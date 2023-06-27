@@ -2,135 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE59773EFDB
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 02:46:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9618D73EFDD
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 02:47:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229737AbjF0Aqw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 20:46:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52308 "EHLO
+        id S229656AbjF0ArS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 20:47:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbjF0Aqv (ORCPT
+        with ESMTP id S229759AbjF0ArO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 20:46:51 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48D6512C;
-        Mon, 26 Jun 2023 17:46:50 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QqmHr1vD1z4wZv;
-        Tue, 27 Jun 2023 10:46:48 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1687826808;
-        bh=Y72SU4FB9301ltMa6LwnjGji2x9UTnFq9kBOUG8LCwM=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=RQwWWzxe3hy80JPWXzjMDbOrjPbOPhxKgB98dM8hl7cUhj36RLNqrBV4EmGIbwN2T
-         oI/O+nAYJN+ySRiwtuibW82kBUrPuN9vLrIRDW65Du5WikSRsXdccCHVb4mBDSGs6w
-         M2soSZ96SZ6Ip2V63+eXue6DDI96iCanplgsqILvvy2GD3mbsla74dGq1aCFNwmY6p
-         FjOTPcHD5HHj5oVRSF07cMmKK6May51q9ZPrUgcbYevc9Uh02LRJWLKji2hrfYT5ZP
-         /8i/Ctj7/fOfI5Ua0a0D1KcEZzTNwzkCxCoPARPWNzNrx1s1YZWRcFGnQTY6Oe3UFU
-         yq5EuUUvEliTw==
-Date:   Tue, 27 Jun 2023 10:46:46 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Theodore Ts'o <tytso@mit.edu>
-Cc:     Jens Axboe <axboe@kernel.dk>, Christoph Hellwig <hch@lst.de>,
-        Jan Kara <jack@suse.cz>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Zhihao Cheng <chengzhihao1@huawei.com>
-Subject: Re: linux-next: manual merge of the block tree with the ext4 tree
-Message-ID: <20230627104646.35f4279d@canb.auug.org.au>
-In-Reply-To: <20230626130951.54c4254a@canb.auug.org.au>
-References: <20230626130951.54c4254a@canb.auug.org.au>
+        Mon, 26 Jun 2023 20:47:14 -0400
+Received: from mail-ot1-x336.google.com (mail-ot1-x336.google.com [IPv6:2607:f8b0:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FBC912C
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 17:47:12 -0700 (PDT)
+Received: by mail-ot1-x336.google.com with SMTP id 46e09a7af769-6b5d1498670so3085004a34.1
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 17:47:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore.com; s=google; t=1687826832; x=1690418832;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=e88+wboWnpMpH6cRUOXCkMh4VlwTjhZruz0PtShif3w=;
+        b=GzpLaR5yt3TFL68xa3HQ1HAbRj9kgRzvQwgzhhGS31MKZMXh5aizRW8zbYtc1Y6ePk
+         VVEYy8bHxb3f+XpjoJjs3wE7FWRRdTBYjV3LhwvQKsfvDw2c18q8x8OrkAvI1KOdJrs1
+         MWAk3cZeKGHlC7GzZioJ6OfSRk6XkVwXEfBPN1DCb2fTcdlu/adCGMHqf2mWE9KW6SQB
+         Tceb4x5YdWqmjCn365rDnNVwOPxhk6fkCi2lN5/x7TN9fnCKMhIy/ypoPqV9HywzNS5P
+         hnxJM9zpiqpxdtTq9ZCMo+5MUGFOaRiYpv3AbannClk5H647SivO73AeJ/1pbEId1LST
+         kD2g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687826832; x=1690418832;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=e88+wboWnpMpH6cRUOXCkMh4VlwTjhZruz0PtShif3w=;
+        b=Zukpg/Qo8VF++gKmptVh65M66nyqJGwej+Jd+PM/kQiv2od4uSojOBA9CEIiZqTM3r
+         Bhmx3s2s1YirEcMAT9fIn5i7t3Pk83/thrNpHIsiekL2gVI9tYTk9c6/tNr4GPwdGY89
+         reaj0yPZPO7AG9n4KB/g7uthsl3FBer3v9XFxuk46E+GeSQ/PT5thejiyWVPZE+vwttA
+         ULawp3q7JVR6oEMN9fWOriNZmxiuf0GbarIsFHm7X3UlRSGRckWQJM0YYDAkndv5S2J8
+         r3+EhyMzU46bjuV5DfzhkL1+fSYMYwmCdmaMpRLRAOEjqm8EpL3Qff+bFVlwGERzrfsR
+         sHhw==
+X-Gm-Message-State: AC+VfDzw5DMm8HZmnuNod0RJWXUSsjIBKpLw1BzIIXYNjGhf92clpWxz
+        uvcniXFnkcsFWcfQNHkBhkR712cnUKxx7oFqrkNQ
+X-Google-Smtp-Source: ACHHUZ552VbcNwq6Y7vNbyGQaEcaIWiOeq+QEElxaKMvr0iJ0bRsbphcS3QF79Q3bP6EuEt3w9pBrz0iHw/jCq+1Rco=
+X-Received: by 2002:a05:6358:cb22:b0:132:d6e6:53ba with SMTP id
+ gr34-20020a056358cb2200b00132d6e653bamr7319742rwb.25.1687826831753; Mon, 26
+ Jun 2023 17:47:11 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/o8s4kc5BqlBWkzFu/sTqaXY";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Mon, 26 Jun 2023 20:47:01 -0400
+Message-ID: <CAHC9VhRdEE58-hOXFGQmO5BV5gCNv0+bLx-GrLogR8uVAhaUqg@mail.gmail.com>
+Subject: [GIT PULL] LSM patches for v6.5
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/o8s4kc5BqlBWkzFu/sTqaXY
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Hi Linus,
 
-Hi all,
+Seven patches in the LSM pull request for v6.5, all relatively small,
+here is a quick summary:
 
-On Mon, 26 Jun 2023 13:09:51 +1000 Stephen Rothwell <sfr@canb.auug.org.au> =
-wrote:
->=20
-> Today's linux-next merge of the block tree got a conflict in:
->=20
->   fs/ext4/super.c
->=20
-> between commit:
->=20
->   ffea255f4052 ("ext4: Fix reusing stale buffer heads from last failed mo=
-unting")
->=20
-> from the ext4 tree and commits:
->=20
->   2736e8eeb0cc ("block: use the holder as indication for exclusive opens")
->   a42fb5a75ccc ("ext4: Fix warning in blkdev_put()")
->=20
-> from the block tree.
->=20
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
->=20
-> --=20
-> Cheers,
-> Stephen Rothwell
->=20
-> diff --cc fs/ext4/super.c
-> index b3819e70093e,64342adcd679..000000000000
-> --- a/fs/ext4/super.c
-> +++ b/fs/ext4/super.c
-> @@@ -1128,13 -1133,7 +1133,13 @@@ static void ext4_blkdev_remove(struct e
->   	struct block_device *bdev;
->   	bdev =3D sbi->s_journal_bdev;
->   	if (bdev) {
->  +		/*
->  +		 * Invalidate the journal device's buffers.  We don't want them
->  +		 * floating about in memory - the physical journal device may
->  +		 * hotswapped, and it breaks the `ro-after' testing code.
->  +		 */
->  +		invalidate_bdev(bdev);
-> - 		ext4_blkdev_put(bdev);
-> + 		blkdev_put(bdev, sbi->s_sb);
->   		sbi->s_journal_bdev =3D NULL;
->   	}
->   }
+- A SafeSetID patch to correct what appears to be a cut-n-paste typo
+in the code causing a UID to be printed where a GID was desired.  This
+is coming via the LSM tree because we haven't been able to get a
+response from the SafeSetID maintainer (Micah Morton) in several
+months.  Hopefully we are able to get in touch with Micah, but until
+we do I'm going to pick them up in the LSM tree.
 
-This is now a conflict between the ext4 tree and Linus' tree.
+- A small fix to the reiserfs LSM xattr code.  We're continuing to
+work through some issues with the reiserfs code as we try to fixup the
+LSM xattr handling, but in the process we're uncovering some ugly
+problems in reiserfs and we may just end up removing the LSM xattr
+support in reiserfs prior to reiserfs' removal.  For better or worse,
+this shouldn't impact any of the reiserfs users, as we discovered that
+LSM xattrs on reiserfs were completely broken, meaning no one is
+currently using the combo of reiserfs and a file labeling LSM.
 
---=20
-Cheers,
-Stephen Rothwell
+- A tweak to how the cap_user_data_t struct/typedef is declared in the
+header file to appease the Sparse gods.
 
---Sig_/o8s4kc5BqlBWkzFu/sTqaXY
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+- In the process of trying to sort out the SafeSetID lost-maintainer
+problem I realized that I needed to update the labeled networking
+entry to "Supported".
 
------BEGIN PGP SIGNATURE-----
+- Minor comment/documentation and spelling fixes.
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmSaMXYACgkQAVBC80lX
-0Gy6ZAgAhEWNmfVOvFAeP1iZyimyJh91WRnHUKGNYvZDUnRufFm2/Weo3msLu0sI
-JHSAtSVjC71A04nHt/er2ZjTtoCthupwVC4YbmJ1OkAKSUT8y6/Mm/nEyg7gh0Tv
-SQQWnc6gAkUnomEWeUK29ItmlxZdIYvbdvkLaITBXN1oXHc+zl+J8DqTV7hsRGdM
-wUypnWh/dx2x37+bP7xMx3kxqHzv8X1BPIAxUZX6qPIOa686oWwj/xjp62zJ26wY
-4uRufm+c9BDpp8Q3dNDaBErRRfcYyie/i7wN4Sjk0tfXlH5rfZm0Tw+JokLeWjy+
-P2XBy1epMY0twEhkNCuUlBXj/OjFAA==
-=xBOG
------END PGP SIGNATURE-----
+Thanks,
+-Paul
 
---Sig_/o8s4kc5BqlBWkzFu/sTqaXY--
+--
+The following changes since commit ac9a78681b921877518763ba0e89202254349d1b:
+
+ Linux 6.4-rc1 (2023-05-07 13:34:35 -0700)
+
+are available in the Git repository at:
+
+ https://git.kernel.org/pub/scm/linux/kernel/git/pcmoore/lsm.git
+   tags/lsm-pr-20230626
+
+for you to fetch changes up to 4be22f16a4a1a1667e79b52b56cca2c64b3747e2:
+
+ device_cgroup: Fix kernel-doc warnings in device_cgroup
+   (2023-06-21 09:30:49 -0400)
+
+----------------------------------------------------------------
+lsm/stable-6.5 PR 20230626
+
+----------------------------------------------------------------
+Alexander Mikhalitsyn (1):
+     SafeSetID: fix UID printed instead of GID
+
+GONG, Ruiqi (1):
+     capability: erase checker warnings about struct __user_cap_data_struct
+
+Gaosheng Cui (2):
+     capability: fix kernel-doc warnings in capability.c
+     device_cgroup: Fix kernel-doc warnings in device_cgroup
+
+Paul Moore (2):
+     lsm: fix a number of misspellings
+     MAINTAINERS: move labeled networking to "supported"
+
+Tetsuo Handa (1):
+     reiserfs: Initialize sec->length in reiserfs_security_init().
+
+MAINTAINERS                     |  2 +-
+fs/reiserfs/xattr_security.c    |  1 +
+include/uapi/linux/capability.h |  5 +++--
+kernel/capability.c             |  2 ++
+security/commoncap.c            | 20 ++++++++++----------
+security/device_cgroup.c        |  3 +--
+security/lsm_audit.c            |  2 +-
+security/safesetid/lsm.c        |  2 +-
+security/security.c             |  4 ++--
+9 files changed, 22 insertions(+), 19 deletions(-)
+
+-- 
+paul-moore.com
