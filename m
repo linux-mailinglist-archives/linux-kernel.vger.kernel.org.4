@@ -2,60 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4732C7406C5
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 01:10:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FE1A7406C8
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 01:16:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230401AbjF0XK1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 19:10:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39080 "EHLO
+        id S229497AbjF0XQT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 19:16:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230331AbjF0XKT (ORCPT
+        with ESMTP id S229524AbjF0XQR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 19:10:19 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CA0D294A
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 16:10:18 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1A19C61239
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 23:10:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 7FE2FC433C8;
-        Tue, 27 Jun 2023 23:10:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687907417;
-        bh=hVCHUpOlEoxqwmxafSXGLFkBksh6GMy+hjOQjrGKxaA=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=BgtBaukGQmymLrFGCN4p71oIXWzS+/pWezypnwZenfcxJ9Udc6clfpKFDjt+sYfFs
-         aRlCrfGybqV7yJEd2mZTVKaCnx8gKLAXINhYUyocdVp+xRZtVLBgjnl+5jxU3UHFso
-         XtmIlYuIQ32Q55/K8p207RvBhpN6i7QWF4ZxAoutuARu2FQVM9pCCKUkPGM0ezyLSM
-         Cs0ncNi8SNR0cvghwTA/b1SVbQeXSkRUS/127mSBoMn+aaHRdXu2TnzUmd/5YmgH0a
-         VyHFR8/75KLDp5sUMEO4gPGdgXnAfcclWp1fUUrrBY6O6XSr3pz379mstbBR4AXtvC
-         DS63EeQZaHCtQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 6CC45E53807;
-        Tue, 27 Jun 2023 23:10:17 +0000 (UTC)
-Subject: Re: [PULL 00/18] xtensa updates for v6.5
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20230627105451.803122-1-jcmvbkbc@gmail.com>
-References: <20230627105451.803122-1-jcmvbkbc@gmail.com>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20230627105451.803122-1-jcmvbkbc@gmail.com>
-X-PR-Tracked-Remote: https://github.com/jcmvbkbc/linux-xtensa.git tags/xtensa-20230627
-X-PR-Tracked-Commit-Id: f7667ca106df50ff8b776db54f85074dc9c52e1b
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 8d8026f376c8e46cc90c59de91256d8ee4322ad8
-Message-Id: <168790741743.21322.13459979108280112690.pr-tracker-bot@kernel.org>
-Date:   Tue, 27 Jun 2023 23:10:17 +0000
-To:     Max Filippov <jcmvbkbc@gmail.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        Tue, 27 Jun 2023 19:16:17 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C26441BCF;
+        Tue, 27 Jun 2023 16:16:16 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1687907774;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=GRwoGOoZ7TfS3mJRWihfbPocmOKxdlsrgSr40GGWDkk=;
+        b=H3TnR2/dn+iIhdhhgfSpvtynaVPPqWUAlALbmY6cd+k0ZU/4a748f9uZwlJKdT421E7g8S
+        2n9g6Q6LPM6fbKCTVFcJ1hy2cx2s/C2s5Nxnw29AXuJpFKP0vdA/uCIybstHEu/AYNxVg1
+        KoNrKEGKiKgzo5fWzRO7K/MgPUN+Af1XWwuDbPG8Vh6KMGYdwyQLKTX4MEnfsqVQHjz3mr
+        ofBZ+WbFFGNguJPOkjmpBIdZfl5Ow0AALJRxB1qMq3+VZOAT5v/Sag+QE7KlWg622X+8SG
+        lSrejnH8ZpsCnH+78CpRINbBEPHqTKWz58app4L07ZSMHemagVrGagTHxfNEnA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1687907774;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=GRwoGOoZ7TfS3mJRWihfbPocmOKxdlsrgSr40GGWDkk=;
+        b=Q4gkUxqHAUXqzDp75Hqv4RlphQUUFvAeBJDBmNhwpsFmNnrWlJSQ6WBdOvSNlGbSpojief
+        TdTps/8Ue79NweAA==
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     linux-doc@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Tom Lendacky <thomas.lendacky@amd.com>
+Subject: Re: [PATCH] Documentation: embargoed-hardware-issues.rst: clean out
+ empty and unused entries
+In-Reply-To: <2023062742-mouse-appease-7917@gregkh>
+References: <2023062742-mouse-appease-7917@gregkh>
+Date:   Wed, 28 Jun 2023 01:16:13 +0200
+Message-ID: <87edlw4htu.ffs@tglx>
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,15 +58,13 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Tue, 27 Jun 2023 03:54:51 -0700:
+On Tue, Jun 27 2023 at 13:26, Greg Kroah-Hartman wrote:
 
-> https://github.com/jcmvbkbc/linux-xtensa.git tags/xtensa-20230627
+> There are a few empty entries in the company/project list, which
+> confuses people as to why they are there, so remove them entirely, and
+> also remove an entry that doesn't wish to participate in this process.
+>
+> Cc: Tom Lendacky <thomas.lendacky@amd.com>
+> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/8d8026f376c8e46cc90c59de91256d8ee4322ad8
-
-Thank you!
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+Reviewed-by: Thomas Gleixner <tglx@linutronix.de>
