@@ -2,62 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00A0B73FF85
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 17:19:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 621D073FF8B
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 17:19:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232321AbjF0PTV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 11:19:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41930 "EHLO
+        id S232338AbjF0PT5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 11:19:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232292AbjF0PTT (ORCPT
+        with ESMTP id S232342AbjF0PTt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 11:19:19 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 36F3E26B3;
-        Tue, 27 Jun 2023 08:19:17 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DF6492F4;
-        Tue, 27 Jun 2023 08:20:00 -0700 (PDT)
-Received: from localhost (ionvoi01-desktop.cambridge.arm.com [10.2.78.69])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 67B873F663;
-        Tue, 27 Jun 2023 08:19:16 -0700 (PDT)
-Date:   Tue, 27 Jun 2023 16:19:14 +0100
-From:   Ionela Voinescu <ionela.voinescu@arm.com>
-To:     Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-Cc:     "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Ricardo Neri <ricardo.neri@intel.com>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Ben Segall <bsegall@google.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Len Brown <len.brown@intel.com>, Mel Gorman <mgorman@suse.de>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Tim Chen <tim.c.chen@linux.intel.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Lukasz Luba <lukasz.luba@arm.com>,
-        Zhao Liu <zhao1.liu@intel.com>,
-        "Yuan, Perry" <Perry.Yuan@amd.com>, x86@kernel.org,
-        "Joel Fernandes (Google)" <joel@joelfernandes.org>,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        "Tim C . Chen" <tim.c.chen@intel.com>,
-        Zhao Liu <zhao1.liu@linux.intel.com>
-Subject: Re: [PATCH v4 07/24] sched/fair: Compute IPC class scores for load
- balancing
-Message-ID: <ZJr98uh/WEty7UJY@arm.com>
-References: <20230613042422.5344-1-ricardo.neri-calderon@linux.intel.com>
- <20230613042422.5344-8-ricardo.neri-calderon@linux.intel.com>
- <ZJQONIinvSengWa8@arm.com>
- <20230625201155.GA3902@ranerica-svr.sc.intel.com>
+        Tue, 27 Jun 2023 11:19:49 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DCBC1735;
+        Tue, 27 Jun 2023 08:19:48 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F1D7F611B5;
+        Tue, 27 Jun 2023 15:19:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E2B3C433C0;
+        Tue, 27 Jun 2023 15:19:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687879187;
+        bh=lVWplkh8U/rtw5laIs2YyXP5mG+eDZDGoYnqUxrwS4k=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Q5TmZ6xn2YYy+K9DIrVHxqng95klWdB7m7T0I7jI0pQvvfRJz5uMHDViWO7XvrlsF
+         Hj7sfUIBs5Akk20UnTLPHTioO+9ePGKg8NMROhhpEaWjfl+Ay52mbUj1ugXMozx4OL
+         pviPLrMhe6A+Rl4KN3mRU/qbs4JO+6Fhahewp7YYvsi3tQ19ThP8B6yTFjWMYKs2w+
+         ZCSz3khQctEd5g5mKNHHfhFV6AJaHz/3+m1VQfXt+PbmutlT5/6+OyzPGo0QNFhiqH
+         2hIUIThRVt0P87xykwgEY0Aj7nxEvBnZfUZr6W5vOHHcjNyxeyNt2e5v/5YIisoyEc
+         PN/YHbBaTbdug==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1qEATp-00046p-3i; Tue, 27 Jun 2023 17:19:45 +0200
+Date:   Tue, 27 Jun 2023 17:19:45 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Krishna Kurapati <quic_kriskura@quicinc.com>
+Cc:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Wesley Cheng <quic_wcheng@quicinc.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        quic_pkondeti@quicinc.com, quic_ppratap@quicinc.com,
+        quic_jackp@quicinc.com, quic_harshq@quicinc.com,
+        ahalaney@redhat.com, quic_shazhuss@quicinc.com
+Subject: Re: [PATCH v9 00/10] Add multiport support for DWC3 controllers
+Message-ID: <ZJr-EbunGzNopVj0@hovoldconsulting.com>
+References: <20230621043628.21485-1-quic_kriskura@quicinc.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230625201155.GA3902@ranerica-svr.sc.intel.com>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <20230621043628.21485-1-quic_kriskura@quicinc.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,170 +71,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hey,
-
-On Sunday 25 Jun 2023 at 13:11:55 (-0700), Ricardo Neri wrote:
-> On Thu, Jun 22, 2023 at 10:02:44AM +0100, Ionela Voinescu wrote:
-> > On Monday 12 Jun 2023 at 21:24:05 (-0700), Ricardo Neri wrote:
-> > > When using IPCC scores to break ties between two scheduling groups, it is
-> > > necessary to consider both the current score and the score that would
-> > > result after load balancing.
-> > > 
-> > > Compute the combined IPC class score of a scheduling group and the local
-> > > scheduling group. Compute both the current score and the prospective score.
-> > > 
-> > > Collect IPCC statistics only for asym_packing and fully_busy scheduling
-> > > groups. These are the only cases that use IPCC scores.
-> > > 
-> > > These IPCC statistics are used during idle load balancing. The candidate
-> > > scheduling group will have one fewer busy CPU after load balancing. This
-> > > observation is important for cores with SMT support.
-> > > 
-> > > The IPCC score of scheduling groups composed of SMT siblings needs to
-> > > consider that the siblings share CPU resources. When computing the total
-> > > IPCC score of the scheduling group, divide the score of each sibling by
-> > > the number of busy siblings.
-> > > 
-> > > Cc: Ben Segall <bsegall@google.com>
-> > > Cc: Daniel Bristot de Oliveira <bristot@redhat.com>
-> > > Cc: Dietmar Eggemann <dietmar.eggemann@arm.com>
-> > > Cc: Ionela Voinescu <ionela.voinescu@arm.com>
-> > > Cc: Joel Fernandes (Google) <joel@joelfernandes.org>
-> > > Cc: Len Brown <len.brown@intel.com>
-> > > Cc: Lukasz Luba <lukasz.luba@arm.com>
-> > > Cc: Mel Gorman <mgorman@suse.de>
-> > > Cc: Perry Yuan <Perry.Yuan@amd.com>
-> > > Cc: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > > Cc: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-> > > Cc: Steven Rostedt <rostedt@goodmis.org>
-> > > Cc: Tim C. Chen <tim.c.chen@intel.com>
-> > > Cc: Valentin Schneider <vschneid@redhat.com>
-> > > Cc: Zhao Liu <zhao1.liu@linux.intel.com>
-> > > Cc: x86@kernel.org
-> > > Cc: linux-pm@vger.kernel.org
-> > > Cc: linux-kernel@vger.kernel.org
-> > > Signed-off-by: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-> > > ---
-> > > Changes since v3:
-> > >  * None
-> > > 
-> > > Changes since v2:
-> > >  * Also collect IPCC stats for fully_busy sched groups.
-> > >  * Restrict use of IPCC stats to SD_ASYM_PACKING. (Ionela)
-> > >  * Handle errors of arch_get_ipcc_score(). (Ionela)
-> > > 
-> > > Changes since v1:
-> > >  * Implemented cleanups and reworks from PeterZ. I took all his
-> > >    suggestions, except the computation of the  IPC score before and after
-> > >    load balancing. We are computing not the average score, but the *total*.
-> > >  * Check for the SD_SHARE_CPUCAPACITY to compute the throughput of the SMT
-> > >    siblings of a physical core.
-> > >  * Used the new interface names.
-> > >  * Reworded commit message for clarity.
-> > > ---
-> > >  kernel/sched/fair.c | 68 +++++++++++++++++++++++++++++++++++++++++++++
-> > >  1 file changed, 68 insertions(+)
-> > > 
-> > > diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-> > > index c0cab5e501b6..a51c65c9335f 100644
-> > > --- a/kernel/sched/fair.c
-> > > +++ b/kernel/sched/fair.c
-> > > @@ -9114,6 +9114,8 @@ struct sg_lb_stats {
-> > >  	unsigned long min_score; /* Min(score(rq->curr->ipcc)) */
-> > >  	unsigned short min_ipcc; /* Class of the task with the minimum IPCC score in the rq */
-> > >  	unsigned long sum_score; /* Sum(score(rq->curr->ipcc)) */
-> > > +	long ipcc_score_after; /* Prospective IPCC score after load balancing */
-> > > +	unsigned long ipcc_score_before; /* IPCC score before load balancing */
-> > >  #endif
-> > >  };
-> > >  
-> > > @@ -9452,6 +9454,62 @@ static void update_sg_lb_ipcc_stats(int dst_cpu, struct sg_lb_stats *sgs,
-> > >  	}
-> > >  }
-> > >  
-> > > +static void update_sg_lb_stats_scores(struct sg_lb_stats *sgs,
-> > > +				      struct sched_group *sg,
-> > > +				      struct lb_env *env)
-> > > +{
-> > > +	unsigned long score_on_dst_cpu, before;
-> > > +	int busy_cpus;
-> > > +	long after;
-> > > +
-> > > +	if (!sched_ipcc_enabled())
-> > > +		return;
-> > > +
-> > > +	/*
-> > > +	 * IPCC scores are only useful during idle load balancing. For now,
-> > > +	 * only asym_packing uses IPCC scores.
-> > > +	 */
-> > > +	if (!(env->sd->flags & SD_ASYM_PACKING) ||
-> > > +	    env->idle == CPU_NOT_IDLE)
-> > > +		return;
-> > > +
-> > > +	/*
-> > > +	 * IPCC scores are used to break ties only between these types of
-> > > +	 * groups.
-> > > +	 */
-> > > +	if (sgs->group_type != group_fully_busy &&
-> > > +	    sgs->group_type != group_asym_packing)
-> > > +		return;
-> > > +
-> > > +	busy_cpus = sgs->group_weight - sgs->idle_cpus;
-> > > +
-> > > +	/* No busy CPUs in the group. No tasks to move. */
-> > > +	if (!busy_cpus)
-> > > +		return;
-> > > +
-> > > +	score_on_dst_cpu = arch_get_ipcc_score(sgs->min_ipcc, env->dst_cpu);
-> > > +
-> > > +	/*
-> > > +	 * Do not use IPC scores. sgs::ipcc_score_{after, before} will be zero
-> > > +	 * and not used.
-> > > +	 */
-> > > +	if (IS_ERR_VALUE(score_on_dst_cpu))
-> > > +		return;
-> > > +
-> > > +	before = sgs->sum_score;
-> > > +	after = before - sgs->min_score;
-> > 
-> > I don't believe this can end up being negative as the sum of all
-> > scores should be higher or equal to the min score, right?
+On Wed, Jun 21, 2023 at 10:06:18AM +0530, Krishna Kurapati wrote:
+> Currently the DWC3 driver supports only single port controller which
+> requires at most two PHYs ie HS and SS PHYs. There are SoCs that has
+> DWC3 controller with multiple ports that can operate in host mode.
+> Some of the port supports both SS+HS and other port supports only HS
+> mode.
 > 
-> Yes, I agree. `after` cannot be negative.
+> This change primarily refactors the Phy logic in core driver to allow
+> multiport support with Generic Phy's.
 > 
-> > 
-> > I'm just wondering if ipcc_score_after can be made unsigned long as well,
-> > just for consistency.
+> Chananges have been tested on  QCOM SoC SA8295P which has 4 ports (2
+> are HS+SS capable and 2 are HS only capable).
 > 
-> Sure. I can make it of type unsigned long as well.
-> 
-> > 
-> > > +
-> > > +	/* SMT siblings share throughput. */
-> > > +	if (busy_cpus > 1 && sg->flags & SD_SHARE_CPUCAPACITY) {
-> > > +		before /= busy_cpus;
-> > > +		/* One sibling will become idle after load balance. */
-> > > +		after /= busy_cpus - 1;
-> > > +	}
-> > > +
-> > > +	sgs->ipcc_score_after = after + score_on_dst_cpu;
-> > > +	sgs->ipcc_score_before = before;
-> > 
-> > Shouldn't the score_on_dst_cpu be added to "after" before being divided
-> > between the SMT siblings?
-> 
-> No, because ipcc_score_after represents the joint score of the busiest
-> core and the destination core after load balance has taken place. The
-> destination core was previously idle and now contributes to the joint
-> score.
+> Changes in v9:
+> Added IRQ support for DP/DM/SS MP Irq's of SC8280
+> Refactored code to read port count by accessing xhci registers
 > 
 
-Right! score_on_dst_cpu does not contribute to the per-cpu throughput of
-the busiest core, but it reflects the improvement in score gained by the
-move to the destination.
+You obviously did many more changes in v9. Please amend this list for v9
+and be more specific when submitting v10.
 
-Thanks,
-Ionela.
-
-> Thanks and BR,
-> Ricardo
+Johan
