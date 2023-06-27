@@ -2,182 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A09E73F853
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 11:09:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DBC9B73F857
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 11:10:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230357AbjF0JJp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 05:09:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33472 "EHLO
+        id S231339AbjF0JKP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 05:10:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231771AbjF0JJd (ORCPT
+        with ESMTP id S231232AbjF0JKN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 05:09:33 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2820519AE
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 02:09:32 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id a640c23a62f3a-9922d6f003cso39342366b.0
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 02:09:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google; t=1687856970; x=1690448970;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=R0dPPN6kCxjJ5erU6C8GI2QpZR2Odnb/ktBK6lqyvdY=;
-        b=eZMzvYYkDo8EfR7GYZC2UEnZSGriHw1BzLCiOfGra3b2gqub9gEyeftBpgrsE1Us2o
-         6JFZLDMOSh92+JS5MZ8TD+vn5oJrWDH9kD7RhVcSTc6pdjTmRzo/XgWxOHvGQ1NE1lbk
-         jj1kvNlyxa+p46PiIy/BuVrkH2bfc9U3Xil7zkB2GQ93+HVIkPsktCI+rx8rlNQ1hDrs
-         l946asInJqI5DBhG9fmf0hvBTKRlMttnOpX2bZ7N0+OIzUcF4Voh365nwihT8sINjk9D
-         XYiSnoYfIaGsCm8wmUxhO/obTZwOD/O99AOzfjGeeM9upJVj16dWxdKE1bixlQt8yXsG
-         kl5Q==
+        Tue, 27 Jun 2023 05:10:13 -0400
+Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C79E10D8;
+        Tue, 27 Jun 2023 02:10:12 -0700 (PDT)
+Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-313fb7f0f80so641691f8f.2;
+        Tue, 27 Jun 2023 02:10:12 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687856970; x=1690448970;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=R0dPPN6kCxjJ5erU6C8GI2QpZR2Odnb/ktBK6lqyvdY=;
-        b=TxW7fnyH8HqKQweBWR8ec1CT86+UavOtb4F2zTjrD5Y67eVkaDjRKXpIuB3oblXYx9
-         yX+cx3RgdtmFRy+0crKVHr8mo6X4JAXzYuzfM+Zqy84CjzYCA67fovgvW9RNNKuGByxF
-         FAHN826TSquYW9pNW6X2ME/tWlAuxG/JDa7xjEhjDa2r8Z7+whZeM4UrFu3dLnHs9wdk
-         ceeRfZazyS9migrmyqUtaw51Zf77BVyAZBcT7kLho6r6XZ73W4J4unX+i/iQ4bpcgXTq
-         hp40+45mQ2aps1kAIhSrWycvszRrOCeLwlXGGs+ka8gmmSndc3rQJOi6luK4ieWyi9ML
-         sdMA==
-X-Gm-Message-State: AC+VfDzw8sssN+8cpBk/PeSLMjFMdOENoUM/R/8F/xJRr9CVRbZyUPJs
-        ZD+TaB/+1quSbcToeoazE42sWQ==
-X-Google-Smtp-Source: ACHHUZ4JTx2HNgMrDX8zs9F7AE78EPk6RMDfso94B/r0ax0vwcVieNX1DoGrYahuA+FJpIr1APh3ag==
-X-Received: by 2002:aa7:d784:0:b0:51b:d49c:8c36 with SMTP id s4-20020aa7d784000000b0051bd49c8c36mr15262930edq.16.1687856970460;
-        Tue, 27 Jun 2023 02:09:30 -0700 (PDT)
-Received: from localhost (2001-1ae9-1c2-4c00-20f-c6b4-1e57-7965.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:20f:c6b4:1e57:7965])
-        by smtp.gmail.com with ESMTPSA id y19-20020aa7d513000000b0051d8a512472sm3133032edq.51.2023.06.27.02.09.29
+        d=1e100.net; s=20221208; t=1687857010; x=1690449010;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=e7hLSJVCCtLYpY+D0x3HcpH48zuU/KxVbnA9ZkjEUYc=;
+        b=FejXqnSJdNWpk/MTLHd2b46+J2RN4AMgPHkXZnIyN3+LpM96FSxDVLpL7fiHJR42er
+         pzW7P2SM0+MeHyYI1c/eH7j/Y4AOYlTXf3lSdGHUDBQxfwoge2+W1sBXrRDxrWY4W5nZ
+         qL0cwpx+uhAfG1ytXwR4HMXvyajHdfqD3f30g9GrwAWrJnwmTy8uiwH3059ilgTnwi5E
+         PJgS263OG6qw8rQc3mDDot8TUFmDxE7XRnH7vIosklhA48b4cID5GWhLRKjXCKQwezty
+         O0QKot+4cCEjafBLz/krlc+841ewpZDtbZP8akpJa6JgufuApMgLxtPGtN5qHoG1eXXE
+         osqw==
+X-Gm-Message-State: AC+VfDxpYsD6vyJ/y+LSEakr9IXdQgy/wWnlQ7Q3+lFaEIBeG+5N8Dse
+        GuNGB+i0pni4W+VWauhfIk6wCEg1icAU2f/6
+X-Google-Smtp-Source: ACHHUZ4SyZagIQKKYwDBn+gOLO2udMSIlGgeLYgeg3krB1VeISWpZu7CSPdmbFqIeZYXEqna79kD2A==
+X-Received: by 2002:adf:ea90:0:b0:30f:c5b1:23ef with SMTP id s16-20020adfea90000000b0030fc5b123efmr23619787wrm.41.1687857010328;
+        Tue, 27 Jun 2023 02:10:10 -0700 (PDT)
+Received: from ryzen.lan (cpc87451-finc19-2-0-cust61.4-2.cable.virginm.net. [82.11.51.62])
+        by smtp.gmail.com with ESMTPSA id c15-20020adffb4f000000b00313e4d02be8sm8880122wrs.55.2023.06.27.02.10.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Jun 2023 02:09:29 -0700 (PDT)
-Date:   Tue, 27 Jun 2023 11:09:28 +0200
-From:   Andrew Jones <ajones@ventanamicro.com>
-To:     Haibo Xu <haibo1.xu@intel.com>
-Cc:     xiaobo55x@gmail.com, maz@kernel.org, oliver.upton@linux.dev,
-        seanjc@google.com, Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Anup Patel <anup@brainfault.org>,
-        Atish Patra <atishp@atishpatra.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Shuah Khan <shuah@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Zenghui Yu <yuzenghui@huawei.com>,
-        David Matlack <dmatlack@google.com>,
-        Ben Gardon <bgardon@google.com>,
-        Ricardo Koller <ricarkol@google.com>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Vipin Sharma <vipinsh@google.com>,
-        Colton Lewis <coltonlewis@google.com>, kvm@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
-        linux-kselftest@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev
-Subject: Re: [PATCH v4 08/12] KVM: arm64: selftests: Move reject_set check
- logic to a function
-Message-ID: <20230627-4d207186c4ef81be43c9d874@orel>
-References: <cover.1687515463.git.haibo1.xu@intel.com>
- <341feff384c9f8a20ed4aac6e2dda0440d6b84f2.1687515463.git.haibo1.xu@intel.com>
+        Tue, 27 Jun 2023 02:10:09 -0700 (PDT)
+From:   Lucas Tanure <tanure@linux.com>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Xianwei Zhao <xianwei.zhao@amlogic.com>
+Cc:     Nick <nick@khadas.com>, Artem <art@khadas.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-amlogic@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        Lucas Tanure <tanure@linux.com>
+Subject: [PATCH v6 0/4] Add Amlogic A311D2 and Khadas Vim4 Board Support
+Date:   Tue, 27 Jun 2023 10:10:03 +0100
+Message-ID: <20230627091007.190958-1-tanure@linux.com>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <341feff384c9f8a20ed4aac6e2dda0440d6b84f2.1687515463.git.haibo1.xu@intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 23, 2023 at 06:40:10PM +0800, Haibo Xu wrote:
-> No functional changes. Just move the reject_set check logic to a
-> function so we can check for specific errno for specific register.
-> This is a preparation for support reject_set in riscv.
-> 
-> Suggested-by: Andrew Jones <ajones@ventanamicro.com>
-> Signed-off-by: Haibo Xu <haibo1.xu@intel.com>
-> ---
->  tools/testing/selftests/kvm/aarch64/get-reg-list.c | 8 ++++++++
->  tools/testing/selftests/kvm/get-reg-list.c         | 7 ++++++-
->  2 files changed, 14 insertions(+), 1 deletion(-)
-> 
-> diff --git a/tools/testing/selftests/kvm/aarch64/get-reg-list.c b/tools/testing/selftests/kvm/aarch64/get-reg-list.c
-> index aaf035c969ec..4e2e1fe833eb 100644
-> --- a/tools/testing/selftests/kvm/aarch64/get-reg-list.c
-> +++ b/tools/testing/selftests/kvm/aarch64/get-reg-list.c
-> @@ -27,6 +27,14 @@ bool filter_reg(__u64 reg)
->  	return false;
->  }
->  
-> +bool reject_set_fail(__u64 reg)
-> +{
-> +	if (reg == KVM_REG_ARM64_SVE_VLS)
-> +		return (errno != EPERM);
-> +
-> +	return false;
-> +}
+The Khadas VIM4 uses the Amlogic A311D2 SoC, based on the Amlogic T7 family.
+This chip is not the same as A311D used in Vim3 board.
 
-I think we should pass errno in as a parameter and I prefer positive
-predicate functions, so I'd name this check_reject_set() and reverse
-the logic. Also, we don't want to check for KVM_REG_ARM64_SVE_VLS,
-because that duplicates the rejects set. I see in a later patch
-that riscv needs to check reg because different errors are used
-for different registers, but that's because KVM_REG_RISCV_TIMER_REG(state)
-was erroneously added to the rejects set. KVM_REG_RISCV_TIMER_REG(state)
-doesn't belong there. That register can be set, but it only supports
-certain input, otherwise, it correctly, results in EINVAL. We'll need
-the concept of a "skip set" to avoid tripping over that one.
+Work based on Khadas 5.4 branch:
+https://github.com/khadas/linux/tree/khadas-vims-5.4.y
 
-So, I think arm's function should be
+The current status is Vim4 board booting to emergency shell via uart.
 
- bool check_reject_set(int errno)
- {
-     return errno == EPERM;
- }
+Board Features:
+- 8GB LPDDR4X 2016MHz
+- 32GB eMMC 5.1 storage
+- 32MB SPI flash
+- 10/100/1000 Base-T Ethernet
+- AP6275S Wireless (802.11 a/b/g/n/ac/ax, BT5.1)
+- HDMI 2.1 video
+- HDMI Input
+- 1x USB 2.0 + 1x USB 3.0 ports
+- 1x USB-C (power) with USB 2.0 OTG
+- 3x LED's (1x red, 1x blue, 1x white)
+- 3x buttons (power, function, reset)
+- M2 socket with PCIe, USB, ADC & I2C
+- 40pin GPIO Header
+- 1x micro SD card slot
 
-and riscv's should be
+Changes Since v5:
+ - Remove meson as T7 its not a meson chip
+ - Change Uart Document descript to S4 compatibles
 
- bool check_reject_set(int errno)
- {
-     return errno == EOPNOTSUPP;
- }
+Changes Since v4:
+ - Use S4 instead of G12a for uart fallback
+ - Add OF_EARLYCON_DECLARE for T7 uart
 
-> +
->  #define REG_MASK (KVM_REG_ARCH_MASK | KVM_REG_SIZE_MASK | KVM_REG_ARM_COPROC_MASK)
->  
->  #define CORE_REGS_XX_NR_WORDS	2
-> diff --git a/tools/testing/selftests/kvm/get-reg-list.c b/tools/testing/selftests/kvm/get-reg-list.c
-> index f6ad7991a812..b956ee410996 100644
-> --- a/tools/testing/selftests/kvm/get-reg-list.c
-> +++ b/tools/testing/selftests/kvm/get-reg-list.c
-> @@ -98,6 +98,11 @@ void __weak print_reg(const char *prefix, __u64 id)
->  	printf("\t0x%llx,\n", id);
->  }
->  
-> +bool __weak reject_set_fail(__u64 reg)
-> +{
-> +	return false;
-> +}
-> +
->  #ifdef __aarch64__
->  static void prepare_vcpu_init(struct vcpu_reg_list *c, struct kvm_vcpu_init *init)
->  {
-> @@ -216,7 +221,7 @@ static void run_test(struct vcpu_reg_list *c)
->  			if (s->rejects_set && find_reg(s->rejects_set, s->rejects_set_n, reg.id)) {
->  				reject_reg = true;
->  				ret = __vcpu_ioctl(vcpu, KVM_SET_ONE_REG, &reg);
-> -				if (ret != -1 || errno != EPERM) {
-> +				if (ret != -1 || reject_set_fail(reg.id)) {
->  					printf("%s: Failed to reject (ret=%d, errno=%d) ", config_name(c), ret, errno);
->  					print_reg(config_name(c), reg.id);
->  					putchar('\n');
-> -- 
-> 2.34.1
->
+Changes Since v3:
+ - Fix issues with "amlogic,meson-t7-uart" documentation
 
-Thanks,
-drew
+Changes Since v2:
+ - Add "amlogic,meson-t7-uart" documentation
+
+Changes Since v1:
+ - Drop the T7 clock driver as it is not needed for serial boot. It will
+ later use the S4 clock
+ driver as S4 and  T7 seems to be similar chips.
+ - Use "arm,gic-400" for interrupt controller to fix dtb_check
+ - Remove CPU node properties not needed for serial boot
+ - Move UART node to apb4 node
+ - Drop T7 UART compatible line and use S4 uart
+ - Use psci V1 instead of 0.2, it works, but I can't verify is correct
+ as the datasheet I have
+ doesn't contain that information.
+ - Remove compatible from meson-t7.dtsi, move it to vim4 board dts
+ - Add memory node with 8GB. Not sure about this one, works without,
+ but doesn't detect 8GB
+ - Use defines for GIC_CPU_MASK_SIMPLE, IRQ_TYPE_LEVEL_LOW,
+ IRQ_TYPE_LEVEL_HIGH instead of hardcoded values
+
+
+Lucas Tanure (4):
+  dt-bindings: arm: amlogic: add Amlogic A311D2 bindings
+  dt-bindings: serial: amlogic,meson-uart: Add compatible string for T7
+  tty: serial: meson: Add a earlycon for the T7 SoC
+  arm64: dts: amlogic-t7-a311d2-khadas-vim4: add initial device-tree
+
+ .../devicetree/bindings/arm/amlogic.yaml      |   7 +
+ .../bindings/serial/amlogic,meson-uart.yaml   |   4 +
+ arch/arm64/boot/dts/amlogic/Makefile          |   1 +
+ .../amlogic/amlogic-t7-a311d2-khadas-vim4.dts |  52 ++++++
+ arch/arm64/boot/dts/amlogic/amlogic-t7.dtsi   | 158 ++++++++++++++++++
+ drivers/tty/serial/meson_uart.c               |   2 +
+ 6 files changed, 224 insertions(+)
+ create mode 100644 arch/arm64/boot/dts/amlogic/amlogic-t7-a311d2-khadas-vim4.dts
+ create mode 100644 arch/arm64/boot/dts/amlogic/amlogic-t7.dtsi
+
+--
+2.41.0
+
