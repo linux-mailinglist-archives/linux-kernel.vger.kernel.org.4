@@ -2,87 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC9CA73FD74
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 16:11:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B599C73FD83
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 16:13:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230040AbjF0OLX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 10:11:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54336 "EHLO
+        id S230023AbjF0ONc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 10:13:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230364AbjF0OLQ (ORCPT
+        with ESMTP id S229454AbjF0ONa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 10:11:16 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3DE1270F;
-        Tue, 27 Jun 2023 07:11:14 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8901E611B9;
-        Tue, 27 Jun 2023 14:11:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EAF26C433C9;
-        Tue, 27 Jun 2023 14:11:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687875074;
-        bh=xeCPOhBMjE2CPK1AN983wnR+87uAbWSntpDZrd/CiBQ=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=tvoMU3ZkZ6gO1+AjSp/+OnLJ1kv+57MeKLJEiUfcscWh/RFIHd9Pb1HSModFxVvnQ
-         m6rs4ymZi2wmdLLWePYzO1x0moz95fhuibjuxvwqhYm4OJ7F6LEy+/0QdWm/I0p5XO
-         gg85VyVj0w3/5PFGbAO3MeGBeLyk3R7RJfDOyh+kzfMhLQwI4MIIVT8asaMnl1TFlR
-         gd9/KU3pt4hpsFFo5UKIry586bO6nzSF3zzrlpy0zTRsJhM5Mi31m/d6vjTGiYg6tW
-         hxNibPTtvpufqhsQOtSN5XYyH13EOhky/tmgiZKI2LlxS9USVxocaQzFcjVIUC/2/d
-         UhyQQqq87f3gw==
-Received: by mail-lj1-f178.google.com with SMTP id 38308e7fff4ca-2b6a6f224a1so27304421fa.1;
-        Tue, 27 Jun 2023 07:11:13 -0700 (PDT)
-X-Gm-Message-State: AC+VfDxwVWR5BNHS1h+20aurm3CFcOM6Y7XZPmBMLe2f3se4cNy7tJbD
-        Rctz3xPS0fH4o87U3MnpatzjuZFr/XvcIp19kQ==
-X-Google-Smtp-Source: ACHHUZ7eabgwGTnZp7X5eZw1EcK1Kg+YRqCE4/uAmx2u4dnbSW6zR+fnqJvmmgj4nBQ1Y9SsU86JFbtiQ2TD3+9pqCg=
-X-Received: by 2002:a2e:7316:0:b0:2b6:9e58:33e4 with SMTP id
- o22-20020a2e7316000000b002b69e5833e4mr4531082ljc.4.1687875071928; Tue, 27 Jun
- 2023 07:11:11 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230412111256.40013-1-okan.sahin@analog.com> <20230412111256.40013-6-okan.sahin@analog.com>
- <20230420103438.GI9904@google.com> <09eb8e4c-3e73-41f0-bf42-8ddf3c4254ec@sirena.org.uk>
- <20230421073938.GO996918@google.com> <82612171-46d7-4d82-a8fc-c7d6a99d57e9@sirena.org.uk>
- <MN2PR03MB516860989BD8ED6AC9A767FBE755A@MN2PR03MB5168.namprd03.prod.outlook.com>
- <20230621171315.GL10378@google.com> <20230626175443.GA3446604-robh@kernel.org>
- <20230627135615.GF10378@google.com>
-In-Reply-To: <20230627135615.GF10378@google.com>
+        Tue, 27 Jun 2023 10:13:30 -0400
+Received: from mail-il1-f170.google.com (mail-il1-f170.google.com [209.85.166.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EE56E74;
+        Tue, 27 Jun 2023 07:13:29 -0700 (PDT)
+Received: by mail-il1-f170.google.com with SMTP id e9e14a558f8ab-345b231322fso5962595ab.2;
+        Tue, 27 Jun 2023 07:13:29 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687875208; x=1690467208;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+34dOqwiPYr04E0G4Xm/yOYM4qu798aPWQjNtLw1CjI=;
+        b=kRxOfX+Tz1dw+6ggsX1elYaytaNNzpnjd2Cwtzzxl7S+9GKgFDSchmWgZo53Wyk48W
+         NUZ2ONQygFeJ6Xwlk1+By80R6dLrm0Ci/1gQOmM334xWzsJZjrpPzM2weC1bu/edysQ+
+         FVxGR6orgyRQZ7vqdp+7YoqssidNUOVyKyWQGBi4EaVjig1u8LrbS7wQQWCId/cWlERN
+         e09R8P6zaZWakgVDBgYzEZnHmdodb+qQv8GXkU51XTYKra/7xkBuZrSoYi2QdggciZId
+         BhvEl4vUS0JWCLwpA4fuhk1Wu2It4H2m3CTbRs7tHkTPLm1qZse29AmLICHfAxQm8cKP
+         cOoA==
+X-Gm-Message-State: AC+VfDx6shN+Ydly0aic4bkbeNnXtT924oVSAv3o+boZCAzglI86YXgV
+        kWhPEEf2GCgkzPFHuC6ZdikMFfy0kg==
+X-Google-Smtp-Source: ACHHUZ4wRY2cU/zuyjuVAsmGPISWFZVleu8/CVMKM4HfKZ24n0tENdP0Afc+q+NMVSthuvPOYuL/gw==
+X-Received: by 2002:a92:d350:0:b0:345:c2ab:2394 with SMTP id a16-20020a92d350000000b00345c2ab2394mr542941ilh.15.1687875208646;
+        Tue, 27 Jun 2023 07:13:28 -0700 (PDT)
+Received: from robh_at_kernel.org ([64.188.179.250])
+        by smtp.gmail.com with ESMTPSA id t9-20020a92c909000000b00345b53bdea4sm695274ilp.37.2023.06.27.07.13.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 27 Jun 2023 07:13:27 -0700 (PDT)
+Received: (nullmailer pid 1834159 invoked by uid 1000);
+        Tue, 27 Jun 2023 14:13:25 -0000
+Date:   Tue, 27 Jun 2023 08:13:25 -0600
 From:   Rob Herring <robh@kernel.org>
-Date:   Tue, 27 Jun 2023 08:10:59 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqL3T6pjnTFgFvbYMeATD6cjhc-Sm0vZW2cv5k+w9Oxjuw@mail.gmail.com>
-Message-ID: <CAL_JsqL3T6pjnTFgFvbYMeATD6cjhc-Sm0vZW2cv5k+w9Oxjuw@mail.gmail.com>
-Subject: Re: [PATCH v7 5/5] mfd: max77541: Add ADI MAX77541/MAX77540 PMIC Support
-To:     Lee Jones <lee@kernel.org>
-Cc:     "Sahin, Okan" <Okan.Sahin@analog.com>,
-        Mark Brown <broonie@kernel.org>,
+To:     Luca Weiss <luca.weiss@fairphone.com>
+Cc:     linux-scsi@vger.kernel.org,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Cosmin Tanislav <demonsingur@gmail.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Caleb Connolly <caleb.connolly@linaro.org>,
-        Marcus Folkesson <marcus.folkesson@gmail.com>,
-        "Bolboaca, Ramona" <Ramona.Bolboaca@analog.com>,
-        ChiYuan Huang <cy_huang@richtek.com>,
-        "Tilki, Ibrahim" <Ibrahim.Tilki@analog.com>,
-        William Breathitt Gray <william.gray@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Hugo Villeneuve <hvilleneuve@dimonoff.com>,
-        ChiaEn Wu <chiaen_wu@richtek.com>,
-        Haibo Chen <haibo.chen@nxp.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        Iskren Chernev <me@iskren.info>,
+        Avri Altman <avri.altman@wdc.com>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Bart Van Assche <bvanassche@acm.org>,
+        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Conor Dooley <conor+dt@kernel.org>
+Subject: Re: [PATCH v5 3/5] dt-bindings: ufs: qcom: Add ICE to sm8450 example
+Message-ID: <168787520491.1834121.2564277926008455539.robh@kernel.org>
+References: <20221209-dt-binding-ufs-v5-0-c9a58c0a53f5@fairphone.com>
+ <20221209-dt-binding-ufs-v5-3-c9a58c0a53f5@fairphone.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221209-dt-binding-ufs-v5-3-c9a58c0a53f5@fairphone.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -90,118 +76,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 27, 2023 at 7:56=E2=80=AFAM Lee Jones <lee@kernel.org> wrote:
->
-> On Mon, 26 Jun 2023, Rob Herring wrote:
->
-> > On Wed, Jun 21, 2023 at 06:13:15PM +0100, Lee Jones wrote:
-> > > On Tue, 13 Jun 2023, Sahin, Okan wrote:
-> > >
-> > > > >On Fri, Apr 21, 2023 at 08:39:38AM +0100, Lee Jones wrote:
-> > > > >
-> > > > >> I'll try anything once!
-> > > > >
-> > > > >> Fair warning, I think this is going to massively complicate thin=
-gs.
-> > > > >
-> > > > >> Either we're going to be left with a situation where child-drive=
-r
-> > > > >> maintainers are scrabbling around looking for previous versions =
-for the
-> > > > >> MFD pull-request or contributors being forced to wait a full cyc=
-le for
-> > > > >> their dependencies to arrive in the maintainer's base.
-> > > > >
-> > > > >If people are resending after the MFD has gone in they really ough=
-t to
-> > > > >be including the pull request in the cover letter, with some combi=
-nation
-> > > > >of either referencing the mail or just saying "this depends on the
-> > > > >signed tag at url+tag", the same way they would for any other depe=
-ndency.
-> > > > >
-> > > > >I can't see how you applying stuff when you can slow things down T=
-BH,
-> > > > >the MFD bits will be applied faster and either people can pull in =
-a
-> > > > >shared tag or you can apply more commits on top of the existing co=
-re
-> > > > >driver.
-> > > > >
-> > > > >> I'm not sure why simply providing your Ack when you're happy wit=
-h the
-> > > > >> driver and forgetting about the set until the pull-request arriv=
-es, like
-> > > > >> we've been doing for nearly a decade now, isn't working for you =
-anymore
-> > > > >> but I'm mostly sure this method will be a regression.
-> > > > >
-> > > > >Like I said I've not been doing that, I've mostly been just applyi=
-ng the
-> > > > >driver when it's ready.  This might not have been so visible to yo=
-u
-> > > > >since it means that the regulator driver doesn't appear in the ser=
-ies by
-> > > > >the time the MFD settles down.  The whole "Acked-for-MFD" has alwa=
-ys
-> > > > >been a bit confusing TBH, it's not a normal ack ("go ahead and app=
-ly
-> > > > >this, I'm fine with it") so it was never clear what the intention =
-was.
-> > > > >
-> > > > >Before I started just applying the drivers there used to be consta=
-nt
-> > > > >problems with things like tags going missing (which some of the ti=
-me is
-> > > > >the submitter just not carrying them but can also be the result of=
- some
-> > > > >churn causing them to be deliberately dropped due to changes) or
-> > > > >forgetting the series as you suggest and then not looking at some =
-other
-> > > > >very similarly named series that was also getting lots of versions=
- after
-> > > > >thinking it was one that had been reviewed already.  It was all ve=
-ry
-> > > > >frustrating.  Not doing the tags until the dependencies have settl=
-ed
-> > > > >down means that if it's in my inbox it at least consistently needs=
- some
-> > > > >kind of attention and that the submitter didn't drop tags or anyth=
-ing so
-> > > > >I know why there's no tag on it even though the version number is =
-high,
-> > > > >though it's not ideal either.
-> > > >
-> > > > Hi Mark and Lee,
-> > > >
-> > > > Is there anything that I need to do for this patch set. I have rece=
-ived reviewed
-> > > > by tag for all of them so far.
-> > >
-> > > Since we are so late in the day, I'm going to just apply this for v6.=
-5.
-> > >
-> > > The remainder can then be applied, friction free, for v6.6.
-> >
-> > Now we have undocmented bindings in use by the driver (as pointed out b=
-y
-> > 'make dt_compatible_check').
-> >
-> > The whole series has all the acks/reviews needed for you to apply the
-> > whole thing, so why not take the whole thing? Plus this series has been
-> > sitting for 2 months. Not a great experience for submitters...
->
-> Patches are missing Acked-by tags.
->
->   Reviewed-by !=3D Acked-by
 
-Reviewed-by > Acked-by
+On Tue, 27 Jun 2023 10:28:03 +0200, Luca Weiss wrote:
+> SM8450 actually supports ICE (Inline Crypto Engine) so adjust the
+> example to match.
+> 
+> Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
+> ---
+>  Documentation/devicetree/bindings/ufs/qcom,ufs.yaml | 1 +
+>  1 file changed, 1 insertion(+)
+> 
 
->
-> I cannot merge other subsystem's patches without and Acked-by.
+Acked-by: Rob Herring <robh@kernel.org>
 
-I (and Krzysztof) give one or the other. If I'm taking a patch, then
-it's neither. I'm pretty sure Mark only gives Reviewed-by when he is
-not taking something.
-
-Rob
