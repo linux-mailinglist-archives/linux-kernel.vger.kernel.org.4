@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D82F73FB36
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 13:38:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C5AB873FB38
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 13:38:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231582AbjF0LiI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 07:38:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48084 "EHLO
+        id S231610AbjF0LiN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 07:38:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231200AbjF0LiG (ORCPT
+        with ESMTP id S231410AbjF0LiH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 07:38:06 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D67826BA
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 04:37:24 -0700 (PDT)
+        Tue, 27 Jun 2023 07:38:07 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E62F010FC
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 04:37:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1687865843;
+        s=mimecast20190719; t=1687865848;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=fm78avJkH6pYdzAlud14BVCLEgTOcTb6h7jlCJ92I3M=;
-        b=Yp96n2ZkbvqBMzgSHRl2sbs37jI2DjZ2C1yh/3BLBlzIdpa9tC1/5PejbTYkFtLwKxWSrL
-        UAOfDINokQJvD8TQCr9yasmQuq2zjw9yOSkDC+vykKHltCFIMLYkOg+aU/fWMjiKd4+3b9
-        pJ3vCHwHYfHeHcnZMaYu7lwJDwUlgpU=
+        bh=M8uI9NITXhdIkfxIh/YGGZnndpIynq2QI9XP50PGOk8=;
+        b=JuSF3WmxLz7lhAimun51C0IfTJZPne1q7B5fpzfgTfwrxKKBHpiVK/tupIqLo0olX2v0Xu
+        96Cm9mCHcc1IuRokYbeFCqs38ylBdcVqKcgf6QpQ9b3U8idUwrhW4enXlDD0RZP6feGc51
+        NzbpPWG/+1TmlxOkNVXXNxQWoFdnNGM=
 Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
  [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-104-lIxHzTeIN4O5vdJSe9EULw-1; Tue, 27 Jun 2023 07:37:22 -0400
-X-MC-Unique: lIxHzTeIN4O5vdJSe9EULw-1
+ us-mta-605-6Rwe48HYN8aT70oaGUc4YA-1; Tue, 27 Jun 2023 07:37:24 -0400
+X-MC-Unique: 6Rwe48HYN8aT70oaGUc4YA-1
 Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 996481C06ED1;
-        Tue, 27 Jun 2023 11:37:21 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 472F13C0FC8D;
+        Tue, 27 Jun 2023 11:37:24 +0000 (UTC)
 Received: from max-t490s.redhat.com (unknown [10.39.208.28])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id F2A20F5CC7;
-        Tue, 27 Jun 2023 11:37:18 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id E0A63F5CD0;
+        Tue, 27 Jun 2023 11:37:21 +0000 (UTC)
 From:   Maxime Coquelin <maxime.coquelin@redhat.com>
 To:     xieyongji@bytedance.com, jasowang@redhat.com, mst@redhat.com,
         david.marchand@redhat.com, lulu@redhat.com
@@ -45,9 +45,9 @@ Cc:     linux-kernel@vger.kernel.org,
         virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
         xuanzhuo@linux.alibaba.com, eperezma@redhat.com,
         Maxime Coquelin <maxime.coquelin@redhat.com>
-Subject: [PATCH v1 1/2] vduse: validate block features only with block devices
-Date:   Tue, 27 Jun 2023 13:36:51 +0200
-Message-ID: <20230627113652.65283-2-maxime.coquelin@redhat.com>
+Subject: [PATCH v1 2/2] vduse: enable Virtio-net device type
+Date:   Tue, 27 Jun 2023 13:36:52 +0200
+Message-ID: <20230627113652.65283-3-maxime.coquelin@redhat.com>
 In-Reply-To: <20230627113652.65283-1-maxime.coquelin@redhat.com>
 References: <20230627113652.65283-1-maxime.coquelin@redhat.com>
 MIME-Version: 1.0
@@ -63,49 +63,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch is preliminary work to enable network device
-type support to VDUSE.
-
-As VIRTIO_BLK_F_CONFIG_WCE shares the same value as
-VIRTIO_NET_F_HOST_TSO4, we need to restrict its check
-to Virtio-blk device type.
+This patch adds Virtio-net device type to the supported
+devices types. Initialization fails if the device does
+not support VIRTIO_F_VERSION_1 feature, in order to
+guarantee the configuration space is read-only.
 
 Signed-off-by: Maxime Coquelin <maxime.coquelin@redhat.com>
 ---
- drivers/vdpa/vdpa_user/vduse_dev.c | 9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
+ drivers/vdpa/vdpa_user/vduse_dev.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
 diff --git a/drivers/vdpa/vdpa_user/vduse_dev.c b/drivers/vdpa/vdpa_user/vduse_dev.c
-index 5f5c21674fdc..c1c2f4c711ae 100644
+index c1c2f4c711ae..89088fa27026 100644
 --- a/drivers/vdpa/vdpa_user/vduse_dev.c
 +++ b/drivers/vdpa/vdpa_user/vduse_dev.c
-@@ -1658,13 +1658,14 @@ static bool device_is_allowed(u32 device_id)
- 	return false;
+@@ -142,6 +142,7 @@ static struct workqueue_struct *vduse_irq_bound_wq;
+ 
+ static u32 allowed_device_id[] = {
+ 	VIRTIO_ID_BLOCK,
++	VIRTIO_ID_NET,
+ };
+ 
+ static inline struct vduse_dev *vdpa_to_vduse(struct vdpa_device *vdpa)
+@@ -1668,6 +1669,10 @@ static bool features_is_valid(struct vduse_dev_config *config)
+ 			(config->features & (1ULL << VIRTIO_BLK_F_CONFIG_WCE)))
+ 		return false;
+ 
++	if ((config->device_id == VIRTIO_ID_NET) &&
++			!(config->features & (1ULL << VIRTIO_F_VERSION_1)))
++		return false;
++
+ 	return true;
  }
  
--static bool features_is_valid(u64 features)
-+static bool features_is_valid(struct vduse_dev_config *config)
- {
--	if (!(features & (1ULL << VIRTIO_F_ACCESS_PLATFORM)))
-+	if (!(config->features & (1ULL << VIRTIO_F_ACCESS_PLATFORM)))
- 		return false;
+@@ -2023,6 +2028,7 @@ static const struct vdpa_mgmtdev_ops vdpa_dev_mgmtdev_ops = {
  
- 	/* Now we only support read-only configuration space */
--	if (features & (1ULL << VIRTIO_BLK_F_CONFIG_WCE))
-+	if ((config->device_id == VIRTIO_ID_BLOCK) &&
-+			(config->features & (1ULL << VIRTIO_BLK_F_CONFIG_WCE)))
- 		return false;
+ static struct virtio_device_id id_table[] = {
+ 	{ VIRTIO_ID_BLOCK, VIRTIO_DEV_ANY_ID },
++	{ VIRTIO_ID_NET, VIRTIO_DEV_ANY_ID },
+ 	{ 0 },
+ };
  
- 	return true;
-@@ -1691,7 +1692,7 @@ static bool vduse_validate_config(struct vduse_dev_config *config)
- 	if (!device_is_allowed(config->device_id))
- 		return false;
- 
--	if (!features_is_valid(config->features))
-+	if (!features_is_valid(config))
- 		return false;
- 
- 	return true;
 -- 
 2.41.0
 
