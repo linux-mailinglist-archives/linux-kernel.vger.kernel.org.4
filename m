@@ -2,158 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3B677406EB
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 01:41:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECBE57406EC
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 01:43:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230089AbjF0Xlm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 19:41:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47896 "EHLO
+        id S230119AbjF0XnI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 19:43:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229488AbjF0Xlk (ORCPT
+        with ESMTP id S229488AbjF0XnG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 19:41:40 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6446B1BE8
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 16:41:39 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id ED3516121C
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 23:41:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58985C433C0;
-        Tue, 27 Jun 2023 23:41:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687909298;
-        bh=z1GvJ00vioZSiRR1ZOMBDf0vCKBMJUK0WdI5BOEKyqE=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=Qoq3/4aOvR1Agudfp3kFnBmCUjPOWezZ5961VI2989QztAU11hldcF7le97u+dp43
-         94aw6uGRtqSvMw+DtPjDodqiL1TscNfFpASks2/qIwNRXRUdYTyurfcZ8Y7MkiQiem
-         eknbZt+bh0+PFuDvMYHuiq5kgIWg4yAlvd71quLOHHglmFiy5DPhUG0ZlRBC+IAg5C
-         yG9kbbX/Oj7Uv+In/mYI82WS0cwQ4I52ApYc8T6RxYh6LVoy5oFwHNY66zEj7E590Q
-         eZIf6Z8b/I9GAOZq0g+LKm9DoAKb5jFCFnGAb8UzCq7h9v/6TwGocIYHPj7PVA8/v7
-         KeFrUa5k0OgOg==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id F0D6CCE3A0D; Tue, 27 Jun 2023 16:41:37 -0700 (PDT)
-Date:   Tue, 27 Jun 2023 16:41:37 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
+        Tue, 27 Jun 2023 19:43:06 -0400
+Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com [IPv6:2607:f8b0:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D62E1199E
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 16:43:04 -0700 (PDT)
+Received: by mail-oi1-x22a.google.com with SMTP id 5614622812f47-3a0457d6b77so4624326b6e.0
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 16:43:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1687909384; x=1690501384;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=RpEHJ42Y+FRkYOYbSx5GF+my4XDRGnA4ioHtgi4/qRI=;
+        b=T7KqYKw8mjlhn/x2K+5YzbAKlMeEIRO5ppq1fModJiFzzSNmseOPT1AFAIsrL0Ts/V
+         AmDbtlD7VMrP/gg1AIn3+T3Kix1bg3L/xEZSB2vqYtw8eDhju+PHRzrnUuJfY+kgnnKX
+         ZpYkw+piG2Rpwp9IalR3BgDyjOw5z7cxdHfoU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687909384; x=1690501384;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=RpEHJ42Y+FRkYOYbSx5GF+my4XDRGnA4ioHtgi4/qRI=;
+        b=QmRmhYvuRNcHgB75CeNypi270rVInNTDiviAhzmaKsZU3+EJpwbDfNwoP9a5ehqJ2e
+         5h1qSMiGfMtu2sH6M9/eMWKREkqJrCntxJ1mlGSM/qsvXIO8nXkTPfaqFWD4FcY5Fr9T
+         PS/RdCK++dT6cMBTnc5n/8sDhT9iOR5z002u6lYK7Pzuw+vNd8OBe9raTNPQ54aYeDeT
+         Mf+UZZx0HLCnK9iGFTDEGCRXdJWoao0ZggWwrlxDcMlyiwPaVoDAECTcn50/NmlhGh50
+         MP7209UFIKAMkh7X8EXm4byN6NB3zkVmVbGBVdlOCxSirWC3KAJEpwM9ELOZ0uIeKq5w
+         NRuA==
+X-Gm-Message-State: AC+VfDwYGg8L3iAgd0viqi/pVGxjlLiqb+W/T1/Og7YMjvw8hltGgoLa
+        D2YgYVRoJ1FMPHZlnRXl1wyWUw==
+X-Google-Smtp-Source: ACHHUZ6hyvjqvfvkAjqCPC6wK6bSa+mhPwzs0dhXh+FswznfWRQHgfbQ0DlGlj6GdOqDNsSsXqM3RQ==
+X-Received: by 2002:a05:6808:1210:b0:3a0:5cd6:8773 with SMTP id a16-20020a056808121000b003a05cd68773mr22185539oil.54.1687909384207;
+        Tue, 27 Jun 2023 16:43:04 -0700 (PDT)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id 3-20020a17090a034300b0025b83c6227asm7127880pjf.3.2023.06.27.16.43.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 27 Jun 2023 16:43:03 -0700 (PDT)
+Date:   Tue, 27 Jun 2023 16:43:02 -0700
+From:   Kees Cook <keescook@chromium.org>
 To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Dinh Nguyen <dinguyen@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        linux-kernel@vger.kernel.org, linux@roeck-us.net,
-        vishal.moola@gmail.com, akpm@linux-foundation.org,
-        sfr@canb.auug.org.au
-Subject: Re: [PATCH] Revert "nios2: Convert __pte_free_tlb() to use ptdescs"
-Message-ID: <8a2707a4-04d3-4bcf-b1ee-9a2ef15886a0@paulmck-laptop>
-Reply-To: paulmck@kernel.org
-References: <20230627221430.464073-1-dinguyen@kernel.org>
- <CAHk-=wgh1CDUTJD+F_utKnbW6d=wApBMC4D8hMfOs15bAn23Bg@mail.gmail.com>
+Cc:     linux-kernel@vger.kernel.org, Baruch Siach <baruch@tkos.co.il>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Fangrui Song <maskray@google.com>,
+        Kees Cook <keescook@chromium.org>
+Subject: [GIT PULL] execve updates for v6.5-rc1
+Message-ID: <202306271642.ED8D48AC@keescook>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAHk-=wgh1CDUTJD+F_utKnbW6d=wApBMC4D8hMfOs15bAn23Bg@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 27, 2023 at 03:35:45PM -0700, Linus Torvalds wrote:
-> On Tue, 27 Jun 2023 at 15:14, Dinh Nguyen <dinguyen@kernel.org> wrote:
-> >
-> > This reverts commit 6ebe94baa2b9ddf3ccbb7f94df6ab26234532734.
-> >
-> > The patch "nios2: Convert __pte_free_tlb() to use ptdescs" was supposed
-> > to go together with a patchset that Vishal Moola had planned taking it
-> > through the mm tree. By just having this patch, all NIOS2 builds are
-> > broken.
-> 
-> This is now at least the third time just this merge window where some
-> base tree was broken, and people thought that linux-next is some kind
-> of testing ground for it all.
-> 
-> NO!
-> 
-> Linux-next is indeed for testing, and for finding situations where
-> there are interactions between different trees.
-> 
-> But linux-next is *not* a replacement for "this tree has to work on
-> its own". THAT testing needs to be done independently, and *before* a
-> tree hits linux-next.
-> 
-> It is *NOT* ok to say "this will work in combination with that other
-> tree". EVERY SINGLE TREE needs to work on its own, because otherwise
-> you cannot bisect the end result sanely.
-> 
-> We apparently had the NIOS2 tree being broken. And the RCU tree was
-> broken. And the KUnit tree was broken.
-> 
-> In all those cases, the base tree did not compile properly on its own,
-> and linux-next "magically fixed" it by either having Stephen Rothwell
-> literally fix the build breakage by hand, or by having some other tree
-> hide the problem.
-> 
-> This is very much not ok.
-> 
-> I'm not sure why it happened so much this release, but this needs to
-> stop. People need to realize that you can't just throw shit at the
-> wall and see if it sticks. You need to test your own trees *first*,
-> and *independently* of other peoples trees.
-> 
-> Then, if  you have done basic testing, you can then have it in
-> linux-next and that hopefully then finds any issues with bad
-> interactions with other trees, and maybe also ends up getting more
-> coverage testing on odd architectures and with odd configurations.
-> 
-> But linux-next must not in *any* way be a replacement for doing basic
-> testing on your own tree first.
+Hi Linus,
 
-On the off-chance that it helps someone else avoid my stupid mistakes,
-here is exactly how I messed this up so badly:
+Please pull these execve updates for v6.5-rc1.
 
-1.	This API-name-change series went well, except for the usual
-	lagging changes.  This *should* not be a problem, as you
-	simply leave the old API in however long it takes for the
-	change to get in.
+Thanks!
 
-2.	At some point -next was a single-argument kfree_rcu()-free zone.
-	So I queued the offending commit on the -rcu tree's rcu/next
-	branch, followed by a revert for my own testing.  The idea was
-	to make new uses fail in -next testing.
+-Kees
 
-	So far, so good.
+The following changes since commit f1fcbaa18b28dec10281551dfe6ed3a3ed80e3d6:
 
-3.	I noticed that -next was now free of kfree_rcu() calls.
+  Linux 6.4-rc2 (2023-05-14 12:51:40 -0700)
 
-	At this point, I made three stupid mistakes:
+are available in the Git repository at:
 
-	a.	I failed to wait for mainline itself to be free of the
-		single-argument kfree_rcu(), thus pulling the offending
-		single-argument kfree_rcu() removal commit into my pull
-		request a merge window too soon.  This is of course
-		especially stupid since I tend to send you the RCU pull
-		request early.
+  https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git tags/execve-v6.5-rc1
 
-	b.	I failed to identify exactly which -next commit eliminated
-		single-argument kfree_rcu().  Had I done so, I would
-		have seen that this was in fact Stephen's rcu/next
-		merge commit, which was never going to go to mainline.
+for you to fetch changes up to aa88054b70905069d1cf706aa5e9a3418d1d341d:
 
-	c.	Worst yet, out of force of habit, I left the revert
-		from #2 above in my testing, thus failing to see the
-		-rcu failure due to that remaining single-argument
-		kfree_rcu() call.
+  binfmt_elf: fix comment typo s/reset/regset/ (2023-06-23 09:36:30 -0700)
 
-So a combination of three stupid mistakes on my part made the RCU
-happen.
+----------------------------------------------------------------
+execve updates for v6.5-rc1
 
-As you say, testing *exactly* the commit heading up the pull request
-merged with your master branch would have spotted this, and I will
-of course make sure that I do this in the future.
+- Fix a few comments for correctness and typos (Baruch Siach)
 
-And again, please accept my apologies for this mess.
+- Small simplifications for binfmt (Christophe JAILLET)
 
-							Thanx, Paul
+- Set p_align to 4 for PT_NOTE in core dump (Fangrui Song)
+
+----------------------------------------------------------------
+Baruch Siach (2):
+      elf: correct note name comment
+      binfmt_elf: fix comment typo s/reset/regset/
+
+Christophe JAILLET (2):
+      binfmt: Use struct_size()
+      binfmt: Slightly simplify elf_fdpic_map_file()
+
+Fangrui Song (1):
+      coredump, vmcore: Set p_align to 4 for PT_NOTE
+
+ fs/binfmt_elf.c          |  4 ++--
+ fs/binfmt_elf_fdpic.c    | 12 ++++--------
+ fs/proc/vmcore.c         |  4 ++--
+ include/uapi/linux/elf.h |  3 ++-
+ 4 files changed, 10 insertions(+), 13 deletions(-)
+
+-- 
+Kees Cook
