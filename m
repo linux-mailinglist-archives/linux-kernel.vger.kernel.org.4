@@ -2,52 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DF03740033
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 17:58:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A00A7740037
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 17:59:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231764AbjF0P61 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 11:58:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60314 "EHLO
+        id S232027AbjF0P7d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 11:59:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230131AbjF0P6X (ORCPT
+        with ESMTP id S230384AbjF0P7b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 11:58:23 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 410492D63
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 08:58:22 -0700 (PDT)
+        Tue, 27 Jun 2023 11:59:31 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72BB72D68;
+        Tue, 27 Jun 2023 08:59:30 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BC6ED6118B
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 15:58:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2FC47C433C0;
-        Tue, 27 Jun 2023 15:58:19 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 016EA611D3;
+        Tue, 27 Jun 2023 15:59:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04E10C433C9;
+        Tue, 27 Jun 2023 15:59:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687881501;
-        bh=Y74UB6OZyQ4Kef5eKxwjNQANfzqcJ4v1SWBb6wuLiwg=;
-        h=Date:From:To:Cc:Subject:From;
-        b=K0QTwxmTf6nM2VMg1tzJTje2AgKgGtvxKO8j8kwenqeIF97/q30J5dGKQL+z7+Jfo
-         X7d8bgu2MqWyf/3ku5do9k+6FGVqK1qh6O/Q0r1PodNrsEgIMn0D5+aOslpFJGAlJC
-         QyPRwl8WJ5pz2FwHh7AXWcEzbxgQ5vTD7auqsuxVK/gJ2QL1ONtA9UvcIp/r2Wbex4
-         iQJlSVltyDjQwqGI5UoWx+n1TqRxS03mRgApARS3Hts1eqVi02o65iOsRst0RrcFEb
-         1qDD8T4xo80mvOaQJUnOd4s1Sh6lACzUNu7LsOlsg0Ikqt/yfb8r7GYR9aTo6gPVoc
-         MU06JMHo/2UNw==
-Date:   Wed, 28 Jun 2023 00:58:18 +0900
-From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Akanksha J N <akanksha@linux.ibm.com>,
-        Masami Hiramatsu (Google) <mhiramat@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        linux-kernel@vger.kernel.org
-Subject: [GIT PULL] Probes update for v6.5
-Message-Id: <20230628005818.c8df3a79955c7585d979419b@kernel.org>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
+        s=k20201202; t=1687881569;
+        bh=AA3u7kz1pu0vMNPeSL/vGc5ARaKVq+llu1ZjNTFOZYY=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=AEjG+n/bSqn/UH82G8HIczhWixak5ScxThjfmMOSom1fAGV4FP1vd9ebK46Wuz2jr
+         6ywXrGKYTf08EabwSo2e/C10RS6x2Im/4ZwHxfXtkFWKT0tBsFToh1WaFTerJU+c1V
+         Jo08l+xxO6Gg6MEHS3rgX0YABVC3s0laavLbYzjXidie28j32/MqcCdEIFmwzUdgk8
+         wDplROUqNRcYqxhIWuUa/pzhrTtO9pIYu1XAAcW/WBweTo30W2aL2Ztx7kdgFzTCGF
+         8YFpNCSQM8GzHBgJvTTXZATWEaz6VHZDvPXCT8/lC06ZFeNhmHW5CX4clk6CjLBysA
+         Y4h11ieYXXwVg==
+Date:   Tue, 27 Jun 2023 08:59:28 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     David Howells <dhowells@redhat.com>
+Cc:     Ilya Dryomov <idryomov@gmail.com>, netdev@vger.kernel.org,
+        Xiubo Li <xiubli@redhat.com>, Jeff Layton <jlayton@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>, Jens Axboe <axboe@kernel.dk>,
+        Matthew Wilcox <willy@infradead.org>,
+        ceph-devel@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net-next v3] libceph: Partially revert changes to
+ support MSG_SPLICE_PAGES
+Message-ID: <20230627085928.6569353e@kernel.org>
+In-Reply-To: <3199652.1687873788@warthog.procyon.org.uk>
+References: <3199652.1687873788@warthog.procyon.org.uk>
+MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -56,229 +61,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+On Tue, 27 Jun 2023 14:49:48 +0100 David Howells wrote:
+> Fix the mishandling of MSG_DONTWAIT and also reinstates the per-page
+> checking of the source pages (which might have come from a DIO write by
+> userspace) by partially reverting the changes to support MSG_SPLICE_PAGES
+> and doing things a little differently.  In messenger_v1:
+> 
+>  (1) The ceph_tcp_sendpage() is resurrected and the callers reverted to use
+>      that.
+> 
+>  (2) The callers now pass MSG_MORE unconditionally.  Previously, they were
+>      passing in MSG_MORE|MSG_SENDPAGE_NOTLAST and then degrading that to
+>      just MSG_MORE on the last call to ->sendpage().
+> 
+>  (3) Make ceph_tcp_sendpage() a wrapper around sendmsg() rather than
+>      sendpage(), setting MSG_SPLICE_PAGES if sendpage_ok() returns true on
+>      the page.
+> 
+> In messenger_v2:
+> 
+>  (4) Bring back do_try_sendpage() and make the callers use that.
+> 
+>  (5) Make do_try_sendpage() use sendmsg() for both cases and set
+>      MSG_SPLICE_PAGES if sendpage_ok() is set.
+> 
+> Fixes: 40a8c17aa770 ("ceph: Use sendmsg(MSG_SPLICE_PAGES) rather than sendpage")
+> Fixes: fa094ccae1e7 ("ceph: Use sendmsg(MSG_SPLICE_PAGES) rather than sendpage()")
+> Reported-by: Ilya Dryomov <idryomov@gmail.com>
 
-Probes updates for v6.5:
+Ilya, would you be okay if we sent the 6.5 PR without this and then
+we can either follow up with a PR in a few days or you can take this
+via your tree?
 
-- fprobe: Pass return address to the fprobe entry/exit callbacks so that
-  the callbacks don't need to analyze pt_regs/stack to find the function
-  return address.
+Or you could review it now, that'd also work :)
 
-- kprobe events: cleanup usage of TPARG_FL_FENTRY and TPARG_FL_RETURN
-  flags so that those are not set at once.
-
-- fprobe events:
- . Add a new fprobe events for tracing arbitrary function entry and
-   exit as a trace event.
- . Add a new tracepoint events for tracing raw tracepoint as a trace
-   event. This allows user to trace non user-exposed tracepoints.
- . Move eprobe's event parser code into probe event common file.
- . Introduce BTF (BPF type format) support to kernel probe (kprobe,
-   fprobe and tracepoint probe) events so that user can specify traced
-   function arguments by name. This also applies the type of argument
-   when fetching the argument.
- . Introduce '$arg*' wildcard support if BTF is available. This expands
-   the '$arg*' meta argument to all function argument automatically.
- . Check the return value types by BTF. If the function returns 'void',
-   '$retval' is rejected.
- . Add some selftest script for fprobe events, tracepoint events and
-   BTF support.
- . Update documentation about the fprobe events.
- . Some fixes for above features, document and selftests.
-
-- selftests for ftrace (except for new fprobe events):
- . Add a test case for multiple consecutive probes in a function which
-   checks if ftrace based kprobe, optimized kprobe and normal kprobe
-   can be defined in the same target function.
- . Add a test case for optimized probe, which checks whether kprobe
-   can be optimized or not.
-
-
-Please pull the latest probes-v6.5 tree, which can be found at:
-
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/trace/linux-trace.git
-probes-v6.5
-
-Tag SHA1: 08bb7e2de7f32619cd100419e719ef96d6cf0aab
-Head SHA1: 53431798f4bb60d214ae1ec4a79eefdd414f577b
-
-
-Akanksha J N (2):
-      selftests/ftrace: Add new test case which adds multiple consecutive probes in a function
-      selftests/ftrace: Add new test case which checks for optimized probes
-
-Masami Hiramatsu (Google) (15):
-      fprobe: Pass return address to the handlers
-      tracing/probes: Avoid setting TPARG_FL_FENTRY and TPARG_FL_RETURN
-      tracing/probes: Add fprobe events for tracing function entry and exit.
-      selftests/ftrace: Add fprobe related testcases
-      tracing/probes: Add tracepoint support on fprobe_events
-      tracing/probes: Move event parameter fetching code to common parser
-      tracing/probes: Support function parameters if BTF is available
-      tracing/probes: Add $arg* meta argument for all function args
-      tracing/probes: Add BTF retval type support
-      selftests/ftrace: Add tracepoint probe test case
-      selftests/ftrace: Add BTF arguments test cases
-      Documentation: tracing/probes: Add fprobe event tracing document
-      tracing/probes: Fix to return NULL and keep using current argc
-      Documentation: Fix typo of reference file name
-      tracing/probes: Fix tracepoint event with $arg* to fetch correct argument
-
-----
- Documentation/trace/fprobetrace.rst                |  188 +++
- Documentation/trace/index.rst                      |    1 +
- Documentation/trace/kprobetrace.rst                |    2 +
- include/linux/fprobe.h                             |   11 +-
- include/linux/rethook.h                            |    2 +-
- include/linux/trace_events.h                       |    3 +
- include/linux/tracepoint-defs.h                    |    1 +
- include/linux/tracepoint.h                         |    5 +
- kernel/kprobes.c                                   |    1 +
- kernel/trace/Kconfig                               |   26 +
- kernel/trace/Makefile                              |    1 +
- kernel/trace/bpf_trace.c                           |    6 +-
- kernel/trace/fprobe.c                              |   17 +-
- kernel/trace/rethook.c                             |    3 +-
- kernel/trace/trace.c                               |   13 +-
- kernel/trace/trace.h     Linus,
-
-Probes updates for v6.5:
-
-- fprobe: Pass return address to the fprobe entry/exit callbacks so that
-  the callbacks don't need to analyze pt_regs/stack to find the function
-  return address.
-
-- kprobe events: cleanup usage of TPARG_FL_FENTRY and TPARG_FL_RETURN
-  flags so that those are not set at once.
-
-- fprobe events:
- . Add a new fprobe events for tracing arbitrary function entry and
-   exit as a trace event.
- . Add a new tracepoint events for tracing raw tracepoint as a trace
-   event. This allows user to trace non user-exposed tracepoints.
- . Move eprobe's event parser code into probe event common file.
- . Introduce BTF (BPF type format) support to kernel probe (kprobe,
-   fprobe and tracepoint probe) events so that user can specify traced
-   function arguments by name. This also applies the type of argument
-   when fetching the argument.
- . Introduce '$arg*' wildcard support if BTF is available. This expands
-   the '$arg*' meta argument to all function argument automatically.
- . Check the return value types by BTF. If the function returns 'void',
-   '$retval' is rejected.
- . Add some selftest script for fprobe events, tracepoint events and
-   BTF support.
- . Update documentation about the fprobe events.
- . Some fixes for above features, document and selftests.
-
-- selftests for ftrace (except for new fprobe events):
- . Add a test case for multiple consecutive probes in a function which
-   checks if ftrace based kprobe, optimized kprobe and normal kprobe
-   can be defined in the same target function.
- . Add a test case for optimized probe, which checks whether kprobe
-   can be optimized or not.
-
-
-Please pull the latest probes-v6.5 tree, which can be found at:
-
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/trace/linux-trace.git
-probes-v6.5
-
-Tag SHA1: 08bb7e2de7f32619cd100419e719ef96d6cf0aab
-Head SHA1: 53431798f4bb60d214ae1ec4a79eefdd414f577b
-
-
-Akanksha J N (2):
-      selftests/ftrace: Add new test case which adds multiple consecutive probes in a function
-      selftests/ftrace: Add new test case which checks for optimized probes
-
-Masami Hiramatsu (Google) (15):
-      fprobe: Pass return address to the handlers
-      tracing/probes: Avoid setting TPARG_FL_FENTRY and TPARG_FL_RETURN
-      tracing/probes: Add fprobe events for tracing function entry and exit.
-      selftests/ftrace: Add fprobe related testcases
-      tracing/probes: Add tracepoint support on fprobe_events
-      tracing/probes: Move event parameter fetching code to common parser
-      tracing/probes: Support function parameters if BTF is available
-      tracing/probes: Add $arg* meta argument for all function args
-      tracing/probes: Add BTF retval type support
-      selftests/ftrace: Add tracepoint probe test case
-      selftests/ftrace: Add BTF arguments test cases
-      Documentation: tracing/probes: Add fprobe event tracing document
-      tracing/probes: Fix to return NULL and keep using current argc
-      Documentation: Fix typo of reference file name
-      tracing/probes: Fix tracepoint event with $arg* to fetch correct argument
-
-----
- Documentation/trace/fprobetrace.rst                |  188 +++
- Documentation/trace/index.rst                      |    1 +
- Documentation/trace/kprobetrace.rst                |    2 +
- include/linux/fprobe.h                             |   11 +-
- include/linux/rethook.h                            |    2 +-
- include/linux/trace_events.h                       |    3 +
- include/linux/tracepoint-defs.h                    |    1 +
- include/linux/tracepoint.h                         |    5 +
- kernel/kprobes.c                                   |    1 +
- kernel/trace/Kconfig                               |   26 +
- kernel/trace/Makefile                              |    1 +
- kernel/trace/bpf_trace.c                           |    6 +-
- kernel/trace/fprobe.c                              |   17 +-
- kernel/trace/rethook.c                             |    3 +-
- kernel/trace/trace.c                               |   13 +-
- kernel/trace/trace.h                               |   11 +
- kernel/trace/trace_eprobe.c                        |   44 +-
- kernel/trace/trace_fprobe.c                        | 1199 ++++++++++++++++++++
- kernel/trace/trace_kprobe.c                        |   35 +-
- kernel/trace/trace_probe.c                         |  659 +++++++++--
- kernel/trace/trace_probe.h                         |   49 +-
- kernel/trace/trace_uprobe.c                        |    8 +-
- lib/test_fprobe.c                                  |   10 +-
- samples/fprobe/fprobe_example.c                    |    6 +-
- .../ftrace/test.d/dynevent/add_remove_btfarg.tc    |   58 +
- .../ftrace/test.d/dynevent/add_remove_fprobe.tc    |   26 +
- .../ftrace/test.d/dynevent/add_remove_tprobe.tc    |   27 +
- .../ftrace/test.d/dynevent/fprobe_syntax_errors.tc |  111 ++
- .../ftrace/test.d/dynevent/tprobe_syntax_errors.tc |   82 ++
- .../ftrace/test.d/kprobe/kprobe_insn_boundary.tc   |   19 +
- .../ftrace/test.d/kprobe/kprobe_opt_types.tc       |   34 +
- .../ftrace/test.d/kprobe/kprobe_syntax_errors.tc   |   16 +-
- 32 files changed, 2510 insertions(+), 164 deletions(-)
- create mode 100644 Documentation/trace/fprobetrace.rst
- create mode 100644 kernel/trace/trace_fprobe.c
- create mode 100644 tools/testing/selftests/ftrace/test.d/dynevent/add_remove_btfarg.tc
- create mode 100644 tools/testing/selftests/ftrace/test.d/dynevent/add_remove_fprobe.tc
- create mode 100644 tools/testing/selftests/ftrace/test.d/dynevent/add_remove_tprobe.tc
- create mode 100644 tools/testing/selftests/ftrace/test.d/dynevent/fprobe_syntax_errors.tc
- create mode 100644 tools/testing/selftests/ftrace/test.d/dynevent/tprobe_syntax_errors.tc
- create mode 100644 tools/testing/selftests/ftrace/test.d/kprobe/kprobe_insn_boundary.tc
- create mode 100644 tools/testing/selftests/ftrace/test.d/kprobe/kprobe_opt_types.tc                          |   11 +
- kernel/trace/trace_eprobe.c                        |   44 +-
- kernel/trace/trace_fprobe.c                        | 1199 ++++++++++++++++++++
- kernel/trace/trace_kprobe.c                        |   35 +-
- kernel/trace/trace_probe.c                         |  659 +++++++++--
- kernel/trace/trace_probe.h                         |   49 +-
- kernel/trace/trace_uprobe.c                        |    8 +-
- lib/test_fprobe.c                                  |   10 +-
- samples/fprobe/fprobe_example.c                    |    6 +-
- .../ftrace/test.d/dynevent/add_remove_btfarg.tc    |   58 +
- .../ftrace/test.d/dynevent/add_remove_fprobe.tc    |   26 +
- .../ftrace/test.d/dynevent/add_remove_tprobe.tc    |   27 +
- .../ftrace/test.d/dynevent/fprobe_syntax_errors.tc |  111 ++
- .../ftrace/test.d/dynevent/tprobe_syntax_errors.tc |   82 ++
- .../ftrace/test.d/kprobe/kprobe_insn_boundary.tc   |   19 +
- .../ftrace/test.d/kprobe/kprobe_opt_types.tc       |   34 +
- .../ftrace/test.d/kprobe/kprobe_syntax_errors.tc   |   16 +-
- 32 files changed, 2510 insertions(+), 164 deletions(-)
- create mode 100644 Documentation/trace/fprobetrace.rst
- create mode 100644 kernel/trace/trace_fprobe.c
- create mode 100644 tools/testing/selftests/ftrace/test.d/dynevent/add_remove_btfarg.tc
- create mode 100644 tools/testing/selftests/ftrace/test.d/dynevent/add_remove_fprobe.tc
- create mode 100644 tools/testing/selftests/ftrace/test.d/dynevent/add_remove_tprobe.tc
- create mode 100644 tools/testing/selftests/ftrace/test.d/dynevent/fprobe_syntax_errors.tc
- create mode 100644 tools/testing/selftests/ftrace/test.d/dynevent/tprobe_syntax_errors.tc
- create mode 100644 tools/testing/selftests/ftrace/test.d/kprobe/kprobe_insn_boundary.tc
- create mode 100644 tools/testing/selftests/ftrace/test.d/kprobe/kprobe_opt_types.tc
-
--- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+In hindsight we should have pushed harder to make the FS changes as
+small as possible for sendpage removal, so that they can go in via 
+the appropriate tree with an appropriate level of scrutiny for 6.6,
+lesson learned :(
