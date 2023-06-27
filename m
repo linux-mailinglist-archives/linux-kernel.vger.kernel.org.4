@@ -2,158 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5319373FAAD
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 13:01:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B9F373FAA7
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 13:01:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231388AbjF0LBq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 07:01:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59658 "EHLO
+        id S231248AbjF0LA6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 07:00:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230522AbjF0LBj (ORCPT
+        with ESMTP id S230086AbjF0LAy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 07:01:39 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1679E1BE4
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 04:01:38 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1qE6R4-0007fq-JI; Tue, 27 Jun 2023 13:00:38 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1qE6Qv-00AQAC-96; Tue, 27 Jun 2023 13:00:29 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1qE6Qu-000ECV-GT; Tue, 27 Jun 2023 13:00:28 +0200
-Date:   Tue, 27 Jun 2023 13:00:25 +0200
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Yangtao Li <frank.li@vivo.com>
-Cc:     miquel.raynal@bootlin.com, rafael@kernel.org,
-        daniel.lezcano@linaro.org, amitk@kernel.org, rui.zhang@intel.com,
-        mmayer@broadcom.com, bcm-kernel-feedback-list@broadcom.com,
-        florian.fainelli@broadcom.com, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
-        linux-imx@nxp.com, agross@kernel.org, andersson@kernel.org,
-        konrad.dybcio@linaro.org, thara.gopinath@gmail.com,
-        heiko@sntech.de, mcoquelin.stm32@gmail.com,
-        alexandre.torgue@foss.st.com, thierry.reding@gmail.com,
-        jonathanh@nvidia.com, tglx@linutronix.de, matthias.bgg@gmail.com,
-        angelogioacchino.delregno@collabora.com,
-        srinivas.pandruvada@linux.intel.com,
-        DLG-Adam.Ward.opensource@dm.renesas.com, shangxiaojing@huawei.com,
-        bchihi@baylibre.com, wenst@chromium.org,
-        hayashi.kunihiko@socionext.com,
-        niklas.soderlund+renesas@ragnatech.se, chi.minghao@zte.com.cn,
-        johan+linaro@kernel.org, jernej.skrabec@gmail.com,
-        linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-tegra@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v2 01/15] genirq/devres: Add error information printing
- for devm_request_threaded_irq()
-Message-ID: <20230627110025.vgtplc6nluiiuvoh@pengutronix.de>
-References: <20230627101215.58798-1-frank.li@vivo.com>
+        Tue, 27 Jun 2023 07:00:54 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E22921FC7
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 04:00:50 -0700 (PDT)
+Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 586521EC06BB;
+        Tue, 27 Jun 2023 13:00:49 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1687863649;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:references;
+        bh=tNTu6Pvc43JIGHySj2x4ASfX/dpRFgRCaVESW8OczY8=;
+        b=gN9qHRAWAwU7hIRbz10Y71fwYpbn1+iyg7AaZAtscaxPsyVCIFKJJDuG1kWCPihN36Vuc6
+        9AhtpCbfUADrHahbmi36FmiXa0Rr3mIM5m6xKkOCuVmcvmcL+/Y2NER0AoqV6ll4/eHm8F
+        R647KpE4fkkYCkrXQPwee+gMyShaHEE=
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
+        header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+        by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id VJhc5N-_SW9S; Tue, 27 Jun 2023 11:00:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+        t=1687863645; bh=tNTu6Pvc43JIGHySj2x4ASfX/dpRFgRCaVESW8OczY8=;
+        h=Date:From:To:Cc:Subject:From;
+        b=CVW3LWR5cegKkvBWoGB5TWjPgfICEbpZRG40qRWYrQrAE6B6b/JdkYimjmU4vCse0
+         TnrJiASnr9Z51wH4+SUzOgYs2xxBOKiFiGV7C+hl5r4NRU13D9fFhleRW87sSLn7qr
+         cecQC6Oe1nZMdxGGRlZyBgo8SklL9Ua+Lm5KhNs+2uAA0i7oV8D10jvi1ybAidI8vm
+         VkOtFKykbdle50I1Mjlh/5MqFPh2IooBGeyo9IJ4IIHPpDS0rSLcAwIqOc7V8ALj8R
+         XOyxta7emEC+Xb+Ak6PmVVIa9nXAXKu8ict/gYEqG9bdqv+qa3wMHC4DRhF/Ze0nUO
+         rg1lEC/V3SiTC+dxHEqJzH/1hOzaQvoHuUsff/dOdecKCtf94HRHg4yvY69rajC+H5
+         SKQKYbSi6LrjLjcroueX3s5mLVujqaGiynHvjqDIzzmbJSQwgIXj9VuhIr+jnO2aRt
+         1613pM5a3fUGiUTngJFzFaZ1sd7xSvzBPmvGHZ49YTCYqDcRFCE8/IPnncTA6CfaJr
+         IgbxzhZXOJGL/rYOwW68JDJnSDgfXbb33w3GiSiv3q/5e9VOJUIaua66wqNK4UDiIK
+         H+vCWbsZUdJ6tBkPsKANUmyYumhps11EhVqUGEufXGR8RlS/PHmSQmzoZy/OFtVMP/
+         kGNZOUKGf96tT6/AxPXta0wI=
+Received: from zn.tnic (pd9530d32.dip0.t-ipconnect.de [217.83.13.50])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+        (No client certificate requested)
+        by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id D4C8040E0033;
+        Tue, 27 Jun 2023 11:00:42 +0000 (UTC)
+Date:   Tue, 27 Jun 2023 13:00:38 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     x86-ml <x86@kernel.org>, lkml <linux-kernel@vger.kernel.org>
+Subject: [GIT PULL] x86/misc for 6.5
+Message-ID: <20230627110038.GCZJrBVqu/4BfdyBeN@fat_crate.local>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="t3yaxbxt6bm6emkg"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230627101215.58798-1-frank.li@vivo.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Linus,
 
---t3yaxbxt6bm6emkg
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+please pull the misc pile of updates for 6.5.
 
-Hello,
+Thx.
 
-On Tue, Jun 27, 2023 at 06:12:01PM +0800, Yangtao Li wrote:
-> Ensure that all error handling branches print error information. In this
-> way, when this function fails, the upper-layer functions can directly
-> return an error code without missing debugging information. Otherwise,
-> the error message will be printed redundantly or missing.
->=20
-> There are more than 700 calls to the devm_request_threaded_irq method.
-> Most drivers only request one interrupt resource, and these error
-> messages are basically the same. If error messages are printed
-> everywhere, more than 1000 lines of code can be saved by removing the
-> msg in the driver.
->=20
-> Signed-off-by: Yangtao Li <frank.li@vivo.com>
-> ---
->  kernel/irq/devres.c | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
->=20
-> diff --git a/kernel/irq/devres.c b/kernel/irq/devres.c
-> index f6e5515ee077..fcb946ffb7ec 100644
-> --- a/kernel/irq/devres.c
-> +++ b/kernel/irq/devres.c
-> @@ -58,8 +58,10 @@ int devm_request_threaded_irq(struct device *dev, unsi=
-gned int irq,
-> =20
->  	dr =3D devres_alloc(devm_irq_release, sizeof(struct irq_devres),
->  			  GFP_KERNEL);
-> -	if (!dr)
-> +	if (!dr) {
-> +		dev_err(dev, "Failed to allocate device resource data\n");
->  		return -ENOMEM;
-> +	}
-> =20
->  	if (!devname)
->  		devname =3D dev_name(dev);
-> @@ -67,6 +69,7 @@ int devm_request_threaded_irq(struct device *dev, unsig=
-ned int irq,
->  	rc =3D request_threaded_irq(irq, handler, thread_fn, irqflags, devname,
->  				  dev_id);
->  	if (rc) {
-> +		dev_err_probe(dev, rc, "Failed to request threaded irq%d: %d\n", irq, =
-rc);
+---
 
-This changes semantics because dev_err_probe() is only supposed to be
-called in probe functions. Not sure about devm_request_threaded_irq, but
-its friend request_irq is called in the setup_irq (or open IIRC)
-callback of serial drivers.
+The following changes since commit ac9a78681b921877518763ba0e89202254349d1b:
 
-While I assume changing to dev_err_probe is a result of my concern that
-no error should be printed when rc=3D-EPROBEDEFER, my other concern that
-adding an error message to a generic allocation function is a bad idea
-still stands.
+  Linux 6.4-rc1 (2023-05-07 13:34:35 -0700)
 
-Best regards
-Uwe
+are available in the Git repository at:
 
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+  git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git tags/x86_misc_for_v6.5
 
---t3yaxbxt6bm6emkg
-Content-Type: application/pgp-signature; name="signature.asc"
+for you to fetch changes up to 5516c89d58283413134f8d26960c6303d5d5bd89:
 
------BEGIN PGP SIGNATURE-----
+  x86/lib: Make get/put_user() exception handling a visible symbol (2023-06-02 10:51:46 +0200)
 
-iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmSawUgACgkQj4D7WH0S
-/k7nEAf/Sl6IkhcKwJ4ubKgDKscqGnFI0cXLbwVB+ka4iZfjqT5YcryVy/7nzzc4
-i3/0+bkJ03exSpcwA2tD+lYPOiEOGjeP/zlVkVO4yUom1zTqv5nxhhV9RlGNaOh4
-078C0cl2BRqDJoTleXNliumh2XZAQwQRCBGjZvxF5nbgbz72DN9KCae20rqtrNGx
-B8kXn6gLq7G3/LyeuUxanxoyk0ok5qPOhbp7fCwRV5FFaq8p4C0AEQKp+IxGwBLm
-YaRpSdThVEGAPaK+FvneVS7geTX5lliN3me02TSHTRDgE4WrMcITeJ3kyImTjU+A
-wSYX7roBs61l4eBj3iITpZkOBqw6ww==
-=xLpK
------END PGP SIGNATURE-----
+----------------------------------------------------------------
+- Remove the local symbols prefix of the get/put_user() exception
+  handling symbols so that tools do not get confused by the presence of
+  code belonging to the wrong symbol/not belonging to any symbol
 
---t3yaxbxt6bm6emkg--
+- Improve csum_partial()'s performance
+
+- Some improvements to the kcpuid tool
+
+----------------------------------------------------------------
+Borislav Petkov (AMD) (1):
+      tools/x86/kcpuid: Dump the correct CPUID function in error
+
+Nadav Amit (1):
+      x86/lib: Make get/put_user() exception handling a visible symbol
+
+Nathan Chancellor (1):
+      x86/csum: Fix clang -Wuninitialized in csum_partial()
+
+Noah Goldstein (1):
+      x86/csum: Improve performance of `csum_partial`
+
+Rong Tao (1):
+      tools/x86/kcpuid: Add .gitignore
+
+ arch/x86/lib/csum-partial_64.c   | 101 ++++++++----
+ arch/x86/lib/getuser.S           |  32 ++--
+ arch/x86/lib/putuser.S           |  24 +--
+ lib/Kconfig.debug                |  17 ++
+ lib/Makefile                     |   1 +
+ lib/checksum_kunit.c             | 334 +++++++++++++++++++++++++++++++++++++++
+ tools/arch/x86/kcpuid/.gitignore |   1 +
+ tools/arch/x86/kcpuid/kcpuid.c   |   7 +-
+ 8 files changed, 453 insertions(+), 64 deletions(-)
+ create mode 100644 lib/checksum_kunit.c
+ create mode 100644 tools/arch/x86/kcpuid/.gitignore
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
