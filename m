@@ -2,142 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79BE674057F
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 23:18:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B94C0740582
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 23:19:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230007AbjF0VSQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 17:18:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34364 "EHLO
+        id S230058AbjF0VTc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 17:19:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbjF0VSP (ORCPT
+        with ESMTP id S230030AbjF0VT1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 17:18:15 -0400
-Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA522198E
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 14:18:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=3vhPCu53nxpX9E42A4ruWOxKwyzxqXGXKDJSyV2Vnpk=; b=esBYqXRaJNsjQ7Zydh+R9urN/b
-        Nx18p1tk8NSIfdccDDViIdi7Y4yI4IjhMdoC/pqWR3U4zCNfghH42qR9ZWLrZLWxQEl0eyXYVfr2T
-        zRki6ceQ3fztKcCmjzZB+9Al4YmhFZEhVTGMysYYU5Bed4DbqOfKcn6qscLRLE9/YsUBu5HzXMGT7
-        DiDXo3saZGh+Tt90xcLek0eYfnUzWIf9gy+9Jzi5LEBWQGodVo/i70P9vt00nYyPDpefIeFUTWoO1
-        fKWUK/RrFuYDqubMpbg+YzkDjDBZDK4L/iKZ4+0rO/mR3OdTXi0y6py6yweLj/ZPuvy779Y57jAd6
-        7knoxslw==;
-Received: from [179.113.218.86] (helo=[192.168.1.111])
-        by fanzine2.igalia.com with esmtpsa 
-        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
-        id 1qEG4D-004r3K-UH; Tue, 27 Jun 2023 23:17:42 +0200
-Message-ID: <b3f72b45-c607-7cd3-2bdb-21567f901469@igalia.com>
-Date:   Tue, 27 Jun 2023 18:17:35 -0300
+        Tue, 27 Jun 2023 17:19:27 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2FC5198E
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 14:19:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1687900765; x=1719436765;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=9F6oczZXMEUoLAJfxEwJtk3XCCkCKi/30DZkczd5yX0=;
+  b=ZBh3EauGKjv5lsLz3jvHWPIbqoaszNHdUMD4vhoxKn1JXNc57qpWcXYZ
+   fSCoV8BCCsdAiwaZ5A0T3KHYJBG4Fj3Qp8eRbzvkeVEHgQPcdGzRPccmM
+   NVh+jwOnAqdnhZVxk7OVQ7TiFGi0Z1jybYwFzDahCd8qxT1Z6L3X3H79y
+   v0CKUiqfXxvxykSCw4Ec//GHtGL3M911fPIPvxn7xLVbkjogwz3nBknrM
+   IauYx8kljUkE8F3PeJ410r4m8ui1awgavjr4HTlD6am7U5+y8+eLdTvIL
+   N17TcCffeHS8QrrzW1vjGIfCLsIRuMeBqtfvyUSLeRrbDmH5YoHpQZR9u
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10754"; a="448068758"
+X-IronPort-AV: E=Sophos;i="6.01,163,1684825200"; 
+   d="scan'208";a="448068758"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2023 14:19:25 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10754"; a="694047086"
+X-IronPort-AV: E=Sophos;i="6.01,163,1684825200"; 
+   d="scan'208";a="694047086"
+Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 27 Jun 2023 14:19:22 -0700
+Received: from kbuild by 783282924a45 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1qEG5p-000CHH-1b;
+        Tue, 27 Jun 2023 21:19:21 +0000
+Date:   Wed, 28 Jun 2023 05:19:18 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Phil Auld <pauld@redhat.com>, linux-kernel@vger.kernel.org
+Cc:     oe-kbuild-all@lists.linux.dev, Juri Lelli <juri.lelli@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Ben Segall <bsegall@google.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Mel Gorman <mgorman@suse.de>, Phil Auld <pauld@redhat.com>
+Subject: Re: [PATCH v2] Sched/fair: Block nohz tick_stop when cfs bandwidth
+ in use
+Message-ID: <202306280536.Zd5x1Zdv-lkp@intel.com>
+References: <20230627191201.344110-1-pauld@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v5 1/1] drm/doc: Document DRM device reset expectations
-To:     =?UTF-8?Q?Christian_K=c3=b6nig?= <ckoenig.leichtzumerken@gmail.com>
-Cc:     pierre-eric.pelloux-prayer@amd.com,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        =?UTF-8?B?J01hcmVrIE9sxaHDoWsn?= <maraeo@gmail.com>,
-        =?UTF-8?Q?Michel_D=c3=a4nzer?= <michel.daenzer@mailbox.org>,
-        Simon Ser <contact@emersion.fr>, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org,
-        =?UTF-8?Q?Timur_Krist=c3=b3f?= <timur.kristof@gmail.com>,
-        amd-gfx@lists.freedesktop.org,
-        Pekka Paalanen <ppaalanen@gmail.com>,
-        Daniel Stone <daniel@fooishbar.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Samuel Pitoiset <samuel.pitoiset@gmail.com>,
-        kernel-dev@igalia.com, Bas Nieuwenhuizen <bas@basnieuwenhuizen.nl>,
-        alexander.deucher@amd.com,
-        Pekka Paalanen <pekka.paalanen@collabora.com>,
-        Dave Airlie <airlied@gmail.com>, christian.koenig@amd.com
-References: <20230627132323.115440-1-andrealmeid@igalia.com>
- <1dbeb507-3f18-1b5d-37be-fcfd60a1c0d4@gmail.com>
-Content-Language: en-US
-From:   =?UTF-8?Q?Andr=c3=a9_Almeida?= <andrealmeid@igalia.com>
-In-Reply-To: <1dbeb507-3f18-1b5d-37be-fcfd60a1c0d4@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230627191201.344110-1-pauld@redhat.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em 27/06/2023 14:47, Christian König escreveu:
-> Am 27.06.23 um 15:23 schrieb André Almeida:
->> Create a section that specifies how to deal with DRM device resets for
->> kernel and userspace drivers.
->>
->> Acked-by: Pekka Paalanen <pekka.paalanen@collabora.com>
->> Signed-off-by: André Almeida <andrealmeid@igalia.com>
->> ---
->>
->> v4: 
->> https://lore.kernel.org/lkml/20230626183347.55118-1-andrealmeid@igalia.com/
->>
->> Changes:
->>   - Grammar fixes (Randy)
->>
->>   Documentation/gpu/drm-uapi.rst | 68 ++++++++++++++++++++++++++++++++++
->>   1 file changed, 68 insertions(+)
->>
->> diff --git a/Documentation/gpu/drm-uapi.rst 
->> b/Documentation/gpu/drm-uapi.rst
->> index 65fb3036a580..3cbffa25ed93 100644
->> --- a/Documentation/gpu/drm-uapi.rst
->> +++ b/Documentation/gpu/drm-uapi.rst
->> @@ -285,6 +285,74 @@ for GPU1 and GPU2 from different vendors, and a 
->> third handler for
->>   mmapped regular files. Threads cause additional pain with signal
->>   handling as well.
->> +Device reset
->> +============
->> +
->> +The GPU stack is really complex and is prone to errors, from hardware 
->> bugs,
->> +faulty applications and everything in between the many layers. Some 
->> errors
->> +require resetting the device in order to make the device usable 
->> again. This
->> +sections describes the expectations for DRM and usermode drivers when a
->> +device resets and how to propagate the reset status.
->> +
->> +Kernel Mode Driver
->> +------------------
->> +
->> +The KMD is responsible for checking if the device needs a reset, and 
->> to perform
->> +it as needed. Usually a hang is detected when a job gets stuck 
->> executing. KMD
->> +should keep track of resets, because userspace can query any time 
->> about the
->> +reset stats for an specific context.
-> 
-> Maybe drop the part "for a specific context". Essentially the reset 
-> query could use global counters instead and we won't need the context 
-> any more here.
-> 
+Hi Phil,
 
-Right, I wrote like this to reflect how it's currently implemented.
+kernel test robot noticed the following build warnings:
 
-If follow correctly what you meant, KMD could always notify the global 
-count for UMD, and we would move to the UMD the responsibility to manage 
-the reset counters, right? This would also simplify my 
-DRM_IOCTL_GET_RESET proposal. I'll apply your suggestion to the next doc 
-version.
+[auto build test WARNING on tip/auto-latest]
+[also build test WARNING on linus/master v6.4 next-20230627]
+[cannot apply to tip/sched/core tip/master]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-> Apart from that this sounds good to me, feel free to add my rb.
-> 
-> Regards,
-> Christian.
-> 
-> 
+url:    https://github.com/intel-lab-lkp/linux/commits/Phil-Auld/Sched-fair-Block-nohz-tick_stop-when-cfs-bandwidth-in-use/20230628-031312
+base:   tip/auto-latest
+patch link:    https://lore.kernel.org/r/20230627191201.344110-1-pauld%40redhat.com
+patch subject: [PATCH v2] Sched/fair: Block nohz tick_stop when cfs bandwidth in use
+config: nios2-randconfig-r035-20230627 (https://download.01.org/0day-ci/archive/20230628/202306280536.Zd5x1Zdv-lkp@intel.com/config)
+compiler: nios2-linux-gcc (GCC) 12.3.0
+reproduce: (https://download.01.org/0day-ci/archive/20230628/202306280536.Zd5x1Zdv-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306280536.Zd5x1Zdv-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   kernel/sched/fair.c:688:5: warning: no previous prototype for 'sched_update_scaling' [-Wmissing-prototypes]
+     688 | int sched_update_scaling(void)
+         |     ^~~~~~~~~~~~~~~~~~~~
+>> kernel/sched/fair.c:6220:6: warning: no previous prototype for 'sched_cfs_bandwidth_active' [-Wmissing-prototypes]
+    6220 | bool sched_cfs_bandwidth_active(struct cfs_rq *cfs_rq)
+         |      ^~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+vim +/sched_cfs_bandwidth_active +6220 kernel/sched/fair.c
+
+  6212	
+  6213	static inline struct cfs_bandwidth *tg_cfs_bandwidth(struct task_group *tg)
+  6214	{
+  6215		return NULL;
+  6216	}
+  6217	static inline void destroy_cfs_bandwidth(struct cfs_bandwidth *cfs_b) {}
+  6218	static inline void update_runtime_enabled(struct rq *rq) {}
+  6219	static inline void unthrottle_offline_cfs_rqs(struct rq *rq) {}
+> 6220	bool sched_cfs_bandwidth_active(struct cfs_rq *cfs_rq)
+  6221	{
+  6222		return false;
+  6223	}
+  6224	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
