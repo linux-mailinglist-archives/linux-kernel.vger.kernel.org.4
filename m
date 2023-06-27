@@ -2,146 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67EB673FBDE
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 14:19:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B47DE73FBE1
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 14:20:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230106AbjF0MTI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 08:19:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39374 "EHLO
+        id S230109AbjF0MUD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 08:20:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbjF0MTG (ORCPT
+        with ESMTP id S229468AbjF0MUB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 08:19:06 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8EBB1999;
-        Tue, 27 Jun 2023 05:19:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687868344; x=1719404344;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=S/Oh83wIoz8iTjgXyFj7FBvLQ6z/1uq7Rt97/C+Sd54=;
-  b=UhlkP5V77gYWSjHPKHlfFoxLhqjpTxGu3c4H7WKrpD1jaJ2Rj7OThxmC
-   kogpxGeUMrU9ozH7RrmikkPX3U9hEoh/JCiiaIpj0JznH50AXczy0z8+i
-   7BKfL7RrdNv5LRF0T2muSqFT6KjWZRHv4LFvwywmrNCCGpXgo73Nb1upx
-   fxU2ENeRQELt92z3QBkOLsmRkm9LVvKmSjKYmluvGw/KKyYDu6l25JqhC
-   eXuQi2E3dPoONTlCMzzcox850guSlqS+ON4MNuXxPtfuP/sMSWov6VITI
-   FplneC5xXvV7ojDOpXK3nKzUMx1Jq0WCmcZ488aWiMtN7G61x8MGW8WCL
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10753"; a="364105346"
-X-IronPort-AV: E=Sophos;i="6.01,162,1684825200"; 
-   d="scan'208";a="364105346"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2023 05:19:03 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10753"; a="963174691"
-X-IronPort-AV: E=Sophos;i="6.01,162,1684825200"; 
-   d="scan'208";a="963174691"
-Received: from rbhaumik-mobl2.ger.corp.intel.com (HELO box.shutemov.name) ([10.251.217.121])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2023 05:18:56 -0700
-Received: by box.shutemov.name (Postfix, from userid 1000)
-        id 453D0103738; Tue, 27 Jun 2023 15:18:53 +0300 (+03)
-Date:   Tue, 27 Jun 2023 15:18:53 +0300
-From:   "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>
-To:     "Huang, Kai" <kai.huang@intel.com>
-Cc:     "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "Raj, Ashok" <ashok.raj@intel.com>,
-        "Hansen, Dave" <dave.hansen@intel.com>,
-        "david@redhat.com" <david@redhat.com>,
-        "bagasdotme@gmail.com" <bagasdotme@gmail.com>,
-        "Luck, Tony" <tony.luck@intel.com>,
-        "ak@linux.intel.com" <ak@linux.intel.com>,
-        "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Christopherson,, Sean" <seanjc@google.com>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "Yamahata, Isaku" <isaku.yamahata@intel.com>,
-        "Chatre, Reinette" <reinette.chatre@intel.com>,
-        "nik.borisov@suse.com" <nik.borisov@suse.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "Shahar, Sagi" <sagis@google.com>,
-        "imammedo@redhat.com" <imammedo@redhat.com>,
-        "bp@alien8.de" <bp@alien8.de>, "Gao, Chao" <chao.gao@intel.com>,
-        "Brown, Len" <len.brown@intel.com>,
-        "sathyanarayanan.kuppuswamy@linux.intel.com" 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        "Huang, Ying" <ying.huang@intel.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "Williams, Dan J" <dan.j.williams@intel.com>
-Subject: Re: [PATCH v12 07/22] x86/virt/tdx: Add skeleton to enable TDX on
- demand
-Message-ID: <20230627121853.ek5zr7sfiezfkfyj@box.shutemov.name>
-References: <cover.1687784645.git.kai.huang@intel.com>
- <104d324cd68b12e14722ee5d85a660cccccd8892.1687784645.git.kai.huang@intel.com>
- <20230627095012.ln47s62pqzdrnb7x@box.shutemov.name>
- <d6a0fb32ebcdeb6c38ebe8e2b03f034f42360c0f.camel@intel.com>
+        Tue, 27 Jun 2023 08:20:01 -0400
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E62731999;
+        Tue, 27 Jun 2023 05:19:59 -0700 (PDT)
+Received: by mail-lj1-x22c.google.com with SMTP id 38308e7fff4ca-2b69e6cce7dso37085501fa.2;
+        Tue, 27 Jun 2023 05:19:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687868398; x=1690460398;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=iZBRO+X3paThKk+MmzNq9+BGJ0hxRpP3TLZQHUudoOA=;
+        b=rkWAm1ADq12z0SXn/Nh9CR+6SU/6HzEv8u8Lbh6hltITBw/8S6l//V3UDxzFMbw16r
+         i1701QGXayvqF7ZHyboxKnmY9MWQ7XVuJ6+8BqRdP4UO/mrtDbh7AM0CPCsxAPEQttB7
+         BQUk+cxmJI51j86nQUmbyrcsUYX7qyfKiul+OhFdZSfHjJ5tbWqrohcwHp27eGJLl798
+         Ru8oFzmLKWq4NLeF+gp36mJ/9ZjfSZinNoAFtSFquMo0JDBAKaKux0fwV3emZTJOpgMn
+         xDhtUaNYr16dU6ERQd1l6i8t4Eh4A96cBvAubnTlm4A3tr16a2srSN8Q2Mj8mFULTF+i
+         SO1g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687868398; x=1690460398;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=iZBRO+X3paThKk+MmzNq9+BGJ0hxRpP3TLZQHUudoOA=;
+        b=I1nE3jgdWl0wHxxQjNysySOEGYNBbSMJFIq79pxsD8GK95cU3E4C2Lgy6gy7MHp5Kf
+         H4LIwUOcdWtHiUXrpjXauUvx60G1eIChC4xq+osZZG2InFR2jZV52u6dx4enRrd9qs+L
+         PGaBs7j7YurzFtgonu9oTUZ+FbKm26pPoRtJ0u3t0nRh/hS1Rn5w4/X9jtu0RM/Bc/Sx
+         +kNRItwFgtB/oIuCfiuwpvaArOyfQpNsJ8rbYaCYU0caBstHAV2BrQJy/Trs6ZewUbDd
+         OE/8Nbw3hl9V6K2fINveUXmvaRIZh4R/1S37cKWt1U1cQbHsnogHEKPTVbN+3MNyWV5g
+         xHkA==
+X-Gm-Message-State: AC+VfDyGXFdxITi4cqJcKsfRkIGdoKijeryYaYaqre4A8wo8uRRt5ozJ
+        BY2HyqiRH5b0r9XCMXgU5uw=
+X-Google-Smtp-Source: ACHHUZ6ZdlfEPxn7Ed0+iaM3WCuxa27iQquL4Z5Cz/jXe2bpcFIDMotV/pP4MwZ8x94+hCXf864wkQ==
+X-Received: by 2002:a2e:948b:0:b0:2b4:491d:8d53 with SMTP id c11-20020a2e948b000000b002b4491d8d53mr19561334ljh.45.1687868397832;
+        Tue, 27 Jun 2023 05:19:57 -0700 (PDT)
+Received: from skbuf ([188.25.159.134])
+        by smtp.gmail.com with ESMTPSA id i23-20020a50fc17000000b0051c7b5692easm3769981edr.7.2023.06.27.05.19.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 27 Jun 2023 05:19:57 -0700 (PDT)
+Date:   Tue, 27 Jun 2023 15:19:55 +0300
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Ravi Gunasekaran <r-gunasekaran@ti.com>
+Cc:     Ido Schimmel <idosch@nvidia.com>, kuba@kernel.org,
+        Nikolay Aleksandrov <razor@blackwall.org>, davem@davemloft.net,
+        edumazet@google.com, pabeni@redhat.com, bigeasy@linutronix.de,
+        simon.horman@corigine.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, rogerq@kernel.org
+Subject: Re: [PATCH v2 net-next] net: hsr: Disable promiscuous mode in
+ offload mode
+Message-ID: <20230627121955.4mhwwkc3i4knrsxg@skbuf>
+References: <20230614114710.31400-1-r-gunasekaran@ti.com>
+ <20230615223736.0577fb11@kernel.org>
+ <ZJA4fIH6vm9cO2VG@shredder>
+ <a93ff762-215b-fbc1-9e23-b186421cb176@ti.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <d6a0fb32ebcdeb6c38ebe8e2b03f034f42360c0f.camel@intel.com>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <a93ff762-215b-fbc1-9e23-b186421cb176@ti.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 27, 2023 at 10:34:04AM +0000, Huang, Kai wrote:
-> On Tue, 2023-06-27 at 12:50 +0300, kirill.shutemov@linux.intel.com wrote:
-> > On Tue, Jun 27, 2023 at 02:12:37AM +1200, Kai Huang wrote:
-> > > +	/*
-> > > +	 * The TDX module global initialization only needs to be done
-> > > +	 * once on any cpu.
-> > > +	 */
-> > > +	raw_spin_lock_irqsave(&tdx_global_init_lock, flags);
-> > 
-> > I don't understand how the comment justifies using raw spin lock.
-> > 
-> 
-> This comment is for using lock in general.  The reason to use raw_ version is
-> because this function gets called in IRQ context, and for PREEMPT_RT kernel the
-> normal spinlock is converted to sleeping lock.
+On Mon, Jun 19, 2023 at 05:37:16PM +0530, Ravi Gunasekaran wrote:
+> > It's not clear to me why you want to disable promiscuous mode. I'm not
+> > familiar with HSR, but I assume you want the hardware to forward all the
+> > packets between the two ports and not only specific DMACs.
+> >
+> > How does the underlying device implement "promiscuous mode" that you
+> > benefit from disabling it?
+>
+> While creating an HSR interface using two slave nodes, the promiscuous mode
+> is set via dev_set_promiscuity() in hsr_portdev_setup() for both the ports.
+> And then in the HSR driver, a packet is forwarded to the other
+> slave port (physical port) and also the HSR master if it is intended for it.
+>
+> Before forwarding, a check is done in
+>
+> static void hsr_forward_do(struct hsr_frame_info *frame)
+> {
+> ...
+>
+> if (hsr->proto_ops->drop_frame &&
+>     hsr->proto_ops->drop_frame(frame, port))
+>          continue;
+>
+> ...
+> }
+>
+> And the drop_frame callback is as below
+>
+> bool hsr_drop_frame(struct hsr_frame_info *frame, struct hsr_port *port)
+> {
+>         if (port->dev->features & NETIF_F_HW_HSR_FWD)
+>                 return prp_drop_frame(frame, port);
+>
+>         return false;
+> }
+>
+>
+> The driver drops these packets and does not forward to any port at all.
+> But since promiscuous mode is enabled, CPU cycles are consumed. So benefit
+> of disabling promiscuous mode is saving CPU cycles.
+>
+> So in this patch, I check for NETIF_F_HW_HSR_FWD and then take a
+> call to enable/disable the promiscuous mode during HSR interface creation.
 
-Sorry, but this still doesn't explain anything.
-
-Why converting to sleeping lock here is wrong? There are plenty
-spin_lock_irqsave() users all over the kernel that are fine to be
-converted to sleeping lock on RT kernel. Why this use-case is special
-enough to justify raw_?
-
-From the documentation:
-
-	raw_spinlock_t is a strict spinning lock implementation in all
-	kernels, including PREEMPT_RT kernels. Use raw_spinlock_t only in
-	real critical core code, low-level interrupt handling and places
-	where disabling preemption or interrupts is required, for example,
-	to safely access hardware state. raw_spinlock_t can sometimes also
-	be used when the critical section is tiny, thus avoiding RT-mutex
-	overhead.
-
-How does it apply here?
-
-> Dave suggested to comment on the function rather than comment on the
-> raw_spin_lock directly, e.g.,  no other kernel code does that:
-> 
-> https://lore.kernel.org/linux-mm/d2b3bc5e-1371-0c50-8ecb-64fc70917d42@intel.com/
-> 
-> So I commented the function in this version:
-> 
-> +/*
-> + * Do the module global initialization if not done yet.
-> + * It's always called with interrupts and preemption disabled.
-> + */
-
-If interrupts are always disabled why do you need _irqsave()?
-
--- 
-  Kiryl Shutsemau / Kirill A. Shutemov
+Can the hardware be configured to not send to the CPU packets that the
+CPU is going to drop anyway? IFF_PROMISC is about receiving packets with
+any MAC DA, not about sending all packets to the CPU. With offloading
+drivers, there is a difference between the 2, because the RX path of a
+port is not necessarily the same as the CPU receive path - the
+destination of a packet can simply be another port.
