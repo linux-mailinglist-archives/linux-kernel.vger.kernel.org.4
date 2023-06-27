@@ -2,111 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A2BC73FEF0
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 16:48:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EFBD73FEF1
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 16:49:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231984AbjF0OsX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 10:48:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49084 "EHLO
+        id S232263AbjF0OtQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 10:49:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231902AbjF0Or7 (ORCPT
+        with ESMTP id S231672AbjF0OtA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 10:47:59 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6794644BA
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 07:46:06 -0700 (PDT)
-Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 2F3D61EC0178;
-        Tue, 27 Jun 2023 16:46:01 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1687877161;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:references;
-        bh=Rq+NtS/H+qSb0WLkIziZljpm/ZqEYTg/+PSGZ+wJxf4=;
-        b=BAIXEe9Cm9P3j3/h2gF8k13a4cZfZzG2zGr+mz7le6DGJMX6d10neoQVFYTo0UXt6ALBM7
-        wcyjRIowhcd+pSpoDX6FByrW31fWng7ZPUeRwbcIrr3Zcx76pHZk8L2GZsAuuxfGWt6cy4
-        HWZ6N1X9tKI4lBdy4btiUUeqQpyGHvA=
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
-        header.d=alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-        by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id 1NB_SoNHx4Tq; Tue, 27 Jun 2023 14:45:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-        t=1687877158; bh=Rq+NtS/H+qSb0WLkIziZljpm/ZqEYTg/+PSGZ+wJxf4=;
-        h=Date:From:To:Cc:Subject:From;
-        b=g/aox48J4wP0syTgAoq79Q9aNPVVQXGS8D5f+Gjp6S+lZaSVPoQYWI4B5PawLJ37L
-         PRaMRdlgnlukKC+qhU71v8lm3D5ftbqwUk8z5MLHekTJuGEJ5zN1xSbxHkU6qVLmXY
-         j7boysoTfq6zfKQmJREp0S6WA2lgSnDvIwYOU3ajZfcUsZ8kugjyZCHGKN8YkA7DQI
-         EKT7lhgn07rZYADAONQacXKzp07tgnHjwGskjvJJ0OOd8TFPBDD8L7qBEbqRq1lTx+
-         RefefIu9mYo3PjJLA9AZKU74dR9140vXG+QeTb7Lo7ESjnyIHRQEP+8R84+QdQPQkk
-         avC8ZroZNFzYK38iaqXqizge5kN3d/0XGGWyg8pfM41Q8ke6ysr/mTi8tykSk3KkiH
-         u8GOcxmJnFpHjGvReDCHrWSIhwcda/g2FZYcNigiQX9tn7ia2m/1YER56X7ax1pgOq
-         Fus+2DfvsBNqMHp1i5rekdmoQeY8/DR+S1wTAUnGLx1Mi8Mol9FlYcktMVfDfHFOUL
-         owDEbyXQr6MGTdP6WDZUK40dg8BlPCa0i/PEvxpuLxgZZsSJ+bzefwBy4OBM6BdrIs
-         SJ6PAa0/xHNP2QW8HvZlQ9BKgf/ityhltG5Y3TgxwcmkRqjIAdE8ig13S2+cUQHoWK
-         VmfpYdBIf+5ZctqvDH9Il8Hs=
-Received: from zn.tnic (pd9530d32.dip0.t-ipconnect.de [217.83.13.50])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
-        (No client certificate requested)
-        by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 318DD40E0187;
-        Tue, 27 Jun 2023 14:45:55 +0000 (UTC)
-Date:   Tue, 27 Jun 2023 16:45:54 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     x86-ml <x86@kernel.org>, lkml <linux-kernel@vger.kernel.org>
-Subject: [GIT PULL] x86/sgx for 6.5
-Message-ID: <20230627144554.GJZJr2Iltg+EaduWjo@fat_crate.local>
+        Tue, 27 Jun 2023 10:49:00 -0400
+Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45EF930E5
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 07:46:47 -0700 (PDT)
+Received: by mail-qt1-x834.google.com with SMTP id d75a77b69052e-4009ea1597bso23129401cf.1
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 07:46:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cmpxchg-org.20221208.gappssmtp.com; s=20221208; t=1687877201; x=1690469201;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=sx2I2uTHzyFWwymbKmW6SHOFKTNzQ5cGIsjHspz4koA=;
+        b=ZELrA/9I+gnOIdSusx5IIl2N9aNIvxXXeGGmk8e5HI3PYQ1IIgx7xZdjnuYlAy8mkp
+         0G7ZnnXRnnSOI6ZfevieJaoYOJRHBhS3BrrtoiJHqpN0qrcisK87zGQBjlog80atBDv6
+         rFBWHKIL+GOM4N0g/u1w7IUav2KTcFK8LsMzmgtaNt/HkfWbQSntk9q8DxTZGBWPsihv
+         wDqDMc1RlpW7jkI8xGZlik+VEQ2O5hnfXlAGd8LUAQ845g57pvSQHSM3twpkzP+lMGhr
+         /xWFBsXi3BysfsllnhectRxRvkdd989PH298AyLoNeX5Fr+rY5I7RMBVMrzzMlqDaO92
+         Hg4A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687877201; x=1690469201;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=sx2I2uTHzyFWwymbKmW6SHOFKTNzQ5cGIsjHspz4koA=;
+        b=V3GN0P5xjwVkh9rYY6v0erZTnQGwg3ZsET+JuQ3/ur62nBKZ6nNAVLBtoaWpcKEKsr
+         TEQqahX5KdyQXIogUq4dSpSdhur5FVP6V2o58eIFSnfq9+++Qso1L7AsVxId+seEGGKb
+         9YkjlSJnwjKUCVbHDzBkETwiiNRMaznKwYIOC0BV4/AJ5gsLnDDle2MD1EEIQHYFdzHb
+         pdEKUur9WlsQQBe4g/RX8v2QiwsObnWoDxcpeEI5ECsXi440Dxb4RpLOxh5lasONBv1Y
+         WyPBxg3gFu+7VaEkpqoLGRGs353NHVC1zXsvw20VIIdN7wf97KTSv5CaN9irwfbLtL//
+         2hnQ==
+X-Gm-Message-State: AC+VfDxTb7rsFXHYe3voYhvMpMdDxh+xrT9k7j4qs5Em9kWv8zJt7nDm
+        OLBra3NUyAiO5uld4TQf1qxUqQ==
+X-Google-Smtp-Source: ACHHUZ6hWYDxmlOuzkAWCv6V6pOmoUF7l8ZC7BNyWQw8rQRVSNz8/Su8DeUifEIa/1aCckgdpPiyng==
+X-Received: by 2002:ac8:5f0a:0:b0:3f6:ac1b:47b3 with SMTP id x10-20020ac85f0a000000b003f6ac1b47b3mr36857835qta.34.1687877200763;
+        Tue, 27 Jun 2023 07:46:40 -0700 (PDT)
+Received: from localhost ([2620:10d:c091:400::5:3a96])
+        by smtp.gmail.com with ESMTPSA id bt3-20020ac86903000000b003f9a79fe046sm2465029qtb.38.2023.06.27.07.46.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 27 Jun 2023 07:46:40 -0700 (PDT)
+Date:   Tue, 27 Jun 2023 10:46:39 -0400
+From:   Johannes Weiner <hannes@cmpxchg.org>
+To:     Charan Teja Kalla <quic_charante@quicinc.com>
+Cc:     akpm@linux-foundation.org, surenb@google.com, minchan@kernel.org,
+        quic_pkondeti@quicinc.com, quic_smanapra@quicinc.com,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH V2] mm: madvise: fix uneven accounting of psi
+Message-ID: <20230627144639.GA52561@cmpxchg.org>
+References: <1687861992-8722-1-git-send-email-quic_charante@quicinc.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <1687861992-8722-1-git-send-email-quic_charante@quicinc.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+Hi Charan,
 
-please pull a single SGX fix for 6.5.
+thanks for fixing this. One comment:
 
-Thx.
+On Tue, Jun 27, 2023 at 04:03:12PM +0530, Charan Teja Kalla wrote:
+> @@ -413,6 +413,7 @@ static int madvise_cold_or_pageout_pte_range(pmd_t *pmd,
+>  
+>  		folio_clear_referenced(folio);
+>  		folio_test_clear_young(folio);
+> +		folio_set_workingset(folio);
 
----
+Unless I'm missing something, this also includes inactive pages, which
+is undesirable. Shouldn't this be:
 
-The following changes since commit 858fd168a95c5b9669aac8db6c14a9aeab446375:
+		if (folio_test_active(folio))
+			folio_set_workingset(folio);
 
-  Linux 6.4-rc6 (2023-06-11 14:35:30 -0700)
+> @@ -512,6 +513,7 @@ static int madvise_cold_or_pageout_pte_range(pmd_t *pmd,
+>  		 */
+>  		folio_clear_referenced(folio);
+>  		folio_test_clear_young(folio);
+> +		folio_set_workingset(folio);
 
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git tags/x86_sgx_for_v6.5
-
-for you to fetch changes up to 1e327963cfab0e02eeeb0331178d6c353c959cd6:
-
-  x86/sgx: Avoid using iterator after loop in sgx_mmu_notifier_release() (2023-06-13 16:21:01 +0200)
-
-----------------------------------------------------------------
-- A fix to avoid using a list iterator variable after the loop it is
-  used in
-
-----------------------------------------------------------------
-Jakob Koschel (1):
-      x86/sgx: Avoid using iterator after loop in sgx_mmu_notifier_release()
-
- arch/x86/kernel/cpu/sgx/encl.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+Here as well.
