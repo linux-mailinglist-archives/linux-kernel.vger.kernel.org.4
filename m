@@ -2,81 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B85773FF83
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 17:18:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00A0B73FF85
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 17:19:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232316AbjF0PSu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 11:18:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41570 "EHLO
+        id S232321AbjF0PTV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 11:19:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232292AbjF0PSr (ORCPT
+        with ESMTP id S232292AbjF0PTT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 11:18:47 -0400
-Received: from mail-il1-f179.google.com (mail-il1-f179.google.com [209.85.166.179])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81EFF139;
-        Tue, 27 Jun 2023 08:18:46 -0700 (PDT)
-Received: by mail-il1-f179.google.com with SMTP id e9e14a558f8ab-3427426f2ddso17563435ab.3;
-        Tue, 27 Jun 2023 08:18:46 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687879126; x=1690471126;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Ijvb8ydCjVx69xo9+vKY/Fihoj6jCn6HLLMClNeKu1Y=;
-        b=fopIXnDGcoxH0NVYoV55zHfYTgKIQMhD8yqY4dCLY1RfZ7azeFMGgSuz1jSeDNDUtR
-         U2yo37rp9VuEITPDDvPKzsrGYK8J8lSz1/BAmB+5EBDpD+bcn+fBINFQu0OeVvhYsewb
-         cgNwlq98Jw6LDKDDLDGvavDAMldPIWG3Xg3rFI7RVWV7ZwF64RzAyG8sT0uAqGnhjst1
-         YCtW78O2JDy6rocVCWs7oU/rUukvwtRJeLbYRMECTsicio6DDSwVbdtm9QEuzxRZW62m
-         gWqf/lWL91cTP8ILkZ5LoeCNt2oksOU433bsiYLVG6qd3OMUkqKSbXTgCuRIX2ySybna
-         ahaA==
-X-Gm-Message-State: AC+VfDz3OFd1Q1QjRZE+sQc4ACISk+gUj0khsK0l2GD1L0ygUUJ0Vx78
-        S8pK/e0iM1KnkpaeojTQVg==
-X-Google-Smtp-Source: ACHHUZ5+u6YK1dd/NS+7qcjA0Vmzepc5iGw59nl8ff+an8BSu5Z6+ijf/GnTk3jYyxo+5wioMbUn5A==
-X-Received: by 2002:a92:c841:0:b0:345:bfc7:d527 with SMTP id b1-20020a92c841000000b00345bfc7d527mr1335127ilq.7.1687879125686;
-        Tue, 27 Jun 2023 08:18:45 -0700 (PDT)
-Received: from robh_at_kernel.org ([64.188.179.250])
-        by smtp.gmail.com with ESMTPSA id h13-20020a056638062d00b004290a22e4cdsm1954955jar.108.2023.06.27.08.18.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Jun 2023 08:18:45 -0700 (PDT)
-Received: (nullmailer pid 1933897 invoked by uid 1000);
-        Tue, 27 Jun 2023 15:18:42 -0000
-Date:   Tue, 27 Jun 2023 09:18:42 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Luca Weiss <luca.weiss@fairphone.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Abel Vesa <abel.vesa@linaro.org>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        linux-arm-msm@vger.kernel.org, linux-scsi@vger.kernel.org,
-        devicetree@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 5/5] scsi: dt-bindings: ufs: qcom: Fix warning for sdm845
- by adding reg-names
-Message-ID: <20230627151842.GB1918927-robh@kernel.org>
-References: <20230623113009.2512206-1-abel.vesa@linaro.org>
- <20230623113009.2512206-6-abel.vesa@linaro.org>
- <cd84b8c6-fac7-ecef-26be-792a1b04a102@linaro.org>
- <CTK1AI4TVYRZ.F77OZB62YYC0@otso>
- <20230623211746.GA1128583-robh@kernel.org>
- <CTMDIQGOYMKD.1BP88GSB03U54@otso>
- <d3970163-b8e8-9665-3761-8942c28adaa8@linaro.org>
- <CTMFNWKMSCJP.DBPZEW25594L@otso>
+        Tue, 27 Jun 2023 11:19:19 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 36F3E26B3;
+        Tue, 27 Jun 2023 08:19:17 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DF6492F4;
+        Tue, 27 Jun 2023 08:20:00 -0700 (PDT)
+Received: from localhost (ionvoi01-desktop.cambridge.arm.com [10.2.78.69])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 67B873F663;
+        Tue, 27 Jun 2023 08:19:16 -0700 (PDT)
+Date:   Tue, 27 Jun 2023 16:19:14 +0100
+From:   Ionela Voinescu <ionela.voinescu@arm.com>
+To:     Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+Cc:     "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Ricardo Neri <ricardo.neri@intel.com>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Ben Segall <bsegall@google.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Len Brown <len.brown@intel.com>, Mel Gorman <mgorman@suse.de>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Tim Chen <tim.c.chen@linux.intel.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Lukasz Luba <lukasz.luba@arm.com>,
+        Zhao Liu <zhao1.liu@intel.com>,
+        "Yuan, Perry" <Perry.Yuan@amd.com>, x86@kernel.org,
+        "Joel Fernandes (Google)" <joel@joelfernandes.org>,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        "Tim C . Chen" <tim.c.chen@intel.com>,
+        Zhao Liu <zhao1.liu@linux.intel.com>
+Subject: Re: [PATCH v4 07/24] sched/fair: Compute IPC class scores for load
+ balancing
+Message-ID: <ZJr98uh/WEty7UJY@arm.com>
+References: <20230613042422.5344-1-ricardo.neri-calderon@linux.intel.com>
+ <20230613042422.5344-8-ricardo.neri-calderon@linux.intel.com>
+ <ZJQONIinvSengWa8@arm.com>
+ <20230625201155.GA3902@ranerica-svr.sc.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CTMFNWKMSCJP.DBPZEW25594L@otso>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+In-Reply-To: <20230625201155.GA3902@ranerica-svr.sc.intel.com>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,37 +65,170 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 26, 2023 at 10:19:09AM +0200, Luca Weiss wrote:
-> On Mon Jun 26, 2023 at 9:41 AM CEST, Krzysztof Kozlowski wrote:
-> > On 26/06/2023 08:38, Luca Weiss wrote:
-> > >>>> but I guess no resends and it can be superseded.
-> > >>>
-> > >>> Right, the patches got reviews but was never applied... I really need to
-> > >>> find a strategy to keep track of sent patches until they're applied with
-> > >>> my work mailbox, it's not the first time that a patch has gotten
-> > >>> forgotten.
-> > >>
-> > >> There was an error reported on the above series. Why would it be 
-> > >> applied?
+Hey,
+
+On Sunday 25 Jun 2023 at 13:11:55 (-0700), Ricardo Neri wrote:
+> On Thu, Jun 22, 2023 at 10:02:44AM +0100, Ionela Voinescu wrote:
+> > On Monday 12 Jun 2023 at 21:24:05 (-0700), Ricardo Neri wrote:
+> > > When using IPCC scores to break ties between two scheduling groups, it is
+> > > necessary to consider both the current score and the score that would
+> > > result after load balancing.
 > > > 
-> > > The error report at [0] complains about reg-names but I'm quite sure
-> > > that patch 2/3 resolves this error. Does your bot only apply one patch
-> > > at a time and run the check or apply all of them and then run it? It's
-> > > been a while but I'm fairly sure I ran all of the checks before sending
-> > > since I also documented some other patches in the cover letter there.
-> >
-> > You did it in cover letter, not in the patch, so there is no dependency
-> > for bots recorded.
+> > > Compute the combined IPC class score of a scheduling group and the local
+> > > scheduling group. Compute both the current score and the prospective score.
+> > > 
+> > > Collect IPCC statistics only for asym_packing and fully_busy scheduling
+> > > groups. These are the only cases that use IPCC scores.
+> > > 
+> > > These IPCC statistics are used during idle load balancing. The candidate
+> > > scheduling group will have one fewer busy CPU after load balancing. This
+> > > observation is important for cores with SMT support.
+> > > 
+> > > The IPCC score of scheduling groups composed of SMT siblings needs to
+> > > consider that the siblings share CPU resources. When computing the total
+> > > IPCC score of the scheduling group, divide the score of each sibling by
+> > > the number of busy siblings.
+> > > 
+> > > Cc: Ben Segall <bsegall@google.com>
+> > > Cc: Daniel Bristot de Oliveira <bristot@redhat.com>
+> > > Cc: Dietmar Eggemann <dietmar.eggemann@arm.com>
+> > > Cc: Ionela Voinescu <ionela.voinescu@arm.com>
+> > > Cc: Joel Fernandes (Google) <joel@joelfernandes.org>
+> > > Cc: Len Brown <len.brown@intel.com>
+> > > Cc: Lukasz Luba <lukasz.luba@arm.com>
+> > > Cc: Mel Gorman <mgorman@suse.de>
+> > > Cc: Perry Yuan <Perry.Yuan@amd.com>
+> > > Cc: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > > Cc: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+> > > Cc: Steven Rostedt <rostedt@goodmis.org>
+> > > Cc: Tim C. Chen <tim.c.chen@intel.com>
+> > > Cc: Valentin Schneider <vschneid@redhat.com>
+> > > Cc: Zhao Liu <zhao1.liu@linux.intel.com>
+> > > Cc: x86@kernel.org
+> > > Cc: linux-pm@vger.kernel.org
+> > > Cc: linux-kernel@vger.kernel.org
+> > > Signed-off-by: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+> > > ---
+> > > Changes since v3:
+> > >  * None
+> > > 
+> > > Changes since v2:
+> > >  * Also collect IPCC stats for fully_busy sched groups.
+> > >  * Restrict use of IPCC stats to SD_ASYM_PACKING. (Ionela)
+> > >  * Handle errors of arch_get_ipcc_score(). (Ionela)
+> > > 
+> > > Changes since v1:
+> > >  * Implemented cleanups and reworks from PeterZ. I took all his
+> > >    suggestions, except the computation of the  IPC score before and after
+> > >    load balancing. We are computing not the average score, but the *total*.
+> > >  * Check for the SD_SHARE_CPUCAPACITY to compute the throughput of the SMT
+> > >    siblings of a physical core.
+> > >  * Used the new interface names.
+> > >  * Reworded commit message for clarity.
+> > > ---
+> > >  kernel/sched/fair.c | 68 +++++++++++++++++++++++++++++++++++++++++++++
+> > >  1 file changed, 68 insertions(+)
+> > > 
+> > > diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+> > > index c0cab5e501b6..a51c65c9335f 100644
+> > > --- a/kernel/sched/fair.c
+> > > +++ b/kernel/sched/fair.c
+> > > @@ -9114,6 +9114,8 @@ struct sg_lb_stats {
+> > >  	unsigned long min_score; /* Min(score(rq->curr->ipcc)) */
+> > >  	unsigned short min_ipcc; /* Class of the task with the minimum IPCC score in the rq */
+> > >  	unsigned long sum_score; /* Sum(score(rq->curr->ipcc)) */
+> > > +	long ipcc_score_after; /* Prospective IPCC score after load balancing */
+> > > +	unsigned long ipcc_score_before; /* IPCC score before load balancing */
+> > >  #endif
+> > >  };
+> > >  
+> > > @@ -9452,6 +9454,62 @@ static void update_sg_lb_ipcc_stats(int dst_cpu, struct sg_lb_stats *sgs,
+> > >  	}
+> > >  }
+> > >  
+> > > +static void update_sg_lb_stats_scores(struct sg_lb_stats *sgs,
+> > > +				      struct sched_group *sg,
+> > > +				      struct lb_env *env)
+> > > +{
+> > > +	unsigned long score_on_dst_cpu, before;
+> > > +	int busy_cpus;
+> > > +	long after;
+> > > +
+> > > +	if (!sched_ipcc_enabled())
+> > > +		return;
+> > > +
+> > > +	/*
+> > > +	 * IPCC scores are only useful during idle load balancing. For now,
+> > > +	 * only asym_packing uses IPCC scores.
+> > > +	 */
+> > > +	if (!(env->sd->flags & SD_ASYM_PACKING) ||
+> > > +	    env->idle == CPU_NOT_IDLE)
+> > > +		return;
+> > > +
+> > > +	/*
+> > > +	 * IPCC scores are used to break ties only between these types of
+> > > +	 * groups.
+> > > +	 */
+> > > +	if (sgs->group_type != group_fully_busy &&
+> > > +	    sgs->group_type != group_asym_packing)
+> > > +		return;
+> > > +
+> > > +	busy_cpus = sgs->group_weight - sgs->idle_cpus;
+> > > +
+> > > +	/* No busy CPUs in the group. No tasks to move. */
+> > > +	if (!busy_cpus)
+> > > +		return;
+> > > +
+> > > +	score_on_dst_cpu = arch_get_ipcc_score(sgs->min_ipcc, env->dst_cpu);
+> > > +
+> > > +	/*
+> > > +	 * Do not use IPC scores. sgs::ipcc_score_{after, before} will be zero
+> > > +	 * and not used.
+> > > +	 */
+> > > +	if (IS_ERR_VALUE(score_on_dst_cpu))
+> > > +		return;
+> > > +
+> > > +	before = sgs->sum_score;
+> > > +	after = before - sgs->min_score;
+> > 
+> > I don't believe this can end up being negative as the sum of all
+> > scores should be higher or equal to the min score, right?
 > 
-> I'm not aware how to put extra comments into a patch in a series with
-> b4, at least last time I checked I don't think it was possible? But I
-> also thought the cover letter was exactly there for giving some
-> background of the series and documenting any dependencies on other
-> patches.
+> Yes, I agree. `after` cannot be negative.
+> 
+> > 
+> > I'm just wondering if ipcc_score_after can be made unsigned long as well,
+> > just for consistency.
+> 
+> Sure. I can make it of type unsigned long as well.
+> 
+> > 
+> > > +
+> > > +	/* SMT siblings share throughput. */
+> > > +	if (busy_cpus > 1 && sg->flags & SD_SHARE_CPUCAPACITY) {
+> > > +		before /= busy_cpus;
+> > > +		/* One sibling will become idle after load balance. */
+> > > +		after /= busy_cpus - 1;
+> > > +	}
+> > > +
+> > > +	sgs->ipcc_score_after = after + score_on_dst_cpu;
+> > > +	sgs->ipcc_score_before = before;
+> > 
+> > Shouldn't the score_on_dst_cpu be added to "after" before being divided
+> > between the SMT siblings?
+> 
+> No, because ipcc_score_after represents the joint score of the busiest
+> core and the destination core after load balance has taken place. The
+> destination core was previously idle and now contributes to the joint
+> score.
+> 
 
-I just put a '---' line and comments after that in the commit messages. 
-That works fine unless your git branch is going upstream directly (i.e. 
-via a pull request). Even when I apply my own patches, I get them from 
-lore and apply so the comments are dropped.
+Right! score_on_dst_cpu does not contribute to the per-cpu throughput of
+the busiest core, but it reflects the improvement in score gained by the
+move to the destination.
 
-Rob
+Thanks,
+Ionela.
+
+> Thanks and BR,
+> Ricardo
