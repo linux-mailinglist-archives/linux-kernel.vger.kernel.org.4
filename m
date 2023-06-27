@@ -2,126 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9840373F486
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 08:29:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DD0473F489
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 08:30:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230365AbjF0G3D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 02:29:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36400 "EHLO
+        id S230144AbjF0Gaz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 02:30:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230360AbjF0G2r (ORCPT
+        with ESMTP id S229656AbjF0Gav (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 02:28:47 -0400
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CB771FFF
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 23:28:46 -0700 (PDT)
-Received: by mail-pl1-x636.google.com with SMTP id d9443c01a7336-1b8063aa2e1so10521835ad.1
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 23:28:46 -0700 (PDT)
+        Tue, 27 Jun 2023 02:30:51 -0400
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A826BF;
+        Mon, 26 Jun 2023 23:30:50 -0700 (PDT)
+Received: by mail-pl1-x633.google.com with SMTP id d9443c01a7336-1b51488ad67so21378355ad.3;
+        Mon, 26 Jun 2023 23:30:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687847325; x=1690439325;
-        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/No3uMDFRGop5NHj4Uit0dWC5kLwd6BWdmA86KFwVss=;
-        b=oZ1dTy9QsTF25Vj6cN7VtiP6Zq/WmSPT0V+70JONVbv9m/5XkMZ6mjXPLJA8Z3sZyl
-         U7VuKuAHoRDK6l3HNc6IEsi4azUzhglWwBfl9L7jcOMSJPeA//swS0DMK/ziwA+PO6Iu
-         bWkHtAK4Vy+oxKBoqpv0h63cpA5OoPksTD1/012Wu/vrG0TVWk19xnpG27RUfzfykqvH
-         ZXEa15Q6WNouQEltEV/Fvy408J6FbcpN4xtbE9MYjU9jw/2lSlpfy5R4AcJrijc+y5/J
-         80er1QgK8sLvIe5PGtaqGTVORTk2avpGTDK6qqFV7Xc5/qMrw1Gqh+uvpyV+mPp+AC7W
-         QBwQ==
+        d=gmail.com; s=20221208; t=1687847450; x=1690439450;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=okd4Hx4unIxXnS558GJb5i+FkVyJr3dJEH0kXxONQ18=;
+        b=L8xL/5g9Lo6HDZeVzpi3Yay84jPsOMEVqbOmis+uy4vLf+BmN06o05VSF4L+LWjbjr
+         A1MRcn9JSPpTsWld0zEMa85czsjVKeWkX+z6NyN5W7VzxmG98kcZ2lWaP3O88CtgPhUE
+         WYXRFSy3K7bM1W0eoLjgVAdHpWbeYtzW+TTKccdKvc1UwQTr+eFQVo6aAq2WEMWkQhIr
+         8Q+In/6o23jKll8xjzqaHIpFwchdjn0f8kIuGCfxlcl8Itv+HOi2JOxsgbRFvwaylox9
+         Uud8cCQNUAagBhf5j9cct6+v1GE0wwEdg/zVsjtBxNgBay/sfZxdmfu8as149RcCcJqm
+         PkcQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687847325; x=1690439325;
-        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=/No3uMDFRGop5NHj4Uit0dWC5kLwd6BWdmA86KFwVss=;
-        b=YPFJEjpKaI55Ib/uCwfJ6lNt/oEIJdEWEAQ1PIcIKgDy11mt0qlHoZiGUbfYnDVfs5
-         iCHRMQe71QnsTLysEsCQV50QW91ZVeiiEQyng0YKWDlitsOvp//LPfrzFyIlAcob05cy
-         v5PGpePe82CnZC+kciduTgCkXJgnnWFbDUOQ6/Pra1Bg6lhULdFfK+LEg4hXj7bq9Ola
-         Y7OtxNUIl3wQx+GkAQe8Kyp9GqswcenZs3J2kqI7G8QoqB9c6Q1di8P5abkc3IuZyuzs
-         BIivfP/PAQm3zSduH4OKW7VRFErY59s1onf9QQYPv5fKsgWyVt7k2yTFC/N/AhW/ZPbF
-         Sh6w==
-X-Gm-Message-State: AC+VfDx8CbvQ9fRWlLXW3QP1VCUSy7qymruP09uc6mGEBIxYDPaswNjt
-        di+sdnWPiy1RematIrEwCxk=
-X-Google-Smtp-Source: ACHHUZ7g637XMAtoJbXRB6S87o2VxjpHWmvVxxMrfQpBcMcRmEaLubMMSIpP32XzwyKQFk84A7x5VQ==
-X-Received: by 2002:a17:902:c946:b0:1b6:7148:f65d with SMTP id i6-20020a170902c94600b001b67148f65dmr5128992pla.17.1687847325572;
-        Mon, 26 Jun 2023 23:28:45 -0700 (PDT)
-Received: from 377044c6c369.cse.ust.hk (191host097.mobilenet.cse.ust.hk. [143.89.191.97])
-        by smtp.gmail.com with ESMTPSA id u6-20020a17090341c600b001b6a241b671sm5136610ple.271.2023.06.26.23.28.43
+        d=1e100.net; s=20221208; t=1687847450; x=1690439450;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=okd4Hx4unIxXnS558GJb5i+FkVyJr3dJEH0kXxONQ18=;
+        b=k0mw1RkS1Dpr7aSkGwtzzUX05WqSPjvGGlo6DA+aUY8SVU2ESYgfeLZtw5ebC6IrW5
+         YcYxJjfEh7X757QrelnjuthsYMUEgfq+cyWoxymyjv90wL3hf3ebO40C84vTNw6gZMVP
+         0uNPV2wQlEH1Ekvnrm1W9JmxMY8QGEUBkFfnXDwzk5fIbS+5b+ELfUaNbYLd9azj6vC6
+         swHbXC4gMZ9Y41pGs7V/l+kQyh9JXDIbPzouLSxdKSOSEi1Bf1tfWCwr8b+5+T4BSPmL
+         J4nwPb53htEkG9XNVdVTos4b8qjZ9AhgUlZJDNYDw3WdEpOoKj7xi8YeuF2pQ/1GIilt
+         k/SA==
+X-Gm-Message-State: AC+VfDw14xRWUE8XEWLSPU7Rn68VCx/+bWd/U80mx3LmnduFWZZ9Mt3G
+        s0IlCsUVR8Ux7o5Cv+3+U/8=
+X-Google-Smtp-Source: ACHHUZ6lSEEedS7ImrIIIDH/Kscr+1QcGy6C6gw7mCE6QOBsKaMEdvanGduqC35z6dEE8QhIxcertg==
+X-Received: by 2002:a17:902:d48d:b0:1b4:fd48:d734 with SMTP id c13-20020a170902d48d00b001b4fd48d734mr7054440plg.47.1687847449713;
+        Mon, 26 Jun 2023 23:30:49 -0700 (PDT)
+Received: from moohyul.svl.corp.google.com ([2620:15c:2a3:200:1663:6fac:d111:59cf])
+        by smtp.gmail.com with ESMTPSA id z7-20020a170903018700b001b02162c86bsm5199541plg.80.2023.06.26.23.30.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Jun 2023 23:28:45 -0700 (PDT)
-From:   Chengfeng Ye <dg573847474@gmail.com>
-To:     mark@fasheh.com, jlbec@evilplan.org, joseph.qi@linux.alibaba.com
-Cc:     ocfs2-devel@oss.oracle.com, linux-kernel@vger.kernel.org,
-        Chengfeng Ye <dg573847474@gmail.com>
-Subject: [PATCH] fs: ocfs: fix potential deadlock on &qs->qs_lock
-Date:   Tue, 27 Jun 2023 06:28:31 +0000
-Message-Id: <20230627062831.16553-1-dg573847474@gmail.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 26 Jun 2023 23:30:49 -0700 (PDT)
+Sender: Namhyung Kim <namhyung@gmail.com>
+From:   Namhyung Kim <namhyung@kernel.org>
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>
+Cc:     Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-perf-users@vger.kernel.org,
+        Andres Freund <andres@anarazel.de>,
+        Sedat Dilek <sedat.dilek@gmail.com>,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Subject: [BUG] perf build: fail with BUILD_NONDISTRO=1 FEATURES_DUMP=...
+Date:   Mon, 26 Jun 2023 23:30:30 -0700
+Message-ID: <20230627063046.548573-1-namhyung@kernel.org>
+X-Mailer: git-send-email 2.41.0.162.gfafddb0af9-goog
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As &qs->qs_lock is also acquired by the timer o2net_idle_timer()
-which executes under softirq context, code executing under process
-context should disable irq before acquiring the lock, otherwise
-deadlock could happen if the process context hold the lock then
-preempt by the timer.
+Hello,
 
-Possible deadlock scenario:
-o2quo_make_decision (workqueue)
-    -> spin_lock(&qs->qs_lock);
-        <timer interrupt>
-        -> o2net_idle_timer
-        -> o2quo_conn_err
-        -> spin_lock(&qs->qs_lock); (deadlock here)
+I'm having a failure during `make build-test` in the perf tree.
+It calls make BUILD_NONDISTRO=1 with FEATURES_DUMP defined.
+Building with BUILD_NONDISTRO=1 alone was fine but it fails when I
+define the FEATURES_DUMP too.
 
-This flaw was found using an experimental static analysis tool we are
-developing for irq-related deadlock.
+  $ make build-test
+            make_nondistro_O: cd . && make BUILD_NONDISTRO=1 \
+		FEATURES_DUMP=./BUILD_TEST_FEATURE_DUMP -j64 \
+		O=/tmp/tmp.6JwPK1xbWG DESTDIR=/tmp/tmp.sWSewBwO13
+  ...
+    CC      util/annotate.o
+  In file included from util/annotate.c:1814:
+  tools/include/tools/dis-asm-compat.h:10:6: error: redeclaration of ‘enum disassembler_style’
+     10 | enum disassembler_style {DISASSEMBLER_STYLE_NOT_EMPTY};
+        |      ^~~~~~~~~~~~~~~~~~
+  In file included from util/annotate.c:1809:
+  /usr/include/dis-asm.h:53:6: note: originally defined here
+     53 | enum disassembler_style
+        |      ^~~~~~~~~~~~~~~~~~
+  tools/include/tools/dis-asm-compat.h: In function ‘init_disassemble_info_compat’:
+  tools/include/tools/dis-asm-compat.h:50:9: error: too few arguments to function ‘init_disassemble_info’
+     50 |         init_disassemble_info(info, stream,
+        |         ^~~~~~~~~~~~~~~~~~~~~
+  /usr/include/dis-asm.h:480:13: note: declared here
+    480 | extern void init_disassemble_info (struct disassemble_info *dinfo, void *stream,
+        |             ^~~~~~~~~~~~~~~~~~~~~
+  util/annotate.c: In function ‘symbol__disassemble_bpf’:
+  util/annotate.c:1896:36: error: incompatible type for argument 1 of ‘disassembler’
+   1896 |         disassemble = disassembler(bfdf);
+        |                                    ^~~~
+        |                                    |
+        |                                    bfd *
+  /usr/include/dis-asm.h:409:63: note: expected ‘enum bfd_architecture’ but argument is of type ‘bfd *’
+    409 | extern disassembler_ftype disassembler (enum bfd_architecture arc,
+        |                                         ~~~~~~~~~~~~~~~~~~~~~~^~~
+  util/annotate.c:1896:23: error: too few arguments to function ‘disassembler’
+   1896 |         disassemble = disassembler(bfdf);
+        |                       ^~~~~~~~~~~~
+  /usr/include/dis-asm.h:409:27: note: declared here
+    409 | extern disassembler_ftype disassembler (enum bfd_architecture arc,
+        |                           ^~~~~~~~~~~~
 
-The tentative patch fix the potential deadlock by spin_lock_irqsave().
 
-Signed-off-by: Chengfeng Ye <dg573847474@gmail.com>
----
- fs/ocfs2/cluster/quorum.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+Thanks,
+Namhyung
 
-diff --git a/fs/ocfs2/cluster/quorum.c b/fs/ocfs2/cluster/quorum.c
-index 189c111bc371..f14313c3e27e 100644
---- a/fs/ocfs2/cluster/quorum.c
-+++ b/fs/ocfs2/cluster/quorum.c
-@@ -92,8 +92,9 @@ static void o2quo_make_decision(struct work_struct *work)
- 	int quorum;
- 	int lowest_hb, lowest_reachable = 0, fence = 0;
- 	struct o2quo_state *qs = &o2quo_state;
-+	unsigned long flags;
- 
--	spin_lock(&qs->qs_lock);
-+	spin_lock_irqsave(&qs->qs_lock, flags);
- 
- 	lowest_hb = find_first_bit(qs->qs_hb_bm, O2NM_MAX_NODES);
- 	if (lowest_hb != O2NM_MAX_NODES)
-@@ -146,14 +147,14 @@ static void o2quo_make_decision(struct work_struct *work)
- 
- out:
- 	if (fence) {
--		spin_unlock(&qs->qs_lock);
-+		spin_unlock_irqrestore(&qs->qs_lock, flags);
- 		o2quo_fence_self();
- 	} else {
- 		mlog(ML_NOTICE, "not fencing this node, heartbeating: %d, "
- 			"connected: %d, lowest: %d (%sreachable)\n",
- 			qs->qs_heartbeating, qs->qs_connected, lowest_hb,
- 			lowest_reachable ? "" : "un");
--		spin_unlock(&qs->qs_lock);
-+		spin_unlock_irqrestore(&qs->qs_lock, flags);
- 
- 	}
- 
--- 
-2.17.1
 
+Cc: Andres Freund <andres@anarazel.de>
+Cc: Sedat Dilek <sedat.dilek@gmail.com>
+Cc: Roberto Sassu <roberto.sassu@huawei.com>
