@@ -2,145 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 155B773F033
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 03:14:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0821C73F036
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 03:15:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230002AbjF0BOJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 21:14:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33774 "EHLO
+        id S229834AbjF0BPr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 21:15:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229777AbjF0BN6 (ORCPT
+        with ESMTP id S229777AbjF0BPl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 21:13:58 -0400
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80F9E198A
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 18:13:56 -0700 (PDT)
-Received: by mail-pf1-x433.google.com with SMTP id d2e1a72fcca58-676cc97ca74so438832b3a.1
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 18:13:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20221208.gappssmtp.com; s=20221208; t=1687828436; x=1690420436;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=MQ/IjqmtE16kQNQEnAAcOTmBTtwuTHwVotfjuZpxuOk=;
-        b=Qh0TdwgR7cXBEXeK5cmdtXosn/XHZ8bChAZlYL8hsZEzYoduf1shHWb2RecxQZPqSU
-         55krgRpDZFhTfysMsHQDkUAZN/Hy8ArK0LNqNRaPnPwhyEvKBgsQCMlI1t+T8e2m8Jnn
-         yS5m0VEHcx726/05Gh/CaTA+PBBY5HkCFo3lP3mpj3cpYcWS7MoE14Rqx2zXa9Dgh6eP
-         RzOu4++eXsf2wbFJ6ySIqQSLHaVfhmoErl9f8ohuehHLV8iLqmrpl2SGqUYAM4GqSy01
-         Bcr2IiFeqqaX3NMqn0dqGEXRXDy/wy6AeSBsLKv8mbvK1Ro+WWRzA1tE1ijjAFP4KcFs
-         Arww==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687828436; x=1690420436;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=MQ/IjqmtE16kQNQEnAAcOTmBTtwuTHwVotfjuZpxuOk=;
-        b=OT08v7A/fDnlfEvrQCpiuBnznT27W+EfQcPOG4kA9IEoPwo8Ktx0Rw9ldaUIgCXkIG
-         Yn1PaYtBab6JIqUXrWWhsooVkJOkxJU2BMORJ69mNSAxwfq/VkdNtZ2u4GuqMb4TbLgB
-         umxpDvGUqkSFgX+dhdrEyKq3sM03u24scGnXT38Y505CQnO2joYFZLHbmtglqMgde9SW
-         FdMMARZ3FYj5odY6DScX6Zr/lWoZmqwewEVBdwxzEzzI7hocPElGrZBsUpnciFJ2hkOh
-         9KoBBP8pw8pVdar0PxfkvykkLvNoBoDkOzzv1HCTlHlCLNmAK4Tee4mQwNgetmNN0K7o
-         ryRg==
-X-Gm-Message-State: AC+VfDw6qoI2+PPZighjBBEor3KDHYpHjupHyGkL0JmrZ5E0D9oWvW/9
-        Cf7IKHXe+YsZTeHVHegiwSbF+g==
-X-Google-Smtp-Source: ACHHUZ6Hji3PWg/+1y1c/8GC5/7oraS0lnPCcB+YX5+KRwILp3HpyMg3HHBinA0tMs9CT3eKf+vs5Q==
-X-Received: by 2002:a05:6a21:6d9c:b0:125:6443:4eb8 with SMTP id wl28-20020a056a216d9c00b0012564434eb8mr17562093pzb.5.1687828435896;
-        Mon, 26 Jun 2023 18:13:55 -0700 (PDT)
-Received: from [192.168.1.136] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id z15-20020a170903018f00b001a072aedec7sm4754717plg.75.2023.06.26.18.13.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 26 Jun 2023 18:13:55 -0700 (PDT)
-Message-ID: <91e9064b-84e3-1712-0395-b017c7c4a964@kernel.dk>
-Date:   Mon, 26 Jun 2023 19:13:54 -0600
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [GIT PULL] bcachefs
-Content-Language: en-US
-To:     Kent Overstreet <kent.overstreet@linux.dev>
-Cc:     torvalds@linux-foundation.org, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-bcachefs@vger.kernel.org,
-        Christoph Hellwig <hch@lst.de>
-References: <20230626214656.hcp4puionmtoloat@moria.home.lan>
- <aeb2690c-4f0a-003d-ba8b-fe06cd4142d1@kernel.dk>
- <20230627000635.43azxbkd2uf3tu6b@moria.home.lan>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <20230627000635.43azxbkd2uf3tu6b@moria.home.lan>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        Mon, 26 Jun 2023 21:15:41 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28002173A
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 18:15:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1687828540; x=1719364540;
+  h=date:from:to:cc:subject:message-id;
+  bh=70lHyXXQha5UpsnClouQiDO5aeyT3/RGwE/fbc2yd5Y=;
+  b=SBPEgSi/yafL9T5aIT2IXYNx6+6O2lTRuadnpzyIzTWlcH/HIdw7DHYf
+   Z05JN+Vpt9HG4LH3h0rDZjCo4+xtN464KWVNVEMb+j2MGCORsFbwKXyWS
+   qbcpF9Tdp8OW+BrGExT2nr/kYWMQF1VXP0ICcV1PWsAZTCIeLFdG/TtNi
+   RWwWYlUANpUjZVJqJ/lCQCnOc1tlFcnreoJz0fHHgmKGvOAG6N/apESnS
+   7eadTaNTB+zb28xCW524O6yxlOT2qIarwUbyenYqi2qntPQ8JuplJDPDA
+   om3+8QlllUlTG1jotjiXmG48qsTPRPtL38j1Q+zIAb6/fmPRXmJ4rFrSV
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10753"; a="447821707"
+X-IronPort-AV: E=Sophos;i="6.01,161,1684825200"; 
+   d="scan'208";a="447821707"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jun 2023 18:15:38 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10753"; a="693669027"
+X-IronPort-AV: E=Sophos;i="6.01,161,1684825200"; 
+   d="scan'208";a="693669027"
+Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 26 Jun 2023 18:15:37 -0700
+Received: from kbuild by 783282924a45 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1qDxIu-000BGh-2t;
+        Tue, 27 Jun 2023 01:15:36 +0000
+Date:   Tue, 27 Jun 2023 09:15:30 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [paulmck-rcu:dev.2023.06.16a] BUILD SUCCESS
+ 95588de780c0e81004b72526aa3e3ef5ce054719
+Message-ID: <202306270928.pBBiZox5-lkp@intel.com>
+User-Agent: s-nail v14.9.24
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/26/23 6:06?PM, Kent Overstreet wrote:
-> On Mon, Jun 26, 2023 at 05:11:29PM -0600, Jens Axboe wrote:
->>> (Worth noting the bug causing the most test failures by a wide margin is
->>> actually an io_uring bug that causes random umount failures in shutdown
->>> tests. Would be great to get that looked at, it doesn't just affect
->>> bcachefs).
->>
->> Maybe if you had told someone about that it could get looked at?
-> 
-> I'm more likely to report bugs to people who have a history of being
-> responsive...
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git dev.2023.06.16a
+branch HEAD: 95588de780c0e81004b72526aa3e3ef5ce054719  rcutorture: Remove obsolete BOOTPARAM_HOTPLUG_CPU0 Kconfig option
 
-I maintain the code I put in the kernel, and generally respond to
-everything, and most certainly bug reports.
+elapsed time: 7396m
 
->> What is the test case and what is going wrong?
-> 
-> Example: https://evilpiepirate.org/~testdashboard/c/82973f03c0683f7ecebe14dfaa2c3c9989dd29fc/xfstests.generic.388/log.br
-> 
-> I haven't personally seen it on xfs - Darrick knew something about it
-> but he's on vacation. If I track down a reproducer on xfs I'll let you
-> know.
->
-> If you're wanting to dig into it on bcachefs, ktest is pretty easy to
-> get going: https://evilpiepirate.org/git/ktest.git
-> 
->   $ ~/ktest/root_image create
->   # from your kernel tree:
->   $ ~/ktest/build-test-kernel run -ILP ~/ktest/tests/bcachefs/xfstests.ktest/generic/388
-> 
-> I have some debug code I can give you from when I was tracing it through
-> the mount path, I still have to find or recreate the part that tracked
-> it down to io_uring...
+configs tested: 49
+configs skipped: 2
 
-Doesn't reproduce for me with XFS. The above ktest doesn't work for me
-either:
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-~/git/ktest/build-test-kernel run -ILP ~/git/ktest/tests/bcachefs/xfstests.ktest/generic/388
-realpath: /home/axboe/git/ktest/tests/bcachefs/xfstests.ktest/generic/388: Not a directory
-Error 1 at /home/axboe/git/ktest/build-test-kernel 262 from: ktest_test=$(realpath "$1"), exiting
-
-and I suspect that should've been a space, but:
-
-~/git/ktest/build-test-kernel run -ILP ~/git/ktest/tests/bcachefs/xfstests.ktest generic/388
-Running test xfstests.ktest on m1max at /home/axboe/git/linux-block
-No tests found
-TEST FAILED
-
-If I just run generic/388 with bcachefs formatted drives, I get xfstests
-complaining as it tries to mount an XFS file system...
-
-As a side note, I do get these when compiling:
-
-fs/bcachefs/alloc_background.c: In function ‘bch2_check_alloc_info’:
-fs/bcachefs/alloc_background.c:1526:1: warning: the frame size of 2640 bytes is larger than 2048 bytes [-Wframe-larger-than=]
- 1526 | }
-      | ^
-fs/bcachefs/reflink.c: In function ‘bch2_remap_range’:
-fs/bcachefs/reflink.c:388:1: warning: the frame size of 2352 bytes is larger than 2048 bytes [-Wframe-larger-than=]
-  388 | }
-      | ^
-
+tested configs:
+alpha                            allyesconfig   gcc  
+alpha                               defconfig   gcc  
+arc                              allyesconfig   gcc  
+arc                                 defconfig   gcc  
+arm                              allmodconfig   gcc  
+arm                              allyesconfig   gcc  
+arm                                 defconfig   gcc  
+arm64                            allyesconfig   gcc  
+arm64                               defconfig   gcc  
+csky                                defconfig   gcc  
+i386                             allyesconfig   gcc  
+i386                              debian-10.3   gcc  
+i386                                defconfig   gcc  
+loongarch                        allmodconfig   gcc  
+loongarch                         allnoconfig   gcc  
+loongarch                           defconfig   gcc  
+m68k                             allmodconfig   gcc  
+m68k                             allyesconfig   gcc  
+m68k                                defconfig   gcc  
+mips                             allmodconfig   gcc  
+mips                             allyesconfig   gcc  
+nios2                               defconfig   gcc  
+parisc                           allyesconfig   gcc  
+parisc                              defconfig   gcc  
+parisc64                            defconfig   gcc  
+powerpc                          allmodconfig   gcc  
+powerpc                           allnoconfig   gcc  
+riscv                            allmodconfig   gcc  
+riscv                             allnoconfig   gcc  
+riscv                            allyesconfig   gcc  
+riscv                               defconfig   gcc  
+riscv                          rv32_defconfig   gcc  
+s390                             allmodconfig   gcc  
+s390                             allyesconfig   gcc  
+s390                                defconfig   gcc  
+sh                               allmodconfig   gcc  
+sparc                            allyesconfig   gcc  
+sparc                               defconfig   gcc  
+um                               allmodconfig   clang
+um                                allnoconfig   clang
+um                               allyesconfig   clang
+um                                  defconfig   gcc  
+um                             i386_defconfig   gcc  
+um                           x86_64_defconfig   gcc  
+x86_64                           allyesconfig   gcc  
+x86_64                              defconfig   gcc  
+x86_64                                  kexec   gcc  
+x86_64                          rhel-8.3-rust   clang
+x86_64                               rhel-8.3   gcc  
 
 -- 
-Jens Axboe
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
