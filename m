@@ -2,160 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38D3E7401DE
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 19:05:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 227EE7401E8
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 19:09:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231196AbjF0RFU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 13:05:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41398 "EHLO
+        id S230494AbjF0RJ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 13:09:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230413AbjF0RFS (ORCPT
+        with ESMTP id S230487AbjF0RJY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 13:05:18 -0400
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D98B10F5
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 10:05:17 -0700 (PDT)
-Received: by mail-wm1-x334.google.com with SMTP id 5b1f17b1804b1-3f9b9863bfdso3565e9.1
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 10:05:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1687885516; x=1690477516;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5nLbnFlyoJNJDBBlkz8JKOe6T7uVTYiMufakhNHN8pc=;
-        b=GM5kpRnwTIQXRm2JOFsrvCN7oqAEa3c/ALUuhS9d+HHl65PFpaQ+gSev7Sf1aUKtGk
-         2goAuOBdfbvbXTBxzjb3eZh97Dq0kbEz2kC2Wu+c308/ZWfEEJxEaThWEYB3CE6DwARZ
-         lDNJOkHRdSx090rySGfpW5YKmaj0mvldXltbb/yeYOATzbzq5tT7MMnBjrBbEpi00DMz
-         vD+8Rg87MG94rC+Y4lRPtKaLRXsZNob38Hq1crQXSy5wBaDQnrvvTm0e+zMUOmsBgDjq
-         Bz6wMypFgcjYaDr7MwPo6Rdegmi3jDt9EQ+yCrbB4wvbFcpk/LM2wgdBtJ82GOb9CHe6
-         OeTA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687885516; x=1690477516;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=5nLbnFlyoJNJDBBlkz8JKOe6T7uVTYiMufakhNHN8pc=;
-        b=X8JniBYfC2Hp5t0rs4PgzSc6/9sbRCIUDq2+AcYVi17bCa1xayltaA+doqx2B68vBS
-         +Ra98+Ww3RA0Dy0whMvxs59TAHqPicimqGvr8X9nYUr/dcBeuuSayxFBGZzdkOiwWpuQ
-         w2aS6POoleXHnf/9sQQXWosrJ8xv2I27sVIaNib5cg/284C20hXnfGZneGJghSUAxpsn
-         csxvK+9mKmYlEakc6a1TdJONHYHRFao5pk/oFarzzklU97xc2NXnUubgcydsHL1kxbJ+
-         P4GyvR7nMQ6i2H3BX8NGzGmGVJqp+6FbpqvOudwcH2CRwhpdWV/jzOV+o2z2YmPrxLeu
-         2rWQ==
-X-Gm-Message-State: AC+VfDxCRfTbNExwJORUcn1I3uaEjH35HWVBDb5J5XdDFgyfgSQuspZH
-        xj29pX5Xu4+yk2iLkhoC6L8kYppnbFjagTlzq8dRUA==
-X-Google-Smtp-Source: ACHHUZ6DJr9MnYp31T22fQMiVeMG4NNo7rn60TL5Trzs3XCbDjIix9JG6YleFhqaAltHVrzbctU6wCFPWfAOB0Tx/Ag=
-X-Received: by 2002:a05:600c:b99:b0:3f4:2736:b5eb with SMTP id
- fl25-20020a05600c0b9900b003f42736b5ebmr148150wmb.1.1687885515753; Tue, 27 Jun
- 2023 10:05:15 -0700 (PDT)
+        Tue, 27 Jun 2023 13:09:24 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2073C1708
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 10:08:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1687885719;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=FwjGo3ptfmf1RlF03vGzPJR/WABEQnl9/WtrBD9kDgg=;
+        b=i2pqaQjL3zSpC4OqMLTL1Oeh4Ol5QMZL15YSQHoOZiDX5QGj7gjAOBVWVjsKQUzhlI2oxB
+        APSOfeqSCp7yiBk9K16ImprvsUCUUY2h9tHKdXauT5avTzznWLxQ1RLKY/RQB1Wddk9xd8
+        VpeZ72N4k/C6AnOeA8QWcPsLlD9dT4E=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-167-Aqtx5LgPOnOYWOA9Z0Mt0Q-1; Tue, 27 Jun 2023 13:08:34 -0400
+X-MC-Unique: Aqtx5LgPOnOYWOA9Z0Mt0Q-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 436EE8C80F2;
+        Tue, 27 Jun 2023 17:06:40 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.42.28.4])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 96D1940F169;
+        Tue, 27 Jun 2023 17:06:37 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <7337a904-231d-201d-397a-7bbe7cae929f@gmail.com>
+References: <7337a904-231d-201d-397a-7bbe7cae929f@gmail.com> <ecbb5d7e-7238-28e2-1a17-686325e2bb50@gmail.com> <4c49176f-147a-4283-f1b1-32aac7b4b996@gmail.com> <20230522121125.2595254-1-dhowells@redhat.com> <20230522121125.2595254-9-dhowells@redhat.com> <2267272.1686150217@warthog.procyon.org.uk> <5a9d4ffb-a569-3f60-6ac8-070ab5e5f5ad@gmail.com> <776549.1687167344@warthog.procyon.org.uk>
+To:     Tariq Toukan <ttoukan.linux@gmail.com>
+Cc:     dhowells@redhat.com, netdev@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+        David Ahern <dsahern@kernel.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Christoph Hellwig <hch@infradead.org>,
+        Jens Axboe <axboe@kernel.dk>, Jeff Layton <jlayton@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Chuck Lever III <chuck.lever@oracle.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, Boris Pismenny <borisp@nvidia.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Gal Pressman <gal@nvidia.com>, ranro@nvidia.com,
+        samiram@nvidia.com, drort@nvidia.com,
+        Tariq Toukan <tariqt@nvidia.com>
+Subject: Re: [PATCH net-next v10 08/16] tls: Inline do_tcp_sendpages()
 MIME-Version: 1.0
-References: <CAOOoKeQ=b4u1C_FZ-OFHSfVt5Z9xw1KtpJ4316zubt46Tny41Q@mail.gmail.com>
- <2023062715-eldercare-washed-3c29@gregkh>
-In-Reply-To: <2023062715-eldercare-washed-3c29@gregkh>
-From:   Yuxiao Zhang <yuxiaozhang@google.com>
-Date:   Tue, 27 Jun 2023 10:05:04 -0700
-Message-ID: <CAOOoKeSxJzJEwX2aVsn_jcqK7gsgEVpB3VdhoKjJPCJgdNf9Mg@mail.gmail.com>
-Subject: Re: support pmsg record size larger than kmalloc limitation
-To:     Greg KH <gregkh@linuxfoundation.org>,
-        "yuxiaozh.zhang@gmail.com" <yuxiaozh.zhang@gmail.com>
-Cc:     keescook@chromium.org, tony.luck@intel.com, gpiccoli@igalia.com,
-        linux-hardening@vger.kernel.org,
-        William Kennington <wak@google.com>,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <3280456.1687885596.1@warthog.procyon.org.uk>
+Date:   Tue, 27 Jun 2023 18:06:37 +0100
+Message-ID: <3280457.1687885597@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-  kfree(record->priv);
-  kfree(record);
-  if (rc !=3D -EEXIST || !quiet)
-diff --git a/fs/pstore/ram.c b/fs/pstore/ram.c
-index ade66dbe5f39..296465b14fa9 100644
---- a/fs/pstore/ram.c
-+++ b/fs/pstore/ram.c
-@@ -20,6 +20,7 @@
- #include <linux/compiler.h>
- #include <linux/of.h>
- #include <linux/of_address.h>
-+#include <linux/mm.h>
+Can you try net-next/main?  Parts of the branch you're trying have been
+dropped.
 
- #include "internal.h"
- #include "ram_internal.h"
-@@ -268,7 +269,7 @@ static ssize_t ramoops_pstore_read(struct
-pstore_record *record)
-  /* ECC correction notice */
-  record->ecc_notice_size =3D persistent_ram_ecc_string(prz, NULL, 0);
+David
 
-- record->buf =3D kmalloc(size + record->ecc_notice_size + 1, GFP_KERNEL);
-+ record->buf =3D kvmalloc(size + record->ecc_notice_size + 1, GFP_KERNEL);
-  if (record->buf =3D=3D NULL) {
-  size =3D -ENOMEM;
-  goto out;
-@@ -282,7 +283,7 @@ static ssize_t ramoops_pstore_read(struct
-pstore_record *record)
-
- out:
-  if (free_prz) {
-- kfree(prz->old_log);
-+ kvfree(prz->old_log);
-  kfree(prz);
-  }
-
-diff --git a/fs/pstore/ram_core.c b/fs/pstore/ram_core.c
-index 966191d3a5ba..3453d493ec27 100644
---- a/fs/pstore/ram_core.c
-+++ b/fs/pstore/ram_core.c
-@@ -17,6 +17,7 @@
- #include <linux/slab.h>
- #include <linux/uaccess.h>
- #include <linux/vmalloc.h>
-+#include <linux/mm.h>
- #include <asm/page.h>
-
- #include "ram_internal.h"
-@@ -385,7 +386,7 @@ void *persistent_ram_old(struct persistent_ram_zone *pr=
-z)
-
- void persistent_ram_free_old(struct persistent_ram_zone *prz)
- {
-- kfree(prz->old_log);
-+ kvfree(prz->old_log);
-  prz->old_log =3D NULL;
-  prz->old_log_size =3D 0;
- }
---
-
-
-
-
-On Mon, Jun 26, 2023 at 11:20=E2=80=AFPM Greg KH <gregkh@linuxfoundation.or=
-g> wrote:
->
-> On Mon, Jun 26, 2023 at 06:20:29PM -0700, Yuxiao Zhang wrote:
-> > @@ -730,7 +731,7 @@ static void decompress_record(struct pstore_record =
-*record)
-> >   return;
-> >
-> >   /* Swap out compressed contents with decompressed contents. */
-> > - kfree(record->buf);
-> > + kvfree(record->buf);
-> >   record->buf =3D unzipped;
-> >   record->size =3D unzipped_len;
-> >   record->compressed =3D false;
-> > @@ -783,7 +784,7 @@ void pstore_get_backend_records(struct pstore_info =
-*psi,
->
-> Patch is corrupted and can not be applied at all, please fix up your
-> email client to not do this.
->
-> thanks,
->
-> greg k-h
