@@ -2,119 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03ED474053D
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 22:51:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E59EF740547
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 22:51:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229618AbjF0UvQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 16:51:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54194 "EHLO
+        id S230128AbjF0Uvx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 16:51:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231648AbjF0UvK (ORCPT
+        with ESMTP id S231618AbjF0Uvq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 16:51:10 -0400
-Received: from tarta.nabijaczleweli.xyz (unknown [139.28.40.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DAC782D54;
-        Tue, 27 Jun 2023 13:51:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=nabijaczleweli.xyz;
-        s=202305; t=1687899065;
-        bh=3nrkr9p7FZVJ/pMwJqhBp8M6P5Ay4Bhj6H5jTZYvtg0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=lvGWVQNO8/o44Da7YlQ8itfHbwOsJKP7c9R3/eoLHV9YZ+bz8Pwa7lyyeUG4z/Lts
-         k9dtOx9BBVqNTqj0eDSjtO4RFZJfgTyJgAiP1asbOmVyPwQSdy69gmWpXyhaliDRfm
-         ao5/U4tIKuHJb2EzDYxP8N6YJmvkt/bseDXA8JNV0+cLoXfK7IKHHcuc6YfHlOcx1U
-         /t95tPT0rtvQ9IOE3ft4CCMuEAJX+GEewOY4bNkUzkaQvnn+AL5iZpC8Cei/HcQT/8
-         zLplP+rBntzTPAgvujTofXMYXw7U8/XpaPFRsnkwRcZbX/iqMK3yyH2FiZtHrZP9Gq
-         eJNHIUkf8Q1iQ==
-Received: from tarta.nabijaczleweli.xyz (unknown [192.168.1.250])
-        by tarta.nabijaczleweli.xyz (Postfix) with ESMTPSA id 263C81536;
-        Tue, 27 Jun 2023 22:51:05 +0200 (CEST)
-Date:   Tue, 27 Jun 2023 22:51:04 +0200
-From:   Ahelenia =?utf-8?Q?Ziemia=C5=84ska?= 
-        <nabijaczleweli@nabijaczleweli.xyz>
-To:     Amir Goldstein <amir73il@gmail.com>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <brauner@kernel.org>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jan Kara <jack@suse.cz>,
-        Chung-Chiang Cheng <cccheng@synology.com>, ltp@lists.linux.it
-Subject: [PATCH v4 3/3] splice: fsnotify_access(in), fsnotify_modify(out) on
- success in tee
-Message-ID: <1274d6074fdd2ca4e028c8b62e42d0ef2b847703.1687898895.git.nabijaczleweli@nabijaczleweli.xyz>
-References: <t5az5bvpfqd3rrwla43437r5vplmkujdytixcxgm7sc4hojspg@jcc63stk66hz>
- <cover.1687898895.git.nabijaczleweli@nabijaczleweli.xyz>
+        Tue, 27 Jun 2023 16:51:46 -0400
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BADD2727
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 13:51:33 -0700 (PDT)
+Received: by mail-lj1-x22c.google.com with SMTP id 38308e7fff4ca-2b6985de215so52125351fa.2
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 13:51:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1687899092; x=1690491092;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=kCzDt5CROKYWDohsq+V3lFQ9c+DIuiELGjjW1xUO8b4=;
+        b=qAyW46DhS3+TOPwxuOExnMpdtCBEUamMGarvJg9AcKe+yAemmVGXuJDBhKSC2Wvt09
+         +JylKWvPIxN+Cm0K5vEBsJiLTJSL3vk881EyySiYp2NkDp6Blw6EIDY6QgiGw8ZysSP3
+         Vs7wSppcZM80nNFx+UI3K2c87rc7afx3SqmAAqBdzvHouiows1haUY8tFPt6Anfs78zv
+         xgEzx3oa7bWgJxYUSFbAf4tz55mRNvdYUuP7sC/350TTrUvZoAe66xhict4TnURHScPq
+         LKcHgBd1dWr9ee2Xzs69iTaWv69vMAANoio4PO+9gqQwEzoNTJrFVAQyB2AIGcVdakI4
+         DUWw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687899092; x=1690491092;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=kCzDt5CROKYWDohsq+V3lFQ9c+DIuiELGjjW1xUO8b4=;
+        b=C8AFIDxv9/YYENNsD+po+tE5hhG94UYhoaIhjyK3ImTcdHoikHd8nwRocJQtjRUY1x
+         yVDy69gwT51yej/wWlaA7WoVYLWlQ6eYbc0TeergWv1xCa69XjNIidyegFrQ0vRhId3O
+         YegAP/p/xmgn+5y+ZFSF4Wt9hVUPw52/6eaVeijcyMFskt4x9G7NhrH6xwk5WzMcwvSw
+         YJTfxm1Bd05D7WJNdKE7SRK+yOwJubqXWaIvhd70/d8gbMopDJ1g2DkfaR7aoxSqmAPj
+         9u9o9KH4MGRwhqvXx+K9XzKOkcz4B526nOUYZgjLF+CbEbuV9nsRZGnBLSDgkXP9O9f9
+         S3IA==
+X-Gm-Message-State: AC+VfDyMIONK8pwnAGqZ9HmcWPsQTbXTjZI0W5MQbzaxtayTk4HH2ouZ
+        ll4qUly5UQ/rTzrKRNR55n90/A==
+X-Google-Smtp-Source: ACHHUZ5ZPUTrUE7nD8aIZbN7Xlww2DznNh1NZ2SSDhF7luRrOhP1OuGQ77OUjfsUyGqY8U50Ifyk9g==
+X-Received: by 2002:a2e:95d7:0:b0:2b4:65bf:d7b with SMTP id y23-20020a2e95d7000000b002b465bf0d7bmr18474072ljh.2.1687899091991;
+        Tue, 27 Jun 2023 13:51:31 -0700 (PDT)
+Received: from [192.168.1.101] (abxj103.neoplus.adsl.tpnet.pl. [83.9.3.103])
+        by smtp.gmail.com with ESMTPSA id y20-20020a2e95d4000000b002b6b928a6d8sm161413ljh.33.2023.06.27.13.51.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 27 Jun 2023 13:51:31 -0700 (PDT)
+Message-ID: <8656ec99-82fc-3570-701d-df4266712348@linaro.org>
+Date:   Tue, 27 Jun 2023 22:51:29 +0200
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="4ot4an2wv4srdmhm"
-Content-Disposition: inline
-In-Reply-To: <cover.1687898895.git.nabijaczleweli@nabijaczleweli.xyz>
-User-Agent: NeoMutt/20230517
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,PDS_RDNS_DYNAMIC_FP,
-        RDNS_DYNAMIC,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH v11 6/9] soc: qcom: cpr: Use u64 for frequency
+Content-Language: en-US
+To:     Jeffrey Hugo <quic_jhugo@quicinc.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Niklas Cassel <nks@flawful.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>
+Cc:     Robert Marko <robimarko@gmail.com>, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-pm@vger.kernel.org,
+        Marijn Suijten <marijn.suijten@somainline.org>
+References: <20230217-topic-cpr3h-v11-0-ba22b4daa5d6@linaro.org>
+ <20230217-topic-cpr3h-v11-6-ba22b4daa5d6@linaro.org>
+ <2e11a98a-3e44-7164-84cc-7bbd519b608a@quicinc.com>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <2e11a98a-3e44-7164-84cc-7bbd519b608a@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 27.06.2023 22:15, Jeffrey Hugo wrote:
+> On 6/27/2023 12:30 PM, Konrad Dybcio wrote:
+>> 32 bits is not enough for over-2.changeGHz frequencies. Move all variables
+>> that operate on Hz to u64 to avoid overflows.
+>>
+>> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> 
+> 
+> I get the following warning when building this -
+Ugh. Either didn't notice or clang wasn't unhappy with it.
 
---4ot4an2wv4srdmhm
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Thanks for noticing.
 
-Same logic applies here: this can fill up the pipe, and pollers that rely
-on getting IN_MODIFY notifications never wake up.
-
-Fixes: 983652c69199 ("splice: report related fsnotify events")
-Link: https://lore.kernel.org/linux-fsdevel/jbyihkyk5dtaohdwjyivambb2gffyjs=
-3dodpofafnkkunxq7bu@jngkdxx65pux/t/#u
-Link: https://bugs.debian.org/1039488
-Signed-off-by: Ahelenia Ziemia=C5=84ska <nabijaczleweli@nabijaczleweli.xyz>
-Reviewed-by: Amir Goldstein <amir73il@gmail.com>
----
- fs/splice.c | 5 +++++
- 1 file changed, 5 insertions(+)
-
-diff --git a/fs/splice.c b/fs/splice.c
-index d3a7f4d5c078..bdbabc2ebfff 100644
---- a/fs/splice.c
-+++ b/fs/splice.c
-@@ -1810,6 +1810,11 @@ long do_tee(struct file *in, struct file *out, size_=
-t len, unsigned int flags)
- 		}
- 	}
-=20
-+	if (ret > 0) {
-+		fsnotify_access(in);
-+		fsnotify_modify(out);
-+	}
-+
- 	return ret;
- }
-=20
---=20
-2.39.2
-
---4ot4an2wv4srdmhm
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEfWlHToQCjFzAxEFjvP0LAY0mWPEFAmSbS7cACgkQvP0LAY0m
-WPGHoBAAuEr2KQDe9rtumdeeAh4Ffl/KEpS/Bi8/idfGipB+ouXMPgw5YvEzycCN
-SczBs3/Iw+E/8CHFuXJN9XFrj0GglDr/cYmH0qmZ1ljmKnQUa/P6iRmPhZErr8lv
-hHVtfszJGBb2MInCUmEom0SZjZloyvQLtipSabeasgrtBf8prBZcOdjvnzIolGKq
-T2IJ2v9xP2ijrNavdvxcO66Gh9ibnQqYAyZtajaXek0qyY0RJoSY7V5N3RwGLQuS
-cDsn9fiXYH91zB02leNyzQySWSnS7EIcG1NeSi4SL15ZD9s0srr6LuA5oWBiZBNa
-oMTG1zjE2/F85qMEBuCBpFeWw4EHXgVs8XU6XSQXxwSzRHpbPbCOJzQvVNfANVAe
-UN61cHxHSPePvWNUG4hnPTCP7ZyTPvNNxVzZ5T8XjT2wAYjTR39bxJczN2wrZkfV
-ASrgDVj4mQlReuJD2IWt9S9NTtSzU3TOqWxGi0jXt3m+dxArFS8WW/YK0fmJ2yaq
-ZfuaoEEV05G2hqXPvdW3FHFLmdFqG7JlCJsA3gat05z3GttSRmDQaQRDy6CJ0GbW
-eSgfr9yFp3ZwuDxqTfWz3vOr6VtX3HHx8n8lRTzzuoUS9iaWW3uNTLYEaEak2koz
-nR6OJn7z2/mQ7+gX8GqJMEmnf7UcH1zTTG2xPukKB9bGaYhPVvU=
-=CovH
------END PGP SIGNATURE-----
-
---4ot4an2wv4srdmhm--
+Konrad
+> 
+>   CC      drivers/soc/qcom/cpr-common.o
+> In file included from ./include/linux/device.h:15:0,
+>                  from ./include/linux/platform_device.h:13,
+>                  from ./include/linux/of_device.h:5,
+>                  from drivers/soc/qcom/cpr.c:18:
+> drivers/soc/qcom/cpr.c: In function ‘cpr_corner_init’:
+> drivers/soc/qcom/cpr.c:870:21: warning: format ‘%lu’ expects argument of type ‘long unsigned int’, but argument 4 has type ‘u64 {aka long long unsigned int}’ [-Wformat=]
+>    dev_dbg(drv->dev, "freq: %lu level: %u fuse level: %u\n",
+>                      ^
+> ./include/linux/dev_printk.h:129:27: note: in definition of macro ‘dev_printk’
+>    _dev_printk(level, dev, fmt, ##__VA_ARGS__);  \
+>                            ^~~
+> ./include/linux/dev_printk.h:163:31: note: in expansion of macro ‘dev_fmt’
+>    dev_printk(KERN_DEBUG, dev, dev_fmt(fmt), ##__VA_ARGS__); \
+>                                ^~~~~~~
+> drivers/soc/qcom/cpr.c:870:3: note: in expansion of macro ‘dev_dbg’
+>    dev_dbg(drv->dev, "freq: %lu level: %u fuse level: %u\n",
+>    ^~~~~~~
