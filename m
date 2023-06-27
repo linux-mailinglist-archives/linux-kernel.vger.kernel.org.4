@@ -2,171 +2,394 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C6E9740557
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 22:55:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0182D74055A
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 22:59:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231156AbjF0Uyq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 16:54:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57656 "EHLO
+        id S230089AbjF0U7X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 16:59:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229886AbjF0Uyg (ORCPT
+        with ESMTP id S229482AbjF0U7V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 16:54:36 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 438C41BE9
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 13:54:35 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C0B4161226
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 20:54:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2591FC433C8;
-        Tue, 27 Jun 2023 20:54:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687899274;
-        bh=5T9yNGajZohHz72pRMr120aN7AzpZSuen42By12MugM=;
-        h=Date:From:To:cc:Subject:From;
-        b=jmMfK55oLmH4pPY2kA3VpPjDcw405rBYiwDz2ACvggZ7FZ9+u1z/vzw2FeT7mxIQA
-         xCYeSYbvLBtARjbHUitZLj9zvUIAEuNqJeFlju7UkSy3Mq8bNmB+a3s7KwYwEhMhmd
-         WeqtvBKK/fZuw3AEPwcBy/DYopDyLt3rZmIAVq6L1CuX/7IY/+kW3mt11fzAH2ed7O
-         lmLxkrMNCTxOV+4K0LSXZIXYyzctf8NMcVLpFd3InjDvAKTdmbbeZ9rU07pAj0+Ig4
-         CEEGrFPGPWBn1QfwwSo/Xjqvjx1LXYpQ7p49vfaGD67l6fWT2+NiIXxQcpi+Y0iCse
-         N6imyQxnDmjiQ==
-Date:   Tue, 27 Jun 2023 22:54:30 +0200 (CEST)
-From:   Jiri Kosina <jikos@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-cc:     Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        linux-kernel@vger.kernel.org
-Subject: [GIT PULL] HID for 6.5
-Message-ID: <nycvar.YFH.7.76.2306272250390.5716@cbobk.fhfr.pm>
-User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
+        Tue, 27 Jun 2023 16:59:21 -0400
+Received: from tarta.nabijaczleweli.xyz (unknown [139.28.40.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C0F7FF2;
+        Tue, 27 Jun 2023 13:59:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=nabijaczleweli.xyz;
+        s=202305; t=1687899558;
+        bh=cCPA9gHUAzZnPeQczg3AkMUdgYMOFvdXzDxq+UdqXHk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=D7bdg+lMx7cOjryXowRwFAneeyhPYCFLmfGhYN0bjVSt055/r40I8hMOmYdzqMrZJ
+         OVyaW3q4KCF+R4HSgz5vPMqtvGl0R6dWmheY6BDofBXTUMBQJbpWbNJfK0dB1H/hCE
+         Hub+ZsTyLNVdQDVm5S/G4Mjka2yAe+YdC8RyM8Cf0DTFFsYPoTYCJLa3gBiqbusX6l
+         Q0zvi18BMRlK+7hU32/n0YqkIoaJ/jBMxPR2QEho/nmpQPPhg0L+qJjB1FCFKpoAUf
+         Qmd6qPwyqswfzSsHnmJSFl/ptw4Ej0o0licRAZan/WgedJVezJ1BeNvESd5fVhSxH2
+         mKyWWAPskjzvg==
+Received: from tarta.nabijaczleweli.xyz (unknown [192.168.1.250])
+        by tarta.nabijaczleweli.xyz (Postfix) with ESMTPSA id CD80513AA;
+        Tue, 27 Jun 2023 22:59:18 +0200 (CEST)
+Date:   Tue, 27 Jun 2023 22:59:17 +0200
+From:   Ahelenia =?utf-8?Q?Ziemia=C5=84ska?= 
+        <nabijaczleweli@nabijaczleweli.xyz>
+To:     Amir Goldstein <amir73il@gmail.com>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Christian Brauner <brauner@kernel.org>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jan Kara <jack@suse.cz>,
+        Chung-Chiang Cheng <cccheng@synology.com>, ltp@lists.linux.it
+Subject: [LTP RFC PATCH v2] inotify13: new test for fs/splice.c functions vs
+ pipes vs inotify
+Message-ID: <ajkeyn2sy35h6ctfbupom4xg3ozoxxgsojdvu7vebac44zqped@ecnusnv6daxn>
+References: <CAOQ4uxifYoKdup6gzyW0iV=KFBzTWu5T8=zq8s8pFw2X3+5xRg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=ISO-8859-15
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="aadmf3i7azbjbqpw"
+Content-Disposition: inline
+In-Reply-To: <CAOQ4uxifYoKdup6gzyW0iV=KFBzTWu5T8=zq8s8pFw2X3+5xRg@mail.gmail.com>
+User-Agent: NeoMutt/20230517
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,PDS_RDNS_DYNAMIC_FP,
+        RDNS_DYNAMIC,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Linus,
 
-please pull from
+--aadmf3i7azbjbqpw
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/hid/hid.git tags/for-linus-2023062701
+The only one that passes on 6.1.27-1 is sendfile_file_to_pipe.
 
-to receive HID subsystem updates for 6.5.
+Link: https://lore.kernel.org/linux-fsdevel/jbyihkyk5dtaohdwjyivambb2gffyjs=
+3dodpofafnkkunxq7bu@jngkdxx65pux/t/#u
+Signed-off-by: Ahelenia Ziemia=C5=84ska <nabijaczleweli@nabijaczleweli.xyz>
+---
+Whitespace-only changes against v1.
+Marking as RFC since we have no commit SHA to reference.
 
-=====
-- more bullet-proof handling of devres-managed resources in HID core
-  (Dmitry Torokhov)
-- conversion of hid-wacom to use ktime_t (Jason Gerecke)
-- touch selftests for hid-wacom (Joshua Dickens)
-- support for nVidia Thunderstrike (SHIELD 2017) controller (Rahul 
-  Rameshbabu)
-- power management reset-during-suspend fix for goodix Chromebook
-  devices (Fei Shao)
-- assorted device ID additions, device-specific quirks and code cleanups
-=====
+I didn't find any style opinions in the repository, so I just let
+clang-format rip. Apparently, according to a /github wiki page/:
+  https://github.com/linux-test-project/ltp/wiki/Test-Writing-Guidelines#2-=
+coding-style
+which is /only referenced/ from a 2020 issue:
+  https://github.com/linux-test-project/ltp/issues/631
+LTP uses the kernel style.
 
-Thanks.
+Could've fooled me, because the other inotify tests are definitely not
+in the kernel style.
 
-----------------------------------------------------------------
-Basavaraj Natikar (5):
-      HID: amd_sfh: Remove unnecessary log
-      HID: amd_sfh: Remove duplicate cleanup
-      HID: amd_sfh: Split sensor and HID initialization
-      HID: amd_sfh: Remove duplicate cleanup for SFH1.1
-      HID: amd_sfh: Split sensor and HID initialization for SFH1.1
+Re-formatted the whole file with the linux .clang-format.
 
-Dan Carpenter (1):
-      HID: fix an error code in hid_check_device_match()
+ testcases/kernel/syscalls/inotify/.gitignore  |   1 +
+ testcases/kernel/syscalls/inotify/inotify13.c | 260 ++++++++++++++++++
+ 2 files changed, 261 insertions(+)
+ create mode 100644 testcases/kernel/syscalls/inotify/inotify13.c
 
-Dmitry Torokhov (2):
-      HID: split apart hid_device_probe to make logic more apparent
-      HID: ensure timely release of driver-allocated resources
+diff --git a/testcases/kernel/syscalls/inotify/.gitignore b/testcases/kerne=
+l/syscalls/inotify/.gitignore
+index f6e5c546a..b597ea63f 100644
+--- a/testcases/kernel/syscalls/inotify/.gitignore
++++ b/testcases/kernel/syscalls/inotify/.gitignore
+@@ -10,3 +10,4 @@
+ /inotify10
+ /inotify11
+ /inotify12
++/inotify13
+diff --git a/testcases/kernel/syscalls/inotify/inotify13.c b/testcases/kern=
+el/syscalls/inotify/inotify13.c
+new file mode 100644
+index 000000000..8c2cd4cf1
+--- /dev/null
++++ b/testcases/kernel/syscalls/inotify/inotify13.c
+@@ -0,0 +1,260 @@
++// SPDX-License-Identifier: GPL-2.0-or-later
++/*\
++ * Verify splice-family functions (and sendfile) generate IN_ACCESS
++ * for what they read and IN_MODIFY for what they write.
++ *
++ * Regression test for 983652c69199 and
++ * https://lore.kernel.org/linux-fsdevel/jbyihkyk5dtaohdwjyivambb2gffyjs3d=
+odpofafnkkunxq7bu@jngkdxx65pux/t/#u
++ */
++
++#define _GNU_SOURCE
++#include "config.h"
++
++#include <stdio.h>
++#include <unistd.h>
++#include <stdlib.h>
++#include <fcntl.h>
++#include <stdbool.h>
++#include <inttypes.h>
++#include <signal.h>
++#include <sys/mman.h>
++#include <sys/sendfile.h>
++
++#include "tst_test.h"
++#include "tst_safe_macros.h"
++#include "inotify.h"
++
++#if defined(HAVE_SYS_INOTIFY_H)
++#include <sys/inotify.h>
++
++static int pipes[2] =3D { -1, -1 };
++static int inotify =3D -1;
++static int memfd =3D -1;
++static int data_pipes[2] =3D { -1, -1 };
++
++static void watch_rw(int fd)
++{
++	char buf[64];
++	sprintf(buf, "/proc/self/fd/%d", fd);
++	SAFE_MYINOTIFY_ADD_WATCH(inotify, buf, IN_ACCESS | IN_MODIFY);
++}
++
++static int compar(const void *l, const void *r)
++{
++	const struct inotify_event *lie =3D l;
++	const struct inotify_event *rie =3D r;
++	return lie->wd - rie->wd;
++}
++
++static void get_events(size_t evcnt, struct inotify_event evs[static evcnt=
+])
++{
++	struct inotify_event tail, *itr =3D evs;
++	for (size_t left =3D evcnt; left; --left)
++		SAFE_READ(true, inotify, itr++, sizeof(struct inotify_event));
++
++	TEST(read(inotify, &tail, sizeof(struct inotify_event)));
++	if (TST_RET !=3D -1)
++		tst_brk(TFAIL, ">%zu events", evcnt);
++	if (TST_ERR !=3D EAGAIN)
++		tst_brk(TFAIL | TTERRNO, "expected EAGAIN");
++
++	qsort(evs, evcnt, sizeof(struct inotify_event), compar);
++}
++
++static void expect_event(struct inotify_event *ev, int wd, uint32_t mask)
++{
++	if (ev->wd !=3D wd)
++		tst_brk(TFAIL, "expect event for wd %d got %d", wd, ev->wd);
++	if (ev->mask !=3D mask)
++		tst_brk(TFAIL,
++			"expect event with mask %" PRIu32 " got %" PRIu32 "",
++			mask, ev->mask);
++}
++
++#define F2P(splice)                                                      \
++	SAFE_WRITE(SAFE_WRITE_RETRY, memfd, __func__, sizeof(__func__)); \
++	SAFE_LSEEK(memfd, 0, SEEK_SET);                                  \
++	watch_rw(memfd);                                                 \
++	watch_rw(pipes[0]);                                              \
++	TEST(splice);                                                    \
++	if (TST_RET =3D=3D -1)                                               \
++		tst_brk(TBROK | TERRNO, #splice);                        \
++	if (TST_RET !=3D sizeof(__func__))                                 \
++		tst_brk(TBROK, #splice ": %" PRId64 "", TST_RET);        \
++                                                                         \
++	/* expecting: IN_ACCESS memfd, IN_MODIFY pipes[0] */             \
++	struct inotify_event events[2];                                  \
++	get_events(ARRAY_SIZE(events), events);                          \
++	expect_event(events + 0, 1, IN_ACCESS);                          \
++	expect_event(events + 1, 2, IN_MODIFY);                          \
++                                                                         \
++	char buf[sizeof(__func__)];                                      \
++	SAFE_READ(true, pipes[0], buf, sizeof(__func__));                \
++	if (memcmp(buf, __func__, sizeof(__func__)))                     \
++		tst_brk(TFAIL, "buf contents bad");
++static void splice_file_to_pipe(void)
++{
++	F2P(splice(memfd, NULL, pipes[1], NULL, 128 * 1024 * 1024, 0));
++}
++static void sendfile_file_to_pipe(void)
++{
++	F2P(sendfile(pipes[1], memfd, NULL, 128 * 1024 * 1024));
++}
++
++static void splice_pipe_to_file(void)
++{
++	SAFE_WRITE(SAFE_WRITE_RETRY, pipes[1], __func__, sizeof(__func__));
++	watch_rw(pipes[0]);
++	watch_rw(memfd);
++	TEST(splice(pipes[0], NULL, memfd, NULL, 128 * 1024 * 1024, 0));
++	if (TST_RET =3D=3D -1)
++		tst_brk(TBROK | TERRNO, "splice");
++	if (TST_RET !=3D sizeof(__func__))
++		tst_brk(TBROK, "splice: %" PRId64 "", TST_RET);
++
++	/* expecting: IN_ACCESS pipes[0], IN_MODIFY memfd */
++	struct inotify_event events[2];
++	get_events(ARRAY_SIZE(events), events);
++	expect_event(events + 0, 1, IN_ACCESS);
++	expect_event(events + 1, 2, IN_MODIFY);
++
++	char buf[sizeof(__func__)];
++	SAFE_LSEEK(memfd, 0, SEEK_SET);
++	SAFE_READ(true, memfd, buf, sizeof(__func__));
++	if (memcmp(buf, __func__, sizeof(__func__)))
++		tst_brk(TFAIL, "buf contents bad");
++}
++
++#define P2P(splice)                                                  \
++	SAFE_WRITE(SAFE_WRITE_RETRY, data_pipes[1], __func__,        \
++		   sizeof(__func__));                                \
++	watch_rw(data_pipes[0]);                                     \
++	watch_rw(pipes[1]);                                          \
++	TEST(splice);                                                \
++	if (TST_RET =3D=3D -1)                                           \
++		tst_brk(TBROK | TERRNO, #splice);                    \
++	if (TST_RET !=3D sizeof(__func__))                             \
++		tst_brk(TBROK, #splice ": %" PRId64 "", TST_RET);    \
++                                                                     \
++	/* expecting: IN_ACCESS data_pipes[0], IN_MODIFY pipes[1] */ \
++	struct inotify_event events[2];                              \
++	get_events(ARRAY_SIZE(events), events);                      \
++	expect_event(events + 0, 1, IN_ACCESS);                      \
++	expect_event(events + 1, 2, IN_MODIFY);                      \
++                                                                     \
++	char buf[sizeof(__func__)];                                  \
++	SAFE_READ(true, pipes[0], buf, sizeof(__func__));            \
++	if (memcmp(buf, __func__, sizeof(__func__)))                 \
++		tst_brk(TFAIL, "buf contents bad");
++static void splice_pipe_to_pipe(void)
++{
++	P2P(splice(data_pipes[0], NULL, pipes[1], NULL, 128 * 1024 * 1024, 0));
++}
++static void tee_pipe_to_pipe(void)
++{
++	P2P(tee(data_pipes[0], pipes[1], 128 * 1024 * 1024, 0));
++}
++
++static char vmsplice_pipe_to_mem_dt[32 * 1024];
++static void vmsplice_pipe_to_mem(void)
++{
++	memcpy(vmsplice_pipe_to_mem_dt, __func__, sizeof(__func__));
++	watch_rw(pipes[0]);
++	TEST(vmsplice(
++		pipes[1],
++		&(struct iovec){ .iov_base =3D vmsplice_pipe_to_mem_dt,
++				 .iov_len =3D sizeof(vmsplice_pipe_to_mem_dt) },
++		1, SPLICE_F_GIFT));
++	if (TST_RET =3D=3D -1)
++		tst_brk(TBROK | TERRNO, "vmsplice");
++	if (TST_RET !=3D sizeof(vmsplice_pipe_to_mem_dt))
++		tst_brk(TBROK, "vmsplice: %" PRId64 "", TST_RET);
++
++	/* expecting: IN_MODIFY pipes[0] */
++	struct inotify_event event;
++	get_events(1, &event);
++	expect_event(&event, 1, IN_MODIFY);
++
++	char buf[sizeof(__func__)];
++	SAFE_READ(true, pipes[0], buf, sizeof(__func__));
++	if (memcmp(buf, __func__, sizeof(__func__)))
++		tst_brk(TFAIL, "buf contents bad");
++}
++
++static void vmsplice_mem_to_pipe(void)
++{
++	char buf[sizeof(__func__)];
++	SAFE_WRITE(SAFE_WRITE_RETRY, pipes[1], __func__, sizeof(__func__));
++	watch_rw(pipes[1]);
++	TEST(vmsplice(pipes[0],
++		      &(struct iovec){ .iov_base =3D buf,
++				       .iov_len =3D sizeof(buf) },
++		      1, 0));
++	if (TST_RET =3D=3D -1)
++		tst_brk(TBROK | TERRNO, "vmsplice");
++	if (TST_RET !=3D sizeof(buf))
++		tst_brk(TBROK, "vmsplice: %" PRId64 "", TST_RET);
++
++	/* expecting: IN_ACCESS pipes[1] */
++	struct inotify_event event;
++	get_events(1, &event);
++	expect_event(&event, 1, IN_ACCESS);
++	if (memcmp(buf, __func__, sizeof(__func__)))
++		tst_brk(TFAIL, "buf contents bad");
++}
++
++typedef void (*tests_f)(void);
++#define TEST_F(f)      \
++	{              \
++		f, #f, \
++	}
++static const struct {
++	tests_f f;
++	const char *n;
++} tests[] =3D {
++	TEST_F(splice_file_to_pipe),  TEST_F(sendfile_file_to_pipe),
++	TEST_F(splice_pipe_to_file),  TEST_F(splice_pipe_to_pipe),
++	TEST_F(tee_pipe_to_pipe),     TEST_F(vmsplice_pipe_to_mem),
++	TEST_F(vmsplice_mem_to_pipe),
++};
++
++static void run_test(unsigned int n)
++{
++	tst_res(TINFO, "%s", tests[n].n);
++
++	SAFE_PIPE2(pipes, O_CLOEXEC);
++	SAFE_PIPE2(data_pipes, O_CLOEXEC);
++	inotify =3D SAFE_MYINOTIFY_INIT1(IN_NONBLOCK | IN_CLOEXEC);
++	if ((memfd =3D memfd_create(__func__, MFD_CLOEXEC)) =3D=3D -1)
++		tst_brk(TCONF | TERRNO, "memfd");
++	tests[n].f();
++	tst_res(TPASS, "=D0=BE=D0=BA");
++}
++
++static void cleanup(void)
++{
++	if (memfd !=3D -1)
++		SAFE_CLOSE(memfd);
++	if (inotify !=3D -1)
++		SAFE_CLOSE(inotify);
++	if (pipes[0] !=3D -1)
++		SAFE_CLOSE(pipes[0]);
++	if (pipes[1] !=3D -1)
++		SAFE_CLOSE(pipes[1]);
++	if (data_pipes[0] !=3D -1)
++		SAFE_CLOSE(data_pipes[0]);
++	if (data_pipes[1] !=3D -1)
++		SAFE_CLOSE(data_pipes[1]);
++}
++
++static struct tst_test test =3D {
++	.max_runtime =3D 10,
++	.cleanup =3D cleanup,
++	.test =3D run_test,
++	.tcnt =3D ARRAY_SIZE(tests),
++	.tags =3D (const struct tst_tag[]){ { "linux-git", "983652c69199" }, {} },
++};
++
++#else
++TST_TEST_TCONF("system doesn't have required inotify support");
++#endif
+--=20
+2.39.2
 
-Even Xu (1):
-      HID: intel-ish-hid: ipc: Add Arrow Lake PCI device ID
+--aadmf3i7azbjbqpw
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Fei Shao (2):
-      dt-bindings: input: goodix: Add "goodix,no-reset-during-suspend" property
-      HID: i2c-hid: goodix: Add support for "goodix,no-reset-during-suspend" property
+-----BEGIN PGP SIGNATURE-----
 
-Geert Uytterhoeven (1):
-      HID: uclogic: Modular KUnit tests should not depend on KUNIT=y
+iQIzBAABCgAdFiEEfWlHToQCjFzAxEFjvP0LAY0mWPEFAmSbTaUACgkQvP0LAY0m
+WPGNNRAAi6Lq2fRPTqF97WtfGi8Gfxt8iKcK1m8DKj9cHd4VbJNRZVl3FYvMOgAW
+Al8SkLG4oTHtYwBkEVDzWzTucc5SlyTHDebDEoW84H9HufMoTrobw2o8w4KSYLKr
+27nRXvBDqq7hWsiLe/5EZTM09HAvda/iCisL3TzWWdbwX1tMU6rOx5iLe2NoInyy
+b4vtyQAbSc+WcbzMMlF239KrwJx+2fxRnh0MyWVTap9nmoNbHmE3FBsdTTXYXxVn
+Fa7n78nuDKWyHCP24Lw9979Amn4DuFvm3IlIa4Du/Jc5NJil1tL+3C3RmiLw1sXv
+kmz3yjaiomm52JggY1/7dgZzebfu7XW0ULR6r8Wzr/VPtsHl0wJjxe3XXMv3VHDQ
+I/74GpC78RAZE6m6YCJHxqCpre6aGBn+DfTp4D7yunR0on9vAPx4BIeAruUCR+X2
+buXBLNHaz1N5SUHMNmY/fS4iDWH3MizsR0xAEqZ4npJYHBIcKJ11pX/SpPSJYZTv
+r7S5xuTbplOM1o0q8egDIcF9AOWFYZAfEXBTUCMY4Q387V4D8EcMlG7jwrrGkfO+
+xEs3qYhZjwjYfFhYDvTrcAd5vyoDOLx2q6rkJXs+3r4EymPA/YuB+3itTjPEVKJj
+uiBoV0coS/qMpPURsYSAUqIm/TkNB87Nsyt9U+NgXhDFLNuRz6c=
+=Mxnw
+-----END PGP SIGNATURE-----
 
-Jason Gerecke (1):
-      HID: wacom: Use ktime_t rather than int when dealing with timestamps
-
-Joshua Dickens (1):
-      selftests: hid: Add touch tests for Wacom devices
-
-Lasse Brun (1):
-      HID: apple: Option to swap only left side mod keys
-
-Ludvig Michaelsson (1):
-      HID: hidraw: fix data race on device refcount
-
-Luke D. Jones (3):
-      HID: asus: Add support for ASUS ROG Z13 keyboard
-      HID: asus: add keycodes for 0x6a, 0x4b, and 0xc7
-      HID: asus: reformat the hotkey mapping block
-
-Marco Morandini (1):
-      HID: add quirk for 03f0:464a HP Elite Presenter Mouse
-
-Mike Hommey (1):
-      HID: logitech-hidpp: add HIDPP_QUIRK_DELAYED_INIT for the T651.
-
-Rahul Rameshbabu (3):
-      HID: nvidia-shield: Initial driver implementation with Thunderstrike support
-      HID: nvidia-shield: Add mappings for consumer HID USAGE buttons
-      HID: nvidia-shield: Support LED functionality for Thunderstrike
-
-Siarhei Vishniakou (1):
-      HID: microsoft: Add rumble support to latest xbox controllers
-
-Uwe Kleine-König (1):
-      HID: i2c-hid: Switch i2c drivers back to use .probe()
-
-stuarthayhurst (1):
-      HID: logitech-hidpp: Add USB and Bluetooth IDs for the Logitech G915 TKL Keyboard
-
- .../devicetree/bindings/input/goodix,gt7375p.yaml  |   9 +
- MAINTAINERS                                        |   6 +
- drivers/hid/Kconfig                                |  20 +-
- drivers/hid/Makefile                               |   1 +
- drivers/hid/amd-sfh-hid/amd_sfh_client.c           |  47 +-
- drivers/hid/amd-sfh-hid/sfh1_1/amd_sfh_init.c      |  24 +-
- drivers/hid/hid-apple.c                            |  13 +-
- drivers/hid/hid-asus.c                             |  42 +-
- drivers/hid/hid-core.c                             | 118 ++--
- drivers/hid/hid-ids.h                              |  15 +-
- drivers/hid/hid-logitech-hidpp.c                   |   6 +-
- drivers/hid/hid-microsoft.c                        |  11 +-
- drivers/hid/hid-nvidia-shield.c                    | 738 +++++++++++++++++++++
- drivers/hid/hid-quirks.c                           |   1 +
- drivers/hid/hidraw.c                               |   9 +-
- drivers/hid/i2c-hid/i2c-hid-acpi.c                 |   2 +-
- drivers/hid/i2c-hid/i2c-hid-of-elan.c              |   2 +-
- drivers/hid/i2c-hid/i2c-hid-of-goodix.c            |  18 +-
- drivers/hid/i2c-hid/i2c-hid-of.c                   |   2 +-
- drivers/hid/intel-ish-hid/ipc/hw-ish.h             |   1 +
- drivers/hid/intel-ish-hid/ipc/pci-ish.c            |   1 +
- drivers/hid/wacom_wac.c                            |   6 +-
- drivers/hid/wacom_wac.h                            |   2 +-
- include/linux/hid.h                                |   1 +
- .../selftests/hid/tests/test_wacom_generic.py      |  84 ++-
- 25 files changed, 1035 insertions(+), 144 deletions(-)
- create mode 100644 drivers/hid/hid-nvidia-shield.c
-
--- 
-Jiri Kosina
-SUSE Labs
-
+--aadmf3i7azbjbqpw--
