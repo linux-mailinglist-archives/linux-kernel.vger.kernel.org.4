@@ -2,81 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33DC673EFD9
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 02:45:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE59773EFDB
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 02:46:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229610AbjF0Ap1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 20:45:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51874 "EHLO
+        id S229737AbjF0Aqw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 20:46:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbjF0ApZ (ORCPT
+        with ESMTP id S229459AbjF0Aqv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 20:45:25 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EE2F172A;
-        Mon, 26 Jun 2023 17:45:23 -0700 (PDT)
+        Mon, 26 Jun 2023 20:46:51 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48D6512C;
+        Mon, 26 Jun 2023 17:46:50 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QqmG91QqHz4wZv;
-        Tue, 27 Jun 2023 10:45:20 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QqmHr1vD1z4wZv;
+        Tue, 27 Jun 2023 10:46:48 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1687826721;
-        bh=FpreN/zpKx5TdtbmQIYenqQgdzwueK8hzykvHFrWr6s=;
+        s=201702; t=1687826808;
+        bh=Y72SU4FB9301ltMa6LwnjGji2x9UTnFq9kBOUG8LCwM=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=a8GEpcdn44laWVKdcZMDncNZzPipma0DiLDrijw8H0AEpKM50hEkYQSe4MHp4K4Z3
-         ccKwRZYxlv56kKEkJjIMaORFaWZHalDhWKfTLgvDn0QhESjx0nCBkxc/+cRo30dg9/
-         37AzIRdeJX+jAUw5OwnhokvSVkPX57CHVtw1xYMDG/x9/jPHK++Y3xWeCxgQGPE585
-         GehrFnJHB1QU8xYNIHXrJGZCVuk6+RasMj2qof+4SFENT2D2SyXv/BkAFgAqVElH7w
-         UfqDFqW7UXVFX+iypcqzvVMSzeyj+8mPAUO1VyUwCs8nzd6Qy+rbIdAZqDo/qHHLcM
-         LZKbIHdYdEnew==
-Date:   Tue, 27 Jun 2023 10:45:20 +1000
+        b=RQwWWzxe3hy80JPWXzjMDbOrjPbOPhxKgB98dM8hl7cUhj36RLNqrBV4EmGIbwN2T
+         oI/O+nAYJN+ySRiwtuibW82kBUrPuN9vLrIRDW65Du5WikSRsXdccCHVb4mBDSGs6w
+         M2soSZ96SZ6Ip2V63+eXue6DDI96iCanplgsqILvvy2GD3mbsla74dGq1aCFNwmY6p
+         FjOTPcHD5HHj5oVRSF07cMmKK6May51q9ZPrUgcbYevc9Uh02LRJWLKji2hrfYT5ZP
+         /8i/Ctj7/fOfI5Ua0a0D1KcEZzTNwzkCxCoPARPWNzNrx1s1YZWRcFGnQTY6Oe3UFU
+         yq5EuUUvEliTw==
+Date:   Tue, 27 Jun 2023 10:46:46 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     David Sterba <dsterba@suse.cz>, Christoph Hellwig <hch@lst.de>,
+To:     Theodore Ts'o <tytso@mit.edu>
+Cc:     Jens Axboe <axboe@kernel.dk>, Christoph Hellwig <hch@lst.de>,
+        Jan Kara <jack@suse.cz>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: manual merge of the btrfs tree with the mm tree
-Message-ID: <20230627104520.25411bc6@canb.auug.org.au>
-In-Reply-To: <20230605090803.43597523@canb.auug.org.au>
-References: <20230605090803.43597523@canb.auug.org.au>
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Zhihao Cheng <chengzhihao1@huawei.com>
+Subject: Re: linux-next: manual merge of the block tree with the ext4 tree
+Message-ID: <20230627104646.35f4279d@canb.auug.org.au>
+In-Reply-To: <20230626130951.54c4254a@canb.auug.org.au>
+References: <20230626130951.54c4254a@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/07p9.jN09_KvQsSc1NEgl_j";
+Content-Type: multipart/signed; boundary="Sig_/o8s4kc5BqlBWkzFu/sTqaXY";
  protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/07p9.jN09_KvQsSc1NEgl_j
+--Sig_/o8s4kc5BqlBWkzFu/sTqaXY
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-On Mon, 5 Jun 2023 09:08:03 +1000 Stephen Rothwell <sfr@canb.auug.org.au> w=
-rote:
->
-> Today's linux-next merge of the btrfs tree got a conflict in:
+On Mon, 26 Jun 2023 13:09:51 +1000 Stephen Rothwell <sfr@canb.auug.org.au> =
+wrote:
 >=20
->   fs/btrfs/file.c
+> Today's linux-next merge of the block tree got a conflict in:
+>=20
+>   fs/ext4/super.c
 >=20
 > between commit:
 >=20
->   39bf7bdb48fe ("backing_dev: remove current->backing_dev_info")
+>   ffea255f4052 ("ext4: Fix reusing stale buffer heads from last failed mo=
+unting")
 >=20
-> from the mm tree and commit:
+> from the ext4 tree and commits:
 >=20
->   3564004ccddf ("btrfs: determine synchronous writers from bio or writeba=
-ck control")
+>   2736e8eeb0cc ("block: use the holder as indication for exclusive opens")
+>   a42fb5a75ccc ("ext4: Fix warning in blkdev_put()")
 >=20
-> from the btrfs tree.
+> from the block tree.
 >=20
 > I fixed it up (see below) and can carry the fix as necessary. This
 > is now fixed as far as linux-next is concerned, but any non trivial
@@ -89,42 +91,46 @@ ck control")
 > Cheers,
 > Stephen Rothwell
 >=20
-> diff --cc fs/btrfs/file.c
-> index ecd43ab66fa6,f53b7b75092d..000000000000
-> --- a/fs/btrfs/file.c
-> +++ b/fs/btrfs/file.c
-> @@@ -1683,9 -1682,7 +1679,6 @@@ ssize_t btrfs_do_write_iter(struct kioc
->   			num_written =3D num_sync;
+> diff --cc fs/ext4/super.c
+> index b3819e70093e,64342adcd679..000000000000
+> --- a/fs/ext4/super.c
+> +++ b/fs/ext4/super.c
+> @@@ -1128,13 -1133,7 +1133,13 @@@ static void ext4_blkdev_remove(struct e
+>   	struct block_device *bdev;
+>   	bdev =3D sbi->s_journal_bdev;
+>   	if (bdev) {
+>  +		/*
+>  +		 * Invalidate the journal device's buffers.  We don't want them
+>  +		 * floating about in memory - the physical journal device may
+>  +		 * hotswapped, and it breaks the `ro-after' testing code.
+>  +		 */
+>  +		invalidate_bdev(bdev);
+> - 		ext4_blkdev_put(bdev);
+> + 		blkdev_put(bdev, sbi->s_sb);
+>   		sbi->s_journal_bdev =3D NULL;
 >   	}
->  =20
-> - 	if (sync)
-> - 		atomic_dec(&inode->sync_writers);
-> -=20
->  -	current->backing_dev_info =3D NULL;
->   	return num_written;
 >   }
->  =20
 
-This is now a conflict between the mm-stable tree and Linus' tree.
+This is now a conflict between the ext4 tree and Linus' tree.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/07p9.jN09_KvQsSc1NEgl_j
+--Sig_/o8s4kc5BqlBWkzFu/sTqaXY
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmSaMSAACgkQAVBC80lX
-0Gxxkgf/QyBsL8zTNhiKo2kbPIgDJ+cSPrJWsqnA2JuXYbNXk4NNvGI4M7CioFLQ
-nS7kAC+bXcfX9q0clILQbiQct4CzBPPN0dAEN88p/QaNPoDQvuH+OjN3tyHjKNKk
-SO52Tir9ix9Q/v5LGaURamDXoTCgeR7C6tfx4BleVN6beXDYwPBwuMQyXiMW+XVe
-NSrDNGHCOfz2seXFpzcPBYpJ0Y5MGkaEKJ8X8hidz47wKcRnSU9X1KjlA98w99QD
-50+WDDSdrZAHXwUGbV1WXEXBCQgCBjn8fGLUZEFTV25GZkaOz4BF4a6L02q0K1gx
-0YgWbWaZuo8QhTnt/gDCG9SCErFqlQ==
-=1S7N
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmSaMXYACgkQAVBC80lX
+0Gy6ZAgAhEWNmfVOvFAeP1iZyimyJh91WRnHUKGNYvZDUnRufFm2/Weo3msLu0sI
+JHSAtSVjC71A04nHt/er2ZjTtoCthupwVC4YbmJ1OkAKSUT8y6/Mm/nEyg7gh0Tv
+SQQWnc6gAkUnomEWeUK29ItmlxZdIYvbdvkLaITBXN1oXHc+zl+J8DqTV7hsRGdM
+wUypnWh/dx2x37+bP7xMx3kxqHzv8X1BPIAxUZX6qPIOa686oWwj/xjp62zJ26wY
+4uRufm+c9BDpp8Q3dNDaBErRRfcYyie/i7wN4Sjk0tfXlH5rfZm0Tw+JokLeWjy+
+P2XBy1epMY0twEhkNCuUlBXj/OjFAA==
+=xBOG
 -----END PGP SIGNATURE-----
 
---Sig_/07p9.jN09_KvQsSc1NEgl_j--
+--Sig_/o8s4kc5BqlBWkzFu/sTqaXY--
