@@ -2,295 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6497073F5D6
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 09:38:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A42CD73F5DE
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 09:40:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230338AbjF0HiC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 03:38:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38442 "EHLO
+        id S229610AbjF0HkW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 03:40:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230221AbjF0Hh6 (ORCPT
+        with ESMTP id S230399AbjF0HkU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 03:37:58 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25FDD196
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 00:37:57 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 8D9A01F8C2;
-        Tue, 27 Jun 2023 07:37:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1687851475; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=qyb6eGX+kWo/2KlAT9Otl5qMd3NG37t3julQmTVAVFg=;
-        b=xKtK+I5bgDfyHGMlKJguXS5bmsKDd5hTEH1SPqYLmj//J9UMB5/sViDLQx/QDCSW34sz6s
-        81dOCKwKbGt6xz2Uo7FwxsxlJ0IOYWFRHJRO7n/B3F5/YrGdo2O87xg6qBJxwOC9KnfiiU
-        rJai7LCPIKpo+GK96QNnlcSDP+RH5ME=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1687851475;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=qyb6eGX+kWo/2KlAT9Otl5qMd3NG37t3julQmTVAVFg=;
-        b=dUzA23sedc4C6mg6ITAfvbNNQU/vFGqGOsFqFJ7DHHvaiAAMqF+sMSHuqQ7EmXswDNMTXN
-        HCxaNrhFCnXNyrCA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 54BD413462;
-        Tue, 27 Jun 2023 07:37:55 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 9PRKE9ORmmTKIAAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Tue, 27 Jun 2023 07:37:55 +0000
-Message-ID: <1c39c9b0-ec37-f910-2b09-cedf7acf6e91@suse.cz>
-Date:   Tue, 27 Jun 2023 09:37:55 +0200
+        Tue, 27 Jun 2023 03:40:20 -0400
+Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F2FBE59
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 00:40:18 -0700 (PDT)
+Received: by mail-lj1-x229.google.com with SMTP id 38308e7fff4ca-2b6985de215so38181251fa.2
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 00:40:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1687851616; x=1690443616;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=6NTcpMVbPtfKRTcDrSmD8MoUfkjuvD8dm7rw3ArPL9I=;
+        b=swdKSXqee4DsixhpEGqQyNNW3XBWrUevNKszorloHuIBaCA0PcMPOfsuOzl9+QiTte
+         4wOsYWBVcN7F8Tj78icmZyMkGYOi7Dm+2krXIRn7atuzwAfMsfDBMaOZ9rnRRGBreFTM
+         T6w9ELsAX328Q75z7uohV2hndIY+XECbVG2a2EjOF+5CpugPTygos1zEsS/Efj66b8rp
+         FE/YMAM82KyOJcjbDpIYUnEKa3Caf5z4C/YQN9PxDLKCsMG3Si0/KaASqAsXFCONmnQL
+         9zuEFehYEYN9wLs03oc5+iWVK1iVNsitw/5ptAAcaTVhDNfxMHzKllJ7PBJJ9IiaC2h3
+         ItEg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687851616; x=1690443616;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=6NTcpMVbPtfKRTcDrSmD8MoUfkjuvD8dm7rw3ArPL9I=;
+        b=keiWeUdKvAUO3OEYyCMnfi6VdhXSpVgI0xNsevY+siOPmQFGPMFyDsifAyHXAgNCYN
+         FUOZXzhRfvgcaq/8Jig5Psr2+TN+aLNHLMQB5qMK4rdGmWxzEeBE8cNwINuZ3J1bB5aa
+         9y1P2wgmoapeyxavYmrG3zsgW12cVxCCDirEecK/YGi7lZAN479udLabb1ZQGGr3ewPe
+         rPdv1O8232u4aBSng8RUtf9ncsIzJ9vXWm0Mi+Le8qh6mpi4YnbFP7JOhc5nc0szK+F/
+         ekyK7Q4qD6h0hNmgqJFQBBITNDTSkKAVi3K31smKib2ZFIycZxPt1I7nDSyhbQWuInCh
+         zCZw==
+X-Gm-Message-State: AC+VfDwS84jWCSpw3QamSz3WPwqonRkU9eoXw3dh+lIu5oFuxhxatq5X
+        jyAX+VNoStd1Sowm4H9zFhOn8Q==
+X-Google-Smtp-Source: ACHHUZ5+P/WxO4oUioGdTlGmHsZgaxSX0SXG7cUKhxcYXN9myY+XUcQUBUCnCbqT23LWO6u4jDOXNg==
+X-Received: by 2002:a2e:7e11:0:b0:2b5:95a8:412b with SMTP id z17-20020a2e7e11000000b002b595a8412bmr7300556ljc.52.1687851616523;
+        Tue, 27 Jun 2023 00:40:16 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.219.26])
+        by smtp.gmail.com with ESMTPSA id m14-20020a7bca4e000000b003fa786b5195sm9823842wml.42.2023.06.27.00.40.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 27 Jun 2023 00:40:16 -0700 (PDT)
+Message-ID: <61f9a781-81fe-d553-6c85-eb069174e6f0@linaro.org>
+Date:   Tue, 27 Jun 2023 09:40:11 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.12.0
-From:   Vlastimil Babka <vbabka@suse.cz>
-Subject: [GIT PULL] slab updates for 6.5
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Christoph Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>, patches@lists.linux.dev,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
-        Jesper Dangaard Brouer <brouer@redhat.com>,
-        David Sterba <dsterba@suse.com>
+Subject: Re: [PATCH 13/15] thermal/drivers/rockchip: remove redundant msg
 Content-Language: en-US
+To:     Yangtao Li <frank.li@vivo.com>, miquel.raynal@bootlin.com,
+        rafael@kernel.org, daniel.lezcano@linaro.org, amitk@kernel.org,
+        rui.zhang@intel.com, mmayer@broadcom.com,
+        bcm-kernel-feedback-list@broadcom.com,
+        florian.fainelli@broadcom.com, shawnguo@kernel.org,
+        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
+        linux-imx@nxp.com, agross@kernel.org, andersson@kernel.org,
+        konrad.dybcio@linaro.org, thara.gopinath@gmail.com,
+        heiko@sntech.de, mcoquelin.stm32@gmail.com,
+        alexandre.torgue@foss.st.com, thierry.reding@gmail.com,
+        jonathanh@nvidia.com, tglx@linutronix.de, matthias.bgg@gmail.com,
+        angelogioacchino.delregno@collabora.com,
+        srinivas.pandruvada@linux.intel.com,
+        DLG-Adam.Ward.opensource@dm.renesas.com, shangxiaojing@huawei.com,
+        bchihi@baylibre.com, wenst@chromium.org,
+        u.kleine-koenig@pengutronix.de, hayashi.kunihiko@socionext.com,
+        niklas.soderlund+renesas@ragnatech.se, chi.minghao@zte.com.cn,
+        johan+linaro@kernel.org, jernej.skrabec@gmail.com
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-tegra@vger.kernel.org, linux-mediatek@lists.infradead.org
+References: <20230627071707.77659-1-frank.li@vivo.com>
+ <20230627071707.77659-13-frank.li@vivo.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230627071707.77659-13-frank.li@vivo.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+On 27/06/2023 09:17, Yangtao Li wrote:
+> The upper-layer devm_request_threaded_irq() function can directly
+> print error information.
 
-please pull the latest slab updates from:
+I don't understand. "Can print"? It does not matter if it can, if it
+does not. Currently it doesn't, therefore change is not correct.
+Otherwise explain a bit better why this is redundant.
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/vbabka/slab.git tags/slab-for-6.5
+> 
+> Signed-off-by: Yangtao Li <frank.li@vivo.com>
+> ---
 
-the changes are summarized below. There will be a (not completely trivial) conflict
-with the mm tree. Stephen's resolution [1] is ok; I would personally move the flags
-SLAB_NO_MERGE modification hunk above the minalign hunk for better logical separation,
-but correctness wise there's no difference.
+Best regards,
+Krzysztof
 
-[1] https://lore.kernel.org/all/20230619140330.28437ac3@canb.auug.org.au/T/#u
-
-======================================
-
-* SLAB deprecation
-
-  Following the discussion at LSF/MM 2023 [1] and no objections, the SLAB
-  allocator is deprecated by renaming the config option (to make its users
-  notice) to CONFIG_SLAB_DEPRECATED with updated help text. SLUB should be
-  used instead. Existing defconfigs with CONFIG_SLAB are also updated.
-
-* SLAB_NO_MERGE kmem_cache flag, by Jesper Dangaard Brouer
-
-  There are (very limited) cases where kmem_cache merging is undesirable, and
-  existing ways to prevent it are hacky. Introduce a new flag to do that
-  cleanly and convert the existing hacky users. Btrfs plans to use this for
-  debug kernel builds (that use case is always fine), networking for
-  performance reasons (that should be very rare).
-
-* Replace the usage of weak PRNGs, by David Keisar Schmidt
-
-  In addition to using stronger RNGs for the security related features, the
-  code is a bit cleaner.
-
-* Misc code cleanups, by SeongJae Parki, Xiongwei Song, Zhen Lei, and
-  zhaoxinchao.
-
-[1] https://lwn.net/Articles/932201/
-
-----------------------------------------------------------------
-David Keisar Schmidt (2):
-      mm/slab: Replace invocation of weak PRNG
-      mm/slab_common: Replace invocation of weak PRNG
-
-Jesper Dangaard Brouer (1):
-      mm/slab: introduce kmem_cache flag SLAB_NO_MERGE
-
-SeongJae Park (2):
-      mm/slab: add a missing semicolon on SLAB_TYPESAFE_BY_RCU example code
-      mm/slab: break up RCU readers on SLAB_TYPESAFE_BY_RCU example code
-
-Vlastimil Babka (4):
-      mm/slab: remove HAVE_HARDENED_USERCOPY_ALLOCATOR
-      mm/slab: rename CONFIG_SLAB to CONFIG_SLAB_DEPRECATED
-      mm/slab_common: use SLAB_NO_MERGE instead of negative refcount
-      Merge branches 'slab/for-6.5/prandom', 'slab/for-6.5/slab_no_merge' and 'slab/for-6.5/slab-deprecate' into slab/for-next
-
-Xiongwei Song (5):
-      slub: Correct the error code when slab_kset is NULL
-      slub: Put objects_show() into CONFIG_SLUB_DEBUG enabled block
-      slub: Remove CONFIG_SMP defined check
-      slub: Remove slabs_node() function
-      slub: Don't read nr_slabs and total_objects directly
-
-Zhen Lei (1):
-      mm/slab_common: reduce an if statement in create_cache()
-
-zhaoxinchao (1):
-      mm/slab: correct return values in comment for _kmem_cache_create()
-
- arch/arc/configs/axs103_smp_defconfig           |  1 -
- arch/arc/configs/haps_hs_defconfig              |  1 -
- arch/arc/configs/haps_hs_smp_defconfig          |  1 -
- arch/arc/configs/hsdk_defconfig                 |  1 -
- arch/arc/configs/tb10x_defconfig                |  1 -
- arch/arm/configs/am200epdkit_defconfig          |  1 -
- arch/arm/configs/at91_dt_defconfig              |  1 -
- arch/arm/configs/dove_defconfig                 |  1 -
- arch/arm/configs/ep93xx_defconfig               |  1 -
- arch/arm/configs/imx_v4_v5_defconfig            |  1 -
- arch/arm/configs/lpc32xx_defconfig              |  1 -
- arch/arm/configs/mmp2_defconfig                 |  1 -
- arch/arm/configs/mvebu_v7_defconfig             |  1 -
- arch/arm/configs/nhk8815_defconfig              |  1 -
- arch/arm/configs/omap2plus_defconfig            |  1 -
- arch/arm/configs/pxa168_defconfig               |  1 -
- arch/arm/configs/pxa3xx_defconfig               |  1 -
- arch/arm/configs/pxa910_defconfig               |  1 -
- arch/arm/configs/realview_defconfig             |  1 -
- arch/arm/configs/rpc_defconfig                  |  1 -
- arch/arm/configs/sama5_defconfig                |  1 -
- arch/arm/configs/sama7_defconfig                |  1 -
- arch/arm/configs/shmobile_defconfig             |  1 -
- arch/arm/configs/sp7021_defconfig               |  1 -
- arch/arm/configs/tegra_defconfig                |  1 -
- arch/arm/configs/versatile_defconfig            |  1 -
- arch/m68k/configs/amiga_defconfig               |  1 -
- arch/m68k/configs/apollo_defconfig              |  1 -
- arch/m68k/configs/atari_defconfig               |  1 -
- arch/m68k/configs/bvme6000_defconfig            |  1 -
- arch/m68k/configs/hp300_defconfig               |  1 -
- arch/m68k/configs/mac_defconfig                 |  1 -
- arch/m68k/configs/multi_defconfig               |  1 -
- arch/m68k/configs/mvme147_defconfig             |  1 -
- arch/m68k/configs/mvme16x_defconfig             |  1 -
- arch/m68k/configs/q40_defconfig                 |  1 -
- arch/m68k/configs/sun3_defconfig                |  1 -
- arch/m68k/configs/sun3x_defconfig               |  1 -
- arch/microblaze/configs/mmu_defconfig           |  1 -
- arch/mips/configs/ar7_defconfig                 |  1 -
- arch/mips/configs/bcm47xx_defconfig             |  1 -
- arch/mips/configs/bigsur_defconfig              |  1 -
- arch/mips/configs/cavium_octeon_defconfig       |  1 -
- arch/mips/configs/ci20_defconfig                |  1 -
- arch/mips/configs/cu1000-neo_defconfig          |  1 -
- arch/mips/configs/cu1830-neo_defconfig          |  1 -
- arch/mips/configs/db1xxx_defconfig              |  1 -
- arch/mips/configs/decstation_64_defconfig       |  1 -
- arch/mips/configs/decstation_defconfig          |  1 -
- arch/mips/configs/decstation_r4k_defconfig      |  1 -
- arch/mips/configs/fuloong2e_defconfig           |  1 -
- arch/mips/configs/gpr_defconfig                 |  1 -
- arch/mips/configs/ip22_defconfig                |  1 -
- arch/mips/configs/ip27_defconfig                |  1 -
- arch/mips/configs/ip28_defconfig                |  1 -
- arch/mips/configs/ip32_defconfig                |  1 -
- arch/mips/configs/jazz_defconfig                |  1 -
- arch/mips/configs/malta_defconfig               |  1 -
- arch/mips/configs/malta_kvm_defconfig           |  1 -
- arch/mips/configs/malta_qemu_32r6_defconfig     |  1 -
- arch/mips/configs/maltaaprp_defconfig           |  1 -
- arch/mips/configs/maltasmvp_defconfig           |  1 -
- arch/mips/configs/maltasmvp_eva_defconfig       |  1 -
- arch/mips/configs/maltaup_defconfig             |  1 -
- arch/mips/configs/maltaup_xpa_defconfig         |  1 -
- arch/mips/configs/mtx1_defconfig                |  1 -
- arch/mips/configs/pic32mzda_defconfig           |  1 -
- arch/mips/configs/qi_lb60_defconfig             |  1 -
- arch/mips/configs/rb532_defconfig               |  1 -
- arch/mips/configs/rbtx49xx_defconfig            |  1 -
- arch/mips/configs/rm200_defconfig               |  1 -
- arch/mips/configs/rs90_defconfig                |  1 -
- arch/mips/configs/sb1250_swarm_defconfig        |  1 -
- arch/nios2/configs/10m50_defconfig              |  1 -
- arch/nios2/configs/3c120_defconfig              |  1 -
- arch/parisc/configs/generic-32bit_defconfig     |  1 -
- arch/powerpc/configs/40x/klondike_defconfig     |  1 -
- arch/powerpc/configs/52xx/pcm030_defconfig      |  1 -
- arch/powerpc/configs/83xx/kmeter1_defconfig     |  1 -
- arch/powerpc/configs/83xx/mpc837x_rdb_defconfig |  1 -
- arch/powerpc/configs/85xx/ge_imp3a_defconfig    |  1 -
- arch/powerpc/configs/ep8248e_defconfig          |  1 -
- arch/powerpc/configs/gamecube_defconfig         |  1 -
- arch/powerpc/configs/mgcoge_defconfig           |  1 -
- arch/powerpc/configs/mpc512x_defconfig          |  1 -
- arch/powerpc/configs/mpc83xx_defconfig          |  1 -
- arch/powerpc/configs/ps3_defconfig              |  1 -
- arch/powerpc/configs/wii_defconfig              |  1 -
- arch/sh/configs/ap325rxa_defconfig              |  1 -
- arch/sh/configs/apsh4a3a_defconfig              |  1 -
- arch/sh/configs/apsh4ad0a_defconfig             |  1 -
- arch/sh/configs/dreamcast_defconfig             |  1 -
- arch/sh/configs/ecovec24-romimage_defconfig     |  1 -
- arch/sh/configs/ecovec24_defconfig              |  1 -
- arch/sh/configs/espt_defconfig                  |  1 -
- arch/sh/configs/hp6xx_defconfig                 |  1 -
- arch/sh/configs/kfr2r09-romimage_defconfig      |  1 -
- arch/sh/configs/kfr2r09_defconfig               |  1 -
- arch/sh/configs/landisk_defconfig               |  1 -
- arch/sh/configs/lboxre2_defconfig               |  1 -
- arch/sh/configs/magicpanelr2_defconfig          |  1 -
- arch/sh/configs/microdev_defconfig              |  1 -
- arch/sh/configs/migor_defconfig                 |  1 -
- arch/sh/configs/polaris_defconfig               |  1 -
- arch/sh/configs/r7780mp_defconfig               |  1 -
- arch/sh/configs/r7785rp_defconfig               |  1 -
- arch/sh/configs/rsk7264_defconfig               |  1 -
- arch/sh/configs/rsk7269_defconfig               |  1 -
- arch/sh/configs/rts7751r2d1_defconfig           |  1 -
- arch/sh/configs/rts7751r2dplus_defconfig        |  1 -
- arch/sh/configs/sdk7786_defconfig               |  1 -
- arch/sh/configs/se7343_defconfig                |  1 -
- arch/sh/configs/se7619_defconfig                |  1 -
- arch/sh/configs/se7705_defconfig                |  1 -
- arch/sh/configs/se7712_defconfig                |  1 -
- arch/sh/configs/se7721_defconfig                |  1 -
- arch/sh/configs/se7724_defconfig                |  1 -
- arch/sh/configs/se7750_defconfig                |  1 -
- arch/sh/configs/se7751_defconfig                |  1 -
- arch/sh/configs/se7780_defconfig                |  1 -
- arch/sh/configs/secureedge5410_defconfig        |  1 -
- arch/sh/configs/sh03_defconfig                  |  1 -
- arch/sh/configs/sh2007_defconfig                |  1 -
- arch/sh/configs/sh7710voipgw_defconfig          |  1 -
- arch/sh/configs/sh7757lcr_defconfig             |  1 -
- arch/sh/configs/sh7763rdp_defconfig             |  1 -
- arch/sh/configs/sh7785lcr_32bit_defconfig       |  1 -
- arch/sh/configs/sh7785lcr_defconfig             |  1 -
- arch/sh/configs/titan_defconfig                 |  1 -
- arch/sh/configs/urquell_defconfig               |  1 -
- arch/sparc/configs/sparc32_defconfig            |  1 -
- arch/sparc/configs/sparc64_defconfig            |  1 -
- arch/um/configs/i386_defconfig                  |  1 -
- arch/um/configs/x86_64_defconfig                |  1 -
- include/linux/slab.h                            | 22 +++++++++---
- kernel/configs/tiny.config                      |  1 -
- mm/Kconfig                                      | 18 +++++++---
- mm/kfence/kfence_test.c                         |  7 ++--
- mm/slab.c                                       | 37 ++++++-------------
- mm/slab.h                                       | 13 ++-----
- mm/slab_common.c                                | 31 +++++++---------
- mm/slub.c                                       | 47 ++++++++++---------------
- security/Kconfig                                |  8 -----
- 143 files changed, 79 insertions(+), 239 deletions(-)
