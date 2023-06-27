@@ -2,187 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8E1973F885
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 11:16:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 719F173F891
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 11:19:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231200AbjF0JQo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 05:16:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38306 "EHLO
+        id S230350AbjF0JT0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 05:19:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229819AbjF0JQi (ORCPT
+        with ESMTP id S229481AbjF0JTY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 05:16:38 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3EC6FD
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 02:16:36 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id a640c23a62f3a-98e1b1d1698so362514066b.2
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 02:16:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google; t=1687857395; x=1690449395;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=+MCoS/GbrEqpT4HJQ2GjfyBERH9spXNSgBlAnljQlo8=;
-        b=hxzm0GKQS+eom3slcVJwuaQB9SbpkcfrgGFcNPoFyyIGNADZabL4nQv4gszNAGffMe
-         lDvcAP3Ghl5j87LvIMP0tvxaDJO5dLmgCDIBMw4x2AqUk0Z06cXw2PHzxhdIva9WTfgT
-         6PYn64hxE1JpVa5KuCqgw60STT4o7kEIqeDbQXinO6DoHzf3XFrtxWiBLPireQe8lFEp
-         47eQyDKL7rL9U/8yuEQRbmm7dLdr4HIvaW63994gvfJXi7ogLu0onQXJPY+Zu8T638Bm
-         toYA9lWto9yOvy9yDPITMK/s6pPZkTIqUdS2A76+SHKBmet/Q/CwNY5HMpBPoqI+rsAK
-         HQ/A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687857395; x=1690449395;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+MCoS/GbrEqpT4HJQ2GjfyBERH9spXNSgBlAnljQlo8=;
-        b=WeKN7JXuZYbIAlIx48AYuEDrX1X+lfXS0vsJ8Vh8PWyrHvsToDTMtKW9UW/aPfV/Tb
-         kiSeGXfzWVx3bDti6yLUw2+6RJ9Necs+AUA7xE8wdmLVZWvMrOlFI7Rz8XsAKw0gOaME
-         snHwU9GJXjBifcOgjAZqU/+kLyCLWSknMLlfIjPxHTJmRMPK9VLGyesYAhV373CLZiId
-         lzgEG/xScMJqFmCWbv/HJ7VoL/i+27lzp3Rm+Z4ZRDOpGqiAlLk3JObVGwWbsKkz5Epk
-         VqXZLecHj+K3bHuiXAXKrv/hJ5LT6amQjOM9NTNIyYDoTpYyh/LRA9vRFhc+bJ8T31mv
-         eE/w==
-X-Gm-Message-State: AC+VfDzVxzne6iDI4CdUmmBZbx7U70hw14/ie4+R61bh7zSUX3/HO3S/
-        hlFO60Q4GLnQgEf6vyqck9+ieQ==
-X-Google-Smtp-Source: ACHHUZ575a/YzRNsfdhJWLZPMJ3YdSkM8BP8AyU7T0mt/iflGtaHCLSXzIB+tLAYyf2UCf7ECFnkfw==
-X-Received: by 2002:a17:906:eec1:b0:970:c9f:2db6 with SMTP id wu1-20020a170906eec100b009700c9f2db6mr24231824ejb.63.1687857395256;
-        Tue, 27 Jun 2023 02:16:35 -0700 (PDT)
-Received: from localhost (2001-1ae9-1c2-4c00-20f-c6b4-1e57-7965.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:20f:c6b4:1e57:7965])
-        by smtp.gmail.com with ESMTPSA id n19-20020a170906841300b00988d0ad4477sm4283531ejx.29.2023.06.27.02.16.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Jun 2023 02:16:34 -0700 (PDT)
-Date:   Tue, 27 Jun 2023 11:16:33 +0200
-From:   Andrew Jones <ajones@ventanamicro.com>
-To:     Haibo Xu <haibo1.xu@intel.com>
-Cc:     xiaobo55x@gmail.com, maz@kernel.org, oliver.upton@linux.dev,
-        seanjc@google.com, Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Anup Patel <anup@brainfault.org>,
-        Atish Patra <atishp@atishpatra.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Shuah Khan <shuah@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Zenghui Yu <yuzenghui@huawei.com>,
-        David Matlack <dmatlack@google.com>,
-        Ben Gardon <bgardon@google.com>,
-        Ricardo Koller <ricarkol@google.com>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Vipin Sharma <vipinsh@google.com>,
-        Colton Lewis <coltonlewis@google.com>, kvm@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
-        linux-kselftest@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev
-Subject: Re: [PATCH v4 11/12] KVM: riscv: selftests: Add finalize_vcpu check
- in run_test
-Message-ID: <20230627-feb5bf584a3fd16d2c0ffe66@orel>
-References: <cover.1687515463.git.haibo1.xu@intel.com>
- <fa6b80b578553e561ccacaeb24091e0716975593.1687515463.git.haibo1.xu@intel.com>
+        Tue, 27 Jun 2023 05:19:24 -0400
+Received: from SHSQR01.spreadtrum.com (unknown [222.66.158.135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0313BF;
+        Tue, 27 Jun 2023 02:19:21 -0700 (PDT)
+Received: from dlp.unisoc.com ([10.29.3.86])
+        by SHSQR01.spreadtrum.com with ESMTP id 35R9HcE0076619;
+        Tue, 27 Jun 2023 17:17:38 +0800 (+08)
+        (envelope-from zhaoyang.huang@unisoc.com)
+Received: from SHDLP.spreadtrum.com (bjmbx01.spreadtrum.com [10.0.64.7])
+        by dlp.unisoc.com (SkyGuard) with ESMTPS id 4Qqzcd589hz2LDdKh;
+        Tue, 27 Jun 2023 17:17:05 +0800 (CST)
+Received: from bj03382pcu.spreadtrum.com (10.0.73.76) by
+ BJMBX01.spreadtrum.com (10.0.64.7) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.23; Tue, 27 Jun 2023 17:17:36 +0800
+From:   "zhaoyang.huang" <zhaoyang.huang@unisoc.com>
+To:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Yang Shi <shy828301@gmail.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Yu Zhao <yuzhao@google.com>, <linux-mm@kvack.org>,
+        <linux-fsdevel@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Zhaoyang Huang <huangzhaoyang@gmail.com>, <ke.wang@unisoc.com>
+Subject: [PATCH] mm: introduce statistic for inode's gen&tier
+Date:   Tue, 27 Jun 2023 17:17:18 +0800
+Message-ID: <1687857438-29142-1-git-send-email-zhaoyang.huang@unisoc.com>
+X-Mailer: git-send-email 1.9.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <fa6b80b578553e561ccacaeb24091e0716975593.1687515463.git.haibo1.xu@intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.0.73.76]
+X-ClientProxiedBy: SHCAS01.spreadtrum.com (10.0.1.201) To
+ BJMBX01.spreadtrum.com (10.0.64.7)
+X-MAIL: SHSQR01.spreadtrum.com 35R9HcE0076619
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 23, 2023 at 06:40:13PM +0800, Haibo Xu wrote:
-> Disable all vcpu extensions which were enabled by default
-> if they were available in the risc-v host, and only enable
-> the desired one for a vcpu_config.
-> 
-> Suggested-by: Andrew Jones <ajones@ventanamicro.com>
-> Signed-off-by: Haibo Xu <haibo1.xu@intel.com>
-> ---
->  tools/testing/selftests/kvm/get-reg-list.c | 42 +++++++++++++++++++++-
->  1 file changed, 41 insertions(+), 1 deletion(-)
-> 
-> diff --git a/tools/testing/selftests/kvm/get-reg-list.c b/tools/testing/selftests/kvm/get-reg-list.c
-> index 3beb6b62de0a..612dabc61137 100644
-> --- a/tools/testing/selftests/kvm/get-reg-list.c
-> +++ b/tools/testing/selftests/kvm/get-reg-list.c
-> @@ -138,11 +138,50 @@ static struct kvm_vcpu *vcpu_config_get_vcpu(struct vcpu_reg_list *c, struct kvm
->  	prepare_vcpu_init(c, &init);
->  	vcpu = __vm_vcpu_add(vm, 0);
->  	aarch64_vcpu_setup(vcpu, &init);
-> -	finalize_vcpu(vcpu, c);
->  
->  	return vcpu;
->  }
->  #else
-> +static inline bool vcpu_has_ext(struct kvm_vcpu *vcpu, int ext)
-> +{
-> +	int ret;
-> +	unsigned long value;
-> +
-> +	ret = __vcpu_get_reg(vcpu, RISCV_ISA_EXT_REG(ext), &value);
-> +	if (ret) {
-> +		printf("Failed to get ext %d", ext);
-> +		return false;
-> +	}
-> +
-> +	return !!value;
-> +}
-> +
-> +static void finalize_vcpu(struct kvm_vcpu *vcpu, struct vcpu_reg_list *c)
-> +{
-> +	struct vcpu_reg_sublist *s;
-> +
-> +	/*
-> +	 * Disable all extensions which were enabled by default
-> +	 * if they were available in the risc-v host.
-> +	 */
-> +	for (int i = 0; i < KVM_RISCV_ISA_EXT_MAX; i++) {
-> +		__vcpu_set_reg(vcpu, RISCV_ISA_EXT_REG(i), 0);
-> +	}
+From: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
 
-nit: can drop the {}
+As mglru scale page's activity more presiced than before, I would like to
+introduce statistics over these two properties on all pages of the inode, which
+could help some mechanisms have ability to judge the inode's activity, etc madivse.
 
-> +
-> +	for_each_sublist(c, s) {
-> +		if (!s->feature)
-> +			continue;
-> +
-> +		/* Try to enable the desired extension */
-> +		__vcpu_set_reg(vcpu, RISCV_ISA_EXT_REG(s->feature), 1);
-> +
-> +		/* Double check whether the desired extension was enabled */
-> +		__TEST_REQUIRE(vcpu_has_ext(vcpu, s->feature),
-> +			       "%s: %s not available, skipping tests\n",
-> +			       config_name(c), s->name);
-> +	}
-> +}
-> +
->  static struct kvm_vcpu *vcpu_config_get_vcpu(struct vcpu_reg_list *c, struct kvm_vm *vm)
->  {
->  	return __vm_vcpu_add(vm, 0);
-> @@ -178,6 +217,7 @@ static void run_test(struct vcpu_reg_list *c)
->  
->  	vm = vm_create_barebones();
->  	vcpu = vcpu_config_get_vcpu(c, vm);
-> +	finalize_vcpu(vcpu, c);
+Signed-off-by: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
+---
+ fs/proc/task_mmu.c        |  9 +++++++++
+ include/linux/fs.h        |  2 ++
+ include/linux/mm_inline.h | 14 ++++++++++++++
+ mm/filemap.c              | 11 +++++++++++
+ mm/swap.c                 |  1 +
+ 5 files changed, 37 insertions(+)
 
-Now that both arm and riscv call finalize_vcpu() we could do the weak
-function trick for it and move the arch-specific implementations to
-their own arch-specific files.
+diff --git a/fs/proc/task_mmu.c b/fs/proc/task_mmu.c
+index e35a039..3ed30ef 100644
+--- a/fs/proc/task_mmu.c
++++ b/fs/proc/task_mmu.c
+@@ -283,17 +283,26 @@ static void show_vma_header_prefix(struct seq_file *m,
+ 	unsigned long start, end;
+ 	dev_t dev = 0;
+ 	const char *name = NULL;
++	long nrpages = 0, gen = 0, tier = 0;
+ 
+ 	if (file) {
+ 		struct inode *inode = file_inode(vma->vm_file);
+ 		dev = inode->i_sb->s_dev;
+ 		ino = inode->i_ino;
+ 		pgoff = ((loff_t)vma->vm_pgoff) << PAGE_SHIFT;
++		nrpages = inode->i_mapping->nrpages;
++		gen = atomic_long_read(&inode->i_mapping->gen);
++		tier = atomic_long_read(&inode->i_mapping->tier);
+ 	}
+ 
+ 	start = vma->vm_start;
+ 	end = vma->vm_end;
+ 	show_vma_header_prefix(m, start, end, flags, pgoff, dev, ino);
++
++	seq_put_hex_ll(m, NULL, nrpages, 8);
++	seq_put_hex_ll(m, ":", gen, 8);
++	seq_put_hex_ll(m, ":", tier, 8);
++
+ 	if (mm)
+ 		anon_name = anon_vma_name(vma);
+ 
+diff --git a/include/linux/fs.h b/include/linux/fs.h
+index c1769a2..4f4c3a2 100644
+--- a/include/linux/fs.h
++++ b/include/linux/fs.h
+@@ -434,6 +434,8 @@ struct address_space {
+ 	struct rb_root_cached	i_mmap;
+ 	struct rw_semaphore	i_mmap_rwsem;
+ 	unsigned long		nrpages;
++	atomic_long_t		gen;
++	atomic_long_t		tier;
+ 	pgoff_t			writeback_index;
+ 	const struct address_space_operations *a_ops;
+ 	unsigned long		flags;
+diff --git a/include/linux/mm_inline.h b/include/linux/mm_inline.h
+index ff3f3f2..f68bd06 100644
+--- a/include/linux/mm_inline.h
++++ b/include/linux/mm_inline.h
+@@ -307,6 +307,20 @@ static inline bool lru_gen_del_folio(struct lruvec *lruvec, struct folio *folio,
+ 	return false;
+ }
+ 
++static inline int lru_tier_from_refs(int refs)
++{
++	return 0;
++}
++
++static inline int folio_lru_refs(struct folio *folio)
++{
++	return 0;
++}
++
++static inline int folio_lru_gen(struct folio *folio)
++{
++	return 0;
++}
+ #endif /* CONFIG_LRU_GEN */
+ 
+ static __always_inline
+diff --git a/mm/filemap.c b/mm/filemap.c
+index c4d4ace..a1c68a9 100644
+--- a/mm/filemap.c
++++ b/mm/filemap.c
+@@ -45,6 +45,7 @@
+ #include <asm/pgalloc.h>
+ #include <asm/tlbflush.h>
+ #include "internal.h"
++#include <linux/mm_inline.h>
+ 
+ #define CREATE_TRACE_POINTS
+ #include <trace/events/filemap.h>
+@@ -126,6 +127,9 @@ static void page_cache_delete(struct address_space *mapping,
+ {
+ 	XA_STATE(xas, &mapping->i_pages, folio->index);
+ 	long nr = 1;
++	int refs = folio_lru_refs(folio);
++	int tier = lru_tier_from_refs(refs);
++	int gen = folio_lru_gen(folio);
+ 
+ 	mapping_set_update(&xas, mapping);
+ 
+@@ -143,6 +147,8 @@ static void page_cache_delete(struct address_space *mapping,
+ 	folio->mapping = NULL;
+ 	/* Leave page->index set: truncation lookup relies upon it */
+ 	mapping->nrpages -= nr;
++	atomic_long_sub(gen, &mapping->gen);
++	atomic_long_sub(tier, &mapping->tier);
+ }
+ 
+ static void filemap_unaccount_folio(struct address_space *mapping,
+@@ -844,6 +850,9 @@ noinline int __filemap_add_folio(struct address_space *mapping,
+ 	int huge = folio_test_hugetlb(folio);
+ 	bool charged = false;
+ 	long nr = 1;
++	int refs = folio_lru_refs(folio);
++	int tier = lru_tier_from_refs(refs);
++	int gen = folio_lru_gen(folio);
+ 
+ 	VM_BUG_ON_FOLIO(!folio_test_locked(folio), folio);
+ 	VM_BUG_ON_FOLIO(folio_test_swapbacked(folio), folio);
+@@ -898,6 +907,8 @@ noinline int __filemap_add_folio(struct address_space *mapping,
+ 			goto unlock;
+ 
+ 		mapping->nrpages += nr;
++		atomic_long_add(gen, &mapping->gen);
++		atomic_long_add(tier, &mapping->tier);
+ 
+ 		/* hugetlb pages do not participate in page cache accounting */
+ 		if (!huge) {
+diff --git a/mm/swap.c b/mm/swap.c
+index 70e2063..6322c1c 100644
+--- a/mm/swap.c
++++ b/mm/swap.c
+@@ -468,6 +468,7 @@ static void folio_inc_refs(struct folio *folio)
+ 		new_flags += BIT(LRU_REFS_PGOFF);
+ 		new_flags |= old_flags & ~LRU_REFS_MASK;
+ 	} while (!try_cmpxchg(&folio->flags, &old_flags, new_flags));
++	atomic_long_inc(&folio->mapping->tier);
+ }
+ #else
+ static void folio_inc_refs(struct folio *folio)
+-- 
+1.9.1
 
->  
->  	reg_list = vcpu_get_reg_list(vcpu);
->  
-> -- 
-> 2.34.1
->
-
-Otherwise,
-
-Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
-
-Thanks,
-drew
