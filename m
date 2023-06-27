@@ -2,94 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94CFD74030A
+	by mail.lfdr.de (Postfix) with ESMTP id 4199F740309
 	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 20:16:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230349AbjF0SQM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 14:16:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47798 "EHLO
+        id S230253AbjF0SQK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 14:16:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231185AbjF0SPt (ORCPT
+        with ESMTP id S231305AbjF0SQC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 14:15:49 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B671C10D8
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 11:15:46 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id a640c23a62f3a-98746d7f35dso705732366b.2
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 11:15:46 -0700 (PDT)
+        Tue, 27 Jun 2023 14:16:02 -0400
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0EB397
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 11:16:00 -0700 (PDT)
+Received: by mail-lf1-x129.google.com with SMTP id 2adb3069b0e04-4f8777caaa1so6906745e87.3
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 11:16:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1687889745; x=1690481745;
+        d=linux-foundation.org; s=google; t=1687889759; x=1690481759;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=ndCPpqDgwou489KjC0kIekAZ9rKZJd9NKLRwxqa3kWo=;
-        b=ixA0x2iljcmjaL4fSY7co3wMQ1r+EcKo28vas1Oo0TPGMSLfOyNZHZ7Kz4Mu5+UQm+
-         rkB5Xj7WJJ/8/up5pGueSbFBIUHcEqYhUZuJW18ZhNWzD8QW4h7+Pt4s20nEUDeSRODj
-         Ck8XcFg71kWOkxPboWcMoMIbIZRvYHQvd9m8rxyp1wGO1BroJO0VcWofO9rcT2uV9698
-         IuQ7sBRVAiZj2dXeG6nqLmT22K3n/qXtYGVbK3wOjkLdyzt/8IkMTPj+yIa7WZcPhTng
-         eu/wphKjcdTKt47a4CYvSNkK0SrwSIq+k1ioBdVc6wt8/JhtDV6vJAs4xKClUl/fgmpE
-         L/Eg==
+        bh=AhTPOEOj0BqxLY9QE/JlifSVTXobVSdIih6u1SdRovk=;
+        b=NHqPmZG+gvs0hXwQO+IFOjNdZ+oKfc/qHB1hP/sKw/JujEh2s7IyKS6rYaKiqxBm4p
+         bMIai8Xiu17vEWjkbtBDJw738ylRuAiiWr6J+9Sqjf+UXRJSAH3vy0jB4dvCbulJ650S
+         UbR6GSiqyXYEOfeHUGvh1im0sQSy6CwnJKU10=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687889745; x=1690481745;
+        d=1e100.net; s=20221208; t=1687889759; x=1690481759;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=ndCPpqDgwou489KjC0kIekAZ9rKZJd9NKLRwxqa3kWo=;
-        b=K22vChMzivBiQgpQM9AeG3K1cA0K5ADgxsZIyP+A7aJhg/Y5FuzFnaXRKmTMjUI+LD
-         pybG8UVju3/WQyUzlW7SUrDdV0AOrBmpEHGdh53Wv7AIJ74guYgYFJQrKH1pa8yb84PV
-         Wx1y+T2OqyDF0aNLBgMGy3l5wd0GsnoF0M6UT8vtNedxV6q6qfI2o2YZRQ6fYvgASn54
-         C9G3mkvsdqdxlFkCQHnXBHge/T9tsmktjaWKkL405D3/FUmd03IvTu+LuGTFvfSHqYFF
-         JhlMfAK/Ai+LcgfNa6LpDAuo5e3sdF+ML7WeaPbQl5bLkUwxgJ1ctULTczlXPQM8aF2G
-         TJqQ==
-X-Gm-Message-State: AC+VfDxWuhTySIgUx4q1XfqEFwEY/JB4PqthaLy0EZIn8IeWshsmQFpt
-        1HJm6Us7KuNn/QZcDpaPRA35XytNYkLEidXvBaLzfw==
-X-Google-Smtp-Source: ACHHUZ5mDR3zHCNEIaXf+4bc2+481wuGeRiTY9bqKnQ2FgfAM2kBtsZ4ibLCMT4pX+mRBbPPZnG6v6jNKX9b241X0pM=
-X-Received: by 2002:a17:907:26ca:b0:98d:fc51:b3dd with SMTP id
- bp10-20020a17090726ca00b0098dfc51b3ddmr9919666ejc.41.1687889744959; Tue, 27
- Jun 2023 11:15:44 -0700 (PDT)
+        bh=AhTPOEOj0BqxLY9QE/JlifSVTXobVSdIih6u1SdRovk=;
+        b=YvtLvfzqS6ZmX6SgvvCWXVmB4s4SsTIccXpTVBVqn+qfWcZNrRAFQ65KCKgENMrLJF
+         /zQALxFVQyPAQMYBtz8hxZiGxRfyXV/0I3p4v8WTWLajqebNym5ydR0U2hnWrfvwY3aI
+         6R/vjTH7i3WSpZ+TNAMBXDDzUaAaByFZ8zbr5ukYcv5Qi1RIUToxOpuN8M7Sxipbr0Rv
+         wvcQlnajgBS6Onow9ctZ1ts/K9HO5u7nIfqbQlGRCrBlJEib6OaGuZq3vB6cHhqT5zSN
+         GgTnhIckWe2WdkU3YFCnJYv1oGp16ek1IakZJpy67udoMgeqN0AnxrrZTqOxF9AxC1ji
+         J4KQ==
+X-Gm-Message-State: AC+VfDyrNpPdy8vJ6TWBZcWsniggWK5YZfTn/nRf2OgUMraicKE/pQ75
+        qifp5XHyv+lQi+fWgGiU+z5zpH5o+6kp6I40BZUBrLCe
+X-Google-Smtp-Source: ACHHUZ5a0TRz6bg/zmHLocnF8+ywTSiiYhUx0Ac8fHicbl2g6+6FO8KqBVjxk+aUE8xElKrf6ftBgQ==
+X-Received: by 2002:a05:6512:ea7:b0:4f7:6b72:3323 with SMTP id bi39-20020a0565120ea700b004f76b723323mr18668272lfb.55.1687889758399;
+        Tue, 27 Jun 2023 11:15:58 -0700 (PDT)
+Received: from mail-lf1-f49.google.com (mail-lf1-f49.google.com. [209.85.167.49])
+        by smtp.gmail.com with ESMTPSA id r11-20020ac25a4b000000b004fb7da93c24sm463409lfn.273.2023.06.27.11.15.57
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 27 Jun 2023 11:15:57 -0700 (PDT)
+Received: by mail-lf1-f49.google.com with SMTP id 2adb3069b0e04-4fa48b5dc2eso5028318e87.1
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 11:15:57 -0700 (PDT)
+X-Received: by 2002:a19:4f5a:0:b0:4f4:d071:be48 with SMTP id
+ a26-20020a194f5a000000b004f4d071be48mr18541427lfk.14.1687889757421; Tue, 27
+ Jun 2023 11:15:57 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230627120058.2214509-1-matteorizzo@google.com>
- <20230627120058.2214509-2-matteorizzo@google.com> <e8924389-985a-42ad-9daf-eca2bf12fa57@acm.org>
-In-Reply-To: <e8924389-985a-42ad-9daf-eca2bf12fa57@acm.org>
-From:   Matteo Rizzo <matteorizzo@google.com>
-Date:   Tue, 27 Jun 2023 20:15:33 +0200
-Message-ID: <CAHKB1wJANtT27WM6hrhDy_x9H9Lsn4qRjPDmXdKosoL93TJRYg@mail.gmail.com>
-Subject: Re: [PATCH 1/1] Add a new sysctl to disable io_uring system-wide
-To:     Bart Van Assche <bvanassche@acm.org>
-Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        io-uring@vger.kernel.org, jordyzomer@google.com, evn@google.com,
-        poprdi@google.com, corbet@lwn.net, axboe@kernel.dk,
-        asml.silence@gmail.com, akpm@linux-foundation.org,
-        keescook@chromium.org, rostedt@goodmis.org,
-        dave.hansen@linux.intel.com, ribalda@chromium.org,
-        chenhuacai@kernel.org, steve@sk2.org, gpiccoli@igalia.com,
-        ldufour@linux.ibm.com
+References: <b0bb8387-9216-0fe7-61e9-7e2daceeef20@linuxfoundation.org>
+In-Reply-To: <b0bb8387-9216-0fe7-61e9-7e2daceeef20@linuxfoundation.org>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Tue, 27 Jun 2023 11:15:40 -0700
+X-Gmail-Original-Message-ID: <CAHk-=whvD6pq-7vp-cCMEnS+EOp2TmLxFKPS3Nw+Ncqt0XZVGw@mail.gmail.com>
+Message-ID: <CAHk-=whvD6pq-7vp-cCMEnS+EOp2TmLxFKPS3Nw+Ncqt0XZVGw@mail.gmail.com>
+Subject: Re: [GIT PULL] Kselftest update for Linux 6.5-rc1
+To:     Shuah Khan <skhan@linuxfoundation.org>
+Cc:     shuah <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 27 Jun 2023 at 19:10, Bart Van Assche <bvanassche@acm.org> wrote:
-> I'm using fio + io_uring all the time on Android devices. I think we need a
-> better solution than disabling io_uring system-wide, e.g. a mechanism based
-> on SELinux that disables io_uring for apps and that keeps io_uring enabled
-> for processes started via 'adb root && adb shell ...'
+On Sun, 25 Jun 2023 at 08:42, Shuah Khan <skhan@linuxfoundation.org> wrote:
+>
+> Please pull the following Kselftest update for Linux 6.5-rc1.
 
-Android already uses seccomp to prevent untrusted applications from using
-io_uring. This patch is aimed at server/desktop environments where there is
-no easy way to set a system-wide seccomp policy and right now the only way
-to disable io_uring system-wide is to compile it out of the kernel entirely
-(not really feasible for e.g. a general-purpose distro).
+Hmm. I pulled this, but it causes multiple objtool warnings.
 
-I thought about adding a capability check that lets privileged processes
-bypass this sysctl, but it wasn't clear to me which capability I should use.
-For userfaultfd the kernel uses CAP_SYS_PTRACE, but I wasn't sure that's
-the best choice here since io_uring has nothing to do with ptrace.
-If anyone has any suggestions please let me know. A LSM hook also sounds
-like an option but it would be more complicated to implement and use.
+The cause seems to be __kunit_abort() being no-return and objtool
+having not being told about it, and I'm double-checking the fix for
+that.
+
+But I'm unhappy with how clearly nobody seems to have looked at
+non-fatal warning output again.
+
+This was why we made the kernel use -Werror, because people would
+ignore build warnings that weren't fatal. Now objtool warnings seem to
+be triggering the same laissez-faire behavior.
+
+               Linus
