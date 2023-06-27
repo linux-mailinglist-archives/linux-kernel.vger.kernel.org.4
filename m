@@ -2,158 +2,244 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBE9C73FB49
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 13:42:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D126B73FB4F
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 13:45:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229527AbjF0LmL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 07:42:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50852 "EHLO
+        id S230224AbjF0Lpt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 07:45:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229814AbjF0LmJ (ORCPT
+        with ESMTP id S229894AbjF0Lpr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 07:42:09 -0400
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F7E82735
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 04:42:04 -0700 (PDT)
-Received: by mail-lf1-x132.google.com with SMTP id 2adb3069b0e04-4f954d78bf8so6232868e87.3
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 04:42:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687866122; x=1690458122;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6VSnLiTkQ1dzquJmbrvFVUB5iYnq0MwIQjudEDRHCVs=;
-        b=CaZ/NHOSfc424KgLTlHip2E51at0aW0HHPdboV+8HoMgAFjWN82skPWUcE9AMwhVU8
-         DuGj7RZ9xqr/A4tAFcfb/8LvDTjVaTfGIFexBxFTJLjl+1fcApI1UXAOxxVpLo1ZAe/f
-         Zj6Lqe1ezphoKkEUcZlF+Jus6I1HRJ16z672q0fNOR45gtxw7OJxf8CfvhTsXZgcTQ6y
-         F21uqTFn/9RSDzUcUhAY70C+0laeiX8f/717vW9uxpOeSVdJifWmNfx2vsoyGYYLVW+W
-         sh0fMGT3YK+thFno74m3y1TwpQkHFLkSCr18Pg+MDhWKIr+/91Im7gyWaO6E8U0iH0Rr
-         6wdQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687866122; x=1690458122;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=6VSnLiTkQ1dzquJmbrvFVUB5iYnq0MwIQjudEDRHCVs=;
-        b=abFBZ/bC6qXq8olmpvht9qSTRGkaTW54YNeB9RJtAtYaTOKEjXV+qeuuMhtRqpiOxy
-         /fCqUM5oLCxygjYbpcGuCX1y/nJw2XVwXH9elHdAAJ6yzsHWEbUyLJBc0WwpT0A348M1
-         j2dBEUeoZj+wSGzVg3lP7ZUE0pdqwg2Mz/Fwwpa9e0g3VCAVUF1vc6tFas8nUKzA9Iql
-         /2zloZGcoajDz1p/lj6Te3rHOJ1Cf+zCnkzRNv1wlwxqAllOtk+Hlj6Od2+RcJV3Q+BZ
-         N6TOaVz/CbEVNZtf7U8U9f/ZDK4emYuapjvVtU6SCsX2RAN22nMoY213fvNswymbJl+c
-         8JYg==
-X-Gm-Message-State: AC+VfDzNF6WNEvJK21Hvno9wQUlbDIt2gqCbv+bgojzJ2WlROXs7AVox
-        NIqU5JBkFRc3QzsUAmkpfTk=
-X-Google-Smtp-Source: ACHHUZ7Xx3+/qq+mhRlzocpzunZ2Y2YOr1cogfwyoCPxXHsIFYZkW00vQnl44DxBd2W+PuxK0+CXyw==
-X-Received: by 2002:a05:6512:3b8e:b0:4fb:744e:17db with SMTP id g14-20020a0565123b8e00b004fb744e17dbmr4917328lfv.1.1687866122079;
-        Tue, 27 Jun 2023 04:42:02 -0700 (PDT)
-Received: from suse.localnet (host-79-12-109-185.retail.telecomitalia.it. [79.12.109.185])
-        by smtp.gmail.com with ESMTPSA id f4-20020a1c6a04000000b003fba2734f1esm1815198wmc.1.2023.06.27.04.42.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Jun 2023 04:42:01 -0700 (PDT)
-From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-To:     Bob Peterson <rpeterso@redhat.com>,
-        Andreas Gruenbacher <agruenba@redhat.com>,
-        cluster-devel@redhat.com, linux-kernel@vger.kernel.org,
-        Deepak R Varma <drv@mailo.com>
-Cc:     Ira Weiny <ira.weiny@intel.com>,
-        Sumitra Sharma <sumitraartsy@gmail.com>,
-        Deepak R Varma <drv@mailo.com>
-Subject: Re: [PATCH v2] gfs2: Replace deprecated kmap_atomic() by kmap_local_page()
-Date:   Tue, 27 Jun 2023 13:41:59 +0200
-Message-ID: <14943541.tv2OnDr8pf@suse>
-In-Reply-To: <ZJk1XTtgLFxIcxzp@bu2204.myguest.virtualbox.org>
-References: <ZJk1XTtgLFxIcxzp@bu2204.myguest.virtualbox.org>
+        Tue, 27 Jun 2023 07:45:47 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD050F4;
+        Tue, 27 Jun 2023 04:45:45 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4452661166;
+        Tue, 27 Jun 2023 11:45:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E79FC433C0;
+        Tue, 27 Jun 2023 11:45:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687866344;
+        bh=1hnYTqMzhlhytwgb/6vjrVjvJJ91r+9AWszFEARG5vw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Q5KUs9BF50Gr9OBt+4gfgvGUWeIe8DIeta9/O/XtmP6gecIhJOc6C3VuXgF/u+qE0
+         ACLxga2WT6GhMLd27ObnNT/U5S2BKB9fiavY/eU+Z4+0Jin0cna+0dw2KpYpxKTzgR
+         uSXwJK9DGzZIi5rgG+KZSka/9XRKbqwLzY8Edhco1d1d3GmspUOlQz7xNqOaBJyXqQ
+         1ShrAv3C7iHnZTKUbcD8s13BRxSDA4JTTRSB3/tJMwwa9TXbqHqb6ouDDPzZumwCsE
+         qwgKDF22VFW1yJ0ylPuyq+AGigdbz8JehfWb4UxMVv8fFTND4KHr3Ra79gftNyC6iL
+         PYXCJ55tCb6yA==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1qE78f-0003E8-1K; Tue, 27 Jun 2023 13:45:41 +0200
+Date:   Tue, 27 Jun 2023 13:45:41 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Krishna Kurapati <quic_kriskura@quicinc.com>
+Cc:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Wesley Cheng <quic_wcheng@quicinc.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        quic_pkondeti@quicinc.com, quic_ppratap@quicinc.com,
+        quic_jackp@quicinc.com, quic_harshq@quicinc.com,
+        ahalaney@redhat.com, quic_shazhuss@quicinc.com
+Subject: Re: [PATCH v9 03/10] usb: dwc3: core: Access XHCI address space
+ temporarily to read port info
+Message-ID: <ZJrL5SXrSiYbvq2o@hovoldconsulting.com>
+References: <20230621043628.21485-1-quic_kriskura@quicinc.com>
+ <20230621043628.21485-4-quic_kriskura@quicinc.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="iso-8859-1"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230621043628.21485-4-quic_kriskura@quicinc.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On luned=EC 26 giugno 2023 08:51:09 CEST Deepak R Varma wrote:
-> kmap_atomic() is deprecated in favor of kmap_local_{folio,page}().
->=20
-> Therefore, replace kmap_atomic() with kmap_local_page() in
-> gfs2_internal_read() and stuffed_readpage().
->=20
-> kmap_atomic() disables page-faults and preemption (the latter only for
-> !PREEMPT_RT kernels), However, the code within the mapping/un-mapping in
-> gfs2_internal_read() and stuffed_readpage() does not depend on the
-> above-mentioned side effects.
->=20
-> Therefore, a mere replacement of the old API with the new one is all that
-> is required (i.e., there is no need to explicitly add any calls to
-> pagefault_disable() and/or preempt_disable()).
->=20
-> Signed-off-by: Deepak R Varma <drv@mailo.com>
+On Wed, Jun 21, 2023 at 10:06:21AM +0530, Krishna Kurapati wrote:
+> Currently host-only capable DWC3 controllers support Multiport.
+> Temporarily map XHCI address space for host-only controllers and parse
+> XHCI Extended Capabilities registers to read number of usb2 ports and
+> usb3 ports present on multiport controller. Each USB Port is at least HS
+> capable.
+> 
+> The port info for usb2 and usb3 phy are identified as num_usb2_ports
+> and num_usb3_ports. The intention is as follows:
+> 
+> Wherever we need to perform phy operations like:
+> 
+> LOOP_OVER_NUMBER_OF_AVAILABLE_PORTS()
+> {
+> 	phy_set_mode(dwc->usb2_generic_phy[i], PHY_MODE_USB_HOST);
+> 	phy_set_mode(dwc->usb3_generic_phy[i], PHY_MODE_USB_HOST);
+> }
+> 
+> If number of usb2 ports is 3, loop can go from index 0-2 for
+> usb2_generic_phy. If number of usb3-ports is 2, we don't know for sure,
+> if the first 2 ports are SS capable or some other ports like (2 and 3)
+> are SS capable. So instead, num_usb2_ports is used to loop around all
+> phy's (both hs and ss) for performing phy operations. If any
+> usb3_generic_phy turns out to be NULL, phy operation just bails out.
+> 
+> num_usb3_ports is used to modify GUSB3PIPECTL registers while setting up
+> phy's as we need to know how many SS capable ports are there for this.
+> 
+> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
 > ---
-> Note: The Patch is build tested only. I will be happy to run recommended
-> testing with some guidance if required.
->=20
-> Changes in v2:
->    - Update patch description to correct the replacement function name fr=
-om
->      kmap_local_folio to kmap_local _page
+>  drivers/usb/dwc3/core.c | 62 +++++++++++++++++++++++++++++++++++++++++
+>  drivers/usb/dwc3/core.h |  9 ++++++
+>  2 files changed, 71 insertions(+)
+> 
+> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+> index f6689b731718..32ec05fc242b 100644
+> --- a/drivers/usb/dwc3/core.c
+> +++ b/drivers/usb/dwc3/core.c
+> @@ -39,6 +39,7 @@
+>  #include "io.h"
+>  
+>  #include "debug.h"
+> +#include "../host/xhci-ext-caps.h"
+>  
+>  #define DWC3_DEFAULT_AUTOSUSPEND_DELAY	5000 /* ms */
+>  
+> @@ -1767,6 +1768,52 @@ static int dwc3_get_clocks(struct dwc3 *dwc)
+>  	return 0;
+>  }
+>  
+> +static int dwc3_read_port_info(struct dwc3 *dwc)
+> +{
+> +	void __iomem *base;
+> +	u8 major_revision;
+> +	u32 offset = 0;
+> +	int ret = 0;
 
-Ah, well done. I didn't note this with the comment on v1.
-=20
->  fs/gfs2/aops.c | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
->=20
-> diff --git a/fs/gfs2/aops.c b/fs/gfs2/aops.c
-> index 3b41542d6697..7bd92054d353 100644
-> --- a/fs/gfs2/aops.c
-> +++ b/fs/gfs2/aops.c
-> @@ -432,10 +432,10 @@ static int stuffed_readpage(struct gfs2_inode *ip,
-> struct page *page) if (error)
->  		return error;
->=20
-> -	kaddr =3D kmap_atomic(page);
-> +	kaddr =3D kmap_local_page(page);
->  	memcpy(kaddr, dibh->b_data + sizeof(struct gfs2_dinode), dsize);
->  	memset(kaddr + dsize, 0, PAGE_SIZE - dsize);
-> -	kunmap_atomic(kaddr);
-> +	kunmap_local(kaddr);
->  	flush_dcache_page(page);
->  	brelse(dibh);
->  	SetPageUptodate(page);
-> @@ -498,12 +498,12 @@ int gfs2_internal_read(struct gfs2_inode *ip, char=
-=20
-*buf,
-> loff_t *pos, continue;
->  			return PTR_ERR(page);
->  		}
-> -		p =3D kmap_atomic(page);
-> +		p =3D kmap_local_page(page);
->  		amt =3D size - copied;
->  		if (offset + size > PAGE_SIZE)
->  			amt =3D PAGE_SIZE - offset;
->  		memcpy(buf + copied, p + offset, amt);
+ret is never modified, so drop and return 0 unconditionally below.
 
-As said in the comment on v1, the memcpy_from_page() helper is better suite=
-d=20
-here, unless you noted something that prevents its use and that I'm not abl=
-e=20
-to see at the moment.
+You can add it back later in the series when you start using it.
 
-Thanks,
+> +	u32 val;
+> +
+> +	/*
+> +	 * Remap xHCI address space to access XHCI ext cap regs,
+> +	 * since it is needed to get port info.
+> +	 */
+> +	base = ioremap(dwc->xhci_resources[0].start,
+> +				resource_size(&dwc->xhci_resources[0]));
+> +	if (IS_ERR(base))
+> +		return PTR_ERR(base);
+> +
+> +	do {
+> +		offset = xhci_find_next_ext_cap(base, offset,
+> +				XHCI_EXT_CAPS_PROTOCOL);
+> +
 
-=46abio
+You can drop this newline.
 
-> -		kunmap_atomic(p);
-> +		kunmap_local(p);
->  		put_page(page);
->  		copied +=3D amt;
->  		index++;
-> --
-> 2.34.1
+> +		if (!offset)
+> +			break;
+> +
+> +		val = readl(base + offset);
+> +		major_revision = XHCI_EXT_PORT_MAJOR(val);
+> +
+> +		val = readl(base + offset + 0x08);
+> +		if (major_revision == 0x03) {
+> +			dwc->num_usb3_ports += XHCI_EXT_PORT_COUNT(val);
+> +		} else if (major_revision <= 0x02) {
+> +			dwc->num_usb2_ports += XHCI_EXT_PORT_COUNT(val);
+> +		} else {
+> +			dev_err(dwc->dev,
+> +				"Unrecognized port major revision %d\n",
+> +							major_revision);
+> +		}
+> +	} while (1);
+> +
+> +	dev_dbg(dwc->dev, "hs-ports: %u ss-ports: %u\n",
+> +			dwc->num_usb2_ports, dwc->num_usb3_ports);
+> +
+> +	iounmap(base);
 
+Nit: I'd add a newline here.
 
+> +	return ret;
+> +}
+> +
+>  static int dwc3_probe(struct platform_device *pdev)
+>  {
+>  	struct device		*dev = &pdev->dev;
+> @@ -1774,6 +1821,7 @@ static int dwc3_probe(struct platform_device *pdev)
+>  	void __iomem		*regs;
+>  	struct dwc3		*dwc;
+>  	int			ret;
+> +	unsigned int		hw_mode;
+>  
+>  	dwc = devm_kzalloc(dev, sizeof(*dwc), GFP_KERNEL);
+>  	if (!dwc)
+> @@ -1854,6 +1902,20 @@ static int dwc3_probe(struct platform_device *pdev)
+>  			goto err_disable_clks;
+>  	}
+>  
+> +	/*
+> +	 * Currently only DWC3 controllers that are host-only capable
+> +	 * support Multiport.
+> +	 */
+> +	hw_mode = DWC3_GHWPARAMS0_MODE(dwc->hwparams.hwparams0);
+> +	if (hw_mode == DWC3_GHWPARAMS0_MODE_HOST) {
+> +		ret = dwc3_read_port_info(dwc);
+> +		if (ret)
+> +			goto err_disable_clks;
+> +	} else {
+> +		dwc->num_usb2_ports = 1;
+> +		dwc->num_usb3_ports = 1;
+> +	}
+> +
+>  	spin_lock_init(&dwc->lock);
+>  	mutex_init(&dwc->mutex);
+>  
+> diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
+> index 8b1295e4dcdd..42fb17aa66fa 100644
+> --- a/drivers/usb/dwc3/core.h
+> +++ b/drivers/usb/dwc3/core.h
+> @@ -33,6 +33,10 @@
+>  
+>  #include <linux/power_supply.h>
+>  
+> +#define XHCI_EXT_PORT_MAJOR(x)	(((x) >> 24) & 0xff)
+> +#define XHCI_EXT_PORT_MINOR(x)	(((x) >> 16) & 0xff)
+> +#define XHCI_EXT_PORT_COUNT(x)	(((x) >> 8) & 0xff)
 
+Again, don't copy defines from xhci.
 
+Looks like these should be moved to the xhci-ext-caps.h header along
+with struct xhci_protocol_caps.
+
+> +
+>  #define DWC3_MSG_MAX	500
+>  
+>  /* Global constants */
+> @@ -1029,6 +1033,8 @@ struct dwc3_scratchpad_array {
+>   * @usb3_phy: pointer to USB3 PHY
+>   * @usb2_generic_phy: pointer to USB2 PHY
+>   * @usb3_generic_phy: pointer to USB3 PHY
+> + * @num_usb2_ports: number of USB2 ports.
+> + * @num_usb3_ports: number of USB3 ports.
+
+Again, please drop the full stops ('.').
+
+Johan
