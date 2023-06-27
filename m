@@ -2,125 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 455687402FD
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 20:13:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 66CAE740301
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 20:15:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230080AbjF0SM6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 14:12:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43972 "EHLO
+        id S229845AbjF0SPF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 14:15:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230104AbjF0SMA (ORCPT
+        with ESMTP id S231230AbjF0SO4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 14:12:00 -0400
-Received: from mail-vs1-xe32.google.com (mail-vs1-xe32.google.com [IPv6:2607:f8b0:4864:20::e32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BB292D57;
-        Tue, 27 Jun 2023 11:11:48 -0700 (PDT)
-Received: by mail-vs1-xe32.google.com with SMTP id ada2fe7eead31-443628ee79dso914430137.1;
-        Tue, 27 Jun 2023 11:11:48 -0700 (PDT)
+        Tue, 27 Jun 2023 14:14:56 -0400
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E4253584
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 11:14:30 -0700 (PDT)
+Received: by mail-lf1-x135.google.com with SMTP id 2adb3069b0e04-4fb77f21c63so3405091e87.2
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 11:14:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687889507; x=1690481507;
+        d=rivosinc-com.20221208.gappssmtp.com; s=20221208; t=1687889661; x=1690481661;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=AQrySK1ZT+LbbRMNZlZ2lWn/isV1vrbKMhcsTS1OQBo=;
-        b=ccscMLZMEwPohsP0JL0F0FqIN8zX0+vDczPhemjc6yR/jzlE4nT8d6b6k92Vguqt4d
-         NESTNiXaU1ZEduS+rja8/5KnMT02uHBmx+PiS19hu+O10kphzNynKJF/GO6rbGL6PcTD
-         XlyoSgihlwPqX0TIDgifW7fG9zonE2kjltpP+tXy56upzsOijWOnx8wDjXFsnqQ5nFs1
-         cGZ2Nj0iSu5AoXQk6zb77Dt89hpFM+vNyzErzp5VFJg91zRDBa4m6eQ16lc9+VDc3NtQ
-         4HHjBg/L4qk6e7X047uUZt34MrJ1hWCg+XcHlqRGX5WZuBE4vIL1kgvt6YLh8/CC7C7I
-         /8/A==
+        bh=p0QHGC18vxO2QHVl3y7SYla7+m+avkHqGb8W6MMkPEM=;
+        b=tKmSEzN1MUFr3JgDwykDdV9fxf49FUdmPMJCMp/pE+IqGWeDxE9B2caQO5GppGpcoJ
+         iMPDOWikOyl/q7Yb8ZAzj5r3MzMNi8HiDhfDCxIXzOrykSuB9Afm/G5g/vgmIXxaxSnj
+         se452nyymxHI2AWS91cvYN3clgF1WZRhn9l4uEI7mIPjXRMccF4omvSmCo8MeZn1oVqz
+         OvDtldD183qgXBU8Log9dVDb9iwsOSzBG3KUuA6oPN6smKDFen8WWfIlu/ZethCG2uVU
+         VrRZUVljz2LRfZ+5sdKNJ0CP8kHFlCWV7TIc9SetsYG8dVcFVVtXB7BKP7L6oO7nzVJj
+         L8rw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687889507; x=1690481507;
+        d=1e100.net; s=20221208; t=1687889661; x=1690481661;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=AQrySK1ZT+LbbRMNZlZ2lWn/isV1vrbKMhcsTS1OQBo=;
-        b=Bki/LSu4lHJSQTAGPK1cPx3tn3eCSqn5QlbwFB99eRZi3lzmCUvl5fAIfiL63Bk6HZ
-         sOtDWa7z7tOYU2JijQy8mm9RBGNk2rfJsp+eHS74LHdtyfGYkRSWHnUGWQBtS5z2Sp/3
-         jHNswGe0lti2WRcJKwWctha+Y5Egp9jamFF0B2Ha9yony7HpzOgybz7tnfKSp/YZP001
-         tnKegXtw4PaQfsOuRcO8bWqFpcwZz30ApXNhwn57c8AamBwkRQRk+JdvNTxPlYAX+jBl
-         3gfwhMX8rsGv7V+c0DA6XhAvi8/USmYRPx/lZ3TDiDNFKLihZgiCvkMzy5ONXdVOZgjR
-         aXIQ==
-X-Gm-Message-State: AC+VfDwXmEWccLDzS13Mts2sQQbtCGAGM85wXfRcFvw4iOmL5sAeqUp+
-        d8NyEDiJ4LFd+PDiRtb34sIWVYvU2y40jWt7IGs=
-X-Google-Smtp-Source: ACHHUZ7g3WdXBL8i2HWww82h1ZkvwZgKVpE6YLuuxJPjlHuKztlRK9wvZ2F43bYjSZNa0fHvzlm7DkhK1z5BSRbDhaY=
-X-Received: by 2002:a05:6102:1cf:b0:43d:c0d5:ed27 with SMTP id
- s15-20020a05610201cf00b0043dc0d5ed27mr15223175vsq.32.1687889506864; Tue, 27
- Jun 2023 11:11:46 -0700 (PDT)
+        bh=p0QHGC18vxO2QHVl3y7SYla7+m+avkHqGb8W6MMkPEM=;
+        b=GUNkkcFF6DYCJqDi2/oMqbaKGYn4aFCFbRy6deay1QcR95293YUFRzMVtPXnWxxZoK
+         gt10iopwuVNJ+yE6W1dvgb3vA+yZ3wcSiUNhFGtFEAizVGL+Xbsan8wgVcqYZKs2M4p5
+         r/5OqbaTbbns7Ua/tCjKMXGaS3PW313jp9qOJfPlQtEr8GWZ5EFnnbOF3Jdj4T7mPgo0
+         OleOF3f6qYT5GMFbVCnGB293QiSB7Q3NrCDg/TyCNVfTDu1Ud8djQVT5PcbRz/6LV+Jm
+         rzFU2c+ZV+LeK/qNW8neUAkUbdNzvd+eqArYIpGjv/5U97fJtvUE5c4k/eKTdOi7XmZX
+         0v9A==
+X-Gm-Message-State: AC+VfDwtT86Kcc4LxC60nmFVowhfgid+C1bFOzJwb3e319ISY5Ohr+RV
+        bU+Ltiw4oUSIxmzR/jtK9+qoO7GrerO0aM/k9tqjog==
+X-Google-Smtp-Source: ACHHUZ4yOkXhNDmqb3f8bSYcYTCluoaVOfNxpRXYi2CuLecvu7rdFhicIm/u539x+9fkWlRMNbVMdC8U8UV1YOusgxQ=
+X-Received: by 2002:a05:6512:3d06:b0:4fb:7be5:8f4e with SMTP id
+ d6-20020a0565123d0600b004fb7be58f4emr4407689lfv.6.1687889661101; Tue, 27 Jun
+ 2023 11:14:21 -0700 (PDT)
 MIME-Version: 1.0
-References: <CAOQ4uxh7i_s4R9pFJPENALdWGG5-dDhqPLEUXuJqSoHraktFiA@mail.gmail.com>
- <cover.1687884029.git.nabijaczleweli@nabijaczleweli.xyz> <4206d7388fdbee87053c9655919096225a461423.1687884031.git.nabijaczleweli@nabijaczleweli.xyz>
-In-Reply-To: <4206d7388fdbee87053c9655919096225a461423.1687884031.git.nabijaczleweli@nabijaczleweli.xyz>
-From:   Amir Goldstein <amir73il@gmail.com>
-Date:   Tue, 27 Jun 2023 21:11:35 +0300
-Message-ID: <CAOQ4uxj5hvSKUURaspF3hDPA99y_+0GAv0OWsVPPhhKKtcJe8w@mail.gmail.com>
-Subject: Re: [PATCH v3 2/3] splice: fsnotify_access(fd)/fsnotify_modify(fd) in vmsplice
-To:     =?UTF-8?Q?Ahelenia_Ziemia=C5=84ska?= 
-        <nabijaczleweli@nabijaczleweli.xyz>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <brauner@kernel.org>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jan Kara <jack@suse.cz>,
-        Chung-Chiang Cheng <cccheng@synology.com>, ltp@vger.kernel.org
+References: <20230627143747.1599218-1-sameo@rivosinc.com> <20230627143747.1599218-3-sameo@rivosinc.com>
+In-Reply-To: <20230627143747.1599218-3-sameo@rivosinc.com>
+From:   Evan Green <evan@rivosinc.com>
+Date:   Tue, 27 Jun 2023 11:13:45 -0700
+Message-ID: <CALs-Hsu1Zktm_yik8q7qArsqH4PiJgUGQyDnLtZs+1aqB+DGWQ@mail.gmail.com>
+Subject: Re: [PATCH 2/3] RISC-V: hwprobe: Expose Zbc and the scalar crypto extensions
+To:     Samuel Ortiz <sameo@rivosinc.com>
+Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-riscv@lists.infradead.org, linux@rivosinc.com,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Andrew Jones <ajones@ventanamicro.com>,
+        Heiko Stuebner <heiko.stuebner@vrull.eu>,
+        Anup Patel <apatel@ventanamicro.com>,
+        linux-kernel@vger.kernel.org,
+        "Hongren (Zenithal) Zheng" <i@zenithal.me>,
+        Guo Ren <guoren@kernel.org>, Atish Patra <atishp@rivosinc.com>,
+        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@rivosinc.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 27, 2023 at 7:55=E2=80=AFPM Ahelenia Ziemia=C5=84ska
-<nabijaczleweli@nabijaczleweli.xyz> wrote:
+On Tue, Jun 27, 2023 at 7:38=E2=80=AFAM Samuel Ortiz <sameo@rivosinc.com> w=
+rote:
 >
-> Same logic applies here: this can fill up the pipe and pollers that rely
-> on getting IN_MODIFY notifications never wake up.
+> Zbc was missing from a previous Bit-Manipulation extension hwprobe
+> patch.
 >
-> Fixes: 983652c69199 ("splice: report related fsnotify events")
-> Link: https://lore.kernel.org/linux-fsdevel/jbyihkyk5dtaohdwjyivambb2gffy=
-js3dodpofafnkkunxq7bu@jngkdxx65pux/t/#u
-> Link: https://bugs.debian.org/1039488
-> Signed-off-by: Ahelenia Ziemia=C5=84ska <nabijaczleweli@nabijaczleweli.xy=
-z>
+> Add all scalar crypto extensions bits, and define a macro for setting
+> the hwprobe key/pair in a more readable way.
+>
+> Signed-off-by: Samuel Ortiz <sameo@rivosinc.com>
 
-Reviewed-by: Amir Goldstein <amir73il@gmail.com>
-
-> ---
->  fs/splice.c | 7 ++++++-
->  1 file changed, 6 insertions(+), 1 deletion(-)
->
-> diff --git a/fs/splice.c b/fs/splice.c
-> index e16f4f032d2f..0eb36e93c030 100644
-> --- a/fs/splice.c
-> +++ b/fs/splice.c
-> @@ -1346,6 +1346,9 @@ static long vmsplice_to_user(struct file *file, str=
-uct iov_iter *iter,
->                 pipe_unlock(pipe);
->         }
->
-> +       if (ret > 0)
-> +               fsnotify_access(file);
-> +
->         return ret;
->  }
->
-> @@ -1375,8 +1378,10 @@ static long vmsplice_to_pipe(struct file *file, st=
-ruct iov_iter *iter,
->         if (!ret)
->                 ret =3D iter_to_pipe(iter, pipe, buf_flag);
->         pipe_unlock(pipe);
-> -       if (ret > 0)
-> +       if (ret > 0) {
->                 wakeup_pipe_readers(pipe);
-> +               fsnotify_modify(file);
-> +       }
->         return ret;
->  }
->
-> --
-> 2.39.2
->
+Reviewed-by: Evan Green <evan@rivosinc.com>
