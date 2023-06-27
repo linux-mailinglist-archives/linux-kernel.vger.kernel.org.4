@@ -2,137 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 787A87406D7
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 01:30:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49A8B7406DD
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 01:36:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230019AbjF0XaH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 19:30:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44726 "EHLO
+        id S230073AbjF0XgU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 19:36:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229544AbjF0XaE (ORCPT
+        with ESMTP id S229544AbjF0XgS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 19:30:04 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 89B891BE3
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 16:30:02 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D18672F4;
-        Tue, 27 Jun 2023 16:30:45 -0700 (PDT)
-Received: from [10.57.35.190] (unknown [10.57.35.190])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id CD7EE3F64C;
-        Tue, 27 Jun 2023 16:29:59 -0700 (PDT)
-Message-ID: <1b0c9677-4e2a-6767-f8f2-23081e6af3e0@arm.com>
-Date:   Wed, 28 Jun 2023 00:29:52 +0100
+        Tue, 27 Jun 2023 19:36:18 -0400
+Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9D9B1BE6;
+        Tue, 27 Jun 2023 16:36:16 -0700 (PDT)
+Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
+        by mailout.west.internal (Postfix) with ESMTP id 352B13200914;
+        Tue, 27 Jun 2023 19:36:13 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute1.internal (MEProxy); Tue, 27 Jun 2023 19:36:13 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sakamocchi.jp;
+         h=cc:cc:content-type:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm2; t=1687908972; x=
+        1687995372; bh=FAAyEM8Ly5PWnExbNv7ubvTfVH0QtKdzbHqCX13GAzg=; b=l
+        IlERPxvSpe39YUYHZnaOyWLv1s1k8zsvCBIJF5U+QY9ypB1nulA4rrRQznySXi9F
+        qdfWJsAvTgN6t0BvaYOzWOPPbmOWInG6rQvjz488L0nnC2x9zmtU2NQavD4tEi2i
+        Rb3uIGfNd9kGO5CtI//igdkti4n8ZIHZbtXi2z0oaQuRIkHYBb5eGoX9HgC/dZ8Y
+        QpnY8+I2yTJifPxmw5d/SbUMMaOQmV8lFKvjbsnyVKTFl74QsP5wxBbq62i+Ur/v
+        4wAngpX7Nd1j6bGiyNQIR7fij1u6yIwZXEjKvwBrTUgEOLRGwY4UolhxhEVS43Ph
+        D2ZEFbnX0IZFnM8mRZlXg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1687908972; x=1687995372; bh=FAAyEM8Ly5PWn
+        ExbNv7ubvTfVH0QtKdzbHqCX13GAzg=; b=K+Nxy0YOe7J0ueBKr1pqqeW2UurQ0
+        PN5DErctn5r4iiJoC+crmjrkbSPxmy5Tvi3f1W34dfOqKGhrMFqmxaT0z5FYZKoJ
+        lv/yqnPkn2C1KoSnqzTHfMF0LdEeGwdPy5kTZ1lnfe0Fn6iV9WOTKaMzABuYhv5k
+        pVWkoHZbzUwpSZVU57bLiqh9lwEMcBBGT9hxGf4HKX/cfRyYOFwi675NjoSh11J/
+        0ciYiwS4TO5tlCw4nOhSFm++NK/ITSoDOJ1m7am3/UR0f4bna6Bilp3o9PcWelfz
+        R6oY61zRJ4lcg+bdGBU81UZI266qAo71CM5Tm9R5+yc+PD3WSEeQlcc+Q==
+X-ME-Sender: <xms:bHKbZFL80QjAugbZ5EXFs64HpbxZ8FWkYBOpHeirjvWJxdrsZI3U3A>
+    <xme:bHKbZBI3qGle7beVPqY9-zmFwpnFOEhpKbBRxQqGr-otcPMkxyO6lkVIuoMmAUDJO
+    yGHqFFrOB29QKCMYlI>
+X-ME-Received: <xmr:bHKbZNv2EXYyk_-3ER_W5GFYTFLqS_PtpA0q5amYEg0yPlMzMyW36S_-_8I447f7j9QolvfzjmElHN1CHp7YF0i30QLByTwUSZs>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrtddugddvgecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefvrghkrghs
+    hhhiucfurghkrghmohhtohcuoehoqdhtrghkrghshhhisehsrghkrghmohgttghhihdrjh
+    hpqeenucggtffrrghtthgvrhhnpeehhffhteetgfekvdeiueffveevueeftdelhfejieei
+    tedvleeftdfgfeeuudekueenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmh
+    grihhlfhhrohhmpehoqdhtrghkrghshhhisehsrghkrghmohgttghhihdrjhhp
+X-ME-Proxy: <xmx:bHKbZGZJNiqFsXFwYPdeo91acXo6ieaA_nfP6S_l3gCi5vnkaPMBWw>
+    <xmx:bHKbZMaoWhl6zy0G8GQa_1yECBsCFh0-0glVW375saVkrlgCcHQkuQ>
+    <xmx:bHKbZKBcqgqSvureY-vlQ4CjXN8FPgb15p7YnissYGbkOl4EhxGR8w>
+    <xmx:bHKbZLxd7odaSe15pixMn6AKZDz_pdu-QhKYxrfGavYkQfKLHgw8oA>
+Feedback-ID: ie8e14432:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 27 Jun 2023 19:36:09 -0400 (EDT)
+Date:   Wed, 28 Jun 2023 08:36:04 +0900
+From:   Takashi Sakamoto <o-takashi@sakamocchi.jp>
+To:     Colin Ian King <colin.i.king@gmail.com>
+Cc:     Clemens Ladisch <clemens@ladisch.de>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
+        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH][next] ALSA: oxfw: make read-only const array models
+ static
+Message-ID: <20230627233604.GA278863@workstation.local>
+Mail-Followup-To: Colin Ian King <colin.i.king@gmail.com>,
+        Clemens Ladisch <clemens@ladisch.de>,
+        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+        alsa-devel@alsa-project.org, kernel-janitors@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230627113253.700065-1-colin.i.king@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v1] iommu/arm-smmu-v3: Allow default substream bypass with
- a pasid support
-Content-Language: en-GB
-To:     Nicolin Chen <nicolinc@nvidia.com>
-Cc:     will@kernel.org, jgg@nvidia.com, joro@8bytes.org,
-        shameerali.kolothum.thodi@huawei.com, yangyicong@hisilicon.com,
-        jean-philippe@linaro.org, linux-arm-kernel@lists.infradead.org,
-        iommu@lists.linux.dev, linux-kernel@vger.kernel.org
-References: <20230627033326.5236-1-nicolinc@nvidia.com>
- <826cbb86-ac7d-c40b-f7e3-51681cda50b8@arm.com>
- <ZJsXLFtH8WkRK41w@Asurada-Nvidia>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <ZJsXLFtH8WkRK41w@Asurada-Nvidia>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230627113253.700065-1-colin.i.king@gmail.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-06-27 18:06, Nicolin Chen wrote:
-> Hi Robin,
-> 
-> On Tue, Jun 27, 2023 at 10:00:18AM +0100, Robin Murphy wrote:
->> On 2023-06-27 04:33, Nicolin Chen wrote:
->>> When an iommu_domain is set to IOMMU_DOMAIN_IDENTITY, the driver would
->>> skip the allocation of a CD table and set the CONFIG field of the STE
->>> to STRTAB_STE_0_CFG_BYPASS. This works well for devices that only have
->>> one substream, i.e. PASID disabled.
->>>
->>> However, there could be a use case, for a pasid capable device, that
->>> allows bypassing the translation at the default substream while still
->>> enabling the pasid feature, which means the driver should not skip the
->>> allocation of a CD table nor simply bypass the CONFIG field. Instead,
->>> the S1DSS field should be set to STRTAB_STE_1_S1DSS_BYPASS and the
->>> SHCFG field should be set to STRTAB_STE_1_SHCFG_INCOMING.
->>>
->>> Add s1dss and shcfg in struct arm_smmu_s1_cfg, to allow configurations
->>> in the finalise() to support that use case. Then, set them accordingly
->>> depending on the iommu_domain->type and the master->ssid_bits.
->>>
->>> Also, add STRTAB_STE_1_SHCFG_NONSHAREABLE of the default configuration
->>> to distinguish from STRTAB_STE_1_SHCFG_INCOMING of the bypass one.
->>
->> Why? The "default configuration" is that the S1 shareability attribute
->> is determined by the S1 translation itself, so the incoming value is
->> irrelevant.
-> 
-> That was for a consistency since the driver set the SHCFG field
-> to 0x0 (STRTAB_STE_1_SHCFG_NONSHAREABLE). I was not quite sure,
-> in a long run, if leaving an uncleared s1_cfg->shcfg potentially
-> can result in an unexpected behavior if it's passed in the STE.
-> Yet, we could be seemingly sure that the !IOMMU_DOMAIN_IDENTITY
-> means the S1 translation must be enabled and so the SHCFG would
-> be irrelevant?
-> 
-> If so, I make make it:
-> 
-> +	if (smmu_domain->domain.type == IOMMU_DOMAIN_IDENTITY) {
-> +		cfg->s1dss = STRTAB_STE_1_S1DSS_BYPASS;
-> +		cfg->shcfg = STRTAB_STE_1_SHCFG_INCOMING;
-> +	} else {
-> +		cfg->s1dss = STRTAB_STE_1_S1DSS_SSID0;
-> +	}
+Hi,
 
-What I mean is we don't need a cfg->shcfg field at all - without loss of 
-generality it can simply be hard-coded to 1 when S1 is active, same as 
-for stream bypass.
-
-The only case where explicitly setting STE.SHCFG=0 makes some sense is 
-for a stage-2-only domain if a device's incoming attribute is stronger 
-than it needs to be, but even then there are multiple levels of 
-IMP-DEFness around whether SHCFG actually does anything anyway.
-
->>> @@ -2198,7 +2206,11 @@ static int arm_smmu_domain_finalise(struct iommu_domain *domain,
->>>        struct arm_smmu_domain *smmu_domain = to_smmu_domain(domain);
->>>        struct arm_smmu_device *smmu = smmu_domain->smmu;
->>>
->>> -     if (domain->type == IOMMU_DOMAIN_IDENTITY) {
->>> +     /*
->>> +      * A master with a pasid capability might need a CD table, so only set
->>> +      * ARM_SMMU_DOMAIN_BYPASS if IOMMU_DOMAIN_IDENTITY and non-pasid master
->>> +      */
->>> +     if (domain->type == IOMMU_DOMAIN_IDENTITY && !master->ssid_bits) {
->>>                smmu_domain->stage = ARM_SMMU_DOMAIN_BYPASS;
->>>                return 0;
->>>        }
->>
->> This means we'll now go on to allocate a pagetable for an identity
->> domain, which doesn't seem ideal :/
+On Tue, Jun 27, 2023 at 12:32:53PM +0100, Colin Ian King wrote:
+> Don't populate the const array on the stack, instead make it static.
 > 
-> Do you suggest to bypass alloc_io_pgtable_ops()? That would zero
-> out the TCR fields in the CD. Not sure if it'd work seamlessly,
-> but I can give it a try.
+> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+> ---
+>  sound/firewire/oxfw/oxfw.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/sound/firewire/oxfw/oxfw.c b/sound/firewire/oxfw/oxfw.c
+> index 9523479fa94a..63d40f1a914f 100644
+> --- a/sound/firewire/oxfw/oxfw.c
+> +++ b/sound/firewire/oxfw/oxfw.c
+> @@ -44,7 +44,7 @@ struct compat_info {
+>  
+>  static bool detect_loud_models(struct fw_unit *unit)
+>  {
+> -	const char *const models[] = {
+> +	static const char *const models[] = {
+>  		"Onyxi",
+>  		"Onyx-i",
+>  		"Onyx 1640i",
+> -- 
+> 2.39.2
+ 
+Indeed. It is preferable.
 
-I think if there's a good reason to support this then it's worth 
-supporting properly, i.e. refactor a bit harder to separate the CD table 
-parts which are common to both S1DSS bypass and S1 translation, from the 
-CD/pagetable parts that are only relevant for translation. S1DSS bypass 
-remains the same as Stream bypass in the sense that there is no 
-structure corresponding to the identity domain itself, so not only does 
-it not make sense to have a pagetable, there's also no valid place to 
-put one anyway - touching the CD belonging to SSID 0 is strictly wrong.
+Reviewed-by: Takashi Sakamoto <o-takashi@sakamocchi.jp>
 
-Thanks,
-Robin.
+I found that ALSA fireface driver includes the similar issue. I'll send a
+patch to fix it later.
+
+
+Thanks
+
+Takashi Sakamoto
