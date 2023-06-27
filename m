@@ -2,31 +2,31 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F33AC73FC56
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 15:01:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A81C273FC55
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 15:01:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230030AbjF0NBw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 09:01:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53120 "EHLO
+        id S230479AbjF0NBr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 09:01:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230419AbjF0NBk (ORCPT
+        with ESMTP id S230193AbjF0NBi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 09:01:40 -0400
+        Tue, 27 Jun 2023 09:01:38 -0400
 Received: from mailbox.box.xen0n.name (mail.xen0n.name [115.28.160.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A36526BA;
-        Tue, 27 Jun 2023 06:01:39 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3455A26BA;
+        Tue, 27 Jun 2023 06:01:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xen0n.name; s=mail;
-        t=1687870893; bh=Ooj9bvYQGjGgA7KkojQxY/KTQ6hTo/rmmadUHjRE+uw=;
+        t=1687870895; bh=Gds07JdhXbkbt8/Vhe4lS60dTh4hWxzow1iLVsGOiF8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=AmLbxfGZ3u2GhlsdZnn1SM+SQrqkxIB2z42P1lhAE+b2yQrHF1d362KAlDBiTMAF3
-         d/wUQhDCG9pm+NTdaRBkPv8golHXpFdIG17uSmYig/F8RBpJhDtIfLTMOGANskVhOM
-         U3rcyxkUjplvEwp5hrnVWBPjWRVP/eIEz4I2YEg4=
+        b=LzOF1JD38e5ptOv8EY2oRvZo6rAOenwsat1S8yfICrnQ8sowG1UxSDKRnZpJPSV9S
+         jgqesWHPdoZTMdIarcEOYlBhufEP9yzxBfrbLwhltOsxKr5oMBw8aOOtmIqo8B/wC8
+         Tm6SKa83zjepp0egjCSwm4XBQGtEleJt1fqBnYBc=
 Received: from ld50.lan (unknown [101.88.25.181])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by mailbox.box.xen0n.name (Postfix) with ESMTPSA id 3C8E96017D;
-        Tue, 27 Jun 2023 21:01:33 +0800 (CST)
+        by mailbox.box.xen0n.name (Postfix) with ESMTPSA id 4DF19605CA;
+        Tue, 27 Jun 2023 21:01:35 +0800 (CST)
 From:   WANG Xuerui <kernel@xen0n.name>
 To:     Huacai Chen <chenhuacai@kernel.org>
 Cc:     WANG Rui <wangrui@loongson.cn>,
@@ -34,9 +34,9 @@ Cc:     WANG Rui <wangrui@loongson.cn>,
         Xi Ruoyao <xry111@xry111.site>, loongarch@lists.linux.dev,
         linux-kbuild@vger.kernel.org, llvm@lists.linux.dev,
         linux-kernel@vger.kernel.org, WANG Xuerui <git@xen0n.name>
-Subject: [PATCH 1/2] LoongArch: vDSO: Use CLANG_FLAGS instead of filtering out '--target='
-Date:   Tue, 27 Jun 2023 21:01:21 +0800
-Message-Id: <20230627130122.1491765-2-kernel@xen0n.name>
+Subject: [PATCH 2/2] LoongArch: Include KBUILD_CPPFLAGS in CHECKFLAGS invocation
+Date:   Tue, 27 Jun 2023 21:01:22 +0800
+Message-Id: <20230627130122.1491765-3-kernel@xen0n.name>
 X-Mailer: git-send-email 2.40.0
 In-Reply-To: <20230627130122.1491765-1-kernel@xen0n.name>
 References: <20230627130122.1491765-1-kernel@xen0n.name>
@@ -54,35 +54,32 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: WANG Xuerui <git@xen0n.name>
 
-This is a port of commit 76d7fff22be3e ("MIPS: VDSO: Use CLANG_FLAGS
-instead of filtering out '--target='") to arch/loongarch, for fixing
-cross-compilation with Clang.
+This is a port of commit 08f6554ff90e ("mips: Include KBUILD_CPPFLAGS
+in CHECKFLAGS invocation") to arch/loongarch, for fixing
+cross-compilation of Linux/LoongArch with Clang, where previously the
+`--target` flag would no longer be present for the CHECKFLAGS cc
+invocation leading to build failure.
 
 Reported-by: Nathan Chancellor <nathan@kernel.org>
 Link: https://github.com/ClangBuiltLinux/linux/issues/1787#issuecomment-1608306002
 Signed-off-by: WANG Xuerui <git@xen0n.name>
 ---
- arch/loongarch/vdso/Makefile | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
+ arch/loongarch/Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/loongarch/vdso/Makefile b/arch/loongarch/vdso/Makefile
-index 3f9df4d9930f..a50308b6fc25 100644
---- a/arch/loongarch/vdso/Makefile
-+++ b/arch/loongarch/vdso/Makefile
-@@ -12,12 +12,9 @@ ccflags-vdso := \
- 	$(filter -E%,$(KBUILD_CFLAGS)) \
- 	$(filter -march=%,$(KBUILD_CFLAGS)) \
- 	$(filter -m%-float,$(KBUILD_CFLAGS)) \
-+	$(CLANG_FLAGS) \
- 	-D__VDSO__
+diff --git a/arch/loongarch/Makefile b/arch/loongarch/Makefile
+index a63683da3bcf..09ba338a64de 100644
+--- a/arch/loongarch/Makefile
++++ b/arch/loongarch/Makefile
+@@ -112,7 +112,7 @@ KBUILD_CFLAGS += -isystem $(shell $(CC) -print-file-name=include)
+ KBUILD_LDFLAGS	+= -m $(ld-emul)
  
--ifeq ($(cc-name),clang)
--ccflags-vdso += $(filter --target=%,$(KBUILD_CFLAGS))
--endif
--
- cflags-vdso := $(ccflags-vdso) \
- 	-isystem $(shell $(CC) -print-file-name=include) \
- 	$(filter -W%,$(filter-out -Wa$(comma)%,$(KBUILD_CFLAGS))) \
+ ifdef CONFIG_LOONGARCH
+-CHECKFLAGS += $(shell $(CC) $(KBUILD_CFLAGS) -dM -E -x c /dev/null | \
++CHECKFLAGS += $(shell $(CC) $(KBUILD_CPPFLAGS) $(KBUILD_CFLAGS) -dM -E -x c /dev/null | \
+ 	grep -E -vw '__GNUC_(MINOR_|PATCHLEVEL_)?_' | \
+ 	sed -e "s/^\#define /-D'/" -e "s/ /'='/" -e "s/$$/'/" -e 's/\$$/&&/g')
+ endif
 -- 
 2.40.0
 
