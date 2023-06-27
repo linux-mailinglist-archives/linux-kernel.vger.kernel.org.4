@@ -2,147 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5001D73FB9E
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 14:02:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FEC273FBA9
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 14:04:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231743AbjF0MCB convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 27 Jun 2023 08:02:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60328 "EHLO
+        id S231766AbjF0ME0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 08:04:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229748AbjF0MB6 (ORCPT
+        with ESMTP id S229748AbjF0MEX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 08:01:58 -0400
-Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com [209.85.128.178])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE57A1712
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 05:01:48 -0700 (PDT)
-Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-57338656a8aso35452247b3.0
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 05:01:48 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687867307; x=1690459307;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=UaDvMAxfFXfyEZM4SJAuMBnx36vSWVo7HcR7XHEqTMs=;
-        b=VR2J7WD3LanI6isGAHUshU+JD0fdryajJlpHmd9chx0MAKDGYtfrRUysqi6cI9oVKf
-         1FKnO+y/XI6O0AlTR+kfISrdsvCByZ8duVc/7agX/iY669Sl0OfamTMSjLN+htLMQiay
-         /DExLBkuAhg5SXJ1VktQ0nZMzeunGBQV9ML1Su6/uT0tD9S3QfCZ06J+rGf2blgehmlX
-         /g1CwJpITFGYlhpI1FcdmDxV8NtREmNHodUgBUgEAu+A1sBnqSlXsj+ktjnV4rvsPExC
-         F37ob2zZdau32R+5z2I5UbDuss91SeQYAOXekbEuW+L7tZF/H95/iLESM8kp1noh9tyj
-         0VHA==
-X-Gm-Message-State: AC+VfDw3WMePJsbkjt5wBNB5TMJjmWMT0bTQzE/Lr2yziBC4ZO+er+Nx
-        p7o+eiY4xGLD09urOQxfaxfWEHl1Yt64+Ybl
-X-Google-Smtp-Source: ACHHUZ67k2/RYhYzFMismqFYvarrKsCGwUbw2ODjWkiXXOYxgmsAzF0Yp39W4P2n6LSUZJldQOegyw==
-X-Received: by 2002:a81:4fd7:0:b0:573:9e0a:b8bf with SMTP id d206-20020a814fd7000000b005739e0ab8bfmr16027202ywb.9.1687867307585;
-        Tue, 27 Jun 2023 05:01:47 -0700 (PDT)
-Received: from mail-yb1-f180.google.com (mail-yb1-f180.google.com. [209.85.219.180])
-        by smtp.gmail.com with ESMTPSA id x83-20020a816356000000b00569ff2d94f6sm1791012ywb.19.2023.06.27.05.01.46
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 27 Jun 2023 05:01:46 -0700 (PDT)
-Received: by mail-yb1-f180.google.com with SMTP id 3f1490d57ef6-c01e1c0402cso2983813276.0
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 05:01:46 -0700 (PDT)
-X-Received: by 2002:a25:f802:0:b0:b9e:712f:4a17 with SMTP id
- u2-20020a25f802000000b00b9e712f4a17mr22534779ybd.6.1687867306425; Tue, 27 Jun
- 2023 05:01:46 -0700 (PDT)
+        Tue, 27 Jun 2023 08:04:23 -0400
+Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D842B10EC;
+        Tue, 27 Jun 2023 05:04:19 -0700 (PDT)
+Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
+        by mx.sberdevices.ru (Postfix) with ESMTP id 9EC795FD71;
+        Tue, 27 Jun 2023 15:04:16 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
+        s=mail; t=1687867456;
+        bh=N+yr4uUtudu6mibyumvLqyo/EuSagL5a4hQI4FKGs9M=;
+        h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
+        b=WqOl7HPJIkLi8Rw+yzXRCdsLyZGIZsnXdFAtGq/6NNVl69IhYX/kS+yNCH3KCIgQU
+         9zrk856UEbqQ5sQ5wlanmnvuUDqCXdO7RSifPbXjwA0jfxxdYAVM8YO03NXMLTLNI4
+         tzn7Dph4Kvs4TOXtIUfyI8UZeshz/A7WrD+HfYBioZiPv3FQs9ioYXqEuzQvUsib22
+         EutXfXCYSYvcMnmBimRjuxnigbocHApZ+eAJQHTyWEhKiB9ubFK+ZvarFM4R42K6J+
+         gLwB28NZVdeflb+3JCy4mklpEGImVwEujcxKGmnY5QevTgEXbMkMqGqvLMUKjKdOix
+         rziDJ6njzO8tA==
+Received: from p-i-exch-sc-m01.sberdevices.ru (p-i-exch-sc-m01.sberdevices.ru [172.16.192.107])
+        by mx.sberdevices.ru (Postfix) with ESMTP;
+        Tue, 27 Jun 2023 15:03:56 +0300 (MSK)
+Message-ID: <bb1c0271-bd0d-7a2d-01a8-b7777af67017@sberdevices.ru>
+Date:   Tue, 27 Jun 2023 14:58:57 +0300
 MIME-Version: 1.0
-References: <20230416115237.798604-1-dmitry.osipenko@collabora.com>
- <20230416115237.798604-4-dmitry.osipenko@collabora.com> <CAMuHMdVrJsmQx8X-_Tnxir9W752Mdh8ye7ob2srtY+6HFDEMGw@mail.gmail.com>
- <0ca8034d-0377-26b9-51c8-8caff6c4174a@collabora.com> <CAMuHMdWfE=6xFsYFv=mCACpwZp45AiCzFxEB=suEFBhv9ry5aw@mail.gmail.com>
- <2f4d3e96-1e10-3662-bfc5-8c361a4c1366@collabora.com>
-In-Reply-To: <2f4d3e96-1e10-3662-bfc5-8c361a4c1366@collabora.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 27 Jun 2023 14:01:34 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdV924gJs1X1nMUbQ5LEbFe8hrrXgxxvgZ_dXf95O0bK5Q@mail.gmail.com>
-Message-ID: <CAMuHMdV924gJs1X1nMUbQ5LEbFe8hrrXgxxvgZ_dXf95O0bK5Q@mail.gmail.com>
-Subject: Re: [PATCH v6 3/3] drm/virtio: Support sync objects
-To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>
-Cc:     David Airlie <airlied@redhat.com>,
-        Gerd Hoffmann <kraxel@redhat.com>,
-        Gurchetan Singh <gurchetansingh@chromium.org>,
-        Chia-I Wu <olvaffe@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-        Rob Clark <robdclark@gmail.com>,
-        =?UTF-8?B?TWFyZWsgT2zFocOhaw==?= <maraeo@gmail.com>,
-        Pierre-Eric Pelloux-Prayer <pierre-eric.pelloux-prayer@amd.com>,
-        Emil Velikov <emil.velikov@collabora.com>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        kernel@collabora.com, virtualization@lists.linux-foundation.org
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [RFC PATCH v1 0/4] virtio/vsock: some updates for MSG_PEEK flag
+Content-Language: en-US
+To:     Stefano Garzarella <sgarzare@redhat.com>
+CC:     Stefan Hajnoczi <stefanha@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Bobby Eshleman <bobby.eshleman@bytedance.com>,
+        <kvm@vger.kernel.org>, <virtualization@lists.linux-foundation.org>,
+        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <kernel@sberdevices.ru>, <oxffffaa@gmail.com>
+References: <20230618062451.79980-1-AVKrasnov@sberdevices.ru>
+ <tmcj34lrgk7rxlnp4qvkpljwovowlz3wnosqboxssv6f6enr6u@qnf422n6lu6j>
+From:   Arseniy Krasnov <avkrasnov@sberdevices.ru>
+In-Reply-To: <tmcj34lrgk7rxlnp4qvkpljwovowlz3wnosqboxssv6f6enr6u@qnf422n6lu6j>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [100.64.160.123]
+X-ClientProxiedBy: p-i-exch-sc-m01.sberdevices.ru (172.16.192.107) To
+ p-i-exch-sc-m01.sberdevices.ru (172.16.192.107)
+X-KSMG-Rule-ID: 4
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Status: not scanned, disabled by settings
+X-KSMG-AntiSpam-Interceptor-Info: not scanned
+X-KSMG-AntiPhishing: not scanned, disabled by settings
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/06/27 09:07:00 #21586757
+X-KSMG-AntiVirus-Status: Clean, skipped
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Dmitry,
 
-On Mon, Jun 26, 2023 at 6:11 PM Dmitry Osipenko
-<dmitry.osipenko@collabora.com> wrote:
-> On 6/25/23 18:36, Geert Uytterhoeven wrote:
-> > On Sun, Jun 25, 2023 at 2:41 PM Dmitry Osipenko
-> > <dmitry.osipenko@collabora.com> wrote:
-> >> On 6/25/23 11:47, Geert Uytterhoeven wrote:
-> >>> On Sun, Apr 16, 2023 at 1:55 PM Dmitry Osipenko
-> >>> <dmitry.osipenko@collabora.com> wrote:
-> >>>> Add sync object DRM UAPI support to VirtIO-GPU driver. Sync objects
-> >>>> support is needed by native context VirtIO-GPU Mesa drivers, it also will
-> >>>> be used by Venus and Virgl contexts.
-> >>>>
-> >>>> Reviewed-by; Emil Velikov <emil.velikov@collabora.com>
-> >>>> Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
-> >>>
-> >>> Thanks for your patch!
-> >>>
-> >>>> --- a/drivers/gpu/drm/virtio/virtgpu_submit.c
-> >>>> +++ b/drivers/gpu/drm/virtio/virtgpu_submit.c
-> >>>
-> >>>> +static int
-> >>>> +virtio_gpu_parse_deps(struct virtio_gpu_submit *submit)
-> >>>> +{
-> >>>> +       struct drm_virtgpu_execbuffer *exbuf = submit->exbuf;
-> >>>> +       struct drm_virtgpu_execbuffer_syncobj syncobj_desc;
-> >>>> +       size_t syncobj_stride = exbuf->syncobj_stride;
-> >>>> +       u32 num_in_syncobjs = exbuf->num_in_syncobjs;
-> >>>> +       struct drm_syncobj **syncobjs;
-> >>>> +       int ret = 0, i;
-> >>>> +
-> >>>> +       if (!num_in_syncobjs)
-> >>>> +               return 0;
-> >>>> +
-> >>>> +       /*
-> >>>> +        * kvalloc at first tries to allocate memory using kmalloc and
-> >>>> +        * falls back to vmalloc only on failure. It also uses GFP_NOWARN
-> >>>
-> >>> GFP_NOWARN does not exist.
-> >>
-> >> https://elixir.bootlin.com/linux/v6.4-rc7/source/include/linux/gfp_types.h#L38
-> >
-> > That line defines "__GFP_NOWARN", not "GFP_NOWARN".
-> > C is case- and underscore-sensitive. as is "git grep -w" ;-)
->
-> The removal of underscores was done intentionally for improving
-> readability of the comment
 
-Please don't do that, as IMHO it actually hampers readability:
-  1. For some xxx, both GFP_xxx and __GFP_xxx are defined,
-     so it does matter which one you are referring to,
-  2. After dropping the underscores, "git grep -w" can no longer find
-     the definition, nor its users.
+On 26.06.2023 19:30, Stefano Garzarella wrote:
+> On Sun, Jun 18, 2023 at 09:24:47AM +0300, Arseniy Krasnov wrote:
+>> Hello,
+>>
+>> This patchset does several things around MSG_PEEK flag support. In
+>> general words it reworks MSG_PEEK test and adds support for this flag
+>> in SOCK_SEQPACKET logic. Here is per-patch description:
+>>
+>> 1) This is cosmetic change for SOCK_STREAM implementation of MSG_PEEK:
+>>   1) I think there is no need of "safe" mode walk here as there is no
+>>      "unlink" of skbs inside loop (it is MSG_PEEK mode - we don't change
+>>      queue).
+>>   2) Nested while loop is removed: in case of MSG_PEEK we just walk
+>>      over skbs and copy data from each one. I guess this nested loop
+>>      even didn't behave as loop - it always executed just for single
+>>      iteration.
+>>
+>> 2) This adds MSG_PEEK support for SOCK_SEQPACKET. It could be implemented
+>>   be reworking MSG_PEEK callback for SOCK_STREAM to support SOCK_SEQPACKET
+>>   also, but I think it will be more simple and clear from potential
+>>   bugs to implemented it as separate function thus not mixing logics
+>>   for both types of socket. So I've added it as dedicated function.
+>>
+>> 3) This is reworked MSG_PEEK test for SOCK_STREAM. Previous version just
+>>   sent single byte, then tried to read it with MSG_PEEK flag, then read
+>>   it in normal way. New version is more complex: now sender uses buffer
+>>   instead of single byte and this buffer is initialized with random
+>>   values. Receiver tests several things:
+>>   1) Read empty socket with MSG_PEEK flag.
+>>   2) Read part of buffer with MSG_PEEK flag.
+>>   3) Read whole buffer with MSG_PEEK flag, then checks that it is same
+>>      as buffer from 2) (limited by size of buffer from 2) of course).
+>>   4) Read whole buffer without any flags, then checks that is is same
+>>      as buffer from 3).
+>>
+>> 4) This is MSG_PEEK test for SOCK_SEQPACKET. It works in the same way
+>>   as for SOCK_STREAM, except it also checks combination of MSG_TRUNC
+>>   and MSG_PEEK.
+>>
+>> Head is:
+>> https://git.kernel.org/pub/scm/linux/kernel/git/netdev/net-next.git/commit/?id=d20dd0ea14072e8a90ff864b2c1603bd68920b4b
+> 
+> Nice cleanup, LGTM, but I'd like a comment from Bobby.
 
-Thanks!
+Got it, thanks!
 
-Gr{oetje,eeting}s,
+Thanks, Arseniy
 
-                        Geert
-
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+> 
+> Thanks,
+> Stefano
+> 
