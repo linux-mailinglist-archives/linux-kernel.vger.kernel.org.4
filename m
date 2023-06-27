@@ -2,178 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4AF87401E1
+	by mail.lfdr.de (Postfix) with ESMTP id 7233F7401E0
 	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 19:07:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230413AbjF0RHM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 13:07:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42010 "EHLO
+        id S230421AbjF0RHP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 13:07:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229481AbjF0RHK (ORCPT
+        with ESMTP id S230400AbjF0RHM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 13:07:10 -0400
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2066.outbound.protection.outlook.com [40.107.223.66])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 866611708
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 10:07:08 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=e2ghFRCg9s8b5yUJUFBXVzblTTYu+l86FCr1iY5p7m4O1qmcnqBM2T7EHyuhGL9xOcy4GkKhpMZDgGF9UEUSpmldO0KWVLTa1VPN/B9Ovo8haUHyQf95XgDDYbppsF+ei0IfOS7bSXsKJwGB2YgsKlA+v1guy+qxkwcOcuGHKWQ29iEHdzRJT/Hb59cSxhs0kG/Wjq6BI3+TEfatP3yidNuwV85rWGCCvCTfHTqgEyoB0RdfwHXlcvv2pWtVrvEqMIrBxLG9aaLnXXZgncWlQeDawUgNreepM1hOU3ZvmKdSV45MHkhMr+wJPOw/yzv5JC0aOMNtLyEtiCamLkwkDQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Cf0tgViEaxHgb6zJeiOXuancmQbB3mADXlT7BhIkNq8=;
- b=BgGtMJU2koVubMxMU5DJ2SnzlDc2Nx6lRsc3s9DYtjqsHRqsIwuWn25kUa9WPwaXS6C3trcWsb1/SjTtcQ5VbVh3gq/+09V9egCdik21P+1wHge/PCe0l3ciZ3/5BTUAnUlGsAvJ2kCqMjAmL7G6LW/WEoeAi/WQ6OuMhfoRSoMvBQsIch254u8hgwKbgFDI6VuOouEcXOhDX7By2OKk2fWY5s5X0ez8VqqxBjcfp3LfkeaWYEivi2nIUimMHOaW8QL6Gt/QdhUANQOGDuziDjjaG7/g16/2yLpNeO98pVJHlz9xVT5/RbsolVn5NDTHv85KDmRUHVlfVlMjsr4tXw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.160) smtp.rcpttodomain=arm.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Cf0tgViEaxHgb6zJeiOXuancmQbB3mADXlT7BhIkNq8=;
- b=lDn1jAKYkIxEzf3hCO6BIO4P+B1ydnNjyHLnrS3N14W61GxhZjGS+Ze+KT5hbgnl2qAxnda57usoLbsZmbw+VCweW2OD0WWvnlgV7mk8kvgARfvg8kZVSf9F5YeYI1PB+rq/kiQNmtWhMA2wL4Qk4hxIJR8oUZgugEDg9thTfqGk81Llfsw7DML1VspDzdyxxkQFVhieHXz8iP0noXVK14v2lbZ1NOXMV0+6Hj4VQrKOwPx5JecvuwJ9TMVSXtGN4QzZxIt7YS46fEJJYH6iOxhEIaap25Kid5Kdn0VSttvL50vX4ouY1E3wsWkq91YsXHeFNA4PWxeov09naWNtMg==
-Received: from BN8PR16CA0009.namprd16.prod.outlook.com (2603:10b6:408:4c::22)
- by SN7PR12MB7977.namprd12.prod.outlook.com (2603:10b6:806:340::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.24; Tue, 27 Jun
- 2023 17:07:06 +0000
-Received: from BN8NAM11FT093.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:4c:cafe::34) by BN8PR16CA0009.outlook.office365.com
- (2603:10b6:408:4c::22) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.34 via Frontend
- Transport; Tue, 27 Jun 2023 17:07:06 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.160) by
- BN8NAM11FT093.mail.protection.outlook.com (10.13.177.22) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6500.47 via Frontend Transport; Tue, 27 Jun 2023 17:07:06 +0000
-Received: from rnnvmail203.nvidia.com (10.129.68.9) by mail.nvidia.com
- (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Tue, 27 Jun 2023
- 10:06:54 -0700
-Received: from rnnvmail204.nvidia.com (10.129.68.6) by rnnvmail203.nvidia.com
- (10.129.68.9) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37; Tue, 27 Jun
- 2023 10:06:54 -0700
-Received: from Asurada-Nvidia (10.127.8.9) by mail.nvidia.com (10.129.68.6)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37 via Frontend
- Transport; Tue, 27 Jun 2023 10:06:53 -0700
-Date:   Tue, 27 Jun 2023 10:06:52 -0700
-From:   Nicolin Chen <nicolinc@nvidia.com>
-To:     Robin Murphy <robin.murphy@arm.com>
-CC:     <will@kernel.org>, <jgg@nvidia.com>, <joro@8bytes.org>,
-        <shameerali.kolothum.thodi@huawei.com>, <yangyicong@hisilicon.com>,
-        <jean-philippe@linaro.org>, <linux-arm-kernel@lists.infradead.org>,
-        <iommu@lists.linux.dev>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v1] iommu/arm-smmu-v3: Allow default substream bypass
- with a pasid support
-Message-ID: <ZJsXLFtH8WkRK41w@Asurada-Nvidia>
-References: <20230627033326.5236-1-nicolinc@nvidia.com>
- <826cbb86-ac7d-c40b-f7e3-51681cda50b8@arm.com>
+        Tue, 27 Jun 2023 13:07:12 -0400
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90D451708;
+        Tue, 27 Jun 2023 10:07:11 -0700 (PDT)
+Received: by mail-pf1-x42f.google.com with SMTP id d2e1a72fcca58-666e64e97e2so2707132b3a.1;
+        Tue, 27 Jun 2023 10:07:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687885631; x=1690477631;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=TCi8Fft3fUuZC6N2KTxcDjbJC9FUbM5bxnxTh2WRBHw=;
+        b=WHR2f57IoLDU/fRvv1LemgnrZDMuFxnUu2LVEALSg10BxZ8g9eleTm8wihH9P7SWeR
+         fyA53QigAnk5+2eZd1j4HJlZXN7UKg6bkug7t+YLQsjXpXNUVxyXqcDwVPkrcmIluSOK
+         bgOpK4pW6RPRjd+TqYZjTCit/lwarkA9S/dUdfnledzPULTdDYDjkVIs1t/QyCXZelYi
+         Hg3DgZLLcoxrECPDbMM1XLU3B0eURsIJHty2dwo4UlIiKgdGkzwmpwfCHo4xS1/dyCIr
+         V9jVDatEs1R9MUc8j/4KvB37np8DKTMKXwGqbiiRzlnDE41hvvUcopve9vjkp4hczUEF
+         anPw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687885631; x=1690477631;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=TCi8Fft3fUuZC6N2KTxcDjbJC9FUbM5bxnxTh2WRBHw=;
+        b=k9buv9+ubCiaAzES0o0owIb/cN+jNCcEBffgUjivfykXgnbxNYni4C1iJT6t1kTU/l
+         KKeUWN2tCoqIjZzeqUrlCxz1/mvprjMYdDPY47l5CCexyZLQ7XXw4DTqYhDOHBCUSz98
+         PANzwey+GILsEq+eGdSXKVQhp182MyHsu1fdX7+paU/TCj9FDIn/qnNAbAtH1igGiR2Q
+         P1le78LhiTwJkcF1EJQrdcfGVBLQvMLLjllh0QGoUloyVamtKoe8UlKbfdYw0J7OymlK
+         AqziaADfu2jFzfWERFPydgXSJ3rG//cbD+cLgtx85p+aiasklJxrKbIrBf93teeo+X0M
+         NBoA==
+X-Gm-Message-State: AC+VfDzR1HuzKQ3oKy9Ri9djkkAFdj+vau9+N5Ibkcy0BgDn9SYPpXf/
+        a8xLXLGvCSOSKVQO303E148=
+X-Google-Smtp-Source: ACHHUZ4Oo3laIj+hS2va5uKe1T5qB9ZZpvHr4eyfuV/zN4mSV5CufaAlc88Bmvn7F2FA0/nk+qxtkQ==
+X-Received: by 2002:a17:90a:188:b0:258:c4b5:c6b4 with SMTP id 8-20020a17090a018800b00258c4b5c6b4mr23840816pjc.12.1687885630872;
+        Tue, 27 Jun 2023 10:07:10 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id jx3-20020a17090b46c300b00262f0e4c1a0sm1775179pjb.3.2023.06.27.10.07.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 27 Jun 2023 10:07:10 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Tue, 27 Jun 2023 10:07:07 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Mark Rutland <mark.rutland@arm.com>
+Cc:     linux-kernel@vger.kernel.org, akiyks@gmail.com,
+        boqun.feng@gmail.com, corbet@lwn.net, keescook@chromium.org,
+        linux@armlinux.org.uk, linux-doc@vger.kernel.org,
+        mchehab@kernel.org, paulmck@kernel.org, peterz@infradead.org,
+        rdunlap@infradead.org, sstabellini@kernel.org, will@kernel.org
+Subject: Re: [PATCH v2 04/27] locking/atomic: make atomic*_{cmp,}xchg optional
+Message-ID: <32395f1f-19e4-41da-9f67-68c7d21cf9b2@roeck-us.net>
+References: <20230605070124.3741859-1-mark.rutland@arm.com>
+ <20230605070124.3741859-5-mark.rutland@arm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <826cbb86-ac7d-c40b-f7e3-51681cda50b8@arm.com>
-X-NV-OnPremToCloud: ExternallySecured
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8NAM11FT093:EE_|SN7PR12MB7977:EE_
-X-MS-Office365-Filtering-Correlation-Id: 86c8e8b3-f14b-40c3-1025-08db7730ef9d
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: TYt2KLgYIazjKzBo3QnbQhsAg2JIjJ94zpTAkceyQsvl9gwYiqTzPSc965o5LAnBFpqSpm1bOwov7fvJGbZczDtydIMnfmTwsGz5w5hobrgu5LqyqazR1BmGAK1cjIIpTFFOEDy9/cmyphB4KwUHYKqIjyqU50v4e+7Ft8oLYQGEvSoEHoVjzU2HE8KIH+phD+aHzPhc7IbsNww9GKRdRsqvseH87zzoC7HB8yFTynkgRCnJwbi9znMqs5yqbHKXKdx8s8Qr+iGSzluhw/e8ZywVQ8pGPcYc9UOp5a293YK7A1iBVJBWy0DpzCzT7thJzBsCBATWAu/JBsaqhE8WtVu1kbl6q3PxNiGBKSbP08KXTyuw8lLe/x7zIu5Voek8OJfBCHuRpoNM6i35Et+94iLNU0KzyNlrgg69oN5uF7qUpa23vZ8/tu+yOZDZHq1xvB5D/fTCihRa06S3btXL2X7M75ixZ+0tW2XIi12xsZzICi+++gHwFKQ2QKEROF9ZgGIjfh544NCSqsd4P+1z4WWy1vdYj5lbGWt+zJ+fOi3a9+DQELAP1ci6gfD/uHzgQXSIvMjZ6zSnWmbdosPLJampdu/2nmCxRjCxReb0r/9nqLJp3HThRk1ibrSEkzOpkUHPrTyLkxInvB+y3xMaUsUFAP0fCP6be+R6HYssZa42oKsNfRW4bUhuZRZobtz3YxcTfhJPqtyWpX/sWLi8XkPaNdtlNCNHxUej4XnDGfY=
-X-Forefront-Antispam-Report: CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230028)(4636009)(451199021)(46966006)(36840700001)(66899021)(82310400005)(53546011)(36860700001)(70206006)(5660300002)(356005)(33716001)(8936002)(8676002)(86362001)(6916009)(316002)(70586007)(7636003)(4326008)(55016003)(47076005)(9686003)(2906002)(26005)(186003)(426003)(508600001)(83380400001)(54906003)(336012)(414714003)(473944003);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Jun 2023 17:07:06.3209
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 86c8e8b3-f14b-40c3-1025-08db7730ef9d
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT093.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB7977
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20230605070124.3741859-5-mark.rutland@arm.com>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Robin,
+Hi,
 
-On Tue, Jun 27, 2023 at 10:00:18AM +0100, Robin Murphy wrote:
-> On 2023-06-27 04:33, Nicolin Chen wrote:
-> > When an iommu_domain is set to IOMMU_DOMAIN_IDENTITY, the driver would
-> > skip the allocation of a CD table and set the CONFIG field of the STE
-> > to STRTAB_STE_0_CFG_BYPASS. This works well for devices that only have
-> > one substream, i.e. PASID disabled.
-> > 
-> > However, there could be a use case, for a pasid capable device, that
-> > allows bypassing the translation at the default substream while still
-> > enabling the pasid feature, which means the driver should not skip the
-> > allocation of a CD table nor simply bypass the CONFIG field. Instead,
-> > the S1DSS field should be set to STRTAB_STE_1_S1DSS_BYPASS and the
-> > SHCFG field should be set to STRTAB_STE_1_SHCFG_INCOMING.
-> > 
-> > Add s1dss and shcfg in struct arm_smmu_s1_cfg, to allow configurations
-> > in the finalise() to support that use case. Then, set them accordingly
-> > depending on the iommu_domain->type and the master->ssid_bits.
-> > 
-> > Also, add STRTAB_STE_1_SHCFG_NONSHAREABLE of the default configuration
-> > to distinguish from STRTAB_STE_1_SHCFG_INCOMING of the bypass one.
+On Mon, Jun 05, 2023 at 08:01:01AM +0100, Mark Rutland wrote:
+> Most architectures define the atomic/atomic64 xchg and cmpxchg
+> operations in terms of arch_xchg and arch_cmpxchg respectfully.
 > 
-> Why? The "default configuration" is that the S1 shareability attribute
-> is determined by the S1 translation itself, so the incoming value is
-> irrelevant.
-
-That was for a consistency since the driver set the SHCFG field
-to 0x0 (STRTAB_STE_1_SHCFG_NONSHAREABLE). I was not quite sure,
-in a long run, if leaving an uncleared s1_cfg->shcfg potentially
-can result in an unexpected behavior if it's passed in the STE.
-Yet, we could be seemingly sure that the !IOMMU_DOMAIN_IDENTITY
-means the S1 translation must be enabled and so the SHCFG would
-be irrelevant?
-
-If so, I make make it:
-
-+	if (smmu_domain->domain.type == IOMMU_DOMAIN_IDENTITY) {
-+		cfg->s1dss = STRTAB_STE_1_S1DSS_BYPASS;
-+		cfg->shcfg = STRTAB_STE_1_SHCFG_INCOMING;
-+	} else {
-+		cfg->s1dss = STRTAB_STE_1_S1DSS_SSID0;
-+	}
-
-> > @@ -2198,7 +2206,11 @@ static int arm_smmu_domain_finalise(struct iommu_domain *domain,
-> >       struct arm_smmu_domain *smmu_domain = to_smmu_domain(domain);
-> >       struct arm_smmu_device *smmu = smmu_domain->smmu;
-> > 
-> > -     if (domain->type == IOMMU_DOMAIN_IDENTITY) {
-> > +     /*
-> > +      * A master with a pasid capability might need a CD table, so only set
-> > +      * ARM_SMMU_DOMAIN_BYPASS if IOMMU_DOMAIN_IDENTITY and non-pasid master
-> > +      */
-> > +     if (domain->type == IOMMU_DOMAIN_IDENTITY && !master->ssid_bits) {
-> >               smmu_domain->stage = ARM_SMMU_DOMAIN_BYPASS;
-> >               return 0;
-> >       }
+> Add fallbacks for these cases and remove the trivial cases from arch
+> code. On some architectures the existing definitions are kept as these
+> are used to build other arch_atomic*() operations.
 > 
-> This means we'll now go on to allocate a pagetable for an identity
-> domain, which doesn't seem ideal :/
+> Signed-off-by: Mark Rutland <mark.rutland@arm.com>
+> Reviewed-by: Kees Cook <keescook@chromium.org>
+> Cc: Boqun Feng <boqun.feng@gmail.com>
+> Cc: Paul E. McKenney <paulmck@kernel.org>
+> Cc: Peter Zijlstra <peterz@infradead.org>
+> Cc: Will Deacon <will@kernel.org>
 
-Do you suggest to bypass alloc_io_pgtable_ops()? That would zero
-out the TCR fields in the CD. Not sure if it'd work seamlessly,
-but I can give it a try.
+This patch results in:
 
-Thanks
-Nic
+ERROR: modpost: "__xchg_called_with_bad_pointer" [lib/atomic64_test.ko] undefined!
+
+when trying to build sparc64:allmodconfig.
+
+Guenter
+
+---
+bisect log:
+
+# bad: [60e7c4a25da68cd826719b685babbd23e73b85b0] Add linux-next specific files for 20230626
+# good: [45a3e24f65e90a047bef86f927ebdc4c710edaa1] Linux 6.4-rc7
+git bisect start 'HEAD' 'v6.4-rc7'
+# good: [1fc7b1b3c9c3211898874f51919fcb1cf6f1cc79] Merge branch 'main' of git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net-next.git
+git bisect good 1fc7b1b3c9c3211898874f51919fcb1cf6f1cc79
+# good: [4fce1fc9cf89412590fb681fa480cde0b23b3381] Merge branch 'for-next' of git://git.kernel.dk/linux-block.git
+git bisect good 4fce1fc9cf89412590fb681fa480cde0b23b3381
+# bad: [cf1a0283badf6d0bfb91876583c24ef535a3c04c] Merge branch 'driver-core-next' of git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/driver-core.git
+git bisect bad cf1a0283badf6d0bfb91876583c24ef535a3c04c
+# bad: [3c5388e722ea98022b4d557ab33acca2eb16c4f0] Merge branch 'master' of git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git
+git bisect bad 3c5388e722ea98022b4d557ab33acca2eb16c4f0
+# good: [997730bdbf14f352ab03e42461f500aafdabc03e] Merge branch 'for-next' of git://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git
+git bisect good 997730bdbf14f352ab03e42461f500aafdabc03e
+# bad: [6fd8266556af196763b9f876ed682873e605469b] Merge branch into tip/master: 'ras/core'
+git bisect bad 6fd8266556af196763b9f876ed682873e605469b
+# good: [37380ea71463658934c2d3167d559d4034ea1c5b] Merge branch into tip/master: 'irq/core'
+git bisect good 37380ea71463658934c2d3167d559d4034ea1c5b
+# bad: [a967852939f864c35f155a2f431292ad6fc3fed9] Merge branch into tip/master: 'locking/core'
+git bisect bad a967852939f864c35f155a2f431292ad6fc3fed9
+# bad: [e50f06ce2d876c740993b5e3d01e203520391ccd] locking/atomic: m68k: add preprocessor symbols
+git bisect bad e50f06ce2d876c740993b5e3d01e203520391ccd
+# good: [b1fe7f2cda2a003afe316ce8dfe8d3645694a67e] x86,intel_iommu: Replace cmpxchg_double()
+git bisect good b1fe7f2cda2a003afe316ce8dfe8d3645694a67e
+# good: [14d72d4b6f0e88b5f683c1a5b7a876a55055852d] locking/atomic: remove fallback comments
+git bisect good 14d72d4b6f0e88b5f683c1a5b7a876a55055852d
+# bad: [f739287ef57bc01155e556033462e9a6ff020c97] locking/atomic: arc: add preprocessor symbols
+git bisect bad f739287ef57bc01155e556033462e9a6ff020c97
+# bad: [d12157efc8e083c77d054675fcdd594f54cc7e2b] locking/atomic: make atomic*_{cmp,}xchg optional
+git bisect bad d12157efc8e083c77d054675fcdd594f54cc7e2b
+# good: [a7bafa7969da1c0e9c342c792d8224078d1c491c] locking/atomic: hexagon: remove redundant arch_atomic_cmpxchg
+git bisect good a7bafa7969da1c0e9c342c792d8224078d1c491c
+# first bad commit: [d12157efc8e083c77d054675fcdd594f54cc7e2b] locking/atomic: make atomic*_{cmp,}xchg optional
+
