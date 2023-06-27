@@ -2,87 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D03B87403DF
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 21:12:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6912B7403E0
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 21:12:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230347AbjF0TMW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 15:12:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44594 "EHLO
+        id S229953AbjF0TMy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 15:12:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229953AbjF0TMT (ORCPT
+        with ESMTP id S229813AbjF0TMw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 15:12:19 -0400
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C1671BD5
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 12:12:18 -0700 (PDT)
-Received: by mail-lf1-x129.google.com with SMTP id 2adb3069b0e04-4fa08687246so4996706e87.1
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 12:12:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20221208.gappssmtp.com; s=20221208; t=1687893137; x=1690485137;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=nWPaWm/SbxNmO7KGYVPvx1QzoejjqxszCBE87FaJ0SI=;
-        b=noqsKYKSyfXlrIAQfs8JJESxdmLsycA+cJDXOWLGOWTw7dpsRxk5p+iuPyy1WJmAzc
-         ABpuTdx2zQlB2EF538pu0Ppg/oJw3ZuQVH0Dg9hcOxO/li/+pzkJxuoyS1CIArTczBh2
-         +8aWbRPzQNctdM9avQQxMRalsFlx0FMpQ7Z0Xo5DKOolWZlOrx/iig53JK84eSElLpIQ
-         BEpTrwFXr1SrEfhEGuwJFELTbMOfQhGk3/hlJn8tg37iHRBaDpBjCW9LatIDbVFnv0jT
-         ZEExPdaY0T8VRwEosMBjjTYLCiJKPjdoG3xBkVRFwle9jAxFy6vKSht6vzikRWN1fqnN
-         T3tg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687893137; x=1690485137;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=nWPaWm/SbxNmO7KGYVPvx1QzoejjqxszCBE87FaJ0SI=;
-        b=UVHmgOIbCCbtJ+lXnj4uJA368YLUUsXmhHXcujm5yJogLiKwJ3BNxOdWGYEA1WGu1K
-         8cwz4+avGWpcnmyFXYaOtz3Xoz0tTc+OoqAsy2SdbF6tyG8S3pw5c6HZ82nVCOzDvNIQ
-         zMccG8Xl/FiJnf4XEimwTSoJPunJdOwHsaYq1C3qr6ShRN43WBI2WGQqooPpl2wrYhiP
-         RQAFtPzqrVs6nzhBGBRRwtF/t6gOByXwknmMpfeSVmBDkM92i2796sbw08hBMLW3iHu6
-         5yLjsiDen4Xv+l66SS2l+vkdzKcr1a4Z3Ll9luHu6vFpzOvFKx0ROUOBGAQklFhgb3qB
-         Giqg==
-X-Gm-Message-State: AC+VfDxXXbNELiewG5TkAZb5WXFXhiO7JHovwumi01PADLm+4fwOOyzf
-        mGVMycC2kCm3jgqLgg+Jrci1foT+Wa56bUQLW/D2nw==
-X-Google-Smtp-Source: ACHHUZ4L9AyGvHHgp1jvCv/pE7ALzx3atTvABCYDswQdNfcJmeP6c+6leOw9ULkc5e2G7l1YkS7Kgyk1Nvp7wralsQc=
-X-Received: by 2002:a05:6512:32cb:b0:4fa:f1da:e6b9 with SMTP id
- f11-20020a05651232cb00b004faf1dae6b9mr5929372lfg.42.1687893136983; Tue, 27
- Jun 2023 12:12:16 -0700 (PDT)
+        Tue, 27 Jun 2023 15:12:52 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C813F11B
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 12:12:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1687893126;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=HuK+Pfp2LtRqUdprChnENfF2XD5swfpqbrkFMD6+4eo=;
+        b=g8EWavW7OwkWJI2e0bzv4THcBnVTgREpE1UmxuW5YLbOuiLTUkBBSSYcLtOCUUbXoYu42L
+        YQmYLb/RljPKSA2IdD/43QlsvUEyHgYYuURaTc3xsPXZc0r+yvGgw28Gb8O+2c1d1+R3rg
+        uLEPgZ/PHI2Ym+AT2U71X7qyF8soLmQ=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-251-KnU2fPdfNpSGjrK6aEt_9g-1; Tue, 27 Jun 2023 15:12:04 -0400
+X-MC-Unique: KnU2fPdfNpSGjrK6aEt_9g-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4D0A6381495C;
+        Tue, 27 Jun 2023 19:12:03 +0000 (UTC)
+Received: from pauld.bos.com (dhcp-17-165.bos.redhat.com [10.18.17.165])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id D5772F5CDB;
+        Tue, 27 Jun 2023 19:12:02 +0000 (UTC)
+From:   Phil Auld <pauld@redhat.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Juri Lelli <juri.lelli@redhat.com>, Ingo Molnar <mingo@redhat.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Ben Segall <bsegall@google.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Mel Gorman <mgorman@suse.de>, Phil Auld <pauld@redhat.com>
+Subject: [PATCH v2] Sched/fair: Block nohz tick_stop when cfs bandwidth in use
+Date:   Tue, 27 Jun 2023 15:12:01 -0400
+Message-Id: <20230627191201.344110-1-pauld@redhat.com>
 MIME-Version: 1.0
-References: <20230623222016.3742145-1-evan@rivosinc.com> <20230623222016.3742145-2-evan@rivosinc.com>
- <64F2D853-61E5-49CF-BAB5-AAFB8697683E@jrtc27.com>
-In-Reply-To: <64F2D853-61E5-49CF-BAB5-AAFB8697683E@jrtc27.com>
-From:   Evan Green <evan@rivosinc.com>
-Date:   Tue, 27 Jun 2023 12:11:40 -0700
-Message-ID: <CALs-HssZG8daTJaRK8JPT0VRk=23CtO6B_5kq4Xa_DdLELjaZw@mail.gmail.com>
-Subject: Re: [PATCH 1/2] RISC-V: Probe for unaligned access speed
-To:     Jessica Clarke <jrtc27@jrtc27.com>
-Cc:     Palmer Dabbelt <palmer@rivosinc.com>, linux-doc@vger.kernel.org,
-        Yangyu Chen <cyy@cyyself.name>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Guo Ren <guoren@kernel.org>,
-        Jisheng Zhang <jszhang@kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Xianting Tian <xianting.tian@linux.alibaba.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Greentime Hu <greentime.hu@sifive.com>,
-        Simon Hosie <shosie@rivosinc.com>,
-        Li Zhengyu <lizhengyu3@huawei.com>,
-        Andrew Jones <ajones@ventanamicro.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Alexandre Ghiti <alexghiti@rivosinc.com>,
-        Ley Foon Tan <leyfoon.tan@starfivetech.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Heiko Stuebner <heiko.stuebner@vrull.eu>,
-        Anup Patel <apatel@ventanamicro.com>,
-        linux-kernel@vger.kernel.org,
-        Sia Jee Heng <jeeheng.sia@starfivetech.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Andy Chiu <andy.chiu@sifive.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+Content-type: text/plain
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -90,56 +65,155 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 26, 2023 at 2:42=E2=80=AFPM Jessica Clarke <jrtc27@jrtc27.com> =
-wrote:
->
-> On 23 Jun 2023, at 23:20, Evan Green <evan@rivosinc.com> wrote:
-> >
-> > Rather than deferring misaligned access speed determinations to a vendo=
-r
-> > function, let's probe them and find out how fast they are. If we
-> > determine that a misaligned word access is faster than N byte accesses,
-> > mark the hardware's misaligned access as "fast".
->
-> How sure are you that your measurements can be extrapolated and aren=E2=
-=80=99t
-> an artefact of the testing process? For example, off the top of my head:
->
-> * The first run will potentially be penalised by data cache misses,
->   untrained prefetchers, TLB misses, branch predictors, etc. compared
->   with later runs. You have one warmup, but who knows how many
->   iterations it will take to converge?
+CFS bandwidth limits and NOHZ full don't play well together.  Tasks
+can easily run well past their quotas before a remote tick does
+accounting.  This leads to long, multi-period stalls before such
+tasks can run again. Currentlyi, when presented with these conflicting
+requirements the scheduler is favoring nohz_full and letting the tick
+be stopped. However, nohz tick stopping is already best-effort, there
+are a number of conditions that can prevent it, whereas cfs runtime
+bandwidth is expected to be enforced.
 
-I'd expect the cache penalties to be reasonably covered by a single
-warmup. You're right about branch prediction, which is why I tried to
-use a large-ish buffer size, minimize the ratio of conditionals to
-loads/stores, and do the test for a decent number of iterations (on my
-THead, about 1800 and 400 for words and bytes).
+Make the scheduler favor bandwidth over stopping the tick by setting
+TICK_DEP_BIT_SCHED when the only running task is a cfs task with
+runtime limit enabled.
 
-When I ran the test a handful of times, I did see variation on the
-order of ~5%. But the comparison of the two numbers doesn't seem to be
-anywhere near that margin (THead C906 was ~4x faster doing misaligned
-word accesses, others with slow misaligned accesses also reporting
-numbers not anywhere close to each other).
+Add sched_feat HZ_BW (off by default) to control this behavior.
 
->
-> * The code being benchmarked isn=E2=80=99t the code being run, so differe=
-nces
->   in access patterns, loop unrolling, loop alignment, etc. may cause the
->   real code to behave differently (and perhaps change which is better).
+Signed-off-by: Phil Auld <pauld@redhat.com>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Vincent Guittot <vincent.guittot@linaro.org>
+Cc: Juri Lelli <juri.lelli@redhat.com>
+Cc: Dietmar Eggemann <dietmar.eggemann@arm.com>
+Cc: Valentin Schneider <vschneid@redhat.com>
+Cc: Ben Segall <bsegall@google.com>
+---
 
-I'm not trying to make statements about memcpy specifically, but
-(only) about misaligned accesses, which is why I tried to write loops
-that isolated that element as much as possible.
+v2:  Ben pointed out that the bit could get cleared in the dequeue path
+if we migrate a newly enqueued task without preempting curr. Added a 
+check for that edge case to sched_can_stop_tick. Removed the call to 
+sched_can_stop_tick from sched_fair_update_stop_tick since it was 
+redundant.
 
->
-> The non-determinism that could in theory result from this also seems
-> like a not great idea to have.
+ kernel/sched/core.c     | 12 +++++++++++
+ kernel/sched/fair.c     | 45 +++++++++++++++++++++++++++++++++++++++++
+ kernel/sched/features.h |  2 ++
+ 3 files changed, 59 insertions(+)
 
-This is fair, if we have machines where this waffles from boot to boot
-that's not great. In theory if misaligned word accesses come out to
-being almost exactly equal to N byte accesses, then it doesn't matter
-which you choose, though of course it could still make a difference in
-practice. The alternative though of providing no info just pushes the
-same problem out into userspace, which seems worse.
--Evan
+diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+index a68d1276bab0..646f60bfc7e7 100644
+--- a/kernel/sched/core.c
++++ b/kernel/sched/core.c
+@@ -1194,6 +1194,8 @@ static void nohz_csd_func(void *info)
+ #endif /* CONFIG_NO_HZ_COMMON */
+ 
+ #ifdef CONFIG_NO_HZ_FULL
++extern bool sched_cfs_bandwidth_active(struct cfs_rq *cfs_rq);
++
+ bool sched_can_stop_tick(struct rq *rq)
+ {
+ 	int fifo_nr_running;
+@@ -1229,6 +1231,16 @@ bool sched_can_stop_tick(struct rq *rq)
+ 	if (rq->nr_running > 1)
+ 		return false;
+ 
++	/*
++	 * If there is one task and it has CFS runtime bandwidth constraints
++	 * and it's on the cpu now we don't want to stop the tick.
++	 */
++	if (sched_feat(HZ_BW) && rq->nr_running == 1 && rq->curr
++	    && rq->curr->sched_class == &fair_sched_class && task_on_rq_queued(rq->curr)) {
++		if (sched_cfs_bandwidth_active(task_cfs_rq(rq->curr)))
++			return false;
++	}
++
+ 	return true;
+ }
+ #endif /* CONFIG_NO_HZ_FULL */
+diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+index 373ff5f55884..a05af33b8da9 100644
+--- a/kernel/sched/fair.c
++++ b/kernel/sched/fair.c
+@@ -6139,6 +6139,42 @@ static void __maybe_unused unthrottle_offline_cfs_rqs(struct rq *rq)
+ 	rcu_read_unlock();
+ }
+ 
++#ifdef CONFIG_NO_HZ_FULL
++
++bool sched_cfs_bandwidth_active(struct cfs_rq *cfs_rq)
++{
++	if (cfs_bandwidth_used() && cfs_rq->runtime_enabled)
++		return true;
++
++	return false;
++}
++
++/* called from pick_next_task_fair() */
++static void sched_fair_update_stop_tick(struct rq *rq, struct task_struct *p)
++{
++	struct cfs_rq *cfs_rq = task_cfs_rq(p);
++	int cpu = cpu_of(rq);
++
++	if (!sched_feat(HZ_BW) || !cfs_bandwidth_used())
++		return;
++
++	if (!tick_nohz_full_cpu(cpu))
++		return;
++
++	if (rq->nr_running != 1)
++		return;
++
++	/*
++	 *  We know there is only one task runnable and we've just picked it. The
++	 *  normal enqueue path will have cleared TICK_DEP_BIT_SCHED if we will
++	 *  be otherwise able to stop the tick. Just need to check if we are using
++	 *  bandwidth control.
++	 */
++	if (cfs_rq->runtime_enabled)
++		tick_nohz_dep_set_cpu(cpu, TICK_DEP_BIT_SCHED);
++}
++#endif
++
+ #else /* CONFIG_CFS_BANDWIDTH */
+ 
+ static inline bool cfs_bandwidth_used(void)
+@@ -6181,9 +6217,17 @@ static inline struct cfs_bandwidth *tg_cfs_bandwidth(struct task_group *tg)
+ static inline void destroy_cfs_bandwidth(struct cfs_bandwidth *cfs_b) {}
+ static inline void update_runtime_enabled(struct rq *rq) {}
+ static inline void unthrottle_offline_cfs_rqs(struct rq *rq) {}
++bool sched_cfs_bandwidth_active(struct cfs_rq *cfs_rq)
++{
++	return false;
++}
+ 
+ #endif /* CONFIG_CFS_BANDWIDTH */
+ 
++#if !defined(CONFIG_CFS_BANDWIDTH) || !defined(CONFIG_NO_HZ_FULL)
++static inline void sched_fair_update_stop_tick(struct rq *rq, struct task_struct *p) {}
++#endif
++
+ /**************************************************
+  * CFS operations on tasks:
+  */
+@@ -8097,6 +8141,7 @@ done: __maybe_unused;
+ 		hrtick_start_fair(rq, p);
+ 
+ 	update_misfit_status(p, rq);
++	sched_fair_update_stop_tick(rq, p);
+ 
+ 	return p;
+ 
+diff --git a/kernel/sched/features.h b/kernel/sched/features.h
+index ee7f23c76bd3..6fdf1fdf6b17 100644
+--- a/kernel/sched/features.h
++++ b/kernel/sched/features.h
+@@ -101,3 +101,5 @@ SCHED_FEAT(LATENCY_WARN, false)
+ 
+ SCHED_FEAT(ALT_PERIOD, true)
+ SCHED_FEAT(BASE_SLICE, true)
++
++SCHED_FEAT(HZ_BW, false)
+-- 
+2.31.1
+
