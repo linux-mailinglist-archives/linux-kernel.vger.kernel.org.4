@@ -2,105 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CD957400BE
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 18:19:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 403607400C2
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 18:21:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231175AbjF0QS6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 12:18:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42264 "EHLO
+        id S231837AbjF0QUp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 12:20:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231338AbjF0QSw (ORCPT
+        with ESMTP id S231887AbjF0QUP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 12:18:52 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 157AD358D;
-        Tue, 27 Jun 2023 09:18:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=pFQ4isJV7B2TpjCesrpoSBexjZu02KMRcYM/H65TX6Y=; b=cDV5unRuN1fjTywciYAWUrDi19
-        RNTLBA4Bmbwsg3DqyTvxqQ3AI6O+RSJATGlLtPo7BrbhhkqSdbXcoQoLiUZc8jvqJ0dL9a5CLKJwQ
-        6zdszemjI+Zo6qrtqfIzYP+FFBi4oSXc6gOH7RHAt71c6Aixw9/2ftJ+2el//DmXY0wMkgdmuAXym
-        sgxEGl4Ac/NjKXj1eohGNZrlZ5tmgNyQvPQRwHjFifmbI8oEWolpqBXCy8NWZtwEDyPk4iA+770IN
-        DQLnOHKGucPKWfXEWkTXEAVZElRH8lxdDcAbAZiugNZj1RsJaYLxQK8SQs1jhUBiilrcPuKiGxauc
-        GCUBMLlw==;
-Received: from [2601:1c2:980:9ec0::2764]
-        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1qEBOm-00Dcey-2T;
-        Tue, 27 Jun 2023 16:18:36 +0000
-Message-ID: <1e081fc1-5d90-f3d4-7429-363dba996ef7@infradead.org>
-Date:   Tue, 27 Jun 2023 09:18:35 -0700
+        Tue, 27 Jun 2023 12:20:15 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B77A3584
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 09:19:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1687882773;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=B1hEG4cTYRVu7i3Wn6FIrmN7k3YbK/ETHFfpOADAOms=;
+        b=KoL7FtIw4M0C+PgzXLZcvd1geXevxr0Y/mp/85e04o9OtlLrsqWhQbMCZx2nENxCjwntO0
+        DWI3r87aSnLLffwEqkJjNLpivvdR1SsWd38HDN4izbozYVuKt5FhWkrm2J0nUBIGpxJ74G
+        GW/vYiuMEFfcfqonUE2x4c6tYSN0V3k=
+Received: from mail-oo1-f72.google.com (mail-oo1-f72.google.com
+ [209.85.161.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-606-UTN5KT0ROuGWBTDsaPtqVw-1; Tue, 27 Jun 2023 12:19:31 -0400
+X-MC-Unique: UTN5KT0ROuGWBTDsaPtqVw-1
+Received: by mail-oo1-f72.google.com with SMTP id 006d021491bc7-56364632e59so1125739eaf.1
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 09:19:31 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687882770; x=1690474770;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=B1hEG4cTYRVu7i3Wn6FIrmN7k3YbK/ETHFfpOADAOms=;
+        b=IMJVpEqLBUHdLuhUerL16cIp3EYom7wKpa0eUmirLA+9Xqhwe2kNlnH6H4jpD/O6F3
+         5KtIFu7bNhJY875I9/LrOLGjRuJ9CMq6ldhrrPfHKVN9ki2cVo4bb+Tvlwo37zts0VtK
+         AmC4lNB1ILvg68tBaoPvorOgbY91su2LooHED8EOZU6jjgM6s5huNcvXFwnfPkZEBCA/
+         CERmlXthjGcX4nygObkO44yAWnu28vBLPgRO1S/Y6I94YBcfbcwwp1X0BYP7osrqIG1f
+         WEgEAPje0QazMbRDF1lvRfJwJ5JpeCtUVZVknhGy+iOUZLOggoroyeW7v1QzvWdf5doU
+         /stw==
+X-Gm-Message-State: AC+VfDyCE2iX6VQEii1aDU7pKDS9tK6zhoLHnJ7ttMURfP0p0N5TG3Kd
+        jBxxyuqEytSQP2sjut8BBgpPRE9PTpN5H0sye4VA8S8JVlcrxcBfTCEqdlzoz79me4QpYfDSw7W
+        2by2shWpuvvDGmyzJuEwhKR3n7T8FqTE=
+X-Received: by 2002:a05:6808:30a5:b0:3a1:e4d1:878d with SMTP id bl37-20020a05680830a500b003a1e4d1878dmr5999006oib.9.1687882769141;
+        Tue, 27 Jun 2023 09:19:29 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ4TE/9DIA1UCoO88m4VqGL/azmypGcrViioc/H2SXDw4w/L4TwXt1NG5LAtJsCReGg8bIv2jA==
+X-Received: by 2002:a05:6808:30a5:b0:3a1:e4d1:878d with SMTP id bl37-20020a05680830a500b003a1e4d1878dmr5998985oib.9.1687882768878;
+        Tue, 27 Jun 2023 09:19:28 -0700 (PDT)
+Received: from [192.168.9.16] (net-2-34-24-242.cust.vodafonedsl.it. [2.34.24.242])
+        by smtp.gmail.com with ESMTPSA id l15-20020ad4444f000000b0062439f05b87sm4722507qvt.45.2023.06.27.09.19.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 27 Jun 2023 09:19:28 -0700 (PDT)
+Message-ID: <4c247ee8-58cd-100b-9229-306fb0a0db1d@redhat.com>
+Date:   Tue, 27 Jun 2023 18:19:26 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH V24 2/3] misc: dcc: Add driver support for Data Capture
- and Compare unit(DCC)
+ Thunderbird/102.12.0
+Subject: Re: [PATCH v7 4/4] fpga: add configuration for the FPGA KUnit test
+ suites.
 Content-Language: en-US
-To:     Souradeep Chowdhury <quic_schowdhu@quicinc.com>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, Alex Elder <elder@ieee.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        Sibi Sankar <quic_sibis@quicinc.com>,
-        Rajendra Nayak <quic_rjendra@quicinc.com>
-References: <cover.1687855361.git.quic_schowdhu@quicinc.com>
- <62bf3d9766bc785cfd0fc8e674ce7f86499a0f5b.1687855361.git.quic_schowdhu@quicinc.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <62bf3d9766bc785cfd0fc8e674ce7f86499a0f5b.1687855361.git.quic_schowdhu@quicinc.com>
+To:     Xu Yilun <yilun.xu@intel.com>
+Cc:     Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>,
+        Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-fpga@vger.kernel.org
+References: <20230616154405.220502-1-marpagan@redhat.com>
+ <20230616154405.220502-5-marpagan@redhat.com>
+ <ZJf5hUkGYCg1YCPx@yilunxu-OptiPlex-7050>
+From:   Marco Pagani <marpagan@redhat.com>
+In-Reply-To: <ZJf5hUkGYCg1YCPx@yilunxu-OptiPlex-7050>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi--
 
-On 6/27/23 02:49, Souradeep Chowdhury wrote:
-> diff --git a/drivers/misc/Kconfig b/drivers/misc/Kconfig
-> index 433aa4197785..3112dbb15cf4 100644
-> --- a/drivers/misc/Kconfig
-> +++ b/drivers/misc/Kconfig
-> @@ -276,6 +276,15 @@ config QCOM_COINCELL
->  	  to maintain PMIC register and RTC state in the absence of
->  	  external power.
+
+On 2023-06-25 10:23, Xu Yilun wrote:
+> On 2023-06-16 at 17:44:05 +0200, Marco Pagani wrote:
+>> Add configuration for the KUnit test suites for the core components
+>> of the FPGA subsystem.
+>>
+>> Signed-off-by: Marco Pagani <marpagan@redhat.com>
+>> ---
+>>  drivers/fpga/Kconfig            |  2 ++
+>>  drivers/fpga/Makefile           |  3 +++
+>>  drivers/fpga/tests/.kunitconfig |  5 +++++
+>>  drivers/fpga/tests/Kconfig      | 11 +++++++++++
+>>  drivers/fpga/tests/Makefile     |  5 +++++
+>>  5 files changed, 26 insertions(+)
+>>  create mode 100644 drivers/fpga/tests/.kunitconfig
+>>  create mode 100644 drivers/fpga/tests/Kconfig
+>>  create mode 100644 drivers/fpga/tests/Makefile
+>>
+>> diff --git a/drivers/fpga/Kconfig b/drivers/fpga/Kconfig
+>> index 0a00763b9f28..2f689ac4ba3a 100644
+>> --- a/drivers/fpga/Kconfig
+>> +++ b/drivers/fpga/Kconfig
+>> @@ -276,4 +276,6 @@ config FPGA_MGR_LATTICE_SYSCONFIG_SPI
+>>  	  FPGA manager driver support for Lattice FPGAs programming over slave
+>>  	  SPI sysCONFIG interface.
+>>  
+>> +source "drivers/fpga/tests/Kconfig"
+>> +
+>>  endif # FPGA
+>> diff --git a/drivers/fpga/Makefile b/drivers/fpga/Makefile
+>> index 72e554b4d2f7..352a2612623e 100644
+>> --- a/drivers/fpga/Makefile
+>> +++ b/drivers/fpga/Makefile
+>> @@ -55,3 +55,6 @@ obj-$(CONFIG_FPGA_DFL_NIOS_INTEL_PAC_N3000)	+= dfl-n3000-nios.o
+>>  
+>>  # Drivers for FPGAs which implement DFL
+>>  obj-$(CONFIG_FPGA_DFL_PCI)		+= dfl-pci.o
+>> +
+>> +# KUnit tests
+>> +obj-$(CONFIG_FPGA_KUNIT_TESTS)		+= tests/
+>> diff --git a/drivers/fpga/tests/.kunitconfig b/drivers/fpga/tests/.kunitconfig
+>> new file mode 100644
+>> index 000000000000..a1c2a2974c39
+>> --- /dev/null
+>> +++ b/drivers/fpga/tests/.kunitconfig
+>> @@ -0,0 +1,5 @@
+>> +CONFIG_KUNIT=y
+>> +CONFIG_FPGA=y
+>> +CONFIG_FPGA_REGION=y
+>> +CONFIG_FPGA_BRIDGE=y
+>> +CONFIG_FPGA_KUNIT_TESTS=y
+>> diff --git a/drivers/fpga/tests/Kconfig b/drivers/fpga/tests/Kconfig
+>> new file mode 100644
+>> index 000000000000..e4a64815f16d
+>> --- /dev/null
+>> +++ b/drivers/fpga/tests/Kconfig
+>> @@ -0,0 +1,11 @@
+>> +config FPGA_KUNIT_TESTS
+>> +	tristate "KUnit test for the FPGA subsystem" if !KUNIT_ALL_TESTS
+>> +	depends on FPGA && FPGA_REGION && FPGA_BRIDGE && KUNIT=y
 > 
-> +config QCOM_DCC
-> +	tristate "Qualcomm Technologies, Inc. Data Capture and Compare(DCC) engine driver"
+> Why KUNIT shouldn't be 'm'
+>
 
-	                                                       Compare (DCC)
+The "running tips" section of KUnit documentation suggests that tests should
+ideally depend on KUNIT=y in their Kconfigs because some features will not work
+when KUNIT=m
 
-> +	depends on ARCH_QCOM || COMPILE_TEST
-> +	help
-> +	  This option enables driver for Data Capture and Compare engine. DCC
 
-	              enables the driver for the                        . The DCC
+>> +	default KUNIT_ALL_TESTS
+>> +        help
+>> +          This builds unit tests for the FPGA subsystem
+>> +
+>> +          For more information on KUnit and unit tests in general,
+>> +          please refer to the KUnit documentation in Documentation/dev-tools/kunit/.
+>> +
+>> +          If unsure, say N.
+>> diff --git a/drivers/fpga/tests/Makefile b/drivers/fpga/tests/Makefile
+>> new file mode 100644
+>> index 000000000000..faa5fa230ab0
+>> --- /dev/null
+>> +++ b/drivers/fpga/tests/Makefile
+>> @@ -0,0 +1,5 @@
+>> +# SPDX-License-Identifier: GPL-2.0
+>> +
+>> +obj-$(CONFIG_FPGA_KUNIT_TESTS) += fpga-mgr-test.o
+>> +obj-$(CONFIG_FPGA_KUNIT_TESTS) += fpga-bridge-test.o
+>> +obj-$(CONFIG_FPGA_KUNIT_TESTS) += fpga-region-test.o
+> 
+> Could be integrated in one line?
 
-> +	  driver provides interface to configure DCC block and read back
+Yes.
 
-	         provides interfaces to configure the DCC block and read back
+> 
+> Thanks,
+> Yilun
+> 
+>> -- 
+>> 2.40.1
+>>
+> 
 
-> +	  captured data from DCC's internal SRAM. The module name for this
-
-	                from the DCC's
-
-> +	  is qcom-dcc.ko
-
-We don't usually add the ".ko" here, so just:
-
-	  is qcom-dcc.
-
-thanks.
--- 
-~Randy
