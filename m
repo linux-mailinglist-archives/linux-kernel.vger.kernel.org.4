@@ -2,96 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47E72740578
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 23:12:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9DFB74057E
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 23:17:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229618AbjF0VLe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 17:11:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33278 "EHLO
+        id S229985AbjF0VR2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 17:17:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229481AbjF0VLa (ORCPT
+        with ESMTP id S229789AbjF0VR0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 17:11:30 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71158199B
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 14:11:29 -0700 (PDT)
-Received: from mail.alien8.de (mail.alien8.de [IPv6:2a01:4f9:3051:3f93::2])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 0545F1EC0178;
-        Tue, 27 Jun 2023 23:11:28 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1687900288;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=UfRVw6XHCHepKGIY3+aHuEUC+en1TYBSByjLOvV8eeI=;
-        b=bQ7boCuj7tiu8Dqvb/UXGH2i/T8GQ2tlPKRZpXbJa3JPhy7IJJ4h/6uCmMuzR8zFeSoJPX
-        uZRsWu7z4s6gRYot+DfSRYlj9fJxLinMcw1wExXbr96rZ5HrE4N7aL5iT4AY5HO0L0E5WE
-        nYJiyVkd69R5zeRXuGhBKshplMhmRlo=
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
-        header.d=alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-        by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id eUWxhy1zrAQn; Tue, 27 Jun 2023 21:11:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-        t=1687900284; bh=UfRVw6XHCHepKGIY3+aHuEUC+en1TYBSByjLOvV8eeI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=F3hK6ql21L6eOrPRbU9yB7uSgHyKdoQj0F1aKphlfqAMXexxlBijh6vmB6LPcFk0i
-         pvPFoTPyZNw7ql0ngBg9uKEOdkVAj0b9LTNkk6g3aiXyQZxtzuwcx5H+xbZm8ONW/1
-         9ASJZWPCFlm6JlV0ed6yn3c0BglKZEy7kjNMEUEamghJrz05+ziDBSmTd8yHE+fnYj
-         QubwB7zMrWDycj4gYo1WZODoE9M7F3uOwofBStnyND17rq+eJGRuKFPeH87ayHE6cJ
-         8ujfhagTWG98yUgstfjBNSW2hvxat4r77sv1cOj8qpb+7OQtVpNhQ8bjT17EbQJTtI
-         KZ2OJalzEjRczuZCeTzEIECr4QuW+ZcueXqPYigpfsVVTt7c1s9K8Ac1N6Xh73vgAx
-         X+ERxqfaRTwa0aK9VPnde1Fj8KXmTKGAl6StaIg091jeFeOOq+7hx1fXgB7kiKpuoW
-         P6rGt7V47iNXC2fBDSre0X2gPdZbWBRhITJJnUE7rBww8e1Xa2TSCugaq04vB27j4i
-         kOU47QhSY2gyHGJ7rNwE0jH3KzFcq0KyrdlatBSAFRrlQuvIhStt3g7xE/Cr4SkAlA
-         hNxDC8HONxUSuTWLefyIAG6M0u3tzacHj+SnGyOLWhYoL+hucWKzLHqgSK3UYzeTkk
-         cPXxV6ihRfhCckWSqDIWWtPs=
-Received: from zn.tnic (pd9530d32.dip0.t-ipconnect.de [217.83.13.50])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
-        (No client certificate requested)
-        by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 5543240E01CB;
-        Tue, 27 Jun 2023 21:11:19 +0000 (UTC)
-Date:   Tue, 27 Jun 2023 23:11:14 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Noah Goldstein <goldstein.w.n@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        x86-ml <x86@kernel.org>, lkml <linux-kernel@vger.kernel.org>
-Subject: Re: [GIT PULL] x86/misc for 6.5
-Message-ID: <20230627211114.GLZJtQcr0MaEqcPwI/@fat_crate.local>
-References: <20230627110038.GCZJrBVqu/4BfdyBeN@fat_crate.local>
- <CAHk-=wghuOwXtMH9u7RAW694BOwf_Q9TeWR2v=GgLy0gjTfu4A@mail.gmail.com>
- <CAHk-=wi9Uwo3-uwB4rT=wK2VKhGq3yEp_U-b2kruogCT=13Mjg@mail.gmail.com>
- <20230627203829.GKZJtIxQhQoC6erNva@fat_crate.local>
- <CAHk-=whR90bEKrOKmk0O8KtX77bTFQGu3ykDDRhTGwmAw8HzYg@mail.gmail.com>
+        Tue, 27 Jun 2023 17:17:26 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1BEF1BD1
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 14:17:24 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id 4fb4d7f45d1cf-51bcf75c4acso3219a12.0
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 14:17:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1687900643; x=1690492643;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=cBeSv/arp5bR8O0ezFl7fdKlEKxWfXnzLYU9+AdmzGc=;
+        b=tfUpx5yzTHhQIqvV6B/hMBOXajoW3JRxIkAPylYF9WdKHxjWQXkaz29OkaD06EUW+C
+         /tSk+kBo0MdDNbAf7SbEV9eaO4cZ/IK21j7EeF69T3+T4FzzOV+PVke8d6c+Bb5S1HQ6
+         hLo5lk8AvJtb9soHB+Yq8dVmRdFaso7T2mFv1mIKj+d55uOi+2yqs11OZq8dxUl241lz
+         awwPlDOWsF0ihnewJriL+vS5clDEI6pQt4emYOx9wGU1+1QnOmI0tM70awk/SeNecE/U
+         1czgUpwJqXcK5y/RIVjx/rZrDm5qZhvRlJVmFjXFnzG3xAq92G/YDwthgX0Iz5XRgtSC
+         2tLQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687900643; x=1690492643;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=cBeSv/arp5bR8O0ezFl7fdKlEKxWfXnzLYU9+AdmzGc=;
+        b=VGAXc/KLdmlZwFk0zPVeAo37laeSSMrxnc7GryxxFglx9YjzluWAzjr4aVDYF8L8pM
+         umAWKXEg8s98aGYnwasF024OpgoZzZgw8YUy/kMnCPRaBqBMdzB9R2VDF/Gej7/m40vx
+         dtCeO7FD/WIIXK866xS4knt1onvzCcgn8PwnVVeeo2i1EZag7uBwYDiVze9SLcH+WAzh
+         R6revMIsH6tgXeUK9UdPmkGWvQKOHIhjrdveh1uA/ijCJq4otE4IbxFwOG+CNyn29Erj
+         wu2Bpr5L+YgwWM0yTyGea0KHb6tOz6X4XKLHQLERmEiLml3R8APcJyzViNo+ZRQoSSS0
+         zKJg==
+X-Gm-Message-State: AC+VfDx+bmHGIEJPnrVEyW+q1CaukZGAZwQX/6kGD6G127uzWItTORSH
+        zdDF2oRKcZylDMdh2BdtPwqWGmzjMD4OBgS/IjQYaA==
+X-Google-Smtp-Source: ACHHUZ70Q5j1PrnGsHu1Pss9Gi238RZdicz8QeFii6Q1FnA+fmkZQD6gh8CYj3Aib3f7Q0vjX9+44Tr1PgkxN5zxB2M=
+X-Received: by 2002:a50:d087:0:b0:506:b280:4993 with SMTP id
+ v7-20020a50d087000000b00506b2804993mr28983edd.2.1687900643282; Tue, 27 Jun
+ 2023 14:17:23 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAHk-=whR90bEKrOKmk0O8KtX77bTFQGu3ykDDRhTGwmAw8HzYg@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20230627050148.2045691-1-yangcong5@huaqin.corp-partner.google.com>
+In-Reply-To: <20230627050148.2045691-1-yangcong5@huaqin.corp-partner.google.com>
+From:   Doug Anderson <dianders@google.com>
+Date:   Tue, 27 Jun 2023 14:17:10 -0700
+Message-ID: <CAD=FV=WR=fnhCxC37Eo3hinh2MV=eTNuXG+GrwgR6K_pV4Rbaw@mail.gmail.com>
+Subject: Re: [v2] drm/panel: Fine tune Starry-ili9882t panel HFP and HBP
+To:     Cong Yang <yangcong5@huaqin.corp-partner.google.com>
+Cc:     sam@ravnborg.org, neil.armstrong@linaro.org, daniel@ffwll.ch,
+        airlied@gmail.com, hsinyi@google.com,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 27, 2023 at 01:49:12PM -0700, Linus Torvalds wrote:
-> That explains a lot.
+Hi,
 
-LOL!
+On Mon, Jun 26, 2023 at 10:01=E2=80=AFPM Cong Yang
+<yangcong5@huaqin.corp-partner.google.com> wrote:
+>
+> Because the setting of hproch is too small, there will be warning in
+> kernel log[1]. After fine tune the HFP and HBP, this warning can be
+> solved. The actual measurement frame rate is 60.1Hz.
+>
+> [1]: WARNING kernel:[drm] HFP + HBP less than d-phy, FPS will under 60Hz
 
-That activity has one rule: don't send the code on the same day as the
-pool visit. :-)
+Thanks for including the warming. This looks like something that's
+only printed on Mediatek display controllers. Just out of curiosity:
+is that because Mediatek controllers have special requirements, or is
+this something generic and the Mediatek controller is the only one
+that warns about it?
 
--- 
-Regards/Gruss,
-    Boris.
 
-https://people.kernel.org/tglx/notes-about-netiquette
+> Fixes: 8716a6473e6c ("drm/panel: Support for Starry-ili9882t TDDI
+> MIPI-DSI panel")
+
+Ideally the tool you have to send mail wouldn't wrap the Fixes line.
+Probably not worth resending just for this, but see if there's
+something you can do to fix this in the future.
+
+Since this is a tiny fix, I don't think we need to wait too long. I'll
+plan to land it on Thursday unless Neil wants to land it himself
+sooner.
+
+Reviewed-by: Douglas Anderson <dianders@chromium.org>
