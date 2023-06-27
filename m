@@ -2,84 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB37F73EFCD
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 02:39:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE18273EFD1
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 02:40:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229849AbjF0AjV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 20:39:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50100 "EHLO
+        id S229898AbjF0Akh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 20:40:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229841AbjF0AjS (ORCPT
+        with ESMTP id S229478AbjF0Akc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 20:39:18 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4161173E;
-        Mon, 26 Jun 2023 17:39:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687826355; x=1719362355;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=elpSqyEUuzY8eUsMBZVkZx16wIcyGPq2qNwtAWHRx0g=;
-  b=e2zryF2ktd4nT7t11mNHU+hJp3W6rvHWnOEKd/N1R3do8Crc9RVGlHIF
-   vEymsbNGVMf3RJtltULtY7r/nw9ehphF2pyj7F9GZmEFcwfH4bGgvqKKL
-   M7d4D8PkRaUty3lxq2QoLf36IRhjE0l0Jqg81iilOY788vvDPfVjtATA8
-   bospG8/krsaHHtvwCBBJ2Azl0xuNqcU5MI2FOApMB6HERk4z98Ok2VpuN
-   dbwaTut3o9eaeBU3IS3zN2IsyztpqNlaYMt1rD+qDEzrljUTvkSVv+3WA
-   7erSw5WDutsJz7nrZkVQWVNm8He0Rdyorl0hJAKcPUzP6xve04WsmFa1H
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10753"; a="427432797"
-X-IronPort-AV: E=Sophos;i="6.01,161,1684825200"; 
-   d="scan'208";a="427432797"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jun 2023 17:39:14 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10753"; a="693662972"
-X-IronPort-AV: E=Sophos;i="6.01,161,1684825200"; 
-   d="scan'208";a="693662972"
-Received: from bbogsx-mobl.amr.corp.intel.com (HELO [10.212.255.77]) ([10.212.255.77])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jun 2023 17:39:13 -0700
-Message-ID: <4fb431eb-85ca-77f0-3e3c-352b61f143a3@linux.intel.com>
-Date:   Mon, 26 Jun 2023 17:39:12 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.11.0
-Subject: Re: [PATCH v3 3/3] selftests/tdx: Test GetQuote TDX attestation
- feature
-To:     Dionna Amalie Glaze <dionnaglaze@google.com>
-Cc:     Dan Williams <dan.j.williams@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        Shuah Khan <shuah@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Wander Lairson Costa <wander@redhat.com>,
-        Erdem Aktas <erdemaktas@google.com>,
-        Chong Cai <chongc@google.com>, Qinkun Bao <qinkun@apache.org>,
-        Guorui Yu <GuoRui.Yu@linux.alibaba.com>,
-        Du Fan <fan.du@intel.com>, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
-        dhowells@redhat.com, brijesh.singh@amd.com, atishp@rivosinc.com,
-        gregkh@linuxfoundation.org, linux-coco@lists.linux.dev,
-        joey.gouly@arm.com, Atish Kumar Patra <atishp@rivosinc.com>
-References: <cover.1684048511.git.sathyanarayanan.kuppuswamy@linux.intel.com>
- <972e1d5c5ec53e2757fb17a586558c5385e987dd.1684048511.git.sathyanarayanan.kuppuswamy@linux.intel.com>
- <64876bf6c30e2_1433ac29415@dwillia2-xfh.jf.intel.com.notmuch>
- <64961c3baf8ce_142af829436@dwillia2-xfh.jf.intel.com.notmuch>
- <9437b176-e15a-3cec-e5cb-68ff57dbc25c@linux.intel.com>
- <CAAH4kHa85hCz0GhQM3f1OQ3wM+=-SfF77ShFAse0-eYGBHvO_A@mail.gmail.com>
-Content-Language: en-US
-From:   Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-In-Reply-To: <CAAH4kHa85hCz0GhQM3f1OQ3wM+=-SfF77ShFAse0-eYGBHvO_A@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        Mon, 26 Jun 2023 20:40:32 -0400
+Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FDE0171A;
+        Mon, 26 Jun 2023 17:40:29 -0700 (PDT)
+Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
+        by mailout.west.internal (Postfix) with ESMTP id 0580432009E9;
+        Mon, 26 Jun 2023 20:40:24 -0400 (EDT)
+Received: from imap50 ([10.202.2.100])
+  by compute1.internal (MEProxy); Mon, 26 Jun 2023 20:40:26 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fastmail.com; h=
+        cc:cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm2; t=1687826424; x=1687912824; bh=5Q
+        MWD7XlquszqzisiC71Nc4buC34U05ZsykVLOeIuq0=; b=e2nvqwcro2clfQTrt4
+        pU1ocsYGQV9zwFw1ZFc56IsqJRwozgjtyre5xcToQ94MjH2nsVXEHiUBBdt7KWQf
+        HPn2Oi/mg9v14kq9wLoXVWHiJLCOJnWq7GBB0TL2dzraRR9MTdWIHHJnaLyIq6t+
+        woGUZw5pL6jkQ+Nh4LAovo6fnL0srrdV/vRN3OzFXJY3H5GgBBrLHopWH5DRF8Pw
+        /wvyXIpaPVDqjrFOh4YOOIh/EXA6wcwOccP3U4nGkNupYuz1U8lTSjuKZJanQvCd
+        4+5Ylqh43p+NHsqsb6NryBPVN3SGBOI+CxTmw1R2i4NoYnIXXpksJEfP0p6DanR8
+        zwEQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1687826424; x=1687912824; bh=5QMWD7Xlquszq
+        zisiC71Nc4buC34U05ZsykVLOeIuq0=; b=IUYduRiHyLJRxXOsAx8N+XquVVBt+
+        sqIx7D9CC8DsX5S+IZ13F4AjjX2m2op+Vbr7puwKZqJMlIjIVW7/LFyTjPYvFMRl
+        UCQSZTE+1bdN4Cgeq8O+UANsi872tAapD7YmDaWMGWeKwGFrur1GC6JLA/IvrbsF
+        Mw7MlaCwN6rzBSlkUruDSdG4LzotI8GPmZC0pcGwvoFD6lOqQLO8uBPfiLJxPFNW
+        0v+bhNon6qLe2cSv5BW3PPgCGURWBZ4IeFlObkIsv5o94y1+flbBxjJxbO3xQdY5
+        TEDTJe5tFcZArVHGJgMSFvBp4+wdcfl4WP2vyg/GGUVyEUGN3Qg1UdgPw==
+X-ME-Sender: <xms:9y-aZPSGj6SWwSQMrPqQ1w6ivpecFJtq4tkWNZw4qWZubPRETYJKlQ>
+    <xme:9y-aZAzKQU0GHElPJSCy0QXnSN0T2WbvnDvghvr0Na3LuiUmUzICOmhLnEZg9h-SC
+    3VYCcKs_Ix1u0OzEA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgeehgedgfeejucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedfufht
+    vghfrghnucfqkdftvggrrhdfuceoshhorhgvrghrsehfrghsthhmrghilhdrtghomheqne
+    cuggftrfgrthhtvghrnhepleejteffuefhueetueeileevfedvkeefgfeiheelgfdukeeg
+    vdekteehleetgfeinecuffhomhgrihhnpehrihhstghvrdhorhhgpdguvghvihgtvghtrh
+    gvvgdrohhrghdpihhnfhhrrgguvggrugdrohhrghenucevlhhushhtvghrufhiiigvpedt
+    necurfgrrhgrmhepmhgrihhlfhhrohhmpehsohhrvggrrhesfhgrshhtmhgrihhlrdgtoh
+    hm
+X-ME-Proxy: <xmx:9y-aZE0n-qKyh4xMUi0ZwVm3OoXwKe19JaPo1EKrMlmhkM9CUPBLTA>
+    <xmx:9y-aZPBVsWnOBn_YM_qTuw28FMEVZt1M204bd2SME1trlKsAtxLmng>
+    <xmx:9y-aZIj7OukpYDM81rXijTw3qXs4PawogUbIjXZEH6vXAoByjR2Suw>
+    <xmx:-C-aZLWxUDD1x0J00tNHeSpM7yKZnbtep1mCktdBMNsyWhubviuHWA>
+Feedback-ID: i84414492:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 63EE21700089; Mon, 26 Jun 2023 20:40:23 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-499-gf27bbf33e2-fm-20230619.001-gf27bbf33
+Mime-Version: 1.0
+Message-Id: <a6449161-d800-4094-bf15-cde890ed17b5@app.fastmail.com>
+In-Reply-To: <20230626-unmarked-atom-70b4d624a386@wendy>
+References: <20230626-unmarked-atom-70b4d624a386@wendy>
+Date:   Mon, 26 Jun 2023 20:40:01 -0400
+From:   "Stefan O'Rear" <sorear@fastmail.com>
+To:     "Conor Dooley" <conor.dooley@microchip.com>,
+        "Palmer Dabbelt" <palmer@dabbelt.com>
+Cc:     conor@kernel.org, "Paul Walmsley" <paul.walmsley@sifive.com>,
+        "Rob Herring" <robh+dt@kernel.org>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        "Alistair Francis" <alistair.francis@wdc.com>,
+        "Andrew Jones" <ajones@ventanamicro.com>,
+        "Anup Patel" <apatel@ventanamicro.com>,
+        "Atish Patra" <atishp@atishpatra.org>,
+        "Jessica Clarke" <jrtc27@jrtc27.com>,
+        "Rick Chen" <rick@andestech.com>, Leo <ycliang@andestech.com>,
+        Oleksii <oleksii.kurochko@gmail.com>,
+        linux-riscv@lists.infradead.org, qemu-riscv@nongnu.org,
+        u-boot@lists.denx.de, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        "Palmer Dabbelt" <palmer@rivosinc.com>
+Subject: Re: [PATCH v3] dt-bindings: riscv: deprecate riscv,isa
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,500 +99,626 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-+Atish
+On Mon, Jun 26, 2023, at 6:10 AM, Conor Dooley wrote:
+> intro
+> =====
+>
+> When the RISC-V dt-bindings were accepted upstream in Linux, the base
+> ISA etc had yet to be ratified. By the ratification of the base ISA,
+> incompatible changes had snuck into the specifications - for example the
+> Zicsr and Zifencei extensions were spun out of the base ISA.
+>
+> Fast forward to today, and the reason for this patch.
+> Currently the riscv,isa dt property permits only a specific subset of
+> the ISA string - in particular it excludes version numbering.
+> With the current constraints, it is not possible to discern whether
+> "rv64i" means that the hart supports the fence.i instruction, for
+> example.
+> Future systems may choose to implement their own instruction fencing,
+> perhaps using a vendor extension, or they may not implement the optional
+> counter extensions. Software needs a way to determine this.
+>
+> versioning schemes
+> ==================
+>
+> "Use the extension versions that are described in the ISA manual" you
+> may say, and it's not like this has not been considered.
+> Firstly, software that parses the riscv,isa property at runtime will
+> need to contain a lookup table of some sort that maps arbitrary versions
+> to versions it understands. There is not a consistent application of
+> version number applied to extensions, with a higgledy-piggledy
+> collection of tags, "bare" and versioned documents awaiting the reader
+> on the "recently ratified extensions" page:
+> https://wiki.riscv.org/display/HOME/Recently+Ratified+Extensions
+>
+> 	As an aside, and this is reflected in the patch too, since many
+> 	extensions have yet to appear in a release of the ISA specs,
+> 	they are defined by commits in their respective "working draft"
+> 	repositories.
+>
+> Secondly, there is an issue of backwards compatibility, whereby allowing
+> numbers in the ISA string, some parsers may be broken. This would
+> require an additional property to be created to even use the versions in
+> this manner.
+>
+> ~boolean properties~ string array property
+> ==========================================
+>
+> If a new property is needed, the whole approach may as well be looked at
+> from the bottom up. A string with limited character choices etc is
+> hardly the best approach for communicating extension information to
+> software.
+>
+> Switching to using properties that are defined on a per extension basis,
+> allows us to define explicit meanings for the DT representation of each
+> extension - rather than the current situation where different operating
+> systems or other bits of software may impart different meanings to
+> characters in the string.
+> Clearly the best source of meanings is the specifications themselves,
+> this just provides us the ability to choose at what point in time the
+> meaning is set. If an extension changes incompatibility in the future,
+> a new property will be required.
+>
+> Off-list, some of the RVI folks have committed to shoring up the wording
+> in either the ISA specifications, the riscv-isa-manual or
+> so that in the future, modifications to and additions or removals of
+> features will require a new extension. Codifying that assertion
+> somewhere would make it quite unlikely that compatibility would be
+> broken, but we have the tools required to deal with it, if & when it
+> crops up.
+> It is in our collective interest, as consumers of extension meanings, to
+> define a scheme that enforces compatibility.
+>
+> The use of individual properties, rather than elements in a single
 
-Atish, any comments on this topic from RISC-v?
+no longer individual properties
 
-On 6/26/23 11:57 AM, Dionna Amalie Glaze wrote:
-> On Sun, Jun 25, 2023 at 8:06 PM Sathyanarayanan Kuppuswamy
-> <sathyanarayanan.kuppuswamy@linux.intel.com> wrote:
->>
->> Hi Dan,
->>
->> On 6/23/23 3:27 PM, Dan Williams wrote:
->>> Dan Williams wrote:
->>>> [ add David, Brijesh, and Atish]
->>>>
->>>> Kuppuswamy Sathyanarayanan wrote:
->>>>> In TDX guest, the second stage of the attestation process is Quote
->>>>> generation. This process is required to convert the locally generated
->>>>> TDREPORT into a remotely verifiable Quote. It involves sending the
->>>>> TDREPORT data to a Quoting Enclave (QE) which will verify the
->>>>> integrity of the TDREPORT and sign it with an attestation key.
->>>>>
->>>>> Intel's TDX attestation driver exposes TDX_CMD_GET_QUOTE IOCTL to
->>>>> allow the user agent to get the TD Quote.
->>>>>
->>>>> Add a kernel selftest module to verify the Quote generation feature.
->>>>>
->>>>> TD Quote generation involves following steps:
->>>>>
->>>>> * Get the TDREPORT data using TDX_CMD_GET_REPORT IOCTL.
->>>>> * Embed the TDREPORT data in quote buffer and request for quote
->>>>>   generation via TDX_CMD_GET_QUOTE IOCTL request.
->>>>> * Upon completion of the GetQuote request, check for non zero value
->>>>>   in the status field of Quote header to make sure the generated
->>>>>   quote is valid.
->>>>
->>>> What this cover letter does not say is that this is adding another
->>>> instance of the similar pattern as SNP_GET_REPORT.
->>>>
->>>> Linux is best served when multiple vendors trying to do similar
->>>> operations are brought together behind a common ABI. We see this in the
->>>> history of wrangling SCSI vendors behind common interfaces. Now multiple
->>>> confidential computing vendors trying to develop similar flows with
->>>> differentiated formats where that differentiation need not leak over the
->>>> ABI boundary.
->>> [..]
->>>
->>> Below is a rough mock up of this approach to demonstrate the direction.
->>> Again, the goal is to define an ABI that can support any vendor's
->>> arch-specific attestation method and key provisioning flows without
->>> leaking vendor-specific details, or confidential material over the
->>> user/kernel ABI.
->>
->> Thanks for working on this mock code and helping out. It gives me the
->> general idea about your proposal.
->>
->>>
->>> The observation is that there are a sufficient number of attestation
->>> flows available to review where Linux can define a superset ABI to
->>> contain them all. The other observation is that the implementations have
->>> features that may cross-polinate over time. For example the SEV
->>> privelege level consideration ("vmpl"), and the TDX RTMR (think TPM
->>> PCRs) mechanisms address generic Confidential Computing use cases.
->>
->>
->> I agree with your point about VMPL and RTMR feature cases. This observation
->> is valid for AMD SEV and TDX attestation flows. But I am not sure whether
->> it will hold true for other vendor implementations. Our sample set is not
->> good enough to make this conclusion. The reason for my concern is, if you
->> check the ABI interface used in the S390 arch attestation driver
->> (drivers/s390/char/uvdevice.c), you would notice that there is a significant
->> difference between the ABI used in that driver and SEV/TDX drivers. The S390
->> driver attestation request appears to accept two data blobs as input, as well
->> as a variety of vendor-specific header configurations.
->>
->> Maybe the s390 attestation model is a special case, but, I think we consider
->> this issue. Since we don't have a common spec, there is chance that any
->> superset ABI we define now may not meet future vendor requirements. One way to
->> handle it to leave enough space in the generic ABI to handle future vendor
->> requirements.
->>
->> I think it would be better if other vendors (like ARM or RISC) can comment and
->> confirm whether this proposal meets their demands.
->>
-> 
-> The VMPL-based separation that will house the supervisor module known
-> as SVSM can have protocols that implement a TPM command interface, or
-> an RTMR-extension interface, and will also need to have an
-> SVSM-specific protocol attestation report format to keep the secure
-> chain of custody apparent. We'd have different formats and protocols
-> in the kernel, at least, to speak to each technology. I'm not sure
-> it's worth the trouble of papering over all the... 3-4 technologies
-> with similar but still weirdly different formats and ways of doing
-> things with an abstracted attestation ABI, especially since the output
-> all has to be interpreted in an architecture-specific way anyway.
-> 
-> ARM's Confidential Computing Realm Management Extensions (RME) seems
-> to be going along the lines of a runtime measurement register model
-> with their hardware enforced security. The number of registers isn't
-> prescribed in the spec.
-> 
-> +Joey Gouly +linux-coco@lists.linux.dev as far as RME is concerned, do
-> you know who would be best to weigh in on this discussion of a unified
-> attestation model?
+> string, will also permit validation that the properties have a meaning,
+> as well as potentially reject mutually exclusive combinations, or
+> enforce dependencies between extensions. That would not have be possible
 
+Under what circumstances is a device tree which declares support for a
+superset extension (e.g. m) required to also declare support for its subsets
+(e.g. zmmul)?  There are compatibility issues in both directions.
 
-> 
->>>
->>> Vendor specific ioctls for all of this feels like surrender when Linux
->>> already has the keys subsystem which has plenty of degrees of freedom
->>> for tracking blobs with signatures and using those blobs to instantiate
->>> other blobs. It already serves as the ABI wrapping various TPM
->>> implementations and marshaling keys for storage encryption and other use
->>> cases that intersect Confidential Computing.
->>>
->>> The benefit of deprecating vendor-specific abstraction layers in
->>> userspace is secondary. The primary benefit is collaboration. It enables
->>> kernel developers from various architectures to collaborate on common
->>> infrastructure. If, referring back to my previous example, SEV adopts an
->>> RTMR-like mechanism and TDX adopts a vmpl-like mechanism it would be
->>> unfortunate if those efforts were siloed, duplicated, and needlessly
->>> differentiated to userspace. So while there are arguably a manageable
->>> number of basic arch attestation methods the planned expansion of those
->>> to build incremental functionality is where I believe we, as a
->>> community, will be glad that we invested in a "Linux format" for all of
->>> this.
->>>
->>> An example, to show what the strawman patch below enables: (req_key is
->>> the sample program from "man 2 request_key")
->>>
->>> # ./req_key guest_attest guest_attest:0:0-$desc $(cat user_data | base64)
->>> Key ID is 10e2f3a7
->>> # keyctl pipe 0x10e2f3a7 | hexdump -C
->>> 00000000  54 44 58 20 47 65 6e 65  72 61 74 65 64 20 51 75  |TDX Generated Qu|
->>> 00000010  6f 74 65 00 00 00 00 00  00 00 00 00 00 00 00 00  |ote.............|
->>> 00000020  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|
->>> *
->>> 00004000
->>>
->>> This is the kernel instantiating a TDX Quote without the TDREPORT
->>> implementation detail ever leaving the kernel. Now, this is only the
->>
->> IIUC, the idea here is to cache the quote data and return it to the user whenever
->> possible, right? If yes, I think such optimization may not be very useful for our
->> case. AFAIK, the quote data will change whenever there is a change in the guest
->> measurement data. Since the validity of the generated quote will not be long,
->> and the frequency of quote generation requests is expected to be less, we may not
->> get much benefit from caching the quote data. I think we can keep this logic simple
->> by directly retrieving the quote data from the quoting enclave whenever there is a
->> request from the user.
->>
->>> top-half of what is needed. The missing bottom half takes that material
->>> and uses it to instantiate derived key material like the storage
->>> decryption key internal to the kernel. See "The Process" in
->>> Documentation/security/keys/request-key.rst for how the Keys subsystem
->>> handles the "keys for keys" use case.
->>
->> This is only useful for key-server use case, right? Attestation can also be
->> used for use cases like pattern matching or uploading some secure data, etc.
->> Since key-server is not the only use case, does it make sense to suppport
->> this derived key feature?
->>
->>>
->>> ---
->>> diff --git a/drivers/virt/Kconfig b/drivers/virt/Kconfig
->>> index f79ab13a5c28..0f775847028e 100644
->>> --- a/drivers/virt/Kconfig
->>> +++ b/drivers/virt/Kconfig
->>> @@ -54,4 +54,8 @@ source "drivers/virt/coco/sev-guest/Kconfig"
->>>
->>>  source "drivers/virt/coco/tdx-guest/Kconfig"
->>>
->>> +config GUEST_ATTEST
->>> +     tristate
->>> +     select KEYS
->>> +
->>>  endif
->>> diff --git a/drivers/virt/Makefile b/drivers/virt/Makefile
->>> index e9aa6fc96fab..66f6b838f8f4 100644
->>> --- a/drivers/virt/Makefile
->>> +++ b/drivers/virt/Makefile
->>> @@ -12,3 +12,4 @@ obj-$(CONFIG_ACRN_HSM)              += acrn/
->>>  obj-$(CONFIG_EFI_SECRET)     += coco/efi_secret/
->>>  obj-$(CONFIG_SEV_GUEST)              += coco/sev-guest/
->>>  obj-$(CONFIG_INTEL_TDX_GUEST)        += coco/tdx-guest/
->>> +obj-$(CONFIG_GUEST_ATTEST)   += coco/guest-attest/
->>> diff --git a/drivers/virt/coco/guest-attest/Makefile b/drivers/virt/coco/guest-attest/Makefile
->>> new file mode 100644
->>> index 000000000000..5581c5a27588
->>> --- /dev/null
->>> +++ b/drivers/virt/coco/guest-attest/Makefile
->>> @@ -0,0 +1,2 @@
->>> +obj-$(CONFIG_GUEST_ATTEST) += guest_attest.o
->>> +guest_attest-y := key.o
->>> diff --git a/drivers/virt/coco/guest-attest/key.c b/drivers/virt/coco/guest-attest/key.c
->>> new file mode 100644
->>> index 000000000000..2a494b6dd7a7
->>> --- /dev/null
->>> +++ b/drivers/virt/coco/guest-attest/key.c
->>> @@ -0,0 +1,159 @@
->>> +// SPDX-License-Identifier: GPL-2.0-only
->>> +/* Copyright(c) 2023 Intel Corporation. All rights reserved. */
->>> +
->>> +#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
->>> +#include <linux/seq_file.h>
->>> +#include <linux/key-type.h>
->>> +#include <linux/module.h>
->>> +#include <linux/base64.h>
->>> +
->>> +#include <keys/request_key_auth-type.h>
->>> +#include <keys/user-type.h>
->>> +
->>> +#include "guest-attest.h"
->>
->> Can you share you guest-attest.h?
->>
->>> +
->>> +static LIST_HEAD(guest_attest_list);
->>> +static DECLARE_RWSEM(guest_attest_rwsem);
->>> +
->>> +static struct guest_attest_ops *fetch_ops(void)
->>> +{
->>> +     return list_first_entry_or_null(&guest_attest_list,
->>> +                                     struct guest_attest_ops, list);
->>> +}
->>> +
->>> +static struct guest_attest_ops *get_ops(void)
->>> +{
->>> +     down_read(&guest_attest_rwsem);
->>> +     return fetch_ops();
->>> +}
->>> +
->>> +static void put_ops(void)
->>> +{
->>> +     up_read(&guest_attest_rwsem);
->>> +}
->>> +
->>> +int register_guest_attest_ops(struct guest_attest_ops *ops)
->>> +{
->>> +     struct guest_attest_ops *conflict;
->>> +     int rc;
->>> +
->>> +     down_write(&guest_attest_rwsem);
->>> +     conflict = fetch_ops();
->>> +     if (conflict) {
->>> +             pr_err("\"%s\" ops already registered\n", conflict->name);
->>> +             rc = -EEXIST;
->>> +             goto out;
->>> +     }
->>> +     list_add(&ops->list, &guest_attest_list);
->>> +     try_module_get(ops->module);
->>> +     rc = 0;
->>> +out:
->>> +     up_write(&guest_attest_rwsem);
->>> +     return rc;
->>> +}
->>> +EXPORT_SYMBOL_GPL(register_guest_attest_ops);
->>> +
->>> +void unregister_guest_attest_ops(struct guest_attest_ops *ops)
->>> +{
->>> +     down_write(&guest_attest_rwsem);
->>> +     list_del(&ops->list);
->>> +     up_write(&guest_attest_rwsem);
->>> +     module_put(ops->module);
->>> +}
->>> +EXPORT_SYMBOL_GPL(unregister_guest_attest_ops);
->>> +
->>> +static int __guest_attest_request_key(struct key *key, int level,
->>> +                                   struct key *dest_keyring,
->>> +                                   const char *callout_info, int callout_len,
->>> +                                   struct key *authkey)
->>> +{
->>> +     struct guest_attest_ops *ops;
->>> +     void *payload = NULL;
->>> +     int rc, payload_len;
->>> +
->>> +     ops = get_ops();
->>> +     if (!ops)
->>> +             return -ENOKEY;
->>> +
->>> +     payload = kzalloc(max(GUEST_ATTEST_DATALEN, callout_len), GFP_KERNEL);
->>> +     if (!payload) {
->>> +             rc = -ENOMEM;
->>> +             goto out;
->>> +     }
->>
->> Is the idea to get the values like vmpl part of the payload?
->>
->>> +
->>> +     payload_len = base64_decode(callout_info, callout_len, payload);
->>> +     if (payload_len < 0 || payload_len > GUEST_ATTEST_DATALEN) {
->>> +             rc = -EINVAL;
->>> +             goto out;
->>> +     }
->>> +
->>> +     rc = ops->request_attest(key, level, dest_keyring, payload, payload_len,
->>> +                              authkey);
->>> +out:
->>> +     kfree(payload);
->>> +     put_ops();
->>> +     return rc;
->>> +}
->>> +
->>> +static int guest_attest_request_key(struct key *authkey, void *data)
->>> +{
->>> +     struct request_key_auth *rka = get_request_key_auth(authkey);
->>> +     struct key *key = rka->target_key;
->>> +     unsigned long long id;
->>> +     int rc, level;
->>> +
->>> +     pr_debug("desc: %s op: %s callout: %s\n", key->description, rka->op,
->>> +              rka->callout_info ? (char *)rka->callout_info : "\"none\"");
->>> +
->>> +     if (sscanf(key->description, "guest_attest:%d:%llu", &level, &id) != 2)
->>> +             return -EINVAL;
->>> +
->>
->> Can you explain some details about the id and level? It is not very clear why
->> we need it.
->>
->>> +     if (!rka->callout_info) {
->>> +             rc = -EINVAL;
->>> +             goto out;
->>> +     }
->>> +
->>> +     rc = __guest_attest_request_key(key, level, rka->dest_keyring,
->>> +                                     rka->callout_info, rka->callout_len,
->>> +                                     authkey);
->>> +out:
->>> +     complete_request_key(authkey, rc);
->>> +     return rc;
->>> +}
->>> +
->>> +static int guest_attest_vet_description(const char *desc)
->>> +{
->>> +     unsigned long long id;
->>> +     int level;
->>> +
->>> +     if (sscanf(desc, "guest_attest:%d:%llu", &level, &id) != 2)
->>> +             return -EINVAL;
->>> +     return 0;
->>> +}
->>> +
->>> +static struct key_type key_type_guest_attest = {
->>> +     .name = "guest_attest",
->>> +     .preparse = user_preparse,
->>> +     .free_preparse = user_free_preparse,
->>> +     .instantiate = generic_key_instantiate,
->>> +     .revoke = user_revoke,
->>> +     .destroy = user_destroy,
->>> +     .describe = user_describe,
->>> +     .read = user_read,
->>> +     .vet_description = guest_attest_vet_description,
->>> +     .request_key = guest_attest_request_key,
->>> +};
->>> +
->>> +static int __init guest_attest_init(void)
->>> +{
->>> +     return register_key_type(&key_type_guest_attest);
->>> +}
->>> +
->>> +static void __exit guest_attest_exit(void)
->>> +{
->>> +     unregister_key_type(&key_type_guest_attest);
->>> +}
->>> +
->>> +module_init(guest_attest_init);
->>> +module_exit(guest_attest_exit);
->>> +MODULE_LICENSE("GPL v2");
->>> diff --git a/drivers/virt/coco/tdx-guest/Kconfig b/drivers/virt/coco/tdx-guest/Kconfig
->>> index 14246fc2fb02..9a1ec85369fe 100644
->>> --- a/drivers/virt/coco/tdx-guest/Kconfig
->>> +++ b/drivers/virt/coco/tdx-guest/Kconfig
->>> @@ -1,6 +1,7 @@
->>>  config TDX_GUEST_DRIVER
->>>       tristate "TDX Guest driver"
->>>       depends on INTEL_TDX_GUEST
->>> +     select GUEST_ATTEST
->>>       help
->>>         The driver provides userspace interface to communicate with
->>>         the TDX module to request the TDX guest details like attestation
->>> diff --git a/drivers/virt/coco/tdx-guest/tdx-guest.c b/drivers/virt/coco/tdx-guest/tdx-guest.c
->>> index 388491fa63a1..65b5aab284d9 100644
->>> --- a/drivers/virt/coco/tdx-guest/tdx-guest.c
->>> +++ b/drivers/virt/coco/tdx-guest/tdx-guest.c
->>> @@ -13,11 +13,13 @@
->>>  #include <linux/string.h>
->>>  #include <linux/uaccess.h>
->>>  #include <linux/set_memory.h>
->>> +#include <linux/key-type.h>
->>>
->>>  #include <uapi/linux/tdx-guest.h>
->>>
->>>  #include <asm/cpu_device_id.h>
->>>  #include <asm/tdx.h>
->>> +#include "../guest-attest/guest-attest.h"
->>>
->>>  /*
->>>   * Intel's SGX QE implementation generally uses Quote size less
->>> @@ -229,6 +231,62 @@ static const struct x86_cpu_id tdx_guest_ids[] = {
->>>  };
->>>  MODULE_DEVICE_TABLE(x86cpu, tdx_guest_ids);
->>>
->>> +static int tdx_request_attest(struct key *key, int level,
->>> +                           struct key *dest_keyring, void *payload,
->>> +                           int payload_len, struct key *authkey)
->>> +{
->>> +     u8 *tdreport;
->>> +     long ret;
->>> +
->>> +     tdreport = kzalloc(TDX_REPORT_LEN, GFP_KERNEL);
->>> +     if (!tdreport)
->>> +             return -ENOMEM;
->>> +
->>> +     /* Generate TDREPORT0 using "TDG.MR.REPORT" TDCALL */
->>> +     ret = tdx_mcall_get_report0(payload, tdreport);
->>> +     if (ret)
->>> +             goto out;
->>> +
->>> +     mutex_lock(&quote_lock);
->>> +
->>> +     memset(qentry->buf, 0, qentry->buf_len);
->>> +     reinit_completion(&qentry->compl);
->>> +     qentry->valid = true;
->>> +
->>> +     /* Submit GetQuote Request using GetQuote hyperetall */
->>> +     ret = tdx_hcall_get_quote(qentry->buf, qentry->buf_len);
->>> +     if (ret) {
->>> +             pr_err("GetQuote hyperetall failed, status:%lx\n", ret);
->>> +             ret = -EIO;
->>> +             goto quote_failed;
->>> +     }
->>> +
->>> +     /*
->>> +      * Although the GHCI specification does not state explicitly that
->>> +      * the VMM must not wait indefinitely for the Quote request to be
->>> +      * completed, a sane VMM should always notify the guest after a
->>> +      * certain time, regardless of whether the Quote generation is
->>> +      * successful or not.  For now just assume the VMM will do so.
->>> +      */
->>> +     wait_for_completion(&qentry->compl);
->>> +
->>> +     ret = key_instantiate_and_link(key, qentry->buf, qentry->buf_len,
->>> +                                    dest_keyring, authkey);
->>> +
->>> +quote_failed:
->>> +     qentry->valid = false;
->>> +     mutex_unlock(&quote_lock);
->>> +out:
->>> +     kfree(tdreport);
->>> +     return ret;
->>> +}
->>> +
->>> +static struct guest_attest_ops tdx_attest_ops = {
->>> +     .name = KBUILD_MODNAME,
->>> +     .module = THIS_MODULE,
->>> +     .request_attest = tdx_request_attest,
->>> +};
->>> +
->>>  static int __init tdx_guest_init(void)
->>>  {
->>>       int ret;
->>> @@ -251,8 +309,14 @@ static int __init tdx_guest_init(void)
->>>       if (ret)
->>>               goto free_quote;
->>>
->>> +     ret = register_guest_attest_ops(&tdx_attest_ops);
->>> +     if (ret)
->>> +             goto free_irq;
->>> +
->>>       return 0;
->>>
->>> +free_irq:
->>> +     tdx_unregister_event_irq_cb(quote_cb_handler, qentry);
->>>  free_quote:
->>>       free_quote_entry(qentry);
->>>  free_misc:
->>> @@ -264,6 +328,7 @@ module_init(tdx_guest_init);
->>>
->>>  static void __exit tdx_guest_exit(void)
->>>  {
->>> +     unregister_guest_attest_ops(&tdx_attest_ops);
->>>       tdx_unregister_event_irq_cb(quote_cb_handler, qentry);
->>>       free_quote_entry(qentry);
->>>       misc_deregister(&tdx_misc_dev);
->>
->> --
->> Sathyanarayanan Kuppuswamy
->> Linux Kernel Developer
-> 
-> 
-> 
-> --
-> -Dionna Glaze, PhD (she/her)
+Proposal: If an extension X is a superset of an extension Y and X is present
+in riscv,isa-extensions, Y must also be present if Y was ratified or added
+to the schema before X, but need not also be present if Y was ratified after
+or at the same time as X.  If X "depends on" Y, then Y must be present in
+riscv,isa-extensions even if X and Y were ratified at the same time.
 
--- 
-Sathyanarayanan Kuppuswamy
-Linux Kernel Developer
+> with the current dt-schema infrastructure for arbitrary strings, as we
+> would need to add a riscv,isa parser to dt-validate!
+> That's not implemented in this patch, but rather left as future work (for
+> the brave, or the foolish).
+>
+> acpi
+> ====
+>
+> The current ACPI ECR is based on having a single ISA string unfortunately,
+> but ideally ACPI will move to another method, perhaps GUIDs, that give
+> explicit meaning to extensions.
+>
+> parser simplicity
+> =================
+>
+> Many systems that parse DT at runtime already implement an function that
+> can check for the presence of a string in an array of string, as it is
+> similar to the process for parsing a list of compatible strings, so a
+> bunch of new, custom, DT parsing should not be needed.
+> Getting rid of "riscv,isa" parsing would be a nice simplification, but
+> unfortunately for backwards compatibility with old dtbs, existing
+> parsers may not be removable - which may greatly simplify
+> dt parsing code. In Linux, for example, checking for whether a hart
+> supports an extension becomes as simple as:
+> 	of_property_match_string(node, "riscv,isa-extensions", "zicbom")
+>
+> vendor extensions
+> =================
+>
+> Compared to riscv,isa, this proposed scheme promotes vendor extensions,
+> oft touted as the strength of RISC-V, to first-class citizens.
+> At present, extensions are defined as meaning what the RISC-V ISA
+> specifications say they do. There is no realistic way of using that
+> interface to provide cross-platform definitions for what vendor
+> extensions mean. Vendor extensions may also have even less consistency
+> than RVI do in terms of versioning, or no care about backwards
+> compatibility.
+> The new property allows us to assign explicit meanings on a per vendor
+> extension basis, backed up by a description of their meanings.
+
+How are vendor extension names allocated?  Will any proposed name for a
+vendor extension pass through linux-riscv@ before it shows up in the wild,
+or are vendors expected to allocate extension names unilaterally?  Is it
+worth creating an experimental-* namespace for prototype implementations
+of unreleased extensions?
+
+> fin
+> ===
+>
+> Create a new file to store the extension meanings and a new
+> riscv,isa-base property to replace the aspect of riscv,isa that is
+> not represented by the new property - the base ISA implemented by a hart.
+>
+> As a starting point, add properties for extensions currently used in
+> Linux.
+>
+> Finally, mark riscv,isa as deprecated, as removing support for it in
+> existing programs would be an ABI break.
+>
+> CC: Palmer Dabbelt <palmer@dabbelt.com>
+> CC: Paul Walmsley <paul.walmsley@sifive.com>
+> CC: Rob Herring <robh+dt@kernel.org>
+> CC: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+> CC: Alistair Francis <alistair.francis@wdc.com>
+> CC: Andrew Jones <ajones@ventanamicro.com>
+> CC: Anup Patel <apatel@ventanamicro.com>
+> CC: Atish Patra <atishp@atishpatra.org>
+> CC: Jessica Clarke <jrtc27@jrtc27.com>
+> CC: Rick Chen <rick@andestech.com>
+> CC: Leo <ycliang@andestech.com>
+> CC: Oleksii <oleksii.kurochko@gmail.com>
+> CC: linux-riscv@lists.infradead.org
+> CC: qemu-riscv@nongnu.org
+> CC: u-boot@lists.denx.de
+> CC: devicetree@vger.kernel.org
+> CC: linux-kernel@vger.kernel.org
+> Reviewed-by: Palmer Dabbelt <palmer@rivosinc.com>
+> Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
+> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+> ---
+> Changes in v3:
+> - Per Rob's suggestion, switch to an array of strings. Cuts down on the
+>   size, compared to booleans. It has a standard mechanism for parsing
+>   (you need to parse arrays of strings for compatibles). It still allows
+>   for having a limited set of explicitly defined properties - so the
+>   advantages over a free-form string still apply.
+> - Pick up Palmer's Ack and Review (although I expect that he will be the
+>   one to apply this).
+> ---
+>  .../devicetree/bindings/riscv/cpus.yaml       |  43 ++-
+>  .../devicetree/bindings/riscv/extensions.yaml | 245 ++++++++++++++++++
+>  2 files changed, 265 insertions(+), 23 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/riscv/extensions.yaml
+>
+> diff --git a/Documentation/devicetree/bindings/riscv/cpus.yaml 
+> b/Documentation/devicetree/bindings/riscv/cpus.yaml
+> index 67bd239ead0b..74bc92591086 100644
+> --- a/Documentation/devicetree/bindings/riscv/cpus.yaml
+> +++ b/Documentation/devicetree/bindings/riscv/cpus.yaml
+> @@ -25,6 +25,7 @@ description: |
+> 
+>  allOf:
+>    - $ref: /schemas/cpu.yaml#
+> +  - $ref: extensions.yaml
+> 
+>  properties:
+>    compatible:
+> @@ -82,25 +83,6 @@ properties:
+>      description:
+>        The blocksize in bytes for the Zicboz cache operations.
+> 
+> -  riscv,isa:
+> -    description:
+> -      Identifies the specific RISC-V instruction set architecture
+> -      supported by the hart.  These are documented in the RISC-V
+> -      User-Level ISA document, available from
+> -      https://riscv.org/specifications/
+> -
+> -      Due to revisions of the ISA specification, some deviations
+> -      have arisen over time.
+> -      Notably, riscv,isa was defined prior to the creation of the
+> -      Zicntr, Zicsr, Zifencei and Zihpm extensions and thus "i"
+> -      implies "zicntr_zicsr_zifencei_zihpm".
+> -
+> -      While the isa strings in ISA specification are case
+> -      insensitive, letters in the riscv,isa string must be all
+> -      lowercase.
+> -    $ref: /schemas/types.yaml#/definitions/string
+> -    pattern: 
+> ^rv(?:64|32)imaf?d?q?c?b?k?j?p?v?h?(?:[hsxz](?:[a-z])+)?(?:_[hsxz](?:[a-z])+)*$
+> -
+>    # RISC-V has multiple properties for cache op block sizes as the 
+> sizes
+>    # differ between individual CBO extensions
+>    cache-op-block-size: false
+> @@ -139,8 +121,17 @@ properties:
+>        DMIPS/MHz, relative to highest capacity-dmips-mhz
+>        in the system.
+> 
+> +oneOf:
+> +  - required:
+> +      - riscv,isa
+> +  - required:
+> +      - riscv,isa-base
+> +
+> +dependencies:
+> +  riscv,isa-base: [ "riscv,isa-extensions" ]
+> +  riscv,isa-extensions: [ "riscv,isa-base" ]
+> +
+>  required:
+> -  - riscv,isa
+>    - interrupt-controller
+> 
+>  unevaluatedProperties: false
+> @@ -160,7 +151,9 @@ examples:
+>                  i-cache-sets = <128>;
+>                  i-cache-size = <16384>;
+>                  reg = <0>;
+> -                riscv,isa = "rv64imac";
+> +                riscv,isa-base = "rv64i";
+> +                riscv,isa-extensions = "i", "m", "a", "c";
+> +
+>                  cpu_intc0: interrupt-controller {
+>                          #interrupt-cells = <1>;
+>                          compatible = "riscv,cpu-intc";
+> @@ -183,8 +176,10 @@ examples:
+>                  i-tlb-size = <32>;
+>                  mmu-type = "riscv,sv39";
+>                  reg = <1>;
+> -                riscv,isa = "rv64imafdc";
+>                  tlb-split;
+> +                riscv,isa-base = "rv64i";
+> +                riscv,isa-extensions = "i", "m", "a", "f", "d", "c";
+> +
+>                  cpu_intc1: interrupt-controller {
+>                          #interrupt-cells = <1>;
+>                          compatible = "riscv,cpu-intc";
+> @@ -202,8 +197,10 @@ examples:
+>                  device_type = "cpu";
+>                  reg = <0>;
+>                  compatible = "riscv";
+> -                riscv,isa = "rv64imafdc";
+>                  mmu-type = "riscv,sv48";
+> +                riscv,isa-base = "rv64i";
+> +                riscv,isa-extensions = "i", "m", "a", "f", "d", "c";
+> +
+>                  interrupt-controller {
+>                          #interrupt-cells = <1>;
+>                          interrupt-controller;
+> diff --git a/Documentation/devicetree/bindings/riscv/extensions.yaml 
+> b/Documentation/devicetree/bindings/riscv/extensions.yaml
+> new file mode 100644
+> index 000000000000..af98307f2c2c
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/riscv/extensions.yaml
+> @@ -0,0 +1,245 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR MIT)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/riscv/extensions.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: RISC-V ISA extensions
+> +
+> +maintainers:
+> +  - Paul Walmsley <paul.walmsley@sifive.com>
+> +  - Palmer Dabbelt <palmer@sifive.com>
+> +  - Conor Dooley <conor@kernel.org>
+> +
+> +description: |
+> +  RISC-V has a large number of extensions, some of which are "standard"
+> +  extensions, meaning they are ratified by RISC-V International, and 
+> others
+> +  are "vendor" extensions.
+> +  This document defines properties that indicate whether a hart 
+> supports a
+> +  given extension.
+> +
+> +  Once a standard extension has been ratified, no changes in behaviour 
+> can be
+> +  made without the creation of a new extension.
+> +  The properties for standard extensions therefore map to their 
+> originally
+> +  ratified states, with the exception of the I, Zicntr & Zihpm 
+> extensions.
+> +  See the "i" property for more information.
+> +
+> +select:
+> +  properties:
+> +    compatible:
+> +      contains:
+> +        const: riscv
+> +
+> +properties:
+> +  riscv,isa:
+> +    description:
+> +      Identifies the specific RISC-V instruction set architecture
+> +      supported by the hart.  These are documented in the RISC-V
+> +      User-Level ISA document, available from
+> +      https://riscv.org/specifications/
+> +
+> +      Due to revisions of the ISA specification, some deviations
+> +      have arisen over time.
+> +      Notably, riscv,isa was defined prior to the creation of the
+> +      Zicntr, Zicsr, Zifencei and Zihpm extensions and thus "i"
+> +      implies "zicntr_zicsr_zifencei_zihpm".
+> +
+> +      While the isa strings in ISA specification are case
+> +      insensitive, letters in the riscv,isa string must be all
+> +      lowercase.
+> +    $ref: /schemas/types.yaml#/definitions/string
+> +    pattern: 
+> ^rv(?:64|32)imaf?d?q?c?b?k?j?p?v?h?(?:[hsxz](?:[a-z])+)?(?:_[hsxz](?:[a-z])+)*$
+> +    deprecated: true
+> +
+> +  riscv,isa-base:
+> +    description:
+> +      The base ISA implemented by this hart, as described by the 
+> 20191213
+> +      version of the unprivileged ISA specification.
+> +    enum:
+> +      - rv32i
+> +      - rv64i
+> +
+> +  riscv,isa-extensions:
+> +    $ref: /schemas/types.yaml#/definitions/string-array
+> +    minItems: 1
+> +    description: Extensions supported by the hart.
+> +    items:
+> +      anyOf:
+> +        # single letter extensions, in canonical order
+> +        - const: i
+> +          description: |
+> +            The base integer instruction set, as ratified in the 
+> 20191213
+> +            version of the unprivileged ISA specification, with the 
+> exception of
+> +            counter access.
+> +            Counter access was removed after the ratification of the 
+> 20191213
+> +            version of the unprivileged specification and shunted into 
+> the
+> +            Zicntr and Zihpm extensions.
+
+I think this may belong in the description of zicsr?  rdcycle in 20191213
+is a special case of csrrs, which is in zicsr not the base.
+
+> +
+> +        - const: m
+> +          description:
+> +            The standard M extension for integer multiplication and 
+> division, as
+> +            ratified in the 20191213 version of the unprivileged ISA
+> +            specification.
+> +
+> +        - const: a
+> +          description:
+> +            The standard A extension for atomic instructions, as 
+> ratified in the
+> +            20191213 version of the unprivileged ISA specification.
+> +
+> +        - const: f
+> +          description:
+> +            The standard F extension for single-precision floating 
+> point, as
+> +            ratified in the 20191213 version of the unprivileged ISA
+> +            specification.
+
+Do we want to be able to describe the K210 in the new schema?  I believe
+that it implements the 2.0 F and D extensions, which are neither forward
+nor backward compatible with the ratified ones.
+
+#include <stdio.h>
+int main() {
+    long a,b;
+    asm("fsub.s fa0,fa0,fa0\n"
+        "fdiv.s fa0,fa0,fa0\n"
+        "fmv.x.d %0,fa0\n"
+        "fcvt.s.w fa1,x0\n"
+        "fmax.s fa1,fa1,fa0\n"
+        "fmv.x.d %1,fa1\n" : "=r" (a), "=r" (b));
+    printf("box(nan) = %lx\nmax(0,nan) = %lx\n", a, b);
+    return 0;
+}
+
+> +
+> +        - const: d
+> +          description:
+> +            The standard D extension for double-precision 
+> floating-point, as
+> +            ratified in the 20191213 version of the unprivileged ISA
+> +            specification.
+> +
+> +        - const: q
+> +          description:
+> +            The standard Q extension for quad-precision 
+> floating-point, as
+> +            ratified in the 20191213 version of the unprivileged ISA
+> +            specification.
+> +
+> +        - const: c
+> +          description:
+> +            The standard C extension for compressed instructions, as 
+> ratified in
+> +            the 20191213 version of the unprivileged ISA specification.
+> +
+> +        - const: v
+> +          description:
+> +            The standard V extension for vector operations, as ratified
+> +            in-and-around commit 7a6c8ae ("Fix text that describes 
+> vfmv.v.f
+> +            encoding") of the riscv-v-spec.
+> +
+> +        - const: h
+> +          description:
+> +            The standard H extension for hypervisors as ratified in 
+> the 20191213
+> +            version of the privileged ISA specification.
+> +
+> +        # multi-letter extensions, sorted alphanumerically
+> +        - const: smaia
+> +          description: |
+> +            The standard Smaia supervisor-level extension for the 
+> advanced
+> +            interrupt architecture for machine-mode-visible csr and 
+> behavioural
+> +            changes to interrupts as frozen at commit ccbddab ("Merge 
+> pull
+> +            request #42 from riscv/jhauser-2023-RC4") of riscv-aia.
+> +
+> +        - const: ssaia
+> +          description: |
+> +            The standard Ssaia supervisor-level extension for the 
+> advanced
+> +            interrupt architecture for supervisor-mode-visible csr and
+> +            behavioural changes to interrupts as frozen at commit 
+> ccbddab
+> +            ("Merge pull request #42 from riscv/jhauser-2023-RC4") of 
+> riscv-aia.
+> +
+> +        - const: sscofpmf
+> +          description: |
+> +            The standard Sscofpmf supervisor-level extension for count 
+> overflow
+> +            and mode-based filtering as ratified at commit 01d1df0 
+> ("Add ability
+> +            to manually trigger workflow. (#2)") of 
+> riscv-count-overflow.
+> +
+> +        - const: sstc
+> +          description: |
+> +            The standard Sstc supervisor-level extension for time 
+> compare as
+> +            ratified at commit 3f9ed34 ("Add ability to manually 
+> trigger
+> +            workflow. (#2)") of riscv-time-compare.
+> +
+> +        - const: svinval
+> +          description:
+> +            The standard Svinval supervisor-level extension for 
+> fine-grained
+> +            address-translation cache invalidation as ratified in the 
+> 20191213
+> +            version of the privileged ISA specification.
+> +
+> +        - const: svnapot
+> +          description:
+> +            The standard Svnapot supervisor-level extensions for napot
+> +            translation contiguity as ratified in the 20191213 version 
+> of the
+> +            privileged ISA specification.
+> +
+> +        - const: svpbmt
+> +          description:
+> +            The standard Svpbmt supervisor-level extensions for 
+> page-based
+> +            memory types as ratified in the 20191213 version of the 
+> privileged
+> +            ISA specification.
+> +
+> +        - const: zba
+> +          description: |
+> +            The standard Zba bit-manipulation extension for address 
+> generation
+> +            acceleration instructions as ratified at commit 6d33919 
+> ("Merge pull
+> +            request #158 from hirooih/clmul-fix-loop-end-condition") of
+> +            riscv-bitmanip.
+> +
+> +        - const: zbb
+> +          description: |
+> +            The standard Zbb bit-manipulation extension for basic 
+> bit-manipulation
+> +            as ratified at commit 6d33919 ("Merge pull request #158 
+> from
+> +            hirooih/clmul-fix-loop-end-condition") of riscv-bitmanip.
+> +
+> +        - const: zbc
+> +          description: |
+> +            The standard Zbc bit-manipulation extension for carry-less
+> +            multiplication as ratified at commit 6d33919 ("Merge pull 
+> request
+> +            #158 from hirooih/clmul-fix-loop-end-condition") of 
+> riscv-bitmanip.
+> +
+> +        - const: zbs
+> +          description: |
+> +            The standard Zbs bit-manipulation extension for single-bit
+> +            instructions as ratified at commit 6d33919 ("Merge pull 
+> request #158
+> +            from hirooih/clmul-fix-loop-end-condition") of 
+> riscv-bitmanip.
+> +
+> +        - const: zicbom
+> +          description:
+> +            The standard Zicbom extension for base cache management 
+> operations as
+> +            ratified in commit 3dd606f ("Create cmobase-v1.0.pdf") of 
+> riscv-CMOs.
+> +
+> +        - const: zicbop
+> +          description:
+> +            The standard Zicbop extension for cache-block prefetch 
+> instructions
+> +            as ratified in commit 3dd606f ("Create cmobase-v1.0.pdf") 
+> of
+> +            riscv-CMOs.
+> +
+> +        - const: zicboz
+> +          description:
+> +            The standard Zicboz extension for cache-block zeroing as 
+> ratified
+> +            in commit 3dd606f ("Create cmobase-v1.0.pdf") of 
+> riscv-CMOs.
+> +
+> +        - const: zicntr
+> +          description:
+> +            The standard Zicntr extension for base counters and 
+> timers, as
+> +            ratified in the 20191213 version of the unprivileged ISA
+> +            specification.
+> +
+> +        - const: zicsr
+> +          description:
+> +            The standard Zicsr extension for control and status 
+> register
+> +            instructions, as ratified in the 20191213 version of the
+> +            unprivileged ISA specification.
+> +
+> +        - const: zifencei
+> +          description:
+> +            The standard Zifencei extension for instruction-fetch 
+> fence, as
+> +            ratified in the 20191213 version of the unprivileged ISA
+> +            specification.
+> +
+> +        - const: zihintpause
+> +          description:
+> +            The standard Zihintpause extension for pause hints, as 
+> ratified in
+> +            commit d8ab5c7 ("Zihintpause is ratified") of the 
+> riscv-isa-manual.
+> +
+> +        - const: zihpm
+> +          description:
+> +            The standard Zihpm extension for hardware performance 
+> counters, as
+> +            ratified in the 20191213 version of the unprivileged ISA
+> +            specification.
+> +
+> +        - const: ztso
+> +          description:
+> +            The standard Ztso extension for total store ordering, as 
+> ratified
+> +            in commit 2e5236 ("Ztso is now ratified.") of the
+> +            riscv-isa-manual.
+
+There are quite a few extension names defined in ratified specifications
+that aren't in that list yet.  Would there be interest in adding them or
+are we waiting for specific conditions to be met?
+
+In particular several subsystems depend on "ziccif" from the profiles
+spec but we haven't previously had a way to check or document that
+dependency.
+
+> +additionalProperties: true
+> +...
+> -- 
+> 2.40.1
+>
+>
+> _______________________________________________
+> linux-riscv mailing list
+> linux-riscv@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-riscv
