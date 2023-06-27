@@ -2,82 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EE3873F62E
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 09:55:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 836AD73F639
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 09:57:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231205AbjF0Hyh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 03:54:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45952 "EHLO
+        id S230145AbjF0H5H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 03:57:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230217AbjF0Hy0 (ORCPT
+        with ESMTP id S229524AbjF0H5D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 03:54:26 -0400
-Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B966810FB
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 00:54:22 -0700 (PDT)
-Received: by mail-lj1-x22b.google.com with SMTP id 38308e7fff4ca-2b6985de215so38378461fa.2
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 00:54:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687852461; x=1690444461;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=D/9SiAC6+9hSpeXdep9Ze7xghxn8zCBJk7xNH3HIPpA=;
-        b=xH3OBdpByqpSTSDwgUUbQnCdFbZ8EGBUquiIbTgoM6ur/RxO4jzr5N7FVdLEyp9osu
-         4fUg5o1kQgFd39kaSQB/v3Dt2i5+kH+XtjQrYFY2H/phUVXzEfm1YhsIZTP5BWuD6/AC
-         d8Wd1CuUwipCNMSrcoEVdiV0oA82bEUcO/DWeKoMQVtlExD0oo0eqYO+EDG5OgJWsT5q
-         l5gdVK4Ub+V8MQoKEiEqvq2+3rmEiIOuUolAzbjTnUgRBWqSgyoCdv8UKbyPfLgPtOaA
-         E3s1bXCmPgb9Iy0Atr6leoWtgDn/a0RgdPONUCFznSOJfqB4wsYAYc3aSmK8lQQxqugZ
-         5rLg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687852461; x=1690444461;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=D/9SiAC6+9hSpeXdep9Ze7xghxn8zCBJk7xNH3HIPpA=;
-        b=WxRZ3Sk1znlfbolc5pe7Cg9N1sV0182JTCfa0jY/QBsjDFqdAEPHPKrICyFKjpOK0O
-         RbblyircJr8RCdOECr9mGBWOTbyRLVMmINZx5k6CBG3cW5yaNsqibZjIBh/yURLPjHYU
-         DLeJ8VfexiQQVeGobuxRHZ/J9UEuGd2LfJ7usCcKpyMwV2iZcjNxwZZ9LsTI5sZXRXDP
-         gggWQ8++WNZkI/bOE6ZEPTUsB61qSQwa2obuXl7lPJrs6JTo3/y+I9K8uwAq8yUCwAfP
-         QH4EVir7iwuQJkd5hVTa+GUfvfb/9+GoUq75Ae6N4+lsusMYiEhKxHrAKYM7E5ubAeEP
-         Q2Mw==
-X-Gm-Message-State: AC+VfDxcwYSBuOMM1pBz+WSI48zLzjzDJQoYZ4X2GgSYFekz0S4eh+/9
-        kNNJ/Kz04GYNfcwnTc4WaLrNig==
-X-Google-Smtp-Source: ACHHUZ7bpuVEi9RLkIMrLwAHeRUB8Dq5bSdhVpr9n9MLMwiGjVZ9wyoQ3JQkv2KD/Z88PbBdz+0EsQ==
-X-Received: by 2002:a2e:6e16:0:b0:2b5:950a:711c with SMTP id j22-20020a2e6e16000000b002b5950a711cmr8267099ljc.10.1687852460842;
-        Tue, 27 Jun 2023 00:54:20 -0700 (PDT)
-Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:52eb:f6ff:feb3:451a])
-        by smtp.gmail.com with ESMTPSA id a1-20020a5d4561000000b0030e5a63e2dbsm9665578wrc.80.2023.06.27.00.54.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Jun 2023 00:54:20 -0700 (PDT)
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-To:     Andrzej Hajda <andrzej.hajda@intel.com>,
-        Robert Foss <rfoss@kernel.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        =?utf-8?q?Adri=C3=A1n_Larumbe?= <adrian.larumbe@collabora.com>
-Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        linux-amlogic@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org
-In-Reply-To: <cover.1687702042.git.adrian.larumbe@collabora.com>
-References: <cover.1687702042.git.adrian.larumbe@collabora.com>
-Subject: Re: [PATCH v3 0/3] Add additional YUV420 bus format check for
- dw-meson's bridge enable
-Message-Id: <168785245992.3048852.18155160209808336465.b4-ty@linaro.org>
-Date:   Tue, 27 Jun 2023 09:54:19 +0200
+        Tue, 27 Jun 2023 03:57:03 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 41682172A;
+        Tue, 27 Jun 2023 00:57:02 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 071BB11FB;
+        Tue, 27 Jun 2023 00:57:46 -0700 (PDT)
+Received: from [10.57.76.16] (unknown [10.57.76.16])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id EA0443F663;
+        Tue, 27 Jun 2023 00:56:58 -0700 (PDT)
+Message-ID: <ba282a84-1a0d-4ffd-0b22-ac9510a820ef@arm.com>
+Date:   Tue, 27 Jun 2023 08:56:57 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.12.0
+Subject: Re: [PATCH v1 03/10] mm: Introduce try_vma_alloc_movable_folio()
+To:     Yu Zhao <yuzhao@google.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Yin Fengwei <fengwei.yin@intel.com>,
+        David Hildenbrand <david@redhat.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-alpha@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, linux-s390@vger.kernel.org
+References: <20230626171430.3167004-1-ryan.roberts@arm.com>
+ <20230626171430.3167004-4-ryan.roberts@arm.com>
+ <CAOUHufZKM+aS_hYQ5nDUHh74UQwWipJ27Na5Sw4n+RDqnwyWHA@mail.gmail.com>
+ <CAOUHufZeFTjzO6nSFz7Y=5rBGPzY+_eeN3f8W+g0u6AqosdmuQ@mail.gmail.com>
+From:   Ryan Roberts <ryan.roberts@arm.com>
+In-Reply-To: <CAOUHufZeFTjzO6nSFz7Y=5rBGPzY+_eeN3f8W+g0u6AqosdmuQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Mailer: b4 0.12.2
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,31 +62,111 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On Sun, 25 Jun 2023 15:17:14 +0100, Adrián Larumbe wrote:
-> This is a belated follow-up on
-> https://lore.kernel.org/dri-devel/20220515204412.2733803-1-adrian.larumbe@collabora.com
+On 27/06/2023 06:29, Yu Zhao wrote:
+> On Mon, Jun 26, 2023 at 8:34 PM Yu Zhao <yuzhao@google.com> wrote:
+>>
+>> On Mon, Jun 26, 2023 at 11:14 AM Ryan Roberts <ryan.roberts@arm.com> wrote:
+>>>
+>>> Opportunistically attempt to allocate high-order folios in highmem,
+>>> optionally zeroed. Retry with lower orders all the way to order-0, until
+>>> success. Although, of note, order-1 allocations are skipped since a
+>>> large folio must be at least order-2 to work with the THP machinery. The
+>>> user must check what they got with folio_order().
+>>>
+>>> This will be used to oportunistically allocate large folios for
+>>> anonymous memory with a sensible fallback under memory pressure.
+>>>
+>>> For attempts to allocate non-0 orders, we set __GFP_NORETRY to prevent
+>>> high latency due to reclaim, instead preferring to just try for a lower
+>>> order. The same approach is used by the readahead code when allocating
+>>> large folios.
+>>>
+>>> Signed-off-by: Ryan Roberts <ryan.roberts@arm.com>
+>>> ---
+>>>  mm/memory.c | 33 +++++++++++++++++++++++++++++++++
+>>>  1 file changed, 33 insertions(+)
+>>>
+>>> diff --git a/mm/memory.c b/mm/memory.c
+>>> index 367bbbb29d91..53896d46e686 100644
+>>> --- a/mm/memory.c
+>>> +++ b/mm/memory.c
+>>> @@ -3001,6 +3001,39 @@ static vm_fault_t fault_dirty_shared_page(struct vm_fault *vmf)
+>>>         return 0;
+>>>  }
+>>>
+>>> +static inline struct folio *vma_alloc_movable_folio(struct vm_area_struct *vma,
+>>> +                               unsigned long vaddr, int order, bool zeroed)
+>>> +{
+>>> +       gfp_t gfp = order > 0 ? __GFP_NORETRY | __GFP_NOWARN : 0;
+>>> +
+>>> +       if (zeroed)
+>>> +               return vma_alloc_zeroed_movable_folio(vma, vaddr, gfp, order);
+>>> +       else
+>>> +               return vma_alloc_folio(GFP_HIGHUSER_MOVABLE | gfp, order, vma,
+>>> +                                                               vaddr, false);
+>>> +}
+>>> +
+>>> +/*
+>>> + * Opportunistically attempt to allocate high-order folios, retrying with lower
+>>> + * orders all the way to order-0, until success. order-1 allocations are skipped
+>>> + * since a folio must be at least order-2 to work with the THP machinery. The
+>>> + * user must check what they got with folio_order(). vaddr can be any virtual
+>>> + * address that will be mapped by the allocated folio.
+>>> + */
+>>> +static struct folio *try_vma_alloc_movable_folio(struct vm_area_struct *vma,
+>>> +                               unsigned long vaddr, int order, bool zeroed)
+>>> +{
+>>> +       struct folio *folio;
+>>> +
+>>> +       for (; order > 1; order--) {
+>>> +               folio = vma_alloc_movable_folio(vma, vaddr, order, zeroed);
+>>> +               if (folio)
+>>> +                       return folio;
+>>> +       }
+>>> +
+>>> +       return vma_alloc_movable_folio(vma, vaddr, 0, zeroed);
+>>> +}
+>>
+>> I'd drop this patch. Instead, in do_anonymous_page():
+>>
+>>   if (IS_ENABLED(CONFIG_ARCH_WANTS_PTE_ORDER))
+>>     folio = vma_alloc_zeroed_movable_folio(vma, addr,
+>> CONFIG_ARCH_WANTS_PTE_ORDER))
+>>
+>>   if (!folio)
+>>     folio = vma_alloc_zeroed_movable_folio(vma, addr, 0);
 > 
-> Commit e67f6037ae1be34b2b68 ("drm/meson: split out encoder from meson_dw_hdmi")
-> broke 4K display modes for me, and I discovered it was because the right
-> pixel clock wasn't being chosen in dw_hdmi_phy_init. I misinterpreted the
-> reason as a problem in figuring out whether we want to enforce YUV420 mode,
-> but it turned out to be a mismatch between what dw-meson code is doing and
-> the way the bus format is being picked by the dw-hdmi bus output format drm
-> helper.
-> 
-> [...]
+> I meant a runtime function arch_wants_pte_order() (Its default
+> implementation would return 0.)
 
-Thanks, Applied to https://anongit.freedesktop.org/git/drm/drm-misc.git (drm-misc-next)
+There are a bunch of things which you are implying here which I'll try to make
+explicit:
 
-[1/3] drm/bridge: dw-hdmi: change YUV420 selection logic at clock setup
-      https://cgit.freedesktop.org/drm/drm-misc/commit/?id=7ed40ff1d134bf3a4aef706eed478b926f35b404
-[2/3] drm/bridge: dw-hdmi: truly enforce 420-only formats when drm mode demands it
-      https://cgit.freedesktop.org/drm/drm-misc/commit/?id=f3710b424a96078f416e1be9cf52b87eadabae78
-[3/3] drm/bridge: dw-hdmi: remove dead code and fix indentation
-      https://cgit.freedesktop.org/drm/drm-misc/commit/?id=2299a8d12c1cbcdc7086027615d9936a970e7d68
+I think you are implying that we shouldn't retry allocation with intermediate
+orders; but only try the order requested by the arch (arch_wants_pte_order())
+and 0. Correct? For arm64 at least, I would like the VMA's THP hint to be a
+factor in determining the preferred order (see patches 8 and 9). So I would add
+a vma parameter to arch_wants_pte_order() to allow for this.
 
--- 
-Neil
+For the case where the THP hint is present, then the arch will request 2M (if
+the page size is 16K or 64K). If that fails to allocate, there is still value in
+allocating a 64K folio (which is order 2 in the 16K case). Without the retry
+with intermediate orders logic, we would not get this.
 
+We can't just blindly allocate a folio of arch_wants_pte_order() size because it
+might overlap with existing populated PTEs, or cross the bounds of the VMA (or a
+number of other things - see calc_anon_folio_order_alloc() in patch 10). Are you
+implying that if there is any kind of issue like this, then we should go
+directly to order 0? I can kind of see the argument from a minimizing
+fragmentation perspective, but for best possible performance I think we are
+better off "packing the bin" with intermediate orders.
+
+You're also implying that a runtime arch_wants_pte_order() function is better
+than the Kconfig stuff I did in patch 8. On reflection, I agree with you here. I
+think you mentioned that AMD supports coalescing 8 pages on some CPUs - so you
+would probably want runtime logic to determine if you are on an appropriate AMD
+CPU as part of the decision in that function?
+
+The real reason for the existance of try_vma_alloc_movable_folio() is that I'm
+reusing it on the other fault paths (which are no longer part of this series).
+But I guess that's not a good reason to keep this until we get to those patches.
