@@ -2,101 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3243174068D
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 00:41:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A8EB740690
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 00:44:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229841AbjF0WlR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 18:41:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59314 "EHLO
+        id S229861AbjF0WoH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 18:44:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229568AbjF0WlQ (ORCPT
+        with ESMTP id S229482AbjF0WoF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 18:41:16 -0400
-Received: from out-50.mta0.migadu.com (out-50.mta0.migadu.com [IPv6:2001:41d0:1004:224b::32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7157D211E
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 15:41:14 -0700 (PDT)
-Date:   Tue, 27 Jun 2023 18:41:07 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1687905672;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=MCOyXvQH1vh+16AdCtA2h/TxtP+27XdlCYVsV7ar0MU=;
-        b=VDeCtPDb5tI6zYim17g3fBoJR+8/KM77xSyFpu0QrP4QfTs2zRgeg3NTd/S7qaxR8WyzXU
-        ENlj3ZXqUAxaOQ06BP4+J49aoDt1aTPuJg4xmDZfs/kRklitcaBOU/Y60FoVrw5XQ1TWPs
-        aTL5CV2NsP719/+6vCsw0HkK+xXU43I=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Kent Overstreet <kent.overstreet@linux.dev>
-To:     Dave Chinner <david@fromorbit.com>
-Cc:     Jens Axboe <axboe@kernel.dk>, torvalds@linux-foundation.org,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-bcachefs@vger.kernel.org, Christoph Hellwig <hch@lst.de>
-Subject: Re: [GIT PULL] bcachefs
-Message-ID: <20230627224107.trexy3sanysgzorf@moria.home.lan>
-References: <20230626214656.hcp4puionmtoloat@moria.home.lan>
- <aeb2690c-4f0a-003d-ba8b-fe06cd4142d1@kernel.dk>
- <20230627000635.43azxbkd2uf3tu6b@moria.home.lan>
- <91e9064b-84e3-1712-0395-b017c7c4a964@kernel.dk>
- <20230627020525.2vqnt2pxhtgiddyv@moria.home.lan>
- <b92ea170-d531-00f3-ca7a-613c05dcbf5f@kernel.dk>
- <23922545-917a-06bd-ec92-ff6aa66118e2@kernel.dk>
- <20230627201524.ool73bps2lre2tsz@moria.home.lan>
- <ZJtdEgbt+Wa8UHij@dread.disaster.area>
+        Tue, 27 Jun 2023 18:44:05 -0400
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 794BB211E
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 15:44:04 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id 4fb4d7f45d1cf-51dd0205b2cso23177a12.1
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 15:44:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google; t=1687905843; x=1690497843;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=62ZMa8IP6rzchtKNliU3xgtrtztxTiRDLodjcE3oYKw=;
+        b=B+n6JzSC5idXgfE44FSmmDdBudiS0zYbWvLaq9xowdVCDRYQVO1zmi6gXhHFp+hj+D
+         08DdaZK00cxAVDCyXIfHti50mYI8PWry8G4FCuyJPG7NEDveZEH4V/OIfFP36mBGCwrG
+         oIl7Hk+jg+7Z/V0uZ7d8C8s8SrmGg1HRRplF0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687905843; x=1690497843;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=62ZMa8IP6rzchtKNliU3xgtrtztxTiRDLodjcE3oYKw=;
+        b=MPFGgoI5tnGjnD+aaImIUyGqFzD2IewUOEZ6MucX8qwy+gk/QqqoK6ovbw9/2b+Qai
+         RXzGEkRyvv1PP7YV+joJpWDxE6TDCCsx4oJ+X9TFGp4ZBvDPLKDmtfhskp1nWigKDYQe
+         IBVQiHjh314jz8a5LEDxqW4CJ47qekntbKccpGeEhjp1YE2ln91C19wausoMNBhFmlzk
+         UJmnkO4JAAVKDnMN6roJ7ZiXrYOqkw79ut86o9P9f6Czrmr+lkC3ZBWH+p/vensmlhhM
+         iN59Nrmd7E1sUtlGuvPXdvN/bZDY8WRBgDLuR6uDHzWr3hm9U+BKgIF3o/G7/078A9Bi
+         JdUg==
+X-Gm-Message-State: AC+VfDzFMHvRyBb5drIVDRoQ1AWa+APAKE3rDIcOsElBrxdD/MZRVbSR
+        iLW87HGIPl04zpBtoVRsrCgJ1DB/nTP7bXSkM0PM/6xe
+X-Google-Smtp-Source: ACHHUZ7RPhS4+1MK2WYfcFtSwTO6VgOnlV9aY3yjfxumQtziPhkIez7NiV6PsHU55PIlMiWc0aFeMA==
+X-Received: by 2002:a05:6402:34c7:b0:4fc:97d9:18ec with SMTP id w7-20020a05640234c700b004fc97d918ecmr32994129edc.21.1687905842923;
+        Tue, 27 Jun 2023 15:44:02 -0700 (PDT)
+Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com. [209.85.208.52])
+        by smtp.gmail.com with ESMTPSA id h9-20020a50ed89000000b0051d888df7f8sm3975793edr.56.2023.06.27.15.44.01
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 27 Jun 2023 15:44:02 -0700 (PDT)
+Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-51a52a7d859so649612a12.0
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 15:44:01 -0700 (PDT)
+X-Received: by 2002:a05:6402:1614:b0:51d:927e:316f with SMTP id
+ f20-20020a056402161400b0051d927e316fmr8347079edv.19.1687905841740; Tue, 27
+ Jun 2023 15:44:01 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZJtdEgbt+Wa8UHij@dread.disaster.area>
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20230627110038.GCZJrBVqu/4BfdyBeN@fat_crate.local>
+ <CAHk-=wghuOwXtMH9u7RAW694BOwf_Q9TeWR2v=GgLy0gjTfu4A@mail.gmail.com>
+ <1982e4b4-3858-d456-6c90-92782b95726a@linux.intel.com> <CAHk-=wiQEj1cP7tnQ6Uw1jjFYnZmMdNgodga3b+rw98vBBvENg@mail.gmail.com>
+In-Reply-To: <CAHk-=wiQEj1cP7tnQ6Uw1jjFYnZmMdNgodga3b+rw98vBBvENg@mail.gmail.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Tue, 27 Jun 2023 15:43:44 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wgMw2VE8afWp4p6RyJKCvnkhNXx4XUByUOHUWKiAo=WLQ@mail.gmail.com>
+Message-ID: <CAHk-=wgMw2VE8afWp4p6RyJKCvnkhNXx4XUByUOHUWKiAo=WLQ@mail.gmail.com>
+Subject: Re: [GIT PULL] x86/misc for 6.5
+To:     Arjan van de Ven <arjan@linux.intel.com>
+Cc:     Borislav Petkov <bp@alien8.de>,
+        Noah Goldstein <goldstein.w.n@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        x86-ml <x86@kernel.org>, lkml <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 28, 2023 at 08:05:06AM +1000, Dave Chinner wrote:
-> On Tue, Jun 27, 2023 at 04:15:24PM -0400, Kent Overstreet wrote:
-> > On Tue, Jun 27, 2023 at 11:16:01AM -0600, Jens Axboe wrote:
-> > > On 6/26/23 8:59?PM, Jens Axboe wrote:
-> > > > On 6/26/23 8:05?PM, Kent Overstreet wrote:
-> > > >> On Mon, Jun 26, 2023 at 07:13:54PM -0600, Jens Axboe wrote:
-> > > >>> Doesn't reproduce for me with XFS. The above ktest doesn't work for me
-> > > >>> either:
-> > > >>
-> > > >> It just popped for me on xfs, but it took half an hour or so of looping
-> > > >> vs. 30 seconds on bcachefs.
-> > > > 
-> > > > OK, I'll try and leave it running overnight and see if I can get it to
-> > > > trigger.
-> > > 
-> > > I did manage to reproduce it, and also managed to get bcachefs to run
-> > > the test. But I had to add:
-> > > 
-> > > diff --git a/check b/check
-> > > index 5f9f1a6bec88..6d74bd4933bd 100755
-> > > --- a/check
-> > > +++ b/check
-> > > @@ -283,7 +283,7 @@ while [ $# -gt 0 ]; do
-> > >  	case "$1" in
-> > >  	-\? | -h | --help) usage ;;
-> > >  
-> > > -	-nfs|-afs|-glusterfs|-cifs|-9p|-fuse|-virtiofs|-pvfs2|-tmpfs|-ubifs)
-> > > +	-nfs|-afs|-glusterfs|-cifs|-9p|-fuse|-virtiofs|-pvfs2|-tmpfs|-ubifs|-bcachefs)
-> > >  		FSTYP="${1:1}"
-> > >  		;;
-> > >  	-overlay)
-> > 
-> > I wonder if this is due to an upstream fstests change I haven't seen
-> > yet, I'll have a look.
-> 
-> Run mkfs.bcachefs on the testdir first. fstests tries to probe the
-> filesystem type to test if $FSTYP is not set. If it doesn't find a
-> filesystem or it is unsupported, it will use the default (i.e. XFS).
-> There should be no reason to need to specify the filesystem type for
-> filesystems that blkid recognises. from common/config:
+On Tue, 27 Jun 2023 at 15:25, Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
+>
+> I don't know what the rules are - and some of the functions you test
+> seem actively buggy (ie not handling alignment right etc).
 
-Actually ktest already does that, and it sets $FSTYP as well. Jens, are
-you sure you weren't doing something funny?
+Oh. And you *only* test the 40-byte case. That seems a bit bogus.
+
+If I change the packet size from 40 to 1500, I get
+
+  02: 185.1 / 186.4 cycles (8b414316) Upcoming linux kernel version
+  04: 184.9 / 186.5 cycles (8b414316) Specialized to size 40
+  06: 107.3 / 117.2 cycles (8b414316) New version
+  22: 185.6 / 186.5 cycles (8b414316) Odd-alignment handling removed
+
+which seems unexpectedly bad for the other versions.
+
+But those other functions have that 64-byte unrolling, rather than the
+"two 40-byte loops", so maybe it is real, and my version is actually
+just that good.
+
+Or maybe it's a sign that my version is some seriously buggy crap, and
+it just looks good on the benchmark because it does the wrong thing.
+
+Whatever. Back to the merge window again.
+
+              Linus
