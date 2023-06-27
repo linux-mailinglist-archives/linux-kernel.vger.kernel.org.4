@@ -2,81 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24CD373FA1D
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 12:23:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E50A73FA1A
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 12:23:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230338AbjF0KXO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 06:23:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41828 "EHLO
+        id S231720AbjF0KXH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 06:23:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231562AbjF0KWp (ORCPT
+        with ESMTP id S230211AbjF0KWm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 06:22:45 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D572109;
-        Tue, 27 Jun 2023 03:20:06 -0700 (PDT)
+        Tue, 27 Jun 2023 06:22:42 -0400
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB983E3;
+        Tue, 27 Jun 2023 03:19:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=QpIG8zIiPiSqoF8aX8idnXur9dqkJW4/QKoTrZH8cD8=; b=AvSWYAQNpQ/maAcKP7sl2uAWaM
-        r8VUkC/gUpf8gqV4fszhxttZkOR2LWKnEc87QNlx02OHUeHuUts/aXwTibIk39V5MnW2AcRRxkFw/
-        A5XYNmTvrwPSkdZqKNBuRoxZrePTBbZaP9Y1fHc3WOYafzBheEm/pdMdp/JftCUyKwlTmQLUhkkgO
-        E5bE9FwoMVtR525XRJIhz1KEncHrv9TwrCTeIrqVtuiHNK4ELXfXcDrCfNZIsKJCz+H+LwZmJiLNU
-        tB3d2WpFl5GpcyT6+4gZxPQsriZBPZcc2owzmgLkK5DEA6frQWGkpyGMtkQCmLDXJy7r6s1NWxF9P
-        e47EPxlA==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1qE5nR-004e0Y-1h;
-        Tue, 27 Jun 2023 10:19:42 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 5A8D5300118;
-        Tue, 27 Jun 2023 12:19:39 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 3790924A40809; Tue, 27 Jun 2023 12:19:39 +0200 (CEST)
-Date:   Tue, 27 Jun 2023 12:19:39 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Bagas Sanjaya <bagasdotme@gmail.com>
-Cc:     "Steven Rostedt (Google)" <rostedt@goodmis.org>,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
-        Jozsef Kadlecsik <kadlec@netfilter.org>,
-        Florian Westphal <fw@strlen.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Lingutla Chandrasekhar <clingutla@codeaurora.org>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        "J. Avila" <elavila@google.com>,
-        Vivek Anand <vivekanand754@gmail.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Thomas Renninger <trenn@suse.com>,
-        Shuah Khan <shuah@kernel.org>, Borislav Petkov <bp@alien8.de>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Regressions <regressions@lists.linux.dev>,
-        Linux Netfilter Development <netfilter-devel@vger.kernel.org>,
-        Netfilter Core Developers <coreteam@netfilter.org>,
-        Linux Networking <netdev@vger.kernel.org>,
-        Linux Power Management <linux-pm@vger.kernel.org>,
-        x86@kernel.org
-Subject: Re: Fwd: High cpu usage caused by kernel process when upgraded to
- linux 5.19.17 or later
-Message-ID: <20230627101939.GZ4253@hirez.programming.kicks-ass.net>
-References: <01ac399d-f793-49d4-844b-72cd8e0034df@gmail.com>
- <ZJpJkL3dPXxgw6RK@debian.me>
- <20230627073035.GV4253@hirez.programming.kicks-ass.net>
- <99b64dfd-be4a-2248-5c42-8eb9197824e1@gmail.com>
+        d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
+        bh=hHK2zVsOPsYddg/sW13UtUauH4zY0IBI+dg4QZPPeok=; b=CpHjAc92fm6gtpOtfhLpNGfe5f
+        b3dgrXyTuwCU2D10IChbFpAQLVAsA+0qm9sWDAxTJMjHNWBD01h4vhW3slzFiN7cpi5nSpcyVXXis
+        im1Xn8hGgWaRKfTkgq0/Gr2yyJgguKFxYiOtRu7a9lPq+S45NZcAvzghjer+pDy1k7Kn8fnJxetuC
+        qwvwdG19mGcjetUzXoVVjvfbliw6tQz8W70DMTelmkE6giAFAvldyeDTunQ7/GYwqjdxAmODaVptW
+        R2n/SsGubS/ZJxtyYsdfg2n3yLzGUh1c3owPMeZAtI7FUvS/vPkGsBydkS6aTyW4Ah5+0bwwQZlX6
+        b3uVed1Q==;
+Received: from sslproxy03.your-server.de ([88.198.220.132])
+        by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1qE5nT-000O7h-DK; Tue, 27 Jun 2023 12:19:43 +0200
+Received: from [85.1.206.226] (helo=linux.home)
+        by sslproxy03.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1qE5nS-00020f-Gv; Tue, 27 Jun 2023 12:19:42 +0200
+Subject: Re: [PATCH bpf-next v3 2/7] net: export inet_lookup_reuseport and
+ inet6_lookup_reuseport
+To:     Lorenz Bauer <lmb@isovalent.com>,
+        Kuniyuki Iwashima <kuniyu@amazon.com>
+Cc:     andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
+        davem@davemloft.net, dsahern@kernel.org, edumazet@google.com,
+        haoluo@google.com, hemanthmalla@gmail.com, joe@wand.net.nz,
+        john.fastabend@gmail.com, jolsa@kernel.org, kpsingh@kernel.org,
+        kuba@kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, martin.lau@linux.dev,
+        mykolal@fb.com, netdev@vger.kernel.org, pabeni@redhat.com,
+        sdf@google.com, shuah@kernel.org, song@kernel.org,
+        willemdebruijn.kernel@gmail.com, yhs@fb.com
+References: <20230613-so-reuseport-v3-2-907b4cbb7b99@isovalent.com>
+ <20230626173249.57682-1-kuniyu@amazon.com>
+ <CAN+4W8hnPzhuKPorSjHeOQHFgAuk=A9oa1hW5jckUPoF=5zEQQ@mail.gmail.com>
+From:   Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <e21aa61a-803b-bb82-d56e-2db0c839477b@iogearbox.net>
+Date:   Tue, 27 Jun 2023 12:19:41 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <99b64dfd-be4a-2248-5c42-8eb9197824e1@gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+In-Reply-To: <CAN+4W8hnPzhuKPorSjHeOQHFgAuk=A9oa1hW5jckUPoF=5zEQQ@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.103.8/26952/Tue Jun 27 09:29:10 2023)
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,10 +74,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 27, 2023 at 05:15:42PM +0700, Bagas Sanjaya wrote:
-> On 6/27/23 14:30, Peter Zijlstra wrote:
-> > I can't tell from this. Also, please don't use bugzilla.
+On 6/27/23 10:56 AM, Lorenz Bauer wrote:
+> On Mon, Jun 26, 2023 at 6:33 PM Kuniyuki Iwashima <kuniyu@amazon.com> wrote:
+>>
+>> From: Lorenz Bauer <lmb@isovalent.com>
+>> Date: Mon, 26 Jun 2023 16:08:59 +0100
+>>> Rename the existing reuseport helpers for IPv4 and IPv6 so that they
+>>> can be invoked in the follow up commit. Export them so that DCCP which
+>>> may be built as a module can access them.
+>>
+>> We need not export the functions unless there is a real user.
+>>
+>> I added a deprecation notice for DCCP recently, so I bet DCCP
+>> will not get SO_REUSEPORT support.
+>> https://git.kernel.org/pub/scm/linux/kernel/git/netdev/net.git/commit/?id=b144fcaf46d4
 > 
-> Why not BZ? I'm confused too...
+> Misleading commit message, it turns out that ipv6 as a module also
+> needs (the v6 functions at least) to be EXPORT_SYMBOL'd. That's
+> because of some special shenanigans where inet6_hashtables.c is linked
+> into vmlinux even when CONFIG_IPV6=m.
+> 
+> Also not sure how to work around this: DCCP may be deprecated but
+> without the export a module build of it fails.
 
-Because we have email; and why would I want to touch a browser for this?
+If it breaks the build, then we need to export it.
