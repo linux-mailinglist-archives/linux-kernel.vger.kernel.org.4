@@ -2,200 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E36DD7404F2
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 22:26:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D99E67404F7
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 22:26:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231376AbjF0U0B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 16:26:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45330 "EHLO
+        id S231365AbjF0U0l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 16:26:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230003AbjF0UZ6 (ORCPT
+        with ESMTP id S229912AbjF0U0j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 16:25:58 -0400
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE86D1FEA
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 13:25:55 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-57003dac4a8so5280817b3.1
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 13:25:55 -0700 (PDT)
+        Tue, 27 Jun 2023 16:26:39 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D0581BD1
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 13:26:38 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id a640c23a62f3a-98d34f1e54fso514171966b.2
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 13:26:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1687897555; x=1690489555;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=OrGhpjSBH+uvN2RlFVrnMyWFjf7MZCvpoWYUAG+UcGg=;
-        b=J1Ay4xaAwE50titRnLAf8EZ4tOlp28f3hhclzOHSVchSUxINJwhyXY9wEHPBbWfTge
-         jR+g6Qg7w9D7qLD7y8MPyelzGYCKfMt40xm05TJk8JQzDZ2Xv0FIDFrt2MjLrE7EqPuR
-         +FhFBpbySZ4yVC722kZ+WSAf44aMVbcssT1g9QIOqa1me2sIWUujzxgSR4AmrFtTObz6
-         Nt50EtsaW67uPWXg8PwR3SWnu+MuBJwsepJWfrwtDsUVeqqnYqx3jWepoAWjotKXDVyn
-         gkqH3ypgLtrjW9EZmi1a24+cbBfm9HqDaddwo2Q2fhlXEhzIELgqVmz9o0rwAVUyCkoW
-         JuiA==
+        d=linux-foundation.org; s=google; t=1687897597; x=1690489597;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZZrPHSDW5enXdUA/+h3OiDc6V9OxKvnH/ntjoCa20hE=;
+        b=dUzODIT1UtxuXm3z346utCTVO3bXpuw3S5JXg3vp72+iJ09RnogGzOYqqhcfpxn0cn
+         7N4lxn76UbcACEx+dQ18wxN2+mbl9oSdKp4bX+nNlE5pUJyO/mczTsW4rWSjF+XwnEGr
+         9usdaMHfFDb/wFnZ4g9Mhh70Qm46u9jd/rAO4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687897555; x=1690489555;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=OrGhpjSBH+uvN2RlFVrnMyWFjf7MZCvpoWYUAG+UcGg=;
-        b=B0nKsYCREMLpvOdrSj3X1w83EseQPBeSbSiug120R79JNRyUoLUl7tb7MxEKB7FPML
-         JTpZFQydAW8Qv7czCDGdZOyJef3tekgx/CbXhKIPxKZjizrOh1WQzJm9bGxaNQYSB/EE
-         ti/Km5dlXVUoH+7ZG2tM+R27ZoFPDsPkIUv72Qyy+UvLv5poRTIpWzdilgQJhuqGhgtH
-         Pij71c10SBjVQdwk/wdFkgiepoNzBmZMnwTt7Yv8PHfYGFC3VB+P6IkFj1K/2TJwRyky
-         NCvzQRMjSxFViFoeEngDrXNhAWVYoSkb83Ozc+px+2paM2fGbWhpb2r9H3/twc1BaDg1
-         R76Q==
-X-Gm-Message-State: AC+VfDymZN6XVB7vfe2EOyES7Flhtp5w4XbJHIx6GYsM+8FuPFHpyv6d
-        5VIEh0Orbm4l/66gR57z4HOgvTpAp0GRZTOIvQ==
-X-Google-Smtp-Source: ACHHUZ7pwzISo3tUi89gxWua4UMbJKl2ONFmvL3K96MUD3/tkU2czKYAmuuzG/84BwbTNX2A7s33obaNpq3hC+l0CQ==
-X-Received: from yuxiao.svl.corp.google.com ([2620:15c:2a3:200:372c:3efd:f120:f25d])
- (user=yuxiaozhang job=sendgmr) by 2002:a25:d205:0:b0:ba8:381b:f764 with SMTP
- id j5-20020a25d205000000b00ba8381bf764mr12393540ybg.3.1687897555050; Tue, 27
- Jun 2023 13:25:55 -0700 (PDT)
-Date:   Tue, 27 Jun 2023 13:25:41 -0700
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.41.0.162.gfafddb0af9-goog
-Message-ID: <20230627202540.881909-2-yuxiaozhang@google.com>
-Subject: [PATCH] pstore: ramoops: support pmsg size larger than kmalloc limitation
-From:   Yuxiao Zhang <yuxiaozhang@google.com>
-To:     Kees Cook <keescook@chromium.org>, Tony Luck <tony.luck@intel.com>,
-        "'Guilherme G . Piccoli'" <gpiccoli@igalia.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        linux-hardening@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, wak@google.com,
-        Yuxiao Zhang <yuxiaozhang@google.com>
+        d=1e100.net; s=20221208; t=1687897597; x=1690489597;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ZZrPHSDW5enXdUA/+h3OiDc6V9OxKvnH/ntjoCa20hE=;
+        b=SUn5Yi+dZLfiVrAveBZCC2VpuQ/RnLKQtzzbIc5gMyM7YMhsyFdYMYgAMQFG02Qwig
+         YPRPlQibLGpTzpgpblbs23fZMVq6M2WZV1L5vbr6HIykhSXBzy85//8BYrz583y4S4m8
+         z2Ra5LedWkAP0HXjNEiq+6SX7YE970z/xqQa1XNpJ5/5ry1bXqK4JdttiX5iJhirrp80
+         SgcEMidRlUC8DHB88PHkGa5iuZvl5WcLXhn55uvuOOjrdi+OtWJosb0nY0lmtV12G0p7
+         P23yUBpqKDCZR2BRskBa+z9Q49B7naTw2+28PXe+C5pXCN3QMjJ/PY37cA68mhEoVTG7
+         rnXg==
+X-Gm-Message-State: AC+VfDzfS6iQR3dvzPTHyHnLWpeXZMTefgMfjUJfsirVL9Wz+Ey+CXCd
+        VbElLyusaepCQPG5ZaQyuVb82/BKttmPFaznz0sgeGd2
+X-Google-Smtp-Source: ACHHUZ7lL1Ew5dwmzrwzsbqkfJOOZrdIi4mXWq6sS826QVCXqOHOxl4rCVmODUZ/WLC7KKC0d2Dzkg==
+X-Received: by 2002:a17:907:9303:b0:973:d06d:545f with SMTP id bu3-20020a170907930300b00973d06d545fmr24281064ejc.24.1687897596723;
+        Tue, 27 Jun 2023 13:26:36 -0700 (PDT)
+Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com. [209.85.208.48])
+        by smtp.gmail.com with ESMTPSA id o18-20020a170906289200b00982b204678fsm4893998ejd.207.2023.06.27.13.26.35
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 27 Jun 2023 13:26:35 -0700 (PDT)
+Received: by mail-ed1-f48.google.com with SMTP id 4fb4d7f45d1cf-51d5569e4d1so3849597a12.2
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 13:26:35 -0700 (PDT)
+X-Received: by 2002:aa7:c743:0:b0:51d:9ddf:f0f3 with SMTP id
+ c3-20020aa7c743000000b0051d9ddff0f3mr3243757eds.31.1687897595271; Tue, 27 Jun
+ 2023 13:26:35 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230627110038.GCZJrBVqu/4BfdyBeN@fat_crate.local> <CAHk-=wghuOwXtMH9u7RAW694BOwf_Q9TeWR2v=GgLy0gjTfu4A@mail.gmail.com>
+In-Reply-To: <CAHk-=wghuOwXtMH9u7RAW694BOwf_Q9TeWR2v=GgLy0gjTfu4A@mail.gmail.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Tue, 27 Jun 2023 13:26:18 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wi9Uwo3-uwB4rT=wK2VKhGq3yEp_U-b2kruogCT=13Mjg@mail.gmail.com>
+Message-ID: <CAHk-=wi9Uwo3-uwB4rT=wK2VKhGq3yEp_U-b2kruogCT=13Mjg@mail.gmail.com>
+Subject: Re: [GIT PULL] x86/misc for 6.5
+To:     Borislav Petkov <bp@alien8.de>,
+        Noah Goldstein <goldstein.w.n@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>
+Cc:     x86-ml <x86@kernel.org>, lkml <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Current pmsg implementation is using kmalloc for pmsg record buffer,
-which has max size limits based on page size. Currently even we
-allocate enough space with pmsg-size, pmsg will still fail if the
-file size is larger than what kmalloc allowed.
+On Tue, 27 Jun 2023 at 13:11, Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
+>
+> Finally: did I already mention that this is completely untested?
 
-Since we don't need physical contiguous memory for pmsg buffer
-, we can use kvmalloc to avoid such limitation.
+Oh, this part is buggy:
 
-Signed-off-by: Yuxiao Zhang <yuxiaozhang@google.com>
----
- fs/pstore/inode.c    | 2 +-
- fs/pstore/platform.c | 9 +++++----
- fs/pstore/ram.c      | 5 +++--
- fs/pstore/ram_core.c | 3 ++-
- 4 files changed, 11 insertions(+), 8 deletions(-)
++               asm("addq %1,%0\n\t"
++                   "adcq $0,%0"
++                   :"=r" (temp64): "r" (temp64_2));
 
-diff --git a/fs/pstore/inode.c b/fs/pstore/inode.c
-index ffbadb8b3032..df7fb2ad4599 100644
---- a/fs/pstore/inode.c
-+++ b/fs/pstore/inode.c
-@@ -54,7 +54,7 @@ static void free_pstore_private(struct pstore_private *private)
- 	if (!private)
- 		return;
- 	if (private->record) {
--		kfree(private->record->buf);
-+		kvfree(private->record->buf);
- 		kfree(private->record->priv);
- 		kfree(private->record);
- 	}
-diff --git a/fs/pstore/platform.c b/fs/pstore/platform.c
-index cbc0b468c1ab..f51e9460ac9d 100644
---- a/fs/pstore/platform.c
-+++ b/fs/pstore/platform.c
-@@ -32,6 +32,7 @@
- #include <linux/uaccess.h>
- #include <linux/jiffies.h>
- #include <linux/workqueue.h>
-+#include <linux/mm.h>
- 
- #include "internal.h"
- 
-@@ -549,7 +550,7 @@ static int pstore_write_user_compat(struct pstore_record *record,
- 	if (record->buf)
- 		return -EINVAL;
- 
--	record->buf = memdup_user(buf, record->size);
-+	record->buf = vmemdup_user(buf, record->size);
- 	if (IS_ERR(record->buf)) {
- 		ret = PTR_ERR(record->buf);
- 		goto out;
-@@ -557,7 +558,7 @@ static int pstore_write_user_compat(struct pstore_record *record,
- 
- 	ret = record->psi->write(record);
- 
--	kfree(record->buf);
-+	kvfree(record->buf);
- out:
- 	record->buf = NULL;
- 
-@@ -730,7 +731,7 @@ static void decompress_record(struct pstore_record *record)
- 		return;
- 
- 	/* Swap out compressed contents with decompressed contents. */
--	kfree(record->buf);
-+	kvfree(record->buf);
- 	record->buf = unzipped;
- 	record->size = unzipped_len;
- 	record->compressed = false;
-@@ -783,7 +784,7 @@ void pstore_get_backend_records(struct pstore_info *psi,
- 		rc = pstore_mkfile(root, record);
- 		if (rc) {
- 			/* pstore_mkfile() did not take record, so free it. */
--			kfree(record->buf);
-+			kvfree(record->buf);
- 			kfree(record->priv);
- 			kfree(record);
- 			if (rc != -EEXIST || !quiet)
-diff --git a/fs/pstore/ram.c b/fs/pstore/ram.c
-index ade66dbe5f39..296465b14fa9 100644
---- a/fs/pstore/ram.c
-+++ b/fs/pstore/ram.c
-@@ -20,6 +20,7 @@
- #include <linux/compiler.h>
- #include <linux/of.h>
- #include <linux/of_address.h>
-+#include <linux/mm.h>
- 
- #include "internal.h"
- #include "ram_internal.h"
-@@ -268,7 +269,7 @@ static ssize_t ramoops_pstore_read(struct pstore_record *record)
- 	/* ECC correction notice */
- 	record->ecc_notice_size = persistent_ram_ecc_string(prz, NULL, 0);
- 
--	record->buf = kmalloc(size + record->ecc_notice_size + 1, GFP_KERNEL);
-+	record->buf = kvmalloc(size + record->ecc_notice_size + 1, GFP_KERNEL);
- 	if (record->buf == NULL) {
- 		size = -ENOMEM;
- 		goto out;
-@@ -282,7 +283,7 @@ static ssize_t ramoops_pstore_read(struct pstore_record *record)
- 
- out:
- 	if (free_prz) {
--		kfree(prz->old_log);
-+		kvfree(prz->old_log);
- 		kfree(prz);
- 	}
- 
-diff --git a/fs/pstore/ram_core.c b/fs/pstore/ram_core.c
-index 966191d3a5ba..3453d493ec27 100644
---- a/fs/pstore/ram_core.c
-+++ b/fs/pstore/ram_core.c
-@@ -17,6 +17,7 @@
- #include <linux/slab.h>
- #include <linux/uaccess.h>
- #include <linux/vmalloc.h>
-+#include <linux/mm.h>
- #include <asm/page.h>
- 
- #include "ram_internal.h"
-@@ -385,7 +386,7 @@ void *persistent_ram_old(struct persistent_ram_zone *prz)
- 
- void persistent_ram_free_old(struct persistent_ram_zone *prz)
- {
--	kfree(prz->old_log);
-+	kvfree(prz->old_log);
- 	prz->old_log = NULL;
- 	prz->old_log_size = 0;
- }
--- 
-2.41.0.162.gfafddb0af9-goog
+and it needs to show that 'temp64' is an input too.
+
+Dummy me.
+
+The trivial fix is just to make the "=r" be a "+r".
+
+In fact, I should have used "+r" inside update_csum_40b(), but at
+least there I did add the proper input constraint, so that one isn't
+actively buggy.
+
+And again: I noticed this by looking at the patch one more time. No
+actual *testing* has happened. It might still be buggy garbage even
+with that "+r". It's just a bit *less* buggy garbage.
+
+I will now go back to my cave and continue pulling stuff, I just had
+to do something else for a while. Some people relax with a nice drink
+by the pool, I relax by playing around with inline asm.
+
+                Linus
