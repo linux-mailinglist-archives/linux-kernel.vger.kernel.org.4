@@ -2,190 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 403607400C2
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 18:21:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75ED27400C0
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 18:20:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231837AbjF0QUp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 12:20:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42594 "EHLO
+        id S230346AbjF0QUM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 12:20:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231887AbjF0QUP (ORCPT
+        with ESMTP id S232106AbjF0QTg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 12:20:15 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B77A3584
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 09:19:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1687882773;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=B1hEG4cTYRVu7i3Wn6FIrmN7k3YbK/ETHFfpOADAOms=;
-        b=KoL7FtIw4M0C+PgzXLZcvd1geXevxr0Y/mp/85e04o9OtlLrsqWhQbMCZx2nENxCjwntO0
-        DWI3r87aSnLLffwEqkJjNLpivvdR1SsWd38HDN4izbozYVuKt5FhWkrm2J0nUBIGpxJ74G
-        GW/vYiuMEFfcfqonUE2x4c6tYSN0V3k=
-Received: from mail-oo1-f72.google.com (mail-oo1-f72.google.com
- [209.85.161.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-606-UTN5KT0ROuGWBTDsaPtqVw-1; Tue, 27 Jun 2023 12:19:31 -0400
-X-MC-Unique: UTN5KT0ROuGWBTDsaPtqVw-1
-Received: by mail-oo1-f72.google.com with SMTP id 006d021491bc7-56364632e59so1125739eaf.1
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 09:19:31 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687882770; x=1690474770;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=B1hEG4cTYRVu7i3Wn6FIrmN7k3YbK/ETHFfpOADAOms=;
-        b=IMJVpEqLBUHdLuhUerL16cIp3EYom7wKpa0eUmirLA+9Xqhwe2kNlnH6H4jpD/O6F3
-         5KtIFu7bNhJY875I9/LrOLGjRuJ9CMq6ldhrrPfHKVN9ki2cVo4bb+Tvlwo37zts0VtK
-         AmC4lNB1ILvg68tBaoPvorOgbY91su2LooHED8EOZU6jjgM6s5huNcvXFwnfPkZEBCA/
-         CERmlXthjGcX4nygObkO44yAWnu28vBLPgRO1S/Y6I94YBcfbcwwp1X0BYP7osrqIG1f
-         WEgEAPje0QazMbRDF1lvRfJwJ5JpeCtUVZVknhGy+iOUZLOggoroyeW7v1QzvWdf5doU
-         /stw==
-X-Gm-Message-State: AC+VfDyCE2iX6VQEii1aDU7pKDS9tK6zhoLHnJ7ttMURfP0p0N5TG3Kd
-        jBxxyuqEytSQP2sjut8BBgpPRE9PTpN5H0sye4VA8S8JVlcrxcBfTCEqdlzoz79me4QpYfDSw7W
-        2by2shWpuvvDGmyzJuEwhKR3n7T8FqTE=
-X-Received: by 2002:a05:6808:30a5:b0:3a1:e4d1:878d with SMTP id bl37-20020a05680830a500b003a1e4d1878dmr5999006oib.9.1687882769141;
-        Tue, 27 Jun 2023 09:19:29 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ4TE/9DIA1UCoO88m4VqGL/azmypGcrViioc/H2SXDw4w/L4TwXt1NG5LAtJsCReGg8bIv2jA==
-X-Received: by 2002:a05:6808:30a5:b0:3a1:e4d1:878d with SMTP id bl37-20020a05680830a500b003a1e4d1878dmr5998985oib.9.1687882768878;
-        Tue, 27 Jun 2023 09:19:28 -0700 (PDT)
-Received: from [192.168.9.16] (net-2-34-24-242.cust.vodafonedsl.it. [2.34.24.242])
-        by smtp.gmail.com with ESMTPSA id l15-20020ad4444f000000b0062439f05b87sm4722507qvt.45.2023.06.27.09.19.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 27 Jun 2023 09:19:28 -0700 (PDT)
-Message-ID: <4c247ee8-58cd-100b-9229-306fb0a0db1d@redhat.com>
-Date:   Tue, 27 Jun 2023 18:19:26 +0200
+        Tue, 27 Jun 2023 12:19:36 -0400
+Received: from ms.lwn.net (ms.lwn.net [45.79.88.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64C1F30EE;
+        Tue, 27 Jun 2023 09:19:32 -0700 (PDT)
+Received: from localhost (unknown [IPv6:2601:281:8300:73::5f6])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ms.lwn.net (Postfix) with ESMTPSA id E84B055A;
+        Tue, 27 Jun 2023 16:19:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net E84B055A
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
+        t=1687882772; bh=NHwPKxL+x5snvxpcGltS1di1yS+9ZamOSPRd0uqGUNo=;
+        h=From:To:Cc:Subject:Date:From;
+        b=chluDPMkr47yB3ZCHuYIp4vBhf8QJ6T1QHl9fKpxjg/9poLBVwLYDNpNBIrB0GXdy
+         6mKlIWTexqdLIAMglnjIq7bxA/NY1KI5/JxejP+0NChkDgjCn3krgrz41WRDgwuyKo
+         GZwtIGQUpFkIqLnrxlDQruWvOSynsRZEZ2Z+O1Xw5+7Z/BhY4ZG4liaOk1JKjFbSsu
+         29x4mZe5IrJdcbw/1RIsQbh4aTDjY7/YTr9oZ2/LmiTSeF3R9yYJ6dp7Chqsv4PlXV
+         UEIlK0DAlNvi8Ij52cpSZY0F06X9mg8pwh2fs6ptErHBR1E+Gb+xKWKVed6HHuMOmy
+         IjRQrD6gOuuxQ==
+From:   Jonathan Corbet <corbet@lwn.net>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org
+Subject: [GIT PULL] Documentation for 6.5
+Date:   Tue, 27 Jun 2023 10:19:31 -0600
+Message-ID: <87h6qsev3g.fsf@meer.lwn.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v7 4/4] fpga: add configuration for the FPGA KUnit test
- suites.
-Content-Language: en-US
-To:     Xu Yilun <yilun.xu@intel.com>
-Cc:     Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>,
-        Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-fpga@vger.kernel.org
-References: <20230616154405.220502-1-marpagan@redhat.com>
- <20230616154405.220502-5-marpagan@redhat.com>
- <ZJf5hUkGYCg1YCPx@yilunxu-OptiPlex-7050>
-From:   Marco Pagani <marpagan@redhat.com>
-In-Reply-To: <ZJf5hUkGYCg1YCPx@yilunxu-OptiPlex-7050>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The following changes since commit bd415b5c9552d44069d4e7c1e018b6d42f25af9e:
 
+  Documentation/filesystems: ramfs-rootfs-initramfs: use :Author: (2023-05-16 12:55:35 -0600)
 
-On 2023-06-25 10:23, Xu Yilun wrote:
-> On 2023-06-16 at 17:44:05 +0200, Marco Pagani wrote:
->> Add configuration for the KUnit test suites for the core components
->> of the FPGA subsystem.
->>
->> Signed-off-by: Marco Pagani <marpagan@redhat.com>
->> ---
->>  drivers/fpga/Kconfig            |  2 ++
->>  drivers/fpga/Makefile           |  3 +++
->>  drivers/fpga/tests/.kunitconfig |  5 +++++
->>  drivers/fpga/tests/Kconfig      | 11 +++++++++++
->>  drivers/fpga/tests/Makefile     |  5 +++++
->>  5 files changed, 26 insertions(+)
->>  create mode 100644 drivers/fpga/tests/.kunitconfig
->>  create mode 100644 drivers/fpga/tests/Kconfig
->>  create mode 100644 drivers/fpga/tests/Makefile
->>
->> diff --git a/drivers/fpga/Kconfig b/drivers/fpga/Kconfig
->> index 0a00763b9f28..2f689ac4ba3a 100644
->> --- a/drivers/fpga/Kconfig
->> +++ b/drivers/fpga/Kconfig
->> @@ -276,4 +276,6 @@ config FPGA_MGR_LATTICE_SYSCONFIG_SPI
->>  	  FPGA manager driver support for Lattice FPGAs programming over slave
->>  	  SPI sysCONFIG interface.
->>  
->> +source "drivers/fpga/tests/Kconfig"
->> +
->>  endif # FPGA
->> diff --git a/drivers/fpga/Makefile b/drivers/fpga/Makefile
->> index 72e554b4d2f7..352a2612623e 100644
->> --- a/drivers/fpga/Makefile
->> +++ b/drivers/fpga/Makefile
->> @@ -55,3 +55,6 @@ obj-$(CONFIG_FPGA_DFL_NIOS_INTEL_PAC_N3000)	+= dfl-n3000-nios.o
->>  
->>  # Drivers for FPGAs which implement DFL
->>  obj-$(CONFIG_FPGA_DFL_PCI)		+= dfl-pci.o
->> +
->> +# KUnit tests
->> +obj-$(CONFIG_FPGA_KUNIT_TESTS)		+= tests/
->> diff --git a/drivers/fpga/tests/.kunitconfig b/drivers/fpga/tests/.kunitconfig
->> new file mode 100644
->> index 000000000000..a1c2a2974c39
->> --- /dev/null
->> +++ b/drivers/fpga/tests/.kunitconfig
->> @@ -0,0 +1,5 @@
->> +CONFIG_KUNIT=y
->> +CONFIG_FPGA=y
->> +CONFIG_FPGA_REGION=y
->> +CONFIG_FPGA_BRIDGE=y
->> +CONFIG_FPGA_KUNIT_TESTS=y
->> diff --git a/drivers/fpga/tests/Kconfig b/drivers/fpga/tests/Kconfig
->> new file mode 100644
->> index 000000000000..e4a64815f16d
->> --- /dev/null
->> +++ b/drivers/fpga/tests/Kconfig
->> @@ -0,0 +1,11 @@
->> +config FPGA_KUNIT_TESTS
->> +	tristate "KUnit test for the FPGA subsystem" if !KUNIT_ALL_TESTS
->> +	depends on FPGA && FPGA_REGION && FPGA_BRIDGE && KUNIT=y
-> 
-> Why KUNIT shouldn't be 'm'
->
+are available in the Git repository at:
 
-The "running tips" section of KUnit documentation suggests that tests should
-ideally depend on KUNIT=y in their Kconfigs because some features will not work
-when KUNIT=m
+  git://git.lwn.net/linux.git tags/docs-6.5
 
+for you to fetch changes up to a1e72bb00a48687a1dc1c2e549eaf4ba09e802be:
 
->> +	default KUNIT_ALL_TESTS
->> +        help
->> +          This builds unit tests for the FPGA subsystem
->> +
->> +          For more information on KUnit and unit tests in general,
->> +          please refer to the KUnit documentation in Documentation/dev-tools/kunit/.
->> +
->> +          If unsure, say N.
->> diff --git a/drivers/fpga/tests/Makefile b/drivers/fpga/tests/Makefile
->> new file mode 100644
->> index 000000000000..faa5fa230ab0
->> --- /dev/null
->> +++ b/drivers/fpga/tests/Makefile
->> @@ -0,0 +1,5 @@
->> +# SPDX-License-Identifier: GPL-2.0
->> +
->> +obj-$(CONFIG_FPGA_KUNIT_TESTS) += fpga-mgr-test.o
->> +obj-$(CONFIG_FPGA_KUNIT_TESTS) += fpga-bridge-test.o
->> +obj-$(CONFIG_FPGA_KUNIT_TESTS) += fpga-region-test.o
-> 
-> Could be integrated in one line?
+  docs: consolidate storage interfaces (2023-06-21 09:18:06 -0600)
 
-Yes.
+----------------------------------------------------------------
+It's been a relatively calm cycle in docsland.  We do have:
 
-> 
-> Thanks,
-> Yilun
-> 
->> -- 
->> 2.40.1
->>
-> 
+- Some initial page-table documentation from Linus (the other Linus)
 
+- Regression-handling documentation improvements from Thorsten
+
+- Addition of kerneldoc documentation for the ERR_PTR() and related
+  macros from James Seo
+
+...and the usual collection of fixes and updates.
+
+----------------------------------------------------------------
+Baruch Siach (1):
+      docs: crypto: async-tx-api: fix typo in struct name
+
+Costa Shulyupin (2):
+      docs: consolidate human interface subsystems
+      docs: consolidate storage interfaces
+
+Jakub Kicinski (1):
+      MAINTAINERS: direct process doc changes to a dedicated ML
+
+James Seo (3):
+      Documentation: conf.py: Add __force to c_id_attributes
+      err.h: Add missing kerneldocs for error pointer functions
+      Documentation: core-api: Add error pointer functions to kernel-api
+
+Joe Stringer (1):
+      docs/doc-guide: Clarify how to write tables
+
+Johannes Berg (1):
+      Documentation: update git configuration for Link: tag
+
+Jonathan Corbet (1):
+      docs: process: fix a typoed cross-reference
+
+Kees Cook (1):
+      docs: submitting-patches: Discuss interleaved replies
+
+Linus Walleij (1):
+      Documentation/mm: Initial page table documentation
+
+Natesh Sharma (1):
+      docs: admin-guide: Add information about intel_pstate active mode
+
+Randy Dunlap (5):
+      Documentation: virt: correct location of haltpoll module params
+      Documentation: KVM: make corrections to halt-polling.rst
+      Documentation: KVM: make corrections to locking.rst
+      Documentation: KVM: make corrections to ppc-pv.rst
+      Documentation: KVM: make corrections to vcpu-requests.rst
+
+Thorsten Leemhuis (1):
+      docs: handling-regressions: rework section about fixing procedures
+
+Yan-Jie Wang (1):
+      docs: clarify KVM related kernel parameters' descriptions
+
+ Documentation/admin-guide/kernel-parameters.txt |  63 ++++---
+ Documentation/conf.py                           |   1 +
+ Documentation/core-api/kernel-api.rst           |   6 +
+ Documentation/crypto/async-tx-api.rst           |   2 +-
+ Documentation/doc-guide/sphinx.rst              |  11 +-
+ Documentation/maintainer/configure-git.rst      |   2 +-
+ Documentation/mm/page_tables.rst                | 149 +++++++++++++++++
+ Documentation/process/2.Process.rst             |   7 +-
+ Documentation/process/handling-regressions.rst  | 208 ++++++++++++++----------
+ Documentation/process/submitting-patches.rst    |  25 +++
+ Documentation/subsystem-apis.rst                |  34 ++--
+ Documentation/virt/guest-halt-polling.rst       |   2 +-
+ Documentation/virt/kvm/halt-polling.rst         |  10 +-
+ Documentation/virt/kvm/locking.rst              |  18 +-
+ Documentation/virt/kvm/ppc-pv.rst               |   8 +-
+ Documentation/virt/kvm/vcpu-requests.rst        |   6 +-
+ MAINTAINERS                                     |   6 +
+ include/linux/err.h                             |  48 ++++++
+ 18 files changed, 462 insertions(+), 144 deletions(-)
