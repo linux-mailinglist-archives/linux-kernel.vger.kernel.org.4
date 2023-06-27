@@ -2,145 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C00073F9B7
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 12:10:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AFEAF73F9B9
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 12:12:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231794AbjF0KKN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 06:10:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35404 "EHLO
+        id S230474AbjF0KMJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 06:12:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231781AbjF0KJj (ORCPT
+        with ESMTP id S232059AbjF0KLh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 06:09:39 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D6F335A1
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 03:07:29 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id 4fb4d7f45d1cf-51d80c5c834so5484132a12.1
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 03:07:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fairphone.com; s=fair; t=1687860447; x=1690452447;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=H/bshRujrEsiLO7ti1ugHaJ7JTv6arLWxo0bLpM2w8E=;
-        b=BesOb6HZEjpAtSY1iORrnvTv/Y2oCzoYf/xvnZdD/YRTXO9z4DC9m3fy44+aMAYaze
-         f7L8eGLl6wQuJqL3v64fOn/s9VoB6Riq/c3kFZkjI7SBcnXUrL1IlaLriO93ICllvcfn
-         xZN0KowdyjE/vPHCANP/4susBvzYrUgomBomRxDOl+EqrpgNiOe2z6Al4va9fYFSYcGk
-         RFqkNYP2cezOjdfhsYMQlhv77w+/w6WZ5409y8mbUr1t/MEisNM4/oxYgX8DTZHRSVyf
-         gnuzt1Id17pqV/Q1wJPvczJ/Kf3muZWaCQsiUzwH4sQcTcxkTD3bSVqCpjrhTxAYnZC8
-         X5bg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687860447; x=1690452447;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=H/bshRujrEsiLO7ti1ugHaJ7JTv6arLWxo0bLpM2w8E=;
-        b=QqJ2+CHHux7GOPEBD5+TYcT1uGub46pTdMQfnKy9CjEt9jTy2pkSJLJ57E0EhT/1cr
-         B4E9d3ieKq3k3wP/9C2GZhEBp6CSkxeaFGMjrsJozK6xRkr58yTqKN6JB0b6iGife0kj
-         hZw3OVugpnjWyWHfEAxlODqEuam/OFM/uMlIWnxHOrkQd1lUVbvqNuPKUe06gvD0BsNB
-         MRs72qci8X5JhtNllpMFC/mgFZ7cYcuBNOVhGl48dOSf+YzAKqW3U3MogBgnUop8XKBA
-         KK5FTQT+KkAAfHhT7d/yFL9zabQJcfhg6rWyouOKSmV1nleBBDMA7bahZhzVAU439PJ5
-         KCQg==
-X-Gm-Message-State: AC+VfDy06qzdkK5D5xqRzdBSPFXlmnLyd/pTGiVHn2AWMTnxbZmjHW7F
-        NrLbbZukSK9CCybc5o4O7isIpg==
-X-Google-Smtp-Source: ACHHUZ61byw/tAEZGzgU9K68oQmUy/igsn/JcYD9BHF10QFWuqe3r1Hj/ux1ur8aNyR90b7K3QfcJw==
-X-Received: by 2002:a05:6402:2547:b0:51b:cd0f:562 with SMTP id l7-20020a056402254700b0051bcd0f0562mr19659710edb.4.1687860447612;
-        Tue, 27 Jun 2023 03:07:27 -0700 (PDT)
-Received: from localhost (144-178-202-138.static.ef-service.nl. [144.178.202.138])
-        by smtp.gmail.com with ESMTPSA id s5-20020aa7d785000000b0051da1258377sm1321182edq.68.2023.06.27.03.07.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 27 Jun 2023 03:07:27 -0700 (PDT)
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date:   Tue, 27 Jun 2023 12:07:26 +0200
-Message-Id: <CTNCLCWEUWJO.19I1NW2GL7QMZ@otso>
-Cc:     "Conor Dooley" <conor+dt@kernel.org>,
-        "Andy Gross" <agross@kernel.org>,
-        "Alim Akhtar" <alim.akhtar@samsung.com>,
-        <devicetree@vger.kernel.org>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
-        "Konrad Dybcio" <konrad.dybcio@linaro.org>,
-        "Rob Herring" <robh+dt@kernel.org>,
-        "Iskren Chernev" <me@iskren.info>,
-        "Manivannan Sadhasivam" <mani@kernel.org>,
-        "Avri Altman" <avri.altman@wdc.com>, <linux-scsi@vger.kernel.org>,
-        <~postmarketos/upstreaming@lists.sr.ht>,
-        <linux-arm-msm@vger.kernel.org>, <phone-devel@vger.kernel.org>,
-        "Bjorn Andersson" <andersson@kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        "Bart Van Assche" <bvanassche@acm.org>
-Subject: Re: [PATCH v5 3/5] dt-bindings: ufs: qcom: Add ICE to sm8450
- example
-From:   "Luca Weiss" <luca.weiss@fairphone.com>
-To:     "Rob Herring" <robh@kernel.org>
-X-Mailer: aerc 0.15.1
-References: <20221209-dt-binding-ufs-v5-0-c9a58c0a53f5@fairphone.com>
- <20221209-dt-binding-ufs-v5-3-c9a58c0a53f5@fairphone.com>
- <168785971145.1233664.7985274899454909326.robh@kernel.org>
-In-Reply-To: <168785971145.1233664.7985274899454909326.robh@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Tue, 27 Jun 2023 06:11:37 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D714AC9
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 03:11:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=4zqNnV0CnsHhr55I3vwqjRbQalEDsGW/EKXeK+n995M=; b=d3LfQiugbqmzx8tRj/MqnprqiY
+        CtmJtlHIYPjvPL03cg26fQq6KMctnn4cWPxE8M5pSIKauVRCqdY6J2ca7Ll7R/y+YYGCl78OIqZM7
+        tgSbot++XFu2Dm5DZkXSXmPw7Z3kp1FUdVI3APcs2hwIhD3ZAz3yPc8HKclx41jOf0/26ZK8FrSyw
+        Yma1VMRQLWzSZO4i23TGAH/QlqsYQT5JH4NumfAxHVfYrqyp7tkImws/4icIXGv7bWL7L+GiEWXRq
+        aEX8YvMHFLWQWMrAxOD8Z+0XAGhOwTiYzkiG5uFbu1e3qL26Dx0Cc0T9CbnowySEios30HoShs3BP
+        6157kKIQ==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1qE5ex-004ds7-2s;
+        Tue, 27 Jun 2023 10:10:56 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 5815F3002C5;
+        Tue, 27 Jun 2023 12:10:54 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id F2A582435114E; Tue, 27 Jun 2023 12:10:53 +0200 (CEST)
+Date:   Tue, 27 Jun 2023 12:10:53 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Aaron Lu <aaron.lu@intel.com>
+Cc:     Chen Yu <yu.c.chen@intel.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Deng Pan <pan.deng@intel.com>, tim.c.chen@intel.com,
+        linux-kernel@vger.kernel.org, tianyou.li@intel.com,
+        yu.ma@intel.com, lipeng.zhu@intel.com,
+        Tim Chen <tim.c.chen@linux.intel.com>
+Subject: Re: [PATCH v2] sched/task_group: Re-layout structure to reduce false
+ sharing
+Message-ID: <20230627101053.GX4253@hirez.programming.kicks-ass.net>
+References: <20230621081425.420607-1-pan.deng@intel.com>
+ <20230626054756.GA435374@ziqianlu-dell>
+ <ZJlDsbyNmcKtweg4@chenyu5-mobl2.ccr.corp.intel.com>
+ <20230626125335.GA508448@ziqianlu-dell>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230626125335.GA508448@ziqianlu-dell>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue Jun 27, 2023 at 11:55 AM CEST, Rob Herring wrote:
->
-> On Tue, 27 Jun 2023 10:28:03 +0200, Luca Weiss wrote:
-> > SM8450 actually supports ICE (Inline Crypto Engine) so adjust the
-> > example to match.
-> >=20
-> > Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
-> > ---
-> >  Documentation/devicetree/bindings/ufs/qcom,ufs.yaml | 1 +
-> >  1 file changed, 1 insertion(+)
-> >=20
->
-> My bot found errors running 'make DT_CHECKER_FLAGS=3D-m dt_binding_check'
-> on your patch (DT_CHECKER_FLAGS is new in v5.13):
->
-> yamllint warnings/errors:
->
-> dtschema/dtc warnings/errors:
-> /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/u=
-fs/qcom,ufs.example.dtb: ufs@1d84000: Unevaluated properties are not allowe=
-d ('qcom,ice' was unexpected)
-> 	from schema $id: http://devicetree.org/schemas/ufs/qcom,ufs.yaml#
+On Mon, Jun 26, 2023 at 08:53:35PM +0800, Aaron Lu wrote:
+> On Mon, Jun 26, 2023 at 03:52:17PM +0800, Chen Yu wrote:
+> > Besides the cache line alignment, if the task is not a rt one,
+> > why do we have to touch that, I wonder if the following change can avoid that:
+> > 
+> > diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
+> > index ec7b3e0a2b20..067f1310bad2 100644
+> > --- a/kernel/sched/sched.h
+> > +++ b/kernel/sched/sched.h
+> > @@ -1958,8 +1958,10 @@ static inline void set_task_rq(struct task_struct *p, unsigned int cpu)
+> >  #endif
+> >  
+> >  #ifdef CONFIG_RT_GROUP_SCHED
+> > -	p->rt.rt_rq  = tg->rt_rq[cpu];
+> > -	p->rt.parent = tg->rt_se[cpu];
+> > +	if (p->sched_class = &rt_sched_class) {
+>                            ==  :-)
+> 
+> > +		p->rt.rt_rq  = tg->rt_rq[cpu];
+> > +		p->rt.parent = tg->rt_se[cpu];
+> > +	}
+> >  #endif
+> >  }
+> 
+> If a task starts life as a SCHED_NORMAL one and then after some time
+> it's changed to a RT one, then during its next ttwu(), if it didn't
+> migrate, then set_task_rq() will not be called and p->rt.rt_rq will
+> keep as NULL which will cause problem when this task gets enqueued as
+> a rt one.
+> 
+> The follow diff seems to cure this issue:
+> 
+> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+> index c7db597e8175..8c57148e668c 100644
+> --- a/kernel/sched/core.c
+> +++ b/kernel/sched/core.c
+> @@ -7801,6 +7801,20 @@ static int __sched_setscheduler(struct task_struct *p,
+>  	}
+>  	__setscheduler_uclamp(p, attr);
+>  
+> +#ifdef CONFIG_RT_GROUP_SCHED
+> +	/*
+> +	 * Make sure when this task becomes a rt one,
+> +	 * its rt fields have valid value.
+> +	 */
+> +	if (rt_prio(newprio)) {
+> +		struct task_group *tg = task_group(p);
+> +		int cpu = cpu_of(rq);
+> +
+> +		p->rt.rt_rq = tg->rt_rq[cpu];
+> +		p->rt.parent = tg->rt_se[cpu];
+> +	}
+> +#endif
+> +
+>  	if (queued) {
+>  		/*
+>  		 * We enqueue to tail when the priority of a task is
+> 
+> But I'm not sure if it's worth the trouble.
 
-qcom,ice should land with v5.4
+Not sufficient, you can become RT through PI and not pass
+__sched_setscheduler().
 
-https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/=
-?id=3D29a6d1215b7cd5fdff9c3c31ea26076a694ee0a3
+The common code-path in this case would be check_class_changed(), that's
+called for oth PI and __sched_setscheduler().
 
-And as mentioned in the cover letter, validation will still fail with
-without the extra patch linked there (which is not in -next yet).
-
-Regards
-Luca
-
->
-> doc reference errors (make refcheckdocs):
->
-> See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/202212=
-09-dt-binding-ufs-v5-3-c9a58c0a53f5@fairphone.com
->
-> The base for the series is generally the latest rc1. A different dependen=
-cy
-> should be noted in *this* patch.
->
-> If you already ran 'make dt_binding_check' and didn't see the above
-> error(s), then make sure 'yamllint' is installed and dt-schema is up to
-> date:
->
-> pip3 install dtschema --upgrade
->
-> Please check and re-submit after running the above command yourself. Note
-> that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-> your schema. However, it must be unset to test all examples with your sch=
-ema.
-
+Anyway, not against this per-se, but RT_GROUP_SCHED is utter shite and
+nobody should be using it. Also, if there's no measurable performance
+gain (as stated elsewhere IIRC) we shouldn't be adding complexity.
