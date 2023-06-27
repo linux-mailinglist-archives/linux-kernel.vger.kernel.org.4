@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EE4A7404C8
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 22:15:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D44E37404C9
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 22:15:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231636AbjF0UPs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 16:15:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36282 "EHLO
+        id S231642AbjF0UPx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 16:15:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231325AbjF0UOu (ORCPT
+        with ESMTP id S231354AbjF0UOv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 16:14:50 -0400
-Received: from m-r2.th.seeweb.it (m-r2.th.seeweb.it [5.144.164.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9C8D2D5E
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 13:14:42 -0700 (PDT)
+        Tue, 27 Jun 2023 16:14:51 -0400
+Received: from relay08.th.seeweb.it (relay08.th.seeweb.it [IPv6:2001:4b7a:2000:18::169])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DE002D77
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 13:14:44 -0700 (PDT)
 Received: from Marijn-Arch-PC.localdomain (94-211-6-86.cable.dynamic.v4.ziggo.nl [94.211.6.86])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id 011443F770;
-        Tue, 27 Jun 2023 22:14:39 +0200 (CEST)
+        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id 5BF813F788;
+        Tue, 27 Jun 2023 22:14:41 +0200 (CEST)
 From:   Marijn Suijten <marijn.suijten@somainline.org>
-Date:   Tue, 27 Jun 2023 22:14:29 +0200
-Subject: [PATCH v2 14/15] arm64: dts: qcom: sm6125: Add display hardware
- nodes
+Date:   Tue, 27 Jun 2023 22:14:30 +0200
+Subject: [PATCH v2 15/15] arm64: dts: qcom: sm6125-seine: Configure MDSS,
+ DSI and panel
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230627-sm6125-dpu-v2-14-03e430a2078c@somainline.org>
+Message-Id: <20230627-sm6125-dpu-v2-15-03e430a2078c@somainline.org>
 References: <20230627-sm6125-dpu-v2-0-03e430a2078c@somainline.org>
 In-Reply-To: <20230627-sm6125-dpu-v2-0-03e430a2078c@somainline.org>
 To:     Andy Gross <agross@kernel.org>,
@@ -59,7 +59,7 @@ Cc:     ~postmarketos/upstreaming@lists.sr.ht,
         linux-clk@vger.kernel.org, dri-devel@lists.freedesktop.org,
         freedreno@lists.freedesktop.org, Lux Aliaga <they@mint.lgbt>
 X-Mailer: b4 0.12.3
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -68,221 +68,91 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the DT nodes that describe the MDSS hardware on SM6125, containing
-one MDP (display controller) together with a single DSI and DSI PHY.  No
-DisplayPort support is added for now.
+Enable MDSS and DSI, and configure the Samsung SOFEF01-M ams597ut01
+6.0" 1080x2520 panel.
 
 Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
 ---
- arch/arm64/boot/dts/qcom/sm6125.dtsi | 191 ++++++++++++++++++++++++++++++++++-
- 1 file changed, 189 insertions(+), 2 deletions(-)
+ .../dts/qcom/sm6125-sony-xperia-seine-pdx201.dts   | 59 ++++++++++++++++++++++
+ 1 file changed, 59 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/qcom/sm6125.dtsi b/arch/arm64/boot/dts/qcom/sm6125.dtsi
-index a5cc0d43d2d9..b21fa1256f95 100644
---- a/arch/arm64/boot/dts/qcom/sm6125.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sm6125.dtsi
-@@ -1204,12 +1204,199 @@ sram@4690000 {
- 			reg = <0x04690000 0x10000>;
- 		};
+diff --git a/arch/arm64/boot/dts/qcom/sm6125-sony-xperia-seine-pdx201.dts b/arch/arm64/boot/dts/qcom/sm6125-sony-xperia-seine-pdx201.dts
+index 9f8a9ef398a2..08d96d05da2e 100644
+--- a/arch/arm64/boot/dts/qcom/sm6125-sony-xperia-seine-pdx201.dts
++++ b/arch/arm64/boot/dts/qcom/sm6125-sony-xperia-seine-pdx201.dts
+@@ -179,6 +179,43 @@ &i2c3 {
+ 	/* Cirrus Logic CS35L41 boosted audio amplifier @ 40 */
+ };
  
-+		mdss: display-subsystem@5e00000 {
-+			compatible = "qcom,sm6125-mdss";
-+			reg = <0x05e00000 0x1000>;
-+			reg-names = "mdss";
++&mdss {
++	status = "okay";
++};
 +
-+			interrupts = <GIC_SPI 186 IRQ_TYPE_LEVEL_HIGH>;
-+			interrupt-controller;
-+			#interrupt-cells = <1>;
++&mdss_dsi0 {
++	vdda-supply = <&pm6125_l18>;
++	status = "okay";
 +
-+			clocks = <&gcc GCC_DISP_AHB_CLK>,
-+				 <&dispcc DISP_CC_MDSS_AHB_CLK>,
-+				 <&dispcc DISP_CC_MDSS_MDP_CLK>;
-+			clock-names = "iface",
-+				      "ahb",
-+				      "core";
++	panel@0 {
++		compatible = "samsung,sofef01-m-ams597ut01";
++		reg = <0>;
 +
-+			power-domains = <&dispcc MDSS_GDSC>;
++		reset-gpios = <&tlmm 90 GPIO_ACTIVE_LOW>;
 +
-+			iommus = <&apps_smmu 0x400 0x0>;
++		vddio-supply = <&pm6125_l12>;
 +
-+			#address-cells = <1>;
-+			#size-cells = <1>;
-+			ranges;
++		pinctrl-0 = <&mdss_dsi_active &mdss_te_active_sleep>;
++		pinctrl-1 = <&mdss_dsi_sleep &mdss_te_active_sleep>;
++		pinctrl-names = "default", "sleep";
 +
-+			status = "disabled";
-+
-+			mdss_mdp: display-controller@5e01000 {
-+				compatible = "qcom,sm6125-dpu";
-+				reg = <0x05e01000 0x83208>,
-+				      <0x05eb0000 0x2008>;
-+				reg-names = "mdp", "vbif";
-+
-+				interrupt-parent = <&mdss>;
-+				interrupts = <0>;
-+
-+				clocks = <&gcc GCC_DISP_HF_AXI_CLK>,
-+					 <&dispcc DISP_CC_MDSS_AHB_CLK>,
-+					 <&dispcc DISP_CC_MDSS_ROT_CLK>,
-+					 <&dispcc DISP_CC_MDSS_MDP_LUT_CLK>,
-+					 <&dispcc DISP_CC_MDSS_MDP_CLK>,
-+					 <&dispcc DISP_CC_MDSS_VSYNC_CLK>;
-+				clock-names = "bus",
-+					      "iface",
-+					      "rot",
-+					      "lut",
-+					      "core",
-+					      "vsync";
-+				assigned-clocks = <&dispcc DISP_CC_MDSS_VSYNC_CLK>;
-+				assigned-clock-rates = <19200000>;
-+
-+				operating-points-v2 = <&mdp_opp_table>;
-+				power-domains = <&rpmpd SM6125_VDDCX>;
-+
-+				ports {
-+					#address-cells = <1>;
-+					#size-cells = <0>;
-+
-+					port@0 {
-+						reg = <0>;
-+						dpu_intf1_out: endpoint {
-+							remote-endpoint = <&mdss_dsi0_in>;
-+						};
-+					};
-+				};
-+
-+				mdp_opp_table: opp-table {
-+					compatible = "operating-points-v2";
-+
-+					opp-192000000 {
-+						opp-hz = /bits/ 64 <192000000>;
-+						required-opps = <&rpmpd_opp_low_svs>;
-+					};
-+
-+					opp-256000000 {
-+						opp-hz = /bits/ 64 <256000000>;
-+						required-opps = <&rpmpd_opp_svs>;
-+					};
-+
-+					opp-307200000 {
-+						opp-hz = /bits/ 64 <307200000>;
-+						required-opps = <&rpmpd_opp_svs_plus>;
-+					};
-+
-+					opp-384000000 {
-+						opp-hz = /bits/ 64 <384000000>;
-+						required-opps = <&rpmpd_opp_nom>;
-+					};
-+
-+					opp-400000000 {
-+						opp-hz = /bits/ 64 <400000000>;
-+						required-opps = <&rpmpd_opp_turbo>;
-+					};
-+				};
-+			};
-+
-+			mdss_dsi0: dsi@5e94000 {
-+				compatible = "qcom,sm6125-dsi-ctrl", "qcom,mdss-dsi-ctrl";
-+				reg = <0x05e94000 0x400>;
-+				reg-names = "dsi_ctrl";
-+
-+				interrupt-parent = <&mdss>;
-+				interrupts = <4>;
-+
-+				clocks = <&dispcc DISP_CC_MDSS_BYTE0_CLK>,
-+					 <&dispcc DISP_CC_MDSS_BYTE0_INTF_CLK>,
-+					 <&dispcc DISP_CC_MDSS_PCLK0_CLK>,
-+					 <&dispcc DISP_CC_MDSS_ESC0_CLK>,
-+					 <&dispcc DISP_CC_MDSS_AHB_CLK>,
-+					 <&gcc GCC_DISP_HF_AXI_CLK>;
-+				clock-names = "byte",
-+					      "byte_intf",
-+					      "pixel",
-+					      "core",
-+					      "iface",
-+					      "bus";
-+				assigned-clocks = <&dispcc DISP_CC_MDSS_BYTE0_CLK_SRC>,
-+						  <&dispcc DISP_CC_MDSS_PCLK0_CLK_SRC>;
-+				assigned-clock-parents = <&mdss_dsi0_phy 0>, <&mdss_dsi0_phy 1>;
-+
-+				operating-points-v2 = <&dsi_opp_table>;
-+				power-domains = <&rpmpd SM6125_VDDCX>;
-+
-+				phys = <&mdss_dsi0_phy>;
-+				phy-names = "dsi";
-+
-+				#address-cells = <1>;
-+				#size-cells = <0>;
-+
-+				status = "disabled";
-+
-+				ports {
-+					#address-cells = <1>;
-+					#size-cells = <0>;
-+
-+					port@0 {
-+						reg = <0>;
-+						mdss_dsi0_in: endpoint {
-+							remote-endpoint = <&dpu_intf1_out>;
-+						};
-+					};
-+
-+					port@1 {
-+						reg = <1>;
-+						mdss_dsi0_out: endpoint {
-+						};
-+					};
-+				};
-+
-+				dsi_opp_table: opp-table {
-+					compatible = "operating-points-v2";
-+
-+					opp-164000000 {
-+						opp-hz = /bits/ 64 <164000000>;
-+						required-opps = <&rpmpd_opp_low_svs>;
-+					};
-+
-+					opp-187500000 {
-+						opp-hz = /bits/ 64 <187500000>;
-+						required-opps = <&rpmpd_opp_svs>;
-+					};
-+				};
-+			};
-+
-+			mdss_dsi0_phy: phy@5e94400 {
-+				compatible = "qcom,sm6125-dsi-phy-14nm";
-+				reg = <0x05e94400 0x100>,
-+				      <0x05e94500 0x300>,
-+				      <0x05e94800 0x188>;
-+				reg-names = "dsi_phy",
-+					    "dsi_phy_lane",
-+					    "dsi_pll";
-+
-+				#clock-cells = <1>;
-+				#phy-cells = <0>;
-+
-+				clocks = <&dispcc DISP_CC_MDSS_AHB_CLK>,
-+					 <&rpmcc RPM_SMD_XO_CLK_SRC>;
-+				clock-names = "iface",
-+					      "ref";
-+
-+				required-opps = <&rpmpd_opp_svs>;
-+				power-domains = <&rpmpd SM6125_VDDMX>;
-+
-+				status = "disabled";
++		port {
++			panel_in: endpoint {
++				remote-endpoint = <&mdss_dsi0_out>;
 +			};
 +		};
++	};
++};
 +
- 		dispcc: clock-controller@5f00000 {
- 			compatible = "qcom,sm6125-dispcc";
- 			reg = <0x05f00000 0x20000>;
- 			clocks = <&rpmcc RPM_SMD_XO_CLK_SRC>,
--				 <0>,
--				 <0>,
-+				 <&mdss_dsi0_phy 0>,
-+				 <&mdss_dsi0_phy 1>,
- 				 <0>,
- 				 <0>,
- 				 <0>,
++&mdss_dsi0_out {
++	remote-endpoint = <&panel_in>;
++	data-lanes = <0 1 2 3>;
++};
++
++&mdss_dsi0_phy {
++	status = "okay";
++};
++
+ &pm6125_adc {
+ 	pinctrl-names = "default";
+ 	pinctrl-0 = <&camera_flash_therm &emmc_ufs_therm &rf_pa1_therm>;
+@@ -469,6 +506,28 @@ vol_down_n: vol-down-n-state {
+ 		drive-strength = <2>;
+ 		bias-disable;
+ 	};
++
++	mdss_te_active_sleep: mdss-te-active-sleep-state {
++		pins = "gpio89";
++		function = "mdp_vsync";
++		drive-strength = <2>;
++		bias-pull-down;
++	};
++
++	mdss_dsi_active: mdss-dsi-active-state {
++		pins = "gpio90";
++		function = "gpio";
++		drive-strength = <8>;
++		bias-disable;
++	};
++
++	mdss_dsi_sleep: mdss-dsi-sleep-state {
++		pins = "gpio90";
++		function = "gpio";
++		drive-strength = <2>;
++		bias-pull-down;
++	};
++
+ };
+ 
+ &usb3 {
 
 -- 
 2.41.0
