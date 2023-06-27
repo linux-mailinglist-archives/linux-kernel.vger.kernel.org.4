@@ -2,121 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6659173FA8D
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 12:54:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DFD373FA91
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 12:55:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231484AbjF0KyR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 06:54:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56748 "EHLO
+        id S231240AbjF0KzJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 06:55:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231145AbjF0KyO (ORCPT
+        with ESMTP id S230283AbjF0KzH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 06:54:14 -0400
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEAA01FDE
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 03:54:10 -0700 (PDT)
-Received: by mail-lf1-x12c.google.com with SMTP id 2adb3069b0e04-4fa48b5dc2eso4172552e87.1
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 03:54:10 -0700 (PDT)
+        Tue, 27 Jun 2023 06:55:07 -0400
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2E7E19AA
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 03:55:06 -0700 (PDT)
+Received: by mail-pl1-x62d.google.com with SMTP id d9443c01a7336-1b8063aa2e1so11915935ad.1
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 03:55:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687863249; x=1690455249;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=j/3/Pl0tuPRbfuDP1AdE9VlIh+h2E8Q6RrXICwnGYhU=;
-        b=CQF/TOzOM+o3Tl4syLqqTQMovqHI3RYpBuWiZqTJDKA2lQNqYuAszrUeZp7uVPX8mR
-         qY0AtmnYE6PvnYvBEYfl0l1nSfj/oghQOfXOzs2eb98qYDjbPasVkWVwImlYmsSymPoz
-         GZggbbW0+GaxE5EkZGGdua+q7/SfjObckb4EqELceMcLju1a9+ec06eAHj8qxkgYt2X6
-         zMc85RzZqCbynJeiNLbU+x5NTalIwpjgSTScijO0IydI4AsFzHyjjlQ4MVMCcr+Ggp2M
-         ipPfIwvgvIQiolDKxxvn05eTWiqqNU/cQn4VZ/oua8pIF2gDyGm1D6U4QMEzl9RFrQvy
-         XY2w==
+        d=gmail.com; s=20221208; t=1687863306; x=1690455306;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=8+7pb9kkezXuALuGQ9D1BYYeolzOO/8PS1XTZd2C/jQ=;
+        b=XkZMAaIH6zTafrMpOtt/Rf5k5qj+eqHlO+XMiByS4e8QgTS/8NhUZMLb1Lqs6hkpae
+         aKSWR6SPugzj8jYgur2WN7XvK1mC09zEb88/2Jnj/XzToXqr2hHgcXOPwgHUZBoU+D5Y
+         RJaD0qLZWzrDMGpdEsOqH82xIZio6q1r8JKdfnGsKaCQ5ycwwQTp3glfKMb/eiXp7535
+         E8kgrTKbCxR0HGo8zl5vYysIaEFc1+T6g0dB3s9JDgrEGzzPhHXy0TL6+m750ICWIMAu
+         TLDbtlEsbfJERpwPgon/CMBWEEeLsn4lMftSfcZe5rKayV5IJuWkzWf4wWtTuv9MJRKf
+         KxlA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687863249; x=1690455249;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=j/3/Pl0tuPRbfuDP1AdE9VlIh+h2E8Q6RrXICwnGYhU=;
-        b=cIC1VHaCkcoR7NOcor38XHsp6NR/i2lMJNJ/L5GbR/E78W7CzweTIw4lf9rx22JMYe
-         bArbCfuhHhr3ZU/rVDPFrPX6ABHYRBb0qt4UTls3Qcklxuqp05Jx39iSsooALgej0+ao
-         lhqqIfu1PNTOgj7vH/0JplQrBPjj+RL4WO+RohOunH/tgyEDAWc0LD+m2UqSM+E0BZ2M
-         a8bFQEaQp67SQPuy5Z7VWWEIialuVMCuVUcoD2p2Ucvs7AmF1iyi9xUck8wCBcYI6IwQ
-         lo2svVX4i2t53r/oN7y/qmZ0/RIVQHZ6VptwAMgD/ZU2TlgzevFiucrO5UzRfVNl5a6o
-         nxng==
-X-Gm-Message-State: AC+VfDwUFMQSGGOtjCAIDAszlebVCut2kYuI97dh+kTIbIbsOfMF2yye
-        IRZKF7WfVhsKORfQRRy32nOWzg==
-X-Google-Smtp-Source: ACHHUZ7k9Ag/F1Rx0JLwrCSKfm0c8Qh4irFFfk1A/Ij8ZpFTwvoIjYcFx6pE/Sm2leBHKfGgUy/DAg==
-X-Received: by 2002:a05:6512:2343:b0:4fa:9817:c1da with SMTP id p3-20020a056512234300b004fa9817c1damr5082080lfu.21.1687863248768;
-        Tue, 27 Jun 2023 03:54:08 -0700 (PDT)
-Received: from linaro.org ([62.231.110.100])
-        by smtp.gmail.com with ESMTPSA id i5-20020a05600c290500b003f9b66a9376sm13378426wmd.42.2023.06.27.03.54.07
+        d=1e100.net; s=20221208; t=1687863306; x=1690455306;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=8+7pb9kkezXuALuGQ9D1BYYeolzOO/8PS1XTZd2C/jQ=;
+        b=VK3wu0YKw1XuhQfOQsKzyr9g2cYZrCM5BYHjBDKPdjeljXVaIzthXySv7QxcJdaqSk
+         sOUSV7jDwW2Ef/4ClV2r6CzfbRNJVBNORiam8K6zqYCrK4JZjhFjhFYxIFSCIMvavu8A
+         dxMi/cho82Y8ptmRq0InnMRYgdL+2teGm7tuya7uuC0HpYA3sTCyfl+T09lAfa7dY3CI
+         w2tNM4WG6u7B+9G5qmmxYngyi7b3dYs4g/PLLXgTO23ZTbddqPEgTXbTmE13U+yzOYp1
+         6XqqZq14ldcUuOLv9I1iTjATXegekeRCF/9QgSpmJDEt0gAO7qQLJczVEq4L8/1Ra1wf
+         iXKA==
+X-Gm-Message-State: AC+VfDye9FbFC79dqPZhRyH5dwTAIYwq82r7M5JemSUYPFJnp8Yz/FIs
+        bKEo6cjxGWdI+3hRz9xBBak4UdBaB+o=
+X-Google-Smtp-Source: ACHHUZ4YPJ4GQ3UeoAQCoAoc+jmw/lW9SVBKsgAgEQlTFrrgLQcshXBgjIGN6MKbxWWejCQ2unRMbg==
+X-Received: by 2002:a17:902:eccf:b0:1b3:e6ba:1573 with SMTP id a15-20020a170902eccf00b001b3e6ba1573mr5854659plh.6.1687863306247;
+        Tue, 27 Jun 2023 03:55:06 -0700 (PDT)
+Received: from octofox.hsd1.ca.comcast.net ([2601:641:401:1d20:96d2:5d2:b10f:c30c])
+        by smtp.gmail.com with ESMTPSA id i10-20020a17090332ca00b001b8053b8e0esm3256635plr.136.2023.06.27.03.55.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Jun 2023 03:54:08 -0700 (PDT)
-Date:   Tue, 27 Jun 2023 13:54:06 +0300
-From:   Abel Vesa <abel.vesa@linaro.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        avel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Mike Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Taniya Das <tdas@qti.qualcomm.com>, linux-pm@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arm-msm@vger.kernel.org
-Subject: Re: [RFC PATCH 1/2] PM: domains: Allow devices attached to genpd to
- be managed by HW
-Message-ID: <ZJq/zgFC+O2MoiEw@linaro.org>
-References: <20230627104033.3345659-1-abel.vesa@linaro.org>
- <2023062741-passion-scarcity-2390@gregkh>
+        Tue, 27 Jun 2023 03:55:05 -0700 (PDT)
+From:   Max Filippov <jcmvbkbc@gmail.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org, Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>
+Subject: [PULL 00/18] xtensa updates for v6.5
+Date:   Tue, 27 Jun 2023 03:54:51 -0700
+Message-Id: <20230627105451.803122-1-jcmvbkbc@gmail.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2023062741-passion-scarcity-2390@gregkh>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        FROM_LOCAL_NOVOWEL,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23-06-27 12:46:28, Greg Kroah-Hartman wrote:
-> On Tue, Jun 27, 2023 at 01:40:32PM +0300, Abel Vesa wrote:
-> > From: Ulf Hansson <ulf.hansson@linaro.org>
-> > 
-> > Some power-domains may be capable of relying on the HW to control the power
-> > for a device that's hooked up to it. Typically, for these kinds of
-> > configurations the device doesn't really need to be attached to a PM domain
-> > (genpd), from Linux point of view. However, in some cases the behaviour of
-> > the power-domain and its device can be changed in runtime.
-> > 
-> > To allow a consumer driver to change the behaviour of the PM domain for its
-> > device, let's provide a new function, dev_pm_genpd_set_hwmode(). Moreover,
-> > let's add a corresponding optional genpd callback, ->set_hwmode_dev(),
-> > which the genpd provider should implement if it can support switching
-> > between HW controlled mode and SW controlled mode.
-> > 
-> > Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
-> 
-> You can't forward on a patch from someone else without also adding your
-> signed-off-by on it, right?
+Hi Linus,
 
-Oups, forgot to add it. Will do in the next version.
+please pull the following updates for the Xtensa architecture.
 
-> 
-> Also, why is this a RFC series?  What is left to do with it to get it
-> into a state which you feel comfortable having us review it "for real"?
+The following changes since commit 858fd168a95c5b9669aac8db6c14a9aeab446375:
 
-There is a bit of back story here. This HW control support is something
-that Qualcomm platforms support for some of the PDs. Sent this as RFC
-as I thought it might open up a discussion of such a generic need at
-first. But now that I think of it, it might've been a non-RFC patch as
-well.
+  Linux 6.4-rc6 (2023-06-11 14:35:30 -0700)
 
-> 
-> thanks,
-> 
-> greg k-h
+are available in the Git repository at:
+
+  https://github.com/jcmvbkbc/linux-xtensa.git tags/xtensa-20230627
+
+for you to fetch changes up to f7667ca106df50ff8b776db54f85074dc9c52e1b:
+
+  xtensa: dump userspace code around the exception PC (2023-06-24 06:34:27 -0700)
+
+----------------------------------------------------------------
+Xtensa updates for v6.5
+
+- clean up platform_* interface of the xtensa architecture
+- enable HAVE_ASM_MODVERSIONS
+- drop ARCH_WANT_FRAME_POINTERS
+- clean up unaligned access exception handler
+- provide handler for load/store exceptions
+- various small fixes and cleanups
+
+----------------------------------------------------------------
+Max Filippov (18):
+      xtensa: xt2000: drop empty platform_init
+      xtensa: drop platform_heartbeat
+      xtensa: drop platform_restart
+      xtensa: drop platform_halt and platform_power_off
+      xtensa: clean up default platform functions
+      xtensa: boot-redboot: clean up Makefile
+      xtensa: drop EXPORT_SYMBOL for common_exception_return
+      xtensa: drop bcopy implementation
+      xtensa: only build __strncpy_user with CONFIG_ARCH_HAS_STRNCPY_FROM_USER
+      xtensa: add asm-prototypes.h
+      xtensa: report trax and perf counters in cpuinfo
+      xtensa: drop ARCH_WANT_FRAME_POINTERS
+      xtensa: move early_trap_init from kasan_early_init to init_arch
+      xtensa: always install slow handler for unaligned access exception
+      xtensa: rearrange unaligned exception handler
+      xtensa: add load/store exception handler
+      xtensa: rearrange show_stack output
+      xtensa: dump userspace code around the exception PC
+
+ arch/xtensa/Kconfig                      |  14 +-
+ arch/xtensa/Kconfig.debug                |   8 +
+ arch/xtensa/boot/boot-redboot/Makefile   |   9 +-
+ arch/xtensa/include/asm/asm-prototypes.h |  29 ++++
+ arch/xtensa/include/asm/asmmacro.h       |   1 +
+ arch/xtensa/include/asm/core.h           |   8 +
+ arch/xtensa/include/asm/ftrace.h         |   9 --
+ arch/xtensa/include/asm/platform.h       |  20 ---
+ arch/xtensa/include/asm/string.h         |   3 -
+ arch/xtensa/include/asm/traps.h          |   7 +
+ arch/xtensa/kernel/align.S               | 256 +++++++++++++++++++++----------
+ arch/xtensa/kernel/mcount.S              |   1 +
+ arch/xtensa/kernel/platform.c            |  29 ++--
+ arch/xtensa/kernel/setup.c               |  41 ++++-
+ arch/xtensa/kernel/stacktrace.c          |   4 -
+ arch/xtensa/kernel/time.c                |   4 -
+ arch/xtensa/kernel/traps.c               | 102 +++++++++---
+ arch/xtensa/kernel/xtensa_ksyms.c        |  95 +-----------
+ arch/xtensa/lib/Makefile                 |   3 +-
+ arch/xtensa/lib/ashldi3.S                |   1 +
+ arch/xtensa/lib/ashrdi3.S                |   1 +
+ arch/xtensa/lib/bswapdi2.S               |   1 +
+ arch/xtensa/lib/bswapsi2.S               |   1 +
+ arch/xtensa/lib/checksum.S               |   2 +
+ arch/xtensa/lib/divsi3.S                 |   1 +
+ arch/xtensa/lib/lshrdi3.S                |   1 +
+ arch/xtensa/lib/memcopy.S                |  19 +--
+ arch/xtensa/lib/memset.S                 |   2 +
+ arch/xtensa/lib/modsi3.S                 |   1 +
+ arch/xtensa/lib/mulsi3.S                 |   1 +
+ arch/xtensa/lib/strncpy_user.S           |   1 +
+ arch/xtensa/lib/strnlen_user.S           |   1 +
+ arch/xtensa/lib/udivsi3.S                |   1 +
+ arch/xtensa/lib/umodsi3.S                |   1 +
+ arch/xtensa/lib/umulsidi3.S              |   1 +
+ arch/xtensa/lib/usercopy.S               |   1 +
+ arch/xtensa/mm/kasan_init.c              |   2 -
+ arch/xtensa/mm/misc.S                    |   5 +
+ arch/xtensa/platforms/iss/setup.c        |  24 +--
+ arch/xtensa/platforms/xt2000/setup.c     |  48 +++---
+ arch/xtensa/platforms/xtfpga/setup.c     |  34 ++--
+ 41 files changed, 467 insertions(+), 326 deletions(-)
+ create mode 100644 arch/xtensa/include/asm/asm-prototypes.h
+
+-- 
+Thanks.
+-- Max
