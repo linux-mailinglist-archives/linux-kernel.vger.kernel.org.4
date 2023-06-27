@@ -2,116 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CCA473F5A9
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 09:28:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF91373F5AB
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 09:29:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231158AbjF0H2K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 03:28:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33828 "EHLO
+        id S230383AbjF0H3O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 03:29:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231365AbjF0H1m (ORCPT
+        with ESMTP id S231292AbjF0H25 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 03:27:42 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4524D1716;
-        Tue, 27 Jun 2023 00:27:30 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8111411FB;
-        Tue, 27 Jun 2023 00:28:13 -0700 (PDT)
-Received: from [10.57.76.16] (unknown [10.57.76.16])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 476E23F663;
-        Tue, 27 Jun 2023 00:27:26 -0700 (PDT)
-Message-ID: <a729a5cb-2376-869b-96dd-cb1babac04d2@arm.com>
-Date:   Tue, 27 Jun 2023 08:27:24 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.12.0
-Subject: Re: [PATCH v1 02/10] mm: pass gfp flags and order to
- vma_alloc_zeroed_movable_folio()
-To:     Yu Zhao <yuzhao@google.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Yin Fengwei <fengwei.yin@intel.com>,
-        David Hildenbrand <david@redhat.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-alpha@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, linux-s390@vger.kernel.org
-References: <20230626171430.3167004-1-ryan.roberts@arm.com>
- <20230626171430.3167004-3-ryan.roberts@arm.com>
- <CAOUHufYWtsAU4PvKpVhzJUeQb9cd+BifY9KzgceBXHp2F2dDRg@mail.gmail.com>
-From:   Ryan Roberts <ryan.roberts@arm.com>
-In-Reply-To: <CAOUHufYWtsAU4PvKpVhzJUeQb9cd+BifY9KzgceBXHp2F2dDRg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 27 Jun 2023 03:28:57 -0400
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6A99B30EC
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 00:28:19 -0700 (PDT)
+Received: from linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net (linux.microsoft.com [13.77.154.182])
+        by linux.microsoft.com (Postfix) with ESMTPSA id A3F4520C08E6;
+        Tue, 27 Jun 2023 00:28:18 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com A3F4520C08E6
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1687850898;
+        bh=rDEzAo1VXiqZ899g34kuC/RyTIU/6VEVuMbphol/K90=;
+        h=From:To:Cc:Subject:Date:From;
+        b=eHqDSHgaNLW4PuVGscrgqX+BPFfVXaaTGgU2mhwcXz5xx+XneMb8R44FzIk7m6nW2
+         IPAz2VRxb/eIIHw3XspUTYo6kHx0rn6uyO8kHhejcIqP6vOSITUtfFl+d1L7tTWwD7
+         tAy6Dc20gvpk19edsnxxn0iRTShJZFvoCsgFJwe4=
+From:   Saurabh Sengar <ssengar@linux.microsoft.com>
+To:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        luto@kernel.org, peterz@infradead.org, mikelley@microsoft.com,
+        linux-kernel@vger.kernel.org
+Cc:     ssengar@linux.microsoft.com
+Subject: [PATCH] x86/numa: Add Devicetree support
+Date:   Tue, 27 Jun 2023 00:28:02 -0700
+Message-Id: <1687850882-22554-1-git-send-email-ssengar@linux.microsoft.com>
+X-Mailer: git-send-email 1.8.3.1
+X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27/06/2023 03:27, Yu Zhao wrote:
-> On Mon, Jun 26, 2023 at 11:14 AM Ryan Roberts <ryan.roberts@arm.com> wrote:
->>
->> Allow allocation of large folios with vma_alloc_zeroed_movable_folio().
->> This prepares the ground for large anonymous folios. The generic
->> implementation of vma_alloc_zeroed_movable_folio() now uses
->> clear_huge_page() to zero the allocated folio since it may now be a
->> non-0 order.
->>
->> Currently the function is always called with order 0 and no extra gfp
->> flags, so no functional change intended. But a subsequent commit will
->> take advantage of the new parameters to allocate large folios. The extra
->> gfp flags will be used to control the reclaim policy.
->>
->> Signed-off-by: Ryan Roberts <ryan.roberts@arm.com>
->> ---
->>  arch/alpha/include/asm/page.h   |  5 +++--
->>  arch/arm64/include/asm/page.h   |  3 ++-
->>  arch/arm64/mm/fault.c           |  7 ++++---
->>  arch/ia64/include/asm/page.h    |  5 +++--
->>  arch/m68k/include/asm/page_no.h |  7 ++++---
->>  arch/s390/include/asm/page.h    |  5 +++--
->>  arch/x86/include/asm/page.h     |  5 +++--
->>  include/linux/highmem.h         | 23 +++++++++++++----------
->>  mm/memory.c                     |  5 +++--
->>  9 files changed, 38 insertions(+), 27 deletions(-)
->>
->> diff --git a/arch/alpha/include/asm/page.h b/arch/alpha/include/asm/page.h
->> index 4db1ebc0ed99..6fc7fe91b6cb 100644
->> --- a/arch/alpha/include/asm/page.h
->> +++ b/arch/alpha/include/asm/page.h
->> @@ -17,8 +17,9 @@
->>  extern void clear_page(void *page);
->>  #define clear_user_page(page, vaddr, pg)       clear_page(page)
->>
->> -#define vma_alloc_zeroed_movable_folio(vma, vaddr) \
->> -       vma_alloc_folio(GFP_HIGHUSER_MOVABLE | __GFP_ZERO, 0, vma, vaddr, false)
->> +#define vma_alloc_zeroed_movable_folio(vma, vaddr, gfp, order) \
->> +       vma_alloc_folio(GFP_HIGHUSER_MOVABLE | __GFP_ZERO | (gfp), \
->> +                       order, vma, vaddr, false)
-> 
-> I don't think we need to worry about gfp if we want to make a minimum
-> series. There would be many discussion points around it, e.g., I
-> already disagree with what you chose: GFP_TRANSHUGE_LIGHT would be
-> more suitable than __GFP_NORETRY, and there are even better options
-> than GFP_TRANSHUGE_LIGHT.
+Hyper-V has usecases where it need to fetch NUMA information from
+Devicetree. Currently, it is not possible to extract the NUMA
+information from Devicetree for x86 arch.
 
-OK, but disagreeing about what the GFP flags should be is different from
-disagreeing about whether we need a mechanism for specifying them. Given I need
-to do the changes to add `order` I thought it was sensible to add the gfp flags
-at the same time.
+Add support for Devicetree in the x86_numa_init function, allowing
+the retrieval of NUMA node information from the Devicetree.
 
-I'll follow your advice and remove the gfp flag addition for now.
+Additionally, relocate the x86_dtb_init function before initmem_init
+to ensure the Devicetree initialization prior to its utilization in
+x86_numa_init.
+
+Signed-off-by: Saurabh Sengar <ssengar@linux.microsoft.com>
+---
+ arch/x86/Kconfig        | 1 +
+ arch/x86/kernel/setup.c | 2 +-
+ arch/x86/mm/numa.c      | 3 +++
+ 3 files changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+index c531b16ee0bf..a2ada193b2d8 100644
+--- a/arch/x86/Kconfig
++++ b/arch/x86/Kconfig
+@@ -1567,6 +1567,7 @@ config NUMA
+ 	depends on X86_64 || (X86_32 && HIGHMEM64G && X86_BIGSMP)
+ 	default y if X86_BIGSMP
+ 	select USE_PERCPU_NUMA_NODE_ID
++	select OF_NUMA if OF
+ 	help
+ 	  Enable NUMA (Non-Uniform Memory Access) support.
+ 
+diff --git a/arch/x86/kernel/setup.c b/arch/x86/kernel/setup.c
+index fd975a4a5200..940c92a6a5e9 100644
+--- a/arch/x86/kernel/setup.c
++++ b/arch/x86/kernel/setup.c
+@@ -1220,6 +1220,7 @@ void __init setup_arch(char **cmdline_p)
+ 
+ 	early_acpi_boot_init();
+ 
++	x86_dtb_init();
+ 	initmem_init();
+ 	dma_contiguous_reserve(max_pfn_mapped << PAGE_SHIFT);
+ 
+@@ -1261,7 +1262,6 @@ void __init setup_arch(char **cmdline_p)
+ 	 * Read APIC and some other early information from ACPI tables.
+ 	 */
+ 	acpi_boot_init();
+-	x86_dtb_init();
+ 
+ 	/*
+ 	 * get boot-time SMP configuration:
+diff --git a/arch/x86/mm/numa.c b/arch/x86/mm/numa.c
+index 2aadb2019b4f..a6d3d331fda2 100644
+--- a/arch/x86/mm/numa.c
++++ b/arch/x86/mm/numa.c
+@@ -11,6 +11,7 @@
+ #include <linux/nodemask.h>
+ #include <linux/sched.h>
+ #include <linux/topology.h>
++#include <linux/of.h>
+ 
+ #include <asm/e820/api.h>
+ #include <asm/proto.h>
+@@ -733,6 +734,8 @@ void __init x86_numa_init(void)
+ 		if (!numa_init(amd_numa_init))
+ 			return;
+ #endif
++		if (acpi_disabled && !numa_init(of_numa_init))
++			return;
+ 	}
+ 
+ 	numa_init(dummy_numa_init);
+-- 
+2.34.1
+
