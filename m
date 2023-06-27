@@ -2,149 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC7FB73F680
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 10:09:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B4FA73F683
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 10:10:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229910AbjF0IJk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 04:09:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51916 "EHLO
+        id S231218AbjF0IKa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 04:10:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229740AbjF0IJi (ORCPT
+        with ESMTP id S229852AbjF0IK2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 04:09:38 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id ACF931FC7;
-        Tue, 27 Jun 2023 01:09:37 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7400B2F4;
-        Tue, 27 Jun 2023 01:10:21 -0700 (PDT)
-Received: from [10.57.76.16] (unknown [10.57.76.16])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 780303F663;
-        Tue, 27 Jun 2023 01:09:33 -0700 (PDT)
-Message-ID: <b16636b3-b493-39c5-c605-c5701fcbed1f@arm.com>
-Date:   Tue, 27 Jun 2023 09:09:31 +0100
+        Tue, 27 Jun 2023 04:10:28 -0400
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A82971FCF;
+        Tue, 27 Jun 2023 01:10:25 -0700 (PDT)
+Received: by mail-pf1-x42b.google.com with SMTP id d2e1a72fcca58-668711086f4so2752565b3a.1;
+        Tue, 27 Jun 2023 01:10:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687853425; x=1690445425;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=xma4Gb4pEkAaFNibqGslSuwc+Q9f0EZKxO+NL/xlyfI=;
+        b=fiBi966y5+YTn7gXaGwP283Y2BULbbybfwWimaRKkiaLfziKHTr1Nn0u1Y4UaJ/uSI
+         4IhX+y6uQgiQ18lasWqI4l0uK3jdswVclrdS1f8VT6CKG+aKKUgEduqi2upawQ6oMuJE
+         lm0DbIknBPi8M4R2E/bBlE1gxXv4dRLEGf+VdtQGNa4DsV8cPbS/0MB5VUZ3QXKiRQ8Q
+         hVUr3UhZa2tyxKz/59QEJVK1N4C+oNENC9UIUARU0oQRGrz4C8Wnq2RONrppJ9vCcS8O
+         wUCeH7i4v9Ecgh5zu+zElctWm9yHWqD3Pbx7uUcbCYnsAHWCm+my7dj3Ecvba/L4CG54
+         Lp8A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687853425; x=1690445425;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=xma4Gb4pEkAaFNibqGslSuwc+Q9f0EZKxO+NL/xlyfI=;
+        b=OC4I4H0WnUEStVDLeR5HBjmMYTudFr8PGFezBi6Fr+OxQ0Ipj9NrC8ho9pclJDctOV
+         RK587EtlrHF9znGL5MDf/ZuwoUwyz5lmhzyJCwFVLhDytdZzYuv6GcNMZh+28Ch0qF0T
+         6pz88Xoj5leJcr7obmo9hyRNt2Wx7fPwy+igjtA8bcIIgd9k4KfPzW+G+P+IY4Ljwpzu
+         nKkbyLU9uqfCSHOtxRyb0WDHCyOAjOEWI0x1F9RXZ1p1+hK5CjPakwfe08dyFHxECwFN
+         zUzWwUd5XBiebwLjv0M1gpEu95BbxVsFowUfeOPVjG1+vT58DDOMA0rHe8EcYiAa640i
+         ayLg==
+X-Gm-Message-State: AC+VfDxXFmf8ES1gGKAKVYh4Ytt7JG5Dp2ivQuZRwaovTroo3ugSDtDe
+        CKtFOZ5ggCslSM6FXCOEFRM=
+X-Google-Smtp-Source: ACHHUZ6CTNgcyl0NsEzGvyssYofApXbtOrbfoHv2bAAqnrKqKJBxnRusB1xfPUGPR21Y52lkC3EaWQ==
+X-Received: by 2002:a05:6a00:228a:b0:666:eaaf:a2af with SMTP id f10-20020a056a00228a00b00666eaafa2afmr40933721pfe.14.1687853425063;
+        Tue, 27 Jun 2023 01:10:25 -0700 (PDT)
+Received: from hackyzh-VMware-Virtual-Platform.localdomain ([117.163.240.206])
+        by smtp.gmail.com with ESMTPSA id r2-20020a62e402000000b00672401787c6sm3670351pfh.109.2023.06.27.01.10.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 27 Jun 2023 01:10:24 -0700 (PDT)
+From:   yqsun1997@gmail.com
+To:     tiffany.lin@mediatek.com
+Cc:     andrew-ct.chen@mediatek.com, yunfei.dong@mediatek.com,
+        matthias.bgg@gmail.com, angelogioacchino.delregno@collabora.com,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, 499671216@qq.com,
+        yqsun1997 <yqsun1997@gmail.com>
+Subject: [PATCH] OOB read and write in mtk multiple places
+Date:   Tue, 27 Jun 2023 16:10:02 +0800
+Message-Id: <20230627081002.1768990-1-yqsun1997@gmail.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.12.0
-Subject: Re: [PATCH v1 04/10] mm: Implement folio_add_new_anon_rmap_range()
-To:     Yu Zhao <yuzhao@google.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Yin Fengwei <fengwei.yin@intel.com>,
-        David Hildenbrand <david@redhat.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-alpha@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, linux-s390@vger.kernel.org
-References: <20230626171430.3167004-1-ryan.roberts@arm.com>
- <20230626171430.3167004-5-ryan.roberts@arm.com>
- <CAOUHufZ0ZzHoJXwbzNyZOv74L=XYdZzcxA8SXxLX0MXdykuWRA@mail.gmail.com>
-From:   Ryan Roberts <ryan.roberts@arm.com>
-In-Reply-To: <CAOUHufZ0ZzHoJXwbzNyZOv74L=XYdZzcxA8SXxLX0MXdykuWRA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27/06/2023 08:08, Yu Zhao wrote:
-> On Mon, Jun 26, 2023 at 11:14 AM Ryan Roberts <ryan.roberts@arm.com> wrote:
->>
->> Like folio_add_new_anon_rmap() but batch-rmaps a range of pages
->> belonging to a folio, for effciency savings. All pages are accounted as
->> small pages.
->>
->> Signed-off-by: Ryan Roberts <ryan.roberts@arm.com>
->> ---
->>  include/linux/rmap.h |  2 ++
->>  mm/rmap.c            | 43 +++++++++++++++++++++++++++++++++++++++++++
->>  2 files changed, 45 insertions(+)
->>
->> diff --git a/include/linux/rmap.h b/include/linux/rmap.h
->> index a3825ce81102..15433a3d0cbf 100644
->> --- a/include/linux/rmap.h
->> +++ b/include/linux/rmap.h
->> @@ -196,6 +196,8 @@ void page_add_new_anon_rmap(struct page *, struct vm_area_struct *,
->>                 unsigned long address);
->>  void folio_add_new_anon_rmap(struct folio *, struct vm_area_struct *,
->>                 unsigned long address);
->> +void folio_add_new_anon_rmap_range(struct folio *folio, struct page *page,
->> +               int nr, struct vm_area_struct *vma, unsigned long address);
-> 
-> We should update folio_add_new_anon_rmap() to support large() &&
-> !folio_test_pmd_mappable() folios instead.
-> 
-> I double checked all places currently using folio_add_new_anon_rmap(),
-> and as expected, none actually allocates large() &&
-> !folio_test_pmd_mappable() and maps it one by one, which makes the
-> cases simpler, i.e.,
->   if (!large())
->     // the existing basepage case
->   else if (!folio_test_pmd_mappable())
->     // our new case
->   else
->     // the existing THP case
+From: yqsun1997 <yqsun1997@gmail.com>
 
-I don't have a strong opinion either way. Happy to go with this suggestion. But
-the reason I did it as a new function was because I was following the pattern in
-[1] which adds a new folio_add_file_rmap_range() function.
+The num_planes max index is 8,
+but bytesperline and bytesperline in struct mtk_q_data,
+The max index is MTK_VCODEC_MAX_PLANES == 3,
+so will cause OOB read and write in multiple places.like vidioc_venc_g_fmt
+same as commit 8fbcf730
 
-[1] https://lore.kernel.org/linux-mm/20230315051444.3229621-35-willy@infradead.org/
+Signed-off-by: yqsun1997 <yqsun1997@gmail.com>
+---
+ drivers/media/platform/mediatek/vcodec/mtk_vcodec_drv.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-
-> 
->>  void page_add_file_rmap(struct page *, struct vm_area_struct *,
->>                 bool compound);
->>  void folio_add_file_rmap_range(struct folio *, struct page *, unsigned int nr,
->> diff --git a/mm/rmap.c b/mm/rmap.c
->> index 1d8369549424..4050bcea7ae7 100644
->> --- a/mm/rmap.c
->> +++ b/mm/rmap.c
->> @@ -1305,6 +1305,49 @@ void folio_add_new_anon_rmap(struct folio *folio, struct vm_area_struct *vma,
->>         __page_set_anon_rmap(folio, &folio->page, vma, address, 1);
->>  }
->>
->> +/**
->> + * folio_add_new_anon_rmap_range - Add mapping to a set of pages within a new
->> + * anonymous potentially large folio.
->> + * @folio:      The folio containing the pages to be mapped
->> + * @page:       First page in the folio to be mapped
->> + * @nr:         Number of pages to be mapped
->> + * @vma:        the vm area in which the mapping is added
->> + * @address:    the user virtual address of the first page to be mapped
->> + *
->> + * Like folio_add_new_anon_rmap() but batch-maps a range of pages within a folio
->> + * using non-THP accounting. Like folio_add_new_anon_rmap(), the inc-and-test is
->> + * bypassed and the folio does not have to be locked. All pages in the folio are
->> + * individually accounted.
->> + *
->> + * As the folio is new, it's assumed to be mapped exclusively by a single
->> + * process.
->> + */
->> +void folio_add_new_anon_rmap_range(struct folio *folio, struct page *page,
->> +               int nr, struct vm_area_struct *vma, unsigned long address)
->> +{
->> +       int i;
->> +
->> +       VM_BUG_ON_VMA(address < vma->vm_start ||
->> +                     address + (nr << PAGE_SHIFT) > vma->vm_end, vma);
-> 
-> BTW, VM_BUG_ON* shouldn't be used in new code:
-> Documentation/process/coding-style.rst
-
-Thanks, sorry about that. Was copy-pasting from folio_add_new_anon_rmap().
+diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_drv.h b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_drv.h
+index 9acab54fd..c2c157675 100644
+--- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_drv.h
++++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_drv.h
+@@ -22,7 +22,7 @@
+ #define MTK_VCODEC_DEC_NAME	"mtk-vcodec-dec"
+ #define MTK_VCODEC_ENC_NAME	"mtk-vcodec-enc"
+ 
+-#define MTK_VCODEC_MAX_PLANES	3
++#define MTK_VCODEC_MAX_PLANES	8
+ #define MTK_V4L2_BENCHMARK	0
+ #define WAIT_INTR_TIMEOUT_MS	1000
+ #define IS_VDEC_LAT_ARCH(hw_arch) ((hw_arch) >= MTK_VDEC_LAT_SINGLE_CORE)
+-- 
+2.39.2
 
