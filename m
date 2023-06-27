@@ -2,136 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C186773F7CC
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 10:51:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B9B873F7C4
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 10:51:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230344AbjF0Ivs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 04:51:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50768 "EHLO
+        id S231802AbjF0Iv1 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 27 Jun 2023 04:51:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231841AbjF0Ivk (ORCPT
+        with ESMTP id S231329AbjF0IvY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 04:51:40 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D2ED10D;
-        Tue, 27 Jun 2023 01:51:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1687855897; x=1719391897;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=CXsYWghN+E3gwCoJ+rRyfawRMHzc9mlxaZI/0JHowCY=;
-  b=CBQ33ownST3aciL70QFwHbT1jLQCH0JVc8QK/UszaotNJ4v9h0nsRHK0
-   X+mjie192ABtJNaYrAJsXikwwqRhi7Z/BW1o6Ni2Dra1bZSNfP62OXi3i
-   P7If8+6xlNCtYPsE+Y6wm6N1GMhfjE2d8b+LkTCaJswltCXMK+z4KlYnh
-   94u7q1z0KQpTX9C1HV2NH6sU7AhL507kDsktnEMfETCXNm9vL10ANXcJC
-   uBs0w8vSPlpxTOYncFKQGhESATOz3kDl2NSvOVMJO5wjzrpGebhCJxJIt
-   Sqrj/TUhUAmpbMIoyijOA26SWoXAD/6K42yoIhM1VHXjqUJYq05+cAQ51
-   Q==;
-X-IronPort-AV: E=Sophos;i="6.01,161,1684825200"; 
-   d="asc'?scan'208";a="220027967"
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 27 Jun 2023 01:51:36 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Tue, 27 Jun 2023 01:51:36 -0700
-Received: from wendy (10.10.115.15) by chn-vm-ex04.mchp-main.com
- (10.10.85.152) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
- Transport; Tue, 27 Jun 2023 01:51:34 -0700
-Date:   Tue, 27 Jun 2023 09:51:05 +0100
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     Sunil V L <sunilvl@ventanamicro.com>
-CC:     Conor Dooley <conor@kernel.org>,
-        Andrew Jones <ajones@ventanamicro.com>, <palmer@dabbelt.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Heiko Stuebner <heiko.stuebner@vrull.eu>,
-        Evan Green <evan@rivosinc.com>,
-        <linux-riscv@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v1 1/9] RISC-V: don't parse dt/acpi isa string to get
- rv32/rv64
-Message-ID: <20230627-gosling-crouch-635c07ae05b3@wendy>
-References: <20230626-provable-angrily-81760e8c3cc6@wendy>
- <20230626-silk-colonize-824390303994@wendy>
- <20230626-e3ea7beb39c584bfbf7ee836@orel>
- <20230626-dragonish-romp-9acf4846ae01@spud>
- <20230626-4fb963235f3ab08383a6d9ab@orel>
- <20230626-ragweed-whenever-5b22e180dcd1@spud>
- <ZJqXj7UdegnRP4mI@sunil-laptop>
+        Tue, 27 Jun 2023 04:51:24 -0400
+Received: from mail-yw1-f172.google.com (mail-yw1-f172.google.com [209.85.128.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70CEF120;
+        Tue, 27 Jun 2023 01:51:23 -0700 (PDT)
+Received: by mail-yw1-f172.google.com with SMTP id 00721157ae682-56fff21c2ebso44861717b3.3;
+        Tue, 27 Jun 2023 01:51:23 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687855882; x=1690447882;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :reply-to:in-reply-to:references:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=xP6wkKdVTdDwoYQc7PHGzeZpIcm2xdCM8uEJq+8Vkio=;
+        b=l12gasXUj2XRwFouiEjuWIhTAQGAalLkLVUPPka9MQMiSsOz7eU5wq8EiYlWAUVb/S
+         Vyw8G5qwbFwhoOYLqKDcra7iULTKHTSYUZoRL1PekVHNkn18s75HOgP9agNom9wi6eCR
+         7L1LqH4F3yCcHJ1+yzl2IkxCu+nrICjJT2C9ZyvdBK6civTUfQrWdVKAv0kBFNQ2WZ9H
+         LFkzMuUkAmJaLYwn79jb/mYVWPrHkOGwSq2ce1Vd9MOJY8P74uWjwpfqJ9NLNoN8WEmQ
+         prUv0uMV1k1oJqC+I9yt72td1HoojLw4z7iCdsPsELbHDGl+NEMut4poXQ9/TXrs1M5w
+         saMA==
+X-Gm-Message-State: AC+VfDwxKAdrhgQjSUQpebPk/xuY1RLlcJcSHIJ8Vh3/fNgThkVpT80T
+        T0MbdjHr9zjb2omsfgU1EvZiY+U+BiyLSAib
+X-Google-Smtp-Source: ACHHUZ7emZ+6IvN3nOcxlWYDgCXYbPcOWCJxn7/jdwuF8Lihuh29GbhFBby2WisvwMH6RzzfSombXw==
+X-Received: by 2002:a0d:ca56:0:b0:573:974a:d264 with SMTP id m83-20020a0dca56000000b00573974ad264mr19941490ywd.49.1687855882071;
+        Tue, 27 Jun 2023 01:51:22 -0700 (PDT)
+Received: from mail-yb1-f182.google.com (mail-yb1-f182.google.com. [209.85.219.182])
+        by smtp.gmail.com with ESMTPSA id b126-20020a816784000000b005731f3c8989sm1705873ywc.62.2023.06.27.01.51.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 27 Jun 2023 01:51:21 -0700 (PDT)
+Received: by mail-yb1-f182.google.com with SMTP id 3f1490d57ef6-c14476f8401so3181264276.3;
+        Tue, 27 Jun 2023 01:51:21 -0700 (PDT)
+X-Received: by 2002:a25:29c6:0:b0:c1b:2fab:b802 with SMTP id
+ p189-20020a2529c6000000b00c1b2fabb802mr6022656ybp.17.1687855881181; Tue, 27
+ Jun 2023 01:51:21 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="ThX69JfIuFO+nHyA"
-Content-Disposition: inline
-In-Reply-To: <ZJqXj7UdegnRP4mI@sunil-laptop>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230623081242.109131-1-tanure@linux.com> <20230623081242.109131-3-tanure@linux.com>
+ <a885b97e-aaf0-cb72-f25b-71054d6d3fe2@linaro.org> <CAJX_Q+2qZg+RuwxmnM3rzs_akt_UMJRx+=aMxf72P-sGNjm9uw@mail.gmail.com>
+ <4fba1603-5741-ec1b-122f-d6a92803f49a@linaro.org>
+In-Reply-To: <4fba1603-5741-ec1b-122f-d6a92803f49a@linaro.org>
+Reply-To: tanure@linux.com
+From:   Lucas Tanure <tanure@linux.com>
+Date:   Tue, 27 Jun 2023 09:51:09 +0100
+X-Gmail-Original-Message-ID: <CAJX_Q+3GX5NEtx7DA-vapU45dVooTpXxrwUZsNVAKd9JN2kKXA@mail.gmail.com>
+Message-ID: <CAJX_Q+3GX5NEtx7DA-vapU45dVooTpXxrwUZsNVAKd9JN2kKXA@mail.gmail.com>
+Subject: Re: [PATCH v5 2/4] dt-bindings: serial: amlogic,meson-uart: Add
+ compatible string for T7
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>, Nick <nick@khadas.com>,
+        Artem <art@khadas.com>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-amlogic@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---ThX69JfIuFO+nHyA
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Fri, Jun 23, 2023 at 6:56 PM Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+>
+> On 23/06/2023 19:53, Lucas Tanure wrote:
+> > On Fri, Jun 23, 2023 at 9:51 AM Krzysztof Kozlowski
+> > <krzysztof.kozlowski@linaro.org> wrote:
+> >>
+> >> On 23/06/2023 10:12, Lucas Tanure wrote:
+> >>> Amlogic T7 SoCs uses the same UART controller as S4 SoCs and G12A.
+> >>> There is no need for an extra compatible line in the driver, but
+> >>> add T7 compatible line for documentation.
+> >>>
+> >>> Signed-off-by: Lucas Tanure <tanure@linux.com>
+> >>> ---
+> >>>  .../devicetree/bindings/serial/amlogic,meson-uart.yaml        | 4 ++++
+> >>>  1 file changed, 4 insertions(+)
+> >>>
+> >>> diff --git a/Documentation/devicetree/bindings/serial/amlogic,meson-uart.yaml b/Documentation/devicetree/bindings/serial/amlogic,meson-uart.yaml
+> >>> index 01ec45b3b406..ad970c9ed1c7 100644
+> >>> --- a/Documentation/devicetree/bindings/serial/amlogic,meson-uart.yaml
+> >>> +++ b/Documentation/devicetree/bindings/serial/amlogic,meson-uart.yaml
+> >>> @@ -50,6 +50,10 @@ properties:
+> >>>          items:
+> >>>            - const: amlogic,meson-g12a-uart
+> >>>            - const: amlogic,meson-gx-uart
+> >>> +      - description: UART controller on T7 compatible SoCs
+> >>
+> >> Your description is rather incorrect. This is UART on SoCs compatible
+> >> with S4, not with T7. Otherwise what do you expect to grow later when
+> >> adding more compatible devices? Just drop the description, it's kind of
+> >> obvious when done correctly (but can be misleading if done wrong).
+> >>
+> >> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> >>
+> > Sorry, but S4 is already added in another way, which accepts just an
+> > S4 compatible string.
+> > But for T7 we need a fallback.
+> > Could you let me know what you're asking here? Redo S4 and add T7? Or
+> > do T7 in another different way that I didn't get?
+>
+> I comment only about the description, so why touching anything else? You
+> did not add here T7 compatible SoCs. You added here S4 compatible SoCs.
+>
+> > Do you want a v6 patch series? If yes, could you be more clear about
+> > how you want it?
+>
+> No need. If you are going to send v6, you can as well drop the description.
+>
+I can't just remove that line, as it doesn't pass the checks.
+I will change it to S4.
 
-On Tue, Jun 27, 2023 at 01:32:23PM +0530, Sunil V L wrote:
-> On Mon, Jun 26, 2023 at 05:16:09PM +0100, Conor Dooley wrote:
-> > On Mon, Jun 26, 2023 at 06:05:40PM +0200, Andrew Jones wrote:
-> > > On Mon, Jun 26, 2023 at 04:51:29PM +0100, Conor Dooley wrote:
-> > > > On Mon, Jun 26, 2023 at 05:14:15PM +0200, Andrew Jones wrote:
-> > > > > On Mon, Jun 26, 2023 at 12:19:39PM +0100, Conor Dooley wrote:
-
-> > > > One of the few things I know does parsing of /proc/cpuinfo is:
-> > > > https://github.com/google/cpu_features/blob/main/src/impl_riscv_lin=
-ux.c
-> > > > and that doesn't seem to care about the mmu, but does rely on
-> > > > vendor/uarch ordering.
-> > > >=20
-> > > > Makes me wonder, does ACPI break things by leaving out uarch/vendor
-> > > > fields, if there is something that expects them to exist? We should
-> > > > not intentionally break stuff in /proc/cpuinfo, but can't say I fee=
-l any
-> > > > sympathy for naively parsing it.
-> > >=20
-> > > Yes, it would be nice for ACPI to be consistent. I'm not sure what ca=
-n be
-> > > done about that.
-> >=20
-> > Print "unknown", until there's a way of passing the info?
-> > Speaking of being an eejit, adding new fields to the file would probably
-> > break some really naive parsers & quite frankly that sort of thing can
-> > keep the pieces IMO. Ditto if adding more extensions breaks someone that
-> > expects _zicbom_zicboz that breaks when _zicbop is slid into the middle.
-
-> Instead of unknown, could you print "risc-v" or "riscv"?
-
-I don't really see how that is better. "riscv" is not the uarch or
-vendor. If we don't know, we should either say we don't know or omit the
-field IMO.
-
-Cheers,
-Conor.
-
---ThX69JfIuFO+nHyA
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZJqi+QAKCRB4tDGHoIJi
-0odMAP9kKtThcpSAcsqVjnS6huAGPWKUX3mutzPXNe6QTDlWoAEA0U6dhi0/NMhn
-piv1C2IwpR2atmi3IYJKU226a/OWxQU=
-=NB1e
------END PGP SIGNATURE-----
-
---ThX69JfIuFO+nHyA--
+>
+> ---
+>
+> This is an automated instruction, just in case, because many review tags
+> are being ignored. If you do not know the process, here is a short
+> explanation:
+>
+> Please add Acked-by/Reviewed-by/Tested-by tags when posting new
+> versions, under or above your Signed-off-by tag. Tools like b4 can help
+> here. However, there's no need to repost patches *only* to add the tags.
+> The upstream maintainer will do that for acks received on the version
+> they apply.
+>
+> https://elixir.bootlin.com/linux/v5.17/source/Documentation/process/submitting-patches.rst#L540
+>
+> Best regards,
+> Krzysztof
+>
