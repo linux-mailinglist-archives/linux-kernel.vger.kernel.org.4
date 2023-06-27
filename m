@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AAAB7402E5
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 20:11:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92E737402E3
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 20:11:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230268AbjF0SK4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 14:10:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42702 "EHLO
+        id S230340AbjF0SK7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 14:10:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230031AbjF0SKu (ORCPT
+        with ESMTP id S229957AbjF0SKw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 14:10:50 -0400
-Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2AB22976
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 11:10:46 -0700 (PDT)
-Received: by mail-pf1-x44a.google.com with SMTP id d2e1a72fcca58-665bd7fe2f4so2067241b3a.0
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 11:10:46 -0700 (PDT)
+        Tue, 27 Jun 2023 14:10:52 -0400
+Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1C5C297D
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 11:10:48 -0700 (PDT)
+Received: by mail-pg1-x54a.google.com with SMTP id 41be03b00d2f7-53fc6e58dabso2093938a12.1
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 11:10:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1687889446; x=1690481446;
+        d=google.com; s=20221208; t=1687889448; x=1690481448;
         h=to:from:subject:references:mime-version:message-id:in-reply-to:date
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=DWCGE0gvk+pE+CmFQOT3NcABG9fSPb9UJ3AYuKosiSs=;
-        b=U3tszF3iEnPlISAxvRgLQh2yAsfBXVo/Q6PsnR8CoF2tEFqxSBVSBaD/G6Pm6Cajnz
-         aQ4XGOH4k9El84pkqkaI76GE6uJ3psK5/29cFwc9AT9tJ0m8tAFK7+Xup/A2reI81n96
-         wPh32LcU2PSJ38NBnw3EifrTE5J7lYjzK/tvFFhsSwTOJh0hR8p061/PfLA9EeiBrAWn
-         f3YBVRP3D9stcaMoLY8zd/yQdE/4vZRNkOGfqG4A8hU+Wzhq9+shpWzmiAmwTJntc0h3
-         q9sKKT8u+w0OgGX1a2RMJvyThaU3d8/esnfAlURWDJq4i0smQ24u6vUoVwrace9wRXjl
-         oqkQ==
+        bh=E3xFrkPN2+sT/sY0g+uTpgnQ+XoDit6j6d+F4zxTHTs=;
+        b=mDO2RZPnw3ueZUEgv1txbCfJHsBa5ZLGazmnDmvs1Rka9T1sryG8ukUK81nej5lSNu
+         ORauHXjoy1ZWTbiDpbmxh/Ik0yEX7nG/6Kexgltr82+VRMVArq9QsoYWy6GTx+sXEhB3
+         urulGJs2wXbd8LaN7yG5ZJqtHm+FAftrzBsdkM2+8018xoe9DHQG72o2CvaG1m85vGlz
+         5IEf668Pba9cgBJXVY9EVU3x9C/nLzyHwbwQ9aRW7k03A7HvDUY/BXQN3+h7C74R5BUU
+         hnFpuLkVqktQKdKBdU8mQoYsp4xWyf4aNgy7FU5a/VIu3RjDzRNmIU//UnIc4IDcJBDk
+         CsNQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687889446; x=1690481446;
+        d=1e100.net; s=20221208; t=1687889448; x=1690481448;
         h=to:from:subject:references:mime-version:message-id:in-reply-to:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=DWCGE0gvk+pE+CmFQOT3NcABG9fSPb9UJ3AYuKosiSs=;
-        b=l3GEr2eGDhJcm5h1Cmjjn5wYOyW0IIE4pmdtrwfhepFkUeLDgKmOW/v4Gb4WmKbnFq
-         XSEWoEsj2VRyXc81xB3DX/eqaskhi6Fsow9ixI7Hg9MegFKjbOUMGBLvtLOLogbDf3+j
-         81TiGfxDlvqcHs3PHufI2bPBzb8cCvklRUNlg9kgw4vfHOJzTKdkQqQH/0MuRD4h6Pzu
-         rFbrm7QmswfB5bRhVX4HxCCdL33HLUm5CQk/6YCl46wTx3aDy5ViQyvQOuhQThCr6ecf
-         lMbqzG8exT8QWVpfwZrPOTsdeZ8A+MKkznXB3jh1jwHLmi1t+kkCz1uvsXh7iWI8oOvM
-         zAGQ==
-X-Gm-Message-State: AC+VfDzxi/7KA4ItzWap4YJvCwYcfS5nYWb0Ajs4Mb2afglz0rkGL4NP
-        w09dlTj+3gcEwmxgUob8c/Gh/M3G4W+J
-X-Google-Smtp-Source: ACHHUZ7eXpeYFLZxfraqt2sq94LXekMZYj8K3lgYRHv1M1aPEVN24PTbJvBtf5w1JuRlH1u8acu24npK7HSM
+        bh=E3xFrkPN2+sT/sY0g+uTpgnQ+XoDit6j6d+F4zxTHTs=;
+        b=FWoRxPUm3O5EZm+0VZBTXia8N+YgXuN/VfO9R7bO+dQzjfoVyFtlZwZ6y0/V2eVqZ2
+         9NmMN4y2+2cwcPUq9KS92sF6eXMz/WtJMtLEXeqnwpXk4WLo2OXm3TTqbNraN2T5px+Y
+         woIru/YtN9Nor0Fmp18X1wMRwsvI9ay3asNQqoklIOZNHAbUu6SzXQ9VXfALg6HksmiJ
+         4J3HOt7mYU43GQ6TyNtZfKBooJMWO9pNYbqPf+oYZ36D0Caz/sBKC3Y9SOAsTQvFPvMP
+         1kBMH4uJa1nYmNUK1BI/NXyhHmLv2fTsHElUyMWqW2wVMLuoGX42JGq8EdWJtrjjjaXw
+         cYtg==
+X-Gm-Message-State: AC+VfDynC5/ImZa/NKnrHSWUvsYgQVApcXZ4QQqF4mKQpfcYnJrRXwWp
+        Rc5zXzy/WCVK9VPo1FgwrM9rMUNiWb17
+X-Google-Smtp-Source: ACHHUZ5mB+sRufre0MS10vvaUmW/lZoKm7KiOFOjWsJZZ/Z0hFb1Aj5m0AyV+IoElXQMnCvyrcjdO2AbKUr/
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2a3:200:a518:9a69:cf62:b4d9])
- (user=irogers job=sendgmr) by 2002:a05:6a00:1504:b0:668:7377:1fe3 with SMTP
- id q4-20020a056a00150400b0066873771fe3mr7745734pfu.2.1687889446028; Tue, 27
- Jun 2023 11:10:46 -0700 (PDT)
-Date:   Tue, 27 Jun 2023 11:10:19 -0700
+ (user=irogers job=sendgmr) by 2002:a17:90a:c695:b0:262:dc49:3bff with SMTP id
+ n21-20020a17090ac69500b00262dc493bffmr1357157pjt.5.1687889448289; Tue, 27 Jun
+ 2023 11:10:48 -0700 (PDT)
+Date:   Tue, 27 Jun 2023 11:10:20 -0700
 In-Reply-To: <20230627181030.95608-1-irogers@google.com>
-Message-Id: <20230627181030.95608-3-irogers@google.com>
+Message-Id: <20230627181030.95608-4-irogers@google.com>
 Mime-Version: 1.0
 References: <20230627181030.95608-1-irogers@google.com>
 X-Mailer: git-send-email 2.41.0.162.gfafddb0af9-goog
-Subject: [PATCH v2 02/13] perf parse-events: Remove unused PE_KERNEL_PMU_EVENT token
+Subject: [PATCH v2 03/13] perf parse-events: Remove two unused tokens
 From:   Ian Rogers <irogers@google.com>
 To:     Peter Zijlstra <peterz@infradead.org>,
         Ingo Molnar <mingo@redhat.com>,
@@ -78,73 +78,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Removed by commit 70c90e4a6b2f ("perf parse-events: Avoid scanning
-PMUs before parsing").
+The tokens PE_PREFIX_RAW and PE_PREFIX_GROUP are unused so remove them.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/util/parse-events.y | 27 ---------------------------
- 1 file changed, 27 deletions(-)
+ tools/perf/util/parse-events.y | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/tools/perf/util/parse-events.y b/tools/perf/util/parse-events.y
-index 64755f9cd600..4ee6c6865655 100644
+index 4ee6c6865655..b09a5fa92144 100644
 --- a/tools/perf/util/parse-events.y
 +++ b/tools/perf/util/parse-events.y
-@@ -63,7 +63,6 @@ static void free_list_evsel(struct list_head* list_evsel)
+@@ -61,7 +61,7 @@ static void free_list_evsel(struct list_head* list_evsel)
+ %token PE_BPF_OBJECT PE_BPF_SOURCE
+ %token PE_MODIFIER_EVENT PE_MODIFIER_BP PE_BP_COLON PE_BP_SLASH
  %token PE_LEGACY_CACHE
- %token PE_PREFIX_MEM PE_PREFIX_RAW PE_PREFIX_GROUP
+-%token PE_PREFIX_MEM PE_PREFIX_RAW PE_PREFIX_GROUP
++%token PE_PREFIX_MEM
  %token PE_ERROR
--%token PE_KERNEL_PMU_EVENT
  %token PE_ARRAY_ALL PE_ARRAY_RANGE
  %token PE_DRV_CFG_TERM
- %token PE_TERM_HW
-@@ -81,7 +80,6 @@ static void free_list_evsel(struct list_head* list_evsel)
- %type <str> PE_MODIFIER_EVENT
- %type <str> PE_MODIFIER_BP
- %type <str> PE_EVENT_NAME
--%type <str> PE_KERNEL_PMU_EVENT
- %type <str> PE_DRV_CFG_TERM
- %type <str> name_or_raw name_or_legacy
- %destructor { free ($$); } <str>
-@@ -358,18 +356,6 @@ PE_NAME opt_pmu_config
- #undef CLEANUP_YYABORT
- }
- |
--PE_KERNEL_PMU_EVENT sep_dc
--{
--	struct list_head *list;
--	int err;
--
--	err = parse_events_multi_pmu_add(_parse_state, $1, NULL, &list);
--	free($1);
--	if (err < 0)
--		YYABORT;
--	$$ = list;
--}
--|
- PE_NAME sep_dc
- {
- 	struct list_head *list;
-@@ -381,19 +367,6 @@ PE_NAME sep_dc
- 		YYABORT;
- 	$$ = list;
- }
--|
--PE_KERNEL_PMU_EVENT opt_pmu_config
--{
--	struct list_head *list;
--	int err;
--
--	/* frees $2 */
--	err = parse_events_multi_pmu_add(_parse_state, $1, $2, &list);
--	free($1);
--	if (err < 0)
--		YYABORT;
--	$$ = list;
--}
- 
- value_sym:
- PE_VALUE_SYM_HW
 -- 
 2.41.0.162.gfafddb0af9-goog
 
