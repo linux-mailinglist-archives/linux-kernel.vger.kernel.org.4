@@ -2,80 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD03C73FDF6
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 16:36:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E82A873FE0E
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 16:37:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229886AbjF0OgU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 10:36:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37300 "EHLO
+        id S230405AbjF0OhZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 10:37:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231289AbjF0OgI (ORCPT
+        with ESMTP id S231566AbjF0OhK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 10:36:08 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1E40273C
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 07:35:23 -0700 (PDT)
+        Tue, 27 Jun 2023 10:37:10 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6364E35A6
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 07:36:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1687876523;
+        s=mimecast20190719; t=1687876571;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=2I4RPsehThqnH3/y9cWZQKNuT4LiknWjJr+uizynBV8=;
-        b=ZtlIT+dnAlxAhHDhkTkpQ4VTzYPS8xkbBZZbqV5JUH6WD4q0q7CUSK///ZsNTAGisInq1t
-        gffBV2q9LFbRZrMVqVBaSOPWLgrVtq/L9JW+xpYGyJ6NCQrUXE712h/wVYyD+gH6tw58cs
-        7yHILZ1B5GhDy+SZvjXPXxC0Y10w/i4=
-Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
- [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-302-P1wMmus1OWeUyFMiaMsNZw-1; Tue, 27 Jun 2023 10:35:04 -0400
-X-MC-Unique: P1wMmus1OWeUyFMiaMsNZw-1
-Received: by mail-ej1-f72.google.com with SMTP id a640c23a62f3a-9874fbf5c95so525482066b.1
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 07:34:53 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687876492; x=1690468492;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=2I4RPsehThqnH3/y9cWZQKNuT4LiknWjJr+uizynBV8=;
-        b=jKaHANq0T0aZMGkFfwFGVgMEDQjBivqN0uFTgr7cu3+yXPZRR8deNsurmwDbvBM9I2
-         Fn6ThjmF9WaASZMYb7M6RFyGLIGDb3ib56CBcnaiTh4nnopP+GyPWAratRxZOtH/+lIH
-         CiZDiPBCPlhYTOkJ5NR/bnrTDFZznFVPL7KuHL4wxW4WF5y+VVPe0aiT89N9TB0hmZvj
-         mxrEXU2Fk5hTgmMsOPCeKbVLbmeaj5gVDB7lwGhUWCbxwoxrDTBVfWdHf9sEzz/cQh75
-         udE8y2ygGACM+vdKwFmqy0Zw/rcEzn6DmyyhZdBRivMi8GuX1jc+hP9FweKz0FCuvWdu
-         vbDA==
-X-Gm-Message-State: AC+VfDxT9qaDkgRHuZyWjs5TocCiLVBrpXGV4y+xdbiL+fpDCzOrjfxl
-        7dxtTXVjB1UmpkFS53GrWTCRLJvlXCq1ZRSTaDTOFHAs21MNg20pBGCnMME5XA8/Dtb8IZoqYF6
-        +RFpHzj7c2SEh6O0oZlsnJO8R
-X-Received: by 2002:a17:907:8686:b0:987:d0c3:e300 with SMTP id qa6-20020a170907868600b00987d0c3e300mr28330433ejc.26.1687876492628;
-        Tue, 27 Jun 2023 07:34:52 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ7j3siesSuwDDTtjYEMoIX15DvUDbPq20AHtUXQVahommtxFi3hAAB5BjCBJEb1dI9s6am0ng==
-X-Received: by 2002:a17:907:8686:b0:987:d0c3:e300 with SMTP id qa6-20020a170907868600b00987d0c3e300mr28330412ejc.26.1687876492365;
-        Tue, 27 Jun 2023 07:34:52 -0700 (PDT)
-Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
-        by smtp.gmail.com with ESMTPSA id t14-20020a170906948e00b00988b86d6c7csm4607674ejx.132.2023.06.27.07.34.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 27 Jun 2023 07:34:51 -0700 (PDT)
-Message-ID: <6a566e51-6288-f782-2fa5-f9b0349b6d7c@redhat.com>
-Date:   Tue, 27 Jun 2023 16:34:51 +0200
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=Vt7eR5Warck2Ap0bmlsSY+DSBbefbEPsBcMz8g8y+lE=;
+        b=TePE6k0GtFW9aPQSNkaDciZn+rHKCEffrc1BdNri1yCULOQYwTHL8PCTAXdUsW0xa+r2wG
+        BfElZUXEHzt2AZ7W8b+2NQlrxm6nYy5+3K5GcITAq2ldWm5gLBFfjFDpPVT5lNclyZNuNj
+        zd9/iU+Zu5/SlDIvMAA/cDhn5SvrmkY=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-649-80VyoFvJNiu59IAEKwFGwA-1; Tue, 27 Jun 2023 10:36:08 -0400
+X-MC-Unique: 80VyoFvJNiu59IAEKwFGwA-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id CF69E280AA50;
+        Tue, 27 Jun 2023 14:35:31 +0000 (UTC)
+Received: from llong.com (unknown [10.22.10.32])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id CBED140C2063;
+        Tue, 27 Jun 2023 14:35:30 +0000 (UTC)
+From:   Waiman Long <longman@redhat.com>
+To:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Mrunal Patel <mpatel@redhat.com>,
+        Ryan Phillips <rphillips@redhat.com>,
+        Brent Rowsell <browsell@redhat.com>,
+        Peter Hunt <pehunt@redhat.com>, Phil Auld <pauld@redhat.com>,
+        Waiman Long <longman@redhat.com>
+Subject: [PATCH v4 0/9] cgroup/cpuset: Support remote partitions
+Date:   Tue, 27 Jun 2023 10:34:59 -0400
+Message-Id: <20230627143508.1576882-1-longman@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH] fs/vboxsf: Replace kmap() with kmap_local_{page, folio}()
-Content-Language: en-US, nl
-To:     Sumitra Sharma <sumitraartsy@gmail.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Ira Weiny <ira.weiny@intel.com>, Fabio <fmdefrancesco@gmail.com>,
-        Deepak R Varma <drv@mailo.com>
-References: <20230627135115.GA452832@sumitra.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20230627135115.GA452832@sumitra.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,90 +68,81 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+ v4:
+  - [v3] https://lore.kernel.org/lkml/20230627005529.1564984-1-longman@redhat.com/
+  - Fix compilation problem reported by kernel test robot.
 
-On 6/27/23 15:51, Sumitra Sharma wrote:
-> kmap() has been deprecated in favor of the kmap_local_page() due to high
-> cost, restricted mapping space, the overhead of a global lock for
-> synchronization, and making the process sleep in the absence of free
-> slots.
-> 
-> kmap_local_{page, folio}() is faster than kmap() and offers thread-local
-> and CPU-local mappings, can take pagefaults in a local kmap region and
-> preserves preemption by saving the mappings of outgoing tasks and
-> restoring those of the incoming one during a context switch.
-> 
-> The difference between kmap_local_page() and kmap_local_folio() consist
-> only in the first taking a pointer to a page and the second taking two
-> arguments, a pointer to a folio and the byte offset within the folio which
-> identifies the page.
-> 
-> The mappings are kept thread local in the functions 'vboxsf_read_folio',
-> 'vboxsf_writepage', 'vboxsf_write_end' in file.c
-> 
-> Suggested-by: Ira Weiny <ira.weiny@intel.com>
-> Signed-off-by: Sumitra Sharma <sumitraartsy@gmail.com>
+ v3:
+  - [v2] https://lore.kernel.org/lkml/20230531163405.2200292-1-longman@redhat.com/
+  - Change the new control file from root-only "cpuset.cpus.reserve" to
+    non-root "cpuset.cpus.exclusive" which lists the set of exclusive
+    CPUs distributed down the hierarchy.
+  - Add a patch to restrict boot-time isolated CPUs to isolated
+    partitions only.
+  - Update the test_cpuset_prs.sh test script and documentation
+    accordingly.
 
-Thanks, patch looks good to me:
+This patch series introduces a new cpuset control file
+"cpuset.cpus.exclusive" which must be a subset of "cpuset.cpus"
+and the parent's "cpuset.cpus.exclusive". This control file lists
+the exclusive CPUs to be distributed down the hierarchy. Any one
+of the exclusive CPUs can only be distributed to at most one child
+cpuset. Unlike "cpuset.cpus", invalid input to "cpuset.cpus.exclusive"
+will be rejected with an error. This new control file has no effect on
+the behavior of the cpuset until it turns into a partition root. At that
+point, its effective CPUs will be set to its exclusive CPUs unless some
+of them are offline.
 
-Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+This patch series also introduces a new category of cpuset partition
+called remote partitions. The existing partition category where the
+partition roots have to be clustered around the root cgroup in a
+hierarchical way is now referred to as local partitions.
 
-Regards,
+A remote partition can be formed far from the root cgroup
+with no partition root parent. While local partitions can be
+created without touching "cpuset.cpus.exclusive" as it can be set
+automatically if a cpuset becomes a local partition root. Properly set
+"cpuset.cpus.exclusive" values down the hierarchy are required to create
+a remote partition.
 
-Hans
+Both scheduling and isolated partitions can be formed in a remote
+partition. A local partition can be created under a remote partition.
+A remote partition, however, cannot be formed under a local partition
+for now.
 
+Modern container orchestration tools like Kubernetes use the cgroup
+hierarchy to manage different containers. And it is relying on other
+middleware like systemd to help managing it. If a container needs to
+use isolated CPUs, it is hard to get those with the local partitions
+as it will require the administrative parent cgroup to be a partition
+root too which tool like systemd may not be ready to manage.
 
+With this patch series, we allow the creation of remote partition
+far from the root. The container management tool can manage the
+"cpuset.cpus.exclusive" file without impacting the other cpuset
+files that are managed by other middlewares. Of course, invalid
+"cpuset.cpus.exclusive" values will be rejected and changes to
+"cpuset.cpus" can affect the value of "cpuset.cpus.exclusive" due to
+the requirement that it has to be a subset of the former control file.
 
-> ---
->  fs/vboxsf/file.c | 12 ++++++------
->  1 file changed, 6 insertions(+), 6 deletions(-)
-> 
-> diff --git a/fs/vboxsf/file.c b/fs/vboxsf/file.c
-> index 572aa1c43b37..5190619bc3c5 100644
-> --- a/fs/vboxsf/file.c
-> +++ b/fs/vboxsf/file.c
-> @@ -234,7 +234,7 @@ static int vboxsf_read_folio(struct file *file, struct folio *folio)
->  	u8 *buf;
->  	int err;
->  
-> -	buf = kmap(page);
-> +	buf = kmap_local_folio(folio, off);
->  
->  	err = vboxsf_read(sf_handle->root, sf_handle->handle, off, &nread, buf);
->  	if (err == 0) {
-> @@ -245,7 +245,7 @@ static int vboxsf_read_folio(struct file *file, struct folio *folio)
->  		SetPageError(page);
->  	}
->  
-> -	kunmap(page);
-> +	kunmap_local(buf);
->  	unlock_page(page);
->  	return err;
->  }
-> @@ -286,10 +286,10 @@ static int vboxsf_writepage(struct page *page, struct writeback_control *wbc)
->  	if (!sf_handle)
->  		return -EBADF;
->  
-> -	buf = kmap(page);
-> +	buf = kmap_local_page(page);
->  	err = vboxsf_write(sf_handle->root, sf_handle->handle,
->  			   off, &nwrite, buf);
-> -	kunmap(page);
-> +	kunmap_local(buf);
->  
->  	kref_put(&sf_handle->refcount, vboxsf_handle_release);
->  
-> @@ -320,10 +320,10 @@ static int vboxsf_write_end(struct file *file, struct address_space *mapping,
->  	if (!PageUptodate(page) && copied < len)
->  		zero_user(page, from + copied, len - copied);
->  
-> -	buf = kmap(page);
-> +	buf = kmap_local_page(page);
->  	err = vboxsf_write(sf_handle->root, sf_handle->handle,
->  			   pos, &nwritten, buf + from);
-> -	kunmap(page);
-> +	kunmap_local(buf);
->  
->  	if (err) {
->  		nwritten = 0;
+Waiman Long (9):
+  cgroup/cpuset: Inherit parent's load balance state in v2
+  cgroup/cpuset: Extract out CS_CPU_EXCLUSIVE & CS_SCHED_LOAD_BALANCE
+    handling
+  cgroup/cpuset: Improve temporary cpumasks handling
+  cgroup/cpuset: Allow suppression of sched domain rebuild in
+    update_cpumasks_hier()
+  cgroup/cpuset: Add cpuset.cpus.exclusive for v2
+  cgroup/cpuset: Introduce remote partition
+  cgroup/cpuset: Check partition conflict with housekeeping setup
+  cgroup/cpuset: Documentation update for partition
+  cgroup/cpuset: Extend test_cpuset_prs.sh to test remote partition
+
+ Documentation/admin-guide/cgroup-v2.rst       |  100 +-
+ kernel/cgroup/cpuset.c                        | 1347 ++++++++++++-----
+ .../selftests/cgroup/test_cpuset_prs.sh       |  398 +++--
+ 3 files changed, 1291 insertions(+), 554 deletions(-)
+
+-- 
+2.31.1
 
