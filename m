@@ -2,270 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FA1473F792
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 10:41:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DFA4973F79B
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 10:42:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230479AbjF0Ilo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 04:41:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45366 "EHLO
+        id S231424AbjF0ImO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 04:42:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230392AbjF0Ilk (ORCPT
+        with ESMTP id S231390AbjF0ImH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 04:41:40 -0400
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 60978E3
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 01:41:38 -0700 (PDT)
-Received: from loongson.cn (unknown [10.20.42.43])
-        by gateway (Coremail) with SMTP id _____8Dxc8TAoJpkcvYCAA--.4787S3;
-        Tue, 27 Jun 2023 16:41:36 +0800 (CST)
-Received: from [10.20.42.43] (unknown [10.20.42.43])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8AxzyO_oJpknq4LAA--.7367S3;
-        Tue, 27 Jun 2023 16:41:35 +0800 (CST)
-Message-ID: <766f323a-efcf-6552-f7e5-a736830c3f12@loongson.cn>
-Date:   Tue, 27 Jun 2023 16:41:35 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH] drm: Remove the deprecated drm_put_dev() function
-Content-Language: en-US
-To:     Thomas Zimmermann <tzimmermann@suse.de>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Christian Koenig <christian.koenig@amd.com>,
-        Pan Xinhui <Xinhui.Pan@amd.com>
-Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        amd-gfx@lists.freedesktop.org
-References: <20230625050901.393055-1-suijingfeng@loongson.cn>
- <4672fc8d-ca95-6d00-1303-cb5968c51703@suse.de>
-From:   Sui Jingfeng <suijingfeng@loongson.cn>
-Organization: Loongson
-In-Reply-To: <4672fc8d-ca95-6d00-1303-cb5968c51703@suse.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8AxzyO_oJpknq4LAA--.7367S3
-X-CM-SenderInfo: xvxlyxpqjiv03j6o00pqjv00gofq/
-X-Coremail-Antispam: 1Uk129KBj93XoW3Xr48Jw1UGr4Uur4fZw1kWFX_yoW7uF4fpF
-        s3JFyrtrWUtFs5Gr17JF17CFy5Jw47t3WfWr18Ga43Wrs8Ary0qF9xXry0gryUJrW8Ar1F
-        yF15XF1UZFyUCFcCm3ZEXasCq-sJn29KB7ZKAUJUUUU7529EdanIXcx71UUUUU7KY7ZEXa
-        sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-        0xBIdaVrnRJUUUPab4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-        IYs7xG6rWj6s0DM7CIcVAFz4kK6r106r15M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-        e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-        0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AK
-        xVW8Jr0_Cr1UM2kKe7AKxVWUXVWUAwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07
-        AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWU
-        AVWUtwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI4
-        8JMxk0xIA0c2IEe2xFo4CEbIxvr21lc7CjxVAaw2AFwI0_JF0_Jw1l42xK82IYc2Ij64vI
-        r41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxYO2xFxVAFwI0_Jrv_JF1lx2IqxVAqx4xG67
-        AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIY
-        rxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14
-        v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVW8JVWx
-        JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxU4R6wDU
-        UUU
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 27 Jun 2023 04:42:07 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4D2A109
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 01:42:05 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id 3f1490d57ef6-bb2fae9b286so5444079276.3
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 01:42:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1687855325; x=1690447325;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=1RESTY0nSCfW0d4KcpyLv7Xpk29hSjI3Ckc6/VSjxn4=;
+        b=c8XIlf+3aeJrwWjkv8WOhdxbRUqNtzu1r7xryqM84sNDaZTz0rgtwU4fwyvKCSfw+V
+         cKwotcy9WmTSkSA1D35NIYW2q7BOtu5c2MlZafkFnYXgxrZCjgbF9WsxmNh34B0ieWP0
+         n18tsAHbC/T8dPO8Fb06HV8eCH69k2z2f+HMDJSfW2yzR5ZoKM2M579qULNi9NxPkqBx
+         thT8eC5DbFnBcnhsvE8Ha+gDP29RFRwPs2RLoebi29W2qg5Hdi/ZoLZHJx4YOspsEYOE
+         jAhmj3bjEW8ADu4jA5WKxCOS0fptUboAd0uNfBw+rJHKHjX/SfxEZ7SlBZtkaws7MISj
+         u5gQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687855325; x=1690447325;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=1RESTY0nSCfW0d4KcpyLv7Xpk29hSjI3Ckc6/VSjxn4=;
+        b=J8yQMGPBQIPfwDYo4GVktOvintrGVHkmhBZW21whJ9Og34LJ3uphlKOYHa670kcaXY
+         LBJa1wfhPnyu/CnCERMjb3/Ga/bWbQLYXK7HhNrnIvsMPFXcYmFL4Pe0dFRfgEisIFuT
+         ik+X1iQg6z/13Pc0XqiRNH2EQYkoLouE227ODAfyd2BC3KUNeNW03kmIaNSADNO3mK6Y
+         IWk439gU7OebE4W7ScPwfSUi5ldwMBXioenq6whRMzdnnYXUojaEXgWRb+TFwbAt/Mer
+         ypAz6fkpEHhg8NkrDpuv7P8c9/Q7RsbUxqBn3yxxkeGPfGUB8tjvfnzwjMZX4btdWjG6
+         ePWg==
+X-Gm-Message-State: AC+VfDygTBzakOEn8eUO8zsythP1zdRiGF/KQ5Dj3+9AJu7BPvBH0jcR
+        rYwilOl8T/MtekP4JRyBe4d20PF0fvIICrw=
+X-Google-Smtp-Source: ACHHUZ5iOX9ZQJ8FlpbvB37RDLgsinU8s6WO100emwe5lWg59GuLkFcVXvVuPSp2u0spSRurCuI1z9UcFOaU4po=
+X-Received: from aliceryhl.c.googlers.com ([fda3:e722:ac3:cc00:31:98fb:c0a8:6c8])
+ (user=aliceryhl job=sendgmr) by 2002:a25:6988:0:b0:c1d:4fce:460 with SMTP id
+ e130-20020a256988000000b00c1d4fce0460mr2519491ybc.4.1687855325036; Tue, 27
+ Jun 2023 01:42:05 -0700 (PDT)
+Date:   Tue, 27 Jun 2023 08:42:02 +0000
+In-Reply-To: <sEZfLlqyui7bU5IsD7mRZq4wIsJqQ5ZZj4qtp6oq-d8rEu4Gx1rp6MXwxTsZt4zEaO7V-5HtmmULgwpVArU4DW-9UcZsjWYg0a5pojvAlVQ=@proton.me>
+Mime-Version: 1.0
+References: <sEZfLlqyui7bU5IsD7mRZq4wIsJqQ5ZZj4qtp6oq-d8rEu4Gx1rp6MXwxTsZt4zEaO7V-5HtmmULgwpVArU4DW-9UcZsjWYg0a5pojvAlVQ=@proton.me>
+X-Mailer: git-send-email 2.41.0.162.gfafddb0af9-goog
+Message-ID: <20230627084202.1738047-1-aliceryhl@google.com>
+Subject: Re: [PATCH v2 5/8] rust: workqueue: add helper for defining
+ work_struct fields
+From:   Alice Ryhl <aliceryhl@google.com>
+To:     benno.lossin@proton.me
+Cc:     alex.gaynor@gmail.com, aliceryhl@google.com,
+        bjorn3_gh@protonmail.com, boqun.feng@gmail.com, gary@garyguo.net,
+        jiangshanlai@gmail.com, linux-kernel@vger.kernel.org,
+        ojeda@kernel.org, patches@lists.linux.dev,
+        rust-for-linux@vger.kernel.org, tj@kernel.org, wedsonaf@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Benno Lossin <benno.lossin@proton.me> writes:
+> On 01.06.23 15:49, Alice Ryhl wrote:
+>> +/// # Safety
+>> +///
+>> +/// The [`OFFSET`] constant must be the offset of a field in Self of type [`Work<T, ID>`]. The methods on
+>> +/// this trait must have exactly the behavior that the definitions given below have.
+> 
+> I think you should just say "implementers are not allowed to implement
+> the functions defined by this trait." I see no reason to allow that, since
+> all functions are fully determined by the `OFFSET` constant.
+ 
+The macro overrides one of the methods, so that wont work.
+(It overrides the method to check that the field has the claimed type.)
 
-On 2023/6/26 15:56, Thomas Zimmermann wrote:
-> Hi
->
-> Am 25.06.23 um 07:09 schrieb Sui Jingfeng:
->> As this function can be replaced with drm_dev_unregister() + 
->> drm_dev_put(),
->> it is already marked as deprecated, so remove it. No functional change.
->>
->> Signed-off-by: Sui Jingfeng <suijingfeng@loongson.cn>
->> ---
->>   drivers/gpu/drm/drm_drv.c           | 28 ----------------------------
->>   drivers/gpu/drm/drm_pci.c           |  3 ++-
->>   drivers/gpu/drm/radeon/radeon_drv.c |  3 ++-
->>   include/drm/drm_drv.h               |  1 -
->>   4 files changed, 4 insertions(+), 31 deletions(-)
->>
->> diff --git a/drivers/gpu/drm/drm_drv.c b/drivers/gpu/drm/drm_drv.c
->> index 12687dd9e1ac..5057307fe22a 100644
->> --- a/drivers/gpu/drm/drm_drv.c
->> +++ b/drivers/gpu/drm/drm_drv.c
->> @@ -406,34 +406,6 @@ void drm_minor_release(struct drm_minor *minor)
->>    * possibly leaving the hardware enabled.
->>    */
->>   -/**
->> - * drm_put_dev - Unregister and release a DRM device
->> - * @dev: DRM device
->> - *
->> - * Called at module unload time or when a PCI device is unplugged.
->> - *
->> - * Cleans up all DRM device, calling drm_lastclose().
->> - *
->> - * Note: Use of this function is deprecated. It will eventually go away
->> - * completely.  Please use drm_dev_unregister() and drm_dev_put() 
->> explicitly
->> - * instead to make sure that the device isn't userspace accessible 
->> any more
->> - * while teardown is in progress, ensuring that userspace can't 
->> access an
->> - * inconsistent state.
->> - */
->> -void drm_put_dev(struct drm_device *dev)
->> -{
->> -    DRM_DEBUG("\n");
->> -
->> -    if (!dev) {
->> -        DRM_ERROR("cleanup called no dev\n");
->> -        return;
->> -    }
->> -
->> -    drm_dev_unregister(dev);
->> -    drm_dev_put(dev);
->> -}
->> -EXPORT_SYMBOL(drm_put_dev);
->> -
->>   /**
->>    * drm_dev_enter - Enter device critical section
->>    * @dev: DRM device
->> diff --git a/drivers/gpu/drm/drm_pci.c b/drivers/gpu/drm/drm_pci.c
->> index 39d35fc3a43b..b3a68a92eaa6 100644
->> --- a/drivers/gpu/drm/drm_pci.c
->> +++ b/drivers/gpu/drm/drm_pci.c
->> @@ -257,7 +257,8 @@ void drm_legacy_pci_exit(const struct drm_driver 
->> *driver,
->>                        legacy_dev_list) {
->>               if (dev->driver == driver) {
->>                   list_del(&dev->legacy_dev_list);
->> -                drm_put_dev(dev);
->> +                drm_dev_unregister(dev);
->> +                drm_dev_put(dev);
->>               }
->>           }
->>           mutex_unlock(&legacy_dev_list_lock);
->> diff --git a/drivers/gpu/drm/radeon/radeon_drv.c 
->> b/drivers/gpu/drm/radeon/radeon_drv.c
->> index e4374814f0ef..a4955ae10659 100644
->> --- a/drivers/gpu/drm/radeon/radeon_drv.c
->> +++ b/drivers/gpu/drm/radeon/radeon_drv.c
->> @@ -357,7 +357,8 @@ radeon_pci_remove(struct pci_dev *pdev)
->>   {
->>       struct drm_device *dev = pci_get_drvdata(pdev);
->>   -    drm_put_dev(dev);
->
-> Did you verify that dev cannot be NULL here? There was a check in 
-> drm_put_dev() for !dev.
->
+I'll apply the rest of your suggestions.
 
-I have verified :
-
-
-1)
-
-If there is no radeon card(say R5-340) mounted in the system,  I 
-modprobe the radeon.ko manually.
-
-then both the radeon_pci_probe() and the radeon_pci_remove() function 
-won't get called.
-
-There is no chance that the driver_probe_device() function getting called.
-
-
-|- driver_register()
-
-|-- bus_add_driver()
-
-|--- driver_attach()
-
-|---- bus_for_each_dev(drv->bus, NULL, drv, __driver_attach)
-
-|----- __driver_attach()
-
-|------ __device_attach_driver()
-
-// There is no chance that the driver_probe_device() function get called.
-
-|------- driver_probe_device(drv, dev)
-
-```
-
-
-2)  normal case:
-
-
-If there are radeon cards mounted in the system,
-
-then as long as the pci_set_drvdata(pdev, dev) get called,
-
-the 'driver_data' member of struct device will hold the pointer to the 
-'struct drm_device';
-
-So, it will be fine as long as the radeon.ko get loaded normally.
-
-
-I'm sure it will works as expected on normal case, with 100% confident.
-
-
-3) Abnormal case
-
-If there is a error happen before the 'pci_set_drvdata(pdev, dev)' 
-function get called.
-
-It is also don't need to worry, if the ->probe() failed, then the 
-->remove will be get called.
-
-
-I have verified that
-
-if the ->probe() failed, then the ->remove will be get called.
-
-I'm doing the test by add a line before the drm_dev_alloc()
-
-function in the body of radeon_pci_probe() function.
-
-See below:
-
-```
-
-     return -ENODEV;
-
-     dev = drm_dev_alloc(&kms_driver, &pdev->dev);
-     if (IS_ERR(dev))
-         return PTR_ERR(dev);
-
-     ret = pci_enable_device(pdev);
-     if (ret)
-         goto err_free;
-```
-
-
-So, there is no problem, as far as I can see.
-
-
-> Best regards
-> Thomas
->
->> +    drm_dev_unregister(dev);
->> +    drm_dev_put(dev);
->>   }
->>     static void
->> diff --git a/include/drm/drm_drv.h b/include/drm/drm_drv.h
->> index 89e2706cac56..289c97b12e82 100644
->> --- a/include/drm/drm_drv.h
->> +++ b/include/drm/drm_drv.h
->> @@ -511,7 +511,6 @@ void drm_dev_unregister(struct drm_device *dev);
->>     void drm_dev_get(struct drm_device *dev);
->>   void drm_dev_put(struct drm_device *dev);
->> -void drm_put_dev(struct drm_device *dev);
->>   bool drm_dev_enter(struct drm_device *dev, int *idx);
->>   void drm_dev_exit(int idx);
->>   void drm_dev_unplug(struct drm_device *dev);
->
--- 
-Jingfeng
+Alice
 
