@@ -2,69 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C7567406BD
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 01:05:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B286B7406BF
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 01:07:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230179AbjF0XFg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 19:05:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37608 "EHLO
+        id S230205AbjF0XHB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 19:07:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229645AbjF0XFe (ORCPT
+        with ESMTP id S229667AbjF0XG7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 19:05:34 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB445296D
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 16:05:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687907133; x=1719443133;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=FK+q1lr+AwoT9eN4z1p01SBRj2tgSZa1Ch82VpM14l0=;
-  b=JRxDGQ8Xi5gpW0KQ+SAY/qOG5F69X/VJN+/LippAfN3DFa23AlEFWiqn
-   /FONiifa5CYEPYSD+UX6qirfOb1Y9VsucOfUCgqyU40dAyUF/ZbwosgfM
-   pLshPm07tfVR7q7OR7eMhPJl7csjfxN4OqSBd3uKwJHfHcn3bS9fWOkkr
-   XR3Sb/DcS9cZ58QcCoDToXKdeauflRWecXyKR2uZJAW5Z3QFceyJRzydX
-   kQPxCSAZWHpE3iXL1NA2yq0MgOjghEjKXRTPFhbZVNtImSZY/mDpxjIJd
-   6MmMsVC6we0s53iOkSe7JM29ejbGlZgdMEQetWAhygHjW930nZx35rGgb
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10754"; a="341286883"
-X-IronPort-AV: E=Sophos;i="6.01,163,1684825200"; 
-   d="scan'208";a="341286883"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2023 16:05:33 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10754"; a="782044687"
-X-IronPort-AV: E=Sophos;i="6.01,163,1684825200"; 
-   d="scan'208";a="782044687"
-Received: from avandeve-mobl1.amr.corp.intel.com (HELO [10.209.78.231]) ([10.209.78.231])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2023 16:05:32 -0700
-Message-ID: <fe807f09-9e4a-52d6-c057-b159bee55510@linux.intel.com>
-Date:   Tue, 27 Jun 2023 16:05:31 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [GIT PULL] x86/misc for 6.5
-Content-Language: en-US
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Borislav Petkov <bp@alien8.de>,
-        Noah Goldstein <goldstein.w.n@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        x86-ml <x86@kernel.org>, lkml <linux-kernel@vger.kernel.org>
-References: <20230627110038.GCZJrBVqu/4BfdyBeN@fat_crate.local>
- <CAHk-=wghuOwXtMH9u7RAW694BOwf_Q9TeWR2v=GgLy0gjTfu4A@mail.gmail.com>
- <1982e4b4-3858-d456-6c90-92782b95726a@linux.intel.com>
- <CAHk-=wiQEj1cP7tnQ6Uw1jjFYnZmMdNgodga3b+rw98vBBvENg@mail.gmail.com>
- <CAHk-=wgMw2VE8afWp4p6RyJKCvnkhNXx4XUByUOHUWKiAo=WLQ@mail.gmail.com>
- <51f58d51-d5bf-79a2-a32a-e6849a118123@linux.intel.com>
- <CAHk-=wgtrxkRDR95y=U685LMd_ZR5TrLW0_LGoQi3v8Or11Yrw@mail.gmail.com>
-From:   Arjan van de Ven <arjan@linux.intel.com>
-In-Reply-To: <CAHk-=wgtrxkRDR95y=U685LMd_ZR5TrLW0_LGoQi3v8Or11Yrw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        Tue, 27 Jun 2023 19:06:59 -0400
+Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31FE72941
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 16:06:58 -0700 (PDT)
+Received: by mail-pj1-x1049.google.com with SMTP id 98e67ed59e1d1-2630eecfa6dso953866a91.0
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 16:06:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1687907217; x=1690499217;
+        h=cc:to:from:subject:message-id:mime-version:date:reply-to:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=gL62EeYqdZ3PPyujO7ySVUUWGUsaK4x/yrcgDor1fzE=;
+        b=fKYm2sX9P4fmxXTP33Md8PfThqEVR6SSfWQ9bmBYHUHZG3jhYeG/jjgOLEnXYzxCHE
+         sbchK5/QuJhz3B7rbFAzZPIwE6S0I9idn+wnpefiqki8wGFb+wzUmAKGji+OLo3EbnBL
+         2Ymm/eOXqEalFkmXbTY+ZtiyXCknwitFSSmpfZf66g7M2BPbr1RQfxaBbhlXIMhYbXBZ
+         DdblIbYvJ7dwC5LDgjVDHTJqYtw/jyv0lBGErMZaun6ZiWzgM+e7bmXs5G0oId1TxEEQ
+         zXGgNrWGBZiKPZ4v36VwVcYOXNK3qrsVygftWyhHM0uDe6893F236NH59fBkat35anem
+         NVEQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687907217; x=1690499217;
+        h=cc:to:from:subject:message-id:mime-version:date:reply-to
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=gL62EeYqdZ3PPyujO7ySVUUWGUsaK4x/yrcgDor1fzE=;
+        b=EHxAYqm4usdI9YRsV+o6wUqKUVXX0YFQE7Wb3DP/nfTgcf+TvS0S7CXtkNNOL2//mo
+         0ZEdDZOAxYG/alQIcrvLTs07nyrecVd/umv/7+zBc+aDx8l/+sBKLdMQkFoBdHqpc1Qz
+         /RKTqRUGCzJ4g12Qr2oWFhR9a3JFU7RvvZu5QnbmZBNP7d9QltOOc+cZaeuHp808I/AW
+         lWt31jj4ZyIo0qmh8jYWfWmiE6O62/RuyABfUd0gkyw2ojbWhhm321PeuNXsNYSvsFx3
+         ER4w3V6XKoA47vEe4Lnt+pg851sU+lzDKz0/ryOSJem9YwMIwfmgik5BPntYKEL9UsZP
+         Ralw==
+X-Gm-Message-State: AC+VfDx8wX5JdHbHx17PqhwpeE4gYZdf75q/HOs61sQ40d2JLTbEXJab
+        lFK8/9okt8YnlUJ08zFv5itaqmcG12Y=
+X-Google-Smtp-Source: ACHHUZ666Fn22KRYLGf7nDT1NpIRjQNKOeRfl8ZbwKBChIE/imADWetbcLmqcEvBBkb/Gqs7ZqR06jmRGBg=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a17:90a:9418:b0:262:e955:3d87 with SMTP id
+ r24-20020a17090a941800b00262e9553d87mr1221003pjo.9.1687907217644; Tue, 27 Jun
+ 2023 16:06:57 -0700 (PDT)
+Reply-To: Sean Christopherson <seanjc@google.com>
+Date:   Tue, 27 Jun 2023 16:06:54 -0700
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.41.0.162.gfafddb0af9-goog
+Message-ID: <20230627230654.2934968-1-seanjc@google.com>
+Subject: [ANNOUNCE] PUCK Agenda - 2023.06.28 - CANCELED
+From:   Sean Christopherson <seanjc@google.com>
+To:     kvm@vger.kernel.org
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,30 +68,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/27/2023 4:02 PM, Linus Torvalds wrote:
-> On Tue, 27 Jun 2023 at 15:51, Arjan van de Ven <arjan@linux.intel.com> wrote:
->>
->> I'm not surprised though; running 2 parallel streams (where one stream has a fixed zero as input,
->> so can run OOO any time) .. can really have a performance change like this
-> 
-> How much do people care?
-> 
-> One of the advantages of just having that single "update_csum_40b()"
-> function is that it's trivial to then manually unroll.
-> 
-> With a 4-way unrolling, I get
-> 
->    02: 184.0 / 184.5 cycles (8b414316) Upcoming linux kernel version
->    04: 184.0 / 184.2 cycles (8b414316) Specialized to size 40
->    06: 89.4 / 102.5 cycles (512daed6) New version
->    22: 184.6 / 184.4 cycles (8b414316) Odd-alignment handling removed
-> 
-> but doesn't most network hardware do the csum on its own anyway? How
-> critical is csum_partial(), really?
+No topic this week, and I need to reclaim some time this week as I will be OOO
+all of next week.
 
-the hardware does most cases..
-in
-https://lore.kernel.org/netdev/20211111181025.2139131-1-eric.dumazet@gmail.com/
-Eric kind of implies it's for IPv6 headers in practice
+For future topics, a few things on my radar that I am hoping to discuss in the
+not-too-distant future, but that need additional work before they're worth
+discussing:
 
+ - Coordinating guest_mem() development.  I need to post patches, plan is to do
+   that the week after I get back.
 
+ - Overhauling KVM's gfn_to_pfn() APIs.  Need a status update from David S., e.g.
+   I don't even know if this being actively worked.
+
+   https://lore.kernel.org/all/ZGvUsf7lMkrNDHuE@google.com
+
+ - KVM + UFFD scalability.  We're not yet at the point where we need a synchronous
+   discussion, but I suspect we'll want a live discussion before merging.
+
+   https://lore.kernel.org/all/20230602161921.208564-1-amoorthy@google.com
+
+ - Hiding KVM internals from the kernel at large, e.g. moving kvm_host.h into
+   arch/<arch>/kvm and virt/kvm/, and exporting "internal" KVM symbols if and
+   only if there are vendor modules.  Needs an RFC from us (Google GCE people).
+
+Future Schedule:
+June 28th - Canceled
+July 5th  - Canceled (Sean OOO)
+July 12th - Available!
+July 19th - Available!
