@@ -2,162 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D3EF73FB3C
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 13:38:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F1A773FB3A
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 13:38:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231665AbjF0Lig (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 07:38:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48266 "EHLO
+        id S231706AbjF0LiX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 07:38:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231641AbjF0Lib (ORCPT
+        with ESMTP id S231651AbjF0LiP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 07:38:31 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAE242977;
-        Tue, 27 Jun 2023 04:38:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687865902; x=1719401902;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=pblGJiVM9kZOdgL3JsS2LvFnPRI4Ksm9ReZEZ35fwAc=;
-  b=KuYIBTvSnOuO/27SQ/qRm/I3mjUaw2sEz5PFKbPE+/UfCO8bFkIVri80
-   TBVM/yoV+Em/kJPnOWse7mNY4gbGU0x5BV264aw81Jo1yhru47ngFtYzp
-   Sb7JyUl/hEyLjY3hiYEG/4WBLzyI7sOZPjqEiGQEHhGVvUkaHBR/elSAk
-   xTaZVWRj9sXdJG6Eaxra8UJXwfI2zml04NjHddsZwgBltUPwsFCEs6cbQ
-   4hyP9cZtgybdJREryq1sBMSrbOlUUMoEuT01JmIg33H7piLRJq1mEZPej
-   GfZDQFREELexGJ7NQn6wVKdX97lGPpr7RBUIPNiA1/RV1HrC7JI/YoOYv
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10753"; a="425216430"
-X-IronPort-AV: E=Sophos;i="6.01,162,1684825200"; 
-   d="scan'208";a="425216430"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2023 04:38:02 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10753"; a="710620519"
-X-IronPort-AV: E=Sophos;i="6.01,162,1684825200"; 
-   d="scan'208";a="710620519"
-Received: from rbhaumik-mobl2.ger.corp.intel.com (HELO box.shutemov.name) ([10.251.217.121])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2023 04:37:55 -0700
-Received: by box.shutemov.name (Postfix, from userid 1000)
-        id 05756103738; Tue, 27 Jun 2023 14:37:53 +0300 (+03)
-Date:   Tue, 27 Jun 2023 14:37:52 +0300
-From:   "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>
-To:     "Huang, Kai" <kai.huang@intel.com>
-Cc:     "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "Raj, Ashok" <ashok.raj@intel.com>,
-        "Hansen, Dave" <dave.hansen@intel.com>,
-        "david@redhat.com" <david@redhat.com>,
-        "bagasdotme@gmail.com" <bagasdotme@gmail.com>,
-        "Luck, Tony" <tony.luck@intel.com>,
-        "ak@linux.intel.com" <ak@linux.intel.com>,
-        "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Christopherson,, Sean" <seanjc@google.com>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "Yamahata, Isaku" <isaku.yamahata@intel.com>,
-        "Chatre, Reinette" <reinette.chatre@intel.com>,
-        "nik.borisov@suse.com" <nik.borisov@suse.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "Shahar, Sagi" <sagis@google.com>,
-        "imammedo@redhat.com" <imammedo@redhat.com>,
-        "bp@alien8.de" <bp@alien8.de>, "Gao, Chao" <chao.gao@intel.com>,
-        "Brown, Len" <len.brown@intel.com>,
-        "sathyanarayanan.kuppuswamy@linux.intel.com" 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        "Huang, Ying" <ying.huang@intel.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "Williams, Dan J" <dan.j.williams@intel.com>
-Subject: Re: [PATCH v12 08/22] x86/virt/tdx: Get information about TDX module
- and TDX-capable memory
-Message-ID: <20230627113752.djyxgt4io6aiixwy@box.shutemov.name>
-References: <cover.1687784645.git.kai.huang@intel.com>
- <a33f372df345f6232b55e26d498ea67d4adc18f0.1687784645.git.kai.huang@intel.com>
- <20230627095124.nhiypr6ivi4kdfrw@box.shutemov.name>
- <49f197f7756ac05b99717a9f63d56cfb860ab88b.camel@intel.com>
+        Tue, 27 Jun 2023 07:38:15 -0400
+Received: from mail-pl1-x644.google.com (mail-pl1-x644.google.com [IPv6:2607:f8b0:4864:20::644])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF5F22712;
+        Tue, 27 Jun 2023 04:38:13 -0700 (PDT)
+Received: by mail-pl1-x644.google.com with SMTP id d9443c01a7336-1b80512a7f2so13280265ad.3;
+        Tue, 27 Jun 2023 04:38:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687865893; x=1690457893;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=xEO3Nk6Y8XH6bTMW8nJppcuxQHpEE9aHNdQQmfT2ado=;
+        b=Ykh79237L6j9Ib6rQESfFRbNpvxe1FrB4gQoazP9KifD3Wm81K+8wPiyx/LYR/7Aeu
+         YmvyEge4bY5vzF3SlCDitPRfOfuV7c9RDOPGbtQfetsNHigRhvUpXf1T/Cw8LfaCBzux
+         uJkYQKndrlvWa4xm0EjcAIlEYVmpi6mSqB5f/aGHYGsHb5WIqMI1tglwVnh0veDTGeDH
+         6Y01zwJwKpqJikkKXV+wbpMXkRBeS2nhu7EMBpH4ACkARZvSQvnI53G3pgEs74t3Z5aG
+         +R+snEuP1cwlfuzaxfImywrLgO9zM8EXMvy+wCMIflGm71KltwBhDYSJZRkwvzTRlL3H
+         m1Xg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687865893; x=1690457893;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=xEO3Nk6Y8XH6bTMW8nJppcuxQHpEE9aHNdQQmfT2ado=;
+        b=i5hqsYkqHwRZu1fXEIOG5iwpPluv7a5fBIk1ikQq2sWNgDGi2KM27h4v2L2nrYPags
+         Beke+K+UIRrwBkSW3/M9wngcONufeMRcc3yMDgrHXrxFrDc7gIJFRFv7UGfbmF17PFul
+         QATZ/lm/l6OMo/xyw4cAPglyO+8dIRaJoQOYYKICtXmNzNO3X2nByzn79OAWiMxLlTdU
+         tuEBNduSK3w3hd99Yv7JjiK1uNEMlsCiV5bNJ44Cgr2Spe89NhQTq9IFrmTrRA4/jKc3
+         eJ0p/s+kXspLVYOz8BUqt0QCoUIJlSQXUfY+Ccg+i4BBib3RtDj6InU2Cgu52NSWnhta
+         Jk7Q==
+X-Gm-Message-State: AC+VfDxvaXfxzufdzl1SOMQe5ke1twWGrMgXMAn6FmYfnK+Li4D4tZHd
+        IBP1uRDGi3mk2PeqqO5/7kg=
+X-Google-Smtp-Source: ACHHUZ6lCoe3QSvXEcmkL3etA0B5Y5jJ0ziNUHLpRsO/DWbR9IEhh7l0EM9rdeAPdLCPcbcv7Mgtlg==
+X-Received: by 2002:a17:903:189:b0:1b5:1467:c4e8 with SMTP id z9-20020a170903018900b001b51467c4e8mr7663857plg.15.1687865893120;
+        Tue, 27 Jun 2023 04:38:13 -0700 (PDT)
+Received: from localhost.localdomain ([43.132.141.9])
+        by smtp.gmail.com with ESMTPSA id u9-20020a170902e5c900b001b67a2896bdsm4280944plf.274.2023.06.27.04.38.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 27 Jun 2023 04:38:12 -0700 (PDT)
+From:   korantwork@gmail.com
+To:     kw@linux.com, nirmal.patel@linux.intel.com
+Cc:     linux-kernel@vger.kernel.org, hch@infradead.org,
+        linux-pci@vger.kernel.org, Xinghui Li <korantli@tencent.com>,
+        Dan Carpenter <error27@gmail.com>
+Subject: [PATCH] PCI: vmd: Clean up an indentation issue reported by Smatch
+Date:   Tue, 27 Jun 2023 19:38:08 +0800
+Message-Id: <20230627113808.269716-1-korantwork@gmail.com>
+X-Mailer: git-send-email 2.39.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <49f197f7756ac05b99717a9f63d56cfb860ab88b.camel@intel.com>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 27, 2023 at 10:45:33AM +0000, Huang, Kai wrote:
-> On Tue, 2023-06-27 at 12:51 +0300, kirill.shutemov@linux.intel.com wrote:
-> > On Tue, Jun 27, 2023 at 02:12:38AM +1200, Kai Huang wrote:
-> > >  static int init_tdx_module(void)
-> > >  {
-> > > +	struct tdsysinfo_struct *sysinfo;
-> > > +	struct cmr_info *cmr_array;
-> > > +	int ret;
-> > > +
-> > > +	/*
-> > > +	 * Get the TDSYSINFO_STRUCT and CMRs from the TDX module.
-> > > +	 *
-> > > +	 * The buffers of the TDSYSINFO_STRUCT and the CMR array passed
-> > > +	 * to the TDX module must be 1024-bytes and 512-bytes aligned
-> > > +	 * respectively.  Allocate one page to accommodate them both and
-> > > +	 * also meet those alignment requirements.
-> > > +	 */
-> > > +	sysinfo = (struct tdsysinfo_struct *)__get_free_page(GFP_KERNEL);
-> > > +	if (!sysinfo)
-> > > +		return -ENOMEM;
-> > > +	cmr_array = (struct cmr_info *)((unsigned long)sysinfo + PAGE_SIZE / 2);
-> > > +
-> > > +	BUILD_BUG_ON(PAGE_SIZE / 2 < TDSYSINFO_STRUCT_SIZE);
-> > > +	BUILD_BUG_ON(PAGE_SIZE / 2 < sizeof(struct cmr_info) * MAX_CMRS);
-> > 
-> > This works, but why not just use slab for this? kmalloc has 512 and 1024
-> > pools already and you won't waste memory for rounding up.
-> > 
-> > Something like this:
-> > 
-> >         sysinfo = kmalloc(TDSYSINFO_STRUCT_SIZE, GFP_KERNEL);
-> >         if (!sysinfo)
-> >                 return -ENOMEM;
-> > 
-> >         cmr_array_size = sizeof(struct cmr_info) * MAX_CMRS;
-> > 
-> >         /* CMR array has to be 512-aligned */
-> >         cmr_array_size = round_up(cmr_array_size, 512);
-> 
-> Should we define a macro for 512
-> 
-> 	+#define CMR_INFO_ARRAY_ALIGNMENT	512
-> 
-> And get rid of this comment?  AFAICT Dave didn't like such comment mentioning
-> 512-bytes aligned if we have a macro for that.
+From: Xinghui Li <korantli@tencent.com>
 
-Good idea.
+There is one inconsistent indenting warning:
+"drivers/pci/controller/vmd.c:1058 vmd_resume()
+warn: inconsistent indenting"
 
-> >         cmr_array = kmalloc(cmr_array_size, GFP_KERNEL);
-> >         if (!cmr_array) {
-> >                 kfree(sysinfo);
-> >                 return -ENOMEM;
-> >         }
-> > 
-> > ?
-> > 
-> 
-> I confess the reason I used __get_free_page() was to avoid having to allocate
-> twice, and in case of failure, I need to handle additional memory free.  But I
-> can do if you think it's clearer?
+Fix it and remove the unnecessary if.
 
-Less trickery is always cleaner. Especially if the trick is not justified.
+Reported-by: Dan Carpenter <error27@gmail.com>
+Signed-off-by: Christoph Hellwig <hch@infradead.org>
+Signed-off-by: Xinghui Li <korantli@tencent.com>
+---
+ drivers/pci/controller/vmd.c | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
 
-> I wouldn't worry about wasting memory.  The buffer is freed anyway for now. 
-> Long-termly it's just 4K.
-
+diff --git a/drivers/pci/controller/vmd.c b/drivers/pci/controller/vmd.c
+index 990630ec57c6..356bbeb548fe 100644
+--- a/drivers/pci/controller/vmd.c
++++ b/drivers/pci/controller/vmd.c
+@@ -1055,10 +1055,7 @@ static int vmd_resume(struct device *dev)
+ 	struct vmd_dev *vmd = pci_get_drvdata(pdev);
+ 	int err, i;
+ 
+-       if (vmd->irq_domain)
+-               vmd_set_msi_remapping(vmd, true);
+-       else
+-               vmd_set_msi_remapping(vmd, false);
++	vmd_set_msi_remapping(vmd, !!vmd->irq_domain);
+ 
+ 	for (i = 0; i < vmd->msix_count; i++) {
+ 		err = devm_request_irq(dev, vmd->irqs[i].virq,
 -- 
-  Kiryl Shutsemau / Kirill A. Shutemov
+2.39.3
+
