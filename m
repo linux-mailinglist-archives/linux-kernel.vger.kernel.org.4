@@ -2,71 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9454F73FA8A
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 12:54:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6659173FA8D
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 12:54:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230504AbjF0Kx7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 06:53:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56056 "EHLO
+        id S231484AbjF0KyR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 06:54:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229773AbjF0Kxz (ORCPT
+        with ESMTP id S231145AbjF0KyO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 06:53:55 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7482F19AA
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 03:53:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1687863189;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=WFw/4fiD1vrAfncts8AgckKFYgBXTcbThMAzGWaQS4w=;
-        b=SD3sE2nNvP4+eUXLCcFvsyEZ8WdoYrNDmX1/rretOHEMD2Y2zVKcBpM0z2cEGumQ4rH78N
-        aVZxN8WZXx6dQAgZ0cYOXcrr5fGSlVYfeHV3poequs2PAj4PIIgddaRvw9UpPu19w8i6kA
-        DJwLNfZEFi3e+4kEajogPnNZuXaEwOI=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-653-X2QqxgYyNDmmDqt6CRTpgA-1; Tue, 27 Jun 2023 06:53:04 -0400
-X-MC-Unique: X2QqxgYyNDmmDqt6CRTpgA-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D9AE729AA381;
-        Tue, 27 Jun 2023 10:53:03 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.42.28.4])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 2847F40C2063;
-        Tue, 27 Jun 2023 10:53:03 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <20230626173521.459345-1-willy@infradead.org>
-References: <20230626173521.459345-1-willy@infradead.org>
-To:     "Matthew Wilcox (Oracle)" <willy@infradead.org>
-Cc:     dhowells@redhat.com, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jan Kara <jack@suse.com>
-Subject: Re: [PATCH 00/12] Convert write_cache_pages() to an iterator
+        Tue, 27 Jun 2023 06:54:14 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEAA01FDE
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 03:54:10 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id 2adb3069b0e04-4fa48b5dc2eso4172552e87.1
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 03:54:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1687863249; x=1690455249;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=j/3/Pl0tuPRbfuDP1AdE9VlIh+h2E8Q6RrXICwnGYhU=;
+        b=CQF/TOzOM+o3Tl4syLqqTQMovqHI3RYpBuWiZqTJDKA2lQNqYuAszrUeZp7uVPX8mR
+         qY0AtmnYE6PvnYvBEYfl0l1nSfj/oghQOfXOzs2eb98qYDjbPasVkWVwImlYmsSymPoz
+         GZggbbW0+GaxE5EkZGGdua+q7/SfjObckb4EqELceMcLju1a9+ec06eAHj8qxkgYt2X6
+         zMc85RzZqCbynJeiNLbU+x5NTalIwpjgSTScijO0IydI4AsFzHyjjlQ4MVMCcr+Ggp2M
+         ipPfIwvgvIQiolDKxxvn05eTWiqqNU/cQn4VZ/oua8pIF2gDyGm1D6U4QMEzl9RFrQvy
+         XY2w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687863249; x=1690455249;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=j/3/Pl0tuPRbfuDP1AdE9VlIh+h2E8Q6RrXICwnGYhU=;
+        b=cIC1VHaCkcoR7NOcor38XHsp6NR/i2lMJNJ/L5GbR/E78W7CzweTIw4lf9rx22JMYe
+         bArbCfuhHhr3ZU/rVDPFrPX6ABHYRBb0qt4UTls3Qcklxuqp05Jx39iSsooALgej0+ao
+         lhqqIfu1PNTOgj7vH/0JplQrBPjj+RL4WO+RohOunH/tgyEDAWc0LD+m2UqSM+E0BZ2M
+         a8bFQEaQp67SQPuy5Z7VWWEIialuVMCuVUcoD2p2Ucvs7AmF1iyi9xUck8wCBcYI6IwQ
+         lo2svVX4i2t53r/oN7y/qmZ0/RIVQHZ6VptwAMgD/ZU2TlgzevFiucrO5UzRfVNl5a6o
+         nxng==
+X-Gm-Message-State: AC+VfDwUFMQSGGOtjCAIDAszlebVCut2kYuI97dh+kTIbIbsOfMF2yye
+        IRZKF7WfVhsKORfQRRy32nOWzg==
+X-Google-Smtp-Source: ACHHUZ7k9Ag/F1Rx0JLwrCSKfm0c8Qh4irFFfk1A/Ij8ZpFTwvoIjYcFx6pE/Sm2leBHKfGgUy/DAg==
+X-Received: by 2002:a05:6512:2343:b0:4fa:9817:c1da with SMTP id p3-20020a056512234300b004fa9817c1damr5082080lfu.21.1687863248768;
+        Tue, 27 Jun 2023 03:54:08 -0700 (PDT)
+Received: from linaro.org ([62.231.110.100])
+        by smtp.gmail.com with ESMTPSA id i5-20020a05600c290500b003f9b66a9376sm13378426wmd.42.2023.06.27.03.54.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 27 Jun 2023 03:54:08 -0700 (PDT)
+Date:   Tue, 27 Jun 2023 13:54:06 +0300
+From:   Abel Vesa <abel.vesa@linaro.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        avel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Mike Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Taniya Das <tdas@qti.qualcomm.com>, linux-pm@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arm-msm@vger.kernel.org
+Subject: Re: [RFC PATCH 1/2] PM: domains: Allow devices attached to genpd to
+ be managed by HW
+Message-ID: <ZJq/zgFC+O2MoiEw@linaro.org>
+References: <20230627104033.3345659-1-abel.vesa@linaro.org>
+ <2023062741-passion-scarcity-2390@gregkh>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <3130122.1687863182.1@warthog.procyon.org.uk>
-Date:   Tue, 27 Jun 2023 11:53:02 +0100
-Message-ID: <3130123.1687863182@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2023062741-passion-scarcity-2390@gregkh>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Do you have this on a branch somewhere?
+On 23-06-27 12:46:28, Greg Kroah-Hartman wrote:
+> On Tue, Jun 27, 2023 at 01:40:32PM +0300, Abel Vesa wrote:
+> > From: Ulf Hansson <ulf.hansson@linaro.org>
+> > 
+> > Some power-domains may be capable of relying on the HW to control the power
+> > for a device that's hooked up to it. Typically, for these kinds of
+> > configurations the device doesn't really need to be attached to a PM domain
+> > (genpd), from Linux point of view. However, in some cases the behaviour of
+> > the power-domain and its device can be changed in runtime.
+> > 
+> > To allow a consumer driver to change the behaviour of the PM domain for its
+> > device, let's provide a new function, dev_pm_genpd_set_hwmode(). Moreover,
+> > let's add a corresponding optional genpd callback, ->set_hwmode_dev(),
+> > which the genpd provider should implement if it can support switching
+> > between HW controlled mode and SW controlled mode.
+> > 
+> > Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+> 
+> You can't forward on a patch from someone else without also adding your
+> signed-off-by on it, right?
 
-David
+Oups, forgot to add it. Will do in the next version.
 
+> 
+> Also, why is this a RFC series?  What is left to do with it to get it
+> into a state which you feel comfortable having us review it "for real"?
+
+There is a bit of back story here. This HW control support is something
+that Qualcomm platforms support for some of the PDs. Sent this as RFC
+as I thought it might open up a discussion of such a generic need at
+first. But now that I think of it, it might've been a non-RFC patch as
+well.
+
+> 
+> thanks,
+> 
+> greg k-h
