@@ -2,173 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EEB0740573
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 23:07:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47E72740578
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 23:12:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229763AbjF0VHW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 17:07:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60832 "EHLO
+        id S229618AbjF0VLe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 17:11:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229495AbjF0VHV (ORCPT
+        with ESMTP id S229481AbjF0VLa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 17:07:21 -0400
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B9CE1BD1
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 14:07:20 -0700 (PDT)
-Received: by mail-pj1-x1033.google.com with SMTP id 98e67ed59e1d1-262d9e75438so2734394a91.2
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 14:07:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20221208.gappssmtp.com; s=20221208; t=1687900039; x=1690492039;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=sirRvSov4RuE6Flh2RoZE9PzcNIKlryblf5nf7NWajA=;
-        b=I7oLfq4KpGkW6eVaiiOLhvIZWSmjmi1emjZklKf+bs+mVe2Y/rBp86DxEkDUzFbYWB
-         rB7Hsc6H3S3zI90tVgW7XSWyAOOCNjhtXeLBd/OKrrfmZw4/bwADF7DALuDS2bBkHL6w
-         PMi+U/jAUXGMHJ9Q4B/k3RGkKrHOtqOd/JwKAf4vWOJnJJcCj8lF8OyvIl1+dEjBbRLX
-         y1aDrBXI8eG0gsholAKLTe+oQ38sMzmZb5SPwNzVWZqHrzRHkYmlM0tRBSxhV6oN/lzq
-         cJHJRzCMmqHJATkHwsNmlxp/m+CWI38VwV/l3KBrgH6zRmfzvIlwn7ObbbdCrt9dIWQE
-         pcKg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687900039; x=1690492039;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=sirRvSov4RuE6Flh2RoZE9PzcNIKlryblf5nf7NWajA=;
-        b=XR8UD1CMRPFH5AJ2YEKmjviDeO22joQ6C3xfowubxXIkJUKYo5dqqoudrbtCLsZuEi
-         o5gddwPwU0xdhfkbt8v3mNepXiT5BiYqanAmOLnZewFzcozhkJvOnrAcq1TBoU+WGdhD
-         BaGn9TXWeGre1H4LTwT176Nmg+vIBkUa+1W2MqeIW7m3ZqqobYGikaHQEPW2wLGx37EA
-         bAjJ1kxdj+eBYo4tb5YM6qdfdeydj9WJK1eUtObIwC2SyxJth5iLQzIOGtH6iWwsPyjP
-         cCgBNzkt+JtTN+AyIKBCwHjucdBZzQ2OLQYD3vftJQeFV3WTPR4iIKE9LzQYXse61/kt
-         RQlw==
-X-Gm-Message-State: AC+VfDyfZ/P48ho5+kEzrDbTO9Xe9aB21TZI+59bvgYAx4WNdkCbxPBe
-        IpGqtIA+WxNeH8UhInpshqc7QkVdwPlAuTw3PCingw==
-X-Google-Smtp-Source: ACHHUZ5Q51IS/tAaF6PaipIVHaMH4/ZWm7RCaYeKfDNSDheaQLI1oupE8xj/yAqDJWqRYjjyAgKlsbVIw4XiC8NsIKM=
-X-Received: by 2002:a17:90b:1648:b0:262:d661:75e4 with SMTP id
- il8-20020a17090b164800b00262d66175e4mr9330028pjb.0.1687900039345; Tue, 27 Jun
- 2023 14:07:19 -0700 (PDT)
+        Tue, 27 Jun 2023 17:11:30 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71158199B
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 14:11:29 -0700 (PDT)
+Received: from mail.alien8.de (mail.alien8.de [IPv6:2a01:4f9:3051:3f93::2])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 0545F1EC0178;
+        Tue, 27 Jun 2023 23:11:28 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1687900288;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=UfRVw6XHCHepKGIY3+aHuEUC+en1TYBSByjLOvV8eeI=;
+        b=bQ7boCuj7tiu8Dqvb/UXGH2i/T8GQ2tlPKRZpXbJa3JPhy7IJJ4h/6uCmMuzR8zFeSoJPX
+        uZRsWu7z4s6gRYot+DfSRYlj9fJxLinMcw1wExXbr96rZ5HrE4N7aL5iT4AY5HO0L0E5WE
+        nYJiyVkd69R5zeRXuGhBKshplMhmRlo=
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
+        header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+        by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id eUWxhy1zrAQn; Tue, 27 Jun 2023 21:11:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+        t=1687900284; bh=UfRVw6XHCHepKGIY3+aHuEUC+en1TYBSByjLOvV8eeI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=F3hK6ql21L6eOrPRbU9yB7uSgHyKdoQj0F1aKphlfqAMXexxlBijh6vmB6LPcFk0i
+         pvPFoTPyZNw7ql0ngBg9uKEOdkVAj0b9LTNkk6g3aiXyQZxtzuwcx5H+xbZm8ONW/1
+         9ASJZWPCFlm6JlV0ed6yn3c0BglKZEy7kjNMEUEamghJrz05+ziDBSmTd8yHE+fnYj
+         QubwB7zMrWDycj4gYo1WZODoE9M7F3uOwofBStnyND17rq+eJGRuKFPeH87ayHE6cJ
+         8ujfhagTWG98yUgstfjBNSW2hvxat4r77sv1cOj8qpb+7OQtVpNhQ8bjT17EbQJTtI
+         KZ2OJalzEjRczuZCeTzEIECr4QuW+ZcueXqPYigpfsVVTt7c1s9K8Ac1N6Xh73vgAx
+         X+ERxqfaRTwa0aK9VPnde1Fj8KXmTKGAl6StaIg091jeFeOOq+7hx1fXgB7kiKpuoW
+         P6rGt7V47iNXC2fBDSre0X2gPdZbWBRhITJJnUE7rBww8e1Xa2TSCugaq04vB27j4i
+         kOU47QhSY2gyHGJ7rNwE0jH3KzFcq0KyrdlatBSAFRrlQuvIhStt3g7xE/Cr4SkAlA
+         hNxDC8HONxUSuTWLefyIAG6M0u3tzacHj+SnGyOLWhYoL+hucWKzLHqgSK3UYzeTkk
+         cPXxV6ihRfhCckWSqDIWWtPs=
+Received: from zn.tnic (pd9530d32.dip0.t-ipconnect.de [217.83.13.50])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+        (No client certificate requested)
+        by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 5543240E01CB;
+        Tue, 27 Jun 2023 21:11:19 +0000 (UTC)
+Date:   Tue, 27 Jun 2023 23:11:14 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Noah Goldstein <goldstein.w.n@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        x86-ml <x86@kernel.org>, lkml <linux-kernel@vger.kernel.org>
+Subject: Re: [GIT PULL] x86/misc for 6.5
+Message-ID: <20230627211114.GLZJtQcr0MaEqcPwI/@fat_crate.local>
+References: <20230627110038.GCZJrBVqu/4BfdyBeN@fat_crate.local>
+ <CAHk-=wghuOwXtMH9u7RAW694BOwf_Q9TeWR2v=GgLy0gjTfu4A@mail.gmail.com>
+ <CAHk-=wi9Uwo3-uwB4rT=wK2VKhGq3yEp_U-b2kruogCT=13Mjg@mail.gmail.com>
+ <20230627203829.GKZJtIxQhQoC6erNva@fat_crate.local>
+ <CAHk-=whR90bEKrOKmk0O8KtX77bTFQGu3ykDDRhTGwmAw8HzYg@mail.gmail.com>
 MIME-Version: 1.0
-References: <20230626183611.40479-1-charlie@rivosinc.com> <20230627-eternity-mulberry-e1f4babf06a1@spud>
- <CA+7dDtKARX35pcgdKopuM6c8oj+TKLRhXcF0+d4MZE51V7Bifg@mail.gmail.com>
-In-Reply-To: <CA+7dDtKARX35pcgdKopuM6c8oj+TKLRhXcF0+d4MZE51V7Bifg@mail.gmail.com>
-From:   Charlie Jenkins <charlie@rivosinc.com>
-Date:   Tue, 27 Jun 2023 14:07:08 -0700
-Message-ID: <CA+7dDtL=bNCSWOTet8NLqOaceaNKQaPaw-cKEFbW2gh6wFeb7g@mail.gmail.com>
-Subject: Re: [PATCH 0/2] Restrict address space for sv39,sv48,sv57
-To:     Conor Dooley <conor@kernel.org>
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Kees Cook <keescook@chromium.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Alexandre Ghiti <alexghiti@rivosinc.com>,
-        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@rivosinc.com>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Greentime Hu <greentime.hu@sifive.com>,
-        Zong Li <zong.li@sifive.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Guo Ren <guoren@kernel.org>,
-        Andrew Jones <ajones@ventanamicro.com>,
-        Sergey Matyukevich <sergey.matyukevich@syntacore.com>,
-        David Hildenbrand <david@redhat.com>,
-        Mayuresh Chitale <mchitale@ventanamicro.com>,
-        Qinglin Pan <panqinglin2020@iscas.ac.cn>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Brian Cain <bcain@quicinc.com>,
-        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Stafford Horne <shorne@gmail.com>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Anup Patel <anup@brainfault.org>,
-        Sunil V L <sunilvl@ventanamicro.com>,
-        Evan Green <evan@rivosinc.com>,
-        Guillaume Tucker <guillaume.tucker@collabora.com>,
-        Mark Brown <broonie@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        "open list:RISC-V ARCHITECTURE" <linux-riscv@lists.infradead.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:EXEC & BINFMT API" <linux-mm@kvack.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Atish Kumar Patra <atishp@rivosinc.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CAHk-=whR90bEKrOKmk0O8KtX77bTFQGu3ykDDRhTGwmAw8HzYg@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I see it in patchwork here:
-https://patchwork.kernel.org/project/linux-mm/cover/20230626183611.40479-1-=
-charlie@rivosinc.com/.
+On Tue, Jun 27, 2023 at 01:49:12PM -0700, Linus Torvalds wrote:
+> That explains a lot.
 
-On Tue, Jun 27, 2023 at 1:44=E2=80=AFPM Charles Jenkins <charlie@rivosinc.c=
-om> wrote:
->
-> I talked to Atish, he's not sure what's going on here either. I am going
-> to add him to the CC list.
->
-> On Tue, Jun 27, 2023 at 11:24=E2=80=AFAM Conor Dooley <conor@kernel.org> =
-wrote:
->
-> > Hey Charlie,
-> >
-> > On Mon, Jun 26, 2023 at 11:36:02AM -0700, Charlie Jenkins wrote:
-> > > Make sv39 the default address space for mmap as some applications
-> > > currently depend on this assumption. The RISC-V specification enforce=
-s
-> > > that bits outside of the virtual address range are not used, so
-> > > restricting the size of the default address space as such should be
-> > > temporary. A hint address passed to mmap will cause the largest addre=
-ss
-> > > space that fits entirely into the hint to be used. If the hint is les=
-s
-> > > than or equal to 1<<38, a 39-bit address will be used. After an addre=
-ss
-> > > space is completely full, the next smallest address space will be use=
-d.
-> > >
-> > > Documentation is also added to the RISC-V virtual memory section to
-> > explain
-> > > these changes.
-> >
-> > I don't know what went wrong here, but this never ended up in patchwork
-> > for some reason, although it has appeared on lore. That seems to be via
-> > the docs mailing list, rather than linux-riscv. Could you speak to Atis=
-h
-> > and see if he knows what went wrong?
-> >
-> > Cheers,
-> > Conor.
-> >
-> > >
-> > > Charlie Jenkins (2):
-> > >   RISC-V: mm: Restrict address space for sv39,sv48,sv57
-> > >   RISC-V: mm: Update documentation and include test
-> > >
-> > >  Documentation/riscv/vm-layout.rst             | 20 ++++++++
-> > >  arch/riscv/include/asm/elf.h                  |  2 +-
-> > >  arch/riscv/include/asm/pgtable.h              | 21 ++++++--
-> > >  arch/riscv/include/asm/processor.h            | 41 +++++++++++++---
-> > >  tools/testing/selftests/riscv/Makefile        |  2 +-
-> > >  tools/testing/selftests/riscv/mm/Makefile     | 22 +++++++++
-> > >  .../selftests/riscv/mm/testcases/mmap.c       | 49 +++++++++++++++++=
-++
-> > >  7 files changed, 144 insertions(+), 13 deletions(-)
-> > >  create mode 100644 tools/testing/selftests/riscv/mm/Makefile
-> > >  create mode 100644 tools/testing/selftests/riscv/mm/testcases/mmap.c
-> > >
-> > >
-> > > base-commit: eef509789cecdce895020682192d32e8bac790e8
-> > > --
-> > > 2.34.1
-> > >
-> >
+LOL!
+
+That activity has one rule: don't send the code on the same day as the
+pool visit. :-)
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
