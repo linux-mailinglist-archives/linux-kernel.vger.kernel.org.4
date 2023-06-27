@@ -2,175 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D44A73FD49
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 15:56:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3067773FD50
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 16:01:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231339AbjF0N4u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 09:56:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49588 "EHLO
+        id S230453AbjF0OBx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 10:01:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230523AbjF0N4t (ORCPT
+        with ESMTP id S229608AbjF0OBt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 09:56:49 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97E01E74
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 06:56:45 -0700 (PDT)
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35RD0aax005898;
-        Tue, 27 Jun 2023 13:56:34 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
- cc : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=qcppdkim1; bh=4S2U3hsLDipgOOGGVwmjrTLzrZZ9eXd9cKZq+iimHYM=;
- b=DKQj5gvJJT0ZLNqzSuO+54SwWWtKZelyhYtKMyy52nOKHV7gUe89puLweLbv+mdX7LI+
- 1wjD9zMPDdaVU0Bntgqz+/a+T0UaTrjJljfMxQprCUM04XXGis805zGb5/qjIHPnWnS2
- x2qZJUHq1eRz8nWQUg2jfChudIsMKy9fosWfCrfzzlv3T33XY++qTX74WmZ4Cr1MvV1Z
- lmkdaZ5Ol0q7H5avDIfYHSSQbyODS/CQmsEJmhq8JaHH4dL7/saFnCBbE5qjUCtqCRf/
- qcfdzvgWHdHv1AQmFvIPA+ZR+lzOWghAFFq/l+I3qnQ53epTQo2JB/qZANlu0tczzIQP TQ== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rfuhj8qkw-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 27 Jun 2023 13:56:34 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35RDuXmA017991
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 27 Jun 2023 13:56:33 GMT
-Received: from hu-pkondeti-hyd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Tue, 27 Jun 2023 06:56:29 -0700
-Date:   Tue, 27 Jun 2023 19:26:24 +0530
-From:   Pavan Kondeti <quic_pkondeti@quicinc.com>
-To:     Charan Teja Kalla <quic_charante@quicinc.com>
-CC:     <akpm@linux-foundation.org>, <surenb@google.com>,
-        <hannes@cmpxchg.org>, <minchan@kernel.org>,
-        <quic_pkondeti@quicinc.com>, <quic_smanapra@quicinc.com>,
-        <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH V2] mm: madvise: fix uneven accounting of psi
-Message-ID: <f72dc0b0-e848-4053-879d-5eccd4d00b52@quicinc.com>
-References: <1687861992-8722-1-git-send-email-quic_charante@quicinc.com>
+        Tue, 27 Jun 2023 10:01:49 -0400
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B58DA1718;
+        Tue, 27 Jun 2023 07:01:48 -0700 (PDT)
+Received: by mail-wr1-x42c.google.com with SMTP id ffacd0b85a97d-313e34ab99fso3775259f8f.1;
+        Tue, 27 Jun 2023 07:01:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687874507; x=1690466507;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=zslKG4Gk1yPo9JIikeXogtJtSLjxkyiGcUPYRj5BTfw=;
+        b=rz40dLBeIyXIxQR9OjydRBjFPSIrm8NsTyXSUaNc2WqObEgL9sgbVKGBFZ8D0CBuS1
+         RRIjbhMHUHc1FeFMNd3V8vIKQEsMn11zkGzS17SexLp+6vggrOnUxkMRGMAVISM/3+bN
+         JxOM7SN/n8VzoVZSa/PFdXDYf5AllrRjoUNN7XsG4EVJ8gTkB3fHx2CEjKCzXDjpDLYs
+         xnefsaBrS58olv7UMlX5BhzRRnXTzpsUnbeWn/Qh9n8vTvol+TahrvNaLP6c1LxQHB48
+         vBgPqHEEg2lgNHTi8reWG4hGRvJC9Lwz7ZETwPJPnvtYXHb5+MTfwRBd0zqg0pKP8BTo
+         aXdw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687874507; x=1690466507;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=zslKG4Gk1yPo9JIikeXogtJtSLjxkyiGcUPYRj5BTfw=;
+        b=BQr35zMrExNrfPXeZqujJhJZtZQon8YDOFD/Gd099oZfCPvxm38J8yrCQ2vOi2tW/7
+         D1IHo4gvROmf43v0stRScoquFCw0heEd+fe2L4dlUGLNbfZD9mDhvMiq+v0k8auf5NRo
+         lDQTXjNm1jK2MT6ssNgxmmM6t4Sj4iy35fvRx+ThSQZ3mAKydxC+VHH6jO21gAS1tlXa
+         fRwVuQdXXOqZ1QQhciCjnvaHDiXsf7YPu6WLWnO4ZDfbMpKNYkch9pe8M4A9h0qnFEja
+         nhf29BFiQxgaXmLQ4Am7pP/0K0ib4X2VLtpSwpA1Jcv5YukdINTlK+5QdgAlAFQSL4SH
+         AbOg==
+X-Gm-Message-State: AC+VfDxyJfNHqB7hCivOFa9HRZywx28KJdCGJp9V9clcSK+osRlwCeVW
+        z7xGTbBlEVhd/k+RKxUH7gk=
+X-Google-Smtp-Source: ACHHUZ7UQAUjF7ILXHovRzkVTKMyTkmk0UxBvDmZXSNKj1sJhniuMIVpC8dYcEz3H7MffUKlhcX+qA==
+X-Received: by 2002:a5d:4fd2:0:b0:313:f0e3:2fdc with SMTP id h18-20020a5d4fd2000000b00313f0e32fdcmr4803225wrw.2.1687874506931;
+        Tue, 27 Jun 2023 07:01:46 -0700 (PDT)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id h10-20020a5d504a000000b00313e8dc7facsm8734663wrt.116.2023.06.27.07.01.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 27 Jun 2023 07:01:46 -0700 (PDT)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH][next] clk: lmk04832: clkout: make read-only const arrays static
+Date:   Tue, 27 Jun 2023 15:01:45 +0100
+Message-Id: <20230627140145.729609-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <1687861992-8722-1-git-send-email-quic_charante@quicinc.com>
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: sLP3apRvmAXLgRyIILXz4HttgIauD-BR
-X-Proofpoint-ORIG-GUID: sLP3apRvmAXLgRyIILXz4HttgIauD-BR
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-06-27_09,2023-06-27_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
- mlxlogscore=999 malwarescore=0 phishscore=0 priorityscore=1501 bulkscore=0
- spamscore=0 impostorscore=0 clxscore=1015 lowpriorityscore=0 mlxscore=0
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2305260000 definitions=main-2306270129
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 27, 2023 at 04:03:12PM +0530, Charan Teja Kalla wrote:
-> A folio turns into a Workingset during:
-> 1) shrink_active_list() placing the folio from active to inactive list.
-> 2) When a workingset transition is happening during the folio refault.
-> 
-> And when Workingset is set on a folio, PSI for memory can be accounted
-> during a) That folio is being reclaimed and b) Refault of that folio.
-> 
+Don't populate the arrays on the stack, instead make them static.
 
-Please help me understand why PSI for memory (I understood it as the 
-time spent in psi_memstall_enter() to psi_memstall_leave()) would be
-accounted in (a) i.e during reclaim. I understand that when a working
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+---
+ drivers/clk/clk-lmk04832.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-The (b) part is very clear.
+diff --git a/drivers/clk/clk-lmk04832.c b/drivers/clk/clk-lmk04832.c
+index e22ac93e0c2f..21b425d8a1b7 100644
+--- a/drivers/clk/clk-lmk04832.c
++++ b/drivers/clk/clk-lmk04832.c
+@@ -369,7 +369,7 @@ static unsigned long lmk04832_vco_recalc_rate(struct clk_hw *hw,
+ 					      unsigned long prate)
+ {
+ 	struct lmk04832 *lmk = container_of(hw, struct lmk04832, vco);
+-	const unsigned int pll2_p[] = {8, 2, 2, 3, 4, 5, 6, 7};
++	static const unsigned int pll2_p[] = {8, 2, 2, 3, 4, 5, 6, 7};
+ 	unsigned int pll2_n, p, pll2_r;
+ 	unsigned int pll2_misc;
+ 	unsigned long vco_rate;
+@@ -631,7 +631,7 @@ static int lmk04832_register_vco(struct lmk04832 *lmk)
+ 
+ static int lmk04832_clkout_set_ddly(struct lmk04832 *lmk, int id)
+ {
+-	const int dclk_div_adj[] = {0, 0, -2, -2, 0, 3, -1, 0};
++	static const int dclk_div_adj[] = {0, 0, -2, -2, 0, 3, -1, 0};
+ 	unsigned int sclkx_y_ddly = 10;
+ 	unsigned int dclkx_y_ddly;
+ 	unsigned int dclkx_y_div;
+-- 
+2.39.2
 
-> This accounting of PSI for memory is not consistent in the cases where
-> clients use madvise(COLD/PAGEOUT) to deactivate or proactively reclaim a
-> folio:
-> a) A folio started at inactive and moved to active as part of accesses.
-> Workingset is absent on the folio thus madvise(MADV_PAGEOUT) don't
-> account such folios for PSI.
-> 
-> b) When the same folio transition from inactive->active and then to
-> inactive through shrink_active_list(). Workingset is set on the folio
-> thus madvise(MADV_PAGEOUT) account such folios for PSI.
-> 
-> c) When the same folio is part of active list directly as a result of
-> folio refault and this was a workingset folio prior to eviction.
-> Workingset is set on the folio thus both the operations of MADV_PAGEOUT
-> and reclaim of the MADV_COLD operated folio account for PSI.
-> 
-> d) madvise(MADV_COLD) transfers the folio from active list to inactive
-> list. Such folios may not have the Workingset thus reclaim operation
-> on such folio doesn't account for PSI.
-> 
-> As said above, the MADV_PAGEOUT on a folio is accounts for memory PSI in
-> b) and c) but not in a). Reclaim of a folio on which MADV_COLD is
-> performed accounts memory PSI in c) but not in d) which is an
-> inconsistent behaviour. Make this PSI accounting always consistent by
-> turning a folio into a workingset one whenever it is leaving the active
-> list. Also, accounting of PSI on a folio whenever it leaves the
-> active list as part of the MADV_COLD/PAGEOUT operation helps the users
-> whether they are operating on proper folios[1].
-
-I understood the problem from V1 discussions. But the references to 
-"madvise account such folios for PSI" is confusing. Why would madvise(PAGEOUT)
-be accounting anything related to PSI. I get that madvise() is messing
-up PSI accuracy indirectly..
-
-> 
-> [1] https://lore.kernel.org/all/20230605180013.GD221380@cmpxchg.org/
-> 
-> Suggested-by: Suren Baghdasaryan <surenb@google.com>
-> Reported-by: Sai Manobhiram Manapragada <quic_smanapra@quicinc.com>
-> Reported-by: Pavan Kondeti <quic_pkondeti@quicinc.com>
-> Signed-off-by: Charan Teja Kalla <quic_charante@quicinc.com>
-> ---
-> V2: Made changes as per the comments from Johannes/Suren.
-> 
-> V1: https://lore.kernel.org/all/1685531374-6091-1-git-send-email-quic_charante@quicinc.com/
-> 
->  mm/madvise.c | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/mm/madvise.c b/mm/madvise.c
-> index d9e7b42..76fb31f 100644
-> --- a/mm/madvise.c
-> +++ b/mm/madvise.c
-> @@ -413,6 +413,7 @@ static int madvise_cold_or_pageout_pte_range(pmd_t *pmd,
->  
->  		folio_clear_referenced(folio);
->  		folio_test_clear_young(folio);
-> +		folio_set_workingset(folio);
->  		if (pageout) {
->  			if (folio_isolate_lru(folio)) {
->  				if (folio_test_unevictable(folio))
-> @@ -512,6 +513,7 @@ static int madvise_cold_or_pageout_pte_range(pmd_t *pmd,
->  		 */
->  		folio_clear_referenced(folio);
->  		folio_test_clear_young(folio);
-> +		folio_set_workingset(folio);
->  		if (pageout) {
->  			if (folio_isolate_lru(folio)) {
->  				if (folio_test_unevictable(folio))
-> -- 
-> 2.7.4
-> 
-
-This is not limited to madvise(PAGEOUT) right, anywhere an active page
-is reclaimed we have the same problem. For ex: damon_pa_pageout() and
-__alloc_contig_migrate_range()->reclaim_clean_pages_from_list().
-
-If that is the case, can we set mark a folio as a workingset when it is
-activated? That way, we don't have make madvise() as a special case?
-
-Thanks,
-Pavan
