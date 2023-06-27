@@ -2,229 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B326073FDB2
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 16:21:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B87673FDB4
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 16:22:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231437AbjF0OVX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 10:21:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59750 "EHLO
+        id S230085AbjF0OV6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 10:21:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230504AbjF0OVV (ORCPT
+        with ESMTP id S229664AbjF0OVz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 10:21:21 -0400
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6A2D3AB;
-        Tue, 27 Jun 2023 07:21:17 -0700 (PDT)
-Received: from loongson.cn (unknown [10.20.42.43])
-        by gateway (Coremail) with SMTP id _____8CxKsZb8Jpk0iYDAA--.4924S3;
-        Tue, 27 Jun 2023 22:21:15 +0800 (CST)
-Received: from [10.20.42.43] (unknown [10.20.42.43])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8BxB81Z8JpkJlkMAA--.41429S3;
-        Tue, 27 Jun 2023 22:21:13 +0800 (CST)
-Message-ID: <8da62fff-5402-db70-eae5-9174e6753fc7@loongson.cn>
-Date:   Tue, 27 Jun 2023 22:21:13 +0800
+        Tue, 27 Jun 2023 10:21:55 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03E1A270F
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 07:21:51 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8943C611B9
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 14:21:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7783EC433C8;
+        Tue, 27 Jun 2023 14:21:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687875710;
+        bh=Rjb5KzOvEcNBlqAldIGXkJCYs3UeaI83KJEb4omLbqI=;
+        h=Date:Subject:To:References:From:In-Reply-To:From;
+        b=Yd52Vi9wTQRfvLzc71xv6C1LtVQs9bTGLIY0pzXRZuDEde0vAbr0hzSvYY//u3DGl
+         AQ6re97HPS6VK2XoYTCO2cG5sa1GWhAVrd1j1glWdt9ChbjMQIUSZZOqH3wK9cfYi0
+         P4kKpaK1/QjezOknCPlHyp/NSvRAyxzmCEV0hSsoadYA2PB4KoVn7srxZuY7p2T3ad
+         Og+AX2Nz6BAPc5LE6GNV62YX8kBkANZtwLiibjL0oco8/mnroSyxjPkCBR5bsARRXZ
+         k/106BUiYQEwg1hrfn3hfTSwNVTeHj7dv0JQ4td3j151K/S33HwefGY1s7R0O0SPgS
+         VyzKYW5434Wkg==
+Message-ID: <fe5c86d1-1fd5-c717-e40c-c9cc102624ed@kernel.org>
+Date:   Tue, 27 Jun 2023 08:21:48 -0600
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v7 5/8] video/aperture: Add a helper to detect if an
- aperture contains firmware FB
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.12.0
+Subject: Re: [PATCH v3 1/1] gro: decrease size of CB
 Content-Language: en-US
-To:     Sui Jingfeng <15330273260@189.cn>,
-        Bjorn Helgaas <bhelgaas@google.com>
-Cc:     amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, intel-gfx@lists.freedesktop.org,
-        nouveau@lists.freedesktop.org, linux-pci@vger.kernel.org,
-        kvm@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>, Helge Deller <deller@gmx.de>,
-        Jani Nikula <jani.nikula@linux.intel.com>
-References: <20230613030151.216625-1-15330273260@189.cn>
- <20230613030151.216625-6-15330273260@189.cn>
-From:   Sui Jingfeng <suijingfeng@loongson.cn>
-Organization: Loongson
-In-Reply-To: <20230613030151.216625-6-15330273260@189.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8BxB81Z8JpkJlkMAA--.41429S3
-X-CM-SenderInfo: xvxlyxpqjiv03j6o00pqjv00gofq/
-X-Coremail-Antispam: 1Uk129KBj93XoWxuw1UtrW3tryktry5GFyUArc_yoW7tr1UpF
-        sxAFZ8Gr4UKF1Fyay3CrWI9r4rXa1SqFWrW39xA3s3AF17AFykJr17ZFyDJrZxJrZrAa4a
-        grZxtryrCa1DAFXCm3ZEXasCq-sJn29KB7ZKAUJUUUUk529EdanIXcx71UUUUU7KY7ZEXa
-        sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-        0xBIdaVrnRJUUUPvb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-        IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-        e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-        0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AK
-        xVW8Jr0_Cr1UM2kKe7AKxVWUtVW8ZwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07
-        AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWU
-        tVWrXwAv7VC2z280aVAFwI0_Cr0_Gr1UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwI
-        xGrwCYjI0SjxkI62AI1cAE67vIY487MxkF7I0En4kS14v26r1q6r43MxAIw28IcxkI7VAK
-        I48JMxC20s026xCaFVCjc4AY6r1j6r4UMxCIbckI1I0E14v26r1q6r43MI8I3I0E5I8CrV
-        AFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWrXwCI
-        c40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26ryj6F1UMIIF0xvE2Ix0cI8IcVCY1x0267
-        AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Cr0_
-        Gr1UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJbIYCTnIWIevJa73UjIFyTuYvjxUxO
-        zsDUUUU
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+To:     Gal Pressman <gal@nvidia.com>,
+        Richard Gobert <richardbgobert@gmail.com>, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        aleksander.lobakin@intel.com, lixiaoyan@google.com,
+        lucien.xin@gmail.com, alexanderduyck@fb.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230601160924.GA9194@debian> <20230601161407.GA9253@debian>
+ <f83d79d6-f8d7-a229-941a-7d7427975160@nvidia.com>
+From:   David Ahern <dsahern@kernel.org>
+In-Reply-To: <f83d79d6-f8d7-a229-941a-7d7427975160@nvidia.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-  PING ?
+On 6/26/23 2:55 AM, Gal Pressman wrote:
+> I believe this commit broke gro over udp tunnels.
+> I'm running iperf tcp traffic over geneve interfaces and the bandwidth
+> is pretty much zero.
+> 
 
-On 2023/6/13 11:01, Sui Jingfeng wrote:
-> From: Sui Jingfeng <suijingfeng@loongson.cn>
->
-> This patch adds the aperture_contain_firmware_fb() function to do the
-> determination. Unfortunately due to the fact that apertures list will be
-> freed dynamically, the location and size information of the firmware fb
-> will be lost after dedicated drivers call
-> aperture_remove_conflicting_devices(),
-> aperture_remove_conflicting_pci_devices() or
-> aperture_remove_all_conflicting_devices() functions
->
-> We handle this problem by introducing two static variables which record the
-> firmware framebuffer's start addrness and end addrness. It assumes that the
-> system has only one active firmware framebuffer driver at a time.
->
-> We don't use the global structure screen_info here, because PCI resource
-> may get reallocated(the VRAM BAR could be moved) at kernel boot stage.
->
-> Cc: Thomas Zimmermann <tzimmermann@suse.de>
-> Cc: Javier Martinez Canillas <javierm@redhat.com>
-> Cc: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
-> Cc: Maxime Ripard <mripard@kernel.org>
-> Cc: David Airlie <airlied@gmail.com>
-> Cc: Daniel Vetter <daniel@ffwll.ch>
-> Cc: Helge Deller <deller@gmx.de>
-> Signed-off-by: Sui Jingfeng <suijingfeng@loongson.cn>
-> ---
->   drivers/gpu/drm/drm_aperture.c | 16 ++++++++++++++++
->   drivers/video/aperture.c       | 29 +++++++++++++++++++++++++++++
->   include/drm/drm_aperture.h     |  2 ++
->   include/linux/aperture.h       |  7 +++++++
->   4 files changed, 54 insertions(+)
->
-> diff --git a/drivers/gpu/drm/drm_aperture.c b/drivers/gpu/drm/drm_aperture.c
-> index 5729f3bb4398..6e5d8a08683c 100644
-> --- a/drivers/gpu/drm/drm_aperture.c
-> +++ b/drivers/gpu/drm/drm_aperture.c
-> @@ -190,3 +190,19 @@ int drm_aperture_remove_conflicting_pci_framebuffers(struct pci_dev *pdev,
->   	return aperture_remove_conflicting_pci_devices(pdev, req_driver->name);
->   }
->   EXPORT_SYMBOL(drm_aperture_remove_conflicting_pci_framebuffers);
-> +
-> +/**
-> + * drm_aperture_contain_firmware_fb - Determine if a aperture contains firmware framebuffer
-> + *
-> + * @base: the aperture's base address in physical memory
-> + * @size: aperture size in bytes
-> + *
-> + * Returns:
-> + * true on if there is a firmware framebuffer belong to the aperture passed in,
-> + * or false otherwise.
-> + */
-> +bool drm_aperture_contain_firmware_fb(resource_size_t base, resource_size_t size)
-> +{
-> +	return aperture_contain_firmware_fb(base, base + size);
-> +}
-> +EXPORT_SYMBOL(drm_aperture_contain_firmware_fb);
-> diff --git a/drivers/video/aperture.c b/drivers/video/aperture.c
-> index 561be8feca96..5a5422cec669 100644
-> --- a/drivers/video/aperture.c
-> +++ b/drivers/video/aperture.c
-> @@ -141,6 +141,9 @@ struct aperture_range {
->   static LIST_HEAD(apertures);
->   static DEFINE_MUTEX(apertures_lock);
->   
-> +static resource_size_t firm_fb_start;
-> +static resource_size_t firm_fb_end;
-> +
->   static bool overlap(resource_size_t base1, resource_size_t end1,
->   		    resource_size_t base2, resource_size_t end2)
->   {
-> @@ -170,6 +173,9 @@ static int devm_aperture_acquire(struct device *dev,
->   
->   	mutex_lock(&apertures_lock);
->   
-> +	firm_fb_start = base;
-> +	firm_fb_end = end;
-> +
->   	list_for_each(pos, &apertures) {
->   		ap = container_of(pos, struct aperture_range, lh);
->   		if (overlap(base, end, ap->base, ap->base + ap->size)) {
-> @@ -377,3 +383,26 @@ int aperture_remove_conflicting_pci_devices(struct pci_dev *pdev, const char *na
->   
->   }
->   EXPORT_SYMBOL(aperture_remove_conflicting_pci_devices);
-> +
-> +/**
-> + * aperture_contain_firmware_fb - Detect if the firmware framebuffer belong to
-> + *                                a aperture.
-> + * @ap_start: the aperture's start address in physical memory
-> + * @ap_end: the aperture's end address in physical memory
-> + *
-> + * Returns:
-> + * true on if there is a firmware framebuffer belong to the aperture passed in,
-> + * or false otherwise.
-> + */
-> +bool aperture_contain_firmware_fb(resource_size_t ap_start, resource_size_t ap_end)
-> +{
-> +	/* No firmware framebuffer support */
-> +	if (!firm_fb_start || !firm_fb_end)
-> +		return false;
-> +
-> +	if (firm_fb_start >= ap_start && firm_fb_end <= ap_end)
-> +		return true;
-> +
-> +	return false;
-> +}
-> +EXPORT_SYMBOL(aperture_contain_firmware_fb);
-> diff --git a/include/drm/drm_aperture.h b/include/drm/drm_aperture.h
-> index cbe33b49fd5d..6a0b9bacb081 100644
-> --- a/include/drm/drm_aperture.h
-> +++ b/include/drm/drm_aperture.h
-> @@ -35,4 +35,6 @@ drm_aperture_remove_framebuffers(const struct drm_driver *req_driver)
->   							    req_driver);
->   }
->   
-> +bool drm_aperture_contain_firmware_fb(resource_size_t base, resource_size_t size);
-> +
->   #endif
-> diff --git a/include/linux/aperture.h b/include/linux/aperture.h
-> index 1a9a88b11584..d4dc5917c49b 100644
-> --- a/include/linux/aperture.h
-> +++ b/include/linux/aperture.h
-> @@ -19,6 +19,8 @@ int aperture_remove_conflicting_devices(resource_size_t base, resource_size_t si
->   int __aperture_remove_legacy_vga_devices(struct pci_dev *pdev);
->   
->   int aperture_remove_conflicting_pci_devices(struct pci_dev *pdev, const char *name);
-> +
-> +bool aperture_contain_firmware_fb(resource_size_t ap_start, resource_size_t ap_end);
->   #else
->   static inline int devm_aperture_acquire_for_platform_device(struct platform_device *pdev,
->   							    resource_size_t base,
-> @@ -42,6 +44,11 @@ static inline int aperture_remove_conflicting_pci_devices(struct pci_dev *pdev,
->   {
->   	return 0;
->   }
-> +
-> +static inline bool aperture_contain_firmware_fb(resource_size_t ap_start, resource_size_t ap_end)
-> +{
-> +	return false;
-> +}
->   #endif
->   
->   /**
-
--- 
-Jingfeng
+Could you add a test script to tools/testing/selftests/net? It will help
+catch future regressions.
 
