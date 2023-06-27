@@ -2,66 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2428740423
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 21:53:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E560740427
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 21:55:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230412AbjF0TxZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 15:53:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56110 "EHLO
+        id S230063AbjF0Tym (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 15:54:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230401AbjF0TxU (ORCPT
+        with ESMTP id S230002AbjF0Tyk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 15:53:20 -0400
-Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com [IPv6:2607:f8b0:4864:20::832])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 817A82733
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 12:53:16 -0700 (PDT)
-Received: by mail-qt1-x832.google.com with SMTP id d75a77b69052e-401f4408955so63261cf.1
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 12:53:16 -0700 (PDT)
+        Tue, 27 Jun 2023 15:54:40 -0400
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDDCE10F5
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 12:54:38 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id 4fb4d7f45d1cf-51bcf75c4acso2302a12.0
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 12:54:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1687895595; x=1690487595;
+        d=google.com; s=20221208; t=1687895677; x=1690487677;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ZLuI5nD00PYdmR0TV738RD1rmcrLwafP6/VBiaRjU1Q=;
-        b=cSzqkm1d1b4AFhkJhViS8sDaJIf+PxUmJXSE1RGhTP6iCCCv38N0BIynlZA09gF4vP
-         CpD6cB948INT3shzg+B7IOADAv1mqcb/d284GyeFR7u9Nxq4fDQ/N55DBiaX1FAvlzfk
-         Diqjm5prhKaUtRZovQzs1wF6v5Q6+/PTGp2bJ1qMeOcIgAPHCQA7qRmQdIafxnNqmWqw
-         MmjY3XWZjlu7Udq8ZL4PTQmd0SnSMlK0whx7TLERo3Mx3XYKbbGU17QRSaLVpQvt3Swx
-         Vpc3OrS2B1C1fo8P7o8jU3KS9Lj2Cj+HHmHBerMNwmv6JLhJCO1FQ9ZNhdOIV5ceoHUs
-         sJ8A==
+        bh=oyMtR3cHIPCcrX9Qmw6TUS4exz//e0byqhk5V1sO8fk=;
+        b=2GlDcJSRb8Sf7QlZ29iJIG113UXKJ0k1Wa9naaey4i1af+jilqW5+4dt7o2PUwztP8
+         qSwhqP/3oTAgRj0AcQRNlWBPWJ/huQLNNufJFTIVfvw/jV8xfn/zaSooX2E8S9liVWrD
+         /Km2uLvQvF7E79fOyLLEs8VnIJayGbSyUZEXnMTNp3qB5UVTWVLOzDATNPiM2cwsGr98
+         oNYmb/B4B4hF556uRQ5jbj3dR3wtEHyyqVJ3tMNLCNxGc/qRbLE4qlrv/z5nLj04TwRm
+         DyH9PJxxM0BA/Iz2E2HgJuGE5E7bvTC1ptTtc5lwuC7OHDm7ZeK51zGvoD4Hvwe0iaSd
+         KljQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687895595; x=1690487595;
+        d=1e100.net; s=20221208; t=1687895677; x=1690487677;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=ZLuI5nD00PYdmR0TV738RD1rmcrLwafP6/VBiaRjU1Q=;
-        b=OrntAA7hy5QobBzf9OChg/T/qt7rzdFBhpmYuDgCTkHinueLbeAgtQxlgIt+w4rS6z
-         rm+ATv1FrrL99DHJvS0DWMlgd5pjD9M0SLMJxXGMKVNNxcniTCB6vnx/xuU7tgTbwph9
-         gncYF0nrGpxqkIzKaoxkkso6DS7gRBC82ckp89RaOagEBkvYr20oTEVbUhD7UWSpXGQs
-         8IlwnepMKXS8CJu75IKRRsOpWUBQHOUcqboVDPzepqcBURk0/eVmfqTwVdunPNi+iLph
-         1z4O+AYxDP15Fi3lpQX5owNHKuWDQSI8B7WMgZoLD0shKWY+Nqu0QQ920gwnquendiYm
-         a4WA==
-X-Gm-Message-State: AC+VfDxVDbJwXbIaktYCdS4k3GwG33n0XBcVOA7w7LlyyIO42TqCbA7Q
-        ZHYL/48eimF546y4gna6WkJm8QvTjABH2Ex0bOp6Qw==
-X-Google-Smtp-Source: ACHHUZ4WywyCYGtPMuvdFcpW2dqCRu0tWKd63P8E6CytwoFeUoTgkNgf73pWryoHaPsc+KPEWJlGKZA+hMjAqZ0nE+U=
-X-Received: by 2002:a05:622a:285:b0:3f8:175a:4970 with SMTP id
- z5-20020a05622a028500b003f8175a4970mr37184qtw.18.1687895595463; Tue, 27 Jun
- 2023 12:53:15 -0700 (PDT)
+        bh=oyMtR3cHIPCcrX9Qmw6TUS4exz//e0byqhk5V1sO8fk=;
+        b=MBS8GYuZ7gAy6uDtwpDvxoZhOa19N8CT1pX30YdjDCLVCSnwNYcKfa51nj4eIMBxmY
+         zUzOG8MAbJS79f5JVIsYJPVc7kanJGUIpl7i5wZY5y8okmuRQTWGqoEmhGpOgr3WlUWz
+         Bj3zzgzdGlBw1oYfxusfvyu5GK+yn4dnlR2vnSvfmk92lisS43Ts8jmb2bvJoPaXc7yF
+         rq3t7yXmqFfBRyTe+u7Vijk2bBaquIq8ZqV54FN5DTCeQruzMlFkPh8bv+aTUyqadbQT
+         aXVMf76cawxFNjPVOfagc36Dnc7w7wbdBLBE8an/lsWA2x51Fm8ubJ2mVpmQjBEZbVjv
+         OkyA==
+X-Gm-Message-State: AC+VfDw/wikRfcy7CwoLivaTDuO19cYNU8lb14lN3m3P0sroAiPryjV5
+        494hcgHTYJIKo9vIb0O8PpTohwBsm2Ym9/MzXtM54g==
+X-Google-Smtp-Source: ACHHUZ7raH1oUkiTxXalrd3pGeyqiAo4JUItij8HXQEL4Vw/n53rYAlsyi7qb4LsO/833WErhLsHUeBIQPoP/qWP1aU=
+X-Received: by 2002:a50:99d0:0:b0:519:7d2:e256 with SMTP id
+ n16-20020a5099d0000000b0051907d2e256mr14597edb.0.1687895677218; Tue, 27 Jun
+ 2023 12:54:37 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230624002708.1907962-1-maskray@google.com> <ff7c875a-8893-9b7d-e2fa-200f1601e666@meta.com>
- <CAM9d7cjyKmKk+z1z8qatjaC7xwwJa_PFE0DJzJ=_mFjS6taz_A@mail.gmail.com>
-In-Reply-To: <CAM9d7cjyKmKk+z1z8qatjaC7xwwJa_PFE0DJzJ=_mFjS6taz_A@mail.gmail.com>
-From:   Fangrui Song <maskray@google.com>
-Date:   Tue, 27 Jun 2023 12:53:04 -0700
-Message-ID: <CAFP8O3L_fGJWAcNEhFGBZF4mRi6ObOyupto5o4z80Zaa3x7PDw@mail.gmail.com>
-Subject: Re: [PATCH] perf: Replace deprecated -target with --target= for Clang
-To:     Namhyung Kim <namhyung@gmail.com>
-Cc:     Yonghong Song <yhs@meta.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        bpf@vger.kernel.org, llvm@lists.linux.dev
+References: <20230626113156.1274521-1-usama.anjum@collabora.com>
+ <20230626113156.1274521-3-usama.anjum@collabora.com> <ZJo/gOnTmwEQPLF8@gmail.com>
+ <13ea54c0-25a3-285c-f47e-d6da11c91795@collabora.com> <CABb0KFGn=3oAYa+wsf=iWr1Ss=en9+m11JOijEibXJLFDAkvjQ@mail.gmail.com>
+ <6ac9c60e-0a6b-110a-cace-97afbd9708a0@collabora.com>
+In-Reply-To: <6ac9c60e-0a6b-110a-cace-97afbd9708a0@collabora.com>
+From:   =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>
+Date:   Tue, 27 Jun 2023 21:54:25 +0200
+Message-ID: <CABb0KFH60U5RE9dLfCOEGp5=wLwwxpKaMdzQL8drYEmL3T_itw@mail.gmail.com>
+Subject: Re: [PATCH v21 2/5] fs/proc/task_mmu: Implement IOCTL to get and
+ optionally clear info about PTEs
+To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
+Cc:     Andrei Vagin <avagin@gmail.com>, Peter Xu <peterx@redhat.com>,
+        David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Danylo Mocherniuk <mdanylo@google.com>,
+        Paul Gofman <pgofman@codeweavers.com>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Shuah Khan <shuah@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Yang Shi <shy828301@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+        Yun Zhou <yun.zhou@windriver.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Alex Sierra <alex.sierra@amd.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
@@ -75,34 +96,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 27, 2023 at 12:29=E2=80=AFPM Namhyung Kim <namhyung@gmail.com> =
-wrote:
+On Tue, 27 Jun 2023 at 21:20, Muhammad Usama Anjum
+<usama.anjum@collabora.com> wrote:
+> Thanks Micha=C5=82 for replying.
 >
-> Hi Fangui and Yonghong,
->
-> On Sun, Jun 25, 2023 at 11:25=E2=80=AFAM Yonghong Song <yhs@meta.com> wro=
-te:
+> On 6/27/23 11:52=E2=80=AFPM, Micha=C5=82 Miros=C5=82aw wrote:
+> > On Tue, 27 Jun 2023 at 11:00, Muhammad Usama Anjum
+> > <usama.anjum@collabora.com> wrote:
+> >>
+> >> Hi Andrei and Michal,
+> >>
+> >> Lets resolve last two points. Please reply below.
+> >>
+> >> On 6/27/23 6:46=E2=80=AFAM, Andrei Vagin wrote:
+> > [...]
+> >>> And we need to report an address where it stopped scanning.
+> >>> We can do that by adding zero length vector.
+> >> I don't want to do multiplexing the ending address in vec. Can we add
+> >> end_addr variable in struct pm_scan_arg to always return the ending ad=
+dress?
+> >>
+> >> struct pm_scan_arg {
+> >>         ...
+> >>         _u64 end_addr;
+> >> };
 > >
-> >
-> >
-> > On 6/23/23 5:27 PM, Fangrui Song wrote:
-> > > -target has been deprecated since Clang 3.4 in 2013. Use the preferre=
-d
-> > > --target=3Dbpf form instead. This matches how we use --target=3D in
-> > > scripts/Makefile.clang.
-> > >
-> > > Link: https://github.com/llvm/llvm-project/commit/274b6f0c87a6a1798de=
-0a68135afc7f95def6277
-> > > Signed-off-by: Fangrui Song <maskray@google.com>
-> >
-> > Acked-by: Yonghong Song <yhs@fb.com>
->
-> After 10 years of deprecation, time to change. :)
->
-> Applied to perf-tools-next, thanks!
+> > The idea to emit a zero-length entry for the end looks nice. This has
+> > the disadvantage that we'd need to either reserve one entry for the
+> > ending marker or stop the walk after the last entry is no longer
+> > matching.
+> This is ambiguous.
 
-Thank you!
+Can you explain? Both solutions would allow to return the restart
+point back to the caller (the second one would need to stop the walk
+as soon as the matching page range finishes -- that creates
+discontinuity).
 
+> > Another solution would be to rewrite 'start' and 'len'. The caller
+> > would be forced to use non-const `pm_scan_arg`, but I expect the `vec`
+> > pointer would normally be written anyway (unless using only a
+> > statically-allocated buffer).
+> > Also, if the 'len' is replaced with 'end' that would make the ioctl
+> > easily restartable (just call again if start !=3D end).
+> Nice idea. But returning ending address in len seems a bit strange.
 
---=20
-=E5=AE=8B=E6=96=B9=E7=9D=BF
+I mean that it would update `start` =3D start value for next call' and
+`len` =3D `len` - (new `start` - original `start`).
+
+By replacing `len` I meant to remove the field and add `end` instead
+to make the requested range use begin .. end (iterator range) style
+instead of start + len (buffer and length). In this version you only
+need to update `start` (or `begin` if you prefer).
+
+Best Regards
+Micha=C5=82 Miros=C5=82aw
