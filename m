@@ -2,72 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2083273F08D
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 03:31:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45DCF73F092
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 03:32:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230269AbjF0BbA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 21:31:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41100 "EHLO
+        id S229943AbjF0Bcw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 21:32:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230268AbjF0Baf (ORCPT
+        with ESMTP id S229501AbjF0Bcu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 21:30:35 -0400
-Received: from mail-qv1-xf31.google.com (mail-qv1-xf31.google.com [IPv6:2607:f8b0:4864:20::f31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 323E51993;
-        Mon, 26 Jun 2023 18:30:27 -0700 (PDT)
-Received: by mail-qv1-xf31.google.com with SMTP id 6a1803df08f44-635e372679bso10393236d6.2;
-        Mon, 26 Jun 2023 18:30:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687829426; x=1690421426;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=hhDlakkrO33rTu0vQMvMOMEB5EZyQV3S4PB9Kp4amtA=;
-        b=UhRlL3DNGbZeEZt23RGvIG9Ly/RG0mw2Rc2FyOSpAeqD7GIx6EWIa6raInkqvnBJmX
-         Pt+brnZouqiDiUcailCSzKpPhXmlQUtQ3Dq5aQBLlszddbwcCYrKqxg3Z7LBbT94HSpA
-         l1xxCGBRSAuUptuwwzhJ40qUgw8z3D8PC1n20AXaAOxTJWYTuqy8jymdw3Y4yb4aQhru
-         VhL9jthPpbnLDpWn1PPmIt8yBsXur+ldrwPe8VduZoAmQTdqmwNTl992PIyKOph7uRjR
-         TwCjpqQWweTuI1SUp4Aimia8/uveXXMw22eJwCjL4YugYsWJgqB0k6w2h5h2uVlQXigX
-         wPJA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687829426; x=1690421426;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=hhDlakkrO33rTu0vQMvMOMEB5EZyQV3S4PB9Kp4amtA=;
-        b=fnIIxWJAaOTDBMVk+FoX3ExhSglTvWal0oPFaeTPaewq1uXuqTB2fg4pwBf5lkDApT
-         B5xXRyQIVMckiYw/Ka7WEojBp28J0AQbqONSG3AAY0dwzHS10sgMzFdQ+pV7T2RLyyWq
-         Ly0ruM6g6vDOn44TY2pirBaNF8CA/mrIU1QQgS7lEmE34u+PA7ikjblnL6PNdP8+abZy
-         I9S4240RI25xbXvGrfIa9gEWbjsb1IWO5pJH0bZqUgLlA0ZAF10txoHxdiq0vtQmSfEM
-         aj2xPc9+2SmviUVAakzMWxFPyf1H6LOTBP/U22XAWZkXT/UZtwUvLvxQkgwR+P84xAhT
-         Cn9g==
-X-Gm-Message-State: AC+VfDwHMJWkZMG0lHPPZ95Nug+z/CiRkFveB3xxonr33an0mGYqxJ7b
-        0B9FVMla1EAx6crZp1tjtox6CZjCTfF1hXLDEns=
-X-Google-Smtp-Source: ACHHUZ4kZbh1tCdR7x8U4aF2VQHX8COh1+eYDiehF3xxhPpEIWXa+rSS9P+G4CeobUe0aqQRMIHP0zEVJqPOgPQ6NSM=
-X-Received: by 2002:a05:6214:2249:b0:626:3a5a:f8e9 with SMTP id
- c9-20020a056214224900b006263a5af8e9mr42430080qvc.54.1687829426301; Mon, 26
- Jun 2023 18:30:26 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230627012129.4066-1-youkangren@vivo.com>
-In-Reply-To: <20230627012129.4066-1-youkangren@vivo.com>
-From:   Julian Calaby <julian.calaby@gmail.com>
-Date:   Tue, 27 Jun 2023 11:30:14 +1000
-Message-ID: <CAGRGNgW7oVdbriG2uTQt0hbJLErXQ4JAX8aWo9Hv7A5idadHEg@mail.gmail.com>
-Subject: Re: [PATCH v2] wifi: ray_cs: Replace the ternary conditional operator
- with min()
-To:     You Kangren <youkangren@vivo.com>
-Cc:     Kalle Valo <kvalo@kernel.org>, Dongliang Mu <dzm91@hust.edu.cn>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Simon Horman <simon.horman@corigine.com>,
-        "open list:RAYLINK/WEBGEAR 802.11 WIRELESS LAN DRIVER" 
-        <linux-wireless@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        opensource.kernel@vivo.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        Mon, 26 Jun 2023 21:32:50 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 930ABE74
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 18:32:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1687829569; x=1719365569;
+  h=date:from:to:cc:subject:message-id;
+  bh=YUa7uQ2HA03NrQmbqOWG+FvRG/SFSisGFcdO5hd1VC8=;
+  b=mfKAUxkH157uUJyIP/hzfceqyYzOGRgslKqmCX4VpwnCO2Sm+ckMSZtX
+   b1B0BVEUVoNZkt+4uDRFyTz6RfMTENJh5KEvyR7D+yGduyS8pLEatiViE
+   BOqyUDP7JpKrL2T4P+iv2ckY+u5oXuJPB0oUvGW3QrtoPY4gGIaoYDDvZ
+   cZaaJXrrRXs7zaHwFHFiUvsjT3QaWC8Q4vdwnYPXaMtede2+eyBMIOZ0C
+   QdtdGLS/RCwmT/KPm3VSiOCReftRwMSh/TXAl+8WT5D8dUs7gE7hwNURb
+   UCxc+LaJrTBE6nbL+/nD5QoCGY4SX9HNkqt9AcdHQ07jtyWw5o3bJO3OK
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10753"; a="364890460"
+X-IronPort-AV: E=Sophos;i="6.01,161,1684825200"; 
+   d="scan'208";a="364890460"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jun 2023 18:32:49 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10753"; a="716355360"
+X-IronPort-AV: E=Sophos;i="6.01,161,1684825200"; 
+   d="scan'208";a="716355360"
+Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 26 Jun 2023 18:32:48 -0700
+Received: from kbuild by 783282924a45 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1qDxZX-000BbS-1Y;
+        Tue, 27 Jun 2023 01:32:47 +0000
+Date:   Tue, 27 Jun 2023 09:31:50 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:master] BUILD SUCCESS
+ ef22fef10e35bee0111293e3c858b1e197db9ebd
+Message-ID: <202306270949.6mDGX9Pt-lkp@intel.com>
+User-Agent: s-nail v14.9.24
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,41 +60,123 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi You,
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git master
+branch HEAD: ef22fef10e35bee0111293e3c858b1e197db9ebd  Merge branch into tip/master: 'x86/shstk'
 
-On Tue, Jun 27, 2023 at 11:24=E2=80=AFAM You Kangren <youkangren@vivo.com> =
-wrote:
->
-> Replace the ternary conditional operator with min_t() to simplify the cod=
-e
->
-> Signed-off-by: You Kangren <youkangren@vivo.com>
-> ---
->  drivers/net/wireless/legacy/ray_cs.c | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
->
-> diff --git a/drivers/net/wireless/legacy/ray_cs.c b/drivers/net/wireless/=
-legacy/ray_cs.c
-> index 8ace797ce951..5f97fcf5c4ba 100644
-> --- a/drivers/net/wireless/legacy/ray_cs.c
-> +++ b/drivers/net/wireless/legacy/ray_cs.c
-> @@ -2086,8 +2086,7 @@ static void ray_rx(struct net_device *dev, ray_dev_=
-t *local,
->                         rx_data(dev, prcs, pkt_addr, rx_len);
->
->                 copy_from_rx_buff(local, (UCHAR *) &local->last_bcn, pkt_=
-addr,
-> -                                 rx_len < sizeof(struct beacon_rx) ?
-> -                                 rx_len : sizeof(struct beacon_rx));
-> +                                 min_t(rx_len < sizeof(struct beacon_rx)=
-));
+elapsed time: 1093m
 
-This is obviously bogus, did you compile this before posting it?
+configs tested: 104
+configs skipped: 9
 
-Thanks,
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
---=20
-Julian Calaby
+tested configs:
+alpha                            allyesconfig   gcc  
+alpha                               defconfig   gcc  
+arc                              allyesconfig   gcc  
+arc                          axs101_defconfig   gcc  
+arc                                 defconfig   gcc  
+arc                        nsimosci_defconfig   gcc  
+arc                  randconfig-r006-20230626   gcc  
+arc                  randconfig-r023-20230626   gcc  
+arc                  randconfig-r025-20230626   gcc  
+arc                  randconfig-r043-20230626   gcc  
+arm                              allmodconfig   gcc  
+arm                              allyesconfig   gcc  
+arm                          collie_defconfig   clang
+arm                                 defconfig   gcc  
+arm                  randconfig-r013-20230626   clang
+arm                  randconfig-r046-20230626   clang
+arm64                            allyesconfig   gcc  
+arm64                               defconfig   gcc  
+csky                                defconfig   gcc  
+hexagon              randconfig-r002-20230626   clang
+hexagon              randconfig-r031-20230626   clang
+hexagon              randconfig-r041-20230626   clang
+hexagon              randconfig-r045-20230626   clang
+i386                             allyesconfig   gcc  
+i386         buildonly-randconfig-r004-20230626   clang
+i386         buildonly-randconfig-r005-20230626   clang
+i386         buildonly-randconfig-r006-20230626   clang
+i386                              debian-10.3   gcc  
+i386                                defconfig   gcc  
+i386                 randconfig-i001-20230626   clang
+i386                 randconfig-i002-20230626   clang
+i386                 randconfig-i003-20230626   clang
+i386                 randconfig-i004-20230626   clang
+i386                 randconfig-i005-20230626   clang
+i386                 randconfig-i006-20230626   clang
+i386                 randconfig-i011-20230626   gcc  
+i386                 randconfig-i012-20230626   gcc  
+i386                 randconfig-i013-20230626   gcc  
+i386                 randconfig-i014-20230626   gcc  
+i386                 randconfig-i015-20230626   gcc  
+i386                 randconfig-i016-20230626   gcc  
+i386                 randconfig-r016-20230626   gcc  
+loongarch                        allmodconfig   gcc  
+loongarch                         allnoconfig   gcc  
+loongarch                           defconfig   gcc  
+loongarch            randconfig-r026-20230626   gcc  
+m68k                             allmodconfig   gcc  
+m68k                             allyesconfig   gcc  
+m68k                                defconfig   gcc  
+m68k                          hp300_defconfig   gcc  
+m68k                 randconfig-r012-20230626   gcc  
+microblaze           randconfig-r024-20230626   gcc  
+mips                             allmodconfig   gcc  
+mips                             allyesconfig   gcc  
+mips                           ip22_defconfig   clang
+mips                           ip32_defconfig   gcc  
+mips                 randconfig-r034-20230626   gcc  
+mips                          rm200_defconfig   clang
+nios2                               defconfig   gcc  
+nios2                randconfig-r033-20230626   gcc  
+parisc                           allyesconfig   gcc  
+parisc                              defconfig   gcc  
+parisc64                            defconfig   gcc  
+powerpc                          allmodconfig   gcc  
+powerpc                           allnoconfig   gcc  
+powerpc                      pcm030_defconfig   gcc  
+powerpc              randconfig-r011-20230626   gcc  
+powerpc              randconfig-r022-20230626   gcc  
+riscv                            alldefconfig   clang
+riscv                            allmodconfig   gcc  
+riscv                             allnoconfig   gcc  
+riscv                            allyesconfig   gcc  
+riscv                               defconfig   gcc  
+riscv                randconfig-r042-20230626   gcc  
+riscv                          rv32_defconfig   gcc  
+s390                             allmodconfig   gcc  
+s390                             allyesconfig   gcc  
+s390                                defconfig   gcc  
+s390                 randconfig-r044-20230626   gcc  
+sh                               allmodconfig   gcc  
+sh                        dreamcast_defconfig   gcc  
+sh                   randconfig-r004-20230626   gcc  
+sh                           se7206_defconfig   gcc  
+sh                           se7619_defconfig   gcc  
+sparc                            allyesconfig   gcc  
+sparc                               defconfig   gcc  
+um                               allmodconfig   clang
+um                                allnoconfig   clang
+um                               allyesconfig   clang
+um                                  defconfig   gcc  
+um                             i386_defconfig   gcc  
+um                   randconfig-r015-20230626   clang
+um                           x86_64_defconfig   gcc  
+x86_64                           allyesconfig   gcc  
+x86_64       buildonly-randconfig-r001-20230626   clang
+x86_64       buildonly-randconfig-r002-20230626   clang
+x86_64       buildonly-randconfig-r003-20230626   clang
+x86_64                              defconfig   gcc  
+x86_64                                  kexec   gcc  
+x86_64               randconfig-r014-20230626   gcc  
+x86_64               randconfig-r036-20230626   clang
+x86_64                          rhel-8.3-rust   clang
+x86_64                               rhel-8.3   gcc  
+xtensa                generic_kc705_defconfig   gcc  
 
-Email: julian.calaby@gmail.com
-Profile: http://www.google.com/profiles/julian.calaby/
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
