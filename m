@@ -2,119 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09D2D73F778
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 10:35:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A7BBD73F77C
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 10:36:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230418AbjF0Ifr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 04:35:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41186 "EHLO
+        id S231255AbjF0IgN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 04:36:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231960AbjF0IfH (ORCPT
+        with ESMTP id S230494AbjF0Ifn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 04:35:07 -0400
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B0E1B1B0;
-        Tue, 27 Jun 2023 01:35:05 -0700 (PDT)
-Received: by linux.microsoft.com (Postfix, from userid 1099)
-        id 168E7207D83C; Tue, 27 Jun 2023 01:35:05 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 168E7207D83C
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1687854905;
-        bh=K4HFgVlcvPfQm78lAEPmPTT4urn6YNDo91cXDN2zB8E=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=VD+yYVsDc4rAPZEi4myXvriUOzXzK9uTtXmHTHsVmjiMiJwb8oKH9g2QqtsmOwRYl
-         Ttp9nnTmxfN87L/xnbn8KHVfdpJeMngVrwHOQntDlCtNxWiRT0cl2qMuO+ZHm7BZUb
-         vNVKcAYhcWoz2BjacqhovPZIxfkor1ZUOgR+oM1g=
-Date:   Tue, 27 Jun 2023 01:35:05 -0700
-From:   Souradeep Chakrabarti <schakrabarti@linux.microsoft.com>
-To:     Stephen Hemminger <stephen@networkplumber.org>
-Cc:     Dexuan Cui <decui@microsoft.com>,
-        Simon Horman <simon.horman@corigine.com>,
-        KY Srinivasan <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        "wei.liu@kernel.org" <wei.liu@kernel.org>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "pabeni@redhat.com" <pabeni@redhat.com>,
-        Long Li <longli@microsoft.com>,
-        Ajay Sharma <sharmaajay@microsoft.com>,
-        "leon@kernel.org" <leon@kernel.org>,
-        "cai.huoqing@linux.dev" <cai.huoqing@linux.dev>,
-        "ssengar@linux.microsoft.com" <ssengar@linux.microsoft.com>,
-        "vkuznets@redhat.com" <vkuznets@redhat.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>,
-        Souradeep Chakrabarti <schakrabarti@microsoft.com>
-Subject: Re: [PATCH 1/2 V3 net] net: mana: Fix MANA VF unload when host is
- unresponsive
-Message-ID: <20230627083505.GA31802@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
-References: <1687771058-26634-1-git-send-email-schakrabarti@linux.microsoft.com>
- <1687771098-26775-1-git-send-email-schakrabarti@linux.microsoft.com>
- <ZJmNBKA3ygDryP7i@corigine.com>
- <SA1PR21MB1335166153541BFDC2B7036BBF26A@SA1PR21MB1335.namprd21.prod.outlook.com>
- <20230626134721.256c6c16@hermes.local>
+        Tue, 27 Jun 2023 04:35:43 -0400
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9192F10CF
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 01:35:41 -0700 (PDT)
+Received: from mail-pj1-f71.google.com (mail-pj1-f71.google.com [209.85.216.71])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 25002423E9
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 08:35:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1687854939;
+        bh=cRPd42UjLsQHHlZk9zoi1NoFgO3UAhUdUSvEc9A0iZk=;
+        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+         To:Cc:Content-Type;
+        b=dmJu8jPzzyyvTdUNWV9vjdq1TsWOcIVodf5VrX41eGFs04e7s1zMx7m3uUw6e4Kkd
+         9LYhzbVzCZdsMTvbAjAafOn1f4T9S/Ujj5R2XaPrhnc0eoNS2C3nPO6xGUyQ8/EJcq
+         JzcAffZALUEAmp1Zi/1StX5LMsrrmNDq1jGrap196+3YG0CfwRfkUh+JRqjvx3KeDq
+         dlXNEDwYOvuLdM1c3uO6aLEq+3nNu8DDX2zH5tftHNQRoA6mJHIGIf2lhpzlpC1mla
+         bP3+00z6D7+OCT0M1D0gWYTzc/pgDsFGOcCmzUyRwOXnQHG4Jlt2/iHbC9jWH9j/VY
+         zlCYW1RUyUjzw==
+Received: by mail-pj1-f71.google.com with SMTP id 98e67ed59e1d1-262e04a6fd1so1270578a91.3
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 01:35:39 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687854937; x=1690446937;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=cRPd42UjLsQHHlZk9zoi1NoFgO3UAhUdUSvEc9A0iZk=;
+        b=LaDccfSB25k9QY26LEsg0u+KXJXOF+BEUUnB2n5MDLZMcVsmPh+NZ3M6dKVDUvk+2I
+         uWKYQmoAr5UNFy+fCtt0xd06YJKyKt3XtYd4CJh2QmeqdUCAJjcPdzGgBM6/zbF+yDG+
+         j7TGS8LWpcIJDvjosP2r/GdR9P6SS2mxozKGo/cXyd13/Dg5w3nV8phZB0EnZkf5C1q9
+         EbFEmQiYEzRsgmM+WQQxd22tPBz5TCj8V49/E8u/75WcFChWdiRhIlcNYZvWTxTnfWPJ
+         IDeenu1OPzGWjshIzeYLykJBebjgNxlbWIF4m6bxsxTjCuOOX2+jknPk317BWhqCgcpB
+         rbIw==
+X-Gm-Message-State: AC+VfDx6UP8tAZnHuwG2AqA2BLsPAmVN9Fl8GKatXmxRXeMm8Q/UJi8f
+        xmyOTrFbH46JA59gRfDCJuYV2j4IqaBmu4zTD9c53EdD0/I7TalnegeFDr8hUnTXYQw7KADh1aO
+        cE1kBW9oI4aVdxXmscOdPQKpD+4jE6iEeyM12otTIBtMsa9x28cCO8PG4xQ==
+X-Received: by 2002:a17:90b:38cf:b0:262:d4c8:cb3c with SMTP id nn15-20020a17090b38cf00b00262d4c8cb3cmr4511922pjb.49.1687854937513;
+        Tue, 27 Jun 2023 01:35:37 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ7MioXDYJkmV3SVO/wCnwnRIelqTF7AbSlaDlO1rO00diyGula96bz59WjKHfHlP5jECR7f1hwhWVHtmzuxmwQ=
+X-Received: by 2002:a17:90b:38cf:b0:262:d4c8:cb3c with SMTP id
+ nn15-20020a17090b38cf00b00262d4c8cb3cmr4511912pjb.49.1687854937083; Tue, 27
+ Jun 2023 01:35:37 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230626134721.256c6c16@hermes.local>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <1b4b2c6c-8119-95fd-8958-dbbecc66510c@amd.com> <20230622230607.GA155247@bhelgaas>
+In-Reply-To: <20230622230607.GA155247@bhelgaas>
+From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
+Date:   Tue, 27 Jun 2023 16:35:25 +0800
+Message-ID: <CAAd53p4kH7E92++jabBhvsM_+M7Dpyk2JP+aoVdb_sxZn47eyQ@mail.gmail.com>
+Subject: Re: [PATCH] PCI/ASPM: Enable ASPM on external PCIe devices
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     "Limonciello, Mario" <mario.limonciello@amd.com>,
+        bhelgaas@google.com,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Vidya Sagar <vidyas@nvidia.com>,
+        Michael Bottini <michael.a.bottini@linux.intel.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 26, 2023 at 01:47:21PM -0700, Stephen Hemminger wrote:
-> On Mon, 26 Jun 2023 20:06:48 +0000
-> Dexuan Cui <decui@microsoft.com> wrote:
-> 
-> > > From: Simon Horman
-> > > Sent: Monday, June 26, 2023 6:05 AM  
-> > > > ...
-> > > > Fixes: ca9c54d2d6a5ab2430c4eda364c77125d62e5e0f (net: mana: Add a
-> > > > driver for
-> > > > Microsoft Azure Network Adapter)  
-> > > 
-> > > nit: A correct format of this fixes tag is:
-> > > 
-> > > In particular:
-> > > * All on lone line
-> > > * Description in double quotes.
-> > > 
-> > > Fixes: ca9c54d2d6a5 ("net: mana: Add a driver for Microsoft Azure Network
-> > > Adapter (MANA)")  
-> > 
-> > Hi Souradeep, FYI I often refer to:
-> > https://marc.info/?l=linux-pci&m=150905742808166&w=2
-> > 
-> > The link mentions:
-> > alias gsr='git --no-pager show -s --abbrev-commit --abbrev=12 --pretty=format:"%h (\"%s\")%n"'
-> > 
-Thank you for the advice. Will use it from now onwards.
-> > "gsr ca9c54d2d6a5ab2430c4eda364c77125d62e5e0f" produces:
-> > ca9c54d2d6a5 ("net: mana: Add a driver for Microsoft Azure Network Adapter (MANA)")
-> 
-> You can do same thing without shell alias by using git-config
-> 
-> [alias]
-> 	fixes = log -1 --format=fixes
-> 	gsr = log -1 --format=gsr
-> 
-> [pretty]
-> 	fixes = Fixes: %h (\"%s\")
-> 	gsr = %h (\"%s\")
-> 
-> Then:
-> $ git gsr 1919b39fc6eabb9a6f9a51706ff6d03865f5df29
-> 1919b39fc6ea ("net: mana: Fix perf regression: remove rx_cqes, tx_cqes counters")
-Thank you for the suggestion.
+On Fri, Jun 23, 2023 at 7:06=E2=80=AFAM Bjorn Helgaas <helgaas@kernel.org> =
+wrote:
+>
+> On Tue, Jun 20, 2023 at 01:36:59PM -0500, Limonciello, Mario wrote:
+> > <snip>
+> > > > A variety of Intel chipsets don't support lane width switching
+> > > > or speed switching.  When ASPM has been enabled on a dGPU,
+> > > > these features are utilized and breakage ensues.
+> > > Maybe this helps explain all the completely unmaintainable ASPM
+> > > garbage in amdgpu and radeon.
+> > >
+> > > If these devices are broken, we need quirks for them.
+> >
+> > The problem is which device do you consider "broken"?
+> > The dGPU that uses these features when the platform advertises ASPM
+> > or the chipset which doesn't support the features that the device
+> > uses when ASPM is active?
+> >
+> > With this problem I'm talking about the dGPU works fine on hosts
+> > that support these features.
+>
+> Without more details about what's broken and when, I can't say.  What
+> I *think* is that a device that doesn't work per spec needs a quirk.
+> Typically it's a device that advertises a capability that doesn't work
+> correctly.
+
+Many silicon vendors use the same "PCI IP" and integrate it into their
+own chip. That's one of the reason why the capability doesn't really
+reflect what actually being support.
+The vendors then send their private datasheet to system integrator so
+BIOS can enable what's really supported.
+
+So the logic is to ignore the capability and trust the default set by BIOS.
+
+>
+> > > > > > I think the pragmatic way to approach it is to (essentially)
+> > > > > > apply the policy as BIOS defaults and allow overrides from
+> > > > > > that.
+> > > > >
+> > > > > Do you mean that when enumerating a device (at boot-time or
+> > > > > hot-add time), we would read the current ASPM config but not
+> > > > > change it?  And users could use the sysfs knobs to
+> > > > > enable/disable ASPM as desired?
+> > > >
+> > > > Yes.
+> > > >
+> > > Hot-added devices power up with ASPM disabled.  This policy would
+> > > mean the user has to explicitly enable it, which doesn't seem
+> > > practical to me.
+> >
+> > Could we maybe have the hot added devices follow the policy of
+> > the bridge they're connected to by default?
+> >
+> > > > > That wouldn't solve the problem Kai-Heng is trying to solve.
+> > > >
+> > > > Alone it wouldn't; but if you treated the i225 PCIe device
+> > > > connected to the system as a "quirk" to apply ASPM policy
+> > > > from the parent device to this child device it could.
+> > >
+> > > I want quirks for BROKEN devices.  Quirks for working hardware is a
+> > > maintenance nightmare.
+> >
+> > If you follow my idea of hot added devices the policy follows
+> > the parent would it work for the i225 PCIe device case?
+>
+> That doesn't *sound* really robust to me because even if the default
+> config after hot-add works, the user can change things via sysfs, and
+> any configuration we set it to should work as well.  If there are
+> land-mines there, we need a quirk that prevents sysfs from running
+> into it.
+
+For this case it means driver needs to provide a ASPM callback to flip
+PTM based on ASPM sysfs.
+
+Kai-Heng
+
+> Bjorn
