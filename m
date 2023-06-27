@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64BE07402EE
+	by mail.lfdr.de (Postfix) with ESMTP id B81727402EF
 	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 20:11:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231239AbjF0SLf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 14:11:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42808 "EHLO
+        id S231305AbjF0SLh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 14:11:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230450AbjF0SLF (ORCPT
+        with ESMTP id S230468AbjF0SLH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 14:11:05 -0400
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54A5310D7
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 11:11:03 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id 3f1490d57ef6-bd69ee0edacso6514869276.3
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 11:11:03 -0700 (PDT)
+        Tue, 27 Jun 2023 14:11:07 -0400
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D36FF2733
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 11:11:05 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-573d70da2dcso61561297b3.1
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 11:11:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1687889462; x=1690481462;
+        d=google.com; s=20221208; t=1687889465; x=1690481465;
         h=to:from:subject:references:mime-version:message-id:in-reply-to:date
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=1Y44TOA7IP5InT6TRlpHuOEgaV2HfkPV6BhBGubei/8=;
-        b=c9gurYrQqRSFvo7zJ8m414du8P7eJ9NkSzT6aLXKB4BfMI5WawStXka9WiRq5JOw/v
-         oWqKg0C7YBaR/KnfK3/kJLT2e5oOiWG8IJcE5OvD3w0UcHc+tQLB/MgoG3l3XRfNonyz
-         Q6m5AUjEjI7GgkUeVjIBIdy9xOOJa2vINIxBQ71BK6X4BpMC8236R9alITgBf+5A105M
-         eSxP1no+WzzdpjnS3uxuZlGFHkye//BZTsa6vkU1p2zsWrnznmfNncam/YJle49naEk4
-         FNAXi2ur3RVloIqgfmIae+74ELhIPp53/EQ66tT5z3/0JSjRef+MZQqcj82/9xG6R7h8
-         ZHXA==
+        bh=HmcwCCrzohBexPPxiwkNS29383WCu9lx0QPsW2KVyZ4=;
+        b=aei3beb4q3x++WPIPe0QnHzZckcCFW4R3vf2GZueNTS8EH1ej5AXfNxSKeKke4OnW4
+         pA1YiiyKDg4RiHfInlERXtFstvo8F+W0YaAE+KQJjwrFblA/gDRz1CNUUrPC2w2JQil3
+         /Wra5Ojjv9MsDQI5HT4WZil3DOlquS7Yg0g4ytIrnu96YIlrFydfvyZzAezPCh/AEdFB
+         rRhqPAkPurZjCa/Bls2FsuQpCBCe+AU4YlqrMa6qVUXBaNjbpW5dfNvPrvt+gulyeI6z
+         hZY6zNeqiTqUAdNOa6piRZ3r0WzZRF4/9Mff9lv3m+nnFLcYoEpQVXsLvBCl3X/F32rh
+         wojA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687889462; x=1690481462;
+        d=1e100.net; s=20221208; t=1687889465; x=1690481465;
         h=to:from:subject:references:mime-version:message-id:in-reply-to:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=1Y44TOA7IP5InT6TRlpHuOEgaV2HfkPV6BhBGubei/8=;
-        b=em/6evp9j2IHEaExda1uMBpBOJNVUfYcjEW5BnnGwQoWi3k0vKtGkVAPOffrYjTEfP
-         228d7HnhYVxlU9WeNbs6cMXRbcy4QoA6aGbyI/pvnnY2RJd3snn98MPNR/SjQBFtFA3R
-         A914/Y4/c+228pYkZy+JVKDG0Ucrotag0UJ7P95RvNY4+U4FSqivvoI//6bjn6eUK2RW
-         bKs7rrjyFA99HBnsCH52UDXbo2QE3OgfPy5Uj9078zMPp3wh01RJt1k7AxqIsvGrZbux
-         hh7Ymz2lW/UNH1hQaL/9apYLZNCJzOuK0WOPOZyzkursxrnEu94kD3TehOl873wauO7p
-         L8Vw==
-X-Gm-Message-State: AC+VfDyiSyjYV6R6vCcPBCoGAknH6a3eCRXUH53y675Js2FQxJPDMIHO
-        CnooZfdQUp7Uiyer+fMXzEydXt/gmyiq
-X-Google-Smtp-Source: ACHHUZ45eWIOcww9XvJdH9Wpn9yaGfgwtvCYiA4KW5mMlaVQdVSQEelhhiHH1vPrJCsS/CFFJGoTZsCrIf9p
+        bh=HmcwCCrzohBexPPxiwkNS29383WCu9lx0QPsW2KVyZ4=;
+        b=BSFK5tT1CSR6rWpsO9+f3IHvjRAezngic7YpcaR/QkR8kb5HiEhLQm6I7XA7KwEFZc
+         nyAtoN6eIyzGtBdtY5gK5If6L1BmkbQALJm36cMo7Xfr751E8KOi19I7GGFHbow6Ilmi
+         8IBqb4vJUEEZBQGCdQm/Mwry18BCALAF7GXmTaDrr1yzCFhI/4rD16QkbluPdIgU9wzM
+         B+PCi2N9ag2nHFIbVRJlOIrCEFcXEn2WMbT9pWT8XC53O/43rpuFQaSMmWpJoo6/3ZM0
+         5C6HXENQe3sAJj57+Sd1SU8pifYhsjPKN052Ddh7uSfKjtfKLCjWe/w02aGSicAve9q6
+         vnYw==
+X-Gm-Message-State: AC+VfDwfG98+cDDykOspbF5fRKnEr5oEQbjJwJrO4tEsMRV4lIQYdkD2
+        +baiifLNPSO0vAubhlMcUhfPHubNMO4y
+X-Google-Smtp-Source: ACHHUZ4/a+LchMST3LH5uXgoZ0tXTL1BebqlP5Oj8R+ArkMhvomyHOWsaMi0FEXWPrdUw3IQVWMEMjhABDIT
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2a3:200:a518:9a69:cf62:b4d9])
- (user=irogers job=sendgmr) by 2002:a25:2144:0:b0:be4:7214:7aef with SMTP id
- h65-20020a252144000000b00be472147aefmr14974748ybh.10.1687889462624; Tue, 27
- Jun 2023 11:11:02 -0700 (PDT)
-Date:   Tue, 27 Jun 2023 11:10:26 -0700
+ (user=irogers job=sendgmr) by 2002:a25:ad9f:0:b0:bce:5d6f:87a with SMTP id
+ z31-20020a25ad9f000000b00bce5d6f087amr7873345ybi.1.1687889465014; Tue, 27 Jun
+ 2023 11:11:05 -0700 (PDT)
+Date:   Tue, 27 Jun 2023 11:10:27 -0700
 In-Reply-To: <20230627181030.95608-1-irogers@google.com>
-Message-Id: <20230627181030.95608-10-irogers@google.com>
+Message-Id: <20230627181030.95608-11-irogers@google.com>
 Mime-Version: 1.0
 References: <20230627181030.95608-1-irogers@google.com>
 X-Mailer: git-send-email 2.41.0.162.gfafddb0af9-goog
-Subject: [PATCH v2 09/13] perf parse-events: Separate ENOMEM memory handling
+Subject: [PATCH v2 10/13] perf parse-events: Additional error reporting
 From:   Ian Rogers <irogers@google.com>
 To:     Peter Zijlstra <peterz@infradead.org>,
         Ingo Molnar <mingo@redhat.com>,
@@ -71,407 +71,105 @@ Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add PE_ABORT that will YYNOMEM or YYABORT accordingly.
+When no events or PMUs match report an error for event_pmu:
 
+Before:
+```
+$ perf stat -e 'asdfasdf' -a sleep 1
+Run 'perf list' for a list of valid events
+
+ Usage: perf stat [<options>] [<command>]
+
+    -e, --event <event>   event selector. use 'perf list' to list available events
+```
+
+After:
+```
+$ perf stat -e 'asdfasdf' -a sleep 1
+event syntax error: 'asdfasdf'
+                     \___ Bad event name
+
+Unabled to find PMU or event on a PMU of 'asdfasdf'
+Run 'perf list' for a list of valid events
+
+ Usage: perf stat [<options>] [<command>]
+
+    -e, --event <event>   event selector. use 'perf list' to list available events
+```
+
+Fixes the inadvertent removal when hybrid parsing was modified.
+
+Fixes: ("70c90e4a6b2f perf parse-events: Avoid scanning PMUs before parsing")
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/util/parse-events.y | 134 ++++++++++++++++++++-------------
- 1 file changed, 82 insertions(+), 52 deletions(-)
+ tools/perf/util/parse-events.y | 25 +++++++++++++++++++------
+ 1 file changed, 19 insertions(+), 6 deletions(-)
 
 diff --git a/tools/perf/util/parse-events.y b/tools/perf/util/parse-events.y
-index eaf43bd8fe3f..f090a85c4518 100644
+index f090a85c4518..a636a7db6e6f 100644
 --- a/tools/perf/util/parse-events.y
 +++ b/tools/perf/util/parse-events.y
-@@ -28,6 +28,13 @@ do { \
- 		YYABORT; \
- } while (0)
- 
-+#define PE_ABORT(val) \
-+do { \
-+	if (val == -ENOMEM) \
-+		YYNOMEM; \
-+	YYABORT; \
-+} while (0)
-+
- static struct list_head* alloc_list(void)
+@@ -291,7 +291,6 @@ PE_NAME opt_pmu_config
  {
- 	struct list_head *list;
-@@ -371,7 +378,7 @@ PE_NAME sep_dc
+ 	struct parse_events_state *parse_state = _parse_state;
+ 	struct list_head *list = NULL, *orig_terms = NULL, *terms= NULL;
+-	struct parse_events_error *error = parse_state->error;
+ 	char *pattern = NULL;
+ 
+ #define CLEANUP						\
+@@ -303,9 +302,6 @@ PE_NAME opt_pmu_config
+ 		free(pattern);				\
+ 	} while(0)
+ 
+-	if (error)
+-		error->idx = @1.first_column;
+-
+ 	if (parse_events_copy_term_list($2, &orig_terms)) {
+ 		CLEANUP;
+ 		YYNOMEM;
+@@ -360,6 +356,14 @@ PE_NAME opt_pmu_config
+ 			$2 = NULL;
+ 		}
+ 		if (!ok) {
++			struct parse_events_error *error = parse_state->error;
++			char *help;
++
++			if (asprintf(&help, "Unabled to find PMU or event on a PMU of '%s'", $1) < 0)
++				help = NULL;
++			parse_events_error__handle(error, @1.first_column,
++						   strdup("Bad event or PMU"),
++						   help);
+ 			CLEANUP;
+ 			YYABORT;
+ 		}
+@@ -376,9 +380,18 @@ PE_NAME sep_dc
+ 	int err;
+ 
  	err = parse_events_multi_pmu_add(_parse_state, $1, NULL, &list);
- 	free($1);
- 	if (err < 0)
--		YYABORT;
-+		PE_ABORT(err);
- 	$$ = list;
- }
- 
-@@ -396,7 +403,7 @@ value_sym '/' event_config '/'
- 	parse_events_terms__delete($3);
- 	if (err) {
- 		free_list_evsel(list);
--		YYABORT;
-+		PE_ABORT(err);
- 	}
- 	$$ = list;
- }
-@@ -407,23 +414,28 @@ value_sym sep_slash_slash_dc
- 	int type = $1 >> 16;
- 	int config = $1 & 255;
- 	bool wildcard = (type == PERF_TYPE_HARDWARE || type == PERF_TYPE_HW_CACHE);
-+	int err;
- 
- 	list = alloc_list();
- 	if (!list)
- 		YYNOMEM;
--	ABORT_ON(parse_events_add_numeric(_parse_state, list, type, config,
--					  /*head_config=*/NULL, wildcard));
-+	err = parse_events_add_numeric(_parse_state, list, type, config, /*head_config=*/NULL, wildcard);
-+	if (err)
-+		PE_ABORT(err);
- 	$$ = list;
- }
- |
- PE_VALUE_SYM_TOOL sep_slash_slash_dc
- {
- 	struct list_head *list;
-+	int err;
- 
- 	list = alloc_list();
- 	if (!list)
- 		YYNOMEM;
--	ABORT_ON(parse_events_add_tool(_parse_state, list, $1));
-+	err = parse_events_add_tool(_parse_state, list, $1);
-+	if (err)
-+		YYNOMEM;
- 	$$ = list;
- }
- 
-@@ -444,7 +456,7 @@ PE_LEGACY_CACHE opt_event_config
- 	free($1);
- 	if (err) {
- 		free_list_evsel(list);
--		YYABORT;
-+		PE_ABORT(err);
- 	}
- 	$$ = list;
- }
-@@ -465,7 +477,7 @@ PE_PREFIX_MEM PE_VALUE PE_BP_SLASH PE_VALUE PE_BP_COLON PE_MODIFIER_BP opt_event
- 	free($6);
- 	if (err) {
- 		free(list);
--		YYABORT;
-+		PE_ABORT(err);
- 	}
- 	$$ = list;
- }
-@@ -484,7 +496,7 @@ PE_PREFIX_MEM PE_VALUE PE_BP_SLASH PE_VALUE opt_event_config
- 	parse_events_terms__delete($5);
- 	if (err) {
- 		free(list);
--		YYABORT;
-+		PE_ABORT(err);
- 	}
- 	$$ = list;
- }
-@@ -504,7 +516,7 @@ PE_PREFIX_MEM PE_VALUE PE_BP_COLON PE_MODIFIER_BP opt_event_config
- 	free($4);
- 	if (err) {
- 		free(list);
--		YYABORT;
-+		PE_ABORT(err);
- 	}
- 	$$ = list;
- }
-@@ -522,7 +534,7 @@ PE_PREFIX_MEM PE_VALUE opt_event_config
- 	parse_events_terms__delete($3);
- 	if (err) {
- 		free(list);
--		YYABORT;
-+		PE_ABORT(err);
- 	}
- 	$$ = list;
- }
-@@ -549,7 +561,7 @@ tracepoint_name opt_event_config
- 	free($1.event);
- 	if (err) {
- 		free(list);
--		YYABORT;
-+		PE_ABORT(err);
- 	}
- 	$$ = list;
- }
-@@ -576,7 +588,7 @@ PE_VALUE ':' PE_VALUE opt_event_config
- 	parse_events_terms__delete($4);
- 	if (err) {
- 		free(list);
--		YYABORT;
-+		PE_ABORT(err);
- 	}
- 	$$ = list;
- }
-@@ -600,7 +612,7 @@ PE_RAW opt_event_config
- 	parse_events_terms__delete($2);
- 	if (err) {
- 		free(list);
--		YYABORT;
-+		PE_ABORT(err);
- 	}
- 	$$ = list;
- }
-@@ -620,7 +632,7 @@ PE_BPF_OBJECT opt_event_config
- 	free($1);
- 	if (err) {
- 		free(list);
--		YYABORT;
-+		PE_ABORT(err);
- 	}
- 	$$ = list;
- }
-@@ -637,7 +649,7 @@ PE_BPF_SOURCE opt_event_config
- 	parse_events_terms__delete($2);
- 	if (err) {
- 		free(list);
--		YYABORT;
-+		PE_ABORT(err);
- 	}
- 	$$ = list;
- }
-@@ -712,11 +724,12 @@ event_term:
- PE_RAW
- {
- 	struct parse_events_term *term;
-+	int err = parse_events_term__str(&term, PARSE_EVENTS__TERM_TYPE_RAW,
-+					 strdup("raw"), $1, &@1, &@1);
- 
--	if (parse_events_term__str(&term, PARSE_EVENTS__TERM_TYPE_RAW,
--					strdup("raw"), $1, &@1, &@1)) {
-+	if (err) {
- 		free($1);
--		YYABORT;
-+		PE_ABORT(err);
- 	}
- 	$$ = term;
- }
-@@ -724,12 +737,12 @@ PE_RAW
- name_or_raw '=' name_or_legacy
- {
- 	struct parse_events_term *term;
-+	int err = parse_events_term__str(&term, PARSE_EVENTS__TERM_TYPE_USER, $1, $3, &@1, &@3);
- 
--	if (parse_events_term__str(&term, PARSE_EVENTS__TERM_TYPE_USER,
--					$1, $3, &@1, &@3)) {
-+	if (err) {
- 		free($1);
- 		free($3);
--		YYABORT;
-+		PE_ABORT(err);
- 	}
- 	$$ = term;
- }
-@@ -737,11 +750,12 @@ name_or_raw '=' name_or_legacy
- name_or_raw '=' PE_VALUE
- {
- 	struct parse_events_term *term;
-+	int err = parse_events_term__num(&term, PARSE_EVENTS__TERM_TYPE_USER,
-+					 $1, $3, false, &@1, &@3);
- 
--	if (parse_events_term__num(&term, PARSE_EVENTS__TERM_TYPE_USER,
--					$1, $3, false, &@1, &@3)) {
-+	if (err) {
- 		free($1);
--		YYABORT;
-+		PE_ABORT(err);
- 	}
- 	$$ = term;
- }
-@@ -749,12 +763,13 @@ name_or_raw '=' PE_VALUE
- name_or_raw '=' PE_TERM_HW
- {
- 	struct parse_events_term *term;
-+	int err = parse_events_term__str(&term, PARSE_EVENTS__TERM_TYPE_USER,
-+					 $1, $3.str, &@1, &@3);
- 
--	if (parse_events_term__str(&term, PARSE_EVENTS__TERM_TYPE_USER,
--					$1, $3.str, &@1, &@3)) {
-+	if (err) {
- 		free($1);
- 		free($3.str);
--		YYABORT;
-+		PE_ABORT(err);
- 	}
- 	$$ = term;
- }
-@@ -762,11 +777,12 @@ name_or_raw '=' PE_TERM_HW
- PE_LEGACY_CACHE
- {
- 	struct parse_events_term *term;
-+	int err = parse_events_term__num(&term, PARSE_EVENTS__TERM_TYPE_LEGACY_CACHE,
-+					 $1, 1, true, &@1, NULL);
- 
--	if (parse_events_term__num(&term, PARSE_EVENTS__TERM_TYPE_LEGACY_CACHE,
--					$1, 1, true, &@1, NULL)) {
-+	if (err) {
- 		free($1);
--		YYABORT;
-+		PE_ABORT(err);
- 	}
- 	$$ = term;
- }
-@@ -774,11 +790,12 @@ PE_LEGACY_CACHE
- PE_NAME
- {
- 	struct parse_events_term *term;
-+	int err = parse_events_term__num(&term, PARSE_EVENTS__TERM_TYPE_USER,
-+					 $1, 1, true, &@1, NULL);
- 
--	if (parse_events_term__num(&term, PARSE_EVENTS__TERM_TYPE_USER,
--					$1, 1, true, &@1, NULL)) {
-+	if (err) {
- 		free($1);
--		YYABORT;
-+		PE_ABORT(err);
- 	}
- 	$$ = term;
- }
-@@ -786,11 +803,12 @@ PE_NAME
- PE_TERM_HW
- {
- 	struct parse_events_term *term;
-+	int err = parse_events_term__num(&term, PARSE_EVENTS__TERM_TYPE_HARDWARE,
-+					 $1.str, $1.num & 255, false, &@1, NULL);
- 
--	if (parse_events_term__num(&term, PARSE_EVENTS__TERM_TYPE_HARDWARE,
--				   $1.str, $1.num & 255, false, &@1, NULL)) {
-+	if (err) {
- 		free($1.str);
--		YYABORT;
-+		PE_ABORT(err);
- 	}
- 	$$ = term;
- }
-@@ -798,10 +816,11 @@ PE_TERM_HW
- PE_TERM '=' name_or_legacy
- {
- 	struct parse_events_term *term;
-+	int err = parse_events_term__str(&term, (int)$1, NULL, $3, &@1, &@3);
- 
--	if (parse_events_term__str(&term, (int)$1, NULL, $3, &@1, &@3)) {
-+	if (err) {
- 		free($3);
--		YYABORT;
-+		PE_ABORT(err);
- 	}
- 	$$ = term;
- }
-@@ -809,10 +828,11 @@ PE_TERM '=' name_or_legacy
- PE_TERM '=' PE_TERM_HW
- {
- 	struct parse_events_term *term;
-+	int err = parse_events_term__str(&term, (int)$1, NULL, $3.str, &@1, &@3);
- 
--	if (parse_events_term__str(&term, (int)$1, NULL, $3.str, &@1, &@3)) {
-+	if (err) {
- 		free($3.str);
--		YYABORT;
-+		PE_ABORT(err);
- 	}
- 	$$ = term;
- }
-@@ -820,37 +840,46 @@ PE_TERM '=' PE_TERM_HW
- PE_TERM '=' PE_TERM
- {
- 	struct parse_events_term *term;
-+	int err = parse_events_term__term(&term, (int)$1, (int)$3, &@1, &@3);
+-	free($1);
+-	if (err < 0)
++	if (err < 0) {
++		struct parse_events_state *parse_state = _parse_state;
++		struct parse_events_error *error = parse_state->error;
++		char *help;
 +
-+	if (err)
-+		PE_ABORT(err);
- 
--	ABORT_ON(parse_events_term__term(&term, (int)$1, (int)$3, &@1, &@3));
- 	$$ = term;
++		if (asprintf(&help, "Unabled to find PMU or event on a PMU of '%s'", $1) < 0)
++			help = NULL;
++		parse_events_error__handle(error, @1.first_column, strdup("Bad event name"), help);
++		free($1);
+ 		PE_ABORT(err);
++	}
++	free($1);
+ 	$$ = list;
  }
- |
- PE_TERM '=' PE_VALUE
- {
- 	struct parse_events_term *term;
-+	int err = parse_events_term__num(&term, (int)$1, NULL, $3, false, &@1, &@3);
-+
-+	if (err)
-+		PE_ABORT(err);
  
--	ABORT_ON(parse_events_term__num(&term, (int)$1, NULL, $3, false, &@1, &@3));
- 	$$ = term;
- }
- |
- PE_TERM
- {
- 	struct parse_events_term *term;
-+	int err = parse_events_term__num(&term, (int)$1, NULL, 1, true, &@1, NULL);
-+
-+	if (err)
-+		PE_ABORT(err);
- 
--	ABORT_ON(parse_events_term__num(&term, (int)$1, NULL, 1, true, &@1, NULL));
- 	$$ = term;
- }
- |
- name_or_raw array '=' name_or_legacy
- {
- 	struct parse_events_term *term;
-+	int err = parse_events_term__str(&term, PARSE_EVENTS__TERM_TYPE_USER, $1, $4, &@1, &@4);
- 
--	if (parse_events_term__str(&term, PARSE_EVENTS__TERM_TYPE_USER,
--					$1, $4, &@1, &@4)) {
-+	if (err) {
- 		free($1);
- 		free($4);
- 		free($2.ranges);
--		YYABORT;
-+		PE_ABORT(err);
- 	}
- 	term->array = $2;
- 	$$ = term;
-@@ -859,12 +888,12 @@ name_or_raw array '=' name_or_legacy
- name_or_raw array '=' PE_VALUE
- {
- 	struct parse_events_term *term;
-+	int err = parse_events_term__num(&term, PARSE_EVENTS__TERM_TYPE_USER, $1, $4, false, &@1, &@4);
- 
--	if (parse_events_term__num(&term, PARSE_EVENTS__TERM_TYPE_USER,
--					$1, $4, false, &@1, &@4)) {
-+	if (err) {
- 		free($1);
- 		free($2.ranges);
--		YYABORT;
-+		PE_ABORT(err);
- 	}
- 	term->array = $2;
- 	$$ = term;
-@@ -874,14 +903,15 @@ PE_DRV_CFG_TERM
- {
- 	struct parse_events_term *term;
- 	char *config = strdup($1);
-+	int err;
- 
- 	if (!config)
- 		YYNOMEM;
--	if (parse_events_term__str(&term, PARSE_EVENTS__TERM_TYPE_DRV_CFG,
--					config, $1, &@1, NULL)) {
-+	err = parse_events_term__str(&term, PARSE_EVENTS__TERM_TYPE_DRV_CFG, config, $1, &@1, NULL);
-+	if (err) {
- 		free($1);
- 		free(config);
--		YYABORT;
-+		PE_ABORT(err);
- 	}
- 	$$ = term;
- }
 -- 
 2.41.0.162.gfafddb0af9-goog
 
