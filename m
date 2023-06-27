@@ -2,156 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B170873EFB6
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 02:31:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36D4B73EFC3
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 02:35:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229720AbjF0Abr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 20:31:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47348 "EHLO
+        id S229823AbjF0Afs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 20:35:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbjF0Abp (ORCPT
+        with ESMTP id S229448AbjF0Afq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 20:31:45 -0400
-Received: from smtp-relay-canonical-0.canonical.com (smtp-relay-canonical-0.canonical.com [185.125.188.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BE5F1703;
-        Mon, 26 Jun 2023 17:31:44 -0700 (PDT)
-Received: from [10.8.192.2] (unknown [50.47.134.245])
+        Mon, 26 Jun 2023 20:35:46 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAE351716;
+        Mon, 26 Jun 2023 17:35:44 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by smtp-relay-canonical-0.canonical.com (Postfix) with ESMTPSA id 298E53F25A;
-        Tue, 27 Jun 2023 00:31:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1687825901;
-        bh=ZJuKj+u/iaHfpnToK3Hjz8WAqXefP5JdPosEoq9MmW4=;
-        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-         In-Reply-To:Content-Type;
-        b=hboEUQu9s70yZcXCgpqK7RsTvsmD1KKk6A42+uK2cx4xuDA16YR2zAprJexV4ERKq
-         bg4NTT5XrXrUkS6miJy88A3SP7ANqZKZzxJqRAhp5mcKjWpUJpGxXWZoz/anMbmy8k
-         VpPdPGpNLeo4MwC5Fdj5SgiaC3SgF6TSONL4PHzj213BbaW45q15YeF3wNH8L6vOEX
-         /3FngaWH7uvmGm9ADjtt9wu2L0XwLgisu5JEBZoP9NjesrnO9V0MAb1Km0Pen5HWuA
-         YDc8oxJn39tJmdBKy8TrB7dUoj+8MYL7TCksiCVI5yRjle7CN1G/n1SF/KPEzhMgzF
-         +lNHe2xdaFynw==
-Message-ID: <31d6e8d6-0747-a282-746b-5c144a9970bb@canonical.com>
-Date:   Mon, 26 Jun 2023 17:31:37 -0700
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6D6FF60FBC;
+        Tue, 27 Jun 2023 00:35:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4338C433C9;
+        Tue, 27 Jun 2023 00:35:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687826143;
+        bh=ri8Lw0btK8xU98fieJeNgDYMq7tpyggvX0fT3i8LXvU=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=Y5byjoU8crCZ5+nUd5ao0pSbq5PDEH2HLWApGVhYwd5n072gix8PNM7837Pw3Jz/3
+         T3/HYrcYbw85FAxa852NPTyGg+/OIyksq1BQu4ywgbjQD9zdWxTeNoCVP6H3esfjoX
+         3wTEUeBRt67vDxrhnB7Dx0vhI1e5qAh29YjAfcsIe3LKD5zR8M6l9HE9cuSeXuY8Q1
+         tdA9oJw1U3GIX3dJxO+7FXf3O7k26sgh23Tz9o0gKzu49W5RaKFGwzvX5xPV5v6eTH
+         b1QBQPaEZPzMJHGCzDUgHw7Adq/uAKO/nZ4e6g/sph00uMADLLtq5KrlzS8Qkg6g/X
+         dgZGnVbkTfZVg==
+Received: by mail-lf1-f46.google.com with SMTP id 2adb3069b0e04-4fafe87c6fbso2951236e87.3;
+        Mon, 26 Jun 2023 17:35:43 -0700 (PDT)
+X-Gm-Message-State: AC+VfDxoj79OZYxy/3J6ZALLABTHLarBVa8fQ9fk1qH/XXfUALPxqKYZ
+        zoeiUSPyHAW8r6/IaeO160XGJ1TM2G9otQLpjJY=
+X-Google-Smtp-Source: ACHHUZ6r6mwH6YsL2/0Z1A3dZTnXXWmub0BcbTsy21tD6ta5oIOu7Om/p7EXVx74EOcnySCJTXFUzRYUwTD6GVIoG0k=
+X-Received: by 2002:a19:6555:0:b0:4f8:5f32:b1da with SMTP id
+ c21-20020a196555000000b004f85f32b1damr15112836lfj.24.1687826141758; Mon, 26
+ Jun 2023 17:35:41 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v3] apparmor: global buffers spin lock may get contended
-Content-Language: en-US
-To:     Anil Altinay <aaltinay@google.com>
-Cc:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        LKLM <linux-kernel@vger.kernel.org>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Tomasz Figa <tfiga@chromium.org>,
-        linux-security-module@vger.kernel.org
-References: <YO2S+C7Cw7AS7bsg@google.com>
- <cfd5cc6f-5943-2e06-1dbe-f4b4ad5c1fa1@canonical.com>
- <Y19GhTg8Q/3ym/VD@google.com>
- <dac1c2d5-367f-c8a7-c61e-c1774d98d602@canonical.com>
- <4595e7b4-ea31-5b01-f636-259e84737dfc@canonical.com>
- <Y+9aoFjrYkpFSvuE@linutronix.de>
- <f3fd5dd8-9d78-43be-fc5c-bf990ad3a64d@canonical.com>
- <CACCxZWOK6=mHNQrWEhjw4pC2i3qBKYdn9joiaaCNE7ge8FAz0A@mail.gmail.com>
- <CACCxZWO-+M-J_enENr7q1WDcu1U8vYFoytqJxAh=x-nuP268zA@mail.gmail.com>
-From:   John Johansen <john.johansen@canonical.com>
-Organization: Canonical
-In-Reply-To: <CACCxZWO-+M-J_enENr7q1WDcu1U8vYFoytqJxAh=x-nuP268zA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+References: <20230623180523.1901230-1-jbaron@akamai.com>
+In-Reply-To: <20230623180523.1901230-1-jbaron@akamai.com>
+From:   Song Liu <song@kernel.org>
+Date:   Mon, 26 Jun 2023 17:35:29 -0700
+X-Gmail-Original-Message-ID: <CAPhsuW4xyxS=oYmeaF2Jze76WC-e2p_dQNos+QDnFX6nr5AOCw@mail.gmail.com>
+Message-ID: <CAPhsuW4xyxS=oYmeaF2Jze76WC-e2p_dQNos+QDnFX6nr5AOCw@mail.gmail.com>
+Subject: Re: [PATCH] md/raid0: add discard support for the 'original' layout
+To:     Jason Baron <jbaron@akamai.com>
+Cc:     linux-kernel@vger.kernel.org, linux-raid@vger.kernel.org,
+        NeilBrown <neilb@suse.de>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/26/23 16:33, Anil Altinay wrote:
-> Hi John,
-> 
-> I was wondering if you get a chance to work on patch v4. Please let me know if you need help with testing.
-> 
+On Fri, Jun 23, 2023 at 11:05=E2=80=AFAM Jason Baron <jbaron@akamai.com> wr=
+ote:
+>
+> We've found that using raid0 with the 'original' layout and discard
+> enabled with different disk sizes (such that at least two zones are
+> created) can result in data corruption. This is due to the fact that
+> the discard handling in 'raid0_handle_discard()' assumes the 'alternate'
+> layout. We've seen this corruption using ext4 but other filesystems are
+> likely susceptible as well.
+>
+> More specifically, while multiple zones are necessary to create the
+> corruption, the corruption may not occur with multiple zones if they
+> layout in such a way the layout matches what the 'alternate' layout
+> would have produced. Thus, not all raid0 devices with the 'original'
+> layout, different size disks and discard enabled will encounter this
+> corruption.
+>
+> The 3.14 kernel inadvertently changed the raid0 disk layout for different
+> size disks. Thus, running a pre-3.14 kernel and post-3.14 kernel on the
+> same raid0 array could corrupt data. This lead to the creation of the
+> 'original' layout (to match the pre-3.14 layout) and the 'alternate' layo=
+ut
+> (to match the post 3.14 layout) in the 5.4 kernel time frame and an optio=
+n
+> to tell the kernel which layout to use (since it couldn't be autodetected=
+).
+> However, when the 'original' layout was added back to 5.4 discard support
+> for the 'original' layout was not added leading this issue.
+>
+> I've been able to reliably reproduce the corruption with the following
+> test case:
+>
+> 1. create raid0 array with different size disks using original layout
+> 2. mkfs
+> 3. mount -o discard
+> 4. create lots of files
+> 5. remove 1/2 the files
+> 6. fstrim -a (or just the mount point for the raid0 array)
+> 7. umount
+> 8. fsck -fn /dev/md0 (spews all sorts of corruptions)
+>
+> Let's fix this by adding proper discard support to the 'original' layout.
+> The fix 'maps' the 'original' layout disks to the order in which they are
+> read/written such that we can compare the disks in the same way that the
+> current 'alternate' layout does. A 'disk_shift' field is added to
+> 'struct strip_zone'. This could be computed on the fly in
+> raid0_handle_discard() but by adding this field, we save some computation
+> in the discard path.
+>
+> Note we could also potentially fix this by re-ordering the disks in the
+> zones that follow the first one, and then always read/writing them using
+> the 'alternate' layout. However, that is seen as a more substantial chang=
+e,
+> and we are attempting the least invasive fix at this time to remedy the
+> corruption.
+>
+> I've verified the change using the reproducer mentioned above. Typically,
+> the corruption is seen after less than 3 iterations, while the patch has
+> run 500+ iterations.
+>
+> Cc: NeilBrown <neilb@suse.de>
+> Cc: Song Liu <song@kernel.org>
+> Fixes: c84a1372df92 ("md/raid0: avoid RAID0 data corruption due to layout=
+ confusion.")
+> Signed-off-by: Jason Baron <jbaron@akamai.com>
 
-yeah, testing help is always much appreciated. I have a v4, and I am working on 3 alternate version to compare against, to help give a better sense if we can get away with simplifying or tweak the scaling. I should be able to post them out some time tonight.
+ Looks good to me! Applied to md-next.
 
-> Best,
-> Anil
-> 
-> On Tue, Feb 21, 2023 at 1:27 PM Anil Altinay <aaltinay@google.com <mailto:aaltinay@google.com>> wrote:
-> 
->     I can test the patch with 5.10 and 5.15 kernels in different machines.
->     Just let me know which machine types you would like me to test.
-> 
->     On Mon, Feb 20, 2023 at 12:42 AM John Johansen
->     <john.johansen@canonical.com <mailto:john.johansen@canonical.com>> wrote:
->      >
->      > On 2/17/23 02:44, Sebastian Andrzej Siewior wrote:
->      > > On 2023-02-16 16:08:10 [-0800], John Johansen wrote:
->      > >> --- a/security/apparmor/lsm.c
->      > >> +++ b/security/apparmor/lsm.c
->      > >> @@ -49,12 +49,19 @@ union aa_buffer {
->      > >>      char buffer[1];
->      > >>   };
->      > >> +struct aa_local_cache {
->      > >> +    unsigned int contention;
->      > >> +    unsigned int hold;
->      > >> +    struct list_head head;
->      > >> +};
->      > >
->      > > if you stick a local_lock_t into that struct, then you could replace
->      > >       cache = get_cpu_ptr(&aa_local_buffers);
->      > > with
->      > >       local_lock(&aa_local_buffers.lock);
->      > >       cache = this_cpu_ptr(&aa_local_buffers);
->      > >
->      > > You would get the preempt_disable() based locking for the per-CPU
->      > > variable (as with get_cpu_ptr()) and additionally some lockdep
->      > > validation which would warn if it is used outside of task context (IRQ).
->      > >
->      > I did look at local_locks and there was a reason I didn't use them. I
->      > can't recall as the original iteration of this is over a year old now.
->      > I will have to dig into it again.
->      >
->      > > I didn't parse completely the hold/contention logic but it seems to work
->      > > ;)
->      > > You check "cache->count >=  2" twice but I don't see an inc/ dec of it
->      > > nor is it part of aa_local_cache.
->      > >
->      > sadly I messed up the reordering of this and the debug patch. This will be
->      > fixed in v4.
->      >
->      > > I can't parse how many items can end up on the local list if the global
->      > > list is locked. My guess would be more than 2 due the ->hold parameter.
->      > >
->      > So this iteration, forces pushing back to global list if there are already
->      > two on the local list. The hold parameter just affects how long the
->      > buffers remain on the local list, before trying to place them back on
->      > the global list.
->      >
->      > Originally before the count was added more than 2 buffers could end up
->      > on the local list, and having too many local buffers is a waste of
->      > memory. The count got added to address this. The value of 2 (which should
->      > be switched to a define) was chosen because no mediation routine currently
->      > uses more than 2 buffers.
->      >
->      > Note that this doesn't mean that more than two buffers can be allocated
->      > to a tasks on a cpu. Its possible in some cases to have a task have
->      > allocated buffers and to still have buffers on the local cache list.
->      >
->      > > Do you have any numbers on the machine and performance it improved? It
->      > > sure will be a good selling point.
->      > >
->      >
->      > I can include some supporting info, for a 16 core machine. But it will
->      > take some time to for me to get access to a bigger machine, where this
->      > is much more important. Hence the call for some of the other people
->      > on this thread to test.
->      >
->      > thanks for the feedback
->      >
-> 
+Since this will be released with 6.6, we should have a smaller and safer fi=
+x
+before that. Would you mind create a patch that ignores all discards to
+orig_layout and not the first zone? We will roll that to 6.5 and back port =
+to
+stable. Then this version will be shipped to 6.6+.
 
+Thanks,
+Song
