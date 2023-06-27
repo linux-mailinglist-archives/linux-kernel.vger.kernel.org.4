@@ -2,264 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06EC1740501
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 22:29:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48D28740503
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 22:29:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231430AbjF0U3G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 16:29:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47032 "EHLO
+        id S231454AbjF0U3T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 16:29:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229729AbjF0U3C (ORCPT
+        with ESMTP id S231438AbjF0U3N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 16:29:02 -0400
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DC0E296B;
-        Tue, 27 Jun 2023 13:29:01 -0700 (PDT)
-Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35RJYdqP008631;
-        Tue, 27 Jun 2023 20:28:42 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : references : content-type : in-reply-to :
- mime-version; s=corp-2023-03-30;
- bh=oJqTh2QrtXa10+KGHEqzUe7CAfA+U503MbRp9GCPB28=;
- b=PJDnRheKDIAZ9yWINxLiXtwayUQF+dElJdfpoRpL1m+C5xHtb5bIZsmpg0G1wAmF/duH
- NmwUYKNMuK4LARpAliawicrQFkrSWbX1t6KMcQWWk7MH/LVAA00XCoMBNRobW2f7be48
- xi92DJL70UuF8rXeAl8GZFCnJDWWB1MzMiN6tU2u2q9m57T/SZ+QMOqs1e1BjPLOTq3a
- 2U8yrV9KIcOtBpDCee15fD2mHG9ohmaNXEZUP+Er7sQga5BchYSMQBLwHlpqDI9/Ro+o
- Wg+uthH1LVLhV+dkrdprHvKzX38rH8dp8lEM+eT9z5nnexC33Sqg2eBuznOPWODYdMsh tQ== 
-Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3rf40e47ad-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 27 Jun 2023 20:28:42 +0000
-Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 35RJjKqu038183;
-        Tue, 27 Jun 2023 20:28:42 GMT
-Received: from nam10-mw2-obe.outbound.protection.outlook.com (mail-mw2nam10lp2108.outbound.protection.outlook.com [104.47.55.108])
-        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3rdpxbjq1n-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 27 Jun 2023 20:28:41 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Lx0RoXaJdxHa5xJ0VO6B33AL8/oZ/dxn0K4heuBLil6FTxgVriR1XHWgZuVwv/ZdFL6qnWa6BQQH7UPOpDfgVBcX9iFIiqdty+RRiEjSd6ZHximiXrU1A4C3clM5bCiyqHts3RL0nZRlldFktrzxaB+t1+h7lJrBoTGcL+WdLIJXFrGXpNIK9P4O8VadZ4hqwg+GRMLXYWiJfXJk1x4yuMPuR7rHvh638gxcIPu8o8pZjY2nyS38mr4Tn9I9qllaKdHv/u5DacX4WWNV3zIo10EnHDvEIUs6REL9tg9Et8vg1Z64DYrTUYNBQ/fqvKwpzIEuWg7KXj0bWWNxAUf5sw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=oJqTh2QrtXa10+KGHEqzUe7CAfA+U503MbRp9GCPB28=;
- b=c0YtuTalen96/biSlpN6zEghfegPDR7mFRndcDenW8/6euVF6jHRDQzaEbShE7CS1u7YU/wUUffEGd1fxNJ2uszonVrC+lSkQHk/lsC6y7eP1o70+vqmJXBI/wPO8xs2/EycyQQ+005lQIwQVZ+rgegTOT2XCKk1SMK0QtaQuLkbGI0MP0brlMGo3UbKUePnsp+V4i1lKh+nXdw8k7Kwk9QUen4o7EwGHYy1jishwJCi7P33J8r0dfM85Nkis3ap/zE57IYGobg5c/4mwm/t7JUQl+/fBLp0ZzZp5bKNotB7umgxbFcktEFyyMVbapfjJdDwU5Q2zP2ByOISlw25Fg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
+        Tue, 27 Jun 2023 16:29:13 -0400
+Received: from mail-vk1-xa30.google.com (mail-vk1-xa30.google.com [IPv6:2607:f8b0:4864:20::a30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B607D26BF;
+        Tue, 27 Jun 2023 13:29:09 -0700 (PDT)
+Received: by mail-vk1-xa30.google.com with SMTP id 71dfb90a1353d-4716726b741so1361492e0c.3;
+        Tue, 27 Jun 2023 13:29:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=oJqTh2QrtXa10+KGHEqzUe7CAfA+U503MbRp9GCPB28=;
- b=NpL7bBLoN9fDawaZmY9PWX2lUPR+i3rpfQlQi9g1TS7P1R21x3NVt7dgToIDnv5fhL2EhTAjwK7TmNzMM+t94EjpRZJ9RgjW+HsaHxhguEHzOLTefcQS1azFSyZ/mpGKtq5tngSeUG+QdtAKVWherw2dFpOGrQezxOw+7wYSRqc=
-Received: from SN6PR10MB3022.namprd10.prod.outlook.com (2603:10b6:805:d8::25)
- by BLAPR10MB5137.namprd10.prod.outlook.com (2603:10b6:208:306::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.26; Tue, 27 Jun
- 2023 20:28:33 +0000
-Received: from SN6PR10MB3022.namprd10.prod.outlook.com
- ([fe80::998f:d221:5fb6:c67d]) by SN6PR10MB3022.namprd10.prod.outlook.com
- ([fe80::998f:d221:5fb6:c67d%7]) with mapi id 15.20.6521.024; Tue, 27 Jun 2023
- 20:28:33 +0000
-Date:   Tue, 27 Jun 2023 16:28:30 -0400
-From:   "Liam R. Howlett" <Liam.Howlett@Oracle.com>
-To:     Lorenzo Stoakes <lstoakes@gmail.com>
-Cc:     Joel Fernandes <joel@joelfernandes.org>,
-        linux-kernel@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
-        Shuah Khan <shuah@kernel.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Michal Hocko <mhocko@suse.com>,
-        Kirill A Shutemov <kirill@shutemov.name>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Kalesh Singh <kaleshsingh@google.com>,
-        Lokesh Gidra <lokeshgidra@google.com>,
-        Vineeth Pillai <vineeth@bitbyteword.org>
-Subject: Re: [PATCH v4 1/7] mm/mremap: Optimize the start addresses in
- move_page_tables()
-Message-ID: <20230627202830.cqbkquapapo6tadr@revolver>
-Mail-Followup-To: "Liam R. Howlett" <Liam.Howlett@Oracle.com>,
-        Lorenzo Stoakes <lstoakes@gmail.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        linux-kernel@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
-        Shuah Khan <shuah@kernel.org>, Vlastimil Babka <vbabka@suse.cz>,
-        Michal Hocko <mhocko@suse.com>,
-        Kirill A Shutemov <kirill@shutemov.name>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Kalesh Singh <kaleshsingh@google.com>,
-        Lokesh Gidra <lokeshgidra@google.com>,
-        Vineeth Pillai <vineeth@bitbyteword.org>
-References: <20230531220807.2048037-1-joel@joelfernandes.org>
- <20230531220807.2048037-2-joel@joelfernandes.org>
- <f2f751ca-217e-4177-bb7f-1c9cd71e103e@lucifer.local>
- <b87df265-7e58-5907-e215-953630a87155@joelfernandes.org>
- <20230627175609.xrn4mle6hpi6exh7@revolver>
- <e6da79b4-e48d-4b09-86b8-96bc66604694@lucifer.local>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <e6da79b4-e48d-4b09-86b8-96bc66604694@lucifer.local>
-User-Agent: NeoMutt/20220429
-X-ClientProxiedBy: YT4PR01CA0306.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:b01:10e::9) To SN6PR10MB3022.namprd10.prod.outlook.com
- (2603:10b6:805:d8::25)
+        d=gmail.com; s=20221208; t=1687897749; x=1690489749;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=sPh2acxcnLROxhjhKZUNfv/hApqShyzr5T/UnDzlvUY=;
+        b=Mjf+s2b32hWPynVylWQ/msKmOAJasxcAdf0obzN18ZOIJzZ5bfTiVMf4c1Kx1Thp0E
+         hG7WGGMNNZgulKuh9n9wmVQ+hoFZ15kVHiiPvUFfja5IJco2pDlQBP2WQyH3Ecm7J5LV
+         JbmJyfIi5lh+dvjwYtQV4eFXBJ+uHmvUTnP0++EP17BZVLan2W/bs1gM+rUuwDVyv/DE
+         1MsriH9vtUCh8ko6wqUgPQB6d5ydbLuh4NIozuNW4+tjrQoscwG8Dzy9LOc8ON1Dt5ZU
+         Iim//1qLTz1Iud8XKIzAr3xDAy5SAlmdN6zdP8dAuIxUkgr5z58W1dB/G+xjbDWC4AgK
+         K7uQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687897749; x=1690489749;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=sPh2acxcnLROxhjhKZUNfv/hApqShyzr5T/UnDzlvUY=;
+        b=fXVk6hRZtdGOCWPfiE91cdRtBxWeurKIjh3rTOtGZTBkOA52RjuRSHcdsLneOb/Ppx
+         Ks7SVlGSLMJ0ci+jHRFRvCFux4mc8/OlA08KjR+XYYpG1jf3RZ7MV/PnRIK9F3k/dFe/
+         hcOVIJLTki4OrrMAhfWP7lsEGVrWp2BEqMl1uaEq17rxptORdtfTJfSWXYkc5l5q41yA
+         P9QT4jGWMjvlqOtNNEESBtQGokjCaEwRPPUjXLAx3GB13f/nTvGVy6XSOSu2PqUJ2j0b
+         Nn0PBvADGAB08axoJoSZP4yKb0mJ9/6VexQH22kJN0zWXETE5bDan6OzwiYMsr2kXI8b
+         tfkQ==
+X-Gm-Message-State: AC+VfDzW9dSv4cR7XF5/J9vpBlpX2qwiKuuLlxJTd0Khdd5n4mtJd5+G
+        7i8PlI7dlDwdr77purPGHHNNI+PgfTht2UMTFRA=
+X-Google-Smtp-Source: ACHHUZ4pyCz5ljhuQNcO/uAin5FuWJYFwKm0nAu4les4mZCFC8rIIBIKirySJLtIPLdMNkc87gNhEsuH/mVpzV0hgWw=
+X-Received: by 2002:a1f:ea45:0:b0:456:e940:b583 with SMTP id
+ i66-20020a1fea45000000b00456e940b583mr9403173vkh.16.1687897748367; Tue, 27
+ Jun 2023 13:29:08 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SN6PR10MB3022:EE_|BLAPR10MB5137:EE_
-X-MS-Office365-Filtering-Correlation-Id: ea46690d-39aa-4072-99aa-08db774d13d0
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: nzLAub56Tr1k3pLgAc3et6O3iMSUQytlSq/L7xruW3ye61chS6JOgWrkUCtuIdpR5BaW5jYcTV6MCFSmrWwr2SmSYmYXQtB1EEM2XTx4LLfHYaR4+6ardzgfn0W5hbpfM2E3neWwudD5v2TTVUPAG2Z1f8OvubnzVonZSUMOCs0Zqmz9tw2srs7rjpFIe2V1yeLXFtxsaPAu+XEKfXl75M8sEYbDA4DBEnZ5q5MkuELKop4YLwZiku6cBBy3lmnSBoWGywbDlZMJQjnfFnoLGalTfpTmHU6KniLpq4R+6l+YPKfUPEGmhehq6Sy9+0VqfWu/UDoYOaFHQ8MzwZrTef9lA6jMpj4XXaiupa5jYEh+JgD+sLHzaZKm5APpn+vXEhKL9tmrf+EwYGSoIV7/tzk/cFzRTZrmO0FJcNykTQ+kWhYwF+mHC4MKKahwn9KXkfVQ7ygSC0VmSlPZZhYvE3VPYfBWkwoh3YvVHqHxvaey1I46ExFC0OoG5M5se/BGCAXcll9oyEfTjl6aPz1zrTF/BmINCIRokJkp1Qpldz6ehdA4DoEDc3NP6/l5sG4d
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR10MB3022.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(7916004)(136003)(376002)(366004)(346002)(39860400002)(396003)(451199021)(8936002)(8676002)(6486002)(33716001)(5660300002)(7416002)(6512007)(9686003)(2906002)(54906003)(86362001)(41300700001)(83380400001)(38100700002)(26005)(316002)(6916009)(478600001)(1076003)(4326008)(6506007)(66556008)(186003)(66476007)(66946007);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?BXs4/Ppe/I1zItHDIYaDf3dCXQLeya+ytUrC+3AF/EoOtStp0BV+cfUBIoXi?=
- =?us-ascii?Q?Hxc2wVUdtsaaokEOOWyUzZ6CrHgblkgquzXLmaEmDTTJFEVCg/ioMh0UXChn?=
- =?us-ascii?Q?y1XEs4gujKew1Ddxcxr1WWMAkMYnHEAJpijo5P7+Wp2Txq9k/4eMjPUE13qD?=
- =?us-ascii?Q?5jKGiojZ3rRGzXn+akqE+ngiRavKB+p0Ppc7APxPYoOG0ixB767vn3cIM4HR?=
- =?us-ascii?Q?an0TaQ6Tiv1uZK8QYtPPFxKweYtcvgGIoNHJiHWHhv8/BLOJL9b9VA0z3tUZ?=
- =?us-ascii?Q?93gHk2ekDeDLVWorjeCxJMvC5MDP4S5H+s7oRJiEfUwUzIDgYouZTphmb/Zu?=
- =?us-ascii?Q?k0LS4240jIDBfOV+DS4hukDk0oHiuAYy1jA7X1fcbZdEHK7P6Jc34f62YMFP?=
- =?us-ascii?Q?1ulW+mMiElbdF30T3ggBw6iRYvIqB/SQeHUdGKZlO+OHkd4shJ0mKuap+0W3?=
- =?us-ascii?Q?3bGft+X5LQRfeEL7Z8DK0WfpzKU8jzW1WeUZB6/CAt2qf40po4VOHyQWMKQv?=
- =?us-ascii?Q?fvzq2+yzafQzDEgPYXQe6MIX8i9MxusyE5MYfTq7WkdwM3fw3yNtn8sSUBB3?=
- =?us-ascii?Q?1BrHCsWguPcfGYbE5+KKkk9KrZqsYYTCTiuXO59S9AY5W2uv07qmc/N4VvVf?=
- =?us-ascii?Q?+ARgwIbzqZKVI2P8WCmTyDV4FpggjwFSxsLv/3uulVClK6hKtxYiMpK/napc?=
- =?us-ascii?Q?w7RpfUSOxwVQpsMSsZ6PoCCT8PUTz0xcxnQt3zOzrsYMGHlLRdMRahypUHz1?=
- =?us-ascii?Q?ixYL+WfIbCX/PCVYLGCPTo7epmjBt49YPW5hDz2PFuMmlkRFn2I6fdaoNNUl?=
- =?us-ascii?Q?BtbtN3zJ5semlDFbUV5vu+BRwx0+2wiWWiywKsF7cTbekYAHqh7AuMl7X6CG?=
- =?us-ascii?Q?n+julgKjLm+/ybpNJiWUL6o3ZI6t/3il3gPjsusyFDwCJqYEWYF2ZX+FmEk0?=
- =?us-ascii?Q?QMhOrJaqyqQjAN6Mma+x0WOVbgZjKIsiGY6299qIYAjJl9eAvcMsp6DlaWYb?=
- =?us-ascii?Q?IztwFCIIhSaTCBIxapeb3DK7rzAM9q1+W4cuoUJlHHvGDQGn3dU0EZdqsZGL?=
- =?us-ascii?Q?QSkBm6vxZPdp4BQdlAD+1P7O3xwmgAD0uSGABaRgJV5jm1+hK6257FcDOwPN?=
- =?us-ascii?Q?bDrae6hMr4BdHCR0kPCKSRjqRjKVI5J+ods2IbKH9RPUfiTBKwqn/NHZIzcr?=
- =?us-ascii?Q?LG9dZNSAi/ZeCc+7TLFzq8gsTnEz175JChqis3bMFTgw9NMNbpQGYy6KX7Op?=
- =?us-ascii?Q?uj+ZoXreGwBEXgJ7FZQ47cNcWpi58AfJY8u217oF4nxr36e8o1HiL1511EQS?=
- =?us-ascii?Q?Ut2W2b+Fhm94RxvyZ71SrEw38HEdaSJ7/O00DOVclfH0G3xJ/+UPjAbFNtBN?=
- =?us-ascii?Q?o0uaqVq5O5JGlwW3l8b6E1W3k5uAnts+IjUiKkV2f65NnYbsRA2v1LE6os52?=
- =?us-ascii?Q?V5WSqRdDI6IMjEAFWXoTJ0+74zcSvPnrbsHFqHiISvei+fhmdXYx5OdkfLDg?=
- =?us-ascii?Q?i5NbSE1a9DxBHy/o5HwjLaqeR6rIH3f2/iSczYfZRO9SJT5ZvCHqonX1Z43p?=
- =?us-ascii?Q?d4/VgXo4PnvugEYxpTHviPkQ0owG5x7uGzqn/h/5KltRcvzHmbkbQk+qtQCB?=
- =?us-ascii?Q?3w=3D=3D?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: =?us-ascii?Q?SAFUggOHl2lZmFehvfow50QYUAPCz26C24NTzzukVY2C9594gxpTELRL5qFS?=
- =?us-ascii?Q?QanyUpdDKQxQiWPQRGcoSAcKBbnTgTMLUJc/t4BNAtRrqqfe6mD1BYZwOR8Z?=
- =?us-ascii?Q?OetMPQ+4l+ZNGfEViNlWM7EBDRtk+pAHqUi9llvVW1SKXZtYWImmzazC4tBo?=
- =?us-ascii?Q?2PXAGbL3Lti3xsuYUYnfS66gvmLhVLnQSe8VS9thHK6AlVKZBTQ8qa1ed9GM?=
- =?us-ascii?Q?H/J2GzvuOnvrcE/F6D6YuXvyvlzWc/RB6lyHV83odgILIPNPpKF8tb3DslEg?=
- =?us-ascii?Q?D0619NU9N0L40Bz3dKSt0w7G7DNBvAW0tUUpMBh635Nxr91lPILmzqZgvkZK?=
- =?us-ascii?Q?L0AY4uRwWvVzJp6dUvE9P80fXHBwubyKZNaWpfa/7EHqm9LemVssSJBLg1mk?=
- =?us-ascii?Q?qtVAvbvP3s18BFvrcjEnMU+Br2qOR6qcNsB/8mp81YogYBhS+U+lntMXL7hX?=
- =?us-ascii?Q?Rn5kSD4kpdIw10RqXhOp6+MFMwTjmZDWRQC9SWHfJ3l8dY0NJCx+Q2t55By5?=
- =?us-ascii?Q?F5fbHIyGwb7grXsTAwIIkPVZjoQL4zIMT7YcrgS3QGQMCPuKG1nLEbb4fPx4?=
- =?us-ascii?Q?dBJuzL1TwqvdVGXErrh91HcfoIid25BGWJoTlyVX4cKWznfW7ZNbjecgW1ov?=
- =?us-ascii?Q?fy74YOeaPr1fbLAq1WZUlPWkZc3RYQLRcLgcr2RG0ftW/D9SGnn5IKnqwjEY?=
- =?us-ascii?Q?LBPfz33hj5iOkhZ6HlNhGMQLzKhm2aPMFc2OXo1qOpIjgpAEkWm5lIxnGk4C?=
- =?us-ascii?Q?4S0Mteexq0bWOPz+iGAZ2azs/j/c16jb3QG4Nad9wg8hrpr7Z40nT9U9N5MH?=
- =?us-ascii?Q?QnqRccqatAYdjyNH0PrZDLlCspdrx8/KRfgkQYp/f5cxu+YX/A3zpMBzeD4e?=
- =?us-ascii?Q?VgscV9OeEpfUapNpBGofY7g/QKk1ao8Q1v0e1hJIduAfsm+nuwoPGsg/c7aR?=
- =?us-ascii?Q?qhGDf5AMrlTDwbxkLDsHj5T9V82A4g5ltnUrpfBQbwS07Iej9cMOTmFuY5/F?=
- =?us-ascii?Q?0fDjkhGMFlDpkP2UQcIGBLhLSntpXOdhnoiiV5Zw8oOHkNkuj4+rKOFRx5QP?=
- =?us-ascii?Q?LHasc6SpvLHCBN5gzf2iQdStxHwvPNta5QdscL88dbtFiD2MRxk=3D?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ea46690d-39aa-4072-99aa-08db774d13d0
-X-MS-Exchange-CrossTenant-AuthSource: SN6PR10MB3022.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Jun 2023 20:28:33.2928
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: p61rXYfOYJYQFwsVwNZBzwubf4CogeC3IjRLivFxeMPbXNVeXA1QMoIz2qd/Td2dqEXnVRjvGEWIp9Jl5QcNbA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BLAPR10MB5137
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-06-27_14,2023-06-27_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 spamscore=0
- mlxlogscore=745 malwarescore=0 phishscore=0 bulkscore=0 suspectscore=0
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2305260000 definitions=main-2306270186
-X-Proofpoint-GUID: eTupTmC0TD82nKzThJebPk-DbifJyByw
-X-Proofpoint-ORIG-GUID: eTupTmC0TD82nKzThJebPk-DbifJyByw
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <CA+CX+bjcvbtW2Wto1XF1dKcAbpGGisdyHAGHX12v3TchhLbKtg@mail.gmail.com>
+ <CAPDyKFoTH0j1uVSKvY_d7boMdG0kt_WvmLEKenYG22ZJR=UmvA@mail.gmail.com> <CAAd53p4NPr7t2ykOVLfjRRSiO5oatMu-Kx6p=O=cTn239XY+Vw@mail.gmail.com>
+In-Reply-To: <CAAd53p4NPr7t2ykOVLfjRRSiO5oatMu-Kx6p=O=cTn239XY+Vw@mail.gmail.com>
+From:   Pascal Terjan <pterjan@gmail.com>
+Date:   Tue, 27 Jun 2023 21:28:51 +0100
+Message-ID: <CA+CX+bjit+BsLNWn1Oh0HYjJYratcUTnoEQri4M_BiKbdVn2yA@mail.gmail.com>
+Subject: Re: rtsx_usb_sdmmc not detecting card insertion anymore
+To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
+Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-mmc@vger.kernel.org, Ricky WU <ricky_wu@realtek.com>,
+        Oleksandr Natalenko <oleksandr@natalenko.name>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-* Lorenzo Stoakes <lstoakes@gmail.com> [230627 14:02]:
-> On Tue, Jun 27, 2023 at 01:56:09PM -0400, Liam R. Howlett wrote:
-> [snip]
-> > > > How about something like:-
-> > > >
-> > > > return find_vma_intersection(vma->mm, addr_masked, vma->vm_start) == NULL;
-> > > >
-> > > > Which explicitly asserts that the range in [addr_masked, vma->vm_start) is
-> > > > empty.
-> > > >
-> > > > But actually, we should be able to go further and replace the previous
-> > > > check with:-
-> > > >
-> > > > return find_vma_intersection(vma->mm, addr_masked, addr_to_align) == NULL;
-> > > >
-> > > > Which will fail if addr_to_align is offset within the VMA.
+On Tue, 27 Jun 2023 at 14:23, Kai-Heng Feng <kai.heng.feng@canonical.com> w=
+rote:
+>
+> On Tue, Jun 27, 2023 at 7:01=E2=80=AFPM Ulf Hansson <ulf.hansson@linaro.o=
+rg> wrote:
+> >
+> > + Ricky WU, Kai Heng Feng, Oleksandr Natalenko
+> >
+> > On Sat, 24 Jun 2023 at 22:39, Pascal Terjan <pterjan@gmail.com> wrote:
 > > >
-> > > Your suggestion would mean that we do a full VMA search starting from the
-> > > root. That would not be a nice thing if say we've 1000s of VMAs?
+> > > Hi,
+> > > I have an ASUS PN50 machine with a 0bda:0129 card reader. The card is
+> > > not seen unless I reload the rtsx_usb_sdmmc module.
+> >
+> > Thanks for reporting, let's see how we can move this forward.
+> >
+> > I have looped in some of the people that has been involved in the
+> > relevant changes for rtsx_usb. Let's see if they can help too.
+> >
 > > >
-> > > Actually Liam told me to use find_vma_prev() because given a VMA, the maple
-> > > tree would not have to work that hard for the common case to find the
-> > > previous VMA. Per conversing with him, there is a chance we may have to go
-> > > one step above in the tree if we hit the edge of a node, but that's not
-> > > supposed to be the common case. In previous code, the previous VMA could
-> > > just be obtained using the "previous VMA" pointer, however that pointer has
-> > > been remove since the maple tree changes and given a VMA, going to the
-> > > previous one using the maple tree is just as fast (as I'm told).
+> > > I found a Debian bug report for the same regression
+> > > https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=3D993068 but nothin=
+g
+> > > to see there.
+> > >
+> > > Trying to understand things I found
+> > > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/co=
+mmit/?id=3D4dad599b8b5d1ffc5ef12a2edb13d15d537202ba
+> > > which seemed related, so I first tried to revert it and that worked.
 > >
-> > I think there's been a bit of a miscommunication on that..
+> > Okay! That's certainly good information. Are you willing to help
+> > running further debug testings?
 > >
-> > If you have already found the VMA and are using the maple state, then
-> > it's very little effort to get the next/prev.  Leaf nodes can hold 16
-> > entries/NULL ranges, so the chances to go to the next/prev is usually in
-> > the cpu cache already.. if you go up a level in the tree, then you will
-> > have 10 nodes each with 16 entries each, etc, etc..  So the chances of
-> > being on an edge node and having to walk up multiple levels to get to
-> > the prev/next becomes rather rare.. and if you've just walked down, the
-> > nodes on the way up will still be cached.
+> > Unless I mistaken, I think we should avoid doing a plain revert
+> > (assuming we can find another option) as it will cause us to waste a
+> > lot of energy instead.
 > >
-> > Here, you're not using the maple state but searching for an address
-> > using find_vma_prev(), but internally, that function does use a maple
-> > state to get you the previous.  So you are looking up the VMA from the
-> > root, but the prev will very likely be in the CPU cache.
+> > >
+> > > Assuming the description is correct and the rtsx USB driver runtime
+> > > resumes the rtsx_usb_sdmmc device when it detects that a new card has
+> > > been inserted, I assume this means it doesn't detect that a card was
+> > > inserted and the problem would be in rtsx_usb rather than
+> > > rtsx_usb_sdmmc.
 > >
-> > Assuming the worst case tree (each VMA has a gap next to it, not really
-> > going to happen as they tend to be grouped together), then we are
-> > looking at a 4 level tree to get to 8,000 VMAs.  5 levels gets you a
-> > minimum 80,000.  I've never seen a tree of height 6 in the wild, but you
-> > can fit 1.6M to 800K in one.
+> > There is also another interesting commit, which was also part of the
+> > re-work of the rtsx_usb_sdmmc driver that you pointed to above.
 > >
-> > I think the code is fine, but I wanted to clarify what we discussed.
-> 
-> Would the same apply to find_vma_intersection(), as they equally searches
-> from the root and allows the code to be made fairly succinct?
+> > commit 883a87ddf2f1 (misc: rtsx_usb: Use USB remote wakeup signaling
+> > for card insertion detection")
+> >
+> > >
+> > > I am not sure how to debug this further, usbmon doesn't see anything
+> > > when I insert the card.
+> >
+> > If you are willing to run some tests, I suggest to add some debug print=
+s in:
+> > drivers/mmc/host/rtsx_usb_sdmmc.c
+> >   sdmmc_get_cd()
+> >   rtsx_usb_sdmmc_runtime_resume()
+> >   rtsx_usb_sdmmc_runtime_suspend()
+> >
+> > sdmmc_get_cd() should be returning 1 when it finds that there is card
+> > inserted, but of course the error path would be interesting too.
+> >
+> > rtsx_usb_sdmmc_runtime_resume() may be called during probing of the
+> > rtsx_usb_sdmmc driver. Beyond that point, it should also be called
+> > when you insert an SD card. Just having a debug print in there should
+> > help answer if that actually happens.
+>
+> Adding kernel parameter "usbcore.dyndbg" can also help, it will print
+> out what's going on at USB side.
 
-I think so.
+Nothing happens for that device (4-4), I only get others (1, 2, 3, 5,
+7) waking up repeatedly:
 
-> 
-> I really am not a huge fan of find_vma_prev() searching for a VMA you
-> already have just to get the previous one... would at lesat like to use
-> vma_prev() on a newly defined vmi, but if find_vma_intersection() is fine
-> then can reduce code to this.
+[  316.890285] usb usb7: usb auto-resume
+[  316.890322] hub 7-0:1.0: hub_resume
+[  316.912386] hub 7-0:1.0: state 7 ports 2 chg 0000 evt 0000
+[  316.912460] hub 7-0:1.0: hub_suspend
+[  316.912470] usb usb7: bus auto-suspend, wakeup 1
+[  316.912595] usb usb5: usb auto-resume
+[  316.912624] hub 5-0:1.0: hub_resume
+[  316.934386] hub 5-0:1.0: state 7 ports 2 chg 0000 evt 0000
+[  316.934460] hub 5-0:1.0: hub_suspend
+[  316.934471] usb usb5: bus auto-suspend, wakeup 1
+[  316.934595] usb usb3: usb auto-resume
+[  316.934609] hub 3-0:1.0: hub_resume
+[  316.956385] hub 3-0:1.0: state 7 ports 2 chg 0000 evt 0000
+[  316.956456] hub 3-0:1.0: hub_suspend
+[  316.956466] usb usb3: bus auto-suspend, wakeup 1
+[  316.956540] usb usb2: usb auto-resume
+[  316.956553] hub 2-0:1.0: hub_resume
+[  316.956576] hub 2-0:1.0: state 7 ports 2 chg 0000 evt 0000
+[  316.956594] hub 2-0:1.0: hub_suspend
+[  316.956600] usb usb2: bus auto-suspend, wakeup 1
+[  316.956626] usb usb1: usb auto-resume
+[  316.956662] hub 1-0:1.0: hub_resume
+[  316.956679] hub 1-0:1.0: state 7 ports 1 chg 0000 evt 0000
+[  316.956697] hub 1-0:1.0: hub_suspend
+[  316.956703] usb usb1: bus auto-suspend, wakeup 1
 
-find_vma_intersection() will work as well.
+The only time I get a log for it is when I reload the module with the
+card in, and then eject the card:
 
-> [snip]
+[  278.743368] usb 4-4: kworker/15:1 timed out on ep2in len=3D0/8
