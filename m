@@ -2,167 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4981B7403C7
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 21:05:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14E1E740387
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 20:42:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231430AbjF0TFU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 15:05:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42058 "EHLO
+        id S230226AbjF0Smc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 14:42:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231396AbjF0TFQ (ORCPT
+        with ESMTP id S229487AbjF0Sma (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 15:05:16 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCD3D185;
-        Tue, 27 Jun 2023 12:05:15 -0700 (PDT)
-Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35RIxaTa031473;
-        Tue, 27 Jun 2023 19:05:02 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding; s=pp1;
- bh=C3D/P4FPq9C11xGqw+J0fMya1etpgORpNTBZHmpQ5a0=;
- b=PGitqmLY/HXn5BLhQYJs51QT78xDtZP6o3Dnyte/7G9Ugd5eciKJ+3/VoHZgNF1QqVGr
- Yn2kNib6u56WbS+hJCJGWn6szXh/GOp8uiQ1OXDTATHHmzybJDJ6ArOhNeeGllikOrPS
- E3LjynpYYCdNBBI8x1qEHBZt27l6AdezA5ouoQmdbsovq3QQrAN1WqjHdRChtIHTA6Y+
- QpIkrd5lCLnul+TdcOpPyilQODVw1Ykh+4rr0cocdPY0Su7hYKDGZ9JBPNZjWWNFeytD
- 1mSxwzTTGTDoPHWZzDWCUqL/HPWLEvfAUJA9xg9Me8vPadg8qt/4eVvdydavl1CFMdTk wQ== 
-Received: from ppma01wdc.us.ibm.com (fd.55.37a9.ip4.static.sl-reverse.com [169.55.85.253])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3rg5hag6et-7
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 27 Jun 2023 19:05:01 +0000
-Received: from pps.filterd (ppma01wdc.us.ibm.com [127.0.0.1])
-        by ppma01wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 35RHkVFN013240;
-        Tue, 27 Jun 2023 18:40:32 GMT
-Received: from smtprelay02.wdc07v.mail.ibm.com ([9.208.129.120])
-        by ppma01wdc.us.ibm.com (PPS) with ESMTPS id 3rdr45j2e6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 27 Jun 2023 18:40:32 +0000
-Received: from smtpav06.dal12v.mail.ibm.com (smtpav06.dal12v.mail.ibm.com [10.241.53.105])
-        by smtprelay02.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 35RIeUNe66257280
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 27 Jun 2023 18:40:31 GMT
-Received: from smtpav06.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 9593658043;
-        Tue, 27 Jun 2023 18:40:30 +0000 (GMT)
-Received: from smtpav06.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 639B258055;
-        Tue, 27 Jun 2023 18:40:30 +0000 (GMT)
-Received: from slate16.aus.stglabs.ibm.com (unknown [9.61.104.152])
-        by smtpav06.dal12v.mail.ibm.com (Postfix) with ESMTP;
-        Tue, 27 Jun 2023 18:40:30 +0000 (GMT)
-From:   Eddie James <eajames@linux.ibm.com>
-To:     linux-hwmon@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux@roeck-us.net,
-        jdelvare@suse.com, lakshmiy@us.ibm.com,
-        Eddie James <eajames@linux.ibm.com>
-Subject: [PATCH] hwmon: (pmbus/acbel-fsg032) Add firmware version debugfs attribute
-Date:   Tue, 27 Jun 2023 13:40:27 -0500
-Message-Id: <20230627184027.16343-1-eajames@linux.ibm.com>
-X-Mailer: git-send-email 2.39.3
+        Tue, 27 Jun 2023 14:42:30 -0400
+Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C55610FE;
+        Tue, 27 Jun 2023 11:42:29 -0700 (PDT)
+Received: by mail-oi1-x235.google.com with SMTP id 5614622812f47-3a0423ea749so3950862b6e.0;
+        Tue, 27 Jun 2023 11:42:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687891349; x=1690483349;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=5QW7db0ayiyIii0yaz366+aZQikC9TPomjktNVfLgKA=;
+        b=lTr0hPUu+VSVtxwnzjFuIRI9fc2sezvUzFVC3QJLaIUaPBLttHamZsk0+Na3/KhHum
+         T1GmICHTIIx7C8O4sKGGK/ME2bplCuDjHc0yJC/t/ECBWLFqR8IOPaDtfAUm6IJWis8p
+         E+mZ6PcUkk8PlwmxtxskER3VPhYzmBW8U+9EI0mUotQw7jiwQkev/lxkpGr/n0mGzPQQ
+         dodKIJVJGzSXEi0kYRhOFE5eu+uvvEemXy30zh6pKiqN2jepRPZUbd7lU9BwpLLHOjXH
+         rRt/Au0fKNeDsWkF1ix2x+SOUPNHd0mIQd1uZwRLaPbUIajqifgjIfOysAm2KmQKl46A
+         TXaQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687891349; x=1690483349;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=5QW7db0ayiyIii0yaz366+aZQikC9TPomjktNVfLgKA=;
+        b=eZ9Tn6GRUnMnsGS/ui9+whIkst60SA30EihE9rd3PE0UYK5X5+dSCen1usAeRqQUdz
+         y2wqOqkNc7dKt0faMpcO+Bs+1AxpUyKTKjfpYFHuYesUXJrca8BUmZDKzZI+Z4tXP7fD
+         OVjNU288hqwztdqwGskB/CEMDSfFIwD1ZaTDH+p8XcRBNtNEw8yVFIDIZyyK6AlaKJRU
+         cx3DP0B41VTcLfO8Xq4Bzac+3e7AbhGqhtvjXFeBh1WAdEeZ5ng8LEM2iqjmR8US5HiB
+         gss5qUGY167FiIX+65KF9wZ1wSTQwlXq2xyjfNFShP/vEJg5JDMNJAnpTMRyo6Mbbfnr
+         jf6w==
+X-Gm-Message-State: AC+VfDwI251HV+EzAHW5d0k3aoDrhG/Oi8KMIR73OQfBqc5jrtu4jeMt
+        v4rRGAXXVFbYKdP5IBmGXgg=
+X-Google-Smtp-Source: ACHHUZ6Nem7zk+ecNK+zPI3edbqWlsf/eKM6nf8cVKttdKKTAVbChIQpM1KyrDscALmG9R98ekyIWg==
+X-Received: by 2002:a05:6808:2202:b0:3a1:aa90:d486 with SMTP id bd2-20020a056808220200b003a1aa90d486mr19289571oib.26.1687891348535;
+        Tue, 27 Jun 2023 11:42:28 -0700 (PDT)
+Received: from localhost (dhcp-72-235-13-41.hawaiiantel.net. [72.235.13.41])
+        by smtp.gmail.com with ESMTPSA id 14-20020a630b0e000000b0054fb537ca5dsm5919490pgl.92.2023.06.27.11.42.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 27 Jun 2023 11:42:27 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Tue, 27 Jun 2023 08:42:28 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Christian Brauner <brauner@kernel.org>
+Cc:     Suren Baghdasaryan <surenb@google.com>, gregkh@linuxfoundation.org,
+        peterz@infradead.org, lujialin4@huawei.com,
+        lizefan.x@bytedance.com, hannes@cmpxchg.org, mingo@redhat.com,
+        ebiggers@kernel.org, oleg@redhat.com, akpm@linux-foundation.org,
+        viro@zeniv.linux.org.uk, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, vschneid@redhat.com,
+        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, kernel-team@android.com
+Subject: Re: [PATCH 1/2] kernfs: add kernfs_ops.free operation to free
+ resources tied to the file
+Message-ID: <ZJstlHU4Y3ZtiWJe@slm.duckdns.org>
+References: <20230626201713.1204982-1-surenb@google.com>
+ <ZJn1tQDgfmcE7mNG@slm.duckdns.org>
+ <20230627-kanon-hievt-bfdb583ddaa6@brauner>
+ <CAJuCfpECKqYiekDK6Zw58w10n1T4Q3R+2nymfHX2ZGfQVDC3VQ@mail.gmail.com>
+ <20230627-ausgaben-brauhaus-a33e292558d8@brauner>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: yCImGPd8-ZGvACJ7YC59vgajXeidnTVp
-X-Proofpoint-GUID: yCImGPd8-ZGvACJ7YC59vgajXeidnTVp
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-06-27_13,2023-06-27_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 phishscore=0
- clxscore=1011 lowpriorityscore=0 mlxlogscore=999 suspectscore=0
- spamscore=0 impostorscore=0 malwarescore=0 mlxscore=0 adultscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2305260000 definitions=main-2306270173
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230627-ausgaben-brauhaus-a33e292558d8@brauner>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Like the IBM CFFPS driver, export the PSU's firmware version to a
-debugfs attribute as reported in the manufacturer register.
+Hello, Christian.
 
-Signed-off-by: Eddie James <eajames@linux.ibm.com>
----
- drivers/hwmon/pmbus/acbel-fsg032.c | 48 ++++++++++++++++++++++++++++++
- 1 file changed, 48 insertions(+)
+On Tue, Jun 27, 2023 at 07:30:26PM +0200, Christian Brauner wrote:
+...
+> ->release() was added in
+> 
+>     commit 0e67db2f9fe91937e798e3d7d22c50a8438187e1
+>     kernfs: add kernfs_ops->open/release() callbacks
+> 
+>     Add ->open/release() methods to kernfs_ops.  ->open() is called when
+>     the file is opened and ->release() when the file is either released or
+>     severed.  These callbacks can be used, for example, to manage
+>     persistent caching objects over multiple seq_file iterations.
+> 
+>     Signed-off-by: Tejun Heo <tj@kernel.org>
+>     Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+>     Acked-by: Acked-by: Zefan Li <lizefan@huawei.com>
+> 
+> which mentions "either releases or severed" which imho already points to
+> separate methods.
 
-diff --git a/drivers/hwmon/pmbus/acbel-fsg032.c b/drivers/hwmon/pmbus/acbel-fsg032.c
-index 0a0ef4ce3493..4b97f108cfe3 100644
---- a/drivers/hwmon/pmbus/acbel-fsg032.c
-+++ b/drivers/hwmon/pmbus/acbel-fsg032.c
-@@ -3,6 +3,7 @@
-  * Copyright 2023 IBM Corp.
-  */
- 
-+#include <linux/debugfs.h>
- #include <linux/device.h>
- #include <linux/fs.h>
- #include <linux/i2c.h>
-@@ -11,6 +12,52 @@
- #include <linux/hwmon-sysfs.h>
- #include "pmbus.h"
- 
-+#define ACBEL_MFR_FW_REVISION	0xd9
-+
-+static ssize_t acbel_fsg032_debugfs_read(struct file *file, char __user *buf, size_t count,
-+					 loff_t *ppos)
-+{
-+	struct i2c_client *client = file->private_data;
-+	char data[I2C_SMBUS_BLOCK_MAX + 2] = { 0 };
-+	char out[8];
-+	int rc;
-+	int i;
-+
-+	rc = pmbus_lock_interruptible(client);
-+	if (rc)
-+		return rc;
-+
-+	rc = i2c_smbus_read_block_data(client, ACBEL_MFR_FW_REVISION, data);
-+	pmbus_unlock(client);
-+	if (rc < 0)
-+		return rc;
-+
-+	for (i = 0; i < rc && i < 3; ++i)
-+		snprintf(&out[i * 2], 3, "%02X", data[i]);
-+
-+	rc = i * 2;
-+	out[rc++] = '\n';
-+	out[rc++] = 0;
-+	return simple_read_from_buffer(buf, count, ppos, out, rc);
-+}
-+
-+static const struct file_operations acbel_debugfs_ops = {
-+	.llseek = noop_llseek,
-+	.read = acbel_fsg032_debugfs_read,
-+	.write = NULL,
-+	.open = simple_open,
-+};
-+
-+static void acbel_fsg032_init_debugfs(struct i2c_client *client)
-+{
-+	struct dentry *debugfs = pmbus_get_debugfs_dir(client);
-+
-+	if (!debugfs)
-+		return;
-+
-+	debugfs_create_file("fw_version", 0444, debugfs, client, &acbel_debugfs_ops);
-+}
-+
- static const struct i2c_device_id acbel_fsg032_id[] = {
- 	{ "acbel_fsg032" },
- 	{}
-@@ -59,6 +106,7 @@ static int acbel_fsg032_probe(struct i2c_client *client)
- 	if (rc)
- 		return rc;
- 
-+	acbel_fsg032_init_debugfs(client);
- 	return 0;
- }
- 
+This is because kernfs has revoking operation which doesn't exist for other
+filesystems. Other filesystem implemenations can't just say "I'm done. Bye!"
+and go away. Even if the underlying filesystem has completely failed, the
+code still has to remain attached and keep aborting operations.
+
+However, kernfs serves as the midlayer to a lot of device drivers and other
+internal subsystems and it'd be really inconvenient for each of them to have
+to implement "I want to go away but I gotta wait out this user who's holding
+onto my tuning knob file". So, kernfs exposes a revoke or severing semantics
+something that's exposing interface through kernfs wants to stop doing so.
+
+If you look at it from file operation implementation POV, this seems exactly
+like ->release. All open files are shutdown and there won't be any future
+operations. After all, revoke is forced closing of all fd's. So, for most
+users, treating severing just like ->release is the right thing to do.
+
+The PSI file which caused this is a special case because it attaches
+something to its kernfs file which outlives the severing operation bypassing
+kernfs infra. A more complete way to fix this would be supporting the
+required behavior from kernfs side, so that the PSI file operates on kernfs
+interface which knows the severing event and detaches properly. That said,
+currently, this is very much an one-off.
+
+Suren, if you're interested, it might make sense to pipe poll through kernfs
+properly so that it has its kernfs operation and kernfs can sever it. That
+said, as this is a fix for something which is currently causing crashes,
+it'd be better to merge this simpler fix first no matter what.
+
+Thanks.
+
 -- 
-2.39.3
-
+tejun
