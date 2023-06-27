@@ -2,97 +2,261 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B3E773EF95
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 02:08:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F92873EF97
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 02:12:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229724AbjF0AI2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 26 Jun 2023 20:08:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40952 "EHLO
+        id S229763AbjF0AMK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 26 Jun 2023 20:12:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbjF0AI0 (ORCPT
+        with ESMTP id S229456AbjF0AMH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 26 Jun 2023 20:08:26 -0400
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 314D11B0
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 17:08:24 -0700 (PDT)
-Received: by mail-lf1-x133.google.com with SMTP id 2adb3069b0e04-4f867700f36so5413009e87.0
-        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 17:08:24 -0700 (PDT)
+        Mon, 26 Jun 2023 20:12:07 -0400
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C0E0E3;
+        Mon, 26 Jun 2023 17:12:06 -0700 (PDT)
+Received: by mail-wm1-x331.google.com with SMTP id 5b1f17b1804b1-3fa96fd79f0so22214705e9.3;
+        Mon, 26 Jun 2023 17:12:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687824502; x=1690416502;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=HUDk6lpQO4D+lgSHC77eFwv9Vy/Pegzp1sgSsnp9oK0=;
-        b=f+Su9d7Hpedc2UzK0RZkyNTQBgyXbMbi8fisIqreldLGMax5DzH/S/iepoXQQJuGBY
-         Dj8rVoZ339Dce3SnqeY8MpcBU2wlaRXQc7N1rEjtjME3ruaQ/GbjpI+wFe36ap7eKi0A
-         l1niWEgBAt+n6vCEVeOcz5AH/b26VkWfp52VKIIc6FikhpQbn5FKMl7wsHYM03JzUFkj
-         zkC0S2NbsEe/fWo8kjVn0bH8TBbt6LVG5Ao9woHlVXF0+hgC0rbqLAIj9Nn5Jn+9pNnB
-         GQsghVxmsCT/ldzXdEgEfc4XQB1bYliScPfYvnd/thjEzyy6xC8ehXikHYeVsSpfdfXZ
-         1R3g==
+        d=gmail.com; s=20221208; t=1687824724; x=1690416724;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=bNboCHedRLLXfh28XbOHjXWJ1PFfJzftlv/4qzy3emY=;
+        b=Ac2dKWLvqT90BLdek41KI+7ybjXLn4H00EY8HNxT2dPqrMG0d8uJX7HD0aRI2hq5wu
+         7nclcOiUk1M5uSyp+UrlFqvOYc68HSOk+YvegHyF/mPxEF+34q8viEVgoR626QfYqumN
+         Wg6K6CRwUyKRWjvMFDjb6odvizOnY6vSYWT2bhPzpJxS7pCFcvtjdsoe8HmWKwdRoi4m
+         hIyssDIz65Ej/vAztf47TYVq/eK/25YDOM5S4Hafojl23uAY6T42SEuKsWb9VTjQx8PV
+         kO8QnmQvk7k4J3hU5JANaBdxLHHDJ2WaVogJQFqJuNp2VK+OZjJfmjSLWRaxq5Ie3aEz
+         f/Ig==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687824502; x=1690416502;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=HUDk6lpQO4D+lgSHC77eFwv9Vy/Pegzp1sgSsnp9oK0=;
-        b=i4xeXedeXODlhROvUk+sCvgpnpARduAhlkttep/0ib5/8DuDyGGCQyqspR4PVE/mPn
-         rBYu5fOvZGSp34V8yebFK4AOwWkZqCz/UapTqGYa7OsqGe2hj0xyAK+yrtFkbB33kNI0
-         w+umjYAPBd+BOIMcRLM67HoQhrC3TW4Eeq1GPlnEVr7Z043XXLtK3WrIxreVPaOcPK5K
-         XNh+cyGRCqGSiDFRLEUGdESyG57fzVRQdIbpt/K9/vfDXHX3Q8fNrMqj0hw8a+V8lxvS
-         UzzYqHucqlPmqdP0cAib3BVBClEsx1cwkCyZLtTS8eHz3fNdDFWwAFDQEsfYrGdypMJm
-         zEEw==
-X-Gm-Message-State: AC+VfDy84ga2sejim8H3mOA5QbugqQ+0PXQ6JHd9Ga8wLpEX7dSVlwOW
-        N433pVzsX4Ic549TIShd53uhJg==
-X-Google-Smtp-Source: ACHHUZ7z4NEHlcGmXI64eNVgNgFtpHutyjAz+SSbRa1145TwcmQyjPbWDbgt3pH7sTGeBG+HFKH6uA==
-X-Received: by 2002:a19:9151:0:b0:4f8:6b82:56c4 with SMTP id y17-20020a199151000000b004f86b8256c4mr14064306lfj.33.1687824502205;
-        Mon, 26 Jun 2023 17:08:22 -0700 (PDT)
-Received: from ?IPV6:2001:14ba:a0db:1f00::8a5? (dzdqv0yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a0db:1f00::8a5])
-        by smtp.gmail.com with ESMTPSA id m3-20020ac24ac3000000b004fb737737f9sm846593lfp.106.2023.06.26.17.08.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 26 Jun 2023 17:08:21 -0700 (PDT)
-Message-ID: <e7c577c8-f42a-cdfa-3369-5a377f3914f1@linaro.org>
-Date:   Tue, 27 Jun 2023 03:08:20 +0300
+        d=1e100.net; s=20221208; t=1687824724; x=1690416724;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=bNboCHedRLLXfh28XbOHjXWJ1PFfJzftlv/4qzy3emY=;
+        b=hDMUlck2lH0rtNgV71eNHqoHVmiWubvmuMnKq0Us6wSzRlR6QAoE+cxrHwT1JUIhH+
+         5wAkEuSMp9xCjclqi5dnF24BuofXQ6FXs2v1zjg9LRygzxwSyCZ88clLVOZ3JQK6UYYq
+         PSPzGIP4ou7zMAtP1XFZRA6rmpPfoh/As9BUmjQgy25rwpwbIyGw6Tipmmv0yfV4FcdY
+         nL6RYlE3RuSpooxBihOPnWrGWtSHq3t3OSnf0othZCccXL3ps/tjAqblKIEwrnFa1JjS
+         6o/dB6+CsHC3yJ03e8wzLIyC3Hp7tApTL4BfyTDU4PQ1xMqtAM142aAEi8+kYIAVwjqz
+         aZFQ==
+X-Gm-Message-State: AC+VfDxbJepNSh/OCm3dm6c/RS08GnUbxQVYKPK0UAdaoNToL+RmHuR2
+        bpnISMLJN0yPOHiZR0vLKY8NzkTi1sANCIney2Y=
+X-Google-Smtp-Source: ACHHUZ5SZSV1kLiIvOHnAr6ypRBQ9/JysLeblGPbXmFMY+rdoQWO2hFBDk9gK3Z/GiKzsmRbrT7dSB8nXf+wAXgpvQg=
+X-Received: by 2002:a1c:f70f:0:b0:3f7:e58b:5898 with SMTP id
+ v15-20020a1cf70f000000b003f7e58b5898mr34070714wmh.33.1687824724272; Mon, 26
+ Jun 2023 17:12:04 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH] iio: adc: qcom-spmi-adc5: Add ADC5_GPIO2_100K_PU
-Content-Language: en-GB
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>
-Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
-        linux-arm-msm@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230627-topic-adc-v1-1-c61581abffa3@linaro.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20230627-topic-adc-v1-1-c61581abffa3@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <cover.1687819413.git.dxu@dxuuu.xyz> <d98692cd1451b35b0939718f5d4676444aa40069.1687819413.git.dxu@dxuuu.xyz>
+In-Reply-To: <d98692cd1451b35b0939718f5d4676444aa40069.1687819413.git.dxu@dxuuu.xyz>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Mon, 26 Jun 2023 17:11:52 -0700
+Message-ID: <CAEf4Bza-b8WhMofDrOZcUr59inZcX8GWXMJxuHmPxj7eChzr=w@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 1/7] tools: libbpf: add netfilter link attach helper
+To:     Daniel Xu <dxu@dxuuu.xyz>
+Cc:     daniel@iogearbox.net, ast@kernel.org, andrii@kernel.org,
+        fw@strlen.de, martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
+        haoluo@google.com, jolsa@kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, netfilter-devel@vger.kernel.org,
+        dsahern@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27/06/2023 02:21, Konrad Dybcio wrote:
-> Even though it existed in bindings for the longest time,
-> ADC5_GPIO2_100K_PU was never assigned in the driver. Do so.
-> 
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+On Mon, Jun 26, 2023 at 4:02=E2=80=AFPM Daniel Xu <dxu@dxuuu.xyz> wrote:
+>
+> Add new api function: bpf_program__attach_netfilter.
+>
+> It takes a bpf program (netfilter type), and a pointer to a option struct
+> that contains the desired attachment (protocol family, priority, hook
+> location, ...).
+>
+> It returns a pointer to a 'bpf_link' structure or NULL on error.
+>
+> Next patch adds new netfilter_basic test that uses this function to
+> attach a program to a few pf/hook/priority combinations.
+>
+> Co-developed-by: Florian Westphal <fw@strlen.de>
+> Signed-off-by: Florian Westphal <fw@strlen.de>
+> Suggested-by: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+> Signed-off-by: Daniel Xu <dxu@dxuuu.xyz>
 > ---
->   drivers/iio/adc/qcom-spmi-adc5.c | 2 ++
->   1 file changed, 2 insertions(+)
-> 
+>  tools/lib/bpf/bpf.c      |  8 +++++++
+>  tools/lib/bpf/bpf.h      |  6 +++++
+>  tools/lib/bpf/libbpf.c   | 47 ++++++++++++++++++++++++++++++++++++++++
+>  tools/lib/bpf/libbpf.h   | 15 +++++++++++++
+>  tools/lib/bpf/libbpf.map |  1 +
+>  5 files changed, 77 insertions(+)
+>
+> diff --git a/tools/lib/bpf/bpf.c b/tools/lib/bpf/bpf.c
+> index ed86b37d8024..3b0da19715e1 100644
+> --- a/tools/lib/bpf/bpf.c
+> +++ b/tools/lib/bpf/bpf.c
+> @@ -741,6 +741,14 @@ int bpf_link_create(int prog_fd, int target_fd,
+>                 if (!OPTS_ZEROED(opts, tracing))
+>                         return libbpf_err(-EINVAL);
+>                 break;
+> +       case BPF_NETFILTER:
+> +               attr.link_create.netfilter.pf =3D OPTS_GET(opts, netfilte=
+r.pf, 0);
+> +               attr.link_create.netfilter.hooknum =3D OPTS_GET(opts, net=
+filter.hooknum, 0);
+> +               attr.link_create.netfilter.priority =3D OPTS_GET(opts, ne=
+tfilter.priority, 0);
+> +               attr.link_create.netfilter.flags =3D OPTS_GET(opts, netfi=
+lter.flags, 0);
+> +               if (!OPTS_ZEROED(opts, netfilter))
+> +                       return libbpf_err(-EINVAL);
+> +               break;
+>         default:
+>                 if (!OPTS_ZEROED(opts, flags))
+>                         return libbpf_err(-EINVAL);
+> diff --git a/tools/lib/bpf/bpf.h b/tools/lib/bpf/bpf.h
+> index 9aa0ee473754..c676295ab9bf 100644
+> --- a/tools/lib/bpf/bpf.h
+> +++ b/tools/lib/bpf/bpf.h
+> @@ -349,6 +349,12 @@ struct bpf_link_create_opts {
+>                 struct {
+>                         __u64 cookie;
+>                 } tracing;
+> +               struct {
+> +                       __u32 pf;
+> +                       __u32 hooknum;
+> +                       __s32 priority;
+> +                       __u32 flags;
+> +               } netfilter;
+>         };
+>         size_t :0;
+>  };
+> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+> index 214f828ece6b..a8b9d5abb55f 100644
+> --- a/tools/lib/bpf/libbpf.c
+> +++ b/tools/lib/bpf/libbpf.c
+> @@ -11811,6 +11811,53 @@ static int attach_iter(const struct bpf_program =
+*prog, long cookie, struct bpf_l
+>         return libbpf_get_error(*link);
+>  }
+>
+> +struct bpf_link *bpf_program__attach_netfilter(const struct bpf_program =
+*prog,
+> +                                              const struct bpf_netfilter=
+_opts *opts)
+> +{
+> +       DECLARE_LIBBPF_OPTS(bpf_link_create_opts, link_create_opts);
 
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+nit: let's use shorter LIBBPF_OPTS() macro
 
--- 
-With best wishes
-Dmitry
+> +       struct bpf_link *link;
+> +       int prog_fd, link_fd;
+> +
+> +       if (!OPTS_VALID(opts, bpf_netfilter_opts))
+> +               return libbpf_err_ptr(-EINVAL);
+> +
+> +       link_create_opts.netfilter.pf =3D OPTS_GET(opts, pf, 0);
+> +       link_create_opts.netfilter.hooknum =3D OPTS_GET(opts, hooknum, 0)=
+;
+> +       link_create_opts.netfilter.priority =3D OPTS_GET(opts, priority, =
+0);
+> +       link_create_opts.netfilter.flags =3D OPTS_GET(opts, flags, 0);
+> +
+> +       prog_fd =3D bpf_program__fd(prog);
+> +       if (prog_fd < 0) {
+> +               pr_warn("prog '%s': can't attach before loaded\n", prog->=
+name);
+> +               return libbpf_err_ptr(-EINVAL);
+> +       }
+> +
+> +       link =3D calloc(1, sizeof(*link));
+> +       if (!link)
+> +               return libbpf_err_ptr(-ENOMEM);
+> +       link->detach =3D &bpf_link__detach_fd;
+> +
+> +       link_fd =3D bpf_link_create(prog_fd, 0, BPF_NETFILTER, &link_crea=
+te_opts);
+> +
+> +       link->fd =3D ensure_good_fd(link_fd);
 
+bpf_link_create() does ensure_good_fd() already, no need to do it
+here, just assign result directly
+
+
+> +
+> +       if (link->fd < 0) {
+> +               char errmsg[STRERR_BUFSIZE];
+> +
+> +               link_fd =3D -errno;
+> +               free(link);
+> +               pr_warn("prog '%s': failed to attach to pf:%d,hooknum:%d:=
+prio:%d: %s\n",
+
+comma before prio? but also how necessary is to emit all these? what
+if we add another argument to opts, would we add them here as well?
+
+I'd just go with just "failed to attach netfilter" and keep it simple
+
+> +                       prog->name,
+> +                       OPTS_GET(opts, pf, 0),
+> +                       OPTS_GET(opts, hooknum, 0),
+> +                       OPTS_GET(opts, priority, 0),
+> +                       libbpf_strerror_r(link_fd, errmsg, sizeof(errmsg)=
+));
+> +               return libbpf_err_ptr(link_fd);
+> +       }
+> +
+> +       return link;
+> +}
+> +
+>  struct bpf_link *bpf_program__attach(const struct bpf_program *prog)
+>  {
+>         struct bpf_link *link =3D NULL;
+> diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
+> index 754da73c643b..10642ad69d76 100644
+> --- a/tools/lib/bpf/libbpf.h
+> +++ b/tools/lib/bpf/libbpf.h
+> @@ -718,6 +718,21 @@ LIBBPF_API struct bpf_link *
+>  bpf_program__attach_freplace(const struct bpf_program *prog,
+>                              int target_fd, const char *attach_func_name)=
+;
+>
+> +struct bpf_netfilter_opts {
+> +       /* size of this struct, for forward/backward compatibility */
+> +       size_t sz;
+> +
+> +       __u32 pf;
+> +       __u32 hooknum;
+> +       __s32 priority;
+> +       __u32 flags;
+> +};
+> +#define bpf_netfilter_opts__last_field flags
+> +
+> +LIBBPF_API struct bpf_link *
+> +bpf_program__attach_netfilter(const struct bpf_program *prog,
+> +                             const struct bpf_netfilter_opts *opts);
+> +
+>  struct bpf_map;
+>
+>  LIBBPF_API struct bpf_link *bpf_map__attach_struct_ops(const struct bpf_=
+map *map);
+> diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
+> index 7521a2fb7626..d9ec4407befa 100644
+> --- a/tools/lib/bpf/libbpf.map
+> +++ b/tools/lib/bpf/libbpf.map
+> @@ -395,4 +395,5 @@ LIBBPF_1.2.0 {
+>  LIBBPF_1.3.0 {
+>         global:
+>                 bpf_obj_pin_opts;
+> +               bpf_program__attach_netfilter;
+>  } LIBBPF_1.2.0;
+> --
+> 2.40.1
+>
