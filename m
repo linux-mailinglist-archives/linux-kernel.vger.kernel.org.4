@@ -2,64 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73FCB73FCC7
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 15:24:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BDB5873FCCC
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 15:24:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230023AbjF0NYH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 09:24:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33638 "EHLO
+        id S230205AbjF0NYl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 09:24:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230169AbjF0NXl (ORCPT
+        with ESMTP id S230203AbjF0NYY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 09:23:41 -0400
-Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDDE1199C
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 06:23:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-        s=20170329; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Message-ID:
-        Date:Subject:Cc:To:From:Sender:Reply-To:Content-ID:Content-Description:
-        Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
-        In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=XXhdTWoMk14blpQJORYtPE+5yfyz5ZqdWBj8yIkLzts=; b=GVtsM/JAeN+WVIVK5y8d9+UwbL
-        vQvr+6+K0y1KIV1qun0KL0TPobxoP4ch9FaLw2AcFV+RiUHM4eUbU2aJOAEHPs6lTnlI/UGB3x9Q0
-        uHSyXWF1fI9dwNyrB+U5o8H4JRk7ajOxpvMdqI0gF++zcTN4Y06KyLNyKTRwz1v5Mh/IiapsMswEf
-        UNJtlpWufkEyzBNENgpCLTvPOgiWgj6MZA6/9VJVumIeeElrAEoFV+Gs5PR0lToOPlshD0/SkVCpu
-        7t5eMnMIKmw5ryXFHhP6kjt7TigQ9cxnS0I55bG3WO+68FWUhmlpRbIpvTxGdHdEnwvk0f8V3IV9v
-        DQ5bGx5A==;
-Received: from [179.113.218.86] (helo=steammachine.lan)
-        by fanzine2.igalia.com with esmtpsa 
-        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
-        id 1qE8fM-004Yyb-Bb; Tue, 27 Jun 2023 15:23:32 +0200
-From:   =?UTF-8?q?Andr=C3=A9=20Almeida?= <andrealmeid@igalia.com>
-To:     dri-devel@lists.freedesktop.org, amd-gfx@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-Cc:     kernel-dev@igalia.com, alexander.deucher@amd.com,
-        christian.koenig@amd.com, pierre-eric.pelloux-prayer@amd.com,
-        Simon Ser <contact@emersion.fr>,
-        Rob Clark <robdclark@gmail.com>,
-        Pekka Paalanen <ppaalanen@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Daniel Stone <daniel@fooishbar.org>,
-        =?UTF-8?q?=27Marek=20Ol=C5=A1=C3=A1k=27?= <maraeo@gmail.com>,
-        Dave Airlie <airlied@gmail.com>,
-        =?UTF-8?q?Michel=20D=C3=A4nzer?= <michel.daenzer@mailbox.org>,
-        Samuel Pitoiset <samuel.pitoiset@gmail.com>,
-        =?UTF-8?q?Timur=20Krist=C3=B3f?= <timur.kristof@gmail.com>,
-        Bas Nieuwenhuizen <bas@basnieuwenhuizen.nl>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        =?UTF-8?q?Andr=C3=A9=20Almeida?= <andrealmeid@igalia.com>,
-        Pekka Paalanen <pekka.paalanen@collabora.com>
-Subject: [PATCH v5 1/1] drm/doc: Document DRM device reset expectations
-Date:   Tue, 27 Jun 2023 10:23:23 -0300
-Message-ID: <20230627132323.115440-1-andrealmeid@igalia.com>
-X-Mailer: git-send-email 2.41.0
+        Tue, 27 Jun 2023 09:24:24 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5F5E1BC8
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 06:23:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1687872218;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=tGxhg8QGQ9+BpJAoqUPu1JIoDVbHcL8KnysND43NiuE=;
+        b=NKlCv0Bw2XPUT/wLubwwfLoIzPWdQzMn8DrdOlaKHKjcnscnZG33hKDlu4S3zW5XRfTkrK
+        lU7LHZFlz5uHT6VRo62ysGvaO9ASYhuIVibyiCAHiWxRFJoTyauVPalyHuNLQ4zbdlJUtZ
+        yYSS82dHa90eV9U8z2/2hG+hly/GtIg=
+Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
+ [209.85.218.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-584-6fhsQWDzNKWYKeBeWfH-Vg-1; Tue, 27 Jun 2023 09:23:36 -0400
+X-MC-Unique: 6fhsQWDzNKWYKeBeWfH-Vg-1
+Received: by mail-ej1-f70.google.com with SMTP id a640c23a62f3a-987accb96dbso307221166b.2
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 06:23:35 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687872214; x=1690464214;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=tGxhg8QGQ9+BpJAoqUPu1JIoDVbHcL8KnysND43NiuE=;
+        b=kgMr7S6gNdRovTp+URY72h5t+ITq+EPlhdpeD0xYyqzVCTKZ6bsV2F3/m6wH/l8vu+
+         sBjbaQ4uOGEOoTxxejyAuKu9JzHzywos1yPW7XuezRaorJ9aH25DS5GFaWP2LHwZuYYw
+         l3O/sXcMF7MpS5eebGoVYKjYVlCuUMFFrpksIbQ8CewkU17RYKn18dr1pRdbYRDparIA
+         ctnQZQWbH04In1xBnZmGz05l9NXRDJdUs0zzGFB3hoUUjH61uZ6FaojECH2IAz6Jjj4w
+         Uo5YFMw1YGQBZq/5vlv2U5g+RqvsStMPYLvTjZito8UVPeyW2xZwE44053WRGFfjqykL
+         FueQ==
+X-Gm-Message-State: AC+VfDwDPYuP1daXL5D7OMzQ4EiTmSPUagyP6xspjpaVQ8ZLuiLpACLw
+        r72KsD3z9YW+FYV9JtPgrKPrjjpd+13DskXAWJ0bPZxEvjeebTxWj6+HmElBmuZwMZQZCSNcO7V
+        9vq8Ij6i1GuruN0Az3xcIlwxL0oH7iyY=
+X-Received: by 2002:a17:907:6d1f:b0:991:d336:9b32 with SMTP id sa31-20020a1709076d1f00b00991d3369b32mr4605037ejc.35.1687872213990;
+        Tue, 27 Jun 2023 06:23:33 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ7ZI6wqeMqj0mC7/1kR2G2bIYUZUExPbAvxtZ249lLZ7QyeDSV0ok3T7mdKpUcxIdnPlIifmQ==
+X-Received: by 2002:a17:907:6d1f:b0:991:d336:9b32 with SMTP id sa31-20020a1709076d1f00b00991d3369b32mr4605021ejc.35.1687872213562;
+        Tue, 27 Jun 2023 06:23:33 -0700 (PDT)
+Received: from [192.168.9.16] (net-2-34-24-242.cust.vodafonedsl.it. [2.34.24.242])
+        by smtp.gmail.com with ESMTPSA id w6-20020a17090633c600b0098748422178sm4516770eja.56.2023.06.27.06.23.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 27 Jun 2023 06:23:33 -0700 (PDT)
+Message-ID: <d230b259-b3b2-c6b1-1238-c3f04587f340@redhat.com>
+Date:   Tue, 27 Jun 2023 15:23:32 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH v7 1/4] fpga: add an initial KUnit suite for the FPGA
+ Manager
+To:     Xu Yilun <yilun.xu@intel.com>
+Cc:     Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>,
+        Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-fpga@vger.kernel.org
+References: <20230616154405.220502-1-marpagan@redhat.com>
+ <20230616154405.220502-2-marpagan@redhat.com>
+ <ZJfokyHdapZEgTyY@yilunxu-OptiPlex-7050>
+Content-Language: en-US
+From:   Marco Pagani <marpagan@redhat.com>
+In-Reply-To: <ZJfokyHdapZEgTyY@yilunxu-OptiPlex-7050>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,100 +86,347 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Create a section that specifies how to deal with DRM device resets for
-kernel and userspace drivers.
 
-Acked-by: Pekka Paalanen <pekka.paalanen@collabora.com>
-Signed-off-by: André Almeida <andrealmeid@igalia.com>
----
 
-v4: https://lore.kernel.org/lkml/20230626183347.55118-1-andrealmeid@igalia.com/
+On 2023-06-25 09:11, Xu Yilun wrote:
+> On 2023-06-16 at 17:44:02 +0200, Marco Pagani wrote:
+>> The suite tests the basic behaviors of the FPGA Manager including
+>> programming using a single contiguous buffer and a scatter gather table.
+>>
+>> Signed-off-by: Marco Pagani <marpagan@redhat.com>
+>> ---
+>>  drivers/fpga/tests/fpga-mgr-test.c | 302 +++++++++++++++++++++++++++++
+>>  1 file changed, 302 insertions(+)
+>>  create mode 100644 drivers/fpga/tests/fpga-mgr-test.c
+>>
+>> diff --git a/drivers/fpga/tests/fpga-mgr-test.c b/drivers/fpga/tests/fpga-mgr-test.c
+>> new file mode 100644
+>> index 000000000000..70e897dad3b6
+>> --- /dev/null
+>> +++ b/drivers/fpga/tests/fpga-mgr-test.c
+>> @@ -0,0 +1,302 @@
+>> +// SPDX-License-Identifier: GPL-2.0
+>> +/*
+>> + * KUnit test for the FPGA Manager
+>> + *
+>> + * Copyright (C) 2023 Red Hat, Inc.
+>> + *
+>> + * Author: Marco Pagani <marpagan@redhat.com>
+>> + */
+>> +
+>> +#include <linux/types.h>
+>> +#include <linux/module.h>
+>> +#include <linux/device.h>
+>> +#include <linux/scatterlist.h>
+>> +#include <kunit/test.h>
+>> +#include <linux/fpga/fpga-mgr.h>
+> 
+> alphabetical order please
+>
 
-Changes:
- - Grammar fixes (Randy)
+I'll sort all includes alphabetically in the next version.
 
- Documentation/gpu/drm-uapi.rst | 68 ++++++++++++++++++++++++++++++++++
- 1 file changed, 68 insertions(+)
+>> +
+>> +#define HEADER_FILL		'H'
+>> +#define IMAGE_FILL		'P'
+>> +#define IMAGE_BLOCK		1024
+>> +
+>> +#define HEADER_SIZE		IMAGE_BLOCK
+>> +#define IMAGE_SIZE		(IMAGE_BLOCK * 4)
+>> +
+>> +struct mgr_stats {
+>> +	bool header_match;
+>> +	bool image_match;
+>> +	u32 seq_num;
+>> +	u32 op_parse_header_seq;
+>> +	u32 op_write_init_seq;
+>> +	u32 op_write_seq;
+>> +	u32 op_write_sg_seq;
+>> +	u32 op_write_complete_seq;
+>> +	enum fpga_mgr_states op_parse_header_state;
+>> +	enum fpga_mgr_states op_write_init_state;
+>> +	enum fpga_mgr_states op_write_state;
+>> +	enum fpga_mgr_states op_write_sg_state;
+>> +	enum fpga_mgr_states op_write_complete_state;
+>> +};
+>> +
+>> +struct mgr_ctx {
+>> +	struct fpga_image_info *img_info;
+>> +	struct fpga_manager *mgr;
+>> +	struct platform_device *pdev;
+>> +	struct mgr_stats stats;
+>> +};
+>> +
+>> +/**
+>> + * init_test_buffer() - Allocate and initialize a test image in a buffer.
+>> + * @test: KUnit test context object.
+>> + * @count: image size in bytes.
+>> + *
+>> + * Return: pointer to the newly allocated image.
+>> + */
+>> +static char *init_test_buffer(struct kunit *test, size_t count)
+>> +{
+>> +	char *buf;
+>> +	size_t i;
+>> +
+>> +	buf = kunit_kzalloc(test, count, GFP_KERNEL);
+>> +	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, buf);
+>> +
+>> +	for (i = 0; i < count; i++)
+>> +		buf[i] = i < HEADER_SIZE ? HEADER_FILL : IMAGE_FILL;
+> 
+> memset?
+>
 
-diff --git a/Documentation/gpu/drm-uapi.rst b/Documentation/gpu/drm-uapi.rst
-index 65fb3036a580..3cbffa25ed93 100644
---- a/Documentation/gpu/drm-uapi.rst
-+++ b/Documentation/gpu/drm-uapi.rst
-@@ -285,6 +285,74 @@ for GPU1 and GPU2 from different vendors, and a third handler for
- mmapped regular files. Threads cause additional pain with signal
- handling as well.
- 
-+Device reset
-+============
-+
-+The GPU stack is really complex and is prone to errors, from hardware bugs,
-+faulty applications and everything in between the many layers. Some errors
-+require resetting the device in order to make the device usable again. This
-+sections describes the expectations for DRM and usermode drivers when a
-+device resets and how to propagate the reset status.
-+
-+Kernel Mode Driver
-+------------------
-+
-+The KMD is responsible for checking if the device needs a reset, and to perform
-+it as needed. Usually a hang is detected when a job gets stuck executing. KMD
-+should keep track of resets, because userspace can query any time about the
-+reset stats for an specific context. This is needed to propagate to the rest of
-+the stack that a reset has happened. Currently, this is implemented by each
-+driver separately, with no common DRM interface.
-+
-+User Mode Driver
-+----------------
-+
-+The UMD should check before submitting new commands to the KMD if the device has
-+been reset, and this can be checked more often if the UMD requires it. After
-+detecting a reset, UMD will then proceed to report it to the application using
-+the appropriate API error code, as explained in the section below about
-+robustness.
-+
-+Robustness
-+----------
-+
-+The only way to try to keep an application working after a reset is if it
-+complies with the robustness aspects of the graphical API that it is using.
-+
-+Graphical APIs provide ways to applications to deal with device resets. However,
-+there is no guarantee that the app will use such features correctly, and the
-+UMD can implement policies to close the app if it is a repeating offender,
-+likely in a broken loop. This is done to ensure that it does not keep blocking
-+the user interface from being correctly displayed. This should be done even if
-+the app is correct but happens to trigger some bug in the hardware/driver.
-+
-+OpenGL
-+~~~~~~
-+
-+Apps using OpenGL should use the available robust interfaces, like the
-+extension ``GL_ARB_robustness`` (or ``GL_EXT_robustness`` for OpenGL ES). This
-+interface tells if a reset has happened, and if so, all the context state is
-+considered lost and the app proceeds by creating new ones. If it is possible to
-+determine that robustness is not in use, the UMD will terminate the app when a
-+reset is detected, giving that the contexts are lost and the app won't be able
-+to figure this out and recreate the contexts.
-+
-+Vulkan
-+~~~~~~
-+
-+Apps using Vulkan should check for ``VK_ERROR_DEVICE_LOST`` for submissions.
-+This error code means, among other things, that a device reset has happened and
-+it needs to recreate the contexts to keep going.
-+
-+Reporting causes of resets
-+--------------------------
-+
-+Apart from propagating the reset through the stack so apps can recover, it's
-+really useful for driver developers to learn more about what caused the reset in
-+first place. DRM devices should make use of devcoredump to store relevant
-+information about the reset, so this information can be added to user bug
-+reports.
-+
- .. _drm_driver_ioctl:
- 
- IOCTL Support on Device Nodes
--- 
-2.41.0
+Okay, I'll use memset in the next version.
+
+>> +
+>> +	return buf;
+>> +}
+>> +
+>> +static int op_parse_header(struct fpga_manager *mgr, struct fpga_image_info *info,
+>> +			   const char *buf, size_t count)
+>> +{
+>> +	struct mgr_stats *stats = mgr->priv;
+>> +	size_t i;
+>> +
+>> +	/* Set header_size and data_size for later */
+>> +	info->header_size = HEADER_SIZE;
+>> +	info->data_size = info->count - HEADER_SIZE;
+>> +
+>> +	stats->header_match = true;
+>> +
+>> +	/* Check header */
+>> +	for (i = 0; i < info->header_size; i++)
+>> +		if (buf[i] != HEADER_FILL)
+>> +			stats->header_match = false;
+>> +
+>> +	stats->op_parse_header_state = mgr->state;
+>> +	stats->op_parse_header_seq = stats->seq_num++;
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +static int op_write_init(struct fpga_manager *mgr, struct fpga_image_info *info,
+>> +			 const char *buf, size_t count)
+>> +{
+>> +	struct mgr_stats *stats = mgr->priv;
+>> +
+>> +	stats->op_write_init_state = mgr->state;
+>> +	stats->op_write_init_seq = stats->seq_num++;
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +static int op_write(struct fpga_manager *mgr, const char *buf, size_t count)
+>> +{
+>> +	struct mgr_stats *stats = mgr->priv;
+>> +	size_t i;
+>> +
+>> +	/* Check image */
+>> +	stats->image_match = true;
+>> +	for (i = 0; i < count; i++)
+>> +		if (buf[i] != IMAGE_FILL)
+>> +			stats->image_match = false;
+>> +
+>> +	stats->op_write_state = mgr->state;
+>> +	stats->op_write_seq = stats->seq_num++;
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +static int op_write_sg(struct fpga_manager *mgr, struct sg_table *sgt)
+>> +{
+>> +	struct mgr_stats *stats = mgr->priv;
+>> +	struct scatterlist *sg;
+>> +	char *img;
+>> +	unsigned int si, i, j = 0;
+>> +
+>> +	stats->image_match = true;
+>> +
+>> +	/* Check image (write_sg will still get whole image in sg_table) */
+>> +	for_each_sgtable_sg(sgt, sg, si) {
+>> +		img = sg_virt(sg);
+>> +		for (i = 0; i < sg->length; i++) {
+>> +			if (i + j > HEADER_SIZE && img[i] != IMAGE_FILL)
+> 
+> Is it possible just use sg_miter_skip() to skip the image header?
+> 
+
+I'll use sg_miter_* functions in the next version.
+
+>> +				stats->image_match = false;
+>> +		}
+>> +		j += i;
+>> +	}
+>> +
+>> +	stats->op_write_sg_state = mgr->state;
+>> +	stats->op_write_sg_seq = stats->seq_num++;
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +static int op_write_complete(struct fpga_manager *mgr, struct fpga_image_info *info)
+>> +{
+>> +	struct mgr_stats *stats = mgr->priv;
+>> +
+>> +	stats->op_write_complete_state = mgr->state;
+>> +	stats->op_write_complete_seq = stats->seq_num++;
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +/*
+>> + * Fake Manager that implements all ops required to check the programming
+>> + * sequence using a single contiguous buffer and a scatter gather table.
+>> + */
+>> +static const struct fpga_manager_ops fake_mgr_ops = {
+>> +	.skip_header = true,
+>> +	.parse_header = op_parse_header,
+>> +	.write_init = op_write_init,
+>> +	.write = op_write,
+>> +	.write_sg = op_write_sg,
+>> +	.write_complete = op_write_complete,
+>> +};
+>> +
+>> +static void fpga_mgr_test_get(struct kunit *test)
+>> +{
+>> +	struct mgr_ctx *ctx = test->priv;
+>> +	struct fpga_manager *mgr;
+>> +
+>> +	mgr = fpga_mgr_get(&ctx->pdev->dev);
+>> +	KUNIT_EXPECT_PTR_EQ(test, mgr, ctx->mgr);
+>> +
+>> +	fpga_mgr_put(ctx->mgr);
+>> +}
+>> +
+>> +static void fpga_mgr_test_lock(struct kunit *test)
+>> +{
+>> +	struct mgr_ctx *ctx = test->priv;
+>> +	int ret;
+>> +
+>> +	ret = fpga_mgr_lock(ctx->mgr);
+>> +	KUNIT_EXPECT_EQ(test, ret, 0);
+>> +
+>> +	ret = fpga_mgr_lock(ctx->mgr);
+>> +	KUNIT_EXPECT_EQ(test, ret, -EBUSY);
+>> +
+>> +	fpga_mgr_unlock(ctx->mgr);
+>> +}
+>> +
+>> +/* Check the programming sequence using an image in a buffer */
+>> +static void fpga_mgr_test_img_load_buf(struct kunit *test)
+>> +{
+>> +	struct mgr_ctx *ctx = test->priv;
+>> +	char *img_buf;
+>> +	int ret;
+>> +
+>> +	img_buf = init_test_buffer(test, IMAGE_SIZE);
+>> +
+>> +	ctx->img_info->count = IMAGE_SIZE;
+>> +	ctx->img_info->buf = img_buf;
+>> +
+>> +	ret = fpga_mgr_load(ctx->mgr, ctx->img_info);
+>> +	KUNIT_EXPECT_EQ(test, ret, 0);
+>> +
+>> +	KUNIT_EXPECT_TRUE(test, ctx->stats.header_match);
+>> +	KUNIT_EXPECT_TRUE(test, ctx->stats.image_match);
+>> +
+>> +	KUNIT_EXPECT_EQ(test, ctx->stats.op_parse_header_state, FPGA_MGR_STATE_PARSE_HEADER);
+>> +	KUNIT_EXPECT_EQ(test, ctx->stats.op_write_init_state, FPGA_MGR_STATE_WRITE_INIT);
+>> +	KUNIT_EXPECT_EQ(test, ctx->stats.op_write_state, FPGA_MGR_STATE_WRITE);
+>> +	KUNIT_EXPECT_EQ(test, ctx->stats.op_write_complete_state, FPGA_MGR_STATE_WRITE_COMPLETE);
+>> +
+>> +	KUNIT_EXPECT_EQ(test, ctx->stats.op_write_init_seq, ctx->stats.op_parse_header_seq + 1);
+>> +	KUNIT_EXPECT_EQ(test, ctx->stats.op_write_seq, ctx->stats.op_parse_header_seq + 2);
+>> +	KUNIT_EXPECT_EQ(test, ctx->stats.op_write_complete_seq, ctx->stats.op_parse_header_seq + 3);
+>> +}
+>> +
+>> +/* Check the programming sequence using an image in a scatter gather table */
+>> +static void fpga_mgr_test_img_load_sgt(struct kunit *test)
+>> +{
+>> +	struct mgr_ctx *ctx = test->priv;
+>> +	struct sg_table *sgt;
+>> +	char *img_buf;
+>> +	int ret;
+>> +
+>> +	img_buf = init_test_buffer(test, IMAGE_SIZE);
+>> +
+>> +	sgt = kunit_kzalloc(test, sizeof(*sgt), GFP_KERNEL);
+>> +	ret = sg_alloc_table(sgt, 1, GFP_KERNEL);
+>> +	KUNIT_ASSERT_EQ(test, ret, 0);
+>> +	sg_init_one(sgt->sgl, img_buf, IMAGE_SIZE);
+>> +
+>> +	ctx->img_info->sgt = sgt;
+>> +
+>> +	ret = fpga_mgr_load(ctx->mgr, ctx->img_info);
+>> +	KUNIT_EXPECT_EQ(test, ret, 0);
+>> +
+>> +	KUNIT_EXPECT_TRUE(test, ctx->stats.header_match);
+>> +	KUNIT_EXPECT_TRUE(test, ctx->stats.image_match);
+>> +
+>> +	KUNIT_EXPECT_EQ(test, ctx->stats.op_parse_header_state, FPGA_MGR_STATE_PARSE_HEADER);
+>> +	KUNIT_EXPECT_EQ(test, ctx->stats.op_write_init_state, FPGA_MGR_STATE_WRITE_INIT);
+>> +	KUNIT_EXPECT_EQ(test, ctx->stats.op_write_sg_state, FPGA_MGR_STATE_WRITE);
+>> +	KUNIT_EXPECT_EQ(test, ctx->stats.op_write_complete_state, FPGA_MGR_STATE_WRITE_COMPLETE);
+>> +
+>> +	KUNIT_EXPECT_EQ(test, ctx->stats.op_write_init_seq, ctx->stats.op_parse_header_seq + 1);
+>> +	KUNIT_EXPECT_EQ(test, ctx->stats.op_write_sg_seq, ctx->stats.op_parse_header_seq + 2);
+>> +	KUNIT_EXPECT_EQ(test, ctx->stats.op_write_complete_seq, ctx->stats.op_parse_header_seq + 3);
+>> +
+>> +	sg_free_table(ctx->img_info->sgt);
+>> +}
+>> +
+>> +static int fpga_mgr_test_init(struct kunit *test)
+>> +{
+>> +	struct mgr_ctx *ctx;
+>> +
+>> +	ctx = kunit_kzalloc(test, sizeof(*ctx), GFP_KERNEL);
+>> +	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, ctx);
+>> +
+>> +	ctx->pdev = platform_device_register_simple("mgr_pdev", PLATFORM_DEVID_AUTO, NULL, 0);
+>> +	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, ctx->pdev);
+>> +
+>> +	ctx->mgr = devm_fpga_mgr_register(&ctx->pdev->dev, "Fake FPGA Manager", &fake_mgr_ops,
+>> +					  &ctx->stats);
+>> +	KUNIT_ASSERT_FALSE(test, IS_ERR_OR_NULL(ctx->mgr));
+>> +
+>> +	ctx->img_info = fpga_image_info_alloc(&ctx->pdev->dev);
+>> +	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, ctx->img_info);
+>> +
+>> +	test->priv = ctx;
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +static void fpga_mgr_test_exit(struct kunit *test)
+>> +{
+>> +	struct mgr_ctx *ctx = test->priv;
+>> +
+>> +	fpga_image_info_free(ctx->img_info);
+>> +	platform_device_unregister(ctx->pdev);
+>> +}
+>> +
+>> +static struct kunit_case fpga_mgr_test_cases[] = {
+>> +	KUNIT_CASE(fpga_mgr_test_get),
+>> +	KUNIT_CASE(fpga_mgr_test_lock),
+>> +	KUNIT_CASE(fpga_mgr_test_img_load_buf),
+>> +	KUNIT_CASE(fpga_mgr_test_img_load_sgt),
+>> +	{}
+>> +};
+>> +
+>> +static struct kunit_suite fpga_mgr_suite = {
+>> +	.name = "fpga_mgr",
+>> +	.init = fpga_mgr_test_init,
+>> +	.exit = fpga_mgr_test_exit,
+>> +	.test_cases = fpga_mgr_test_cases,
+>> +};
+>> +
+>> +kunit_test_suite(fpga_mgr_suite);
+>> +
+>> +MODULE_LICENSE("GPL");
+>> -- 
+>> 2.40.1
+>>
+> 
 
