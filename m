@@ -2,130 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 074C773FB24
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 13:32:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 615A773FB26
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 13:32:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231396AbjF0Lcc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 07:32:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46062 "EHLO
+        id S231482AbjF0Lcz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 07:32:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229501AbjF0Lca (ORCPT
+        with ESMTP id S231438AbjF0Lcy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 07:32:30 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0289E26B8
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 04:32:29 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 934DB61189
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 11:32:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72E02C433C8;
-        Tue, 27 Jun 2023 11:32:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687865548;
-        bh=AlpMZ5iLqgAPxVW6nsDVYIyw9ZFOHeY/QxYTKuyL484=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=qJcvhkkvfbBXSqbGMu2QUXOoNwcdEXCxGycx2ODHftd+U8MCscjuAK9KJy4B+oWi5
-         CJL7Te5EZsGPovlqAtUV4Wn9Xk2Caje/ovhJGD+LFxn01iFEn/3KiZOTytV2vG+0Iv
-         zhrUQyPGGj/I3C9UtiCltVzh9qp3sWxJqZ/3GJAoDEFTMGj84ZF0npJo0MKFa2BkLB
-         lSWwjY2jPm1iKfhvhPsbn9oq4aLITKjqx6beggTPrYWmxAvOeQRKvYRoiS8t/nA+W4
-         qK1wfBUqxzc/OHwm6aAkBZylhXYKVQ0LA2IF2wYjyDNanY6EeXgywIsEr8tFIQk5fZ
-         2/w14OcZgzHoQ==
-Date:   Tue, 27 Jun 2023 13:32:24 +0200
-From:   Frederic Weisbecker <frederic@kernel.org>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Anna-Maria Behnsen <anna-maria@linutronix.de>,
-        John Stultz <jstultz@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Oleg Nesterov <oleg@redhat.com>
-Subject: Re: [patch 13/45] posix-cpu-timers: Replace old expiry retrieval in
- posix_cpu_timer_set()
-Message-ID: <ZJrIyGxdDYy3Ppy1@lothringen>
-References: <20230606132949.068951363@linutronix.de>
- <20230606142031.761271959@linutronix.de>
+        Tue, 27 Jun 2023 07:32:54 -0400
+Received: from out-33.mta1.migadu.com (out-33.mta1.migadu.com [IPv6:2001:41d0:203:375::21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27A9626B7
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 04:32:52 -0700 (PDT)
+Message-ID: <e1da325b-8f16-f4d2-d6bf-65976a4239b4@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1687865568;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=5AAMGnil1vus66xTAIuI1lIxfQX8aaFDX8sQDFraqX0=;
+        b=eS1vGYD3pvIWNwfllqk4fByrGt+RqENGbMduaSfT6deiKtjk2Gw54VnY/s0C1RbCfKcq9Q
+        phktX+iq9LmCjNOB1IPbCB18N4sM/abS27c7xSewD0hTrHMjZO356eNtdhAUx2jKMYkZgS
+        dbDkSVh8MSGCTEWSYtSznAzZdPh9pDs=
+Date:   Tue, 27 Jun 2023 19:32:42 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230606142031.761271959@linutronix.de>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Subject: Re: [PATCH v2 3/3] blk-mq: fix start_time_ns and alloc_time_ns for
+ pre-allocated rq
+Content-Language: en-US
+To:     Tejun Heo <tj@kernel.org>
+Cc:     axboe@kernel.dk, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, zhouchengming@bytedance.com
+References: <20230626050405.781253-1-chengming.zhou@linux.dev>
+ <20230626050405.781253-4-chengming.zhou@linux.dev>
+ <ZJn5F4xb6gln0653@slm.duckdns.org>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Chengming Zhou <chengming.zhou@linux.dev>
+In-Reply-To: <ZJn5F4xb6gln0653@slm.duckdns.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 06, 2023 at 04:37:39PM +0200, Thomas Gleixner wrote:
-> Reuse the split out __posix_cpu_timer_get() function which does already the
-> right thing.
+On 2023/6/27 04:46, Tejun Heo wrote:
+> Hello,
 > 
-> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-> ---
->  kernel/time/posix-cpu-timers.c |   28 +++++-----------------------
->  1 file changed, 5 insertions(+), 23 deletions(-)
+> I only glanced the blk-mq core part but in general this looks a lot better
+> than the previous one.
+
+Thanks for your review!
+
 > 
-> --- a/kernel/time/posix-cpu-timers.c
-> +++ b/kernel/time/posix-cpu-timers.c
-> @@ -609,6 +609,8 @@ static void cpu_timer_fire(struct k_itim
->  	}
->  }
->  
-> +static void __posix_cpu_timer_get(struct k_itimer *timer, struct itimerspec64
-> *itp, u64 now);
+> On Mon, Jun 26, 2023 at 01:04:05PM +0800, chengming.zhou@linux.dev wrote:
+>> Note we don't skip setting alloc_time_ns and start_time_ns for all
+>> pre-allocated rq, since the first returned rq still need to be set.
+> 
+> This part is a bit curious for me tho. Why do we need to set it at batch
+> allocation time and then at actual dispensing from the bat later? Who uses
+> the alloc time stamp inbetween?
+> 
 
-Perhaps you can move __posix_cpu_timer_get() above posix_cpu_timer_set()?
+Yes, this part should need more explanation, and my explanation is not clear.
 
-> +
->  /*
->   * Guts of sys_timer_settime for CPU timers.
->   * This is called with the timer locked and interrupts disabled.
-> @@ -680,29 +682,9 @@ static int posix_cpu_timer_set(struct k_
->  	else
->  		now = cpu_clock_sample_group(clkid, p, !sigev_none);
->  
-> -	if (old) {
-> -		if (old_expires == 0) {
-> -			old->it_value.tv_sec = 0;
-> -			old->it_value.tv_nsec = 0;
-> -		} else {
-> -			/*
-> -			 * Update the timer in case it has overrun already.
-> -			 * If it has, we'll report it as having overrun and
-> -			 * with the next reloaded timer already ticking,
-> -			 * though we are swallowing that pending
-> -			 * notification here to install the new setting.
-> -			 */
-> -			u64 exp = bump_cpu_timer(timer, now);
-> -
-> -			if (now < exp) {
-> -				old_expires = exp - now;
-> -				old->it_value = ns_to_timespec64(old_expires);
-> -			} else {
-> -				old->it_value.tv_nsec = 1;
-> -				old->it_value.tv_sec = 0;
-> -			}
-> -		}
-> -	}
-> +	/* Retrieve the previous expiry value if requested. */
-> +	if (old && old_expires)
-> +		__posix_cpu_timer_get(timer, old, now);
+Now the batched pre-allocation code looks like this:
 
-The changelog should probably mention the desired side effect that sigev_none
-will return a zero old value if expired.
+```
+if (!rq_list_empty(plug->cached_rq))
 
-Reviewed-by: Frederic Weisbecker <frederic@kernel.org>
+  get pre-allocated rq from plug cache
+
+  // we set alloc and start time here
+  return rq
+
+else
+  rq = __blk_mq_alloc_requests_batch() do batched allocation (1)
+  (2)
+  return rq
+```
+
+In (1) we alloc some requests and push them in plug list, and pop one request
+to return to use. So this popped one request need to be set time at batch allocation time.
+
+Yes, we can also set this popped request time in (2), just before return it to use.
+
+
+Since all requests in batch allocation use the same alloc and start time, so this patch
+just leave it as it is, and reset it at actual used time.
+
+I think both way is ok, do you think it's better to just set the popped one request, leave
+other requests time to 0 ? If so, I can update to do it.
 
 Thanks.
 
->  
->  	/* Retry if the timer expiry is running concurrently */
->  	if (unlikely(ret)) {
-> 
