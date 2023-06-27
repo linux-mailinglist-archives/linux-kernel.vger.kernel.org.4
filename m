@@ -2,100 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A00A7740037
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 17:59:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DD1B74003A
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 18:00:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232027AbjF0P7d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 11:59:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60750 "EHLO
+        id S232037AbjF0QAe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 12:00:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230384AbjF0P7b (ORCPT
+        with ESMTP id S231688AbjF0QAc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 11:59:31 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72BB72D68;
-        Tue, 27 Jun 2023 08:59:30 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 016EA611D3;
-        Tue, 27 Jun 2023 15:59:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04E10C433C9;
-        Tue, 27 Jun 2023 15:59:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687881569;
-        bh=AA3u7kz1pu0vMNPeSL/vGc5ARaKVq+llu1ZjNTFOZYY=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=AEjG+n/bSqn/UH82G8HIczhWixak5ScxThjfmMOSom1fAGV4FP1vd9ebK46Wuz2jr
-         6ywXrGKYTf08EabwSo2e/C10RS6x2Im/4ZwHxfXtkFWKT0tBsFToh1WaFTerJU+c1V
-         Jo08l+xxO6Gg6MEHS3rgX0YABVC3s0laavLbYzjXidie28j32/MqcCdEIFmwzUdgk8
-         wDplROUqNRcYqxhIWuUa/pzhrTtO9pIYu1XAAcW/WBweTo30W2aL2Ztx7kdgFzTCGF
-         8YFpNCSQM8GzHBgJvTTXZATWEaz6VHZDvPXCT8/lC06ZFeNhmHW5CX4clk6CjLBysA
-         Y4h11ieYXXwVg==
-Date:   Tue, 27 Jun 2023 08:59:28 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     David Howells <dhowells@redhat.com>
-Cc:     Ilya Dryomov <idryomov@gmail.com>, netdev@vger.kernel.org,
-        Xiubo Li <xiubli@redhat.com>, Jeff Layton <jlayton@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>, Jens Axboe <axboe@kernel.dk>,
-        Matthew Wilcox <willy@infradead.org>,
-        ceph-devel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next v3] libceph: Partially revert changes to
- support MSG_SPLICE_PAGES
-Message-ID: <20230627085928.6569353e@kernel.org>
-In-Reply-To: <3199652.1687873788@warthog.procyon.org.uk>
-References: <3199652.1687873788@warthog.procyon.org.uk>
+        Tue, 27 Jun 2023 12:00:32 -0400
+Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A2592D63
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 09:00:31 -0700 (PDT)
+Received: by mail-yb1-xb33.google.com with SMTP id 3f1490d57ef6-bfee679b7efso4636378276.0
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 09:00:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1687881630; x=1690473630;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=9KkJfMIW232ztzAZaUdoyK+3frIKBC3oUzLc/0KyY7g=;
+        b=TSmneStqHeW3vCGRSk9XN9K/xAOpUNp9Vt2idzhSed8Jk+sSOVzUMYMfK5RbQI1ezV
+         xCcyNw+2DbcLe4wWwb+sZrHHbbktJgcRITbuZtz6oydu/tUcvwox4YrknRwXpzAlmJOP
+         orSU/BHf8zwqMob8Lmjh+Rk+lPb7uV7/TsKfBFQo78u+j2lducnvRLXzqme6BAOSma7C
+         wm+yNe+rT3S/dvG2NXgwRWysJw6pZHxyQcFfsx8v6zz6MvXxzLTh6RSn3eg7C+0+NnyJ
+         KA9VLZ5YOphRWjJmhl7NlekRjYrHPsGQNPRy+HRTD3mtoTXAsOZc7Mn6GtWgZTBQ0Ohc
+         Dgog==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687881630; x=1690473630;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=9KkJfMIW232ztzAZaUdoyK+3frIKBC3oUzLc/0KyY7g=;
+        b=DJ8X11jSDZ02ILqpNSBHwNXZK63TOiN9Ul8sMUCRYomO1oMBFR083d9seCjgdYYzML
+         cc6J/t0R4Lsdb7Z5xxYm+mdk7c/AP4mR5sbJHslrwU/7hOodU+OUQ7k3eLxQh19lkbCu
+         HOH6dRzgaiEWy2Ez09MTaLYLcHY0EX1536tu4bTfardtRcp1Q1d0cUkp2EDMl5bPkNvj
+         przB4bgeR/+nT1CaqFy/oh4ajhfPmwJEEHindDtptyzr0eogOwT+WFvIGPOU28sbe7sn
+         4MYDJxTPpGKvVruehARK7Vf8wuREr3diVE8YYFzsaiJldG2hARdyTFjYf3+95qQ9wnr4
+         pzVQ==
+X-Gm-Message-State: AC+VfDwBsjY2NR8t40ONFdFCPs9HUTaDKHfngVY4pPX+7TXCmPz8adbm
+        T5MHQSehRaFNWsqe4AfDoSr91T6LRwlDHKVyOO6BxA==
+X-Google-Smtp-Source: ACHHUZ4+7sbj81UsRHmAbl9QlYt7ZZmVqNsMLkZDz17Ve/pdy6A0enKOXhe8I1iDZXgOZeytbthoVeE93RHK/qCLMik=
+X-Received: by 2002:a25:ca0b:0:b0:ba1:ce0d:a076 with SMTP id
+ a11-20020a25ca0b000000b00ba1ce0da076mr30559075ybg.43.1687881630048; Tue, 27
+ Jun 2023 09:00:30 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230627042321.1763765-1-surenb@google.com> <20230627042321.1763765-6-surenb@google.com>
+ <ZJsBEk4OHlp39vEK@x1n>
+In-Reply-To: <ZJsBEk4OHlp39vEK@x1n>
+From:   Suren Baghdasaryan <surenb@google.com>
+Date:   Tue, 27 Jun 2023 09:00:18 -0700
+Message-ID: <CAJuCfpEdBtLo0iaAyKh0Ok_DqEGLkRaVGNxpteki7tkr7+kdJg@mail.gmail.com>
+Subject: Re: [PATCH v3 5/8] mm: make folio_lock_fault indicate the state of
+ mmap_lock upon return
+To:     Peter Xu <peterx@redhat.com>
+Cc:     akpm@linux-foundation.org, willy@infradead.org, hannes@cmpxchg.org,
+        mhocko@suse.com, josef@toxicpanda.com, jack@suse.cz,
+        ldufour@linux.ibm.com, laurent.dufour@fr.ibm.com,
+        michel@lespinasse.org, liam.howlett@oracle.com, jglisse@google.com,
+        vbabka@suse.cz, minchan@google.com, dave@stgolabs.net,
+        punit.agrawal@bytedance.com, lstoakes@gmail.com, hdanton@sina.com,
+        apopple@nvidia.com, ying.huang@intel.com, david@redhat.com,
+        yuzhao@google.com, dhowells@redhat.com, hughd@google.com,
+        viro@zeniv.linux.org.uk, brauner@kernel.org,
+        pasha.tatashin@soleen.com, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-team@android.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 27 Jun 2023 14:49:48 +0100 David Howells wrote:
-> Fix the mishandling of MSG_DONTWAIT and also reinstates the per-page
-> checking of the source pages (which might have come from a DIO write by
-> userspace) by partially reverting the changes to support MSG_SPLICE_PAGES
-> and doing things a little differently.  In messenger_v1:
-> 
->  (1) The ceph_tcp_sendpage() is resurrected and the callers reverted to use
->      that.
-> 
->  (2) The callers now pass MSG_MORE unconditionally.  Previously, they were
->      passing in MSG_MORE|MSG_SENDPAGE_NOTLAST and then degrading that to
->      just MSG_MORE on the last call to ->sendpage().
-> 
->  (3) Make ceph_tcp_sendpage() a wrapper around sendmsg() rather than
->      sendpage(), setting MSG_SPLICE_PAGES if sendpage_ok() returns true on
->      the page.
-> 
-> In messenger_v2:
-> 
->  (4) Bring back do_try_sendpage() and make the callers use that.
-> 
->  (5) Make do_try_sendpage() use sendmsg() for both cases and set
->      MSG_SPLICE_PAGES if sendpage_ok() is set.
-> 
-> Fixes: 40a8c17aa770 ("ceph: Use sendmsg(MSG_SPLICE_PAGES) rather than sendpage")
-> Fixes: fa094ccae1e7 ("ceph: Use sendmsg(MSG_SPLICE_PAGES) rather than sendpage()")
-> Reported-by: Ilya Dryomov <idryomov@gmail.com>
+On Tue, Jun 27, 2023 at 8:32=E2=80=AFAM Peter Xu <peterx@redhat.com> wrote:
+>
+> On Mon, Jun 26, 2023 at 09:23:18PM -0700, Suren Baghdasaryan wrote:
+> > folio_lock_fault might drop mmap_lock before returning and to extend it
+> > to work with per-VMA locks, the callers will need to know whether the
+> > lock was dropped or is still held. Introduce new fault_flag to indicate
+> > whether the lock got dropped and store it inside vm_fault flags.
+> >
+> > Signed-off-by: Suren Baghdasaryan <surenb@google.com>
+> > ---
+> >  include/linux/mm_types.h | 1 +
+> >  mm/filemap.c             | 2 ++
+> >  2 files changed, 3 insertions(+)
+> >
+> > diff --git a/include/linux/mm_types.h b/include/linux/mm_types.h
+> > index 79765e3dd8f3..6f0dbef7aa1f 100644
+> > --- a/include/linux/mm_types.h
+> > +++ b/include/linux/mm_types.h
+> > @@ -1169,6 +1169,7 @@ enum fault_flag {
+> >       FAULT_FLAG_UNSHARE =3D            1 << 10,
+> >       FAULT_FLAG_ORIG_PTE_VALID =3D     1 << 11,
+> >       FAULT_FLAG_VMA_LOCK =3D           1 << 12,
+> > +     FAULT_FLAG_LOCK_DROPPED =3D       1 << 13,
+> >  };
+> >
+> >  typedef unsigned int __bitwise zap_flags_t;
+> > diff --git a/mm/filemap.c b/mm/filemap.c
+> > index 87b335a93530..8ad06d69895b 100644
+> > --- a/mm/filemap.c
+> > +++ b/mm/filemap.c
+> > @@ -1723,6 +1723,7 @@ vm_fault_t __folio_lock_fault(struct folio *folio=
+, struct vm_fault *vmf)
+> >                       return VM_FAULT_RETRY;
+> >
+> >               mmap_read_unlock(mm);
+> > +             vmf->flags |=3D FAULT_FLAG_LOCK_DROPPED;
+> >               if (vmf->flags & FAULT_FLAG_KILLABLE)
+> >                       folio_wait_locked_killable(folio);
+> >               else
+> > @@ -1735,6 +1736,7 @@ vm_fault_t __folio_lock_fault(struct folio *folio=
+, struct vm_fault *vmf)
+> >               ret =3D __folio_lock_killable(folio);
+> >               if (ret) {
+> >                       mmap_read_unlock(mm);
+> > +                     vmf->flags |=3D FAULT_FLAG_LOCK_DROPPED;
+> >                       return VM_FAULT_RETRY;
+> >               }
+> >       } else {
+>
+> IIRC we've discussed about this bits in previous version, and the consens=
+us
+> was that we don't need yet another flag?  Just to recap: I think relying =
+on
+> RETRY|COMPLETE would be enough for vma lock, as NOWAIT is only used by gu=
+p
+> while not affecting vma lockings, no?
 
-Ilya, would you be okay if we sent the 6.5 PR without this and then
-we can either follow up with a PR in a few days or you can take this
-via your tree?
+Sorry for missing that point. I focused on making VMA locks being
+dropped for RETRY|COMPLETE and forgot to check after that change if
+RETRY|COMPLETE is enough indication to conclude that VMA lock is
+dropped. Looking at that now, I'm not sure that would be always true
+for file-backed page faults (including shmem_fault()), but we do not
+handle them under VMA locks for now anyway, so this indeed seems like
+a safe assumption. When Matthew implements file-backed support he
+needs to be careful to ensure this rule still holds. With your
+suggestions to drop the VMA lock at the place where we return RETRY
+this seems to indeed eliminate the need for FAULT_FLAG_LOCK_DROPPED
+and simplifies things. I'll try that approach and see if anything
+blows up.
 
-Or you could review it now, that'd also work :)
+>
+> As mentioned in the other reply, even COMPLETE won't appear for vma lock
+> path yet afaict, so mostly only RETRY matters here and it can 100% imply =
+a
+> lock release happened.  It's just that it's very easy to still cover
+> COMPLETE altogether in this case, being prepared for any possible shared
+> support on vma locks, IMHO.
 
-In hindsight we should have pushed harder to make the FS changes as
-small as possible for sendpage removal, so that they can go in via 
-the appropriate tree with an appropriate level of scrutiny for 6.6,
-lesson learned :(
+Yes and I do introduce one place where we use COMPLETE with VMA locks,
+so will cover it the same way as for RETRY.
+Thanks,
+Suren.
+
+>
+> Thanks,
+>
+> --
+> Peter Xu
+>
