@@ -2,75 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EE3374036E
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 20:33:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25035740376
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 20:35:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231356AbjF0Sdb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 14:33:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56462 "EHLO
+        id S231419AbjF0Seo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 14:34:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231182AbjF0SdM (ORCPT
+        with ESMTP id S231436AbjF0Se3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 14:33:12 -0400
-Received: from mail-qt1-x829.google.com (mail-qt1-x829.google.com [IPv6:2607:f8b0:4864:20::829])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DFCD359D
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 11:32:34 -0700 (PDT)
-Received: by mail-qt1-x829.google.com with SMTP id d75a77b69052e-40079620a83so44311cf.0
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 11:32:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1687890749; x=1690482749;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=m7K0Na1ueMpAAs3MzlJF92Yho3FRcETqD8qwawTqqFc=;
-        b=e/pfOs22GIokVkqI5J7akSwBH2svdYxY0/QUERIXfSKF0jer7YNKJe3qoat3/Doj8/
-         TEs2uHi1AG79uoJLHbRiniLUvA8KKA0cXmgA5L5uQzC5EBzbVbzQl1Z9uY5ZW/MkRO7e
-         +DyACIFndYmHDRYNSDxOPiWj/Kgdc2O7lSNM871xivxiYZaf16+9udNm7nCAusHtPbMY
-         5iW8AhATTqwmv88VgSm0IR3gVRvOipsD0ZfzazENuMMwyTP2KTafwez0wTHloU2RgEPf
-         Uqqhz92bfq5jPXxjjfKryMoE+CWMxfY3cBfb+96QWQ4ojsqxJOosnENe1akjB4axgG5j
-         /sgA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687890749; x=1690482749;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=m7K0Na1ueMpAAs3MzlJF92Yho3FRcETqD8qwawTqqFc=;
-        b=XR4JOgqlrFT2LHb+9TupfC7EFTrr6jCOiY5QQ+XoiFDnLl8RGIc9VEPD2PCPjc2CtZ
-         aLf0OmoPsNAQg+S+A5+KCEqCMX2MTQ1LQ1whnOUpxMNzDumyROltzrmXmO0UgOwOa5nv
-         W6GtC1fCcWvhlvsZGag5yqjBM4bkbDvcM0hltP++c+9lKgnk1PLPjBVyy41l71Y1K3nn
-         cGYIDQ6WXs48rauCcnEkB0VBGpzQLkZz3FThUW9ADAmnn/UTuzVRXhoOKMmJJ0g12jLT
-         L3NxCbPZd7d35Ag+BwyObhz5Hej/Ho92Om19Y25m/VoZKgp0D0G6NEA7GS1WKCnBSxXM
-         /Nrg==
-X-Gm-Message-State: AC+VfDws4HNuHOBhUQaXYACUJBrPGudeoIElyAcwcjusbvX1SMJDe4oJ
-        U1hwOW6TiD+xYBBWc0Q39+J7bLdtFABdXJznajDhjw==
-X-Google-Smtp-Source: ACHHUZ4c4KGXAte2Kf1JXrwjTmss/dsbjj7iiE1YmyPHwb5dqqOs3xpx/apLktvU8pCYy5sDex41OjZRTe6uHyncS4U=
-X-Received: by 2002:a05:622a:3c7:b0:3f6:97b4:1a4a with SMTP id
- k7-20020a05622a03c700b003f697b41a4amr14542qtx.20.1687890749520; Tue, 27 Jun
- 2023 11:32:29 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230614151625.2077-1-yangjihong1@huawei.com> <CAP-5=fUf0+7HwZ+AHUR0nRD5QnfPn9_CPMEdJZP_5goPfrPB+Q@mail.gmail.com>
- <CAP-5=fVOXjjcusjv858SOGrnNgE2w2sb7zS=0sZUpdFfR1T_GA@mail.gmail.com>
- <668a6159-b7a8-ed25-d8fa-5584a4c04d37@huawei.com> <CAP-5=fX6nWRboZ2dWc1h_y0pe5TAgs0QC0qwCeaLcALfJ+5YEA@mail.gmail.com>
- <cc3a669d-570b-2f0d-ce0f-0f4bee417eb2@huawei.com>
-In-Reply-To: <cc3a669d-570b-2f0d-ce0f-0f4bee417eb2@huawei.com>
-From:   Ian Rogers <irogers@google.com>
-Date:   Tue, 27 Jun 2023 11:32:17 -0700
-Message-ID: <CAP-5=fU-F6sCP+Bf-RssRxtvZs79OcjONbphExiGq390cBcZvw@mail.gmail.com>
-Subject: Re: [PATCH] perf top & record: Fix segfault when default cycles event
- is not supported
-To:     Yang Jihong <yangjihong1@huawei.com>
-Cc:     peterz@infradead.org, mingo@redhat.com, acme@kernel.org,
-        mark.rutland@arm.com, alexander.shishkin@linux.intel.com,
-        jolsa@kernel.org, namhyung@kernel.org, adrian.hunter@intel.com,
-        kan.liang@linux.intel.com, linux-perf-users@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
+        Tue, 27 Jun 2023 14:34:29 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1CFF2D4A
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 11:34:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1687890841; x=1719426841;
+  h=date:from:to:cc:subject:message-id;
+  bh=/Pvwfr6lQu6bkd4SP+sqJxzrIxfHKPrssJRrwuefG4Q=;
+  b=evtMkjmo0Zbk04OURIFEH+EVI5ikgNM/ytbMeeEBA35a2A9THHF8F2ic
+   O9HDmvSjXpNx0nC3MRhMPRHpTUtDNT6//SBV6ZNkDAAmMfY4i0uELZeOK
+   GFsDc9g5Eiq15iEftbbaruR3aH/DplpBX/uNV24i2YQGm+JyTYqrE48Mc
+   4Jtja8wyIkd5cGTl908ISoZU6pMRRXNPZ+9hqAd4db4XqDlPrZrJpRySh
+   UzbwBd4KeU6IKpVjY7u+NXMpTqJec/1BF1prjXnWkX0MR+sI0Q7Cvbayr
+   07Lan0EmQb4wQLe1cBPGvl32Xwez6RWpCdQ/vpr6OVJDaPAuGfGlefv3Q
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10754"; a="364203538"
+X-IronPort-AV: E=Sophos;i="6.01,163,1684825200"; 
+   d="scan'208";a="364203538"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2023 11:33:15 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10754"; a="694002468"
+X-IronPort-AV: E=Sophos;i="6.01,163,1684825200"; 
+   d="scan'208";a="694002468"
+Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 27 Jun 2023 11:33:14 -0700
+Received: from kbuild by 783282924a45 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1qEDV4-000C7N-0T;
+        Tue, 27 Jun 2023 18:33:14 +0000
+Date:   Wed, 28 Jun 2023 02:33:08 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:x86/merge] BUILD SUCCESS
+ f83c38b9e2a5ce5375ac16be43768541e212f311
+Message-ID: <202306280206.nub1BU8y-lkp@intel.com>
+User-Agent: s-nail v14.9.24
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,184 +61,137 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 15, 2023 at 4:46=E2=80=AFAM Yang Jihong <yangjihong1@huawei.com=
-> wrote:
->
-> Hello,
->
-> On 2023/6/15 10:04, Ian Rogers wrote:
-> > On Wed, Jun 14, 2023 at 6:55=E2=80=AFPM Yang Jihong <yangjihong1@huawei=
-.com> wrote:
-> >>
-> >> Hello,
-> >>
-> >> On 2023/6/15 6:03, Ian Rogers wrote:
-> >>> On Wed, Jun 14, 2023 at 9:18=E2=80=AFAM Ian Rogers <irogers@google.co=
-m> wrote:
-> >>>>
-> >>>> On Wed, Jun 14, 2023 at 8:18=E2=80=AFAM Yang Jihong <yangjihong1@hua=
-wei.com> wrote:
-> >>>>>
-> >>>>> The perf-record and perf-top call parse_event() to add a cycles eve=
-nt to
-> >>>>> an empty evlist. For the system that does not support hardware cycl=
-es
-> >>>>> event, such as QEMU, the evlist is empty due to the following code =
-process:
-> >>>>>
-> >>>>>     parse_event(evlist, "cycles:P" or ""cycles:Pu")
-> >>>>>       parse_events(evlist, "cycles:P")
-> >>>>>         __parse_events
-> >>>>>           ...
-> >>>>>           ret =3D parse_events__scanner(str, &parse_state);
-> >>>>>           // ret =3D 0
-> >>>>>           ...
-> >>>>>           ret2 =3D parse_events__sort_events_and_fix_groups()
-> >>>>>           if (ret2 < 0)
-> >>>>>             return ret;
-> >>>>>           // The cycles event is not supported, here ret2 =3D -EINV=
-AL,
-> >>>>>           // Here return 0.
-> >>>>>           ...
-> >>>>>           evlist__splice_list_tail(evlist)
-> >>>>>           // The code here does not execute to, so the evlist is st=
-ill empty.
-> >>>>>
-> >>>>> A null pointer occurs when the content in the evlist is accessed la=
-ter.
-> >>>>>
-> >>>>> Before:
-> >>>>>
-> >>>>>     # perf list hw
-> >>>>>
-> >>>>>     List of pre-defined events (to be used in -e or -M):
-> >>>>>
-> >>>>>     # perf record true
-> >>>>>     libperf: Miscounted nr_mmaps 0 vs 1
-> >>>>>     WARNING: No sample_id_all support, falling back to unordered pr=
-ocessing
-> >>>>>     perf: Segmentation fault
-> >>>>>     Obtained 1 stack frames.
-> >>>>>     [0xc5beff]
-> >>>>>     Segmentation fault
-> >>>>>
-> >>>>> Solution:
-> >>>>>     If cycles event is not supported, try to fall back to cpu-clock=
- event.
-> >>>>>
-> >>>>> After:
-> >>>>>     # perf record true
-> >>>>>     [ perf record: Woken up 1 times to write data ]
-> >>>>>     [ perf record: Captured and wrote 0.006 MB perf.data ]
-> >>>>>     #
-> >>>>>
-> >>>>> Fixes: 7b100989b4f6 ("perf evlist: Remove __evlist__add_default")
-> >>>>> Signed-off-by: Yang Jihong <yangjihong1@huawei.com>
-> >>>>
-> >>>> Thanks, useful addition. The cpu-clock fall back wasn't present befo=
-re
-> >>>> 7b100989b4f6 so is the fixes tag correct?
-> >>>
-> >>> Hmm... it should be coming from evsel__fallback:
-> >>> https://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git/tree/t=
-ools/perf/util/evsel.c?h=3Dtmp.perf-tools-next#n2840
-> >>> so we shouldn't duplicate that logic. The question is why we're not
-> >>> doing the fallback.
-> >>>
-> >>
-> >> Yes, it's a bit of the same logic as evsel__fallback, or we can call
-> >> evlist__add_default() as before, simply create an evsel of hardware
-> >> cycles and add it directly to evlist.
-> >>
-> >> Please confirm whether this solution is feasible. If it is feasible, I
-> >> will send a v2 version.
-> >
-> > The previous evlist__add_default logic didn't handle wildcard PMUs for
-> > cycles, hence wanting to reuse the parse events logic. The error is
-> > that the logic now isn't doing the fallback properly. I think an
-> > evlist__add_cycles which uses evsel__fallback makes sense matching the
-> > previous logic. I'd be happy if you took a look. I'll write a patch so
-> > that the perf_pmus list of core PMUs is never empty.
-> >
->
-> The gdb calltrace for core dump is as follows:
->
-> (gdb) bt
-> #0  0x00000000005ffaa2 in __perf_cpu_map__nr (cpus=3D0x0) at cpumap.c:283
-> #1  0x00000000005ffd17 in perf_cpu_map__max (map=3D0x0) at cpumap.c:371
-> #2  0x0000000000565644 in cpu_map_data__alloc
-> (syn_data=3Dsyn_data@entry=3D0x7ffc843bff30,
-> header_size=3Dheader_size@entry=3D8) at util/synthetic-events.c:1273
-> #3  0x0000000000568712 in cpu_map_event__new (map=3D<optimized out>) at
-> util/synthetic-events.c:1321
-> #4  perf_event__synthesize_cpu_map (tool=3Dtool@entry=3D0xc37580 <record>=
-,
-> map=3D<optimized out>, process=3Dprocess@entry=3D0x413a80
-> <process_synthesized_event>, machine=3Dmachine@entry=3D0x0) at
-> util/synthetic-events.c:1341
-> #5  0x000000000041426e in record__synthesize (tail=3Dtail@entry=3Dfalse,
-> rec=3D0xc37580 <record>) at builtin-record.c:2050
-> #6  0x0000000000415a0b in __cmd_record (argc=3D<optimized out>,
-> argv=3D<optimized out>, rec=3D0xc37580 <record>) at builtin-record.c:2512
-> #7  0x0000000000418f22 in cmd_record (argc=3D<optimized out>,
-> argv=3D<optimized out>) at builtin-record.c:4260
-> #8  0x00000000004babdd in run_builtin (p=3Dp@entry=3D0xc3a0e8
-> <commands+264>, argc=3Dargc@entry=3D2, argv=3Dargv@entry=3D0x7ffc843c5b30=
-) at
-> perf.c:323
-> #9  0x0000000000401632 in handle_internal_command (argv=3D0x7ffc843c5b30,
-> argc=3D2) at perf.c:377
-> #10 run_argv (argcp=3D<synthetic pointer>, argv=3D<synthetic pointer>) at
-> perf.c:421
-> #11 main (argc=3D2, argv=3D0x7ffc843c5b30) at perf.c:537
->
-> The direct cause of the problem is that rec->evlist->core.all_cpus is
-> empty, resulting in null pointer access.
->
-> The code process is as follows:
->
-> cmd_record
->    parse_event(rec->evlist)
->    // Hardware cycle events should not be supported here, so rec->evlist
-> is empty
->    ...
->
->    evlist__create_maps(rec->evlist)
->      perf_evlist__set_maps(&rec->evlist->core)
->           perf_evlist__propagate_maps(&rec->evlist->core)
->             perf_evlist__for_each_evsel(&rec->evlist->core, evsel)
->                 // because rec->evlist is empty, don't get into that
-> __perf_evlist__propagate_maps(), so rec->evlist->core.all_cpus is NULL.
->                   __perf_evlist__propagate_maps
->                     rec->evlist->core.all_cpus =3D perf_cpu_map__merge(ev=
-list->all_cpus,
-> evsel->cpus);
->    ...
->
->    __cmd_record
->      record__synthesize
->        perf_event__synthesize_cpu_map(rec->evlist->core.all_cpus)
->          cpu_map_event__new(rec->evlist->core.all_cpus)
->                   cpu_map_data__alloc(rec->evlist->core.all_cpus)
->                     perf_cpu_map__max(rec->evlist->core.all_cpus)
->                           __perf_cpu_map__nr
->                           // Here null pointer access!
->         ...
->
->         record__open
->        evsel__fallback
->           // Here fallback is just starting
->
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/merge
+branch HEAD: f83c38b9e2a5ce5375ac16be43768541e212f311  Merge branch 'x86/shstk' into x86/merge, to ease integration testing
 
-Sorry, I don't follow this. I sent out a patch for the no core PMU
-case - please take a look:
-https://lore.kernel.org/lkml/20230627182834.117565-1-irogers@google.com/
-I haven't got a reproduction for failing to open cycles and it's not
-clear to me why evsel__fallback isn't being used to fallback to clock.
-Were you able to look at this?
+elapsed time: 724m
 
-Thanks,
-Ian
+configs tested: 118
+configs skipped: 3
 
-> Thanks,
-> Yang
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+tested configs:
+alpha                            allyesconfig   gcc  
+alpha                               defconfig   gcc  
+arc                              allyesconfig   gcc  
+arc                                 defconfig   gcc  
+arc                  randconfig-r043-20230627   gcc  
+arm                              allmodconfig   gcc  
+arm                              allyesconfig   gcc  
+arm                                 defconfig   gcc  
+arm                      jornada720_defconfig   gcc  
+arm                        multi_v7_defconfig   gcc  
+arm                  randconfig-r015-20230627   gcc  
+arm                  randconfig-r036-20230627   clang
+arm                  randconfig-r046-20230627   gcc  
+arm64                            allyesconfig   gcc  
+arm64                               defconfig   gcc  
+arm64                randconfig-r005-20230627   gcc  
+arm64                randconfig-r006-20230627   gcc  
+arm64                randconfig-r023-20230627   clang
+csky                                defconfig   gcc  
+csky                 randconfig-r011-20230627   gcc  
+hexagon              randconfig-r001-20230627   clang
+hexagon              randconfig-r034-20230627   clang
+hexagon              randconfig-r041-20230627   clang
+hexagon              randconfig-r045-20230627   clang
+i386                             allyesconfig   gcc  
+i386         buildonly-randconfig-r004-20230627   gcc  
+i386         buildonly-randconfig-r005-20230627   gcc  
+i386         buildonly-randconfig-r006-20230627   gcc  
+i386                              debian-10.3   gcc  
+i386                                defconfig   gcc  
+i386                 randconfig-i001-20230627   gcc  
+i386                 randconfig-i002-20230627   gcc  
+i386                 randconfig-i003-20230627   gcc  
+i386                 randconfig-i004-20230627   gcc  
+i386                 randconfig-i005-20230627   gcc  
+i386                 randconfig-i006-20230627   gcc  
+i386                 randconfig-i011-20230627   clang
+i386                 randconfig-i012-20230627   clang
+i386                 randconfig-i013-20230627   clang
+i386                 randconfig-i014-20230627   clang
+i386                 randconfig-i015-20230627   clang
+i386                 randconfig-i016-20230627   clang
+loongarch                        allmodconfig   gcc  
+loongarch                         allnoconfig   gcc  
+loongarch                           defconfig   gcc  
+loongarch            randconfig-r025-20230627   gcc  
+loongarch            randconfig-r033-20230627   gcc  
+m68k                             allmodconfig   gcc  
+m68k                             allyesconfig   gcc  
+m68k                                defconfig   gcc  
+microblaze                          defconfig   gcc  
+microblaze           randconfig-r013-20230627   gcc  
+microblaze           randconfig-r024-20230627   gcc  
+microblaze           randconfig-r031-20230627   gcc  
+mips                             allmodconfig   gcc  
+mips                             allyesconfig   gcc  
+mips                 randconfig-r035-20230627   clang
+nios2                               defconfig   gcc  
+nios2                randconfig-r016-20230627   gcc  
+nios2                randconfig-r021-20230627   gcc  
+nios2                randconfig-r022-20230627   gcc  
+parisc                           allyesconfig   gcc  
+parisc                              defconfig   gcc  
+parisc                generic-32bit_defconfig   gcc  
+parisc               randconfig-r026-20230627   gcc  
+parisc64                            defconfig   gcc  
+powerpc                          allmodconfig   gcc  
+powerpc                           allnoconfig   gcc  
+powerpc                 mpc836x_rdk_defconfig   clang
+powerpc              randconfig-r032-20230627   gcc  
+powerpc                    sam440ep_defconfig   gcc  
+powerpc                     tqm8548_defconfig   gcc  
+riscv                            allmodconfig   gcc  
+riscv                             allnoconfig   gcc  
+riscv                            allyesconfig   gcc  
+riscv                               defconfig   gcc  
+riscv                randconfig-r042-20230627   clang
+riscv                          rv32_defconfig   gcc  
+s390                             allmodconfig   gcc  
+s390                             allyesconfig   gcc  
+s390                                defconfig   gcc  
+s390                 randconfig-r012-20230627   clang
+s390                 randconfig-r044-20230627   clang
+sh                               allmodconfig   gcc  
+sh                        edosk7705_defconfig   gcc  
+sh                               j2_defconfig   gcc  
+sh                   randconfig-r014-20230627   gcc  
+sh                          sdk7780_defconfig   gcc  
+sparc                            allyesconfig   gcc  
+sparc                               defconfig   gcc  
+um                               allmodconfig   clang
+um                                allnoconfig   clang
+um                               allyesconfig   clang
+um                                  defconfig   gcc  
+um                             i386_defconfig   gcc  
+um                   randconfig-r004-20230627   clang
+um                           x86_64_defconfig   gcc  
+x86_64                           allyesconfig   gcc  
+x86_64       buildonly-randconfig-r001-20230627   gcc  
+x86_64       buildonly-randconfig-r002-20230627   gcc  
+x86_64       buildonly-randconfig-r003-20230627   gcc  
+x86_64                              defconfig   gcc  
+x86_64                                  kexec   gcc  
+x86_64               randconfig-x001-20230627   clang
+x86_64               randconfig-x002-20230627   clang
+x86_64               randconfig-x003-20230627   clang
+x86_64               randconfig-x004-20230627   clang
+x86_64               randconfig-x005-20230627   clang
+x86_64               randconfig-x006-20230627   clang
+x86_64               randconfig-x011-20230627   gcc  
+x86_64               randconfig-x012-20230627   gcc  
+x86_64               randconfig-x013-20230627   gcc  
+x86_64               randconfig-x014-20230627   gcc  
+x86_64               randconfig-x015-20230627   gcc  
+x86_64               randconfig-x016-20230627   gcc  
+x86_64                          rhel-8.3-rust   clang
+x86_64                               rhel-8.3   gcc  
+xtensa               randconfig-r002-20230627   gcc  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
