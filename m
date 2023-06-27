@@ -2,75 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E831973FB46
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 13:41:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBE9C73FB49
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 13:42:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231365AbjF0Llz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 07:41:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50532 "EHLO
+        id S229527AbjF0LmL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 07:42:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229527AbjF0Llx (ORCPT
+        with ESMTP id S229814AbjF0LmJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 07:41:53 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51E57102;
-        Tue, 27 Jun 2023 04:41:52 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id a640c23a62f3a-98e109525d6so528158466b.0;
-        Tue, 27 Jun 2023 04:41:52 -0700 (PDT)
+        Tue, 27 Jun 2023 07:42:09 -0400
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F7E82735
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 04:42:04 -0700 (PDT)
+Received: by mail-lf1-x132.google.com with SMTP id 2adb3069b0e04-4f954d78bf8so6232868e87.3
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 04:42:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687866111; x=1690458111;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=hLCPa6nZQpfPgSc4juymFKG8/hs+ZrwGVBkAUJ3rTuc=;
-        b=CVJ860h2ZOdFWZmQWFaZ2hwikkPWxh3VLPLwpmYMq+YkC6He/p0IMJ06XEDR3ausYm
-         KdE8UDNEILn0UtI1mp7SG6nRLAWrpKNzcvV4E3QOgsd20b6xYsxDMh+zHLEbi2jMuf4j
-         sRdAoVRj1fJndbTKFHsyfPoyT+hOCNf2ykVpMfT5WfiezYvLdXBzEVSstrotXZpdxjD0
-         jnomQ0jmmhiQaW//XoY7MDjkoO9VsZTws/7cd6+JBDRjgrjzqdfSNXubXJ1tS+WierDU
-         XrXX5ldQePOSNQdIoukUrSkW7p2pQ2SteInIiw0cR2VwmpKWEXpSx8VEjv+no8FOPuq7
-         L9OA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687866111; x=1690458111;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20221208; t=1687866122; x=1690458122;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=hLCPa6nZQpfPgSc4juymFKG8/hs+ZrwGVBkAUJ3rTuc=;
-        b=Dh35mFL14SyadhxmEcS3JG6a9W+l8FCS0q4rZclLa0qDCOzAVzK2c/U0LT4oIpanj6
-         04D0zNnHj05ZPhRRGsilGdJOncD5D8bSY2JG6JdASvdh9TRh0qMrRbzvi9AeBC1PbYMN
-         sIAn2mkSx9GEWsorZxXNtjUPWhRklKzQt+qOGPpplnrTTFsz/aDVgQV2+WVXTXYjFGK7
-         Te5vJT/wl/9V1JM2l9q6A1e0jNlR0njMYdphqPJzY7IslndV+0jvh+fiGqNuYGF1qvbk
-         5IRrGCuw9e1FX4+CK72JkG9H49oWaLB7UuoTMfvoO4axce13n26hKjKxaTqDr2El4cbF
-         Qvyw==
-X-Gm-Message-State: AC+VfDyX75OrBexAyueZWs6R5PGI07b7uVygJvwuF+EzaWBxMuEGdHfQ
-        /I88a2z03dUphwpuDB8B2UA=
-X-Google-Smtp-Source: ACHHUZ7QiODMRguTr8XLYLEPD3zMhNk0nlbKYbHkig1slCbMG0v0CLvxHru68Xziqg2mx+Xi6aLm6w==
-X-Received: by 2002:a17:907:6e06:b0:98f:8481:24b3 with SMTP id sd6-20020a1709076e0600b0098f848124b3mr6264974ejc.37.1687866110530;
-        Tue, 27 Jun 2023 04:41:50 -0700 (PDT)
-Received: from skbuf ([188.25.159.134])
-        by smtp.gmail.com with ESMTPSA id ha22-20020a170906a89600b0098e0c0cfb66sm3869302ejb.38.2023.06.27.04.41.49
+        bh=6VSnLiTkQ1dzquJmbrvFVUB5iYnq0MwIQjudEDRHCVs=;
+        b=CaZ/NHOSfc424KgLTlHip2E51at0aW0HHPdboV+8HoMgAFjWN82skPWUcE9AMwhVU8
+         DuGj7RZ9xqr/A4tAFcfb/8LvDTjVaTfGIFexBxFTJLjl+1fcApI1UXAOxxVpLo1ZAe/f
+         Zj6Lqe1ezphoKkEUcZlF+Jus6I1HRJ16z672q0fNOR45gtxw7OJxf8CfvhTsXZgcTQ6y
+         F21uqTFn/9RSDzUcUhAY70C+0laeiX8f/717vW9uxpOeSVdJifWmNfx2vsoyGYYLVW+W
+         sh0fMGT3YK+thFno74m3y1TwpQkHFLkSCr18Pg+MDhWKIr+/91Im7gyWaO6E8U0iH0Rr
+         6wdQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687866122; x=1690458122;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=6VSnLiTkQ1dzquJmbrvFVUB5iYnq0MwIQjudEDRHCVs=;
+        b=abFBZ/bC6qXq8olmpvht9qSTRGkaTW54YNeB9RJtAtYaTOKEjXV+qeuuMhtRqpiOxy
+         /fCqUM5oLCxygjYbpcGuCX1y/nJw2XVwXH9elHdAAJ6yzsHWEbUyLJBc0WwpT0A348M1
+         j2dBEUeoZj+wSGzVg3lP7ZUE0pdqwg2Mz/Fwwpa9e0g3VCAVUF1vc6tFas8nUKzA9Iql
+         /2zloZGcoajDz1p/lj6Te3rHOJ1Cf+zCnkzRNv1wlwxqAllOtk+Hlj6Od2+RcJV3Q+BZ
+         N6TOaVz/CbEVNZtf7U8U9f/ZDK4emYuapjvVtU6SCsX2RAN22nMoY213fvNswymbJl+c
+         8JYg==
+X-Gm-Message-State: AC+VfDzNF6WNEvJK21Hvno9wQUlbDIt2gqCbv+bgojzJ2WlROXs7AVox
+        NIqU5JBkFRc3QzsUAmkpfTk=
+X-Google-Smtp-Source: ACHHUZ7Xx3+/qq+mhRlzocpzunZ2Y2YOr1cogfwyoCPxXHsIFYZkW00vQnl44DxBd2W+PuxK0+CXyw==
+X-Received: by 2002:a05:6512:3b8e:b0:4fb:744e:17db with SMTP id g14-20020a0565123b8e00b004fb744e17dbmr4917328lfv.1.1687866122079;
+        Tue, 27 Jun 2023 04:42:02 -0700 (PDT)
+Received: from suse.localnet (host-79-12-109-185.retail.telecomitalia.it. [79.12.109.185])
+        by smtp.gmail.com with ESMTPSA id f4-20020a1c6a04000000b003fba2734f1esm1815198wmc.1.2023.06.27.04.42.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Jun 2023 04:41:50 -0700 (PDT)
-Date:   Tue, 27 Jun 2023 14:41:48 +0300
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Simon Horman <simon.horman@corigine.com>
-Cc:     Vladimir Oltean <vladimir.oltean@nxp.com>, netdev@vger.kernel.org,
-        Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net 2/2] net: dsa: tag_sja1105: always prefer source port
- information from INCL_SRCPT
-Message-ID: <20230627114148.lpyopy6ttuvvciww@skbuf>
-References: <20230626155112.3155993-1-vladimir.oltean@nxp.com>
- <20230626155112.3155993-3-vladimir.oltean@nxp.com>
- <ZJnU6WntVQW2AgvZ@corigine.com>
- <20230626221828.qzjeo6dedjnyme6k@skbuf>
- <ZJrEtw15g3a7nyLN@corigine.com>
+        Tue, 27 Jun 2023 04:42:01 -0700 (PDT)
+From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+To:     Bob Peterson <rpeterso@redhat.com>,
+        Andreas Gruenbacher <agruenba@redhat.com>,
+        cluster-devel@redhat.com, linux-kernel@vger.kernel.org,
+        Deepak R Varma <drv@mailo.com>
+Cc:     Ira Weiny <ira.weiny@intel.com>,
+        Sumitra Sharma <sumitraartsy@gmail.com>,
+        Deepak R Varma <drv@mailo.com>
+Subject: Re: [PATCH v2] gfs2: Replace deprecated kmap_atomic() by kmap_local_page()
+Date:   Tue, 27 Jun 2023 13:41:59 +0200
+Message-ID: <14943541.tv2OnDr8pf@suse>
+In-Reply-To: <ZJk1XTtgLFxIcxzp@bu2204.myguest.virtualbox.org>
+References: <ZJk1XTtgLFxIcxzp@bu2204.myguest.virtualbox.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZJrEtw15g3a7nyLN@corigine.com>
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="iso-8859-1"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -81,60 +76,84 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 27, 2023 at 01:15:03PM +0200, Simon Horman wrote:
-> On Tue, Jun 27, 2023 at 01:18:28AM +0300, Vladimir Oltean wrote:
-> > Hi Simon,
-> > 
-> > On Mon, Jun 26, 2023 at 08:11:53PM +0200, Simon Horman wrote:
-> > > Hi Vladimir,
-> > > 
-> > > A similar comment to that made for [1], though the code is somewhat
-> > > different to that case: are you sure vid is initialised here?
-> > > GCC 12 and Smatch seem unsure about it.
-> > > 
-> > > [1] Re: [PATCH net-next v2 4/7] net: dsa: vsc73xx: Add dsa tagging based on 8021q
-> > >     https://lore.kernel.org/all/ZJg2M+Qvg3Fv73CH@corigine.com/
-> > 
-> > "vid" can be uninitialized if the tagger is fed a junk packet (a
-> > non-link-local, non-meta packet that also has no tag_8021q header).
-> > 
-> > The immediate answer that comes to mind is: it depends on how the driver
-> > configures the hardware to send packets to the CPU (and it will never
-> > configure the switch in that way).
-> > 
-> > But, between the sja1105 driver configuring the switch in a certain way
-> > and the tag_sja1105 driver seeing the results of that, there's also the
-> > DSA master driver (can be any net_device) which can alter the packet in
-> > a nonsensical way, like remove the VLAN header for some reason.
-> > 
-> > Considering the fact that the DSA master can have tc rules on its
-> > ingress path which do just that, it would probably be wise to be
-> > defensive about this. So I can probably add:
-> > 
-> > 	if (sja1105_skb_has_tag_8021q(skb)) {
-> > 		... // existing call to sja1105_vlan_rcv() here
-> > 	} else if (source_port == -1 && switch_id == -1) {
-> > 		/* Packets with no source information have no chance of
-> > 		 * getting accepted, drop them straight away.
-> > 		 */
-> > 		return NULL;
-> > 	}
-> > 
-> > This "else if" block should ensure that when "vid" is uninitialized,
-> > either "source_port" and "switch_id", or "vbid", always have valid values.
-> 
-> This is kind of complex :)
-> 
-> Can I clarify that either:
-> 
-> 1. Both source_port and switch_id are -1; or
-> 2. Neither source_port nor switch_id are -1
-> 
-> If so, I agree with your proposal.
+On luned=EC 26 giugno 2023 08:51:09 CEST Deepak R Varma wrote:
+> kmap_atomic() is deprecated in favor of kmap_local_{folio,page}().
+>=20
+> Therefore, replace kmap_atomic() with kmap_local_page() in
+> gfs2_internal_read() and stuffed_readpage().
+>=20
+> kmap_atomic() disables page-faults and preemption (the latter only for
+> !PREEMPT_RT kernels), However, the code within the mapping/un-mapping in
+> gfs2_internal_read() and stuffed_readpage() does not depend on the
+> above-mentioned side effects.
+>=20
+> Therefore, a mere replacement of the old API with the new one is all that
+> is required (i.e., there is no need to explicitly add any calls to
+> pagefault_disable() and/or preempt_disable()).
+>=20
+> Signed-off-by: Deepak R Varma <drv@mailo.com>
+> ---
+> Note: The Patch is build tested only. I will be happy to run recommended
+> testing with some guidance if required.
+>=20
+> Changes in v2:
+>    - Update patch description to correct the replacement function name fr=
+om
+>      kmap_local_folio to kmap_local _page
 
-They are integers assigned from the same code blocks in all cases,
-starting with -1 and later being assigned rvalues either from u64 fields
-limited to 0-255 (meta->source_port, meta->switch_id) or from unsigned
-char fields (hdr->h_dest[3], hdr->h_dest[4]), or from
-dsa_8021q_rx_source_port() and dsa_8021q_rx_switch_id() which return
-limited-size positive integers due to their implementation.
+Ah, well done. I didn't note this with the comment on v1.
+=20
+>  fs/gfs2/aops.c | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
+>=20
+> diff --git a/fs/gfs2/aops.c b/fs/gfs2/aops.c
+> index 3b41542d6697..7bd92054d353 100644
+> --- a/fs/gfs2/aops.c
+> +++ b/fs/gfs2/aops.c
+> @@ -432,10 +432,10 @@ static int stuffed_readpage(struct gfs2_inode *ip,
+> struct page *page) if (error)
+>  		return error;
+>=20
+> -	kaddr =3D kmap_atomic(page);
+> +	kaddr =3D kmap_local_page(page);
+>  	memcpy(kaddr, dibh->b_data + sizeof(struct gfs2_dinode), dsize);
+>  	memset(kaddr + dsize, 0, PAGE_SIZE - dsize);
+> -	kunmap_atomic(kaddr);
+> +	kunmap_local(kaddr);
+>  	flush_dcache_page(page);
+>  	brelse(dibh);
+>  	SetPageUptodate(page);
+> @@ -498,12 +498,12 @@ int gfs2_internal_read(struct gfs2_inode *ip, char=
+=20
+*buf,
+> loff_t *pos, continue;
+>  			return PTR_ERR(page);
+>  		}
+> -		p =3D kmap_atomic(page);
+> +		p =3D kmap_local_page(page);
+>  		amt =3D size - copied;
+>  		if (offset + size > PAGE_SIZE)
+>  			amt =3D PAGE_SIZE - offset;
+>  		memcpy(buf + copied, p + offset, amt);
+
+As said in the comment on v1, the memcpy_from_page() helper is better suite=
+d=20
+here, unless you noted something that prevents its use and that I'm not abl=
+e=20
+to see at the moment.
+
+Thanks,
+
+=46abio
+
+> -		kunmap_atomic(p);
+> +		kunmap_local(p);
+>  		put_page(page);
+>  		copied +=3D amt;
+>  		index++;
+> --
+> 2.34.1
+
+
+
+
