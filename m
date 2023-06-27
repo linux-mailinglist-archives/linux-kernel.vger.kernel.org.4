@@ -2,68 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 621D073FF8B
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 17:19:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBF8973FF91
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 17:22:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232338AbjF0PT5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 11:19:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42304 "EHLO
+        id S232348AbjF0PWU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 11:22:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232342AbjF0PTt (ORCPT
+        with ESMTP id S229967AbjF0PWR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 11:19:49 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DCBC1735;
-        Tue, 27 Jun 2023 08:19:48 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F1D7F611B5;
-        Tue, 27 Jun 2023 15:19:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E2B3C433C0;
-        Tue, 27 Jun 2023 15:19:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687879187;
-        bh=lVWplkh8U/rtw5laIs2YyXP5mG+eDZDGoYnqUxrwS4k=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Q5TmZ6xn2YYy+K9DIrVHxqng95klWdB7m7T0I7jI0pQvvfRJz5uMHDViWO7XvrlsF
-         Hj7sfUIBs5Akk20UnTLPHTioO+9ePGKg8NMROhhpEaWjfl+Ay52mbUj1ugXMozx4OL
-         pviPLrMhe6A+Rl4KN3mRU/qbs4JO+6Fhahewp7YYvsi3tQ19ThP8B6yTFjWMYKs2w+
-         ZCSz3khQctEd5g5mKNHHfhFV6AJaHz/3+m1VQfXt+PbmutlT5/6+OyzPGo0QNFhiqH
-         2hIUIThRVt0P87xykwgEY0Aj7nxEvBnZfUZr6W5vOHHcjNyxeyNt2e5v/5YIisoyEc
-         PN/YHbBaTbdug==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1qEATp-00046p-3i; Tue, 27 Jun 2023 17:19:45 +0200
-Date:   Tue, 27 Jun 2023 17:19:45 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Krishna Kurapati <quic_kriskura@quicinc.com>
-Cc:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Wesley Cheng <quic_wcheng@quicinc.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        quic_pkondeti@quicinc.com, quic_ppratap@quicinc.com,
-        quic_jackp@quicinc.com, quic_harshq@quicinc.com,
-        ahalaney@redhat.com, quic_shazhuss@quicinc.com
-Subject: Re: [PATCH v9 00/10] Add multiport support for DWC3 controllers
-Message-ID: <ZJr-EbunGzNopVj0@hovoldconsulting.com>
-References: <20230621043628.21485-1-quic_kriskura@quicinc.com>
+        Tue, 27 Jun 2023 11:22:17 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 617E5185;
+        Tue, 27 Jun 2023 08:22:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=5OQ81fP5MT/p2WsB3Y4qNkUUEhdkT8Ufx9BbHjrAEbA=; b=FWVHHoNlfAUSWj7ka/pCDSK0++
+        SWDM/XEPrDvTwyoUL2l8ZbKiwIjlzLtT+XeR/zCp/mxEJsSuW1gbUXCKdSGk1bAnDmX8YEW63MPLe
+        51ySaTyvfy7uQf72BWCkBY70FwJzRfi8Vikc8OcuMD27S3jUWxIDKYvZga77pTyT/qx8wzm3nn2p1
+        v2X5IQDuY4fE5mqCWq2yQ/3n2lZacpfxypxdliaJdlFl3+N4a3kv8EYqAd2zvEbH6lq3VV3RuaWnn
+        sJYMegxILw3EWuWCOH/UA8z5UEAEAQr6u1Ob6LzjW/ajVTxpxRQtlVtsmiHpXfPGJhXyhUqSGpq3u
+        HtEegAJA==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1qEAW6-002q7Q-Q9; Tue, 27 Jun 2023 15:22:07 +0000
+Date:   Tue, 27 Jun 2023 16:22:06 +0100
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Markus Elfring <Markus.Elfring@web.de>
+Cc:     Jane Chu <jane.chu@oracle.com>, nvdimm@lists.linux.dev,
+        linux-fsdevel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Christian Brauner <brauner@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>
+Subject: Re: [v5 0/1] dax: enable dax fault handler to report
+ VM_FAULT_HWPOISON
+Message-ID: <ZJr+ngIH877t9seI@casper.infradead.org>
+References: <20230615181325.1327259-1-jane.chu@oracle.com>
+ <b57afc45-6bf8-3849-856f-2873e60fcf97@web.de>
+ <18ca0017-821b-595c-0d5a-25adb04196c1@oracle.com>
+ <be3db57c-29d0-cfc9-f0cc-1765b672c57e@web.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230621043628.21485-1-quic_kriskura@quicinc.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <be3db57c-29d0-cfc9-f0cc-1765b672c57e@web.de>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,25 +60,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 21, 2023 at 10:06:18AM +0530, Krishna Kurapati wrote:
-> Currently the DWC3 driver supports only single port controller which
-> requires at most two PHYs ie HS and SS PHYs. There are SoCs that has
-> DWC3 controller with multiple ports that can operate in host mode.
-> Some of the port supports both SS+HS and other port supports only HS
-> mode.
+On Tue, Jun 27, 2023 at 08:08:19AM +0200, Markus Elfring wrote:
+> > The thought was to put descriptions unsuitable for commit header in the cover letter.
 > 
-> This change primarily refactors the Phy logic in core driver to allow
-> multiport support with Generic Phy's.
+> How do you think about to put additional information below triple dashes
+> (or even into improved change descriptions)?
 > 
-> Chananges have been tested on  QCOM SoC SA8295P which has 4 ports (2
-> are HS+SS capable and 2 are HS only capable).
-> 
-> Changes in v9:
-> Added IRQ support for DP/DM/SS MP Irq's of SC8280
-> Refactored code to read port count by accessing xhci registers
-> 
+> See also:
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/process/submitting-patches.rst?h=v6.4#n686
 
-You obviously did many more changes in v9. Please amend this list for v9
-and be more specific when submitting v10.
+Markus,
 
-Johan
+Please go away.  Your feedback is not helpful.  Thank you.
