@@ -2,219 +2,224 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56A8D7401D2
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 19:01:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F7017401D9
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 19:03:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230355AbjF0RBW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 13:01:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39944 "EHLO
+        id S230384AbjF0RDb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 13:03:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230268AbjF0RBR (ORCPT
+        with ESMTP id S229898AbjF0RD3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 13:01:17 -0400
-Received: from mail-qk1-x72f.google.com (mail-qk1-x72f.google.com [IPv6:2607:f8b0:4864:20::72f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD17510F5
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 10:01:13 -0700 (PDT)
-Received: by mail-qk1-x72f.google.com with SMTP id af79cd13be357-765579770f3so3998585a.0
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 10:01:13 -0700 (PDT)
+        Tue, 27 Jun 2023 13:03:29 -0400
+Received: from mail-yw1-x112f.google.com (mail-yw1-x112f.google.com [IPv6:2607:f8b0:4864:20::112f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB4A51700
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 10:03:27 -0700 (PDT)
+Received: by mail-yw1-x112f.google.com with SMTP id 00721157ae682-57703895bd5so221187b3.2
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 10:03:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google; t=1687885273; x=1690477273;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=pGj4zIY05LUVw6x8uPMdw5L+2KzhNBDHJ+ePBOrWYt0=;
-        b=fv4aOli3RZQEuSykjh0KPJosM74wknroYSqHFVHSdVChqt5dE0DVgXlrRYmt1CvOnY
-         r9QI0fTgfFUWgqXHSsZNrLc1f1ayXFTJny6re162pz73LDYLIDX6x6Nul8W8uuDPtVWR
-         xoZkJB0tiNVJUTKpK+B42I9Ds4Qf24HB1E8PYwh06kJrMPtStHsczNkteBBirKb849fq
-         SKJQDQJ4TcsB3DjhjpUqZxyJnRgGPJeMW2bpLrpcW54Dv8Mu2lATNH6KyyDAxb5Vfuu4
-         oITAc+4BgUG5kzFG16sOvZjbagDHdS79UTpKP1GYZUDMG7cnLhcr7J+U+MeYG16MZmqp
-         f/Iw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687885273; x=1690477273;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=google.com; s=20221208; t=1687885407; x=1690477407;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=pGj4zIY05LUVw6x8uPMdw5L+2KzhNBDHJ+ePBOrWYt0=;
-        b=Ly43kVmZbBNlKUPH3vtwQTPjtY17ihEyFR93nZhDvZOs/bN0vmSDosR9xiASUIjAwt
-         RssvoVvaeKjQI/+fRC87zGz4YZDWHefiCtAkUWvGc0L4M2FGLVzaTiKCzXBT+zjMnCUN
-         D/ixp9LEj5W05SYrtBENAO8RF8aKs01Qrizv28HlYXQ69a7AoqLrzAoE9afoHnUfsHNp
-         YI2/cxN4A16HIsbgewM73GjOAxCR1sI6NH3m93v/KWi+UTnj7intzWUVGg9afdRNR1vm
-         6eTKU6RZXqhkDzHTkVtEHh5aWJn/OCqpE9Z8fFkkyVZZAXUmhKOncFYqLbh1fKyT/tVS
-         W89g==
-X-Gm-Message-State: AC+VfDxspZNdEiGF5nxLB8brdRdhBz9bM5nktYd07o+cWvlbUCcFBeHJ
-        J1YgXq5/Gk14yWJIt43YzTeVHg==
-X-Google-Smtp-Source: ACHHUZ6oaDuFjtrZalcD7+2mNq8I8fqsW/Qlz3+39Q2yb+iaemspbajCtES18RCk5gRY5Hel+BhpGw==
-X-Received: by 2002:ad4:5b81:0:b0:616:5755:ca5d with SMTP id 1-20020ad45b81000000b006165755ca5dmr37937429qvp.4.1687885272640;
-        Tue, 27 Jun 2023 10:01:12 -0700 (PDT)
-Received: from ziepe.ca (hlfxns017vw-142-68-25-194.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.68.25.194])
-        by smtp.gmail.com with ESMTPSA id w14-20020a0cef8e000000b0062df95d7ef6sm3777254qvr.115.2023.06.27.10.01.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Jun 2023 10:01:12 -0700 (PDT)
-Received: from jgg by wakko with local (Exim 4.95)
-        (envelope-from <jgg@ziepe.ca>)
-        id 1qEC3z-008yOA-DP;
-        Tue, 27 Jun 2023 14:01:11 -0300
-Date:   Tue, 27 Jun 2023 14:01:11 -0300
-From:   Jason Gunthorpe <jgg@ziepe.ca>
-To:     Hugh Dickins <hughd@google.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        David Hildenbrand <david@redhat.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Qi Zheng <zhengqi.arch@bytedance.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Peter Xu <peterx@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Will Deacon <will@kernel.org>, Yu Zhao <yuzhao@google.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Ralph Campbell <rcampbell@nvidia.com>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Steven Price <steven.price@arm.com>,
-        SeongJae Park <sj@kernel.org>,
-        Lorenzo Stoakes <lstoakes@gmail.com>,
-        Huang Ying <ying.huang@intel.com>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Zack Rusin <zackr@vmware.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Minchan Kim <minchan@kernel.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Song Liu <song@kernel.org>,
-        Thomas Hellstrom <thomas.hellstrom@linux.intel.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David Sc. Miller" <davem@davemloft.net>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Jann Horn <jannh@google.com>,
-        Vishal Moola <vishal.moola@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        linux-arm-kernel@lists.infradead.org, sparclinux@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [PATCH v2 05/12] powerpc: add pte_free_defer() for pgtables
- sharing page
-Message-ID: <ZJsV19f41CrfkFYa@ziepe.ca>
-References: <54cb04f-3762-987f-8294-91dafd8ebfb0@google.com>
- <5cd9f442-61da-4c3d-eca-b7f44d22aa5f@google.com>
- <ZJGRa4zvsXfc43vB@ziepe.ca>
- <2ad8b6cf-692a-ff89-ecc-586c20c5e07f@google.com>
- <ZJI7xkXWmjrE1yY3@ziepe.ca>
- <c8284d0-91cb-b65e-4c95-bfeb627234f@google.com>
+        bh=YwJpQjqEtRpc/SEmt5pFPTPTYI4cOuq5x7buDx5ZuQ0=;
+        b=VNU6l8MQAHnG/R3gJ3KAuxwjiBJWuDsgo0tU96FjtiRPcbwah5Beuv6ZFNsUbpKf+Y
+         od3zt5MqA8N/KnROUYO5UBxfbReNGZwSm0DKfdYg7HKQ6tJm0r7cupQznzsSGNMZHxQu
+         R2HsDLOK/kVS1KnpxoGBybdPHBX/zJPfu4Al4J3gN6dJ/ywxc8sy2uxfttDpeMaru5x0
+         KmKCRrLJNja0vWGI2qMoyYuxgHgR7bGCrFz5XH05BII/O5/2HW7PUuhklZ/8K2jpnfwG
+         jTxxxS7tkMfbGze3Jgd7fqt5WINMKOS6wR07oPT0lM1R/uhJdWBnM3utYlqTbs8Tdi/e
+         9EXw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687885407; x=1690477407;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=YwJpQjqEtRpc/SEmt5pFPTPTYI4cOuq5x7buDx5ZuQ0=;
+        b=LrWXhZgP1UO8V/HPbQ1L7jvDIbuXgj1yC6mre24/eNoRNTUtL/6McPij595nnbS3dh
+         2TYXCs8ovPTw09G+FCDGNcgRxLHnE89pM4H0isCTxMtUEZyGzz9PqW4ddAcLjYcDfu+t
+         2+oroshK+GyThTXZmEFQzgq5R4rX8MrvFf+3v7FLu74BLQjcZ58f6Rckudy2sxYkYOmr
+         2bR9CXe2ofCioeB71pxNva319FOpkMaI15yx59kCNgEfLb7oS6gzP/BlijA7lT+1FQ81
+         TIMahV4xJqyX6WiL5ab+vtIAyhXwcDIxn51ZgnX//YftRg35jgYu+FRjJUADXtCFXRb+
+         oVBA==
+X-Gm-Message-State: AC+VfDzJKpUg+dV0JTuw7Rwb3pEBUz9i6O5kDj+X4RsxJ7yeajOAW3tA
+        49SQa9Rg+vyTAs+bVU+6GXmKrRT3GvyyUIa5g4Shhw==
+X-Google-Smtp-Source: ACHHUZ5PVaGCJu4BN1A9Mb4T/fUpUO1U6zkHsUD52ji5cOi00nbkf1CK+leY05Kw4YrbFD4QsPZpoHAEBW+fjnL4AW4=
+X-Received: by 2002:a25:acd4:0:b0:ba8:ae3a:dd39 with SMTP id
+ x20-20020a25acd4000000b00ba8ae3add39mr33038525ybd.43.1687885406546; Tue, 27
+ Jun 2023 10:03:26 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c8284d0-91cb-b65e-4c95-bfeb627234f@google.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230626201713.1204982-1-surenb@google.com> <2023062757-hardening-confusion-6f4e@gregkh>
+In-Reply-To: <2023062757-hardening-confusion-6f4e@gregkh>
+From:   Suren Baghdasaryan <surenb@google.com>
+Date:   Tue, 27 Jun 2023 10:03:15 -0700
+Message-ID: <CAJuCfpGUTMP2FTzzx+bq9_5KZjo1r_qspHYZXK2Ors-yU3XhqQ@mail.gmail.com>
+Subject: Re: [PATCH 1/2] kernfs: add kernfs_ops.free operation to free
+ resources tied to the file
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     tj@kernel.org, peterz@infradead.org, lujialin4@huawei.com,
+        lizefan.x@bytedance.com, hannes@cmpxchg.org, mingo@redhat.com,
+        ebiggers@kernel.org, oleg@redhat.com, akpm@linux-foundation.org,
+        viro@zeniv.linux.org.uk, brauner@kernel.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, vschneid@redhat.com,
+        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, kernel-team@android.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 21, 2023 at 07:36:11PM -0700, Hugh Dickins wrote:
-> [PATCH v3 05/12] powerpc: add pte_free_defer() for pgtables sharing page
-> 
-> Add powerpc-specific pte_free_defer(), to free table page via call_rcu().
-> pte_free_defer() will be called inside khugepaged's retract_page_tables()
-> loop, where allocating extra memory cannot be relied upon.  This precedes
-> the generic version to avoid build breakage from incompatible pgtable_t.
-> 
-> This is awkward because the struct page contains only one rcu_head, but
-> that page may be shared between PTE_FRAG_NR pagetables, each wanting to
-> use the rcu_head at the same time.  But powerpc never reuses a fragment
-> once it has been freed: so mark the page Active in pte_free_defer(),
-> before calling pte_fragment_free() directly; and there call_rcu() to
-> pte_free_now() when last fragment is freed and the page is PageActive.
-> 
-> Suggested-by: Jason Gunthorpe <jgg@ziepe.ca>
-> Signed-off-by: Hugh Dickins <hughd@google.com>
-> ---
->  arch/powerpc/include/asm/pgalloc.h |  4 ++++
->  arch/powerpc/mm/pgtable-frag.c     | 29 ++++++++++++++++++++++++++---
->  2 files changed, 30 insertions(+), 3 deletions(-)
-> 
-> diff --git a/arch/powerpc/include/asm/pgalloc.h b/arch/powerpc/include/asm/pgalloc.h
-> index 3360cad78ace..3a971e2a8c73 100644
-> --- a/arch/powerpc/include/asm/pgalloc.h
-> +++ b/arch/powerpc/include/asm/pgalloc.h
-> @@ -45,6 +45,10 @@ static inline void pte_free(struct mm_struct *mm, pgtable_t ptepage)
->  	pte_fragment_free((unsigned long *)ptepage, 0);
->  }
->  
-> +/* arch use pte_free_defer() implementation in arch/powerpc/mm/pgtable-frag.c */
-> +#define pte_free_defer pte_free_defer
-> +void pte_free_defer(struct mm_struct *mm, pgtable_t pgtable);
-> +
->  /*
->   * Functions that deal with pagetables that could be at any level of
->   * the table need to be passed an "index_size" so they know how to
-> diff --git a/arch/powerpc/mm/pgtable-frag.c b/arch/powerpc/mm/pgtable-frag.c
-> index 20652daa1d7e..0c6b68130025 100644
-> --- a/arch/powerpc/mm/pgtable-frag.c
-> +++ b/arch/powerpc/mm/pgtable-frag.c
-> @@ -106,6 +106,15 @@ pte_t *pte_fragment_alloc(struct mm_struct *mm, int kernel)
->  	return __alloc_for_ptecache(mm, kernel);
->  }
->  
-> +static void pte_free_now(struct rcu_head *head)
-> +{
-> +	struct page *page;
-> +
-> +	page = container_of(head, struct page, rcu_head);
-> +	pgtable_pte_page_dtor(page);
-> +	__free_page(page);
-> +}
-> +
->  void pte_fragment_free(unsigned long *table, int kernel)
->  {
->  	struct page *page = virt_to_page(table);
-> @@ -115,8 +124,22 @@ void pte_fragment_free(unsigned long *table, int kernel)
->  
->  	BUG_ON(atomic_read(&page->pt_frag_refcount) <= 0);
->  	if (atomic_dec_and_test(&page->pt_frag_refcount)) {
-> -		if (!kernel)
-> -			pgtable_pte_page_dtor(page);
-> -		__free_page(page);
-> +		if (kernel)
-> +			__free_page(page);
-> +		else if (TestClearPageActive(page))
-> +			call_rcu(&page->rcu_head, pte_free_now);
-> +		else
-> +			pte_free_now(&page->rcu_head);
->  	}
->  }
-> +
-> +#ifdef CONFIG_TRANSPARENT_HUGEPAGE
-> +void pte_free_defer(struct mm_struct *mm, pgtable_t pgtable)
-> +{
-> +	struct page *page;
-> +
-> +	page = virt_to_page(pgtable);
-> +	SetPageActive(page);
-> +	pte_fragment_free((unsigned long *)pgtable, 0);
-> +}
-> +#endif /* CONFIG_TRANSPARENT_HUGEPAGE */
+On Mon, Jun 26, 2023 at 11:25=E2=80=AFPM Greg KH <gregkh@linuxfoundation.or=
+g> wrote:
+>
+> On Mon, Jun 26, 2023 at 01:17:12PM -0700, Suren Baghdasaryan wrote:
+> > kernfs_ops.release operation can be called from kernfs_drain_open_files
+> > which is not tied to the file's real lifecycle. Introduce a new kernfs_=
+ops
+> > free operation which is called only when the last fput() of the file is
+> > performed and therefore is strictly tied to the file's lifecycle. This
+> > operation will be used for freeing resources tied to the file, like
+> > waitqueues used for polling the file.
+>
+> This is confusing, shouldn't release be the "last" time the file is
+> handled and then all resources attached to it freed?  Why do we need
+> another callback, shouldn't release handle this?
 
-Yes, this makes sense to me, very simple..
+That is what I thought too but apparently kernfs_drain_open_files()
+can also cause ops->release to be called while the file keeps on
+living (see details here:
+https://lore.kernel.org/all/CAJuCfpFZ3B4530TgsSHqp5F_gwfrDujwRYewKReJru=3D=
+=3DMdEHQg@mail.gmail.com/#t).
 
-I always for get these details but atomic_dec_and_test() is a release?
-So the SetPageActive is guarenteed to be visible in another thread
-that reaches 0?
+>
+>
+> >
+> > Signed-off-by: Suren Baghdasaryan <surenb@google.com>
+> > ---
+> >  fs/kernfs/file.c       | 8 +++++---
+> >  include/linux/kernfs.h | 5 +++++
+> >  2 files changed, 10 insertions(+), 3 deletions(-)
+> >
+> > diff --git a/fs/kernfs/file.c b/fs/kernfs/file.c
+> > index 40c4661f15b7..acc52d23d8f6 100644
+> > --- a/fs/kernfs/file.c
+> > +++ b/fs/kernfs/file.c
+> > @@ -766,7 +766,7 @@ static int kernfs_fop_open(struct inode *inode, str=
+uct file *file)
+> >
+> >  /* used from release/drain to ensure that ->release() is called exactl=
+y once */
+> >  static void kernfs_release_file(struct kernfs_node *kn,
+> > -                             struct kernfs_open_file *of)
+> > +                             struct kernfs_open_file *of, bool final)
+>
+> Adding flags to functions like this are a pain, now we need to look it
+> up every time to see what that bool means.
+>
+> And when we do, we see that it is not documented here so we have no idea
+> of what it is :(
+>
+> This is not going to be maintainable as-is, sorry.
 
+It's a static function with only two places it's used in the same
+file. I can add documentation too if that helps.
+
+>
+> >  {
+> >       /*
+> >        * @of is guaranteed to have no other file operations in flight a=
+nd
+> > @@ -787,6 +787,8 @@ static void kernfs_release_file(struct kernfs_node =
+*kn,
+> >               of->released =3D true;
+> >               of_on(of)->nr_to_release--;
+> >       }
+> > +     if (final && kn->attr.ops->free)
+> > +             kn->attr.ops->free(of);
+> >  }
+> >
+> >  static int kernfs_fop_release(struct inode *inode, struct file *filp)
+> > @@ -798,7 +800,7 @@ static int kernfs_fop_release(struct inode *inode, =
+struct file *filp)
+> >               struct mutex *mutex;
+> >
+> >               mutex =3D kernfs_open_file_mutex_lock(kn);
+> > -             kernfs_release_file(kn, of);
+> > +             kernfs_release_file(kn, of, true);
+> >               mutex_unlock(mutex);
+> >       }
+> >
+> > @@ -852,7 +854,7 @@ void kernfs_drain_open_files(struct kernfs_node *kn=
+)
+> >               }
+> >
+> >               if (kn->flags & KERNFS_HAS_RELEASE)
+> > -                     kernfs_release_file(kn, of);
+> > +                     kernfs_release_file(kn, of, false);
+>
+> Why isn't this also the "last" time things are touched here?  why is it
+> false?
+
+Because it's called from the context of the process doing rmdir() and
+if another process has the file in the directory opened it will have
+that file alive until it calls the last fput(). These are the call
+paths:
+
+do_rmdir
+  cgroup_rmdir
+    kernfs_drain_open_files
+      kernfs_release_file(..., false)
+        kn->attr.ops->release(), of->released=3Dtrue
+
+fput()
+  kernfs_fop_release()
+    kernfs_release_file(..., true), of->released=3D=3Dtrue,
+kn->attr.ops->release() is not called.
+
+So, when kn->attr.ops->release() is called by do_rmdir() the file is
+still kept alive by another process holding a reference to the file.
+It's a problem in our case because if we free the resources associated
+with that file (waitqueue head) from inside our release() operation
+then the ongoing poll() operation on that file will step on that freed
+resource.
+
+>
+>
+> >       }
+> >
+> >       WARN_ON_ONCE(on->nr_mmapped || on->nr_to_release);
+> > diff --git a/include/linux/kernfs.h b/include/linux/kernfs.h
+> > index 73f5c120def8..a7e404ff31bb 100644
+> > --- a/include/linux/kernfs.h
+> > +++ b/include/linux/kernfs.h
+> > @@ -273,6 +273,11 @@ struct kernfs_ops {
+> >        */
+> >       int (*open)(struct kernfs_open_file *of);
+> >       void (*release)(struct kernfs_open_file *of);
+> > +     /*
+> > +      * Free resources tied to the lifecycle of the file, like a
+> > +      * waitqueue used for polling.
+> > +      */
+> > +     void (*free)(struct kernfs_open_file *of);
+>
+> I agree with Tejun, this needs to be documented much better and show how
+> you really should never need to use this :)
+
+I'll be happy not to use it if we can fix the release() to be called
+only when the file is truly going away.
 Thanks,
-Jason
+Suren.
+
+>
+> thanks,
+>
+> greg k-h
