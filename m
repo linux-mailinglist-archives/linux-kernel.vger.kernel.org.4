@@ -2,78 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2755E73F404
-	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 07:43:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7016C73F407
+	for <lists+linux-kernel@lfdr.de>; Tue, 27 Jun 2023 07:46:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230075AbjF0FnN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 01:43:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49772 "EHLO
+        id S229909AbjF0Fqg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 01:46:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229689AbjF0FnJ (ORCPT
+        with ESMTP id S229610AbjF0Fqe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 01:43:09 -0400
-Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C455610FE;
-        Mon, 26 Jun 2023 22:43:08 -0700 (PDT)
-Received: by mail-qt1-x836.google.com with SMTP id d75a77b69052e-4008b90d2f9so36485371cf.2;
-        Mon, 26 Jun 2023 22:43:08 -0700 (PDT)
+        Tue, 27 Jun 2023 01:46:34 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F850173C
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 22:46:32 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id a640c23a62f3a-991aac97802so273966166b.1
+        for <linux-kernel@vger.kernel.org>; Mon, 26 Jun 2023 22:46:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687844588; x=1690436588;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=DKo4W7yeVNu1/C75Wi6h0MFNDHB4xFJdmLBXdnRsVKo=;
-        b=RyRXq14W4/8lRHOCke/kDWvwcUpR/VkJS8e5oOB4Gl5EswXMKT93tcDlED1l+RLIGc
-         ZI+ogkEOu33E2WrqVUrBYGo3s1HHjWNEkrhG4aprg1gPhHgSK/uggsYFZCiqWn0vdvIC
-         bbCOuGS4VVDwLDexyZO2Jddxwh3u5eB04ixQqkSiOlUyS3FE/ws0OQX9QMH9hMznYcSD
-         n+muYefqFKOTgGuTZmVpfVgC6/1XIiaAtUh4bcRy3VXYD00LSAQDXwlheSDYN6CADP2F
-         eYnjpom+0IbA9ruXfgfMgcTtrVKSOfciyEJqy2apGSjPYkfxh5YeEDIuzRdxdmhhb0L/
-         frig==
+        d=metaspace-dk.20221208.gappssmtp.com; s=20221208; t=1687844790; x=1690436790;
+        h=content-transfer-encoding:mime-version:message-id:in-reply-to:date
+         :subject:cc:to:from:user-agent:references:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=1cDBmGMx1xvc7jnjL1kjpTGnBDqdA53Y3e0zN441FdY=;
+        b=qTSHf9xI3mOKUo2mws9JBmy3RrLnpLJmxHunylpWtztFLUJcY8BrG9wRK/1d6YD8bC
+         kLW3+oJwpnj0MLcfwHH/My9GA5fBkiHbOMNFMfZaSeoGeFAczjNhr0MuwuFTw7CW3ltX
+         DzJFm6lXpJuRk6vqVYWhaPo54XbPmUUFvM4anCepAjHb4bv//6eGSwciR1hfu3zQFnEw
+         g/KlbKmpeq+5/1uMCqJATyCEMQ/j7ntxl98uCjVSyY0si/K2dI+aeEr31OV7+Kxw8zEG
+         N/ESfN5B0HzXs3P8DimcuKCg1IV/KQpysbbDv8DMaK9rJMHwQpGry8WQmciB+OAhwLoc
+         aDEg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687844588; x=1690436588;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=DKo4W7yeVNu1/C75Wi6h0MFNDHB4xFJdmLBXdnRsVKo=;
-        b=HFUQqlawlODkKQnUSHx0VrkNV8IsvfC0EK1HboSvOLGLv6sNI74tiy9eqn8vGys8uo
-         WKoE3jFwCGWlBE86eUaN/0wKrAWhFwut93NQa4m5hXvWAEv9G00JkJX19SlzqhfyiRiu
-         6t/CZY3SDkQ0yY0QUvn2eSoDjfvWfpyyvyAfOxlQIcHIWAkMGZQJe2w8i+TMfYx//AIe
-         857bS16cdReWhYdEiuAbsKVuhe8TbRhwZDQvSrj8HNmAVvAAke7CZhhqQBMdg5deuDiF
-         hma6avYLIRrGm5veXBUrDkyLxIcHAKKWq4ZygDniCWqa0ZQv4Y0LBRqBWJjU1NVopUQk
-         dcfg==
-X-Gm-Message-State: AC+VfDyXyMUSKQtsCaF50zqZRKe08ME8kztFh4jDvICy/SMM3LQqZdJP
-        YbcuYhjuxvTUg6dzE6Ds8MM=
-X-Google-Smtp-Source: ACHHUZ5avhtwTCxoBLwAvnHkv2/ud6DupY9bk0Y8ddk25e+Brsx8E//Abj/lVUnxyL/g2ex0hIiGcg==
-X-Received: by 2002:a05:622a:4cc:b0:3fd:e9cc:79d1 with SMTP id q12-20020a05622a04cc00b003fde9cc79d1mr29922201qtx.56.1687844587776;
-        Mon, 26 Jun 2023 22:43:07 -0700 (PDT)
-Received: from [172.19.1.47] (60-250-192-107.hinet-ip.hinet.net. [60.250.192.107])
-        by smtp.gmail.com with ESMTPSA id j3-20020a635943000000b00553b546a638sm4932709pgm.67.2023.06.26.22.43.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 26 Jun 2023 22:43:07 -0700 (PDT)
-Message-ID: <32ae28ae-ef53-092e-6fb4-5f95fc306dde@gmail.com>
-Date:   Tue, 27 Jun 2023 13:43:03 +0800
+        d=1e100.net; s=20221208; t=1687844790; x=1690436790;
+        h=content-transfer-encoding:mime-version:message-id:in-reply-to:date
+         :subject:cc:to:from:user-agent:references:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=1cDBmGMx1xvc7jnjL1kjpTGnBDqdA53Y3e0zN441FdY=;
+        b=COYdc4xE4Dm1yKBSX5HNVJRRwkKWMOV2cv6NbI2pv7gZpqOXgjPd2yukvV8hmfwODV
+         M+X3JmzRAEseMGehqaiROy+T6gWfeIseX34YdxIZZpflx5E5jIn+UFUmFmtZxjFjrrXe
+         egpa2N9LJBBbda6tlat+1nIOsihF/dBnN5pGHpPKlBJP71N6y//GaUiQbTn/Ho0E2iMz
+         fF2D/bb2IvsjfXr92pogOSepWrTUq9olhf6hJbstHUNuUBPn0mwSi5Pp5MeyrlHyoM04
+         gMzhU/A3+mcR8UE6VxYn2DqZC7pzDJXM57Lqw58WxwWH2ec0V6PZWbIZSDZc0OUTpK92
+         wgYA==
+X-Gm-Message-State: AC+VfDyOPkXwZNYMiwN8IUwsPV7bS/RzSalHvfhI6pN0zMSDNqVR2Zdq
+        rIToaNbNBmrEnyt6mkPF4WGfJHuRjgUK5lK40mQ=
+X-Google-Smtp-Source: ACHHUZ6RQrHaBR03XPKt8Kn4xn0BhgYfw9D1DMDMEl7/SAQBUyBeP2XO5b4KIbbq7bhntxmsq1AUkQ==
+X-Received: by 2002:a17:907:778e:b0:98d:f4a7:71cf with SMTP id ky14-20020a170907778e00b0098df4a771cfmr7403274ejc.62.1687844790514;
+        Mon, 26 Jun 2023 22:46:30 -0700 (PDT)
+Received: from localhost ([79.142.230.34])
+        by smtp.gmail.com with ESMTPSA id qn1-20020a170907210100b0098e42bef731sm2741029ejb.169.2023.06.26.22.46.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 26 Jun 2023 22:46:30 -0700 (PDT)
+References: <20230626164752.1098394-1-nmi@metaspace.dk>
+ <02730282-88b0-572e-439c-719cfef379bb@wdc.com>
+ <87r0pygjp1.fsf@metaspace.dk>
+ <7481472f-8950-0801-029c-85264b671c19@kernel.org>
+User-agent: mu4e 1.10.3; emacs 28.2.50
+From:   "Andreas Hindborg (Samsung)" <nmi@metaspace.dk>
+To:     Damien Le Moal <dlemoal@kernel.org>
+Cc:     Johannes Thumshirn <Johannes.Thumshirn@wdc.com>,
+        "open list:ZONEFS FILESYSTEM" <linux-fsdevel@vger.kernel.org>,
+        "gost.dev@samsung.com" <gost.dev@samsung.com>,
+        Naohiro Aota <Naohiro.Aota@wdc.com>,
+        Johannes Thumshirn <jth@kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] zonefs: do not use append if device does not support it
+Date:   Tue, 27 Jun 2023 07:45:25 +0200
+In-reply-to: <7481472f-8950-0801-029c-85264b671c19@kernel.org>
+Message-ID: <87ilb9h2yz.fsf@metaspace.dk>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v3 3/3] clk: nuvoton: Use clk_parent_data instead of
- string for parent clock
-To:     Stephen Boyd <sboyd@kernel.org>, arnd@arndb.de,
-        gregkh@linuxfoundation.org, mturquette@baylibre.com
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-clk@vger.kernel.org, soc@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, schung@nuvoton.com,
-        Jacky Huang <ychuang3@nuvoton.com>
-References: <20230622141343.13595-1-ychuang570808@gmail.com>
- <20230622141343.13595-4-ychuang570808@gmail.com>
- <be147a766979642ac518710e6ff99a11.sboyd@kernel.org>
-Content-Language: en-US
-From:   Jacky Huang <ychuang570808@gmail.com>
-In-Reply-To: <be147a766979642ac518710e6ff99a11.sboyd@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,47 +80,53 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
+Damien Le Moal <dlemoal@kernel.org> writes:
 
-On 2023/6/27 上午 12:09, Stephen Boyd wrote:
-> Quoting Jacky Huang (2023-06-22 07:13:43)
->> From: Jacky Huang <ychuang3@nuvoton.com>
->>
->> For the declaration of parent clocks, use struct clk_parent_data instead
->> of a string. Due to the change in the passed arguments, replace the usage
->> of devm_clk_hw_register_mux() with clk_hw_register_mux_parent_data() for
->> all cases.
->>
->> Signed-off-by: Jacky Huang <ychuang3@nuvoton.com>
->> ---
->>   drivers/clk/nuvoton/clk-ma35d1.c | 306 ++++++++++++++++++++++---------
->>   1 file changed, 219 insertions(+), 87 deletions(-)
->>
->> diff --git a/drivers/clk/nuvoton/clk-ma35d1.c b/drivers/clk/nuvoton/clk-ma35d1.c
->> index 733750dda0f4..f1fe7edd21b5 100644
->> --- a/drivers/clk/nuvoton/clk-ma35d1.c
->> +++ b/drivers/clk/nuvoton/clk-ma35d1.c
->> @@ -63,167 +63,298 @@ static DEFINE_SPINLOCK(ma35d1_lock);
->>   #define PLL_MODE_SS             2
->>   
->>   static const struct clk_parent_data ca35clk_sel_clks[] = {
->> -       { .index = 0 },  /* HXT */
->> -       { .index = 1 },  /* CAPLL */
->> -       { .index = 2 }   /* DDRPLL */
->> +       { .fw_name = "hxt", },
->> +       { .fw_name = "capll", },
->> +       { .fw_name = "ddrpll", },
-> Is there any reason why this changed from numbers to strings? It is
-> faster to directly index vs. access the clock-names property. The
-> preference is to use the index field and only use fw_name if we're
-> migrating legacy clk drivers to use DT based lookups.
+> On 6/27/23 03:23, Andreas Hindborg (Samsung) wrote:
+>>=20
+>> Johannes Thumshirn <Johannes.Thumshirn@wdc.com> writes:
+>>=20
+>>> On 26.06.23 18:47, Andreas Hindborg wrote:
+>>>> From: "Andreas Hindborg (Samsung)" <nmi@metaspace.dk>
+>>>>
+>>>> Zonefs will try to use `zonefs_file_dio_append()` for direct sync writ=
+es even if
+>>>> device `max_zone_append_sectors` is zero. This will cause the IO to fa=
+il as the
+>>>> io vector is truncated to zero. It also causes a call to
+>>>> `invalidate_inode_pages2_range()` with end set to UINT_MAX, which is p=
+robably
+>>>> not intentional. Thus, do not use append when device does not support =
+it.
+>>>>
+>>>
+>>> I'm sorry but I think it has been stated often enough that for Linux Zo=
+ne Append
+>>> is a mandatory feature for a Zoned Block Device. Therefore this path is=
+ essentially
+>>> dead code as max_zone_append_sectors will always be greater than zero.
+>>>
+>>> So this is a clear NAK from my side.
+>>=20
+>> OK, thanks for clarifying =F0=9F=91=8D I came across this bugging out wh=
+ile
+>> playing around with zone append for ublk. The code makes sense if the
+>> stack expects append to always be present.
+>>=20
+>> I didn't follow the discussion, could you reiterate why the policy is
+>> that zoned devices _must_ support append?
+>
+> To avoid support fragmentation and for performance. btrfs zoned block dev=
+ice
+> support requires zone append and using that command makes writes much fas=
+ter as
+> we do not have to go through zone locking.
+> Note that for zonefs, I plan to add async zone append support as well, li=
+nked
+> with O_APPEND use to further improve write performance with ZNS drives.
+>
 
-This is simply because I think strings are more readable than numbers.
-Since using an index is the preferred method, I will change all occurrences
-of ".fw_name" to ".index" and add comments to describe it.
-As this patch was applied, I will create another patch relative to this one.
+Thanks for clarifying, Damien =F0=9F=91=8D
 
-
-Best Regards,
-Jacky Huang
-
+BR Andreas
 
