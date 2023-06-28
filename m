@@ -2,168 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 107F6741145
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 14:39:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DE47741124
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 14:39:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229813AbjF1MgT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 08:36:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39980 "EHLO
+        id S231566AbjF1MgY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 08:36:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231214AbjF1MgF (ORCPT
+        with ESMTP id S231204AbjF1MgF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 28 Jun 2023 08:36:05 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08BA730E6
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 05:36:03 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id 4fb4d7f45d1cf-51d9124e1baso5153199a12.2
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 05:36:02 -0700 (PDT)
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3AAB30E5;
+        Wed, 28 Jun 2023 05:36:02 -0700 (PDT)
+Received: by mail-pl1-x633.google.com with SMTP id d9443c01a7336-1b80f2e6c17so23578135ad.0;
+        Wed, 28 Jun 2023 05:36:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687955761; x=1690547761;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=GmuFganyxYV9oTk/s8YFRwqFcz+cn6L4jtzUfYMJZfY=;
-        b=HFoww3PY8H+PN1nGnfWDLVOYQs0OS9HmgPffbN7DsNnVsz/q+/QWgnM7dfndpE9592
-         H4Ohm4GbtuncosDi+CEZRMZKnnC63W8q+3S8F6W14WR0FHgtExqVzmqg+b0Re4PTnH8F
-         oe42jT2cv9MfubVMh9KYWFPaU7BTt5gaKUo0ycumz2biccHIvQOglMETo3s4VCzrynhq
-         QF08CoIue2oL9x6g8nhGGNqWv9F0cn/Q5qMpAh4shCAQ1LsjhLhSXa9RcxeOwKHVXVH+
-         01b1I7W0jMad8SRLVJHB0YvcbM4r2C79YbdpLl9hLMum9Pxi6Tlx2bZEz7UzvqSZynzu
-         oJlA==
+        d=gmail.com; s=20221208; t=1687955762; x=1690547762;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=P9uwE8FV/ivDDO+Z8YzefStQzaFkqx5z6ew9qfbvNn8=;
+        b=jTEDyJRMwskUuN3w4IcMMHahRhE3VhVIqr/j/NRpR5FGHr3osT7NE0BRIQltdAcB0l
+         WLPKcK7/5tW4mI9NimxfGyGKkD5UT+n++9dW9bSdl6r1p68nrn/XWO79jWN+X0iJcsCR
+         zrS7RJQmUb2pzRYnle30jinbnV+fFTwVl4dh1wBT01IsbNoN22U0Ese0Jgfx32cViDJ9
+         yWgYWOmnIWEXDowVrahO6fiVXViWP8Gykg8WkWRXjyGX0fxmqNIPasv1YAVSFhl942sI
+         631RJ8UnNy7u4y8RDGygB+iEzvEA6Ooyh4hLGx+CM1iLXxiq0xgwa3WBgq0HxVDE//Gv
+         u0gQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687955761; x=1690547761;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20221208; t=1687955762; x=1690547762;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=GmuFganyxYV9oTk/s8YFRwqFcz+cn6L4jtzUfYMJZfY=;
-        b=ciS7qpOw/nptrIXgtKEc54jRrZVZW/j/0s68io77VULxKCPBbqcYddm9MqVgKbIymj
-         b1rW/XVu5kWOpPE1i7DwgpBVdii5vP2j8SaTs+fhyNl7kV2g0HPZM/mlSybDihpvokcq
-         TWMXkKG+AaR/YpQf3V+zFKO4STYy/CB4jcIpzar8iQjMFPYF5zbPtT2XOUhLKL+TGdgX
-         CcEcTpSp7FopJ0IifxcnfBbDFhiYl2TIN8FtRmpCdy9ZYJUDnOfEurBo3ieTEEeqgGQA
-         g5InL/wqxg/zF0uTAo67MR1k4siDseZy+nsAzKAyt5pGsl0KktJSqb8P541o19+08ky9
-         TpAA==
-X-Gm-Message-State: AC+VfDyaFJwBK32lVDkb94upvgF+D7EEK9vJP92KExjoTHz3ewrf5heW
-        h2V4lOudpboT0nBPi+QC/zpwcXK06AFYpDWwBacQWA==
-X-Google-Smtp-Source: ACHHUZ6D5ytOq1YfewFvAI1UJcz0ckd29b9U37Gp9+k5NYwHiOF0WE7/VKoEvgA9157hRVp3LxMy0w6dT0lJOIyGd1o=
-X-Received: by 2002:a05:6402:10c4:b0:514:9e91:f54 with SMTP id
- p4-20020a05640210c400b005149e910f54mr23990257edu.26.1687955761447; Wed, 28
- Jun 2023 05:36:01 -0700 (PDT)
+        bh=P9uwE8FV/ivDDO+Z8YzefStQzaFkqx5z6ew9qfbvNn8=;
+        b=d/u7Cg3ihJWXc9vaD0Fob2Y5jGeTJ7iLggUYXbH/wunI0rLerlzl0MVHPqEz5Vuosk
+         Ij6SqD3GwH/pxN4rDHHY/GoYt5TYXy+kYuf9stuwvBGWFGWnuNPcX4SmbuARtSnX4i92
+         QBEg8nfPNQskV4mJlt8s/vvD4BRaSC+FAr2s+0ZR6z5+M8Xp2R626I3EngYmq5xPS6T+
+         511um9nsJgYfC9PF0EeaMXN6BmXN2r9drbGQwo74J+pv8kutskCskRs7wgXZaOW3ZeRQ
+         9l6BGFRl6YkP1gbmykKQWdSwICTAC6JpJTyd92i1QLv87Co9iaJUxpy8FCyaMws/mOEW
+         y65g==
+X-Gm-Message-State: ABy/qLa/DKJQ6smRu5xMkLrmO07UFMzWsSGk1qNO4FFZnavmGcbLgyie
+        CmWofnl286IaE5P91bk1XMQ=
+X-Google-Smtp-Source: APBJJlEChZyNGMV0N5RWs86fVhqh4+9fjpQ5sFTfwIKFSfURuvun6qQrr4ThcGV6vVTq3IjsH4CW0g==
+X-Received: by 2002:a17:902:d315:b0:1b8:4cd0:e29c with SMTP id b21-20020a170902d31500b001b84cd0e29cmr124200plc.21.1687955762194;
+        Wed, 28 Jun 2023 05:36:02 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id bb6-20020a170902bc8600b001b694140d96sm7600889plb.170.2023.06.28.05.36.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 28 Jun 2023 05:36:01 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <4eda066a-a56f-583d-84dc-69c1190d1bf7@roeck-us.net>
+Date:   Wed, 28 Jun 2023 05:35:59 -0700
 MIME-Version: 1.0
-References: <8e785777-03aa-99e1-d20e-e956f5685be6@huawei.com>
- <87mt18it1y.ffs@tglx> <68baeac9-9fa7-5594-b5e7-4baf8ac86b77@huawei.com>
- <ba352e83-b8b1-d900-9c1f-56b8c8a8b8fb@huawei.com> <CAKfTPtBoe_jRn-EMsQxssQ4BcveT+Qcd+GmsRbQEXQDGfzFOMg@mail.gmail.com>
- <875y774wvp.ffs@tglx>
-In-Reply-To: <875y774wvp.ffs@tglx>
-From:   Vincent Guittot <vincent.guittot@linaro.org>
-Date:   Wed, 28 Jun 2023 14:35:50 +0200
-Message-ID: <CAKfTPtAzTy4KPrBNRA4cMeTonxn5EKLEAg0b9iH5ecJkAMEStw@mail.gmail.com>
-Subject: Re: [Question] report a race condition between CPU hotplug state
- machine and hrtimer 'sched_cfs_period_timer' for cfs bandwidth throttling
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     Xiongfeng Wang <wangxiongfeng2@huawei.com>, vschneid@redhat.com,
-        Phil Auld <pauld@redhat.com>, vdonnefort@google.com,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Wei Li <liwei391@huawei.com>,
-        "liaoyu (E)" <liaoyu15@huawei.com>, zhangqiao22@huawei.com,
-        Peter Zijlstra <peterz@infradead.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Ingo Molnar <mingo@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH] sparc: mark __arch_xchg() as __always_inline
+Content-Language: en-US
+To:     Arnd Bergmann <arnd@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Kees Cook <keescook@chromium.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Andi Shyti <andi.shyti@linux.intel.com>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Palmer Dabbelt <palmer@rivosinc.com>,
+        sparclinux@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230628094938.2318171-1-arnd@kernel.org>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <20230628094938.2318171-1-arnd@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 28 Jun 2023 at 14:03, Thomas Gleixner <tglx@linutronix.de> wrote:
->
-> On Tue, Jun 27 2023 at 18:46, Vincent Guittot wrote:
-> > On Mon, 26 Jun 2023 at 10:23, Xiongfeng Wang <wangxiongfeng2@huawei.com> wrote:
-> >> > diff --cc kernel/sched/fair.c
-> >> > index d9d6519fae01,bd6624353608..000000000000
-> >> > --- a/kernel/sched/fair.c
-> >> > +++ b/kernel/sched/fair.c
-> >> > @@@ -5411,10 -5411,16 +5411,15 @@@ void start_cfs_bandwidth(struct cfs_ban
-> >> >   {
-> >> >         lockdep_assert_held(&cfs_b->lock);
-> >> >
-> >> > -       if (cfs_b->period_active)
-> >> > +       if (cfs_b->period_active) {
-> >> > +               struct hrtimer_clock_base *clock_base = cfs_b->period_timer.base;
-> >> > +               int cpu = clock_base->cpu_base->cpu;
-> >> > +               if (!cpu_active(cpu) && cpu != smp_processor_id())
-> >> > +                       hrtimer_start_expires(&cfs_b->period_timer,
-> >> > HRTIMER_MODE_ABS_PINNED);
-> >> >                 return;
-> >> > +       }
-> >
-> > I have been able to reproduce your problem and run your fix on top. I
-> > still wonder if there is a
-> > Could we have a helper from hrtimer to get the cpu of the clock_base ?
->
-> No, because this is fundamentally wrong.
->
-> If the CPU is on the way out, then the scheduler hotplug machinery
-> has to handle the period timer so that the problem Xiongfeng analyzed
-> does not happen in the first place.
+On 6/28/23 02:49, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> An otherwise correct change to the atomic operations uncovered an
+> existing bug in the sparc __arch_xchg() function, which is calls
+> __xchg_called_with_bad_pointer() when its arguments are unknown at
+> compile time:
+> 
+> ERROR: modpost: "__xchg_called_with_bad_pointer" [lib/atomic64_test.ko] undefined!
+> 
+> This now happens because gcc determines that it's better to not inline the
+> function. Avoid this by just marking the function as __always_inline
+> to force the compiler to do the right thing here.
+> 
+> Reported-by: Guenter Roeck <linux@roeck-us.net>
+> Link: https://lore.kernel.org/all/c525adc9-6623-4660-8718-e0c9311563b8@roeck-us.net/
+> Fixes: d12157efc8e08 ("locking/atomic: make atomic*_{cmp,}xchg optional")
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
-But the hrtimer was enqueued before it starts to offline the cpu
-Then, hrtimers_dead_cpu should take care of migrating the hrtimer out
-of the outgoing cpu but :
-- it must run on another target cpu to migrate the hrtimer.
-- it runs in the context of the caller which can be throttled.
+Nice catch.
 
->
-> sched_cpu_wait_empty() would be the obvious place to cleanup armed CFS
-> timers, but let me look into whether we can migrate hrtimers early in
-> general.
+Acked-by: Guenter Roeck <linux@roeck-us.net>
 
-but for that we must check if the timer is enqueued on the outgoing
-cpu and we then need to choose a target cpu
+> ---
+>   arch/sparc/include/asm/cmpxchg_32.h | 2 +-
+>   arch/sparc/include/asm/cmpxchg_64.h | 2 +-
+>   2 files changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/arch/sparc/include/asm/cmpxchg_32.h b/arch/sparc/include/asm/cmpxchg_32.h
+> index 7a1339533d1d7..d0af82c240b73 100644
+> --- a/arch/sparc/include/asm/cmpxchg_32.h
+> +++ b/arch/sparc/include/asm/cmpxchg_32.h
+> @@ -15,7 +15,7 @@
+>   unsigned long __xchg_u32(volatile u32 *m, u32 new);
+>   void __xchg_called_with_bad_pointer(void);
+>   
+> -static inline unsigned long __arch_xchg(unsigned long x, __volatile__ void * ptr, int size)
+> +static __always_inline unsigned long __arch_xchg(unsigned long x, __volatile__ void * ptr, int size)
+>   {
+>   	switch (size) {
+>   	case 4:
+> diff --git a/arch/sparc/include/asm/cmpxchg_64.h b/arch/sparc/include/asm/cmpxchg_64.h
+> index 66cd61dde9ec1..3de25262c4118 100644
+> --- a/arch/sparc/include/asm/cmpxchg_64.h
+> +++ b/arch/sparc/include/asm/cmpxchg_64.h
+> @@ -87,7 +87,7 @@ xchg16(__volatile__ unsigned short *m, unsigned short val)
+>   	return (load32 & mask) >> bit_shift;
+>   }
+>   
+> -static inline unsigned long
+> +static __always_inline unsigned long
+>   __arch_xchg(unsigned long x, __volatile__ void * ptr, int size)
+>   {
+>   	switch (size) {
 
->
-> Aside of that the above is wrong by itself.
->
->         if (cfs_b->period_active)
->                 hrtimer_start_expires(&cfs_b->period_timer, HRTIMER_MODE_ABS_PINNED);
->
-> This only ends up on the outgoing CPU if either:
->
->    1) The code runs on the outgoing CPU
->
-> or
->
->    2) The hrtimer is concurrently executing the hrtimer callback on the
->       outgoing CPU.
->
-> So this:
->
->         if (cfs_b->period_active) {
->                 struct hrtimer_clock_base *clock_base = cfs_b->period_timer.base;
->                 int cpu = clock_base->cpu_base->cpu;
->
->                 if (!cpu_active(cpu) && cpu != smp_processor_id())
->                         hrtimer_start_expires(&cfs_b->period_timer, HRTIMER_MODE_ABS_PINNED);
->               return;
->       }
->
-> only works, if
->
->   1) The code runs _not_ on the outgoing CPU
->
-> and
->
->   2) The hrtimer is _not_ concurrently executing the hrtimer callback on
->      the outgoing CPU.
->
->      If the callback is executing (it spins on cfs_b->lock), then the
->      timer is requeued on the outgoing CPU. Not what you want, right?
->
-> Plus accessing hrtimer->clock_base->cpu_base->cpu lockless is fragile at
-> best.
->
-> Thanks,
->
->         tglx
