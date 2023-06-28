@@ -2,46 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96BE6740E95
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 12:24:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52F80740DE6
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 12:03:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231143AbjF1KX7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 06:23:59 -0400
-Received: from mail.takauji.or.jp ([210.249.139.2]:20413 "EHLO
-        mail.takauji.or.jp" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231545AbjF1KVy (ORCPT
+        id S229488AbjF1Jvp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 05:51:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50702 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234601AbjF1Jcg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 06:21:54 -0400
-Received: from [127.0.0.1] ([20.222.97.116]) (authenticated)by mail.takauji.or.jp(unknown) with ESMTP id 35S3DYeF060910for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 12:15:35 +0900 (JST)
-Authentication-Results: mail.takauji.or.jp; sender-id=softfail header.from=naf3599@hita-net.jp; auth=pass (PLAIN); spf=softfail smtp.mfrom=naf3599@hita-net.jp
-Content-Type: text/plain; charset=utf-8
-From:   "mail@vger.kernel.org" <naf3599@hita-net.jp>
-To:     linux-kernel@vger.kernel.org
-Subject: =?UTF-8?B?5p2x5YyX5a2m6Zmi5aSn5a2m44GL44KJ44Gu5aSn?=
- =?UTF-8?B?5YiH44Gq44Oh44OD44K744O844K444GM77yS44Gk?=
- =?UTF-8?B?44GC44KK44G+44GZ?=
-Message-ID: <37d70732-8f2e-d3df-d958-9cea250f183d@hita-net.jp>
-X-Priority: 1 (Highest)
-X-Msmail-Priority: High
-Importance: High
-Content-Transfer-Encoding: base64
-Date:   Wed, 28 Jun 2023 03:15:34 +0000
+        Wed, 28 Jun 2023 05:32:36 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C6353591;
+        Wed, 28 Jun 2023 02:29:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=rs013m832eycdbI7wI/qncGLxYKg/qYM1dV7Gd0Gkgs=; b=PzravfTDeMUsb+TMMGGGfXMNm0
+        /Z81cqwcqFlZ4wnimgB3S34jrQT7TtJDfeNsq0Rp9+51TvLQeQ5POCJ63GZ/JsrYDBF/FjJg24ZON
+        +Y1FYmcuOWNYI6Fd9s+USoL1cvMYY/KCPFyQN8f+R7PvI5kHiCzoK5vYgDe+rwVf33838Ax7S0h9u
+        j9LFUmpfLdCXULlE0/kBb/6VitpuGNSBFPrSz9JdbQpAWykCCuzGgfB1rsnSaRrFGLoCDs5SDYmSu
+        LS4a38URAovV4wOLKbjiT9EQeptPqZvIcMJ/6JUG9cM6eEscXGPuj696IVXcaeus6KbfXR35xL+/Q
+        TfGlmw1Q==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
+        id 1qEOPB-00EwSc-18;
+        Wed, 28 Jun 2023 06:11:53 +0000
+Date:   Tue, 27 Jun 2023 23:11:53 -0700
+From:   Christoph Hellwig <hch@infradead.org>
+To:     "zhaoyang.huang" <zhaoyang.huang@unisoc.com>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Yang Shi <shy828301@gmail.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Yu Zhao <yuzhao@google.com>, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Zhaoyang Huang <huangzhaoyang@gmail.com>, ke.wang@unisoc.com,
+        Christian Brauner <christian@brauner.io>
+Subject: Re: [PATCH] mm: introduce statistic for inode's gen&tier
+Message-ID: <ZJvPKV+1d2+uHB1E@infradead.org>
+References: <1687857438-29142-1-git-send-email-zhaoyang.huang@unisoc.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1687857438-29142-1-git-send-email-zhaoyang.huang@unisoc.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DATE_IN_PAST_03_06,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+        lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-4oC744GT44Gu44Oh44O844Or44GvVmdlcuS8muWToeOBrueahuanmOOBq+Wum+OBpuOBn+OCguOB
-ruOBp+OBmeOAgg0K4oC744GT44Gu44Oh44O844Or44G444Gu6L+U5L+h44Gv44GU6YGg5oWu44GP
-44Gg44GV44GE44CCDQotLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLSAtLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLQ0KMjAyMyDlubQgNiDmnIgg
-Mjgg5pelDQoNClZnZXLjg6Hjg7Pjg5Djg7w6DQoNCg0K5p2x5YyX5a2m6Zmi5aSn5a2m44GL44KJ
-44Gu5aSn5YiH44Gq44Oh44OD44K744O844K444GMMuOBpOOBguOCiuOBvuOBmeOAgg0KDQoNCuOD
-oeODg+OCu+ODvOOCuOOCkuihqOekuuOBmeOCi+OBq+OBr+OAgeS4i+OBruODquODs+OCr+OCkuOC
-r+ODquODg+OCr+OBl+OBpuOBj+OBoOOBleOBhA0KDQpodHRwczovL2phZGlrcmVhdGlmLmNvbS9z
-ZWN1cmUvdXNlci9zdi53ZWJtYWlsLmpwP3VpZD1saW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3Jn
-DQoNCu+8iu+8iu+8iu+8iu+8iu+8iu+8iu+8iu+8iu+8iu+8iu+8iu+8iu+8iu+8iu+8iu+8iu+8
-iu+8iu+8iu+8iu+8ig0K44GU5pSv5o+044GE44Gf44Gg44GN44GC44KK44GM44Go44GG44GU44GW
-44GE44G+44GZ44CCDQpodHRwczovL3d3dy52Z2VyLmtlcm5lbC5vcmcvY29udGFjdC9WZ2VyLw0K
-77yK77yK77yK77yK77yK77yK77yK77yK77yK77yK77yK77yK77yK77yK77yK77yK77yK77yK77yK
-77yK77yK77yK
+On Tue, Jun 27, 2023 at 05:17:18PM +0800, zhaoyang.huang wrote:
+> --- a/include/linux/fs.h
+> +++ b/include/linux/fs.h
+> @@ -434,6 +434,8 @@ struct address_space {
+>  	struct rb_root_cached	i_mmap;
+>  	struct rw_semaphore	i_mmap_rwsem;
+>  	unsigned long		nrpages;
+> +	atomic_long_t		gen;
+> +	atomic_long_t		tier;
+
+This increases the size of the inode by 16 byes, and better have really
+good data supporting it, as increases of the inode size impact a lot
+of workloads.
+
