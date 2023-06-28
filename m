@@ -2,94 +2,198 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 597C4740BB9
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 10:39:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 60547740AF0
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 10:14:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234742AbjF1Ijf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 04:39:35 -0400
-Received: from mga07.intel.com ([134.134.136.100]:40497 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235249AbjF1Ifw (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 04:35:52 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687941352; x=1719477352;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=30tbHYBVKtiwmy4ek/9rLdJHPLikMjah+QEc5qOEVZI=;
-  b=hr80XAf1IRnE1zjPP5AM4Eg4rutqBtvksrnw4AXj8Vng1zsAS6+NGJbJ
-   parkS5wbpx1D2csilrKSFOHTiB5sBL0RM8ma2BUAZnf47s20rIVE3vdZc
-   6AZ8fP8vLmCrtS6EMjupKPoW0fA1wKOgF5UZnn6ezwgJfoEjEA+SZJVDn
-   gmL/fiKqaXo/hSqDr8ku5YrTonYlu2NmO9ThDGC5YO54j2UhXadN19wxD
-   8+Jd2GEITtPMw2IivBVcVV9Y43usYX3QMRC9Xy+Mgbz8ddLw7gjtJS7Dp
-   Io3Nfej5Rn+e6N2j8n7WvjJhE+uTjTJPsfwrhHY1hF4x6y9LCORQ9n7Cw
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10754"; a="427765542"
-X-IronPort-AV: E=Sophos;i="6.01,164,1684825200"; 
-   d="scan'208";a="427765542"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2023 22:57:49 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10754"; a="806768023"
-X-IronPort-AV: E=Sophos;i="6.01,164,1684825200"; 
-   d="scan'208";a="806768023"
-Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
-  by FMSMGA003.fm.intel.com with ESMTP; 27 Jun 2023 22:57:46 -0700
-Date:   Wed, 28 Jun 2023 13:56:36 +0800
-From:   Xu Yilun <yilun.xu@intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Peter Colberg <peter.colberg@intel.com>, hao.wu@intel.com,
-        gregkh@linuxfoundation.org, linux-fpga@vger.kernel.org,
-        linux-kernel@vger.kernel.org, aaron.j.grier@intel.com,
-        tianfei.zhang@intel.com, russell.h.weight@intel.com,
-        matthew.gerlach@linux.intel.com, marpagan@redhat.com,
-        lgoncalv@redhat.com
-Subject: Re: [PATCH v2] fpga: dfl: afu: use PFN_DOWN() and PFN_PHYS() helper
- macros
-Message-ID: <ZJvLlHpJwr/tv3gq@yilunxu-OptiPlex-7050>
-References: <2023061908-subscribe-persuader-9b9f@gregkh>
- <20230619195634.11366-1-peter.colberg@intel.com>
- <ZJqBE1mCjSaRIvyt@yilunxu-OptiPlex-7050>
- <ZJspBy/imk1qH+s2@smile.fi.intel.com>
+        id S233792AbjF1IO3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 04:14:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36840 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234088AbjF1IMR (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 28 Jun 2023 04:12:17 -0400
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8633A420F;
+        Wed, 28 Jun 2023 01:08:45 -0700 (PDT)
+Received: by mail-lj1-x22a.google.com with SMTP id 38308e7fff4ca-2b69923a715so55281451fa.0;
+        Wed, 28 Jun 2023 01:08:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687939724; x=1690531724;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=n3aJVivKTsxGgC5bZY9lBEYilnIfeNYiUvGs+4klsT4=;
+        b=YjeZO/jUnGdaNQpdnrUu1EmzUGRBz4pUJt0o59PNarnmbwrY+T5WRf4t0XEwJ6JNsu
+         CVZ8FrikEZv/mYXDcFMZ9laKMWPQR3yWYKFQIEkZoUZxkI9xPELX2njf6HauShx/hQoV
+         0c2ib/db7WxfNHNRFeYhjhAt4PutvQssRvidvcAsorZWtf3UyT/qc5inZf62EnnA+gO3
+         jrpoagOc/rO6uLLl/aSd1u/QTDArNU94qRibaASr2aj3Ejth1bwY684JWL2M2Jp02I4E
+         jBF5HbLndr972D+mUdP8DYEBPARi8JLKy87Qq/WXmd1fVMhc8xScXvT9YG7b/cPEggGD
+         QjYw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687939724; x=1690531724;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=n3aJVivKTsxGgC5bZY9lBEYilnIfeNYiUvGs+4klsT4=;
+        b=juObJZAoX9NkwCX3XAYtQe+kHLewRGoVdVsntRfgYMA88j9AuYHNE8Y6e1h0zNZuUo
+         D5zkUErxlmLC0opV44DyJlfMaZFpoiYZ1dZ2VuQEbDWMvsRwZzZqU0v07MdA1fag3ISx
+         3HFdoDnQxOwzOdHnUxDuBNML/7QxaeXFwvBYlvx68b0WQygXVCczoMKaey2zEFLJarKz
+         7aCnvoxJCPfKPX42avswg3pWxI/eikJBmgFTC4KiQu5H2sn1Lx+VIo9K3ZJbeC46MLz/
+         3PzLFvRungztyAxJE+laUWgZP27qmXQrIRXq2IcqL8K+08fWmF9DqxtyhWLLbcIpaalD
+         J/4g==
+X-Gm-Message-State: AC+VfDzGJoOoBDLJbx8Vk/NZ8yEEIy7dsiwxuilD6GOhzZzcQSHNUQjj
+        x1J5HKdyDCGkosV7Ihgp0eExy+yLmISRKablWqQOVK2s3bA=
+X-Google-Smtp-Source: ACHHUZ6G3GAT9ajCN9HnEnSa14/P//f+PSHHiBNlYEdgWCk+bz3CMGjmyPuJIjqhIuitZ1/YwJeJIdz2FvIiBiB2/A0=
+X-Received: by 2002:a05:6512:3d21:b0:4fb:4368:14a1 with SMTP id
+ d33-20020a0565123d2100b004fb436814a1mr7873262lfv.18.1687931912362; Tue, 27
+ Jun 2023 22:58:32 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZJspBy/imk1qH+s2@smile.fi.intel.com>
+References: <cover.1687515463.git.haibo1.xu@intel.com> <341feff384c9f8a20ed4aac6e2dda0440d6b84f2.1687515463.git.haibo1.xu@intel.com>
+ <20230627-4d207186c4ef81be43c9d874@orel>
+In-Reply-To: <20230627-4d207186c4ef81be43c9d874@orel>
+From:   Haibo Xu <xiaobo55x@gmail.com>
+Date:   Wed, 28 Jun 2023 13:58:21 +0800
+Message-ID: <CAJve8ony9nj9LyCAJjtvthR+ABLvSPHvpeE5e5=wr_z44i20qw@mail.gmail.com>
+Subject: Re: [PATCH v4 08/12] KVM: arm64: selftests: Move reject_set check
+ logic to a function
+To:     Andrew Jones <ajones@ventanamicro.com>
+Cc:     Haibo Xu <haibo1.xu@intel.com>, maz@kernel.org,
+        oliver.upton@linux.dev, seanjc@google.com,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Anup Patel <anup@brainfault.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Shuah Khan <shuah@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Zenghui Yu <yuzenghui@huawei.com>,
+        David Matlack <dmatlack@google.com>,
+        Ben Gardon <bgardon@google.com>,
+        Ricardo Koller <ricarkol@google.com>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Vipin Sharma <vipinsh@google.com>,
+        Colton Lewis <coltonlewis@google.com>, kvm@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
+        linux-kselftest@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+        lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-06-27 at 21:23:03 +0300, Andy Shevchenko wrote:
-> On Tue, Jun 27, 2023 at 02:26:27PM +0800, Xu Yilun wrote:
-> > On 2023-06-19 at 15:56:34 -0400, Peter Colberg wrote:
-> 
-> ...
-> 
-> > > -	int npages = region->length >> PAGE_SHIFT;
-> > > +	int npages = PFN_DOWN(region->length);
-> > 
-> > I don't much prefer this change, it is not doing the phy addr to pfn
-> > convertion. The macro name doesn't match what is doing here.
-> 
-> This macro converts length to pages. And it's not about phy addr.
+On Tue, Jun 27, 2023 at 5:09=E2=80=AFPM Andrew Jones <ajones@ventanamicro.c=
+om> wrote:
+>
+> On Fri, Jun 23, 2023 at 06:40:10PM +0800, Haibo Xu wrote:
+> > No functional changes. Just move the reject_set check logic to a
+> > function so we can check for specific errno for specific register.
+> > This is a preparation for support reject_set in riscv.
+> >
+> > Suggested-by: Andrew Jones <ajones@ventanamicro.com>
+> > Signed-off-by: Haibo Xu <haibo1.xu@intel.com>
+> > ---
+> >  tools/testing/selftests/kvm/aarch64/get-reg-list.c | 8 ++++++++
+> >  tools/testing/selftests/kvm/get-reg-list.c         | 7 ++++++-
+> >  2 files changed, 14 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/tools/testing/selftests/kvm/aarch64/get-reg-list.c b/tools=
+/testing/selftests/kvm/aarch64/get-reg-list.c
+> > index aaf035c969ec..4e2e1fe833eb 100644
+> > --- a/tools/testing/selftests/kvm/aarch64/get-reg-list.c
+> > +++ b/tools/testing/selftests/kvm/aarch64/get-reg-list.c
+> > @@ -27,6 +27,14 @@ bool filter_reg(__u64 reg)
+> >       return false;
+> >  }
+> >
+> > +bool reject_set_fail(__u64 reg)
+> > +{
+> > +     if (reg =3D=3D KVM_REG_ARM64_SVE_VLS)
+> > +             return (errno !=3D EPERM);
+> > +
+> > +     return false;
+> > +}
+>
+> I think we should pass errno in as a parameter and I prefer positive
+> predicate functions, so I'd name this check_reject_set() and reverse
+> the logic. Also, we don't want to check for KVM_REG_ARM64_SVE_VLS,
+> because that duplicates the rejects set. I see in a later patch
+> that riscv needs to check reg because different errors are used
+> for different registers, but that's because KVM_REG_RISCV_TIMER_REG(state=
+)
+> was erroneously added to the rejects set. KVM_REG_RISCV_TIMER_REG(state)
+> doesn't belong there. That register can be set, but it only supports
+> certain input, otherwise, it correctly, results in EINVAL. We'll need
+> the concept of a "skip set" to avoid tripping over that one.
+>
+> So, I think arm's function should be
+>
+>  bool check_reject_set(int errno)
+>  {
+>      return errno =3D=3D EPERM;
+>  }
+>
+> and riscv's should be
+>
+>  bool check_reject_set(int errno)
+>  {
+>      return errno =3D=3D EOPNOTSUPP;
+>  }
+>
 
-You are right.
+Sure, will add a new 'skips_set' member to 'struct vcpu_reg_sublist' and
+move KVM_REG_RISCV_TIMER_REG(state) reg to it.
 
-> > > -	offset = vma->vm_pgoff << PAGE_SHIFT;
-> > > +	offset = PFN_PHYS(vma->vm_pgoff);
-> > 
-> > ditto. The variables are offsets within file, not phys addr & pfn.
-> 
-> Here I probably can agree.
-
-OK. Remove this one, and others LGTM.
-
-Thanks,
-Yilun
-
-> 
-> -- 
-> With Best Regards,
-> Andy Shevchenko
-> 
-> 
+> > +
+> >  #define REG_MASK (KVM_REG_ARCH_MASK | KVM_REG_SIZE_MASK | KVM_REG_ARM_=
+COPROC_MASK)
+> >
+> >  #define CORE_REGS_XX_NR_WORDS        2
+> > diff --git a/tools/testing/selftests/kvm/get-reg-list.c b/tools/testing=
+/selftests/kvm/get-reg-list.c
+> > index f6ad7991a812..b956ee410996 100644
+> > --- a/tools/testing/selftests/kvm/get-reg-list.c
+> > +++ b/tools/testing/selftests/kvm/get-reg-list.c
+> > @@ -98,6 +98,11 @@ void __weak print_reg(const char *prefix, __u64 id)
+> >       printf("\t0x%llx,\n", id);
+> >  }
+> >
+> > +bool __weak reject_set_fail(__u64 reg)
+> > +{
+> > +     return false;
+> > +}
+> > +
+> >  #ifdef __aarch64__
+> >  static void prepare_vcpu_init(struct vcpu_reg_list *c, struct kvm_vcpu=
+_init *init)
+> >  {
+> > @@ -216,7 +221,7 @@ static void run_test(struct vcpu_reg_list *c)
+> >                       if (s->rejects_set && find_reg(s->rejects_set, s-=
+>rejects_set_n, reg.id)) {
+> >                               reject_reg =3D true;
+> >                               ret =3D __vcpu_ioctl(vcpu, KVM_SET_ONE_RE=
+G, &reg);
+> > -                             if (ret !=3D -1 || errno !=3D EPERM) {
+> > +                             if (ret !=3D -1 || reject_set_fail(reg.id=
+)) {
+> >                                       printf("%s: Failed to reject (ret=
+=3D%d, errno=3D%d) ", config_name(c), ret, errno);
+> >                                       print_reg(config_name(c), reg.id)=
+;
+> >                                       putchar('\n');
+> > --
+> > 2.34.1
+> >
+>
+> Thanks,
+> drew
