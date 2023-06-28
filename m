@@ -2,148 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75840741816
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 20:34:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9654741814
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 20:34:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232011AbjF1Sdr convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 28 Jun 2023 14:33:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49874 "EHLO
+        id S231248AbjF1Sek (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 14:34:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232062AbjF1Sdj (ORCPT
+        with ESMTP id S229832AbjF1Sei (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 14:33:39 -0400
-X-Greylist: delayed 26739 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 28 Jun 2023 11:33:37 PDT
-Received: from unicorn.mansr.com (unicorn.mansr.com [IPv6:2001:8b0:ca0d:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81C1E1FCC;
-        Wed, 28 Jun 2023 11:33:37 -0700 (PDT)
-Received: from raven.mansr.com (raven.mansr.com [IPv6:2001:8b0:ca0d:1::3])
-        by unicorn.mansr.com (Postfix) with ESMTPS id 2509F15360;
-        Wed, 28 Jun 2023 19:33:35 +0100 (BST)
-Received: by raven.mansr.com (Postfix, from userid 51770)
-        id 17DD3219FD1; Wed, 28 Jun 2023 19:33:35 +0100 (BST)
-From:   =?iso-8859-1?Q?M=E5ns_Rullg=E5rd?= <mans@mansr.com>
-To:     Maxime Ripard <mripard@kernel.org>
-Cc:     Samuel Holland <samuel@sholland.org>, Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        linux-sunxi@lists.linux.dev,
-        Michael Turquette <mturquette@baylibre.com>,
-        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Stephen Boyd <sboyd@kernel.org>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 3/4] clk: sunxi-ng: Convert early providers to
- platform drivers
-References: <20211119033338.25486-1-samuel@sholland.org>
-        <20211119033338.25486-4-samuel@sholland.org>
-        <yw1xedly2z3m.fsf@mansr.com>
-        <maqh4yir66agto4lyulvrqrim7qnixwd246jusvvhsjlhhrmmw@gjbubqc2cv4o>
-        <yw1xa5wj3kvn.fsf@mansr.com>
-        <un3xm7ybsm54qf56ojhrtr6kehlmhdoavzcaqr2jfbcyg2kr6u@rdlq7nelycs2>
-Date:   Wed, 28 Jun 2023 19:33:35 +0100
-In-Reply-To: <un3xm7ybsm54qf56ojhrtr6kehlmhdoavzcaqr2jfbcyg2kr6u@rdlq7nelycs2>
-        (Maxime Ripard's message of "Wed, 28 Jun 2023 13:41:30 +0200")
-Message-ID: <yw1x352b308w.fsf@mansr.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
+        Wed, 28 Jun 2023 14:34:38 -0400
+Received: from mail-oo1-xc35.google.com (mail-oo1-xc35.google.com [IPv6:2607:f8b0:4864:20::c35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEE6B1726
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 11:34:36 -0700 (PDT)
+Received: by mail-oo1-xc35.google.com with SMTP id 006d021491bc7-563531a3ad2so157341eaf.3
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 11:34:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687977276; x=1690569276;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=44i1HPgVbDjroHL3xpYNV2W1/J/Ibi9y849Av9M0qyY=;
+        b=kPGmdWzzEVQtSrhSb93sFIagde0v3WzAxnzvFWxsyuVa7H6O+bTAdLjamfYt2oY56i
+         bUZi/qQlHUo9WUo3Tu+N3GYI/QAnZcSms9X2LynUVHSaQtu73xHS8/tS+ZdvCxp/qwE4
+         Th7NbgPdfyqMtuGXqXSke+VnvpwAuCGidV1TEYvtKvDjDGlXVyr4diYmZwt2sfo+v4C8
+         7qoMTIPqy7XiWaf6OTAcmmiYtE+55bA1WfHfEd25KFQvk3NxI0Ov7uTAfYcKUSeRvrjH
+         +WoOpe6OWsly5Wnz1HyQTEYPnyjsiud37jadMJYFGodoqo/25cPtdYG7/XMpkQR9bmSZ
+         dKkw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687977276; x=1690569276;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=44i1HPgVbDjroHL3xpYNV2W1/J/Ibi9y849Av9M0qyY=;
+        b=Bex7zsGb1viQ/AcXyvUU0vd5sARkikOowvWPO2w7hdFofkcr5xZApG+ZE5fK6Ur1xn
+         Awix8XqMWlEvpcmMKblIL4psrTzWaMWsYxTkzE8qpA864Urg4ER0beHUm7Gm3lCYgT4N
+         xegqCL/mZN7nZi5O28Bz/6TmYHkltCL9pTCQHlTBnJyn9154GXv3Szuj3i5AVclNwpUn
+         +74mSB/n1jaqJRPMe3ADj7GkfUmQjAUNVlOSxawAimKbqVkePMpKYdotfugy3Q6hCBJz
+         SHEoPquymvmGJjFCjTJ7bFr6m4yTn8jAfFgvY6+5jaC7RIKaAZowxFYCqIgxVIAnaHnh
+         LCaQ==
+X-Gm-Message-State: AC+VfDzAFU/0TEhc2R7ChWaTgmKz8sroOVs8ysZgJacqbVnwZmv8ncEQ
+        elBOyLhuRWOqA1LDUr+ohMub6oOkdAAY7VJB5pc=
+X-Google-Smtp-Source: ACHHUZ4sp+cRLx2BGJd2DsfYaUSIcfnnRHHgz3BQGkTCoYvhCmvSlc3Mha1JU/ZWFXrPcJzh6ICSYZqYQ/HpoN6xrzU=
+X-Received: by 2002:a4a:a308:0:b0:563:488d:c661 with SMTP id
+ q8-20020a4aa308000000b00563488dc661mr7261860ool.8.1687977275994; Wed, 28 Jun
+ 2023 11:34:35 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20230628020657.957880-1-goldstein.w.n@gmail.com>
+ <20230628091241.GAZJv5ie0xVGvnMKIM@fat_crate.local> <CAFUsyfKYQk87fxCDj9FpM9xzLwZVRrfUZgyUCF5G+HuC0N2pXg@mail.gmail.com>
+ <CAHk-=wj1fe4Pa0zLxUTiMjaxEXW84HBup+Hv=fe-U8PoFzrm5g@mail.gmail.com>
+In-Reply-To: <CAHk-=wj1fe4Pa0zLxUTiMjaxEXW84HBup+Hv=fe-U8PoFzrm5g@mail.gmail.com>
+From:   Noah Goldstein <goldstein.w.n@gmail.com>
+Date:   Wed, 28 Jun 2023 13:34:24 -0500
+Message-ID: <CAFUsyfJ-n53mXd1QZCtFfkCjux6Hy7iAG4-uALX0Uyofg=PTGg@mail.gmail.com>
+Subject: Re: x86/csum: Remove unnecessary odd handling
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Borislav Petkov <bp@alien8.de>, x86@kernel.org,
+        edumazet@google.com, tglx@linutronix.de, mingo@redhat.com,
+        dave.hansen@linux.intel.com, hpa@zytor.com,
+        lkml <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Maxime Ripard <mripard@kernel.org> writes:
+On Wed, Jun 28, 2023 at 12:44=E2=80=AFPM Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
+>
+> On Wed, 28 Jun 2023 at 08:32, Noah Goldstein <goldstein.w.n@gmail.com> wr=
+ote:
+> >
+> > Linus, if you're planning a patch and want to just integrate the codes
+> > here I'm happy drop this patch
+>
+> No, that patch looks good to me.
+>
+> In fact, I wasn't planning on integrating my patch at all. I literally
+> did it as a "I would have done it this way instead" exercise.
+>
+> And while I am currently running with my patch in the kernel, I don't
+> even really know if it works and does the right thing. Maybe my use
+> doesn't even trigger csum_partial() at all. I did not do any testing
+> that "yes, I get the same checksum as a result".
+>
 
-> On Wed, Jun 28, 2023 at 12:07:56PM +0100, Måns Rullgård wrote:
->> Maxime Ripard <mripard@kernel.org> writes:
->> 
->> > On Mon, Jun 26, 2023 at 01:21:33PM +0100, Måns Rullgård wrote:
->> >> Samuel Holland <samuel@sholland.org> writes:
->> >> 
->> >> > The PRCM CCU drivers depend on clocks provided by other CCU drivers. For
->> >> > example, the sun8i-r-ccu driver uses the "pll-periph" clock provided by
->> >> > the SoC's main CCU.
->> >> >
->> >> > However, sun8i-r-ccu is an early OF clock provider, and many of the
->> >> > main CCUs (e.g. sun50i-a64-ccu) use platform drivers. This means that
->> >> > the consumer clocks will be orphaned until the supplier driver is bound.
->> >> > This can be avoided by converting the remaining CCUs to use platform
->> >> > drivers. Then fw_devlink will ensure the drivers are bound in the
->> >> > optimal order.
->> >> >
->> >> > The sun5i CCU is the only one which actually needs to be an early clock
->> >> > provider, because it provides the clock for the system timer. That one
->> >> > is left alone.
->> >> >
->> >> > Signed-off-by: Samuel Holland <samuel@sholland.org>
->> >> > ---
->> >> >
->> >> > (no changes since v1)
->> >> >
->> >> >  drivers/clk/sunxi-ng/Kconfig             | 20 ++++----
->> >> >  drivers/clk/sunxi-ng/ccu-sun4i-a10.c     | 58 +++++++++++++--------
->> >> >  drivers/clk/sunxi-ng/ccu-sun50i-h6-r.c   | 56 ++++++++++++--------
->> >> >  drivers/clk/sunxi-ng/ccu-sun50i-h616.c   | 33 ++++++++----
->> >> >  drivers/clk/sunxi-ng/ccu-sun6i-a31.c     | 40 +++++++++++----
->> >> >  drivers/clk/sunxi-ng/ccu-sun8i-a23.c     | 35 +++++++++----
->> >> >  drivers/clk/sunxi-ng/ccu-sun8i-a33.c     | 40 +++++++++++----
->> >> >  drivers/clk/sunxi-ng/ccu-sun8i-h3.c      | 62 ++++++++++++++--------
->> >> >  drivers/clk/sunxi-ng/ccu-sun8i-r.c       | 65 ++++++++++++++----------
->> >> >  drivers/clk/sunxi-ng/ccu-sun8i-v3s.c     | 57 +++++++++++++--------
->> >> >  drivers/clk/sunxi-ng/ccu-suniv-f1c100s.c | 38 ++++++++++----
->> >> >  11 files changed, 332 insertions(+), 172 deletions(-)
->> >> 
->> >> This broke the hstimer clocksource on A20 since it requires a clock
->> >> provided by the sun4i ccu driver.
->> >
->> > The A10 is probably broken by this, but the A20 should be able to use
->> > the arch timers just like all the other Cortex-A7-based SoCs.
->> >
->> > Do you have a dmesg log that could help debug why it's not working?
->> 
->> The A20 works as such since, as you say, it has other clocksources.
->> However, the hstimer has become unusable.  If anyone was using, for
->> whatever reason, it won't be working for them now.
->> 
->> Before this change, the kernel log used include this line:
->> 
->> clocksource: hstimer: mask: 0xffffffff max_cycles: 0xffffffff, max_idle_ns: 6370868154 ns
->> 
->> Now there is only a cryptic "Can't get timer clock" in its place.
->> 
->> As it is now, the hstimer driver is nothing but a waste of space.
->> I figure it ought to be fixed one way or another.
->
-> Yeah, definitely.
->
-> IIRC, the situation is:
->
->  - A10 has just the "regular", old, timer
->  - A10s/A13/GR8 has the A10 timer + hstimer
->  - A20 has the A13 timers + arch timers
->
-> We also default to the hstimer only for the A10s/A13 which aren't
-> affected by this patch series afaics.
->
-> We also enable the HS timer for the A31, but just like the A20 it
-> doesn't use it by default, so it's probably been broken there too.
->
-> I guess one way to fix it would be to switch the HS timer driver to a
-> lower priority than the A10 timer, so we pick that up by default instead
-> for the A10s/A13, and then convert the HS timer driver to a proper
-> platform_device driver that will be able to get its clock.
->
-> The downside is that the A13 will lose some precision over its default
-> timer, but I don't think it's a big deal.
+There is a reasonably robust kunit for csum_partial: lib/checksum_kunit.c
+so if you happened to run the kunit testsuite with your patch, it's
+probably correct.
 
-The options I see are converting the hstimer to a platform device or
-reverting the change to the sun4i ccu driver.
-
-I don't personally have much of an opinion on this since my systems
-aren't affected.  The only reason I looked at it was that I noticed
-a new error message in the kernel logs.
-
--- 
-Måns Rullgård
+> So
+>
+>  (a) removing the pointless one-byte alignment looks good to me.
+>
+>  (b) I'd actually hope that somebody who _cares_ about this path and
+> has put some real work into it (as opposed to my "superficial
+> dabbling") would look at my patch and either go "yeah, not worth it",
+> or "looks good, I'll take it".
+>
+> and I'm including that final patch of mine here again in case there
+> was any confusion with the earlier versions (there were at least two
+> known-broken versions I posted).
+>
+> *If* somebody likes it, and verifies that the checksum result is
+> correct, feel free to do anything with that patch, including adding my
+> signed-off-by for it (or taking the credit all for yourself -
+> Mwahahahahaahaa!)
+>
+>               Linus
