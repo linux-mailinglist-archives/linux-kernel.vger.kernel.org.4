@@ -2,78 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D242741ADA
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 23:28:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6411D741AE0
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 23:29:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232003AbjF1V1s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 17:27:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60972 "EHLO
+        id S231966AbjF1V3G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 17:29:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231490AbjF1V1i (ORCPT
+        with ESMTP id S230413AbjF1V3D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 17:27:38 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C7B0210E;
-        Wed, 28 Jun 2023 14:27:37 -0700 (PDT)
-Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35SKvbk6023817;
-        Wed, 28 Jun 2023 21:27:30 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=E3xlbiz/oogAND8NeoIkYwev4is3nvBY4FThkGBj8FE=;
- b=XtVIcGh8VJ6UKsTFvY7ms5HTjqCoAYOSNAy46dOgojaA8RyfcGiJBKpJMEGWvC5wIySk
- TMQAPJevIK0cykkym1sOu0e4XFS1dgRtXFxY36/a/cP3OQ0n4fYCQkN1w4sh+2KPgwyZ
- 5Z3yB9mPSB3TApPHLlDUmmMSieYndNKzapbHbe8FlxnOPq2oej0bo9aTlr1s6Eucy2GI
- cYhJw6ckzXOkmh3CDcfSSfLtm8+ENxGCpD9yOVQcTf116i/kGDjHuGGr0Xh33IJicPqz
- Obu2u7ghu5eF+B5iJMoNSNYg/Dpq1n6DTSd5AGUQAYEPWf6XfOjyf7g6Clp+EAykz3QH dw== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rgaxctb4u-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 28 Jun 2023 21:27:29 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35SLRTeM021207
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 28 Jun 2023 21:27:29 GMT
-Received: from [10.110.17.251] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.7; Wed, 28 Jun
- 2023 14:27:28 -0700
-Message-ID: <b1e956cb-431f-197f-09de-7e407faffbf8@quicinc.com>
-Date:   Wed, 28 Jun 2023 15:27:07 -0600
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH] docs: networking: Update codeaurora references for rmnet
-To:     Jeffrey Hugo <quic_jhugo@quicinc.com>, <quic_stranche@quicinc.com>,
-        <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-        <pabeni@redhat.com>, <corbet@lwn.net>, <andersson@kernel.org>
-CC:     <netdev@vger.kernel.org>, <linux-doc@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20230628191606.25483-1-quic_jhugo@quicinc.com>
-Content-Language: en-US
-From:   "Subash Abhinov Kasiviswanathan (KS)" <quic_subashab@quicinc.com>
-In-Reply-To: <20230628191606.25483-1-quic_jhugo@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: _P_HTuEuZSWqggrLcQn07mEd5sXWKPas
-X-Proofpoint-ORIG-GUID: _P_HTuEuZSWqggrLcQn07mEd5sXWKPas
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-06-28_14,2023-06-27_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- suspectscore=0 mlxscore=0 clxscore=1011 priorityscore=1501 bulkscore=0
- malwarescore=0 mlxlogscore=999 spamscore=0 adultscore=0 phishscore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2305260000 definitions=main-2306280190
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        Wed, 28 Jun 2023 17:29:03 -0400
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0DDB1BCC
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 14:29:02 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-56ff81be091so44257b3.0
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 14:29:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1687987742; x=1690579742;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=S4+NG0E282pExx69hOpqlYJL4D++Sscbft5Jezcu1U4=;
+        b=LmTiMTLjtNU8B+N2wm1qv1Xh+WY5DCUp3/vCPG22i+LFvSuz4Z8BwGRQgKrdosqrED
+         8KVLYu5kYeA9sXbrtaC5xRgq12Vn0+jvo2NS9FLX2LoVDN7s6lIqJncjVsTOxKDbSs/t
+         qmWHZuANGKIhnEeC5aO9RIfyOD2dsd+EBfvThphHldcD8OElNd8OFdMTrLG6DGcxVUMr
+         /eTTF8mTqrNEzid+Gjd117s+xAtn9r5f2QzMeSYYZe7yxL0+jjhc9mlb5l1VEz4t38du
+         C+w0gdJaiY+6ADDV+ee0nUnzlJPd4yq+N++z02+jMjaYwzgoHHeZQeGQqoPH+LPTsanU
+         0eOQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687987742; x=1690579742;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=S4+NG0E282pExx69hOpqlYJL4D++Sscbft5Jezcu1U4=;
+        b=e5bwP/zocJSFgcGqi2ifjeMwW4c+HESK3H/kSC/6lju3VLoeH723qxn6j4h537dHvd
+         L3HN9wJ9D2oipfdTzWiTSLHDaEdtVC78B5sdEvztVZJoHF14T/ZEFGibwoyYweJCHgan
+         lHOVAQSrny/6k1BqRxiqKKBX4YedR2RuuMoRXtvbDO4LT88wNBioZb8ny4m0mx1RWhTI
+         79NpysZaRNCER2rkLCMR69uZK8Gbpg+rDi28yv7+55VlhZpP2CJ4edA50hXv03YlSl8I
+         3IK2GAtvKuGdKp5pWvXcUDl1xfIuaRuLRaqhHygsY+k5uQ0f2X7C1nJPFuFlqvFIRXVC
+         g22g==
+X-Gm-Message-State: AC+VfDwdQUfvhx8zkKVWaU796A7p+H4KRc53d+F4lJ8HX/mjJR1aoMLy
+        nR3PKPytMlgT1oCC87EQg5cNFKJo4L0=
+X-Google-Smtp-Source: ACHHUZ4n8a2QLF6VBqJGBRku7htondlRkoTsoqSbam1pQTzOu9LsAReH81erivYUgmkTY3xJRw3s1hR6jZA=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a05:690c:708:b0:576:a5a8:f686 with SMTP id
+ bs8-20020a05690c070800b00576a5a8f686mr4556851ywb.9.1687987741909; Wed, 28 Jun
+ 2023 14:29:01 -0700 (PDT)
+Date:   Wed, 28 Jun 2023 14:29:00 -0700
+In-Reply-To: <20230607123700.40229-4-cloudliang@tencent.com>
+Mime-Version: 1.0
+References: <20230607123700.40229-1-cloudliang@tencent.com> <20230607123700.40229-4-cloudliang@tencent.com>
+Message-ID: <ZJymHAKx9XNAFYPk@google.com>
+Subject: Re: [PATCH v3 3/4] KVM: selftests: Check if event filter meets
+ expectations on fixed counters
+From:   Sean Christopherson <seanjc@google.com>
+To:     Jinrong Liang <ljr.kernel@gmail.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Aaron Lewis <aaronlewis@google.com>,
+        David Matlack <dmatlack@google.com>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Like Xu <like.xu.linux@gmail.com>,
+        Jinrong Liang <cloudliang@tencent.com>,
+        linux-kselftest@vger.kernel.org, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,30 +77,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/28/2023 1:16 PM, Jeffrey Hugo wrote:
-> source.codeaurora.org is no longer accessible and so the reference link
-> in the documentation is not useful.  The content was mirrored over to
-> Code Linaro so lets update the references to point there instead.
-> 
-> Signed-off-by: Jeffrey Hugo <quic_jhugo@quicinc.com>
-> ---
->   .../networking/device_drivers/cellular/qualcomm/rmnet.rst     | 4 ++--
->   1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/Documentation/networking/device_drivers/cellular/qualcomm/rmnet.rst b/Documentation/networking/device_drivers/cellular/qualcomm/rmnet.rst
-> index 4118384cf8eb..a3d91034ef30 100644
-> --- a/Documentation/networking/device_drivers/cellular/qualcomm/rmnet.rst
-> +++ b/Documentation/networking/device_drivers/cellular/qualcomm/rmnet.rst
-> @@ -191,7 +191,7 @@ MAP header|IP Packet|Optional padding|MAP header|Command Packet|Optional pad...
->   ==========================
->   
->   rmnet userspace configuration is done through netlink library librmnetctl
-> -and command line utility rmnetcli. Utility is hosted in codeaurora forum git.
-> +and command line utility rmnetcli. Utility is hosted in Code Linaro git.
->   The driver uses rtnl_link_ops for communication.
->   
-> -https://source.codeaurora.org/quic/la/platform/vendor/qcom-opensource/dataservices/tree/rmnetctl
-> +https://git.codelinaro.org/clo/la/platform/vendor/qcom-opensource/dataservices/
+On Wed, Jun 07, 2023, Jinrong Liang wrote:
+> +	/*
+> +	 * Check the fixed performance counter can count normally works when
+> +	 * KVM userspace doesn't set any pmu filter.
+> +	 */
+> +	TEST_ASSERT(run_vcpu_to_sync(vcpu),
+> +		    "Fixed counter does not exist or does not work as expected.");
 
-I've discussed this with Jeffrey - I'll send a v2 which points to 
-iproute2 instead as it has a rmnet module for configuration.
+No punctuation, and print the unexpected return value so that debug isn't too
+painful.
+
+> +
+> +	for (i = 0; i < BIT(nr_fixed_counters); i++) {
+> +		bitmap = BIT(i);
+> +		count = test_with_fixed_counter_filter(vcpu, KVM_PMU_EVENT_ALLOW,
+> +						       bitmap);
+> +		TEST_ASSERT(!!count == !!(bitmap & BIT(idx)),
+> +			    "Fixed event filter does not work as expected.");
+
+No punctuation please.
+
+> +
+> +		count = test_with_fixed_counter_filter(vcpu, KVM_PMU_EVENT_DENY,
+> +						       bitmap);
+> +		TEST_ASSERT(!!count == !(bitmap & BIT(idx)),
+> +			    "Fixed event filter does not work as expected.");
+> +	}
+> +}
