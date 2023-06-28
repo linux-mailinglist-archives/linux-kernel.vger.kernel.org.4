@@ -2,230 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FE8D7407B8
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 03:40:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ADAFC7407AC
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 03:36:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230522AbjF1Bku (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 21:40:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49092 "EHLO
+        id S230280AbjF1BgY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 21:36:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230487AbjF1Bks (ORCPT
+        with ESMTP id S229450AbjF1BgW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 21:40:48 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F011310FF;
-        Tue, 27 Jun 2023 18:40:46 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id A62461F889;
-        Wed, 28 Jun 2023 01:40:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1687916445; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=R8eZSeaid4Vp+UUwa4Su10+SxmbF9o4RkDKmIHyrq1k=;
-        b=FdIWOCCu8d0heDRxTDSgsw17HrW5TB9N4Vu25H6WvXDQKXSnKKEoKEtVxOhRZ14WCoNgXx
-        +XwXph8f3hdDQUrI4TfR6APpSK+5520VjhO558wk9inl0IFe/v8aSHd0dR41Nn+B5zi+4W
-        F80xitXcC8kkY/3lbusJj773rNRZbNE=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 222D1138E8;
-        Wed, 28 Jun 2023 01:40:45 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 2CyrBJ2Pm2TpLQAAMHmgww
-        (envelope-from <ailiop@suse.com>); Wed, 28 Jun 2023 01:40:45 +0000
-From:   Anthony Iliopoulos <ailiop@suse.com>
-To:     Mark Fasheh <mark@fasheh.com>, Joel Becker <jlbec@evilplan.org>,
-        Joseph Qi <joseph.qi@linux.alibaba.com>
-Cc:     ocfs2-devel@lists.linux.dev, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org
-Subject: [PATCH 2/2] docs: update ocfs2-devel mailing list address
-Date:   Wed, 28 Jun 2023 03:34:37 +0200
-Message-Id: <20230628013437.47030-3-ailiop@suse.com>
-X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20230628013437.47030-1-ailiop@suse.com>
-References: <20230628013437.47030-1-ailiop@suse.com>
+        Tue, 27 Jun 2023 21:36:22 -0400
+Received: from mail-qt1-x82b.google.com (mail-qt1-x82b.google.com [IPv6:2607:f8b0:4864:20::82b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F9871737
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 18:36:20 -0700 (PDT)
+Received: by mail-qt1-x82b.google.com with SMTP id d75a77b69052e-401d1d967beso153181cf.0
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 18:36:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1687916179; x=1690508179;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=76q3czNHBGF97J8zUfgBzI1kFFF4VkjgowoEBA/iOwY=;
+        b=y26X29gqmEGqKXrFtZryTyXDzQ9ewY6D9loFvzylkwQasUaA3rhMju6tAIXM45FOCP
+         EiMe0MCGmWBUFKrsCbSYBusOLFWu0jf2ch1nvHU2ezj0YlibSSfCAj3pkfhCVHzE1K7H
+         Z7NtUDgJupEmpBLcz2JwUP0Ew4wYs1sF5cUDLma1QWvlN3N/adRlgN+tfnFyRaGsxpnh
+         SbXxUiJzn2QLtTTP3iL+pFTRkz2lk8L1MKva4dy/j5S7MgRwhh1nEATI68dFDXZfdONG
+         FhiCx9DGJTIiGbbLlNXJi17Unkk3M74ZWytzQwiWvh1eVm0Sq9lBTa4tZoll5SdOHuaw
+         8eCA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687916179; x=1690508179;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=76q3czNHBGF97J8zUfgBzI1kFFF4VkjgowoEBA/iOwY=;
+        b=hLm1ymTF3w911Fjztpxt7PalO1KLKxR/w3vOyft9wE2Z0YLf/doWNmRTK00FBODcWG
+         ICJXyEoJHCUFlJr8bZLbw36JdPVMIkcYPwVfqK0HiNljGM0q2n0JzkWyrXXTcOOHWIho
+         CJYuryr8Nx/SaxsYPIq6FTujUnDULu2SwGCvaan/ZsyEP2zrEXTuzeV7pniFI204h0SM
+         aw6iXZgMovA0ADG9yDtGOWJUlyvLyQCuAZ1saiQ4LCFg2khB7VX/HqAOgVnqZaWdln1y
+         EBqaSnp/2rBGPapRPQZdHUQ06rscEx80P12KU94qrq3ec4OirUURYgX4KeynVgbPM+H9
+         nxag==
+X-Gm-Message-State: AC+VfDyGYLGK+0u4/h2Z+D9TsgFbz5zpbftiQ9j+IB/XXqoKuBHl+znP
+        owuMeTNwATta5SrbvJ/pHwn0yhdAwPMATHW1/7B18A==
+X-Google-Smtp-Source: ACHHUZ7sVzuwnmV3HryX+9qLq3qI6jRIEjo2b86t4SeBiyuoth4UHt8vts7j6aJsIac12Y3Yp0QqGwhzwhLl3ASLDT8=
+X-Received: by 2002:ac8:5710:0:b0:3ef:343b:fe7e with SMTP id
+ 16-20020ac85710000000b003ef343bfe7emr130387qtw.2.1687916179378; Tue, 27 Jun
+ 2023 18:36:19 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <cover.1684048511.git.sathyanarayanan.kuppuswamy@linux.intel.com>
+ <972e1d5c5ec53e2757fb17a586558c5385e987dd.1684048511.git.sathyanarayanan.kuppuswamy@linux.intel.com>
+ <64876bf6c30e2_1433ac29415@dwillia2-xfh.jf.intel.com.notmuch>
+ <64961c3baf8ce_142af829436@dwillia2-xfh.jf.intel.com.notmuch>
+ <9437b176-e15a-3cec-e5cb-68ff57dbc25c@linux.intel.com> <CAAH4kHa85hCz0GhQM3f1OQ3wM+=-SfF77ShFAse0-eYGBHvO_A@mail.gmail.com>
+ <649b7a9b69cb6_11e68529473@dwillia2-xfh.jf.intel.com.notmuch>
+In-Reply-To: <649b7a9b69cb6_11e68529473@dwillia2-xfh.jf.intel.com.notmuch>
+From:   Dionna Amalie Glaze <dionnaglaze@google.com>
+Date:   Tue, 27 Jun 2023 18:36:07 -0700
+Message-ID: <CAAH4kHY1-N+HOxPON6SuXE3QPowAGnwTjc5H=ZnNZwh7a+msnQ@mail.gmail.com>
+Subject: Re: [PATCH v3 3/3] selftests/tdx: Test GetQuote TDX attestation feature
+To:     Dan Williams <dan.j.williams@intel.com>
+Cc:     Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        Shuah Khan <shuah@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Wander Lairson Costa <wander@redhat.com>,
+        Erdem Aktas <erdemaktas@google.com>,
+        Chong Cai <chongc@google.com>, Qinkun Bao <qinkun@apache.org>,
+        Guorui Yu <GuoRui.Yu@linux.alibaba.com>,
+        Du Fan <fan.du@intel.com>, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
+        dhowells@redhat.com, brijesh.singh@amd.com, atishp@rivosinc.com,
+        gregkh@linuxfoundation.org, linux-coco@lists.linux.dev,
+        joey.gouly@arm.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The ocfs2-devel mailing list has been migrated to the kernel.org
-infrastructure, update all related documentation pointers to reflect the
-change.
+On Tue, Jun 27, 2023 at 5:13=E2=80=AFPM Dan Williams <dan.j.williams@intel.=
+com> wrote:
+> [..]
+> >
+> > The VMPL-based separation that will house the supervisor module known
+> > as SVSM can have protocols that implement a TPM command interface, or
+> > an RTMR-extension interface, and will also need to have an
+> > SVSM-specific protocol attestation report format to keep the secure
+> > chain of custody apparent. We'd have different formats and protocols
+> > in the kernel, at least, to speak to each technology.
+>
+> That's where I hope the line can be drawn, i.e. that all of this vendor
+> differentiation really only matters inside the kernel in the end.
+>
+> > I'm not sure it's worth the trouble of papering over all the... 3-4
+> > technologies with similar but still weirdly different formats and ways
+> > of doing things with an abstracted attestation ABI, especially since
+> > the output all has to be interpreted in an architecture-specific way
+> > anyway.
+>
+> This is where I need help. Can you identify where the following
+> assertion falls over:
+>
+> "The minimum viable key-server is one that can generically validate a
+> blob with an ECDSA signature".
+>
+> I.e. the fact that SEV and TDX send different length blobs is less
+> important than validating that signature.
+>
+> If it is always the case that specific fields in the blob need to be
+> decoded then yes, that weakens the assertion. However, maybe that means
+> that kernel code parses the blob and conveys that parsed info along with
+> vendor attestation payload all signed by a Linux key. I.e. still allow
+> for a unified output format + signed vendor blob and provide a path to
+> keep all the vendor specific handling internal to the kernel.
+>
 
-Signed-off-by: Anthony Iliopoulos <ailiop@suse.com>
----
- Documentation/ABI/obsolete/o2cb       |  4 ++--
- Documentation/ABI/removed/o2cb        |  4 ++--
- Documentation/ABI/stable/o2cb         |  4 ++--
- Documentation/ABI/testing/sysfs-ocfs2 | 12 ++++++------
- Documentation/filesystems/dlmfs.rst   |  2 +-
- Documentation/filesystems/ocfs2.rst   |  2 +-
- fs/ocfs2/Kconfig                      |  6 +++---
- 7 files changed, 17 insertions(+), 17 deletions(-)
+All the specific fields of the blob have to be decoded and subjected
+to an acceptance policy. That policy will most always be different
+across different platforms and VM owners. I wrote all of
+github.com/google/go-sev-guest, including the verification and
+validation logic, and it's going to get more complicated, and the
+sources of the data that provide validators with notions of what
+values can be trusted will be varied. The formats are not
+standardized. The Confidential Computing Consortium should be working
+toward that, but it's a slow process. There's IETF RATS. There's
+in-toto.io attestations. There's Azure's JWT thing. There's a signed
+serialized protocol buffer that I've decided is what Google is going
+to produce while we figure out all the "right" formats to use. There
+will be factions and absolute gridlock for multiple years if we
+require solidifying an abstraction for the kernel to manage all this
+logic before passing a report on to user space.
 
-diff --git a/Documentation/ABI/obsolete/o2cb b/Documentation/ABI/obsolete/o2cb
-index fe7e45e17bc7..8f39b596731d 100644
---- a/Documentation/ABI/obsolete/o2cb
-+++ b/Documentation/ABI/obsolete/o2cb
-@@ -1,11 +1,11 @@
- What:		/sys/o2cb
- Date:		Dec 2005
- KernelVersion:	2.6.16
--Contact:	ocfs2-devel@oss.oracle.com
-+Contact:	ocfs2-devel@lists.linux.dev
- Description:	Ocfs2-tools looks at 'interface-revision' for versioning
- 		information. Each logmask/ file controls a set of debug prints
- 		and can be written into with the strings "allow", "deny", or
- 		"off". Reading the file returns the current state.
- 		Was renamed to /sys/fs/u2cb/
- Users:		ocfs2-tools. It's sufficient to mail proposed changes to
--		ocfs2-devel@oss.oracle.com.
-+		ocfs2-devel@lists.linux.dev.
-diff --git a/Documentation/ABI/removed/o2cb b/Documentation/ABI/removed/o2cb
-index 20c91adca6d4..61cff238fbe8 100644
---- a/Documentation/ABI/removed/o2cb
-+++ b/Documentation/ABI/removed/o2cb
-@@ -1,10 +1,10 @@
- What:		/sys/o2cb symlink
- Date:		May 2011
- KernelVersion:	3.0
--Contact:	ocfs2-devel@oss.oracle.com
-+Contact:	ocfs2-devel@lists.linux.dev
- Description:	This is a symlink: /sys/o2cb to /sys/fs/o2cb. The symlink is
- 		removed when new versions of ocfs2-tools which know to look
- 		in /sys/fs/o2cb are sufficiently prevalent. Don't code new
- 		software to look here, it should try /sys/fs/o2cb instead.
- Users:		ocfs2-tools. It's sufficient to mail proposed changes to
--		ocfs2-devel@oss.oracle.com.
-+		ocfs2-devel@lists.linux.dev.
-diff --git a/Documentation/ABI/stable/o2cb b/Documentation/ABI/stable/o2cb
-index b62a967f01a0..3a83b5c54e93 100644
---- a/Documentation/ABI/stable/o2cb
-+++ b/Documentation/ABI/stable/o2cb
-@@ -1,10 +1,10 @@
- What:		/sys/fs/o2cb/
- Date:		Dec 2005
- KernelVersion:	2.6.16
--Contact:	ocfs2-devel@oss.oracle.com
-+Contact:	ocfs2-devel@lists.linux.dev
- Description:	Ocfs2-tools looks at 'interface-revision' for versioning
- 		information. Each logmask/ file controls a set of debug prints
- 		and can be written into with the strings "allow", "deny", or
- 		"off". Reading the file returns the current state.
- Users:		ocfs2-tools. It's sufficient to mail proposed changes to
--		ocfs2-devel@oss.oracle.com.
-+		ocfs2-devel@lists.linux.dev.
-diff --git a/Documentation/ABI/testing/sysfs-ocfs2 b/Documentation/ABI/testing/sysfs-ocfs2
-index b7cc516a8a8a..494d7c1ac710 100644
---- a/Documentation/ABI/testing/sysfs-ocfs2
-+++ b/Documentation/ABI/testing/sysfs-ocfs2
-@@ -1,13 +1,13 @@
- What:		/sys/fs/ocfs2/
- Date:		April 2008
--Contact:	ocfs2-devel@oss.oracle.com
-+Contact:	ocfs2-devel@lists.linux.dev
- Description:
- 		The /sys/fs/ocfs2 directory contains knobs used by the
- 		ocfs2-tools to interact with the filesystem.
- 
- What:		/sys/fs/ocfs2/max_locking_protocol
- Date:		April 2008
--Contact:	ocfs2-devel@oss.oracle.com
-+Contact:	ocfs2-devel@lists.linux.dev
- Description:
- 		The /sys/fs/ocfs2/max_locking_protocol file displays version
- 		of ocfs2 locking supported by the filesystem.  This version
-@@ -28,7 +28,7 @@ Description:
- 
- What:		/sys/fs/ocfs2/loaded_cluster_plugins
- Date:		April 2008
--Contact:	ocfs2-devel@oss.oracle.com
-+Contact:	ocfs2-devel@lists.linux.dev
- Description:
- 		The /sys/fs/ocfs2/loaded_cluster_plugins file describes
- 		the available plugins to support ocfs2 cluster operation.
-@@ -48,7 +48,7 @@ Description:
- 
- What:		/sys/fs/ocfs2/active_cluster_plugin
- Date:		April 2008
--Contact:	ocfs2-devel@oss.oracle.com
-+Contact:	ocfs2-devel@lists.linux.dev
- Description:
- 		The /sys/fs/ocfs2/active_cluster_plugin displays which
- 		cluster plugin is currently in use by the filesystem.
-@@ -65,7 +65,7 @@ Description:
- 
- What:		/sys/fs/ocfs2/cluster_stack
- Date:		April 2008
--Contact:	ocfs2-devel@oss.oracle.com
-+Contact:	ocfs2-devel@lists.linux.dev
- Description:
- 		The /sys/fs/ocfs2/cluster_stack file contains the name
- 		of current ocfs2 cluster stack.  This value is set by
-@@ -86,4 +86,4 @@ Description:
- 		stack return an error.
- 
- Users:
--	ocfs2-tools <ocfs2-tools-devel@oss.oracle.com>
-+	ocfs2-tools <ocfs2-tools-devel@lists.linux.dev>
-diff --git a/Documentation/filesystems/dlmfs.rst b/Documentation/filesystems/dlmfs.rst
-index 28dd41a63be2..7e2b1fd471d7 100644
---- a/Documentation/filesystems/dlmfs.rst
-+++ b/Documentation/filesystems/dlmfs.rst
-@@ -12,7 +12,7 @@ dlmfs is built with OCFS2 as it requires most of its infrastructure.
- 
- :Project web page:    http://ocfs2.wiki.kernel.org
- :Tools web page:      https://github.com/markfasheh/ocfs2-tools
--:OCFS2 mailing lists: https://oss.oracle.com/projects/ocfs2/mailman/
-+:OCFS2 mailing lists: https://subspace.kernel.org/lists.linux.dev.html
- 
- All code copyright 2005 Oracle except when otherwise noted.
- 
-diff --git a/Documentation/filesystems/ocfs2.rst b/Documentation/filesystems/ocfs2.rst
-index 42ca9a3d4c6e..5827062995cb 100644
---- a/Documentation/filesystems/ocfs2.rst
-+++ b/Documentation/filesystems/ocfs2.rst
-@@ -14,7 +14,7 @@ get "mount.ocfs2" and "ocfs2_hb_ctl".
- 
- Project web page:    http://ocfs2.wiki.kernel.org
- Tools git tree:      https://github.com/markfasheh/ocfs2-tools
--OCFS2 mailing lists: https://oss.oracle.com/projects/ocfs2/mailman/
-+OCFS2 mailing lists: https://subspace.kernel.org/lists.linux.dev.html
- 
- All code copyright 2005 Oracle except when otherwise noted.
- 
-diff --git a/fs/ocfs2/Kconfig b/fs/ocfs2/Kconfig
-index 304d12186ccd..3123da7cfb30 100644
---- a/fs/ocfs2/Kconfig
-+++ b/fs/ocfs2/Kconfig
-@@ -17,9 +17,9 @@ config OCFS2_FS
- 	  You'll want to install the ocfs2-tools package in order to at least
- 	  get "mount.ocfs2".
- 
--	  Project web page:    https://oss.oracle.com/projects/ocfs2
--	  Tools web page:      https://oss.oracle.com/projects/ocfs2-tools
--	  OCFS2 mailing lists: https://oss.oracle.com/projects/ocfs2/mailman/
-+	  Project web page:    https://ocfs2.wiki.kernel.org/
-+	  Tools web page:      https://github.com/markfasheh/ocfs2-tools
-+	  OCFS2 mailing lists: https://subspace.kernel.org/lists.linux.dev.html
- 
- 	  For more information on OCFS2, see the file
- 	  <file:Documentation/filesystems/ocfs2.rst>.
--- 
-2.35.3
+Now, not only are the field contents important, the certificates of
+the keys that signed the report are important. Each platform has its
+own special x509v3 extensions and key hierarchy to express what parts
+of the report should be what value if signed by this key, and in TDX's
+case there are extra endpoints that you need to query to determine if
+there's an active CVE on the associated TCB version. This is how they
+avoid adding every cpu's key to the leaf certificate's CRL.
 
+You really shouldn't be putting attestation validation logic in the
+kernel. It belongs outside of the VM entirely with the party that will
+only release access keys to the VM if it can prove it's running the
+software it claims, on the platform it claims. I think Windows puts a
+remote procedure call in their guest attestation driver to the Azure
+attestation service, and that is an anti-pattern in my mind.
+
+> > ARM's Confidential Computing Realm Management Extensions (RME) seems
+> > to be going along the lines of a runtime measurement register model
+> > with their hardware enforced security. The number of registers isn't
+> > prescribed in the spec.
+> >
+> > +Joey Gouly +linux-coco@lists.linux.dev as far as RME is concerned, do
+> > you know who would be best to weigh in on this discussion of a unified
+> > attestation model?
+
+
+
+--=20
+-Dionna Glaze, PhD (she/her)
