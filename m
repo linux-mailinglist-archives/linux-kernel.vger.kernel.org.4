@@ -2,75 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25B31740FEC
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 13:17:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92A3D740FF5
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 13:19:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231522AbjF1LQx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 07:16:53 -0400
-Received: from sender4-op-o15.zoho.com ([136.143.188.15]:17592 "EHLO
-        sender4-op-o15.zoho.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231239AbjF1LQe (ORCPT
+        id S231691AbjF1LTF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 07:19:05 -0400
+Received: from mx5.didiglobal.com ([111.202.70.122]:48772 "HELO
+        mx5.didiglobal.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S230498AbjF1LSq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 07:16:34 -0400
-ARC-Seal: i=1; a=rsa-sha256; t=1687950982; cv=none; 
-        d=zohomail.com; s=zohoarc; 
-        b=ZZlgzUq5NUHrka0aoshbot51CpzuDpBdy+XKtPamjnL6D3ELRZ6OoL+v7Hz3pc3OFtC8dIogwpwk7zQYisPvWLZ0wr1WEEVbUHnKJWKcF9HeX9I9IDQ8WJx4gbPx7g1N6RP3eTNTPKNXzgNKvsgQzAQsEXGOh8c/53IxYcGtmhc=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-        t=1687950982; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=FITWfOQSLZcRm2X7I99mXdDRUnYkfYJapAY6VqQhFJU=; 
-        b=mLv3uoGKqAUOcGGffN8hYILcMhxAIpkWusuqhFJONMcAZ05qu7RM91xcaLOL9CCTbgqS0BqUQZlJJtqT4j7LmR5x/8Ih/F70APpuzcgPphoMfYz3XyNwknjR69SlRl4bdUoCTyK2jBjsVcBVA+yvNKb4hKBFVzLayg5eu0wW40Q=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-        dkim=pass  header.i=linux.beauty;
-        spf=pass  smtp.mailfrom=me@linux.beauty;
-        dmarc=pass header.from=<me@linux.beauty>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1687950982;
-        s=zmail; d=linux.beauty; i=me@linux.beauty;
-        h=Date:Date:From:From:To:To:Cc:Cc:Message-ID:In-Reply-To:References:Subject:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
-        bh=FITWfOQSLZcRm2X7I99mXdDRUnYkfYJapAY6VqQhFJU=;
-        b=QIUXc/SIzOT1F8TwSXJNZYa/yUpPTWoRaop0FQVtqJ7zfTlfrznHaZYf/FE61mKh
-        gs08M1fSWXTG+2+BMp37OFFv9jboZiFTHkNXtfoshlZlD0M/nARP68PFSNKj/89KT9l
-        6mqDXsbs3WCgh5C06ZsEsc7TEeNJFPU8WWlxndRc=
-Received: from mail.zoho.com by mx.zohomail.com
-        with SMTP id 1687950981133598.4605502910363; Wed, 28 Jun 2023 04:16:21 -0700 (PDT)
-Date:   Wed, 28 Jun 2023 19:16:21 +0800
-From:   Li Chen <me@linux.beauty>
-To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
-Cc:     "dmaengine" <dmaengine@vger.kernel.org>,
-        "linux-arm-kernel" <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel" <linux-kernel@vger.kernel.org>,
-        "Arnd Bergmann" <arnd@arndb.de>
-Message-ID: <18901b7f7f4.10c6f89c4692094.481698950513259776@linux.beauty>
-In-Reply-To: <ZJwTV59xRlUBit+N@shell.armlinux.org.uk>
-References: <18901a6cbf0.c9e3e099688173.4166132371304083225@linux.beauty> <ZJwTV59xRlUBit+N@shell.armlinux.org.uk>
-Subject: Re: Should dma_map_single take the dma controller or its consumer
- as an argument?
+        Wed, 28 Jun 2023 07:18:46 -0400
+Received: from mail.didiglobal.com (unknown [10.79.65.12])
+        by mx5.didiglobal.com (Maildata Gateway V2.8) with ESMTPS id 59374B002422E;
+        Wed, 28 Jun 2023 19:18:42 +0800 (CST)
+Received: from didi-ThinkCentre-M930t-N000 (10.79.64.101) by
+ ZJY02-ACTMBX-02.didichuxing.com (10.79.65.12) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Wed, 28 Jun 2023 19:18:41 +0800
+Date:   Wed, 28 Jun 2023 19:18:34 +0800
+X-MD-Sfrom: tiozhang@didiglobal.com
+X-MD-SrcIP: 10.79.65.12
+From:   tiozhang <tiozhang@didiglobal.com>
+To:     <tj@kernel.org>
+CC:     <rdunlap@infradead.org>, <frederic@kernel.org>,
+        <jiangshanlai@gmail.com>, <linux-kernel@vger.kernel.org>,
+        <zyhtheonly@gmail.com>, <zyhtheonly@yeah.net>,
+        <zwp10758@gmail.com>, <tiozhang@didiglobal.com>,
+        <fuyuanli@didiglobal.com>
+Subject: [PATCH v4] workqueue: add cmdline parameter `workqueue.unbound_cpus`
+ to further constrain wq_unbound_cpumask at boot time
+Message-ID: <20230628111722.GA31661@didi-ThinkCentre-M930t-N000>
+Mail-Followup-To: tj@kernel.org, rdunlap@infradead.org, frederic@kernel.org,
+        jiangshanlai@gmail.com, linux-kernel@vger.kernel.org,
+        zyhtheonly@gmail.com, zyhtheonly@yeah.net, zwp10758@gmail.com,
+        fuyuanli@didiglobal.com
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-Importance: Medium
-User-Agent: Zoho Mail
-X-Mailer: Zoho Mail
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <ZJn8bQd6EdHolayS@slm.duckdns.org>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Originating-IP: [10.79.64.101]
+X-ClientProxiedBy: ZJY01-PUBMBX-01.didichuxing.com (10.79.64.32) To
+ ZJY02-ACTMBX-02.didichuxing.com (10.79.65.12)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Russell,
+Motivation of doing this is to better improve boot times for devices when
+we want to prevent our workqueue works from running on some specific CPUs,
+e,g, some CPUs are busy with interrupts.
 
- ---- On Wed, 28 Jun 2023 19:02:47 +0800  Russell King (Oracle)  wrote --- 
- > On Wed, Jun 28, 2023 at 06:57:35PM +0800, Li Chen wrote:
- > > Hi all,
- > > 
- > > I recently encountered an issue where the dma_mask was set in the DMA controller's driver, but the consumer peripheral driver didn't set its own dma_mask.
- > 
- > It should always take the device that is *actually* performing the DMA,
- > since that is the device that has restrictions on what addresses can be
- > accessed, etc.
- > 
- > Devices that "consume" the data from a DMA controller don't access
- > memory - they are merely the targets, and they can't on their own access
- > host memory. Therefore, their dma mask _should_ be irrelevant.
+Signed-off-by: tiozhang <tiozhang@didiglobal.com>
+---
+ .../admin-guide/kernel-parameters.txt         |  7 +++++++
+ kernel/workqueue.c                            | 20 +++++++++++++++++++
+ 2 files changed, 27 insertions(+)
 
-Thanks for your quick response. Therefore, I just need to use chan->device->dev in my dma_map_single and there is no need to configure the dma_mask for my consumer peripherals.
+diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+index a465d5242774..a88b133ab09b 100644
+--- a/Documentation/admin-guide/kernel-parameters.txt
++++ b/Documentation/admin-guide/kernel-parameters.txt
+@@ -6780,6 +6780,13 @@
+ 			disables both lockup detectors. Default is 10
+ 			seconds.
+ 
++	workqueue.unbound_cpus=
++			[KNL,SMP] Specify to constrain one or some CPUs
++			to use in unbound workqueues.
++			Format: <cpu-list>
++			By default, all online CPUs are available for
++			unbound workqueues.
++
+ 	workqueue.watchdog_thresh=
+ 			If CONFIG_WQ_WATCHDOG is configured, workqueue can
+ 			warn stall conditions and dump internal state to
+diff --git a/kernel/workqueue.c b/kernel/workqueue.c
+index 7cd5f5e7e0a1..29e8254edd63 100644
+--- a/kernel/workqueue.c
++++ b/kernel/workqueue.c
+@@ -329,6 +329,9 @@ static bool workqueue_freezing;		/* PL: have wqs started freezing? */
+ /* PL: allowable cpus for unbound wqs and work items */
+ static cpumask_var_t wq_unbound_cpumask;
+ 
++/* for further constrain wq_unbound_cpumask by cmdline parameter*/
++static struct cpumask wq_cmdline_cpumask __initdata;
++
+ /* CPU where unbound work was last round robin scheduled from this CPU */
+ static DEFINE_PER_CPU(int, wq_rr_cpu_last);
+ 
+@@ -6006,6 +6009,9 @@ void __init workqueue_init_early(void)
+ 	cpumask_copy(wq_unbound_cpumask, housekeeping_cpumask(HK_TYPE_WQ));
+ 	cpumask_and(wq_unbound_cpumask, wq_unbound_cpumask, housekeeping_cpumask(HK_TYPE_DOMAIN));
+ 
++	if (!cpumask_empty(&wq_cmdline_cpumask))
++		cpumask_and(wq_unbound_cpumask, wq_unbound_cpumask, &wq_cmdline_cpumask);
++
+ 	pwq_cache = KMEM_CACHE(pool_workqueue, SLAB_PANIC);
+ 
+ 	/* initialize CPU pools */
+@@ -6129,3 +6135,17 @@ void __init workqueue_init(void)
+  */
+ void __warn_flushing_systemwide_wq(void) { }
+ EXPORT_SYMBOL(__warn_flushing_systemwide_wq);
++
++static int __init workqueue_unbound_cpus_setup(char *str)
++{
++	int ret;
++
++	ret = cpulist_parse(str, &wq_cmdline_cpumask);
++	if (ret < 0) {
++		cpumask_clear(&wq_cmdline_cpumask);
++		pr_warn("workqueue.unbound_cpus: incorrect CPU range\n");
++	}
++
++	return ret;
++}
++__setup("workqueue.unbound_cpus=", workqueue_unbound_cpus_setup);
+-- 
+2.17.1
 
-Regards,
-Li
