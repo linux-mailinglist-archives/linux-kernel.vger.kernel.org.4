@@ -2,212 +2,288 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 828A67412DB
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 15:46:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36BB07412D4
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 15:44:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232244AbjF1Noa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 09:44:30 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:35211 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231237AbjF1NoU (ORCPT
+        id S232169AbjF1NoW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 09:44:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49402 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231659AbjF1NoO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 09:44:20 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1687959814;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=BR1e31KWtCzKshHk3i9sGJsYk/tQaHs2cFTTZ86spN4=;
-        b=h8r8vY3iyTStut/WWWHpRHteuJyj2PJd7vyj/Pg5cv7mJyQdoPXDozgsenYn3C1c0FYi30
-        llsAkApo60N2JmF03U7hg8fuGPv0tTnBsPUHzwCfdeOedHEqjaHmVniu5o7YC2VWNFDqG5
-        E/+jFOtFlZgpxyf9+ym598nCTF3fdGM=
-Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com
- [209.85.160.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-79-uK-5clZEMAWaMlYDKeeqlg-1; Wed, 28 Jun 2023 09:43:33 -0400
-X-MC-Unique: uK-5clZEMAWaMlYDKeeqlg-1
-Received: by mail-qt1-f198.google.com with SMTP id d75a77b69052e-401e1fc831fso4506391cf.1
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 06:43:32 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687959812; x=1690551812;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        Wed, 28 Jun 2023 09:44:14 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E744710D5;
+        Wed, 28 Jun 2023 06:44:12 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id 4fb4d7f45d1cf-51d80d81d6eso5255931a12.1;
+        Wed, 28 Jun 2023 06:44:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687959851; x=1690551851;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=BR1e31KWtCzKshHk3i9sGJsYk/tQaHs2cFTTZ86spN4=;
-        b=d0SOEPyfe0Qa3HkFGx6g4lW1einKUMluUmpRrcRLFN2FMaGiuZr6cQhBhSy6Zeotno
-         IOAu45sUCYXDukCODLuQ66GZAr+NgLKn964SkURszVOQfEtRomy934xK1sOLJgm1OMT5
-         +pl4kH9xTjB4LV8zhtqugHc+0Qy2EjkOgDQzepeCJkkf/o0GoJZSiIybymAYffuacYFB
-         RlgkvVVozhG+XWadvkEnYIHH7fEEm1MgQ2KbQ0tKlVi6IzkamSf0IH06st21/xqBG9IE
-         aDwX3awT/yeGZXPf1H0ZW8oCQ2NgCcLryqTzQOxcsZbcV1PSX3b4vkwsUWxUCvZWDxOW
-         wjwQ==
-X-Gm-Message-State: AC+VfDwTdr0imdXpWUgU6375RaPWoUdeIBzUIOIuoahAJ2GEMNhYQIWy
-        tXMQ6VLT+dKumGE/HniArI+DKT6oaHo6ugTkoQPyZtOW81wrDl4w+i8MRnxSe3BlFH7MA/38bMM
-        162IvC37fFApzu5Zwhau/FsHR
-X-Received: by 2002:ac8:5713:0:b0:400:9bd5:3387 with SMTP id 19-20020ac85713000000b004009bd53387mr12057676qtw.0.1687959812263;
-        Wed, 28 Jun 2023 06:43:32 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ4GFumLvOCPj0F9b49es3pXW0L/ClPJqVb/4kHTZ+ZSwVk61r/fK/ZvKcbBwMMSNkp8sCzcFg==
-X-Received: by 2002:ac8:5713:0:b0:400:9bd5:3387 with SMTP id 19-20020ac85713000000b004009bd53387mr12057630qtw.0.1687959811891;
-        Wed, 28 Jun 2023 06:43:31 -0700 (PDT)
-Received: from x1n (cpe5c7695f3aee0-cm5c7695f3aede.cpe.net.cable.rogers.com. [99.254.144.39])
-        by smtp.gmail.com with ESMTPSA id fw15-20020a05622a4a8f00b00400a5ca26fesm4279836qtb.2.2023.06.28.06.43.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Jun 2023 06:43:31 -0700 (PDT)
-Date:   Wed, 28 Jun 2023 09:43:29 -0400
-From:   Peter Xu <peterx@redhat.com>
-To:     Suren Baghdasaryan <surenb@google.com>
-Cc:     akpm@linux-foundation.org, willy@infradead.org, hannes@cmpxchg.org,
-        mhocko@suse.com, josef@toxicpanda.com, jack@suse.cz,
-        ldufour@linux.ibm.com, laurent.dufour@fr.ibm.com,
-        michel@lespinasse.org, liam.howlett@oracle.com, jglisse@google.com,
-        vbabka@suse.cz, minchan@google.com, dave@stgolabs.net,
-        punit.agrawal@bytedance.com, lstoakes@gmail.com, hdanton@sina.com,
-        apopple@nvidia.com, ying.huang@intel.com, david@redhat.com,
-        yuzhao@google.com, dhowells@redhat.com, hughd@google.com,
-        viro@zeniv.linux.org.uk, brauner@kernel.org,
-        pasha.tatashin@soleen.com, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-team@android.com
-Subject: Re: [PATCH v4 5/6] mm: handle swap page faults under per-VMA lock
-Message-ID: <ZJw5AcazkbA5u+wO@x1n>
-References: <20230628071800.544800-1-surenb@google.com>
- <20230628071800.544800-6-surenb@google.com>
+        bh=DBv8cSvMkvEF1DkMG98bpwrqP7g4vFh1aUZStsMNl9c=;
+        b=Zlc1pZYlLshNBMDIZeLIFmudEhsNNxdVueSsNAVMmfG4YxQ5KunHGM745IFd7VoEgK
+         1K8lzl+LKzAx7oVBL2Z7/riAJsBCfX3z3JxqCM4NYJqigC6ie/9DZodlWiN4vLRfqoLw
+         1w9HzZ/FUWEOhXXRUYOAcvypkfOtRyWXrFq71+rU9WgAaTDPYPzPVtiQwi+bjxrZQs6q
+         CwbheXFyDke1BS+YBQ1eNbNQ8fqaq0DHMCGULn+sq+9tIlD/9B5uqQtkyIUiHQQXvL7y
+         Jlq3IPRIL6OEaKSq/QPsSV81eMiY0be/JYlz3qWw5dZLOkUkewIVXrBJo/eGFE8IDVBa
+         mtDQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687959851; x=1690551851;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=DBv8cSvMkvEF1DkMG98bpwrqP7g4vFh1aUZStsMNl9c=;
+        b=PwY9Sh99HC8hU6/o3Krt7uXt8VJw+5sRWbTqP0qmwws11T2h8C2E73ofBfThrxc14K
+         ed7H1d14AYyM+oU3vsYYm+nsiKAF12Rr33S4mNCUU4bXo1lGRorlbJz4M2H6+JJTsN1D
+         P6essoZ5GXDOxnqlB6zQDPu8iwmXA86HaONm6pZI2tiWMb4lcPMjTUY2UC6YRfINP7L2
+         AtWV/SN/eYg4+sGYgOs08nSpJ3c0qEdFWWoEfvNaxrtxE+uSvg2YZc06lp1c7XH9qf56
+         quyAm199xZwIBItMY1YcFTxBY45yn0XFnKaVplufuFqXAqROYGmtfjs9WVSHzHpSyib9
+         K1Eg==
+X-Gm-Message-State: AC+VfDx/SP7geF29/hJ61kp2ASMNN4b6TzYchKFclYIZihbVP2Rr1qUx
+        W8ma6LLzZ8ihrYtaCGNv3/TTLFcOzkEkY8HGDvY=
+X-Google-Smtp-Source: ACHHUZ7oXZBHs6NMhkxsGsw96wOEqS7BEMbTZjUoi8ySOd5bxD2bpIiiZDa91fCITCubHFaPraFG5y3NUElfmp3zhrc=
+X-Received: by 2002:aa7:c593:0:b0:51d:93c8:99ff with SMTP id
+ g19-20020aa7c593000000b0051d93c899ffmr8089366edq.36.1687959851110; Wed, 28
+ Jun 2023 06:44:11 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230628071800.544800-6-surenb@google.com>
+References: <1687955688-20809-1-git-send-email-quic_mojha@quicinc.com> <1687955688-20809-5-git-send-email-quic_mojha@quicinc.com>
+In-Reply-To: <1687955688-20809-5-git-send-email-quic_mojha@quicinc.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Wed, 28 Jun 2023 16:43:34 +0300
+Message-ID: <CAHp75VfF=TVBiTBGeDuGdROPFbS=zbc4ABjPL1cCfWe0rTxhQA@mail.gmail.com>
+Subject: Re: [PATCH v4 04/21] soc: qcom: Add Qualcomm APSS minidump (frontend)
+ feature support
+To:     Mukesh Ojha <quic_mojha@quicinc.com>
+Cc:     corbet@lwn.net, agross@kernel.org, andersson@kernel.org,
+        konrad.dybcio@linaro.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        keescook@chromium.org, tony.luck@intel.com, gpiccoli@igalia.com,
+        mathieu.poirier@linaro.org, catalin.marinas@arm.com,
+        will@kernel.org, linus.walleij@linaro.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-hardening@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+        lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 28, 2023 at 12:17:59AM -0700, Suren Baghdasaryan wrote:
-> When page fault is handled under per-VMA lock protection, all swap page
-> faults are retried with mmap_lock because folio_lock_or_retry has to drop
-> and reacquire mmap_lock if folio could not be immediately locked.
-> Follow the same pattern as mmap_lock to drop per-VMA lock when waiting
-> for folio and retrying once folio is available.
-> With this obstacle removed, enable do_swap_page to operate under
-> per-VMA lock protection. Drivers implementing ops->migrate_to_ram might
-> still rely on mmap_lock, therefore we have to fall back to mmap_lock in
-> that particular case.
-> Note that the only time do_swap_page calls synchronous swap_readpage
-> is when SWP_SYNCHRONOUS_IO is set, which is only set for
-> QUEUE_FLAG_SYNCHRONOUS devices: brd, zram and nvdimms (both btt and
-> pmem). Therefore we don't sleep in this path, and there's no need to
-> drop the mmap or per-VMA lock.
-> 
-> Signed-off-by: Suren Baghdasaryan <surenb@google.com>
+On Wed, Jun 28, 2023 at 3:35=E2=80=AFPM Mukesh Ojha <quic_mojha@quicinc.com=
+> wrote:
+>
+> Minidump is a best effort mechanism to collect useful and predefined
+> data for first level of debugging on end user devices running on
+> Qualcomm SoCs. It is built on the premise that System on Chip (SoC)
+> or subsystem part of SoC crashes, due to a range of hardware and
+> software bugs. Hence, the ability to collect accurate data is only
+> a best-effort. The data collected could be invalid or corrupted,
+> data collection itself could fail, and so on.
+>
+> Qualcomm devices in engineering mode provides a mechanism for
+> generating full system ramdumps for post mortem debugging. But in some
+> cases it's however not feasible to capture the entire content of RAM.
+> The minidump mechanism provides the means for selecting region should
+> be included in the ramdump. The solution supports extracting the
+> ramdump/minidump produced either over USB or stored to an attached
+> storage device.
+>
+> Minidump kernel driver implementation is divided into two parts for
+> simplicity, one is minidump core which can also be called minidump
+> frontend(As API gets exported from this driver for registration with
+> backend) and the other part is minidump backend i.e, where the underlying
+> implementation of minidump will be there. There could be different way
+> how the backend is implemented like Shared memory, Memory mapped IO
+> or Resource manager based where the guest region information is passed
+> to hypervisor via hypercalls.
+>
+> Minidump Client-1     Client-2      Client-5    Client-n
+>          |               |              |             |
+>          |               |    ...       |   ...       |
+>          |               |              |             |
+>          |               |              |             |
+>          |               |              |             |
+>          |               |              |             |
+>          |               |              |             |
+>          |               |              |             |
+>          |           +---+--------------+----+        |
+>          +-----------+  qcom_minidump(core)  +--------+
+>                      |                       |
+>                      +------+-----+------+---+
+>                             |     |      |
+>                             |     |      |
+>             +---------------+     |      +--------------------+
+>             |                     |                           |
+>             |                     |                           |
+>             |                     |                           |
+>             v                     v                           v
+>  +-------------------+      +-------------------+     +------------------=
++
+>  |qcom_minidump_smem |      |qcom_minidump_mmio |     | qcom_minidump_rm =
+|
+>  |                   |      |                   |     |                  =
+|
+>  +-------------------+      +-------------------+     +------------------=
++
+>    Shared memory              Memory mapped IO           Resource manager
+>     (backend)                   (backend)                   (backend)
+>
+> Here, we will be giving all analogy of backend with SMEM as it is the
+> only implemented backend at present but general idea remains the same.
 
-Acked-by: Peter Xu <peterx@redhat.com>
+the general
 
-One nit below:
+>
+> The core of minidump feature is part of Qualcomm's boot firmware code.
+> It initializes shared memory (SMEM), which is a part of DDR and
+> allocates a small section of it to minidump table i.e also called
 
-> ---
->  mm/filemap.c | 25 ++++++++++++++++---------
->  mm/memory.c  | 16 ++++++++++------
->  2 files changed, 26 insertions(+), 15 deletions(-)
-> 
-> diff --git a/mm/filemap.c b/mm/filemap.c
-> index 52bcf12dcdbf..7ee078e1a0d2 100644
-> --- a/mm/filemap.c
-> +++ b/mm/filemap.c
-> @@ -1699,31 +1699,38 @@ static int __folio_lock_async(struct folio *folio, struct wait_page_queue *wait)
->  	return ret;
->  }
->  
-> +static void release_fault_lock(struct vm_fault *vmf)
+the minidump
+
+> global table of content (G-ToC). Each subsystem (APSS, ADSP, ...) has
+> their own table of segments to be included in the minidump, all
+> references from a descriptor in SMEM (G-ToC). Each segment/region has
+> some details like name, physical address and it's size etc. and it
+> could be anywhere scattered in the DDR.
+>
+> qcom_minidump(core or frontend) driver adds the capability to add APSS
+> region to be dumped as part of ram dump collection. It provides
+> appropriate symbol register/unregister client regions.
+>
+> To simplify post mortem debugging, it creates and maintain an ELF
+> header as first region that gets updated upon registration
+> of a new region.
+
+...
+
+> +#include <linux/device.h>
+> +#include <linux/export.h>
+> +#include <linux/kallsyms.h>
+
+> +#include <linux/kernel.h>
+
+Why?
+
+And again a lot of missing headers, like
+
+bug.h
+dev_printk.h
+errno.h
+export.h
+mutex.h
+slab.h
+
+> +#include <linux/module.h>
+> +#include <linux/printk.h>
+> +#include <linux/string.h>
+
+...
+
+> +/*
+> + * In some of the Old Qualcomm devices, boot firmware statically allocat=
+es 300
+> + * as total number of supported region (including all co-processors) in
+
+regions
+
+> + * minidump table out of which linux was using 201. In future, this limi=
+tation
+> + * from boot firmware might get removed by allocating the region dynamic=
+ally.
+> + * So, keep it compatible with older devices, we can keep the current li=
+mit for
+
+So, to keep...
+
+> + * Linux to 201.
+> + */
+
+...
+
+> +static struct elf_shdr *elf_shdr_entry_addr(struct elfhdr *ehdr, int idx=
+)
 > +{
-> +	if (vmf->flags & FAULT_FLAG_VMA_LOCK)
-> +		vma_end_read(vmf->vma);
-> +	else
-> +		mmap_read_unlock(vmf->vma->vm_mm);
+> +       struct elf_shdr *eshdr =3D (struct elf_shdr *)((size_t)ehdr + ehd=
+r->e_shoff);
+
+Interesting casting pointer to a size_t. Perhaps void * would work
+more explicitly?
+Ditto for all other cases like this.
+
+> +       return &eshdr[idx];
 > +}
-> +
->  /*
->   * Return values:
->   * 0 - folio is locked.
->   * VM_FAULT_RETRY - folio is not locked.
-> - *     mmap_lock has been released (mmap_read_unlock(), unless flags had both
-> - *     FAULT_FLAG_ALLOW_RETRY and FAULT_FLAG_RETRY_NOWAIT set, in
-> - *     which case mmap_lock is still held.
-> + *     mmap_lock or per-VMA lock has been released (mmap_read_unlock() or
-> + *     vma_end_read()), unless flags had both FAULT_FLAG_ALLOW_RETRY and
-> + *     FAULT_FLAG_RETRY_NOWAIT set, in which case the lock is still held.
->   *
->   * If neither ALLOW_RETRY nor KILLABLE are set, will always return 0
-> - * with the folio locked and the mmap_lock unperturbed.
-> + * with the folio locked and the mmap_lock/per-VMA lock is left unperturbed.
->   */
->  vm_fault_t __folio_lock_or_retry(struct folio *folio, struct vm_fault *vmf)
->  {
-> -	struct mm_struct *mm = vmf->vma->vm_mm;
->  	unsigned int flags = vmf->flags;
->  
->  	if (fault_flag_allow_retry_first(flags)) {
->  		/*
-> -		 * CAUTION! In this case, mmap_lock is not released
-> -		 * even though return VM_FAULT_RETRY.
-> +		 * CAUTION! In this case, mmap_lock/per-VMA lock is not
-> +		 * released even though returning VM_FAULT_RETRY.
->  		 */
->  		if (flags & FAULT_FLAG_RETRY_NOWAIT)
->  			return VM_FAULT_RETRY;
->  
-> -		mmap_read_unlock(mm);
-> +		release_fault_lock(vmf);
->  		if (flags & FAULT_FLAG_KILLABLE)
->  			folio_wait_locked_killable(folio);
->  		else
-> @@ -1735,7 +1742,7 @@ vm_fault_t __folio_lock_or_retry(struct folio *folio, struct vm_fault *vmf)
->  
->  		ret = __folio_lock_killable(folio);
->  		if (ret) {
-> -			mmap_read_unlock(mm);
-> +			release_fault_lock(vmf);
->  			return VM_FAULT_RETRY;
->  		}
->  	} else {
-> diff --git a/mm/memory.c b/mm/memory.c
-> index 345080052003..76c7907e7286 100644
-> --- a/mm/memory.c
-> +++ b/mm/memory.c
-> @@ -3712,12 +3712,6 @@ vm_fault_t do_swap_page(struct vm_fault *vmf)
->  	if (!pte_unmap_same(vmf))
->  		goto out;
->  
-> -	if (vmf->flags & FAULT_FLAG_VMA_LOCK) {
-> -		ret = VM_FAULT_RETRY;
-> -		vma_end_read(vma);
-> -		goto out;
-> -	}
-> -
->  	entry = pte_to_swp_entry(vmf->orig_pte);
->  	if (unlikely(non_swap_entry(entry))) {
->  		if (is_migration_entry(entry)) {
-> @@ -3727,6 +3721,16 @@ vm_fault_t do_swap_page(struct vm_fault *vmf)
->  			vmf->page = pfn_swap_entry_to_page(entry);
->  			ret = remove_device_exclusive_entry(vmf);
->  		} else if (is_device_private_entry(entry)) {
-> +			if (vmf->flags & FAULT_FLAG_VMA_LOCK) {
-> +				/*
-> +				 * migrate_to_ram is not yet ready to operate
-> +				 * under VMA lock.
-> +				 */
-> +				vma_end_read(vma);
-> +				ret |= VM_FAULT_RETRY;
 
-Here IIUC ret==0 is guaranteed, so maybe "ret = VM_FAULT_RETRY" is slightly
-clearer.
+...
 
-> +				goto out;
-> +			}
-> +
->  			vmf->page = pfn_swap_entry_to_page(entry);
->  			vmf->pte = pte_offset_map_lock(vma->vm_mm, vmf->pmd,
->  					vmf->address, &vmf->ptl);
-> -- 
-> 2.41.0.162.gfafddb0af9-goog
-> 
+> +       old_idx +=3D strscpy((strtab + old_idx), name, MAX_REGION_NAME_LE=
+NGTH);
 
--- 
-Peter Xu
+(Parentheses are not needed)
 
+strscpy() might return a very big number in this case. Is it a problem?
+
+...
+
+> +unlock:
+
+out_unlock: ?
+
+Ditto for other similar cases.
+
+> +       mutex_unlock(&md_lock);
+> +       return ret;
+
+...
+
+> +       /*
+> +        * Above are some prdefined sections/program header used
+
+predefined
+
+> +        * for debug, update their count here.
+> +        */
+
+...
+
+> +#ifndef _QCOM_MINIDUMP_INTERNAL_H_
+> +#define _QCOM_MINIDUMP_INTERNAL_H_
+
+> +#include <linux/elf.h>
+
+Not sure I see how it's used. You may provide forward declarations for
+the pointers.
+
+> +#include <soc/qcom/qcom_minidump.h>
+
++ kconfig.h for IS_ENABLED() ?
+
+MIssing forward declaration:
+struct device;
+
+...
+
+>  #ifndef _QCOM_MINIDUMP_H_
+>  #define _QCOM_MINIDUMP_H_
+
++ types.h for phys_addr_t.
+
+...
+
+> + * @size:      Number of byte to dump from @address location,
+
+bytes
+
+> + *             and it should be 4 byte aligned.
+
+--=20
+With Best Regards,
+Andy Shevchenko
