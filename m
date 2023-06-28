@@ -2,272 +2,317 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53F1D741C11
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 00:58:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC244741C16
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 01:00:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231689AbjF1W56 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 18:57:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54774 "EHLO
+        id S230519AbjF1XA3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 19:00:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231748AbjF1W5i (ORCPT
+        with ESMTP id S229667AbjF1XA0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 18:57:38 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C965E2972;
-        Wed, 28 Jun 2023 15:57:36 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4B31D61486;
-        Wed, 28 Jun 2023 22:57:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B0C44C433D9;
-        Wed, 28 Jun 2023 22:57:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687993055;
-        bh=XSxNf5d4s/AaOcCnirW0Jl1hvso/mY++X2drHrXVbCQ=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=WYXmL+vPDanp9rWWgOqVG3J6qu+xxaFQTxmeVW2LJ3sI5bQVIUqIi2JN0ogyHNEc5
-         cfbkDgSkk4fcLxroMjmvyXRI91pEf4dU/CH/XVRDqLmrBfDaXZQtG7Ev9/2qqN/7X0
-         9RFVzkko3oQW0cXCts9ht/E7rRKtimpDtRVb3JWQ4nqY3yCEBQPW6dAbq7nWCRa1Mo
-         Jtvx6oBg6S+mtkhb6tl/ZSxpwPlcwLTdTkqUx51BsUgTn4oWCG+Hpvh0/uXSYnlN/I
-         R2CRgqqoVeotq2LZqXCF98OvrkklLVay0vwVs4Uf2LDSE3eNAA3Dm7dzYV8UqaX0Y4
-         GZharQNDLg8JQ==
-Received: by mail-lj1-f172.google.com with SMTP id 38308e7fff4ca-2b5c231c23aso949011fa.0;
-        Wed, 28 Jun 2023 15:57:35 -0700 (PDT)
-X-Gm-Message-State: AC+VfDxT6fTiH8Q6Vb40zjLKq61mw7tlbhvO7nT6qG7K1OHLQDUAcZId
-        sfh87tgRbIE3vSm6uccXDknha2SnWETuyU8cig==
-X-Google-Smtp-Source: ACHHUZ4J98dfCHqOutQPFPcPHFwg8wcRtXlshbyiPOJK90fuQQ5MEJui8/nFepQ3uoj3Iks6YjlbDG9ljkXq33sPRYk=
-X-Received: by 2002:a2e:7e0f:0:b0:2b5:9d2a:ab51 with SMTP id
- z15-20020a2e7e0f000000b002b59d2aab51mr9130668ljc.5.1687993053604; Wed, 28 Jun
- 2023 15:57:33 -0700 (PDT)
+        Wed, 28 Jun 2023 19:00:26 -0400
+Received: from mail-oa1-x2e.google.com (mail-oa1-x2e.google.com [IPv6:2001:4860:4864:20::2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 703379F
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 16:00:25 -0700 (PDT)
+Received: by mail-oa1-x2e.google.com with SMTP id 586e51a60fabf-1b00b0ab0daso69528fac.0
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 16:00:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687993224; x=1690585224;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Vap9ObRGKKthG6hrVHvlAX1DOFBnrRGZlJowcTyVXG0=;
+        b=qarjeECAX0plaOmUJA+QFapscYWPU8QwikjKi8VpqnySU01CcTtdQOLgtgD96D6cwS
+         pZekHdjYMpUSfO4vhlvPOsfaoCJheAO0uRnAhPfmTclZeK+C92qbYPvuneVD2s7tgCZ/
+         XOicFXujE2e06WfJTpUZWsyjZKtX4jva/eUzQR2tnLV6UrDgVaBe8YTxmQx7r5CrrdJR
+         ZwzPCFz4ji4HcUpRIuCbNtUlTRVWBj3w2FMOJmZ05NZ0m04ZPDK+zjz9UNRNP7C3mPmH
+         5t1cCGYsxbYg5jJO0PPHAQJOLf7t08awenvE7/yGyzcbdNC8s/JJ1/imikMMApHqkHvi
+         bMKQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687993224; x=1690585224;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Vap9ObRGKKthG6hrVHvlAX1DOFBnrRGZlJowcTyVXG0=;
+        b=TVx8AImvZlgSHkWBTRPx4uUrgbkEmevHsyIwut3jMhZex1f2k8pdtFfoCZCbDVaS7b
+         3c96WK3Y0YCUfFMsv85EDfIX/oNItu2aWrpddsn+FZc1/2WeQ8O1mtyvKv3hriWJXuIt
+         GldRu/qeR61hL9xo/frbTqHPGLYninqpp0jd4oLIbztTE8DobLDI4obVbkGRPHBVpjie
+         Ep2BGKJ8HRfOI82nedBAf48YTTjLnqkRUNafjWf9vocN38T3Ka28+lIiSmI65hAKzenF
+         EMrf2iE5iFqRin2mCu45nv4Xx31juxV3dZZ5UPeqeY1RjmghOcxcCR3DTC0w+v7CCg2o
+         d72Q==
+X-Gm-Message-State: AC+VfDxz/PgS8f+xhL1p2DUlRb8843qUIQNxUXUfslT1xinFobcCw1Hp
+        juS/LJxE1uQmpklGGmNDbBFhS81WFA==
+X-Google-Smtp-Source: ACHHUZ7/VPxqIV/+k5pjTff0m/aZJKLmqduuc8GgySskqpbGSePtYE4DdKR3mde/UyokjdVheKNh9A==
+X-Received: by 2002:a05:6870:988c:b0:1b0:1087:4475 with SMTP id eg12-20020a056870988c00b001b010874475mr9640390oab.26.1687993223856;
+        Wed, 28 Jun 2023 16:00:23 -0700 (PDT)
+Received: from citadel.. (047-026-243-217.res.spectrum.com. [47.26.243.217])
+        by smtp.gmail.com with ESMTPSA id cm9-20020a056870b60900b0019f188355a8sm6956331oab.17.2023.06.28.16.00.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 28 Jun 2023 16:00:22 -0700 (PDT)
+From:   Brian Gerst <brgerst@gmail.com>
+To:     linux-kernel@vger.kernel.org, x86@kernel.org
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Borislav Petkov <bp@alien8.de>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Brian Gerst <brgerst@gmail.com>
+Subject: [PATCH] x86/32: Use a thread flag to track SYSENTER status
+Date:   Wed, 28 Jun 2023 19:00:15 -0400
+Message-ID: <20230628230015.105355-1-brgerst@gmail.com>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
-References: <1687955688-20809-1-git-send-email-quic_mojha@quicinc.com> <1687955688-20809-11-git-send-email-quic_mojha@quicinc.com>
-In-Reply-To: <1687955688-20809-11-git-send-email-quic_mojha@quicinc.com>
-From:   Rob Herring <robh+dt@kernel.org>
-Date:   Wed, 28 Jun 2023 16:57:20 -0600
-X-Gmail-Original-Message-ID: <CAL_Jsq+O70mnreuS1m54RKM+uZu_z1L87RT8sKBYEw5uvowGJg@mail.gmail.com>
-Message-ID: <CAL_Jsq+O70mnreuS1m54RKM+uZu_z1L87RT8sKBYEw5uvowGJg@mail.gmail.com>
-Subject: Re: [PATCH v4 10/21] soc: qcom: Add qcom's pstore minidump driver support
-To:     Mukesh Ojha <quic_mojha@quicinc.com>
-Cc:     corbet@lwn.net, agross@kernel.org, andersson@kernel.org,
-        konrad.dybcio@linaro.org, krzysztof.kozlowski+dt@linaro.org,
-        conor+dt@kernel.org, keescook@chromium.org, tony.luck@intel.com,
-        gpiccoli@igalia.com, mathieu.poirier@linaro.org,
-        catalin.marinas@arm.com, will@kernel.org, linus.walleij@linaro.org,
-        andy.shevchenko@gmail.com, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-hardening@vger.kernel.org,
-        linux-remoteproc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 28, 2023 at 6:37=E2=80=AFAM Mukesh Ojha <quic_mojha@quicinc.com=
-> wrote:
->
-> This driver was inspired from the fact pstore ram region should be
-> fixed and boot firmware need to have awarness about this region,
-> so that it will be persistent across boot. But, there are many
-> QCOM SoC which does not support warm boot from hardware but they
-> have minidump support from the software, and for them, there is
-> no need of this pstore ram region to be fixed, but at the same
-> time have interest in the pstore frontends data. So, this driver
-> get the dynamic reserved region from the ram and register the
-> ramoops platform device.
->
->  +---------+     +---------+   +--------+     +---------+
->  | console |     | pmsg    |   | ftrace |     | dmesg   |
->  +---------+     +---------+   +--------+     +---------+
->        |             |             |              |
->        |             |             |              |
->        +------------------------------------------+
->                           |
->                          \ /
->                   +----------------+
->             (1)   |pstore frontends|
->                   +----------------+
->                           |
->                          \ /
->                  +------------------- +
->             (2)  | pstore backend(ram)|
->                  +--------------------+
->                           |
->                          \ /
->                  +--------------------+
->             (3)  |qcom_pstore_minidump|
->                  +--------------------+
->                           |
->                          \ /
->                    +---------------+
->             (4)    | qcom_minidump |
->                    +---------------+
->
-> This driver will route all the pstore front data to the stored
-> in qcom pstore reserved region and the reason of showing an
-> arrow from (3) to (4) as qcom_pstore_minidump driver will register
-> all the available frontends region with qcom minidump driver
-> in upcoming patch.
->
-> Signed-off-by: Mukesh Ojha <quic_mojha@quicinc.com>
-> ---
->  drivers/soc/qcom/Kconfig                | 12 +++++
->  drivers/soc/qcom/Makefile               |  1 +
->  drivers/soc/qcom/qcom_pstore_minidump.c | 85 +++++++++++++++++++++++++++=
-++++++
+When a task is in VM86 mode, the SYSENTER instruction must be disabled
+to prevent kernel stack corruption.  Use a thread flag to track when a
+task needs SYSENTER disabled instead of abusing the ss1 field of the
+TSS.
 
-drivers/soc/ is the dumping ground for things with no other place. As
-this is a pstore driver, it belongs with pstore.
+Signed-off-by: Brian Gerst <brgerst@gmail.com>
+---
+ arch/x86/include/asm/processor.h   | 26 ++------------------------
+ arch/x86/include/asm/switch_to.h   | 12 ------------
+ arch/x86/include/asm/thread_info.h |  5 ++++-
+ arch/x86/include/asm/vm86.h        |  8 ++++++++
+ arch/x86/kernel/cpu/common.c       | 10 +---------
+ arch/x86/kernel/process.c          |  4 +++-
+ arch/x86/kernel/process_32.c       |  1 -
+ arch/x86/kernel/vm86_32.c          |  8 ++++----
+ 8 files changed, 22 insertions(+), 52 deletions(-)
 
->  3 files changed, 98 insertions(+)
->  create mode 100644 drivers/soc/qcom/qcom_pstore_minidump.c
->
-> diff --git a/drivers/soc/qcom/Kconfig b/drivers/soc/qcom/Kconfig
-> index 1834213fd652..fbf08e30feda 100644
-> --- a/drivers/soc/qcom/Kconfig
-> +++ b/drivers/soc/qcom/Kconfig
-> @@ -306,4 +306,16 @@ config QCOM_MINIDUMP_SMEM
->
->           This config should be enabled if the low level minidump is impl=
-emented
->           as part of SMEM.
-> +
-> +config QCOM_PSTORE_MINIDUMP
-> +       tristate "Pstore support for QCOM Minidump"
-> +       depends on ARCH_QCOM
-> +       depends on PSTORE_RAM
-> +       depends on QCOM_MINIDUMP
-> +       help
-> +         Enablement of this driver ensures that ramoops region can be an=
-ywhere
-> +         reserved in ram instead of being fixed address which needs boot=
- firmware
-> +         awareness. So, this driver creates plaform device and registers=
- available
-> +         frontend region with the Qualcomm's minidump driver.
-> +
->  endmenu
-> diff --git a/drivers/soc/qcom/Makefile b/drivers/soc/qcom/Makefile
-> index 737d868757ac..1ab59c1b364d 100644
-> --- a/drivers/soc/qcom/Makefile
-> +++ b/drivers/soc/qcom/Makefile
-> @@ -36,3 +36,4 @@ qcom_ice-objs                 +=3D ice.o
->  obj-$(CONFIG_QCOM_INLINE_CRYPTO_ENGINE)        +=3D qcom_ice.o
->  obj-$(CONFIG_QCOM_MINIDUMP) +=3D qcom_minidump.o
->  obj-$(CONFIG_QCOM_MINIDUMP_SMEM) +=3D qcom_minidump_smem.o
-> +obj-$(CONFIG_QCOM_PSTORE_MINIDUMP) +=3D qcom_pstore_minidump.o
-> diff --git a/drivers/soc/qcom/qcom_pstore_minidump.c b/drivers/soc/qcom/q=
-com_pstore_minidump.c
-> new file mode 100644
-> index 000000000000..b07cd10340df
-> --- /dev/null
-> +++ b/drivers/soc/qcom/qcom_pstore_minidump.c
-> @@ -0,0 +1,85 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +
-> +/*
-> + * Copyright (c) 2023 Qualcomm Innovation Center, Inc. All rights reserv=
-ed.
-> + */
-> +
-> +#include <linux/module.h>
-> +#include <linux/of_device.h>
+diff --git a/arch/x86/include/asm/processor.h b/arch/x86/include/asm/processor.h
+index b216ac80ebcc..96a5e3e5bb7b 100644
+--- a/arch/x86/include/asm/processor.h
++++ b/arch/x86/include/asm/processor.h
+@@ -226,23 +226,7 @@ struct x86_hw_tss {
+ 	unsigned long		sp0;
+ 	unsigned short		ss0, __ss0h;
+ 	unsigned long		sp1;
+-
+-	/*
+-	 * We don't use ring 1, so ss1 is a convenient scratch space in
+-	 * the same cacheline as sp0.  We use ss1 to cache the value in
+-	 * MSR_IA32_SYSENTER_CS.  When we context switch
+-	 * MSR_IA32_SYSENTER_CS, we first check if the new value being
+-	 * written matches ss1, and, if it's not, then we wrmsr the new
+-	 * value and update ss1.
+-	 *
+-	 * The only reason we context switch MSR_IA32_SYSENTER_CS is
+-	 * that we set it to zero in vm86 tasks to avoid corrupting the
+-	 * stack if we were to go through the sysenter path from vm86
+-	 * mode.
+-	 */
+-	unsigned short		ss1;	/* MSR_IA32_SYSENTER_CS */
+-
+-	unsigned short		__ss1h;
++	unsigned short		ss1, __ss1h;
+ 	unsigned long		sp2;
+ 	unsigned short		ss2, __ss2h;
+ 	unsigned long		__cr3;
+@@ -419,16 +403,11 @@ struct thread_struct {
+ 	unsigned long		sp0;
+ #endif
+ 	unsigned long		sp;
+-#ifdef CONFIG_X86_32
+-	unsigned long		sysenter_cs;
+-#else
++#ifdef CONFIG_X86_64
+ 	unsigned short		es;
+ 	unsigned short		ds;
+ 	unsigned short		fsindex;
+ 	unsigned short		gsindex;
+-#endif
+-
+-#ifdef CONFIG_X86_64
+ 	unsigned long		fsbase;
+ 	unsigned long		gsbase;
+ #else
+@@ -648,7 +627,6 @@ static inline void spin_lock_prefetch(const void *x)
+ #ifdef CONFIG_X86_32
+ #define INIT_THREAD  {							  \
+ 	.sp0			= TOP_OF_INIT_STACK,			  \
+-	.sysenter_cs		= __KERNEL_CS,				  \
+ }
+ 
+ #define KSTK_ESP(task)		(task_pt_regs(task)->sp)
+diff --git a/arch/x86/include/asm/switch_to.h b/arch/x86/include/asm/switch_to.h
+index 5c91305d09d2..53d34c6fb581 100644
+--- a/arch/x86/include/asm/switch_to.h
++++ b/arch/x86/include/asm/switch_to.h
+@@ -49,18 +49,6 @@ do {									\
+ 	((last) = __switch_to_asm((prev), (next)));			\
+ } while (0)
+ 
+-#ifdef CONFIG_X86_32
+-static inline void refresh_sysenter_cs(struct thread_struct *thread)
+-{
+-	/* Only happens when SEP is enabled, no need to test "SEP"arately: */
+-	if (unlikely(this_cpu_read(cpu_tss_rw.x86_tss.ss1) == thread->sysenter_cs))
+-		return;
+-
+-	this_cpu_write(cpu_tss_rw.x86_tss.ss1, thread->sysenter_cs);
+-	wrmsr(MSR_IA32_SYSENTER_CS, thread->sysenter_cs, 0);
+-}
+-#endif
+-
+ /* This is used when switching tasks or entering/exiting vm86 mode. */
+ static inline void update_task_stack(struct task_struct *task)
+ {
+diff --git a/arch/x86/include/asm/thread_info.h b/arch/x86/include/asm/thread_info.h
+index f1cccba52eb9..7f7332290ee1 100644
+--- a/arch/x86/include/asm/thread_info.h
++++ b/arch/x86/include/asm/thread_info.h
+@@ -78,6 +78,7 @@ struct thread_info {
+  * - these are process state flags that various assembly files
+  *   may need to access
+  */
++#define TIF_DISABLE_SYSENTER	0	/* disable SYSENTER for VM86 mode */
+ #define TIF_NOTIFY_RESUME	1	/* callback before returning to user */
+ #define TIF_SIGPENDING		2	/* signal pending */
+ #define TIF_NEED_RESCHED	3	/* rescheduling necessary */
+@@ -101,6 +102,7 @@ struct thread_info {
+ #define TIF_LAZY_MMU_UPDATES	27	/* task is updating the mmu lazily */
+ #define TIF_ADDR32		29	/* 32-bit address space on 64 bits */
+ 
++#define _TIF_DISABLE_SYSENTER	(1 << TIF_DISABLE_SYSENTER)
+ #define _TIF_NOTIFY_RESUME	(1 << TIF_NOTIFY_RESUME)
+ #define _TIF_SIGPENDING		(1 << TIF_SIGPENDING)
+ #define _TIF_NEED_RESCHED	(1 << TIF_NEED_RESCHED)
+@@ -126,7 +128,8 @@ struct thread_info {
+ /* flags to check in __switch_to() */
+ #define _TIF_WORK_CTXSW_BASE					\
+ 	(_TIF_NOCPUID | _TIF_NOTSC | _TIF_BLOCKSTEP |		\
+-	 _TIF_SSBD | _TIF_SPEC_FORCE_UPDATE)
++	 _TIF_SSBD | _TIF_SPEC_FORCE_UPDATE | 			\
++	 _TIF_DISABLE_SYSENTER)
+ 
+ /*
+  * Avoid calls to __switch_to_xtra() on UP as STIBP is not evaluated.
+diff --git a/arch/x86/include/asm/vm86.h b/arch/x86/include/asm/vm86.h
+index 9e8ac5073ecb..9e3cdbfe6e45 100644
+--- a/arch/x86/include/asm/vm86.h
++++ b/arch/x86/include/asm/vm86.h
+@@ -72,6 +72,12 @@ static inline int invalid_vm86_irq(int irq)
+ 
+ void release_vm86_irqs(struct task_struct *);
+ 
++static inline void refresh_sysenter_cs(bool disable_sysenter)
++{
++	/* Only happens when SEP is enabled, no need to test "SEP"arately: */
++	wrmsr(MSR_IA32_SYSENTER_CS, disable_sysenter ? 0 : __KERNEL_CS , 0);
++}
++
+ #else
+ 
+ #define handle_vm86_fault(a, b)
+@@ -86,6 +92,8 @@ static inline void save_v86_state(struct kernel_vm86_regs *a, int b) { }
+ 
+ #define free_vm86(t) do { } while(0)
+ 
++static inline void refresh_sysenter_cs(bool disable_sysenter) { }
++
+ #endif /* CONFIG_VM86 */
+ 
+ #endif /* _ASM_X86_VM86_H */
+diff --git a/arch/x86/kernel/cpu/common.c b/arch/x86/kernel/cpu/common.c
+index cf5275a67f39..aaf636e4d1de 100644
+--- a/arch/x86/kernel/cpu/common.c
++++ b/arch/x86/kernel/cpu/common.c
+@@ -1933,22 +1933,14 @@ static void identify_cpu(struct cpuinfo_x86 *c)
+ #ifdef CONFIG_X86_32
+ void enable_sep_cpu(void)
+ {
+-	struct tss_struct *tss;
+ 	int cpu;
+ 
+ 	if (!boot_cpu_has(X86_FEATURE_SEP))
+ 		return;
+ 
+ 	cpu = get_cpu();
+-	tss = &per_cpu(cpu_tss_rw, cpu);
+ 
+-	/*
+-	 * We cache MSR_IA32_SYSENTER_CS's value in the TSS's ss1 field --
+-	 * see the big comment in struct x86_hw_tss's definition.
+-	 */
+-
+-	tss->x86_tss.ss1 = __KERNEL_CS;
+-	wrmsr(MSR_IA32_SYSENTER_CS, tss->x86_tss.ss1, 0);
++	wrmsr(MSR_IA32_SYSENTER_CS, __KERNEL_CS, 0);
+ 	wrmsr(MSR_IA32_SYSENTER_ESP, (unsigned long)(cpu_entry_stack(cpu) + 1), 0);
+ 	wrmsr(MSR_IA32_SYSENTER_EIP, (unsigned long)entry_SYSENTER_32, 0);
+ 
+diff --git a/arch/x86/kernel/process.c b/arch/x86/kernel/process.c
+index cc7a642f8c9d..cd2c483b91c1 100644
+--- a/arch/x86/kernel/process.c
++++ b/arch/x86/kernel/process.c
+@@ -75,7 +75,6 @@ __visible DEFINE_PER_CPU_PAGE_ALIGNED(struct tss_struct, cpu_tss_rw) = {
+ 		.sp1 = TOP_OF_INIT_STACK,
+ 
+ 		.ss0 = __KERNEL_DS,
+-		.ss1 = __KERNEL_CS,
+ #endif
+ 		.io_bitmap_base	= IO_BITMAP_OFFSET_INVALID,
+ 	 },
+@@ -713,6 +712,9 @@ void __switch_to_xtra(struct task_struct *prev_p, struct task_struct *next_p)
+ 		/* Enforce MSR update to ensure consistent state */
+ 		__speculation_ctrl_update(~tifn, tifn);
+ 	}
++
++	if (unlikely((tifp ^ tifn) & _TIF_DISABLE_SYSENTER))
++		refresh_sysenter_cs((tifn & _TIF_DISABLE_SYSENTER) != 0);
+ }
+ 
+ /*
+diff --git a/arch/x86/kernel/process_32.c b/arch/x86/kernel/process_32.c
+index 708c87b88cc1..c609faa3e50e 100644
+--- a/arch/x86/kernel/process_32.c
++++ b/arch/x86/kernel/process_32.c
+@@ -196,7 +196,6 @@ __switch_to(struct task_struct *prev_p, struct task_struct *next_p)
+ 	 * case prev or next is vm86.
+ 	 */
+ 	update_task_stack(next_p);
+-	refresh_sysenter_cs(next);
+ 	this_cpu_write(pcpu_hot.top_of_stack,
+ 		       (unsigned long)task_stack_page(next_p) +
+ 		       THREAD_SIZE);
+diff --git a/arch/x86/kernel/vm86_32.c b/arch/x86/kernel/vm86_32.c
+index e9e803a4d44c..9d25793ba999 100644
+--- a/arch/x86/kernel/vm86_32.c
++++ b/arch/x86/kernel/vm86_32.c
+@@ -143,10 +143,10 @@ void save_v86_state(struct kernel_vm86_regs *regs, int retval)
+ exit_vm86:
+ 	preempt_disable();
+ 	tsk->thread.sp0 = vm86->saved_sp0;
+-	tsk->thread.sysenter_cs = __KERNEL_CS;
+ 	update_task_stack(tsk);
+-	refresh_sysenter_cs(&tsk->thread);
+ 	vm86->saved_sp0 = 0;
++	if (test_and_clear_thread_flag(TIF_DISABLE_SYSENTER))
++		refresh_sysenter_cs(false);
+ 	preempt_enable();
+ 
+ 	memcpy(&regs->pt, &vm86->regs32, sizeof(struct pt_regs));
+@@ -332,8 +332,8 @@ static long do_sys_vm86(struct vm86plus_struct __user *user_vm86, bool plus)
+ 	tsk->thread.sp0 += 16;
+ 
+ 	if (boot_cpu_has(X86_FEATURE_SEP)) {
+-		tsk->thread.sysenter_cs = 0;
+-		refresh_sysenter_cs(&tsk->thread);
++		set_thread_flag(TIF_DISABLE_SYSENTER);
++		refresh_sysenter_cs(true);
+ 	}
+ 
+ 	update_task_stack(tsk);
+-- 
+2.41.0
 
-You probably don't need this include. Use the actual includes you need
-and don't rely on implicit includes (because I'm trying to remove
-those).
-
-> +#include <linux/of_reserved_mem.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/pstore_ram.h>
-> +
-> +struct qcom_ramoops_dd {
-> +       struct ramoops_platform_data qcom_ramoops_pdata;
-> +       struct platform_device *ramoops_pdev;
-> +};
-> +
-> +static int qcom_ramoops_probe(struct platform_device *pdev)
-> +{
-> +       struct device_node *of_node =3D pdev->dev.of_node;
-> +       struct qcom_ramoops_dd *qcom_rdd;
-> +       struct ramoops_platform_data *pdata;
-> +       struct reserved_mem *rmem;
-> +       struct device_node *node;
-> +       long ret;
-> +
-> +       node =3D of_parse_phandle(of_node, "memory-region", 0);
-> +       if (!node)
-> +               return -ENODEV;
-> +
-> +       rmem =3D of_reserved_mem_lookup(node);
-> +       of_node_put(node);
-> +       if (!rmem) {
-> +               dev_err(&pdev->dev, "failed to locate DT /reserved-memory=
- resource\n");
-> +               return -EINVAL;
-> +       }
-> +
-> +       qcom_rdd =3D devm_kzalloc(&pdev->dev, sizeof(*qcom_rdd), GFP_KERN=
-EL);
-> +       if (!qcom_rdd)
-> +               return -ENOMEM;
-> +
-> +       pdata =3D &qcom_rdd->qcom_ramoops_pdata;
-> +       pdata->mem_size =3D rmem->size;
-> +       pdata->mem_address =3D rmem->base;
-> +       ramoops_parse_dt(pdev, pdata);
-> +
-> +       qcom_rdd->ramoops_pdev =3D platform_device_register_data(NULL, "r=
-amoops", -1,
-> +                                                              pdata, siz=
-eof(*pdata));
-> +       if (IS_ERR(qcom_rdd->ramoops_pdev)) {
-> +               ret =3D PTR_ERR(qcom_rdd->ramoops_pdev);
-> +               dev_err(&pdev->dev, "could not create platform device: %l=
-d\n", ret);
-> +               qcom_rdd->ramoops_pdev =3D NULL;
-> +       }
-> +       platform_set_drvdata(pdev, qcom_rdd);
-> +
-> +       return ret;
-> +}
-> +
-> +static void qcom_ramoops_remove(struct platform_device *pdev)
-> +{
-> +       struct qcom_ramoops_dd *qcom_rdd =3D platform_get_drvdata(pdev);
-> +
-> +       platform_device_unregister(qcom_rdd->ramoops_pdev);
-> +       qcom_rdd->ramoops_pdev =3D NULL;
-> +}
-> +
-> +static const struct of_device_id qcom_ramoops_of_match[] =3D {
-> +       { .compatible =3D "qcom,ramoops"},
-> +       {}
-> +};
-> +MODULE_DEVICE_TABLE(of, qcom_ramoops_of_match);
-> +
-> +static struct platform_driver qcom_ramoops_drv =3D {
-> +       .driver         =3D {
-> +               .name   =3D "qcom,ramoops",
-> +               .of_match_table =3D qcom_ramoops_of_match,
-> +       },
-> +       .probe =3D qcom_ramoops_probe,
-> +       .remove_new =3D qcom_ramoops_remove,
-> +};
-> +
-> +module_platform_driver(qcom_ramoops_drv);
-> +
-> +MODULE_DESCRIPTION("Qualcomm ramoops minidump driver");
-> +MODULE_LICENSE("GPL");
-> --
-> 2.7.4
->
