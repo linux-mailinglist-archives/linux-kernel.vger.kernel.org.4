@@ -2,76 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 780D8741A00
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 23:03:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B3EF0741A01
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 23:04:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232059AbjF1VDi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 17:03:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48246 "EHLO
+        id S231994AbjF1VEn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 17:04:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231952AbjF1VDa (ORCPT
+        with ESMTP id S231974AbjF1VEj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 17:03:30 -0400
-Received: from mail-il1-x12a.google.com (mail-il1-x12a.google.com [IPv6:2607:f8b0:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE8151BC5
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 14:03:28 -0700 (PDT)
-Received: by mail-il1-x12a.google.com with SMTP id e9e14a558f8ab-34570b2d069so9775ab.1
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 14:03:28 -0700 (PDT)
+        Wed, 28 Jun 2023 17:04:39 -0400
+Received: from mail-qv1-xf36.google.com (mail-qv1-xf36.google.com [IPv6:2607:f8b0:4864:20::f36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E24311FF1
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 14:04:36 -0700 (PDT)
+Received: by mail-qv1-xf36.google.com with SMTP id 6a1803df08f44-635857af3beso734366d6.0
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 14:04:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1687986208; x=1690578208;
+        d=chromium.org; s=google; t=1687986276; x=1690578276;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=d0cdu9U2U8ASHi6NJW0ECm1JdkHTOWLc1i/nUUY1BF0=;
-        b=qALhyPAZRGyS03UfieGmldU5/tdTCQx1STLIWruvHOrdJLpxjqfEe7TD2Qpwd0x3Uy
-         7wd46NnG2q+Z8T7BbodPA9sO72eYnQJVBXYdNJ4SCBSGSNSuofpCAXKSBeMIJAHZf0Wz
-         n0RqTdu1V8lgBKGtPoUi8VIYcRW95y5JJYXR6/Rjvpt034uJxEoVGaDY1A9Vuc0iAnIN
-         JfAvYJt4rENY5iNC4dYQIN3dH8KSA58NMxYI9BE2TFcg9CfWw76GyLJCdI7BJsLOBF7H
-         XK8kznEWdQ3NF7T2z8/5WbaJoJUYmQBW4o8OdeCM1z3e3BMp4LGz/SY1qf6Ll4bIYDCd
-         FJ+A==
+        bh=IsWTxHedmoku42qDv7PVi9DEQQIzmo+NZkEk7SkyjQg=;
+        b=W6fNm4cBHxITfzUVWluefWRpKwsvOxuRKNKA8bwDoIEs2qUnsRgpXfySIuMDE7/D5H
+         7gBcJvi1YC2hv7aJk0IZczBfb4lG0x9fs8jrmC2FuZRJJ6Gak0N4yeMobtuNaqXhleiZ
+         vwwNx34KMuyn72W5EpUSJeXjEDARF+Bst568g=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687986208; x=1690578208;
+        d=1e100.net; s=20221208; t=1687986276; x=1690578276;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=d0cdu9U2U8ASHi6NJW0ECm1JdkHTOWLc1i/nUUY1BF0=;
-        b=YykeLn8u2F41rc0QaOywaCSqBv0PCSvLMo1bpPeD6hvM2//f0Spgd6b7scRvrGnT4W
-         EJCkH2GQQPADlgHjQpx/XNNmuCEC8Y0eFO+reZyFS0evMYgAfscaXSNoAh4I3HcTQvC6
-         2YfXiqpS+5vx3uXY0lbvrlJMfVscfetONXneiLwKw8/Az2Keo2YtJ00F5tAhBfeCkIOB
-         9fIpgQBjgvziu8nHLjbohqN3daY+6X/lb7ko8ctf0lh8I00CmC6BhAErmHkWxVyrFPXH
-         FcsUQArbftC0JNFk/pQHhTzyco6SxKG58JLr+F9PlTDuSrlg+i2XHr5wnKJRlKFB5ovc
-         7C3A==
-X-Gm-Message-State: AC+VfDzq+DxAg7VXkNGRtKf1Y4K6QP+EKF+v+sO089M0D9E8q6VncWmO
-        Tcq91Pqb+TcB42CkZ2FW/hYK2uhysieEdqtTBPvrNRzsWfNpbE3MXd8=
-X-Google-Smtp-Source: ACHHUZ4VdSsK7Y7KlmfNfqd9ODzVU/nm7ybn2zKWiVMsQ6w53rrUFo7Doxn7k7I2d0+ytyV4iakOHwg3hgKY30HQNpw=
-X-Received: by 2002:a05:6e02:1b82:b0:33d:ac65:f95e with SMTP id
- h2-20020a056e021b8200b0033dac65f95emr322693ili.12.1687986207843; Wed, 28 Jun
- 2023 14:03:27 -0700 (PDT)
+        bh=IsWTxHedmoku42qDv7PVi9DEQQIzmo+NZkEk7SkyjQg=;
+        b=Aiy97W0/y/LKKppdRYzwyu4Va2+6eoFNx8nAk6qdX9RFrk+hBVLtA7LDI777RtZEcc
+         hFTcRxtsHmZx8HEHLpGmG4ZCKYENV7Zcsg7pe7LLHjHdZzppNQwXaPAhOW9Vd9WgvXn+
+         z0Ngmvnb2aIiZj6FiKi4LXxfV8PssUgYdRyQb3f/z5VY4HtLuvjhmnSF1NxextsjgqpM
+         JOLcwLsbEabSUWGChyUzuxfFURw11OXXLClvGk193hCUJnO//xpyjdDF1qjYsTwsF69Z
+         5tnNHI75UK6nAgk2sR3yu7pOXfjeDvNeFPrNq0533OrFU+gMwkBHdUHx0XBqg0Mjqyxj
+         Urnw==
+X-Gm-Message-State: AC+VfDx7YMB8OQXkoI/Ac7XQIxXlNxQI5ihuk/uYaduXVSF2bp/657I/
+        tG9y/e/RpfUOeOkIWc5JScpqNqwlLk+tXq7tHn4MdKzC
+X-Google-Smtp-Source: ACHHUZ5Nm4OzfTcxLAy5MruNf4bXpVhdX+1k6vkq0qYkwmBNXu0EUesv5vyeWQcA0Kk71+GLkUmEZQ==
+X-Received: by 2002:ad4:596f:0:b0:635:f6f7:3a73 with SMTP id eq15-20020ad4596f000000b00635f6f73a73mr4049420qvb.53.1687986275754;
+        Wed, 28 Jun 2023 14:04:35 -0700 (PDT)
+Received: from mail-qv1-f43.google.com (mail-qv1-f43.google.com. [209.85.219.43])
+        by smtp.gmail.com with ESMTPSA id dz11-20020ad4588b000000b006263a9e7c63sm6070589qvb.104.2023.06.28.14.04.34
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 28 Jun 2023 14:04:35 -0700 (PDT)
+Received: by mail-qv1-f43.google.com with SMTP id 6a1803df08f44-6237faa8677so673556d6.1
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 14:04:34 -0700 (PDT)
+X-Received: by 2002:a05:6214:c8a:b0:632:c2e:57ae with SMTP id
+ r10-20020a0562140c8a00b006320c2e57aemr23045114qvr.54.1687986274228; Wed, 28
+ Jun 2023 14:04:34 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230530134248.23998-1-cloudliang@tencent.com>
- <20230530134248.23998-4-cloudliang@tencent.com> <ZJybjcyiLQVkSHMC@google.com>
-In-Reply-To: <ZJybjcyiLQVkSHMC@google.com>
-From:   Jim Mattson <jmattson@google.com>
-Date:   Wed, 28 Jun 2023 14:03:13 -0700
-Message-ID: <CALMp9eQmux6cip=a+FkLpfmMz2zMuMD6bec-zO2or5HQGZ7Hsw@mail.gmail.com>
-Subject: Re: [PATCH v2 3/8] KVM: selftests: Test Intel PMU architectural
- events on gp counters
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Jinrong Liang <ljr.kernel@gmail.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Like Xu <likexu@tencent.com>,
-        David Matlack <dmatlack@google.com>,
-        Aaron Lewis <aaronlewis@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jinrong Liang <cloudliang@tencent.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+References: <20230628-mtk-usb-v1-1-3c5b2ea3d6b9@chromium.org>
+In-Reply-To: <20230628-mtk-usb-v1-1-3c5b2ea3d6b9@chromium.org>
+From:   Ricardo Ribalda <ribalda@chromium.org>
+Date:   Wed, 28 Jun 2023 23:04:20 +0200
+X-Gmail-Original-Message-ID: <CANiDSCsAgD33gMk9-CTGHuUv_b4KfRnO02ETEt6jFtQvw+6cag@mail.gmail.com>
+Message-ID: <CANiDSCsAgD33gMk9-CTGHuUv_b4KfRnO02ETEt6jFtQvw+6cag@mail.gmail.com>
+Subject: Re: [PATCH] usb: xhci-mtk: set the dma max_seg_size
+To:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Zubin Mithra <zsm@chromium.org>
+Cc:     linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,252 +82,183 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 28, 2023 at 1:44=E2=80=AFPM Sean Christopherson <seanjc@google.=
-com> wrote:
+On Wed, 28 Jun 2023 at 23:00, Ricardo Ribalda <ribalda@chromium.org> wrote:
 >
-> On Tue, May 30, 2023, Jinrong Liang wrote:
-> > +/* Guest payload for any performance counter counting */
-> > +#define NUM_BRANCHES 10
-> > +
-> > +static struct kvm_vm *pmu_vm_create_with_one_vcpu(struct kvm_vcpu **vc=
-pu,
-> > +                                               void *guest_code)
-> > +{
-> > +     struct kvm_vm *vm;
-> > +
-> > +     vm =3D vm_create_with_one_vcpu(vcpu, guest_code);
-> > +     vm_init_descriptor_tables(vm);
-> > +     vcpu_init_descriptor_tables(*vcpu);
-> > +
-> > +     return vm;
-> > +}
-> > +
-> > +static uint64_t run_vcpu(struct kvm_vcpu *vcpu, uint64_t *ucall_arg)
-> > +{
-> > +     struct ucall uc;
-> > +
-> > +     vcpu_run(vcpu);
-> > +     switch (get_ucall(vcpu, &uc)) {
-> > +     case UCALL_SYNC:
-> > +             *ucall_arg =3D uc.args[1];
-> > +             break;
-> > +     case UCALL_DONE:
-> > +             break;
-> > +     default:
-> > +             TEST_ASSERT(false, "Unexpected exit: %s",
-> > +                         exit_reason_str(vcpu->run->exit_reason));
+> Allow devices to have dma operations beyond 64K, and avoid warnings such
+> as:
 >
-> TEST_FAIL()
+> DMA-API: xhci-mtk 11200000.usb: mapping sg segment longer than device cla=
+ims to support [len=3D98304] [max=3D65536]
 >
-> > +     }
-> > +     return uc.cmd;
-> > +}
-> > +
-> > +static void intel_guest_run_arch_event(uint8_t version, uint8_t max_gp=
-_num,
+> Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+Reported-by: Zubin Mithra <zsm@chromium.org>
+> ---
+> Fix warnings such as:
 >
-> Unless I'm mistaken, this isn't specific to arch events.  And with a bit =
-of
-> massaging, it doesn't need to be Intel specific.  Typically we try to avo=
-id
-> speculatively creating infrastructure, but in this case we *know* AMD has=
- vPMU
-> support, and we *know* from KVM-Unit-Tests that accounting for the differ=
-ences
-> between MSRs on Intel vs. AMD is doable, so we should write code with an =
-eye
-> toward supporting both AMD and Intel.
+> [  451.089443] ------------[ cut here ]------------
+> [  451.089498] DMA-API: xhci-mtk 11200000.usb: mapping sg segment longer =
+than device claims to support [len=3D98304] [max=3D65536]
+> [  451.089617] WARNING: CPU: 7 PID: 14227 at kernel/dma/debug.c:1163 debu=
+g_dma_map_sg+0x5bc/0x950
+> [  451.089674] Modules linked in: xfrm_interface tun hci_vhci bridge stp =
+llc veth xt_cgroup xt_MASQUERADE uinput rfcomm ip6table_nat fuse 8021q algi=
+f_hash algif_skcipher af_alg r8153_ecm cdc_ether usbnet r8152 mii mtk_vcode=
+c_dec_hw mt7921s mt76_sdio mt7921_common mt76_connac_lib mt76 uvcvideo vide=
+obuf2_vmalloc mtk_vcodec_dec v4l2_h264 mtk_vcodec_enc mtk_jpeg v4l2_vp9 vid=
+eobuf2_dma_contig videobuf2_memops v4l2_mem2mem videobuf2_v4l2 btmtksdio vi=
+deobuf2_common mtk_vcodec_common btmtk mac80211 snd_sof_mt8186 snd_sof_xten=
+sa_dsp snd_sof_of snd_sof snd_sof_utils mtk_scp mtk_rpmsg rpmsg_core mtk_sc=
+p_ipi hid_rmi rmi_core serio bluetooth ecdh_generic ecc cfg80211 lzo_rle lz=
+o_compress zram joydev
+> [  451.090285] CPU: 7 PID: 14227 Comm: syz-executor.0 Not tainted 5.15.11=
+8-lockdep-19753-g1b0a8b16661d #1 cd3ddfc5e13dbbbea438d3161fcad4d98ec474f4
+> [  451.090333] Hardware name: Google Rusty sku196608/196609/196610/196611=
+ board (DT)
+> [  451.090356] pstate: 60400009 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYP=
+E=3D--)
+> [  451.090401] pc : debug_dma_map_sg+0x5bc/0x950
+> [  451.090433] lr : debug_dma_map_sg+0x5bc/0x950
+> [  451.090462] sp : ffffffc01fdd75e0
+> [  451.090479] x29: ffffffc01fdd7640 x28: ffffff80c1280300 x27: 000000000=
+0010000
+> [  451.090531] x26: ffffff80c1ec9600 x25: 1ffffff01a749501 x24: ffffff80d=
+3a4a800
+> [  451.090581] x23: dfffffc000000000 x22: ffffff80d3a4a80c x21: ffffffc00=
+aae5740
+> [  451.090631] x20: ffffffffffffffff x19: ffffff80d3a4a810 x18: 000000000=
+0000000
+> [  451.090680] x17: 64206e6168742072 x16: 65676e6f6c20746e x15: 656d67657=
+3206773
+> [  451.090731] x14: 20676e697070616d x13: 0000000000000001 x12: 000000000=
+0000001
+> [  451.090779] x11: 0000000000000000 x10: 0000000000040000 x9 : 3c6fd66e7=
+9e32400
+> [  451.090828] x8 : 3c6fd66e79e32400 x7 : 0000000000000001 x6 : 000000000=
+0000001
+> [  451.090877] x5 : ffffffc01fdd7158 x4 : ffffffc00b64e2a0 x3 : ffffffc00=
+8f92adc
+> [  451.090926] x2 : 0000000100000000 x1 : ffffff8057afd940 x0 : 000000000=
+000006f
+> [  451.090976] Call trace:
+> [  451.090994]  debug_dma_map_sg+0x5bc/0x950
+> [  451.091026]  dma_alloc_noncontiguous+0x2f4/0x404
+> [  451.091060]  uvc_alloc_urb_buffers+0x1e8/0x600 [uvcvideo 1a151fdc87685=
+4366480a9c6b7aaa4b7999fb493]
+> [  451.091150]  uvc_video_start_transfer+0xaf4/0x1628 [uvcvideo 1a151fdc8=
+76854366480a9c6b7aaa4b7999fb493]
+> [  451.091228]  uvc_video_start_streaming+0x154/0x2d8 [uvcvideo 1a151fdc8=
+76854366480a9c6b7aaa4b7999fb493]
+> [  451.091305]  uvc_start_streaming+0x20c/0x3d4 [uvcvideo 1a151fdc8768543=
+66480a9c6b7aaa4b7999fb493]
+> [  451.091379]  vb2_start_streaming+0x118/0x400 [videobuf2_common 252dc8c=
+49960dcb8e329e2787100c89e1899c17f]
+> [  451.091446]  vb2_core_streamon+0x258/0x360 [videobuf2_common 252dc8c49=
+960dcb8e329e2787100c89e1899c17f]
+> [  451.091507]  vb2_streamon+0x88/0xbc [videobuf2_v4l2 f4acca89bfe3410cd8=
+f3ca536255fc3877fe63db]
+> [  451.091555]  uvc_queue_streamon+0x44/0x68 [uvcvideo 1a151fdc8768543664=
+80a9c6b7aaa4b7999fb493]
+> [  451.091631]  uvc_ioctl_streamon+0xd8/0x124 [uvcvideo 1a151fdc876854366=
+480a9c6b7aaa4b7999fb493]
+> [  451.091705]  v4l_streamon+0x74/0xa8
+> [  451.091738]  __video_do_ioctl+0x90c/0xa40
+> [  451.091769]  video_usercopy+0xa44/0x1ef8
+> [  451.091799]  video_ioctl2+0x44/0x58
+> [  451.091830]  v4l2_ioctl+0x138/0x164
+> [  451.091860]  __arm64_sys_ioctl+0x154/0x1d0
+> [  451.091892]  invoke_syscall+0x98/0x278
+> [  451.091923]  el0_svc_common+0x214/0x274
+> [  451.091953]  do_el0_svc+0x9c/0x19c
+> [  451.091982]  el0_svc+0x5c/0xc0
+> [  451.092013]  el0t_64_sync_handler+0x78/0x108
+> [  451.092045]  el0t_64_sync+0x1a4/0x1a8
+> [  451.092081] Kernel panic - not syncing: kernel: panic_on_warn set ...
+> [  451.092103] CPU: 7 PID: 14227 Comm: syz-executor.0 Not tainted 5.15.11=
+8-lockdep-19753-g1b0a8b16661d #1 cd3ddfc5e13dbbbea438d3161fcad4d98ec474f4
+> [  451.092148] Hardware name: Google Rusty sku196608/196609/196610/196611=
+ board (DT)
+> [  451.092171] Call trace:
+> [  451.092186]  dump_backtrace+0x0/0x4e8
+> [  451.092219]  show_stack+0x34/0x44
+> [  451.092247]  dump_stack_lvl+0xdc/0x11c
+> [  451.092278]  dump_stack+0x1c/0x48
+> [  451.092307]  panic+0x2a4/0x7b8
+> [  451.092335]  check_panic_on_warn+0xb8/0x104
+> [  451.092369]  __warn+0x16c/0x230
+> [  451.092399]  report_bug+0x160/0x280
+> [  451.092432]  bug_handler+0x48/0xb8
+> [  451.092466]  call_break_hook+0x180/0x1b4
+> [  451.092498]  brk_handler+0x30/0xbc
+> [  451.092529]  do_debug_exception+0x16c/0x31c
+> [  451.092563]  el1_dbg+0x64/0x80
+> [  451.092592]  el1h_64_sync_handler+0x70/0xb4
+> [  451.092624]  el1h_64_sync+0x7c/0x80
+> [  451.092653]  debug_dma_map_sg+0x5bc/0x950
+> [  451.092685]  dma_alloc_noncontiguous+0x2f4/0x404
+> [  451.092717]  uvc_alloc_urb_buffers+0x1e8/0x600 [uvcvideo 1a151fdc87685=
+4366480a9c6b7aaa4b7999fb493]
+> [  451.092794]  uvc_video_start_transfer+0xaf4/0x1628 [uvcvideo 1a151fdc8=
+76854366480a9c6b7aaa4b7999fb493]
+> [  451.092868]  uvc_video_start_streaming+0x154/0x2d8 [uvcvideo 1a151fdc8=
+76854366480a9c6b7aaa4b7999fb493]
+> [  451.092942]  uvc_start_streaming+0x20c/0x3d4 [uvcvideo 1a151fdc8768543=
+66480a9c6b7aaa4b7999fb493]
+> [  451.093015]  vb2_start_streaming+0x118/0x400 [videobuf2_common 252dc8c=
+49960dcb8e329e2787100c89e1899c17f]
+> [  451.093079]  vb2_core_streamon+0x258/0x360 [videobuf2_common 252dc8c49=
+960dcb8e329e2787100c89e1899c17f]
+> [  451.093139]  vb2_streamon+0x88/0xbc [videobuf2_v4l2 f4acca89bfe3410cd8=
+f3ca536255fc3877fe63db]
+> [  451.093187]  uvc_queue_streamon+0x44/0x68 [uvcvideo 1a151fdc8768543664=
+80a9c6b7aaa4b7999fb493]
+> [  451.093261]  uvc_ioctl_streamon+0xd8/0x124 [uvcvideo 1a151fdc876854366=
+480a9c6b7aaa4b7999fb493]
+> [  451.093334]  v4l_streamon+0x74/0xa8
+> [  451.093366]  __video_do_ioctl+0x90c/0xa40
+> [  451.093398]  video_usercopy+0xa44/0x1ef8
+> [  451.093428]  video_ioctl2+0x44/0x58
+> [  451.093457]  v4l2_ioctl+0x138/0x164
+> [  451.093487]  __arm64_sys_ioctl+0x154/0x1d0
+> [  451.093518]  invoke_syscall+0x98/0x278
+> [  451.093548]  el0_svc_common+0x214/0x274
+> [  451.093578]  do_el0_svc+0x9c/0x19c
+> [  451.093607]  el0_svc+0x5c/0xc0
+> [  451.093637]  el0t_64_sync_handler+0x78/0x108
+> [  451.093669]  el0t_64_sync+0x1a4/0x1a8
+> [  451.093701] SMP: stopping secondary CPUs
+> [  451.093777] Kernel Offset: disabled
+> [  451.093797] CPU features: 0xc00181c1,a3300e42
+> [  451.093822] Memory Limit: none
 >
-> And then we can avoid having to prefix so many functions with "intel", e.=
-g. this
-> can be something like
+> Signed-off-by: Ricardo Ribalda Delgado <ribalda@chromium.org>
+> ---
+>  drivers/usb/host/xhci-mtk.c | 2 ++
+>  1 file changed, 2 insertions(+)
 >
->   static void guest_measure_loop()
+> diff --git a/drivers/usb/host/xhci-mtk.c b/drivers/usb/host/xhci-mtk.c
+> index 90cf40d6d0c3..605b1e1a5098 100644
+> --- a/drivers/usb/host/xhci-mtk.c
+> +++ b/drivers/usb/host/xhci-mtk.c
+> @@ -643,6 +643,8 @@ static int xhci_mtk_probe(struct platform_device *pde=
+v)
+>         pm_runtime_put_autosuspend(dev);
+>         pm_runtime_forbid(dev);
 >
-> or whatever.
+> +       dma_set_max_seg_size(dev, UINT_MAX);
+> +
+>         return 0;
 >
-> > +                                    uint32_t ctr_base_msr, uint64_t ev=
-t_code)
-> > +{
-> > +     uint32_t global_msr =3D MSR_CORE_PERF_GLOBAL_CTRL;
-> > +     unsigned int i;
-> > +
-> > +     for (i =3D 0; i < max_gp_num; i++) {
-> > +             wrmsr(ctr_base_msr + i, 0);
-> > +             wrmsr(MSR_P6_EVNTSEL0 + i, EVENTSEL_OS | EVENTSEL_EN | ev=
-t_code);
-> > +             if (version > 1)
-> > +                     wrmsr(global_msr, BIT_ULL(i));
-> > +
-> > +             __asm__ __volatile__("loop ." : "+c"((int){NUM_BRANCHES})=
-);
-> > +
-> > +             if (version > 1)
-> > +                     wrmsr(global_msr, 0);
-> > +
-> > +             GUEST_SYNC(_rdpmc(i));
-> > +     }
-> > +
-> > +     GUEST_DONE();
-> > +}
-> > +
-> > +static void test_arch_events_cpuid(struct kvm_vcpu *vcpu, uint8_t evt_=
-vector,
+>  dealloc_usb3_hcd:
 >
-> "vector" is confusing, as "vector" usually refers to a vector number, e.g=
-. for
-> IRQs and exceptions.  This is the _length_ of a so called vector.  I vote=
- to ignore
-> the SDM's use of "vector" in this case and instead call it something like
-> arch_events_bitmap_size.  And then arch_events_unavailable_mask?
+> ---
+> base-commit: 1b2c92a1cb2469d8c0079dbf496ab86e22e1cb7c
+> change-id: 20230628-mtk-usb-bf0059f64bd7
 >
-> > +                                uint8_t unavl_mask, uint8_t idx)
-> > +{
-> > +     struct kvm_cpuid_entry2 *entry;
-> > +     uint32_t ctr_msr =3D MSR_IA32_PERFCTR0;
-> > +     bool is_supported;
-> > +     uint64_t counter_val =3D 0;
-> > +
-> > +     entry =3D vcpu_get_cpuid_entry(vcpu, 0xa);
-> > +     entry->eax =3D (entry->eax & ~EVT_LEN_MASK) |
-> > +             (evt_vector << EVT_LEN_OFS_BIT);
+> Best regards,
+> --
+> Ricardo Ribalda Delgado <ribalda@chromium.org>
 >
-> EVT_LEN_OFS_BIT can be a KVM_x86_PROPERTY.  And please also add a helper =
-to set
-> properties, the whole point of the FEATURE and PROPERTY frameworks is to =
-avoid
-> open coding CPUID manipulations.  E.g.
->
-> static inline void vcpu_set_cpuid_property(struct kvm_vcpu *vcpu,
->                                            struct kvm_x86_cpu_property pr=
-operty,
->                                            uint32_t value)
-> {
->         ...
-> }
->
-> > +     entry->ebx =3D (entry->ebx & ~EVENTS_MASK) | unavl_mask;
-> > +     vcpu_set_cpuid(vcpu);
-> > +
-> > +     if (vcpu_get_msr(vcpu, MSR_IA32_PERF_CAPABILITIES) & PMU_CAP_FW_W=
-RITES)
-> > +             ctr_msr =3D MSR_IA32_PMC0;
->
-> This can be done in the guest, no?
->
-> > +
-> > +     /* Arch event x is supported if EBX[x]=3D0 && EAX[31:24]>x */
-> > +     is_supported =3D !(entry->ebx & BIT_ULL(idx)) &&
-> > +             (((entry->eax & EVT_LEN_MASK) >> EVT_LEN_OFS_BIT) > idx);
->
-> Please add a helper for this.
->
-> > +
-> > +     vcpu_args_set(vcpu, 4, X86_INTEL_PMU_VERSION, X86_INTEL_MAX_GP_CT=
-R_NUM,
-> > +                   ctr_msr, arch_events[idx]);
-> > +
-> > +     while (run_vcpu(vcpu, &counter_val) !=3D UCALL_DONE)
-> > +             TEST_ASSERT(is_supported =3D=3D !!counter_val,
-> > +                         "Unavailable arch event is counting.");
-> > +}
-> > +
-> > +static void intel_check_arch_event_is_unavl(uint8_t idx)
-> > +{
-> > +     uint8_t eax_evt_vec, ebx_unavl_mask, i, j;
-> > +     struct kvm_vcpu *vcpu;
-> > +     struct kvm_vm *vm;
-> > +
-> > +     /*
-> > +      * A brute force iteration of all combinations of values is likel=
-y to
-> > +      * exhaust the limit of the single-threaded thread fd nums, so it=
-'s
-> > +      * tested here by iterating through all valid values on a single =
-bit.
-> > +      */
-> > +     for (i =3D 0; i < ARRAY_SIZE(arch_events); i++) {
-> > +             eax_evt_vec =3D BIT_ULL(i);
-> > +             for (j =3D 0; j < ARRAY_SIZE(arch_events); j++) {
-> > +                     ebx_unavl_mask =3D BIT_ULL(j);
-> > +                     vm =3D pmu_vm_create_with_one_vcpu(&vcpu,
-> > +                                                      intel_guest_run_=
-arch_event);
-> > +                     test_arch_events_cpuid(vcpu, eax_evt_vec,
-> > +                                            ebx_unavl_mask, idx);
-> > +
-> > +                     kvm_vm_free(vm);
-> > +             }
-> > +     }
-> > +}
-> > +
-> > +static void intel_test_arch_events(void)
-> > +{
-> > +     uint8_t idx;
-> > +
-> > +     for (idx =3D 0; idx < ARRAY_SIZE(arch_events); idx++) {
-> > +             /*
-> > +              * Given the stability of performance event recurrence,
-> > +              * only these arch events are currently being tested:
-> > +              *
-> > +              * - Core cycle event (idx =3D 0)
-> > +              * - Instruction retired event (idx =3D 1)
-> > +              * - Reference cycles event (idx =3D 2)
-> > +              * - Branch instruction retired event (idx =3D 5)
-> > +              *
-> > +              * Note that reference cycles is one event that actually =
-cannot
-> > +              * be successfully virtualized.
-> > +              */
 
-Actually, there is no reason that reference cycles can't be
-successfully virtualized. It just can't be done with the current vPMU
-infrastructure.
 
-> > +             if (idx > 2 && idx !=3D 5)
->
-> As request in a previous patch, use enums, then the need to document the =
-magic
-> numbers goes away.
->
-> > +                     continue;
-> > +
-> > +             intel_check_arch_event_is_unavl(idx);
-> > +     }
-> > +}
-> > +
-> > +static void intel_test_pmu_cpuid(void)
-> > +{
-> > +     intel_test_arch_events();
->
-> Either put the Intel-specific TEST_REQUIRE()s in here, or open code the c=
-alls.
-> Adding a helper and then splitting code across the helper and its sole ca=
-ller is
-> unnecessary.
->
-> > +}
-> > +
-> > +int main(int argc, char *argv[])
-> > +{
-> > +     TEST_REQUIRE(get_kvm_param_bool("enable_pmu"));
-> > +
-> > +     if (host_cpu_is_intel) {
->
-> Presumably AMD will be supported at some point, but until then, this need=
-s to be
->
->         TEST_REQUIRE(host_cpu_is_intel);
->
-> > +             TEST_REQUIRE(kvm_cpu_has_p(X86_PROPERTY_PMU_VERSION));
-> > +             TEST_REQUIRE(X86_INTEL_PMU_VERSION > 0);
-> > +             TEST_REQUIRE(kvm_cpu_has(X86_FEATURE_PDCM));
-> > +
-> > +             intel_test_pmu_cpuid();
-> > +     }
-> > +
-> > +     return 0;
-> > +}
-> > --
-> > 2.31.1
-> >
+--=20
+Ricardo Ribalda
