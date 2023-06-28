@@ -2,215 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 009E474181D
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 20:38:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1393741822
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 20:41:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230447AbjF1SiV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 14:38:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50308 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229517AbjF1SiT (ORCPT
+        id S231449AbjF1SkW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 14:40:22 -0400
+Received: from smtp-fw-80006.amazon.com ([99.78.197.217]:54882 "EHLO
+        smtp-fw-80006.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229517AbjF1SkT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 14:38:19 -0400
-Received: from mail-vs1-xe2c.google.com (mail-vs1-xe2c.google.com [IPv6:2607:f8b0:4864:20::e2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C2A2198E;
-        Wed, 28 Jun 2023 11:38:16 -0700 (PDT)
-Received: by mail-vs1-xe2c.google.com with SMTP id ada2fe7eead31-440db8e60c8so71362137.0;
-        Wed, 28 Jun 2023 11:38:16 -0700 (PDT)
+        Wed, 28 Jun 2023 14:40:19 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687977495; x=1690569495;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=fUfemlynnNneoxL8cdSabImehAqyH734aWKCQV2DU1U=;
-        b=nj/fTdVOvEEk1BUnQEQlWWmwdnbfMJn6BAZGIXq9TAzRzf/CKgapHEbYtH7ViJr0FV
-         0BRZMjWNOA3f0C6jzA2qSBogK/IlvbrAny3EjSFwIYQT6A6FuIE/zzHzb+/wq29cojc5
-         VDShPWA8OMXHmAw9aghDvZXygdgMvLcTfi115abjYV1cIjXk1ealb2bRjMVhqJcy3AT9
-         4wrCay2k1tRglt5B4f2EG2oVhi2CFWMmLbm/qOJe6qh6sRXVnKwGfKtLkd1LZvNur7MQ
-         qz1n+0uqLH2oWdFHeJ0rUDSnXM5FhFHrlpV5JvvKdPWxu3zFn+voPwt0423U+IN6vhgZ
-         MMPQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687977495; x=1690569495;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=fUfemlynnNneoxL8cdSabImehAqyH734aWKCQV2DU1U=;
-        b=dL78nclhYhxBisPsRoBMXGHw9cgPioZHUjf4NuWVaEK8UgXvIpX3gLwmgKNoc2C09R
-         BWRvJ+THhxi9Lwi9eoQWulyjHQwCEGRvCz3kV4x/czaOyMgdsAoQjKYoaSdBk8vJ/8hS
-         du8Gy5Q8UWcgas6oNO7msNcR1lI/TptZ+Fte+DQUmcJcZQanghqOssrqz241dTyDMY8S
-         6cX8o3up4mFVV3BfA9KwtmTzlbjNoZLSIdvmTGYlNOTWhhdWPqNm9N+2dy3EMvFyYoOA
-         bkJCXE95m5QQbi5W5h+7SRmlRwVhvJi2x5DuNQk1NoiyT5a+eLju/MMmG5DB6hkXtd5E
-         PfhQ==
-X-Gm-Message-State: AC+VfDzlWGj8Brh14dMGpycE/n/EQFqSnETYwCGnMb4YtNLA7lWQLfjN
-        0lPDXd5D5PYKCfzj4ob9MlNQZPwAivxcIZzrYUY=
-X-Google-Smtp-Source: ACHHUZ6mjzx7S9b3k6PPB8thfNeFOxurIR+4Ghqx+hQOrJXdXRcmSeWtJZzFywWJ/Bs1Ww42QFWbbbbm9OyBRm+wx9s=
-X-Received: by 2002:a67:f998:0:b0:443:6ad6:7915 with SMTP id
- b24-20020a67f998000000b004436ad67915mr5460304vsq.27.1687977495140; Wed, 28
- Jun 2023 11:38:15 -0700 (PDT)
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1687977620; x=1719513620;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=BL4ULAFej05+WRV13/0IUuXBJpcZCjd4OTT8VyAGeUo=;
+  b=md69R2XKNtIInjnpodcnZ8ZCRoSl0TFUSxMBAnm0cudPbrsS7/PTXU4u
+   K+PU8b/s2nIyom7cMzaFy+BQT1S6xCoHI+DbQs4ZToD9q9taXhaNuP9wG
+   yfPU5h6TDJvVgBe3vELVjWFjI+iml6KDWvNL8Y0ntwCzpCVKCD3Eclx0t
+   s=;
+X-IronPort-AV: E=Sophos;i="6.01,166,1684800000"; 
+   d="scan'208";a="223422365"
+Received: from pdx4-co-svc-p1-lb2-vlan2.amazon.com (HELO email-inbound-relay-iad-1a-m6i4x-9fe6ad2f.us-east-1.amazon.com) ([10.25.36.210])
+  by smtp-border-fw-80006.pdx80.corp.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2023 18:40:16 +0000
+Received: from EX19MTAUWB001.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan3.iad.amazon.com [10.40.163.38])
+        by email-inbound-relay-iad-1a-m6i4x-9fe6ad2f.us-east-1.amazon.com (Postfix) with ESMTPS id 1B2B7805E6;
+        Wed, 28 Jun 2023 18:40:08 +0000 (UTC)
+Received: from EX19D004ANA001.ant.amazon.com (10.37.240.138) by
+ EX19MTAUWB001.ant.amazon.com (10.250.64.248) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.26; Wed, 28 Jun 2023 18:40:04 +0000
+Received: from 88665a182662.ant.amazon.com.com (10.187.170.50) by
+ EX19D004ANA001.ant.amazon.com (10.37.240.138) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.30; Wed, 28 Jun 2023 18:39:59 +0000
+From:   Kuniyuki Iwashima <kuniyu@amazon.com>
+To:     <lmb@isovalent.com>
+CC:     <andrii@kernel.org>, <ast@kernel.org>, <bpf@vger.kernel.org>,
+        <daniel@iogearbox.net>, <davem@davemloft.net>,
+        <dsahern@kernel.org>, <edumazet@google.com>, <haoluo@google.com>,
+        <hemanthmalla@gmail.com>, <joe@wand.net.nz>,
+        <john.fastabend@gmail.com>, <jolsa@kernel.org>,
+        <kpsingh@kernel.org>, <kuba@kernel.org>, <kuniyu@amazon.com>,
+        <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+        <martin.lau@linux.dev>, <mykolal@fb.com>, <netdev@vger.kernel.org>,
+        <pabeni@redhat.com>, <sdf@google.com>, <shuah@kernel.org>,
+        <song@kernel.org>, <willemdebruijn.kernel@gmail.com>, <yhs@fb.com>
+Subject: Re: [PATCH bpf-next v4 4/7] net: document inet[6]_lookup_reuseport sk_state requirements
+Date:   Wed, 28 Jun 2023 11:39:50 -0700
+Message-ID: <20230628183950.75449-1-kuniyu@amazon.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20230613-so-reuseport-v4-4-4ece76708bba@isovalent.com>
+References: <20230613-so-reuseport-v4-4-4ece76708bba@isovalent.com>
 MIME-Version: 1.0
-References: <t5az5bvpfqd3rrwla43437r5vplmkujdytixcxgm7sc4hojspg@jcc63stk66hz>
- <cover.1687898895.git.nabijaczleweli@nabijaczleweli.xyz> <e770188fd86595c6f39d4da86d906a824f8abca3.1687898895.git.nabijaczleweli@nabijaczleweli.xyz>
- <CAOQ4uxjQcn9DUo_Z2LGTgG0SOViy8h5=ST_A5v1v=gdFLwj6Hw@mail.gmail.com> <q2nwpf74fngjdlhukkxvlxuz3xkaaq4aup7hzpqjkqlmlthag5@dsx6m7cgk5yt>
-In-Reply-To: <q2nwpf74fngjdlhukkxvlxuz3xkaaq4aup7hzpqjkqlmlthag5@dsx6m7cgk5yt>
-From:   Amir Goldstein <amir73il@gmail.com>
-Date:   Wed, 28 Jun 2023 21:38:03 +0300
-Message-ID: <CAOQ4uxh-ALXa0N-aZzVtO9E5e6C5++OOnkbL=aPSwRbF=DL1Pw@mail.gmail.com>
-Subject: Re: [PATCH v4 1/3] splice: always fsnotify_access(in),
- fsnotify_modify(out) on success
-To:     =?UTF-8?Q?Ahelenia_Ziemia=C5=84ska?= 
-        <nabijaczleweli@nabijaczleweli.xyz>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <brauner@kernel.org>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jan Kara <jack@suse.cz>,
-        Chung-Chiang Cheng <cccheng@synology.com>, ltp@lists.linux.it
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-        lindbergh.monkeyblade.net
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.187.170.50]
+X-ClientProxiedBy: EX19D041UWA003.ant.amazon.com (10.13.139.105) To
+ EX19D004ANA001.ant.amazon.com (10.37.240.138)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 28, 2023 at 8:09=E2=80=AFPM Ahelenia Ziemia=C5=84ska
-<nabijaczleweli@nabijaczleweli.xyz> wrote:
->
-> On Wed, Jun 28, 2023 at 09:33:43AM +0300, Amir Goldstein wrote:
-> > On Tue, Jun 27, 2023 at 11:50=E2=80=AFPM Ahelenia Ziemia=C5=84ska
-> > <nabijaczleweli@nabijaczleweli.xyz> wrote:
-> > > The current behaviour caused an asymmetry where some write APIs
-> > > (write, sendfile) would notify the written-to/read-from objects,
-> > > but splice wouldn't.
-> > >
-> > > This affected userspace which uses inotify, most notably coreutils
-> > > tail -f, to monitor pipes.
-> > > If the pipe buffer had been filled by a splice-family function:
-> > >   * tail wouldn't know and thus wouldn't service the pipe, and
-> > >   * all writes to the pipe would block because it's full,
-> > > thus service was denied.
-> > > (For the particular case of tail -f this could be worked around
-> > >  with ---disable-inotify.)
-> > Is my understanding of the tail code wrong?
-> > My understanding was that tail_forever_inotify() is not called for
-> > pipes, or is it being called when tailing a mixed collection of pipes
-> > and regular files? If there are subtleties like those you need to
-> > mention them , otherwise people will not be able to reproduce the
-> > problem that you are describing.
-> I can't squeak to the code itself, but it's trivial to check:
->   $ tail -f  fifo &
->   [1] 3213996
->   $ echo zupa > fifo
->   zupa
->   $ echo zupa > fifo
->   zupa
->   $ echo zupa > fifo
->   zupa
->   $ cat /bin/tail > fifo
->   # ...
->   $ cat /bin/tail > fifo
-> hangs: the fifo is being watched with inotify.
->
-> This happens regardless of other files being specified.
->
-> tail -f doesn't follow FIFOs or pipes if they're fd 0
-> (guaranteed by POSIX, coreutils conforms).
->
-> OTOH, you could theoretically do
->   $ cat | tail -f /dev/fd/3 3<&0
-> which first reads from the pipe until completion (=E2=87=94 hangup, cat d=
-ied),
-> then hangs, because it's waiting for more data on the pipe.
->
-> This can never happen under a normal scenario, but doing
->   $ echo zupa > /proc/3238590/fd/3
-> a few times reveals it's using classic 1/s polling
-> (and splicing to /proc/3238590/fd/3 actually yields that data being
->  output from tail).
->
-> > I need to warn you about something regarding this patch -
-> > often there are colliding interests among different kernel users -
-> > fsnotify use cases quite often collide with the interest of users track=
-ing
-> > performance regressions and IN_ACCESS/IN_MODIFY on anonymous pipes
-> > specifically have been the source of several performance regression rep=
-orts
-> > in the past and have driven optimizations like:
-> >
-> > 71d734103edf ("fsnotify: Rearrange fast path to minimise overhead
-> > when there is no watcher")
-> > e43de7f0862b ("fsnotify: optimize the case of no marks of any type")
-> >
-> > The moral of this story is: even if your patches are accepted by fsnoti=
-fy
-> > reviewers, once they are staged for merging they will be subject to
-> > performance regression tests and I can tell you with certainty that
-> > performance regression will not be tolerated for the tail -f use case.
-> > I will push your v4 patches to a branch in my github, to let the kernel
-> > test bots run the performance regressions on it whenever they get to it=
-.
-> >
-> > Moreover, if coreutils will change tail -f to start setting inotify wat=
-ches
-> > on anonymous pipes (my understanding is that currently does not?),
-> > then any tail -f on anonymous pipe can cripple the "no marks on sb"
-> > performance optimization for all anonymous pipes and that would be
-> > a *very* unfortunate outcome.
-> As seen above, it doesn't set inotify watches on anon pipes, and
-> (since it manages to distinguish "| /dev/fd/3 3<&0" from "fifo",
->  so it must be going further than S_ISFIFO(fstat()))
-> this is an explicit design decision.
->
-> If you refuse setting inotifies on anon pipes then that likely won't
-> impact any userspace program (it's pathological, and for tail-like cases
->  it'd only be meaningful for magic /proc/$pid/fd/* symlinks),
-> and if it's in the name of performance then no-one'll likely complain,
-> or even notice.
->
+From: Lorenz Bauer <lmb@isovalent.com>
+Date: Wed, 28 Jun 2023 10:48:19 +0100
+> The current implementation was extracted from inet[6]_lhash2_lookup
+> in commit 80b373f74f9e ("inet: Extract helper for selecting socket
+> from reuseport group") and commit 5df6531292b5 ("inet6: Extract helper
+> for selecting socket from reuseport group"). In the original context,
+> sk is always in TCP_LISTEN state and so did not have a separate check.
+> 
+> Add documentation that specifies which sk_state are valid to pass to
+> the function.
+> 
+> Signed-off-by: Lorenz Bauer <lmb@isovalent.com>
 
-Unfortunately, it doesn't work this way - most of the time we are not
-supposed to break existing applications and I have no way of knowing if
-those applications exist...
+Reviewed-by: Kuniyuki Iwashima <kuniyu@amazon.com>
 
-> > I think we need to add a rule to fanotify_events_supported() to ban
-> > sb/mount marks on SB_KERNMOUNT and backport this
-> > fix to LTS kernels (I will look into it) and then we can fine tune
-> > the s_fsnotify_connectors optimization in fsnotify_parent() for
-> > the SB_KERNMOUNT special case.
-> > This may be able to save your patch for the faith of NACKed
-> > for performance regression.
-> This goes over my head, but if Jan says it makes sense
-> then it must do.
->
+2 nit below.
 
-Here you go:
-https://github.com/amir73il/linux/commits/fsnotify_pipe
 
-I ended up using SB_NOUSER which is narrower than
-SB_KERNMOUNT.
+> ---
+>  net/ipv4/inet_hashtables.c  | 14 ++++++++++++++
+>  net/ipv6/inet6_hashtables.c | 14 ++++++++++++++
+>  2 files changed, 28 insertions(+)
+> 
+> diff --git a/net/ipv4/inet_hashtables.c b/net/ipv4/inet_hashtables.c
+> index 352eb371c93b..ac927a635a6f 100644
+> --- a/net/ipv4/inet_hashtables.c
+> +++ b/net/ipv4/inet_hashtables.c
+> @@ -335,6 +335,20 @@ static inline int compute_score(struct sock *sk, struct net *net,
+>  
+>  INDIRECT_CALLABLE_DECLARE(inet_ehashfn_t udp_ehashfn);
+>  
+> +/**
+> + * inet_lookup_reuseport() - execute reuseport logic on AF_INET socket if necessary.
+> + * @net: network namespace.
+> + * @sk: AF_INET socket, must be in TCP_LISTEN state for TCP or TCP_CLOSE for UDP.
+> + * @skb: context for a potential SK_REUSEPORT program.
+> + * @doff: header offset.
+> + * @saddr: source address.
+> + * @sport: source port.
+> + * @daddr: destination address.
+> + * @hnum: destination port in host byte order.
 
-Care to test?
-1) Functionally - that I did not break your tests.
-2) Optimization - that when one anon pipe has an inotify watch
-write to another anon pipe stops at fsnotify_inode_has_watchers()
-and does not get to fsnotify().
+It seems you forgot to copy-and-paste the ehashfn description.
 
-> > > Generate modify out before access in to let inotify merge the
-> > > modify out events in thr ipipe case.
-> > This comment is not clear and does not belong in this context,
-> > but it very much belongs near the code in question.
-> Turned it into
->                 /*
->                  * Generate modify out before access in:
->                  * do_splice_from() may've already sent modify out,
->                  * and this ensures the events get merged.
->                  */
-> for v5.
+---8<---
++ * @ehashfn: hash function used to generate the fallback hash.
+---8<---
+https://lore.kernel.org/all/20230613-so-reuseport-v3-4-907b4cbb7b99@isovalent.com/
 
-OK.
 
-Thanks,
-Amir.
+> + *
+> + * Return: NULL if sk doesn't have SO_REUSEPORT set, otherwise a pointer to
+> + *         the selected sock or an error.
+> + */
+>  struct sock *inet_lookup_reuseport(struct net *net, struct sock *sk,
+>  				   struct sk_buff *skb, int doff,
+>  				   __be32 saddr, __be16 sport,
+> diff --git a/net/ipv6/inet6_hashtables.c b/net/ipv6/inet6_hashtables.c
+> index 3616225c89ef..d37602fabc00 100644
+> --- a/net/ipv6/inet6_hashtables.c
+> +++ b/net/ipv6/inet6_hashtables.c
+> @@ -114,6 +114,20 @@ static inline int compute_score(struct sock *sk, struct net *net,
+>  
+>  INDIRECT_CALLABLE_DECLARE(inet6_ehashfn_t udp6_ehashfn);
+>  
+> +/**
+> + * inet6_lookup_reuseport() - execute reuseport logic on AF_INET6 socket if necessary.
+> + * @net: network namespace.
+> + * @sk: AF_INET6 socket, must be in TCP_LISTEN state for TCP or TCP_CLOSE for UDP.
+> + * @skb: context for a potential SK_REUSEPORT program.
+> + * @doff: header offset.
+> + * @saddr: source address.
+> + * @sport: source port.
+> + * @daddr: destination address.
+> + * @hnum: destination port in host byte order.
+
+Same here.
+
+
+> + *
+> + * Return: NULL if sk doesn't have SO_REUSEPORT set, otherwise a pointer to
+> + *         the selected sock or an error.
+> + */
+>  struct sock *inet6_lookup_reuseport(struct net *net, struct sock *sk,
+>  				    struct sk_buff *skb, int doff,
+>  				    const struct in6_addr *saddr,
+> 
+> -- 
+> 2.40.1
