@@ -2,85 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF62B7413C5
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 16:22:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FEE17413BF
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 16:22:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232302AbjF1OVO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 10:21:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53888 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232593AbjF1OTz (ORCPT
+        id S230216AbjF1OVb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 10:21:31 -0400
+Received: from mx1.sberdevices.ru ([37.18.73.165]:51108 "EHLO
+        mx1.sberdevices.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232692AbjF1OUG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 10:19:55 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AC1530EA
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 07:19:33 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        Wed, 28 Jun 2023 10:20:06 -0400
+Received: from p-infra-ksmg-sc-msk01 (localhost [127.0.0.1])
+        by mx1.sberdevices.ru (Postfix) with ESMTP id 2A969100010;
+        Wed, 28 Jun 2023 17:20:04 +0300 (MSK)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mx1.sberdevices.ru 2A969100010
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
+        s=mail; t=1687962004;
+        bh=Lk3qB4uYxKXyPUp5kolLvL3qgFw7FLaRDeOgiAkPfaY=;
+        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type:From;
+        b=XKNMDmCfB+n/eT0axZCuc6oQTuSbQOU9CWCpZg3JV0ziwt+BBWjeCZAVJ9IC1uxrw
+         sRE6kjI493+xNLexts6m1cYfL+uz3mOoeh1QecFzgqhXyVHd17g0nNcrCgfIFVRZ89
+         nw33wnuz6sPUsdeB/Bq6ksjlCYvKk7yadqQzxMDHpBERTN3O8+tHYpveU4xWdc78Q6
+         vKQ75c1iAE1f/KtfhXyw9SoQGiOeW3ek2OtKbpLxmilImnZB/nTG0Mn6uuA9DbYEXD
+         OJBekE9eY4QqP2qx9lsbssaG6XzgPC2tYWc6cVe+X9YSjDmkUrRTiAO3jrI3tOCj6T
+         zWDTRG4G9xbNA==
+Received: from p-i-exch-sc-m01.sberdevices.ru (p-i-exch-sc-m01.sberdevices.ru [172.16.192.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B57D1612B7
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 14:19:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98BCFC433C8;
-        Wed, 28 Jun 2023 14:19:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687961972;
-        bh=yrVlAWiwxFJi/PSUnLEvi1oEGkS0sNHufr0RPMimCWE=;
-        h=Date:Subject:To:References:From:In-Reply-To:From;
-        b=YM1IppAygzGHN4bX7d7k6Q2VpMqf5//MszBZC+ih6wU75AtTQ74afbl1qmk+6t1Rv
-         MMVMDEyz45sK6IV5iE2ddrwcMiNbbnK7+EMYQXQtuAeNXwDLzyFUlvbpdQoIXLklzp
-         HEfAtDBLEossqE8WvxDajNU1kRioww6Cf1sRB441Kweah2/4Unnb/TzGEwADLZnUPA
-         X8aiQIQXw0eizjV037noLjdItbiQFa0LaTE2BrptArYy0HBQph5tfeq4qPcNqaE8Lp
-         P5md2kIb6rlvkoc0SzH2s1BEPc2kB0Bc7ubHbUnDB2iPlK99S6iZ+/5jSsvdsDmSkg
-         SrPLI/4D9xOPg==
-Message-ID: <b45cedc6-3dbe-5cbb-1938-5c33cf9fc70d@kernel.org>
-Date:   Wed, 28 Jun 2023 08:19:30 -0600
+        by mx1.sberdevices.ru (Postfix) with ESMTPS;
+        Wed, 28 Jun 2023 17:20:04 +0300 (MSK)
+Received: from localhost (100.64.160.123) by p-i-exch-sc-m01.sberdevices.ru
+ (172.16.192.107) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.30; Wed, 28 Jun
+ 2023 17:19:06 +0300
+Date:   Wed, 28 Jun 2023 17:20:03 +0300
+From:   Dmitry Rokosov <ddrokosov@sberdevices.ru>
+To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+CC:     <neil.armstrong@linaro.org>, <jbrunet@baylibre.com>,
+        <mturquette@baylibre.com>, <sboyd@kernel.org>,
+        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <khilman@baylibre.com>, <conor+dt@kernel.org>,
+        <kernel@sberdevices.ru>, <sdfw_system_team@sberdevices.ru>,
+        <rockosov@gmail.com>, <linux-amlogic@lists.infradead.org>,
+        <linux-clk@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        Alexey Romanov <avromanov@sberdevices.ru>
+Subject: Re: [PATCH v1 3/6] arm64: dts: meson: a1: enable efuse controller
+ and setup its clk
+Message-ID: <20230628142003.ggqbxkvuzn6noupc@CAB-WSD-L081021>
+References: <20230607201641.20982-1-ddrokosov@sberdevices.ru>
+ <20230607201641.20982-4-ddrokosov@sberdevices.ru>
+ <CAFBinCC0F4gaW1eFkJvf=oSkmAMmjbJ-ZFbVhpnrcGZPOX2sYg@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.12.0
-Subject: Re: [PATCH v3 1/1] gro: decrease size of CB
-To:     Gal Pressman <gal@nvidia.com>,
-        Richard Gobert <richardbgobert@gmail.com>, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        aleksander.lobakin@intel.com, lixiaoyan@google.com,
-        lucien.xin@gmail.com, alexanderduyck@fb.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230601160924.GA9194@debian> <20230601161407.GA9253@debian>
- <f83d79d6-f8d7-a229-941a-7d7427975160@nvidia.com>
- <fe5c86d1-1fd5-c717-e40c-c9cc102624ed@kernel.org>
- <b3908ce2-43e1-b56d-5d1d-48a932a2a016@nvidia.com>
-Content-Language: en-US
-From:   David Ahern <dsahern@kernel.org>
-In-Reply-To: <b3908ce2-43e1-b56d-5d1d-48a932a2a016@nvidia.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-        lindbergh.monkeyblade.net
+Content-Type: text/plain; charset="utf-8"
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAFBinCC0F4gaW1eFkJvf=oSkmAMmjbJ-ZFbVhpnrcGZPOX2sYg@mail.gmail.com>
+User-Agent: NeoMutt/20220415
+X-Originating-IP: [100.64.160.123]
+X-ClientProxiedBy: p-i-exch-sc-m01.sberdevices.ru (172.16.192.107) To
+ p-i-exch-sc-m01.sberdevices.ru (172.16.192.107)
+X-KSMG-Rule-ID: 10
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Lua-Profiles: 178314 [Jun 28 2023]
+X-KSMG-AntiSpam-Version: 5.9.59.0
+X-KSMG-AntiSpam-Envelope-From: DDRokosov@sberdevices.ru
+X-KSMG-AntiSpam-Rate: 0
+X-KSMG-AntiSpam-Status: not_detected
+X-KSMG-AntiSpam-Method: none
+X-KSMG-AntiSpam-Auth: dkim=none
+X-KSMG-AntiSpam-Info: LuaCore: 517 517 b0056c19d8e10afbb16cb7aad7258dedb0179a79, {Track_E25351}, {Tracking_from_domain_doesnt_match_to}, sberdevices.ru:7.1.1,5.0.1;127.0.0.199:7.1.2;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;p-i-exch-sc-m01.sberdevices.ru:7.1.1,5.0.1, FromAlignment: s, {Tracking_white_helo}, ApMailHostAddress: 100.64.160.123
+X-MS-Exchange-Organization-SCL: -1
+X-KSMG-AntiSpam-Interceptor-Info: scan successful
+X-KSMG-AntiPhishing: Clean
+X-KSMG-LinksScanning: Clean
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 2.0.1.6960, bases: 2023/06/28 08:00:00 #21591748
+X-KSMG-AntiVirus-Status: Clean, skipped
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/28/23 6:42 AM, Gal Pressman wrote:
-> On 27/06/2023 17:21, David Ahern wrote:
->> On 6/26/23 2:55 AM, Gal Pressman wrote:
->>> I believe this commit broke gro over udp tunnels.
->>> I'm running iperf tcp traffic over geneve interfaces and the bandwidth
->>> is pretty much zero.
->>>
->>
->> Could you add a test script to tools/testing/selftests/net? It will help
->> catch future regressions.
->>
-> 
-> I'm checking internally, someone from the team might be able to work on
-> this, though I'm not sure that a test that verifies bandwidth makes much
-> sense as a selftest.
-> 
+On Sun, Jun 25, 2023 at 10:50:37PM +0200, Martin Blumenstingl wrote:
+> On Wed, Jun 7, 2023 at 10:16 PM Dmitry Rokosov <ddrokosov@sberdevices.ru> wrote:
+> [...]
+> > +       efuse: efuse {
+> > +               compatible = "amlogic,meson-gxbb-efuse";
+> > +               clocks = <&clkc_periphs CLKID_OTP>;
+> > +               #address-cells = <1>;
+> > +               #size-cells = <1>;
+> > +               secure-monitor = <&sm>;
+> > +               power-domains = <&pwrc PWRC_OTP_ID>;
+> > +               status = "okay";
+> If eFuse is always enabled then we can just drop status = "okay" as
+> that's the default.
 
-With veth and namespaces I expect up to 25-30G performance levels,
-depending on the test. When something fundamental breaks like this patch
-a drop to < 1G would be a red flag, so there is value to the test.
+Ahh, okay. I wasn't aware of that behavior. Thank you for pointing it
+out!
+
+-- 
+Thank you,
+Dmitry
