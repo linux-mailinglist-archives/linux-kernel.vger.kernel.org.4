@@ -2,102 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E1CE741899
+	by mail.lfdr.de (Postfix) with ESMTP id 608D274189A
 	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 21:06:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231213AbjF1TFe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 15:05:34 -0400
-Received: from mx0b-0031df01.pphosted.com ([205.220.180.131]:28474 "EHLO
-        mx0b-0031df01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232425AbjF1TE7 (ORCPT
+        id S231406AbjF1TFg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 15:05:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54934 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231424AbjF1TFN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 15:04:59 -0400
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35SIWjSQ011106;
-        Wed, 28 Jun 2023 19:04:54 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=qcppdkim1;
- bh=c6gV6DUPeseuoyeesDk6z1v7bVxPu3Jz3kaPMY40MHk=;
- b=I/cJGUyUaSM4ghy8E/vjJl5Zpipgl73Ts1E2EWBRa8aTr7TDyJ20AFOuzhUIgyiVkL+r
- 4sf9fPcWA8gCUoixYw1r3o+U17VXxMqPrtWZ9EE2HZEmT9Y52YEunjcvGG/K1s1icXdJ
- 0ynQ+aLYBkcruYIFE3qosrlsunHZ1JEiG9KT1Z1zCmw6a21BPb9yE+BzFB6nJu0GzxyW
- +sWjZCwYEdVtZsygVUzvyPXwc37GzITZzzZtZZB1liDTVGI0mpXlTQOuDHMiSAjVH5hQ
- oyB/zYBYJUSYqe5Ot9HGGR519nyB/2VIjqN2gdNGxdPjNWlsXVpKk69Egx9tEiXAH5HY Fw== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rg9pb29c9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 28 Jun 2023 19:04:54 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35SJ4rl6023926
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 28 Jun 2023 19:04:53 GMT
-Received: from jhugo-lnx.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.7; Wed, 28 Jun 2023 12:04:51 -0700
-From:   Jeffrey Hugo <quic_jhugo@quicinc.com>
-To:     <rfoss@kernel.org>, <todor.too@gmail.com>,
-        <bryan.odonoghue@linaro.org>, <mchehab@kernel.org>,
-        <andersson@kernel.org>
-CC:     <linux-media@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        "Jeffrey Hugo" <quic_jhugo@quicinc.com>
-Subject: [PATCH] media: docs: qcom_camss: Update Code Aurora references
-Date:   Wed, 28 Jun 2023 13:04:33 -0600
-Message-ID: <20230628190433.19050-1-quic_jhugo@quicinc.com>
-X-Mailer: git-send-email 2.40.1
+        Wed, 28 Jun 2023 15:05:13 -0400
+Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B51F19B1
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 12:05:12 -0700 (PDT)
+Received: by mail-lj1-x22b.google.com with SMTP id 38308e7fff4ca-2b6c3921c8bso2475151fa.3
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 12:05:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1687979111; x=1690571111;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=J5YZzdJQyh4eu5fAj6xameoZPW5lmqQSZHtsSrZxy+c=;
+        b=bApBKeIV6L+P7bQQSgdCs8KOomZuQ+P1vVzFbdcBYF5YrlqR1gQpUbDKW+svoxZM5u
+         ZMI1O2A432MkFzaG9yEcIzwtnDdz7yUanUYRGGth1TcETQ9nw9TCowrr7KBXzjA4LaTT
+         5a9wa4Mx67QZRyBtXHn535wSfV3hKRjiKJ8O6R7VMaIhU8OrO+kbE1JHkq26aLgK220A
+         SlOWKQVRIMGY/BBPpmz2qqLFTj6aG1IUWc/dmxZA5aT9ZSYr01DHDkK0pZbIM0b67bCb
+         G1p8PRTStaNe7WCI/CTPdXo6fR7CNQGEg7Na2JMDre/uMZseZJCfO5KoSO4gZyFtudW2
+         uK0A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687979111; x=1690571111;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=J5YZzdJQyh4eu5fAj6xameoZPW5lmqQSZHtsSrZxy+c=;
+        b=AMwfXJcVNjcbu/k88LiwXJJ8F9WWoMOT57AuU3O8rUeJ4Df5YnlWyuIVwC5LcEAl/M
+         xagh4Ey/xDv8XtiREIowXf8LPicll+W7ILI9m+ZL+hGqTbtr9sjFa1yQ1ii7nXiSt7xL
+         G5FRLt1ebDaTrapYsjSLJ8xaytiwaCEiNJTjEnZSG9W1uiF7piB0cltdIpTqNwmi49NM
+         LlAre7Zo8J0Yi/5Jl5YzF4s6x4h2zs9DyY2OPvDsDzBh/mCDwO9H7Ah6NmLx5hiXeg57
+         cULKuAh2tGJqUl1ArP0Kb3iKbwhePEa+3spnNhDl04p+rg40mF2E4S6j7nbnaof4uu3U
+         nLiA==
+X-Gm-Message-State: AC+VfDxxAONoj0Zif53o6+KunSb0WGqADlPi2ifZlocbw+EqHt+aUYdu
+        eqF9bLSmzN0BFRXDAYNEjAbQCw==
+X-Google-Smtp-Source: ACHHUZ4bn9WdqZwlwgpaohN+JH/FskgQr6To+oDImxYoZ8FAbp2paEayyppRUM7Xb7j7v5znECW0yA==
+X-Received: by 2002:a2e:900a:0:b0:2b4:6195:bb26 with SMTP id h10-20020a2e900a000000b002b46195bb26mr22432303ljg.25.1687979110797;
+        Wed, 28 Jun 2023 12:05:10 -0700 (PDT)
+Received: from [192.168.1.101] (abyk82.neoplus.adsl.tpnet.pl. [83.9.30.82])
+        by smtp.gmail.com with ESMTPSA id t6-20020a2e9c46000000b002b6a85a7292sm1102616ljj.19.2023.06.28.12.05.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 28 Jun 2023 12:05:09 -0700 (PDT)
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+Date:   Wed, 28 Jun 2023 21:05:08 +0200
+Subject: [PATCH] drm/msm/adreno: Assign revn to A635
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: VkRIRPim3zEAWN_ijA4XA-4P8A6veG3I
-X-Proofpoint-ORIG-GUID: VkRIRPim3zEAWN_ijA4XA-4P8A6veG3I
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-06-28_13,2023-06-27_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 clxscore=1011
- spamscore=0 bulkscore=0 priorityscore=1501 adultscore=0 lowpriorityscore=0
- phishscore=0 mlxscore=0 mlxlogscore=880 impostorscore=0 malwarescore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2305260000
- definitions=main-2306280168
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20230628-topic-a635-v1-1-5056e09c08fb@linaro.org>
+X-B4-Tracking: v=1; b=H4sIAGOEnGQC/x2NQQqDMBAAvyJ77oJJrNp+RTwk221dkCiJihD8u
+ 0uPMzBMgcxJOMO7KpD4kCxLVDCPCmjy8ccoH2WwtXV1a3vcllUIfeueaIIjS6++a0wHGgSfGUP
+ ykSZN4j7PKtfEXzn/h2G8rhsjRnTzcQAAAA==
+To:     Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>
+Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
+        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Konrad Dybcio <konrad.dybcio@linaro.org>
+X-Mailer: b4 0.12.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1687979108; l=1049;
+ i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
+ bh=yOF2V2vC/eERQ5I69KrybMFDlBclITTn/+Bht2rKkYY=;
+ b=T9f2BftsBHUMn+H55F1KeMb0BOE9TuUoOA3jtNlB1lxYTYSv97uLuQMLHUS9T4OyQkR1hib9J
+ t+Eg5u6zA8ICDEQPx9CoIlDczwxnK718qaXUbFdux/m3XE4IGEwzpIS
+X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
+ pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+        lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-source.codeaurora.org is no longer accessible and so the reference links
-in the documentation are not useful.  The content was mirrored over to
-Code Linaro so lets update the references to point there instead.
+Recently, a WARN_ON() was introduced to ensure that revn is filled before
+adreno_is_aXYZ is called. This however doesn't work very well when revn is
+0 by design (such as for A635). Fill it in as a stopgap solution for
+-fixes.
 
-Signed-off-by: Jeffrey Hugo <quic_jhugo@quicinc.com>
+Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 ---
- Documentation/admin-guide/media/qcom_camss.rst | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/gpu/drm/msm/adreno/adreno_device.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/Documentation/admin-guide/media/qcom_camss.rst b/Documentation/admin-guide/media/qcom_camss.rst
-index a72e17d09cb7..8a8f3ff40105 100644
---- a/Documentation/admin-guide/media/qcom_camss.rst
-+++ b/Documentation/admin-guide/media/qcom_camss.rst
-@@ -18,7 +18,7 @@ The driver implements V4L2, Media controller and V4L2 subdev interfaces.
- Camera sensor using V4L2 subdev interface in the kernel is supported.
- 
- The driver is implemented using as a reference the Qualcomm Camera Subsystem
--driver for Android as found in Code Aurora [#f1]_ [#f2]_.
-+driver for Android as found in Code Linaro [#f1]_ [#f2]_.
- 
- 
- Qualcomm Camera Subsystem hardware
-@@ -181,5 +181,5 @@ Referenced 2018-06-22.
- References
- ----------
- 
--.. [#f1] https://source.codeaurora.org/quic/la/kernel/msm-3.10/
--.. [#f2] https://source.codeaurora.org/quic/la/kernel/msm-3.18/
-+.. [#f1] https://git.codelinaro.org/clo/la/kernel/msm-3.10/
-+.. [#f2] https://git.codelinaro.org/clo/la/kernel/msm-3.18/
+diff --git a/drivers/gpu/drm/msm/adreno/adreno_device.c b/drivers/gpu/drm/msm/adreno/adreno_device.c
+index cb94cfd137a8..8ea7eae9fc52 100644
+--- a/drivers/gpu/drm/msm/adreno/adreno_device.c
++++ b/drivers/gpu/drm/msm/adreno/adreno_device.c
+@@ -345,6 +345,7 @@ static const struct adreno_info gpulist[] = {
+ 		.address_space_size = SZ_16G,
+ 	}, {
+ 		.rev = ADRENO_REV(6, 3, 5, ANY_ID),
++		.revn = 635,
+ 		.fw = {
+ 			[ADRENO_FW_SQE] = "a660_sqe.fw",
+ 			[ADRENO_FW_GMU] = "a660_gmu.bin",
+
+---
+base-commit: 5c875096d59010cee4e00da1f9c7bdb07a025dc2
+change-id: 20230628-topic-a635-1b3c2c987417
+
+Best regards,
 -- 
-2.40.1
+Konrad Dybcio <konrad.dybcio@linaro.org>
 
