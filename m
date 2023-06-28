@@ -2,84 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E84F740CD1
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 11:31:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FF33740CE3
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 11:31:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232492AbjF1J1B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 05:27:01 -0400
-Received: from mail-wm1-f50.google.com ([209.85.128.50]:44353 "EHLO
-        mail-wm1-f50.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237953AbjF1JQB (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 05:16:01 -0400
-Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-3fba9daf043so14233445e9.1
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 02:16:00 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687943759; x=1690535759;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=01gfdKzfF02P0jmnqST0ihntbXHOlNcCxH5v9bR5r+o=;
-        b=TiihWchIG73YfsGlzSKnKEk/8whaxTiSMp79ttuyq6lpSVmQMiCE9C92y8j/eiUvK1
-         d8vW4v5ydTh38n7SaL+Mt7yj5jz1sfCEAGV1FIY6CoA77+jMA3Gvqp5Q8uQCf6DZLRmK
-         in51an9AdOLRztzhvPOJLpfljISH7ZQlrDZUPUe4Wc3aidR5fNNYBMfolBTM3arZug0H
-         lz+doO47P+yZvgIOz3KrYSxbMTo3LOaypxHurl/IA3UyGyHCWHoPdES9GRtG+pWBB5R9
-         ga6WvQfx/FOgWKyzqzXRqzYe9rAtxlsbywCXDaM9ZdVqdEFpyYJB58RCaeMWuPWzIcET
-         Pcxw==
-X-Gm-Message-State: AC+VfDyYvfKPtWw0LRh61/BUqvEZwKrpNYaHcPLW6Uw9fR/InOIIp6fv
-        3Qblm63O7LKDkrLfNLnVK5Y=
-X-Google-Smtp-Source: ACHHUZ5hsARBwoIr3AF1HaRatYKrAwOdMNB28sX12tsvIXxXoqWb7tG6uwvpHQiXWEZCed0eK0iZUA==
-X-Received: by 2002:a05:600c:21c5:b0:3fa:74ae:df9f with SMTP id x5-20020a05600c21c500b003fa74aedf9fmr14272085wmj.37.1687943759325;
-        Wed, 28 Jun 2023 02:15:59 -0700 (PDT)
-Received: from gmail.com (fwdproxy-cln-118.fbsv.net. [2a03:2880:31ff:76::face:b00c])
-        by smtp.gmail.com with ESMTPSA id y12-20020a05600c364c00b003f7f249e7dfsm16262298wmq.4.2023.06.28.02.15.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Jun 2023 02:15:58 -0700 (PDT)
-Date:   Wed, 28 Jun 2023 02:15:56 -0700
-From:   Breno Leitao <leitao@debian.org>
-To:     Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Josh Poimboeuf <jpoimboe@kernel.org>, leit@fb.com,
-        "open list:X86 ARCHITECTURE (32-BIT AND 64-BIT)" 
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2] x86/bugs: Break down mitigations configurations
-Message-ID: <ZJv6TL4yH4HbCe/h@gmail.com>
-References: <20230616164851.2559415-1-leitao@debian.org>
- <20230621001327.qdyebewnx7r5aiy3@desk>
- <ZJMdKUr98H8zPSAl@gmail.com>
- <20230621173135.wiprtgzslhw5z5or@desk>
- <ZJNDRSUZuZ2L+pwo@gmail.com>
- <20230621194101.bmwesljror2yqjxx@desk>
- <ZJseCvXVKFHu84Sv@gmail.com>
- <20230627223040.bjacsmaotlderpdu@desk>
+        id S232568AbjF1J1H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 05:27:07 -0400
+Received: from mga02.intel.com ([134.134.136.20]:20683 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233249AbjF1JSZ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 28 Jun 2023 05:18:25 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1687943905; x=1719479905;
+  h=from:to:cc:subject:in-reply-to:references:date:
+   message-id:mime-version;
+  bh=8aunF6uXt/FcyUPtDVGqqz1i1fzmTynkmzPIDRaREEo=;
+  b=dWPhNz0VF/y0gWP2A/j54faUhgDghi4XdfEgEz9novpicDDR7XsY936N
+   oDqE2C2kjAtCv+UOYA630Zk5LByUk8sxdIC9YWEcAt0fwlvEn23/2v1z4
+   Jmrs8amsKITUdphgDC8GUYvEw5/5uHPNU/y/+1rDpU4eOClDat9TOAKTG
+   RyWDna/7xOWoPG7fkbj0ljCsDSOxeJD6rJ3ID8WVNTLGh/v4hZRYA/sur
+   i9q23UGB4Tv5ri1BDbfG6KoghKfPvOcOmyqlpYsn2xtU5rxRY2JLKxbTG
+   73ZbHOzxKNvI4DEbofCfva3cq3jbHwcyab70yp96CRgrb9mg4InSo1oAW
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10754"; a="351581308"
+X-IronPort-AV: E=Sophos;i="6.01,165,1684825200"; 
+   d="scan'208";a="351581308"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2023 02:18:24 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10754"; a="963523788"
+X-IronPort-AV: E=Sophos;i="6.01,165,1684825200"; 
+   d="scan'208";a="963523788"
+Received: from lzhiguno-mobl.ger.corp.intel.com (HELO localhost) ([10.252.63.165])
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2023 02:18:21 -0700
+From:   Jani Nikula <jani.nikula@intel.com>
+To:     Ralph Campbell <rcampbell@nvidia.com>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Cc:     Ralph Campbell <rcampbell@nvidia.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Maxime Ripard <mripard@kernel.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@gmail.com>
+Subject: Re: [Intel-gfx] [PATCH v2] drm/edid: Add quirk for OSVR HDK 2.0
+In-Reply-To: <20230621061903.3422648-1-rcampbell@nvidia.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+References: <20230621061903.3422648-1-rcampbell@nvidia.com>
+Date:   Wed, 28 Jun 2023 12:18:04 +0300
+Message-ID: <87r0pwrlmb.fsf@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230627223040.bjacsmaotlderpdu@desk>
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 27, 2023 at 03:30:40PM -0700, Pawan Gupta wrote:
-> On Tue, Jun 27, 2023 at 10:36:10AM -0700, Breno Leitao wrote:
-> > On Wed, Jun 21, 2023 at 12:41:01PM -0700, Pawan Gupta wrote:
-> > > On Wed, Jun 21, 2023 at 11:36:53AM -0700, Breno Leitao wrote:
-> > > > If I understand where you want to go, you think we should create a
-> > > > single patchset that creates a CONFIG_<MITIGATION> for each mitigation,
-> > > > and move get it under CONFIG_SPECULATION_MITIGATIONS.
-> > > 
-> > > Yes, a single series (or a patch) that adds config for each mitigation
-> > > would be good.
-> > 
-> > I've been working on this request, and I may need your help to validate
-> > the wordings and dependencies (as in architecture/vendors where the
-> > problem needs to be mitigations) for each entry.
-> 
-> Kconfig text looks fine to me. (Some comments on arch/vendor dependency
-> are down below).
+On Tue, 20 Jun 2023, Ralph Campbell <rcampbell@nvidia.com> wrote:
+> The OSVR virtual reality headset HDK 2.0 uses a different EDID
+> vendor and device identifier than the HDK 1.1 - 1.4 headsets.
+> Add the HDK 2.0 vendor and device identifier to the quirks table so
+> that window managers do not try to display the desktop screen on the
+> headset display.
+>
+> Signed-off-by: Ralph Campbell <rcampbell@nvidia.com>
+> Tested-by: Ralph Campbell <rcampbell@nvidia.com>
 
-Neat, thanks for the clarifications. I will send v3 later today.
+Closes: https://gitlab.freedesktop.org/drm/misc/-/issues/30
+
+> ---
+>  drivers/gpu/drm/drm_edid.c | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> I don't know how many of these VR headsets are still around but I have a
+> working one and I saw an entry for HDK 1.x so I thought it would be good
+> to add HDK 2.0.
+>
+> v2: The vendor ID was byte swapped.
+> I'm not sure how I missed that in v1.
+>
+> diff --git a/drivers/gpu/drm/drm_edid.c b/drivers/gpu/drm/drm_edid.c
+> index 0454da505687..3b8cc1fe05e8 100644
+> --- a/drivers/gpu/drm/drm_edid.c
+> +++ b/drivers/gpu/drm/drm_edid.c
+> @@ -230,6 +230,7 @@ static const struct edid_quirk {
+>  
+>  	/* OSVR HDK and HDK2 VR Headsets */
+>  	EDID_QUIRK('S', 'V', 'R', 0x1019, EDID_QUIRK_NON_DESKTOP),
+> +	EDID_QUIRK('A', 'U', 'O', 0x1111, EDID_QUIRK_NON_DESKTOP),
+>  };
+>  
+>  /*
+
+-- 
+Jani Nikula, Intel Open Source Graphics Center
