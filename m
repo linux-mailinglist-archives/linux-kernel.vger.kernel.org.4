@@ -2,178 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86D33741C09
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 00:56:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6318D741C0B
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 00:57:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231509AbjF1W4X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 18:56:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53798 "EHLO
+        id S231555AbjF1W5R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 18:57:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231245AbjF1W4G (ORCPT
+        with ESMTP id S230326AbjF1W5O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 18:56:06 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 266F0172D;
-        Wed, 28 Jun 2023 15:56:05 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B7EE46134F;
-        Wed, 28 Jun 2023 22:56:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21918C433C8;
-        Wed, 28 Jun 2023 22:56:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687992964;
-        bh=z0GP1s6Qm5gaRNATmvVAjf46ln1IUrR3Y9mzaUuT0vI=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=M4D3+2EfHc3tsUszWtFv1i5+dblc/ulEnuGK6ONynXXRSP5Y+mOEyRbJd+Um7qhFY
-         BKPGKoobL4GJ1IUJ2oe6raTq7iE+iErR5y2lU66YjWcQumon8qTcI6kYtapCSY5Wcq
-         73mz1u8stPALy8ets2yljU6ADDJn1dQij+T7ZN1PFAU7xTrRqRdSJD27pcMaeo2iaE
-         iLT9+z1Pu+6OmuMXwDwIyX45VMOKmtZwihgiwVRbOz+hhpSnWda83H8JS1LGOXHarv
-         EknLX9SSXH18f1LaXsGBV8GDWPwR+h3NRPZwCzc3ihKhKsvd4KuyzLTvyYqHZ1M94n
-         d7gB8TgpyeidQ==
-Received: by mail-lf1-f41.google.com with SMTP id 2adb3069b0e04-4f86fbe5e4fso93391e87.2;
-        Wed, 28 Jun 2023 15:56:04 -0700 (PDT)
-X-Gm-Message-State: AC+VfDxfYwGURqnxjLbSabsQ8TyW9cBXi9/ighAszv5ZoO2SxCrNCDTK
-        +6GqItSaE44dm4wXkxXZuCEWEksSZck8aSV/LZo=
-X-Google-Smtp-Source: ACHHUZ5mkWdT6qxRLMJjAE8W8hnm6wfee0W6aRSq59cmNeKLM7WwcvSH7lTUOPkC7HIBHrc2073VG2kEJeSskmLwDVk=
-X-Received: by 2002:a05:6512:2522:b0:4fb:74da:989a with SMTP id
- be34-20020a056512252200b004fb74da989amr7023657lfb.3.1687992962093; Wed, 28
- Jun 2023 15:56:02 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230628143201.1522227-1-jbaron@akamai.com> <CAPhsuW6-vrNh1MSCznEk_AmahBw9iq+jyG=Kmyi0N5m-T2dByA@mail.gmail.com>
-In-Reply-To: <CAPhsuW6-vrNh1MSCznEk_AmahBw9iq+jyG=Kmyi0N5m-T2dByA@mail.gmail.com>
-From:   Song Liu <song@kernel.org>
-Date:   Wed, 28 Jun 2023 15:55:49 -0700
-X-Gmail-Original-Message-ID: <CAPhsuW4yXpWMy5Pa20S69t5xUocpkOkWjWW=ZR3a4uttTn9pHg@mail.gmail.com>
-Message-ID: <CAPhsuW4yXpWMy5Pa20S69t5xUocpkOkWjWW=ZR3a4uttTn9pHg@mail.gmail.com>
-Subject: Re: [PATCH] md/raid0: drop discard support past the first zone for
- the original layout (stable fix)
-To:     Jason Baron <jbaron@akamai.com>
-Cc:     linux-kernel@vger.kernel.org, linux-raid@vger.kernel.org,
-        NeilBrown <neilb@suse.de>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Wed, 28 Jun 2023 18:57:14 -0400
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B72226B9
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 15:57:12 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-565ba5667d5so538557b3.0
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 15:57:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1687993031; x=1690585031;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=hwgSA/+Q3RwZ/y/YZJGoooMBAh627PahKu/KzBnos0s=;
+        b=Oskss3t+pC064I6YCeM23QPiq/UnvLj6LANVC7YxVDbWHJUnifSzqz29R96QnU+IdF
+         wye1IcGLqykZvDZMmi8yOmpioxKLnKtiOrvp6LAw3PWIisM/3TMlr5OwTXiuq74MV7lF
+         HZKIpqx/pjlhrjmmFTC2IsMbMD73e1rrEvyFi1KX996EXXw8/ci2mFWs9UKERmrvNeba
+         79KN777V5kWTkiHBKFKzDMLFwwKsKt+ldSLBrgKrBL/C+xL6BeRFk9iU1LRTtMRhN/A7
+         GBXSgjol6OyCKtuQaO2VyklYLzCuWI2VipFHkvD+LANt04oUTKjv3eQHmRVJwlB1ufrL
+         efeQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687993031; x=1690585031;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=hwgSA/+Q3RwZ/y/YZJGoooMBAh627PahKu/KzBnos0s=;
+        b=ecYwHmoLFiOyKtw3UlBs9di+X2X99A518i0RLK/pMlq6ah7fcDNAj73w71d2iWkEQ6
+         ThSjiZAhNtEkJeYx/qY0poyoTrivTO5y4hqk7pkvk3tCglqbzr6zleycJFm0fEK1/Uvv
+         gKUVZ6VMR433aLQ5f3D4j+Gr0xmnWlDG2TfT56uKGkrVa7ihFBJsszTwIRMjKzMYv/mf
+         h+Pce9FzAwGS0ZQ9bCXaHILs2AbpV9Z2X1y8E++VWv7WC7XF8u+Ixw8ibiZSr1+47nIC
+         wOO660Crpz8b2QsFN0Mud8u9Q61vA4Fr47RZKKsuj5meqi2NxqTMttzzPjvaEkfKGwTb
+         /wJw==
+X-Gm-Message-State: AC+VfDwHIgO04innhjF3LKIll82X9Z7vLvL0D2jRlXB6zaQkgCIBat8I
+        l1d9q45cQahhWjFw7UvciBDDQyfuha0=
+X-Google-Smtp-Source: ACHHUZ7zCOG9RSK63m/viGHrTVnLManN+Bek2z4NKfPkzS1lEk61765VeWfKqH5jp32gijPhHUu9Ay6Hn6U=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a81:b1c5:0:b0:570:b1:ca37 with SMTP id
+ p188-20020a81b1c5000000b0057000b1ca37mr14108433ywh.5.1687993031424; Wed, 28
+ Jun 2023 15:57:11 -0700 (PDT)
+Date:   Wed, 28 Jun 2023 15:57:09 -0700
+In-Reply-To: <20230616023858.7503-1-yan.y.zhao@intel.com>
+Mime-Version: 1.0
+References: <20230616023101.7019-1-yan.y.zhao@intel.com> <20230616023858.7503-1-yan.y.zhao@intel.com>
+Message-ID: <ZJy6xcIsOknHPQ9w@google.com>
+Subject: Re: [PATCH v3 08/11] KVM: x86: move vmx code to get EPT memtype when
+ CR0.CD=1 to x86 common code
+From:   Sean Christopherson <seanjc@google.com>
+To:     Yan Zhao <yan.y.zhao@intel.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        pbonzini@redhat.com, chao.gao@intel.com, kai.huang@intel.com,
+        robert.hoo.linux@gmail.com
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,
+        USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 28, 2023 at 3:43=E2=80=AFPM Song Liu <song@kernel.org> wrote:
->
-> Hi Jason,
->
-> Thanks for the fix!
->
-> On Wed, Jun 28, 2023 at 7:32=E2=80=AFAM Jason Baron <jbaron@akamai.com> w=
-rote:
-> >
-> > We've found that using raid0 with the 'original' layout and discard
-> > enabled with different disk sizes (such that at least two zones are
-> > created) can result in data corruption. This is due to the fact that
-> > the discard handling in 'raid0_handle_discard()' assumes the 'alternate=
-'
-> > layout. We've seen this corruption using ext4 but other filesystems are
-> > likely susceptible as well.
-> >
-> > More specifically, while multiple zones are necessary to create the
-> > corruption, the corruption may not occur with multiple zones if they
-> > layout in such a way the layout matches what the 'alternate' layout
-> > would have produced. Thus, not all raid0 devices with the 'original'
-> > layout, different size disks and discard enabled will encounter this
-> > corruption.
-> >
-> > The 3.14 kernel inadvertently changed the raid0 disk layout for differe=
-nt
-> > size disks. Thus, running a pre-3.14 kernel and post-3.14 kernel on the
-> > same raid0 array could corrupt data. This lead to the creation of the
-> > 'original' layout (to match the pre-3.14 layout) and the 'alternate' la=
-yout
-> > (to match the post 3.14 layout) in the 5.4 kernel time frame and an opt=
-ion
-> > to tell the kernel which layout to use (since it couldn't be autodetect=
-ed).
-> > However, when the 'original' layout was added back to 5.4 discard suppo=
-rt
-> > for the 'original' layout was not added leading this issue.
-> >
-> > I've been able to reliably reproduce the corruption with the following
-> > test case:
-> >
-> > 1. create raid0 array with different size disks using original layout
-> > 2. mkfs
-> > 3. mount -o discard
-> > 4. create lots of files
-> > 5. remove 1/2 the files
-> > 6. fstrim -a (or just the mount point for the raid0 array)
-> > 7. umount
-> > 8. fsck -fn /dev/md0 (spews all sorts of corruptions)
-> >
-> > The fix here is a minimal fix intended for stable trees which doesn't d=
-o
-> > discard if we have the original layout and we are not in first zone or
-> > if the i/o crosses zones (we either do the entire discard or none of it=
-).
-> > The proper fix to actually perform discard to all zones for the origina=
-l
-> > layout will land in upstream versions. We have implemented the minimal
-> > fix here for stable branches to reduce risk.
-> >
-> > I've verified the change using the reproducer mentioned above. Typicall=
-y,
-> > the corruption is seen after less than 3 iterations, while the patch ha=
-s
-> > run 500+ iterations.
-> >
-> > Cc: NeilBrown <neilb@suse.de>
-> > Cc: Song Liu <song@kernel.org>
-> > Fixes: c84a1372df92 ("md/raid0: avoid RAID0 data corruption due to layo=
-ut confusion.")
-> > Signed-off-by: Jason Baron <jbaron@akamai.com>
-> > ---
-> >  drivers/md/raid0.c | 17 ++++++++++++++++-
-> >  1 file changed, 16 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/md/raid0.c b/drivers/md/raid0.c
-> > index f8ee9a95e25d..2713a4acb44f 100644
-> > --- a/drivers/md/raid0.c
-> > +++ b/drivers/md/raid0.c
-> > @@ -444,10 +444,25 @@ static void raid0_handle_discard(struct mddev *md=
-dev, struct bio *bio)
-> >         sector_t end_disk_offset;
-> >         unsigned int end_disk_index;
-> >         unsigned int disk;
-> > +       bool bio_zone_overlap =3D false;
-> >
-> >         zone =3D find_zone(conf, &start);
-> > +       if (bio_end_sector(bio) > zone->zone_end)
-> > +               bio_zone_overlap =3D true;
-> > +
-> > +       /* The discard code below doesn't properly support the original
-> > +        * layout for the zones above the first one. We are adding
-> > +        * proper support in later kernel versions but have decided
-> > +        * that dropping discard support here is the lower risk option
-> > +        * to avoid data corruption for stable versions.
-> > +        */
-> > +       if ((conf->layout =3D=3D RAID0_ORIG_LAYOUT) &&
-> > +           ((zone !=3D conf->strip_zone) || (bio_zone_overlap))) {
-> > +               bio_endio(bio);
-> > +               return;
-> > +       }
->
-> For bio_zone_overlap case, I think we can still do the split below and
-> send discard to the first zone?
+On Fri, Jun 16, 2023, Yan Zhao wrote:
+> Move code in vmx.c to get cache disabled memtype when non-coherent DMA
+> present to x86 common code.
+> 
+> This is the preparation patch for later implementation of fine-grained gfn
+> zap for CR0.CD toggles when guest MTRRs are honored.
+> 
+> No functional change intended.
+> 
+> Signed-off-by: Yan Zhao <yan.y.zhao@intel.com>
+> ---
+>  arch/x86/kvm/mtrr.c    | 19 +++++++++++++++++++
+>  arch/x86/kvm/vmx/vmx.c | 10 +++++-----
+>  arch/x86/kvm/x86.h     |  1 +
+>  3 files changed, 25 insertions(+), 5 deletions(-)
+> 
+> diff --git a/arch/x86/kvm/mtrr.c b/arch/x86/kvm/mtrr.c
+> index 3ce58734ad22..b35dd0bc9cad 100644
+> --- a/arch/x86/kvm/mtrr.c
+> +++ b/arch/x86/kvm/mtrr.c
+> @@ -721,3 +721,22 @@ bool kvm_mtrr_check_gfn_range_consistency(struct kvm_vcpu *vcpu, gfn_t gfn,
+>  
+>  	return type == mtrr_default_type(mtrr_state);
+>  }
+> +
+> +void kvm_mtrr_get_cd_memory_type(struct kvm_vcpu *vcpu, u8 *type, bool *ipat)
 
-Actually, on a second (third?) thought, I think we can just ship the other
-version (20230623180523.1901230-1-jbaron@akamai.com) to stable
-kernel. It is very safe. So we don't need more work on this version.
-Sorry for the confusion.
+Hmm, I'm not convinced that this logic is subtle enough to warrant a common
+helper with out params (I *really* don't like out params :-) ).
 
-Thanks again for the fix!
-Song
+UC, or more specifically CR0.CD=1 on VMX without the quirk, is a super special case,
+because to faithfully emulatee "No Fill" mode, KVM needs to ignore guest PAT (stupid WC).
+
+I don't love having the same logic/assumptions in multiple places, but the CR0.CD=1
+behavior is so rigidly tied to what KVM must do to that I think trying to provide a
+common helper makes the code more complex than it needs to be.
+
+If we open code the logic in the MTRR helper, than I think it can be distilled
+down to:
+
+	struct kvm_mtrr *mtrr_state = &vcpu->arch.mtrr_state;
+	bool mtrr_enabled = mtrr_is_enabled(mtrr_state);
+	u8 default_type;
+
+	/*
+	 * Faithfully emulating CR0.CD=1 on VMX requires ignoring guest PAT, as
+	 * WC in the PAT overrides UC in the MTRRs.  Zap all SPTEs so that KVM
+	 * will once again start honoring guest PAT.
+	 */
+	if (!kvm_check_has_quirk(vcpu->kvm, KVM_X86_QUIRK_CD_NW_CLEARED))
+		return kvm_mtrr_zap_gfn_range(vcpu, gpa_to_gfn(0), gpa_to_gfn(~0ULL));
+
+	default_type = mtrr_enabled ? mtrr_default_type(mtrr_state) :
+				      mtrr_disabled_type(vcpu);
+
+	if (default_type != MTRR_TYPE_WRBACK)
+		return kvm_mtrr_zap_gfn_range(vcpu, gpa_to_gfn(0), gpa_to_gfn(~0ULL));
+
+	if (mtrr_enabled) {
+		if (gather_non_wb_fixed_mtrrs(vcpu, MTRR_TYPE_WRBACK))
+			goto fail;
+
+		if (gather_non_wb_var_mtrrs(vcpu, MTRR_TYPE_WRBACK))
+			goto fail;
+
+		kvm_zap_or_wait_mtrrs(vcpu->kvm);
+	}
+
+and this patch goes away.
+
+> +{
+> +	/*
+> +	 * this routine is supposed to be called when guest mtrrs are honored
+> +	 */
+> +	if (unlikely(!kvm_mmu_honors_guest_mtrrs(vcpu->kvm))) {
+
+I don't think this is worth checking, e.g. this would be WARN-worthy if it weren't
+for an otherwise benign race with device (un)assignment.
+
+> +		*type = MTRR_TYPE_WRBACK;
+> +		*ipat = true;
+
+> +	} else if (unlikely(!kvm_check_has_quirk(vcpu->kvm,
+
+Eh, drop the "unlikely()" annotations.  AIUI, they almost never provide actual
+performance benefits, and I dislike unnecessarily speculating on what userspace
+is doing when it comes to code (though I 100% agree that this definitely unlikely)
