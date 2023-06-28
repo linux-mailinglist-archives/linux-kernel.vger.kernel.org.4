@@ -2,84 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BEBD674159E
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 17:49:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E20057415A8
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 17:50:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229941AbjF1PtX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 11:49:23 -0400
-Received: from mail-io1-f42.google.com ([209.85.166.42]:55392 "EHLO
-        mail-io1-f42.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229591AbjF1PtS (ORCPT
+        id S231829AbjF1Pu2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 11:50:28 -0400
+Received: from mail-io1-f44.google.com ([209.85.166.44]:46478 "EHLO
+        mail-io1-f44.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231252AbjF1PuY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 11:49:18 -0400
-Received: by mail-io1-f42.google.com with SMTP id ca18e2360f4ac-7835e5fa459so1629239f.2;
-        Wed, 28 Jun 2023 08:49:18 -0700 (PDT)
+        Wed, 28 Jun 2023 11:50:24 -0400
+Received: by mail-io1-f44.google.com with SMTP id ca18e2360f4ac-78363cc070aso2275739f.1;
+        Wed, 28 Jun 2023 08:50:23 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687967357; x=1690559357;
+        d=1e100.net; s=20221208; t=1687967423; x=1690559423;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=6yTuLJEjegEnc+ckJ/STK+G1bTc1nViuTPAG6DOencA=;
-        b=BZ0Ip2CP1dBVIJ1RsN9+fgK5GQIRiGHv30AHsWxiMxS0voDItkDBLA6ldaqEqj34Gz
-         Pe2RIfvcc4HrQyvOSREdwMvllUcmkL7ZOMx6TA2JT4B2Ztaf5Oy/DwxArAX9GIgAK0zb
-         895LCdz5ZxmJbIs3tO6VzaXyf2GpZvlgzbyXx6+1/b0B0IohK2QvhVS2sLNIdXg3sbQT
-         CBOEwsFSJAyZlxXwgM7r7tnXtuiAX58eNUiJbERww24Zs2gTfq4VKR4f1P+/rgjbfyZI
-         dcVvdWKpWibPgz68svsMySBLrAPgQ/kgNvD6H1wVUMhh2vra/BTvnfMZ8hplDqMeoC9I
-         Ph7g==
-X-Gm-Message-State: AC+VfDxvVKW6MfMF20RyUxMFcpV+HQV8CDae2aOT7E7c0A36OlT1aXSi
-        DDp8evgYyJjdnxQL0Hm0lQ==
-X-Google-Smtp-Source: ACHHUZ5JQFD1swjEc+5KIr79xJ+lX9X7/7F/be7HrRES7/memPLKsVxZkqlae2+9Rc1k71hUJkzTTA==
-X-Received: by 2002:a5d:9452:0:b0:783:7275:9c47 with SMTP id x18-20020a5d9452000000b0078372759c47mr5690077ior.7.1687967357467;
-        Wed, 28 Jun 2023 08:49:17 -0700 (PDT)
+        bh=XLQv79sJE7S4tWUBkkIAujP4Kn0djoVfryatFW5MJhI=;
+        b=eoUl/V5Up32UJUomwpEzhjuCP0B67f/aJP34nCKktn8hZG6bsomO1pPUFX7CYUW9e+
+         9Uwt1XvAI4CuWDqwkdvtyaEFXJ8tJ3g8DReJ59XvI4wI123PHTtJzGGucjaTQri6t2mF
+         mRpctkatZPXbvZAzxCQam19p57SEdJGM7zNs6Wm/LPzBq22GqRJj/mWO2WBnWzc5yMdJ
+         jC/npk301hGcSg35CHvGxBAmwHGNBms+vlo7y0Y7H2QG6l3RQzKt/R3TeiHHxUbhFu2D
+         HHy1MMpCRLyje6gNpQeVAfHtoYMr2oLjLpftmCAd4jjm36PQZL85/s3BY/uSR5negPXS
+         RhXA==
+X-Gm-Message-State: AC+VfDyadaeaNoDCC0BMvfRr41gt6AyZ2s5RNgfSOsd46vnsDw0ZOZqv
+        NAiMzs9xmQPbe/YTMDK+1UyXthqIuQ==
+X-Google-Smtp-Source: ACHHUZ5RqzYAkoyGx9J9K9evNG0Il0MvfBax/rK0gOcUrtpBisU6MLQoliHUYiQ9BeL+y3KvCQM0Cw==
+X-Received: by 2002:a5e:c018:0:b0:786:2706:ecf6 with SMTP id u24-20020a5ec018000000b007862706ecf6mr1003351iol.11.1687967423001;
+        Wed, 28 Jun 2023 08:50:23 -0700 (PDT)
 Received: from robh_at_kernel.org ([64.188.179.250])
-        by smtp.gmail.com with ESMTPSA id k5-20020a02cb45000000b0040bbcee6b57sm1044231jap.133.2023.06.28.08.49.15
+        by smtp.gmail.com with ESMTPSA id c17-20020a02a611000000b0040bb600eb81sm3247408jam.149.2023.06.28.08.50.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Jun 2023 08:49:16 -0700 (PDT)
-Received: (nullmailer pid 535502 invoked by uid 1000);
-        Wed, 28 Jun 2023 15:49:15 -0000
-Date:   Wed, 28 Jun 2023 09:49:15 -0600
+        Wed, 28 Jun 2023 08:50:22 -0700 (PDT)
+Received: (nullmailer pid 536791 invoked by uid 1000);
+        Wed, 28 Jun 2023 15:50:20 -0000
+Date:   Wed, 28 Jun 2023 09:50:20 -0600
 From:   Rob Herring <robh@kernel.org>
-To:     Thippeswamy Havalige <thippeswamy.havalige@amd.com>
-Cc:     linux-pci@vger.kernel.org, bharat.kumar.gogada@amd.com,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        bhelgaas@google.com, robh+dt@kernel.org, michals@amd.com,
-        lorenzo.pieralisi@arm.com, krzysztof.kozlowski@linaro.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH V5 2/3] dt-bindings: PCI: xilinx-xdma: Add YAML schemas
- for Xilinx XDMA PCIe Root Port Bridge
-Message-ID: <168796735468.535447.828928601501423401.robh@kernel.org>
-References: <20230628092812.1592644-1-thippeswamy.havalige@amd.com>
- <20230628092812.1592644-3-thippeswamy.havalige@amd.com>
+To:     Imran Shaik <quic_imrashai@quicinc.com>
+Cc:     Conor Dooley <conor+dt@kernel.org>,
+        Melody Olvera <quic_molvera@quicinc.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Andy Gross <agross@kernel.org>, linux-arm-msm@vger.kernel.org,
+        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+        Satya Priya Kakitapalli <quic_skakitap@quicinc.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Jagadeesh Kona <quic_jkona@quicinc.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Ajit Pandey <quic_ajipan@quicinc.com>,
+        linux-kernel@vger.kernel.org,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Taniya Das <quic_tdas@quicinc.com>
+Subject: Re: [PATCH V2 1/5] dt-bindings: clock: Update GCC clocks for QDU1000
+ and QRU1000 SoCs
+Message-ID: <168796741983.536728.7220713393187676699.robh@kernel.org>
+References: <20230628092837.3090801-1-quic_imrashai@quicinc.com>
+ <20230628092837.3090801-2-quic_imrashai@quicinc.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230628092812.1592644-3-thippeswamy.havalige@amd.com>
+In-Reply-To: <20230628092837.3090801-2-quic_imrashai@quicinc.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On Wed, 28 Jun 2023 14:58:11 +0530, Thippeswamy Havalige wrote:
-> Add YAML dtschemas of Xilinx XDMA Soft IP PCIe Root Port Bridge
-> dt binding.
+On Wed, 28 Jun 2023 14:58:33 +0530, Imran Shaik wrote:
+> Update the qcom GCC clock bindings for QDU1000 and QRU1000 SoCs.
 > 
-> Signed-off-by: Thippeswamy Havalige <thippeswamy.havalige@amd.com>
-> Signed-off-by: Bharat Kumar Gogada <bharat.kumar.gogada@amd.com>
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Co-developed-by: Taniya Das <quic_tdas@quicinc.com>
+> Signed-off-by: Taniya Das <quic_tdas@quicinc.com>
+> Signed-off-by: Imran Shaik <quic_imrashai@quicinc.com>
 > ---
-> change in v5:
-> Modified uppercase case hex value to lower case.
-> change in v4:
-> - Removed unnecessary space.
-> changes in v3:
-> - Fixed compatible string issue.
-> - Modified ranges property description to maxItems.
-> - Modified address-cell property of interrupt-controller child node.
-> changes in v2:
-> - None
->  .../bindings/pci/xlnx,xdma-host.yaml          | 114 ++++++++++++++++++
->  1 file changed, 114 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/pci/xlnx,xdma-host.yaml
+> Chanes since v1:
+>  - Removed the v2 variant compatible string changes
+>  - Updated the maintainers list
+> 
+>  Documentation/devicetree/bindings/clock/qcom,qdu1000-gcc.yaml | 3 ++-
+>  include/dt-bindings/clock/qcom,qdu1000-gcc.h                  | 4 +++-
+>  2 files changed, 5 insertions(+), 2 deletions(-)
 > 
 
 Acked-by: Rob Herring <robh@kernel.org>
