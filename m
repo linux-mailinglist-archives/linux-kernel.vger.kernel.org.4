@@ -2,105 +2,216 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD6557410D4
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 14:18:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C41A7410D8
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 14:22:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230271AbjF1MSU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 08:18:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38904 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229522AbjF1MSR (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 08:18:17 -0400
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C4F51BC3;
-        Wed, 28 Jun 2023 05:18:16 -0700 (PDT)
-Received: by mail-lf1-x134.google.com with SMTP id 2adb3069b0e04-4fb7dc16ff0so3694058e87.2;
-        Wed, 28 Jun 2023 05:18:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687954694; x=1690546694;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=4FYIxAMkhkhiAjDiPN+KI7EBsu/xU4FGXFKUcyj7bx8=;
-        b=FAdfpsuuwPtBqoIZEb1jLfLqbuc1jj3PzETRwPGNdTzsgFQ9fRpf08qU+QwLMi1Ia9
-         ZHWbThZFG6j5GKkkFG2szDHhcseNgS62ZmR5lZuF04vmJdo40ubsfXOkg8hbqMCHQdWa
-         GMnAPYcm3jO23oDxSY59hnhlNMk1FFu5dsnWZ8umoBeaZ+NbPCfRUyyD3FCnLzvFUw87
-         UsU0b5mCW0VMuhgHLcyMJQdH6ShdR/B2uOG2OF1sBkKyuMhC3zurMkUT/EFOVf5WIWYE
-         USBfFi6TkYQDIncrfH2f84H4t0fvZmjtep+hUZVmS3uEvYIyABrB6ePZx1JarEsZMVTX
-         pLwQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687954694; x=1690546694;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=4FYIxAMkhkhiAjDiPN+KI7EBsu/xU4FGXFKUcyj7bx8=;
-        b=Cuf2TDwzm0YKpJ8Ho9x7BOHBT8loLWntFk9YiWO2BtRyfm+MKFc1/XWOlkzuIasWWV
-         ILA27fIhJ36XK1GGkk1EIU8uh3UB/vHk9/+ZfJ+1ex9RgGl5DzTISInmG+w1KTVb+EeN
-         D2gPD+7VrIiI1gpsgrnZ4Ojl+sbeWGiMh6gSIz/Fr+oy4DvoNiPYDiWMPjOkQdTSjUgd
-         Tv6rUMaRevoKwfFKMmW6YdbBBFZsDC8UF/Wdpg/suY6ZzeYyLcRaAkJDuf6nKFA8pfeU
-         8UWErkmlHw0AOVATdOl71DYh/lF6/gYFGgtXT+9hmObwUNF5DEXNVV4MBPmiNwQrVG2Q
-         ep1A==
-X-Gm-Message-State: AC+VfDwKJJz3xUKi7eA71IlD8y8TYdTkJGbc6lPL4AEsxBhq4Cb+DtM1
-        Vd9W7phFIM6qs+zNLSRm4mI=
-X-Google-Smtp-Source: ACHHUZ7OXOQxRsAX0aD4U5RT8WOW8kqx2K3fjQ47nANcHQbcQoZbPLldxuOr9IJ+f8EpU3/bBSPrZw==
-X-Received: by 2002:ac2:4f0f:0:b0:4fb:8c2a:d43f with SMTP id k15-20020ac24f0f000000b004fb8c2ad43fmr2809030lfr.7.1687954693971;
-        Wed, 28 Jun 2023 05:18:13 -0700 (PDT)
-Received: from oberon.zico.biz (77-85-190-39.ip.btc-net.bg. [77.85.190.39])
-        by smtp.gmail.com with ESMTPSA id g11-20020a7bc4cb000000b003fbab76165asm2978672wmk.48.2023.06.28.05.18.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Jun 2023 05:18:13 -0700 (PDT)
-From:   "Tzvetomir Stoyanov (VMware)" <tz.stoyanov@gmail.com>
-To:     rostedt@goodmis.org
-Cc:     mhiramat@kernel.org, dan.carpenter@linaro.org,
-        linux-trace-devel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] kernel/trace: Fix cleanup logic of enable_trace_eprobe
-Date:   Wed, 28 Jun 2023 15:18:11 +0300
-Message-ID: <20230628121811.338655-1-tz.stoyanov@gmail.com>
-X-Mailer: git-send-email 2.41.0
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-        lindbergh.monkeyblade.net
+        id S230164AbjF1MWo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 08:22:44 -0400
+Received: from mga01.intel.com ([192.55.52.88]:63468 "EHLO mga01.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229522AbjF1MWm (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 28 Jun 2023 08:22:42 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1687954962; x=1719490962;
+  h=date:from:to:cc:subject:message-id;
+  bh=u/fCpMxmLYcZwj8E97tLzCLUp6WVk/Q6Ei+BiQ6fO3c=;
+  b=JtSFqz+KhyhTGvNx1ByTEdfEB1iCmkGAnglKe3GE8n53oIaH7bH8FQjO
+   aITB0pLiMEdldyBT+s6aPV2cTVsZA7qZ3DO9FNV6htWlER/qUrfeNKSx3
+   24D053FcHWQKJLRjfj0SEA3SCVIkmt0SxHAqg653UnuF/WfJ3ALdbJ5PS
+   HmzvNGevYBb9z2u5uSca+IfaudXXlmrh5JaJcv51dLHRX1CiLeZNhtxR5
+   UzQ8p2AYL9906N3+GV06McjnORzh4Ea2XQAwMJmiRL3M3eb3lv7u+pZuP
+   O9x/GIzusoR6vPtzD7OGEdGbNOffqckA0Xz1HCP2syxJgQvbZGDN3dOYi
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10754"; a="392552341"
+X-IronPort-AV: E=Sophos;i="6.01,165,1684825200"; 
+   d="scan'208";a="392552341"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2023 05:22:41 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10754"; a="787028438"
+X-IronPort-AV: E=Sophos;i="6.01,165,1684825200"; 
+   d="scan'208";a="787028438"
+Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
+  by fmsmga004.fm.intel.com with ESMTP; 28 Jun 2023 05:22:40 -0700
+Received: from kbuild by 783282924a45 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1qEUC0-000DFV-0J;
+        Wed, 28 Jun 2023 12:22:40 +0000
+Date:   Wed, 28 Jun 2023 20:22:21 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>
+Subject: [gustavoars:testing/fam01-next20230627] BUILD SUCCESS WITH
+ WARNING 2ebb702f25c4764fb36ab29f4f40728e12b0e42b
+Message-ID: <202306282018.A5SDYtCO-lkp@intel.com>
+User-Agent: s-nail v14.9.24
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The enable_trace_eprobe() function enables all event probes, attached
-to given trace probe. If an error occurs in enabling one of the event
-probes, all others should be roll backed. There is a bug in that roll
-back logic - instead of all event probes, only the failed one is
-disabled.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gustavoars/linux.git testing/fam01-next20230627
+branch HEAD: 2ebb702f25c4764fb36ab29f4f40728e12b0e42b  scsi: aacraid: Replace one-element array with flexible-array member in struct user_sgmap
 
-Reported-by: Dan Carpenter <dan.carpenter@linaro.org>
-Fixes: 7491e2c44278 ("tracing: Add a probe that attaches to trace events")
-Signed-off-by: Tzvetomir Stoyanov (VMware) <tz.stoyanov@gmail.com>
----
- kernel/trace/trace_eprobe.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+Warning: (recently discovered and may have been fixed)
 
-diff --git a/kernel/trace/trace_eprobe.c b/kernel/trace/trace_eprobe.c
-index 67e854979d53..ba9a28bc773f 100644
---- a/kernel/trace/trace_eprobe.c
-+++ b/kernel/trace/trace_eprobe.c
-@@ -702,8 +702,12 @@ static int enable_trace_eprobe(struct trace_event_call *call,
- 
- 	if (ret) {
- 		/* Failed to enable one of them. Roll back all */
--		if (enabled)
--			disable_eprobe(ep, file->tr);
-+		if (enabled) {
-+			list_for_each_entry(pos, trace_probe_probe_list(tp), list) {
-+				ep = container_of(pos, struct trace_eprobe, tp);
-+				disable_eprobe(ep, file->tr);
-+			}
-+		}
- 		if (file)
- 			trace_probe_remove_file(tp, file);
- 		else
+arch/loongarch/include/asm/atomic.h:174:9: warning: array subscript 1 is outside array bounds of 'struct cpumask[1]' [-Warray-bounds]
+arch/mips/include/asm/io.h:272:23: warning: array subscript -1 is outside array bounds of 'char[]' [-Warray-bounds]
+drivers/gpu/drm/amd/amdgpu/../display/dc/link/protocols/link_dp_training_dpia.c:427:17: warning: 'dp_decide_lane_settings' accessing 4 bytes in a region of size 1 [-Wstringop-overflow=]
+drivers/gpu/drm/amd/amdgpu/../display/dc/link/protocols/link_dp_training_dpia.c:535:17: warning: 'dp_decide_lane_settings' accessing 4 bytes in a region of size 1 [-Wstringop-overflow=]
+drivers/gpu/drm/amd/amdgpu/../display/dc/link/protocols/link_dp_training_fixed_vs_pe_retimer.c:472:25: warning: 'dp_decide_lane_settings' accessing 4 bytes in a region of size 1 [-Wstringop-overflow=]
+drivers/media/dvb-frontends/cxd2880/cxd2880_devio_spi.c:95:17: warning: 'memcpy' writing 255 bytes into a region of size 129 [-Wstringop-overflow=]
+fs/crypto/fname.c:506:33: warning: array subscript 'struct fscrypt_nokey_name[0]' is partly outside array bounds of 'unsigned char[189]' [-Warray-bounds]
+include/net/xfrm.h:1363:19: warning: array subscript 'xfrm_address_t[0]' is partly outside array bounds of '__be32[1]' {aka 'unsigned int[1]'} [-Warray-bounds]
+
+Warning ids grouped by kconfigs:
+
+gcc_recent_errors
+|-- arm-randconfig-r046-20230627
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-protocols-link_dp_training_dpia.c:warning:dp_decide_lane_settings-accessing-bytes-in-a-region-of-size
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-protocols-link_dp_training_fixed_vs_pe_retimer.c:warning:dp_decide_lane_settings-accessing-bytes-in-a-region-of-size
+|   `-- fs-crypto-fname.c:warning:array-subscript-struct-fscrypt_nokey_name-is-partly-outside-array-bounds-of-unsigned-char
+|-- loongarch-allmodconfig
+|   `-- arch-loongarch-include-asm-atomic.h:warning:array-subscript-is-outside-array-bounds-of-struct-cpumask
+|-- microblaze-randconfig-r004-20230627
+|   |-- drivers-media-dvb-frontends-cxd2880-cxd2880_devio_spi.c:warning:memcpy-writing-bytes-into-a-region-of-size
+|   `-- include-net-xfrm.h:warning:array-subscript-xfrm_address_t-is-partly-outside-array-bounds-of-__be32-aka-unsigned-int
+|-- mips-randconfig-r011-20230627
+|   `-- arch-mips-include-asm-io.h:warning:array-subscript-is-outside-array-bounds-of-char
+`-- x86_64-buildonly-randconfig-r001-20230627
+    |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-protocols-link_dp_training_dpia.c:warning:dp_decide_lane_settings-accessing-bytes-in-a-region-of-size
+    `-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-protocols-link_dp_training_fixed_vs_pe_retimer.c:warning:dp_decide_lane_settings-accessing-bytes-in-a-region-of-size
+
+elapsed time: 723m
+
+configs tested: 123
+configs skipped: 7
+
+tested configs:
+alpha                            allyesconfig   gcc  
+alpha                               defconfig   gcc  
+alpha                randconfig-r012-20230627   gcc  
+alpha                randconfig-r022-20230627   gcc  
+arc                              allyesconfig   gcc  
+arc                      axs103_smp_defconfig   gcc  
+arc                                 defconfig   gcc  
+arc                  randconfig-r043-20230627   gcc  
+arc                           tb10x_defconfig   gcc  
+arm                              allmodconfig   gcc  
+arm                              allyesconfig   gcc  
+arm                         assabet_defconfig   gcc  
+arm                         axm55xx_defconfig   gcc  
+arm                                 defconfig   gcc  
+arm                  randconfig-r021-20230627   gcc  
+arm                  randconfig-r031-20230627   clang
+arm                  randconfig-r035-20230627   clang
+arm                  randconfig-r046-20230627   gcc  
+arm                        spear3xx_defconfig   clang
+arm64                            allyesconfig   gcc  
+arm64                               defconfig   gcc  
+arm64                randconfig-r013-20230627   clang
+csky                             alldefconfig   gcc  
+csky                                defconfig   gcc  
+hexagon              randconfig-r002-20230627   clang
+hexagon              randconfig-r041-20230627   clang
+hexagon              randconfig-r045-20230627   clang
+i386                             allyesconfig   gcc  
+i386         buildonly-randconfig-r004-20230627   gcc  
+i386         buildonly-randconfig-r005-20230627   gcc  
+i386         buildonly-randconfig-r006-20230627   gcc  
+i386                              debian-10.3   gcc  
+i386                                defconfig   gcc  
+i386                 randconfig-i001-20230627   gcc  
+i386                 randconfig-i002-20230627   gcc  
+i386                 randconfig-i003-20230627   gcc  
+i386                 randconfig-i004-20230627   gcc  
+i386                 randconfig-i005-20230627   gcc  
+i386                 randconfig-i006-20230627   gcc  
+i386                 randconfig-i011-20230627   clang
+i386                 randconfig-i012-20230627   clang
+i386                 randconfig-i013-20230627   clang
+i386                 randconfig-i014-20230627   clang
+i386                 randconfig-i015-20230627   clang
+i386                 randconfig-i016-20230627   clang
+loongarch                        allmodconfig   gcc  
+loongarch                         allnoconfig   gcc  
+loongarch                           defconfig   gcc  
+loongarch            randconfig-r032-20230627   gcc  
+m68k                             allmodconfig   gcc  
+m68k                             allyesconfig   gcc  
+m68k                                defconfig   gcc  
+m68k                        mvme147_defconfig   gcc  
+m68k                 randconfig-r015-20230627   gcc  
+m68k                           virt_defconfig   gcc  
+microblaze           randconfig-r003-20230627   gcc  
+microblaze           randconfig-r004-20230627   gcc  
+mips                             allmodconfig   gcc  
+mips                             allyesconfig   gcc  
+mips                            ar7_defconfig   gcc  
+mips                           gcw0_defconfig   gcc  
+mips                           mtx1_defconfig   clang
+mips                 randconfig-r011-20230627   gcc  
+nios2                               defconfig   gcc  
+nios2                randconfig-r025-20230627   gcc  
+openrisc                         alldefconfig   gcc  
+openrisc                  or1klitex_defconfig   gcc  
+parisc                           allyesconfig   gcc  
+parisc                              defconfig   gcc  
+parisc64                            defconfig   gcc  
+powerpc                          allmodconfig   gcc  
+powerpc                           allnoconfig   gcc  
+powerpc                   bluestone_defconfig   clang
+powerpc                      katmai_defconfig   clang
+powerpc                      mgcoge_defconfig   gcc  
+powerpc                   microwatt_defconfig   clang
+powerpc              randconfig-r024-20230627   clang
+riscv                            allmodconfig   gcc  
+riscv                             allnoconfig   gcc  
+riscv                            allyesconfig   gcc  
+riscv                               defconfig   gcc  
+riscv                randconfig-r014-20230627   clang
+riscv                randconfig-r026-20230627   clang
+riscv                randconfig-r042-20230627   clang
+riscv                          rv32_defconfig   gcc  
+s390                             allmodconfig   gcc  
+s390                             allyesconfig   gcc  
+s390                                defconfig   gcc  
+s390                 randconfig-r044-20230627   clang
+sh                               allmodconfig   gcc  
+sh                   randconfig-r006-20230627   gcc  
+sh                   sh7724_generic_defconfig   gcc  
+sh                  sh7785lcr_32bit_defconfig   gcc  
+sparc                            allyesconfig   gcc  
+sparc                               defconfig   gcc  
+sparc64              randconfig-r023-20230627   gcc  
+um                               allmodconfig   clang
+um                                allnoconfig   clang
+um                               allyesconfig   clang
+um                                  defconfig   gcc  
+um                             i386_defconfig   gcc  
+um                   randconfig-r001-20230627   clang
+um                           x86_64_defconfig   gcc  
+x86_64                           allyesconfig   gcc  
+x86_64       buildonly-randconfig-r001-20230627   gcc  
+x86_64       buildonly-randconfig-r002-20230627   gcc  
+x86_64       buildonly-randconfig-r003-20230627   gcc  
+x86_64                              defconfig   gcc  
+x86_64                                  kexec   gcc  
+x86_64               randconfig-x001-20230627   clang
+x86_64               randconfig-x002-20230627   clang
+x86_64               randconfig-x003-20230627   clang
+x86_64               randconfig-x004-20230627   clang
+x86_64               randconfig-x005-20230627   clang
+x86_64               randconfig-x006-20230627   clang
+x86_64               randconfig-x011-20230627   gcc  
+x86_64               randconfig-x012-20230627   gcc  
+x86_64               randconfig-x013-20230627   gcc  
+x86_64               randconfig-x014-20230627   gcc  
+x86_64               randconfig-x015-20230627   gcc  
+x86_64               randconfig-x016-20230627   gcc  
+x86_64                          rhel-8.3-rust   clang
+x86_64                               rhel-8.3   gcc  
+
 -- 
-2.41.0
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
