@@ -2,106 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A31EB740803
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 04:00:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A7E8740807
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 04:01:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230372AbjF1CAn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 22:00:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57542 "EHLO
+        id S229645AbjF1CBQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 22:01:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229763AbjF1CAh (ORCPT
+        with ESMTP id S230353AbjF1CBO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 22:00:37 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53D82297C;
-        Tue, 27 Jun 2023 19:00:36 -0700 (PDT)
+        Tue, 27 Jun 2023 22:01:14 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B7092D72;
+        Tue, 27 Jun 2023 19:01:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687917636; x=1719453636;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Kf4OUq5f8e7JmaiUhbLO6qC90pOxyi/ygia+z/UvdLA=;
-  b=EXxteSgoq2ECGLhSoUD0S/aaTJd8aNVCEh1VvCfjCFqzlY+eWPaFqaFg
-   Okn5c993qTpvya1ioV/X/+LFKHtEjL9uZrKFGu3vlMeEfss8+vGjGsOU6
-   di9dls/rNnhSEHzuR16H3tAcYAxH0GbgqeMfreVWz1s9iksSlFlnbubwT
-   73gRuiKo1YGLEB7A1oD52D0tPv+g6LgO7xbyMGl6p8bKlpPRoBXvwNiIk
-   1GAOuXV/iXpBjYna2Qs4J1rPtyyYCVBP+IaTqS0Qm7lV49ckTtnsxhUAk
-   S83H/MBeU2KndrVYfn8kmzA4YnNPQr9mAn2+ezb7x3aXZXZ0sKFfcUp43
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10754"; a="346489025"
+  t=1687917663; x=1719453663;
+  h=message-id:date:mime-version:cc:subject:to:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=Afn3yy/9SE/0j1yHY5f7D7/VKnZeVp+lwaI9bNljNsk=;
+  b=RYLjV4HkjMp08v+YdskhqCzAt9/GDRZVhO15PGAaJ8fsc+WDGuFOpIIC
+   6UGcSj94RSHHD3t/hZG1P4stGFi3Zzda6nQEaEA+6Y3U3S2104Fhi/ioH
+   2lkaRjTI8MXVc3umxEIzPcZ3B+UyRca/HewrZ1NI6FPMQ18IhmQ+hL9O7
+   mh/gI+hRQgXVsrvD+P5B0du/tvvtPKZC4a3xfDD1GiZkppff0QADYGEXf
+   5HVAscWtsSH2R1ATzv/8n7VDDRgTJ1t78mQgj5QnOlaIPQM9WE5e3TBm7
+   r5tBhxU/uGXTH2lYwhxeiNtYzYVxyvNIOjDpia/FhhQFMmfjuvQKS3JRO
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10754"; a="365182908"
 X-IronPort-AV: E=Sophos;i="6.01,164,1684825200"; 
-   d="scan'208";a="346489025"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2023 19:00:35 -0700
+   d="scan'208";a="365182908"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2023 19:01:02 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10754"; a="840895500"
+X-IronPort-AV: E=McAfee;i="6600,9927,10754"; a="710860419"
 X-IronPort-AV: E=Sophos;i="6.01,164,1684825200"; 
-   d="scan'208";a="840895500"
-Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 27 Jun 2023 19:00:31 -0700
-Received: from kbuild by 783282924a45 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1qEKTu-000CSt-2U;
-        Wed, 28 Jun 2023 02:00:30 +0000
-Date:   Wed, 28 Jun 2023 10:00:18 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Jim Shargo <jshargo@chromium.org>, mairacanal@riseup.net,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@gmail.com>,
-        Haneen Mohammed <hamohammed.sa@gmail.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Melissa Wen <melissa.srw@gmail.com>,
-        Rodrigo Siqueira <rodrigosiqueiramelo@gmail.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>
-Cc:     oe-kbuild-all@lists.linux.dev, Jim Shargo <jshargo@chromium.org>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-doc@vger.kernel.org
-Subject: Re: [PATCH v2 4/6] drm/vkms: Add ConfigFS scaffolding to VKMS
-Message-ID: <202306280759.b1BQCTXw-lkp@intel.com>
-References: <20230623222353.97283-5-jshargo@chromium.org>
+   d="scan'208";a="710860419"
+Received: from blu2-mobl.ccr.corp.intel.com (HELO [10.249.175.150]) ([10.249.175.150])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2023 19:00:58 -0700
+Message-ID: <26b97776-7ce5-51f6-77b7-0ce837aa7cca@linux.intel.com>
+Date:   Wed, 28 Jun 2023 10:00:56 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230623222353.97283-5-jshargo@chromium.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Cc:     baolu.lu@linux.intel.com, Nicolin Chen <nicolinc@nvidia.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>,
+        Yi Liu <yi.l.liu@intel.com>,
+        Jacob Pan <jacob.jun.pan@linux.intel.com>,
+        iommu@lists.linux.dev, linux-kselftest@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCHES 00/17] IOMMUFD: Deliver IO page faults to user space
+Content-Language: en-US
+To:     Jason Gunthorpe <jgg@ziepe.ca>
+References: <20230530053724.232765-1-baolu.lu@linux.intel.com>
+ <ZHZFi28jRxeZMKK3@Asurada-Nvidia>
+ <a8ccbac8-c456-d116-24a2-7503ccbb720c@linux.intel.com>
+ <ZJnZ7bEIZHsqmyAG@ziepe.ca>
+From:   Baolu Lu <baolu.lu@linux.intel.com>
+In-Reply-To: <ZJnZ7bEIZHsqmyAG@ziepe.ca>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jim,
+On 2023/6/27 2:33, Jason Gunthorpe wrote:
+> On Sun, Jun 25, 2023 at 02:30:46PM +0800, Baolu Lu wrote:
+> 
+>> Agreed. We should avoid workqueue in sva iopf framework. Perhaps we
+>> could go ahead with below code? It will be registered to device with
+>> iommu_register_device_fault_handler() in IOMMU_DEV_FEAT_IOPF enabling
+>> path. Un-registering in the disable path of cause.
+> 
+> This maze needs to be undone as well.
+> 
+> It makes no sense that all the drivers are calling
+> 
+>   iommu_register_device_fault_handler(dev, iommu_queue_iopf, dev);
+> 
+> The driver should RX a PRI fault and deliver it to some core code
+> function, this looks like a good start:
+> 
+>> static int io_pgfault_handler(struct iommu_fault *fault, void *cookie)
+>> {
+>>          ioasid_t pasid = fault->prm.pasid;
+>>          struct device *dev = cookie;
+>>          struct iommu_domain *domain;
+>>
+>>          if (fault->type != IOMMU_FAULT_PAGE_REQ)
+>>                  return -EOPNOTSUPP;
+>>
+>>          if (fault->prm.flags & IOMMU_FAULT_PAGE_REQUEST_PASID_VALID)
+>>                  domain = iommu_get_domain_for_dev_pasid(dev, pasid, 0);
+>>          else
+>>                  domain = iommu_get_domain_for_dev(dev);
+>>
+>>          if (!domain || !domain->iopf_handler)
+>>                  return -ENODEV;
+>>
+>>          if (domain->type == IOMMU_DOMAIN_SVA)
+>>                  return iommu_queue_iopf(fault, cookie);
+>>
+>>          return domain->iopf_handler(fault, dev, domain->fault_data);
+> 
+> Then we find the domain that owns the translation and invoke its
+> domain->ops->iopf_handler()
 
-kernel test robot noticed the following build warnings:
+Agreed. The iommu_register_device_fault_handler() could only be called
+by the device drivers who want to handle the DMA faults and IO page
+faults by themselves in any special ways.
 
-[auto build test WARNING on drm-misc/drm-misc-next]
-[also build test WARNING on drm-intel/for-linux-next next-20230627]
-[cannot apply to drm-intel/for-linux-next-fixes drm-tip/drm-tip linus/master v6.4]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+By default, the faults should be dispatched to domain->iopf_handler in a
+generic core code.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Jim-Shargo/drm-vkms-Back-VKMS-with-DRM-memory-management-instead-of-static-objects/20230624-062659
-base:   git://anongit.freedesktop.org/drm/drm-misc drm-misc-next
-patch link:    https://lore.kernel.org/r/20230623222353.97283-5-jshargo%40chromium.org
-patch subject: [PATCH v2 4/6] drm/vkms: Add ConfigFS scaffolding to VKMS
-config: xtensa-randconfig-r052-20230627 (https://download.01.org/0day-ci/archive/20230628/202306280759.b1BQCTXw-lkp@intel.com/config)
-compiler: xtensa-linux-gcc (GCC) 12.3.0
-reproduce: (https://download.01.org/0day-ci/archive/20230628/202306280759.b1BQCTXw-lkp@intel.com/reproduce)
+> 
+> If the driver created a SVA domain then the op should point to some
+> generic 'handle sva fault' function. There shouldn't be weird SVA
+> stuff in the core code.
+> 
+> The weird SVA stuff is really just a generic per-device workqueue
+> dispatcher, so if we think that is valuable then it should be
+> integrated into the iommu_domain (domain->ops->use_iopf_workqueue =
+> true for instance). Then it could route the fault through the
+> workqueue and still invoke domain->ops->iopf_handler.
+> 
+> The word "SVA" should not appear in any of this.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306280759.b1BQCTXw-lkp@intel.com/
+Yes. We should make it generic. The domain->use_iopf_workqueue flag
+denotes that the page faults of a fault group should be put together and
+then be handled and responded in a workqueue. Otherwise, the page fault
+is dispatched to domain->iopf_handler directly.
 
-cocci warnings: (new ones prefixed by >>)
->> drivers/gpu/drm/vkms/vkms_drv.c:266:9-16: WARNING: ERR_CAST can be used with pdev
+> 
+> Not sure what iommu_register_device_fault_handler() has to do with all
+> of this.. Setting up the dev_iommu stuff to allow for the workqueue
+> should happen dynamically during domain attach, ideally in the core
+> code before calling to the driver.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+There are two pointers under struct dev_iommu for fault handling.
+
+/**
+  * struct dev_iommu - Collection of per-device IOMMU data
+  *
+  * @fault_param: IOMMU detected device fault reporting data
+  * @iopf_param:  I/O Page Fault queue and data
+
+[...]
+
+struct dev_iommu {
+         struct mutex lock;
+         struct iommu_fault_param        *fault_param;
+         struct iopf_device_param        *iopf_param;
+
+My understanding is that @fault_param is a place holder for generic
+things, while @iopf_param is workqueue specific. Perhaps we could make
+@fault_param static and initialize it during iommu device_probe, as
+IOMMU fault is generic on every device managed by an IOMMU.
+
+@iopf_param could be allocated on demand. (perhaps renaming it to a more
+meaningful one?) It happens before a domain with use_iopf_workqueue flag
+set attaches to a device. iopf_param keeps alive until device_release.
+
+> 
+> Also, I can understand there is a need to turn on PRI support really
+> early, and it can make sense to have some IOMMU_DEV_FEAT_IOPF/SVA to
+> ask to turn it on.. But that should really only be needed if the HW
+> cannot turn it on dynamically during domain attach of a PRI enabled
+> domain.
+> 
+> It needs cleaning up..
+
+Yes. I can put this and other cleanup things that we've discussed in a
+preparation series and send it out for review after the next rc1 is
+released.
+
+> 
+> Jason
+
+Best regards,
+baolu
