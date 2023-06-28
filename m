@@ -2,229 +2,207 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61F087410DB
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 14:24:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED7DE7410E0
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 14:29:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230059AbjF1MX5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 08:23:57 -0400
-Received: from mga02.intel.com ([134.134.136.20]:34335 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230339AbjF1MXw (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 08:23:52 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687955032; x=1719491032;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=C3DgP6Fkxxe9p5bn588wcInDqX31hZVPVaT7AmQDj98=;
-  b=P2e3gPx4NEbIF7BfxWjVLpOzNuxhN5vvjBuiKaf5zwzltApqACPnYa5C
-   +Y9RzK6bLzezDwsk5vlI0eVnBkQVEZ8q2mwsXh+x8rTD9gx2Teeo2Kxz2
-   GuxHCZf1Y3Q+n6THcU/hhFMK+JD2KOIflzFA0yzsTZUMOnQRv/Wr2+99p
-   p4OdGPJRtBYHMJPG1WZTMdgRiLRGL5EVf8Vw6TE3Z0dTslvEQAY94mUkE
-   9VjEHyPoS3XpEuCQrW+Baxj/IWuNDsqWJZ/BtcT0dRRfMLi0egrzqoeNU
-   fLzV9h6gcRAH8E1QNYrZdoPSUtadEp43ORDVEIHgQrybyEnHTKmUOyMh4
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10754"; a="351613988"
-X-IronPort-AV: E=Sophos;i="6.01,165,1684825200"; 
-   d="scan'208";a="351613988"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2023 05:23:52 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10754"; a="830091017"
-X-IronPort-AV: E=Sophos;i="6.01,165,1684825200"; 
-   d="scan'208";a="830091017"
-Received: from rajritu-mobl2.ger.corp.intel.com (HELO box.shutemov.name) ([10.249.47.187])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2023 05:23:45 -0700
-Received: by box.shutemov.name (Postfix, from userid 1000)
-        id 889041095C8; Wed, 28 Jun 2023 15:23:42 +0300 (+03)
-Date:   Wed, 28 Jun 2023 15:23:42 +0300
-From:   kirill.shutemov@linux.intel.com
-To:     Kai Huang <kai.huang@intel.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-mm@kvack.org, x86@kernel.org, dave.hansen@intel.com,
-        tony.luck@intel.com, peterz@infradead.org, tglx@linutronix.de,
-        bp@alien8.de, mingo@redhat.com, hpa@zytor.com, seanjc@google.com,
-        pbonzini@redhat.com, david@redhat.com, dan.j.williams@intel.com,
-        rafael.j.wysocki@intel.com, ashok.raj@intel.com,
-        reinette.chatre@intel.com, len.brown@intel.com, ak@linux.intel.com,
-        isaku.yamahata@intel.com, ying.huang@intel.com, chao.gao@intel.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com, nik.borisov@suse.com,
-        bagasdotme@gmail.com, sagis@google.com, imammedo@redhat.com
-Subject: Re: [PATCH v12 18/22] x86/virt/tdx: Keep TDMRs when module
- initialization is successful
-Message-ID: <20230628122342.zdnqsgnugalqj6ix@box.shutemov.name>
-References: <cover.1687784645.git.kai.huang@intel.com>
- <7d06fe5fda0e330895c1c9043b881f3c2a2d4f3f.1687784645.git.kai.huang@intel.com>
+        id S230499AbjF1M25 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 08:28:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39282 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230380AbjF1M2y (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 28 Jun 2023 08:28:54 -0400
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35B402102
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 05:28:46 -0700 (PDT)
+Received: by mail-wm1-x32a.google.com with SMTP id 5b1f17b1804b1-3fb4146e8fcso8653085e9.0
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 05:28:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20221208.gappssmtp.com; s=20221208; t=1687955324; x=1690547324;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=rOLEBNQo1Inji0t08F3DZcnSffT102MRoN1JGgPzCcY=;
+        b=fLYGP4xQoQLX4keTyqhlrWns1/NqFlBMJnHvTnV9HaARpgysk2tzpoG3Aq23TGicEj
+         zRUlliT73BgV0s41P8T67KpTgjjFhlFyQWjhU4x6fCJ17AcHQruKuoSGGvi95pf5gims
+         egCfFMZ4ixOLix1Jc23upHmHZPBCP02UaBwuM8Yx9R+x692mmxKw9E3jZ0kiSjA9ycst
+         C98eIdKTWIMeBezJDske2doTd5JVpElFuE3End4E0pT17ZKSPnWKzVjhmYO1SM3Ghv5y
+         1QiZ0OQgGmfoT0eshxa1+YZT1Jh3+q/YXppICRKnDAZ5GiLkck1B7SxHVbg403Sx8ZGh
+         T1Fg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687955324; x=1690547324;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=rOLEBNQo1Inji0t08F3DZcnSffT102MRoN1JGgPzCcY=;
+        b=kKJo/iX2nKIPe/ZeOj9O7S7rCTNk3KuT9E/n8fEA6upAeUCVrDm9jQHMity1fUCp9g
+         BrcPpaZthC+CxRBvpLL9SuEmOrt8a2ceThxp/hLgVcOD2LXUATwAjBhW7pYCoc+AQyin
+         Hd370po3Y/o4yLCTkgfoVH8VDDJ43PpLurX6SOQLASl+LRw+txMkYY/EQKhGIwaqn/oE
+         yaAcxB336bZT7Fd5Gs+ljn4TSB/lMlqEIndDzW7v2mBBNvijKTFPCIhNGyb/wkFc3KoH
+         ZH0VxBS5X0UeML5+s//tAs6mnGYXu18AakShN2eIyf74ptZX11sryWu4Fr5IMaLN0y+m
+         4tvg==
+X-Gm-Message-State: AC+VfDy+23VMa/4rZIR93ugRe4KqEewhpOhCCnXid2bH8Fd2a/EkH7eM
+        4epzPiCrlkXfXRsSdApq+Ghluw==
+X-Google-Smtp-Source: ACHHUZ6HufTDxFwtPEoJbtj1wzivZBgEUqwyJS1z/7pHQ8CiWI6nPMbKHmqH+gNEi7xsQhXhUNNjgQ==
+X-Received: by 2002:a05:600c:511e:b0:3fa:91d0:8ddb with SMTP id o30-20020a05600c511e00b003fa91d08ddbmr1458860wms.14.1687955324399;
+        Wed, 28 Jun 2023 05:28:44 -0700 (PDT)
+Received: from vermeer ([2a01:cb1d:81a9:dd00:b570:b34c:ffd4:c805])
+        by smtp.gmail.com with ESMTPSA id c6-20020a05600c0ac600b003f9c0a7c6bcsm13737062wmr.0.2023.06.28.05.28.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 28 Jun 2023 05:28:43 -0700 (PDT)
+Date:   Wed, 28 Jun 2023 14:28:41 +0200
+From:   Samuel Ortiz <sameo@rivosinc.com>
+To:     Conor Dooley <conor@kernel.org>
+Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-riscv@lists.infradead.org, linux@rivosinc.com,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Andrew Jones <ajones@ventanamicro.com>,
+        Heiko Stuebner <heiko.stuebner@vrull.eu>,
+        Anup Patel <apatel@ventanamicro.com>,
+        linux-kernel@vger.kernel.org,
+        "Hongren (Zenithal) Zheng" <i@zenithal.me>,
+        Guo Ren <guoren@kernel.org>, Atish Patra <atishp@rivosinc.com>,
+        =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@rivosinc.com>,
+        Evan Green <evan@rivosinc.com>
+Subject: Re: [PATCH 3/3] RISC-V: Implement archrandom when Zkr is available
+Message-ID: <ZJwneby7cyBYFRZW@vermeer>
+References: <20230627143747.1599218-1-sameo@rivosinc.com>
+ <20230627143747.1599218-4-sameo@rivosinc.com>
+ <20230627-grinning-droop-bfbb327f6164@spud>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <7d06fe5fda0e330895c1c9043b881f3c2a2d4f3f.1687784645.git.kai.huang@intel.com>
+In-Reply-To: <20230627-grinning-droop-bfbb327f6164@spud>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+        lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 27, 2023 at 02:12:48AM +1200, Kai Huang wrote:
-> On the platforms with the "partial write machine check" erratum, the
-> kexec() needs to convert all TDX private pages back to normal before
-> booting to the new kernel.  Otherwise, the new kernel may get unexpected
-> machine check.
-> 
-> There's no existing infrastructure to track TDX private pages.  Change
-> to keep TDMRs when module initialization is successful so that they can
-> be used to find PAMTs.
-> 
-> With this change, only put_online_mems() and freeing the buffer of the
-> TDSYSINFO_STRUCT and CMR array still need to be done even when module
-> initialization is successful.  Adjust the error handling to explicitly
-> do them when module initialization is successful and unconditionally
-> clean up the rest when initialization fails.
-> 
-> Signed-off-by: Kai Huang <kai.huang@intel.com>
-> ---
-> 
-> v11 -> v12 (new patch):
->   - Defer keeping TDMRs logic to this patch for better review
->   - Improved error handling logic (Nikolay/Kirill in patch 15)
-> 
-> ---
->  arch/x86/virt/vmx/tdx/tdx.c | 84 ++++++++++++++++++-------------------
->  1 file changed, 42 insertions(+), 42 deletions(-)
-> 
-> diff --git a/arch/x86/virt/vmx/tdx/tdx.c b/arch/x86/virt/vmx/tdx/tdx.c
-> index 52b7267ea226..85b24b2e9417 100644
-> --- a/arch/x86/virt/vmx/tdx/tdx.c
-> +++ b/arch/x86/virt/vmx/tdx/tdx.c
-> @@ -49,6 +49,8 @@ static DEFINE_MUTEX(tdx_module_lock);
->  /* All TDX-usable memory regions.  Protected by mem_hotplug_lock. */
->  static LIST_HEAD(tdx_memlist);
->  
-> +static struct tdmr_info_list tdx_tdmr_list;
-> +
->  /*
->   * Wrapper of __seamcall() to convert SEAMCALL leaf function error code
->   * to kernel error code.  @seamcall_ret and @out contain the SEAMCALL
-> @@ -1047,7 +1049,6 @@ static int init_tdmrs(struct tdmr_info_list *tdmr_list)
->  static int init_tdx_module(void)
->  {
->  	struct tdsysinfo_struct *sysinfo;
-> -	struct tdmr_info_list tdmr_list;
->  	struct cmr_info *cmr_array;
->  	int ret;
->  
-> @@ -1088,17 +1089,17 @@ static int init_tdx_module(void)
->  		goto out_put_tdxmem;
->  
->  	/* Allocate enough space for constructing TDMRs */
-> -	ret = alloc_tdmr_list(&tdmr_list, sysinfo);
-> +	ret = alloc_tdmr_list(&tdx_tdmr_list, sysinfo);
->  	if (ret)
->  		goto out_free_tdxmem;
->  
->  	/* Cover all TDX-usable memory regions in TDMRs */
-> -	ret = construct_tdmrs(&tdx_memlist, &tdmr_list, sysinfo);
-> +	ret = construct_tdmrs(&tdx_memlist, &tdx_tdmr_list, sysinfo);
->  	if (ret)
->  		goto out_free_tdmrs;
->  
->  	/* Pass the TDMRs and the global KeyID to the TDX module */
-> -	ret = config_tdx_module(&tdmr_list, tdx_global_keyid);
-> +	ret = config_tdx_module(&tdx_tdmr_list, tdx_global_keyid);
->  	if (ret)
->  		goto out_free_pamts;
->  
-> @@ -1118,51 +1119,50 @@ static int init_tdx_module(void)
->  		goto out_reset_pamts;
->  
->  	/* Initialize TDMRs to complete the TDX module initialization */
-> -	ret = init_tdmrs(&tdmr_list);
-> +	ret = init_tdmrs(&tdx_tdmr_list);
-> +	if (ret)
-> +		goto out_reset_pamts;
-> +
-> +	pr_info("%lu KBs allocated for PAMT.\n",
-> +			tdmrs_count_pamt_kb(&tdx_tdmr_list));
-> +
-> +	/*
-> +	 * @tdx_memlist is written here and read at memory hotplug time.
-> +	 * Lock out memory hotplug code while building it.
-> +	 */
-> +	put_online_mems();
-> +	/*
-> +	 * For now both @sysinfo and @cmr_array are only used during
-> +	 * module initialization, so always free them.
-> +	 */
-> +	free_page((unsigned long)sysinfo);
-> +
-> +	return 0;
->  out_reset_pamts:
-> -	if (ret) {
-> -		/*
-> -		 * Part of PAMTs may already have been initialized by the
-> -		 * TDX module.  Flush cache before returning PAMTs back
-> -		 * to the kernel.
-> -		 */
-> -		wbinvd_on_all_cpus();
-> -		/*
-> -		 * According to the TDX hardware spec, if the platform
-> -		 * doesn't have the "partial write machine check"
-> -		 * erratum, any kernel read/write will never cause #MC
-> -		 * in kernel space, thus it's OK to not convert PAMTs
-> -		 * back to normal.  But do the conversion anyway here
-> -		 * as suggested by the TDX spec.
-> -		 */
-> -		tdmrs_reset_pamt_all(&tdmr_list);
-> -	}
-> +	/*
-> +	 * Part of PAMTs may already have been initialized by the
-> +	 * TDX module.  Flush cache before returning PAMTs back
-> +	 * to the kernel.
-> +	 */
-> +	wbinvd_on_all_cpus();
-> +	/*
-> +	 * According to the TDX hardware spec, if the platform
-> +	 * doesn't have the "partial write machine check"
-> +	 * erratum, any kernel read/write will never cause #MC
-> +	 * in kernel space, thus it's OK to not convert PAMTs
-> +	 * back to normal.  But do the conversion anyway here
-> +	 * as suggested by the TDX spec.
-> +	 */
-> +	tdmrs_reset_pamt_all(&tdx_tdmr_list);
->  out_free_pamts:
-> -	if (ret)
-> -		tdmrs_free_pamt_all(&tdmr_list);
-> -	else
-> -		pr_info("%lu KBs allocated for PAMT.\n",
-> -				tdmrs_count_pamt_kb(&tdmr_list));
-> +	tdmrs_free_pamt_all(&tdx_tdmr_list);
->  out_free_tdmrs:
-> -	/*
-> -	 * Always free the buffer of TDMRs as they are only used during
-> -	 * module initialization.
-> -	 */
-> -	free_tdmr_list(&tdmr_list);
-> +	free_tdmr_list(&tdx_tdmr_list);
->  out_free_tdxmem:
-> -	if (ret)
-> -		free_tdx_memlist(&tdx_memlist);
-> +	free_tdx_memlist(&tdx_memlist);
->  out_put_tdxmem:
-> -	/*
-> -	 * @tdx_memlist is written here and read at memory hotplug time.
-> -	 * Lock out memory hotplug code while building it.
-> -	 */
->  	put_online_mems();
->  out:
-> -	/*
-> -	 * For now both @sysinfo and @cmr_array are only used during
-> -	 * module initialization, so always free them.
-> -	 */
->  	free_page((unsigned long)sysinfo);
->  	return ret;
->  }
+Hi Conor,
 
-This diff is extremely hard to follow, but I think the change to error
-handling Nikolay proposed has to be applied to the function from the
-beginning, not changed drastically in this patch.
+On Tue, Jun 27, 2023 at 08:09:08PM +0100, Conor Dooley wrote:
+> On Tue, Jun 27, 2023 at 04:37:44PM +0200, Samuel Ortiz wrote:
+> > The Zkr extension is ratified and provides 16 bits of entropy seed when
+> > reading the SEED CSR.
+> > 
+> > We can implement arch_get_random_seed_longs() by doing multiple csrrw to
+> > that CSR and filling an unsigned long with valid entropy bits.
+> > 
+> > Signed-off-by: Samuel Ortiz <sameo@rivosinc.com>
+> > ---
+> >  arch/riscv/include/asm/archrandom.h | 66 +++++++++++++++++++++++++++++
+> >  arch/riscv/include/asm/csr.h        |  9 ++++
+> >  2 files changed, 75 insertions(+)
+> >  create mode 100644 arch/riscv/include/asm/archrandom.h
+> > 
+> > diff --git a/arch/riscv/include/asm/archrandom.h b/arch/riscv/include/asm/archrandom.h
+> > new file mode 100644
+> > index 000000000000..3d01aab2800a
+> > --- /dev/null
+> > +++ b/arch/riscv/include/asm/archrandom.h
+> > @@ -0,0 +1,66 @@
+> > +/* SPDX-License-Identifier: GPL-2.0 */
+> > +/*
+> > + * Kernel interface for the RISCV arch_random_* functions
+> > + *
+> > + * Copyright (c) 2022 by Rivos Inc.
+> > + *
+> > + */
+> > +
+> > +#ifndef ASM_RISCV_ARCHRANDOM_H
+> > +#define ASM_RISCV_ARCHRANDOM_H
+> > +
+> > +#include <asm/csr.h>
+> > +
+> > +#define PR_PREFIX "Zkr Extension: "
+> 
+> Does pr_fmt() not work for you?
 
--- 
-  Kiryl Shutsemau / Kirill A. Shutemov
+It would, but since this is a header that e.g. gets included in
+random.h, I would have to ifndef it first.
+My v2 is less verbose and gets rid of this prefix anyways.
+
+> Also, "Zkr Extension" doesn't really seem super helpful to a punter if
+> they saw it in a log. Why not s/Zkr Extension/archrandom/, or similar?
+> 
+> > +#define SEED_RETRY_LOOPS 10
+> > +
+> > +static inline bool __must_check csr_seed_long(unsigned long *v)
+> > +{
+> > +	unsigned int retry = SEED_RETRY_LOOPS;
+> > +	unsigned int needed_seeds = sizeof(unsigned long) / 2, valid_seeds = 0;
+> > +	u16 *entropy = (u16 *)v;
+> > +
+> > +	do {
+> > +		/*
+> > +		 * The SEED CSR (0x015) must be accessed with a read-write
+> > +		 * instruction. Moreover, implementations must ignore the write
+> > +		 * value, its purpose is to signal polling for new seed.
+> > +		 */
+> 
+> What relevance does the second half of this comment have to the kernel?
+
+Not much, I will remove it with v2.
+
+> > +		unsigned long csr_seed = csr_swap(CSR_SEED, 0);
+> > +
+> > +		switch (csr_seed & SEED_OPST_MASK) {
+> > +		case SEED_OPST_ES16:
+> > +			entropy[valid_seeds++] = csr_seed & SEED_ENTROPY_MASK;
+> > +			if (valid_seeds == needed_seeds)
+> > +				return true;
+> > +			break;
+> > +
+> > +		case SEED_OPST_DEAD:
+> > +			pr_err_once(PR_PREFIX "Unrecoverable error\n");
+> > +			return false;
+> > +
+> > +		case SEED_OPST_BIST:
+> > +			pr_info(PR_PREFIX "On going Built-in Self Test\n");
+> 
+> tiny nit, "On-going"? My OCD is bother by the capitalisation otherwise.
+
+I removed that one with v2, as it may be a little too chatty.
+
+> > +			fallthrough;
+> > +
+> > +		case SEED_OPST_WAIT:
+> > +		default:
+> > +			continue;
+> > +		}
+> > +
+> > +	} while (--retry);
+> > +
+> > +	return false;
+> > +}
+> > +
+> > +static inline size_t __must_check arch_get_random_longs(unsigned long *v, size_t max_longs)
+> > +{
+> > +	return 0;
+> > +}
+> > +
+> > +static inline size_t __must_check arch_get_random_seed_longs(unsigned long *v, size_t max_longs)
+> > +{
+> > +	return max_longs && riscv_isa_extension_available(NULL, ZKR) && csr_seed_long(v) ? 1 : 0;
+> 
+> Could you please write this in a more readable way, even if that is
+> going to be a lot more verbose? I know you copied it from x86, but
+> that's not really an excuse ;)
+
+Agreed :)
+Fixed as well with v2.
+
+> Also, is there a reason that you opted not to use the alternative-backed
+> riscv_has_extension_[un]likely() here?
+
+I did not know about them, I switched to it with v2 (Made it a likely
+case).
+
+Cheers,
+Samuel.
+
