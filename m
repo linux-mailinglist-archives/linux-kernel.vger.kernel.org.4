@@ -2,180 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64F0F7411F5
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 15:10:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF28B7411FB
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 15:11:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231398AbjF1NKB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 09:10:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44302 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231542AbjF1NJ4 (ORCPT
+        id S231409AbjF1NKm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 09:10:42 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:20630 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230458AbjF1NKi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 09:09:56 -0400
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5654F2119
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 06:09:54 -0700 (PDT)
-Received: by mail-ed1-x531.google.com with SMTP id 4fb4d7f45d1cf-51da8a744c4so2406018a12.0
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 06:09:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=resnulli-us.20221208.gappssmtp.com; s=20221208; t=1687957793; x=1690549793;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=k76YrPTzyyjATZAkPWsngOApRdksnz4938tVnCuwxy0=;
-        b=ScgYnUQe6P6kGA/N6ZPo3yO417tWRwpx3GvemyrdtyZVRiMKBb3mX7VI2GC9diLcMu
-         CBglKEUKyw7sx2XjP/XbJOD3iNnN+N9GWxQ1mlTSXafAi8ZUGZ1eDbHmnkr5clkYOrjz
-         8GDQoZ2Tp1PraxZ/pmeSyq/QVCRc/QRFE5TFbBS9xF88g2abpug24dt9lgXFX5GM+yij
-         RiioISv2/N2ZwCj6vMlrza/ubjNUMvoHHzw+bfeT37sBUEtzdgN4KJIymYZ3Ku4VDzhk
-         Mj4zVAxzoFL1AljyNcajNKEfjlIxauzw/vVgq7tTHszhYZyGB1ntaUvlngn31dONZgTd
-         zmEA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687957793; x=1690549793;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=k76YrPTzyyjATZAkPWsngOApRdksnz4938tVnCuwxy0=;
-        b=ZDYiCTvk7NUdOHDROuKY6O2Lp6k3WfAH4UgU7DXMN+kHPjyU5AvZYjbbCe/DkOCQ9q
-         WauD9A3pgqimwtm2+ExWQ3BydqigECfewEa4Vg40k9YXP1E2yRTs7mAfbB7S85/p6ZK2
-         6qmyp2FWQ8TXbh0pGgOL8257ayJxVAh8PkxmZxZos79mIFN6IopkPyGUPHj2SSZhhevk
-         6Cixw6wzzsb//EV+KYv05McRh49caRp47siw12GEnklQJBjzc0Kl5aKvn5aBq9I14JnN
-         y7G/aJWXLZjo2xCn7pqbl70Lpbza0Fw5yJctXlAv69wxxi3s6Zslmn4tpU+dPRUsAxcx
-         +/Rw==
-X-Gm-Message-State: AC+VfDz2ixfao/tHLKbQc7yvkdjiNaYbp2aODISqmYqqvif1pLVDyuz8
-        n8c7gcG3KXTrQi8U7yge0rfuEA==
-X-Google-Smtp-Source: ACHHUZ4FQ7JmqxI+YoYuBXCwpW4UP8TYDQSff2DdAMDuypxC1caOuVE2XCGI/Z0rJ4e0navjgsMuwg==
-X-Received: by 2002:a05:6402:1496:b0:51d:91ef:c836 with SMTP id e22-20020a056402149600b0051d91efc836mr6548808edv.32.1687957792701;
-        Wed, 28 Jun 2023 06:09:52 -0700 (PDT)
-Received: from localhost (host-213-179-129-39.customer.m-online.net. [213.179.129.39])
-        by smtp.gmail.com with ESMTPSA id s19-20020a056402165300b0051d9df5dd2fsm2609023edx.72.2023.06.28.06.09.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Jun 2023 06:09:51 -0700 (PDT)
-Date:   Wed, 28 Jun 2023 15:09:50 +0200
-From:   Jiri Pirko <jiri@resnulli.us>
-To:     Vadim Fedorenko <vadim.fedorenko@linux.dev>
-Cc:     "Kubalewski, Arkadiusz" <arkadiusz.kubalewski@intel.com>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "vadfed@meta.com" <vadfed@meta.com>,
-        "jonathan.lemon@gmail.com" <jonathan.lemon@gmail.com>,
-        "pabeni@redhat.com" <pabeni@redhat.com>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "vadfed@fb.com" <vadfed@fb.com>,
-        "Brandeburg, Jesse" <jesse.brandeburg@intel.com>,
-        "Nguyen, Anthony L" <anthony.l.nguyen@intel.com>,
-        "M, Saeed" <saeedm@nvidia.com>,
-        "leon@kernel.org" <leon@kernel.org>,
-        "richardcochran@gmail.com" <richardcochran@gmail.com>,
-        "sj@kernel.org" <sj@kernel.org>,
-        "javierm@redhat.com" <javierm@redhat.com>,
-        "ricardo.canuelo@collabora.com" <ricardo.canuelo@collabora.com>,
-        "mst@redhat.com" <mst@redhat.com>,
-        "tzimmermann@suse.de" <tzimmermann@suse.de>,
-        "Michalik, Michal" <michal.michalik@intel.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "jacek.lawrynowicz@linux.intel.com" 
-        <jacek.lawrynowicz@linux.intel.com>,
-        "airlied@redhat.com" <airlied@redhat.com>,
-        "ogabbay@kernel.org" <ogabbay@kernel.org>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "nipun.gupta@amd.com" <nipun.gupta@amd.com>,
-        "axboe@kernel.dk" <axboe@kernel.dk>,
-        "linux@zary.sk" <linux@zary.sk>,
-        "masahiroy@kernel.org" <masahiroy@kernel.org>,
-        "benjamin.tissoires@redhat.com" <benjamin.tissoires@redhat.com>,
-        "geert+renesas@glider.be" <geert+renesas@glider.be>,
-        "Olech, Milena" <milena.olech@intel.com>,
-        "kuniyu@amazon.com" <kuniyu@amazon.com>,
-        "liuhangbin@gmail.com" <liuhangbin@gmail.com>,
-        "hkallweit1@gmail.com" <hkallweit1@gmail.com>,
-        "andy.ren@getcruise.com" <andy.ren@getcruise.com>,
-        "razor@blackwall.org" <razor@blackwall.org>,
-        "idosch@nvidia.com" <idosch@nvidia.com>,
-        "lucien.xin@gmail.com" <lucien.xin@gmail.com>,
-        "nicolas.dichtel@6wind.com" <nicolas.dichtel@6wind.com>,
-        "phil@nwl.cc" <phil@nwl.cc>,
-        "claudiajkang@gmail.com" <claudiajkang@gmail.com>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "intel-wired-lan@lists.osuosl.org" <intel-wired-lan@lists.osuosl.org>,
-        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>, poros <poros@redhat.com>,
-        mschmidt <mschmidt@redhat.com>,
-        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>
-Subject: Re: [RFC PATCH v9 00/10] Create common DPLL configuration API
-Message-ID: <ZJwxHucKMwCQMMVM@nanopsycho>
-References: <20230623123820.42850-1-arkadiusz.kubalewski@intel.com>
- <ZJq3a6rl6dnPMV17@nanopsycho>
- <DM6PR11MB4657084DDD7554663F86C1C19B24A@DM6PR11MB4657.namprd11.prod.outlook.com>
- <DM6PR11MB4657A1ACB586AD9B45C7996E9B24A@DM6PR11MB4657.namprd11.prod.outlook.com>
- <2e9ce197-2732-d061-b11d-4f4513af6abc@linux.dev>
+        Wed, 28 Jun 2023 09:10:38 -0400
+Received: from pps.filterd (m0353726.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35SCxjGr005743;
+        Wed, 28 Jun 2023 13:10:38 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=dqrHOtS23igrd6a15KgAzVG3EY30E0zNBaHr7o1S/Jo=;
+ b=EH4bNd3Rf5uOpHXqTeH2FcfpSUajSvP/WZi2up0e5k0ffDgqhKkfSq7kKkjeIJ6sikAs
+ okkfT6Y9JhTCsoTyJlcDR9/OHGKKIFbBL0MJuW90UuS6c8/ZLgTKb2izpaNR58ZtAbal
+ LywpY4szPQ0GbmdBUpfwXvCTp8uE7+SSloTnte3DGec0uUsUMKrq0bHI3ffZ/eu0tJ27
+ YcJCOnegNn6zzD3zpKjTRNRPFMLgZi/HcS4blVAIJRrJj5vG9PyxggTgrSWLaGEZlwro
+ O1AJXAEG4mii7+zn8E92KkIfySGVPGEklss1tvObe1ZFWr/kb6yR6tDmqeopl5voDrTb 2g== 
+Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3rgn5w8u8d-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 28 Jun 2023 13:10:37 +0000
+Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
+        by ppma01fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 35SBktk6031198;
+        Wed, 28 Jun 2023 13:10:35 GMT
+Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
+        by ppma01fra.de.ibm.com (PPS) with ESMTPS id 3rdr451y53-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 28 Jun 2023 13:10:35 +0000
+Received: from smtpav07.fra02v.mail.ibm.com (smtpav07.fra02v.mail.ibm.com [10.20.54.106])
+        by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 35SDAToP59375886
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 28 Jun 2023 13:10:29 GMT
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id C7ADE20043;
+        Wed, 28 Jun 2023 13:10:29 +0000 (GMT)
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 8843A20040;
+        Wed, 28 Jun 2023 13:10:29 +0000 (GMT)
+Received: from p-imbrenda.boeblingen.de.ibm.com (unknown [9.152.224.66])
+        by smtpav07.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Wed, 28 Jun 2023 13:10:29 +0000 (GMT)
+From:   Claudio Imbrenda <imbrenda@linux.ibm.com>
+To:     kvm@vger.kernel.org
+Cc:     linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
+        frankja@linux.ibm.com, mhartmay@linux.ibm.com, nsg@linux.ibm.com,
+        borntraeger@de.ibm.com
+Subject: [PATCH v1 1/1] KVM: s390: pv: simplify shutdown and fix race
+Date:   Wed, 28 Jun 2023 15:10:29 +0200
+Message-ID: <20230628131029.35145-1-imbrenda@linux.ibm.com>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2e9ce197-2732-d061-b11d-4f4513af6abc@linux.dev>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-        lindbergh.monkeyblade.net
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: AD9XzmSmvwHs_EMjcbfnD80M6S02vQSl
+X-Proofpoint-GUID: AD9XzmSmvwHs_EMjcbfnD80M6S02vQSl
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-06-28_08,2023-06-27_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 phishscore=0
+ mlxlogscore=851 malwarescore=0 spamscore=0 impostorscore=0
+ lowpriorityscore=0 suspectscore=0 clxscore=1015 adultscore=0 bulkscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2305260000 definitions=main-2306280116
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Wed, Jun 28, 2023 at 01:11:19PM CEST, vadim.fedorenko@linux.dev wrote:
->On 28/06/2023 10:27, Kubalewski, Arkadiusz wrote:
->> > From: Kubalewski, Arkadiusz
->> > Sent: Wednesday, June 28, 2023 11:15 AM
->> > 
->> > > From: Jiri Pirko <jiri@resnulli.us>
->> > > Sent: Tuesday, June 27, 2023 12:18 PM
->> > > 
->> > > Fri, Jun 23, 2023 at 02:38:10PM CEST, arkadiusz.kubalewski@intel.com
->> > wrote:
->> > > 
->> > > > v8 -> v9:
->> > > 
->> > > Could you please address all the unresolved issues from v8 and send v10?
->> > > I'm not reviewing this one.
->> > > 
->> > > Thanks!
->> > 
->> > Sure, will do, but first missing to-do/discuss list:
->> > 1) remove mode_set as not used by any driver
->> > 2) remove "no-added-value" static functions descriptions in
->> >    dpll_core/dpll_netlink
->> > 3) merge patches [ 03/10, 04/10, 05/10 ] into patches that are compiling
->> >    after each patch apply
->> > 4) remove function return values descriptions/lists
->> > 5) Fix patch [05/10]:
->> >    - status Supported
->> >    - additional maintainers
->> >    - remove callback:
->> >      int (*source_pin_idx_get)(...) from `struct dpll_device_ops`
->> > 6) Fix patch [08/10]: rethink ice mutex locking scheme
->> > 7) Fix patch [09/10]: multiple comments on
->> > https://lore.kernel.org/netdev/ZIQu+%2Fo4J0ZBspVg@nanopsycho/#t
->> > 8) add PPS DPLL phase offset to the netlink get-device API
->> > 
->> > Thank you!
->> > Arkadiusz
->> 
->> If someone has any objections please state them now, I will work on
->> all above except 5) and 7).
->> Vadim, could you take care of those 2 points?
->> 
->Yeah, sure, I'll update 5 and 7.
->I'm not sure about 8) - do we really need this info, I believe every
->supported DPLL device exports PTP device as well. But I'm Ok to add this
->feature too.
+Simplify the shutdown of non-protected VMs. There is no need to do
+complex manipulations of the counter if it was zero.
 
-Could you add the notification work while you are at it? I don't want
-that to be forgotten. Thanks!
+This also fixes a very rare race which caused pages to be torn down
+from the address space with a non-zero counter even on older machines
+that don't support the UVC instruction, causing a crash.
 
->
->> Thank you!
->> Arkadiusz
->
+Reported-by: Marc Hartmayer <mhartmay@linux.ibm.com>
+Fixes: fb491d5500a7 ("KVM: s390: pv: asynchronous destroy for reboot")
+Signed-off-by: Claudio Imbrenda <imbrenda@linux.ibm.com>
+---
+ arch/s390/kvm/pv.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
+
+diff --git a/arch/s390/kvm/pv.c b/arch/s390/kvm/pv.c
+index 3ce5f4351156..899f3b8ac011 100644
+--- a/arch/s390/kvm/pv.c
++++ b/arch/s390/kvm/pv.c
+@@ -411,8 +411,12 @@ int kvm_s390_pv_deinit_cleanup_all(struct kvm *kvm, u16 *rc, u16 *rrc)
+ 	u16 _rc, _rrc;
+ 	int cc = 0;
+ 
+-	/* Make sure the counter does not reach 0 before calling s390_uv_destroy_range */
+-	atomic_inc(&kvm->mm->context.protected_count);
++	/*
++	 * Nothing to do if the counter was already 0. Otherwise make sure
++	 * the counter does not reach 0 before calling s390_uv_destroy_range.
++	 */
++	if (!atomic_inc_not_zero(&kvm->mm->context.protected_count))
++		return 0;
+ 
+ 	*rc = 1;
+ 	/* If the current VM is protected, destroy it */
+-- 
+2.41.0
+
