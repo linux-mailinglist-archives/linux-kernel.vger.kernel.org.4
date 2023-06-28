@@ -2,202 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E5537417D7
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 20:14:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC8417417E0
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 20:19:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231363AbjF1SO1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 14:14:27 -0400
-Received: from mail-mw2nam10on2063.outbound.protection.outlook.com ([40.107.94.63]:31721
-        "EHLO NAM10-MW2-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S229541AbjF1SOZ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 14:14:25 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=UBzYEj8GJhigV0z5Y4BoCpRwW/NS3d6T43n799Wj64d77NqCYMMXo3HS2GR8FaiPX1/6rMZyTg0oHAoOcA+Gd8f4BVnI3/rN7degYAQqPdieIcb0efERUiCXIm+KsZoHcwan13Q7J6A67dvzPeAPeUYBzxNKUycNV+y09lOITHKjZXWdGqm80kCqEabk0IdbdT8HCIZSA/vlpy4ITNtqTTZ4Or/w4iCwwFaR1nPbhGo+gfzoBPXgO7N12WwLPnW2GA9Os7XHPATmvrNBd29SS+YHO9N4ro0iCwXRCBIvlFJcZMCDvF/DRdFrVmqHt0/bY5KUaiBXBR/tTUInhBVnoQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=wMHDJHGCVGuJxeQzSZhw7+eUHepbY39ltKpq8KgC6Rk=;
- b=bueh8IQp2JHHtrHEHRBO4aKNpPpcV8ONDADxBbW2ZTy4IS7VmMx4H9kS6iBA+UVV2KLLKdz83vEps6CMMjKrFXHantYz1s+vFvV40TwEPmmEn9CNXoyPGq9nJjjkZRnvcAhTb5U2zXS+xO8smUmubuSXISImVmeQDEEqOdFu4d1XBNJC7wrCQm9SJh0NAlIIzaszlM5It2Dh2laxkl7PO9TmBw5BouF1BuV3h9mh08UmLIKW0mKEAadudVymJjHDDBMLg57r7M6dAlzAQTJOk32tuFgTV6RMQ6/4+BPz7WYZ4SIg2V7n8Fd09lVuS0r47hS5rYoa6wR7gHRUy64ISA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=wMHDJHGCVGuJxeQzSZhw7+eUHepbY39ltKpq8KgC6Rk=;
- b=rIU4fOWy/glLgw7IJAqr3E7d0QqzxEUppUBHthv38eLMJ6qzy+V2k0IaN+JpY5ZXCmeh7cNE6eFdDix2MCkPhGsSdGtjas9wNeJtwXdPRBnRJLDL935cV8mvYSc+y1W71G+QykzGhexf1Av1J38Lz1xhOO4CRIy2NeDw89qA1lw=
-Received: from BN9PR03CA0479.namprd03.prod.outlook.com (2603:10b6:408:139::34)
- by CY8PR12MB8216.namprd12.prod.outlook.com (2603:10b6:930:78::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.23; Wed, 28 Jun
- 2023 18:14:22 +0000
-Received: from BN8NAM11FT023.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:139:cafe::91) by BN9PR03CA0479.outlook.office365.com
- (2603:10b6:408:139::34) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.34 via Frontend
- Transport; Wed, 28 Jun 2023 18:14:22 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- BN8NAM11FT023.mail.protection.outlook.com (10.13.177.103) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6500.48 via Frontend Transport; Wed, 28 Jun 2023 18:14:22 +0000
-Received: from SATLEXMB05.amd.com (10.181.40.146) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Wed, 28 Jun
- 2023 13:14:20 -0500
-Received: from SATLEXMB03.amd.com (10.181.40.144) by SATLEXMB05.amd.com
- (10.181.40.146) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Wed, 28 Jun
- 2023 13:14:20 -0500
-Received: from [172.19.74.144] (10.180.168.240) by SATLEXMB03.amd.com
- (10.181.40.144) with Microsoft SMTP Server id 15.1.2507.23 via Frontend
- Transport; Wed, 28 Jun 2023 13:14:19 -0500
-Message-ID: <cea2cb94-6f50-4a92-bcc9-f5d7bfe38e7e@amd.com>
-Date:   Wed, 28 Jun 2023 11:14:14 -0700
+        id S230429AbjF1SSv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 14:18:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48690 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229610AbjF1SSh (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 28 Jun 2023 14:18:37 -0400
+Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBA0D1BC3
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 11:18:35 -0700 (PDT)
+Received: by mail-yb1-xb34.google.com with SMTP id 3f1490d57ef6-c13280dfb09so33413276.2
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 11:18:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1687976314; x=1690568314;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/K9OS0zmztPbtY0PgdFfjCYBxDyy7aJx/bjVFEWW/zU=;
+        b=581WkyNE3unzDgNYmmnMuhz9DPFGMaDG8zfvPvFTpQuAjINSYngeXP4UhZ8hqBx/+c
+         FBq81FPsrzb47Zp3QB5HxpqS/oR1q15toQie6f+Vk5+LsWUiWzMadgauzQZ/ucTi65pA
+         1UjENO+Fktt/FHXzaN01E1DE/M4GNO9pF3vMgdQzGFEm8O+RAgajutwOe3j5gLL8EW6q
+         mMLClQugPV3+9irnbY9yyK+g8uInwDPPlISGXw2oaVrq9ojyIqPqeFuAl6tZpedC0Q4Z
+         1l6ivjmficvNIra9S7wCin0ish9T9cq9as4OitA+p68B+VyO4uNW1/ZY7rn7UfMxQa+5
+         HLqA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687976314; x=1690568314;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=/K9OS0zmztPbtY0PgdFfjCYBxDyy7aJx/bjVFEWW/zU=;
+        b=Za96AN0kWUi4dJgVaAvz7o9xFL9SOCmXQ5OomQxImBxOBRqHZpEYxXVNO+dxbkWoaU
+         BTL2GBkU0pCRjwsvQ2t5hqxn3idtK+y/eVh28UoasIlX+VyMzn97xbyxjxTSKVqjImRr
+         GgEICOhv6Q3y/ppeP/u24Vgr0IWsEgiGWvg+WjiU6iTNrfPwSc/ZOUlHWD3L3hRj+jbo
+         OfASw7X8NiedwC5N8oQZDjCJw6omLYcDpfwA8gT2i/xjpZdWXflukxOkGaWhvbgu1fwv
+         HaPRbgEpC3mxX5lW4UbxFTm3rRZJtbeUMOdZk7YZR3kwQGOeZniWJUYao+ChzOk7InAD
+         XlLQ==
+X-Gm-Message-State: AC+VfDwuE/ZnPLxxl4Yzcyt822O59cA9QcRTbi/Hf+Kwk+8FzMLOu1r2
+        wVHgkkJx5cRkTGBSMhuuojTDljT50kNvnbaxU6wRSQ==
+X-Google-Smtp-Source: ACHHUZ79l9ad3gdBVQUaVc8lzXfc9b5dm4VBH1fcUbHp2JNq0nr0Ghsfo6MDVCUkDHm48YsLbKxPx5Hi//4io1YwUGg=
+X-Received: by 2002:a25:2f8f:0:b0:c1a:5904:fe8e with SMTP id
+ v137-20020a252f8f000000b00c1a5904fe8emr10924745ybv.34.1687976314500; Wed, 28
+ Jun 2023 11:18:34 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH V9 5/5] of: unittest: Add pci_dt_testdrv pci driver
-Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>,
-        Herve Codina <herve.codina@bootlin.com>
-CC:     <linux-pci@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <max.zhen@amd.com>,
-        <sonal.santan@amd.com>, <stefano.stabellini@xilinx.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-References: <1687368849-36722-1-git-send-email-lizhi.hou@amd.com>
- <1687368849-36722-6-git-send-email-lizhi.hou@amd.com>
- <20230622122742.379a34d2@bootlin.com>
- <CAL_JsqKnShsngeq+9_Y24rQSCmAJ3uqP0kKB3UoG4+2TT8MOsQ@mail.gmail.com>
-From:   Lizhi Hou <lizhi.hou@amd.com>
-In-Reply-To: <CAL_JsqKnShsngeq+9_Y24rQSCmAJ3uqP0kKB3UoG4+2TT8MOsQ@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8NAM11FT023:EE_|CY8PR12MB8216:EE_
-X-MS-Office365-Filtering-Correlation-Id: 4978781d-d03c-4877-f571-08db78037f68
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: wIjL2GAkOyH7Whcy5SJf14472oYGIyd6xas1O90+W2h98ekOpfz0a/dTVnriqAjfekgRSq+WNqY88nv6bjdLcdbI3jGwh6fPBHG+fds/hkgWEaYCjeRJgTL4+6+mQTuomWj8T6A+Ez0Sx4CxG0wq4vThJ/tq9dkVXowWnUtb24AI7OBEXA4VHDTc24p/G+7+a0E8TTwyhsgw01/1412XnFO90JWe3arxvw0wt5q0jh+YbzWKm1TWpnXAn3Jzcz6I8KeASeZWOAyIxo26gfgHplP4hqEyADsAHKMGVMTZ7xdlha+bQ8mAweTxCz0PEts26NExVwhXEoCitOzdkEzqI2dIOtn2EJJidnyMGUCyM7sw/AYGp2CTA8efiqpYF3JZCpYytfyaHuPJI5GSeRW+U+7+y9/ryTBg2xyHHjXBg+tCNAqqaZ24TjyeQSO5o/0AvGFROzGRa5g5WN8RH0nf60iEyHdvynrRdRSwWYwrrzpnUIcI3yhFjBTKOHXrxliQm0xwd0u6ZnbjJ3Hki9R5Dc8EYKaVPZyLa3/SYIJadgceJwJd/quesYvXMrQ4Jt31BC0iNHpW79Bn5/43mcWr67lviRlg6ObPIorqbOhuFSlNZ7L+gIkZhB5yGa4eCMsejM7wcfGKC7pXqxyduYx9B04G4lZk1kCEb8eHDBED8unQFLIm9a3hcW+UjdwQTvZ1OijsA+e403TPKnwjpLYzltYCb3dttdl+B4gLoQ/W+DmvWa2lVyzXdoRa4sycsg7ousJ0bIYmHtWJnZ5Nu7WwtIaXweusXrUqz4mplnSZorDHrHo6Xutu7T29Fc+qN152
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(136003)(346002)(396003)(376002)(451199021)(40470700004)(36840700001)(46966006)(70206006)(8676002)(316002)(70586007)(8936002)(186003)(26005)(41300700001)(426003)(336012)(4326008)(53546011)(54906003)(2616005)(110136005)(16576012)(966005)(40460700003)(6666004)(2906002)(82310400005)(44832011)(5660300002)(40480700001)(81166007)(478600001)(356005)(82740400003)(31696002)(36756003)(86362001)(36860700001)(31686004)(83380400001)(47076005)(36900700001)(43740500002)(376954003);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Jun 2023 18:14:22.0408
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4978781d-d03c-4877-f571-08db78037f68
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT023.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR12MB8216
+References: <CAJuCfpFUrPGVSnZ9+CmMz31GjRNN+tNf6nUmiCgx0Cs5ygD64A@mail.gmail.com>
+ <CAJuCfpFe2OdBjZkwHW5UCFUbnQh7hbNeqs7B99PXMXdFNjKb5Q@mail.gmail.com>
+ <CAJuCfpG2_trH2DuudX_E0CWfMxyTKfPWqJU14zjVxpTk6kPiWQ@mail.gmail.com>
+ <ZJuSzlHfbLj3OjvM@slm.duckdns.org> <CAJuCfpGoNbLOLm08LWKPOgn05+FB1GEqeMTUSJUZpRmDYQSjpA@mail.gmail.com>
+ <20230628-meisennest-redlich-c09e79fde7f7@brauner> <CAJuCfpHqZ=5a_2k==FsdBbwDCF7+s7Ji3aZ37LBqUgyXLMz7gA@mail.gmail.com>
+ <20230628-faden-qualvoll-6c33b570f54c@brauner> <CAJuCfpF=DjwpWuhugJkVzet2diLkf8eagqxjR8iad39odKdeYQ@mail.gmail.com>
+ <20230628-spotten-anzweifeln-e494d16de48a@brauner> <ZJx1nkqbQRVCaKgF@slm.duckdns.org>
+In-Reply-To: <ZJx1nkqbQRVCaKgF@slm.duckdns.org>
+From:   Suren Baghdasaryan <surenb@google.com>
+Date:   Wed, 28 Jun 2023 11:18:20 -0700
+Message-ID: <CAJuCfpEFo6WowJ_4XPXH+=D4acFvFqEa4Fuc=+qF8=Jkhn=3pA@mail.gmail.com>
+Subject: Re: [PATCH 1/2] kernfs: add kernfs_ops.free operation to free
+ resources tied to the file
+To:     Tejun Heo <tj@kernel.org>
+Cc:     Christian Brauner <brauner@kernel.org>, gregkh@linuxfoundation.org,
+        peterz@infradead.org, lujialin4@huawei.com,
+        lizefan.x@bytedance.com, hannes@cmpxchg.org, mingo@redhat.com,
+        ebiggers@kernel.org, oleg@redhat.com, akpm@linux-foundation.org,
+        viro@zeniv.linux.org.uk, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, vschneid@redhat.com,
+        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, kernel-team@android.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+        lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On 6/26/23 09:51, Rob Herring wrote:
-> On Thu, Jun 22, 2023 at 4:27 AM Herve Codina <herve.codina@bootlin.com> wrote:
->> Hi all,
->>
->> On Wed, 21 Jun 2023 10:34:09 -0700
->> Lizhi Hou <lizhi.hou@amd.com> wrote:
->>
->>> pci_dt_testdrv is bound to QEMU PCI Test Device. It reads
->>> overlay_pci_node fdt fragment and apply it to Test Device. Then it
->>> calls of_platform_default_populate() to populate the platform
->>> devices.
->>>
->>> Signed-off-by: Lizhi Hou <lizhi.hou@amd.com>
->>> ---
->>>   drivers/of/unittest-data/Makefile             |   3 +-
->>>   .../of/unittest-data/overlay_pci_node.dtso    |  22 ++
->>>   drivers/of/unittest.c                         | 188 ++++++++++++++++++
->>>   drivers/pci/quirks.c                          |   1 +
->>>   4 files changed, 213 insertions(+), 1 deletion(-)
->>>   create mode 100644 drivers/of/unittest-data/overlay_pci_node.dtso
->> Did the test under QEMU with the instructions that Lizhi provided at
->>    https://github.com/houlz0507/xoclv2/blob/pci-dt-0329/pci-dt-patch-0329/README
-> Instructions need to be in the tree, not living somewhere else. Don't
-> need the full QEMU setup, but just stating 'add "-device pci-testdev"'
-> somewhere. Probably in the test failure messages would be the most
-> helpful location.
-Sure. I will add this to the test failure message.
+On Wed, Jun 28, 2023 at 11:02=E2=80=AFAM Tejun Heo <tj@kernel.org> wrote:
 >
->> The unittest results were:
->> --- 8< ---
->> [    1.107378] ### dt-test ### pass of_unittest_lifecycle():3273
->> [    1.110068] ### dt-test ### pass of_unittest_pci_node():3909
->> [    1.110401] ### dt-test ### pass unittest_pci_probe():3840
->> [    1.110618] ### dt-test ### pass of_unittest_pci_node():3914
->> [    1.110759] ### dt-test ### pass of_unittest_pci_node_verify():3870
->> [    1.110894] ### dt-test ### pass of_unittest_pci_node_verify():3877
->> [    1.110985] ### dt-test ### pass of_unittest_pci_node_verify():3884
->> [    1.111088] ### dt-test ### pass of_unittest_pci_node():3926
->> [    1.111171] ### dt-test ### pass of_unittest_pci_node():3927
->> [    1.112056] ### dt-test ### pass of_unittest_pci_node_verify():3870
->> [    1.112201] ### dt-test ### pass of_unittest_pci_node_verify():3890
->> [    1.112326] ### dt-test ### pass of_unittest_pci_node_verify():3892
->> [    1.112489] ### dt-test ### pass of_unittest_check_tree_linkage():271
->> --- 8< ---
->>
->> Based on the test provided, no failure detected.
->>
->> Tested-by: Herve Codina <herve.codina@bootlin.com>
->>
->> Further more, I dumped the dt (PCI related nodes) available on the target.
->> If someone needs to look at it:
-> Thanks!
+> On Wed, Jun 28, 2023 at 07:35:20PM +0200, Christian Brauner wrote:
+> > > To summarize my understanding of your proposal, you suggest adding ne=
+w
+> > > kernfs_ops for the case you marked (1) and change ->release() to do
+> > > only (2). Please correct me if I misunderstood. Greg, Tejun, WDYT?
+> >
+> > Yes. I can't claim to know all the intricate implementation details of
+> > kernfs ofc but this seems sane to me.
 >
->> --- 8< ---
->> # cat /tmp/dt.dts
->> /dts-v1/;
->>
->> / {
->>          #address-cells = <0x02>;
->>          #size-cells = <0x02>;
->>          interrupt-parent = <0x8002>;
->>          compatible = "linux,dummy-virt";
->>          name = [00];
->> [...]
->>          pcie@10000000 {
->>                  #address-cells = <0x03>;
->>                  dma-coherent;
->>                  bus-range = <0x00 0xff>;
->>                  interrupt-map = <0x00 0x00 0x00 0x01 0x8002 0x00 0x00 0x00 0x03 0x04 0x00 0x00 0x00 0x02 0x8002 0x00 0x00 0x00 0x04 0x04 0x00 0x00 0x00 0x03 0x8002 0x00 0x00 0x00 0x05 0x04 0x00 0x00 0x00 0x04 0x8002 0x00 0x00 0x00 0x06 0x04 0x800 0x00 0x00 0x01 0x8002 0x00 0x00 0x00 0x04 0x04 0x800 0x00 0x00 0x02 0x8002 0x00 0x00 0x00 0x05 0x04 0x800 0x00 0x00 0x03 0x8002 0x00 0x00 0x00 0x06 0x04 0x800 0x00 0x00 0x04 0x8002 0x00 0x00 0x00 0x03 0x04 0x1000 0x00 0x00 0x01 0x8002 0x00 0x00 0x00 0x05 0x04 0x1000 0x00 0x00 0x02 0x8002 0x00 0x00 0x00 0x06 0x04 0x1000 0x00 0x00 0x03 0x8002 0x00 0x00 0x00 0x03 0x04 0x1000 0x00 0x00 0x04 0x8002 0x00 0x00 0x00 0x04 0x04 0x1800 0x00 0x00 0x01 0x8002 0x00 0x00 0x00 0x06 0x04 0x1800 0x00 0x00 0x02 0x8002 0x00 0x00 0x00 0x03 0x04 0x1800 0x00 0x00 0x03 0x8002 0x00 0x00 0x00 0x04 0x04 0x1800 0x00 0x00 0x04 0x8002 0x00 0x00 0x00 0x05 0x04>;
->>                  #size-cells = <0x02>;
->>                  device_type = "pci";
->>                  interrupt-map-mask = <0x1800 0x00 0x00 0x07>;
->>                  compatible = "pci-host-ecam-generic";
->>                  ranges = <0x1000000 0x00 0x00 0x00 0x3eff0000 0x00 0x10000 0x2000000 0x00 0x10000000 0x00 0x10000000 0x00 0x2eff0000 0x3000000 0x80 0x00 0x80 0x00 0x80 0x00>;
->>                  #interrupt-cells = <0x01>;
->>                  reg = <0x40 0x10000000 0x00 0x10000000>;
->>                  linux,pci-domain = <0x00>;
->>                  msi-parent = <0x8003>;
->>                  name = "pcie";
->>
->>                  pci@3,0 {
->>                          #address-cells = <0x03>;
->>                          #size-cells = <0x02>;
->>                          device_type = "pci";
->>                          compatible = "pci1b36,c\0pciclass,060400\0pciclass,0604";
->>                          ranges = <0x81001800 0x00 0x1000 0x81001800 0x00 0x1000 0x00 0x2000 0x82001800 0x00 0x10000000 0x82001800 0x00 0x10000000 0x00 0x200000 0xc3001800 0x80 0x00 0xc3001800 0x80 0x00 0x00 0x200000>;
->>                          reg = <0x1800 0xffff6d76 0xc2b23600 0xffff6d76 0x3fbf63a0>;
-> Something looks wrong with the values here. I found this running it thru dtc.
+> This is going to be massively confusing for vast majority of kernfs users=
+.
+> The contract kernfs provides is that you can tell kernfs that you want ou=
+t
+> and then you can do so synchronously in a finite amount of time (you stil=
+l
+> have to wait for in-flight operations to finish but that's under your
+> control). Adding an operation which outlives that contract as something
+> usual to use is guaranteed to lead to obscure future crnashes. For a
+> temporary fix, it's fine as long as it's marked clearly but please don't
+> make it something seemingly widely useable.
 >
-> <stdout>: Warning (pci_device_reg): /pcie@10000000/pci@3,0:reg: PCI
-> reg config space address cells 2 and 3 must be 0
+> We have a long history of modules causing crashes because of this. The
+> severing semantics is not there just for fun.
 
-I will fix this. Thanks.
-
-Lizhi
+I'm sure there are reasons things are working as they do today. Sounds
+like we can't change the ->release() logic from what it is today...
+Then the question is how do we fix this case needing to release a
+resource which can be released only when there are no users of the
+file? My original suggestion was to add a kernfs_ops operation which
+would indicate there are no more users but that seems to be confusing.
+Are there better ways to fix this issue?
+Thanks,
+Suren.
 
 >
-> Rob
+> Thanks.
+>
+> --
+> tejun
