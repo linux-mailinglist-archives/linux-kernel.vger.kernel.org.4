@@ -2,67 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C22C7411E4
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 15:03:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A0D597411E5
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 15:04:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230287AbjF1NDT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 09:03:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43800 "EHLO
+        id S230447AbjF1NDw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 09:03:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229533AbjF1NDR (ORCPT
+        with ESMTP id S229533AbjF1NDu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 09:03:17 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 576FC1FFE;
-        Wed, 28 Jun 2023 06:03:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=YRmXGRO7v2q8teN6iRwJ9n9mRadW5UVlq2nlH+dKy24=; b=Y5SPXY5m7lDhE2wc93WRe+e82x
-        pv4oSOcQfUupKrpjY49BQmwgwIVmZlqJny4rHJoFWuJrOF9y3XU8lUfG5KqM/NLW2YtZvHViL43Od
-        fjfBes3FJOTYbfrb5jbks6t5CFuXSCtnusKItAP94u5QHO5xYgCMIk42sn0aNHpmZB+G2r316+Csb
-        qb3qE5USZfBo3U6hO0nsW73qUXQKHEgbEnk8rtUy5VyUjRjy9Nczo+6xn8livWnufRo5nGXUlHsPZ
-        rrPtKWSy2YWG8VIZLtKMznwjClUgfd8QOfvgcjl6q8GGHL2bQRt3espQed2cH7VnM45WmGs7LXo5V
-        ySd+/mKw==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1qEUoz-005eGG-12;
-        Wed, 28 Jun 2023 13:02:57 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        Wed, 28 Jun 2023 09:03:50 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 782B42110;
+        Wed, 28 Jun 2023 06:03:49 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id E9BB73002F0;
-        Wed, 28 Jun 2023 15:02:56 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id D1AB727F62BA0; Wed, 28 Jun 2023 15:02:56 +0200 (CEST)
-Date:   Wed, 28 Jun 2023 15:02:56 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Kai Huang <kai.huang@intel.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-mm@kvack.org, x86@kernel.org, dave.hansen@intel.com,
-        kirill.shutemov@linux.intel.com, tony.luck@intel.com,
-        tglx@linutronix.de, bp@alien8.de, mingo@redhat.com, hpa@zytor.com,
-        seanjc@google.com, pbonzini@redhat.com, david@redhat.com,
-        dan.j.williams@intel.com, rafael.j.wysocki@intel.com,
-        ashok.raj@intel.com, reinette.chatre@intel.com,
-        len.brown@intel.com, ak@linux.intel.com, isaku.yamahata@intel.com,
-        ying.huang@intel.com, chao.gao@intel.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com, nik.borisov@suse.com,
-        bagasdotme@gmail.com, sagis@google.com, imammedo@redhat.com
-Subject: Re: [PATCH v12 06/22] x86/virt/tdx: Handle SEAMCALL running out of
- entropy error
-Message-ID: <20230628130256.GB2438817@hirez.programming.kicks-ass.net>
-References: <cover.1687784645.git.kai.huang@intel.com>
- <b5bf58246659572bd68d46b14e90e9e5b37f7f93.1687784645.git.kai.huang@intel.com>
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0D81B61328;
+        Wed, 28 Jun 2023 13:03:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63EACC433C0;
+        Wed, 28 Jun 2023 13:03:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687957428;
+        bh=P66gHZJ7j77wWis96oF6KJ5NyIpuzPIhqa8Ws293cdw=;
+        h=From:To:Cc:Subject:Date:From;
+        b=IlYtPlZZ3p701Gno3JE7mrUNMem3fznktwgwgxczfNagLUHKsLJ4MokWmH/PcfHDD
+         AU3/lYyNyvNbEV2gdEcwUzW6dgkH50DWwOdNR7zruAI/Nc4VtGhIsW33HwR/a1YIOX
+         Yw0g1UjWDOrQNMUh///RlDNcRgjkWqGL/tRcfx786OjVKvbbzN8E+RVSqMR5xO+hn4
+         a5CnSpQyG5dPI5OUMw9OQCPmqRPoqJdEcusDCQYCpXOhDuGeB/1sbR7lB/d+vUnlKq
+         W+IWT55bRjAA6ec32RF5OPlK5ob1TYu+prViY84ixJ/2l8NavObCvC03t2x49T75C7
+         LhPX409PkP5rQ==
+Received: from mchehab by mail.kernel.org with local (Exim 4.96)
+        (envelope-from <mchehab@kernel.org>)
+        id 1qEUpl-000rfb-2F;
+        Wed, 28 Jun 2023 15:03:45 +0200
+From:   Mauro Carvalho Chehab <mchehab@kernel.org>
+To:     linux-media@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+Subject: [PATCH] media: dvb: mb86a20s: get rid of a clang-15 warning
+Date:   Wed, 28 Jun 2023 15:03:39 +0200
+Message-ID: <20230628130339.206261-1-mchehab@kernel.org>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <b5bf58246659572bd68d46b14e90e9e5b37f7f93.1687784645.git.kai.huang@intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,23 +57,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 27, 2023 at 02:12:36AM +1200, Kai Huang wrote:
+When building with clang-15: this warning is produced:
 
->  	cpu = get_cpu();
-> -	sret = __seamcall(fn, rcx, rdx, r8, r9, out);
-> +
-> +	/*
-> +	 * Certain SEAMCALL leaf functions may return error due to
-> +	 * running out of entropy, in which case the SEAMCALL should
-> +	 * be retried.  Handle this in SEAMCALL common function.
-> +	 *
-> +	 * Mimic rdrand_long() retry behavior.
+	../drivers/media/dvb-frontends/mb86a20s.c:1572:6: error: variable 'active_layers' set but not used [-Werror,-Wunused-but-set-variable]
+	        int active_layers = 0, pre_ber_layers = 0, post_ber_layers = 0;
+	            ^
+	1 error generated.
 
-Yeah, except that doesn't have preemption disabled.. you do.
+Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+---
+ drivers/media/dvb-frontends/mb86a20s.c | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
 
-> +	 */
-> +	do {
-> +		sret = __seamcall(fn, rcx, rdx, r8, r9, out);
-> +	} while (sret == TDX_RND_NO_ENTROPY && --retry);
-> +
->  	put_cpu();
+diff --git a/drivers/media/dvb-frontends/mb86a20s.c b/drivers/media/dvb-frontends/mb86a20s.c
+index b74b9afed9a2..125fed4891ba 100644
+--- a/drivers/media/dvb-frontends/mb86a20s.c
++++ b/drivers/media/dvb-frontends/mb86a20s.c
+@@ -1569,7 +1569,7 @@ static int mb86a20s_get_stats(struct dvb_frontend *fe, int status_nr)
+ 	u32 t_post_bit_error = 0, t_post_bit_count = 0;
+ 	u32 block_error = 0, block_count = 0;
+ 	u32 t_block_error = 0, t_block_count = 0;
+-	int active_layers = 0, pre_ber_layers = 0, post_ber_layers = 0;
++	int pre_ber_layers = 0, post_ber_layers = 0;
+ 	int per_layers = 0;
+ 
+ 	dev_dbg(&state->i2c->dev, "%s called.\n", __func__);
+@@ -1589,9 +1589,6 @@ static int mb86a20s_get_stats(struct dvb_frontend *fe, int status_nr)
+ 
+ 	for (layer = 0; layer < NUM_LAYERS; layer++) {
+ 		if (c->isdbt_layer_enabled & (1 << layer)) {
+-			/* Layer is active and has rc segments */
+-			active_layers++;
+-
+ 			/* Handle BER before vterbi */
+ 			rc = mb86a20s_get_pre_ber(fe, layer,
+ 						  &bit_error, &bit_count);
+-- 
+2.41.0
+
