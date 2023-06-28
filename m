@@ -2,86 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E842A740C0C
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 10:58:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00A73740C61
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 11:08:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235555AbjF1I6T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 04:58:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41772 "EHLO
+        id S234323AbjF1JE5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 05:04:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233749AbjF1Icd (ORCPT
+        with ESMTP id S236419AbjF1IrD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 04:32:33 -0400
-Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59EEF469C
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 01:24:58 -0700 (PDT)
-Received: by mail-pg1-x534.google.com with SMTP id 41be03b00d2f7-54f75f85a17so3009397a12.0
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 01:24:58 -0700 (PDT)
+        Wed, 28 Jun 2023 04:47:03 -0400
+Received: from mail-qk1-x730.google.com (mail-qk1-x730.google.com [IPv6:2607:f8b0:4864:20::730])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A1E035A1;
+        Wed, 28 Jun 2023 01:39:22 -0700 (PDT)
+Received: by mail-qk1-x730.google.com with SMTP id af79cd13be357-76547539718so399726985a.2;
+        Wed, 28 Jun 2023 01:39:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1687940698; x=1690532698;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Z1rezx4FlsyiQzr31Fbv1Ua224W3A27Dsl53mJwBX+Q=;
-        b=HNrPckaSsayG+1s6jwbaMdcUi1nHme8boVBGWPvSSaPE7Sz9Jib4gNiLLEkoZnf6qo
-         LLrZ8mgX7X8ltSqvr65j0h+pe0O6rCJ9PAN6/VQU9M3UeJAGz8QUqSE6udqk32mUcKPt
-         GFtHg2ak7mjiknlOe7Kv0ngDFEFNnPWso/8TE=
+        d=gmail.com; s=20221208; t=1687941561; x=1690533561;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ScB+ZZist0LJhvo4aFrlQCLs/vxCp+MpbUQwDLajxRw=;
+        b=Sc7YXP1JbPv0mFwQfYm4HOjIkcuGaoYrspov0HZUKETfxRnhgij7IHOEJ7ZTntjbWw
+         sSr9sTImr/TpA+q824k92W5AviwhWW8+j6ZLZ2DdTB/kcZ5VlKK3w/lWGDAFuq+zDZBt
+         C87XQTvC6OzXmgDF80R7ztwPknaCOhv0crl+e5w0IloO+acNL8v1raxkWtGKJOtayxau
+         tT/ZIJ2jSWi7bN8sG2Luq+RvhwVUVU1bnhM5q9DE3VZws8e0EaCULqaA+iq4mVkGsC5K
+         n/jjMqN0ZQh3kU7lxsCS2iFjKoh2UksEWxiukfgjl81oPJI5di7GVpuT2heRq3V536kD
+         Vj0A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687940698; x=1690532698;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Z1rezx4FlsyiQzr31Fbv1Ua224W3A27Dsl53mJwBX+Q=;
-        b=FBxudQY4njZOxw3yC0r0qgtqdEMlgWn1+SRJh/rNQPvZjM8km0d1/mrzx05XBYVJqf
-         XTmT4LxSiLCM79eeyufKqqDAcaWHMHfBbOUGo/BX1u8oqE9QNt/VfdQJFEAL01uUjGl+
-         jgiLpILdFQTqGKIbF+EURPt0Ja5ne4KeYPKre6CEva0uPe8LPBg8mzuLjRMaxUfwnlW+
-         ybHMJ9JaUyZHbi90mpIlexXDjtMLS+bb9pDDQzFQyGlNG0BMqZCNLeLL62cLIRSgmgTW
-         68p2Hb6imjqgaYne4pfpYdOJ+bYzrPxn9/Bse3Ux3ofbkYFqDRT34x0eqhfNwPvKLAmm
-         85Zg==
-X-Gm-Message-State: AC+VfDxEYHKlLQfkp4Umr8VlzVR/HIQo9QQ9wVM7iEgItOx/Wyyoi4Il
-        Dz1x8RrpMqpY8yp2Vz57wtxznZTofCyxtyES5KI=
-X-Google-Smtp-Source: ACHHUZ7KT4Fg1lTSocDCNNw/9wkPQe7TfmtvFw0+Rk4N8M5KR/3eIdl3R/uQabndibwMqJlKiV/VcA==
-X-Received: by 2002:a6b:7218:0:b0:763:92eb:f81e with SMTP id n24-20020a6b7218000000b0076392ebf81emr35269464ioc.8.1687926313653;
-        Tue, 27 Jun 2023 21:25:13 -0700 (PDT)
-Received: from mail-io1-f48.google.com (mail-io1-f48.google.com. [209.85.166.48])
-        by smtp.gmail.com with ESMTPSA id i1-20020a02b681000000b0040bd3646d0dsm2576684jam.157.2023.06.27.21.25.12
-        for <linux-kernel@vger.kernel.org>
+        d=1e100.net; s=20221208; t=1687941561; x=1690533561;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ScB+ZZist0LJhvo4aFrlQCLs/vxCp+MpbUQwDLajxRw=;
+        b=gqtT5jGaLiCse2zAZ/o+SGYBmQ3A6Y9ImKo3s3qEwoeeP0TvqHrnVCNzE6n9ZZYCJ1
+         KMYouJbk19lYjTo+vlEp9QBWbuGICqBRrVUsNCZ8DeV7SjGGmieGoWRAAvW5WuIqFx24
+         n9hM3QSC8AVS6/0UmzBT4uK77wItoG+AyyQ2nwQ0M5rrpTv8dzVdKleSVR/mWtS5cIk3
+         C8bMLdUmTWecIiVUcHv3mo/W7nWJmffvrLCzwiUazFczZhiLdo74WG0wvnArGLO1Yn3f
+         xUEP2lV3hKKA8kQaj4xUwbD1Xf+h3N12gfTFeAkWNGot9oxPhovAV0T8odoUhCmyP5p0
+         XoGg==
+X-Gm-Message-State: AC+VfDzNC834a2codn/1HnVU2cyVJjX5gTkHWM0cIJr5mJqbbGyYea1j
+        i3TefXMGChwmJuYgQruWfoF7Iaz/9JJ/iIUr/eU=
+X-Google-Smtp-Source: ACHHUZ4lVPX+j5H7tZJ6oXHoKfmzWDLYFEUeYz33ThHTbUCa2xbvIJmb2a0J/CVmsCUQZSEw4UUV6Q==
+X-Received: by 2002:a17:902:e746:b0:1b7:f3a4:a6dc with SMTP id p6-20020a170902e74600b001b7f3a4a6dcmr11012625plf.21.1687926325524;
+        Tue, 27 Jun 2023 21:25:25 -0700 (PDT)
+Received: from [192.168.255.10] ([103.7.29.32])
+        by smtp.gmail.com with ESMTPSA id iw19-20020a170903045300b001b0603829a0sm862107plb.199.2023.06.27.21.25.22
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 27 Jun 2023 21:25:12 -0700 (PDT)
-Received: by mail-io1-f48.google.com with SMTP id ca18e2360f4ac-7836e80b303so84638239f.0
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 21:25:12 -0700 (PDT)
-X-Received: by 2002:a05:6602:22cd:b0:783:63f9:55b9 with SMTP id
- e13-20020a05660222cd00b0078363f955b9mr6463588ioe.16.1687926311837; Tue, 27
- Jun 2023 21:25:11 -0700 (PDT)
+        Tue, 27 Jun 2023 21:25:24 -0700 (PDT)
+Message-ID: <ca71fc1f-280e-19ff-ce0f-8befa29f45cd@gmail.com>
+Date:   Wed, 28 Jun 2023 12:25:16 +0800
 MIME-Version: 1.0
-References: <20230627063946.14935-1-shawn.sung@mediatek.com>
- <20230627063946.14935-14-shawn.sung@mediatek.com> <30fc2593-1d8e-286a-cc54-03ee250a37e7@baylibre.com>
-In-Reply-To: <30fc2593-1d8e-286a-cc54-03ee250a37e7@baylibre.com>
-From:   Fei Shao <fshao@chromium.org>
-Date:   Wed, 28 Jun 2023 12:24:35 +0800
-X-Gmail-Original-Message-ID: <CAC=S1niScbOZrq6srx2DHGGtKfTV+L7rEf6o+77Y=XCz6GezwQ@mail.gmail.com>
-Message-ID: <CAC=S1niScbOZrq6srx2DHGGtKfTV+L7rEf6o+77Y=XCz6GezwQ@mail.gmail.com>
-Subject: Re: [PATCH v5 13/14] drm/mediatek: Improve compatibility of display driver
-To:     Alexandre Mergnat <amergnat@baylibre.com>
-Cc:     Hsiao Chien Sung <shawn.sung@mediatek.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        Singo Chang <singo.chang@mediatek.com>,
-        Nancy Lin <nancy.lin@mediatek.com>,
-        Jason-JH Lin <jason-jh.lin@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.12.0
+Subject: Re: [PATCH 1/4] perf/x86/intel: Get shared reg constraints first for
+ vLBR
+Content-Language: en-US
+To:     Xiong Zhang <xiong.y.zhang@intel.com>,
+        Sean Christopherson <seanjc@google.com>
+Cc:     pbonzini@redhat.com, peterz@infradead.org,
+        kan.liang@linux.intel.com, zhenyuw@linux.intel.com,
+        zhiyuan.lv@intel.com, kvm list <kvm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20230616113353.45202-1-xiong.y.zhang@intel.com>
+ <20230616113353.45202-2-xiong.y.zhang@intel.com>
+From:   Like Xu <like.xu.linux@gmail.com>
+In-Reply-To: <20230616113353.45202-2-xiong.y.zhang@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -89,22 +80,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 27, 2023 at 9:48=E2=80=AFPM Alexandre Mergnat <amergnat@baylibr=
-e.com> wrote:
->
-snip
->
-> The lines is > 80 columns.
->
-> https://www.kernel.org/doc/html/latest/process/coding-style.html#breaking=
--long-lines-and-strings
+On 16/6/2023 7:33 pm, Xiong Zhang wrote:
+> When host has per cpu pinned LBR event and guest use LBR also, host
+> couldn't get correct LBR data, as the physical LBR is preempted by
+> guest.
+> 
+> The rule for multi events sharing LBR is defined in
+> __intel_shared_reg_get_constraints(), but guest vLBR event skips this
+> function, so even if host has per cpu pinned LBR event, guest vLBR event
+> could get constraints successfully and make vlbr_exclude_host returns true,
+> finally host couldn't enable LBR in intel_pmu_lbr_enable_all().
 
-The 80-column convention is preferred but I think this provides better
-readability.
-Also checkpatch.pl allows up to 100 columns today and the lines fit in.
+Although it goes against the "per cpu pinned LBR event" priority expectation,
+the order is intentionally specified. For two reasons:
 
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?=
-id=3Dbdc48fa11e46f
+- vlbr uses the fake event mechanism in its implementation, a presence similar to
+   BTS event, thus the question here is whether we can get the per cpu pinned BTS
+   event to work as expected;
 
-Regards,
-Fei
+- this change should not be applied first before KVM has done a good job
+   of making guest lbr and other lbr events coexist correctly;
+
+In treating vlbr event as an ordinary perf_event behind a guest counter that
+is expected to comply equally with the scheduling rules of host perf, the first
+thing we need to address is how a guest counter should continue to function
+during the time when the backend event is preempted by a higher priority one.
+
+> 
+> This commit move intel_vlbr_constraints() behind
+> intel_shared_regs_constraints(), guest vLBR event will use LBR also and it
+> should get LBR resource through intel_shared_regs_constraints().
+> 
+> Fixes: 097e4311cda9 ("perf/x86: Add constraint to create guest LBR event without hw counter")
+> Signed-off-by: Xiong Zhang <xiong.y.zhang@intel.com>
+> ---
+>   arch/x86/events/intel/core.c | 6 +++---
+>   1 file changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/arch/x86/events/intel/core.c b/arch/x86/events/intel/core.c
+> index 6fd3cd97a6ac..2e27a69e9725 100644
+> --- a/arch/x86/events/intel/core.c
+> +++ b/arch/x86/events/intel/core.c
+> @@ -3347,15 +3347,15 @@ __intel_get_event_constraints(struct cpu_hw_events *cpuc, int idx,
+>   {
+>   	struct event_constraint *c;
+>   
+> -	c = intel_vlbr_constraints(event);
+> +	c = intel_bts_constraints(event);
+>   	if (c)
+>   		return c;
+>   
+> -	c = intel_bts_constraints(event);
+> +	c = intel_shared_regs_constraints(cpuc, event);
+>   	if (c)
+>   		return c;
+>   
+> -	c = intel_shared_regs_constraints(cpuc, event);
+> +	c = intel_vlbr_constraints(event);
+>   	if (c)
+>   		return c;
+>   
