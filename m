@@ -2,141 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 519A67414C8
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 17:21:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1AC47414E6
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 17:26:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231403AbjF1PUt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 11:20:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59576 "EHLO
+        id S230498AbjF1P0T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 11:26:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231156AbjF1PUo (ORCPT
+        with ESMTP id S232031AbjF1PZx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 11:20:44 -0400
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B456268E
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 08:20:42 -0700 (PDT)
-Received: by mail-lj1-x235.google.com with SMTP id 38308e7fff4ca-2b698937f85so68748371fa.2
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 08:20:41 -0700 (PDT)
+        Wed, 28 Jun 2023 11:25:53 -0400
+Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93F9A2682;
+        Wed, 28 Jun 2023 08:25:52 -0700 (PDT)
+Received: by mail-pg1-x52a.google.com with SMTP id 41be03b00d2f7-55adfa61199so2612641a12.2;
+        Wed, 28 Jun 2023 08:25:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687965640; x=1690557640;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=O1zwqe2L/ZqF+4ydv1LkIfmqL/mIwvO8jVnOWDtDmHc=;
-        b=nTxbvr+SBUiWzq9OAQX07rXCVvs2/Lbd4/KmFokAqczlvC+YDKyj96ycYBeELJHLbE
-         ZaFgdtiUoZtw3RX8I1WbSeS7pmYLkLH3BwTfE4SbvtJjFJIc6/l00moGy0eNLiRpqtVW
-         /qTk9Rsc7SV11Ua/yyvVfI9vP/ZsTZqH3cjehWmbPMPTeswMLb5fnMjwWCYZm9Pjs63F
-         TUFXM0QSSn0s7eYwyZMHVM/ybdj4OhXHYh8Pjy6eYUk0Q/vMKH+aQrhfvye8VQEAL3k9
-         7IEZqJNJ0elQNNtWnkKY7iTiqBjCgaeV8NYUO6y0ya4Bi6rb1yHm2HJnv5u2YKSTL925
-         K17Q==
+        d=gmail.com; s=20221208; t=1687965952; x=1690557952;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=n4lOJqlO+m1XcCVJDoqo4LYW2FoCv0dKe3840PVKsVg=;
+        b=U/BcOhqvS44SFeqphSYAucZs9BXpwPTfqIe4vYZescTcIzohXH6nnk9w/g5bI60fJq
+         B853T6sPl0XjxnvVYa/YPXCmN9sUg5Zy5/6quOLEQnTzmIuzXBqnRpRMD4hnCXtWAecQ
+         RCQgLqh04na0Q9Drxbyos7O2fZUq2TNwpmto5FAjCO7W343PUgsNRg9rsdTQtobJx8ot
+         mHT+Cxs2WWnnpxLmeKjOTFny7X9UPM09KSOb0vpwCs9KozefZm+u8EV3XjzkGFn+R3Zh
+         q6CiTTTcrEVuxjnJ7u+9ZN5ABS7Zqxh4HXaSVkFoBZPcAybs2ZLgGWMsUa0HrK9mL+rT
+         lKqA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687965640; x=1690557640;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=O1zwqe2L/ZqF+4ydv1LkIfmqL/mIwvO8jVnOWDtDmHc=;
-        b=NMdnayg7mfjrn6qulyuq9yW/AccFKtSNXZUEUawN7ccJFoz32bno87izvuqMs1NdxC
-         ETQ+HtvwYWMxtXw+re7n0u63iT07X9nfULeNZfcfMRxrN/5nF4bIDMj2PH8dQKoVEdHj
-         OsrGCmYNTWQUrs1UOaO62BcCYbHIrQhNv5iivVZsPNAPQ3hQX9pBa6yor/rd8UgOwYTy
-         2p0gBTQNrA1rHBeVZae1rCg70wWsUQ2tA16kVx7yIeWAXguQaIjR7MPr1FQFwTaL+cL6
-         4tBjSYdRyJ0ujiX1k7tTDT5k/HkHyLMUBdZdgg6lBAFp2qo7vcLTdJOB4KUAKMmVvH8j
-         oF3g==
-X-Gm-Message-State: AC+VfDyEXUtD0FeNtNOqyxBMlOjbyDr471oGFhZG8WtaGfBMCbqnoKm2
-        ZN1eo953Q4Fvjb/2XuU5ZdFtLQ==
-X-Google-Smtp-Source: ACHHUZ6JfrUGGy1kQpxW6rclkKMCtjKkk1FPM6l2RRR6pdSpC5gvG8oz7MM9jhGyN//xPLtECFBahA==
-X-Received: by 2002:a2e:8089:0:b0:2b6:b88b:6689 with SMTP id i9-20020a2e8089000000b002b6b88b6689mr2940268ljg.22.1687965640187;
-        Wed, 28 Jun 2023 08:20:40 -0700 (PDT)
-Received: from [192.168.1.101] (abyk82.neoplus.adsl.tpnet.pl. [83.9.30.82])
-        by smtp.gmail.com with ESMTPSA id x17-20020a2e8811000000b002b34f9cfc7asm2271183ljh.90.2023.06.28.08.20.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 28 Jun 2023 08:20:39 -0700 (PDT)
-Message-ID: <d5c5671f-b6a8-9e97-f917-784dffed7f90@linaro.org>
-Date:   Wed, 28 Jun 2023 17:20:37 +0200
+        d=1e100.net; s=20221208; t=1687965952; x=1690557952;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=n4lOJqlO+m1XcCVJDoqo4LYW2FoCv0dKe3840PVKsVg=;
+        b=CtP6HyZY/ktbqDw/3FzfnddnvUmeLjBfJwKsIkTnD/GJJyRVxh7ktbEWcIKsjDsv6s
+         ufV1NF5aaZTf+fOCgsS01LKYQk59/pi4xO0cT12zNZLnTtfMn8TvnP9pXIn3HPQtgYDe
+         iOYjunU6PpZP2vm2DOg4yQjyxTOOpBuJAWCsRwAySIPcQ0bxdn2S0Rb3b8NWZO7wRpkk
+         KMbGP2EuMQdiuLeJ1ZalhysOq3t+6nygvy5xKJLRE1E/+p/A6FJv3oDD8TxXpZA710ly
+         8bHdTfcHYvVw/XbOJ8LLc1kdEcmlKeAXsFxBvIKimCpSYv3hLMHQ72/ASTS0IUplKiy9
+         5Zpw==
+X-Gm-Message-State: AC+VfDxw0nv5nQxlyVxlge6vz3VqMFSXed4m9upFjXbSVTd+YIeeQaLv
+        j3t1Vn/ILNXMLfEe6I6KuYg=
+X-Google-Smtp-Source: ACHHUZ5HsB9Dk/4b5zEZUH2EtL7M7ADWTPlPwL0H4tceTmfa40sAM0eGuokuYZhWoNNFRZ53u1yeOw==
+X-Received: by 2002:a17:90b:3b41:b0:262:f872:fa77 with SMTP id ot1-20020a17090b3b4100b00262f872fa77mr7793984pjb.31.1687965951831;
+        Wed, 28 Jun 2023 08:25:51 -0700 (PDT)
+Received: from localhost.localdomain ([43.224.245.252])
+        by smtp.gmail.com with ESMTPSA id r2-20020a635142000000b004ff6b744248sm7539337pgl.48.2023.06.28.08.25.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 28 Jun 2023 08:25:51 -0700 (PDT)
+From:   ruihongluo <colorsu1922@gmail.com>
+X-Google-Original-From: ruihongluo <luoruihong@xiaomi.com>
+To:     =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        ruihongluo <luoruihong@xiaomi.com>
+Subject: [PATCH v1 1/1] serial: 8250: Preserve original value of DLF register
+Date:   Wed, 28 Jun 2023 23:21:37 +0800
+Message-Id: <20230628152135.56286-1-luoruihong@xiaomi.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v4 19/21] firmware: scm: Modify only the download bits in
- TCSR register
-Content-Language: en-US
-To:     Mukesh Ojha <quic_mojha@quicinc.com>, corbet@lwn.net,
-        agross@kernel.org, andersson@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        keescook@chromium.org, tony.luck@intel.com, gpiccoli@igalia.com,
-        mathieu.poirier@linaro.org, catalin.marinas@arm.com,
-        will@kernel.org, linus.walleij@linaro.org,
-        andy.shevchenko@gmail.com
-Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-hardening@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org
-References: <1687955688-20809-1-git-send-email-quic_mojha@quicinc.com>
- <1687955688-20809-20-git-send-email-quic_mojha@quicinc.com>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <1687955688-20809-20-git-send-email-quic_mojha@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 28.06.2023 14:34, Mukesh Ojha wrote:
-> CrashDump collection is based on the DLOAD bit of TCSR register.
-> To retain other bits, we read the register and modify only the
-> DLOAD bit as the other bits have their own significance.
-> 
-> Co-developed-by: Poovendhan Selvaraj <quic_poovendh@quicinc.com>
-> Signed-off-by: Mukesh Ojha <quic_mojha@quicinc.com>
-> ---
->  drivers/firmware/qcom_scm.c | 12 ++++++++++--
->  1 file changed, 10 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/firmware/qcom_scm.c b/drivers/firmware/qcom_scm.c
-> index 104d86e49b97..a9ff77d16c42 100644
-> --- a/drivers/firmware/qcom_scm.c
-> +++ b/drivers/firmware/qcom_scm.c
-> @@ -30,6 +30,11 @@ module_param(download_mode, bool, 0);
->  #define SCM_HAS_IFACE_CLK	BIT(1)
->  #define SCM_HAS_BUS_CLK		BIT(2)
->  
-> +#define QCOM_DOWNLOAD_FULLDUMP		 0x1
-> +#define QCOM_DOWNLOAD_NODUMP		 0x0
-> +#define QCOM_DOWNLOAD_MODE_SHIFT	   4
-> +#define QCOM_DOWNLOAD_MODE_MASK		0x30
-GENMASK and then FIELD_PREP below?
+This commit is aimed at preserving the original value of the
+DLF(Divisor Latch Fraction Register). When the DLF register is
+modified without preservation, it can disrupt the baudrate settings
+established by firmware or bootloader , leading to data corruption
+and the generation of unreadable or distorted characters.
 
-> +
->  struct qcom_scm {
->  	struct device *dev;
->  	struct clk *core_clk;
-> @@ -440,6 +445,7 @@ static int __qcom_scm_set_dload_mode(struct device *dev, bool enable)
->  static void qcom_scm_set_download_mode(bool enable)
->  {
->  	bool avail;
-> +	int val;
-What's wrong with initializing it in the same line as ret?
+Signed-off-by: ruihongluo <luoruihong@xiaomi.com>
+---
+ drivers/tty/serial/8250/8250_dwlib.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
->  	int ret = 0;
->  
->  	avail = __qcom_scm_is_call_available(__scm->dev,
-> @@ -448,8 +454,10 @@ static void qcom_scm_set_download_mode(bool enable)
->  	if (avail) {
->  		ret = __qcom_scm_set_dload_mode(__scm->dev, enable);
->  	} else if (__scm->dload_mode_addr) {
-> -		ret = qcom_scm_io_writel(__scm->dload_mode_addr,
-> -				enable ? QCOM_SCM_BOOT_SET_DLOAD_MODE : 0);
-> +		val = (enable ? QCOM_DOWNLOAD_FULLDUMP : QCOM_DOWNLOAD_NODUMP);
-unnecessary braces
+diff --git a/drivers/tty/serial/8250/8250_dwlib.c b/drivers/tty/serial/8250/8250_dwlib.c
+index 75f32f054ebb..d30957722da8 100644
+--- a/drivers/tty/serial/8250/8250_dwlib.c
++++ b/drivers/tty/serial/8250/8250_dwlib.c
+@@ -244,7 +244,7 @@ void dw8250_setup_port(struct uart_port *p)
+ 	struct dw8250_port_data *pd = p->private_data;
+ 	struct dw8250_data *data = to_dw8250_data(pd);
+ 	struct uart_8250_port *up = up_to_u8250p(p);
+-	u32 reg;
++	u32 reg, orig;
+ 
+ 	pd->hw_rs485_support = dw8250_detect_rs485_hw(p);
+ 	if (pd->hw_rs485_support) {
+@@ -270,9 +270,11 @@ void dw8250_setup_port(struct uart_port *p)
+ 	dev_dbg(p->dev, "Designware UART version %c.%c%c\n",
+ 		(reg >> 24) & 0xff, (reg >> 16) & 0xff, (reg >> 8) & 0xff);
+ 
++	/* Preserve value written by firmware or bootloader  */
++	orig = dw8250_readl_ext(p, DW_UART_DLF);
+ 	dw8250_writel_ext(p, DW_UART_DLF, ~0U);
+ 	reg = dw8250_readl_ext(p, DW_UART_DLF);
+-	dw8250_writel_ext(p, DW_UART_DLF, 0);
++	dw8250_writel_ext(p, DW_UART_DLF, orig);
+ 
+ 	if (reg) {
+ 		pd->dlf_size = fls(reg);
+-- 
+2.39.2
 
-Konrad
-> +		val <<= QCOM_DOWNLOAD_MODE_SHIFT;
-> +		ret = qcom_scm_io_update_field(__scm->dload_mode_addr,
-> +				QCOM_DOWNLOAD_MODE_MASK, val);
->  	} else {
->  		dev_err(__scm->dev,
->  			"No available mechanism for setting download mode\n");
