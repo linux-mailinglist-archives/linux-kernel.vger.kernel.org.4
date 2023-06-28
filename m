@@ -2,81 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EDF374177F
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 19:52:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F44C741788
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 19:54:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231824AbjF1RwW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 13:52:22 -0400
-Received: from out-15.mta0.migadu.com ([91.218.175.15]:56295 "EHLO
-        out-15.mta0.migadu.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231750AbjF1RwL (ORCPT
+        id S231981AbjF1Rxx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 13:53:53 -0400
+Received: from mail-pg1-f173.google.com ([209.85.215.173]:50201 "EHLO
+        mail-pg1-f173.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231987AbjF1Rxp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 13:52:11 -0400
-Date:   Wed, 28 Jun 2023 13:52:04 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1687974729;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=3wb1kX6L9/pLjHJdQokUyimNTJMnyAUv+LwDyu/SD5A=;
-        b=NF2SPqayC4BiclJHcHAIBaBByf4KV5Q43ZH0e95617IhssmKgWnWUFtxGyotr/gKZhsNm1
-        RN+KQcxyvA5BGAeqHSlWP2WprMri89bMWLGDEt7y92eH+lt1bEABpnImsptiWCu8Qw+EWG
-        RijQZcqgyot80L03bXHj53Ze3srap7k=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Kent Overstreet <kent.overstreet@linux.dev>
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     torvalds@linux-foundation.org, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-bcachefs@vger.kernel.org,
-        Christoph Hellwig <hch@lst.de>,
-        Christian Brauner <brauner@kernel.org>
-Subject: Re: [GIT PULL] bcachefs
-Message-ID: <20230628175204.oeek4nnqx7ltlqmg@moria.home.lan>
-References: <20230627000635.43azxbkd2uf3tu6b@moria.home.lan>
- <91e9064b-84e3-1712-0395-b017c7c4a964@kernel.dk>
- <20230627020525.2vqnt2pxhtgiddyv@moria.home.lan>
- <b92ea170-d531-00f3-ca7a-613c05dcbf5f@kernel.dk>
- <23922545-917a-06bd-ec92-ff6aa66118e2@kernel.dk>
- <20230627201524.ool73bps2lre2tsz@moria.home.lan>
- <c06a9e0b-8f3e-4e47-53d0-b4854a98cc44@kernel.dk>
- <20230628040114.oz46icbsjpa4egpp@moria.home.lan>
- <b02657af-5bbb-b46b-cea0-ee89f385f3c1@kernel.dk>
- <4b863e62-4406-53e4-f96a-f4d1daf098ab@kernel.dk>
+        Wed, 28 Jun 2023 13:53:45 -0400
+Received: by mail-pg1-f173.google.com with SMTP id 41be03b00d2f7-54f87d5f1abso3318351a12.0;
+        Wed, 28 Jun 2023 10:53:45 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687974825; x=1690566825;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=rH1w84gNN5G82KmJfuI+u4t8267PkH4gL6EwCL5odH0=;
+        b=Y8q4wV4YUKMvK81wf7fF8gtd55XkLLvUG0MQewRfaIz5Iuoj0b66cBQ6MQXB+z7MmE
+         ZYbA8+21TJu9GzctAQ7GnfPNhOQ0fnhRqw6rUMTFhyiGpfIw+Ebe1GDZhybny67E3VS2
+         h+1PY+xzIO5JPqpiaEEeZrrNov+luspuFnk+hmW3ZBeRsqR8JBUFTZeAk2VqbQzTUbrJ
+         e5sYEWRX+4cTI5wdfFgIb3oNp0bklLCNMFNgRyQIbaCMrn3jJhtOxwOAI732Ld7BBIc5
+         aNx+H2QReoTRswe2sSECSboq9O7EecS+L946Qu4xdlRxHVgeaY/p4qheW9OlHVgcUQrN
+         vr6Q==
+X-Gm-Message-State: ABy/qLYWL6QbSTYLokzkE2gXFXNpr1U9b0q8EjWhMRb5wzR5W2a98KIi
+        nfPV9akdRsgqadCeiYe2XfQ=
+X-Google-Smtp-Source: APBJJlGSpOxxN0oABYwCbwzJyxX1X07vCkqIADsm0ecgnirgEZjCp9N07TG2rFZG4wTDAMsabsyq2g==
+X-Received: by 2002:a17:90a:13cd:b0:263:5333:56a8 with SMTP id s13-20020a17090a13cd00b00263533356a8mr427479pjf.21.1687974825376;
+        Wed, 28 Jun 2023 10:53:45 -0700 (PDT)
+Received: from liuwe-devbox-debian-v2 ([20.69.120.36])
+        by smtp.gmail.com with ESMTPSA id co21-20020a17090afe9500b00262dbf8648esm6848805pjb.34.2023.06.28.10.53.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 28 Jun 2023 10:53:44 -0700 (PDT)
+Date:   Wed, 28 Jun 2023 17:53:43 +0000
+From:   Wei Liu <wei.liu@kernel.org>
+To:     Nischala Yelchuri <niyelchu@linux.microsoft.com>
+Cc:     linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
+        mikelley@microsoft.com, K.Y.Srinivasan@linux.microsoft.com,
+        kys@microsoft.com, Haiyang@linux.microsoft.com,
+        Zhang@linux.microsoft.com, haiyangz@microsoft.com,
+        Wei@linux.microsoft.com, Liu@linux.microsoft.com,
+        wei.liu@kernel.org, Dexuan@linux.microsoft.com,
+        Cui@linux.microsoft.com, decui@microsoft.com,
+        Thomas@linux.microsoft.com, Gleixner@linux.microsoft.com,
+        tglx@linutronix.de, Ingo@linux.microsoft.com,
+        Molnar@linux.microsoft.com, mingo@redhat.com,
+        Borislav@linux.microsoft.com, Petkov@linux.microsoft.com,
+        bp@alien8.de, Dave@linux.microsoft.com, Hansen@linux.microsoft.com,
+        dave.hansen@linux.intel.com, x86@kernel.org,
+        H.PeterAnvin@linux.microsoft.com, hpa@zytor.com,
+        Tyler@linux.microsoft.com, Hicks@linux.microsoft.com,
+        code@tyhicks.com, niyelchu@microsoft.com
+Subject: Re: [PATCH] x86/hyperv: Improve code for referencing
+ hyperv_pcpu_input_arg
+Message-ID: <ZJxzp7zJVTIFAylj@liuwe-devbox-debian-v2>
+References: <1687286438-9421-1-git-send-email-niyelchu@linux.microsoft.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <4b863e62-4406-53e4-f96a-f4d1daf098ab@kernel.dk>
-X-Migadu-Flow: FLOW_OUT
+In-Reply-To: <1687286438-9421-1-git-send-email-niyelchu@linux.microsoft.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 28, 2023 at 10:57:02AM -0600, Jens Axboe wrote:
-> I discussed this with Christian offline. I have a patch that is pretty
-> simple, but it does mean that you'd wait for delayed fput flush off
-> umount. Which seems kind of iffy.
+On Tue, Jun 20, 2023 at 11:40:38AM -0700, Nischala Yelchuri wrote:
+> Several places in code for Hyper-V reference the
+> per-CPU variable hyperv_pcpu_input_arg. Older code uses a multi-line
+> sequence to reference the variable, and usually includes a cast.
+> Newer code does a much simpler direct assignment. The latter is
+> preferable as the complexity of the older code is unnecessary.
 > 
-> I think we need to back up a bit and consider if the kill && umount
-> really is sane. If you kill a task that has open files, then any fput
-> from that task will end up being delayed. This means that the umount may
-> very well fail.
+> Update older code to use the simpler direct assignment.
 > 
-> It'd be handy if we could have umount wait for that to finish, but I'm
-> not at all confident this is a sane solution for all cases. And as
-> discussed, we have no way to even identify which files we'd need to
-> flush out of the delayed list.
-> 
-> Maybe the test case just needs fixing? Christian suggested lazy/detach
-> umount and wait for sb release. There's an fsnotify hook for that,
-> fsnotify_sb_delete(). Obviously this is a bit more involved, but seems
-> to me that this would be the way to make it more reliable when killing
-> of tasks with open files are involved.
+> Signed-off-by: Nischala Yelchuri <niyelchu@linux.microsoft.com>
 
-No, this is a real breakage. Any time we introduce unexpected
-asynchrony there's the potential for breakage: case in point, there was
-a filesystem that made rm asynchronous, then there were scripts out
-there that deleted until df showed under some threshold.. whoops...
-
-this would break anyone that does fuser; umount; and making the umount
-lazy just moves the race to the next thing that uses the block device.
-
-I'd like to know how delayed_fput() avoids this.
+Applied to hyperv-fixes. Thanks!
