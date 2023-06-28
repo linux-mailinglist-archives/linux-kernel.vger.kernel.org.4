@@ -2,222 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4650741286
+	by mail.lfdr.de (Postfix) with ESMTP id 44C99741284
 	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 15:33:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229823AbjF1Nci (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 09:32:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47434 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232031AbjF1Nbv (ORCPT
+        id S231927AbjF1Ncd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 09:32:33 -0400
+Received: from mx0a-0064b401.pphosted.com ([205.220.166.238]:12238 "EHLO
+        mx0a-0064b401.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231571AbjF1Nbp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 09:31:51 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AF792D66
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 06:30:59 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id 4fb4d7f45d1cf-51d9128494cso4136607a12.0
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 06:30:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687959058; x=1690551058;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Qi8ZWOlQKnb6tZLEsWPYx0hcKfZEPw/vCZpYrdYVcHY=;
-        b=xY6j3vE/DhPV808atFTXH0F0dDTZ2eeA25/Oq+LDFlOpHHG6UF2wkfZDdYKQmpo3Kp
-         RhCuW3ew1HdM8jzbeFkVMn69gxCeB1HPr7AXA5KUP4JNk6Uc4iSEc1HGYf3Wv33cqRTQ
-         hQJslfR3Okiy6Mt/h/JZrswZc72F77CcStnCkklgcEAvwWLGyDtVDQrmlLgRb/5juocl
-         ItW9YSylFzgW1ojIzBCvjvTsZR36269MOxz5zukDGf7N6NXxml4w5pZHzvuPwtu1pJKX
-         uy/NgvkGkJOzwEvLy+pREsowL56Uk17cAAlN6H0XGAYb0JtvMTHmi6j2iTPAV4DYVngJ
-         sJZg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687959058; x=1690551058;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Qi8ZWOlQKnb6tZLEsWPYx0hcKfZEPw/vCZpYrdYVcHY=;
-        b=Cf/xtGJPF/Z1GTXxjSKNzehRciVaxHYr3lIPKMhAaKPhTkV8rSnBgJBwWEgam9sBuu
-         jgsmMdwsm4wgt91AU4JTfPfsL8i30H6yukvyhRrVtEPga8ZoRisj1lZ3g+KDxrlRs/gu
-         H1gs98simV+XImzYP1PGxr17h/Tp9RUFWgjmzPSNo0C2ierozfAa1aePWbEGo3oQIXSt
-         3YSsuO/AXJTRdY/qH+98CnVVFAHpSY6Q51L5bpKXi/0tZ0EEa8ryR6yBvSU4FtM4YMj+
-         qzguntI6UUh6o+xI6+Iqi2ZmvZLJpMllDx05ney7n3QdyfH6Fs6srrImSHIqaeUy4GI9
-         W1/A==
-X-Gm-Message-State: AC+VfDwtWWRtTFDgTNwidvyKARBWa8gZJA4K0+8n8Tz7R+qPzLzdjarx
-        iaMaZqzp0a0+8qQsGsuzFJODQ+8mr3o761Zd8xVJwQ==
-X-Google-Smtp-Source: ACHHUZ4CM3oFYWAHJiXiroqEZ4EG0120bWv4gvuncP5SHoKmvkoH/pvtMvaT8KnhO1GCMXS70uqxEwnk1n7PUmf5Czo=
-X-Received: by 2002:aa7:d947:0:b0:51a:468c:b46c with SMTP id
- l7-20020aa7d947000000b0051a468cb46cmr24163859eds.30.1687959057683; Wed, 28
- Jun 2023 06:30:57 -0700 (PDT)
+        Wed, 28 Jun 2023 09:31:45 -0400
+Received: from pps.filterd (m0250810.ppops.net [127.0.0.1])
+        by mx0a-0064b401.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35SCUlCs019209;
+        Wed, 28 Jun 2023 06:31:14 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=windriver.com;
+         h=from:to:cc:subject:date:message-id:content-transfer-encoding
+        :content-type:mime-version; s=PPS06212021; bh=gjTr0f7M8QrExyM3qw
+        uOHs4MhV9+18GMo9BLtPYtKZc=; b=aeWA9uAy2yTyJL/55u2yqEgcR8U0s4hiRP
+        l/OyXSVbrppMz0tZR/EFdZ00/+717paQ/AjtpU02sLJb+bKI90rl1phi3YdHS4Jd
+        22quIC+/wUdnLtW5i71wFbMrNFOXQmWNhwIvHT+0bHmrWFPjS0iL09vNjT8tcXVs
+        FvEeqk8EXZ5KCJptXBGIxYO2Z+mdFcUYm8Hng4569N2tXkwtOvCApvSYYkxSXhbj
+        WwIIOumKcL45C7UDaXFVK41SJQ8zMgHvke3kFlyXIzlhIX4nJG5qsXFBRJfMGXD5
+        4Z7CzrQnAAiqZ98fcONP/p5URghMttSU6J2hvs86qDGIwrGFvRpQ==
+Received: from nam02-dm3-obe.outbound.protection.outlook.com (mail-dm3nam02lp2047.outbound.protection.outlook.com [104.47.56.47])
+        by mx0a-0064b401.pphosted.com (PPS) with ESMTPS id 3rdurxus7e-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 28 Jun 2023 06:31:14 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=IMs/HtQi5U4Pe306NAHZyS/PjXvkiP+phsyZnQ4AYyEXnJZ4LGXpzRuJm31zJ5+biGJUMTPOwLh+PTQi+NjIrNrNBB8fmqIj6r7RFCTT7Hb2rUxZYUoZe+ZYE6NkdCML4HMvYCCHLZCNgyGrS1jiC0+rvZ4kqXGCK4w7RXXJsM4RbS05GtPYJWQjBM6Uruc+N8hBtUynJMsJE6xyxw4stc4Ppv05xaMJrgodcwM53eAqPlfC2914rzrKz1e0lPbzi1RFyHJqnVUryzgnBMhwfvE+dkm0H+cYiAWeVdlK7jP8/64m1RKqnAcK+Ph2EfqFlS+3YrW70+M5+INL+obYow==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=gjTr0f7M8QrExyM3qwuOHs4MhV9+18GMo9BLtPYtKZc=;
+ b=HrUZWytVcsJT1DqY0WkjUvg5yHD+ZrLX1S+7Yw0FB8Pv8El2B8OAnAMsv9djxYwgNUoJb84OLNoV+nCYR6jIRERlX7fGqPec4BsbzcG4QBSr7p2lktXJEyxw/hk8k6199+UI1hUjqLsLKWulXc3gGJKnKKAzPpzMSv7ui6zHXEkHMB7IVC5P81xtNe8pHhZlWKKmnMIwMlxJyuyladJxwV8wKKVyZdFmD+OhqXY+3Ls3FI2RicNf027dWLLd3nt/hkVQ0cXhxk6jc3mXasKDVDxp//mc+AO9WVdZQL0sHZQ61sSzIJCXMmS0RkCBsfaVrdfWBIu0zG9j9AtZyb5NdA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=windriver.com; dmarc=pass action=none
+ header.from=windriver.com; dkim=pass header.d=windriver.com; arc=none
+Received: from PH0PR11MB4952.namprd11.prod.outlook.com (2603:10b6:510:40::15)
+ by IA0PR11MB7741.namprd11.prod.outlook.com (2603:10b6:208:400::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6500.35; Wed, 28 Jun
+ 2023 13:31:09 +0000
+Received: from PH0PR11MB4952.namprd11.prod.outlook.com
+ ([fe80::89a4:55ba:11f6:6b05]) by PH0PR11MB4952.namprd11.prod.outlook.com
+ ([fe80::89a4:55ba:11f6:6b05%7]) with mapi id 15.20.6521.026; Wed, 28 Jun 2023
+ 13:31:03 +0000
+From:   Dragos-Marian Panait <dragos.panait@windriver.com>
+To:     stable@vger.kernel.org
+Cc:     Yang Lan <lanyang0908@gmail.com>,
+        Bob Peterson <rpeterso@redhat.com>,
+        Andreas Gruenbacher <agruenba@redhat.com>,
+        cluster-devel@redhat.com, linux-kernel@vger.kernel.org
+Subject: [PATCH 5.4] gfs2: Don't deref jdesc in evict
+Date:   Wed, 28 Jun 2023 16:30:52 +0300
+Message-Id: <20230628133052.1796173-1-dragos.panait@windriver.com>
+X-Mailer: git-send-email 2.34.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: VI1PR06CA0132.eurprd06.prod.outlook.com
+ (2603:10a6:803:a0::25) To PH0PR11MB4952.namprd11.prod.outlook.com
+ (2603:10b6:510:40::15)
 MIME-Version: 1.0
-References: <8e785777-03aa-99e1-d20e-e956f5685be6@huawei.com>
- <87mt18it1y.ffs@tglx> <68baeac9-9fa7-5594-b5e7-4baf8ac86b77@huawei.com>
- <ba352e83-b8b1-d900-9c1f-56b8c8a8b8fb@huawei.com> <CAKfTPtBoe_jRn-EMsQxssQ4BcveT+Qcd+GmsRbQEXQDGfzFOMg@mail.gmail.com>
-In-Reply-To: <CAKfTPtBoe_jRn-EMsQxssQ4BcveT+Qcd+GmsRbQEXQDGfzFOMg@mail.gmail.com>
-From:   Vincent Guittot <vincent.guittot@linaro.org>
-Date:   Wed, 28 Jun 2023 15:30:46 +0200
-Message-ID: <CAKfTPtDZN1gVgr0AqgtVe3arVWEtA35PA3PL99hT_WAR1D9S9g@mail.gmail.com>
-Subject: Re: [Question] report a race condition between CPU hotplug state
- machine and hrtimer 'sched_cfs_period_timer' for cfs bandwidth throttling
-To:     Xiongfeng Wang <wangxiongfeng2@huawei.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>, vschneid@redhat.com,
-        Phil Auld <pauld@redhat.com>, vdonnefort@google.com,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Wei Li <liwei391@huawei.com>,
-        "liaoyu (E)" <liaoyu15@huawei.com>, zhangqiao22@huawei.com,
-        Peter Zijlstra <peterz@infradead.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Ingo Molnar <mingo@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-        lindbergh.monkeyblade.net
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR11MB4952:EE_|IA0PR11MB7741:EE_
+X-MS-Office365-Filtering-Correlation-Id: fae0fa03-0796-4de5-c93e-08db77dbeb85
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: kUDM23D+7YJejxd068AF3kE/+vd2RRtLenI7FIunhdg5xWNJMQjHSjREINoYdr6t7H9UHkgn/AzqdYUgZ7lPR7zX0g8rN+MjQhiq8iHS7viCH/P/fUizqc/6REGYI28u7CPJiO5GcOxoeqeh9Gey3s20v5jnrHRnZofiG4e55g/DqM+zwjnIHvsdlS8TUq/c3x6iwrfxKIfCcUim6lDsu805t43WRATCeg7ND+GvThEcoiwmssuv0qNqHrLvzjxpHkvd7GCRZSkpZB1HuRJpAm99CG+CNlPtNr+B017S4HNh07qkTT8QD0Ue9CFDHMS1oW299hcnhImqAQR7PlRJoLCW/u/SnDy0o8K3gH/3ZBUuzkTYbhs7FjkKhC0ulo2fsFN/I//Ok7nFrFCpE91M7YkbSCJU+Q+U4Jwd7zjZNWeHShakfOEl0xl5IEWQA4xntqEcygX9MtAKF454N/XhEYS3UxhmaI7ur2Bl0XDuukLBpdhwJFp1N/59JbOQemO5wW0O2xr2QZVdTiOLqXiuC+QIlc9VO8NtaJxL8glcbsm/q4m1F6MI/tCmBsa0vSkVCCYL5mtT84UlNesCuXAD1LPWff+gO4xOf8oc7GFAqVC27UXInjwCQqDaxjhOnwSS
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR11MB4952.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(136003)(376002)(366004)(39850400004)(346002)(451199021)(5660300002)(66946007)(66556008)(4326008)(66476007)(6916009)(478600001)(36756003)(316002)(8936002)(8676002)(2906002)(54906003)(41300700001)(6486002)(52116002)(186003)(38350700002)(86362001)(26005)(6506007)(6512007)(6666004)(1076003)(2616005)(38100700002)(83380400001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?ejK6V6eN3ubFX3Sd8ZEyOSDM1hUoVDqVhFphLEXR/aurpQg+1EHNj9Ymz5gg?=
+ =?us-ascii?Q?gBS50cpTNDHAAo/ITNINDjHHKkkuVbKTwLNIP0AJZb4IOwHZPMF1UpKCXOyy?=
+ =?us-ascii?Q?bbXOuVi4L1PIdvsOqo5NKGuPCmd3ArMwRgn/MjA2pwA5ChDJLUT6YUq8MBua?=
+ =?us-ascii?Q?EbccsCblcd2Uf3OCRO7Ji/PMGsZLcjX9cIq1RWxP+znFm/f18BGqYu+puQ9r?=
+ =?us-ascii?Q?no9jgIpQhqEUirn0LZ7ZVn3qSy4HZO1hqXg64HN6ARu4gQgj5CVXvK9cJDah?=
+ =?us-ascii?Q?OWlGMi9KFkuKEoHey6s6WzPt3G8HiMwVLn30LOcot6KlAipWJxIlN1WxJc9J?=
+ =?us-ascii?Q?b6sghgpJK84bK40YJrCjDh6bfT0DiPzzQCgwPgBXKlunRj5LJBjd2NHVvvQ8?=
+ =?us-ascii?Q?FtMttrfjWpQe7jHqBqtIFBBvhU2R75KdjS+Y3ogttfCckNpGdpUqE5FGTpGQ?=
+ =?us-ascii?Q?gvMO4Vo6EjGNo7plS8LyPVf/EqHxVdcA86HBSinioNfRShf2aQA1clJyzMVX?=
+ =?us-ascii?Q?Z+cnBnIsdbnUgPlrwUNysid50SgLm/xQ+axbGpJDdWHPHaEHJexI6pfAoCmc?=
+ =?us-ascii?Q?12rCbSCL8gq6hco+f0oGiiotm0kceDfty96nSM5OVmOXpUotILrFW15brMNI?=
+ =?us-ascii?Q?sL9icvvHrmQtcEdv91pGQUFHR6sjWH3Kj7TC6M8L4iGqZrutaQvRy71L5QBx?=
+ =?us-ascii?Q?/JKIjTtKu76Xjz/I2Fl2yix8xv5aztBECNMKwIkZq2G+vAR4fbU+LAgIUCba?=
+ =?us-ascii?Q?siGj6fpEG451KBGHBXH+J+gmfDRUTrpKGlKOK+wSGNhgJpG0QNY6RTCS5FYw?=
+ =?us-ascii?Q?rxg647b03vduF/5scA4zmwiddVWH5v4aTq2V2XCxtQx9MnW5fuum57bKw5GC?=
+ =?us-ascii?Q?ZDpHqfaeoU+r+jkyEzJHDCrSHJP4SVisZxFl+kEiJMBnnaZySB+blMeeoJC2?=
+ =?us-ascii?Q?TnVPb+4Xe3p4bAHwQmducOCeMlAUDpYNFv5o19yacd+sru44AREol3Bokw2z?=
+ =?us-ascii?Q?kaj2RV9zFINm33VUfj/hD28h7K1+vGpMMje8bmNuD0sFFsCnRemuVrJduKis?=
+ =?us-ascii?Q?wmsKJkyzl3f/qzSexnF5t8ca7YAnuOF1c26P1gHLLVqC/ygimpyLJ2cH+sZz?=
+ =?us-ascii?Q?hdIKRSHhu4vNFqQl/gzkbT0zqbv9TEfvx/Hdd5hpRYJNsfiYbY5LBXXkc7i2?=
+ =?us-ascii?Q?ymERQ3wLdvxbpMBTg/gVw4IzhE8jvGdk6PpooqBAuQefJz9xEt2BlRDq5vfF?=
+ =?us-ascii?Q?erlucwB7mSMDn9WQZvYMtQY4wt329sedYvwAeNUraXxrhyPByQEJJDSIsVKT?=
+ =?us-ascii?Q?Z9RZYGL3iYuWgv0PtWvYdwnezLQANH0C72zRs5L0/scDKJp7IiAFMVOqTq7v?=
+ =?us-ascii?Q?6uO/VqzDbai5vRhscH5MVLI3uN6JrWdiLd4/4crkM4SCJfX06ngTqri1rxeh?=
+ =?us-ascii?Q?bMA6L8BBpumP6XVU9Q5M0bF7fHNbV81x4Jkc9dDN/ifNWMLvnFkIv9ike5/w?=
+ =?us-ascii?Q?7w3wGoZbFmkm+wmZ+5R1JAAC6c1mntfdgskOZFybDejBDZ4jCK8+VwE657jX?=
+ =?us-ascii?Q?Dr+N9XtVF9n39ZY8BSfVlN5uYLHYiyXH0+hrOHWeO1WtaCM6kOhiuHenZaIP?=
+ =?us-ascii?Q?YA=3D=3D?=
+X-OriginatorOrg: windriver.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: fae0fa03-0796-4de5-c93e-08db77dbeb85
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR11MB4952.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Jun 2023 13:31:03.8180
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 8ddb2873-a1ad-4a18-ae4e-4644631433be
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: UW0ZKdQ+4mJRGfWZkrxXCwbopxMzuI4RPLv5aTKeW9fYq32HcjPDvzVZrq7YbqswXQc3z9BWudCS7bdOqtOl1n/FC0JjHdzbdDc/C2OFaNk=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA0PR11MB7741
+X-Proofpoint-ORIG-GUID: I-xk8SNyfI4w4GbW3M7CS5jqXXHs2LwB
+X-Proofpoint-GUID: I-xk8SNyfI4w4GbW3M7CS5jqXXHs2LwB
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-06-28_09,2023-06-27_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0
+ priorityscore=1501 suspectscore=0 bulkscore=0 clxscore=1011 malwarescore=0
+ phishscore=0 impostorscore=0 mlxlogscore=820 lowpriorityscore=0
+ spamscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2305260000 definitions=main-2306280119
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 27 Jun 2023 at 18:46, Vincent Guittot
-<vincent.guittot@linaro.org> wrote:
->
-> On Mon, 26 Jun 2023 at 10:23, Xiongfeng Wang <wangxiongfeng2@huawei.com> wrote:
-> >
-> > Hi,
-> >
-> > Kindly ping~
-> > Could you please take a look at this issue and the below temporary fix ?
-> >
-> > Thanks,
-> > Xiongfeng
-> >
-> > On 2023/6/12 20:49, Xiongfeng Wang wrote:
-> > >
-> > >
-> > > On 2023/6/9 22:55, Thomas Gleixner wrote:
-> > >> On Fri, Jun 09 2023 at 19:24, Xiongfeng Wang wrote:
-> > >>
-> > >> Cc+ scheduler people, leave context intact
-> > >>
-> > >>> Hello,
-> > >>>  When I do some low power tests, the following hung task is printed.
-> > >>>
-> > >>>   Call trace:
-> > >>>    __switch_to+0xd4/0x160
-> > >>>    __schedule+0x38c/0x8c4
-> > >>>    __cond_resched+0x24/0x50
-> > >>>    unmap_kernel_range_noflush+0x210/0x240
-> > >>>    kretprobe_trampoline+0x0/0xc8
-> > >>>    __vunmap+0x70/0x31c
-> > >>>    __vfree+0x34/0x8c
-> > >>>    vfree+0x40/0x58
-> > >>>    free_vm_stack_cache+0x44/0x74
-> > >>>    cpuhp_invoke_callback+0xc4/0x71c
-> > >>>    _cpu_down+0x108/0x284
-> > >>>    kretprobe_trampoline+0x0/0xc8
-> > >>>    suspend_enter+0xd8/0x8ec
-> > >>>    suspend_devices_and_enter+0x1f0/0x360
-> > >>>    pm_suspend.part.1+0x428/0x53c
-> > >>>    pm_suspend+0x3c/0xa0
-> > >>>    devdrv_suspend_proc+0x148/0x248 [drv_devmng]
-> > >>>    devdrv_manager_set_power_state+0x140/0x680 [drv_devmng]
-> > >>>    devdrv_manager_ioctl+0xcc/0x210 [drv_devmng]
-> > >>>    drv_ascend_intf_ioctl+0x84/0x248 [drv_davinci_intf]
-> > >>>    __arm64_sys_ioctl+0xb4/0xf0
-> > >>>    el0_svc_common.constprop.0+0x140/0x374
-> > >>>    do_el0_svc+0x80/0xa0
-> > >>>    el0_svc+0x1c/0x28
-> > >>>    el0_sync_handler+0x90/0xf0
-> > >>>    el0_sync+0x168/0x180
-> > >>>
-> > >>> After some analysis, I found it is caused by the following race condition.
-> > >>>
-> > >>> 1. A task running on CPU1 is throttled for cfs bandwidth. CPU1 starts the
-> > >>> hrtimer cfs_bandwidth 'period_timer' and enqueue the hrtimer on CPU1's rbtree.
-> > >>> 2. Then the task is migrated to CPU2 and starts to offline CPU1. CPU1 starts
-> > >>> CPUHP AP steps, and then the hrtimer 'period_timer' expires and re-enqueued on CPU1.
-> > >>> 3. CPU1 runs to take_cpu_down() and disable irq. After CPU1 finished CPUHP AP
-> > >>> steps, CPU2 starts the rest CPUHP step.
-> > >>> 4. When CPU2 runs to free_vm_stack_cache(), it is sched out in __vunmap()
-> > >>> because it run out of CPU quota. start_cfs_bandwidth() does not restart the
-> > >>> hrtimer because 'cfs_b->period_active' is set.
-> > >>> 5. The task waits the hrtimer 'period_timer' to expire to wake itself up, but
-> > >>> CPU1 has disabled irq and the hrtimer won't expire until it is migrated to CPU2
-> > >>> in hrtimers_dead_cpu(). But the task is blocked and cannot proceed to
-> > >>> hrtimers_dead_cpu() step. So the task hungs.
-> > >>>
-> > >>>     CPU1                                                     CPU2
-> > >>> Task set cfs_quota
-> > >>> start hrtimer cfs_bandwidth 'period_timer'
-> > >>>                                             start to offline CPU1
-> > >>> CPU1 start CPUHP AP step
-> > >>> ...
-> > >>> 'period_timer' expired and re-enqueued on CPU1
-> > >>> ...
-> > >>> disable irq in take_cpu_down()
-> > >>> ...
-> > >>>                                             CPU2 start the rest CPUHP steps
-> > >>>                                             ...
-> > >>>                                           sched out in free_vm_stack_cache()
-> > >>>                                             wait for 'period_timer' expires
-> > >>>
-> > >>>
-> > >>> Appreciate it a lot if anyone can give some suggestion on how fix this problem !
-> > >>>
-> > >>> Thanks,
-> > >>> Xiongfeng
-> > >> .
-> > >>
-> > >
-> > > Test script:
-> > > taskset -cp 1 $$
-> > > mkdir /sys/fs/cgroup/cpu/test
-> > > echo $$ > /sys/fs/cgroup/cpu/test/tasks
-> > > echo 80000 > /sys/fs/cgroup/cpu/test/cpu.cfs_quota_us
-> > > echo 100000 > /sys/fs/cgroup/cpu/test/cpu.cfs_period_us
-> > > taskset -cp 2 $$
-> > > echo 0 > /sys/devices/system/cpu/cpu1/online
-> > >
-> > >
-> > > Tests show that the following modification can solve the problem of above test
-> > > scripts. But I am not sure if there exists some other issues.
-> > >
-> > > diff --cc kernel/sched/fair.c
-> > > index d9d6519fae01,bd6624353608..000000000000
-> > > --- a/kernel/sched/fair.c
-> > > +++ b/kernel/sched/fair.c
-> > > @@@ -5411,10 -5411,16 +5411,15 @@@ void start_cfs_bandwidth(struct cfs_ban
-> > >   {
-> > >         lockdep_assert_held(&cfs_b->lock);
-> > >
-> > > -       if (cfs_b->period_active)
-> > > +       if (cfs_b->period_active) {
-> > > +               struct hrtimer_clock_base *clock_base = cfs_b->period_timer.base;
-> > > +               int cpu = clock_base->cpu_base->cpu;
-> > > +               if (!cpu_active(cpu) && cpu != smp_processor_id())
-> > > +                       hrtimer_start_expires(&cfs_b->period_timer,
-> > > HRTIMER_MODE_ABS_PINNED);
-> > >                 return;
-> > > +       }
->
-> I have been able to reproduce your problem and run your fix on top. I
-> still wonder if there is a
+From: Bob Peterson <rpeterso@redhat.com>
 
-Looks like I have been preempted and never finished the sentence. The
-full sentence is:
-I still wonder if there is a race condition where the hang can still
-happen but i haven't been able to find one so far
+[ Upstream commit 504a10d9e46bc37b23d0a1ae2f28973c8516e636 ]
 
-> Could we have a helper from hrtimer to get the cpu of the clock_base ?
->
->
-> > >
-> > >         cfs_b->period_active = 1;
-> > >  -
-> > >         hrtimer_forward_now(&cfs_b->period_timer, cfs_b->period);
-> > >         hrtimer_start_expires(&cfs_b->period_timer, HRTIMER_MODE_ABS_PINNED);
-> > >   }
-> > >
-> > > Thanks,
-> > > Xiongfeng
-> > >
-> > > .
-> > >
+On corrupt gfs2 file systems the evict code can try to reference the
+journal descriptor structure, jdesc, after it has been freed and set to
+NULL. The sequence of events is:
+
+init_journal()
+...
+fail_jindex:
+   gfs2_jindex_free(sdp); <------frees journals, sets jdesc = NULL
+      if (gfs2_holder_initialized(&ji_gh))
+         gfs2_glock_dq_uninit(&ji_gh);
+fail:
+   iput(sdp->sd_jindex); <--references jdesc in evict_linked_inode
+      evict()
+         gfs2_evict_inode()
+            evict_linked_inode()
+               ret = gfs2_trans_begin(sdp, 0, sdp->sd_jdesc->jd_blocks);
+<------references the now freed/zeroed sd_jdesc pointer.
+
+The call to gfs2_trans_begin is done because the truncate_inode_pages
+call can cause gfs2 events that require a transaction, such as removing
+journaled data (jdata) blocks from the journal.
+
+This patch fixes the problem by adding a check for sdp->sd_jdesc to
+function gfs2_evict_inode. In theory, this should only happen to corrupt
+gfs2 file systems, when gfs2 detects the problem, reports it, then tries
+to evict all the system inodes it has read in up to that point.
+
+Reported-by: Yang Lan <lanyang0908@gmail.com>
+Signed-off-by: Bob Peterson <rpeterso@redhat.com>
+Signed-off-by: Andreas Gruenbacher <agruenba@redhat.com>
+[DP: adjusted context]
+Signed-off-by: Dragos-Marian Panait <dragos.panait@windriver.com>
+---
+ fs/gfs2/super.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/fs/gfs2/super.c b/fs/gfs2/super.c
+index 9c593fd50c6a..baf0a70460c0 100644
+--- a/fs/gfs2/super.c
++++ b/fs/gfs2/super.c
+@@ -1258,6 +1258,14 @@ static void gfs2_evict_inode(struct inode *inode)
+ 	if (inode->i_nlink || sb_rdonly(sb))
+ 		goto out;
+ 
++	/*
++	 * In case of an incomplete mount, gfs2_evict_inode() may be called for
++	 * system files without having an active journal to write to.  In that
++	 * case, skip the filesystem evict.
++	 */
++	if (!sdp->sd_jdesc)
++		goto out;
++
+ 	if (test_bit(GIF_ALLOC_FAILED, &ip->i_flags)) {
+ 		BUG_ON(!gfs2_glock_is_locked_by_me(ip->i_gl));
+ 		gfs2_holder_mark_uninitialized(&gh);
+-- 
+2.40.1
+
