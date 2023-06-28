@@ -2,124 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5554C741766
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 19:43:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4507D74176B
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 19:44:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231468AbjF1RnZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 13:43:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45820 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229999AbjF1RnW (ORCPT
+        id S229748AbjF1Roe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 13:44:34 -0400
+Received: from smtp-fw-2101.amazon.com ([72.21.196.25]:4480 "EHLO
+        smtp-fw-2101.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231750AbjF1RoH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 13:43:22 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B24802123;
-        Wed, 28 Jun 2023 10:43:21 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 471A261374;
-        Wed, 28 Jun 2023 17:43:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10EEFC433C0;
-        Wed, 28 Jun 2023 17:43:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687974200;
-        bh=DigUiMepEKZdpHMPnpx95fJpEWDaT/7V9w+BxtVC7MY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=VU27FEMGNX7uLNDp3McHl6GNJMB5ErsahJsW4e9nUmvJxj0MpsU25chnCjvQ1uL0K
-         4GpFU2m7sSJO+j1nW2wWRD7jXl4G50U5jcGM4AW0e1kiKdQxl4TnLpjaJfVljtaKJN
-         bspgesvLD/sPcVRNqAc/ujhS342ec46lPfoHu0OB0DmCnia/xQCQ8wjuDZgpSoCgu7
-         1dE0bCEezgL54Vn/yltVu9Aoe9w1DbZhKuMwfw9YcIo3jJGjMTlTKR56gSGbP1c39f
-         7RvYs+Dt6s9ZK9vJszZlui9OrDVZkFb+excIzKhfJ1bKnhCnNkMV9rsqJ50malblT6
-         QwaXTZrA7hV6w==
-Date:   Wed, 28 Jun 2023 18:43:15 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     Evan Green <evan@rivosinc.com>
-Cc:     Conor Dooley <conor.dooley@microchip.com>, palmer@dabbelt.com,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Andrew Jones <ajones@ventanamicro.com>,
-        Heiko Stuebner <heiko.stuebner@vrull.eu>,
-        Sunil V L <sunilvl@ventanamicro.com>,
-        linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 6/9] RISC-V: add single letter extensions to
- riscv_isa_ext
-Message-ID: <20230628-gizzard-trading-a5f9785128b5@spud>
-References: <20230626-provable-angrily-81760e8c3cc6@wendy>
- <20230626-sensuous-clothing-124f7ae0aedf@wendy>
- <CALs-HstDV3PjBk_8WDecwuvVK9rno1CKFzT1+8ohoUXE7X0GwA@mail.gmail.com>
+        Wed, 28 Jun 2023 13:44:07 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1687974247; x=1719510247;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=PrG4tYO/ZphjCkN2Y/btvDogyR+oDAvStHHOQ5Xdam4=;
+  b=F/zR4J0WgotPHVqfpRL9FNx2HWFFIMDV7V33jLujr+tq/X2uo28Y7w0I
+   QjpDaYBHxt7EIEDilj7/Br1+z9MC2cjg4Q+sLwYZnp/5GgF3jc/qAUTzI
+   nCJX56RUv0Yr/HlBrZK2vrtv+4kCHr/QqtdHvUM/FP3CpufTVYlcpWvBr
+   M=;
+X-IronPort-AV: E=Sophos;i="6.01,166,1684800000"; 
+   d="scan'208";a="336700844"
+Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-iad-1a-m6i4x-47cc8a4c.us-east-1.amazon.com) ([10.43.8.6])
+  by smtp-border-fw-2101.iad2.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2023 17:44:04 +0000
+Received: from EX19MTAUWB002.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan2.iad.amazon.com [10.40.163.34])
+        by email-inbound-relay-iad-1a-m6i4x-47cc8a4c.us-east-1.amazon.com (Postfix) with ESMTPS id F28FC160DAE;
+        Wed, 28 Jun 2023 17:43:57 +0000 (UTC)
+Received: from EX19D004ANA001.ant.amazon.com (10.37.240.138) by
+ EX19MTAUWB002.ant.amazon.com (10.250.64.231) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.26; Wed, 28 Jun 2023 17:43:45 +0000
+Received: from 88665a182662.ant.amazon.com.com (10.187.170.50) by
+ EX19D004ANA001.ant.amazon.com (10.37.240.138) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.30; Wed, 28 Jun 2023 17:43:40 +0000
+From:   Kuniyuki Iwashima <kuniyu@amazon.com>
+To:     <lmb@isovalent.com>
+CC:     <andrii@kernel.org>, <ast@kernel.org>, <bpf@vger.kernel.org>,
+        <daniel@iogearbox.net>, <davem@davemloft.net>,
+        <dsahern@kernel.org>, <edumazet@google.com>, <haoluo@google.com>,
+        <hemanthmalla@gmail.com>, <joe@wand.net.nz>,
+        <john.fastabend@gmail.com>, <jolsa@kernel.org>,
+        <kpsingh@kernel.org>, <kuba@kernel.org>, <kuniyu@amazon.com>,
+        <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+        <martin.lau@linux.dev>, <mykolal@fb.com>, <netdev@vger.kernel.org>,
+        <pabeni@redhat.com>, <sdf@google.com>, <shuah@kernel.org>,
+        <song@kernel.org>, <willemdebruijn.kernel@gmail.com>, <yhs@fb.com>
+Subject: Re: [PATCH bpf-next v4 2/7] net: export inet_lookup_reuseport and inet6_lookup_reuseport
+Date:   Wed, 28 Jun 2023 10:43:29 -0700
+Message-ID: <20230628174329.68454-1-kuniyu@amazon.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20230613-so-reuseport-v4-2-4ece76708bba@isovalent.com>
+References: <20230613-so-reuseport-v4-2-4ece76708bba@isovalent.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="IEb0IsuCCuZUv+Ab"
-Content-Disposition: inline
-In-Reply-To: <CALs-HstDV3PjBk_8WDecwuvVK9rno1CKFzT1+8ohoUXE7X0GwA@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-        lindbergh.monkeyblade.net
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.187.170.50]
+X-ClientProxiedBy: EX19D044UWB001.ant.amazon.com (10.13.139.171) To
+ EX19D004ANA001.ant.amazon.com (10.37.240.138)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Lorenz Bauer <lmb@isovalent.com>
+Date: Wed, 28 Jun 2023 10:48:17 +0100
+> Rename the existing reuseport helpers for IPv4 and IPv6 so that they
+> can be invoked in the follow up commit. Export them so that building
+> DCCP and IPv6 as a module works.
+> 
+> No change in functionality.
+> 
+> Signed-off-by: Lorenz Bauer <lmb@isovalent.com>
 
---IEb0IsuCCuZUv+Ab
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Wed, Jun 28, 2023 at 10:33:20AM -0700, Evan Green wrote:
-> On Mon, Jun 26, 2023 at 4:21=E2=80=AFAM Conor Dooley <conor.dooley@microc=
-hip.com> wrote:
-> >
-> > So that riscv_fill_hwcap() can use riscv_isa_ext to probe for single
-> > letter extensions, add them to it. riscv_isa_ext_data grows a new
-> > member, signifying whether an extension is multi-letter & thus requiring
-> > special handling.
-> > As a result, what gets spat out in /proc/cpuinfo will become borked, as
-> > single letter extensions will be printed as part of the base extensions
-> > and while printing from riscv_isa_arr. Take the opportunity to unify the
-> > printing of the isa string, using the new member of riscv_isa_ext_data
-> > in the process.
-> >
-> > Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
-> > ---
-> >  arch/riscv/include/asm/hwcap.h |  1 +
-> >  arch/riscv/kernel/cpu.c        | 36 ++++++----------------
-> >  arch/riscv/kernel/cpufeature.c | 56 +++++++++++++++++++++-------------
-> >  3 files changed, 46 insertions(+), 47 deletions(-)
-> >
-> > diff --git a/arch/riscv/include/asm/hwcap.h b/arch/riscv/include/asm/hw=
-cap.h
-> > index a35bee219dd7..6ad896dc4342 100644
-> > --- a/arch/riscv/include/asm/hwcap.h
-> > +++ b/arch/riscv/include/asm/hwcap.h
-> > @@ -77,6 +77,7 @@ unsigned long riscv_get_elf_hwcap(void);
-> >  struct riscv_isa_ext_data {
-> >         const unsigned int id;
-> >         const char *name;
-> > +       const bool multi_letter;
->=20
-> Instead of defining a new member, could we just infer this by making a
-> macro like #define MULTI_LETTER(name) (name[0] && name[1])?
-
-Or don't even try to be clever like this and just call strnlen on the
-name & check if it is 1? It's only used in 2 places.
-
---IEb0IsuCCuZUv+Ab
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZJxxMwAKCRB4tDGHoIJi
-0hp+AP91DhkjewdtfZP1vKzJeISjYAdB7Bdm2bRrgqMPsu3f1AD/VqublU31lGDa
-NFdXAaLNImqjgRoRJ3JGTBfpN5735AM=
-=udNR
------END PGP SIGNATURE-----
-
---IEb0IsuCCuZUv+Ab--
+Reviewed-by: Kuniyuki Iwashima <kuniyu@amazon.com>
