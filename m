@@ -2,400 +2,210 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE8267415FC
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 18:03:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B0A97415FE
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 18:04:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229610AbjF1QDW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 12:03:22 -0400
-Received: from mail-io1-f50.google.com ([209.85.166.50]:60598 "EHLO
-        mail-io1-f50.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231739AbjF1QDS (ORCPT
+        id S229935AbjF1QDj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 12:03:39 -0400
+Received: from 139-28-40-42.artus.net.pl ([139.28.40.42]:55712 "EHLO
+        tarta.nabijaczleweli.xyz" rhost-flags-OK-FAIL-OK-OK)
+        by vger.kernel.org with ESMTP id S230425AbjF1QDb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 12:03:18 -0400
-Received: by mail-io1-f50.google.com with SMTP id ca18e2360f4ac-783546553ddso3140439f.0;
-        Wed, 28 Jun 2023 09:03:18 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687968198; x=1690560198;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=DJLUn95bN50MLrjeQ6DO828FU9z5sEFCH/xfkgQbYuA=;
-        b=PIhj+1OspXLxzcUs8nJdf57JVgYDKMNKGwtNIHE1cVd/wpJLeFsYfTj6nNTref0zLC
-         DXepP5Qv/yXIuimTTCvxNgrlSRqu+vlulVbBzzkyMODqipjrLFZhp2v5XIBrakSnSGVM
-         wVolM/4SMFQQf0M9DkcWh9jBpZqRI3IXDxn2TsyXg6NWx1MPDtG0a0nVR83v9STf0g9b
-         V0NF6OeIe0FjzY3pmtK90UHyk529MNAGsKoPMUpuv+i3S0RipcU9l2E1QoQNO6ZZHgaO
-         RFnbGNZDIj+bWlyu/5AJPr3lNOvaQ0OXnZ/CZRtrNlZoEz4xQCmaRLX3f8qo82slN/Sp
-         gmEw==
-X-Gm-Message-State: AC+VfDylv6UJEBboCwBaBF6FiP2geTh5p73+UvnSNLEiRrxW5jl3+g+1
-        lw1DoaHCfBbPGrVA48j/pQ==
-X-Google-Smtp-Source: ACHHUZ6vF8sM1dJa0P6obie4OfmrkmvRN/fLsN9zJuvW23NtjX0y+Mx398XLT2XoDTkIb/GX8K6mMw==
-X-Received: by 2002:a05:6e02:4cb:b0:345:ba42:239d with SMTP id f11-20020a056e0204cb00b00345ba42239dmr5270270ils.9.1687968197659;
-        Wed, 28 Jun 2023 09:03:17 -0700 (PDT)
-Received: from robh_at_kernel.org ([64.188.179.250])
-        by smtp.gmail.com with ESMTPSA id l29-20020a02cd9d000000b0040f91082a4fsm3197303jap.75.2023.06.28.09.03.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Jun 2023 09:03:16 -0700 (PDT)
-Received: (nullmailer pid 553215 invoked by uid 1000);
-        Wed, 28 Jun 2023 16:03:14 -0000
-Date:   Wed, 28 Jun 2023 10:03:14 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Niklas Cassel <nks@flawful.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Robert Marko <robimarko@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
-        Jeffrey Hugo <quic_jhugo@quicinc.com>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>
-Subject: Re: [PATCH v12 04/10] dt-bindings: soc: qcom: cpr3: Add bindings for
- CPR3 driver
-Message-ID: <20230628160314.GB542106-robh@kernel.org>
-References: <20230217-topic-cpr3h-v12-0-1a4d050e1e67@linaro.org>
- <20230217-topic-cpr3h-v12-4-1a4d050e1e67@linaro.org>
+        Wed, 28 Jun 2023 12:03:31 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=nabijaczleweli.xyz;
+        s=202305; t=1687968207;
+        bh=H89eKS6J7cZfio0FgmlRYvKGVSwe9xd5Odkri+vpPGc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=lyP55kt8ofkUXdl1DPqdFR5uUcrdGPGPqBg6DNO5nCYIONynedyZ22xjgXVLQ5/+D
+         a3ee3jHoAXMS/E0e3/dz98Bo6ECuJZ1Ifzd41oyk1cUCn3uiMI3MYo2DXy1xQQ8Xs9
+         lqZXB2Q9sNVNBsQLKUCD9W6tB8p36vhym2T4+NmC0Px2NrMSslOBkoaqsvlCt4yLVI
+         ussGwLduyhfQ8ADtT3kfzFjEiBd+5dXsuCj3Kf1UDvqdtT8Pb/b4umk7Hcblelmk1T
+         N8+Zf9eKNS8IbdmaqmrLvYU2zKuACUcCKf8Brl4RtzT7FcXJojbAO9UbzY4YAdeoMO
+         J5JNFyoHklHQg==
+Received: from tarta.nabijaczleweli.xyz (unknown [192.168.1.250])
+        by tarta.nabijaczleweli.xyz (Postfix) with ESMTPSA id 767CB173C;
+        Wed, 28 Jun 2023 18:03:27 +0200 (CEST)
+Date:   Wed, 28 Jun 2023 18:03:26 +0200
+From:   Ahelenia =?utf-8?Q?Ziemia=C5=84ska?= 
+        <nabijaczleweli@nabijaczleweli.xyz>
+To:     Amir Goldstein <amir73il@gmail.com>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Christian Brauner <brauner@kernel.org>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jan Kara <jack@suse.cz>,
+        Chung-Chiang Cheng <cccheng@synology.com>, ltp@lists.linux.it,
+        Petr Vorel <pvorel@suse.cz>
+Subject: Re: [LTP RFC PATCH v3] inotify13: new test for fs/splice.c functions
+ vs pipes vs inotify
+Message-ID: <ychkzjlukpzb4h24dxtvesnvq3tgjrtqcfed6xlorzpy24xk43@zdips4bvrsii>
+References: <ajkeyn2sy35h6ctfbupom4xg3ozoxxgsojdvu7vebac44zqped@ecnusnv6daxn>
+ <f4mzakro6yp7dlq25h3mbm3ecbkuebwlengdln47y4w5wfqwo2@3hasgbhltgvg>
+ <CAOQ4uxg4mGpqCMCnJcNSK9vQXU1hx8XPQDEcL0+3yM7AF9V9-A@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="7ui7ewvobyxz6sd5"
 Content-Disposition: inline
-In-Reply-To: <20230217-topic-cpr3h-v12-4-1a4d050e1e67@linaro.org>
+In-Reply-To: <CAOQ4uxg4mGpqCMCnJcNSK9vQXU1hx8XPQDEcL0+3yM7AF9V9-A@mail.gmail.com>
+User-Agent: NeoMutt/20230517
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 28, 2023 at 04:00:43PM +0200, Konrad Dybcio wrote:
-> From: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
-> 
-> Add the bindings for the CPR3 driver to the documentation.
 
-Bindings are for h/w, not drivers.
+--7ui7ewvobyxz6sd5
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> 
-> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
-> [Konrad: Make binding check pass; update AGdR's email]
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> ---
->  .../devicetree/bindings/soc/qcom/qcom,cpr3.yaml    | 289 +++++++++++++++++++++
->  1 file changed, 289 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/soc/qcom/qcom,cpr3.yaml b/Documentation/devicetree/bindings/soc/qcom/qcom,cpr3.yaml
-> new file mode 100644
-> index 000000000000..46b94dffaf85
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/soc/qcom/qcom,cpr3.yaml
-> @@ -0,0 +1,289 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: "http://devicetree.org/schemas/soc/qcom/qcom,cpr3.yaml#"
-> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
+On Wed, Jun 28, 2023 at 08:30:15AM +0300, Amir Goldstein wrote:
+> On Wed, Jun 28, 2023 at 3:21=E2=80=AFAM Ahelenia Ziemia=C5=84ska
+> > diff --git a/testcases/kernel/syscalls/inotify/inotify13.c b/testcases/=
+kernel/syscalls/inotify/inotify13.c
+> > new file mode 100644
+> > index 000000000..97f88053e
+> > --- /dev/null
+> > +++ b/testcases/kernel/syscalls/inotify/inotify13.c
+> > @@ -0,0 +1,282 @@
+> > +// SPDX-License-Identifier: GPL-2.0-or-later
+> > +/*\
+> > + * [Description]
+> > + * Verify splice-family functions (and sendfile) generate IN_ACCESS
+> > + * for what they read and IN_MODIFY for what they write.
+> > + *
+> > + * Regression test for 983652c69199 ("splice: report related fsnotify =
+events") and
+> > + * https://lore.kernel.org/linux-fsdevel/jbyihkyk5dtaohdwjyivambb2gffy=
+js3dodpofafnkkunxq7bu@jngkdxx65pux/t/#u
+> The process of posting a test for the fix that was not yet merged
+> is indeed a chicken and egg situation.
+>=20
+> What I usually do is post a draft test (like this) and link
+> to the post of the LTP test (and maybe a branch on github)
+> when posting the fix, to say how I tested the fix.
+https://git.sr.ht/~nabijaczleweli/ltp/commit/v4 for now.
 
-Drop quotes
+> I would then put it in my TODO to re-post the LTP
+> test once the kernel fix has been merged.
+Yep.
 
-> +
-> +title: Qualcomm Core Power Reduction v3/v4/Hardened (CPR3, CPR4, CPRh)
-> +
-> +description:
-> +  CPR (Core Power Reduction) is a technology to reduce core power of a CPU
-> +  (or another device). Each OPP of a device corresponds to a "corner" that
-> +  has a range of valid voltages for a particular frequency.
-> +  The CPR monitors dynamic factors such as temperature, etc. and suggests
-> +  or (in the CPR-hardened case) applies voltage adjustments to save power
-> +  and meet silicon characteristic requirements for a given chip unit.
-> +
-> +maintainers:
-> +  - AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-> +
-> +properties:
-> +  compatible:
-> +    oneOf:
-> +      - description: CPRv3 controller
-> +        items:
-> +          - const: qcom,cpr3
-> +      - description: CPRv4 controller
-> +        items:
-> +          - const: qcom,cpr4
-> +      - description: CPRv4-Hardened controller
-> +        items:
-> +          - enum:
-> +              - qcom,msm8998-cprh
-> +              - qcom,sdm630-cprh
-> +          - const: qcom,cprh
-> +
-> +  reg:
-> +    description: Base address and size of the CPR controller(s)
-> +    maxItems: 2
+> > +static int compar(const void *l, const void *r)
+> > +{
+> > +       const struct inotify_event *lie =3D l;
+> > +       const struct inotify_event *rie =3D r;
+> > +
+> > +       return lie->wd - rie->wd;
+> > +}
+> > +
+> > +static void get_events(size_t evcnt, struct inotify_event evs[static e=
+vcnt])
+> > +{
+> > +       struct inotify_event tail, *itr =3D evs;
+> > +
+> > +       for (size_t left =3D evcnt; left; --left)
+> > +               SAFE_READ(true, inotify, itr++, sizeof(struct inotify_e=
+vent));
+> > +
+> > +       TEST(read(inotify, &tail, sizeof(struct inotify_event)));
+> > +       if (TST_RET !=3D -1)
+> > +               tst_brk(TFAIL, ">%zu events", evcnt);
+> > +       if (TST_ERR !=3D EAGAIN)
+> > +               tst_brk(TFAIL | TTERRNO, "expected EAGAIN");
+> > +
+> > +       qsort(evs, evcnt, sizeof(struct inotify_event), compar);
+> > +}
+> > +
+> > +static void expect_transfer(const char *name, size_t size)
+> > +{
+> > +       if (TST_RET =3D=3D -1)
+> > +               tst_brk(TBROK | TERRNO, "%s", name);
+> > +       if ((size_t)TST_RET !=3D size)
+> > +               tst_brk(TBROK, "%s: %ld !=3D %zu", name, TST_RET, size);
+> > +}
+> > +
+> > +static void expect_event(struct inotify_event *ev, int wd, uint32_t ma=
+sk)
+> > +{
+> > +       if (ev->wd !=3D wd)
+> > +               tst_brk(TFAIL, "expect event for wd %d got %d", wd, ev-=
+>wd);
+> > +       if (ev->mask !=3D mask)
+> > +               tst_brk(TFAIL,
+> > +                       "expect event with mask %" PRIu32 " got %" PRIu=
+32 "",
+> > +                       mask, ev->mask);
+> > +}
+> > +
+> > +// write to file, rewind, transfer accd'g to f2p, read from pipe
+> > +// expecting: IN_ACCESS memfd, IN_MODIFY pipes[0]
+> > +static void file_to_pipe(const char *name, ssize_t (*f2p)(void))
+> > +{
+> > +       struct inotify_event events[2];
+> > +       char buf[strlen(name)];
+> > +
+> > +       SAFE_WRITE(SAFE_WRITE_RETRY, memfd, name, strlen(name));
+> > +       SAFE_LSEEK(memfd, 0, SEEK_SET);
+> > +       watch_rw(memfd);
+> > +       watch_rw(pipes[0]);
+> > +       TEST(f2p());
+> > +       expect_transfer(name, strlen(name));
+> > +
+> > +       get_events(ARRAY_SIZE(events), events);
+> > +       expect_event(events + 0, 1, IN_ACCESS);
+> > +       expect_event(events + 1, 2, IN_MODIFY);
+> So what I meant to say is that if there are double events that
+> usually get merged (unless reader was fast enough to read the
+> first event), this is something that I could live with, but encoding
+> an expectation for a double event, that's not at all what I meant.
+>=20
+> But anyway, I see that you've found a way to work around
+> this problem, so at least the test can expect and get a single event.
+I've tried (admittedly, not all that hard) to read a double out modify
+event in this case with the v4 kernel patchset and haven't managed it.
 
-What is each entry?
+> I think you are missing expect_no_more_events() here to
+> verify that you won't get double events.
+get_events() reads precisely N events, then tries to read another,
+and fails if that succeeds.
 
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    items:
-> +      - description: CPR reference clock
-> +
-> +  vdd-supply:
-> +    description: Autonomous Phase Control (APC) or other power supply
-> +
-> +  '#power-domain-cells':
-> +    const: 1
-> +
-> +  qcom,acc:
-> +    $ref: /schemas/types.yaml#/definitions/phandle
-> +    description: phandle to syscon for writing ACC settings
-> +
-> +  nvmem-cells:
-> +    description: Cells containing the fuse corners and revision data
-> +    maxItems: 32
-> +
-> +  nvmem-cell-names:
-> +    maxItems: 32
-> +
-> +  operating-points-v2: true
-> +
-> +  power-domains: true
+Maybe a better name would be "get_events_exact()".
 
-Need to define how many.
+> See test inotify12 as an example for a test that encodes
+> expect_events per test case and also verifies there are no
+> unexpected extra events.
+>=20
+> That's also an example of a more generic test template,
+> but your test cases are all a bit different from each other is
+> subtle ways, so I trust you will find the best balance between
+> putting generic parameterized code in the run_test() template
+> and putting code in the test case subroutine.
+Yes, that's indeed an optics issue: it looks like there's more, but
+the only actually "common" bit of the test drivers is that they all
+read events in the middle: the set-up before is different, and the
+additional post-conditions are different.
 
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - clocks
-> +  - operating-points-v2
-> +  - "#power-domain-cells"
-> +  - nvmem-cells
-> +  - nvmem-cell-names
-> +
-> +additionalProperties: false
-> +
-> +allOf:
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            enum:
-> +              - qcom,msm8998-cprh
-> +    then:
-> +      properties:
-> +        nvmem-cell-names:
-> +          items:
-> +            - const: cpr_speed_bin
-> +            - const: cpr_fuse_revision
-> +            - const: cpr0_quotient1
-> +            - const: cpr0_quotient2
-> +            - const: cpr0_quotient3
-> +            - const: cpr0_quotient4
-> +            - const: cpr0_quotient_offset2
-> +            - const: cpr0_quotient_offset3
-> +            - const: cpr0_quotient_offset4
-> +            - const: cpr0_init_voltage1
-> +            - const: cpr0_init_voltage2
-> +            - const: cpr0_init_voltage3
-> +            - const: cpr0_init_voltage4
-> +            - const: cpr0_ring_osc1
-> +            - const: cpr0_ring_osc2
-> +            - const: cpr0_ring_osc3
-> +            - const: cpr0_ring_osc4
-> +            - const: cpr1_quotient1
-> +            - const: cpr1_quotient2
-> +            - const: cpr1_quotient3
-> +            - const: cpr1_quotient4
-> +            - const: cpr1_quotient_offset2
-> +            - const: cpr1_quotient_offset3
-> +            - const: cpr1_quotient_offset4
-> +            - const: cpr1_init_voltage1
-> +            - const: cpr1_init_voltage2
-> +            - const: cpr1_init_voltage3
-> +            - const: cpr1_init_voltage4
-> +            - const: cpr1_ring_osc1
-> +            - const: cpr1_ring_osc2
-> +            - const: cpr1_ring_osc3
-> +            - const: cpr1_ring_osc4
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/clock/qcom,gcc-msm8998.h>
-> +    #include <dt-bindings/interrupt-controller/irq.h>
-> +
-> +    cpus {
-> +        #address-cells = <2>;
-> +        #size-cells = <0>;
-> +
-> +        cpu@0 {
-> +            compatible = "qcom,kryo280";
-> +            device_type = "cpu";
-> +            reg = <0x0 0x0>;
-> +            operating-points-v2 = <&cpu0_opp_table>;
-> +            power-domains = <&apc_cprh 0>;
-> +            power-domain-names = "cprh";
+We /could/ encode the expected events in the test array, but then
+that would put the expected events away from the code that generates
+them, which is more code, and more confusing for no good reason I
+think.
 
-The name should be local to the device, not based on the provider.
+--7ui7ewvobyxz6sd5
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Do you really need a name here with only 1? 
+-----BEGIN PGP SIGNATURE-----
 
-> +        };
-> +
-> +        cpu@100 {
-> +            compatible = "qcom,kryo280";
-> +            device_type = "cpu";
-> +            reg = <0x0 0x100>;
-> +            operating-points-v2 = <&cpu4_opp_table>;
-> +            power-domains = <&apc_cprh 1>;
-> +            power-domain-names = "cprh";
-> +        };
-> +    };
-> +
-> +    cpu0_opp_table: opp-table-cpu0 {
-> +        compatible = "operating-points-v2";
-> +        opp-shared;
-> +
-> +        opp-1843200000 {
-> +            opp-hz = /bits/ 64 <1843200000>;
-> +            required-opps = <&cprh_opp3>;
-> +        };
-> +
-> +        opp-1094400000 {
-> +            opp-hz = /bits/ 64 <1094400000>;
-> +            required-opps = <&cprh_opp2>;
-> +        };
-> +
-> +        opp-300000000 {
-> +            opp-hz = /bits/ 64 <300000000>;
-> +            required-opps = <&cprh_opp1>;
-> +        };
-> +    };
-> +
-> +    cpu4_opp_table: opp-table-cpu4 {
-> +        compatible = "operating-points-v2";
-> +        opp-shared;
-> +
-> +        opp-2208000000 {
-> +            opp-hz = /bits/ 64 <2208000000>;
-> +            required-opps = <&cprh_opp3>;
-> +        };
-> +
-> +        opp-1113600000 {
-> +            opp-hz = /bits/ 64 <1113600000>;
-> +            required-opps = <&cprh_opp2>;
-> +        };
-> +
-> +        opp-300000000 {
-> +            opp-hz = /bits/ 64 <300000000>;
-> +            required-opps = <&cprh_opp1>;
-> +        };
-> +    };
-> +
-> +    cprh_opp_table: opp-table-cprh {
-> +        compatible = "operating-points-v2-qcom-level";
-> +
-> +        cprh_opp1: opp-1 {
-> +            opp-level = <1>;
-> +            qcom,opp-fuse-level = <1>;
-> +            qcom,opp-cloop-vadj = <0>;
-> +            qcom,opp-oloop-vadj = <0>;
-> +        };
-> +
-> +        cprh_opp2: opp-2 {
-> +            opp-level = <2>;
-> +            qcom,opp-fuse-level = <2>;
-> +            qcom,opp-cloop-vadj = <0>;
-> +            qcom,opp-oloop-vadj = <0>;
-> +        };
-> +
-> +        cprh_opp3: opp-3 {
-> +            opp-level = <3>;
-> +            qcom,opp-fuse-level = <2 3>;
-> +            qcom,opp-cloop-vadj = <0>;
-> +            qcom,opp-oloop-vadj = <0>;
-> +        };
-> +    };
-> +
-> +    apc_cprh: power-controller@179c8000 {
-> +        compatible = "qcom,msm8998-cprh", "qcom,cprh";
-> +        reg = <0x0179c8000 0x4000>, <0x0179c4000 0x4000>;
-> +        clocks = <&gcc GCC_HMSS_RBCPR_CLK>;
-> +
-> +        operating-points-v2 = <&cprh_opp_table>;
-> +        #power-domain-cells = <1>;
-> +
-> +        nvmem-cells = <&cpr_efuse_speedbin>,
-> +                      <&cpr_fuse_revision>,
-> +                      <&cpr_quot0_pwrcl>,
-> +                      <&cpr_quot1_pwrcl>,
-> +                      <&cpr_quot2_pwrcl>,
-> +                      <&cpr_quot3_pwrcl>,
-> +                      <&cpr_quot_offset1_pwrcl>,
-> +                      <&cpr_quot_offset2_pwrcl>,
-> +                      <&cpr_quot_offset3_pwrcl>,
-> +                      <&cpr_init_voltage0_pwrcl>,
-> +                      <&cpr_init_voltage1_pwrcl>,
-> +                      <&cpr_init_voltage2_pwrcl>,
-> +                      <&cpr_init_voltage3_pwrcl>,
-> +                      <&cpr_ro_sel0_pwrcl>,
-> +                      <&cpr_ro_sel1_pwrcl>,
-> +                      <&cpr_ro_sel2_pwrcl>,
-> +                      <&cpr_ro_sel3_pwrcl>,
-> +                      <&cpr_quot0_perfcl>,
-> +                      <&cpr_quot1_perfcl>,
-> +                      <&cpr_quot2_perfcl>,
-> +                      <&cpr_quot3_perfcl>,
-> +                      <&cpr_quot_offset1_perfcl>,
-> +                      <&cpr_quot_offset2_perfcl>,
-> +                      <&cpr_quot_offset3_perfcl>,
-> +                      <&cpr_init_voltage0_perfcl>,
-> +                      <&cpr_init_voltage1_perfcl>,
-> +                      <&cpr_init_voltage2_perfcl>,
-> +                      <&cpr_init_voltage3_perfcl>,
-> +                      <&cpr_ro_sel0_perfcl>,
-> +                      <&cpr_ro_sel1_perfcl>,
-> +                      <&cpr_ro_sel2_perfcl>,
-> +                      <&cpr_ro_sel3_perfcl>;
-> +        nvmem-cell-names = "cpr_speed_bin",
-> +                           "cpr_fuse_revision",
-> +                           "cpr0_quotient1",
-> +                           "cpr0_quotient2",
-> +                           "cpr0_quotient3",
-> +                           "cpr0_quotient4",
-> +                           "cpr0_quotient_offset2",
-> +                           "cpr0_quotient_offset3",
-> +                           "cpr0_quotient_offset4",
-> +                           "cpr0_init_voltage1",
-> +                           "cpr0_init_voltage2",
-> +                           "cpr0_init_voltage3",
-> +                           "cpr0_init_voltage4",
-> +                           "cpr0_ring_osc1",
-> +                           "cpr0_ring_osc2",
-> +                           "cpr0_ring_osc3",
-> +                           "cpr0_ring_osc4",
-> +                           "cpr1_quotient1",
-> +                           "cpr1_quotient2",
-> +                           "cpr1_quotient3",
-> +                           "cpr1_quotient4",
-> +                           "cpr1_quotient_offset2",
-> +                           "cpr1_quotient_offset3",
-> +                           "cpr1_quotient_offset4",
-> +                           "cpr1_init_voltage1",
-> +                           "cpr1_init_voltage2",
-> +                           "cpr1_init_voltage3",
-> +                           "cpr1_init_voltage4",
-> +                           "cpr1_ring_osc1",
-> +                           "cpr1_ring_osc2",
-> +                           "cpr1_ring_osc3",
-> +                           "cpr1_ring_osc4";
-> +    };
-> +...
-> 
-> -- 
-> 2.41.0
-> 
+iQIzBAABCgAdFiEEfWlHToQCjFzAxEFjvP0LAY0mWPEFAmScWcsACgkQvP0LAY0m
+WPF5eQ/+LoxhH0H8RkCh+velixumpSekw5xdU9bjN6xNL9Xj39OXfoVVSX3Uwndc
+/20JuN5ozy2mMMdyDHfNv0OW5MDJQu//O3Wth5S0cQFE5kArkNOxp9K59ap9WXdw
+oMbvCu2I11dmS5S9kEdUFnHfgt3gqb4BSv1eq8vXSOeP995j6jSlH2d6e1/fOw2T
+QGX3X9pkyR6ZIEA59Wr8S44QoEu/hzQJAGQTHjNYh3AD5EbV78N9uW1kWn4sXAqQ
+Bpd1Me/DErTbf/2MBvvLSNj56P3SUEmj9sy69Ub0KMIJ0nLVJ4xNhdwVe58oWtt9
+OhMqJmxm+me5ze6stLM1rsD3Brhe9XhxMTSaE35xVpTu+qvy2/7j9OqikbsHFQzW
+yh7pxcCe0atc2nMYMtsXnyWjpp0ojqtFrgUGUUcnihYJSof9fWTOYHICYVZFh75Q
+e1OL+ZeZZbaaUHOritJuVodbYspEAmBsgCThe/cuZv65FHKjxkstlsFFuRGCjwnI
+UlW+XVd06IjjtMdgQj8v5H+sCMPR6lirXtCyKFOMPnyhJjoKTTcZSzQEu5Q/I9cr
+azHv8T8kfLZWceX8b3k80IW/+gZSQUCTucH+7preDq+XOE/bjvgbimSzL1nfF/Vg
+r9+49pGt54dJKws9ulHmcjA5+CRNwz2p4/69kLKxlV2DplT6r/k=
+=f6aD
+-----END PGP SIGNATURE-----
+
+--7ui7ewvobyxz6sd5--
