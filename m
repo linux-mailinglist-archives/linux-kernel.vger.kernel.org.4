@@ -2,130 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B17E17412F9
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 15:48:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85BBF7412FC
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 15:50:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232204AbjF1Nr1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 09:47:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49872 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232259AbjF1NrN (ORCPT
+        id S231538AbjF1NsQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 09:48:16 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:32597 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232215AbjF1NsG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 09:47:13 -0400
-Received: from mx.treblig.org (unknown [IPv6:2a00:1098:5b::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37BCF211D;
-        Wed, 28 Jun 2023 06:47:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=treblig.org
-        ; s=bytemarkmx; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID
-        :Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID
-        :Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:
-        Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe
-        :List-Post:List-Owner:List-Archive;
-        bh=eH4SjeRhHKBa6HEjUBhnoQ960B2age+5x0TL7nsavJA=; b=DyyA54ASxxJe8S2eoum8Zfiy5b
-        Y41wiTqwy6W3H8XHKox2u8szf9sHXsTB/e5hppG6pi2dWknnXd/ZPBjXDy3LdIQjEC+hyU0MglEKV
-        wous5aLK5FwjMGI9K535HuIWx+B8QRL/sBPhWnZLPVEqnKei5n4iqJnOCEj3eLIePj9VcXEnyircK
-        soQyb8HF0VdvzFcfZ040oVDviKk7cocybAwllBHFJ74rYpRXyES4wht6y9TQULRte/QnzP9nDCCX6
-        2dDv2+Uv8GLxL75OGt3w5A6PnZ0UtqUeKkBoFPbpDQ/8bm91gfJMdmF09aj6xfXQBK5L2OEZhjPqH
-        rPtY9SmA==;
-Received: from dg by mx.treblig.org with local (Exim 4.94.2)
-        (envelope-from <dg@treblig.org>)
-        id 1qEVVZ-00GT5O-B5; Wed, 28 Jun 2023 13:46:57 +0000
-Date:   Wed, 28 Jun 2023 13:46:57 +0000
-From:   "Dr. David Alan Gilbert" <linux@treblig.org>
-To:     Tom Talpey <tom@talpey.com>
-Cc:     sfrench@samba.org, linkinjeon@kernel.org,
-        linux-cifs@vger.kernel.org, jfs-discussion@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/3] dedupe smb unicode files
-Message-ID: <ZJw50e0pvn/IN5Gj@gallifrey>
-References: <20230628011439.159678-1-linux@treblig.org>
- <9343462e-6a4a-ca7b-03b8-4855e5a33b72@talpey.com>
- <ZJw4iLlFWRMq6a3S@gallifrey>
+        Wed, 28 Jun 2023 09:48:06 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1687960037;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=Fn/bqfguGzs3lkCA5wKrTQnKBSDaj3bzPZJgusB7pXE=;
+        b=D7MrOkA2v+dpVPYLBlxnJ6FXdpM47qzSigIua6QZA96p961flgITIW6ZbasBDS0XfWevLt
+        MNWyjCK6wFZe2DXl/0NAGpBPiDmrGNFZsQvCoKlpgPIjwGJHef6To2hbtfTJFCPjLi/ROb
+        hfehA2HxmMB0ubgBU1DxG95bPFxXyBM=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-669-2BDt8uANN7Kp1jMQTQhbfQ-1; Wed, 28 Jun 2023 09:47:14 -0400
+X-MC-Unique: 2BDt8uANN7Kp1jMQTQhbfQ-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 08CF488D1A1;
+        Wed, 28 Jun 2023 13:47:06 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.42.28.4])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 6C5AC40C2063;
+        Wed, 28 Jun 2023 13:47:05 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+To:     Marc Dionne <marc.dionne@auristor.com>
+cc:     dhowells@redhat.com, linux-afs@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] afs: Fix accidental truncation when storing data
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-In-Reply-To: <ZJw4iLlFWRMq6a3S@gallifrey>
-X-Chocolate: 70 percent or better cocoa solids preferably
-X-Operating-System: Linux/5.10.0-21-amd64 (x86_64)
-X-Uptime: 13:46:24 up 101 days, 20 min,  1 user,  load average: 0.01, 0.03,
- 0.00
-User-Agent: Mutt/2.0.5 (2021-01-21)
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RDNS_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-        lindbergh.monkeyblade.net
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <3526894.1687960024.1@warthog.procyon.org.uk>
+Content-Transfer-Encoding: quoted-printable
+Date:   Wed, 28 Jun 2023 14:47:04 +0100
+Message-ID: <3526895.1687960024@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-* Dr. David Alan Gilbert (dave@treblig.org) wrote:
-> * Tom Talpey (tom@talpey.com) wrote:
-> > On 6/27/2023 9:14 PM, linux@treblig.org wrote:
-> > > From: "Dr. David Alan Gilbert" <linux@treblig.org>
-> > > 
-> > > The smb client and server code have (mostly) duplicated code
-> > > for unicode manipulation, in particular upper case handling.
-> > > 
-> > > Flatten this lot into shared code.
-> > > 
-> > > There's some code that's slightly different between the two, and
-> > > I've not attempted to share that - this should be strictly a no
-> > > behaviour change set.
-> > > 
-> > > I'd love to also boil out the same code from fs/jfs/ - but that's
-> > > a thought for another time (and harder since there's no good test
-> > > for it).
-> > > 
-> > > Lightly tested with a module and a monolithic build, and just mounting
-> > > itself.
-> > > 
-> > > This dupe was found using PMD:
-> > >    https://pmd.github.io/pmd/pmd_userdocs_cpd.html
-> > > 
-> > > Dave
-> > > 
-> > > Dr. David Alan Gilbert (3):
-> > >    fs/smb: Remove unicode 'lower' tables
-> > >    fs/smb: Swing unicode common code from server->common
-> > >    fs/smb/client: Use common code in client
-> > > 
-> > >   fs/smb/client/cifs_unicode.c                  |   1 -
-> > >   fs/smb/client/cifs_unicode.h                  | 313 +-----------------
-> > >   fs/smb/client/cifs_uniupr.h                   | 239 -------------
-> > >   fs/smb/common/Makefile                        |   1 +
-> > >   .../uniupr.h => common/cifs_unicode_common.c} | 156 +--------
-> > >   fs/smb/common/cifs_unicode_common.h           | 279 ++++++++++++++++
-> > 
-> > So far so good, but please drop the "cifs_" prefix from this new file's
-> > name, since its contents apply to later smb dialects as well.
-> 
-> Sure.
+    =
 
-Actually, would you be ok with smb_unicode_common ?  The reason is that
-you end up with a module named unicode_common  that sounds too generic.
+When an AFS FS.StoreData RPC call is made, amongst other things it is give=
+n
+the resultant file size to be.  On the server, this is processed by
+truncating the file to new size and then writing the data.
 
-Dave
+Now, kafs has a lock (vnode->io_lock) that serves to serialise operations
+against a specific vnode (ie. inode), but the parameters for the op are se=
+t
+before the lock is taken.  This allows two writebacks (say sync and kswapd=
+)
+to race - and if writes are ongoing the writeback for a later write could
+occur before the writeback for an earlier one if the latter gets
+interrupted.
 
-> Dave
-> 
-> > Tom.
-> > 
-> > >   fs/smb/server/unicode.c                       |   1 -
-> > >   fs/smb/server/unicode.h                       | 301 +----------------
-> > >   8 files changed, 298 insertions(+), 993 deletions(-)
-> > >   delete mode 100644 fs/smb/client/cifs_uniupr.h
-> > >   rename fs/smb/{server/uniupr.h => common/cifs_unicode_common.c} (50%)
-> > >   create mode 100644 fs/smb/common/cifs_unicode_common.h
-> > > 
-> -- 
->  -----Open up your eyes, open up your mind, open up your code -------   
-> / Dr. David Alan Gilbert    |       Running GNU/Linux       | Happy  \ 
-> \        dave @ treblig.org |                               | In Hex /
->  \ _________________________|_____ http://www.treblig.org   |_______/
--- 
- -----Open up your eyes, open up your mind, open up your code -------   
-/ Dr. David Alan Gilbert    |       Running GNU/Linux       | Happy  \ 
-\        dave @ treblig.org |                               | In Hex /
- \ _________________________|_____ http://www.treblig.org   |_______/
+Note that afs_writepages() cannot take i_mutex and only takes a shared loc=
+k
+on vnode->validate_lock.
+
+Also note that the server does the truncation and the write inside a lock,
+so there's no problem at that end.
+
+Fix this by moving the calculation for the proposed new i_size inside the
+vnode->io_lock.  Also reset the iterator (which we might have read from)
+and update the mtime setting there.
+
+Fixes: bd80d8a80e12 ("afs: Use ITER_XARRAY for writing")
+Reported-by: Marc Dionne <marc.dionne@auristor.com>
+Signed-off-by: David Howells <dhowells@redhat.com>
+cc: linux-afs@lists.infradead.org
+cc: linux-fsdevel@vger.kernel.org
+---
+ fs/afs/write.c |    8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
+
+diff --git a/fs/afs/write.c b/fs/afs/write.c
+index 8750b99c3f56..c1f4391ccd7c 100644
+--- a/fs/afs/write.c
++++ b/fs/afs/write.c
+@@ -413,17 +413,19 @@ static int afs_store_data(struct afs_vnode *vnode, s=
+truct iov_iter *iter, loff_t
+ 	afs_op_set_vnode(op, 0, vnode);
+ 	op->file[0].dv_delta =3D 1;
+ 	op->file[0].modification =3D true;
+-	op->store.write_iter =3D iter;
+ 	op->store.pos =3D pos;
+ 	op->store.size =3D size;
+-	op->store.i_size =3D max(pos + size, vnode->netfs.remote_i_size);
+ 	op->store.laundering =3D laundering;
+-	op->mtime =3D vnode->netfs.inode.i_mtime;
+ 	op->flags |=3D AFS_OPERATION_UNINTR;
+ 	op->ops =3D &afs_store_data_operation;
+ =
+
+ try_next_key:
+ 	afs_begin_vnode_operation(op);
++
++	op->store.write_iter =3D iter;
++	op->store.i_size =3D max(pos + size, vnode->netfs.remote_i_size);
++	op->mtime =3D vnode->netfs.inode.i_mtime;
++
+ 	afs_wait_for_operation(op);
+ =
+
+ 	switch (op->error) {
+
