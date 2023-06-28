@@ -2,88 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 457027411D4
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 14:57:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 860357411D7
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 14:58:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231648AbjF1M53 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 08:57:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43130 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231469AbjF1Mzw (ORCPT
+        id S231691AbjF1M5c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 08:57:32 -0400
+Received: from out-27.mta1.migadu.com ([95.215.58.27]:54859 "EHLO
+        out-27.mta1.migadu.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231750AbjF1M4A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 08:55:52 -0400
-Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 826252D50
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 05:55:51 -0700 (PDT)
-Received: by mail-yb1-xb2d.google.com with SMTP id 3f1490d57ef6-c2cf4e61bc6so2376053276.3
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 05:55:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=technolution.nl; s=google; t=1687956950; x=1690548950;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=iD2tw9vOS0lrg1X3bxbq4vEfHnMlyogsPaJF24ZAxuQ=;
-        b=N4Irq8s4HBNojI+j2hpkXGl+oGiD99Um86UUBubKU4eOKisksyBfE/7+dUh2CtYldZ
-         uIyzpzqp5Gr2ExG1DTdKJcceq7VIc4IJu4iBbU4QOwbRVR4p08q2YDV6J9qRAh10wSfP
-         RBMGlnvmQ774h0SKFEFqNzt7Ia2ujE4Ho0Tko=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687956950; x=1690548950;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=iD2tw9vOS0lrg1X3bxbq4vEfHnMlyogsPaJF24ZAxuQ=;
-        b=ZOHfBlgDjdQa17LDDXNYfvdl+lYB+AwZx2fvPPTBaLWBtcYTsKzztON095JxRKhH2z
-         GqrbNgZKgZB+c1PWe/3r9LJzScdgHQ1tkXrNAFrXKj9Bk+nSRmksbsOX7e9QP+VhKqpU
-         4Impt9NEVqs/E3VT2BzvWo0wkGTxzfpE/84k1KS8vwD8CnwVhLmrxYgTIGLwTilDg2+Q
-         D+vlLFdsGjdJGV/f9Ucmc3tg7CUbu44+PZHQfimv5IZXltAqmfTCINblkbbd2rbweAri
-         AiTinlFNI/jh56G18+f/G2v1oyUtx2tORgIv1lTU7IVF2pPrHenGM4vNLATLKMiLOb4Y
-         rF3A==
-X-Gm-Message-State: AC+VfDzn+YbF5Ze0JLCdsEGRMs9cg7YKvsle9agqqpziDZiviz7qCWuk
-        QBwrVw5G8YZ4TntM9ZautSDEsvhe/htErUJ7fbmhcUF943x/7PdcYsUl76IDRVZ+eNAsnGkSp2j
-        rzg2DpFUt3tKPXLSP/RaWfxFwbvM5rRhP4w==
-X-Google-Smtp-Source: ACHHUZ7PMRGajU5y5LS+ndBWZH/f28/boOqs3KXglygkyhG0rDT6SxPSfaSiQdfYhe79w0JA297k49uHTfAAr08Yrus=
-X-Received: by 2002:a25:dcd1:0:b0:c15:2fed:3b43 with SMTP id
- y200-20020a25dcd1000000b00c152fed3b43mr13463079ybe.9.1687956950771; Wed, 28
- Jun 2023 05:55:50 -0700 (PDT)
+        Wed, 28 Jun 2023 08:56:00 -0400
+Message-ID: <d53c9aa4-84c5-a7be-76fe-cde80da1749f@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1687956959;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=c2T8W8o0K5DGJb97RUC5TjsMkkgzorpjMD0zx6EXUAk=;
+        b=wTH7p1w7IsCMPIr7lbDes2EzF4lhh6rgDzSMMz9aLRcEPE6JyOZcp/I/EKfi5Qve56xviS
+        ajVfOD+n/WvKEYnedxvWjAMtWK35w67FuZPY2QP8Vr6zyjrV+Qj0jDsE/O4RSk0anzfq11
+        68uyhupQc8qKm75uOFbyepZ2ls90c0w=
+Date:   Wed, 28 Jun 2023 20:55:53 +0800
 MIME-Version: 1.0
-References: <CAB3BuKAVzXWNNiYDceNCpBqBmKyEykKA3rX=cfTyz+gWaJcnkA@mail.gmail.com>
- <d1227506-e9b0-4f75-a63b-e25e0c621c48@sirena.org.uk>
-In-Reply-To: <d1227506-e9b0-4f75-a63b-e25e0c621c48@sirena.org.uk>
-From:   Stefan Moring <stefan.moring@technolution.nl>
-Date:   Wed, 28 Jun 2023 14:55:40 +0200
-Message-ID: <CAB3BuKA95i0NQ7xtQv9jmB_xAv1YG+XEuFAxHNeCMnpLwz3pQA@mail.gmail.com>
-Subject: Re: [PATCH] spi: Increase imx51 ecspi burst length based on transfer length
-To:     Mark Brown <broonie@kernel.org>
-Cc:     shawnguo@kernel.org,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-        kernel@pengutronix.de, "festevam@gmail.com" <festevam@gmail.com>,
-        linux-imx@nxp.com, linux-spi@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-techno-validated: techno-validated
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-        lindbergh.monkeyblade.net
+Subject: Re: [PATCH 2/4] blk-flush: count inflight flush_data requests
+Content-Language: en-US
+To:     Ming Lei <ming.lei@redhat.com>
+Cc:     axboe@kernel.dk, tj@kernel.org, hch@lst.de,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        zhouchengming@bytedance.com
+References: <20230627120854.971475-1-chengming.zhou@linux.dev>
+ <20230627120854.971475-3-chengming.zhou@linux.dev>
+ <ZJuzYMeVhP5cthbC@ovpn-8-21.pek2.redhat.com>
+ <490fd0d8-c0b3-cc26-c658-da35d52b6b56@linux.dev>
+ <ZJvfr345L9krt371@ovpn-8-21.pek2.redhat.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Chengming Zhou <chengming.zhou@linux.dev>
+In-Reply-To: <ZJvfr345L9krt371@ovpn-8-21.pek2.redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-My bad, I resend it using git send-email.
+On 2023/6/28 15:22, Ming Lei wrote:
+> On Wed, Jun 28, 2023 at 12:55:49PM +0800, Chengming Zhou wrote:
+>> On 2023/6/28 12:13, Ming Lei wrote:
+>>> On Tue, Jun 27, 2023 at 08:08:52PM +0800, chengming.zhou@linux.dev wrote:
+>>>> From: Chengming Zhou <zhouchengming@bytedance.com>
+>>>>
+>>>> The flush state machine use a double list to link all inflight
+>>>> flush_data requests, to avoid issuing separate post-flushes for
+>>>> these flush_data requests which shared PREFLUSH.
+>>>>
+>>>> So we can't reuse rq->queuelist, this is why we need rq->flush.list
+>>>>
+>>>> In preparation of the next patch that reuse rq->queuelist for flush
+>>>> state machine, we change the double linked list to a u64 counter,
+>>>> which count all inflight flush_data requests.
+>>>>
+>>>> This is ok since we only need to know if there is any inflight
+>>>> flush_data request, so a u64 counter is good. The only problem I can
+>>>> think of is that u64 counter may overflow, which should be unlikely happen.
+>>>
+>>> It won't overflow, q->nr_requests is 'unsigned long', which should have
+>>> been limited to one more reasonable value, such as 2 * BLK_MQ_MAX_DEPTH, so
+>>> u16 should be big enough in theory.
+>>
+>> Ah, right. q->nr_requests is 'unsigned long' and q->queue_depth is 'unsigned int',
+>> so 'unsigned long' counter here won't overflow.
+> 
+> Not like q->nr_requests, q->queue_depth usually means the whole queue's depth,
+> which may cover all hw queue's depth. And it is only used by scsi, but it
+> should be held in "unsigned short" too.
+> 
+>>
+>> Should I change it to smaller 'unsigned short' or just leave it as 'unsigned long' ?
+>> (Now the size of struct blk_flush_queue is exactly 64 bytes)
+> 
+> You have to limit q->nr_requests first, which may need a bit more work for avoiding
+> compiling warning or sort of thing. And 64k is big enough for holding per-queue
+> scheduler request.
+> 
+> Once it is done, it is fine to define this counter as 'unsigned short'.
+> 
 
-Op wo 28 jun 2023 om 13:54 schreef Mark Brown <broonie@kernel.org>:
->
-> On Wed, Jun 28, 2023 at 10:41:27AM +0200, Stefan Moring wrote:
->
-> >   ctrl |= (spi_imx->slave_burst * 8 - 1)
-> >   << MX51_ECSPI_CTRL_BL_OFFSET;
-> > - else
-> > - ctrl |= (spi_imx->bits_per_word - 1)
-> > - << MX51_ECSPI_CTRL_BL_OFFSET;
-> > + else {
-> > + if (spi_imx->count >= 512)
-> > + ctrl |= 0xFFF << MX51_ECSPI_CTRL_BL_OFFSET;
->
-> Your patch is completely mangled and so can't be applied - please check
-> your setup for sending things.
+Ok, I looked around these related code, found it maybe subtle to me for now.
+So I'd better just leave it 'unsigned long' here. :)
+
+Thanks.
+
