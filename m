@@ -2,118 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB8F27412C1
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 15:42:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2E567412C2
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 15:42:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231896AbjF1Nlv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 09:41:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49032 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230287AbjF1Nlr (ORCPT
+        id S232094AbjF1Nmq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 09:42:46 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:42840 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232072AbjF1Nmf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 09:41:47 -0400
-Received: from mx.treblig.org (unknown [IPv6:2a00:1098:5b::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C6D2129;
-        Wed, 28 Jun 2023 06:41:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=treblig.org
-        ; s=bytemarkmx; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID
-        :Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID
-        :Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:
-        Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe
-        :List-Post:List-Owner:List-Archive;
-        bh=EPySIftZSA/ANVv7duy+nkpNF1TRSIy5ZkBMzXpU3B4=; b=UN6LVzBThsGmqA3+M7gmTxfh1l
-        zMVyubo43pIUiCCMKEzgJSXs8rhru8EwKMOZvlO/ekv+vM4VkuQOcSPy8mlYA6WE/lblOu9Ulio8P
-        Zt8p2SXv6APS2z3SP6RI9Av+YriIxYFvrWXapRlB5mwcW7B3uwpN3u/vW9TX9UraBMF6cvHp6OJ71
-        hlhfXBm85dK6NFNyb9SOn6JyCblqLjjNrx+PzqWXWt47x6q4zKp9T+KE+oVYECmID0M/qbazE2gtS
-        g+bmH3BNR2s/LOFIju1kaf2zO5OUlG286VA2GKn1t5hrHV4/6Y/TYbrN4bFSzQXZon/Jv1WIcSiQx
-        3zprm/ew==;
-Received: from dg by mx.treblig.org with local (Exim 4.94.2)
-        (envelope-from <dg@treblig.org>)
-        id 1qEVQG-00GT0N-Px; Wed, 28 Jun 2023 13:41:28 +0000
-Date:   Wed, 28 Jun 2023 13:41:28 +0000
-From:   "Dr. David Alan Gilbert" <dave@treblig.org>
-To:     Tom Talpey <tom@talpey.com>
-Cc:     sfrench@samba.org, linkinjeon@kernel.org,
-        linux-cifs@vger.kernel.org, jfs-discussion@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/3] dedupe smb unicode files
-Message-ID: <ZJw4iLlFWRMq6a3S@gallifrey>
-References: <20230628011439.159678-1-linux@treblig.org>
- <9343462e-6a4a-ca7b-03b8-4855e5a33b72@talpey.com>
+        Wed, 28 Jun 2023 09:42:35 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1687959710;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ILSaV7SEbZMYRZS2QLMojuBNjtkSUW+dMP8xI7bFpVE=;
+        b=DOe05T5UCy3MEwlm39MaFRxA10AhX1Qq16wEaI+SXfGfJUzc7h17Om1m9P7bXvvS9Ni1Yx
+        vnQOHLU5nOxInkgWfRgim4lIi3zW/eWUswSa5UlQ76PLeeV4Q19KI7K3/7XY2zgTDYBuQN
+        gvpV0hx/KqkaaBZ+IFnfGs+opbO5NRY=
+Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
+ [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-674-4kkYsD1nODShuelVeQc5TQ-1; Wed, 28 Jun 2023 09:41:42 -0400
+X-MC-Unique: 4kkYsD1nODShuelVeQc5TQ-1
+Received: by mail-qk1-f198.google.com with SMTP id af79cd13be357-7655fffd637so123687685a.1
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 06:41:34 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687959694; x=1690551694;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ILSaV7SEbZMYRZS2QLMojuBNjtkSUW+dMP8xI7bFpVE=;
+        b=FvxanTQaI8PVHAKfu5WMTGMPACpi3HUJVLVFTG6FzpPNHqP7kgajqkLx/kbWY8ksRr
+         wUVTLXZIlRBXmWxW2HZdxPiz2JijZ6x0dbGOX++Jhnpt8ylOfzxHnj29Xd+epa5nZCVr
+         FRuBsNdfCz5T00niFULkWu6BaCoG8GxEp0Q72D3nNiTKtfklvODnQxYZQpyTUiH4IPy1
+         FgDElo+iaf7JMZeH5NmZDz4f3vLu5hK8M3NuceLUopXbIT1hpaoSpeluozHoimi84X89
+         IFH/ZIemPNSgUuCpA3WZNRPc2696bPvXt5X6OGKvvvPCqi9tyA6KkD3bwvjgX2ecvxZi
+         biSg==
+X-Gm-Message-State: AC+VfDxOFyZr9L7KLUfeEnSB91r7Ulngy2aP884cpAkHDnHTYQfaz59b
+        6RwqSiDi+v8FwgWa2qw5bg9j7ZSWNfh/6QER1XMiImMvQBynorb84QMrQAINXScOxuitc97gx12
+        u72PosCUnQxipo0Xas+DpMNRI
+X-Received: by 2002:a05:620a:31a8:b0:767:1573:d36e with SMTP id bi40-20020a05620a31a800b007671573d36emr4488742qkb.3.1687959694165;
+        Wed, 28 Jun 2023 06:41:34 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ5EYwd3DwX2vFwTswXmip/cui/gItGng+GTU5PNz+TRsCiUUcV7PXYj6w3sA6knSn3LjwckQg==
+X-Received: by 2002:a05:620a:31a8:b0:767:1573:d36e with SMTP id bi40-20020a05620a31a800b007671573d36emr4488725qkb.3.1687959693901;
+        Wed, 28 Jun 2023 06:41:33 -0700 (PDT)
+Received: from x1n (cpe5c7695f3aee0-cm5c7695f3aede.cpe.net.cable.rogers.com. [99.254.144.39])
+        by smtp.gmail.com with ESMTPSA id w15-20020a05620a128f00b007594a7aedb2sm5045644qki.105.2023.06.28.06.41.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 28 Jun 2023 06:41:33 -0700 (PDT)
+Date:   Wed, 28 Jun 2023 09:41:31 -0400
+From:   Peter Xu <peterx@redhat.com>
+To:     Suren Baghdasaryan <surenb@google.com>
+Cc:     akpm@linux-foundation.org, willy@infradead.org, hannes@cmpxchg.org,
+        mhocko@suse.com, josef@toxicpanda.com, jack@suse.cz,
+        ldufour@linux.ibm.com, laurent.dufour@fr.ibm.com,
+        michel@lespinasse.org, liam.howlett@oracle.com, jglisse@google.com,
+        vbabka@suse.cz, minchan@google.com, dave@stgolabs.net,
+        punit.agrawal@bytedance.com, lstoakes@gmail.com, hdanton@sina.com,
+        apopple@nvidia.com, ying.huang@intel.com, david@redhat.com,
+        yuzhao@google.com, dhowells@redhat.com, hughd@google.com,
+        viro@zeniv.linux.org.uk, brauner@kernel.org,
+        pasha.tatashin@soleen.com, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-team@android.com
+Subject: Re: [PATCH v4 3/6] mm: drop per-VMA lock when returning
+ VM_FAULT_RETRY or VM_FAULT_COMPLETED
+Message-ID: <ZJw4i67FKlsvIiV3@x1n>
+References: <20230628071800.544800-1-surenb@google.com>
+ <20230628071800.544800-4-surenb@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <9343462e-6a4a-ca7b-03b8-4855e5a33b72@talpey.com>
-X-Chocolate: 70 percent or better cocoa solids preferably
-X-Operating-System: Linux/5.10.0-21-amd64 (x86_64)
-X-Uptime: 13:41:22 up 101 days, 15 min,  1 user,  load average: 0.01, 0.05,
- 0.00
-User-Agent: Mutt/2.0.5 (2021-01-21)
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RDNS_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-        lindbergh.monkeyblade.net
+In-Reply-To: <20230628071800.544800-4-surenb@google.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-* Tom Talpey (tom@talpey.com) wrote:
-> On 6/27/2023 9:14 PM, linux@treblig.org wrote:
-> > From: "Dr. David Alan Gilbert" <linux@treblig.org>
-> > 
-> > The smb client and server code have (mostly) duplicated code
-> > for unicode manipulation, in particular upper case handling.
-> > 
-> > Flatten this lot into shared code.
-> > 
-> > There's some code that's slightly different between the two, and
-> > I've not attempted to share that - this should be strictly a no
-> > behaviour change set.
-> > 
-> > I'd love to also boil out the same code from fs/jfs/ - but that's
-> > a thought for another time (and harder since there's no good test
-> > for it).
-> > 
-> > Lightly tested with a module and a monolithic build, and just mounting
-> > itself.
-> > 
-> > This dupe was found using PMD:
-> >    https://pmd.github.io/pmd/pmd_userdocs_cpd.html
-> > 
-> > Dave
-> > 
-> > Dr. David Alan Gilbert (3):
-> >    fs/smb: Remove unicode 'lower' tables
-> >    fs/smb: Swing unicode common code from server->common
-> >    fs/smb/client: Use common code in client
-> > 
-> >   fs/smb/client/cifs_unicode.c                  |   1 -
-> >   fs/smb/client/cifs_unicode.h                  | 313 +-----------------
-> >   fs/smb/client/cifs_uniupr.h                   | 239 -------------
-> >   fs/smb/common/Makefile                        |   1 +
-> >   .../uniupr.h => common/cifs_unicode_common.c} | 156 +--------
-> >   fs/smb/common/cifs_unicode_common.h           | 279 ++++++++++++++++
+On Wed, Jun 28, 2023 at 12:17:57AM -0700, Suren Baghdasaryan wrote:
+> handle_mm_fault returning VM_FAULT_RETRY or VM_FAULT_COMPLETED means
+> mmap_lock has been released. However with per-VMA locks behavior is
+> different and the caller should still release it. To make the
+> rules consistent for the caller, drop the per-VMA lock when returning
+> VM_FAULT_RETRY or VM_FAULT_COMPLETED. Currently the only path returning
+> VM_FAULT_RETRY under per-VMA locks is do_swap_page and no path returns
+> VM_FAULT_COMPLETED for now.
 > 
-> So far so good, but please drop the "cifs_" prefix from this new file's
-> name, since its contents apply to later smb dialects as well.
+> Signed-off-by: Suren Baghdasaryan <surenb@google.com>
 
-Sure.
+Acked-by: Peter Xu <peterx@redhat.com>
 
-Dave
-
-> Tom.
-> 
-> >   fs/smb/server/unicode.c                       |   1 -
-> >   fs/smb/server/unicode.h                       | 301 +----------------
-> >   8 files changed, 298 insertions(+), 993 deletions(-)
-> >   delete mode 100644 fs/smb/client/cifs_uniupr.h
-> >   rename fs/smb/{server/uniupr.h => common/cifs_unicode_common.c} (50%)
-> >   create mode 100644 fs/smb/common/cifs_unicode_common.h
-> > 
 -- 
- -----Open up your eyes, open up your mind, open up your code -------   
-/ Dr. David Alan Gilbert    |       Running GNU/Linux       | Happy  \ 
-\        dave @ treblig.org |                               | In Hex /
- \ _________________________|_____ http://www.treblig.org   |_______/
+Peter Xu
+
