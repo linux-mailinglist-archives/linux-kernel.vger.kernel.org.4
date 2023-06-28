@@ -2,184 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1068740E56
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 12:11:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E511740E71
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 12:13:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233565AbjF1KL0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 06:11:26 -0400
-Received: from mail-40133.protonmail.ch ([185.70.40.133]:32535 "EHLO
-        mail-40133.protonmail.ch" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231892AbjF1KH3 (ORCPT
+        id S229690AbjF1KNn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 06:13:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54918 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233470AbjF1KKt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 06:07:29 -0400
-Date:   Wed, 28 Jun 2023 10:07:18 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=proton.me;
-        s=protonmail; t=1687946847; x=1688206047;
-        bh=UpZHWzsrfNOLqeOc1z4tKkV+9JnbzntAZiSfSVgKJds=;
-        h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-         Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
-         Message-ID:BIMI-Selector;
-        b=WWBEUpjfy75Uxk8GAx5C0EFChHGNBbGq3pllIPKpzGJdokO/LzfL5O7OOH1/zSz+4
-         NkX7fIpdIOwIRZWA2KwUN1r1KUviDJ+IcMwb89iqoctXo26uySsaa+0gL4+2/DCFH4
-         jAfOy6Sw5q4tQmExR8yTqTkXIoQUy8tbrvIhSLWlMsOvUnAxRSNxRHWpfthSPzqkJE
-         zEhQJFRXodhR8gMxBx5jKIvpjcsK37gxpBpTgDe/6KteNAFCwKYw7EoCBfT2mcOshW
-         mvYXEY964fWrzTRL11XPRtE09O8iX6AePBlnEBj6EXjAtsgMyTvKKzFJDnYCD0UDzP
-         YJ/SD6KgnZ9aA==
-To:     Boqun Feng <boqun.feng@gmail.com>
-From:   Benno Lossin <benno.lossin@proton.me>
-Cc:     rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Gary Guo <gary@garyguo.net>,
-        =?utf-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
-        Martin Rodriguez Reboredo <yakoyoku@gmail.com>
-Subject: Re: [PATCH v2] rust: alloc: Add realloc and alloc_zeroed to the GlobalAlloc impl
-Message-ID: <ffYDfWJfSkQZnT-rW-AJ2S8KyMvWqSzuqHVEFiMEJAz0EzRbuwllUKKOV-evQpo6XA8aoeCpuF6Wjh5cLRJQyz1CyO9LeT0olkZhcH5y5P4=@proton.me>
-In-Reply-To: <20230625232528.89306-1-boqun.feng@gmail.com>
-References: <20230625232528.89306-1-boqun.feng@gmail.com>
-Feedback-ID: 71780778:user:proton
+        Wed, 28 Jun 2023 06:10:49 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0A3A3AAB;
+        Wed, 28 Jun 2023 03:09:34 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id a640c23a62f3a-9922d6f003cso207180566b.0;
+        Wed, 28 Jun 2023 03:09:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687946973; x=1690538973;
+        h=content-transfer-encoding:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8Osa+sqzunCfgSVMTf5LNK7jPD500rEs+nNv3O7VOhU=;
+        b=JBqXHfLGZ/b6JXkE2bmBNKNSCl4IsgBxe59NraVtvAqa+FX8eqr5hPftgi8tgbbsC4
+         ehTt208s+MGm2bNpm9J7fPORw11So39eQp6eGcuulfjhJQvugxOFt79zRo+HyQ1w55Qv
+         bQ/S+7+foVtTijdEoNcEN0HnnLnlSKNXAauwHlnhA2jatUO2DM7cFOe0WhN8+gmVz+sQ
+         RggctWprYR+9uSX7yr7HsC8AGP6KBrJlRFvBWV8jXZ8+VqxU95m234hofEQpFw5us7UI
+         +M46nV2xcOVEVOH+h2LbZLCvbXm10a/K8N9HCoewSsbpGngO96b0d1zw45SYvfLJwA2w
+         yezQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687946973; x=1690538973;
+        h=content-transfer-encoding:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=8Osa+sqzunCfgSVMTf5LNK7jPD500rEs+nNv3O7VOhU=;
+        b=bl070midOWy/bgLppFv4cRM84646bz3jWSetKzLBcy3xSVr9E+XI43qmrJhIiLnQtX
+         kz6wGtQQH0fc40tCnM3sig6WkiQImVxSOAlyxPxltMzDRZRuTqqF9aYF3JZwXEstlG2K
+         LgFM1FWH5CNeQHBQ4dTbJ0vxDYKqMlC5w6HpZz2RI8pd6CXUl1c00gIPhIsZZxfifLAR
+         CN1h6ro0nbkBxUvQLLxKKsbNp1hXL+z9yJrLe957b6tWzF5UyOemJ4QhjDwRo2UWJgNI
+         07XKJ0etRHiokPuQqgAR6Mn+nm0heSgjH6WqceOPFI9toX0voCfYDDMw9u9mi95gyeu9
+         EFCg==
+X-Gm-Message-State: AC+VfDwDilS81pYQO4lg4Hn+j1gOBROlPXvAVDMnPkzXRJfs8w84DndE
+        0CyQW1v4LYVtXA0oxPN928dE/7uTnFagXdtPrZM=
+X-Google-Smtp-Source: ACHHUZ4hV0XF9mN/Yy7HZaehKx5DaM6NMZQ2Ggx6m6TRWZMsZVTRBKRzapqwf+mEqU8SM4IFLM92V+FRAoLJCQobX+Q=
+X-Received: by 2002:a17:906:80d0:b0:98d:e7e3:5ab7 with SMTP id
+ a16-20020a17090680d000b0098de7e35ab7mr9123961ejx.11.1687946973053; Wed, 28
+ Jun 2023 03:09:33 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+References: <20230627082731.1769620-1-yqsun1997@gmail.com> <20230627140640.GA3605278@gnbcxd0016.gnb.st.com>
+ <CAA0BgY_Lj+hQdevrgK8y=wLztddnh+npP-hWz_XaPbi-5mzwnQ@mail.gmail.com> <20230628063353.GA3625616@gnbcxd0016.gnb.st.com>
+In-Reply-To: <20230628063353.GA3625616@gnbcxd0016.gnb.st.com>
+From:   sun yq <yqsun1997@gmail.com>
+Date:   Wed, 28 Jun 2023 18:09:22 +0800
+Message-ID: <CAA0BgY_1Rn4LJ4NM7ZMNgG1K-V9Uy0HTi6bMg_o3cPDWj7NfKQ@mail.gmail.com>
+Subject: Re: [PATCH] OOB read and write in mdp_prepare_buffer
+To:     sun yq <yqsun1997@gmail.com>, mchehab@kernel.org,
+        matthias.bgg@gmail.com, angelogioacchino.delregno@collabora.com,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, 499671216@qq.com
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+        lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 26.06.23 01:25, Boqun Feng wrote:
-> While there are default impls for these methods, using the respective C
-> api's is faster. Currently neither the existing nor these new
-> GlobalAlloc method implementations are actually called. Instead the
-> __rust_* function defined below the GlobalAlloc impl are used. With
-> rustc 1.71 these functions will be gone and all allocation calls will go
-> through the GlobalAlloc implementation.
->=20
-> Link: https://github.com/Rust-for-Linux/linux/issues/68
-> Signed-off-by: Bj=C3=B6rn Roy Baron <bjorn3_gh@protonmail.com>
-> [boqun: add size adjustment for alignment requirement]
-> Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
+Hi Alain,
 
-Reviewed-by: Benno Lossin <benno.lossin@proton.me>
+May I ask if you are the person involved in the code?We should  listen
+to the opinions of the code owner.
 
-> ---
-> Miguel, I fold my diff into Bj=C3=B6rn's original patch and make a v2, it
-> relies on the other patch:
->=20
-> =09https://lore.kernel.org/rust-for-linux/6e61f06f-2411-0bcb-926b-0a69270=
-96f20@gmail.com/
->=20
-> So this v2 (if all goes well) is targeted for v6.6, JFYI.
->=20
-> v1 -> v2:
->=20
-> *=09Add size adjustment for align requirement.
->=20
->   rust/kernel/allocator.rs | 59 ++++++++++++++++++++++++++++++++++++----
->   1 file changed, 54 insertions(+), 5 deletions(-)
->=20
-> diff --git a/rust/kernel/allocator.rs b/rust/kernel/allocator.rs
-> index 66575cf87ce2..af723c2924dc 100644
-> --- a/rust/kernel/allocator.rs
-> +++ b/rust/kernel/allocator.rs
-> @@ -9,8 +9,17 @@
->=20
->   struct KernelAllocator;
->=20
-> -unsafe impl GlobalAlloc for KernelAllocator {
-> -    unsafe fn alloc(&self, layout: Layout) -> *mut u8 {
-> +impl KernelAllocator {
-> +    /// # Safety
-> +    ///
-> +    /// * `ptr` can be either null or a pointer which has been allocated=
- by this allocator.
-> +    /// * `layout` must have a non-zero size.
-> +    unsafe fn krealloc_with_flags(
-> +        &self,
-> +        ptr: *mut u8,
-> +        layout: Layout,
-> +        flags: bindings::gfp_t,
-> +    ) -> *mut u8 {
->           // Customized layouts from `Layout::from_size_align()` can have=
- size < align, so pads first.
->           let layout =3D layout.pad_to_align();
->=20
-> @@ -26,9 +35,22 @@ unsafe fn alloc(&self, layout: Layout) -> *mut u8 {
->               size =3D size.next_power_of_two();
->           }
->=20
-> -        // `krealloc()` is used instead of `kmalloc()` because the latte=
-r is
-> -        // an inline function and cannot be bound to as a result.
-> -        unsafe { bindings::krealloc(ptr::null(), size, bindings::GFP_KER=
-NEL) as *mut u8 }
-> +        // SAFETY:
-> +        //
-> +        // * `ptr` is either null or a pointer returned from a previous =
-k{re}alloc() by the function
-> +        //   safety requirement.
-> +        //
-> +        // * `size` is greater than 0 since it's either a `layout.size()=
-` (which cannot be zero
-> +        //    according to the function safety requirement) or a result =
-from `next_power_of_two()`.
-> +        unsafe { bindings::krealloc(ptr as *const core::ffi::c_void, siz=
-e, flags) as *mut u8 }
-> +    }
-> +}
-> +
-> +unsafe impl GlobalAlloc for KernelAllocator {
-> +    unsafe fn alloc(&self, layout: Layout) -> *mut u8 {
-> +        // SAFETY: `ptr::null_mut()` is null and `layout` has a non-zero=
- size by the function safety
-> +        // requirement.
-> +        unsafe { self.krealloc_with_flags(ptr::null_mut(), layout, bindi=
-ngs::GFP_KERNEL) }
->       }
->=20
->       unsafe fn dealloc(&self, ptr: *mut u8, _layout: Layout) {
-> @@ -36,6 +58,33 @@ unsafe fn dealloc(&self, ptr: *mut u8, _layout: Layout=
-) {
->               bindings::kfree(ptr as *const core::ffi::c_void);
->           }
->       }
-> +
-> +    unsafe fn realloc(&self, ptr: *mut u8, layout: Layout, new_size: usi=
-ze) -> *mut u8 {
-> +        // SAFETY:
-> +        // * `new_size` when rounded up to the nearest multiple of `layo=
-ut.align()`, will not
-> +        //   overflow `isize` by the function safety requirement.
-> +        // * `layout.align()` is a proper alignment (i.e. not zero and m=
-ust be a power of two).
-> +        let layout =3D unsafe { Layout::from_size_align_unchecked(new_si=
-ze, layout.align()) };
-> +
-> +        // SAFETY:
-> +        // * `ptr` is either null or a pointer allocated by this allocat=
-or by function safety
-> +        //   requirement.
-> +        // * the size of `layout` is not zero because `new_size` is not =
-zero by function safety
-> +        //   requirement.
-> +        unsafe { self.krealloc_with_flags(ptr, layout, bindings::GFP_KER=
-NEL) }
-> +    }
-> +
-> +    unsafe fn alloc_zeroed(&self, layout: Layout) -> *mut u8 {
-> +        // SAFETY: `ptr::null_mut()` is null and `layout` has a non-zero=
- size by the function safety
-> +        // requirement.
-> +        unsafe {
-> +            self.krealloc_with_flags(
-> +                ptr::null_mut(),
-> +                layout,
-> +                bindings::GFP_KERNEL | bindings::__GFP_ZERO,
-> +            )
-> +        }
-> +    }
->   }
->=20
->   #[global_allocator]
-> --
-> 2.39.2
-> 
+On Wed, Jun 28, 2023 at 2:34=E2=80=AFPM Alain Volmat <alain.volmat@foss.st.=
+com> wrote:
+>
+> Hi,
+>
+> On Wed, Jun 28, 2023 at 07:28:54AM +0800, sun yq wrote:
+> > Hi,
+> > Because there are many functions using the plane, increasing the max
+> > number of the plane is to maximize the solution to all possible oob
+> > places.
+>
+> I don't think it is the right approach then.  If the HW is only handling
+> 3 planes, there should be no reason to have to allocate for 8 planes.  I
+> suspect that this 8 value is coming from the maximum allowed plane
+> number in V4L2 right ?
+> INHO driver should simply be fixed to ensure that num_plane won't go
+> higher than the real number of plane allocated in the structures.
+> It should be possible to get the num_plane value from the format
+> selected.
+>
+> Alain
+>
+> >
+> > On Tue, Jun 27, 2023 at 10:06=E2=80=AFPM Alain Volmat <alain.volmat@fos=
+s.st.com> wrote:
+> > >
+> > > Hi,
+> > >
+> > > On Tue, Jun 27, 2023 at 04:27:31PM +0800, yqsun1997@gmail.com wrote:
+> > > > From: yqsun1997 <yqsun1997@gmail.com>
+> > > >
+> > > > Because format in struct img_image_buffer max index is IMG_MAX_PLAN=
+ES =3D=3D3,
+> > > > The num_planes max index is 8.so will be OOB like in mdp_prepare_bu=
+ffer.
+> > >
+> > > Similarly as your other patch, could you describe why you need to
+> > > increase the IMG_MAX_PLANES while I suspect your driver only needs to
+> > > deal with 3 planes.  While the maximum num_planes value that can be
+> > > given by the user is 8, this has to be first compared to the configur=
+ed
+> > > format prior to reaching this function.
+> > >
+> > > >
+> > > > static void mdp_prepare_buffer(struct img_image_buffer *b,
+> > > >                                struct mdp_frame *frame, struct vb2_=
+buffer *vb)
+> > > > {
+> > > >         struct v4l2_pix_format_mplane *pix_mp =3D &frame->format.fm=
+t.pix_mp;
+> > > >         unsigned int i;
+> > > >
+> > > >         b->format.colorformat =3D frame->mdp_fmt->mdp_color;
+> > > >         b->format.ycbcr_prof =3D frame->ycbcr_prof;
+> > > >         for (i =3D 0; i < pix_mp->num_planes; ++i) {
+> > > >                 u32 stride =3D mdp_fmt_get_stride(frame->mdp_fmt,
+> > > >                         pix_mp->plane_fmt[i].bytesperline, i);
+> > > >
+> > > >                 b->format.plane_fmt[i].stride =3D stride;  //oob
+> > > >                 ......
+> > > >
+> > > > Signed-off-by: yqsun1997 <yqsun1997@gmail.com>
+> > > > ---
+> > > >  drivers/media/platform/mediatek/mdp3/mtk-mdp3-type.h | 2 +-
+> > > >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > > >
+> > > > diff --git a/drivers/media/platform/mediatek/mdp3/mtk-mdp3-type.h b=
+/drivers/media/platform/mediatek/mdp3/mtk-mdp3-type.h
+> > > > index ae0396806..e2e991a34 100644
+> > > > --- a/drivers/media/platform/mediatek/mdp3/mtk-mdp3-type.h
+> > > > +++ b/drivers/media/platform/mediatek/mdp3/mtk-mdp3-type.h
+> > > > @@ -11,7 +11,7 @@
+> > > >
+> > > >  #define IMG_MAX_HW_INPUTS    3
+> > > >  #define IMG_MAX_HW_OUTPUTS   4
+> > > > -#define IMG_MAX_PLANES               3
+> > > > +#define IMG_MAX_PLANES               8
+> > > >  #define IMG_MAX_COMPONENTS   20
+> > > >
+> > > >  struct img_crop {
+> > > > --
+> > > > 2.39.2
+> > > >
+> > >
+> > > Regards,
+> > > Alain
