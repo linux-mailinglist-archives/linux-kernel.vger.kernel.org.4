@@ -2,167 +2,265 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76CBA741A7D
+	by mail.lfdr.de (Postfix) with ESMTP id BFBD6741A7E
 	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 23:17:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233102AbjF1VMT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 17:12:19 -0400
-Received: from mail-he1eur04on2044.outbound.protection.outlook.com ([40.107.7.44]:27525
-        "EHLO EUR04-HE1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S230353AbjF1VKF (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 17:10:05 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=dBVJ/ZYEfG0bXPqkD/QzVI+uOoD20auom3Xzj4c2gctHGaShJOhqS6IgsB9l49MQtZWKjLaxnIbW3SDUyuyKv2YuEyGQ1npZs7mJg2ubFVr+CVyXDLXikUnSbvIDj2HXz6e7b0UgoVtBuUS+3CELwNqP2f9QXPuBRPpdvf7nBT70LlnG7sVKRi5Rodmv9j7s5rELDhJXZNmU+gspr+YvU64tY4V86fyxuesGq6htfPTnF6bJmZ5zKKEjV3AuJhEDb4o+ddCriCvR2qmlY8Bpyz+tzHm+/drb3+HrMpKr88SYEneZY4TiAOQEDaW0SGbLRoc42faKKCfanSBKMZxUrw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=e/mJShD8IBxUBtDIaIr0eHfsZx28V2yRA1R6tClfE0o=;
- b=RoceazeNp0wcrkc2WBbupAYObBeq5pLT5Kmjk0cQ9KLwlMsTrB/SbQE2AfYGhkEsWj75lwa8wCshAD0hYZQrk+4+rwQAP9lAHRMPSVnLYltuGQ8q0gktjJbGv3uHXA2KlkCZegrGsbD57bNsWWAPNkB/OTZLL8aXJioKE06EOdCmnzee1BsWbMoWhfyZF8L+x/EX/IwdWLbDn4wENdY99A+FGeto4S3GaU1m0FNNdrLmQ6GLy1VaWf9N+FINcpXnOfiIJpSjvc5EkNwr1V6kyv2CmDgU12hnYZGcG8ZD86jRyCJGd63nFzyQrHV5neLQtjKp5LbGGlFwTnW8A2SX3A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=e/mJShD8IBxUBtDIaIr0eHfsZx28V2yRA1R6tClfE0o=;
- b=ZPEOQikYJmXM9AMuhX8EksnCSVvjm0oWV9s1XPFItgq8FG9+hcSWlaNizb4hAVeyi/jPb9ECpkqslsuxzlegPHdrO+Hzrd9zt4cx1CuCUfQLIL8cCRDrC3xRjkdKNusiV1X4CfmxL7aR3KqBI/XM0qgbA9ZNIKhMyHwLO9AfzQs=
-Received: from AM0PR04MB6289.eurprd04.prod.outlook.com (2603:10a6:208:145::23)
- by AS5PR04MB9923.eurprd04.prod.outlook.com (2603:10a6:20b:67f::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.24; Wed, 28 Jun
- 2023 21:10:02 +0000
-Received: from AM0PR04MB6289.eurprd04.prod.outlook.com
- ([fe80::7aac:2f58:b7e3:2c24]) by AM0PR04MB6289.eurprd04.prod.outlook.com
- ([fe80::7aac:2f58:b7e3:2c24%7]) with mapi id 15.20.6521.026; Wed, 28 Jun 2023
- 21:10:02 +0000
-From:   Leo Li <leoyang.li@nxp.com>
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Ma Ke <make_ruc2021@163.com>
-CC:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH] usb: gadget: fsl_qe_udc: validate endpoint index for ch9
- udc
-Thread-Topic: [PATCH] usb: gadget: fsl_qe_udc: validate endpoint index for ch9
- udc
-Thread-Index: AQHZqZi9K7bLkqeFik2hEi3PRtnNM6+gcHbggAAtAQCAABgTIA==
-Date:   Wed, 28 Jun 2023 21:10:01 +0000
-Message-ID: <AM0PR04MB628929736762F5DF46C55D708F24A@AM0PR04MB6289.eurprd04.prod.outlook.com>
-References: <20230628081511.186850-1-make_ruc2021@163.com>
- <AM0PR04MB62893E77D085030A6E2C37B28F24A@AM0PR04MB6289.eurprd04.prod.outlook.com>
- <f321287d-8156-b805-26fd-58acfa26e324@csgroup.eu>
-In-Reply-To: <f321287d-8156-b805-26fd-58acfa26e324@csgroup.eu>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: AM0PR04MB6289:EE_|AS5PR04MB9923:EE_
-x-ms-office365-filtering-correlation-id: 914a68b4-0bb0-4d31-9f45-08db781c09a3
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: +MXzSn3wJeCsrxX+DY9/Aifj1JpcZSZcLXQ61gLWzlwMW2h1q0a+PJUylDa++/dADHmd0XCHsGc0Eyiv4AgJtzJl+wPivCWNfw0adzoZyGlm54cQxUu2YRsyNNSqqGe24LzzPpa7z0uKKLmVjo+QsaBSIleXCHdO9OhU8VzkVQYThYCMy6FVOl/Tw/MYinp86JmjQhsT0xsr1WphJcCStccSZcN1co/HRDKLqtg/P9YgW5vQlOwAm6ddku1+ecOblmVyu2kXwgB6CjCo8ODhWhf0oSjLb+1AKSXOggpig9b0rM5vVeL6kEd++G7AzyINMu+jMHE6ozGK6yKtMV6q3gWc9oUoxhhwGQ23HaQRfNi8IPiRym/C0PLoZ6lhBWB45HNnu9B4zEqWzOBLUUYKjnY9g9IsMcJVj6QM4pmiICr4G2gDQ/xXGBLPM5Yv7tFtlkiV3hZDfiuqZXleM+ZwlOwsxkSBFSh+lgXr4I9dY7kDGZFmYLITnD6LRkwiOhnjHe1G9enU756Ppqom4zr8Stbu+03lAdQS11tSM+YoqwElhV8mt7GgPay6G/lDknh6Jqn+Rk96jGyhvdgByoqaV8ANL/uxuPYjR+JHAXMv4Dhqm2ry8N2OK4I6rxd+XokI
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0PR04MB6289.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(396003)(376002)(346002)(136003)(39860400002)(451199021)(66446008)(38070700005)(26005)(66556008)(66476007)(33656002)(122000001)(52536014)(66574015)(86362001)(8936002)(41300700001)(4326008)(316002)(8676002)(55016003)(66946007)(5660300002)(64756008)(38100700002)(76116006)(110136005)(6506007)(53546011)(55236004)(9686003)(186003)(2906002)(83380400001)(15650500001)(71200400001)(54906003)(7696005)(478600001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?WFhSMzhZQ1lodjRVU3ViMWhoUjlpdUE3UklKMHNZaTMxcjMvbW8wWE9xOE4v?=
- =?utf-8?B?VjFJdnpDOG5qL3VScGgvcTE0bFpFMXVUVE9tYnRNWXF3U0xUalhURmxLNEln?=
- =?utf-8?B?WHpCWXR3NTB3ejMvNVBpS1hpQ3Q3SGovenIvMWN6QUttSTNoWmtnbmZYMCt1?=
- =?utf-8?B?MHZtaUVzaVY0anRvK3JnSlB6SUhhNFBHdDZSM1hZSno2TUI4c3puYndra3d0?=
- =?utf-8?B?cEFOR1ZvQ2o1aVhqSG5Yd25LdEErVWs0bjJ4OXBOV1ZYMUIreDNTeEd0cHFE?=
- =?utf-8?B?b2hXYi9ydkdUUWEvQlphdzQ3K3dEQ1pFd25VWldvcWlVY0RJdGdUejdOTnZM?=
- =?utf-8?B?U0pRSXZPUVlFVmplTjByWndEelB0QVIxZm80QWRhdUsxVGJzUjRiUTN3VUYv?=
- =?utf-8?B?VXJjN0RJcnBlNFF6N3JVYk9NMkNmYi9NcFJ3eEtKSDNyRlJrUzRlNkJkaTNG?=
- =?utf-8?B?UFlnRE5YUGhreG1kZjlpZzR2dDA0SXc4M3BxRHhSNG1kUzdJWmpPNU5weWN0?=
- =?utf-8?B?aG9EYnV6Szh3Y0FVUTdUZitYSjAzRGI5eTBzWGQ1YmsvWElZbCtLU05ZRnFq?=
- =?utf-8?B?aDA4b1FnVEd3QlJmRmlRRFVkSm9kY1BjenFUQnNvV283NUV6ZkV5OTdhcSts?=
- =?utf-8?B?ZkFaK01TcThlV3JBaXdjc000YUI2cE00S042eUM2VHRBTTgwRjV0Rm5SRWlp?=
- =?utf-8?B?NHZkR2V5SHhmZUZXNUVsRjQ5cThBdjYwSVRyOXR5d2N3WFNiTFVaZkFWME9u?=
- =?utf-8?B?UzE3Wmw4d3lFNU10RGFyUnMzRUh4SmV3NFlRMURhL01xT1lGZm5IRmo1eEFM?=
- =?utf-8?B?Y0d4cE4wTWhCNVg5aXpXRXMyblpsTWFKc0hQYXU2ZDM3ejg4YTZOc09pUHJB?=
- =?utf-8?B?RldDSUt4WTVSWUlVQTBZY1F2MUNkS29RMlFWNFEvUGI5WHdzaHNmTFRoVjd1?=
- =?utf-8?B?RjlmME0xUTBuM0E2elhDSXFZSUxWYVpUZ2UzTXN5OUJNRjl0MS9VeFFsWUpr?=
- =?utf-8?B?K29qWGhVbXBIajFqVXpEZXlyU2RuMnFxclhkU3BqS2xNL3V5OGQ3ODlMSHVk?=
- =?utf-8?B?ZjU3aFhwQXo5VjRRbzlyN2JqejgrUDIzd1NiZUZkYmJTZUE3UHlBemp1aFZO?=
- =?utf-8?B?Tm8wVzZVQ1l1ZU9Idi9GbkRsZVp2RXBpRnR4eXpBQzVBblRSNVFHaXhybHhI?=
- =?utf-8?B?OU5oL3Vybk1tTVVWWk12cWQrYWMzb2NTaW4zenFVbHpKM0trY2JJdjNXRHB2?=
- =?utf-8?B?NmNlNHJrZGFFOVFJZTJmNmt2REZxNFBEVTBBN1FWR3U4UHY0OGN4MFZxTGZz?=
- =?utf-8?B?dFdNNDBtVDZNaVMzV3N1VDVUUkVtQXdzSkMzODVoSGJqQWJIMWNzVGFyZ280?=
- =?utf-8?B?cXpQUjNScEVpd2gzTHlpRFZsZzQ3bFgvZ1gzYWtGcXY4d2hHWjBHVGVFWE1Q?=
- =?utf-8?B?alVneU1jZTVkVm1uSE5PbWZUNlQrSXdDZjhnY0x0SXJsR3Z4M3k4dzduSU5D?=
- =?utf-8?B?L0NQdU5ncDJPVy93c2ZOazJ2UW43ZGM2NlhIbmk4a21CZkdUQmZBMGQrbWY2?=
- =?utf-8?B?WE1UT2ZkdTVHVktqbzNQV043dGdaQm51MVAzaUtZMDkwU1B4RmJYTW9KVTkr?=
- =?utf-8?B?aFdJcUNRZktyenZvMVZHOWtobnQ0OE9Rc3h4aXJTN1ZtbWdkOTRJdW9hclgx?=
- =?utf-8?B?cndvQi9uYjhVYitCRmU0VFFTUTdnS1BkM3c4NmVJU2Y3VGJLczQ4NDJvaExK?=
- =?utf-8?B?MStoY0pPQXp0K3NKcC9xSmt6QUJSa1BXM3dWK3JVdlowVDlUdjNuV1RNVWZ1?=
- =?utf-8?B?dFFHWVFmeEF2MnoyVjU1SkJzNFA3WFNYU1BYOHZ4ZldISnRzRFFSVHdacTVh?=
- =?utf-8?B?NytlWnJNTDMvQjZHYWdiTFV3MXBnRWJHNElmN2x5MmNaVTV6Z0tiOEQ1dXZq?=
- =?utf-8?B?L3pwL0ZjeG82UnU5eEtQQnRFZS9SeStJMUsrcjJ3YXZWM2E1Tzk2a25TWGcy?=
- =?utf-8?B?R3hiSm5DMjM1ejIvQm9LOWFaQTNXalM4TVNMZ2dhSjFlMXpJNGtxUDN3a0Vh?=
- =?utf-8?B?aEpnV0xUZE1IOHZFQTVya1ZFNW1oVFdoL1FTYktJUEZvRFdKdmE4amExUFJR?=
- =?utf-8?Q?H9TbVxhdV32ETBUcKx7euBjPt?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        id S232066AbjF1VPO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 17:15:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51824 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233175AbjF1VNB (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 28 Jun 2023 17:13:01 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E91D2704;
+        Wed, 28 Jun 2023 14:10:47 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0832A614AC;
+        Wed, 28 Jun 2023 21:10:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A26CC433C9;
+        Wed, 28 Jun 2023 21:10:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687986646;
+        bh=zKjNzkX/4Suk1DSKfWO5q+G02nHPWwKDc6OwiAcfhf0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=R2mnlfpbzbjoSum+dqYitKp8j9j7Zo+O/g31Dq5YDye63K+uLeJ2Y1QkxiSwIPJpr
+         NLPHCFRVFCwF8xh/0xs8qvRs8ZnbamHSKMomoIuQJ9dnM4g2UlT19jgesQqhxmtafI
+         PGKrXQPB08T1jrSvD59/4KxwVLQfVS72tRbQiYIxBGre0zwgKQLsYH4SZhBdW7Bwbu
+         8FEXcKF8Cs/X9xb/X5p62UOI0ykcBgKDpD6LrO86LgqqnXhsrm3mwBZX4/nyCkrCw/
+         GqR++SU2clRAviQK+7TcrJlQsaxiuXw2GfTaJJl4JVlfmTdFpc05dx9MKfspggor7G
+         Rnk4skpviy4fg==
+Date:   Wed, 28 Jun 2023 14:10:44 -0700
+From:   Eduardo Valentin <evalenti@kernel.org>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Eduardo Valentin <evalenti@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>, eduval@amazon.com,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>
+Subject: [PATCH 1/1] thermal: sysfs: avoid actual readings from sysfs
+Message-ID: <ZJyh1Dp5WrXyv9wW@uf8f119305bce5e.ant.amazon.com>
+References: <20230607003721.834038-1-evalenti@kernel.org>
+ <f26ac9a9-60af-a0fe-fccc-25bcd306f5a1@linaro.org>
+ <ZICybSuZELhR1Ni5@uf8f119305bce5e.ant.amazon.com>
+ <b2e93db5-e6f8-a9d8-53de-af5ea750f0f0@linaro.org>
+ <ZIITZINvtPfjuhS6@uf8f119305bce5e.ant.amazon.com>
+ <7616fd9d-aa0d-2ecd-8751-894b1c9073c0@linaro.org>
+ <ZJKFar/U75+PGCRt@uf8f119305bce5e.ant.amazon.com>
+ <75eba2da-593f-f3bd-4eac-5155fcf5aee8@linaro.org>
+ <ZJPUchRH+3LLvuKy@uf8f119305bce5e.ant.amazon.com>
+ <CAJZ5v0jAJj-Eh9tJZRMamSFSWWJqVpzaWeHmqThyPvAGpzk17w@mail.gmail.com>
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: AM0PR04MB6289.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 914a68b4-0bb0-4d31-9f45-08db781c09a3
-X-MS-Exchange-CrossTenant-originalarrivaltime: 28 Jun 2023 21:10:01.8755
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 9Z9vL6BEkJZxgU7Va2j1bB1L3empmTE+gLIIJ43gC1CaaDmho6TpemwhGVqB2kwcljRJbVVuRE9mKZjmSWABVA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS5PR04MB9923
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAJZ5v0jAJj-Eh9tJZRMamSFSWWJqVpzaWeHmqThyPvAGpzk17w@mail.gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+        lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DQoNCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gRnJvbTogQ2hyaXN0b3BoZSBMZXJv
-eSA8Y2hyaXN0b3BoZS5sZXJveUBjc2dyb3VwLmV1Pg0KPiBTZW50OiBXZWRuZXNkYXksIEp1bmUg
-MjgsIDIwMjMgMjo0MCBQTQ0KPiBUbzogTGVvIExpIDxsZW95YW5nLmxpQG54cC5jb20+OyBNYSBL
-ZSA8bWFrZV9ydWMyMDIxQDE2My5jb20+DQo+IENjOiBncmVna2hAbGludXhmb3VuZGF0aW9uLm9y
-ZzsgbGludXgtdXNiQHZnZXIua2VybmVsLm9yZzsgbGludXhwcGMtDQo+IGRldkBsaXN0cy5vemxh
-YnMub3JnOyBsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnDQo+IFN1YmplY3Q6IFJlOiBbUEFU
-Q0hdIHVzYjogZ2FkZ2V0OiBmc2xfcWVfdWRjOiB2YWxpZGF0ZSBlbmRwb2ludCBpbmRleCBmb3IN
-Cj4gY2g5IHVkYw0KPiANCj4gDQo+IA0KPiBMZSAyOC8wNi8yMDIzIMOgIDE5OjA0LCBMZW8gTGkg
-YSDDqWNyaXTCoDoNCj4gPg0KPiA+DQo+ID4+IC0tLS0tT3JpZ2luYWwgTWVzc2FnZS0tLS0tDQo+
-ID4+IEZyb206IE1hIEtlIDxtYWtlX3J1YzIwMjFAMTYzLmNvbT4NCj4gPj4gU2VudDogV2VkbmVz
-ZGF5LCBKdW5lIDI4LCAyMDIzIDM6MTUgQU0NCj4gPj4gVG86IExlbyBMaSA8bGVveWFuZy5saUBu
-eHAuY29tPg0KPiA+PiBDYzogZ3JlZ2toQGxpbnV4Zm91bmRhdGlvbi5vcmc7IGxpbnV4LXVzYkB2
-Z2VyLmtlcm5lbC5vcmc7IGxpbnV4cHBjLQ0KPiA+PiBkZXZAbGlzdHMub3psYWJzLm9yZzsgbGlu
-dXgta2VybmVsQHZnZXIua2VybmVsLm9yZzsgTWEgS2UNCj4gPj4gPG1ha2VfcnVjMjAyMUAxNjMu
-Y29tPg0KPiA+PiBTdWJqZWN0OiBbUEFUQ0hdIHVzYjogZ2FkZ2V0OiBmc2xfcWVfdWRjOiB2YWxp
-ZGF0ZSBlbmRwb2ludCBpbmRleCBmb3INCj4gPj4gY2g5IHVkYw0KPiA+Pg0KPiA+PiBXZSBzaG91
-bGQgdmVyaWZ5IHRoZSBib3VuZCBvZiB0aGUgYXJyYXkgdG8gYXNzdXJlIHRoYXQgaG9zdCBtYXkg
-bm90DQo+ID4+IG1hbmlwdWxhdGUgdGhlIGluZGV4IHRvIHBvaW50IHBhc3QgZW5kcG9pbnQgYXJy
-YXkuDQo+ID4+DQo+ID4+IFNpZ25lZC1vZmYtYnk6IE1hIEtlIDxtYWtlX3J1YzIwMjFAMTYzLmNv
-bT4NCj4gPj4gLS0tDQo+ID4+ICAgZHJpdmVycy91c2IvZ2FkZ2V0L3VkYy9mc2xfcWVfdWRjLmMg
-fCAyICsrDQo+ID4+ICAgMSBmaWxlIGNoYW5nZWQsIDIgaW5zZXJ0aW9ucygrKQ0KPiA+Pg0KPiA+
-PiBkaWZmIC0tZ2l0IGEvZHJpdmVycy91c2IvZ2FkZ2V0L3VkYy9mc2xfcWVfdWRjLmMNCj4gPj4g
-Yi9kcml2ZXJzL3VzYi9nYWRnZXQvdWRjL2ZzbF9xZV91ZGMuYw0KPiA+PiBpbmRleCAzYjFjYzhm
-YTMwYzguLmY0ZTVjYmQxOTNiNyAxMDA2NDQNCj4gPj4gLS0tIGEvZHJpdmVycy91c2IvZ2FkZ2V0
-L3VkYy9mc2xfcWVfdWRjLmMNCj4gPj4gKysrIGIvZHJpdmVycy91c2IvZ2FkZ2V0L3VkYy9mc2xf
-cWVfdWRjLmMNCj4gPj4gQEAgLTE5NTksNiArMTk1OSw4IEBAIHN0YXRpYyB2b2lkIGNoOWdldHN0
-YXR1cyhzdHJ1Y3QgcWVfdWRjICp1ZGMsIHU4DQo+ID4+IHJlcXVlc3RfdHlwZSwgdTE2IHZhbHVl
-LA0KPiA+PiAgIAl9IGVsc2UgaWYgKChyZXF1ZXN0X3R5cGUgJiBVU0JfUkVDSVBfTUFTSykgPT0N
-Cj4gPj4gVVNCX1JFQ0lQX0VORFBPSU5UKSB7DQo+ID4+ICAgCQkvKiBHZXQgZW5kcG9pbnQgc3Rh
-dHVzICovDQo+ID4+ICAgCQlpbnQgcGlwZSA9IGluZGV4ICYgVVNCX0VORFBPSU5UX05VTUJFUl9N
-QVNLOw0KPiA+PiArCQlpZiAocGlwZSA+PSBVU0JfTUFYX0VORFBPSU5UUykNCj4gPj4gKwkJCWdv
-dG8gc3RhbGw7DQo+ID4NCj4gPiBUaGFua3MuICBUaGlzIHNlZW1zIHRvIGJlIHRoZSByaWdodCB0
-aGluZyB0byBkby4gIEJ1dCBub3JtYWxseSB3ZSBkb24ndCBtaXgNCj4gZGVjbGFyYXRpb25zIHdp
-dGggY29kZSB3aXRoaW4gYSBjb2RlIGJsb2NrLiAgQ291bGQgd2UgcmUtYXJyYW5nZSB0aGUgY29k
-ZSBhDQo+IGxpdHRsZSBiaXQgc28gZGVjbGFyYXRpb25zIHN0YXkgb24gdG9wPw0KPiANCj4gQnV0
-IHdlIGFyZSBhdCB0aGUgc3RhcnQgb2YgYSBjb2RlIGJsb2NrIGFyZW4ndCB3ZSA/DQoNCkJ1dCB0
-aGV5IHdlcmUgYXQgdGhlIGJlZ2lubmluZyBvZiBhIHsgfSBibG9jayB3aGljaCBpcyBjb21wbGlh
-bnQgd2l0aCB0aGUgQzg5IHN0YW5kYXJkLiAgSSBrbm93IGdjYyBpcyBtb3JlIHJlbGF4ZWQgZnJv
-bSB0aGlzLiAgQnV0IGl0IGlzIHByb2JhYmx5IHN0aWxsIGdvb2QgdG8gc3RpY2sgdG8gdGhlIHN0
-YW5kYXJkPw0KDQo+IA0KPiBUaGUgb25seSBtaXNzaW5nIHRoaW5nIGlzIHRoZSBibGFuayBsaW5l
-IGJldHdlZW4gdGhlIGRlY2xhcmF0aW9ucyBhbmQgdGhlDQo+IGNvZGUsIHNvIHRoYXQgd2UgY2xl
-YXJseSBzZWUgd2hlcmUgZGVjbGFyYXRpb25zIGVuZCBhbmQgd2hlcmUgY29kZSBzdGFydC4NCj4g
-DQo+ID4NCj4gPj4gICAJCXN0cnVjdCBxZV9lcCAqdGFyZ2V0X2VwID0gJnVkYy0+ZXBzW3BpcGVd
-Ow0KPiA+PiAgIAkJdTE2IHVzZXA7DQo+ID4+DQo+ID4+IC0tDQo+ID4+IDIuMzcuMg0KPiA+DQo=
+On Fri, Jun 23, 2023 at 07:31:43PM +0200, Rafael J. Wysocki wrote:
+> 
+> 
+> 
+> On Thu, Jun 22, 2023 at 6:56 AM Eduardo Valentin <evalenti@kernel.org> wrote:
+> >
+> > On Wed, Jun 21, 2023 at 01:43:26PM +0200, Daniel Lezcano wrote:
+> > >
+> > >
+> > >
+> > > On 21/06/2023 07:06, Eduardo Valentin wrote:
+> > > > On Mon, Jun 12, 2023 at 10:17:51AM +0200, Daniel Lezcano wrote:
+> > > > >
+> > > > >
+> > > > >
+> > > > > Hi Eduardo,
+> > > > >
+> > > > > On 08/06/2023 19:44, Eduardo Valentin wrote:
+> > > > >
+> > > > > [ ... ]
+> > > > >
+> > > > > > > Do you have a use case with some measurements to spot an issue or is it
+> > > > > > > a potential issue you identified ?
+> > > > > >
+> > > > > >
+> > > > > > yes, a governor that is using I2C device as input, behind I2C fast mode (100KHz)
+> > > > > > and needs to update the zone every 100ms. Each read in this bus, if done alone
+> > > > > > would be around 500us, takes 10bytes to read the device, it is 10 clocks per byte,
+> > > > > > well technically 9, but rounding for the sake of the example, which gets you
+> > > > > > 50 / 100KHz = 500 us. That is for a single read. You add one single extra
+> > > > > > userspace read triggering an unused device update, that is already a 1ms drift.
+> > > > > > Basically you looking at 0.5% for each extra userspace read competing in this
+> > > > > > sysfs node. You add extra devices in the same I2C bus, your governor is looking
+> > > > > > at more than 1% overhead. And I am talking also about a main CPU of ~800MHz.
+> > > > > > I did not even include the lock overhead considered for this CPU ;-)
+> > > > > >
+> > > > > > Again, this is not about controlling the DIE temperature of the CPU you
+> > > > > > are running the thermal subsystem. This is about controlling
+> > > > > > a target device.
+> > > > >
+> > > > > Ok. The target device is on a bus which is slow and prone to contention.
+> > > > >
+> > > > > This hardware is not designed to be monitored with a high precision, so
+> > > > > reading the temperature at a high rate does not really make sense.
+> > > >
+> > > > On the contrary, it needs even more precision and any extra delay adds to
+> > > > loss on accuracy :-)
+> > >
+> > > What I meant is if the hardware designer thought there could be a
+> > > problem with the thermal zone they would have put another kind of
+> > > sensor, not one with a i2c based communication.
+> >
+> > No, that is not a problem in the physical thermal zone. Or to cover
+> > for a hardware design flaw. This is an actual typical case. However,
+> > yes, designer must take into account any sort of delays or jittering
+> > in the control system, and typically one would add some thermal margins
+> > on the control system. But to the original point here, we should eliminate
+> > unnecessary jittering or delay in the control system.
+> >
+> > >
+> > >
+> > > > > Moreover (putting apart a potential contention), the delayed read does
+> > > > > not change the time interval, which remains the same from the governor
+> > > > > point of view.
+> > > >
+> > > > It does not change the governor update interval and that is a property of
+> > > > the thermal zone. Correct. And that is the intention of the change.
+> > > > The actual temperature updates driven by the governor will always
+> > > > result in a driver call. While a userspace call will not be in the way
+> > > > of the governor update.
+> > > >
+> > > > Sysfs reads, However, with the current code as is, it may cause
+> > > > jittering on the actual execution of the governor throttle function.
+> > > >   causing the computation of the desired outcome cooling device being skewed.
+> > > >
+> > > > >
+> > > > > In addition, i2c sensors are usually handled in the hwmon subsystem
+> > > > > which are registered in the thermal framework from there. Those have
+> > > > > most of their 'read' callback with a cached value in a jiffies based way
+> > > > > eg. [1].
+> > > >
+> > > > I guess what you are really saying is: go read the hwmon sysfs node,
+> > > > or, hwmon solves this for us, which unfortunately is not true for all devices.
+> > >
+> > > I meant the i2c sensors are under the hwmon subsystem. This subsystem is
+> > > connected with the thermal framework, so when a hwmon sensor is created,
+> > > it register this sensor as a thermal zone.
+> > >
+> > >
+> > > > > So the feature already exists for slow devices and are handled in the
+> > > > > drivers directly via the hwmon subsystem.
+> > > > >
+> > > > >  From my POV, the feature is not needed in the thermal framework.
+> > > >
+> > > > The fact that hwmon does it in some way is another evidence of the
+> > > > actual problem.
+> > >
+> > > Not really, it shows the i2c sensors are in the hwmon subsystems.
+> >
+> > They are there too. And hwmon also sees same problem of too frequent
+> > device update. The problem is there regardless of the subsystem we use
+> > to represent the device. Also, I dont buy the argument that this is
+> > a problem of hwmon because it is already supported to plug in
+> > hwmon devices in the thermal subsystem. That is actually the original
+> > design in fact :-). So running a control in the thermal subsystem
+> > on top of inputs from hwmon, which happens to support I2C devices,
+> > is not a problem for hwmon to solve, since the control is in the
+> > thermal subsystem, and hwmon does not offer control solutions.
+> 
+> Regardless of where the problem is etc, if my understanding of the
+> patch is correct, it is proposing to change the behavior of a
+> well-known sysfs interface in a way that is likely to be incompatible
+> with at least some of its users.  This is an obvious no-go in kernel
+> development and I would expect you to be well aware of it.
+
+yeah I get it.
+
+> 
+> IOW, if you want the cached value to be returned, a new interface (eg.
+> a new sysfs attribute) is needed.
+
+Yeah, I am fine with either a new sysfs entry to return the cached value,
+or a new sysfs entry to change the behavior of the existing /temp, as I
+mentioned before, either way works for me, if changing the existing one
+is too intrusive.
+
+> 
+> And I think that the use case is not really i2c sensors in general,
+
+I2C was just the factual example I had, but you are right, the use case
+is not isolated to I2C sensor. Rather, to be clear I am not blaming I2C,
+the actual issue just happen to be easier to see when I2C devices, slower
+than typical MMIO devices, are being used as input for the control.
+
+> because at least in some cases they work just fine AFAICS, but a
+> platform with a control loop running in the kernel that depends on
+> sensor reads carried out at a specific, approximately constant, rate
+> that can be disturbed by user space checking the sensor temperature
+> via sysfs at "wrong" times.  If at the same time the user space
+> program in question doesn't care about the most recent values reported
+> by the sensor, it may very well use the values cached by the in-kernel
+> control loop.
+
+That is right, the balance between supporting user space reads and
+running the control timely is the actual original concern. The problem
+fades out a bit when you have device reads in the us / ns time scale
+and control update is in 100s of ms. But becomes more apparent on slower
+devices, when reads are in ms and policy update is in the 100s ms, that is
+why the I2C case was quoted. But nothing wrong with I2C, or supporting
+I2C on the thermal subsystem as we do today via the hwmon interface REGISTER_TZ,
+the problem is on having to support the control in kernel and a read in
+userspace that can create jitter to the control.
+
+And as you properly stated, for this use case, the userspace does not care
+about the most recent value of the device, so that is why the change
+proposes to give cached values.
+
+On the flip side though, there may be user space based policies that
+require the most recent device value. But in this case, the expectation
+is to disable the in kernel policy and switch the thermal zone to
+mode == disabled. And that is also why this patch will go the path
+to request the most recent device value when the /temp sysfs entry
+is read and the mode is disabled.
+
+I would suggest to have an addition sysfs entry that sets the
+thermal zone into cached mode or not, let's say for the sake of the
+discussion, we call it 'cached_values', with default to 'not cached'.
+This way, we could support:
+
+a) Default, current situation, where all reads in /temp are always backed up
+with an actual device .get_temp(). Nothing changes here, keeps reading
+under /temp, and so long system designer is satisfied with jittering,
+no need to change anything.
+
+b) When one has control in kernel, and frequent userspace reads on /temp
+but system designer wants to protect the control in kernel to avoid jittering.
+Just keep reading from /temp but set the new sysfs property 'cached_values' to 'cached'.
+Then userspace will get updated values as frequent as the kernel control has
+and the kernel control will not be disturbed by frequent device reads.
+
+c) When one has control in userspace, and wants to have the most frequent
+device read. Here, one can simply disable the in kernel control by
+setting the 'mode' sysfs entry to 'disabled', and making sure the new sysfs property is set
+to 'not cached'. Well in fact, the way I thought this originally in this patch
+was to simply always read the device when /temp is read is 'mode' is 'disabled'.
+
+I believe you proposed to have another sysfs entry  sysfs entry for reading cached temperature.
+Something like 'temp_cached'. Thinking of it, as I mentioned before, it will work.
+The only possible downside is to have two entries to read temperature.
+
+Strong opinions on any of the above?
+
+
+-- 
+All the best,
+Eduardo Valentin
