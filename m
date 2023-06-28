@@ -2,111 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EFEC7419CE
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 22:41:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 160527419D0
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 22:41:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232084AbjF1UlS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 16:41:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38312 "EHLO
+        id S231140AbjF1UlL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 16:41:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231767AbjF1UlB (ORCPT
+        with ESMTP id S232262AbjF1Ukz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 16:41:01 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AD501FF7;
-        Wed, 28 Jun 2023 13:39:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=Q74U9h5cJqAF7kQMrqejEwYKPbZZwynJrbUyaN3UMdk=; b=U7ven3j1n/AGEZHnBs70CiAm3c
-        IFp7vZgZH+yI7tHPmRDhAxOv2CZ4gCjKF9xF4GFFql17CQMcuZsdavKL+gcE2vidJElANCkN/8Nlp
-        2Wi1Mxv7uQu7+LMDHIpCxsmPRFaciMupyA2OtLGyMmPZK3R+wiSQCLj3z19/8StnPgL1++XOAQOS8
-        Zm4KNBKwkc32cbwqyYjVZpp4wAMQtDJfxRPhUH2DlnwKFk6ZmIYyfJj7mDbnGRbWIgDUIo8M72um9
-        gTIhGZf2TIGG6gfoSjXoe3/DZawyJWKyubvPt63WJDlpJBmXc+ZlzlbsSKsW657uHq2vLD9F7d0vU
-        ffz4ertQ==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1qEbvl-004CII-F8; Wed, 28 Jun 2023 20:38:25 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 317E33002C5;
-        Wed, 28 Jun 2023 22:38:23 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 18B8C214D80C3; Wed, 28 Jun 2023 22:38:23 +0200 (CEST)
-Date:   Wed, 28 Jun 2023 22:38:23 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Kai Huang <kai.huang@intel.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-mm@kvack.org, x86@kernel.org, dave.hansen@intel.com,
-        kirill.shutemov@linux.intel.com, tony.luck@intel.com,
-        tglx@linutronix.de, bp@alien8.de, mingo@redhat.com, hpa@zytor.com,
-        seanjc@google.com, pbonzini@redhat.com, david@redhat.com,
-        dan.j.williams@intel.com, rafael.j.wysocki@intel.com,
-        ashok.raj@intel.com, reinette.chatre@intel.com,
-        len.brown@intel.com, ak@linux.intel.com, isaku.yamahata@intel.com,
-        ying.huang@intel.com, chao.gao@intel.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com, nik.borisov@suse.com,
-        bagasdotme@gmail.com, sagis@google.com, imammedo@redhat.com
-Subject: Re: [PATCH v12 20/22] x86/virt/tdx: Allow SEAMCALL to handle #UD and
- #GP
-Message-ID: <20230628203823.GR38236@hirez.programming.kicks-ass.net>
-References: <cover.1687784645.git.kai.huang@intel.com>
- <c124550719716f1f7759c2bdea70f4722d8e0167.1687784645.git.kai.huang@intel.com>
- <20230628152900.GI2438817@hirez.programming.kicks-ass.net>
+        Wed, 28 Jun 2023 16:40:55 -0400
+Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFE972713
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 13:39:07 -0700 (PDT)
+Received: by mail-qt1-x830.google.com with SMTP id d75a77b69052e-4007b5bafceso27171cf.1
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 13:39:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1687984747; x=1690576747;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=HpPgoFO0pSdncXppmusXrUkfxh4ES6Te3jdG2Cg2eVU=;
+        b=2wSG3WNANah+mdgC+nya2O5pWqd4PcmMoSbSQ1RduXR5iKstf64V+594XXv/EMB5YP
+         nQZUDgSOkJ0z5K/di8IExvuJiKqTMHF5oTTJM8qQUb16BIBPIAvPPGeN+tKF7mhN58C2
+         B3JlHc/+8NsuEwxwLlp7T16pcRQkCIFTJ2x9bh0Y7QnkdO23lwnP8cM9KqI0Ewerz8g7
+         cc7wRDDr8l2C1gFvKRvA0q9g+w1dbhRVRlne0ImjC4oDkzpju92K5p0XIaL0Vh2+Uaw1
+         7mEveiLJ04k1YYbR2HyGltOXn01eNIbdaOZJAU8cdPmMJAWuk/qDl8Nb9hEOo1qX0Cvn
+         FrSw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687984747; x=1690576747;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=HpPgoFO0pSdncXppmusXrUkfxh4ES6Te3jdG2Cg2eVU=;
+        b=MMTOkHTDbOZm6VhVoIrJ7hagTMgqGKyi9KGaLblvQPp6RfaSpgF2IH97YKHtvt4pIh
+         qFVamTf3PDI4sJ7+vvi2fCCG/6bIxI4tmbxi1cyBQTtg09ZY9FcJZR8sR0xfxJwggCv5
+         pgie7LOXlCEzh7GPZ56zaugjguVbEyrBgIBntEQ7wNN3J2yTwHSkWDerxLrlKop8gied
+         YQqEJwr5GQiSKCpDxTbWt8naL2A45LzGsal+kvZ9q7AKMYkunXBQGtzTiHBeue6ZhS2v
+         47J4Z1QS/sAyvjeDJiHeZ6sIbNRuQoeD5WsneNuO7rrV7BaR1ujtkIUuoqoVHQtpINBl
+         9F3Q==
+X-Gm-Message-State: AC+VfDy8iIND7NbKDJHMCtX/gmBxDgVAg1UjF7CtnmTezGjcRQsWAyRi
+        Tz69zZIorTLgm4UjWbj9fzeFSW+/c/GQZdIfl3ij
+X-Google-Smtp-Source: ACHHUZ4/TbZlYMa41Qfpo1LF3DWnM40YS8CTkj+s37iAs6EIO+6Wa0uTofT6Eaqyh9psw3nW/VBXZb/ILGt5fTgVDk8=
+X-Received: by 2002:a05:622a:51:b0:3f8:5b2:aef2 with SMTP id
+ y17-20020a05622a005100b003f805b2aef2mr345329qtw.26.1687984746831; Wed, 28 Jun
+ 2023 13:39:06 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230628152900.GI2438817@hirez.programming.kicks-ass.net>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230628180534.31819-1-quic_jhugo@quicinc.com>
+In-Reply-To: <20230628180534.31819-1-quic_jhugo@quicinc.com>
+From:   John Stultz <jstultz@google.com>
+Date:   Wed, 28 Jun 2023 13:38:54 -0700
+Message-ID: <CANDhNCqUkhiWgjCuLVX=vpBsHYj9zto95HoBH1f4XqOEkx9Zhw@mail.gmail.com>
+Subject: Re: [PATCH] MAINTAINERS: Remove Liam Mark from DMA-BUF HEAPS FRAMEWORK
+To:     Jeffrey Hugo <quic_jhugo@quicinc.com>,
+        "T.J. Mercier" <tjmercier@google.com>
+Cc:     sumit.semwal@linaro.org, benjamin.gaignard@collabora.com,
+        labbott@redhat.com, Brian.Starkey@arm.com, andersson@kernel.org,
+        linux-media@vger.kernel.or, dri-devel@lists.freedesktop.org,
+        linaro-mm-sig@lists.linaro.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 28, 2023 at 05:29:01PM +0200, Peter Zijlstra wrote:
-> On Tue, Jun 27, 2023 at 02:12:50AM +1200, Kai Huang wrote:
-> > diff --git a/arch/x86/virt/vmx/tdx/tdxcall.S b/arch/x86/virt/vmx/tdx/tdxcall.S
-> > index 49a54356ae99..757b0c34be10 100644
-> > --- a/arch/x86/virt/vmx/tdx/tdxcall.S
-> > +++ b/arch/x86/virt/vmx/tdx/tdxcall.S
-> > @@ -1,6 +1,7 @@
-> >  /* SPDX-License-Identifier: GPL-2.0 */
-> >  #include <asm/asm-offsets.h>
-> >  #include <asm/tdx.h>
-> > +#include <asm/asm.h>
-> >  
-> >  /*
-> >   * TDCALL and SEAMCALL are supported in Binutils >= 2.36.
-> > @@ -45,6 +46,7 @@
-> >  	/* Leave input param 2 in RDX */
-> >  
-> >  	.if \host
-> > +1:
-> >  	seamcall
-> 
-> So what registers are actually clobbered by SEAMCALL ? There's a
-> distinct lack of it in SDM Vol.2 instruction list :-(
+On Wed, Jun 28, 2023 at 11:05=E2=80=AFAM Jeffrey Hugo <quic_jhugo@quicinc.c=
+om> wrote:
+>
+> @codeaurora.org email addresses are no longer valid and will bounce.
+>
+> I reached out to Liam about updating his entry under DMA-BUF HEAPS
+> FRAMEWORK with an @codeaurora.org address.  His response:
+>
+> "I am not a maintainer anymore, that should be removed."
+>
+> Liam currently does not have an email address that can be used to remove
+> this entry, so I offered to submit a cleanup on his behalf with Liam's
+> consent.
+>
+> Signed-off-by: Jeffrey Hugo <quic_jhugo@quicinc.com>
+> ---
+>  MAINTAINERS | 1 -
+>  1 file changed, 1 deletion(-)
+>
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 76b53bafc03c..1781eb0a8dda 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -6168,7 +6168,6 @@ F:        kernel/dma/
+>  DMA-BUF HEAPS FRAMEWORK
+>  M:     Sumit Semwal <sumit.semwal@linaro.org>
+>  R:     Benjamin Gaignard <benjamin.gaignard@collabora.com>
+> -R:     Liam Mark <lmark@codeaurora.org>
+>  R:     Laura Abbott <labbott@redhat.com>
+>  R:     Brian Starkey <Brian.Starkey@arm.com>
+>  R:     John Stultz <jstultz@google.com>
+> --
 
-With the exception of the abomination that is TDH.VP.ENTER all SEAMCALLs
-seem to be limited to the set presented here (c,d,8,9,10,11) and all
-other registers should be available.
+Acked-by: John Stultz <jstultz@google.com>
 
-Can we please make that a hard requirement, SEAMCALL must not use
-registers outside this? We can hardly program to random future
-extentions; we need hard ABI guarantees here.
-
-That also means we should be able to use si,di for the cmovc below.
-
-Kirill, back when we did __tdx_hypercall() we got bp removed as a valid
-register, the 1.0 spec still lists that, and it is also listed in
-TDH.VP.ENTER, I'm assuming it will be removed there too?
-
-bp must not be used -- it violates the pre-existing calling convention.
-
+Though probably worth adding TJ as a reviewer?
+-john
