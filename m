@@ -2,171 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B55D740BFE
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 10:56:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA830740BB6
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 10:39:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234463AbjF1I4b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 04:56:31 -0400
-Received: from mailout4.samsung.com ([203.254.224.34]:21520 "EHLO
+        id S230517AbjF1IjE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 04:39:04 -0400
+Received: from mailout4.samsung.com ([203.254.224.34]:27192 "EHLO
         mailout4.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233724AbjF1Icd (ORCPT
+        with ESMTP id S235403AbjF1Igp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 04:32:33 -0400
+        Wed, 28 Jun 2023 04:36:45 -0400
 Received: from epcas5p1.samsung.com (unknown [182.195.41.39])
-        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20230628060406epoutp046f0a12486222ea8b734c4ca949fbf8b9~svW94rc2j2153821538epoutp04g
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 06:04:06 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20230628060406epoutp046f0a12486222ea8b734c4ca949fbf8b9~svW94rc2j2153821538epoutp04g
+        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20230628083644epoutp0418eea67be7550c9c0cb6dca8042b0317~sxcOeQshV1104711047epoutp04s
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 08:36:44 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20230628083644epoutp0418eea67be7550c9c0cb6dca8042b0317~sxcOeQshV1104711047epoutp04s
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1687932246;
-        bh=1J0GA8jA4OUCQy/o7Wr1UV/l6aUJqp3vp4GqzSVMq34=;
-        h=From:To:Cc:Subject:Date:References:From;
-        b=gHWPpnzdNaowUfBnb8O12Ax06bsrdSv5UTqpOu/v2/Eipj3ml94JDfujC7cyMrDsH
-         QWU1OY1rDWBwDxMFGP3578ovVOn6E0FIHhzSSTODN3+P2+nBIrgIkmMzuX8hWC+54B
-         m2TBewcIXGc5mKgqZkPmP0UrM6viTufHceFwgTQw=
-Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
+        s=mail20170921; t=1687941404;
+        bh=KZJNLKdtjgoDbmPLLBh4ZMAxAfXH8SRMRxK6xTKUcho=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=EOkie86NDd4tN1srUavqdXOiEqnCBVRuYiy/RYZ6L6lbTc2AzZw/mQXb06vywyhOL
+         /N9G2Z3+5XZNcyqp1GGerbLxb9xmedJJh9VrqpTVjg1tCqBUc1mL7484som9FS4wpB
+         UeePw/gGSit4bAwrIuLZCg9n/1w8bMgw0OBpqvZ4=
+Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
         epcas5p1.samsung.com (KnoxPortal) with ESMTP id
-        20230628060406epcas5p1b07b2ffdedda603499d565a0c801a436~svW9hDb5i0452904529epcas5p1Q;
-        Wed, 28 Jun 2023 06:04:06 +0000 (GMT)
-Received: from epsmges5p3new.samsung.com (unknown [182.195.38.174]) by
-        epsnrtp1.localdomain (Postfix) with ESMTP id 4QrWHS5QZBz4x9Q0; Wed, 28 Jun
-        2023 06:04:04 +0000 (GMT)
-Received: from epcas5p1.samsung.com ( [182.195.41.39]) by
+        20230628083643epcas5p19fec22088e3af806c1b6daccc1d77a36~sxcOBuMPi1461714617epcas5p1l;
+        Wed, 28 Jun 2023 08:36:43 +0000 (GMT)
+Received: from epsmges5p3new.samsung.com (unknown [182.195.38.175]) by
+        epsnrtp3.localdomain (Postfix) with ESMTP id 4QrZgZ54nRz4x9QH; Wed, 28 Jun
+        2023 08:36:42 +0000 (GMT)
+Received: from epcas5p4.samsung.com ( [182.195.41.42]) by
         epsmges5p3new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        93.51.06099.45DCB946; Wed, 28 Jun 2023 15:04:04 +0900 (KST)
+        82.BD.06099.911FB946; Wed, 28 Jun 2023 17:36:41 +0900 (KST)
 Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
         epcas5p4.samsung.com (KnoxPortal) with ESMTPA id
-        20230628051122epcas5p45d70f2c36ce91b60863f702de1534321~suo63XkqC1272712727epcas5p4X;
-        Wed, 28 Jun 2023 05:11:22 +0000 (GMT)
+        20230628083625epcas5p48b2728c6a160744ef628da9ecb49db25~sxb9JMtQI1211412114epcas5p4W;
+        Wed, 28 Jun 2023 08:36:25 +0000 (GMT)
 Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
         epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20230628051122epsmtrp104a14031214eb43558622326ce5397d0~suo62c5y60727707277epsmtrp1R;
-        Wed, 28 Jun 2023 05:11:22 +0000 (GMT)
-X-AuditID: b6c32a4b-cafff700000017d3-e4-649bcd5436b4
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+        20230628083625epsmtrp1c4c53858ee4defb98904b483e92a3835~sxb9IQNxa3254732547epsmtrp10;
+        Wed, 28 Jun 2023 08:36:25 +0000 (GMT)
+X-AuditID: b6c32a4b-d308d700000017d3-15-649bf1191ac7
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
         epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        6A.AE.34491.AF0CB946; Wed, 28 Jun 2023 14:11:22 +0900 (KST)
-Received: from ubuntu.. (unknown [109.105.118.54]) by epsmtip2.samsung.com
+        13.50.34491.901FB946; Wed, 28 Jun 2023 17:36:25 +0900 (KST)
+Received: from ubuntu.. (unknown [109.105.118.54]) by epsmtip1.samsung.com
         (KnoxPortal) with ESMTPA id
-        20230628051120epsmtip2557b4491a4e53bf72b782da715fa63f3~suo5chpNN2817628176epsmtip2r;
-        Wed, 28 Jun 2023 05:11:20 +0000 (GMT)
+        20230628083624epsmtip1cedd402dbe729584598554849fbf4e6b~sxb8EahpB2786627866epsmtip1K;
+        Wed, 28 Jun 2023 08:36:24 +0000 (GMT)
 From:   Min Li <min15.li@samsung.com>
-To:     axboe@kernel.dk, willy@infradead.org, hch@lst.de,
-        dlemoal@kernel.org, gregkh@linuxfoundation.org
-Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@kernel.org, Min Li <min15.li@samsung.com>
-Subject: [PATCH v3] block: add check that partition length needs to be
+To:     hch@lst.de
+Cc:     axboe@kernel.dk, dlemoal@kernel.org, gregkh@linuxfoundation.org,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        min15.li@samsung.com, stable@kernel.org, willy@infradead.org
+Subject: Re: [PATCH v3] block: add check that partition length needs to be
  aligned with block size
-Date:   Wed, 28 Jun 2023 13:09:41 +0000
-Message-Id: <20230628130941.10690-1-min15.li@samsung.com>
+Date:   Wed, 28 Jun 2023 16:34:42 +0000
+Message-Id: <20230628163442.2796-1-min15.li@samsung.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230628073214.GA25314@lst.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrMJsWRmVeSWpSXmKPExsWy7bCmum7I2dkpBhc3qVmsvtvPZvFgv71F
-        8+L1bBY3jr9jtpj7+hKLxcrVR5ks9t7Stri8aw6bxfJVHUwWZyd8YLX4dP4Cm8XvH0CxG+uu
-        sjjwemxeoeVx+Wypx6ZVnWwe++euYffYfbOBzaNvyypGj8+b5ALYo7JtMlITU1KLFFLzkvNT
-        MvPSbZW8g+Od403NDAx1DS0tzJUU8hJzU22VXHwCdN0yc4BOVVIoS8wpBQoFJBYXK+nb2RTl
-        l5akKmTkF5fYKqUWpOQUmBToFSfmFpfmpevlpZZYGRoYGJkCFSZkZ2y+MY2x4KxgxZ89m9gb
-        GGfwdTFyckgImEgcODOfrYuRi0NIYDejxOU/a1hBEkICnxglug+KQyS+MUosfHmUHabj7LbV
-        jBBFexkltl43gyh6ziixZMZloAQHB5uAssS2pT4gNSICaRJLO36ygdjMAoUSP751MIPYwgIJ
-        EvNfbWQCsVkEVCU6z3WCLeYVsJRYu/MoM8QueYn9B88yQ8QFJU7OfMICMUdeonnrbKiaRg6J
-        viMSELaLxMT//6DiwhKvjm+BullK4mV/GzvIaRICxRIvf4RBhGskdn+7zQRhW0tsW7+OCaSE
-        WUBTYv0ufYiwrMTUU+uYILbySfT+fgJVziuxYx6MrSTx98I5RghbQmLx/oesELaHxLl/d1kg
-        IRUrMbXnIMsERvlZSJ6ZheSZWQibFzAyr2KUTC0ozk1PLTYtMM5LLYdHanJ+7iZGcGrV8t7B
-        +OjBB71DjEwcjIcYJTiYlUR4xX5MTxHiTUmsrEotyo8vKs1JLT7EaAoM4YnMUqLJ+cDknlcS
-        b2hiaWBiZmZmYmlsZqgkznvxem+KkEB6YklqdmpqQWoRTB8TB6dUA5O+ceETtv2bi3Q1ZSd1
-        nnqz/LHp5M1HNx/KUfm58DnzusuR5y7+eDRFbcmCv7x2/v/vB/979POH06amS99udCz+b85o
-        9jPk0Irz+yV+tPG/fTHF8d2VO3HCsjW7OGc4uqo2vJzddcj/wi+2+d5f6jJXvVvxwPFb3svw
-        U3NsTQ5lp1RMl/3f4XG7IUWA2ezewz9/DK9P+yn6PmbXbPUd/zUXCik8Tn8fWjdJ+D3L65j+
-        j6vvlzkYRlvETHh4tKX+5fLJ7qlMrFMbDu22P7N78hxWDZMSl48a8k7MJ/9armJl6hTLky6O
-        cpBTj7612mmVnoJz11GLNQd+6U+W9L11Kv9cyO/8K8u/zpW4lvxZ2vkYsxJLcUaioRZzUXEi
-        ANGY6Uw2BAAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrILMWRmVeSWpSXmKPExsWy7bCSvO6vA7NTDFbvFrFYfbefzeLBfnuL
-        5sXr2SxuHH/HbDH39SUWi5WrjzJZ7L2lbXF51xw2i+WrOpgszk74wGrx6fwFNovfP4BiN9Zd
-        ZXHg9di8Qsvj8tlSj02rOtk89s9dw+6x+2YDm0ffllWMHp83yQWwR3HZpKTmZJalFunbJXBl
-        bL4xjbHgrGDFnz2b2BsYZ/B1MXJySAiYSJzdtpqxi5GLQ0hgN6PEtK5djBAJCYnz836xQdjC
-        Eiv/PWeHKHrKKNF8+D6Qw8HBJqAssW2pD4gpIpAjseK7P0g5s0CpxNbbTewgtrBAHFB4KguI
-        zSKgKtF5rpMVxOYVsJRYu/MoM8R4eYn9B88yQ8QFJU7OfMICMUdeonnrbOYJjHyzkKRmIUkt
-        YGRaxSiZWlCcm55bbFhgmJdarlecmFtcmpeul5yfu4kRHOpamjsYt6/6oHeIkYmD8RCjBAez
-        kgiv2I/pKUK8KYmVValF+fFFpTmpxYcYpTlYlMR5xV/0pggJpCeWpGanphakFsFkmTg4pRqY
-        cl3/3Zhi0nH7hdtxju23HwkdeJ4Ua/ttyrTMnNbny9imbr8nIyP7ZvF2yYlppnemV85TDeOU
-        kNgUs/XX67WBfVn2HDMk95/Z1GpyRVXmDuPFQLkgnXU3gj8vC/56+inXfv3j2/rvXJiZs1FX
-        acM02zO/s+wS/GZdlM60NhGvXcD/t7NbZHaGSOcnm1llYqybnFU3n8jl7473OuCjnv/1ettx
-        Xvu2vcoWXNIpQZmfF+y4/nR2wH61jlUNhp0/yqqX2q1nEQ1ZfXlX1w/esNVNfMvW9hqZCYRe
-        3d599T+/jrGHip3I/7zjx2qNzHITn109dn7itBJF189me7e8flV9okVT8E/kwn2vTZ8+9Ptg
-        rcRSnJFoqMVcVJwIAFGzsWPkAgAA
-X-CMS-MailID: 20230628051122epcas5p45d70f2c36ce91b60863f702de1534321
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrOJsWRmVeSWpSXmKPExsWy7bCmlq7kx9kpBlf+GVisvtvPZvFgv71F
+        8+L1bBZzX19isVi5+iiTxd5b2haXd81hs1i+qoPJ4uyED6wWn85fYLP4/WMOmwO3x+YVWh6X
+        z5Z6bFrVyeaxf+4ado/dNxvYPPq2rGL0+LxJLoA9KtsmIzUxJbVIITUvOT8lMy/dVsk7ON45
+        3tTMwFDX0NLCXEkhLzE31VbJxSdA1y0zB+hAJYWyxJxSoFBAYnGxkr6dTVF+aUmqQkZ+cYmt
+        UmpBSk6BSYFecWJucWleul5eaomVoYGBkSlQYUJ2xuL3B5gLJjFW7P+8nLmBsbCLkZNDQsBE
+        YnfHPJYuRi4OIYHdjBK9L/pZIZxPjBL/361lh3C+MUpc7rnACNPy98BEqKq9jBJPny5khHCe
+        M0q8X7qOqYuRg4NNQFli21IfEFNEgE/i1q1UkBJmgQOMEntfNoMNEhZIkXj8azYLiM0ioCqx
+        /fVdVhCbV8BC4tDmNjaIZfIS+w+eZQaxOQV0JDrvbGeHqBGUODnzCVgvM1BN89bZzCALJAR6
+        OSRu/f4D1ewisab9NtTVwhKvjm9hh7ClJF72t7GDHCchUCzx8kcYRLhGYve320wQtrXEtvUQ
+        rzALaEqs36UPEZaVmHpqHRPEWj6J3t9PoMp5JXbMg7GVJP5eOAe1VUJi8f6HrBC2h8S7tRPB
+        ThYSqJd4Nn8n+wRGhVlIvpmF5JtZCJsXMDKvYpRMLSjOTU8tNi0wzksth0dxcn7uJkZwitXy
+        3sH46MEHvUOMTByMhxglOJiVRHhvv5mdIsSbklhZlVqUH19UmpNafIjRFBjcE5mlRJPzgUk+
+        ryTe0MTSwMTMzMzE0tjMUEmc9+L13hQhgfTEktTs1NSC1CKYPiYOTqkGJm6dPmG9vyuCvDMi
+        JnBO2Ohm3Md3e+ZxnyfL16mX/VyY3pq52WXCf/YjSdJu0nad7zbveHdJ6eSlFbyKHN/9b6ce
+        lf/6KPjt7eMLTaO2tB/L6OXbPKWwYKfmsbr+g9VT9DS36QdsUjgkdvKFc7CLdWiw+e6/KktL
+        bqntX1G67V68QLGCIv/RjY8WzjKZ+GfpHCnfk4oeTPwVQbftPsZXzHin/XvVwzVnXz46pHz3
+        R+LiW5/y2jr/3f6aOzs8LNy6OSHu7uMLYcvn/rZLsG/M4uU5buxWZX/2MFPmtvOKs1dwezx1
+        KJ0SGCbtXjVtyvdtO+X/WTPUSH290KGiE3oyYNOCiIYnVx+t8Dyw4dGChW5KLMUZiYZazEXF
+        iQC7sLMcOgQAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrHLMWRmVeSWpSXmKPExsWy7bCSnC7nx9kpBtNeqFusvtvPZvFgv71F
+        8+L1bBZzX19isVi5+iiTxd5b2haXd81hs1i+qoPJ4uyED6wWn85fYLP4/WMOmwO3x+YVWh6X
+        z5Z6bFrVyeaxf+4ado/dNxvYPPq2rGL0+LxJLoA9issmJTUnsyy1SN8ugStj8fsDzAWTGCv2
+        f17O3MBY2MXIySEhYCLx98BE1i5GLg4hgd2MErdPTmKGSEhInJ/3iw3CFpZY+e85O4gtJPCU
+        UWJGY1QXIwcHm4CyxLalPiCmiACfxK1bqSBjmAVOMUq0/zwPVi4skCTxddFcMJtFQFVi++u7
+        rCA2r4CFxKHNbVDj5SX2HzwLtpZTQEei8852qFXaEtN+PWGGqBeUODnzCQuIzQxU37x1NvME
+        RoFZSFKzkKQWMDKtYpRMLSjOTc8tNiwwzEst1ytOzC0uzUvXS87P3cQIjgItzR2M21d90DvE
+        yMTBeIhRgoNZSYT39pvZKUK8KYmVValF+fFFpTmpxYcYpTlYlMR5xV/0pggJpCeWpGanphak
+        FsFkmTg4pRqYlpl/zNJ9KWY29e4fCUOGmQ/Wt9tVPo2dIZTyk/mgpWtFQaJb0It+HvVOmzUs
+        ax4vC72/T0u1S/eGusHeNrvWJr+LRqfUH937Gz9N4z3jtLzdfREc6VeMrj22+fYt9vDH3w0L
+        ggO2LuI1vlz3SG7Z9H6bfUKrjhTHHe7fwZX5pe7Cn2cuoQdmX5czdzDY+LV3xSujHVtCSstO
+        mLJdtvWprGU9sKQ5N4eZZ4JrxEnxD3/TXPz9Vf6cv3f5auJus0zpnXtsj3zPKpuktrHtWb7N
+        vx4Z778KJpNm/J8c2n11trXkxN/mB5ZuFH5xnIF/i0vckyeRBZVhv2z5H5bt1NG8V31vHl9K
+        WWRkvXJRnk6EEktxRqKhFnNRcSIAJoBTUPECAAA=
+X-CMS-MailID: 20230628083625epcas5p48b2728c6a160744ef628da9ecb49db25
 X-Msg-Generator: CA
 Content-Type: text/plain; charset="utf-8"
 X-Sendblock-Type: REQ_APPROVE
 CMS-TYPE: 105P
 DLP-Filter: Pass
 X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20230628051122epcas5p45d70f2c36ce91b60863f702de1534321
-References: <CGME20230628051122epcas5p45d70f2c36ce91b60863f702de1534321@epcas5p4.samsung.com>
+X-CMS-RootMailID: 20230628083625epcas5p48b2728c6a160744ef628da9ecb49db25
+References: <20230628073214.GA25314@lst.de>
+        <CGME20230628083625epcas5p48b2728c6a160744ef628da9ecb49db25@epcas5p4.samsung.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Before calling add partition or resize partition, there is no check
-on whether the length is aligned with the logical block size.
-If the logical block size of the disk is larger than 512 bytes,
-then the partition size maybe not the multiple of the logical block size,
-and when the last sector is read, bio_truncate() will adjust the bio size,
-resulting in an IO error if the size of the read command is smaller than
-the logical block size.If integrity data is supported, this will also
-result in a null pointer dereference when calling bio_integrity_free.
+I will modify the blksz to unsigned int.
+For pre-existing start/length, is it ok to change them to sector_t?
 
-Signed-off-by: Min Li <min15.li@samsung.com>
+Thanks for your reply
 
----
-Changes from v1:
-
-- Add a space after /* and before */.
-- Move length alignment check before the "start = p.start >> SECTOR_SHIFT"
-- Move check for p.start being aligned together with this length alignment check.
-
-Changes from v2:
-
-- Add the assignment on the first line and merge the two lines into one.
-- Use IS_ALIGNED function to check alignment.
----
- block/ioctl.c | 9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
-
-diff --git a/block/ioctl.c b/block/ioctl.c
-index 3be11941fb2d..1a351132bf4e 100644
---- a/block/ioctl.c
-+++ b/block/ioctl.c
-@@ -16,9 +16,9 @@
- static int blkpg_do_ioctl(struct block_device *bdev,
- 			  struct blkpg_partition __user *upart, int op)
- {
-+	long long blksz = bdev_logical_block_size(bdev), start, length;
- 	struct gendisk *disk = bdev->bd_disk;
- 	struct blkpg_partition p;
--	long long start, length;
- 
- 	if (!capable(CAP_SYS_ADMIN))
- 		return -EACCES;
-@@ -33,14 +33,15 @@ static int blkpg_do_ioctl(struct block_device *bdev,
- 	if (op == BLKPG_DEL_PARTITION)
- 		return bdev_del_partition(disk, p.pno);
- 
-+	/* Check that the partition is aligned to the block size */
-+	if (!IS_ALIGNED(p.start | p.length, blksz))
-+		return -EINVAL;
-+
- 	start = p.start >> SECTOR_SHIFT;
- 	length = p.length >> SECTOR_SHIFT;
- 
- 	switch (op) {
- 	case BLKPG_ADD_PARTITION:
--		/* check if partition is aligned to blocksize */
--		if (p.start & (bdev_logical_block_size(bdev) - 1))
--			return -EINVAL;
- 		return bdev_add_partition(disk, p.pno, start, length);
- 	case BLKPG_RESIZE_PARTITION:
- 		return bdev_resize_partition(disk, p.pno, start, length);
--- 
-2.34.1
-
+Min Li
