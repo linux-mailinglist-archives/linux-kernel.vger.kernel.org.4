@@ -2,195 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBE75741685
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 18:33:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FCF7741686
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 18:33:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231142AbjF1Qcy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 12:32:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38942 "EHLO
+        id S229939AbjF1QdF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 12:33:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231620AbjF1QcL (ORCPT
+        with ESMTP id S232114AbjF1Qcb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 12:32:11 -0400
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAF8D2D76
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 09:31:28 -0700 (PDT)
-Received: by mail-lj1-x22c.google.com with SMTP id 38308e7fff4ca-2b5c231f842so65281111fa.2
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 09:31:28 -0700 (PDT)
+        Wed, 28 Jun 2023 12:32:31 -0400
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5000419AF
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 09:32:23 -0700 (PDT)
+Received: by mail-pf1-x433.google.com with SMTP id d2e1a72fcca58-6687096c6ddso3375785b3a.0
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 09:32:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sifive.com; s=google; t=1687969887; x=1690561887;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=MxUKkkbx+vRaC8aApGfWw+lRG/yJ6GciI8eYWTcSc+k=;
-        b=UWTbqKJ2fZNsGlGeU+8ZqLPNDF2dy+79VrxjSQXDm8YcY/1L1wE7WMUH+axRruogbx
-         A08uUzgNdoD9PvKZlIafvnJ3JtujnGWoKyJkpMWvVa0ipnPKdJijF266uEO18WoglKYp
-         l+ehO5vfpQkxBZggXZNKcZKv+EQKodX2f+Z1dgQJ8iiCO/64mushT8tSZHQySYGC4tIH
-         /wSVEHiefbZ1CXQQEbX7i4urF2ooCKxKflvI9W9GmTZkcms+hP3Jh0w3eaeLTg7HZOjM
-         i7yZiz8IDiby+B+LAGmNaisWhRX1gXnaXUlH5o8JGY/TE+Z5wjFBsBuWon1C7rxHA0bI
-         ZErA==
+        d=chromium.org; s=google; t=1687969943; x=1690561943;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=qDGMYCjLis4jKxTwr/XdUXoNY3JVle8y3T0ovRza2gI=;
+        b=So0cQmmYjKO65vw+/JsinQBhmojmi5xblarthQ+XwK6zfOrl6nidesbKTUolCr2pTj
+         v6gEfN3NB9a8q4sxVqNolfWNnRp4XqLAHKowxUgtk9uf3sWNhisK6K8UMc+/sGQs7zl3
+         7wNc+mBDuFAzumNdKdKkBJsTHBdBLtEE96zHw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687969887; x=1690561887;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=MxUKkkbx+vRaC8aApGfWw+lRG/yJ6GciI8eYWTcSc+k=;
-        b=SOoJe/OF99r1iqXyCwVdnCQcEdPkDREe2vkeK/xsUBGYvZZSdL1DOGRiXfpBozGmE5
-         chwcUiUFQvP6zHZxQFA4XjZCseEVKdq4hKM4JS1sl7jFll40gCP7S6LCvB7WR9XcXp81
-         2Yv5yBV3/+9JDnRQijrZxdTOAbBUzxSqeO/e+ZepUAZh2h2kGOm87ooNlOi+viJZYtpr
-         Tl9zCZXuDYt0LAy+hdtxRfxILXOPNV9p3ytJQD8/zpt6CJN3HPp+0K0WJxuCm3wZbE7p
-         GOZByVChtKbb7u4xhG2ARpMcRPWNU+i95avot59AIh/Bk5wlSS2wyaMUn4YaHrxk2uNx
-         0TwQ==
-X-Gm-Message-State: AC+VfDx4e0ebWvidb238pKcrwTAEAAmrgZyehM9ttEYWxS5s48yPLAxa
-        txJSGA38p7nYdzQxJWTeCv3fBjX4dAcRorhpVG7FKw==
-X-Google-Smtp-Source: ACHHUZ4m+7RR8cSMdL8PzsOGNomHg8wcCI+B4awSJPYhsIdDffEKLLZoyQ0wBygn7bgMqn4iZow/NVhPAO6GvWVDdGA=
-X-Received: by 2002:a2e:9e07:0:b0:2b4:5fdd:f588 with SMTP id
- e7-20020a2e9e07000000b002b45fddf588mr21115198ljk.43.1687969887180; Wed, 28
- Jun 2023 09:31:27 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1687969943; x=1690561943;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=qDGMYCjLis4jKxTwr/XdUXoNY3JVle8y3T0ovRza2gI=;
+        b=KBxB4o4yYmoDhaaXjjq9taZLE9KXQTy1qVKPqp1VCT+d2kyWVXXRpAkddUBidq3UYm
+         ZWKAsCiGhn3KDVsHbSax3xDvBGi6I0+xNzrw68Q07/8dVsmx4BJ1fAgAfrvw/crKJsvY
+         1zBKwBobL8TvFMf+DJJVixKwUpv9BQDwjQtMcGFUJcmKz9RNdmrdqJZvp5p35Rh3oOcx
+         BrdScM54twWY+mkwEugOFI0/TRJ9LG8Gb3ItHWGH34/TFaI6nd9Vlqqb0Yi+o27RaNLw
+         jG3lSmNLataLaFBz4OZFAuhzPzNurhJHphOtiPtbLChPV3S1XuENehTWANoaz7klKnPC
+         M/zQ==
+X-Gm-Message-State: AC+VfDwJf96vHUTwGLVvrlSxgqrpBqY+rv5lTooV6q9Ay6ZygglI2wia
+        O/VzBfyxABNwgw5ZxEq0nDYyyy/4iXkQfl1D8dQ=
+X-Google-Smtp-Source: ACHHUZ4hwJdblgv/IjbPFH+BZPSdbdvvXEegZidz0b10Rp2sJOYq5ixdTjeKDAOTEUFq8KxIhGOHvQ==
+X-Received: by 2002:a05:6a00:3994:b0:66a:3812:7eda with SMTP id fi20-20020a056a00399400b0066a38127edamr20180226pfb.9.1687969942751;
+        Wed, 28 Jun 2023 09:32:22 -0700 (PDT)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id bm2-20020a056a00320200b00681783cfc85sm1263377pfb.144.2023.06.28.09.32.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 28 Jun 2023 09:32:21 -0700 (PDT)
+Date:   Wed, 28 Jun 2023 09:32:20 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Samuel Thibault <samuel.thibault@ens-lyon.org>,
+        Kees Cook <kees@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Simon Brand <simon.brand@postadigitale.de>,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
+        Dave@mielke.cc
+Subject: Re: [PATCH v3 2/2] tty: Allow TIOCSTI to be disabled
+Message-ID: <202306280930.8CBBB9B@keescook>
+References: <20221022182828.give.717-kees@kernel.org>
+ <20221022182949.2684794-2-keescook@chromium.org>
+ <20221227234000.jgosvixx7eahqb3z@begin>
+ <C95AF535-7A95-48BA-8921-1932C15A1931@kernel.org>
+ <20221228205726.rfevry7ud6gmttg5@begin>
+ <20230625155625.s4kvy7m2vw74ow4i@begin>
+ <202306271944.E80E1D0@keescook>
+ <20230628060716.vvgtlgbushyjh6km@begin>
 MIME-Version: 1.0
-References: <20230616063210.19063-1-eric.lin@sifive.com> <20230616063210.19063-4-eric.lin@sifive.com>
- <2437bda9-bbdb-ad80-7201-1e16e1388890@linaro.org> <CAPqJEFoTsmVZ4kvsSB0RkQZaQGyXC96KV6RvdpeC5XxURCOZ0w@mail.gmail.com>
- <8c9ed2d4-83ab-ecc0-a300-e6bc8e2047b6@linaro.org>
-In-Reply-To: <8c9ed2d4-83ab-ecc0-a300-e6bc8e2047b6@linaro.org>
-From:   Eric Lin <eric.lin@sifive.com>
-Date:   Thu, 29 Jun 2023 00:31:15 +0800
-Message-ID: <CAPqJEFqhmxksvEgvC61cJcRGR0DrSWDZxJC3J7tdgcG8UY+sFw@mail.gmail.com>
-Subject: Re: [PATCH 3/3] dt-bindings: riscv: sifive: Add SiFive Private L2
- cache controller
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     conor@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dslin1010@gmail.com,
-        Zong Li <zong.li@sifive.com>, Nick Hu <nick.hu@sifive.com>,
-        Greentime Hu <greentime.hu@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230628060716.vvgtlgbushyjh6km@begin>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Krzysztof,
+On Wed, Jun 28, 2023 at 08:07:16AM +0200, Samuel Thibault wrote:
+> Kees Cook, le mar. 27 juin 2023 19:48:45 -0700, a ecrit:
+> > On Sun, Jun 25, 2023 at 05:56:25PM +0200, Samuel Thibault wrote:
+> > > > Can we perhaps just introduce a CAP_TIOCSTI that the brltty daemon would
+> > > > be able to use? We could even make it only allow TIOCSTI on the linux
+> > > > console (tty->ops == con_ops).
+> > 
+> > Does brltty run with CAP_SYS_ADMIN?
+> 
+> ATM most often, yes, though we are trying to reduce the CAP_* privileges
+> to what it actually needs.
+> 
+> > > *Please* comment on this so we can progress. ATM people are
+> > > advising each other to set dev.tty.legacy_tiocsti=1, which is just
+> > > counter-productive in terms of security...
+> > 
+> > So is there really no solution for brltty and TIOCSTI being disabled?
+> 
+> No, there is no way to simulate characters on the Linux console. The
+> alternative would be to use uinput, but that simulates keycodes, not
+> characters, thus requiring backtranslating first, which is very fragile.
+> 
+> > What is FreeBSD doing? I imagine it's the same situation there too,
+> > though maybe there is just no support?
+> 
+> There is just no support in the kernel, only a patch against "screen".
+> 
+> > > Really, this a serious regression for the people affected by this.
+> > 
+> > Can you send a patch adding a CAP_SYS_ADMIN exception?
+> 
+> Sure!
 
-On Mon, Jun 26, 2023 at 2:19=E2=80=AFPM Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
->
-> On 26/06/2023 05:26, Eric Lin wrote:
-> > Hi Krzysztof,
-> >
-> > On Fri, Jun 16, 2023 at 6:45=E2=80=AFPM Krzysztof Kozlowski
-> > <krzysztof.kozlowski@linaro.org> wrote:
-> >>
-> >> On 16/06/2023 08:32, Eric Lin wrote:
-> >>> This add YAML DT binding documentation for SiFive Private L2
-> >>> cache controller
-> >>>
-> >>> Signed-off-by: Eric Lin <eric.lin@sifive.com>
-> >>> Reviewed-by: Zong Li <zong.li@sifive.com>
-> >>> Reviewed-by: Nick Hu <nick.hu@sifive.com>
-> >>> ---
-> >>>  .../bindings/riscv/sifive,pL2Cache0.yaml      | 81 +++++++++++++++++=
-++
-> >>>  1 file changed, 81 insertions(+)
-> >>>  create mode 100644 Documentation/devicetree/bindings/riscv/sifive,pL=
-2Cache0.yaml
-> >>>
-> >>> diff --git a/Documentation/devicetree/bindings/riscv/sifive,pL2Cache0=
-.yaml b/Documentation/devicetree/bindings/riscv/sifive,pL2Cache0.yaml
-> >>> new file mode 100644
-> >>> index 000000000000..b5d8d4a39dde
-> >>> --- /dev/null
-> >>> +++ b/Documentation/devicetree/bindings/riscv/sifive,pL2Cache0.yaml
-> >>> @@ -0,0 +1,81 @@
-> >>> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> >>> +# Copyright (C) 2023 SiFive, Inc.
-> >>> +%YAML 1.2
-> >>> +---
-> >>> +$id: http://devicetree.org/schemas/riscv/sifive,pL2Cache0.yaml#
-> >>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> >>> +
-> >>> +title: SiFive Private L2 Cache Controller
-> >>> +
-> >>> +maintainers:
-> >>> +  - Greentime Hu  <greentime.hu@sifive.com>
-> >>> +  - Eric Lin      <eric.lin@sifive.com>
-> >>> +
-> >>> +description:
-> >>> +  The SiFive Private L2 Cache Controller is per hart and communicate=
-s with both the upstream
-> >>> +  L1 caches and downstream L3 cache or memory, enabling a high-perfo=
-rmance cache subsystem.
-> >>> +  All the properties in ePAPR/DeviceTree specification applies for t=
-his platform.
-> >>
-> >> Drop the last sentence. Why specification would not apply?
-> >>
-> > OK, I'll drop it in v2.
-> >
-> >>> +
-> >>> +allOf:
-> >>> +  - $ref: /schemas/cache-controller.yaml#
-> >>> +
-> >>> +select:
-> >>> +  properties:
-> >>> +    compatible:
-> >>> +      contains:
-> >>> +        enum:
-> >>> +          - sifive,pL2Cache0
-> >>> +          - sifive,pL2Cache
-> >>> +
-> >>> +  required:
-> >>> +    - compatible
-> >>> +
-> >>> +properties:
-> >>> +  compatible:
-> >>> +    items:
-> >>
-> >>
-> >> You have only one item, so no need for items... unless you just missed
-> >> proper fallback.
-> >
-> > OK, I'll fix it in v2.
-> >
-> >>
-> >>> +      - enum:
-> >>> +          - sifive,pL2Cache0
-> >>> +          - sifive,pL2Cache1
-> >>
-> >> What is "0" and "1" here? What do these compatibles represent? Why the=
-y
-> >> do not have any SoC related part?
-> >
-> > The pL2Cache1 has minor changes in hardware, but it can use the same
-> > pl2 cache driver.
->
-> Then why aren't they compatible?
->
+Thanks! (And be sure to use file->f_cred for the check[1], not "current",
+that way brltty can open the tty and drop caps and still do the ioctl.)
 
-The pL2Cache1 has removed some unused bits in the register compared to
-pl2Cache0.
-From the hardware perspective, they are not compatible but they can
-share the same pl2 cache driver in software.
-Thus, we would like to keep both. It would be great if you can provide
-some suggestions. Thanks.
+-Kees
 
-Best Regards,
-Eric Lin.
+https://docs.kernel.org/security/credentials.html?highlight=confused+deputy#open-file-credentials
 
-> > May I ask, what do you mean about the SoC-related part? Thanks.
->
-> This is part of a SoC, right? We expect SoC blocks to have compatible
-> based on the SoC.
->
->
->
-> Best regards,
-> Krzysztof
->
+-- 
+Kees Cook
