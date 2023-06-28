@@ -2,210 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2409D741C05
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 00:55:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 86D33741C09
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 00:56:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231406AbjF1Wzr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 18:55:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53680 "EHLO
+        id S231509AbjF1W4X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 18:56:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231330AbjF1Wzm (ORCPT
+        with ESMTP id S231245AbjF1W4G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 18:55:42 -0400
-Received: from out-28.mta0.migadu.com (out-28.mta0.migadu.com [91.218.175.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBB24272D
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 15:55:28 -0700 (PDT)
-Date:   Wed, 28 Jun 2023 18:55:14 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1687992926;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=NC7io3hJiGazy/1nLRyLYY/aZGU1OCwphLLIBbRfFVc=;
-        b=u44xIlYolPHdvyZbmi/QCzn6vZPbW5FX79/HnVCpNxVXIKZiP2IR1cDolNo/S9hCb9fpLo
-        g3uwlLoc3p7WAk/kI+JJj3gOL9BJVGuHBBfLks+T8IxjbiXUKVfH8na30X+R+dwPSSx5za
-        viuWG+OpYuc9LGzRgkPkz9lUHGnKIVM=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Kent Overstreet <kent.overstreet@linux.dev>
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     torvalds@linux-foundation.org, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-bcachefs@vger.kernel.org,
-        Christoph Hellwig <hch@lst.de>,
-        Christian Brauner <brauner@kernel.org>,
-        Al Viro <viro@zeniv.linux.org.uk>
-Subject: Re: [GIT PULL] bcachefs
-Message-ID: <20230628225514.n3xtlgmjkgapgnrd@moria.home.lan>
-References: <20230627201524.ool73bps2lre2tsz@moria.home.lan>
- <c06a9e0b-8f3e-4e47-53d0-b4854a98cc44@kernel.dk>
- <20230628040114.oz46icbsjpa4egpp@moria.home.lan>
- <b02657af-5bbb-b46b-cea0-ee89f385f3c1@kernel.dk>
- <4b863e62-4406-53e4-f96a-f4d1daf098ab@kernel.dk>
- <20230628175204.oeek4nnqx7ltlqmg@moria.home.lan>
- <e1570c46-68da-22b7-5322-f34f3c2958d9@kernel.dk>
- <2e635579-37ba-ddfc-a2ab-e6c080ab4971@kernel.dk>
- <20230628221342.4j3gr3zscnsu366p@moria.home.lan>
- <d697ec27-8008-2eb6-0950-f612a602dcf5@kernel.dk>
+        Wed, 28 Jun 2023 18:56:06 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 266F0172D;
+        Wed, 28 Jun 2023 15:56:05 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B7EE46134F;
+        Wed, 28 Jun 2023 22:56:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21918C433C8;
+        Wed, 28 Jun 2023 22:56:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687992964;
+        bh=z0GP1s6Qm5gaRNATmvVAjf46ln1IUrR3Y9mzaUuT0vI=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=M4D3+2EfHc3tsUszWtFv1i5+dblc/ulEnuGK6ONynXXRSP5Y+mOEyRbJd+Um7qhFY
+         BKPGKoobL4GJ1IUJ2oe6raTq7iE+iErR5y2lU66YjWcQumon8qTcI6kYtapCSY5Wcq
+         73mz1u8stPALy8ets2yljU6ADDJn1dQij+T7ZN1PFAU7xTrRqRdSJD27pcMaeo2iaE
+         iLT9+z1Pu+6OmuMXwDwIyX45VMOKmtZwihgiwVRbOz+hhpSnWda83H8JS1LGOXHarv
+         EknLX9SSXH18f1LaXsGBV8GDWPwR+h3NRPZwCzc3ihKhKsvd4KuyzLTvyYqHZ1M94n
+         d7gB8TgpyeidQ==
+Received: by mail-lf1-f41.google.com with SMTP id 2adb3069b0e04-4f86fbe5e4fso93391e87.2;
+        Wed, 28 Jun 2023 15:56:04 -0700 (PDT)
+X-Gm-Message-State: AC+VfDxfYwGURqnxjLbSabsQ8TyW9cBXi9/ighAszv5ZoO2SxCrNCDTK
+        +6GqItSaE44dm4wXkxXZuCEWEksSZck8aSV/LZo=
+X-Google-Smtp-Source: ACHHUZ5mkWdT6qxRLMJjAE8W8hnm6wfee0W6aRSq59cmNeKLM7WwcvSH7lTUOPkC7HIBHrc2073VG2kEJeSskmLwDVk=
+X-Received: by 2002:a05:6512:2522:b0:4fb:74da:989a with SMTP id
+ be34-20020a056512252200b004fb74da989amr7023657lfb.3.1687992962093; Wed, 28
+ Jun 2023 15:56:02 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <d697ec27-8008-2eb6-0950-f612a602dcf5@kernel.dk>
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20230628143201.1522227-1-jbaron@akamai.com> <CAPhsuW6-vrNh1MSCznEk_AmahBw9iq+jyG=Kmyi0N5m-T2dByA@mail.gmail.com>
+In-Reply-To: <CAPhsuW6-vrNh1MSCznEk_AmahBw9iq+jyG=Kmyi0N5m-T2dByA@mail.gmail.com>
+From:   Song Liu <song@kernel.org>
+Date:   Wed, 28 Jun 2023 15:55:49 -0700
+X-Gmail-Original-Message-ID: <CAPhsuW4yXpWMy5Pa20S69t5xUocpkOkWjWW=ZR3a4uttTn9pHg@mail.gmail.com>
+Message-ID: <CAPhsuW4yXpWMy5Pa20S69t5xUocpkOkWjWW=ZR3a4uttTn9pHg@mail.gmail.com>
+Subject: Re: [PATCH] md/raid0: drop discard support past the first zone for
+ the original layout (stable fix)
+To:     Jason Baron <jbaron@akamai.com>
+Cc:     linux-kernel@vger.kernel.org, linux-raid@vger.kernel.org,
+        NeilBrown <neilb@suse.de>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 28, 2023 at 04:33:55PM -0600, Jens Axboe wrote:
-> On 6/28/23 4:13?PM, Kent Overstreet wrote:
-> > On Wed, Jun 28, 2023 at 03:17:43PM -0600, Jens Axboe wrote:
-> >> Case in point, just changed my reproducer to use aio instead of
-> >> io_uring. Here's the full script:
-> >>
-> >> #!/bin/bash
-> >>
-> >> DEV=/dev/nvme1n1
-> >> MNT=/data
-> >> ITER=0
-> >>
-> >> while true; do
-> >> 	echo loop $ITER
-> >> 	sudo mount $DEV $MNT
-> >> 	fio --name=test --ioengine=aio --iodepth=2 --filename=$MNT/foo --size=1g --buffered=1 --overwrite=0 --numjobs=12 --minimal --rw=randread --output=/dev/null &
-> >> 	Y=$(($RANDOM % 3))
-> >> 	X=$(($RANDOM % 10))
-> >> 	VAL="$Y.$X"
-> >> 	sleep $VAL
-> >> 	ps -e | grep fio > /dev/null 2>&1
-> >> 	while [ $? -eq 0 ]; do
-> >> 		killall -9 fio > /dev/null 2>&1
-> >> 		echo will wait
-> >> 		wait > /dev/null 2>&1
-> >> 		echo done waiting
-> >> 		ps -e | grep "fio " > /dev/null 2>&1
-> >> 	done
-> >> 	sudo umount /data
-> >> 	if [ $? -ne 0 ]; then
-> >> 		break
-> >> 	fi
-> >> 	((ITER++))
-> >> done
-> >>
-> >> and if I run that, fails on the first umount attempt in that loop:
-> >>
-> >> axboe@m1max-kvm ~> bash test2.sh
-> >> loop 0
-> >> will wait
-> >> done waiting
-> >> umount: /data: target is busy.
-> >>
-> >> So yeah, this is _nothing_ new. I really don't think trying to address
-> >> this in the kernel is the right approach, it'd be a lot saner to harden
-> >> the xfstest side to deal with the umount a bit more sanely. There are
-> >> obviously tons of other ways that a mount could get pinned, which isn't
-> >> too relevant here since the bdev and mount point are basically exclusive
-> >> to the test being run. But the kill and delayed fput is enough to make
-> >> that case imho.
-> > 
-> > Uh, count me very much not in favor of hacking around bugs elsewhere.
-> > 
-> > Al, do you know if this has been considered before? We've got fput()
-> > being called from aio completion, which often runs out of a worqueue (if
-> > not a workqueue, a bottom half of some sort - what happens then, I
-> > wonder) - so the effect is that it goes on the global list, not the task
-> > work list.
-> > 
-> > hence, kill -9ing a process doing aio (or io_uring io, for extra
-> > reasons) causes umount to fail with -EBUSY.
-> > 
-> > and since there's no mechanism for userspace to deal with this besides
-> > sleep and retry, this seems pretty gross.
-> 
-> But there is, as Christian outlined. I would not call it pretty or
-> intuitive, but you can in fact make it work just fine and not just for
-> the deferred fput() case but also in the presence of other kinds of
-> pins. Of which there are of course many.
-
-No, because as I explained that just defers the race until when you next
-try to use the device, since with lazy umount the device will still be
-use when umount returns.
-
-What you'd want is a lazy, synchronous umount, and AFAIK that doesn't
-exist.
-
-> > I'd be willing to tackle this for aio since I know that code...
-> 
-> But it's not aio (or io_uring or whatever), it's simply the fact that
-> doing an fput() from an exiting task (for example) will end up being
-> done async. And hence waiting for task exits is NOT enough to ensure
-> that all file references have been released.
-> 
-> Since there are a variety of other reasons why a mount may be pinned and
-> fail to umount, perhaps it's worth considering that changing this
-> behavior won't buy us that much. Especially since it's been around for
-> more than 10 years:
-
-Because it seems that before io_uring the race was quite a bit harder to
-hit - I only started seeing it when things started switching over to
-io_uring. generic/388 used to pass reliably for me (pre backpointers),
-now it doesn't.
-
-> commit 4a9d4b024a3102fc083c925c242d98ac27b1c5f6
-> Author: Al Viro <viro@zeniv.linux.org.uk>
-> Date:   Sun Jun 24 09:56:45 2012 +0400
-> 
->     switch fput to task_work_add
-> 
-> though that commit message goes on to read:
-> 
->     We are guaranteed that __fput() will be done before we return
->     to userland (or exit).  Note that for fput() from a kernel
->     thread we get an async behaviour; it's almost always OK, but
->     sometimes you might need to have __fput() completed before
->     you do anything else.  There are two mechanisms for that -
->     a general barrier (flush_delayed_fput()) and explicit
->     __fput_sync().  Both should be used with care (as was the
->     case for fput() from kernel threads all along).  See comments
->     in fs/file_table.c for details.
-> 
-> where that first sentence isn't true if the task is indeed exiting. I
-> guess you can say that it is as it doesn't return to userland, but
-> splitting hairs. Though the commit in question doesn't seem to handle
-> that case, but assuming that came in with a later fixup.
-> 
-> It is true if the task_work gets added, as that will get run before
-> returning to userspace.
-
-Yes, AIO seems to very much be the exceptional case that wasn't
-originally considered.
-
-> If a case were to be made that we also guarantee that fput has been done
-> by the time to task returns to userspace, or exits,
-
-And that does seem to be the intent of the original code, no?
-
-> then we'd probably want to move that deferred fput list to the
-> task_struct and ensure that it gets run if the task exits rather than
-> have a global deferred list. Currently we have:
+On Wed, Jun 28, 2023 at 3:43=E2=80=AFPM Song Liu <song@kernel.org> wrote:
 >
-> 
-> 1) If kthread or in interrupt
-> 	1a) add to global fput list
-> 2) task_work_add if not. If that fails, goto 1a.
-> 
-> which would then become:
-> 
-> 1) If kthread or in interrupt
-> 	1a) add to global fput list
-> 2) task_work_add if not. If that fails, we know task is existing. add to
->    per-task defer list to be run at a convenient time before task has
->    exited.
+> Hi Jason,
+>
+> Thanks for the fix!
+>
+> On Wed, Jun 28, 2023 at 7:32=E2=80=AFAM Jason Baron <jbaron@akamai.com> w=
+rote:
+> >
+> > We've found that using raid0 with the 'original' layout and discard
+> > enabled with different disk sizes (such that at least two zones are
+> > created) can result in data corruption. This is due to the fact that
+> > the discard handling in 'raid0_handle_discard()' assumes the 'alternate=
+'
+> > layout. We've seen this corruption using ext4 but other filesystems are
+> > likely susceptible as well.
+> >
+> > More specifically, while multiple zones are necessary to create the
+> > corruption, the corruption may not occur with multiple zones if they
+> > layout in such a way the layout matches what the 'alternate' layout
+> > would have produced. Thus, not all raid0 devices with the 'original'
+> > layout, different size disks and discard enabled will encounter this
+> > corruption.
+> >
+> > The 3.14 kernel inadvertently changed the raid0 disk layout for differe=
+nt
+> > size disks. Thus, running a pre-3.14 kernel and post-3.14 kernel on the
+> > same raid0 array could corrupt data. This lead to the creation of the
+> > 'original' layout (to match the pre-3.14 layout) and the 'alternate' la=
+yout
+> > (to match the post 3.14 layout) in the 5.4 kernel time frame and an opt=
+ion
+> > to tell the kernel which layout to use (since it couldn't be autodetect=
+ed).
+> > However, when the 'original' layout was added back to 5.4 discard suppo=
+rt
+> > for the 'original' layout was not added leading this issue.
+> >
+> > I've been able to reliably reproduce the corruption with the following
+> > test case:
+> >
+> > 1. create raid0 array with different size disks using original layout
+> > 2. mkfs
+> > 3. mount -o discard
+> > 4. create lots of files
+> > 5. remove 1/2 the files
+> > 6. fstrim -a (or just the mount point for the raid0 array)
+> > 7. umount
+> > 8. fsck -fn /dev/md0 (spews all sorts of corruptions)
+> >
+> > The fix here is a minimal fix intended for stable trees which doesn't d=
+o
+> > discard if we have the original layout and we are not in first zone or
+> > if the i/o crosses zones (we either do the entire discard or none of it=
+).
+> > The proper fix to actually perform discard to all zones for the origina=
+l
+> > layout will land in upstream versions. We have implemented the minimal
+> > fix here for stable branches to reduce risk.
+> >
+> > I've verified the change using the reproducer mentioned above. Typicall=
+y,
+> > the corruption is seen after less than 3 iterations, while the patch ha=
+s
+> > run 500+ iterations.
+> >
+> > Cc: NeilBrown <neilb@suse.de>
+> > Cc: Song Liu <song@kernel.org>
+> > Fixes: c84a1372df92 ("md/raid0: avoid RAID0 data corruption due to layo=
+ut confusion.")
+> > Signed-off-by: Jason Baron <jbaron@akamai.com>
+> > ---
+> >  drivers/md/raid0.c | 17 ++++++++++++++++-
+> >  1 file changed, 16 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/md/raid0.c b/drivers/md/raid0.c
+> > index f8ee9a95e25d..2713a4acb44f 100644
+> > --- a/drivers/md/raid0.c
+> > +++ b/drivers/md/raid0.c
+> > @@ -444,10 +444,25 @@ static void raid0_handle_discard(struct mddev *md=
+dev, struct bio *bio)
+> >         sector_t end_disk_offset;
+> >         unsigned int end_disk_index;
+> >         unsigned int disk;
+> > +       bool bio_zone_overlap =3D false;
+> >
+> >         zone =3D find_zone(conf, &start);
+> > +       if (bio_end_sector(bio) > zone->zone_end)
+> > +               bio_zone_overlap =3D true;
+> > +
+> > +       /* The discard code below doesn't properly support the original
+> > +        * layout for the zones above the first one. We are adding
+> > +        * proper support in later kernel versions but have decided
+> > +        * that dropping discard support here is the lower risk option
+> > +        * to avoid data corruption for stable versions.
+> > +        */
+> > +       if ((conf->layout =3D=3D RAID0_ORIG_LAYOUT) &&
+> > +           ((zone !=3D conf->strip_zone) || (bio_zone_overlap))) {
+> > +               bio_endio(bio);
+> > +               return;
+> > +       }
+>
+> For bio_zone_overlap case, I think we can still do the split below and
+> send discard to the first zone?
 
-no, it becomes:
- if we're running in a user task, or if we're doing an operation on
- behalf of a user task, add to the user task's deferred list: otherwise
- add to global deferred list.
+Actually, on a second (third?) thought, I think we can just ship the other
+version (20230623180523.1901230-1-jbaron@akamai.com) to stable
+kernel. It is very safe. So we don't need more work on this version.
+Sorry for the confusion.
+
+Thanks again for the fix!
+Song
