@@ -2,79 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 642DB7416C7
+	by mail.lfdr.de (Postfix) with ESMTP id B5C997416C8
 	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 18:53:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230480AbjF1QxQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 12:53:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41320 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230059AbjF1QxN (ORCPT
+        id S231462AbjF1Qx0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 12:53:26 -0400
+Received: from dfw.source.kernel.org ([139.178.84.217]:46110 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230059AbjF1QxW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 12:53:13 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5656C19B9
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 09:53:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=MIME-Version:Content-Transfer-Encoding:
-        Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description;
-        bh=om+kWUo4HQwJaY7BR4O0yR+Zkf6CHrydbLfUPhhJQCo=; b=SVuJLw/IYiAyuVX50Uk/7jjKBY
-        vOzrcE8pHF+2bzmPhNt+bFUnCf1aotZRJv2XVDc7HqI2/XSxsF5dlLlAnlsX/1WfMe3MTdxou5g+r
-        Zuyi/eKIhwrvqgaTnEskqse61Q1yLFERwpUmgQ5bD+LQwtBpJWHidasXvR378ZyZMtpkpE1Mf+VCh
-        Odh6x4+yivvDGMG/9p+FbWEGGDpzvsB9mP21sWUYBZWo7TAQwyHsC8R6Qh0PA8VvLwzD84dZyLUQM
-        oVDcS4CO3Ayp/4LKihTTk935JTvAPY6yLGltHR/IZ8Xf6Y0T3kE0eMJOV+1jt1kg238hIkpCj7i4H
-        2YbbHFLA==;
-Received: from [54.239.6.184] (helo=freeip.amazon.com)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1qEYPi-0040eA-4Y; Wed, 28 Jun 2023 16:53:06 +0000
-Message-ID: <3028b04b24936efcde760a3cd01844409962dc53.camel@infradead.org>
-Subject: Re: [PATCH 0/1] User space notifications about VM cloning
-From:   Amit Shah <amit@infradead.org>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Alexander Graf <graf@amazon.de>
-Cc:     Babis Chalios <bchalios@amazon.es>, Theodore Ts'o <tytso@mit.edu>,
-        linux-kernel@vger.kernel.org, mzxreary@0pointer.de,
-        xmarcalx@amazon.co.uk, Amit Shah <amit@kernel.org>,
-        Greg KH <gregkh@linuxfoundation.org>
-Date:   Wed, 28 Jun 2023 18:53:02 +0200
-In-Reply-To: <CAHmME9pxc-nO_xa=4+1CnvbnuefbRTJHxM7n817c_TPeoxzu_g@mail.gmail.com>
-References: <20230531095119.11202-1-bchalios@amazon.es>
-         <20f65557-766d-d954-f3ef-c26ad2b661dc@amazon.es>
-         <6ccec434-42f0-0ae8-8c7b-bea4646c5e7d@amazon.de>
-         <CAHmME9pxc-nO_xa=4+1CnvbnuefbRTJHxM7n817c_TPeoxzu_g@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4-0ubuntu1 
+        Wed, 28 Jun 2023 12:53:22 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F100E6129B;
+        Wed, 28 Jun 2023 16:53:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CFC8EC433C8;
+        Wed, 28 Jun 2023 16:53:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1687971201;
+        bh=gozokXz2eVh6fctzR506kgwTFWCpOKR95WNjlihKjp0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=XSAZJUru2/LERqubKZhN960vjbBGOsstoqQchktqgk2eAmAtD04A8rchUv6KtMPCO
+         bluJTB4rl9FsREuSLLbvkM+kuLVOwWaqtIpM5FPIWWt2zmRAH96RiEjex7HjZ2P52U
+         90KKlCAHvvTURFden0f0Wv5p/9azoOifGjIJdo/I=
+Date:   Wed, 28 Jun 2023 18:53:18 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Mukesh Ojha <quic_mojha@quicinc.com>
+Cc:     corbet@lwn.net, agross@kernel.org, andersson@kernel.org,
+        konrad.dybcio@linaro.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        keescook@chromium.org, tony.luck@intel.com, gpiccoli@igalia.com,
+        mathieu.poirier@linaro.org, catalin.marinas@arm.com,
+        will@kernel.org, linus.walleij@linaro.org,
+        andy.shevchenko@gmail.com, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-hardening@vger.kernel.org,
+        linux-remoteproc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org
+Subject: Re: [PATCH v4 00/21] Add Qualcomm Minidump kernel driver related
+ support
+Message-ID: <2023062812-exporter-facing-aaf9@gregkh>
+References: <1687955688-20809-1-git-send-email-quic_mojha@quicinc.com>
+ <2023062814-chance-flounder-f002@gregkh>
+ <10dd2ead-758a-89f0-cda4-70ae927269eb@quicinc.com>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-        lindbergh.monkeyblade.net
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <10dd2ead-758a-89f0-cda4-70ae927269eb@quicinc.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2023-06-28 at 18:27 +0200, Jason A. Donenfeld wrote:
-> Just so you guys know, roughly the order of operations here are going to =
-be:
->=20
-> - vdso vgetrandom v+1
-> - virtio fork driver
-> - exposing fork events to userspace
->=20
-> I'll keep you posted on those.
+On Wed, Jun 28, 2023 at 09:50:00PM +0530, Mukesh Ojha wrote:
+> 
+> 
+> On 6/28/2023 9:15 PM, Greg KH wrote:
+> > On Wed, Jun 28, 2023 at 06:04:27PM +0530, Mukesh Ojha wrote:
+> > > Minidump is a best effort mechanism to collect useful and predefined data
+> > > for first level of debugging on end user devices running on Qualcomm SoCs.
+> > > It is built on the premise that System on Chip (SoC) or subsystem part of
+> > > SoC crashes, due to a range of hardware and software bugs. Hence, the
+> > > ability to collect accurate data is only a best-effort. The data collected
+> > > could be invalid or corrupted, data collection itself could fail, and so on.
+> > > 
+> > > Qualcomm devices in engineering mode provides a mechanism for generating
+> > > full system ramdumps for post mortem debugging. But in some cases it's
+> > > however not feasible to capture the entire content of RAM. The minidump
+> > > mechanism provides the means for selecting which snippets should be
+> > > included in the ramdump.
+> > > 
+> > > Minidump kernel driver implementation is divided into two parts for
+> > > simplicity, one is minidump core which can also be called minidump
+> > > frontend(As API gets exported from this driver for registration with
+> > > backend) and the other part is minidump backend i.e, where the underlying
+> > > implementation of minidump will be there. There could be different way
+> > > how the backend is implemented like Shared memory, Memory mapped IO
+> > > or Resource manager(gunyah) based where the guest region information is
+> > > passed to hypervisor via hypercalls.
+> > > 
+> > >      Minidump Client-1     Client-2      Client-5    Client-n
+> > >               |               |              |             |
+> > >               |               |    ...       |   ...       |
+> > >               |               |              |             |
+> > >               |               |              |             |
+> > >               |               |              |             |
+> > >               |               |              |             |
+> > >               |               |              |             |
+> > >               |               |              |             |
+> > >               |           +---+--------------+----+        |
+> > >               +-----------+  qcom_minidump(core)  +--------+
+> > >                           |                       |
+> > >                           +------+-----+------+---+
+> > >                                  |     |      |
+> > >                                  |     |      |
+> > >                  +---------------+     |      +--------------------+
+> > >                  |                     |                           |
+> > >                  |                     |                           |
+> > >                  |                     |                           |
+> > >                  v                     v                           v
+> > >       +-------------------+      +-------------------+     +------------------+
+> > >       |qcom_minidump_smem |      |qcom_minidump_mmio |     | qcom_minidump_rm |
+> > >       |                   |      |                   |     |                  |
+> > >       +-------------------+      +-------------------+     +------------------+
+> > >         Shared memory              Memory mapped IO           Resource manager
+> > >          (backend)                   (backend)                   (backend)
+> > > 
+> > > 
+> > > Here, we will be giving all analogy of backend with SMEM as it is the
+> > > only implemented backend at present but general idea remains the same.
+> > 
+> > If you only have one "backend" then you don't need the extra compexity
+> > here at all, just remove that whole middle layer please and make this
+> > much simpler and smaller and easier to review and possibly accept.
+> > 
+> > We don't add layers when they are not needed, and never when there is no
+> > actual user.  If you need the extra "complexity" later, then add it
+> > later when it is needed as who knows when that will ever be.
+> > 
+> > Please redo this series based on that, thanks.
+> 
+> I already followed without this middle layer till v3 since without
+> the middle layer it will be end up with lot of code duplication if there
+> is another backend.
 
-Thank you!
+But as this series does not have such a thing, only add it when needed
+please.  Don't make us review a whole bunch of stuff that is not
+actually used here.
 
-One of the things I've struggled with is the lack of updates or
-direction from Jason to Babis - he's had patches out for a while, and
-Jason has said he's going to drive it, but we didn't see follow-ups.
+Would you want to review such a thing?
 
-At least this conversation has the signs of progress.
+> We already have other backend implementation in the downstream, if you
+> want to see them, i will try to post them in upcoming series..
 
-Thanks!
+Ok, so if you already have it, yes, post it as part of the series,
+otherwise such a layer makes no sense.
 
-		Amit
+thanks,
+
+greg k-h
