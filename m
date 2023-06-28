@@ -2,118 +2,219 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B684741960
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 22:15:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14415741963
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 22:16:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231789AbjF1UPW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 16:15:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33516 "EHLO
+        id S231496AbjF1UQP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 16:16:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231395AbjF1UOr (ORCPT
+        with ESMTP id S231879AbjF1UQE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 16:14:47 -0400
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 553281FF5
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 13:14:44 -0700 (PDT)
-Received: by mail-lf1-x12c.google.com with SMTP id 2adb3069b0e04-4f96d680399so86334e87.0
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 13:14:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1687983282; x=1690575282;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=hbAy1A4hg8jKYhqwi5Dl7jA23U6AKUJrNF/g/KP9ftA=;
-        b=SZgjdpk14oTFV1va1hxUQzM0gi4I0D8KcoyQtm3mh0LhZczx8c5LEaydLlRaoUIuCV
-         +ytkAFRSH8ZrUDUMs093Y1ggCaliQn4k1QQw7ecszEAEmiq6z4IXvDgqMXxNLkxKLTql
-         soYOORLu7B0pQwOEnWj5f5gTFtoccnD7IM17c=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687983282; x=1690575282;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=hbAy1A4hg8jKYhqwi5Dl7jA23U6AKUJrNF/g/KP9ftA=;
-        b=Gj3SW2tRND+Rj6L4tyzdZeLfVepWqc4ubVdSnKyjVQUK8n8SMXce9axurZSRnkFpML
-         9KOdG4IxJ1mBDmi/THVB65fyEDX0bmfCdY2wBckrBhCxtnngrNEbtY/SIcT9XROgSvZM
-         wD2KeLLTksa7g67PMc4le+mFkd0H//GUu8HlV04U2TH4MSTksbscv9YQEkylEvZgPBhO
-         iXxtQmvrLd0UNC19JeT9Hz0qIloNR8Y9T+J6FMMTZC5LSzl3kNxODnqQysp1yuDQ1I7m
-         9zhDjZ90EQwXxdia6Bysn4pGxjMUYxJPTzSiPwP7Y70ejyQNW/+0Pdt1OiXJ9VPu/7n8
-         sP9w==
-X-Gm-Message-State: AC+VfDzpSTeT3xq7LMgQugbg+OQGq9SI137qqGCPCCQSXN+l476ejwOl
-        iUcb+km7LiuNatjq8oZ1gfuzoJnrj/YuiTdG2vyptZif
-X-Google-Smtp-Source: ACHHUZ44/bkMnQCq/z7R3lznXYVZ7hjpzhnDsBrxbl/f9RU6PwxeIXW0JJe2gFwVeoK6x7mCS/gvQg==
-X-Received: by 2002:a19:4354:0:b0:4f9:567a:7a59 with SMTP id m20-20020a194354000000b004f9567a7a59mr15021799lfj.30.1687983282323;
-        Wed, 28 Jun 2023 13:14:42 -0700 (PDT)
-Received: from mail-lj1-f177.google.com (mail-lj1-f177.google.com. [209.85.208.177])
-        by smtp.gmail.com with ESMTPSA id x28-20020ac259dc000000b004f73e290025sm2072781lfn.210.2023.06.28.13.14.41
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 28 Jun 2023 13:14:41 -0700 (PDT)
-Received: by mail-lj1-f177.google.com with SMTP id 38308e7fff4ca-2b69923a715so3831471fa.0
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 13:14:41 -0700 (PDT)
-X-Received: by 2002:aa7:de11:0:b0:51b:ea1d:bc31 with SMTP id
- h17-20020aa7de11000000b0051bea1dbc31mr12411899edv.26.1687983261040; Wed, 28
- Jun 2023 13:14:21 -0700 (PDT)
+        Wed, 28 Jun 2023 16:16:04 -0400
+Received: from sequoia-grove.ad.secure-endpoints.com (sequoia-grove.ad.secure-endpoints.com [IPv6:2001:470:1f07:f77:70f5:c082:a96a:5685])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EBDE210E
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 13:16:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/relaxed;
+        d=auristor.com; s=MDaemon; r=y; t=1687983359; x=1688588159;
+        i=jaltman@auristor.com; q=dns/txt; h=Message-ID:Date:
+        MIME-Version:User-Agent:Subject:Content-Language:To:Cc:
+        References:From:Organization:In-Reply-To:Content-Type; bh=Y4+2td
+        TYjkS3am3Sj7gywZEiF7X20eMNXddFo5yECdc=; b=d52INFqa5C/KD2gzY2MfH7
+        0qnw1NTO+M2nuhmgM++p+O7nZZDZSTOK89S2at+yRNJSNxgtNzyvmos0M4E2IIXB
+        E75z+A+uh9p5tEja/Z44qgSFFzZlnaaIV8tlsPMVBrkSSCf62a4oY5oW9FjRpFft
+        tjHLjS4ltdkgDbtA/DRAg=
+X-MDAV-Result: clean
+X-MDAV-Processed: sequoia-grove.ad.secure-endpoints.com, Wed, 28 Jun 2023 16:15:59 -0400
+Received: from [IPV6:2603:7000:73c:9c99:9902:9ca4:6931:20ab] by auristor.com (IPv6:2001:470:1f07:f77:28d9:68fb:855d:c2a5) (MDaemon PRO v23.0.2rc3) 
+        with ESMTPSA id md5001003541478.msg; Wed, 28 Jun 2023 16:15:58 -0400
+X-Spam-Processed: sequoia-grove.ad.secure-endpoints.com, Wed, 28 Jun 2023 16:15:58 -0400
+        (not processed: message from trusted or authenticated source)
+X-MDRemoteIP: 2603:7000:73c:9c99:9902:9ca4:6931:20ab
+X-MDHelo: [IPV6:2603:7000:73c:9c99:9902:9ca4:6931:20ab]
+X-MDArrival-Date: Wed, 28 Jun 2023 16:15:58 -0400
+X-MDOrigin-Country: US, NA
+X-Authenticated-Sender: jaltman@auristor.com
+X-Return-Path: prvs=15436356b9=jaltman@auristor.com
+X-Envelope-From: jaltman@auristor.com
+X-MDaemon-Deliver-To: linux-kernel@vger.kernel.org
+Message-ID: <8e7318d0-04a1-3a41-a660-066791a2f95d@auristor.com>
+Date:   Wed, 28 Jun 2023 16:15:54 -0400
 MIME-Version: 1.0
-References: <ZHTCK2_1pF61yWIr@hovoldconsulting.com> <CAHk-=wg7ihygotpO9x5a6QJO5oAom9o91==L_Kx-gUHvRYuXiQ@mail.gmail.com>
- <ZHYitt7P7W+8ZlSB@bombadil.infradead.org> <499e30cc-d015-8353-1364-50d17da58f47@redhat.com>
- <ZHd8bLPY4OQCb/Z5@bombadil.infradead.org> <ba60bca6-b682-4c27-3c54-2512b6f16151@redhat.com>
- <ZHoTFDkPIgglW0sU@bombadil.infradead.org> <fa3f1a1f-edc6-f13b-cc84-f3264b03b0b1@redhat.com>
- <ZH38lpTHZ/RISC1v@bombadil.infradead.org> <ZH3/KVCHhX4D4yh9@bombadil.infradead.org>
- <ZJyBhv6yrAfYvMh5@bombadil.infradead.org>
-In-Reply-To: <ZJyBhv6yrAfYvMh5@bombadil.infradead.org>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Wed, 28 Jun 2023 13:14:04 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wiSRTEOgiDA5qUTPGcw=Fbk9Ou2i97kfSBcj3pey3X=fQ@mail.gmail.com>
-Message-ID: <CAHk-=wiSRTEOgiDA5qUTPGcw=Fbk9Ou2i97kfSBcj3pey3X=fQ@mail.gmail.com>
-Subject: Re: [PATCH 2/2] module: add support to avoid duplicates early on load
-To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     David Hildenbrand <david@redhat.com>, song@kernel.org,
-        Johan Hovold <johan@kernel.org>,
-        Lucas De Marchi <lucas.demarchi@intel.com>,
-        Petr Pavlu <petr.pavlu@suse.com>, gregkh@linuxfoundation.org,
-        rafael@kernel.org, lucas.de.marchi@gmail.com,
-        christophe.leroy@csgroup.eu, peterz@infradead.org, rppt@kernel.org,
-        dave@stgolabs.net, willy@infradead.org, vbabka@suse.cz,
-        mhocko@suse.com, dave.hansen@linux.intel.com,
-        colin.i.king@gmail.com, jim.cromie@gmail.com,
-        catalin.marinas@arm.com, jbaron@akamai.com,
-        rick.p.edgecombe@intel.com, yujie.liu@intel.com,
-        tglx@linutronix.de, hch@lst.de, patches@lists.linux.dev,
-        linux-modules@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, pmladek@suse.com, prarit@redhat.com,
-        lennart@poettering.net
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH] afs: Fix accidental truncation when storing data
+Content-Language: en-US
+To:     David Howells <dhowells@redhat.com>,
+        Marc Dionne <marc.dionne@auristor.com>
+Cc:     linux-afs@lists.infradead.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <3526895.1687960024@warthog.procyon.org.uk>
+From:   Jeffrey E Altman <jaltman@auristor.com>
+Organization: AuriStor, Inc.
+In-Reply-To: <3526895.1687960024@warthog.procyon.org.uk>
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256; boundary="------------ms070307000305000007080607"
+X-MDCFSigsAdded: auristor.com
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 28 Jun 2023 at 11:52, Luis Chamberlain <mcgrof@kernel.org> wrote:
+This is a cryptographically signed message in MIME format.
+
+--------------ms070307000305000007080607
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+
+On 6/28/2023 9:47 AM, David Howells wrote:
+>      
+> When an AFS FS.StoreData RPC call is made, amongst other things it is given
+> the resultant file size to be.  On the server, this is processed by
+> truncating the file to new size and then writing the data.
 >
-> Linus, were you thinking of including these patches in for v6.5-rc1?
+> Now, kafs has a lock (vnode->io_lock) that serves to serialise operations
+> against a specific vnode (ie. inode), but the parameters for the op are set
+> before the lock is taken.  This allows two writebacks (say sync and kswapd)
+> to race - and if writes are ongoing the writeback for a later write could
+> occur before the writeback for an earlier one if the latter gets
+> interrupted.
+>
+> Note that afs_writepages() cannot take i_mutex and only takes a shared lock
+> on vnode->validate_lock.
+>
+> Also note that the server does the truncation and the write inside a lock,
+> so there's no problem at that end.
+>
+> Fix this by moving the calculation for the proposed new i_size inside the
+> vnode->io_lock.  Also reset the iterator (which we might have read from)
+> and update the mtime setting there.
+>
+> Fixes: bd80d8a80e12 ("afs: Use ITER_XARRAY for writing")
+> Reported-by: Marc Dionne <marc.dionne@auristor.com>
+> Signed-off-by: David Howells <dhowells@redhat.com>
+> cc: linux-afs@lists.infradead.org
+> cc: linux-fsdevel@vger.kernel.org
+> ---
+>   fs/afs/write.c |    8 +++++---
+>   1 file changed, 5 insertions(+), 3 deletions(-)
+>
+> diff --git a/fs/afs/write.c b/fs/afs/write.c
+> index 8750b99c3f56..c1f4391ccd7c 100644
+> --- a/fs/afs/write.c
+> +++ b/fs/afs/write.c
+> @@ -413,17 +413,19 @@ static int afs_store_data(struct afs_vnode *vnode, struct iov_iter *iter, loff_t
+>   	afs_op_set_vnode(op, 0, vnode);
+>   	op->file[0].dv_delta = 1;
+>   	op->file[0].modification = true;
+> -	op->store.write_iter = iter;
+>   	op->store.pos = pos;
+>   	op->store.size = size;
+> -	op->store.i_size = max(pos + size, vnode->netfs.remote_i_size);
+>   	op->store.laundering = laundering;
+> -	op->mtime = vnode->netfs.inode.i_mtime;
+>   	op->flags |= AFS_OPERATION_UNINTR;
+>   	op->ops = &afs_store_data_operation;
+>   
+>   try_next_key:
+>   	afs_begin_vnode_operation(op);
+> +
+> +	op->store.write_iter = iter;
+> +	op->store.i_size = max(pos + size, vnode->netfs.remote_i_size);
+> +	op->mtime = vnode->netfs.inode.i_mtime;
+> +
+>   	afs_wait_for_operation(op);
+>   
+>   	switch (op->error) {
 
-Heh, I don't even have them in my tree any more, I was assuming that
-if they were good they'd be sent back to me...
+Reviewed-by: Jeffrey Altman <jaltman@auristor.com>
 
-I guess I can go fish them out from my old emails, but I actually was
-expecting to just get them from you.
 
-I do actually maintain my own branches for *some* things, and merge
-them myself, but they tend to be for areas that I feel I'm
-co-maintaining (ie notably vfs and mm that I still feel I'm involved
-in).
 
-In other areas, I may send out patches, but I don't feel like I'm a
-maintainer, so I then think that "the real maintainer can decide if
-these patches are good or not".
+--------------ms070307000305000007080607
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
 
-And I would very much hope that people don't take said patches _just_
-because they come from me. They should be judged on their own merits,
-and then occasionally people can mutter "Christ, what drugs is Linus
-on _today_?" and just throw my patches in the garbage.
+MIAGCSqGSIb3DQEHAqCAMIACAQExDzANBglghkgBZQMEAgEFADCABgkqhkiG9w0BBwEAAKCC
+DHEwggXSMIIEuqADAgECAhBAAYJpmi/rPn/F0fJyDlzMMA0GCSqGSIb3DQEBCwUAMDoxCzAJ
+BgNVBAYTAlVTMRIwEAYDVQQKEwlJZGVuVHJ1c3QxFzAVBgNVBAMTDlRydXN0SUQgQ0EgQTEz
+MB4XDTIyMDgwNDE2MDQ0OFoXDTI1MTAzMTE2MDM0OFowcDEvMC0GCgmSJomT8ixkAQETH0Ew
+MTQxMEQwMDAwMDE4MjY5OUEyRkQyMDAwMjMzQ0QxGTAXBgNVBAMTEEplZmZyZXkgRSBBbHRt
+YW4xFTATBgNVBAoTDEF1cmlTdG9yIEluYzELMAkGA1UEBhMCVVMwggEiMA0GCSqGSIb3DQEB
+AQUAA4IBDwAwggEKAoIBAQCkC7PKBBZnQqDKPtZPMLAy77zo2DPvwtGnd1hNjPvbXrpGxUb3
+xHZRtv179LHKAOcsY2jIctzieMxf82OMyhpBziMPsFAG/ukihBMFj3/xEeZVso3K27pSAyyN
+fO/wJ0rX7G+ges22Dd7goZul8rPaTJBIxbZDuaykJMGpNq4PQ8VPcnYZx+6b+nJwJJoJ46kI
+EEfNh3UKvB/vM0qtxS690iAdgmQIhTl+qfXq4IxWB6b+3NeQxgR6KLU4P7v88/tvJTpxIKkg
+9xj89ruzeThyRFd2DSe3vfdnq9+g4qJSHRXyTft6W3Lkp7UWTM4kMqOcc4VSRdufVKBQNXjG
+IcnhAgMBAAGjggKcMIICmDAOBgNVHQ8BAf8EBAMCBPAwgYQGCCsGAQUFBwEBBHgwdjAwBggr
+BgEFBQcwAYYkaHR0cDovL2NvbW1lcmNpYWwub2NzcC5pZGVudHJ1c3QuY29tMEIGCCsGAQUF
+BzAChjZodHRwOi8vdmFsaWRhdGlvbi5pZGVudHJ1c3QuY29tL2NlcnRzL3RydXN0aWRjYWEx
+My5wN2MwHwYDVR0jBBgwFoAULbfeG1l+KpguzeHUG+PFEBJe6RQwCQYDVR0TBAIwADCCASsG
+A1UdIASCASIwggEeMIIBGgYLYIZIAYb5LwAGAgEwggEJMEoGCCsGAQUFBwIBFj5odHRwczov
+L3NlY3VyZS5pZGVudHJ1c3QuY29tL2NlcnRpZmljYXRlcy9wb2xpY3kvdHMvaW5kZXguaHRt
+bDCBugYIKwYBBQUHAgIwga0MgapUaGlzIFRydXN0SUQgQ2VydGlmaWNhdGUgaGFzIGJlZW4g
+aXNzdWVkIGluIGFjY29yZGFuY2Ugd2l0aCBJZGVuVHJ1c3QncyBUcnVzdElEIENlcnRpZmlj
+YXRlIFBvbGljeSBmb3VuZCBhdCBodHRwczovL3NlY3VyZS5pZGVudHJ1c3QuY29tL2NlcnRp
+ZmljYXRlcy9wb2xpY3kvdHMvaW5kZXguaHRtbDBFBgNVHR8EPjA8MDqgOKA2hjRodHRwOi8v
+dmFsaWRhdGlvbi5pZGVudHJ1c3QuY29tL2NybC90cnVzdGlkY2FhMTMuY3JsMB8GA1UdEQQY
+MBaBFGphbHRtYW5AYXVyaXN0b3IuY29tMB0GA1UdDgQWBBQB+nzqgljLocLTsiUn2yWqEc2s
+gjAdBgNVHSUEFjAUBggrBgEFBQcDAgYIKwYBBQUHAwQwDQYJKoZIhvcNAQELBQADggEBAJwV
+eycprp8Ox1npiTyfwc5QaVaqtoe8Dcg2JXZc0h4DmYGW2rRLHp8YL43snEV93rPJVk6B2v4c
+WLeQfaMrnyNeEuvHx/2CT44cdLtaEk5zyqo3GYJYlLcRVz6EcSGHv1qPXgDT0xB/25etwGYq
+utYF4Chkxu4KzIpq90eDMw5ajkexw+8ARQz4N5+d6NRbmMCovd7wTGi8th/BZvz8hgKUiUJo
+Qle4wDxrdXdnIhCP7g87InXKefWgZBF4VX21t2+hkc04qrhIJlHrocPG9mRSnnk2WpsY0MXt
+a8ivbVKtfpY7uSNDZSKTDi1izEFH5oeQdYRkgIGb319a7FjslV8wggaXMIIEf6ADAgECAhBA
+AXA7OrqBjMk8rp4OuNQSMA0GCSqGSIb3DQEBCwUAMEoxCzAJBgNVBAYTAlVTMRIwEAYDVQQK
+EwlJZGVuVHJ1c3QxJzAlBgNVBAMTHklkZW5UcnVzdCBDb21tZXJjaWFsIFJvb3QgQ0EgMTAe
+Fw0yMDAyMTIyMTA3NDlaFw0zMDAyMTIyMTA3NDlaMDoxCzAJBgNVBAYTAlVTMRIwEAYDVQQK
+EwlJZGVuVHJ1c3QxFzAVBgNVBAMTDlRydXN0SUQgQ0EgQTEzMIIBIjANBgkqhkiG9w0BAQEF
+AAOCAQ8AMIIBCgKCAQEAu6sUO01SDD99PM+QdZkNxKxJNt0NgQE+Zt6ixaNP0JKSjTd+SG5L
+wqxBWjnOgI/3dlwgtSNeN77AgSs+rA4bK4GJ75cUZZANUXRKw/et8pf9Qn6iqgB63OdHxBN/
+15KbM3HR+PyiHXQoUVIevCKW8nnlWnnZabT1FejOhRRKVUg5HACGOTfnCOONrlxlg+m1Vjgn
+o1uNqNuLM/jkD1z6phNZ/G9IfZGI0ppHX5AA/bViWceX248VmefNhSR14ADZJtlAAWOi2un0
+3bqrBPHA9nDyXxI8rgWLfUP5rDy8jx2hEItg95+ORF5wfkGUq787HBjspE86CcaduLka/Bk2
+VwIDAQABo4IChzCCAoMwEgYDVR0TAQH/BAgwBgEB/wIBADAOBgNVHQ8BAf8EBAMCAYYwgYkG
+CCsGAQUFBwEBBH0wezAwBggrBgEFBQcwAYYkaHR0cDovL2NvbW1lcmNpYWwub2NzcC5pZGVu
+dHJ1c3QuY29tMEcGCCsGAQUFBzAChjtodHRwOi8vdmFsaWRhdGlvbi5pZGVudHJ1c3QuY29t
+L3Jvb3RzL2NvbW1lcmNpYWxyb290Y2ExLnA3YzAfBgNVHSMEGDAWgBTtRBnA0/AGi+6ke75C
+5yZUyI42djCCASQGA1UdIASCARswggEXMIIBEwYEVR0gADCCAQkwSgYIKwYBBQUHAgEWPmh0
+dHBzOi8vc2VjdXJlLmlkZW50cnVzdC5jb20vY2VydGlmaWNhdGVzL3BvbGljeS90cy9pbmRl
+eC5odG1sMIG6BggrBgEFBQcCAjCBrQyBqlRoaXMgVHJ1c3RJRCBDZXJ0aWZpY2F0ZSBoYXMg
+YmVlbiBpc3N1ZWQgaW4gYWNjb3JkYW5jZSB3aXRoIElkZW5UcnVzdCdzIFRydXN0SUQgQ2Vy
+dGlmaWNhdGUgUG9saWN5IGZvdW5kIGF0IGh0dHBzOi8vc2VjdXJlLmlkZW50cnVzdC5jb20v
+Y2VydGlmaWNhdGVzL3BvbGljeS90cy9pbmRleC5odG1sMEoGA1UdHwRDMEEwP6A9oDuGOWh0
+dHA6Ly92YWxpZGF0aW9uLmlkZW50cnVzdC5jb20vY3JsL2NvbW1lcmNpYWxyb290Y2ExLmNy
+bDAdBgNVHQ4EFgQULbfeG1l+KpguzeHUG+PFEBJe6RQwHQYDVR0lBBYwFAYIKwYBBQUHAwIG
+CCsGAQUFBwMEMA0GCSqGSIb3DQEBCwUAA4ICAQB/7BKcygLX6Nl4a03cDHt7TLdPxCzFvDF2
+bkVYCFTRX47UfeomF1gBPFDee3H/IPlLRmuTPoNt0qjdpfQzmDWN95jUXLdLPRToNxyaoB5s
+0hOhcV6H08u3FHACBif55i0DTDzVSaBv0AZ9h1XeuGx4Fih1Vm3Xxz24GBqqVudvPRLyMJ7u
+6hvBqTIKJ53uCs3dyQLZT9DXnp+kJv8y7ZSAY+QVrI/dysT8avtn8d7k7azNBkfnbRq+0e88
+QoBnel6u+fpwbd5NLRHywXeH+phbzULCa+bLPRMqJaW2lbhvSWrMHRDy3/d8HvgnLCBFK2s4
+Spns4YCN4xVcbqlGWzgolHCKUH39vpcsDo1ymZFrJ8QR6ihIn8FmJ5oKwAnnd/G6ADXFC9bu
+db9+532phSAXOZrrecIQn+vtP366PC+aClAPsIIDJDsotS5z4X2JUFsNIuEgXGqhiKE7SuZb
+rFG9sdcLprSlJN7TsRDc0W2b9nqwD+rj/5MN0C+eKwha+8ydv0+qzTyxPP90KRgaegGowC4d
+UsZyTk2n4Z3MuAHX5nAZL/Vh/SyDj/ajorV44yqZBzQ3ChKhXbfUSwe2xMmygA2Z5DRwMRJn
+p/BscizYdNk2WXJMTnH+wVLN8sLEwEtQR4eTLoFmQvrK2AMBS9kW5sBkMzINt/ZbbcZ3F+eA
+MDGCAxQwggMQAgEBME4wOjELMAkGA1UEBhMCVVMxEjAQBgNVBAoTCUlkZW5UcnVzdDEXMBUG
+A1UEAxMOVHJ1c3RJRCBDQSBBMTMCEEABgmmaL+s+f8XR8nIOXMwwDQYJYIZIAWUDBAIBBQCg
+ggGXMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIzMDYyODIw
+MTU1NFowLwYJKoZIhvcNAQkEMSIEIMw804XnCnF8m5hLb6jEehsZy94vSc74mF9tj/ioCSe6
+MF0GCSsGAQQBgjcQBDFQME4wOjELMAkGA1UEBhMCVVMxEjAQBgNVBAoTCUlkZW5UcnVzdDEX
+MBUGA1UEAxMOVHJ1c3RJRCBDQSBBMTMCEEABgmmaL+s+f8XR8nIOXMwwXwYLKoZIhvcNAQkQ
+AgsxUKBOMDoxCzAJBgNVBAYTAlVTMRIwEAYDVQQKEwlJZGVuVHJ1c3QxFzAVBgNVBAMTDlRy
+dXN0SUQgQ0EgQTEzAhBAAYJpmi/rPn/F0fJyDlzMMGwGCSqGSIb3DQEJDzFfMF0wCwYJYIZI
+AWUDBAEqMAsGCWCGSAFlAwQBAjAKBggqhkiG9w0DBzAOBggqhkiG9w0DAgICAIAwDQYIKoZI
+hvcNAwICAUAwBwYFKw4DAgcwDQYIKoZIhvcNAwICASgwDQYJKoZIhvcNAQEBBQAEggEATcH8
+DuJaBdP9hSUpbbguEKvwDJE9Jr4h5hmvZz5y2q78aYdtCRaEmYl6lgHVWJ3uXsohAIAQcQww
+h5BS8uL9S+3MMmVDVyMzsMb2rRjBMyZKhtFQGE+n8ZL9Wu/y4zL5ptQ/yazuezF9/HMX3UIr
+r5S0o/lyI99dqY7wC7hEbieTyYYZKfbfiCt5cCWjPr00ROTLHYu1BQ+IGv/aOlQS+T0DUiRs
+w7oXRyOyXasVNr9YJywisUEoLhpWDGNkzO9BgQqxgUH/kiYGc6GN3OsUAPnYWHr3pT+MHMu0
+uhD1w8RBDP71q6B7i3fJDuPpoJWaXTfnd7FUFtFcZJRcq6j9+gAAAAAAAA==
+--------------ms070307000305000007080607--
 
-             Linus
