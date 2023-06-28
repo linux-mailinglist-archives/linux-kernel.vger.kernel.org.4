@@ -2,81 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75A01741497
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 17:09:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6550E74149B
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 17:10:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231976AbjF1PJV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 11:09:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58400 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231200AbjF1PJR (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 11:09:17 -0400
-Received: from mail-oa1-x2e.google.com (mail-oa1-x2e.google.com [IPv6:2001:4860:4864:20::2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36CF21715
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 08:09:15 -0700 (PDT)
-Received: by mail-oa1-x2e.google.com with SMTP id 586e51a60fabf-1b056276889so2152956fac.2
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 08:09:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1687964954; x=1690556954;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=XQFXM7LoMXWobaAJZ3RZKI3cUbo9p+ZmED0c5tG5e8o=;
-        b=aFkpfco7/EqtSeH8SvrioWbyX+Ie6tKQ/zdB41Apheqb0+GWe389VsNoqIegt1qEQf
-         TQ3oLh241qOkxJ6WUHW7zQkl0qKXdY8CRGa8M9bxehKI2jDjp4eb01wV+tw0DhV1jfWO
-         NFlMjr/fqIG7/AmLOuFg65aPOT9UZAw89SasI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687964954; x=1690556954;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=XQFXM7LoMXWobaAJZ3RZKI3cUbo9p+ZmED0c5tG5e8o=;
-        b=WVhAlaGufKtJfdw048pVS6Lcn1x2Pirn6Rg5VkS4f4uWFqpRlLUkvVrB64xsNBGFYw
-         5vd8MrA/oVlIASLGoVm3ZyQG4U2d2ZmBWbe37bPU1vL2LJ+rNKm0Y+9q+0MZ3OKZPzLY
-         puhOATfWZCKE+PWzwlhhRhqgNm3Lm0J5/IVRkuHntkRBLFbMCxFchrWMsHkMPTcc72V1
-         1JirMS9WoMmhs895bEx1erhTQeMHDcQfIOUEQocusckjaDFhCD17mAnvU8rpkzQbW305
-         xL/AIUCmKYfXUhhNuYSaA2Dfuqzo0EdBfmvPgTlM+9XizP+0AEOIMHWzTX5lpM2HsesM
-         PuNg==
-X-Gm-Message-State: AC+VfDw9Tee5BAg2INroS4ZI4RnUbHha1GR+BnKDsbIjFS3i6EIphXo+
-        mhirB4xcgJ9Zg9Rg9w1EdTJ8pkrP6iRiLsS7eJYqvcFQ+398ZWd6Owg=
-X-Google-Smtp-Source: ACHHUZ7mEBIwcDekNUgmogdX1cBOPhK0TtMzNVRdpWwdf24243yY8Fh3zjN7XTDZu/RLnFFOjNTB1StBdw8SgOnw3a8=
-X-Received: by 2002:a05:6870:5b18:b0:1b0:b13:c18 with SMTP id
- ds24-20020a0568705b1800b001b00b130c18mr13876523oab.3.1687964954543; Wed, 28
- Jun 2023 08:09:14 -0700 (PDT)
+        id S232047AbjF1PKL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 11:10:11 -0400
+Received: from mx.kolabnow.com ([212.103.80.153]:16646 "EHLO mx.kolabnow.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231200AbjF1PKH (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 28 Jun 2023 11:10:07 -0400
+Received: from localhost (unknown [127.0.0.1])
+        by mx.kolabnow.com (Postfix) with ESMTP id BD3A01507;
+        Wed, 28 Jun 2023 17:10:05 +0200 (CEST)
+Authentication-Results: ext-mx-out001.mykolab.com (amavisd-new);
+        dkim=pass (4096-bit key) reason="pass (just generated, assumed good)"
+        header.d=kolabnow.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kolabnow.com; h=
+        content-transfer-encoding:mime-version:message-id:date:date
+        :subject:subject:from:from:received:received:received; s=
+        dkim20160331; t=1687965003; x=1689779404; bh=h4ahYP33d2p2uwjetro
+        Ov3PU/MUKWiTuDotZ45ehQFk=; b=sO9bn2YoyvPU65FCXgW9wZRMClV3Nj8HNKp
+        U06azC7tLSfm63hVNaJ8sOAVz+8Qonducv4TzjnOaYNQnrZrQZzTMgPMcKukM/Oo
+        0RamdVOPLU/ByaOY5MCWF0KMdTvjYB16Qh3FnWLL4FuWuoFFMqwFS0F231pRV79n
+        MDFA9HlMqAuRWEnsGYmDQBfHfRbslNij/xG4mGjqkqMVSZLBE619KVJKTZkQ0cr0
+        AmQ6msGFBEm4hfzBqHazeXngO3dRnn+ei77LLu6/F28OFq7LTHfMp/Pv0Bv8/Uwh
+        oTYHRIbLSyEk2A4ckIPMoKQFn+NKPNqE2S83Q13lh7hNgj9xEDLwG4D2/6CQ6D5s
+        62w19V1uXL02IhoDFK+lGoLS+xBZugmNv0nn+7Iv9plJS5NG3jLf/eKCyYcpCx0J
+        cfoGEtejzv1m1pV9wYnR/2+eVLrwm7cemaY3e7YBNIYP1vMBw9vaV+SDml1mhBE1
+        ssW7w1VK03j/uIMxaMt7mpZEmnMvuOMy/BOgxRBehFSAeDtPTbfk4dA0Ssl2xOrW
+        jWczFdkLXqCJQdaiQtrI0v6hoBV8otr8vKXufokYhi92WGulfeYzOZmNFjLqZtg4
+        Yka0Jz1I0olJhxPOS8vRDWXQCjkGlTw0MZ3wfVVu1/JuBRWTURjKByuTguPB4N5T
+        ydFM9NCc=
+X-Virus-Scanned: amavisd-new at mykolab.com
+X-Spam-Flag: NO
+X-Spam-Score: -1.9
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.9 tagged_above=-10 required=4
+        tests=[BAYES_00=-1.9] autolearn=no autolearn_force=no
+Received: from mx.kolabnow.com ([127.0.0.1])
+        by localhost (ext-mx-out001.mykolab.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id 54oBje1Govza; Wed, 28 Jun 2023 17:10:03 +0200 (CEST)
+Received: from int-mx002.mykolab.com (unknown [10.9.13.2])
+        by mx.kolabnow.com (Postfix) with ESMTPS id 7BE82607;
+        Wed, 28 Jun 2023 17:10:02 +0200 (CEST)
+Received: from ext-subm003.mykolab.com (unknown [10.9.6.3])
+        by int-mx002.mykolab.com (Postfix) with ESMTPS id AD56934CA;
+        Wed, 28 Jun 2023 17:10:01 +0200 (CEST)
+From:   alison@she-devel.com
+To:     johan@kernel.org
+Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        conor+dt@kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, alison@she-devel.com,
+        achaiken@aurora.tech
+Subject: [PATCH v8 0/2] support config of U-Blox Zed-F9 GNSS
+Date:   Wed, 28 Jun 2023 08:09:46 -0700
+Message-Id: <20230628150948.908273-1-alison@she-devel.com>
 MIME-Version: 1.0
-References: <20230628130339.206261-1-mchehab@kernel.org>
-In-Reply-To: <20230628130339.206261-1-mchehab@kernel.org>
-From:   Chen-Yu Tsai <wenst@chromium.org>
-Date:   Wed, 28 Jun 2023 17:09:01 +0200
-Message-ID: <CAGXv+5FT64iMSebcT3b9TP2NhEt5e05bjy5HC4AvzM_+n-og=A@mail.gmail.com>
-Subject: Re: [PATCH] media: dvb: mb86a20s: get rid of a clang-15 warning
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-        lindbergh.monkeyblade.net
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 28, 2023 at 3:03=E2=80=AFPM Mauro Carvalho Chehab
-<mchehab@kernel.org> wrote:
->
-> When building with clang-15: this warning is produced:
->
->         ../drivers/media/dvb-frontends/mb86a20s.c:1572:6: error: variable=
- 'active_layers' set but not used [-Werror,-Wunused-but-set-variable]
->                 int active_layers =3D 0, pre_ber_layers =3D 0, post_ber_l=
-ayers =3D 0;
->                     ^
->         1 error generated.
->
-> Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+From: Alison Chaiken <alison@she-devel.com>
 
-Reviewed-by: Chen-Yu Tsai <wenst@chromium.org>
+Add generalized support for setting arbitrary configuration of the
+U-Blox Zed-F9P GNSS.  Employ the new functionality to set the baud rate
+of the Zed-F9P if the devicetree specifies a non-default value.
+
+Tested with 6.1.22 on U-Blox Zed-F9P GNSS devices.
+
+V7 -> V8 Rebased on v6.4.
+V6 -> V7 Fixed tag and version.
+V5 -> V6 Change #ifdef to _maybe_unused and fix warnings.
+V4 -> V5 Wrap all new code in a CONFIG_OF=y check and fixes
+V3 -> V4 Lookup device-specific properties by matching driver data.
+V2 -> V3 Add email recipients whom I foolishly missed the first two times.
+V1 -> V2 Fixes error identified by kernel test robot:
+
+Alison Chaiken (2):
+  gnss: ubx: customize serial device open to set U-Blox Zed-F9P baud
+  dt-bindings: gnss: Add U-Blox Zed-F9
+
+ .../bindings/gnss/u-blox,neo-6m.yaml          |   1 +
+ drivers/gnss/ubx.c                            | 243 +++++++++++++++++-
+ 2 files changed, 233 insertions(+), 11 deletions(-)
+
+
+base-commit: 6995e2de6891c724bfeb2db33d7b87775f913ad1
+-- 
+2.40.1
+
