@@ -2,69 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC08074175C
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 19:39:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC80F74175F
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 19:40:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229501AbjF1RjA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 13:39:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45508 "EHLO
+        id S231597AbjF1RkX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 13:40:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230119AbjF1Ri6 (ORCPT
+        with ESMTP id S230119AbjF1RkU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 13:38:58 -0400
-Received: from mail-oi1-x231.google.com (mail-oi1-x231.google.com [IPv6:2607:f8b0:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B9AF2102;
-        Wed, 28 Jun 2023 10:38:57 -0700 (PDT)
-Received: by mail-oi1-x231.google.com with SMTP id 5614622812f47-3a36b309524so466134b6e.3;
-        Wed, 28 Jun 2023 10:38:57 -0700 (PDT)
+        Wed, 28 Jun 2023 13:40:20 -0400
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42D051FFA
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 10:40:19 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-565ba5667d5so778257b3.0
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 10:40:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687973936; x=1690565936;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=cWldZ174xGCS2Gs9xZ7wHxkpqbJdzsS714AuaqaJcGc=;
-        b=IncwhENVMCB+5fqBC/VlDxPnjb5MRamc7lX1hqFGcFsMVLGq9UVcRPJm1uaxIIhmpe
-         PeUJou+xTHRkVJhK+5C1kvW+YkzWy1wc+EFz1ybEhKv1HKAVYFbjr827X6KC8WHy2UPD
-         1ABWFfwpGtCnPIir00Qbev4cjF+6v3Oeejr28Ou8RC/7VstYwip0mQz3zijpbuDhML4G
-         Vtutc/epw70sZ+aSkDRdHZ+6Y735/+Pfcl4/sPGatXCsqvLvV4JpHFvuS9eX7DGG4OIL
-         PxQPmxMS2VDbFVhURt1wKrQjcqFUvCBUHtdmvS9BM5Nq7IwBwJ+pCEbNh2Pq5Cf9zoXd
-         SgXA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687973936; x=1690565936;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=google.com; s=20221208; t=1687974018; x=1690566018;
+        h=content-transfer-encoding:cc:to:from:subject:message-id:references
+         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=cWldZ174xGCS2Gs9xZ7wHxkpqbJdzsS714AuaqaJcGc=;
-        b=A0Jjf8lFtmcXuS3KhFfGNpWBoe7rwrHlSHuYFbxauzV2wC1yHxNeLhYfOOIjkXTG7k
-         YoHSilpOv4PYLk56tc6lAmboMC6fjrc6DEoOEhe2uwuCiab9cGctOUtollK7wjnhHXev
-         QJa4SKjFpI8F550TqW4iwSG3OCHILoJyDOLn1Sxf9gyolL+exnOddjrTQ13XrrYql6cF
-         wvnE5j7fwMUaiwoVYcIDGMaVAZIqRuX2OzhqhJcqUDxUvAF96oza9ECf+Tj462qPKcKx
-         6t0nxuaPNVJHqMypXztYgMJJEvN9ecR/DknbcABXfOTI6wa1e8j/HG7nB3xtITSZGCo9
-         rxhQ==
-X-Gm-Message-State: AC+VfDzyUvR2UQTnYoxiy8EhinrLzouoebyip2y9Mgc5S1c8ybW5eMpa
-        o4F2CDfCHY2Mbv2pvoFIZNPSae0dZGxqjvr8lHhRJm9nQtk=
-X-Google-Smtp-Source: ACHHUZ5zCwL8ebBj47RFOKQlNLdPZtnvNZoB0jdId69CdbJu3AgINjUedNvNDGCXntBxMZTaduocIChOfpEfwPFalQc=
-X-Received: by 2002:a05:6808:2122:b0:3a2:ee9b:4232 with SMTP id
- r34-20020a056808212200b003a2ee9b4232mr5841254oiw.58.1687973936409; Wed, 28
- Jun 2023 10:38:56 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230626180746.943455203@linuxfoundation.org>
-In-Reply-To: <20230626180746.943455203@linuxfoundation.org>
-From:   Allen Pais <stable.kernel.dev@gmail.com>
-Date:   Wed, 28 Jun 2023 10:38:45 -0700
-Message-ID: <CAJq+SaDMbKq6wvAP-qA9odEB6E2avudft=OvRFg4eMX1HexCWg@mail.gmail.com>
-Subject: Re: [PATCH 5.15 00/96] 5.15.119-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de,
-        conor@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        bh=Im4fFxXWg+oVOfUH+8SJrHwG1JicT9m6/P5cgR+BWzw=;
+        b=SZpxzhcnhadOc346dhqn6V9xWrDfp0/Y29IDCtUvlFlOaJ3ac8zC5HOctOfMdc1Lxd
+         smbqhhT0foT4AluoS1BMfq9FmR61Q0Sk8pBV0ms2Dy4Y5dyu5cKv0Rl0P64NW5nXa0sI
+         7ftH1wYY4i0icYuPqNo8v36++h1Entv+Q76B6+tvWERKGy6O2ZuCn/y7KYzdcIDyl3Yu
+         0i6gJ3d6F0uoF6jzA/ib/reDqAv0lbX8ZmqxTfy9VDIugQ3ysYJqGFhFKwxXmiNnBvR9
+         /F8CddkcUEz9Le7WLSecsEDoZiKXhDoMwAywFZI66f/oXxuJAvQuXrpjouv7jvoMnlag
+         dDDw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687974018; x=1690566018;
+        h=content-transfer-encoding:cc:to:from:subject:message-id:references
+         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=Im4fFxXWg+oVOfUH+8SJrHwG1JicT9m6/P5cgR+BWzw=;
+        b=HYY+i+qNXKOcFpZs8mYblU7XUlz79q0M6aiJCPPfhF3amYm+MqyXk/gnGeXsRhUs3h
+         DaLcBMT7W66fMgtlm61AtOCrSnjDAG5mPenYgvY1IuSHvPSJo99gdjDXTz250bzT+Pjz
+         RK9Bw4p2WY4WJ2Pm2UqMZqMf2IS1No20ZhBZDVTcmqeXqWGGXXmBDm1PAH09SHi6uy1+
+         UX3m266p+LTzTGciCUniEd5FUTlMDXUmQLwRt2WfKjcu3NBwEIFJX++nzbZvAVJsTDFc
+         uL8U0MH3oRirUfKnFGMSR9OFm5xsajW+9prLfa5Ud6+A+BgotBqi/Y1csUpkgQoX7h+d
+         dzuA==
+X-Gm-Message-State: AC+VfDw15ISzcMXc6iNb2HYm6tH8y65GYY9SJ7NevN6EC3DFEUPcHwYP
+        2ZlEU1vxEj7SBnovZ25Fpl39r6DHpNM=
+X-Google-Smtp-Source: ACHHUZ4EWb7yMD0jDqHEhtw00eSYbqGcY9/m+arPcFTTx3+aL/4IJzSmJ1nizOBPBDoFlz4x7a9Aj2WCCIc=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a81:ae07:0:b0:570:200:18e1 with SMTP id
+ m7-20020a81ae07000000b00570020018e1mr14078200ywh.3.1687974018560; Wed, 28 Jun
+ 2023 10:40:18 -0700 (PDT)
+Date:   Wed, 28 Jun 2023 10:40:16 -0700
+In-Reply-To: <e11e348c-3763-8eda-281d-c8d965cd52b6@linux.intel.com>
+Mime-Version: 1.0
+References: <20230606091842.13123-1-binbin.wu@linux.intel.com>
+ <20230606091842.13123-4-binbin.wu@linux.intel.com> <ZJtzdftocuwTvp67@google.com>
+ <e11e348c-3763-8eda-281d-c8d965cd52b6@linux.intel.com>
+Message-ID: <ZJxwgCx3YatyH9or@google.com>
+Subject: Re: [PATCH v9 3/6] KVM: x86: Virtualize CR3.LAM_{U48,U57}
+From:   Sean Christopherson <seanjc@google.com>
+To:     Binbin Wu <binbin.wu@linux.intel.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        pbonzini@redhat.com, chao.gao@intel.com, kai.huang@intel.com,
+        David.Laight@aculab.com, robert.hu@linux.intel.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,28 +73,152 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> This is the start of the stable review cycle for the 5.15.119 release.
-> There are 96 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Wed, 28 Jun 2023 18:07:23 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.119-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
->
+On Wed, Jun 28, 2023, Binbin Wu wrote:
+>=20
+>=20
+> On 6/28/2023 7:40 AM, Sean Christopherson wrote:
+> > I think I'd prefer to drop this field and avoid bikeshedding the name e=
+ntirely.  The
+> > only reason to effectively cache "X86_CR3_LAM_U48 | X86_CR3_LAM_U57" is=
+ because
+> > guest_cpuid_has() is slow, and I'd rather solve that problem with the "=
+governed
+> > feature" framework.
+> Thanks for the suggestion.
+>=20
+> Is the below patch the lastest patch of "governed feature" framework
+> support?
+> https://lore.kernel.org/kvm/20230217231022.816138-2-seanjc@google.com/
 
-Compiled and booted on my x86_64 and ARM64 test systems. No errors or
-regressions.
+Yes, I haven't refreshed it since the original posting.
 
-Tested-by: Allen Pais <apais@linux.microsoft.com>
+> Do you have plan to apply it to kvm-x86 repo?
 
-Thanks.
+I'm leaning more and more towards pushing it through sooner than later as t=
+his
+isn't the first time in recent memory that a patch/series has done somewhat=
+ odd
+things to workaround guest_cpuid_has() being slow.  I was hoping to get fee=
+dback
+before applying, but that's not looking likely at this point.
+
+> > More below.
+> >=20
+> > >   	unsigned long cr4;
+> > >   	unsigned long cr4_guest_owned_bits;
+> > >   	unsigned long cr4_guest_rsvd_bits;
+> > > diff --git a/arch/x86/kvm/cpuid.h b/arch/x86/kvm/cpuid.h
+> > > index b1658c0de847..ef8e1b912d7d 100644
+> > > --- a/arch/x86/kvm/cpuid.h
+> > > +++ b/arch/x86/kvm/cpuid.h
+> > > @@ -42,6 +42,11 @@ static inline int cpuid_maxphyaddr(struct kvm_vcpu=
+ *vcpu)
+> > >   	return vcpu->arch.maxphyaddr;
+> > >   }
+> > > +static inline bool kvm_vcpu_is_legal_cr3(struct kvm_vcpu *vcpu, unsi=
+gned long cr3)
+> > Heh, I think it makes sense to wrap this one.  I'll probably tell you d=
+ifferently
+> > tomorrow, but today, let's wrap.
+> >=20
+> > > +{
+> > > +	return !((cr3 & vcpu->arch.reserved_gpa_bits) & ~vcpu->arch.cr3_ctr=
+l_bits);
+> > Don't open code something for which there is a perfect helper, i.e. use
+> > kvm_vcpu_is_legal_gpa().
+> I didn't use the helper because after masking the control bits (LAM bits)=
+,
+> CR3 is not=C2=A0 a GPA conceptally, i.e, it contains PCID or PWT/PCD in l=
+ower
+> bits.
+> But maybe this is my overthinking=EF=BC=9FWill use the helper instead.
+
+You're not overthinking it, I had the exact same reaction.  However, the ab=
+ove
+also directly looks at arch.reserved_gpa_bits, i.e. treats CR3 like a GPA f=
+or
+all intents and purposes, so it's not any better than using kvm_vcpu_is_leg=
+al_gpa().
+And I couldn't bring myself to suggest adding a "reserved CR3 bits" mask be=
+cause
+CR3 *does* contain a GPA, i.e. we'd still have to check kvm_vcpu_is_legal_g=
+pa(),
+and realistically the "reserved CR3 bits" will never be a superset of "ille=
+gal
+GPA bits".
+
+> > If we go the governed feature route, this becomes:
+> >=20
+> > static inline bool kvm_vcpu_is_legal_cr3(struct kvm_vcpu *vcpu,
+> > 					 unsigned long cr3)
+> > {
+> > 	if (guest_can_use(vcpu, X86_FEATURE_LAM))
+> > 		cr3 &=3D ~(X86_CR3_LAM_U48 | X86_CR3_LAM_U57);
+> >=20
+> > 	return kvm_vcpu_is_legal_gpa(cr3);
+> > }
+> >=20
+> > > +}
+> > > +
+> > >   static inline bool kvm_vcpu_is_legal_gpa(struct kvm_vcpu *vcpu, gpa=
+_t gpa)
+> > >   {
+> > >   	return !(gpa & vcpu->arch.reserved_gpa_bits);
+> > > diff --git a/arch/x86/kvm/mmu.h b/arch/x86/kvm/mmu.h
+> > > index 92d5a1924fc1..81d8a433dae1 100644
+> > > --- a/arch/x86/kvm/mmu.h
+> > > +++ b/arch/x86/kvm/mmu.h
+> > > @@ -144,6 +144,11 @@ static inline unsigned long kvm_get_active_pcid(=
+struct kvm_vcpu *vcpu)
+> > >   	return kvm_get_pcid(vcpu, kvm_read_cr3(vcpu));
+> > >   }
+> > > +static inline u64 kvm_get_active_cr3_ctrl_bits(struct kvm_vcpu *vcpu=
+)
+> > And then this becomes:
+> >=20
+> > static inline u64 kvm_get_active_cr3_lam_bits(struct kvm_vcpu *vcpu)
+> > {
+> > 	if (!guest_can_use(vcpu, X86_FEATURE_LAM))
+> > 		return 0;
+> >=20
+> > 	return kvm_read_cr3(vcpu) & (X86_CR3_LAM_U48 | X86_CR3_LAM_U57);
+> > }
+> >=20
+> > > +{
+> > > +	return kvm_read_cr3(vcpu) & vcpu->arch.cr3_ctrl_bits;
+> > > +}
+> > > +
+> > >   static inline void kvm_mmu_load_pgd(struct kvm_vcpu *vcpu)
+> > >   {
+> > >   	u64 root_hpa =3D vcpu->arch.mmu->root.hpa;
+> > > diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+> > > index c8961f45e3b1..deea9a9f0c75 100644
+> > > --- a/arch/x86/kvm/mmu/mmu.c
+> > > +++ b/arch/x86/kvm/mmu/mmu.c
+> > > @@ -3812,7 +3812,13 @@ static int mmu_alloc_shadow_roots(struct kvm_v=
+cpu *vcpu)
+> > >   	hpa_t root;
+> > >   	root_pgd =3D kvm_mmu_get_guest_pgd(vcpu, mmu);
+> > > -	root_gfn =3D root_pgd >> PAGE_SHIFT;
+> > > +	/*
+> > > +	 * Guest PGD can be CR3 or EPTP (for nested EPT case). CR3 may cont=
+ain
+> > > +	 * additional control bits (e.g. LAM control bits). To be generic,
+> > > +	 * unconditionally strip non-address bits when computing the GFN si=
+nce
+> > > +	 * the guest PGD has already been checked for validity.
+> > > +	 */
+> > Drop this comment, the code is self-explanatory, and the comment is inc=
+omplete,
+> > e.g. it can also be nCR3.
+> I was trying to use CR3 for both nested/non-nested cases. Sorry for the
+> confusion.
+> Anyway, will drop the comment.
+
+FWIW, EPTP also has non-address bits.  But the real reason I don't think th=
+is
+warrants a comment is that "pgd" is a specifically not an address, i.e. it'=
+s
+fully expected and intuitive that retrieving the gfn from a pgd would need =
+to
+mask off bits.
