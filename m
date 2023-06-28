@@ -2,150 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 595417415E9
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 18:00:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1CE77415D6
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 17:56:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231881AbjF1QAG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 12:00:06 -0400
-Received: from mail-dm3nam02on2062.outbound.protection.outlook.com ([40.107.95.62]:19168
-        "EHLO NAM02-DM3-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S232245AbjF1QAB (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 12:00:01 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=TfEyP9ZrIMpka7Ud7E8yOvXu7ojDaFDDEQmXN9B1G5fpEGu5OouOuDNl0OySLNK5XxmVarHbeG0EP8qy0xapmxvPaJt/BWY65jecXzB0T7Z1n9EKec9uz/KpnxqAo48n01kdxxm84AOM9SL1UXBoo0bDvC8fHWgRhHTGQu1HQ8TYQc+b56BC30eafqLhFu1i+NIcW3p2eOvzmwr1oA8q5AjLyvrEmLHDsR5H3OKmhV465YdplqAg9ixyAvfRU9PN7Ze367EzXhGW0Tl2J/U72PjBdK2ZTPRXYO8BYamPeDUoUo4RMeurQK1mZmtmDR4ZZN9yGBIMOO4k9nnV6yTb0g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=/MqI/cLeOKTmvQqmEVt+L3GJrpO7oa8E6R7VLK2llYo=;
- b=eLwit1SjbAGNgZVo3S3j2YQZCt5TYPL8zy7PdG3Q3b9XL9sNigw4juWPTLbTOE9okOS9YI6jExYjBLBQjDAt/N8PTbJHJ6NypjkukncwyM3AxVL/xGeM9gkXrvTFk1VD6UNuwRVMePTNMwoeB1vZ26ywBcfUL9vODVmnAtsFeziuhJ1XHLI6uVPDzZ10x2qFbtnN9aetbWTC5xNCYMRnMQ59cqbAN0PA53ukCiNds2Ib6sYhBbeHgZ4xDiKezCxnfzFG8KPJHDlnbSo0rIKPAh8/CwSQMSGX/mCtOLIjxkr3YHEwPnVqXPc/eB/5ADLL0ttPZHz5ZzL+/kl7XeE1NA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.118.233) smtp.rcpttodomain=arm.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=/MqI/cLeOKTmvQqmEVt+L3GJrpO7oa8E6R7VLK2llYo=;
- b=fTxmhtvcKHcjCEIelGRBwH7PZVnY9O5FyzV3cdADEAuRSXKnSJfaqK6jR32C+wqmgEss8M91NFwtCACOG1JVEC7S0K+g8Sa40sCH6/i//ehyVrwJF8VEblzbGRhsD3dt0EH4FcfUxEdQ5PivsOUTCMboEJSEy70IaxzgtXVqmX2tynaZivRlMFhH6kSRuyfGWE9VLvKIuB0aW6+xItQvOI9f7yrsozqyicxUXN7+ojW+GEX+NnNFCHBbKT1hYTh09GqpvyK2Q5qDV3nifiawyyNYLV/hD6C6gDEAb5kms/Z4N6rzOQ+WBbumKTDyhsxZ+xedN5YOplJyPydtuSMq6Q==
-Received: from DS0PR17CA0013.namprd17.prod.outlook.com (2603:10b6:8:191::11)
- by PH7PR12MB7869.namprd12.prod.outlook.com (2603:10b6:510:27e::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.24; Wed, 28 Jun
- 2023 15:59:59 +0000
-Received: from DM6NAM11FT033.eop-nam11.prod.protection.outlook.com
- (2603:10b6:8:191:cafe::2e) by DS0PR17CA0013.outlook.office365.com
- (2603:10b6:8:191::11) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6544.20 via Frontend
- Transport; Wed, 28 Jun 2023 15:59:59 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.118.233)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.118.233 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.118.233; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.118.233) by
- DM6NAM11FT033.mail.protection.outlook.com (10.13.172.221) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6500.48 via Frontend Transport; Wed, 28 Jun 2023 15:59:59 +0000
-Received: from drhqmail203.nvidia.com (10.126.190.182) by mail.nvidia.com
- (10.127.129.6) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Wed, 28 Jun 2023
- 08:59:49 -0700
-Received: from drhqmail202.nvidia.com (10.126.190.181) by
- drhqmail203.nvidia.com (10.126.190.182) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.37; Wed, 28 Jun 2023 08:59:49 -0700
-Received: from Asurada-Nvidia (10.127.8.9) by mail.nvidia.com (10.126.190.181)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37 via Frontend
- Transport; Wed, 28 Jun 2023 08:59:48 -0700
-Date:   Wed, 28 Jun 2023 08:59:47 -0700
-From:   Nicolin Chen <nicolinc@nvidia.com>
-To:     Robin Murphy <robin.murphy@arm.com>
-CC:     <will@kernel.org>, <jgg@nvidia.com>, <joro@8bytes.org>,
-        <shameerali.kolothum.thodi@huawei.com>, <yangyicong@hisilicon.com>,
-        <jean-philippe@linaro.org>, <linux-arm-kernel@lists.infradead.org>,
-        <iommu@lists.linux.dev>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v1] iommu/arm-smmu-v3: Allow default substream bypass
- with a pasid support
-Message-ID: <ZJxY8wyNZiAI40lm@Asurada-Nvidia>
-References: <20230627033326.5236-1-nicolinc@nvidia.com>
- <826cbb86-ac7d-c40b-f7e3-51681cda50b8@arm.com>
- <ZJsXLFtH8WkRK41w@Asurada-Nvidia>
- <1b0c9677-4e2a-6767-f8f2-23081e6af3e0@arm.com>
- <ZJt7GhV4IOLvRhhr@Asurada-Nvidia>
- <2274ba47-7def-082c-8429-8f2cc18adf9f@arm.com>
+        id S231874AbjF1P4N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 11:56:13 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:20083 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231983AbjF1Pz5 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 28 Jun 2023 11:55:57 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1687967706;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=9qZSFuxG0IoUAkOzLqBAsv4mqf5Nr+aL9HVwyHW9Zro=;
+        b=XUM1qFE41xJltHdxRjqB/b7QuCINT1FgrYVtBybaZVr+eo+yKOzHLKaXQpl8PArhCtJjP3
+        2jSpEULevGIrbyCjENDK5XmehZ1HimTtMPIp3wxhpC8QYeNmL+EiJN59AiL9aK+c9xaAqm
+        9Wxa5LIUU4aDCu4ZS9bAqrUwVzGXXAk=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-375-zxQD8_t6NrCMSLSlLOuOGA-1; Wed, 28 Jun 2023 11:54:53 -0400
+X-MC-Unique: zxQD8_t6NrCMSLSlLOuOGA-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D3320280D21A;
+        Wed, 28 Jun 2023 15:54:05 +0000 (UTC)
+Received: from segfault.boston.devel.redhat.com (segfault.boston.devel.redhat.com [10.19.60.26])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 5CC97111F3B6;
+        Wed, 28 Jun 2023 15:54:05 +0000 (UTC)
+From:   Jeff Moyer <jmoyer@redhat.com>
+To:     Matteo Rizzo <matteorizzo@google.com>
+Cc:     Ricardo Ribalda <ribalda@chromium.org>,
+        Bart Van Assche <bvanassche@acm.org>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        io-uring@vger.kernel.org, jordyzomer@google.com, evn@google.com,
+        poprdi@google.com, corbet@lwn.net, axboe@kernel.dk,
+        asml.silence@gmail.com, akpm@linux-foundation.org,
+        keescook@chromium.org, rostedt@goodmis.org,
+        dave.hansen@linux.intel.com, chenhuacai@kernel.org, steve@sk2.org,
+        gpiccoli@igalia.com, ldufour@linux.ibm.com
+Subject: Re: [PATCH 1/1] Add a new sysctl to disable io_uring system-wide
+References: <20230627120058.2214509-1-matteorizzo@google.com>
+        <20230627120058.2214509-2-matteorizzo@google.com>
+        <e8924389-985a-42ad-9daf-eca2bf12fa57@acm.org>
+        <CAHKB1wJANtT27WM6hrhDy_x9H9Lsn4qRjPDmXdKosoL93TJRYg@mail.gmail.com>
+        <CANiDSCvjCoj3Q3phbmdhdG-veHNRrfD-gBu=FuZkmrgJ2uxiJg@mail.gmail.com>
+        <CAHKB1w+UyOnC_rOBABVhmzG+XeePaWYgPJWxX9NUeqnAi9WcgA@mail.gmail.com>
+X-PGP-KeyID: 1F78E1B4
+X-PGP-CertKey: F6FE 280D 8293 F72C 65FD  5A58 1FF8 A7CA 1F78 E1B4
+Date:   Wed, 28 Jun 2023 11:59:56 -0400
+In-Reply-To: <CAHKB1w+UyOnC_rOBABVhmzG+XeePaWYgPJWxX9NUeqnAi9WcgA@mail.gmail.com>
+        (Matteo Rizzo's message of "Wed, 28 Jun 2023 17:12:42 +0200")
+Message-ID: <x497crnefwj.fsf@segfault.boston.devel.redhat.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <2274ba47-7def-082c-8429-8f2cc18adf9f@arm.com>
-X-NV-OnPremToCloud: ExternallySecured
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6NAM11FT033:EE_|PH7PR12MB7869:EE_
-X-MS-Office365-Filtering-Correlation-Id: 289c7a32-1031-49ba-da7f-08db77f0b989
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: DLIOhUep2thKfcG/buthMq92C9OW2TszQxmV+WZmOUlKnc4/KZTJrlj/p01Bw8MVseWxJjPVCI4hI6ZMZGr/Hi7uORsMGCY94LYdqiJhi6hjk/4NO8MEh0vj3hPYBuKAbdD8iSFlU4NedrRgMwUCv4BsVQBgz1FMxF2/pYsV7rAedmMXt18L4cKUh8WjkUhovSxoyYsek2O8uhzwn+aDvo9j/OE5e48zDSHQt7NYmtV6vt0ThErdljLu5dM3X1f0bRptzwt+lMu9/7zp0FpS2L/j/c0jADcxkHsIm3is2nS58LTB/6I+S9slnCNkRxoSo2t65nwctYXbC5hecg24T27QZiKMkcXFCZnJmm15XMDkcEOIgP4ksZrWJqfzAvV2ALdeboYZYhQKR7VunCvOUPtgiRwG7uEIxpyubc7RuaKVPKXMkM9ufzXixieTlchmmFTtVAgS9HOeKv+r4uHgVDIkL8PZeQDHespWrFd3Lpx9+wxopeF/nL0tjJpLoDBoUy7XmNAuvTysi8S6+kxw60B98WiRQqN15BdV8PTQkPTIHA5ski/hLV07qJx+19Zoj6Ddg9TA3UYSQlz8vACsLWnzt2MNe3si6kOnz4Ck2x2mAwlden/2uqp7mn6wde0MO1f1B+CwfokXCtqzIGFPtXk0tMsNUKr4gIhFFQIvlISlePLh1RMKmPhZR+gG8On0RAm1XdoTtZRjBOVWMgkixM1CJ7MClisguhK3Nshg8C+3/12FnYZKxZ0FoeEJDUb7kMKhMnJ2yOlKK5RCJMbKA788P1up4UUyYv3QWLqSdHc=
-X-Forefront-Antispam-Report: CIP:216.228.118.233;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc7edge2.nvidia.com;CAT:NONE;SFS:(13230028)(4636009)(396003)(39860400002)(136003)(376002)(346002)(451199021)(40470700004)(36840700001)(46966006)(86362001)(478600001)(54906003)(40480700001)(55016003)(6916009)(4326008)(70586007)(70206006)(2906002)(316002)(40460700003)(41300700001)(33716001)(26005)(9686003)(186003)(47076005)(36860700001)(426003)(336012)(5660300002)(82310400005)(82740400003)(7636003)(356005)(8936002)(8676002)(414714003)(473944003);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Jun 2023 15:59:59.0326
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 289c7a32-1031-49ba-da7f-08db77f0b989
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.118.233];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT033.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB7869
+Content-Type: text/plain
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Robin,
+Matteo Rizzo <matteorizzo@google.com> writes:
 
-On Wed, Jun 28, 2023 at 04:39:48PM +0100, Robin Murphy wrote:
+> On Wed, 28 Jun 2023 at 13:44, Ricardo Ribalda <ribalda@chromium.org> wrote:
+>>
+>> Have you considered that the new sysctl is "sticky like kexec_load_disabled.
+>> When the user disables it there is no way to turn it back on until the
+>> system is rebooted.
+>
+> Are you suggesting making this sysctl sticky? Are there any examples of how to
+> implement a sticky sysctl that can take more than 2 values in case we want to
+> add an intermediate level that still allows privileged processes to use
+> io_uring? Also, what would be the use case? Preventing privileged processes
+> from re-enabling io_uring?
 
-> > > supporting properly, i.e. refactor a bit harder to separate the CD table
-> > > parts which are common to both S1DSS bypass and S1 translation, from the
-> > > CD/pagetable parts that are only relevant for translation. S1DSS bypass
-> > > remains the same as Stream bypass in the sense that there is no
-> > > structure corresponding to the identity domain itself, so not only does
-> > > it not make sense to have a pagetable, there's also no valid place to
-> > > put one anyway - touching the CD belonging to SSID 0 is strictly wrong.
-> > 
-> > I can try that. Yet, I think the S1DSS bypass case still belongs
-> > to ARM_SMMU_DOMAIN_S1/arm_smmu_domain_finalise_s1, right?
-> 
-> That's what I'm disagreeing with - although S1DSS behaviour requires S1
-> translation to be nominally enabled for the stream as a whole, the
-> bypass domain is distinctly *not* an S1 translation domain, and there is
-> no S1 context to finalise. I think it's either a generalisation of
-> ARM_SMMU_DOMAIN_BYPASS based on s1cdmax, or it's its own new thing.
+See unprivileged_bpf_disabled for an example.  I can't speak to the use
+case for a sticky value.
 
-Hmm, the fundamental of my view is that the ARM_SMMU_DOMAIN_*
-list is quite matching with the CONFIG field of an STE, which
-turns the S1DSS bypass into the ARM_SMMU_DOMAIN_S1 category.
-And after all S1DSS is named "S1" :)
+-Jeff
 
-Following your view, How about ARM_SMMU_DOMAIN_S1DSS_BYPASS?
-
-> > I'd try keeping most of the parts intact while adding a pointer
-> > to a structure holding pagetable stuff, to make it cleaner. Then
-> > the S1DSS bypass case can be flagged by an empty pointer.
-> 
-> I'd expect that what you need for this is much the same as what Michael
-> has already proposed for the PASID-generalisation series. The current
-> inside-out notion of S1 domains owning CD tables is what's getting in
-> the way of doing the right thing cleanly, in both cases.
-
-Yea, Jason had the same remarks when I discussed this matter
-with him. But I took the chance after I saw a shortcut :)
-
-I have been aligning with Michael already, trying to figure
-out how much ground that our use cases can share.
-
-Thanks
-Nic
