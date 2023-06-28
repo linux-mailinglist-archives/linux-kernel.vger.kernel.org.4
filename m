@@ -2,107 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E8F87407BE
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 03:46:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A62DF7407C3
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 03:47:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230216AbjF1BqZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 21:46:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50872 "EHLO
+        id S230242AbjF1BrY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 21:47:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229488AbjF1BqX (ORCPT
+        with ESMTP id S229488AbjF1BrW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 21:46:23 -0400
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 69FCE26A3;
-        Tue, 27 Jun 2023 18:46:21 -0700 (PDT)
-Received: from loongson.cn (unknown [10.20.42.43])
-        by gateway (Coremail) with SMTP id _____8DxfcfrkJtkxU8DAA--.5338S3;
-        Wed, 28 Jun 2023 09:46:19 +0800 (CST)
-Received: from [10.20.42.43] (unknown [10.20.42.43])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8DxJ83rkJtkl1YNAA--.50104S3;
-        Wed, 28 Jun 2023 09:46:19 +0800 (CST)
-Message-ID: <a00c590c-9ffe-5b69-4da4-a3eb66c36854@loongson.cn>
-Date:   Wed, 28 Jun 2023 09:46:19 +0800
+        Tue, 27 Jun 2023 21:47:22 -0400
+Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com [IPv6:2607:f8b0:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 994B31BD7
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 18:47:21 -0700 (PDT)
+Received: by mail-oi1-x232.google.com with SMTP id 5614622812f47-39ed35dfa91so3900246b6e.3
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 18:47:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1687916841; x=1690508841;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=39f5Ofs4Fut4oG/x67xmD5HKVQS6vifJS9n1Fqh5CNI=;
+        b=xCwf9hAwyokrWOGO7CX935cGCvgM7aunAkp6xEeawz1c2RtC1heZey3QYcfDZD205r
+         hrqHBiB4isLHaYtBq5xyNuHLup9OdGt/LRrEiH786z8vYdu+ws4UwiE2bO71ztqUfVEa
+         9xdUBGg/I8Kt9nxdQnb+RZahB3yaUyYznzbdGDDJ7QA3TBxRZT9VmjAzfEDg7Q/GMGUM
+         gcDVRgMXClox+ITMtyGgKcM1qZz5dkJBHaXn28Mchsxhyv+SeBYF5u9LtDSX0N2xngqs
+         mPrTsZQ4pTIIY6ByM1galx7dSoRDyWiH7A/Y6LH7HanurvSyOsBwCyDTh4JvDaHceB9W
+         PXtQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687916841; x=1690508841;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=39f5Ofs4Fut4oG/x67xmD5HKVQS6vifJS9n1Fqh5CNI=;
+        b=i9hNvDdlKzKV5f7zBbE36id3g/+A5gTRNSGAmu9+WMniPEotm0FUI6e5+HfLzDuFDA
+         6/+99ZCLpVncr7NZ/HN2Kh7MwC7nhuameL2KDuIwKTiSfyBNMOznQQOcX9ayZu7wTt3F
+         xL/nBqWcSEWxtbI7G8Q8T/0T2cs91jMbGlAT6pxgi/3n6ePyg0zKJ0vaFCnmUgEa8YmF
+         ZQ19vwEOzzfxXR1p+4qinJwn5fX/po1mXDXR2svZESV2lmSZLqeA6pdUZsQSQwJSUGRe
+         SkF6B9LGkjLZpWsg1YGmBXn1JlrKVqmwR7Ez/QG/bma30ar7Ca4wGVhrCTPkkSxwAVpt
+         iCxQ==
+X-Gm-Message-State: AC+VfDz2WlWdevs57WOuSV0mDYgaQdQnSu0WcAmE9UBjjsly1B22IIgO
+        SXR4APnRuh2T9cvOpERV8dIpeEBEOKGt4mUnJq3c5Q==
+X-Google-Smtp-Source: ACHHUZ7c501zOPij6leqylYmOj8Qka5FCrkxofq6AvdEns+6OFM8mCOc1asFuyTCWGmGLGr1txrh4LPuXsNJwsPyEls=
+X-Received: by 2002:a05:6808:1b07:b0:399:b7bd:9041 with SMTP id
+ bx7-20020a0568081b0700b00399b7bd9041mr36225966oib.34.1687916840967; Tue, 27
+ Jun 2023 18:47:20 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [12/39] drm: renesas: shmobile: Don't set display info width and
- height twice
-To:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Magnus Damm <magnus.damm@gmail.com>
-Cc:     linux-renesas-soc@vger.kernel.org,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
-References: <b747c41a478ca984f776165e2f6c99cba7ac862a.1687423204.git.geert+renesas@glider.be>
-Content-Language: en-US
-From:   Sui Jingfeng <suijingfeng@loongson.cn>
-Organization: Loongson
-In-Reply-To: <b747c41a478ca984f776165e2f6c99cba7ac862a.1687423204.git.geert+renesas@glider.be>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: AQAAf8DxJ83rkJtkl1YNAA--.50104S3
-X-CM-SenderInfo: xvxlyxpqjiv03j6o00pqjv00gofq/
-X-Coremail-Antispam: 1Uk129KBj93XoW7tr18Kr45WrW3Gr4rtrW3CFX_yoW8JFykpF
-        4xArWYyFW0qa98K347AFs7ur98Aa43KFyS9FyqganxCF48t347Jw45XFn3XFyDZry7CF4j
-        vanxG3yfA3WUu3gCm3ZEXasCq-sJn29KB7ZKAUJUUUU7529EdanIXcx71UUUUU7KY7ZEXa
-        sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-        0xBIdaVrnRJUUUPFb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-        IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-        e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-        0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_
-        Gr0_Gr1UM2kKe7AKxVWUXVWUAwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYI
-        kI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUAVWU
-        twAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JMx
-        k0xIA0c2IEe2xFo4CEbIxvr21lc7CjxVAaw2AFwI0_JF0_Jw1l42xK82IYc2Ij64vIr41l
-        4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxYO2xFxVAFwI0_Jrv_JF1lx2IqxVAqx4xG67AKxV
-        WUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI
-        7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r
-        1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVW8JVWxJwCI
-        42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUxYiiDUUUU
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230627050148.2045691-1-yangcong5@huaqin.corp-partner.google.com>
+ <CAD=FV=WR=fnhCxC37Eo3hinh2MV=eTNuXG+GrwgR6K_pV4Rbaw@mail.gmail.com>
+In-Reply-To: <CAD=FV=WR=fnhCxC37Eo3hinh2MV=eTNuXG+GrwgR6K_pV4Rbaw@mail.gmail.com>
+From:   cong yang <yangcong5@huaqin.corp-partner.google.com>
+Date:   Wed, 28 Jun 2023 09:47:09 +0800
+Message-ID: <CAHwB_NLDFqDEQ14cTAo3z1pvXvCZXhMeRbTXM3u93hVtpjE52w@mail.gmail.com>
+Subject: Re: [v2] drm/panel: Fine tune Starry-ili9882t panel HFP and HBP
+To:     Doug Anderson <dianders@google.com>
+Cc:     sam@ravnborg.org, neil.armstrong@linaro.org, daniel@ffwll.ch,
+        airlied@gmail.com, hsinyi@google.com,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi
+Hi, Doug
 
-On 2023/6/22 17:21, Geert Uytterhoeven wrote:
-> From: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
->
-> The display info width_mm and height_mm fields are set at init time and
-> never overwritten, don't set them a second time when getting modes.
->
-> Signed-off-by: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
-> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-Reviewed-by: Sui Jingfeng <suijingfeng@loongson.cn>
-> ---
->   drivers/gpu/drm/renesas/shmobile/shmob_drm_crtc.c | 3 ---
->   1 file changed, 3 deletions(-)
->
-> diff --git a/drivers/gpu/drm/renesas/shmobile/shmob_drm_crtc.c b/drivers/gpu/drm/renesas/shmobile/shmob_drm_crtc.c
-> index c775c1d49f0e1ce9..0eeb1410b662d74b 100644
-> --- a/drivers/gpu/drm/renesas/shmobile/shmob_drm_crtc.c
-> +++ b/drivers/gpu/drm/renesas/shmobile/shmob_drm_crtc.c
-> @@ -618,9 +618,6 @@ static int shmob_drm_connector_get_modes(struct drm_connector *connector)
->   	drm_mode_set_name(mode);
->   	drm_mode_probed_add(connector, mode);
->   
-> -	connector->display_info.width_mm = sdev->pdata->panel.width_mm;
-> -	connector->display_info.height_mm = sdev->pdata->panel.height_mm;
-> -
->   	return 1;
->   }
->   
 
--- 
-Jingfeng
+On Wed, Jun 28, 2023 at 5:17=E2=80=AFAM Doug Anderson <dianders@google.com>=
+ wrote:
+>
+> Hi,
+>
+> On Mon, Jun 26, 2023 at 10:01=E2=80=AFPM Cong Yang
+> <yangcong5@huaqin.corp-partner.google.com> wrote:
+> >
+> > Because the setting of hproch is too small, there will be warning in
+> > kernel log[1]. After fine tune the HFP and HBP, this warning can be
+> > solved. The actual measurement frame rate is 60.1Hz.
+> >
+> > [1]: WARNING kernel:[drm] HFP + HBP less than d-phy, FPS will under 60H=
+z
+>
+> Thanks for including the warming. This looks like something that's
+> only printed on Mediatek display controllers. Just out of curiosity:
+> is that because Mediatek controllers have special requirements, or is
+> this something generic and the Mediatek controller is the only one
+> that warns about it?
 
+It seems to be a generic calculation formula for MTK controllers.
+At least I have see this warning in both MT8186 and MT8188.
+By the way, the same warning will also appear under coreboot.
+
+>
+>
+> > Fixes: 8716a6473e6c ("drm/panel: Support for Starry-ili9882t TDDI
+> > MIPI-DSI panel")
+>
+> Ideally the tool you have to send mail wouldn't wrap the Fixes line.
+> Probably not worth resending just for this, but see if there's
+> something you can do to fix this in the future.
+>
+> Since this is a tiny fix, I don't think we need to wait too long. I'll
+> plan to land it on Thursday unless Neil wants to land it himself
+> sooner.
+
+Thank you, Doug.
+
+>
+> Reviewed-by: Douglas Anderson <dianders@chromium.org>
