@@ -2,143 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0879741B24
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 23:51:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EB81741B31
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 23:54:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231547AbjF1VvS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 17:51:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37420 "EHLO
+        id S230315AbjF1VyF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 17:54:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230379AbjF1VvP (ORCPT
+        with ESMTP id S229610AbjF1VyD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 17:51:15 -0400
-Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C16CD1FFB
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 14:51:13 -0700 (PDT)
-Received: by mail-yb1-xb36.google.com with SMTP id 3f1490d57ef6-c2cf4e61bc6so8192276.3
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 14:51:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1687989073; x=1690581073;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=oiU1ba44MUUFQMwv4R2LW1J18iVFXpq0u3lKLnpz3Xc=;
-        b=yGSq9469ZtBk1ZalIinO4oHCn6+fl9Mioak3I3ItprNlBB2i5CG8SW2uaDJYBJ82CF
-         peruRSwPdWE3ulMVZphVZF6Td9mBMDF2emMRSAaDIr4OkPG0hzUxwu759Prh9CPgykAx
-         XRFojr8qVtzUt0+3h9YqMTuRkgvFqqhNGoo7jyIUzTMo9Fv/tcwxK7Pf509o/7+YAM/1
-         tKV74JfZJ9/F1aCnWQNLG0fLkTUQjrmSCb3EA6ygUrlLtha+2T5pHZRJYeNdWPu6mZye
-         XjSaajeSL6VnNlsmoOo7Wm/driYwl+iqhGitf5wrv0LKJ3PsUo+PeXq0IYSVgg2GDAX8
-         73Ww==
+        Wed, 28 Jun 2023 17:54:03 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B08CF2102
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 14:53:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1687989194;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=h1nRhPjVUvT83glYEJmWAi7ToC2P8NKyYybxP7YvEbw=;
+        b=DXZmwMbKoImucuXpNwD9+O9pGNf/ienHvPHYuZ3+F16jGkPJzhwe2oDxolImFGBZPxUb/f
+        wb+DGvGy38L8BjK9/+67SdK3x7HEA6UynGnAQqihL77ga2Jl/Rxjyo1bRba+oMwrZUOdsF
+        +c7e5O5Bkl2ArPCwhJEJtg2NXMjlT4Q=
+Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
+ [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-569-ekbs_2kHM0mrB3ULSZRFTg-1; Wed, 28 Jun 2023 17:53:13 -0400
+X-MC-Unique: ekbs_2kHM0mrB3ULSZRFTg-1
+Received: by mail-qt1-f197.google.com with SMTP id d75a77b69052e-40320c2d93dso60701cf.0
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 14:53:13 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687989073; x=1690581073;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=oiU1ba44MUUFQMwv4R2LW1J18iVFXpq0u3lKLnpz3Xc=;
-        b=F2i6atAJAsbk2eHyTqB53/nQ8TU+7HReQW5MQxeCaXvKEI1pkyHGJ0EX571N4AG92o
-         +ySdnyfHaP5i/uYyA3WgA/zbcaapMHWIQkTLjsd4VTcOnVlidLKQD4rhF4p51+BA8bxf
-         +YhgOvbYBIWRiZcl9Vfox1ryMq7fniKSOxGRM56rEMTm7t4lOYItCADgHZiRlsvNtZSg
-         zbESbn4FMDfqR1qtro2LBZ+Krs0iIky64cAeuESiyia2BgczQn+UccB+he+vtDYn/kYQ
-         DLTNEzchYddsagbWfSHkHt+DrvzzaKnKeiOtGh+5k7kzN8IFsmK8OfNHTptkRsTtbbaF
-         A4hg==
-X-Gm-Message-State: AC+VfDzsuGt4KFwH7dLW/xDaZonxqMohe/8KM3vBFqYp71lA1HR9aRQM
-        HkpRDJ9Y/LfOA9ZDvQV3dXNYp8Xrid6RX5ONPX51sQ==
-X-Google-Smtp-Source: ACHHUZ4cfXqbxLsUUem2cXUx8pH1XWjLr/u24Cm/eF5T/Yf+mADUuiGnm9aQFd2GhQSDjAHdcUKVPpC+nw4V4ifPuqc=
-X-Received: by 2002:a25:6b50:0:b0:b9e:6fd1:4350 with SMTP id
- o16-20020a256b50000000b00b9e6fd14350mr35804952ybm.17.1687989072841; Wed, 28
- Jun 2023 14:51:12 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1687989193; x=1690581193;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=h1nRhPjVUvT83glYEJmWAi7ToC2P8NKyYybxP7YvEbw=;
+        b=U3N4XC/51SEJ9lKN+xCGtso3Lq1K8UNJEee8vhDi5/pJtXbfSJ5QP7w6WVL/7FqFxi
+         eM+OHwYHZoAhFGV5bTn58uiPbwoOW0Z/gT3X2FRxhy/F0+7NPbRDs3a8UjnBFHP1k0ha
+         SWNOICXvq+VaTbzLmTBGUWDnqt7jB+CXVzUnk9tVeo300ybV2i4LKl211+xWFXu+YUfw
+         dpdEO6HXeDfCh8GmDe0WruvJlBb0wr/80NIjWrIxkWPwSlIZ8rKYZNGmyeKPs0dCeLMg
+         /Tj8BXY69qrZXkm47OTwTqdJFw0x6lu1RfYwl0btA0+lciPENuZHFNc1RKBR82nn6qdj
+         EHUw==
+X-Gm-Message-State: ABy/qLatlgLxO4ur7oaKKMS3PtZzF1QANufu3sBzZRLuY70t/28eUP4t
+        f5/P6qWyasjoNMgAkHdNXPN2kFY9i5+kqHqBvJMu2nPBLa2t26LlS6RpNSkBvzovtzzIlCGCTSu
+        r0IsYdwlK+ZirZLcedZCu2+lX
+X-Received: by 2002:a05:6214:5010:b0:635:e528:521a with SMTP id jo16-20020a056214501000b00635e528521amr946113qvb.5.1687989193088;
+        Wed, 28 Jun 2023 14:53:13 -0700 (PDT)
+X-Google-Smtp-Source: APBJJlHoNAJWjLY8+y5RRUWEW1UMYBA8wgDHtFPDoOHjnAx+ck1QWHJujGtsSDS/6EviOoS7uEg5dA==
+X-Received: by 2002:a05:6214:5010:b0:635:e528:521a with SMTP id jo16-20020a056214501000b00635e528521amr946098qvb.5.1687989192755;
+        Wed, 28 Jun 2023 14:53:12 -0700 (PDT)
+Received: from x1n.. (cpe5c7695f3aee0-cm5c7695f3aede.cpe.net.cable.rogers.com. [99.254.144.39])
+        by smtp.gmail.com with ESMTPSA id p3-20020a0cfac3000000b00631fea4d5bcsm6277797qvo.95.2023.06.28.14.53.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 28 Jun 2023 14:53:12 -0700 (PDT)
+From:   Peter Xu <peterx@redhat.com>
+To:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Cc:     David Hildenbrand <david@redhat.com>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Yang Shi <shy828301@gmail.com>,
+        James Houghton <jthoughton@google.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Lorenzo Stoakes <lstoakes@gmail.com>,
+        Hugh Dickins <hughd@google.com>, peterx@redhat.com
+Subject: [PATCH v4 0/8] mm/gup: Unify hugetlb, speed up thp
+Date:   Wed, 28 Jun 2023 17:53:02 -0400
+Message-ID: <20230628215310.73782-1-peterx@redhat.com>
+X-Mailer: git-send-email 2.41.0
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <CAJuCfpGoNbLOLm08LWKPOgn05+FB1GEqeMTUSJUZpRmDYQSjpA@mail.gmail.com>
- <20230628-meisennest-redlich-c09e79fde7f7@brauner> <CAJuCfpHqZ=5a_2k==FsdBbwDCF7+s7Ji3aZ37LBqUgyXLMz7gA@mail.gmail.com>
- <20230628-faden-qualvoll-6c33b570f54c@brauner> <CAJuCfpF=DjwpWuhugJkVzet2diLkf8eagqxjR8iad39odKdeYQ@mail.gmail.com>
- <20230628-spotten-anzweifeln-e494d16de48a@brauner> <ZJx1nkqbQRVCaKgF@slm.duckdns.org>
- <CAJuCfpEFo6WowJ_4XPXH+=D4acFvFqEa4Fuc=+qF8=Jkhn=3pA@mail.gmail.com>
- <2023062845-stabilize-boogieman-1925@gregkh> <CAJuCfpFqYytC+5GY9X+jhxiRvhAyyNd27o0=Nbmt_Wc5LFL1Sw@mail.gmail.com>
- <ZJyZWtK4nihRkTME@slm.duckdns.org>
-In-Reply-To: <ZJyZWtK4nihRkTME@slm.duckdns.org>
-From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Wed, 28 Jun 2023 14:50:59 -0700
-Message-ID: <CAJuCfpFKjhmti8k6OHoDHAu6dPvqP0jn8FFdSDPqmRfH97bkiQ@mail.gmail.com>
-Subject: Re: [PATCH 1/2] kernfs: add kernfs_ops.free operation to free
- resources tied to the file
-To:     Tejun Heo <tj@kernel.org>
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
-        Christian Brauner <brauner@kernel.org>, peterz@infradead.org,
-        lujialin4@huawei.com, lizefan.x@bytedance.com, hannes@cmpxchg.org,
-        mingo@redhat.com, ebiggers@kernel.org, oleg@redhat.com,
-        akpm@linux-foundation.org, viro@zeniv.linux.org.uk,
-        juri.lelli@redhat.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
-        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, kernel-team@android.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 28, 2023 at 1:34=E2=80=AFPM Tejun Heo <tj@kernel.org> wrote:
->
-> Hello, Suren.
->
-> On Wed, Jun 28, 2023 at 01:12:23PM -0700, Suren Baghdasaryan wrote:
-> > AFAIU all other files that handle polling rely on f_op->release()
-> > being called after all the users are gone, therefore they can safely
-> > free their resources. However kernfs can call ->release() while there
-> > are still active users of the file. I can't use that operation for
-> > resource cleanup therefore I was suggesting to add a new operation
-> > which would be called only after the last fput() and would guarantee
-> > no users. Again, I'm not an expert in this, so there might be a better
-> > way to handle it. Please advise.
->
-> So, w/ kernfs, the right thing to do is making sure that whatever is expo=
-sed
-> to the kernfs user is terminated on removal - ie. after kernfs_ops->relea=
-se
-> is called, the ops table should be considered dead and there shouldn't be
-> anything left to clean up from the kernfs user side. You can add abstract=
-ion
-> kernfs so that kernfs can terminate the calls coming down from the higher
-> layers on its own. That's how every other operation is handled and what
-> should happen with the psi polling too.
+v1: https://lore.kernel.org/r/20230613215346.1022773-1-peterx@redhat.com
+v2: https://lore.kernel.org/r/20230619231044.112894-1-peterx@redhat.com
+v3: https://lore.kernel.org/r/20230623142936.268456-1-peterx@redhat.com
 
-I'm not sure I understand. The waitqueue head we are freeing in
-->release() can be accessed asynchronously and does not require any
-kernfs_op call. Here is a recap of that race:
+v4:
+- Patch 2: check pte write for unsharing [David]
+- Added more tags, rebased to akpm/mm-unstable
 
-                                                do_select
-                                                      vfs_poll
-cgroup_pressure_release
-    psi_trigger_destroy
-        wake_up_pollfree(&t->event_wait) -> unblocks vfs_poll
-        synchronize_rcu()
-        kfree(t) -> frees waitqueue head
-                                                     poll_freewait() -> UAF
+Hugetlb has a special path for slow gup that follow_page_mask() is actually
+skipped completely along with faultin_page().  It's not only confusing, but
+also duplicating a lot of logics that generic gup already has, making
+hugetlb slightly special.
 
-Note that poll_freewait() is not part of any kernel_op, so I'm not
-sure how adding an abstraction kernfs would help, but again, this is
-new territory for me and I might be missing something.
+This patchset tries to dedup the logic, by first touching up the slow gup
+code to be able to handle hugetlb pages correctly with the current follow
+page and faultin routines (where we're mostly there.. due to 10 years ago
+we did try to optimize thp, but half way done; more below), then at the
+last patch drop the special path, then the hugetlb gup will always go the
+generic routine too via faultin_page().
 
-On a different note, I think there might be an easy way to fix this.
-What if psi triggers reuse kernfs_open_node->poll waitqueue head?
-Since we are overriding the ->poll() method, that waitqueue head is
-unused AFAIKT. And best of all, its lifecycle is tied to the file's
-lifecycle, so it does not have the issue that trigger waitqueue head
-has. In the trigger I could simply store a pointer to that waitqueue
-and use it. Then in ->release() freeing trigger would not affect the
-waitqueue at all. Does that sound sane?
+Note that hugetlb is still special for gup, mostly due to the pgtable
+walking (hugetlb_walk()) that we rely on which is currently per-arch.  But
+this is still one small step forward, and the diffstat might be a proof
+too that this might be worthwhile.
 
+Then for the "speed up thp" side: as a side effect, when I'm looking at the
+chunk of code, I found that thp support is actually partially done.  It
+doesn't mean that thp won't work for gup, but as long as **pages pointer
+passed over, the optimization will be skipped too.  Patch 6 should address
+that, so for thp we now get full speed gup.
 
->
-> Thanks.
->
-> --
-> tejun
+For a quick number, "chrt -f 1 ./gup_test -m 512 -t -L -n 1024 -r 10" gives
+me 13992.50us -> 378.50us.  Gup_test is an extreme case, but just to show
+how it affects thp gups.
+
+Patch 1-5:   prepares for the switch
+Patch 6:     switchover to the new code and remove the old
+Patch 7-8:   added some gup test matrix into run_vmtests.sh
+
+Please review, thanks.
+
+Peter Xu (8):
+  mm/hugetlb: Handle FOLL_DUMP well in follow_page_mask()
+  mm/hugetlb: Prepare hugetlb_follow_page_mask() for FOLL_PIN
+  mm/hugetlb: Add page_mask for hugetlb_follow_page_mask()
+  mm/gup: Cleanup next_page handling
+  mm/gup: Accelerate thp gup even for "pages != NULL"
+  mm/gup: Retire follow_hugetlb_page()
+  selftests/mm: Add -a to run_vmtests.sh
+  selftests/mm: Add gup test matrix in run_vmtests.sh
+
+ fs/userfaultfd.c                          |   2 +-
+ include/linux/hugetlb.h                   |  20 +-
+ mm/gup.c                                  |  83 ++++---
+ mm/hugetlb.c                              | 265 +++-------------------
+ tools/testing/selftests/mm/run_vmtests.sh |  48 +++-
+ 5 files changed, 126 insertions(+), 292 deletions(-)
+
+-- 
+2.41.0
+
