@@ -2,99 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 572147413CB
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 16:23:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69F907413CF
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 16:25:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230451AbjF1OXE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 10:23:04 -0400
-Received: from mail.xen0n.name ([115.28.160.31]:38314 "EHLO
-        mailbox.box.xen0n.name" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232103AbjF1OWY (ORCPT
+        id S229667AbjF1OXv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 10:23:51 -0400
+Received: from mx2.sberdevices.ru ([45.89.224.132]:54653 "EHLO
+        mx1.sberdevices.ru" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S231236AbjF1OXX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 10:22:24 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xen0n.name; s=mail;
-        t=1687962141; bh=KteBACahesOTtph0p7WmbToRdVIApqR3ig8QwMvsL1U=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=m5C7Z7Vh/RSqq7hVsCH8Pwe6vJ3Zz7iRb3ONjRRqfY72GyqXfmTxGErKyo3/rHexH
-         48Ox9N7CQ1f5Olb5MKEUDKIyhZxUJlvNgLPu0doMS7lsrLXe2YHO/ptv978GXowT/k
-         svHobETosQ9GQedwM59HMbEYAFRziWU0zD5SeFkA=
-Received: from [100.100.34.13] (unknown [220.248.53.61])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Wed, 28 Jun 2023 10:23:23 -0400
+Received: from p-infra-ksmg-sc-msk02 (localhost [127.0.0.1])
+        by mx1.sberdevices.ru (Postfix) with ESMTP id 7F15112001B;
+        Wed, 28 Jun 2023 17:23:06 +0300 (MSK)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mx1.sberdevices.ru 7F15112001B
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
+        s=mail; t=1687962186;
+        bh=Tv9CtTxw2JKJilL1q5p5p8VeT0w+UW8IFg0I9fdWF8M=;
+        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type:From;
+        b=LVWbl87nYqaExJtjTCAaPNVQyp5eo3g1SzIU6ihFZn0+cWiEWSFm/SfiB79VCv0kB
+         58HxGcNPjq6KC7ElUcj2wEzrIU2Xw+TtlK47TsDafoKlWvq4A/YLiWUDV56QSrQvjx
+         MgwEddYDQO6K+Qu/crzXR+ZeZuzje2KCguxuSRYkSJilQLljUboOSraUnYrPirOagi
+         JGZ8Eebw0sXD8ONc+2YCVslgzm9Y769MZD2s1lCqRkrPqWAadEB/x1M2JjVSTuLRLt
+         cyCozAbGUPj24Y895BwyAsRa0GlsPg3t/goT3ehTj7AmzplMobvub5tK2JTxZMxsfH
+         +G0Iwxs8H0Baw==
+Received: from p-i-exch-sc-m01.sberdevices.ru (p-i-exch-sc-m01.sberdevices.ru [172.16.192.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mailbox.box.xen0n.name (Postfix) with ESMTPSA id 5700360112;
-        Wed, 28 Jun 2023 22:22:21 +0800 (CST)
-Message-ID: <2217f142-470d-b467-6ad8-b1d7c0aee2c8@xen0n.name>
-Date:   Wed, 28 Jun 2023 22:22:20 +0800
+        by mx1.sberdevices.ru (Postfix) with ESMTPS;
+        Wed, 28 Jun 2023 17:23:05 +0300 (MSK)
+Received: from localhost (100.64.160.123) by p-i-exch-sc-m01.sberdevices.ru
+ (172.16.192.107) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.30; Wed, 28 Jun
+ 2023 17:22:07 +0300
+Date:   Wed, 28 Jun 2023 17:23:05 +0300
+From:   Dmitry Rokosov <ddrokosov@sberdevices.ru>
+To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+CC:     <neil.armstrong@linaro.org>, <jbrunet@baylibre.com>,
+        <mturquette@baylibre.com>, <sboyd@kernel.org>,
+        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <khilman@baylibre.com>, <conor+dt@kernel.org>,
+        <kernel@sberdevices.ru>, <sdfw_system_team@sberdevices.ru>,
+        <rockosov@gmail.com>, <linux-amlogic@lists.infradead.org>,
+        <linux-clk@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        Martin Kurbanov <mmkurbanov@sberdevices.ru>
+Subject: Re: [PATCH v1 4/6] arm64: dts: meson: a1: introduce SPI Flash
+ Controller
+Message-ID: <20230628142305.74fkh6ektxhww3v7@CAB-WSD-L081021>
+References: <20230607201641.20982-1-ddrokosov@sberdevices.ru>
+ <20230607201641.20982-5-ddrokosov@sberdevices.ru>
+ <CAFBinCAGLerkDrz98WbpyVAV3jukkPXqDGSV0vOWY0jNiKaJvQ@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.12.0
-Subject: Re: [PATCH] LoongArch: Delete debugfs checking
-Content-Language: en-US
-To:     Dan Carpenter <dan.carpenter@linaro.org>,
-        Ivan Orlov <ivan.orlov0322@gmail.com>,
-        Immad Mir <mirimmad17@gmail.com>
-Cc:     Huacai Chen <chenhuacai@kernel.org>, loongarch@lists.linux.dev,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
-References: <7627f2b9-2287-46d2-b461-d33aa69931a8@moroto.mountain>
-From:   WANG Xuerui <kernel@xen0n.name>
-In-Reply-To: <7627f2b9-2287-46d2-b461-d33aa69931a8@moroto.mountain>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAFBinCAGLerkDrz98WbpyVAV3jukkPXqDGSV0vOWY0jNiKaJvQ@mail.gmail.com>
+User-Agent: NeoMutt/20220415
+X-Originating-IP: [100.64.160.123]
+X-ClientProxiedBy: p-i-exch-sc-m02.sberdevices.ru (172.16.192.103) To
+ p-i-exch-sc-m01.sberdevices.ru (172.16.192.107)
+X-KSMG-Rule-ID: 10
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Lua-Profiles: 178314 [Jun 28 2023]
+X-KSMG-AntiSpam-Version: 5.9.59.0
+X-KSMG-AntiSpam-Envelope-From: DDRokosov@sberdevices.ru
+X-KSMG-AntiSpam-Rate: 0
+X-KSMG-AntiSpam-Status: not_detected
+X-KSMG-AntiSpam-Method: none
+X-KSMG-AntiSpam-Auth: dkim=none
+X-KSMG-AntiSpam-Info: LuaCore: 517 517 b0056c19d8e10afbb16cb7aad7258dedb0179a79, {Track_E25351}, {Tracking_from_domain_doesnt_match_to}, sberdevices.ru:7.1.1,5.0.1;p-i-exch-sc-m01.sberdevices.ru:7.1.1,5.0.1;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;127.0.0.199:7.1.2, FromAlignment: s, {Tracking_white_helo}, ApMailHostAddress: 100.64.160.123
+X-MS-Exchange-Organization-SCL: -1
+X-KSMG-AntiSpam-Interceptor-Info: scan successful
+X-KSMG-AntiPhishing: Clean
+X-KSMG-LinksScanning: Clean
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 2.0.1.6960, bases: 2023/06/28 08:00:00 #21591748
+X-KSMG-AntiVirus-Status: Clean, skipped
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Sun, Jun 25, 2023 at 11:03:21PM +0200, Martin Blumenstingl wrote:
+> On Wed, Jun 7, 2023 at 10:16 PM Dmitry Rokosov <ddrokosov@sberdevices.ru> wrote:
+> >
+> > From: Martin Kurbanov <mmkurbanov@sberdevices.ru>
+> >
+> > This controller can be used for spinand flash connection.
+> >
+> > Signed-off-by: Martin Kurbanov <mmkurbanov@sberdevices.ru>
+> > Signed-off-by: Dmitry Rokosov <ddrokosov@sberdevices.ru>
+> > ---
+> >  arch/arm64/boot/dts/amlogic/meson-a1.dtsi | 10 ++++++++++
+> >  1 file changed, 10 insertions(+)
+> >
+> > diff --git a/arch/arm64/boot/dts/amlogic/meson-a1.dtsi b/arch/arm64/boot/dts/amlogic/meson-a1.dtsi
+> > index 63faccfc1134..0efd922ca7e1 100644
+> > --- a/arch/arm64/boot/dts/amlogic/meson-a1.dtsi
+> > +++ b/arch/arm64/boot/dts/amlogic/meson-a1.dtsi
+> > @@ -199,6 +199,16 @@ gic: interrupt-controller@ff901000 {
+> >                         #address-cells = <0>;
+> >                 };
+> >
+> > +               spifc: spi@fd000400 {
+> please also sort this numerically, so it should appear before &apb
 
-On 2023/6/20 16:06, Dan Carpenter wrote:
-> Debugfs functions are not supposed to be checked for errors.  This
-> is sort of unusual but it is described in the comments for the
-> debugfs_create_dir() function.  Also debugfs_create_dir() can never
-> return NULL.
-> 
-> Signed-off-by: Dan Carpenter <dan.carpenter@linaro.org>
-> ---
-> I spotted this code because I was looking at patches which were sent
-> to stable but without a Fixes tag.  The correct way of checking for
-> error pointers is not IS_ERR_OR_NULL(), it's IS_ERR().  When a function
-> returns both error pointers and NULL, the NULL should be treated as a
-> special kind of success.  Please see my blog for more details.
-> 
-> https://staticthinking.wordpress.com/2022/08/01/mixing-error-pointers-and-null/
-> 
-> I have not included a Fixes tag here, because it's not really a bug fix,
-> it's just a clean up.
-
-Thanks for the patch and sorry for the late review. I didn't notice this 
-back then (just recovering from covid around that time) but since 
-loongarch-next isn't tagged yet I think the patch could make it this 
-cycle. (Somehow Huacai didn't see the mail either, weird...)
-
-> 
->   arch/loongarch/kernel/unaligned.c | 2 --
->   1 file changed, 2 deletions(-)
-> 
-> diff --git a/arch/loongarch/kernel/unaligned.c b/arch/loongarch/kernel/unaligned.c
-> index 85fae3d2d71a..3abf163dda05 100644
-> --- a/arch/loongarch/kernel/unaligned.c
-> +++ b/arch/loongarch/kernel/unaligned.c
-> @@ -485,8 +485,6 @@ static int __init debugfs_unaligned(void)
->   	struct dentry *d;
->   
->   	d = debugfs_create_dir("loongarch", NULL);
-> -	if (IS_ERR_OR_NULL(d))
-> -		return -ENOMEM;
->   
->   	debugfs_create_u32("unaligned_instructions_user",
->   				S_IRUGO, d, &unaligned_instructions_user);
-
-Trivial enough, thanks!
-
-Reviewed-by: WANG Xuerui <git@xen0n.name>
+Sure, not a problem. If things have base addresses, all of them ought to
+be sorted numerically.
 
 -- 
-WANG "xen0n" Xuerui
-
-Linux/LoongArch mailing list: https://lore.kernel.org/loongarch/
-
+Thank you,
+Dmitry
