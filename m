@@ -2,127 +2,246 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BD147414D8
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 17:24:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D40E7414DB
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 17:24:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231379AbjF1PXj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 11:23:39 -0400
-Received: from mx0a-0031df01.pphosted.com ([205.220.168.131]:29278 "EHLO
-        mx0a-0031df01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231246AbjF1PXe (ORCPT
+        id S231958AbjF1PYk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 11:24:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59924 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231317AbjF1PYh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 11:23:34 -0400
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35SEboS8032604;
-        Wed, 28 Jun 2023 15:23:12 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=WFkKKkqtyqaZFCoepnWbsAmdxJT8uhDZrVsVu73pAn8=;
- b=PpDvGt6bBkXi6ENnBU9PxLr4o/Js+whE8hX+6ViJxiBV6iFehCdMer9vAeYtApyD4O0u
- indt7vGInUxJ74kfAQWsHhpuHBN3e1aRvtCYvXwN02zOzSTl8tIBGn+S8dHRFkjfzcCv
- maeVF726Ny/hXit72YBtIS4iGG8oHhcfJGsSrFZy9vcpAqEMxMc3z/ccNFWEjpbrsWyq
- tMiN/hcdY/JIZVzFjgz5zBoP858ZKTup0pCYhlF8ahTLKCZzqO31zYJG0TNPvZnoSU8M
- 2KIV5DLw0j+me7Q674XP2GyZwfuN861dsi7EClb3h2ZCfBAH0sve8fXtRwf+Ueh8IfI6 sQ== 
-Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rgexthah8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 28 Jun 2023 15:23:11 +0000
-Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
-        by NASANPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35SFNBOM008369
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 28 Jun 2023 15:23:11 GMT
-Received: from [10.216.26.159] (10.80.80.8) by nasanex01c.na.qualcomm.com
- (10.45.79.139) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Wed, 28 Jun
- 2023 08:23:01 -0700
-Message-ID: <86c104a6-a685-4d05-08f4-e1be595f9d31@quicinc.com>
-Date:   Wed, 28 Jun 2023 20:52:57 +0530
+        Wed, 28 Jun 2023 11:24:37 -0400
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE4B62690
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 08:24:34 -0700 (PDT)
+Received: by mail-wm1-x329.google.com with SMTP id 5b1f17b1804b1-3fa96fd7a01so213925e9.1
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 08:24:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20221208.gappssmtp.com; s=20221208; t=1687965873; x=1690557873;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=lN8SGKNkIKsowIbOG24r2oHuv4Nw4qW6wOBZIWClXj8=;
+        b=MkkXjC9KhSM2H5uOLgHX8CFDi6yBTUzRKnE7IZmqYQjDDVgYlQg+qY5CrYwNbmQxQK
+         UQe6clAFHqdKWTckalVo7ypS12RhXt9HG9fFQR76pTvbR75AwxYfhY1ZB1sHzCJEUKlZ
+         8NnXvXTM6bK1For8MOSDjyfg7rIj1kL+b2pOo3WFAUQwCJnw1GrbKJ90+d+RwJb+U5Qz
+         7mnmxUD0lw3iLOxPrNzBTBBQeBR/uaXW04tW7Y7yhrFEBKHv0jqxPISbkEUf+ctoYZew
+         ZHO5QcCcjfPVZNcWPM4CGU5lUVR8E+23WcXHR+gPcFmbs69Rv+l6X4hr9syJL3aq6iRW
+         a0fQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687965873; x=1690557873;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=lN8SGKNkIKsowIbOG24r2oHuv4Nw4qW6wOBZIWClXj8=;
+        b=PguzjAP3/tNEAykXFZHK9vEIGNuMnOFbSrqFyT6F/0vHJWP5fa/70A++oRXCLlRC7d
+         GLPKu4/cKsBG5bOT7R3L7o8rxC2iDuAnClMjuA8k7cjYljaQgI02pLN0uBmyI4U+1SZT
+         SavfWqfAmDkIIA47UpoKuiFJ08eKK7mp95TAtOvPVy79vcpf/jY9kWaL5A6BRSC8q+Lm
+         M2Yn9YfjG2wGkQblEX+WtvEex5qj3SYpE3pdb6yNeEMuldc6uOvrwOUk1rfX7V6V+5TJ
+         Hgq+u4fNn2cB7Kw4a6xstvPl0x07YbrQNZb62MeGJ28Qu5XcD5HKj+7CR08Ux2gKf/MT
+         DK8A==
+X-Gm-Message-State: AC+VfDx1iOSQ6430c4xJB7FIhxOJamXON2+LT/LI+Zy80K3FdDCLHxX3
+        WdenBhLC7sKS5rA0vEh6yRjCHQ==
+X-Google-Smtp-Source: ACHHUZ419DnKiKqWGEETRVY6hfowx+1eoXsIWIvFGMy0EdeT5Aa1Be3rPvw4EzKFgMcYjQboZIjGrA==
+X-Received: by 2002:a05:600c:2247:b0:3fb:a266:3a34 with SMTP id a7-20020a05600c224700b003fba2663a34mr4247463wmm.12.1687965873152;
+        Wed, 28 Jun 2023 08:24:33 -0700 (PDT)
+Received: from vermeer ([2a01:cb1d:81a9:dd00:b570:b34c:ffd4:c805])
+        by smtp.gmail.com with ESMTPSA id 12-20020a05600c020c00b003f90ab2fff9sm14027515wmi.9.2023.06.28.08.24.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 28 Jun 2023 08:24:32 -0700 (PDT)
+Date:   Wed, 28 Jun 2023 17:24:30 +0200
+From:   Samuel Ortiz <sameo@rivosinc.com>
+To:     Dan Williams <dan.j.williams@intel.com>
+Cc:     Dionna Amalie Glaze <dionnaglaze@google.com>,
+        Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        Shuah Khan <shuah@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Wander Lairson Costa <wander@redhat.com>,
+        Erdem Aktas <erdemaktas@google.com>,
+        Chong Cai <chongc@google.com>, Qinkun Bao <qinkun@apache.org>,
+        Guorui Yu <GuoRui.Yu@linux.alibaba.com>,
+        Du Fan <fan.du@intel.com>, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
+        dhowells@redhat.com, brijesh.singh@amd.com, atishp@rivosinc.com,
+        gregkh@linuxfoundation.org, linux-coco@lists.linux.dev,
+        joey.gouly@arm.com
+Subject: Re: [PATCH v3 3/3] selftests/tdx: Test GetQuote TDX attestation
+ feature
+Message-ID: <ZJxQrs2KrWITNuLE@vermeer>
+References: <cover.1684048511.git.sathyanarayanan.kuppuswamy@linux.intel.com>
+ <972e1d5c5ec53e2757fb17a586558c5385e987dd.1684048511.git.sathyanarayanan.kuppuswamy@linux.intel.com>
+ <64876bf6c30e2_1433ac29415@dwillia2-xfh.jf.intel.com.notmuch>
+ <64961c3baf8ce_142af829436@dwillia2-xfh.jf.intel.com.notmuch>
+ <9437b176-e15a-3cec-e5cb-68ff57dbc25c@linux.intel.com>
+ <CAAH4kHa85hCz0GhQM3f1OQ3wM+=-SfF77ShFAse0-eYGBHvO_A@mail.gmail.com>
+ <649b7a9b69cb6_11e68529473@dwillia2-xfh.jf.intel.com.notmuch>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v4 02/21] kallsyms: Export kallsyms_lookup_name
-Content-Language: en-US
-To:     Pavan Kondeti <quic_pkondeti@quicinc.com>
-CC:     <corbet@lwn.net>, <agross@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
-        <keescook@chromium.org>, <tony.luck@intel.com>,
-        <gpiccoli@igalia.com>, <mathieu.poirier@linaro.org>,
-        <catalin.marinas@arm.com>, <will@kernel.org>,
-        <linus.walleij@linaro.org>, <andy.shevchenko@gmail.com>,
-        <linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-hardening@vger.kernel.org>,
-        <linux-remoteproc@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-gpio@vger.kernel.org>
-References: <1687955688-20809-1-git-send-email-quic_mojha@quicinc.com>
- <1687955688-20809-3-git-send-email-quic_mojha@quicinc.com>
- <a26f22d2-95a7-4143-bff5-45ef0b53b30b@quicinc.com>
-From:   Mukesh Ojha <quic_mojha@quicinc.com>
-In-Reply-To: <a26f22d2-95a7-4143-bff5-45ef0b53b30b@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01c.na.qualcomm.com (10.45.79.139)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: xhyixVggvep4Hpw--p5GRvSXPJDLqlTn
-X-Proofpoint-GUID: xhyixVggvep4Hpw--p5GRvSXPJDLqlTn
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-06-28_10,2023-06-27_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- impostorscore=0 mlxscore=0 mlxlogscore=870 spamscore=0 malwarescore=0
- bulkscore=0 clxscore=1015 adultscore=0 suspectscore=0 lowpriorityscore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2305260000 definitions=main-2306280137
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <649b7a9b69cb6_11e68529473@dwillia2-xfh.jf.intel.com.notmuch>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+        lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 6/28/2023 7:23 PM, Pavan Kondeti wrote:
-> On Wed, Jun 28, 2023 at 06:04:29PM +0530, Mukesh Ojha wrote:
->> Module like minidump providing debugging support will need to
->> get the symbol information from the core kernel e.g to get
->> the linux_banner, kernel section addresses bss, data, ro etc.
->>
-> One might ask why we would need such a debug driver to
-> be compiled as module? What would you do if we need to capture more
-> kernel data structures later? Do you plan to continue use
-> kallsyms_lookup_name() to query all the symbols?
-
-You are on point, i needed this driver to be static but i don't have
-any example at present to collect more than just _linux_banner_ from
-my existing set of patches..
-
-Agree, it will be easier to make this driver as static instead of
-opening up the doors for modules to abuse via exporting
-kallsyms_lookup_name() and also it will be very slow for production
-kernel uses.
-
+On Tue, Jun 27, 2023 at 05:11:07PM -0700, Dan Williams wrote:
+> Dionna Amalie Glaze wrote:
+> > On Sun, Jun 25, 2023 at 8:06 PM Sathyanarayanan Kuppuswamy
+> > <sathyanarayanan.kuppuswamy@linux.intel.com> wrote:
+> [..]
+> > > Hi Dan,
+> > >
+> > > On 6/23/23 3:27 PM, Dan Williams wrote:
+> > > > Dan Williams wrote:
+> > > >> [ add David, Brijesh, and Atish]
+> > > >>
+> > > >> Kuppuswamy Sathyanarayanan wrote:
+> > > >>> In TDX guest, the second stage of the attestation process is Quote
+> > > >>> generation. This process is required to convert the locally generated
+> > > >>> TDREPORT into a remotely verifiable Quote. It involves sending the
+> > > >>> TDREPORT data to a Quoting Enclave (QE) which will verify the
+> > > >>> integrity of the TDREPORT and sign it with an attestation key.
+> > > >>>
+> > > >>> Intel's TDX attestation driver exposes TDX_CMD_GET_QUOTE IOCTL to
+> > > >>> allow the user agent to get the TD Quote.
+> > > >>>
+> > > >>> Add a kernel selftest module to verify the Quote generation feature.
+> > > >>>
+> > > >>> TD Quote generation involves following steps:
+> > > >>>
+> > > >>> * Get the TDREPORT data using TDX_CMD_GET_REPORT IOCTL.
+> > > >>> * Embed the TDREPORT data in quote buffer and request for quote
+> > > >>>   generation via TDX_CMD_GET_QUOTE IOCTL request.
+> > > >>> * Upon completion of the GetQuote request, check for non zero value
+> > > >>>   in the status field of Quote header to make sure the generated
+> > > >>>   quote is valid.
+> > > >>
+> > > >> What this cover letter does not say is that this is adding another
+> > > >> instance of the similar pattern as SNP_GET_REPORT.
+> > > >>
+> > > >> Linux is best served when multiple vendors trying to do similar
+> > > >> operations are brought together behind a common ABI. We see this in the
+> > > >> history of wrangling SCSI vendors behind common interfaces. Now multiple
+> > > >> confidential computing vendors trying to develop similar flows with
+> > > >> differentiated formats where that differentiation need not leak over the
+> > > >> ABI boundary.
+> > > > [..]
+> > > >
+> > > > Below is a rough mock up of this approach to demonstrate the direction.
+> > > > Again, the goal is to define an ABI that can support any vendor's
+> > > > arch-specific attestation method and key provisioning flows without
+> > > > leaking vendor-specific details, or confidential material over the
+> > > > user/kernel ABI.
+> > >
+> > > Thanks for working on this mock code and helping out. It gives me the
+> > > general idea about your proposal.
+> > >
+> > > >
+> > > > The observation is that there are a sufficient number of attestation
+> > > > flows available to review where Linux can define a superset ABI to
+> > > > contain them all. The other observation is that the implementations have
+> > > > features that may cross-polinate over time. For example the SEV
+> > > > privelege level consideration ("vmpl"), and the TDX RTMR (think TPM
+> > > > PCRs) mechanisms address generic Confidential Computing use cases.
+> > >
+> > >
+> > > I agree with your point about VMPL and RTMR feature cases. This observation
+> > > is valid for AMD SEV and TDX attestation flows. But I am not sure whether
+> > > it will hold true for other vendor implementations. Our sample set is not
+> > > good enough to make this conclusion. The reason for my concern is, if you
+> > > check the ABI interface used in the S390 arch attestation driver
+> > > (drivers/s390/char/uvdevice.c), you would notice that there is a significant
+> > > difference between the ABI used in that driver and SEV/TDX drivers. The S390
+> > > driver attestation request appears to accept two data blobs as input, as well
+> > > as a variety of vendor-specific header configurations.
+> > >
+> > > Maybe the s390 attestation model is a special case, but, I think we consider
+> > > this issue. Since we don't have a common spec, there is chance that any
+> > > superset ABI we define now may not meet future vendor requirements. One way to
+> > > handle it to leave enough space in the generic ABI to handle future vendor
+> > > requirements.
+> > >
+> > > I think it would be better if other vendors (like ARM or RISC) can comment and
+> > > confirm whether this proposal meets their demands.
+> > >
+> > 
+> > The VMPL-based separation that will house the supervisor module known
+> > as SVSM can have protocols that implement a TPM command interface, or
+> > an RTMR-extension interface, and will also need to have an
+> > SVSM-specific protocol attestation report format to keep the secure
+> > chain of custody apparent. We'd have different formats and protocols
+> > in the kernel, at least, to speak to each technology. 
 > 
-> I have seen v3 discussion where you are asked to compile this driver
-> as module but that time there was no reason why your driver needs to
-> be compiled as statically, now you have a reason (linux_banner) for
-> it.
+> That's where I hope the line can be drawn, i.e. that all of this vendor
+> differentiation really only matters inside the kernel in the end.
 
-Yes, at present minidump driver will not be able to compile without
-exporting kallsyms_lookup_name()
+Looking at your keys subsystem based PoC (thanks for putting it
+together), I understand that the intention is to pass an attestation
+evidence request as a payload to the kernel, in a abstract way.
+i.e. the void *data in:
+static int guest_attest_request_key(struct key *authkey, void *data)
 
--Mukesh
+And then passiing that down to vendor specific handlers
+(tdx_request_attest in your PoC) for it to behave as a key server for
+that attestation evidence request. The vendor magic of transforming an
+attestation request into an actual attestation evidence (typically
+signed with platform derived keys) is stuffed into that handler. The
+format, content and protection of both the attestation evidence request
+and the evidence itself is left for the guest kernel handler (e.g.
+tdx_request_attest) to handle.
 
+Is that a fair description of your proposal?
+
+If it is, then it makes sense to me, and could serve as a generic
+abstraction for confidential computing guest attestation evidence
+requests. I think it could support the TDX, SEV and also the RISC-V
+(aka CoVE) guest attestation request evidence flow.
+
+> > I'm not sure it's worth the trouble of papering over all the... 3-4
+> > technologies with similar but still weirdly different formats and ways
+> > of doing things with an abstracted attestation ABI, especially since
+> > the output all has to be interpreted in an architecture-specific way
+> > anyway.
 > 
->> commit 0bd476e6c671 ("kallsyms: unexport kallsyms_lookup_name()
->>   and kallsyms_on_each_symbol()") unexports kallsyms_lookup_name
->> due to lack of in-tree user of the symbol. Now, that minidump
->> will one of its user, export it.
->>
->> Signed-off-by: Mukesh Ojha <quic_mojha@quicinc.com>
+> This is where I need help. Can you identify where the following
+> assertion falls over:
 > 
-> Thanks,
-> Pavan
+> "The minimum viable key-server is one that can generically validate a
+> blob with an ECDSA signature".
+> 
+> I.e. the fact that SEV and TDX send different length blobs is less
+> important than validating that signature.
+
+I'm not sure which signature we're talking about here.
+The final attestation evidence (The blob the guest workload will send to
+a remote attestation service) is signed with a platform derived key,
+typically rooted into a manufacturer's CA. It is then up to the *remote*
+attestation service to authenticate and validate the evidence signature.
+Then it can go through the actual attestation verification flow
+(comparison against reference values, policy checks, etc). The latter
+should be none of the guest kernel's business, which is what your
+proposal seems to be heading to.
+
+
+> If it is always the case that specific fields in the blob need to be
+> decoded then yes, that weakens the assertion. 
+
+Your vendor specific key handler may have to decode the passed void
+pointer into a vendor specific structure before sending it down to the
+TSM/ASP/etc, and that's fine imho.
+
+Cheers,
+Samuel.
