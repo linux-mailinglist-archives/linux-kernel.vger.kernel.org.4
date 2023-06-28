@@ -2,118 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14AD5740D23
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 11:39:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35371740D90
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 11:51:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235207AbjF1JeR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 05:34:17 -0400
-Received: from mail-oa1-f79.google.com ([209.85.160.79]:49362 "EHLO
-        mail-oa1-f79.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233791AbjF1J3x (ORCPT
+        id S232381AbjF1Ju3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 05:50:29 -0400
+Received: from dfw.source.kernel.org ([139.178.84.217]:54886 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235072AbjF1Jdq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 05:29:53 -0400
-Received: by mail-oa1-f79.google.com with SMTP id 586e51a60fabf-19ee42cbc89so4821475fac.2
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 02:29:53 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687944593; x=1690536593;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=H9dMY6YcIlrE3sJMTzfK2UKqNaC09qMUm825ErXZUR8=;
-        b=AAk39xqojxC3DBX+tXfHdzzoYKsgGMmUcMmtkm+XBLwWIWcNR1qiP0VC6tfnhSplc8
-         9F6IKr1k5O6NWnruGTbceJiWO751/oUgz+0hYQesv3xDwTbMOr15EJzo7i3SAbWjVhYf
-         PHrOpAiUPcxE1zyVzm7jlmgTx/RFUMszZKxgKbpq0Pr9fnqLxYV/IJE5BvEB+NwpoVdD
-         vz8dsx/VSojVlIlQlvNpNDEWnTTvVL4bs21u5wPlCxHEBdmsILLHNpcJ453PbfOub5YT
-         68x0PkDrxWStsLPrkpYyiRTdIDNqkqHVB9KSGO3phRhIS7NNBj5Hphib8wM1S4KR9AHf
-         vtIg==
-X-Gm-Message-State: AC+VfDzPh84WdTStBNtwfLldIyNGnTIcA9Cz6p4oFQINixcSrvoF/KCS
-        UZ+MA2LfobtbI7ympioV1RmVEfNyxxhHTy5gOKpdH5BmF0c5
-X-Google-Smtp-Source: ACHHUZ4lr9VNLciAwFNJ8sPT7XFB0q7VnfZnpr98kyi+ddowVEcHfZMFvXHCynxtGSbYKcwl6rEuj8xzS6J7F/zIu+D0NxcamFHh
+        Wed, 28 Jun 2023 05:33:46 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AD7E561262;
+        Wed, 28 Jun 2023 09:33:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CFD18C433CC;
+        Wed, 28 Jun 2023 09:33:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687944824;
+        bh=CrYGMFVkuZ18bbqqXmjfHXjWhRbYeT+J+BKK1daGGTM=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=kOuXnRg1BENhX68oF4wUvOmW/QKYKiFbeB0wy5Ut2FxM4NX35vw0HSBU3KmtU25Oc
+         dD2GnXVvObPqkTvkdH7Sm4c9s0P8eZa2vrfUMQlMnJr5eD1rOrOq5Se46/4/K4o6NH
+         9UJlVx63Axich432Zg3l3EzUS3KMKanaVvVm3MzNM3uHSJBqv9YnS3FJuQTZWk0b4H
+         MHT1zgheuTxilkJYVIJEkC2eKTdTkqy0Wv0g7hLWKSbB63HFEiy+Q2BmVACbpRl7CZ
+         SLTLNlty4b8+YHM2M9KQVJxy8R9ZhO+Eqi+ESZ7RRwEDZljTsvl2/JZ/gZn0NZg/Qt
+         kVGUOaZzCtibQ==
+Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-51d9865b7bdso3522204a12.1;
+        Wed, 28 Jun 2023 02:33:44 -0700 (PDT)
+X-Gm-Message-State: AC+VfDzxyxtMBYm5YPkf6KF/9WDRLbGTCxMv+6oaTLuYQzdCJACGIZwi
+        aVszGzVDwjDYymf6O8X4TCRKRUxH/htqq8NsXLQ=
+X-Google-Smtp-Source: ACHHUZ7bRzRsDllhNLipd/qefy1r65bKvlwuhhM1+DNN01yuN/J3IxfKXTbbm1Hh31Dk7m5G6zYrn7LxlzhxhZiIySE=
+X-Received: by 2002:a05:6402:755:b0:51a:4842:ecdc with SMTP id
+ p21-20020a056402075500b0051a4842ecdcmr23379907edy.1.1687944823012; Wed, 28
+ Jun 2023 02:33:43 -0700 (PDT)
 MIME-Version: 1.0
-X-Received: by 2002:a05:6870:6387:b0:1b0:8d7:6e54 with SMTP id
- t7-20020a056870638700b001b008d76e54mr4947774oap.5.1687944593005; Wed, 28 Jun
- 2023 02:29:53 -0700 (PDT)
-Date:   Wed, 28 Jun 2023 02:29:52 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000dde2fb05ff2d39c6@google.com>
-Subject: [syzbot] [kernel?] upstream test error: UBSAN: array-index-out-of-bounds
- in alloc_pid
-From:   syzbot <syzbot+522a57d8d5a0f7ac5c6c@syzkaller.appspotmail.com>
-To:     brauner@kernel.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
+References: <20230625095644.3156349-1-kernel@xen0n.name> <20230625095644.3156349-2-kernel@xen0n.name>
+In-Reply-To: <20230625095644.3156349-2-kernel@xen0n.name>
+From:   Huacai Chen <chenhuacai@kernel.org>
+Date:   Wed, 28 Jun 2023 17:33:31 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H5hBes5R30mFBW7asX8wPWeSQ+J-=GypnoMoO=-CR3cNg@mail.gmail.com>
+Message-ID: <CAAhV-H5hBes5R30mFBW7asX8wPWeSQ+J-=GypnoMoO=-CR3cNg@mail.gmail.com>
+Subject: Re: [PATCH v3 1/8] LoongArch: Calculate various sizes in the linker script
+To:     WANG Xuerui <kernel@xen0n.name>
+Cc:     WANG Rui <wangrui@loongson.cn>, Xi Ruoyao <xry111@xry111.site>,
+        loongarch@lists.linux.dev, linux-kbuild@vger.kernel.org,
+        llvm@lists.linux.dev, linux-kernel@vger.kernel.org,
+        WANG Xuerui <git@xen0n.name>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Sun, Jun 25, 2023 at 5:57=E2=80=AFPM WANG Xuerui <kernel@xen0n.name> wro=
+te:
+>
+> From: WANG Rui <wangrui@loongson.cn>
+>
+> Taking the address delta between symbols in different sections is not
+> supported by the LLVM IAS. Instead, do this in the linker script, so
+> the same data can be properly referenced in assembly.
+>
+> Signed-off-by: WANG Rui <wangrui@loongson.cn>
+> Signed-off-by: WANG Xuerui <git@xen0n.name>
+> ---
+>  arch/loongarch/kernel/efi-header.S  | 6 +++---
+>  arch/loongarch/kernel/head.S        | 8 ++++----
+>  arch/loongarch/kernel/vmlinux.lds.S | 7 +++++++
+>  3 files changed, 14 insertions(+), 7 deletions(-)
+>
+> diff --git a/arch/loongarch/kernel/efi-header.S b/arch/loongarch/kernel/e=
+fi-header.S
+> index 8c1d229a2afa..5f23b85d78ca 100644
+> --- a/arch/loongarch/kernel/efi-header.S
+> +++ b/arch/loongarch/kernel/efi-header.S
+> @@ -24,7 +24,7 @@
+>         .byte   0x02                                    /* MajorLinkerVer=
+sion */
+>         .byte   0x14                                    /* MinorLinkerVer=
+sion */
+>         .long   __inittext_end - .Lefi_header_end       /* SizeOfCode */
+> -       .long   _end - __initdata_begin                 /* SizeOfInitiali=
+zedData */
+> +       .long   _kernel_vsize                           /* SizeOfInitiali=
+zedData */
+>         .long   0                                       /* SizeOfUninitia=
+lizedData */
+>         .long   __efistub_efi_pe_entry - _head          /* AddressOfEntry=
+Point */
+>         .long   .Lefi_header_end - _head                /* BaseOfCode */
+> @@ -79,9 +79,9 @@
+>                 IMAGE_SCN_MEM_EXECUTE                   /* Characteristic=
+s */
+>
+>         .ascii  ".data\0\0\0"
+> -       .long   _end - __initdata_begin                 /* VirtualSize */
+> +       .long   _kernel_vsize                           /* VirtualSize */
+>         .long   __initdata_begin - _head                /* VirtualAddress=
+ */
+> -       .long   _edata - __initdata_begin               /* SizeOfRawData =
+*/
+> +       .long   _kernel_rsize                           /* SizeOfRawData =
+*/
+>         .long   __initdata_begin - _head                /* PointerToRawDa=
+ta */
+>
+>         .long   0                                       /* PointerToReloc=
+ations */
+> diff --git a/arch/loongarch/kernel/head.S b/arch/loongarch/kernel/head.S
+> index 0d8180153ec0..53b883db0786 100644
+> --- a/arch/loongarch/kernel/head.S
+> +++ b/arch/loongarch/kernel/head.S
+> @@ -23,7 +23,7 @@ _head:
+>         .word   MZ_MAGIC                /* "MZ", MS-DOS header */
+>         .org    0x8
+>         .dword  kernel_entry            /* Kernel entry point */
+> -       .dword  _end - _text            /* Kernel image effective size */
+> +       .dword  _kernel_asize           /* Kernel image effective size */
+>         .quad   PHYS_LINK_KADDR         /* Kernel image load offset from =
+start of RAM */
+>         .org    0x38                    /* 0x20 ~ 0x37 reserved */
+>         .long   LINUX_PE_MAGIC
+> @@ -32,9 +32,9 @@ _head:
+>  pe_header:
+>         __EFI_PE_HEADER
+>
+> -SYM_DATA(kernel_asize, .long _end - _text);
+> -SYM_DATA(kernel_fsize, .long _edata - _text);
+> -SYM_DATA(kernel_offset, .long kernel_offset - _text);
+> +SYM_DATA(kernel_asize, .long _kernel_asize);
+> +SYM_DATA(kernel_fsize, .long _kernel_fsize);
+> +SYM_DATA(kernel_offset, .long _kernel_offset);
+>
+>  #endif
+>
+> diff --git a/arch/loongarch/kernel/vmlinux.lds.S b/arch/loongarch/kernel/=
+vmlinux.lds.S
+> index 0c7b041be9d8..79f238df029e 100644
+> --- a/arch/loongarch/kernel/vmlinux.lds.S
+> +++ b/arch/loongarch/kernel/vmlinux.lds.S
+> @@ -136,6 +136,13 @@ SECTIONS
+>         DWARF_DEBUG
+>         ELF_DETAILS
+>
+> +       /* header symbols */
+> +       _kernel_asize =3D _end - _text;
+> +       _kernel_fsize =3D _edata - _text;
+> +       _kernel_offset =3D kernel_offset - _text;
+When !CONFIG_EFI_STUB there is a build error, I fixed it when I applied.
 
-syzbot found the following issue on:
-
-HEAD commit:    6aeadf7896bf Merge tag 'docs-arm64-move' of git://git.lwn...
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=12cea2c7280000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=652d39e0420afbb8
-dashboard link: https://syzkaller.appspot.com/bug?extid=522a57d8d5a0f7ac5c6c
-compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
-
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/3887d048a41c/disk-6aeadf78.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/b25a7d5f9034/vmlinux-6aeadf78.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/96457fbed62d/bzImage-6aeadf78.xz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+522a57d8d5a0f7ac5c6c@syzkaller.appspotmail.com
-
-================================================================================
-UBSAN: array-index-out-of-bounds in kernel/pid.c:244:3
-index 1 is out of range for type 'struct upid[1]'
-CPU: 1 PID: 4996 Comm: syz-executor.0 Not tainted 6.4.0-syzkaller-01761-g6aeadf7896bf #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/27/2023
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0x1e7/0x2d0 lib/dump_stack.c:106
- ubsan_epilogue lib/ubsan.c:217 [inline]
- __ubsan_handle_out_of_bounds+0x11c/0x150 lib/ubsan.c:348
- alloc_pid+0x405/0xc40 kernel/pid.c:244
- copy_process+0x1f2f/0x4350 kernel/fork.c:2523
- kernel_clone+0x222/0x800 kernel/fork.c:2915
- __do_sys_clone kernel/fork.c:3058 [inline]
- __se_sys_clone kernel/fork.c:3042 [inline]
- __x64_sys_clone+0x258/0x2a0 kernel/fork.c:3042
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f30e5e89fab
-Code: ed 0f 85 60 01 00 00 64 4c 8b 0c 25 10 00 00 00 45 31 c0 4d 8d 91 d0 02 00 00 31 d2 31 f6 bf 11 00 20 01 b8 38 00 00 00 0f 05 <48> 3d 00 f0 ff ff 0f 87 89 00 00 00 41 89 c5 85 c0 0f 85 90 00 00
-RSP: 002b:00007ffe72312890 EFLAGS: 00000246 ORIG_RAX: 0000000000000038
-RAX: ffffffffffffffda RBX: 00007ffe72312ee8 RCX: 00007f30e5e89fab
-RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000001200011
-RBP: 0000000000000000 R08: 0000000000000000 R09: 000055555643c400
-R10: 000055555643c6d0 R11: 0000000000000246 R12: 0000000000000000
-R13: 00007ffe72312980 R14: 00007f30e5fac9d8 R15: 000000000000000c
- </TASK>
-================================================================================
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-
-If the bug is already fixed, let syzbot know by replying with:
-#syz fix: exact-commit-title
-
-If you want to change bug's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
-
-If the bug is a duplicate of another bug, reply with:
-#syz dup: exact-subject-of-another-report
-
-If you want to undo deduplication, reply with:
-#syz undup
+Huacai
+> +       _kernel_vsize =3D _end - __initdata_begin;
+> +       _kernel_rsize =3D _edata - __initdata_begin;
+> +
+>         .gptab.sdata : {
+>                 *(.gptab.data)
+>                 *(.gptab.sdata)
+> --
+> 2.40.0
+>
+>
