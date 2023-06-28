@@ -2,144 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3367F740FD1
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 13:11:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE1F8740FD8
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 13:13:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231203AbjF1LLe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 07:11:34 -0400
-Received: from out-40.mta0.migadu.com ([91.218.175.40]:16132 "EHLO
-        out-40.mta0.migadu.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231304AbjF1LL2 (ORCPT
+        id S229748AbjF1LNj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 07:13:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34072 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229456AbjF1LNh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 07:11:28 -0400
-Message-ID: <2e9ce197-2732-d061-b11d-4f4513af6abc@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1687950686;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=L1I/ER/w6jNuNeN1IzKuVARZ7DzIC62fE15mQqKlcKA=;
-        b=Rdepi0ljPQ2cZvn1YYGKUl4KHpRN6kkf2yTS5VgyROLqP19w683nmg9jAPJUuhyTK9RD+n
-        FSSEs43rfghN6NEQu0DbynAEjUXM97SW+nvtSu/fbL7My/4ovr5DZ3UhNU+6rL+OkX6hIT
-        Qa7packtPMeaAcIYXpWRq1A4sWVQwyc=
-Date:   Wed, 28 Jun 2023 12:11:19 +0100
+        Wed, 28 Jun 2023 07:13:37 -0400
+Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48071AA
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 04:13:35 -0700 (PDT)
+Received: by mail-lj1-x22d.google.com with SMTP id 38308e7fff4ca-2b5e7dba43cso62182961fa.1
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 04:13:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1687950813; x=1690542813;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=mxUjDgbY/jNz54AC4sl2RIErcdWqb2mUuJILzEKOlqM=;
+        b=oaZ8tyOpIUvX+cCLzgWdNoY8qftM92bZWnYXHa1SrK1QcQPPtAxjE4Sc7rnvK6yo5E
+         jFxzIDIPHv1HMLWARS/EKHXuxZ9f68yYnLRJDWTHzN5NpL4IVaLRwAMDZUFahEw9yNBB
+         EWOP7DSP9oo5THMy3XEr08CZ+YzzpleUdQtab5olUQClRuBtSh7ZoTxbcfLjuYG//vYO
+         73p49yKQ52BpY3azzO+z4MqRj4kmOVgaT/TV1auN55Gf01WwYad489xm+1Jgih7tx2ko
+         S+Oc+Qi2zgCMmNQOpQxYjjZdb5XIejDQ7sGOQ0/mEA7peRKHrJlaiexutyvC62/xMhc4
+         LiNQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687950813; x=1690542813;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=mxUjDgbY/jNz54AC4sl2RIErcdWqb2mUuJILzEKOlqM=;
+        b=DfUlVOaxtwtR2gIgWMajpG8L/kSfgTTXaLFvq4ojxNRI58Kz9IFkYKyDc5WSts3CKo
+         HdyneMzDtRqBOdktUHJR0CxuVD9FmGKck7u+F2/j6x6C/s6IacAF3S94p0eFqt9Vv0ZP
+         VHMWdOCvTCT8UlnTVcX+iYNWkZHHKLoynvnMxWcmNF9ctuUkUf7ZGk6iZPk7cJfLSQCt
+         +vi9jyOh87hqQ7KMTB+0b9+eOA0Dy7M2V5a/NDScYByJmKIX/5zLzdj6xYEc+vNL5sUu
+         eOcZmzHCDrldWxCMqhsnGi9KqBAR/flq3K4UhttuuofNq2g1a/m3nO7rgta5NxJ2Wy/y
+         aCtw==
+X-Gm-Message-State: AC+VfDx/ZNb3sDvpKO4ReESrPy3EcNePcS5kypaS64UXRjniuUBbQnkX
+        uylZH3v9DCriivUrTAuIsJtheQ==
+X-Google-Smtp-Source: ACHHUZ7F1tJgooydEk02WTCZjUfRe7PKzXWFYzlX3R9hRMRIB9K95VGzrtXqoz4UshqPiLZ3IaK0qw==
+X-Received: by 2002:a2e:8e8a:0:b0:2b4:8239:b132 with SMTP id z10-20020a2e8e8a000000b002b48239b132mr18914904ljk.22.1687950813572;
+        Wed, 28 Jun 2023 04:13:33 -0700 (PDT)
+Received: from [192.168.1.101] (abyj233.neoplus.adsl.tpnet.pl. [83.9.29.233])
+        by smtp.gmail.com with ESMTPSA id d19-20020a2e3313000000b002b1e6a78d3esm2165609ljc.82.2023.06.28.04.13.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 28 Jun 2023 04:13:33 -0700 (PDT)
+Message-ID: <2dfa5bb8-3189-29f2-a85f-3dd392b27141@linaro.org>
+Date:   Wed, 28 Jun 2023 13:13:31 +0200
 MIME-Version: 1.0
-Subject: Re: [RFC PATCH v9 00/10] Create common DPLL configuration API
-To:     "Kubalewski, Arkadiusz" <arkadiusz.kubalewski@intel.com>,
-        Jiri Pirko <jiri@resnulli.us>
-Cc:     "kuba@kernel.org" <kuba@kernel.org>,
-        "vadfed@meta.com" <vadfed@meta.com>,
-        "jonathan.lemon@gmail.com" <jonathan.lemon@gmail.com>,
-        "pabeni@redhat.com" <pabeni@redhat.com>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "vadfed@fb.com" <vadfed@fb.com>,
-        "Brandeburg, Jesse" <jesse.brandeburg@intel.com>,
-        "Nguyen, Anthony L" <anthony.l.nguyen@intel.com>,
-        "M, Saeed" <saeedm@nvidia.com>,
-        "leon@kernel.org" <leon@kernel.org>,
-        "richardcochran@gmail.com" <richardcochran@gmail.com>,
-        "sj@kernel.org" <sj@kernel.org>,
-        "javierm@redhat.com" <javierm@redhat.com>,
-        "ricardo.canuelo@collabora.com" <ricardo.canuelo@collabora.com>,
-        "mst@redhat.com" <mst@redhat.com>,
-        "tzimmermann@suse.de" <tzimmermann@suse.de>,
-        "Michalik, Michal" <michal.michalik@intel.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "jacek.lawrynowicz@linux.intel.com" 
-        <jacek.lawrynowicz@linux.intel.com>,
-        "airlied@redhat.com" <airlied@redhat.com>,
-        "ogabbay@kernel.org" <ogabbay@kernel.org>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "nipun.gupta@amd.com" <nipun.gupta@amd.com>,
-        "axboe@kernel.dk" <axboe@kernel.dk>,
-        "linux@zary.sk" <linux@zary.sk>,
-        "masahiroy@kernel.org" <masahiroy@kernel.org>,
-        "benjamin.tissoires@redhat.com" <benjamin.tissoires@redhat.com>,
-        "geert+renesas@glider.be" <geert+renesas@glider.be>,
-        "Olech, Milena" <milena.olech@intel.com>,
-        "kuniyu@amazon.com" <kuniyu@amazon.com>,
-        "liuhangbin@gmail.com" <liuhangbin@gmail.com>,
-        "hkallweit1@gmail.com" <hkallweit1@gmail.com>,
-        "andy.ren@getcruise.com" <andy.ren@getcruise.com>,
-        "razor@blackwall.org" <razor@blackwall.org>,
-        "idosch@nvidia.com" <idosch@nvidia.com>,
-        "lucien.xin@gmail.com" <lucien.xin@gmail.com>,
-        "nicolas.dichtel@6wind.com" <nicolas.dichtel@6wind.com>,
-        "phil@nwl.cc" <phil@nwl.cc>,
-        "claudiajkang@gmail.com" <claudiajkang@gmail.com>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "intel-wired-lan@lists.osuosl.org" <intel-wired-lan@lists.osuosl.org>,
-        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>, poros <poros@redhat.com>,
-        mschmidt <mschmidt@redhat.com>,
-        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>
-References: <20230623123820.42850-1-arkadiusz.kubalewski@intel.com>
- <ZJq3a6rl6dnPMV17@nanopsycho>
- <DM6PR11MB4657084DDD7554663F86C1C19B24A@DM6PR11MB4657.namprd11.prod.outlook.com>
- <DM6PR11MB4657A1ACB586AD9B45C7996E9B24A@DM6PR11MB4657.namprd11.prod.outlook.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH v4 5/6] soc: qcom: Add LLCC support for multi channel DDR
 Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Vadim Fedorenko <vadim.fedorenko@linux.dev>
-In-Reply-To: <DM6PR11MB4657A1ACB586AD9B45C7996E9B24A@DM6PR11MB4657.namprd11.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+To:     Komal Bajaj <quic_kbajaj@quicinc.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>
+Cc:     linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+References: <20230623141806.13388-1-quic_kbajaj@quicinc.com>
+ <20230623141806.13388-6-quic_kbajaj@quicinc.com>
+ <b84b2bfc-6f8f-f50f-27b5-52a982ae30f2@linaro.org>
+ <e80f0bd3-cf1e-dfed-bcc6-d22d4d934230@quicinc.com>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <e80f0bd3-cf1e-dfed-bcc6-d22d4d934230@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+        lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 28/06/2023 10:27, Kubalewski, Arkadiusz wrote:
->> From: Kubalewski, Arkadiusz
->> Sent: Wednesday, June 28, 2023 11:15 AM
->>
->>> From: Jiri Pirko <jiri@resnulli.us>
->>> Sent: Tuesday, June 27, 2023 12:18 PM
->>>
->>> Fri, Jun 23, 2023 at 02:38:10PM CEST, arkadiusz.kubalewski@intel.com
->> wrote:
->>>
->>>> v8 -> v9:
->>>
->>> Could you please address all the unresolved issues from v8 and send v10?
->>> I'm not reviewing this one.
->>>
->>> Thanks!
->>
->> Sure, will do, but first missing to-do/discuss list:
->> 1) remove mode_set as not used by any driver
->> 2) remove "no-added-value" static functions descriptions in
->>    dpll_core/dpll_netlink
->> 3) merge patches [ 03/10, 04/10, 05/10 ] into patches that are compiling
->>    after each patch apply
->> 4) remove function return values descriptions/lists
->> 5) Fix patch [05/10]:
->>    - status Supported
->>    - additional maintainers
->>    - remove callback:
->>      int (*source_pin_idx_get)(...) from `struct dpll_device_ops`
->> 6) Fix patch [08/10]: rethink ice mutex locking scheme
->> 7) Fix patch [09/10]: multiple comments on
->> https://lore.kernel.org/netdev/ZIQu+%2Fo4J0ZBspVg@nanopsycho/#t
->> 8) add PPS DPLL phase offset to the netlink get-device API
->>
->> Thank you!
->> Arkadiusz
+On 28.06.2023 10:52, Komal Bajaj wrote:
 > 
-> If someone has any objections please state them now, I will work on
-> all above except 5) and 7).
-> Vadim, could you take care of those 2 points?
 > 
-Yeah, sure, I'll update 5 and 7.
-I'm not sure about 8) - do we really need this info, I believe every 
-supported DPLL device exports PTP device as well. But I'm Ok to add this 
-feature too.
+> On 6/23/2023 8:28 PM, Konrad Dybcio wrote:
+>> On 23.06.2023 16:18, Komal Bajaj wrote:
+>>> Add LLCC support for multi channel DDR configuration
+>>> based on a feature register. Reading DDR channel
+>>> confiuration uses nvmem framework, so select the
+>>> dependency in Kconfig. Without this, there will be
+>>> errors while building the driver with COMPILE_TEST only.
+>>>
+>>> Signed-off-by: Komal Bajaj <quic_kbajaj@quicinc.com>
+>>> ---
+>>>   drivers/soc/qcom/Kconfig     |  2 ++
+>>>   drivers/soc/qcom/llcc-qcom.c | 33 ++++++++++++++++++++++++++++++---
+>>>   2 files changed, 32 insertions(+), 3 deletions(-)
+>>>
+>>> diff --git a/drivers/soc/qcom/Kconfig b/drivers/soc/qcom/Kconfig
+>>> index a491718f8064..cc9ad41c63aa 100644
+>>> --- a/drivers/soc/qcom/Kconfig
+>>> +++ b/drivers/soc/qcom/Kconfig
+>>> @@ -64,6 +64,8 @@ config QCOM_LLCC
+>>>       tristate "Qualcomm Technologies, Inc. LLCC driver"
+>>>       depends on ARCH_QCOM || COMPILE_TEST
+>>>       select REGMAP_MMIO
+>>> +    select NVMEM
+>>> +    select QCOM_SCM
+>>>       help
+>>>         Qualcomm Technologies, Inc. platform specific
+>>>         Last Level Cache Controller(LLCC) driver for platforms such as,
+>>> diff --git a/drivers/soc/qcom/llcc-qcom.c b/drivers/soc/qcom/llcc-qcom.c
+>>> index 6cf373da5df9..3c29612da1c5 100644
+>>> --- a/drivers/soc/qcom/llcc-qcom.c
+>>> +++ b/drivers/soc/qcom/llcc-qcom.c
+>>> @@ -12,6 +12,7 @@
+>>>   #include <linux/kernel.h>
+>>>   #include <linux/module.h>
+>>>   #include <linux/mutex.h>
+>>> +#include <linux/nvmem-consumer.h>
+>>>   #include <linux/of.h>
+>>>   #include <linux/of_device.h>
+>>>   #include <linux/regmap.h>
+>>> @@ -943,6 +944,19 @@ static int qcom_llcc_cfg_program(struct platform_device *pdev,
+>>>       return ret;
+>>>   }
+>>>   +static int qcom_llcc_get_cfg_index(struct platform_device *pdev, u8 *cfg_index)
+>>> +{
+>>> +    int ret;
+>>> +
+>>> +    ret = nvmem_cell_read_u8(&pdev->dev, "multi-chan-ddr", cfg_index);
+>>> +    if (ret == -ENOENT) {
+>>> +        *cfg_index = 0;
+>>> +        return 0;
+>>> +    }
+>>> +
+>>> +    return ret;
+>>> +}
+>>> +
+>>>   static int qcom_llcc_remove(struct platform_device *pdev)
+>>>   {
+>>>       /* Set the global pointer to a error code to avoid referencing it */
+>>> @@ -975,11 +989,13 @@ static int qcom_llcc_probe(struct platform_device *pdev)
+>>>       struct device *dev = &pdev->dev;
+>>>       int ret, i;
+>>>       struct platform_device *llcc_edac;
+>>> -    const struct qcom_llcc_config *cfg;
+>>> +    const struct qcom_llcc_config *cfg, *entry;
+>>>       const struct llcc_slice_config *llcc_cfg;
+>>>       u32 sz;
+>>> +    u8 cfg_index;
+>>>       u32 version;
+>>>       struct regmap *regmap;
+>>> +    u32 num_entries = 0;
+>>>         drv_data = devm_kzalloc(dev, sizeof(*drv_data), GFP_KERNEL);
+>>>       if (!drv_data) {
+>>> @@ -1040,8 +1056,19 @@ static int qcom_llcc_probe(struct platform_device *pdev)
+>>>         drv_data->version = version;
+>>>   -    llcc_cfg = cfg[0]->sct_data;
+>>> -    sz = cfg[0]->size;
+>>> +    ret = qcom_llcc_get_cfg_index(pdev, &cfg_index);
+>>> +    if (ret)
+>>> +        goto err;
+>>> +
+>>
+>>> +    for (entry = cfg; entry->sct_data; entry++, num_entries++)
+>>> +        ;
+>>> +    if (cfg_index >= num_entries || cfg_index < 0) {
+>> cfg_index is an unsigned variable, it can never be < 0
+> 
+> Okay, will remove this condition.
+> 
+>>
+>>> +        ret = -EINVAL;
+>>> +        goto err;
+>>> +    }
+>>> +
+>> if (cfg_index >= entry->size)? With that, you can also keep the config
+>> entries non-0-terminated in the previous patch, saving a whole lot of RAM.
+> 
+> entry->size represents the size of sct table whereas num_entries represents the number
+> of sct tables that we can have. And by this check we are validating the value read from the
+> fuse register. Am I understanding your comment correctly?
+Oh you're right.
 
-> Thank you!
-> Arkadiusz
+I still see room for improvement, though.
 
+For example, you duplicate assigning need_llcc_cfg, reg_offset
+and edac_reg_offset. You can add a new struct, like "sct_config" and add
+a pointer to sct_config[] & the length of this array to qcom_llcc_config.
+
+Konrad
+
+> 
+>>
+>> Konrad
+>>> +    llcc_cfg = cfg[cfg_index].sct_data;
+>>> +    sz = cfg[cfg_index].size;
+>>>         for (i = 0; i < sz; i++)
+>>>           if (llcc_cfg[i].slice_id > drv_data->max_slices)
+> 
