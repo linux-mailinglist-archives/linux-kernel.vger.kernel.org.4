@@ -2,90 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 005C07413FB
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 16:43:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B3157413FD
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 16:44:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231555AbjF1OnB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 10:43:01 -0400
-Received: from mga06b.intel.com ([134.134.136.31]:40100 "EHLO mga06.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230265AbjF1Om7 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 10:42:59 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687963379; x=1719499379;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=peKAr0s1Kurrh+o6kbrz5QnnAIgvQneW3GDRLAasnhQ=;
-  b=KU+kT9kLodqd6Q4kTAzWRZNtPggESLjS5siXXAY8VHKJJmFuNH3/jFXY
-   X7Z2IAkdQigX/NfYPapreqkw3/giBjT58nhofX/1cb4EglpCeFxShFh1F
-   fquAiJkbvtqELjJrfpCcnMValiM4Uri69wmCnupJmYscjeK8otgtut3vJ
-   TG0UjJ/9MEQ/o56mpGxlt9Ay1sCjA9FpIsxBudAsk6SnlctGA0A+g7IWG
-   92VgmGwRGl/CmeH03kXStsad9QNQYb07Ve9es8SsUTOZ/SbzTGwDskb7N
-   vXlO9Zbh2qSY3WjlAlBaJtyRSSUHSkzOB50I/F6XHbcouk1D3luMR5UPE
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10755"; a="425533944"
-X-IronPort-AV: E=Sophos;i="6.01,165,1684825200"; 
-   d="scan'208";a="425533944"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2023 07:42:58 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10755"; a="891069714"
-X-IronPort-AV: E=Sophos;i="6.01,165,1684825200"; 
-   d="scan'208";a="891069714"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga005.jf.intel.com with ESMTP; 28 Jun 2023 07:42:55 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@intel.com>)
-        id 1qEWNi-000coK-0e;
-        Wed, 28 Jun 2023 17:42:54 +0300
-Date:   Wed, 28 Jun 2023 17:42:53 +0300
-From:   Andy Shevchenko <andriy.shevchenko@intel.com>
-To:     Amadeusz =?utf-8?B?U8WCYXdpxYRza2k=?= 
-        <amadeuszx.slawinski@linux.intel.com>
-Cc:     Bjorn Helgaas <bhelgaas@google.com>,
-        Mark Brown <broonie@kernel.org>, Takashi Iwai <tiwai@suse.com>,
-        alsa-devel@alsa-project.org, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Cezary Rojewski <cezary.rojewski@intel.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Kai Vehmanen <kai.vehmanen@linux.intel.com>
-Subject: Re: [RFC PATCH 4/8] ALSA: hda/i915: Update PCI IDs
-Message-ID: <ZJxG7YRroqi6kiyz@smile.fi.intel.com>
-References: <20230628205135.517241-1-amadeuszx.slawinski@linux.intel.com>
- <20230628205135.517241-5-amadeuszx.slawinski@linux.intel.com>
+        id S231127AbjF1OoR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 10:44:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55514 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229789AbjF1OoJ (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 28 Jun 2023 10:44:09 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1920AA2;
+        Wed, 28 Jun 2023 07:44:08 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 984396134E;
+        Wed, 28 Jun 2023 14:44:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29E79C433C0;
+        Wed, 28 Jun 2023 14:44:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687963446;
+        bh=CftGqe7uSHGDIhGMtuKnY6LHqyYkAcjuQD1TCyu0PK0=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=JaKcEvpLCTUDffE/nH0JPp2K2Du1tThuKk5BM0oGygHn8wf+QK+vP6yssdtE5LrQQ
+         BfCRurBIscWWv+hzIgI6oVxccIse66uxbcdp/oJFz1Ryh+TfrcaR45b26LIbczo+UQ
+         nxqgPpKsl9Uy9VL2Mxl7+cl8Sgv01fdwHmTYpnCS4EbigCBFv9o8n8olJ/LtfmCjXH
+         GXzGbAQffGUbLDmk7wniU6Gwg5l9SBTaJ8rEfPkiCD4rc4HXWwMHcMr/1IEL2wWj/F
+         KdZX8/9b5rIILrUOI8mzMa6Un4sY5RVngrauCz4Ojju8FLEog8WnwgdbtJxsAS4asg
+         7K6YmX9KuwpQg==
+From:   "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
+To:     Jiri Olsa <jolsa@kernel.org>, Steven Rostedt <rostedt@goodmis.org>
+Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        lkml <linux-kernel@vger.kernel.org>,
+        linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org
+Subject: [PATCH] fprobe: Ensure running fprobe_exit_handler() finished before calling rethook_free()
+Date:   Wed, 28 Jun 2023 23:44:02 +0900
+Message-Id: <168796344232.46347.7947681068822514750.stgit@devnote2>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230628012305.978e34d44f1a53fe20327fde@kernel.org>
+References: <20230628012305.978e34d44f1a53fe20327fde@kernel.org>
+User-Agent: StGit/0.19
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230628205135.517241-5-amadeuszx.slawinski@linux.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+        lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 28, 2023 at 10:51:31PM +0200, Amadeusz Sławiński wrote:
-> Use PCI device IDs from pci_ids.h header
+From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
 
-Missing period at the end.
+Ensure running fprobe_exit_handler() has finished before
+calling rethook_free() in the unregister_fprobe() so that caller can free
+the fprobe right after unregister_fprobe().
 
-...
+unregister_fprobe() ensured that all running fprobe_entry/exit_handler()
+have finished by calling unregister_ftrace_function() which synchronizes
+RCU. But commit 5f81018753df ("fprobe: Release rethook after the ftrace_ops
+is unregistered") changed to call rethook_free() after
+unregister_ftrace_function(). So call rethook_stop() to make rethook
+disabled before unregister_ftrace_function() and ensure it again.
 
-> -#define IS_HSW_CONTROLLER(pci) (((pci)->device == 0x0a0c) || \
-> -				((pci)->device == 0x0c0c) || \
-> -				((pci)->device == 0x0d0c) || \
-> -				((pci)->device == 0x160c))
-> +#define IS_HSW_CONTROLLER(pci) (((pci)->device == PCI_DEVICE_ID_INTEL_HDA_HSW_0) || \
-> +				((pci)->device == PCI_DEVICE_ID_INTEL_HDA_HSW_2) || \
-> +				((pci)->device == PCI_DEVICE_ID_INTEL_HDA_HSW_3) || \
-> +				((pci)->device == PCI_DEVICE_ID_INTEL_HDA_BDW))
+Fixes: 5f81018753df ("fprobe: Release rethook after the ftrace_ops is unregistered")
+Cc: stable@vger.kernel.org
+Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+---
+ include/linux/rethook.h |    1 +
+ kernel/trace/fprobe.c   |    3 +++
+ kernel/trace/rethook.c  |   13 +++++++++++++
+ 3 files changed, 17 insertions(+)
 
-The very same macro under different name appeared in the previous patch.
-Am I correct? Perhaps go further and first move it somewhere to be available
-for both?
-
--- 
-With Best Regards,
-Andy Shevchenko
-
+diff --git a/include/linux/rethook.h b/include/linux/rethook.h
+index c8ac1e5afcd1..bdbe6717f45a 100644
+--- a/include/linux/rethook.h
++++ b/include/linux/rethook.h
+@@ -59,6 +59,7 @@ struct rethook_node {
+ };
+ 
+ struct rethook *rethook_alloc(void *data, rethook_handler_t handler);
++void rethook_stop(struct rethook *rh);
+ void rethook_free(struct rethook *rh);
+ void rethook_add_node(struct rethook *rh, struct rethook_node *node);
+ struct rethook_node *rethook_try_get(struct rethook *rh);
+diff --git a/kernel/trace/fprobe.c b/kernel/trace/fprobe.c
+index 0121e8c0d54e..75517667b54f 100644
+--- a/kernel/trace/fprobe.c
++++ b/kernel/trace/fprobe.c
+@@ -364,6 +364,9 @@ int unregister_fprobe(struct fprobe *fp)
+ 		    fp->ops.saved_func != fprobe_kprobe_handler))
+ 		return -EINVAL;
+ 
++	if (fp->rethook)
++		rethook_stop(fp->rethook);
++
+ 	ret = unregister_ftrace_function(&fp->ops);
+ 	if (ret < 0)
+ 		return ret;
+diff --git a/kernel/trace/rethook.c b/kernel/trace/rethook.c
+index 60f6cb2b486b..468006cce7ca 100644
+--- a/kernel/trace/rethook.c
++++ b/kernel/trace/rethook.c
+@@ -53,6 +53,19 @@ static void rethook_free_rcu(struct rcu_head *head)
+ 		kfree(rh);
+ }
+ 
++/**
++ * rethook_stop() - Stop using a rethook.
++ * @rh: the struct rethook to stop.
++ *
++ * Stop using a rethook to prepare for freeing it. If you want to wait for
++ * all running rethook handler before calling rethook_free(), you need to
++ * call this first and wait RCU, and call rethook_free().
++ */
++void rethook_stop(struct rethook *rh)
++{
++	WRITE_ONCE(rh->handler, NULL);
++}
++
+ /**
+  * rethook_free() - Free struct rethook.
+  * @rh: the struct rethook to be freed.
 
