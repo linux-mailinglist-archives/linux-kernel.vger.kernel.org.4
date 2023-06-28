@@ -2,116 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C934D7419D8
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 22:46:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C51E7419DA
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 22:46:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231416AbjF1Up5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 16:45:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42976 "EHLO
+        id S230081AbjF1Uqk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 16:46:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231415AbjF1Upy (ORCPT
+        with ESMTP id S229936AbjF1Uqh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 16:45:54 -0400
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 653651FC2
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 13:45:53 -0700 (PDT)
-Received: by mail-pf1-x430.google.com with SMTP id d2e1a72fcca58-656bc570a05so39154b3a.0
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 13:45:53 -0700 (PDT)
+        Wed, 28 Jun 2023 16:46:37 -0400
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51B701FF5
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 13:46:36 -0700 (PDT)
+Received: by mail-pf1-x432.google.com with SMTP id d2e1a72fcca58-6687096c6ddso173713b3a.0
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 13:46:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20221208.gappssmtp.com; s=20221208; t=1687985153; x=1690577153;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ciE7wPwGlLP5hh+CkZMsNJNeE41TUQznpNx6pNMaRRI=;
-        b=E1ETyBIgQsGQgasljZx9V29BYsEXMwpSWRjjIQXeh+TalfY4vVLpFNoLg6c3WWUtTZ
-         M2kitqzDzK45TCpowZ+9lO56+k7pU5hJApEzZzpzcmIWjCHjIgxl5rGnQBYDLlLwsaPE
-         aI3nqoAk2L9MbjxW0dsiqVDu7v3EFW/hRjUXPa6raIhcPsuqNR7hAWM7HMrSLZ2mGncG
-         fzoJdURHwgB68706aWlsoJDgVIuqWHY6neyf+jaL8T7M1fdaAfFYaZB5OMgn0AUtjEcT
-         CGQ0L+SW1HeMWmijcXBkPbUtbdGjCrN4jxmfNY9zKVa8HG6UVBBk4Bovbc1YcXdnDCjP
-         aDLA==
+        d=chromium.org; s=google; t=1687985196; x=1690577196;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=kBhJKyD7bJwEozlu6VGmqEJtVOOTdpq3aGqlzavxyb4=;
+        b=QWE+loXzU3wKDS8ejmYVrM1fvW7AcQBsWfrRd9M6KnNwMAdJCD0nJim15NjpalqeuR
+         5OK2peY57vRnKl4CjQaw5y7uXU6wWWHy4eQazHd839z585RfywUalJZLfWqcVdvb9ITi
+         cHBZuj6woWszwebYdkvbTjAjhSOkwRZJ/ItrU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687985153; x=1690577153;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ciE7wPwGlLP5hh+CkZMsNJNeE41TUQznpNx6pNMaRRI=;
-        b=eqmDo1zqPaW8y64HvddQtVIpByFROTNcRM4it/KGXZkUV4aE1NSFPaPcVmUye7qpet
-         D9bAejSiQ0ksCp6E7+fnw9iFYBybEjOAFD29zgq9D9plCljhFWpWFXmnFS8ShE1QALeK
-         HD7vB9oBL5ONH6jVI4sys3VmgImYsZSbzqCiQGQg3a80dRXhst9oanoed6OeYCyz3X97
-         qrx3CJMb4Uh5f6o5JC7sgnXcGOZWJuLjGCFwer4Reg98OZNqZHxEy30wN2YBVV6wJOPc
-         rkvZGr97ixqDHHWkwqZ2ByBBtiKxdEuPIjIUbNs+fZVGeStSnDRkvWHrOvAPv0QuEfQ/
-         0OMg==
-X-Gm-Message-State: AC+VfDyUHHcBGvf4xQ1EBTIiNBaVBqI32ER2LeXvKhaNwSfxvfzBAIj4
-        wrSE1nKtnk3Xg2T347TreqB2OA==
-X-Google-Smtp-Source: ACHHUZ4zwfZP2vsUiZhQHuwV2D8ZtQX+vlXo+Oj1VMMNxaq6QHHTrapOwQMa8suOS6gRG90Hy1EAJw==
-X-Received: by 2002:a05:6a00:4091:b0:67f:8ef5:2643 with SMTP id bw17-20020a056a00409100b0067f8ef52643mr5194179pfb.2.1687985152898;
-        Wed, 28 Jun 2023 13:45:52 -0700 (PDT)
-Received: from [192.168.1.136] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id f19-20020aa782d3000000b0062dba4e4706sm7332690pfn.191.2023.06.28.13.45.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 28 Jun 2023 13:45:52 -0700 (PDT)
-Message-ID: <18a38d3e-0b23-ba92-199a-e63c44b18da9@kernel.dk>
-Date:   Wed, 28 Jun 2023 14:45:50 -0600
+        d=1e100.net; s=20221208; t=1687985196; x=1690577196;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=kBhJKyD7bJwEozlu6VGmqEJtVOOTdpq3aGqlzavxyb4=;
+        b=kcDiaX4Kf0fF6R+QvoNBBwDNkMgFJu8dY4jHeJdtmAwtOnFwrx51R76EUIorLTCUVE
+         9DzpvxGvsIje61yv5NRzLq1hq+Kat3OCYjNzUYZze+zJnmXe9B2xN+YNW6ilgE7H+Cha
+         1wyHvswy47EXDvlNdJ3XrPAgC+jg94raPmWvucO6xMif65UYtYnlYSbbUbCchCOZcNEB
+         Cg+1j+BD9AHjnkV8LTRbxeJmcTIP+016JGjdrRI/AHla3rhrYgn6acyNDMSDK2HfKxUu
+         j3XMuOlaja6/TmoJ6XMGjsYS2nq5q05OJ092fLhYIGS5IVnK1qhQ0jZ9L2vidAod3rUk
+         PW0w==
+X-Gm-Message-State: AC+VfDxqBO8TA9OwCUBtEFS2E/N7oEOGn1tGemlV6veGOYEl92juWf0y
+        X4cYkC5Gqb2q680m7abZDFSzZA==
+X-Google-Smtp-Source: ACHHUZ4+7odXJ0w41n+UICBA7a8VNpdAePajhftdeAf+kTzdbAyBRr6TACllyBIVPquapYHBKFcJAA==
+X-Received: by 2002:a05:6a00:a29:b0:674:1dde:4c59 with SMTP id p41-20020a056a000a2900b006741dde4c59mr10827321pfh.28.1687985195409;
+        Wed, 28 Jun 2023 13:46:35 -0700 (PDT)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id m18-20020aa79012000000b0064d47cd117esm7388086pfo.39.2023.06.28.13.46.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 28 Jun 2023 13:46:34 -0700 (PDT)
+Date:   Wed, 28 Jun 2023 13:46:34 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
+Cc:     aacraid@microsemi.com, "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hardening@vger.kernel.org
+Subject: Re: [PATCH 09/10][next] scsi: aacraid: Replace one-element array
+ with flexible-array member in struct sgmap64
+Message-ID: <202306281344.FA95C5E@keescook>
+References: <cover.1687974498.git.gustavoars@kernel.org>
+ <169a28c9e45d1f237308b1ca716122c5d0ee3488.1687974498.git.gustavoars@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [GIT PULL] bcachefs
-Content-Language: en-US
-To:     Kent Overstreet <kent.overstreet@linux.dev>
-Cc:     torvalds@linux-foundation.org, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-bcachefs@vger.kernel.org,
-        Christoph Hellwig <hch@lst.de>
-References: <20230627000635.43azxbkd2uf3tu6b@moria.home.lan>
- <91e9064b-84e3-1712-0395-b017c7c4a964@kernel.dk>
- <20230627020525.2vqnt2pxhtgiddyv@moria.home.lan>
- <b92ea170-d531-00f3-ca7a-613c05dcbf5f@kernel.dk>
- <23922545-917a-06bd-ec92-ff6aa66118e2@kernel.dk>
- <20230627201524.ool73bps2lre2tsz@moria.home.lan>
- <c06a9e0b-8f3e-4e47-53d0-b4854a98cc44@kernel.dk>
- <20230628040114.oz46icbsjpa4egpp@moria.home.lan>
- <b02657af-5bbb-b46b-cea0-ee89f385f3c1@kernel.dk>
- <03308df9-7a6f-4e55-40c8-6f57c5b67fe6@kernel.dk>
- <20230628175608.hap54mrx54owdkyg@moria.home.lan>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <20230628175608.hap54mrx54owdkyg@moria.home.lan>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <169a28c9e45d1f237308b1ca716122c5d0ee3488.1687974498.git.gustavoars@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/28/23 11:56?AM, Kent Overstreet wrote:
-> On Wed, Jun 28, 2023 at 09:22:15AM -0600, Jens Axboe wrote:
->> On 6/28/23 8:58?AM, Jens Axboe wrote:
->>> I should have something later today, don't feel like I fully understand
->>> all of it just yet.
->>
->> Might indeed be delayed_fput, just the flush is a bit broken in that it
->> races with the worker doing the flush. In any case, with testing that, I
->> hit this before I got an umount failure on loop 6 of generic/388:
->>
->> fsck from util-linux 2.38.1
->> recovering from clean shutdown, journal seq 14642
->> journal read done, replaying entries 14642-14642
->> checking allocations
->> starting journal replay, 0 keys
->> checking need_discard and freespace btrees
->> checking lrus
->> checking backpointers to alloc keys
->> checking backpointers to extents
->> backpointer for missing extent
->>   u64s 9 type backpointer 0:7950303232:0 len 0 ver 0: bucket=0:15164:0 btree=extents l=0 offset=0:0 len=88 pos=1342182431:5745:U32_MAX, not fixing
+On Wed, Jun 28, 2023 at 11:57:30AM -0600, Gustavo A. R. Silva wrote:
+> Replace one-element array with flexible-array member in struct
+> sgmap64 and refactor the rest of the code, accordingly.
 > 
-> Known bug, but it's gotten difficult to reproduce - if generic/388 ends
-> up being a better reproducer for this that'll be nice
+> Issue found with the help of Coccinelle and audited and fixed,
+> manually.
 
-Seems to reproduce in anywhere from 1..4 iterations for me.
+Like with the sgmap patch, I see (expected) binary differences in
+aac_write_block64() and aac_read_block64() due to the simplified
+calculations. I don't see anything unaccounted for, so:
+
+Reviewed-by: Kees Cook <keescook@chromium.org>
+
+-Kees
+
+> Link: https://github.com/KSPP/linux/issues/79
+> Link: https://github.com/ClangBuiltLinux/linux/issues/1851
+> Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+> ---
+>  drivers/scsi/aacraid/aachba.c  | 9 +++------
+>  drivers/scsi/aacraid/aacraid.h | 2 +-
+>  2 files changed, 4 insertions(+), 7 deletions(-)
+> 
+> diff --git a/drivers/scsi/aacraid/aachba.c b/drivers/scsi/aacraid/aachba.c
+> index b2849e5cc104..90df697e7c5f 100644
+> --- a/drivers/scsi/aacraid/aachba.c
+> +++ b/drivers/scsi/aacraid/aachba.c
+> @@ -1301,8 +1301,7 @@ static int aac_read_block64(struct fib * fib, struct scsi_cmnd * cmd, u64 lba, u
+>  	if (ret < 0)
+>  		return ret;
+>  	fibsize = sizeof(struct aac_read64) +
+> -		((le32_to_cpu(readcmd->sg.count) - 1) *
+> -		 sizeof (struct sgentry64));
+> +		  le32_to_cpu(readcmd->sg.count) * sizeof(struct sgentry64);
+>  	BUG_ON (fibsize > (fib->dev->max_fib_size -
+>  				sizeof(struct aac_fibhdr)));
+>  	/*
+> @@ -1433,8 +1432,7 @@ static int aac_write_block64(struct fib * fib, struct scsi_cmnd * cmd, u64 lba,
+>  	if (ret < 0)
+>  		return ret;
+>  	fibsize = sizeof(struct aac_write64) +
+> -		((le32_to_cpu(writecmd->sg.count) - 1) *
+> -		 sizeof (struct sgentry64));
+> +		  le32_to_cpu(writecmd->sg.count) * sizeof(struct sgentry64);
+>  	BUG_ON (fibsize > (fib->dev->max_fib_size -
+>  				sizeof(struct aac_fibhdr)));
+>  	/*
+> @@ -2271,8 +2269,7 @@ int aac_get_adapter_info(struct aac_dev* dev)
+>  			dev->scsi_host_ptr->sg_tablesize =
+>  				(dev->max_fib_size -
+>  				sizeof(struct aac_fibhdr) -
+> -				sizeof(struct aac_write64) +
+> -				sizeof(struct sgentry64)) /
+> +				sizeof(struct aac_write64)) /
+>  					sizeof(struct sgentry64);
+>  		} else {
+>  			dev->a_ops.adapter_read = aac_read_block;
+> diff --git a/drivers/scsi/aacraid/aacraid.h b/drivers/scsi/aacraid/aacraid.h
+> index 3fbc22ae72b6..fb3d93e4a99e 100644
+> --- a/drivers/scsi/aacraid/aacraid.h
+> +++ b/drivers/scsi/aacraid/aacraid.h
+> @@ -517,7 +517,7 @@ struct user_sgmap {
+>  
+>  struct sgmap64 {
+>  	__le32		count;
+> -	struct sgentry64 sg[1];
+> +	struct sgentry64 sg[];
+>  };
+>  
+>  struct user_sgmap64 {
+> -- 
+> 2.34.1
+> 
 
 -- 
-Jens Axboe
-
+Kees Cook
