@@ -2,140 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E3B074173C
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 19:33:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B70F274173F
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 19:34:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230304AbjF1Rcy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 13:32:54 -0400
-Received: from mga14.intel.com ([192.55.52.115]:21793 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229789AbjF1Rcw (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 13:32:52 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687973572; x=1719509572;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=dnWzPfExhbshNDPQIUAoulQwTqJcg7XuV88po8XEsGU=;
-  b=ZjwQcnPH9KrcEQ/DsBuQj4fNhZ1hQ5hWv1e6npWzwXh1a5+AlSzjP3yF
-   JyI7iKshAXDpaPln+lWTqakmvh4MwWGwCsrJG3a4e/V0kNcldvrKq99EV
-   BfBg3ssM3NlJPh4jZT81WHLUR5+1OF1VNX8I7sKgp36yGKRPsZJrj7ocX
-   WmCvdnxQvCiLBmd2EjYDJQJy0QIUBfNobM9i8/L2jb0xpxlyTYHBrxB2Y
-   A1DxSA0pNJAvW/CA4WrfJHUfOVUN+tfO2pCj/erqslBY31F9dEsg4X1gH
-   swDnuXX7rzEOn/cjTEyoM6n/L8AC/yP38W5TFYxBSgEoarQeRgAf4GiH9
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10755"; a="361954866"
-X-IronPort-AV: E=Sophos;i="6.01,166,1684825200"; 
-   d="scan'208";a="361954866"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2023 10:32:51 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10755"; a="752344459"
-X-IronPort-AV: E=Sophos;i="6.01,166,1684825200"; 
-   d="scan'208";a="752344459"
-Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 28 Jun 2023 10:32:49 -0700
-Received: from kbuild by 783282924a45 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1qEZ29-000DPL-0O;
-        Wed, 28 Jun 2023 17:32:49 +0000
-Date:   Thu, 29 Jun 2023 01:32:28 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Evan Quan <evan.quan@amd.com>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Alex Deucher <alexander.deucher@amd.com>
-Subject: drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu11/sienna_cichlid_ppt.c:2133
- sienna_cichlid_update_pcie_parameters() warn: unsigned 'table_member1[0]' is
- never less than zero.
-Message-ID: <202306290140.jvaRB2DW-lkp@intel.com>
+        id S231249AbjF1ReF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 13:34:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44882 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231290AbjF1Rd7 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 28 Jun 2023 13:33:59 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EB4F210A
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 10:33:58 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id 2adb3069b0e04-4fb8574a3a1so3542617e87.1
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 10:33:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20221208.gappssmtp.com; s=20221208; t=1687973636; x=1690565636;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=mu8Gi2wSnoTXkOMcCin+xgkyW4SfsZOtfaMQ9m+MZ5U=;
+        b=ctXSjsQSzaufeY9GTPqn+avzhgMNvjo9PgbMSWr3gC1OzFmKrqHpkfW/Hh4/BxaRHj
+         oatlyGdfBX5is3/rXAkRtPpuVaBjnbVAWHtGueEalCtd0kiWVV+nHvycDQA6ttsaegMd
+         3lcR9743n2mULg7SZFP8WAzgB7VrDSJyHfySHd5R6/1eVpsEDvWiJ7WrXlv0a9KSs29x
+         WETDEpY2W0csY2Kc8h8MS0M9gIM0+saldCRjt5f4n2ePrtvwjqb9Q37Q+s3b2t5w550r
+         rE7oMwUkLRYM2F7ETOGVj7LBn7mLZofgXEPOlaZgFM5DxnuqH6dXXJk0pzK8+aL2GhCR
+         7xfg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687973636; x=1690565636;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=mu8Gi2wSnoTXkOMcCin+xgkyW4SfsZOtfaMQ9m+MZ5U=;
+        b=jsgTD4p/1mBRc8M+QSkIzmX9sRestu9G5Eip494OCNtHqDctlmZsnHS7QV98iGSLqe
+         jJIekSaGRhFLpCHvjHIte4J4JJ+I+1WoSEogC5GW1HUBo4sxKfMyQ7ghkkLM7cMBh7rp
+         lxEwn2tVTueXTRw2XcVyupraV50rcY26M2E7G83gUeDOXrNwZlV0SUDfV0GNfift+IR9
+         ln3nsqec8aK2DGFawZOOmLBsfDxitWZpiEK5acFAw8KbdRaOBU2NFpuCHWDgKQ4iKAjN
+         5igsLxhZUazLsrDQdcHwKHbJBnmn2DhLiUzGX2OwJDZz6ITD+iTewjYG8hnkC/Ty1CpP
+         HSAg==
+X-Gm-Message-State: AC+VfDxSoKU7BxPgdJ8/+yZYVI80x8Yw5QRrIvR4FmeDYaRS+qvAZrKq
+        xFczOFIRHRLK4qiCVTWBeeurjNFBN8DEGr8n/8H7PQ==
+X-Google-Smtp-Source: ACHHUZ7/LXypQ2b7zt5BdRodKsoDzSYUcdIaTGpou0UZUfpPyxiEPFkUIurdLsWJ+cccDbdbnTpgIrlMLbBaiJoTBCY=
+X-Received: by 2002:a19:7710:0:b0:4f8:6800:86f6 with SMTP id
+ s16-20020a197710000000b004f8680086f6mr16992828lfc.49.1687973636628; Wed, 28
+ Jun 2023 10:33:56 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20230626-provable-angrily-81760e8c3cc6@wendy> <20230626-sensuous-clothing-124f7ae0aedf@wendy>
+In-Reply-To: <20230626-sensuous-clothing-124f7ae0aedf@wendy>
+From:   Evan Green <evan@rivosinc.com>
+Date:   Wed, 28 Jun 2023 10:33:20 -0700
+Message-ID: <CALs-HstDV3PjBk_8WDecwuvVK9rno1CKFzT1+8ohoUXE7X0GwA@mail.gmail.com>
+Subject: Re: [PATCH v1 6/9] RISC-V: add single letter extensions to riscv_isa_ext
+To:     Conor Dooley <conor.dooley@microchip.com>
+Cc:     palmer@dabbelt.com, conor@kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Andrew Jones <ajones@ventanamicro.com>,
+        Heiko Stuebner <heiko.stuebner@vrull.eu>,
+        Sunil V L <sunilvl@ventanamicro.com>,
+        linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+        lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   6aeadf7896bff4ca230702daba8788455e6b866e
-commit: 38e4ced804796c5725e2a52ec3601951552c4a97 drm/amd/pm: conditionally disable pcie lane switching for some sienna_cichlid SKUs
-date:   3 weeks ago
-config: openrisc-randconfig-m041-20230628 (https://download.01.org/0day-ci/archive/20230629/202306290140.jvaRB2DW-lkp@intel.com/config)
-compiler: or1k-linux-gcc (GCC) 12.3.0
-reproduce: (https://download.01.org/0day-ci/archive/20230629/202306290140.jvaRB2DW-lkp@intel.com/reproduce)
+On Mon, Jun 26, 2023 at 4:21=E2=80=AFAM Conor Dooley <conor.dooley@microchi=
+p.com> wrote:
+>
+> So that riscv_fill_hwcap() can use riscv_isa_ext to probe for single
+> letter extensions, add them to it. riscv_isa_ext_data grows a new
+> member, signifying whether an extension is multi-letter & thus requiring
+> special handling.
+> As a result, what gets spat out in /proc/cpuinfo will become borked, as
+> single letter extensions will be printed as part of the base extensions
+> and while printing from riscv_isa_arr. Take the opportunity to unify the
+> printing of the isa string, using the new member of riscv_isa_ext_data
+> in the process.
+>
+> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+> ---
+>  arch/riscv/include/asm/hwcap.h |  1 +
+>  arch/riscv/kernel/cpu.c        | 36 ++++++----------------
+>  arch/riscv/kernel/cpufeature.c | 56 +++++++++++++++++++++-------------
+>  3 files changed, 46 insertions(+), 47 deletions(-)
+>
+> diff --git a/arch/riscv/include/asm/hwcap.h b/arch/riscv/include/asm/hwca=
+p.h
+> index a35bee219dd7..6ad896dc4342 100644
+> --- a/arch/riscv/include/asm/hwcap.h
+> +++ b/arch/riscv/include/asm/hwcap.h
+> @@ -77,6 +77,7 @@ unsigned long riscv_get_elf_hwcap(void);
+>  struct riscv_isa_ext_data {
+>         const unsigned int id;
+>         const char *name;
+> +       const bool multi_letter;
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306290140.jvaRB2DW-lkp@intel.com/
-
-smatch warnings:
-drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu11/sienna_cichlid_ppt.c:2133 sienna_cichlid_update_pcie_parameters() warn: unsigned 'table_member1[0]' is never less than zero.
-
-vim +2133 drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu11/sienna_cichlid_ppt.c
-
-  2107	
-  2108	static int sienna_cichlid_update_pcie_parameters(struct smu_context *smu,
-  2109						 uint32_t pcie_gen_cap,
-  2110						 uint32_t pcie_width_cap)
-  2111	{
-  2112		struct smu_11_0_dpm_context *dpm_context = smu->smu_dpm.dpm_context;
-  2113		struct smu_11_0_pcie_table *pcie_table = &dpm_context->dpm_tables.pcie_table;
-  2114		uint32_t gen_speed_override, lane_width_override;
-  2115		uint8_t *table_member1, *table_member2;
-  2116		uint32_t min_gen_speed, max_gen_speed;
-  2117		uint32_t min_lane_width, max_lane_width;
-  2118		uint32_t smu_pcie_arg;
-  2119		int ret, i;
-  2120	
-  2121		GET_PPTABLE_MEMBER(PcieGenSpeed, &table_member1);
-  2122		GET_PPTABLE_MEMBER(PcieLaneCount, &table_member2);
-  2123	
-  2124		sienna_cichlid_get_override_pcie_settings(smu,
-  2125							  &gen_speed_override,
-  2126							  &lane_width_override);
-  2127	
-  2128		/* PCIE gen speed override */
-  2129		if (gen_speed_override != 0xff) {
-  2130			min_gen_speed = MIN(pcie_gen_cap, gen_speed_override);
-  2131			max_gen_speed = MIN(pcie_gen_cap, gen_speed_override);
-  2132		} else {
-> 2133			min_gen_speed = MAX(0, table_member1[0]);
-  2134			max_gen_speed = MIN(pcie_gen_cap, table_member1[1]);
-  2135			min_gen_speed = min_gen_speed > max_gen_speed ?
-  2136					max_gen_speed : min_gen_speed;
-  2137		}
-  2138		pcie_table->pcie_gen[0] = min_gen_speed;
-  2139		pcie_table->pcie_gen[1] = max_gen_speed;
-  2140	
-  2141		/* PCIE lane width override */
-  2142		if (lane_width_override != 0xff) {
-  2143			min_lane_width = MIN(pcie_width_cap, lane_width_override);
-  2144			max_lane_width = MIN(pcie_width_cap, lane_width_override);
-  2145		} else {
-  2146			min_lane_width = MAX(1, table_member2[0]);
-  2147			max_lane_width = MIN(pcie_width_cap, table_member2[1]);
-  2148			min_lane_width = min_lane_width > max_lane_width ?
-  2149					 max_lane_width : min_lane_width;
-  2150		}
-  2151		pcie_table->pcie_lane[0] = min_lane_width;
-  2152		pcie_table->pcie_lane[1] = max_lane_width;
-  2153	
-  2154		for (i = 0; i < NUM_LINK_LEVELS; i++) {
-  2155			smu_pcie_arg = (i << 16 |
-  2156					pcie_table->pcie_gen[i] << 8 |
-  2157					pcie_table->pcie_lane[i]);
-  2158	
-  2159			ret = smu_cmn_send_smc_msg_with_param(smu,
-  2160					SMU_MSG_OverridePcieParameters,
-  2161					smu_pcie_arg,
-  2162					NULL);
-  2163			if (ret)
-  2164				return ret;
-  2165		}
-  2166	
-  2167		return 0;
-  2168	}
-  2169	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Instead of defining a new member, could we just infer this by making a
+macro like #define MULTI_LETTER(name) (name[0] && name[1])?
