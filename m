@@ -2,203 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E0127408DB
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 05:16:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 894487408E1
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 05:17:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229982AbjF1DQj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 23:16:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54640 "EHLO
+        id S230363AbjF1DR0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 23:17:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229651AbjF1DQf (ORCPT
+        with ESMTP id S229746AbjF1DRY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 23:16:35 -0400
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46BFE1FCD
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 20:16:34 -0700 (PDT)
-Received: by mail-pf1-x430.google.com with SMTP id d2e1a72fcca58-656bc570a05so1323068b3a.0
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 20:16:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20221208.gappssmtp.com; s=20221208; t=1687922194; x=1690514194;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=RIhtuSRiqrjXezeemJprapYEprlXOItnVIuU2+4Kb0c=;
-        b=if1+TA/D1PyQT9UmQ4rtsOuH2Nq4tapIkj0nVFP+G+d7FNRIf8JFHLmik8AfBb0OZ8
-         GvzgaveeVgsWlpm7m8/AcBqqYcDtIfAjp3cn7vP4Qcwip2OgOL5R9pu2/FGcnOkUZJPc
-         IzHEEuI2h27ORNtthM4q7GwSJsehjn6BFrA0fzSgWM7lkIMNMTHj6jYHPdTdjWTyFKf2
-         +0VB4BepSLUB+mjJETAQRMYJdFgB5dCRyluwU1bVzST0DakegtRn0DJ4UqqLRlXR4UGU
-         S/nkJfN6vrO3gmUlisg9rOMYQ9aBvhNRhXXtn8HEOpusszV/oxi4mH3ZYx86o8sRFF0q
-         Aj7g==
+        Tue, 27 Jun 2023 23:17:24 -0400
+Received: from mail-io1-f44.google.com (mail-io1-f44.google.com [209.85.166.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E22281FF0;
+        Tue, 27 Jun 2023 20:17:22 -0700 (PDT)
+Received: by mail-io1-f44.google.com with SMTP id ca18e2360f4ac-78362f574c9so94849939f.3;
+        Tue, 27 Jun 2023 20:17:22 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687922194; x=1690514194;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=RIhtuSRiqrjXezeemJprapYEprlXOItnVIuU2+4Kb0c=;
-        b=lNh58Enadg/ssUVMsEdzBaw2J4tRHPpBZdmokDHpKncESj9wNikG4Q+DxXj51Ar9lf
-         yMAPjrvj5qgkkoagMwYKVT6vKyzZPmgbVCAaNRW8+Ymv8in8/4jbqRRXnaa/4FAMMsCf
-         po7LufYh4MZWAGX+EFgQT73vBdQFIRD99FdGH+wKm5pyNmJGS3rdvy/yvG70IVKWe3vZ
-         UCJBQAUtMIkM/+hnxmSw93RYQiXdJTLoMx81g0Qhd6NTCkIK0QQ9v3hqk1mq3MC7HLup
-         B5c2Ptp41tNmQNDpDaV5MC9zVTVSNuqcfFPz4IpasGTHhLxeJWWsNtHDLbeRR6YAIpWE
-         QDZw==
-X-Gm-Message-State: AC+VfDykk1sgydnj3eJTFudXZixgkJYwUQ2TZHin6OXURHUn+jp70Jgh
-        O/uneWnr9YDiAwob+X9ETRhrKcZ/HcaFTEGRskI=
-X-Google-Smtp-Source: ACHHUZ4ho6TEGjNA4Lk8sLA/4sGHjIfiH9fAAJnwGQA4Wp7rFiJD/shNnAMtphMHE3/+JlGN5+PkXQ==
-X-Received: by 2002:a05:6a20:430c:b0:10b:e7d2:9066 with SMTP id h12-20020a056a20430c00b0010be7d29066mr42410880pzk.2.1687922193582;
-        Tue, 27 Jun 2023 20:16:33 -0700 (PDT)
-Received: from [192.168.1.136] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id q17-20020a62e111000000b006736bce8581sm4877904pfh.16.2023.06.27.20.16.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 27 Jun 2023 20:16:32 -0700 (PDT)
-Message-ID: <c06a9e0b-8f3e-4e47-53d0-b4854a98cc44@kernel.dk>
-Date:   Tue, 27 Jun 2023 21:16:31 -0600
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [GIT PULL] bcachefs
-Content-Language: en-US
-To:     Kent Overstreet <kent.overstreet@linux.dev>
-Cc:     torvalds@linux-foundation.org, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-bcachefs@vger.kernel.org,
-        Christoph Hellwig <hch@lst.de>
-References: <20230626214656.hcp4puionmtoloat@moria.home.lan>
- <aeb2690c-4f0a-003d-ba8b-fe06cd4142d1@kernel.dk>
- <20230627000635.43azxbkd2uf3tu6b@moria.home.lan>
- <91e9064b-84e3-1712-0395-b017c7c4a964@kernel.dk>
- <20230627020525.2vqnt2pxhtgiddyv@moria.home.lan>
- <b92ea170-d531-00f3-ca7a-613c05dcbf5f@kernel.dk>
- <23922545-917a-06bd-ec92-ff6aa66118e2@kernel.dk>
- <20230627201524.ool73bps2lre2tsz@moria.home.lan>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <20230627201524.ool73bps2lre2tsz@moria.home.lan>
-Content-Type: text/plain; charset=UTF-8
+        d=1e100.net; s=20221208; t=1687922242; x=1690514242;
+        h=date:subject:message-id:references:in-reply-to:cc:to:from
+         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=INWn++X539HUv+RnQizuaLBRomsClpWYmquCOLaszEc=;
+        b=Xypky9OB66hLwb48EO12XgfwBOiafH2TDlEJdvzrJw3NRcdA1oVqjtdbUnASZ1l+0v
+         94AAVqPJDhZ/a168HXav0qvgsfWX+IoDM1SnDpD4m7Ia0JvIJb2X0jrrYqFL1WTB9EpT
+         WOfscH7Av3ktmksVJqyqpF4SSNN6bLLZPhHoNcZVcnbFQluGH4AeT+uPbU/RLqcnB5qI
+         PwWkqe65lL7ATjX99Hg98gkFIqwzkukWozzZ2rr6Yl3P7QzddG19Yd0NORMNVr94jYBT
+         QeP1pGBRwrSn+XhmEQAkZWIgSpGgtbJ24DPXb9X7HGgfNwY3GLHOj0P88y9pqTbITfIu
+         crUg==
+X-Gm-Message-State: AC+VfDwnL01Nv8euqeFR2N8dhCF++27HBzA9c2F+UfMqswAxfW609JQY
+        Hjir97+I/6T+6xhZJtviEA==
+X-Google-Smtp-Source: ACHHUZ4SkuH/rOeMwpUJS3fMCjuCAW3PL2e+N5xZB35DEeyHA3jrXuG5Xsy3RDGm8ypHdhvE2kD+5A==
+X-Received: by 2002:a6b:6604:0:b0:785:d017:c16f with SMTP id a4-20020a6b6604000000b00785d017c16fmr2210804ioc.14.1687922241839;
+        Tue, 27 Jun 2023 20:17:21 -0700 (PDT)
+Received: from robh_at_kernel.org ([64.188.179.250])
+        by smtp.gmail.com with ESMTPSA id t23-20020a05663801f700b004267551cd81sm2950948jaq.127.2023.06.27.20.17.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 27 Jun 2023 20:17:21 -0700 (PDT)
+Received: (nullmailer pid 3670973 invoked by uid 1000);
+        Wed, 28 Jun 2023 03:17:18 -0000
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+MIME-Version: 1.0
+From:   Rob Herring <robh@kernel.org>
+To:     Krishna chaitanya chundru <quic_krichai@quicinc.com>
+Cc:     quic_ramkri@quicinc.com, linux-pci@vger.kernel.org,
+        Bjorn Helgaas <bhelgaas@google.com>, quic_nitegupt@quicinc.com,
+        linux-arm-msm@vger.kernel.org,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        devicetree@vger.kernel.org, helgaas@kernel.org,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        =?utf-8?q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
+        Conor Dooley <conor+dt@kernel.org>, quic_skananth@quicinc.com,
+        krzysztof.kozlowski@linaro.org, manivannan.sadhasivam@linaro.org,
+        quic_vbadigan@quicinc.com, Bjorn Andersson <andersson@kernel.org>,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <1687918770-28416-2-git-send-email-quic_krichai@quicinc.com>
+References: <1687918770-28416-1-git-send-email-quic_krichai@quicinc.com>
+ <1687918770-28416-2-git-send-email-quic_krichai@quicinc.com>
+Message-Id: <168792223860.3670940.1209110069541964432.robh@kernel.org>
+Subject: Re: [PATCH v6 1/3] dt-bindings: PCI: qcom: ep: Add interconnects
+ path
+Date:   Tue, 27 Jun 2023 21:17:18 -0600
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/27/23 2:15?PM, Kent Overstreet wrote:
->> to ktest/tests/xfstests/ and run it with -bcachefs, otherwise it kept
->> failing because it assumed it was XFS.
->>
->> I suspected this was just a timing issue, and it looks like that's
->> exactly what it is. Looking at the test case, it'll randomly kill -9
->> fsstress, and if that happens while we have io_uring IO pending, then we
->> process completions inline (for a PF_EXITING current). This means they
->> get pushed to fallback work, which runs out of line. If we hit that case
->> AND the timing is such that it hasn't been processed yet, we'll still be
->> holding a file reference under the mount point and umount will -EBUSY
->> fail.
->>
->> As far as I can tell, this can happen with aio as well, it's just harder
->> to hit. If the fput happens while the task is exiting, then fput will
->> end up being delayed through a workqueue as well. The test case assumes
->> that once it's reaped the exit of the killed task that all files are
->> released, which isn't necessarily true if they are done out-of-line.
+
+On Wed, 28 Jun 2023 07:49:28 +0530, Krishna chaitanya chundru wrote:
+> Some platforms may not boot if a device driver doesn't
+> initialize the interconnect path. Mostly it is handled
+> by the bootloader but we have starting to see cases
+> where bootloader simply ignores them.
 > 
-> Yeah, I traced it through to the delayed fput code as well.
+> Add the "pcie-mem" interconnect path as a required property
+> to the bindings.
 > 
-> I'm not sure delayed fput is responsible here; what I learned when I was
-> tracking this down has mostly fell out of my brain, so take anything I
-> say with a large grain of salt. But I believe I tested with delayed_fput
-> completely disabled, and found another thing in io_uring with the same
-> effect as delayed_fput that wasn't being flushed.
-
-I'm not saying it's delayed_fput(), I'm saying it's the delayed putting
-io_uring can end up doing. But yes, delayed_fput() is another candidate.
-
->> For io_uring specifically, it may make sense to wait on the fallback
->> work. The below patch does this, and should fix the issue. But I'm not
->> fully convinced that this is really needed, as I do think this can
->> happen without io_uring as well. It just doesn't right now as the test
->> does buffered IO, and aio will be fully sync with buffered IO. That
->> means there's either no gap where aio will hit it without O_DIRECT, or
->> it's just small enough that it hasn't been hit.
+> Signed-off-by: Krishna chaitanya chundru <quic_krichai@quicinc.com>
+> Acked-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+>  Documentation/devicetree/bindings/pci/qcom,pcie-ep.yaml | 13 +++++++++++++
+>  1 file changed, 13 insertions(+)
 > 
-> I just tried your patch and I still have generic/388 failing - it
-> might've taken a bit longer to pop this time.
 
-Yep see the same here. Didn't have time to look into it after sending
-that email today, just took a quick stab at writing a reproducer and
-ended up crashing bcachefs:
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-[ 1122.384909] workqueue: Failed to create a rescuer kthread for wq "bcachefs": -EINTR
-[ 1122.384915] Unable to handle kernel NULL pointer dereference at virtual address 0000000000000000
-[ 1122.385814] Mem abort info:
-[ 1122.385962]   ESR = 0x0000000096000004
-[ 1122.386161]   EC = 0x25: DABT (current EL), IL = 32 bits
-[ 1122.386444]   SET = 0, FnV = 0
-[ 1122.386612]   EA = 0, S1PTW = 0
-[ 1122.386842]   FSC = 0x04: level 0 translation fault
-[ 1122.387168] Data abort info:
-[ 1122.387321]   ISV = 0, ISS = 0x00000004
-[ 1122.387518]   CM = 0, WnR = 0
-[ 1122.387676] user pgtable: 4k pages, 48-bit VAs, pgdp=00000001133da000
-[ 1122.388014] [0000000000000000] pgd=0000000000000000, p4d=0000000000000000
-[ 1122.388363] Internal error: Oops: 0000000096000004 [#1] SMP
-[ 1122.388659] Modules linked in:
-[ 1122.388866] CPU: 4 PID: 23129 Comm: mount Not tainted 6.4.0-02556-ge61c7fc22b68-dirty #3647
-[ 1122.389389] Hardware name: linux,dummy-virt (DT)
-[ 1122.389682] pstate: 61400005 (nZCv daif +PAN -UAO -TCO +DIT -SSBS BTYPE=--)
-[ 1122.390118] pc : bch2_free_pending_node_rewrites+0x40/0x90
-[ 1122.390466] lr : bch2_free_pending_node_rewrites+0x28/0x90
-[ 1122.390815] sp : ffff80002481b770
-[ 1122.391030] x29: ffff80002481b770 x28: ffff0000e1d24000 x27: 00000000fffff7b7
-[ 1122.391475] x26: 0000000000000000 x25: ffff0000e1d00040 x24: dead000000000122
-[ 1122.391919] x23: dead000000000100 x22: ffff0000e1d031b8 x21: ffff0000e1d00040
-[ 1122.392366] x20: 0000000000000000 x19: ffff0000e1d031a8 x18: 0000000000000009
-[ 1122.392860] x17: 3a22736665686361 x16: 6362222071772072 x15: 6f66206461657268
-[ 1122.393622] x14: 746b207265756373 x13: 52544e49452d203a x12: 0000000000000001
-[ 1122.395170] x11: 0000000000000001 x10: 0000000000000000 x9 : 00000000000002d3
-[ 1122.396592] x8 : 00000000000003f8 x7 : 0000000000000000 x6 : ffff8000093c2e78
-[ 1122.397970] x5 : ffff000209de4240 x4 : ffff0000e1d00030 x3 : dead000000000122
-[ 1122.399263] x2 : 00000000000031a8 x1 : 0000000000000000 x0 : 0000000000000000
-[ 1122.400473] Call trace:
-[ 1122.400908]  bch2_free_pending_node_rewrites+0x40/0x90
-[ 1122.401783]  bch2_fs_release+0x48/0x24c
-[ 1122.402589]  kobject_put+0x7c/0xe8
-[ 1122.403271]  bch2_fs_free+0xa4/0xc8
-[ 1122.404033]  bch2_fs_alloc+0x5c8/0xbcc
-[ 1122.404888]  bch2_fs_open+0x19c/0x430
-[ 1122.405781]  bch2_mount+0x194/0x45c
-[ 1122.406643]  legacy_get_tree+0x2c/0x54
-[ 1122.407476]  vfs_get_tree+0x28/0xd4
-[ 1122.408251]  path_mount+0x5d0/0x6c8
-[ 1122.409056]  do_mount+0x80/0xa4
-[ 1122.409866]  __arm64_sys_mount+0x150/0x168
-[ 1122.410904]  invoke_syscall.constprop.0+0x70/0xb8
-[ 1122.411890]  do_el0_svc+0xbc/0xf0
-[ 1122.412596]  el0_svc+0x74/0x9c
-[ 1122.413343]  el0t_64_sync_handler+0xa8/0x134
-[ 1122.414148]  el0t_64_sync+0x168/0x16c
-[ 1122.414863] Code: f2fbd5b7 d2863502 91008af8 8b020273 (f85d8695) 
-[ 1122.415939] ---[ end trace 0000000000000000 ]---
+yamllint warnings/errors:
 
-> I wonder if there might be a better way of solving this though? For aio,
-> when a process is exiting we just synchronously tear down the ioctx,
-> including waiting for outstanding iocbs.
+dtschema/dtc warnings/errors:
+Documentation/devicetree/bindings/clock/milbeaut-clock.example.dtb: /example-2/serial@1e700010: failed to match any schema with compatible: ['socionext,milbeaut-usio-uart']
+Documentation/devicetree/bindings/clock/sprd,sc9863a-clk.example.dtb: /example-1/syscon@20e00000: failed to match any schema with compatible: ['sprd,sc9863a-glbregs', 'syscon', 'simple-mfd']
+Documentation/devicetree/bindings/leds/common.example.dtb: /example-2/i2c/led-controller@30: failed to match any schema with compatible: ['panasonic,an30259a']
+Documentation/devicetree/bindings/sound/audio-graph-card2.example.dtb: /example-0/cpu: failed to match any schema with compatible: ['cpu-driver']
+Documentation/devicetree/bindings/sound/audio-graph-card2.example.dtb: /example-0/codec: failed to match any schema with compatible: ['codec-driver']
+Documentation/devicetree/bindings/thermal/brcm,avs-ro-thermal.example.dtb: /example-0/avs-monitor@7d5d2000: failed to match any schema with compatible: ['brcm,bcm2711-avs-monitor', 'syscon', 'simple-mfd']
+Documentation/devicetree/bindings/thermal/imx-thermal.example.dtb: /example-0/anatop@20c8000: failed to match any schema with compatible: ['fsl,imx6q-anatop', 'syscon', 'simple-mfd']
+Documentation/devicetree/bindings/i2c/qcom,i2c-cci.example.dtb: /example-0/cci@ac4a000/i2c-bus@1/camera@60: failed to match any schema with compatible: ['ovti,ov7251']
+Documentation/devicetree/bindings/iio/adc/ti,palmas-gpadc.example.dtb: /example-0/pmic: failed to match any schema with compatible: ['ti,twl6035-pmic', 'ti,palmas-pmic']
+Documentation/devicetree/bindings/iio/adc/ti,palmas-gpadc.example.dtb: /example-0/pmic: failed to match any schema with compatible: ['ti,twl6035-pmic', 'ti,palmas-pmic']
+Documentation/devicetree/bindings/input/mediatek,pmic-keys.example.dtb: /example-0/pmic: failed to match any schema with compatible: ['mediatek,mt6397']
+Documentation/devicetree/bindings/input/sprd,sc27xx-vibrator.example.dtb: /example-0/pmic@0: failed to match any schema with compatible: ['sprd,sc2731']
+Documentation/devicetree/bindings/dma/dma-controller.example.dtb: /example-0/dma-controller@48000000: failed to match any schema with compatible: ['ti,omap-sdma']
+Documentation/devicetree/bindings/dma/dma-router.example.dtb: /example-0/dma-router@4a002b78: failed to match any schema with compatible: ['ti,dra7-dma-crossbar']
+Documentation/devicetree/bindings/memory-controllers/ingenic,nemc.example.dtb: /example-0/memory-controller@13410000/ethernet@6: failed to match any schema with compatible: ['davicom,dm9000']
+Documentation/devicetree/bindings/arm/hisilicon/controller/cpuctrl.example.dtb: /example-0/cpuctrl@a22000/clock@0: failed to match any schema with compatible: ['hisilicon,hix5hd2-clock']
+Documentation/devicetree/bindings/arm/hisilicon/controller/sysctrl.example.dtb: /example-0/system-controller@802000/clock@0: failed to match any schema with compatible: ['hisilicon,hi3620-clock']
+Documentation/devicetree/bindings/arm/hisilicon/controller/hi3798cv200-perictrl.example.dtb: /example-0/peripheral-controller@8a20000/phy@850: failed to match any schema with compatible: ['hisilicon,hi3798cv200-combphy']
+Documentation/devicetree/bindings/media/rockchip-isp1.example.dtb: /example-0/parent/i2c/camera@36: failed to match any schema with compatible: ['ovti,ov5695']
+Documentation/devicetree/bindings/net/marvell,mvusb.example.dtb: /example-0/usb/mdio@1/switch@0: failed to match any schema with compatible: ['marvell,mv88e6190']
+Documentation/devicetree/bindings/net/qca,ar71xx.example.dtb: /example-0/ethernet@1a000000/mdio/switch@10: failed to match any schema with compatible: ['qca,ar9331-switch']
+Documentation/devicetree/bindings/reset/hisilicon,hi3660-reset.example.dtb: /example-0/iomcu@ffd7e000: failed to match any schema with compatible: ['hisilicon,hi3660-iomcu', 'syscon']
 
-aio is pretty trivial, because the only async it supports is O_DIRECT
-on regular files which always completes in finite time. io_uring has to
-cancel etc, so we need to do a lot more.
+doc reference errors (make refcheckdocs):
 
-But the concept of my patch should be fine, but I think we must be
-missing a case. Which is why I started writing a small reproducer
-instead. I'll pick it up again tomorrow and see what is going on here.
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/1687918770-28416-2-git-send-email-quic_krichai@quicinc.com
 
-> delayed_fput, even though I believe not responsible here, seems sketchy
-> to me because there doesn't seem to be a straightforward way to flush
-> delayed fputs for a given _process_ - there's a single global work item,
-> and we can only flush globally.
+The base for the series is generally the latest rc1. A different dependency
+should be noted in *this* patch.
 
-Yep as mentioned I don't think it's delayed_fput at all. And yeah we can
-only globally flush that, not per task/files_struct.
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
 
--- 
-Jens Axboe
+pip3 install dtschema --upgrade
+
+Please check and re-submit after running the above command yourself. Note
+that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+your schema. However, it must be unset to test all examples with your schema.
 
