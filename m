@@ -2,35 +2,35 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A16BB741BE8
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 00:48:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AA3B741BEB
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 00:51:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231769AbjF1Ws1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 18:48:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50130 "EHLO
+        id S230280AbjF1WvA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 18:51:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231650AbjF1Wr4 (ORCPT
+        with ESMTP id S232675AbjF1Wui (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 18:47:56 -0400
+        Wed, 28 Jun 2023 18:50:38 -0400
 Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 322063C0E;
-        Wed, 28 Jun 2023 15:44:37 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD829358D;
+        Wed, 28 Jun 2023 15:46:56 -0700 (PDT)
 Received: from pendragon.ideasonboard.com (aztw-30-b2-v4wan-166917-cust845.vm26.cable.virginm.net [82.37.23.78])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 2139C905;
-        Thu, 29 Jun 2023 00:43:54 +0200 (CEST)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id D175B905;
+        Thu, 29 Jun 2023 00:46:14 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1687992234;
-        bh=8kUftu7lYSaZy3TqVKWV5nfS/HXx3yf+27+tAyJIkyk=;
+        s=mail; t=1687992374;
+        bh=O+6GdTlpoNHtF1G6mT01fUdQslr2Gm+LWPozhSbq2L8=;
         h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=iJ6U8CHr0KCHygB+rhCg58KJj/2gAUDwcbI9GZA/3cbYVkCDbLNSPNJUxRiMOBxL3
-         6QXplw2JoYKR1UHRlsFcIzvHMwb7eoxrf01EKEtVm0T6qZI2y2Pw1JRea8swrf7opv
-         B20v0j+nvh6J8xT2iNTjwNljt9CnWsDOkTD0aplY=
+        b=QXxEIatFxiEy/dM2XSsAz44gRa1s92D8MurVhdym0yFSIEvoBvcwmPZWzcBTZqZu6
+         r598qR+uDm+7tkrh1XXQGS6YA0mo1XWSlGWVZy6jsdKN/bp59ZrlAdV8Tbx6n1mRyJ
+         nlFt8vBtiA4A4SvnvhJXQLSes4dWVjIVIEdvMBQY=
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20230627201628.207483-4-umang.jain@ideasonboard.com>
-References: <20230627201628.207483-1-umang.jain@ideasonboard.com> <20230627201628.207483-4-umang.jain@ideasonboard.com>
-Subject: Re: [PATCH v8 3/5] staging: bcm2835-camera: Register bcm2835-camera with vchiq_bus_type
+In-Reply-To: <20230627201628.207483-6-umang.jain@ideasonboard.com>
+References: <20230627201628.207483-1-umang.jain@ideasonboard.com> <20230627201628.207483-6-umang.jain@ideasonboard.com>
+Subject: Re: [PATCH v8 5/5] staging: vc04_services: vchiq_arm: Remove vchiq_register_child()
 From:   Kieran Bingham <kieran.bingham@ideasonboard.com>
 Cc:     stefan.wahren@i2se.com, gregkh@linuxfoundation.org,
         f.fainelli@gmail.com, athierry@redhat.com, error27@gmail.com,
@@ -40,178 +40,71 @@ To:     Umang Jain <umang.jain@ideasonboard.com>,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         linux-media@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
         linux-staging@lists.linux.dev
-Date:   Wed, 28 Jun 2023 23:44:31 +0100
-Message-ID: <168799227183.3298351.12365161998104715465@Monstersaurus>
+Date:   Wed, 28 Jun 2023 23:46:52 +0100
+Message-ID: <168799241214.3298351.10936017214708371368@Monstersaurus>
 User-Agent: alot/0.10
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,
-        T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Umang Jain (2023-06-27 21:16:26)
-> Register the bcm2835-camera with the vchiq_bus_type instead of using
-> platform driver/device.
+Quoting Umang Jain (2023-06-27 21:16:28)
+> vchiq_register_child() is used to registered child devices as platform
+
+s/registered/register/
+
+> devices. Now that the child devices are migrated to use the
+> vchiq_bus_type instead, they will be registered to that. Hence, drop
+> vchiq_register_child() as it is no more required.
 >=20
-> Also the VCHIQ firmware doesn't support device enumeration, hence
-> one has to maintain a list of devices to be registered in the interface.
->=20
+
+Reviewed-by: Kieran Bingham <kieran.bingham@ideasonboard.com>
+
 > Signed-off-by: Umang Jain <umang.jain@ideasonboard.com>
 > ---
->  .../bcm2835-camera/bcm2835-camera.c           | 16 +++++++-------
->  .../interface/vchiq_arm/vchiq_arm.c           | 21 ++++++++++++++++---
->  2 files changed, 26 insertions(+), 11 deletions(-)
+>  .../interface/vchiq_arm/vchiq_arm.c           | 22 -------------------
+>  1 file changed, 22 deletions(-)
 >=20
-> diff --git a/drivers/staging/vc04_services/bcm2835-camera/bcm2835-camera.=
-c b/drivers/staging/vc04_services/bcm2835-camera/bcm2835-camera.c
-> index 346d00df815a..f37b2a881d92 100644
-> --- a/drivers/staging/vc04_services/bcm2835-camera/bcm2835-camera.c
-> +++ b/drivers/staging/vc04_services/bcm2835-camera/bcm2835-camera.c
-> @@ -24,8 +24,9 @@
->  #include <media/v4l2-event.h>
->  #include <media/v4l2-common.h>
->  #include <linux/delay.h>
-> -#include <linux/platform_device.h>
-> =20
-> +#include "../interface/vchiq_arm/vchiq_arm.h"
-> +#include "../interface/vchiq_arm/vchiq_device.h"
->  #include "../vchiq-mmal/mmal-common.h"
->  #include "../vchiq-mmal/mmal-encodings.h"
->  #include "../vchiq-mmal/mmal-vchiq.h"
-> @@ -1841,7 +1842,7 @@ static struct v4l2_format default_v4l2_format =3D {
->         .fmt.pix.sizeimage =3D 1024 * 768,
->  };
-> =20
-> -static int bcm2835_mmal_probe(struct platform_device *pdev)
-> +static int bcm2835_mmal_probe(struct vchiq_device *device)
->  {
->         int ret;
->         struct bcm2835_mmal_dev *dev;
-> @@ -1896,7 +1897,7 @@ static int bcm2835_mmal_probe(struct platform_devic=
-e *pdev)
->                                                        &camera_instance);
->                 ret =3D v4l2_device_register(NULL, &dev->v4l2_dev);
->                 if (ret) {
-> -                       dev_err(&pdev->dev, "%s: could not register V4L2 =
-device: %d\n",
-> +                       dev_err(&device->dev, "%s: could not register V4L=
-2 device: %d\n",
->                                 __func__, ret);
->                         goto free_dev;
->                 }
-> @@ -1976,7 +1977,7 @@ static int bcm2835_mmal_probe(struct platform_devic=
-e *pdev)
->         return ret;
->  }
-> =20
-> -static void bcm2835_mmal_remove(struct platform_device *pdev)
-> +static void bcm2835_mmal_remove(struct vchiq_device *device)
->  {
->         int camera;
->         struct vchiq_mmal_instance *instance =3D gdev[0]->instance;
-> @@ -1988,17 +1989,16 @@ static void bcm2835_mmal_remove(struct platform_d=
-evice *pdev)
->         vchiq_mmal_finalise(instance);
->  }
-> =20
-> -static struct platform_driver bcm2835_camera_driver =3D {
-> +static struct vchiq_driver bcm2835_camera_driver =3D {
->         .probe          =3D bcm2835_mmal_probe,
-> -       .remove_new     =3D bcm2835_mmal_remove,
-> +       .remove         =3D bcm2835_mmal_remove,
->         .driver         =3D {
->                 .name   =3D "bcm2835-camera",
->         },
->  };
-> =20
-> -module_platform_driver(bcm2835_camera_driver)
-> +module_vchiq_driver(bcm2835_camera_driver)
-> =20
->  MODULE_DESCRIPTION("Broadcom 2835 MMAL video capture");
->  MODULE_AUTHOR("Vincent Sanders");
->  MODULE_LICENSE("GPL");
-> -MODULE_ALIAS("platform:bcm2835-camera");
-
-This bit worries me. I think that's how module autoloading is handled.
-
-Can you check into the details of MODULE_ALIAS and follow the rabbit
-hole for a bit? It's a few years since I last went down there so I can't
-remember the specifics right now.
-
-Except for that, I think this looks good.
-
-
 > diff --git a/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.=
 c b/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c
-> index e8d40f891449..79d4d0eeb5fb 100644
+> index 75da37fa6372..3c52b09c49ea 100644
 > --- a/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c
 > +++ b/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c
-> @@ -67,7 +67,6 @@ int vchiq_susp_log_level =3D VCHIQ_LOG_ERROR;
->  DEFINE_SPINLOCK(msg_queue_spinlock);
->  struct vchiq_state g_state;
-> =20
-> -static struct platform_device *bcm2835_camera;
->  static struct platform_device *bcm2835_audio;
-> =20
->  struct vchiq_drvdata {
-> @@ -134,6 +133,15 @@ struct vchiq_pagelist_info {
->         unsigned int scatterlist_mapped;
+> @@ -1778,28 +1778,6 @@ static const struct of_device_id vchiq_of_match[] =
+=3D {
 >  };
+>  MODULE_DEVICE_TABLE(of, vchiq_of_match);
 > =20
-> +/*
-> + * The devices implemented in the VCHIQ firmware are not discoverable,
-> + * so we need to maintain a list of them in order to register them with
-> + * the interface.
-> + */
-> +static const char *const vchiq_devices[] =3D {
-> +       "bcm2835-camera",
-> +};
-> +
->  static void __iomem *g_regs;
->  /* This value is the size of the L2 cache lines as understood by the
->   * VPU firmware, which determines the required alignment of the
-> @@ -1798,6 +1806,7 @@ static int vchiq_probe(struct platform_device *pdev)
->         struct device_node *fw_node;
->         const struct of_device_id *of_id;
->         struct vchiq_drvdata *drvdata;
-> +       unsigned int i;
->         int err;
-> =20
->         of_id =3D of_match_node(vchiq_of_match, pdev->dev.of_node);
-> @@ -1840,9 +1849,15 @@ static int vchiq_probe(struct platform_device *pde=
-v)
->                 goto error_exit;
->         }
-> =20
-> -       bcm2835_camera =3D vchiq_register_child(pdev, "bcm2835-camera");
->         bcm2835_audio =3D vchiq_register_child(pdev, "bcm2835_audio");
-> =20
-> +       for (i =3D 0; i < ARRAY_SIZE(vchiq_devices); i++) {
-> +               err =3D vchiq_device_register(&pdev->dev, vchiq_devices[i=
-]);
-> +               if (err)
-> +                       dev_err(&pdev->dev, "Failed to register %s vchiq =
-device\n",
-> +                       vchiq_devices[i]);
-> +       }
-> +
->         return 0;
-> =20
->  failed_platform_init:
-> @@ -1854,7 +1869,7 @@ static int vchiq_probe(struct platform_device *pdev)
->  static void vchiq_remove(struct platform_device *pdev)
+> -static struct platform_device *
+> -vchiq_register_child(struct platform_device *pdev, const char *name)
+> -{
+> -       struct platform_device_info pdevinfo;
+> -       struct platform_device *child;
+> -
+> -       memset(&pdevinfo, 0, sizeof(pdevinfo));
+> -
+> -       pdevinfo.parent =3D &pdev->dev;
+> -       pdevinfo.name =3D name;
+> -       pdevinfo.id =3D PLATFORM_DEVID_NONE;
+> -       pdevinfo.dma_mask =3D DMA_BIT_MASK(32);
+> -
+> -       child =3D platform_device_register_full(&pdevinfo);
+> -       if (IS_ERR(child)) {
+> -               dev_warn(&pdev->dev, "%s not registered\n", name);
+> -               child =3D NULL;
+> -       }
+> -
+> -       return child;
+> -}
+> -
+>  static int vchiq_probe(struct platform_device *pdev)
 >  {
->         platform_device_unregister(bcm2835_audio);
-> -       platform_device_unregister(bcm2835_camera);
-> +       bus_for_each_dev(&vchiq_bus_type, NULL, NULL, vchiq_device_unregi=
-ster);
->         vchiq_debugfs_deinit();
->         vchiq_deregister_chrdev();
->  }
+>         struct device_node *fw_node;
 > --=20
 > 2.39.1
 >
