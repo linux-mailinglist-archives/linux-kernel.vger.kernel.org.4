@@ -2,77 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF072741317
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 15:56:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E10ED74131F
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 15:57:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232021AbjF1Nzj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 09:55:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50800 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232432AbjF1Nz0 (ORCPT
+        id S231750AbjF1N4Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 09:56:25 -0400
+Received: from smtp-out2.suse.de ([195.135.220.29]:56424 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230429AbjF1N4W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 09:55:26 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C817269D;
-        Wed, 28 Jun 2023 06:55:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=5EcaSelTELk66D9yc9EYTzF87nomzYvNvPRV8mwi9rc=; b=W7LN9a17V1DnA+F/c3rpfgeTL+
-        s9C6KEt2zXeQToktpw0ehyIxpP8abSG8JjAcd9hEC4JaLD6uOF28ErTho1dbkT4FRasYilW+/pm9O
-        GaSsh2got/8M5YCpEVHSaY8H+lWAe3N63tWBp/2z5fY+mKdxDssIuFK9qmNpu5ecE8L8odGjryrT2
-        WFMy4Jdp3EFl1ebmWQlv+E01ibKRG2NMOpr2uJVr3ZFgoClliTEpNwjhVxW7ODFQiIbaDbxY22PqA
-        J7KGeNLv4kkiMfDRCqctgMKvjGcSccUdAk74NE+Z8nefaHQ2rvGphUe/z+LAwqyo4NVN1faZP7an5
-        N4GwLRXQ==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1qEVcz-003psp-FM; Wed, 28 Jun 2023 13:54:37 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        Wed, 28 Jun 2023 09:56:22 -0400
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 5214B30005E;
-        Wed, 28 Jun 2023 15:54:36 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 316902424518F; Wed, 28 Jun 2023 15:54:36 +0200 (CEST)
-Date:   Wed, 28 Jun 2023 15:54:36 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Kai Huang <kai.huang@intel.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-mm@kvack.org, x86@kernel.org, dave.hansen@intel.com,
-        kirill.shutemov@linux.intel.com, tony.luck@intel.com,
-        tglx@linutronix.de, bp@alien8.de, mingo@redhat.com, hpa@zytor.com,
-        seanjc@google.com, pbonzini@redhat.com, david@redhat.com,
-        dan.j.williams@intel.com, rafael.j.wysocki@intel.com,
-        ashok.raj@intel.com, reinette.chatre@intel.com,
-        len.brown@intel.com, ak@linux.intel.com, isaku.yamahata@intel.com,
-        ying.huang@intel.com, chao.gao@intel.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com, nik.borisov@suse.com,
-        bagasdotme@gmail.com, sagis@google.com, imammedo@redhat.com
-Subject: Re: [PATCH v12 05/22] x86/virt/tdx: Add SEAMCALL infrastructure
-Message-ID: <20230628135436.GC2439977@hirez.programming.kicks-ass.net>
-References: <cover.1687784645.git.kai.huang@intel.com>
- <b2a875fd855145728744617ac4425a06d8b46c90.1687784645.git.kai.huang@intel.com>
- <20230628125813.GA2438817@hirez.programming.kicks-ass.net>
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 704E61F6E6;
+        Wed, 28 Jun 2023 13:56:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1687960581; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=UBkDkoRg0HA6vloPwRjoXM7rrbP50/wBU1LZzUkViAU=;
+        b=EVwkpnA3ZnBl4diVvgSAhsFc0JP4kr6t+CDom0M9DLYq1eYt8N+THhgRu+9j36T7vPKeOi
+        LJKLNiRmMCwYTXeE2s7k5fcD2XdqTTr3tXb9JZLxdpzZVoMn6LcE+m6Kg3XmAsIUjdAX1Q
+        mBPDBX8sXuZ+VbgdBGvJF4NcamLfP+A=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 4F01C138EF;
+        Wed, 28 Jun 2023 13:56:21 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id l3/3EAU8nGRSDwAAMHmgww
+        (envelope-from <mhocko@suse.com>); Wed, 28 Jun 2023 13:56:21 +0000
+Date:   Wed, 28 Jun 2023 15:56:20 +0200
+From:   Michal Hocko <mhocko@suse.com>
+To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        "Luis Claudio R. Goncalves" <lgoncalv@redhat.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        John Ogness <john.ogness@linutronix.de>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Waiman Long <longman@redhat.com>, Will Deacon <will@kernel.org>
+Subject: Re: [PATCH v3 2/2] mm/page_alloc: Use write_seqlock_irqsave()
+ instead write_seqlock() + local_irq_save().
+Message-ID: <ZJw8BFHj6YD2Tl6x@dhcp22.suse.cz>
+References: <20230623171232.892937-1-bigeasy@linutronix.de>
+ <20230623171232.892937-3-bigeasy@linutronix.de>
+ <ZJXhxJU2jFccMjkg@dhcp22.suse.cz>
+ <20230623201517.yw286Knb@linutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230628125813.GA2438817@hirez.programming.kicks-ass.net>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-        lindbergh.monkeyblade.net
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230623201517.yw286Knb@linutronix.de>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 28, 2023 at 02:58:13PM +0200, Peter Zijlstra wrote:
+Andrew, it seems that we have a consensus on the MM side of things that
+this is good enough to go. I am not sure about patch 1, that is more on
+lockdep people but I think that this patch is good enough on this own.
+Can we get this patch merged into mm tree and see whether any of Tetsuo
+concerns pop out?
 
-> Can someone explain to me why __tdx_hypercall() is sane (per the above)
-> but then we grew __tdx_module_call() as an absolute abomination and are
-> apparently using that for seam too?
+On Fri 23-06-23 22:15:17, Sebastian Andrzej Siewior wrote:
+> __build_all_zonelists() acquires zonelist_update_seq by first disabling
+> interrupts via local_irq_save() and then acquiring the seqlock with
+> write_seqlock(). This is troublesome and leads to problems on
+> PREEMPT_RT. The problem is that the inner spinlock_t becomes a sleeping
+> lock on PREEMPT_RT and must not be acquired with disabled interrupts.
+> 
+> The API provides write_seqlock_irqsave() which does the right thing in
+> one step.
+> printk_deferred_enter() has to be invoked in non-migrate-able context to
+> ensure that deferred printing is enabled and disabled on the same CPU.
+> This is the case after zonelist_update_seq has been acquired.
+> 
+> There was discussion on the first submission that the order should be:
+> 	local_irq_disable();
+> 	printk_deferred_enter();
+> 	write_seqlock();
+> 
+> to avoid pitfalls like having an unaccounted printk() coming from
+> write_seqlock_irqsave() before printk_deferred_enter() is invoked. The
+> only origin of such a printk() can be a lockdep splat because the
+> lockdep annotation happens after the sequence count is incremented.
+> This is exceptional and subject to change.
+> 
+> It was also pointed that PREEMPT_RT can be affected by the printk
+> problem since its write_seqlock_irqsave() does not really disable
+> interrupts. This isn't the case because PREEMPT_RT's printk
+> implementation differs from the mainline implementation in two important
+> aspects:
+> - Printing happens in a dedicated threads and not at during the
+>   invocation of printk().
+> - In emergency cases where synchronous printing is used, a different
+>   driver is used which does not use tty_port::lock.
+> 
+> Acquire zonelist_update_seq with write_seqlock_irqsave() and then defer
+> printk output.
+> 
+> Fixes: 1007843a91909 ("mm/page_alloc: fix potential deadlock on zonelist_update_seq seqlock")
+> Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+> Acked-by: Michal Hocko <mhocko@suse.com>
+> ---
+> v2…v3
+>   - Update comment as per Michal's suggestion.
+> 
+> v1…v2:
+>   - Improve commit description
+> 
+>  mm/page_alloc.c | 15 ++++++---------
+>  1 file changed, 6 insertions(+), 9 deletions(-)
+> 
+> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+> index 47421bedc12b7..440e9af67b48d 100644
+> --- a/mm/page_alloc.c
+> +++ b/mm/page_alloc.c
+> @@ -5808,19 +5808,17 @@ static void __build_all_zonelists(void *data)
+>  	unsigned long flags;
+>  
+>  	/*
+> -	 * Explicitly disable this CPU's interrupts before taking seqlock
+> -	 * to prevent any IRQ handler from calling into the page allocator
+> -	 * (e.g. GFP_ATOMIC) that could hit zonelist_iter_begin and livelock.
+> +	 * The zonelist_update_seq must be acquired with irqsave because the
+> +	 * reader can be invoked from IRQ with GFP_ATOMIC.
+>  	 */
+> -	local_irq_save(flags);
+> +	write_seqlock_irqsave(&zonelist_update_seq, flags);
+>  	/*
+> -	 * Explicitly disable this CPU's synchronous printk() before taking
+> -	 * seqlock to prevent any printk() from trying to hold port->lock, for
+> +	 * Also disable synchronous printk() to prevent any printk() from
+> +	 * trying to hold port->lock, for
+>  	 * tty_insert_flip_string_and_push_buffer() on other CPU might be
+>  	 * calling kmalloc(GFP_ATOMIC | __GFP_NOWARN) with port->lock held.
+>  	 */
+>  	printk_deferred_enter();
+> -	write_seqlock(&zonelist_update_seq);
+>  
+>  #ifdef CONFIG_NUMA
+>  	memset(node_load, 0, sizeof(node_load));
+> @@ -5857,9 +5855,8 @@ static void __build_all_zonelists(void *data)
+>  #endif
+>  	}
+>  
+> -	write_sequnlock(&zonelist_update_seq);
+>  	printk_deferred_exit();
+> -	local_irq_restore(flags);
+> +	write_sequnlock_irqrestore(&zonelist_update_seq, flags);
+>  }
+>  
+>  static noinline void __init
+> -- 
+> 2.40.1
 
-That is, why do we have two different TDCALL wrappers? Makes no sense.
+-- 
+Michal Hocko
+SUSE Labs
