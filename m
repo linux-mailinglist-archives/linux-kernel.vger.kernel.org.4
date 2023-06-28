@@ -2,84 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DAB8B741BF0
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 00:51:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EBAA741BF2
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 00:51:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231432AbjF1Wvm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 18:51:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51006 "EHLO
+        id S230496AbjF1Wvp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 18:51:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230456AbjF1WvA (ORCPT
+        with ESMTP id S231146AbjF1WvB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 18:51:00 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46A6B2D71;
-        Wed, 28 Jun 2023 15:49:59 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CC88A613E2;
-        Wed, 28 Jun 2023 22:49:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E303FC433C8;
-        Wed, 28 Jun 2023 22:49:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687992598;
-        bh=jk5QAFpZWXOnbqEW7te6qtZr2mIxDA9rsL7AaBk576M=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=k8d/p4vCzjgdct3iMSZpOKbkC9P7cqnJ1L73NrfpgY9L00YS41ftb8VoQhHcEP4Zc
-         Jg3UjZd955w+slcSddxsoAmpGTk/ofk5XiEFiu7cZmR7vbwsuz1tsMpnkd4O1aftPP
-         0+bR8MFS6+MMDTfvbINmEdpUpg0veOjOlSDPJIj0yA+UQLqzE0xaKfS6xsTRpwKVzy
-         t4fTmEvThEm7gaCUxcm0E7x/APepB9c0PZIF98oTB1t+AswyQUdnmAJPiDODjqWJCp
-         X0WOAv4bgow2CKJbYzo1w1stRaQgChFcsO1YW5Xv4J0C5Ht8KgFyceT9l22cmb2JpR
-         Ls2zt8KFT31lA==
-Message-ID: <fe5a1cdd-9564-c2af-db6c-8af2107432e3@kernel.org>
-Date:   Thu, 29 Jun 2023 07:49:55 +0900
+        Wed, 28 Jun 2023 18:51:01 -0400
+Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E001326B9;
+        Wed, 28 Jun 2023 15:50:49 -0700 (PDT)
+Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-1b6824141b4so319265ad.1;
+        Wed, 28 Jun 2023 15:50:49 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687992649; x=1690584649;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=RfqFDtT/eGzqQeEDf95cLreNmgKO2LGGgIvnbhaSmwc=;
+        b=YQoyXa4nNfTr3esU8SJWPohfIzpbIzYKLB4gOQ519fXdcPPR70q+N/IMdXkPOvWj0L
+         4sQ35qGCtYXkFaIWEhGZ0OwQgvJVXq5RT5NaPP7yENqiQAmFwbzJzzXw967sjgE7ONgL
+         I5j7pTLHVqrRCuoTtVJ3NqzPHmWtZkeGQRIg/lLo3V1E3SZTQGamPoJFJy9A/RBZLYC0
+         oECop44aUc28wdK0sxxQxgXGQ+e1a+L6jCQfxLjdDw2ZDeKOfTbb2ekdkfq/1oye6F75
+         fC5B11CRaulZUcTHdpA1x++4GjrenhihK2nWrxDM2q6Lvds8ibA1a4mxL+fRobdLlGck
+         vuVQ==
+X-Gm-Message-State: AC+VfDw/2tFsu+3PmARpoU+rixAcHucHiUnXea0ygFeN05xe4MKHiur9
+        jZBGhXlFK4yX3QjRM3acox5d9eZ2V/k=
+X-Google-Smtp-Source: ACHHUZ6DPO+qpk7VGOE7L1H4AovjX2mXxQC4bqfErUpLkFuXiwxShFN8MVsD0KATlIB8e9sHKBZTbA==
+X-Received: by 2002:a17:903:1cf:b0:1b6:a91d:bd1f with SMTP id e15-20020a17090301cf00b001b6a91dbd1fmr3017792plh.6.1687992649105;
+        Wed, 28 Jun 2023 15:50:49 -0700 (PDT)
+Received: from [192.168.50.14] ([98.51.102.78])
+        by smtp.gmail.com with ESMTPSA id p12-20020a170902b08c00b001ab061e352bsm8090033plr.195.2023.06.28.15.50.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 28 Jun 2023 15:50:48 -0700 (PDT)
+Message-ID: <896abe03-4fcd-003f-1273-209daafc5635@acm.org>
+Date:   Wed, 28 Jun 2023 15:50:44 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v4 2/4] ublk: move types to shared header file
+ Thunderbird/102.11.0
+Subject: Re: [RESEND v2] ufs: core: Add support for qTimestamp attribute
 Content-Language: en-US
-To:     Andreas Hindborg <nmi@metaspace.dk>, Ming Lei <ming.lei@redhat.com>
-Cc:     Hans Holmberg <Hans.Holmberg@wdc.com>,
-        Aravind Ramesh <Aravind.Ramesh@wdc.com>,
-        Jens Axboe <axboe@kernel.dk>,
-        "open list:BLOCK LAYER" <linux-block@vger.kernel.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Matias Bjorling <Matias.Bjorling@wdc.com>,
-        Andreas Hindborg <a.hindborg@samsung.com>,
-        open list <linux-kernel@vger.kernel.org>, gost.dev@samsung.com,
-        Minwoo Im <minwoo.im.dev@gmail.com>
-References: <20230628190649.11233-1-nmi@metaspace.dk>
- <20230628190649.11233-3-nmi@metaspace.dk>
-From:   Damien Le Moal <dlemoal@kernel.org>
-Organization: Western Digital Research
-In-Reply-To: <20230628190649.11233-3-nmi@metaspace.dk>
-Content-Type: text/plain; charset=UTF-8
+To:     Arthur Simchaev <arthur.simchaev@wdc.com>,
+        martin.petersen@oracle.com
+Cc:     avri.altman@wdc.com, Avi.Shchislowski@wdc.com, beanhuo@micron.com,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230626103320.8737-1-arthur.simchaev@wdc.com>
+From:   Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <20230626103320.8737-1-arthur.simchaev@wdc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/29/23 04:06, Andreas Hindborg wrote:
-> From: Andreas Hindborg <a.hindborg@samsung.com>
-> 
-> This change is in preparation for ublk zoned storage support.
-> 
-> Signed-off-by: Andreas Hindborg <a.hindborg@samsung.com>
+On 6/26/23 03:33, Arthur Simchaev wrote:
+> +/**
+> + * struct utp_upiu_query_v4_0 - upiu request buffer structure for
+> + * query request >= UFS 4.0 spec.
+> + * @opcode: command to perform B-0
+> + * @idn: a value that indicates the particular type of data B-1
+> + * @index: Index to further identify data B-2
+> + * @selector: Index to further identify data B-3
+> + * @osf4: spec field B-5
+> + * @osf5: spec field B 6,7
+> + * @osf6: spec field DW 8,9
+> + * @osf7: spec field DW 10,11
+> + */
+> +struct utp_upiu_query_v4_0 {
+> +	__u8 opcode;
+> +	__u8 idn;
+> +	__u8 index;
+> +	__u8 selector;
+> +	__u8 osf3;
+> +	__u8 osf4;
+> +	__be16 osf5;
+> +	__be32 osf6;
+> +	__be32 osf7;
+> +	__be32 reserved;
+> +};
 
-Looks OK to me.
+Is this structure useful for user space software? If not, please move it 
+into another header file.
 
-Reviewed-by: Damien Le Moal <dlemoal@kernel.org>
+Thanks,
 
-
--- 
-Damien Le Moal
-Western Digital Research
-
+Bart.
