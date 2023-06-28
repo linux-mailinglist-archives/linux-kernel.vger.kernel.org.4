@@ -2,142 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F8C7741281
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 15:33:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41AC47412A6
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 15:37:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231948AbjF1Nc4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 09:32:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47606 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231740AbjF1Ncb (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 09:32:31 -0400
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9FF61705;
-        Wed, 28 Jun 2023 06:31:39 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id 4fb4d7f45d1cf-51d9123a8abso4805820a12.2;
-        Wed, 28 Jun 2023 06:31:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687959098; x=1690551098;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7FUnaW6Od3Yv31RkB8JAdBBWdogXZHwC3KylqgBdp8I=;
-        b=pZt0W2Ch5oOAafjon76+3AXSaQqYipdQahYl7hiTfj2uMPO5byT4CkSR6N/0LZafUO
-         IE+4ZvNP5BjxXieb3AdwDKd4nZJUTgeFMPJfT1sVPa1cziz8XcDCn0xX6h8b9igT5NbA
-         mJQagYG9VGy6pQDN33XTNlfe9e+9lxiTbBId9JXi/NoMiDfPE5VGOzgJtsoCQHEvSTAC
-         fNC7QrN0NJJkeDC4MLJWWyGTXhn9r9q4HxMiQ3dmjwgGUFBggjJtdjlaojfO8hNqlMIh
-         DomUMpWytZdIsKIxn5iaCZLgKfZqVYN76jWuBrMN6p3+G8MewpnrRWGrpx2LEbPjZh93
-         f7jQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687959098; x=1690551098;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=7FUnaW6Od3Yv31RkB8JAdBBWdogXZHwC3KylqgBdp8I=;
-        b=KpLRf42EN+yy+J75xRUm6qWMj0uC/3yShlbmyBkC0WkDxASHB0NgGEBEdus8JmiHTG
-         3jNuyWPOrPeXGhyuYkpDRsh05+I2hMMOeQNqNIMrU022YriEGGY9b413Y1yeT7bJBXOv
-         4icatWTE0kjbzSjCk6mInxa/05MHHQe/cG+hTBvCiMAzr1rkK1IPuaGcUMjCvFYJKhMT
-         k24SHJIzCuxRCg07YTGxdsz4CbidH+WvCKIEkOJnZIFg1Ph6+LwJfJUVHNk9QY1VzVH6
-         e9eO2+2LDuWNWaboYFHrg6GDkvWECYhUL/22e9a79guxz6LX1KxjbOlG27JDBrPz5sxC
-         CcPA==
-X-Gm-Message-State: AC+VfDxQgV02kqe9LZHM+xuR5CsHtiR10yKNaRjiLzutRTIgA10pDCga
-        9Dl7OYx7G2xeKaIf8hAgcgdOY9GRtMZz3QZR1bs=
-X-Google-Smtp-Source: ACHHUZ4tJxtb9mtDVz05B6rx/caVQ80f6FNKZiZvs5KBgQj2R9xBIm9SvAJ8zNw1mIaeX7ncVTXV+oUnck/F3olR/bU=
-X-Received: by 2002:aa7:d4d5:0:b0:51d:3747:f88a with SMTP id
- t21-20020aa7d4d5000000b0051d3747f88amr8767995edr.31.1687959098117; Wed, 28
- Jun 2023 06:31:38 -0700 (PDT)
+        id S232100AbjF1Ngy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 09:36:54 -0400
+Received: from bg4.exmail.qq.com ([43.154.54.12]:28837 "EHLO bg4.exmail.qq.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231555AbjF1Ngm (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 28 Jun 2023 09:36:42 -0400
+X-QQ-mid: bizesmtp68t1687959386tfk2bzmm
+Received: from linux-lab-host.localdomain ( [116.30.129.193])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Wed, 28 Jun 2023 21:36:24 +0800 (CST)
+X-QQ-SSF: 01200000000000D0V000000A0000000
+X-QQ-FEAT: znfcQSa1hKaTu/Ha7ZQ1+V2pKPKgcx9n9xqgBcc+SOYAX8h6kkRGQ1foUBAeE
+        kncvdehoqJs9juDKWFcfnf91v40tNFH0eQpUaw2087LC37IxT3o70ShZHzxi4qbU8j9f4Jf
+        OjQC38WI2V8z38rxPbae6PLJ7uZIFfF0g0UWlirZRWVd7RAIUtlkOg0YAdNOG7nAc701TXf
+        g0LWaq6rxYsTiXEGw5rt3bGahKrMMBKAxfA1Z220RnBaJ+5lds/fz4bTaMuZjVqYqdKB4vJ
+        CYpmXXl+DIMJE2YeOLonC/ZLLx35FWmy08Mx6wHrLSe8+5+1VVxXmzDcJcJDFWG5D/R9cFA
+        zUiGHVhsiY0vSp2vIBMvWK7tymqDyhYUVoV5h3yHFMWKg9BnCvyvWng45N1mA==
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 10609451260477278999
+From:   Zhangjin Wu <falcon@tinylab.org>
+To:     thomas@t-8ch.de, w@1wt.eu
+Cc:     falcon@tinylab.org, arnd@arndb.de, david.laight@aculab.com,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-riscv@lists.infradead.org
+Subject: [PATCH v5 08/14] tools/nolibc: arch-mips.h: shrink with SYSCALL_CLOBBERLIST
+Date:   Wed, 28 Jun 2023 21:31:25 +0800
+Message-Id: <9e932ce3fdba8ed744319b170ce094a916ac71be.1687957589.git.falcon@tinylab.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <cover.1687957589.git.falcon@tinylab.org>
+References: <cover.1687957589.git.falcon@tinylab.org>
 MIME-Version: 1.0
-References: <1687955688-20809-1-git-send-email-quic_mojha@quicinc.com> <1687955688-20809-4-git-send-email-quic_mojha@quicinc.com>
-In-Reply-To: <1687955688-20809-4-git-send-email-quic_mojha@quicinc.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Wed, 28 Jun 2023 16:31:01 +0300
-Message-ID: <CAHp75VeWEkEnBLgkk_xi633WP9hTegi3W-zh2nRim6JRz4V0mg@mail.gmail.com>
-Subject: Re: [PATCH v4 03/21] soc: qcom: Add qcom_minidump_smem module
-To:     Mukesh Ojha <quic_mojha@quicinc.com>
-Cc:     corbet@lwn.net, agross@kernel.org, andersson@kernel.org,
-        konrad.dybcio@linaro.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        keescook@chromium.org, tony.luck@intel.com, gpiccoli@igalia.com,
-        mathieu.poirier@linaro.org, catalin.marinas@arm.com,
-        will@kernel.org, linus.walleij@linaro.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-hardening@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-        lindbergh.monkeyblade.net
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrsz:qybglogicsvrsz3a-3
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 28, 2023 at 3:35=E2=80=AFPM Mukesh Ojha <quic_mojha@quicinc.com=
-> wrote:
->
-> Add qcom_minidump_smem module in a preparation to remove smem
-> based minidump specific code from driver/remoteproc/qcom_common.c
-> and provide needed exported API, this abstract minidump specific
-> data layout from qualcomm's remoteproc driver.
+my_syscall<N> share a same long clobber list, define a macro for them.
 
-...
+Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
+---
+ tools/include/nolibc/arch-mips.h | 22 ++++++++++------------
+ 1 file changed, 10 insertions(+), 12 deletions(-)
 
-> +#include <linux/kernel.h>
+diff --git a/tools/include/nolibc/arch-mips.h b/tools/include/nolibc/arch-mips.h
+index 1fd1eedc12a6..55a9f01825e0 100644
+--- a/tools/include/nolibc/arch-mips.h
++++ b/tools/include/nolibc/arch-mips.h
+@@ -57,6 +57,10 @@ struct sys_stat_struct {
+  *     don't have to experience issues with register constraints.
+  */
+ 
++#define SYSCALL_CLOBBERLIST			\
++	"memory", "cc", "at", "v1", "hi", "lo",	\
++	"t0", "t1", "t2", "t3", "t4", "t5", "t6", "t7", "t8", "t9"
++
+ #define my_syscall0(num)							\
+ ({										\
+ 	register long _num __asm__ ("v0") = (num);				\
+@@ -68,8 +72,7 @@ struct sys_stat_struct {
+ 		"addiu $sp, $sp, 32\n"						\
+ 		: "=r"(_num), "=r"(_arg4)					\
+ 		: "r"(_num)							\
+-		: "memory", "cc", "at", "v1", "hi", "lo",			\
+-		  "t0", "t1", "t2", "t3", "t4", "t5", "t6", "t7", "t8", "t9"	\
++		: SYSCALL_CLOBBERLIST						\
+ 	);									\
+ 	_arg4 ? -_num : _num;							\
+ })
+@@ -87,8 +90,7 @@ struct sys_stat_struct {
+ 		: "=r"(_num), "=r"(_arg4)					\
+ 		: "0"(_num),							\
+ 		  "r"(_arg1)							\
+-		: "memory", "cc", "at", "v1", "hi", "lo",			\
+-		  "t0", "t1", "t2", "t3", "t4", "t5", "t6", "t7", "t8", "t9"	\
++		: SYSCALL_CLOBBERLIST						\
+ 	);									\
+ 	_arg4 ? -_num : _num;							\
+ })
+@@ -107,8 +109,7 @@ struct sys_stat_struct {
+ 		: "=r"(_num), "=r"(_arg4)					\
+ 		: "0"(_num),							\
+ 		  "r"(_arg1), "r"(_arg2)					\
+-		: "memory", "cc", "at", "v1", "hi", "lo",			\
+-		  "t0", "t1", "t2", "t3", "t4", "t5", "t6", "t7", "t8", "t9"	\
++		: SYSCALL_CLOBBERLIST						\
+ 	);									\
+ 	_arg4 ? -_num : _num;							\
+ })
+@@ -128,8 +129,7 @@ struct sys_stat_struct {
+ 		: "=r"(_num), "=r"(_arg4)					\
+ 		: "0"(_num),							\
+ 		  "r"(_arg1), "r"(_arg2), "r"(_arg3)				\
+-		: "memory", "cc", "at", "v1", "hi", "lo",			\
+-		  "t0", "t1", "t2", "t3", "t4", "t5", "t6", "t7", "t8", "t9"	\
++		: SYSCALL_CLOBBERLIST						\
+ 	);									\
+ 	_arg4 ? -_num : _num;							\
+ })
+@@ -149,8 +149,7 @@ struct sys_stat_struct {
+ 		: "=r" (_num), "=r"(_arg4)					\
+ 		: "0"(_num),							\
+ 		  "r"(_arg1), "r"(_arg2), "r"(_arg3), "r"(_arg4)		\
+-		: "memory", "cc", "at", "v1", "hi", "lo",			\
+-		  "t0", "t1", "t2", "t3", "t4", "t5", "t6", "t7", "t8", "t9"	\
++		: SYSCALL_CLOBBERLIST						\
+ 	);									\
+ 	_arg4 ? -_num : _num;							\
+ })
+@@ -172,8 +171,7 @@ struct sys_stat_struct {
+ 		: "=r" (_num), "=r"(_arg4)					\
+ 		: "0"(_num),							\
+ 		  "r"(_arg1), "r"(_arg2), "r"(_arg3), "r"(_arg4), "r"(_arg5)	\
+-		: "memory", "cc", "at", "v1", "hi", "lo",			\
+-		  "t0", "t1", "t2", "t3", "t4", "t5", "t6", "t7", "t8", "t9"	\
++		: SYSCALL_CLOBBERLIST						\
+ 	);									\
+ 	_arg4 ? -_num : _num;							\
+ })
+-- 
+2.25.1
 
-Why?
-
-Missing headers:
-err.h
-export.h
-string.h
-types.h
-
-byteorder/generic.h
-
-> +#include <linux/module.h>
-> +#include <linux/io.h>
-
-Can you have them ordered?
-
-...
-
-> + * Return: On success, it returns iomapped base segment address, otherwi=
-se NULL on error.
-
-IO mapped (or MMIO?)
-
-...
-
-> +       return ioremap((unsigned long)le64_to_cpu(subsystem->regions_base=
-ptr),
-
-Why casting?
-
-> +                       *seg_cnt * sizeof(struct minidump_region));
-
-Something from overflow.h?
-
-...
-
-> +       /* If it is not valid region, skip it */
-
-if region is not valid, skip it
-
-...
-
-> +#ifndef _QCOM_MINIDUMP_H_
-> +#define _QCOM_MINIDUMP_H_
-
-This header uses EINVAL, IS_ENABLED() and (to some extent) dma_addr_t.
-So do you need respective headers to be included?
-
-> +#endif /* _QCOM_MINIDUMP_H_ */
-
---=20
-With Best Regards,
-Andy Shevchenko
