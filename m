@@ -2,59 +2,35 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F0F7740C36
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 11:02:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 58C2F740C08
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 10:57:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236337AbjF1JAo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 05:00:44 -0400
-Received: from mga05.intel.com ([192.55.52.43]:49902 "EHLO mga05.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232712AbjF1Ima (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 04:42:30 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687941750; x=1719477750;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=9J5gR38+qfCPdwPoriwRdvlX7FhExR9b/qgLe8IrYhg=;
-  b=cNrh/9EU7xLMyWYfrb+IWpeKal19p+VHhv/w4bDcO8GhkedNz/AXeAQT
-   bJAggQy0aoxzY/LX7Aqcnhu2PTn5W0TeNw/k6M+9RCCgUdpiyLJQYyL+j
-   urvcDb1ZjVBGK7AQGNAOsdbM172onBPWuAld2/XlfCxblNUXKSwsYpuox
-   Fl3L9OVYXSIi+MFo+0CnhSsZAyclXRn0E1XJgVOBW7VBItkOestu+0Mfs
-   XbkeucBs/pJBSlJ5cHnxytpnwLZ+BAxlY7ciRA4r2bYLNoXF+vsGSrlE7
-   jC7k1dbnBN1mjdzXkYpva+s+dgMomj+vL9H9MIhS8xy2K7Da6XHFMeHWn
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10754"; a="448174213"
-X-IronPort-AV: E=Sophos;i="6.01,165,1684825200"; 
-   d="scan'208";a="448174213"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2023 01:42:29 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10754"; a="1047308957"
-X-IronPort-AV: E=Sophos;i="6.01,165,1684825200"; 
-   d="scan'208";a="1047308957"
-Received: from zengguan-mobl1.ccr.corp.intel.com (HELO [10.238.2.33]) ([10.238.2.33])
-  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2023 01:42:25 -0700
-Message-ID: <2b5303c5-1798-72d1-237f-395029eea3ec@intel.com>
-Date:   Wed, 28 Jun 2023 16:42:17 +0800
+        id S235300AbjF1I52 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 04:57:28 -0400
+Received: from [42.101.60.195] ([42.101.60.195]:46008 "HELO mail.nfschina.com"
+        rhost-flags-FAIL-FAIL-OK-FAIL) by vger.kernel.org with SMTP
+        id S236204AbjF1Ip0 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 28 Jun 2023 04:45:26 -0400
+Received: from [172.30.11.106] (unknown [180.167.10.98])
+        by mail.nfschina.com (Maildata Gateway V2.8.8) with ESMTPSA id E8A80605F4FBF;
+        Wed, 28 Jun 2023 16:45:07 +0800 (CST)
+Message-ID: <f69df0a0-dcb4-b4d3-2582-e1c64331b491@nfschina.com>
+Date:   Wed, 28 Jun 2023 16:45:05 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v1 0/6] LASS KVM virtualization support
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH net-next 07/10] net: hns3: remove unnecessary (void*)
+ conversions
 Content-Language: en-US
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        H Peter Anvin <hpa@zytor.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20230601142309.6307-1-guang.zeng@intel.com>
- <ZJsXl6emfV2yr4rs@google.com>
-From:   Zeng Guang <guang.zeng@intel.com>
-In-Reply-To: <ZJsXl6emfV2yr4rs@google.com>
+To:     Hao Lan <lanhao@huawei.com>, yisen.zhuang@huawei.com,
+        salil.mehta@huawei.com, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org
+X-MD-Sfrom: yunchuan@nfschina.com
+X-MD-SrcIP: 180.167.10.98
+From:   yunchuan <yunchuan@nfschina.com>
+In-Reply-To: <408a4d7b-5dbf-fa3b-357d-1cd736f92e83@huawei.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
@@ -62,21 +38,24 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On 6/28/2023 1:08 AM, Sean Christopherson wrote:
-> On Thu, Jun 01, 2023, Zeng Guang wrote:
->> This patch series provide a LASS KVM solution.
-> ... and depends on kernel enabling that can be found at
->
-> https://lore.kernel.org/all/20230609183632.48706-1-alexander.shishkin@linux.intel.com
-OK. I will add the dependency statement in next version.
->> We tested the basic function of LASS virtualization including LASS
->> enumeration and enabling in non-root and nested environment. As KVM
->> unittest framework is not compatible to LASS rule, we use kernel module
->> and application test to emulate LASS violation instead. With KVM forced
->> emulation mechanism, we also verified the LASS functionality on some
->> emulation path with instruction fetch and data access to have same
->> behavior as hardware.
->>
->> [1] Intel ISE https://cdrdv2.intel.com/v1/dl/getContent/671368
->> Chapter Linear Address Space Separation (LASS)
+On 2023/6/28 15:26, Hao Lan wrote:
+> nit: the local variable declarations could be reverse xmas tree
+> longest line to shortest line.
+> and elsewhere in other patchs.
 
+Hi, Hao Lan,
+
+I am so sorry for this, I will check again and resend them when the 
+merge window opening.
+Thanks for your reply!
+
+wuych
+
+>
+> By the way, the net-next branch is currently closed, and you need to wait for
+> the merge window to open before merging patches.
+>
+> Reviewed-by: Hao Lan <lanhao@huawei.com>
+>
+> Yours,
+> Hao Lan
