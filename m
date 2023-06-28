@@ -2,505 +2,327 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BB4B74127E
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 15:32:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA23B7412A1
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 15:37:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232082AbjF1Na4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 09:30:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47280 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232410AbjF1Na3 (ORCPT
+        id S232180AbjF1NhD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 09:37:03 -0400
+Received: from mx0b-00069f02.pphosted.com ([205.220.177.32]:4698 "EHLO
+        mx0b-00069f02.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232042AbjF1Ngq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 09:30:29 -0400
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 204791705
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 06:30:27 -0700 (PDT)
-Received: by mail-wm1-x335.google.com with SMTP id 5b1f17b1804b1-3fa94ea1caaso9206015e9.1
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 06:30:27 -0700 (PDT)
+        Wed, 28 Jun 2023 09:36:46 -0400
+Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35SBTAjI003640;
+        Wed, 28 Jun 2023 13:30:59 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=corp-2023-03-30;
+ bh=xcIR9+7IkYg8hVo+LNN0seB38kT5QlJ+/NVm/siVnCo=;
+ b=B7iFCq4AiRJoab2n565ObD7zPfsEWNjMbOBpi6NAQvaSJKVw2SHfwYNSS/MOQJRtXLYb
+ xFhYZGRBT8u/JrB91PeSRmuwMUbhFEvQpAShQDK2m/ndAygIzt0g1AFARDg+X1H2bCy6
+ ppXQ9xFm73lZ6ZCp2s90yaOIHbUpcoV5+3uo4Dr5M1x+UtHTBpyizCrHeQITenvg5WTh
+ gqR0VJhx/jcsxXDEFuai+LEDIArJbaKdCpGd43XvgBtEmpODciqBGa/JExy6LbDWXGg7
+ isTZ0r9QTfELcHNFoXdI085/oQW7wPXNhY71QXYrJfHb5g0lOri4oKktCBFiSMTw4UEq qQ== 
+Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3rdq937gpf-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 28 Jun 2023 13:30:58 +0000
+Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 35SDAuRI029607;
+        Wed, 28 Jun 2023 13:30:57 GMT
+Received: from nam12-dm6-obe.outbound.protection.outlook.com (mail-dm6nam12lp2173.outbound.protection.outlook.com [104.47.59.173])
+        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3rdpx60t3r-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 28 Jun 2023 13:30:57 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=aeveih347uUKwE1PDfVU57+tr4eH5JKzsVVt/v8abvGjwL+F1UBL1P7Z26LAGM6O+120ol04oUrZ5O2LuOEZCJo+GR1D5ShYXjsm390q/wvaW/E1AspsWfVd6rVGqf3JmbQeo2op4v7GGrD/uIO6us13R4Pfuc8chXkNTqKE59zWdJU2VCUoR8u2B5Crj0ZHsVD7FMOEawrd++srGfo+mQ8ZNe8g7koD6hQsWWzPdbZp1yasd+wBZ3uM6AwEdAAs+EWlKGw+okOWnGeCl6gLOBOb6ZYEeIAuBeG9y6WruuNhDxbN9XrhXomSMQZXysRp6F12MmQ0ql6VpJYArhLf+A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=xcIR9+7IkYg8hVo+LNN0seB38kT5QlJ+/NVm/siVnCo=;
+ b=mXHeitUqH2kTcf/MfQZu7aWw91qXQpiCJazn4bCa0PA6vWp2JbvB6SaLV1t+ZSC9o0aZTSt/1qoIaqsiTMblzNE1p0SYA9FEb1X3uBhSFCycy5Z+99xNOZqqEBvtwmEzZRCKb2VAV6D5f7SCnCj1U2kx83zmm+it0a9WfTU2PuhE9wrLcQJ4a8SByOtH84zy9B7aWofBlqLI8DEaIVJR4ywd9i0XrNsuDi1Egg/33rCbER64jzOH1srbwZymPuMJqme8dhYhqxuhGgXbe1kRiRnkfAQkKOK99jZ6Hd9u6CtcP5CqKiytRjr78TOaND0g1EJ1fbBSC+5MeL9BvNj/mw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20221208.gappssmtp.com; s=20221208; t=1687959025; x=1690551025;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+nVl+/yXtnlURyfJvLncPhgM4T0+LK4rpPdu5nt0rA8=;
-        b=23ti5bZysoqyCGpPfrdIZ0PvLZQ/f/ub3GwRU+EtS2F0hINRnpsY4m6W71zZJXmdJq
-         ukDsRVu7ZwlSbXvme5nqGnKW+Ms9zKQQ3EHhv6wLaZyzAU4ioc+dCEv6UBRiQJMyCfZO
-         E+55jC7eWJmsWvEFv6lMXzlPzwWuD/qk4GoMZTjP6u++CFe3guzN2pY1dRyRjAkSgn2F
-         usJ+Ck5R9oWlQt/bULy610tfWADe1uEMMhamQFR8CsXhEIpYJIZcU4mXC7fpEAS6v8ZU
-         gZCfxHhnDZr7M0PAM82XymCHL0PV3uoaKh/DEU/qnb/fbgK7NDnsDDzcIh8RnHBIOzbj
-         jYMQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687959025; x=1690551025;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=+nVl+/yXtnlURyfJvLncPhgM4T0+LK4rpPdu5nt0rA8=;
-        b=RDIEYFJJacLcGjpV28sC71Md/2LNIkLA2zq70vsq6w6tzltSxrVob3k2eY/BFRX4/o
-         Hi2if1arzigSTuwXpoY5TMA79j3Tye4/i4nC/XjaQvKSGuMBlXEdXu4lhEr884TMKcw4
-         teN5zkJlMbfn8acue4Y0OmS6k5gEYrVgqjYmQ/PH+Fgxm4AO/3rpbT7gAdcjpUleNhEF
-         d51yqfkKiGbNg5VCysZKggramw0Pg9lyQZkLK1QjenTrJcEG2bynKs982n5BWx489vT7
-         Jq0fXtTUL1PXseGYAwIxqTnpULfFEJrQU6WmGv81L/hfxWy5F0b4OEqmBR5CQrlv/WlM
-         II6g==
-X-Gm-Message-State: AC+VfDwaz/EmCObkzVbfJmuuYVjnjUreO6Wy8Uxq2P7LhVvgcU5ZCTC8
-        5g7GgHpbxH/IAWLCCPk+047xNQ==
-X-Google-Smtp-Source: ACHHUZ5KEYjSzdszrCtSfqP6p4gTQLnscaMKKxct6rsJ2mCvpKIqG/Dd+Z4MQwe4nt4dbBJ7BbRDtg==
-X-Received: by 2002:a1c:7213:0:b0:3fb:40f5:f54e with SMTP id n19-20020a1c7213000000b003fb40f5f54emr1553325wmc.13.1687959025387;
-        Wed, 28 Jun 2023 06:30:25 -0700 (PDT)
-Received: from localhost.localdomain ([2a01:e0a:28d:66d0:c6d7:ee89:d0ff:2f52])
-        by smtp.gmail.com with ESMTPSA id z7-20020a05600c220700b003fa999cefc0sm8067994wml.36.2023.06.28.06.30.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Jun 2023 06:30:24 -0700 (PDT)
-From:   Esteban Blanc <eblanc@baylibre.com>
-To:     linus.walleij@linaro.org, a.zummo@towertech.it,
-        alexandre.belloni@bootlin.com
-Cc:     linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-rtc@vger.kernel.org, jpanis@baylibre.com,
-        jneanne@baylibre.com, aseketeli@baylibre.com, eblanc@baylibre.com,
-        u-kumar1@ti.com
-Subject: [PATCH v7 2/2] pinctrl: tps6594: Add driver for TPS6594 pinctrl and GPIOs
-Date:   Wed, 28 Jun 2023 15:30:21 +0200
-Message-ID: <20230628133021.500477-3-eblanc@baylibre.com>
-X-Mailer: git-send-email 2.41.0
-In-Reply-To: <20230628133021.500477-1-eblanc@baylibre.com>
-References: <20230628133021.500477-1-eblanc@baylibre.com>
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=xcIR9+7IkYg8hVo+LNN0seB38kT5QlJ+/NVm/siVnCo=;
+ b=hU8IxlnpBnRF7rbSH+e5c7Fhvh7R1YCUVx9ZbWMZW1yM+EYv2ToEBUoPUDvEZUpTsY/mme7fIvgqzAtzSdfZ3O3E04XeKODyBOZetKAighM6wSbg7xYEmkFrbBg9ZLISVbBjMfp+HuO1iYD1SF9jClyctiWcOXe1aMv+5rtpoqA=
+Received: from CO1PR10MB4531.namprd10.prod.outlook.com (2603:10b6:303:6c::22)
+ by DS7PR10MB5166.namprd10.prod.outlook.com (2603:10b6:5:3a4::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.26; Wed, 28 Jun
+ 2023 13:30:53 +0000
+Received: from CO1PR10MB4531.namprd10.prod.outlook.com
+ ([fe80::8b8f:b4b1:bb78:b048]) by CO1PR10MB4531.namprd10.prod.outlook.com
+ ([fe80::8b8f:b4b1:bb78:b048%5]) with mapi id 15.20.6521.024; Wed, 28 Jun 2023
+ 13:30:53 +0000
+Message-ID: <8158b5de-c2c5-2b4b-a2c4-5ace9a17a99b@oracle.com>
+Date:   Wed, 28 Jun 2023 08:30:42 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v3 11/13] riscv/kexec: refactor for kernel/Kconfig.kexec
+Content-Language: en-US
+To:     Conor Dooley <conor.dooley@microchip.com>
+Cc:     linux@armlinux.org.uk, catalin.marinas@arm.com, will@kernel.org,
+        chenhuacai@kernel.org, geert@linux-m68k.org,
+        tsbogend@alpha.franken.de, James.Bottomley@hansenpartnership.com,
+        deller@gmx.de, ysato@users.sourceforge.jp, dalias@libc.org,
+        glaubitz@physik.fu-berlin.de, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-ia64@vger.kernel.org, loongarch@lists.linux.dev,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, kernel@xen0n.name, mpe@ellerman.id.au,
+        npiggin@gmail.com, christophe.leroy@csgroup.eu,
+        paul.walmsley@sifive.com, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu, hca@linux.ibm.com, gor@linux.ibm.com,
+        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
+        svens@linux.ibm.com, hpa@zytor.com, keescook@chromium.org,
+        paulmck@kernel.org, peterz@infradead.org, frederic@kernel.org,
+        akpm@linux-foundation.org, ardb@kernel.org,
+        samitolvanen@google.com, juerg.haefliger@canonical.com,
+        arnd@arndb.de, rmk+kernel@armlinux.org.uk,
+        linus.walleij@linaro.org, sebastian.reichel@collabora.com,
+        rppt@kernel.org, kirill.shutemov@linux.intel.com,
+        anshuman.khandual@arm.com, ziy@nvidia.com, masahiroy@kernel.org,
+        ndesaulniers@google.com, mhiramat@kernel.org, ojeda@kernel.org,
+        thunder.leizhen@huawei.com, xin3.li@intel.com, tj@kernel.org,
+        gregkh@linuxfoundation.org, tsi@tuyoix.net, bhe@redhat.com,
+        hbathini@linux.ibm.com, sourabhjain@linux.ibm.com,
+        boris.ostrovsky@oracle.com, konrad.wilk@oracle.com
+References: <20230626161332.183214-1-eric.devolder@oracle.com>
+ <20230626161332.183214-12-eric.devolder@oracle.com>
+ <20230628-urologist-faction-42ebe5372206@wendy>
+From:   Eric DeVolder <eric.devolder@oracle.com>
+In-Reply-To: <20230628-urologist-faction-42ebe5372206@wendy>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: SJ0PR03CA0015.namprd03.prod.outlook.com
+ (2603:10b6:a03:33a::20) To CO1PR10MB4531.namprd10.prod.outlook.com
+ (2603:10b6:303:6c::22)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-        lindbergh.monkeyblade.net
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO1PR10MB4531:EE_|DS7PR10MB5166:EE_
+X-MS-Office365-Filtering-Correlation-Id: 2821a4fd-9f1b-4999-2bed-08db77dbe55d
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: zV/pq6YnW3nCMf2W925/J71RpoglFBi7KV9BQS2Doy+7D3xkEVzt+RhRBGJTPElZtAD1XaK3YXya2bl1PmdwIOlzt+i3SsoB0mnUtnwwEH1EAXQs2b0aX7ENqgVluJK0bC/UXugKelwt2gYbVgIokKafZABpzz/jslnkOXfmfQ2K0ixdT9GVQCL89GGxQnxsYPgKQHfBblep3RG2K3k8TYVZM2DyuW5airj7Af0OZTTHtHs180lYl7GuIIOfpRe60Q+unKejClhF4Q4xY6aKVP1+qZX6eQNeM7fhWAiripb0B3bKRWMrPDais4JcHGjKQl3GhZxsdytT7VhpKyrdZNYc8Wqf97ZmR80H8eJ3tEzuRpdPZL4l8sRTLDaFYZ0HrcQPT4MOWVfWJvoaw2UoYIVyFUecJ3Qn9yPOQ2hORIYi+J60oqlQiDB7ofr9FWKg2ncaRNyRRKZB+uWSxKuVqVyvXbQiVlYuLnCJb6k5NDBPgsFj6tHXm3HNILl0zB13rimyDtQIgymAEVSOspbQY1kzOWNMHESq4Mgcztuqx/nnHlBwZ8nOriQ+Y0FglaVlmn0Hi2jxfC+wqmw6rnb+F4phYYS8EcF7ZZScBib7qxs9YgDxborFwT2kKAHZcMzuGkfHw5hxqisueGrR4eYklg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO1PR10MB4531.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(39860400002)(136003)(346002)(366004)(396003)(376002)(451199021)(38100700002)(36756003)(83380400001)(31696002)(86362001)(31686004)(2616005)(8936002)(6486002)(6666004)(41300700001)(66556008)(66946007)(66476007)(8676002)(316002)(53546011)(6916009)(26005)(4326008)(6512007)(107886003)(186003)(6506007)(478600001)(7406005)(2906002)(7366002)(5660300002)(7416002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?bU1CQVhtRmtkWkhNRS9tTFpCVytXdVhhVXBNSzAyaHhGcTg5VHlpTUhmSjlr?=
+ =?utf-8?B?SDY1Z1VsOGo4Ylc1bmgzMExTbWlUSDNkN3hRWjUvVUJWM09rNVh0aFZIdDNx?=
+ =?utf-8?B?NVpYR3MyNU11bVNYY3NqSTdvckdCRkdSQ25nS0h2R2FvR2MwaEJSU0hCMlhW?=
+ =?utf-8?B?aW1jbzJkb21rVDM3emVKSHFNUEx6MVZydGdGVG1KblhRSlVORkJVMWs5aFlF?=
+ =?utf-8?B?MTNBR0lJZ00zSHEvODR3T0gvRnA5cnJiQXFFSHZYM0N6eDlZU09vNHlEcDQ5?=
+ =?utf-8?B?SVd4TlkrazYySmp1YjRxWk9oVkVBc3lHMWRKT1dmRmJtMk5RVnNtMmhrdndV?=
+ =?utf-8?B?eVVnQkttU3JtRk4zRHhoUFZra0hMN1ozT1dxaUhDd3hvc3BEVnFjamZGSG5M?=
+ =?utf-8?B?YzBJNGdqall3U0JoZ0hwQXdLeWJzZi9xL21qcWdwdGUrbTFtdGI5S3QvY25n?=
+ =?utf-8?B?ZnFlelVvQ08zSUFnMFZoNjI4R2lmaFhDLytCbjUvMnhIOGVJZnlUdFFSeU50?=
+ =?utf-8?B?SHBYTyt2UTk0T0wvU3dsQlo3a2t1WW1yQkhDcWFXQ1U3Q0FzZjIzaHA4MktH?=
+ =?utf-8?B?YTBYS3FQYzJNanhFejJ3ZytwOGdSaXZ6ZXk0b0pHWXhUU1VhNnVYdlVJSjAy?=
+ =?utf-8?B?TnY3L1pjMkJ6aUwyd2ViVC8rZHNIZjdXdCtmajk3eEpnalJuR01vaTZZbzZx?=
+ =?utf-8?B?L2dldk9adzZydHQ1dHVRUW0yWmtjZlFqMUZKMEVTMm9lRUp0V2hyUDllTDBX?=
+ =?utf-8?B?ellzL0JvMXJJZENScDhwQjJGUnBoYTNwNjFXQ1NKbHgxTWpURTdPRlJ3Tkdu?=
+ =?utf-8?B?dWI2endTV3ZTa2ZFUS9zaDA5MEhhRXViRFl0UzJhbUMzdkQ0SGVkWkZaV3JO?=
+ =?utf-8?B?YTVRTEJQVGtoOVprUlpUdGEzNGpTcUJqRG5FUGljTFBJY3JOZ0dEZ0ZEdlB4?=
+ =?utf-8?B?Tk04RkZrb0VTWlk5UFVONUVrWU50OGV2cENTMm1YWEJBSUdYZ0l0QkxaV1R2?=
+ =?utf-8?B?RTJkVGZtZ08yT1RCUEpjL2hjVlNacUxWMG1MZjdwMUtuSWwvSEw1V2dUQVJS?=
+ =?utf-8?B?OTlQd1puQ2ZTcEtSc01xOUdQR3VPNVJHK2FicVhRMi9wZmdkY2o5UEZkV1Yr?=
+ =?utf-8?B?ZW56MDFTaXpNUkhJN0o1MlpLWncvUnpIZFJ1R3VEbzg5THpMdng1aTNJMUY2?=
+ =?utf-8?B?MmVnL3lPMVBuQXVzM2FtUExQOWJXSk5aN1NLK0RTeTlKd2ZGRDZuaHROTDBJ?=
+ =?utf-8?B?NlJSUzRteEQ2VlRRNjRnNjlhR0g1Z2RXQW45Y2psTnRNQ2N6K3R5RGdHK28r?=
+ =?utf-8?B?NDVYd0tzdDQrWkhjaFh0QWQwV0lDVFkwck0zR1A2aW80OVBzVFV3ajYxK29t?=
+ =?utf-8?B?SEZDa0lpZnNHczErbjVEako0TXU2Qm9xdnNyaXRtdHdxZTM0MlVUVEpxejhL?=
+ =?utf-8?B?VnlXSEk3bkU5TzhMRmg5RXlaV2FFY3YrRjQyVVE1enZLM2ZPSDhpUEpQVTlq?=
+ =?utf-8?B?aWhLUFBjbExvcXVaekhRcTBwbk0rMSt0YjM2MEZwYlRiSEhDd2t5L3QxUzhi?=
+ =?utf-8?B?cmw1YkJWUFA4R3NldWw2dWpHYlcwRU0ydEdNZXVPTDNSeFc5N05TWlpTSDJQ?=
+ =?utf-8?B?bVpKYWxhY1UrTGg2ZFcybHJLenBPOWQ0Wk9iOTZ3UEhCNjhXNHJ3VjVXSEtY?=
+ =?utf-8?B?ZE1IdEgwTGtTd1BVSVVETVBKTU9wZDg1cTRjclBLMXJBL1pDVG5rQkt6M05k?=
+ =?utf-8?B?YXF1emkraFpBTWV6djliVi9ZcWluYm5Obm5IeVZLZjJIOTRGbUUySk02endM?=
+ =?utf-8?B?TVZQQ1ZSL3dicDFKd1ZqQWlteXdxd2xnSk00MlNYall2ZGNsU0lSZWMrQjlD?=
+ =?utf-8?B?VTE2S0N2N1BYT2sxNVQ3UGNQUGhGL1JuOHMySk1rQlEzbWxESm5XOHZSR2Vu?=
+ =?utf-8?B?blFzTzhMRnN1dGlyeXR2T3J3cS9YV21YcFRuaGY5SXdha2ZxcDF2L2xsSlNE?=
+ =?utf-8?B?S090SkNibVpoVXlsSFp3WTgvcEFtMmt2QkFpUmhHTHp5UllFclBReklRK1R0?=
+ =?utf-8?B?Y1lMMjE0N20wOFRpVlpsU3pSdDNwZjVtbFpYTmJTemhxdmQ5bnVPVnkvQ3dC?=
+ =?utf-8?B?VEVsVjhqMFR1SGlUSDJCZDltdmZOU0Znck1qTG02djlSMVRiZmhvcFdJTUpC?=
+ =?utf-8?B?Unc9PQ==?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 2
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: =?utf-8?B?U1V3aUI3VkE2MWNRWjl6bVhIdFNSbXhyTkxTSWRyekR0ZFJwQUhOYW5MUG1U?=
+ =?utf-8?B?QUtqdVQ0R3c1akFvejNIMHRWVXNjS0o2NjB4T1dKQ2tkeHQ3NkdKUi9uTEpU?=
+ =?utf-8?B?YmF0OW4wUlpoUEphRHdneXE2bngzQk51TGFHQ3hOMHBuUEE0elg5UWlFaXNP?=
+ =?utf-8?B?YnFqS3QzdGh4WWdyc1NSTUlEOHlTcjhsK0pBTDVEZ3pDS0ZBRFF2QzIvTHFa?=
+ =?utf-8?B?R0JKcjVtUEwwOWluOFUrRThzdTkyK1dmNUxXQ0VVTitUeXR5NEZBNFd0S0Ja?=
+ =?utf-8?B?WTBFS2twZDlDbGV1RWFiUUNwV0UveDBOU3JlVzFXNjJmS1NMRnoxZHRsVGpz?=
+ =?utf-8?B?cnc3eXpNUTYyTFpPTElmZHVHZkNoZGJjREFWZWVudllxdytYSS9yQnk4TmNz?=
+ =?utf-8?B?R0JxRndvTkloc09JNGwrRTZDN0F3Szl0SUk3MSt6N25kOS9VdkFYSFk3NlZ4?=
+ =?utf-8?B?TUx6cURzdytVd2NBSjhvd0pLcTd4WmhVNEkxUUVBcFFpN1d4dVJEYkhJR3c4?=
+ =?utf-8?B?aU4rTjE3dTl0VTJHZEtvVk40VTZheXRTVmhhckxZdjFpaXdYaDVac3Njbzl6?=
+ =?utf-8?B?R1Z1eFduN1dNUHBzTkk5bmlrNFhUY0FQTkRCaUlIdFNhODF2TUluMlZUaDA1?=
+ =?utf-8?B?Q3p5ZGRtSmhnRzlCcjU3ZGdxcTlCZk8vU1YrTTIvTmorc0JMQURmTUxxMy9Q?=
+ =?utf-8?B?cHlRbG1WTy92UnFEcGhhVkl0blBGQ2xJUmU2eUJwWmZmRXZuUGVTNWVxVEsx?=
+ =?utf-8?B?OXlvamdvQ3QvZFk0eDU3dEs1VXh4L0s4TjYzWFNmWWFJbTB4anN4VDh4dVZa?=
+ =?utf-8?B?cmZCdGZ1Z1dzbVJyYkl5bUhZWnJONEFMWk04Qmw3aXdoQW1SUlNPSEdDSXBh?=
+ =?utf-8?B?WTdIYUhhT2VzZlBWRVBEbDhMdlNvOE9GQi9TSWg2LzhVZkFkRExoekFlRmhl?=
+ =?utf-8?B?MlhxTWJhQ3JyMldRQmdrNXhuQUFhT1hWVTdBdlZMUm9nbHJSZ3pvbnV4clBq?=
+ =?utf-8?B?WjljUC9TMmNtL1BqSEl5UXNQTWVjUGNvbUoyT2RnUjJHUDA2VkJjZHRpQVBK?=
+ =?utf-8?B?TzRXNW9HRjdMRHNlSE5VTkVlMlRmRnNHellBRjRlaFR2R3NVN1drRnFrdTNT?=
+ =?utf-8?B?Z05PNDZVY3FsRkgzU1VXaFlwQW4xeWltUE5mV0t5dDdJSy95SDlvTWNjK0RX?=
+ =?utf-8?B?aS82aWYyTmcvcmhqQjVPM0dOREhSN3VzaTh4Q2ovZlAzYVhWbng3UmNNVGlj?=
+ =?utf-8?B?TFl6SHVjcWV2OEFvK1JjaXU3emJFN3FyZUpTUVM4Mk9GYzBtWStFWDNUYVBH?=
+ =?utf-8?B?NDJGUDRNRWNWb01NMGdLOVgxQ2hoRHFpN3g3M3FmT09xL01zejd2dFk1RVVv?=
+ =?utf-8?B?Y0Y2VGcyaElOWU9kWkRzVGQ4M0duOTdRV2haSTRJdk5ybDRZQ2haaE5Ea2Zx?=
+ =?utf-8?B?Vkd6Mkg2LzFQaERzdkF5L2FEdWQzR01zSy9yK09JT2tPUFR6bHp0Y0NmaWRS?=
+ =?utf-8?B?cFIydUYrWFB4RlBzbjB2NlZvbERLUEN4VndGWTJWMGpoWWlsejdaQTg5QVE4?=
+ =?utf-8?B?dkdkbzIrYUxzNi9BbEVQMGJuZkJxQVRIUXBvYWJqeEEzbkdESHRMcTM1SnEv?=
+ =?utf-8?B?UHZjekR5aFFCa0VhbllSdjJWU1loSS9HNzFhaCtqdmx2dk5vMC9RS3FUZXNu?=
+ =?utf-8?B?VjJmemhvS2k3NCtIYitQMmR1N2drTmlOeWFVYUdad1RaVVJ0dHNrVFhlL3Fl?=
+ =?utf-8?B?eWlST2l1Zm16cHBFaHd1OENma0F1TTEwZEFjVDE5N2hab2QyR0FIY1IzQmtH?=
+ =?utf-8?B?d3FjQk1NenEyTkpsSml4Z1FTOXNvRXlPR0FmWUMxSFpQOGxqbnQ4MTJielc3?=
+ =?utf-8?B?VFZjd2V4STZTbS9kN2kvemsweFREOWZmNElQSUVhdkVXaGpySk9DZ3FXWDBF?=
+ =?utf-8?B?emkrTlp4UnExNVg2cm1VRXpSaHN4S1lxdnpzSTBhM1Y2S2dmd1FWVmtTallo?=
+ =?utf-8?B?Y0JqMW5XaU5OSHlUenFFL3lUSHFKZ2hTYW9sOTZ2ZGhkTlVZUnJxYXhZSStw?=
+ =?utf-8?B?L3hVcXNQaFJMSS9aY0h4Tk83TEt1WW00RHE2NmMydUx3cDRpQ0Fadkp4Vm5Z?=
+ =?utf-8?B?YTVkMmJyVm5OK2FRR2FpNzJGSy9JQklJazhxd0NmbSt6bFh3T2ZiQSswTUZ4?=
+ =?utf-8?B?VmFJUXJ1VUk3ZTMwRGRHN1hydDBxZ2N5cEEzMFptZnpsUGoyWUFsazBLeVhI?=
+ =?utf-8?B?aFEvU3BMZ2VQZ05teGlUa3I0MkVsREgrM2NOWTNoODJMLzVqQWxGZWIvOElz?=
+ =?utf-8?B?VVJ5ZmVlWFdFdStKOGtyZDZ4MWlRMXpuUFJDRTBGOWxMM3JjdjA1a0FwRkNy?=
+ =?utf-8?Q?tJ9cXQYTHDEphrs2oOJaUADo4LKqGHJ1AwK3Hzjw/vbfs?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-1: +Fjfx9FFApqFEiWXGg4T15wvTc7KISa+SbUl1w2rWgdRG6T7LnEfs5UnH84DJlVXdb/qMwchq5Br1GDpCLQVvUCIl2Su78MVSCIpJUO9aYFHi0DUBTwl/ocV3OBXWc5A28IWWwPimacWOuI0fd9hGkdVsGT718MRTWIuBVnFLYCDPgBx3yZJxfxlatFZeSL+QbxGqgXPdB0bD9+FNeFCBMBTh8xoWQMjiYrx08w787VzqO+nB7NeY8b0KhRjAtwmBToJzQqbrhL2UnT5CZ8NR+rIXNP6dPe8fPJkkImG54wcLZO074kjGhEU9yiArF2McRsaSlWZiQtH1T4h/a+D7GoYUfEeo/AOyaFCShgKHd/btYtbcGx2fAnPhFciItV4inKb0DPa0rYQO3CqjpYIF66MINgUcxWLcZb18aJgNX60PcGSUy9Uy5mO1ss2pgIGsuWJw8sqE5n9IFjvWQMmf5AK/KxIncFFGwXG4vDQRLZP77Unf5os9jWC
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2821a4fd-9f1b-4999-2bed-08db77dbe55d
+X-MS-Exchange-CrossTenant-AuthSource: CO1PR10MB4531.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Jun 2023 13:30:53.5530
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: COj5tdljajzTM5GwjG/czGSUNDPZ9ctwfGiNtWCfNMmto4UrgcbtO8em+fl4jgvIDH4RWyM61fTA1BHJMGSJgZPYQC0CVr890Xq56GMnkwo=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR10MB5166
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-06-28_09,2023-06-27_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 suspectscore=0
+ malwarescore=0 adultscore=0 mlxlogscore=999 phishscore=0 bulkscore=0
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2305260000 definitions=main-2306280120
+X-Proofpoint-ORIG-GUID: 2R7_TIJwpnZhb78eOaUZ1eLNDHaj7McR
+X-Proofpoint-GUID: 2R7_TIJwpnZhb78eOaUZ1eLNDHaj7McR
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-TI TPS6594 PMIC has 11 GPIOs which can be used
-for different functions.
 
-This patch adds a pinctrl and GPIO drivers in
-order to use those functions.
 
-Signed-off-by: Esteban Blanc <eblanc@baylibre.com>
----
- drivers/pinctrl/Kconfig           |  15 ++
- drivers/pinctrl/Makefile          |   1 +
- drivers/pinctrl/pinctrl-tps6594.c | 368 ++++++++++++++++++++++++++++++
- 3 files changed, 384 insertions(+)
- create mode 100644 drivers/pinctrl/pinctrl-tps6594.c
+On 6/28/23 03:20, Conor Dooley wrote:
+> Hey Eric,
+> 
+> On Mon, Jun 26, 2023 at 12:13:30PM -0400, Eric DeVolder wrote:
+>> The kexec and crash kernel options are provided in the common
+>> kernel/Kconfig.kexec. Utilize the common options and provide
+>> the ARCH_SUPPORTS_ and ARCH_SELECTS_ entries to recreate the
+> 
+>> equivalent set of KEXEC and CRASH options.
+> 
+> I find this diff a little hard to follow (since the other half off the
+> change is in another patch), so it may be me missing something, but are
+> you sure?
+> 
+>>
+>> Signed-off-by: Eric DeVolder <eric.devolder@oracle.com>
+>> ---
+>>   arch/riscv/Kconfig | 48 ++++++++++++++--------------------------------
+>>   1 file changed, 14 insertions(+), 34 deletions(-)
+>>
+>> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+>> index 5966ad97c30c..c484abd9bbfd 100644
+>> --- a/arch/riscv/Kconfig
+>> +++ b/arch/riscv/Kconfig
+>> @@ -585,48 +585,28 @@ config RISCV_BOOT_SPINWAIT
+>>   
+>>   	  If unsure what to do here, say N.
+>>   
+>> -config KEXEC
+>> -	bool "Kexec system call"
+>> -	depends on MMU
+>> +config ARCH_SUPPORTS_KEXEC
+>> +	def_bool MMU
+>> +
+>> +config ARCH_SELECTS_KEXEC
+>> +	def_bool y
+>> +	depends on KEXEC
+>>   	select HOTPLUG_CPU if SMP
+>> -	select KEXEC_CORE
+>> -	help
+>> -	  kexec is a system call that implements the ability to shutdown your
+>> -	  current kernel, and to start another kernel. It is like a reboot
+>> -	  but it is independent of the system firmware. And like a reboot
+>> -	  you can start any kernel with it, not just Linux.
+>>   
+>> -	  The name comes from the similarity to the exec system call.
+>> +config ARCH_SUPPORTS_KEXEC_FILE
+>> +	def_bool 64BIT && MMU && CRYPTO=y && CRYPTO_SHA256=y
+> 
+> This looks like a change to me. Previously, only KEXEC_PURGATORY
+> required these crypto options to be like so, but now KEXEC_FILE needs
+> them too.
+> 
+> What am I missing?
+Conor,
+Thanks for looking at this! Indeed I erroneously applied the CRYPTO=y && CRYPTO_SHA256=y
+to KEXEC_FILE rather than PURGATORY. I will correct for v4!
+Thanks!
+eric
 
-diff --git a/drivers/pinctrl/Kconfig b/drivers/pinctrl/Kconfig
-index 5787c579dcf6..d3cff8d27e5d 100644
---- a/drivers/pinctrl/Kconfig
-+++ b/drivers/pinctrl/Kconfig
-@@ -480,6 +480,21 @@ config PINCTRL_TB10X
- 	depends on OF && ARC_PLAT_TB10X
- 	select GPIOLIB
- 
-+config PINCTRL_TPS6594
-+	tristate "Pinctrl and GPIO driver for TI TPS6594 PMIC"
-+	depends on MFD_TPS6594
-+	default MFD_TPS6594
-+	select PINMUX
-+	select GPIOLIB
-+	select REGMAP
-+	select GPIO_REGMAP
-+	help
-+	  Say Y to select the pinmuxing and GPIOs driver for the TPS6594
-+	  PMICs chip family.
-+
-+	  This driver can also be built as a module
-+	  called tps6594-pinctrl.
-+
- config PINCTRL_ZYNQ
- 	bool "Pinctrl driver for Xilinx Zynq"
- 	depends on ARCH_ZYNQ
-diff --git a/drivers/pinctrl/Makefile b/drivers/pinctrl/Makefile
-index e196c6e324ad..28271a8d5275 100644
---- a/drivers/pinctrl/Makefile
-+++ b/drivers/pinctrl/Makefile
-@@ -49,6 +49,7 @@ obj-$(CONFIG_PINCTRL_ST) 	+= pinctrl-st.o
- obj-$(CONFIG_PINCTRL_STMFX) 	+= pinctrl-stmfx.o
- obj-$(CONFIG_PINCTRL_SX150X)	+= pinctrl-sx150x.o
- obj-$(CONFIG_PINCTRL_TB10X)	+= pinctrl-tb10x.o
-+obj-$(CONFIG_PINCTRL_TPS6594)	+= pinctrl-tps6594.o
- obj-$(CONFIG_PINCTRL_ZYNQMP)	+= pinctrl-zynqmp.o
- obj-$(CONFIG_PINCTRL_ZYNQ)	+= pinctrl-zynq.o
- 
-diff --git a/drivers/pinctrl/pinctrl-tps6594.c b/drivers/pinctrl/pinctrl-tps6594.c
-new file mode 100644
-index 000000000000..a1fcb9fd793b
---- /dev/null
-+++ b/drivers/pinctrl/pinctrl-tps6594.c
-@@ -0,0 +1,368 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Pinmux and GPIO driver for tps6594 PMIC
-+ *
-+ * Copyright (C) 2023 BayLibre Incorporated - https://www.baylibre.com/
-+ */
-+
-+#include <linux/gpio/driver.h>
-+#include <linux/gpio/regmap.h>
-+#include <linux/module.h>
-+#include <linux/pinctrl/pinmux.h>
-+#include <linux/platform_device.h>
-+
-+#include <linux/mfd/tps6594.h>
-+
-+#define TPS6594_PINCTRL_PINS_NB 11
-+
-+#define TPS6594_PINCTRL_GPIO_FUNCTION 0
-+#define TPS6594_PINCTRL_SCL_I2C2_CS_SPI_FUNCTION 1
-+#define TPS6594_PINCTRL_TRIG_WDOG_FUNCTION 1
-+#define TPS6594_PINCTRL_CLK32KOUT_FUNCTION 1
-+#define TPS6594_PINCTRL_SCLK_SPMI_FUNCTION 1
-+#define TPS6594_PINCTRL_SDATA_SPMI_FUNCTION 1
-+#define TPS6594_PINCTRL_NERR_MCU_FUNCTION 1
-+#define TPS6594_PINCTRL_PDOG_FUNCTION 1
-+#define TPS6594_PINCTRL_SYNCCLKIN_FUNCTION 1
-+#define TPS6594_PINCTRL_NRSTOUT_SOC_FUNCTION 2
-+#define TPS6594_PINCTRL_SYNCCLKOUT_FUNCTION 2
-+#define TPS6594_PINCTRL_SDA_I2C2_SDO_SPI_FUNCTION 2
-+#define TPS6594_PINCTRL_NERR_SOC_FUNCTION 2
-+#define TPS6594_PINCTRL_DISABLE_WDOG_FUNCTION 3
-+#define TPS6594_PINCTRL_NSLEEP1_FUNCTION 4
-+#define TPS6594_PINCTRL_NSLEEP2_FUNCTION 5
-+#define TPS6594_PINCTRL_WKUP1_FUNCTION 6
-+#define TPS6594_PINCTRL_WKUP2_FUNCTION 7
-+
-+/* Special muxval for recalcitrant pins */
-+#define TPS6594_PINCTRL_DISABLE_WDOG_FUNCTION_GPIO8 2
-+#define TPS6594_PINCTRL_SYNCCLKOUT_FUNCTION_GPIO8 3
-+#define TPS6594_PINCTRL_CLK32KOUT_FUNCTION_GPIO9 3
-+
-+#define TPS6594_OFFSET_GPIO_SEL 5
-+
-+#define FUNCTION(fname, v)									\
-+	{											\
-+		.pinfunction = PINCTRL_PINFUNCTION(#fname,					\
-+						tps6594_##fname##_func_group_names,		\
-+						ARRAY_SIZE(tps6594_##fname##_func_group_names)),\
-+		.muxval = v,									\
-+	}
-+
-+static const struct pinctrl_pin_desc tps6594_pins[TPS6594_PINCTRL_PINS_NB] = {
-+	PINCTRL_PIN(0, "GPIO0"),   PINCTRL_PIN(1, "GPIO1"),
-+	PINCTRL_PIN(2, "GPIO2"),   PINCTRL_PIN(3, "GPIO3"),
-+	PINCTRL_PIN(4, "GPIO4"),   PINCTRL_PIN(5, "GPIO5"),
-+	PINCTRL_PIN(6, "GPIO6"),   PINCTRL_PIN(7, "GPIO7"),
-+	PINCTRL_PIN(8, "GPIO8"),   PINCTRL_PIN(9, "GPIO9"),
-+	PINCTRL_PIN(10, "GPIO10"),
-+};
-+
-+static const char *const tps6594_gpio_func_group_names[] = {
-+	"GPIO0", "GPIO1", "GPIO2", "GPIO3", "GPIO4", "GPIO5",
-+	"GPIO6", "GPIO7", "GPIO8", "GPIO9", "GPIO10",
-+};
-+
-+static const char *const tps6594_nsleep1_func_group_names[] = {
-+	"GPIO0", "GPIO1", "GPIO2", "GPIO3", "GPIO4", "GPIO5",
-+	"GPIO6", "GPIO7", "GPIO8", "GPIO9", "GPIO10",
-+};
-+
-+static const char *const tps6594_nsleep2_func_group_names[] = {
-+	"GPIO0", "GPIO1", "GPIO2", "GPIO3", "GPIO4", "GPIO5",
-+	"GPIO6", "GPIO7", "GPIO8", "GPIO9", "GPIO10",
-+};
-+
-+static const char *const tps6594_wkup1_func_group_names[] = {
-+	"GPIO0", "GPIO1", "GPIO2", "GPIO3", "GPIO4", "GPIO5",
-+	"GPIO6", "GPIO7", "GPIO8", "GPIO9", "GPIO10",
-+};
-+
-+static const char *const tps6594_wkup2_func_group_names[] = {
-+	"GPIO0", "GPIO1", "GPIO2", "GPIO3", "GPIO4", "GPIO5",
-+	"GPIO6", "GPIO7", "GPIO8", "GPIO9", "GPIO10",
-+};
-+
-+static const char *const tps6594_scl_i2c2_cs_spi_func_group_names[] = {
-+	"GPIO0",
-+	"GPIO1",
-+};
-+
-+static const char *const tps6594_nrstout_soc_func_group_names[] = {
-+	"GPIO0",
-+	"GPIO10",
-+};
-+
-+static const char *const tps6594_trig_wdog_func_group_names[] = {
-+	"GPIO1",
-+	"GPIO10",
-+};
-+
-+static const char *const tps6594_sda_i2c2_sdo_spi_func_group_names[] = {
-+	"GPIO1",
-+};
-+
-+static const char *const tps6594_clk32kout_func_group_names[] = {
-+	"GPIO2",
-+	"GPIO3",
-+	"GPIO7",
-+};
-+
-+static const char *const tps6594_nerr_soc_func_group_names[] = {
-+	"GPIO2",
-+};
-+
-+static const char *const tps6594_sclk_spmi_func_group_names[] = {
-+	"GPIO4",
-+};
-+
-+static const char *const tps6594_sdata_spmi_func_group_names[] = {
-+	"GPIO5",
-+};
-+
-+static const char *const tps6594_nerr_mcu_func_group_names[] = {
-+	"GPIO6",
-+};
-+
-+static const char *const tps6594_syncclkout_func_group_names[] = {
-+	"GPIO7",
-+	"GPIO9",
-+};
-+
-+static const char *const tps6594_disable_wdog_func_group_names[] = {
-+	"GPIO7",
-+	"GPIO8",
-+};
-+
-+static const char *const tps6594_pdog_func_group_names[] = {
-+	"GPIO8",
-+};
-+
-+static const char *const tps6594_syncclkin_func_group_names[] = {
-+	"GPIO9",
-+};
-+
-+struct tps6594_pinctrl_function {
-+	struct pinfunction pinfunction;
-+	u8 muxval;
-+};
-+
-+static const struct tps6594_pinctrl_function pinctrl_functions[] = {
-+	FUNCTION(gpio, TPS6594_PINCTRL_GPIO_FUNCTION),
-+	FUNCTION(nsleep1, TPS6594_PINCTRL_NSLEEP1_FUNCTION),
-+	FUNCTION(nsleep2, TPS6594_PINCTRL_NSLEEP2_FUNCTION),
-+	FUNCTION(wkup1, TPS6594_PINCTRL_WKUP1_FUNCTION),
-+	FUNCTION(wkup2, TPS6594_PINCTRL_WKUP2_FUNCTION),
-+	FUNCTION(scl_i2c2_cs_spi, TPS6594_PINCTRL_SCL_I2C2_CS_SPI_FUNCTION),
-+	FUNCTION(nrstout_soc, TPS6594_PINCTRL_NRSTOUT_SOC_FUNCTION),
-+	FUNCTION(trig_wdog, TPS6594_PINCTRL_TRIG_WDOG_FUNCTION),
-+	FUNCTION(sda_i2c2_sdo_spi, TPS6594_PINCTRL_SDA_I2C2_SDO_SPI_FUNCTION),
-+	FUNCTION(clk32kout, TPS6594_PINCTRL_CLK32KOUT_FUNCTION),
-+	FUNCTION(nerr_soc, TPS6594_PINCTRL_NERR_SOC_FUNCTION),
-+	FUNCTION(sclk_spmi, TPS6594_PINCTRL_SCLK_SPMI_FUNCTION),
-+	FUNCTION(sdata_spmi, TPS6594_PINCTRL_SDATA_SPMI_FUNCTION),
-+	FUNCTION(nerr_mcu, TPS6594_PINCTRL_NERR_MCU_FUNCTION),
-+	FUNCTION(syncclkout, TPS6594_PINCTRL_SYNCCLKOUT_FUNCTION),
-+	FUNCTION(disable_wdog, TPS6594_PINCTRL_DISABLE_WDOG_FUNCTION),
-+	FUNCTION(pdog, TPS6594_PINCTRL_PDOG_FUNCTION),
-+	FUNCTION(syncclkin, TPS6594_PINCTRL_SYNCCLKIN_FUNCTION),
-+};
-+
-+struct tps6594_pinctrl {
-+	struct tps6594 *tps;
-+	struct gpio_regmap *gpio_regmap;
-+	struct pinctrl_dev *pctl_dev;
-+	const struct tps6594_pinctrl_function *funcs;
-+	const struct pinctrl_pin_desc *pins;
-+};
-+
-+static int tps6594_gpio_regmap_xlate(struct gpio_regmap *gpio,
-+				     unsigned int base, unsigned int offset,
-+				     unsigned int *reg, unsigned int *mask)
-+{
-+	unsigned int line = offset % 8;
-+	unsigned int stride = offset / 8;
-+
-+	switch (base) {
-+	case TPS6594_REG_GPIOX_CONF(0):
-+		*reg = TPS6594_REG_GPIOX_CONF(offset);
-+		*mask = TPS6594_BIT_GPIO_DIR;
-+		return 0;
-+	case TPS6594_REG_GPIO_IN_1:
-+	case TPS6594_REG_GPIO_OUT_1:
-+		*reg = base + stride;
-+		*mask = BIT(line);
-+		return 0;
-+	default:
-+		return -EINVAL;
-+	}
-+
-+	return 0;
-+}
-+
-+static int tps6594_pmx_func_cnt(struct pinctrl_dev *pctldev)
-+{
-+	return ARRAY_SIZE(pinctrl_functions);
-+}
-+
-+static const char *tps6594_pmx_func_name(struct pinctrl_dev *pctldev,
-+					 unsigned int selector)
-+{
-+	struct tps6594_pinctrl *pinctrl = pinctrl_dev_get_drvdata(pctldev);
-+
-+	return pinctrl->funcs[selector].pinfunction.name;
-+}
-+
-+static int tps6594_pmx_func_groups(struct pinctrl_dev *pctldev,
-+				   unsigned int selector,
-+				   const char *const **groups,
-+				   unsigned int *num_groups)
-+{
-+	struct tps6594_pinctrl *pinctrl = pinctrl_dev_get_drvdata(pctldev);
-+
-+	*groups = pinctrl->funcs[selector].pinfunction.groups;
-+	*num_groups = pinctrl->funcs[selector].pinfunction.ngroups;
-+
-+	return 0;
-+}
-+
-+static int tps6594_pmx_set(struct tps6594_pinctrl *pinctrl, unsigned int pin,
-+			   u8 muxval)
-+{
-+	u8 mux_sel_val = muxval << TPS6594_OFFSET_GPIO_SEL;
-+
-+	return regmap_update_bits(pinctrl->tps->regmap,
-+				  TPS6594_REG_GPIOX_CONF(pin),
-+				  TPS6594_MASK_GPIO_SEL, mux_sel_val);
-+}
-+
-+static int tps6594_pmx_set_mux(struct pinctrl_dev *pctldev,
-+			       unsigned int function, unsigned int group)
-+{
-+	struct tps6594_pinctrl *pinctrl = pinctrl_dev_get_drvdata(pctldev);
-+	u8 muxval = pinctrl->funcs[function].muxval;
-+
-+	/* Some pins don't have the same muxval for the same function... */
-+	if (group == 8) {
-+		if (muxval == TPS6594_PINCTRL_DISABLE_WDOG_FUNCTION)
-+			muxval = TPS6594_PINCTRL_DISABLE_WDOG_FUNCTION_GPIO8;
-+		else if (muxval == TPS6594_PINCTRL_SYNCCLKOUT_FUNCTION)
-+			muxval = TPS6594_PINCTRL_SYNCCLKOUT_FUNCTION_GPIO8;
-+	} else if (group == 9) {
-+		if (muxval == TPS6594_PINCTRL_CLK32KOUT_FUNCTION)
-+			muxval = TPS6594_PINCTRL_CLK32KOUT_FUNCTION_GPIO9;
-+	}
-+
-+	return tps6594_pmx_set(pinctrl, group, muxval);
-+}
-+
-+static int tps6594_pmx_gpio_set_direction(struct pinctrl_dev *pctldev,
-+					  struct pinctrl_gpio_range *range,
-+					  unsigned int offset, bool input)
-+{
-+	struct tps6594_pinctrl *pinctrl = pinctrl_dev_get_drvdata(pctldev);
-+	u8 muxval = pinctrl->funcs[TPS6594_PINCTRL_GPIO_FUNCTION].muxval;
-+
-+	return tps6594_pmx_set(pinctrl, offset, muxval);
-+}
-+
-+static const struct pinmux_ops tps6594_pmx_ops = {
-+	.get_functions_count = tps6594_pmx_func_cnt,
-+	.get_function_name = tps6594_pmx_func_name,
-+	.get_function_groups = tps6594_pmx_func_groups,
-+	.set_mux = tps6594_pmx_set_mux,
-+	.gpio_set_direction = tps6594_pmx_gpio_set_direction,
-+	.strict = true,
-+};
-+
-+static int tps6594_groups_cnt(struct pinctrl_dev *pctldev)
-+{
-+	return ARRAY_SIZE(tps6594_pins);
-+}
-+
-+static int tps6594_group_pins(struct pinctrl_dev *pctldev,
-+			      unsigned int selector, const unsigned int **pins,
-+			      unsigned int *num_pins)
-+{
-+	struct tps6594_pinctrl *pinctrl = pinctrl_dev_get_drvdata(pctldev);
-+
-+	*pins = &pinctrl->pins[selector].number;
-+	*num_pins = 1;
-+
-+	return 0;
-+}
-+
-+static const char *tps6594_group_name(struct pinctrl_dev *pctldev,
-+				      unsigned int selector)
-+{
-+	struct tps6594_pinctrl *pinctrl = pinctrl_dev_get_drvdata(pctldev);
-+
-+	return pinctrl->pins[selector].name;
-+}
-+
-+static const struct pinctrl_ops tps6594_pctrl_ops = {
-+	.dt_node_to_map = pinconf_generic_dt_node_to_map_group,
-+	.dt_free_map = pinconf_generic_dt_free_map,
-+	.get_groups_count = tps6594_groups_cnt,
-+	.get_group_name = tps6594_group_name,
-+	.get_group_pins = tps6594_group_pins,
-+};
-+
-+static int tps6594_pinctrl_probe(struct platform_device *pdev)
-+{
-+	struct tps6594 *tps = dev_get_drvdata(pdev->dev.parent);
-+	struct device *dev = &pdev->dev;
-+	struct tps6594_pinctrl *pinctrl;
-+	struct pinctrl_desc *pctrl_desc;
-+	struct gpio_regmap_config config = {};
-+
-+	pctrl_desc = devm_kzalloc(dev, sizeof(*pctrl_desc), GFP_KERNEL);
-+	if (!pctrl_desc)
-+		return -ENOMEM;
-+	pctrl_desc->name = dev_name(dev);
-+	pctrl_desc->owner = THIS_MODULE;
-+	pctrl_desc->pins = tps6594_pins;
-+	pctrl_desc->npins = ARRAY_SIZE(tps6594_pins);
-+	pctrl_desc->pctlops = &tps6594_pctrl_ops;
-+	pctrl_desc->pmxops = &tps6594_pmx_ops;
-+
-+	pinctrl = devm_kzalloc(dev, sizeof(*pinctrl), GFP_KERNEL);
-+	if (!pinctrl)
-+		return -ENOMEM;
-+	pinctrl->tps = dev_get_drvdata(dev->parent);
-+	pinctrl->funcs = pinctrl_functions;
-+	pinctrl->pins = tps6594_pins;
-+	pinctrl->pctl_dev = devm_pinctrl_register(dev, pctrl_desc, pinctrl);
-+	if (IS_ERR(pinctrl->pctl_dev))
-+		return dev_err_probe(dev, PTR_ERR(pinctrl->pctl_dev),
-+				     "Couldn't register pinctrl driver\n");
-+
-+	config.parent = tps->dev;
-+	config.regmap = tps->regmap;
-+	config.ngpio = TPS6594_PINCTRL_PINS_NB;
-+	config.ngpio_per_reg = 8;
-+	config.reg_dat_base = TPS6594_REG_GPIO_IN_1;
-+	config.reg_set_base = TPS6594_REG_GPIO_OUT_1;
-+	config.reg_dir_out_base = TPS6594_REG_GPIOX_CONF(0);
-+	config.reg_mask_xlate = tps6594_gpio_regmap_xlate;
-+
-+	pinctrl->gpio_regmap = devm_gpio_regmap_register(dev, &config);
-+	if (IS_ERR(pinctrl->gpio_regmap))
-+		return dev_err_probe(dev, PTR_ERR(pinctrl->gpio_regmap),
-+				     "Couldn't register gpio_regmap driver\n");
-+
-+	return 0;
-+}
-+
-+static struct platform_driver tps6594_pinctrl_driver = {
-+	.probe = tps6594_pinctrl_probe,
-+	.driver = {
-+		.name = "tps6594-pinctrl",
-+	},
-+};
-+module_platform_driver(tps6594_pinctrl_driver);
-+
-+MODULE_ALIAS("platform:tps6594-pinctrl");
-+MODULE_AUTHOR("Esteban Blanc <eblanc@baylibre.com>");
-+MODULE_DESCRIPTION("TPS6594 pinctrl and GPIO driver");
-+MODULE_LICENSE("GPL");
--- 
-2.41.0
-
+> 
+> Cheers,
+> Conor.
+> 
+>>   
+>> -config KEXEC_FILE
+>> -	bool "kexec file based systmem call"
+>> -	depends on 64BIT && MMU
+>> -	select HAVE_IMA_KEXEC if IMA
+>> -	select KEXEC_CORE
+>> +config ARCH_SELECTS_KEXEC_FILE
+>> +	def_bool y
+>> +	depends on KEXEC_FILE
+>>   	select KEXEC_ELF
+>> -	help
+>> -	  This is new version of kexec system call. This system call is
+>> -	  file based and takes file descriptors as system call argument
+>> -	  for kernel and initramfs as opposed to list of segments as
+>> -	  accepted by previous system call.
+>> -
+>> -	  If you don't know what to do here, say Y.
+>> +	select HAVE_IMA_KEXEC if IMA
+>>   
+>>   config ARCH_HAS_KEXEC_PURGATORY
+>>   	def_bool KEXEC_FILE
+>> -	depends on CRYPTO=y
+>> -	depends on CRYPTO_SHA256=y
+>>   
+>> -config CRASH_DUMP
+>> -	bool "Build kdump crash kernel"
+>> -	help
+>> -	  Generate crash dump after being started by kexec. This should
+>> -	  be normally only set in special crash dump kernels which are
+>> -	  loaded in the main kernel with kexec-tools into a specially
+>> -	  reserved region and then later executed after a crash by
+>> -	  kdump/kexec.
+>> -
+>> -	  For more details see Documentation/admin-guide/kdump/kdump.rst
+>> +config ARCH_SUPPORTS_CRASH_DUMP
+>> +	def_bool y
+>>   
+>>   config COMPAT
+>>   	bool "Kernel support for 32-bit U-mode"
+>> -- 
+>> 2.31.1
+>>
