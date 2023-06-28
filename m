@@ -2,132 +2,208 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B97F7417FC
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 20:25:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14F787417FE
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 20:26:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232001AbjF1SYn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 14:24:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49310 "EHLO
+        id S231952AbjF1S0Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 14:26:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231986AbjF1SYj (ORCPT
+        with ESMTP id S229924AbjF1S0W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 14:24:39 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CF491BE8;
-        Wed, 28 Jun 2023 11:24:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:Content-Type:MIME-Version:
-        Message-ID:Subject:Cc:To:From:Date:Reply-To:Content-Transfer-Encoding:
-        Content-ID:Content-Description:In-Reply-To:References;
-        bh=rZ7tW+lP5VbpS09o8l8H9B+pWyICkkk7HcLmzLLVSYE=; b=jLIna+47HDapmlKg2krsqqOn5u
-        LaxSJ37gnbaRB7oSlZEOHwBRws4MDZKwLLN+LcRVt8hOBi7MkzgUi+C9O2raUKUlMilwnio8IY1cn
-        kJgPP+F+IgqgQ0vfi9aHP5q2042JXQSvTgXFkDZOBYoMXiLgcYpB+Y1vNth5ec8nd6wnZ3+1A4AFO
-        j3ACuczFst0UWGk/5CbnMDu3uKXO318BI1YSfe/S2/G2KiO9mnV0WAKbXZt/cqJy17UK4meO+14XZ
-        7z9+2P7+fkF59UClddYhILm8VYpfQkh/TQKjNpH8Bg1w8Hu5rh5D8R2UYWLqKsbytogEkvJqvP/w8
-        Tzp8N4ig==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1qEZq5-00GO51-0t;
-        Wed, 28 Jun 2023 18:24:25 +0000
-Date:   Wed, 28 Jun 2023 11:24:25 -0700
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     ebiederm@xmission.com, keescook@chromium.org, yzaikin@google.com,
-        j.granados@samsung.com, patches@lists.linux.dev,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        mcgrof@kernel.org
-Subject: [GIT PULL] sysctl changes for v6.5-rc1
-Message-ID: <ZJx62RvS9TwjUUCi@bombadil.infradead.org>
+        Wed, 28 Jun 2023 14:26:22 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 604691BE9;
+        Wed, 28 Jun 2023 11:26:21 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EA3926142A;
+        Wed, 28 Jun 2023 18:26:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91C82C433C0;
+        Wed, 28 Jun 2023 18:26:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687976780;
+        bh=5dS/hp0ttb4kLhVLrgEpv9hH1IBgDRlNs5EqvxHGAR0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=nf2oa1nwOcm0vc7JNCj8SIS7lrTcwZ8lq/XEN9Kis6Wbd8261hsN26HYgBohT4bBp
+         595fi07GoTc7w6Zyz1Fn/JCV9NrQt+S3EzjAsZllZJbpFAxc+jELRp1PRb8cu6d7cH
+         7yePjmudRkPshnFauhGxbgtM0HiMNqYS3z+lJRhIqz0c4uyqyhC2tVtvq4h2glG8bI
+         Ov3folZmHWZJ68nRLrzj4Q5i9CPqmkDpU6cKCTDNehumCf+R95dl9JUFjuHbFjhe+L
+         5Zi6HRnsu7ya2B1LZcdVMPOcC1L/jRRq6GMrJYFrBt+gk2nODpkbwc9vLlBjyWc03E
+         IoW5qUrTCCFyg==
+Date:   Wed, 28 Jun 2023 11:26:17 -0700
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        Nicolas Dufresne <nicolas.dufresne@collabora.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        kernel test robot <lkp@intel.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH 1/2] media: verisilicon: fix excessive stack usage
+Message-ID: <20230628182617.GA911656@dev-arch.thelio-3990X>
+References: <20230616144854.3818934-1-arnd@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230616144854.3818934-1-arnd@kernel.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following changes since commit f1fcbaa18b28dec10281551dfe6ed3a3ed80e3d6:
+On Fri, Jun 16, 2023 at 04:48:47PM +0200, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> In some configurations, gcc decides not to inline the register accessor functions,
+> which in turn leads to lots of temporary hantro_reg structures on the stack that
+> cannot be eliminated because they escape into an uninlined function:
+> 
+> drivers/media/platform/verisilicon/rockchip_vpu981_hw_av1_dec.c:1022:1: warning: the frame size of 1112 bytes is larger than 1024 bytes [-Wframe-larger-than=]
+> 
+> Mark all of these as __always_inline so the compiler is able to completely
+> eliminate the temporary structures instead, which brings the stack usage
+> back down to just the normal local variables.
+> 
+> Reported-by: kernel test robot <lkp@intel.com>
+> Closes: https://lore.kernel.org/oe-kbuild-all/202306151506.goHEegOd-lkp@intel.com/
+> Fixes: 727a400686a2c ("media: verisilicon: Add Rockchip AV1 decoder")
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
-  Linux 6.4-rc2 (2023-05-14 12:51:40 -0700)
+For what it's worth, this patch massively helps with avoiding a warning
+with clang 16.x and older, for presumably a similar reason, since this
+happens with allmodconfig, which turns on a bunch of sanitizers.
 
-are available in the Git repository at:
+https://github.com/ClangBuiltLinux/linux/issues/1875
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git/ tags/v6.5-rc1-sysctl-next
+Before this change:
 
-for you to fetch changes up to 2f2665c13af4895b26761107c2f637c2f112d8e9:
+  drivers/media/platform/verisilicon/rockchip_vpu981_hw_av1_dec.c:2097:5: error: stack frame size (2096) exceeds limit (2048) in 'rockchip_vpu981_av1_dec_run' [-Werror,-Wframe-larger-than]
+  int rockchip_vpu981_av1_dec_run(struct hantro_ctx *ctx)
+      ^
+  238/2096 (11.35%) spills, 1858/2096 (88.65%) variables
 
-  sysctl: replace child with an enumeration (2023-06-18 02:32:54 -0700)
+After this change:
 
-----------------------------------------------------------------
-v6.5-rc1-sysctl-next
+  drivers/media/platform/verisilicon/rockchip_vpu981_hw_av1_dec.c:2097:5: error: stack frame size (496) exceeds limit (200) in 'rockchip_vpu981_av1_dec_run' [-Werror,-Wframe-larger-than]
+  int rockchip_vpu981_av1_dec_run(struct hantro_ctx *ctx)
+      ^
+  265/496 (53.43%) spills, 231/496 (46.57%) variables
 
-The changes queued up for v6.5-rc1 for sysctl are in line with
-prior efforts to stop usage of deprecated routines which incur
-recursion and also make it hard to remove the empty array element
-in each sysctl array declaration. The most difficult user to modify
-was parport which required a bit of re-thinking of how to declare shared
-sysctls there, Joel Granados has stepped up to the plate to do most of
-this work and eventual removal of register_sysctl_table(). That work
-ended up saving us about 1465 bytes according to bloat-o-meter. Since
-we gained a few bloat-o-meter karma points I moved two rather small
-sysctl arrays from kernel/sysctl.c leaving us only two more sysctl
-arrays to move left.
+If this could be picked up either before the 6.5 media pull goes out or
+at some point during the -rc cycle, that would be great!
 
-Most changes have been tested on linux-next for about a month. The last
-straggler patches are a minor parport fix, changes to the sysctl
-kernel selftest so to verify correctness and prevent regressions for
-the future change he made to provide an alternative solution for the
-special sysctl mount point target which was using the now deprecated
-sysctl child element.
+Tested-by: Nathan Chancellor <nathan@kernel.org>
 
-This is all prep work to now finally be able to remove the empty
-array element in all sysctl declarations / registrations which is
-expected to save us a bit of bytes all over the kernel. That work
-will be tested early after v6.5-rc1 is out.
-
-----------------------------------------------------------------
-Joel Granados (16):
-      parport: Move magic number "15" to a define
-      parport: Remove register_sysctl_table from parport_proc_register
-      parport: Remove register_sysctl_table from parport_device_proc_register
-      parport: Remove register_sysctl_table from parport_default_proc_register
-      parport: Removed sysctl related defines
-      sysctl: stop exporting register_sysctl_table
-      sysctl: Refactor base paths registrations
-      sysctl: Remove register_sysctl_table
-      parport: plug a sysctl register leak
-      test_sysctl: Fix test metadata getters
-      test_sysctl: Group node sysctl test under one func
-      test_sysctl: Add an unregister sysctl test
-      test_sysctl: Add an option to prevent test skip
-      test_sysclt: Test for registering a mount point
-      sysctl: Remove debugging dump_stack
-      sysctl: replace child with an enumeration
-
-Luis Chamberlain (4):
-      sysctl: remove empty dev table
-      signal: move show_unhandled_signals sysctl to its own file
-      sysctl: move umh sysctl registration to its own file
-      sysctl: move security keys sysctl registration to its own file
-
- drivers/parport/procfs.c                 | 185 ++++++++++++-----------
- drivers/parport/share.c                  |   2 +-
- fs/proc/proc_sysctl.c                    | 244 +++----------------------------
- fs/sysctls.c                             |   5 +-
- include/linux/key.h                      |   3 -
- include/linux/parport.h                  |   2 +
- include/linux/sysctl.h                   |  45 ++----
- include/linux/umh.h                      |   2 -
- kernel/signal.c                          |  23 +++
- kernel/sysctl.c                          |  40 +----
- kernel/umh.c                             |  11 +-
- lib/test_sysctl.c                        |  91 +++++++++++-
- scripts/check-sysctl-docs                |  10 --
- security/keys/sysctl.c                   |   7 +
- tools/testing/selftests/sysctl/sysctl.sh | 115 +++++++++++----
- 15 files changed, 351 insertions(+), 434 deletions(-)
+> ---
+>  drivers/media/platform/verisilicon/hantro.h | 22 ++++++++++-----------
+>  1 file changed, 11 insertions(+), 11 deletions(-)
+> 
+> diff --git a/drivers/media/platform/verisilicon/hantro.h b/drivers/media/platform/verisilicon/hantro.h
+> index 6523ffb748812..6c5e56ce5b351 100644
+> --- a/drivers/media/platform/verisilicon/hantro.h
+> +++ b/drivers/media/platform/verisilicon/hantro.h
+> @@ -370,26 +370,26 @@ extern int hantro_debug;
+>  	pr_err("%s:%d: " fmt, __func__, __LINE__, ##args)
+>  
+>  /* Structure access helpers. */
+> -static inline struct hantro_ctx *fh_to_ctx(struct v4l2_fh *fh)
+> +static __always_inline struct hantro_ctx *fh_to_ctx(struct v4l2_fh *fh)
+>  {
+>  	return container_of(fh, struct hantro_ctx, fh);
+>  }
+>  
+>  /* Register accessors. */
+> -static inline void vepu_write_relaxed(struct hantro_dev *vpu,
+> +static __always_inline void vepu_write_relaxed(struct hantro_dev *vpu,
+>  				      u32 val, u32 reg)
+>  {
+>  	vpu_debug(6, "0x%04x = 0x%08x\n", reg / 4, val);
+>  	writel_relaxed(val, vpu->enc_base + reg);
+>  }
+>  
+> -static inline void vepu_write(struct hantro_dev *vpu, u32 val, u32 reg)
+> +static __always_inline void vepu_write(struct hantro_dev *vpu, u32 val, u32 reg)
+>  {
+>  	vpu_debug(6, "0x%04x = 0x%08x\n", reg / 4, val);
+>  	writel(val, vpu->enc_base + reg);
+>  }
+>  
+> -static inline u32 vepu_read(struct hantro_dev *vpu, u32 reg)
+> +static __always_inline u32 vepu_read(struct hantro_dev *vpu, u32 reg)
+>  {
+>  	u32 val = readl(vpu->enc_base + reg);
+>  
+> @@ -397,27 +397,27 @@ static inline u32 vepu_read(struct hantro_dev *vpu, u32 reg)
+>  	return val;
+>  }
+>  
+> -static inline void vdpu_write_relaxed(struct hantro_dev *vpu,
+> +static __always_inline void vdpu_write_relaxed(struct hantro_dev *vpu,
+>  				      u32 val, u32 reg)
+>  {
+>  	vpu_debug(6, "0x%04x = 0x%08x\n", reg / 4, val);
+>  	writel_relaxed(val, vpu->dec_base + reg);
+>  }
+>  
+> -static inline void vdpu_write(struct hantro_dev *vpu, u32 val, u32 reg)
+> +static __always_inline void vdpu_write(struct hantro_dev *vpu, u32 val, u32 reg)
+>  {
+>  	vpu_debug(6, "0x%04x = 0x%08x\n", reg / 4, val);
+>  	writel(val, vpu->dec_base + reg);
+>  }
+>  
+> -static inline void hantro_write_addr(struct hantro_dev *vpu,
+> +static __always_inline void hantro_write_addr(struct hantro_dev *vpu,
+>  				     unsigned long offset,
+>  				     dma_addr_t addr)
+>  {
+>  	vdpu_write(vpu, addr & 0xffffffff, offset);
+>  }
+>  
+> -static inline u32 vdpu_read(struct hantro_dev *vpu, u32 reg)
+> +static __always_inline u32 vdpu_read(struct hantro_dev *vpu, u32 reg)
+>  {
+>  	u32 val = readl(vpu->dec_base + reg);
+>  
+> @@ -425,7 +425,7 @@ static inline u32 vdpu_read(struct hantro_dev *vpu, u32 reg)
+>  	return val;
+>  }
+>  
+> -static inline u32 vdpu_read_mask(struct hantro_dev *vpu,
+> +static __always_inline u32 vdpu_read_mask(struct hantro_dev *vpu,
+>  				 const struct hantro_reg *reg,
+>  				 u32 val)
+>  {
+> @@ -437,14 +437,14 @@ static inline u32 vdpu_read_mask(struct hantro_dev *vpu,
+>  	return v;
+>  }
+>  
+> -static inline void hantro_reg_write(struct hantro_dev *vpu,
+> +static __always_inline void hantro_reg_write(struct hantro_dev *vpu,
+>  				    const struct hantro_reg *reg,
+>  				    u32 val)
+>  {
+>  	vdpu_write_relaxed(vpu, vdpu_read_mask(vpu, reg, val), reg->base);
+>  }
+>  
+> -static inline void hantro_reg_write_s(struct hantro_dev *vpu,
+> +static __always_inline void hantro_reg_write_s(struct hantro_dev *vpu,
+>  				      const struct hantro_reg *reg,
+>  				      u32 val)
+>  {
+> -- 
+> 2.39.2
+> 
