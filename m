@@ -2,101 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 552347417B7
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 20:01:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DA6A7417C1
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 20:02:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232127AbjF1R7o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 13:59:44 -0400
-Received: from mail-pg1-f178.google.com ([209.85.215.178]:57602 "EHLO
-        mail-pg1-f178.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230113AbjF1R6v (ORCPT
+        id S229522AbjF1SCN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 14:02:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47810 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229924AbjF1SCK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 13:58:51 -0400
-Received: by mail-pg1-f178.google.com with SMTP id 41be03b00d2f7-55ac628e3cfso2380477a12.3;
-        Wed, 28 Jun 2023 10:58:51 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687975130; x=1690567130;
+        Wed, 28 Jun 2023 14:02:10 -0400
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93649E2;
+        Wed, 28 Jun 2023 11:02:09 -0700 (PDT)
+Received: by mail-pf1-x42a.google.com with SMTP id d2e1a72fcca58-666ecf9a0ceso3672441b3a.2;
+        Wed, 28 Jun 2023 11:02:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687975329; x=1690567329;
         h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=RW4mwlpWl10TH0psfzQmrQ5XZDVmCuzE7bR+x7bxPNE=;
-        b=l5wwZIyk4TS2XMYOjm7/tKmRWUKgHA7WL3mD7V+GfwmU8CD3sxSy6P3a9Pgf4XTiL1
-         kbXBXyWg8s7OLFHrcMCmEZblbor5w983KIDEhR2oXYIrvN6EM6rjUe6i1bWy9j/bEEJc
-         QAbayg89khKOIFuVgFhiCSs90frJsrE5IG1fo6HfC7gO91r14JoAqKf0YffUbohsLmRk
-         B7J2jHjs3KBjZzzBi69GMHfBF08ccdtvXV50XqmDZibjchnXuA4JWNPg3ffMuNr/m15/
-         O5N9xap+I9WSsfZX5vVw/9YoV/L+t2EZKWOJhz9py/cI9NnEz0h3ddYM/I9UVFMRl7KW
-         27/w==
-X-Gm-Message-State: AC+VfDx68mhGMJZOSYe7FlYgyGl9yalgUNEY0tnFdLeIuAwcAqOiC8d7
-        KyB2usNAc+Z0kSEAmSu9Mv8=
-X-Google-Smtp-Source: ACHHUZ6I6NNMYBTcW1td1WbYA0EwtrILk6+AD9BP3oTE+rYL8C549ffwpRWXcqbzodde5/KRLoAecw==
-X-Received: by 2002:a17:90a:d511:b0:263:949:7ab9 with SMTP id t17-20020a17090ad51100b0026309497ab9mr5311816pju.24.1687975130502;
-        Wed, 28 Jun 2023 10:58:50 -0700 (PDT)
-Received: from liuwe-devbox-debian-v2 ([20.69.120.36])
-        by smtp.gmail.com with ESMTPSA id s2-20020a17090aba0200b002535a0f2028sm9743975pjr.51.2023.06.28.10.58.49
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=+Xqri33yoDNZGyEBQeXSHUSwznC+68J260AdLVrfRsM=;
+        b=fDtJ9NZvaS4L1aMwArhLRV5JeI/wTBBLIHL8vVk9VyPyXkkUcWSaX3EmbLVw26eXeq
+         7ANcADHHJscIhra53M6SW2Gn+LDPF4FjnB0xSiAl5aEr4rKF9Yjb0actQmuFWCdCREcv
+         sC+DMdd90d1TZuLtxhn/bSBGRuZpDhPL57WycoRQdlBGy3sXOMaDlqwyLDgLDKemtxph
+         +AI5R3vAfMJP43uStb2EkBDHSQvwAwsc5fRPN8jh3VMpSCB5TxsPc3O+YqDr3TIy8rQY
+         gGltQb8siAYWAQ4n+U9PjL3QTJwytuo5j1gTUPlDv6/wcETdqWWDOviV2y6+SHqKteaW
+         YStQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687975329; x=1690567329;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=+Xqri33yoDNZGyEBQeXSHUSwznC+68J260AdLVrfRsM=;
+        b=Pt9SI8wS0Bq3tUyC5N11RzknBi3flttt5pRxi2tHqzaFJabYN/uRSnwmt+yFbD4Inx
+         vFSfuJbgS+tnAJcXDJZN1DucEHhCvG/9ITdtsJ7QkSHkstp6xEZZqfV6XlWdHpIcqMl6
+         8Xnq5/IozcCLXBdH7qH5uBNO2eZOBkr8F4Qzl2bPUA6RceSfHCdXCXFTPw2w1iUi1x8/
+         WJ6B6QAFWbjsEgbacMcaRyeNNpOtK7Ye8lD1lIaKFDI/mSdNVm7OQtAM70eJp0IMwPIT
+         fGcMRR5bGhYv3PJIAp64/uV2MxaXqZCK/DEAQoDpUPWjXBrvIlKu2xCpPS1BYRz4/GIj
+         QuBw==
+X-Gm-Message-State: AC+VfDyYNfbXrr9YYG1OO4As5lajepbV1iDDNAxEDbCdix8Jq9fOnnmE
+        fu6UlB5eOwzyozcGEYpcRqY=
+X-Google-Smtp-Source: ACHHUZ7CHlFkEDs/5sm1MQ+azVbXjUYeQq+AGDFJrP6yd6SvPLGcTvYW7z0CNBmdbfRAh6bU6N7z5w==
+X-Received: by 2002:a05:6a21:329d:b0:127:72c3:fd60 with SMTP id yt29-20020a056a21329d00b0012772c3fd60mr9334511pzb.1.1687975328667;
+        Wed, 28 Jun 2023 11:02:08 -0700 (PDT)
+Received: from localhost ([2620:10d:c090:400::5:7961])
+        by smtp.gmail.com with ESMTPSA id l6-20020a656806000000b005579c73d209sm6133960pgt.1.2023.06.28.11.02.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Jun 2023 10:58:50 -0700 (PDT)
-Date:   Wed, 28 Jun 2023 17:58:48 +0000
-From:   Wei Liu <wei.liu@kernel.org>
-To:     Saurabh Sengar <ssengar@linux.microsoft.com>
-Cc:     kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
-        decui@microsoft.com, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
-        mikelley@microsoft.com, linux-kernel@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, hpa@zytor.com
-Subject: Re: [PATCH v3] x86/hyperv: add noop functions to x86_init mpparse
- functions
-Message-ID: <ZJx02GzzoQ9E1TH9@liuwe-devbox-debian-v2>
-References: <1687537688-5397-1-git-send-email-ssengar@linux.microsoft.com>
+        Wed, 28 Jun 2023 11:02:08 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Wed, 28 Jun 2023 08:02:06 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Christian Brauner <brauner@kernel.org>
+Cc:     Suren Baghdasaryan <surenb@google.com>, gregkh@linuxfoundation.org,
+        peterz@infradead.org, lujialin4@huawei.com,
+        lizefan.x@bytedance.com, hannes@cmpxchg.org, mingo@redhat.com,
+        ebiggers@kernel.org, oleg@redhat.com, akpm@linux-foundation.org,
+        viro@zeniv.linux.org.uk, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, vschneid@redhat.com,
+        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, kernel-team@android.com
+Subject: Re: [PATCH 1/2] kernfs: add kernfs_ops.free operation to free
+ resources tied to the file
+Message-ID: <ZJx1nkqbQRVCaKgF@slm.duckdns.org>
+References: <CAJuCfpFUrPGVSnZ9+CmMz31GjRNN+tNf6nUmiCgx0Cs5ygD64A@mail.gmail.com>
+ <CAJuCfpFe2OdBjZkwHW5UCFUbnQh7hbNeqs7B99PXMXdFNjKb5Q@mail.gmail.com>
+ <CAJuCfpG2_trH2DuudX_E0CWfMxyTKfPWqJU14zjVxpTk6kPiWQ@mail.gmail.com>
+ <ZJuSzlHfbLj3OjvM@slm.duckdns.org>
+ <CAJuCfpGoNbLOLm08LWKPOgn05+FB1GEqeMTUSJUZpRmDYQSjpA@mail.gmail.com>
+ <20230628-meisennest-redlich-c09e79fde7f7@brauner>
+ <CAJuCfpHqZ=5a_2k==FsdBbwDCF7+s7Ji3aZ37LBqUgyXLMz7gA@mail.gmail.com>
+ <20230628-faden-qualvoll-6c33b570f54c@brauner>
+ <CAJuCfpF=DjwpWuhugJkVzet2diLkf8eagqxjR8iad39odKdeYQ@mail.gmail.com>
+ <20230628-spotten-anzweifeln-e494d16de48a@brauner>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1687537688-5397-1-git-send-email-ssengar@linux.microsoft.com>
+In-Reply-To: <20230628-spotten-anzweifeln-e494d16de48a@brauner>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+        lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 23, 2023 at 09:28:08AM -0700, Saurabh Sengar wrote:
-> Hyper-V can run VMs at different privilege "levels" known as Virtual
-> Trust Levels (VTL). Sometimes, it chooses to run two different VMs
-> at different levels but they share some of their address space. In
-> such setups VTL2 (higher level VM) has visibility of all of the
-> VTL0 (level 0) memory space.
+On Wed, Jun 28, 2023 at 07:35:20PM +0200, Christian Brauner wrote:
+> > To summarize my understanding of your proposal, you suggest adding new
+> > kernfs_ops for the case you marked (1) and change ->release() to do
+> > only (2). Please correct me if I misunderstood. Greg, Tejun, WDYT?
 > 
-> When the CONFIG_X86_MPPARSE is enabled for VTL2, the VTL2 kernel
-> performs a search within the low memory to locate MP tables. However,
-> in systems where VTL0 manages the low memory and may contain valid
-> tables, this scanning can result in incorrect MP table information
-> being provided to the VTL2 kernel, mistakenly considering VTL0's MP
-> table as its own
-> 
-> Add noop functions to avoid MP parse scan by VTL2.
-> 
-> Signed-off-by: Saurabh Sengar <ssengar@linux.microsoft.com>
+> Yes. I can't claim to know all the intricate implementation details of
+> kernfs ofc but this seems sane to me.
 
-Hi Dave, are you happy with the commit message?
+This is going to be massively confusing for vast majority of kernfs users.
+The contract kernfs provides is that you can tell kernfs that you want out
+and then you can do so synchronously in a finite amount of time (you still
+have to wait for in-flight operations to finish but that's under your
+control). Adding an operation which outlives that contract as something
+usual to use is guaranteed to lead to obscure future crnashes. For a
+temporary fix, it's fine as long as it's marked clearly but please don't
+make it something seemingly widely useable.
 
-> ---
-> [V3]
->  - modify commit message.
-> 
->  arch/x86/hyperv/hv_vtl.c | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/arch/x86/hyperv/hv_vtl.c b/arch/x86/hyperv/hv_vtl.c
-> index 85d38b9f3586..db5d2ea39fc0 100644
-> --- a/arch/x86/hyperv/hv_vtl.c
-> +++ b/arch/x86/hyperv/hv_vtl.c
-> @@ -25,6 +25,10 @@ void __init hv_vtl_init_platform(void)
->  	x86_init.irqs.pre_vector_init = x86_init_noop;
->  	x86_init.timers.timer_init = x86_init_noop;
->  
-> +	/* Avoid searching for BIOS MP tables */
-> +	x86_init.mpparse.find_smp_config = x86_init_noop;
-> +	x86_init.mpparse.get_smp_config = x86_init_uint_noop;
-> +
->  	x86_platform.get_wallclock = get_rtc_noop;
->  	x86_platform.set_wallclock = set_rtc_noop;
->  	x86_platform.get_nmi_reason = hv_get_nmi_reason;
-> -- 
-> 2.34.1
-> 
+We have a long history of modules causing crashes because of this. The
+severing semantics is not there just for fun.
+
+Thanks.
+
+-- 
+tejun
