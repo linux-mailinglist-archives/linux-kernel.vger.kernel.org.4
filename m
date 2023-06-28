@@ -2,100 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DE167412B4
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 15:40:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B40F7412B7
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 15:40:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232051AbjF1Niv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 09:38:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48536 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231645AbjF1Nim (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 09:38:42 -0400
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7981B1FDC
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 06:38:41 -0700 (PDT)
-Received: by mail-wm1-x32a.google.com with SMTP id 5b1f17b1804b1-3fa99742bd1so33336795e9.3
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 06:38:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20221208.gappssmtp.com; s=20221208; t=1687959520; x=1690551520;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/vfQOuKGwQGjFlFPrXNZqTLKUFzS/2MyEVN12NS22zU=;
-        b=GH2JkageMSynd6IaD064W1MAY7DMIEUEBAWRUBgV8BMlsnbcOXzo5bNP0SLOOOzHN4
-         ugVM3PqqukZCP0axhC6abn64D+0b2vA3nBF3EkQb/KboMPLGhRkx3iIq5tnoAZ7j68sP
-         iI2Oa1+dvJmtuUBdFwcJn2AeyZ1sXrVTms1KB7CQHhjWWRxNgIlI0tuiewHvdjRmr5WP
-         I9GEbHae0oaPGSx9KguCV1Ub7QzP3Oh0b3qx+N344iuFpRwHXHHDemSsWgYY1E5nfAQ2
-         DVtJ+3StlwPYPJRzTnuMUHpcKw0w3OZC8XOy/qDw+yN+n05ByT4q+vPmbveNiOyVhsgG
-         zlqg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687959520; x=1690551520;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=/vfQOuKGwQGjFlFPrXNZqTLKUFzS/2MyEVN12NS22zU=;
-        b=dzpvFtq/ceizLTr9Udz1hHlceBSwD97D6Q5Q+/Tgu93KekJtuG/gIr25MwsYotSg20
-         B8Xch3afnw67g6tKRuBONfgoYnljpf/8Iz1BEJ94eKWAeQE0nS3aze3z+f/N24wMSfCP
-         pZ9m7Uu2fr4khM1YfSUMCmwatRXZfIY5ytlWVHg4QMHKd7BgPAM/6ioebWphvFb1pTUd
-         IUUi9URN7hq61xEA/TGgta61U1Nf+k5NnYQ5+uIYG6cGk+Ta2rtF8FhERkeAyNPJy6WE
-         X+L+ItWIiE38bZiP1VfBR6Su9gxj0tDW8G9l6/UDdgxwDIe5hw0S+zxgmtqx31RoKZ0m
-         rOyQ==
-X-Gm-Message-State: AC+VfDwRPD2nWzjXsNxniLidOw5tpItEfDqQ0DpeD+xbfMDimKIuqJFo
-        c5YATw9BY+fPeu9BSdbHYgXHPA==
-X-Google-Smtp-Source: ACHHUZ4GDk+xDZ6anRxhPtEO4mbCDmFanNfZ/1ZcxYcY0VHiyvYzil51yqltVXbuWMtgTGsfSVJq3A==
-X-Received: by 2002:a05:600c:22d2:b0:3f9:b297:1804 with SMTP id 18-20020a05600c22d200b003f9b2971804mr19633307wmg.17.1687959520081;
-        Wed, 28 Jun 2023 06:38:40 -0700 (PDT)
-Received: from localhost.localdomain (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
-        by smtp.googlemail.com with ESMTPSA id o23-20020a05600c379700b003fae92e7a8dsm7657539wmr.27.2023.06.28.06.38.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Jun 2023 06:38:39 -0700 (PDT)
-From:   Corentin Labbe <clabbe@baylibre.com>
-To:     gregkh@linuxfoundation.org, johan@kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        david@ixit.cz, Corentin Labbe <clabbe@baylibre.com>
-Subject: [PATCH v6 2/2] usb: serial: add myself as maintainer of CH348
-Date:   Wed, 28 Jun 2023 13:38:34 +0000
-Message-Id: <20230628133834.1527941-3-clabbe@baylibre.com>
+        id S231587AbjF1Nkb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 09:40:31 -0400
+Received: from bg4.exmail.qq.com ([43.154.54.12]:10796 "EHLO bg4.exmail.qq.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231896AbjF1NkX (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 28 Jun 2023 09:40:23 -0400
+X-QQ-mid: bizesmtp63t1687959609tym1h2ar
+Received: from linux-lab-host.localdomain ( [116.30.129.193])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Wed, 28 Jun 2023 21:40:07 +0800 (CST)
+X-QQ-SSF: 01200000000000D0V000000A0000000
+X-QQ-FEAT: RrZlkntZBfm7xfyOGEmRqtWFTO3iq7nrzLtjOv4A2klW688L8fqcGLaJOxs8X
+        3F31Ai7GCBo2e9HJyJILIB42zbeQx1PuK7MYOfzgKgeaSRyYEmvI3hI2uTHhybYCBrsA3cp
+        lS9RSbXqWjPh8ae0mL2HdWhgRJCIj6hHiwuiw5vmOpYUuMmi5hG9xLwpb+2pSbkKiMMXT7H
+        zh8H3WHw1AhFVzB0XpFpehS+BHfnlTIdh6yP8pcReyx66HBcS99g/oRIzWaDjHA8RbxP/zQ
+        PaskCzmAYuEA1rRID6wETmtTzTqReplG8ThnqMB1q3tpCd7su10qnwcpvXYWaRnHzPvYojP
+        +KN8Bp67CChP70petq2j5GKX9rlALGG3tAh+/jWXJy/KNyr37geEaTCIZOvaA==
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 14474260632320986348
+From:   Zhangjin Wu <falcon@tinylab.org>
+To:     thomas@t-8ch.de, w@1wt.eu
+Cc:     falcon@tinylab.org, arnd@arndb.de, david.laight@aculab.com,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-riscv@lists.infradead.org,
+        David Laight <David.Laight@ACULAB.COM>
+Subject: [PATCH v5 10/14] tools/nolibc: __sysret: support syscalls who return a pointer
+Date:   Wed, 28 Jun 2023 21:39:56 +0800
+Message-Id: <72d948095d22c3ba4e69d98877addcea49a326c6.1687957589.git.falcon@tinylab.org>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230628133834.1527941-1-clabbe@baylibre.com>
-References: <20230628133834.1527941-1-clabbe@baylibre.com>
+In-Reply-To: <cover.1687957589.git.falcon@tinylab.org>
+References: <cover.1687957589.git.falcon@tinylab.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-        lindbergh.monkeyblade.net
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrsz:qybglogicsvrsz3a-3
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since I did the driver and have hardware to test, set myself as
-maintainer of it.
+To support syscalls (e.g. mmap()) who return a pointer and to allow the
+pointer as big as possible, we should convert the negated errno value to
+unsigned long (uintptr_t), otherwise, in signed long, a potential big
+pointer (whose highest bit is 1) will be treated as a failure.
 
-Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
+tools/include/nolibc/errno.h defines the MAX_ERRNO, let's use it
+directly. after converting to unsigned long, the negative errno value
+from -1 to -MAX_ERRNO becomes something like '~1 + 1' (every bit is 1)
+to '~MAX_ERRNO + 1', '~1 + 1' is the biggest, '~MAX_ERRNO + 1' is the
+smallest, so, the check becomes:
+
+    if (ret <= (unsigned long)-1 && ret >= (unsigned long)-MAX_ERRNO) {
+        ...
+    }
+
+Since (unsigned long)-1 is the biggest unsigned long value, it is always
+true if bigger than (unsigned long)-MAX_ERRNO, so, just reserve the
+following check is enough:
+
+    if (ret >= (unsigned long)-MAX_ERRNO) {
+        ...
+    }
+
+Suggested-by: David Laight <David.Laight@ACULAB.COM>
+Link: https://lore.kernel.org/linux-riscv/94dd5170929f454fbc0a10a2eb3b108d@AcuMS.aculab.com/
+Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
 ---
- MAINTAINERS | 5 +++++
- 1 file changed, 5 insertions(+)
+ tools/include/nolibc/sys.h | 13 ++++++++-----
+ 1 file changed, 8 insertions(+), 5 deletions(-)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 342cb79a9ac5..e95b51594bac 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -22044,6 +22044,11 @@ F:	Documentation/usb/usb-serial.rst
- F:	drivers/usb/serial/
- F:	include/linux/usb/serial.h
+diff --git a/tools/include/nolibc/sys.h b/tools/include/nolibc/sys.h
+index 53bc3ad6593e..b6125e600dc2 100644
+--- a/tools/include/nolibc/sys.h
++++ b/tools/include/nolibc/sys.h
+@@ -28,13 +28,16 @@
+ #include "errno.h"
+ #include "types.h"
  
-+USB SERIAL DRIVER FOR CH348
-+M:	Corentin Labbe <clabbe@baylibre.com>
-+S:	Maintained
-+F:	drivers/usb/serial/ch348.c
+-/* Syscall return helper, set errno as -ret when ret < 0 */
 +
- USB SMSC75XX ETHERNET DRIVER
- M:	Steve Glendinning <steve.glendinning@shawell.net>
- L:	netdev@vger.kernel.org
++/* Syscall return helper for library routines
++ * set errno as -ret when ret in [-MAX_ERRNO, -1]
++ */
+ static __inline__ __attribute__((unused, always_inline))
+-long __sysret(long ret)
++long __sysret(unsigned long ret)
+ {
+-	if (ret < 0) {
+-		SET_ERRNO(-ret);
+-		ret = -1;
++	if (ret >= (unsigned long)-MAX_ERRNO) {
++		SET_ERRNO(-(long)ret);
++		return -1;
+ 	}
+ 	return ret;
+ }
 -- 
-2.39.3
+2.25.1
 
