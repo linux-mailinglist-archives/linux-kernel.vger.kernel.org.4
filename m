@@ -2,141 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 817EA741961
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 22:15:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4913C741966
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 22:17:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231395AbjF1UPt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 16:15:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33618 "EHLO
+        id S231676AbjF1URx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 16:17:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231494AbjF1UPO (ORCPT
+        with ESMTP id S230260AbjF1URv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 16:15:14 -0400
-Received: from omta40.uswest2.a.cloudfilter.net (omta40.uswest2.a.cloudfilter.net [35.89.44.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 674F11FEF
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 13:15:13 -0700 (PDT)
-Received: from eig-obgw-6010a.ext.cloudfilter.net ([10.0.30.248])
-        by cmsmtp with ESMTP
-        id EWupqgJLnbK1VEbZIq6ct5; Wed, 28 Jun 2023 20:15:12 +0000
-Received: from gator4166.hostgator.com ([108.167.133.22])
-        by cmsmtp with ESMTPS
-        id EbZGqI7BbY25XEbZHqAX8U; Wed, 28 Jun 2023 20:15:11 +0000
-X-Authority-Analysis: v=2.4 cv=WJ1s41gR c=1 sm=1 tr=0 ts=649c94cf
- a=1YbLdUo/zbTtOZ3uB5T3HA==:117 a=WzbPXH4gqzPVN0x6HrNMNA==:17
- a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10 a=of4jigFt-DYA:10
- a=wYkD_t78qR0A:10 a=NEAV23lmAAAA:8 a=PtVJBk4Srns10J10ZCQA:9 a=QEXdDO2ut3YA:10
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=embeddedor.com; s=default; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=Ql0YnZ/hm7SjAddMwZMN2OCRFvLEYjNTsWCj2y8mpk0=; b=ZXuRDz57bO5v6SPpzm/WePFb30
-        U4SYPEUCNE6+sJF0IjEvhoOFVeJXFVB2n7XE9Znvh1osuk4SQ53N4QlRnR8roLBQ6DS727aKirLNU
-        uE0C1Md9xsPQosYtTeVQAEAGsn8cz7qZXOWLFMpKovdONKJH01p0zE2Uxzi49McU1bMb4yi4NdAmc
-        GlBpC7fHd6Dq/9dZUIcWUiF9w8UtXUjYJC80rGv5RqpjW2I0UPH5f9YeCvt2vfAW0BRlyfLhoy1Xj
-        StSF17oMwSYG6wAAfvDZVFhIkEG3SRPwmsKWtp/GAl6w9Xq/mrLdDVmJXRcdAAelDvXcjDFJyEzt6
-        /beNesfg==;
-Received: from 187-162-21-192.static.axtel.net ([187.162.21.192]:55090 helo=[192.168.15.8])
-        by gator4166.hostgator.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.96)
-        (envelope-from <gustavo@embeddedor.com>)
-        id 1qEbZG-000Ofy-1E;
-        Wed, 28 Jun 2023 15:15:10 -0500
-Message-ID: <62386518-4123-db1f-4656-6b4ea509f5b1@embeddedor.com>
-Date:   Wed, 28 Jun 2023 14:16:02 -0600
+        Wed, 28 Jun 2023 16:17:51 -0400
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 225601FEF
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 13:17:50 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id 4fb4d7f45d1cf-5183075a5ecso3773a12.0
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 13:17:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687983468; x=1690575468;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=mcdcu/X3rvKEweORiM1Bmj6FQklcqIusFWzpaLNxjw8=;
+        b=M0mobyy+a1mpb9FR5GvFkRFbuDFWqG2lIKK4qIzcLoRtiEwGPqshjHF1dAh7QUvpyd
+         w9ZQSmGvPH9mCfPCGVzbQF6mW83VuhBVpe7XFJuwVcjk9QuKgZBYmitBZIAPjzJ27FFK
+         3JBovOivuHwDrDc3X40QaQ+BNl3j/jHJRzB+gk3VtIFeQUeMSyGNtvbJ3Bv9/dRiip4w
+         QFBtuSTcEprudmc2eUn8NI6CkhVk6bCr6zSHEQDFkdPmq93sQo8xPihuqFayUjobVl08
+         qwHJZr5Vb9yxcaqAfy3ynHmh2vkiW2vTGK7bWPVgQUnq7UX9hIjxHnQEmQR707JptHhV
+         tiwA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687983468; x=1690575468;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=mcdcu/X3rvKEweORiM1Bmj6FQklcqIusFWzpaLNxjw8=;
+        b=mEFbgcBwuI7B0DfM7K+3tfZwBFTkXlQ6jQBBFVPQjopRmeRYWJ7QXciSVj9X5jSAdJ
+         Apj+KmlGAcWUwDlmbVlj/szPSZhL9sadEuFUYEWT9IDt3TtfZa3BAg/L9ZcZuhvFOLUS
+         Ng8HoVPM6u9zNJMDglR6rjuU4jwio0aegwYRJ6FUAmsMaCmdSr14z7e0M4/+tpROM07T
+         sTDGZLFB/49vfQW1C9xRGVcYNYVsrpsSmI9MYi01bdGV9uiJ2Gmrzf934Q7+rH2CX1b6
+         70ErirdQYHi6Wxjod49pPKLsJmWeTESSoIlhdC9HQ0MpLtV0GuOfIkClTPztFIJBFsTU
+         +Tyw==
+X-Gm-Message-State: ABy/qLbIJJPTJaIwxvZG3RpE8NGik80ot6t9JCXU7LYRYbCD8NiwlYPt
+        pP88e95MaHtMxvtxYVNdf54=
+X-Google-Smtp-Source: APBJJlFWqOEcMZcIUebKXKysYKVZS4fqqeBHyIYI9EqdnShb8WVRVzC4oMjuOqF5ZcDF0qXU0uzrlg==
+X-Received: by 2002:a05:6402:4407:b0:51d:b9b9:62b4 with SMTP id y7-20020a056402440700b0051db9b962b4mr686042eda.4.1687983468344;
+        Wed, 28 Jun 2023 13:17:48 -0700 (PDT)
+Received: from [192.168.0.103] (p57ba2e0b.dip0.t-ipconnect.de. [87.186.46.11])
+        by smtp.gmail.com with ESMTPSA id c20-20020aa7df14000000b0051d984e610esm3538697edy.66.2023.06.28.13.17.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 28 Jun 2023 13:17:45 -0700 (PDT)
+Message-ID: <8d065458-b6c7-e388-6768-76a875ed1036@gmail.com>
+Date:   Wed, 28 Jun 2023 22:17:34 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.11.0
-Subject: Re: [PATCH 00/10][next] scsi: aacraid: Replace one-element arrays
- with flexible-array members
+Subject: Re: [PATCH v3 0/3] Fix some checkpatch issues
+To:     =?UTF-8?Q?Franziska_N=c3=a4pelt?= 
+        <franziska.naepelt@googlemail.com>
+Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        eperi1024@gmail.com, hdegoede@redhat.com, quic_vjakkam@quicinc.com,
+        johannes.berg@intel.com, tegongkang@gmail.com,
+        gregkh@linuxfoundation.org
+References: <20230625155632.32403-1-franziska.naepelt@gmail.com>
+ <7caa96fb-4fb6-fb87-5d0c-fa6985fa127b@gmail.com>
+ <CAAUT3iM7eAYH5AcN=Ko9jDstEUGqXxG7Q6qjp4O9qF_e2WkUVQ@mail.gmail.com>
 Content-Language: en-US
-To:     Kees Cook <keescook@chromium.org>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>
-Cc:     aacraid@microsemi.com, "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org
-References: <cover.1687974498.git.gustavoars@kernel.org>
- <202306281307.BB7B4369F@keescook>
-From:   "Gustavo A. R. Silva" <gustavo@embeddedor.com>
-In-Reply-To: <202306281307.BB7B4369F@keescook>
+From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
+In-Reply-To: <CAAUT3iM7eAYH5AcN=Ko9jDstEUGqXxG7Q6qjp4O9qF_e2WkUVQ@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - gator4166.hostgator.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - embeddedor.com
-X-BWhitelist: no
-X-Source-IP: 187.162.21.192
-X-Source-L: No
-X-Exim-ID: 1qEbZG-000Ofy-1E
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: 187-162-21-192.static.axtel.net ([192.168.15.8]) [187.162.21.192]:55090
-X-Source-Auth: gustavo@embeddedor.com
-X-Email-Count: 2
-X-Org:  HG=hgshared;ORG=hostgator;
-X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
-X-Local-Domain: yes
-X-CMAE-Envelope: MS4xfG/WLAuNcRRVjTG8a+hI3tYPEC8OxK0AgddEyuK0zkRVjOK4YQB5jzy2q1KbrPnPDERiT+xLsnSwRKoRwL/kfHJKwqVDRPTpNT9fvpuVjiulSwHqZ4zy
- qKQCYrp4sNk1DHzNMkWpj4vyqVrqcRAUSCZ+BAa4GtXloyqMz7Za996NG5cWWIdv3+rgk5ZJgHUK3l/4ZUr3/T5Vb2eMnNk9M9N7bxBbxqz7I+Wq3n6X1eoj
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 6/28/23 14:08, Kees Cook wrote:
-> On Wed, Jun 28, 2023 at 11:53:45AM -0600, Gustavo A. R. Silva wrote:
->> This series aims to replace one-element arrays with flexible-array
->> members in multiple structures in drivers/scsi/aacraid/aacraid.h.
->>
->> This helps with the ongoing efforts to globally enable -Warray-bounds
->> and get us closer to being able to tighten the FORTIFY_SOURCE routines
->> on memcpy().
->>
->> These issues were found with the help of Coccinelle and audited and fixed,
->> manually.
->>
->> Link: https://github.com/KSPP/linux/issues/79
->>
->> Gustavo A. R. Silva (10):
->>    scsi: aacraid: Replace one-element array with flexible-array member
->>    scsi: aacraid: Use struct_size() helper in aac_get_safw_ciss_luns()
->>    scsi: aacraid: Replace one-element array with flexible-array member in
->>      struct aac_aifcmd
->>    scsi: aacraid: Replace one-element array with flexible-array member in
->>      struct user_sgmapraw
->>    scsi: aacraid: Replace one-element array with flexible-array member in
->>      struct sgmapraw
->>    scsi: aacraid: Use struct_size() helper in code related to struct
->>      sgmapraw
->>    scsi: aacraid: Replace one-element array with flexible-array member in
->>      struct user_sgmap64
->>    scsi: aacraid: Replace one-element array with flexible-array member in
->>      struct sgmap
->>    scsi: aacraid: Replace one-element array with flexible-array member in
->>      struct sgmap64
->>    scsi: aacraid: Replace one-element array with flexible-array member in
->>      struct user_sgmap
+On 6/28/23 18:38, Franziska Näpelt wrote:
+> Hi Philipp,
 > 
-> I'd like to reorganize this series so that all the conversions are
-> first, and then struct_size() additions are at the end. That way, if
-> desired, the conversions can land as fixes to turn the Clang builds
-> green again.
+> Am Mo., 26. Juni 2023 um 19:09 Uhr schrieb Philipp Hortmann
+> <philipp.g.hortmann@gmail.com>:
+>>
+>> On 6/25/23 17:56, Franziska Naepelt wrote:
+>>> This is a series of patches to fix some trivial checkpatch issues. Not all
+>>> issues have been fixed. I intend to submit another series to fix more stuff.
+>>>
+>>> Testing:
+>>>
+>>> ---
+>>> v3: Series to contain only remaining patches.
+>>>
+>>> Franziska Naepelt (3):
+>>>     staging: rtl8723bs: Fix space issues
+>>>     staging: rtl8723bs: Fix alignment open parenthesis
+>>>     staging: rtl8723bs: Fix remaining blank line issue
+>>>
+>>>    .../staging/rtl8723bs/os_dep/ioctl_cfg80211.c | 164 +++++++++---------
+>>>    1 file changed, 85 insertions(+), 79 deletions(-)
+>>>
+>>> --
+>>> 2.39.2 (Apple Git-143)
+>>>
+>>>
+>>
+>> checkpatch prints the following warning:
+>> WARNING: From:/Signed-off-by: email address mismatch: 'From: Franziska
+>> Naepelt <franziska.naepelt@googlemail.com>' != 'Signed-off-by: Franziska
+>> Naepelt <franziska.naepelt@gmail.com>'
+>>
+>> I propose you change the git email matching the one that you use to send.
+>>
+>> When testing you can compile the driver with this command:
+>> make -C . M=drivers/staging/rtl8723bs
+>> Typically a compile of the entire kernel is not required.
+>>
+>> Please use the subsystem and driver also for the Subject line of the
+>> cover letter.
+>>
+>> Bye Philipp
 > 
+> Do you want me to submit v4 to fix the email address as well as the subject of
+> the cover letter or are you ok with me promising to make it properly the next
+> time? ;)
+> 
+> Thanks,
+> Franziska
 
-OK; I can make that happen. :)
+Hi Franziska,
+you do not need to submit v4 for me.
 
---
-Gustavo
+Here the reason what you need to take into account.
+
+If you leave the e-mail addresses this way you need to monitor both for 
+the next weeks. Because somebody(or a robot) may contact you for 
+questions, errors or hints for improvement.
+
+If you look into the kernel patch statistics:
+http://www.remword.com/kps_result/all_petop.html
+Look in google for: "kernel patch statistics"
+You can find this person:
+Franziska Naepelt <franziska ! naepelt () idt ! com> 
+1(0.00%)	@IDT                             @Unknown
+May be this is you. Maybe you want to see the number of patches in total 
+that you have submitted. That is best possible if you submit all patches 
+under one Email address.
+
+May be you plan to vote for the Technical Advisory Board. Then you need 
+to collect your patches (credits under one email address)
+
+So all your choice.
+
+Bye Philipp
+
+
+
+
+
+
