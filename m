@@ -2,89 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0D5B740C2B
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 11:02:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F5DD740B3D
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 10:25:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236187AbjF1JAL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 05:00:11 -0400
-Received: from mx18.pku.edu.cn ([162.105.129.181]:22535 "EHLO pku.edu.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S232035AbjF1IWB (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 04:22:01 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=pku.edu.cn; s=dkim; h=Received:Date:From:To:Cc:Subject:
-        Message-ID:References:MIME-Version:Content-Type:
-        Content-Disposition:In-Reply-To; bh=2TuRVB6UrpKR/H+eKdPp49cVqkS/
-        qTK9lPInkHmcSIE=; b=QhcKvj+NDKHtPd5PlhIMKmfrZV+Kd+IlcUkKo1rs/MC7
-        aPCOqriRFzGelPyU0hW79RebYEv/FlHurtXOeFXNrtnvkOtpvaUEumlCQcCBf4rc
-        t0bF84M1ny+NR/CLOUwh11i6HY3PAs6g+jpUSfJPHlgA2FUaiIFlD8HRTbFFAZ0=
-Received: from localhost (unknown [10.7.61.172])
-        by front01 (Coremail) with SMTP id 5oFpogCXn5da7ZtkOi9ZCw--.31623S2;
-        Wed, 28 Jun 2023 16:20:52 +0800 (CST)
-Date:   Wed, 28 Jun 2023 16:20:42 +0800
-From:   Ruihan Li <lrh2000@pku.edu.cn>
-To:     syzbot <syzbot+644848628d5e12d5438c@syzkaller.appspotmail.com>
-Cc:     akpm@linux-foundation.org, gregkh@linuxfoundation.org,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, seanjc@google.com, stern@rowland.harvard.edu,
-        syzkaller-bugs@googlegroups.com, Ruihan Li <lrh2000@pku.edu.cn>
-Subject: Re: [syzbot] [kernel?] kernel BUG in workingset_activation (2)
-Message-ID: <227x4knhpjl2vk66ht7kqjh7fsotzxszycuounstjvrkktzvu2@k7un4x5yco62>
-References: <000000000000a2c79f05ed84c7f9@google.com>
- <0000000000001e68bd05ff2bfbbf@google.com>
+        id S233978AbjF1IY6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 04:24:58 -0400
+Received: from lelv0143.ext.ti.com ([198.47.23.248]:55534 "EHLO
+        lelv0143.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233817AbjF1IU7 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 28 Jun 2023 04:20:59 -0400
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 35S8Kk9n120812;
+        Wed, 28 Jun 2023 03:20:46 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1687940446;
+        bh=jl//wheQUX9KT7i1/Iv7eiB6CFe7ES3HsUsD8F3mOEQ=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=PT2WIQrJxoQLC8BXqq1YBoDDf8MUjOi/iuMEBXSDtIlfqqjZos/okhlbsx2BFn7V6
+         If7e9uOP58QC2P7qWpQsliwAWeQoeW0uDAv3O1Z0fZzZELJrprbKMM/pmwhsLg6WAt
+         xPfPn4TddVhaMgKKX3nEU50XBO5RlP5rjSbYjvTk=
+Received: from DFLE102.ent.ti.com (dfle102.ent.ti.com [10.64.6.23])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 35S8Kk0Z058413
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 28 Jun 2023 03:20:46 -0500
+Received: from DFLE114.ent.ti.com (10.64.6.35) by DFLE102.ent.ti.com
+ (10.64.6.23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Wed, 28
+ Jun 2023 03:20:46 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE114.ent.ti.com
+ (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Wed, 28 Jun 2023 03:20:46 -0500
+Received: from [172.24.217.204] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 35S8KgHr116006;
+        Wed, 28 Jun 2023 03:20:43 -0500
+Message-ID: <7fe4adef-9be2-6dae-d53f-692f9775439c@ti.com>
+Date:   Wed, 28 Jun 2023 13:50:42 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0000000000001e68bd05ff2bfbbf@google.com>
-X-CM-TRANSID: 5oFpogCXn5da7ZtkOi9ZCw--.31623S2
-X-Coremail-Antispam: 1UD129KBjvdXoWrtr47uF48AFWfZFyDZFy8uFg_yoWkAFg_Wr
-        4UGF97K397Ar1UArsYyrnaqw4kWa97WFyFgFn3Xrs2ka9xJayxGFs7WF48G348Jr43X34D
-        K34aqrWDtwsIvjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUbfxFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AK
-        wVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20x
-        vE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4UJVW0owA2z4x0Y4vEx4A2
-        jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oVCq3wAac4AC62xK8xCEY4
-        vEwIxC4wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv
-        7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r
-        1j6r4UM4x0Y48IcVAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628v
-        n2kIc2xKxwCY02Avz4vE-syl42xK82IYc2Ij64vIr41l42xK82IY6x8ErcxFaVAv8VWkJr
-        1UJwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480
-        Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7
-        IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k2
-        6cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxV
-        AFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUQZ23UUUUU=
-X-CM-SenderInfo: yssqiiarrvmko6sn3hxhgxhubq/1tbiAgELBVPy78PRJAA-sK
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH v2] arm64: dts: ti: k3-j721s2-main: Enable support for
+ SDR104 speed mode
+To:     Bhavya Kapoor <b-kapoor@ti.com>, <linux-kernel@vger.kernel.org>,
+        <devicetree@vger.kernel.org>
+CC:     <linux-arm-kernel@lists.infradead.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <robh+dt@kernel.org>,
+        <kristo@kernel.org>, <vigneshr@ti.com>, <nm@ti.com>,
+        <u-kumar1@ti.com>
+References: <20230412121415.860447-1-b-kapoor@ti.com>
+Content-Language: en-US
+From:   "Kumar, Udit" <u-kumar1@ti.com>
+In-Reply-To: <20230412121415.860447-1-b-kapoor@ti.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 28, 2023 at 01:00:45AM -0700, syzbot wrote:
-> syzbot suspects this issue was fixed by commit:
-> 
-> commit 0143d148d1e882fb1538dc9974c94d63961719b9
-> Author: Ruihan Li <lrh2000@pku.edu.cn>
-> Date:   Mon May 15 13:09:55 2023 +0000
-> 
->     usb: usbfs: Enforce page requirements for mmap
-> 
-> bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=10a65abd280000
-> start commit:   59d0d52c30d4 AMerge tag 'netfs-fixes-20221115' of git://gi..
-> git tree:       upstream
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=11d3fa0b3feb5055
-> dashboard link: https://syzkaller.appspot.com/bug?extid=644848628d5e12d5438c
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=14fdf3f1880000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=17b54702880000
-> 
-> If the result looks correct, please mark the issue as fixed by replying with:
-> 
-> #syz fix: usb: usbfs: Enforce page requirements for mmap
-> 
-> For information about bisection process see: https://goo.gl/tpsmEJ#bisection
 
-Correct.
+On 4/12/2023 5:44 PM, Bhavya Kapoor wrote:
+> According to TRM for J721S2, SDR104 speed mode is supported by the SoC
+> but its capabilities were masked in device tree. Remove sdhci-caps-mask
+> to enable support for SDR104 speed mode for SD card in J721S2 SoC.
+>
+> [+] Refer to : section 12.3.6.1.1 MMCSD Features, in J721S2 TRM
+> - https://www.ti.com/lit/zip/spruj28
+>
+> Fixes: b8545f9d3a54 ("arm64: dts: ti: Add initial support for J721S2 SoC")
+> Signed-off-by: Bhavya Kapoor <b-kapoor@ti.com>
+> ---
+> Changelog v1->v2:
+> 	- Modified Commit Message and Added Fixes tag
+>
+> Link to v1 : https://lore.kernel.org/all/20230404091245.336732-1-b-kapoor@ti.com/
+>
+>   arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi | 2 --
+>   1 file changed, 2 deletions(-)
+>
+> diff --git a/arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi b/arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi
+> index 8915132efcc1..95c6151ed10c 100644
+> --- a/arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi
+> +++ b/arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi
+> @@ -400,8 +400,6 @@ main_sdhci1: mmc@4fb0000 {
+>   		ti,clkbuf-sel = <0x7>;
+>   		ti,trm-icp = <0x8>;
+>   		dma-coherent;
+> -		/* Masking support for SDR104 capability */
+> -		sdhci-caps-mask = <0x00000003 0x00000000>;
 
-#syz fix: usb: usbfs: Enforce page requirements for mmap
 
-Thanks,
-Ruihan Li
+Reviewed-by: Udit Kumar <u-kumar1@ti.com>
 
+>   	};
+>   
+>   	main_navss: bus@30000000 {
