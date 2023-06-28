@@ -2,106 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA4AB74101B
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 13:32:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FA5574101E
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 13:34:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231361AbjF1Lcs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 07:32:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35548 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230409AbjF1Lcq (ORCPT
+        id S229924AbjF1LeZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 07:34:25 -0400
+Received: from szxga02-in.huawei.com ([45.249.212.188]:44129 "EHLO
+        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229690AbjF1LeW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 07:32:46 -0400
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 694872D52
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 04:32:45 -0700 (PDT)
-Received: by mail-wr1-x429.google.com with SMTP id ffacd0b85a97d-3141140f51bso116943f8f.1
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 04:32:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687951964; x=1690543964;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+6lmlFVNjM5Cb5lXMgqZptXE+TaesBmngRzxOeWBOik=;
-        b=JlBQyc2fxVlmFPJeEW2Z+eQfudAVjmJUIoIj1qGOSKvUZ8xM1ZVFMz23V3M2ydeONX
-         wO3D4yb5czNNMecSMdcX8ebAp/FAnUjzl19G6epxzU6AmKgqcV8RnQLoRcAlww9WOI1k
-         DjoaRQgStmJ4bWdHyaqPsrbcw0N6fbV2eWSbH6WITqWeM3AB5RRVUIVygyT+bZZ799Fb
-         /LZtwGmdN+ppMkgFdflpjLsXtEVA68JK3I4vUaUmd3Q3fHTGgr9y1FJFIcKEaoEMF1uT
-         8ekTtsiGjiFddrrNbghZFNN8gHHArU3YadXa9nBD1Qi3Ropmvo14UUbhje9Nl1M0Es8b
-         /aKQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687951964; x=1690543964;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=+6lmlFVNjM5Cb5lXMgqZptXE+TaesBmngRzxOeWBOik=;
-        b=I0s9X//mkaJV6CtoCw6JsAcybcmD5vSvzjZtZih53wsQ2t05C7ZJrvSlFIlPJtYJ3A
-         2lTBiarIjYcvzJno2rccOj24h+X5Uv1ciS3vJaJAeQb3V1psUW+yQGb0LFMDdE+FFa7g
-         3QqMTvSEhHvOEgXpKNVqYsZzKT81slTHCThFjSlrM5fv1bH7g5WPH4xw6FoXaVoCQJFF
-         WGR4CYsJ/2gBCbAHa3QSOR6ijMoGb8ukuEmLhqxoVlwRnsreXZi6QrqpzLkBBUds8ZE9
-         rjtg4uDx2yzF/x88UTXcwfdxJ6L6JY6Zm7adY0xV/wrI0IaIQACAgrG2Qeabnr5XDEXk
-         orTA==
-X-Gm-Message-State: ABy/qLbjt3jR/EZhDEq8qlxI3j2gKbdN2WfNtasprnxFTEamNOpTpx7R
-        dBqUIQmTgq0DrxSX69JHrxVFhUaCBuNa6R3KuTs=
-X-Google-Smtp-Source: APBJJlEd16N1IdgVeUSMC3DSgUMRguMJCgvwLvoV49jy+a/9p6nQCX4M9XVETFgkz+OSmdXgnGIdo+6M7mBhbmDYEU0=
-X-Received: by 2002:adf:e4d0:0:b0:314:1025:96fd with SMTP id
- v16-20020adfe4d0000000b00314102596fdmr637013wrm.47.1687951963757; Wed, 28 Jun
- 2023 04:32:43 -0700 (PDT)
+        Wed, 28 Jun 2023 07:34:22 -0400
+Received: from dggpemm500006.china.huawei.com (unknown [172.30.72.56])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4QrfXq74zVzMpcn;
+        Wed, 28 Jun 2023 19:31:07 +0800 (CST)
+Received: from [10.174.178.55] (10.174.178.55) by
+ dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.27; Wed, 28 Jun 2023 19:34:18 +0800
+Subject: Re: [PATCH] kallsyms: strip LTO-only suffixes from promoted global
+ functions
+To:     Yonghong Song <yhs@fb.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Petr Mladek <pmladek@suse.com>, Song Liu <song@kernel.org>
+CC:     Fangrui Song <maskray@google.com>, <kernel-team@fb.com>,
+        <linux-kernel@vger.kernel.org>, <llvm@lists.linux.dev>
+References: <20230628064433.2859335-1-yhs@fb.com>
+From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
+Message-ID: <42da73d9-063b-24c9-6a7e-734403827dcb@huawei.com>
+Date:   Wed, 28 Jun 2023 19:34:18 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 MIME-Version: 1.0
-References: <20230628105250.40874-1-dg573847474@gmail.com> <2023062851-gutter-rudder-5c2d@gregkh>
-In-Reply-To: <2023062851-gutter-rudder-5c2d@gregkh>
-From:   Chengfeng Ye <dg573847474@gmail.com>
-Date:   Wed, 28 Jun 2023 19:32:32 +0800
-Message-ID: <CAAo+4rX5nJo63ZF64d3rf7_QC+1pR+-EBH7_5JrsrJn1nhpkfQ@mail.gmail.com>
-Subject: Re: [PATCH] misc: bcm_vk: Fix potential deadlock on &vk->ctx_lock
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     scott.branden@broadcom.com, bcm-kernel-feedback-list@broadcom.com,
-        arnd@arndb.de, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-        lindbergh.monkeyblade.net
+In-Reply-To: <20230628064433.2859335-1-yhs@fb.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.178.55]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ dggpemm500006.china.huawei.com (7.185.36.236)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thanks for the reply! V2 patch is sent including more detail of the static
-analyzer and testing process.
 
-Best Regards,
-Chengfeng
 
-Greg KH <gregkh@linuxfoundation.org> =E4=BA=8E2023=E5=B9=B46=E6=9C=8828=E6=
-=97=A5=E5=91=A8=E4=B8=89 19:00=E5=86=99=E9=81=93=EF=BC=9A
->
-> On Wed, Jun 28, 2023 at 10:52:50AM +0000, Chengfeng Ye wrote:
-> > As &vk->ctx_lock is acquired by timer bcm_vk_hb_poll() under softirq
-> > context, other process context code should disable irq or bottom-half
-> > before acquire the same lock, otherwise deadlock could happen if the
-> > timer preempt the execution while the lock is held in process context
-> > on the same CPU.
-> >
-> > Possible deadlock scenario
-> > bcm_vk_open()
-> >     -> bcm_vk_get_ctx()
-> >     -> spin_lock(&vk->ctx_lock)
-> >         <timer iterrupt>
-> >         -> bcm_vk_hb_poll()
-> >         -> bcm_vk_blk_drv_access()
-> >         -> spin_lock_irqsave(&vk->ctx_lock, flags) (deadlock here)
-> >
-> > This flaw was found using an experimental static analysis tool we are
-> > developing for irq-related deadlock.
-> >
-> > The tentative patch fix the potential deadlock by spin_lock_irqsave().
->
-> how was this tested?  As per the file,
-> Documentation/process/researcher-guidelines.rst, you have to show this.
->
-> thanks,
->
-> greg k-h
+On 2023/6/28 14:44, Yonghong Song wrote:
+> Commit 6eb4bd92c1ce ("kallsyms: strip LTO suffixes from static functions")
+> stripped all function/variable suffixes started with '.' regardless
+> of whether those suffixes are generated at LTO mode or not. In fact,
+> as far as I know, in LTO mode, when a static function/variable is
+> promoted to the global scope, '.llvm.<...>' suffix is added.
+> 
+> The existing mechanism breaks live patch for a LTO kernel even if
+> no <symbol>.llvm.<...> symbols are involved. For example, for the following
+> kernel symbols:
+>   $ grep bpf_verifier_vlog /proc/kallsyms
+>   ffffffff81549f60 t bpf_verifier_vlog
+>   ffffffff8268b430 d bpf_verifier_vlog._entry
+>   ffffffff8282a958 d bpf_verifier_vlog._entry_ptr
+>   ffffffff82e12a1f d bpf_verifier_vlog.__already_done
+> 'bpf_verifier_vlog' is a static function. '_entry', '_entry_ptr' and
+> '__already_done' are static variables used inside 'bpf_verifier_vlog',
+> so llvm promotes them to file-level static with prefix 'bpf_verifier_vlog.'.
+> Note that the func-level to file-level static function promotion also
+> happens without LTO.
+> 
+> Given a symbol name 'bpf_verifier_vlog', with LTO kernel, current mechanism will
+> return 4 symbols to live patch subsystem which current live patching
+> subsystem cannot handle it. With non-LTO kernel, only one symbol
+> is returned.
+> 
+> In [1], we have a lengthy discussion, the suggestion is to separate two
+> cases:
+>   (1). new symbols with suffix which are generated regardless of whether
+>        LTO is enabled or not, and
+>   (2). new symbols with suffix generated only when LTO is enabled.
+> 
+> The cleanup_symbol_name() should only remove suffixes for case (2).
+> Case (1) should not be changed so it can work uniformly with or without LTO.
+> 
+> This patch removed LTO-only suffix '.llvm.<...>' so live patching and
+> tracing should work the same way for non-LTO kernel.
+> 
+>  [1] https://lore.kernel.org/live-patching/20230615170048.2382735-1-song@kernel.org/T/#u
+
+Missed the addition of:
+Reported-by: Song Liu <song@kernel.org>
+
+> 
+> Fixes: 6eb4bd92c1ce ("kallsyms: strip LTO suffixes from static functions")
+> Signed-off-by: Yonghong Song <yhs@fb.com>
+> ---
+>  kernel/kallsyms.c | 5 ++---
+>  1 file changed, 2 insertions(+), 3 deletions(-)
+> 
+> diff --git a/kernel/kallsyms.c b/kernel/kallsyms.c
+> index 77747391f49b..4874508bb950 100644
+> --- a/kernel/kallsyms.c
+> +++ b/kernel/kallsyms.c
+> @@ -174,11 +174,10 @@ static bool cleanup_symbol_name(char *s)
+>  	 * LLVM appends various suffixes for local functions and variables that
+>  	 * must be promoted to global scope as part of LTO.  This can break
+>  	 * hooking of static functions with kprobes. '.' is not a valid
+> -	 * character in an identifier in C. Suffixes observed:
+> +	 * character in an identifier in C. Suffixes only in LLVM LTO observed:
+>  	 * - foo.llvm.[0-9a-f]+
+> -	 * - foo.[0-9a-f]+
+>  	 */
+> -	res = strchr(s, '.');
+> +	res = strstr(s, ".llvm.");
+
+We'd better modify function cleanup_symbol_name() in scripts/kallsyms.c accordingly.
+
+
+>  	if (res) {
+>  		*res = '\0';
+>  		return true;
+> 
+
+-- 
+Regards,
+  Zhen Lei
