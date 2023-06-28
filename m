@@ -2,104 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F40A6741955
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 22:11:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D6B3741956
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 22:11:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231687AbjF1ULo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 16:11:44 -0400
-Received: from dfw.source.kernel.org ([139.178.84.217]:54696 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232160AbjF1ULN (ORCPT
+        id S231361AbjF1ULs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 16:11:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60468 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232168AbjF1ULN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 28 Jun 2023 16:11:13 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D08F261466;
-        Wed, 28 Jun 2023 20:11:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 05DF5C433C0;
-        Wed, 28 Jun 2023 20:11:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687983072;
-        bh=LLcceKwXay+1+LZDqQSJ8DdnOTd9XJoa6qAnUlgbGhQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ny+Dig9eSI8aD48PEXYHzX0z4qqIyDFR4n9v6cCNGMCJIuUkM3THoCcDTZXFEo0iC
-         4pZSWDZDTu+NSJjYsR74RLvpclufEOOnYAMEzqs8y+O+w6t2DS/wwm7iXfJ50U74Py
-         tlWQZbEZEOsEHxp0xbcG4lpIzaiwo6CzLehq3g8WFubcVqyVMQqTM6cneR/1N/aOXf
-         DCfi7lw7VUlaKsMWs0zu3q9pfYNjCOCKH57v1bD+1bJqxYB8nkTPWAE3XF+YsheRNV
-         3nQjPTCxd/bNW4DvJNE4Dr7AFDTrxd2F/qF+4raCfkes3j7wvNuKhcOJb7MCCoE/Y5
-         J6DsMfu9kAncg==
-Date:   Wed, 28 Jun 2023 21:11:05 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        krzysztof.kozlowski+dt@linaro.org, andersson@kernel.org,
-        robh+dt@kernel.org, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, johan+linaro@kernel.org,
-        perex@perex.cz, tiwai@suse.com, lgirdwood@gmail.com,
-        ckeepax@opensource.cirrus.com, kuninori.morimoto.gx@renesas.com,
-        linux-kernel@vger.kernel.org, pierre-louis.bossart@linux.intel.com,
-        alsa-devel@alsa-project.org
-Subject: Re: [PATCH 2/3] ASoC: qcom: q6apm: add support for reading firmware
- name from DT
-Message-ID: <12c19702-9a0a-45b9-9dc0-6b62879fae81@sirena.org.uk>
-References: <20230628102621.15016-1-srinivas.kandagatla@linaro.org>
- <20230628102621.15016-3-srinivas.kandagatla@linaro.org>
- <f71c8d2b-d5f4-42bb-932f-5b9ec6117ffc@sirena.org.uk>
- <73dce263-bee6-554f-9eb6-af4aa7badab1@linaro.org>
- <c377aefe-2678-4ba7-96b3-2186e8f3f1b4@sirena.org.uk>
- <fabef33c-a8c7-af61-80b4-91e55081c977@linaro.org>
- <c5bbdaa9-43fb-4ec3-af7d-b1629d2d88f7@sirena.org.uk>
- <CAA8EJprRH6aFj17A-sJzzHJXG7vNWu-yznSh7oA3WBXRv19wvw@mail.gmail.com>
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AEEF2708
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 13:11:10 -0700 (PDT)
+Received: by mail-pl1-x62c.google.com with SMTP id d9443c01a7336-1b7db2e162cso2447075ad.1
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 13:11:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1687983069; x=1690575069;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=5K4gcsgfu5VdAQZmgsxJjZsYjNzsysi7aJ/FIr0V2kA=;
+        b=de0X15c22x4phdM0BKgrnCVftBlKRbqym+5tXlx3mmoYm2yv2sZUv7lssa3ypa5liF
+         494z/vLNcOuupUwxI6KNzv5kLS+IerDQhhxtsdWSzbITrutMyGQUCw64p6Dr5N7CiE3i
+         wJqJM/v/Lvx77uHrLUotpWbiKbgPFumcU2xB8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687983069; x=1690575069;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=5K4gcsgfu5VdAQZmgsxJjZsYjNzsysi7aJ/FIr0V2kA=;
+        b=Y1vD0IUPlWjzTKk0h60exhp7Qu9gxgVc650JHi4cYb+abt4k+fU6QrpzApcigan6RM
+         SRWedBcZaKnMx9ZYrfbt3/2OqEgn091gqB5ydgepkLcUNkCurHx3lR8ynUIScW6jhEdJ
+         28A10wYN81mxVuHqn+1NeUS8uGwylNnC29Z9HAFYz1AFu+juk3O4cqQU3mJhc4Izfq8U
+         O2WgK4zXvVp0iF3QszJ5BmCoKqBp3Av3uGOUGEBWz2RLGZs0ZWOXU4idxKiw5MRlFAMx
+         CNUfLEddFYlxyNbg35Lb+qnT8349YbHlH+/SytWaKW43/7jU0VE2cpOibL4zLXwhmT2z
+         ZSAg==
+X-Gm-Message-State: AC+VfDwDe0EG3KyTkxZByiLWA3oFnMM84e5czebc/1Q8Ee4rGDIsRoQV
+        dxm71mW7rcSxjVJsyhMQM63l1g==
+X-Google-Smtp-Source: ACHHUZ4PcHsrof2rSh4ypgQ4TC9TefxxeJCtnWJr6LVXVz2BjqfkCNVlKErJZ2LW9jafeiNxTeHaIA==
+X-Received: by 2002:a17:902:9a09:b0:1b3:e003:be8e with SMTP id v9-20020a1709029a0900b001b3e003be8emr9732346plp.7.1687983069715;
+        Wed, 28 Jun 2023 13:11:09 -0700 (PDT)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id f4-20020a170902e98400b001b53029fef1sm1950809plb.172.2023.06.28.13.11.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 28 Jun 2023 13:11:09 -0700 (PDT)
+Date:   Wed, 28 Jun 2023 13:11:08 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
+Cc:     aacraid@microsemi.com, "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hardening@vger.kernel.org
+Subject: Re: [PATCH 10/10][next] scsi: aacraid: Replace one-element array
+ with flexible-array member in struct user_sgmap
+Message-ID: <202306281311.8AE923473@keescook>
+References: <cover.1687974498.git.gustavoars@kernel.org>
+ <2ebb702f25c4764fb36ab29f4f40728e12b0e42b.1687974498.git.gustavoars@kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="YMXJcNcxLhYXGPw7"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAA8EJprRH6aFj17A-sJzzHJXG7vNWu-yznSh7oA3WBXRv19wvw@mail.gmail.com>
-X-Cookie: HELLO, everybody, I'm a HUMAN!!
+In-Reply-To: <2ebb702f25c4764fb36ab29f4f40728e12b0e42b.1687974498.git.gustavoars@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+        lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Jun 28, 2023 at 11:57:48AM -0600, Gustavo A. R. Silva wrote:
+> Replace one-element array with flexible-array member in struct
+> user_sgmap and refactor the rest of the code, accordingly.
+> 
+> Issue found with the help of Coccinelle and audited and fixed,
+> manually.
+> 
+> This results in no differences in binary output.
 
---YMXJcNcxLhYXGPw7
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Confirmed.
 
-On Wed, Jun 28, 2023 at 11:00:54PM +0300, Dmitry Baryshkov wrote:
-> On Wed, 28 Jun 2023 at 22:40, Mark Brown <broonie@kernel.org> wrote:
-> > On Wed, Jun 28, 2023 at 10:33:16PM +0300, Dmitry Baryshkov wrote:
+> 
+> Link: https://github.com/KSPP/linux/issues/79
+> Link: https://github.com/ClangBuiltLinux/linux/issues/1851
+> Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
 
-> > > This quickly becomes overcomplicated. Some platforms use different firmware
-> > > naming structure. Some firmware goes into a generic location and other files
-> > > go into device-specific location. So having a generic helper doesn't really
-> > > help.
+Reviewed-by: Kees Cook <keescook@chromium.org>
 
-> > That sounds like a job for symlinks surely?
-
-> Excuse me, but I don't understand the goal for such symlinks. In my
-> opinion (and more importantly, in the opinion of qcom maintainers),
-> firmware-name does the necessary job. It provides enough flexibility
-> and doesn't require any additional dances around.
-
-The goal is to avoid adding a Linux specific ABI if we don't need one,
-and to allow later adjustment of what's selected on the userspace side
-more easily (eg, if a more specific firwmare is found).
-
---YMXJcNcxLhYXGPw7
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmSck9gACgkQJNaLcl1U
-h9BlIAf/U3zhxoGXi5DoWCg8Bs+vMFignIh07oSJjhgCaLNRBDO8u+xB0O2y3Ttc
-huuRgDvcmjdZu1j258LPOc2dOwsYlGpIGNZuO2MxbeRxWLvJ+jYolrQr693R0H7Z
-H7tR1GmW2+kU10RHflKOdoByXYSFg3s8Y37K1gUAKYDFCtDdk72sSeRdKWAyxlb1
-cieBspLTI7ezND4O8mBpNZTkPrw6TFGDtETlk6ek5ySbUD2beWWTbBWbb604LJrI
-IGStw1SfiHcu6eY0zm7BFyiWJgowKLxzq4Aesy/ok/Ng8ztRXk1dYttxFifSY+x0
-GSDE23I/jS9mukoIMyL1z3/nA0ty4Q==
-=jB6O
------END PGP SIGNATURE-----
-
---YMXJcNcxLhYXGPw7--
+-- 
+Kees Cook
