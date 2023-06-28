@@ -2,95 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58C287417C5
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 20:05:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 33AB37417CD
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 20:10:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229789AbjF1SFo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 14:05:44 -0400
-Received: from mail-pj1-f45.google.com ([209.85.216.45]:58506 "EHLO
-        mail-pj1-f45.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231520AbjF1SFl (ORCPT
+        id S231332AbjF1SK0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 14:10:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48206 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229622AbjF1SKX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 14:05:41 -0400
-Received: by mail-pj1-f45.google.com with SMTP id 98e67ed59e1d1-262ff3a4659so2427888a91.0;
-        Wed, 28 Jun 2023 11:05:41 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687975541; x=1690567541;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=I6CGUiKfkA/rqCIECSBciDbZpKGwEtXOQFB5hLYmBzE=;
-        b=elGdAmPqKGr5nx8WX8wbMJqsb3pgKIYNV3iqedm1eKT7E0+Xltj/dGhd1cES2y/XsL
-         bOhBOq1w9x0l3JIVtDTtgOiEMX7G3PsNTDR8T+CrNLQtg6ObHOIKf5Sn5clCfLc02QIT
-         hTMgboLDZTRWkQr+3hKjJfuMbBWlL0PP1WVxhVYe5Kxno8AlwU4AQX/z9yR9tONZ2Ilz
-         mxxeOXpacaBecLRAgE+j6d3YTQesd652QZ91pt+dke7OQ/TjwGdwrgloXxdq73cGL4sg
-         hQMFP3F3SCxOEZxVf8SHwnaNvB9fYoLii9yi6dHad0JDsvs/sjY/uN16Cf5hjPVgg1k+
-         eXrg==
-X-Gm-Message-State: AC+VfDw7EvZQ1NPVS5q5+6vW/3WEGz92wljqVtcixVXfmxMNLA+NKCcr
-        97ia1tQQRF5UDsokNHm0RWw=
-X-Google-Smtp-Source: ACHHUZ7FlAjGD9Xh6goc3LuzXD+WCH3hg+8oQQ7uIyDpxUBa6X9RTW50aPEtWkdCGQMLAyymK7Uezg==
-X-Received: by 2002:a17:90a:df04:b0:262:fb5d:147d with SMTP id gp4-20020a17090adf0400b00262fb5d147dmr8277691pjb.16.1687975540932;
-        Wed, 28 Jun 2023 11:05:40 -0700 (PDT)
-Received: from liuwe-devbox-debian-v2 ([20.69.120.36])
-        by smtp.gmail.com with ESMTPSA id 91-20020a17090a0fe400b00259b53dccddsm8690914pjz.34.2023.06.28.11.05.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Jun 2023 11:05:40 -0700 (PDT)
-Date:   Wed, 28 Jun 2023 18:05:38 +0000
-From:   Wei Liu <wei.liu@kernel.org>
-To:     Dexuan Cui <decui@microsoft.com>
-Cc:     ak@linux.intel.com, arnd@arndb.de, bp@alien8.de,
-        brijesh.singh@amd.com, dan.j.williams@intel.com,
-        dave.hansen@intel.com, dave.hansen@linux.intel.com,
-        haiyangz@microsoft.com, hpa@zytor.com, jane.chu@oracle.com,
-        kirill.shutemov@linux.intel.com, kys@microsoft.com,
-        linux-arch@vger.kernel.org, linux-hyperv@vger.kernel.org,
-        luto@kernel.org, mingo@redhat.com, peterz@infradead.org,
-        rostedt@goodmis.org, sathyanarayanan.kuppuswamy@linux.intel.com,
-        seanjc@google.com, tglx@linutronix.de, tony.luck@intel.com,
-        wei.liu@kernel.org, x86@kernel.org, mikelley@microsoft.com,
-        linux-kernel@vger.kernel.org, Tianyu.Lan@microsoft.com,
-        rick.p.edgecombe@intel.com
-Subject: Re: [PATCH v9 0/2] Support TDX guests on Hyper-V (the x86/tdx part)
-Message-ID: <ZJx2cm1HaMEcNIYy@liuwe-devbox-debian-v2>
-References: <20230621191317.4129-1-decui@microsoft.com>
+        Wed, 28 Jun 2023 14:10:23 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93CCB10D8
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 11:10:22 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 29AD36137F
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 18:10:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4EA31C433C8;
+        Wed, 28 Jun 2023 18:10:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687975821;
+        bh=mRw+zSjf9GVtwo3Ud86Z4s79jqjy9EQmP9Bk+yry79A=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Xl5IPOjHQkFkteFmgywK0YHyez1XmlRv472aammeiNpNloRidnxLudrm8amkVjY80
+         ghvB49te5naUnLaUpzaakeQsuO6SSZHRWtZkLV36FyGmkdylV5pTXA2zPbNNjaB9N1
+         1+TN1te5e+WOGkViNY8rkqx2xOVAWZtKl99z8KlbqPMamqRINyT3yBETdljldChXvK
+         RwWTFmC2jUgRn/7fh0VfdpQkqvoAWecD5nB4Df/1PlO6bEgbM8b8bCFykQvfEJxx4N
+         k48wxinIXNh9NmEyV3ww3D1LAJVKcHG9V+dgzJs73Ceq369EmMQ5SGY/HVI0LIKY8v
+         Ko7/OTESN2ELA==
+Date:   Wed, 28 Jun 2023 11:10:19 -0700
+From:   Josh Poimboeuf <jpoimboe@kernel.org>
+To:     Michal Kubecek <mkubecek@suse.cz>
+Cc:     Peter Zijlstra <peterz@infradead.org>, linux-kernel@vger.kernel.org
+Subject: Re: build failure after commit eb0481bbc4ce ("objtool: Fix
+ reloc_hash size")
+Message-ID: <20230628181019.cmgfbygxfvwamzur@treble>
+References: <20230628115825.ahqejf5y4hgxhyqj@lion.mk-sys.cz>
+ <20230628151654.zqwy5zsc2cymqghr@treble>
+ <20230628154432.4drtq4pivlkkg6v2@lion.mk-sys.cz>
+ <20230628160631.ryt4icjeck627efs@lion.mk-sys.cz>
+ <20230628164554.womrvwq7chnjtva4@lion.mk-sys.cz>
+ <20230628170530.derop5w2gtmgjeis@treble>
+ <20230628172659.6qwbswgz4ki24wyv@lion.mk-sys.cz>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230621191317.4129-1-decui@microsoft.com>
+In-Reply-To: <20230628172659.6qwbswgz4ki24wyv@lion.mk-sys.cz>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+        lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 21, 2023 at 12:13:15PM -0700, Dexuan Cui wrote:
-> The two patches are based on today's tip.git's master branch.
+On Wed, Jun 28, 2023 at 07:26:59PM +0200, Michal Kubecek wrote:
+> I digged some more and my guess is that the problem is that
+> elf_open_read() does
 > 
-> Note: the two patches don't apply to the current x86/tdx branch, which
-> doesn't have commit 75d090fd167a ("x86/tdx: Add unaccepted memory support").
+> 	memset(elf, 0, offsetof(struct elf, sections));
 > 
-> As Dave suggested, I moved some local variables of tdx_map_gpa() to
-> inside the loop. I added Sathyanarayanan's Reviewed-by.
-> 
-> Please review.
-> 
-> FWIW, the old versons are here:
-> v8: https://lwn.net/ml/linux-kernel/20230620154830.25442-1-decui@microsoft.com/
-> v7: https://lwn.net/ml/linux-kernel/20230616044701.15888-1-decui%40microsoft.com/
-> v6: https://lwn.net/ml/linux-kernel/20230504225351.10765-1-decui@microsoft.com/
-> 
-> Dexuan Cui (2):
->   x86/tdx: Retry TDVMCALL_MAP_GPA() when needed
->   x86/tdx: Support vmalloc() for tdx_enc_status_changed()
-> 
->  arch/x86/coco/tdx/tdx.c           | 87 ++++++++++++++++++++++++++-----
->  arch/x86/include/asm/shared/tdx.h |  2 +
->  2 files changed, 77 insertions(+), 12 deletions(-)
+> but commit eb0481bbc4ce ("objtool: Fix reloc_hash size") added
+> num_relocs after sections so that it is not zeroed (0xbabababababababa
+> is probably some kind of poison).
 
-Dexuan, do you expect these to go through the Hyper-V tree?
+Argh, that memset() is subtle as heck.  Peter, why?!?
 
-Thanks,
-Wei.
-
-> 
-> -- 
-> 2.25.1
-> 
+-- 
+Josh
