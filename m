@@ -2,117 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A618740E20
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 12:06:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1939740DF1
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 12:03:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231403AbjF1KG0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 06:06:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53556 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234096AbjF1J41 (ORCPT
+        id S233890AbjF1JzM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 05:55:12 -0400
+Received: from mail.xen0n.name ([115.28.160.31]:49980 "EHLO
+        mailbox.box.xen0n.name" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232646AbjF1Jvc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 05:56:27 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E87435AE;
-        Wed, 28 Jun 2023 02:50:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=pfjacbNuUwNkrWAeX5Ew7Qz/kZoiz3IcmwDj95RMCcU=; b=tXJSifE16qh8I4CRy5NBp/XIYX
-        2GwwbwIoEpaBUvWf/xRX5/W2QDGoOfYvCt/iARxSA8EKGG4Cnjy+Kr3tr5BcMDzZLjw1vi9IDV46y
-        1ao7vzotqEPWi12kqEQRipNiimnRZ4u5m/BEDyTlKFXbfH9vXutfJQKiva3H3fJD+51ucfpS4TO8D
-        jubHGiI/FFT6xo57D9ufPAQeuNkD7XKAnNAMYW4dAgmNp13AboEGdJv0TJt1h8osmD+sQhjAao6q7
-        zwcZA+WIdrahy/4QkavoMuu01xZgh6XeA9Hgt4daBaEV15xnGX2Pg6RKcNiIstSUHvCg3UbzqliS0
-        QGitV93A==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:33168)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.96)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1qERoy-00071a-19;
-        Wed, 28 Jun 2023 10:50:44 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1qERov-0006eS-Aj; Wed, 28 Jun 2023 10:50:41 +0100
-Date:   Wed, 28 Jun 2023 10:50:41 +0100
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     wuych <yunchuan@nfschina.com>
-Cc:     iyappan@os.amperecomputing.com, keyur@os.amperecomputing.com,
-        quan@os.amperecomputing.com, andrew@lunn.ch, hkallweit1@gmail.com,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
-Subject: Re: [PATCH net-next 08/10] net: mdio: Remove unnecessary (void*)
- conversions
-Message-ID: <ZJwCcWgi0d6kEepI@shell.armlinux.org.uk>
-References: <20230628024517.1440644-1-yunchuan@nfschina.com>
+        Wed, 28 Jun 2023 05:51:32 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xen0n.name; s=mail;
+        t=1687945890; bh=mERR5o/6GAasOdmhfFEv0s0jaV6yQdbTTBXBhqFAqgI=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=Ag+B3SY2EAgFH+HU437SHcr9olebrpCEhzkgGhOszvll4+B2qkAon0dWQPULujxqZ
+         HtSHHGOTWf0z5sZCcNI88A/TucYf0UT/cq/COITvzTEPtOsd6cI+elKhe3jo2WQCzh
+         iKK29Zl+6XHUqPRR0+zbcAkiDZ1NCjaPRn/LjwEY=
+Received: from [100.100.34.13] (unknown [220.248.53.61])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mailbox.box.xen0n.name (Postfix) with ESMTPSA id B59C7600A6;
+        Wed, 28 Jun 2023 17:51:29 +0800 (CST)
+Message-ID: <cfc87f85-3a09-8a9e-4258-4fb1fd8013ab@xen0n.name>
+Date:   Wed, 28 Jun 2023 17:51:28 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230628024517.1440644-1-yunchuan@nfschina.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-        lindbergh.monkeyblade.net
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.12.0
+Subject: Re: [PATCH v15 27/30] LoongArch: KVM: Implement vcpu world switch
+Content-Language: en-US
+To:     zhaotianrui <zhaotianrui@loongson.cn>,
+        Jinyang He <hejinyang@loongson.cn>,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        loongarch@lists.linux.dev, Jens Axboe <axboe@kernel.dk>,
+        Mark Brown <broonie@kernel.org>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Oliver Upton <oliver.upton@linux.dev>, maobibo@loongson.cn,
+        Xi Ruoyao <xry111@xry111.site>, tangyouling@loongson.cn
+References: <20230626084752.1138621-1-zhaotianrui@loongson.cn>
+ <20230626084752.1138621-28-zhaotianrui@loongson.cn>
+ <f648a182-7c26-5bbc-6ae5-584af26e9db1@loongson.cn>
+ <7017277c-3721-b417-5215-491efae7c8a9@loongson.cn>
+From:   WANG Xuerui <kernel@xen0n.name>
+In-Reply-To: <7017277c-3721-b417-5215-491efae7c8a9@loongson.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 Hi,
 
-I think you missed one case:
+On 2023/6/28 16:34, zhaotianrui wrote:
+> 
+> 在 2023/6/28 上午11:42, Jinyang He 写道:
+>> On 2023-06-26 16:47, Tianrui Zhao wrote:
+>>
+>>> [snip]
+>>
+>>> +    ldx.d   t0, t1, t0
+>>> +    csrwr    t0, LOONGARCH_CSR_PGDL
+>>> +
+>>> +    /* Mix GID and RID */
+>>> +    csrrd        t1, LOONGARCH_CSR_GSTAT
+>>> +    bstrpick.w    t1, t1, CSR_GSTAT_GID_SHIFT_END, CSR_GSTAT_GID_SHIFT
+>>> +    csrrd        t0, LOONGARCH_CSR_GTLBC
+>>> +    bstrins.w    t0, t1, CSR_GTLBC_TGID_SHIFT_END, CSR_GTLBC_TGID_SHIFT
+>>> +    csrwr        t0, LOONGARCH_CSR_GTLBC
+>>> +
+>>> +    /*
+>>> +     * Switch to guest:
+>>> +     *  GSTAT.PGM = 1, ERRCTL.ISERR = 0, TLBRPRMD.ISTLBR = 0
+>>> +     *  ertn
+>>> +     */
+>>> +
+>>> +    /*
+>>> +     * Enable intr in root mode with future ertn so that host interrupt
+>>> +     * can be responsed during VM runs
+>>> +     * guest crmd comes from separate gcsr_CRMD register
+>>> +     */
+>>> +    ori    t0, zero, CSR_PRMD_PIE
+>> li.w t0, CSR_PRMD_PIE
+> Thanks for your advice, and I think it need not to replace it with 
+> "li.w" there, as it has the same meaning with "ori" instruction, and 
+> "ori" instruction is simple and clear enough. The same as the following 
+> "move" instructions. What do you think of it.
 
-        if (mdio_id == XGENE_MDIO_RGMII) {
-                mdio_bus->read = xgene_mdio_rgmii_read;
-                mdio_bus->write = xgene_mdio_rgmii_write;
-                mdio_bus->priv = (void __force *)pdata;
+Just my 2c: I'd agree that pseudo-instructions should be used wherever 
+possible and helping readability.
 
-This cast using __force is also not required.
+FYI there were similar usages way before, but all were cleaned up with 
+my previous commit 57ce5d3eefac ("LoongArch: Use the "move" 
+pseudo-instruction where applicable").
 
-On Wed, Jun 28, 2023 at 10:45:17AM +0800, wuych wrote:
-> @@ -211,7 +211,7 @@ static void xgene_enet_wr_mdio_csr(void __iomem *base_addr,
->  static int xgene_xfi_mdio_write(struct mii_bus *bus, int phy_id,
->  				int reg, u16 data)
->  {
-> -	void __iomem *addr = (void __iomem *)bus->priv;
-> +	void __iomem *addr = bus->priv;
->  	int timeout = 100;
->  	u32 status, val;
->  
-> @@ -234,7 +234,7 @@ static int xgene_xfi_mdio_write(struct mii_bus *bus, int phy_id,
->  
->  static int xgene_xfi_mdio_read(struct mii_bus *bus, int phy_id, int reg)
->  {
-> -	void __iomem *addr = (void __iomem *)bus->priv;
-> +	void __iomem *addr = bus->priv;
->  	u32 data, status, val;
->  	int timeout = 100;
-
-These probably cause Sparse to warn whether or not the cast is there.
-
-Given that in this case, bus->priv is initialised via:
-
-                mdio_bus->priv = (void __force *)pdata->mdio_csr_addr;
-
-I think the simple thing is to _always_ initialise mdio_bus->priv
-to point at pdata, and have xgene_xfi_mdio_*() always do:
-
-	struct xgene_mdio_pdata *pdata = bus->priv;
-	void __iomem *addr = pdata->mdio_csr_addr;
-
-The extra access will be dwarfed by the time taken to perform the
-access.
-
-This change should be made with a separate patch and not combined with
-the patch removing the casts in xgene_mdio_rgmii_*().
-
-Thanks.
+Such usages apparently came from an era when the LoongArch toolchains 
+didn't support any pseudo-instruction, and are less intuitive especially 
+for someone not familiar with LoongArch assembly. Given that familiarity 
+with LoongArch won't be widespread (unlike with e.g. RISC-V that are 
+adopted more widely), we should optimize for readability when writing 
+code; it's also a best practice in general because code is read way more 
+often than written, and people care about semantics not unnecessary 
+details like "how are moves like this or that materialized".
 
 -- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
+WANG "xen0n" Xuerui
+
+Linux/LoongArch mailing list: https://lore.kernel.org/loongarch/
+
