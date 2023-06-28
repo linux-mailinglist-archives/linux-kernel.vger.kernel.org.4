@@ -2,142 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DAFC741908
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 21:51:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 526B774190A
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 21:52:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231324AbjF1TvH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 15:51:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58696 "EHLO
+        id S231421AbjF1Twq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 15:52:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229487AbjF1TvE (ORCPT
+        with ESMTP id S231388AbjF1Twp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 15:51:04 -0400
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B8F01BE9;
-        Wed, 28 Jun 2023 12:51:02 -0700 (PDT)
-Received: by mail-wr1-x430.google.com with SMTP id ffacd0b85a97d-31297125334so333649f8f.0;
-        Wed, 28 Jun 2023 12:51:01 -0700 (PDT)
+        Wed, 28 Jun 2023 15:52:45 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8C611FD8
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 12:52:43 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id a640c23a62f3a-98934f000a5so23113166b.2
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 12:52:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687981860; x=1690573860;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=XagGNUSMlZ2YxfStu7vBidTnF8doQVt9/OwIdHD5PeU=;
-        b=aI19TtPB0HZxkWtcmWaWHVpCLB2ui/jaTO3L9MOtOyVG6Qhk0SzhtPqrxD9beEfE9Q
-         AJmZou1t7QgXMX9u4ZxwxXvVmqf6DTmJt1RHqw9tdJGJ0BiPRzGgV1/jmPAHRiqJlZAO
-         rM/kT8pWmG2Okog9HqI1CYcjIjlT/M+q37PCQZe9rz8xYiJFZXAJJHBhEmwQclksggCX
-         2T/DJ6Y8UANk3pplycwDea+IddP34eCtjLKGW3kyB4tURv8xyWQLFygi3tK/td7AYHoc
-         4bLsqDKBLVrf6zxsNUTCqm/GOK2pKUgfmX0/SF2IHNZsq2optTA7QjeMvoWJVMXjSp0j
-         0SoA==
+        d=linux-foundation.org; s=google; t=1687981962; x=1690573962;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=YkBvgE6FKBaRtID8FuxJ3ehb22oG6DMFKjLdz1CVX1E=;
+        b=Fcn8JnPCLG/w+KsUn/lG3I4gAz86hv420AP0DHK0zCVxVTgX/ddbS6FIo7VfQr7JvE
+         HvXw2M0nQEhm5tZ7XV0rTFWkS5Z7FItk/zwRwC36ByCC0wZW/EgnyL71dUICwSNVMz0v
+         X1bnONfDv/EEM378FE4OLNDqgBu8XAzQR46t4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687981860; x=1690573860;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=XagGNUSMlZ2YxfStu7vBidTnF8doQVt9/OwIdHD5PeU=;
-        b=fhKIZ9ZVGDTHNV+UN9itkJ+Aqn4ufiLissY0H86kJ5ijDodDgZ+WFqnsbgcNcuTbuK
-         YMwxZbKj1aEkqvDYD0S2LKPWcvYFC2qBhtCMs56t34LTQG5kiV/WtdgVSFNKL0NBDTzi
-         7dSHkvhqA9evLx3IQ/zszk+44KvhVKOv9n1Dp1ra3cbdZtXdQOJr/bdy2SLJdoeQWpzd
-         6BRdVvq4/pmiHSLorM+cK6xRFZ6/S7eofO7tujM0pjSPT4Dse+LQSIAcuJzn0KvwWBCN
-         ilaflQlqoobiXkpH7Du7e4+ibn+ysVcpvKj7zTa7FEJjURxwaESddZFxEavQdpu3jcjl
-         Lcgw==
-X-Gm-Message-State: AC+VfDxSyM7RczwJWp8SpEsVuIFDuTMDuEF5gSnvPJjcG5yefSDvRNjs
-        1U2VzVbNtoumeqtb145xifSGjHN1x3M=
-X-Google-Smtp-Source: ACHHUZ4DkdsPnRN96+9fvZ1oe5acppJA1dzDhm0/IZ4Fuc3oQjqtcRtv+UM0Wd74boHlX13ESVfnmQ==
-X-Received: by 2002:a5d:49c1:0:b0:314:c16:56a2 with SMTP id t1-20020a5d49c1000000b003140c1656a2mr2592622wrs.14.1687981860200;
-        Wed, 28 Jun 2023 12:51:00 -0700 (PDT)
-Received: from localhost ([2a00:23c5:dc8c:8701:1663:9a35:5a7b:1d76])
-        by smtp.gmail.com with ESMTPSA id s2-20020adff802000000b00313de682eb3sm14057138wrp.65.2023.06.28.12.50.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Jun 2023 12:50:59 -0700 (PDT)
-Date:   Wed, 28 Jun 2023 20:50:58 +0100
-From:   Lorenzo Stoakes <lstoakes@gmail.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        mm-commits@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [GIT PULL] MM updates for 6.5-rc1
-Message-ID: <986f48a6-5ec2-4f69-b1dc-72fe5b7ada77@lucifer.local>
-References: <20230626085035.e66992e96b4c6d37dad54bd9@linux-foundation.org>
- <CAHk-=whppqqPdjVOx0mONDFx+JjewZPacionbWCUUFdrfOon-g@mail.gmail.com>
+        d=1e100.net; s=20221208; t=1687981962; x=1690573962;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=YkBvgE6FKBaRtID8FuxJ3ehb22oG6DMFKjLdz1CVX1E=;
+        b=QgPcf9PxXs4WNxb9DJb31ugpD+2aUlV+mhVhUwDs6OFGZkj7IlL48gfHrhtlUtuw6h
+         EGsZhKXzItxs23WbiDMwtR9ZQyogxViWqee7JG3DTaI7jZP8hNp9rxP535vw505kLJ/I
+         LmOHvJWyKOEoVaVEWEd8iW823C/8Ne4oZbNuSzTp9GQZxGFtQ66BMsp+8HTC2GMJHIX8
+         ueP7sjFxI35lZ6NnMnyDTb67vdNER4xi8s+mEeTJWqgGRgKp9mQTVHI5QaKcVAfROa4o
+         unEMDxM0SJTHLUdtya9EEsJnqD051oHF2X+iQKKLhBndJTnjIl8MarRSFKJ3c3mWISxv
+         xOFA==
+X-Gm-Message-State: AC+VfDzN5B/gsyxJJV/mdz3aA+urI3f2b2Z3KmliHePqjOwp+WcKu370
+        T7CFJQZPTjLRjNDNMJPBmL/Zs3ZBnULA6bktUsXk5/AD
+X-Google-Smtp-Source: ACHHUZ7xON3k9bD2kZsu0qpwsobUZjxGS/dTKbkWOBQp7fVAjiYP5AdkMGAQR6sgVdiof9JK07GFHw==
+X-Received: by 2002:a17:907:7294:b0:988:c97b:8973 with SMTP id dt20-20020a170907729400b00988c97b8973mr23768807ejc.6.1687981962194;
+        Wed, 28 Jun 2023 12:52:42 -0700 (PDT)
+Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com. [209.85.208.41])
+        by smtp.gmail.com with ESMTPSA id gw26-20020a170906f15a00b009929d998abcsm416446ejb.209.2023.06.28.12.52.41
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 28 Jun 2023 12:52:41 -0700 (PDT)
+Received: by mail-ed1-f41.google.com with SMTP id 4fb4d7f45d1cf-51d9865b8a2so4525717a12.3
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 12:52:41 -0700 (PDT)
+X-Received: by 2002:a05:6402:1353:b0:51d:a679:7555 with SMTP id
+ y19-20020a056402135300b0051da6797555mr4623975edw.31.1687981961409; Wed, 28
+ Jun 2023 12:52:41 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHk-=whppqqPdjVOx0mONDFx+JjewZPacionbWCUUFdrfOon-g@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <ZJyECvfrOWhKJj4t@casper.infradead.org>
+In-Reply-To: <ZJyECvfrOWhKJj4t@casper.infradead.org>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Wed, 28 Jun 2023 12:52:24 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wghER2OsCc+H2USU+nmh72QJ-kqTmaHq=YFd=0xaivubw@mail.gmail.com>
+Message-ID: <CAHk-=wghER2OsCc+H2USU+nmh72QJ-kqTmaHq=YFd=0xaivubw@mail.gmail.com>
+Subject: Re: Reunbreak the MEM_ENCRYPT build
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     Thomas Gleixner <tglx@linutronix.de>, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 28, 2023 at 12:19:42PM -0700, Linus Torvalds wrote:
-> On Mon, 26 Jun 2023 at 08:50, Andrew Morton <akpm@linux-foundation.org> wrote:
-> >
-> > Linus, please merge the MM updates for the 6.5-rc cycle.
+On Wed, 28 Jun 2023 at 12:03, Matthew Wilcox <willy@infradead.org> wrote:
 >
-> Hmm. I have merged this, as pr-tracker-bot already noticed, but I
-> found a bug after merging it.
->
-> mm/memory.c: __access_remote_vm() is entirely broken for the
-> HAVE_IOREMAP_PROT case (ie all normal architectures), because it does
-> (skipping the non-HAVE_IOREMAP_PROT case):
->
->         struct vm_area_struct *vma = NULL;
->         struct page *page = get_user_page_vma_remote(mm, addr,
->                                                      gup_flags, &vma);
->
->         if (IS_ERR_OR_NULL(page)) {
->                 [ ... ]
->                 if (!vma)
->                         break;
->                 if (vma->vm_ops && vma->vm_ops->access)
->                         res = vma->vm_ops->access(vma, addr, buf, ...
->
-> but get_user_page_vma_remote() doesn't even set vma if it fails!
->
-> So that "if (!vma)" case will always trigger, and the whole ->access()
-> thing is never done.
+> Probably this is the wrong fix.
 
-Ugh yeah...
+No, that looks like the obviously correct fix, I just don't see how we
+all missed that stale declaration.
 
-This came about because the helper function handles the vma_lookup() case
-but obviously we now only bother with the vma_lookup() if the gup_remote()
-succeeds.
+I guess we all had X86_MEM_ENCRYPT enabled, which hides the problem.
+And other architectures wouldn't have had the issue.
 
-It's made a little trickier by the fact we warn on !vma if the gup
-succeeded, so probably special casing this one makes sense for now.
-
-There's been discussion about eliminating this weirdo thing gup returning 0
-but being treated as a not-failure, I will probably try to patch this soon
-for the one usecase where it matters (uprobes) and maybe also look at this
-whole odd 'special mappings are ok in this one place' thing here.
-
->
-> So that __access_remote_vm() conversion in commit ca5e863233e8
-> ("mm/gup: remove vmas parameter from get_user_pages_remote()") is
-> entirely broken.
->
-> Now, I don't disagree with removing the vmas parameter. I just
-> disagree with the get_user_page_vma_remote() helper use here.
->
-> I think the minimal fix is to just put the vma_lookup() back in the error case:
->
->     --- a/mm/memory.c
->     +++ b/mm/memory.c
->     @@ -5592,6 +5592,7 @@ int __access_remote_vm(struct mm_struct *mm,
->                  * Check if this is a VM_IO | VM_PFNMAP VMA, which
->                  * we can access using slightly different code.
->                  */
->     +           vma = vma_lookup(mm, addr);
->                 if (!vma)
->                         break;
->                 if (vma->vm_ops && vma->vm_ops->access)
->
-> and I'll commit that fix for now. Anybody who disagrees, please holler.
->
->                  Linus
-
-Yeah I think this is the best fix in this case, we're not doing any
-additional work since this wouldn't have run in the helper.
+                 Linus
