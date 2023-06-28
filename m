@@ -2,152 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5382C7411F2
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 15:09:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A18BC7411FD
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 15:11:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231368AbjF1NJP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 09:09:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44234 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbjF1NJK (ORCPT
+        id S230429AbjF1NK7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 09:10:59 -0400
+Received: from bg4.exmail.qq.com ([43.155.65.254]:26558 "EHLO
+        bg4.exmail.qq.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231136AbjF1NKz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 09:09:10 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CA4A2118;
-        Wed, 28 Jun 2023 06:09:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=/wef/ORaePi5rraYqwEm/o3Nv/tMCObZmjkD+rQugnw=; b=PDi20WW3Y1qeIx2VS+PtiQ/riF
-        a1d08NY4ejV640VZefmowE9KddBTfmHnYsiApZPVzGglYLPKeXQOlBRLiql9G8ofhJEBwY5+H2VZf
-        y2cGKzXwgshcigUPgBZQoiFfuSD98Q0I23DrmseJ0k5Oz0lfXp56xozo0UQ9QKvdWMh3rvKW8VqwF
-        5+Cb+ojDCAlHi6sgYBj4O6K0XMU1KIVtgZ2+qA07W4WXy+PlFmCvzssazUEWK1Ealz9JQ2zfBC7aS
-        X7/a115gTN0JPsxvPFIi9GSSWpxAR9HNgThP/IVFUctW/eqMJuiZv8iiJgd0Nu4Am0OnksPDIY9WP
-        hF9YjD4A==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1qEUuF-003nSs-Sq; Wed, 28 Jun 2023 13:08:23 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 17BF33002C5;
-        Wed, 28 Jun 2023 15:08:23 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id F40A527F62BA3; Wed, 28 Jun 2023 15:08:22 +0200 (CEST)
-Date:   Wed, 28 Jun 2023 15:08:22 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Kai Huang <kai.huang@intel.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-mm@kvack.org, x86@kernel.org, dave.hansen@intel.com,
-        kirill.shutemov@linux.intel.com, tony.luck@intel.com,
-        tglx@linutronix.de, bp@alien8.de, mingo@redhat.com, hpa@zytor.com,
-        seanjc@google.com, pbonzini@redhat.com, david@redhat.com,
-        dan.j.williams@intel.com, rafael.j.wysocki@intel.com,
-        ashok.raj@intel.com, reinette.chatre@intel.com,
-        len.brown@intel.com, ak@linux.intel.com, isaku.yamahata@intel.com,
-        ying.huang@intel.com, chao.gao@intel.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com, nik.borisov@suse.com,
-        bagasdotme@gmail.com, sagis@google.com, imammedo@redhat.com
-Subject: Re: [PATCH v12 07/22] x86/virt/tdx: Add skeleton to enable TDX on
- demand
-Message-ID: <20230628130822.GD2438817@hirez.programming.kicks-ass.net>
-References: <cover.1687784645.git.kai.huang@intel.com>
- <104d324cd68b12e14722ee5d85a660cccccd8892.1687784645.git.kai.huang@intel.com>
+        Wed, 28 Jun 2023 09:10:55 -0400
+X-QQ-mid: bizesmtp81t1687957840tk05w25f
+Received: from linux-lab-host.localdomain ( [116.30.129.193])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Wed, 28 Jun 2023 21:10:38 +0800 (CST)
+X-QQ-SSF: 01200000000000D0V000000A0000000
+X-QQ-FEAT: 3M0okmaRx3izmkUOsSxg9uIUu5hu7sXFhGMVn/F21TZKgQ+LTXI715mV+znqg
+        V0FT8m4j5DU0uhm6jSBfO1u4rd7ypCrgSxJ91A3DlKLEueKsMfbTPPs+P9mJAzgNVumAW9U
+        QkEQK3DazjlmxzOw8p068gfMxLkBWHbXFdbP/MVamr2vOlwQG9sNOE1r6D9eod+n8miz9Mk
+        qH26SCAVQRROGIpcJ5YabBf38Pf4XN/b8ImH1ko0hkIy/ANWUjXjd3rcxdpp8bzl3nTjxt4
+        /eu8Nz4NkPabuRpc5kBjSj7f6YL1B8AiP7pvmV6zn0pBlRyQemBwh60oA6IjG2HfjjdnX3N
+        n38Lno9VJXoOQHtJmlyr9DM9Zvh9zrl+PAfzsaANOHi+Dmo3wsu6GmpGjn/c6JhUUagGQGB
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 17494817763370749656
+From:   Zhangjin Wu <falcon@tinylab.org>
+To:     thomas@t-8ch.de, w@1wt.eu
+Cc:     falcon@tinylab.org, arnd@arndb.de, david.laight@aculab.com,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-riscv@lists.infradead.org,
+        =?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <linux@weissschuh.net>
+Subject: [PATCH v5 01/14] tools/nolibc: sys.h: add a syscall return helper
+Date:   Wed, 28 Jun 2023 21:08:32 +0800
+Message-Id: <c23a5b2ad7c756c05d8a19af6033462ddbd948a6.1687957589.git.falcon@tinylab.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <cover.1687957589.git.falcon@tinylab.org>
+References: <cover.1687957589.git.falcon@tinylab.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <104d324cd68b12e14722ee5d85a660cccccd8892.1687784645.git.kai.huang@intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-        lindbergh.monkeyblade.net
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrsz:qybglogicsvrsz3a-3
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 27, 2023 at 02:12:37AM +1200, Kai Huang wrote:
+Most of the library routines share the same syscall return logic:
 
-> +/*
-> + * Do the module global initialization if not done yet.
-> + * It's always called with interrupts and preemption disabled.
-> + */
-> +static int try_init_module_global(void)
-> +{
-> +	unsigned long flags;
-> +	int ret;
-> +
-> +	/*
-> +	 * The TDX module global initialization only needs to be done
-> +	 * once on any cpu.
-> +	 */
-> +	raw_spin_lock_irqsave(&tdx_global_init_lock, flags);
-> +
-> +	if (tdx_global_initialized) {
-> +		ret = 0;
-> +		goto out;
-> +	}
-> +
-> +	/* All '0's are just unused parameters. */
-> +	ret = seamcall(TDH_SYS_INIT, 0, 0, 0, 0, NULL, NULL);
-> +	if (!ret)
-> +		tdx_global_initialized = true;
-> +out:
-> +	raw_spin_unlock_irqrestore(&tdx_global_init_lock, flags);
-> +
-> +	return ret;
-> +}
-> +
-> +/**
-> + * tdx_cpu_enable - Enable TDX on local cpu
-> + *
-> + * Do one-time TDX module per-cpu initialization SEAMCALL (and TDX module
-> + * global initialization SEAMCALL if not done) on local cpu to make this
-> + * cpu be ready to run any other SEAMCALLs.
-> + *
-> + * Call this function with preemption disabled.
-> + *
-> + * Return 0 on success, otherwise errors.
-> + */
-> +int tdx_cpu_enable(void)
-> +{
-> +	int ret;
-> +
-> +	if (!platform_tdx_enabled())
-> +		return -ENODEV;
-> +
-> +	lockdep_assert_preemption_disabled();
-> +
-> +	/* Already done */
-> +	if (__this_cpu_read(tdx_lp_initialized))
-> +		return 0;
-> +
-> +	/*
-> +	 * The TDX module global initialization is the very first step
-> +	 * to enable TDX.  Need to do it first (if hasn't been done)
-> +	 * before the per-cpu initialization.
-> +	 */
-> +	ret = try_init_module_global();
-> +	if (ret)
-> +		return ret;
-> +
-> +	/* All '0's are just unused parameters */
-> +	ret = seamcall(TDH_SYS_LP_INIT, 0, 0, 0, 0, NULL, NULL);
-> +	if (ret)
-> +		return ret;
+  In general, a 0 return value indicates success.  A -1 return value
+  indicates an error, and an error number is stored in errno. [1]
 
-And here you do *NOT* have IRQs disabled... so an IRQ can come in here
-and do the above again.
+Let's add a __sysret() helper for the above logic to simplify the coding
+and shrink the code lines too.
 
-I suspect that's a completely insane thing to have happen, but the way
-the code is written does not tell me this and might even suggest I
-should worry about it, per the above thing actually disabling IRQs.
+Thomas suggested to use inline function instead of macro for __sysret().
 
-> +
-> +	__this_cpu_write(tdx_lp_initialized, true);
-> +
-> +	return 0;
-> +}
+Willy suggested to make __sysret() be always inline.
+
+[1]: https://man7.org/linux/man-pages/man2/syscall.2.html
+
+Suggested-by: Willy Tarreau <w@1wt.eu>
+Link: https://lore.kernel.org/linux-riscv/ZH1+hkhiA2+ItSvX@1wt.eu/
+Suggested-by: Thomas Weißschuh <linux@weissschuh.net>
+Link: https://lore.kernel.org/linux-riscv/ea4e7442-7223-4211-ba29-70821e907888@t-8ch.de/
+Reviewed-by: Thomas Weißschuh <linux@weissschuh.net>
+Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
+---
+ tools/include/nolibc/sys.h | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
+
+diff --git a/tools/include/nolibc/sys.h b/tools/include/nolibc/sys.h
+index 5464f93e863e..097eef88cf7e 100644
+--- a/tools/include/nolibc/sys.h
++++ b/tools/include/nolibc/sys.h
+@@ -28,6 +28,16 @@
+ #include "errno.h"
+ #include "types.h"
+ 
++/* Syscall return helper, set errno as -ret when ret < 0 */
++static __inline__ __attribute__((unused, always_inline))
++long __sysret(long ret)
++{
++	if (ret < 0) {
++		SET_ERRNO(-ret);
++		ret = -1;
++	}
++	return ret;
++}
+ 
+ /* Functions in this file only describe syscalls. They're declared static so
+  * that the compiler usually decides to inline them while still being allowed
+-- 
+2.25.1
+
