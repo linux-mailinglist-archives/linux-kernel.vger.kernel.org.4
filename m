@@ -2,84 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33389741857
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 20:55:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13FC4741865
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 20:56:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232303AbjF1Sxz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 14:53:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53250 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231671AbjF1Sxb (ORCPT
+        id S231687AbjF1SzL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 14:55:11 -0400
+Received: from bg4.exmail.qq.com ([43.155.65.254]:32295 "EHLO
+        bg4.exmail.qq.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231454AbjF1Sxk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 14:53:31 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 083791FE8;
-        Wed, 28 Jun 2023 11:53:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=pbgmqzfx61gqa8ZE0U7704hyAi4M3AzWTUQaBmz/ojs=; b=nXV5/7tO9JYgJrNPdu3ARxvZ9H
-        Te9clGGefdDvfjj4XBxBjUuPv/dgT2yF+X+BDpH559nid58AiJt08y0IKsv9DrnIpEAidQr7Qg6sa
-        yge3leQVZxs+SIdx4hu8g09RdCM16ewSWcUoAALXpFt1+ANS7HgcRTwaaLN+AysJePruyIQnzOHZU
-        zZQQyM7N5oTobC7OMGBEZpxNJf7HcO+lNNYZ3kKfV0j+Zz8OIoHGkdBE6VPBTaW0K4NjhopPqP/Wv
-        +x3w8xazZ/YX/cUlvHRafLSmrEmnMkz6zC+XqB0EQ+ESoSu5xvuV0dJsjHPHWpT39WNsz3cVYVhdt
-        m9cyefUQ==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1qEaHe-00GRev-0n;
-        Wed, 28 Jun 2023 18:52:54 +0000
-Date:   Wed, 28 Jun 2023 11:52:54 -0700
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>,
-        David Hildenbrand <david@redhat.com>, song@kernel.org
-Cc:     Johan Hovold <johan@kernel.org>,
-        Lucas De Marchi <lucas.demarchi@intel.com>,
-        Petr Pavlu <petr.pavlu@suse.com>, gregkh@linuxfoundation.org,
-        rafael@kernel.org, lucas.de.marchi@gmail.com,
-        christophe.leroy@csgroup.eu, peterz@infradead.org, rppt@kernel.org,
-        dave@stgolabs.net, willy@infradead.org, vbabka@suse.cz,
-        mhocko@suse.com, dave.hansen@linux.intel.com,
-        colin.i.king@gmail.com, jim.cromie@gmail.com,
-        catalin.marinas@arm.com, jbaron@akamai.com,
-        rick.p.edgecombe@intel.com, yujie.liu@intel.com,
-        tglx@linutronix.de, hch@lst.de, patches@lists.linux.dev,
-        linux-modules@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, pmladek@suse.com, prarit@redhat.com,
-        lennart@poettering.net
-Subject: Re: [PATCH 2/2] module: add support to avoid duplicates early on load
-Message-ID: <ZJyBhv6yrAfYvMh5@bombadil.infradead.org>
-References: <ZHTCK2_1pF61yWIr@hovoldconsulting.com>
- <CAHk-=wg7ihygotpO9x5a6QJO5oAom9o91==L_Kx-gUHvRYuXiQ@mail.gmail.com>
- <ZHYitt7P7W+8ZlSB@bombadil.infradead.org>
- <499e30cc-d015-8353-1364-50d17da58f47@redhat.com>
- <ZHd8bLPY4OQCb/Z5@bombadil.infradead.org>
- <ba60bca6-b682-4c27-3c54-2512b6f16151@redhat.com>
- <ZHoTFDkPIgglW0sU@bombadil.infradead.org>
- <fa3f1a1f-edc6-f13b-cc84-f3264b03b0b1@redhat.com>
- <ZH38lpTHZ/RISC1v@bombadil.infradead.org>
- <ZH3/KVCHhX4D4yh9@bombadil.infradead.org>
+        Wed, 28 Jun 2023 14:53:40 -0400
+X-QQ-mid: bizesmtp68t1687978411t0a7h12q
+Received: from linux-lab-host.localdomain ( [116.30.129.193])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Thu, 29 Jun 2023 02:53:30 +0800 (CST)
+X-QQ-SSF: 01200000000000D0W000000A0000000
+X-QQ-FEAT: mhgCCnGOC3zHQx6jmcB1kz2NwHDP18v38JyGZQAiWr5o2Az3hiwOxWqJkj3sr
+        al8QuuOwy8FjxN1au85JUw6DW1Wb/vHX+2GC8XTjfP+O1t3S8qORnqLdPM4Cf3pGlaNlChX
+        IHySjIMY6PzNPzCMg+XhHGFJZdwOJjXNsPKyYq9th7KpBU9mTcFUUeq4Sd4P+9ywNxuj/kp
+        QXH2k7KkcaMDqTnkd4C35V2UHyfP7DbRQBaqLYhMy0H3EM5JlWAOt5xoIudinQAR0jwiSBJ
+        40AtcWRh83++0lXsOvsW4Jkmh6pGtR+4nBRcL1IOSR0yfiq5l+cw6ZOed+Sl5CuENCqT1a2
+        z8R4BsBETw1oB5lmDLIPriksbujqTB7Rf8E6RzmmPTuI8MlY10=
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 10897143188466502564
+From:   Zhangjin Wu <falcon@tinylab.org>
+To:     thomas@t-8ch.de, w@1wt.eu
+Cc:     falcon@tinylab.org, arnd@arndb.de, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org
+Subject: [PATCH v1 02/11] tools/nolibc: add new crt.h with _start_c
+Date:   Thu, 29 Jun 2023 02:53:18 +0800
+Message-Id: <0976471a36cd4facf712bc02e733f669f1697083.1687976753.git.falcon@tinylab.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <cover.1687976753.git.falcon@tinylab.org>
+References: <cover.1687976753.git.falcon@tinylab.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZH3/KVCHhX4D4yh9@bombadil.infradead.org>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-        lindbergh.monkeyblade.net
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrsz:qybglogicsvrsz3a-3
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 05, 2023 at 08:28:41AM -0700, Luis Chamberlain wrote:
-> On Mon, Jun 05, 2023 at 08:17:42AM -0700, Luis Chamberlain wrote:
-> > We've gone down from ~6 GiB to ~6 MiB.
-> 
-> And just to also highlight, that was just for for the KASAN enabled case, and
-> for !KASAN we went from ~18 GiB to 0.
+As the environ and _auxv support added for nolibc, the assembly _start
+function becomes more and more complex and therefore makes the porting
+of nolibc to new architectures harder and harder.
 
-Linus, were you thinking of including these patches in for v6.5-rc1?
+To simplify portability, this crt.h is added to do most of the assembly
+start operations in C function: _start_c(), which reduces the complexity
+a lot and will eventually simplify the porting of nolibc to the new
+architectures.
 
-  Luis
+The new _start_c() only requires a stack pointer argument, it will find
+argv, envp and _auxv for us, and then call main(), finally, it exit()
+with main's return status. With this new _start_c(), the future new
+architectures only require to add very few assembly instructions.
+
+It may also easier the future init/fini support.
+
+Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
+---
+ tools/include/nolibc/crt.h | 57 ++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 57 insertions(+)
+ create mode 100644 tools/include/nolibc/crt.h
+
+diff --git a/tools/include/nolibc/crt.h b/tools/include/nolibc/crt.h
+new file mode 100644
+index 000000000000..698fe1084d26
+--- /dev/null
++++ b/tools/include/nolibc/crt.h
+@@ -0,0 +1,57 @@
++/* SPDX-License-Identifier: LGPL-2.1 OR MIT */
++/*
++ * C Run Time support for NOLIBC
++ * Copyright (C) 2023 Zhangjin Wu <falcon@tinylab.org>
++ */
++
++#ifndef _NOLIBC_CRT_H
++#define _NOLIBC_CRT_H
++
++char **environ __attribute__((weak));
++const unsigned long *_auxv __attribute__((weak));
++
++int main(int argc, char *argv[], char **envp);
++static void exit(int);
++
++void _start_c(long *sp)
++{
++	int argc, i;
++	char **argv;
++	char **envp;
++
++	/*
++	 * sp  :  argc          <-- argument count, required by main()
++	 * argv:  argv[0]       <-- argument vector, required by main()
++	 *        argv[1]
++	 *        ...
++	 *        argv[argc-1]
++	 *        null
++	 * envp:  envp[0]       <-- environment variables, required by main() and getenv()
++	 *        envp[1]
++	 *        ...
++	 *        null
++	 * _auxv: auxv[0]       <-- auxiliary vector, required by getauxval()
++	 *        auxv[1]
++	 *        ...
++	 *        null
++	 */
++
++	/* assign argc and argv */
++	argc = sp[0];
++	argv = (void *)(sp + 1);
++
++	/* find envp */
++	envp = argv + argc + 1;
++	environ = envp;
++
++	/* find auxv */
++	i = 0;
++	while (envp[i])
++		i++;
++	_auxv = (void *)(envp + i + 1);
++
++	/* go to application */
++	exit(main(argc, argv, envp));
++}
++
++#endif /* _NOLIBC_CRT_H */
+-- 
+2.25.1
+
