@@ -2,123 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02AB0741B06
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 23:34:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 745F4741B09
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 23:35:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232060AbjF1VeM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 17:34:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34914 "EHLO
+        id S232168AbjF1VfF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 17:35:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230014AbjF1VeK (ORCPT
+        with ESMTP id S232064AbjF1VfC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 17:34:10 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78B671FE4;
-        Wed, 28 Jun 2023 14:34:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687988049; x=1719524049;
-  h=from:to:cc:subject:in-reply-to:references:date:
-   message-id:mime-version;
-  bh=2zFRPcPqSdw/rQupEM6m4agW4/QKfyjYyUa1kit0f1s=;
-  b=UIa1fHs2Zs9fdB87YCNRFAuxiWbmg/365ZNADpyUTOAtzHvLgfO5lBUK
-   wxw67CFmygXg+ogUUMNSmnnNLywwAJ0Au4bjzmidC/nbeyA6beV653ui/
-   lSYP1SiJBy5+Qb4mDjF7U7L2U0i/tqr98wyd7l0MXuKC+xLb3kZz6wVk/
-   4nCnAFdauRuLIoNlwLs9RgXmrPzHLU9plxZuBFcUBTmly0A3B2lUc86t9
-   D2mOHA42J2FRRrzQU0rztrUyjmIDZ8kycv95abvSgM7JDW6P8UmVR+wzU
-   xTd3Fit49RtYOAk49V48l7GcxjvapcCmElyyuz4oLkqLm/WUSy1+cpXET
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10755"; a="351758361"
-X-IronPort-AV: E=Sophos;i="6.01,166,1684825200"; 
-   d="scan'208";a="351758361"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2023 14:34:08 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10755"; a="787172958"
-X-IronPort-AV: E=Sophos;i="6.01,166,1684825200"; 
-   d="scan'208";a="787172958"
-Received: from vcostago-desk1.jf.intel.com (HELO vcostago-desk1) ([10.54.70.17])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2023 14:34:07 -0700
-From:   Vinicius Costa Gomes <vinicius.gomes@intel.com>
-To:     Florian Kauer <florian.kauer@linutronix.de>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Vedang Patel <vedang.patel@intel.com>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Jithu Joseph <jithu.joseph@intel.com>,
-        Andre Guedes <andre.guedes@intel.com>,
-        Simon Horman <simon.horman@corigine.com>
-Cc:     netdev@vger.kernel.org, kurt@linutronix.de,
-        intel-wired-lan@lists.osuosl.org, linux-kernel@vger.kernel.org
-Subject: Re: [Intel-wired-lan] [PATCH net v2] igc: Prevent garbled TX queue
- with XDP ZEROCOPY
-In-Reply-To: <20230628091148.62256-1-florian.kauer@linutronix.de>
-References: <20230628091148.62256-1-florian.kauer@linutronix.de>
-Date:   Wed, 28 Jun 2023 14:34:07 -0700
-Message-ID: <87a5wjqnjk.fsf@intel.com>
+        Wed, 28 Jun 2023 17:35:02 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D94B1FE3;
+        Wed, 28 Jun 2023 14:35:00 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1687988098;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=oGFgO8vIJKfZgOfsYstghjtI2K67VzhERDDt0pVsmX8=;
+        b=nDj6a4qXdIVzMoLU9lWgktdyaajqTMRQcqRamqUCj4Xe5nS75xNTGYvEPDrKCcpwHlpxjJ
+        jeKxnk5O8vNoZIhphXNDu+JDZNrmHnsUhO8csIFqeu0ImVuNL65nG2A78Sopxp2C4k13HI
+        YmeueUKOd7c/364kGKPapcnbrmz1pBY0ead+FuU4dySjTF8SDIe3hoaQVa1xHS60LN1P1e
+        aRp14zckfPHgSpukUIWfB+gG14BYvJdfnb2wx68t0vxzmxrpVQDG4+vM+p9R7QGKtQZ94v
+        nQSRcONI+mLsIXqCUlpOs+4cn/sj01bjf/jLlzNhNFccSYQ+sk3WOGaYBOjrEg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1687988098;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=oGFgO8vIJKfZgOfsYstghjtI2K67VzhERDDt0pVsmX8=;
+        b=ExYSDHM8G4ATjuwOcPG9HtIntjW48Iw73IyQoq/mZGVjKIRfmsLDITkSJMLoKg5bxOwI0b
+        a8kpeZGJDbCcfxDg==
+To:     Greg KH <gregkh@linuxfoundation.org>, linux-kernel@vger.kernel.org
+Cc:     ashok.raj@intel.com, stable-commits@vger.kernel.org
+Subject: Re: Patch "x86/smp: Cure kexec() vs. mwait_play_dead() breakage"
+ has been added to the 4.14-stable tree
+In-Reply-To: <2023062812-regime-demote-14f8@gregkh>
+References: <2023062810-override-roundup-e5bf@gregkh>
+ <2023062859-snowboard-surrogate-8484@gregkh>
+ <2023062812-regime-demote-14f8@gregkh>
+Date:   Wed, 28 Jun 2023 23:34:58 +0200
+Message-ID: <87r0pv2rul.ffs@tglx>
 MIME-Version: 1.0
 Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Florian Kauer <florian.kauer@linutronix.de> writes:
-
-> In normal operation, each populated queue item has
-> next_to_watch pointing to the last TX desc of the packet,
-> while each cleaned item has it set to 0. In particular,
-> next_to_use that points to the next (necessarily clean)
-> item to use has next_to_watch set to 0.
+On Wed, Jun 28 2023 at 21:40, Greg KH wrote:
+> On Wed, Jun 28, 2023 at 09:39:09PM +0200, Greg KH wrote:
+>> On Wed, Jun 28, 2023 at 09:32:12PM +0200, gregkh@linuxfoundation.org wrote:
+>> > 
+>> > This is a note to let you know that I've just added the patch titled
+>> > 
+>> >     x86/smp: Cure kexec() vs. mwait_play_dead() breakage
+>> > 
+>> > to the 4.14-stable tree which can be found at:
+>> >     http://www.kernel.org/git/?p=linux/kernel/git/stable/stable-queue.git;a=summary
+>> > 
+>> > The filename of the patch is:
+>> >      x86-smp-cure-kexec-vs.-mwait_play_dead-breakage.patch
+>> > and it can be found in the queue-4.14 subdirectory.
+>> 
+>> Oops, nope, this breaks the build on 4.14.y :(
 >
-> When the TX queue is used both by an application using
-> AF_XDP with ZEROCOPY as well as a second non-XDP application
-> generating high traffic, the queue pointers can get in
-> an invalid state where next_to_use points to an item
-> where next_to_watch is NOT set to 0.
->
-> However, the implementation assumes at several places
-> that this is never the case, so if it does hold,
-> bad things happen. In particular, within the loop inside
-> of igc_clean_tx_irq(), next_to_clean can overtake next_to_use.
-> Finally, this prevents any further transmission via
-> this queue and it never gets unblocked or signaled.
-> Secondly, if the queue is in this garbled state,
-> the inner loop of igc_clean_tx_ring() will never terminate,
-> completely hogging a CPU core.
->
-> The reason is that igc_xdp_xmit_zc() reads next_to_use
-> before acquiring the lock, and writing it back
-> (potentially unmodified) later. If it got modified
-> before locking, the outdated next_to_use is written
-> pointing to an item that was already used elsewhere
-> (and thus next_to_watch got written).
->
-> Fixes: 9acf59a752d4 ("igc: Enable TX via AF_XDP zero-copy")
-> Signed-off-by: Florian Kauer <florian.kauer@linutronix.de>
-> Reviewed-by: Kurt Kanzenbach <kurt@linutronix.de>
-> Tested-by: Kurt Kanzenbach <kurt@linutronix.de>
-> ---
+> And on 4.19.y, 5.4.y, 5.10.y, and 5.15.y, so dropped from all of them as
+> well.
 
-This patch doesn't directly apply because there's a small conflict with
-commit 95b681485563 ("igc: Avoid transmit queue timeout for XDP"),
-but really easy to solve.
-
-Anyway, good catch:
-
-Acked-by: Vinicius Costa Gomes <vinicius.gomes@intel.com>
-
-
-Cheers,
--- 
-Vinicius
+I'll have a look at it tomorrow.
