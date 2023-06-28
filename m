@@ -2,117 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C486D740E53
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 12:11:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD9C7740E47
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 12:09:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233333AbjF1KKT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 06:10:19 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:42386 "EHLO
-        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231742AbjF1KGl (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 06:06:41 -0400
-Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35S9lZlU009538;
-        Wed, 28 Jun 2023 10:06:14 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=pp1;
- bh=jVW7yohLK9Vw3P0klRV5j1vQuRogcPT4LlvarI8f2XM=;
- b=El6aNHXyD7OidD3+wLkh4BsZqv+UwtKYGGPZxB8BHaB/rw5A/JxZ+PbmrMyAyWcIMqql
- CpYM9JmQlpt4oTxSBV1+ROHIdhgopBCKaCqnYZE612zx2fIXndoVgVz5yzhzANHT7arD
- D+ODmfCuVOQ/NKquQdf1QVii7WwKUneOV0+600Dm2Vzf/U9anHBmSNX0BnaMQpUAwr8D
- xJ9v8miturkg9o13lPwplBBLB1BD5ZY3kR2YXHm4HnSqyW8e5OY5SpcjurNpxpX4ErYx
- F1zJVuu8p01yRt9Jdy2qZgvf4CpeWhce/QYQHc8IwBE0PW0FnGvjhKkbVmKI/+wz/w9R mA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3rgjhngf8w-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 28 Jun 2023 10:06:14 +0000
-Received: from m0356516.ppops.net (m0356516.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 35S9llFL010055;
-        Wed, 28 Jun 2023 10:06:13 GMT
-Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3rgjhngf76-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 28 Jun 2023 10:06:13 +0000
-Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
-        by ppma05fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 35S4Po2X026876;
-        Wed, 28 Jun 2023 10:06:11 GMT
-Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
-        by ppma05fra.de.ibm.com (PPS) with ESMTPS id 3rdr459vwj-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 28 Jun 2023 10:06:11 +0000
-Received: from smtpav07.fra02v.mail.ibm.com (smtpav07.fra02v.mail.ibm.com [10.20.54.106])
-        by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 35SA68px42140226
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 28 Jun 2023 10:06:08 GMT
-Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C8AFE2005A;
-        Wed, 28 Jun 2023 10:06:08 +0000 (GMT)
-Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id EA74C20063;
-        Wed, 28 Jun 2023 10:06:07 +0000 (GMT)
-Received: from localhost.localdomain (unknown [9.171.41.43])
-        by smtpav07.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Wed, 28 Jun 2023 10:06:07 +0000 (GMT)
-From:   Laurent Dufour <ldufour@linux.ibm.com>
-To:     linuxppc-dev@lists.ozlabs.org
-Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        mpe@ellerman.id.au, npiggin@gmail.com, christophe.leroy@csgroup.eu,
-        tglx@linutronix.de, dave.hansen@linux.intel.com, mingo@redhat.com,
-        bp@alien8.de
-Subject: [PATCH v2 9/9] powerpc/pseries: Honour current SMT state when DLPAR onlining CPUs
-Date:   Wed, 28 Jun 2023 12:05:58 +0200
-Message-ID: <20230628100558.43482-10-ldufour@linux.ibm.com>
-X-Mailer: git-send-email 2.41.0
-In-Reply-To: <20230628100558.43482-1-ldufour@linux.ibm.com>
-References: <20230628100558.43482-1-ldufour@linux.ibm.com>
+        id S232910AbjF1KJF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 06:09:05 -0400
+Received: from mga06b.intel.com ([134.134.136.31]:18087 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231166AbjF1KGI (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 28 Jun 2023 06:06:08 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1687946768; x=1719482768;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=D9/HaLrYlCtEllZMLsE+qnE2OoNhKXG87x9IvttFtFM=;
+  b=XFXbIRdVNZn0eBZ5+Wjv5zAL/SsMaYwsS+Bc0y10MwZo/U9A9H9ZVuQd
+   kfmtBysihWZIxujQQ9Xu6dm153YNE+Nb7zDreHZxCnqh7OAsSrwosjjhJ
+   jpYZGJNs8l9b5bGV9qAn6e0kf5oFTIst5kQ1qzHwFefCoo47RBrxqD9Kh
+   zKVyZ5qPI/e5THdq4KU4rxJNkjT/GnF14dQTrVhciaaxI04yc2Ja2RyQz
+   oglPjWrxQyiHmYXqn+Z8zTLVDws0mOMsPmh2zRbm8INebHwBjui6PE7CI
+   VKvaP7ROSjbtTpNX68tt9nqPwdlH4DL6TcVFEYqyjR3rDATE/bbjD2lV8
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10754"; a="425476475"
+X-IronPort-AV: E=Sophos;i="6.01,165,1684825200"; 
+   d="scan'208";a="425476475"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2023 03:06:07 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10754"; a="963538182"
+X-IronPort-AV: E=Sophos;i="6.01,165,1684825200"; 
+   d="scan'208";a="963538182"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga006.fm.intel.com with ESMTP; 28 Jun 2023 03:06:02 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1qES3k-000YPx-1a;
+        Wed, 28 Jun 2023 13:06:00 +0300
+Date:   Wed, 28 Jun 2023 13:06:00 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     George Stark <gnstark@sberdevices.ru>
+Cc:     jic23@kernel.org, lars@metafoo.de, neil.armstrong@linaro.org,
+        khilman@baylibre.com, jbrunet@baylibre.com,
+        martin.blumenstingl@googlemail.com, nuno.sa@analog.com,
+        linux-iio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-amlogic@lists.infradead.org,
+        kernel@sberdevices.ru
+Subject: Re: [PATCH v3 5/5] meson saradc: support reading from channel 7 mux
+ inputs
+Message-ID: <ZJwGCNA+ZURri24i@smile.fi.intel.com>
+References: <20230627224017.1724097-1-gnstark@sberdevices.ru>
+ <20230627224017.1724097-6-gnstark@sberdevices.ru>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: 8_tmfXruTTgONMEKwR3a5L-81nS_vELJ
-X-Proofpoint-GUID: fJ_IgKow8TtJpPkgGY6GhgrDKIQlwdzY
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-06-28_06,2023-06-27_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 spamscore=0
- impostorscore=0 adultscore=0 mlxlogscore=880 bulkscore=0
- priorityscore=1501 phishscore=0 mlxscore=0 malwarescore=0
- lowpriorityscore=0 clxscore=1015 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2305260000 definitions=main-2306280088
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230627224017.1724097-6-gnstark@sberdevices.ru>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Michael Ellerman <mpe@ellerman.id.au>
+On Wed, Jun 28, 2023 at 01:37:18AM +0300, George Stark wrote:
+> Add iio channel for every channel 7 mux input.
+> Meson saradc channel 7 is connected to a mux that can switch channel
+> input to well-known sources like Vdd, GND and several Vdd dividers.
 
-Integrate with the generic SMT support, so that when a CPU is DLPAR
-onlined it is brought up with the correct SMT mode.
+...
 
-Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
----
- arch/powerpc/platforms/pseries/hotplug-cpu.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+> +static enum meson_sar_adc_chan7_mux_sel chan7_mux_values[] = {
+> +	CHAN7_MUX_VSS,
+> +	CHAN7_MUX_VDD_DIV4,
+> +	CHAN7_MUX_VDD_DIV2,
+> +	CHAN7_MUX_VDD_MUL3_DIV4,
+> +	CHAN7_MUX_VDD,
+> +};
+> +
+> +static const char * const chan7_mux_names[] = {
+> +	"gnd",
+> +	"0.25vdd",
+> +	"0.5vdd",
+> +	"0.75vdd",
+> +	"vdd",
 
-diff --git a/arch/powerpc/platforms/pseries/hotplug-cpu.c b/arch/powerpc/platforms/pseries/hotplug-cpu.c
-index 61fb7cb00880..e62835a12d73 100644
---- a/arch/powerpc/platforms/pseries/hotplug-cpu.c
-+++ b/arch/powerpc/platforms/pseries/hotplug-cpu.c
-@@ -398,6 +398,14 @@ static int dlpar_online_cpu(struct device_node *dn)
- 		for_each_present_cpu(cpu) {
- 			if (get_hard_smp_processor_id(cpu) != thread)
- 				continue;
-+
-+			if (!topology_is_primary_thread(cpu)) {
-+				if (cpu_smt_control != CPU_SMT_ENABLED)
-+					break;
-+				if (!topology_smt_thread_allowed(cpu))
-+					break;
-+			}
-+
- 			cpu_maps_update_done();
- 			find_and_update_cpu_nid(cpu);
- 			rc = device_online(get_cpu_device(cpu));
+For the sake of robustness you can assign like this
+
+	[CHAN7_MUX_VDD_DIV2] = "0.5vdd",
+
+>  };
+
+...
+
+> -	if (chan->type == IIO_VOLTAGE)
+> -		return sprintf(label, "channel-%d\n", chan->channel);
+> +	if (chan->type == IIO_VOLTAGE) {
+
+> +		if (chan->channel <= NUM_CHAN_7)
+
+I believe you can get rid of this conditional and make diff less ping-pong-ish,
+  see below.
+
+> +			return sprintf(label, "channel-%d\n", chan->channel);
+> +		if (chan->channel >= NUM_MUX_0_VSS)
+> +			return sprintf(label, "%s\n",
+> +				chan7_mux_names[chan->channel - NUM_MUX_0_VSS]);
+> +	}
+
+
+	if (chan->type == IIO_VOLTAGE && chan->channel >= NUM_MUX_0_VSS)
+		return sprintf(label, "%s\n", chan7_mux_names[chan->channel - NUM_MUX_0_VSS]);
+
+	if (chan->type == IIO_VOLTAGE)
+		return sprintf(label, "channel-%d\n", chan->channel);
+
+
 -- 
-2.41.0
+With Best Regards,
+Andy Shevchenko
+
 
