@@ -2,129 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E770740FC9
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 13:10:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3367F740FD1
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 13:11:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231579AbjF1LKq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 07:10:46 -0400
-Received: from esa.microchip.iphmx.com ([68.232.153.233]:41143 "EHLO
-        esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231304AbjF1LKn (ORCPT
+        id S231203AbjF1LLe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 07:11:34 -0400
+Received: from out-40.mta0.migadu.com ([91.218.175.40]:16132 "EHLO
+        out-40.mta0.migadu.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231304AbjF1LL2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 07:10:43 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1687950643; x=1719486643;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=WPS8EgVmsuYKLwB/yZyqAD3qQxEAVrUEUVm4/Bk6ZlA=;
-  b=f45a2Vvg/1SqoCWNNeIkz+r8cjxjgWIMLkTKxWYwiUV2yjN7+2VqFxaE
-   XJ8XlwYINPRCclNKIgNtS08A4P7lUbUDIR/ARJT2iCA9VCHv8gXtHzv4s
-   k/mMBc1fUAIbCYfMSPIy9BH0YO7Ult2+EeGPS8jPrRWkNhcrgPJp4ujhY
-   a4ShgZrAoB4WvfnnsVmytASiw96d+3eBuBbvL6cLXB+u8sCB+QyEQ6SDe
-   bzGNYi2Ytlxl+dj6l3wGaiZ+lvKCxyJM1R7eMpEWKtPML/f7mJclbe3Ti
-   87JEe7TQ0/dg60k3G5/jD6faJnhRk/0msNA+pZxT8nkMiaix814tUk4XW
-   Q==;
-X-IronPort-AV: E=Sophos;i="6.01,165,1684825200"; 
-   d="asc'?scan'208";a="220273292"
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 28 Jun 2023 04:10:43 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Wed, 28 Jun 2023 04:10:42 -0700
-Received: from wendy (10.10.115.15) by chn-vm-ex02.mchp-main.com
- (10.10.85.144) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
- Transport; Wed, 28 Jun 2023 04:10:39 -0700
-Date:   Wed, 28 Jun 2023 12:10:11 +0100
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     Samuel Ortiz <sameo@rivosinc.com>
-CC:     Conor Dooley <conor@kernel.org>, Evan Green <evan@rivosinc.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        <linux-riscv@lists.infradead.org>,
-        "Hongren (Zenithal) Zheng" <i@zenithal.me>, <linux@rivosinc.com>,
-        Andrew Jones <ajones@ventanamicro.com>,
-        Heiko Stuebner <heiko.stuebner@vrull.eu>,
-        Anup Patel <apatel@ventanamicro.com>,
-        <linux-kernel@vger.kernel.org>, Guo Ren <guoren@kernel.org>,
-        Atish Patra <atishp@rivosinc.com>,
-        =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@rivosinc.com>,
-        Jiatai He <jiatai2021@iscas.ac.cn>
-Subject: Re: [PATCH 1/3] RISC-V: add Bitmanip/Scalar Crypto parsing from DT
-Message-ID: <20230628-unfeeling-tavern-edd4f58396fa@wendy>
-References: <20230627143747.1599218-1-sameo@rivosinc.com>
- <20230627143747.1599218-2-sameo@rivosinc.com>
- <CALs-HssMkVikspnEi-Ek2t=ABvFvgptAhsBjk1+aLuVjiP7P7w@mail.gmail.com>
- <20230627-debating-twelve-da2c1ed60948@spud>
- <ZJwE5wRVkoND3Z6P@vermeer>
+        Wed, 28 Jun 2023 07:11:28 -0400
+Message-ID: <2e9ce197-2732-d061-b11d-4f4513af6abc@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1687950686;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=L1I/ER/w6jNuNeN1IzKuVARZ7DzIC62fE15mQqKlcKA=;
+        b=Rdepi0ljPQ2cZvn1YYGKUl4KHpRN6kkf2yTS5VgyROLqP19w683nmg9jAPJUuhyTK9RD+n
+        FSSEs43rfghN6NEQu0DbynAEjUXM97SW+nvtSu/fbL7My/4ovr5DZ3UhNU+6rL+OkX6hIT
+        Qa7packtPMeaAcIYXpWRq1A4sWVQwyc=
+Date:   Wed, 28 Jun 2023 12:11:19 +0100
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="YhMMrLi4maVY432h"
-Content-Disposition: inline
-In-Reply-To: <ZJwE5wRVkoND3Z6P@vermeer>
+Subject: Re: [RFC PATCH v9 00/10] Create common DPLL configuration API
+To:     "Kubalewski, Arkadiusz" <arkadiusz.kubalewski@intel.com>,
+        Jiri Pirko <jiri@resnulli.us>
+Cc:     "kuba@kernel.org" <kuba@kernel.org>,
+        "vadfed@meta.com" <vadfed@meta.com>,
+        "jonathan.lemon@gmail.com" <jonathan.lemon@gmail.com>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "vadfed@fb.com" <vadfed@fb.com>,
+        "Brandeburg, Jesse" <jesse.brandeburg@intel.com>,
+        "Nguyen, Anthony L" <anthony.l.nguyen@intel.com>,
+        "M, Saeed" <saeedm@nvidia.com>,
+        "leon@kernel.org" <leon@kernel.org>,
+        "richardcochran@gmail.com" <richardcochran@gmail.com>,
+        "sj@kernel.org" <sj@kernel.org>,
+        "javierm@redhat.com" <javierm@redhat.com>,
+        "ricardo.canuelo@collabora.com" <ricardo.canuelo@collabora.com>,
+        "mst@redhat.com" <mst@redhat.com>,
+        "tzimmermann@suse.de" <tzimmermann@suse.de>,
+        "Michalik, Michal" <michal.michalik@intel.com>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "jacek.lawrynowicz@linux.intel.com" 
+        <jacek.lawrynowicz@linux.intel.com>,
+        "airlied@redhat.com" <airlied@redhat.com>,
+        "ogabbay@kernel.org" <ogabbay@kernel.org>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "nipun.gupta@amd.com" <nipun.gupta@amd.com>,
+        "axboe@kernel.dk" <axboe@kernel.dk>,
+        "linux@zary.sk" <linux@zary.sk>,
+        "masahiroy@kernel.org" <masahiroy@kernel.org>,
+        "benjamin.tissoires@redhat.com" <benjamin.tissoires@redhat.com>,
+        "geert+renesas@glider.be" <geert+renesas@glider.be>,
+        "Olech, Milena" <milena.olech@intel.com>,
+        "kuniyu@amazon.com" <kuniyu@amazon.com>,
+        "liuhangbin@gmail.com" <liuhangbin@gmail.com>,
+        "hkallweit1@gmail.com" <hkallweit1@gmail.com>,
+        "andy.ren@getcruise.com" <andy.ren@getcruise.com>,
+        "razor@blackwall.org" <razor@blackwall.org>,
+        "idosch@nvidia.com" <idosch@nvidia.com>,
+        "lucien.xin@gmail.com" <lucien.xin@gmail.com>,
+        "nicolas.dichtel@6wind.com" <nicolas.dichtel@6wind.com>,
+        "phil@nwl.cc" <phil@nwl.cc>,
+        "claudiajkang@gmail.com" <claudiajkang@gmail.com>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "intel-wired-lan@lists.osuosl.org" <intel-wired-lan@lists.osuosl.org>,
+        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>, poros <poros@redhat.com>,
+        mschmidt <mschmidt@redhat.com>,
+        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>
+References: <20230623123820.42850-1-arkadiusz.kubalewski@intel.com>
+ <ZJq3a6rl6dnPMV17@nanopsycho>
+ <DM6PR11MB4657084DDD7554663F86C1C19B24A@DM6PR11MB4657.namprd11.prod.outlook.com>
+ <DM6PR11MB4657A1ACB586AD9B45C7996E9B24A@DM6PR11MB4657.namprd11.prod.outlook.com>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Vadim Fedorenko <vadim.fedorenko@linux.dev>
+In-Reply-To: <DM6PR11MB4657A1ACB586AD9B45C7996E9B24A@DM6PR11MB4657.namprd11.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---YhMMrLi4maVY432h
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On 28/06/2023 10:27, Kubalewski, Arkadiusz wrote:
+>> From: Kubalewski, Arkadiusz
+>> Sent: Wednesday, June 28, 2023 11:15 AM
+>>
+>>> From: Jiri Pirko <jiri@resnulli.us>
+>>> Sent: Tuesday, June 27, 2023 12:18 PM
+>>>
+>>> Fri, Jun 23, 2023 at 02:38:10PM CEST, arkadiusz.kubalewski@intel.com
+>> wrote:
+>>>
+>>>> v8 -> v9:
+>>>
+>>> Could you please address all the unresolved issues from v8 and send v10?
+>>> I'm not reviewing this one.
+>>>
+>>> Thanks!
+>>
+>> Sure, will do, but first missing to-do/discuss list:
+>> 1) remove mode_set as not used by any driver
+>> 2) remove "no-added-value" static functions descriptions in
+>>    dpll_core/dpll_netlink
+>> 3) merge patches [ 03/10, 04/10, 05/10 ] into patches that are compiling
+>>    after each patch apply
+>> 4) remove function return values descriptions/lists
+>> 5) Fix patch [05/10]:
+>>    - status Supported
+>>    - additional maintainers
+>>    - remove callback:
+>>      int (*source_pin_idx_get)(...) from `struct dpll_device_ops`
+>> 6) Fix patch [08/10]: rethink ice mutex locking scheme
+>> 7) Fix patch [09/10]: multiple comments on
+>> https://lore.kernel.org/netdev/ZIQu+%2Fo4J0ZBspVg@nanopsycho/#t
+>> 8) add PPS DPLL phase offset to the netlink get-device API
+>>
+>> Thank you!
+>> Arkadiusz
+> 
+> If someone has any objections please state them now, I will work on
+> all above except 5) and 7).
+> Vadim, could you take care of those 2 points?
+> 
+Yeah, sure, I'll update 5 and 7.
+I'm not sure about 8) - do we really need this info, I believe every 
+supported DPLL device exports PTP device as well. But I'm Ok to add this 
+feature too.
 
-On Wed, Jun 28, 2023 at 12:01:11PM +0200, Samuel Ortiz wrote:
-> On Tue, Jun 27, 2023 at 07:48:15PM +0100, Conor Dooley wrote:
-> > On Tue, Jun 27, 2023 at 11:14:30AM -0700, Evan Green wrote:
-> > > On Tue, Jun 27, 2023 at 7:38=E2=80=AFAM Samuel Ortiz <sameo@rivosinc.=
-com> wrote:
+> Thank you!
+> Arkadiusz
 
-> > > It would be nice to consolidate the ones together that search for a
-> > > single string and set multiple bits, though I don't have any super
-> > > elegant ideas for how off the top of my head.
-> >=20
-> > I've got a refactor of this code in progress, dropping all of these
-> > copy-paste in place of a loop. It certainly looks more elegant than
-> > this, but it will fall over a bit for these "one string matches many
-> > extensions" cases. See here:
-> > https://patchwork.kernel.org/project/linux-riscv/patch/20230626-thievin=
-g-jockstrap-d35d20b535c5@wendy/
-> > My immediate thought is to add another element to riscv_isa_ext_data,
-> > that contains "parent" extensions to check for. Should be fairly doable,
-> > I'll whip something up on top of that...
->=20
-> Nice, and thanks for the review.
-
-> Should I wait for your refactor to be merged before pushing this one?
-
-I don't know. I think that you should continue on with your series here,
-and whichever goes in second gets rebased on top of the other.
-I don't think it makes material difference to review of this patchset as
-to whether you rebase on top of what I'm working on, so I wouldn't
-bother until it gets merged.
-
-Rather hacky, had less time than expected this morning:
-https://git.kernel.org/pub/scm/linux/kernel/git/conor/linux.git/commit/?h=
-=3Driscv-extensions-strings-supersets
-Clearly there's issues with looping to RISCV_ISA_MAX_SUPERSETS & I just
-repurposed Zicsr for the sake of testing something in the time I had.
-
-Evan, at a high level, does that look more elegant to you, or have I made
-things worse?
-
-
---YhMMrLi4maVY432h
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZJwVEwAKCRB4tDGHoIJi
-0odBAQCGhQC04g5NX1UwATx7PJIFcjSsuRX6bdBayXqjTHuUqwEA1YlIzLiAh68e
-R4OeRtEOFZOGNesu9GAsfbgm0Zx4DgE=
-=iWeD
------END PGP SIGNATURE-----
-
---YhMMrLi4maVY432h--
