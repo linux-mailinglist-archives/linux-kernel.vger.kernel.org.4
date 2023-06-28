@@ -2,195 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8784B740C41
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 11:04:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 24761740C0B
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 10:58:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232450AbjF1JDS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 05:03:18 -0400
-Received: from mx0a-0031df01.pphosted.com ([205.220.168.131]:15138 "EHLO
-        mx0a-0031df01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233797AbjF1IxX (ORCPT
+        id S235470AbjF1I6G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 04:58:06 -0400
+Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:56580
+        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S233854AbjF1IxZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 04:53:23 -0400
-Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35S7mYHj014442;
-        Wed, 28 Jun 2023 08:52:55 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=nxbHiyfMNnhx4XUpknlzeEjX+JkKUzyLXEMSoAFObQU=;
- b=NH8rNzW6ByA07gT4EkOlMvFxOhcElpc4QPduqXQ/wzviPLRsXkabdSu4QDRdKAjaaxFP
- 7VQYf1+ezrZBDyrDNdk2B1BWP4ZbK1yG70/YE9vuTEz7tawsO/6fd8oeSkfGGuRJO6ob
- aw/Xyhhq22wkXFr4RpyJxXPn0t7KzZPzqCuWtjz2+/XmdkS7dB3U+atGp3uIRi/JTtfF
- S9VFLl0p1DqI6foS9jyoDI2bQF5j2Bm8yFPXX0e5p5Teiq/LIzAJKGmgtr22X0OtevYu
- 6AQuP2usEkBkzdOiyZwGHdTaIZeyBbY7QIxcpJBVFdixaj4fMY45Yj9g+X5o3mA5q3eL wQ== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rgfp3raed-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 28 Jun 2023 08:52:55 +0000
-Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35S8qsMN028810
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 28 Jun 2023 08:52:54 GMT
-Received: from [10.214.230.142] (10.80.80.8) by nalasex01b.na.qualcomm.com
- (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Wed, 28 Jun
- 2023 01:52:51 -0700
-Message-ID: <e80f0bd3-cf1e-dfed-bcc6-d22d4d934230@quicinc.com>
-Date:   Wed, 28 Jun 2023 14:22:46 +0530
+        Wed, 28 Jun 2023 04:53:25 -0400
+Received: from mail-pf1-f200.google.com (mail-pf1-f200.google.com [209.85.210.200])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 4CF733F22B
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 08:53:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1687942381;
+        bh=g+Vzq7623MxsGxq8ObiiEY8MrsR0kmj8nphAIedVAvI=;
+        h=From:To:Subject:Date:Message-Id:MIME-Version;
+        b=FK9mE27w9cUcFe8e1tsKbuMGoMu8x+9i/crZp265HcliX9JMYh2f6xceHisGAHV9d
+         i3jNEIbTGY/jimO9iYfLWO0AJ6b1aqyhwlnosCyewrnhRrB3fNRZLhEZhMkHtKtyYN
+         BD87HkN4MNKSUooCapB2VAn5s+7uns/j4A3cSNb+XcaASfxCv1KjkHLP8wHQNHynsz
+         XZeBiOGnfZuy7Lr84Q4m8uYRfv3C9UHme5xYkf6jvxfGpgvq7iKkMxJxpOMHh/zmUs
+         bYcP4umb7FjC356OJToTI22oNmXWWmmupjwn+NvrtjXOifot9st1pkdivnwh0m2IcY
+         CEjxWS/O7Vzcg==
+Received: by mail-pf1-f200.google.com with SMTP id d2e1a72fcca58-668728bb904so4616146b3a.2
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 01:53:01 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687942378; x=1690534378;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=g+Vzq7623MxsGxq8ObiiEY8MrsR0kmj8nphAIedVAvI=;
+        b=Ag0a/7kU7dF+xJqGQqljU6lG30vDpUyqqbYOkf6KHeJIKuf3SLu959F36pcwtAnpT/
+         u6DmKssHTU1pxGMggfmO1nAbhkoYRlVW31DCkYJyZcXbztOL6LFy6FnphbUev5V9Eg20
+         BIYKGjIIkGjYijma3vTb9qEQLj+iWZodgVc6+V6p6TItIqI3IL1R3uUeqIjBU1sqcd1x
+         kIvzRzcYhcGLXdyWMkTe12CcMlvBWBXnATqyvZBagwO7BR8ZDMNOA/Mem5Fw7tujBO4s
+         a198q/vgO8AHFHIoitL6fgcNUG9/L39Z5MaYodEfvFd3EqdRgzV/Yiyz/i2y/7oedS9r
+         IqVg==
+X-Gm-Message-State: AC+VfDwrskQ1MXwkV7sS+X5dnZRfdwuPi7n08YdKzkAdV+exoU7/hxWD
+        AEtzTN7TahWgm8MBLeyD/ryhc4oDnTJm5owTZyoBx882mdJkhszvNSjerzjwEFopjH5eCExYtjO
+        u+JLkph7Z3A6RBg/bklAnTgMtx7Sr1WLOTebebAXUjqGu98Ml4OgR
+X-Received: by 2002:a05:6a00:841:b0:680:98c:c5a5 with SMTP id q1-20020a056a00084100b00680098cc5a5mr2938765pfk.32.1687942377894;
+        Wed, 28 Jun 2023 01:52:57 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ6/Hz7/NrJVz/DhdYrrAKlsklzx7nk+HlL2OxoEz1r6nU5Lo1EjYDj7MUsFbVB6Bcy7ec5wuA==
+X-Received: by 2002:a05:6a00:841:b0:680:98c:c5a5 with SMTP id q1-20020a056a00084100b00680098cc5a5mr2938754pfk.32.1687942377527;
+        Wed, 28 Jun 2023 01:52:57 -0700 (PDT)
+Received: from canonical.com (211-75-139-218.hinet-ip.hinet.net. [211.75.139.218])
+        by smtp.gmail.com with ESMTPSA id b26-20020aa7811a000000b00666b3706be6sm6632178pfi.107.2023.06.28.01.52.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 28 Jun 2023 01:52:56 -0700 (PDT)
+From:   Koba Ko <koba.ko@canonical.com>
+To:     Borislav Petkov <bp@alien8.de>, Tony Luck <tony.luck@intel.com>,
+        James Morse <james.morse@arm.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Robert Richter <rric@kernel.org>, linux-edac@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] EDAC/i10nm: shift exponent is negative
+Date:   Wed, 28 Jun 2023 16:52:53 +0800
+Message-Id: <20230628085253.1013799-1-koba.ko@canonical.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [PATCH v4 5/6] soc: qcom: Add LLCC support for multi channel DDR
-Content-Language: en-US
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>
-CC:     <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <devicetree@vger.kernel.org>
-References: <20230623141806.13388-1-quic_kbajaj@quicinc.com>
- <20230623141806.13388-6-quic_kbajaj@quicinc.com>
- <b84b2bfc-6f8f-f50f-27b5-52a982ae30f2@linaro.org>
-From:   Komal Bajaj <quic_kbajaj@quicinc.com>
-In-Reply-To: <b84b2bfc-6f8f-f50f-27b5-52a982ae30f2@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: cRMwfyNecBWdklBeIV7n11-jCEgFYkRh
-X-Proofpoint-ORIG-GUID: cRMwfyNecBWdklBeIV7n11-jCEgFYkRh
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-06-28_05,2023-06-27_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 mlxlogscore=956
- clxscore=1015 suspectscore=0 bulkscore=0 malwarescore=0 impostorscore=0
- phishscore=0 lowpriorityscore=0 priorityscore=1501 mlxscore=0 spamscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2305260000
- definitions=main-2306280077
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+UBSAN complains this error
+~~~
+ UBSAN: shift-out-of-bounds in drivers/edac/skx_common.c:369:16
+ shift exponent -66 is negative
+ Call Trace:
+  <TASK>
+  dump_stack_lvl+0x48/0x70
+  dump_stack+0x10/0x20
+  __ubsan_handle_shift_out_of_bounds+0x1ac/0x360
+  skx_get_dimm_info.cold+0x91/0x175 [i10nm_edac]
+  ? kvasprintf_const+0x2a/0xb0
+  i10nm_get_dimm_config+0x23c/0x340 [i10nm_edac]
+  skx_register_mci+0x139/0x1e0 [i10nm_edac]
+  ? __pfx_i10nm_get_dimm_config+0x10/0x10 [i10nm_edac]
+  i10nm_init+0x403/0xd10 [i10nm_edac]
+  ? __pfx_i10nm_init+0x10/0x10 [i10nm_edac]
+  do_one_initcall+0x5b/0x250
+  do_init_module+0x68/0x260
+  load_module+0xb45/0xcd0
+  ? kernel_read_file+0x2a4/0x320
+  __do_sys_finit_module+0xc4/0x140
+  ? __do_sys_finit_module+0xc4/0x140
+  __x64_sys_finit_module+0x18/0x30
+  do_syscall_64+0x58/0x90
+  ? syscall_exit_to_user_mode+0x29/0x50
+  ? do_syscall_64+0x67/0x90
+  ? syscall_exit_to_user_mode+0x29/0x50
+  ? do_syscall_64+0x67/0x90
+  ? do_syscall_64+0x67/0x90
+  ? __flush_smp_call_function_queue+0x122/0x1f0
+  ? exit_to_user_mode_prepare+0x30/0xb0
+  ? irqentry_exit_to_user_mode+0x9/0x20
+  ? irqentry_exit+0x43/0x50
+  ? sysvec_call_function+0x4b/0xd0
+  entry_SYSCALL_64_after_hwframe+0x72/0xdc
+~~~
 
+when get rows, cols and ranks, the returned error value doesn't be
+handled.
 
-On 6/23/2023 8:28 PM, Konrad Dybcio wrote:
-> On 23.06.2023 16:18, Komal Bajaj wrote:
->> Add LLCC support for multi channel DDR configuration
->> based on a feature register. Reading DDR channel
->> confiuration uses nvmem framework, so select the
->> dependency in Kconfig. Without this, there will be
->> errors while building the driver with COMPILE_TEST only.
->>
->> Signed-off-by: Komal Bajaj <quic_kbajaj@quicinc.com>
->> ---
->>   drivers/soc/qcom/Kconfig     |  2 ++
->>   drivers/soc/qcom/llcc-qcom.c | 33 ++++++++++++++++++++++++++++++---
->>   2 files changed, 32 insertions(+), 3 deletions(-)
->>
->> diff --git a/drivers/soc/qcom/Kconfig b/drivers/soc/qcom/Kconfig
->> index a491718f8064..cc9ad41c63aa 100644
->> --- a/drivers/soc/qcom/Kconfig
->> +++ b/drivers/soc/qcom/Kconfig
->> @@ -64,6 +64,8 @@ config QCOM_LLCC
->>   	tristate "Qualcomm Technologies, Inc. LLCC driver"
->>   	depends on ARCH_QCOM || COMPILE_TEST
->>   	select REGMAP_MMIO
->> +	select NVMEM
->> +	select QCOM_SCM
->>   	help
->>   	  Qualcomm Technologies, Inc. platform specific
->>   	  Last Level Cache Controller(LLCC) driver for platforms such as,
->> diff --git a/drivers/soc/qcom/llcc-qcom.c b/drivers/soc/qcom/llcc-qcom.c
->> index 6cf373da5df9..3c29612da1c5 100644
->> --- a/drivers/soc/qcom/llcc-qcom.c
->> +++ b/drivers/soc/qcom/llcc-qcom.c
->> @@ -12,6 +12,7 @@
->>   #include <linux/kernel.h>
->>   #include <linux/module.h>
->>   #include <linux/mutex.h>
->> +#include <linux/nvmem-consumer.h>
->>   #include <linux/of.h>
->>   #include <linux/of_device.h>
->>   #include <linux/regmap.h>
->> @@ -943,6 +944,19 @@ static int qcom_llcc_cfg_program(struct platform_device *pdev,
->>   	return ret;
->>   }
->>   
->> +static int qcom_llcc_get_cfg_index(struct platform_device *pdev, u8 *cfg_index)
->> +{
->> +	int ret;
->> +
->> +	ret = nvmem_cell_read_u8(&pdev->dev, "multi-chan-ddr", cfg_index);
->> +	if (ret == -ENOENT) {
->> +		*cfg_index = 0;
->> +		return 0;
->> +	}
->> +
->> +	return ret;
->> +}
->> +
->>   static int qcom_llcc_remove(struct platform_device *pdev)
->>   {
->>   	/* Set the global pointer to a error code to avoid referencing it */
->> @@ -975,11 +989,13 @@ static int qcom_llcc_probe(struct platform_device *pdev)
->>   	struct device *dev = &pdev->dev;
->>   	int ret, i;
->>   	struct platform_device *llcc_edac;
->> -	const struct qcom_llcc_config *cfg;
->> +	const struct qcom_llcc_config *cfg, *entry;
->>   	const struct llcc_slice_config *llcc_cfg;
->>   	u32 sz;
->> +	u8 cfg_index;
->>   	u32 version;
->>   	struct regmap *regmap;
->> +	u32 num_entries = 0;
->>   
->>   	drv_data = devm_kzalloc(dev, sizeof(*drv_data), GFP_KERNEL);
->>   	if (!drv_data) {
->> @@ -1040,8 +1056,19 @@ static int qcom_llcc_probe(struct platform_device *pdev)
->>   
->>   	drv_data->version = version;
->>   
->> -	llcc_cfg = cfg[0]->sct_data;
->> -	sz = cfg[0]->size;
->> +	ret = qcom_llcc_get_cfg_index(pdev, &cfg_index);
->> +	if (ret)
->> +		goto err;
->> +
->
->> +	for (entry = cfg; entry->sct_data; entry++, num_entries++)
->> +		;
->> +	if (cfg_index >= num_entries || cfg_index < 0) {
-> cfg_index is an unsigned variable, it can never be < 0
+check the return value is EINVAL, if yes, directly return 0.
 
-Okay, will remove this condition.
+Signed-off-by: Koba Ko <koba.ko@canonical.com>
+---
+ drivers/edac/skx_common.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
->
->> +		ret = -EINVAL;
->> +		goto err;
->> +	}
->> +
-> if (cfg_index >= entry->size)? With that, you can also keep the config
-> entries non-0-terminated in the previous patch, saving a whole lot of RAM.
-
-entry->size represents the size of sct table whereas num_entries 
-represents the number
-of sct tables that we can have. And by this check we are validating the 
-value read from the
-fuse register. Am I understanding your comment correctly?
-
->
-> Konrad
->> +	llcc_cfg = cfg[cfg_index].sct_data;
->> +	sz = cfg[cfg_index].size;
->>   
->>   	for (i = 0; i < sz; i++)
->>   		if (llcc_cfg[i].slice_id > drv_data->max_slices)
+diff --git a/drivers/edac/skx_common.c b/drivers/edac/skx_common.c
+index 2a00e0503f0d5..98baed1617c9f 100644
+--- a/drivers/edac/skx_common.c
++++ b/drivers/edac/skx_common.c
+@@ -351,6 +351,8 @@ int skx_get_dimm_info(u32 mtr, u32 mcmtr, u32 amap, struct dimm_info *dimm,
+ 	ranks = numrank(mtr);
+ 	rows = numrow(mtr);
+ 	cols = imc->hbm_mc ? 6 : numcol(mtr);
++	if (ranks == -EINVAL || rows == -EINVAL || cols == -EINVAL)
++		return 0;
+ 
+ 	if (imc->hbm_mc) {
+ 		banks = 32;
+-- 
+2.34.1
 
