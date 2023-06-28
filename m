@@ -2,187 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2232E74176E
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 19:45:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A34B741779
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 19:51:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231330AbjF1RpE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 13:45:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45910 "EHLO
+        id S231361AbjF1Rvh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 13:51:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231731AbjF1RpA (ORCPT
+        with ESMTP id S230519AbjF1Rve (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 13:45:00 -0400
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B0942134
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 10:44:58 -0700 (PDT)
-Received: by mail-lf1-x12a.google.com with SMTP id 2adb3069b0e04-4f122ff663eso8796816e87.2
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 10:44:58 -0700 (PDT)
+        Wed, 28 Jun 2023 13:51:34 -0400
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEE042123
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 10:51:32 -0700 (PDT)
+Received: by mail-lj1-x234.google.com with SMTP id 38308e7fff4ca-2b6a675743dso1211381fa.2
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 10:51:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1687974296; x=1690566296;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=O5iwGD4XHWkWOIfZ3yQGIh6iTIUnFByvMDl0Vq0m8Go=;
-        b=EmsspnBzEw/jQHMY0ZC6hqmpzYPwXz49Nr5F3m9lZwltrrIbjpg86UxQ+BIALTUHtC
-         GJkgEuePI9cVYBNs1TCByp/Du2Oh87sFptpCgzbJCzXQTXN1i/nU7yXc9jFS9+Ad9NRB
-         lkDs5CJUVPvZOjnlPt+qKLsa3EIXP4lvu041Q=
+        d=rivosinc-com.20221208.gappssmtp.com; s=20221208; t=1687974691; x=1690566691;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=UIfoyCpUUajyFpMhMqY2mJy3ksaLY6ORUfahwyFeKps=;
+        b=PZhSyKn0rBq8tzcP5Bek1yLJg+XNjZNPiL4LicVXac8ZOnPsWOnWA/9I80VfEM4619
+         g5ay6vTG1iOzQj4ZH+Ab5XNGun/Iazle8Ji9pUkAGLMi2e0llijrwn+V/yw5k+v/9Luh
+         RzJbb8msOTGWs80BMmcTGN4oLQohW5sbBQId13ax1T8cACnTMXSM57HORJikYJABP05Y
+         2AX9yXWr89Mwke4BESf25avuAOE7dLikndEcqN49udXL2cEUvH21ZM8j0MuNZ9J6gnou
+         jI1RYyDbtxgC9SexfytFdTs6FJo2prck5CqbvHYZFhbG0bmUDr6FmBp4iMJnL9/K/rYm
+         7JHw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687974296; x=1690566296;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=O5iwGD4XHWkWOIfZ3yQGIh6iTIUnFByvMDl0Vq0m8Go=;
-        b=jHcYp62JIuMwUOOab0eGqOi9xzDVT462JDjp0LCAHwu8hXzymmGTKCvdbp6m2C26TG
-         oZv7sNn9cRBAbXDRboZbNtHOZkfA23DqUam9ZoHF4N4QrTYdcnhsjTYUqr7Kb1HZQtOT
-         25QgHB2Fo7NJkKis6v8UHlUAAZO41bX3Bpv89J7W2KFADVrI7jpQT0Udj6cZKFBHZl8g
-         fAS41bhuN6dl1IZDvTE+nSiya3XHed3fo4puCveR9Y6yjhlmgwukio+liW0PF6WA3TNy
-         tejkDKwWiGLNNre6MOjRjg/PdYbDHpieiy2J/tjaCP7KIm6N+t5VdOwXrV74WuUX43Q2
-         FNHQ==
-X-Gm-Message-State: AC+VfDx0vKShc1ITeGEbyVI6THShAmmMWy7EL9jWPd/enVNld1f2lE1h
-        SddZyB+yinqt3pqkEy2+zkm7B9HycuCOjJP9V4lJI5ir
-X-Google-Smtp-Source: ACHHUZ7OF/LQh0apXePecR+CuFAzAEhvO3FI24xgUnqC6Dd+8pO/69I40gniWeNIY9lzYCb72dOMwA==
-X-Received: by 2002:ac2:4f0a:0:b0:4fb:7404:538b with SMTP id k10-20020ac24f0a000000b004fb7404538bmr7872835lfr.66.1687974296366;
-        Wed, 28 Jun 2023 10:44:56 -0700 (PDT)
-Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com. [209.85.167.54])
-        by smtp.gmail.com with ESMTPSA id w25-20020a19c519000000b004ec84d24818sm2003255lfe.282.2023.06.28.10.44.54
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 28 Jun 2023 10:44:54 -0700 (PDT)
-Received: by mail-lf1-f54.google.com with SMTP id 2adb3069b0e04-4fb7b2e3dacso5316339e87.0
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 10:44:54 -0700 (PDT)
-X-Received: by 2002:a05:6512:2527:b0:4fa:a0c3:ef9d with SMTP id
- be39-20020a056512252700b004faa0c3ef9dmr8121152lfb.18.1687974294238; Wed, 28
- Jun 2023 10:44:54 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1687974691; x=1690566691;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=UIfoyCpUUajyFpMhMqY2mJy3ksaLY6ORUfahwyFeKps=;
+        b=BMjkqhCrx/nN8bOYjoEIjntF4oFm4DKJwGtCCzs6brtaHMAcn3I430JmFhJ5yxZDXk
+         l/mvtWD9RESKLyQPVqeHH1uUsxIH7T5BG4qlhVCYxJ9Vy/ToMpHRUlzsidiZz2Ff75qG
+         K83zu6WHbRMEaFYunJ7ijVPvk8ddHvAqph7XeBQiyiA+BKdjZyDPv4otso06+BV4/xc3
+         SwuxFvRIBBNuGyzpHBQ/VS7BfpbSydgAvlU471r+tvoExRr4Wuo45ZRVC8UufPKQ9MpR
+         O5oo3JOYvxAbBJe9vxvTuEMyWlsF0KUXxQcqcatIe+HmeiiiU6HO1dOMZPdku7OG55QY
+         voxA==
+X-Gm-Message-State: AC+VfDwxUjLK+VzH7groyjBoH7FWMnVkkBE26yeJz6JcFqcHZGQbaliG
+        YXwVGNWvLpp7htVZ7GwnX2gzD8EgBsKgsjpwEP97Hw==
+X-Google-Smtp-Source: ACHHUZ5owY13ULc/O32xrPfk+xUrhF3ccAD9wXq9jBAmvoET+2nZVQozOcdx0DwQxDw2S4OBcBUVCT2CQpLzucnAlkE=
+X-Received: by 2002:a2e:3e08:0:b0:2b6:9ed0:46f4 with SMTP id
+ l8-20020a2e3e08000000b002b69ed046f4mr8648646lja.23.1687974691162; Wed, 28 Jun
+ 2023 10:51:31 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230628020657.957880-1-goldstein.w.n@gmail.com>
- <20230628091241.GAZJv5ie0xVGvnMKIM@fat_crate.local> <CAFUsyfKYQk87fxCDj9FpM9xzLwZVRrfUZgyUCF5G+HuC0N2pXg@mail.gmail.com>
-In-Reply-To: <CAFUsyfKYQk87fxCDj9FpM9xzLwZVRrfUZgyUCF5G+HuC0N2pXg@mail.gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Wed, 28 Jun 2023 10:44:37 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wj1fe4Pa0zLxUTiMjaxEXW84HBup+Hv=fe-U8PoFzrm5g@mail.gmail.com>
-Message-ID: <CAHk-=wj1fe4Pa0zLxUTiMjaxEXW84HBup+Hv=fe-U8PoFzrm5g@mail.gmail.com>
-Subject: Re: x86/csum: Remove unnecessary odd handling
-To:     Noah Goldstein <goldstein.w.n@gmail.com>
-Cc:     Borislav Petkov <bp@alien8.de>, x86@kernel.org,
-        edumazet@google.com, tglx@linutronix.de, mingo@redhat.com,
-        dave.hansen@linux.intel.com, hpa@zytor.com,
-        lkml <linux-kernel@vger.kernel.org>
-Content-Type: multipart/mixed; boundary="00000000000033860005ff34249b"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+References: <20230626-provable-angrily-81760e8c3cc6@wendy> <20230626-sensuous-clothing-124f7ae0aedf@wendy>
+ <CALs-HstDV3PjBk_8WDecwuvVK9rno1CKFzT1+8ohoUXE7X0GwA@mail.gmail.com> <20230628-gizzard-trading-a5f9785128b5@spud>
+In-Reply-To: <20230628-gizzard-trading-a5f9785128b5@spud>
+From:   Evan Green <evan@rivosinc.com>
+Date:   Wed, 28 Jun 2023 10:50:55 -0700
+Message-ID: <CALs-HsvdXu+Ag50FpdCRthZamP+pzsqhxr2rnA+=Ko_sZ98z9A@mail.gmail.com>
+Subject: Re: [PATCH v1 6/9] RISC-V: add single letter extensions to riscv_isa_ext
+To:     Conor Dooley <conor@kernel.org>
+Cc:     Conor Dooley <conor.dooley@microchip.com>, palmer@dabbelt.com,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Andrew Jones <ajones@ventanamicro.com>,
+        Heiko Stuebner <heiko.stuebner@vrull.eu>,
+        Sunil V L <sunilvl@ventanamicro.com>,
+        linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---00000000000033860005ff34249b
-Content-Type: text/plain; charset="UTF-8"
-
-On Wed, 28 Jun 2023 at 08:32, Noah Goldstein <goldstein.w.n@gmail.com> wrote:
+On Wed, Jun 28, 2023 at 10:43=E2=80=AFAM Conor Dooley <conor@kernel.org> wr=
+ote:
 >
-> Linus, if you're planning a patch and want to just integrate the codes
-> here I'm happy drop this patch
+> On Wed, Jun 28, 2023 at 10:33:20AM -0700, Evan Green wrote:
+> > On Mon, Jun 26, 2023 at 4:21=E2=80=AFAM Conor Dooley <conor.dooley@micr=
+ochip.com> wrote:
+> > >
+> > > So that riscv_fill_hwcap() can use riscv_isa_ext to probe for single
+> > > letter extensions, add them to it. riscv_isa_ext_data grows a new
+> > > member, signifying whether an extension is multi-letter & thus requir=
+ing
+> > > special handling.
+> > > As a result, what gets spat out in /proc/cpuinfo will become borked, =
+as
+> > > single letter extensions will be printed as part of the base extensio=
+ns
+> > > and while printing from riscv_isa_arr. Take the opportunity to unify =
+the
+> > > printing of the isa string, using the new member of riscv_isa_ext_dat=
+a
+> > > in the process.
+> > >
+> > > Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+> > > ---
+> > >  arch/riscv/include/asm/hwcap.h |  1 +
+> > >  arch/riscv/kernel/cpu.c        | 36 ++++++----------------
+> > >  arch/riscv/kernel/cpufeature.c | 56 +++++++++++++++++++++-----------=
+--
+> > >  3 files changed, 46 insertions(+), 47 deletions(-)
+> > >
+> > > diff --git a/arch/riscv/include/asm/hwcap.h b/arch/riscv/include/asm/=
+hwcap.h
+> > > index a35bee219dd7..6ad896dc4342 100644
+> > > --- a/arch/riscv/include/asm/hwcap.h
+> > > +++ b/arch/riscv/include/asm/hwcap.h
+> > > @@ -77,6 +77,7 @@ unsigned long riscv_get_elf_hwcap(void);
+> > >  struct riscv_isa_ext_data {
+> > >         const unsigned int id;
+> > >         const char *name;
+> > > +       const bool multi_letter;
+> >
+> > Instead of defining a new member, could we just infer this by making a
+> > macro like #define MULTI_LETTER(name) (name[0] && name[1])?
+>
+> Or don't even try to be clever like this and just call strnlen on the
+> name & check if it is 1? It's only used in 2 places.
 
-No, that patch looks good to me.
-
-In fact, I wasn't planning on integrating my patch at all. I literally
-did it as a "I would have done it this way instead" exercise.
-
-And while I am currently running with my patch in the kernel, I don't
-even really know if it works and does the right thing. Maybe my use
-doesn't even trigger csum_partial() at all. I did not do any testing
-that "yes, I get the same checksum as a result".
-
-So
-
- (a) removing the pointless one-byte alignment looks good to me.
-
- (b) I'd actually hope that somebody who _cares_ about this path and
-has put some real work into it (as opposed to my "superficial
-dabbling") would look at my patch and either go "yeah, not worth it",
-or "looks good, I'll take it".
-
-and I'm including that final patch of mine here again in case there
-was any confusion with the earlier versions (there were at least two
-known-broken versions I posted).
-
-*If* somebody likes it, and verifies that the checksum result is
-correct, feel free to do anything with that patch, including adding my
-signed-off-by for it (or taking the credit all for yourself -
-Mwahahahahaahaa!)
-
-              Linus
-
---00000000000033860005ff34249b
-Content-Type: text/x-patch; charset="US-ASCII"; 
-	name="0001-Silly-csum-improvement.-Maybe.patch"
-Content-Disposition: attachment; 
-	filename="0001-Silly-csum-improvement.-Maybe.patch"
-Content-Transfer-Encoding: base64
-Content-ID: <f_ljg0at1j0>
-X-Attachment-Id: f_ljg0at1j0
-
-RnJvbSAyNGExZDUzM2Q5NjA3NDIyMDkyN2Q4NDRhNjE5YTU0NDE5YjY5YjgxIE1vbiBTZXAgMTcg
-MDA6MDA6MDAgMjAwMQpGcm9tOiBMaW51cyBUb3J2YWxkcyA8dG9ydmFsZHNAbGludXgtZm91bmRh
-dGlvbi5vcmc+CkRhdGU6IFR1ZSwgMjcgSnVuIDIwMjMgMTM6NTU6MzIgLTA3MDAKU3ViamVjdDog
-W1BBVENIXSBTaWxseSBjc3VtIGltcHJvdmVtZW50LiBNYXliZS4KCi0tLQogYXJjaC94ODYvbGli
-L2NzdW0tcGFydGlhbF82NC5jIHwgODMgKysrKysrKysrKysrKysrKy0tLS0tLS0tLS0tLS0tLS0t
-LQogMSBmaWxlIGNoYW5nZWQsIDM4IGluc2VydGlvbnMoKyksIDQ1IGRlbGV0aW9ucygtKQoKZGlm
-ZiAtLWdpdCBhL2FyY2gveDg2L2xpYi9jc3VtLXBhcnRpYWxfNjQuYyBiL2FyY2gveDg2L2xpYi9j
-c3VtLXBhcnRpYWxfNjQuYwppbmRleCBjZWEyNWNhOGI4Y2YuLmQ5NmUxZGE2NjA0YSAxMDA2NDQK
-LS0tIGEvYXJjaC94ODYvbGliL2NzdW0tcGFydGlhbF82NC5jCisrKyBiL2FyY2gveDg2L2xpYi9j
-c3VtLXBhcnRpYWxfNjQuYwpAQCAtMzMsNiArMzMsMjAgQEAgc3RhdGljIGlubGluZSBfX3dzdW0g
-Y3N1bV90YWlsKHU2NCB0ZW1wNjQsIGludCBvZGQpCiAJcmV0dXJuIChfX2ZvcmNlIF9fd3N1bSly
-ZXN1bHQ7CiB9CiAKK3N0YXRpYyBpbmxpbmUgdW5zaWduZWQgbG9uZyB1cGRhdGVfY3N1bV80MGIo
-dW5zaWduZWQgbG9uZyBzdW0sIGNvbnN0IHVuc2lnbmVkIGxvbmcgbVs1XSkKK3sKKwlhc20oImFk
-ZHEgJTEsJTBcblx0IgorCSAgICAgImFkY3EgJTIsJTBcblx0IgorCSAgICAgImFkY3EgJTMsJTBc
-blx0IgorCSAgICAgImFkY3EgJTQsJTBcblx0IgorCSAgICAgImFkY3EgJTUsJTBcblx0IgorCSAg
-ICAgImFkY3EgJDAsJTAiCisJCToiK3IiIChzdW0pCisJCToibSIgKG1bMF0pLCAibSIgKG1bMV0p
-LCAibSIgKG1bMl0pLAorCQkgIm0iIChtWzNdKSwgIm0iIChtWzRdKSk7CisJcmV0dXJuIHN1bTsK
-K30KKwogLyoKICAqIERvIGEgY2hlY2tzdW0gb24gYW4gYXJiaXRyYXJ5IG1lbW9yeSBhcmVhLgog
-ICogUmV0dXJucyBhIDMyYml0IGNoZWNrc3VtLgpAQCAtNTksNTIgKzczLDMxIEBAIF9fd3N1bSBj
-c3VtX3BhcnRpYWwoY29uc3Qgdm9pZCAqYnVmZiwgaW50IGxlbiwgX193c3VtIHN1bSkKIAkJYnVm
-ZisrOwogCX0KIAotCS8qCi0JICogbGVuID09IDQwIGlzIHRoZSBob3QgY2FzZSBkdWUgdG8gSVB2
-NiBoZWFkZXJzLCBidXQgYW5ub3RhdGluZyBpdCBsaWtlbHkoKQotCSAqIGhhcyBub3RpY2VhYmxl
-IG5lZ2F0aXZlIGFmZmVjdCBvbiBjb2RlZ2VuIGZvciBhbGwgb3RoZXIgY2FzZXMgd2l0aAotCSAq
-IG1pbmltYWwgcGVyZm9ybWFuY2UgYmVuZWZpdCBoZXJlLgotCSAqLwotCWlmIChsZW4gPT0gNDAp
-IHsKLQkJYXNtKCJhZGRxIDAqOCglW3NyY10pLCVbcmVzXVxuXHQiCi0JCSAgICAiYWRjcSAxKjgo
-JVtzcmNdKSwlW3Jlc11cblx0IgotCQkgICAgImFkY3EgMio4KCVbc3JjXSksJVtyZXNdXG5cdCIK
-LQkJICAgICJhZGNxIDMqOCglW3NyY10pLCVbcmVzXVxuXHQiCi0JCSAgICAiYWRjcSA0KjgoJVtz
-cmNdKSwlW3Jlc11cblx0IgotCQkgICAgImFkY3EgJDAsJVtyZXNdIgotCQkgICAgOiBbcmVzXSAi
-K3IiKHRlbXA2NCkKLQkJICAgIDogW3NyY10gInIiKGJ1ZmYpLCAibSIoKihjb25zdCBjaGFyKCop
-WzQwXSlidWZmKSk7Ci0JCXJldHVybiBjc3VtX3RhaWwodGVtcDY0LCBvZGQpOwotCX0KLQlpZiAo
-dW5saWtlbHkobGVuID49IDY0KSkgewotCQkvKgotCQkgKiBFeHRyYSBhY2N1bXVsYXRvcnMgZm9y
-IGJldHRlciBJTFAgaW4gdGhlIGxvb3AuCi0JCSAqLwotCQl1NjQgdG1wX2FjY3VtLCB0bXBfY2Fy
-cmllczsKKwkvKiBEbyB0d28gNDAtYnl0ZSBjaHVua3MgaW4gcGFyYWxsZWwgdG8gZ2V0IGJldHRl
-ciBJTFAgKi8KKwlpZiAobGlrZWx5KGxlbiA+PSA4MCkpIHsKKwkJdTY0IHRlbXA2NF8yID0gMDsK
-KwkJZG8geworCQkJdGVtcDY0ID0gdXBkYXRlX2NzdW1fNDBiKHRlbXA2NCwgYnVmZik7CisJCQl0
-ZW1wNjRfMiA9IHVwZGF0ZV9jc3VtXzQwYih0ZW1wNjRfMiwgYnVmZiArIDQwKTsKKwkJCWJ1ZmYg
-Kz0gODA7CisJCQlsZW4gLT0gODA7CisJCX0gd2hpbGUgKGxlbiA+PSA4MCk7CiAKLQkJYXNtKCJ4
-b3JsICVrW3RtcF9hY2N1bV0sJWtbdG1wX2FjY3VtXVxuXHQiCi0JCSAgICAieG9ybCAla1t0bXBf
-Y2Fycmllc10sJWtbdG1wX2NhcnJpZXNdXG5cdCIKLQkJICAgICJzdWJsICQ2NCwgJVtsZW5dXG5c
-dCIKLQkJICAgICIxOlxuXHQiCi0JCSAgICAiYWRkcSAwKjgoJVtzcmNdKSwlW3Jlc11cblx0Igot
-CQkgICAgImFkY3EgMSo4KCVbc3JjXSksJVtyZXNdXG5cdCIKLQkJICAgICJhZGNxIDIqOCglW3Ny
-Y10pLCVbcmVzXVxuXHQiCi0JCSAgICAiYWRjcSAzKjgoJVtzcmNdKSwlW3Jlc11cblx0IgotCQkg
-ICAgImFkY2wgJDAsJWtbdG1wX2NhcnJpZXNdXG5cdCIKLQkJICAgICJhZGRxIDQqOCglW3NyY10p
-LCVbdG1wX2FjY3VtXVxuXHQiCi0JCSAgICAiYWRjcSA1KjgoJVtzcmNdKSwlW3RtcF9hY2N1bV1c
-blx0IgotCQkgICAgImFkY3EgNio4KCVbc3JjXSksJVt0bXBfYWNjdW1dXG5cdCIKLQkJICAgICJh
-ZGNxIDcqOCglW3NyY10pLCVbdG1wX2FjY3VtXVxuXHQiCi0JCSAgICAiYWRjbCAkMCwla1t0bXBf
-Y2Fycmllc11cblx0IgotCQkgICAgImFkZHEgJDY0LCAlW3NyY11cblx0IgotCQkgICAgInN1Ymwg
-JDY0LCAlW2xlbl1cblx0IgotCQkgICAgImpnZSAxYlxuXHQiCi0JCSAgICAiYWRkcSAlW3RtcF9h
-Y2N1bV0sJVtyZXNdXG5cdCIKLQkJICAgICJhZGNxICVbdG1wX2NhcnJpZXNdLCVbcmVzXVxuXHQi
-Ci0JCSAgICAiYWRjcSAkMCwlW3Jlc10iCi0JCSAgICA6IFt0bXBfYWNjdW1dICI9JnIiKHRtcF9h
-Y2N1bSksCi0JCSAgICAgIFt0bXBfY2Fycmllc10gIj0mciIodG1wX2NhcnJpZXMpLCBbcmVzXSAi
-K3IiKHRlbXA2NCksCi0JCSAgICAgIFtsZW5dICIrciIobGVuKSwgW3NyY10gIityIihidWZmKQot
-CQkgICAgOiAibSIoKihjb25zdCBjaGFyICopYnVmZikpOworCQlhc20oImFkZHEgJTEsJTBcblx0
-IgorCQkgICAgImFkY3EgJDAsJTAiCisJCSAgICA6IityIiAodGVtcDY0KTogInIiICh0ZW1wNjRf
-MikpOworCX0KKworCS8qCisJICogbGVuID09IDQwIGlzIHRoZSBob3QgY2FzZSBkdWUgdG8gSVB2
-NiBoZWFkZXJzLCBzbyByZXR1cm4KKwkgKiBlYXJseSBmb3IgdGhhdCBleGFjdCBjYXNlIHdpdGhv
-dXQgY2hlY2tpbmcgdGhlIHRhaWwgYnl0ZXMuCisJICovCisJaWYgKGxlbiA+PSA0MCkgeworCQl0
-ZW1wNjQgPSB1cGRhdGVfY3N1bV80MGIodGVtcDY0LCBidWZmKTsKKwkJbGVuIC09IDQwOworCQlp
-ZiAoIWxlbikKKwkJCXJldHVybiBjc3VtX3RhaWwodGVtcDY0LCBvZGQpOworCQlidWZmICs9IDQw
-OwogCX0KIAogCWlmIChsZW4gJiAzMikgewotLSAKMi40MS4wLjIwMy5nYTRmMmNkMzJiYi5kaXJ0
-eQoK
---00000000000033860005ff34249b--
+Sounds good to me!
