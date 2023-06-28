@@ -2,119 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93F59741BB7
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 00:20:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20CF3741BBB
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 00:24:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229645AbjF1WUX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 18:20:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44100 "EHLO
+        id S230449AbjF1WYD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 18:24:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229524AbjF1WUT (ORCPT
+        with ESMTP id S229469AbjF1WYA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 18:20:19 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CEB61FCD;
-        Wed, 28 Jun 2023 15:20:11 -0700 (PDT)
-X-UUID: ef59e15a160111ee9cb5633481061a41-20230629
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=S/nbo+ebgMdV4ZZSJyAeh1YAiJ4mp8iyvOvAOjIJhm0=;
-        b=GS1LtMzZXvgNH3LGI6bs4As0WeHw9ohCk/KCiDKNsLsekqnUujnxPHAijKAlyGp2AsEif741PfNuYc6AJ5/pZLb3nNKAnvLskx/yJq+SzMwyfkAtVnyYy5S6UFyNxgZ7vlc7CF6rwrnr1Dt+fkwfiC895D8lVt84n8IqCSIGkw4=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.27,REQID:0d5afe75-e8b1-4ed6-a931-76c706a454d4,IP:0,U
-        RL:0,TC:0,Content:-25,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
-        N:release,TS:-25
-X-CID-META: VersionHash:01c9525,CLOUDID:0884a50d-c22b-45ab-8a43-3004e9216b56,B
-        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:11|1,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:
-        NO
-X-CID-BVR: 0,NGT
-X-CID-BAS: 0,NGT,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_ULN
-X-UUID: ef59e15a160111ee9cb5633481061a41-20230629
-Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw01.mediatek.com
-        (envelope-from <sean.wang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1265616894; Thu, 29 Jun 2023 06:20:06 +0800
-Received: from mtkmbs11n1.mediatek.inc (172.21.101.186) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Thu, 29 Jun 2023 06:20:04 +0800
-Received: from mtkswgap22.mediatek.inc (172.21.77.33) by
- mtkmbs11n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.1118.26 via Frontend Transport; Thu, 29 Jun 2023 06:20:04 +0800
-From:   <sean.wang@mediatek.com>
-To:     <marcel@holtmann.org>, <johan.hedberg@gmail.com>,
-        <luiz.dentz@gmail.com>
-CC:     <sean.wang@mediatek.com>, <chris.lu@mediatek.com>,
-        <Soul.Huang@mediatek.com>, <Leon.Yen@mediatek.com>,
-        <Deren.Wu@mediatek.com>, <km.lin@mediatek.com>,
-        <robin.chiu@mediatek.com>, <Eddie.Chen@mediatek.com>,
-        <ch.yeh@mediatek.com>, <jenhao.yang@mediatek.com>,
-        <Stella.Chang@mediatek.com>, <Tom.Chou@mediatek.com>,
-        <steve.lee@mediatek.com>, <jsiuda@google.com>,
-        <frankgor@google.com>, <abhishekpandit@google.com>,
-        <michaelfsun@google.com>, <mmandlik@google.com>,
-        <abhishekpandit@chromium.org>, <mcchou@chromium.org>,
-        <shawnku@google.com>, <linux-bluetooth@vger.kernel.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH v3] Bluetooth: btmtk: add printing firmware information
-Date:   Thu, 29 Jun 2023 06:20:03 +0800
-Message-ID: <1c40a12b51ccd6ee2ee002276f5b1ba92c377100.1687990098.git.objelf@gmail.com>
-X-Mailer: git-send-email 1.7.9.5
+        Wed, 28 Jun 2023 18:24:00 -0400
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C61472134;
+        Wed, 28 Jun 2023 15:23:58 -0700 (PDT)
+Received: by mail-wm1-x330.google.com with SMTP id 5b1f17b1804b1-3fba545d743so582095e9.0;
+        Wed, 28 Jun 2023 15:23:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687991037; x=1690583037;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=eJSQ2cbgDZSmh5RuRHhUwD3ZZOJfvX+ur0GE22ML6KI=;
+        b=IAeB7RM8oKj2Ma9uUqLnb4e119QOYrBBnvem6Foysew6wIo0xM+jtRjyw3BgfHN2SF
+         sNQCmPf+wiZmuzA6RfcHIPX88vaQeB934RdAQnkv4fKAnRUpcjhEzwDdCrWVT4yw+qwl
+         uRYefMOSDeFVnLZBnjtJYoFORQKCJOKMKAwmRe2TqKIoyVrrxURlmFz4rN3GyvrKUVKE
+         BFttYYRZ6gYSsg64oNGnxVb62HJNTx5TjK0YZihM843Kgo+5R/MeOzhfmZ3Jqrwmi0U7
+         ngRGb1gK8eNmZP9Nmk4z4Ur7PWnrcuyRaX9Yd3UMIo95hG70sujIu7cpW8JH/khb/Mjm
+         zFBA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687991037; x=1690583037;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=eJSQ2cbgDZSmh5RuRHhUwD3ZZOJfvX+ur0GE22ML6KI=;
+        b=YF4wkPkk6HmpOfkZQV2JPMBJKyXlPlGRiF6lxCrxrEmcPUp1dpl+rjc/YSaS3Vh76s
+         tY8+IUAkFkpSawqsmS6d6PJpqfKJeBDu0RY/WYEtdiQorMcRv+wjFJYw61rX3TIPvt5E
+         EkMtoDmhF6hTzR4W2mkYAInv3x9tk+TPi8cHoHF16KvoPnSgBWAkGtEnCjIgvrm4Pbcg
+         OFT30IXpZoFlxS7uOf0aTX7L+8WDK6SalQq0OeIzdTn02i5CSjzL87wSkt3i8qvzUXYM
+         BtpVW85eExgYptAqTCQkBmXnhyBabAf2fuxQyqlHBt8yZplVcwZEaIfdVGe8il/OGTsX
+         xHpw==
+X-Gm-Message-State: AC+VfDw/Huab8irpNYi7BQB5puHMiCtELeCYS9r76/AOgq1dkohy/xnu
+        B6CbDazpogY9EooO2BliX/yl+iL595g=
+X-Google-Smtp-Source: ACHHUZ5kOHdlPw1OGXW6fZxr/hv7DLmJTCXyIxcloHSLI27O6GzkGcfxQJToG70wWFjyiRiIYkmZng==
+X-Received: by 2002:a7b:c5d7:0:b0:3f8:c70e:7ed1 with SMTP id n23-20020a7bc5d7000000b003f8c70e7ed1mr31957944wmk.20.1687991036884;
+        Wed, 28 Jun 2023 15:23:56 -0700 (PDT)
+Received: from suse.localnet (host-87-3-108-126.retail.telecomitalia.it. [87.3.108.126])
+        by smtp.gmail.com with ESMTPSA id n17-20020a5d6611000000b003140fff4f75sm1983877wru.17.2023.06.28.15.23.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 28 Jun 2023 15:23:55 -0700 (PDT)
+From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     Sumitra Sharma <sumitraartsy@gmail.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Ira Weiny <ira.weiny@intel.com>, Deepak R Varma <drv@mailo.com>
+Subject: Re: [PATCH] fs/vboxsf: Replace kmap() with kmap_local_{page, folio}()
+Date:   Thu, 29 Jun 2023 00:23:54 +0200
+Message-ID: <6924669.18pcnM708K@suse>
+In-Reply-To: <ZJxqmEVKoxxftfXM@casper.infradead.org>
+References: <20230627135115.GA452832@sumitra.com> <ZJxqmEVKoxxftfXM@casper.infradead.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,SPF_HELO_PASS,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,
-        UNPARSEABLE_RELAY,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="iso-8859-1"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Chris Lu <chris.lu@mediatek.com>
+On mercoled=EC 28 giugno 2023 19:15:04 CEST Matthew Wilcox wrote:
+> Here's a more comprehensive read_folio patch.  It's not at all
+> efficient, but then if we wanted an efficient vboxsf, we'd implement
+> vboxsf_readahead() and actually do an async call with deferred setting
+> of the uptodate flag.
+> I can consult with anyone who wants to do all
+> this work.
 
-Add printing firmware information part when driver loading firmware that
-user can get mediatek bluetooth information.
+Interesting...
+=20
+> I haven't even compiled this, just trying to show the direction this
+> should take.
+>=20
+> diff --git a/fs/vboxsf/file.c b/fs/vboxsf/file.c
+> index 2307f8037efc..f1af9a7bd3d8 100644
+> --- a/fs/vboxsf/file.c
+> +++ b/fs/vboxsf/file.c
+> @@ -227,26 +227,31 @@ const struct inode_operations vboxsf_reg_iops =3D {
+>=20
+>  static int vboxsf_read_folio(struct file *file, struct folio *folio)
+>  {
+> -	struct page *page =3D &folio->page;
+>  	struct vboxsf_handle *sf_handle =3D file->private_data;
+> -	loff_t off =3D page_offset(page);
+> -	u32 nread =3D PAGE_SIZE;
+> -	u8 *buf;
+> +	loff_t pos =3D folio_pos(folio);
+> +	size_t offset =3D 0;
+>  	int err;
+>=20
+> -	buf =3D kmap(page);
+> +	do {
 
-Co-developed-by: Sean Wang <sean.wang@mediatek.com>
-Signed-off-by: Sean Wang <sean.wang@mediatek.com>
-Signed-off-by: Chris Lu <chris.lu@mediatek.com>
----
-v3: resend again with the latest tree
----
- drivers/bluetooth/btmtk.c | 5 +++++
- 1 file changed, 5 insertions(+)
+Please let me understand why you are calling vboxsf_read() in a loop, a=20
+PAGE_SIZE at a time.
 
-diff --git a/drivers/bluetooth/btmtk.c b/drivers/bluetooth/btmtk.c
-index 9482401d97fa..8490d59502a5 100644
---- a/drivers/bluetooth/btmtk.c
-+++ b/drivers/bluetooth/btmtk.c
-@@ -57,6 +57,7 @@ int btmtk_setup_firmware_79xx(struct hci_dev *hdev, const char *fwname,
- 			      wmt_cmd_sync_func_t wmt_cmd_sync)
- {
- 	struct btmtk_hci_wmt_params wmt_params;
-+	struct btmtk_patch_header *hdr;
- 	struct btmtk_global_desc *globaldesc = NULL;
- 	struct btmtk_section_map *sectionmap;
- 	const struct firmware *fw;
-@@ -75,9 +76,13 @@ int btmtk_setup_firmware_79xx(struct hci_dev *hdev, const char *fwname,
- 
- 	fw_ptr = fw->data;
- 	fw_bin_ptr = fw_ptr;
-+	hdr = (struct btmtk_patch_header *)fw_ptr;
- 	globaldesc = (struct btmtk_global_desc *)(fw_ptr + MTK_FW_ROM_PATCH_HEADER_SIZE);
- 	section_num = le32_to_cpu(globaldesc->section_num);
- 
-+	bt_dev_info(hdev, "HW/SW Version: 0x%04x%04x, Build Time: %s",
-+		    le16_to_cpu(hdr->hwver), le16_to_cpu(hdr->swver), hdr->datetime);
-+
- 	for (i = 0; i < section_num; i++) {
- 		first_block = 1;
- 		fw_ptr = fw_bin_ptr;
--- 
-2.25.1
+I have had only few minutes (whereas I'd need more time) to look at this co=
+de.
+
+If I understand the current code it reads a single page at offset zero of a=
+=20
+folio and then memset() with zeros from &buf[nread] up to the end of the pa=
+ge.=20
+Then it seems that this function currently assume that the folio doesn't ne=
+ed=20
+to be read until "offset < folio_size(folio)" becomes false.
+
+Does it imply that the folio is always one page sized? Doesn't it? I'm sure=
+ly=20
+missing some basics... =20
+
+> +		u8 *buf =3D kmap_local_folio(folio, offset);
+> +		u32 nread =3D PAGE_SIZE;
+>=20
+> -	err =3D vboxsf_read(sf_handle->root, sf_handle->handle, off, &nread,=20
+buf);
+> -	if (err =3D=3D 0) {
+> -		memset(&buf[nread], 0, PAGE_SIZE - nread);
+> -		flush_dcache_page(page);
+> -		SetPageUptodate(page);
+> -	} else {
+> -		SetPageError(page);
+> -	}
+> +		err =3D vboxsf_read(sf_handle->root, sf_handle->handle, pos,
+> +				&nread, buf);
+> +		if (nread < PAGE_SIZE)
+> +			memset(&buf[nread], 0, PAGE_SIZE - nread);
+> +		kunmap_local(buf);
+> +		if (err)
+> +			break;
+> +		offset +=3D PAGE_SIZE;
+> +		pos +=3D PAGE_SIZE;
+> +	} while (offset < folio_size(folio);
+>=20
+> -	kunmap(page);
+> -	unlock_page(page);
+> +	if (!err) {
+> +		flush_dcache_folio(folio);
+> +		folio_mark_uptodate(folio);
+> +	}
+> +	folio_unlock(folio);
+
+Shouldn't we call folio_lock() to lock the folio to be able to unlock with=
+=20
+folio_unlock()?
+=20
+If so, I can't find any neither a folio_lock() or a page_lock() in this=20
+filesystem.=20
+
+Again sorry for not understanding, can you please explain it?
+
+>  	return err;
+>  }
+
+Thanks,
+
+=46abio
+
 
