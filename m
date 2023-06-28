@@ -2,143 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AADA740DFC
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 12:03:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF97F740DF4
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 12:03:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233508AbjF1Jy1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 05:54:27 -0400
-Received: from dfw.source.kernel.org ([139.178.84.217]:36890 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232236AbjF1JuB (ORCPT
+        id S233826AbjF1JzF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 05:55:05 -0400
+Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:60508
+        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230297AbjF1Jur (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 05:50:01 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Wed, 28 Jun 2023 05:50:47 -0400
+Received: from mail-lf1-f70.google.com (mail-lf1-f70.google.com [209.85.167.70])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CF0EE6126D;
-        Wed, 28 Jun 2023 09:50:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9CF13C433C0;
-        Wed, 28 Jun 2023 09:49:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687945800;
-        bh=wHy/4Bdn8bLqInIOtsbVUy9HeffaJhdQru3m0BWjVgw=;
-        h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-        b=BWkUgE7gZGIMcrVg4STv/B5lPWx6Q8LyAoYbws0CSfCsql+bBDYdawWGK2XhmpBeC
-         3NvH9Qv74cYPjC+asPQ3krfts5qn3C7LZYVRGVdHGFaGO7GdSQmH+hfhKB56A3qgD4
-         rRd/g93Rxsf5ti8lgPiq9rjcuAtigVVAqhyrlKKEcf0T7e2F743EjQwGeo+bPkXkPY
-         n2tEOow3lYJ/Tr3Tgu68XW+2U48h6bpvpjGQUwRX+yOVSS3c8yAM8jlgvUV2Czauhv
-         C6o8lclOBYraXDRZR45mVnE2yiHbIPq7H1HzStHYeG5v/6wDIwbVa1imO/tNyHZj0v
-         6GKfP/FzqBL8w==
-From:   Maxime Ripard <mripard@kernel.org>
-Date:   Wed, 28 Jun 2023 11:49:23 +0200
-Subject: [PATCH v2 3/3] drivers: base: Free devm resources when
- unregistering a device
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id B26E43F266
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 09:50:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1687945844;
+        bh=+3ajja7MAstA+YCVmYNOJvwhE7/9ec4gOlnHNDS3MOU=;
+        h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+         MIME-Version;
+        b=IY9PhGuAx7bsRmVsptgNaIWo/6lOnkdt6dorDkfEtAwaDf1UDygjy+z+KDofwnpP+
+         /dcH1yY6ktGbA/dv6WNNNnC67Y3bmHtvOLXMsiFJDItrxyaCsr4zuI9IdWbTj4vL9o
+         dd3PmIW02Dk49TANdDFQDHEs9LyIxX4ll5yLRiXPPkW/2Nu/F3h17sb2Eb8RBR58QH
+         ts7jrG9qyW71FMvBHJTp/GQHzhQRKFHpkSpv+/GgbJxscIOdfpz6LVWtIfzaMaJOUB
+         KcZVJQSE8IE8fws4t8rgI4K1DBPH/7GfN5UuVhODEbqdhn7AIHfYQtUEaIO9JkrHrH
+         9IkR+Xr37vf8A==
+Received: by mail-lf1-f70.google.com with SMTP id 2adb3069b0e04-4f01644f62eso4658160e87.0
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 02:50:44 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687945844; x=1690537844;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=+3ajja7MAstA+YCVmYNOJvwhE7/9ec4gOlnHNDS3MOU=;
+        b=eP4+QWZENhNYKdUgTor8NdM0GfNeF8/peGn8L2EJZY6jlgPhj2PPbQB3orWKAEGu6D
+         hLbm/MTgmBV2gp5XFmjsKg/2V+9S0bUzjpnMV9z90sInfKWRYU/HrlSHgwx+p8CIED/r
+         EWLx58EjCeeVtm9P4ICIefJZFVtFiH/4JhCTzwa8HSce3pqgJekDhrdkz/EtkDLxwvcA
+         L9VKlH6juL6d1JqMNLkD8dopx8PUyf9FxumIjJZrNXfuwaF0c/rWe2W1pdqUX6JMzo6P
+         fPg4FU+PTP3KWeY1Mn3POk6vl1PchAd9NEDOz/MUVdsbpjVoeGcs2MeCDYLc1RMs53FX
+         DhGQ==
+X-Gm-Message-State: AC+VfDwavkL9Zy+FFVbcKZX18wuZ32p6DMiJUkhzrH2qX+z5CDDZRkGg
+        IflQ/9CjAKS8OGCd9gw2V3pk87vN6bcfcWsQSWDdtBWlw/pE+yqnJjDO5UUkLQkK/vwpGnRv6nz
+        yikzewA6ELLA5Ctz3cxcSgDKOmlyAoOtMK2TXXd+7QA==
+X-Received: by 2002:a19:380f:0:b0:4f8:4177:e087 with SMTP id f15-20020a19380f000000b004f84177e087mr18902751lfa.47.1687945844105;
+        Wed, 28 Jun 2023 02:50:44 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ4cBM2grbJSWNi7mCJ5ewuTKswFCGuguC6q7nJIziby3TaAJDbD2NRFzSz6qF8ad+lor8ckng==
+X-Received: by 2002:a19:380f:0:b0:4f8:4177:e087 with SMTP id f15-20020a19380f000000b004f84177e087mr18902737lfa.47.1687945843773;
+        Wed, 28 Jun 2023 02:50:43 -0700 (PDT)
+Received: from localhost ([194.191.244.86])
+        by smtp.gmail.com with ESMTPSA id a25-20020a5d4579000000b003048477729asm12871090wrc.81.2023.06.28.02.50.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 28 Jun 2023 02:50:43 -0700 (PDT)
+From:   Juerg Haefliger <juerg.haefliger@canonical.com>
+To:     juerg.haefliger@canonical.com
+Cc:     alistair@popple.id.au, eajames@linux.ibm.com, jk@ozlabs.org,
+        joel@jms.id.au, linux-fsi@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Subject: [PATCH v2] fsi: master-ast-cf: Add MODULE_FIRMWARE macro
+Date:   Wed, 28 Jun 2023 11:50:39 +0200
+Message-Id: <20230628095039.26218-1-juerg.haefliger@canonical.com>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230616122040.1035518-1-juerg.haefliger@canonical.com>
+References: <20230616122040.1035518-1-juerg.haefliger@canonical.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230329-kunit-devm-inconsistencies-test-v2-3-19feb71e864b@kernel.org>
-References: <20230329-kunit-devm-inconsistencies-test-v2-0-19feb71e864b@kernel.org>
-In-Reply-To: <20230329-kunit-devm-inconsistencies-test-v2-0-19feb71e864b@kernel.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Brendan Higgins <brendan.higgins@linux.dev>,
-        David Gow <davidgow@google.com>,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org, Maxime Ripard <mripard@kernel.org>,
-        Maxime Ripard <mripard@kernel.org>
-X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3285; i=mripard@kernel.org;
- h=from:subject:message-id; bh=kkD1/1T/bjGcKyT9fGwaBiGFMGIVAdeHxZ21NAuyjKQ=;
- b=owGbwMvMwCX2+D1vfrpE4FHG02pJDClzmDQeKW9juC9gfatjn+zP1Tc23Pvrmamu8vlh4Z0Fz
- 0MeOSxL6ShlYRDjYpAVU2SJETZfEndq1utONr55MHNYmUCGMHBxCsBEHjUzMnQyzcqpElvTKrI5
- b+bcuqw+yyvfLRbvNI6x/MYZ685Xu4aR4b5PXZ3fitalx1w82WN83qfUTXv818QscdauFV7nTaf
- N5gQA
-X-Developer-Key: i=mripard@kernel.org; a=openpgp;
- fpr=BE5675C37E818C8B5764241C254BCFC56BF6CE8D
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: David Gow <davidgow@google.com>
+The module loads firmware so add a MODULE_FIRMWARE macro to provide that
+information via modinfo.
 
-In the current code, devres_release_all() only gets called if the device
-has a bus and has been probed.
+Fixes: 6a794a27daca ("fsi: master-ast-cf: Add new FSI master using Aspeed ColdFire")
+Cc: stable@vger.kernel.org # 4.19+
+Signed-off-by: Juerg Haefliger <juerg.haefliger@canonical.com>
 
-This leads to issues when using bus-less or driver-less devices where
-the device might never get freed if a managed resource holds a reference
-to the device. This is happening in the DRM framework for example.
-
-We should thus call devres_release_all() in the device_del() function to
-make sure that the device-managed actions are properly executed when the
-device is unregistered, even if it has neither a bus nor a driver.
-
-This is effectively the same change than commit 2f8d16a996da ("devres:
-release resources on device_del()") that got reverted by commit
-a525a3ddeaca ("driver core: free devres in device_release") over
-use-after-free concerns.
-
-It's not clear whether those concerns are legitimate though, but I would
-expect drivers not to register new resources in their device-managed
-actions.
-
-Fixes: a525a3ddeaca ("driver core: free devres in device_release")
-Signed-off-by: Maxime Ripard <mripard@kernel.org>
 ---
- drivers/base/core.c                      | 11 +++++++++++
- drivers/base/test/platform-device-test.c |  2 --
- drivers/base/test/root-device-test.c     |  2 --
- 3 files changed, 11 insertions(+), 4 deletions(-)
+v2:
+  - Remove empty line
+  - Add Fixes and Cc tags
+---
+ drivers/fsi/fsi-master-ast-cf.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/base/core.c b/drivers/base/core.c
-index 3dff5037943e..6ceaf50f5a67 100644
---- a/drivers/base/core.c
-+++ b/drivers/base/core.c
-@@ -3817,6 +3817,17 @@ void device_del(struct device *dev)
- 	device_platform_notify_remove(dev);
- 	device_links_purge(dev);
+diff --git a/drivers/fsi/fsi-master-ast-cf.c b/drivers/fsi/fsi-master-ast-cf.c
+index 5f608ef8b53c..cde281ec89d7 100644
+--- a/drivers/fsi/fsi-master-ast-cf.c
++++ b/drivers/fsi/fsi-master-ast-cf.c
+@@ -1441,3 +1441,4 @@ static struct platform_driver fsi_master_acf = {
  
-+	/*
-+	 * If a device does not have a driver attached, we need to clean
-+	 * up any managed resources. We do this in device_release(), but
-+	 * it's never called (and we leak the device) if a managed
-+	 * resource holds a reference to the device. So release all
-+	 * managed resources here, like we do in driver_detach(). We
-+	 * still need to do so again in device_release() in case someone
-+	 * adds a new resource after this point, though.
-+	 */
-+	devres_release_all(dev);
-+
- 	bus_notify(dev, BUS_NOTIFY_REMOVED_DEVICE);
- 	kobject_uevent(&dev->kobj, KOBJ_REMOVE);
- 	glue_dir = get_glue_dir(dev);
-diff --git a/drivers/base/test/platform-device-test.c b/drivers/base/test/platform-device-test.c
-index b6ebf1dcdffb..1ae5ce8bd366 100644
---- a/drivers/base/test/platform-device-test.c
-+++ b/drivers/base/test/platform-device-test.c
-@@ -87,8 +87,6 @@ static void platform_device_devm_register_get_unregister_with_devm_test(struct k
- 	struct test_priv *priv = test->priv;
- 	int ret;
- 
--	kunit_skip(test, "This needs to be fixed in the core.");
--
- 	pdev = platform_device_alloc(DEVICE_NAME, PLATFORM_DEVID_NONE);
- 	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, pdev);
- 
-diff --git a/drivers/base/test/root-device-test.c b/drivers/base/test/root-device-test.c
-index 9a3e6cccae13..780d07455f57 100644
---- a/drivers/base/test/root-device-test.c
-+++ b/drivers/base/test/root-device-test.c
-@@ -78,8 +78,6 @@ static void root_device_devm_register_get_unregister_with_devm_test(struct kunit
- 	struct test_priv *priv = test->priv;
- 	int ret;
- 
--	kunit_skip(test, "This needs to be fixed in the core.");
--
- 	priv->dev = root_device_register(DEVICE_NAME);
- 	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, priv->dev);
- 
-
+ module_platform_driver(fsi_master_acf);
+ MODULE_LICENSE("GPL");
++MODULE_FIRMWARE(FW_FILE_NAME);
 -- 
-2.40.0
+2.39.2
 
