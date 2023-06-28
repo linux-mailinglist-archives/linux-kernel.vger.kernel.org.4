@@ -2,113 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3190C740A26
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 09:59:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 860477409DE
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 09:52:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230443AbjF1H6v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 03:58:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33910 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231760AbjF1H4Z (ORCPT
+        id S230469AbjF1Hwj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 03:52:39 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:20460 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230450AbjF1Hwc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 03:56:25 -0400
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 335AD30CB;
-        Wed, 28 Jun 2023 00:55:40 -0700 (PDT)
-Received: by mail-pl1-x62d.google.com with SMTP id d9443c01a7336-1b80ba9326bso22837675ad.1;
-        Wed, 28 Jun 2023 00:55:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687938939; x=1690530939;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=jwV6VegEGgXHvYZO+FVF8YG499LVL6bepvXDlvF8+Rg=;
-        b=DdN/W8i9yZGtVroesVqsYL9291qa6yWdufawJ695i78fLkmsgsak5TfYyWmXdTfYnF
-         1FPtHGggMjJYlAvpYG4UJGDhQKW0nDaFKUzDHNBP+UEm4+XaxCfVb6Ds/fqhGIaK7k2S
-         glFNTqtmoiZgWAC35C9oOnpZpjRvhs1sNT5HpEnMLa56LxbSW1btvvXyKDr9awgPk2vS
-         xTTLLmGMRjacxZZpi2nBjvtvhYfNz6dL19rRENid70NexX/C6eS8pP8gU1meTDwrueXG
-         8q/jc6q3jGHNMU5W3/AREXc0J2kUTGfTxIcUvKCyCkFjMXuKnq5rh6UyqPhSyR91iSev
-         LsAw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687938939; x=1690530939;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=jwV6VegEGgXHvYZO+FVF8YG499LVL6bepvXDlvF8+Rg=;
-        b=cdr1eb/k3dGnTm44E+508q54OTTw95l5st1vyKxWMNMmfhEXP6n7rOg/b124VCyKcw
-         MqYWd+k/vqvkWfRKrSHQALCVu4m8qR5VU+eTEhu7yFM4e9Vv4ww79DzyExr+Wdqqgban
-         30Xn6ZTO5kg/5UuHHKDAUOzpN+KWej1Pz5dhILv4XG5MgRpjciA+VaZYXi+BF+pCeqfr
-         17PTB8nPk5yaS/VAJp2d76iKL3G7UFJOESNY/ESDRFS7euH4grlfGNkxZVcu2gZEW8hA
-         gr5f4xcYS8aUp+Vw1c1yOtYykyseoyBbqVhgKy3XMCOMTcfYfygxK5ywztSxYLpnIP9Q
-         yl5w==
-X-Gm-Message-State: AC+VfDzXpBRAeKww4MGH4VYZ5AVtKCFyeUWc+mP/M4PT7i4/B1fWnvBx
-        POm2ypsgIiWIqvgOE+1aLFQdF1xV+jQ7dUrVb3SDoBAtwBk=
-X-Google-Smtp-Source: ACHHUZ4soVvSPz//0N56n2zVg9/mvSMdsW+hABPbyzw+YBgPBTOqSHuV37+eeVnA7wmrf8sM0FpOVum4oowpUDUaULk=
-X-Received: by 2002:a1f:e201:0:b0:471:4ceb:675f with SMTP id
- z1-20020a1fe201000000b004714ceb675fmr10540049vkg.9.1687932158755; Tue, 27 Jun
- 2023 23:02:38 -0700 (PDT)
+        Wed, 28 Jun 2023 03:52:32 -0400
+Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35S5pSFw008157;
+        Wed, 28 Jun 2023 06:04:12 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=qjhN1yHhVfB8bKKHksru9FAz/YSXpy2LrUUmQdoojY4=;
+ b=k/+w0azOqOXyw1ZX/vUF2Pw2F2cnXhPrsHi+X1RI0iqGKhoUWKHfBD9oiyWsXL3V6j7v
+ px7pn2La4x7zWbcHWky+NIO+xzhqBIx5UIxyjp2A0IUiWnV7qly9/MvLwtKXL30zzhgC
+ aOeIPxttQ+jwUitgIrWa+ohywq/emWRgyFZych56UB0Hb16w0+tpyT7P8Exhf/DcsD6i
+ 1//ICCFx+OKioBJGg30M+wkUoULxf9xKqu4e/Pu9/JHRIFRXbud1V9Wp6nbb/+4zGJ2N
+ xHzW5Gc1LSqb33L849Zbjs1rr5rSfHCDgzbMyzKIESYXbaf12Fv61uom/flxfq/ufmQp Fg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3rgf36ranx-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 28 Jun 2023 06:04:12 +0000
+Received: from m0356517.ppops.net (m0356517.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 35S5pWGJ008285;
+        Wed, 28 Jun 2023 06:04:11 GMT
+Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3rgf36ram3-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 28 Jun 2023 06:04:11 +0000
+Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
+        by ppma04fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 35S2jYJO030676;
+        Wed, 28 Jun 2023 06:04:09 GMT
+Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
+        by ppma04fra.de.ibm.com (PPS) with ESMTPS id 3rdr451ss7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 28 Jun 2023 06:04:09 +0000
+Received: from smtpav02.fra02v.mail.ibm.com (smtpav02.fra02v.mail.ibm.com [10.20.54.101])
+        by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 35S645P016908894
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 28 Jun 2023 06:04:05 GMT
+Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 9EB0B20043;
+        Wed, 28 Jun 2023 06:04:05 +0000 (GMT)
+Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 4203C20040;
+        Wed, 28 Jun 2023 06:04:05 +0000 (GMT)
+Received: from [9.152.212.165] (unknown [9.152.212.165])
+        by smtpav02.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Wed, 28 Jun 2023 06:04:05 +0000 (GMT)
+Message-ID: <e5274fc1-7de4-2c63-8767-fc437c2b68b2@linux.ibm.com>
+Date:   Wed, 28 Jun 2023 08:04:05 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH] perf/test: perf test case Daemon operations dumps core
+To:     Namhyung Kim <namhyung@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        acme@kernel.org, irogers@google.com, hca@linux.ibm.com,
+        svens@linux.ibm.com, gor@linux.ibm.com, sumanthk@linux.ibm.com
+References: <20230627092633.2135105-1-tmricht@linux.ibm.com>
+ <CAM9d7cjmmx2GQ7QQj3wBe1KkqgVNzoYbMuLeasVUWuZeLWUE9A@mail.gmail.com>
+Content-Language: en-US
+From:   Thomas Richter <tmricht@linux.ibm.com>
+Organization: IBM
+In-Reply-To: <CAM9d7cjmmx2GQ7QQj3wBe1KkqgVNzoYbMuLeasVUWuZeLWUE9A@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: LJQoIT1Veq46xhr8OJ_IzaJ_5DYTmhkl
+X-Proofpoint-ORIG-GUID: N3rKsWCN7AlhjlHo3O3mwpGnqZpQXBTw
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-References: <t5az5bvpfqd3rrwla43437r5vplmkujdytixcxgm7sc4hojspg@jcc63stk66hz> <cover.1687898895.git.nabijaczleweli@nabijaczleweli.xyz>
-In-Reply-To: <cover.1687898895.git.nabijaczleweli@nabijaczleweli.xyz>
-From:   Amir Goldstein <amir73il@gmail.com>
-Date:   Wed, 28 Jun 2023 09:02:27 +0300
-Message-ID: <CAOQ4uxgLVJwzTZDvcs6aRLU+Q8zARTXv4tqsAGTX=r8pCLB7NQ@mail.gmail.com>
-Subject: Re: [PATCH v4 0/3] fanotify accounting for fs/splice.c
-To:     =?UTF-8?Q?Ahelenia_Ziemia=C5=84ska?= 
-        <nabijaczleweli@nabijaczleweli.xyz>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <brauner@kernel.org>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jan Kara <jack@suse.cz>,
-        Chung-Chiang Cheng <cccheng@synology.com>,
-        Mel Gorman <mgorman@techsingularity.net>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-        lindbergh.monkeyblade.net
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-06-28_02,2023-06-27_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 phishscore=0
+ mlxscore=0 mlxlogscore=999 spamscore=0 lowpriorityscore=0 clxscore=1015
+ adultscore=0 malwarescore=0 impostorscore=0 suspectscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2305260000 definitions=main-2306280053
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 27, 2023 at 11:50=E2=80=AFPM Ahelenia Ziemia=C5=84ska
-<nabijaczleweli@nabijaczleweli.xyz> wrote:
->
-> Always generate modify out, access in for splice;
-> this gets automatically merged with no ugly special cases.
+On 6/27/23 17:35, Namhyung Kim wrote:
+> Hello,
+> 
+> On Tue, Jun 27, 2023 at 2:39 AM Thomas Richter <tmricht@linux.ibm.com> wrote:
+>>
+>> The perf test case Daemon operations dumps core all the time.
+>> I narrowed it down to this invocation:
+> 
+> Jiri sent the same fix already.  I'll add your Reported-by, ok?
+> 
+> https://lore.kernel.org/all/20230626201606.2514679-1-jolsa@kernel.org/
+> 
+> Thanks,
+> Namhyung
+> 
 
-Ahelenia,
+sure, fine with me.
 
-Obviously, you are new to sending patches to the kernel
-and you appear to be a very enthusiastic and fast learner,
-so I assume you won't mind getting some tips that you won't
-find in any document.
+-- 
+Thomas Richter, Dept 3303, IBM s390 Linux Development, Boeblingen, Germany
+--
+Vorsitzender des Aufsichtsrats: Gregor Pillen
+Geschäftsführung: David Faller
+Sitz der Gesellschaft: Böblingen / Registergericht: Amtsgericht Stuttgart, HRB 243294
 
-a) CC LTP only on tests, not on the kernel patches
-
-b) Please don't post these "diff" patches.
-Developers (and bots) should be able to understand which
-upstream commit a patch is based on (git format-patch provides that info).
-
-I mean you can send those diff patches as part of a conversation to
-explain yourself, that's fine, just don't post them as if they are patches
-for review.
-
-c) When there are prospect reviewers that have not reviewed v1
-(especially inotify maintainer), it is better to wait at least one day post=
-ing
-v2 and v3 and v4 ;), because:
-1. It is better to accumulate review comments from several reviewers
-2. Different reviewers may disagree, so if you are just following my
-    advice you may need to go back and forth until everyone is happy
-3. It's racy - reviewers may be in the middle of review of v1 without
-    realizing that v2,v3,v4 is already in their inbox, so that's creating
-    extra work for them - not a good outcome
-
-Going to review v4....
-
-Thanks,
-Amir.
