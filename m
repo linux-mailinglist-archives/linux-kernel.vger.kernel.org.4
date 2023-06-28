@@ -2,126 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 499AF7418CD
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 21:20:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E3AD7418D0
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 21:21:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231363AbjF1TUI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 15:20:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56318 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231185AbjF1TUD (ORCPT
+        id S229873AbjF1TUh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 15:20:37 -0400
+Received: from dfw.source.kernel.org ([139.178.84.217]:45928 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231495AbjF1TUd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 15:20:03 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B28D61FE8
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 12:20:02 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id 2adb3069b0e04-4f76a0a19d4so8901639e87.2
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 12:20:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1687980000; x=1690572000;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=JyArVu4aB7TFdxCwRbf3XY40ntQA2MhFquVGiFkdvFo=;
-        b=a/W8iJjlmmvCPEWuMe4BXKXFW/WMIAL9YlxN1j6FV80yakPKRKd4ztPijjeZesNjLb
-         4SvO6nKPpHgHfx3087+APgp4brmIDPfDzlsx8HoWvaQOdFieUMRLxmKRKN2diFS2qvhU
-         TI+48hX6WvnnwSpaHcAte1l6bqnvJYF1HXl6M=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687980000; x=1690572000;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=JyArVu4aB7TFdxCwRbf3XY40ntQA2MhFquVGiFkdvFo=;
-        b=XV6l6AVfVNOu5zZw/5M5prbG76/qQjdE3g9ehOewcQ3nWZNIp6hFllwK/xd7OUv36O
-         EodL21dZQxcABsT7yqqWV+c0LI7iQ4fUNJSgoeF81gS08EML52XvdSrZSVyW5GKW9Sew
-         QKeWy5XzZUFQznvu0ADjlYooDAszoGr7E8uTBd/6BVbKd9XX3USNnjDWKHJEthjFOZOf
-         aTCwur3zlMcToFC9/yv9oyrGS63bzzq8WIrnbwz1vMksV+UjOUokbf/tzGgK8/7WVQLN
-         P8E7/1MPS1R9PRAYz9nZt1wFIm87PEV+ilwpi0z8qMLE3FN0mtdhbnuV7xiy7XMfJSmc
-         hnAQ==
-X-Gm-Message-State: AC+VfDyVLUqsCFQzm8+AzbDhBMApI3kzYRZWbeM5u4wm+nH3hDEGGG1t
-        5+ZJ842yOAhpOcq5XunHs8yA0gbxdBexx/6W2fQ8itNA
-X-Google-Smtp-Source: ACHHUZ59uG1U7gBRD09BCsvTDzc1F8iCl5UQ3qJyYSVbsHBPPgoWe6g9gJZ6BKpQ7VMUCU5QGs6I2Q==
-X-Received: by 2002:a05:6512:401e:b0:4f9:a232:f09c with SMTP id br30-20020a056512401e00b004f9a232f09cmr9113043lfb.63.1687980000462;
-        Wed, 28 Jun 2023 12:20:00 -0700 (PDT)
-Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com. [209.85.167.54])
-        by smtp.gmail.com with ESMTPSA id z17-20020ac24191000000b004f846cd74bcsm326071lfh.245.2023.06.28.12.19.59
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 28 Jun 2023 12:19:59 -0700 (PDT)
-Received: by mail-lf1-f54.google.com with SMTP id 2adb3069b0e04-4f76a0a19d4so8901590e87.2
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 12:19:59 -0700 (PDT)
-X-Received: by 2002:a19:7b02:0:b0:4f8:83f:babe with SMTP id
- w2-20020a197b02000000b004f8083fbabemr20751801lfc.62.1687979999337; Wed, 28
- Jun 2023 12:19:59 -0700 (PDT)
+        Wed, 28 Jun 2023 15:20:33 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1BA1461453;
+        Wed, 28 Jun 2023 19:20:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B56C4C433C9;
+        Wed, 28 Jun 2023 19:20:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687980032;
+        bh=ZQZVtPeU7dPNfjGKYQ6Traz9rQl2dIA6gWmjA6m8qoc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=MNwdXgUAdozPFhzvee/9wFbEm1LOcTqPM+0kxlq1OXoC4ACco74LdlRpZZdvmn4Aa
+         8pARNmwwLJTg+/YUQI9OPZ6xg2xt4hEopHVW21rE7gkCF+zmKmDIFFR3sNddnwga8P
+         uovtIqPF8UljmZzo478xqZhrezrLWS/ndPSL2XgYG8gk4qAiNNxHaAoioglGGg7HTE
+         L8FAKplr0VVd7jcxJ2H7otD5Hez1qfRM3cO+uNjJEGo6QtNDoFYR7ALyNcWcEDDtuG
+         T8/OTb/jl7jherPuJOfe9CeqsGDQoXao7KIAO1A0qDZeWNyeK7inssZBwAKXayuYiz
+         Snp2MwMet+L7A==
+Date:   Wed, 28 Jun 2023 20:20:24 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Lee Jones <lee@kernel.org>
+Cc:     Rob Herring <robh@kernel.org>,
+        William Breathitt Gray <william.gray@linaro.org>,
+        "Sahin, Okan" <Okan.Sahin@analog.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Cosmin Tanislav <demonsingur@gmail.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Caleb Connolly <caleb.connolly@linaro.org>,
+        Marcus Folkesson <marcus.folkesson@gmail.com>,
+        "Bolboaca, Ramona" <Ramona.Bolboaca@analog.com>,
+        ChiYuan Huang <cy_huang@richtek.com>,
+        "Tilki, Ibrahim" <Ibrahim.Tilki@analog.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Hugo Villeneuve <hvilleneuve@dimonoff.com>,
+        ChiaEn Wu <chiaen_wu@richtek.com>,
+        Haibo Chen <haibo.chen@nxp.com>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>
+Subject: Re: [PATCH v7 5/5] mfd: max77541: Add ADI MAX77541/MAX77540 PMIC
+ Support
+Message-ID: <472a4d86-3bfb-4c2b-a099-f1254dd01e24@sirena.org.uk>
+References: <82612171-46d7-4d82-a8fc-c7d6a99d57e9@sirena.org.uk>
+ <MN2PR03MB516860989BD8ED6AC9A767FBE755A@MN2PR03MB5168.namprd03.prod.outlook.com>
+ <20230621171315.GL10378@google.com>
+ <20230626175443.GA3446604-robh@kernel.org>
+ <20230627135615.GF10378@google.com>
+ <CAL_JsqL3T6pjnTFgFvbYMeATD6cjhc-Sm0vZW2cv5k+w9Oxjuw@mail.gmail.com>
+ <ZJry8QTka8m6ag/j@fedora>
+ <20230627163344.GG10378@google.com>
+ <CAL_Jsq+Z64tuMO8a2Y=2GrXZ8q0L4Z2avCiphsn0HOOC71Dzjg@mail.gmail.com>
+ <20230628134013.GH10378@google.com>
 MIME-Version: 1.0
-References: <20230626085035.e66992e96b4c6d37dad54bd9@linux-foundation.org>
-In-Reply-To: <20230626085035.e66992e96b4c6d37dad54bd9@linux-foundation.org>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Wed, 28 Jun 2023 12:19:42 -0700
-X-Gmail-Original-Message-ID: <CAHk-=whppqqPdjVOx0mONDFx+JjewZPacionbWCUUFdrfOon-g@mail.gmail.com>
-Message-ID: <CAHk-=whppqqPdjVOx0mONDFx+JjewZPacionbWCUUFdrfOon-g@mail.gmail.com>
-Subject: Re: [GIT PULL] MM updates for 6.5-rc1
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Lorenzo Stoakes <lstoakes@gmail.com>
-Cc:     linux-mm@kvack.org, mm-commits@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-        lindbergh.monkeyblade.net
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="t/OdDRDxov9ilkpM"
+Content-Disposition: inline
+In-Reply-To: <20230628134013.GH10378@google.com>
+X-Cookie: HELLO, everybody, I'm a HUMAN!!
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 26 Jun 2023 at 08:50, Andrew Morton <akpm@linux-foundation.org> wrote:
->
-> Linus, please merge the MM updates for the 6.5-rc cycle.
 
-Hmm. I have merged this, as pr-tracker-bot already noticed, but I
-found a bug after merging it.
+--t/OdDRDxov9ilkpM
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-mm/memory.c: __access_remote_vm() is entirely broken for the
-HAVE_IOREMAP_PROT case (ie all normal architectures), because it does
-(skipping the non-HAVE_IOREMAP_PROT case):
+On Wed, Jun 28, 2023 at 02:40:13PM +0100, Lee Jones wrote:
+> On Tue, 27 Jun 2023, Rob Herring wrote:
+> > On Tue, Jun 27, 2023 at 10:33=E2=80=AFAM Lee Jones <lee@kernel.org> wro=
+te:
 
-        struct vm_area_struct *vma = NULL;
-        struct page *page = get_user_page_vma_remote(mm, addr,
-                                                     gup_flags, &vma);
+> > IMO, a series with interdependencies, which most cases of a new MFD
+> > are, should be applied as a series. That's generally what happens
+> > everywhere else. Creating a branch and PR seems like extra work for
+> > everyone. The downside to that is any API changes outside of MFD would
 
-        if (IS_ERR_OR_NULL(page)) {
-                [ ... ]
-                if (!vma)
-                        break;
-                if (vma->vm_ops && vma->vm_ops->access)
-                        res = vma->vm_ops->access(vma, addr, buf, ...
+> This is what we've been doing for the last decade.  However, I'm getting
+> mixed messages from folk.  Mark recently asked for something completely
+> different (which I did say would be a bad idea at the time):
 
-but get_user_page_vma_remote() doesn't even set vma if it fails!
+> https://lore.kernel.org/all/20230421073938.GO996918@google.com/
 
-So that "if (!vma)" case will always trigger, and the whole ->access()
-thing is never done.
+> Could we please just pick a strategy and go with it?
 
-So that __access_remote_vm() conversion in commit ca5e863233e8
-("mm/gup: remove vmas parameter from get_user_pages_remote()") is
-entirely broken.
+The basic ask from me is for things that cause these serieses to make
+progress, ideally in ways that minimise the amount of noise that they
+generate (given that they're generally pretty routine).  Applying
+patches when they're ready at least mitigates the size of the series,
+makes it easy to tell that they're OK and doesn't preclude applying more
+patches on top of it if that's a thing that people want to do.
 
-Now, I don't disagree with removing the vmas parameter. I just
-disagree with the get_user_page_vma_remote() helper use here.
+> > need some coordination. That coordination would only be needed when a
+> > subsystem has some API change and there's a new MFD using that
+> > subsystem rather than by default for every new MFD.
 
-I think the minimal fix is to just put the vma_lookup() back in the error case:
+> > Another option is just that you take all the binding patches since the
+> > MFD binding depends on the others. The drivers can still go via the
+> > subsystem. Not totally ideal to have branches of drivers missing
+> > bindings, but better than mainline missing bindings.
 
-    --- a/mm/memory.c
-    +++ b/mm/memory.c
-    @@ -5592,6 +5592,7 @@ int __access_remote_vm(struct mm_struct *mm,
-                 * Check if this is a VM_IO | VM_PFNMAP VMA, which
-                 * we can access using slightly different code.
-                 */
-    +           vma = vma_lookup(mm, addr);
-                if (!vma)
-                        break;
-                if (vma->vm_ops && vma->vm_ops->access)
+> My original method of taking everything with Acks was fine IMHO.
 
-and I'll commit that fix for now. Anybody who disagrees, please holler.
+As I mentioned before the number of resends of what are frequently very
+similar serieses (eg, two PMICs from the same vendor in flight at the
+same time) was causing me real issues with tags going AWOL and things
+getting lost in the noise.
 
-                 Linus
+--t/OdDRDxov9ilkpM
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmSch/cACgkQJNaLcl1U
+h9Cquwf/beLq1gjcYtTzTT+W2Y2bDq3eP4a1a1nJj6YBoMNGL+H9aDDh+IEYQcny
+tQ93FGnAxxprHje5GpW88ar0WLhMDf/nlCvuv5M5SGXgKtAvTV26FZzQr5NMKgFW
+bhdMs4r869lmrqfF8uG7xE6REDJqLKUqTgW7x1i+pVnE2MuFPT5coQbqAJohhR91
+ZhEhjPKzdUq1L9gC8MkosngN8XSTQZtVbs060CLHXc12gBqkw0bxgImIMRtP+ld7
+bVYPdSDhsTG7cJp/BmJIeNtE70RQczZbXYfqeRgw5wbuZVIWEHilOjV+oe1FJaV0
+3EehhtqBFHUFu+aOROFtdNOcsqSnbQ==
+=+yB6
+-----END PGP SIGNATURE-----
+
+--t/OdDRDxov9ilkpM--
