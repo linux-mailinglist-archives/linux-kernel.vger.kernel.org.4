@@ -2,110 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A43A740F7B
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 12:58:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 33C22740F80
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 12:59:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231410AbjF1K6E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 06:58:04 -0400
-Received: from sender4-op-o15.zoho.com ([136.143.188.15]:17530 "EHLO
-        sender4-op-o15.zoho.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231355AbjF1K5q (ORCPT
+        id S230332AbjF1K7m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 06:59:42 -0400
+Received: from fllv0016.ext.ti.com ([198.47.19.142]:36884 "EHLO
+        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229522AbjF1K7f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 06:57:46 -0400
-ARC-Seal: i=1; a=rsa-sha256; t=1687949856; cv=none; 
-        d=zohomail.com; s=zohoarc; 
-        b=lolKdYMH9//FJVcezcjoakLi76Mmm4I4NkH/Y7xn+/lrXv4B4oKoSNLwZTj+mmzc1VAAkzRm2J2LvQyG01+1sCJtuA5+Hkbeo2s8zuVWwbYxD0tg8AdhzCdHfQVrH+muCxA6u6MM3X8Jfi/z8KRUwVjKIDoXpZTls5L/CXM4FFQ=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-        t=1687949856; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:MIME-Version:Message-ID:Subject:To; 
-        bh=8K+nKJ/3xWzEx5rKzAeQMHMskxt0a3+GGU9b7FhFp3s=; 
-        b=UcU8Cm9ggl//3w9KPfMVPfKPbxmtjbOf4yZ4rxc2gWz/P7Y7bp/zPAI7uC8HpvJaGu8U+WKy94REob/FtAu+v5r2F+fqb1Ifs+p7XJ3TUcDNrYYalq5qEEqs8SxDvLBmQuDWXTBh1hHLKtR8yW8pqhRVbswiGbW18EvCeRFFSMU=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-        dkim=pass  header.i=linux.beauty;
-        spf=pass  smtp.mailfrom=me@linux.beauty;
-        dmarc=pass header.from=<me@linux.beauty>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1687949856;
-        s=zmail; d=linux.beauty; i=me@linux.beauty;
-        h=Date:Date:From:From:To:To:Cc:Cc:Message-ID:In-Reply-To:Subject:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
-        bh=8K+nKJ/3xWzEx5rKzAeQMHMskxt0a3+GGU9b7FhFp3s=;
-        b=mgZmAbtGcHQn+Khka68nTsRpnKZgg0RQBLABueHMqI8Y7oF8AMmCNpPEUO/YvM5Y
-        QJDJTYhsAxUU8bETq4gCF4pqrXJR+XfSS4vi8aKr8r4yoTAtLy0AcP6CVgfjecy8G8O
-        xa1T+eAWgHox24GI7UpagUuDdmGg049BUqIgExtk=
-Received: from mail.zoho.com by mx.zohomail.com
-        with SMTP id 1687949855751748.7272600539072; Wed, 28 Jun 2023 03:57:35 -0700 (PDT)
-Date:   Wed, 28 Jun 2023 18:57:35 +0800
-From:   Li Chen <me@linux.beauty>
-To:     "dmaengine" <dmaengine@vger.kernel.org>,
-        "linux-arm-kernel" <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel" <linux-kernel@vger.kernel.org>
-Cc:     "Arnd Bergmann" <arnd@arndb.de>
-Message-ID: <18901a6cbf0.c9e3e099688173.4166132371304083225@linux.beauty>
-In-Reply-To: 
-Subject: Should dma_map_single take the dma controller or its consumer as an
- argument?
+        Wed, 28 Jun 2023 06:59:35 -0400
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 35SAxDPP039747;
+        Wed, 28 Jun 2023 05:59:13 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1687949953;
+        bh=fAz5LFseo7lEldx3ZYITuvV7Xvig0TD/PEjZ1krIfcE=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=DJJNhfBYVJprDaynnB1x5t74zsQJLkdPiJJVoZcclfCWK2C8SvhQ7wyt0zGoRwzuv
+         eRDqdItBrkxITOBzsXKYa8FF1ekZoSWh/Cjvb/ZUzh48AhO+K9aIksD4zVuhXkxmQ0
+         wYBgKleRaDOgXpAG4EqDsd1UTLZDXFRK51RG7HFE=
+Received: from DLEE104.ent.ti.com (dlee104.ent.ti.com [157.170.170.34])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 35SAxDk1025395
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 28 Jun 2023 05:59:13 -0500
+Received: from DLEE104.ent.ti.com (157.170.170.34) by DLEE104.ent.ti.com
+ (157.170.170.34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Wed, 28
+ Jun 2023 05:59:12 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE104.ent.ti.com
+ (157.170.170.34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Wed, 28 Jun 2023 05:59:12 -0500
+Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 35SAxB7e121791;
+        Wed, 28 Jun 2023 05:59:12 -0500
+Date:   Wed, 28 Jun 2023 05:59:11 -0500
+From:   Nishanth Menon <nm@ti.com>
+To:     "Kumar, Udit" <u-kumar1@ti.com>
+CC:     Bhavya Kapoor <b-kapoor@ti.com>, <linux-kernel@vger.kernel.org>,
+        <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <robh+dt@kernel.org>,
+        <kristo@kernel.org>, <vigneshr@ti.com>
+Subject: Re: [PATCH v2] arm64: dts: ti: k3-j721s2-main: Enable support for
+ SDR104 speed mode
+Message-ID: <20230628105911.rdpqwxuhshgaj2ik@kobold>
+References: <20230412121415.860447-1-b-kapoor@ti.com>
+ <7fe4adef-9be2-6dae-d53f-692f9775439c@ti.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-Importance: Medium
-User-Agent: Zoho Mail
-X-Mailer: Zoho Mail
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <7fe4adef-9be2-6dae-d53f-692f9775439c@ti.com>
+User-Agent: NeoMutt/20171215
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi all,
+On 13:50-20230628, Kumar, Udit wrote:
+> 
+> On 4/12/2023 5:44 PM, Bhavya Kapoor wrote:
+> > According to TRM for J721S2, SDR104 speed mode is supported by the SoC
+> > but its capabilities were masked in device tree. Remove sdhci-caps-mask
+> > to enable support for SDR104 speed mode for SD card in J721S2 SoC.
+> > 
+> > [+] Refer to : section 12.3.6.1.1 MMCSD Features, in J721S2 TRM
+> > - https://www.ti.com/lit/zip/spruj28
+> > 
+> > Fixes: b8545f9d3a54 ("arm64: dts: ti: Add initial support for J721S2 SoC")
+> > Signed-off-by: Bhavya Kapoor <b-kapoor@ti.com>
+> > ---
+> > Changelog v1->v2:
+> > 	- Modified Commit Message and Added Fixes tag
+> > 
+> > Link to v1 : https://lore.kernel.org/all/20230404091245.336732-1-b-kapoor@ti.com/
+> > 
+> >   arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi | 2 --
+> >   1 file changed, 2 deletions(-)
+> > 
+> > diff --git a/arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi b/arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi
+> > index 8915132efcc1..95c6151ed10c 100644
+> > --- a/arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi
+> > +++ b/arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi
+> > @@ -400,8 +400,6 @@ main_sdhci1: mmc@4fb0000 {
+> >   		ti,clkbuf-sel = <0x7>;
+> >   		ti,trm-icp = <0x8>;
+> >   		dma-coherent;
+> > -		/* Masking support for SDR104 capability */
+> > -		sdhci-caps-mask = <0x00000003 0x00000000>;
+> 
+> 
+> Reviewed-by: Udit Kumar <u-kumar1@ti.com>
 
-I recently encountered an issue where the dma_mask was set in the DMA controller's driver, but the consumer peripheral driver didn't set its own dma_mask.
+Please confirm if there are any changes in *tap-delay attributes.
+> 
+> >   	};
+> >   	main_navss: bus@30000000 {
 
-If I utilize APIs such as dma_map_single or dma_alloc_coherent and pass a DMA controller as the argument, such as dma_map_single(dma_chan->device->dev, ...), the dma_mask is respected and there would be no issues. I also saw there are some user cases in the kernel:
-```
-# rg "dma_map_single.*chan"
-drivers/i2c/busses/i2c-sh_mobile.c
-536:    dma_addr = dma_map_single(chan->device->dev, pd->dma_buf, pd->msg->len, dir);
-
-drivers/i2c/busses/i2c-imx.c
-399:    dma->dma_buf = dma_map_single(chan_dev, msgs->buf,
-
-drivers/i2c/busses/i2c-stm32.c
-121:    dma->dma_buf = dma_map_single(chan_dev, buf, dma->dma_len,
-
-drivers/i2c/busses/i2c-rcar.c
-443:    dma_addr = dma_map_single(chan->device->dev, buf, len, dir);
-
-drivers/net/ethernet/ti/davinci_cpdma.c
-1049:           buffer = dma_map_single(ctlr->dev, si->data_virt, len, chan->dir);
-
-drivers/tty/serial/ambarella_uart.c
-826:            dma_phys = dma_map_single(dma_chan->device->dev,
-836:            dma_phys = dma_map_single(dma_chan->device->dev,
-
-drivers/tty/serial/samsung_tty.c
-1105:   dma->rx_addr = dma_map_single(dma->rx_chan->device->dev, dma->rx_buf,
-1114:   dma->tx_addr = dma_map_single(dma->tx_chan->device->dev,
-
-drivers/tty/serial/8250/8250_dma.c
-253:    dma->tx_addr = dma_map_single(dma->txchan->device->dev,
-
-drivers/tty/serial/sh-sci.c
-1600:           s->tx_dma_addr = dma_map_single(chan->device->dev,
-
-drivers/mtd/hyperbus/hbmc-am654.c
-87:     dma_dst = dma_map_single(rx_chan->device->dev, to, len, DMA_FROM_DEVICE);
-
-drivers/mtd/nand/raw/intel-nand-controller.c
-314:    buf_dma = dma_map_single(chan->device->dev, (void *)buf, len, dir);
-
-drivers/mtd/nand/raw/sh_flctl.c
-398:    dma_addr = dma_map_single(chan->device->dev, buf, len, dir);
-...
-```
-
-However, if I pass the consumer peripheral's struct device to dma_map_single, the dma_mask would not be respected because the peripheral driver doesn't set it, which would lead to unexpected outcomes. For instance, even if the DMA controller is capable of handling 64-bit operations, it would still use SWIOTLB, which is really unnecessary.
-
-So my question is which device should be dma_map_single's first argument? DMA controller or the consumer peripheral itself?
-
-I know I could also set dma_mask in my peripheral driver, just the same as the DMA controller did, but I want to learn the best practice.
-
-Thanks in advanced.
-
+--
 Regards,
-Li
+Nishanth Menon
