@@ -2,118 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3499D740DB8
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 11:51:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9175D740D1F
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 11:39:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231622AbjF1Juw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 05:50:52 -0400
-Received: from dggsgout11.his.huawei.com ([45.249.212.51]:7594 "EHLO
-        dggsgout11.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233156AbjF1J21 (ORCPT
+        id S234927AbjF1Jd3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 05:33:29 -0400
+Received: from mx0a-0031df01.pphosted.com ([205.220.168.131]:38766 "EHLO
+        mx0a-0031df01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S233533AbjF1J3I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 05:28:27 -0400
-Received: from mail02.huawei.com (unknown [172.30.67.143])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4QrbqC0hvpz4f4HDH;
-        Wed, 28 Jun 2023 17:28:23 +0800 (CST)
-Received: from [10.174.176.73] (unknown [10.174.176.73])
-        by APP4 (Coremail) with SMTP id gCh0CgBH_rE3_Ztk6L_hMg--.19650S3;
-        Wed, 28 Jun 2023 17:28:23 +0800 (CST)
-Subject: Re: [PATCH 3/3] md/raid10: use get_rdev_repl_from_mirror() to get
- devices
-To:     linan666@huaweicloud.com, song@kernel.org,
-        guoqing.jiang@cloud.ionos.com, colyli@suse.de, xni@redhat.com
-Cc:     linux-raid@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linan122@huawei.com, yi.zhang@huawei.com, houtao1@huawei.com,
-        yangerkun@huawei.com, "yukuai (C)" <yukuai3@huawei.com>
-References: <20230628015752.102267-1-linan666@huaweicloud.com>
- <20230628015752.102267-4-linan666@huaweicloud.com>
-From:   Yu Kuai <yukuai1@huaweicloud.com>
-Message-ID: <b06cafde-a6e0-6d52-8113-7ec3895f3b30@huaweicloud.com>
-Date:   Wed, 28 Jun 2023 17:28:22 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Wed, 28 Jun 2023 05:29:08 -0400
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35S7x3nn018679;
+        Wed, 28 Jun 2023 09:29:04 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=qcppdkim1;
+ bh=JurXvFvN3FaVuLqjt8uyVfMyx7nh5fOnI9auSwATcA4=;
+ b=Wq5ErT4Xt4uuIL2abzOhKhi7Xg/Tc+9S6ehBm0a40bqBfcvU9RP4+5UnF6ch5tJiFAHK
+ nfdd6xX411d4Gs8i9p+YbF2AbzUrLAnY1p3zf3za7UgzDSDH7U8HXyvel7S6a2C5I0b7
+ /TedKu38s9Xo56xxfatIcwab4kRq+o/ejczm3O57237IVr8pAdhAYj2RiCaC3+w8Ms2P
+ +0ffqZMxFAVlYtVKguCQc+9+HHXTTESikinAvnUAjcAouGAXX5rrodnavE9Xge+ei2MV
+ P8HmWiAyPDcUHel5wUUB7u9wgVrYdwITLRY2f9rxBDfheK1PQKbVOSc6her8BO16xcg8 hg== 
+Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rgextgj5u-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 28 Jun 2023 09:29:04 +0000
+Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
+        by NASANPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35S9T3li018703
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 28 Jun 2023 09:29:03 GMT
+Received: from hu-imrashai-hyd.qualcomm.com (10.80.80.8) by
+ nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.42; Wed, 28 Jun 2023 02:28:58 -0700
+From:   Imran Shaik <quic_imrashai@quicinc.com>
+To:     Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>
+CC:     Taniya Das <quic_tdas@quicinc.com>,
+        Imran Shaik <quic_imrashai@quicinc.com>,
+        Melody Olvera <quic_molvera@quicinc.com>,
+        "Dmitry Baryshkov" <dmitry.baryshkov@linaro.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-clk@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Jagadeesh Kona <quic_jkona@quicinc.com>,
+        Satya Priya Kakitapalli <quic_skakitap@quicinc.com>,
+        Ajit Pandey <quic_ajipan@quicinc.com>
+Subject: [PATCH V2 0/5] Update GCC clocks for QDU1000 and QRU1000 SoCs
+Date:   Wed, 28 Jun 2023 14:58:32 +0530
+Message-ID: <20230628092837.3090801-1-quic_imrashai@quicinc.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <20230628015752.102267-4-linan666@huaweicloud.com>
-Content-Type: text/plain; charset=gbk; format=flowed
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: gCh0CgBH_rE3_Ztk6L_hMg--.19650S3
-X-Coremail-Antispam: 1UD129KBjvJXoW7tF1xWrW5Zr4xWrWfXw4fKrg_yoW8trWkpa
-        n8K3WYyFWUW3yjkF1UJFWUGa4FvryxtF4fAr98Z3y3W39xJrZ3J3W8G345Wr98ZFZ8uFy5
-        WF1UKanay3W0qFDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUU9Y14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4U
-        JVW0owA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
-        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
-        I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
-        4UM4x0Y48IcVAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628vn2kI
-        c2xKxwCYjI0SjxkI62AI1cAE67vIY487MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4
-        AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE
-        17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMI
-        IF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Zr0_Wr1U
-        MIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJbIYCT
-        nIWIevJa73UjIFyTuYvjfUF9a9DUUUU
-X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
-X-CFilter-Loop: Reflected
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: 2NHyfz5RNxMSXs-zn84WUtFs7K2TglkA
+X-Proofpoint-GUID: 2NHyfz5RNxMSXs-zn84WUtFs7K2TglkA
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-06-28_06,2023-06-27_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ impostorscore=0 mlxscore=0 mlxlogscore=934 spamscore=0 malwarescore=0
+ bulkscore=0 clxscore=1015 adultscore=0 suspectscore=0 lowpriorityscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2305260000 definitions=main-2306280083
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-ÔÚ 2023/06/28 9:57, linan666@huaweicloud.com Ð´µÀ:
-> From: Li Nan <linan122@huawei.com>
-> 
-> Commit 2ae6aaf76912 ("md/raid10: fix io loss while replacement replace
-> rdev") reads replacement first to prevent io loss. However, there are same
-> issue in wait_blocked_dev() and raid10_handle_discard(), too. Fix it by
-> using get_rdev_repl_from_mirror() to get devices.
+Update GCC clocks and add support for GDSCs for QDU1000 and QRU1000 SoCs.
 
-LGTM
+Changes since v1:
+ - Dropped the v2 variant compatible changes
+ - Update tha maintainers list
+ - Split the GCC driver patch as per the review comments
 
-Reviewed-by: Yu Kuai <yukuai3@huawei.com>
-> 
-> Fixes: d30588b2731f ("md/raid10: improve raid10 discard request")
-> Fixes: f2e7e269a752 ("md/raid10: pull the code that wait for blocked dev into one function")
-> Signed-off-by: Li Nan <linan122@huawei.com>
-> ---
->   drivers/md/raid10.c | 15 +++++----------
->   1 file changed, 5 insertions(+), 10 deletions(-)
-> 
-> diff --git a/drivers/md/raid10.c b/drivers/md/raid10.c
-> index eaaf6307ddda..2d55374d8b22 100644
-> --- a/drivers/md/raid10.c
-> +++ b/drivers/md/raid10.c
-> @@ -1376,11 +1376,9 @@ static void wait_blocked_dev(struct mddev *mddev, struct r10bio *r10_bio)
->   	blocked_rdev = NULL;
->   	rcu_read_lock();
->   	for (i = 0; i < conf->copies; i++) {
-> -		struct md_rdev *rdev = rcu_dereference(conf->mirrors[i].rdev);
-> -		struct md_rdev *rrdev = rcu_dereference(
-> -			conf->mirrors[i].replacement);
-> -		if (rdev == rrdev)
-> -			rrdev = NULL;
-> +		struct md_rdev *rdev, *rrdev;
-> +
-> +		get_rdev_repl_from_mirror(&conf->mirrors[i], &rdev, &rrdev);
->   		if (rdev && unlikely(test_bit(Blocked, &rdev->flags))) {
->   			atomic_inc(&rdev->nr_pending);
->   			blocked_rdev = rdev;
-> @@ -1816,15 +1814,12 @@ static int raid10_handle_discard(struct mddev *mddev, struct bio *bio)
->   	 */
->   	rcu_read_lock();
->   	for (disk = 0; disk < geo->raid_disks; disk++) {
-> -		struct md_rdev *rdev = rcu_dereference(conf->mirrors[disk].rdev);
-> -		struct md_rdev *rrdev = rcu_dereference(
-> -			conf->mirrors[disk].replacement);
-> +		struct md_rdev *rdev, *rrdev;
->   
-> +		get_rdev_repl_from_mirror(&conf->mirrors[disk], &rdev, &rrdev);
->   		r10_bio->devs[disk].bio = NULL;
->   		r10_bio->devs[disk].repl_bio = NULL;
->   
-> -		if (rdev == rrdev)
-> -			rrdev = NULL;
->   		if (rdev && (test_bit(Faulty, &rdev->flags)))
->   			rdev = NULL;
->   		if (rrdev && (test_bit(Faulty, &rrdev->flags)))
-> 
+Previous series:
+v1: https://patchwork.kernel.org/project/linux-arm-msm/list/?series=757828
+
+Imran Shaik (5):
+  dt-bindings: clock: Update GCC clocks for QDU1000 and QRU1000 SoCs
+  clk: qcom: gcc-qdu1000: Fix gcc_pcie_0_pipe_clk_src clock handling
+  clk: qcom: gcc-qdu1000: Update GCC clocks as per the latest hw version
+  clk: qcom: gcc-qdu1000: Add support for GDSCs
+  clk: qcom: gcc-qdu1000: Update the RCGs ops
+
+ .../bindings/clock/qcom,qdu1000-gcc.yaml      |   3 +-
+ drivers/clk/qcom/gcc-qdu1000.c                | 159 ++++++++++++------
+ include/dt-bindings/clock/qcom,qdu1000-gcc.h  |   4 +-
+ 3 files changed, 110 insertions(+), 56 deletions(-)
+
+-- 
+2.25.1
 
