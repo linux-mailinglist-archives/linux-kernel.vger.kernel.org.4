@@ -2,14 +2,14 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAAD2740C50
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 11:04:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4452F740C3C
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 11:02:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233643AbjF1JEK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 05:04:10 -0400
-Received: from mg.richtek.com ([220.130.44.152]:44336 "EHLO mg.richtek.com"
+        id S236758AbjF1JCX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 05:02:23 -0400
+Received: from mg.richtek.com ([220.130.44.152]:44342 "EHLO mg.richtek.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236442AbjF1Iri (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        id S236443AbjF1Iri (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 28 Jun 2023 04:47:38 -0400
 X-MailGates: (flag:4,DYNAMIC,BADHELO,RELAY,NOHOST:PASS)(compute_score:DE
         LIVER,40,3)
@@ -29,10 +29,12 @@ To:     <broonie@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
 CC:     <robh+dt@kernel.org>, <lgirdwood@gmail.com>,
         <cy_huang@richtek.com>, <devicetree@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>
-Subject: [PATCH 0/2] Add support for RT5733
-Date:   Wed, 28 Jun 2023 16:47:15 +0800
-Message-ID: <1687942037-14652-1-git-send-email-cy_huang@richtek.com>
+Subject: [PATCH 1/2] regulator: dt-bindings: rt5739: Add compatible for rt5733
+Date:   Wed, 28 Jun 2023 16:47:16 +0800
+Message-ID: <1687942037-14652-2-git-send-email-cy_huang@richtek.com>
 X-Mailer: git-send-email 1.8.3.1
+In-Reply-To: <1687942037-14652-1-git-send-email-cy_huang@richtek.com>
+References: <1687942037-14652-1-git-send-email-cy_huang@richtek.com>
 MIME-Version: 1.0
 Content-Type: text/plain
 Precedence: bulk
@@ -41,16 +43,25 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: ChiYuan Huang <cy_huang@richtek.com>
 
-This series is to add the compatible support for rt5733 based on rt5739.
+Add compatible string for rt5733.
 
-ChiYuan Huang (2):
-  regulator: dt-bindings: rt5739: Add compatible for rt5733
-  regulator: rt5739: Add DID check and compatible for rt5733
+Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
+---
+ Documentation/devicetree/bindings/regulator/richtek,rt5739.yaml | 1 +
+ 1 file changed, 1 insertion(+)
 
- .../bindings/regulator/richtek,rt5739.yaml    |  1 +
- drivers/regulator/rt5739.c                    | 49 ++++++++++++++++---
- 2 files changed, 42 insertions(+), 8 deletions(-)
-
+diff --git a/Documentation/devicetree/bindings/regulator/richtek,rt5739.yaml b/Documentation/devicetree/bindings/regulator/richtek,rt5739.yaml
+index 358297dd3fb7..e95e046e9ed6 100644
+--- a/Documentation/devicetree/bindings/regulator/richtek,rt5739.yaml
++++ b/Documentation/devicetree/bindings/regulator/richtek,rt5739.yaml
+@@ -21,6 +21,7 @@ allOf:
+ properties:
+   compatible:
+     enum:
++      - richtek,rt5733
+       - richtek,rt5739
+ 
+   reg:
 -- 
 2.40.1
 
