@@ -2,97 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5259F74107F
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 13:55:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB64B741085
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 13:55:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231807AbjF1LzG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 07:55:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37504 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231504AbjF1Lyw (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 07:54:52 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D8D12D58;
-        Wed, 28 Jun 2023 04:54:52 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 80DFA612A5;
-        Wed, 28 Jun 2023 11:54:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0578C433C8;
-        Wed, 28 Jun 2023 11:54:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687953291;
-        bh=q1YOv3qNdA94MZ7eXuxfh/I9kDvs9oI0q4Kqi3B5xWU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=IXeRQ+EPmw8uIVJUyixWgarA31XTlKMjJjTq1xQdcH04jBwiX0bkTjk0LqFT2zHw4
-         s0alkDEocQ1d9Y6/L64SJjXvqgfdG2DR2ikXVQoYngEkLjjG5cQve3pNsKQSYfcBKZ
-         4czkWI19C1UkfT/KHIBZhpyZqc2eHlvpDS55peDl0mwQieUmlpFQaO53Kqq+jyhfB7
-         dCD/VfSi1sDx6xjOP4Kqd8qb8SUsZ2LURYnDYFMTW1onfxSPTq2J2ICN0DK97iAove
-         2FLmu4425Fzy/lEFGsF/pV8LrRqGIggSEvhhKb5h+H8ppzNsLCj2WSZgQosuXgaNGE
-         P75NH4inn4DUQ==
-Date:   Wed, 28 Jun 2023 12:54:43 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Stefan Moring <stefan.moring@technolution.nl>
-Cc:     shawnguo@kernel.org,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-        kernel@pengutronix.de, "festevam@gmail.com" <festevam@gmail.com>,
-        linux-imx@nxp.com, linux-spi@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] spi: Increase imx51 ecspi burst length based on transfer
- length
-Message-ID: <d1227506-e9b0-4f75-a63b-e25e0c621c48@sirena.org.uk>
-References: <CAB3BuKAVzXWNNiYDceNCpBqBmKyEykKA3rX=cfTyz+gWaJcnkA@mail.gmail.com>
+        id S231705AbjF1Lzi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 07:55:38 -0400
+Received: from mga14.intel.com ([192.55.52.115]:55149 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231504AbjF1Lzc (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 28 Jun 2023 07:55:32 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1687953332; x=1719489332;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=WenmENrCtD5NWaxfSXRbwYTJrz8lTYnfUODoBwJSvko=;
+  b=R8RwFHxL/5YtLhUhbbNvU5eQBlWQ5u570JNucuG5VRckVqgOv+h+tJt0
+   5HTxM+Ugr8PukDmwsf3fY96jbUzYSG4CHVcg+o8b8tqqTjD/j2oeetV37
+   YeKEXgDr3lzEZbLeXp23MOCARTIlCum66+r7YYikFnqlabXaWkgeS8VZ6
+   fCWoxAnq+MInX7vL8mOA8FFqFJu4lgRxHe6N/XOM+PQ7/FR+wzNHXilE3
+   OX1iPk6CxBdFTLw1xzjhlqIV5gYDLGOVAW/dxTO36HV/l9El1LGKL4reD
+   5CUF3tkCK9brtq0MXgOFkf2VRV/4e5MJAtzsCjG+eU3kDYk+8aIX0Kuyj
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10754"; a="361865554"
+X-IronPort-AV: E=Sophos;i="6.01,165,1684825200"; 
+   d="scan'208";a="361865554"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2023 04:55:32 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10754"; a="711019721"
+X-IronPort-AV: E=Sophos;i="6.01,165,1684825200"; 
+   d="scan'208";a="711019721"
+Received: from rajritu-mobl2.ger.corp.intel.com (HELO box.shutemov.name) ([10.249.47.187])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2023 04:55:24 -0700
+Received: by box.shutemov.name (Postfix, from userid 1000)
+        id 57DD21095C8; Wed, 28 Jun 2023 14:55:21 +0300 (+03)
+Date:   Wed, 28 Jun 2023 14:55:21 +0300
+From:   "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>
+To:     "Huang, Kai" <kai.huang@intel.com>
+Cc:     "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "Raj, Ashok" <ashok.raj@intel.com>,
+        "Huang, Ying" <ying.huang@intel.com>,
+        "Hansen, Dave" <dave.hansen@intel.com>,
+        "david@redhat.com" <david@redhat.com>,
+        "bagasdotme@gmail.com" <bagasdotme@gmail.com>,
+        "ak@linux.intel.com" <ak@linux.intel.com>,
+        "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Chatre, Reinette" <reinette.chatre@intel.com>,
+        "Christopherson,, Sean" <seanjc@google.com>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "Yamahata, Isaku" <isaku.yamahata@intel.com>,
+        "nik.borisov@suse.com" <nik.borisov@suse.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "Luck, Tony" <tony.luck@intel.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "imammedo@redhat.com" <imammedo@redhat.com>,
+        "Shahar, Sagi" <sagis@google.com>, "bp@alien8.de" <bp@alien8.de>,
+        "Brown, Len" <len.brown@intel.com>,
+        "Gao, Chao" <chao.gao@intel.com>,
+        "sathyanarayanan.kuppuswamy@linux.intel.com" 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        "Williams, Dan J" <dan.j.williams@intel.com>,
+        "x86@kernel.org" <x86@kernel.org>
+Subject: Re: [PATCH v12 07/22] x86/virt/tdx: Add skeleton to enable TDX on
+ demand
+Message-ID: <20230628115521.bo7x6lhonsmyvr7v@box.shutemov.name>
+References: <cover.1687784645.git.kai.huang@intel.com>
+ <104d324cd68b12e14722ee5d85a660cccccd8892.1687784645.git.kai.huang@intel.com>
+ <20230627095012.ln47s62pqzdrnb7x@box.shutemov.name>
+ <d6a0fb32ebcdeb6c38ebe8e2b03f034f42360c0f.camel@intel.com>
+ <20230627121853.ek5zr7sfiezfkfyj@box.shutemov.name>
+ <9361abfa9bf22c2a1a4b25e5495bcccc5b8dcd43.camel@intel.com>
+ <7b61715ad35d7b9916f55df72378e02e62c5cc4e.camel@intel.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="wUyQV1ZJoE1X237c"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAB3BuKAVzXWNNiYDceNCpBqBmKyEykKA3rX=cfTyz+gWaJcnkA@mail.gmail.com>
-X-Cookie: HELLO, everybody, I'm a HUMAN!!
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-        lindbergh.monkeyblade.net
+In-Reply-To: <7b61715ad35d7b9916f55df72378e02e62c5cc4e.camel@intel.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Jun 28, 2023 at 12:28:12AM +0000, Huang, Kai wrote:
+> On Tue, 2023-06-27 at 22:37 +0000, Huang, Kai wrote:
+> > > > 
+> > > > +/*
+> > > > + * Do the module global initialization if not done yet.
+> > > > + * It's always called with interrupts and preemption disabled.
+> > > > + */
+> > > 
+> > > If interrupts are always disabled why do you need _irqsave()?
+> > > 
+> > 
+> > I'll remove the _irqsave().
+> > 
+> > AFAICT Isaku preferred this for additional security, but this is not
+> > necessary.
+> > 
+> > 
+> 
+> Damn.  I think we can change the comment to say this function is called with
+> preemption being disabled, but _can_ be called with interrupt disabled.  And we
+> keep using the _irqsave() version.
+> 
+> 	/*
+> 	 * Do the module global initialization if not done yet.  It's always
+> 	 * called with preemption disabled and can be called with interrupts
+> 	 * disabled.
+> 	 */
+> 
+> This allows a use case that the caller simply wants to call some SEAMCALL on
+> local cpu, e.g., IOMMU code may just use below to get some TDX-IO information:
+> 
+> 	preempt_disable();
+> 	vmxon();
+> 	tdx_cpu_enable();
+> 	SEAMCALL;
+> 	vmxoff();
+> 	preempt_enable();
+> 
+> Are you OK with this?
 
---wUyQV1ZJoE1X237c
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Is it hypothetical use-case? If so, I would rather keep it simple for now
+and adjust in the future if needed.
 
-On Wed, Jun 28, 2023 at 10:41:27AM +0200, Stefan Moring wrote:
-
->   ctrl |= (spi_imx->slave_burst * 8 - 1)
->   << MX51_ECSPI_CTRL_BL_OFFSET;
-> - else
-> - ctrl |= (spi_imx->bits_per_word - 1)
-> - << MX51_ECSPI_CTRL_BL_OFFSET;
-> + else {
-> + if (spi_imx->count >= 512)
-> + ctrl |= 0xFFF << MX51_ECSPI_CTRL_BL_OFFSET;
-
-Your patch is completely mangled and so can't be applied - please check
-your setup for sending things.
-
---wUyQV1ZJoE1X237c
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmScH4IACgkQJNaLcl1U
-h9DQzgf/dC5AgapiZMe29pBNUzhmKQsw7kc3rOFRxfBEJ07hsg00h7TdWqyZZ9hu
-xrNYElw/ImbNHoNnaErxnIeaFBnhq0tJg4djq30Ts9JPuDOayd9xU5fj9/nXfTv6
-r3pawqDMqM+IGSS0kJmg+Phwo7ABMfenLhvmMafDmcoWNpPZ8CWe2/yfaPrLUPVM
-nDtXFysFrUPfdMeppniTkz3wuukGQIi52gD7nUoOYjQlV/1s0Xhbsi3crvFLVwdt
-t32htz7tzbj8YMUbpv3HB014aNRUxyQ7sVB9wAxcQ+A4B5h0QiQvdP3V2OEhSYtE
-cuByQrnsb5Mv+mBCjQ7pVl23/S9FgQ==
-=6ueh
------END PGP SIGNATURE-----
-
---wUyQV1ZJoE1X237c--
+-- 
+  Kiryl Shutsemau / Kirill A. Shutemov
