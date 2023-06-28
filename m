@@ -2,92 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48B127419DC
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 22:47:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E6677419DF
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 22:50:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231566AbjF1UrR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 16:47:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43798 "EHLO
+        id S231631AbjF1UuE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 16:50:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229936AbjF1UrP (ORCPT
+        with ESMTP id S230340AbjF1Utv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 16:47:15 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A8C5A2
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 13:47:14 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id a640c23a62f3a-98dfd15aae1so6142566b.0
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 13:47:14 -0700 (PDT)
+        Wed, 28 Jun 2023 16:49:51 -0400
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3410819B0
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 13:49:47 -0700 (PDT)
+Received: by mail-pl1-x634.google.com with SMTP id d9443c01a7336-1b6824141b4so9626305ad.1
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 13:49:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687985232; x=1690577232;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=gvhvp++Fmkno+9Wkxssy9/RZIvwRvbSrouh/UrjrNS0=;
-        b=Q+wWNqK1i8blrA2COVOU9mkWoZXQ8R39jB3tiQ/ojlnaVE1lHg11CJgiYqSvppEjFi
-         W6bFHpqarB8kSdofMJpg/Yd0+vWnShUGlss3SIOMyN6QE2HERPpE2j25zfLxmW1VijML
-         tufK8uCem+HSNxkOvboxHGQDYPNm/6WnVPv9VaWZ0V6zOWYH14ILU7Rpl3BN1VxuYprW
-         8RKzqK2R8Ipt3ocXC7zG7wnZhcwG0tRCQCw+GUoQXX1FYugYK+ocDENvWPB2ri44Uw1c
-         dlad2ZmVloulVUrnDLudzjVTTm/PBvF93jmFqp6Y6B80sNAyW0x9KrA1wTFjXgi2HefX
-         oo0Q==
+        d=chromium.org; s=google; t=1687985386; x=1690577386;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=vr1uGKS8yimH0wL2pnkRpehoKj4yux612ywDNz5FjuI=;
+        b=Is1rd5GHrGje7AW8Oo1Nyjoj3Yo6Wc9d1X+rAR807gekf0gMd9Qi4avwq3f/BM67HQ
+         2MkR1jWYEB6CQxhh8QKpp1JVnOiJdaV7IkzI2yNNgMjSogPeIUOgsEPJnkDzFtGhZBK2
+         8B6veo651uzIlQZUHs/8zT0lqVLoz6qRXMC4s=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687985232; x=1690577232;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=gvhvp++Fmkno+9Wkxssy9/RZIvwRvbSrouh/UrjrNS0=;
-        b=SqaBCOzsZqcC4TMgcRcpj/Om0BibCv8XMx6Bd0GYi+XkKSKZV+RZkZvALv3X+dzvt+
-         u8N0z22yZ0xCCj5BRq58A3xotIyQMIZ6m+gNHQfR4aKCfITXL5IJdOWtENJUKkNlWTpx
-         A+Lqm1wI3SLn3IdTpaTPy3thphsEinPK5zmnyoB//9MkEM+0rlEnzgMBPKSY/9xo3SY8
-         q+dfC5SHHWOM+f4umHPhIckiyyA8bPxT4GN8uXhxWqkpi+ym323Rk9V1DFCyzsydN8cU
-         wMJOH6xpOcaZ5s0rTcuJO7ou6jWBR0bZxLvgsp/f9/OsqugJt8hwT9aXUwr0rz4k4obX
-         AhpA==
-X-Gm-Message-State: AC+VfDy/l9YBgHtnr1Thm907NxcJyu9ezibVFGrsDCS7GRDC8JcfrNCS
-        llV0ldgDIMTZmLfitgyr8lk=
-X-Google-Smtp-Source: ACHHUZ5H/7pjTQI3ejfHhGJqIbm+0QAe0YmuknMuDAvqDeFeKsFYxqQcqGAseUMHnHn58q7PxEa0OA==
-X-Received: by 2002:a17:906:729e:b0:988:c8bb:e3ac with SMTP id b30-20020a170906729e00b00988c8bbe3acmr21097955ejl.7.1687985232347;
-        Wed, 28 Jun 2023 13:47:12 -0700 (PDT)
-Received: from [192.168.0.101] (p57ba2e0b.dip0.t-ipconnect.de. [87.186.46.11])
-        by smtp.gmail.com with ESMTPSA id b6-20020a1709064d4600b00988c6ac6b86sm6030668ejv.186.2023.06.28.13.47.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 28 Jun 2023 13:47:11 -0700 (PDT)
-Message-ID: <e6e3f64e-9df8-cafe-9a83-42f3bbb14962@gmail.com>
-Date:   Wed, 28 Jun 2023 22:47:10 +0200
+        d=1e100.net; s=20221208; t=1687985386; x=1690577386;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=vr1uGKS8yimH0wL2pnkRpehoKj4yux612ywDNz5FjuI=;
+        b=P9GA1vMVICyYze5JFnYLjb54AuRCUaqfGcqXeLSs9c3Z78Lk9mM4ikbAa1cpGK0Y5w
+         CvyWkWzHe+H7ghZfmohD61gWoM13zpxxSWZyLdRojtlXHoXifTnSCTsw5Te7+64xAPsf
+         w1VZsdcBYag9ImfwjyJ1uF3VHbJs0o2cu6XIgayUvyDoJGprNayhdR6a9gYX8GbrpD9d
+         Cv9ZFeZ64GFpnM+1i4h90Y2FaS9mT8LlP23MjNbXT9W5tz4rVWU7GCkWC3pAHj941mMH
+         zq1J0r1+/ZR1mS1Lfg5nfwBXux4miLWC6CfdYVlsazbDAMU7Zg+IKFoCPkydX5lWVdzw
+         ffwQ==
+X-Gm-Message-State: AC+VfDzDnOlElWSx+0Iy7U1MAuu+pn2tQqaE0pMZ5e5Hx4+YK/jzY/ms
+        TPK06cGS71Mq1koZqVViYZnSSA==
+X-Google-Smtp-Source: ACHHUZ6wMbb5D8+wuxsmeAWX9doMe9pb0ZXFdgDEFDvZ8PnK8g/Z/X9SwXLqHJQaUTSbJSnCSlbu2Q==
+X-Received: by 2002:a17:90a:c906:b0:263:7d8:4a with SMTP id v6-20020a17090ac90600b0026307d8004amr3121008pjt.18.1687985386686;
+        Wed, 28 Jun 2023 13:49:46 -0700 (PDT)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id v29-20020a63481d000000b00553d27ab0e0sm7642080pga.69.2023.06.28.13.49.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 28 Jun 2023 13:49:46 -0700 (PDT)
+Date:   Wed, 28 Jun 2023 13:49:45 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
+Cc:     aacraid@microsemi.com, "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hardening@vger.kernel.org
+Subject: Re: [PATCH 05/10][next] scsi: aacraid: Replace one-element array
+ with flexible-array member in struct sgmapraw
+Message-ID: <202306281348.5571090DAD@keescook>
+References: <cover.1687974498.git.gustavoars@kernel.org>
+ <9dfcdf55597a49ed7e19ba064f5be424b344e175.1687974498.git.gustavoars@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v3] staging: rtl8192e: Rename function IsHTHalfNmodeAPs to
- is_ht_half_nmode_aps
-Content-Language: en-US
-To:     Tree Davies <tdavies@darkphysics.net>, gregkh@linuxfoundation.org,
-        dan.carpenter@linaro.org
-Cc:     linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev
-References: <ZJp93mCd9ogrGZbx@tacos.darkphysics>
-From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
-In-Reply-To: <ZJp93mCd9ogrGZbx@tacos.darkphysics>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <9dfcdf55597a49ed7e19ba064f5be424b344e175.1687974498.git.gustavoars@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/27/23 08:12, Tree Davies wrote:
-> Rename function IsHTHalfNmodeAPs to is_ht_half_nmode_aps in order to
-> fix checkpatch warning: Avoid CamelCase
+On Wed, Jun 28, 2023 at 11:56:12AM -0600, Gustavo A. R. Silva wrote:
+> Replace one-element array with flexible-array member in struct
+> sgmapraw.
 > 
-> Signed-off-by: Tree Davies <tdavies@darkphysics.net>
+> Issue found with the help of Coccinelle and audited and fixed,
+> manually.
+
+As with the other two, I see expected binary changes in
+aac_read_raw_io() and aac_write_raw_io() due to the simplified count
+calculations.
+
+Reviewed-by: Kees Cook <keescook@chromium.org>
+
+-Kees
+
+> 
+> Link: https://github.com/KSPP/linux/issues/79
+> Link: https://github.com/ClangBuiltLinux/linux/issues/1851
+> Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
 > ---
-> v3: Fix email parch as v2 info was placed above the ---
-> v2: Rename is_ht_half_nmode_a_ps -> is_ht_half_nmode_aps
->   drivers/staging/rtl8192e/rtl819x_HTProc.c | 2 +-
->   drivers/staging/rtl8192e/rtllib.h         | 2 +-
->   drivers/staging/rtl8192e/rtllib_softmac.c | 2 +-
->   3 files changed, 3 insertions(+), 3 deletions(-)
+>  drivers/scsi/aacraid/aachba.c  | 4 ++--
+>  drivers/scsi/aacraid/aacraid.h | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/scsi/aacraid/aachba.c b/drivers/scsi/aacraid/aachba.c
+> index fff0550e02e4..b3c0c2255e55 100644
+> --- a/drivers/scsi/aacraid/aachba.c
+> +++ b/drivers/scsi/aacraid/aachba.c
+> @@ -1267,7 +1267,7 @@ static int aac_read_raw_io(struct fib * fib, struct scsi_cmnd * cmd, u64 lba, u3
+>  			return ret;
+>  		command = ContainerRawIo;
+>  		fibsize = sizeof(struct aac_raw_io) +
+> -			((le32_to_cpu(readcmd->sg.count)-1) * sizeof(struct sgentryraw));
+> +			  le32_to_cpu(readcmd->sg.count) * sizeof(struct sgentryraw);
+>  	}
+>  
+>  	BUG_ON(fibsize > (fib->dev->max_fib_size - sizeof(struct aac_fibhdr)));
+> @@ -1401,7 +1401,7 @@ static int aac_write_raw_io(struct fib * fib, struct scsi_cmnd * cmd, u64 lba, u
+>  			return ret;
+>  		command = ContainerRawIo;
+>  		fibsize = sizeof(struct aac_raw_io) +
+> -			((le32_to_cpu(writecmd->sg.count)-1) * sizeof (struct sgentryraw));
+> +			  le32_to_cpu(writecmd->sg.count) * sizeof(struct sgentryraw);
+>  	}
+>  
+>  	BUG_ON(fibsize > (fib->dev->max_fib_size - sizeof(struct aac_fibhdr)));
+> diff --git a/drivers/scsi/aacraid/aacraid.h b/drivers/scsi/aacraid/aacraid.h
+> index d1fc1ce2e36d..87015dd2abd9 100644
+> --- a/drivers/scsi/aacraid/aacraid.h
+> +++ b/drivers/scsi/aacraid/aacraid.h
+> @@ -527,7 +527,7 @@ struct user_sgmap64 {
+>  
+>  struct sgmapraw {
+>  	__le32		  count;
+> -	struct sgentryraw sg[1];
+> +	struct sgentryraw sg[];
+>  };
+>  
+>  struct user_sgmapraw {
+> -- 
+> 2.34.1
 > 
 
-Tested-by: Philipp Hortmann <philipp.g.hortmann@gmail.com>
+-- 
+Kees Cook
