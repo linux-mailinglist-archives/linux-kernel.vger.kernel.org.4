@@ -2,263 +2,300 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3EF0741A01
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 23:04:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72CB1741A04
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 23:05:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231994AbjF1VEn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 17:04:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48652 "EHLO
+        id S231835AbjF1VFS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 17:05:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231974AbjF1VEj (ORCPT
+        with ESMTP id S231127AbjF1VFO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 17:04:39 -0400
-Received: from mail-qv1-xf36.google.com (mail-qv1-xf36.google.com [IPv6:2607:f8b0:4864:20::f36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E24311FF1
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 14:04:36 -0700 (PDT)
-Received: by mail-qv1-xf36.google.com with SMTP id 6a1803df08f44-635857af3beso734366d6.0
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 14:04:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1687986276; x=1690578276;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=IsWTxHedmoku42qDv7PVi9DEQQIzmo+NZkEk7SkyjQg=;
-        b=W6fNm4cBHxITfzUVWluefWRpKwsvOxuRKNKA8bwDoIEs2qUnsRgpXfySIuMDE7/D5H
-         7gBcJvi1YC2hv7aJk0IZczBfb4lG0x9fs8jrmC2FuZRJJ6Gak0N4yeMobtuNaqXhleiZ
-         vwwNx34KMuyn72W5EpUSJeXjEDARF+Bst568g=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687986276; x=1690578276;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=IsWTxHedmoku42qDv7PVi9DEQQIzmo+NZkEk7SkyjQg=;
-        b=Aiy97W0/y/LKKppdRYzwyu4Va2+6eoFNx8nAk6qdX9RFrk+hBVLtA7LDI777RtZEcc
-         hFTcRxtsHmZx8HEHLpGmG4ZCKYENV7Zcsg7pe7LLHjHdZzppNQwXaPAhOW9Vd9WgvXn+
-         z0Ngmvnb2aIiZj6FiKi4LXxfV8PssUgYdRyQb3f/z5VY4HtLuvjhmnSF1NxextsjgqpM
-         JOLcwLsbEabSUWGChyUzuxfFURw11OXXLClvGk193hCUJnO//xpyjdDF1qjYsTwsF69Z
-         5tnNHI75UK6nAgk2sR3yu7pOXfjeDvNeFPrNq0533OrFU+gMwkBHdUHx0XBqg0Mjqyxj
-         Urnw==
-X-Gm-Message-State: AC+VfDx7YMB8OQXkoI/Ac7XQIxXlNxQI5ihuk/uYaduXVSF2bp/657I/
-        tG9y/e/RpfUOeOkIWc5JScpqNqwlLk+tXq7tHn4MdKzC
-X-Google-Smtp-Source: ACHHUZ5Nm4OzfTcxLAy5MruNf4bXpVhdX+1k6vkq0qYkwmBNXu0EUesv5vyeWQcA0Kk71+GLkUmEZQ==
-X-Received: by 2002:ad4:596f:0:b0:635:f6f7:3a73 with SMTP id eq15-20020ad4596f000000b00635f6f73a73mr4049420qvb.53.1687986275754;
-        Wed, 28 Jun 2023 14:04:35 -0700 (PDT)
-Received: from mail-qv1-f43.google.com (mail-qv1-f43.google.com. [209.85.219.43])
-        by smtp.gmail.com with ESMTPSA id dz11-20020ad4588b000000b006263a9e7c63sm6070589qvb.104.2023.06.28.14.04.34
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 28 Jun 2023 14:04:35 -0700 (PDT)
-Received: by mail-qv1-f43.google.com with SMTP id 6a1803df08f44-6237faa8677so673556d6.1
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 14:04:34 -0700 (PDT)
-X-Received: by 2002:a05:6214:c8a:b0:632:c2e:57ae with SMTP id
- r10-20020a0562140c8a00b006320c2e57aemr23045114qvr.54.1687986274228; Wed, 28
- Jun 2023 14:04:34 -0700 (PDT)
+        Wed, 28 Jun 2023 17:05:14 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9349A1BC5;
+        Wed, 28 Jun 2023 14:05:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de;
+ s=s31663417; t=1687986302; x=1688591102; i=w_armin@gmx.de;
+ bh=IiGtllmgP/pmEOgMoxqsu3Xz6O/TQi0NuVrauWBIThw=;
+ h=X-UI-Sender-Class:Subject:To:Cc:References:From:Date:In-Reply-To;
+ b=MKRO8IvET5yJUBfb/suzv/XflaWyRmlDUP1p4xKH4EC7hCi1wuABUERhUaD8rs+KQ4joAuW
+ oHndn0K5G11fqs+BLQ7oKvZ7elokG23EpQc/AUvWpPRsGmkb43qkZeD6dJuRHGeAsJ+gZASzs
+ mcP0vqInFpcYG9X0hlMlbWNtIyQEmgCspupc9MyjV+H6GtquufsPDZBuj5SQ5R54hTx438BAz
+ +lw/xSjgFwtXq2ibz6MkyS/hi2L04FbMKNL7aJ4GQjBsEl4Ie4Pds0O6lflg0tDKh3slj8b48
+ FcmrTEd/rwC393SJC4loJmhvjxbxjgG/kVjQWouNCzKhnNBMu5Rw==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [192.168.0.14] ([141.30.226.119]) by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1N7i8Y-1q1suC1OAk-014gWS; Wed, 28
+ Jun 2023 23:05:02 +0200
+Subject: Re: [PATCH] platform/x86: wmi: add Positivo WMI key driver
+To:     Edson Juliano Drosdeck <edson.drosdeck@gmail.com>,
+        hdegoede@redhat.com
+Cc:     markgross@kernel.org, linux-kernel@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org
+References: <20230628214015.68558-1-edson.drosdeck@gmail.com>
+From:   Armin Wolf <W_Armin@gmx.de>
+Message-ID: <75200e77-8274-985c-d086-cd3a0eced3b5@gmx.de>
+Date:   Wed, 28 Jun 2023 23:04:23 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-References: <20230628-mtk-usb-v1-1-3c5b2ea3d6b9@chromium.org>
-In-Reply-To: <20230628-mtk-usb-v1-1-3c5b2ea3d6b9@chromium.org>
-From:   Ricardo Ribalda <ribalda@chromium.org>
-Date:   Wed, 28 Jun 2023 23:04:20 +0200
-X-Gmail-Original-Message-ID: <CANiDSCsAgD33gMk9-CTGHuUv_b4KfRnO02ETEt6jFtQvw+6cag@mail.gmail.com>
-Message-ID: <CANiDSCsAgD33gMk9-CTGHuUv_b4KfRnO02ETEt6jFtQvw+6cag@mail.gmail.com>
-Subject: Re: [PATCH] usb: xhci-mtk: set the dma max_seg_size
-To:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Zubin Mithra <zsm@chromium.org>
-Cc:     linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20230628214015.68558-1-edson.drosdeck@gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Language: en-US
+X-Provags-ID: V03:K1:9GGNivmcCQ24EeSgP7nd3EEZ4A0Fwpe6eOCq+G77Ul+Eqm6sKoF
+ eR1e7LcyVJSxRbL/+EAD15Y82Oxwdsi/qkTbFBec0525Sal0RXPSGPyOY4eWQT8bZM0T1W7
+ aNGRw63zvMpmFQTiFW9xNtlD9rBNLjpVCw1us0uHtBO+fqT/nLqQjswKgzOwyhnoDfCrfOa
+ Q+Reipz17D6rPrOqCo7qw==
+UI-OutboundReport: notjunk:1;M01:P0:OiX57gtHD4w=;kzs4zbX1xc48pJ1tfpY2OYCP1KD
+ 5eTJyH9lh5moXVy9mWKln6qq+2x3A8kRdiSmVF117nj3j/oecPDvJ0vvDtdqxRgJxLoIVIaur
+ ++iQ8BBF5CfHah8n6RAB6ZmQHeuMWdsGPky7AMTq8SpSTVpdAA69fwqSLwiLHJ3ZMVUDrMKnz
+ 7PcIKszsMwpV6u98pEOb/xjXsJT2mbYgutOhbmiOvXjuBHDbZ6lCcBV6tIV0QpSH+sXLYrjBA
+ bqvVLJvFHWRZiNYz8H5KIRQzLHdv7nuVjsdPj6L4mP4Xsr1yRlutVC7DKTerZ6FEOq0yV67AJ
+ 8AXqns0CG/QaKthyBtAfm+gNUGcuPM7K+IIfbHqW5nYqitvTv6a77g+CU7pwjmylYXOHJVgus
+ b14RgCq4mp4kVVKDg43PZiE0PfQA/Vv3XktLItdRy6pi37jg70Sn/7iRC1hX9H3ZecuxBcfXl
+ dyUm8S0/7XUUVQQl2Jp4N8Ifkrei+7Iqezsx39Ifz6frsqJfw5OddytutqtcnQLWKlKsKVy2z
+ lKM32WLZo8bjSmBZUu1zw9n4jUfRzopKjf+d8ti3M//sRGkLPYVPk3IuKjdiwlGaErCkNJnia
+ g9xMlcup+3wdURja7ZhqdDhFfXoG7Khm6C7plnu5wygTq/L/PTFsAE7YKzIoFm22UBfvLIYIn
+ NB2eEcJEzptXgTF1q6M58JyM9xj6EZejTLgDdMdF+e9nd4kqmslR8b8FF3lL6f9DGhXiO0Aqw
+ qSt3qDz41W+5MOiD31M/RLVOo56tLFt1l2JfCXzlGUmvds3BjRNt5n1b+GaMiTevi7QWdYEbM
+ OJ5CuuowEk9icEJiceajf2V6mrMjFfswVWI3J7Tq+RrHKBbXl8Ow7vzLFF+59+r3Fvt5SQZeZ
+ VFH5T6ccYsbLm0ARNoM1peyUjGSpFF8S715sIztFX+IyDK8TM7ssPW5JKiWmqWfpIHSRleB1P
+ AfuMtWhJrcKSoPLtqOPkrDmzObA=
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 28 Jun 2023 at 23:00, Ricardo Ribalda <ribalda@chromium.org> wrote:
+Am 28.06.23 um 23:40 schrieb Edson Juliano Drosdeck:
+
+> Some function keys on the built in keyboard on Positivo's notebooks does
+> not produce any key events when pressed in combination with the function
+> key. Some of these keys do report that they are being pressed via WMI
+> events.
 >
-> Allow devices to have dma operations beyond 64K, and avoid warnings such
-> as:
+> This driver reports key events for Fn+F10,Fn+F11  and a custom key to
+> launch a custom program.
 >
-> DMA-API: xhci-mtk 11200000.usb: mapping sg segment longer than device cla=
-ims to support [len=3D98304] [max=3D65536]
+> Other WMI events that are reported by the hardware but not utilized by
+> this driver are Caps Lock(which already work).
 >
-> Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
-Reported-by: Zubin Mithra <zsm@chromium.org>
+> Signed-off-by: Edson Juliano Drosdeck <edson.drosdeck@gmail.com>
 > ---
-> Fix warnings such as:
+>   drivers/platform/x86/Kconfig        |  11 +++
+>   drivers/platform/x86/Makefile       |   1 +
+>   drivers/platform/x86/positivo-wmi.c | 136 ++++++++++++++++++++++++++++
+>   3 files changed, 148 insertions(+)
+>   create mode 100644 drivers/platform/x86/positivo-wmi.c
 >
-> [  451.089443] ------------[ cut here ]------------
-> [  451.089498] DMA-API: xhci-mtk 11200000.usb: mapping sg segment longer =
-than device claims to support [len=3D98304] [max=3D65536]
-> [  451.089617] WARNING: CPU: 7 PID: 14227 at kernel/dma/debug.c:1163 debu=
-g_dma_map_sg+0x5bc/0x950
-> [  451.089674] Modules linked in: xfrm_interface tun hci_vhci bridge stp =
-llc veth xt_cgroup xt_MASQUERADE uinput rfcomm ip6table_nat fuse 8021q algi=
-f_hash algif_skcipher af_alg r8153_ecm cdc_ether usbnet r8152 mii mtk_vcode=
-c_dec_hw mt7921s mt76_sdio mt7921_common mt76_connac_lib mt76 uvcvideo vide=
-obuf2_vmalloc mtk_vcodec_dec v4l2_h264 mtk_vcodec_enc mtk_jpeg v4l2_vp9 vid=
-eobuf2_dma_contig videobuf2_memops v4l2_mem2mem videobuf2_v4l2 btmtksdio vi=
-deobuf2_common mtk_vcodec_common btmtk mac80211 snd_sof_mt8186 snd_sof_xten=
-sa_dsp snd_sof_of snd_sof snd_sof_utils mtk_scp mtk_rpmsg rpmsg_core mtk_sc=
-p_ipi hid_rmi rmi_core serio bluetooth ecdh_generic ecc cfg80211 lzo_rle lz=
-o_compress zram joydev
-> [  451.090285] CPU: 7 PID: 14227 Comm: syz-executor.0 Not tainted 5.15.11=
-8-lockdep-19753-g1b0a8b16661d #1 cd3ddfc5e13dbbbea438d3161fcad4d98ec474f4
-> [  451.090333] Hardware name: Google Rusty sku196608/196609/196610/196611=
- board (DT)
-> [  451.090356] pstate: 60400009 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYP=
-E=3D--)
-> [  451.090401] pc : debug_dma_map_sg+0x5bc/0x950
-> [  451.090433] lr : debug_dma_map_sg+0x5bc/0x950
-> [  451.090462] sp : ffffffc01fdd75e0
-> [  451.090479] x29: ffffffc01fdd7640 x28: ffffff80c1280300 x27: 000000000=
-0010000
-> [  451.090531] x26: ffffff80c1ec9600 x25: 1ffffff01a749501 x24: ffffff80d=
-3a4a800
-> [  451.090581] x23: dfffffc000000000 x22: ffffff80d3a4a80c x21: ffffffc00=
-aae5740
-> [  451.090631] x20: ffffffffffffffff x19: ffffff80d3a4a810 x18: 000000000=
-0000000
-> [  451.090680] x17: 64206e6168742072 x16: 65676e6f6c20746e x15: 656d67657=
-3206773
-> [  451.090731] x14: 20676e697070616d x13: 0000000000000001 x12: 000000000=
-0000001
-> [  451.090779] x11: 0000000000000000 x10: 0000000000040000 x9 : 3c6fd66e7=
-9e32400
-> [  451.090828] x8 : 3c6fd66e79e32400 x7 : 0000000000000001 x6 : 000000000=
-0000001
-> [  451.090877] x5 : ffffffc01fdd7158 x4 : ffffffc00b64e2a0 x3 : ffffffc00=
-8f92adc
-> [  451.090926] x2 : 0000000100000000 x1 : ffffff8057afd940 x0 : 000000000=
-000006f
-> [  451.090976] Call trace:
-> [  451.090994]  debug_dma_map_sg+0x5bc/0x950
-> [  451.091026]  dma_alloc_noncontiguous+0x2f4/0x404
-> [  451.091060]  uvc_alloc_urb_buffers+0x1e8/0x600 [uvcvideo 1a151fdc87685=
-4366480a9c6b7aaa4b7999fb493]
-> [  451.091150]  uvc_video_start_transfer+0xaf4/0x1628 [uvcvideo 1a151fdc8=
-76854366480a9c6b7aaa4b7999fb493]
-> [  451.091228]  uvc_video_start_streaming+0x154/0x2d8 [uvcvideo 1a151fdc8=
-76854366480a9c6b7aaa4b7999fb493]
-> [  451.091305]  uvc_start_streaming+0x20c/0x3d4 [uvcvideo 1a151fdc8768543=
-66480a9c6b7aaa4b7999fb493]
-> [  451.091379]  vb2_start_streaming+0x118/0x400 [videobuf2_common 252dc8c=
-49960dcb8e329e2787100c89e1899c17f]
-> [  451.091446]  vb2_core_streamon+0x258/0x360 [videobuf2_common 252dc8c49=
-960dcb8e329e2787100c89e1899c17f]
-> [  451.091507]  vb2_streamon+0x88/0xbc [videobuf2_v4l2 f4acca89bfe3410cd8=
-f3ca536255fc3877fe63db]
-> [  451.091555]  uvc_queue_streamon+0x44/0x68 [uvcvideo 1a151fdc8768543664=
-80a9c6b7aaa4b7999fb493]
-> [  451.091631]  uvc_ioctl_streamon+0xd8/0x124 [uvcvideo 1a151fdc876854366=
-480a9c6b7aaa4b7999fb493]
-> [  451.091705]  v4l_streamon+0x74/0xa8
-> [  451.091738]  __video_do_ioctl+0x90c/0xa40
-> [  451.091769]  video_usercopy+0xa44/0x1ef8
-> [  451.091799]  video_ioctl2+0x44/0x58
-> [  451.091830]  v4l2_ioctl+0x138/0x164
-> [  451.091860]  __arm64_sys_ioctl+0x154/0x1d0
-> [  451.091892]  invoke_syscall+0x98/0x278
-> [  451.091923]  el0_svc_common+0x214/0x274
-> [  451.091953]  do_el0_svc+0x9c/0x19c
-> [  451.091982]  el0_svc+0x5c/0xc0
-> [  451.092013]  el0t_64_sync_handler+0x78/0x108
-> [  451.092045]  el0t_64_sync+0x1a4/0x1a8
-> [  451.092081] Kernel panic - not syncing: kernel: panic_on_warn set ...
-> [  451.092103] CPU: 7 PID: 14227 Comm: syz-executor.0 Not tainted 5.15.11=
-8-lockdep-19753-g1b0a8b16661d #1 cd3ddfc5e13dbbbea438d3161fcad4d98ec474f4
-> [  451.092148] Hardware name: Google Rusty sku196608/196609/196610/196611=
- board (DT)
-> [  451.092171] Call trace:
-> [  451.092186]  dump_backtrace+0x0/0x4e8
-> [  451.092219]  show_stack+0x34/0x44
-> [  451.092247]  dump_stack_lvl+0xdc/0x11c
-> [  451.092278]  dump_stack+0x1c/0x48
-> [  451.092307]  panic+0x2a4/0x7b8
-> [  451.092335]  check_panic_on_warn+0xb8/0x104
-> [  451.092369]  __warn+0x16c/0x230
-> [  451.092399]  report_bug+0x160/0x280
-> [  451.092432]  bug_handler+0x48/0xb8
-> [  451.092466]  call_break_hook+0x180/0x1b4
-> [  451.092498]  brk_handler+0x30/0xbc
-> [  451.092529]  do_debug_exception+0x16c/0x31c
-> [  451.092563]  el1_dbg+0x64/0x80
-> [  451.092592]  el1h_64_sync_handler+0x70/0xb4
-> [  451.092624]  el1h_64_sync+0x7c/0x80
-> [  451.092653]  debug_dma_map_sg+0x5bc/0x950
-> [  451.092685]  dma_alloc_noncontiguous+0x2f4/0x404
-> [  451.092717]  uvc_alloc_urb_buffers+0x1e8/0x600 [uvcvideo 1a151fdc87685=
-4366480a9c6b7aaa4b7999fb493]
-> [  451.092794]  uvc_video_start_transfer+0xaf4/0x1628 [uvcvideo 1a151fdc8=
-76854366480a9c6b7aaa4b7999fb493]
-> [  451.092868]  uvc_video_start_streaming+0x154/0x2d8 [uvcvideo 1a151fdc8=
-76854366480a9c6b7aaa4b7999fb493]
-> [  451.092942]  uvc_start_streaming+0x20c/0x3d4 [uvcvideo 1a151fdc8768543=
-66480a9c6b7aaa4b7999fb493]
-> [  451.093015]  vb2_start_streaming+0x118/0x400 [videobuf2_common 252dc8c=
-49960dcb8e329e2787100c89e1899c17f]
-> [  451.093079]  vb2_core_streamon+0x258/0x360 [videobuf2_common 252dc8c49=
-960dcb8e329e2787100c89e1899c17f]
-> [  451.093139]  vb2_streamon+0x88/0xbc [videobuf2_v4l2 f4acca89bfe3410cd8=
-f3ca536255fc3877fe63db]
-> [  451.093187]  uvc_queue_streamon+0x44/0x68 [uvcvideo 1a151fdc8768543664=
-80a9c6b7aaa4b7999fb493]
-> [  451.093261]  uvc_ioctl_streamon+0xd8/0x124 [uvcvideo 1a151fdc876854366=
-480a9c6b7aaa4b7999fb493]
-> [  451.093334]  v4l_streamon+0x74/0xa8
-> [  451.093366]  __video_do_ioctl+0x90c/0xa40
-> [  451.093398]  video_usercopy+0xa44/0x1ef8
-> [  451.093428]  video_ioctl2+0x44/0x58
-> [  451.093457]  v4l2_ioctl+0x138/0x164
-> [  451.093487]  __arm64_sys_ioctl+0x154/0x1d0
-> [  451.093518]  invoke_syscall+0x98/0x278
-> [  451.093548]  el0_svc_common+0x214/0x274
-> [  451.093578]  do_el0_svc+0x9c/0x19c
-> [  451.093607]  el0_svc+0x5c/0xc0
-> [  451.093637]  el0t_64_sync_handler+0x78/0x108
-> [  451.093669]  el0t_64_sync+0x1a4/0x1a8
-> [  451.093701] SMP: stopping secondary CPUs
-> [  451.093777] Kernel Offset: disabled
-> [  451.093797] CPU features: 0xc00181c1,a3300e42
-> [  451.093822] Memory Limit: none
+> diff --git a/drivers/platform/x86/Kconfig b/drivers/platform/x86/Kconfig
+> index 22052031c719..f3ad84479460 100644
+> --- a/drivers/platform/x86/Kconfig
+> +++ b/drivers/platform/x86/Kconfig
+> @@ -134,6 +134,17 @@ config YOGABOOK_WMI
+>   	  To compile this driver as a module, choose M here: the module will
+>   	  be called lenovo-yogabook-wmi.
 >
-> Signed-off-by: Ricardo Ribalda Delgado <ribalda@chromium.org>
-> ---
->  drivers/usb/host/xhci-mtk.c | 2 ++
->  1 file changed, 2 insertions(+)
->
-> diff --git a/drivers/usb/host/xhci-mtk.c b/drivers/usb/host/xhci-mtk.c
-> index 90cf40d6d0c3..605b1e1a5098 100644
-> --- a/drivers/usb/host/xhci-mtk.c
-> +++ b/drivers/usb/host/xhci-mtk.c
-> @@ -643,6 +643,8 @@ static int xhci_mtk_probe(struct platform_device *pde=
-v)
->         pm_runtime_put_autosuspend(dev);
->         pm_runtime_forbid(dev);
->
-> +       dma_set_max_seg_size(dev, UINT_MAX);
+> +config POSITIVO_WMI
+> +	tristate "Positivo WMI key driver"
+> +	depends on ACPI_WMI
+> +	depends on INPUT
+> +	select INPUT_SPARSEKMAP
+> +	help
+> +	  This driver provides support for Positvo WMI hotkeys.
 > +
->         return 0;
+> +	  To compile this driver as a module, choose M here: the module
+> +	  will be called positivo-wmi.
+> +
+>   config ACERHDF
+>   	tristate "Acer Aspire One temperature and fan driver"
+>   	depends on ACPI && THERMAL
+> diff --git a/drivers/platform/x86/Makefile b/drivers/platform/x86/Makefi=
+le
+> index 2cafe51ec4d8..5458bb9a56d3 100644
+> --- a/drivers/platform/x86/Makefile
+> +++ b/drivers/platform/x86/Makefile
+> @@ -15,6 +15,7 @@ obj-$(CONFIG_NVIDIA_WMI_EC_BACKLIGHT)	+=3D nvidia-wmi-=
+ec-backlight.o
+>   obj-$(CONFIG_XIAOMI_WMI)		+=3D xiaomi-wmi.o
+>   obj-$(CONFIG_GIGABYTE_WMI)		+=3D gigabyte-wmi.o
+>   obj-$(CONFIG_YOGABOOK_WMI)		+=3D lenovo-yogabook-wmi.o
+> +obj-$(CONFIG_POSITIVO_WMI)		+=3D positivo-wmi.o
 >
->  dealloc_usb3_hcd:
->
-> ---
-> base-commit: 1b2c92a1cb2469d8c0079dbf496ab86e22e1cb7c
-> change-id: 20230628-mtk-usb-bf0059f64bd7
->
-> Best regards,
-> --
-> Ricardo Ribalda Delgado <ribalda@chromium.org>
->
+>   # Acer
+>   obj-$(CONFIG_ACERHDF)		+=3D acerhdf.o
+> diff --git a/drivers/platform/x86/positivo-wmi.c b/drivers/platform/x86/=
+positivo-wmi.c
+> new file mode 100644
+> index 000000000000..5fbb4cf42154
+> --- /dev/null
+> +++ b/drivers/platform/x86/positivo-wmi.c
+> @@ -0,0 +1,136 @@
+> +// SPDX-License-Identifier: GPL-2.0-or-later
+> +
+> +/* WMI driver for Positivo Laptops
+> + *
+> + * Copyright (C) 2023 Edson Juliano Drosdeck <edson.drosdeck@gmail.com>
+> + *
+> + * */
+> +
+> +#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+> +
+> +#include <linux/kernel.h>
+> +#include <linux/acpi.h>
+> +#include <linux/input.h>
+> +#include <linux/input/sparse-keymap.h>
+> +#include <linux/dmi.h>
+> +#include <linux/module.h>
+> +
+> +MODULE_AUTHOR("Edson Juliano Drosdeck");
+> +MODULE_DESCRIPTION("Positivo WMI Hotkey Driver");
+> +MODULE_LICENSE("GPL");
+> +
+> +#define POSITIVO_WMI_EVENT_GUID "ABBC0F72-8EA1-11D1-00A0-C90629100000"
+> +
+> +MODULE_ALIAS("wmi:"POSITIVO_WMI_EVENT_GUID);
+> +
+> +static const struct key_entry positivo_wmi_keymap[] =3D {
+> +	{ KE_KEY, 0x1c, { KEY_PROG1} },
+> +	{ KE_KEY, 0x36, { KEY_WLAN } },
+> +	{ KE_KEY, 0x37, { KEY_BLUETOOTH } },
+> +	{ KE_END, 0},
+> +};
+> +
+> +static struct input_dev *positivo_wmi_input_dev;
+> +
+> +static void positivo_wmi_notify(u32 value, void *context)
+> +{
+> +	struct acpi_buffer response =3D { ACPI_ALLOCATE_BUFFER, NULL };
+> +	union acpi_object *obj;
+> +	int eventcode;
+> +	acpi_status status;
+> +
+> +	status =3D wmi_get_event_data(value, &response);
+> +	if (status !=3D AE_OK) {
+> +		pr_err("bad event status 0x%x\n", status);
+> +		return;
+> +	}
+> +
+> +	obj =3D (union acpi_object *)response.pointer;
+> +	if (obj && obj->type =3D=3D ACPI_TYPE_INTEGER) {
+> +		eventcode =3D obj->integer.value;
+> +
+> +		if (!sparse_keymap_report_event(positivo_wmi_input_dev,
+> +						eventcode, 1, true))
+> +			pr_err("Unknown key %x pressed\n", eventcode);
+> +	}
+> +
+> +	kfree(response.pointer);
+> +}
+> +
+> +static int positivo_wmi_input_setup(void)
+> +{
+> +
+> +	int err;
+> +
+> +	positivo_wmi_input_dev =3D input_allocate_device();
+> +	if (!positivo_wmi_input_dev)
+> +		return -ENOMEM;
+> +
+> +	positivo_wmi_input_dev->name =3D "Positivo laptop WMI hotkeys";
+> +	positivo_wmi_input_dev->phys =3D "wmi/input0";
+> +	positivo_wmi_input_dev->id.bustype =3D BUS_HOST;
+> +
+> +	err =3D sparse_keymap_setup(positivo_wmi_input_dev,
+> +				  positivo_wmi_keymap, NULL);
+> +	if (err)
+> +		goto err_free_dev;
+> +
+> +	err =3D input_register_device(positivo_wmi_input_dev);
+> +
+> +	if (err){
+> +		pr_info("Unable to register input device\n");
+> +		goto err_free_dev;
+> +	}
+> +
+> +	return 0;
+> +
+> +err_free_dev:
+> +	input_free_device(positivo_wmi_input_dev);
+> +	return err;
+> +}
+> +
+> +static const struct dmi_system_id positivo_wmi_dmi_table[] __initconst =
+=3D {
+> +	{
+> +		.ident =3D "Positivo laptop",
+> +		.matches =3D {
+> +			DMI_MATCH(DMI_SYS_VENDOR, "Positivo Tecnologia SA"),
+> +		},
+> +	},
+> +	{}
+> +};
 
+Hello,
 
---=20
-Ricardo Ribalda
+it would be better if the driver matches on the WMI GUID. More on this bel=
+ow.
+
+> +
+> +static int __init positivo_wmi_init(void)
+> +{
+> +	int err;
+> +
+> +	if (!wmi_has_guid(POSITIVO_WMI_EVENT_GUID) ||
+> +	    !dmi_check_system(positivo_wmi_dmi_table))
+> +		return -ENODEV;
+> +
+> +	err =3D positivo_wmi_input_setup();
+> +	if (err)
+> +		return err;
+> +
+> +	err =3D wmi_install_notify_handler(POSITIVO_WMI_EVENT_GUID,
+> +					positivo_wmi_notify, NULL);
+
+Please use the newer bus-based WMI interface. The legacy GUID-based interf=
+ace is
+deprecated an has several issues. I recommend you to take a look at the xi=
+aomi-wmi
+driver. It seems to do a very similar thing and uses the modern bus-based =
+WMI interface.
+The only big difference is that your driver uses the acpi_object passed by=
+ the notify
+callback to determine the key code.
+
+You can find more documentation regarding the bus-based WMI interface unde=
+r:
+https://www.kernel.org/doc/html/next/driver-api/wmi.html
+
+Thanks,
+Armin Wolf
+
+> +		if (ACPI_FAILURE(err)) {
+> +			pr_err("Unable to setup WMI notify handler\n");
+> +			goto err_free_input;
+> +		}
+> +
+> +	return 0;
+> +
+> +err_free_input:
+> +	input_unregister_device(positivo_wmi_input_dev);
+> +	return err;
+> +
+> +}
+> +
+> +static void __exit positivo_wmi_exit(void)
+> +{
+> +       wmi_remove_notify_handler(POSITIVO_WMI_EVENT_GUID);
+> +       input_free_device(positivo_wmi_input_dev);
+> +}
+> +
+> +module_init(positivo_wmi_init);
+> +module_exit(positivo_wmi_exit);
