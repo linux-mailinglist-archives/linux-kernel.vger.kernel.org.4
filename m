@@ -2,436 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DF58741810
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 20:33:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D31B741815
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 20:34:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232003AbjF1SdY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 14:33:24 -0400
-Received: from smtp-fw-9106.amazon.com ([207.171.188.206]:48096 "EHLO
-        smtp-fw-9106.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229732AbjF1SdV (ORCPT
+        id S231886AbjF1Sdo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 14:33:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49894 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232059AbjF1Sdj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 14:33:21 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1687977202; x=1719513202;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=dbBTEYDPjFE8oKNWOHth2ymdjwkx8nOAMSa/Kr6zII8=;
-  b=Im+TeCEJmQpRzbM3/R74S54LjZsu1nlHOMYfZ24BdbsfykC1h1hVaYFn
-   o8L1oHLMoF7JGPSR8xHpo8dMlmkPqoY5zbFRyIQZQg6/hNf7PcMi6aGVL
-   U2jJyUX2VNu4pUm0UCb2Y27EsAIb88uuB0xZXubzJp0rSoRzg7/sNbcmm
-   s=;
-X-IronPort-AV: E=Sophos;i="6.01,166,1684800000"; 
-   d="scan'208";a="656859080"
-Received: from pdx4-co-svc-p1-lb2-vlan3.amazon.com (HELO email-inbound-relay-pdx-2b-m6i4x-189d700f.us-west-2.amazon.com) ([10.25.36.214])
-  by smtp-border-fw-9106.sea19.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2023 18:33:16 +0000
-Received: from EX19MTAUWC001.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan2.pdx.amazon.com [10.236.137.194])
-        by email-inbound-relay-pdx-2b-m6i4x-189d700f.us-west-2.amazon.com (Postfix) with ESMTPS id 2070640D41;
-        Wed, 28 Jun 2023 18:33:14 +0000 (UTC)
-Received: from EX19D004ANA001.ant.amazon.com (10.37.240.138) by
- EX19MTAUWC001.ant.amazon.com (10.250.64.174) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Wed, 28 Jun 2023 18:33:13 +0000
-Received: from 88665a182662.ant.amazon.com.com (10.187.170.50) by
- EX19D004ANA001.ant.amazon.com (10.37.240.138) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.30; Wed, 28 Jun 2023 18:33:08 +0000
-From:   Kuniyuki Iwashima <kuniyu@amazon.com>
-To:     <lmb@isovalent.com>
-CC:     <andrii@kernel.org>, <ast@kernel.org>, <bpf@vger.kernel.org>,
-        <daniel@iogearbox.net>, <davem@davemloft.net>,
-        <dsahern@kernel.org>, <edumazet@google.com>, <haoluo@google.com>,
-        <hemanthmalla@gmail.com>, <joe@wand.net.nz>,
-        <john.fastabend@gmail.com>, <jolsa@kernel.org>,
-        <kpsingh@kernel.org>, <kuba@kernel.org>, <kuniyu@amazon.com>,
-        <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-        <martin.lau@linux.dev>, <mykolal@fb.com>, <netdev@vger.kernel.org>,
-        <pabeni@redhat.com>, <sdf@google.com>, <shuah@kernel.org>,
-        <song@kernel.org>, <willemdebruijn.kernel@gmail.com>, <yhs@fb.com>
-Subject: Re: [PATCH bpf-next v4 3/7] net: remove duplicate reuseport_lookup functions
-Date:   Wed, 28 Jun 2023 11:32:58 -0700
-Message-ID: <20230628183258.74704-1-kuniyu@amazon.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20230613-so-reuseport-v4-3-4ece76708bba@isovalent.com>
-References: <20230613-so-reuseport-v4-3-4ece76708bba@isovalent.com>
+        Wed, 28 Jun 2023 14:33:39 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB8A91FE4;
+        Wed, 28 Jun 2023 11:33:37 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7113761418;
+        Wed, 28 Jun 2023 18:33:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A9501C433C8;
+        Wed, 28 Jun 2023 18:33:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687977216;
+        bh=PQylG1KdUstc1Cg/WoQUG20kCsvwqf/NgHAmIMpuUdk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=R0mZTZ0RKj5JbYPa2WjnbY8Bh47st/gO0VHS3b5WH+rsBw0D7pOpXT/oaLkQxh23H
+         skGrGU1yvdjS5oiBwPxLxDGaGjOBYaKJBw/hlwdow+V1/+EbAcEo5JMKjqoWOnSDhI
+         3TBG5UJR7iDP1syCoubUPXOi02b1Dk8gICHcCtLWlLIIOVh4AhZCd3faTF46mUnwZh
+         HO2eQxW5w4e7bx6XbfpNPa1Q6xUamE0ejIVEDKDjfGdgpSxWw37AAJsh3cRCK3tHh7
+         l2LmUTH2juuaBKuRRPjxCCweNdps5BLbgGLPs9FsCkHx0JTIihms5JYcrTfrkCmocn
+         r1DFGh2eMLZRQ==
+Date:   Wed, 28 Jun 2023 11:33:35 -0700
+From:   Jaegeuk Kim <jaegeuk@kernel.org>
+To:     Chao Yu <chao@kernel.org>
+Cc:     linux-kernel@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net, stable@vger.kernel.org
+Subject: Re: [PATCH v2] f2fs: fix deadlock in i_xattr_sem and inode page lock
+ and fix the original issue
+Message-ID: <ZJx8/0eOB4PcftQe@google.com>
+References: <20230613233940.3643362-1-jaegeuk@kernel.org>
+ <e5788348-b547-8e10-21af-90544f3aa75c@kernel.org>
+ <ZJvqZTX1SIwvDCUn@google.com>
+ <e4ee00c4-c20a-4613-87ec-3b144d6252ed@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.187.170.50]
-X-ClientProxiedBy: EX19D043UWA002.ant.amazon.com (10.13.139.53) To
- EX19D004ANA001.ant.amazon.com (10.37.240.138)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <e4ee00c4-c20a-4613-87ec-3b144d6252ed@kernel.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+        lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lorenz Bauer <lmb@isovalent.com>
-Date: Wed, 28 Jun 2023 10:48:18 +0100
-> There are currently four copies of reuseport_lookup: one each for
-> (TCP, UDP)x(IPv4, IPv6). This forces us to duplicate all callers of
-> those functions as well. This is already the case for sk_lookup
-> helpers (inet,inet6,udp4,udp6)_lookup_run_bpf.
+On 06/28, Chao Yu wrote:
+> On 2023/6/28 16:08, Jaegeuk Kim wrote:
+> > Thread #1:
+> > 
+> > [122554.641906][   T92]  f2fs_getxattr+0xd4/0x5fc
+> >      -> waiting for f2fs_down_read(&F2FS_I(inode)->i_xattr_sem);
+> > 
+> > [122554.641927][   T92]  __f2fs_get_acl+0x50/0x284
+> > [122554.641948][   T92]  f2fs_init_acl+0x84/0x54c
+> > [122554.641969][   T92]  f2fs_init_inode_metadata+0x460/0x5f0
+> > [122554.641990][   T92]  f2fs_add_inline_entry+0x11c/0x350
+> >      -> Locked dir->inode_page by f2fs_get_node_page()
+> > 
+> > [122554.642009][   T92]  f2fs_do_add_link+0x100/0x1e4
+> > [122554.642025][   T92]  f2fs_create+0xf4/0x22c
+> > [122554.642047][   T92]  vfs_create+0x130/0x1f4
+> > 
+> > Thread #2:
+> > 
+> > [123996.386358][   T92]  __get_node_page+0x8c/0x504
+> >      -> waiting for dir->inode_page lock
+> > 
+> > [123996.386383][   T92]  read_all_xattrs+0x11c/0x1f4
+> > [123996.386405][   T92]  __f2fs_setxattr+0xcc/0x528
+> > [123996.386424][   T92]  f2fs_setxattr+0x158/0x1f4
+> >      -> f2fs_down_write(&F2FS_I(inode)->i_xattr_sem);
+> > 
+> > [123996.386443][   T92]  __f2fs_set_acl+0x328/0x430
+> > [123996.386618][   T92]  f2fs_set_acl+0x38/0x50
+> > [123996.386642][   T92]  posix_acl_chmod+0xc8/0x1c8
+> > [123996.386669][   T92]  f2fs_setattr+0x5e0/0x6bc
+> > [123996.386689][   T92]  notify_change+0x4d8/0x580
+> > [123996.386717][   T92]  chmod_common+0xd8/0x184
+> > [123996.386748][   T92]  do_fchmodat+0x60/0x124
+> > [123996.386766][   T92]  __arm64_sys_fchmodat+0x28/0x3c
 > 
-> There are two differences between the reuseport_lookup helpers:
+> Back to the race condition, my question is why we can chmod on inode before
+> it has been created?
+
+This is touching the directory.
+
 > 
-> 1. They call different hash functions depending on protocol
-> 2. UDP reuseport_lookup checks that sk_state != TCP_ESTABLISHED
+> Thanks,
 > 
-> Move the check for sk_state into the caller and use the INDIRECT_CALL
-> infrastructure to cut down the helpers to one per IP version.
-> 
-> Signed-off-by: Lorenz Bauer <lmb@isovalent.com>
-
-Reviewed-by: Kuniyuki Iwashima <kuniyu@amazon.com>
-
-2 nits below.
-
-
-> ---
->  include/net/inet6_hashtables.h | 11 ++++++++++-
->  include/net/inet_hashtables.h  | 15 ++++++++++-----
->  net/ipv4/inet_hashtables.c     | 20 +++++++++++++-------
->  net/ipv4/udp.c                 | 34 +++++++++++++---------------------
->  net/ipv6/inet6_hashtables.c    | 14 ++++++++++----
->  net/ipv6/udp.c                 | 41 ++++++++++++++++-------------------------
->  6 files changed, 72 insertions(+), 63 deletions(-)
-> 
-> diff --git a/include/net/inet6_hashtables.h b/include/net/inet6_hashtables.h
-> index 032ddab48f8f..f89320b6fee3 100644
-> --- a/include/net/inet6_hashtables.h
-> +++ b/include/net/inet6_hashtables.h
-> @@ -48,12 +48,21 @@ struct sock *__inet6_lookup_established(struct net *net,
->  					const u16 hnum, const int dif,
->  					const int sdif);
->  
-> +typedef u32 (inet6_ehashfn_t)(const struct net *net,
-> +			       const struct in6_addr *laddr, const u16 lport,
-> +			       const struct in6_addr *faddr, const __be16 fport);
-> +
-> +inet6_ehashfn_t inet6_ehashfn;
-> +
-> +INDIRECT_CALLABLE_DECLARE(inet6_ehashfn_t udp6_ehashfn);
-
-We need not define udp6_ehashfn() here as inet6_hashtables.c has
-the definition.
-
-Only inet6_ehashfn() is needed because sk_ehashfn() uses it.
-
-
-> +
->  struct sock *inet6_lookup_reuseport(struct net *net, struct sock *sk,
->  				    struct sk_buff *skb, int doff,
->  				    const struct in6_addr *saddr,
->  				    __be16 sport,
->  				    const struct in6_addr *daddr,
-> -				    unsigned short hnum);
-> +				    unsigned short hnum,
-> +				    inet6_ehashfn_t *ehashfn);
->  
->  struct sock *inet6_lookup_listener(struct net *net,
->  				   struct inet_hashinfo *hashinfo,
-> diff --git a/include/net/inet_hashtables.h b/include/net/inet_hashtables.h
-> index 8734f3488f5d..ddfa2e67fdb5 100644
-> --- a/include/net/inet_hashtables.h
-> +++ b/include/net/inet_hashtables.h
-> @@ -379,10 +379,19 @@ struct sock *__inet_lookup_established(struct net *net,
->  				       const __be32 daddr, const u16 hnum,
->  				       const int dif, const int sdif);
->  
-> +typedef u32 (inet_ehashfn_t)(const struct net *net,
-> +			      const __be32 laddr, const __u16 lport,
-> +			      const __be32 faddr, const __be16 fport);
-> +
-> +inet_ehashfn_t inet_ehashfn;
-> +
-> +INDIRECT_CALLABLE_DECLARE(inet_ehashfn_t udp_ehashfn);
-> +
-
-We don't need inet_ehashfn() and udp_ehashfn() declarations here.
-
-
->  struct sock *inet_lookup_reuseport(struct net *net, struct sock *sk,
->  				   struct sk_buff *skb, int doff,
->  				   __be32 saddr, __be16 sport,
-> -				   __be32 daddr, unsigned short hnum);
-> +				   __be32 daddr, unsigned short hnum,
-> +				   inet_ehashfn_t *ehashfn);
->  
->  static inline struct sock *
->  	inet_lookup_established(struct net *net, struct inet_hashinfo *hashinfo,
-> @@ -453,10 +462,6 @@ static inline struct sock *__inet_lookup_skb(struct inet_hashinfo *hashinfo,
->  			     refcounted);
->  }
->  
-> -u32 inet6_ehashfn(const struct net *net,
-> -		  const struct in6_addr *laddr, const u16 lport,
-> -		  const struct in6_addr *faddr, const __be16 fport);
-> -
->  static inline void sk_daddr_set(struct sock *sk, __be32 addr)
->  {
->  	sk->sk_daddr = addr; /* alias of inet_daddr */
-> diff --git a/net/ipv4/inet_hashtables.c b/net/ipv4/inet_hashtables.c
-> index 920131e4a65d..352eb371c93b 100644
-> --- a/net/ipv4/inet_hashtables.c
-> +++ b/net/ipv4/inet_hashtables.c
-> @@ -28,9 +28,9 @@
->  #include <net/tcp.h>
->  #include <net/sock_reuseport.h>
->  
-> -static u32 inet_ehashfn(const struct net *net, const __be32 laddr,
-> -			const __u16 lport, const __be32 faddr,
-> -			const __be16 fport)
-> +u32 inet_ehashfn(const struct net *net, const __be32 laddr,
-> +		 const __u16 lport, const __be32 faddr,
-> +		 const __be16 fport)
->  {
->  	static u32 inet_ehash_secret __read_mostly;
->  
-> @@ -39,6 +39,7 @@ static u32 inet_ehashfn(const struct net *net, const __be32 laddr,
->  	return __inet_ehashfn(laddr, lport, faddr, fport,
->  			      inet_ehash_secret + net_hash_mix(net));
->  }
-> +EXPORT_SYMBOL_GPL(inet_ehashfn);
->  
->  /* This function handles inet_sock, but also timewait and request sockets
->   * for IPv4/IPv6.
-> @@ -332,16 +333,20 @@ static inline int compute_score(struct sock *sk, struct net *net,
->  	return score;
->  }
->  
-> +INDIRECT_CALLABLE_DECLARE(inet_ehashfn_t udp_ehashfn);
-> +
->  struct sock *inet_lookup_reuseport(struct net *net, struct sock *sk,
->  				   struct sk_buff *skb, int doff,
->  				   __be32 saddr, __be16 sport,
-> -				   __be32 daddr, unsigned short hnum)
-> +				   __be32 daddr, unsigned short hnum,
-> +				   inet_ehashfn_t *ehashfn)
->  {
->  	struct sock *reuse_sk = NULL;
->  	u32 phash;
->  
->  	if (sk->sk_reuseport) {
-> -		phash = inet_ehashfn(net, daddr, hnum, saddr, sport);
-> +		phash = INDIRECT_CALL_2(ehashfn, udp_ehashfn, inet_ehashfn,
-> +					net, daddr, hnum, saddr, sport);
->  		reuse_sk = reuseport_select_sock(sk, phash, skb, doff);
->  	}
->  	return reuse_sk;
-> @@ -371,7 +376,7 @@ static struct sock *inet_lhash2_lookup(struct net *net,
->  		score = compute_score(sk, net, hnum, daddr, dif, sdif);
->  		if (score > hiscore) {
->  			result = inet_lookup_reuseport(net, sk, skb, doff,
-> -						       saddr, sport, daddr, hnum);
-> +						       saddr, sport, daddr, hnum, inet_ehashfn);
->  			if (result)
->  				return result;
->  
-> @@ -400,7 +405,8 @@ static inline struct sock *inet_lookup_run_bpf(struct net *net,
->  	if (no_reuseport || IS_ERR_OR_NULL(sk))
->  		return sk;
->  
-> -	reuse_sk = inet_lookup_reuseport(net, sk, skb, doff, saddr, sport, daddr, hnum);
-> +	reuse_sk = inet_lookup_reuseport(net, sk, skb, doff, saddr, sport, daddr, hnum,
-> +					 inet_ehashfn);
->  	if (reuse_sk)
->  		sk = reuse_sk;
->  	return sk;
-> diff --git a/net/ipv4/udp.c b/net/ipv4/udp.c
-> index 5ef478d2c408..7258edece691 100644
-> --- a/net/ipv4/udp.c
-> +++ b/net/ipv4/udp.c
-> @@ -405,9 +405,9 @@ static int compute_score(struct sock *sk, struct net *net,
->  	return score;
->  }
->  
-> -static u32 udp_ehashfn(const struct net *net, const __be32 laddr,
-> -		       const __u16 lport, const __be32 faddr,
-> -		       const __be16 fport)
-> +INDIRECT_CALLABLE_SCOPE
-> +u32 udp_ehashfn(const struct net *net, const __be32 laddr, const __u16 lport,
-> +		const __be32 faddr, const __be16 fport)
->  {
->  	static u32 udp_ehash_secret __read_mostly;
->  
-> @@ -417,22 +417,6 @@ static u32 udp_ehashfn(const struct net *net, const __be32 laddr,
->  			      udp_ehash_secret + net_hash_mix(net));
->  }
->  
-> -static struct sock *lookup_reuseport(struct net *net, struct sock *sk,
-> -				     struct sk_buff *skb,
-> -				     __be32 saddr, __be16 sport,
-> -				     __be32 daddr, unsigned short hnum)
-> -{
-> -	struct sock *reuse_sk = NULL;
-> -	u32 hash;
-> -
-> -	if (sk->sk_reuseport && sk->sk_state != TCP_ESTABLISHED) {
-> -		hash = udp_ehashfn(net, daddr, hnum, saddr, sport);
-> -		reuse_sk = reuseport_select_sock(sk, hash, skb,
-> -						 sizeof(struct udphdr));
-> -	}
-> -	return reuse_sk;
-> -}
-> -
->  /* called with rcu_read_lock() */
->  static struct sock *udp4_lib_lookup2(struct net *net,
->  				     __be32 saddr, __be16 sport,
-> @@ -451,7 +435,14 @@ static struct sock *udp4_lib_lookup2(struct net *net,
->  				      daddr, hnum, dif, sdif);
->  		if (score > badness) {
->  			badness = score;
-> -			result = lookup_reuseport(net, sk, skb, saddr, sport, daddr, hnum);
-> +
-> +			if (sk->sk_state == TCP_ESTABLISHED) {
-> +				result = sk;
-> +				continue;
-> +			}
-> +
-> +			result = inet_lookup_reuseport(net, sk, skb, sizeof(struct udphdr),
-> +						       saddr, sport, daddr, hnum, udp_ehashfn);
->  			if (!result) {
->  				result = sk;
->  				continue;
-> @@ -490,7 +481,8 @@ static struct sock *udp4_lookup_run_bpf(struct net *net,
->  	if (no_reuseport || IS_ERR_OR_NULL(sk))
->  		return sk;
->  
-> -	reuse_sk = lookup_reuseport(net, sk, skb, saddr, sport, daddr, hnum);
-> +	reuse_sk = inet_lookup_reuseport(net, sk, skb, sizeof(struct udphdr),
-> +					 saddr, sport, daddr, hnum, udp_ehashfn);
->  	if (reuse_sk)
->  		sk = reuse_sk;
->  	return sk;
-> diff --git a/net/ipv6/inet6_hashtables.c b/net/ipv6/inet6_hashtables.c
-> index b7c56867314e..3616225c89ef 100644
-> --- a/net/ipv6/inet6_hashtables.c
-> +++ b/net/ipv6/inet6_hashtables.c
-> @@ -39,6 +39,7 @@ u32 inet6_ehashfn(const struct net *net,
->  	return __inet6_ehashfn(lhash, lport, fhash, fport,
->  			       inet6_ehash_secret + net_hash_mix(net));
->  }
-> +EXPORT_SYMBOL_GPL(inet6_ehashfn);
->  
->  /*
->   * Sockets in TCP_CLOSE state are _always_ taken out of the hash, so
-> @@ -111,18 +112,22 @@ static inline int compute_score(struct sock *sk, struct net *net,
->  	return score;
->  }
->  
-> +INDIRECT_CALLABLE_DECLARE(inet6_ehashfn_t udp6_ehashfn);
-> +
->  struct sock *inet6_lookup_reuseport(struct net *net, struct sock *sk,
->  				    struct sk_buff *skb, int doff,
->  				    const struct in6_addr *saddr,
->  				    __be16 sport,
->  				    const struct in6_addr *daddr,
-> -				    unsigned short hnum)
-> +				    unsigned short hnum,
-> +				    inet6_ehashfn_t *ehashfn)
->  {
->  	struct sock *reuse_sk = NULL;
->  	u32 phash;
->  
->  	if (sk->sk_reuseport) {
-> -		phash = inet6_ehashfn(net, daddr, hnum, saddr, sport);
-> +		phash = INDIRECT_CALL_INET(ehashfn, udp6_ehashfn, inet6_ehashfn,
-> +					   net, daddr, hnum, saddr, sport);
->  		reuse_sk = reuseport_select_sock(sk, phash, skb, doff);
->  	}
->  	return reuse_sk;
-> @@ -145,7 +150,7 @@ static struct sock *inet6_lhash2_lookup(struct net *net,
->  		score = compute_score(sk, net, hnum, daddr, dif, sdif);
->  		if (score > hiscore) {
->  			result = inet6_lookup_reuseport(net, sk, skb, doff,
-> -							saddr, sport, daddr, hnum);
-> +							saddr, sport, daddr, hnum, inet6_ehashfn);
->  			if (result)
->  				return result;
->  
-> @@ -176,7 +181,8 @@ static inline struct sock *inet6_lookup_run_bpf(struct net *net,
->  	if (no_reuseport || IS_ERR_OR_NULL(sk))
->  		return sk;
->  
-> -	reuse_sk = inet6_lookup_reuseport(net, sk, skb, doff, saddr, sport, daddr, hnum);
-> +	reuse_sk = inet6_lookup_reuseport(net, sk, skb, doff,
-> +					  saddr, sport, daddr, hnum, inet6_ehashfn);
->  	if (reuse_sk)
->  		sk = reuse_sk;
->  	return sk;
-> diff --git a/net/ipv6/udp.c b/net/ipv6/udp.c
-> index 8b3cb1d7da7c..ebac9200b15c 100644
-> --- a/net/ipv6/udp.c
-> +++ b/net/ipv6/udp.c
-> @@ -70,11 +70,12 @@ int udpv6_init_sock(struct sock *sk)
->  	return 0;
->  }
->  
-> -static u32 udp6_ehashfn(const struct net *net,
-> -			const struct in6_addr *laddr,
-> -			const u16 lport,
-> -			const struct in6_addr *faddr,
-> -			const __be16 fport)
-> +INDIRECT_CALLABLE_SCOPE
-> +u32 udp6_ehashfn(const struct net *net,
-> +		 const struct in6_addr *laddr,
-> +		 const u16 lport,
-> +		 const struct in6_addr *faddr,
-> +		 const __be16 fport)
->  {
->  	static u32 udp6_ehash_secret __read_mostly;
->  	static u32 udp_ipv6_hash_secret __read_mostly;
-> @@ -159,24 +160,6 @@ static int compute_score(struct sock *sk, struct net *net,
->  	return score;
->  }
->  
-> -static struct sock *lookup_reuseport(struct net *net, struct sock *sk,
-> -				     struct sk_buff *skb,
-> -				     const struct in6_addr *saddr,
-> -				     __be16 sport,
-> -				     const struct in6_addr *daddr,
-> -				     unsigned int hnum)
-> -{
-> -	struct sock *reuse_sk = NULL;
-> -	u32 hash;
-> -
-> -	if (sk->sk_reuseport && sk->sk_state != TCP_ESTABLISHED) {
-> -		hash = udp6_ehashfn(net, daddr, hnum, saddr, sport);
-> -		reuse_sk = reuseport_select_sock(sk, hash, skb,
-> -						 sizeof(struct udphdr));
-> -	}
-> -	return reuse_sk;
-> -}
-> -
->  /* called with rcu_read_lock() */
->  static struct sock *udp6_lib_lookup2(struct net *net,
->  		const struct in6_addr *saddr, __be16 sport,
-> @@ -194,7 +177,14 @@ static struct sock *udp6_lib_lookup2(struct net *net,
->  				      daddr, hnum, dif, sdif);
->  		if (score > badness) {
->  			badness = score;
-> -			result = lookup_reuseport(net, sk, skb, saddr, sport, daddr, hnum);
-> +
-> +			if (sk->sk_state == TCP_ESTABLISHED) {
-> +				result = sk;
-> +				continue;
-> +			}
-> +
-> +			result = inet6_lookup_reuseport(net, sk, skb, sizeof(struct udphdr),
-> +							saddr, sport, daddr, hnum, udp6_ehashfn);
->  			if (!result) {
->  				result = sk;
->  				continue;
-> @@ -234,7 +224,8 @@ static inline struct sock *udp6_lookup_run_bpf(struct net *net,
->  	if (no_reuseport || IS_ERR_OR_NULL(sk))
->  		return sk;
->  
-> -	reuse_sk = lookup_reuseport(net, sk, skb, saddr, sport, daddr, hnum);
-> +	reuse_sk = inet6_lookup_reuseport(net, sk, skb, sizeof(struct udphdr),
-> +					  saddr, sport, daddr, hnum, udp6_ehashfn);
->  	if (reuse_sk)
->  		sk = reuse_sk;
->  	return sk;
-> 
-> -- 
-> 2.40.1
+> > 
+> > Fixes: 27161f13e3c3 "f2fs: avoid race in between read xattr & write xattr"
+> > Cc: <stable@vger.kernel.org>
+> > Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
+> > ---
+> >   fs/f2fs/dir.c   | 9 ++++++++-
+> >   fs/f2fs/xattr.c | 6 ++++--
+> >   2 files changed, 12 insertions(+), 3 deletions(-)
+> > 
+> > diff --git a/fs/f2fs/dir.c b/fs/f2fs/dir.c
+> > index 887e55988450..d635c58cf5a3 100644
+> > --- a/fs/f2fs/dir.c
+> > +++ b/fs/f2fs/dir.c
+> > @@ -775,8 +775,15 @@ int f2fs_add_dentry(struct inode *dir, const struct f2fs_filename *fname,
+> >   {
+> >   	int err = -EAGAIN;
+> > -	if (f2fs_has_inline_dentry(dir))
+> > +	if (f2fs_has_inline_dentry(dir)) {
+> > +		/*
+> > +		 * Should get i_xattr_sem to keep the lock order:
+> > +		 * i_xattr_sem -> inode_page lock used by f2fs_setxattr.
+> > +		 */
+> > +		f2fs_down_read(&F2FS_I(dir)->i_xattr_sem);
+> >   		err = f2fs_add_inline_entry(dir, fname, inode, ino, mode);
+> > +		f2fs_up_read(&F2FS_I(dir)->i_xattr_sem);
+> > +	}
+> >   	if (err == -EAGAIN)
+> >   		err = f2fs_add_regular_entry(dir, fname, inode, ino, mode);
+> > diff --git a/fs/f2fs/xattr.c b/fs/f2fs/xattr.c
+> > index 213805d3592c..476b186b90a6 100644
+> > --- a/fs/f2fs/xattr.c
+> > +++ b/fs/f2fs/xattr.c
+> > @@ -528,10 +528,12 @@ int f2fs_getxattr(struct inode *inode, int index, const char *name,
+> >   	if (len > F2FS_NAME_LEN)
+> >   		return -ERANGE;
+> > -	f2fs_down_read(&F2FS_I(inode)->i_xattr_sem);
+> > +	if (!ipage)
+> > +		f2fs_down_read(&F2FS_I(inode)->i_xattr_sem);
+> >   	error = lookup_all_xattrs(inode, ipage, index, len, name,
+> >   				&entry, &base_addr, &base_size, &is_inline);
+> > -	f2fs_up_read(&F2FS_I(inode)->i_xattr_sem);
+> > +	if (!ipage)
+> > +		f2fs_up_read(&F2FS_I(inode)->i_xattr_sem);
+> >   	if (error)
+> >   		return error;
