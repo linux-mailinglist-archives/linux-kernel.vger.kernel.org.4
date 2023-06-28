@@ -2,93 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9439474122B
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 15:20:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C769741247
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 15:25:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231720AbjF1NU4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 09:20:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45858 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231151AbjF1NUx (ORCPT
+        id S231891AbjF1NYX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 09:24:23 -0400
+Received: from szxga01-in.huawei.com ([45.249.212.187]:21997 "EHLO
+        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231684AbjF1NYU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 09:20:53 -0400
-Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27B291705
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 06:20:51 -0700 (PDT)
-Received: by mail-yb1-xb2e.google.com with SMTP id 3f1490d57ef6-c13280dfb09so4682289276.2
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 06:20:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=technolution.nl; s=google; t=1687958450; x=1690550450;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=rGA6jxqN8vTcDS3wt2muKgODh4eayNigHAkX1s+Utm4=;
-        b=DM28bS3zVl7LqD1wB6+f6W2ce5jfWKpWcC+hGhPHAWdzeVR7DtutGaZ9gVnwn/EiB6
-         Pz9mDD8KpmHY3yQbzFDienNENZxX4JMLFK9nRIixXu5trv/etNgTNNM4fTsBx+IOBTgK
-         sLShII9vBlLLI77k5XUCncIuUvNnQiQwFQy2w=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687958450; x=1690550450;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=rGA6jxqN8vTcDS3wt2muKgODh4eayNigHAkX1s+Utm4=;
-        b=NztCv8398IdXpJXOAxUSFPKZNwb+0YMyOtXYChJHebKjkYg+uAQyRGfUXBZkbXxxDR
-         Cz6jxJ2UPF5iSuWhbSitPdg4m5t4ry+LmhNWAhD+NkLGZkmCeO4dylxyvyQN2+JGXyrB
-         LhIwiee0P4LdMcuLCS1ibZOUVz/b0DKVA0+ixF2U31M5r4jedKsBCo/RzOQjmltEBgY9
-         O7KQnEFLMHGafZvlsTOl6FtMo0StHD1L6m95e5kKBPw0v76HBTkMDdui6IYAM2HGqmcp
-         NamjO37iauF/VAjXT98Y5S1aUoAvkTX4HFb+QuZqtM4i80sgXToYyxGBf9D5PygMpZfs
-         0Q1Q==
-X-Gm-Message-State: AC+VfDx8Zw7rBvQ5CxNDE469HjgCveiYk/SPUmrGbtZM8tVj3ril/dhn
-        tpEkUM/g+wRoAkAAmnDoxhQv7Hi8ANqp2SkmlCIwXT1leL2vssn+BLUzNDQV0gjFCTriod00uM/
-        EIqq9bLFxdNX3JnkzYWYp1/QMZ3fZLw2KZg==
-X-Google-Smtp-Source: ACHHUZ5vzh7jOCYjBp4RJ8IsPQl5raQ9wLO+ZE90Xiiggta+9PXzCzTN5UiOvpvxAJewg7KjMc+a5s0IC797yUYUJpo=
-X-Received: by 2002:a25:ef07:0:b0:c19:3d97:b924 with SMTP id
- g7-20020a25ef07000000b00c193d97b924mr10615611ybd.32.1687958450389; Wed, 28
- Jun 2023 06:20:50 -0700 (PDT)
+        Wed, 28 Jun 2023 09:24:20 -0400
+Received: from dggpeml500021.china.huawei.com (unknown [172.30.72.56])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Qrj0D1KzvzlVmr;
+        Wed, 28 Jun 2023 21:21:32 +0800 (CST)
+Received: from huawei.com (10.175.127.227) by dggpeml500021.china.huawei.com
+ (7.185.36.21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Wed, 28 Jun
+ 2023 21:24:16 +0800
+From:   Baokun Li <libaokun1@huawei.com>
+To:     <jack@suse.cz>
+CC:     <linux-fsdevel@vger.kernel.org>, <linux-ext4@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <yi.zhang@huawei.com>,
+        <yangerkun@huawei.com>, <chengzhihao1@huawei.com>,
+        <yukuai3@huawei.com>, <libaokun1@huawei.com>
+Subject: [PATCH v2 0/7] quota: fix race condition between dqput() and dquot_mark_dquot_dirty()
+Date:   Wed, 28 Jun 2023 21:21:48 +0800
+Message-ID: <20230628132155.1560425-1-libaokun1@huawei.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-References: <20230628125406.237949-1-stefan.moring@technolution.nl> <CAOMZO5AftBB8B-Bb-j0TrTnKiQdGpBkq+jZ3surLSs6xPm_pUQ@mail.gmail.com>
-In-Reply-To: <CAOMZO5AftBB8B-Bb-j0TrTnKiQdGpBkq+jZ3surLSs6xPm_pUQ@mail.gmail.com>
-From:   Stefan Moring <stefan.moring@technolution.nl>
-Date:   Wed, 28 Jun 2023 15:20:39 +0200
-Message-ID: <CAB3BuKDcg=7Umxv4yUTDVsQ3X_ash6iFmz-3XaENfni2=R_LCw@mail.gmail.com>
-Subject: Re: [PATCH] spi: Increase imx51 ecspi burst length based on transfer length
-To:     Fabio Estevam <festevam@gmail.com>
-Cc:     broonie@kernel.org, shawnguo@kernel.org, s.hauer@pengutronix.de,
-        linux-imx@nxp.com, linux-spi@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-techno-validated: techno-validated
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-        lindbergh.monkeyblade.net
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.127.227]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpeml500021.china.huawei.com (7.185.36.21)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Fabio,
+Hello Honza,
 
-In our application we send ~80kB at 10MHz. The total transfer time
-went from ~80ms to 67ms, so that would be a reduction of 15%.
-I tested it on an IMX8MM platform.
+This is a solution that uses dquot_srcu to avoid race condition between
+dqput() and dquot_mark_dquot_dirty(). I performed a 24+h fault injection
+stress test (6 VMs, 4 test threads per VM) and have not found any problems.
+And I tested the performance based on the latest mainline (6aeadf7896bf),
+the patch set did not lead to performance degradation, and even a little
+bit of improvement.
 
-Kind regards,
+V1->V2:
+	Modify the solution to use dquot_srcu.
 
-Stefan Moring
+Baokun Li (7):
+  quota: factor out dquot_write_dquot()
+  quota: add new global dquot list releasing_dquots
+  quota: rename dquot_active() to inode_dquot_active()
+  quota: add new helper dquot_active()
+  quota: fix dqput() to follow the guarantees dquot_srcu should provide
+  quota: simplify drop_dquot_ref()
+  quota: remove unused function put_dquot_list()
 
-Op wo 28 jun 2023 om 15:16 schreef Fabio Estevam <festevam@gmail.com>:
->
-> Hi Stefan,
->
-> On Wed, Jun 28, 2023 at 9:54=E2=80=AFAM Stefan Moring
-> <stefan.moring@technolution.nl> wrote:
-> >
-> > IMX51 supports 4096 bit burst lengths. Using the spi transfer length
-> > instead of bits_per_word increases performance significantly.
->
-> Could you please share the performance increase after this change?
->
-> Thanks
+ fs/quota/dquot.c | 237 +++++++++++++++++++++++++++--------------------
+ 1 file changed, 134 insertions(+), 103 deletions(-)
+
+-- 
+2.31.1
+
