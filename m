@@ -2,216 +2,229 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C41A7410D8
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 14:22:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 61F087410DB
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 14:24:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230164AbjF1MWo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 08:22:44 -0400
-Received: from mga01.intel.com ([192.55.52.88]:63468 "EHLO mga01.intel.com"
+        id S230059AbjF1MX5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 08:23:57 -0400
+Received: from mga02.intel.com ([134.134.136.20]:34335 "EHLO mga02.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229522AbjF1MWm (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 08:22:42 -0400
+        id S230339AbjF1MXw (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 28 Jun 2023 08:23:52 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687954962; x=1719490962;
-  h=date:from:to:cc:subject:message-id;
-  bh=u/fCpMxmLYcZwj8E97tLzCLUp6WVk/Q6Ei+BiQ6fO3c=;
-  b=JtSFqz+KhyhTGvNx1ByTEdfEB1iCmkGAnglKe3GE8n53oIaH7bH8FQjO
-   aITB0pLiMEdldyBT+s6aPV2cTVsZA7qZ3DO9FNV6htWlER/qUrfeNKSx3
-   24D053FcHWQKJLRjfj0SEA3SCVIkmt0SxHAqg653UnuF/WfJ3ALdbJ5PS
-   HmzvNGevYBb9z2u5uSca+IfaudXXlmrh5JaJcv51dLHRX1CiLeZNhtxR5
-   UzQ8p2AYL9906N3+GV06McjnORzh4Ea2XQAwMJmiRL3M3eb3lv7u+pZuP
-   O9x/GIzusoR6vPtzD7OGEdGbNOffqckA0Xz1HCP2syxJgQvbZGDN3dOYi
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10754"; a="392552341"
+  t=1687955032; x=1719491032;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=C3DgP6Fkxxe9p5bn588wcInDqX31hZVPVaT7AmQDj98=;
+  b=P2e3gPx4NEbIF7BfxWjVLpOzNuxhN5vvjBuiKaf5zwzltApqACPnYa5C
+   +Y9RzK6bLzezDwsk5vlI0eVnBkQVEZ8q2mwsXh+x8rTD9gx2Teeo2Kxz2
+   GuxHCZf1Y3Q+n6THcU/hhFMK+JD2KOIflzFA0yzsTZUMOnQRv/Wr2+99p
+   p4OdGPJRtBYHMJPG1WZTMdgRiLRGL5EVf8Vw6TE3Z0dTslvEQAY94mUkE
+   9VjEHyPoS3XpEuCQrW+Baxj/IWuNDsqWJZ/BtcT0dRRfMLi0egrzqoeNU
+   fLzV9h6gcRAH8E1QNYrZdoPSUtadEp43ORDVEIHgQrybyEnHTKmUOyMh4
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10754"; a="351613988"
 X-IronPort-AV: E=Sophos;i="6.01,165,1684825200"; 
-   d="scan'208";a="392552341"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2023 05:22:41 -0700
+   d="scan'208";a="351613988"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2023 05:23:52 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10754"; a="787028438"
+X-IronPort-AV: E=McAfee;i="6600,9927,10754"; a="830091017"
 X-IronPort-AV: E=Sophos;i="6.01,165,1684825200"; 
-   d="scan'208";a="787028438"
-Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 28 Jun 2023 05:22:40 -0700
-Received: from kbuild by 783282924a45 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1qEUC0-000DFV-0J;
-        Wed, 28 Jun 2023 12:22:40 +0000
-Date:   Wed, 28 Jun 2023 20:22:21 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>
-Subject: [gustavoars:testing/fam01-next20230627] BUILD SUCCESS WITH
- WARNING 2ebb702f25c4764fb36ab29f4f40728e12b0e42b
-Message-ID: <202306282018.A5SDYtCO-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+   d="scan'208";a="830091017"
+Received: from rajritu-mobl2.ger.corp.intel.com (HELO box.shutemov.name) ([10.249.47.187])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2023 05:23:45 -0700
+Received: by box.shutemov.name (Postfix, from userid 1000)
+        id 889041095C8; Wed, 28 Jun 2023 15:23:42 +0300 (+03)
+Date:   Wed, 28 Jun 2023 15:23:42 +0300
+From:   kirill.shutemov@linux.intel.com
+To:     Kai Huang <kai.huang@intel.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-mm@kvack.org, x86@kernel.org, dave.hansen@intel.com,
+        tony.luck@intel.com, peterz@infradead.org, tglx@linutronix.de,
+        bp@alien8.de, mingo@redhat.com, hpa@zytor.com, seanjc@google.com,
+        pbonzini@redhat.com, david@redhat.com, dan.j.williams@intel.com,
+        rafael.j.wysocki@intel.com, ashok.raj@intel.com,
+        reinette.chatre@intel.com, len.brown@intel.com, ak@linux.intel.com,
+        isaku.yamahata@intel.com, ying.huang@intel.com, chao.gao@intel.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com, nik.borisov@suse.com,
+        bagasdotme@gmail.com, sagis@google.com, imammedo@redhat.com
+Subject: Re: [PATCH v12 18/22] x86/virt/tdx: Keep TDMRs when module
+ initialization is successful
+Message-ID: <20230628122342.zdnqsgnugalqj6ix@box.shutemov.name>
+References: <cover.1687784645.git.kai.huang@intel.com>
+ <7d06fe5fda0e330895c1c9043b881f3c2a2d4f3f.1687784645.git.kai.huang@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <7d06fe5fda0e330895c1c9043b881f3c2a2d4f3f.1687784645.git.kai.huang@intel.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gustavoars/linux.git testing/fam01-next20230627
-branch HEAD: 2ebb702f25c4764fb36ab29f4f40728e12b0e42b  scsi: aacraid: Replace one-element array with flexible-array member in struct user_sgmap
+On Tue, Jun 27, 2023 at 02:12:48AM +1200, Kai Huang wrote:
+> On the platforms with the "partial write machine check" erratum, the
+> kexec() needs to convert all TDX private pages back to normal before
+> booting to the new kernel.  Otherwise, the new kernel may get unexpected
+> machine check.
+> 
+> There's no existing infrastructure to track TDX private pages.  Change
+> to keep TDMRs when module initialization is successful so that they can
+> be used to find PAMTs.
+> 
+> With this change, only put_online_mems() and freeing the buffer of the
+> TDSYSINFO_STRUCT and CMR array still need to be done even when module
+> initialization is successful.  Adjust the error handling to explicitly
+> do them when module initialization is successful and unconditionally
+> clean up the rest when initialization fails.
+> 
+> Signed-off-by: Kai Huang <kai.huang@intel.com>
+> ---
+> 
+> v11 -> v12 (new patch):
+>   - Defer keeping TDMRs logic to this patch for better review
+>   - Improved error handling logic (Nikolay/Kirill in patch 15)
+> 
+> ---
+>  arch/x86/virt/vmx/tdx/tdx.c | 84 ++++++++++++++++++-------------------
+>  1 file changed, 42 insertions(+), 42 deletions(-)
+> 
+> diff --git a/arch/x86/virt/vmx/tdx/tdx.c b/arch/x86/virt/vmx/tdx/tdx.c
+> index 52b7267ea226..85b24b2e9417 100644
+> --- a/arch/x86/virt/vmx/tdx/tdx.c
+> +++ b/arch/x86/virt/vmx/tdx/tdx.c
+> @@ -49,6 +49,8 @@ static DEFINE_MUTEX(tdx_module_lock);
+>  /* All TDX-usable memory regions.  Protected by mem_hotplug_lock. */
+>  static LIST_HEAD(tdx_memlist);
+>  
+> +static struct tdmr_info_list tdx_tdmr_list;
+> +
+>  /*
+>   * Wrapper of __seamcall() to convert SEAMCALL leaf function error code
+>   * to kernel error code.  @seamcall_ret and @out contain the SEAMCALL
+> @@ -1047,7 +1049,6 @@ static int init_tdmrs(struct tdmr_info_list *tdmr_list)
+>  static int init_tdx_module(void)
+>  {
+>  	struct tdsysinfo_struct *sysinfo;
+> -	struct tdmr_info_list tdmr_list;
+>  	struct cmr_info *cmr_array;
+>  	int ret;
+>  
+> @@ -1088,17 +1089,17 @@ static int init_tdx_module(void)
+>  		goto out_put_tdxmem;
+>  
+>  	/* Allocate enough space for constructing TDMRs */
+> -	ret = alloc_tdmr_list(&tdmr_list, sysinfo);
+> +	ret = alloc_tdmr_list(&tdx_tdmr_list, sysinfo);
+>  	if (ret)
+>  		goto out_free_tdxmem;
+>  
+>  	/* Cover all TDX-usable memory regions in TDMRs */
+> -	ret = construct_tdmrs(&tdx_memlist, &tdmr_list, sysinfo);
+> +	ret = construct_tdmrs(&tdx_memlist, &tdx_tdmr_list, sysinfo);
+>  	if (ret)
+>  		goto out_free_tdmrs;
+>  
+>  	/* Pass the TDMRs and the global KeyID to the TDX module */
+> -	ret = config_tdx_module(&tdmr_list, tdx_global_keyid);
+> +	ret = config_tdx_module(&tdx_tdmr_list, tdx_global_keyid);
+>  	if (ret)
+>  		goto out_free_pamts;
+>  
+> @@ -1118,51 +1119,50 @@ static int init_tdx_module(void)
+>  		goto out_reset_pamts;
+>  
+>  	/* Initialize TDMRs to complete the TDX module initialization */
+> -	ret = init_tdmrs(&tdmr_list);
+> +	ret = init_tdmrs(&tdx_tdmr_list);
+> +	if (ret)
+> +		goto out_reset_pamts;
+> +
+> +	pr_info("%lu KBs allocated for PAMT.\n",
+> +			tdmrs_count_pamt_kb(&tdx_tdmr_list));
+> +
+> +	/*
+> +	 * @tdx_memlist is written here and read at memory hotplug time.
+> +	 * Lock out memory hotplug code while building it.
+> +	 */
+> +	put_online_mems();
+> +	/*
+> +	 * For now both @sysinfo and @cmr_array are only used during
+> +	 * module initialization, so always free them.
+> +	 */
+> +	free_page((unsigned long)sysinfo);
+> +
+> +	return 0;
+>  out_reset_pamts:
+> -	if (ret) {
+> -		/*
+> -		 * Part of PAMTs may already have been initialized by the
+> -		 * TDX module.  Flush cache before returning PAMTs back
+> -		 * to the kernel.
+> -		 */
+> -		wbinvd_on_all_cpus();
+> -		/*
+> -		 * According to the TDX hardware spec, if the platform
+> -		 * doesn't have the "partial write machine check"
+> -		 * erratum, any kernel read/write will never cause #MC
+> -		 * in kernel space, thus it's OK to not convert PAMTs
+> -		 * back to normal.  But do the conversion anyway here
+> -		 * as suggested by the TDX spec.
+> -		 */
+> -		tdmrs_reset_pamt_all(&tdmr_list);
+> -	}
+> +	/*
+> +	 * Part of PAMTs may already have been initialized by the
+> +	 * TDX module.  Flush cache before returning PAMTs back
+> +	 * to the kernel.
+> +	 */
+> +	wbinvd_on_all_cpus();
+> +	/*
+> +	 * According to the TDX hardware spec, if the platform
+> +	 * doesn't have the "partial write machine check"
+> +	 * erratum, any kernel read/write will never cause #MC
+> +	 * in kernel space, thus it's OK to not convert PAMTs
+> +	 * back to normal.  But do the conversion anyway here
+> +	 * as suggested by the TDX spec.
+> +	 */
+> +	tdmrs_reset_pamt_all(&tdx_tdmr_list);
+>  out_free_pamts:
+> -	if (ret)
+> -		tdmrs_free_pamt_all(&tdmr_list);
+> -	else
+> -		pr_info("%lu KBs allocated for PAMT.\n",
+> -				tdmrs_count_pamt_kb(&tdmr_list));
+> +	tdmrs_free_pamt_all(&tdx_tdmr_list);
+>  out_free_tdmrs:
+> -	/*
+> -	 * Always free the buffer of TDMRs as they are only used during
+> -	 * module initialization.
+> -	 */
+> -	free_tdmr_list(&tdmr_list);
+> +	free_tdmr_list(&tdx_tdmr_list);
+>  out_free_tdxmem:
+> -	if (ret)
+> -		free_tdx_memlist(&tdx_memlist);
+> +	free_tdx_memlist(&tdx_memlist);
+>  out_put_tdxmem:
+> -	/*
+> -	 * @tdx_memlist is written here and read at memory hotplug time.
+> -	 * Lock out memory hotplug code while building it.
+> -	 */
+>  	put_online_mems();
+>  out:
+> -	/*
+> -	 * For now both @sysinfo and @cmr_array are only used during
+> -	 * module initialization, so always free them.
+> -	 */
+>  	free_page((unsigned long)sysinfo);
+>  	return ret;
+>  }
 
-Warning: (recently discovered and may have been fixed)
-
-arch/loongarch/include/asm/atomic.h:174:9: warning: array subscript 1 is outside array bounds of 'struct cpumask[1]' [-Warray-bounds]
-arch/mips/include/asm/io.h:272:23: warning: array subscript -1 is outside array bounds of 'char[]' [-Warray-bounds]
-drivers/gpu/drm/amd/amdgpu/../display/dc/link/protocols/link_dp_training_dpia.c:427:17: warning: 'dp_decide_lane_settings' accessing 4 bytes in a region of size 1 [-Wstringop-overflow=]
-drivers/gpu/drm/amd/amdgpu/../display/dc/link/protocols/link_dp_training_dpia.c:535:17: warning: 'dp_decide_lane_settings' accessing 4 bytes in a region of size 1 [-Wstringop-overflow=]
-drivers/gpu/drm/amd/amdgpu/../display/dc/link/protocols/link_dp_training_fixed_vs_pe_retimer.c:472:25: warning: 'dp_decide_lane_settings' accessing 4 bytes in a region of size 1 [-Wstringop-overflow=]
-drivers/media/dvb-frontends/cxd2880/cxd2880_devio_spi.c:95:17: warning: 'memcpy' writing 255 bytes into a region of size 129 [-Wstringop-overflow=]
-fs/crypto/fname.c:506:33: warning: array subscript 'struct fscrypt_nokey_name[0]' is partly outside array bounds of 'unsigned char[189]' [-Warray-bounds]
-include/net/xfrm.h:1363:19: warning: array subscript 'xfrm_address_t[0]' is partly outside array bounds of '__be32[1]' {aka 'unsigned int[1]'} [-Warray-bounds]
-
-Warning ids grouped by kconfigs:
-
-gcc_recent_errors
-|-- arm-randconfig-r046-20230627
-|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-protocols-link_dp_training_dpia.c:warning:dp_decide_lane_settings-accessing-bytes-in-a-region-of-size
-|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-protocols-link_dp_training_fixed_vs_pe_retimer.c:warning:dp_decide_lane_settings-accessing-bytes-in-a-region-of-size
-|   `-- fs-crypto-fname.c:warning:array-subscript-struct-fscrypt_nokey_name-is-partly-outside-array-bounds-of-unsigned-char
-|-- loongarch-allmodconfig
-|   `-- arch-loongarch-include-asm-atomic.h:warning:array-subscript-is-outside-array-bounds-of-struct-cpumask
-|-- microblaze-randconfig-r004-20230627
-|   |-- drivers-media-dvb-frontends-cxd2880-cxd2880_devio_spi.c:warning:memcpy-writing-bytes-into-a-region-of-size
-|   `-- include-net-xfrm.h:warning:array-subscript-xfrm_address_t-is-partly-outside-array-bounds-of-__be32-aka-unsigned-int
-|-- mips-randconfig-r011-20230627
-|   `-- arch-mips-include-asm-io.h:warning:array-subscript-is-outside-array-bounds-of-char
-`-- x86_64-buildonly-randconfig-r001-20230627
-    |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-protocols-link_dp_training_dpia.c:warning:dp_decide_lane_settings-accessing-bytes-in-a-region-of-size
-    `-- drivers-gpu-drm-amd-amdgpu-..-display-dc-link-protocols-link_dp_training_fixed_vs_pe_retimer.c:warning:dp_decide_lane_settings-accessing-bytes-in-a-region-of-size
-
-elapsed time: 723m
-
-configs tested: 123
-configs skipped: 7
-
-tested configs:
-alpha                            allyesconfig   gcc  
-alpha                               defconfig   gcc  
-alpha                randconfig-r012-20230627   gcc  
-alpha                randconfig-r022-20230627   gcc  
-arc                              allyesconfig   gcc  
-arc                      axs103_smp_defconfig   gcc  
-arc                                 defconfig   gcc  
-arc                  randconfig-r043-20230627   gcc  
-arc                           tb10x_defconfig   gcc  
-arm                              allmodconfig   gcc  
-arm                              allyesconfig   gcc  
-arm                         assabet_defconfig   gcc  
-arm                         axm55xx_defconfig   gcc  
-arm                                 defconfig   gcc  
-arm                  randconfig-r021-20230627   gcc  
-arm                  randconfig-r031-20230627   clang
-arm                  randconfig-r035-20230627   clang
-arm                  randconfig-r046-20230627   gcc  
-arm                        spear3xx_defconfig   clang
-arm64                            allyesconfig   gcc  
-arm64                               defconfig   gcc  
-arm64                randconfig-r013-20230627   clang
-csky                             alldefconfig   gcc  
-csky                                defconfig   gcc  
-hexagon              randconfig-r002-20230627   clang
-hexagon              randconfig-r041-20230627   clang
-hexagon              randconfig-r045-20230627   clang
-i386                             allyesconfig   gcc  
-i386         buildonly-randconfig-r004-20230627   gcc  
-i386         buildonly-randconfig-r005-20230627   gcc  
-i386         buildonly-randconfig-r006-20230627   gcc  
-i386                              debian-10.3   gcc  
-i386                                defconfig   gcc  
-i386                 randconfig-i001-20230627   gcc  
-i386                 randconfig-i002-20230627   gcc  
-i386                 randconfig-i003-20230627   gcc  
-i386                 randconfig-i004-20230627   gcc  
-i386                 randconfig-i005-20230627   gcc  
-i386                 randconfig-i006-20230627   gcc  
-i386                 randconfig-i011-20230627   clang
-i386                 randconfig-i012-20230627   clang
-i386                 randconfig-i013-20230627   clang
-i386                 randconfig-i014-20230627   clang
-i386                 randconfig-i015-20230627   clang
-i386                 randconfig-i016-20230627   clang
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                           defconfig   gcc  
-loongarch            randconfig-r032-20230627   gcc  
-m68k                             allmodconfig   gcc  
-m68k                             allyesconfig   gcc  
-m68k                                defconfig   gcc  
-m68k                        mvme147_defconfig   gcc  
-m68k                 randconfig-r015-20230627   gcc  
-m68k                           virt_defconfig   gcc  
-microblaze           randconfig-r003-20230627   gcc  
-microblaze           randconfig-r004-20230627   gcc  
-mips                             allmodconfig   gcc  
-mips                             allyesconfig   gcc  
-mips                            ar7_defconfig   gcc  
-mips                           gcw0_defconfig   gcc  
-mips                           mtx1_defconfig   clang
-mips                 randconfig-r011-20230627   gcc  
-nios2                               defconfig   gcc  
-nios2                randconfig-r025-20230627   gcc  
-openrisc                         alldefconfig   gcc  
-openrisc                  or1klitex_defconfig   gcc  
-parisc                           allyesconfig   gcc  
-parisc                              defconfig   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-powerpc                   bluestone_defconfig   clang
-powerpc                      katmai_defconfig   clang
-powerpc                      mgcoge_defconfig   gcc  
-powerpc                   microwatt_defconfig   clang
-powerpc              randconfig-r024-20230627   clang
-riscv                            allmodconfig   gcc  
-riscv                             allnoconfig   gcc  
-riscv                            allyesconfig   gcc  
-riscv                               defconfig   gcc  
-riscv                randconfig-r014-20230627   clang
-riscv                randconfig-r026-20230627   clang
-riscv                randconfig-r042-20230627   clang
-riscv                          rv32_defconfig   gcc  
-s390                             allmodconfig   gcc  
-s390                             allyesconfig   gcc  
-s390                                defconfig   gcc  
-s390                 randconfig-r044-20230627   clang
-sh                               allmodconfig   gcc  
-sh                   randconfig-r006-20230627   gcc  
-sh                   sh7724_generic_defconfig   gcc  
-sh                  sh7785lcr_32bit_defconfig   gcc  
-sparc                            allyesconfig   gcc  
-sparc                               defconfig   gcc  
-sparc64              randconfig-r023-20230627   gcc  
-um                               allmodconfig   clang
-um                                allnoconfig   clang
-um                               allyesconfig   clang
-um                                  defconfig   gcc  
-um                             i386_defconfig   gcc  
-um                   randconfig-r001-20230627   clang
-um                           x86_64_defconfig   gcc  
-x86_64                           allyesconfig   gcc  
-x86_64       buildonly-randconfig-r001-20230627   gcc  
-x86_64       buildonly-randconfig-r002-20230627   gcc  
-x86_64       buildonly-randconfig-r003-20230627   gcc  
-x86_64                              defconfig   gcc  
-x86_64                                  kexec   gcc  
-x86_64               randconfig-x001-20230627   clang
-x86_64               randconfig-x002-20230627   clang
-x86_64               randconfig-x003-20230627   clang
-x86_64               randconfig-x004-20230627   clang
-x86_64               randconfig-x005-20230627   clang
-x86_64               randconfig-x006-20230627   clang
-x86_64               randconfig-x011-20230627   gcc  
-x86_64               randconfig-x012-20230627   gcc  
-x86_64               randconfig-x013-20230627   gcc  
-x86_64               randconfig-x014-20230627   gcc  
-x86_64               randconfig-x015-20230627   gcc  
-x86_64               randconfig-x016-20230627   gcc  
-x86_64                          rhel-8.3-rust   clang
-x86_64                               rhel-8.3   gcc  
+This diff is extremely hard to follow, but I think the change to error
+handling Nikolay proposed has to be applied to the function from the
+beginning, not changed drastically in this patch.
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+  Kiryl Shutsemau / Kirill A. Shutemov
