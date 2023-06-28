@@ -2,97 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 113B07414E9
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 17:28:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6DE87414FB
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 17:30:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231721AbjF1P1v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 11:27:51 -0400
-Received: from mga04.intel.com ([192.55.52.120]:10549 "EHLO mga04.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231454AbjF1P1s (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 11:27:48 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687966068; x=1719502068;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=s3pAHWHbgTHI2Pri/uRlZesknz1ogXXp0gk7P8LjtiI=;
-  b=n7A4yfOcBZn0thOcSqrVOM4hYknFRw3RNgXWMVyJB0yPD/Ie+tULFUNc
-   ck2tWD6NaA77S6P627p7zTWPPMuwrrBea9UqgcvNFMTcPcK5ZtGm3jtcF
-   wwsYg6bnii5BLM9vxp3jm8skzz9mLyqsCPleDMwYEnXMn3gOTi/D7W5ju
-   1rFkgl7c274nabuCeYrfNGDfk/COoDNeSVANHWBlt4TuMBy9kW0CmRy9h
-   JyBWrYCbkuF3VZe14xB5FMdeLv/kt1pAbxCJJvA52TvCA9LWOR1S9HBqR
-   AZfugJdu8MLUpFpujcFOKYI5gDCEpcEdTFutSmW9JKYfjdlUiaWBuYZQh
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10755"; a="360731332"
-X-IronPort-AV: E=Sophos;i="6.01,165,1684825200"; 
-   d="scan'208";a="360731332"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2023 08:27:47 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10755"; a="787081290"
-X-IronPort-AV: E=Sophos;i="6.01,165,1684825200"; 
-   d="scan'208";a="787081290"
-Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 28 Jun 2023 08:27:45 -0700
-Received: from kbuild by 783282924a45 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1qEX57-000DKf-0H;
-        Wed, 28 Jun 2023 15:27:45 +0000
-Date:   Wed, 28 Jun 2023 23:27:43 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Stephan Gerhold <stephan.gerhold@kernkonzept.com>
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        linux-kernel@vger.kernel.org,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Subject: drivers/thermal/qcom/tsens-v0_1.c:296:31: warning: unused variable
- 'ops_v0_1'
-Message-ID: <202306282315.6mHC7VVw-lkp@intel.com>
+        id S232146AbjF1PaG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 11:30:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60416 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232098AbjF1PaA (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 28 Jun 2023 11:30:00 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFEAA268F;
+        Wed, 28 Jun 2023 08:29:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=yx7U6Q1zu/jZUmaTgwSAgFdK87Ilf4lSewGXSOlnpeM=; b=j/HFTVj/s4oubzmOZQkbXs2rGy
+        m89lVq7Gr97cfnYWa6xARbldnNMVFMkRq8W1AjOORgsbE+JDe1bw/SVj909aNMoaQgR33VCyocwnB
+        jMyRPT/RNe6DUCMNQAbSh+QXX1aa+EunTFd0+s08kp6YUsHL37mxE+tFruQTX09nNF/z4QHlhYdw/
+        Q5Ev1yPX6SCK8BzGSUJsl0YZ9yclM8o4/U1hfdZUH6Q02BMUKP1h+1S3pQ/wYL/2iY2EjTmEFlAP+
+        boThf77OadEYRu9XDFgab10EyNjLhgCEc6jrk8JIR2EiwsURk08sQ48aUNIfNGmiKUfXlxu01rmoL
+        unCslgyg==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1qEX6M-005iuP-1l;
+        Wed, 28 Jun 2023 15:29:02 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 16CA73002D6;
+        Wed, 28 Jun 2023 17:29:01 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id F340423B2EE90; Wed, 28 Jun 2023 17:29:00 +0200 (CEST)
+Date:   Wed, 28 Jun 2023 17:29:00 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Kai Huang <kai.huang@intel.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-mm@kvack.org, x86@kernel.org, dave.hansen@intel.com,
+        kirill.shutemov@linux.intel.com, tony.luck@intel.com,
+        tglx@linutronix.de, bp@alien8.de, mingo@redhat.com, hpa@zytor.com,
+        seanjc@google.com, pbonzini@redhat.com, david@redhat.com,
+        dan.j.williams@intel.com, rafael.j.wysocki@intel.com,
+        ashok.raj@intel.com, reinette.chatre@intel.com,
+        len.brown@intel.com, ak@linux.intel.com, isaku.yamahata@intel.com,
+        ying.huang@intel.com, chao.gao@intel.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com, nik.borisov@suse.com,
+        bagasdotme@gmail.com, sagis@google.com, imammedo@redhat.com
+Subject: Re: [PATCH v12 20/22] x86/virt/tdx: Allow SEAMCALL to handle #UD and
+ #GP
+Message-ID: <20230628152900.GI2438817@hirez.programming.kicks-ass.net>
+References: <cover.1687784645.git.kai.huang@intel.com>
+ <c124550719716f1f7759c2bdea70f4722d8e0167.1687784645.git.kai.huang@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <c124550719716f1f7759c2bdea70f4722d8e0167.1687784645.git.kai.huang@intel.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+        lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   6aeadf7896bff4ca230702daba8788455e6b866e
-commit: 6812d1dfbca99cd5032683354bf50e0002b2aa02 thermal/drivers/qcom/tsens-v0_1: Fix mdm9607 slope values
-date:   2 days ago
-config: arm-randconfig-r046-20230628 (https://download.01.org/0day-ci/archive/20230628/202306282315.6mHC7VVw-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce: (https://download.01.org/0day-ci/archive/20230628/202306282315.6mHC7VVw-lkp@intel.com/reproduce)
+On Tue, Jun 27, 2023 at 02:12:50AM +1200, Kai Huang wrote:
+> diff --git a/arch/x86/virt/vmx/tdx/tdxcall.S b/arch/x86/virt/vmx/tdx/tdxcall.S
+> index 49a54356ae99..757b0c34be10 100644
+> --- a/arch/x86/virt/vmx/tdx/tdxcall.S
+> +++ b/arch/x86/virt/vmx/tdx/tdxcall.S
+> @@ -1,6 +1,7 @@
+>  /* SPDX-License-Identifier: GPL-2.0 */
+>  #include <asm/asm-offsets.h>
+>  #include <asm/tdx.h>
+> +#include <asm/asm.h>
+>  
+>  /*
+>   * TDCALL and SEAMCALL are supported in Binutils >= 2.36.
+> @@ -45,6 +46,7 @@
+>  	/* Leave input param 2 in RDX */
+>  
+>  	.if \host
+> +1:
+>  	seamcall
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306282315.6mHC7VVw-lkp@intel.com/
+So what registers are actually clobbered by SEAMCALL ? There's a
+distinct lack of it in SDM Vol.2 instruction list :-(
 
-All warnings (new ones prefixed by >>):
+>  	/*
+>  	 * SEAMCALL instruction is essentially a VMExit from VMX root
+> @@ -57,10 +59,23 @@
+>  	 * This value will never be used as actual SEAMCALL error code as
+>  	 * it is from the Reserved status code class.
+>  	 */
+> -	jnc .Lno_vmfailinvalid
+> +	jnc .Lseamcall_out
+>  	mov $TDX_SEAMCALL_VMFAILINVALID, %rax
+> -.Lno_vmfailinvalid:
+> +	jmp .Lseamcall_out
+> +2:
+> +	/*
+> +	 * SEAMCALL caused #GP or #UD.  By reaching here %eax contains
+> +	 * the trap number.  Convert the trap number to the TDX error
+> +	 * code by setting TDX_SW_ERROR to the high 32-bits of %rax.
+> +	 *
+> +	 * Note cannot OR TDX_SW_ERROR directly to %rax as OR instruction
+> +	 * only accepts 32-bit immediate at most.
+> +	 */
+> +	mov $TDX_SW_ERROR, %r12
+> +	orq %r12, %rax
+>  
+> +	_ASM_EXTABLE_FAULT(1b, 2b)
+> +.Lseamcall_out:
 
->> drivers/thermal/qcom/tsens-v0_1.c:296:31: warning: unused variable 'ops_v0_1' [-Wunused-const-variable]
-     296 | static const struct tsens_ops ops_v0_1 = {
-         |                               ^
-   1 warning generated.
+This is all pretty atrocious code flow... would it at all be possible to
+write it like:
+
+SYM_FUNC_START(...)
+
+.if \host
+1:	seamcall
+	cmovc	%spare, %rax
+2:
+.else
+	tdcall
+.endif
+
+	.....
+	RET
 
 
-vim +/ops_v0_1 +296 drivers/thermal/qcom/tsens-v0_1.c
+3:
+	mov $TDX_SW_ERROR, %r12
+	orq %r12, %rax
+	jmp 2b
 
-c19970548edc35 Amit Kucheria    2019-03-20  295  
-51d78b8b1beba2 Dmitry Baryshkov 2023-01-01 @296  static const struct tsens_ops ops_v0_1 = {
-51d78b8b1beba2 Dmitry Baryshkov 2023-01-01  297  	.init		= init_common,
-51d78b8b1beba2 Dmitry Baryshkov 2023-01-01  298  	.calibrate	= tsens_calibrate_common,
-51d78b8b1beba2 Dmitry Baryshkov 2023-01-01  299  	.get_temp	= get_temp_common,
-51d78b8b1beba2 Dmitry Baryshkov 2023-01-01  300  };
-51d78b8b1beba2 Dmitry Baryshkov 2023-01-01  301  
+	_ASM_EXTABLE_FAULT(1b, 3b)
 
-:::::: The code at line 296 was first introduced by commit
-:::::: 51d78b8b1beba247e1e4314420d98acb0732c4b7 thermal/drivers/tsens: Drop single-cell code for mdm9607
+SYM_FUNC_END()
 
-:::::: TO: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-:::::: CC: Daniel Lezcano <daniel.lezcano@linaro.org>
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+That is, having all that inline in the hotpath is quite horrific.
