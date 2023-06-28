@@ -2,63 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6308B7413E9
+	by mail.lfdr.de (Postfix) with ESMTP id AB02B7413EA
 	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 16:39:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231359AbjF1Oig (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 10:38:36 -0400
-Received: from vps0.lunn.ch ([156.67.10.101]:40208 "EHLO vps0.lunn.ch"
+        id S231425AbjF1Oi5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 10:38:57 -0400
+Received: from mga03.intel.com ([134.134.136.65]:51261 "EHLO mga03.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229832AbjF1Oie (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 10:38:34 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=qmTXXrFz0E6R4ltZ86kan94IWacvSfn7Y1jZEOiQyFo=; b=vs2gmnkNvAn9GHzNb9dS764WOe
-        DB1It/rw3/dNF0wR12aINRAE5VH3Xt406ctOWfh1l5GT6vtm5AcmZbgSdQF8qmpo+Efh/4O0T90dP
-        HB4FXssXprb06ZNzlqzzAY1IT02lN/B2p6neqT6ceHbAKSNOJSZHouYFbj3cQofBagHc=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1qEWIh-0007qk-QH; Wed, 28 Jun 2023 16:37:43 +0200
-Date:   Wed, 28 Jun 2023 16:37:43 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     yunchuan <yunchuan@nfschina.com>
-Cc:     Hao Lan <lanhao@huawei.com>, f.fainelli@gmail.com,
-        olteanv@gmail.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, irusskikh@marvell.com,
-        yisen.zhuang@huawei.com, salil.mehta@huawei.com,
-        jesse.brandeburg@intel.com, anthony.l.nguyen@intel.com,
-        steve.glendinning@shawell.net, iyappan@os.amperecomputing.com,
-        keyur@os.amperecomputing.com, quan@os.amperecomputing.com,
-        hkallweit1@gmail.com, linux@armlinux.org.uk,
-        mostrows@earthlink.net, xeb@mail.ru, qiang.zhao@nxp.com,
-        yangyingliang@huawei.com, linux@rempel-privat.de,
-        ansuelsmth@gmail.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, intel-wired-lan@lists.osuosl.org,
-        linuxppc-dev@lists.ozlabs.org, kernel-janitors@vger.kernel.org
-Subject: Re: [PATCH net-next 00/10] Remove unnecessary (void*) conversions
-Message-ID: <badb3550-e157-4a31-9e49-ad184990c06d@lunn.ch>
-References: <1f5652f7-7eb2-11f0-4a07-c87f2992e509@huawei.com>
- <734b846f-3235-f2e3-db06-6e852803cd7f@nfschina.com>
+        id S229832AbjF1Oix (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 28 Jun 2023 10:38:53 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1687963133; x=1719499133;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=hbL6+8IOydZgwh2S4eqQZSEu5o5novv5z8EuQf1SO+U=;
+  b=lkBm+CyGpLQDq53PJIKoapOZaIT6HhHzbM/KUdE9fPGLUmrEFT2cQztJ
+   xc9rR0hVVhZF7lBtHnDEH3B0istq/d7XmkVxrR6wILTNV45i7iKUymHur
+   6FmY1cO8OGxDwQor1LUd6XKaIGsftSV8ifWd+5+m66A8v8KbPBWgEPuvj
+   8VLNXRjv8a8Lfvs+x4480jAgldkJqdITwcMD9/6IWwSb5vri+N7b8wsnF
+   TAkFglEewpryxh4DW+MXzaUo34tfARFmRU8CFbDaVXKAuVP4JvbxgTctu
+   j9DhQnCrVsswge452I6syOp79/+GlmdDwGincGXxAZPe7ZXOh+SamYszA
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10754"; a="365323111"
+X-IronPort-AV: E=Sophos;i="6.01,165,1684825200"; 
+   d="scan'208";a="365323111"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2023 07:38:45 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10754"; a="711062902"
+X-IronPort-AV: E=Sophos;i="6.01,165,1684825200"; 
+   d="scan'208";a="711062902"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga007.jf.intel.com with ESMTP; 28 Jun 2023 07:38:41 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1qEWJb-000clN-2U;
+        Wed, 28 Jun 2023 17:38:39 +0300
+Date:   Wed, 28 Jun 2023 17:38:39 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Giovanni Cabiddu <giovanni.cabiddu@intel.com>
+Cc:     You Kangren <youkangren@vivo.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Tom Zanussi <tom.zanussi@linux.intel.com>,
+        Damian Muszynski <damian.muszynski@intel.com>,
+        Srinivas Kerekare <srinivas.kerekare@intel.com>,
+        "open list:QAT DRIVER" <qat-linux@intel.com>,
+        "open list:CRYPTO API" <linux-crypto@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        opensource.kernel@vivo.com
+Subject: Re: [PATCH] crypto: qat - use min() in fw loader
+Message-ID: <ZJxF77bNAQ79OpWs@smile.fi.intel.com>
+References: <20230627071726.20578-1-youkangren@vivo.com>
+ <ZJwPlLC7/sJP8U7u@smile.fi.intel.com>
+ <ZJwxmUGPsIlTv+TG@gcabiddu-mobl1.ger.corp.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <734b846f-3235-f2e3-db06-6e852803cd7f@nfschina.com>
+In-Reply-To: <ZJwxmUGPsIlTv+TG@gcabiddu-mobl1.ger.corp.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> Hi, Hao Lan,
-> 
-> Sorry for that, I just compiled these patches in the mainline branch.
-> I know now, it's also necessary to compile patches in net and net-next
-> branch.
-> Thanks for your reply!
+On Wed, Jun 28, 2023 at 02:11:53PM +0100, Giovanni Cabiddu wrote:
+> On Wed, Jun 28, 2023 at 01:46:44PM +0300, Andy Shevchenko wrote:
+> > On Tue, Jun 27, 2023 at 03:17:24PM +0800, You Kangren wrote:
 
-net-next is also closed at the moment due to the merge window. Please
-wait two weeks before reposting, by which time net-next will be open
-again.
+...
 
-	Andrew
+> > min_t() can be dangerous some times.
+> > 
+> > To make it robust I would suggest to use min() and mark UWORD_CPYBUF_SIZE
+> > with U suffix to make the type the same.
+> Thanks. I reworked it, added a missing include and ordered the includes
+> in the file.
+
+I think it should be two patches then, but it's up to you and subsystem
+maintainer.
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
