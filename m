@@ -2,40 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2ADF0741100
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 14:36:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AFC574114E
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 14:39:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231440AbjF1MgN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 08:36:13 -0400
-Received: from mx0b-0031df01.pphosted.com ([205.220.180.131]:30942 "EHLO
+        id S232350AbjF1MiU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 08:38:20 -0400
+Received: from mx0b-0031df01.pphosted.com ([205.220.180.131]:2428 "EHLO
         mx0b-0031df01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231303AbjF1MgA (ORCPT
+        by vger.kernel.org with ESMTP id S231856AbjF1Mgk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 08:36:00 -0400
-Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35SBBj0W032212;
-        Wed, 28 Jun 2023 12:35:29 GMT
+        Wed, 28 Jun 2023 08:36:40 -0400
+Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35S7R01Z029236;
+        Wed, 28 Jun 2023 12:35:37 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-type; s=qcppdkim1;
- bh=z/38/L7Qb4rY0gn24IqUDEH0xFQsfWB9pSUqCcrV3P8=;
- b=HNt/zEUQKPRanF5fARYX0Inv7LCG2imfF6HYWksc/Eli2gqIe2VjIiOwyMrLlCPlZq19
- l7bZCVuDQIuguhcfQV4LBj2QX6OqqTet7/YZqtdc9aRZ4ZfFrnMzqqGdEOOe0454ugB3
- 2gHE8oIBdGiJ06ixILlRJyde0MVBVa/Wno6UPBe81pLh74ci9+r1ej5jdcEDUxdB/e+m
- D9e6DFlPygSCp1mGmaDrpB+oe0G5Nr265ncA/pUoLUCtmh0Dhq1lbmGQSHVzMV6xCzWK
- g1PFLDK/ezpJc9LCowsl1GwG81f0kMZS0Wwb2aDUM5/GqYYYjdeDIWHLrTdPBU6stiFJ gw== 
-Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rgetpgw4j-1
+ bh=QmPTvnuCX9nTTcTKJzsrAxvtP/T8wK3/aBYs6dPtSDI=;
+ b=Ierbl0LvulKXCI+Dz6XQC3UdYbrYlrZS0tR4q0MBlUktdtEqvx2n6tXi379tRuiLGqQs
+ ZlaHvQ8KGcrwc9sKDX9vrqc3MJN54GOaLSY3C7LMcZXvXRzqaZXLNbz74Ee9VL5qdgLY
+ fGdje59auLxBoEFaZtssqR9Xj/Hzylj0k3N3HmoVWxwc4xP7oIrDs6tUctq78RRSPk1d
+ EGqL1ioVGw9FGMYiBSiS+x5KixChWZUJAE/z8cczyVTd8JN/oQG+8euPwE3BIsjTej88
+ aXihprM1c18RE9J0k5Cl9RW5yOVD63DMK4V5ne5GoWuQlijZ/WjUOGb7Re05LtyA0O0S DA== 
+Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rgbfss8d0-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 28 Jun 2023 12:35:28 +0000
+        Wed, 28 Jun 2023 12:35:36 +0000
 Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
-        by NASANPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35SCZRr3025624
+        by NASANPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35SCZZpe029190
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 28 Jun 2023 12:35:27 GMT
+        Wed, 28 Jun 2023 12:35:35 GMT
 Received: from hu-mojha-hyd.qualcomm.com (10.80.80.8) by
  nasanex01c.na.qualcomm.com (10.45.79.139) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Wed, 28 Jun 2023 05:35:20 -0700
+ 15.2.986.42; Wed, 28 Jun 2023 05:35:27 -0700
 From:   Mukesh Ojha <quic_mojha@quicinc.com>
 To:     <corbet@lwn.net>, <agross@kernel.org>, <andersson@kernel.org>,
         <konrad.dybcio@linaro.org>, <robh+dt@kernel.org>,
@@ -51,9 +51,9 @@ CC:     <linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
         <linux-gpio@vger.kernel.org>,
         "Mukesh Ojha" <quic_mojha@quicinc.com>
-Subject: [PATCH v4 02/21] kallsyms: Export kallsyms_lookup_name
-Date:   Wed, 28 Jun 2023 18:04:29 +0530
-Message-ID: <1687955688-20809-3-git-send-email-quic_mojha@quicinc.com>
+Subject: [PATCH v4 03/21] soc: qcom: Add qcom_minidump_smem module
+Date:   Wed, 28 Jun 2023 18:04:30 +0530
+Message-ID: <1687955688-20809-4-git-send-email-quic_mojha@quicinc.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1687955688-20809-1-git-send-email-quic_mojha@quicinc.com>
 References: <1687955688-20809-1-git-send-email-quic_mojha@quicinc.com>
@@ -64,47 +64,234 @@ X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
  nasanex01c.na.qualcomm.com (10.45.79.139)
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: cdOZ3jlYYRrz3hYIl8DadVmQZGPwRH6s
-X-Proofpoint-GUID: cdOZ3jlYYRrz3hYIl8DadVmQZGPwRH6s
+X-Proofpoint-GUID: 8vbZ3mHqD4PnjLNlGLMFmmrv47sJ7uZj
+X-Proofpoint-ORIG-GUID: 8vbZ3mHqD4PnjLNlGLMFmmrv47sJ7uZj
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
  definitions=2023-06-28_08,2023-06-27_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 adultscore=0
- mlxlogscore=999 spamscore=0 priorityscore=1501 suspectscore=0
- clxscore=1015 bulkscore=0 mlxscore=0 phishscore=0 lowpriorityscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ spamscore=0 bulkscore=0 suspectscore=0 phishscore=0 mlxlogscore=999
+ adultscore=0 priorityscore=1501 clxscore=1015 malwarescore=0 mlxscore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2305260000 definitions=main-2306280111
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Module like minidump providing debugging support will need to
-get the symbol information from the core kernel e.g to get
-the linux_banner, kernel section addresses bss, data, ro etc.
-
-commit 0bd476e6c671 ("kallsyms: unexport kallsyms_lookup_name()
- and kallsyms_on_each_symbol()") unexports kallsyms_lookup_name
-due to lack of in-tree user of the symbol. Now, that minidump
-will one of its user, export it.
+Add qcom_minidump_smem module in a preparation to remove smem
+based minidump specific code from driver/remoteproc/qcom_common.c
+and provide needed exported API, this abstract minidump specific
+data layout from qualcomm's remoteproc driver.
 
 Signed-off-by: Mukesh Ojha <quic_mojha@quicinc.com>
 ---
- kernel/kallsyms.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/soc/qcom/Kconfig              |   8 ++
+ drivers/soc/qcom/qcom_minidump_smem.c | 147 ++++++++++++++++++++++++++++++++++
+ include/soc/qcom/qcom_minidump.h      |  24 ++++++
+ 3 files changed, 179 insertions(+)
+ create mode 100644 drivers/soc/qcom/qcom_minidump_smem.c
+ create mode 100644 include/soc/qcom/qcom_minidump.h
 
-diff --git a/kernel/kallsyms.c b/kernel/kallsyms.c
-index 77747391f49b..34a074f58736 100644
---- a/kernel/kallsyms.c
-+++ b/kernel/kallsyms.c
-@@ -283,7 +283,7 @@ unsigned long kallsyms_lookup_name(const char *name)
+diff --git a/drivers/soc/qcom/Kconfig b/drivers/soc/qcom/Kconfig
+index a491718f8064..982310b5a1cb 100644
+--- a/drivers/soc/qcom/Kconfig
++++ b/drivers/soc/qcom/Kconfig
+@@ -279,4 +279,12 @@ config QCOM_INLINE_CRYPTO_ENGINE
+ 	tristate
+ 	select QCOM_SCM
  
- 	return module_kallsyms_lookup_name(name);
- }
--
-+EXPORT_SYMBOL_GPL(kallsyms_lookup_name);
- /*
-  * Iterate over all symbols in vmlinux.  For symbols from modules use
-  * module_kallsyms_on_each_symbol instead.
++config QCOM_MINIDUMP_SMEM
++	tristate "QCOM Minidump SMEM (as backend) Support"
++	depends on ARCH_QCOM
++	depends on QCOM_SMEM
++	help
++	  Enablement of core minidump feature is controlled from boot firmware
++	  side, and this config allow linux to query minidump segments associated
++	  with the remote processor and check its validity.
+ endmenu
+diff --git a/drivers/soc/qcom/qcom_minidump_smem.c b/drivers/soc/qcom/qcom_minidump_smem.c
+new file mode 100644
+index 000000000000..b588833ea26e
+--- /dev/null
++++ b/drivers/soc/qcom/qcom_minidump_smem.c
+@@ -0,0 +1,147 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * Copyright (c) 2023 Qualcomm Innovation Center, Inc. All rights reserved.
++ */
++#include <linux/kernel.h>
++#include <linux/module.h>
++#include <linux/io.h>
++#include <linux/soc/qcom/smem.h>
++#include <soc/qcom/qcom_minidump.h>
++
++#define MAX_NUM_OF_SS           10
++#define MAX_REGION_NAME_LENGTH  16
++#define SBL_MINIDUMP_SMEM_ID	602
++#define MINIDUMP_REGION_VALID	('V' << 24 | 'A' << 16 | 'L' << 8 | 'I' << 0)
++#define MINIDUMP_SS_ENCR_DONE	('D' << 24 | 'O' << 16 | 'N' << 8 | 'E' << 0)
++#define MINIDUMP_SS_ENABLED	('E' << 24 | 'N' << 16 | 'B' << 8 | 'L' << 0)
++
++/**
++ * struct minidump_region - Minidump region
++ * @name		: Name of the region to be dumped
++ * @seq_num:		: Use to differentiate regions with same name.
++ * @valid		: This entry to be dumped (if set to 1)
++ * @address		: Physical address of region to be dumped
++ * @size		: Size of the region
++ */
++struct minidump_region {
++	char	name[MAX_REGION_NAME_LENGTH];
++	__le32	seq_num;
++	__le32	valid;
++	__le64	address;
++	__le64	size;
++};
++
++/**
++ * struct minidump_subsystem - Subsystem's SMEM Table of content
++ * @status : Subsystem toc init status
++ * @enabled : if set to 1, this region would be copied during coredump
++ * @encryption_status: Encryption status for this subsystem
++ * @encryption_required : Decides to encrypt the subsystem regions or not
++ * @region_count : Number of regions added in this subsystem toc
++ * @regions_baseptr : regions base pointer of the subsystem
++ */
++struct minidump_subsystem {
++	__le32	status;
++	__le32	enabled;
++	__le32	encryption_status;
++	__le32	encryption_required;
++	__le32	region_count;
++	__le64	regions_baseptr;
++};
++
++/**
++ * struct minidump_global_toc - Global Table of Content
++ * @status : Global Minidump init status
++ * @md_revision : Minidump revision
++ * @enabled : Minidump enable status
++ * @subsystems : Array of subsystems toc
++ */
++struct minidump_global_toc {
++	__le32				status;
++	__le32				md_revision;
++	__le32				enabled;
++	struct minidump_subsystem	subsystems[MAX_NUM_OF_SS];
++};
++
++/**
++ * qcom_ss_md_mapped_base() - For getting subsystem iomapped base segment address
++ * for given minidump index.
++ *
++ * @minidump_id: Subsystem minidump index.
++ * @seg_cnt:	 Segment count for a given minidump index
++ *
++ * Return: On success, it returns iomapped base segment address, otherwise NULL on error.
++ */
++void *qcom_ss_md_mapped_base(unsigned int minidump_id, int *seg_cnt)
++{
++	struct minidump_global_toc *toc;
++	struct minidump_subsystem *subsystem;
++
++	/*
++	 * Get global minidump ToC and check if global table
++	 * pointer exists and init is set.
++	 */
++	toc = qcom_smem_get(QCOM_SMEM_HOST_ANY, SBL_MINIDUMP_SMEM_ID, NULL);
++	if (IS_ERR(toc) || !toc->status)
++		return NULL;
++
++	/* Get subsystem table of contents using the minidump id */
++	subsystem = &toc->subsystems[minidump_id];
++
++	/**
++	 * Collect minidump if SS ToC is valid and segment table
++	 * is initialized in memory and encryption status is set.
++	 */
++	if (subsystem->regions_baseptr == 0 ||
++	    le32_to_cpu(subsystem->status) != 1 ||
++	    le32_to_cpu(subsystem->enabled) != MINIDUMP_SS_ENABLED ||
++	    le32_to_cpu(subsystem->encryption_status) != MINIDUMP_SS_ENCR_DONE)
++		return NULL;
++
++	*seg_cnt = le32_to_cpu(subsystem->region_count);
++
++	return ioremap((unsigned long)le64_to_cpu(subsystem->regions_baseptr),
++			*seg_cnt * sizeof(struct minidump_region));
++}
++EXPORT_SYMBOL_GPL(qcom_ss_md_mapped_base);
++
++/**
++ * qcom_ss_valid_segment_info() - Checks segment sanity and gets it's details
++ *
++ * @ptr:  Segment IO-mapped base address.
++ * @i:	  Segment index.
++ * @name: Segment name.
++ * @da:	  Segment physical address.
++ * @size: Segment size.
++ *
++ * Return: It returns 0 on success and 1 if the segment is invalid and negative
++ *	   value on error.
++ */
++int qcom_ss_valid_segment_info(void *ptr, int i, char **name, dma_addr_t *da, size_t *size)
++{
++	struct minidump_region __iomem *tmp;
++	struct minidump_region region;
++
++	if (!ptr)
++		return -EINVAL;
++
++	tmp = ptr;
++	memcpy_fromio(&region, tmp + i, sizeof(region));
++
++	/* If it is not valid region, skip it */
++	if (le32_to_cpu(region.valid) != MINIDUMP_REGION_VALID)
++		return 1;
++
++	*name = kstrndup(region.name, MAX_REGION_NAME_LENGTH - 1, GFP_KERNEL);
++	if (!*name)
++		return -ENOMEM;
++
++	*da = le64_to_cpu(region.address);
++	*size = le64_to_cpu(region.size);
++
++	return 0;
++}
++EXPORT_SYMBOL_GPL(qcom_ss_valid_segment_info);
++
++MODULE_DESCRIPTION("Qualcomm Minidump SMEM as backend driver");
++MODULE_LICENSE("GPL");
+diff --git a/include/soc/qcom/qcom_minidump.h b/include/soc/qcom/qcom_minidump.h
+new file mode 100644
+index 000000000000..d7747c27fd45
+--- /dev/null
++++ b/include/soc/qcom/qcom_minidump.h
+@@ -0,0 +1,24 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++/*
++ * Copyright (c) 2023 Qualcomm Innovation Center, Inc. All rights reserved.
++ */
++
++#ifndef _QCOM_MINIDUMP_H_
++#define _QCOM_MINIDUMP_H_
++
++#if IS_ENABLED(CONFIG_QCOM_MINIDUMP_SMEM)
++void *qcom_ss_md_mapped_base(unsigned int minidump_id, int *seg_cnt);
++int qcom_ss_valid_segment_info(void *ptr, int i, char **name,
++			       dma_addr_t *da, size_t *size);
++#else
++static inline void *qcom_ss_md_mapped_base(unsigned int minidump_id, int *seg_cnt)
++{
++	return NULL;
++}
++static inline int qcom_ss_valid_segment_info(void *ptr, int i, char **name,
++					     dma_addr_t *da, size_t *size)
++{
++	return -EINVAL;
++}
++#endif /* CONFIG_QCOM_MINIDUMP_SMEM */
++#endif /* _QCOM_MINIDUMP_H_ */
 -- 
 2.7.4
 
