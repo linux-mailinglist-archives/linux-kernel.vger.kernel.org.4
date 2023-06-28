@@ -2,146 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DBB47413F2
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 16:40:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 005C07413FB
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 16:43:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231582AbjF1Okk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 10:40:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55276 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231583AbjF1Okd (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 10:40:33 -0400
-Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 632612103
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 07:40:31 -0700 (PDT)
-Received: by mail-io1-xd30.google.com with SMTP id ca18e2360f4ac-785d3a53ed6so12866339f.1
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 07:40:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20221208.gappssmtp.com; s=20221208; t=1687963230; x=1690555230;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=gw+1SzCqOzLBAsCHPofcZWnW/1XnEKR52ONcAb/VwIU=;
-        b=nMvogRKjodPYqMEKzS1+45qiQ1ts6quMm+6EBnJOqhU0hfN8kaUd8jx/fMWbr+GZ52
-         nbR2svkXJ8qCfmRdRfaWCGF+x6DZmh7IFMkcC/xwNTZMov8F0qz0dFJ28i8B076zXjm7
-         JkCBYXsfYhytvZ51G1ch0A84X1/Dw56tQB50WUdQqlZOp42caRwZje9sNVjdDJczbCTb
-         iKHLJzdfg+mrshlTq3DoTtEF1fSOwFGZ/gcD5XWxCUWZpxRKXgMlKfdBW4AUzg79TYqo
-         rs2Wl0BsyQDOQmwp6PkcE+/6ldYlAG6NIG0bA523SM+Hfoo8CIZWfz5iMFOxArBiJPvk
-         7NTw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687963230; x=1690555230;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=gw+1SzCqOzLBAsCHPofcZWnW/1XnEKR52ONcAb/VwIU=;
-        b=V9dPCkuDOkz8z2xwO7ALtS8jUW0dcxDgm6gm+0krUSpLPqZhnR1/96DvNYHPVpePkt
-         B/VjdcT9XAdBUzqcKJWfu/JmApZGWtPi2TSEx9Z8CcZbx2T56qHn7jGQIPnw9M+j8BcD
-         GWdMCqD1hy9nezGTbd8b3n+YCfK0107Z/u0iWwHXtOpLIvscdHxExX+F/TIRxBPyk7g7
-         A7yQWSQbtDoRMLKS3TBU6fXL41cW/9wLxvO0Sou/1ohKIq11m4sGl1Z8zTKgCMT1qCsr
-         pvdzzisfRd3lBpWst1RafL9j7mh67rINd7xal1uhyVmqOsGOfGz9yBkNPwEudybDhaG/
-         H31g==
-X-Gm-Message-State: AC+VfDwZCrCMibRir6kemUGszsBSSP5KADeeqjtENS6NA9KFCJQ+uNbN
-        ynzGpoEbO3OoxdlZzclzaGR4Mg==
-X-Google-Smtp-Source: ACHHUZ4+2SAm8EoLrcc2AtB8NSlinSM93X0+AZ5q0LtuDQS3X5xb6WUFpx//qOrq7G76Q1FXgqMeoQ==
-X-Received: by 2002:a6b:1495:0:b0:780:d65c:d78f with SMTP id 143-20020a6b1495000000b00780d65cd78fmr16017374iou.2.1687963230425;
-        Wed, 28 Jun 2023 07:40:30 -0700 (PDT)
-Received: from [192.168.1.94] ([96.43.243.2])
-        by smtp.gmail.com with ESMTPSA id ed21-20020a056638291500b0042af158d05fsm436706jab.114.2023.06.28.07.40.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 28 Jun 2023 07:40:29 -0700 (PDT)
-Message-ID: <3337524d-347c-900a-a1c7-5774cd731af0@kernel.dk>
-Date:   Wed, 28 Jun 2023 08:40:27 -0600
+        id S231555AbjF1OnB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 10:43:01 -0400
+Received: from mga06b.intel.com ([134.134.136.31]:40100 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230265AbjF1Om7 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 28 Jun 2023 10:42:59 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1687963379; x=1719499379;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=peKAr0s1Kurrh+o6kbrz5QnnAIgvQneW3GDRLAasnhQ=;
+  b=KU+kT9kLodqd6Q4kTAzWRZNtPggESLjS5siXXAY8VHKJJmFuNH3/jFXY
+   X7Z2IAkdQigX/NfYPapreqkw3/giBjT58nhofX/1cb4EglpCeFxShFh1F
+   fquAiJkbvtqELjJrfpCcnMValiM4Uri69wmCnupJmYscjeK8otgtut3vJ
+   TG0UjJ/9MEQ/o56mpGxlt9Ay1sCjA9FpIsxBudAsk6SnlctGA0A+g7IWG
+   92VgmGwRGl/CmeH03kXStsad9QNQYb07Ve9es8SsUTOZ/SbzTGwDskb7N
+   vXlO9Zbh2qSY3WjlAlBaJtyRSSUHSkzOB50I/F6XHbcouk1D3luMR5UPE
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10755"; a="425533944"
+X-IronPort-AV: E=Sophos;i="6.01,165,1684825200"; 
+   d="scan'208";a="425533944"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2023 07:42:58 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10755"; a="891069714"
+X-IronPort-AV: E=Sophos;i="6.01,165,1684825200"; 
+   d="scan'208";a="891069714"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga005.jf.intel.com with ESMTP; 28 Jun 2023 07:42:55 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@intel.com>)
+        id 1qEWNi-000coK-0e;
+        Wed, 28 Jun 2023 17:42:54 +0300
+Date:   Wed, 28 Jun 2023 17:42:53 +0300
+From:   Andy Shevchenko <andriy.shevchenko@intel.com>
+To:     Amadeusz =?utf-8?B?U8WCYXdpxYRza2k=?= 
+        <amadeuszx.slawinski@linux.intel.com>
+Cc:     Bjorn Helgaas <bhelgaas@google.com>,
+        Mark Brown <broonie@kernel.org>, Takashi Iwai <tiwai@suse.com>,
+        alsa-devel@alsa-project.org, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Cezary Rojewski <cezary.rojewski@intel.com>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Kai Vehmanen <kai.vehmanen@linux.intel.com>
+Subject: Re: [RFC PATCH 4/8] ALSA: hda/i915: Update PCI IDs
+Message-ID: <ZJxG7YRroqi6kiyz@smile.fi.intel.com>
+References: <20230628205135.517241-1-amadeuszx.slawinski@linux.intel.com>
+ <20230628205135.517241-5-amadeuszx.slawinski@linux.intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [GIT PULL] bcachefs
-Content-Language: en-US
-To:     Dave Chinner <david@fromorbit.com>,
-        Kent Overstreet <kent.overstreet@linux.dev>
-Cc:     torvalds@linux-foundation.org, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-bcachefs@vger.kernel.org,
-        Christoph Hellwig <hch@lst.de>
-References: <20230626214656.hcp4puionmtoloat@moria.home.lan>
- <aeb2690c-4f0a-003d-ba8b-fe06cd4142d1@kernel.dk>
- <20230627000635.43azxbkd2uf3tu6b@moria.home.lan>
- <91e9064b-84e3-1712-0395-b017c7c4a964@kernel.dk>
- <20230627020525.2vqnt2pxhtgiddyv@moria.home.lan>
- <b92ea170-d531-00f3-ca7a-613c05dcbf5f@kernel.dk>
- <23922545-917a-06bd-ec92-ff6aa66118e2@kernel.dk>
- <20230627201524.ool73bps2lre2tsz@moria.home.lan>
- <ZJtdEgbt+Wa8UHij@dread.disaster.area>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <ZJtdEgbt+Wa8UHij@dread.disaster.area>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-        lindbergh.monkeyblade.net
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230628205135.517241-5-amadeuszx.slawinski@linux.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/27/23 4:05?PM, Dave Chinner wrote:
-> On Tue, Jun 27, 2023 at 04:15:24PM -0400, Kent Overstreet wrote:
->> On Tue, Jun 27, 2023 at 11:16:01AM -0600, Jens Axboe wrote:
->>> On 6/26/23 8:59?PM, Jens Axboe wrote:
->>>> On 6/26/23 8:05?PM, Kent Overstreet wrote:
->>>>> On Mon, Jun 26, 2023 at 07:13:54PM -0600, Jens Axboe wrote:
->>>>>> Doesn't reproduce for me with XFS. The above ktest doesn't work for me
->>>>>> either:
->>>>>
->>>>> It just popped for me on xfs, but it took half an hour or so of looping
->>>>> vs. 30 seconds on bcachefs.
->>>>
->>>> OK, I'll try and leave it running overnight and see if I can get it to
->>>> trigger.
->>>
->>> I did manage to reproduce it, and also managed to get bcachefs to run
->>> the test. But I had to add:
->>>
->>> diff --git a/check b/check
->>> index 5f9f1a6bec88..6d74bd4933bd 100755
->>> --- a/check
->>> +++ b/check
->>> @@ -283,7 +283,7 @@ while [ $# -gt 0 ]; do
->>>  	case "$1" in
->>>  	-\? | -h | --help) usage ;;
->>>  
->>> -	-nfs|-afs|-glusterfs|-cifs|-9p|-fuse|-virtiofs|-pvfs2|-tmpfs|-ubifs)
->>> +	-nfs|-afs|-glusterfs|-cifs|-9p|-fuse|-virtiofs|-pvfs2|-tmpfs|-ubifs|-bcachefs)
->>>  		FSTYP="${1:1}"
->>>  		;;
->>>  	-overlay)
->>
->> I wonder if this is due to an upstream fstests change I haven't seen
->> yet, I'll have a look.
-> 
-> Run mkfs.bcachefs on the testdir first. fstests tries to probe the
-> filesystem type to test if $FSTYP is not set. If it doesn't find a
-> filesystem or it is unsupported, it will use the default (i.e. XFS).
+On Wed, Jun 28, 2023 at 10:51:31PM +0200, Amadeusz Sławiński wrote:
+> Use PCI device IDs from pci_ids.h header
 
-I did format both test and scratch first with bcachefs, so guessing
-something is going wrong with figuring out what filesystem is on the
-device and then it defaults to XFS. I didn't spend too much time on that
-bit, figured it was easier to just force bcachefs for my purpose.
+Missing period at the end.
 
-> There should be no reason to need to specify the filesystem type for
-> filesystems that blkid recognises. from common/config:
-> 
->         # Autodetect fs type based on what's on $TEST_DEV unless it's been set
->         # externally
->         if [ -z "$FSTYP" ] && [ ! -z "$TEST_DEV" ]; then
->                 FSTYP=`blkid -c /dev/null -s TYPE -o value $TEST_DEV`
->         fi
->         FSTYP=${FSTYP:=xfs}
->         export FSTYP
+...
 
-Gotcha, yep it's because blkid fails to figure it out.
+> -#define IS_HSW_CONTROLLER(pci) (((pci)->device == 0x0a0c) || \
+> -				((pci)->device == 0x0c0c) || \
+> -				((pci)->device == 0x0d0c) || \
+> -				((pci)->device == 0x160c))
+> +#define IS_HSW_CONTROLLER(pci) (((pci)->device == PCI_DEVICE_ID_INTEL_HDA_HSW_0) || \
+> +				((pci)->device == PCI_DEVICE_ID_INTEL_HDA_HSW_2) || \
+> +				((pci)->device == PCI_DEVICE_ID_INTEL_HDA_HSW_3) || \
+> +				((pci)->device == PCI_DEVICE_ID_INTEL_HDA_BDW))
+
+The very same macro under different name appeared in the previous patch.
+Am I correct? Perhaps go further and first move it somewhere to be available
+for both?
 
 -- 
-Jens Axboe
+With Best Regards,
+Andy Shevchenko
+
 
