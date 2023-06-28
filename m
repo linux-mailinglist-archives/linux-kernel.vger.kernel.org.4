@@ -2,83 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 273597419E5
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 22:52:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 15F1E7419E8
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 22:52:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231338AbjF1Uva (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 16:51:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44666 "EHLO
+        id S231626AbjF1UwB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 16:52:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231317AbjF1UvW (ORCPT
+        with ESMTP id S231609AbjF1Uv5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 16:51:22 -0400
-Received: from mail-ot1-x331.google.com (mail-ot1-x331.google.com [IPv6:2607:f8b0:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EED351FEF
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 13:51:20 -0700 (PDT)
-Received: by mail-ot1-x331.google.com with SMTP id 46e09a7af769-6b5f362f4beso90314a34.2
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 13:51:20 -0700 (PDT)
+        Wed, 28 Jun 2023 16:51:57 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0DDE194;
+        Wed, 28 Jun 2023 13:51:56 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id a640c23a62f3a-98377c5d53eso29990766b.0;
+        Wed, 28 Jun 2023 13:51:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1687985480; x=1690577480;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=yP0bXSs2vVbWc7nKFI6QoxCUJ3C1YWOqkj+wTitBDqc=;
-        b=Lo2CcrCL9oe8kvhQVqlQS5R+0S7iqR0SsmjOLDWpnDgGi9bm8RKsBzZrOb43c7DA7O
-         nxbYkYcJgcZEPxP7sn7Crs5BiYti1hQz+prQ7O/08hw7IXMXrHQ2Hua7jebKEe0fN9Hf
-         AtkKlUbxX7bSFjCkyoiVHnmD7EDgVc5dYL0O4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687985480; x=1690577480;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=googlemail.com; s=20221208; t=1687985515; x=1690577515;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=yP0bXSs2vVbWc7nKFI6QoxCUJ3C1YWOqkj+wTitBDqc=;
-        b=id2PfBSI2WIsMA/euYWK0ibezXC0QXiTPgRt58Gs4vpes4dexM/Zg1FjKb06TDQO76
-         WG+ulkc5UUVOLHgi6ir9HoJJkQj3T60FymEC+oYmtq2ruz6QU1XXfw5aJQ0QO+/edCg0
-         I2KBYChzJsykU2YeW4HN2DV8I4cRjWbGjTsn/QXtad1E5JLmupxx0FphwLJ4g39GRlje
-         P1f+iOMb5LTphTmd+iWP5Gswe7fI3zYPW8fd56ZQvIuomilpd0GQgIrj3kyi/sinzMXd
-         qBb3G1DZPktDp7Ggo4hERobnr4vAPJxeUzcUfJ0yW6MZy7diC4H6afDcOpUBBqHndx2n
-         FGBg==
-X-Gm-Message-State: AC+VfDyc8wcQXjhBWJdwFZ23MIcsB1lVIIM+ma7CwTzHuLECzt81zn5Y
-        7PERg/ioOHbSHzoM1HR6T9shHw==
-X-Google-Smtp-Source: ACHHUZ6jhyLKKeHPuPtSXt8ApEyv98ChgMOnNAtkcK9QOfalGkyJAcNmZpDpNOlEntpRLln4pnhyLA==
-X-Received: by 2002:a05:6830:613:b0:6b8:19d8:6925 with SMTP id w19-20020a056830061300b006b819d86925mr7542358oti.12.1687985480265;
-        Wed, 28 Jun 2023 13:51:20 -0700 (PDT)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id 21-20020a17090a019500b00256b67208b1sm10669705pjc.56.2023.06.28.13.51.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Jun 2023 13:51:19 -0700 (PDT)
-Date:   Wed, 28 Jun 2023 13:51:19 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
-Cc:     aacraid@microsemi.com, "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org
-Subject: Re: [PATCH 06/10][next] scsi: aacraid: Use struct_size() helper in
- code related to struct sgmapraw
-Message-ID: <202306281351.6572899FE@keescook>
-References: <cover.1687974498.git.gustavoars@kernel.org>
- <be2e5ecf1c4410ab419e2290341fbc8a0e2ba963.1687974498.git.gustavoars@kernel.org>
+        bh=H09su0JFKNP1Fr2cMqvDj35F61R1G5GRKDatbkayncI=;
+        b=HhKl0a8N+ZKyZOg/yyWu2wih6yNx8S4yuWQkB7m/pi8Ms3UVGXqwsDDq/4qptTm4XC
+         0Gt3AhtG2RA86n76l7v7J+F2Mzif/vKYYlQS6xNQl2VX2Uyq8JK1MtzB97bXsy7nRH0/
+         4WVbQ4GN90ugYr/aWRQEyaugh/RBNdkGj5dvj/zrDTr5La8pf1mWzUyH5MbvcrNXMjGY
+         xPbk019pAtqGRKJ0H7SGKlPeXDYyt58gVsXvmNqMRyK1OP6DeUULsKKb/9A/a5nb8ovK
+         +ANHBtNdS4FRxFomULwxZKkHyeNXhE/S+SvQAcISQs036hJGYhQwy5d7zz2wGWKWDswx
+         Dk0w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687985515; x=1690577515;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=H09su0JFKNP1Fr2cMqvDj35F61R1G5GRKDatbkayncI=;
+        b=FWjJLpd/Sj0apHjCY1KEr92uH4HaAtcIIW7Ifi/Oz8RGNw4ihe7vENobxnBRlDwsW8
+         u7RHtQjGw4y8XcPWAIu9v1+rI2VXLC/t5TYO5NZZfUJ79CMwVvd9zRECDxl5PU3CLSDt
+         pdM8kSEy57PnL1hN0MU8rSsTZM23UZZJqgSrVddpSoZBPlpRTcEnubO4zd5VJqzCeK0L
+         bQw0kE0kjh2pNFaHajZlthKrcrL/VhbeSm8b+pTd4pDIF77GLedMoXXUu5EeZ5MLUp6o
+         oS3nxG3J/I0rGZRUAd4Sqx19QQbJ3M7MQnmX3pJbaJ9zwtvOnSOaLb9gN9zYFXcX7kv8
+         85DQ==
+X-Gm-Message-State: AC+VfDzapoZAp1sai3g9dqcJQpQwNEy2dlia2GR6BWOzwgKoI+2ZaXuh
+        vDeraoc7ICjcDJqpdZq2P5y8vNGJGYZM3SEI0OxnFPfo
+X-Google-Smtp-Source: ACHHUZ6ZHBQJxCh+FwiIqR9kqXjpG7Tcm/91+2ol36od0qJFABIuiBJMSCabSpWrShyknE0rzh7IBfR2eiQrWsFTbLE=
+X-Received: by 2002:a17:906:d542:b0:977:95f4:5cca with SMTP id
+ cr2-20020a170906d54200b0097795f45ccamr29993727ejc.54.1687985514876; Wed, 28
+ Jun 2023 13:51:54 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <be2e5ecf1c4410ab419e2290341fbc8a0e2ba963.1687974498.git.gustavoars@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230607201641.20982-1-ddrokosov@sberdevices.ru>
+ <20230607201641.20982-2-ddrokosov@sberdevices.ru> <CAFBinCAO14zcgY66UyJO9UxuCWf1N-Lsx=iYNTJL=cwXoJv__Q@mail.gmail.com>
+ <20230628141839.ea7qzotr5un6f2ij@CAB-WSD-L081021>
+In-Reply-To: <20230628141839.ea7qzotr5un6f2ij@CAB-WSD-L081021>
+From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Date:   Wed, 28 Jun 2023 22:51:43 +0200
+Message-ID: <CAFBinCBzmYQu-+1A8MxZ+r551Jeym29fg9ErZJkftTEdL2b=-A@mail.gmail.com>
+Subject: Re: [PATCH v1 1/6] arm64: dts: meson: a1: introduce PLL and
+ Peripherals clk controllers
+To:     Dmitry Rokosov <ddrokosov@sberdevices.ru>
+Cc:     neil.armstrong@linaro.org, jbrunet@baylibre.com,
+        mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, khilman@baylibre.com,
+        conor+dt@kernel.org, kernel@sberdevices.ru,
+        sdfw_system_team@sberdevices.ru, rockosov@gmail.com,
+        linux-amlogic@lists.infradead.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 28, 2023 at 11:56:31AM -0600, Gustavo A. R. Silva wrote:
-> Prefer struct_size() over open-coded versions.
-> 
-> Link: https://github.com/KSPP/linux/issues/160
-> Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
-
-Reviewed-by: Kees Cook <keescook@chromium.org>
-
--- 
-Kees Cook
+On Wed, Jun 28, 2023 at 4:18=E2=80=AFPM Dmitry Rokosov <ddrokosov@sberdevic=
+es.ru> wrote:
+[...]
+> >
+> > >                         gpio_intc: interrupt-controller@0440 {
+> > note to self: at some point we'll have to re-order &gpio_intc, but
+> > that's out of scope for this patch
+>
+> I have noticed that the 'meson-a1.dtsi' file contains unsorted items. As
+> part of the current patch series, I can re-order them to improve the dt
+> structure.
+That would be awesome!
