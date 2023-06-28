@@ -2,116 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8794F741230
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 15:22:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9439474122B
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 15:20:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231810AbjF1NVM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 09:21:12 -0400
-Received: from szxga03-in.huawei.com ([45.249.212.189]:16306 "EHLO
-        szxga03-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231437AbjF1NVK (ORCPT
+        id S231720AbjF1NU4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 09:20:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45858 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231151AbjF1NUx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 09:21:10 -0400
-Received: from kwepemm600013.china.huawei.com (unknown [172.30.72.57])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4QrhxL56yWzLlkr;
-        Wed, 28 Jun 2023 21:19:02 +0800 (CST)
-Received: from huawei.com (10.175.104.67) by kwepemm600013.china.huawei.com
- (7.193.23.68) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Wed, 28 Jun
- 2023 21:21:07 +0800
-From:   Zhihao Cheng <chengzhihao1@huawei.com>
-To:     <tytso@mit.edu>, <adilger.kernel@dilger.ca>, <jack@suse.cz>
-CC:     <linux-ext4@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <chengzhihao1@huawei.com>, <yi.zhang@huawei.com>
-Subject: [PATCH] ext4: Fix unttached inode after power cut with orphan file feature enabled
-Date:   Wed, 28 Jun 2023 21:20:11 +0800
-Message-ID: <20230628132011.650383-1-chengzhihao1@huawei.com>
-X-Mailer: git-send-email 2.39.2
+        Wed, 28 Jun 2023 09:20:53 -0400
+Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27B291705
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 06:20:51 -0700 (PDT)
+Received: by mail-yb1-xb2e.google.com with SMTP id 3f1490d57ef6-c13280dfb09so4682289276.2
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 06:20:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=technolution.nl; s=google; t=1687958450; x=1690550450;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=rGA6jxqN8vTcDS3wt2muKgODh4eayNigHAkX1s+Utm4=;
+        b=DM28bS3zVl7LqD1wB6+f6W2ce5jfWKpWcC+hGhPHAWdzeVR7DtutGaZ9gVnwn/EiB6
+         Pz9mDD8KpmHY3yQbzFDienNENZxX4JMLFK9nRIixXu5trv/etNgTNNM4fTsBx+IOBTgK
+         sLShII9vBlLLI77k5XUCncIuUvNnQiQwFQy2w=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687958450; x=1690550450;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=rGA6jxqN8vTcDS3wt2muKgODh4eayNigHAkX1s+Utm4=;
+        b=NztCv8398IdXpJXOAxUSFPKZNwb+0YMyOtXYChJHebKjkYg+uAQyRGfUXBZkbXxxDR
+         Cz6jxJ2UPF5iSuWhbSitPdg4m5t4ry+LmhNWAhD+NkLGZkmCeO4dylxyvyQN2+JGXyrB
+         LhIwiee0P4LdMcuLCS1ibZOUVz/b0DKVA0+ixF2U31M5r4jedKsBCo/RzOQjmltEBgY9
+         O7KQnEFLMHGafZvlsTOl6FtMo0StHD1L6m95e5kKBPw0v76HBTkMDdui6IYAM2HGqmcp
+         NamjO37iauF/VAjXT98Y5S1aUoAvkTX4HFb+QuZqtM4i80sgXToYyxGBf9D5PygMpZfs
+         0Q1Q==
+X-Gm-Message-State: AC+VfDx8Zw7rBvQ5CxNDE469HjgCveiYk/SPUmrGbtZM8tVj3ril/dhn
+        tpEkUM/g+wRoAkAAmnDoxhQv7Hi8ANqp2SkmlCIwXT1leL2vssn+BLUzNDQV0gjFCTriod00uM/
+        EIqq9bLFxdNX3JnkzYWYp1/QMZ3fZLw2KZg==
+X-Google-Smtp-Source: ACHHUZ5vzh7jOCYjBp4RJ8IsPQl5raQ9wLO+ZE90Xiiggta+9PXzCzTN5UiOvpvxAJewg7KjMc+a5s0IC797yUYUJpo=
+X-Received: by 2002:a25:ef07:0:b0:c19:3d97:b924 with SMTP id
+ g7-20020a25ef07000000b00c193d97b924mr10615611ybd.32.1687958450389; Wed, 28
+ Jun 2023 06:20:50 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.104.67]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- kwepemm600013.china.huawei.com (7.193.23.68)
-X-CFilter-Loop: Reflected
+References: <20230628125406.237949-1-stefan.moring@technolution.nl> <CAOMZO5AftBB8B-Bb-j0TrTnKiQdGpBkq+jZ3surLSs6xPm_pUQ@mail.gmail.com>
+In-Reply-To: <CAOMZO5AftBB8B-Bb-j0TrTnKiQdGpBkq+jZ3surLSs6xPm_pUQ@mail.gmail.com>
+From:   Stefan Moring <stefan.moring@technolution.nl>
+Date:   Wed, 28 Jun 2023 15:20:39 +0200
+Message-ID: <CAB3BuKDcg=7Umxv4yUTDVsQ3X_ash6iFmz-3XaENfni2=R_LCw@mail.gmail.com>
+Subject: Re: [PATCH] spi: Increase imx51 ecspi burst length based on transfer length
+To:     Fabio Estevam <festevam@gmail.com>
+Cc:     broonie@kernel.org, shawnguo@kernel.org, s.hauer@pengutronix.de,
+        linux-imx@nxp.com, linux-spi@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-techno-validated: techno-validated
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+        lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Running generic/475(filesystem consistent tests after power cut) could
-easily trigger unattached inode error while doing fsck:
-  Unattached zero-length inode 39405.  Clear? no
+Hi Fabio,
 
-  Unattached inode 39405
-  Connect to /lost+found? no
+In our application we send ~80kB at 10MHz. The total transfer time
+went from ~80ms to 67ms, so that would be a reduction of 15%.
+I tested it on an IMX8MM platform.
 
-Above inconsistence is caused by following process:
-       P1                       P2
-ext4_create
- inode = ext4_new_inode_start_handle  // itable records nlink=1
- ext4_add_nondir
-   err = ext4_add_entry  // ENOSPC
-    ext4_append
-     ext4_bread
-      ext4_getblk
-       ext4_map_blocks // returns ENOSPC
-   drop_nlink(inode) // won't be updated into disk inode
-   ext4_orphan_add(handle, inode)
-    ext4_orphan_file_add
- ext4_journal_stop(handle)
-		      jbd2_journal_commit_transaction // commit success
-              >> power cut <<
-ext4_fill_super
- ext4_load_and_init_journal   // itable records nlink=1
- ext4_orphan_cleanup
-  ext4_process_orphan
-   if (inode->i_nlink)        // true, inode won't be deleted
+Kind regards,
 
-Then, allocated inode will be reserved on disk and corresponds to no
-dentries, so e2fsck reports 'unattached inode' problem.
+Stefan Moring
 
-The problem won't happen if orphan file feature is disabled, because
-ext4_orphan_add() will update disk inode in orphan list mode. There
-are several places not updating disk inode while putting inode into
-orphan area, such as ext4_add_nondir(), ext4_symlink() and whiteout
-in ext4_rename(). Fix it by updating inode into disk in all error
-branches of these places.
-
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=217605
-Fixes: 02f310fcf47f ("ext4: Speedup ext4 orphan inode handling")
-Signed-off-by: Zhihao Cheng <chengzhihao1@huawei.com>
----
- fs/ext4/namei.c | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/fs/ext4/namei.c b/fs/ext4/namei.c
-index 0caf6c730ce3..6bcc3770ee19 100644
---- a/fs/ext4/namei.c
-+++ b/fs/ext4/namei.c
-@@ -2799,6 +2799,7 @@ static int ext4_add_nondir(handle_t *handle,
- 		return err;
- 	}
- 	drop_nlink(inode);
-+	ext4_mark_inode_dirty(handle, inode);
- 	ext4_orphan_add(handle, inode);
- 	unlock_new_inode(inode);
- 	return err;
-@@ -3436,6 +3437,7 @@ static int ext4_symlink(struct mnt_idmap *idmap, struct inode *dir,
- 
- err_drop_inode:
- 	clear_nlink(inode);
-+	ext4_mark_inode_dirty(handle, inode);
- 	ext4_orphan_add(handle, inode);
- 	unlock_new_inode(inode);
- 	if (handle)
-@@ -4021,6 +4023,7 @@ static int ext4_rename(struct mnt_idmap *idmap, struct inode *old_dir,
- 			ext4_resetent(handle, &old,
- 				      old.inode->i_ino, old_file_type);
- 			drop_nlink(whiteout);
-+			ext4_mark_inode_dirty(handle, whiteout);
- 			ext4_orphan_add(handle, whiteout);
- 		}
- 		unlock_new_inode(whiteout);
--- 
-2.39.2
-
+Op wo 28 jun 2023 om 15:16 schreef Fabio Estevam <festevam@gmail.com>:
+>
+> Hi Stefan,
+>
+> On Wed, Jun 28, 2023 at 9:54=E2=80=AFAM Stefan Moring
+> <stefan.moring@technolution.nl> wrote:
+> >
+> > IMX51 supports 4096 bit burst lengths. Using the spi transfer length
+> > instead of bits_per_word increases performance significantly.
+>
+> Could you please share the performance increase after this change?
+>
+> Thanks
