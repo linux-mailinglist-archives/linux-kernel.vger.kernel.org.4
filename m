@@ -2,170 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4793741928
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 22:00:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DF5E74192D
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 22:01:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231708AbjF1UAN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 16:00:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59146 "EHLO
+        id S230496AbjF1UBM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 16:01:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230496AbjF1UAG (ORCPT
+        with ESMTP id S230448AbjF1UBI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 16:00:06 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 613B31FE7;
-        Wed, 28 Jun 2023 13:00:05 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CD54D61464;
-        Wed, 28 Jun 2023 20:00:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF7D6C433C8;
-        Wed, 28 Jun 2023 20:00:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687982404;
-        bh=B+RSyNVteRzKXRsWojAaoBAvx3nzmKOepDBCgrWk75Q=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Z3DAS+DhjSBSF9kLBE56DRoAnHxqMycCSGE90TM5K/zrbttcJ0PGjGYru+7zttFug
-         SiEsAu/eGbGk87tJa6MbuC+4T6HZPPX6H9LsZ3O+JhVTD8jEYeNYdS1/fsm3a1Kc/7
-         m4Ov1P0PCeIr7Ml2rVcX1J8bHYjjXYZ6KnwGejaruvL4cghEvDC0/W2KgSdq25y0mU
-         VwXE5W2suIGkTVwtlP9WYGagF9KxO/mqmfLMx8OpDoZAJY1X1wjz46lqpXWBKGWubM
-         2TWNJSmvbpFWbG4HoimhGCvT6CxwGWTRSqdLIT5NWqnnDlQDWGvmibpuh2Aw2nEpJF
-         gAqCqtEDvDT2A==
-Date:   Wed, 28 Jun 2023 13:00:02 -0700
-From:   Eduardo Valentin <evalenti@kernel.org>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Eduardo Valentin <evalenti@kernel.org>, eduval@amazon.com,
-        linux-pm@vger.kernel.org,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 5/7] thermal: stats: introduce tz time in trip
-Message-ID: <ZJyRQhLURUrIHP1z@uf8f119305bce5e.ant.amazon.com>
-References: <20230519032719.2581689-1-evalenti@kernel.org>
- <20230519032719.2581689-6-evalenti@kernel.org>
- <CAJZ5v0hho1B6TiwshT4kYhs+Z4Q6xvnbgf8aoEZop=owkJHqxg@mail.gmail.com>
- <ZJKAYAx5768atJa8@uf8f119305bce5e.ant.amazon.com>
- <CAJZ5v0jVL69QYpUFCMBeZ9eACca4XoeR6Js_qoDd2K5PfU9BwA@mail.gmail.com>
+        Wed, 28 Jun 2023 16:01:08 -0400
+Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 459221FEB
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 13:01:07 -0700 (PDT)
+Received: by mail-yb1-xb35.google.com with SMTP id 3f1490d57ef6-be3e2d172cbso114802276.3
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 13:01:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1687982466; x=1690574466;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=pH8fcOy6rMWZ3uve7XV8TBdo5xEMK41yysafMwoH2IE=;
+        b=qz9jHSQcQn2Eqv5Gcrj+63LutKi3Xyivczb45g2I/oid/NwcQYB2znuVTukvLXbnYh
+         dQ1yCw8Nl/3jRnxBEBKJkON41/9l/WA/O5Z4STYAaBQ/HI6MCloeJnqwq/FYEmtwOt9j
+         LqmsVf/132+dYgy+aDN8haLR3sHea+wzGg7ekrV4hr8JlpdLCIF9hvrbIuYX3l0xILNL
+         ZwCUwEFvkqy12tPJhIpKFmTabXkNF0FEZN/m1qeW6R1ieMsmBWuOOCHxEIvEqiWET/dL
+         WtAl1QYoLpy0eWsyqQIRbtUkAKjzJl/Qzr6uAb+o4Oft4N6JFgrNNltd3kSE5SCQZnvc
+         i6gA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687982466; x=1690574466;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=pH8fcOy6rMWZ3uve7XV8TBdo5xEMK41yysafMwoH2IE=;
+        b=E/StYszsqTJeaIJuZzZj91Y8Hc5Iht8peXqYrdJ3Ww7SFH+RJhrpD0T/JJThcUtvcs
+         27cun6xQmq41sO7c+cOpW10NxG1roJot2t2tQtaVkhQVREIhLYUbsvsxBAbluvHPSDer
+         A2wbvGvicoVtB6c3aFHbcrAu6/4mrDs1O7Zq/+7s6R+3Ei3dSMNS5OVXnqI7on/hu471
+         CRcGmAry1XCPYHI8U7U1Vla4uCWuKNZgDEHK1xj+2JV6MSQ+/IBSfHazqAlG5l/qI3DM
+         aVbtgsvt+3VukDhiab5JLgNtcsAQnCWs7rUqgdJrVQU+WQCBeMxzqvyNxYbrDpCK8LBO
+         OKKw==
+X-Gm-Message-State: AC+VfDw+/jxXmIXxy//gyV8tEuSNfTpEB4ZPtWAZSQQdXK5nWUxoIa8X
+        3K7OnfMgNL7a3U8N3gTxVKyK6BglvSu7xEehrgSVUA==
+X-Google-Smtp-Source: ACHHUZ6rTGYn4z21ozH/ZLqZuWscx/1Ssm6RMV9/o+OjoTbuk1Ka/cUauz/o8y4vIJHKAGz4vpE/C0fYCOszLgRZI54=
+X-Received: by 2002:a25:da96:0:b0:c1b:4078:b136 with SMTP id
+ n144-20020a25da96000000b00c1b4078b136mr11126494ybf.63.1687982466408; Wed, 28
+ Jun 2023 13:01:06 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAJZ5v0jVL69QYpUFCMBeZ9eACca4XoeR6Js_qoDd2K5PfU9BwA@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230628102621.15016-1-srinivas.kandagatla@linaro.org>
+ <20230628102621.15016-3-srinivas.kandagatla@linaro.org> <f71c8d2b-d5f4-42bb-932f-5b9ec6117ffc@sirena.org.uk>
+ <73dce263-bee6-554f-9eb6-af4aa7badab1@linaro.org> <c377aefe-2678-4ba7-96b3-2186e8f3f1b4@sirena.org.uk>
+ <fabef33c-a8c7-af61-80b4-91e55081c977@linaro.org> <c5bbdaa9-43fb-4ec3-af7d-b1629d2d88f7@sirena.org.uk>
+In-Reply-To: <c5bbdaa9-43fb-4ec3-af7d-b1629d2d88f7@sirena.org.uk>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Wed, 28 Jun 2023 23:00:54 +0300
+Message-ID: <CAA8EJprRH6aFj17A-sJzzHJXG7vNWu-yznSh7oA3WBXRv19wvw@mail.gmail.com>
+Subject: Re: [PATCH 2/3] ASoC: qcom: q6apm: add support for reading firmware
+ name from DT
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        krzysztof.kozlowski+dt@linaro.org, andersson@kernel.org,
+        robh+dt@kernel.org, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, johan+linaro@kernel.org,
+        perex@perex.cz, tiwai@suse.com, lgirdwood@gmail.com,
+        ckeepax@opensource.cirrus.com, kuninori.morimoto.gx@renesas.com,
+        linux-kernel@vger.kernel.org, pierre-louis.bossart@linux.intel.com,
+        alsa-devel@alsa-project.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 23, 2023 at 06:40:20PM +0200, Rafael J. Wysocki wrote:
-> 
-> 
-> 
-> On Wed, Jun 21, 2023 at 6:45 AM Eduardo Valentin <evalenti@kernel.org> wrote:
-> >
-> > On Tue, Jun 20, 2023 at 07:27:57PM +0200, Rafael J. Wysocki wrote:
-> > >
-> > >
-> > >
-> > > On Fri, May 19, 2023 at 5:27 AM Eduardo Valentin <evalenti@kernel.org> wrote:
-> > > >
-> > > > From: Eduardo Valentin <eduval@amazon.com>
-> > > >
-> > > > This patch adds a statistic to report how long
-> > > > the thermal zone spent on temperature intervals
-> > > > created by each trip point. The first interval
-> > > > is the range below the first trip point. All
-> > > > subsequent intervals are accounted when temperature
-> > > > is above the trip point temperature value.
-> > > >
-> > > > Samples:
-> > > > $ cat /sys//class/thermal/thermal_zone0/stats/time_in_trip_ms
-> > > > trip-1  0       0
-> > >
-> > > The above line is confusing.
-> > >
-> > > > trip0   -10000  35188
-> > > > trip1   25000   0
-> > >
-> > > And the format violates the "one value per attribute" sysfs rule.
-> > >
-> > > > $ cat /sys//class/thermal/thermal_zone0/stats/time_in_trip_ms
-> > > > trip-1  0       0
-> > > > trip0   -10000  36901
-> > > > trip1   25000   0
-> > > > $ echo 25001 > /sys//class/thermal/thermal_zone0/emul_temp
-> > > > $ cat /sys//class/thermal/thermal_zone0/stats/time_in_trip_ms
-> > > > trip-1  0       0
-> > > > trip0   -10000  47810
-> > > > trip1   25000   2259
-> > > > $ cat /sys//class/thermal/thermal_zone0/stats/time_in_trip_ms
-> > > > trip-1  0       0
-> > > > trip0   -10000  47810
-> > > > trip1   25000   3224
-> > > > $ echo 24001 > /sys//class/thermal/thermal_zone0/emul_temp
-> > > > $ cat /sys//class/thermal/thermal_zone0/stats/time_in_trip_ms
-> > > > trip-1  0       0
-> > > > trip0   -10000  48960
-> > > > trip1   25000   10080
-> > > > $ cat /sys//class/thermal/thermal_zone0/stats/time_in_trip_ms
-> > > > trip-1  0       0
-> > > > trip0   -10000  49844
-> > > > trip1   25000   10080
-> > > >
-> > > > Cc: "Rafael J. Wysocki" <rafael@kernel.org> (supporter:THERMAL)
-> > > > Cc: Daniel Lezcano <daniel.lezcano@linaro.org> (supporter:THERMAL)
-> > > > Cc: Amit Kucheria <amitk@kernel.org> (reviewer:THERMAL)
-> > > > Cc: Zhang Rui <rui.zhang@intel.com> (reviewer:THERMAL)
-> > > > Cc: Jonathan Corbet <corbet@lwn.net> (maintainer:DOCUMENTATION)
-> > > > Cc: linux-pm@vger.kernel.org (open list:THERMAL)
-> > > > Cc: linux-doc@vger.kernel.org (open list:DOCUMENTATION)
-> > > > Cc: linux-kernel@vger.kernel.org (open list)
-> > > >
-> > > > Signed-off-by: Eduardo Valentin <eduval@amazon.com>
-> > > > ---
-> > > >  .../driver-api/thermal/sysfs-api.rst          |  2 +
-> > > >  drivers/thermal/thermal_sysfs.c               | 86 +++++++++++++++++++
-> > > >  2 files changed, 88 insertions(+)
-> > > >
-> > > > diff --git a/Documentation/driver-api/thermal/sysfs-api.rst b/Documentation/driver-api/thermal/sysfs-api.rst
-> > > > index ed5e6ba4e0d7..4a2b92a7488c 100644
-> > > > --- a/Documentation/driver-api/thermal/sysfs-api.rst
-> > > > +++ b/Documentation/driver-api/thermal/sysfs-api.rst
-> > > > @@ -359,6 +359,8 @@ Thermal zone device sys I/F, created once it's registered::
-> > > >      |---stats/reset_tz_stats:  Writes to this file resets the statistics.
-> > > >      |---stats/max_gradient:    The maximum recorded dT/dt in uC/ms.
-> > > >      |---stats/min_gradient:    The minimum recorded dT/dt in uC/ms.
-> > > > +    |---stats/time_in_trip_ms: Time spent on each temperature interval of
-> > > > +                               trip points.
-> > >
-> > > I would write "in each temperature interval between consecutive trip points".
-> >
-> > Ok
-> >
-> > >
-> > > Doesn't this assume a specific temperature ordering of trip points?
-> > > And so what if they are not ordered?
-> >
-> > It does. I believe other things will break if they are not ordered.
-> 
-> But there's no guarantee that they will be ordered, so it looks like
-> those other things are already broken.
+On Wed, 28 Jun 2023 at 22:40, Mark Brown <broonie@kernel.org> wrote:
+>
+> On Wed, Jun 28, 2023 at 10:33:16PM +0300, Dmitry Baryshkov wrote:
+> > On 28/06/2023 21:10, Mark Brown wrote:
+>
+> > > If the goal here is to put all the firmwares for a given board in a
+> > > single place surely it would be better to factor this all out of the
+> > > individual drivers so that they ask some helper for a directory to use
+> > > for firmware?  Adding these device specific firmware node properties
+> > > doesn't seem to follow.
+>
+> > This quickly becomes overcomplicated. Some platforms use different firmware
+> > naming structure. Some firmware goes into a generic location and other files
+> > go into device-specific location. So having a generic helper doesn't really
+> > help.
+>
+> That sounds like a job for symlinks surely?
 
-Correct. (1) there is no guarantee, it works by construction, and (2) current
-code does assume ascending order, so yes, if they come unsorted, the core
-code will not properly work.
+Excuse me, but I don't understand the goal for such symlinks. In my
+opinion (and more importantly, in the opinion of qcom maintainers),
+firmware-name does the necessary job. It provides enough flexibility
+and doesn't require any additional dances around.
 
-Ensuring the order is likely beyond the original intention of this patch, but
-we do need to improve there, for sure.
+
 
 -- 
-All the best,
-Eduardo Valentin
+With best wishes
+Dmitry
