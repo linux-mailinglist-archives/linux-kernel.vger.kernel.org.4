@@ -2,123 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 289BD740DEF
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 12:03:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03520740DF5
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 12:03:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233371AbjF1JyK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 05:54:10 -0400
-Received: from mga17.intel.com ([192.55.52.151]:4320 "EHLO mga17.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231307AbjF1Jrc (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 05:47:32 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687945651; x=1719481651;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=0rxMvXN9/9rNCH+4gQCmn1WFc0BxwRhyzO2KvFRuxfY=;
-  b=KXxWEzyJgKuVEON0TQHUXf4B2wOh1kJMqU6ZZ3iZswZhjGNDx0I+AX/S
-   rb2Ke5uQ/IU8ESE0BP8Kq0JBxCWKPfU+OForK38y3b2SLf7l0Lx/d+qrb
-   kGWwCxVy9PqaXCPZBJ4cNw4ckQn5CzLSW7GJJw1gbHjr/cqAimOUSWExA
-   PBvkf1Z7hM6OhWBX/vl+VHksk8KhCR3RLmWareOg1t6XhQ+iE1e8sV0iJ
-   n6ftgslovuz/NPqQaW6V8E2Sm921i+azRx6sx+H+ossM7JaoqG/p3b14P
-   2g4G7vVcs9brClTpPShYvoVpYI1CZ3ReItCZi6BRf33gsKyBhsKiFf2Dc
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10754"; a="342137871"
-X-IronPort-AV: E=Sophos;i="6.01,165,1684825200"; 
-   d="scan'208";a="342137871"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2023 02:47:31 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10754"; a="667040646"
-X-IronPort-AV: E=Sophos;i="6.01,165,1684825200"; 
-   d="scan'208";a="667040646"
-Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 28 Jun 2023 02:47:27 -0700
-Received: from kbuild by 783282924a45 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1qERlm-000DAP-0p;
-        Wed, 28 Jun 2023 09:47:26 +0000
-Date:   Wed, 28 Jun 2023 17:46:57 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     =?iso-8859-1?Q?N=EDcolas_F=2E_R=2E_A=2E?= Prado 
-        <nfraprado@collabora.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Hans Verkuil <hverkuil@xs4all.nl>
-Cc:     oe-kbuild-all@lists.linux.dev, kernel@collabora.com,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        =?iso-8859-1?Q?N=EDcolas_F=2E_R=2E_A=2E?= Prado 
-        <nfraprado@collabora.com>,
-        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org,
-        Tiffany Lin <tiffany.lin@mediatek.com>,
-        Yunfei Dong <yunfei.dong@mediatek.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH v4 5/7] media: mediatek: vcodec: Read HW active status
- from syscon
-Message-ID: <202306281746.a2zk4ETu-lkp@intel.com>
-References: <20230627214615.1503901-6-nfraprado@collabora.com>
+        id S233627AbjF1Jyg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 05:54:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52486 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232355AbjF1JuY (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 28 Jun 2023 05:50:24 -0400
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC1942115
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 02:48:37 -0700 (PDT)
+Received: by mail-wm1-x335.google.com with SMTP id 5b1f17b1804b1-3fbb40ce844so1437535e9.0
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 02:48:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=isovalent.com; s=google; t=1687945716; x=1690537716;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=FP6EIORZPJxzFsIqvOxDq19SJKXWVqMsImue+SKUFg8=;
+        b=XsjxTyPkJ3bOYJQSpzHK71Ql/BG/qCVbF4SB/59ookNrppeeken42JlBoGr5NHXNIh
+         z5IbxM+mlAVvX+9Zundma7f7rcvVCCcbEuFkhhOuF371COKodPCbgnyvza8yDvStMuIs
+         cY2wVRlR0PGT0lTJF+lBmQbSBJDngLEdidJa888k6igCPGkx3KhX+byDoZneoELdMQTS
+         EF8B74wwJTrdqRVRX+v5KmlY0xBEfeYc72B1CHnJLEES+EmAIPTcnpm9I0R9hg94sBWZ
+         2i/kux9PGuhd/MDx93JduKCKm+pQIutwlEXMrmSwoALEysgTm/Zma6x57ASw6zwUbx6B
+         6Y9Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687945716; x=1690537716;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=FP6EIORZPJxzFsIqvOxDq19SJKXWVqMsImue+SKUFg8=;
+        b=OAmNHot9BMSEn4eCBYAUisTv6bMI631khb6tDXkLzvBXAwRVPt2dmL/7p404RkevJa
+         Ne/W4VO9thaEf4Lvd7fQHuIH5SQ+ukYDAjKR36a6wYekVEKm7ve/YDx5Vw7kRr5UpnNN
+         9gEkwvCn3OUjnD60dJtIKJEHw2uayxiPa2ORP4GMis+IwWOrMF1Pxhf/A+A9hMtm1spw
+         gR2N1kmsgR1yGaOoxHqeY9OiF5CuRHnfd/yGwVhY3LUSELUHC0bWiVTGdLGugCgpQadb
+         GL33GRlJ5/2DEzBial916MzU83jhrDTqBWoBczaFdGlHuGpr6SicRtvXtQ9xE/pgsrwn
+         7XeQ==
+X-Gm-Message-State: AC+VfDwtC1rLB1cGoj7ilzjj1MFb9g9ufJxF6kdXvyKGNUnPv0cV3cfO
+        JgBV7PuqtjcfTzxvMVCwb5x4dQ==
+X-Google-Smtp-Source: ACHHUZ7wPIusenCR7v9NN3XspUt/PsXwcRvhGF4plXfCXn9cqoUqOXtN00e6OOtxQAfdg+FxvGhXgQ==
+X-Received: by 2002:a7b:c017:0:b0:3f5:ffe3:46a7 with SMTP id c23-20020a7bc017000000b003f5ffe346a7mr24250845wmb.9.1687945716240;
+        Wed, 28 Jun 2023 02:48:36 -0700 (PDT)
+Received: from [192.168.1.193] (f.c.7.0.0.0.0.0.0.0.0.0.0.0.0.0.f.f.6.2.a.5.a.7.0.b.8.0.1.0.0.2.ip6.arpa. [2001:8b0:7a5a:26ff::7cf])
+        by smtp.gmail.com with ESMTPSA id k26-20020a7bc41a000000b003fbb1a9586esm1187613wmi.15.2023.06.28.02.48.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 28 Jun 2023 02:48:36 -0700 (PDT)
+From:   Lorenz Bauer <lmb@isovalent.com>
+Subject: [PATCH bpf-next v4 0/7] Add SO_REUSEPORT support for TC
+ bpf_sk_assign
+Date:   Wed, 28 Jun 2023 10:48:15 +0100
+Message-Id: <20230613-so-reuseport-v4-0-4ece76708bba@isovalent.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230627214615.1503901-6-nfraprado@collabora.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAN8BnGQC/32OQQ7CIBBFr9KwFkOhluDKexgXDE4tiUIDSGqa3
+ l3Kyhjj8ufNf38WEjFYjOTYLCRgttF6V0K3a4gZtbshtdeSCWdcsL4VNHoa8Blx8iFRVNwceN9
+ KgUhKBXRECkE7M26lz9sNTwEHO9e1M4FpoA7nRC6FjDYmH171jcwr/72YOWUUpOmVFl1ZFicbf
+ dZ3dGlv/KPKsvgnEEWgmITOAEhQ6luwrusbyAOISBYBAAA=
+To:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        David Ahern <dsahern@kernel.org>,
+        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Joe Stringer <joe@wand.net.nz>,
+        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
+        Kuniyuki Iwashima <kuniyu@amazon.com>
+Cc:     Hemanth Malla <hemanthmalla@gmail.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, Lorenz Bauer <lmb@isovalent.com>,
+        Joe Stringer <joe@cilium.io>
+X-Mailer: b4 0.12.2
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+        lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Nícolas,
+We want to replace iptables TPROXY with a BPF program at TC ingress.
+To make this work in all cases we need to assign a SO_REUSEPORT socket
+to an skb, which is currently prohibited. This series adds support for
+such sockets to bpf_sk_assing.
 
-kernel test robot noticed the following build errors:
+I did some refactoring to cut down on the amount of duplicate code. The
+key to this is to use INDIRECT_CALL in the reuseport helpers. To show
+that this approach is not just beneficial to TC sk_assign I removed
+duplicate code for bpf_sk_lookup as well.
 
-[auto build test ERROR on media-tree/master]
-[also build test ERROR on robh/for-next]
-[cannot apply to mbgg-mediatek/for-next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Joint work with Daniel Borkmann.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/N-colas-F-R-A-Prado/media-dt-bindings-mediatek-vcodec-Allow-single-clock-for-mt8183/20230628-054734
-base:   git://linuxtv.org/media_tree.git master
-patch link:    https://lore.kernel.org/r/20230627214615.1503901-6-nfraprado%40collabora.com
-patch subject: [PATCH v4 5/7] media: mediatek: vcodec: Read HW active status from syscon
-config: arm-allmodconfig (https://download.01.org/0day-ci/archive/20230628/202306281746.a2zk4ETu-lkp@intel.com/config)
-compiler: arm-linux-gnueabi-gcc (GCC) 12.3.0
-reproduce: (https://download.01.org/0day-ci/archive/20230628/202306281746.a2zk4ETu-lkp@intel.com/reproduce)
+Signed-off-by: Lorenz Bauer <lmb@isovalent.com>
+---
+Changes in v4:
+- WARN_ON_ONCE if reuseport socket is refcounted (Kuniyuki)
+- Use inet[6]_ehashfn_t to shorten function declarations (Kuniyuki)
+- Shuffle documentation patch around (Kuniyuki)
+- Update commit message to explain why IPv6 needs EXPORT_SYMBOL
+- Link to v3: https://lore.kernel.org/r/20230613-so-reuseport-v3-0-907b4cbb7b99@isovalent.com
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306281746.a2zk4ETu-lkp@intel.com/
+Changes in v3:
+- Fix warning re udp_ehashfn and udp6_ehashfn (Simon)
+- Return higher scoring connected UDP reuseport sockets (Kuniyuki)
+- Fix ipv6 module builds
+- Link to v2: https://lore.kernel.org/r/20230613-so-reuseport-v2-0-b7c69a342613@isovalent.com
 
-All errors (new ones prefixed by >>):
+Changes in v2:
+- Correct commit abbrev length (Kuniyuki)
+- Reduce duplication (Kuniyuki)
+- Add checks on sk_state (Martin)
+- Split exporting inet[6]_lookup_reuseport into separate patch (Eric)
 
-   drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_drv.c: In function 'mtk_vcodec_is_hw_active':
->> drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_drv.c:52:17: error: implicit declaration of function 'FIELD_GET' [-Werror=implicit-function-declaration]
-      52 |         return !FIELD_GET(VDEC_HW_ACTIVE_MASK, cg_status);
-         |                 ^~~~~~~~~
-   cc1: some warnings being treated as errors
+---
+Daniel Borkmann (1):
+      selftests/bpf: Test that SO_REUSEPORT can be used with sk_assign helper
 
+Lorenz Bauer (6):
+      udp: re-score reuseport groups when connected sockets are present
+      net: export inet_lookup_reuseport and inet6_lookup_reuseport
+      net: remove duplicate reuseport_lookup functions
+      net: document inet[6]_lookup_reuseport sk_state requirements
+      net: remove duplicate sk_lookup helpers
+      bpf, net: Support SO_REUSEPORT sockets with bpf_sk_assign
 
-vim +/FIELD_GET +52 drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_drv.c
+ include/net/inet6_hashtables.h                     |  81 ++++++++-
+ include/net/inet_hashtables.h                      |  74 +++++++-
+ include/net/sock.h                                 |   7 +-
+ include/uapi/linux/bpf.h                           |   3 -
+ net/core/filter.c                                  |   2 -
+ net/ipv4/inet_hashtables.c                         |  67 ++++---
+ net/ipv4/udp.c                                     |  88 ++++-----
+ net/ipv6/inet6_hashtables.c                        |  70 +++++---
+ net/ipv6/udp.c                                     |  98 ++++------
+ tools/include/uapi/linux/bpf.h                     |   3 -
+ tools/testing/selftests/bpf/network_helpers.c      |   3 +
+ .../selftests/bpf/prog_tests/assign_reuse.c        | 197 +++++++++++++++++++++
+ .../selftests/bpf/progs/test_assign_reuse.c        | 142 +++++++++++++++
+ 13 files changed, 656 insertions(+), 179 deletions(-)
+---
+base-commit: 970308a7b544fa1c7ee98a2721faba3765be8dd8
+change-id: 20230613-so-reuseport-e92c526173ee
 
-    42	
-    43	static bool mtk_vcodec_is_hw_active(struct mtk_vcodec_dev *dev)
-    44	{
-    45		u32 cg_status;
-    46	
-    47		if (dev->vdecsys_regmap)
-    48			return !regmap_test_bits(dev->vdecsys_regmap, VDEC_HW_ACTIVE_ADDR,
-    49						 VDEC_HW_ACTIVE_MASK);
-    50	
-    51		cg_status = readl(dev->reg_base[VDEC_SYS] + VDEC_HW_ACTIVE_ADDR);
-  > 52		return !FIELD_GET(VDEC_HW_ACTIVE_MASK, cg_status);
-    53	}
-    54	
-
+Best regards,
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Lorenz Bauer <lmb@isovalent.com>
+
