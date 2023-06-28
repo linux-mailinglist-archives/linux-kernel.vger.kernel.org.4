@@ -2,149 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F916741841
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 20:52:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 96B67741846
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 20:52:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232636AbjF1SvU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 14:51:20 -0400
-Received: from bg4.exmail.qq.com ([43.154.54.12]:56757 "EHLO bg4.exmail.qq.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231974AbjF1SvA (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 14:51:00 -0400
-X-QQ-mid: bizesmtp76t1687978248tvmfh55f
-Received: from linux-lab-host.localdomain ( [116.30.129.193])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Thu, 29 Jun 2023 02:50:47 +0800 (CST)
-X-QQ-SSF: 01200000000000D0W000000A0000000
-X-QQ-FEAT: kNiroXLcbYfrJCsBI1sa5E6qtqNyNUUSAPAKfE1it5MbxZO/BaVe/duwUGXKF
-        Sm9d/SAmlvYOT+pgc5igmBpIt9S2G4iKsnTlVXEvkaFaHcDNqBQzv2bSp41ULt8iIrDCCnw
-        tdsdjVq+IbEYYN7LM3/MDZ3DnO9T5rDy+lL/Yyim/NFIp/+GQWL01mQEGU0Q3mRYtZNu00W
-        BmFVKFq2OsmovkZ2/TLDlFljGX9E2juXwgQaKyXF/LfN8W1bXuZJYedEeHDWhOt5FMXxMwz
-        2SLVCGCFSefiq1H6yfNBBnHM0QEHRC068sGkE+J52h9ZMmARwFYG5Hn4/VSAttMSijYP9eS
-        YlV97yWdOyNmZvtepGpyk/g7CsQIA==
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 12319157307414105420
-From:   Zhangjin Wu <falcon@tinylab.org>
-To:     thomas@t-8ch.de, w@1wt.eu
-Cc:     falcon@tinylab.org, arnd@arndb.de, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org
-Subject: [PATCH v1 00/11] tools/nolibc: shrink arch support
-Date:   Thu, 29 Jun 2023 02:50:41 +0800
-Message-Id: <cover.1687976753.git.falcon@tinylab.org>
-X-Mailer: git-send-email 2.25.1
+        id S231573AbjF1SwC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 14:52:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52894 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232013AbjF1Sve (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 28 Jun 2023 14:51:34 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E75962694
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 11:51:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Cc:Content-ID:Content-Description;
+        bh=lI2tg1GnlinJyvRIAEmAI51EovH7MwFyKO06irrJ0rE=; b=arERCPNnSQbvk/W9vqqLIsVrwf
+        cqJSPEgNbHk7B+6gAS6Ez6WQPYuSzz+GmWsF5RkEgEqvSs3sLRbOPn0MQoUEMnT8ZZQgkRLDoXCyr
+        oeB3Snrb8DxiIpw4RAX/2SpjcPs2OZOCSXqBazZAa027ExGRNCi90M5sdtCeJuIap4Vg1vJ0SmmvV
+        hif46q7Ar2eLTXL++UtOv2a8lThm2eRu7zYKhDmrjG1pwtmJLbHa/L4d/rjXTEEPfH5sTffJCGP+i
+        dfgY5s8UtxQ4j+elXtGke9OX826DZ7O7mqLyWofla+yIGyIfhiwMkAaPsxItykW8IUZXl3bptJ1tG
+        qJ19Hcpw==;
+Received: from [2601:1c2:980:9ec0::2764]
+        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1qEaGK-00GRGs-3B;
+        Wed, 28 Jun 2023 18:51:33 +0000
+Message-ID: <fd34114d-d2e4-0d10-475c-61585753a639@infradead.org>
+Date:   Wed, 28 Jun 2023 11:51:32 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrsz:qybglogicsvrsz3a-3
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH v4] workqueue: add cmdline parameter
+ `workqueue.unbound_cpus` to further constrain wq_unbound_cpumask at boot time
+Content-Language: en-US
+To:     tj@kernel.org, frederic@kernel.org, jiangshanlai@gmail.com,
+        linux-kernel@vger.kernel.org, zyhtheonly@gmail.com,
+        zyhtheonly@yeah.net, zwp10758@gmail.com, fuyuanli@didiglobal.com
+References: <20230628111722.GA31661@didi-ThinkCentre-M930t-N000>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20230628111722.GA31661@didi-ThinkCentre-M930t-N000>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+        lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hi--
 
-This patchset further improves porting of nolibc to new architectures,
-it is based on our previous v5 sysret helper series [1].
+On 6/28/23 04:18, tiozhang wrote:
+> Motivation of doing this is to better improve boot times for devices when
+> we want to prevent our workqueue works from running on some specific CPUs,
+> e,g, some CPUs are busy with interrupts.
+> 
+> Signed-off-by: tiozhang <tiozhang@didiglobal.com>
+> ---
+>  .../admin-guide/kernel-parameters.txt         |  7 +++++++
+>  kernel/workqueue.c                            | 20 +++++++++++++++++++
+>  2 files changed, 27 insertions(+)
+> 
 
-It mainly shrinks the assembly _start by moving most of its operations
-to a C version of _start_c() function. and also, it removes the old
-sys_stat() support by using the sys_statx() instead and therefore,
-removes all of the arch specific sys_stat_struct.
+> diff --git a/kernel/workqueue.c b/kernel/workqueue.c
+> index 7cd5f5e7e0a1..29e8254edd63 100644
+> --- a/kernel/workqueue.c
+> +++ b/kernel/workqueue.c
 
-Tested 'run' on all of the supported architectures:
+> @@ -6129,3 +6135,17 @@ void __init workqueue_init(void)
+>   */
+>  void __warn_flushing_systemwide_wq(void) { }
+>  EXPORT_SYMBOL(__warn_flushing_systemwide_wq);
+> +
+> +static int __init workqueue_unbound_cpus_setup(char *str)
+> +{
+> +	int ret;
+> +
+> +	ret = cpulist_parse(str, &wq_cmdline_cpumask);
+> +	if (ret < 0) {
+> +		cpumask_clear(&wq_cmdline_cpumask);
+> +		pr_warn("workqueue.unbound_cpus: incorrect CPU range\n");
+> +	}
+> +
+> +	return ret;
+> +}
+> +__setup("workqueue.unbound_cpus=", workqueue_unbound_cpus_setup);
 
-               arch/board | result
-              ------------|------------
-          arm/vexpress-a9 | 141 test(s) passed, 1 skipped, 0 failed. See all results in /labs/linux-lab/logging/nolibc/arm-vexpress-a9-nolibc-test.log
-                 arm/virt | 141 test(s) passed, 1 skipped, 0 failed. See all results in /labs/linux-lab/logging/nolibc/arm-virt-nolibc-test.log
-             aarch64/virt | 141 test(s) passed, 1 skipped, 0 failed. See all results in /labs/linux-lab/logging/nolibc/aarch64-virt-nolibc-test.log
-              ppc/g3beige | not supported
-              ppc/ppce500 | not supported
-                  i386/pc | 141 test(s) passed, 1 skipped, 0 failed. See all results in /labs/linux-lab/logging/nolibc/i386-pc-nolibc-test.log
-                x86_64/pc | 141 test(s) passed, 1 skipped, 0 failed. See all results in /labs/linux-lab/logging/nolibc/x86_64-pc-nolibc-test.log
-             mipsel/malta | 141 test(s) passed, 1 skipped, 0 failed. See all results in /labs/linux-lab/logging/nolibc/mipsel-malta-nolibc-test.log
-         loongarch64/virt | 141 test(s) passed, 1 skipped, 0 failed. See all results in /labs/linux-lab/logging/nolibc/loongarch64-virt-nolibc-test.log
-             riscv64/virt | 141 test(s) passed, 1 skipped, 0 failed. See all results in /labs/linux-lab/logging/nolibc/riscv64-virt-nolibc-test.log
-             riscv32/virt | 119 test(s) passed, 1 skipped, 22 failed. See all results in /labs/linux-lab/logging/nolibc/riscv32-virt-nolibc-test.log
-    s390x/s390-ccw-virtio | 141 test(s) passed, 1 skipped, 0 failed. See all results in /labs/linux-lab/logging/nolibc/s390x-s390-ccw-virtio-nolibc-test.log
+__setup() functions don't return 0 for success or errno/other values
+for error. They return 1 if the parameter is handled and 0 if it is
+not handled, as documented in include/linux/init.h.
 
-  Notes:
-  - ppc support are ready locally, will be sent out later.
-  - full riscv32/virt support are ready locally, will be sent out later.
-
-Changes:
-
-* tools/nolibc: remove old arch specific stat support
-
-    Just like the __NR_statx we used in nolibc-test.c, Let's only
-    reserve sys_statx() and use it to implement the stat() function.
-
-    Remove the old sys_stat() and sys_stat_struct completely.
-
-* tools/nolibc: add new crt.h with _start_c
-
-    A new C version of _start_c() is added to only require a 'sp' argument
-    and find the others (argc, argv, envp/environ, auxv) for us in C.
-
-* tools/nolibc: include crt.h before arch.h
-
-    Include crt.h before arch.h to let _start() be able to call the new
-    added _start_c() in arch-<ARCH>.h.
-
-* tools/nolibc: arm: shrink _start with _start_c
-  tools/nolibc: aarch64: shrink _start with _start_c
-  tools/nolibc: i386: shrink _start with _start_c
-  tools/nolibc: x86_64: shrink _start with _start_c
-  tools/nolibc: mips: shrink _start with _start_c
-  tools/nolibc: loongarch: shrink _start with _start_c
-  tools/nolibc: riscv: shrink _start with _start_c
-  tools/nolibc: s390: shrink _start with _start_c
-
-    Move most of the operations from the assembly _start() to the C
-    _start_c(), only require to do minimal operations in assembly _start
-    now.
-
-With this patchset, porting nolibc to a new architecture become easier,
-the powerpc porting will be added later.
-
-Best regards,
-Zhangjin
----
-[1]: https://lore.kernel.org/lkml/cover.1687957589.git.falcon@tinylab.org/
-
-Zhangjin Wu (11):
-  tools/nolibc: remove old arch specific stat support
-  tools/nolibc: add new crt.h with _start_c
-  tools/nolibc: include crt.h before arch.h
-  tools/nolibc: arm: shrink _start with _start_c
-  tools/nolibc: aarch64: shrink _start with _start_c
-  tools/nolibc: i386: shrink _start with _start_c
-  tools/nolibc: x86_64: shrink _start with _start_c
-  tools/nolibc: mips: shrink _start with _start_c
-  tools/nolibc: loongarch: shrink _start with _start_c
-  tools/nolibc: riscv: shrink _start with _start_c
-  tools/nolibc: s390: shrink _start with _start_c
-
- tools/include/nolibc/Makefile         |  1 +
- tools/include/nolibc/arch-aarch64.h   | 53 ++----------------
- tools/include/nolibc/arch-arm.h       | 79 ++-------------------------
- tools/include/nolibc/arch-i386.h      | 58 +++-----------------
- tools/include/nolibc/arch-loongarch.h | 42 ++------------
- tools/include/nolibc/arch-mips.h      | 73 +++----------------------
- tools/include/nolibc/arch-riscv.h     | 65 ++--------------------
- tools/include/nolibc/arch-s390.h      | 60 ++------------------
- tools/include/nolibc/arch-x86_64.h    | 54 ++----------------
- tools/include/nolibc/crt.h            | 57 +++++++++++++++++++
- tools/include/nolibc/nolibc.h         |  1 +
- tools/include/nolibc/signal.h         |  1 +
- tools/include/nolibc/stdio.h          |  1 +
- tools/include/nolibc/stdlib.h         |  1 +
- tools/include/nolibc/sys.h            | 64 ++++------------------
- tools/include/nolibc/time.h           |  1 +
- tools/include/nolibc/types.h          |  4 +-
- tools/include/nolibc/unistd.h         |  1 +
- 18 files changed, 122 insertions(+), 494 deletions(-)
- create mode 100644 tools/include/nolibc/crt.h
+And "handled" basically means "recognized" as a kernel parameter,
+not that the value(s) passed to it are correct.
+I.e., they should usually return 0.
 
 -- 
-2.25.1
-
+~Randy
