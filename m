@@ -2,90 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40E58740ADB
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 10:12:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 960B3740AC1
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 10:11:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234101AbjF1IMS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 04:12:18 -0400
-Received: from szxga03-in.huawei.com ([45.249.212.189]:16304 "EHLO
-        szxga03-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233829AbjF1IKF (ORCPT
+        id S232419AbjF1IKw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 04:10:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35882 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231451AbjF1IGO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 04:10:05 -0400
-Received: from dggpemm500005.china.huawei.com (unknown [172.30.72.55])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4QrY3g602pzLn30;
-        Wed, 28 Jun 2023 15:23:59 +0800 (CST)
-Received: from [10.67.102.37] (10.67.102.37) by dggpemm500005.china.huawei.com
- (7.185.36.74) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Wed, 28 Jun
- 2023 15:26:04 +0800
-Subject: Re: [PATCH net-next 07/10] net: hns3: remove unnecessary (void*)
- conversions
-To:     wuych <yunchuan@nfschina.com>, <yisen.zhuang@huawei.com>,
-        <salil.mehta@huawei.com>, <davem@davemloft.net>,
-        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>
-References: <20230628024510.1440567-1-yunchuan@nfschina.com>
-CC:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <kernel-janitors@vger.kernel.org>
-From:   Hao Lan <lanhao@huawei.com>
-Message-ID: <408a4d7b-5dbf-fa3b-357d-1cd736f92e83@huawei.com>
-Date:   Wed, 28 Jun 2023 15:26:04 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:45.0) Gecko/20100101
- Thunderbird/45.7.1
+        Wed, 28 Jun 2023 04:06:14 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC2562956;
+        Wed, 28 Jun 2023 01:04:49 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3BF026132C;
+        Wed, 28 Jun 2023 07:26:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0CE5C433C0;
+        Wed, 28 Jun 2023 07:26:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687937175;
+        bh=KKTVALnymNGJ+x0EEK73YI4pMPfmDEYV5K+7qO8CGUo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=GcS7JW5+a8i3+Z8giAru7YHmGUQvZNRoX56KWjc+y86DW90aKZvEtZfAe8F0tgTB6
+         vODIPUXQFMnc7oyAgJHFtJ7WWUEOS8/xt+vtbj1Ec+jkkJhRb/33kVHz2LG8ACMbwf
+         oX9ySoEp5rruTcNC78fWHKGMKVfWWMVSTRr6k2bJFZq64nMsR6Qb5uX/v266a97WQM
+         Kmd8aSMjBU+2dR6lRv0NGfwBXFrrSU9iCVipztVIoJ+vAKGfzGkzrd46kPnt0Cve/x
+         u0+00mGkMRvPE+GUMCKMwrLM0ey+apK3Gl7JoD4pYrdzGvsgTCWajYG0CMapDfdyOW
+         lUeUocKXOHZdg==
+Date:   Wed, 28 Jun 2023 09:26:07 +0200
+From:   Christian Brauner <brauner@kernel.org>
+To:     Suren Baghdasaryan <surenb@google.com>
+Cc:     Tejun Heo <tj@kernel.org>, gregkh@linuxfoundation.org,
+        peterz@infradead.org, lujialin4@huawei.com,
+        lizefan.x@bytedance.com, hannes@cmpxchg.org, mingo@redhat.com,
+        ebiggers@kernel.org, oleg@redhat.com, akpm@linux-foundation.org,
+        viro@zeniv.linux.org.uk, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, vschneid@redhat.com,
+        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, kernel-team@android.com
+Subject: Re: [PATCH 1/2] kernfs: add kernfs_ops.free operation to free
+ resources tied to the file
+Message-ID: <20230628-meisennest-redlich-c09e79fde7f7@brauner>
+References: <ZJn1tQDgfmcE7mNG@slm.duckdns.org>
+ <20230627-kanon-hievt-bfdb583ddaa6@brauner>
+ <CAJuCfpECKqYiekDK6Zw58w10n1T4Q3R+2nymfHX2ZGfQVDC3VQ@mail.gmail.com>
+ <20230627-ausgaben-brauhaus-a33e292558d8@brauner>
+ <ZJstlHU4Y3ZtiWJe@slm.duckdns.org>
+ <CAJuCfpFUrPGVSnZ9+CmMz31GjRNN+tNf6nUmiCgx0Cs5ygD64A@mail.gmail.com>
+ <CAJuCfpFe2OdBjZkwHW5UCFUbnQh7hbNeqs7B99PXMXdFNjKb5Q@mail.gmail.com>
+ <CAJuCfpG2_trH2DuudX_E0CWfMxyTKfPWqJU14zjVxpTk6kPiWQ@mail.gmail.com>
+ <ZJuSzlHfbLj3OjvM@slm.duckdns.org>
+ <CAJuCfpGoNbLOLm08LWKPOgn05+FB1GEqeMTUSJUZpRmDYQSjpA@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20230628024510.1440567-1-yunchuan@nfschina.com>
-Content-Type: text/plain; charset="windows-1252"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.102.37]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- dggpemm500005.china.huawei.com (7.185.36.74)
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAJuCfpGoNbLOLm08LWKPOgn05+FB1GEqeMTUSJUZpRmDYQSjpA@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+        lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2023/6/28 10:45, wuych wrote:
-> Pointer variables of void * type do not require type cast.
+On Tue, Jun 27, 2023 at 08:09:46PM -0700, Suren Baghdasaryan wrote:
+> On Tue, Jun 27, 2023 at 6:54 PM Tejun Heo <tj@kernel.org> wrote:
+> >
+> > Hello,
+> >
+> > On Tue, Jun 27, 2023 at 02:58:08PM -0700, Suren Baghdasaryan wrote:
+> > > Ok in kernfs_generic_poll() we are using kernfs_open_node.poll
+> > > waitqueue head for polling and kernfs_open_node is freed from inside
+> > > kernfs_unlink_open_file() which is called from kernfs_fop_release().
+> > > So, it is destroyed only when the last fput() is done, unlike the
+> > > ops->release() operation which we are using for destroying PSI
+> > > trigger's waitqueue. So, it seems we still need an operation which
+> > > would indicate that the file is truly going away.
+> >
+> > If we want to stay consistent with how kernfs behaves w.r.t. severing, the
+> > right thing to do would be preventing any future polling at severing and
+> > waking up everyone currently waiting, which sounds fine from cgroup behavior
+> > POV too.
 > 
-> Signed-off-by: wuych <yunchuan@nfschina.com>
-> ---
->  drivers/net/ethernet/hisilicon/hns3/hns3_ethtool.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> That's actually what we are currently doing for PSI triggers.
+> ->release() is handled by cgroup_pressure_release() which signals the
+> waiters, waits for RCU grace period to pass (per
+> https://elixir.bootlin.com/linux/latest/source/include/linux/wait.h#L258)
+> and then releases all the trigger resources including the waitqueue
+> head. However as reported in
+> https://lore.kernel.org/all/20230613062306.101831-1-lujialin4@huawei.com
+> this does not save us from the synchronous polling case:
 > 
-> diff --git a/drivers/net/ethernet/hisilicon/hns3/hns3_ethtool.c b/drivers/net/ethernet/hisilicon/hns3/hns3_ethtool.c
-> index 51d1278b18f6..1df941ef86e3 100644
-> --- a/drivers/net/ethernet/hisilicon/hns3/hns3_ethtool.c
-> +++ b/drivers/net/ethernet/hisilicon/hns3/hns3_ethtool.c
-> @@ -570,7 +570,7 @@ static void hns3_get_strings(struct net_device *netdev, u32 stringset, u8 *data)
->  
->  static u64 *hns3_get_stats_tqps(struct hnae3_handle *handle, u64 *data)
->  {
-> -	struct hns3_nic_priv *nic_priv = (struct hns3_nic_priv *)handle->priv;
-> +	struct hns3_nic_priv *nic_priv = handle->priv;
->  	struct hnae3_knic_private_info *kinfo = &handle->kinfo;
->  	struct hns3_enet_ring *ring;
->  	u8 *stat;
+>                                                   do_select
+>                                                       vfs_poll
+> cgroup_pressure_release
+>     psi_trigger_destroy
+>         wake_up_pollfree(&t->event_wait) -> unblocks vfs_poll
+>         synchronize_rcu()
+>         kfree(t) -> frees waitqueue head
+>                                                      poll_freewait()
+> -> uses waitqueue head
 > 
+> 
+> This happens because we release the resources associated with the file
+> while there are still file users (the file's refcount is non-zero).
+> And that happens because kernfs can call ->release() before the last
+> fput().
+> 
+> >
+> > Now, the challenge is designing an interface which is difficult to make
+> > mistake with. IOW, it'd be great if kernfs wraps poll call so that severing
+> > is implemented without kernfs users doing anything, or at least make it
+> > pretty obvious what the correct usage pattern is.
+> >
+> > > Christian's suggestion to rename current ops->release() operation into
+> > > ops->drain() (or ops->flush() per Matthew's request) and introduce a
+> > > "new" ops->release() which is called only when the last fput() is done
+> > > seems sane to me. Would everyone be happy with that approach?
+> >
+> > I'm not sure I'd go there. The contract is that once ->release() is called,
+> > the code backing that file can go away (e.g. rmmod'd). It really should
+> > behave just like the last put from kernfs users' POV.
+> 
+> I 100% agree with the above statement.
+> 
+> > For this specific fix,
+> > it's safe because we know the ops is always built into the kernel and won't
+> > go away but it'd be really bad if the interface says "this is a normal thing
+> > to do". We'd be calling into rmmod'd text pages in no time.
+> >
+> > So, I mean, even for temporary fix, we have to make it abundantly clear that
+> > this is not for usual usage and can only be used if the code backing the ops
+> > is built into the kernel and so on.
+> 
+> I think the root cause of this problem is that ->release() in kernfs
+> does not adhere to the common rule that ->release() is called only
+> when the file is going away and has no users left. Am I wrong?
 
-Hi wuych,
-Thank you for your patch.
-nit: the local variable declarations could be reverse xmas tree
-longest line to shortest line. One option being:
- static u64 *hns3_get_stats_tqps(struct hnae3_handle *handle, u64 *data)
- {
--	struct hns3_nic_priv *nic_priv = (struct hns3_nic_priv *)handle->priv;
- 	struct hnae3_knic_private_info *kinfo = &handle->kinfo;
-+	struct hns3_nic_priv *nic_priv = handle->priv;
- 	struct hns3_enet_ring *ring;
- 	u8 *stat;
-and elsewhere in other patchs.
+So imho, ultimately this all comes down to rmdir() having special
+semantics in kernfs. On any regular filesystem an rmdir() on a directory
+which is still referenced by a struct file doesn't trigger an
+f_op->release() operation. It's just that directory is unlinked and
+you get some sort of errno like ENOENT when you try to create new files
+in there or whatever. The actual f_op->release) however is triggered
+on last fput().
 
-By the way, the net-next branch is currently closed, and you need to wait for
-the merge window to open before merging patches.
-
-Reviewed-by: Hao Lan <lanhao@huawei.com>
-
-Yours,
-Hao Lan
+But in essence, kernfs treats an rmdir() operation as being equivalent
+to a final fput() such that it somehow magically kills all file
+references. And that's just wrong and not supported.
