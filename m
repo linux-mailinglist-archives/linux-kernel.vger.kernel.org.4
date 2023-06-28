@@ -2,179 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A09097419F0
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 22:54:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 361597419F5
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 23:00:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231494AbjF1UyU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 16:54:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45912 "EHLO
+        id S231848AbjF1U7j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 16:59:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232018AbjF1UyK (ORCPT
+        with ESMTP id S231687AbjF1U7h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 16:54:10 -0400
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D11FA294E
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 13:54:08 -0700 (PDT)
-Received: by mail-pf1-x42b.google.com with SMTP id d2e1a72fcca58-676cc97ca74so36168b3a.1
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 13:54:08 -0700 (PDT)
+        Wed, 28 Jun 2023 16:59:37 -0400
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FCE619B0
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 13:59:36 -0700 (PDT)
+Received: by mail-pf1-x42c.google.com with SMTP id d2e1a72fcca58-666e916b880so163557b3a.2
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 13:59:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20221208.gappssmtp.com; s=20221208; t=1687985648; x=1690577648;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=vhRG05GlU4RJJ7xv+jzoKr3i+fIGPg8MRBPy8snbcU8=;
-        b=Ep3L5wmiVI27ZoKOZNB/CNRyrmDlSSs1LUNZC4Et7lDD5kIZblfuAXFMZvcfQvO8m4
-         py5D82d/6MF6895JhO6m/4N2xRYFz/KbJJsO2pSr4vQShVqe+MVCbCBfyiunK2BYgMKr
-         4fT6cWEh5SnCaL4ngLmOPw3irrgz+V33DbCXR4pCI4Dfq2uzdI7UVXCpydoe7SI11cLH
-         IvlK+G//vTF6edTpEN5ANT5s4CqJo87H1yrE4LHrXi8MmJBW+v99ds9JbAbytwP0mSCB
-         xFd9xB8rMEhpYLdfYCCeDyviTa4a+YwfgPBtUBiFFYGz59jaXq7yAPLdNlaAUzY10tpS
-         WcLA==
+        d=chromium.org; s=google; t=1687985975; x=1690577975;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=p5EAwO68zepmlB4DZ7YeQCN7tx9mqPakWLHiXEndXTk=;
+        b=lqW3ouyNx7hW2mqTtqZkWWLZkqi91e+OzqynvHrRmoI+fFXMrHqi7+vOlxnIV/s3RB
+         jfaDcgTVeM2rtOKSDntGBOqnjK1QK0I9bWtkAyJPAS67ACxO8MdHkkDm1/TMHV4ZiOlU
+         Jzso/vrdbQt9Q3QjyeWHNBVwjD2c7FPLrT7bQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687985648; x=1690577648;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20221208; t=1687985975; x=1690577975;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=vhRG05GlU4RJJ7xv+jzoKr3i+fIGPg8MRBPy8snbcU8=;
-        b=QDoJYxJebJ5CHzEyg6wvmYngHhvamJyQWoQFy93HcFZNA5/GAODt2ewFklEl/CirfA
-         m9kcdQJjdJhxfTHgih7zClFL45K4UsLXryslMhq8aUI451VUngHpsidteXGVZIahlbTK
-         Wf6d81QIXgqwFQLjgmWk3u0VvuP5EAP30/10raee+heLwPIT6+r1e6k0++gfF4vPJQZv
-         nLlloN2Ne3WlqGWam5fhz5LuEj3JRdagatyObbHvg5ZA+ogENtXgqUjsQFJ3UaU1WWDD
-         7ZBX+fw8BaqBX8D7I2Q0ANqvX9xPtih3pVbwU/q0xjyL8OoC5BJN4AJ9dZhDN+SAg0Un
-         YYkQ==
-X-Gm-Message-State: AC+VfDxX9M7KG7iFYxTlcd4LQJoTQKVOmd7Rf2rjwG+r9+bNYosYsUby
-        XV9b4xofuHXYQpk1aBndp5okQQ==
-X-Google-Smtp-Source: ACHHUZ4ogsVS0lX3nCPBIG5bc6Q95Br2cbk12Jk/ulWzavPWNHR06zRL4hyqFaBkj7P63x6gP3A8Yw==
-X-Received: by 2002:a05:6a20:8f04:b0:121:b5af:acbc with SMTP id b4-20020a056a208f0400b00121b5afacbcmr38240738pzk.3.1687985648291;
-        Wed, 28 Jun 2023 13:54:08 -0700 (PDT)
-Received: from [192.168.1.136] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id j5-20020a62b605000000b00640f51801e6sm7375748pff.159.2023.06.28.13.54.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 28 Jun 2023 13:54:07 -0700 (PDT)
-Message-ID: <4d3efe17-e114-96c1-dca8-a100cc6f7fc6@kernel.dk>
-Date:   Wed, 28 Jun 2023 14:54:06 -0600
+        bh=p5EAwO68zepmlB4DZ7YeQCN7tx9mqPakWLHiXEndXTk=;
+        b=S+BvS1ZF9RqkkVCOqwUXzXWCBqV83VXDYZSQ9OJRq+69COG36deccZ0IlHKUQIrtMU
+         cbALaOMpzFjcExmkCpv6gkd2h+ZRV53FVJzw9WumxFfhQpOihArl5sJ5D+aBnYHaRO3B
+         tgS6orNFDv6zOTLCdU2+n6KCwouWZ1LzaMgqrtHLsGIA+wwIUTx2xdm6VVO6Jy40RUaH
+         Kkcxh1g9jo28QHCg6k/Z8PTxWkWJ73H7Nck6Ctix4tkZE7h8DDAocWowUBMKO/dRJCGb
+         qaB9bPgCvigwMkrfGRKwnO0hI3Q+Hu9LF63sgJD+BFYa+kvdYpgKOISkwdTBI09j8pLr
+         iWOw==
+X-Gm-Message-State: AC+VfDy+lR1Ks7tBj5P+Pm9rCd2zPrOKmC7ycATiInqWemqSRavTlC4p
+        dfdZH+jaEzl+uWN7u9uXffxisg==
+X-Google-Smtp-Source: ACHHUZ4b34bw7rZc9L7px3h6EUsiEBtUzLuZldpOt5NSLbXfKgtYiPS99hwUcfBulL/R+vof/etEuQ==
+X-Received: by 2002:a05:6a00:3a14:b0:668:82fe:16e2 with SMTP id fj20-20020a056a003a1400b0066882fe16e2mr22096409pfb.16.1687985975628;
+        Wed, 28 Jun 2023 13:59:35 -0700 (PDT)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id u23-20020aa78497000000b0067aa2a70179sm4146384pfn.46.2023.06.28.13.59.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 28 Jun 2023 13:59:34 -0700 (PDT)
+Date:   Wed, 28 Jun 2023 13:59:34 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Julian Pidancet <julian.pidancet@oracle.com>
+Cc:     Christoph Lameter <cl@linux.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>, linux-mm@kvack.org,
+        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Matthew Wilcox <willy@infradead.org>,
+        Rafael Aquini <aquini@redhat.com>
+Subject: Re: [PATCH] mm/slub: disable slab merging in the default
+ configuration
+Message-ID: <202306281358.E6E6C2759@keescook>
+References: <20230627132131.214475-1-julian.pidancet@oracle.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [GIT PULL] bcachefs
-Content-Language: en-US
-To:     Kent Overstreet <kent.overstreet@linux.dev>
-Cc:     torvalds@linux-foundation.org, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-bcachefs@vger.kernel.org,
-        Christoph Hellwig <hch@lst.de>
-References: <aeb2690c-4f0a-003d-ba8b-fe06cd4142d1@kernel.dk>
- <20230627000635.43azxbkd2uf3tu6b@moria.home.lan>
- <91e9064b-84e3-1712-0395-b017c7c4a964@kernel.dk>
- <20230627020525.2vqnt2pxhtgiddyv@moria.home.lan>
- <b92ea170-d531-00f3-ca7a-613c05dcbf5f@kernel.dk>
- <23922545-917a-06bd-ec92-ff6aa66118e2@kernel.dk>
- <20230627201524.ool73bps2lre2tsz@moria.home.lan>
- <c06a9e0b-8f3e-4e47-53d0-b4854a98cc44@kernel.dk>
- <20230628040114.oz46icbsjpa4egpp@moria.home.lan>
- <b02657af-5bbb-b46b-cea0-ee89f385f3c1@kernel.dk>
- <20230628175421.funhhfbx5kdvhclx@moria.home.lan>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <20230628175421.funhhfbx5kdvhclx@moria.home.lan>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230627132131.214475-1-julian.pidancet@oracle.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/28/23 11:54?AM, Kent Overstreet wrote:
-> On Wed, Jun 28, 2023 at 08:58:45AM -0600, Jens Axboe wrote:
->> On 6/27/23 10:01?PM, Kent Overstreet wrote:
->>> On Tue, Jun 27, 2023 at 09:16:31PM -0600, Jens Axboe wrote:
->>>> On 6/27/23 2:15?PM, Kent Overstreet wrote:
->>>>>> to ktest/tests/xfstests/ and run it with -bcachefs, otherwise it kept
->>>>>> failing because it assumed it was XFS.
->>>>>>
->>>>>> I suspected this was just a timing issue, and it looks like that's
->>>>>> exactly what it is. Looking at the test case, it'll randomly kill -9
->>>>>> fsstress, and if that happens while we have io_uring IO pending, then we
->>>>>> process completions inline (for a PF_EXITING current). This means they
->>>>>> get pushed to fallback work, which runs out of line. If we hit that case
->>>>>> AND the timing is such that it hasn't been processed yet, we'll still be
->>>>>> holding a file reference under the mount point and umount will -EBUSY
->>>>>> fail.
->>>>>>
->>>>>> As far as I can tell, this can happen with aio as well, it's just harder
->>>>>> to hit. If the fput happens while the task is exiting, then fput will
->>>>>> end up being delayed through a workqueue as well. The test case assumes
->>>>>> that once it's reaped the exit of the killed task that all files are
->>>>>> released, which isn't necessarily true if they are done out-of-line.
->>>>>
->>>>> Yeah, I traced it through to the delayed fput code as well.
->>>>>
->>>>> I'm not sure delayed fput is responsible here; what I learned when I was
->>>>> tracking this down has mostly fell out of my brain, so take anything I
->>>>> say with a large grain of salt. But I believe I tested with delayed_fput
->>>>> completely disabled, and found another thing in io_uring with the same
->>>>> effect as delayed_fput that wasn't being flushed.
->>>>
->>>> I'm not saying it's delayed_fput(), I'm saying it's the delayed putting
->>>> io_uring can end up doing. But yes, delayed_fput() is another candidate.
->>>
->>> Sorry - was just working through my recollections/initial thought
->>> process out loud
->>
->> No worries, it might actually be a combination and this is why my
->> io_uring side patch didn't fully resolve it. Wrote a simple reproducer
->> and it seems to reliably trigger it, but is fixed with an flush of the
->> delayed fput list on mount -EBUSY return. Still digging...
->>
->>>>>> For io_uring specifically, it may make sense to wait on the fallback
->>>>>> work. The below patch does this, and should fix the issue. But I'm not
->>>>>> fully convinced that this is really needed, as I do think this can
->>>>>> happen without io_uring as well. It just doesn't right now as the test
->>>>>> does buffered IO, and aio will be fully sync with buffered IO. That
->>>>>> means there's either no gap where aio will hit it without O_DIRECT, or
->>>>>> it's just small enough that it hasn't been hit.
->>>>>
->>>>> I just tried your patch and I still have generic/388 failing - it
->>>>> might've taken a bit longer to pop this time.
->>>>
->>>> Yep see the same here. Didn't have time to look into it after sending
->>>> that email today, just took a quick stab at writing a reproducer and
->>>> ended up crashing bcachefs:
->>>
->>> You must have hit an error before we finished initializing the
->>> filesystem, the list head never got initialized. Patch for that will be
->>> in the testing branch momentarily.
->>
->> I'll pull that in. In testing just now, I hit a few more leaks:
->>
->> unreferenced object 0xffff0000e55cf200 (size 128):
->>   comm "mount", pid 723, jiffies 4294899134 (age 85.868s)
->>   hex dump (first 32 bytes):
->>     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
->>     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
->>   backtrace:
->>     [<000000001d69062c>] slab_post_alloc_hook.isra.0+0xb4/0xbc
->>     [<00000000c503def2>] __kmem_cache_alloc_node+0xd0/0x178
->>     [<00000000cde48528>] __kmalloc+0xac/0xd4
->>     [<000000006cb9446a>] kmalloc_array.constprop.0+0x18/0x20
->>     [<000000008341b32c>] bch2_fs_alloc+0x73c/0xbcc
+On Tue, Jun 27, 2023 at 03:21:31PM +0200, Julian Pidancet wrote:
+> Make CONFIG_SLAB_MERGE_DEFAULT default to n unless CONFIG_SLUB_TINY is
+> enabled. Benefits of slab merging is limited on systems that are not
+> memory constrained: the overhead is negligible and evidence of its
+> effect on cache hotness is hard to come by.
 > 
-> Can you faddr2line this? I just did a bunch of kmemleak testing and
-> didn't see it.
+> On the other hand, distinguishing allocations into different slabs will
+> make attacks that rely on "heap spraying" more difficult to carry out
+> with success.
+> 
+> Take sides with security in the default kernel configuration over
+> questionnable performance benefits/memory efficiency.
+> 
+> Signed-off-by: Julian Pidancet <julian.pidancet@oracle.com>
+> ---
+> In an attempt to assess the performance impact of disabling slab
+> merging, a timed linux kernel compilation test has been conducted first
+> using slab_merge, then using slab_nomerge. Both tests started in an
+> identical state.  Commodity hardware was used: a laptop with an AMD Ryzen
+> 5 3500U CPU, and 16GiB of RAM. The kernel source files were placed on
+> an XFS partition because of the extensive use of slab caches in XFS.
+> 
+> The results are as follows:
+> 
+>       | slab_merge       | slab_nomerge     |
+> ------+------------------+------------------|
+> Time  | 489.074 ± 10.334 | 489.975 ± 10.350 |
+> Min   |          459.688 |          460.554 |
+> Max   |          493.126 |          494.282 |
+> 
+> The benchmark favors the configuration where merging is disabled, but the
+> difference is only ~0.18%, well under statistical significance.
 
-0xffff800008589a20 is in bch2_fs_alloc (fs/bcachefs/super.c:813).
-808		    !(c->online_reserved = alloc_percpu(u64)) ||
-809		    !(c->btree_paths_bufs = alloc_percpu(struct btree_path_buf)) ||
-810		    mempool_init_kvpmalloc_pool(&c->btree_bounce_pool, 1,
-811						btree_bytes(c)) ||
-812		    mempool_init_kmalloc_pool(&c->large_bkey_pool, 1, 2048) ||
-813		    !(c->unused_inode_hints = kcalloc(1U << c->inode_shard_bits,
-814						      sizeof(u64), GFP_KERNEL))) {
-815			ret = -BCH_ERR_ENOMEM_fs_other_alloc;
-816			goto err;
-817		}
+As mentioned, please include these kinds of perf notes in the commit
+log; it's useful to see later. :)
+
+Regardless, yes, please. I have been running slab_nomerge on all my
+systems for years and years now.
+
+With the typo fixed and commit log updated, please consider this:
+
+Reviewed-by: Kees Cook <keescook@chromium.org>
+
+-Kees
 
 -- 
-Jens Axboe
-
+Kees Cook
