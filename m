@@ -2,104 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FEE17413BF
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 16:22:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A7E2E7413C4
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 16:22:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230216AbjF1OVb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 10:21:31 -0400
-Received: from mx1.sberdevices.ru ([37.18.73.165]:51108 "EHLO
-        mx1.sberdevices.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232692AbjF1OUG (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 10:20:06 -0400
-Received: from p-infra-ksmg-sc-msk01 (localhost [127.0.0.1])
-        by mx1.sberdevices.ru (Postfix) with ESMTP id 2A969100010;
-        Wed, 28 Jun 2023 17:20:04 +0300 (MSK)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mx1.sberdevices.ru 2A969100010
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1687962004;
-        bh=Lk3qB4uYxKXyPUp5kolLvL3qgFw7FLaRDeOgiAkPfaY=;
-        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type:From;
-        b=XKNMDmCfB+n/eT0axZCuc6oQTuSbQOU9CWCpZg3JV0ziwt+BBWjeCZAVJ9IC1uxrw
-         sRE6kjI493+xNLexts6m1cYfL+uz3mOoeh1QecFzgqhXyVHd17g0nNcrCgfIFVRZ89
-         nw33wnuz6sPUsdeB/Bq6ksjlCYvKk7yadqQzxMDHpBERTN3O8+tHYpveU4xWdc78Q6
-         vKQ75c1iAE1f/KtfhXyw9SoQGiOeW3ek2OtKbpLxmilImnZB/nTG0Mn6uuA9DbYEXD
-         OJBekE9eY4QqP2qx9lsbssaG6XzgPC2tYWc6cVe+X9YSjDmkUrRTiAO3jrI3tOCj6T
-         zWDTRG4G9xbNA==
-Received: from p-i-exch-sc-m01.sberdevices.ru (p-i-exch-sc-m01.sberdevices.ru [172.16.192.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mx1.sberdevices.ru (Postfix) with ESMTPS;
-        Wed, 28 Jun 2023 17:20:04 +0300 (MSK)
-Received: from localhost (100.64.160.123) by p-i-exch-sc-m01.sberdevices.ru
- (172.16.192.107) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.30; Wed, 28 Jun
- 2023 17:19:06 +0300
-Date:   Wed, 28 Jun 2023 17:20:03 +0300
-From:   Dmitry Rokosov <ddrokosov@sberdevices.ru>
-To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-CC:     <neil.armstrong@linaro.org>, <jbrunet@baylibre.com>,
-        <mturquette@baylibre.com>, <sboyd@kernel.org>,
-        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <khilman@baylibre.com>, <conor+dt@kernel.org>,
-        <kernel@sberdevices.ru>, <sdfw_system_team@sberdevices.ru>,
-        <rockosov@gmail.com>, <linux-amlogic@lists.infradead.org>,
-        <linux-clk@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        Alexey Romanov <avromanov@sberdevices.ru>
-Subject: Re: [PATCH v1 3/6] arm64: dts: meson: a1: enable efuse controller
- and setup its clk
-Message-ID: <20230628142003.ggqbxkvuzn6noupc@CAB-WSD-L081021>
-References: <20230607201641.20982-1-ddrokosov@sberdevices.ru>
- <20230607201641.20982-4-ddrokosov@sberdevices.ru>
- <CAFBinCC0F4gaW1eFkJvf=oSkmAMmjbJ-ZFbVhpnrcGZPOX2sYg@mail.gmail.com>
+        id S231744AbjF1OVq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 10:21:46 -0400
+Received: from mail.avm.de ([212.42.244.120]:57488 "EHLO mail.avm.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231929AbjF1OU1 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 28 Jun 2023 10:20:27 -0400
+Received: from mail-auth.avm.de (dovecot-mx-01.avm.de [212.42.244.71])
+        by mail.avm.de (Postfix) with ESMTPS;
+        Wed, 28 Jun 2023 16:20:24 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=avm.de; s=mail;
+        t=1687962025; bh=bPDxZSX5AGRWE//qyJ05XWKBdUJXjjjaprO229FFQE0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=X1xMyfo0ASe/oBNmPwaajR3/PUBuBdKuHuN7p10YbZQAudOlDJg+MH4WFE4Z9uyr9
+         MQDVx1TyUQVwvclTmkQnd+sPkN0VIO8IFAfp9b32hTN2D6uDazwic757HGgt81pFa6
+         pegcpxY6Gs+e1LDc3THwpYIJF1g5HFS5/tTbjw4k=
+Received: from buildd.core.avm.de (buildd-sv-01.avm.de [172.16.0.225])
+        by mail-auth.avm.de (Postfix) with ESMTPA id 4FF3B80AC0;
+        Wed, 28 Jun 2023 16:20:25 +0200 (CEST)
+Received: by buildd.core.avm.de (Postfix, from userid 1000)
+        id 45038181EF4; Wed, 28 Jun 2023 16:20:25 +0200 (CEST)
+Date:   Wed, 28 Jun 2023 16:20:25 +0200
+From:   Nicolas Schier <n.schier@avm.de>
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>
+Subject: Re: [PATCH v4 3/3] kbuild: respect GNU Make -w flag
+Message-ID: <ZJxBqYdSxWknb/+v@buildd.core.avm.de>
+Mail-Followup-To: Masahiro Yamada <masahiroy@kernel.org>,
+        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>
+References: <20230626233014.66549-1-masahiroy@kernel.org>
+ <20230626233014.66549-3-masahiroy@kernel.org>
+ <CAK7LNATtUBZo0bczb=bQyQ6UrXbK7V4Bp058+wzZQp3QREfniQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAFBinCC0F4gaW1eFkJvf=oSkmAMmjbJ-ZFbVhpnrcGZPOX2sYg@mail.gmail.com>
-User-Agent: NeoMutt/20220415
-X-Originating-IP: [100.64.160.123]
-X-ClientProxiedBy: p-i-exch-sc-m01.sberdevices.ru (172.16.192.107) To
- p-i-exch-sc-m01.sberdevices.ru (172.16.192.107)
-X-KSMG-Rule-ID: 10
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Lua-Profiles: 178314 [Jun 28 2023]
-X-KSMG-AntiSpam-Version: 5.9.59.0
-X-KSMG-AntiSpam-Envelope-From: DDRokosov@sberdevices.ru
-X-KSMG-AntiSpam-Rate: 0
-X-KSMG-AntiSpam-Status: not_detected
-X-KSMG-AntiSpam-Method: none
-X-KSMG-AntiSpam-Auth: dkim=none
-X-KSMG-AntiSpam-Info: LuaCore: 517 517 b0056c19d8e10afbb16cb7aad7258dedb0179a79, {Track_E25351}, {Tracking_from_domain_doesnt_match_to}, sberdevices.ru:7.1.1,5.0.1;127.0.0.199:7.1.2;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;p-i-exch-sc-m01.sberdevices.ru:7.1.1,5.0.1, FromAlignment: s, {Tracking_white_helo}, ApMailHostAddress: 100.64.160.123
-X-MS-Exchange-Organization-SCL: -1
-X-KSMG-AntiSpam-Interceptor-Info: scan successful
-X-KSMG-AntiPhishing: Clean
-X-KSMG-LinksScanning: Clean
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 2.0.1.6960, bases: 2023/06/28 08:00:00 #21591748
-X-KSMG-AntiVirus-Status: Clean, skipped
+In-Reply-To: <CAK7LNATtUBZo0bczb=bQyQ6UrXbK7V4Bp058+wzZQp3QREfniQ@mail.gmail.com>
+X-purgate-ID: 149429::1687962024-5C6A3FC0-470BA280/0/0
+X-purgate-type: clean
+X-purgate-size: 2939
+X-purgate-Ad: Categorized by eleven eXpurgate (R) http://www.eleven.de
+X-purgate: This mail is considered clean (visit http://www.eleven.de for further information)
+X-purgate: clean
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jun 25, 2023 at 10:50:37PM +0200, Martin Blumenstingl wrote:
-> On Wed, Jun 7, 2023 at 10:16 PM Dmitry Rokosov <ddrokosov@sberdevices.ru> wrote:
-> [...]
-> > +       efuse: efuse {
-> > +               compatible = "amlogic,meson-gxbb-efuse";
-> > +               clocks = <&clkc_periphs CLKID_OTP>;
-> > +               #address-cells = <1>;
-> > +               #size-cells = <1>;
-> > +               secure-monitor = <&sm>;
-> > +               power-domains = <&pwrc PWRC_OTP_ID>;
-> > +               status = "okay";
-> If eFuse is always enabled then we can just drop status = "okay" as
-> that's the default.
+On Wed, Jun 28, 2023 at 04:09:44PM +0900, Masahiro Yamada wrote:
+> On Tue, Jun 27, 2023 at 8:30 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
+> >
+> > Currently, -w (--print-directory) option is ignored, but it is better
+> > to respect the user's choice.
+> >
+> > This commit changes the behavior of "Entering directory ..." logging.
+> >
+> > If -w (or --print-directory) is given via the command line or the
+> > MAKEFLAGS environment variable, print "Entering directory ..." for every
+> > sub make.
+> >
+> > If --no-print-directory is given via the command line or the MAKEFLAGS
+> > environment variable, suppress "Entering directory ..." completely.
+> >
+> > If none of them is given, print "Entering directory ..." when Kbuild
+> > changes the working directory at the start of building. (default)
+> >
+> > Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> > Tested-by: Nicolas Schier <n.schier@avm.de>
+> > ---
+> 
+> 
+> As it turns out, this patch does not work for GNU Make <= 4.3
 
-Ahh, okay. I wasn't aware of that behavior. Thank you for pointing it
-out!
+Ups, I'm sorry.  I was pretty sure I tested it with make-4.3, but
+obviously not...
 
--- 
-Thank you,
-Dmitry
+Kind regards,
+Nicolas
+
+
+
+> I will drop (and give up) this patch.
+> 
+> 
+> 
+> 
+> 
+> 
+> >
+> > (no changes since v2)
+> >
+> > Changes in v2:
+> >   - new patch
+> >
+> >  Makefile | 16 ++++++++++------
+> >  1 file changed, 10 insertions(+), 6 deletions(-)
+> >
+> > diff --git a/Makefile b/Makefile
+> > index 7edb00603b7e..c9864f83a3d2 100644
+> > --- a/Makefile
+> > +++ b/Makefile
+> > @@ -38,6 +38,12 @@ __all:
+> >  # descending is started. They are now explicitly listed as the
+> >  # prepare rule.
+> >
+> > +ifeq ($(filter 3.%,$(MAKE_VERSION)),)
+> > +short-opts := $(firstword -$(MAKEFLAGS))
+> > +else
+> > +short-opts := $(filter-out --%,$(MAKEFLAGS))
+> > +endif
+> > +
+> >  this-makefile := $(lastword $(MAKEFILE_LIST))
+> >  export abs_srctree := $(realpath $(dir $(this-makefile)))
+> >  export abs_objtree := $(CURDIR)
+> > @@ -95,12 +101,6 @@ endif
+> >  # commands
+> >  # make-4.0 (and later) keep single letter options in the 1st word of MAKEFLAGS.
+> >
+> > -ifeq ($(filter 3.%,$(MAKE_VERSION)),)
+> > -short-opts := $(firstword -$(MAKEFLAGS))
+> > -else
+> > -short-opts := $(filter-out --%,$(MAKEFLAGS))
+> > -endif
+> > -
+> >  ifneq ($(findstring s,$(short-opts)),)
+> >  quiet=silent_
+> >  override KBUILD_VERBOSE :=
+> > @@ -215,12 +215,16 @@ else
+> >  need-sub-make := 1
+> >  endif
+> >
+> > +ifeq ($(findstring w, $(short-opts)),)
+> >  ifeq ($(filter --no-print-directory, $(MAKEFLAGS)),)
+> >  # If --no-print-directory is unset, recurse once again to set it.
+> >  # You may end up recursing into __sub-make twice. This is needed due to the
+> >  # behavior change in GNU Make 4.4.1.
+> >  need-sub-make := 1
+> >  endif
+> > +else
+> > +no-print-directory :=
+> > +endif
+> >
+> >  ifeq ($(need-sub-make),1)
+> >
+> > --
+> > 2.39.2
+> >
+> 
+> 
+> -- 
+> Best Regards
+> Masahiro Yamada
