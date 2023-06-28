@@ -2,68 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 096FF74177E
+	by mail.lfdr.de (Postfix) with ESMTP id 2EDF374177F
 	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 19:52:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230519AbjF1RwH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 13:52:07 -0400
-Received: from mail-pg1-f180.google.com ([209.85.215.180]:59881 "EHLO
-        mail-pg1-f180.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231282AbjF1Rv6 (ORCPT
+        id S231824AbjF1RwW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 13:52:22 -0400
+Received: from out-15.mta0.migadu.com ([91.218.175.15]:56295 "EHLO
+        out-15.mta0.migadu.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231750AbjF1RwL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 13:51:58 -0400
-Received: by mail-pg1-f180.google.com with SMTP id 41be03b00d2f7-543c692db30so4834567a12.3;
-        Wed, 28 Jun 2023 10:51:58 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687974718; x=1690566718;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=f4gcMA0oAXbXxZ6AhiBL84jasGitldsUSZgsSv4UPKo=;
-        b=lrj52n+oBR7QDrdKt0ShmUe2c7ZQ7XZaCmpm9sQcpyqaEMxx7/887hVOtMXomip7z8
-         EWXp69x1bYpydGy9rZ+DyHsUwGB83JwU+0VU2zR/+N4s/PFyb+Vif6gYu0JA3/5pjdjo
-         Tfqfh7hirVpLIF3zd28r7G2k7oWph1wPFCbSveYcjWdp+A3YTie1IfYCJJy6xrd//TUx
-         xpaWkRtivjRCdiK7NvmNjruilnCgc2Uc7/diPknbcdNInxFkOkCqhb1G+w9ggtDFw437
-         5ONLwj++1FOCr9t5UPgTca67xxYe1OwWl2k84Q316Wdrc3aHOwSZFu9OWkqcZdW3OF13
-         dzVA==
-X-Gm-Message-State: AC+VfDy2aLC2M6G7r8+kT/INIYp8JeziniOh2mTvKRh4p3Ax6Nc9RFhj
-        5KY2e5vbunHBabYZGW1co78=
-X-Google-Smtp-Source: ACHHUZ6qiJMmUvs92SwZ633rCVbaKSKSga815p5pMFTq3uIitHFEy2OBiILhM/oZ0gd1Vk8cJHgW+w==
-X-Received: by 2002:a17:90a:7522:b0:25d:e321:c4e8 with SMTP id q31-20020a17090a752200b0025de321c4e8mr34433756pjk.41.1687974718159;
-        Wed, 28 Jun 2023 10:51:58 -0700 (PDT)
-Received: from liuwe-devbox-debian-v2 ([20.69.120.36])
-        by smtp.gmail.com with ESMTPSA id oj3-20020a17090b4d8300b0024e4f169931sm9905468pjb.2.2023.06.28.10.51.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Jun 2023 10:51:57 -0700 (PDT)
-Date:   Wed, 28 Jun 2023 17:51:56 +0000
-From:   Wei Liu <wei.liu@kernel.org>
-To:     Kameron Carr <kameroncarr@linux.microsoft.com>
-Cc:     arnd@arndb.de, decui@microsoft.com, haiyangz@microsoft.com,
-        kys@microsoft.com, linux-arch@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
-        wei.liu@kernel.org
-Subject: Re: [PATCH v2] Drivers: hv: Change hv_free_hyperv_page() to take
- void * argument
-Message-ID: <ZJxzPBE5mDVBUKCE@liuwe-devbox-debian-v2>
-References: <1687558189-19734-1-git-send-email-kameroncarr@linux.microsoft.com>
+        Wed, 28 Jun 2023 13:52:11 -0400
+Date:   Wed, 28 Jun 2023 13:52:04 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1687974729;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=3wb1kX6L9/pLjHJdQokUyimNTJMnyAUv+LwDyu/SD5A=;
+        b=NF2SPqayC4BiclJHcHAIBaBByf4KV5Q43ZH0e95617IhssmKgWnWUFtxGyotr/gKZhsNm1
+        RN+KQcxyvA5BGAeqHSlWP2WprMri89bMWLGDEt7y92eH+lt1bEABpnImsptiWCu8Qw+EWG
+        RijQZcqgyot80L03bXHj53Ze3srap7k=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Kent Overstreet <kent.overstreet@linux.dev>
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     torvalds@linux-foundation.org, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-bcachefs@vger.kernel.org,
+        Christoph Hellwig <hch@lst.de>,
+        Christian Brauner <brauner@kernel.org>
+Subject: Re: [GIT PULL] bcachefs
+Message-ID: <20230628175204.oeek4nnqx7ltlqmg@moria.home.lan>
+References: <20230627000635.43azxbkd2uf3tu6b@moria.home.lan>
+ <91e9064b-84e3-1712-0395-b017c7c4a964@kernel.dk>
+ <20230627020525.2vqnt2pxhtgiddyv@moria.home.lan>
+ <b92ea170-d531-00f3-ca7a-613c05dcbf5f@kernel.dk>
+ <23922545-917a-06bd-ec92-ff6aa66118e2@kernel.dk>
+ <20230627201524.ool73bps2lre2tsz@moria.home.lan>
+ <c06a9e0b-8f3e-4e47-53d0-b4854a98cc44@kernel.dk>
+ <20230628040114.oz46icbsjpa4egpp@moria.home.lan>
+ <b02657af-5bbb-b46b-cea0-ee89f385f3c1@kernel.dk>
+ <4b863e62-4406-53e4-f96a-f4d1daf098ab@kernel.dk>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1687558189-19734-1-git-send-email-kameroncarr@linux.microsoft.com>
+In-Reply-To: <4b863e62-4406-53e4-f96a-f4d1daf098ab@kernel.dk>
+X-Migadu-Flow: FLOW_OUT
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 23, 2023 at 03:09:49PM -0700, Kameron Carr wrote:
-> Currently hv_free_hyperv_page() takes an unsigned long argument, which
-> is inconsistent with the void * return value from the corresponding
-> hv_alloc_hyperv_page() function and variants. This creates unnecessary
-> extra casting.
+On Wed, Jun 28, 2023 at 10:57:02AM -0600, Jens Axboe wrote:
+> I discussed this with Christian offline. I have a patch that is pretty
+> simple, but it does mean that you'd wait for delayed fput flush off
+> umount. Which seems kind of iffy.
 > 
-> Change the hv_free_hyperv_page() argument type to void *.
-> Also remove redundant casts from invocations of
-> hv_alloc_hyperv_page() and variants.
+> I think we need to back up a bit and consider if the kill && umount
+> really is sane. If you kill a task that has open files, then any fput
+> from that task will end up being delayed. This means that the umount may
+> very well fail.
 > 
-> Signed-off-by: Kameron Carr <kameroncarr@linux.microsoft.com>
+> It'd be handy if we could have umount wait for that to finish, but I'm
+> not at all confident this is a sane solution for all cases. And as
+> discussed, we have no way to even identify which files we'd need to
+> flush out of the delayed list.
+> 
+> Maybe the test case just needs fixing? Christian suggested lazy/detach
+> umount and wait for sb release. There's an fsnotify hook for that,
+> fsnotify_sb_delete(). Obviously this is a bit more involved, but seems
+> to me that this would be the way to make it more reliable when killing
+> of tasks with open files are involved.
 
-Applied to hyperv-fixes. Thanks!
+No, this is a real breakage. Any time we introduce unexpected
+asynchrony there's the potential for breakage: case in point, there was
+a filesystem that made rm asynchronous, then there were scripts out
+there that deleted until df showed under some threshold.. whoops...
+
+this would break anyone that does fuser; umount; and making the umount
+lazy just moves the race to the next thing that uses the block device.
+
+I'd like to know how delayed_fput() avoids this.
