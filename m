@@ -2,112 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B366741969
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 22:18:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA68C74196B
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 22:19:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231718AbjF1USx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 16:18:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34664 "EHLO
+        id S231899AbjF1UTO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 16:19:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230219AbjF1USp (ORCPT
+        with ESMTP id S232026AbjF1UTE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 16:18:45 -0400
-Received: from mail-vs1-xe2e.google.com (mail-vs1-xe2e.google.com [IPv6:2607:f8b0:4864:20::e2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 122B91FE7;
-        Wed, 28 Jun 2023 13:18:41 -0700 (PDT)
-Received: by mail-vs1-xe2e.google.com with SMTP id ada2fe7eead31-4409abccbefso85207137.2;
-        Wed, 28 Jun 2023 13:18:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687983520; x=1690575520;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=pge0xg3Dy7GY8NiUP6kHgHtD5RV0kGRrdoTBXD750rI=;
-        b=q3gLekqcwhHtKKWm74AP9KdYwthCek5udnq1vVf4deHQ805a5/56gNVv78Yx4eXHMi
-         M3973ym+uOHrteChp6z7kSpRDxm3/WVEwR7TfbUoi0LKOWrjnYhUgL4ICdWv39eMJDWo
-         E1B1/vVTDyjL6yFUlO0pkZYUQOgKoF62ULE9CrBI4NPwGbpWxU7zIzjHhLW5e0edw5Ib
-         hA4kVGphaCTmRS6cordf7ToLCWoBur07+8djZWTYMjc/cYCf9FJBBNYORQArgrkcP2Uz
-         7Wd+XxEdzZGrz6GmM3pepZ7L4k4subE/fF/+wMiQ4onuevlEeoA+O5kL2w7KWOqpsi8/
-         1qPA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687983520; x=1690575520;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=pge0xg3Dy7GY8NiUP6kHgHtD5RV0kGRrdoTBXD750rI=;
-        b=hCVCGP109I4M84uspqKwv5iZPK1Q5y3PK1wBOjESvUv/QA7Mgo6rs7s9LhiFSkc/Tx
-         Vii7YRpYtmyrVHYa70qN+UJRb8gv+uR0nVZHog2idlyOf1op+6/Ec80knIuNzWEyDuzk
-         jJV3OMy9H1ZUPi7zn43mRDOasEaIC3D6gI50m/vZx0DB5RE7vVxljhsD8nCzSTzWa8tU
-         Dm5lKsk9tQE8T3nEcJUAokT4vCPL4E3PWVzQZhkZIUv99vBZ+HPCCB1Pkm/Hv328cPqX
-         LOpIY/yaPPUNnccPSeSAmH38sSHJbLCq7psoQeTb08mFgwPfBYV4qlw509IGb/TfpEeH
-         RcLA==
-X-Gm-Message-State: ABy/qLaWsOmCT0EavP8Xup7KbK61mKSGOJE/vrz5AcL8y+00cngGzXsJ
-        Ty+jqDQ0m0+rhrkQq+rZjTphheQEy9DbyDBeekY=
-X-Google-Smtp-Source: APBJJlELLQ0aF3ZB6zFPZmMkPIOWyEVArGwYVTvsJ8IIHALlnCzOcRKU+2UdwRlvJ2VLxhydXqFQcBuyy+/1BeIll3g=
-X-Received: by 2002:a05:6102:11ee:b0:444:230e:e1e0 with SMTP id
- e14-20020a05610211ee00b00444230ee1e0mr241936vsg.29.1687983520011; Wed, 28 Jun
- 2023 13:18:40 -0700 (PDT)
+        Wed, 28 Jun 2023 16:19:04 -0400
+Received: from tarta.nabijaczleweli.xyz (unknown [139.28.40.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7777B1FEF;
+        Wed, 28 Jun 2023 13:18:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=nabijaczleweli.xyz;
+        s=202305; t=1687983534;
+        bh=PbluAP57CpIIaXvOGapkwKIW8x93+/qYk4SdJ04NFh0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=d1DrQqJx8leEoEgyi77wUmYtSGjlxtSq8XHdLNZniH5D6YKy2B4iYXbny+ib940lJ
+         vTYaVFQ6swp5NBCrEkueU4ymaFtF5S0cEqO4e+fVgk4yYM4Cg0HmSl8x33uZiYY3io
+         UYwFuCrgxosWW29M9dqURFQVEYNdOAfDhkZkmN5HrpZ/oVBej4xw1xuis0oY5nDYjY
+         nV3s3pp1uNQc+2G0zwa/cnMqNjyfUQElCtNr9yC/VoslqWQ+sl2jM631HsKyGPejS/
+         85SO3x+jcrhZP4kNl09Xy0E1LP3HC+9h8hZqj8b5zZnPVHrikzbGSImX628p1O6rk5
+         MrD3dZW21wdrg==
+Received: from tarta.nabijaczleweli.xyz (unknown [192.168.1.250])
+        by tarta.nabijaczleweli.xyz (Postfix) with ESMTPSA id 3218115CA;
+        Wed, 28 Jun 2023 22:18:54 +0200 (CEST)
+Date:   Wed, 28 Jun 2023 22:18:53 +0200
+From:   Ahelenia =?utf-8?Q?Ziemia=C5=84ska?= 
+        <nabijaczleweli@nabijaczleweli.xyz>
+To:     Amir Goldstein <amir73il@gmail.com>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Christian Brauner <brauner@kernel.org>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jan Kara <jack@suse.cz>,
+        Chung-Chiang Cheng <cccheng@synology.com>, ltp@lists.linux.it
+Subject: Re: [PATCH v4 1/3] splice: always fsnotify_access(in),
+ fsnotify_modify(out) on success
+Message-ID: <3nfsszygfgzpli4xvwuwpli5ozpqtcnlij737qid6riwramjkv@pj23p6q5tzrb>
+References: <t5az5bvpfqd3rrwla43437r5vplmkujdytixcxgm7sc4hojspg@jcc63stk66hz>
+ <cover.1687898895.git.nabijaczleweli@nabijaczleweli.xyz>
+ <e770188fd86595c6f39d4da86d906a824f8abca3.1687898895.git.nabijaczleweli@nabijaczleweli.xyz>
+ <CAOQ4uxjQcn9DUo_Z2LGTgG0SOViy8h5=ST_A5v1v=gdFLwj6Hw@mail.gmail.com>
+ <q2nwpf74fngjdlhukkxvlxuz3xkaaq4aup7hzpqjkqlmlthag5@dsx6m7cgk5yt>
+ <CAOQ4uxh-ALXa0N-aZzVtO9E5e6C5++OOnkbL=aPSwRbF=DL1Pw@mail.gmail.com>
 MIME-Version: 1.0
-References: <CAA85sZukiFq4A+b9+en_G85eVDNXMQsnGc4o-4NZ9SfWKqaULA@mail.gmail.com>
- <CAA85sZvm1dL3oGO85k4R+TaqBiJsggUTpZmGpH1+dqdC+U_s1w@mail.gmail.com>
- <e7e49ed5-09e2-da48-002d-c7eccc9f9451@intel.com> <CAA85sZtyM+X_oHcpOBNSgF=kmB6k32bpB8FCJN5cVE14YCba+A@mail.gmail.com>
- <22aad588-47d6-6441-45b2-0e685ed84c8d@intel.com> <CAA85sZti1=ET=Tc3MoqCX0FqthHLf6MSxGNAhJUNiMms1TfoKA@mail.gmail.com>
- <CAA85sZvn04k7=oiTQ=4_C8x7pNEXRWzeEStcaXvi3v63ah7OUQ@mail.gmail.com>
- <ffb554bfa4739381d928406ad24697a4dbbbe4a2.camel@redhat.com>
- <CAA85sZunA=tf0FgLH=MNVYq3Edewb1j58oBAoXE1Tyuy3GJObg@mail.gmail.com>
- <CAA85sZsH1tMwLtL=VDa5=GBdVNWgifvhK+eG-hQg69PeSxBWkg@mail.gmail.com>
- <CAA85sZu=CzJx9QD87-vehOStzO9qHUSWk6DXZg3TzJeqOV5-aw@mail.gmail.com>
- <0a040331995c072c56fce58794848f5e9853c44f.camel@redhat.com>
- <CAA85sZuuwxtAQcMe3LHpFVeF7y-bVoHtO1nukAa2+NyJw3zcyg@mail.gmail.com>
- <CAA85sZurk7-_0XGmoCEM93vu3vbqRgPTH4QVymPR5BeeFw6iFg@mail.gmail.com>
- <486ae2687cd2e2624c0db1ea1f3d6ca36db15411.camel@redhat.com>
- <CAA85sZsJEZK0g0fGfH+toiHm_o4pdN+Wo0Wq9fgsUjHXGxgxQA@mail.gmail.com>
- <CAA85sZs4KkfVojx=vxbDaWhWRpxiHc-RCc2OLD2c+VefRjpTfw@mail.gmail.com> <5688456234f5d15ea9ca0f000350c28610ed2639.camel@redhat.com>
-In-Reply-To: <5688456234f5d15ea9ca0f000350c28610ed2639.camel@redhat.com>
-From:   Ian Kumlien <ian.kumlien@gmail.com>
-Date:   Wed, 28 Jun 2023 22:18:27 +0200
-Message-ID: <CAA85sZvT-vAHQooy8+i0-bTxgv4JjkqMorLL1HjkXK6XDKX41w@mail.gmail.com>
-Subject: Re: [Intel-wired-lan] bug with rx-udp-gro-forwarding offloading?
-To:     Paolo Abeni <pabeni@redhat.com>
-Cc:     Alexander Lobakin <aleksander.lobakin@intel.com>,
-        intel-wired-lan <intel-wired-lan@lists.osuosl.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="kq2jxxetonbh2epl"
+Content-Disposition: inline
+In-Reply-To: <CAOQ4uxh-ALXa0N-aZzVtO9E5e6C5++OOnkbL=aPSwRbF=DL1Pw@mail.gmail.com>
+User-Agent: NeoMutt/20230517
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,PDS_RDNS_DYNAMIC_FP,
+        RDNS_DYNAMIC,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 28, 2023 at 5:15=E2=80=AFPM Paolo Abeni <pabeni@redhat.com> wro=
-te:
->
-> On Wed, 2023-06-28 at 14:04 +0200, Ian Kumlien wrote:
-> > So have some hits, would it be better without your warn on? ... Things
-> > are a bit slow atm - lets just say that i noticed the stacktraces
-> > because a stream stuttered =3D)
->
-> Sorry, I screwed-up completely a newly added check.
 
-Thats ok
+--kq2jxxetonbh2epl
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> If you have Kasan enabled you can simply and more safely remove my 2nd
-> patch. Kasan should be able to catch all the out-of-buffer scenarios
-> such checks were intended to prevent.
+On Wed, Jun 28, 2023 at 09:38:03PM +0300, Amir Goldstein wrote:
+> On Wed, Jun 28, 2023 at 8:09=E2=80=AFPM Ahelenia Ziemia=C5=84ska
+> <nabijaczleweli@nabijaczleweli.xyz> wrote:
+> > On Wed, Jun 28, 2023 at 09:33:43AM +0300, Amir Goldstein wrote:
+> > > I think we need to add a rule to fanotify_events_supported() to ban
+> > > sb/mount marks on SB_KERNMOUNT and backport this
+> > > fix to LTS kernels (I will look into it) and then we can fine tune
+> > > the s_fsnotify_connectors optimization in fsnotify_parent() for
+> > > the SB_KERNMOUNT special case.
+> > > This may be able to save your patch for the faith of NACKed
+> > > for performance regression.
+> > This goes over my head, but if Jan says it makes sense
+> > then it must do.
+> Here you go:
+> https://github.com/amir73il/linux/commits/fsnotify_pipe
+>=20
+> I ended up using SB_NOUSER which is narrower than
+> SB_KERNMOUNT.
+>=20
+> Care to test?
+> 1) Functionally - that I did not break your tests.
+) | gzip -d > inotify13; chmod +x inotify13; exec ./inotify13
+tst_test.c:1560: TINFO: Timeout per run is 0h 00m 30s
+inotify13.c:260: TINFO: file_to_pipe
+inotify13.c:269: TPASS: =D0=BE=D0=BA
+inotify13.c:260: TINFO: file_to_pipe
+inotify13.c:269: TPASS: =D0=BE=D0=BA
+inotify13.c:260: TINFO: splice_pipe_to_file
+inotify13.c:269: TPASS: =D0=BE=D0=BA
+inotify13.c:260: TINFO: pipe_to_pipe
+inotify13.c:269: TPASS: =D0=BE=D0=BA
+inotify13.c:260: TINFO: pipe_to_pipe
+inotify13.c:269: TPASS: =D0=BE=D0=BA
+inotify13.c:260: TINFO: vmsplice_pipe_to_mem
+inotify13.c:269: TPASS: =D0=BE=D0=BA
+inotify13.c:260: TINFO: vmsplice_mem_to_pipe
+inotify13.c:269: TPASS: =D0=BE=D0=BA
 
-I thought I'd run without any of the patches, preparing for that now,
-but i have to stop testing tomorrow and will continue on monday if i
-don't catch anything
+Summary:
+passed   7
+failed   0
+broken   0
+skipped  0
+warnings 0
 
-> Cheers,
->
-> Paolo
->
+The discrete tests from before also work as expected,
+both to a fifo and an anon pipe.
+
+> 2) Optimization - that when one anon pipe has an inotify watch
+> write to another anon pipe stops at fsnotify_inode_has_watchers()
+> and does not get to fsnotify().
+Yes, I can confirm this as well: fsnotify_parent() only continues to
+fsnotify() for the watched pipe; writes to other pipes early-exit.
+
+To validate the counterfactual, I reverted "fsnotify: optimize the case
+of anonymous pipe with no watches" and fsnotify() was being called
+for each anon pipe write, so long as any anon pipe watches were registered.
+
+--kq2jxxetonbh2epl
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEfWlHToQCjFzAxEFjvP0LAY0mWPEFAmSclaoACgkQvP0LAY0m
+WPGEbg//cj23PmCJ73Ev+PmMefCpRtuYucdcpi5l3icLi2aAsM6rjVn9RzHgj/nj
+DYif2JzFoHk4lwsBcx5v2t0aZXAadUFPq8RmrTfplNfsaMcGkCboCOYIRZ8FCnH8
+tAuZREZl7mO/8byRzFnSIBiDzPdi/y7WAglnRZpYIGq6LYPD65cQq6Xx83f8d0vi
+avzT3S8+jTV9npgfqsuPX6aN9tvVLD/rb70H6eiQT8tLK3IjogU7yPrc7GtqKFN1
+jseFtY5Y2R2IfDgbJmMheRQ23vo2R2Avjls1zLk9m6v0HxHnBGUjTYfwpNX1PNjI
+1OfbxzNTGmhUpF1shVAljZ3HMQbrYSyKyaWY0zCOaj0h2QVRtC+li5xqIt6o9oTZ
+an7on2xShO2UylU9rEnb+pPll9r68zSki5N2nwhIyv/BQDGzao4eNMFMVNknn35b
+Nr3xGh0HHUOgbA09PbtrfNU/x22aGs1XVVXLPfWpbuFaz9xUkaeqArEIdHg/yZ2y
+nEKwi1cqfE4di2p06obnaODlcvOrGm+2yimd9g6Sdvc9TejfyoeT0wJeD+VJaEiI
+zdJQaB8RIR58jI4YCrJ8zIbpn5EPR04+p4qls0dRleWw6jeZxn+weVScVkuH9q01
+mSjPLuYuSHTXeCUyiIjPGtrxvX3LbW4FZGiP17jX8S1IpkKjMt0=
+=c7nN
+-----END PGP SIGNATURE-----
+
+--kq2jxxetonbh2epl--
