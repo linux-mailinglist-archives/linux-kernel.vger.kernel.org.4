@@ -2,28 +2,28 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 181EA740C5B
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 11:08:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85875740C52
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 11:04:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234023AbjF1JEf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 05:04:35 -0400
-Received: from mout.gmx.net ([212.227.15.19]:60829 "EHLO mout.gmx.net"
+        id S233926AbjF1JEZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 05:04:25 -0400
+Received: from mout.gmx.net ([212.227.15.19]:45821 "EHLO mout.gmx.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233497AbjF1Itt (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 04:49:49 -0400
+        id S233129AbjF1Itp (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 28 Jun 2023 04:49:45 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
- s=s31663417; t=1687942153; x=1688546953; i=georgmueller@gmx.net;
- bh=IqMVZAVcC6oao8CL+MjCeJoklvxUgAe2/NirNejdy8k=;
+ s=s31663417; t=1687942157; x=1688546957; i=georgmueller@gmx.net;
+ bh=7EYxf2mbjFZfjlwtXaTopEVdIniSJTqMoHEmr5pnAAQ=;
  h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
- b=PO8Q4Ymw00tef3JsmohZqScnvZgOjJEDD2HoBmWtQtZE+v+v51lAFQdFVZSRZ7cnB2YQf+x
- E9kG9ah0x1qhzu3FUokpHBEt5s5OyHbHw0T+mCx1oY4gFkUMQmspKbsKdFFETIPFVFfUesSyM
- wr2esT8BE5cVde5TEEwZAA77jejx32t0Il6b6mQugoAG5HyC/7X+WNYmqhD/gLdrSbAEkM6xM
- b6MOaBE7plfFg0qZuaLz8fUieuAvx96LXCszfG6cxQm50zxGL7j8BCUpUdlXwF8fnfY4srXmA
- 41pYAYBFt9eMl8c5AX1LphfboMNb2xr4+Kvljb70Ato8DxF1JeSw==
+ b=jbLHvXBonqIsNYqv0cmDGf/lc9iYbCb+tMrlV+CXWUXPsekXscsvvKbMjufE1ptSNfrYxR1
+ UyMXqBzcrvlrlb5o1IRC+BVc9tA0YsXhValMK+n64dPvKKMcw7SvuNQsb6rkzxI0YUziAQAQy
+ 1o9ws4uxeZ0gpB5a9se8wxayp/VS57iSM+m1Y2Pmks+pL2Nr8H5KObuc4UUMY8WlzpqAzRsD1
+ rqU+NlODhWyL2W2vJ6vsjy5t6GLogH7hjtOf50hmhuxA5nfB+43ecTycsMki+16j/J/UNnGTf
+ YuwpVXKc1d/vbskYnHyXG+0jczHi0tW7uhp+SsCT2K9im+M/fHrw==
 X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
 Received: from nb-georg.intra.allegro-packets.com ([79.246.84.17]) by
  mail.gmx.net (mrgmx004 [212.227.17.190]) with ESMTPSA (Nemesis) id
- 1MMXUD-1qWEjH3txv-00JYeE; Wed, 28 Jun 2023 10:49:13 +0200
+ 1Msq2E-1puR8P1nKq-00tBRZ; Wed, 28 Jun 2023 10:49:17 +0200
 From:   =?UTF-8?q?Georg=20M=C3=BCller?= <georgmueller@gmx.net>
 To:     Peter Zijlstra <peterz@infradead.org>,
         Ingo Molnar <mingo@redhat.com>,
@@ -40,138 +40,88 @@ Cc:     =?UTF-8?q?Georg=20M=C3=BCller?= <georgmueller@gmx.net>,
         Arnaldo Carvalho de Melo <acme@redhat.com>,
         linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
         stable@vger.kernel.org
-Subject: [PATCH v3 1/2] perf probe: add test for regression introduced by switch to die_get_decl_file
-Date:   Wed, 28 Jun 2023 10:45:50 +0200
-Message-ID: <20230628084551.1860532-5-georgmueller@gmx.net>
+Subject: [PATCH v3 2/2] perf probe: read DWARF files from the correct CU
+Date:   Wed, 28 Jun 2023 10:45:51 +0200
+Message-ID: <20230628084551.1860532-6-georgmueller@gmx.net>
 X-Mailer: git-send-email 2.41.0
 In-Reply-To: <20230628084551.1860532-3-georgmueller@gmx.net>
 References: <20230628084551.1860532-3-georgmueller@gmx.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:kdGhZgfEbflE33yA0vvf/egN3okf3RDeYUzy9I3XmrQKqp64kyS
- ZCvjqt1Xy+L+i1hzZVR81GnnkNfmju/AsraIyz+mWKnhh9N5VuagyCScGL2w9LPg4NjBQcz
- EwblKYezTE3IrCTrFCNtb2NwDCLMoMNesms8vojdlshKazRJwK/TOBbEGmoq0YWGPQaR2hQ
- LTs0uVDzI8AgoL9qxAxiw==
+X-Provags-ID: V03:K1:Cb82SGcEsrL11zuH0JhYn8EPvv7SYgVIiYe39ozfB6jCOHBRCG3
+ tdBkdi7oMnRW+phUL09ePfExRcxv1JtDBLya3Woi1NpS/u2jFhx1jcsiuFRqmkSVLzmnqbe
+ bwyisMG9/BYJriHw3Mf4q8UuPv3OyvXg2esjKwIzlywis/rh3EhFh+Sh1s0HqD0zPm0yQOY
+ 7UNmWN3HPHoS4XPyv+9Cg==
 X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:uPxKcZocKN8=;Y+mmy4nqoTka2UdcxmCpU7DmPmq
- wGchdmvx3cXXWQFZ9snoG9/sVicxe2kCdS2a+8J/2l4vMJ00hLy/SRd5PWAnxbj45Z8w78bsn
- xAk135uApf75LznxzgE774U+D2w77fxfPSl7ShCacM3Ml/SaX2NERbuh2+M4JIRrxkwT8Gjoh
- NizRog2VM1udzCFVjBwY49vI4UlqFYi1T90k3deuJTjHlOMo1QBsybEWTZ2SLMcJlD1L4QACV
- Mv/srZdKY5NrIvM8r8gNxQZZXirTvcwSKRJp3s9fkenYw/6VeiwWCemhgmmXblRQxFxEiTYhJ
- jbFyQix+nQAz3Lhk/c5PhxEhO+zrBIxeNyRTBXCmppKMhtPMxDnEyb9L4X8NAsE4hEU/jl2TW
- 0VWAKuIE0mLH596zFaLmp91DZil7VgEJpMQhHxfYtCRwr8msG6XT6tkokeYky7byxhfk8N2i8
- jIqlJ41FkAS45FGEZ+Wd6X3fuZbIhEVgdEpCSBb/rSyohM7q0WAaVtYzEjOZ1nZAtRHheJ+iB
- RroTy9QXdtIuBXDbTK5/aCOa+GUnoXn34mB2YGRrntQi5GhmOfmZwqsQuouoeQ8BwxKTfiKTp
- uvqEN+CtAwvb4P8Kz+XPXs3NOdADGU9xOEm9hRiwpn/RbgujmLcpDxRWnRbLNDtRb+1QPAUwU
- wFCKdPsND4RyRBshTTJzpNep/9clb9Cxq7Ydw15j/3IEXW7PlTTnhR1UC8NtMHnq/GuzsctCA
- kD9VDwNX2QuZIpobLaI87hcEUbkOJY90Z5ti0PBywK+XJQQaE2RSxs54Q6wXQLZlU5mEF17x5
- Mxgq7AXCmaS/iU3FtVU9t6SHAYu9nfIs6FHaydOJWCJQEzOZx3NzqheV4nMUXujfuPhO8ti9S
- L7H9VNIdVui7Zr2k8CPJSOJoWuLYK8WBK9gYu/uOv7CBW/cUDsV54Z+2+g+4j8++ges6bKLVE
- f82fEE2aAwJNzXgQNcwDQjw9lDU=
+UI-OutboundReport: notjunk:1;M01:P0:lcY/W0j30Co=;e7msvmEaR+Q9xqySdxbTx8k8St5
+ BOvJXLrzS5VRpHvvuT1aMLe4qblAsZeqsHSyXNQBnfDYnx+XknZJgVsr9ZFuGlFVSyu1RQaYY
+ NBzSp3SxlUwSjwUK0vyMaS1ENVzkesXBAw0iFkUHaz98HWRMgW+LqZF9k7dxLRONffu+AnaSr
+ LN9S3iPhOy+ByS2cV53aPdWF5AWly1iNIG7Ydm/VepxRdwLq9xqQ7GVgx3nx79xNYylws3t9m
+ 6BjaLY3geW3davNGhyUbWmRWtPqsfArZwuqv+ahKdLRrya39fZdq6XOqMdWZ94KlZdvWgdkOX
+ vgFqH23DqvhJlGRy6+S3TPGfOnqHgymMidK27BF2FaXriit2OGC2hfxhx9xHMUW7LPxh9Z695
+ d/1G/mB/i+x5ddSjSpXQBEr2SlsEy2PXBcGWhi5srm7c2296Aqm0Q7pR8HsorvA/Kz7ITBlr6
+ EGgE+5dC4k6Iay/2D0ZjPQuBRMaLojzmOskpnmoNhbueCxVxrvVro8jGniSzU3qGZUVyxZ6lL
+ Tk7nnqu8TR1RGMCnzjCVYQfX8N8SCdvnQGidZxuOSTVeZfzViIxyD4TCDoV0nWlUQb7tcvXd+
+ xyujVGIwReFJ6SkfX7SkRPxPxU0lxxEEaCVfKWlRX464ieccxO9PumWXC1tbEqfgWqP3nSqdu
+ s3hCrBXsdvn0BWdn8DOZWIabNqfKJXg+u5kTj5QsYgmI20d32LGTHKgKUiDhT9zbcpmgQBlj8
+ x2G6ossF6QZhOcZ/S9JJJOWl5ZQyd0lEBXs+8NRf7PYryP6SOroAcI7M0z1fQZhI9AGzzL4fb
+ CVEymTXwgKAoVyo9+I/kS3Ca05Hh8KfW1Z7MbfPL0Ah8ulKph89Lr2EVDnooztVUaXiyML4EN
+ o/sJviXjoALTHcR5cJw+O2RCP3bb1ydbH/bA8UWEklxJnFNBprYR36JR5sgAnw11NqaOKZ1S8
+ c6QLcpQW7nc6X+nUMvACIWYYPmg=
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch adds a test to validate that perf probe works for binaries
-where DWARF info is split into multiple CUs
+After switching from dwarf_decl_file() to die_get_decl_file(), it is not
+possible to add probes for certain functions:
 
+ $ perf probe -x /usr/lib/systemd/systemd-logind match_unit_removed
+ A function DIE doesn't have decl_line. Maybe broken DWARF?
+ A function DIE doesn't have decl_line. Maybe broken DWARF?
+ Probe point 'match_unit_removed' not found.
+    Error: Failed to add events.
+
+The problem is that die_get_decl_file() uses the wrong CU to search for
+the file. elfutils commit e1db5cdc9f has some good explanation for this:
+
+    dwarf_decl_file uses dwarf_attr_integrate to get the DW_AT_decl_file
+    attribute. This means the attribute might come from a different DIE
+    in a different CU. If so, we need to use the CU associated with the
+    attribute, not the original DIE, to resolve the file name.
+
+This patch uses the same source of information as elfutils: use attribute
+DW_AT_decl_file and use this CU to search for the file.
+
+Fixes: dc9a5d2ccd5c ("perf probe: Fix to get declared file name from clang=
+ DWARF5")
 Signed-off-by: Georg M=C3=BCller <georgmueller@gmx.net>
 Link: https://lore.kernel.org/r/5a00d5a5-7be7-ef8a-4044-9a16249fff25@gmx.n=
 et/
 Cc: stable@vger.kernel.org
 =2D--
- .../shell/test_uprobe_from_different_cu.sh    | 77 +++++++++++++++++++
- 1 file changed, 77 insertions(+)
- create mode 100755 tools/perf/tests/shell/test_uprobe_from_different_cu.s=
-h
+ tools/perf/util/dwarf-aux.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/tools/perf/tests/shell/test_uprobe_from_different_cu.sh b/too=
-ls/perf/tests/shell/test_uprobe_from_different_cu.sh
-new file mode 100755
-index 000000000000..00d2e0e2e0c2
-=2D-- /dev/null
-+++ b/tools/perf/tests/shell/test_uprobe_from_different_cu.sh
-@@ -0,0 +1,77 @@
-+#!/bin/bash
-+# test perf probe of function from different CU
-+# SPDX-License-Identifier: GPL-2.0
-+
-+set -e
-+
-+temp_dir=3D$(mktemp -d /tmp/perf-uprobe-different-cu-sh.XXXXXXXXXX)
-+
-+cleanup()
-+{
-+	trap - EXIT TERM INT
-+	if [[ "${temp_dir}" =3D~ ^/tmp/perf-uprobe-different-cu-sh.*$ ]]; then
-+		echo "--- Cleaning up ---"
-+		perf probe -x ${temp_dir}/testfile -d foo
-+		rm -f "${temp_dir}/"*
-+		rmdir "${temp_dir}"
-+	fi
-+}
-+
-+trap_cleanup()
-+{
-+        cleanup
-+        exit 1
-+}
-+
-+trap trap_cleanup EXIT TERM INT
-+
-+cat > ${temp_dir}/testfile-foo.h << EOF
-+struct t
-+{
-+  int *p;
-+  int c;
-+};
-+
-+extern int foo (int i, struct t *t);
-+EOF
-+
-+cat > ${temp_dir}/testfile-foo.c << EOF
-+#include "testfile-foo.h"
-+
-+int
-+foo (int i, struct t *t)
-+{
-+  int j, res =3D 0;
-+  for (j =3D 0; j < i && j < t->c; j++)
-+    res +=3D t->p[j];
-+
-+  return res;
-+}
-+EOF
-+
-+cat > ${temp_dir}/testfile-main.c << EOF
-+#include "testfile-foo.h"
-+
-+static struct t g;
-+
-+int
-+main (int argc, char **argv)
-+{
-+  int i;
-+  int j[argc];
-+  g.c =3D argc;
-+  g.p =3D j;
-+  for (i =3D 0; i < argc; i++)
-+    j[i] =3D (int) argv[i][0];
-+  return foo (3, &g);
-+}
-+EOF
-+
-+gcc -g -Og -flto -c ${temp_dir}/testfile-foo.c -o ${temp_dir}/testfile-fo=
-o.o
-+gcc -g -Og -c ${temp_dir}/testfile-main.c -o ${temp_dir}/testfile-main.o
-+gcc -g -Og -o ${temp_dir}/testfile ${temp_dir}/testfile-foo.o ${temp_dir}=
-/testfile-main.o
-+
-+perf probe -x ${temp_dir}/testfile --funcs foo
-+perf probe -x ${temp_dir}/testfile foo
-+
-+cleanup
+diff --git a/tools/perf/util/dwarf-aux.c b/tools/perf/util/dwarf-aux.c
+index b07414409771..137b3ed9897b 100644
+=2D-- a/tools/perf/util/dwarf-aux.c
++++ b/tools/perf/util/dwarf-aux.c
+@@ -478,8 +478,10 @@ static const char *die_get_file_name(Dwarf_Die *dw_di=
+e, int idx)
+ {
+ 	Dwarf_Die cu_die;
+ 	Dwarf_Files *files;
++	Dwarf_Attribute attr_mem;
+
+-	if (idx < 0 || !dwarf_diecu(dw_die, &cu_die, NULL, NULL) ||
++	if (idx < 0 || !dwarf_attr_integrate(dw_die, DW_AT_decl_file, &attr_mem)=
+ ||
++	    !dwarf_cu_die(attr_mem.cu, &cu_die, NULL, NULL, NULL, NULL, NULL, NU=
+LL) ||
+ 	    dwarf_getsrcfiles(&cu_die, &files, NULL) !=3D 0)
+ 		return NULL;
+
 =2D-
 2.41.0
 
