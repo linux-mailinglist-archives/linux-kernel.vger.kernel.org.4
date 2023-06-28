@@ -2,163 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 085F674171D
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 19:25:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7340474171F
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 19:25:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230262AbjF1RYz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 13:24:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43656 "EHLO
+        id S231300AbjF1RZh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 13:25:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230215AbjF1RYr (ORCPT
+        with ESMTP id S230215AbjF1RZf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 13:24:47 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8CBB1FCD
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 10:24:46 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5D11161407
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 17:24:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 773F0C433C8;
-        Wed, 28 Jun 2023 17:24:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687973085;
-        bh=Sop1yazDMV/lbh0CwxeOMS0e7MThVMtbfcxDvIY6Dh8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=dSRecRJtf1nhaszbsN0TCBX6rcEJD8lDqlCiZxK/c+rNQ5KqgAJzo/BFob79E2NCR
-         RPurYxvyLHoGAN3GKmHY/cG/kuVpKmHsgw+HB1vrajaXVNV9V3hJMhqMQe/HXNAIUT
-         0dUNCPXrc7fkEtgtMhZgAb6TE12IWDijpbqG3ShvsQP2YRjknXqaUSD/7EFuw+ulY6
-         nP9ktEvzTdO0W+IZi/fsKBuXKo5XRcB7WzBG0XK/FjJL3b04sF23QKfJFl8OeeDlLu
-         KvyqV+f21g6KzVBcwmV6xKUqPAfGze5q6t4oX0S3NHZRoVxRGW7ta6JTuVTOs5aE2K
-         8js1ra+oT9WgA==
-Date:   Wed, 28 Jun 2023 18:24:40 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     Evan Green <evan@rivosinc.com>
-Cc:     Conor Dooley <conor.dooley@microchip.com>,
-        Samuel Ortiz <sameo@rivosinc.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-riscv@lists.infradead.org,
-        "Hongren (Zenithal) Zheng" <i@zenithal.me>, linux@rivosinc.com,
-        Andrew Jones <ajones@ventanamicro.com>,
-        Heiko Stuebner <heiko.stuebner@vrull.eu>,
-        Anup Patel <apatel@ventanamicro.com>,
-        linux-kernel@vger.kernel.org, Guo Ren <guoren@kernel.org>,
-        Atish Patra <atishp@rivosinc.com>,
-        =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@rivosinc.com>,
-        Jiatai He <jiatai2021@iscas.ac.cn>
-Subject: Re: [PATCH 1/3] RISC-V: add Bitmanip/Scalar Crypto parsing from DT
-Message-ID: <20230628-dragonish-lullaby-b44d2df09d66@spud>
-References: <20230627143747.1599218-1-sameo@rivosinc.com>
- <20230627143747.1599218-2-sameo@rivosinc.com>
- <CALs-HssMkVikspnEi-Ek2t=ABvFvgptAhsBjk1+aLuVjiP7P7w@mail.gmail.com>
- <20230627-debating-twelve-da2c1ed60948@spud>
- <ZJwE5wRVkoND3Z6P@vermeer>
- <20230628-unfeeling-tavern-edd4f58396fa@wendy>
- <CALs-HstZe+bw_fY--4FQXfFoA67tvMSaEjKhZ2pRstNT07xBxA@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="Nk2liGfu8KoG29TY"
-Content-Disposition: inline
-In-Reply-To: <CALs-HstZe+bw_fY--4FQXfFoA67tvMSaEjKhZ2pRstNT07xBxA@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Wed, 28 Jun 2023 13:25:35 -0400
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FDAB1FCD
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 10:25:34 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-561eb6c66f6so755667b3.0
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 10:25:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1687973133; x=1690565133;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=hMZRtPRHvkkt7QqAFekeMTqeELkYPbEsxE5DbVGbAQw=;
+        b=WJ1srCN4efbgzWv3Rm7jHxnLtnFQ2wC8rKhvLnebGnMmhfm1vwe75Fpp9qURntM6rK
+         HXEFdZdpYeBoY0oo2q8NVYAYDB2Af2TBcc08grhsroRYbC4wgzxne2wT/iqImNvLju32
+         boskIvVwSb4RiHLzq10iAh2+0lvX9vd5veraKc/6XEyYO5TBSlO3TEHmoa8itoh4h48s
+         O2lr9wHEgZTwZdenimo4cU9XzUz/E9rtjJPoOH7wBjEFI+PW0EPeTkJKaDva9+T1pgpP
+         EZAUMcpKGPzBanBAIx37EPdwB3MHQztoeF9Nyb+oN+m3+K7F9NvyBZr0epvPDK8hqfB/
+         Nmkw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687973133; x=1690565133;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=hMZRtPRHvkkt7QqAFekeMTqeELkYPbEsxE5DbVGbAQw=;
+        b=GCXt8X+hAJqb7gXuCLka2UEL/i0alS8qMLQFXlaMclm8KtzcQNcvAdSae3ewxeqO8w
+         sUNE4eREjXkWsctn9/EH9RfeTZf3n57LxC7dHLW+MBbJHzluN8Cgq8Od8QcjQ6Z1hcEq
+         yHrtOyK77Yt4OoFYCI18eDgKtSr+kp93sBBmdOf2Ra8FY3WdUbXgpQpUampn9bpjrSwN
+         ECjJ6D2H3SFcG7YbnQFqCeDZuDF2T6TuMEApHKaWVMqD6Pl6DVaiymE0PxIT4fkpzHvr
+         p7uj/kkd1EtSoIo0W6nHwTdd2pBm5D5U/tY5ME7tyRrpwZASWI2IkjfpurkxUgXt2IAH
+         7cZA==
+X-Gm-Message-State: AC+VfDw3Bcn3W8ZfDGaucoaYWqhDFeoxj+xfGJAuS2PLriCeRXzkicno
+        Nreh1qaQcAMmfXkXbQwkuzrfE8i3A/Q=
+X-Google-Smtp-Source: ACHHUZ4DvlNUYTACDbiNlaFJHL9tx6qnixg7xtHhlSbjHbe7y4H1JUre29eeW6meRLf/iFtOPgU9zt+em+E=
+X-Received: from surenb-desktop.mtv.corp.google.com ([2620:15c:211:201:eea3:e898:7d7a:1125])
+ (user=surenb job=sendgmr) by 2002:a05:690c:701:b0:565:bd68:b493 with SMTP id
+ bs1-20020a05690c070100b00565bd68b493mr15502484ywb.6.1687973133351; Wed, 28
+ Jun 2023 10:25:33 -0700 (PDT)
+Date:   Wed, 28 Jun 2023 10:25:23 -0700
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.41.0.162.gfafddb0af9-goog
+Message-ID: <20230628172529.744839-1-surenb@google.com>
+Subject: [PATCH v5 0/6] Per-VMA lock support for swap and userfaults
+From:   Suren Baghdasaryan <surenb@google.com>
+To:     akpm@linux-foundation.org
+Cc:     willy@infradead.org, hannes@cmpxchg.org, mhocko@suse.com,
+        josef@toxicpanda.com, jack@suse.cz, ldufour@linux.ibm.com,
+        laurent.dufour@fr.ibm.com, michel@lespinasse.org,
+        liam.howlett@oracle.com, jglisse@google.com, vbabka@suse.cz,
+        minchan@google.com, dave@stgolabs.net, punit.agrawal@bytedance.com,
+        lstoakes@gmail.com, hdanton@sina.com, apopple@nvidia.com,
+        peterx@redhat.com, ying.huang@intel.com, david@redhat.com,
+        yuzhao@google.com, dhowells@redhat.com, hughd@google.com,
+        viro@zeniv.linux.org.uk, brauner@kernel.org,
+        pasha.tatashin@soleen.com, surenb@google.com, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-team@android.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+When per-VMA locks were introduced in [1] several types of page faults
+would still fall back to mmap_lock to keep the patchset simple. Among them
+are swap and userfault pages. The main reason for skipping those cases was
+the fact that mmap_lock could be dropped while handling these faults and
+that required additional logic to be implemented.
+Implement the mechanism to allow per-VMA locks to be dropped for these
+cases.
+First, change handle_mm_fault to drop per-VMA locks when returning
+VM_FAULT_RETRY or VM_FAULT_COMPLETED to be consistent with the way
+mmap_lock is handled. Then change folio_lock_or_retry to accept vm_fault
+and return vm_fault_t which simplifies later patches. Finally allow swap
+and uffd page faults to be handled under per-VMA locks by dropping per-VMA
+and retrying, the same way it's done under mmap_lock.
+Naturally, once VMA lock is dropped that VMA should be assumed unstable
+and can't be used.
 
---Nk2liGfu8KoG29TY
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Changes since v4 posted at [2]
+- 5/6 changed setting VM_FAULT_RETRY bit to an assignment, per Peter Xu
+- 5/6 moved release_fault_lock to its final place, per Peter Xu
+- 6/6 removed mm parameter in assert_fault_locked, per Peter Xu
+- 6/6 replaced BUG_ON with WARN_ON_ONCE and moved the check for
+FAULT_FLAG_RETRY_NOWAIT && FAULT_FLAG_VMA_LOCK into sanitize_fault_flags,
+per Peter Xu
 
-On Wed, Jun 28, 2023 at 10:18:34AM -0700, Evan Green wrote:
-> On Wed, Jun 28, 2023 at 4:10=E2=80=AFAM Conor Dooley <conor.dooley@microc=
-hip.com> wrote:
-> >
-> > On Wed, Jun 28, 2023 at 12:01:11PM +0200, Samuel Ortiz wrote:
-> > > On Tue, Jun 27, 2023 at 07:48:15PM +0100, Conor Dooley wrote:
-> > > > On Tue, Jun 27, 2023 at 11:14:30AM -0700, Evan Green wrote:
-> > > > > On Tue, Jun 27, 2023 at 7:38=E2=80=AFAM Samuel Ortiz <sameo@rivos=
-inc.com> wrote:
-> >
-> > > > > It would be nice to consolidate the ones together that search for=
- a
-> > > > > single string and set multiple bits, though I don't have any super
-> > > > > elegant ideas for how off the top of my head.
-> > > >
-> > > > I've got a refactor of this code in progress, dropping all of these
-> > > > copy-paste in place of a loop. It certainly looks more elegant than
-> > > > this, but it will fall over a bit for these "one string matches many
-> > > > extensions" cases. See here:
-> > > > https://patchwork.kernel.org/project/linux-riscv/patch/20230626-thi=
-eving-jockstrap-d35d20b535c5@wendy/
-> > > > My immediate thought is to add another element to riscv_isa_ext_dat=
-a,
-> > > > that contains "parent" extensions to check for. Should be fairly do=
-able,
-> > > > I'll whip something up on top of that...
-> > >
-> > > Nice, and thanks for the review.
-> >
-> > > Should I wait for your refactor to be merged before pushing this one?
-> >
-> > I don't know. I think that you should continue on with your series here,
-> > and whichever goes in second gets rebased on top of the other.
-> > I don't think it makes material difference to review of this patchset as
-> > to whether you rebase on top of what I'm working on, so I wouldn't
-> > bother until it gets merged.
-> >
-> > Rather hacky, had less time than expected this morning:
-> > https://git.kernel.org/pub/scm/linux/kernel/git/conor/linux.git/commit/=
-?h=3Driscv-extensions-strings-supersets
-> > Clearly there's issues with looping to RISCV_ISA_MAX_SUPERSETS & I just
-> > repurposed Zicsr for the sake of testing something in the time I had.
-> >
-> > Evan, at a high level, does that look more elegant to you, or have I ma=
-de
-> > things worse?
-> >
->=20
-> I see what you're going for at least. It's unfortunate that when
-> someone bumps up RISCV_ISA_MAX_SUPERSETS it squares the whole array.
-> Another way to go might be to define the elements in a separate array,
-> like:
->=20
-> unsigned int riscv_zks_exts[] =3D {
->        RISCV_ISA_EXT_ZBKB,
->        RISCV_ISA_EXT_ZBKC,
->        ....
-> };
->=20
-> then the macro entry looks like:
->=20
-> SET_ISA_EXT_MAP_MULTI("zks", riscv_zks_exts),
->=20
-> where the SET_ISA_EXT_MAP_MULTI() could use ARRAY_SIZE() to stash both
-> the pointer to the array and the number of elements.
+Note: patch 3/8 will cause a trivial merge conflict in arch/arm64/mm/fault.c
+when applied over mm-unstable branch due to a patch from ARM64 tree [3]
+which is missing in mm-unstable.
 
-Yup, I like the sound of that. I like the variadic stuff as it'd not
-require defining a bunch of sub-arrays of supersets. I guess if it grows
-too badly, we can just dump it off into another file or w/e.
+[1] https://lore.kernel.org/all/20230227173632.3292573-1-surenb@google.com/
+[2] https://lore.kernel.org/all/20230628071800.544800-1-surenb@google.com/
+[3] https://lore.kernel.org/all/20230524131305.2808-1-jszhang@kernel.org/
 
---Nk2liGfu8KoG29TY
-Content-Type: application/pgp-signature; name="signature.asc"
+Suren Baghdasaryan (6):
+  swap: remove remnants of polling from read_swap_cache_async
+  mm: add missing VM_FAULT_RESULT_TRACE name for VM_FAULT_COMPLETED
+  mm: drop per-VMA lock when returning VM_FAULT_RETRY or
+    VM_FAULT_COMPLETED
+  mm: change folio_lock_or_retry to use vm_fault directly
+  mm: handle swap page faults under per-VMA lock
+  mm: handle userfaults under VMA lock
 
------BEGIN PGP SIGNATURE-----
+ arch/arm64/mm/fault.c    |  3 ++-
+ arch/powerpc/mm/fault.c  |  3 ++-
+ arch/s390/mm/fault.c     |  3 ++-
+ arch/x86/mm/fault.c      |  3 ++-
+ fs/userfaultfd.c         | 34 ++++++++++++----------------
+ include/linux/mm.h       | 39 ++++++++++++++++++++++++++++++++
+ include/linux/mm_types.h |  3 ++-
+ include/linux/pagemap.h  |  9 ++++----
+ mm/filemap.c             | 37 +++++++++++++++---------------
+ mm/madvise.c             |  4 ++--
+ mm/memory.c              | 49 ++++++++++++++++++++++------------------
+ mm/swap.h                |  1 -
+ mm/swap_state.c          | 12 ++++------
+ 13 files changed, 120 insertions(+), 80 deletions(-)
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZJxs2AAKCRB4tDGHoIJi
-0hyeAPoCJou4iW+SwgKBQCp5o/rvu8bFFnG2SdAC26nA3X5ifAD8Cev8fwX4Y1Qg
-5T7g/LvQlXnVSz10udi5To5hLiisfQM=
-=dznn
------END PGP SIGNATURE-----
+-- 
+2.41.0.162.gfafddb0af9-goog
 
---Nk2liGfu8KoG29TY--
