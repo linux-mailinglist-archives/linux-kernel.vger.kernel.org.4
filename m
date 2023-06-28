@@ -2,104 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DEEA740CD9
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 11:31:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09CC0740CD3
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 11:31:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231834AbjF1JbN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 05:31:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48952 "EHLO
+        id S233743AbjF1JbS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 05:31:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231370AbjF1JYd (ORCPT
+        with ESMTP id S229719AbjF1JZd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 05:24:33 -0400
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 159B610D8
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 02:24:31 -0700 (PDT)
-Received: by mail-wm1-x32b.google.com with SMTP id 5b1f17b1804b1-3fa99f6a482so32651615e9.0
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 02:24:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687944269; x=1690536269;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=wzKXpMccA6UrwHtXvOGSFvI/x46V/z1bpRu3rF0Fgs0=;
-        b=fueU1DULpIywX2DaDQQk0rGXg3PtSBos/iW8JpD9Vgn8gH+xHWp/h0QRyukEI7O19n
-         zm6aK/HjiOtVtDnYJOaFMUvOhdbBp42M8K0RL1WMTCaWgLu7TuX6X0HSUl8E5ohHg/cJ
-         7hOyN1YGptCx7M2Kg9BpiVSukjKpVpaQeT/dqBlFAqG01ISxfbd1sS3ab+mmme8B95r/
-         Fw7lYhPsitYBBrKLtJwiFm4MJV1MGMWOxKVo1KPOV6rKYvO0eq7GQgA1vRUPQ/3ZKX4I
-         PGIgGxKgUefcJQV08RH9cHKNJP6V8+ERX2wOcQIQhtZjeSbSgLcDzuGTv91NBllPb1ss
-         DWXg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687944269; x=1690536269;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=wzKXpMccA6UrwHtXvOGSFvI/x46V/z1bpRu3rF0Fgs0=;
-        b=CK5O3UtWGpDU7PU5GWQ/XIzwBANFyjT+ThyyxU8VPtRMIqjA3PzWGMqwqH5SFLDDfh
-         AIKCJjQx6yIZnZIyhPL6vjCpEk9xNZuZ90QPoUQVBQinGDJTEzrrIaq+6+uDArwLfyV0
-         h86NG9Go/dBTOTSTx5zfCmgprS3HL/YF8o1oS2I20/DuEQzcg2adA0lSem/aZ/gNua3O
-         bejZgsGkAQ8uqN7SvjhWLlQn8CHKAdaCmVifcXqLKcIoGobc3SAUw+7mWZa3GIQK21mF
-         Q2fdv3znDqetnghU5LPuzSmRy02nIawvDBGbgIxzkoxnpekd5l8Knka0ZfvvbY5SkNi0
-         fzpg==
-X-Gm-Message-State: AC+VfDxmzy489WuxM42IhjQ5L8vY1OrWjSpgS+8xUHSlQqaaDmdcweJH
-        spm0MquRAC8P8c2oaGhJRwVfJQ==
-X-Google-Smtp-Source: ACHHUZ54XNFWh70xItwrsXJjQNsNfbm1HM+SarGY7nLeMvIhA+uyrvqHtA6D65tWQXSWo7WG4YGACA==
-X-Received: by 2002:a5d:4e50:0:b0:313:eb47:b7b3 with SMTP id r16-20020a5d4e50000000b00313eb47b7b3mr9446659wrt.66.1687944269482;
-        Wed, 28 Jun 2023 02:24:29 -0700 (PDT)
-Received: from localhost.localdomain ([5.133.47.210])
-        by smtp.gmail.com with ESMTPSA id o18-20020a056000011200b00313f9085119sm5500091wrx.113.2023.06.28.02.24.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Jun 2023 02:24:28 -0700 (PDT)
-From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-To:     broonie@kernel.org
-Cc:     johan+linaro@kernel.org, perex@perex.cz, tiwai@suse.com,
-        lgirdwood@gmail.com, ckeepax@opensource.cirrus.com,
-        kuninori.morimoto.gx@renesas.com, linux-kernel@vger.kernel.org,
-        pierre-louis.bossart@linux.intel.com, alsa-devel@alsa-project.org,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Stable@vger.kernel.org
-Subject: [PATCH] ASoC: qdsp6: q6apm: use dai link pcm id as pcm device number
-Date:   Wed, 28 Jun 2023 10:24:04 +0100
-Message-Id: <20230628092404.13927-1-srinivas.kandagatla@linaro.org>
-X-Mailer: git-send-email 2.21.0
+        Wed, 28 Jun 2023 05:25:33 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 272EF2D78;
+        Wed, 28 Jun 2023 02:25:23 -0700 (PDT)
+Date:   Wed, 28 Jun 2023 09:25:19 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1687944320;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
+        bh=OnY1F7yX7rrK4j9xMOZ9K3sCE9M5bOJmvrjoSo9v6Fo=;
+        b=bAGn807W54K4kJSM53DgYfa0ZEeVO3CqePQShk7uyfpyRUzS85N7YhGQxwi+niazPYqQzb
+        XCOB5P3LZgNLtJL/RV1yLh5YMwKQ/WZkiWF2jcL/kE/vizfYCoDhJMLY1f20BzTwSV0n/1
+        TGidNV1kYLFPjPlUxwS3Dh/6xOJFKX0IfsBet8ns/zPC1IrkXi68KtCXs/shVmey7wqPsn
+        XuhPKODWX53eCKJLVSB5Mh36wx+9SFTGMnyjyKmeoKAQTiro8wWO5/EBYR+CxLUJDWtWg5
+        8o6QRGK1QtOfU571Vr4zjxQeYLWAf9xqgDsFpoBnK/LcEtv6jNLu6wimyF/eEg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1687944320;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
+        bh=OnY1F7yX7rrK4j9xMOZ9K3sCE9M5bOJmvrjoSo9v6Fo=;
+        b=R/jzqjkI1KmfosKVLjX7mV47vM5Yw6aayY/Ux8Gx5nV2P2TCmytW6tVYjlGjWVADvJ1X3c
+        FiVBqdrr9DShBbDA==
+From:   "tip-bot2 for Ingo Molnar" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: objtool/urgent] objtool: Remove btrfs_assertfail() from the
+ noreturn exceptions list
+Cc:     David Sterba <dsterba@suse.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        linux-kernel@vger.kernel.org, Ingo Molnar <mingo@kernel.org>,
+        x86@kernel.org
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Message-ID: <168794431960.404.13615748804101554026.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-For some reason we ended up with a setup without this flag.
-This resulted in inconsistent sound card devices numbers which
- are also not starting as expected at dai_link->id.
- (Ex: MultiMedia1 pcm ended up with device number 4 instead of 0)
+The following commit has been merged into the objtool/urgent branch of tip:
 
-With this patch patch now the MultiMedia1 PCM ends up with device number 0
-as expected.
+Commit-ID:     cc592643a3ea1b2231628fb414dee203633a11c0
+Gitweb:        https://git.kernel.org/tip/cc592643a3ea1b2231628fb414dee203633a11c0
+Author:        Ingo Molnar <mingo@kernel.org>
+AuthorDate:    Wed, 28 Jun 2023 11:16:03 +02:00
+Committer:     Ingo Molnar <mingo@kernel.org>
+CommitterDate: Wed, 28 Jun 2023 11:21:50 +02:00
 
-Fixes: 9b4fe0f1cd79 ("ASoC: qdsp6: audioreach: add q6apm-dai support")
-Cc: <Stable@vger.kernel.org>
-Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+objtool: Remove btrfs_assertfail() from the noreturn exceptions list
+
+Upstream merge commit:
+
+  6f612579be9d Merge tag 'objtool-core-2023-06-27' of git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip
+
+... generated a (minor) semantic conflict that was not resolved: the btrfs_assertfail()
+entry that was removed from the list in tools/objtool/check.c in:
+
+  b831306b3b7d ("btrfs: print assertion failure report and stack trace from the same line")
+
+... because btrfs_assertfail() was changed from a noreturn function into
+a macro.
+
+But the list was moved to a different file, in a different enumeration format:
+
+  6245ce4ab670 ("objtool: Move noreturn function list to separate file")
+
+And has to be removed from tools/objtool/noreturns.h post-merge as well.
+
+Do it explicitly.
+
+Cc: David Sterba <dsterba@suse.com>
+Cc: Josh Poimboeuf <jpoimboe@kernel.org>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: linux-kernel@vger.kernel.org
+Signed-off-by: Ingo Molnar <mingo@kernel.org>
 ---
- sound/soc/qcom/qdsp6/q6apm-dai.c | 1 +
- 1 file changed, 1 insertion(+)
+ tools/objtool/noreturns.h | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/sound/soc/qcom/qdsp6/q6apm-dai.c b/sound/soc/qcom/qdsp6/q6apm-dai.c
-index 5eb0b864c740..c90db6daabbd 100644
---- a/sound/soc/qcom/qdsp6/q6apm-dai.c
-+++ b/sound/soc/qcom/qdsp6/q6apm-dai.c
-@@ -840,6 +840,7 @@ static const struct snd_soc_component_driver q6apm_fe_dai_component = {
- 	.pointer	= q6apm_dai_pointer,
- 	.trigger	= q6apm_dai_trigger,
- 	.compress_ops	= &q6apm_dai_compress_ops,
-+	.use_dai_pcm_id = true,
- };
- 
- static int q6apm_dai_probe(struct platform_device *pdev)
--- 
-2.21.0
-
+diff --git a/tools/objtool/noreturns.h b/tools/objtool/noreturns.h
+index 1514e84..e45c7cb 100644
+--- a/tools/objtool/noreturns.h
++++ b/tools/objtool/noreturns.h
+@@ -14,7 +14,6 @@ NORETURN(__stack_chk_fail)
+ NORETURN(__ubsan_handle_builtin_unreachable)
+ NORETURN(arch_call_rest_init)
+ NORETURN(arch_cpu_idle_dead)
+-NORETURN(btrfs_assertfail)
+ NORETURN(cpu_bringup_and_idle)
+ NORETURN(cpu_startup_entry)
+ NORETURN(do_exit)
