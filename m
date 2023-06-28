@@ -2,84 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97546740B95
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 10:33:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C652D740B54
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 10:26:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232288AbjF1IdE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 04:33:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41386 "EHLO
+        id S230215AbjF1I0E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 04:26:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235307AbjF1Iat (ORCPT
+        with ESMTP id S234398AbjF1IXz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 04:30:49 -0400
-Received: from mail-qk1-x732.google.com (mail-qk1-x732.google.com [IPv6:2607:f8b0:4864:20::732])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EB1D2D73;
-        Wed, 28 Jun 2023 01:22:58 -0700 (PDT)
-Received: by mail-qk1-x732.google.com with SMTP id af79cd13be357-7659dc74d91so364735385a.0;
-        Wed, 28 Jun 2023 01:22:58 -0700 (PDT)
+        Wed, 28 Jun 2023 04:23:55 -0400
+Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8125B4EC1
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 01:13:20 -0700 (PDT)
+Received: by mail-yb1-xb2c.google.com with SMTP id 3f1490d57ef6-c2743325e2dso1077647276.1
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 01:13:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687940577; x=1690532577;
+        d=linaro.org; s=google; t=1687939999; x=1690531999;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=OPlJ3d55zkkCE0158NpdPdIacPtyKpxD+77cxWNgQn4=;
-        b=B/FZcfHwfA80FMXQD1r+by4GfJ0G7ym+e7/y8s8Dee0ja1UvDXu8hKfBtvH2b7omy4
-         iT2OS4wkVrFBsCEOfq2lPYFeWGMp25v0lOosQ2FsDX90HXA1RCJikhqpyOYR57VSWCYU
-         HUZkoJEPXkhwug4GOxIrQue/HFohjUSoIXllRFpNNsKQL73oNgrsqCPqjIbezwC8i8cz
-         hwQQYWWOBblL/zFLWntF32HtInNOxKnpqM5HAlqh5Rip8WXlQLddiQTz7HqF03uRQsJz
-         LC0xfiBf+i0vX0VrRdbjeFnHtWDtSe0L1JFNnd9Icg+eOK0964Pc+8KNOR5dv3Pqy1Dc
-         vfew==
+        bh=eFn/Do9jN3RPupZVUJruVQkAXpC2rvNpM+OVzSO4M6Y=;
+        b=iaItv3GMpIVhZsud7gv7o5W6eL/8hi3+YbatlDYiT3M2NfhEwRkXuOyodt/9lM1AqR
+         je0h/gtDbOmCb19KXQRHljgKXj4KlGpRqBvgizdQUBXavay5J98ysVFOaHHDWnlOvUkI
+         FAqFeP/c/8VF0C0wBP1fgUkOlMyX4VlY+p3xs9JfGExfLruaqE0ygZsitPsrW6ZtqWrN
+         wxhCmfwYNzvJEGVYufpJqqv9uZPfr1AkwPUE3+f4lD9zhZyyjTwcinDvm9UswgF9ef7f
+         PVCbFPXa0fdi0rL0wOms5nw26lzu4hzdXsMyNzcXxvQC0nGyZzLJ2YFySOud4XFVvXPW
+         W/tw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687940577; x=1690532577;
+        d=1e100.net; s=20221208; t=1687939999; x=1690531999;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=OPlJ3d55zkkCE0158NpdPdIacPtyKpxD+77cxWNgQn4=;
-        b=MjWxZTrHLVlxW/2+31BV5YYgeh7oVR6QRM/zd/g/bIQ+UfSOIYMTIV39niaVN6XXVe
-         NWGyBT+c62OL+iMLLGWpxdK1hMD8rkvIMtUWCleKBUzpWqHADqgOqsgy8zK6UHTcti8o
-         4d2otioCSEu0g6YPvpl57iOTaFibLciu5nbH55Tvcu9wNdrZkOvxHbdULWO88bt8j3QG
-         xY8ba3h8/Gj694q+7nJm2MC/9ZzB2wDOgn2BqjatdIyLp52qMX7XhGbrvP8sQdflynnR
-         gOHUKsqjkx3CGoLQmY3dvya1h2WAesCM4OR7r2UZzq7E9auLXtyPHNpF2hGXYmMsHmXw
-         7lbA==
-X-Gm-Message-State: AC+VfDxgAqpqcbeVeYXKl8wLVUIXm6ndDily+hDmJyUDfkbRcha7HASc
-        uXMfeUsYiqFEJrWGOzhWWWBv9kcHvUyOCuONdZOcV19vzStasQ==
-X-Google-Smtp-Source: ACHHUZ4SZINxUDCT1VOxGKSGnyrORp5xMAlVWVYZ4VVr9D12NJWQpx1JwNxevKpURs5vLH73EZrUYAMXE2UkZpD5Us8=
-X-Received: by 2002:a05:6214:2524:b0:5f4:5af6:1304 with SMTP id
- gg4-20020a056214252400b005f45af61304mr36084024qvb.16.1687936643694; Wed, 28
- Jun 2023 00:17:23 -0700 (PDT)
+        bh=eFn/Do9jN3RPupZVUJruVQkAXpC2rvNpM+OVzSO4M6Y=;
+        b=YzNujlH0m9ImEiW7xkjZINowLJKedWfASiTTaLgnOs3tu2V82SSqjMXjNiStsPBPOw
+         LnRGSEFrKo5GgJa1J8fiocAa0IuFM2vU4DfAHDOwjZhZAH4QzsNfpwV+p0ghOG0FTbAq
+         Jggnr4a4KlEf579v9NSpCZ9ul3GaBEQWMkJmoowCuY0iYVh679xPzb+j0KPexz0FZsJO
+         DCrUbKHI9FdfpGJ1ADSd56B9qpitv6SkpTy0UbHeeHLSuFWkJSyGKW4ng9bda1B2ohq/
+         XbJt0cvZCD0oFUDMrHrzMSy1XB1agt0S8rT8Wiod4VOdPmP1B2qQfYqIB5eEwBeP5Tfb
+         I4og==
+X-Gm-Message-State: ABy/qLagLhpP2JfJSeVwVkvKKUXtXBG2/CL7XBfxJPi5zgRHXT0w+Q82
+        0qI9K/RLo1C2orarg0LzBzUjr49ySHeSijG3r37pzD2nzObLwq7WKnhV3g==
+X-Google-Smtp-Source: ACHHUZ620+ut1eAZaT3bcrux1OZzch2BmXZiVR/JAa5o3q2SNMYljDhjnw86jyAORwrecq40xjDRJwSnfOiK5+6IE0I=
+X-Received: by 2002:a67:f9c2:0:b0:443:681b:c8ca with SMTP id
+ c2-20020a67f9c2000000b00443681bc8camr165293vsq.10.1687936638913; Wed, 28 Jun
+ 2023 00:17:18 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230517034510.15639-1-zegao@tencent.com> <20230517034510.15639-3-zegao@tencent.com>
-In-Reply-To: <20230517034510.15639-3-zegao@tencent.com>
-From:   Yafang Shao <laoar.shao@gmail.com>
-Date:   Wed, 28 Jun 2023 15:16:47 +0800
-Message-ID: <CALOAHbC6UpfFOOibdDiC7xFc5YFUgZnk3MZ=3Ny6we=AcrNbew@mail.gmail.com>
-Subject: Re: [PATCH v3 2/4] fprobe: make fprobe_kprobe_handler recursion free
-To:     Ze Gao <zegao2021@gmail.com>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Borislav Petkov <bp@alien8.de>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Vasily Gorbik <gor@linux.ibm.com>, x86@kernel.org,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-trace-kernel@vger.kernel.org,
-        Conor Dooley <conor@kernel.org>, Jiri Olsa <jolsa@kernel.org>,
-        Yonghong Song <yhs@fb.com>, Ze Gao <zegao@tencent.com>
+References: <20230626180733.699092073@linuxfoundation.org>
+In-Reply-To: <20230626180733.699092073@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Wed, 28 Jun 2023 12:47:07 +0530
+Message-ID: <CA+G9fYvkRm274Sdk-06dbQuKV-W-mx7K9KM9BER9i_+HH0x4ZA@mail.gmail.com>
+Subject: Re: [PATCH 4.14 00/26] 4.14.320-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de,
+        conor@kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,159 +74,155 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 17, 2023 at 11:45=E2=80=AFAM Ze Gao <zegao2021@gmail.com> wrote=
-:
+On Mon, 26 Jun 2023 at 23:44, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
 >
-> Current implementation calls kprobe related functions before doing
-> ftrace recursion check in fprobe_kprobe_handler, which opens door
-> to kernel crash due to stack recursion if preempt_count_{add, sub}
-> is traceable in kprobe_busy_{begin, end}.
+> This is the start of the stable review cycle for the 4.14.320 release.
+> There are 26 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 >
-> Things goes like this without this patch quoted from Steven:
-> "
-> fprobe_kprobe_handler() {
->    kprobe_busy_begin() {
->       preempt_disable() {
->          preempt_count_add() {  <-- trace
->             fprobe_kprobe_handler() {
->                 [ wash, rinse, repeat, CRASH!!! ]
-> "
+> Responses should be made by Wed, 28 Jun 2023 18:07:23 +0000.
+> Anything received after that time might be too late.
 >
-> By refactoring the common part out of fprobe_kprobe_handler and
-> fprobe_handler and call ftrace recursion detection at the very beginning,
-> the whole fprobe_kprobe_handler is free from recursion.
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-=
+4.14.320-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-4.14.y
+> and the diffstat can be found below.
 >
-> Signed-off-by: Ze Gao <zegao@tencent.com>
-> Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-> Link: https://lore.kernel.org/linux-trace-kernel/20230516071830.8190-3-ze=
-gao@tencent.com
-> ---
->  kernel/trace/fprobe.c | 59 ++++++++++++++++++++++++++++++++-----------
->  1 file changed, 44 insertions(+), 15 deletions(-)
+> thanks,
 >
-> diff --git a/kernel/trace/fprobe.c b/kernel/trace/fprobe.c
-> index 9abb3905bc8e..097c740799ba 100644
-> --- a/kernel/trace/fprobe.c
-> +++ b/kernel/trace/fprobe.c
-> @@ -20,30 +20,22 @@ struct fprobe_rethook_node {
->         char data[];
->  };
->
-> -static void fprobe_handler(unsigned long ip, unsigned long parent_ip,
-> -                          struct ftrace_ops *ops, struct ftrace_regs *fr=
-egs)
-> +static inline void __fprobe_handler(unsigned long ip, unsigned long
-> +               parent_ip, struct ftrace_ops *ops, struct ftrace_regs *fr=
-egs)
->  {
->         struct fprobe_rethook_node *fpr;
->         struct rethook_node *rh =3D NULL;
->         struct fprobe *fp;
->         void *entry_data =3D NULL;
-> -       int bit, ret;
-> +       int ret;
->
->         fp =3D container_of(ops, struct fprobe, ops);
-> -       if (fprobe_disabled(fp))
-> -               return;
-> -
-> -       bit =3D ftrace_test_recursion_trylock(ip, parent_ip);
-> -       if (bit < 0) {
-> -               fp->nmissed++;
-> -               return;
-> -       }
->
->         if (fp->exit_handler) {
->                 rh =3D rethook_try_get(fp->rethook);
->                 if (!rh) {
->                         fp->nmissed++;
-> -                       goto out;
-> +                       return;
->                 }
->                 fpr =3D container_of(rh, struct fprobe_rethook_node, node=
-);
->                 fpr->entry_ip =3D ip;
-> @@ -61,23 +53,60 @@ static void fprobe_handler(unsigned long ip, unsigned=
- long parent_ip,
->                 else
->                         rethook_hook(rh, ftrace_get_regs(fregs), true);
->         }
-> -out:
-> +}
-> +
-> +static void fprobe_handler(unsigned long ip, unsigned long parent_ip,
-> +               struct ftrace_ops *ops, struct ftrace_regs *fregs)
-> +{
-> +       struct fprobe *fp;
-> +       int bit;
-> +
-> +       fp =3D container_of(ops, struct fprobe, ops);
-> +       if (fprobe_disabled(fp))
-> +               return;
-> +
-> +       /* recursion detection has to go before any traceable function an=
-d
-> +        * all functions before this point should be marked as notrace
-> +        */
-> +       bit =3D ftrace_test_recursion_trylock(ip, parent_ip);
-> +       if (bit < 0) {
-> +               fp->nmissed++;
-> +               return;
-> +       }
-> +       __fprobe_handler(ip, parent_ip, ops, fregs);
->         ftrace_test_recursion_unlock(bit);
-> +
->  }
->  NOKPROBE_SYMBOL(fprobe_handler);
->
->  static void fprobe_kprobe_handler(unsigned long ip, unsigned long parent=
-_ip,
->                                   struct ftrace_ops *ops, struct ftrace_r=
-egs *fregs)
->  {
-> -       struct fprobe *fp =3D container_of(ops, struct fprobe, ops);
-> +       struct fprobe *fp;
-> +       int bit;
-> +
-> +       fp =3D container_of(ops, struct fprobe, ops);
-> +       if (fprobe_disabled(fp))
-> +               return;
-> +
-> +       /* recursion detection has to go before any traceable function an=
-d
-> +        * all functions called before this point should be marked as not=
-race
-> +        */
-> +       bit =3D ftrace_test_recursion_trylock(ip, parent_ip);
-> +       if (bit < 0) {
-> +               fp->nmissed++;
-> +               return;
-> +       }
->
->         if (unlikely(kprobe_running())) {
->                 fp->nmissed++;
+> greg k-h
 
-I have just looked through this patchset, just out of curiosity,
-shouldn't we call ftrace_test_recursion_unlock(bit) here ?
-We have already locked it successfully, so why should we not unlock it?
+Results from Linaro=E2=80=99s test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
->                 return;
->         }
-> +
->         kprobe_busy_begin();
-> -       fprobe_handler(ip, parent_ip, ops, fregs);
-> +       __fprobe_handler(ip, parent_ip, ops, fregs);
->         kprobe_busy_end();
-> +       ftrace_test_recursion_unlock(bit);
->  }
->
->  static void fprobe_exit_handler(struct rethook_node *rh, void *data,
-> --
-> 2.40.1
->
->
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
+## Build
+* kernel: 4.14.320-rc1
+* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+* git branch: linux-4.14.y
+* git commit: 11aa1c2697f51ec92ee0c9033b8bce9e13b71787
+* git describe: v4.14.319-27-g11aa1c2697f5
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-4.14.y/build/v4.14=
+.319-27-g11aa1c2697f5
 
---=20
-Regards
-Yafang
+## Test Regressions (compared to v4.14.314-117-g854d9237fbd3)
+
+## Metric Regressions (compared to v4.14.314-117-g854d9237fbd3)
+
+## Test Fixes (compared to v4.14.314-117-g854d9237fbd3)
+
+## Metric Fixes (compared to v4.14.314-117-g854d9237fbd3)
+
+## Test result summary
+total: 61334, pass: 48370, fail: 2047, skip: 10872, xfail: 45
+
+## Build Summary
+* arc: 10 total, 10 passed, 0 failed
+* arm: 108 total, 104 passed, 4 failed
+* arm64: 35 total, 31 passed, 4 failed
+* i386: 21 total, 18 passed, 3 failed
+* mips: 21 total, 21 passed, 0 failed
+* parisc: 3 total, 3 passed, 0 failed
+* powerpc: 8 total, 7 passed, 1 failed
+* s390: 6 total, 5 passed, 1 failed
+* sh: 12 total, 12 passed, 0 failed
+* sparc: 6 total, 6 passed, 0 failed
+* x86_64: 27 total, 23 passed, 4 failed
+
+## Test suites summary
+* boot
+* kselftest-android
+* kselftest-arm64
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers-dma-buf
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-filesystems-binderfs
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-ftrace
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-membarrier
+* kselftest-net
+* kselftest-net-forwarding
+* kselftest-net-mptcp
+* kselftest-netfilter
+* kselftest-nsfs
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-tc-testing
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-x86
+* kselftest-zram
+* kunit
+* libhugetlbfs
+* log-parser-boot
+* log-parser-test
+* ltp-cap_bounds
+* ltp-commands
+* ltp-containers
+* ltp-controllers
+* ltp-crypto
+* ltp-cve
+* ltp-fcntl-locktests
+* ltp-filecaps
+* ltp-fs
+* ltp-fs_bind
+* ltp-fs_perms_simple
+* ltp-fsx
+* ltp-hugetlb
+* ltp-io
+* ltp-ipc
+* ltp-math
+* ltp-mm
+* ltp-nptl
+* ltp-pty
+* ltp-sched
+* ltp-securebits
+* ltp-smoke
+* ltp-syscalls
+* ltp-tracing
+* rcutorture
+* v4l2-compliance
+
+--
+Linaro LKFT
+https://lkft.linaro.org
