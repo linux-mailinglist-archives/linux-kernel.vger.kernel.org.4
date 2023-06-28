@@ -2,67 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C061F740CEA
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 11:31:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 108DA740A97
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 10:07:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233771AbjF1J3v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 05:29:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33890 "EHLO
+        id S232756AbjF1IHo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 04:07:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231665AbjF1H4N (ORCPT
+        with ESMTP id S232313AbjF1IBz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 03:56:13 -0400
-Received: from mail-ot1-x32d.google.com (mail-ot1-x32d.google.com [IPv6:2607:f8b0:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39BED30F6
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 00:55:32 -0700 (PDT)
-Received: by mail-ot1-x32d.google.com with SMTP id 46e09a7af769-6b73b839025so3177948a34.1
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 00:55:32 -0700 (PDT)
+        Wed, 28 Jun 2023 04:01:55 -0400
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17C8DA3;
+        Wed, 28 Jun 2023 01:00:26 -0700 (PDT)
+Received: by mail-lf1-x12a.google.com with SMTP id 2adb3069b0e04-4fb7589b187so4825469e87.1;
+        Wed, 28 Jun 2023 01:00:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687938931; x=1690530931;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+        d=gmail.com; s=20221208; t=1687939224; x=1690531224;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Kl6zRFJwJX4TVX+FX/9X3H88Ay6pIJMzZMs21mv/0NU=;
-        b=iMGOC55B5TuwgnR0v4ok2zHDywa5XSYRfkgwD+tOItlxgD+o7Ujk3a2/I51UH0CApf
-         W9l75bcMGlz1BFFwVxW1+/jDWwtGDWo35h1LRP32v/EOYwdQTlL+2ddr6YsTlNCK2/9/
-         QjmWskclSCjQxPg70zFWRwkj7G4CfNCmFoDCFc20KEVKgVNGUHrkCBZOVwBhEXiVx8zk
-         31SaNpbyRhgUr20eldNGDrBuUuxUI7P2s6jOqcfADKB+xgyc0ZSZHMQXtcoVBSxcx2Zi
-         WQTWaKfTpuCfW/+0URiQPMJCcx+XqPXENNgZzXSuOlKxA+E1ogPWNSMvIKTvqtlYFYW/
-         f6eg==
+        bh=gCiVnIiBTWxP9T/l4gc5KqB15PzobXDfsgWHGo4kW6w=;
+        b=Atk/FL/9Z6Wadg6fR1BZpsHoBVs6dAZnOoJjIoGnbqSpNasB218H73bm4pxhxs3VJx
+         umDvYrlu+7+G8C8UAfPJ0XS4+z1oEcsDGqLppe+qNkUYfPT5jOgL6HGEu+kO867kcmUJ
+         UCyf9Apq1cJtI1nV2bqz9cuYXog2xB/uMEUbmiXB2viAp1hs/GkFLkkRBdaW0+bzTzcz
+         zUqPyuhfXJsjyRkwsp0NFQM15rXajW4l8ZPaCszNYqmQnVcQlnHDbS14qFQGRdaxp+OH
+         XCCg1srlakVE1oL75m3yR0bYWQGBlYmngkaeMZNazjFf3iNORBJKNdO3zxZxxsArQBQC
+         d1tg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687938931; x=1690530931;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Kl6zRFJwJX4TVX+FX/9X3H88Ay6pIJMzZMs21mv/0NU=;
-        b=MtBSwpHopSwmOQy4sxpQAbK8fi1oq9opTqnPjYjbvUYb1kcwSJ70YHi1Gb482q06Z3
-         FhDjXpNrc17sRj44RVxBuNn3/Wb9/3xWS6cYfc/ATys7rKfSFo8hssyHmpP5hUt3fqUR
-         A6zoQKDBxCT3KD+DKrbHah6nedXP5j9G/UdeJZwoeWox0aSx6XtC53FQA7GPUAMlJrpo
-         EA6c+qL+dgsWmETtp1yfclqurTRzSWWA8Y9U1PfGPWw6EbUwP+BukrTdWZg/1DuTAzY1
-         oAxzORUOEjzVgh0qK3TA5cwE1U3bZ1987lyh+DbvAugJsDN6gDdSlpSry4J4PTS+QulN
-         1Xcw==
-X-Gm-Message-State: AC+VfDxn23MkwWgFKLQM1W6FakDZ+v9CzGtoj/8E7MOnV5kq/mytSaEo
-        4cj0PLu39w3HauKsvPE60NAteFiG4N0=
-X-Google-Smtp-Source: ACHHUZ6JRGIUhgEO5FJSQSbiiil8v67RVs0NzWdjFNveJ+SE3EwyVqvk0R0XDfh2xtMRMHlWi+ekJA==
-X-Received: by 2002:a05:6a20:7da1:b0:123:9582:e9fb with SMTP id v33-20020a056a207da100b001239582e9fbmr18239344pzj.50.1687938538548;
-        Wed, 28 Jun 2023 00:48:58 -0700 (PDT)
-Received: from localhost ([156.236.96.165])
-        by smtp.gmail.com with ESMTPSA id w5-20020a170902d3c500b001b1a2bf5277sm914932plb.39.2023.06.28.00.48.57
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Wed, 28 Jun 2023 00:48:58 -0700 (PDT)
-Date:   Wed, 28 Jun 2023 15:57:42 +0800
-From:   Yue Hu <zbestahu@gmail.com>
-To:     Gao Xiang <hsiangkao@linux.alibaba.com>
-Cc:     linux-erofs@lists.ozlabs.org, LKML <linux-kernel@vger.kernel.org>,
-        huyue2@coolpad.com
-Subject: Re: [PATCH 1/2] erofs: get rid of the remaining kmap_atomic()
-Message-ID: <20230628155742.0000038e.zbestahu@gmail.com>
-In-Reply-To: <20230627161240.331-1-hsiangkao@linux.alibaba.com>
-References: <20230627161240.331-1-hsiangkao@linux.alibaba.com>
-X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; i686-w64-mingw32)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+        d=1e100.net; s=20221208; t=1687939224; x=1690531224;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=gCiVnIiBTWxP9T/l4gc5KqB15PzobXDfsgWHGo4kW6w=;
+        b=ktuESsELloTCOHTx2ryoHmJLm6qZ5rd4OUnAbTX4HXVwwOz2De1qDt1YLjcpLHqYu/
+         rA2/Vcgze4sZOI7wkwlmLVR5dtSXfbW/Cfg12kTR3eNtbsyrrLJt+VxIniZPkQLwVT0B
+         bYSXQ1IRainzlmNBQf+tHsx6G0FaqLB+o1B39ATMYtvZ1yF8AJwzmkgZC8ZXvF3n6idq
+         mKyMdHycxb3hzjJo6V0IyDRNqdqDISKcM4AYNVO+y4PMnXfOoVbU3c2cbkCbHNffXIRx
+         srwFbreXkaMgNwFzfr2e/NEatBT1s6MnO9MNOiorStTOLPpb1xRdq5QpfiK9BNlmIbTz
+         mgIQ==
+X-Gm-Message-State: AC+VfDwsa77V3RNcFkYRKJR/siziZa+nnL+VXG3RD63iamdGK2UnI8lN
+        nYie6YgtNUIq1CwLVAjO8Ek=
+X-Google-Smtp-Source: ACHHUZ5JfjpLByN+xk3+nw7l3otdzAnIQaT9fCpC3MJlEf/M7GLH4UUGnbVSdzEN0B0XtGlgO5VAxw==
+X-Received: by 2002:a05:6512:b0e:b0:4f8:75cf:fdd7 with SMTP id w14-20020a0565120b0e00b004f875cffdd7mr16303621lfu.22.1687939223949;
+        Wed, 28 Jun 2023 01:00:23 -0700 (PDT)
+Received: from localhost (freebox.vlq16.iliad.fr. [213.36.7.13])
+        by smtp.gmail.com with ESMTPSA id u8-20020a05600c210800b003f9b4330880sm13048436wml.29.2023.06.28.01.00.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 28 Jun 2023 01:00:23 -0700 (PDT)
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date:   Wed, 28 Jun 2023 10:00:23 +0200
+Message-Id: <CTO4IM6NQZ4N.6DC89N410CDS@syracuse>
+Cc:     "opensource.kernel@vivo.com" <opensource.kernel@vivo.com>
+Subject: =?utf-8?q?Re:_[PATCH]_wifi=EF=BC=9Amac80211:_Replace_the_ternary_conditio?= =?utf-8?q?nal_operator_with_max()?=
+From:   "Nicolas Escande" <nico.escande@gmail.com>
+To:     "Ping-Ke Shih" <pkshih@realtek.com>,
+        "You Kangren" <youkangren@vivo.com>,
+        "Johannes Berg" <johannes@sipsolutions.net>,
+        "David S. Miller" <davem@davemloft.net>,
+        "Eric Dumazet" <edumazet@google.com>,
+        "Jakub Kicinski" <kuba@kernel.org>,
+        "Paolo Abeni" <pabeni@redhat.com>,
+        "open list:MAC80211" <linux-wireless@vger.kernel.org>,
+        "open list:NETWORKING [GENERAL]" <netdev@vger.kernel.org>,
+        "open list" <linux-kernel@vger.kernel.org>
+X-Mailer: aerc 0.15.1
+References: <20230626104829.1896-1-youkangren@vivo.com>
+ <9e4e3bf85ed945e7b0c8d5d389065670@realtek.com>
+In-Reply-To: <9e4e3bf85ed945e7b0c8d5d389065670@realtek.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -73,12 +82,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 28 Jun 2023 00:12:39 +0800
-Gao Xiang <hsiangkao@linux.alibaba.com> wrote:
+On Wed Jun 28, 2023 at 3:48 AM CEST, Ping-Ke Shih wrote:
+>
+>
+> > -----Original Message-----
+> > From: You Kangren <youkangren@vivo.com>
+> > Sent: Monday, June 26, 2023 6:48 PM
+> > To: Johannes Berg <johannes@sipsolutions.net>; David S. Miller <davem@d=
+avemloft.net>; Eric Dumazet
+> > <edumazet@google.com>; Jakub Kicinski <kuba@kernel.org>; Paolo Abeni <p=
+abeni@redhat.com>; open
+> > list:MAC80211 <linux-wireless@vger.kernel.org>; open list:NETWORKING [G=
+ENERAL] <netdev@vger.kernel.org>;
+> > open list <linux-kernel@vger.kernel.org>
+> > Cc: opensource.kernel@vivo.com; youkangren@vivo.com
+> > Subject: [PATCH] wifi=EF=BC=9Amac80211: Replace the ternary conditional=
+ operator with max()
+>
+> The semicolon of "wifi=EF=BC=9A" is different from others.
+>
+> >=20
+> > Replace the ternary conditional operator with max() to make the code cl=
+ean
+> >=20
+> > Signed-off-by: You Kangren <youkangren@vivo.com>
+> > ---
+> >  net/mac80211/tdls.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >=20
+> > diff --git a/net/mac80211/tdls.c b/net/mac80211/tdls.c
+> > index a4af3b7675ef..9f8b0842a616 100644
+> > --- a/net/mac80211/tdls.c
+> > +++ b/net/mac80211/tdls.c
+> > @@ -946,7 +946,7 @@ ieee80211_tdls_build_mgmt_packet_data(struct ieee80=
+211_sub_if_data *sdata,
+> >         int ret;
+> >         struct ieee80211_link_data *link;
+> >=20
+> > -       link_id =3D link_id >=3D 0 ? link_id : 0;
+> > +       link_id =3D max(link_id, 0);
+>
+> Original logic means "if link_id < 0, then use default link (0)" instead =
+of
+> "always use link_id larger than or equal to 0". So, I think max(link_id, =
+0) could
+> cause misunderstanding.=20
 
-> It's unnecessary to use kmap_atomic() compared with kmap_local_page().
-> In addition, kmap_atomic() is deprecated now.
-> 
-> Signed-off-by: Gao Xiang <hsiangkao@linux.alibaba.com>
+I feel the same way, max() implies we want the 'highest' link whereas for m=
+e the
+actual code really means 'prefer the non default' (zero) link.
 
-Reviewed-by: Yue Hu <huyue2@coolpad.com>
+>
+> >         rcu_read_lock();
+> >         link =3D rcu_dereference(sdata->link[link_id]);
+> >         if (WARN_ON(!link))
+> > --
+> > 2.39.0
+> >=20
+> >=20
+> > ------Please consider the environment before printing this e-mail.
+
