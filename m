@@ -2,110 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B70F274173F
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 19:34:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 023D0741743
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 19:34:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231249AbjF1ReF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 13:34:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44882 "EHLO
+        id S231151AbjF1Rdh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 13:33:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231290AbjF1Rd7 (ORCPT
+        with ESMTP id S230379AbjF1Rdf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 13:33:59 -0400
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EB4F210A
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 10:33:58 -0700 (PDT)
-Received: by mail-lf1-x12c.google.com with SMTP id 2adb3069b0e04-4fb8574a3a1so3542617e87.1
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 10:33:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20221208.gappssmtp.com; s=20221208; t=1687973636; x=1690565636;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=mu8Gi2wSnoTXkOMcCin+xgkyW4SfsZOtfaMQ9m+MZ5U=;
-        b=ctXSjsQSzaufeY9GTPqn+avzhgMNvjo9PgbMSWr3gC1OzFmKrqHpkfW/Hh4/BxaRHj
-         oatlyGdfBX5is3/rXAkRtPpuVaBjnbVAWHtGueEalCtd0kiWVV+nHvycDQA6ttsaegMd
-         3lcR9743n2mULg7SZFP8WAzgB7VrDSJyHfySHd5R6/1eVpsEDvWiJ7WrXlv0a9KSs29x
-         WETDEpY2W0csY2Kc8h8MS0M9gIM0+saldCRjt5f4n2ePrtvwjqb9Q37Q+s3b2t5w550r
-         rE7oMwUkLRYM2F7ETOGVj7LBn7mLZofgXEPOlaZgFM5DxnuqH6dXXJk0pzK8+aL2GhCR
-         7xfg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687973636; x=1690565636;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=mu8Gi2wSnoTXkOMcCin+xgkyW4SfsZOtfaMQ9m+MZ5U=;
-        b=jsgTD4p/1mBRc8M+QSkIzmX9sRestu9G5Eip494OCNtHqDctlmZsnHS7QV98iGSLqe
-         jJIekSaGRhFLpCHvjHIte4J4JJ+I+1WoSEogC5GW1HUBo4sxKfMyQ7ghkkLM7cMBh7rp
-         lxEwn2tVTueXTRw2XcVyupraV50rcY26M2E7G83gUeDOXrNwZlV0SUDfV0GNfift+IR9
-         ln3nsqec8aK2DGFawZOOmLBsfDxitWZpiEK5acFAw8KbdRaOBU2NFpuCHWDgKQ4iKAjN
-         5igsLxhZUazLsrDQdcHwKHbJBnmn2DhLiUzGX2OwJDZz6ITD+iTewjYG8hnkC/Ty1CpP
-         HSAg==
-X-Gm-Message-State: AC+VfDxSoKU7BxPgdJ8/+yZYVI80x8Yw5QRrIvR4FmeDYaRS+qvAZrKq
-        xFczOFIRHRLK4qiCVTWBeeurjNFBN8DEGr8n/8H7PQ==
-X-Google-Smtp-Source: ACHHUZ7/LXypQ2b7zt5BdRodKsoDzSYUcdIaTGpou0UZUfpPyxiEPFkUIurdLsWJ+cccDbdbnTpgIrlMLbBaiJoTBCY=
-X-Received: by 2002:a19:7710:0:b0:4f8:6800:86f6 with SMTP id
- s16-20020a197710000000b004f8680086f6mr16992828lfc.49.1687973636628; Wed, 28
- Jun 2023 10:33:56 -0700 (PDT)
+        Wed, 28 Jun 2023 13:33:35 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A3E02102;
+        Wed, 28 Jun 2023 10:33:34 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 93AE76120E;
+        Wed, 28 Jun 2023 17:33:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68DBDC433C0;
+        Wed, 28 Jun 2023 17:33:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687973613;
+        bh=O1MO0FX7r5ETJgeXa3FWAKYrIQbVEKXsUnp7T291ICo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=EQcefN3gtbUOatt4oQZ6m6ELSB2icWLaDiniHanCBJ+kAl+be6BLUpBsf3gY5G3DQ
+         CaFDcH2wCrkscgcBSec/NPgdodCRiLOdtbsWP7n1yxK/9rSe8HPFW79PrsWMgZsE40
+         SRg8qVqog442A4wS/3Sv4crws8bmxIV/XE0ArcftKdXZscy2pODQIm3U+Sx+FTH1pX
+         u5E7njr5glPHJJtP0IIoMa5m8dr8gJ+a1YlNMGL4Pe2XgktdzAPnBW9d0JINOkg7eZ
+         4fIJApPZc0TVV/KFrFWjmC0UERaK79P+JXMnWTkabXdPPtRxdVfa2uRfzIg+pP40GV
+         DtQv//b+0aG5w==
+Date:   Wed, 28 Jun 2023 19:33:28 +0200
+From:   Christian Brauner <brauner@kernel.org>
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     Kent Overstreet <kent.overstreet@linux.dev>,
+        torvalds@linux-foundation.org, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-bcachefs@vger.kernel.org,
+        Christoph Hellwig <hch@lst.de>
+Subject: Re: [GIT PULL] bcachefs
+Message-ID: <20230628-global-gewebe-c7491691d780@brauner>
+References: <20230627000635.43azxbkd2uf3tu6b@moria.home.lan>
+ <91e9064b-84e3-1712-0395-b017c7c4a964@kernel.dk>
+ <20230627020525.2vqnt2pxhtgiddyv@moria.home.lan>
+ <b92ea170-d531-00f3-ca7a-613c05dcbf5f@kernel.dk>
+ <23922545-917a-06bd-ec92-ff6aa66118e2@kernel.dk>
+ <20230627201524.ool73bps2lre2tsz@moria.home.lan>
+ <c06a9e0b-8f3e-4e47-53d0-b4854a98cc44@kernel.dk>
+ <20230628040114.oz46icbsjpa4egpp@moria.home.lan>
+ <b02657af-5bbb-b46b-cea0-ee89f385f3c1@kernel.dk>
+ <4b863e62-4406-53e4-f96a-f4d1daf098ab@kernel.dk>
 MIME-Version: 1.0
-References: <20230626-provable-angrily-81760e8c3cc6@wendy> <20230626-sensuous-clothing-124f7ae0aedf@wendy>
-In-Reply-To: <20230626-sensuous-clothing-124f7ae0aedf@wendy>
-From:   Evan Green <evan@rivosinc.com>
-Date:   Wed, 28 Jun 2023 10:33:20 -0700
-Message-ID: <CALs-HstDV3PjBk_8WDecwuvVK9rno1CKFzT1+8ohoUXE7X0GwA@mail.gmail.com>
-Subject: Re: [PATCH v1 6/9] RISC-V: add single letter extensions to riscv_isa_ext
-To:     Conor Dooley <conor.dooley@microchip.com>
-Cc:     palmer@dabbelt.com, conor@kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Andrew Jones <ajones@ventanamicro.com>,
-        Heiko Stuebner <heiko.stuebner@vrull.eu>,
-        Sunil V L <sunilvl@ventanamicro.com>,
-        linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <4b863e62-4406-53e4-f96a-f4d1daf098ab@kernel.dk>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 26, 2023 at 4:21=E2=80=AFAM Conor Dooley <conor.dooley@microchi=
-p.com> wrote:
->
-> So that riscv_fill_hwcap() can use riscv_isa_ext to probe for single
-> letter extensions, add them to it. riscv_isa_ext_data grows a new
-> member, signifying whether an extension is multi-letter & thus requiring
-> special handling.
-> As a result, what gets spat out in /proc/cpuinfo will become borked, as
-> single letter extensions will be printed as part of the base extensions
-> and while printing from riscv_isa_arr. Take the opportunity to unify the
-> printing of the isa string, using the new member of riscv_isa_ext_data
-> in the process.
->
-> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
-> ---
->  arch/riscv/include/asm/hwcap.h |  1 +
->  arch/riscv/kernel/cpu.c        | 36 ++++++----------------
->  arch/riscv/kernel/cpufeature.c | 56 +++++++++++++++++++++-------------
->  3 files changed, 46 insertions(+), 47 deletions(-)
->
-> diff --git a/arch/riscv/include/asm/hwcap.h b/arch/riscv/include/asm/hwca=
-p.h
-> index a35bee219dd7..6ad896dc4342 100644
-> --- a/arch/riscv/include/asm/hwcap.h
-> +++ b/arch/riscv/include/asm/hwcap.h
-> @@ -77,6 +77,7 @@ unsigned long riscv_get_elf_hwcap(void);
->  struct riscv_isa_ext_data {
->         const unsigned int id;
->         const char *name;
-> +       const bool multi_letter;
+On Wed, Jun 28, 2023 at 10:57:02AM -0600, Jens Axboe wrote:
+> On 6/28/23 8:58?AM, Jens Axboe wrote:
+> > On 6/27/23 10:01?PM, Kent Overstreet wrote:
+> >> On Tue, Jun 27, 2023 at 09:16:31PM -0600, Jens Axboe wrote:
+> >>> On 6/27/23 2:15?PM, Kent Overstreet wrote:
+> >>>>> to ktest/tests/xfstests/ and run it with -bcachefs, otherwise it kept
+> >>>>> failing because it assumed it was XFS.
+> >>>>>
+> >>>>> I suspected this was just a timing issue, and it looks like that's
+> >>>>> exactly what it is. Looking at the test case, it'll randomly kill -9
+> >>>>> fsstress, and if that happens while we have io_uring IO pending, then we
+> >>>>> process completions inline (for a PF_EXITING current). This means they
+> >>>>> get pushed to fallback work, which runs out of line. If we hit that case
+> >>>>> AND the timing is such that it hasn't been processed yet, we'll still be
+> >>>>> holding a file reference under the mount point and umount will -EBUSY
+> >>>>> fail.
+> >>>>>
+> >>>>> As far as I can tell, this can happen with aio as well, it's just harder
+> >>>>> to hit. If the fput happens while the task is exiting, then fput will
+> >>>>> end up being delayed through a workqueue as well. The test case assumes
+> >>>>> that once it's reaped the exit of the killed task that all files are
+> >>>>> released, which isn't necessarily true if they are done out-of-line.
+> >>>>
+> >>>> Yeah, I traced it through to the delayed fput code as well.
+> >>>>
+> >>>> I'm not sure delayed fput is responsible here; what I learned when I was
+> >>>> tracking this down has mostly fell out of my brain, so take anything I
+> >>>> say with a large grain of salt. But I believe I tested with delayed_fput
+> >>>> completely disabled, and found another thing in io_uring with the same
+> >>>> effect as delayed_fput that wasn't being flushed.
+> >>>
+> >>> I'm not saying it's delayed_fput(), I'm saying it's the delayed putting
+> >>> io_uring can end up doing. But yes, delayed_fput() is another candidate.
+> >>
+> >> Sorry - was just working through my recollections/initial thought
+> >> process out loud
+> > 
+> > No worries, it might actually be a combination and this is why my
+> > io_uring side patch didn't fully resolve it. Wrote a simple reproducer
+> > and it seems to reliably trigger it, but is fixed with an flush of the
+> > delayed fput list on mount -EBUSY return. Still digging...
+> 
+> I discussed this with Christian offline. I have a patch that is pretty
+> simple, but it does mean that you'd wait for delayed fput flush off
+> umount. Which seems kind of iffy.
+> 
+> I think we need to back up a bit and consider if the kill && umount
+> really is sane. If you kill a task that has open files, then any fput
+> from that task will end up being delayed. This means that the umount may
+> very well fail.
 
-Instead of defining a new member, could we just infer this by making a
-macro like #define MULTI_LETTER(name) (name[0] && name[1])?
+That's why we have MNT_DETACH:
+
+umount2("/mnt", MNT_DETACH)
+
+will succeed even if fds are still open.
+
+> 
+> It'd be handy if we could have umount wait for that to finish, but I'm
+> not at all confident this is a sane solution for all cases. And as
+> discussed, we have no way to even identify which files we'd need to
+> flush out of the delayed list.
+> 
+> Maybe the test case just needs fixing? Christian suggested lazy/detach
+> umount and wait for sb release. There's an fsnotify hook for that,
+> fsnotify_sb_delete(). Obviously this is a bit more involved, but seems
+> to me that this would be the way to make it more reliable when killing
+> of tasks with open files are involved.
+
+You can wait on superblock destruction today in multiple ways. Roughly
+from the shell this should work:
+
+        root@wittgenstein:~# cat sb_wait.sh
+        #! /bin/bash
+        
+        echo "WARNING WARNING: I SUCK AT SHELL SCRIPTS"
+        
+        echo "mount fs"
+        sudo mount -t tmpfs tmpfs /mnt
+        touch /mnt/bla
+        
+        echo "pin sb by random file for 5s"
+        sleep 5 > /mnt/bla &
+        
+        echo "establish inotify watch for sb destruction"
+        inotifywait -e unmount /mnt &
+        pid=$!
+        
+        echo "regular umount - will fail..."
+        umount /mnt
+        
+        findmnt | grep "/mnt"
+        
+        echo "lazily umount - will succeed"
+        umount -l /mnt
+        
+        findmnt | grep "/mnt"
+        
+        echo "and now we wait"
+        wait $!
+        
+        echo "done"
+
+Can also use a tiny bpf lsm, fanotify in the future as we plans for
+that.
