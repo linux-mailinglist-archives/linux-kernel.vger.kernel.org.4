@@ -2,142 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C0EE741718
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 19:19:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD12774171B
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 19:23:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231918AbjF1RS6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 13:18:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43444 "EHLO
+        id S229813AbjF1RXj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 13:23:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231609AbjF1RSu (ORCPT
+        with ESMTP id S229520AbjF1RXf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 13:18:50 -0400
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58553198D
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 10:18:49 -0700 (PDT)
-Received: by mail-lf1-x12a.google.com with SMTP id 2adb3069b0e04-4f766777605so8551548e87.1
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 10:18:49 -0700 (PDT)
+        Wed, 28 Jun 2023 13:23:35 -0400
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEF741FCC
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 10:23:33 -0700 (PDT)
+Received: by mail-lf1-x12d.google.com with SMTP id 2adb3069b0e04-4fb77f21c63so5323364e87.2
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 10:23:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687972727; x=1690564727;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Ow7tRjEnsCjS1GIOssymNS7x0t0R+j0hS5b7Ebpa1p0=;
-        b=ehYR155YzFx895QNHg9wHaaw+3kIP/EM7R6ld82ulDdVzKb3XAIzpizTnaiGaNnc46
-         YFOFtA23bJFNXeAN+td6RvEsX46tCTiCZz7wnj0D4oaPbUP8YN/iyKGFYiK/pmXz7yXC
-         KWmQNT1q+/RRZxr1tMFiZpubGU5T5NtVqJiI6ScmrVaG2druj0A4j6eyTPX1xinwmFEL
-         ZMmCMAbXULkJrFPS0+e7ULq6xTFqSub1DKt2o1utNYZmwjtBza2h2tw+ilQvrz7YvLev
-         HfBbnoFeEJOuwyrlyMeia5dpchManwelJAUd+kdDkWJIC9gQnwFciCzHzTWAR4rd09Ox
-         7y5w==
+        d=rivosinc-com.20221208.gappssmtp.com; s=20221208; t=1687973012; x=1690565012;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=kqIqFUPFrsKoIzLWBGgp2HjNxkpNScvy103dAekNK5w=;
+        b=iO+yzmLlBkR+O04yTgo80XMCjE1b80WI/5T4Qt+zTpN+zGPz5uUifYYcilgLFgMHlu
+         KRxvTMs2ZdJ5lItvmKidStNdeww57cz5o093LHLryAOWX0mjEFxB/a5kzgIFkFBD3YlU
+         +D1ZnbfS+sh+CSyY39sAcSRMdmntP6SsFXeNJU0rDO5cbX1P57xW5ZRi6WlYNSHkr0IQ
+         arbyQtQnxWUZGkqsK0ZlsXC6Hpc6EC3nZ9MEER7r4rJ01FEkQzjNOSJ5nrkBS6KXOD+Y
+         aq5OoGfAThvZRw/LqxpPX05JVvc7EhBP60vZwNHAEiCJXpHKfesydgdF0TUxzYFw98/8
+         cNZg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687972727; x=1690564727;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Ow7tRjEnsCjS1GIOssymNS7x0t0R+j0hS5b7Ebpa1p0=;
-        b=cg2aUfkes6bJ6wFm3KM9/7QSPDm7B3iGOQoLr05rRN2udJJifN+yF9efV6BrnLzrB1
-         FKfsPK8bfUsfuHe8BN6zki/33d22qXDznshLmjYvYdX3EGe2+p3ZcfG3T7r2JUpghPyi
-         B5NVBLMOCCWv65hW1s9VBuOZ1Ve0aailM9TmZqoFnoRJePP/CppxIRTob0fF4YxnpaHl
-         AX8M+mbZHpzJ6OPQepFr03fdI0CHruwio2HeWpoKd0iPc0sP0SfFPwbVdt1xjlvplvex
-         FcxbzfWqXh2c5ni3U8ZyvKL7QhhEAjEEWALLMHIlwa6n69p6nrw6NXyWPc47ut73qkxZ
-         UVGw==
-X-Gm-Message-State: AC+VfDwyJP/m190b5NYQgVs6rc5IvwFwnquSxSGmX+FDEsnTK+xQ2FiV
-        28MY7RiKkiUGLruYfTx6kvZifg==
-X-Google-Smtp-Source: ACHHUZ77YJXHqmFGoChqgG3trHPveAapS5Nb3B+LNq40EJ1Bf0lssdrfxIgIeP0QaAx96K4CoERoaw==
-X-Received: by 2002:a19:6704:0:b0:4f9:547c:a3cc with SMTP id b4-20020a196704000000b004f9547ca3ccmr14580392lfc.14.1687972727147;
-        Wed, 28 Jun 2023 10:18:47 -0700 (PDT)
-Received: from [192.168.1.101] (abyk82.neoplus.adsl.tpnet.pl. [83.9.30.82])
-        by smtp.gmail.com with ESMTPSA id d27-20020ac244db000000b004f27471e0aesm2006371lfm.79.2023.06.28.10.18.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 28 Jun 2023 10:18:46 -0700 (PDT)
-Message-ID: <42b1167d-da60-f6c3-67b6-3f6857327396@linaro.org>
-Date:   Wed, 28 Jun 2023 19:18:45 +0200
+        d=1e100.net; s=20221208; t=1687973012; x=1690565012;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=kqIqFUPFrsKoIzLWBGgp2HjNxkpNScvy103dAekNK5w=;
+        b=ZS5bkETfPE7FTB7b9W+65NE0z9Rp2558b5tR51JE+6W3/VQaCgQdEGAomfXcH+/0NC
+         ZMjnhELU++RpuI7wa40iDlAVGaoWXtjY4/ieO/HW8TNZu/7Uy72Pj+NCCeXtyQ4tE+y2
+         oR9FUk2eJ377oN9aqPn3qq006Zz0/7j/y1q1ReT2O6yfwAQb0+fGpUFFWAuX1wsi2HQN
+         KYL/VRfM/Deklh+auKWv6fh8CRXhqOOfNk/xhgyc/W3oNwWpphbKbekLSkfVj+lnroQz
+         QfkfkufoYxOKjp1RcSM1e5ppmj5kCCynxdg6neicCjaQYLejxGkpcm9AvqZFrSZ+yfNV
+         gVjw==
+X-Gm-Message-State: AC+VfDz9llnwVHx302NyIihK2RZ7v661CVTmyyAS1lvpuqEWlPXDEqJl
+        6hp8XWwad2azNVHxF8gZFy7Uq2JUt4/ZnFoXBZfVhw==
+X-Google-Smtp-Source: ACHHUZ79N/TpxztcIneHGSQv13tw7uydK8uMAMcNq7uhd3nC2sjwlTTVD5XfZdbpiDrun3fawZh0gaSMQ8wx9lp5nbA=
+X-Received: by 2002:a05:6512:e9d:b0:4f9:b6f8:844f with SMTP id
+ bi29-20020a0565120e9d00b004f9b6f8844fmr8662285lfb.39.1687973011995; Wed, 28
+ Jun 2023 10:23:31 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH 2/2] clk: qcom: gdsc: Add support for set_hwmode_dev
-Content-Language: en-US
-To:     Abel Vesa <abel.vesa@linaro.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        avel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Mike Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Taniya Das <tdas@qti.qualcomm.com>
-Cc:     linux-pm@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arm-msm@vger.kernel.org
-References: <20230628105652.1670316-1-abel.vesa@linaro.org>
- <20230628105652.1670316-3-abel.vesa@linaro.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230628105652.1670316-3-abel.vesa@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230628131442.3022772-1-sameo@rivosinc.com> <20230628131442.3022772-2-sameo@rivosinc.com>
+In-Reply-To: <20230628131442.3022772-2-sameo@rivosinc.com>
+From:   Evan Green <evan@rivosinc.com>
+Date:   Wed, 28 Jun 2023 10:22:56 -0700
+Message-ID: <CALs-HsuccHQiHEtJ+=s-YS0kHLhwOUnDUY7eP5W3BL2Lpx5+9g@mail.gmail.com>
+Subject: Re: [PATCH v2 1/3] RISC-V: add Bitmanip/Scalar Crypto parsing from DT
+To:     Samuel Ortiz <sameo@rivosinc.com>
+Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-riscv@lists.infradead.org,
+        "Hongren (Zenithal) Zheng" <i@zenithal.me>, linux@rivosinc.com,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Andrew Jones <ajones@ventanamicro.com>,
+        Heiko Stuebner <heiko.stuebner@vrull.eu>,
+        Anup Patel <apatel@ventanamicro.com>,
+        linux-kernel@vger.kernel.org, Guo Ren <guoren@kernel.org>,
+        Atish Patra <atishp@rivosinc.com>,
+        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@rivosinc.com>,
+        Jiatai He <jiatai2021@iscas.ac.cn>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 28.06.2023 12:56, Abel Vesa wrote:
-> Implement the GDSC specific genpd set_hwmode_dev callback in order to
-> switch the HW control on or off. For any GDSC that supports HW control
-> set this callback in order to allow its consumers to control it.
-> 
-> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
-> ---
-This still does nothing to prevent the HW_CTRL state being changed in
-init, enable and disable functions.
+On Wed, Jun 28, 2023 at 6:15=E2=80=AFAM Samuel Ortiz <sameo@rivosinc.com> w=
+rote:
+>
+> From: "Hongren (Zenithal) Zheng" <i@zenithal.me>
+>
+> Parse Zb/Zk related string from DT and output them to cpuinfo.
+>
+> It is worth noting that the Scalar Crypto extension defines "zk" as a
+> shorthand for the Zkn, Zkr and Zkt extensions. Since the Zkn one also
+> implies the Zbkb, Zbkc and Zbkx extensions, simply passing the valid
+> "zk" extension name through a DT will enable all of the  Zbkb, Zbkc,
+> Zbkx, Zkn, Zkr and Zkt extensions.
+>
+> Also, since there currently is no mechanism to merge all enabled
+> extensions, the generated cpuinfo output could be relatively large.
+> For example, setting the "riscv,isa" DT property to "rv64imafdc_zk_zks"
+> will generate the following cpuinfo output:
+> "rv64imafdc_zbkb_zbkc_zbkx_zknd_zkne_zknh_zkr_zksed_zksh_zkt".
+>
+> Tested-by: Jiatai He <jiatai2021@iscas.ac.cn>
+> Signed-off-by: Samuel Ortiz <sameo@rivosinc.com>
+> Signed-off-by: Hongren (Zenithal) Zheng <i@zenithal.me>
 
-Konrad
->  drivers/clk/qcom/gdsc.c | 22 ++++++++++++++++++++++
->  1 file changed, 22 insertions(+)
-> 
-> diff --git a/drivers/clk/qcom/gdsc.c b/drivers/clk/qcom/gdsc.c
-> index 5358e28122ab..9a04bf2e4379 100644
-> --- a/drivers/clk/qcom/gdsc.c
-> +++ b/drivers/clk/qcom/gdsc.c
-> @@ -314,6 +314,26 @@ static int gdsc_enable(struct generic_pm_domain *domain)
->  	return 0;
->  }
->  
-> +static int gdsc_set_hwmode_dev(struct generic_pm_domain *domain,
-> +			       struct device *dev, bool enable)
-> +{
-> +	int ret = gdsc_hwctrl(domain_to_gdsc(domain), enable);
-> +
-> +	if (ret)
-> +		goto out;
-> +
-> +	/*
-> +	 * Wait for the GDSC to go through a power down and
-> +	 * up cycle.  In case there is a status polling going on
-> +	 * before the power cycle is completed it might read an
-> +	 * wrong status value.
-> +	 */
-> +	udelay(1);
-> +
-> +out:
-> +	return ret;
-> +}
-> +
->  static int gdsc_disable(struct generic_pm_domain *domain)
->  {
->  	struct gdsc *sc = domain_to_gdsc(domain);
-> @@ -451,6 +471,8 @@ static int gdsc_init(struct gdsc *sc)
->  		sc->pd.power_off = gdsc_disable;
->  	if (!sc->pd.power_on)
->  		sc->pd.power_on = gdsc_enable;
-> +	if (sc->flags & HW_CTRL)
-> +		sc->pd.set_hwmode_dev = gdsc_set_hwmode_dev;
->  
->  	ret = pm_genpd_init(&sc->pd, NULL, !on);
->  	if (ret)
+Reviewed-by: Evan Green <evan@rivosinc.com>
