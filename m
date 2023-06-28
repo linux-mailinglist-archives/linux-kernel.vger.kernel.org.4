@@ -2,119 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29CAC7407A5
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 03:33:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 110D07407B4
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 03:40:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230417AbjF1BdT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 21:33:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47408 "EHLO
+        id S230458AbjF1Bko (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 21:40:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229647AbjF1BdR (ORCPT
+        with ESMTP id S229841AbjF1Bkm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 21:33:17 -0400
-Received: from out-27.mta1.migadu.com (out-27.mta1.migadu.com [IPv6:2001:41d0:203:375::1b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E474BE7E
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 18:33:15 -0700 (PDT)
-Message-ID: <9db7b307-11c7-2770-786d-5727d771aaa9@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1687915993;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=/C2/e9OXN1uWKWIpZoEkIk0l2No59LPS3LVXKbpNiKw=;
-        b=np7oTgs6/QoAHAGzSbaUg+u/r13kffSUylCb3S7Sc4I/DmYNP5QxmisSgAqx3ATWRIxzwO
-        EiGMlqhXcn1T8qCzcm+tjJ/dC/RVkWbOUd5ZakaqNF9U4fKo7dd69z7Vt6LTh7XVhjY0+m
-        gKPDEMWgY/N4L502LCeMvhppiEXvQp4=
-Date:   Wed, 28 Jun 2023 09:33:19 +0800
+        Tue, 27 Jun 2023 21:40:42 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4C7210D2;
+        Tue, 27 Jun 2023 18:40:37 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 783071F8B4;
+        Wed, 28 Jun 2023 01:40:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1687916435; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=DTwipPwdW2/LXsLE72OtUM8pgO73fvfJDGprJTZaU/A=;
+        b=ukMVLD1JxK5JkOIKj0T7+pZi6x7FIajELpw6NRFWpvn0o6o07YxS+Nhu813jTDN/glbC+0
+        nMF1OLejbfjr7FhZZRkw/IB58ddSOFjK3E3u6XVWTJqT3xs1Qj55QZ1IIlDpJDPt4m6oEN
+        nn2Z4x/8zQ5pli9lo0O5Mt+gyfxBJR4=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 071E7138E8;
+        Wed, 28 Jun 2023 01:40:34 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id Oba3OpKPm2TpLQAAMHmgww
+        (envelope-from <ailiop@suse.com>); Wed, 28 Jun 2023 01:40:34 +0000
+From:   Anthony Iliopoulos <ailiop@suse.com>
+To:     Mark Fasheh <mark@fasheh.com>, Joel Becker <jlbec@evilplan.org>,
+        Joseph Qi <joseph.qi@linux.alibaba.com>
+Cc:     ocfs2-devel@lists.linux.dev, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org
+Subject: [PATCH 0/2] update ocfs2-devel mailing list addresses
+Date:   Wed, 28 Jun 2023 03:34:35 +0200
+Message-Id: <20230628013437.47030-1-ailiop@suse.com>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
-Subject: Re: [PATCH v2 09/12] ext4: Ensure ext4_mb_prefetch_fini() is called
- for all prefetched BGs
-To:     Ojaswin Mujoo <ojaswin@linux.ibm.com>
-Cc:     linux-ext4@vger.kernel.org, Theodore Ts'o <tytso@mit.edu>,
-        Ritesh Harjani <riteshh@linux.ibm.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jan Kara <jack@suse.cz>,
-        Kemeng Shi <shikemeng@huaweicloud.com>,
-        Ritesh Harjani <ritesh.list@gmail.com>
-References: <cover.1685449706.git.ojaswin@linux.ibm.com>
- <05e648ae04ec5b754207032823e9c1de9a54f87a.1685449706.git.ojaswin@linux.ibm.com>
- <c3173405-713d-d2eb-bd9c-af8b8c747533@linux.dev>
- <ZJqG+rEl9DATNRIX@li-bb2b2a4c-3307-11b2-a85c-8fa5c3a69313.ibm.com>
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Guoqing Jiang <guoqing.jiang@linux.dev>
-In-Reply-To: <ZJqG+rEl9DATNRIX@li-bb2b2a4c-3307-11b2-a85c-8fa5c3a69313.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Ojaswin,
+The ocfs2-devel mailing list has been migrated to kernel.org, update all
+related kernel documentation pointers to reflect the change.
 
-On 6/27/23 14:51, Ojaswin Mujoo wrote:
-> On Tue, Jun 06, 2023 at 10:00:57PM +0800, Guoqing Jiang wrote:
->> Hello,
->>
->> On 5/30/23 20:33, Ojaswin Mujoo wrote:
->>> Before this patch, the call stack in ext4_run_li_request is as follows:
->>>
->>>     /*
->>>      * nr = no. of BGs we want to fetch (=s_mb_prefetch)
->>>      * prefetch_ios = no. of BGs not uptodate after
->>>      * 		    ext4_read_block_bitmap_nowait()
->>>      */
->>>     next_group = ext4_mb_prefetch(sb, group, nr, prefetch_ios);
->>>     ext4_mb_prefetch_fini(sb, next_group prefetch_ios);
->>>
->>> ext4_mb_prefetch_fini() will only try to initialize buddies for BGs in
->>> range [next_group - prefetch_ios, next_group). This is incorrect since
->>> sometimes (prefetch_ios < nr), which causes ext4_mb_prefetch_fini() to
->>> incorrectly ignore some of the BGs that might need initialization. This
->>> issue is more notable now with the previous patch enabling "fetching" of
->>> BLOCK_UNINIT BGs which are marked buffer_uptodate by default.
->>>
->>> Fix this by passing nr to ext4_mb_prefetch_fini() instead of
->>> prefetch_ios so that it considers the right range of groups.
->> Thanks for the series.
->>
->>> Similarly, make sure we don't pass nr=0 to ext4_mb_prefetch_fini() in
->>> ext4_mb_regular_allocator() since we might have prefetched BLOCK_UNINIT
->>> groups that would need buddy initialization.
->> Seems ext4_mb_prefetch_fini can't be called by ext4_mb_regular_allocator
->> if nr is 0.
-> Hi Guoqing,
->
-> Sorry I was on vacation so didn't get a chance to reply to this sooner.
-> Let me explain what I meant by that statement in the commit message.
->
-> So basically, the prefetch_ios output argument is incremented whenever
-> ext4_mb_prefetch() reads a block group with !buffer_uptodate(bh).
-> However, for BLOCK_UNINIT BGs the buffer is marked uptodate after
-> initialization and hence prefetch_ios is not incremented when such BGs
-> are prefetched.
->
-> This leads to nr becoming 0 due to the following line (removed in this patch):
->
-> 				if (prefetch_ios == curr_ios)
-> 					nr = 0;
->
-> hence ext4_mb_prefetch_fini() would never pre initialise the corresponding
-> buddy structures. Instead, these structures would then get initialized
-> probably at a later point during the slower allocation criterias. The
-> motivation of making sure the BLOCK_UNINIT BGs' buddies are pre
-> initialized is so the faster allocation criterias can utilize the data
-> to make better decisions.
+Anthony Iliopoulos (2):
+  MAINTAINERS: Update ocfs2-devel mailing list address
+  docs: update ocfs2-devel mailing list address
 
-Got it, appreciate for the detailed explanation!
+ Documentation/ABI/obsolete/o2cb       |  4 ++--
+ Documentation/ABI/removed/o2cb        |  4 ++--
+ Documentation/ABI/stable/o2cb         |  4 ++--
+ Documentation/ABI/testing/sysfs-ocfs2 | 12 ++++++------
+ Documentation/filesystems/dlmfs.rst   |  2 +-
+ Documentation/filesystems/ocfs2.rst   |  2 +-
+ MAINTAINERS                           |  2 +-
+ fs/ocfs2/Kconfig                      |  6 +++---
+ 8 files changed, 18 insertions(+), 18 deletions(-)
 
-Thanks,
-Guoqing
+-- 
+2.35.3
+
