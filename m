@@ -2,126 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85875740C52
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 11:04:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35A0D740C40
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 11:04:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233926AbjF1JEZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 05:04:25 -0400
-Received: from mout.gmx.net ([212.227.15.19]:45821 "EHLO mout.gmx.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233129AbjF1Itp (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 04:49:45 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
- s=s31663417; t=1687942157; x=1688546957; i=georgmueller@gmx.net;
- bh=7EYxf2mbjFZfjlwtXaTopEVdIniSJTqMoHEmr5pnAAQ=;
- h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
- b=jbLHvXBonqIsNYqv0cmDGf/lc9iYbCb+tMrlV+CXWUXPsekXscsvvKbMjufE1ptSNfrYxR1
- UyMXqBzcrvlrlb5o1IRC+BVc9tA0YsXhValMK+n64dPvKKMcw7SvuNQsb6rkzxI0YUziAQAQy
- 1o9ws4uxeZ0gpB5a9se8wxayp/VS57iSM+m1Y2Pmks+pL2Nr8H5KObuc4UUMY8WlzpqAzRsD1
- rqU+NlODhWyL2W2vJ6vsjy5t6GLogH7hjtOf50hmhuxA5nfB+43ecTycsMki+16j/J/UNnGTf
- YuwpVXKc1d/vbskYnHyXG+0jczHi0tW7uhp+SsCT2K9im+M/fHrw==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from nb-georg.intra.allegro-packets.com ([79.246.84.17]) by
- mail.gmx.net (mrgmx004 [212.227.17.190]) with ESMTPSA (Nemesis) id
- 1Msq2E-1puR8P1nKq-00tBRZ; Wed, 28 Jun 2023 10:49:17 +0200
-From:   =?UTF-8?q?Georg=20M=C3=BCller?= <georgmueller@gmx.net>
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
-Cc:     =?UTF-8?q?Georg=20M=C3=BCller?= <georgmueller@gmx.net>,
-        regressions@lists.linux.dev,
-        Arnaldo Carvalho de Melo <acme@redhat.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-Subject: [PATCH v3 2/2] perf probe: read DWARF files from the correct CU
-Date:   Wed, 28 Jun 2023 10:45:51 +0200
-Message-ID: <20230628084551.1860532-6-georgmueller@gmx.net>
-X-Mailer: git-send-email 2.41.0
-In-Reply-To: <20230628084551.1860532-3-georgmueller@gmx.net>
-References: <20230628084551.1860532-3-georgmueller@gmx.net>
+        id S232894AbjF1JD2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 05:03:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44412 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233919AbjF1IuF (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 28 Jun 2023 04:50:05 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B7862956;
+        Wed, 28 Jun 2023 01:46:56 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C1E4661260;
+        Wed, 28 Jun 2023 08:46:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4CA6FC433C8;
+        Wed, 28 Jun 2023 08:46:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687942014;
+        bh=a7qYYMfvhrkx8GjWo17aDb5hBm4by7dQQM443cV8Zng=;
+        h=Date:Subject:To:References:Cc:From:In-Reply-To:From;
+        b=BLeDWM/ynvXrBgTAarLsb/JRDmY8GGAr9/YtCTnzMOVELGRQ7ebxSs05lhERYNOr0
+         NrUpPUw6MkZJQ2NVW4Gizlury5z21Z+aTBZeplCjB6k3e3sZxZYBba/adjmSHCW7La
+         5XaWs6vFI2MxatVH7QTAj1BTI7Mu9jVO5XlNJ7Am5scGvlYcCR27MD4POBmx4lt0RB
+         dVR4O8WEvaerJbHtobCC+gFc7ecLAL+kZaV5JIOmtioxMuXNqh8Ek+e389UtlnEpzI
+         QfRa62rA6DPoI6DFwwF1ijn039snDraz5u3tYbWMzorixSukg7Z8mjpjrZSbKfeCmf
+         3Gi5GncuKI2dQ==
+Message-ID: <55a80df7-0725-d36c-566b-24cdf2dfd6da@kernel.org>
+Date:   Wed, 28 Jun 2023 16:46:51 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:Cb82SGcEsrL11zuH0JhYn8EPvv7SYgVIiYe39ozfB6jCOHBRCG3
- tdBkdi7oMnRW+phUL09ePfExRcxv1JtDBLya3Woi1NpS/u2jFhx1jcsiuFRqmkSVLzmnqbe
- bwyisMG9/BYJriHw3Mf4q8UuPv3OyvXg2esjKwIzlywis/rh3EhFh+Sh1s0HqD0zPm0yQOY
- 7UNmWN3HPHoS4XPyv+9Cg==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:lcY/W0j30Co=;e7msvmEaR+Q9xqySdxbTx8k8St5
- BOvJXLrzS5VRpHvvuT1aMLe4qblAsZeqsHSyXNQBnfDYnx+XknZJgVsr9ZFuGlFVSyu1RQaYY
- NBzSp3SxlUwSjwUK0vyMaS1ENVzkesXBAw0iFkUHaz98HWRMgW+LqZF9k7dxLRONffu+AnaSr
- LN9S3iPhOy+ByS2cV53aPdWF5AWly1iNIG7Ydm/VepxRdwLq9xqQ7GVgx3nx79xNYylws3t9m
- 6BjaLY3geW3davNGhyUbWmRWtPqsfArZwuqv+ahKdLRrya39fZdq6XOqMdWZ94KlZdvWgdkOX
- vgFqH23DqvhJlGRy6+S3TPGfOnqHgymMidK27BF2FaXriit2OGC2hfxhx9xHMUW7LPxh9Z695
- d/1G/mB/i+x5ddSjSpXQBEr2SlsEy2PXBcGWhi5srm7c2296Aqm0Q7pR8HsorvA/Kz7ITBlr6
- EGgE+5dC4k6Iay/2D0ZjPQuBRMaLojzmOskpnmoNhbueCxVxrvVro8jGniSzU3qGZUVyxZ6lL
- Tk7nnqu8TR1RGMCnzjCVYQfX8N8SCdvnQGidZxuOSTVeZfzViIxyD4TCDoV0nWlUQb7tcvXd+
- xyujVGIwReFJ6SkfX7SkRPxPxU0lxxEEaCVfKWlRX464ieccxO9PumWXC1tbEqfgWqP3nSqdu
- s3hCrBXsdvn0BWdn8DOZWIabNqfKJXg+u5kTj5QsYgmI20d32LGTHKgKUiDhT9zbcpmgQBlj8
- x2G6ossF6QZhOcZ/S9JJJOWl5ZQyd0lEBXs+8NRf7PYryP6SOroAcI7M0z1fQZhI9AGzzL4fb
- CVEymTXwgKAoVyo9+I/kS3Ca05Hh8KfW1Z7MbfPL0Ah8ulKph89Lr2EVDnooztVUaXiyML4EN
- o/sJviXjoALTHcR5cJw+O2RCP3bb1ydbH/bA8UWEklxJnFNBprYR36JR5sgAnw11NqaOKZ1S8
- c6QLcpQW7nc6X+nUMvACIWYYPmg=
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [syzbot] [f2fs?] possible deadlock in f2fs_fiemap
+Content-Language: en-US
+To:     syzbot <syzbot+dd6352699b8027673b35@syzkaller.appspotmail.com>,
+        jaegeuk@kernel.org, linux-f2fs-devel@lists.sourceforge.net,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+References: <000000000000ded70105fef7cd35@google.com>
+Cc:     Eric Biggers <ebiggers@kernel.org>
+From:   Chao Yu <chao@kernel.org>
+In-Reply-To: <000000000000ded70105fef7cd35@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+        lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-After switching from dwarf_decl_file() to die_get_decl_file(), it is not
-possible to add probes for certain functions:
+On 2023/6/26 1:45, syzbot wrote:
+> Hello,
+> 
+> syzbot found the following issue on:
+> 
+> HEAD commit:    15e71592dbae Add linux-next specific files for 20230621
+> git tree:       linux-next
+> console output: https://syzkaller.appspot.com/x/log.txt?x=101c827b280000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=b4e51841f618f374
+> dashboard link: https://syzkaller.appspot.com/bug?extid=dd6352699b8027673b35
+> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> 
+> Unfortunately, I don't have any reproducer for this issue yet.
+> 
+> Downloadable assets:
+> disk image: https://storage.googleapis.com/syzbot-assets/6b6464ef4887/disk-15e71592.raw.xz
+> vmlinux: https://storage.googleapis.com/syzbot-assets/81eba5775318/vmlinux-15e71592.xz
+> kernel image: https://storage.googleapis.com/syzbot-assets/bc7983587629/bzImage-15e71592.xz
+> 
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+dd6352699b8027673b35@syzkaller.appspotmail.com
+> 
+> loop4: detected capacity change from 0 to 40427
+> F2FS-fs (loop4): Found nat_bits in checkpoint
+> F2FS-fs (loop4): Mounted with checkpoint version = 48b305e5
+> ======================================================
+> WARNING: possible circular locking dependency detected
+> 6.4.0-rc7-next-20230621-syzkaller #0 Not tainted
+> ------------------------------------------------------
+> syz-executor.4/7658 is trying to acquire lock:
+> ffff888012869e20 (&mm->mmap_lock){++++}-{3:3}, at: __might_fault+0xb2/0x190 mm/memory.c:5716
+> 
+> but task is already holding lock:
+> ffff8880865b1a10 (&sb->s_type->i_mutex_key#23){+.+.}-{3:3}, at: inode_lock include/linux/fs.h:771 [inline]
+> ffff8880865b1a10 (&sb->s_type->i_mutex_key#23){+.+.}-{3:3}, at: f2fs_fiemap+0x1e3/0x1670 fs/f2fs/data.c:1998
 
- $ perf probe -x /usr/lib/systemd/systemd-logind match_unit_removed
- A function DIE doesn't have decl_line. Maybe broken DWARF?
- A function DIE doesn't have decl_line. Maybe broken DWARF?
- Probe point 'match_unit_removed' not found.
-    Error: Failed to add events.
+This was caused by the patch
+"f2fs: fix to avoid mmap vs set_compress_option case"
+(https://lore.kernel.org/linux-f2fs-devel/20230529104709.2560779-1-chao@kernel.org/)
+which has been dropped.
 
-The problem is that die_get_decl_file() uses the wrong CU to search for
-the file. elfutils commit e1db5cdc9f has some good explanation for this:
-
-    dwarf_decl_file uses dwarf_attr_integrate to get the DW_AT_decl_file
-    attribute. This means the attribute might come from a different DIE
-    in a different CU. If so, we need to use the CU associated with the
-    attribute, not the original DIE, to resolve the file name.
-
-This patch uses the same source of information as elfutils: use attribute
-DW_AT_decl_file and use this CU to search for the file.
-
-Fixes: dc9a5d2ccd5c ("perf probe: Fix to get declared file name from clang=
- DWARF5")
-Signed-off-by: Georg M=C3=BCller <georgmueller@gmx.net>
-Link: https://lore.kernel.org/r/5a00d5a5-7be7-ef8a-4044-9a16249fff25@gmx.n=
-et/
-Cc: stable@vger.kernel.org
-=2D--
- tools/perf/util/dwarf-aux.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
-
-diff --git a/tools/perf/util/dwarf-aux.c b/tools/perf/util/dwarf-aux.c
-index b07414409771..137b3ed9897b 100644
-=2D-- a/tools/perf/util/dwarf-aux.c
-+++ b/tools/perf/util/dwarf-aux.c
-@@ -478,8 +478,10 @@ static const char *die_get_file_name(Dwarf_Die *dw_di=
-e, int idx)
- {
- 	Dwarf_Die cu_die;
- 	Dwarf_Files *files;
-+	Dwarf_Attribute attr_mem;
-
--	if (idx < 0 || !dwarf_diecu(dw_die, &cu_die, NULL, NULL) ||
-+	if (idx < 0 || !dwarf_attr_integrate(dw_die, DW_AT_decl_file, &attr_mem)=
- ||
-+	    !dwarf_cu_die(attr_mem.cu, &cu_die, NULL, NULL, NULL, NULL, NULL, NU=
-LL) ||
- 	    dwarf_getsrcfiles(&cu_die, &files, NULL) !=3D 0)
- 		return NULL;
-
-=2D-
-2.41.0
-
+#syz set subsystems: f2fs
+#syz invalid
