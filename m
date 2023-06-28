@@ -2,160 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7E2E7413C4
+	by mail.lfdr.de (Postfix) with ESMTP id 0BE567413C2
 	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 16:22:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231744AbjF1OVq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 10:21:46 -0400
-Received: from mail.avm.de ([212.42.244.120]:57488 "EHLO mail.avm.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231929AbjF1OU1 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 10:20:27 -0400
-Received: from mail-auth.avm.de (dovecot-mx-01.avm.de [212.42.244.71])
-        by mail.avm.de (Postfix) with ESMTPS;
-        Wed, 28 Jun 2023 16:20:24 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=avm.de; s=mail;
-        t=1687962025; bh=bPDxZSX5AGRWE//qyJ05XWKBdUJXjjjaprO229FFQE0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=X1xMyfo0ASe/oBNmPwaajR3/PUBuBdKuHuN7p10YbZQAudOlDJg+MH4WFE4Z9uyr9
-         MQDVx1TyUQVwvclTmkQnd+sPkN0VIO8IFAfp9b32hTN2D6uDazwic757HGgt81pFa6
-         pegcpxY6Gs+e1LDc3THwpYIJF1g5HFS5/tTbjw4k=
-Received: from buildd.core.avm.de (buildd-sv-01.avm.de [172.16.0.225])
-        by mail-auth.avm.de (Postfix) with ESMTPA id 4FF3B80AC0;
-        Wed, 28 Jun 2023 16:20:25 +0200 (CEST)
-Received: by buildd.core.avm.de (Postfix, from userid 1000)
-        id 45038181EF4; Wed, 28 Jun 2023 16:20:25 +0200 (CEST)
-Date:   Wed, 28 Jun 2023 16:20:25 +0200
-From:   Nicolas Schier <n.schier@avm.de>
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>
-Subject: Re: [PATCH v4 3/3] kbuild: respect GNU Make -w flag
-Message-ID: <ZJxBqYdSxWknb/+v@buildd.core.avm.de>
-Mail-Followup-To: Masahiro Yamada <masahiroy@kernel.org>,
-        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>
-References: <20230626233014.66549-1-masahiroy@kernel.org>
- <20230626233014.66549-3-masahiroy@kernel.org>
- <CAK7LNATtUBZo0bczb=bQyQ6UrXbK7V4Bp058+wzZQp3QREfniQ@mail.gmail.com>
+        id S231969AbjF1OV4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 10:21:56 -0400
+Received: from relay07.th.seeweb.it ([5.144.164.168]:60413 "EHLO
+        relay07.th.seeweb.it" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231264AbjF1OUj (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 28 Jun 2023 10:20:39 -0400
+Received: from SoMainline.org (94-211-6-86.cable.dynamic.v4.ziggo.nl [94.211.6.86])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id 79F273F78D;
+        Wed, 28 Jun 2023 16:20:36 +0200 (CEST)
+Date:   Wed, 28 Jun 2023 16:20:34 +0200
+From:   Marijn Suijten <marijn.suijten@somainline.org>
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     Neil Armstrong <neil.armstrong@linaro.org>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Caleb Connolly <caleb@connolly.tech>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        devicetree@vger.kernel.org,
+        Jami Kettunen <jami.kettunen@somainline.org>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        ~postmarketos/upstreaming@lists.sr.ht,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Jessica Zhang <quic_jesszhan@quicinc.com>,
+        Kuogee Hsieh <quic_khsieh@quicinc.com>
+Subject: Re: [PATCH RFC 10/10] drm/panel/sony-griffin-samsung: Add panel
+ driver for Sony Xperia 1
+Message-ID: <a7h7hudmgg3ldb334o2knga7dqilvp47tfd46se4szpri2xi35@lxg5i5igjfmj>
+References: <20230521-drm-panels-sony-v1-0-541c341d6bee@somainline.org>
+ <20230521-drm-panels-sony-v1-10-541c341d6bee@somainline.org>
+ <CACRpkdbrk_pPqewo-bGPq4NQScHSRKNMeO0ik_aqEQ+BY12BBQ@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAK7LNATtUBZo0bczb=bQyQ6UrXbK7V4Bp058+wzZQp3QREfniQ@mail.gmail.com>
-X-purgate-ID: 149429::1687962024-5C6A3FC0-470BA280/0/0
-X-purgate-type: clean
-X-purgate-size: 2939
-X-purgate-Ad: Categorized by eleven eXpurgate (R) http://www.eleven.de
-X-purgate: This mail is considered clean (visit http://www.eleven.de for further information)
-X-purgate: clean
+In-Reply-To: <CACRpkdbrk_pPqewo-bGPq4NQScHSRKNMeO0ik_aqEQ+BY12BBQ@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 28, 2023 at 04:09:44PM +0900, Masahiro Yamada wrote:
-> On Tue, Jun 27, 2023 at 8:30 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
-> >
-> > Currently, -w (--print-directory) option is ignored, but it is better
-> > to respect the user's choice.
-> >
-> > This commit changes the behavior of "Entering directory ..." logging.
-> >
-> > If -w (or --print-directory) is given via the command line or the
-> > MAKEFLAGS environment variable, print "Entering directory ..." for every
-> > sub make.
-> >
-> > If --no-print-directory is given via the command line or the MAKEFLAGS
-> > environment variable, suppress "Entering directory ..." completely.
-> >
-> > If none of them is given, print "Entering directory ..." when Kbuild
-> > changes the working directory at the start of building. (default)
-> >
-> > Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-> > Tested-by: Nicolas Schier <n.schier@avm.de>
-> > ---
+On 2023-06-28 11:22:37, Linus Walleij wrote:
+> On Sun, May 21, 2023 at 11:23 PM Marijn Suijten
+> <marijn.suijten@somainline.org> wrote:
 > 
-> 
-> As it turns out, this patch does not work for GNU Make <= 4.3
-
-Ups, I'm sorry.  I was pretty sure I tested it with make-4.3, but
-obviously not...
-
-Kind regards,
-Nicolas
-
-
-
-> I will drop (and give up) this patch.
-> 
-> 
-> 
-> 
-> 
-> 
+> > The Sony Xperia 1 (codename kumano griffin) features an unnamed 4k OLED
+> > DSI cmd mode panel produced by Samsung.  It can be driven in a
+> > 1644x3840@60 or 1096x2560@60 mode, and always has Display Stream
+> > Compression 1.1 enabled.
 > >
-> > (no changes since v2)
-> >
-> > Changes in v2:
-> >   - new patch
-> >
-> >  Makefile | 16 ++++++++++------
-> >  1 file changed, 10 insertions(+), 6 deletions(-)
-> >
-> > diff --git a/Makefile b/Makefile
-> > index 7edb00603b7e..c9864f83a3d2 100644
-> > --- a/Makefile
-> > +++ b/Makefile
-> > @@ -38,6 +38,12 @@ __all:
-> >  # descending is started. They are now explicitly listed as the
-> >  # prepare rule.
-> >
-> > +ifeq ($(filter 3.%,$(MAKE_VERSION)),)
-> > +short-opts := $(firstword -$(MAKEFLAGS))
-> > +else
-> > +short-opts := $(filter-out --%,$(MAKEFLAGS))
-> > +endif
+> > Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
+> (...)
+> 
+> > +static int sony_griffin_samsung_on(struct sony_griffin_samsung *ctx)
+> > +{
+> 
+> > +       ret = mipi_dsi_dcs_exit_sleep_mode(dsi);
+> > +       if (ret < 0) {
+> > +               dev_err(dev, "Failed to exit sleep mode: %d\n", ret);
+> > +               return ret;
+> > +       }
+> > +       usleep_range(10000, 11000);
 > > +
-> >  this-makefile := $(lastword $(MAKEFILE_LIST))
-> >  export abs_srctree := $(realpath $(dir $(this-makefile)))
-> >  export abs_objtree := $(CURDIR)
-> > @@ -95,12 +101,6 @@ endif
-> >  # commands
-> >  # make-4.0 (and later) keep single letter options in the 1st word of MAKEFLAGS.
-> >
-> > -ifeq ($(filter 3.%,$(MAKE_VERSION)),)
-> > -short-opts := $(firstword -$(MAKEFLAGS))
-> > -else
-> > -short-opts := $(filter-out --%,$(MAKEFLAGS))
-> > -endif
-> > -
-> >  ifneq ($(findstring s,$(short-opts)),)
-> >  quiet=silent_
-> >  override KBUILD_VERBOSE :=
-> > @@ -215,12 +215,16 @@ else
-> >  need-sub-make := 1
-> >  endif
-> >
-> > +ifeq ($(findstring w, $(short-opts)),)
-> >  ifeq ($(filter --no-print-directory, $(MAKEFLAGS)),)
-> >  # If --no-print-directory is unset, recurse once again to set it.
-> >  # You may end up recursing into __sub-make twice. This is needed due to the
-> >  # behavior change in GNU Make 4.4.1.
-> >  need-sub-make := 1
-> >  endif
-> > +else
-> > +no-print-directory :=
-> > +endif
-> >
-> >  ifeq ($(need-sub-make),1)
-> >
-> > --
-> > 2.39.2
-> >
+> > +       ret = mipi_dsi_dcs_set_tear_on(dsi, MIPI_DSI_DCS_TEAR_MODE_VBLANK);
+> > +       if (ret < 0) {
+> > +               dev_err(dev, "Failed to set tear on: %d\n", ret);
+> > +               return ret;
+> > +       }
+> > +
+> > +       mipi_dsi_dcs_write_seq(dsi, 0xf0, 0x5a, 0x5a);
+> > +       mipi_dsi_dcs_write_seq(dsi, 0xb0, 0x05);
+> > +       mipi_dsi_dcs_write_seq(dsi, 0xd7, 0x07);
+> > +       mipi_dsi_dcs_write_seq(dsi, 0xf0, 0xa5, 0xa5);
+> > +       /* Enable backlight control */
+> > +       mipi_dsi_dcs_write_seq(dsi, MIPI_DCS_WRITE_CONTROL_DISPLAY, BIT(5));
+> > +       msleep(110);
+> > +       mipi_dsi_dcs_write_seq(dsi, 0xf0, 0x5a, 0x5a);
+> > +       mipi_dsi_dcs_write_seq(dsi, 0xe2, enable_4k ? 0 : 1);
+> > +       mipi_dsi_dcs_write_seq(dsi, 0xf0, 0xa5, 0xa5);
+> > +
+> > +       ret = mipi_dsi_dcs_set_column_address(dsi, 0, hdisplay - 1);
+> > +       if (ret < 0) {
+> > +               dev_err(dev, "Failed to set column address: %d\n", ret);
+> > +               return ret;
+> > +       }
+> > +
+> > +       ret = mipi_dsi_dcs_set_page_address(dsi, 0, vdisplay - 1);
+> > +       if (ret < 0) {
+> > +               dev_err(dev, "Failed to set page address: %d\n", ret);
+> > +               return ret;
+> > +       }
+> > +
+> > +       mipi_dsi_dcs_write_seq(dsi, 0xf0, 0x5a, 0x5a);
+> > +       mipi_dsi_dcs_write_seq(dsi, 0xb0, 0x70);
+> > +       mipi_dsi_dcs_write_seq(dsi, 0xb9, 0x00, 0x60);
+> > +       mipi_dsi_dcs_write_seq(dsi, 0xf0, 0xa5, 0xa5);
+> > +       mipi_dsi_dcs_write_seq(dsi, 0xf0, 0x5a, 0x5a);
+> > +       mipi_dsi_dcs_write_seq(dsi, 0xc5, 0x2e, 0x21);
+> > +       mipi_dsi_dcs_write_seq(dsi, 0xf0, 0xa5, 0xa5);
+> > +
+> > +       ret = mipi_dsi_dcs_set_display_on(dsi);
+> > +       if (ret < 0) {
+> > +               dev_err(dev, "Failed to turn display on: %d\n", ret);
+> > +               return ret;
+> > +       }
+> > +
+> > +       return 0;
+> > +}
 > 
+> This is eerily similar to the sequence in panel-samsung-sofef00.c:
 > 
-> -- 
-> Best Regards
-> Masahiro Yamada
+> static int sofef00_panel_on(struct sofef00_panel *ctx)
+> {
+>         struct mipi_dsi_device *dsi = ctx->dsi;
+>         struct device *dev = &dsi->dev;
+>         int ret;
+> 
+>         dsi->mode_flags |= MIPI_DSI_MODE_LPM;
+> 
+>         ret = mipi_dsi_dcs_exit_sleep_mode(dsi);
+>         if (ret < 0) {
+>                 dev_err(dev, "Failed to exit sleep mode: %d\n", ret);
+>                 return ret;
+>         }
+>         usleep_range(10000, 11000);
+> 
+>         mipi_dsi_dcs_write_seq(dsi, 0xf0, 0x5a, 0x5a);
+> 
+>         ret = mipi_dsi_dcs_set_tear_on(dsi, MIPI_DSI_DCS_TEAR_MODE_VBLANK);
+>         if (ret < 0) {
+>                 dev_err(dev, "Failed to set tear on: %d\n", ret);
+>                 return ret;
+>         }
+> 
+>         mipi_dsi_dcs_write_seq(dsi, 0xf0, 0xa5, 0xa5);
+>         mipi_dsi_dcs_write_seq(dsi, 0xf0, 0x5a, 0x5a);
+>         mipi_dsi_dcs_write_seq(dsi, 0xb0, 0x07);
+>         mipi_dsi_dcs_write_seq(dsi, 0xb6, 0x12);
+>         mipi_dsi_dcs_write_seq(dsi, 0xf0, 0xa5, 0xa5);
+>         mipi_dsi_dcs_write_seq(dsi, MIPI_DCS_WRITE_CONTROL_DISPLAY, 0x20);
+>         mipi_dsi_dcs_write_seq(dsi, MIPI_DCS_WRITE_POWER_SAVE, 0x00);
+> 
+>         ret = mipi_dsi_dcs_set_display_on(dsi);
+>         if (ret < 0) {
+>                 dev_err(dev, "Failed to set display on: %d\n", ret);
+>                 return ret;
+>         }
+> 
+>         return 0;
+> }
+> 
+> Isn't this just the same display controller with a different configuration?
+> Especially the sleep ranges are even the same.
+> 
+> I almost feel like buying these phones just to pry them apart and put
+> under a microscope to figure out what these displays actually contain.
+
+In the second iteration this is going to be the souxp00 controller,
+powering specifically the amb650wh01 panel on the Xperia 1 (griffin) and
+amb650wh07 on the Xperia 1 II.
+
+To answer your question more generically, open a few more of the Samsung
+panels already in the tree and within this series.  All their commands
+look awkwardly similar.  Some call the 0xf0, 0x5a, 0x5a sequence an MCS
+password, others call it an MCS_LEVEL_2_KEY, and for our panels where we
+have zero documentation and only a list of commands downstream we leave
+them undocumented.
+
+In an ideal world we have documentation and can accurately determine
+what the commands mean (and if they're similar between DrIC revisions),
+and instead describe the right parameters per-panel which are
+generically converted to commands, allowing us to implement all these
+lookalikes in a single driver.
+
+But for now we might already create a step-up version of that by having
+a "Samsung panel driver library" to deduplicate generic commands, which
+drivers can freely call into?  Or do you envision anything else here
+considering that there is no spec to build on top of that guarantees our
+observations?
+
+On the other hand of the spectrum we currently have 4 downstream panels
+for Sony devices that all declare to be using the sofef01 controller,
+but with vastly different command sets.  And even if we "accidentally"
+send the wrong set for the wrong device, the panel works anyway with no
+noticeable color shifts or otherwise...
+
+- Marijn
