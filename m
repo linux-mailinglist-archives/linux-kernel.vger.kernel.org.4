@@ -2,62 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86E75740AA2
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 10:08:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FC4C740AFB
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 10:18:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232816AbjF1IIW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 04:08:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35570 "EHLO
+        id S234135AbjF1ISY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 04:18:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231464AbjF1ICs (ORCPT
+        with ESMTP id S232656AbjF1INo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 04:02:48 -0400
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1513C2956
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 01:01:57 -0700 (PDT)
-Received: by mail-pf1-x432.google.com with SMTP id d2e1a72fcca58-666ed230c81so4949703b3a.0
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 01:01:57 -0700 (PDT)
+        Wed, 28 Jun 2023 04:13:44 -0400
+Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3490F4239
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 01:09:38 -0700 (PDT)
+Received: by mail-oi1-x235.google.com with SMTP id 5614622812f47-3a36803f667so126541b6e.0
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 01:09:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1687939316; x=1690531316;
+        d=bytedance.com; s=google; t=1687939777; x=1690531777;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=vVHRGKJQOMwzWN83g2m+Cd2Oov5QH2ldO2Pug8KfAvg=;
-        b=QOF6Ti9wHMS5didrT90b4hH0tCVqbTZyim+VdQRTLxqzWA856cXTokXmeMWVkTD2Ny
-         0B3SvYZpfGwTQrNApbz4ShZf7vOBjBDFJsaJ27GPbzmsTlcIwumIGyFD3t83FY1TyTrj
-         kAhNuxx65kG1/+r3TfAmStel9sNMof6P4yhLtSnnzMA2kF6oy2WQhVRrDBVRqf1FTjU2
-         CqF8ftEyF5/zVqxfMSfbgxRN2dI3KjpwvCfFlCCgPrhgZotdY0S8FhmwBuPNIFpjPNf5
-         ob5CNzzmX2pcBvjCeczYimVqFzLNmGWm6eo+9UBAnBi/Yi2R3tlHauVRRDnI9H1KtBTb
-         m/tQ==
+        bh=mE5S+xEF8iVKqL+efUmsUqFQSIecG35V/4BhhPZycNg=;
+        b=AilhbHK0aM+A5BB8Z1rmPO4N+MsUR/2+LQgiCZJWFN2R11wFXOUolRw8hL8L8T4mof
+         y5mtG8fPoQ/kIFKblMt5ceUIVNhur2Qn+h/0TBSRxWK5PIcMoDxtA/7e9HFQF8tA/TLP
+         PoELeW1aYNmSReh/flMgBDZsXlw7UF79s0r+tfstLyIVfOMsrYZlkU/8ffNjc3MKkCPY
+         x6A4cQN7bNxLQfVluDsG+qqxCWwJfiGmSpJF22bhYclYAJfE57DK3Kj4nFy6DwtKa0d5
+         1S00BaWFyUECXKoYNsz46o2qtcBolWgd7GAVfl9Pi5CnmqWO25huNDpK8CqmbKaZqya7
+         0BAw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687939316; x=1690531316;
+        d=1e100.net; s=20221208; t=1687939777; x=1690531777;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=vVHRGKJQOMwzWN83g2m+Cd2Oov5QH2ldO2Pug8KfAvg=;
-        b=Usn+H8IXBC+oLwPMAYGja9b85VQ3TeJ4PnxBWR1sKiYuIQp8cusQj5drcEJxQynsLq
-         nyYuiV1/EU4gFRrogjZ0hSLnsaOkUISJrv5qOY9ssxVGYHGM2L0duaGQCRQ5Yeu4NENs
-         18/l5MzVGaDB6FehNWWDT5EXXh8COGTgBjmN2U3gQRJdp2WDCJPLrwlmCMODi1/lihxL
-         hWGpIYTfKzhYaBX/KoLmHKb6MoiDIuVHy0xR8kNRd19bLMgtkmPOtsiVepv1T38bnhub
-         iMju84nyq7DzyYK5/qfcDxBU7KcmwDuoZI65och//bMIyj9jOS3QynIs9zKfdGWM2fKN
-         mWsg==
-X-Gm-Message-State: AC+VfDzd8Az1uZlfmK5JpBThzV90nHbKu4jRoSk/CKs1wT8xI4qaEKtR
-        tXoXxycvE67X+OXXeQbATlWNWfFniPLkhQ/2JI2YRw==
-X-Google-Smtp-Source: ACHHUZ5+PvtsHNs9Wy1quunYgyqWj1bXlsRhzyJYtceWJ7YMan2oFDzco6hyvxSK51LzuybFcQy+cg==
-X-Received: by 2002:a17:902:d2ca:b0:1b6:8c7e:4e7a with SMTP id n10-20020a170902d2ca00b001b68c7e4e7amr15240644plc.67.1687937834808;
-        Wed, 28 Jun 2023 00:37:14 -0700 (PDT)
+        bh=mE5S+xEF8iVKqL+efUmsUqFQSIecG35V/4BhhPZycNg=;
+        b=CiOzveHJ3KhZQ9SM/PKs2CUZlLc2EKLiFz9Z+R27Yuyp3RNATTBR6AnKsaYNcQP4hM
+         BpP/c9a24TlZg7LALX53f6zt0JRSCJbYBwtxAlP7VHfOsG6oDslIlB4k/CyEk/Br1iUR
+         BofecG64oh535rrTFtd+hBwqN3wx5CDBfyZuvlA3dHfzEk45CUXjPrU2G7z84C7t/F5c
+         btwN3vmN+3O9AdV0u8hJcNRYxyhkOs80OJUbXwqJnjolrDxTJ2tbr09OUo1/LF9WO2v4
+         x4JrMtCIoKilH8I+zFH4/riFq7bnRdPUJ2i2rqJ75clNotqNkgql+74W3DuvV4lEA+H/
+         +h3g==
+X-Gm-Message-State: AC+VfDzeP38btlKaKCyrX8h3ewXmMMJlJEVLQuTAdZ/nQxmlzj6u8650
+        6HEgloAm28se4SCa10ePOaSbqQeBXI2wGjs7uCQmaw==
+X-Google-Smtp-Source: ACHHUZ7wsIFlFgorUeOyA8dts5//X0YcNBChMuP62NzBrpOOf8zMBBIOHsejV1gjrmGlqvrF9RiRhQ==
+X-Received: by 2002:a17:902:ecc3:b0:1b3:c62d:71b7 with SMTP id a3-20020a170902ecc300b001b3c62d71b7mr992905plh.18.1687937837922;
+        Wed, 28 Jun 2023 00:37:17 -0700 (PDT)
 Received: from GL4FX4PXWL.bytedance.net ([203.208.167.146])
-        by smtp.gmail.com with ESMTPSA id jj6-20020a170903048600b001b8021fbcd2sm4836988plb.280.2023.06.28.00.37.12
+        by smtp.gmail.com with ESMTPSA id jj6-20020a170903048600b001b8021fbcd2sm4836988plb.280.2023.06.28.00.37.15
         (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Wed, 28 Jun 2023 00:37:14 -0700 (PDT)
+        Wed, 28 Jun 2023 00:37:17 -0700 (PDT)
 From:   Peng Zhang <zhangpeng.00@bytedance.com>
 To:     Liam.Howlett@oracle.com
 Cc:     akpm@linux-foundation.org, linux-mm@kvack.org,
         linux-kernel@vger.kernel.org, maple-tree@lists.infradead.org,
         Peng Zhang <zhangpeng.00@bytedance.com>
-Subject: [PATCH v4 2/4] maple_tree: add test for expanding range in RCU mode
-Date:   Wed, 28 Jun 2023 15:36:55 +0800
-Message-Id: <20230628073657.75314-3-zhangpeng.00@bytedance.com>
+Subject: [PATCH v4 3/4] maple_tree: optimize mas_wr_append(), also improve duplicating VMAs
+Date:   Wed, 28 Jun 2023 15:36:56 +0800
+Message-Id: <20230628073657.75314-4-zhangpeng.00@bytedance.com>
 X-Mailer: git-send-email 2.37.0 (Apple Git-136)
 In-Reply-To: <20230628073657.75314-1-zhangpeng.00@bytedance.com>
 References: <20230628073657.75314-1-zhangpeng.00@bytedance.com>
@@ -73,115 +73,89 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add test for expanding range in RCU mode. If we use the fast path of the
-slot store to expand range in RCU mode, this test will fail.
+When the new range can be completely covered by the original last range
+without touching the boundaries on both sides, two new entries can be
+appended to the end as a fast path. We update the original last pivot at
+the end, and the newly appended two entries will not be accessed before
+this, so it is also safe in RCU mode.
+
+This is useful for sequential insertion, which is what we do in
+dup_mmap(). Enabling BENCH_FORK in test_maple_tree and just running
+bench_forking() gives the following time-consuming numbers:
+
+before:               after:
+17,874.83 msec        15,738.38 msec
+
+It shows about a 12% performance improvement for duplicating VMAs.
 
 Signed-off-by: Peng Zhang <zhangpeng.00@bytedance.com>
 Reviewed-by: Liam R. Howlett <Liam.Howlett@oracle.com>
 ---
- tools/testing/radix-tree/maple.c | 75 ++++++++++++++++++++++++++++++++
- 1 file changed, 75 insertions(+)
+ lib/maple_tree.c | 33 ++++++++++++++++++++++-----------
+ 1 file changed, 22 insertions(+), 11 deletions(-)
 
-diff --git a/tools/testing/radix-tree/maple.c b/tools/testing/radix-tree/maple.c
-index 03539d86cdf0..312c0d9fcbae 100644
---- a/tools/testing/radix-tree/maple.c
-+++ b/tools/testing/radix-tree/maple.c
-@@ -45,6 +45,13 @@ struct rcu_test_struct2 {
- 	unsigned long last[RCU_RANGE_COUNT];
- };
- 
-+struct rcu_test_struct3 {
-+	struct maple_tree *mt;
-+	unsigned long index;
-+	unsigned long last;
-+	bool stop;
-+};
-+
- struct rcu_reader_struct {
- 	unsigned int id;
- 	int mod;
-@@ -34954,6 +34961,70 @@ void run_check_rcu(struct maple_tree *mt, struct rcu_test_struct *vals)
- 	MT_BUG_ON(mt, !vals->seen_entry2);
- }
- 
-+static void *rcu_slot_store_reader(void *ptr)
-+{
-+	struct rcu_test_struct3 *test = ptr;
-+	MA_STATE(mas, test->mt, test->index, test->index);
-+
-+	rcu_register_thread();
-+
-+	rcu_read_lock();
-+	while (!test->stop) {
-+		mas_walk(&mas);
-+		/* The length of growth to both sides must be equal. */
-+		RCU_MT_BUG_ON(test, (test->index - mas.index) !=
-+				    (mas.last - test->last));
-+	}
-+	rcu_read_unlock();
-+
-+	rcu_unregister_thread();
-+	return NULL;
-+}
-+
-+static noinline void run_check_rcu_slot_store(struct maple_tree *mt)
-+{
-+	pthread_t readers[20];
-+	int range_cnt = 200, i, limit = 10000;
-+	unsigned long len = ULONG_MAX / range_cnt, start, end;
-+	struct rcu_test_struct3 test = {.stop = false, .mt = mt};
-+
-+	start = range_cnt / 2 * len;
-+	end = start + len - 1;
-+	test.index = start;
-+	test.last = end;
-+
-+	for (i = 0; i < range_cnt; i++) {
-+		mtree_store_range(mt, i * len, i * len + len - 1,
-+				  xa_mk_value(i * 100), GFP_KERNEL);
-+	}
-+
-+	mt_set_in_rcu(mt);
-+	MT_BUG_ON(mt, !mt_in_rcu(mt));
-+
-+	for (i = 0; i < ARRAY_SIZE(readers); i++) {
-+		if (pthread_create(&readers[i], NULL, rcu_slot_store_reader,
-+				   &test)) {
-+			perror("creating reader thread");
-+			exit(1);
-+		}
-+	}
-+
-+	usleep(5);
-+
-+	while (limit--) {
-+		/* Step by step, expand the most middle range to both sides. */
-+		mtree_store_range(mt, --start, ++end, xa_mk_value(100),
-+				  GFP_KERNEL);
-+	}
-+
-+	test.stop = true;
-+
-+	while (i--)
-+		pthread_join(readers[i], NULL);
-+
-+	mt_validate(mt);
-+}
-+
- static noinline
- void run_check_rcu_slowread(struct maple_tree *mt, struct rcu_test_struct *vals)
+diff --git a/lib/maple_tree.c b/lib/maple_tree.c
+index bfffbb7cab26..56b9b5be28c8 100644
+--- a/lib/maple_tree.c
++++ b/lib/maple_tree.c
+@@ -4266,10 +4266,10 @@ static inline unsigned char mas_wr_new_end(struct ma_wr_state *wr_mas)
+  *
+  * Return: True if appended, false otherwise
+  */
+-static inline bool mas_wr_append(struct ma_wr_state *wr_mas)
++static inline bool mas_wr_append(struct ma_wr_state *wr_mas,
++				 unsigned char new_end)
  {
-@@ -35206,6 +35277,10 @@ static noinline void __init check_rcu_threaded(struct maple_tree *mt)
- 	run_check_rcu(mt, &vals);
- 	mtree_destroy(mt);
+ 	unsigned char end = wr_mas->node_end;
+-	unsigned char new_end = end + 1;
+ 	struct ma_state *mas = wr_mas->mas;
+ 	unsigned char node_pivots = mt_pivots[wr_mas->type];
  
-+	/* Check expanding range in RCU mode */
-+	mt_init_flags(mt, MT_FLAGS_ALLOC_RANGE);
-+	run_check_rcu_slot_store(mt);
-+	mtree_destroy(mt);
+@@ -4281,16 +4281,27 @@ static inline bool mas_wr_append(struct ma_wr_state *wr_mas)
+ 		ma_set_meta(wr_mas->node, maple_leaf_64, 0, new_end);
+ 	}
  
- 	/* Forward writer for rcu stress */
- 	mt_init_flags(mt, MT_FLAGS_ALLOC_RANGE);
+-	if (mas->last == wr_mas->r_max) {
+-		/* Append to end of range */
+-		rcu_assign_pointer(wr_mas->slots[new_end], wr_mas->entry);
+-		wr_mas->pivots[end] = mas->index - 1;
+-		mas->offset = new_end;
++	if (new_end == wr_mas->node_end + 1) {
++		if (mas->last == wr_mas->r_max) {
++			/* Append to end of range */
++			rcu_assign_pointer(wr_mas->slots[new_end],
++					   wr_mas->entry);
++			wr_mas->pivots[end] = mas->index - 1;
++			mas->offset = new_end;
++		} else {
++			/* Append to start of range */
++			rcu_assign_pointer(wr_mas->slots[new_end],
++					   wr_mas->content);
++			wr_mas->pivots[end] = mas->last;
++			rcu_assign_pointer(wr_mas->slots[end], wr_mas->entry);
++		}
+ 	} else {
+-		/* Append to start of range */
++		/* Append to the range without touching any boundaries. */
+ 		rcu_assign_pointer(wr_mas->slots[new_end], wr_mas->content);
+-		wr_mas->pivots[end] = mas->last;
+-		rcu_assign_pointer(wr_mas->slots[end], wr_mas->entry);
++		wr_mas->pivots[end + 1] = mas->last;
++		rcu_assign_pointer(wr_mas->slots[end + 1], wr_mas->entry);
++		wr_mas->pivots[end] = mas->index - 1;
++		mas->offset = end + 1;
+ 	}
+ 
+ 	if (!wr_mas->content || !wr_mas->entry)
+@@ -4337,7 +4348,7 @@ static inline void mas_wr_modify(struct ma_wr_state *wr_mas)
+ 		goto slow_path;
+ 
+ 	/* Attempt to append */
+-	if (new_end == wr_mas->node_end + 1 && mas_wr_append(wr_mas))
++	if (mas_wr_append(wr_mas, new_end))
+ 		return;
+ 
+ 	if (new_end == wr_mas->node_end && mas_wr_slot_store(wr_mas))
 -- 
 2.20.1
 
