@@ -2,145 +2,197 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07013740C70
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 11:09:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BF5F740C75
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 11:11:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237210AbjF1JI5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 05:08:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47056 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233916AbjF1JEY (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 05:04:24 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18AEF3595;
-        Wed, 28 Jun 2023 02:02:35 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 89FE561276;
-        Wed, 28 Jun 2023 09:02:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2DDCAC433C0;
-        Wed, 28 Jun 2023 09:02:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1687942953;
-        bh=dZ8ewtgN7+nQ8HFCPwMwFbD5X/40NMNmnlkYkea6Iqo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=e4Ni7XDNzGqsmBfx9rCiTuMO4Rbz5g8lx7ujGD3cwkr3aUIVy8zh8n5HiwhgYrUEO
-         8Fn09MGTbBZWGIAO0UJiAwEfgWLT9oJoP1qajsNFxwm9mz/fdQ8E21qW3FOvXQ+v+w
-         upAwUY0M0SsU7obLCi96V8Utj+Xqp0CqbpNxW3Mw=
-Date:   Wed, 28 Jun 2023 11:02:30 +0200
-From:   "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
-To:     "Huang, Kai" <kai.huang@intel.com>
-Cc:     "corbet@lwn.net" <corbet@lwn.net>,
-        "linux-coco@lists.linux.dev" <linux-coco@lists.linux.dev>,
-        "shuah@kernel.org" <shuah@kernel.org>,
-        "Yu, Guorui" <guorui.yu@linux.alibaba.com>,
-        "Luck, Tony" <tony.luck@intel.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "joey.gouly@arm.com" <joey.gouly@arm.com>,
-        "dionnaglaze@google.com" <dionnaglaze@google.com>,
-        "qinkun@apache.org" <qinkun@apache.org>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Du, Fan" <fan.du@intel.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "wander@redhat.com" <wander@redhat.com>,
-        "atishp@rivosinc.com" <atishp@rivosinc.com>,
-        "Aktas, Erdem" <erdemaktas@google.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "chongc@google.com" <chongc@google.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "sathyanarayanan.kuppuswamy@linux.intel.com" 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        "brijesh.singh@amd.com" <brijesh.singh@amd.com>,
-        "Williams, Dan J" <dan.j.williams@intel.com>,
-        "dhowells@redhat.com" <dhowells@redhat.com>
-Subject: Re: [PATCH v3 3/3] selftests/tdx: Test GetQuote TDX attestation
- feature
-Message-ID: <2023062825-rebel-happily-09fd@gregkh>
-References: <972e1d5c5ec53e2757fb17a586558c5385e987dd.1684048511.git.sathyanarayanan.kuppuswamy@linux.intel.com>
- <64876bf6c30e2_1433ac29415@dwillia2-xfh.jf.intel.com.notmuch>
- <64961c3baf8ce_142af829436@dwillia2-xfh.jf.intel.com.notmuch>
- <9437b176-e15a-3cec-e5cb-68ff57dbc25c@linux.intel.com>
- <CAAH4kHa85hCz0GhQM3f1OQ3wM+=-SfF77ShFAse0-eYGBHvO_A@mail.gmail.com>
- <649b7a9b69cb6_11e68529473@dwillia2-xfh.jf.intel.com.notmuch>
- <CAAH4kHY1-N+HOxPON6SuXE3QPowAGnwTjc5H=ZnNZwh7a+msnQ@mail.gmail.com>
- <c85324480053af20e6f0409e28fbc5e156c54143.camel@intel.com>
- <2023062805-drove-privatize-ae2c@gregkh>
- <e30fb40d736ccc60672316c5d20aaf1ab7c94dcf.camel@intel.com>
+        id S234222AbjF1JJW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 05:09:22 -0400
+Received: from mail-vi1eur05on2068.outbound.protection.outlook.com ([40.107.21.68]:7776
+        "EHLO EUR05-VI1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S234245AbjF1JEx (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 28 Jun 2023 05:04:53 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=UATYBZ4SI2z/OaeJ1Md5yZ8tlBYQ988KMt9ZFyNH8uACscohwQupIwj88UByc9NO5QKs50yocgm3Tan8h40NcvWuZJGAplv9Joue8tIqndRUDuv14n3vaPsriDsO21WRhTgty7HIvJPCFOCdfX+zfw0OlyLSz0wVnu8lxNO/gc4uOEPBjVublQ4U2yX3euWekTTln86Iu+vwDFBE6PgtNsDC2cLcjrggIljGFlOfz4cnaSG72rTIXwmy8e9QF8fRbyTPX9E2q3etiAYYC7c93Kq1qcGbykiWi/KzQmQxOKLpV5BioQLWKSGlXfCBlSybGlPVvmQCtllJ5zopIDHwtQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=GfwlJtTfb9o9ohq3M0TQpLto4k+BBMEQAZTxXuFBJ3w=;
+ b=MRb6zaPilBszisb/Nm9HCYq9m/SI1PU+cDoCANmSP/UeT3rEjhWJbi48EcOVI36s0RJIuBTtSQkh8+YcOYz9m+JW9jhmiQcP8kzZcHIBTzoZ4+4QqVqTa1TKZnct5jXTVe21SJMZsE2fSxHYUfJdzLGZ37bg8a/pTfBaMirkL15AJTfPghgG5/4CDoAmJVPkvW3XdoQ6nt8tTNlZy5MFZG/tQm8Zzh1vF1aFffnDkpaYqzSwvJQcGh+irMxd5WGsu5Z2puBwd5OPHcUpPFCVyPTUIXHHKUmvNWyuoNLPSmgGL5soQyYspUrBRrqcaEzYsNfrB+crBk57zpEF3oqnTg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
+ dkim=pass header.d=suse.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=GfwlJtTfb9o9ohq3M0TQpLto4k+BBMEQAZTxXuFBJ3w=;
+ b=xFVX8VvJMjksRa3HAeksthJexIQxwQ8WCB3IR5fbwJ8xV/pYZZio6F3v5jPBDt43yIz2+47YBfvu/ml+ulUCmvuDddtj17Z4bbGk8dykhMFOS+oDGWR9pXcqzv59TvFQY5PGZChJvZzPF2Il33l+bioNNilrSmOUg155v64y0rDbPD6lPNj4Mh4SXulbVY/I374Ro5IcdDc8NirwTSGAon4Y3YypmcPtkZNufvbaiAFsJ0nd45dhoQMQb7ikEZ3eNAF1o1KQKyDCWu670xUvvYy/CNECGrGeUMCKxXLYCkLYboJjNj/iCDX6bTO23Cicv/FQF6aqFf2syOeNSQ8a2g==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=suse.com;
+Received: from PA4PR04MB7790.eurprd04.prod.outlook.com (2603:10a6:102:cc::8)
+ by PAXPR04MB9154.eurprd04.prod.outlook.com (2603:10a6:102:22d::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.26; Wed, 28 Jun
+ 2023 09:04:48 +0000
+Received: from PA4PR04MB7790.eurprd04.prod.outlook.com
+ ([fe80::66a2:8913:a22a:be8d]) by PA4PR04MB7790.eurprd04.prod.outlook.com
+ ([fe80::66a2:8913:a22a:be8d%4]) with mapi id 15.20.6521.026; Wed, 28 Jun 2023
+ 09:04:48 +0000
+Message-ID: <b8ba66c0-ea3c-24ec-9966-e8438d7c5626@suse.com>
+Date:   Wed, 28 Jun 2023 12:04:43 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v12 18/22] x86/virt/tdx: Keep TDMRs when module
+ initialization is successful
+Content-Language: en-US
+To:     Kai Huang <kai.huang@intel.com>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org
+Cc:     linux-mm@kvack.org, x86@kernel.org, dave.hansen@intel.com,
+        kirill.shutemov@linux.intel.com, tony.luck@intel.com,
+        peterz@infradead.org, tglx@linutronix.de, bp@alien8.de,
+        mingo@redhat.com, hpa@zytor.com, seanjc@google.com,
+        pbonzini@redhat.com, david@redhat.com, dan.j.williams@intel.com,
+        rafael.j.wysocki@intel.com, ashok.raj@intel.com,
+        reinette.chatre@intel.com, len.brown@intel.com, ak@linux.intel.com,
+        isaku.yamahata@intel.com, ying.huang@intel.com, chao.gao@intel.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com, bagasdotme@gmail.com,
+        sagis@google.com, imammedo@redhat.com
+References: <cover.1687784645.git.kai.huang@intel.com>
+ <7d06fe5fda0e330895c1c9043b881f3c2a2d4f3f.1687784645.git.kai.huang@intel.com>
+From:   Nikolay Borisov <nik.borisov@suse.com>
+In-Reply-To: <7d06fe5fda0e330895c1c9043b881f3c2a2d4f3f.1687784645.git.kai.huang@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: ZRAP278CA0005.CHEP278.PROD.OUTLOOK.COM
+ (2603:10a6:910:10::15) To PA4PR04MB7790.eurprd04.prod.outlook.com
+ (2603:10a6:102:cc::8)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <e30fb40d736ccc60672316c5d20aaf1ab7c94dcf.camel@intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-        lindbergh.monkeyblade.net
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PA4PR04MB7790:EE_|PAXPR04MB9154:EE_
+X-MS-Office365-Filtering-Correlation-Id: f7762d01-4be7-4d28-7fe5-08db77b6b911
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 5eOTrXe4OS5fkFFVbfkiV2PjbsXUP5QyFI6+TWBUYMUPUXuLkdQ0AGGGIC9cXzj/stdWLAXiycUd+hWPGPiD3tqE1gDQnlYlMmzgl2QaeYq2xkUvL7JYNuhI6H6q5zi6HKkZnuwgSLBFFSMlsJnSJrXa7uptfJKVPEpBS9ebr9aBQS0jWvzvc/pa4CxW0BvPJJKavIJxkmU8qS34zu5UOahmPg0uUTGdBLL1+Z3sNASnVFGp/jJ2HiNC5S2rP1cG1SwB4GnWQ4as7zUq82T0w7r+ktoTRkO3T+6Lw7oAf8mTT3P3gTdeWvlnsCTujw3pSWAzf4NfeiTuYdmKZN+RlRtG/A4GqD0BbgXpxJyggUb2YvMqbm8lTIAPF5e/ffN8angepxshLJkZEqjML5Rm95i8o7OnfH0WDABdGxvCQpkOgVGMguomxTCZzVZsVpaVmFPeMOr/kVxDLVRofc0pPxSKfQqYxNu0Tgx2xa8nI0sK7vjxg7Pj73W/Bl6MP004y+Tev9lMgANKrpQTGM2UozffzwZcE4ujiwOddFHP+h/Mg1VZWnXDCbubSP9t6SRbjpcwjDiC3vQmXFldKSj8B8uUviu4RaAPacRUdjMGn0Wk9qElsKR+Cfed7bjutmnSVN4knvrBPyvoq8pSW2MTDw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PA4PR04MB7790.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(346002)(376002)(396003)(366004)(39860400002)(136003)(451199021)(31686004)(6666004)(478600001)(6486002)(83380400001)(2616005)(86362001)(31696002)(66476007)(66556008)(6506007)(186003)(2906002)(6512007)(66946007)(4326008)(36756003)(8936002)(41300700001)(38100700002)(316002)(7416002)(8676002)(5660300002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?cWxqaW1ib3FiTHNFQnVNY2Y1bnYySFp6dnV3RUZ3TWwzcWxxT1VCV0xNamRF?=
+ =?utf-8?B?WW52Z3VJZzhwK2dHdzBQZ1NNMENtZ1FyWjh5akZaTTZaVkdzajE4bDlVRlh3?=
+ =?utf-8?B?ODlmQkxDblRJUklMUllTT0h5V3kzUU95ZzZrV0p4Rm5xakoySEhyR0NYV2ta?=
+ =?utf-8?B?T3J4Vm9ibTlsRVR3NTlnZXRJKzVEeEZrVG9sL2xSOGtURmpHVFlOUis1Uzc4?=
+ =?utf-8?B?MUpoTTkwanJBT01laDJEWjUrTzlCZmYyWWRBWkxUajJ3UlZub3dhaXB3YnMv?=
+ =?utf-8?B?dEZadHJNYzJLK2phMTJKRm1PbzRUTGdoNXVLMm5xWjFGNVVQMXd5enNiZS9h?=
+ =?utf-8?B?U0k3NUJCTm5HVFdOYlFSRXFZK3d6Z2pNRlh6UWZqWEpmbk1Zbk9ISEZENE13?=
+ =?utf-8?B?MVpFZ2FmbkJ3QmhrVVBmTzZKcTBwbjJ2RXZ6b2JKb2RjWTYyaGJ4d3p5WEhl?=
+ =?utf-8?B?SmFyd0QvOCtxakxPTmwvV0d4OUwxNUhyK24rTGI1T1Bhc01TSm1kWGUyeVEw?=
+ =?utf-8?B?SFBLYkVTNERsS29LNHRvdWozMzhTZlZEemJ4Y3djTFU4WlRjciszWTNGdDEw?=
+ =?utf-8?B?N291L2h6MHpOTUptMUxxc0thSHVBOGIvMlRCVyt0RFZjZTRVakJxSEpCQ1l2?=
+ =?utf-8?B?Nnh5aEEzWGVhOEMvcUdOSEVBZ0JXZUVnK0dMU200UVpmVi91cFJWZGNtNTQ1?=
+ =?utf-8?B?b0Y5K2NYSzJBQWtZN0pVY2prQXJucDVGQk0zV3g1N3NyY3NDbDd0Z044UWFl?=
+ =?utf-8?B?bldGVlRSSDRIcU1hVzlUVFh3MEpIeGZvUUNWQjliMVAvL29KY2w1eDlBcS8z?=
+ =?utf-8?B?Ly84ODlYc2EzV0prcWFKamx2TTdTUGpaQjljc21OQ0ZmZWFsVnpsNmxxcUwy?=
+ =?utf-8?B?aFFhSHpDNTRWa3o0VjhsTTFjemVXZldhcjFsRnJJQTYvUzZYNGl1ZWRGVnZn?=
+ =?utf-8?B?OUFFVmxxcW4rQVZwNUgxUWFSSDMyTW1OazIzaXp0amQrNXlGYXg3Z3M4dFBl?=
+ =?utf-8?B?bUVYNXNBSDMzb0VaMjllc0duOWd0YlpVOFhZYnF1VzdtdEpkUWRIaFNFWU1z?=
+ =?utf-8?B?QzdKZVFjTmEwcjB1b2ovbnVsaHc2Tzg4YnJwbG0vVU9PaXI4b1hITXcxREhp?=
+ =?utf-8?B?UmRhMUJ5TzhMLzFvVE9CQzRRSmZOUDk3RXU1eGc1N0tOQXZLY3lVNHlGeFhC?=
+ =?utf-8?B?a0ZjZC82NGJ1eTJkNEhYWTdjTkhwR2xjZ0Q4dVdKTnhpRE1TdVVHbDR2OXMz?=
+ =?utf-8?B?bVN1MVhqeVVwcklYMFBvVGZLSFRrNmdNRTM2WEhqYU1UMWVZK1prMy81SllM?=
+ =?utf-8?B?SEcyRnZmMzVaT0tmQUo0SVB0S0ZJT2Jna2t3SytvWHM1TkNvZ1M0WjZiaFll?=
+ =?utf-8?B?RU5GZE9rQW1JR0RHRDBYcE42L2lRaTFhdHpwVmZ3SE92UmNwU2VJaS9UcHda?=
+ =?utf-8?B?c0UzVVRtSnJPLyswa3UxWXV6MVcvRzBEajVIM1NJMGNlRzVJWE1MSlh0eDdk?=
+ =?utf-8?B?U2VSQUJTeGRWTkw4MDQ4cWMzTG9ITTNmN2prWGZ1QXlFLzRuK0ZVcTBzek1z?=
+ =?utf-8?B?aGlsMXcxajZ4N1hwSTU0dlBDU3lBYm9uL2gzWXJxZ09jQ2Q1SzhabEFnL1U0?=
+ =?utf-8?B?TDhjUUZrSm9rczk5VXdxTFdRSmRpak5HejExZmcwSUJQTjhGUzhvc3c0S1BP?=
+ =?utf-8?B?K1BlQWQ1MFE3TUlBY2liWWRiYklEUXVhd1lIb1RuSUFzTWhCeGM2TDdwVENQ?=
+ =?utf-8?B?eFY2UEZsVWE2ZG8zSFRjdnhjT1hEd0xxdmVZSS94MWRXMG9PNnBrRjNzTGtD?=
+ =?utf-8?B?cS9NeUs0WmU3QTVhQUNaOFJBWVpxK1BQb1hJWWxlTXNhZXF6dXpCRnB2RXNJ?=
+ =?utf-8?B?Qm9lRkJpcUV1UlpScE1vRnRtUjFIb01Ib0hNNEpJSDM5YVR3OEtYQmhQQ2d1?=
+ =?utf-8?B?a0M5ZmNiVXRNd3o3NHFTeE4rWWg1VmJENEc5RTQxVUNUZXg3YTQyVEU5MUd0?=
+ =?utf-8?B?NFNqUTRIemtGSlMzMnVUUE0wdll3OGRRbUN0ZkpUSnJyc0U1ejlxQjlIVU0v?=
+ =?utf-8?B?WUI1TGdsR0srVTVsekZCQkNOUGpWQXFIUGovYlppZ3BiNHNyZ1Avb0RwQTJD?=
+ =?utf-8?B?a0NsQkJJTWVoMFlvMjFNTFkwVXUxc2hNeVBIbUVJVnNqYll1YnBySnI2cy9a?=
+ =?utf-8?Q?bSL+96vmds3ZXE+GBjelWjuhfVNmUlurdK78cBqz1T7s?=
+X-OriginatorOrg: suse.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: f7762d01-4be7-4d28-7fe5-08db77b6b911
+X-MS-Exchange-CrossTenant-AuthSource: PA4PR04MB7790.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Jun 2023 09:04:47.7667
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: p6PhLJKU0w/rKpk9SGMj0V2W/+4W+D5Ba/dHPsXLQLmdFsK0MwGd4nBAWC6xkVuGqK/YK8fNgZRnzFbkPw+Y8Q==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAXPR04MB9154
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 28, 2023 at 08:56:30AM +0000, Huang, Kai wrote:
-> On Wed, 2023-06-28 at 08:46 +0200, gregkh@linuxfoundation.org wrote:
-> > On Wed, Jun 28, 2023 at 02:16:45AM +0000, Huang, Kai wrote:
-> > > > You really shouldn't be putting attestation validation logic in the
-> > > > kernel.
-> > > 
-> > > Agreed.  The data blob for remote verification should be just some data blob to
-> > > the kernel.  I think the kernel shouldn't even try to understand the data blob
-> > > is for which architecture.  From the kernel's perspective, it should be just
-> > > some data blob that the kernel gets from hardware/firmware or whatever embedded
-> > > in the root-of-trust in the hardware after taking some input from usrspace for
-> > > the unique identity of the blob that can be used to, e.g., mitigate replay-
-> > > attack, etc.
-> > 
-> > Great, then use the common "data blob" api that we have in the kernel
-> > for a very long time now, the "firwmare download" api, or the sysfs
-> > binary file api.  Both of them just use the kernel as a pass-through and
-> > do not touch the data at all.  No need for crazy custom ioctls and all
-> > that mess :)
-> > 
-> 
-> I guess I was talking about from "kernel shouldn't try to parse attestation data
-> blob" perspective.  Looking at AMD's attestation flow (I have no deep
-> understanding of AMD's attestation flow), the assumption of "one remote
-> verifiable data blob" isn't even true -- AMD can return "attestation report"
-> (remote verifiable) and the "certificate" to verify it separately:
-> 
-> https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/snp-attestation.html
-> 
-> On the other hand, AFAICT Intel SGX-based attestation doesn't have a mechanism
-> "for the kernel" to return certificate(s), but choose to embed the
-> certificate(s) to the Quote itself.  I believe we can add such mechanism (e.g.,
-> another TDVMCALL) for the kernel to get certificate(s) separately, but AFAICT it
-> doesn't exist yet.
-> 
-> Btw, getting "remote verifiable blob" is only one step of the attestation flow.
-> For instance, before the blob can be generated, there must be a step to
-> establish the attestation key between the machine and the attestation service. 
-> And the flow to do this could be very different between vendors too.
-> 
-> That being said, while I believe all those differences can be unified in some
-> way, I think the question is whether it is worth to put such effort to try to
-> unify attestation flow for all vendors.  As Erdem Aktas mentioned earlier, "the
-> number of CPU vendors for confidential computing seems manageable".
 
-So you think that there should be a custom user/kernel api for every
-single different CPU vendor?  That's not how kernel development works,
-sorry.  Let's try to unify them to make both the kernel, and userspace,
-sane.
 
-And Dan is right, if this is handling keys, then the key subsystem needs
-to be used here instead of custom ioctls.
+On 26.06.23 г. 17:12 ч., Kai Huang wrote:
+> On the platforms with the "partial write machine check" erratum, the
+> kexec() needs to convert all TDX private pages back to normal before
+> booting to the new kernel.  Otherwise, the new kernel may get unexpected
+> machine check.
+> 
+> There's no existing infrastructure to track TDX private pages.  Change
+> to keep TDMRs when module initialization is successful so that they can
+> be used to find PAMTs.
+> 
+> With this change, only put_online_mems() and freeing the buffer of the
+> TDSYSINFO_STRUCT and CMR array still need to be done even when module
+> initialization is successful.  Adjust the error handling to explicitly
+> do them when module initialization is successful and unconditionally
+> clean up the rest when initialization fails.
+> 
+> Signed-off-by: Kai Huang <kai.huang@intel.com>
+> ---
+> 
+> v11 -> v12 (new patch):
+>    - Defer keeping TDMRs logic to this patch for better review
+>    - Improved error handling logic (Nikolay/Kirill in patch 15)
+> 
+> ---
+>   arch/x86/virt/vmx/tdx/tdx.c | 84 ++++++++++++++++++-------------------
+>   1 file changed, 42 insertions(+), 42 deletions(-)
+> 
+> diff --git a/arch/x86/virt/vmx/tdx/tdx.c b/arch/x86/virt/vmx/tdx/tdx.c
+> index 52b7267ea226..85b24b2e9417 100644
+> --- a/arch/x86/virt/vmx/tdx/tdx.c
+> +++ b/arch/x86/virt/vmx/tdx/tdx.c
+> @@ -49,6 +49,8 @@ static DEFINE_MUTEX(tdx_module_lock);
+>   /* All TDX-usable memory regions.  Protected by mem_hotplug_lock. */
+>   static LIST_HEAD(tdx_memlist);
+>   
+> +static struct tdmr_info_list tdx_tdmr_list;
+> +
+>   /*
+>    * Wrapper of __seamcall() to convert SEAMCALL leaf function error code
+>    * to kernel error code.  @seamcall_ret and @out contain the SEAMCALL
+> @@ -1047,7 +1049,6 @@ static int init_tdmrs(struct tdmr_info_list *tdmr_list)
+>   static int init_tdx_module(void)
+>   {
+>   	struct tdsysinfo_struct *sysinfo;
+> -	struct tdmr_info_list tdmr_list;
+>   	struct cmr_info *cmr_array;
+>   	int ret;
+>   
+> @@ -1088,17 +1089,17 @@ static int init_tdx_module(void)
+>   		goto out_put_tdxmem;
+>   
+>   	/* Allocate enough space for constructing TDMRs */
+> -	ret = alloc_tdmr_list(&tdmr_list, sysinfo);
+> +	ret = alloc_tdmr_list(&tdx_tdmr_list, sysinfo);
+>   	if (ret)
+>   		goto out_free_tdxmem;
+>   
+>   	/* Cover all TDX-usable memory regions in TDMRs */
+> -	ret = construct_tdmrs(&tdx_memlist, &tdmr_list, sysinfo);
+> +	ret = construct_tdmrs(&tdx_memlist, &tdx_tdmr_list, sysinfo);
 
-thanks,
+nit: Does it make sense to keep passing those global variables are 
+function parameters? Since those functions are static it's unlikely that 
+they are going to be used with any other parameter so might as well use 
+the parameter directly. It makes the code somewhat easier to follow.
 
-greg k-h
+<snip>
