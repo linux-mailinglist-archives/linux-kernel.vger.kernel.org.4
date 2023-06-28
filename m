@@ -2,92 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E34777414A7
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 17:13:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 316C37414AE
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 17:15:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231409AbjF1PNB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 11:13:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58796 "EHLO
+        id S231709AbjF1PNs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 11:13:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230363AbjF1PM6 (ORCPT
+        with ESMTP id S231439AbjF1PNo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 11:12:58 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 106B52682
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 08:12:55 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id 4fb4d7f45d1cf-51a52a7d859so1943496a12.0
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 08:12:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1687965173; x=1690557173;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=TEPHgY7GKbiF+bbsFDPJ1N0ThqLb/95Yk4P2Ndq0Cf0=;
-        b=1HSbYA14PwbTl7aYIHkFeD4WrFU+1yU3qwZYGOcDz5Kg4jiCY4/xPW0Ba4ZZyh1ozn
-         RyQkFx3+XorZswA3SbauYwj+467/ZTVzAkFrdcdaHS+RFaNBW//EIwjneVySSVvCpII/
-         +nu1GrCqx/kJP+2kuEeyPvaW0e1l5/P8YpkJuubdQO4N4shz/sNJUaSkNqAPukX5Q7vT
-         jhGJCfvrnI8F5hBiHiMx6dStMtn3R7kBcVUv2MHUGLpXXNV4VFqBoWvuy2UDh1aU0ES6
-         IEg/hMzwZoMrkZb9tCN6l8d4tWYJ0C7FF1cxOeHzDQyCFOtfOhSZEiQxPrcTYlAHBnio
-         NZqQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687965173; x=1690557173;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=TEPHgY7GKbiF+bbsFDPJ1N0ThqLb/95Yk4P2Ndq0Cf0=;
-        b=J53HuHAwkmt+kLzG2vXF7X4zQGYor11o2reigJRmReFgCsgV1q12/aOCum1j7LF8b2
-         dxFCTv7YvHFlndnSiAgtG9Fl+gQDUcGoQjd8kQyrvc9EVOBg0alL2ruRsr4lw4ixVJgc
-         +aD/28RHz9RJd40NTeMLv7l3oWXQlrXFsFhO4HTXXSNVpzTZCJ+Dgt7w62QQrKeBLYfN
-         7rPiLxpV8v9UvnVJHwpJEzyZXAlcOnKG3ufA0fCvb2BhFvmSY7oShjyHxAsFdYMTfeEG
-         880VLFnDGtyvfP8jJ0VkMeKiZ5kPaWjpFcjUipPsNhpVGKnvnZ/6plF6pxT/XqrpWgw7
-         POuA==
-X-Gm-Message-State: AC+VfDxhDQr+z9KBKWaR2FPGWTjvnY+k00w1E0E5AihNrzbmIVXPC62o
-        5BMsL7pRs4rP5nwr5gCFe+BexNy2pGj+O03jk2qxkw==
-X-Google-Smtp-Source: ACHHUZ7UuL8ZBMWlyWdJrkY3dNefm8jZW8JSGnKNDdEDVURdgVH+tvbbzsH4uStA2/DZ58NExa0jwW00Jh2AaaCClJM=
-X-Received: by 2002:a17:907:2d25:b0:992:4723:76f4 with SMTP id
- gs37-20020a1709072d2500b00992472376f4mr1378215ejc.6.1687965173386; Wed, 28
- Jun 2023 08:12:53 -0700 (PDT)
+        Wed, 28 Jun 2023 11:13:44 -0400
+Received: from mx.treblig.org (unknown [IPv6:2a00:1098:5b::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 290CFA1;
+        Wed, 28 Jun 2023 08:13:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=treblig.org
+        ; s=bytemarkmx; h=In-Reply-To:Content-Transfer-Encoding:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=DBTIfrxMdKKM9sBHIVJZO9vzHO75jz/0ZU+aMpxxKZE=; b=momUJtebq9yrc3OXvovd16djTJ
+        C2HZNqgjC41tWcLJkC0tbgDnDWHGEw49Oh4Z31tXD0nUhJpCz8kAg9dEcnanu0mDSfUq4o9gVap5F
+        VV+KfCoRy7wgdrot4IZ8s5qCAXFDc6d0IUqKAf9zaEKhv/lq3ef7LwcSblm7C8nw2mL2Oj7rwPUkX
+        dM65UjPbEl+047Kv+AKU7ZFlitQ06kT8qepIxE88HYf7PQueJZphHs4z5ovkW8EvzNZ45OnsPzViK
+        /7sf0rAiDmoRmcXMkyesoJcXXVY1X2QHwa0v97dNpB3Gp1FfxmZdYSPxjUxCCDELjCqaNVCUckCGK
+        SdWmijyg==;
+Received: from dg by mx.treblig.org with local (Exim 4.94.2)
+        (envelope-from <dg@treblig.org>)
+        id 1qEWr9-00GTya-Gw; Wed, 28 Jun 2023 15:13:19 +0000
+Date:   Wed, 28 Jun 2023 15:13:19 +0000
+From:   "Dr. David Alan Gilbert" <linux@treblig.org>
+To:     Steve French <smfrench@gmail.com>
+Cc:     Dave Kleikamp <dave.kleikamp@oracle.com>, krisman@collabora.com,
+        Tom Talpey <tom@talpey.com>, sfrench@samba.org,
+        linux-cifs@vger.kernel.org, jfs-discussion@lists.sourceforge.net,
+        linkinjeon@kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [Jfs-discussion] [PATCH 0/3] dedupe smb unicode files
+Message-ID: <ZJxOD+OZzq3FR1dH@gallifrey>
+References: <20230628011439.159678-1-linux@treblig.org>
+ <9343462e-6a4a-ca7b-03b8-4855e5a33b72@talpey.com>
+ <ZJw4iLlFWRMq6a3S@gallifrey>
+ <ZJw50e0pvn/IN5Gj@gallifrey>
+ <90f35697-5941-d42d-b600-245454cbd040@oracle.com>
+ <ZJxGFBzuhU8t5rcx@gallifrey>
+ <CAH2r5ms1UE4vAuakBLuayv1CXw3sC_OcuhtCrz5mV_ftR+=rjg@mail.gmail.com>
 MIME-Version: 1.0
-References: <20230627120058.2214509-1-matteorizzo@google.com>
- <20230627120058.2214509-2-matteorizzo@google.com> <e8924389-985a-42ad-9daf-eca2bf12fa57@acm.org>
- <CAHKB1wJANtT27WM6hrhDy_x9H9Lsn4qRjPDmXdKosoL93TJRYg@mail.gmail.com> <CANiDSCvjCoj3Q3phbmdhdG-veHNRrfD-gBu=FuZkmrgJ2uxiJg@mail.gmail.com>
-In-Reply-To: <CANiDSCvjCoj3Q3phbmdhdG-veHNRrfD-gBu=FuZkmrgJ2uxiJg@mail.gmail.com>
-From:   Matteo Rizzo <matteorizzo@google.com>
-Date:   Wed, 28 Jun 2023 17:12:42 +0200
-Message-ID: <CAHKB1w+UyOnC_rOBABVhmzG+XeePaWYgPJWxX9NUeqnAi9WcgA@mail.gmail.com>
-Subject: Re: [PATCH 1/1] Add a new sysctl to disable io_uring system-wide
-To:     Ricardo Ribalda <ribalda@chromium.org>
-Cc:     Bart Van Assche <bvanassche@acm.org>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, io-uring@vger.kernel.org,
-        jordyzomer@google.com, evn@google.com, poprdi@google.com,
-        corbet@lwn.net, axboe@kernel.dk, asml.silence@gmail.com,
-        akpm@linux-foundation.org, keescook@chromium.org,
-        rostedt@goodmis.org, dave.hansen@linux.intel.com,
-        chenhuacai@kernel.org, steve@sk2.org, gpiccoli@igalia.com,
-        ldufour@linux.ibm.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAH2r5ms1UE4vAuakBLuayv1CXw3sC_OcuhtCrz5mV_ftR+=rjg@mail.gmail.com>
+X-Chocolate: 70 percent or better cocoa solids preferably
+X-Operating-System: Linux/5.10.0-21-amd64 (x86_64)
+X-Uptime: 15:12:06 up 101 days,  1:46,  1 user,  load average: 0.00, 0.00,
+ 0.00
+User-Agent: Mutt/2.0.5 (2021-01-21)
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RDNS_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 28 Jun 2023 at 13:44, Ricardo Ribalda <ribalda@chromium.org> wrote:
->
-> Have you considered that the new sysctl is "sticky like kexec_load_disabled.
-> When the user disables it there is no way to turn it back on until the
-> system is rebooted.
+* Steve French (smfrench@gmail.com) wrote:
+> On Wed, Jun 28, 2023 at 9:40 AM Dr. David Alan Gilbert
+> <linux@treblig.org> wrote:
+> > > > Actually, would you be ok with smb_unicode_common ?  The reason is that
+> > > > you end up with a module named unicode_common  that sounds too generic.
+> > >
+> > > I'd suggest make it generic and move it to fs/nls/. I'd run it by the nls
+> > > maintainers, but I don't think there are any.
+> >
+> > Steve & Tom - would you be OK with that?
+> 
+> Yes - absolutely
 
-Are you suggesting making this sysctl sticky? Are there any examples of how to
-implement a sticky sysctl that can take more than 2 values in case we want to
-add an intermediate level that still allows privileged processes to use
-io_uring? Also, what would be the use case? Preventing privileged processes
-from re-enabling io_uring?
+OK.
 
-Thanks!
---
-Matteo
+> > (Copying in Gabriel Bertazi, owner of fs/unicode; although this isn't
+> > utf-8)
+> 
+> Unicode UCS-2
+
+(I'm going to regret the next question...)
+So how does this compare to the stuff in include/linux/ucs2_string.h
+and lib/ucs2_string.c ?
+
+Dave
+
+> 
+> -- 
+> Thanks,
+> 
+> Steve
+-- 
+ -----Open up your eyes, open up your mind, open up your code -------   
+/ Dr. David Alan Gilbert    |       Running GNU/Linux       | Happy  \ 
+\        dave @ treblig.org |                               | In Hex /
+ \ _________________________|_____ http://www.treblig.org   |_______/
