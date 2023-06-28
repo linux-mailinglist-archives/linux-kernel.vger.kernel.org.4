@@ -2,149 +2,248 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 931CF740AC7
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 10:11:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EDC73740B72
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 10:28:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232772AbjF1ILI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 04:11:08 -0400
-Received: from mx08-00178001.pphosted.com ([91.207.212.93]:55064 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S232112AbjF1IG4 (ORCPT
+        id S234684AbjF1I2X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 04:28:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41150 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234239AbjF1IZx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 04:06:56 -0400
-Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35S5lVX9018612;
-        Wed, 28 Jun 2023 08:34:00 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=date : from : to :
- cc : subject : message-id : references : mime-version : content-type :
- content-transfer-encoding : in-reply-to; s=selector1;
- bh=PDrjMND7bGroH5j0rrcnleC0OQhYiDIbwQdzo2Jgn1U=;
- b=RtXRKS/WRZx7QSJzfVpCjRCj9ZtuaKSv3IXMctDL/yPKDmEgeo5VLF01mapnfg3LVOlU
- XtKbfby2bnY9inO/CZ0KbBRWxwmwVwtZeufo5NiNXTaPZUTeRHxOI9lwngy0TRBPVixB
- 2Sn8KEsghfIKT9KJ8PrqwEMVeIp7k3LPRSCc89jmy8Nm2W0f4SJ1djae7tqZS8ny3YV5
- 8AMu2qCIFVEqoYidHx70QY7trwnVn4YgezH3lLvN6X+8Y2hUw2uCh9eESZ2KY0ImE2WE
- i4aocEfzGaL7pPAXOwe2CYsUz+8kRv6z8iQxfGYjnWI3/IglynWMp0w0Z/RLYRZt5h+5 qg== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3rgf1ara2p-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 28 Jun 2023 08:34:00 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 18C8810005B;
-        Wed, 28 Jun 2023 08:33:59 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 0CDDF20B869;
-        Wed, 28 Jun 2023 08:33:59 +0200 (CEST)
-Received: from gnbcxd0016.gnb.st.com (10.129.178.213) by SHFDAG1NODE1.st.com
- (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Wed, 28 Jun
- 2023 08:33:58 +0200
-Date:   Wed, 28 Jun 2023 08:33:53 +0200
-From:   Alain Volmat <alain.volmat@foss.st.com>
-To:     sun yq <yqsun1997@gmail.com>
-CC:     <mchehab@kernel.org>, <matthias.bgg@gmail.com>,
-        <angelogioacchino.delregno@collabora.com>,
-        <linux-media@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>, <499671216@qq.com>
-Subject: Re: [PATCH] OOB read and write in mdp_prepare_buffer
-Message-ID: <20230628063353.GA3625616@gnbcxd0016.gnb.st.com>
-Mail-Followup-To: sun yq <yqsun1997@gmail.com>, mchehab@kernel.org,
-        matthias.bgg@gmail.com, angelogioacchino.delregno@collabora.com,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, 499671216@qq.com
-References: <20230627082731.1769620-1-yqsun1997@gmail.com>
- <20230627140640.GA3605278@gnbcxd0016.gnb.st.com>
- <CAA0BgY_Lj+hQdevrgK8y=wLztddnh+npP-hWz_XaPbi-5mzwnQ@mail.gmail.com>
+        Wed, 28 Jun 2023 04:25:53 -0400
+Received: from mail-qv1-xf2f.google.com (mail-qv1-xf2f.google.com [IPv6:2607:f8b0:4864:20::f2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0FE0359F
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 01:16:27 -0700 (PDT)
+Received: by mail-qv1-xf2f.google.com with SMTP id 6a1803df08f44-635ee3baa14so12420786d6.3
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 01:16:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1687940187; x=1690532187;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=uBsZLVTgJrT+03UCUP7W/SIjStfAyEMLyISpbv+xmm8=;
+        b=m98RFeaaOnxrYBM0OFPEej8BMRQYeFNWVlEr/7XoZpYuG8QsOD1Mz6IYo/lmtC3BQc
+         I+KAamdhaUpfLlRr+OVApe+wOvo2mglrhMZD2F+U8YjaWnHA5Q22qJWdi1dkRSitOybp
+         HRgylMS9ddO+MWKzbYg1S5ZnxVKUlht440MZwrzhLd9eh9ViYQDDsd6KwZ4NCYadnpGU
+         SSRK178FQsAFe53HKSGQpBLG3/m+tsenrVjEtzLgKkovr/R6erg8jsTvjQOlfcaD0pnv
+         /oRuD1q5vIxVgnuQ8SINg238Pc1ePXubvX930kWWygzfxRSzvB9xvZ9+EOfSPgOI+56o
+         eTAw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687940187; x=1690532187;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=uBsZLVTgJrT+03UCUP7W/SIjStfAyEMLyISpbv+xmm8=;
+        b=dYwCy5r06Np2n+oGhbIMWZjH/fuqvg4FieYP6dUBlEKGFN8ctw7Sak443JKOTsME1i
+         22yVWkH0Odi7kB4CSkJ1r9AsMeVVfeoc7cFnYeEys3a3wnN1SI3gMm+R/rgEKvf8M08E
+         RPI5RQRZ1Y5jFtmGB2QDJmkPxiIf6fgcCyZVByZ8nHYIJpL0Ma5OZWZQWRqsKJ9zYaN3
+         rWHnvWMdkiHl7jF3uxSBnEULYPtAM0/+Y3CmiaOylD7VkK/ftxvBL4EITpWIADAxE9a3
+         JOkkgpZfVD81gq4Q8j7d2ynBRDaogSC56unMoVV8Hu7tqmwWz+m5uWq87RxJM2AWUvBp
+         YMGg==
+X-Gm-Message-State: AC+VfDwrW0q8dWwx64ZikBHqWpImy3lzrcWD818gdUy1Fy5jVoCCa2rc
+        RwLw0i7yAN4ikhpGAWV7o+BH5F+XMjTstHHq27ADcy3UqScGrNZLa9bPGw==
+X-Google-Smtp-Source: ACHHUZ66FiA8xyxebfpqH1Qrde7H4jIWrD3BH5kC6/BYy+JjAxjAd0yItqgheFmJGhyMczqDz+DfrCQyD/3ICxiw6Yk=
+X-Received: by 2002:a67:efd7:0:b0:443:62c2:7f4f with SMTP id
+ s23-20020a67efd7000000b0044362c27f4fmr2989394vsp.32.1687934151245; Tue, 27
+ Jun 2023 23:35:51 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAA0BgY_Lj+hQdevrgK8y=wLztddnh+npP-hWz_XaPbi-5mzwnQ@mail.gmail.com>
-X-Disclaimer: ce message est personnel / this message is private
-X-Originating-IP: [10.129.178.213]
-X-ClientProxiedBy: SHFCAS1NODE2.st.com (10.75.129.73) To SHFDAG1NODE1.st.com
- (10.75.129.69)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-06-28_03,2023-06-27_01,2023-05-22_02
+References: <20230626180800.476539630@linuxfoundation.org>
+In-Reply-To: <20230626180800.476539630@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Wed, 28 Jun 2023 12:05:24 +0530
+Message-ID: <CA+G9fYs=AMHqGPMG2wa4wi8o6QmBqYEFABS8B-SDdf_7Ekzw3Q@mail.gmail.com>
+Subject: Re: [PATCH 6.1 000/170] 6.1.36-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de,
+        conor@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+        lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Mon, 26 Jun 2023 at 23:57, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 6.1.36 release.
+> There are 170 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Wed, 28 Jun 2023 18:07:23 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-=
+6.1.36-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-6.1.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-On Wed, Jun 28, 2023 at 07:28:54AM +0800, sun yq wrote:
-> Hi,
-> Because there are many functions using the plane, increasing the max
-> number of the plane is to maximize the solution to all possible oob
-> places.
 
-I don't think it is the right approach then.  If the HW is only handling
-3 planes, there should be no reason to have to allocate for 8 planes.  I
-suspect that this 8 value is coming from the maximum allowed plane
-number in V4L2 right ?
-INHO driver should simply be fixed to ensure that num_plane won't go
-higher than the real number of plane allocated in the structures.
-It should be possible to get the num_plane value from the format
-selected.
+Results from Linaro=E2=80=99s test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
-Alain
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-> 
-> On Tue, Jun 27, 2023 at 10:06 PM Alain Volmat <alain.volmat@foss.st.com> wrote:
-> >
-> > Hi,
-> >
-> > On Tue, Jun 27, 2023 at 04:27:31PM +0800, yqsun1997@gmail.com wrote:
-> > > From: yqsun1997 <yqsun1997@gmail.com>
-> > >
-> > > Because format in struct img_image_buffer max index is IMG_MAX_PLANES ==3,
-> > > The num_planes max index is 8.so will be OOB like in mdp_prepare_buffer.
-> >
-> > Similarly as your other patch, could you describe why you need to
-> > increase the IMG_MAX_PLANES while I suspect your driver only needs to
-> > deal with 3 planes.  While the maximum num_planes value that can be
-> > given by the user is 8, this has to be first compared to the configured
-> > format prior to reaching this function.
-> >
-> > >
-> > > static void mdp_prepare_buffer(struct img_image_buffer *b,
-> > >                                struct mdp_frame *frame, struct vb2_buffer *vb)
-> > > {
-> > >         struct v4l2_pix_format_mplane *pix_mp = &frame->format.fmt.pix_mp;
-> > >         unsigned int i;
-> > >
-> > >         b->format.colorformat = frame->mdp_fmt->mdp_color;
-> > >         b->format.ycbcr_prof = frame->ycbcr_prof;
-> > >         for (i = 0; i < pix_mp->num_planes; ++i) {
-> > >                 u32 stride = mdp_fmt_get_stride(frame->mdp_fmt,
-> > >                         pix_mp->plane_fmt[i].bytesperline, i);
-> > >
-> > >                 b->format.plane_fmt[i].stride = stride;  //oob
-> > >                 ......
-> > >
-> > > Signed-off-by: yqsun1997 <yqsun1997@gmail.com>
-> > > ---
-> > >  drivers/media/platform/mediatek/mdp3/mtk-mdp3-type.h | 2 +-
-> > >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > >
-> > > diff --git a/drivers/media/platform/mediatek/mdp3/mtk-mdp3-type.h b/drivers/media/platform/mediatek/mdp3/mtk-mdp3-type.h
-> > > index ae0396806..e2e991a34 100644
-> > > --- a/drivers/media/platform/mediatek/mdp3/mtk-mdp3-type.h
-> > > +++ b/drivers/media/platform/mediatek/mdp3/mtk-mdp3-type.h
-> > > @@ -11,7 +11,7 @@
-> > >
-> > >  #define IMG_MAX_HW_INPUTS    3
-> > >  #define IMG_MAX_HW_OUTPUTS   4
-> > > -#define IMG_MAX_PLANES               3
-> > > +#define IMG_MAX_PLANES               8
-> > >  #define IMG_MAX_COMPONENTS   20
-> > >
-> > >  struct img_crop {
-> > > --
-> > > 2.39.2
-> > >
-> >
-> > Regards,
-> > Alain
+## Build
+* kernel: 6.1.36-rc1
+* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+* git branch: linux-6.1.y
+* git commit: 8c805fb9757e69c239188ee683605520ff73b913
+* git describe: v6.1.35-171-g8c805fb9757e
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.1.y/build/v6.1.3=
+5-171-g8c805fb9757e
+
+## Test Regressions (compared to v6.1.35)
+
+## Metric Regressions (compared to v6.1.35)
+
+## Test Fixes (compared to v6.1.35)
+
+## Metric Fixes (compared to v6.1.35)
+
+
+## Test result summary
+total: 166130, pass: 132599, fail: 3459, skip: 29913, xfail: 159
+
+## Build Summary
+* arc: 5 total, 5 passed, 0 failed
+* arm: 151 total, 150 passed, 1 failed
+* arm64: 57 total, 56 passed, 1 failed
+* i386: 41 total, 38 passed, 3 failed
+* mips: 30 total, 28 passed, 2 failed
+* parisc: 4 total, 4 passed, 0 failed
+* powerpc: 38 total, 36 passed, 2 failed
+* riscv: 16 total, 15 passed, 1 failed
+* s390: 16 total, 16 passed, 0 failed
+* sh: 14 total, 12 passed, 2 failed
+* sparc: 8 total, 8 passed, 0 failed
+* x86_64: 46 total, 46 passed, 0 failed
+
+## Test suites summary
+* boot
+* fwts
+* kselftest-android
+* kselftest-arm64
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers-dma-buf
+* kselftest-efivarfs
+* kselftest-exec
+* kselftest-filesystems
+* kselftest-filesystems-binderfs
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-ftrace
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-membarrier
+* kselftest-memfd
+* kselftest-memory-hotplug
+* kselftest-mincore
+* kselftest-mount
+* kselftest-mqueue
+* kselftest-net
+* kselftest-net-forwarding
+* kselftest-net-mptcp
+* kselftest-netfilter
+* kselftest-nsfs
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-tc-testing
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-user_events
+* kselftest-vDSO
+* kselftest-watchdog
+* kselftest-x86
+* kselftest-zram
+* kunit
+* kvm-unit-tests
+* libgpiod
+* libhugetlbfs
+* log-parser-boot
+* log-parser-test
+* ltp-cap_bounds
+* ltp-commands
+* ltp-containers
+* ltp-controllers
+* ltp-cpuhotplug
+* ltp-crypto
+* ltp-cve
+* ltp-dio
+* ltp-fcntl-locktests
+* ltp-filecaps
+* ltp-fs
+* ltp-fs_bind
+* ltp-fs_perms_simple
+* ltp-fsx
+* ltp-hugetlb
+* ltp-io
+* ltp-ipc
+* ltp-math
+* ltp-mm
+* ltp-nptl
+* ltp-pty
+* ltp-sched
+* ltp-securebits
+* ltp-smoke
+* ltp-syscalls
+* ltp-tracing
+* network-basic-tests
+* perf
+* rcutorture
+* v4l2-compliance
+* vdso
+
+--
+Linaro LKFT
+https://lkft.linaro.org
