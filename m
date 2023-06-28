@@ -2,127 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC8417417E0
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 20:19:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8C567417E1
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 20:20:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230429AbjF1SSv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 14:18:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48690 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229610AbjF1SSh (ORCPT
+        id S231689AbjF1STt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 14:19:49 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:20354 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231467AbjF1STo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 14:18:37 -0400
-Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBA0D1BC3
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 11:18:35 -0700 (PDT)
-Received: by mail-yb1-xb34.google.com with SMTP id 3f1490d57ef6-c13280dfb09so33413276.2
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 11:18:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1687976314; x=1690568314;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/K9OS0zmztPbtY0PgdFfjCYBxDyy7aJx/bjVFEWW/zU=;
-        b=581WkyNE3unzDgNYmmnMuhz9DPFGMaDG8zfvPvFTpQuAjINSYngeXP4UhZ8hqBx/+c
-         FBq81FPsrzb47Zp3QB5HxpqS/oR1q15toQie6f+Vk5+LsWUiWzMadgauzQZ/ucTi65pA
-         1UjENO+Fktt/FHXzaN01E1DE/M4GNO9pF3vMgdQzGFEm8O+RAgajutwOe3j5gLL8EW6q
-         mMLClQugPV3+9irnbY9yyK+g8uInwDPPlISGXw2oaVrq9ojyIqPqeFuAl6tZpedC0Q4Z
-         1l6ivjmficvNIra9S7wCin0ish9T9cq9as4OitA+p68B+VyO4uNW1/ZY7rn7UfMxQa+5
-         HLqA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687976314; x=1690568314;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=/K9OS0zmztPbtY0PgdFfjCYBxDyy7aJx/bjVFEWW/zU=;
-        b=Za96AN0kWUi4dJgVaAvz7o9xFL9SOCmXQ5OomQxImBxOBRqHZpEYxXVNO+dxbkWoaU
-         BTL2GBkU0pCRjwsvQ2t5hqxn3idtK+y/eVh28UoasIlX+VyMzn97xbyxjxTSKVqjImRr
-         GgEICOhv6Q3y/ppeP/u24Vgr0IWsEgiGWvg+WjiU6iTNrfPwSc/ZOUlHWD3L3hRj+jbo
-         OfASw7X8NiedwC5N8oQZDjCJw6omLYcDpfwA8gT2i/xjpZdWXflukxOkGaWhvbgu1fwv
-         HaPRbgEpC3mxX5lW4UbxFTm3rRZJtbeUMOdZk7YZR3kwQGOeZniWJUYao+ChzOk7InAD
-         XlLQ==
-X-Gm-Message-State: AC+VfDwuE/ZnPLxxl4Yzcyt822O59cA9QcRTbi/Hf+Kwk+8FzMLOu1r2
-        wVHgkkJx5cRkTGBSMhuuojTDljT50kNvnbaxU6wRSQ==
-X-Google-Smtp-Source: ACHHUZ79l9ad3gdBVQUaVc8lzXfc9b5dm4VBH1fcUbHp2JNq0nr0Ghsfo6MDVCUkDHm48YsLbKxPx5Hi//4io1YwUGg=
-X-Received: by 2002:a25:2f8f:0:b0:c1a:5904:fe8e with SMTP id
- v137-20020a252f8f000000b00c1a5904fe8emr10924745ybv.34.1687976314500; Wed, 28
- Jun 2023 11:18:34 -0700 (PDT)
-MIME-Version: 1.0
-References: <CAJuCfpFUrPGVSnZ9+CmMz31GjRNN+tNf6nUmiCgx0Cs5ygD64A@mail.gmail.com>
- <CAJuCfpFe2OdBjZkwHW5UCFUbnQh7hbNeqs7B99PXMXdFNjKb5Q@mail.gmail.com>
- <CAJuCfpG2_trH2DuudX_E0CWfMxyTKfPWqJU14zjVxpTk6kPiWQ@mail.gmail.com>
- <ZJuSzlHfbLj3OjvM@slm.duckdns.org> <CAJuCfpGoNbLOLm08LWKPOgn05+FB1GEqeMTUSJUZpRmDYQSjpA@mail.gmail.com>
- <20230628-meisennest-redlich-c09e79fde7f7@brauner> <CAJuCfpHqZ=5a_2k==FsdBbwDCF7+s7Ji3aZ37LBqUgyXLMz7gA@mail.gmail.com>
- <20230628-faden-qualvoll-6c33b570f54c@brauner> <CAJuCfpF=DjwpWuhugJkVzet2diLkf8eagqxjR8iad39odKdeYQ@mail.gmail.com>
- <20230628-spotten-anzweifeln-e494d16de48a@brauner> <ZJx1nkqbQRVCaKgF@slm.duckdns.org>
-In-Reply-To: <ZJx1nkqbQRVCaKgF@slm.duckdns.org>
-From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Wed, 28 Jun 2023 11:18:20 -0700
-Message-ID: <CAJuCfpEFo6WowJ_4XPXH+=D4acFvFqEa4Fuc=+qF8=Jkhn=3pA@mail.gmail.com>
-Subject: Re: [PATCH 1/2] kernfs: add kernfs_ops.free operation to free
- resources tied to the file
-To:     Tejun Heo <tj@kernel.org>
-Cc:     Christian Brauner <brauner@kernel.org>, gregkh@linuxfoundation.org,
-        peterz@infradead.org, lujialin4@huawei.com,
-        lizefan.x@bytedance.com, hannes@cmpxchg.org, mingo@redhat.com,
-        ebiggers@kernel.org, oleg@redhat.com, akpm@linux-foundation.org,
-        viro@zeniv.linux.org.uk, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, vschneid@redhat.com,
-        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, kernel-team@android.com
-Content-Type: text/plain; charset="UTF-8"
+        Wed, 28 Jun 2023 14:19:44 -0400
+Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35SHwla9024479
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 11:19:44 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : content-type : content-transfer-encoding :
+ mime-version; s=facebook; bh=z0e8QttLPh/Q/9kNelSZTNeMoB4d8XPy6uAeGGRHDJE=;
+ b=Sk8OibaWF5PZvTwQEeOU/jmAzItcoR2TAgesKoUjwVBC+85zto95Om++ikJz3cA2/BBK
+ nIGDZSWDXULhMZdTIDaqi90Cxvv0uNTKgDCze4dYyKcwCjznKmYJoYLBJuwhnHyzMDLq
+ Rq015CyZFnx3lOu1nhhIE9yrgPdpNY0gGGo= 
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3rgart71bj-2
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 11:19:43 -0700
+Received: from twshared18891.17.frc2.facebook.com (2620:10d:c085:108::8) by
+ mail.thefacebook.com (2620:10d:c085:21d::4) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Wed, 28 Jun 2023 11:19:42 -0700
+Received: by devbig309.ftw3.facebook.com (Postfix, from userid 128203)
+        id 994FE22169B1E; Wed, 28 Jun 2023 11:19:26 -0700 (PDT)
+From:   Yonghong Song <yhs@fb.com>
+To:     Nick Desaulniers <ndesaulniers@google.com>,
+        Petr Mladek <pmladek@suse.com>, Song Liu <song@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>
+CC:     Fangrui Song <maskray@google.com>, <kernel-team@fb.com>,
+        Leizhen <thunder.leizhen@huawei.com>,
+        <linux-kernel@vger.kernel.org>, <llvm@lists.linux.dev>
+Subject: [PATCH v2] kallsyms: strip LTO-only suffixes from promoted global functions
+Date:   Wed, 28 Jun 2023 11:19:26 -0700
+Message-ID: <20230628181926.4102448-1-yhs@fb.com>
+X-Mailer: git-send-email 2.34.1
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-ORIG-GUID: MmlXjdY53bokJ4lboidNc5CLdEuKdNJ3
+X-Proofpoint-GUID: MmlXjdY53bokJ4lboidNc5CLdEuKdNJ3
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-        lindbergh.monkeyblade.net
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+MIME-Version: 1.0
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-06-28_12,2023-06-27_01,2023-05-22_02
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 28, 2023 at 11:02=E2=80=AFAM Tejun Heo <tj@kernel.org> wrote:
->
-> On Wed, Jun 28, 2023 at 07:35:20PM +0200, Christian Brauner wrote:
-> > > To summarize my understanding of your proposal, you suggest adding ne=
-w
-> > > kernfs_ops for the case you marked (1) and change ->release() to do
-> > > only (2). Please correct me if I misunderstood. Greg, Tejun, WDYT?
-> >
-> > Yes. I can't claim to know all the intricate implementation details of
-> > kernfs ofc but this seems sane to me.
->
-> This is going to be massively confusing for vast majority of kernfs users=
-.
-> The contract kernfs provides is that you can tell kernfs that you want ou=
-t
-> and then you can do so synchronously in a finite amount of time (you stil=
-l
-> have to wait for in-flight operations to finish but that's under your
-> control). Adding an operation which outlives that contract as something
-> usual to use is guaranteed to lead to obscure future crnashes. For a
-> temporary fix, it's fine as long as it's marked clearly but please don't
-> make it something seemingly widely useable.
->
-> We have a long history of modules causing crashes because of this. The
-> severing semantics is not there just for fun.
+Commit 6eb4bd92c1ce ("kallsyms: strip LTO suffixes from static functions")
+stripped all function/variable suffixes started with '.' regardless
+of whether those suffixes are generated at LTO mode or not. In fact,
+as far as I know, in LTO mode, when a static function/variable is
+promoted to the global scope, '.llvm.<...>' suffix is added.
 
-I'm sure there are reasons things are working as they do today. Sounds
-like we can't change the ->release() logic from what it is today...
-Then the question is how do we fix this case needing to release a
-resource which can be released only when there are no users of the
-file? My original suggestion was to add a kernfs_ops operation which
-would indicate there are no more users but that seems to be confusing.
-Are there better ways to fix this issue?
-Thanks,
-Suren.
+The existing mechanism breaks live patch for a LTO kernel even if
+no <symbol>.llvm.<...> symbols are involved. For example, for the following
+kernel symbols:
+  $ grep bpf_verifier_vlog /proc/kallsyms
+  ffffffff81549f60 t bpf_verifier_vlog
+  ffffffff8268b430 d bpf_verifier_vlog._entry
+  ffffffff8282a958 d bpf_verifier_vlog._entry_ptr
+  ffffffff82e12a1f d bpf_verifier_vlog.__already_done
+'bpf_verifier_vlog' is a static function. '_entry', '_entry_ptr' and
+'__already_done' are static variables used inside 'bpf_verifier_vlog',
+so llvm promotes them to file-level static with prefix 'bpf_verifier_vlog.'.
+Note that the func-level to file-level static function promotion also
+happens without LTO.
 
->
-> Thanks.
->
-> --
-> tejun
+Given a symbol name 'bpf_verifier_vlog', with LTO kernel, current mechanism=
+ will
+return 4 symbols to live patch subsystem which current live patching
+subsystem cannot handle it. With non-LTO kernel, only one symbol
+is returned.
+
+In [1], we have a lengthy discussion, the suggestion is to separate two
+cases:
+  (1). new symbols with suffix which are generated regardless of whether
+       LTO is enabled or not, and
+  (2). new symbols with suffix generated only when LTO is enabled.
+
+The cleanup_symbol_name() should only remove suffixes for case (2).
+Case (1) should not be changed so it can work uniformly with or without LTO.
+
+This patch removed LTO-only suffix '.llvm.<...>' so live patching and
+tracing should work the same way for non-LTO kernel.
+The cleanup_symbol_name() in scripts/kallsyms.c is also changed to have the=
+ same
+filtering pattern so both kernel and kallsyms tool have the same
+expectation on the order of symbols.
+
+ [1] https://lore.kernel.org/live-patching/20230615170048.2382735-1-song@ke=
+rnel.org/T/#u
+
+Fixes: 6eb4bd92c1ce ("kallsyms: strip LTO suffixes from static functions")
+Reported-by: Song Liu <song@kernel.org>
+Signed-off-by: Yonghong Song <yhs@fb.com>
+---
+ kernel/kallsyms.c  | 5 ++---
+ scripts/kallsyms.c | 6 +++---
+ 2 files changed, 5 insertions(+), 6 deletions(-)
+
+Changelogs:
+  v1 -> v2:
+    . add 'Reported-by: Song Liu <song@kernel.org>'
+    . also fix in scripts/kallsyms.c.
+
+diff --git a/kernel/kallsyms.c b/kernel/kallsyms.c
+index 77747391f49b..4874508bb950 100644
+--- a/kernel/kallsyms.c
++++ b/kernel/kallsyms.c
+@@ -174,11 +174,10 @@ static bool cleanup_symbol_name(char *s)
+ 	 * LLVM appends various suffixes for local functions and variables that
+ 	 * must be promoted to global scope as part of LTO.  This can break
+ 	 * hooking of static functions with kprobes. '.' is not a valid
+-	 * character in an identifier in C. Suffixes observed:
++	 * character in an identifier in C. Suffixes only in LLVM LTO observed:
+ 	 * - foo.llvm.[0-9a-f]+
+-	 * - foo.[0-9a-f]+
+ 	 */
+-	res =3D strchr(s, '.');
++	res =3D strstr(s, ".llvm.");
+ 	if (res) {
+ 		*res =3D '\0';
+ 		return true;
+diff --git a/scripts/kallsyms.c b/scripts/kallsyms.c
+index 0d2db41177b2..13af6d0ff845 100644
+--- a/scripts/kallsyms.c
++++ b/scripts/kallsyms.c
+@@ -346,10 +346,10 @@ static void cleanup_symbol_name(char *s)
+ 	 * ASCII[_]   =3D 5f
+ 	 * ASCII[a-z] =3D 61,7a
+ 	 *
+-	 * As above, replacing '.' with '\0' does not affect the main sorting,
+-	 * but it helps us with subsorting.
++	 * As above, replacing the first '.' in ".llvm." with '\0' does not
++	 * affect the main sorting, but it helps us with subsorting.
+ 	 */
+-	p =3D strchr(s, '.');
++	p =3D strstr(s, ".llvm.");
+ 	if (p)
+ 		*p =3D '\0';
+ }
+--=20
+2.34.1
+
