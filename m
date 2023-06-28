@@ -2,184 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A9A4740BBE
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 10:41:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4D39740AC8
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 10:11:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234910AbjF1Iju (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 04:39:50 -0400
-Received: from dfw.source.kernel.org ([139.178.84.217]:43230 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235410AbjF1Igw (ORCPT
+        id S233891AbjF1IKS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 04:10:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35320 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233133AbjF1IFt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 04:36:52 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EB2D06119F;
-        Wed, 28 Jun 2023 04:57:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 918B8C433C8;
-        Wed, 28 Jun 2023 04:57:53 +0000 (UTC)
-Date:   Wed, 28 Jun 2023 10:27:43 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Krishna Chaitanya Chundru <quic_krichai@quicinc.com>
-Cc:     Manivannan Sadhasivam <mani@kernel.org>, quic_vbadigan@quicinc.com,
-        quic_ramkri@quicinc.com, linux-arm-msm@vger.kernel.org,
-        konrad.dybcio@linaro.org,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Rob Herring <robh@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        "open list:PCIE ENDPOINT DRIVER FOR QUALCOMM" 
-        <linux-pci@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH RFC v1 3/3] PCI: qcom: ep: Add wake up host op to
- dw_pcie_ep_ops
-Message-ID: <20230628045743.GA20477@thinkpad>
-References: <1686754850-29817-1-git-send-email-quic_krichai@quicinc.com>
- <1686754850-29817-4-git-send-email-quic_krichai@quicinc.com>
- <20230623061839.GC5611@thinkpad>
- <1b41ba64-51e2-7c66-104d-bc60ac131a0f@quicinc.com>
- <20230627135351.GE5490@thinkpad>
- <cd34d241-98e4-d3fa-3ae2-89182e9cd190@quicinc.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <cd34d241-98e4-d3fa-3ae2-89182e9cd190@quicinc.com>
+        Wed, 28 Jun 2023 04:05:49 -0400
+Received: from mail-ot1-x32e.google.com (mail-ot1-x32e.google.com [IPv6:2607:f8b0:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B888C2D73;
+        Wed, 28 Jun 2023 01:04:15 -0700 (PDT)
+Received: by mail-ot1-x32e.google.com with SMTP id 46e09a7af769-6b44b5adfd3so4480533a34.3;
+        Wed, 28 Jun 2023 01:04:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687939455; x=1690531455;
+        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=KcRIZBylUodGg6xfwSa+s03103SVj3Aromni82wUePU=;
+        b=B0FEtoQpRUb3J8puVJuM9Z+DAcx79qLsl1w20PIMSoW4+yRiYUaQN3bn7R0yXE5ZAz
+         l1ymLC0TymQw8OU29lcj3ntJEgUZm2u6v4pJb75KJ91bmJqVF9hvi4Go5HQQMBy8pOdf
+         /JE6w+szmm4YpDn5Q+r2m4gbhlXHf2JsT/PAz31EoUWmC37Pw/aOwWu4BswTB27Z6eRq
+         Xw4pzqweeQgSy5nvfh7ITDDkQjQokZ0dPImddUYfsazUy4PnLb6PnQ5dZZUmPYcTC3VB
+         ZczUvJQra1SOR5flzQ6qs/bDl11iyD67i7V1lUJ9+nZOT0zOqq+pXjElrRyE/NpRlhrJ
+         NjuA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687939455; x=1690531455;
+        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=KcRIZBylUodGg6xfwSa+s03103SVj3Aromni82wUePU=;
+        b=dx+rmfYEVZySYxLfSDrMPy9b2RpcvyN0W97+/2UBpYOd15zjIFrkO9eXSnFg9+j6wG
+         pjlZnq2ZHQV3n99WYdKUybmiGHMVKjah9n/QIZv5moPHRS5/jQk5i021cqZYkzxaeqM8
+         5F+MoLJf7ItSlZmYSxhEdLCjs7I4cjzG8ogN22U5jsE3nM9krxJTt5K0dkhMVtMwdEvz
+         RspK9W5nSZUAUIAN9jUoR/jZJ2KxVceU1g6K+50EDn/vYCjHusZEPSmMFzETz6WNYw+Z
+         eJ7uel6nQCmS7HbWXxTtfg1BXuowdgKXAcNFAP1OFN8UM9ErPRwKT1ZtMAUj0hJl6PDf
+         lKew==
+X-Gm-Message-State: AC+VfDzYVJWzkRFJrgsi7Vn8SXxw1I9nGOMv6sauHshbBwe0MBeQE3nI
+        4/fufVo2sIOYri8jABNZhCF8qZDA8bnOSw==
+X-Google-Smtp-Source: ACHHUZ69UkxxcYAdA4L9SDk4thCu0zc7lIFPY7os8Def0ljO2ruAnk0fEj1EBnbrR/THYFgq4CYG4A==
+X-Received: by 2002:a05:6a20:914a:b0:10b:8e96:561 with SMTP id x10-20020a056a20914a00b0010b8e960561mr26061871pzc.62.1687928408592;
+        Tue, 27 Jun 2023 22:00:08 -0700 (PDT)
+Received: from 377044c6c369.cse.ust.hk (191host097.mobilenet.cse.ust.hk. [143.89.191.97])
+        by smtp.gmail.com with ESMTPSA id c24-20020a170902d91800b001b80f3717d5sm3544632plz.123.2023.06.27.22.00.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 27 Jun 2023 22:00:07 -0700 (PDT)
+From:   Chengfeng Ye <dg573847474@gmail.com>
+To:     dennis.dalessandro@cornelisnetworks.com, jgg@ziepe.ca,
+        leon@kernel.org
+Cc:     linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Chengfeng Ye <dg573847474@gmail.com>
+Subject: [PATCH] IB/hfi1: Fix potential deadlock on &sde->flushlist_lock
+Date:   Wed, 28 Jun 2023 04:59:25 +0000
+Message-Id: <20230628045925.5261-1-dg573847474@gmail.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+        lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 28, 2023 at 08:01:45AM +0530, Krishna Chaitanya Chundru wrote:
-> 
-> On 6/27/2023 7:23 PM, Manivannan Sadhasivam wrote:
-> > On Mon, Jun 26, 2023 at 07:18:49PM +0530, Krishna Chaitanya Chundru wrote:
-> > > On 6/23/2023 11:48 AM, Manivannan Sadhasivam wrote:
-> > > > On Wed, Jun 14, 2023 at 08:30:49PM +0530, Krishna chaitanya chundru wrote:
-> > > > > Add wakeup host op to dw_pcie_ep_ops to wake up host from D3cold
-> > > > > or D3hot.
-> > > > > 
-> > > > Commit message should describe how the wakeup is implemented in the driver.
-> > > I will correct this in next series.
-> > > > > Signed-off-by: Krishna chaitanya chundru <quic_krichai@quicinc.com>
-> > > > > ---
-> > > > >    drivers/pci/controller/dwc/pcie-qcom-ep.c | 34 +++++++++++++++++++++++++++++++
-> > > > >    1 file changed, 34 insertions(+)
-> > > > > 
-> > > > > diff --git a/drivers/pci/controller/dwc/pcie-qcom-ep.c b/drivers/pci/controller/dwc/pcie-qcom-ep.c
-> > > > > index 5d146ec..916a138 100644
-> > > > > --- a/drivers/pci/controller/dwc/pcie-qcom-ep.c
-> > > > > +++ b/drivers/pci/controller/dwc/pcie-qcom-ep.c
-> > > > > @@ -91,6 +91,7 @@
-> > > > >    /* PARF_PM_CTRL register fields */
-> > > > >    #define PARF_PM_CTRL_REQ_EXIT_L1		BIT(1)
-> > > > >    #define PARF_PM_CTRL_READY_ENTR_L23		BIT(2)
-> > > > > +#define PARF_PM_CTRL_XMT_PME			BIT(4)
-> > > > >    #define PARF_PM_CTRL_REQ_NOT_ENTR_L1		BIT(5)
-> > > > >    /* PARF_MHI_CLOCK_RESET_CTRL fields */
-> > > > > @@ -794,10 +795,43 @@ static void qcom_pcie_ep_init(struct dw_pcie_ep *ep)
-> > > > >    		dw_pcie_ep_reset_bar(pci, bar);
-> > > > >    }
-> > > > > +static int qcom_pcie_ep_wakeup_host(struct dw_pcie_ep *ep, u8 func_no)
-> > > > > +{
-> > > > > +	struct dw_pcie *pci = to_dw_pcie_from_ep(ep);
-> > > > > +	struct qcom_pcie_ep *pcie_ep = to_pcie_ep(pci);
-> > > > > +	struct device *dev = pci->dev;
-> > > > > +	u32 perst, dstate, val;
-> > > > > +
-> > > > > +	perst = gpiod_get_value(pcie_ep->reset);
-> > > > > +	/* Toggle wake GPIO when device is in D3 cold */
-> > > > > +	if (perst) {
-> > > > > +		dev_info(dev, "Device is in D3 cold toggling wake\n");
-> > > > dev_dbg(). "Waking up the host by toggling WAKE#"
-> > > > 
-> > > > > +		gpiod_set_value_cansleep(pcie_ep->wake, 1);
-> > > > Waking a device from D3cold requires power-on sequence by the host and in the
-> > > > presence of Vaux, the EPF should be prepared for that. In that case, the mode of
-> > > > wakeup should be decided by the EPF driver. So the wakeup API should have an
-> > > > argument to decide whether the wakeup is through PME or sideband WAKE#.
-> > > > 
-> > > > Also note that as per PCIe Spec 3.0, the devices can support PME generation from
-> > > > D3cold provided that the Vaux is supplied to the device. I do not know if that
-> > > > is supported by Qcom devices but API should honor the spec. So the wakeup
-> > > > control should come from EPF driver as I suggested above.
-> > > I aggre with you, but how will EPF know the PCI device state is in D3cold or
-> > > D3hot.
-> > > 
-> > We should add a notifier in the controller driver which signals EPF when it
-> > receives the DState events.. Take a look at pci_epc_linkdown().
-> Ok I will add this kind of Dstate change event
-> > 
-> > > And how the EPF knows whether Vaux is supported or not in D3cold?
-> > > 
-> > > If there is any existing mechanism can you please point me that.
-> > > 
-> > > FYI Qcom does not support vaux power in D3 cold.
-> > > 
-> > If the EPF can trigger wakeup event during D3Cold then it means it is powered
-> > by Vaux, isn't it?
-> > 
-> > - Mani
-> 
-> EPF needs to know that if the endpoint is getting vaux in D3cold or not
-> without this info
-> 
-> EPF doesn't know wheather to send toggle wake or send Inband PME right.
-> 
-> I mean EPF should have some  prior information wheather vaux is supplied or
-> not to decide
-> 
-> wheather to toggle wake or send in band PME.
-> 
+As &sde->flushlist_lock is acquired by timer sdma_err_progress_check()
+through layer of calls under softirq context, other process
+context code acquiring the lock should disable irq.
 
-Controller driver can use the #PERST level to detect D3Cold. Then it can pass
-that info to EPF over notifiers. EPF may decide whether to toggle #WAKE or
-send PME based on its configuration. For MHI EPF, it can toggle #WAKE as PME
-during D3Cold is not supported.
+Possible deadlock scenario
+sdma_send_txreq()
+    -> spin_lock(&sde->flushlist_lock)
+        <timer interrupt>
+        -> sdma_err_progress_check()
+        -> __sdma_process_event()
+        -> sdma_set_state()
+        -> sdma_flush()
+        -> spin_lock_irqsave(&sde->flushlist_lock, flags) (deadlock here)
 
-- Mani
+This flaw was found using an experimental static analysis tool we are
+developing for irq-related deadlock.
 
-> -KC
-> 
-> > 
-> > > > > +		usleep_range(WAKE_DELAY_US, WAKE_DELAY_US + 500);
-> > > > > +		gpiod_set_value_cansleep(pcie_ep->wake, 0);
-> > > > > +		return 0;
-> > > > > +	}
-> > > > > +
-> > > > > +	dstate = dw_pcie_readl_dbi(pci, DBI_CON_STATUS) &
-> > > > > +				   DBI_CON_STATUS_POWER_STATE_MASK;
-> > > > > +	if (dstate == 3) {
-> > > > > +		dev_info(dev, "Device is in D3 hot sending inband PME\n");
-> > > > dev_dbg(). As I said, the device can sent PME from D3cold also. So the log could
-> > > > be "Waking up the host using PME".
-> > > > 
-> > > > > +		val = readl_relaxed(pcie_ep->parf + PARF_PM_CTRL);
-> > > > > +		val |= PARF_PM_CTRL_XMT_PME;
-> > > > > +		writel_relaxed(val, pcie_ep->parf + PARF_PM_CTRL);
-> > > > > +	} else {
-> > > > > +		dev_err(dev, "Device is not in D3 state wakeup is not supported\n");
-> > > > > +		return -EPERM;
-> > > > -ENOTSUPP
-> > > > 
-> > > > - Mani
-> > > > 
-> > > > > +	}
-> > > > > +
-> > > > > +	return 0;
-> > > > > +}
-> > > > > +
-> > > > >    static const struct dw_pcie_ep_ops pci_ep_ops = {
-> > > > >    	.ep_init = qcom_pcie_ep_init,
-> > > > >    	.raise_irq = qcom_pcie_ep_raise_irq,
-> > > > >    	.get_features = qcom_pcie_epc_get_features,
-> > > > > +	.wakeup_host = qcom_pcie_ep_wakeup_host,
-> > > > >    };
-> > > > >    static int qcom_pcie_ep_probe(struct platform_device *pdev)
-> > > > > -- 
-> > > > > 2.7.4
-> > > > > 
+The tentative patch fix the potential deadlock by spin_lock_irqsave().
 
+Signed-off-by: Chengfeng Ye <dg573847474@gmail.com>
+---
+ drivers/infiniband/hw/hfi1/sdma.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/infiniband/hw/hfi1/sdma.c b/drivers/infiniband/hw/hfi1/sdma.c
+index bb2552dd29c1..0431f575c861 100644
+--- a/drivers/infiniband/hw/hfi1/sdma.c
++++ b/drivers/infiniband/hw/hfi1/sdma.c
+@@ -2371,9 +2371,9 @@ int sdma_send_txreq(struct sdma_engine *sde,
+ 	tx->sn = sde->tail_sn++;
+ 	trace_hfi1_sdma_in_sn(sde, tx->sn);
+ #endif
+-	spin_lock(&sde->flushlist_lock);
++	spin_lock_irqsave(&sde->flushlist_lock, flags);
+ 	list_add_tail(&tx->list, &sde->flushlist);
+-	spin_unlock(&sde->flushlist_lock);
++	spin_unlock_irqrestore(&sde->flushlist_lock, flags);
+ 	iowait_inc_wait_count(wait, tx->num_desc);
+ 	queue_work_on(sde->cpu, system_highpri_wq, &sde->flush_worker);
+ 	ret = -ECOMM;
+@@ -2459,7 +2459,7 @@ int sdma_send_txlist(struct sdma_engine *sde, struct iowait_work *wait,
+ 	*count_out = total_count;
+ 	return ret;
+ unlock_noconn:
+-	spin_lock(&sde->flushlist_lock);
++	spin_lock_irqsave(&sde->flushlist_lock, flags);
+ 	list_for_each_entry_safe(tx, tx_next, tx_list, list) {
+ 		tx->wait = iowait_ioww_to_iow(wait);
+ 		list_del_init(&tx->list);
+@@ -2472,7 +2472,7 @@ int sdma_send_txlist(struct sdma_engine *sde, struct iowait_work *wait,
+ 		flush_count++;
+ 		iowait_inc_wait_count(wait, tx->num_desc);
+ 	}
+-	spin_unlock(&sde->flushlist_lock);
++	spin_unlock_irqrestore(&sde->flushlist_lock, flags);
+ 	queue_work_on(sde->cpu, system_highpri_wq, &sde->flush_worker);
+ 	ret = -ECOMM;
+ 	goto update_tail;
 -- 
-மணிவண்ணன் சதாசிவம்
+2.17.1
+
