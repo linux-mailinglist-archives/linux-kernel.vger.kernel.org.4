@@ -2,60 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA68C74196B
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 22:19:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBBA1741972
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 22:28:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231899AbjF1UTO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 16:19:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34844 "EHLO
+        id S231834AbjF1U20 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 16:28:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232026AbjF1UTE (ORCPT
+        with ESMTP id S229626AbjF1U2Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 16:19:04 -0400
-Received: from tarta.nabijaczleweli.xyz (unknown [139.28.40.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7777B1FEF;
-        Wed, 28 Jun 2023 13:18:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=nabijaczleweli.xyz;
-        s=202305; t=1687983534;
-        bh=PbluAP57CpIIaXvOGapkwKIW8x93+/qYk4SdJ04NFh0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=d1DrQqJx8leEoEgyi77wUmYtSGjlxtSq8XHdLNZniH5D6YKy2B4iYXbny+ib940lJ
-         vTYaVFQ6swp5NBCrEkueU4ymaFtF5S0cEqO4e+fVgk4yYM4Cg0HmSl8x33uZiYY3io
-         UYwFuCrgxosWW29M9dqURFQVEYNdOAfDhkZkmN5HrpZ/oVBej4xw1xuis0oY5nDYjY
-         nV3s3pp1uNQc+2G0zwa/cnMqNjyfUQElCtNr9yC/VoslqWQ+sl2jM631HsKyGPejS/
-         85SO3x+jcrhZP4kNl09Xy0E1LP3HC+9h8hZqj8b5zZnPVHrikzbGSImX628p1O6rk5
-         MrD3dZW21wdrg==
-Received: from tarta.nabijaczleweli.xyz (unknown [192.168.1.250])
-        by tarta.nabijaczleweli.xyz (Postfix) with ESMTPSA id 3218115CA;
-        Wed, 28 Jun 2023 22:18:54 +0200 (CEST)
-Date:   Wed, 28 Jun 2023 22:18:53 +0200
-From:   Ahelenia =?utf-8?Q?Ziemia=C5=84ska?= 
-        <nabijaczleweli@nabijaczleweli.xyz>
-To:     Amir Goldstein <amir73il@gmail.com>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <brauner@kernel.org>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jan Kara <jack@suse.cz>,
-        Chung-Chiang Cheng <cccheng@synology.com>, ltp@lists.linux.it
-Subject: Re: [PATCH v4 1/3] splice: always fsnotify_access(in),
- fsnotify_modify(out) on success
-Message-ID: <3nfsszygfgzpli4xvwuwpli5ozpqtcnlij737qid6riwramjkv@pj23p6q5tzrb>
-References: <t5az5bvpfqd3rrwla43437r5vplmkujdytixcxgm7sc4hojspg@jcc63stk66hz>
- <cover.1687898895.git.nabijaczleweli@nabijaczleweli.xyz>
- <e770188fd86595c6f39d4da86d906a824f8abca3.1687898895.git.nabijaczleweli@nabijaczleweli.xyz>
- <CAOQ4uxjQcn9DUo_Z2LGTgG0SOViy8h5=ST_A5v1v=gdFLwj6Hw@mail.gmail.com>
- <q2nwpf74fngjdlhukkxvlxuz3xkaaq4aup7hzpqjkqlmlthag5@dsx6m7cgk5yt>
- <CAOQ4uxh-ALXa0N-aZzVtO9E5e6C5++OOnkbL=aPSwRbF=DL1Pw@mail.gmail.com>
+        Wed, 28 Jun 2023 16:28:24 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBD221A2;
+        Wed, 28 Jun 2023 13:28:22 -0700 (PDT)
+Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35SJgoqi001742;
+        Wed, 28 Jun 2023 20:28:00 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=TjnP3jpnMUMxwLyS7IxgsYElJNAIPiqDmCAH8VXYyFA=;
+ b=UKMMRXcY45XfWbInEoUFJare+tR1zUyb5rkNHyG93pDNh4ooT3qLSMAB71TqAhEuGGrz
+ gT5lDrCC/FlP2cD2cOQFnpoHJenExeucodKMrOJYZg0grRAHkNBDjcl5p2nACgmfXdE5
+ 45qmbdRoaRw+bY9OyTK7CT7JkKrdONVEEfYEM+sD+WIifCPUuQ8t8kEC7AVfTgNPB9iF
+ 8lXLVOczE5QtymLJvOMxJ65xoVR4CRfJKgszo+uGwlmdS+rsEccfVDQV220RdaXCiXJ8
+ HzgC8wRcncGveFh0B9VuB+VlGLl3pmY2jQWx9hZuw0ZMGe+G8RQWNUmJSlrmCZRFKVj1 Hw== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rgnxr8ua7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 28 Jun 2023 20:28:00 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35SKRxXx031657
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 28 Jun 2023 20:27:59 GMT
+Received: from [10.134.70.142] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.7; Wed, 28 Jun
+ 2023 13:27:56 -0700
+Message-ID: <1cb2b1d0-86d4-3f8f-d4cc-73d29c454619@quicinc.com>
+Date:   Wed, 28 Jun 2023 13:27:55 -0700
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="kq2jxxetonbh2epl"
-Content-Disposition: inline
-In-Reply-To: <CAOQ4uxh-ALXa0N-aZzVtO9E5e6C5++OOnkbL=aPSwRbF=DL1Pw@mail.gmail.com>
-User-Agent: NeoMutt/20230517
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,PDS_RDNS_DYNAMIC_FP,
-        RDNS_DYNAMIC,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [Freedreno] [PATCH 06/15] dt-bindings: display/msm: sc7180-dpu:
+ Describe SM6125
+Content-Language: en-US
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        Andy Gross <agross@kernel.org>,
+        "Bjorn Andersson" <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        "Stephen Boyd" <sboyd@kernel.org>, Rob Clark <robdclark@gmail.com>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Krishna Manikandan <quic_mkrishn@quicinc.com>,
+        Taniya Das <quic_tdas@quicinc.com>
+CC:     <devicetree@vger.kernel.org>,
+        Jami Kettunen <jami.kettunen@somainline.org>,
+        <linux-arm-msm@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
+        <linux-kernel@vger.kernel.org>,
+        "Krzysztof Kozlowski" <krzk@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        "Lux Aliaga" <they@mint.lgbt>,
+        Martin Botka <martin.botka@somainline.org>,
+        <~postmarketos/upstreaming@lists.sr.ht>,
+        <freedreno@lists.freedesktop.org>, <linux-clk@vger.kernel.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+References: <20230624-sm6125-dpu-v1-0-1d5a638cebf2@somainline.org>
+ <20230624-sm6125-dpu-v1-6-1d5a638cebf2@somainline.org>
+ <631728c5-9e4f-fa5d-e954-d4ba35f6fd19@linaro.org>
+From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
+In-Reply-To: <631728c5-9e4f-fa5d-e954-d4ba35f6fd19@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: fPaDk9QNB_nXzD0ZMgDpFTVb88rTyAjC
+X-Proofpoint-GUID: fPaDk9QNB_nXzD0ZMgDpFTVb88rTyAjC
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-06-28_14,2023-06-27_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ clxscore=1011 impostorscore=0 mlxscore=0 spamscore=0 adultscore=0
+ bulkscore=0 suspectscore=0 phishscore=0 malwarescore=0 mlxlogscore=999
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2305260000 definitions=main-2306280180
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -63,87 +105,48 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---kq2jxxetonbh2epl
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Wed, Jun 28, 2023 at 09:38:03PM +0300, Amir Goldstein wrote:
-> On Wed, Jun 28, 2023 at 8:09=E2=80=AFPM Ahelenia Ziemia=C5=84ska
-> <nabijaczleweli@nabijaczleweli.xyz> wrote:
-> > On Wed, Jun 28, 2023 at 09:33:43AM +0300, Amir Goldstein wrote:
-> > > I think we need to add a rule to fanotify_events_supported() to ban
-> > > sb/mount marks on SB_KERNMOUNT and backport this
-> > > fix to LTS kernels (I will look into it) and then we can fine tune
-> > > the s_fsnotify_connectors optimization in fsnotify_parent() for
-> > > the SB_KERNMOUNT special case.
-> > > This may be able to save your patch for the faith of NACKed
-> > > for performance regression.
-> > This goes over my head, but if Jan says it makes sense
-> > then it must do.
-> Here you go:
-> https://github.com/amir73il/linux/commits/fsnotify_pipe
->=20
-> I ended up using SB_NOUSER which is narrower than
-> SB_KERNMOUNT.
->=20
-> Care to test?
-> 1) Functionally - that I did not break your tests.
-) | gzip -d > inotify13; chmod +x inotify13; exec ./inotify13
-tst_test.c:1560: TINFO: Timeout per run is 0h 00m 30s
-inotify13.c:260: TINFO: file_to_pipe
-inotify13.c:269: TPASS: =D0=BE=D0=BA
-inotify13.c:260: TINFO: file_to_pipe
-inotify13.c:269: TPASS: =D0=BE=D0=BA
-inotify13.c:260: TINFO: splice_pipe_to_file
-inotify13.c:269: TPASS: =D0=BE=D0=BA
-inotify13.c:260: TINFO: pipe_to_pipe
-inotify13.c:269: TPASS: =D0=BE=D0=BA
-inotify13.c:260: TINFO: pipe_to_pipe
-inotify13.c:269: TPASS: =D0=BE=D0=BA
-inotify13.c:260: TINFO: vmsplice_pipe_to_mem
-inotify13.c:269: TPASS: =D0=BE=D0=BA
-inotify13.c:260: TINFO: vmsplice_mem_to_pipe
-inotify13.c:269: TPASS: =D0=BE=D0=BA
+On 6/26/2023 7:04 AM, Dmitry Baryshkov wrote:
+> On 24/06/2023 03:41, Marijn Suijten wrote:
+>> SM6125 is identical to SM6375 except that while downstream also defines
+>> a throttle clock, its presence results in timeouts whereas SM6375
+>> requires it to not observe any timeouts.
+> 
+> I see that the vendor DTS still references this clock.
+> 
+> Abhinav, Tanya, do possibly know what can be wrong here?
+> 
 
-Summary:
-passed   7
-failed   0
-broken   0
-skipped  0
-warnings 0
+ From display side, we just enable it without any specific vote. Seeing 
+timeouts without it makes sense but not with it.
 
-The discrete tests from before also work as expected,
-both to a fifo and an anon pipe.
+I dont have experience with this family of chipsets and this clock is 
+specific to this family of chipsets.
 
-> 2) Optimization - that when one anon pipe has an inotify watch
-> write to another anon pipe stops at fsnotify_inode_has_watchers()
-> and does not get to fsnotify().
-Yes, I can confirm this as well: fsnotify_parent() only continues to
-fsnotify() for the watched pipe; writes to other pipes early-exit.
+Will reach out to folks who might have a better idea about this clock 
+and update with possible suggestions.
 
-To validate the counterfactual, I reverted "fsnotify: optimize the case
-of anonymous pipe with no watches" and fsnotify() was being called
-for each anon pipe write, so long as any anon pipe watches were registered.
+Unless ... tanya has more suggestions.
 
---kq2jxxetonbh2epl
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEfWlHToQCjFzAxEFjvP0LAY0mWPEFAmSclaoACgkQvP0LAY0m
-WPGEbg//cj23PmCJ73Ev+PmMefCpRtuYucdcpi5l3icLi2aAsM6rjVn9RzHgj/nj
-DYif2JzFoHk4lwsBcx5v2t0aZXAadUFPq8RmrTfplNfsaMcGkCboCOYIRZ8FCnH8
-tAuZREZl7mO/8byRzFnSIBiDzPdi/y7WAglnRZpYIGq6LYPD65cQq6Xx83f8d0vi
-avzT3S8+jTV9npgfqsuPX6aN9tvVLD/rb70H6eiQT8tLK3IjogU7yPrc7GtqKFN1
-jseFtY5Y2R2IfDgbJmMheRQ23vo2R2Avjls1zLk9m6v0HxHnBGUjTYfwpNX1PNjI
-1OfbxzNTGmhUpF1shVAljZ3HMQbrYSyKyaWY0zCOaj0h2QVRtC+li5xqIt6o9oTZ
-an7on2xShO2UylU9rEnb+pPll9r68zSki5N2nwhIyv/BQDGzao4eNMFMVNknn35b
-Nr3xGh0HHUOgbA09PbtrfNU/x22aGs1XVVXLPfWpbuFaz9xUkaeqArEIdHg/yZ2y
-nEKwi1cqfE4di2p06obnaODlcvOrGm+2yimd9g6Sdvc9TejfyoeT0wJeD+VJaEiI
-zdJQaB8RIR58jI4YCrJ8zIbpn5EPR04+p4qls0dRleWw6jeZxn+weVScVkuH9q01
-mSjPLuYuSHTXeCUyiIjPGtrxvX3LbW4FZGiP17jX8S1IpkKjMt0=
-=c7nN
------END PGP SIGNATURE-----
-
---kq2jxxetonbh2epl--
+>>
+>> Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
+>> ---
+>>   Documentation/devicetree/bindings/display/msm/qcom,sc7180-dpu.yaml | 
+>> 1 +
+>>   1 file changed, 1 insertion(+)
+>>
+>> diff --git 
+>> a/Documentation/devicetree/bindings/display/msm/qcom,sc7180-dpu.yaml 
+>> b/Documentation/devicetree/bindings/display/msm/qcom,sc7180-dpu.yaml
+>> index 630b11480496..6d2ba9a1cca1 100644
+>> --- a/Documentation/devicetree/bindings/display/msm/qcom,sc7180-dpu.yaml
+>> +++ b/Documentation/devicetree/bindings/display/msm/qcom,sc7180-dpu.yaml
+>> @@ -15,6 +15,7 @@ properties:
+>>     compatible:
+>>       enum:
+>>         - qcom,sc7180-dpu
+>> +      - qcom,sm6125-dpu
+>>         - qcom,sm6350-dpu
+>>         - qcom,sm6375-dpu
+>>
+> 
