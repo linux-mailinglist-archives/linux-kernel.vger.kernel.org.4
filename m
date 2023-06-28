@@ -2,88 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BF4A7412AC
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 15:38:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 393907412B0
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 15:40:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231563AbjF1Nhk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 09:37:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48244 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232239AbjF1NhR (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 09:37:17 -0400
-Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25307129
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 06:36:49 -0700 (PDT)
-Received: by mail-qt1-x82e.google.com with SMTP id d75a77b69052e-401d1d967beso309141cf.0
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 06:36:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1687959408; x=1690551408;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=pxNDlyNnnUp8RWBC1VLsgA/+iGnbRpi0J2EVSR52FcM=;
-        b=rKNzwVZcU3cLIC9qcDCyNFSF0snGD06RpyVH336Lt8XBAWSm/62RDwSb3Kw5Fnq8af
-         071saHOZnx4MsQw+nhZktkAxGksWG5tEFAgrlQaguO2mfB7yCCkdwf4+bHYB5Av3mtJp
-         dNyp3ifKrheqK5Jta3DbM+H6crd+V1GjtVJNTdSF0UGZrThghXaiDneFBJcACli21VO1
-         siAxo8B/Ihtd6WAMJhH5Dnryki6OvLvSb1eZJBXVSyUi4q40y6y+ZKBrmaN6wj9PHI16
-         LoUPy1x4a15Fmenlj7Mnjk4paBdrCMOnqZdw0biiIdZEk7EsDKNMzjsSlCIigIzanab4
-         mtyw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687959408; x=1690551408;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=pxNDlyNnnUp8RWBC1VLsgA/+iGnbRpi0J2EVSR52FcM=;
-        b=VMs21BSDMIaCHfTiO6FgHxwkRxDsDr8B3jzq0y55+ds2n3NflIxu/d5k6mTPeBLXCg
-         c0AdO7zoDulTcnbdSslec2WdlSHUVPv/foe2VVDmagm66AKUdx0cW7XBd4jrvPgGxux+
-         51a/nwxjM0jGrEVk++ewdds/tb2vCR4hArin/l3f1syqwtCBASVmsc+Vhi0A/tYsOEtd
-         tuU6Q7NNBMG3i/CpFJzz+WMsLP3F9QUV7MalScE7XRl5zre7wA8BnH5UBpoAGsMuAKEX
-         mCZMdqPhyPd7CA6s9HXcyhXnPGqrTJ5kRkxCHScg+ZsjePd2WPzDZtuiDDD6rMlP+mBc
-         ELKw==
-X-Gm-Message-State: AC+VfDyJcsp1q5gFyMrq9lNKnfk5+dx1L62mHUX0YK3DDvafSbkJFRlc
-        KMGvziNwguei+OPcqRJxw16hTZok1u/k9OZtZFLIPg==
-X-Google-Smtp-Source: ACHHUZ60AjWGc2bglbo+JECbZzsVot+WSWR2GQvtPPz3GEc8kwmp8sEBxLjEpUAJNmGk6Clveh555GFZ7J2VnYGoUdE=
-X-Received: by 2002:a05:622a:51:b0:3f8:5b2:aef2 with SMTP id
- y17-20020a05622a005100b003f805b2aef2mr224203qtw.26.1687959407890; Wed, 28 Jun
- 2023 06:36:47 -0700 (PDT)
+        id S231467AbjF1Njb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 09:39:31 -0400
+Received: from bg4.exmail.qq.com ([43.154.54.12]:56764 "EHLO bg4.exmail.qq.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232277AbjF1NjG (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 28 Jun 2023 09:39:06 -0400
+X-QQ-mid: bizesmtp90t1687959532t6lkbz99
+Received: from linux-lab-host.localdomain ( [116.30.129.193])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Wed, 28 Jun 2023 21:38:51 +0800 (CST)
+X-QQ-SSF: 01200000000000D0V000000A0000000
+X-QQ-FEAT: fs34Pe/+C2TAGmtvIl5731SN/JR7nW+oSFpCdSEQM3tivCtSYm/L9iQc51+aB
+        fFcDYWodV80KzFgfamh05BQPEi0waHVAGyQiVMNLMa1rIAVmeVPDPtO7Eoe2crDK6Y+JrN7
+        YI2BR8ZJJ/OrR51LISkScVCLzQimPHH6lS1UQ6PmupxN36ALbS0Es94sQxIQkfTwXi/bZ71
+        vK2Mjm0lDlH4e+0ZZ3ziXmrJWYMQVaID7H7YfDo8CNV16ZgS7DK9agY9ko+mAfrnarNWXL9
+        R9JWH0xCpka5uVIONnzNQ34wSXwuYb4MuezRmTqiVP6tiU71EMPPW69JSS3Mj6qEewKrpnX
+        y+FCe82Q5XKBHlcNHADgnFUfRDW1jBA+E7H0cWXQqKITa1lkmg2tV6dh8F3zw==
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 618334748572230207
+From:   Zhangjin Wu <falcon@tinylab.org>
+To:     thomas@t-8ch.de, w@1wt.eu
+Cc:     falcon@tinylab.org, arnd@arndb.de, david.laight@aculab.com,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-riscv@lists.infradead.org
+Subject: [PATCH v5 09/14] tools/nolibc: add missing my_syscall6() for mips
+Date:   Wed, 28 Jun 2023 21:37:29 +0800
+Message-Id: <5089ddd75a7cb01486f664c025876c803fe26d5b.1687957589.git.falcon@tinylab.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <cover.1687957589.git.falcon@tinylab.org>
+References: <cover.1687957589.git.falcon@tinylab.org>
 MIME-Version: 1.0
-References: <20230621063825.268890-1-mshavit@google.com> <20230621063825.268890-10-mshavit@google.com>
- <ZJToAfeKg8FF1sZL@Asurada-Nvidia> <CAKHBV266J1S6EMMjNCRMPhSXCKnqU7-H=rhi5iMbV4D9rH7WgQ@mail.gmail.com>
- <ZJnVjvh+kdUfeMcP@Asurada-Nvidia>
-In-Reply-To: <ZJnVjvh+kdUfeMcP@Asurada-Nvidia>
-From:   Michael Shavit <mshavit@google.com>
-Date:   Wed, 28 Jun 2023 21:36:12 +0800
-Message-ID: <CAKHBV25P7d85LgeAQ7VbLyATjFf+AG447pZC7YRAg=5zty1R9A@mail.gmail.com>
-Subject: Re: [PATCH v4 09/13] iommu/arm-smmu-v3: Implement set_dev_pasid
-To:     Nicolin Chen <nicolinc@nvidia.com>
-Cc:     Will Deacon <will@kernel.org>, Robin Murphy <robin.murphy@arm.com>,
-        Joerg Roedel <joro@8bytes.org>, jean-philippe@linaro.org,
-        jgg@nvidia.com, baolu.lu@linux.intel.com,
-        linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-        lindbergh.monkeyblade.net
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrsz:qybglogicsvrsz3a-3
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 27, 2023 at 2:14=E2=80=AFAM Nicolin Chen <nicolinc@nvidia.com> =
-wrote:
-> > I've been considering migrating those tests to the smmute driver if
-> > that would be valuable.
->
-> Is this on Gerrit too?
+It is able to pass the 6th argument like the 5th argument via the stack
+for mips, let's add a new my_syscall6() now, see [1] for details:
 
-It's not pretty but I've rewritten the tests into the smmute kernel
-driver. Pushed to Gerrit here:
-https://linux-review.googlesource.com/id/Ibb33ba6f9c6d069324f21b9ad98e29c94=
-e15374a
-.
+  The mips/o32 system call convention passes arguments 5 through 8 on
+  the user stack.
+
+Both mmap() and pselect6() require my_syscall6().
+
+[1]: https://man7.org/linux/man-pages/man2/syscall.2.html
+
+Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
+---
+ tools/include/nolibc/arch-mips.h | 25 +++++++++++++++++++++++++
+ tools/include/nolibc/nolibc.h    |  9 ++++-----
+ 2 files changed, 29 insertions(+), 5 deletions(-)
+
+diff --git a/tools/include/nolibc/arch-mips.h b/tools/include/nolibc/arch-mips.h
+index 55a9f01825e0..a8b33d6914a4 100644
+--- a/tools/include/nolibc/arch-mips.h
++++ b/tools/include/nolibc/arch-mips.h
+@@ -176,6 +176,31 @@ struct sys_stat_struct {
+ 	_arg4 ? -_num : _num;							\
+ })
+ 
++#define my_syscall6(num, arg1, arg2, arg3, arg4, arg5, arg6)			\
++({										\
++	register long _num __asm__ ("v0")  = (num);				\
++	register long _arg1 __asm__ ("a0") = (long)(arg1);			\
++	register long _arg2 __asm__ ("a1") = (long)(arg2);			\
++	register long _arg3 __asm__ ("a2") = (long)(arg3);			\
++	register long _arg4 __asm__ ("a3") = (long)(arg4);			\
++	register long _arg5 = (long)(arg5);					\
++	register long _arg6 = (long)(arg6);					\
++										\
++	__asm__ volatile (							\
++		"addiu $sp, $sp, -32\n"						\
++		"sw %7, 16($sp)\n"						\
++		"sw %8, 20($sp)\n"						\
++		"syscall\n  "							\
++		"addiu $sp, $sp, 32\n"						\
++		: "=r" (_num), "=r"(_arg4)					\
++		: "0"(_num),							\
++		  "r"(_arg1), "r"(_arg2), "r"(_arg3), "r"(_arg4), "r"(_arg5),	\
++		  "r"(_arg6)							\
++		: SYSCALL_CLOBBERLIST						\
++	);									\
++	_arg4 ? -_num : _num;							\
++})
++
+ char **environ __attribute__((weak));
+ const unsigned long *_auxv __attribute__((weak));
+ 
+diff --git a/tools/include/nolibc/nolibc.h b/tools/include/nolibc/nolibc.h
+index 05a228a6ee78..1f8d821000ac 100644
+--- a/tools/include/nolibc/nolibc.h
++++ b/tools/include/nolibc/nolibc.h
+@@ -13,11 +13,10 @@
+  * Syscalls are split into 3 levels:
+  *   - The lower level is the arch-specific syscall() definition, consisting in
+  *     assembly code in compound expressions. These are called my_syscall0() to
+- *     my_syscall6() depending on the number of arguments. The MIPS
+- *     implementation is limited to 5 arguments. All input arguments are cast
+- *     to a long stored in a register. These expressions always return the
+- *     syscall's return value as a signed long value which is often either a
+- *     pointer or the negated errno value.
++ *     my_syscall6() depending on the number of arguments. All input arguments
++ *     are castto a long stored in a register. These expressions always return
++ *     the syscall's return value as a signed long value which is often either
++ *     a pointer or the negated errno value.
+  *
+  *   - The second level is mostly architecture-independent. It is made of
+  *     static functions called sys_<name>() which rely on my_syscallN()
+-- 
+2.25.1
+
