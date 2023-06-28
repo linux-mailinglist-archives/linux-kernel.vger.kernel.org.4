@@ -2,122 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85BBF7412FC
+	by mail.lfdr.de (Postfix) with ESMTP id D76657412FD
 	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 15:50:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231538AbjF1NsQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 09:48:16 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:32597 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232215AbjF1NsG (ORCPT
+        id S231248AbjF1NsM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 09:48:12 -0400
+Received: from www262.sakura.ne.jp ([202.181.97.72]:55859 "EHLO
+        www262.sakura.ne.jp" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232163AbjF1NsE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 09:48:06 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1687960037;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=Fn/bqfguGzs3lkCA5wKrTQnKBSDaj3bzPZJgusB7pXE=;
-        b=D7MrOkA2v+dpVPYLBlxnJ6FXdpM47qzSigIua6QZA96p961flgITIW6ZbasBDS0XfWevLt
-        MNWyjCK6wFZe2DXl/0NAGpBPiDmrGNFZsQvCoKlpgPIjwGJHef6To2hbtfTJFCPjLi/ROb
-        hfehA2HxmMB0ubgBU1DxG95bPFxXyBM=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-669-2BDt8uANN7Kp1jMQTQhbfQ-1; Wed, 28 Jun 2023 09:47:14 -0400
-X-MC-Unique: 2BDt8uANN7Kp1jMQTQhbfQ-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 08CF488D1A1;
-        Wed, 28 Jun 2023 13:47:06 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.42.28.4])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 6C5AC40C2063;
-        Wed, 28 Jun 2023 13:47:05 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-To:     Marc Dionne <marc.dionne@auristor.com>
-cc:     dhowells@redhat.com, linux-afs@lists.infradead.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] afs: Fix accidental truncation when storing data
+        Wed, 28 Jun 2023 09:48:04 -0400
+Received: from fsav113.sakura.ne.jp (fsav113.sakura.ne.jp [27.133.134.240])
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 35SDm20A095922;
+        Wed, 28 Jun 2023 22:48:02 +0900 (JST)
+        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Received: from www262.sakura.ne.jp (202.181.97.72)
+ by fsav113.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav113.sakura.ne.jp);
+ Wed, 28 Jun 2023 22:48:02 +0900 (JST)
+X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav113.sakura.ne.jp)
+Received: from [192.168.1.6] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
+        (authenticated bits=0)
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 35SDm2QM095917
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
+        Wed, 28 Jun 2023 22:48:02 +0900 (JST)
+        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Message-ID: <c16e9ab9-13e0-b911-e33a-c9ae81e93a8d@I-love.SAKURA.ne.jp>
+Date:   Wed, 28 Jun 2023 22:48:01 +0900
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <3526894.1687960024.1@warthog.procyon.org.uk>
-Content-Transfer-Encoding: quoted-printable
-Date:   Wed, 28 Jun 2023 14:47:04 +0100
-Message-ID: <3526895.1687960024@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: [PATCH] net: tls: enable __GFP_ZERO upon tls_init()
+Content-Language: en-US
+To:     Boris Pismenny <borisp@nvidia.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>
+Cc:     glider@google.com, herbert@gondor.apana.org.au,
+        linux-crypto@vger.kernel.org, syzkaller-bugs@googlegroups.com,
+        syzbot <syzbot+828dfc12440b4f6f305d@syzkaller.appspotmail.com>,
+        Eric Biggers <ebiggers@kernel.org>,
+        Aviad Yehezkel <aviadye@nvidia.com>,
+        Daniel Borkmann <daniel@iogearbox.net>, netdev@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>
+References: <0000000000008a7ae505aef61db1@google.com>
+ <20200911170150.GA889@sol.localdomain>
+From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+In-Reply-To: <20200911170150.GA889@sol.localdomain>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-    =
+syzbot is reporting uninit-value at aes_encrypt(), for block cipher assumes
+that bytes to encrypt/decrypt is multiple of block size for that cipher but
+tls_alloc_encrypted_msg() is not initializing padding bytes when
+required_size is not multiple of block cipher's block size.
 
-When an AFS FS.StoreData RPC call is made, amongst other things it is give=
-n
-the resultant file size to be.  On the server, this is processed by
-truncating the file to new size and then writing the data.
+In order to make sure that padding bytes are automatically initialized,
+enable __GFP_ZERO flag when setsockopt(SOL_TCP, TCP_ULP, "tls") is called.
 
-Now, kafs has a lock (vnode->io_lock) that serves to serialise operations
-against a specific vnode (ie. inode), but the parameters for the op are se=
-t
-before the lock is taken.  This allows two writebacks (say sync and kswapd=
-)
-to race - and if writes are ongoing the writeback for a later write could
-occur before the writeback for an earlier one if the latter gets
-interrupted.
-
-Note that afs_writepages() cannot take i_mutex and only takes a shared loc=
-k
-on vnode->validate_lock.
-
-Also note that the server does the truncation and the write inside a lock,
-so there's no problem at that end.
-
-Fix this by moving the calculation for the proposed new i_size inside the
-vnode->io_lock.  Also reset the iterator (which we might have read from)
-and update the mtime setting there.
-
-Fixes: bd80d8a80e12 ("afs: Use ITER_XARRAY for writing")
-Reported-by: Marc Dionne <marc.dionne@auristor.com>
-Signed-off-by: David Howells <dhowells@redhat.com>
-cc: linux-afs@lists.infradead.org
-cc: linux-fsdevel@vger.kernel.org
+Reported-by: syzbot <syzbot+828dfc12440b4f6f305d@syzkaller.appspotmail.com>
+Closes: https://syzkaller.appspot.com/bug?extid=828dfc12440b4f6f305d
+Signed-off-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
 ---
- fs/afs/write.c |    8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+According to C reproducer, this problem happens when bpf_exec_tx_verdict() is
+called with lower 4 bits of required_size being 0001 and does not happen when
+being 0100. Thus, I assumed that this problem is caused by lack of initializing
+padding bytes.
+But I couldn't figure out why KMSAN reports this problem when bpf_exec_tx_verdict()
+is called with lower 4 bits of required_size being 0001 for the second time and
+does not report this problem when bpf_exec_tx_verdict() is called with lower
+4 bits of required_size being 0001 for the first time. More deeper problem exists?
+KMSAN reporting this problem when accessing u64 relevant?
 
-diff --git a/fs/afs/write.c b/fs/afs/write.c
-index 8750b99c3f56..c1f4391ccd7c 100644
---- a/fs/afs/write.c
-+++ b/fs/afs/write.c
-@@ -413,17 +413,19 @@ static int afs_store_data(struct afs_vnode *vnode, s=
-truct iov_iter *iter, loff_t
- 	afs_op_set_vnode(op, 0, vnode);
- 	op->file[0].dv_delta =3D 1;
- 	op->file[0].modification =3D true;
--	op->store.write_iter =3D iter;
- 	op->store.pos =3D pos;
- 	op->store.size =3D size;
--	op->store.i_size =3D max(pos + size, vnode->netfs.remote_i_size);
- 	op->store.laundering =3D laundering;
--	op->mtime =3D vnode->netfs.inode.i_mtime;
- 	op->flags |=3D AFS_OPERATION_UNINTR;
- 	op->ops =3D &afs_store_data_operation;
- =
+ net/tls/tls_main.c | 1 +
+ 1 file changed, 1 insertion(+)
 
- try_next_key:
- 	afs_begin_vnode_operation(op);
-+
-+	op->store.write_iter =3D iter;
-+	op->store.i_size =3D max(pos + size, vnode->netfs.remote_i_size);
-+	op->mtime =3D vnode->netfs.inode.i_mtime;
-+
- 	afs_wait_for_operation(op);
- =
-
- 	switch (op->error) {
+diff --git a/net/tls/tls_main.c b/net/tls/tls_main.c
+index f2e7302a4d96..cd5366966864 100644
+--- a/net/tls/tls_main.c
++++ b/net/tls/tls_main.c
+@@ -1025,6 +1025,7 @@ static int tls_init(struct sock *sk)
+ 	struct tls_context *ctx;
+ 	int rc = 0;
+ 
++	sk->sk_allocation |= __GFP_ZERO;
+ 	tls_build_proto(sk);
+ 
+ #ifdef CONFIG_TLS_TOE
+-- 
+2.34.1
 
