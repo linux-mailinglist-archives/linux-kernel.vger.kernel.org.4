@@ -2,179 +2,244 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1F2574197E
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 22:35:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B3B17419CD
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 22:40:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230451AbjF1UfX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 16:35:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36980 "EHLO
+        id S231502AbjF1Uj2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 16:39:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229620AbjF1UfV (ORCPT
+        with ESMTP id S232223AbjF1Uiq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 16:35:21 -0400
-Received: from tarta.nabijaczleweli.xyz (unknown [139.28.40.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AB30D1FC2
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 13:35:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=nabijaczleweli.xyz;
-        s=202305; t=1687984518;
-        bh=dn71ai0Ke54aOHw2jYDnLVqkVoyPtJRVPjZChFWAozI=;
-        h=Date:From:Cc:Subject:From;
-        b=aJVKFu+UTmno2hzADcVUw+OEj7muptJeUv4/K6ywvLu6uPE/BDkVrmUbo1f/vgQ/C
-         RPi9lJDjHwRKM/axScOrmq/bIRfZu3RJt3eZD4k4CjbNyRIAIS0fiTCtNoaKjEFwf9
-         hG62OPFwnBsb2rOdHwMv2qShEYbcSJKpt6s2Vyl6GgIpgIqy/hkovjmhkeIVSK/Y9g
-         leTYDMc28uW0vVhP2UtjqQJ1Ihwp7aTp+HvaVgNvJTlzuZTf+O5lmkWqDU5Dl2Hr2T
-         DTDF7By8/YwXb1E4aKJ+mRhv4VG2fQvEIKOZRejAwmsS+t+olu412bVO2Jiaxy0Phx
-         R+/PrDZP989Wg==
-Received: from tarta.nabijaczleweli.xyz (unknown [192.168.1.250])
-        by tarta.nabijaczleweli.xyz (Postfix) with ESMTPSA id C58B01174;
-        Wed, 28 Jun 2023 22:35:18 +0200 (CEST)
-Date:   Wed, 28 Jun 2023 22:35:17 +0200
-From:   Ahelenia =?utf-8?Q?Ziemia=C5=84ska?= 
-        <nabijaczleweli@nabijaczleweli.xyz>
-Cc:     Andy Whitcroft <apw@canonical.com>, Joe Perches <joe@perches.com>,
-        Dwaipayan Ray <dwaipayanray1@gmail.com>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] checkpatch: don't take signature to be part of the commit SHA
-Message-ID: <cmhc6xudksabuza2jrhgs5yg2a2xbohadyyazitg6463uskhjp@enclcjvmbx4r>
+        Wed, 28 Jun 2023 16:38:46 -0400
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9FE32D54
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 13:36:40 -0700 (PDT)
+Received: by mail-pf1-x436.google.com with SMTP id d2e1a72fcca58-666683eb028so157445b3a.0
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 13:36:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1687984600; x=1690576600;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=FTd9gs+JLXNSUN9G5qmFwQT5UBGhyuUIDz3ia4Gn7nk=;
+        b=GPy0Zf6gjV4znmNrJ1uBnnE0LvBnybeQ1VjgDHwQPY9pQVO6/fVUBkUcT4X+n5ZfLX
+         hRQOO671JUQStKch9ipzQpLyLpbSsGljyL4pdK2TiPGy2XOiPhanu4Ef0GUfz7Z9kF+p
+         hUsMCS8Gt9BC23RH13wgHBzwftfJ7L4/Z0Q3U=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687984600; x=1690576600;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=FTd9gs+JLXNSUN9G5qmFwQT5UBGhyuUIDz3ia4Gn7nk=;
+        b=WUs+dFGHLk+IRKqGcu90n1nWoCZvzwAo8J/7qBzTtI/7/isc1grmddKyirX7pNH1xG
+         nS306K2Dd5C/3xjYrLGJfYT43JGXw1IYTkE6Oowls2/e3pRhHewJ2CR3lHYQy3BHpJe3
+         YPLTCjLKFWCdLNXrOoFr0DqCLI070BKA2jTy4Ezij4YxmH6FKSr0OsomldaXs/0iOtXH
+         A8ZebHGFQ3fYl7ODkQFIps9KfH93A3uZMaNYAeggCF/HoGW7qdJEz7Fv4fTB9RYcaL4F
+         H6dxhSQPnJsCEOaE9CCTNqI5wuC0mx/scVPEEiP8JeUWjnBfj4z7FakVBZBxEeTyn4I6
+         TPxA==
+X-Gm-Message-State: AC+VfDzQPSHexnvX0s+pkkZAb2sj/8Pyj0BUSvY4bPYJ8H/a6uEYhB+u
+        Ufe7wkzKpa1Mq2IggMSvHeOtTg==
+X-Google-Smtp-Source: ACHHUZ5JSbI0ce1k8EZnnUwzRJCg/C5b0Pk7W1P4b4v1+xpCWmFrgeIE5+NVstSZtJr6q2KkuC/hvQ==
+X-Received: by 2002:a05:6a20:144a:b0:122:d1c3:59e9 with SMTP id a10-20020a056a20144a00b00122d1c359e9mr21993643pzi.1.1687984600238;
+        Wed, 28 Jun 2023 13:36:40 -0700 (PDT)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id x48-20020a056a000bf000b0064d32771fa8sm2814288pfu.134.2023.06.28.13.36.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 28 Jun 2023 13:36:39 -0700 (PDT)
+Date:   Wed, 28 Jun 2023 13:36:38 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
+Cc:     aacraid@microsemi.com, "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hardening@vger.kernel.org
+Subject: Re: [PATCH 08/10][next] scsi: aacraid: Replace one-element array
+ with flexible-array member in struct sgmap
+Message-ID: <202306281311.3A69CB64@keescook>
+References: <cover.1687974498.git.gustavoars@kernel.org>
+ <0c7402fe6448186cda5a2618a35eb5f8d1cbb313.1687974498.git.gustavoars@kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="vr7ohxlsyreiktpc"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-User-Agent: NeoMutt/20230517
-X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,MISSING_HEADERS,
-        PDS_RDNS_DYNAMIC_FP,RDNS_DYNAMIC,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+In-Reply-To: <0c7402fe6448186cda5a2618a35eb5f8d1cbb313.1687974498.git.gustavoars@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Jun 28, 2023 at 11:57:13AM -0600, Gustavo A. R. Silva wrote:
+> Replace one-element array with flexible-array member in struct
+> sgmap and refactor the rest of the code, accordingly.
+> 
+> Issue found with the help of Coccinelle and audited and fixed,
+> manually.
 
---vr7ohxlsyreiktpc
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+This change _does_ have binary output differences, although it looks
+like you got most of them. I still see:
 
-I had just received:
-  $ scripts/checkpatch.pl 0001-splice-always-fsnotify_access-in-fsnotify_mo=
-dify-out.patch
-  WARNING: Please use correct Fixes: style 'Fixes: <12 chars of sha1> ("<ti=
-tle line>")' - ie: 'Fixes: gpg: Signatu (":35 CEST")'
-  #25:
-  Fixes: 983652c69199 ("splice: report related fsnotify events")
+commsup.o:
+-       mov    $0x40,%edx
++       mov    $0x38,%edx
 
-  total: 0 errors, 1 warnings, 60 lines checked
+This appears to be the sizeof() here:
 
-  NOTE: For some of the reported defects, checkpatch may be able to
-        mechanically convert to the typical style using --fix or --fix-inpl=
-ace.
+        ret = aac_fib_send(ScsiPortCommand64, fibptr, sizeof(struct aac_srb),
+                                FsaNormal, 1, 1, NULL, NULL);
 
-  0001-splice-always-fsnotify_access-in-fsnotify_modify-out.patch has style=
- problems, please review.
+struct aac_srb includes struct sgmap. I think this needs to explicitly
+include the 1 sgmap, which seems to be sent in the fibptr:
 
-  NOTE: If any of the errors are false positives, please report
-        them to the maintainer, see CHECKPATCH in MAINTAINERS.
+        srbcmd = (struct aac_srb *)fib_data(fibptr);
+	...
+        sg64 = (struct sgmap64 *)&srbcmd->sg;
+        sg64->count = cpu_to_le32(1);
 
-This fails when the Fixes:ed SHAs are signed, since the output is
-  $ git log --format=3D'%H %s'
-  gpg: Signature made Wed 28 Jun 2023 19:05:02 CEST
-  gpg:                using RSA key 7D69474E84028C5CC0C44163BCFD0B018D2658F1
-  gpg: Good signature from "=D0=BD=D0=B0=D0=B1 <nabijaczleweli@nabijaczlewe=
-li.xyz>" [ultimate]
-  gpg:                 aka "=D0=BD=D0=B0=D0=B1 <nabijaczleweli@gmail.com>" =
-[ultimate]
-  gpg:                 aka "nabijaczleweli <nabijaczleweli@gmail.com>" [ult=
-imate]
-  53307062b2b644dc0de7bde916d6193492f37643 splice: fsnotify_access(in), fsn=
-otify_modify(out) on success in tee
-or
-  $ git log --format=3D'%H %s' 983652c69199
-  gpg: Signature made Tue 04 Apr 2023 15:57:35 CEST
-  gpg:                using EDDSA key 408734571EA70C78B332692891C61BC06578D=
-CA2
-  gpg: Can't check signature: No public key
-  983652c691990b3257a07f67f4263eb847baa82d splice: report related fsnotify =
-events
+i.e. "sending 1". This seems to fix it:
 
-The fix mimicks what was done in commit f24fb53984cf ("perf tools: Don't
-include signature in version strings"): just don't ask for the
-signatures being validated.
+-       ret = aac_fib_send(ScsiPortCommand64, fibptr, sizeof(struct aac_srb),
++       ret = aac_fib_send(ScsiPortCommand64, fibptr,
++                               struct_size(srbcmd, sg.sg, 1),
 
-With this, my patch passed validation.
+Then I see changes in both aac_write_block() and aac_scsi_32(), but they
+match the changes you made to get the correct size (it's just an easier
+calculation for the compiler to perform, so the code is slightly
+simplified).
 
-Signed-off-by: Ahelenia Ziemia=C5=84ska <nabijaczleweli@nabijaczleweli.xyz>
----
-Grepped through for /log /, /show /, and /git_command/, and this
-is all I found. Unsure if there's other git executions that need
-to be fixed, tho.
+So I think with the hunk I suggested at the start, and a comment on the
+(expected) binary changes, this should be good to go.
 
- scripts/checkpatch.pl | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+-Kees
 
-diff --git a/scripts/checkpatch.pl b/scripts/checkpatch.pl
-index b30114d637c4..d3a682bc9c20 100755
---- a/scripts/checkpatch.pl
-+++ b/scripts/checkpatch.pl
-@@ -1164,7 +1164,7 @@ sub seed_camelcase_includes {
- 	$camelcase_seeded =3D 1;
-=20
- 	if (-e "$gitroot") {
--		my $git_last_include_commit =3D `${git_command} log --no-merges --pretty=
-=3Dformat:"%h%n" -1 -- include`;
-+		my $git_last_include_commit =3D `${git_command} log --no-show-signature =
---no-merges --pretty=3Dformat:"%h%n" -1 -- include`;
- 		chomp $git_last_include_commit;
- 		$camelcase_cache =3D ".checkpatch-camelcase.git.$git_last_include_commit=
-";
- 	} else {
-@@ -1226,7 +1226,7 @@ sub git_commit_info {
-=20
- 	return ($id, $desc) if ((which("git") eq "") || !(-e "$gitroot"));
-=20
--	my $output =3D `${git_command} log --no-color --format=3D'%H %s' -1 $comm=
-it 2>&1`;
-+	my $output =3D `${git_command} log --no-show-signature --no-color --forma=
-t=3D'%H %s' -1 $commit 2>&1`;
- 	$output =3D~ s/^\s*//gm;
- 	my @lines =3D split("\n", $output);
-=20
-@@ -1277,7 +1277,7 @@ if ($git) {
- 		} else {
- 			$git_range =3D "-1 $commit_expr";
- 		}
--		my $lines =3D `${git_command} log --no-color --no-merges --pretty=3Dform=
-at:'%H %s' $git_range`;
-+		my $lines =3D `${git_command} log --no-show-signature --no-color --no-me=
-rges --pretty=3Dformat:'%H %s' $git_range`;
- 		foreach my $line (split(/\n/, $lines)) {
- 			$line =3D~ /^([0-9a-fA-F]{40,40}) (.*)$/;
- 			next if (!defined($1) || !defined($2));
---=20
-2.39.2
+> Link: https://github.com/KSPP/linux/issues/79
+> Link: https://github.com/ClangBuiltLinux/linux/issues/1851
+> Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+> ---
+>  drivers/scsi/aacraid/aachba.c   | 24 ++++++++++--------------
+>  drivers/scsi/aacraid/aacraid.h  |  2 +-
+>  drivers/scsi/aacraid/commctrl.c |  4 ++--
+>  drivers/scsi/aacraid/comminit.c |  3 +--
+>  4 files changed, 14 insertions(+), 19 deletions(-)
+> 
+> diff --git a/drivers/scsi/aacraid/aachba.c b/drivers/scsi/aacraid/aachba.c
+> index 03ba974f6b2a..b2849e5cc104 100644
+> --- a/drivers/scsi/aacraid/aachba.c
+> +++ b/drivers/scsi/aacraid/aachba.c
+> @@ -1336,8 +1336,7 @@ static int aac_read_block(struct fib * fib, struct scsi_cmnd * cmd, u64 lba, u32
+>  	if (ret < 0)
+>  		return ret;
+>  	fibsize = sizeof(struct aac_read) +
+> -			((le32_to_cpu(readcmd->sg.count) - 1) *
+> -			 sizeof (struct sgentry));
+> +		  le32_to_cpu(readcmd->sg.count) * sizeof(struct sgentry);
+>  	BUG_ON (fibsize > (fib->dev->max_fib_size -
+>  				sizeof(struct aac_fibhdr)));
+>  	/*
+> @@ -1471,8 +1470,7 @@ static int aac_write_block(struct fib * fib, struct scsi_cmnd * cmd, u64 lba, u3
+>  	if (ret < 0)
+>  		return ret;
+>  	fibsize = sizeof(struct aac_write) +
+> -		((le32_to_cpu(writecmd->sg.count) - 1) *
+> -		 sizeof (struct sgentry));
+> +		  le32_to_cpu(writecmd->sg.count) * sizeof(struct sgentry);
+>  	BUG_ON (fibsize > (fib->dev->max_fib_size -
+>  				sizeof(struct aac_fibhdr)));
+>  	/*
+> @@ -1590,9 +1588,9 @@ static int aac_scsi_64(struct fib * fib, struct scsi_cmnd * cmd)
+>  	/*
+>  	 *	Build Scatter/Gather list
+>  	 */
+> -	fibsize = sizeof (struct aac_srb) - sizeof (struct sgentry) +
+> -		((le32_to_cpu(srbcmd->sg.count) & 0xff) *
+> -		 sizeof (struct sgentry64));
+> +	fibsize = sizeof(struct aac_srb) +
+> +		  (le32_to_cpu(srbcmd->sg.count) & 0xff) *
+> +		  sizeof(struct sgentry64);
+>  	BUG_ON (fibsize > (fib->dev->max_fib_size -
+>  				sizeof(struct aac_fibhdr)));
+>  
+> @@ -1621,9 +1619,9 @@ static int aac_scsi_32(struct fib * fib, struct scsi_cmnd * cmd)
+>  	/*
+>  	 *	Build Scatter/Gather list
+>  	 */
+> -	fibsize = sizeof (struct aac_srb) +
+> -		(((le32_to_cpu(srbcmd->sg.count) & 0xff) - 1) *
+> -		 sizeof (struct sgentry));
+> +	fibsize = sizeof(struct aac_srb) +
+> +		  (le32_to_cpu(srbcmd->sg.count) & 0xff) *
+> +		  sizeof(struct sgentry);
+>  	BUG_ON (fibsize > (fib->dev->max_fib_size -
+>  				sizeof(struct aac_fibhdr)));
+>  
+> @@ -1691,8 +1689,7 @@ static int aac_send_safw_bmic_cmd(struct aac_dev *dev,
+>  	fibptr->hw_fib_va->header.XferState &=
+>  		~cpu_to_le32(FastResponseCapable);
+>  
+> -	fibsize  = sizeof(struct aac_srb) - sizeof(struct sgentry) +
+> -						sizeof(struct sgentry64);
+> +	fibsize  = sizeof(struct aac_srb) + sizeof(struct sgentry64);
+>  
+>  	/* allocate DMA buffer for response */
+>  	addr = dma_map_single(&dev->pdev->dev, xfer_buf, xfer_len,
+> @@ -2264,8 +2261,7 @@ int aac_get_adapter_info(struct aac_dev* dev)
+>  		dev->a_ops.adapter_bounds = aac_bounds_32;
+>  		dev->scsi_host_ptr->sg_tablesize = (dev->max_fib_size -
+>  			sizeof(struct aac_fibhdr) -
+> -			sizeof(struct aac_write) + sizeof(struct sgentry)) /
+> -				sizeof(struct sgentry);
+> +			sizeof(struct aac_write)) / sizeof(struct sgentry);
+>  		if (dev->dac_support) {
+>  			dev->a_ops.adapter_read = aac_read_block64;
+>  			dev->a_ops.adapter_write = aac_write_block64;
+> diff --git a/drivers/scsi/aacraid/aacraid.h b/drivers/scsi/aacraid/aacraid.h
+> index 94eb83d38be6..3fbc22ae72b6 100644
+> --- a/drivers/scsi/aacraid/aacraid.h
+> +++ b/drivers/scsi/aacraid/aacraid.h
+> @@ -507,7 +507,7 @@ struct sge_ieee1212 {
+>  
+>  struct sgmap {
+>  	__le32		count;
+> -	struct sgentry	sg[1];
+> +	struct sgentry	sg[];
+>  };
+>  
+>  struct user_sgmap {
+> diff --git a/drivers/scsi/aacraid/commctrl.c b/drivers/scsi/aacraid/commctrl.c
+> index e7cc927ed952..df811ad4afaa 100644
+> --- a/drivers/scsi/aacraid/commctrl.c
+> +++ b/drivers/scsi/aacraid/commctrl.c
+> @@ -561,8 +561,8 @@ static int aac_send_raw_srb(struct aac_dev* dev, void __user * arg)
+>  		rcode = -EINVAL;
+>  		goto cleanup;
+>  	}
+> -	actual_fibsize = sizeof(struct aac_srb) - sizeof(struct sgentry) +
+> -		((user_srbcmd->sg.count & 0xff) * sizeof(struct sgentry));
+> +	actual_fibsize = sizeof(struct aac_srb) +
+> +		(user_srbcmd->sg.count & 0xff) * sizeof(struct sgentry);
+>  	actual_fibsize64 = actual_fibsize + (user_srbcmd->sg.count & 0xff) *
+>  	  (sizeof(struct sgentry64) - sizeof(struct sgentry));
+>  	/* User made a mistake - should not continue */
+> diff --git a/drivers/scsi/aacraid/comminit.c b/drivers/scsi/aacraid/comminit.c
+> index bd99c5492b7d..d8dd89c87b01 100644
+> --- a/drivers/scsi/aacraid/comminit.c
+> +++ b/drivers/scsi/aacraid/comminit.c
+> @@ -523,8 +523,7 @@ struct aac_dev *aac_init_adapter(struct aac_dev *dev)
+>  	dev->max_fib_size = sizeof(struct hw_fib);
+>  	dev->sg_tablesize = host->sg_tablesize = (dev->max_fib_size
+>  		- sizeof(struct aac_fibhdr)
+> -		- sizeof(struct aac_write) + sizeof(struct sgentry))
+> -			/ sizeof(struct sgentry);
+> +		- sizeof(struct aac_write)) / sizeof(struct sgentry);
+>  	dev->comm_interface = AAC_COMM_PRODUCER;
+>  	dev->raw_io_interface = dev->raw_io_64 = 0;
+>  
+> -- 
+> 2.34.1
+> 
 
---vr7ohxlsyreiktpc
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEfWlHToQCjFzAxEFjvP0LAY0mWPEFAmScmYUACgkQvP0LAY0m
-WPGe9Q//WwC94kk6tXtKFC/p/oC39bxAfPeu04v6vs4zF8ZZlQzMJyi4Au93/3UR
-dKvcMZgXCMuWp4xrXNnxiMGzs4WfE69/lm15wTWrfKFn6nvFrv83MY0EyW0I8MPr
-V93wwm6D7F4qURBi1Q4GfGARHdHatyqS04PFHLviFVqHvZVe8SSIzWjTaPcvX4md
-nV/UtJ0iuROtp9rYB2npXQHfb/B9jWXNhDrOJA0OoyTUHjdoWInuH76yIvMFc3dw
-lvvR7TtWR70S/nG0oSean5qXP50ffntIXhcBDgmlY5UDbrr12idmP11/TKaPyi2g
-0BHY3RswjUY8aSrF11V0bg25SliBs7wivuq927FnqSvvOQQudAswshKHb6+8b/VK
-HUuo3fqJLxCGqW6NnDwWJHz/7jDo25lcc3Lv0JaPa2m23BrpLEftgvF+Vg/MF+2a
-xY6WGjsyAHVeWcsAPbGDogmWEp5K/310onNrlucUXqWBwYAPX4znJYtAR/2AqySO
-0DnDo1juV5Yt/S2rajYQQsSY/UFcJkhaXSij4rIRMF3oCkCmsEBmgW5VUUk3AIvr
-+Zcm3gb3DhP+gFk7LQBaseDbETxTaUHXmH5eAjevEosvN5tbHvn4P4jWI/wUtVpj
-miASHzKHAMAOspipufaqtyYQpwKlVp95QhqA0erGtR9JeYdU4Z0=
-=DlOu
------END PGP SIGNATURE-----
-
---vr7ohxlsyreiktpc--
+-- 
+Kees Cook
