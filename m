@@ -2,130 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA14A740DD9
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 12:03:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D346B740DE2
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 12:03:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231594AbjF1JwX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 05:52:23 -0400
-Received: from dggsgout11.his.huawei.com ([45.249.212.51]:12484 "EHLO
-        dggsgout11.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232152AbjF1J0n (ORCPT
+        id S232880AbjF1Jw5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 05:52:57 -0400
+Received: from mx1.sberdevices.ru ([37.18.73.165]:14222 "EHLO
+        mx1.sberdevices.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235520AbjF1JfC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 05:26:43 -0400
-Received: from mail02.huawei.com (unknown [172.30.67.143])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4QrbnD1dNJz4f3l1j;
-        Wed, 28 Jun 2023 17:26:40 +0800 (CST)
-Received: from [10.174.176.73] (unknown [10.174.176.73])
-        by APP4 (Coremail) with SMTP id gCh0CgA30JPP_JtkFqjhMg--.49301S3;
-        Wed, 28 Jun 2023 17:26:40 +0800 (CST)
-Subject: Re: [PATCH 2/3] md/raid10: factor out get_rdev_repl_from_mirror()
-To:     linan666@huaweicloud.com, song@kernel.org,
-        guoqing.jiang@cloud.ionos.com, colyli@suse.de, xni@redhat.com
-Cc:     linux-raid@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linan122@huawei.com, yi.zhang@huawei.com, houtao1@huawei.com,
-        yangerkun@huawei.com, "yukuai (C)" <yukuai3@huawei.com>
-References: <20230628015752.102267-1-linan666@huaweicloud.com>
- <20230628015752.102267-3-linan666@huaweicloud.com>
-From:   Yu Kuai <yukuai1@huaweicloud.com>
-Message-ID: <36a6be92-f9c5-fd7c-20d9-741e2a6f133f@huaweicloud.com>
-Date:   Wed, 28 Jun 2023 17:26:38 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Wed, 28 Jun 2023 05:35:02 -0400
+Received: from p-infra-ksmg-sc-msk01 (localhost [127.0.0.1])
+        by mx1.sberdevices.ru (Postfix) with ESMTP id 6D6B8100010;
+        Wed, 28 Jun 2023 12:34:59 +0300 (MSK)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mx1.sberdevices.ru 6D6B8100010
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
+        s=mail; t=1687944899;
+        bh=GclWWL59oht8VgFW8Tc4TABopkyYORqVnTmqa0M/qOg=;
+        h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type:From;
+        b=isgdeBQNhCOXqAPWFxY23/4YS2SM5oveSMYOXgZN04ijpuuJPs8QDSJo86zoxFWSq
+         akx548USahmjFutrW98GiQW9Yu5c3HMUQyRrw8PBE4RxahH3AYcuCpE66ts5FHhudy
+         UcgvLJxbfBkOGNYZnxlYDseuBe13CHMgxp5XJTcdciGCUwpvDTiamXOo7D+JYIEvqL
+         39cJ82LQBy62R7fdzuQWngyJXD2ZY7eifYTKneKsO6/Bvv2S27QlWD9jxGMj1WI/Es
+         wmm7viJHorE3OsE//MeQ/HQMsgGk0Rs4bNAlJJPH6F0j4qvFx4CdkpHLc9m2xMeuGU
+         hhdW8OtiOlxJg==
+Received: from p-i-exch-sc-m01.sberdevices.ru (p-i-exch-sc-m01.sberdevices.ru [172.16.192.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mx1.sberdevices.ru (Postfix) with ESMTPS;
+        Wed, 28 Jun 2023 12:34:59 +0300 (MSK)
+Received: from localhost.localdomain (100.64.160.123) by
+ p-i-exch-sc-m01.sberdevices.ru (172.16.192.107) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.30; Wed, 28 Jun 2023 12:34:02 +0300
+From:   Arseniy Krasnov <AVKrasnov@sberdevices.ru>
+To:     Liang Yang <liang.yang@amlogic.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+CC:     <oxffffaa@gmail.com>, <kernel@sberdevices.ru>,
+        Arseniy Krasnov <AVKrasnov@sberdevices.ru>,
+        <linux-mtd@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-amlogic@lists.infradead.org>, <linux-kernel@vger.kernel.org>
+Subject: [RFC PATCH v1 2/2] mtd: rawnand: meson: support for 512B ECC step size
+Date:   Wed, 28 Jun 2023 12:29:36 +0300
+Message-ID: <20230628092937.538683-3-AVKrasnov@sberdevices.ru>
+X-Mailer: git-send-email 2.35.0
+In-Reply-To: <20230628092937.538683-1-AVKrasnov@sberdevices.ru>
+References: <20230628092937.538683-1-AVKrasnov@sberdevices.ru>
 MIME-Version: 1.0
-In-Reply-To: <20230628015752.102267-3-linan666@huaweicloud.com>
-Content-Type: text/plain; charset=gbk; format=flowed
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: gCh0CgA30JPP_JtkFqjhMg--.49301S3
-X-Coremail-Antispam: 1UD129KBjvJXoW7tF1xuFyDAr1DKF17XF1DWrg_yoW8uw4UpF
-        4DK3WSyr4UJw42kFsrXFWDAa4avrn2qF40yry3u34ruw13trWUAF1kG3yfArn8ZFZ5u34j
-        qa15Kr4kC3WjqFDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUU9Y14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4U
-        JVW0owA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
-        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
-        I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
-        4UM4x0Y48IcVAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628vn2kI
-        c2xKxwCYjI0SjxkI62AI1cAE67vIY487MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4
-        AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE
-        17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMI
-        IF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_WFyUJVCq
-        3wCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCT
-        nIWIevJa73UjIFyTuYvjfUoOJ5UUUUU
-X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
-X-CFilter-Loop: Reflected
+Content-Type: text/plain
+X-Originating-IP: [100.64.160.123]
+X-ClientProxiedBy: p-i-exch-sc-m02.sberdevices.ru (172.16.192.103) To
+ p-i-exch-sc-m01.sberdevices.ru (172.16.192.107)
+X-KSMG-Rule-ID: 10
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Lua-Profiles: 178300 [Jun 28 2023]
+X-KSMG-AntiSpam-Version: 5.9.59.0
+X-KSMG-AntiSpam-Envelope-From: AVKrasnov@sberdevices.ru
+X-KSMG-AntiSpam-Rate: 0
+X-KSMG-AntiSpam-Status: not_detected
+X-KSMG-AntiSpam-Method: none
+X-KSMG-AntiSpam-Auth: dkim=none
+X-KSMG-AntiSpam-Info: LuaCore: 517 517 b0056c19d8e10afbb16cb7aad7258dedb0179a79, {Tracking_from_domain_doesnt_match_to}, 127.0.0.199:7.1.2;sberdevices.ru:5.0.1,7.1.1;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;p-i-exch-sc-m01.sberdevices.ru:5.0.1,7.1.1, FromAlignment: s, {Tracking_white_helo}, ApMailHostAddress: 100.64.160.123
+X-MS-Exchange-Organization-SCL: -1
+X-KSMG-AntiSpam-Interceptor-Info: scan successful
+X-KSMG-AntiPhishing: Clean
+X-KSMG-LinksScanning: Clean
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 2.0.1.6960, bases: 2023/06/28 08:00:00 #21591748
+X-KSMG-AntiVirus-Status: Clean, skipped
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Meson NAND supports both 512B and 1024B ECC step size.
 
-ÔÚ 2023/06/28 9:57, linan666@huaweicloud.com Ð´µÀ:
-> From: Li Nan <linan122@huawei.com>
-> 
-> Factor out a helper to get 'rdev' and 'replacement' from config->mirrors.
-> Just to make code cleaner and prepare to fix the bug of io loss while
-> 'replacement' replace 'rdev'.
-> 
-> There is no functional change.
-> 
-> Signed-off-by: Li Nan <linan122@huawei.com>
-> ---
->   drivers/md/raid10.c | 30 +++++++++++++++++++++---------
->   1 file changed, 21 insertions(+), 9 deletions(-)
-> 
-> diff --git a/drivers/md/raid10.c b/drivers/md/raid10.c
-> index 3e6a09aaaba6..eaaf6307ddda 100644
-> --- a/drivers/md/raid10.c
-> +++ b/drivers/md/raid10.c
-> @@ -1346,6 +1346,26 @@ static void raid10_write_one_disk(struct mddev *mddev, struct r10bio *r10_bio,
->   	}
->   }
->   
-> +static void get_rdev_repl_from_mirror(struct raid10_info *mirror,
-> +				 struct md_rdev **prdev,
-> +				 struct md_rdev **prrdev)
+Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
+---
+ drivers/mtd/nand/raw/meson_nand.c | 47 +++++++++++++++++++++++--------
+ 1 file changed, 35 insertions(+), 12 deletions(-)
 
-I don't like this name, but I can live with this for now, related code
-will be removed eventually.
-
-Reviewed-by: Yu Kuai <yukuai3@huawei.com>
-> +{
-> +	struct md_rdev *rdev, *rrdev;
-> +
-> +	rrdev = rcu_dereference(mirror->replacement);
-> +	/*
-> +	 * Read replacement first to prevent reading both rdev and
-> +	 * replacement as NULL during replacement replace rdev.
-> +	 */
-> +	smp_mb();
-> +	rdev = rcu_dereference(mirror->rdev);
-> +	if (rdev == rrdev)
-> +		rrdev = NULL;
-> +
-> +	*prrdev = rrdev;
-> +	*prdev = rdev;
-> +}
-> +
->   static void wait_blocked_dev(struct mddev *mddev, struct r10bio *r10_bio)
->   {
->   	int i;
-> @@ -1489,15 +1509,7 @@ static void raid10_write_request(struct mddev *mddev, struct bio *bio,
->   		int d = r10_bio->devs[i].devnum;
->   		struct md_rdev *rdev, *rrdev;
->   
-> -		rrdev = rcu_dereference(conf->mirrors[d].replacement);
-> -		/*
-> -		 * Read replacement first to prevent reading both rdev and
-> -		 * replacement as NULL during replacement replace rdev.
-> -		 */
-> -		smp_mb();
-> -		rdev = rcu_dereference(conf->mirrors[d].rdev);
-> -		if (rdev == rrdev)
-> -			rrdev = NULL;
-> +		get_rdev_repl_from_mirror(&conf->mirrors[d], &rdev, &rrdev);
->   		if (rdev && (test_bit(Faulty, &rdev->flags)))
->   			rdev = NULL;
->   		if (rrdev && (test_bit(Faulty, &rrdev->flags)))
-> 
+diff --git a/drivers/mtd/nand/raw/meson_nand.c b/drivers/mtd/nand/raw/meson_nand.c
+index 345212e8c691..6cc4f63b86c8 100644
+--- a/drivers/mtd/nand/raw/meson_nand.c
++++ b/drivers/mtd/nand/raw/meson_nand.c
+@@ -135,6 +135,7 @@ struct meson_nfc_nand_chip {
+ struct meson_nand_ecc {
+ 	u32 bch;
+ 	u32 strength;
++	u32 size;
+ };
+ 
+ struct meson_nfc_data {
+@@ -190,7 +191,8 @@ struct meson_nfc {
+ };
+ 
+ enum {
+-	NFC_ECC_BCH8_1K		= 2,
++	NFC_ECC_BCH8_512	= 1,
++	NFC_ECC_BCH8_1K,
+ 	NFC_ECC_BCH24_1K,
+ 	NFC_ECC_BCH30_1K,
+ 	NFC_ECC_BCH40_1K,
+@@ -198,15 +200,16 @@ enum {
+ 	NFC_ECC_BCH60_1K,
+ };
+ 
+-#define MESON_ECC_DATA(b, s)	{ .bch = (b),	.strength = (s)}
++#define MESON_ECC_DATA(b, s, sz)	{ .bch = (b), .strength = (s), .size = (sz) }
+ 
+ static struct meson_nand_ecc meson_ecc[] = {
+-	MESON_ECC_DATA(NFC_ECC_BCH8_1K, 8),
+-	MESON_ECC_DATA(NFC_ECC_BCH24_1K, 24),
+-	MESON_ECC_DATA(NFC_ECC_BCH30_1K, 30),
+-	MESON_ECC_DATA(NFC_ECC_BCH40_1K, 40),
+-	MESON_ECC_DATA(NFC_ECC_BCH50_1K, 50),
+-	MESON_ECC_DATA(NFC_ECC_BCH60_1K, 60),
++	MESON_ECC_DATA(NFC_ECC_BCH8_512, 8,  512),
++	MESON_ECC_DATA(NFC_ECC_BCH8_1K,  8,  1024),
++	MESON_ECC_DATA(NFC_ECC_BCH24_1K, 24, 1024),
++	MESON_ECC_DATA(NFC_ECC_BCH30_1K, 30, 1024),
++	MESON_ECC_DATA(NFC_ECC_BCH40_1K, 40, 1024),
++	MESON_ECC_DATA(NFC_ECC_BCH50_1K, 50, 1024),
++	MESON_ECC_DATA(NFC_ECC_BCH60_1K, 60, 1024),
+ };
+ 
+ static int meson_nand_calc_ecc_bytes(int step_size, int strength)
+@@ -224,8 +227,27 @@ static int meson_nand_calc_ecc_bytes(int step_size, int strength)
+ 
+ NAND_ECC_CAPS_SINGLE(meson_gxl_ecc_caps,
+ 		     meson_nand_calc_ecc_bytes, 1024, 8, 24, 30, 40, 50, 60);
+-NAND_ECC_CAPS_SINGLE(meson_axg_ecc_caps,
+-		     meson_nand_calc_ecc_bytes, 1024, 8);
++
++static const int axg_stepinfo_strengths[] = { 8 };
++static const struct nand_ecc_step_info axg_stepinfo_1024 = {
++	.stepsize = 1024,
++	.strengths = axg_stepinfo_strengths,
++	.nstrengths = ARRAY_SIZE(axg_stepinfo_strengths)
++};
++
++static const struct nand_ecc_step_info axg_stepinfo_512 = {
++	.stepsize = 512,
++	.strengths = axg_stepinfo_strengths,
++	.nstrengths = ARRAY_SIZE(axg_stepinfo_strengths)
++};
++
++static const struct nand_ecc_step_info axg_stepinfo[] = { axg_stepinfo_1024, axg_stepinfo_512 };
++
++static const struct nand_ecc_caps meson_axg_ecc_caps = {
++	.stepinfos = axg_stepinfo,
++	.nstepinfos = ARRAY_SIZE(axg_stepinfo),
++	.calc_ecc_bytes = meson_nand_calc_ecc_bytes,
++};
+ 
+ static struct meson_nfc_nand_chip *to_meson_nand(struct nand_chip *nand)
+ {
+@@ -1259,7 +1281,8 @@ static int meson_nand_bch_mode(struct nand_chip *nand)
+ 		return -EINVAL;
+ 
+ 	for (i = 0; i < ARRAY_SIZE(meson_ecc); i++) {
+-		if (meson_ecc[i].strength == nand->ecc.strength) {
++		if (meson_ecc[i].strength == nand->ecc.strength &&
++		    meson_ecc[i].size == nand->ecc.size) {
+ 			meson_chip->bch_mode = meson_ecc[i].bch;
+ 			return 0;
+ 		}
+@@ -1278,7 +1301,7 @@ static int meson_nand_attach_chip(struct nand_chip *nand)
+ 	struct meson_nfc *nfc = nand_get_controller_data(nand);
+ 	struct meson_nfc_nand_chip *meson_chip = to_meson_nand(nand);
+ 	struct mtd_info *mtd = nand_to_mtd(nand);
+-	int nsectors = mtd->writesize / 1024;
++	int nsectors = mtd->writesize / 512;
+ 	int raw_writesize;
+ 	int ret;
+ 
+-- 
+2.35.0
 
