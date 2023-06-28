@@ -2,172 +2,251 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 023D0741743
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 19:34:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8277F741745
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 19:35:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231151AbjF1Rdh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 13:33:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44804 "EHLO
+        id S231597AbjF1ReR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 13:34:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230379AbjF1Rdf (ORCPT
+        with ESMTP id S231481AbjF1ReL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 13:33:35 -0400
+        Wed, 28 Jun 2023 13:34:11 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A3E02102;
-        Wed, 28 Jun 2023 10:33:34 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 374762102;
+        Wed, 28 Jun 2023 10:34:10 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 93AE76120E;
-        Wed, 28 Jun 2023 17:33:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68DBDC433C0;
-        Wed, 28 Jun 2023 17:33:31 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AD1B461440;
+        Wed, 28 Jun 2023 17:34:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C965AC433C8;
+        Wed, 28 Jun 2023 17:34:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687973613;
-        bh=O1MO0FX7r5ETJgeXa3FWAKYrIQbVEKXsUnp7T291ICo=;
+        s=k20201202; t=1687973649;
+        bh=eQUSJ/UXw38WGA2n3EfRxEikZsIX5IenbbmsGSo1lQ8=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=EQcefN3gtbUOatt4oQZ6m6ELSB2icWLaDiniHanCBJ+kAl+be6BLUpBsf3gY5G3DQ
-         CaFDcH2wCrkscgcBSec/NPgdodCRiLOdtbsWP7n1yxK/9rSe8HPFW79PrsWMgZsE40
-         SRg8qVqog442A4wS/3Sv4crws8bmxIV/XE0ArcftKdXZscy2pODQIm3U+Sx+FTH1pX
-         u5E7njr5glPHJJtP0IIoMa5m8dr8gJ+a1YlNMGL4Pe2XgktdzAPnBW9d0JINOkg7eZ
-         4fIJApPZc0TVV/KFrFWjmC0UERaK79P+JXMnWTkabXdPPtRxdVfa2uRfzIg+pP40GV
-         DtQv//b+0aG5w==
-Date:   Wed, 28 Jun 2023 19:33:28 +0200
-From:   Christian Brauner <brauner@kernel.org>
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     Kent Overstreet <kent.overstreet@linux.dev>,
-        torvalds@linux-foundation.org, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-bcachefs@vger.kernel.org,
-        Christoph Hellwig <hch@lst.de>
-Subject: Re: [GIT PULL] bcachefs
-Message-ID: <20230628-global-gewebe-c7491691d780@brauner>
-References: <20230627000635.43azxbkd2uf3tu6b@moria.home.lan>
- <91e9064b-84e3-1712-0395-b017c7c4a964@kernel.dk>
- <20230627020525.2vqnt2pxhtgiddyv@moria.home.lan>
- <b92ea170-d531-00f3-ca7a-613c05dcbf5f@kernel.dk>
- <23922545-917a-06bd-ec92-ff6aa66118e2@kernel.dk>
- <20230627201524.ool73bps2lre2tsz@moria.home.lan>
- <c06a9e0b-8f3e-4e47-53d0-b4854a98cc44@kernel.dk>
- <20230628040114.oz46icbsjpa4egpp@moria.home.lan>
- <b02657af-5bbb-b46b-cea0-ee89f385f3c1@kernel.dk>
- <4b863e62-4406-53e4-f96a-f4d1daf098ab@kernel.dk>
+        b=noXT1R3GKk3Jb9Gw5xjR3GpKL3bo+mbyIHCFpq+y1u+gZj0HJJ0eJ/1bQ3Wmad95y
+         4G3MeZHex8pxEL+9c1iZL1SwFIHnAPllP577+nXiPRn/+Od7mAxiu5t5InRTmF4XAj
+         8TX3zZBTZZEonD87BKoBdUaY1QYEVrvI3CErSL9Kk6b0v/NjDFzXuGQh0biCPr6x0l
+         mfhoIxpp7D30HQFKpffAo5eRYV9LoNSZfi8rDNdeI3GLHiLGuQx9A0b3JXbNKsoskR
+         4d0OvqDspl5NWfw6y+XWDb211neWEdPyiswiZws6/2GgLo4tlgO8szncmha1k+XJwC
+         ESMlIW8u9yWMQ==
+Date:   Wed, 28 Jun 2023 18:34:03 +0100
+From:   Conor Dooley <conor@kernel.org>
+To:     Xingyu Wu <xingyu.wu@starfivetech.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Hal Feng <hal.feng@starfivetech.com>,
+        William Qiu <william.qiu@starfivetech.com>,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org
+Subject: Re: [PATCH v5 2/7] dt-bindings: soc: starfive: Add StarFive syscon
+ module
+Message-ID: <20230628-affix-maverick-84a08905f05b@spud>
+References: <20230613125852.211636-1-xingyu.wu@starfivetech.com>
+ <20230613125852.211636-3-xingyu.wu@starfivetech.com>
+ <7e2d6bfe-5687-97c5-778b-c02e9c0894af@linaro.org>
+ <a83c98ae-2f6c-00c4-5d05-fc304718e05a@starfivetech.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="OWsCuXQtkR2oS87D"
 Content-Disposition: inline
-In-Reply-To: <4b863e62-4406-53e4-f96a-f4d1daf098ab@kernel.dk>
+In-Reply-To: <a83c98ae-2f6c-00c4-5d05-fc304718e05a@starfivetech.com>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 28, 2023 at 10:57:02AM -0600, Jens Axboe wrote:
-> On 6/28/23 8:58?AM, Jens Axboe wrote:
-> > On 6/27/23 10:01?PM, Kent Overstreet wrote:
-> >> On Tue, Jun 27, 2023 at 09:16:31PM -0600, Jens Axboe wrote:
-> >>> On 6/27/23 2:15?PM, Kent Overstreet wrote:
-> >>>>> to ktest/tests/xfstests/ and run it with -bcachefs, otherwise it kept
-> >>>>> failing because it assumed it was XFS.
-> >>>>>
-> >>>>> I suspected this was just a timing issue, and it looks like that's
-> >>>>> exactly what it is. Looking at the test case, it'll randomly kill -9
-> >>>>> fsstress, and if that happens while we have io_uring IO pending, then we
-> >>>>> process completions inline (for a PF_EXITING current). This means they
-> >>>>> get pushed to fallback work, which runs out of line. If we hit that case
-> >>>>> AND the timing is such that it hasn't been processed yet, we'll still be
-> >>>>> holding a file reference under the mount point and umount will -EBUSY
-> >>>>> fail.
-> >>>>>
-> >>>>> As far as I can tell, this can happen with aio as well, it's just harder
-> >>>>> to hit. If the fput happens while the task is exiting, then fput will
-> >>>>> end up being delayed through a workqueue as well. The test case assumes
-> >>>>> that once it's reaped the exit of the killed task that all files are
-> >>>>> released, which isn't necessarily true if they are done out-of-line.
-> >>>>
-> >>>> Yeah, I traced it through to the delayed fput code as well.
-> >>>>
-> >>>> I'm not sure delayed fput is responsible here; what I learned when I was
-> >>>> tracking this down has mostly fell out of my brain, so take anything I
-> >>>> say with a large grain of salt. But I believe I tested with delayed_fput
-> >>>> completely disabled, and found another thing in io_uring with the same
-> >>>> effect as delayed_fput that wasn't being flushed.
-> >>>
-> >>> I'm not saying it's delayed_fput(), I'm saying it's the delayed putting
-> >>> io_uring can end up doing. But yes, delayed_fput() is another candidate.
-> >>
-> >> Sorry - was just working through my recollections/initial thought
-> >> process out loud
-> > 
-> > No worries, it might actually be a combination and this is why my
-> > io_uring side patch didn't fully resolve it. Wrote a simple reproducer
-> > and it seems to reliably trigger it, but is fixed with an flush of the
-> > delayed fput list on mount -EBUSY return. Still digging...
-> 
-> I discussed this with Christian offline. I have a patch that is pretty
-> simple, but it does mean that you'd wait for delayed fput flush off
-> umount. Which seems kind of iffy.
-> 
-> I think we need to back up a bit and consider if the kill && umount
-> really is sane. If you kill a task that has open files, then any fput
-> from that task will end up being delayed. This means that the umount may
-> very well fail.
 
-That's why we have MNT_DETACH:
+--OWsCuXQtkR2oS87D
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-umount2("/mnt", MNT_DETACH)
+On Wed, Jun 28, 2023 at 02:44:10PM +0800, Xingyu Wu wrote:
+> On 2023/6/14 2:31, Krzysztof Kozlowski wrote:
+> > On 13/06/2023 14:58, Xingyu Wu wrote:
+> >> From: William Qiu <william.qiu@starfivetech.com>
+> >>=20
+> >> Add documentation to describe StarFive System Controller Registers.
+> >>=20
+> >> Co-developed-by: Xingyu Wu <xingyu.wu@starfivetech.com>
+> >> Signed-off-by: Xingyu Wu <xingyu.wu@starfivetech.com>
+> >> Signed-off-by: William Qiu <william.qiu@starfivetech.com>
+> >> ---
+> >>  .../soc/starfive/starfive,jh7110-syscon.yaml  | 62 +++++++++++++++++++
+> >>  MAINTAINERS                                   |  7 +++
+> >>  2 files changed, 69 insertions(+)
+> >>  create mode 100644 Documentation/devicetree/bindings/soc/starfive/sta=
+rfive,jh7110-syscon.yaml
+> >>=20
+> >> diff --git a/Documentation/devicetree/bindings/soc/starfive/starfive,j=
+h7110-syscon.yaml b/Documentation/devicetree/bindings/soc/starfive/starfive=
+,jh7110-syscon.yaml
+> >> new file mode 100644
+> >> index 000000000000..a81190f8a54d
+> >> --- /dev/null
+> >> +++ b/Documentation/devicetree/bindings/soc/starfive/starfive,jh7110-s=
+yscon.yaml
+> >> @@ -0,0 +1,62 @@
+> >> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> >> +%YAML 1.2
+> >> +---
+> >> +$id: http://devicetree.org/schemas/soc/starfive/starfive,jh7110-sysco=
+n.yaml#
+> >> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> >> +
+> >> +title: StarFive JH7110 SoC system controller
+> >> +
+> >> +maintainers:
+> >> +  - William Qiu <william.qiu@starfivetech.com>
+> >> +
+> >> +description: |
+> >> +  The StarFive JH7110 SoC system controller provides register informa=
+tion such
+> >> +  as offset, mask and shift to configure related modules such as MMC =
+and PCIe.
+> >> +
+> >> +properties:
+> >> +  compatible:
+> >> +    oneOf:
+> >> +      - items:
+> >> +          - const: starfive,jh7110-sys-syscon
+> >> +          - const: syscon
+> >> +          - const: simple-mfd
+> >> +      - items:
+> >> +          - enum:
+> >> +              - starfive,jh7110-aon-syscon
+> >> +              - starfive,jh7110-stg-syscon
+> >> +          - const: syscon
+> >> +
+> >> +  reg:
+> >> +    maxItems: 1
+> >> +
+> >> +  clock-controller:
+> >> +    $ref: /schemas/clock/starfive,jh7110-pll.yaml#
+> >> +    type: object
+> >> +
+> >> +  "#power-domain-cells":
+> >> +    const: 1
+> >> +
+> >> +required:
+> >> +  - compatible
+> >> +  - reg
+> >> +
+> >> +allOf:
+> >> +  - if:
+> >> +      properties:
+> >> +        compatible:
+> >> +          contains:
+> >> +            const: starfive,jh7110-aon-syscon
+> >> +    then:
+> >> +      required:
+> >> +        - "#power-domain-cells"
+> >=20
+> > Where did you implement the results of the discussion that only some
+> > devices can have power and clock controller?
+> >=20
+> > According to your code all of above - sys, aon and stg - have clock and
+> > power controllers. If not, then the code is not correct, so please do
+> > not respond with what is where (like you did last time) but actually
+> > implement what you say.
+> >=20
+>=20
+> Hi Krzysztof, I need to modify the code to implement it.
+> If I drop the 'clock-controller' and '"#power-domain-cells"' in properite=
+s, and change to this:
+>=20
+> --- a/Documentation/devicetree/bindings/soc/starfive/starfive,jh7110-sysc=
+on.yaml
+> +++ b/Documentation/devicetree/bindings/soc/starfive/starfive,jh7110-sysc=
+on.yaml
+> @@ -29,28 +29,33 @@ properties:
+>    reg:
+>      maxItems: 1
+> =20
+> -  clock-controller:
+> -    $ref: /schemas/clock/starfive,jh7110-pll.yaml#
+> -    type: object
+> -
+> -  "#power-domain-cells":
+> -    const: 1
+> -
+>  required:
+>    - compatible
+>    - reg
+> =20
+>  allOf:
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            const: starfive,jh7110-sys-syscon
+> +    then:
+> +      properties:
+> +        clock-controller:
+> +          $ref: /schemas/clock/starfive,jh7110-pll.yaml#
+> +          type: object
 
-will succeed even if fds are still open.
+Why do this?
+Why not define the property has you have been doing, but only allow it
+on the syscons that support it?
+See the section starting at L205 of example-schema.yaml.
 
-> 
-> It'd be handy if we could have umount wait for that to finish, but I'm
-> not at all confident this is a sane solution for all cases. And as
-> discussed, we have no way to even identify which files we'd need to
-> flush out of the delayed list.
-> 
-> Maybe the test case just needs fixing? Christian suggested lazy/detach
-> umount and wait for sb release. There's an fsnotify hook for that,
-> fsnotify_sb_delete(). Obviously this is a bit more involved, but seems
-> to me that this would be the way to make it more reliable when killing
-> of tasks with open files are involved.
+> +
+>    - if:
+>        properties:
+>          compatible:
+>            contains:
+>              const: starfive,jh7110-aon-syscon
+>      then:
+> -      required:
+> -        - "#power-domain-cells"
+> +      properties:
+> +        "#power-domain-cells":
+> +          const: 1
+> =20
 
-You can wait on superblock destruction today in multiple ways. Roughly
-from the shell this should work:
+> -additionalProperties: false
+> +additionalProperties: true
 
-        root@wittgenstein:~# cat sb_wait.sh
-        #! /bin/bash
-        
-        echo "WARNING WARNING: I SUCK AT SHELL SCRIPTS"
-        
-        echo "mount fs"
-        sudo mount -t tmpfs tmpfs /mnt
-        touch /mnt/bla
-        
-        echo "pin sb by random file for 5s"
-        sleep 5 > /mnt/bla &
-        
-        echo "establish inotify watch for sb destruction"
-        inotifywait -e unmount /mnt &
-        pid=$!
-        
-        echo "regular umount - will fail..."
-        umount /mnt
-        
-        findmnt | grep "/mnt"
-        
-        echo "lazily umount - will succeed"
-        umount -l /mnt
-        
-        findmnt | grep "/mnt"
-        
-        echo "and now we wait"
-        wait $!
-        
-        echo "done"
+Why do you need this?
+Allowing "additionalProperties: true" sounds like you've got some prblem
+that you are trying to hide...
 
-Can also use a tiny bpf lsm, fanotify in the future as we plans for
-that.
+> Would it be better to show that sys-syscon only has clock-controller and =
+aon-syscon is power controller?
+
+You should only permit the properties where they are valid, yes.
+
+Cheers,
+Conor.
+
+
+--OWsCuXQtkR2oS87D
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZJxvCwAKCRB4tDGHoIJi
+0tjQAP9pADun+GqeVqOgv5jm6U4HG5PohwpeIYYvSjn0hhv2RwD/f1ncpULXC5ZJ
+fMsTacgJ5ATCXknFjmdw+LoxZKge5Qg=
+=b8dO
+-----END PGP SIGNATURE-----
+
+--OWsCuXQtkR2oS87D--
