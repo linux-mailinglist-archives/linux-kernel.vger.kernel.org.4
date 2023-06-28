@@ -2,121 +2,234 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69A59740AA8
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 10:09:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC919740CBC
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 11:26:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233467AbjF1IJR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 04:09:17 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:43637 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232099AbjF1IEn (ORCPT
+        id S232054AbjF1J0i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 05:26:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35958 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233286AbjF1IIu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 04:04:43 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1687939435;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ofwo3P8uKOaWvV1X+hYEb8hA8CV2BceFbJ10PxbVumI=;
-        b=BqbSGWJ2/dzYgqH4VP6s6XMdkU50BeknZqtRq1QJ9Wo4LdVTeCeCk4NbQYyxvkA0P5qEfx
-        OiRb92394B0xvzwPkvyNJEKUHrQ3KVeix41A/ChD73phgWsnNCVx2JAA6FSNJEU8BQ5lDR
-        nAnkKFCshoPAfjJtxjk3NLvRTYJb9/I=
-Received: from mail-lf1-f72.google.com (mail-lf1-f72.google.com
- [209.85.167.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-221-osblvqpVM7GySJVFMm6kUA-1; Wed, 28 Jun 2023 04:03:53 -0400
-X-MC-Unique: osblvqpVM7GySJVFMm6kUA-1
-Received: by mail-lf1-f72.google.com with SMTP id 2adb3069b0e04-4f9569b09a3so459992e87.0
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 01:03:53 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687939432; x=1690531432;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ofwo3P8uKOaWvV1X+hYEb8hA8CV2BceFbJ10PxbVumI=;
-        b=e0OvVjndkYVPGqGeDgDa+hNnmeVBqPQ7GfBsu0eqi2/qIcO78BWnbn0a+W6+ZvoFHZ
-         1D3S8buFK70CLeXrAtia8JNt2H9dHCx8D3qUCgfiaaxGpad2X5zm8VByh3d1sl3V2cZt
-         iJ9wJEsuuJd7EY7/tv/RYsa0SfqQ+u4fGs8vpEpJKTdyELwrs6gKx5kvQbyV/9HVk+r6
-         tdq5k6wp1lUPUyXY1p+Mp1sGkRvLlKmeBYm2yt+nQ64BUKtSPY6xvO2C51imLoS/Xv6N
-         nXO0M8oiU0QPM9XrrWZN8cAB25pfudrDWjJxajSptTjm3vymthw0MK5RPrWt9mEwtCOR
-         Hr3g==
-X-Gm-Message-State: AC+VfDw35YkDPsybpOToo/WJttF08qTK1DChmTN18QOFvJ2HxhAVsfS3
-        uZ5mW8l/sk93NVTjnOPrjCAPF2fu7+ExHz+gN/oX78jOMPrIbm6eWBaRkC2KLsbSu8Z+hLLCWe9
-        wKuojtVhNcnpY+NyujGAunEzyOvV2T2QJL0w3e9kS
-X-Received: by 2002:a05:6512:2828:b0:4f8:75d5:e14f with SMTP id cf40-20020a056512282800b004f875d5e14fmr206447lfb.28.1687939432273;
-        Wed, 28 Jun 2023 01:03:52 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ5+VHNhq6OsMLyItLK9e1q5NqGMrmykMJR0HIs4eAUBTfGZ9IUjxcd7L2s5r2cSDn4Ra3WnvvHrOmw346uihVA=
-X-Received: by 2002:a05:6512:2828:b0:4f8:75d5:e14f with SMTP id
- cf40-20020a056512282800b004f875d5e14fmr206443lfb.28.1687939431925; Wed, 28
- Jun 2023 01:03:51 -0700 (PDT)
+        Wed, 28 Jun 2023 04:08:50 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4C663AA6;
+        Wed, 28 Jun 2023 01:07:17 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 72FD26125F;
+        Wed, 28 Jun 2023 08:07:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72539C433C8;
+        Wed, 28 Jun 2023 08:07:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687939636;
+        bh=IOSxMIm++J/AtvG+30u6yhS8IDwIG/Uc3jBJXaL2v1k=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ZJeqKGgVWg5IBQHSCInLraK5jpK5xXuP6otl/gct3F4+5nWR4zd2ROPP+cAILOXCs
+         LIhaNN/35LDYehBBBm6cL2ZTEW6e4H0hp9egR1zSqoqeFmGxNKQX8T6lRAIAs/Z8vI
+         iUV1Gft01eER0aYZYL01KgzOev0M36fSykrcU95DrvbMxIyJcWzEJ8QBvf9JWrlLuu
+         LJcycs+ldlaQNuFuvG+c8aM0EkqM0ZNF24/wYnxeRVukMTwAwf7OtxLmJ1uHDJkzlI
+         sV2XASFW8pWhoe30lJYXuLUjKnX8iqxVWP+YlzWQT8nnLpAMghv8tluO1lHZMTwui8
+         VsnVAIMgGl3tw==
+Date:   Wed, 28 Jun 2023 01:07:14 -0700
+From:   Jaegeuk Kim <jaegeuk@kernel.org>
+To:     Chao Yu <chao@kernel.org>
+Cc:     linux-kernel@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net, stable@vger.kernel.org
+Subject: Re: [f2fs-dev] [PATCH] f2fs: remove i_xattr_sem to avoid deadlock
+ and fix the original issue
+Message-ID: <ZJvqMpWiit24BnXL@google.com>
+References: <20230613233940.3643362-1-jaegeuk@kernel.org>
+ <e5788348-b547-8e10-21af-90544f3aa75c@kernel.org>
+ <d0ec4a04-ab81-7e71-ad56-5b22e1815919@kernel.org>
+ <ZJmOgRADvLP/4rMJ@google.com>
+ <8a370c8e-3b5f-5ea7-5839-76896d1ec69e@kernel.org>
 MIME-Version: 1.0
-References: <20230628065919.54042-1-lulu@redhat.com> <20230628065919.54042-2-lulu@redhat.com>
-In-Reply-To: <20230628065919.54042-2-lulu@redhat.com>
-From:   Jason Wang <jasowang@redhat.com>
-Date:   Wed, 28 Jun 2023 16:03:40 +0800
-Message-ID: <CACGkMEvTyxvEkdMbYqZG3T4ZGm2G36hYqPidbTNzLB=bUgSr0A@mail.gmail.com>
-Subject: Re: [RFC 1/4] vduse: Add the struct to save the vq reconnect info
-To:     Cindy Lu <lulu@redhat.com>
-Cc:     mst@redhat.com, maxime.coquelin@redhat.com,
-        xieyongji@bytedance.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <8a370c8e-3b5f-5ea7-5839-76896d1ec69e@kernel.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+        lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 28, 2023 at 2:59=E2=80=AFPM Cindy Lu <lulu@redhat.com> wrote:
->
-> From: Your Name <you@example.com>
+On 06/27, Chao Yu wrote:
+> On 2023/6/26 21:11, Jaegeuk Kim wrote:
+> > On 06/25, Chao Yu wrote:
+> > > On 2023/6/25 15:26, Chao Yu wrote:
+> > > > One concern below:
+> > > > 
+> > > > Thread A:                    Thread B:
+> > > > - f2fs_getxattr
+> > > >    - lookup_all_xattrs
+> > > >     - read_inline_xattr
+> > > >      - f2fs_get_node_page(ino)
+> > > >      - memcpy inline xattr
+> > > >      - f2fs_put_page
+> > > >                           - f2fs_setxattr
+> > > >                            - __f2fs_setxattr
+> > > >                             - __f2fs_setxattr
+> > > >                              - write_all_xattrs
+> > > >                               - write xnode and inode
+> > > >     ---> inline xattr may out of update here.
+> > > >     - read_xattr_block
+> > > >      - f2fs_get_node_page(xnid)
+> > > >      - memcpy xnode xattr
+> > > >      - f2fs_put_page
+> > > > 
+> > > > Do we need to keep xattr_{get,set} being atomical operation?
+> > > 
+> > > It seems xfstest starts to complain w/ below message...
+> > 
+> > I don't see any failure. Which test do you see?
+> 
+> 051, 083, ... 467, 642
+> 
+> Testcase doesn't fail, but kernel log shows inode has corrupted xattr.
 
-It looks to me your git is not properly configured.
+I got it. It seems I had to fix the above issue only while keeping the sem. :(
 
->
-> this struct is to save the reconnect info struct, in this
-> struct saved the page info that alloc to save the
-> reconnect info
->
-> Signed-off-by: Cindy Lu <lulu@redhat.com>
-> ---
->  drivers/vdpa/vdpa_user/vduse_dev.c | 7 +++++++
->  1 file changed, 7 insertions(+)
->
-> diff --git a/drivers/vdpa/vdpa_user/vduse_dev.c b/drivers/vdpa/vdpa_user/=
-vduse_dev.c
-> index 26b7e29cb900..f845dc46b1db 100644
-> --- a/drivers/vdpa/vdpa_user/vduse_dev.c
-> +++ b/drivers/vdpa/vdpa_user/vduse_dev.c
-> @@ -72,6 +72,12 @@ struct vduse_umem {
->         struct page **pages;
->         struct mm_struct *mm;
->  };
-> +struct vdpa_reconnect_info {
-> +       u32 index;
-> +       phys_addr_t addr;
-> +       unsigned long vaddr;
-> +       phys_addr_t size;
-> +};
-
-Please add comments to explain each field. And I think this should be
-a part of uAPI?
-
-Thanks
-
->
->  struct vduse_dev {
->         struct vduse_vdpa *vdev;
-> @@ -106,6 +112,7 @@ struct vduse_dev {
->         u32 vq_align;
->         struct vduse_umem *umem;
->         struct mutex mem_lock;
-> +       struct vdpa_reconnect_info reconnect_info[64];
->  };
->
->  struct vduse_dev_msg {
-> --
-> 2.34.3
->
-
+> 
+> > 
+> > > 
+> > > [ 3400.856443] F2FS-fs (vdc): inode (2187) has invalid last xattr entry, entry_size: 21468
+> > > [ 3400.864042] F2FS-fs (vdc): inode (1595) has invalid last xattr entry, entry_size: 26580
+> > > [ 3400.865764] F2FS-fs (vdc): inode (2187) has invalid last xattr entry, entry_size: 21468
+> > > [ 3400.880067] F2FS-fs (vdc): inode (9839) has corrupted xattr
+> > > [ 3400.880714] F2FS-fs (vdc): inode (10855) has corrupted xattr
+> > > 
+> > > Thanks,
+> > > 
+> > > > 
+> > > > Thanks,
+> > > > 
+> > > > > 
+> > > > > I think we don't need to truncate xattr pages eagerly which introduces lots of
+> > > > > data races without big benefits.
+> > > > > 
+> > > > > Cc: <stable@vger.kernel.org>
+> > > > > Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
+> > > > > ---
+> > > > >    fs/f2fs/f2fs.h  |  1 -
+> > > > >    fs/f2fs/super.c |  1 -
+> > > > >    fs/f2fs/xattr.c | 31 ++++++++-----------------------
+> > > > >    3 files changed, 8 insertions(+), 25 deletions(-)
+> > > > > 
+> > > > > diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
+> > > > > index 3f5b161dd743..7b9af2d51656 100644
+> > > > > --- a/fs/f2fs/f2fs.h
+> > > > > +++ b/fs/f2fs/f2fs.h
+> > > > > @@ -838,7 +838,6 @@ struct f2fs_inode_info {
+> > > > >        /* avoid racing between foreground op and gc */
+> > > > >        struct f2fs_rwsem i_gc_rwsem[2];
+> > > > > -    struct f2fs_rwsem i_xattr_sem; /* avoid racing between reading and changing EAs */
+> > > > >        int i_extra_isize;        /* size of extra space located in i_addr */
+> > > > >        kprojid_t i_projid;        /* id for project quota */
+> > > > > diff --git a/fs/f2fs/super.c b/fs/f2fs/super.c
+> > > > > index 1b2c788ed80d..c917fa771f0e 100644
+> > > > > --- a/fs/f2fs/super.c
+> > > > > +++ b/fs/f2fs/super.c
+> > > > > @@ -1418,7 +1418,6 @@ static struct inode *f2fs_alloc_inode(struct super_block *sb)
+> > > > >        INIT_LIST_HEAD(&fi->gdirty_list);
+> > > > >        init_f2fs_rwsem(&fi->i_gc_rwsem[READ]);
+> > > > >        init_f2fs_rwsem(&fi->i_gc_rwsem[WRITE]);
+> > > > > -    init_f2fs_rwsem(&fi->i_xattr_sem);
+> > > > >        /* Will be used by directory only */
+> > > > >        fi->i_dir_level = F2FS_SB(sb)->dir_level;
+> > > > > diff --git a/fs/f2fs/xattr.c b/fs/f2fs/xattr.c
+> > > > > index 213805d3592c..bdc8a55085a2 100644
+> > > > > --- a/fs/f2fs/xattr.c
+> > > > > +++ b/fs/f2fs/xattr.c
+> > > > > @@ -433,7 +433,7 @@ static inline int write_all_xattrs(struct inode *inode, __u32 hsize,
+> > > > >    {
+> > > > >        struct f2fs_sb_info *sbi = F2FS_I_SB(inode);
+> > > > >        size_t inline_size = inline_xattr_size(inode);
+> > > > > -    struct page *in_page = NULL;
+> > > > > +    struct page *in_page = ipage;
+> > > > >        void *xattr_addr;
+> > > > >        void *inline_addr = NULL;
+> > > > >        struct page *xpage;
+> > > > > @@ -446,29 +446,19 @@ static inline int write_all_xattrs(struct inode *inode, __u32 hsize,
+> > > > >        /* write to inline xattr */
+> > > > >        if (inline_size) {
+> > > > > -        if (ipage) {
+> > > > > -            inline_addr = inline_xattr_addr(inode, ipage);
+> > > > > -        } else {
+> > > > > +        if (!in_page) {
+> > > > >                in_page = f2fs_get_node_page(sbi, inode->i_ino);
+> > > > >                if (IS_ERR(in_page)) {
+> > > > >                    f2fs_alloc_nid_failed(sbi, new_nid);
+> > > > >                    return PTR_ERR(in_page);
+> > > > >                }
+> > > > > -            inline_addr = inline_xattr_addr(inode, in_page);
+> > > > >            }
+> > > > > +        inline_addr = inline_xattr_addr(inode, in_page);
+> > > > > -        f2fs_wait_on_page_writeback(ipage ? ipage : in_page,
+> > > > > -                            NODE, true, true);
+> > > > > -        /* no need to use xattr node block */
+> > > > > +        f2fs_wait_on_page_writeback(in_page, NODE, true, true);
+> > > > >            if (hsize <= inline_size) {
+> > > > > -            err = f2fs_truncate_xattr_node(inode);
+> > > > > -            f2fs_alloc_nid_failed(sbi, new_nid);
+> > > > > -            if (err) {
+> > > > > -                f2fs_put_page(in_page, 1);
+> > > > > -                return err;
+> > > > > -            }
+> > > > >                memcpy(inline_addr, txattr_addr, inline_size);
+> > > > > -            set_page_dirty(ipage ? ipage : in_page);
+> > > > > +            set_page_dirty(in_page);
+> > > > >                goto in_page_out;
+> > > > >            }
+> > > > >        }
+> > > > > @@ -502,12 +492,13 @@ static inline int write_all_xattrs(struct inode *inode, __u32 hsize,
+> > > > >        memcpy(xattr_addr, txattr_addr + inline_size, VALID_XATTR_BLOCK_SIZE);
+> > > > >        if (inline_size)
+> > > > > -        set_page_dirty(ipage ? ipage : in_page);
+> > > > > +        set_page_dirty(in_page);
+> > > > >        set_page_dirty(xpage);
+> > > > >        f2fs_put_page(xpage, 1);
+> > > > >    in_page_out:
+> > > > > -    f2fs_put_page(in_page, 1);
+> > > > > +    if (in_page != ipage)
+> > > > > +        f2fs_put_page(in_page, 1);
+> > > > >        return err;
+> > > > >    }
+> > > > > @@ -528,10 +519,8 @@ int f2fs_getxattr(struct inode *inode, int index, const char *name,
+> > > > >        if (len > F2FS_NAME_LEN)
+> > > > >            return -ERANGE;
+> > > > > -    f2fs_down_read(&F2FS_I(inode)->i_xattr_sem);
+> > > > >        error = lookup_all_xattrs(inode, ipage, index, len, name,
+> > > > >                    &entry, &base_addr, &base_size, &is_inline);
+> > > > > -    f2fs_up_read(&F2FS_I(inode)->i_xattr_sem);
+> > > > >        if (error)
+> > > > >            return error;
+> > > > > @@ -565,9 +554,7 @@ ssize_t f2fs_listxattr(struct dentry *dentry, char *buffer, size_t buffer_size)
+> > > > >        int error;
+> > > > >        size_t rest = buffer_size;
+> > > > > -    f2fs_down_read(&F2FS_I(inode)->i_xattr_sem);
+> > > > >        error = read_all_xattrs(inode, NULL, &base_addr);
+> > > > > -    f2fs_up_read(&F2FS_I(inode)->i_xattr_sem);
+> > > > >        if (error)
+> > > > >            return error;
+> > > > > @@ -794,9 +781,7 @@ int f2fs_setxattr(struct inode *inode, int index, const char *name,
+> > > > >        f2fs_balance_fs(sbi, true);
+> > > > >        f2fs_lock_op(sbi);
+> > > > > -    f2fs_down_write(&F2FS_I(inode)->i_xattr_sem);
+> > > > >        err = __f2fs_setxattr(inode, index, name, value, size, ipage, flags);
+> > > > > -    f2fs_up_write(&F2FS_I(inode)->i_xattr_sem);
+> > > > >        f2fs_unlock_op(sbi);
+> > > > >        f2fs_update_time(sbi, REQ_TIME);
+> > > > 
+> > > > 
+> > > > _______________________________________________
+> > > > Linux-f2fs-devel mailing list
+> > > > Linux-f2fs-devel@lists.sourceforge.net
+> > > > https://lists.sourceforge.net/lists/listinfo/linux-f2fs-devel
