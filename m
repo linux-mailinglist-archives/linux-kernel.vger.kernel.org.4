@@ -2,195 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D8F8740C09
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 10:57:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53B17740ABE
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 10:11:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235347AbjF1I5l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 04:57:41 -0400
-Received: from ex01.ufhost.com ([61.152.239.75]:50168 "EHLO ex01.ufhost.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233153AbjF1IXE (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 04:23:04 -0400
-Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
-        by ex01.ufhost.com (Postfix) with ESMTP id A98C324E22D;
-        Wed, 28 Jun 2023 14:47:10 +0800 (CST)
-Received: from EXMBX061.cuchost.com (172.16.6.61) by EXMBX166.cuchost.com
- (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 28 Jun
- 2023 14:47:10 +0800
-Received: from [192.168.125.128] (183.27.97.206) by EXMBX061.cuchost.com
- (172.16.6.61) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 28 Jun
- 2023 14:47:09 +0800
-Message-ID: <a83c98ae-2f6c-00c4-5d05-fc304718e05a@starfivetech.com>
-Date:   Wed, 28 Jun 2023 14:44:10 +0800
+        id S231496AbjF1ILW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 04:11:22 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:24354 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S232661AbjF1IHb (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 28 Jun 2023 04:07:31 -0400
+Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
+        by m0089730.ppops.net (8.17.1.19/8.17.1.19) with ESMTP id 35S1R5rk018088
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 23:45:04 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : content-type : content-transfer-encoding :
+ mime-version; s=facebook; bh=/1iNjEhSI1x//A140OvaC7WQBC5Y/8Enz6JnfFqod+s=;
+ b=TJtVZKmhMRM2FZRHTG94BmIMi40TlUcDt5UoFXsyAkCBlnoAJgzVZoY9AM+d/9eurVTF
+ jxP5zyzg94dF9UnEC5zGq3Pde3rd2MEurD1EEbu2ah93ZOmKp0zG74UpwjHB9UlR9Kr6
+ QBcT8E5s4Y1PE+9s5qcbW95lPaVrW99WT40= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by m0089730.ppops.net (PPS) with ESMTPS id 3rfp4gcbjc-4
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 23:45:04 -0700
+Received: from ash-exhub204.TheFacebook.com (2620:10d:c0a8:83::4) by
+ ash-exhub101.TheFacebook.com (2620:10d:c0a8:82::e) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Tue, 27 Jun 2023 23:44:52 -0700
+Received: from twshared18891.17.frc2.facebook.com (2620:10d:c0a8:1b::30) by
+ mail.thefacebook.com (2620:10d:c0a8:83::4) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Tue, 27 Jun 2023 23:44:52 -0700
+Received: by devbig309.ftw3.facebook.com (Postfix, from userid 128203)
+        id 0F701220F0921; Tue, 27 Jun 2023 23:44:33 -0700 (PDT)
+From:   Yonghong Song <yhs@fb.com>
+To:     Nick Desaulniers <ndesaulniers@google.com>,
+        Petr Mladek <pmladek@suse.com>, Song Liu <song@kernel.org>
+CC:     Fangrui Song <maskray@google.com>, <kernel-team@fb.com>,
+        Leizhen <thunder.leizhen@huawei.com>,
+        <linux-kernel@vger.kernel.org>, <llvm@lists.linux.dev>
+Subject: [PATCH] kallsyms: strip LTO-only suffixes from promoted global functions
+Date:   Tue, 27 Jun 2023 23:44:33 -0700
+Message-ID: <20230628064433.2859335-1-yhs@fb.com>
+X-Mailer: git-send-email 2.34.1
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-ORIG-GUID: vaA4HQF6CQrkEYiWofuhhIYR1WELEoFY
+X-Proofpoint-GUID: vaA4HQF6CQrkEYiWofuhhIYR1WELEoFY
+Content-Transfer-Encoding: quoted-printable
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v5 2/7] dt-bindings: soc: starfive: Add StarFive syscon
- module
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-CC:     <linux-riscv@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        "Michael Turquette" <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        "Rob Herring" <robh+dt@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        "Conor Dooley" <conor+dt@kernel.org>,
-        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Hal Feng <hal.feng@starfivetech.com>,
-        William Qiu <william.qiu@starfivetech.com>,
-        <linux-kernel@vger.kernel.org>, <linux-clk@vger.kernel.org>
-References: <20230613125852.211636-1-xingyu.wu@starfivetech.com>
- <20230613125852.211636-3-xingyu.wu@starfivetech.com>
- <7e2d6bfe-5687-97c5-778b-c02e9c0894af@linaro.org>
-From:   Xingyu Wu <xingyu.wu@starfivetech.com>
-In-Reply-To: <7e2d6bfe-5687-97c5-778b-c02e9c0894af@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [183.27.97.206]
-X-ClientProxiedBy: EXCAS062.cuchost.com (172.16.6.22) To EXMBX061.cuchost.com
- (172.16.6.61)
-X-YovoleRuleAgent: yovoleflag
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-06-28_04,2023-06-27_01,2023-05-22_02
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/6/14 2:31, Krzysztof Kozlowski wrote:
-> On 13/06/2023 14:58, Xingyu Wu wrote:
->> From: William Qiu <william.qiu@starfivetech.com>
->> 
->> Add documentation to describe StarFive System Controller Registers.
->> 
->> Co-developed-by: Xingyu Wu <xingyu.wu@starfivetech.com>
->> Signed-off-by: Xingyu Wu <xingyu.wu@starfivetech.com>
->> Signed-off-by: William Qiu <william.qiu@starfivetech.com>
->> ---
->>  .../soc/starfive/starfive,jh7110-syscon.yaml  | 62 +++++++++++++++++++
->>  MAINTAINERS                                   |  7 +++
->>  2 files changed, 69 insertions(+)
->>  create mode 100644 Documentation/devicetree/bindings/soc/starfive/starfive,jh7110-syscon.yaml
->> 
->> diff --git a/Documentation/devicetree/bindings/soc/starfive/starfive,jh7110-syscon.yaml b/Documentation/devicetree/bindings/soc/starfive/starfive,jh7110-syscon.yaml
->> new file mode 100644
->> index 000000000000..a81190f8a54d
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/soc/starfive/starfive,jh7110-syscon.yaml
->> @@ -0,0 +1,62 @@
->> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
->> +%YAML 1.2
->> +---
->> +$id: http://devicetree.org/schemas/soc/starfive/starfive,jh7110-syscon.yaml#
->> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->> +
->> +title: StarFive JH7110 SoC system controller
->> +
->> +maintainers:
->> +  - William Qiu <william.qiu@starfivetech.com>
->> +
->> +description: |
->> +  The StarFive JH7110 SoC system controller provides register information such
->> +  as offset, mask and shift to configure related modules such as MMC and PCIe.
->> +
->> +properties:
->> +  compatible:
->> +    oneOf:
->> +      - items:
->> +          - const: starfive,jh7110-sys-syscon
->> +          - const: syscon
->> +          - const: simple-mfd
->> +      - items:
->> +          - enum:
->> +              - starfive,jh7110-aon-syscon
->> +              - starfive,jh7110-stg-syscon
->> +          - const: syscon
->> +
->> +  reg:
->> +    maxItems: 1
->> +
->> +  clock-controller:
->> +    $ref: /schemas/clock/starfive,jh7110-pll.yaml#
->> +    type: object
->> +
->> +  "#power-domain-cells":
->> +    const: 1
->> +
->> +required:
->> +  - compatible
->> +  - reg
->> +
->> +allOf:
->> +  - if:
->> +      properties:
->> +        compatible:
->> +          contains:
->> +            const: starfive,jh7110-aon-syscon
->> +    then:
->> +      required:
->> +        - "#power-domain-cells"
-> 
-> Where did you implement the results of the discussion that only some
-> devices can have power and clock controller?
-> 
-> According to your code all of above - sys, aon and stg - have clock and
-> power controllers. If not, then the code is not correct, so please do
-> not respond with what is where (like you did last time) but actually
-> implement what you say.
-> 
+Commit 6eb4bd92c1ce ("kallsyms: strip LTO suffixes from static functions")
+stripped all function/variable suffixes started with '.' regardless
+of whether those suffixes are generated at LTO mode or not. In fact,
+as far as I know, in LTO mode, when a static function/variable is
+promoted to the global scope, '.llvm.<...>' suffix is added.
 
-Hi Krzysztof, I need to modify the code to implement it.
-If I drop the 'clock-controller' and '"#power-domain-cells"' in properites, and change to this:
+The existing mechanism breaks live patch for a LTO kernel even if
+no <symbol>.llvm.<...> symbols are involved. For example, for the following
+kernel symbols:
+  $ grep bpf_verifier_vlog /proc/kallsyms
+  ffffffff81549f60 t bpf_verifier_vlog
+  ffffffff8268b430 d bpf_verifier_vlog._entry
+  ffffffff8282a958 d bpf_verifier_vlog._entry_ptr
+  ffffffff82e12a1f d bpf_verifier_vlog.__already_done
+'bpf_verifier_vlog' is a static function. '_entry', '_entry_ptr' and
+'__already_done' are static variables used inside 'bpf_verifier_vlog',
+so llvm promotes them to file-level static with prefix 'bpf_verifier_vlog.'.
+Note that the func-level to file-level static function promotion also
+happens without LTO.
 
---- a/Documentation/devicetree/bindings/soc/starfive/starfive,jh7110-syscon.yaml
-+++ b/Documentation/devicetree/bindings/soc/starfive/starfive,jh7110-syscon.yaml
-@@ -29,28 +29,33 @@ properties:
-   reg:
-     maxItems: 1
- 
--  clock-controller:
--    $ref: /schemas/clock/starfive,jh7110-pll.yaml#
--    type: object
--
--  "#power-domain-cells":
--    const: 1
--
- required:
-   - compatible
-   - reg
- 
- allOf:
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            const: starfive,jh7110-sys-syscon
-+    then:
-+      properties:
-+        clock-controller:
-+          $ref: /schemas/clock/starfive,jh7110-pll.yaml#
-+          type: object
-+
-   - if:
-       properties:
-         compatible:
-           contains:
-             const: starfive,jh7110-aon-syscon
-     then:
--      required:
--        - "#power-domain-cells"
-+      properties:
-+        "#power-domain-cells":
-+          const: 1
- 
--additionalProperties: false
-+additionalProperties: true
+Given a symbol name 'bpf_verifier_vlog', with LTO kernel, current mechanism=
+ will
+return 4 symbols to live patch subsystem which current live patching
+subsystem cannot handle it. With non-LTO kernel, only one symbol
+is returned.
 
+In [1], we have a lengthy discussion, the suggestion is to separate two
+cases:
+  (1). new symbols with suffix which are generated regardless of whether
+       LTO is enabled or not, and
+  (2). new symbols with suffix generated only when LTO is enabled.
 
-Would it be better to show that sys-syscon only has clock-controller and aon-syscon is power controller?
+The cleanup_symbol_name() should only remove suffixes for case (2).
+Case (1) should not be changed so it can work uniformly with or without LTO.
 
-Best regards,
-Xingyu Wu
+This patch removed LTO-only suffix '.llvm.<...>' so live patching and
+tracing should work the same way for non-LTO kernel.
+
+ [1] https://lore.kernel.org/live-patching/20230615170048.2382735-1-song@ke=
+rnel.org/T/#u
+
+Fixes: 6eb4bd92c1ce ("kallsyms: strip LTO suffixes from static functions")
+Signed-off-by: Yonghong Song <yhs@fb.com>
+---
+ kernel/kallsyms.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
+
+diff --git a/kernel/kallsyms.c b/kernel/kallsyms.c
+index 77747391f49b..4874508bb950 100644
+--- a/kernel/kallsyms.c
++++ b/kernel/kallsyms.c
+@@ -174,11 +174,10 @@ static bool cleanup_symbol_name(char *s)
+ 	 * LLVM appends various suffixes for local functions and variables that
+ 	 * must be promoted to global scope as part of LTO.  This can break
+ 	 * hooking of static functions with kprobes. '.' is not a valid
+-	 * character in an identifier in C. Suffixes observed:
++	 * character in an identifier in C. Suffixes only in LLVM LTO observed:
+ 	 * - foo.llvm.[0-9a-f]+
+-	 * - foo.[0-9a-f]+
+ 	 */
+-	res =3D strchr(s, '.');
++	res =3D strstr(s, ".llvm.");
+ 	if (res) {
+ 		*res =3D '\0';
+ 		return true;
+--=20
+2.34.1
 
