@@ -2,108 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82E5274072B
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 02:23:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 59EFE74072F
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 02:25:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229623AbjF1AXA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 20:23:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59768 "EHLO
+        id S230131AbjF1AYv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 20:24:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229861AbjF1AW5 (ORCPT
+        with ESMTP id S229495AbjF1AYt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 20:22:57 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C915726BC;
-        Tue, 27 Jun 2023 17:22:54 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        Tue, 27 Jun 2023 20:24:49 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2922E26BC
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 17:24:49 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QrMjk3GYZz4wZy;
-        Wed, 28 Jun 2023 10:22:49 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1687911770;
-        bh=d9qp0w1IEjACU0PufpTb5hr6JpBscppsya9LwwgZR0I=;
-        h=Date:From:To:Cc:Subject:From;
-        b=UZ6woTnSQ68Y+EeWLNxpSR8+PiEUmSC2NSJArhBF1mEzlJB6Qnn0DL4SZnHpLfUdV
-         DbQTEzLg1Z46PUyHF2pS/Sn2IK9A0pEYn4GzW/tygrkqVomYFF65nmIE1pvEt8W85Y
-         Kx+UFm4kreRXmiF2HDUXnSrLSKKHGdNfx3+gG6P3psW5UUVABhTBSgNwNfqKWW1BzL
-         ze8irWrodkcE0nLfrIPAViEVl3Potu09pW6fdISM2Oa+4x1zzELEnjALb6n0GCEjN/
-         lcmIXQagxKN3Xthj8EAfj5WILwDJmuTsfoZImkq0idBAc1KWok9zz1HB/SI95SVxlx
-         1D5Ia9P2ej7vQ==
-Date:   Wed, 28 Jun 2023 10:22:48 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Helge Deller <deller@gmx.de>,
-        Parisc List <linux-parisc@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the parisc-hd tree with the
- mm-nonmm-stable tree
-Message-ID: <20230628102248.742b79e1@canb.auug.org.au>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id ACDFF60FD9
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 00:24:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC8F1C433C8;
+        Wed, 28 Jun 2023 00:24:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687911888;
+        bh=kNj6AorbsM1YciTdwmI1fpkirwD9mi885PoKVJqM0Q8=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=TcVAY72nXw9KX8BaBPGUEd9Y5wOnDqWkYWeXfrAgMNUdudOg8boIKjWTAj+hjb53j
+         cuATadt7B9u7VCjz1zU1cCYYZnFQ6nRoLe9+2B9ThAZh6IuWrH39wFEIZEzHXNEQEJ
+         ow2wbu6eySWIq+I1z6FZQTCzZMErq3zddWjhhO+sqVr+jFknMY+j3aNHF3zMHWOvXJ
+         /tXH85OvvMCePnIxfmqgWeuP3tlYBV9+xgKfZnk8BpzF6J3fuRykOSX393zGEmijxc
+         2Bt9BJFc+tXcV+4VUwZrlYQ9/s+jccstDTGWcicj+I/IRd2zkp7gkUm0Q8jb0pw5bt
+         IacrvXegkM4HQ==
+Date:   Tue, 27 Jun 2023 17:24:46 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     torvalds@linux-foundation.org
+Cc:     davem@davemloft.net, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, pabeni@redhat.com,
+        bpf@vger.kernel.org
+Subject: Re: [GIT PULL] Networking for v6.5
+Message-ID: <20230627172446.5d42f023@kernel.org>
+In-Reply-To: <20230627115925.4e55f199@kernel.org>
+References: <20230627184830.1205815-1-kuba@kernel.org>
+        <20230627115925.4e55f199@kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/IuO7Y0SK43M6.niNEyTxPa5";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/IuO7Y0SK43M6.niNEyTxPa5
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Tue, 27 Jun 2023 11:59:25 -0700 Jakub Kicinski wrote:
+> On Tue, 27 Jun 2023 11:48:30 -0700 Jakub Kicinski wrote:
+> > WiFi 7 and sendpage changes are the biggest pieces of work for
+> > this release. The latter will definitely require fixes but
+> > I think that we got it to a reasonable point.  
+> 
+> I forgot to mention a conflict, there's a trivial one because of
+> adjacent changes in fs/splice.c. Stephen has the resolution:
+> https://lore.kernel.org/all/20230613125939.595e50b8@canb.auug.org.au/
 
-Hi all,
-
-Today's linux-next merge of the parisc-hd tree got a conflict in:
-
-  arch/parisc/kernel/smp.c
-
-between commit:
-
-  ad1a48301f65 ("init: consolidate prototypes in linux/init.h")
-
-from the mm-nonmm-stable tree and commit:
-
-  57d303096f1c ("parisc: Fix prototype warnings for time related functions")
-
-from the parisc-hd tree.
-
-I fixed it up (the latter also removes the line removed by the former)
-and can carry the fix as necessary. This is now fixed as far as linux-next
-is concerned, but any non trivial conflicts should be mentioned to your
-upstream maintainer when your tree is submitted for merging.  You may
-also want to consider cooperating with the maintainer of the conflicting
-tree to minimise any particularly complex conflicts.
-
-Not that the latter also adds a declaration of init_IRQ() to
-arch/parisc/include/asm/processor.h which will not be needed after
-merging with the mm-nonmm-stable tree (but is harmless, so I have left
-it there for now).
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/IuO7Y0SK43M6.niNEyTxPa5
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmSbfVgACgkQAVBC80lX
-0GzvvggAgKaN6cbQNB4fpteIWhjXWOggYF1vigsQ7RTSi9a3EMMuLBA5qveqey06
-gnVRbOW82upgbdwOubHUOOcKwwQhCE7+xOGkOu1c426DPYuL9RESHDarxyfYkaDH
-bSbdp8m28bkXl6WE4tidKrOMZ1qvRqsVakqdpdUnn6N6MnskNt4c2wDD7g/W1URe
-d0LEAt+c2UctnZJKxq0N/zIAY/KM8SrcMm90xP5mf0owKnmmFqWZ/a+mUXznvuar
-WIf/7q8VB3st94nr/wulHVlFCh2jwMidOVgTr1jpS9/ayJ9+cNUFlV63vf1jqa00
-WsAT7crEvc62DuTyibNiw0Djp98dZw==
-=lDyx
------END PGP SIGNATURE-----
-
---Sig_/IuO7Y0SK43M6.niNEyTxPa5--
+Another one will surface once you pull asm-generic from Arnd:
+https://lore.kernel.org/all/20230609104037.56648990@canb.auug.org.au/
