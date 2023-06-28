@@ -2,68 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB0867413F4
+	by mail.lfdr.de (Postfix) with ESMTP id 7DBB47413F2
 	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 16:40:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230363AbjF1OkU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 10:40:20 -0400
-Received: from vps0.lunn.ch ([156.67.10.101]:40252 "EHLO vps0.lunn.ch"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230340AbjF1OkR (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 10:40:17 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=cW+45nW3hJrB+ORXPsF9u401T/nSilM4vjgp2/JRVK8=; b=U1WferOlqrpgddhvvlvTWes0zc
-        gz9sFpyiKouuyXJTUYNzdFHYS6e6yVbKtT8Fkilt/42PZXz2BDJyjoEp+Q596vjZztfSB1KA5oUT3
-        w0vosHmfbAFtJLPTH97RuCn3S9Mc5r/aU/LSSbblgfHMV0vEIB88AAaMTA20vfI+hZ7c=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1qEWKW-0007sj-0E; Wed, 28 Jun 2023 16:39:36 +0200
-Date:   Wed, 28 Jun 2023 16:39:35 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     yunchuan <yunchuan@nfschina.com>
-Cc:     Hao Lan <lanhao@huawei.com>, f.fainelli@gmail.com,
-        olteanv@gmail.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, irusskikh@marvell.com,
-        yisen.zhuang@huawei.com, salil.mehta@huawei.com,
-        jesse.brandeburg@intel.com, anthony.l.nguyen@intel.com,
-        steve.glendinning@shawell.net, iyappan@os.amperecomputing.com,
-        keyur@os.amperecomputing.com, quan@os.amperecomputing.com,
-        hkallweit1@gmail.com, linux@armlinux.org.uk,
-        mostrows@earthlink.net, xeb@mail.ru, qiang.zhao@nxp.com,
-        yangyingliang@huawei.com, linux@rempel-privat.de,
-        ansuelsmth@gmail.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, intel-wired-lan@lists.osuosl.org,
-        linuxppc-dev@lists.ozlabs.org, kernel-janitors@vger.kernel.org
-Subject: Re: [PATCH net-next 00/10] Remove unnecessary (void*) conversions
-Message-ID: <ecd70c28-1629-4b6c-96fc-a0b8f8713a04@lunn.ch>
-References: <1f5652f7-7eb2-11f0-4a07-c87f2992e509@huawei.com>
- <734b846f-3235-f2e3-db06-6e852803cd7f@nfschina.com>
- <badb3550-e157-4a31-9e49-ad184990c06d@lunn.ch>
+        id S231582AbjF1Okk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 10:40:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55276 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231583AbjF1Okd (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 28 Jun 2023 10:40:33 -0400
+Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 632612103
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 07:40:31 -0700 (PDT)
+Received: by mail-io1-xd30.google.com with SMTP id ca18e2360f4ac-785d3a53ed6so12866339f.1
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 07:40:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20221208.gappssmtp.com; s=20221208; t=1687963230; x=1690555230;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=gw+1SzCqOzLBAsCHPofcZWnW/1XnEKR52ONcAb/VwIU=;
+        b=nMvogRKjodPYqMEKzS1+45qiQ1ts6quMm+6EBnJOqhU0hfN8kaUd8jx/fMWbr+GZ52
+         nbR2svkXJ8qCfmRdRfaWCGF+x6DZmh7IFMkcC/xwNTZMov8F0qz0dFJ28i8B076zXjm7
+         JkCBYXsfYhytvZ51G1ch0A84X1/Dw56tQB50WUdQqlZOp42caRwZje9sNVjdDJczbCTb
+         iKHLJzdfg+mrshlTq3DoTtEF1fSOwFGZ/gcD5XWxCUWZpxRKXgMlKfdBW4AUzg79TYqo
+         rs2Wl0BsyQDOQmwp6PkcE+/6ldYlAG6NIG0bA523SM+Hfoo8CIZWfz5iMFOxArBiJPvk
+         7NTw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687963230; x=1690555230;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=gw+1SzCqOzLBAsCHPofcZWnW/1XnEKR52ONcAb/VwIU=;
+        b=V9dPCkuDOkz8z2xwO7ALtS8jUW0dcxDgm6gm+0krUSpLPqZhnR1/96DvNYHPVpePkt
+         B/VjdcT9XAdBUzqcKJWfu/JmApZGWtPi2TSEx9Z8CcZbx2T56qHn7jGQIPnw9M+j8BcD
+         GWdMCqD1hy9nezGTbd8b3n+YCfK0107Z/u0iWwHXtOpLIvscdHxExX+F/TIRxBPyk7g7
+         A7yQWSQbtDoRMLKS3TBU6fXL41cW/9wLxvO0Sou/1ohKIq11m4sGl1Z8zTKgCMT1qCsr
+         pvdzzisfRd3lBpWst1RafL9j7mh67rINd7xal1uhyVmqOsGOfGz9yBkNPwEudybDhaG/
+         H31g==
+X-Gm-Message-State: AC+VfDwZCrCMibRir6kemUGszsBSSP5KADeeqjtENS6NA9KFCJQ+uNbN
+        ynzGpoEbO3OoxdlZzclzaGR4Mg==
+X-Google-Smtp-Source: ACHHUZ4+2SAm8EoLrcc2AtB8NSlinSM93X0+AZ5q0LtuDQS3X5xb6WUFpx//qOrq7G76Q1FXgqMeoQ==
+X-Received: by 2002:a6b:1495:0:b0:780:d65c:d78f with SMTP id 143-20020a6b1495000000b00780d65cd78fmr16017374iou.2.1687963230425;
+        Wed, 28 Jun 2023 07:40:30 -0700 (PDT)
+Received: from [192.168.1.94] ([96.43.243.2])
+        by smtp.gmail.com with ESMTPSA id ed21-20020a056638291500b0042af158d05fsm436706jab.114.2023.06.28.07.40.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 28 Jun 2023 07:40:29 -0700 (PDT)
+Message-ID: <3337524d-347c-900a-a1c7-5774cd731af0@kernel.dk>
+Date:   Wed, 28 Jun 2023 08:40:27 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <badb3550-e157-4a31-9e49-ad184990c06d@lunn.ch>
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [GIT PULL] bcachefs
+Content-Language: en-US
+To:     Dave Chinner <david@fromorbit.com>,
+        Kent Overstreet <kent.overstreet@linux.dev>
+Cc:     torvalds@linux-foundation.org, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-bcachefs@vger.kernel.org,
+        Christoph Hellwig <hch@lst.de>
+References: <20230626214656.hcp4puionmtoloat@moria.home.lan>
+ <aeb2690c-4f0a-003d-ba8b-fe06cd4142d1@kernel.dk>
+ <20230627000635.43azxbkd2uf3tu6b@moria.home.lan>
+ <91e9064b-84e3-1712-0395-b017c7c4a964@kernel.dk>
+ <20230627020525.2vqnt2pxhtgiddyv@moria.home.lan>
+ <b92ea170-d531-00f3-ca7a-613c05dcbf5f@kernel.dk>
+ <23922545-917a-06bd-ec92-ff6aa66118e2@kernel.dk>
+ <20230627201524.ool73bps2lre2tsz@moria.home.lan>
+ <ZJtdEgbt+Wa8UHij@dread.disaster.area>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <ZJtdEgbt+Wa8UHij@dread.disaster.area>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+        lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 28, 2023 at 04:37:43PM +0200, Andrew Lunn wrote:
-> > Hi, Hao Lan,
-> > 
-> > Sorry for that, I just compiled these patches in the mainline branch.
-> > I know now, it's also necessary to compile patches in net and net-next
-> > branch.
-> > Thanks for your reply!
+On 6/27/23 4:05?PM, Dave Chinner wrote:
+> On Tue, Jun 27, 2023 at 04:15:24PM -0400, Kent Overstreet wrote:
+>> On Tue, Jun 27, 2023 at 11:16:01AM -0600, Jens Axboe wrote:
+>>> On 6/26/23 8:59?PM, Jens Axboe wrote:
+>>>> On 6/26/23 8:05?PM, Kent Overstreet wrote:
+>>>>> On Mon, Jun 26, 2023 at 07:13:54PM -0600, Jens Axboe wrote:
+>>>>>> Doesn't reproduce for me with XFS. The above ktest doesn't work for me
+>>>>>> either:
+>>>>>
+>>>>> It just popped for me on xfs, but it took half an hour or so of looping
+>>>>> vs. 30 seconds on bcachefs.
+>>>>
+>>>> OK, I'll try and leave it running overnight and see if I can get it to
+>>>> trigger.
+>>>
+>>> I did manage to reproduce it, and also managed to get bcachefs to run
+>>> the test. But I had to add:
+>>>
+>>> diff --git a/check b/check
+>>> index 5f9f1a6bec88..6d74bd4933bd 100755
+>>> --- a/check
+>>> +++ b/check
+>>> @@ -283,7 +283,7 @@ while [ $# -gt 0 ]; do
+>>>  	case "$1" in
+>>>  	-\? | -h | --help) usage ;;
+>>>  
+>>> -	-nfs|-afs|-glusterfs|-cifs|-9p|-fuse|-virtiofs|-pvfs2|-tmpfs|-ubifs)
+>>> +	-nfs|-afs|-glusterfs|-cifs|-9p|-fuse|-virtiofs|-pvfs2|-tmpfs|-ubifs|-bcachefs)
+>>>  		FSTYP="${1:1}"
+>>>  		;;
+>>>  	-overlay)
+>>
+>> I wonder if this is due to an upstream fstests change I haven't seen
+>> yet, I'll have a look.
 > 
-> net-next is also closed at the moment due to the merge window. Please
-> wait two weeks before reposting, by which time net-next will be open
-> again.
+> Run mkfs.bcachefs on the testdir first. fstests tries to probe the
+> filesystem type to test if $FSTYP is not set. If it doesn't find a
+> filesystem or it is unsupported, it will use the default (i.e. XFS).
 
-Your email threading also seems to be broken, there is no
-threading. That might cause pathworks an issue.
+I did format both test and scratch first with bcachefs, so guessing
+something is going wrong with figuring out what filesystem is on the
+device and then it defaults to XFS. I didn't spend too much time on that
+bit, figured it was easier to just force bcachefs for my purpose.
 
-	Andrew
+> There should be no reason to need to specify the filesystem type for
+> filesystems that blkid recognises. from common/config:
+> 
+>         # Autodetect fs type based on what's on $TEST_DEV unless it's been set
+>         # externally
+>         if [ -z "$FSTYP" ] && [ ! -z "$TEST_DEV" ]; then
+>                 FSTYP=`blkid -c /dev/null -s TYPE -o value $TEST_DEV`
+>         fi
+>         FSTYP=${FSTYP:=xfs}
+>         export FSTYP
+
+Gotcha, yep it's because blkid fails to figure it out.
+
+-- 
+Jens Axboe
+
