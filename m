@@ -2,100 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF97F740DF4
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 12:03:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A618740E20
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 12:06:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233826AbjF1JzF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 05:55:05 -0400
-Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:60508
-        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230297AbjF1Jur (ORCPT
+        id S231403AbjF1KG0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 06:06:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53556 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234096AbjF1J41 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 05:50:47 -0400
-Received: from mail-lf1-f70.google.com (mail-lf1-f70.google.com [209.85.167.70])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id B26E43F266
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 09:50:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1687945844;
-        bh=+3ajja7MAstA+YCVmYNOJvwhE7/9ec4gOlnHNDS3MOU=;
-        h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-         MIME-Version;
-        b=IY9PhGuAx7bsRmVsptgNaIWo/6lOnkdt6dorDkfEtAwaDf1UDygjy+z+KDofwnpP+
-         /dcH1yY6ktGbA/dv6WNNNnC67Y3bmHtvOLXMsiFJDItrxyaCsr4zuI9IdWbTj4vL9o
-         dd3PmIW02Dk49TANdDFQDHEs9LyIxX4ll5yLRiXPPkW/2Nu/F3h17sb2Eb8RBR58QH
-         ts7jrG9qyW71FMvBHJTp/GQHzhQRKFHpkSpv+/GgbJxscIOdfpz6LVWtIfzaMaJOUB
-         KcZVJQSE8IE8fws4t8rgI4K1DBPH/7GfN5UuVhODEbqdhn7AIHfYQtUEaIO9JkrHrH
-         9IkR+Xr37vf8A==
-Received: by mail-lf1-f70.google.com with SMTP id 2adb3069b0e04-4f01644f62eso4658160e87.0
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 02:50:44 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687945844; x=1690537844;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=+3ajja7MAstA+YCVmYNOJvwhE7/9ec4gOlnHNDS3MOU=;
-        b=eP4+QWZENhNYKdUgTor8NdM0GfNeF8/peGn8L2EJZY6jlgPhj2PPbQB3orWKAEGu6D
-         hLbm/MTgmBV2gp5XFmjsKg/2V+9S0bUzjpnMV9z90sInfKWRYU/HrlSHgwx+p8CIED/r
-         EWLx58EjCeeVtm9P4ICIefJZFVtFiH/4JhCTzwa8HSce3pqgJekDhrdkz/EtkDLxwvcA
-         L9VKlH6juL6d1JqMNLkD8dopx8PUyf9FxumIjJZrNXfuwaF0c/rWe2W1pdqUX6JMzo6P
-         fPg4FU+PTP3KWeY1Mn3POk6vl1PchAd9NEDOz/MUVdsbpjVoeGcs2MeCDYLc1RMs53FX
-         DhGQ==
-X-Gm-Message-State: AC+VfDwavkL9Zy+FFVbcKZX18wuZ32p6DMiJUkhzrH2qX+z5CDDZRkGg
-        IflQ/9CjAKS8OGCd9gw2V3pk87vN6bcfcWsQSWDdtBWlw/pE+yqnJjDO5UUkLQkK/vwpGnRv6nz
-        yikzewA6ELLA5Ctz3cxcSgDKOmlyAoOtMK2TXXd+7QA==
-X-Received: by 2002:a19:380f:0:b0:4f8:4177:e087 with SMTP id f15-20020a19380f000000b004f84177e087mr18902751lfa.47.1687945844105;
-        Wed, 28 Jun 2023 02:50:44 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ4cBM2grbJSWNi7mCJ5ewuTKswFCGuguC6q7nJIziby3TaAJDbD2NRFzSz6qF8ad+lor8ckng==
-X-Received: by 2002:a19:380f:0:b0:4f8:4177:e087 with SMTP id f15-20020a19380f000000b004f84177e087mr18902737lfa.47.1687945843773;
-        Wed, 28 Jun 2023 02:50:43 -0700 (PDT)
-Received: from localhost ([194.191.244.86])
-        by smtp.gmail.com with ESMTPSA id a25-20020a5d4579000000b003048477729asm12871090wrc.81.2023.06.28.02.50.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Jun 2023 02:50:43 -0700 (PDT)
-From:   Juerg Haefliger <juerg.haefliger@canonical.com>
-To:     juerg.haefliger@canonical.com
-Cc:     alistair@popple.id.au, eajames@linux.ibm.com, jk@ozlabs.org,
-        joel@jms.id.au, linux-fsi@lists.ozlabs.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: [PATCH v2] fsi: master-ast-cf: Add MODULE_FIRMWARE macro
-Date:   Wed, 28 Jun 2023 11:50:39 +0200
-Message-Id: <20230628095039.26218-1-juerg.haefliger@canonical.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230616122040.1035518-1-juerg.haefliger@canonical.com>
-References: <20230616122040.1035518-1-juerg.haefliger@canonical.com>
+        Wed, 28 Jun 2023 05:56:27 -0400
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E87435AE;
+        Wed, 28 Jun 2023 02:50:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=pfjacbNuUwNkrWAeX5Ew7Qz/kZoiz3IcmwDj95RMCcU=; b=tXJSifE16qh8I4CRy5NBp/XIYX
+        2GwwbwIoEpaBUvWf/xRX5/W2QDGoOfYvCt/iARxSA8EKGG4Cnjy+Kr3tr5BcMDzZLjw1vi9IDV46y
+        1ao7vzotqEPWi12kqEQRipNiimnRZ4u5m/BEDyTlKFXbfH9vXutfJQKiva3H3fJD+51ucfpS4TO8D
+        jubHGiI/FFT6xo57D9ufPAQeuNkD7XKAnNAMYW4dAgmNp13AboEGdJv0TJt1h8osmD+sQhjAao6q7
+        zwcZA+WIdrahy/4QkavoMuu01xZgh6XeA9Hgt4daBaEV15xnGX2Pg6RKcNiIstSUHvCg3UbzqliS0
+        QGitV93A==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:33168)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.96)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1qERoy-00071a-19;
+        Wed, 28 Jun 2023 10:50:44 +0100
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1qERov-0006eS-Aj; Wed, 28 Jun 2023 10:50:41 +0100
+Date:   Wed, 28 Jun 2023 10:50:41 +0100
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     wuych <yunchuan@nfschina.com>
+Cc:     iyappan@os.amperecomputing.com, keyur@os.amperecomputing.com,
+        quan@os.amperecomputing.com, andrew@lunn.ch, hkallweit1@gmail.com,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
+Subject: Re: [PATCH net-next 08/10] net: mdio: Remove unnecessary (void*)
+ conversions
+Message-ID: <ZJwCcWgi0d6kEepI@shell.armlinux.org.uk>
+References: <20230628024517.1440644-1-yunchuan@nfschina.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230628024517.1440644-1-yunchuan@nfschina.com>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+        lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The module loads firmware so add a MODULE_FIRMWARE macro to provide that
-information via modinfo.
+Hi,
 
-Fixes: 6a794a27daca ("fsi: master-ast-cf: Add new FSI master using Aspeed ColdFire")
-Cc: stable@vger.kernel.org # 4.19+
-Signed-off-by: Juerg Haefliger <juerg.haefliger@canonical.com>
+I think you missed one case:
 
----
-v2:
-  - Remove empty line
-  - Add Fixes and Cc tags
----
- drivers/fsi/fsi-master-ast-cf.c | 1 +
- 1 file changed, 1 insertion(+)
+        if (mdio_id == XGENE_MDIO_RGMII) {
+                mdio_bus->read = xgene_mdio_rgmii_read;
+                mdio_bus->write = xgene_mdio_rgmii_write;
+                mdio_bus->priv = (void __force *)pdata;
 
-diff --git a/drivers/fsi/fsi-master-ast-cf.c b/drivers/fsi/fsi-master-ast-cf.c
-index 5f608ef8b53c..cde281ec89d7 100644
---- a/drivers/fsi/fsi-master-ast-cf.c
-+++ b/drivers/fsi/fsi-master-ast-cf.c
-@@ -1441,3 +1441,4 @@ static struct platform_driver fsi_master_acf = {
- 
- module_platform_driver(fsi_master_acf);
- MODULE_LICENSE("GPL");
-+MODULE_FIRMWARE(FW_FILE_NAME);
+This cast using __force is also not required.
+
+On Wed, Jun 28, 2023 at 10:45:17AM +0800, wuych wrote:
+> @@ -211,7 +211,7 @@ static void xgene_enet_wr_mdio_csr(void __iomem *base_addr,
+>  static int xgene_xfi_mdio_write(struct mii_bus *bus, int phy_id,
+>  				int reg, u16 data)
+>  {
+> -	void __iomem *addr = (void __iomem *)bus->priv;
+> +	void __iomem *addr = bus->priv;
+>  	int timeout = 100;
+>  	u32 status, val;
+>  
+> @@ -234,7 +234,7 @@ static int xgene_xfi_mdio_write(struct mii_bus *bus, int phy_id,
+>  
+>  static int xgene_xfi_mdio_read(struct mii_bus *bus, int phy_id, int reg)
+>  {
+> -	void __iomem *addr = (void __iomem *)bus->priv;
+> +	void __iomem *addr = bus->priv;
+>  	u32 data, status, val;
+>  	int timeout = 100;
+
+These probably cause Sparse to warn whether or not the cast is there.
+
+Given that in this case, bus->priv is initialised via:
+
+                mdio_bus->priv = (void __force *)pdata->mdio_csr_addr;
+
+I think the simple thing is to _always_ initialise mdio_bus->priv
+to point at pdata, and have xgene_xfi_mdio_*() always do:
+
+	struct xgene_mdio_pdata *pdata = bus->priv;
+	void __iomem *addr = pdata->mdio_csr_addr;
+
+The extra access will be dwarfed by the time taken to perform the
+access.
+
+This change should be made with a separate patch and not combined with
+the patch removing the casts in xgene_mdio_rgmii_*().
+
+Thanks.
+
 -- 
-2.39.2
-
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
