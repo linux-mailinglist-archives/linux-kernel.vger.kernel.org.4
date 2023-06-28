@@ -2,73 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 180E7741902
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 21:44:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9F95741904
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 21:46:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230523AbjF1ToM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 15:44:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58440 "EHLO
+        id S231190AbjF1TqY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 15:46:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229461AbjF1ToK (ORCPT
+        with ESMTP id S230113AbjF1TqW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 15:44:10 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 680DD1BE6;
-        Wed, 28 Jun 2023 12:44:09 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id 2adb3069b0e04-4f957a45b10so39308e87.0;
-        Wed, 28 Jun 2023 12:44:09 -0700 (PDT)
+        Wed, 28 Jun 2023 15:46:22 -0400
+Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8B771BE9
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 12:46:20 -0700 (PDT)
+Received: by mail-pg1-x54a.google.com with SMTP id 41be03b00d2f7-528ab7097afso41439a12.1
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 12:46:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687981447; x=1690573447;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=24xzpN7HM7t7BscRHE2SgUACQ+eIA8sq8IN33K3tmOQ=;
-        b=WODHj/yYpYvcJQVjjp07mXGyIyXIxAnE1y3kleyMU/+wK0u6GzGJ5IYJvZ49WjJJXG
-         hMixzSrwu9JbRf9Ujwch7ub8/obzcnE5N33y8jjIuOdKdQFky22pQKevW2CC6blz/Ma+
-         bDIhm8XS56ISmfuFjV61BT/98AUOOJ0RQL1f8TWUrWdH+iYlmRdM31YeT0/jpX3IQ+V1
-         vAIL9wjb6JMLeZskH77MSHE6qBmeXbHjZAPW/BPpKqmLVZqbjaJJL6VVjd2xZywH5CuW
-         BJU28FW4UJoU6vnIOYtJ7G7jJosBSdg41eFJtcoexLU5AiBMGLg/lKdUvW7vpwT5G1To
-         wg/A==
+        d=google.com; s=20221208; t=1687981580; x=1690573580;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=I7mcp5/4P8AP0xkXt/thddGLST36j3uQroOasjJw2kQ=;
+        b=3X3J2Y9E1VfBP9Ua7QLQHnf5tWOiCY196KrTDDRGoQT5j5w75S+ef9lJaxQf1I+Dr6
+         2ng0STjRGjZzYm7EtW7P3AqdvF4BpiTunzeqVHiCrNu8SLnudKTIoKMLwKyJ+dHLPtZx
+         Uy1kq7ORYYrbeGQK/jo2+9FBGCEtb3qnJypIwWIFe5dx+s8TQoFaJ9YZI1UhCqWeNfUG
+         wJ7PZQbwTrRcOtewooOJgYCoEZ9a9ay3tNFjuIrVPzJTK7o6U4C4oXVv4avxQuEpejEU
+         +mrUIUhzaO+zX+OZ8TzVl3OK/CB6e1shtdVkwtZV8PtCKhlGXpsxLKpVzlQEyBGrOjtP
+         Cd9Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687981447; x=1690573447;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=24xzpN7HM7t7BscRHE2SgUACQ+eIA8sq8IN33K3tmOQ=;
-        b=EQxGEe643WO5b9lHbsOqIlplkJD9nWe3AjI38nntm4ahj8mogrHjKANXKRcSkl6jED
-         6X3suw6YY967TIO9ZOGkr28kJDjCGUEDKVsOSE+4rweXVkdyPNgbxnTAWPEyG3pakXgT
-         hEC1ggsnehln6gMyZSn/nBfgpllmoW1UOFJbIsZ2WmxlUkaoPY1w5X0ontO082T/8Z4z
-         ANYCPIHjB1TTs2HdhaHTWToSmprI8Mj3bNXaB1juwTg0dgYglpcTS4VKIK5qu6YhaKQq
-         no/qK3+qTnIJnAnOULxoE5JKwHsY8DWOQg/B1YtE7lEacAbDT1ZOlM18svhmwCH1k8yH
-         fkpg==
-X-Gm-Message-State: ABy/qLYQJ3IQbsRUBz0HUlUEmRC9GMJSHD62htFBP6XOLg2VUMgEqc+A
-        2xcnAmJzrABRp4DgGieIopzIvYIGMSXDiA==
-X-Google-Smtp-Source: APBJJlFSUHsJAN2mbCaOU0cBBFdkIkZMd/h4saQH5B9IruyRKs57bLyadu4DN0LdTjo8BOGyFmb8/A==
-X-Received: by 2002:a05:6512:3194:b0:4fb:99c6:8533 with SMTP id i20-20020a056512319400b004fb99c68533mr85285lfe.33.1687981447038;
-        Wed, 28 Jun 2023 12:44:07 -0700 (PDT)
-Received: from WBEC325.dom.local ([185.188.71.122])
-        by smtp.gmail.com with ESMTPSA id q6-20020ac246e6000000b004fb915e8b93sm355434lfo.201.2023.06.28.12.44.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Jun 2023 12:44:02 -0700 (PDT)
-From:   Pawel Dembicki <paweldembicki@gmail.com>
-To:     netdev@vger.kernel.org
-Cc:     Pawel Dembicki <paweldembicki@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org
-Subject: [PATCH] net: dsa: vsc73xx: fix MTU configuration
-Date:   Wed, 28 Jun 2023 21:43:27 +0200
-Message-Id: <20230628194327.1765644-1-paweldembicki@gmail.com>
-X-Mailer: git-send-email 2.34.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        d=1e100.net; s=20221208; t=1687981580; x=1690573580;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=I7mcp5/4P8AP0xkXt/thddGLST36j3uQroOasjJw2kQ=;
+        b=WY3zN/h8fJ4b0+8n5qeMYRzhxVmnjCWzb16QL7VhZJcsulWnreXnRY2Buo9cIdbQqy
+         FDCUZEGJH7B1ii1qKV4RZNhS2Xu+tL6qII9nUgYqQ7rQQOhU3uGn9uWck+P/Uhp1cj9H
+         mAU8s8WXLat+X+xTol4a1nqtLefXq79rkwC86lUOnOuwmuk05V1U2RS39ikCT4QcyfYV
+         mHVHBUpEskrA8v0OjeLUs2Hi3cg+OIW+r4OJOy+XXgqVYfiq3Ic1g3eYF3eB2t+lcEv3
+         TJhjUnCb7DQg1/VLnBApWNztmUMeqjQMNTj+xbWZHmeNjNy5T57q/XOkzQERlVjDF0py
+         09aQ==
+X-Gm-Message-State: AC+VfDy2Ib3fQBwM7CJAApgwSHuYFN3jRAR7Pp2ORB+mqtYQtDQXMfpA
+        GV5waOikcAxnfpBgHGFx76pxjHtO6RM=
+X-Google-Smtp-Source: ACHHUZ63GagN7SvQAnsZIi3Pep1VIp9fjbRzI2L7PvnlNPi9oisw5tsVURUi8r1TgGB2Av+65c6uN1xbQbk=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a63:f50e:0:b0:54f:d3ef:539a with SMTP id
+ w14-20020a63f50e000000b0054fd3ef539amr3666158pgh.4.1687981580106; Wed, 28 Jun
+ 2023 12:46:20 -0700 (PDT)
+Date:   Wed, 28 Jun 2023 12:46:18 -0700
+In-Reply-To: <20230530134248.23998-2-cloudliang@tencent.com>
+Mime-Version: 1.0
+References: <20230530134248.23998-1-cloudliang@tencent.com> <20230530134248.23998-2-cloudliang@tencent.com>
+Message-ID: <ZJyOCpueM0viGDfX@google.com>
+Subject: Re: [PATCH v2 1/8] KVM: selftests: KVM: selftests: Add macros for
+ fixed counters in processor.h
+From:   Sean Christopherson <seanjc@google.com>
+To:     Jinrong Liang <ljr.kernel@gmail.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, Like Xu <likexu@tencent.com>,
+        David Matlack <dmatlack@google.com>,
+        Aaron Lewis <aaronlewis@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jinrong Liang <cloudliang@tencent.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,50 +73,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Switch in MAXLEN register stores the maximum size of a data frame.
-The MTU size is 18 bytes smaller than the frame size.
+Heh, duplicate "KVM: selftests:" in the shortlog.
 
-The current settings are causing problems with packet forwarding.
-This patch fixes the MTU settings to proper values.
+On Tue, May 30, 2023, Jinrong Liang wrote:
+> From: Jinrong Liang <cloudliang@tencent.com>
+> 
+> Add macro in processor.h, providing a efficient way to obtain
 
-Fixes: fb77ffc6ec86 ("net: dsa: vsc73xx: make the MTU configurable")
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
-Signed-off-by: Pawel Dembicki <paweldembicki@gmail.com>
+Try not to describe what the patch literally does in terms of code, the purpose
+of the shortlog+changelog is to complement the diff, e.g. it's super obvious from
+the diff that this patch adds macros in processor.h.
 
----
-In my first attempt, I sent it to net-next [0], but I was asked to resend
-it to net.
+> the number of fixed counters and fixed counters bit mask. The
 
-[0]https://lore.kernel.org/netdev/20230625115343.1603330-7-paweldembicki@gmail.com/
+Wrap closer to 75 chars, 60 is too aggressive.
 
- drivers/net/dsa/vitesse-vsc73xx-core.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+> addition of these macro will simplify the handling of fixed
+> performance counters, while keeping the code maintainable and
+> clean.
 
-diff --git a/drivers/net/dsa/vitesse-vsc73xx-core.c b/drivers/net/dsa/vitesse-vsc73xx-core.c
-index ae55167ce0a6..ef1a4a7c47b2 100644
---- a/drivers/net/dsa/vitesse-vsc73xx-core.c
-+++ b/drivers/net/dsa/vitesse-vsc73xx-core.c
-@@ -1025,17 +1025,17 @@ static int vsc73xx_change_mtu(struct dsa_switch *ds, int port, int new_mtu)
- 	struct vsc73xx *vsc = ds->priv;
- 
- 	return vsc73xx_write(vsc, VSC73XX_BLOCK_MAC, port,
--			     VSC73XX_MAXLEN, new_mtu);
-+			     VSC73XX_MAXLEN, new_mtu + ETH_HLEN + ETH_FCS_LEN);
- }
- 
- /* According to application not "VSC7398 Jumbo Frames" setting
-- * up the MTU to 9.6 KB does not affect the performance on standard
-+ * up the frame size to 9.6 KB does not affect the performance on standard
-  * frames. It is clear from the application note that
-  * "9.6 kilobytes" == 9600 bytes.
-  */
- static int vsc73xx_get_max_mtu(struct dsa_switch *ds, int port)
- {
--	return 9600;
-+	return 9600 - ETH_HLEN - ETH_FCS_LEN;
- }
- 
- static const struct dsa_switch_ops vsc73xx_ds_ops = {
--- 
-2.34.1
+Instead of making assertions, justify the patch by stating the effects on code.
+Statements like "will simplify the handling" and "keeping the code maintainable
+and clean" are subjective.  In cases like these, it's extremely unlikely anyone
+will disagree, but getting into the habit of providing concrete justification
+even for simple cases makes it easier to write changelogs for more complex changes.
 
+E.g.
+
+  Add x86 properties for the number of PMU fixed counters and the bitmask
+  that allows for "discontiguous" fixed counters so that tests don't have
+  to manually retrieve the correct CPUID leaf+register, and so that the
+  resulting code is self-documenting.
+
+> Signed-off-by: Jinrong Liang <cloudliang@tencent.com>
+> ---
+>  tools/testing/selftests/kvm/include/x86_64/processor.h | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/tools/testing/selftests/kvm/include/x86_64/processor.h b/tools/testing/selftests/kvm/include/x86_64/processor.h
+> index aa434c8f19c5..94751bddf1d9 100644
+> --- a/tools/testing/selftests/kvm/include/x86_64/processor.h
+> +++ b/tools/testing/selftests/kvm/include/x86_64/processor.h
+> @@ -240,6 +240,8 @@ struct kvm_x86_cpu_property {
+>  #define X86_PROPERTY_PMU_VERSION		KVM_X86_CPU_PROPERTY(0xa, 0, EAX, 0, 7)
+>  #define X86_PROPERTY_PMU_NR_GP_COUNTERS		KVM_X86_CPU_PROPERTY(0xa, 0, EAX, 8, 15)
+>  #define X86_PROPERTY_PMU_EBX_BIT_VECTOR_LENGTH	KVM_X86_CPU_PROPERTY(0xa, 0, EAX, 24, 31)
+> +#define X86_PROPERTY_PMU_FIXED_CTRS_BITMASK	KVM_X86_CPU_PROPERTY(0xa, 0, ECX, 0, 31)
+
+Please spell out COUNTERS so that all the properties are consistent.
+
+> +#define X86_PROPERTY_PMU_NR_FIXED_COUNTERS	KVM_X86_CPU_PROPERTY(0xa, 0, EDX, 0, 4)
+>  
+>  #define X86_PROPERTY_SUPPORTED_XCR0_LO		KVM_X86_CPU_PROPERTY(0xd,  0, EAX,  0, 31)
+>  #define X86_PROPERTY_XSTATE_MAX_SIZE_XCR0	KVM_X86_CPU_PROPERTY(0xd,  0, EBX,  0, 31)
+> -- 
+> 2.31.1
+> 
