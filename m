@@ -2,76 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB533741442
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 16:51:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AE26741434
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 16:48:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230472AbjF1OuZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 10:50:25 -0400
-Received: from mga03.intel.com ([134.134.136.65]:52194 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231422AbjF1OuV (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 10:50:21 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687963821; x=1719499821;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=sruLiv3/xbwyVIj40BdSCpcvE/mBru7v73bQNqR+j/8=;
-  b=RU5yR9uFguEyTuiEmC2nUk39n7sZae+o3Ctt0Bcn7I/V5adAEV1i5sf+
-   /C1bTzi4oD8FzvToTjGfc047udt9bjfOzznF7+6WEtFYqa+ieno6yFocW
-   eQFMlhYvCtb6atPn8laRSOnMIaI+ktqX3J53PVDOgsJDSGX4at1515zsF
-   /kJS9PjDjGIc9l8c3cOAht6D8+6ynBgC35CX5bI62JZz7i6C9340tMU/+
-   pg0Rpcm/EwTo8gtwlmGRvhnR3gx1JeWHQO+oNDVSB1QPWrUSa/Ucvq4Ue
-   +4/F9bLJXHoRB9FH7myy9CzDII1asvJOLWIj0PS3UU+P5luVFqWepQ0R/
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10755"; a="365326097"
-X-IronPort-AV: E=Sophos;i="6.01,165,1684825200"; 
-   d="scan'208";a="365326097"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2023 07:48:11 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10755"; a="1047454257"
-X-IronPort-AV: E=Sophos;i="6.01,165,1684825200"; 
-   d="scan'208";a="1047454257"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga005.fm.intel.com with ESMTP; 28 Jun 2023 07:48:07 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@intel.com>)
-        id 1qEWSk-000ctL-10;
-        Wed, 28 Jun 2023 17:48:06 +0300
-Date:   Wed, 28 Jun 2023 17:48:06 +0300
-From:   Andy Shevchenko <andriy.shevchenko@intel.com>
-To:     Amadeusz =?utf-8?B?U8WCYXdpxYRza2k=?= 
-        <amadeuszx.slawinski@linux.intel.com>
-Cc:     Bjorn Helgaas <bhelgaas@google.com>,
-        Mark Brown <broonie@kernel.org>, Takashi Iwai <tiwai@suse.com>,
-        alsa-devel@alsa-project.org, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Cezary Rojewski <cezary.rojewski@intel.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Kai Vehmanen <kai.vehmanen@linux.intel.com>
-Subject: Re: [RFC PATCH 5/8] ASoC: Intel: avs: Update PCI ID list
-Message-ID: <ZJxIJnIdoxb5CM/B@smile.fi.intel.com>
-References: <20230628205135.517241-1-amadeuszx.slawinski@linux.intel.com>
- <20230628205135.517241-6-amadeuszx.slawinski@linux.intel.com>
+        id S231585AbjF1Osn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 10:48:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56040 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231422AbjF1Osi (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 28 Jun 2023 10:48:38 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5829A1984;
+        Wed, 28 Jun 2023 07:48:37 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id D04D41F37F;
+        Wed, 28 Jun 2023 14:48:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1687963715; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=AaXdh1KFTwTLnhJwlh22gGE6uZWJAZgaTyJ+Wnl5PrI=;
+        b=ZDOhglrGlDcNdFdJmzW5ldZVObsj152LZ1rLfrgDVl5t/jtmGgqTC/v0wgnoepQUMttCHc
+        ht3bC98w+gqe6x9OSSOxeD05G0t6pu73pjgu7dEz5Qzg4qIziuRG00hy4MMUKnY2q/qFDN
+        x+EbtboXktwgc171b7G1ygMvof4RXXQ=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1687963715;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=AaXdh1KFTwTLnhJwlh22gGE6uZWJAZgaTyJ+Wnl5PrI=;
+        b=9ZnE9EhSJZ5yUfMsIaKwnusgg8eBTrzElFboY4+OuhYoVEBzwWLFdzZtSaqv2X69xwoqS4
+        Cc0nTGAmp3TgxcDg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id C1FDE138EF;
+        Wed, 28 Jun 2023 14:48:35 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id epVRL0NInGQoKwAAMHmgww
+        (envelope-from <jack@suse.cz>); Wed, 28 Jun 2023 14:48:35 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id 2E529A0707; Wed, 28 Jun 2023 16:48:35 +0200 (CEST)
+Date:   Wed, 28 Jun 2023 16:48:35 +0200
+From:   Jan Kara <jack@suse.cz>
+To:     Zhihao Cheng <chengzhihao1@huawei.com>
+Cc:     tytso@mit.edu, adilger.kernel@dilger.ca, jack@suse.cz,
+        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yi.zhang@huawei.com
+Subject: Re: [PATCH] ext4: Fix unttached inode after power cut with orphan
+ file feature enabled
+Message-ID: <20230628144835.fqhmbpxoj6fee762@quack3>
+References: <20230628132011.650383-1-chengzhihao1@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230628205135.517241-6-amadeuszx.slawinski@linux.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <20230628132011.650383-1-chengzhihao1@huawei.com>
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+        lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 28, 2023 at 10:51:32PM +0200, Amadeusz Sławiński wrote:
-> Use PCI device IDs from pci_ids.h header and while at it change to using
-> PCI_DEVICE_DATA macro, to simplify declarations.
+On Wed 28-06-23 21:20:11, Zhihao Cheng wrote:
+> Running generic/475(filesystem consistent tests after power cut) could
+> easily trigger unattached inode error while doing fsck:
+>   Unattached zero-length inode 39405.  Clear? no
+> 
+>   Unattached inode 39405
+>   Connect to /lost+found? no
+> 
+> Above inconsistence is caused by following process:
+>        P1                       P2
+> ext4_create
+>  inode = ext4_new_inode_start_handle  // itable records nlink=1
+>  ext4_add_nondir
+>    err = ext4_add_entry  // ENOSPC
+>     ext4_append
+>      ext4_bread
+>       ext4_getblk
+>        ext4_map_blocks // returns ENOSPC
+>    drop_nlink(inode) // won't be updated into disk inode
+>    ext4_orphan_add(handle, inode)
+>     ext4_orphan_file_add
+>  ext4_journal_stop(handle)
+> 		      jbd2_journal_commit_transaction // commit success
+>               >> power cut <<
+> ext4_fill_super
+>  ext4_load_and_init_journal   // itable records nlink=1
+>  ext4_orphan_cleanup
+>   ext4_process_orphan
+>    if (inode->i_nlink)        // true, inode won't be deleted
+> 
+> Then, allocated inode will be reserved on disk and corresponds to no
+> dentries, so e2fsck reports 'unattached inode' problem.
+> 
+> The problem won't happen if orphan file feature is disabled, because
+> ext4_orphan_add() will update disk inode in orphan list mode. There
+> are several places not updating disk inode while putting inode into
+> orphan area, such as ext4_add_nondir(), ext4_symlink() and whiteout
+> in ext4_rename(). Fix it by updating inode into disk in all error
+> branches of these places.
+> 
+> Link: https://bugzilla.kernel.org/show_bug.cgi?id=217605
+> Fixes: 02f310fcf47f ("ext4: Speedup ext4 orphan inode handling")
+> Signed-off-by: Zhihao Cheng <chengzhihao1@huawei.com>
 
-PCI_DEVICE_DATA()
+Nice catch. Thanks for fixing this. Feel free to add:
 
+Reviewed-by: Jan Kara <jack@suse.cz>
+
+								Honza
+
+> ---
+>  fs/ext4/namei.c | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/fs/ext4/namei.c b/fs/ext4/namei.c
+> index 0caf6c730ce3..6bcc3770ee19 100644
+> --- a/fs/ext4/namei.c
+> +++ b/fs/ext4/namei.c
+> @@ -2799,6 +2799,7 @@ static int ext4_add_nondir(handle_t *handle,
+>  		return err;
+>  	}
+>  	drop_nlink(inode);
+> +	ext4_mark_inode_dirty(handle, inode);
+>  	ext4_orphan_add(handle, inode);
+>  	unlock_new_inode(inode);
+>  	return err;
+> @@ -3436,6 +3437,7 @@ static int ext4_symlink(struct mnt_idmap *idmap, struct inode *dir,
+>  
+>  err_drop_inode:
+>  	clear_nlink(inode);
+> +	ext4_mark_inode_dirty(handle, inode);
+>  	ext4_orphan_add(handle, inode);
+>  	unlock_new_inode(inode);
+>  	if (handle)
+> @@ -4021,6 +4023,7 @@ static int ext4_rename(struct mnt_idmap *idmap, struct inode *old_dir,
+>  			ext4_resetent(handle, &old,
+>  				      old.inode->i_ino, old_file_type);
+>  			drop_nlink(whiteout);
+> +			ext4_mark_inode_dirty(handle, whiteout);
+>  			ext4_orphan_add(handle, whiteout);
+>  		}
+>  		unlock_new_inode(whiteout);
+> -- 
+> 2.39.2
+> 
 -- 
-With Best Regards,
-Andy Shevchenko
-
-
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
