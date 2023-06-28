@@ -2,127 +2,237 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F46B741468
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 16:59:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B91F4741466
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 16:59:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230413AbjF1O6r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 10:58:47 -0400
-Received: from dfw.source.kernel.org ([139.178.84.217]:49060 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbjF1O6p (ORCPT
+        id S231689AbjF1O65 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 10:58:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57418 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231314AbjF1O6u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 10:58:45 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A0B6261349
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 14:58:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A33AEC433C0;
-        Wed, 28 Jun 2023 14:58:43 +0000 (UTC)
-Date:   Wed, 28 Jun 2023 10:58:39 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        sunliming <sunliming@kylinos.cn>,
-        Beau Belgrave <beaub@linux.microsoft.com>
-Subject: Re: [GIT PULL v2] tracing: tracing: user_event fix for 6.4
-Message-ID: <20230628105839.68cd8780@rorschach.local.home>
-In-Reply-To: <20230628105425.3f39f755@rorschach.local.home>
-References: <20230628105425.3f39f755@rorschach.local.home>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Wed, 28 Jun 2023 10:58:50 -0400
+Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DBC519B4
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 07:58:48 -0700 (PDT)
+Received: by mail-io1-xd34.google.com with SMTP id ca18e2360f4ac-780c89d1998so43944539f.1
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 07:58:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20221208.gappssmtp.com; s=20221208; t=1687964327; x=1690556327;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=gVLNXNflhPvOjKnlG9FYM+xBF+ayKh5uOsxIYUZEgxY=;
+        b=lmWDep4/foHHuWOg+T+C38eGEwSCW87j75nSrsXSSgyGwiEzo78rycisK0RhcTYjHz
+         A5DgDN5dHMJNRlIHjYgjHpR4t+Ln7bPZRUDlGgSDh0oT468QnJ9gfgSszo1qIyosTHsL
+         uO7UCLYbEuqYzAsnA1nJGM4a063BFGexhk7R969Odwaimt8kaGTVxkP1aMPfGmhzsQH8
+         Zryau8Z8S5kQeDfTidchYIDTi2en4/GCNYqs0GJVGvoF2mMU+E9vRZ0g9OnhGuGm6QYQ
+         c/9srChW0qiRZcxXxPunrHjQX1P4yCdAQaeOmoEdbRWyFtY/QMgCvoYf3qCmxGh8TJsD
+         sJMg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687964327; x=1690556327;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=gVLNXNflhPvOjKnlG9FYM+xBF+ayKh5uOsxIYUZEgxY=;
+        b=M8OOX/IdXLkte7KLiIjYfH3dz+bybpkbLU9zlk9IDDK0VDcMLHwU8vv4aDdMH0fiuO
+         +T75TQA/HKn+udOU8kVO/9nGO9BtjANexekRKLoMyavicA50BFsbfcMdC8nQxT6IRjRl
+         RkxlpxAHOQi0vervebDqwR0tbsRtzvbKPjiUnSW6PkEw/CZhML4SCJrmCvsKNr/UNT2J
+         gYViC6mbZGbltOSPJnmr+nx0JjaAG1quZ0kZ4rqlcv4RLq6qnbbW+FlJzb8k+c9NsGgh
+         Y0cFasI8My8PA8y8XOf+xLuVvOE8tFSJfeHManduE6A3XuTlHqIFEhLWnE5OcAEIZnhc
+         hTzg==
+X-Gm-Message-State: AC+VfDzXSCtEY+0VUZZ62RAmmk+Vd4C80JOezjdVEyQST6nskAaHDYPW
+        L9+2HuCIAD4xtM5FP3j7zT2qTg==
+X-Google-Smtp-Source: ACHHUZ6yXxz0aKi0MBzP3P/ZuTOUmKacdIASSEIpMs068KoO+HZtRsH+uymQF08FOr0i66Z4zDgJXQ==
+X-Received: by 2002:a05:6602:1648:b0:780:c6bb:ad8d with SMTP id y8-20020a056602164800b00780c6bbad8dmr165235iow.0.1687964327301;
+        Wed, 28 Jun 2023 07:58:47 -0700 (PDT)
+Received: from [192.168.1.94] ([96.43.243.2])
+        by smtp.gmail.com with ESMTPSA id x5-20020a6bda05000000b0077e2637f897sm3606771iob.13.2023.06.28.07.58.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 28 Jun 2023 07:58:46 -0700 (PDT)
+Message-ID: <b02657af-5bbb-b46b-cea0-ee89f385f3c1@kernel.dk>
+Date:   Wed, 28 Jun 2023 08:58:45 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [GIT PULL] bcachefs
+Content-Language: en-US
+To:     Kent Overstreet <kent.overstreet@linux.dev>
+Cc:     torvalds@linux-foundation.org, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-bcachefs@vger.kernel.org,
+        Christoph Hellwig <hch@lst.de>
+References: <20230626214656.hcp4puionmtoloat@moria.home.lan>
+ <aeb2690c-4f0a-003d-ba8b-fe06cd4142d1@kernel.dk>
+ <20230627000635.43azxbkd2uf3tu6b@moria.home.lan>
+ <91e9064b-84e3-1712-0395-b017c7c4a964@kernel.dk>
+ <20230627020525.2vqnt2pxhtgiddyv@moria.home.lan>
+ <b92ea170-d531-00f3-ca7a-613c05dcbf5f@kernel.dk>
+ <23922545-917a-06bd-ec92-ff6aa66118e2@kernel.dk>
+ <20230627201524.ool73bps2lre2tsz@moria.home.lan>
+ <c06a9e0b-8f3e-4e47-53d0-b4854a98cc44@kernel.dk>
+ <20230628040114.oz46icbsjpa4egpp@moria.home.lan>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <20230628040114.oz46icbsjpa4egpp@moria.home.lan>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+        lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Linus,
+On 6/27/23 10:01?PM, Kent Overstreet wrote:
+> On Tue, Jun 27, 2023 at 09:16:31PM -0600, Jens Axboe wrote:
+>> On 6/27/23 2:15?PM, Kent Overstreet wrote:
+>>>> to ktest/tests/xfstests/ and run it with -bcachefs, otherwise it kept
+>>>> failing because it assumed it was XFS.
+>>>>
+>>>> I suspected this was just a timing issue, and it looks like that's
+>>>> exactly what it is. Looking at the test case, it'll randomly kill -9
+>>>> fsstress, and if that happens while we have io_uring IO pending, then we
+>>>> process completions inline (for a PF_EXITING current). This means they
+>>>> get pushed to fallback work, which runs out of line. If we hit that case
+>>>> AND the timing is such that it hasn't been processed yet, we'll still be
+>>>> holding a file reference under the mount point and umount will -EBUSY
+>>>> fail.
+>>>>
+>>>> As far as I can tell, this can happen with aio as well, it's just harder
+>>>> to hit. If the fput happens while the task is exiting, then fput will
+>>>> end up being delayed through a workqueue as well. The test case assumes
+>>>> that once it's reaped the exit of the killed task that all files are
+>>>> released, which isn't necessarily true if they are done out-of-line.
+>>>
+>>> Yeah, I traced it through to the delayed fput code as well.
+>>>
+>>> I'm not sure delayed fput is responsible here; what I learned when I was
+>>> tracking this down has mostly fell out of my brain, so take anything I
+>>> say with a large grain of salt. But I believe I tested with delayed_fput
+>>> completely disabled, and found another thing in io_uring with the same
+>>> effect as delayed_fput that wasn't being flushed.
+>>
+>> I'm not saying it's delayed_fput(), I'm saying it's the delayed putting
+>> io_uring can end up doing. But yes, delayed_fput() is another candidate.
+> 
+> Sorry - was just working through my recollections/initial thought
+> process out loud
 
-Hold off on pulling this. I'll make a v3 to include a stable and Fixes
-tag as this didn't make it into the release that the code was added.
+No worries, it might actually be a combination and this is why my
+io_uring side patch didn't fully resolve it. Wrote a simple reproducer
+and it seems to reliably trigger it, but is fixed with an flush of the
+delayed fput list on mount -EBUSY return. Still digging...
 
--- Steve
+>>>> For io_uring specifically, it may make sense to wait on the fallback
+>>>> work. The below patch does this, and should fix the issue. But I'm not
+>>>> fully convinced that this is really needed, as I do think this can
+>>>> happen without io_uring as well. It just doesn't right now as the test
+>>>> does buffered IO, and aio will be fully sync with buffered IO. That
+>>>> means there's either no gap where aio will hit it without O_DIRECT, or
+>>>> it's just small enough that it hasn't been hit.
+>>>
+>>> I just tried your patch and I still have generic/388 failing - it
+>>> might've taken a bit longer to pop this time.
+>>
+>> Yep see the same here. Didn't have time to look into it after sending
+>> that email today, just took a quick stab at writing a reproducer and
+>> ended up crashing bcachefs:
+> 
+> You must have hit an error before we finished initializing the
+> filesystem, the list head never got initialized. Patch for that will be
+> in the testing branch momentarily.
 
+I'll pull that in. In testing just now, I hit a few more leaks:
 
-On Wed, 28 Jun 2023 10:54:25 -0400
-Steven Rostedt <rostedt@goodmis.org> wrote:
+unreferenced object 0xffff0000e55cf200 (size 128):
+  comm "mount", pid 723, jiffies 4294899134 (age 85.868s)
+  hex dump (first 32 bytes):
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+  backtrace:
+    [<000000001d69062c>] slab_post_alloc_hook.isra.0+0xb4/0xbc
+    [<00000000c503def2>] __kmem_cache_alloc_node+0xd0/0x178
+    [<00000000cde48528>] __kmalloc+0xac/0xd4
+    [<000000006cb9446a>] kmalloc_array.constprop.0+0x18/0x20
+    [<000000008341b32c>] bch2_fs_alloc+0x73c/0xbcc
+    [<000000003b8339fd>] bch2_fs_open+0x19c/0x430
+    [<00000000aef40a23>] bch2_mount+0x194/0x45c
+    [<0000000005e49357>] legacy_get_tree+0x2c/0x54
+    [<00000000f5813622>] vfs_get_tree+0x28/0xd4
+    [<00000000ea6972ec>] path_mount+0x5d0/0x6c8
+    [<00000000468ec307>] do_mount+0x80/0xa4
+    [<00000000ea5d305d>] __arm64_sys_mount+0x150/0x168
+    [<00000000da6d98cb>] invoke_syscall.constprop.0+0x70/0xb8
+    [<000000008f20c487>] do_el0_svc+0xbc/0xf0
+    [<00000000a1018c2c>] el0_svc+0x74/0x9c
+    [<00000000fc46d579>] el0t_64_sync_handler+0xa8/0x134
+unreferenced object 0xffff0000e55cf580 (size 128):
+  comm "mount", pid 723, jiffies 4294899134 (age 85.868s)
+  hex dump (first 32 bytes):
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+  backtrace:
+    [<000000001d69062c>] slab_post_alloc_hook.isra.0+0xb4/0xbc
+    [<00000000c503def2>] __kmem_cache_alloc_node+0xd0/0x178
+    [<00000000cde48528>] __kmalloc+0xac/0xd4
+    [<0000000097f806f1>] __prealloc_shrinker+0x3c/0x60
+    [<000000008ff20762>] register_shrinker+0x14/0x34
+    [<000000007fa7e36c>] bch2_fs_btree_cache_init+0xf8/0x150
+    [<000000005135a635>] bch2_fs_alloc+0x7ac/0xbcc
+    [<000000003b8339fd>] bch2_fs_open+0x19c/0x430
+    [<00000000aef40a23>] bch2_mount+0x194/0x45c
+    [<0000000005e49357>] legacy_get_tree+0x2c/0x54
+    [<00000000f5813622>] vfs_get_tree+0x28/0xd4
+    [<00000000ea6972ec>] path_mount+0x5d0/0x6c8
+    [<00000000468ec307>] do_mount+0x80/0xa4
+    [<00000000ea5d305d>] __arm64_sys_mount+0x150/0x168
+    [<00000000da6d98cb>] invoke_syscall.constprop.0+0x70/0xb8
+    [<000000008f20c487>] do_el0_svc+0xbc/0xf0
+unreferenced object 0xffff0000e55cf480 (size 128):
+  comm "mount", pid 723, jiffies 4294899134 (age 85.868s)
+  hex dump (first 32 bytes):
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+  backtrace:
+    [<000000001d69062c>] slab_post_alloc_hook.isra.0+0xb4/0xbc
+    [<00000000c503def2>] __kmem_cache_alloc_node+0xd0/0x178
+    [<00000000cde48528>] __kmalloc+0xac/0xd4
+    [<0000000097f806f1>] __prealloc_shrinker+0x3c/0x60
+    [<000000008ff20762>] register_shrinker+0x14/0x34
+    [<000000003d050c32>] bch2_fs_btree_key_cache_init+0x88/0x90
+    [<00000000d9f351c0>] bch2_fs_alloc+0x7c0/0xbcc
+    [<000000003b8339fd>] bch2_fs_open+0x19c/0x430
+    [<00000000aef40a23>] bch2_mount+0x194/0x45c
+    [<0000000005e49357>] legacy_get_tree+0x2c/0x54
+    [<00000000f5813622>] vfs_get_tree+0x28/0xd4
+    [<00000000ea6972ec>] path_mount+0x5d0/0x6c8
+    [<00000000468ec307>] do_mount+0x80/0xa4
+    [<00000000ea5d305d>] __arm64_sys_mount+0x150/0x168
+    [<00000000da6d98cb>] invoke_syscall.constprop.0+0x70/0xb8
+    [<000000008f20c487>] do_el0_svc+0xbc/0xf0
 
-> Linus,
+>>> I wonder if there might be a better way of solving this though? For aio,
+>>> when a process is exiting we just synchronously tear down the ioctx,
+>>> including waiting for outstanding iocbs.
+>>
+>> aio is pretty trivial, because the only async it supports is O_DIRECT
+>> on regular files which always completes in finite time. io_uring has to
+>> cancel etc, so we need to do a lot more.
 > 
-> tracing: Fix user event write on buffer disabled
+> ahh yes, buffered IO would complicate things
 > 
-> The user events write currently returns the size of what was suppose to be
-> written when tracing is disabled and nothing was written. Instead, behave like
-> trace_marker and return -EBADF, as that is what is returned if a file is opened
-> for read only, and a write is performed on it. Writing to the buffer
-> that is disabled is like trying to write to a file opened for read
-> only, as the buffer still can be read, but just not written to.
+>> But the concept of my patch should be fine, but I think we must be
+>> missing a case. Which is why I started writing a small reproducer
+>> instead. I'll pick it up again tomorrow and see what is going on here.
 > 
-> This also includes test cases for this use case.
-> 
-> 
-> Please pull the latest trace-v6.4-rc7-v2 tree, which can be found at:
-> 
-> 
->   git://git.kernel.org/pub/scm/linux/kernel/git/trace/linux-trace.git
-> trace-v6.4-rc7-v2
-> 
-> Tag SHA1: 02efa9f9b19b0d881812bae9b3e28d539b67a863
-> Head SHA1: e155047e53d25f09d055c08ae9d6c269520e90d8
-> 
-> 
-> sunliming (3):
->       tracing/user_events: Fix incorrect return value for writing operation when events are disabled
->       selftests/user_events: Enable the event before write_fault test in ftrace self-test
->       selftests/user_events: Add test cases when event is disabled
-> 
-> ----
->  kernel/trace/trace_events_user.c                  | 3 ++-
->  tools/testing/selftests/user_events/ftrace_test.c | 8 ++++++++
->  2 files changed, 10 insertions(+), 1 deletion(-)
-> ---------------------------
-> diff --git a/kernel/trace/trace_events_user.c b/kernel/trace/trace_events_user.c
-> index 8df0550415e7..09f7d9167b8e 100644
-> --- a/kernel/trace/trace_events_user.c
-> +++ b/kernel/trace/trace_events_user.c
-> @@ -2096,7 +2096,8 @@ static ssize_t user_events_write_core(struct file *file, struct iov_iter *i)
->  
->  		if (unlikely(faulted))
->  			return -EFAULT;
-> -	}
-> +	} else
-> +		return -EBADF;
->  
->  	return ret;
->  }
-> diff --git a/tools/testing/selftests/user_events/ftrace_test.c b/tools/testing/selftests/user_events/ftrace_test.c
-> index eb6904d89f14..5beb0aef1d81 100644
-> --- a/tools/testing/selftests/user_events/ftrace_test.c
-> +++ b/tools/testing/selftests/user_events/ftrace_test.c
-> @@ -324,6 +324,10 @@ TEST_F(user, write_events) {
->  	io[0].iov_base = &reg.write_index;
->  	io[0].iov_len = sizeof(reg.write_index);
->  
-> +	/* Write should return -EBADF when event is not enabled */
-> +	ASSERT_EQ(-1, writev(self->data_fd, (const struct iovec *)io, 3));
-> +	ASSERT_EQ(EBADF, errno);
-> +
->  	/* Enable event */
->  	self->enable_fd = open(enable_file, O_RDWR);
->  	ASSERT_NE(-1, write(self->enable_fd, "1", sizeof("1")))
-> @@ -400,6 +404,10 @@ TEST_F(user, write_fault) {
->  	ASSERT_EQ(0, ioctl(self->data_fd, DIAG_IOCSREG, &reg));
->  	ASSERT_EQ(0, reg.write_index);
->  
-> +	/* Enable event */
-> +	self->enable_fd = open(enable_file, O_RDWR);
-> +	ASSERT_NE(-1, write(self->enable_fd, "1", sizeof("1")))
-> +
->  	/* Write should work normally */
->  	ASSERT_NE(-1, writev(self->data_fd, (const struct iovec *)io, 2));
->  
+> Ok. Soon as you've got a patch I'll throw it at my CI, or I can point my
+> CI at your branch if you have one.
+
+I should have something later today, don't feel like I fully understand
+all of it just yet.
+
+-- 
+Jens Axboe
 
