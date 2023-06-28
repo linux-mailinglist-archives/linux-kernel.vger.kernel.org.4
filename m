@@ -2,98 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FE6574130B
+	by mail.lfdr.de (Postfix) with ESMTP id 873FD74130C
 	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 15:52:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232361AbjF1Nuw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 09:50:52 -0400
-Received: from smtp-out1.suse.de ([195.135.220.28]:58426 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229845AbjF1Nuk (ORCPT
+        id S230297AbjF1Nvr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 09:51:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50370 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231425AbjF1Nvl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 09:50:40 -0400
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id C56542189A;
-        Wed, 28 Jun 2023 13:50:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1687960238; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=VkBXGlD0oggkcayYs7pBu1iDrnzl5z5B5f3CsfkM3Qk=;
-        b=vmxpqRGHSrIk0MJ6BIwhVcjDHN0kyaV/LpTIdBczjKL+pdL5PQUEN48KMitsw+o1GEb/J2
-        lW/ghisQa6LkuOEA8ULyHfIRoWy0zTPpIkNhokT4bn9a8qnLCCgoUQMm2NbaEBZvyeI6NG
-        mZX8D69IhFSSTCybMcSXDW0yNpbbmZQ=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1687960238;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=VkBXGlD0oggkcayYs7pBu1iDrnzl5z5B5f3CsfkM3Qk=;
-        b=E3b6HytdPIOXwgM/OFchWEnEhNlTxHFVElAkORBeleDLqTurnRzWlloGvN1Z9EZDazaupL
-        m8ES9d3VFhNV+QBw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 85150138E8;
-        Wed, 28 Jun 2023 13:50:38 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id CsbhGq46nGQgDAAAMHmgww
-        (envelope-from <krisman@suse.de>); Wed, 28 Jun 2023 13:50:38 +0000
-From:   Gabriel Krisman Bertazi <krisman@suse.de>
-To:     Matteo Rizzo <matteorizzo@google.com>
-Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        io-uring@vger.kernel.org, jordyzomer@google.com, evn@google.com,
-        poprdi@google.com, corbet@lwn.net, axboe@kernel.dk,
-        asml.silence@gmail.com, akpm@linux-foundation.org,
-        keescook@chromium.org, rostedt@goodmis.org,
-        dave.hansen@linux.intel.com, ribalda@chromium.org,
-        chenhuacai@kernel.org, steve@sk2.org, gpiccoli@igalia.com,
-        ldufour@linux.ibm.com
-Subject: Re: [PATCH 1/1] Add a new sysctl to disable io_uring system-wide
-References: <20230627120058.2214509-1-matteorizzo@google.com>
-        <20230627120058.2214509-2-matteorizzo@google.com>
-Date:   Wed, 28 Jun 2023 09:50:37 -0400
-In-Reply-To: <20230627120058.2214509-2-matteorizzo@google.com> (Matteo Rizzo's
-        message of "Tue, 27 Jun 2023 12:00:58 +0000")
-Message-ID: <87ilb7ofv6.fsf@suse.de>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
+        Wed, 28 Jun 2023 09:51:41 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30DED1715;
+        Wed, 28 Jun 2023 06:51:40 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id 4fb4d7f45d1cf-51cb40f13f6so6523669a12.2;
+        Wed, 28 Jun 2023 06:51:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687960298; x=1690552298;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=47IYkdpu8yyPGp2Uw3op/mpBh+Ym1Oi6bcaaWezzn1E=;
+        b=D+yDDjaj08Lfk0gRAmdyuBFxPZwulZrHYg4rkIeU2wF3UZTlFcHeC45dj06ctGhhBa
+         eEnUTDEDK30rDE4AZ65yw4Pq42bKnsQbtWOE+lKOsDjCpQjUfv85Bkdces8k2/xNDjrB
+         orgtKf+PyUx0w3zRuOkFS5LmqNp46OajNpRNMz9lr90ivujXc7lzdPNQe30oVbOT/jna
+         MaLvv8P4G9IdW5B9lOdj/A+iF9t90xScjnrYMiSvuJ7DitMfFB+Im1FYBPmHQhUD38PT
+         SJ6i6DIP68YT6OGNbcv5zoarFd7WhefIGddqBKcxu7Lehyf4Zul11U4lm+kbIyhi00sN
+         O+2w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687960298; x=1690552298;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=47IYkdpu8yyPGp2Uw3op/mpBh+Ym1Oi6bcaaWezzn1E=;
+        b=hFvAP7N0oralV0TdPJbYc2QzpIRpO4KM6vKd8YAnmFr2tCe65wUOuKx1aTx2HrUX1q
+         P4Yyao/ItWUDpuNLA7GhJts31LZfEInwYzBeBxukzJTEMuoMeb8u/mjm7e3RkavfAmCa
+         EqPNSqMg4XohcjuxjscnIlzrvHqStX7kJLwCHwi5Xhv0QeWkW+ZXY7puHko6kd5xgkRY
+         QxR/gAT2jZx/WLC1o/XvutxrtERvFazpJIWaGvhIV/uv7HMgoj6LuFqgiqZt03alF+0d
+         GYtcWS0W6R2g4t3sSJC/foTiLrz3j66s+hvRaQLcWhkHvIZlJETR+EPZ2LE83QMAy8oK
+         gT5w==
+X-Gm-Message-State: AC+VfDxiXM9BHdu0WGNQEgXcxGfT1pjyuEYB8ELfJLkancDJrlIpDM1t
+        t7nslYtPpxZSUQA0zNC1mIFjHfGnBUgxW91HNB0=
+X-Google-Smtp-Source: ACHHUZ5/aml8Qro0WjiQrCcQZmHN9izrK6AaqhR4lEJ48L/5d/n5iBniCxNMSgrvF0j73g6sDIK3dXC3q1vQIgID0AE=
+X-Received: by 2002:a50:ee96:0:b0:51a:3334:f88b with SMTP id
+ f22-20020a50ee96000000b0051a3334f88bmr26148972edr.10.1687960298500; Wed, 28
+ Jun 2023 06:51:38 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
+References: <1687955688-20809-1-git-send-email-quic_mojha@quicinc.com> <1687955688-20809-6-git-send-email-quic_mojha@quicinc.com>
+In-Reply-To: <1687955688-20809-6-git-send-email-quic_mojha@quicinc.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Wed, 28 Jun 2023 16:51:02 +0300
+Message-ID: <CAHp75VcTZRdNOdgjekCMxu-GvSCiw669SnEdyL=hO0SHLkZL2g@mail.gmail.com>
+Subject: Re: [PATCH v4 05/21] soc: qcom: Add linux minidump smem backend
+ driver support
+To:     Mukesh Ojha <quic_mojha@quicinc.com>
+Cc:     corbet@lwn.net, agross@kernel.org, andersson@kernel.org,
+        konrad.dybcio@linaro.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        keescook@chromium.org, tony.luck@intel.com, gpiccoli@igalia.com,
+        mathieu.poirier@linaro.org, catalin.marinas@arm.com,
+        will@kernel.org, linus.walleij@linaro.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-hardening@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+        lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Matteo Rizzo <matteorizzo@google.com> writes:
+On Wed, Jun 28, 2023 at 3:35=E2=80=AFPM Mukesh Ojha <quic_mojha@quicinc.com=
+> wrote:
+>
+> Add shared memory based minidump backend driver and hook it
+> with minidump core (qcom_minidump) by registering SMEM as
+> backend device.
 
-> diff --git a/Documentation/admin-guide/sysctl/kernel.rst b/Documentation/admin-guide/sysctl/kernel.rst
-> index d85d90f5d000..3c53a238332a 100644
-> --- a/Documentation/admin-guide/sysctl/kernel.rst
-> +++ b/Documentation/admin-guide/sysctl/kernel.rst
-> @@ -450,6 +450,20 @@ this allows system administrators to override the
->  ``IA64_THREAD_UAC_NOPRINT`` ``prctl`` and avoid logs being flooded.
->  
->  
-> +io_uring_disabled
-> +=========================
+...
+
+>         help
+>           Enablement of core minidump feature is controlled from boot fir=
+mware
+> -         side, and this config allow linux to query minidump segments as=
+sociated
+> -         with the remote processor and check its validity.
+> +         side, and this config allow linux to query and manages minidump
+
+allows
+Linux
+
+> +         table for remote processors as well as APSS.
 > +
-> +Prevents all processes from creating new io_uring instances. Enabling this
-> +shrinks the kernel's attack surface.
+> +         This config should be enabled if the low level minidump is impl=
+emented
+> +         as part of SMEM.
+
+...
+
+> +#include <linux/io.h>
+>  #include <linux/kernel.h>
+>  #include <linux/module.h>
+> -#include <linux/io.h>
+
+Yeah, the result of wrong order in the initial commit. Can you fix it there=
+?
+
+...
+
+> -#define MINIDUMP_SS_ENCR_DONE  ('D' << 24 | 'O' << 16 | 'N' << 8 | 'E' <=
+< 0)
+> -#define MINIDUMP_SS_ENABLED    ('E' << 24 | 'N' << 16 | 'B' << 8 | 'L' <=
+< 0)
 > +
-> += =============================================================
-> +0 All processes can create io_uring instances as normal. This is the default
-> +  setting.
-> +1 io_uring is disabled. io_uring_setup always fails with -EPERM. Existing
-> +  io_uring instances can still be used.
-> += =============================================================
+> +#define MINIDUMP_REGION_VALID     ('V' << 24 | 'A' << 16 | 'L' << 8 | 'I=
+' << 0)
+> +#define MINIDUMP_REGION_INVALID           ('I' << 24 | 'N' << 16 | 'V' <=
+< 8 | 'A' << 0)
+> +#define MINIDUMP_REGION_INIT      ('I' << 24 | 'N' << 16 | 'I' << 8 | 'T=
+' << 0)
+> +#define MINIDUMP_REGION_NOINIT    0
+> +
+> +#define MINIDUMP_SS_ENCR_REQ      (0 << 24 | 'Y' << 16 | 'E' << 8 | 'S' =
+<< 0)
+> +#define MINIDUMP_SS_ENCR_NOTREQ           (0 << 24 | 0 << 16 | 'N' << 8 =
+| 'R' << 0)
+> +#define MINIDUMP_SS_ENCR_START    ('S' << 24 | 'T' << 16 | 'R' << 8 | 'T=
+' << 0)
+> +#define MINIDUMP_SS_ENCR_DONE     ('D' << 24 | 'O' << 16 | 'N' << 8 | 'E=
+' << 0)
+> +#define MINIDUMP_SS_ENABLED       ('E' << 24 | 'N' << 16 | 'B' << 8 | 'L=
+' << 0)
 
-I had an internal request for something like this recently.  If we go
-this route, we could use a intermediary option that limits io_uring
-to root processes only.
+For all these, please use format like
 
--- 
-Gabriel Krisman Bertazi
+#define MINIDUMP_SS_ENCR_START    0x.... // STRT
+
+...
+
+> +static int smem_md_table_exit(struct minidump *md)
+> +{
+> +       struct minidump_ss_data *mdss_data;
+> +
+> +       mdss_data =3D md->apss_data;
+> +       memset(mdss_data->md_ss_toc,
+> +              cpu_to_le32(0), sizeof(struct minidump_subsystem));
+
+Do you need cpu_to_le32() here?
+Can this be on one line?
+
+> +       return 0;
+> +}
+
+...
+
+> +
+
+Unnecessary blank line.
+
+> +module_platform_driver(qcom_minidump_smem_driver);
+
+...
+
+> +       smem->minidump =3D platform_device_register_data(&pdev->dev, "qco=
+m-minidump-smem",
+> +                                                     PLATFORM_DEVID_NONE=
+, NULL,
+> +                                                     0);
+
+Why can't room on the previous line be used?
+
+> +       if (IS_ERR(smem->minidump))
+> +               dev_dbg(&pdev->dev, "failed to register minidump device\n=
+");
+
+--=20
+With Best Regards,
+Andy Shevchenko
