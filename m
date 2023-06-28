@@ -2,162 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AE26741434
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 16:48:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63E8A741439
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 16:50:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231585AbjF1Osn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 10:48:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56040 "EHLO
+        id S231210AbjF1OuN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 10:50:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231422AbjF1Osi (ORCPT
+        with ESMTP id S231768AbjF1Otq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 10:48:38 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5829A1984;
-        Wed, 28 Jun 2023 07:48:37 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id D04D41F37F;
-        Wed, 28 Jun 2023 14:48:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1687963715; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=AaXdh1KFTwTLnhJwlh22gGE6uZWJAZgaTyJ+Wnl5PrI=;
-        b=ZDOhglrGlDcNdFdJmzW5ldZVObsj152LZ1rLfrgDVl5t/jtmGgqTC/v0wgnoepQUMttCHc
-        ht3bC98w+gqe6x9OSSOxeD05G0t6pu73pjgu7dEz5Qzg4qIziuRG00hy4MMUKnY2q/qFDN
-        x+EbtboXktwgc171b7G1ygMvof4RXXQ=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1687963715;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=AaXdh1KFTwTLnhJwlh22gGE6uZWJAZgaTyJ+Wnl5PrI=;
-        b=9ZnE9EhSJZ5yUfMsIaKwnusgg8eBTrzElFboY4+OuhYoVEBzwWLFdzZtSaqv2X69xwoqS4
-        Cc0nTGAmp3TgxcDg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id C1FDE138EF;
-        Wed, 28 Jun 2023 14:48:35 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id epVRL0NInGQoKwAAMHmgww
-        (envelope-from <jack@suse.cz>); Wed, 28 Jun 2023 14:48:35 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id 2E529A0707; Wed, 28 Jun 2023 16:48:35 +0200 (CEST)
-Date:   Wed, 28 Jun 2023 16:48:35 +0200
-From:   Jan Kara <jack@suse.cz>
-To:     Zhihao Cheng <chengzhihao1@huawei.com>
-Cc:     tytso@mit.edu, adilger.kernel@dilger.ca, jack@suse.cz,
-        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yi.zhang@huawei.com
-Subject: Re: [PATCH] ext4: Fix unttached inode after power cut with orphan
- file feature enabled
-Message-ID: <20230628144835.fqhmbpxoj6fee762@quack3>
-References: <20230628132011.650383-1-chengzhihao1@huawei.com>
+        Wed, 28 Jun 2023 10:49:46 -0400
+Received: from todd.t-8ch.de (unknown [IPv6:2a01:4f8:c010:41de::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F01842127;
+        Wed, 28 Jun 2023 07:49:04 -0700 (PDT)
+Date:   Wed, 28 Jun 2023 16:48:48 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=t-8ch.de; s=mail;
+        t=1687963729; bh=HoX5J3D8ZBsoaEAB7nN7zJQyhlvUjkMd15UQgpJAqwI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=qUwMbCn0SNFMLKV9yL0N6+FLoeKeNO+SHyL1BO/SbQbDfvzNZhJcSE1B0seWepqmn
+         9YWfAilBj/KAyz1zsJM67oIUIISvFIo92z3DlytDZwqlTXO0evUXXjkYx6wuHhsEB9
+         B0ShqYbUUkjoXklrcuDIMPdIdSUOc+O2nGs1Hu2U=
+From:   Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas@t-8ch.de>
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     Dave Chinner <david@fromorbit.com>,
+        Kent Overstreet <kent.overstreet@linux.dev>,
+        torvalds@linux-foundation.org, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-bcachefs@vger.kernel.org,
+        Christoph Hellwig <hch@lst.de>
+Subject: Re: [GIT PULL] bcachefs
+Message-ID: <e5df59c7-eadd-4c1a-9499-5a98ef719216@t-8ch.de>
+References: <20230626214656.hcp4puionmtoloat@moria.home.lan>
+ <aeb2690c-4f0a-003d-ba8b-fe06cd4142d1@kernel.dk>
+ <20230627000635.43azxbkd2uf3tu6b@moria.home.lan>
+ <91e9064b-84e3-1712-0395-b017c7c4a964@kernel.dk>
+ <20230627020525.2vqnt2pxhtgiddyv@moria.home.lan>
+ <b92ea170-d531-00f3-ca7a-613c05dcbf5f@kernel.dk>
+ <23922545-917a-06bd-ec92-ff6aa66118e2@kernel.dk>
+ <20230627201524.ool73bps2lre2tsz@moria.home.lan>
+ <ZJtdEgbt+Wa8UHij@dread.disaster.area>
+ <3337524d-347c-900a-a1c7-5774cd731af0@kernel.dk>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230628132011.650383-1-chengzhihao1@huawei.com>
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <3337524d-347c-900a-a1c7-5774cd731af0@kernel.dk>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed 28-06-23 21:20:11, Zhihao Cheng wrote:
-> Running generic/475(filesystem consistent tests after power cut) could
-> easily trigger unattached inode error while doing fsck:
->   Unattached zero-length inode 39405.  Clear? no
-> 
->   Unattached inode 39405
->   Connect to /lost+found? no
-> 
-> Above inconsistence is caused by following process:
->        P1                       P2
-> ext4_create
->  inode = ext4_new_inode_start_handle  // itable records nlink=1
->  ext4_add_nondir
->    err = ext4_add_entry  // ENOSPC
->     ext4_append
->      ext4_bread
->       ext4_getblk
->        ext4_map_blocks // returns ENOSPC
->    drop_nlink(inode) // won't be updated into disk inode
->    ext4_orphan_add(handle, inode)
->     ext4_orphan_file_add
->  ext4_journal_stop(handle)
-> 		      jbd2_journal_commit_transaction // commit success
->               >> power cut <<
-> ext4_fill_super
->  ext4_load_and_init_journal   // itable records nlink=1
->  ext4_orphan_cleanup
->   ext4_process_orphan
->    if (inode->i_nlink)        // true, inode won't be deleted
-> 
-> Then, allocated inode will be reserved on disk and corresponds to no
-> dentries, so e2fsck reports 'unattached inode' problem.
-> 
-> The problem won't happen if orphan file feature is disabled, because
-> ext4_orphan_add() will update disk inode in orphan list mode. There
-> are several places not updating disk inode while putting inode into
-> orphan area, such as ext4_add_nondir(), ext4_symlink() and whiteout
-> in ext4_rename(). Fix it by updating inode into disk in all error
-> branches of these places.
-> 
-> Link: https://bugzilla.kernel.org/show_bug.cgi?id=217605
-> Fixes: 02f310fcf47f ("ext4: Speedup ext4 orphan inode handling")
-> Signed-off-by: Zhihao Cheng <chengzhihao1@huawei.com>
+On 2023-06-28 08:40:27-0600, Jens Axboe wrote:
+> On 6/27/23 4:05?PM, Dave Chinner wrote:
+> [..]
 
-Nice catch. Thanks for fixing this. Feel free to add:
-
-Reviewed-by: Jan Kara <jack@suse.cz>
-
-								Honza
-
-> ---
->  fs/ext4/namei.c | 3 +++
->  1 file changed, 3 insertions(+)
+> > There should be no reason to need to specify the filesystem type for
+> > filesystems that blkid recognises. from common/config:
+> > 
+> >         # Autodetect fs type based on what's on $TEST_DEV unless it's been set
+> >         # externally
+> >         if [ -z "$FSTYP" ] && [ ! -z "$TEST_DEV" ]; then
+> >                 FSTYP=`blkid -c /dev/null -s TYPE -o value $TEST_DEV`
+> >         fi
+> >         FSTYP=${FSTYP:=xfs}
+> >         export FSTYP
 > 
-> diff --git a/fs/ext4/namei.c b/fs/ext4/namei.c
-> index 0caf6c730ce3..6bcc3770ee19 100644
-> --- a/fs/ext4/namei.c
-> +++ b/fs/ext4/namei.c
-> @@ -2799,6 +2799,7 @@ static int ext4_add_nondir(handle_t *handle,
->  		return err;
->  	}
->  	drop_nlink(inode);
-> +	ext4_mark_inode_dirty(handle, inode);
->  	ext4_orphan_add(handle, inode);
->  	unlock_new_inode(inode);
->  	return err;
-> @@ -3436,6 +3437,7 @@ static int ext4_symlink(struct mnt_idmap *idmap, struct inode *dir,
->  
->  err_drop_inode:
->  	clear_nlink(inode);
-> +	ext4_mark_inode_dirty(handle, inode);
->  	ext4_orphan_add(handle, inode);
->  	unlock_new_inode(inode);
->  	if (handle)
-> @@ -4021,6 +4023,7 @@ static int ext4_rename(struct mnt_idmap *idmap, struct inode *old_dir,
->  			ext4_resetent(handle, &old,
->  				      old.inode->i_ino, old_file_type);
->  			drop_nlink(whiteout);
-> +			ext4_mark_inode_dirty(handle, whiteout);
->  			ext4_orphan_add(handle, whiteout);
->  		}
->  		unlock_new_inode(whiteout);
-> -- 
-> 2.39.2
-> 
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+> Gotcha, yep it's because blkid fails to figure it out.
+
+This needs blkid/util-linux version 2.39 which is fairly new.
+If it doesn't work with that, it's a bug.
+
+Thomas
