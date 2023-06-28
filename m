@@ -2,153 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D3CD741239
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 15:23:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A23A741273
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 15:32:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231273AbjF1NWL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 09:22:11 -0400
-Received: from out-39.mta1.migadu.com ([95.215.58.39]:32590 "EHLO
-        out-39.mta1.migadu.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231833AbjF1NWH (ORCPT
+        id S232208AbjF1NbJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 09:31:09 -0400
+Received: from bg4.exmail.qq.com ([43.155.65.254]:50890 "EHLO
+        bg4.exmail.qq.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232463AbjF1Nah (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 09:22:07 -0400
-Message-ID: <4ebfa74e-8998-a1af-e6b9-3701008900ec@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1687958523;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=9IKeJEG13+S2kDeEbfPQ0kmL8pMxMzPSNBLN+Rhu64E=;
-        b=s4/5XXRAqixfYxME1snH8BsG2Z7AryY6nW2SdeK1xdJofEZ820+LsfkrcTTWs7C2wuXkom
-        Y0met+OzoOxBOXg0w5XNaz3pYCVnDSfoXJXQ3lMqxfca004uCQZtnxLn4k6m6r70HOHABz
-        JhGbp+SJh/7I+nZUN0UikTRtf8ZNxzU=
-Date:   Wed, 28 Jun 2023 14:22:00 +0100
+        Wed, 28 Jun 2023 09:30:37 -0400
+X-QQ-mid: bizesmtp62t1687959022tib37q6q
+Received: from linux-lab-host.localdomain ( [116.30.129.193])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Wed, 28 Jun 2023 21:30:20 +0800 (CST)
+X-QQ-SSF: 01200000000000D0V000000A0000000
+X-QQ-FEAT: LE7C6P2vL8S1CRIbgI3gKZWFO4BCex2pqEfZtd/aX85aJ9sjdLMhw/y0Ap4tA
+        7fHeizX68awglr5Opdxyh1pyvulK+J5cwyQFi0jpVR9W0e7iLNrrSLzAjXQI4ptIaAtgkqw
+        /mDAJc4sQJ/jhWto1SZoK17Sdg5sHkxCIVC4A2mjnRhn7DE1KV+u0ueg6mOLQu2UP1KeIip
+        Uhv/c4Wct8cBN45EWXwkRdNa9OtNasKLSnlrpf2xRniMG+fehkLsV+C4UEonZ+a1i0u9PgT
+        NSR4jmWS0jHaPoy0P+3AipY3jTWBpD1iqyZgyEP8yHRyid9F0U5Gbc1GMiiVLg8PCRYV/GT
+        Xi8EuPBsiJQ57h33gS9szn2ksgwW9VNGV8xGBOSphhLwE+qm82nrNY1BhQJJg==
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 2723118437991997148
+From:   Zhangjin Wu <falcon@tinylab.org>
+To:     thomas@t-8ch.de, w@1wt.eu
+Cc:     falcon@tinylab.org, arnd@arndb.de, david.laight@aculab.com,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-riscv@lists.infradead.org
+Subject: [PATCH v5 07/14] tools/nolibc: arch-loongarch.h: shrink with SYSCALL_CLOBBERLIST
+Date:   Wed, 28 Jun 2023 21:22:21 +0800
+Message-Id: <a906a8e5bb39d88fee89be8f2bca8bf62307d468.1687957589.git.falcon@tinylab.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <cover.1687957589.git.falcon@tinylab.org>
+References: <cover.1687957589.git.falcon@tinylab.org>
 MIME-Version: 1.0
-Subject: Re: [RFC PATCH v9 00/10] Create common DPLL configuration API
-Content-Language: en-US
-To:     Jiri Pirko <jiri@resnulli.us>
-Cc:     "Kubalewski, Arkadiusz" <arkadiusz.kubalewski@intel.com>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "vadfed@meta.com" <vadfed@meta.com>,
-        "jonathan.lemon@gmail.com" <jonathan.lemon@gmail.com>,
-        "pabeni@redhat.com" <pabeni@redhat.com>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "Brandeburg, Jesse" <jesse.brandeburg@intel.com>,
-        "Nguyen, Anthony L" <anthony.l.nguyen@intel.com>,
-        "M, Saeed" <saeedm@nvidia.com>,
-        "leon@kernel.org" <leon@kernel.org>,
-        "richardcochran@gmail.com" <richardcochran@gmail.com>,
-        "sj@kernel.org" <sj@kernel.org>,
-        "javierm@redhat.com" <javierm@redhat.com>,
-        "ricardo.canuelo@collabora.com" <ricardo.canuelo@collabora.com>,
-        "mst@redhat.com" <mst@redhat.com>,
-        "tzimmermann@suse.de" <tzimmermann@suse.de>,
-        "Michalik, Michal" <michal.michalik@intel.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "jacek.lawrynowicz@linux.intel.com" 
-        <jacek.lawrynowicz@linux.intel.com>,
-        "airlied@redhat.com" <airlied@redhat.com>,
-        "ogabbay@kernel.org" <ogabbay@kernel.org>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "nipun.gupta@amd.com" <nipun.gupta@amd.com>,
-        "axboe@kernel.dk" <axboe@kernel.dk>,
-        "linux@zary.sk" <linux@zary.sk>,
-        "masahiroy@kernel.org" <masahiroy@kernel.org>,
-        "benjamin.tissoires@redhat.com" <benjamin.tissoires@redhat.com>,
-        "geert+renesas@glider.be" <geert+renesas@glider.be>,
-        "Olech, Milena" <milena.olech@intel.com>,
-        "kuniyu@amazon.com" <kuniyu@amazon.com>,
-        "liuhangbin@gmail.com" <liuhangbin@gmail.com>,
-        "hkallweit1@gmail.com" <hkallweit1@gmail.com>,
-        "razor@blackwall.org" <razor@blackwall.org>,
-        "idosch@nvidia.com" <idosch@nvidia.com>,
-        "lucien.xin@gmail.com" <lucien.xin@gmail.com>,
-        "nicolas.dichtel@6wind.com" <nicolas.dichtel@6wind.com>,
-        "phil@nwl.cc" <phil@nwl.cc>,
-        "claudiajkang@gmail.com" <claudiajkang@gmail.com>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "intel-wired-lan@lists.osuosl.org" <intel-wired-lan@lists.osuosl.org>,
-        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>, poros <poros@redhat.com>,
-        mschmidt <mschmidt@redhat.com>,
-        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>
-References: <20230623123820.42850-1-arkadiusz.kubalewski@intel.com>
- <ZJq3a6rl6dnPMV17@nanopsycho>
- <DM6PR11MB4657084DDD7554663F86C1C19B24A@DM6PR11MB4657.namprd11.prod.outlook.com>
- <DM6PR11MB4657A1ACB586AD9B45C7996E9B24A@DM6PR11MB4657.namprd11.prod.outlook.com>
- <2e9ce197-2732-d061-b11d-4f4513af6abc@linux.dev>
- <ZJwxHucKMwCQMMVM@nanopsycho>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Vadim Fedorenko <vadim.fedorenko@linux.dev>
-In-Reply-To: <ZJwxHucKMwCQMMVM@nanopsycho>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrgz:qybglogicsvrgz5a-1
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 28/06/2023 14:09, Jiri Pirko wrote:
-> Wed, Jun 28, 2023 at 01:11:19PM CEST, vadim.fedorenko@linux.dev wrote:
->> On 28/06/2023 10:27, Kubalewski, Arkadiusz wrote:
->>>> From: Kubalewski, Arkadiusz
->>>> Sent: Wednesday, June 28, 2023 11:15 AM
->>>>
->>>>> From: Jiri Pirko <jiri@resnulli.us>
->>>>> Sent: Tuesday, June 27, 2023 12:18 PM
->>>>>
->>>>> Fri, Jun 23, 2023 at 02:38:10PM CEST, arkadiusz.kubalewski@intel.com
->>>> wrote:
->>>>>
->>>>>> v8 -> v9:
->>>>>
->>>>> Could you please address all the unresolved issues from v8 and send v10?
->>>>> I'm not reviewing this one.
->>>>>
->>>>> Thanks!
->>>>
->>>> Sure, will do, but first missing to-do/discuss list:
->>>> 1) remove mode_set as not used by any driver
->>>> 2) remove "no-added-value" static functions descriptions in
->>>>     dpll_core/dpll_netlink
->>>> 3) merge patches [ 03/10, 04/10, 05/10 ] into patches that are compiling
->>>>     after each patch apply
->>>> 4) remove function return values descriptions/lists
->>>> 5) Fix patch [05/10]:
->>>>     - status Supported
->>>>     - additional maintainers
->>>>     - remove callback:
->>>>       int (*source_pin_idx_get)(...) from `struct dpll_device_ops`
->>>> 6) Fix patch [08/10]: rethink ice mutex locking scheme
->>>> 7) Fix patch [09/10]: multiple comments on
->>>> https://lore.kernel.org/netdev/ZIQu+%2Fo4J0ZBspVg@nanopsycho/#t
->>>> 8) add PPS DPLL phase offset to the netlink get-device API
->>>>
->>>> Thank you!
->>>> Arkadiusz
->>>
->>> If someone has any objections please state them now, I will work on
->>> all above except 5) and 7).
->>> Vadim, could you take care of those 2 points?
->>>
->> Yeah, sure, I'll update 5 and 7.
->> I'm not sure about 8) - do we really need this info, I believe every
->> supported DPLL device exports PTP device as well. But I'm Ok to add this
->> feature too.
-> 
-> Could you add the notification work while you are at it? I don't want
-> that to be forgotten. Thanks!
+my_syscall<N> share a same long clobber list, define a macro for them.
 
-Sure, Jiri, I'm working on it for ptp_ocp.
+Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
+---
+ tools/include/nolibc/arch-loongarch.h | 25 +++++++++++--------------
+ 1 file changed, 11 insertions(+), 14 deletions(-)
 
->>
->>> Thank you!
->>> Arkadiusz
->>
+diff --git a/tools/include/nolibc/arch-loongarch.h b/tools/include/nolibc/arch-loongarch.h
+index 292d6a58dc87..fbb4844f7993 100644
+--- a/tools/include/nolibc/arch-loongarch.h
++++ b/tools/include/nolibc/arch-loongarch.h
+@@ -23,6 +23,10 @@
+  */
+ #define __ARCH_WANT_SYS_PSELECT6
+ 
++#define SYSCALL_CLOBBERLIST			\
++	"memory", "$t0", "$t1", "$t2", "$t3",	\
++	"$t4", "$t5", "$t6", "$t7", "$t8"
++
+ #define my_syscall0(num)							\
+ ({										\
+ 	register long _num __asm__ ("a7") = (num);				\
+@@ -32,8 +36,7 @@
+ 		"syscall 0\n"							\
+ 		: "=r"(_arg1)							\
+ 		: "r"(_num)							\
+-		: "memory", "$t0", "$t1", "$t2", "$t3",				\
+-		  "$t4", "$t5", "$t6", "$t7", "$t8"				\
++		: SYSCALL_CLOBBERLIST						\
+ 	);									\
+ 	_arg1;									\
+ })
+@@ -47,8 +50,7 @@
+ 		"syscall 0\n"							\
+ 		: "+r"(_arg1)							\
+ 		: "r"(_num)							\
+-		: "memory", "$t0", "$t1", "$t2", "$t3",				\
+-		  "$t4", "$t5", "$t6", "$t7", "$t8"				\
++		: SYSCALL_CLOBBERLIST						\
+ 	);									\
+ 	_arg1;									\
+ })
+@@ -64,8 +66,7 @@
+ 		: "+r"(_arg1)							\
+ 		: "r"(_arg2),							\
+ 		  "r"(_num)							\
+-		: "memory", "$t0", "$t1", "$t2", "$t3",				\
+-		  "$t4", "$t5", "$t6", "$t7", "$t8"				\
++		: SYSCALL_CLOBBERLIST						\
+ 	);									\
+ 	_arg1;									\
+ })
+@@ -82,8 +83,7 @@
+ 		: "+r"(_arg1)							\
+ 		: "r"(_arg2), "r"(_arg3),					\
+ 		  "r"(_num)							\
+-		: "memory", "$t0", "$t1", "$t2", "$t3",				\
+-		  "$t4", "$t5", "$t6", "$t7", "$t8"				\
++		: SYSCALL_CLOBBERLIST						\
+ 	);									\
+ 	_arg1;									\
+ })
+@@ -101,8 +101,7 @@
+ 		: "+r"(_arg1)							\
+ 		: "r"(_arg2), "r"(_arg3), "r"(_arg4),				\
+ 		  "r"(_num)							\
+-		: "memory", "$t0", "$t1", "$t2", "$t3",				\
+-		  "$t4", "$t5", "$t6", "$t7", "$t8"				\
++		: SYSCALL_CLOBBERLIST						\
+ 	);									\
+ 	_arg1;									\
+ })
+@@ -121,8 +120,7 @@
+ 		: "+r"(_arg1)							\
+ 		: "r"(_arg2), "r"(_arg3), "r"(_arg4), "r"(_arg5),		\
+ 		  "r"(_num)							\
+-		: "memory", "$t0", "$t1", "$t2", "$t3",				\
+-		  "$t4", "$t5", "$t6", "$t7", "$t8"				\
++		: SYSCALL_CLOBBERLIST						\
+ 	);									\
+ 	_arg1;									\
+ })
+@@ -142,8 +140,7 @@
+ 		: "+r"(_arg1)							\
+ 		: "r"(_arg2), "r"(_arg3), "r"(_arg4), "r"(_arg5), "r"(_arg6),	\
+ 		  "r"(_num)							\
+-		: "memory", "$t0", "$t1", "$t2", "$t3",				\
+-		  "$t4", "$t5", "$t6", "$t7", "$t8"				\
++		: SYSCALL_CLOBBERLIST						\
+ 	);									\
+ 	_arg1;									\
+ })
+-- 
+2.25.1
 
