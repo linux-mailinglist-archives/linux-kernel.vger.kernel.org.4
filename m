@@ -2,141 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4484F74186B
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 20:58:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 515E9741875
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 20:59:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231640AbjF1S4v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 14:56:51 -0400
-Received: from 139-28-40-42.artus.net.pl ([139.28.40.42]:57848 "EHLO
-        tarta.nabijaczleweli.xyz" rhost-flags-OK-FAIL-OK-OK)
-        by vger.kernel.org with ESMTP id S232925AbjF1Syd (ORCPT
+        id S231538AbjF1S6c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 14:58:32 -0400
+Received: from bg2.exmail.qq.com ([114.132.123.192]:13055 "EHLO
+        bg2.exmail.qq.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232446AbjF1S4z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 14:54:33 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=nabijaczleweli.xyz;
-        s=202305; t=1687978469;
-        bh=407huGS784lSIw/L/pvQpXD2aAp/xkHCUK2qKZHT5AE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=YEn/HOy3ZICA3+l2IV3469bYHERBi4TAUqhwAP5q1X9kuMYuFl6u5EsvMWMGtX7o5
-         6jxJaBZ/fPxHj4GhcApIPQW+ZAqy3oxDP6fXoam5bNZwO7RdS5e5U1TWySlLCV1DTk
-         VHC009Ftk8NQKDYPkiNDcL822ueIhvD/LrSqKR+i3DBNQxNGqkBTMXZv2B1GAEgCDm
-         JmxCJlHXbFYghbWj4nBuNrEVV4wG/Q952nG6HgbGrHaaQuqcgo+VNyzRDGMdb50R0V
-         v0/d3Gb087RhRKnFzRSZVVRpIY10Lr5UVuyqMSlc1ns1HWfvzpxbDw5yXDGWhqdo4T
-         s49yhejK8BWTg==
-Received: from tarta.nabijaczleweli.xyz (unknown [192.168.1.250])
-        by tarta.nabijaczleweli.xyz (Postfix) with ESMTPSA id C0BB410F4;
-        Wed, 28 Jun 2023 20:54:29 +0200 (CEST)
-Date:   Wed, 28 Jun 2023 20:54:28 +0200
-From:   Ahelenia =?utf-8?Q?Ziemia=C5=84ska?= 
-        <nabijaczleweli@nabijaczleweli.xyz>
-To:     Jan Kara <jack@suse.cz>
-Cc:     Amir Goldstein <amir73il@gmail.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <brauner@kernel.org>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Chung-Chiang Cheng <cccheng@synology.com>, ltp@lists.linux.it
-Subject: Re: [PATCH v4 0/3] fanotify accounting for fs/splice.c
-Message-ID: <ns6dcoilztzcutuduujfnbz5eggy3fk7z4t2bajy545zbay5d7@4bodludrpxe6>
-References: <t5az5bvpfqd3rrwla43437r5vplmkujdytixcxgm7sc4hojspg@jcc63stk66hz>
- <cover.1687898895.git.nabijaczleweli@nabijaczleweli.xyz>
- <20230628113853.2b67fic5nvlisx3r@quack3>
+        Wed, 28 Jun 2023 14:56:55 -0400
+X-QQ-mid: bizesmtp90t1687978484tji35iud
+Received: from linux-lab-host.localdomain ( [116.30.129.193])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Thu, 29 Jun 2023 02:54:42 +0800 (CST)
+X-QQ-SSF: 01200000000000D0W000000A0000000
+X-QQ-FEAT: Lc4bMlOoZUGkpC/7Ifsyooy6DUcO5i0KRvgdG3YbtX646PzLWnBy6Qxr2/y+U
+        ozNqeIN24oj33/Fotsv6FXjKjhpcf5dts1f4iXPVGjLEOyao8iLruCcBq410/Itbx/yQ82D
+        4a/DbSH5mlYrgjNVPOh+05Z7F8YWqIAq1qjLT4KMXlyNwrpo7QCsU1QCoKz7cIBCFcrr/Ty
+        IDCMxPgLOJFrecb2pQfzxgO73wk3O0vG3Jcs9W5Sk1Bx2FAaefhT0X35wITWlcT1vqd/uvw
+        bUFlzoPMtnjOpFjHio6NpWI5h0Xj5DFbj2dO5JQCyMdvzC+NNyc+s2q5cad0Yuidf0no2SX
+        kpAAdeYqkgMSQGSZPfd5ki6h4+yttF3ULm1K+4MDPrKxb1Fr2gGOQLmqydKkQ==
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 5556601059308245209
+From:   Zhangjin Wu <falcon@tinylab.org>
+To:     thomas@t-8ch.de, w@1wt.eu
+Cc:     falcon@tinylab.org, arnd@arndb.de, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org
+Subject: [PATCH v1 03/11] tools/nolibc: include crt.h before arch.h
+Date:   Thu, 29 Jun 2023 02:54:35 +0800
+Message-Id: <c61b5bc53895e8c6b2f30d59f86067973e6bbce0.1687976753.git.falcon@tinylab.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <cover.1687976753.git.falcon@tinylab.org>
+References: <cover.1687976753.git.falcon@tinylab.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="t22ubltek2za4lgw"
-Content-Disposition: inline
-In-Reply-To: <20230628113853.2b67fic5nvlisx3r@quack3>
-User-Agent: NeoMutt/20230517
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrsz:qybglogicsvrsz3a-3
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The crt.h provides a new _start_c() function, which is required by the
+new assembly _start entry of arch-<ARCH>.h (included by arch.h), let's
+include crt.h before arch.h.
 
---t22ubltek2za4lgw
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+This '#include "crt.h"' doesn't let the new _start_c() work immediately,
+but it is a base of the coming patches to move most of the assembly
+_start operations to the _start_c() function for every supported
+architecture.
 
-Hi!
+Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
+---
+ tools/include/nolibc/Makefile | 1 +
+ tools/include/nolibc/nolibc.h | 1 +
+ tools/include/nolibc/signal.h | 1 +
+ tools/include/nolibc/stdio.h  | 1 +
+ tools/include/nolibc/stdlib.h | 1 +
+ tools/include/nolibc/sys.h    | 1 +
+ tools/include/nolibc/time.h   | 1 +
+ tools/include/nolibc/unistd.h | 1 +
+ 8 files changed, 8 insertions(+)
 
-On Wed, Jun 28, 2023 at 01:38:53PM +0200, Jan Kara wrote:
-> On Tue 27-06-23 22:50:46, Ahelenia Ziemia=C5=84ska wrote:
-> > Always generate modify out, access in for splice;
-> > this gets automatically merged with no ugly special cases.
-> >=20
-> > No changes to 2/3 or 3/3.
-> Thanks for the patches Ahelena! The code looks fine to me but to be honest
-> I still have one unresolved question so let me think about it loud here f=
-or
-> documentation purposes :). Do we want fsnotify (any filesystem
-> notification framework like inotify or fanotify) to actually generate
-> events on FIFOs? FIFOs are virtual objects and are not part of the
-> filesystem as such (well, the inode itself and the name is), hence
-> *filesystem* notification framework does not seem like a great fit to wat=
-ch
-> for changes or accesses there. And if we say "yes" for FIFOs, then why not
-> AF_UNIX sockets? Where do we draw the line? And is it all worth the
-> trouble?
-As a relative outsider (I haven't used inotify before this, and have not
- been subjected to it or its peripheries before),
-I interpreted inotify as being the Correct solution for:
-  1. stuff you can find in a normal
-     (non-/dev, you don't want to touch devices)
-     filesystem traversal
-  2. stuff you can open
-where, going down the list in inode(7):
-  S_IFSOCK   can't open
-  S_IFLNK    can't open
-  S_IFREG    yes!
-  S_IFBLK    it's a device
-  S_IFDIR    yes!
-  S_IFCHR    it's a device
-  S_IFIFO    yes!
+diff --git a/tools/include/nolibc/Makefile b/tools/include/nolibc/Makefile
+index 875e13e3c851..00471e59b11e 100644
+--- a/tools/include/nolibc/Makefile
++++ b/tools/include/nolibc/Makefile
+@@ -37,6 +37,7 @@ NARCH            = $(or $(NARCH_$(ARCH)),$(ARCH))
+ arch_file := arch-$(NARCH).h
+ all_files := \
+ 		compiler.h \
++		crt.h \
+ 		ctype.h \
+ 		errno.h \
+ 		nolibc.h \
+diff --git a/tools/include/nolibc/nolibc.h b/tools/include/nolibc/nolibc.h
+index 1f8d821000ac..2cc9ccd90d56 100644
+--- a/tools/include/nolibc/nolibc.h
++++ b/tools/include/nolibc/nolibc.h
+@@ -93,6 +93,7 @@
+ #define _NOLIBC_H
+ 
+ #include "std.h"
++#include "crt.h"
+ #include "arch.h"
+ #include "types.h"
+ #include "sys.h"
+diff --git a/tools/include/nolibc/signal.h b/tools/include/nolibc/signal.h
+index 137552216e46..f0a1418c1cb2 100644
+--- a/tools/include/nolibc/signal.h
++++ b/tools/include/nolibc/signal.h
+@@ -8,6 +8,7 @@
+ #define _NOLIBC_SIGNAL_H
+ 
+ #include "std.h"
++#include "crt.h"
+ #include "arch.h"
+ #include "types.h"
+ #include "sys.h"
+diff --git a/tools/include/nolibc/stdio.h b/tools/include/nolibc/stdio.h
+index 0eef91daf289..89d3749b3620 100644
+--- a/tools/include/nolibc/stdio.h
++++ b/tools/include/nolibc/stdio.h
+@@ -10,6 +10,7 @@
+ #include <stdarg.h>
+ 
+ #include "std.h"
++#include "crt.h"
+ #include "arch.h"
+ #include "errno.h"
+ #include "types.h"
+diff --git a/tools/include/nolibc/stdlib.h b/tools/include/nolibc/stdlib.h
+index 902162f80337..0ff7fac40bd4 100644
+--- a/tools/include/nolibc/stdlib.h
++++ b/tools/include/nolibc/stdlib.h
+@@ -8,6 +8,7 @@
+ #define _NOLIBC_STDLIB_H
+ 
+ #include "std.h"
++#include "crt.h"
+ #include "arch.h"
+ #include "types.h"
+ #include "sys.h"
+diff --git a/tools/include/nolibc/sys.h b/tools/include/nolibc/sys.h
+index 2c302f3feb71..b6c33c40c037 100644
+--- a/tools/include/nolibc/sys.h
++++ b/tools/include/nolibc/sys.h
+@@ -24,6 +24,7 @@
+ #include <linux/reboot.h> /* for LINUX_REBOOT_* */
+ #include <linux/prctl.h>
+ 
++#include "crt.h"
+ #include "arch.h"
+ #include "errno.h"
+ #include "types.h"
+diff --git a/tools/include/nolibc/time.h b/tools/include/nolibc/time.h
+index 84655361b9ad..bbe8f9aa3e9b 100644
+--- a/tools/include/nolibc/time.h
++++ b/tools/include/nolibc/time.h
+@@ -8,6 +8,7 @@
+ #define _NOLIBC_TIME_H
+ 
+ #include "std.h"
++#include "crt.h"
+ #include "arch.h"
+ #include "types.h"
+ #include "sys.h"
+diff --git a/tools/include/nolibc/unistd.h b/tools/include/nolibc/unistd.h
+index e38f3660c051..f1677224bb5a 100644
+--- a/tools/include/nolibc/unistd.h
++++ b/tools/include/nolibc/unistd.h
+@@ -8,6 +8,7 @@
+ #define _NOLIBC_UNISTD_H
+ 
+ #include "std.h"
++#include "crt.h"
+ #include "arch.h"
+ #include "types.h"
+ #include "sys.h"
+-- 
+2.25.1
 
-It appears that I'm not the only one who's interpreted it that way,
-especially since neither regular files nor pipes are pollable.
-(Though, under that same categorisation, I wouldn't be surprised
- if anonymous pipes had been refused, for example, since those are
- conventionally unnameable.)
-
-To this end, I'd say we're leaving the line precisely where it was drawn
-before, even if by accident.
-
-> I understand the convenience of inotify working on FIFOs for the "tail -f"
-> usecase but then wouldn't this better be fixed in tail(1) itself by using
-> epoll(7) for FIFOs which, as I've noted in my other reply, does not have
-> the problem that poll(2) has when there are no writers?
-Yes, epoll in ET mode returns POLLHUP only once, but you /also/ need the
-inotify anyway for regular files, which epoll refuses
-(and, with -F, you may want both epoll for a pipe and inotify for the
- directory it's contained in).
-Is it possible to do? yes. Is it more annoying than just having pipes
-report when they were written to? very much so.
-
-inotify actually working(*) is presumably why coreutils tail doesn't use
-epoll =E2=80=92 inotify already provides all required events(*), you can us=
-e the
-same code for regular files and fifos, and with one fewer level of
-indirection: there's just no need(*).
-
-(*: except with a magic syscall only I use apparently)
-
---t22ubltek2za4lgw
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEfWlHToQCjFzAxEFjvP0LAY0mWPEFAmScgeQACgkQvP0LAY0m
-WPFU0hAAsQQgDTXFQBzqm2D+2vh1lcuz9TJUyJydbOgXaLC1qP/QtcPSCisL6n9k
-URhk3SzQ9X5zVbXsxdjp3vPvPKOa9AETM7XcgDfuFbYAkG8EZ6/C9+oy9GvLfr+A
-fKF+yowqAEh1sE5+JuqO6RGoQ00ZIGnK/umNQ0Y3f+zbxyvIkOwCSvpM85FdJQKk
-3SQcGPsvZeCxuWs48Ew3pEPt1KdRFd/09cqBWOak0rqD4X01PMiGi4NeOplayq1m
-T/zwX3mwdzWsWatYETmt+s+81prWz7ZX6QgEGT0iUnntZO6vS8yxT3ONCzePlRmY
-maXGjYmBQOcJonQk+6KzLYR58RCk21JScFuFLPi9fqURpXec7NdDtsS+LyUY6s92
-iRb3Qzns6I/klxwjJ40xdgRFkiaOyrpgod+/J5SIlaImna3BQuM25PrYXnZHnXoW
-azbWHmIDifdx/ZVoJPjW1MctW21yzozQCyZgk8RQZRSGSkBAjo4+Q1ag+LyToQvj
-cei7qcWupecsQChCpDOOvK5gxGETeqHlEW/3Vtr83JjLdTlFxpyo+e4B2Jxlm8DL
-E19bxeY22W8Q/k23S3ihAwC/VlSqCn1jDvIVDnYrwBigfMilVA5vTqy3wWHIBIlJ
-E5G4NgcEOvHTPAcqHzOx6Lvw1y3CdAHAoE0eEktsRumxBfz/IhU=
-=f2tP
------END PGP SIGNATURE-----
-
---t22ubltek2za4lgw--
