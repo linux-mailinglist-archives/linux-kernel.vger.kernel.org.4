@@ -2,324 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D9BC741C71
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 01:25:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 198BE741C64
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 01:25:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232026AbjF1XZ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 19:25:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34942 "EHLO
+        id S231312AbjF1XYr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 19:24:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231966AbjF1XY5 (ORCPT
+        with ESMTP id S229755AbjF1XYq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 19:24:57 -0400
-Received: from mx.treblig.org (unknown [IPv6:2a00:1098:5b::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C24B9E9;
-        Wed, 28 Jun 2023 16:24:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=treblig.org
-        ; s=bytemarkmx; h=Content-Transfer-Encoding:MIME-Version:References:
-        In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=nMLPKXFOEvPRH5qIoR7+T1SMwSnc3wbTmke32V0c7oI=; b=fPsiPA0MRxyRCORVjm5Y8GE8fh
-        ijzHMdQnCliILH4ctQF8oo6CqiPuw7WgWgRtJSUfKNs3CRVjtj7jxZRPkR9Qunqi5SXIWkiHhL3iz
-        fTe0Db9PFP5k9M9pcC5YG+R4FHY0hRKZM0+McFNUx5fIy6ETDsdMkdnMiAw5U/AbJTM2zRVdrRvj1
-        d5zIQaqSvXnRvFw4l7RIYwWkNupafzDeM9APCfLmjjKjSgGRe54aJzlpgo9ELDxCSwGft1J9/zf5r
-        nDcfXSHvHGzo2zHCJ/LU7Scq/mtL8BMrwxHQt58nJ8d04F5/BB508ungdIJxXdk/rJR5sHvuHZngw
-        q+pSjV5w==;
-Received: from localhost ([127.0.0.1] helo=dalek.home.treblig.org)
-        by mx.treblig.org with esmtp (Exim 4.94.2)
-        (envelope-from <linux@treblig.org>)
-        id 1qEeWf-00GXy3-3F; Wed, 28 Jun 2023 23:24:39 +0000
-From:   linux@treblig.org
-To:     sfrench@samba.org, linkinjeon@kernel.org, tom@talpey.com,
-        linux-cifs@vger.kernel.org
-Cc:     krisman@collabora.com, jfs-discussion@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org,
-        "Dr. David Alan Gilbert" <linux@treblig.org>
-Subject: [PATCH v2 4/4] fs/jfs: Use common ucs2 upper case table
-Date:   Thu, 29 Jun 2023 00:24:17 +0100
-Message-ID: <20230628232417.120844-5-linux@treblig.org>
-X-Mailer: git-send-email 2.41.0
-In-Reply-To: <20230628232417.120844-1-linux@treblig.org>
-References: <20230628232417.120844-1-linux@treblig.org>
+        Wed, 28 Jun 2023 19:24:46 -0400
+Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com [IPv6:2607:f8b0:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1570E9
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 16:24:44 -0700 (PDT)
+Received: by mail-oi1-x22f.google.com with SMTP id 5614622812f47-3a1d9b64837so78084b6e.0
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 16:24:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1687994684; x=1690586684;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=c+frzkmPtuGHmkYBEBylQsm3B7k7j/a5AOqV9ViqKmw=;
+        b=O9p5UCnhkvZg2oak3WZ/beM8V7vO1HSsIfVIfXJWkmoa2zWpncWupzqGoCh+quwuIw
+         eYYyc3pePyoePsAbtU+qWBwUYKcvrO/wVDctgrBl5NwF4ITfTWYlEQaFgQWKd6PoeST1
+         QFj5pZnhR8iCRMCT2X8Olzz1vC5f1zU/jultw=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687994684; x=1690586684;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=c+frzkmPtuGHmkYBEBylQsm3B7k7j/a5AOqV9ViqKmw=;
+        b=fdz8/NnOpdxj5w0asYnVa4i3kNqT83MIBOGReAfeU2OsUWmjZlci/SOMwtQX8wuwLJ
+         AyMZ851dxLKUpEyt7u8nR/CzRf80LvUggb5vOd2JsqdXxrRdNQy99Q0PQurOYbeQ5k3M
+         Ylr8yz8TPTjeWl4h9S3O45Ez/xgdpfoZRFTAAcaYdBMcaWQcaUW+t0C1294HTe5HbYwS
+         0XuivlWLmV6WsincR5VHAF/1766y3FhYE+VHJ4zePTRXkLL0KVPS6ksBqw0uWlj3jEzp
+         b1MUBmKTiLLpe4eTD1kt0xqzI1KFl0oaO1KYMn4GjO9Tn6bsOHpAR/SoAmlRQHJzp5lk
+         j/WQ==
+X-Gm-Message-State: AC+VfDzC15Pazb2G7+x+eOi5FS/y/GmGUNY4elSOXEIalRNCeyZiYUva
+        NizUlcOjSgohfzD0pcKiDEa1Ow==
+X-Google-Smtp-Source: ACHHUZ7HhfkP6W58+5+9ClYoNBGA81jUExDe/4f7+kl9C+BhJQdJF35IyU0QaJPazfnHmdZpMeeZaw==
+X-Received: by 2002:a05:6808:1a0d:b0:3a1:dbf5:fdbd with SMTP id bk13-20020a0568081a0d00b003a1dbf5fdbdmr13360315oib.27.1687994684100;
+        Wed, 28 Jun 2023 16:24:44 -0700 (PDT)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id u22-20020aa78496000000b00640f1e4a811sm5845474pfn.22.2023.06.28.16.24.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 28 Jun 2023 16:24:43 -0700 (PDT)
+Date:   Wed, 28 Jun 2023 16:24:42 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+Cc:     Yuxiao Zhang <yuxiaozhang@google.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Tony Luck <tony.luck@intel.com>,
+        linux-hardening@vger.kernel.org, linux-kernel@vger.kernel.org,
+        wak@google.com
+Subject: Re: [PATCH] pstore: ramoops: support pmsg size larger than kmalloc
+ limitation
+Message-ID: <202306281615.360B12EFC@keescook>
+References: <2023062832-barrier-strenuous-9499@gregkh>
+ <20230628171055.1312737-1-yuxiaozhang@google.com>
+ <28718037-ccf1-c36b-4eb6-716c518ca98f@igalia.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RDNS_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <28718037-ccf1-c36b-4eb6-716c518ca98f@igalia.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Dr. David Alan Gilbert" <linux@treblig.org>
+On Wed, Jun 28, 2023 at 03:12:10PM -0300, Guilherme G. Piccoli wrote:
+> Also - Kees certainly knows that way better, but - are we 100% sure that
+> the region for pstore can be non-contiguous? For some reason, I always
+> thought this was a requirement - grepping the code, I found this
+> (wrong?) comment:
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/fs/pstore/zone.c#n3
 
-Use the UCS-2 upper case tables from nls, that are shared
-with smb.
+The contiguous requirements are entirely for the RAM backend's storage,
+so these intermediate memory regions can use non-contiguous physical
+backing memory (i.e. vmalloc).
 
-This code in JFS is hard to test, so we're only reusing the
-same tables (which are identical), not trying to reuse the
-rest of the helper functions.
+Even the special case of crash-dumping should be fine for the large
+buffer used to hold the crash before doing compression.
 
-Signed-off-by: Dr. David Alan Gilbert <linux@treblig.org>
----
- fs/jfs/Kconfig          |   1 +
- fs/jfs/Makefile         |   2 +-
- fs/jfs/jfs_unicode.h    |  17 ++----
- fs/jfs/jfs_uniupr.c     | 121 ----------------------------------------
- fs/nls/nls_ucs2_data.h  |  15 +++++
- fs/nls/nls_ucs2_utils.h |  14 +----
- 6 files changed, 23 insertions(+), 147 deletions(-)
- delete mode 100644 fs/jfs/jfs_uniupr.c
- create mode 100644 fs/nls/nls_ucs2_data.h
+There are effectively 4 types of allocations in pstore:
 
-diff --git a/fs/jfs/Kconfig b/fs/jfs/Kconfig
-index 51e856f0e4b8..eab2f2d2291f 100644
---- a/fs/jfs/Kconfig
-+++ b/fs/jfs/Kconfig
-@@ -2,6 +2,7 @@
- config JFS_FS
- 	tristate "JFS filesystem support"
- 	select NLS
-+	select NLS_UCS2_UTILS
- 	select CRC32
- 	select LEGACY_DIRECT_IO
- 	help
-diff --git a/fs/jfs/Makefile b/fs/jfs/Makefile
-index 7156d2c218c7..b769bbf8bdc2 100644
---- a/fs/jfs/Makefile
-+++ b/fs/jfs/Makefile
-@@ -9,7 +9,7 @@ jfs-y    := super.o file.o inode.o namei.o jfs_mount.o jfs_umount.o \
- 	    jfs_xtree.o jfs_imap.o jfs_debug.o jfs_dmap.o \
- 	    jfs_unicode.o jfs_dtree.o jfs_inode.o jfs_discard.o \
- 	    jfs_extent.o symlink.o jfs_metapage.o \
--	    jfs_logmgr.o jfs_txnmgr.o jfs_uniupr.o \
-+	    jfs_logmgr.o jfs_txnmgr.o \
- 	    resize.o xattr.o ioctl.o
- 
- jfs-$(CONFIG_JFS_POSIX_ACL) += acl.o
-diff --git a/fs/jfs/jfs_unicode.h b/fs/jfs/jfs_unicode.h
-index 9db62d047daa..b6a78d4aef1b 100644
---- a/fs/jfs/jfs_unicode.h
-+++ b/fs/jfs/jfs_unicode.h
-@@ -8,16 +8,9 @@
- 
- #include <linux/slab.h>
- #include <asm/byteorder.h>
-+#include "../nls/nls_ucs2_data.h"
- #include "jfs_types.h"
- 
--typedef struct {
--	wchar_t start;
--	wchar_t end;
--	signed char *table;
--} UNICASERANGE;
--
--extern signed char UniUpperTable[512];
--extern UNICASERANGE UniUpperRange[];
- extern int get_UCSname(struct component_name *, struct dentry *);
- extern int jfs_strfromUCS_le(char *, const __le16 *, int, struct nls_table *);
- 
-@@ -107,12 +100,12 @@ static inline wchar_t *UniStrncpy_from_le(wchar_t * ucs1, const __le16 * ucs2,
-  */
- static inline wchar_t UniToupper(wchar_t uc)
- {
--	UNICASERANGE *rp;
-+	const struct UniCaseRange *rp;
- 
--	if (uc < sizeof(UniUpperTable)) {	/* Latin characters */
--		return uc + UniUpperTable[uc];	/* Use base tables */
-+	if (uc < sizeof(NlsUniUpperTable)) {	/* Latin characters */
-+		return uc + NlsUniUpperTable[uc];	/* Use base tables */
- 	} else {
--		rp = UniUpperRange;	/* Use range tables */
-+		rp = NlsUniUpperRange;	/* Use range tables */
- 		while (rp->start) {
- 			if (uc < rp->start)	/* Before start of range */
- 				return uc;	/* Uppercase = input */
-diff --git a/fs/jfs/jfs_uniupr.c b/fs/jfs/jfs_uniupr.c
-deleted file mode 100644
-index d0b18c7befb8..000000000000
---- a/fs/jfs/jfs_uniupr.c
-+++ /dev/null
-@@ -1,121 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0-or-later
--/*
-- *   Copyright (C) International Business Machines Corp., 2000-2002
-- */
--
--#include <linux/fs.h>
--#include "jfs_unicode.h"
--
--/*
-- * Latin upper case
-- */
--signed char UniUpperTable[512] = {
--   0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0, /* 000-00f */
--   0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0, /* 010-01f */
--   0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0, /* 020-02f */
--   0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0, /* 030-03f */
--   0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0, /* 040-04f */
--   0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0, /* 050-05f */
--   0,-32,-32,-32,-32,-32,-32,-32,-32,-32,-32,-32,-32,-32,-32,-32, /* 060-06f */
-- -32,-32,-32,-32,-32,-32,-32,-32,-32,-32,-32,  0,  0,  0,  0,  0, /* 070-07f */
--   0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0, /* 080-08f */
--   0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0, /* 090-09f */
--   0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0, /* 0a0-0af */
--   0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0, /* 0b0-0bf */
--   0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0, /* 0c0-0cf */
--   0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0, /* 0d0-0df */
-- -32,-32,-32,-32,-32,-32,-32,-32,-32,-32,-32,-32,-32,-32,-32,-32, /* 0e0-0ef */
-- -32,-32,-32,-32,-32,-32,-32,  0,-32,-32,-32,-32,-32,-32,-32,121, /* 0f0-0ff */
--   0, -1,  0, -1,  0, -1,  0, -1,  0, -1,  0, -1,  0, -1,  0, -1, /* 100-10f */
--   0, -1,  0, -1,  0, -1,  0, -1,  0, -1,  0, -1,  0, -1,  0, -1, /* 110-11f */
--   0, -1,  0, -1,  0, -1,  0, -1,  0, -1,  0, -1,  0, -1,  0, -1, /* 120-12f */
--   0,  0,  0, -1,  0, -1,  0, -1,  0,  0, -1,  0, -1,  0, -1,  0, /* 130-13f */
--  -1,  0, -1,  0, -1,  0, -1,  0, -1,  0,  0, -1,  0, -1,  0, -1, /* 140-14f */
--   0, -1,  0, -1,  0, -1,  0, -1,  0, -1,  0, -1,  0, -1,  0, -1, /* 150-15f */
--   0, -1,  0, -1,  0, -1,  0, -1,  0, -1,  0, -1,  0, -1,  0, -1, /* 160-16f */
--   0, -1,  0, -1,  0, -1,  0, -1,  0,  0, -1,  0, -1,  0, -1,  0, /* 170-17f */
--   0,  0,  0, -1,  0, -1,  0,  0, -1,  0,  0,  0, -1,  0,  0,  0, /* 180-18f */
--   0,  0, -1,  0,  0,  0,  0,  0,  0, -1,  0,  0,  0,  0,  0,  0, /* 190-19f */
--   0, -1,  0, -1,  0, -1,  0,  0, -1,  0,  0,  0,  0, -1,  0,  0, /* 1a0-1af */
--  -1,  0,  0,  0, -1,  0, -1,  0,  0, -1,  0,  0,  0, -1,  0,  0, /* 1b0-1bf */
--   0,  0,  0,  0,  0, -1, -2,  0, -1, -2,  0, -1, -2,  0, -1,  0, /* 1c0-1cf */
--  -1,  0, -1,  0, -1,  0, -1,  0, -1,  0, -1,  0, -1,-79,  0, -1, /* 1d0-1df */
--   0, -1,  0, -1,  0, -1,  0, -1,  0, -1,  0, -1,  0, -1,  0, -1, /* 1e0-1ef */
--   0,  0, -1, -2,  0, -1,  0,  0,  0, -1,  0, -1,  0, -1,  0, -1, /* 1f0-1ff */
--};
--
--/* Upper case range - Greek */
--static signed char UniCaseRangeU03a0[47] = {
--   0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,-38,-37,-37,-37, /* 3a0-3af */
--   0,-32,-32,-32,-32,-32,-32,-32,-32,-32,-32,-32,-32,-32,-32,-32, /* 3b0-3bf */
-- -32,-32,-31,-32,-32,-32,-32,-32,-32,-32,-32,-32,-64,-63,-63,
--};
--
--/* Upper case range - Cyrillic */
--static signed char UniCaseRangeU0430[48] = {
-- -32,-32,-32,-32,-32,-32,-32,-32,-32,-32,-32,-32,-32,-32,-32,-32, /* 430-43f */
-- -32,-32,-32,-32,-32,-32,-32,-32,-32,-32,-32,-32,-32,-32,-32,-32, /* 440-44f */
--   0,-80,-80,-80,-80,-80,-80,-80,-80,-80,-80,-80,-80,  0,-80,-80, /* 450-45f */
--};
--
--/* Upper case range - Extended cyrillic */
--static signed char UniCaseRangeU0490[61] = {
--   0, -1,  0, -1,  0, -1,  0, -1,  0, -1,  0, -1,  0, -1,  0, -1, /* 490-49f */
--   0, -1,  0, -1,  0, -1,  0, -1,  0, -1,  0, -1,  0, -1,  0, -1, /* 4a0-4af */
--   0, -1,  0, -1,  0, -1,  0, -1,  0, -1,  0, -1,  0, -1,  0, -1, /* 4b0-4bf */
--   0,  0, -1,  0, -1,  0,  0,  0, -1,  0,  0,  0, -1,
--};
--
--/* Upper case range - Extended latin and greek */
--static signed char UniCaseRangeU1e00[509] = {
--   0, -1,  0, -1,  0, -1,  0, -1,  0, -1,  0, -1,  0, -1,  0, -1, /* 1e00-1e0f */
--   0, -1,  0, -1,  0, -1,  0, -1,  0, -1,  0, -1,  0, -1,  0, -1, /* 1e10-1e1f */
--   0, -1,  0, -1,  0, -1,  0, -1,  0, -1,  0, -1,  0, -1,  0, -1, /* 1e20-1e2f */
--   0, -1,  0, -1,  0, -1,  0, -1,  0, -1,  0, -1,  0, -1,  0, -1, /* 1e30-1e3f */
--   0, -1,  0, -1,  0, -1,  0, -1,  0, -1,  0, -1,  0, -1,  0, -1, /* 1e40-1e4f */
--   0, -1,  0, -1,  0, -1,  0, -1,  0, -1,  0, -1,  0, -1,  0, -1, /* 1e50-1e5f */
--   0, -1,  0, -1,  0, -1,  0, -1,  0, -1,  0, -1,  0, -1,  0, -1, /* 1e60-1e6f */
--   0, -1,  0, -1,  0, -1,  0, -1,  0, -1,  0, -1,  0, -1,  0, -1, /* 1e70-1e7f */
--   0, -1,  0, -1,  0, -1,  0, -1,  0, -1,  0, -1,  0, -1,  0, -1, /* 1e80-1e8f */
--   0, -1,  0, -1,  0, -1,  0,  0,  0,  0,  0,-59,  0, -1,  0, -1, /* 1e90-1e9f */
--   0, -1,  0, -1,  0, -1,  0, -1,  0, -1,  0, -1,  0, -1,  0, -1, /* 1ea0-1eaf */
--   0, -1,  0, -1,  0, -1,  0, -1,  0, -1,  0, -1,  0, -1,  0, -1, /* 1eb0-1ebf */
--   0, -1,  0, -1,  0, -1,  0, -1,  0, -1,  0, -1,  0, -1,  0, -1, /* 1ec0-1ecf */
--   0, -1,  0, -1,  0, -1,  0, -1,  0, -1,  0, -1,  0, -1,  0, -1, /* 1ed0-1edf */
--   0, -1,  0, -1,  0, -1,  0, -1,  0, -1,  0, -1,  0, -1,  0, -1, /* 1ee0-1eef */
--   0, -1,  0, -1,  0, -1,  0, -1,  0, -1,  0,  0,  0,  0,  0,  0, /* 1ef0-1eff */
--   8,  8,  8,  8,  8,  8,  8,  8,  0,  0,  0,  0,  0,  0,  0,  0, /* 1f00-1f0f */
--   8,  8,  8,  8,  8,  8,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0, /* 1f10-1f1f */
--   8,  8,  8,  8,  8,  8,  8,  8,  0,  0,  0,  0,  0,  0,  0,  0, /* 1f20-1f2f */
--   8,  8,  8,  8,  8,  8,  8,  8,  0,  0,  0,  0,  0,  0,  0,  0, /* 1f30-1f3f */
--   8,  8,  8,  8,  8,  8,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0, /* 1f40-1f4f */
--   0,  8,  0,  8,  0,  8,  0,  8,  0,  0,  0,  0,  0,  0,  0,  0, /* 1f50-1f5f */
--   8,  8,  8,  8,  8,  8,  8,  8,  0,  0,  0,  0,  0,  0,  0,  0, /* 1f60-1f6f */
--  74, 74, 86, 86, 86, 86,100,100,  0,  0,112,112,126,126,  0,  0, /* 1f70-1f7f */
--   8,  8,  8,  8,  8,  8,  8,  8,  0,  0,  0,  0,  0,  0,  0,  0, /* 1f80-1f8f */
--   8,  8,  8,  8,  8,  8,  8,  8,  0,  0,  0,  0,  0,  0,  0,  0, /* 1f90-1f9f */
--   8,  8,  8,  8,  8,  8,  8,  8,  0,  0,  0,  0,  0,  0,  0,  0, /* 1fa0-1faf */
--   8,  8,  0,  9,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0, /* 1fb0-1fbf */
--   0,  0,  0,  9,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0, /* 1fc0-1fcf */
--   8,  8,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0, /* 1fd0-1fdf */
--   8,  8,  0,  0,  0,  7,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0, /* 1fe0-1fef */
--   0,  0,  0,  9,  0,  0,  0,  0,  0,  0,  0,  0,  0,
--};
--
--/* Upper case range - Wide latin */
--static signed char UniCaseRangeUff40[27] = {
--   0,-32,-32,-32,-32,-32,-32,-32,-32,-32,-32,-32,-32,-32,-32,-32, /* ff40-ff4f */
-- -32,-32,-32,-32,-32,-32,-32,-32,-32,-32,-32,
--};
--
--/*
-- * Upper Case Range
-- */
--UNICASERANGE UniUpperRange[] = {
--    { 0x03a0,  0x03ce,  UniCaseRangeU03a0 },
--    { 0x0430,  0x045f,  UniCaseRangeU0430 },
--    { 0x0490,  0x04cc,  UniCaseRangeU0490 },
--    { 0x1e00,  0x1ffc,  UniCaseRangeU1e00 },
--    { 0xff40,  0xff5a,  UniCaseRangeUff40 },
--    { 0 }
--};
-diff --git a/fs/nls/nls_ucs2_data.h b/fs/nls/nls_ucs2_data.h
-new file mode 100644
-index 000000000000..1f454dc0f4e0
---- /dev/null
-+++ b/fs/nls/nls_ucs2_data.h
-@@ -0,0 +1,15 @@
-+/* SPDX-License-Identifier: GPL-2.0-or-later */
-+
-+#ifndef _NLS_UCS2_DATA_H
-+#define _NLS_UCS2_DATA_H
-+
-+struct UniCaseRange {
-+	wchar_t start;
-+	wchar_t end;
-+	signed char *table;
-+};
-+
-+extern signed char NlsUniUpperTable[512];
-+extern const struct UniCaseRange NlsUniUpperRange[];
-+
-+#endif /* _NLS_UCS2_DATA_H */
-diff --git a/fs/nls/nls_ucs2_utils.h b/fs/nls/nls_ucs2_utils.h
-index 3500596ea993..ef18d30db1d0 100644
---- a/fs/nls/nls_ucs2_utils.h
-+++ b/fs/nls/nls_ucs2_utils.h
-@@ -26,6 +26,7 @@
- #include <linux/types.h>
- #include <linux/nls.h>
- #include <linux/unicode.h>
-+#include "nls_ucs2_data.h"
- 
- /*
-  * Windows maps these to the user defined 16 bit Unicode range since they are
-@@ -40,19 +41,6 @@
- #define UNI_PIPE        ((__u16)('|' + 0xF000))
- #define UNI_SLASH       ((__u16)('\\' + 0xF000))
- 
--#ifndef	UNICASERANGE_DEFINED
--struct UniCaseRange {
--	wchar_t start;
--	wchar_t end;
--	signed char *table;
--};
--#endif				/* UNICASERANGE_DEFINED */
--
--#ifndef UNIUPR_NOUPPER
--extern signed char NlsUniUpperTable[512];
--extern const struct UniCaseRange NlsUniUpperRange[];
--#endif				/* UNIUPR_NOUPPER */
--
- /*
-  * UniStrcat:  Concatenate the second string to the first
-  *
+1- a physical -> virtual mapping for the RAM backend
+2- the allocations (if any) for non-RAM backends to hold a copy of pstore
+   records when extracted from the backend storage (e.g NVRAM, EFI vars,
+   etc).
+3- incoming allocations that are used temporarily to hand data to the
+   backend (e.g. the write_compat used in this patch)
+4- the allocation used for holding the pstorefs data contents (which I
+   need to double-check, but is entirely defined by the backends)
+
+Changes aren't needed for (1), it's fine on its own. This patch changes
+allocations for (2) and (3) for pmsg and the RAM backend, if I'm reading
+it correctly. I think (4) is included as part of (2), but I need to
+check. As long as all paths use kvfree() for the record buffers,
+everything should Just Work for RAM. Switching the other backends to
+also use kvalloc() would allow for greater flexibility, though.
+
+Anyway, it's on my list to review and test. I'm still working through
+other things related to the merge window opening, so I may be a bit slow
+for the next week. :)
+
+-Kees
+
 -- 
-2.41.0
-
+Kees Cook
