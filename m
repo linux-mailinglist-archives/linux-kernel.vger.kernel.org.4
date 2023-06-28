@@ -2,143 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 108DA740A97
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 10:07:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 22008740A92
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 10:07:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232756AbjF1IHo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 04:07:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35104 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232313AbjF1IBz (ORCPT
+        id S232462AbjF1IHi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 04:07:38 -0400
+Received: from mail-oa1-f69.google.com ([209.85.160.69]:59532 "EHLO
+        mail-oa1-f69.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231372AbjF1IAp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 04:01:55 -0400
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17C8DA3;
-        Wed, 28 Jun 2023 01:00:26 -0700 (PDT)
-Received: by mail-lf1-x12a.google.com with SMTP id 2adb3069b0e04-4fb7589b187so4825469e87.1;
-        Wed, 28 Jun 2023 01:00:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687939224; x=1690531224;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=gCiVnIiBTWxP9T/l4gc5KqB15PzobXDfsgWHGo4kW6w=;
-        b=Atk/FL/9Z6Wadg6fR1BZpsHoBVs6dAZnOoJjIoGnbqSpNasB218H73bm4pxhxs3VJx
-         umDvYrlu+7+G8C8UAfPJ0XS4+z1oEcsDGqLppe+qNkUYfPT5jOgL6HGEu+kO867kcmUJ
-         UCyf9Apq1cJtI1nV2bqz9cuYXog2xB/uMEUbmiXB2viAp1hs/GkFLkkRBdaW0+bzTzcz
-         zUqPyuhfXJsjyRkwsp0NFQM15rXajW4l8ZPaCszNYqmQnVcQlnHDbS14qFQGRdaxp+OH
-         XCCg1srlakVE1oL75m3yR0bYWQGBlYmngkaeMZNazjFf3iNORBJKNdO3zxZxxsArQBQC
-         d1tg==
+        Wed, 28 Jun 2023 04:00:45 -0400
+Received: by mail-oa1-f69.google.com with SMTP id 586e51a60fabf-1ad52c741c1so5577552fac.2
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 01:00:45 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687939224; x=1690531224;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=gCiVnIiBTWxP9T/l4gc5KqB15PzobXDfsgWHGo4kW6w=;
-        b=ktuESsELloTCOHTx2ryoHmJLm6qZ5rd4OUnAbTX4HXVwwOz2De1qDt1YLjcpLHqYu/
-         rA2/Vcgze4sZOI7wkwlmLVR5dtSXfbW/Cfg12kTR3eNtbsyrrLJt+VxIniZPkQLwVT0B
-         bYSXQ1IRainzlmNBQf+tHsx6G0FaqLB+o1B39ATMYtvZ1yF8AJwzmkgZC8ZXvF3n6idq
-         mKyMdHycxb3hzjJo6V0IyDRNqdqDISKcM4AYNVO+y4PMnXfOoVbU3c2cbkCbHNffXIRx
-         srwFbreXkaMgNwFzfr2e/NEatBT1s6MnO9MNOiorStTOLPpb1xRdq5QpfiK9BNlmIbTz
-         mgIQ==
-X-Gm-Message-State: AC+VfDwsa77V3RNcFkYRKJR/siziZa+nnL+VXG3RD63iamdGK2UnI8lN
-        nYie6YgtNUIq1CwLVAjO8Ek=
-X-Google-Smtp-Source: ACHHUZ5JfjpLByN+xk3+nw7l3otdzAnIQaT9fCpC3MJlEf/M7GLH4UUGnbVSdzEN0B0XtGlgO5VAxw==
-X-Received: by 2002:a05:6512:b0e:b0:4f8:75cf:fdd7 with SMTP id w14-20020a0565120b0e00b004f875cffdd7mr16303621lfu.22.1687939223949;
-        Wed, 28 Jun 2023 01:00:23 -0700 (PDT)
-Received: from localhost (freebox.vlq16.iliad.fr. [213.36.7.13])
-        by smtp.gmail.com with ESMTPSA id u8-20020a05600c210800b003f9b4330880sm13048436wml.29.2023.06.28.01.00.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 28 Jun 2023 01:00:23 -0700 (PDT)
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date:   Wed, 28 Jun 2023 10:00:23 +0200
-Message-Id: <CTO4IM6NQZ4N.6DC89N410CDS@syracuse>
-Cc:     "opensource.kernel@vivo.com" <opensource.kernel@vivo.com>
-Subject: =?utf-8?q?Re:_[PATCH]_wifi=EF=BC=9Amac80211:_Replace_the_ternary_conditio?= =?utf-8?q?nal_operator_with_max()?=
-From:   "Nicolas Escande" <nico.escande@gmail.com>
-To:     "Ping-Ke Shih" <pkshih@realtek.com>,
-        "You Kangren" <youkangren@vivo.com>,
-        "Johannes Berg" <johannes@sipsolutions.net>,
-        "David S. Miller" <davem@davemloft.net>,
-        "Eric Dumazet" <edumazet@google.com>,
-        "Jakub Kicinski" <kuba@kernel.org>,
-        "Paolo Abeni" <pabeni@redhat.com>,
-        "open list:MAC80211" <linux-wireless@vger.kernel.org>,
-        "open list:NETWORKING [GENERAL]" <netdev@vger.kernel.org>,
-        "open list" <linux-kernel@vger.kernel.org>
-X-Mailer: aerc 0.15.1
-References: <20230626104829.1896-1-youkangren@vivo.com>
- <9e4e3bf85ed945e7b0c8d5d389065670@realtek.com>
-In-Reply-To: <9e4e3bf85ed945e7b0c8d5d389065670@realtek.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-        lindbergh.monkeyblade.net
+        d=1e100.net; s=20221208; t=1687939245; x=1690531245;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=0tU/DkiC2cdHNVfkcshEwEdx4UQyiRnmp0Dt8PMj1Z0=;
+        b=ZBUINzRhhlW7cao4NF1t+7ovC5ixWud1x3m/CKBWDnu1ASEEXbNiNZJ9LXWrfgJnxI
+         XxOWImj3KpC5d4Va1qY8p9CdzUVBVpEPoNkR+GRJfgKwJpSv44QJDNYcnmZgmzOZUhJY
+         bJyj8ut2r5VeQrREKUVRr5BzueT1mYRbO5MmmbR5ByXlx+6DBy6aMHiiuONG8NL9KdPY
+         fjNdVNSPKCFVCFnCvHunoyu3dxc+rjAfEB05IAScTffHg17186sfEfCk21NK640UyVHW
+         rHTvP8dr2/tNpkANAh/CBvri5MDE1RkjZ4nDENulqDdNLmOZ6UTCpf7mpxCX6uad7J9z
+         avxw==
+X-Gm-Message-State: AC+VfDwQZsj1XJtr/uNRXrpc4aM+g1JnnTokVEjdFE4SYT7qGd/377iG
+        AOOhDR+AgwiLrLBnnb7la/TxVHEpJoZeJq+7izew2prysB4E
+X-Google-Smtp-Source: ACHHUZ5cpgvp7soPDJcmISMLPVZMvANV7NjaIOHQgKsTt00uSF8IsG6HtFS3C0HtXvaPSoJCdX+57RlSlPTzVYakrGII8TH/G1sV
+MIME-Version: 1.0
+X-Received: by 2002:a05:6870:7a0b:b0:1b0:2d25:f5ab with SMTP id
+ hf11-20020a0568707a0b00b001b02d25f5abmr3842449oab.0.1687939245302; Wed, 28
+ Jun 2023 01:00:45 -0700 (PDT)
+Date:   Wed, 28 Jun 2023 01:00:45 -0700
+In-Reply-To: <000000000000a2c79f05ed84c7f9@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000001e68bd05ff2bfbbf@google.com>
+Subject: Re: [syzbot] [kernel?] kernel BUG in workingset_activation (2)
+From:   syzbot <syzbot+644848628d5e12d5438c@syzkaller.appspotmail.com>
+To:     akpm@linux-foundation.org, gregkh@linuxfoundation.org,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, lrh2000@pku.edu.cn, seanjc@google.com,
+        stern@rowland.harvard.edu, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed Jun 28, 2023 at 3:48 AM CEST, Ping-Ke Shih wrote:
->
->
-> > -----Original Message-----
-> > From: You Kangren <youkangren@vivo.com>
-> > Sent: Monday, June 26, 2023 6:48 PM
-> > To: Johannes Berg <johannes@sipsolutions.net>; David S. Miller <davem@d=
-avemloft.net>; Eric Dumazet
-> > <edumazet@google.com>; Jakub Kicinski <kuba@kernel.org>; Paolo Abeni <p=
-abeni@redhat.com>; open
-> > list:MAC80211 <linux-wireless@vger.kernel.org>; open list:NETWORKING [G=
-ENERAL] <netdev@vger.kernel.org>;
-> > open list <linux-kernel@vger.kernel.org>
-> > Cc: opensource.kernel@vivo.com; youkangren@vivo.com
-> > Subject: [PATCH] wifi=EF=BC=9Amac80211: Replace the ternary conditional=
- operator with max()
->
-> The semicolon of "wifi=EF=BC=9A" is different from others.
->
-> >=20
-> > Replace the ternary conditional operator with max() to make the code cl=
-ean
-> >=20
-> > Signed-off-by: You Kangren <youkangren@vivo.com>
-> > ---
-> >  net/mac80211/tdls.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >=20
-> > diff --git a/net/mac80211/tdls.c b/net/mac80211/tdls.c
-> > index a4af3b7675ef..9f8b0842a616 100644
-> > --- a/net/mac80211/tdls.c
-> > +++ b/net/mac80211/tdls.c
-> > @@ -946,7 +946,7 @@ ieee80211_tdls_build_mgmt_packet_data(struct ieee80=
-211_sub_if_data *sdata,
-> >         int ret;
-> >         struct ieee80211_link_data *link;
-> >=20
-> > -       link_id =3D link_id >=3D 0 ? link_id : 0;
-> > +       link_id =3D max(link_id, 0);
->
-> Original logic means "if link_id < 0, then use default link (0)" instead =
-of
-> "always use link_id larger than or equal to 0". So, I think max(link_id, =
-0) could
-> cause misunderstanding.=20
+syzbot suspects this issue was fixed by commit:
 
-I feel the same way, max() implies we want the 'highest' link whereas for m=
-e the
-actual code really means 'prefer the non default' (zero) link.
+commit 0143d148d1e882fb1538dc9974c94d63961719b9
+Author: Ruihan Li <lrh2000@pku.edu.cn>
+Date:   Mon May 15 13:09:55 2023 +0000
 
->
-> >         rcu_read_lock();
-> >         link =3D rcu_dereference(sdata->link[link_id]);
-> >         if (WARN_ON(!link))
-> > --
-> > 2.39.0
-> >=20
-> >=20
-> > ------Please consider the environment before printing this e-mail.
+    usb: usbfs: Enforce page requirements for mmap
 
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=10a65abd280000
+start commit:   59d0d52c30d4 AMerge tag 'netfs-fixes-20221115' of git://gi..
+git tree:       upstream
+kernel config:  https://syzkaller.appspot.com/x/.config?x=11d3fa0b3feb5055
+dashboard link: https://syzkaller.appspot.com/bug?extid=644848628d5e12d5438c
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=14fdf3f1880000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=17b54702880000
+
+If the result looks correct, please mark the issue as fixed by replying with:
+
+#syz fix: usb: usbfs: Enforce page requirements for mmap
+
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
