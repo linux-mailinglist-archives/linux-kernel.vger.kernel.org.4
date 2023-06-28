@@ -2,129 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FD27740845
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 04:22:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 739E7740844
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 04:22:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231248AbjF1CWS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 22:22:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35186 "EHLO
+        id S231329AbjF1CWQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 22:22:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230315AbjF1CV7 (ORCPT
+        with ESMTP id S231321AbjF1CV6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 22:21:59 -0400
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71E411FC1;
-        Tue, 27 Jun 2023 19:21:47 -0700 (PDT)
-Received: by mail-pl1-x631.google.com with SMTP id d9443c01a7336-1b51488ad67so28962145ad.3;
-        Tue, 27 Jun 2023 19:21:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687918907; x=1690510907;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=h6pki8IEhRMBJIPFkBySip5mXparEvV54SUuzJnRAiY=;
-        b=DIuY3LeaXqAs0U5LXmV819WFNCPWVfpcBqzfshj256tQN1iF1vPKiVqskOC/sjPAXZ
-         aNyN0D4YaSM27j7WK96wpJqaq07OjglkeVKSHbPdk/iItS4drvRdGfNSx1q8EqbqY3az
-         CWVUH9psLGTdvmPdAO5yXBUtMEYGdRP+acPSBa7aN4eWbq53z9+ZLKr96V3+QhD+1Om2
-         VrTYqWrNDAQnvg8Ppn7OoSNQnHlQzBsmbKxzAd7h8Pcjm8uMGnDRzjni2gie4DD66l7d
-         jP4qfs8e0HTYJX4xFPL2e7SpS9zsfTorLdGKYJYm96kKS/CD7X5QUTll+VlVRvpbPyGw
-         MxcQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687918907; x=1690510907;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=h6pki8IEhRMBJIPFkBySip5mXparEvV54SUuzJnRAiY=;
-        b=CSRfonkmUP7GcCeHYuRAEeXaNw5PljV96jhE03cXpz3pfaJZXgntieO79TkllCAlkU
-         P0fo06UAFmxuOOG0KdJTqGritrEHOwHTajE2WP0JYgB2IbBNt7iWLbRsmt41Iga+lIVc
-         AC64owU/hPnPvrwkTZnpGvnMX4yZoQZCy7gfysAyfQlJglRRAdSM7e8dmtxVsskwDQgD
-         XvsOZ6w9nvTj/xK0zZ9qz8zZH7KruEq7D9wCWHcJl7YTHhn2ecB0TjvY0SIKhbfKv+w0
-         PWfONLhKLqN2XviE2KQuULBJC6wNlDDz+T0AnTEHmy/GT1HZdvJnDCNHd8E6n3NdHhjG
-         TnyQ==
-X-Gm-Message-State: AC+VfDzQi8taEz8K/Z+QSOnXVgsSd2cgyblhQDD0Y/Ec/vTqO4AE9ioW
-        kBpOQmrm0aur+2LO2D6hnN4=
-X-Google-Smtp-Source: ACHHUZ74WhaD5KRSqRGNyvV5e8E8Fau6Z6n7lMPTOq0xCfn7v55QJkKgM6YpSe6w6orzoIoJeC5qfQ==
-X-Received: by 2002:a17:902:7402:b0:1b3:9d13:34b3 with SMTP id g2-20020a170902740200b001b39d1334b3mr9116715pll.37.1687918906781;
-        Tue, 27 Jun 2023 19:21:46 -0700 (PDT)
-Received: from oslab-pc.tsinghua.edu.cn ([166.111.139.122])
-        by smtp.gmail.com with ESMTPSA id n2-20020a170902968200b001b7cbc5871csm1822165plp.53.2023.06.27.19.21.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Jun 2023 19:21:46 -0700 (PDT)
-From:   Tuo Li <islituo@gmail.com>
-To:     srini.raju@purelifi.com, kvalo@kernel.org
-Cc:     linux-wireless@vger.kernel.org, linux-kernel@vger.kernel.org,
-        baijiaju1990@outlook.com, Tuo Li <islituo@gmail.com>,
-        BassCheck <bass@buaa.edu.cn>
-Subject: [PATCH] wifi: plfxlc: Fix possible data races in rx_urb_complete()
-Date:   Wed, 28 Jun 2023 10:21:21 +0800
-Message-Id: <20230628022121.1010517-1-islituo@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        Tue, 27 Jun 2023 22:21:58 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E4AB358A;
+        Tue, 27 Jun 2023 19:21:44 -0700 (PDT)
+Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35S0bx90031228;
+        Wed, 28 Jun 2023 02:21:34 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=RRMyOnApldKWEBwHoWHXvDCCH6QPx0r7URZKy/MXQbY=;
+ b=bulQxrVOSYSstgCrWXqo3zml7zGOZbFDdDsB1m1u4iTtvRyHisP1hgj4g4+AqJEaQSoB
+ K4THNTXlXh1FDHHpiU1IEm5asmHCGf+mRUZyMl0o/cDL86ELiRg6H5tFmr6LuTxgUzpA
+ AXjQio8ccuNvStudbniJB4TbgbJE9ien3X2ndIpPUJgbjpe8F9xMV5WX8DF2xXbexLYS
+ +nImM0TJHpjhf1Qd3HMPEoyhNW+bqvDiXs4K3iyN/6PWE5zfTdZMH6VkAHS+SSOGreKs
+ O5SVCWA3tUlmiC3mQsXBEhff8+d0k8ePr+1jZ9mNxizjxG2uChLCJ900k0HZOagfBCp2 +g== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rfrdtahdv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 28 Jun 2023 02:21:33 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35S2LWPU018642
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 28 Jun 2023 02:21:32 GMT
+Received: from [10.216.43.155] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Tue, 27 Jun
+ 2023 19:21:26 -0700
+Message-ID: <18ff366c-767c-fee8-7ce8-847e5e4954a8@quicinc.com>
+Date:   Wed, 28 Jun 2023 07:51:23 +0530
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.1
+Subject: Re: [PATCH v5 3/3] PCI: qcom-ep: Add ICC bandwidth voting support
+Content-Language: en-US
+To:     Pavan Kondeti <quic_pkondeti@quicinc.com>
+CC:     <manivannan.sadhasivam@linaro.org>, <helgaas@kernel.org>,
+        <linux-pci@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <quic_vbadigan@quicinc.com>,
+        <quic_nitegupt@quicinc.com>, <quic_skananth@quicinc.com>,
+        <quic_ramkri@quicinc.com>, <krzysztof.kozlowski@linaro.org>,
+        "Manivannan Sadhasivam" <mani@kernel.org>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
+        Rob Herring <robh@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>
+References: <1687827692-6181-1-git-send-email-quic_krichai@quicinc.com>
+ <1687827692-6181-4-git-send-email-quic_krichai@quicinc.com>
+ <bdce0719-4f12-4e75-a8e7-1b38d269ac15@quicinc.com>
+From:   Krishna Chaitanya Chundru <quic_krichai@quicinc.com>
+In-Reply-To: <bdce0719-4f12-4e75-a8e7-1b38d269ac15@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: hEc8lT75T697hGL5zH4ngTaBNgVGKurb
+X-Proofpoint-GUID: hEc8lT75T697hGL5zH4ngTaBNgVGKurb
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-06-27_16,2023-06-27_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ impostorscore=0 suspectscore=0 phishscore=0 mlxlogscore=861
+ lowpriorityscore=0 clxscore=1015 adultscore=0 mlxscore=0 bulkscore=0
+ spamscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2305260000 definitions=main-2306280020
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The variable tx->submitted_urbs is often protected by the lock tx->lock 
-when is accessed. Here is an example in plfxlc_usb_disable_tx():
 
-  spin_lock_irqsave(&tx->lock, flags);
-  WARN_ON(!skb_queue_empty(&tx->submitted_skbs));
-  WARN_ON(tx->submitted_urbs != 0);
-  tx->submitted_urbs = 0;
-  spin_unlock_irqrestore(&tx->lock, flags);
+On 6/27/2023 12:05 PM, Pavan Kondeti wrote:
+> On Tue, Jun 27, 2023 at 06:31:31AM +0530, Krishna chaitanya chundru wrote:
+>> +static void qcom_pcie_ep_icc_update(struct qcom_pcie_ep *pcie_ep)
+>> +{
+>> +	struct dw_pcie *pci = &pcie_ep->pci;
+>> +	u32 offset, status, bw;
+>> +	int speed, width;
+>> +	int ret;
+>> +
+>> +	if (!pcie_ep->icc_mem)
+>> +		return;
+>> +
+> Is this check needed? interconnect is added as required property and
+> probe is failed if interconnect get fails. qcom_pcie_enable_resources()
+> which gets called before enabling this interrupt is assuming that
+> interconnect available.
+>
+>
+>> +	offset = dw_pcie_find_capability(pci, PCI_CAP_ID_EXP);
+>> +	status = readw(pci->dbi_base + offset + PCI_EXP_LNKSTA);
+>> +
+>> +	speed = FIELD_GET(PCI_EXP_LNKSTA_CLS, status);
+>> +	width = FIELD_GET(PCI_EXP_LNKSTA_NLW, status);
+>> +
+>> +	switch (speed) {
+>> +	case 1:
+>> +		bw = MBps_to_icc(PCIE_GEN1_BW_MBPS);
+>> +		break;
+>> +	case 2:
+>> +		bw = MBps_to_icc(PCIE_GEN2_BW_MBPS);
+>> +		break;
+>> +	case 3:
+>> +		bw = MBps_to_icc(PCIE_GEN3_BW_MBPS);
+>> +		break;
+>> +	default:
+>> +		dev_warn(pci->dev, "using default GEN4 bandwidth\n");
+>> +		fallthrough;
+>> +	case 4:
+>> +		bw = MBps_to_icc(PCIE_GEN4_BW_MBPS);
+>> +		break;
+>> +	}
+>> +
+>> +	ret = icc_set_bw(pcie_ep->icc_mem, 0, width * bw);
+>> +	if (ret) {
+>> +		dev_err(pci->dev, "failed to set interconnect bandwidth: %d\n",
+>> +			ret);
+>> +	}
+> Are you not seeing the below warning from checkpatch?
+>
+> WARNING: braces {} are not necessary for single statement blocks
 
-However, it is accessed without holding the lock tx->lock in 
-rx_urb_complete():
+checkpatch is not giving warnings for this.
 
-  if (tx->submitted_urbs++ < PURELIFI_URB_RETRY_MAX)  --> Line 108
-  tx->submitted_urbs++  --> Line 110
-  tx->submitted_urbs = 0  --> Line 114
+I removed the braces.
 
-And thus data races can occur.
-To fix these possible data races, a lock and unlock pair is added when
-accessing the variable tx->submitted_urbs in rx_urb_complete().
+-KC
 
-Reported-by: BassCheck <bass@buaa.edu.cn>
-Signed-off-by: Tuo Li <islituo@gmail.com>
----
- drivers/net/wireless/purelifi/plfxlc/usb.c | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/drivers/net/wireless/purelifi/plfxlc/usb.c b/drivers/net/wireless/purelifi/plfxlc/usb.c
-index 76d0a778636a..44152a615c0e 100644
---- a/drivers/net/wireless/purelifi/plfxlc/usb.c
-+++ b/drivers/net/wireless/purelifi/plfxlc/usb.c
-@@ -69,6 +69,7 @@ static void handle_rx_packet(struct plfxlc_usb *usb, const u8 *buffer,
- static void rx_urb_complete(struct urb *urb)
- {
- 	struct plfxlc_usb_tx *tx;
-+	unsigned long flags;
- 	struct plfxlc_usb *usb;
- 	unsigned int length;
- 	const u8 *buffer;
-@@ -105,13 +106,16 @@ static void rx_urb_complete(struct urb *urb)
- 		return;
- 	default:
- 		dev_dbg(plfxlc_urb_dev(urb), "urb %p error %d\n", urb, urb->status);
-+		spin_lock_irqsave(&tx->lock, flags);
- 		if (tx->submitted_urbs++ < PURELIFI_URB_RETRY_MAX) {
- 			dev_dbg(plfxlc_urb_dev(urb), "urb %p resubmit %d", urb,
- 				tx->submitted_urbs++);
-+			spin_unlock_irqrestore(&tx->lock, flags);
- 			goto resubmit;
- 		} else {
- 			dev_dbg(plfxlc_urb_dev(urb), "urb %p  max resubmits reached", urb);
- 			tx->submitted_urbs = 0;
-+			spin_unlock_irqrestore(&tx->lock, flags);
- 			return;
- 		}
- 	}
--- 
-2.34.1
-
+>> +}
+>> +
+>>   static int qcom_pcie_enable_resources(struct qcom_pcie_ep *pcie_ep)
+>>   {
+>>   	int ret;
+>> +	struct dw_pcie *pci = &pcie_ep->pci;
+>>   
+>>   	ret = clk_bulk_prepare_enable(pcie_ep->num_clks, pcie_ep->clks);
+>>   	if (ret)
+>> @@ -277,6 +331,20 @@ static int qcom_pcie_enable_resources(struct qcom_pcie_ep *pcie_ep)
+>>   	if (ret)
+>>   		goto err_phy_exit;
+>>   
+>> +	/*
+>> +	 * Some Qualcomm platforms require interconnect bandwidth constraints
+>> +	 * to be set before enabling interconnect clocks.
+>> +	 *
+>> +	 * Set an initial peak bandwidth corresponding to single-lane Gen 1
+>> +	 * for the pcie-mem path.
+>> +	 */
+>> +	ret = icc_set_bw(pcie_ep->icc_mem, 0, MBps_to_icc(PCIE_GEN1_BW_MBPS));
+>> +	if (ret) {
+>> +		dev_err(pci->dev, "failed to set interconnect bandwidth: %d\n",
+>> +			ret);
+>> +		goto err_phy_exit;
+>> +	}
+>> +
+>>   	return 0;
+> Thanks,
+> Pavan
