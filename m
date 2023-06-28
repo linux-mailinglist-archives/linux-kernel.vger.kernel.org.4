@@ -2,58 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A600D741702
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 19:11:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EF4274161F
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 18:15:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231659AbjF1RLY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 13:11:24 -0400
-Received: from del.deltatradinggroup.com ([162.214.96.148]:38506 "EHLO
-        del.deltatradinggroup.com" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S231564AbjF1RLE (ORCPT
+        id S231154AbjF1QOG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 12:14:06 -0400
+Received: from mail.tavsvolga.ru ([213.234.28.234]:52165 "EHLO
+        mail.tavsvolga.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231134AbjF1QOC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 13:11:04 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=freevisitday.com; s=default; h=Content-Transfer-Encoding:Content-Type:
-        MIME-Version:Message-ID:Date:Subject:To:From:Reply-To:Sender:Cc:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=oPVxK3uTAivh05J8fKUYcA7mDfym1Wh0wVfvpOf9QCc=; b=ViG1HabhYS82RpQtZxQHwpgmv7
-        rBw1icSlIPzRkSlgZyyqWrEGGamBpp7tAwdLJd0D85zVF9b+VHEY+BXz6Zcwkw7N8BsZIMhsvQTpP
-        d7xhswprjvOJ8pC3NKhqNuxqpxyrwIVEXcBxauDDAAJMYOazfCQuF7N9uZHJLzXhTkvRnONwwvhEh
-        DP6bSRA7SoII98cQ19v7twKsSlk++TPBnfrE7rL3YOSRBuhohRiKk6TqUpkhfd8yuh+a3HvjcemPo
-        TxZ+VUdZUetCgjmEgvwJCCallxPJ2ZX4741UalxTrCPEQhOFGf1zHN7sAgzItvxGcEmngjPpta3si
-        3Fza2klg==;
-Received: from [188.93.233.170] (port=63500 helo=error-no-valid-domain.com)
-        by del.deltatradinggroup.com with esmtpa (Exim 4.95)
-        (envelope-from <mail@freevisitday.com>)
-        id 1q7apZ-0006ZW-Fy
-        for linux-kernel@vger.kernel.org;
-        Fri, 09 Jun 2023 07:03:03 -0500
-Reply-To: willyun330@gmail.com
-From:   "William Yun" <mail@freevisitday.com>
-To:     linux-kernel@vger.kernel.org
-Subject: HALLO ,
-Date:   9 Jun 2023 05:02:57 -0700
-Message-ID: <20230609010055.8EB50153C83C6313@freevisitday.com>
+        Wed, 28 Jun 2023 12:14:02 -0400
+Received: by tavsvolga.ru (Sendmail, from userid 1002)
+        id E43E96DDA9; Wed, 28 Jun 2023 19:14:00 +0300 (KALT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=tavsvolga.ru;
+        s=default; t=1687968840;
+        bh=72nh04VcPo93HxZk/za927slPj2ojceNsiNd2aFTGUY=;
+        h=Subject:To:From:Date:Reply-To;
+        b=Z+/MrWEtpN1i0E9hdiueMQu26x3dLEnIfpxmJJP2EexDiZPYTqV79Y2vB1LXR1Y9M
+         EXFXGwOrxyUexU5IJqRX+Sd/K07RLuOWPm2fhGM5qEUEVDmOV1VL8SGINy8huA4k6v
+         OuMGnA1ke7HioC8hN7NHeZFSEYc4ygSqSL0DOyWw=
+X-Envelope-Sender: 777@tavsvolga.ru
+X-Envelope-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Checker-Version: SpamAssassin 3.2.5 (2008-06-10) on tavsvolga.ru
+X-Spam-Level: 
+X-Spam-Status: No, score=0.6 required=99.0 tests=ALL_TRUSTED,
+        DNS_FROM_AHBL_RHSBL,MISSING_MID autolearn=no version=3.2.5
+X-Original-To: linux-kernel@vger.kernel.org
+Received: from DESKTOP-Q9P0FP8.TL-WA850RE (unknown [41.85.181.27])
+        (Authenticated sender: 777@tavsvolga.ru)
+        by tavsvolga.ru (Sendmail) with ESMTPA id 1FDDD665CE;
+        Wed, 28 Jun 2023 16:36:42 +0300 (KALT)
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="utf-8"
 Content-Transfer-Encoding: quoted-printable
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - del.deltatradinggroup.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - freevisitday.com
-X-Get-Message-Sender-Via: del.deltatradinggroup.com: authenticated_id: mail@freevisitday.com
-X-Authenticated-Sender: del.deltatradinggroup.com: mail@freevisitday.com
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
+Content-Description: Mail message body
+Subject: Representative Needed
+To:     Recipients <777@tavsvolga.ru>
+From:   Global Trader <777@tavsvolga.ru>
+Date:   Wed, 28 Jun 2023 14:36:35 +0100
+Reply-To: pr5502782@gmail.com
+Message-Id: <20230628161400.E43E96DDA9@tavsvolga.ru>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Ich brauche Ihre Unterst=C3=BCtzung bei der Beantragung einer=20
-Erbschaft im Wert von mehreren Millionen Dollar von meiner Bank.=20
-Bei Interesse schreiben Sie mir einfach gleich eine E-Mail.
+My name is , Mrs Rita Potter Rogers we need a Company Representative in you=
+r city location, you can work online or at home and get good payment, conta=
+ct us if interested on this Email: pr5502782@gmail.com
