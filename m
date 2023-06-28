@@ -2,123 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADDB474129E
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 15:37:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BF4A7412AC
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 15:38:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231235AbjF1Ngi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 09:36:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48156 "EHLO
+        id S231563AbjF1Nhk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 09:37:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231555AbjF1Ngc (ORCPT
+        with ESMTP id S232239AbjF1NhR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 09:36:32 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30737E4B;
-        Wed, 28 Jun 2023 06:36:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=ytMNkCq5mj8QRrqKEhG7DQ+40mAfpQCegQXaR8xPOy8=; b=hTq8v5SMGqKnRYTlooA05bx+Lj
-        HRsozeIMcbs653IAaL+XNxCu6YICEE0b0CTdaYd0qHf4tfYBxP8Z0aiOY9+6U+6YGB4y8fMoWE82a
-        tIokfXhEns2lo+ZchXhidsFn5/peKcmJyfXQsYcmVtAKNJeCxwFXhefsLPMGw1q5srfBPR4ELKInp
-        SlYUXTieGCmAasREoJyoRxSY8OV0FwFTkC54mkhirbu70zX66NdujVbKpR17ENFBMubV7c2wvmx+z
-        7ieoGmbW/EWfsBkNHW4jmHqREGUFRknwi501NHA8pzjGtbC7e5dC/ZghtE0Mw1hA+Eb1gwCDkj5bE
-        Vq2LosxQ==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1qEVKg-003olR-0n; Wed, 28 Jun 2023 13:35:42 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 5432C30005E;
-        Wed, 28 Jun 2023 15:35:41 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 3B98924810076; Wed, 28 Jun 2023 15:35:41 +0200 (CEST)
-Date:   Wed, 28 Jun 2023 15:35:41 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     "Huang, Kai" <kai.huang@intel.com>
-Cc:     "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "Raj, Ashok" <ashok.raj@intel.com>,
-        "Huang, Ying" <ying.huang@intel.com>,
-        "Hansen, Dave" <dave.hansen@intel.com>,
-        "david@redhat.com" <david@redhat.com>,
-        "bagasdotme@gmail.com" <bagasdotme@gmail.com>,
-        "ak@linux.intel.com" <ak@linux.intel.com>,
-        "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Chatre, Reinette" <reinette.chatre@intel.com>,
-        "Christopherson,, Sean" <seanjc@google.com>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "Yamahata, Isaku" <isaku.yamahata@intel.com>,
-        "nik.borisov@suse.com" <nik.borisov@suse.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "Luck, Tony" <tony.luck@intel.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "imammedo@redhat.com" <imammedo@redhat.com>,
-        "Shahar, Sagi" <sagis@google.com>, "bp@alien8.de" <bp@alien8.de>,
-        "Brown, Len" <len.brown@intel.com>,
-        "Gao, Chao" <chao.gao@intel.com>,
-        "sathyanarayanan.kuppuswamy@linux.intel.com" 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        "Williams, Dan J" <dan.j.williams@intel.com>,
-        "x86@kernel.org" <x86@kernel.org>
-Subject: Re: [PATCH v12 07/22] x86/virt/tdx: Add skeleton to enable TDX on
- demand
-Message-ID: <20230628133541.GF2438817@hirez.programming.kicks-ass.net>
-References: <cover.1687784645.git.kai.huang@intel.com>
- <104d324cd68b12e14722ee5d85a660cccccd8892.1687784645.git.kai.huang@intel.com>
- <20230627095012.ln47s62pqzdrnb7x@box.shutemov.name>
- <d6a0fb32ebcdeb6c38ebe8e2b03f034f42360c0f.camel@intel.com>
- <20230627121853.ek5zr7sfiezfkfyj@box.shutemov.name>
- <9361abfa9bf22c2a1a4b25e5495bcccc5b8dcd43.camel@intel.com>
- <7b61715ad35d7b9916f55df72378e02e62c5cc4e.camel@intel.com>
+        Wed, 28 Jun 2023 09:37:17 -0400
+Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25307129
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 06:36:49 -0700 (PDT)
+Received: by mail-qt1-x82e.google.com with SMTP id d75a77b69052e-401d1d967beso309141cf.0
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 06:36:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1687959408; x=1690551408;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=pxNDlyNnnUp8RWBC1VLsgA/+iGnbRpi0J2EVSR52FcM=;
+        b=rKNzwVZcU3cLIC9qcDCyNFSF0snGD06RpyVH336Lt8XBAWSm/62RDwSb3Kw5Fnq8af
+         071saHOZnx4MsQw+nhZktkAxGksWG5tEFAgrlQaguO2mfB7yCCkdwf4+bHYB5Av3mtJp
+         dNyp3ifKrheqK5Jta3DbM+H6crd+V1GjtVJNTdSF0UGZrThghXaiDneFBJcACli21VO1
+         siAxo8B/Ihtd6WAMJhH5Dnryki6OvLvSb1eZJBXVSyUi4q40y6y+ZKBrmaN6wj9PHI16
+         LoUPy1x4a15Fmenlj7Mnjk4paBdrCMOnqZdw0biiIdZEk7EsDKNMzjsSlCIigIzanab4
+         mtyw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687959408; x=1690551408;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=pxNDlyNnnUp8RWBC1VLsgA/+iGnbRpi0J2EVSR52FcM=;
+        b=VMs21BSDMIaCHfTiO6FgHxwkRxDsDr8B3jzq0y55+ds2n3NflIxu/d5k6mTPeBLXCg
+         c0AdO7zoDulTcnbdSslec2WdlSHUVPv/foe2VVDmagm66AKUdx0cW7XBd4jrvPgGxux+
+         51a/nwxjM0jGrEVk++ewdds/tb2vCR4hArin/l3f1syqwtCBASVmsc+Vhi0A/tYsOEtd
+         tuU6Q7NNBMG3i/CpFJzz+WMsLP3F9QUV7MalScE7XRl5zre7wA8BnH5UBpoAGsMuAKEX
+         mCZMdqPhyPd7CA6s9HXcyhXnPGqrTJ5kRkxCHScg+ZsjePd2WPzDZtuiDDD6rMlP+mBc
+         ELKw==
+X-Gm-Message-State: AC+VfDyJcsp1q5gFyMrq9lNKnfk5+dx1L62mHUX0YK3DDvafSbkJFRlc
+        KMGvziNwguei+OPcqRJxw16hTZok1u/k9OZtZFLIPg==
+X-Google-Smtp-Source: ACHHUZ60AjWGc2bglbo+JECbZzsVot+WSWR2GQvtPPz3GEc8kwmp8sEBxLjEpUAJNmGk6Clveh555GFZ7J2VnYGoUdE=
+X-Received: by 2002:a05:622a:51:b0:3f8:5b2:aef2 with SMTP id
+ y17-20020a05622a005100b003f805b2aef2mr224203qtw.26.1687959407890; Wed, 28 Jun
+ 2023 06:36:47 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <7b61715ad35d7b9916f55df72378e02e62c5cc4e.camel@intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230621063825.268890-1-mshavit@google.com> <20230621063825.268890-10-mshavit@google.com>
+ <ZJToAfeKg8FF1sZL@Asurada-Nvidia> <CAKHBV266J1S6EMMjNCRMPhSXCKnqU7-H=rhi5iMbV4D9rH7WgQ@mail.gmail.com>
+ <ZJnVjvh+kdUfeMcP@Asurada-Nvidia>
+In-Reply-To: <ZJnVjvh+kdUfeMcP@Asurada-Nvidia>
+From:   Michael Shavit <mshavit@google.com>
+Date:   Wed, 28 Jun 2023 21:36:12 +0800
+Message-ID: <CAKHBV25P7d85LgeAQ7VbLyATjFf+AG447pZC7YRAg=5zty1R9A@mail.gmail.com>
+Subject: Re: [PATCH v4 09/13] iommu/arm-smmu-v3: Implement set_dev_pasid
+To:     Nicolin Chen <nicolinc@nvidia.com>
+Cc:     Will Deacon <will@kernel.org>, Robin Murphy <robin.murphy@arm.com>,
+        Joerg Roedel <joro@8bytes.org>, jean-philippe@linaro.org,
+        jgg@nvidia.com, baolu.lu@linux.intel.com,
+        linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 28, 2023 at 12:28:12AM +0000, Huang, Kai wrote:
-> On Tue, 2023-06-27 at 22:37 +0000, Huang, Kai wrote:
-> > > > 
-> > > > +/*
-> > > > + * Do the module global initialization if not done yet.
-> > > > + * It's always called with interrupts and preemption disabled.
-> > > > + */
-> > > 
-> > > If interrupts are always disabled why do you need _irqsave()?
-> > > 
-> > 
-> > I'll remove the _irqsave().
-> > 
-> > AFAICT Isaku preferred this for additional security, but this is not
-> > necessary.
-> > 
-> > 
-> 
-> Damn.  I think we can change the comment to say this function is called with
-> preemption being disabled, but _can_ be called with interrupt disabled.  And we
-> keep using the _irqsave() version.
-> 
-> 	/*
-> 	 * Do the module global initialization if not done yet.  It's always
-> 	 * called with preemption disabled and can be called with interrupts
-> 	 * disabled.
-> 	 */
+On Tue, Jun 27, 2023 at 2:14=E2=80=AFAM Nicolin Chen <nicolinc@nvidia.com> =
+wrote:
+> > I've been considering migrating those tests to the smmute driver if
+> > that would be valuable.
+>
+> Is this on Gerrit too?
 
-That's still not explaining *why*, what you want to say is:
-
-	Can be called locally or through an IPI function call.
+It's not pretty but I've rewritten the tests into the smmute kernel
+driver. Pushed to Gerrit here:
+https://linux-review.googlesource.com/id/Ibb33ba6f9c6d069324f21b9ad98e29c94=
+e15374a
+.
