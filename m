@@ -2,131 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F24EB740B3C
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 10:25:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DAB6C740B8F
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 10:32:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233768AbjF1IYs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 04:24:48 -0400
-Received: from mga17.intel.com ([192.55.52.151]:64476 "EHLO mga17.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233844AbjF1IVE (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 04:21:04 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687940464; x=1719476464;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=/qPMcMuAbH8XbNYSsnxXR9j+8vlCJi+JFzYYpfZQA1s=;
-  b=GIYEgrXlJ2Ufss14RtWTZPaEtgueYMAJ+owErqDSPkBZXBCcMjqfBDMx
-   FL/qRxjq40LWs9bdciFc1l7k4aE0viGuum4Gn7sOKib8/5grrnli0iUoK
-   N0SMfjtf3qe38bYi5zk31yUhMlFPPRRez/Q1KbxUSN1sRZxl0EOTtZw9z
-   R6ndsJvsmRPLs8+0KiD6Dcxnlaaa/eiZoH6idTbbRGJH7ysplYbfjNJtI
-   zI1dOj992dytBxRNnHP0Yy2p51zpNP99MGT+trqkNz78mRas4Ue+Bi1Ap
-   /vb4FuV8W9QINe99P1aTtpl+gN2GXtIW6T2mZAkrtUYSnRLVX5jRjZUWo
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10754"; a="342087734"
-X-IronPort-AV: E=Sophos;i="6.01,164,1684825200"; 
-   d="scan'208";a="342087734"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2023 21:43:11 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10754"; a="806741515"
-X-IronPort-AV: E=Sophos;i="6.01,164,1684825200"; 
-   d="scan'208";a="806741515"
-Received: from fyin-dev.sh.intel.com ([10.239.159.32])
-  by FMSMGA003.fm.intel.com with ESMTP; 27 Jun 2023 21:43:08 -0700
-From:   Yin Fengwei <fengwei.yin@intel.com>
-To:     akpm@linux-foundation.org, mike.kravetz@oracle.com,
-        willy@infradead.org, ackerleytng@google.com,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Cc:     fengwei.yin@intel.com, oliver.sang@intel.com
-Subject: [PATCH v2] readahead: Correct the start and size in ondemand_readahead()
-Date:   Wed, 28 Jun 2023 12:43:03 +0800
-Message-Id: <20230628044303.1412624-1-fengwei.yin@intel.com>
-X-Mailer: git-send-email 2.39.2
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        id S233265AbjF1Ic2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 04:32:28 -0400
+Received: from dfw.source.kernel.org ([139.178.84.217]:37908 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234052AbjF1I3t (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 28 Jun 2023 04:29:49 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9451A6126B
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 04:50:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 048CFC433C0;
+        Wed, 28 Jun 2023 04:50:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687927812;
+        bh=5S6yRCabcW0/yzekWqHZOlV3mBPFwmI6eomdim5efD4=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=PfFURiqDIhDtw//+gPbCfgg1STC0Sy37goxUCNQgWrAh8hBJkh3ztRIxbAPhNufXY
+         3G3qnK+Qvg0OHeSRKA6khq/bnqxYSPzpTwKHKlGPrwwXxOYkbpQWOa/6B/9gvUfhWr
+         j2iqSLpFM41xU3NM0smMSDUzOUuOKPeARhD62YqPOvYjBkC3eXQ7eBIGsDoV71wl0V
+         V8nauqeb8bU8JkSyU/pOM41sep9rq5i61A1lbtD3Kz7c+mdy8j3vg2GZswQr+lltlJ
+         duexITa2mSDykpoGmwhVeZdMuNDoaXM9gMj3IHpHbIq2l8JMZhRpSC+OUCDJiiiC+l
+         0ANxHbMcR/KVQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id D74D0C43170;
+        Wed, 28 Jun 2023 04:50:11 +0000 (UTC)
+Subject: Re: [GIT PULL] execve updates for v6.5-rc1
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <202306271642.ED8D48AC@keescook>
+References: <202306271642.ED8D48AC@keescook>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <202306271642.ED8D48AC@keescook>
+X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git tags/execve-v6.5-rc1
+X-PR-Tracked-Commit-Id: aa88054b70905069d1cf706aa5e9a3418d1d341d
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: d416a46c954ef0b753595ebfe6bb0988a24c2a57
+Message-Id: <168792781187.32196.8471909196712686321.pr-tracker-bot@kernel.org>
+Date:   Wed, 28 Jun 2023 04:50:11 +0000
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, Baruch Siach <baruch@tkos.co.il>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Fangrui Song <maskray@google.com>,
+        Kees Cook <keescook@chromium.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The commit
-9425c591e06a ("page cache: fix page_cache_next/prev_miss off by one")
-updated the page_cache_next_miss() to return the index beyond
-range.
+The pull request you sent on Tue, 27 Jun 2023 16:43:02 -0700:
 
-But it breaks the start/size of ra in ondemand_readahead() because
-the offset by one is accumulated to readahead_index. As a consequence,
-not best readahead order is picked.
+> https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git tags/execve-v6.5-rc1
 
-Tracing of the order parameter of filemap_alloc_folio() showed:
-     page order    : count     distribution
-        0          : 892073   |                                        |
-        1          : 0        |                                        |
-        2          : 65120457 |****************************************|
-        3          : 32914005 |********************                    |
-        4          : 33020991 |********************                    |
-with 9425c591e06a9.
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/d416a46c954ef0b753595ebfe6bb0988a24c2a57
 
-With parent commit:
-     page order    : count     distribution
-        0          : 3417288  |****                                    |
-        1          : 0        |                                        |
-        2          : 877012   |*                                       |
-        3          : 288      |                                        |
-        4          : 5607522  |*******                                 |
-        5          : 29974228 |****************************************|
+Thank you!
 
-Fix the issue by removing the offset by one when page_cache_next_miss()
-returns no gaps in the range.
-
-After the fix:
-    page order     : count     distribution
-        0          : 2598561  |***                                     |
-        1          : 0        |                                        |
-        2          : 687739   |                                        |
-        3          : 288      |                                        |
-        4          : 207210   |                                        |
-        5          : 32628260 |****************************************|
-
-Reported-by: kernel test robot <oliver.sang@intel.com>
-Closes: https://lore.kernel.org/oe-lkp/202306211346.1e9ff03e-oliver.sang@intel.com
-Fixes: 9425c591e06a ("page cache: fix page_cache_next/prev_miss off by one")
-Signed-off-by: Yin Fengwei <fengwei.yin@intel.com>
----
-Changes from v1:
-  - only removing offset by one when there is no gaps found by
-    page_cache_next_miss()
-  - Update commit message to include the histogram of page order
-    after fix
-
- mm/readahead.c | 10 +++++++++-
- 1 file changed, 9 insertions(+), 1 deletion(-)
-
-diff --git a/mm/readahead.c b/mm/readahead.c
-index 47afbca1d122..a93af773686f 100644
---- a/mm/readahead.c
-+++ b/mm/readahead.c
-@@ -614,9 +614,17 @@ static void ondemand_readahead(struct readahead_control *ractl,
- 				max_pages);
- 		rcu_read_unlock();
- 
--		if (!start || start - index > max_pages)
-+		if (!start || start - index - 1 > max_pages)
- 			return;
- 
-+		/*
-+		 * If no gaps in the range, page_cache_next_miss() returns
-+		 * index beyond range. Adjust it back to make sure
-+		 * ractl->_index is updated correctly later.
-+		 */
-+		if ((start - index - 1) == max_pages)
-+			start--;
-+
- 		ra->start = start;
- 		ra->size = start - index;	/* old async_size */
- 		ra->size += req_size;
 -- 
-2.39.2
-
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
