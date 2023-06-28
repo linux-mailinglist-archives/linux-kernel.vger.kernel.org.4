@@ -2,135 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C49B740B13
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 10:22:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C754740B5C
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 10:26:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233739AbjF1IUl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 04:20:41 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:47772 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233788AbjF1IOU (ORCPT
+        id S233268AbjF1I0p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 04:26:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40714 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232033AbjF1IYJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 04:14:20 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1687940009;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=2B1ynmbT0UkVLiBLPkihB9uufQdZmbcV3Hls/wgSG4U=;
-        b=A5qeOayM0dK13lLqMZ8/Jec4IukNslQCV4l1FpqSjGoauOrmk9Cwz54ZPgio/f31g0RTsP
-        fkO5x7fa9zNdJdBplHzUP/vAuFELJqJM9LzhIDlV5oETVkAAx8yDbp7BKTeON2BkiIXZC/
-        wM77R6tNappoED1Rx3klwUlBdyYUwBY=
-Received: from mail-lf1-f72.google.com (mail-lf1-f72.google.com
- [209.85.167.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-124-gSGxvdqQMHWMUG7yo4UyUA-1; Wed, 28 Jun 2023 04:13:27 -0400
-X-MC-Unique: gSGxvdqQMHWMUG7yo4UyUA-1
-Received: by mail-lf1-f72.google.com with SMTP id 2adb3069b0e04-4fb748a83b4so3178294e87.2
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 01:13:27 -0700 (PDT)
+        Wed, 28 Jun 2023 04:24:09 -0400
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6185730EA
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 01:13:51 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id 4fb4d7f45d1cf-51a52a7d859so1249701a12.0
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 01:13:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20221208.gappssmtp.com; s=20221208; t=1687940030; x=1690532030;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=GAAzD1zf6ehAjePnVBpKpHgOKHgWRG+m2JGrVjW9fnk=;
+        b=XtF/5FKiEtqW97TE7eQWphWjI+POM/V7BL8kDGPHpqGfABLu7enDYGImhj2imAw8XT
+         c9AGwngjmY33f6Youish5B9L1WqAu82M6qbupXKpcOL3PvxphyImitzAcMHXm/8wBLkA
+         my79iBReJHRjN+TFsk7Q/QC7LtnucO2lKWim6DUt16xwihIDxArZU5ujdI9p7GYbiPOk
+         nc/xOkfLEqnBBzXm1FBCZ1D2NgHyqHxcbUoZ1tVgI6hmuk6akaZ5rSpAFvfPBy0H6/Wp
+         UCeX+RQR122pBAX6NgkgAWl/WthIn3jJ+NHehQ2VBEhpE45rb8pTQNyTT2xvB3yn3K5g
+         BCAA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687940006; x=1690532006;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=2B1ynmbT0UkVLiBLPkihB9uufQdZmbcV3Hls/wgSG4U=;
-        b=ho7mPdSqcY26CD0MKUYOVuVHQ7aOJF1Ic10Dgw8M/pGmGG48pCUL3AzXJf3aUuNFL2
-         RW20D5llUYGK3s6kA36xv1Dkd1vPkyPfduscMatB0LjPcq4bHUz8iJrQxlQYoxtTeTtK
-         elOHlb6pFZ95RXoGgJkh+2tn1OCJtLc3i89kXDkVl7aYk8QTOiT6Vg2BqbIH0GNfTO8T
-         nJM5KekYhR+RAF3BzpUua/26Ml0ssOuEK1Cwj2Vg3cOE/RfuctsFMfq//V3pDKcNAT8y
-         hCpnNmvhJJaadjP7wVlSCZwXroNpLKIGnS2KZ/evcPM5SpnBeFyHBWnvmsunnDo3NFyx
-         lrLg==
-X-Gm-Message-State: AC+VfDxd42lbCo7vxBALYLyjjLCb/xTLFxNA72mv1iGha6bk2gtNWWFH
-        FiCBnlHrOtWC2q6U14FbKrUg/E5RO7hxKkWwk3oNJktJS6V/Y+VdYKjYRMTqxoJIl4k725QU1Rs
-        Ef9zAw3neJAWx64aA0vp/UQ/gYD9tIrL8Of1UzXE3
-X-Received: by 2002:a2e:9943:0:b0:2b6:9909:79b6 with SMTP id r3-20020a2e9943000000b002b6990979b6mr6308003ljj.40.1687940006183;
-        Wed, 28 Jun 2023 01:13:26 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ5hUOUptmy1cz/bmc0SQBwJ16zCTf1sq+b8bGF74Opubi8l0hmlcMZJAcxolSBWuUoW13vUTOVfJelNLYP6OGc=
-X-Received: by 2002:a2e:9943:0:b0:2b6:9909:79b6 with SMTP id
- r3-20020a2e9943000000b002b6990979b6mr6307993ljj.40.1687940005910; Wed, 28 Jun
- 2023 01:13:25 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1687940030; x=1690532030;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=GAAzD1zf6ehAjePnVBpKpHgOKHgWRG+m2JGrVjW9fnk=;
+        b=MqJuwGSRYwTUb6Xee6TQn7yrVVulN7ii2Azo97AQZV16WQK6FjmecGosZcd8JWjzlI
+         yZD2acCrkNjM92KEVq7PqbT2/stO9xmfdOP05VbBKFt0uKKCWhkMirPGmpXdBugnrPFd
+         NaDPOseMQ7bQk+tgk2IPKL37TiGGd6YMj+ZP6+EpXY7mfTXcOpKzdGSM0EAT2Cpm1p9h
+         EirsjLnujxWSyJT3np5yDI/EwZRFP8QP0mQdzdhDDGfkqBF0p/TfkS8A7l4Z/vCSDDdq
+         89db9C4+0uFdYXnMJ3VmYPebT0QMRhdo/9gflieJFwCSwPO+Yn+pmbrIQ9LHSU+bjtqX
+         EsUw==
+X-Gm-Message-State: AC+VfDxE8jk6RHC5eW5CWQLRZOR7M2KJSHsRFMDmFJi6oP8HxxCHVZ8k
+        InpRRtmTZJzF2hzBbdKnC6Q1OPXbD2VbmGXuyVfCJQ==
+X-Google-Smtp-Source: ACHHUZ4TQAqqZFi7p64XQp13X/ESAevSlOsyrqVw9VilpZbMXh1J+Z7PLnmcd2EVMzh3kO/WoH3C9g==
+X-Received: by 2002:a17:907:1c13:b0:991:db79:5666 with SMTP id nc19-20020a1709071c1300b00991db795666mr792076ejc.4.1687940029841;
+        Wed, 28 Jun 2023 01:13:49 -0700 (PDT)
+Received: from blmsp.fritz.box ([2001:4091:a247:82fa:b762:4f68:e1ed:5041])
+        by smtp.gmail.com with ESMTPSA id t6-20020a1709060c4600b0098654d3c270sm5436723ejf.52.2023.06.28.01.13.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 28 Jun 2023 01:13:49 -0700 (PDT)
+From:   Markus Schneider-Pargmann <msp@baylibre.com>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Markus Schneider-Pargmann <msp@baylibre.com>
+Subject: [PATCH] mailmap: Add Markus Schneider-Pargmann
+Date:   Wed, 28 Jun 2023 10:13:41 +0200
+Message-Id: <20230628081341.3470229-1-msp@baylibre.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-References: <20230628065919.54042-1-lulu@redhat.com> <20230628065919.54042-5-lulu@redhat.com>
-In-Reply-To: <20230628065919.54042-5-lulu@redhat.com>
-From:   Jason Wang <jasowang@redhat.com>
-Date:   Wed, 28 Jun 2023 16:13:14 +0800
-Message-ID: <CACGkMEtN7pE4FK2-504JC3A1tcfPjy9QejJiTyvXD7nt49KLvA@mail.gmail.com>
-Subject: Re: [RFC 4/4] vduse: update the vq_info in ioctl
-To:     Cindy Lu <lulu@redhat.com>
-Cc:     mst@redhat.com, maxime.coquelin@redhat.com,
-        xieyongji@bytedance.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+        lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 28, 2023 at 3:00=E2=80=AFPM Cindy Lu <lulu@redhat.com> wrote:
->
-> From: Your Name <you@example.com>
->
-> in VDUSE_VQ_GET_INFO, driver will sync the last_avail_idx
-> with reconnect info, I have olny test the split mode, so
+Add my old mail address and update my name.
 
-Typo, should be "only".
+Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
+---
+ .mailmap | 1 +
+ 1 file changed, 1 insertion(+)
 
-> only use this here, will add more information later
->
-> Signed-off-by: Cindy Lu <lulu@redhat.com>
-> ---
->  drivers/vdpa/vdpa_user/vduse_dev.c | 16 ++++++++++++++++
->  1 file changed, 16 insertions(+)
->
-> diff --git a/drivers/vdpa/vdpa_user/vduse_dev.c b/drivers/vdpa/vdpa_user/=
-vduse_dev.c
-> index 3df1256eccb4..b8e453eac0ce 100644
-> --- a/drivers/vdpa/vdpa_user/vduse_dev.c
-> +++ b/drivers/vdpa/vdpa_user/vduse_dev.c
-> @@ -141,6 +141,11 @@ static u32 allowed_device_id[] =3D {
->         VIRTIO_ID_NET,
->  };
->
-> +struct vhost_reconnect_vring {
-> +       uint16_t last_avail_idx;
-> +       bool avail_wrap_counter;
-> +};
-
-Should this belong to uAPI?
-
-> +
->  static inline struct vduse_dev *vdpa_to_vduse(struct vdpa_device *vdpa)
->  {
->         struct vduse_vdpa *vdev =3D container_of(vdpa, struct vduse_vdpa,=
- vdpa);
-> @@ -1176,6 +1181,17 @@ static long vduse_dev_ioctl(struct file *file, uns=
-igned int cmd,
->                                 vq->state.split.avail_index;
->
->                 vq_info.ready =3D vq->ready;
-> +               struct vdpa_reconnect_info *area;
-> +
-> +               area =3D &dev->reconnect_info[index];
-> +               struct vhost_reconnect_vring *log_reconnect;
-> +
-> +               log_reconnect =3D (struct vhost_reconnect_vring *)area->v=
-addr;
-
-What if userspace doesn't do mmap()?
-
-Thanks
-
-> +               if (log_reconnect->last_avail_idx !=3D
-> +                   vq_info.split.avail_index) {
-> +                       vq_info.split.avail_index =3D
-> +                               log_reconnect->last_avail_idx;
-> +               }
->
->                 ret =3D -EFAULT;
->                 if (copy_to_user(argp, &vq_info, sizeof(vq_info)))
-> --
-> 2.34.3
->
+diff --git a/.mailmap b/.mailmap
+index ea246eac7ba1..f9094eefa762 100644
+--- a/.mailmap
++++ b/.mailmap
+@@ -305,6 +305,7 @@ Marek Behún <kabel@kernel.org> <marek.behun@nic.cz>
+ Marek Behún <kabel@kernel.org> Marek Behun <marek.behun@nic.cz>
+ Mark Brown <broonie@sirena.org.uk>
+ Mark Starovoytov <mstarovo@pm.me> <mstarovoitov@marvell.com>
++Markus Schneider-Pargmann <msp@baylibre.com> <mpa@pengutronix.de>
+ Mark Yao <markyao0591@gmail.com> <mark.yao@rock-chips.com>
+ Martin Kepplinger <martink@posteo.de> <martin.kepplinger@ginzinger.com>
+ Martin Kepplinger <martink@posteo.de> <martin.kepplinger@puri.sm>
+-- 
+2.40.1
 
