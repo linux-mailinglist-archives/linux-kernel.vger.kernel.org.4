@@ -2,147 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6DE87414FB
+	by mail.lfdr.de (Postfix) with ESMTP id 7527F7414FA
 	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 17:30:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232146AbjF1PaG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 11:30:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60416 "EHLO
+        id S231454AbjF1P34 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 11:29:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232098AbjF1PaA (ORCPT
+        with ESMTP id S232129AbjF1P3v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 11:30:00 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFEAA268F;
-        Wed, 28 Jun 2023 08:29:59 -0700 (PDT)
+        Wed, 28 Jun 2023 11:29:51 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74C9F268E;
+        Wed, 28 Jun 2023 08:29:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=yx7U6Q1zu/jZUmaTgwSAgFdK87Ilf4lSewGXSOlnpeM=; b=j/HFTVj/s4oubzmOZQkbXs2rGy
-        m89lVq7Gr97cfnYWa6xARbldnNMVFMkRq8W1AjOORgsbE+JDe1bw/SVj909aNMoaQgR33VCyocwnB
-        jMyRPT/RNe6DUCMNQAbSh+QXX1aa+EunTFd0+s08kp6YUsHL37mxE+tFruQTX09nNF/z4QHlhYdw/
-        Q5Ev1yPX6SCK8BzGSUJsl0YZ9yclM8o4/U1hfdZUH6Q02BMUKP1h+1S3pQ/wYL/2iY2EjTmEFlAP+
-        boThf77OadEYRu9XDFgab10EyNjLhgCEc6jrk8JIR2EiwsURk08sQ48aUNIfNGmiKUfXlxu01rmoL
-        unCslgyg==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1qEX6M-005iuP-1l;
-        Wed, 28 Jun 2023 15:29:02 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 16CA73002D6;
-        Wed, 28 Jun 2023 17:29:01 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id F340423B2EE90; Wed, 28 Jun 2023 17:29:00 +0200 (CEST)
-Date:   Wed, 28 Jun 2023 17:29:00 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Kai Huang <kai.huang@intel.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-mm@kvack.org, x86@kernel.org, dave.hansen@intel.com,
-        kirill.shutemov@linux.intel.com, tony.luck@intel.com,
-        tglx@linutronix.de, bp@alien8.de, mingo@redhat.com, hpa@zytor.com,
-        seanjc@google.com, pbonzini@redhat.com, david@redhat.com,
-        dan.j.williams@intel.com, rafael.j.wysocki@intel.com,
-        ashok.raj@intel.com, reinette.chatre@intel.com,
-        len.brown@intel.com, ak@linux.intel.com, isaku.yamahata@intel.com,
-        ying.huang@intel.com, chao.gao@intel.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com, nik.borisov@suse.com,
-        bagasdotme@gmail.com, sagis@google.com, imammedo@redhat.com
-Subject: Re: [PATCH v12 20/22] x86/virt/tdx: Allow SEAMCALL to handle #UD and
- #GP
-Message-ID: <20230628152900.GI2438817@hirez.programming.kicks-ass.net>
-References: <cover.1687784645.git.kai.huang@intel.com>
- <c124550719716f1f7759c2bdea70f4722d8e0167.1687784645.git.kai.huang@intel.com>
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=qvuSyp7Pgubh7X2uYtTckk5E96WXw9yx8a7ad2phyoE=; b=d4gOg6G8/Yj2ZeR0Ny0H+Z4L+F
+        rnUWrxAV2mn/anSVRM8tnDj9kb1rwAgTy4w7zIMKAE0Enx1h0c4XYwi22QzLHNvRP17aUqr9eazE/
+        JKvhDe+wev1SUuwtSU3o444yiKG9AqufILPBPtAgabwIbii4HFcfjwMRjpg00A1oGM4Qly3TS7m59
+        h+S4ajQRIKpJnfSUv5J4Xm5YbenM+l2r7OsjkcySshFBaZCqXHBYeIPyYn/YKJYeoXsc212RFtGWl
+        ewOkZiiuKDGsXA7klj4l31xJf0c7wu9ru35gsv8I+U3OtPFcWhLwf2ygm8ahqHV6m4rQxpGb2tG/v
+        ABGilttA==;
+Received: from [2601:1c2:980:9ec0::2764]
+        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1qEX74-00Fzrz-2c;
+        Wed, 28 Jun 2023 15:29:46 +0000
+Message-ID: <79116003-1c43-fedb-75ec-744e55a94660@infradead.org>
+Date:   Wed, 28 Jun 2023 08:29:44 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c124550719716f1f7759c2bdea70f4722d8e0167.1687784645.git.kai.huang@intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH] s390/net: lcs: fix build errors when FDDI is a loadable
+ module
+Content-Language: en-US
+To:     Alexandra Winter <wintera@linux.ibm.com>,
+        Simon Horman <simon.horman@corigine.com>
+Cc:     linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>,
+        Wenjia Zhang <wenjia@linux.ibm.com>,
+        linux-s390@vger.kernel.org, netdev@vger.kernel.org,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+References: <20230621213742.8245-1-rdunlap@infradead.org>
+ <98375832-3d29-1f03-145f-8d6e763dd2d2@linux.ibm.com>
+ <ZJP99hSRt5MakBXC@corigine.com>
+ <3da03251-21ac-b41f-593d-cbc9ac9f86f6@linux.ibm.com>
+ <7f585168-7296-58aa-7fdb-c2aa08f346f4@infradead.org>
+ <510b6216-35e5-5ea1-525f-5fab35b901e0@infradead.org>
+ <a05a7c3a-0f2f-c3be-3630-6774a26b994f@linux.ibm.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <a05a7c3a-0f2f-c3be-3630-6774a26b994f@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 27, 2023 at 02:12:50AM +1200, Kai Huang wrote:
-> diff --git a/arch/x86/virt/vmx/tdx/tdxcall.S b/arch/x86/virt/vmx/tdx/tdxcall.S
-> index 49a54356ae99..757b0c34be10 100644
-> --- a/arch/x86/virt/vmx/tdx/tdxcall.S
-> +++ b/arch/x86/virt/vmx/tdx/tdxcall.S
-> @@ -1,6 +1,7 @@
->  /* SPDX-License-Identifier: GPL-2.0 */
->  #include <asm/asm-offsets.h>
->  #include <asm/tdx.h>
-> +#include <asm/asm.h>
->  
->  /*
->   * TDCALL and SEAMCALL are supported in Binutils >= 2.36.
-> @@ -45,6 +46,7 @@
->  	/* Leave input param 2 in RDX */
->  
->  	.if \host
-> +1:
->  	seamcall
-
-So what registers are actually clobbered by SEAMCALL ? There's a
-distinct lack of it in SDM Vol.2 instruction list :-(
-
->  	/*
->  	 * SEAMCALL instruction is essentially a VMExit from VMX root
-> @@ -57,10 +59,23 @@
->  	 * This value will never be used as actual SEAMCALL error code as
->  	 * it is from the Reserved status code class.
->  	 */
-> -	jnc .Lno_vmfailinvalid
-> +	jnc .Lseamcall_out
->  	mov $TDX_SEAMCALL_VMFAILINVALID, %rax
-> -.Lno_vmfailinvalid:
-> +	jmp .Lseamcall_out
-> +2:
-> +	/*
-> +	 * SEAMCALL caused #GP or #UD.  By reaching here %eax contains
-> +	 * the trap number.  Convert the trap number to the TDX error
-> +	 * code by setting TDX_SW_ERROR to the high 32-bits of %rax.
-> +	 *
-> +	 * Note cannot OR TDX_SW_ERROR directly to %rax as OR instruction
-> +	 * only accepts 32-bit immediate at most.
-> +	 */
-> +	mov $TDX_SW_ERROR, %r12
-> +	orq %r12, %rax
->  
-> +	_ASM_EXTABLE_FAULT(1b, 2b)
-> +.Lseamcall_out:
-
-This is all pretty atrocious code flow... would it at all be possible to
-write it like:
-
-SYM_FUNC_START(...)
-
-.if \host
-1:	seamcall
-	cmovc	%spare, %rax
-2:
-.else
-	tdcall
-.endif
-
-	.....
-	RET
 
 
-3:
-	mov $TDX_SW_ERROR, %r12
-	orq %r12, %rax
-	jmp 2b
+On 6/28/23 06:41, Alexandra Winter wrote:
+> 
+> 
+> On 28.06.23 07:06, Randy Dunlap wrote:
+>> Hi Alexandra, Simon, others,
+>>
+>> Here is v2 of this patch. I will send it formally after the merge window closes.
+>>
+>> Thanks for all of your help.
+>> ---
+> 
+> Thank you for the patch, Randy.
+> 
+> As suggested by Christian Bornträger, I did some research, whether the FDDI part of the LCS driver
+> could be removed. And actually there is no s390 machine above the minimum architecture level that
+> can have an FDDI interface.
+> I will send a patch to remove the FDDI option from the lcs driver.
+> 
+> I apologize that I was not aware of that earlier. And thank you again for pointing out the issue
+> with FDDI as a module.
 
-	_ASM_EXTABLE_FAULT(1b, 3b)
+No problem. Thanks for the new patch.
+I will trash all of my LCS patches. :)
 
-SYM_FUNC_END()
-
-That is, having all that inline in the hotpath is quite horrific.
+-- 
+~Randy
