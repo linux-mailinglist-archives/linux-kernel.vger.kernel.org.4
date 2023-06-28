@@ -2,193 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F7D3741BFE
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 00:54:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D9B7741C01
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 00:55:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230326AbjF1Wyl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 18:54:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53080 "EHLO
+        id S230526AbjF1WzV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 18:55:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230060AbjF1Wyi (ORCPT
+        with ESMTP id S231208AbjF1WzK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 18:54:38 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61F1126B9;
-        Wed, 28 Jun 2023 15:54:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687992876; x=1719528876;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=Iki1tAwHsT0InDXDuJ03LNhaQB1nSzzHCxO6ym/RF98=;
-  b=FA1ceeOI1N5oayzbg4g51EtVigTVRp2Fb0EGnBGLGvqsCXOApO1TVUVz
-   1XU2kZ8RK3Jg077ufxUKD8Ann55fCjktiOU3PdqoZpuVcWPOojZcB+zB1
-   wdAPUOhKdYt/Y8oecHb+yd3sbOuLY6xVI8CMwAObp9xbNErDqzlRFGDpj
-   iA/XnhVvi3uQsaAB8XjWCAm3iFR3UK9LEYM09D2S0LZg3hxR0K0t9w5XC
-   /htWmHwSxXbDtrtSbzxoqElqK0AAFFu/gGJy0l/Eg6GMjQtFzuJ1JjCoc
-   5X5VeD1afJPcN8LBxtAFNBySKt5Z2wxCNxVLgpUaEIN1+MYS0/jPmW7ft
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10755"; a="365438758"
-X-IronPort-AV: E=Sophos;i="6.01,166,1684825200"; 
-   d="scan'208";a="365438758"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2023 15:54:28 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10755"; a="891206357"
-X-IronPort-AV: E=Sophos;i="6.01,166,1684825200"; 
-   d="scan'208";a="891206357"
-Received: from spandruv-desk.jf.intel.com ([10.54.75.8])
-  by orsmga005.jf.intel.com with ESMTP; 28 Jun 2023 15:54:28 -0700
-From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-To:     rafael@kernel.org, lenb@kernel.org, viresh.kumar@linaro.org
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Subject: [PATCH] cpufreq: intel_pstate: Fix scaling for hybrid capable system with disabled E-cores
-Date:   Wed, 28 Jun 2023 15:53:41 -0700
-Message-Id: <20230628225341.3718351-1-srinivas.pandruvada@linux.intel.com>
-X-Mailer: git-send-email 2.39.1
+        Wed, 28 Jun 2023 18:55:10 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E89610DA;
+        Wed, 28 Jun 2023 15:55:06 -0700 (PDT)
+X-UUID: cf9bd54e160611eeb20a276fd37b9834-20230629
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=4yrhuypULG2OCnly9KsqFwdywOUBkTDpjc5m2LAnCvU=;
+        b=dPIERtCiLdJ78/Kz+xAp2oFARC+ReIK0lrnRWvK72y2JkpmQVlXq/dAEKTuqIm68S9G8CaG+oYieCaeLTXrsUHWIoYMcreQg8IUprOEhDJl5fEGDojtmR4vqZgv0AyecPgMfXcPkzYDjt1yDa/XUbJW8M8YPrfGbhcM88M48k7w=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.27,REQID:fa938f2b-ff30-4e8c-ba3f-af9ee0f6a3ab,IP:0,U
+        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+        release,TS:0
+X-CID-META: VersionHash:01c9525,CLOUDID:e40169da-b4fa-43c8-9c3e-0d3fabd03ec0,B
+        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:11|1,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:
+        NO
+X-CID-BVR: 0,NGT
+X-CID-BAS: 0,NGT,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_ULN
+X-UUID: cf9bd54e160611eeb20a276fd37b9834-20230629
+Received: from mtkmbs13n2.mediatek.inc [(172.21.101.108)] by mailgw02.mediatek.com
+        (envelope-from <sean.wang@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 2072068970; Thu, 29 Jun 2023 06:55:00 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.26; Thu, 29 Jun 2023 06:54:59 +0800
+Received: from mtkswgap22.mediatek.inc (172.21.77.33) by
+ mtkmbs11n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.1118.26 via Frontend Transport; Thu, 29 Jun 2023 06:54:59 +0800
+From:   <sean.wang@mediatek.com>
+To:     <marcel@holtmann.org>, <johan.hedberg@gmail.com>,
+        <luiz.dentz@gmail.com>
+CC:     <sean.wang@mediatek.com>, <chris.lu@mediatek.com>,
+        <Soul.Huang@mediatek.com>, <Leon.Yen@mediatek.com>,
+        <Deren.Wu@mediatek.com>, <km.lin@mediatek.com>,
+        <robin.chiu@mediatek.com>, <Eddie.Chen@mediatek.com>,
+        <ch.yeh@mediatek.com>, <jenhao.yang@mediatek.com>,
+        <Stella.Chang@mediatek.com>, <Tom.Chou@mediatek.com>,
+        <steve.lee@mediatek.com>, <jsiuda@google.com>,
+        <frankgor@google.com>, <abhishekpandit@google.com>,
+        <michaelfsun@google.com>, <mmandlik@google.com>,
+        <abhishekpandit@chromium.org>, <mcchou@chromium.org>,
+        <shawnku@google.com>, <linux-bluetooth@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH v8 1/3] Bluetooth: btusb: mediatek: readx_poll_timeout replaces open coding
+Date:   Thu, 29 Jun 2023 06:54:55 +0800
+Message-ID: <80efe66b16d933e3457bd38b1a60a5d51d4dee9e.1687991820.git.objelf@gmail.com>
+X-Mailer: git-send-email 1.7.9.5
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNPARSEABLE_RELAY,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Some system BIOS configuration may provide option to disable E-cores.
-As part of this change, CPUID feature for hybrid (Leaf 7 sub leaf 0,
-EDX[15] = 0) may not be set. But HWP performance limits will still be
-using a scaling factor like any other hybrid enabled system.
+From: Sean Wang <sean.wang@mediatek.com>
 
-The current check for applying scaling factor will fail when hybrid
-CPUID feature is not set. Only way to make sure that scaling should be
-applied by checking CPPC nominal frequency and nominal performance. If
-CPPC nominal frequency and nominal performance is defined and nominal
-frequency is not in multiples of 100MHz of nominal performance, then use
-hybrid scaling factor.
+Use readx_poll_timeout instead of open coding to poll the hardware reset
+status until it is done.
 
-The above check will fail for non hybrid capable systems as they don't
-publish nominal frequency field in CPPC, so this function can be used
-for all HWP systems without additional cpu model check.
-
-Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Signed-off-by: Sean Wang <sean.wang@mediatek.com>
 ---
- drivers/cpufreq/intel_pstate.c | 59 ++++++++++++++++++++++++++++------
- 1 file changed, 49 insertions(+), 10 deletions(-)
+v2: use 20ms as the unit to poll according to the requirement of
+    readx_poll_timeout
+v3: refine btusb_mtk_reset_done and drop the necessary error check
+    in btusb_mtk_cmd_timeout
+v4, v5, v6 and v7: rebase onto the latest codebase
+v8: fixed GitLint failure
+---
+ drivers/bluetooth/btusb.c | 30 +++++++++++++++---------------
+ 1 file changed, 15 insertions(+), 15 deletions(-)
 
-diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pstate.c
-index 2548ec92faa2..b562ed7c4f37 100644
---- a/drivers/cpufreq/intel_pstate.c
-+++ b/drivers/cpufreq/intel_pstate.c
-@@ -330,6 +330,13 @@ static bool intel_pstate_get_ppc_enable_status(void)
- 	return acpi_ppc;
+diff --git a/drivers/bluetooth/btusb.c b/drivers/bluetooth/btusb.c
+index cb58691b63ca..4c38d1c0f059 100644
+--- a/drivers/bluetooth/btusb.c
++++ b/drivers/bluetooth/btusb.c
+@@ -2657,8 +2657,6 @@ static int btusb_recv_event_realtek(struct hci_dev *hdev, struct sk_buff *skb)
+ #define MTK_EP_RST_OPT		0x74011890
+ #define MTK_EP_RST_IN_OUT_OPT	0x00010001
+ #define MTK_BT_RST_DONE		0x00000100
+-#define MTK_BT_RESET_WAIT_MS	100
+-#define MTK_BT_RESET_NUM_TRIES	10
+ #define MTK_BT_RESET_REG_CONNV3	0x70028610
+ #define MTK_BT_READ_DEV_ID	0x70010200
+ 
+@@ -3032,6 +3030,16 @@ static int btusb_mtk_id_get(struct btusb_data *data, u32 reg, u32 *id)
+ 	return btusb_mtk_reg_read(data, reg, id);
  }
  
-+#define HYBRID_SCALING_FACTOR	78741
-+
-+static inline int core_get_scaling(void)
++static u32 btusb_mtk_reset_done(struct hci_dev *hdev)
 +{
-+	return 100000;
++	struct btusb_data *data = hci_get_drvdata(hdev);
++	u32 val = 0;
++
++	btusb_mtk_uhw_reg_read(data, MTK_BT_MISC, &val);
++
++	return val & MTK_BT_RST_DONE;
 +}
 +
- #ifdef CONFIG_ACPI_CPPC_LIB
- 
- /* The work item is needed to avoid CPU hotplug locking issues */
-@@ -400,10 +407,35 @@ static int intel_pstate_get_cppc_guaranteed(int cpu)
- 
- 	return cppc_perf.nominal_perf;
- }
-+
-+static int intel_pstate_cppc_get_scaling(int cpu)
-+{
-+	struct cppc_perf_caps cppc_perf;
-+	int ret;
-+
-+	ret = cppc_get_perf_caps(cpu, &cppc_perf);
-+
-+	/*
-+	 * Check if nominal frequency is multiples of 100 MHz, if
-+	 * not return hybrid scaling factor.
-+	 */
-+	if (!ret && cppc_perf.nominal_perf && cppc_perf.nominal_freq &&
-+	    (cppc_perf.nominal_perf * 100 != cppc_perf.nominal_freq))
-+		return HYBRID_SCALING_FACTOR;
-+
-+	return core_get_scaling();
-+}
-+
- #else /* CONFIG_ACPI_CPPC_LIB */
- static inline void intel_pstate_set_itmt_prio(int cpu)
+ static int btusb_mtk_setup(struct hci_dev *hdev)
  {
- }
-+
-+static int intel_pstate_cppc_get_scaling(int cpu)
-+{
-+	return core_get_scaling();
-+}
-+
- #endif /* CONFIG_ACPI_CPPC_LIB */
+ 	struct btusb_data *data = hci_get_drvdata(hdev);
+@@ -3232,7 +3240,7 @@ static void btusb_mtk_cmd_timeout(struct hci_dev *hdev)
+ {
+ 	struct btusb_data *data = hci_get_drvdata(hdev);
+ 	u32 val;
+-	int err, retry = 0;
++	int err;
+ 	struct btmediatek_data *mediatek;
  
- static void intel_pstate_init_acpi_perf_limits(struct cpufreq_policy *policy)
-@@ -1895,11 +1927,6 @@ static int core_get_turbo_pstate(int cpu)
- 	return ret;
- }
+ 	/* It's MediaTek specific bluetooth reset mechanism via USB */
+@@ -3284,18 +3292,10 @@ static void btusb_mtk_cmd_timeout(struct hci_dev *hdev)
+ 		btusb_mtk_uhw_reg_read(data, MTK_BT_SUBSYS_RST, &val);
+ 	}
  
--static inline int core_get_scaling(void)
--{
--	return 100000;
--}
+-	/* Poll the register until reset is completed */
+-	do {
+-		btusb_mtk_uhw_reg_read(data, MTK_BT_MISC, &val);
+-		if (val & MTK_BT_RST_DONE) {
+-			bt_dev_dbg(hdev, "Bluetooth Reset Successfully");
+-			break;
+-		}
 -
- static u64 core_get_val(struct cpudata *cpudata, int pstate)
- {
- 	u64 val;
-@@ -1936,16 +1963,29 @@ static void hybrid_get_type(void *data)
- 	*cpu_type = get_this_hybrid_cpu_type();
- }
+-		bt_dev_dbg(hdev, "Polling Bluetooth Reset CR");
+-		retry++;
+-		msleep(MTK_BT_RESET_WAIT_MS);
+-	} while (retry < MTK_BT_RESET_NUM_TRIES);
++	err = readx_poll_timeout(btusb_mtk_reset_done, hdev, val,
++				 val & MTK_BT_RST_DONE, 20000, 1000000);
++	if (err < 0)
++		bt_dev_err(hdev, "Reset timeout");
  
--static int hybrid_get_cpu_scaling(int cpu)
-+static int hwp_get_cpu_scaling(int cpu)
- {
- 	u8 cpu_type = 0;
- 
- 	smp_call_function_single(cpu, hybrid_get_type, &cpu_type, 1);
- 	/* P-cores have a smaller perf level-to-freqency scaling factor. */
- 	if (cpu_type == 0x40)
--		return 78741;
-+		return HYBRID_SCALING_FACTOR;
- 
--	return core_get_scaling();
-+	/* Use default core scaling for E-cores */
-+	if (cpu_type == 0x20)
-+		return core_get_scaling();
-+
-+	/*
-+	 * If reached here, it means that, this system is either non
-+	 * hybrid system (like Tiger Lake) or hybrid capable system (like
-+	 * Alder Lake or Raptor Lake) with no E cores (CPUID for hybrid
-+	 * support is 0).
-+	 * All non hybrid systems, don't publish nominal_frequency
-+	 * field (means nominal frequency = 0), In that case
-+	 * the legacy core scaling is used.
-+	 */
-+	return intel_pstate_cppc_get_scaling(cpu);
- }
- 
- static void intel_pstate_set_pstate(struct cpudata *cpu, int pstate)
-@@ -3393,8 +3433,7 @@ static int __init intel_pstate_init(void)
- 			if (!default_driver)
- 				default_driver = &intel_pstate;
- 
--			if (boot_cpu_has(X86_FEATURE_HYBRID_CPU))
--				pstate_funcs.get_cpu_scaling = hybrid_get_cpu_scaling;
-+			pstate_funcs.get_cpu_scaling = hwp_get_cpu_scaling;
- 
- 			goto hwp_cpu_matched;
- 		}
+ 	btusb_mtk_id_get(data, 0x70010200, &val);
+ 	if (!val)
 -- 
-2.31.1
+2.25.1
 
