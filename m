@@ -2,160 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 524317411DA
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 14:59:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B67267411DB
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 14:59:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229610AbjF1M6q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 08:58:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43392 "EHLO
+        id S231388AbjF1M7C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 08:59:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230238AbjF1M6J (ORCPT
+        with ESMTP id S231237AbjF1M6o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 08:58:09 -0400
-Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D45821FFE;
-        Wed, 28 Jun 2023 05:58:07 -0700 (PDT)
-Received: by mail-io1-xd34.google.com with SMTP id ca18e2360f4ac-77a62a84855so237979339f.1;
-        Wed, 28 Jun 2023 05:58:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687957087; x=1690549087;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=EmAJ4kybVwJdt2vlA7P+ww38r+1sb7umIggV1gZPfIc=;
-        b=TH62gIf3kGj2Mt+ts7Y630wN71DXW47CEhU3g2Pwmabuz3PXytPQ+L5Z5vUmfzd6tq
-         XX0K8zmrpoR4BlYFswV/u0sf4deJ+qP51K5HmjwsQUKQbe8NWmP8rAMTv/y1qvlfhswi
-         7CW3NrPDN3CvIDMFcbjXS0c4nN1j+Cca6liM/YmFCe/6hiOwC9Uid2twZQmsbo66y65p
-         tjEXGKewk/oH/q31S0lN7KDx2E9WT4nFBWDXkAIK4wAt9D4gmsPinno/+w3jHdTsWKvF
-         sEToXu2u7v6U1qdh32oUFrXkeMs0SW64cwg0f8r8L+RH6/dqj9BC6o4rrMLkjw8XfNzl
-         7dLg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687957087; x=1690549087;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=EmAJ4kybVwJdt2vlA7P+ww38r+1sb7umIggV1gZPfIc=;
-        b=Dsmz1dweJyMZv/X6IUyqHL4jBX5NK+W3t07y0N+Hn+sZYeK5z4vFCecnBrAActMgdi
-         N/MrAVMj9ZEzaTvTx0+8m9D7I/v9ktsJhvp9vnAlMUuqUQrSRW6nYkp41k2mWK1xAiSE
-         Dn5HY4HxPjFM/bA3wo8kbOex2ZkyAYHqbsHbZxdLYhONLl2lD0Nc0sy1yXVhTAynY7Up
-         2KYo7vq/BFJiXyRZF66mgot0eNdgY0OXtEGCWeXGMLiLyhRxYUq5USJ4SNrnXDRUAMxA
-         /CW36bU+XENzpeaZgKQeANaA7IES/NoagIhIlOQEMQ9rxmVc1BY9hXsAeto91qi6WWKf
-         hB7g==
-X-Gm-Message-State: AC+VfDyM9N8Vs3ASGn2OrCfxqwPfCqgI8XKal1pMKNRqAvvSkj1uEUAm
-        Lb5AfTBXWTHqJDHkRN8q3uDbSWYuhEDX8jn+jQ8=
-X-Google-Smtp-Source: ACHHUZ6wS3W3zO8LM9C9sDqMZ4ikRUkeGGgbR0c2UtDxGwWsiO7g3opU34oKoYpfnXFkZ40VN/fauhQQUj3llWYZ3Z8=
-X-Received: by 2002:a6b:f203:0:b0:783:7298:55ef with SMTP id
- q3-20020a6bf203000000b00783729855efmr5556608ioh.11.1687957087169; Wed, 28 Jun
- 2023 05:58:07 -0700 (PDT)
+        Wed, 28 Jun 2023 08:58:44 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C81F19B1;
+        Wed, 28 Jun 2023 05:58:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=zblRw/4j1zlPqX3Dlun6zv4SMoiOHGXrVw0l++uKd7o=; b=XVBu/kW3Q71u5MMQF5W/TdFu++
+        oTydPtSEv1z9Oz8kaUTyYOvEdD+a9Rva9LBMBGf9XfQB6ziGwhH1FTXSdprTYWXW1kMWhJiGV3jSI
+        l1nmyoh26nis6AOtKyG4xgefOar78evVQb7hQDKLH9ydeOwVXVwh6EkDZqQ94QCcoxGd5aIcP7dGJ
+        3h1dmIWjqnaEGvJQcBzuR2oKJSphBjwEAwmObHTiBMfSn851xJRTfyu/GzzdbHxEKA+jZSB4wWAmY
+        ZuqKPwW8KKpaSxoldJ398TQqcxlGqODv/jocuFxsUoacmaG8frBdZ17RY980wzImZk+K38gC31DWJ
+        kJWp8Sjw==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1qEUkR-005eCg-32;
+        Wed, 28 Jun 2023 12:58:16 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 38A1030005E;
+        Wed, 28 Jun 2023 14:58:13 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 225F827F62B9F; Wed, 28 Jun 2023 14:58:13 +0200 (CEST)
+Date:   Wed, 28 Jun 2023 14:58:13 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Kai Huang <kai.huang@intel.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-mm@kvack.org, x86@kernel.org, dave.hansen@intel.com,
+        kirill.shutemov@linux.intel.com, tony.luck@intel.com,
+        tglx@linutronix.de, bp@alien8.de, mingo@redhat.com, hpa@zytor.com,
+        seanjc@google.com, pbonzini@redhat.com, david@redhat.com,
+        dan.j.williams@intel.com, rafael.j.wysocki@intel.com,
+        ashok.raj@intel.com, reinette.chatre@intel.com,
+        len.brown@intel.com, ak@linux.intel.com, isaku.yamahata@intel.com,
+        ying.huang@intel.com, chao.gao@intel.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com, nik.borisov@suse.com,
+        bagasdotme@gmail.com, sagis@google.com, imammedo@redhat.com
+Subject: Re: [PATCH v12 05/22] x86/virt/tdx: Add SEAMCALL infrastructure
+Message-ID: <20230628125813.GA2438817@hirez.programming.kicks-ass.net>
+References: <cover.1687784645.git.kai.huang@intel.com>
+ <b2a875fd855145728744617ac4425a06d8b46c90.1687784645.git.kai.huang@intel.com>
 MIME-Version: 1.0
-References: <20230614104759.228372-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20230614104759.228372-6-prabhakar.mahadev-lad.rj@bp.renesas.com> <20d4d296-14d7-467d-826c-b5c9cdf4599a@app.fastmail.com>
-In-Reply-To: <20d4d296-14d7-467d-826c-b5c9cdf4599a@app.fastmail.com>
-From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Date:   Wed, 28 Jun 2023 13:57:40 +0100
-Message-ID: <CA+V-a8tMcNnx3AK69KeFaNLvgt4yhy0wKdKdjR=AvuUwZNM-RA@mail.gmail.com>
-Subject: Re: [PATCH v9 5/6] cache: Add L2 cache management for Andes AX45MP
- RISC-V core
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     "Conor.Dooley" <conor.dooley@microchip.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        guoren <guoren@kernel.org>,
-        Andrew Jones <ajones@ventanamicro.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Samuel Holland <samuel@sholland.org>,
-        linux-riscv@lists.infradead.org,
-        Christoph Hellwig <hch@infradead.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        "Lad, Prabhakar" <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b2a875fd855145728744617ac4425a06d8b46c90.1687784645.git.kai.huang@intel.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Arnd,
+On Tue, Jun 27, 2023 at 02:12:35AM +1200, Kai Huang wrote:
 
-Thank you for the review.
+> +static int __always_unused seamcall(u64 fn, u64 rcx, u64 rdx, u64 r8, u64 r9,
+
+__always_inline perhaps? __always_unused seems wrong, worse it's still
+there at the end of the series:
+
+$ quilt diff --combine - | grep seamcall
+...
++static int __always_unused seamcall(u64 fn, u64 rcx, u64 rdx, u64 r8, u64 r9,
+...
++       ret = seamcall(TDH_SYS_INIT, 0, 0, 0, 0, NULL, NULL);
++       ret = seamcall(TDH_SYS_LP_INIT, 0, 0, 0, 0, NULL, NULL);
++       ret = seamcall(TDH_SYS_INFO, sysinfo_pa, TDSYSINFO_STRUCT_SIZE,
++       ret = seamcall(TDH_SYS_CONFIG, __pa(tdmr_pa_array),
++       return seamcall(TDH_SYS_KEY_CONFIG, 0, 0, 0, 0, NULL, NULL);
++               ret = seamcall(TDH_SYS_TDMR_INIT, tdmr->base, 0, 0, 0, NULL,
+...
+
+Definitely not unused.
+
+> +				    u64 *seamcall_ret,
+> +				    struct tdx_module_output *out)
+
+This interface is atrocious :/ Why have these two ret values? Why can't
+that live in a single space -- /me looks throught the callers, and finds
+seamcall_ret is unused :-(
+
+Worse, the input (c,d,8,9) is a strict subset of the output
+(c,d,8,9,10,11) so why isn't that a single thing used for both input and
+output.
+
+struct tdx_call {
+	u64 rcx, rdx, r8, r9, r10, r11;
+};
+
+static int __always_inline seamcall(u64 fn, struct tdx_call *regs)
+{
+}
 
 
-On Wed, Jun 14, 2023 at 2:11=E2=80=AFPM Arnd Bergmann <arnd@arndb.de> wrote=
-:
->
-> On Wed, Jun 14, 2023, at 12:47, Prabhakar wrote:
->
-> > +static void ax45mp_dma_cache_inv(phys_addr_t paddr, unsigned long size=
-)
-> > +{
-> > +     unsigned long start =3D (unsigned long)phys_to_virt(paddr);
-> > +     char cache_buf[2][AX45MP_CACHE_LINE_SIZE];
-> > +     unsigned long end =3D start + size;
-> > +     unsigned long old_start =3D start;
-> > +     unsigned long old_end =3D end;
-> > +     unsigned long line_size;
-> > +     unsigned long flags;
-> > +
-> > +     if (unlikely(start =3D=3D end))
-> > +             return;
-> > +
-> > +     line_size =3D ax45mp_priv.ax45mp_cache_line_size;
-> > +
-> > +     memset(&cache_buf, 0x0, sizeof(cache_buf));
-> > +     start =3D start & (~(line_size - 1));
-> > +     end =3D ((end + line_size - 1) & (~(line_size - 1)));
-> > +
-> > +     local_irq_save(flags);
-> > +     if (unlikely(start !=3D old_start))
-> > +             memcpy(&cache_buf[0][0], (void *)start, line_size);
-> > +
-> > +     if (unlikely(end !=3D old_end))
-> > +             memcpy(&cache_buf[1][0], (void *)(old_end & (~(line_size =
-- 1))),
-> > line_size);
-> > +
-> > +     ax45mp_cpu_dcache_inval_range(start, end, line_size);
-> > +
-> > +     if (unlikely(start !=3D old_start))
-> > +             memcpy((void *)start, &cache_buf[0][0], (old_start & (lin=
-e_size -
-> > 1)));
-> > +
-> > +     local_irq_restore(flags);
-> > +}
->
-> I'm not quite sure what this does, maybe some comments would help.
->
-> This looks like a novel method of preserving partial cache lines
-> at the beginning (but not the end?) of an unaligned area.
->
-I missed this earlier, (I removed the preserving of cache line from
-then end and left the beginning part. Samuel pointed to earlier on
-these patches if the cache-line-size is 64 we dont need to do this).
-Preserving cache lines is not needed at all,  Ive verified this and
-just doing a _inval() is sufficient. I'll update this and send a new
-version.
+	struct tdx_regs regs = { };
+	ret = seamcall(THD_SYS_INIT, &regs);
 
-Cheers,
-Prabhakar
 
-> As far as I can tell, most dma_mapping implementations don't
-> even try to do that at all, but the ones that do take a different
-> approach by calling _wback_inv() on partial cache lines instead
-> of calling _inv().
->
-> I'd say this does not belong into the low-level operations
-> here, especially since the ZICBOM variant doesn't do this either.
->
 
->       Arnd
+	struct tdx_regs regs = {
+		.rcx = sysinfo_pa,	.rdx = TDXSYSINFO_STRUCT_SIZE,
+		.r8  = cmr_array_pa,	.r9  = MAX_CMRS,
+	};
+	ret = seamcall(THD_SYS_INFO, &regs);
+	if (ret)
+		return ret;
+
+	print_cmrs(cmr_array, regs.r9);
+
+
+/me looks more at this stuff and ... WTF!?!?
+
+Can someone explain to me why __tdx_hypercall() is sane (per the above)
+but then we grew __tdx_module_call() as an absolute abomination and are
+apparently using that for seam too?
+
+
+
+
+> +{
+> +	u64 sret;
+> +	int cpu;
+> +
+> +	/* Need a stable CPU id for printing error message */
+> +	cpu = get_cpu();
+
+And that's important because? Does having preemption off across the
+seamcall make sense? Does it still make sense when you add a loop later?
+
+> +	sret = __seamcall(fn, rcx, rdx, r8, r9, out);
+> +	put_cpu();
+> +
+> +	/* Save SEAMCALL return code if the caller wants it */
+> +	if (seamcall_ret)
+> +		*seamcall_ret = sret;
+> +
+> +	switch (sret) {
+> +	case 0:
+> +		/* SEAMCALL was successful */
+> +		return 0;
+> +	case TDX_SEAMCALL_VMFAILINVALID:
+> +		pr_err_once("module is not loaded.\n");
+> +		return -ENODEV;
+> +	default:
+> +		pr_err_once("SEAMCALL failed: CPU %d: leaf %llu, error 0x%llx.\n",
+> +				cpu, fn, sret);
+> +		if (out)
+> +			pr_err_once("additional output: rcx 0x%llx, rdx 0x%llx, r8 0x%llx, r9 0x%llx, r10 0x%llx, r11 0x%llx.\n",
+> +					out->rcx, out->rdx, out->r8,
+> +					out->r9, out->r10, out->r11);
+
+At the very least this lacks { }, but it is quite horrendous coding
+style.
+
+Why switch() at all, would not:
+
+	if (!rset)
+		return 0;
+
+	if (sret == TDX_SEAMCALL_VMFAILINVALID) {
+		pr_nonsense();
+		return -ENODEV;
+	}
+
+	if (sret == TDX_SEAMCALL_GP) {
+		pr_nonsense();
+		return -ENODEV;
+	}
+
+	if (sret == TDX_SEAMCALL_UD) {
+		pr_nonsense();
+		return -EINVAL;
+	}
+
+	pr_nonsense();
+	return -EIO;
+
+be much clearer and have less horrific indenting issues?
+
+> +		return -EIO;
+> +	}
+> +}
