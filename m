@@ -2,76 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9BE974191A
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 21:54:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 863DF741922
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 21:58:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230451AbjF1Ty3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 15:54:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58934 "EHLO
+        id S231536AbjF1T6W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 15:58:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229813AbjF1TyY (ORCPT
+        with ESMTP id S231361AbjF1T6T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 15:54:24 -0400
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D69561FD8
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 12:54:22 -0700 (PDT)
-Received: by mail-wm1-x32c.google.com with SMTP id 5b1f17b1804b1-3fbac9dd8ebso3537495e9.1
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 12:54:22 -0700 (PDT)
+        Wed, 28 Jun 2023 15:58:19 -0400
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 257941FE7
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 12:58:18 -0700 (PDT)
+Received: by mail-pg1-x529.google.com with SMTP id 41be03b00d2f7-53fbf2c42bfso56025a12.3
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 12:58:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687982061; x=1690574061;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=n/1WCRqInbEQkf2duMLeRlZtPpMeZ3I2eJEdWnZJEsE=;
-        b=wiPuQnqHresP/hP0AhH1LIlgDRlJXchiEYdcoJEDzHt+UEmeFgraxKndgHVw2OY4aR
-         4HUeN7Jck9SA3LDs7HeM7rY382ov4iowO5DNF9tkJk8C0LAfThHl2opwboerfshAvRcy
-         iTVg/XJEfYET1X0VT8BFLN73IoV0I0h9W4VNlxOEApz0pU9MYDaS+dXuWtGLPG2YkKtA
-         cQWE+2GWR4RbF7YmvjlnJ6+yd9RzhRVt+buHpFXgq8o78DUxox9bdD3kPJPvRDScCYrf
-         pjoi1g3TTAJlC8Q9ufWLwix5Vek1E+ehCKgCB/y/cXspQICa+BVJAxHFblMY3rh8nBch
-         c3hA==
+        d=chromium.org; s=google; t=1687982297; x=1690574297;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=SLKKj3K4u0AlIAtmQW7z5se9epOJGry5f3WiL2g4NwY=;
+        b=bX9n4EZZyTbXN54Rp0GUhOYll5IXE//1a0nNjN2h20oHk4WN/oIlsZWQFuTtDjNB3s
+         a0ls74kLCHwip1lHi8qogxSWcaGBS6fcnDHDR26NY29EEYazFE7nYZEwDlzaY4KmCu1z
+         iN9/b9wlgfLjIXCZRzzSwOVfWJtLNKQEP06VI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687982061; x=1690574061;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=n/1WCRqInbEQkf2duMLeRlZtPpMeZ3I2eJEdWnZJEsE=;
-        b=AIV1fXEQbUc+jG3c/G7y5XB9Z3B3FHelK4kGD3GtEs/DjvRpnWQt+UWrgEVwAeogZI
-         d8RFdO3wEbN2LJR6DGj+X275h6uqvkASLkifsDgokQQTtQU4W09dQwe3GjRebyssFtqo
-         UoDpqf9snKXTYIP8L2WbLT48+ufezmJgSOyifnkslECpIBGPAfchg1ScdfaG/RvDxW8g
-         OT7yZiPaP/g4gult1rMDgNAA5d4vTDTTjqzz4+4vloFjDpDyqGObv7W4QzkRgT1xII2d
-         H6NxBaExyTHetcoie6RX2jrBBifQc9Duz6N5itdktHuN98EM1RMtcWXamHhoRK7R+4hG
-         dcqA==
-X-Gm-Message-State: AC+VfDz8X1PUtZ4q9uxL/6g4TSdGpcSImtI+7qJD+yoEsUOQWiBNUJZQ
-        aznq3O0WYtOyYNHlwzg2ElHRjg==
-X-Google-Smtp-Source: ACHHUZ4W+0A/p+ZwDwpOl46I6quIlwSWSeRsQ9uhmc+nS4yPI9mGFeGKCLwc1djZ2BtqVpoSvJ2zRQ==
-X-Received: by 2002:a05:600c:2041:b0:3fa:7808:3e16 with SMTP id p1-20020a05600c204100b003fa78083e16mr12935716wmg.29.1687982061246;
-        Wed, 28 Jun 2023 12:54:21 -0700 (PDT)
-Received: from [10.10.15.130] ([192.130.178.91])
-        by smtp.gmail.com with ESMTPSA id x9-20020a05600c21c900b003fb41491670sm7241386wmj.24.2023.06.28.12.54.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 28 Jun 2023 12:54:20 -0700 (PDT)
-Message-ID: <ef074384-1eee-ec88-b02f-c4ada72037a4@linaro.org>
-Date:   Wed, 28 Jun 2023 22:54:19 +0300
+        d=1e100.net; s=20221208; t=1687982297; x=1690574297;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=SLKKj3K4u0AlIAtmQW7z5se9epOJGry5f3WiL2g4NwY=;
+        b=UMMhze2fWCQKqgra1/4UQ01ZNAVbLYMjDlGks+ZkTslsGOaKuDBwZ2awHLyPLcv0Ey
+         Bmc67P0OmNTZLmYisnn+Peq07N2d+6QzYDIy0KjQ5qrsyEquQaLoubBTjGHuuqITIQUi
+         8Bk40V4oD3Xdac+4Ajcrk1XWedLt3EU0SWuhcNh2OejhfBTCMffbLn5aJ08r9BSnuSpa
+         aXRdu8UOBa/V8j4NdXcukKypfBA7tx8XFSVgGGdUm0Ee3NxtIfO/71zkeoGMitYh8SRH
+         QZRYuMjM7uEX0EkfpfB3GTKq4ANY5Avvv18HxSUrwm0CF2rJSqSGoJcXW1ZJSFl+1RSW
+         8oAQ==
+X-Gm-Message-State: AC+VfDy2IKZZFu3UyFIFU0CKgR2Lzc++ogD3QrmwX6JczJQ2N/0gW02s
+        LcVOIwEglC65v/z76+epZD0A9g==
+X-Google-Smtp-Source: ACHHUZ5TLdkXmDvbkiEIedIWvx1hwus+8KkOIvcmR/GosTyB+JZbqCpMg+YoO6VmeXjJk4WpAJVCQA==
+X-Received: by 2002:a17:90a:930f:b0:262:ebb9:dd59 with SMTP id p15-20020a17090a930f00b00262ebb9dd59mr9131691pjo.20.1687982297575;
+        Wed, 28 Jun 2023 12:58:17 -0700 (PDT)
+Received: from tictac2.mtv.corp.google.com ([2620:15c:9d:2:1228:a4c5:d742:666b])
+        by smtp.gmail.com with ESMTPSA id nw13-20020a17090b254d00b00262ff206931sm5040108pjb.42.2023.06.28.12.58.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 28 Jun 2023 12:58:16 -0700 (PDT)
+From:   Douglas Anderson <dianders@chromium.org>
+To:     Daniel Thompson <daniel.thompson@linaro.org>
+Cc:     Douglas Anderson <dianders@chromium.org>,
+        Aaron Tomlin <atomlin@atomlin.com>,
+        Jason Wessel <jason.wessel@windriver.com>,
+        John Ogness <john.ogness@linutronix.de>,
+        Petr Mladek <pmladek@suse.com>,
+        kgdb-bugreport@lists.sourceforge.net, linux-kernel@vger.kernel.org
+Subject: [PATCH] kdb: Handle LF in the command parser
+Date:   Wed, 28 Jun 2023 12:56:17 -0700
+Message-ID: <20230628125612.1.I5cc6c3d916195f5bcfdf5b75d823f2037707f5dc@changeid>
+X-Mailer: git-send-email 2.41.0.162.gfafddb0af9-goog
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH] drm/msm/adreno: Assign revn to A635
-Content-Language: en-GB
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
-        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org
-References: <20230628-topic-a635-v1-1-5056e09c08fb@linaro.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20230628-topic-a635-v1-1-5056e09c08fb@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -80,50 +70,101 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 28/06/2023 22:05, Konrad Dybcio wrote:
-> Recently, a WARN_ON() was introduced to ensure that revn is filled before
-> adreno_is_aXYZ is called. This however doesn't work very well when revn is
-> 0 by design (such as for A635). Fill it in as a stopgap solution for
-> -fixes.
-> 
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+The main kdb command parser only handles CR (ASCII 13 AKA '\r') today,
+but not LF (ASCII 10 AKA '\n'). That means that the kdb command parser
+can handle terminals that send just CR or that send CR+LF but can't
+handle terminals that send just LF.
 
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+The fact that kdb didn't handle LF in the command parser tripped up a
+tool I tried to use with it. Specifically, I was trying to send a
+command to my device to resume it from kdb using a ChromeOS tool like:
+  dut-control cpu_uart_cmd:"g"
+That tool only terminates lines with LF, not CR+LF.
 
-I'd have probably added:
+Arguably the ChromeOS tool should be fixed. After all, officially kdb
+seems to be designed such that CR+LF is the official line ending
+transmitted over the wire and that internally a line ending is just
+'\n' (LF). Some evidence:
+* uart_poll_put_char(), which is used by kdb, notices a '\n' and
+  converts it to '\r\n'.
+* kdb functions specifically use '\r' to get a carriage return without
+  a newline. You can see this in the pager where kdb will write a '\r'
+  and then write over the pager prompt.
 
-Fixes: cc943f43ece7 ("drm/msm/adreno: warn if chip revn is verified 
-before being set")
+However, all that being said there's no real harm in accepting LF as a
+command terminator in the kdb parser and doing so seems like it would
+improve compatibility. After this, I'd expect that things would work
+OK-ish with a remote terminal that used any of CR, CR+LF, or LF as a
+line ending. Someone using CR as a line ending might get some ugliness
+where kdb wasn't able to overwrite the last line, but basic commands
+would work. Someone using just LF as a line ending would probably also
+work OK.
 
-or
+A few other notes:
+- It can be noted that "bash" running on an "agetty" handles LF as a
+  line termination with no complaints.
+- Historically, kdb's "pager" actually handled either CR or LF fine. A
+  very quick inspection would make one think that kdb's pager actually
+  could have paged down two lines instead of one for anyone using
+  CR+LF, but this is generally avoided because of kdb_input_flush().
+- Conceivably one could argue that some of this special case logic
+  belongs in uart_poll_get_char() since uart_poll_put_char() handles
+  the '\n' => '\r\n' conversion. I would argue that perhaps we should
+  eventually do the opposite and move the '\n' => '\r\n' out of
+  uart_poll_put_char(). Having that conversion at such a low level
+  could interfere if we ever want to transfer binary data. In
+  addition, if we truly made uart_poll_get_char() the inverse of
+  uart_poll_put_char() it would convert back to '\n' and (ironically)
+  kdb's parser currently only looks for '\r' to find the end of a
+  command.
 
-Fixes: 192f4ee3e408 ("drm/msm/a6xx: Add support for Adreno 7c Gen 3 gpu")
+Signed-off-by: Douglas Anderson <dianders@chromium.org>
+---
 
+ kernel/debug/kdb/kdb_io.c | 16 +++++++++++++++-
+ 1 file changed, 15 insertions(+), 1 deletion(-)
 
-> ---
->   drivers/gpu/drm/msm/adreno/adreno_device.c | 1 +
->   1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/gpu/drm/msm/adreno/adreno_device.c b/drivers/gpu/drm/msm/adreno/adreno_device.c
-> index cb94cfd137a8..8ea7eae9fc52 100644
-> --- a/drivers/gpu/drm/msm/adreno/adreno_device.c
-> +++ b/drivers/gpu/drm/msm/adreno/adreno_device.c
-> @@ -345,6 +345,7 @@ static const struct adreno_info gpulist[] = {
->   		.address_space_size = SZ_16G,
->   	}, {
->   		.rev = ADRENO_REV(6, 3, 5, ANY_ID),
-> +		.revn = 635,
->   		.fw = {
->   			[ADRENO_FW_SQE] = "a660_sqe.fw",
->   			[ADRENO_FW_GMU] = "a660_gmu.bin",
-> 
-> ---
-> base-commit: 5c875096d59010cee4e00da1f9c7bdb07a025dc2
-> change-id: 20230628-topic-a635-1b3c2c987417
-> 
-> Best regards,
-
+diff --git a/kernel/debug/kdb/kdb_io.c b/kernel/debug/kdb/kdb_io.c
+index 5c7e9ba7cd6b..813cb6cf72d6 100644
+--- a/kernel/debug/kdb/kdb_io.c
++++ b/kernel/debug/kdb/kdb_io.c
+@@ -131,6 +131,7 @@ char kdb_getchar(void)
+ 	int escape_delay = 0;
+ 	get_char_func *f, *f_prev = NULL;
+ 	int key;
++	static bool last_char_was_cr;
+ 
+ 	for (f = &kdb_poll_funcs[0]; ; ++f) {
+ 		if (*f == NULL) {
+@@ -149,6 +150,18 @@ char kdb_getchar(void)
+ 			continue;
+ 		}
+ 
++		/*
++		 * The caller expects that newlines are either CR or LF. However
++		 * some terminals send _both_ CR and LF. Avoid having to handle
++		 * this in the caller by stripping the LF if we saw a CR right
++		 * before.
++		 */
++		if (last_char_was_cr && key == '\n') {
++			last_char_was_cr = false;
++			continue;
++		}
++		last_char_was_cr = (key == '\r');
++
+ 		/*
+ 		 * When the first character is received (or we get a change
+ 		 * input source) we set ourselves up to handle an escape
+@@ -244,7 +257,8 @@ static char *kdb_read(char *buffer, size_t bufsize)
+ 			*cp = tmp;
+ 		}
+ 		break;
+-	case 13: /* enter */
++	case 10: /* linefeed */
++	case 13: /* carriage return */
+ 		*lastchar++ = '\n';
+ 		*lastchar++ = '\0';
+ 		if (!KDB_STATE(KGDB_TRANS)) {
 -- 
-With best wishes
-Dmitry
+2.41.0.162.gfafddb0af9-goog
 
