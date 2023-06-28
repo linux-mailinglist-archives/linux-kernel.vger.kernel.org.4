@@ -2,114 +2,260 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1AC47414E6
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 17:26:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 781CF7414CF
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 17:22:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230498AbjF1P0T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 11:26:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60084 "EHLO
+        id S231267AbjF1PWX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 11:22:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232031AbjF1PZx (ORCPT
+        with ESMTP id S230311AbjF1PWU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 11:25:53 -0400
-Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93F9A2682;
-        Wed, 28 Jun 2023 08:25:52 -0700 (PDT)
-Received: by mail-pg1-x52a.google.com with SMTP id 41be03b00d2f7-55adfa61199so2612641a12.2;
-        Wed, 28 Jun 2023 08:25:52 -0700 (PDT)
+        Wed, 28 Jun 2023 11:22:20 -0400
+Received: from mail-il1-x130.google.com (mail-il1-x130.google.com [IPv6:2607:f8b0:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2015A268F
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 08:22:18 -0700 (PDT)
+Received: by mail-il1-x130.google.com with SMTP id e9e14a558f8ab-34577a22c7cso5032875ab.0
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 08:22:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687965952; x=1690557952;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=n4lOJqlO+m1XcCVJDoqo4LYW2FoCv0dKe3840PVKsVg=;
-        b=U/BcOhqvS44SFeqphSYAucZs9BXpwPTfqIe4vYZescTcIzohXH6nnk9w/g5bI60fJq
-         B853T6sPl0XjxnvVYa/YPXCmN9sUg5Zy5/6quOLEQnTzmIuzXBqnRpRMD4hnCXtWAecQ
-         RCQgLqh04na0Q9Drxbyos7O2fZUq2TNwpmto5FAjCO7W343PUgsNRg9rsdTQtobJx8ot
-         mHT+Cxs2WWnnpxLmeKjOTFny7X9UPM09KSOb0vpwCs9KozefZm+u8EV3XjzkGFn+R3Zh
-         q6CiTTTcrEVuxjnJ7u+9ZN5ABS7Zqxh4HXaSVkFoBZPcAybs2ZLgGWMsUa0HrK9mL+rT
-         lKqA==
+        d=kernel-dk.20221208.gappssmtp.com; s=20221208; t=1687965737; x=1690557737;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=MvQDQrOqVmgpQjFzLOfLlunva873RcqwEO0Tt7aEIYA=;
+        b=ErWqZdIY1HduXefQcC65bezs3qnpEmO67tbDgV8uJAjCtJ6Yp5sOWaQfS5QSr7yjV0
+         XVJdxzcahXR8bjWVkI1Y9lOuUxo86C1aUJ47OXdFj4KnAT/Z//uoWh0BPXGIHFWnM8eN
+         HprTETcjmTPGsv7DSAGu0g4BiqNgYbO8miVjtrHaUySkpPDTspDWBmS5bjKsCNemofUz
+         N3UvQ7NoxaOu12nWmi9yQgWfd8y5eiFn6dic8zIdvWO1DipUqvX9p29USqXt1QvzHPA6
+         dd6qeavMqzm34ahVv4T0yXaBcYsjptDdub9UvkOvx5Ib56amBf/ysujDrxFc2kqyQcHQ
+         0c3Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687965952; x=1690557952;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=n4lOJqlO+m1XcCVJDoqo4LYW2FoCv0dKe3840PVKsVg=;
-        b=CtP6HyZY/ktbqDw/3FzfnddnvUmeLjBfJwKsIkTnD/GJJyRVxh7ktbEWcIKsjDsv6s
-         ufV1NF5aaZTf+fOCgsS01LKYQk59/pi4xO0cT12zNZLnTtfMn8TvnP9pXIn3HPQtgYDe
-         iOYjunU6PpZP2vm2DOg4yQjyxTOOpBuJAWCsRwAySIPcQ0bxdn2S0Rb3b8NWZO7wRpkk
-         KMbGP2EuMQdiuLeJ1ZalhysOq3t+6nygvy5xKJLRE1E/+p/A6FJv3oDD8TxXpZA710ly
-         8bHdTfcHYvVw/XbOJ8LLc1kdEcmlKeAXsFxBvIKimCpSYv3hLMHQ72/ASTS0IUplKiy9
-         5Zpw==
-X-Gm-Message-State: AC+VfDxw0nv5nQxlyVxlge6vz3VqMFSXed4m9upFjXbSVTd+YIeeQaLv
-        j3t1Vn/ILNXMLfEe6I6KuYg=
-X-Google-Smtp-Source: ACHHUZ5HsB9Dk/4b5zEZUH2EtL7M7ADWTPlPwL0H4tceTmfa40sAM0eGuokuYZhWoNNFRZ53u1yeOw==
-X-Received: by 2002:a17:90b:3b41:b0:262:f872:fa77 with SMTP id ot1-20020a17090b3b4100b00262f872fa77mr7793984pjb.31.1687965951831;
-        Wed, 28 Jun 2023 08:25:51 -0700 (PDT)
-Received: from localhost.localdomain ([43.224.245.252])
-        by smtp.gmail.com with ESMTPSA id r2-20020a635142000000b004ff6b744248sm7539337pgl.48.2023.06.28.08.25.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Jun 2023 08:25:51 -0700 (PDT)
-From:   ruihongluo <colorsu1922@gmail.com>
-X-Google-Original-From: ruihongluo <luoruihong@xiaomi.com>
-To:     =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        ruihongluo <luoruihong@xiaomi.com>
-Subject: [PATCH v1 1/1] serial: 8250: Preserve original value of DLF register
-Date:   Wed, 28 Jun 2023 23:21:37 +0800
-Message-Id: <20230628152135.56286-1-luoruihong@xiaomi.com>
-X-Mailer: git-send-email 2.39.2
+        d=1e100.net; s=20221208; t=1687965737; x=1690557737;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=MvQDQrOqVmgpQjFzLOfLlunva873RcqwEO0Tt7aEIYA=;
+        b=YxugVtw5QiQCnv8TbyJ3mCVs7lofBgdu6od1d3fx26ObSDaTY0yszQp2FxwLeRfHHd
+         3QHm+tK8XLxW/n+Qr59bjNFyzd/3u1Z9kOXmtmbsxdbsg01A5id/ac1xfcKWD6PPc31T
+         Imf8f1C5HLitevA5BrFCHc1fp6mDpAB+url6+Jk5cW5JfDhZ8+ba0qfUJK63Q5tBKqbt
+         t8CA1/jjy90pv6r4/J4sez6zArOtATga0m2CzLiZfWanzmya9ECyCVt1zq/klJNVbL/Q
+         FAKCJfRFFNKNEAtKT+fSqx2dJj0trDCY+ifDs0bFpphoFJS0u5lK1OrOzlv2ZM7SXRT0
+         3EKA==
+X-Gm-Message-State: AC+VfDzcQ5BG5RxFxBeX1WCr5k8ULoYskl46UyORon07ywGLq0oYjD55
+        r3A6i4T9jCXFhsxFScIlafcsSA==
+X-Google-Smtp-Source: ACHHUZ4DX7uqUU8CdAqlLRFd7MykWx8/9UOLnCEQFrKqkAOOZdbIXIePCAD28a24zYZXTtOewoBpAQ==
+X-Received: by 2002:a6b:3b06:0:b0:780:cde6:3e22 with SMTP id i6-20020a6b3b06000000b00780cde63e22mr17460149ioa.0.1687965737367;
+        Wed, 28 Jun 2023 08:22:17 -0700 (PDT)
+Received: from [192.168.1.94] ([96.43.243.2])
+        by smtp.gmail.com with ESMTPSA id v20-20020a6b5b14000000b007836c7e8dccsm1522747ioh.17.2023.06.28.08.22.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 28 Jun 2023 08:22:16 -0700 (PDT)
+Message-ID: <03308df9-7a6f-4e55-40c8-6f57c5b67fe6@kernel.dk>
+Date:   Wed, 28 Jun 2023 09:22:15 -0600
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [GIT PULL] bcachefs
+Content-Language: en-US
+From:   Jens Axboe <axboe@kernel.dk>
+To:     Kent Overstreet <kent.overstreet@linux.dev>
+Cc:     torvalds@linux-foundation.org, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-bcachefs@vger.kernel.org,
+        Christoph Hellwig <hch@lst.de>
+References: <20230626214656.hcp4puionmtoloat@moria.home.lan>
+ <aeb2690c-4f0a-003d-ba8b-fe06cd4142d1@kernel.dk>
+ <20230627000635.43azxbkd2uf3tu6b@moria.home.lan>
+ <91e9064b-84e3-1712-0395-b017c7c4a964@kernel.dk>
+ <20230627020525.2vqnt2pxhtgiddyv@moria.home.lan>
+ <b92ea170-d531-00f3-ca7a-613c05dcbf5f@kernel.dk>
+ <23922545-917a-06bd-ec92-ff6aa66118e2@kernel.dk>
+ <20230627201524.ool73bps2lre2tsz@moria.home.lan>
+ <c06a9e0b-8f3e-4e47-53d0-b4854a98cc44@kernel.dk>
+ <20230628040114.oz46icbsjpa4egpp@moria.home.lan>
+ <b02657af-5bbb-b46b-cea0-ee89f385f3c1@kernel.dk>
+In-Reply-To: <b02657af-5bbb-b46b-cea0-ee89f385f3c1@kernel.dk>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This commit is aimed at preserving the original value of the
-DLF(Divisor Latch Fraction Register). When the DLF register is
-modified without preservation, it can disrupt the baudrate settings
-established by firmware or bootloader , leading to data corruption
-and the generation of unreadable or distorted characters.
+On 6/28/23 8:58?AM, Jens Axboe wrote:
+> I should have something later today, don't feel like I fully understand
+> all of it just yet.
 
-Signed-off-by: ruihongluo <luoruihong@xiaomi.com>
----
- drivers/tty/serial/8250/8250_dwlib.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+Might indeed be delayed_fput, just the flush is a bit broken in that it
+races with the worker doing the flush. In any case, with testing that, I
+hit this before I got an umount failure on loop 6 of generic/388:
 
-diff --git a/drivers/tty/serial/8250/8250_dwlib.c b/drivers/tty/serial/8250/8250_dwlib.c
-index 75f32f054ebb..d30957722da8 100644
---- a/drivers/tty/serial/8250/8250_dwlib.c
-+++ b/drivers/tty/serial/8250/8250_dwlib.c
-@@ -244,7 +244,7 @@ void dw8250_setup_port(struct uart_port *p)
- 	struct dw8250_port_data *pd = p->private_data;
- 	struct dw8250_data *data = to_dw8250_data(pd);
- 	struct uart_8250_port *up = up_to_u8250p(p);
--	u32 reg;
-+	u32 reg, orig;
- 
- 	pd->hw_rs485_support = dw8250_detect_rs485_hw(p);
- 	if (pd->hw_rs485_support) {
-@@ -270,9 +270,11 @@ void dw8250_setup_port(struct uart_port *p)
- 	dev_dbg(p->dev, "Designware UART version %c.%c%c\n",
- 		(reg >> 24) & 0xff, (reg >> 16) & 0xff, (reg >> 8) & 0xff);
- 
-+	/* Preserve value written by firmware or bootloader  */
-+	orig = dw8250_readl_ext(p, DW_UART_DLF);
- 	dw8250_writel_ext(p, DW_UART_DLF, ~0U);
- 	reg = dw8250_readl_ext(p, DW_UART_DLF);
--	dw8250_writel_ext(p, DW_UART_DLF, 0);
-+	dw8250_writel_ext(p, DW_UART_DLF, orig);
- 
- 	if (reg) {
- 		pd->dlf_size = fls(reg);
+
+External UUID:                              724c7f1e-fed4-46e8-888a-2d5b170365b7
+Internal UUID:                              4c356134-e573-4aa4-a7b6-c22ab260e0ff
+Device index:                               0
+Label:                                      
+Version:                                    snapshot_trees
+Oldest version on disk:                     snapshot_trees
+Created:                                    Wed Jun 28 09:16:47 2023
+Sequence number:                            0
+Superblock size:                            816
+Clean:                                      0
+Devices:                                    1
+Sections:                                   members
+Features:                                   new_siphash,new_extent_overwrite,btree_ptr_v2,extents_above_btree_updates,btree_updates_journalled,new_varint,journal_no_flush,alloc_v2,extents_across_btree_nodes
+Compat features:                            
+
+Options:
+  block_size:                               512 B
+  btree_node_size:                          256 KiB
+  errors:                                   continue [ro] panic 
+  metadata_replicas:                        1
+  data_replicas:                            1
+  metadata_replicas_required:               1
+  data_replicas_required:                   1
+  encoded_extent_max:                       64.0 KiB
+  metadata_checksum:                        none [crc32c] crc64 xxhash 
+  data_checksum:                            none [crc32c] crc64 xxhash 
+  compression:                              [none] lz4 gzip zstd 
+  background_compression:                   [none] lz4 gzip zstd 
+  str_hash:                                 crc32c crc64 [siphash] 
+  metadata_target:                          none
+  foreground_target:                        none
+  background_target:                        none
+  promote_target:                           none
+  erasure_code:                             0
+  inodes_32bit:                             1
+  shard_inode_numbers:                      1
+  inodes_use_key_cache:                     1
+  gc_reserve_percent:                       8
+  gc_reserve_bytes:                         0 B
+  root_reserve_percent:                     0
+  wide_macs:                                0
+  acl:                                      1
+  usrquota:                                 0
+  grpquota:                                 0
+  prjquota:                                 0
+  journal_flush_delay:                      1000
+  journal_flush_disabled:                   0
+  journal_reclaim_delay:                    100
+  journal_transaction_names:                1
+  nocow:                                    0
+
+members (size 64):
+  Device:                                   0
+    UUID:                                   dea79b51-ed22-4f11-9cb9-2117240419df
+    Size:                                   20.0 GiB
+    Bucket size:                            256 KiB
+    First bucket:                           0
+    Buckets:                                81920
+    Last mount:                             (never)
+    State:                                  rw
+    Label:                                  (none)
+    Data allowed:                           journal,btree,user
+    Has data:                               (none)
+    Discard:                                0
+    Freespace initialized:                  0
+initializing new filesystem
+going read-write
+initializing freespace
+mounted version=snapshot_trees
+seed = 1687442369
+seed = 1687347478
+seed = 1687934778
+seed = 1687706987
+seed = 1687173946
+seed = 1687488122
+seed = 1687828133
+seed = 1687316163
+seed = 1687511704
+seed = 1687772088
+seed = 1688057713
+seed = 1687321139
+seed = 1687166901
+seed = 1687602318
+seed = 1687659981
+seed = 1687457702
+seed = 1688000542
+seed = 1687221947
+seed = 1687740111
+seed = 1688083754
+seed = 1687314115
+seed = 1687189436
+seed = 1687664679
+seed = 1687631074
+seed = 1687691080
+seed = 1688089920
+seed = 1687962494
+seed = 1687646206
+seed = 1687636790
+seed = 1687442248
+seed = 1687532669
+seed = 1687436103
+seed = 1687626640
+seed = 1687594091
+seed = 1687235023
+seed = 1687525509
+seed = 1687766818
+seed = 1688040782
+seed = 1687293628
+seed = 1687468804
+seed = 1688129968
+seed = 1687176698
+seed = 1687603782
+seed = 1687642709
+seed = 1687844382
+seed = 1687696290
+seed = 1688169221
+_check_generic_filesystem: filesystem on /dev/nvme0n1 is inconsistent
+*** fsck.bcachefs output ***
+fsck from util-linux 2.38.1
+recovering from clean shutdown, journal seq 14642
+journal read done, replaying entries 14642-14642
+checking allocations
+starting journal replay, 0 keys
+checking need_discard and freespace btrees
+checking lrus
+checking backpointers to alloc keys
+checking backpointers to extents
+backpointer for missing extent
+  u64s 9 type backpointer 0:7950303232:0 len 0 ver 0: bucket=0:15164:0 btree=extents l=0 offset=0:0 len=88 pos=1342182431:5745:U32_MAX, not fixing
+checking extents to backpointers
+checking alloc to lru refs
+starting fsck
+going read-write
+mounted version=snapshot_trees opts=degraded,fsck,fix_errors,nochanges
+0xaaaafeb6b580g: still has errors
+*** end fsck.bcachefs output
+*** mount output ***
+/dev/vda2 on / type ext4 (rw,relatime,errors=remount-ro)
+devtmpfs on /dev type devtmpfs (rw,relatime,size=8174296k,nr_inodes=2043574,mode=755)
+proc on /proc type proc (rw,nosuid,nodev,noexec,relatime)
+sysfs on /sys type sysfs (rw,nosuid,nodev,noexec,relatime)
+securityfs on /sys/kernel/security type securityfs (rw,nosuid,nodev,noexec,relatime)
+tmpfs on /dev/shm type tmpfs (rw,nosuid,nodev)
+devpts on /dev/pts type devpts (rw,nosuid,noexec,relatime,gid=5,mode=620,ptmxmode=000)
+tmpfs on /run type tmpfs (rw,nosuid,nodev,size=3276876k,nr_inodes=819200,mode=755)
+tmpfs on /run/lock type tmpfs (rw,nosuid,nodev,noexec,relatime,size=5120k)
+cgroup2 on /sys/fs/cgroup type cgroup2 (rw,nosuid,nodev,noexec,relatime,nsdelegate,memory_recursiveprot)
+pstore on /sys/fs/pstore type pstore (rw,nosuid,nodev,noexec,relatime)
+hugetlbfs on /dev/hugepages type hugetlbfs (rw,relatime,pagesize=2M)
+mqueue on /dev/mqueue type mqueue (rw,nosuid,nodev,noexec,relatime)
+debugfs on /sys/kernel/debug type debugfs (rw,nosuid,nodev,noexec,relatime)
+tracefs on /sys/kernel/tracing type tracefs (rw,nosuid,nodev,noexec,relatime)
+configfs on /sys/kernel/config type configfs (rw,nosuid,nodev,noexec,relatime)
+fusectl on /sys/fs/fuse/connections type fusectl (rw,nosuid,nodev,noexec,relatime)
+ramfs on /run/credentials/systemd-sysctl.service type ramfs (ro,nosuid,nodev,noexec,relatime,mode=700)
+ramfs on /run/credentials/systemd-sysusers.service type ramfs (ro,nosuid,nodev,noexec,relatime,mode=700)
+ramfs on /run/credentials/systemd-tmpfiles-setup-dev.service type ramfs (ro,nosuid,nodev,noexec,relatime,mode=700)
+/dev/vda1 on /boot/efi type vfat (rw,relatime,fmask=0077,dmask=0077,codepage=437,iocharset=iso8859-1,shortname=mixed,errors=remount-ro)
+ramfs on /run/credentials/systemd-tmpfiles-setup.service type ramfs (ro,nosuid,nodev,noexec,relatime,mode=700)
+*** end mount output
+
 -- 
-2.39.2
+Jens Axboe
 
