@@ -2,205 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE1F8740FD8
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 13:13:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53D2E740FDA
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 13:14:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229748AbjF1LNj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 07:13:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34072 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbjF1LNh (ORCPT
+        id S231439AbjF1LOH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 07:14:07 -0400
+Received: from smtp-fw-80006.amazon.com ([99.78.197.217]:62630 "EHLO
+        smtp-fw-80006.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231422AbjF1LOA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 07:13:37 -0400
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48071AA
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 04:13:35 -0700 (PDT)
-Received: by mail-lj1-x22d.google.com with SMTP id 38308e7fff4ca-2b5e7dba43cso62182961fa.1
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 04:13:35 -0700 (PDT)
+        Wed, 28 Jun 2023 07:14:00 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687950813; x=1690542813;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=mxUjDgbY/jNz54AC4sl2RIErcdWqb2mUuJILzEKOlqM=;
-        b=oaZ8tyOpIUvX+cCLzgWdNoY8qftM92bZWnYXHa1SrK1QcQPPtAxjE4Sc7rnvK6yo5E
-         jFxzIDIPHv1HMLWARS/EKHXuxZ9f68yYnLRJDWTHzN5NpL4IVaLRwAMDZUFahEw9yNBB
-         EWOP7DSP9oo5THMy3XEr08CZ+YzzpleUdQtab5olUQClRuBtSh7ZoTxbcfLjuYG//vYO
-         73p49yKQ52BpY3azzO+z4MqRj4kmOVgaT/TV1auN55Gf01WwYad489xm+1Jgih7tx2ko
-         S+Oc+Qi2zgCMmNQOpQxYjjZdb5XIejDQ7sGOQ0/mEA7peRKHrJlaiexutyvC62/xMhc4
-         LiNQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687950813; x=1690542813;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=mxUjDgbY/jNz54AC4sl2RIErcdWqb2mUuJILzEKOlqM=;
-        b=DfUlVOaxtwtR2gIgWMajpG8L/kSfgTTXaLFvq4ojxNRI58Kz9IFkYKyDc5WSts3CKo
-         HdyneMzDtRqBOdktUHJR0CxuVD9FmGKck7u+F2/j6x6C/s6IacAF3S94p0eFqt9Vv0ZP
-         VHMWdOCvTCT8UlnTVcX+iYNWkZHHKLoynvnMxWcmNF9ctuUkUf7ZGk6iZPk7cJfLSQCt
-         +vi9jyOh87hqQ7KMTB+0b9+eOA0Dy7M2V5a/NDScYByJmKIX/5zLzdj6xYEc+vNL5sUu
-         eOcZmzHCDrldWxCMqhsnGi9KqBAR/flq3K4UhttuuofNq2g1a/m3nO7rgta5NxJ2Wy/y
-         aCtw==
-X-Gm-Message-State: AC+VfDx/ZNb3sDvpKO4ReESrPy3EcNePcS5kypaS64UXRjniuUBbQnkX
-        uylZH3v9DCriivUrTAuIsJtheQ==
-X-Google-Smtp-Source: ACHHUZ7F1tJgooydEk02WTCZjUfRe7PKzXWFYzlX3R9hRMRIB9K95VGzrtXqoz4UshqPiLZ3IaK0qw==
-X-Received: by 2002:a2e:8e8a:0:b0:2b4:8239:b132 with SMTP id z10-20020a2e8e8a000000b002b48239b132mr18914904ljk.22.1687950813572;
-        Wed, 28 Jun 2023 04:13:33 -0700 (PDT)
-Received: from [192.168.1.101] (abyj233.neoplus.adsl.tpnet.pl. [83.9.29.233])
-        by smtp.gmail.com with ESMTPSA id d19-20020a2e3313000000b002b1e6a78d3esm2165609ljc.82.2023.06.28.04.13.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 28 Jun 2023 04:13:33 -0700 (PDT)
-Message-ID: <2dfa5bb8-3189-29f2-a85f-3dd392b27141@linaro.org>
-Date:   Wed, 28 Jun 2023 13:13:31 +0200
+  d=amazon.de; i=@amazon.de; q=dns/txt; s=amazon201209;
+  t=1687950841; x=1719486841;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=swPdx64xw/EH+kxvFodSbLyAXdrefblh5CxrQ3vbxpI=;
+  b=Ul8UyyfxWLcIy92HDnNxga8qrxyUSfuh5HaYwzECCtaKBREJy6XH8F/o
+   SQSki8LA0jbECQjlWgtJIf3AGpo3WXpy8tY+twfeUtgx0YiCpGNY3StB+
+   7M+JC6PBpHi2wXHllgrBj9yS4qQ3685mDPfQheQNGjd+BzQwSV+4jLP31
+   M=;
+X-IronPort-AV: E=Sophos;i="6.01,165,1684800000"; 
+   d="scan'208";a="223327740"
+Received: from pdx4-co-svc-p1-lb2-vlan2.amazon.com (HELO email-inbound-relay-pdx-2b-m6i4x-ed19f671.us-west-2.amazon.com) ([10.25.36.210])
+  by smtp-border-fw-80006.pdx80.corp.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2023 11:13:57 +0000
+Received: from EX19MTAUWC001.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan2.pdx.amazon.com [10.236.137.194])
+        by email-inbound-relay-pdx-2b-m6i4x-ed19f671.us-west-2.amazon.com (Postfix) with ESMTPS id EB92380657;
+        Wed, 28 Jun 2023 11:13:55 +0000 (UTC)
+Received: from EX19D020UWC004.ant.amazon.com (10.13.138.149) by
+ EX19MTAUWC001.ant.amazon.com (10.250.64.174) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.26; Wed, 28 Jun 2023 11:13:45 +0000
+Received: from [0.0.0.0] (10.253.83.51) by EX19D020UWC004.ant.amazon.com
+ (10.13.138.149) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.30; Wed, 28 Jun
+ 2023 11:13:43 +0000
+Message-ID: <6ccec434-42f0-0ae8-8c7b-bea4646c5e7d@amazon.de>
+Date:   Wed, 28 Jun 2023 13:13:40 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v4 5/6] soc: qcom: Add LLCC support for multi channel DDR
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.12.0
+Subject: Re: [PATCH 0/1] User space notifications about VM cloning
 Content-Language: en-US
-To:     Komal Bajaj <quic_kbajaj@quicinc.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>
-Cc:     linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-References: <20230623141806.13388-1-quic_kbajaj@quicinc.com>
- <20230623141806.13388-6-quic_kbajaj@quicinc.com>
- <b84b2bfc-6f8f-f50f-27b5-52a982ae30f2@linaro.org>
- <e80f0bd3-cf1e-dfed-bcc6-d22d4d934230@quicinc.com>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <e80f0bd3-cf1e-dfed-bcc6-d22d4d934230@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-        lindbergh.monkeyblade.net
+To:     Babis Chalios <bchalios@amazon.es>, Theodore Ts'o <tytso@mit.edu>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        <linux-kernel@vger.kernel.org>
+CC:     <mzxreary@0pointer.de>, <xmarcalx@amazon.co.uk>,
+        Amit Shah <amit@kernel.org>,
+        Greg KH <gregkh@linuxfoundation.org>
+References: <20230531095119.11202-1-bchalios@amazon.es>
+ <20f65557-766d-d954-f3ef-c26ad2b661dc@amazon.es>
+From:   Alexander Graf <graf@amazon.de>
+In-Reply-To: <20f65557-766d-d954-f3ef-c26ad2b661dc@amazon.es>
+X-Originating-IP: [10.253.83.51]
+X-ClientProxiedBy: EX19D036UWB001.ant.amazon.com (10.13.139.133) To
+ EX19D020UWC004.ant.amazon.com (10.13.138.149)
+Content-Type: text/plain; charset="utf-8"; format="flowed"
+Content-Transfer-Encoding: base64
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 28.06.2023 10:52, Komal Bajaj wrote:
-> 
-> 
-> On 6/23/2023 8:28 PM, Konrad Dybcio wrote:
->> On 23.06.2023 16:18, Komal Bajaj wrote:
->>> Add LLCC support for multi channel DDR configuration
->>> based on a feature register. Reading DDR channel
->>> confiuration uses nvmem framework, so select the
->>> dependency in Kconfig. Without this, there will be
->>> errors while building the driver with COMPILE_TEST only.
->>>
->>> Signed-off-by: Komal Bajaj <quic_kbajaj@quicinc.com>
->>> ---
->>>   drivers/soc/qcom/Kconfig     |  2 ++
->>>   drivers/soc/qcom/llcc-qcom.c | 33 ++++++++++++++++++++++++++++++---
->>>   2 files changed, 32 insertions(+), 3 deletions(-)
->>>
->>> diff --git a/drivers/soc/qcom/Kconfig b/drivers/soc/qcom/Kconfig
->>> index a491718f8064..cc9ad41c63aa 100644
->>> --- a/drivers/soc/qcom/Kconfig
->>> +++ b/drivers/soc/qcom/Kconfig
->>> @@ -64,6 +64,8 @@ config QCOM_LLCC
->>>       tristate "Qualcomm Technologies, Inc. LLCC driver"
->>>       depends on ARCH_QCOM || COMPILE_TEST
->>>       select REGMAP_MMIO
->>> +    select NVMEM
->>> +    select QCOM_SCM
->>>       help
->>>         Qualcomm Technologies, Inc. platform specific
->>>         Last Level Cache Controller(LLCC) driver for platforms such as,
->>> diff --git a/drivers/soc/qcom/llcc-qcom.c b/drivers/soc/qcom/llcc-qcom.c
->>> index 6cf373da5df9..3c29612da1c5 100644
->>> --- a/drivers/soc/qcom/llcc-qcom.c
->>> +++ b/drivers/soc/qcom/llcc-qcom.c
->>> @@ -12,6 +12,7 @@
->>>   #include <linux/kernel.h>
->>>   #include <linux/module.h>
->>>   #include <linux/mutex.h>
->>> +#include <linux/nvmem-consumer.h>
->>>   #include <linux/of.h>
->>>   #include <linux/of_device.h>
->>>   #include <linux/regmap.h>
->>> @@ -943,6 +944,19 @@ static int qcom_llcc_cfg_program(struct platform_device *pdev,
->>>       return ret;
->>>   }
->>>   +static int qcom_llcc_get_cfg_index(struct platform_device *pdev, u8 *cfg_index)
->>> +{
->>> +    int ret;
->>> +
->>> +    ret = nvmem_cell_read_u8(&pdev->dev, "multi-chan-ddr", cfg_index);
->>> +    if (ret == -ENOENT) {
->>> +        *cfg_index = 0;
->>> +        return 0;
->>> +    }
->>> +
->>> +    return ret;
->>> +}
->>> +
->>>   static int qcom_llcc_remove(struct platform_device *pdev)
->>>   {
->>>       /* Set the global pointer to a error code to avoid referencing it */
->>> @@ -975,11 +989,13 @@ static int qcom_llcc_probe(struct platform_device *pdev)
->>>       struct device *dev = &pdev->dev;
->>>       int ret, i;
->>>       struct platform_device *llcc_edac;
->>> -    const struct qcom_llcc_config *cfg;
->>> +    const struct qcom_llcc_config *cfg, *entry;
->>>       const struct llcc_slice_config *llcc_cfg;
->>>       u32 sz;
->>> +    u8 cfg_index;
->>>       u32 version;
->>>       struct regmap *regmap;
->>> +    u32 num_entries = 0;
->>>         drv_data = devm_kzalloc(dev, sizeof(*drv_data), GFP_KERNEL);
->>>       if (!drv_data) {
->>> @@ -1040,8 +1056,19 @@ static int qcom_llcc_probe(struct platform_device *pdev)
->>>         drv_data->version = version;
->>>   -    llcc_cfg = cfg[0]->sct_data;
->>> -    sz = cfg[0]->size;
->>> +    ret = qcom_llcc_get_cfg_index(pdev, &cfg_index);
->>> +    if (ret)
->>> +        goto err;
->>> +
->>
->>> +    for (entry = cfg; entry->sct_data; entry++, num_entries++)
->>> +        ;
->>> +    if (cfg_index >= num_entries || cfg_index < 0) {
->> cfg_index is an unsigned variable, it can never be < 0
-> 
-> Okay, will remove this condition.
-> 
->>
->>> +        ret = -EINVAL;
->>> +        goto err;
->>> +    }
->>> +
->> if (cfg_index >= entry->size)? With that, you can also keep the config
->> entries non-0-terminated in the previous patch, saving a whole lot of RAM.
-> 
-> entry->size represents the size of sct table whereas num_entries represents the number
-> of sct tables that we can have. And by this check we are validating the value read from the
-> fuse register. Am I understanding your comment correctly?
-Oh you're right.
+SGkgZm9sa3MsCgpPbiAxNi4wNi4yMyAxNzowNywgQmFiaXMgQ2hhbGlvcyB3cm90ZToKPiBIZWxs
+byBhbGwsCj4KPiBTb21lIHRpbWUgaGFzIHBhc3NlZCBzaW5jZSBJIHNlbnQgdGhpcy4gQW55IGNv
+bW1lbnRzL3Rob3VnaHRzPwoKCkNhbiB3ZSBwbGVhc2UgZ2V0IHRoaXMgbWVyZ2VkIHNvbWVob3c/
+IEdyZWcsIGFueSBhZHZpc2U/CgpUaGlzIGlzIHB1cmVseSBhIGRldmljZSBub3RpZmljYXRpb24g
+ZXZlbnQgdG8gdXNlciBzcGFjZSwgc2ltaWxhciB0byAKbmV0d29yayBsaW5rIGNoYW5nZSBldmVu
+dHMgYW5kIHRoZSBsaWtlcyBhbmQgaGFzIG5vdGhpbmcgdG8gZG8gd2l0aCAKSmFzb24ncyBlbnZp
+c2lvbmVkIHJhbmRvbSByZXNlZWQgZXZlbnQgZXhwb3N1cmUuIFdlIGNhbiBoYXBwaWx5IHNlbmQg
+UkZDIApwYXRjaGVzIGZvciB0aGUgbGF0dGVyIGFmdGVyIHRoaXMgaXMgbWVyZ2VkIHRvby4KCgpB
+bGV4CgoKCgpBbWF6b24gRGV2ZWxvcG1lbnQgQ2VudGVyIEdlcm1hbnkgR21iSApLcmF1c2Vuc3Ry
+LiAzOAoxMDExNyBCZXJsaW4KR2VzY2hhZWZ0c2Z1ZWhydW5nOiBDaHJpc3RpYW4gU2NobGFlZ2Vy
+LCBKb25hdGhhbiBXZWlzcwpFaW5nZXRyYWdlbiBhbSBBbXRzZ2VyaWNodCBDaGFybG90dGVuYnVy
+ZyB1bnRlciBIUkIgMTQ5MTczIEIKU2l0ejogQmVybGluClVzdC1JRDogREUgMjg5IDIzNyA4NzkK
+Cgo=
 
-I still see room for improvement, though.
-
-For example, you duplicate assigning need_llcc_cfg, reg_offset
-and edac_reg_offset. You can add a new struct, like "sct_config" and add
-a pointer to sct_config[] & the length of this array to qcom_llcc_config.
-
-Konrad
-
-> 
->>
->> Konrad
->>> +    llcc_cfg = cfg[cfg_index].sct_data;
->>> +    sz = cfg[cfg_index].size;
->>>         for (i = 0; i < sz; i++)
->>>           if (llcc_cfg[i].slice_id > drv_data->max_slices)
-> 
