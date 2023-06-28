@@ -2,111 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CB38740F03
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 12:40:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 157FB740F09
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 12:42:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230420AbjF1Kkn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 06:40:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58924 "EHLO
+        id S231637AbjF1Kmi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 06:42:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229544AbjF1KiY (ORCPT
+        with ESMTP id S231954AbjF1Kka (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 06:38:24 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F359819B6;
-        Wed, 28 Jun 2023 03:38:22 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        Wed, 28 Jun 2023 06:40:30 -0400
+Received: from xry111.site (xry111.site [IPv6:2001:470:683e::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E680FE2
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 03:40:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xry111.site;
+        s=default; t=1687948824;
+        bh=j1QlM126j6MA+r/+OaAKCCpzmed3Q7diNaQnwFqIZ8U=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=he8v0OYnFOPwL55tjufGR98tmw8tQQXPIdHEIUgxkSsv3f7JngrXzV1aU+i1bsw2J
+         iFw/W/hTQzIIJQwMxFXpuNk9D22uydpV2stSa1vQUA2L+oMLFWkCKDo25UoMgrjiLz
+         hh5nGrEcl5FwV7L/20/wRImVTklBVOpe9UIkxR9g=
+Received: from [192.168.124.11] (unknown [113.140.11.3])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id B04C61F8CD;
-        Wed, 28 Jun 2023 10:38:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1687948701; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=bjzHtPro9Ner4jNsUFvbzQkAe6zc+I/EVaSBi1coQGk=;
-        b=lDd2o0gI3rUCEnCrSAtsdlSRBwcA6RkoN7NIuSqs3FUIUTdwu/GY/2tF8OqZu176VKoYqq
-        m6qW33R3Yu5gv7lX9SkaEsxw2l68AXvxZ3aJE+Yy+I/avacs8I3yMwkC4CDiQtGHNV6j8d
-        pci/GT6ET5tT6KMYlL4WhMRgT4zoSEg=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1687948701;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=bjzHtPro9Ner4jNsUFvbzQkAe6zc+I/EVaSBi1coQGk=;
-        b=J+kOUIr6cuQb0fhEWDEsuGaDa6vQQiSF8i6pRHXDKrINHw2LdopIByw7+qSC/ZRjMKuX1G
-        SxZrQdvwyy31CTBg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id A1F16138E8;
-        Wed, 28 Jun 2023 10:38:21 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id FEF6J50NnGRXIAAAMHmgww
-        (envelope-from <jack@suse.cz>); Wed, 28 Jun 2023 10:38:21 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id 23586A0707; Wed, 28 Jun 2023 12:38:21 +0200 (CEST)
-Date:   Wed, 28 Jun 2023 12:38:21 +0200
-From:   Jan Kara <jack@suse.cz>
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     Ahelenia =?utf-8?Q?Ziemia=C5=84ska?= 
-        <nabijaczleweli@nabijaczleweli.xyz>,
-        Amir Goldstein <amir73il@gmail.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <brauner@kernel.org>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jan Kara <jack@suse.cz>,
-        Chung-Chiang Cheng <cccheng@synology.com>, ltp@vger.kernel.org
-Subject: Re: [PATCH v3 0/3+1] fanotify accounting for fs/splice.c
-Message-ID: <20230628103821.dnrbnext26ojviyz@quack3>
-References: <CAOQ4uxh7i_s4R9pFJPENALdWGG5-dDhqPLEUXuJqSoHraktFiA@mail.gmail.com>
- <cover.1687884029.git.nabijaczleweli@nabijaczleweli.xyz>
- <ZJu8OUwWgz1zDVf5@infradead.org>
+         key-exchange ECDHE (P-256) server-signature ECDSA (P-384) server-digest SHA384)
+        (Client did not present a certificate)
+        (Authenticated sender: xry111@xry111.site)
+        by xry111.site (Postfix) with ESMTPSA id D86A165C20;
+        Wed, 28 Jun 2023 06:40:21 -0400 (EDT)
+Message-ID: <74a06e8e7d0bab88892321dbdb891762487b6f6b.camel@xry111.site>
+Subject: Re: [PATCH v15 27/30] LoongArch: KVM: Implement vcpu world switch
+From:   Xi Ruoyao <xry111@xry111.site>
+To:     WANG Xuerui <kernel@xen0n.name>, bibo mao <maobibo@loongson.cn>,
+        zhaotianrui <zhaotianrui@loongson.cn>,
+        Jinyang He <hejinyang@loongson.cn>,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        loongarch@lists.linux.dev, Jens Axboe <axboe@kernel.dk>,
+        Mark Brown <broonie@kernel.org>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Oliver Upton <oliver.upton@linux.dev>, tangyouling@loongson.cn
+Date:   Wed, 28 Jun 2023 18:40:20 +0800
+In-Reply-To: <baf5c93f-59ae-57eb-49e0-a0231dab325d@xen0n.name>
+References: <20230626084752.1138621-1-zhaotianrui@loongson.cn>
+         <20230626084752.1138621-28-zhaotianrui@loongson.cn>
+         <f648a182-7c26-5bbc-6ae5-584af26e9db1@loongson.cn>
+         <7017277c-3721-b417-5215-491efae7c8a9@loongson.cn>
+         <cfc87f85-3a09-8a9e-4258-4fb1fd8013ab@xen0n.name>
+         <30261345-45de-8511-e285-fe16ee408ba1@loongson.cn>
+         <baf5c93f-59ae-57eb-49e0-a0231dab325d@xen0n.name>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.48.3 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <ZJu8OUwWgz1zDVf5@infradead.org>
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue 27-06-23 21:51:05, Christoph Hellwig wrote:
-> Can you please resend this outside this thread?  I really cant't see
-> what's new or old here if you have a reply-to in the old thread.
-> 
-> On Tue, Jun 27, 2023 at 06:55:22PM +0200, Ahelenia Ziemiańska wrote:
-> > In 1/3 I've applied if/else if/else tree like you said,
-> > and expounded a bit in the message.
-> > 
-> > This is less pretty now, however, since it turns out that
-> > iter_file_splice_write() already marks the out fd as written because it
-> > writes to it via vfs_iter_write(), and that sent a double notification.
-> 
-> It seems like vfs_iter_write is the wrong level to implement
-> ->splice_write given that the the ->splice_write caller has already
-> checked f_mode, done the equivalent of rw_verify_area and
-> should do the fsnotify_modify.  I'd suggest to just open code the
-> relevant parts of vfs_iocb_iter_write in iter_file_splice_write.
+On Wed, 2023-06-28 at 18:22 +0800, WANG Xuerui wrote:
+> > is "ori t0, zero, CSR_PRMD_PIE" hard to understand? It is basic
+> > arithmetic instr and easy to understand also. To be frank I do not
+> > see the advantage of using li.w, also there is no document that
+> > pseudo-instruction should be used with high priority.
 
-Yeah, looking into the code I agree (with a small remark that unlike
-vfs_iocb_iter_write() this particular variant also needs to work with files
-providing only ->write and not ->write_iter). But we can live with
-duplicate events for now and this seems like a rather separate cleanup to
-do.
+> It depends on the reader. Sure the semantics are the same, but with "ori=
+=20
+> xx, zero, xx" someone's always going to wonder "why do 'x =3D 0 |=20
+> something' when you can simply li.w", because even if it's easy to=20
+> understand it's still an extra level of indirection.
+>=20
+> And I've given the historical and general software engineering=20
+> perspective too; it's not something set in stone, but I'd expect general=
+=20
+> software development best practices and minimizing any *possible* reader=
+=20
+> confusion to be acceptable.
 
-								Honza
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+The pseudo *should* be the high priority in general.  If we don't
+consider the pseudos high priority, people will start to load immediates
+with "their own way", like writing "addi.w $t0, $zero, 42" or even "xori
+$t0, $zero, 42" for "42".  These may puzzle the uarch, causing a
+performance worse than "ori $t0, $zero, 42".  So the only rationale
+things are either:
+
+1. Telling people always use pseudos if possible.
+
+or
+
+2. Telling people "remember to use ori for loading small immediates, not
+other instructions".
+
+1 is obviously easier.
+
+--=20
+Xi Ruoyao <xry111@xry111.site>
+School of Aerospace Science and Technology, Xidian University
