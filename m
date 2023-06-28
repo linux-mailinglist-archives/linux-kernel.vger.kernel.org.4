@@ -2,133 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B52B3741C80
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 01:32:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2A49741C93
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 01:43:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231520AbjF1Xcs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 19:32:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37964 "EHLO
+        id S231571AbjF1Xnv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 19:43:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231237AbjF1Xcq (ORCPT
+        with ESMTP id S229501AbjF1Xnt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 19:32:46 -0400
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF5D31BD1
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 16:32:44 -0700 (PDT)
-Received: by mail-pl1-x62d.google.com with SMTP id d9443c01a7336-1b7f68f1c9eso796265ad.2
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 16:32:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1687995164; x=1690587164;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=3bTxuumwZmEpyajshGaw+wYCur5UAcozF0e23Xfj8P0=;
-        b=DpqBZ3ylLqsAUkTeN+2t0neZqmBEP8mqOM0dY++zleaiP/cmN1rZLCQsA9h2MoPdaK
-         bVjsMay9Vj1r7n/aNaDaA3K76I1HvDVss/M3bSjElBZDmYV4BCnu4Xbc26VyDApeWDBB
-         gmiano+n+sfZ1+xVFICSoAabB7UVr/bshQf00=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687995164; x=1690587164;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=3bTxuumwZmEpyajshGaw+wYCur5UAcozF0e23Xfj8P0=;
-        b=HEWIcImwM6qHHNsCIo4BBns966DxbZlFFu8nMrEXD8nZRz9LACb0vzAicK5Jbs0ryI
-         yBpv/cq5bWIRwVvq6RjuesB0vSVyUpo0DaWHKJvhbBfNUC6VZmj4OcWBIe65TEVSQGHO
-         4IxXMZBIVnfPC/q/lZ1ef6/SBXTf2bJ8zbpjtisyqqO8//ftX2fRgYK1T9fquMgb3b51
-         yGIUiqkH+gcFM2bXA9oal2UUkVGye7T6S4AkTxTNvBn9A7hd2mm8qgcwxdoElsZEZ0mp
-         LN8IP8jyEGksaZwLeGOrjY5greCFPrcMcfghQkaQp9FTRHcSZq18hXBEmJPagUPEhbti
-         6Oxw==
-X-Gm-Message-State: AC+VfDyzH5aNq4XDqp2lpiaVinv3RCFNgkq3y1ax3D8vfpaYAGBRPRSX
-        8/RHbyvxlktpgeqZwchKVJqZqmmKGKVMDHq3Z0g=
-X-Google-Smtp-Source: ACHHUZ6i464rnjRi5eWKGZKYaR1j824hI1mk/wIJeWL2rnhu6VuB/6VB4kd9imOJrxAjoS9KA8XBsg==
-X-Received: by 2002:a17:902:ce8a:b0:1b8:d4c:725 with SMTP id f10-20020a170902ce8a00b001b80d4c0725mr10217778plg.15.1687995164324;
-        Wed, 28 Jun 2023 16:32:44 -0700 (PDT)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id jl23-20020a170903135700b001aafa2e212esm8143235plb.52.2023.06.28.16.32.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Jun 2023 16:32:43 -0700 (PDT)
-Date:   Wed, 28 Jun 2023 16:32:42 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Andrei Vagin <avagin@google.com>
-Cc:     Kees Cook <kees@kernel.org>, Andrei Vagin <avagin@gmail.com>,
-        linux-kernel@vger.kernel.org,
-        Christian Brauner <brauner@kernel.org>,
-        Chen Yu <yu.c.chen@intel.com>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Peter Oskolkov <posk@google.com>,
-        Tycho Andersen <tycho@tycho.pizza>,
-        Will Drewry <wad@chromium.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Peter Zijlstra <peterz@infradead.org>
-Subject: Re: [PATCH 0/6 v5 RESEND] seccomp: add the synchronous mode for
- seccomp_unotify
-Message-ID: <202306281630.504D1FC6@keescook>
-References: <20230308073201.3102738-1-avagin@google.com>
- <20230327102715.GA7701@hirez.programming.kicks-ass.net>
- <CANaxB-wjNAuFGcNErnfz3gy1TG=W6XoJSb0hQM=TtB25YoGSqw@mail.gmail.com>
- <C7D9CFE1-0FEF-41F1-81CC-E3D5C4E61213@kernel.org>
- <CAEWA0a4gOpVejBEEsO=c5+wu_GwTGqO8cOAuKNAMdpqf0w_m1w@mail.gmail.com>
+        Wed, 28 Jun 2023 19:43:49 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7577610EC;
+        Wed, 28 Jun 2023 16:43:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=mkpKticynoUGDZ1Tdpq3P9FZu5kxXQf0JefJvMLgJuA=; b=eVGM60hxW/1oCROBhJRKbbF9pd
+        /WHGc+o+pb+fkeVze6GKs3Hcu2mjtmWM/4oUGYCU0t+UbFMtrvvcjHSl/cglLWbeBdgmG30OqcMNt
+        S2Pr1+dHNTd4T3qFeiVwQeps/R+LjlmcLTRsuZ8NdhZsmraeYrB2Kel7p0VxJ6+7q7EgMQ6Wx6ank
+        P+yHcdGkzLdLPcfc5husZ1HslNubmokchQy4wGscGAVnBMae971Q/C5VLDp5JrfEWC1X5YToHzDHK
+        +ikxlG8dV0EOrjRrjMKr08rEq8iFClaMjdpXxuLncvJrq9YBnHim1BxRohfVxP5cT8JFsbmDDx9YM
+        9l9IY3yQ==;
+Received: from [2601:1c2:980:9ec0::2764]
+        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1qEeow-00H298-0w;
+        Wed, 28 Jun 2023 23:43:34 +0000
+Message-ID: <08e273fc-49c5-dd09-1c9e-d85a080767f9@infradead.org>
+Date:   Wed, 28 Jun 2023 16:43:27 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAEWA0a4gOpVejBEEsO=c5+wu_GwTGqO8cOAuKNAMdpqf0w_m1w@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH] syscalls: Cleanup references to sys_lookup_dcookie()
+Content-Language: en-US
+To:     Sohil Mehta <sohil.mehta@intel.com>, Arnd Bergmann <arnd@arndb.de>,
+        linux-api@vger.kernel.org, linux-arch@vger.kernel.org
+Cc:     Richard Henderson <richard.henderson@linaro.org>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Michal Simek <monstr@monstr.eu>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        "James E . J . Bottomley" <James.Bottomley@HansenPartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+        "David S . Miller" <davem@davemloft.net>,
+        Andy Lutomirski <luto@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>, Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        Sergei Trofimovich <slyich@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Rohan McLure <rmclure@linux.ibm.com>,
+        Andreas Schwab <schwab@linux-m68k.org>,
+        "Eric W . Biederman" <ebiederm@xmission.com>,
+        Brian Gerst <brgerst@gmail.com>, linux-alpha@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-perf-users@vger.kernel.org
+References: <20230628230935.1196180-1-sohil.mehta@intel.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20230628230935.1196180-1-sohil.mehta@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 28, 2023 at 11:44:02AM -0700, Andrei Vagin wrote:
-> On Wed, Apr 5, 2023 at 8:19 PM Kees Cook <kees@kernel.org> wrote:
-> >
-> > On April 3, 2023 11:32:00 AM PDT, Andrei Vagin <avagin@gmail.com> wrote:
-> > >On Mon, Mar 27, 2023 at 3:27 AM Peter Zijlstra <peterz@infradead.org> wrote:
-> > >>
-> > >> On Tue, Mar 07, 2023 at 11:31:55PM -0800, Andrei Vagin wrote:
-> > >>
-> > >> > Kees is ready to take this patch set, but wants to get Acks from the
-> > >> > sched folks.
-> > >> >
-> > >>
-> > >> > Andrei Vagin (4):
-> > >> >   seccomp: don't use semaphore and wait_queue together
-> > >> >   sched: add a few helpers to wake up tasks on the current cpu
-> > >> >   seccomp: add the synchronous mode for seccomp_unotify
-> > >> >   selftest/seccomp: add a new test for the sync mode of
-> > >> >     seccomp_user_notify
-> > >> >
-> > >> > Peter Oskolkov (1):
-> > >> >   sched: add WF_CURRENT_CPU and externise ttwu
-> > >>
-> > >> Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-> > >
-> > >Kees,
-> > >
-> > >Could you look at this patch set? You wrote to one of the previous
-> > >versions that you are ready to take it if sched maintainers approve it.
-> > >Here is no major changes from that moment. The sched-related part has
-> > >been cleaned up according with Peter's comments, and I moved the perf
-> > >test to the perf tool.
-> >
-> > Hi!
-> >
-> > Yes, thanks for keeping this going! I'm catching up after some vacation, but this is on my TODO list. :)
+
+
+On 6/28/23 16:09, Sohil Mehta wrote:
+> commit 'be65de6b03aa ("fs: Remove dcookies support")' removed the
+> syscall definition for lookup_dcookie.  However, syscall tables still
+> point to the old sys_lookup_dcookie() definition. Update syscall tables
+> of all architectures to directly point to sys_ni_syscall() instead.
 > 
-> Hi Kees. Do you have any updates on this series?
+> Signed-off-by: Sohil Mehta <sohil.mehta@intel.com>
 
-Apologies for the delay!
+Reviewed-by: Randy Dunlap <rdunlap@infradead.org>
 
-I've added this to the seccomp tree -- it should show up in -next soon.
+Thanks.
 
--Kees
+> ---
+> This patch has a dependency on another patch that has been applied to the
+> asm-generic tree:
+> https://lore.kernel.org/lkml/20230621223600.1348693-1-sohil.mehta@intel.com/
+> ---
+>  arch/alpha/kernel/syscalls/syscall.tbl              | 2 +-
+>  arch/arm/tools/syscall.tbl                          | 2 +-
+>  arch/arm64/include/asm/unistd32.h                   | 4 ++--
+>  arch/ia64/kernel/syscalls/syscall.tbl               | 2 +-
+>  arch/m68k/kernel/syscalls/syscall.tbl               | 2 +-
+>  arch/microblaze/kernel/syscalls/syscall.tbl         | 2 +-
+>  arch/mips/kernel/syscalls/syscall_n32.tbl           | 2 +-
+>  arch/mips/kernel/syscalls/syscall_n64.tbl           | 2 +-
+>  arch/mips/kernel/syscalls/syscall_o32.tbl           | 2 +-
+>  arch/parisc/kernel/syscalls/syscall.tbl             | 2 +-
+>  arch/powerpc/kernel/syscalls/syscall.tbl            | 2 +-
+>  arch/s390/kernel/syscalls/syscall.tbl               | 2 +-
+>  arch/sh/kernel/syscalls/syscall.tbl                 | 2 +-
+>  arch/sparc/kernel/syscalls/syscall.tbl              | 2 +-
+>  arch/x86/entry/syscalls/syscall_32.tbl              | 2 +-
+>  arch/x86/entry/syscalls/syscall_64.tbl              | 2 +-
+>  arch/xtensa/kernel/syscalls/syscall.tbl             | 2 +-
+>  include/linux/compat.h                              | 1 -
+>  include/linux/syscalls.h                            | 1 -
+>  include/uapi/asm-generic/unistd.h                   | 2 +-
+>  kernel/sys_ni.c                                     | 2 --
+>  tools/include/uapi/asm-generic/unistd.h             | 2 +-
+>  tools/perf/arch/mips/entry/syscalls/syscall_n64.tbl | 2 +-
+>  tools/perf/arch/powerpc/entry/syscalls/syscall.tbl  | 2 +-
+>  tools/perf/arch/s390/entry/syscalls/syscall.tbl     | 2 +-
+>  tools/perf/arch/x86/entry/syscalls/syscall_64.tbl   | 2 +-
+>  26 files changed, 24 insertions(+), 28 deletions(-)
+> 
+
 
 -- 
-Kees Cook
+~Randy
