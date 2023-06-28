@@ -2,107 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94BB6740B0F
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 10:22:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 330C2740AFE
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 10:18:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233540AbjF1IUY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 04:20:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38742 "EHLO
+        id S234876AbjF1ISS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 04:18:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233725AbjF1IOR (ORCPT
+        with ESMTP id S232911AbjF1INQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 04:14:17 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0B8535AE
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 01:09:50 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AAB6C61329
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 07:34:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C47DC433CA;
-        Wed, 28 Jun 2023 07:34:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687937648;
-        bh=wMjh2mW4JXYa3sX6Q+SyiFJ+70tkbGtKkJXlOrezZnQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=NxJpNPK4Awt3qiDCFtIjjIyLKcrvXKrb4g+qeaQjkGbbphdluOdGtfcmR5h1FXxRq
-         TbccwUiiBusOwwG87ua1KKhM9iw54JzgBYbTrkpBFYrIPbN88HH5H4BJV4NgbJ1x6f
-         cJzz6WBhAFTAIpXcNtLLi1aQpxnJv32DkX6OSqtqy8ILBq1IoWVgriMdVrKFsv9LvC
-         ugM+RBXvjoCUBZZjxxjejjpUxieXewm3oJTOtskXnbLadIEXWvrC3/7rlrEvQRocf3
-         pBB6qbWuNDCvOaHzApMXzg0ra+Ld02PxQ5TzZec5qH2VqDbUb+tPIUGc/XfD8ILZTs
-         lLAd/kIEL6tSQ==
-Date:   Wed, 28 Jun 2023 10:33:17 +0300
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Song Shuai <songshuaishuai@tinylab.org>
+        Wed, 28 Jun 2023 04:13:16 -0400
+Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com [IPv6:2607:f8b0:4864:20::d31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A38F4216
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 01:09:06 -0700 (PDT)
+Received: by mail-io1-xd31.google.com with SMTP id ca18e2360f4ac-7835ae70e46so129663039f.3
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 01:09:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance.com; s=google; t=1687939745; x=1690531745;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=59hIQrKJpHgwfOvQPS9O30uYvhiNepA8VuOZQbvyanA=;
+        b=SFKtD3tNp47O7hLGtkWAqB6u3Fy07A6aGlUVdRw4nLkac9JrqDgtqTaFExV7WL/rlm
+         Nb2al5xJWdRJhPCSsjbva5j5lsb0FkU4gsLJbXZZfVv5JLHBhHtHB/7eqmrdxEl5o9Gz
+         31su8Z81XwyzWy3pK7Hm/WOzDCGWASLbqRmpqZLLjPu7zq+nZ5uOsGVPTGb79uhRPKfV
+         6FSeqwcMxQlgGHJkV3XI49+qtuAnpmbnesmyALdxBdp3kO5PuD44dkdKgj6gwoF+EBPm
+         5jW5QcX1qQo5mn1URGuTRFYFmeOLnCDbi2R1XsNYTJVO7WbEvRKah8fA7koBXTZ1iAYr
+         Vh+A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687939745; x=1690531745;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=59hIQrKJpHgwfOvQPS9O30uYvhiNepA8VuOZQbvyanA=;
+        b=ZGXl1WOWAKFkf9tDUvx9Sl84aj8EU1BJc7vFk2EaNK55M2GdFXQExKoJxWISTi3l/b
+         pAr7NZ3GVZelbzTwWD8efLa5etX+LjmDoQwgiSpFr67sFBGNRVnheM9Synh5yilrFDUL
+         +hbg1RTyjDDSkH9GimebE4agKFXxobVLV0pZ3DGVA2Cex5tqlSGhYQYpxpXeqeA8D+rO
+         vHwvQ5OmITnf4czJmbuOqY7AoXVUFlQvIBkqZWQLPoGkbbjuzmDVPRx2BDDf5m7Z2TSt
+         MDfspDnbMtiT7xAyHOhrgcRIz1PuX8oEgV4iP7T0ONuW/Qps/b4gky8fKp8nlTndEtd2
+         dhmA==
+X-Gm-Message-State: AC+VfDxqDrUNn8RIo6aOIfzV4fDCc8ZtboGTv0rIRItZqwhEZxp9uaNl
+        yBi9Vd0qhpvPPyXICOmhJ1KyTQA6d5LNdc9jzcsBzw==
+X-Google-Smtp-Source: ACHHUZ7sSZA2dWtV3MSXiHZSsyyjPBx3Gzn28IS91FEiYfJ0YdxogMtvUD6PcjFRg/YjdoP0oDZayw==
+X-Received: by 2002:a05:6a20:a108:b0:12c:1193:a563 with SMTP id q8-20020a056a20a10800b0012c1193a563mr1398950pzk.58.1687937828517;
+        Wed, 28 Jun 2023 00:37:08 -0700 (PDT)
+Received: from GL4FX4PXWL.bytedance.net ([203.208.167.146])
+        by smtp.gmail.com with ESMTPSA id jj6-20020a170903048600b001b8021fbcd2sm4836988plb.280.2023.06.28.00.37.05
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Wed, 28 Jun 2023 00:37:08 -0700 (PDT)
+From:   Peng Zhang <zhangpeng.00@bytedance.com>
+To:     Liam.Howlett@oracle.com
 Cc:     akpm@linux-foundation.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] memblock: report failures when memblock_can_resize is
- not set
-Message-ID: <20230628073317.GO52412@kernel.org>
-References: <20230624032607.921173-1-songshuaishuai@tinylab.org>
+        linux-kernel@vger.kernel.org, maple-tree@lists.infradead.org,
+        Peng Zhang <zhangpeng.00@bytedance.com>
+Subject: [PATCH v4 0/4] Optimize the fast path of mas_store()
+Date:   Wed, 28 Jun 2023 15:36:53 +0800
+Message-Id: <20230628073657.75314-1-zhangpeng.00@bytedance.com>
+X-Mailer: git-send-email 2.37.0 (Apple Git-136)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230624032607.921173-1-songshuaishuai@tinylab.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jun 24, 2023 at 11:26:07AM +0800, Song Shuai wrote:
-> The callers of memblock_reserve() do not check the return value
-> presuming that memblock_reserve() always succeeds, but there are
-> cases where it may fail.
-> 
-> Having numerous memblock reservations at early boot where
-> memblock_can_resize is unset may exhaust the INIT_MEMBLOCK_REGIONS sized
-> memblock.reserved regions array and an attempt to double this array via
-> memblock_double_array() will fail and will return -1 to the caller.
-> 
-> When this happens the system crashes anyway, but it's hard to identify
-> the reason for the crash.
-> 
-> Add a panic message to memblock_double_array() to aid debugging of the
-> cases when too many regions are reserved before memblock can resize
-> memblock.reserved array.
-> 
-> Link: https://lore.kernel.org/linux-kernel/20230614131746.3670303-1-songshuaishuai@tinylab.org/
-> Signed-off-by: Song Shuai <songshuaishuai@tinylab.org>
+Add fast paths for mas_wr_append() and mas_wr_slot_store() respectively.
+The newly added fast path of mas_wr_append() is used in fork() and how
+much it benefits fork() depends on how many VMAs are duplicated.
 
-This is queued now, it will appear in memblock/for-next after the merge
-window closes.
+Thanks Liam for the review.
 
-Thanks!
+Changes since v3:
+ - Revise the commit log of [4/4]
 
-> ---
->  mm/memblock.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/mm/memblock.c b/mm/memblock.c
-> index 3feafea06ab2..1b8e902490e5 100644
-> --- a/mm/memblock.c
-> +++ b/mm/memblock.c
-> @@ -419,7 +419,7 @@ static int __init_memblock memblock_double_array(struct memblock_type *type,
->  	 * of memory that aren't suitable for allocation
->  	 */
->  	if (!memblock_can_resize)
-> -		return -1;
-> +		panic("memblock: cannot resize %s array\n", type->name);
->  
->  	/* Calculate new doubled size */
->  	old_size = type->max * sizeof(struct memblock_region);
-> -- 
-> 2.20.1
-> 
-> 
+v1: https://lore.kernel.org/lkml/20230602075353.5917-1-zhangpeng.00@bytedance.com/
+v2: https://lore.kernel.org/lkml/20230609120347.63936-1-zhangpeng.00@bytedance.com/
+v3: https://lore.kernel.org/lkml/20230615084301.97701-1-zhangpeng.00@bytedance.com/
+
+Peng Zhang (4):
+  maple_tree: add test for mas_wr_modify() fast path
+  maple_tree: add test for expanding range in RCU mode
+  maple_tree: optimize mas_wr_append(), also improve duplicating VMAs
+  maple_tree: add a fast path case in mas_wr_slot_store()
+
+ lib/maple_tree.c                 | 69 +++++++++++++++++++----------
+ lib/test_maple_tree.c            | 65 +++++++++++++++++++++++++++
+ tools/testing/radix-tree/maple.c | 75 ++++++++++++++++++++++++++++++++
+ 3 files changed, 186 insertions(+), 23 deletions(-)
 
 -- 
-Sincerely yours,
-Mike.
+2.20.1
+
