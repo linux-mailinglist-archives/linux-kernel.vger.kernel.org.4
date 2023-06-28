@@ -2,104 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 380E8741037
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 13:42:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FE8C74103D
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 13:42:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231508AbjF1LmN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 07:42:13 -0400
-Received: from mail-4322.protonmail.ch ([185.70.43.22]:55013 "EHLO
-        mail-4322.protonmail.ch" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230281AbjF1LmK (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 07:42:10 -0400
-Date:   Wed, 28 Jun 2023 11:41:59 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=proton.me;
-        s=protonmail; t=1687952529; x=1688211729;
-        bh=1XmJXLB2uklIrAaKv9O0vIo0TRiOWO1X6CWSa661Mfg=;
-        h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-         Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
-         Message-ID:BIMI-Selector;
-        b=UlBERZzlcMySexpywP/qfwbhkcuGUTK/3+eki529LjK1ujWoEHEDLIGJhR8G+ofo2
-         HJ96vvG49aHx/tDb+30C3Cl4gVcd2UPpiQPc8mbZMEWBzojtWtIaLoT+NPnvI27t3I
-         dcsWKLEczhj4NeRxGDcuK6QlC4g/TGLF5erWdd0b//47PyfwUYVIX+2LS8n6++LVWx
-         tXM1cTk0Cz5qPn+7rKokJTd2Yf9LVVjjDEjbSO9XVK8Qt5tob1alGLuGlE1RKFuPnI
-         6uAqN2CQA66+U8jLcfXAaFqVoi5x4vIL/7kY9K9RZtxsZlH5ArVPIjZ7cyoxjsnnyz
-         aEzhhUSlftGqA==
-To:     Gary Guo <gary@garyguo.net>
-From:   Benno Lossin <benno.lossin@proton.me>
-Cc:     Miguel Ojeda <ojeda@kernel.org>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        =?utf-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
-        Alice Ryhl <aliceryhl@google.com>,
-        Andreas Hindborg <nmi@metaspace.dk>,
-        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
-        patches@lists.linux.dev, Asahi Lina <lina@asahilina.net>
-Subject: Re: [PATCH 3/7] rust: init: make guards in the init macros hygienic
-Message-ID: <w4kyaXwWZEyoBoCCFmVtRmkUS6d0m_DJYTs7OVWLkbBX7PFwjj_wemi1mtvSemjUyhZwSDCA2l-5fXn4sxO4C3DT_8wGyZebpea-wQseOmA=@proton.me>
-In-Reply-To: <20230625215453.25aa38a0.gary@garyguo.net>
-References: <20230624092330.157338-1-benno.lossin@proton.me> <20230624092330.157338-3-benno.lossin@proton.me> <20230625215453.25aa38a0.gary@garyguo.net>
-Feedback-ID: 71780778:user:proton
+        id S229595AbjF1Lmv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 07:42:51 -0400
+Received: from foss.arm.com ([217.140.110.172]:54076 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231578AbjF1Lmj (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 28 Jun 2023 07:42:39 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 84BC9C14;
+        Wed, 28 Jun 2023 04:43:21 -0700 (PDT)
+Received: from FVFF77S0Q05N (unknown [10.57.29.147])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9EED83F663;
+        Wed, 28 Jun 2023 04:42:35 -0700 (PDT)
+Date:   Wed, 28 Jun 2023 12:42:32 +0100
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-kernel@vger.kernel.org, akiyks@gmail.com,
+        boqun.feng@gmail.com, corbet@lwn.net, keescook@chromium.org,
+        linux@armlinux.org.uk, linux-doc@vger.kernel.org,
+        mchehab@kernel.org, paulmck@kernel.org, peterz@infradead.org,
+        rdunlap@infradead.org, sstabellini@kernel.org, will@kernel.org
+Subject: Re: [PATCH v2 04/27] locking/atomic: make atomic*_{cmp,}xchg optional
+Message-ID: <ZJwcqCLlKcCWmlDF@FVFF77S0Q05N>
+References: <20230605070124.3741859-1-mark.rutland@arm.com>
+ <20230605070124.3741859-5-mark.rutland@arm.com>
+ <32395f1f-19e4-41da-9f67-68c7d21cf9b2@roeck-us.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <32395f1f-19e4-41da-9f67-68c7d21cf9b2@roeck-us.net>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 25.06.23 22:54, Gary Guo wrote:
-> On Sat, 24 Jun 2023 09:25:10 +0000
-> Benno Lossin <benno.lossin@proton.me> wrote:
->=20
->> Use hygienic identifiers for the guards instead of the field names. This
->> makes the init macros feel more like normal struct initializers, since
->> assigning identifiers with the name of a field does not create
->> conflicts.
->> Also change the internals of the guards, no need to make the `forget`
->> function `unsafe`, since users cannot access the guards anyways. Now the
->> guards are carried directly on the stack and have no extra `Cell<bool>`
->> field that marks if they have been forgotten or not, instead they are
->> just forgotten via `mem::forget`.
->=20
-> The code LGTM, so:
->=20
-> Reviewed-by: Gary Guo <gary@garyguo.net>
->=20
-> Although this will cause the new expansion we have to be no longer
-> compatible with a totally-proc-macro impl, if we want to do everything
-> in proc macro in the future.
->=20
-> If we have the paste macro upstream (
-> https://github.com/nbdd0121/linux/commit/fff00461b0be7fd3ec218dcc428f2588=
-6b5ec04a
-> ) then we can replace the `guard` with `paste!([<$field>])` and keep
-> the expansion identical.
->=20
+On Tue, Jun 27, 2023 at 10:07:07AM -0700, Guenter Roeck wrote:
+> Hi,
 
-I tried it and it seems to work, but I am not sure why the hygiene is
-set correctly. Could you maybe explain why this works?
-```
-        $crate::__internal::paste!{
-            let [<$field>] =3D unsafe {
-                $crate::__internal::DropGuard::new(::core::ptr::addr_of_mut=
-!((*$slot).$field))
-            };
-            $crate::__init_internal!(init_slot($use_data):
-                @data($data),
-                @slot($slot),
-                @guards([<$field>], $($guards,)*),
-                @munch_fields($($rest)*),
-            );
-        }
-```
+Hi Guenter,
 
-i.e. why can't a user access the guard? I think it is because the hygiene o=
-f the `[<>]`
-is used, but not sure why that works.
+> On Mon, Jun 05, 2023 at 08:01:01AM +0100, Mark Rutland wrote:
+> > Most architectures define the atomic/atomic64 xchg and cmpxchg
+> > operations in terms of arch_xchg and arch_cmpxchg respectfully.
+> > 
+> > Add fallbacks for these cases and remove the trivial cases from arch
+> > code. On some architectures the existing definitions are kept as these
+> > are used to build other arch_atomic*() operations.
+> > 
+> > Signed-off-by: Mark Rutland <mark.rutland@arm.com>
+> > Reviewed-by: Kees Cook <keescook@chromium.org>
+> > Cc: Boqun Feng <boqun.feng@gmail.com>
+> > Cc: Paul E. McKenney <paulmck@kernel.org>
+> > Cc: Peter Zijlstra <peterz@infradead.org>
+> > Cc: Will Deacon <will@kernel.org>
+> 
+> This patch results in:
+> 
+> ERROR: modpost: "__xchg_called_with_bad_pointer" [lib/atomic64_test.ko] undefined!
+> 
+> when trying to build sparc64:allmodconfig.
 
---=20
-Cheers,
-Benno
+Hmm... it seems that in that configuration, the compiler decides to place
+__arch_xchg() out-of-line, and hence can't remove the call to
+__xchg_called_with_bad_pointer() via dead code elimination.
 
+So this is due to tickling the compiler into making a different inlining
+decision rather than due to a semantic issue in the patch.
 
+Marking __arch_xchg() as __always_inline solves that in local testing, and we
+should do likewise for the other bits used under the arch_ atomics.
+
+I'll try to spin a patch for that soon, unless someone beats me to it.
+
+Thanks,
+Mark.
+
+> 
+> Guenter
+> 
+> ---
+> bisect log:
+> 
+> # bad: [60e7c4a25da68cd826719b685babbd23e73b85b0] Add linux-next specific files for 20230626
+> # good: [45a3e24f65e90a047bef86f927ebdc4c710edaa1] Linux 6.4-rc7
+> git bisect start 'HEAD' 'v6.4-rc7'
+> # good: [1fc7b1b3c9c3211898874f51919fcb1cf6f1cc79] Merge branch 'main' of git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net-next.git
+> git bisect good 1fc7b1b3c9c3211898874f51919fcb1cf6f1cc79
+> # good: [4fce1fc9cf89412590fb681fa480cde0b23b3381] Merge branch 'for-next' of git://git.kernel.dk/linux-block.git
+> git bisect good 4fce1fc9cf89412590fb681fa480cde0b23b3381
+> # bad: [cf1a0283badf6d0bfb91876583c24ef535a3c04c] Merge branch 'driver-core-next' of git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/driver-core.git
+> git bisect bad cf1a0283badf6d0bfb91876583c24ef535a3c04c
+> # bad: [3c5388e722ea98022b4d557ab33acca2eb16c4f0] Merge branch 'master' of git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git
+> git bisect bad 3c5388e722ea98022b4d557ab33acca2eb16c4f0
+> # good: [997730bdbf14f352ab03e42461f500aafdabc03e] Merge branch 'for-next' of git://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git
+> git bisect good 997730bdbf14f352ab03e42461f500aafdabc03e
+> # bad: [6fd8266556af196763b9f876ed682873e605469b] Merge branch into tip/master: 'ras/core'
+> git bisect bad 6fd8266556af196763b9f876ed682873e605469b
+> # good: [37380ea71463658934c2d3167d559d4034ea1c5b] Merge branch into tip/master: 'irq/core'
+> git bisect good 37380ea71463658934c2d3167d559d4034ea1c5b
+> # bad: [a967852939f864c35f155a2f431292ad6fc3fed9] Merge branch into tip/master: 'locking/core'
+> git bisect bad a967852939f864c35f155a2f431292ad6fc3fed9
+> # bad: [e50f06ce2d876c740993b5e3d01e203520391ccd] locking/atomic: m68k: add preprocessor symbols
+> git bisect bad e50f06ce2d876c740993b5e3d01e203520391ccd
+> # good: [b1fe7f2cda2a003afe316ce8dfe8d3645694a67e] x86,intel_iommu: Replace cmpxchg_double()
+> git bisect good b1fe7f2cda2a003afe316ce8dfe8d3645694a67e
+> # good: [14d72d4b6f0e88b5f683c1a5b7a876a55055852d] locking/atomic: remove fallback comments
+> git bisect good 14d72d4b6f0e88b5f683c1a5b7a876a55055852d
+> # bad: [f739287ef57bc01155e556033462e9a6ff020c97] locking/atomic: arc: add preprocessor symbols
+> git bisect bad f739287ef57bc01155e556033462e9a6ff020c97
+> # bad: [d12157efc8e083c77d054675fcdd594f54cc7e2b] locking/atomic: make atomic*_{cmp,}xchg optional
+> git bisect bad d12157efc8e083c77d054675fcdd594f54cc7e2b
+> # good: [a7bafa7969da1c0e9c342c792d8224078d1c491c] locking/atomic: hexagon: remove redundant arch_atomic_cmpxchg
+> git bisect good a7bafa7969da1c0e9c342c792d8224078d1c491c
+> # first bad commit: [d12157efc8e083c77d054675fcdd594f54cc7e2b] locking/atomic: make atomic*_{cmp,}xchg optional
+> 
