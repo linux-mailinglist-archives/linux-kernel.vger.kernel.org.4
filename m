@@ -2,156 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AAE37741364
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 16:07:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9486D74136B
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 16:08:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232856AbjF1OGO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 10:06:14 -0400
-Received: from mail-dm6nam11on2046.outbound.protection.outlook.com ([40.107.223.46]:2656
-        "EHLO NAM11-DM6-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S232324AbjF1OEZ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 10:04:25 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=N2P2kmIzrnJ7X/0aJzQX2/pNeNQVTh9RL7FkhIRunt7qISRHhoegL5M/Ju2UQprT1twpGpAPn8SAxT0QWt5xZCCDYrks2LxtBZfl62fX5nhfsqaZqC0VYeOzgTIiPAguXp9U1Qid+b1l5MQS+sn+sdVQxoE3FQU4AY9NWpunyH9oANfhUfUK0iOoK+r+ptqgkN/IikgD/4dk/oZ7H+9C4zMIC3PTn6tRXtOajcUkVLc5lg0csDNBm/yUQrLCmoYdnOGwolR1+00Fwan7oCvg3jrSNboAn2tqbWIn3XpHEZHoDr7EmbpRFpKF6HxawZVSt27orvptlWskGkV7iLQp0Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=IucQlX55L67vBzNdhMn18T0uBLztL20FhgV2dGpiCVM=;
- b=KIMvLyGgzkHUcnOgpmBzNltdLdPiXd/tq/pnmNPQSU5CmBdNGahtpRbUPGqECCVBnOWGN6suVry60WtvFegasv25HyHVfPViYViYqFYeFjwucTLVWq0XzKIzlcLbf3VztBIT5wj0WMWKK8j/A99/eLwgos4S9sosUrHMBwDQCJ9Fr4S/QeGN/+Y8YLeLdlWZPHAtSeVZZoupJC4xajbq/55hZrp28xwTzBad/ygmH5KaRmdlUobq9KaQSaVygn05W0AJ8eEYivZx/eYJ+AzXn+rdBsKWkfUVpgVr65rUTvn3wGSBJ5bfzUwnh5Ipg5glVGXr9YnHrolr3/DRuA8HKg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=IucQlX55L67vBzNdhMn18T0uBLztL20FhgV2dGpiCVM=;
- b=MKPiFvWDYvzZJ3vSNauwlovk5dkv5EVAj6TIdgltruV9ym9OLqiQ8dX93y/+obN2KTS80rJ2IBdPfnRPU1gqBQ7l5gOCNWP197w+1dtddFJjrC6B4+5qQSO6CXAR/1AXGMHnpOW+HbOZ3vYeLxc8O6cPI7ESblUaEi2AG7Hjf1cmMWbKFo4NRFfnEHTTsutLdrXBcM85i51MJq6kKDuCucMRYPpsmopth5U5Q6vKEnFsF/vv+M6LPEHU1hlDQF7WMq8Hb5v6C/fsKqNZOxmZqrdjfVJeMWk4zbp5+fYbHp7T8sg3YW6LO5BtC644R26YMjgCh7yEkiYcUdlzxwvrPw==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
- by SJ0PR12MB8091.namprd12.prod.outlook.com (2603:10b6:a03:4d5::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6500.45; Wed, 28 Jun
- 2023 14:04:22 +0000
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::f7a7:a561:87e9:5fab]) by LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::f7a7:a561:87e9:5fab%7]) with mapi id 15.20.6521.024; Wed, 28 Jun 2023
- 14:04:22 +0000
-Date:   Wed, 28 Jun 2023 11:04:20 -0300
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     iommu@lists.linux.dev, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Kevin Tian <kevin.tian@intel.com>
-Subject: [GIT PULL] Please pull IOMMUFD subsystem changes
-Message-ID: <ZJw95Knh/UEL6vQh@nvidia.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="fBa45IcIvgw6RvFK"
-Content-Disposition: inline
-X-ClientProxiedBy: BL0PR05CA0007.namprd05.prod.outlook.com
- (2603:10b6:208:91::17) To LV2PR12MB5869.namprd12.prod.outlook.com
- (2603:10b6:408:176::16)
+        id S232376AbjF1OIU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 10:08:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51700 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232465AbjF1OGl (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 28 Jun 2023 10:06:41 -0400
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BD0B3A94
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 07:06:33 -0700 (PDT)
+Received: by mail-pl1-x634.google.com with SMTP id d9443c01a7336-1b80f2e6c17so24416625ad.0
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 07:06:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687961193; x=1690553193;
+        h=content-transfer-encoding:subject:from:cc:to:content-language
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=j3BkDK05241Wak+mm9YscMVNm89SWiJwn3V52UthfcY=;
+        b=ZOXHBpjyf+Vv9nCWYMngb0aLLIb04YHicJdy+dd7g/pI7h8Nuas58L+U96kQzDip+z
+         EixEkcSGm5ShYnfXRguksXVRezjciTromRJQsg/W2DdffJzx8ybw5KFjQx8RAwRRSA+f
+         Np5wDP+mf26mYMjHq4gFoF+zAU5SbA2WkADfDvjEqKSnV/vGY8jNnLYYG3wmKK4GeiF3
+         vR/NRJnDjWkHepVjzWdUPwGqVJ/bNFvgA1VJMfSocZnxtgoeFmdcQ5aABxVQdIEiTd9N
+         LshqRaTFd0bm051b/uljpTJD3MRSU0j31aEYHXM3jnU0Vyi6S4mg9/mluX7rKijT0dC5
+         SYDg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687961193; x=1690553193;
+        h=content-transfer-encoding:subject:from:cc:to:content-language
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=j3BkDK05241Wak+mm9YscMVNm89SWiJwn3V52UthfcY=;
+        b=FodrDqx95l6jk2c74PzLxY+6B8Lhri3Fh9Ed88GGMx/tWaOxAdw7S09OEDj+SsgQa8
+         vDCWNSUMoDRDKTTNDcrWmVwgBOkEUHT8vG8ePhz6630MHcZ29E3AoG9QQGeFPEPG4Eo2
+         OPru0KFu3ycVpzNdL/KNeUONKMMYBQqSV6X2U0ltjZxlkoaqOVRm2JMJO4aFH8IEHI8P
+         Kq21dKhUu0bJb9fuvLD3M4NUxTq8FhepJe1fKmH/k782Il+TW1WwH/dJnZGll6691wxg
+         6FZu68Z+7R2obSjLEIKIadiNgNDt5amXZdj/D+GeSv/0VZ0qXsfapJkF2iKVFceXYWbJ
+         iDDQ==
+X-Gm-Message-State: AC+VfDzMQswqrzSpoazc/usBpD6O5w5M3iv9PP1QgNrv5IYLS79gdaIY
+        mXQiR98jagLwXiKOtSzJjZt/QYHiu/ZltA==
+X-Google-Smtp-Source: ACHHUZ4G5B13ogdRQDNY1fe0TTeMCA5uMAxuIijkt1rxDchefc9P14S00VFh229EU8HzgmZlRHU61A==
+X-Received: by 2002:a17:903:41cf:b0:1a1:b3bb:cd5b with SMTP id u15-20020a17090341cf00b001a1b3bbcd5bmr13962320ple.62.1687961192736;
+        Wed, 28 Jun 2023 07:06:32 -0700 (PDT)
+Received: from [192.168.0.103] ([103.131.18.64])
+        by smtp.gmail.com with ESMTPSA id u8-20020a170902e80800b001b8025b32cesm5512359plg.131.2023.06.28.07.06.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 28 Jun 2023 07:06:32 -0700 (PDT)
+Message-ID: <4d9fb4a9-6c48-600c-f625-8ef66208090a@gmail.com>
+Date:   Wed, 28 Jun 2023 21:06:22 +0700
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|SJ0PR12MB8091:EE_
-X-MS-Office365-Filtering-Correlation-Id: 0746e171-695b-413d-89c6-08db77e092c7
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: JRkOm0v0zkvBu9RAPF+mEK6MyyUpT3pHcCkLBVngFWmku7Er+zoTCf91hNUZX91viUT3c/ccesFTfii5GAeHfHzxD69di29OAUMSwtLOHfs7BvMSmjnKT9QMprfpmATa2woD5JuvJejDqE1dd1ij5zB74XL+J/Pj6yUT92PhsgqQM/I4bKIn0muFkZFl0nGpLg8Sz83bzJXgDb6X83CcWQNJgjCKPjcFsrs60XImaG4FkHLluUGghLSTzzbYRePE0idbzV0ghLMIIuHBS40Nq3NKk7V8ZthsXKmQzftTcKcpIk5IbjItH+NNGXhZhXfKponb/SIj6Qae0K/J5p0MDrC0GB/7ikv3wCN6SdOw4IReeCn1wS0jZWL8bAVdslwMsT+XPaSpzdrvA+MmUKbgUzx/1XMrFA6WXAPphEzsDTicoh1TlbvlMBjNGpXRNa5irLJ5swWkQRWGsllaP0uiD6vPWwmVkTA6CKgc4YJFB5DLC7U0bhFCvnQx+MapHXCy44ts/+ljHIsXJebnB0Id590HtsYHqAfLRfnY6JKQclkJH3dWCvxFKkY7ZcVRvOErS67q4uAnfHqf565eLmdK2PFtGiPMWAxta5uoVoI8QfmdgsuQSLtpmJ0f9JEPb0DY
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(39860400002)(346002)(136003)(396003)(366004)(451199021)(66476007)(66946007)(66556008)(36756003)(478600001)(2906002)(316002)(8936002)(4326008)(6916009)(8676002)(5660300002)(26005)(86362001)(38100700002)(41300700001)(6486002)(186003)(6506007)(6512007)(21480400003)(83380400001)(2616005)(44144004)(2700100001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?tLvoGKZl1AZAf0vM/+V94RT+cjXzp1pKaqh5+puc2ZTO8g7AHGbCEdvPUZUq?=
- =?us-ascii?Q?8jXcL/fKiUJbXKnBc7WlrnotIVZtjcSqZXUaPtWCMqFRqURPo3HhjvfgTcJ2?=
- =?us-ascii?Q?rEW0NHRt3OOjFMXNAKjVuujuNgizRTl8+jkILEGD0YBSLAQ8anVwLwoIpBri?=
- =?us-ascii?Q?VG1jHCJxmVLauHUTiNXxS43EjbneIr48pgikMOzgov0d2P+VE2CqdnhEm4Ud?=
- =?us-ascii?Q?mZeMPJnOraB5LbTNdIWenkXucxoHZZGpDDQglXKfEpTlWujPSfqmb8iJJdrk?=
- =?us-ascii?Q?/QgnZxF31YBRY3uiD+UoHN43VRJgVqEzLAoECFrs7FnM6VT4oPQ0VIee3iJ9?=
- =?us-ascii?Q?Givu62R7aIEpAt5FdIhLY7xXk3AijNKqbXjmVJIV0oWBOQUUrDMZK1nIXeN0?=
- =?us-ascii?Q?QT4Gu1lubDwv83aUPK0PplxbASsfnfWlYjVENtU49tR588M/k70fpmn02/+a?=
- =?us-ascii?Q?1noxQ2K9VAa5m8Yvi/OlLI1BEGNJhX7LoX4hg1boHQrniWwHQ4IKD11/acEe?=
- =?us-ascii?Q?08TDFABINnoutBoqDm+VJPFm0y3q+9K7u//gGv7pRCfAC9mNnrWAV32hp8mQ?=
- =?us-ascii?Q?SZKFxl0xDnAKtvYyFy11XscyFtCq77Nl4cRg/XDzMWkNow4wM9RMHBB8PyZv?=
- =?us-ascii?Q?lugsQW9hcdz0oFNkl96k8/+W62pjw29CIdJDmAEZVZpkeAC7hktJ/VH7HXmO?=
- =?us-ascii?Q?1q0Jc/lXjUowELxcx8OrEw5GMY/he2rlg5T+HjBLHrTNdPlKPhtTIOzqftBT?=
- =?us-ascii?Q?s5/Wu3QQ5WBvejfTfLIeoa7SNUpq0ymXX6fFq688PtYPA0bdV1+Lo8Hlqr/Z?=
- =?us-ascii?Q?rt+TW/OmBcBTo4mZ3cgm29jzrY/YZrdwA/nrWi78SQ6lHIdoLW9ozVtHEXs4?=
- =?us-ascii?Q?hoPSOVJuGcaXrnCnEq+DJWif/FvMXf6iZTjv3+BCUYAF5Sd620JUVVqr4R8u?=
- =?us-ascii?Q?9ioEi/xC54OpVyHkGNK1uz/Dk3Cq91jkXU6nk5/3xjPLa79vcR0Q5Ukb6r3b?=
- =?us-ascii?Q?xSm71Wa8DNmxJp3ErOgt5tx5yRpqN45k6EfQCgUyZm7BM3FxwN0B+V2GmLNj?=
- =?us-ascii?Q?vxa7lZMjAIF0cBMbd0hHi4GePfTSmXjmv/Bo/jc/Sh+xUqdgWdWueR/Q9R+2?=
- =?us-ascii?Q?hCUVVNeUsqPJtv/GaR1uMUqEWo5NwIE02+BLBUdVGKiWR/+sjtL374OJ1AzL?=
- =?us-ascii?Q?GJYH3D49jH/r2NGmYGkEVwsPSmpp2JGZJYZp/p7uIixpgmfWDIyBkYIlN7Da?=
- =?us-ascii?Q?Rx36Wbosm3Nb/gYh45Eka9pInSdfIpdVkg+Goi6JU/wJdx4oRP6qbpbpQj13?=
- =?us-ascii?Q?q0aRkTmwCqSVmnqnSAnAflzr0BbDKp3+tqa3AigVAWCAi3zxfxHGwuS2XbIl?=
- =?us-ascii?Q?XXqB39VesmCsIZlZcAmWPD8v0CBhN7DunsDsFrwIqC0mg2QF/46sHMDXnmV/?=
- =?us-ascii?Q?lPJq8kikOm1ySodn0/bys+UlozwC5yCFgM88oyhTnpGoKMkCR98+uttUCVd/?=
- =?us-ascii?Q?qRT69fG/NwODG/pc9yZpmfOnP+3IB0VuA0WD8eagKUUSwpYqCpJ3PFt4SoyB?=
- =?us-ascii?Q?cCoyYFVjBnxCSkVOfr4iCERTZNEMSlEjPEG6TH2y?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0746e171-695b-413d-89c6-08db77e092c7
-X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Jun 2023 14:04:22.3099
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 53QB7hLTlT1/7xBISYWo/LDf+f9+zLtUQV7YVJVwoqgvWUDlwWWJNYcQVhnWCxnu
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR12MB8091
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Content-Language: en-US
+To:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Regressions <regressions@lists.linux.dev>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        Borislav Petkov <bp@alien8.de>
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+Subject: Fwd: commit 9df9d2f0471b causes boot failure in pre-rc1 6.5 kernel
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+        lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---fBa45IcIvgw6RvFK
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Hi,
 
-Hi Linus,
+I notice a regression report on Bugzilla [1]. Quoting from it:
 
-Just two rc syzkaller fixes for this merge window. It looks like the
-vfio changes are now done so we should see progress next cycle.
+> Since yesterday my builds of the https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git no longer boot with a black screen immediately upon booting. Today I finished git bisecting the issue and arrived at the following:
+> 
+> 9df9d2f0471b4c4702670380b8d8a45b40b23a7d is the first bad commit
+> commit 9df9d2f0471b4c4702670380b8d8a45b40b23a7d
+> Author: Thomas Gleixner <tglx@linutronix.de>
+> Date:   Wed Jun 14 01:39:39 2023 +0200
+> 
+>     init: Invoke arch_cpu_finalize_init() earlier
+>     
+>     X86 is reworking the boot process so that initializations which are not
+>     required during early boot can be moved into the late boot process and out
+>     of the fragile and restricted initial boot phase.
+>     
+>     arch_cpu_finalize_init() is the obvious place to do such initializations,
+>     but arch_cpu_finalize_init() is invoked too late in start_kernel() e.g. for
+>     initializing the FPU completely. fork_init() requires that the FPU is
+>     initialized as the size of task_struct on X86 depends on the size of the
+>     required FPU register buffer.
+>     
+>     Fortunately none of the init calls between calibrate_delay() and
+>     arch_cpu_finalize_init() is relevant for the functionality of
+>     arch_cpu_finalize_init().
+>     
+>     Invoke it right after calibrate_delay() where everything which is relevant
+>     for arch_cpu_finalize_init() has been set up already.
+>     
+>     No functional change intended.
+>     
+>     Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+>     Reviewed-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
+>     Link: https://lore.kernel.org/r/20230613224545.612182854@linutronix.de
+> 
+>  init/main.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> Since it might be relevant, my CPU is Intel Core i5-12400 with UEFI from december 2022 and the compiler is gcc (Gentoo Hardened 13.1.1_p20230527 p3) 13.1.1 20230527. If additional information such as the kernel configuration is required, let me know.
 
-Thanks,
-Jason
+See Bugzilla for the full thread.
 
-The following changes since commit 6995e2de6891c724bfeb2db33d7b87775f913ad1:
+The reporter can't provide requested dmesg due to this is early
+boot failure, unfortunately.
 
-  Linux 6.4 (2023-06-25 16:29:58 -0700)
+Nevertheless, this regression has already been taken care of on
+Bugzilla, but to ensure it is tracked and doesn't get fallen through
+cracks unnoticed, I'm adding it to regzbot:
 
-are available in the Git repository at:
+#regzbot introduced: 9df9d2f0471b https://bugzilla.kernel.org/show_bug.cgi?id=217602
+#regzbot title: early arch_cpu_finalize_init() cause immediate boot failure
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/jgg/iommufd.git tags/for-linus-iommufd
+Thanks.
 
-for you to fetch changes up to dbe245cdf5189e88d680379ed13901356628b650:
+[1]: https://bugzilla.kernel.org/show_bug.cgi?id=217602
 
-  iommufd: Call iopt_area_contig_done() under the lock (2023-06-26 09:00:23 -0300)
-
-----------------------------------------------------------------
-iommufd for 6.5
-
-Just two RC syzkaller fixes, both for the same basic issue, using the area
-pointer during an access forced unmap while the locks protecting it were
-let go.
-
-----------------------------------------------------------------
-Jason Gunthorpe (2):
-      iommufd: Do not access the area pointer after unlocking
-      iommufd: Call iopt_area_contig_done() under the lock
-
- drivers/iommu/iommufd/device.c       |  2 +-
- drivers/iommu/iommufd/io_pagetable.c | 14 +++++++++++---
- 2 files changed, 12 insertions(+), 4 deletions(-)
-
---fBa45IcIvgw6RvFK
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRRRCHOFoQz/8F5bUaFwuHvBreFYQUCZJw94wAKCRCFwuHvBreF
-YdxxAQDgT2+DHJWw75aXC14icZTTqRoDECu1QBJzU3MCe4p1WAEAkPATNrM4iRhn
-PQ4sz4WIEKzrAaEa5E86mThblvLRwQc=
-=H2MS
------END PGP SIGNATURE-----
-
---fBa45IcIvgw6RvFK--
+-- 
+An old man doll... just what I always wanted! - Clara
