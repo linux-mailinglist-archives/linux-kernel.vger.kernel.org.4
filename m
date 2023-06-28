@@ -2,126 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 130EA740CDB
+	by mail.lfdr.de (Postfix) with ESMTP id 5AE52740CDC
 	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 11:31:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233257AbjF1J2e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 05:28:34 -0400
-Received: from esa.microchip.iphmx.com ([68.232.153.233]:39676 "EHLO
-        esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236027AbjF1I7a (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 04:59:30 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1687942770; x=1719478770;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=H5XOlVYF53c/y157iszIY78jZEcz/O9uOxgpG6UDJZM=;
-  b=1BY/EKVTCKqKJN1BK2u7VJQVgd5cIlSCCmuBERP1t+aNmM+pewTvDh96
-   DeqzSDdhKaWBVTnrzwn1OjKV7I6vY9BxRWATYnOnxySOeGNQar6ltaFw0
-   SXvVWaKEkRa0/a5FPDtAU8QdTEooTOZcKLHhVyKFA6+UjpZ+4oWhHX3Lj
-   nuaiaI4RnskwMSt1Vgu4V4bHLWC2WNgp+XNaEBa+uqQoj2hydpuEnL0aB
-   AvPciMMa6FV3EoTAqBpkbggXs2PIJoQYxqF6akKZmxXdfdJWoOygpb/Hw
-   R9QpsptvJmxkriQff5u5/WPAM10vHhd3DxLvrN5+pgxiuuXXsmxyj6o5Z
-   A==;
-X-IronPort-AV: E=Sophos;i="6.01,165,1684825200"; 
-   d="scan'208";a="232626321"
-X-Amp-Result: SKIPPED(no attachment in message)
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 28 Jun 2023 01:59:30 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Wed, 28 Jun 2023 01:59:19 -0700
-Received: from [10.12.67.138] (10.10.115.15) by chn-vm-ex02.mchp-main.com
- (10.10.85.144) with Microsoft SMTP Server id 15.1.2507.21 via Frontend
- Transport; Wed, 28 Jun 2023 01:59:17 -0700
-Message-ID: <2b323110-428c-e2a0-9d2c-fbffd4524cf9@microchip.com>
-Date:   Wed, 28 Jun 2023 10:59:16 +0200
+        id S232969AbjF1J16 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 05:27:58 -0400
+Received: from [42.101.60.195] ([42.101.60.195]:53662 "HELO mail.nfschina.com"
+        rhost-flags-FAIL-FAIL-OK-FAIL) by vger.kernel.org with SMTP
+        id S236728AbjF1JCU (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 28 Jun 2023 05:02:20 -0400
+Received: from [172.30.11.106] (unknown [180.167.10.98])
+        by mail.nfschina.com (Maildata Gateway V2.8.8) with ESMTPSA id 38A89605F6240;
+        Wed, 28 Jun 2023 17:01:59 +0800 (CST)
+Message-ID: <734b846f-3235-f2e3-db06-6e852803cd7f@nfschina.com>
+Date:   Wed, 28 Jun 2023 17:01:58 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH] MAINTAINERS: Orphan the OV7740 driver
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH net-next 00/10] Remove unnecessary (void*) conversions
 Content-Language: en-US
-To:     Sakari Ailus <sakari.ailus@linux.intel.com>
-CC:     <linux-media@vger.kernel.org>, <hverkuil-cisco@xs4all.nl>,
-        <mchehab@kernel.org>, <laurent.pinchart@ideasonboard.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        Balamanikandan Gunasundar 
-        <balamanikandan.gunasundar@microchip.com>,
-        "Songjun Wu" <songjun.wu@atmel.com>,
-        Hari Prasath <Hari.PrasathGE@microchip.com>
-References: <20230522134751.30489-1-nicolas.ferre@microchip.com>
- <ZGuJ7GqxDI0aZxK6@kekkonen.localdomain>
-From:   Nicolas Ferre <nicolas.ferre@microchip.com>
-Organization: microchip
-In-Reply-To: <ZGuJ7GqxDI0aZxK6@kekkonen.localdomain>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+To:     Hao Lan <lanhao@huawei.com>, andrew@lunn.ch, f.fainelli@gmail.com,
+        olteanv@gmail.com, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, irusskikh@marvell.com,
+        yisen.zhuang@huawei.com, salil.mehta@huawei.com,
+        jesse.brandeburg@intel.com, anthony.l.nguyen@intel.com,
+        steve.glendinning@shawell.net, iyappan@os.amperecomputing.com,
+        keyur@os.amperecomputing.com, quan@os.amperecomputing.com,
+        hkallweit1@gmail.com, linux@armlinux.org.uk,
+        mostrows@earthlink.net, xeb@mail.ru, qiang.zhao@nxp.com
+Cc:     yangyingliang@huawei.com, linux@rempel-privat.de,
+        ansuelsmth@gmail.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, intel-wired-lan@lists.osuosl.org,
+        linuxppc-dev@lists.ozlabs.org, kernel-janitors@vger.kernel.org
+X-MD-Sfrom: yunchuan@nfschina.com
+X-MD-SrcIP: 180.167.10.98
+From:   yunchuan <yunchuan@nfschina.com>
+In-Reply-To: <1f5652f7-7eb2-11f0-4a07-c87f2992e509@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sakari,
-
-On 22/05/2023 at 17:27, Sakari Ailus wrote:
-> Hi Nicolas,
-> 
-> On Mon, May 22, 2023 at 03:47:51PM +0200, nicolas.ferre@microchip.com wrote:
->> From: Nicolas Ferre <nicolas.ferre@microchip.com>
+On 2023/6/28 15:41, Hao Lan wrote:
+>
+> On 2023/6/28 10:41, wuych wrote:
+>> Remove (void*) conversions under "drivers/net" directory.
+>> According to the suggestion[1] of Jakub Kicinski, send these patches
+>> in series of 10.
 >>
->> Wenyou's email is bouncing, remove him from this camera driver's entry
->> and mark it as orphan.
+>> wuych (10):
+>>    net: dsa: ar9331: remove unnecessary (void*) conversions
+>>    net: dsa: qca8k: remove unnecessary (void*) conversions
+>>    atlantic:hw_atl2:hw_atl2_utils_fw: Remove unnecessary (void*)
+>>      conversions
+>>    ice: Remove unnecessary (void*) conversions
+>>    ethernet: smsc: remove unnecessary (void*) conversions
+>>    net: hns: Remove unnecessary (void*) conversions
+>>    net: hns3: remove unnecessary (void*) conversions
+>>    net: mdio: Remove unnecessary (void*) conversions
+>>    net: ppp: remove unnecessary (void*) conversions
+>>    net: wan: Remove unnecessary (void*) conversions
 >>
->> Signed-off-by: Nicolas Ferre <nicolas.ferre@microchip.com>
->> ---
->> Wenyou, all,
->>
->> If you want to take this driver, please don't hesitate to update this patch for
->> a better maintenance. My only concern is the @microchip.com email address
->> bouncing.
+> Hi wuych,
+> Thank you for your patch.
+> The following two patches conflict with the net-next branch, and others have modified the related code.
+> Please compile your series in net and net-next branch and upload your series again.
+>    net: dsa: ar9331: remove unnecessary (void*) conversions
+>    net: dsa: qca8k: remove unnecessary (void*) conversions
 
-I'm sorry to insist, but bouncing email on our domain is becoming a real 
-problem.
-I don't see this patch on Linux-next, so what can I do to make this move 
-forward?
+Hi, Hao Lan,
 
-> What about the driver author (cc'd)?
+Sorry for that, I just compiled these patches in the mainline branch.
+I know now, it's also necessary to compile patches in net and net-next 
+branch.
+Thanks for your reply!
 
-I didn't hear about Songjun for a long time.
+wuych
 
-Best regards,
-    Nicolas
-
->>   MAINTAINERS | 3 +--
->>   1 file changed, 1 insertion(+), 2 deletions(-)
->>
->> diff --git a/MAINTAINERS b/MAINTAINERS
->> index e0ad886d3163..bae9c7591144 100644
->> --- a/MAINTAINERS
->> +++ b/MAINTAINERS
->> @@ -15577,9 +15577,8 @@ F:    drivers/media/i2c/ov772x.c
->>   F:   include/media/i2c/ov772x.h
->>
->>   OMNIVISION OV7740 SENSOR DRIVER
->> -M:   Wenyou Yang <wenyou.yang@microchip.com>
->>   L:   linux-media@vger.kernel.org
->> -S:   Maintained
->> +S:   Orphan
->>   T:   git git://linuxtv.org/media_tree.git
->>   F:   Documentation/devicetree/bindings/media/i2c/ov7740.txt
->>   F:   drivers/media/i2c/ov7740.c
->> --
->> 2.34.1
->>
-> 
-> --
-> Kind regards,
-> 
-> Sakari Ailus
-
--- 
-Nicolas Ferre
-
+>
+> Yours,
+> Hao Lan
