@@ -2,73 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2216E741308
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 15:52:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1B3B7412EC
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 15:47:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231363AbjF1NvX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 09:51:23 -0400
-Received: from bg4.exmail.qq.com ([43.155.65.254]:15726 "EHLO
-        bg4.exmail.qq.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232177AbjF1NvI (ORCPT
+        id S231740AbjF1Nq7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 09:46:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49826 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230298AbjF1Nqz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 09:51:08 -0400
-X-QQ-mid: bizesmtp62t1687960254t1k4fnuc
-Received: from linux-lab-host.localdomain ( [116.30.129.193])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Wed, 28 Jun 2023 21:50:52 +0800 (CST)
-X-QQ-SSF: 01200000000000D0V000000A0000000
-X-QQ-FEAT: LE7C6P2vL8Rs71HKKnUKI/KsyIrvxJemr+QCXnBO0TehcHy+yUadv9WfiP7BO
-        HumbA33LeCmpxXahC9MRtCsLp5durYPTvDlmaJANCO1MTNZEb96K4CiFu4Fl/voUN96haZ9
-        ZXcXz4lYzLkh1CGfyBVFfJpuIPMmn7i6aYGvsP138KojvBcs/6/Gnegj72JAAmfLUO2AkYr
-        IAf+MrlyOU2tFhoCORLxP8p1gN7+1CNaExSogNRUJPXZSOMYa4w1o2+VKtn7eSCuWW3+Jn7
-        QbGg+iWGuMvOZIh1BQHkcnh8BLx3mRLxLqIcBeQ/8bNQkAlB1QJJaoayNC4N6eDso0yW2XO
-        LBMnmsTl2FHwwFfqw7qGLOxkdTijLN0URhWT7t/v7RlefDPLcE=
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 15994507505466130744
-From:   Zhangjin Wu <falcon@tinylab.org>
-To:     thomas@t-8ch.de, w@1wt.eu
-Cc:     falcon@tinylab.org, arnd@arndb.de, david.laight@aculab.com,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-riscv@lists.infradead.org
-Subject: [PATCH v5 13/14] selftests/nolibc: add sbrk_0 to test current brk getting
-Date:   Wed, 28 Jun 2023 21:46:28 +0800
-Message-Id: <f329ca3550f654501390d3fda46889367babfc60.1687957589.git.falcon@tinylab.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <cover.1687957589.git.falcon@tinylab.org>
-References: <cover.1687957589.git.falcon@tinylab.org>
+        Wed, 28 Jun 2023 09:46:55 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3B2F198E;
+        Wed, 28 Jun 2023 06:46:51 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2A92461336;
+        Wed, 28 Jun 2023 13:46:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 903A5C433C8;
+        Wed, 28 Jun 2023 13:46:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687960010;
+        bh=wgMMJMfTyVwxcOPMIJp46LB31ptEtKR4JfsP16lGm9k=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=o++EuTxwQNKpUT8rchLW4uiFlCodtVJ9mCVTuOO26yZkA0sHg0HEImHXbydkQeByi
+         aHgsv3bKxFKgbEbhyeB1g5cdgVlzTP6rgxSFtvrJWv99KIIzk0XL+nI1hdzckDnzvm
+         aTqHOvxyUZ+yZzyfipOtQg9LZ9M53zPi8+r9roOYThY8F9Eva2B+AdxUSSzHbuxQe4
+         k6gxrKTuuFxCToclnpIG61uQcks2SJKAEkCKoON7ODyJ6nIcUMz1WnHnS6Ml0PPvgi
+         1JcE24yW4lmU42VtBhcLK1K0gErFKLMGzuGcoBn3pUD2he9QDlcW1OJV/dukbuW56r
+         a5Bh6Xf3rpeuA==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 2D46FCE39D5; Wed, 28 Jun 2023 06:46:50 -0700 (PDT)
+Date:   Wed, 28 Jun 2023 06:46:50 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Jason Gunthorpe <jgg@ziepe.ca>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Zhu Yanjun <zyjzyj2000@gmail.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        linux-kernel@vger.kernel.org, kernel-team@meta.com,
+        mingo@kernel.org, tglx@linutronix.de, rcu@vger.kernel.org
+Subject: Re: [GIT PULL] RCU changes for v6.5
+Message-ID: <9b1a620a-975a-490f-b9ee-6aea7c8effe0@paulmck-laptop>
+Reply-To: paulmck@kernel.org
+References: <963d6eb8-6520-4c33-bbe8-6c76205bfd3d@paulmck-laptop>
+ <CAHk-=whn4DGusRgq7ihBmu7vPBhvSDZsYN_ctef94E1rVbf5jA@mail.gmail.com>
+ <fcc987bb-4ce4-4816-a909-cffa4c3f24ff@paulmck-laptop>
+ <ZJw26orq0ZLEOL9q@ziepe.ca>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrgz:qybglogicsvrgz5a-1
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZJw26orq0ZLEOL9q@ziepe.ca>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+        lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From musl 0.9.14 (to the latest version 1.2.3), both sbrk() and brk()
-have almost been disabled for they conflict with malloc, only sbrk(0) is
-still permitted as a way to get the current brk, let's support such
-case.
+On Wed, Jun 28, 2023 at 10:34:34AM -0300, Jason Gunthorpe wrote:
+> On Tue, Jun 27, 2023 at 11:30:46AM -0700, Paul E. McKenney wrote:
+> > On Tue, Jun 27, 2023 at 10:56:21AM -0700, Linus Torvalds wrote:
+> > > On Sun, 25 Jun 2023 at 08:35, Paul E. McKenney <paulmck@kernel.org> wrote:
+> > > >
+> > > >   git://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git tags/rcu.2023.06.22a
+> > > >
+> > > > o       Eliminate the single-argument variant of k[v]free_rcu() now
+> > > >         that all uses have been converted to k[v]free_rcu_mightsleep().
+> > > 
+> > > Well, clearly not all users had been.
+> > > 
+> > > The base of this RCU was v6.4-rc1, and when that commit was done, we
+> > > still had a single-argument variant:
+> > > 
+> > >   7e3f926bf453 ("rcu/kvfree: Eliminate k[v]free_rcu() single argument macro")
+> > > 
+> > > but look here:
+> > > 
+> > >      git grep 'kfree_rcu([^,()][^,()]*)' 7e3f926bf453
+> > > 
+> > > results in
+> > > 
+> > >    7e3f926bf453:drivers/infiniband/sw/rxe/rxe_verbs.c:     kfree_rcu(mr);
+> > > 
+> > > so the RCU tree itself can not possibly have built cleanly.
+> > > 
+> > > How the heck did this pass testing in linux-next? Did linux-next just
+> > > assume that it was a merge error, and fix it up?
+> > 
+> > Because idiot here failed to notice that the needed change was only
+> > in -next, and not yet in mainline.
+> 
+> It passed testing in linux-next because Stephen fixes eveything so it compiles:
+> 
+> https://lore.kernel.org/all/20230328121609.68105dd5@canb.auug.org.au/
+> 
+> It seems Stephen's report is a bit odd because it wasn't a merge issue
+> vs rdma, it was vs v6.4-rc1..
+> 
+> I suppose the question is why didn't something like Intel 0-day catch
+> it when it trial compiled the RCU tree's branch.
 
-EXPECT_PTRNE() is used to expect sbrk() always successfully getting the
-current brk.
+The revert meant that 0-day didn't see -rcu without the single-argument
+kfree_rcu() definition.
 
-Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
----
- tools/testing/selftests/nolibc/nolibc-test.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
-index 34af802dadfd..80ab29e2887c 100644
---- a/tools/testing/selftests/nolibc/nolibc-test.c
-+++ b/tools/testing/selftests/nolibc/nolibc-test.c
-@@ -630,6 +630,7 @@ int run_syscall(int min, int max)
- 		CASE_TEST(kill_0);            EXPECT_SYSZR(1, kill(getpid(), 0)); break;
- 		CASE_TEST(kill_CONT);         EXPECT_SYSZR(1, kill(getpid(), 0)); break;
- 		CASE_TEST(kill_BADPID);       EXPECT_SYSER(1, kill(INT_MAX, 0), -1, ESRCH); break;
-+		CASE_TEST(sbrk_0);            EXPECT_PTRNE(1, sbrk(0), (void *)-1); break;
- 		CASE_TEST(sbrk);              if ((p1 = p2 = sbrk(4096)) != (void *)-1) p2 = sbrk(-4096); EXPECT_SYSZR(1, (p2 == (void *)-1) || p2 == p1); break;
- 		CASE_TEST(brk);               EXPECT_SYSZR(1, brk(sbrk(0))); break;
- 		CASE_TEST(chdir_root);        EXPECT_SYSZR(1, chdir("/")); break;
--- 
-2.25.1
-
+							Thanx, Paul
