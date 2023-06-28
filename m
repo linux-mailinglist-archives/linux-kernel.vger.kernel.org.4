@@ -2,75 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 306F874121C
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 15:19:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A2C33741221
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 15:19:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231778AbjF1NSQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 09:18:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45564 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229686AbjF1NSO (ORCPT
+        id S231820AbjF1NTQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 09:19:16 -0400
+Received: from bg4.exmail.qq.com ([43.155.65.254]:32632 "EHLO
+        bg4.exmail.qq.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231852AbjF1NSp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 09:18:14 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6628FC;
-        Wed, 28 Jun 2023 06:18:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=SZjY9T5wYLk/ZPXpC2xwCOO8vFvsYxxnBs2G2p7Kd4c=; b=GOc0CrE7TOe5knDtMw3STu/s9q
-        Zw6M9D5kaE32oHAbeNWaRr+nFWPxDtMQolrRL3ZcJ6mqoDqMnAvWSqNWFw+rkhrcr9WpAuHBlEMmn
-        F0UJr5rHq9k0fwJaOQRnerQoS5u+MRymdKE52oWTefth8eALR/zHVqFrWyTq/om90HIyv+1TkCLLH
-        keCSdVwZSdcfypkBibwUAMMXY6hUUxXM1cnkjzeU1tkgljgoQ3LZjd44Ttw72AvUmgVMib+Uqknnm
-        WBGrVzsNOq5AkFIpYVWh1QbnNOJ3qTpRP6UW9GSk6PCvqpUAiRzMXnu8VP/pHxb4a5t0R7zaPkBt7
-        9FsQs/jw==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1qEV2s-005eQa-2y;
-        Wed, 28 Jun 2023 13:17:19 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 257C0300023;
-        Wed, 28 Jun 2023 15:17:18 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 0B3BC27F62BA6; Wed, 28 Jun 2023 15:17:18 +0200 (CEST)
-Date:   Wed, 28 Jun 2023 15:17:17 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Kai Huang <kai.huang@intel.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-mm@kvack.org, x86@kernel.org, dave.hansen@intel.com,
-        kirill.shutemov@linux.intel.com, tony.luck@intel.com,
-        tglx@linutronix.de, bp@alien8.de, mingo@redhat.com, hpa@zytor.com,
-        seanjc@google.com, pbonzini@redhat.com, david@redhat.com,
-        dan.j.williams@intel.com, rafael.j.wysocki@intel.com,
-        ashok.raj@intel.com, reinette.chatre@intel.com,
-        len.brown@intel.com, ak@linux.intel.com, isaku.yamahata@intel.com,
-        ying.huang@intel.com, chao.gao@intel.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com, nik.borisov@suse.com,
-        bagasdotme@gmail.com, sagis@google.com, imammedo@redhat.com
-Subject: Re: [PATCH v12 07/22] x86/virt/tdx: Add skeleton to enable TDX on
- demand
-Message-ID: <20230628131717.GE2438817@hirez.programming.kicks-ass.net>
-References: <cover.1687784645.git.kai.huang@intel.com>
- <104d324cd68b12e14722ee5d85a660cccccd8892.1687784645.git.kai.huang@intel.com>
+        Wed, 28 Jun 2023 09:18:45 -0400
+X-QQ-mid: bizesmtp69t1687958310tkm13siq
+Received: from linux-lab-host.localdomain ( [116.30.129.193])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Wed, 28 Jun 2023 21:18:28 +0800 (CST)
+X-QQ-SSF: 01200000000000D0V000000A0000000
+X-QQ-FEAT: 4Vai6KyTH6olGrLgZSh4EBdEiPnKWxX8aNTYUPXg6Lx8/XabB2ORuydqmTx/K
+        nWsv/KD90ZFL9r+VXWuXyOoaC4ERWR4sRX4WJGAdhGOcAVvoLQD6ex8moLKIWd4QdG+IQ0D
+        j+Eyw8nSFDo7OPg9885wL1pFPE2ySFIKUphzXcdUp2+tx3SCAcbjOBrFZ4dxb56eUSh6pPc
+        /BQ3n6GCw3KrPwbZO2/uOtkFe+rxslqi4Gdi42zsHGIqonDvO3UvUWI3MA7r00cqXahGUsa
+        6HaNURQHnn3AYs8IQZA5V8bZfJyoZdF+ukP58U08Qu+0XQrbgUdUxGmj+dB65uJm67WdVz/
+        Vh7LojKgfFwfn6eZRuXjKUbeiX7LvUBY8mnaXVNcLABVkgiZtjPMU6Obm8yuA==
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 7654508823436994445
+From:   Zhangjin Wu <falcon@tinylab.org>
+To:     thomas@t-8ch.de, w@1wt.eu
+Cc:     falcon@tinylab.org, arnd@arndb.de, david.laight@aculab.com,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-riscv@lists.infradead.org
+Subject: [PATCH v5 05/14] tools/nolibc: string.h: clean up multiple whitespaces with tab
+Date:   Wed, 28 Jun 2023 21:17:18 +0800
+Message-Id: <bb93eb9b6684bd72dc62ddbc7a7b09b16eb5bc17.1687957589.git.falcon@tinylab.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <cover.1687957589.git.falcon@tinylab.org>
+References: <cover.1687957589.git.falcon@tinylab.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <104d324cd68b12e14722ee5d85a660cccccd8892.1687784645.git.kai.huang@intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-        lindbergh.monkeyblade.net
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrsz:qybglogicsvrsz3a-3
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 27, 2023 at 02:12:37AM +1200, Kai Huang wrote:
-> +EXPORT_SYMBOL_GPL(tdx_cpu_enable);
+To align with Linux code style and let scripts/checkpatch.pl happy, the
+multiple whitespaces in arch-<ARCH>.h files are cleaned up with tab.
 
-I can't find a single caller of this.. why is this exported?
+It is detected by:
+
+    $ grep '  *\\$' tools/include/nolibc/string.h
+
+Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
+---
+ tools/include/nolibc/string.h | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/tools/include/nolibc/string.h b/tools/include/nolibc/string.h
+index 0c2e06c7c477..e8f471ce09f3 100644
+--- a/tools/include/nolibc/string.h
++++ b/tools/include/nolibc/string.h
+@@ -148,10 +148,10 @@ size_t strlen(const char *str)
+  */
+ #if defined(__OPTIMIZE__)
+ #define nolibc_strlen(x) strlen(x)
+-#define strlen(str) ({                          \
+-	__builtin_constant_p((str)) ?           \
+-		__builtin_strlen((str)) :       \
+-		nolibc_strlen((str));           \
++#define strlen(str) ({				\
++	__builtin_constant_p((str)) ?		\
++		__builtin_strlen((str)) :	\
++		nolibc_strlen((str));		\
+ })
+ #endif
+ 
+-- 
+2.25.1
+
