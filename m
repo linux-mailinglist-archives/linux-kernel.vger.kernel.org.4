@@ -2,68 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4DF4741490
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 17:07:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75A01741497
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 17:09:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232029AbjF1PHF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 11:07:05 -0400
-Received: from dfw.source.kernel.org ([139.178.84.217]:55358 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231969AbjF1PGz (ORCPT
+        id S231976AbjF1PJV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 11:09:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58400 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231200AbjF1PJR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 11:06:55 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5C8AF6124B;
-        Wed, 28 Jun 2023 15:06:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C45C8C433C8;
-        Wed, 28 Jun 2023 15:06:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687964814;
-        bh=tYONJNnGCQMJ80wSHKkNy+/9k7bcbNipagC4FIaSVh4=;
-        h=In-Reply-To:References:From:Date:Subject:To:Cc:From;
-        b=fH3IUtR0gjCfGcOCNMckBP2f/Vs37X+rPVTO1uoh0Ocxu9vLx7mIfIgmE5UNXcRoM
-         ogAbNleaeEMIL8vXfLUV9xsABdJYxzznt/+oUqFmmJgFQwmfr4ykUEi5VdEqL4emt1
-         VBrN0WQBW8RAQNhUWwGsrd7t1QlsAWmwUIRBJveXODht9U2Z5gU0KpuSJvCl+MFffJ
-         ZJ1Pg/F3xXwfFeeY29HbU7PmpVANRdsdDrdVOqc+In+rrGj/DN+DLIwgZIC5FnbX8k
-         x0aRa3Iax38OyIKeajKR4UkyJWdPxg6NH7l2luXYY/3JH5xRtngl8too4lulS6neTZ
-         LmMjwNWo1RHZg==
-Received: by mail-oo1-f51.google.com with SMTP id 006d021491bc7-55b8f1c930eso3717093eaf.3;
-        Wed, 28 Jun 2023 08:06:54 -0700 (PDT)
-X-Gm-Message-State: AC+VfDynyw2x7qiJl5b2bHVt5o/pujFI9Aq8DGoUmYWrosoO9K1MoV2/
-        gkflC5YJvfSUFOVE4fxLgKNEip4oOHhE6c5cA+o=
-X-Google-Smtp-Source: ACHHUZ6B52reag+L2IlplUvg6F+aLqCsIPNfwwTs1JaQRfUZzOM5Xa4xbUxzeJQ+BYca+dwvBsArZR5zC0ac59AlOQA=
-X-Received: by 2002:a05:6820:396:b0:563:5542:c45 with SMTP id
- r22-20020a056820039600b0056355420c45mr5562605ooj.7.1687964813976; Wed, 28 Jun
- 2023 08:06:53 -0700 (PDT)
+        Wed, 28 Jun 2023 11:09:17 -0400
+Received: from mail-oa1-x2e.google.com (mail-oa1-x2e.google.com [IPv6:2001:4860:4864:20::2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36CF21715
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 08:09:15 -0700 (PDT)
+Received: by mail-oa1-x2e.google.com with SMTP id 586e51a60fabf-1b056276889so2152956fac.2
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 08:09:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1687964954; x=1690556954;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=XQFXM7LoMXWobaAJZ3RZKI3cUbo9p+ZmED0c5tG5e8o=;
+        b=aFkpfco7/EqtSeH8SvrioWbyX+Ie6tKQ/zdB41Apheqb0+GWe389VsNoqIegt1qEQf
+         TQ3oLh241qOkxJ6WUHW7zQkl0qKXdY8CRGa8M9bxehKI2jDjp4eb01wV+tw0DhV1jfWO
+         NFlMjr/fqIG7/AmLOuFg65aPOT9UZAw89SasI=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687964954; x=1690556954;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=XQFXM7LoMXWobaAJZ3RZKI3cUbo9p+ZmED0c5tG5e8o=;
+        b=WVhAlaGufKtJfdw048pVS6Lcn1x2Pirn6Rg5VkS4f4uWFqpRlLUkvVrB64xsNBGFYw
+         5vd8MrA/oVlIASLGoVm3ZyQG4U2d2ZmBWbe37bPU1vL2LJ+rNKm0Y+9q+0MZ3OKZPzLY
+         puhOATfWZCKE+PWzwlhhRhqgNm3Lm0J5/IVRkuHntkRBLFbMCxFchrWMsHkMPTcc72V1
+         1JirMS9WoMmhs895bEx1erhTQeMHDcQfIOUEQocusckjaDFhCD17mAnvU8rpkzQbW305
+         xL/AIUCmKYfXUhhNuYSaA2Dfuqzo0EdBfmvPgTlM+9XizP+0AEOIMHWzTX5lpM2HsesM
+         PuNg==
+X-Gm-Message-State: AC+VfDw9Tee5BAg2INroS4ZI4RnUbHha1GR+BnKDsbIjFS3i6EIphXo+
+        mhirB4xcgJ9Zg9Rg9w1EdTJ8pkrP6iRiLsS7eJYqvcFQ+398ZWd6Owg=
+X-Google-Smtp-Source: ACHHUZ7mEBIwcDekNUgmogdX1cBOPhK0TtMzNVRdpWwdf24243yY8Fh3zjN7XTDZu/RLnFFOjNTB1StBdw8SgOnw3a8=
+X-Received: by 2002:a05:6870:5b18:b0:1b0:b13:c18 with SMTP id
+ ds24-20020a0568705b1800b001b00b130c18mr13876523oab.3.1687964954543; Wed, 28
+ Jun 2023 08:09:14 -0700 (PDT)
 MIME-Version: 1.0
-Received: by 2002:ac9:7a97:0:b0:4e8:f6ff:2aab with HTTP; Wed, 28 Jun 2023
- 08:06:53 -0700 (PDT)
-In-Reply-To: <20230628011439.159678-3-linux@treblig.org>
-References: <20230628011439.159678-1-linux@treblig.org> <20230628011439.159678-3-linux@treblig.org>
-From:   Namjae Jeon <linkinjeon@kernel.org>
-Date:   Thu, 29 Jun 2023 00:06:53 +0900
-X-Gmail-Original-Message-ID: <CAKYAXd-KeNM56ecmnaDR2wA4meTqPRa=e+KT3JJkpvC9=PCeiw@mail.gmail.com>
-Message-ID: <CAKYAXd-KeNM56ecmnaDR2wA4meTqPRa=e+KT3JJkpvC9=PCeiw@mail.gmail.com>
-Subject: Re: [PATCH 2/3] fs/smb: Swing unicode common code from server->common
-To:     linux@treblig.org
-Cc:     sfrench@samba.org, linux-cifs@vger.kernel.org,
-        jfs-discussion@lists.sourceforge.net, linux-kernel@vger.kernel.org
+References: <20230628130339.206261-1-mchehab@kernel.org>
+In-Reply-To: <20230628130339.206261-1-mchehab@kernel.org>
+From:   Chen-Yu Tsai <wenst@chromium.org>
+Date:   Wed, 28 Jun 2023 17:09:01 +0200
+Message-ID: <CAGXv+5FT64iMSebcT3b9TP2NhEt5e05bjy5HC4AvzM_+n-og=A@mail.gmail.com>
+Subject: Re: [PATCH] media: dvb: mb86a20s: get rid of a clang-15 warning
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+        lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-2023-06-28 10:14 GMT+09:00, linux@treblig.org <linux@treblig.org>:
-> From: "Dr. David Alan Gilbert" <linux@treblig.org>
+On Wed, Jun 28, 2023 at 3:03=E2=80=AFPM Mauro Carvalho Chehab
+<mchehab@kernel.org> wrote:
 >
-> Swing most of the inline functions and unicode tables into smb/common
-> from the copy in smb/server.
+> When building with clang-15: this warning is produced:
 >
-> UniStrcat has different types between the client and server
-> versions so I've not moved it (although I suspect it's OK).
-ksmbd doesn't use this function. You can move it to smb_unicode_common.h.
+>         ../drivers/media/dvb-frontends/mb86a20s.c:1572:6: error: variable=
+ 'active_layers' set but not used [-Werror,-Wunused-but-set-variable]
+>                 int active_layers =3D 0, pre_ber_layers =3D 0, post_ber_l=
+ayers =3D 0;
+>                     ^
+>         1 error generated.
+>
+> Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 
-Thanks.
+Reviewed-by: Chen-Yu Tsai <wenst@chromium.org>
