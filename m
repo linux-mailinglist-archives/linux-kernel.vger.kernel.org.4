@@ -2,151 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5E117413AF
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 16:20:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A2FA7413A4
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 16:20:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231794AbjF1OTS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 10:19:18 -0400
-Received: from mx1.sberdevices.ru ([37.18.73.165]:64328 "EHLO
-        mx1.sberdevices.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231919AbjF1OSm (ORCPT
+        id S232389AbjF1OTg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 10:19:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53556 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231882AbjF1OTB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 10:18:42 -0400
-Received: from p-infra-ksmg-sc-msk01 (localhost [127.0.0.1])
-        by mx1.sberdevices.ru (Postfix) with ESMTP id 57235100010;
-        Wed, 28 Jun 2023 17:18:40 +0300 (MSK)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mx1.sberdevices.ru 57235100010
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1687961920;
-        bh=Svbfgf0j0KalI3BkPbMkKrb1SmgOXFuqi609v02vEJo=;
-        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type:From;
-        b=YmokS3sh6Ig+a8MRqX0d7lPrHlCbjVkd3bk6UbfFYyxorfvqGLazMnPB9GOTCI1/A
-         TGMgo7N8FdDrix2YNOh7Vu7FegtMSE3q96KHviLB5kpO0JqcGZvCHJRKogeCcxnAa5
-         bmzVxjACdOyl8I81ff9Rtia4TjQXW9S/vd7mhFwZfKnGn3hdS600ahvhCp6Mst+WuB
-         P3MEBtazWT0mlXqGnZlEdNTXmukt5J1bCXis6oBgQTTM1Xnc9AVPuQ5DsqqHDWeOjg
-         uJymijvh1v39yzQAEIWFS1HA20EE+W6uxvF67BR7YnECXZLZ3TXjSyWjLFdRofpmtl
-         jVyPIa9xr0+xg==
-Received: from p-i-exch-sc-m01.sberdevices.ru (p-i-exch-sc-m01.sberdevices.ru [172.16.192.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 28 Jun 2023 10:19:01 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFC892D4B;
+        Wed, 28 Jun 2023 07:18:50 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by mx1.sberdevices.ru (Postfix) with ESMTPS;
-        Wed, 28 Jun 2023 17:18:40 +0300 (MSK)
-Received: from localhost (100.64.160.123) by p-i-exch-sc-m01.sberdevices.ru
- (172.16.192.107) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.30; Wed, 28 Jun
- 2023 17:17:42 +0300
-Date:   Wed, 28 Jun 2023 17:18:39 +0300
-From:   Dmitry Rokosov <ddrokosov@sberdevices.ru>
-To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-CC:     <neil.armstrong@linaro.org>, <jbrunet@baylibre.com>,
-        <mturquette@baylibre.com>, <sboyd@kernel.org>,
-        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <khilman@baylibre.com>, <conor+dt@kernel.org>,
-        <kernel@sberdevices.ru>, <sdfw_system_team@sberdevices.ru>,
-        <rockosov@gmail.com>, <linux-amlogic@lists.infradead.org>,
-        <linux-clk@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH v1 1/6] arm64: dts: meson: a1: introduce PLL and
- Peripherals clk controllers
-Message-ID: <20230628141839.ea7qzotr5un6f2ij@CAB-WSD-L081021>
-References: <20230607201641.20982-1-ddrokosov@sberdevices.ru>
- <20230607201641.20982-2-ddrokosov@sberdevices.ru>
- <CAFBinCAO14zcgY66UyJO9UxuCWf1N-Lsx=iYNTJL=cwXoJv__Q@mail.gmail.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 55BA061346;
+        Wed, 28 Jun 2023 14:18:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4CDA9C433CB;
+        Wed, 28 Jun 2023 14:18:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687961929;
+        bh=qaUMkZZQ9EmFCIQ2y31xK0EquwIbJ/1gDt+zU6UKhJs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=BNm9UB6tjo7/M5dEly4kdWLpLbPPCLgyljAD6WZ+OBQ+ZrkLPH453Mdwv7eMgPqrC
+         2sAaVQMvluZk293R+Miq0pgZrPC8s/E3SrAi7w3V+/JHFZZoDZOARiKkxrIqLIbXGC
+         j01RHEyWTayeVQITjoEtg5m54JynRkMU7fr2I3TaarFQwOOwjaUpJSui9SSzcF+ILo
+         vRFoAHp/U3x6QIfo/o1ttgys5mRuv2uQWcD3sY7ZuuLQ6WBcYgkPGdhHAtnOO8HfOb
+         x0C9CRGNWa9zAFthOyjDRmJQLYqF57XkHDrNm+Kk3Wkr4W+c8vjTwc0dmnPf11OTsx
+         kevvR51P9x7Og==
+Date:   Wed, 28 Jun 2023 15:18:42 +0100
+From:   Lee Jones <lee@kernel.org>
+To:     Okan Sahin <okan.sahin@analog.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Cosmin Tanislav <demonsingur@gmail.com>,
+        Alexander Sverdlin <alexander.sverdlin@gmail.com>,
+        Hugo Villeneuve <hvilleneuve@dimonoff.com>,
+        Ramona Bolboaca <ramona.bolboaca@analog.com>,
+        Ibrahim Tilki <Ibrahim.Tilki@analog.com>,
+        ChiYuan Huang <cy_huang@richtek.com>,
+        Caleb Connolly <caleb.connolly@linaro.org>,
+        William Breathitt Gray <william.gray@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Leonard =?iso-8859-1?Q?G=F6hrs?= <l.goehrs@pengutronix.de>,
+        ChiaEn Wu <chiaen_wu@richtek.com>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org
+Subject: Re: [PATCH v7 4/5] dt-bindings: mfd: max77541: Add ADI
+ MAX77541/MAX77540
+Message-ID: <20230628141842.GL10378@google.com>
+References: <20230412111256.40013-1-okan.sahin@analog.com>
+ <20230412111256.40013-5-okan.sahin@analog.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAFBinCAO14zcgY66UyJO9UxuCWf1N-Lsx=iYNTJL=cwXoJv__Q@mail.gmail.com>
-User-Agent: NeoMutt/20220415
-X-Originating-IP: [100.64.160.123]
-X-ClientProxiedBy: p-i-exch-sc-m02.sberdevices.ru (172.16.192.103) To
- p-i-exch-sc-m01.sberdevices.ru (172.16.192.107)
-X-KSMG-Rule-ID: 10
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Lua-Profiles: 178314 [Jun 28 2023]
-X-KSMG-AntiSpam-Version: 5.9.59.0
-X-KSMG-AntiSpam-Envelope-From: DDRokosov@sberdevices.ru
-X-KSMG-AntiSpam-Rate: 0
-X-KSMG-AntiSpam-Status: not_detected
-X-KSMG-AntiSpam-Method: none
-X-KSMG-AntiSpam-Auth: dkim=none
-X-KSMG-AntiSpam-Info: LuaCore: 517 517 b0056c19d8e10afbb16cb7aad7258dedb0179a79, {Track_E25351}, {Tracking_from_domain_doesnt_match_to}, 127.0.0.199:7.1.2;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;sberdevices.ru:7.1.1,5.0.1;p-i-exch-sc-m01.sberdevices.ru:7.1.1,5.0.1, FromAlignment: s, {Tracking_white_helo}, ApMailHostAddress: 100.64.160.123
-X-MS-Exchange-Organization-SCL: -1
-X-KSMG-AntiSpam-Interceptor-Info: scan successful
-X-KSMG-AntiPhishing: Clean
-X-KSMG-LinksScanning: Clean
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 2.0.1.6960, bases: 2023/06/28 08:00:00 #21591748
-X-KSMG-AntiVirus-Status: Clean, skipped
+In-Reply-To: <20230412111256.40013-5-okan.sahin@analog.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+        lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Martin,
+On Wed, 12 Apr 2023, Okan Sahin wrote:
 
-Thank you for the review!
-
-On Sun, Jun 25, 2023 at 11:00:06PM +0200, Martin Blumenstingl wrote:
-> On Wed, Jun 7, 2023 at 10:16 PM Dmitry Rokosov <ddrokosov@sberdevices.ru> wrote:
-> >
-> > This patch adds clkc and clkc_pll dts nodes to A1 SoC main dtsi.
-> > The first one clk controller is responsible for all SoC peripherals
-> > clocks excluding audio clocks. The second one clk controller is used by
-> > A1 SoC PLLs. Actually, there are two different APB heads, so we have two
-> > different drivers.
-> >
-> > Signed-off-by: Dmitry Rokosov <ddrokosov@sberdevices.ru>
-> > ---
-> >  arch/arm64/boot/dts/amlogic/meson-a1.dtsi | 26 +++++++++++++++++++++++
-> >  1 file changed, 26 insertions(+)
-> >
-> > diff --git a/arch/arm64/boot/dts/amlogic/meson-a1.dtsi b/arch/arm64/boot/dts/amlogic/meson-a1.dtsi
-> > index eed96f262844..a24228808c9c 100644
-> > --- a/arch/arm64/boot/dts/amlogic/meson-a1.dtsi
-> > +++ b/arch/arm64/boot/dts/amlogic/meson-a1.dtsi
-> > @@ -6,6 +6,8 @@
-> >  #include <dt-bindings/interrupt-controller/irq.h>
-> >  #include <dt-bindings/interrupt-controller/arm-gic.h>
-> >  #include <dt-bindings/gpio/meson-a1-gpio.h>
-> > +#include <dt-bindings/clock/amlogic,a1-pll-clkc.h>
-> > +#include <dt-bindings/clock/amlogic,a1-peripherals-clkc.h>
-> >
-> >  / {
-> >         compatible = "amlogic,a1";
-> > @@ -126,6 +128,30 @@ uart_AO_B: serial@2000 {
-> >                                 status = "disabled";
-> >                         };
-> >
-> > +                       clkc_periphs: clock-controller@800 {
-> please keep the entries sorted - so &clkc_periphs should come after
-> &periphs_pinctrl
+> Add ADI MAX77541/MAX77540 devicetree document.
 > 
+> Signed-off-by: Okan Sahin <okan.sahin@analog.com>
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+>  .../devicetree/bindings/mfd/adi,max77541.yaml | 68 +++++++++++++++++++
+>  1 file changed, 68 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/mfd/adi,max77541.yaml
 
-Sure
-
-> > +                               compatible = "amlogic,a1-peripherals-clkc";
-> > +                               reg = <0 0x800 0 0x104>;
-> > +                               #clock-cells = <1>;
-> > +                               clocks = <&clkc_pll CLKID_FCLK_DIV2>,
-> > +                                        <&clkc_pll CLKID_FCLK_DIV3>,
-> > +                                        <&clkc_pll CLKID_FCLK_DIV5>,
-> > +                                        <&clkc_pll CLKID_FCLK_DIV7>,
-> > +                                        <&clkc_pll CLKID_HIFI_PLL>,
-> > +                                        <&xtal>;
-> > +                               clock-names = "fclk_div2", "fclk_div3",
-> > +                                             "fclk_div5", "fclk_div7",
-> > +                                             "hifi_pll", "xtal";
-> > +                       };
-> [...]
-> 
-> >                         gpio_intc: interrupt-controller@0440 {
-> note to self: at some point we'll have to re-order &gpio_intc, but
-> that's out of scope for this patch
-
-I have noticed that the 'meson-a1.dtsi' file contains unsorted items. As
-part of the current patch series, I can re-order them to improve the dt
-structure.
+Applied, thanks
 
 -- 
-Thank you,
-Dmitry
+Lee Jones [李琼斯]
