@@ -2,104 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD12774171B
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 19:23:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 085F674171D
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 19:25:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229813AbjF1RXj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 13:23:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43610 "EHLO
+        id S230262AbjF1RYz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 13:24:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229520AbjF1RXf (ORCPT
+        with ESMTP id S230215AbjF1RYr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 13:23:35 -0400
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEF741FCC
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 10:23:33 -0700 (PDT)
-Received: by mail-lf1-x12d.google.com with SMTP id 2adb3069b0e04-4fb77f21c63so5323364e87.2
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 10:23:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20221208.gappssmtp.com; s=20221208; t=1687973012; x=1690565012;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=kqIqFUPFrsKoIzLWBGgp2HjNxkpNScvy103dAekNK5w=;
-        b=iO+yzmLlBkR+O04yTgo80XMCjE1b80WI/5T4Qt+zTpN+zGPz5uUifYYcilgLFgMHlu
-         KRxvTMs2ZdJ5lItvmKidStNdeww57cz5o093LHLryAOWX0mjEFxB/a5kzgIFkFBD3YlU
-         +D1ZnbfS+sh+CSyY39sAcSRMdmntP6SsFXeNJU0rDO5cbX1P57xW5ZRi6WlYNSHkr0IQ
-         arbyQtQnxWUZGkqsK0ZlsXC6Hpc6EC3nZ9MEER7r4rJ01FEkQzjNOSJ5nrkBS6KXOD+Y
-         aq5OoGfAThvZRw/LqxpPX05JVvc7EhBP60vZwNHAEiCJXpHKfesydgdF0TUxzYFw98/8
-         cNZg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687973012; x=1690565012;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=kqIqFUPFrsKoIzLWBGgp2HjNxkpNScvy103dAekNK5w=;
-        b=ZS5bkETfPE7FTB7b9W+65NE0z9Rp2558b5tR51JE+6W3/VQaCgQdEGAomfXcH+/0NC
-         ZMjnhELU++RpuI7wa40iDlAVGaoWXtjY4/ieO/HW8TNZu/7Uy72Pj+NCCeXtyQ4tE+y2
-         oR9FUk2eJ377oN9aqPn3qq006Zz0/7j/y1q1ReT2O6yfwAQb0+fGpUFFWAuX1wsi2HQN
-         KYL/VRfM/Deklh+auKWv6fh8CRXhqOOfNk/xhgyc/W3oNwWpphbKbekLSkfVj+lnroQz
-         QfkfkufoYxOKjp1RcSM1e5ppmj5kCCynxdg6neicCjaQYLejxGkpcm9AvqZFrSZ+yfNV
-         gVjw==
-X-Gm-Message-State: AC+VfDz9llnwVHx302NyIihK2RZ7v661CVTmyyAS1lvpuqEWlPXDEqJl
-        6hp8XWwad2azNVHxF8gZFy7Uq2JUt4/ZnFoXBZfVhw==
-X-Google-Smtp-Source: ACHHUZ79N/TpxztcIneHGSQv13tw7uydK8uMAMcNq7uhd3nC2sjwlTTVD5XfZdbpiDrun3fawZh0gaSMQ8wx9lp5nbA=
-X-Received: by 2002:a05:6512:e9d:b0:4f9:b6f8:844f with SMTP id
- bi29-20020a0565120e9d00b004f9b6f8844fmr8662285lfb.39.1687973011995; Wed, 28
- Jun 2023 10:23:31 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230628131442.3022772-1-sameo@rivosinc.com> <20230628131442.3022772-2-sameo@rivosinc.com>
-In-Reply-To: <20230628131442.3022772-2-sameo@rivosinc.com>
-From:   Evan Green <evan@rivosinc.com>
-Date:   Wed, 28 Jun 2023 10:22:56 -0700
-Message-ID: <CALs-HsuccHQiHEtJ+=s-YS0kHLhwOUnDUY7eP5W3BL2Lpx5+9g@mail.gmail.com>
-Subject: Re: [PATCH v2 1/3] RISC-V: add Bitmanip/Scalar Crypto parsing from DT
-To:     Samuel Ortiz <sameo@rivosinc.com>
-Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Wed, 28 Jun 2023 13:24:47 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8CBB1FCD
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 10:24:46 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5D11161407
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 17:24:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 773F0C433C8;
+        Wed, 28 Jun 2023 17:24:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687973085;
+        bh=Sop1yazDMV/lbh0CwxeOMS0e7MThVMtbfcxDvIY6Dh8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=dSRecRJtf1nhaszbsN0TCBX6rcEJD8lDqlCiZxK/c+rNQ5KqgAJzo/BFob79E2NCR
+         RPurYxvyLHoGAN3GKmHY/cG/kuVpKmHsgw+HB1vrajaXVNV9V3hJMhqMQe/HXNAIUT
+         0dUNCPXrc7fkEtgtMhZgAb6TE12IWDijpbqG3ShvsQP2YRjknXqaUSD/7EFuw+ulY6
+         nP9ktEvzTdO0W+IZi/fsKBuXKo5XRcB7WzBG0XK/FjJL3b04sF23QKfJFl8OeeDlLu
+         KvyqV+f21g6KzVBcwmV6xKUqPAfGze5q6t4oX0S3NHZRoVxRGW7ta6JTuVTOs5aE2K
+         8js1ra+oT9WgA==
+Date:   Wed, 28 Jun 2023 18:24:40 +0100
+From:   Conor Dooley <conor@kernel.org>
+To:     Evan Green <evan@rivosinc.com>
+Cc:     Conor Dooley <conor.dooley@microchip.com>,
+        Samuel Ortiz <sameo@rivosinc.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
         Palmer Dabbelt <palmer@dabbelt.com>,
         Albert Ou <aou@eecs.berkeley.edu>,
         linux-riscv@lists.infradead.org,
         "Hongren (Zenithal) Zheng" <i@zenithal.me>, linux@rivosinc.com,
-        Conor Dooley <conor.dooley@microchip.com>,
         Andrew Jones <ajones@ventanamicro.com>,
         Heiko Stuebner <heiko.stuebner@vrull.eu>,
         Anup Patel <apatel@ventanamicro.com>,
         linux-kernel@vger.kernel.org, Guo Ren <guoren@kernel.org>,
         Atish Patra <atishp@rivosinc.com>,
-        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@rivosinc.com>,
+        =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@rivosinc.com>,
         Jiatai He <jiatai2021@iscas.ac.cn>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH 1/3] RISC-V: add Bitmanip/Scalar Crypto parsing from DT
+Message-ID: <20230628-dragonish-lullaby-b44d2df09d66@spud>
+References: <20230627143747.1599218-1-sameo@rivosinc.com>
+ <20230627143747.1599218-2-sameo@rivosinc.com>
+ <CALs-HssMkVikspnEi-Ek2t=ABvFvgptAhsBjk1+aLuVjiP7P7w@mail.gmail.com>
+ <20230627-debating-twelve-da2c1ed60948@spud>
+ <ZJwE5wRVkoND3Z6P@vermeer>
+ <20230628-unfeeling-tavern-edd4f58396fa@wendy>
+ <CALs-HstZe+bw_fY--4FQXfFoA67tvMSaEjKhZ2pRstNT07xBxA@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="Nk2liGfu8KoG29TY"
+Content-Disposition: inline
+In-Reply-To: <CALs-HstZe+bw_fY--4FQXfFoA67tvMSaEjKhZ2pRstNT07xBxA@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 28, 2023 at 6:15=E2=80=AFAM Samuel Ortiz <sameo@rivosinc.com> w=
-rote:
->
-> From: "Hongren (Zenithal) Zheng" <i@zenithal.me>
->
-> Parse Zb/Zk related string from DT and output them to cpuinfo.
->
-> It is worth noting that the Scalar Crypto extension defines "zk" as a
-> shorthand for the Zkn, Zkr and Zkt extensions. Since the Zkn one also
-> implies the Zbkb, Zbkc and Zbkx extensions, simply passing the valid
-> "zk" extension name through a DT will enable all of the  Zbkb, Zbkc,
-> Zbkx, Zkn, Zkr and Zkt extensions.
->
-> Also, since there currently is no mechanism to merge all enabled
-> extensions, the generated cpuinfo output could be relatively large.
-> For example, setting the "riscv,isa" DT property to "rv64imafdc_zk_zks"
-> will generate the following cpuinfo output:
-> "rv64imafdc_zbkb_zbkc_zbkx_zknd_zkne_zknh_zkr_zksed_zksh_zkt".
->
-> Tested-by: Jiatai He <jiatai2021@iscas.ac.cn>
-> Signed-off-by: Samuel Ortiz <sameo@rivosinc.com>
-> Signed-off-by: Hongren (Zenithal) Zheng <i@zenithal.me>
 
-Reviewed-by: Evan Green <evan@rivosinc.com>
+--Nk2liGfu8KoG29TY
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Wed, Jun 28, 2023 at 10:18:34AM -0700, Evan Green wrote:
+> On Wed, Jun 28, 2023 at 4:10=E2=80=AFAM Conor Dooley <conor.dooley@microc=
+hip.com> wrote:
+> >
+> > On Wed, Jun 28, 2023 at 12:01:11PM +0200, Samuel Ortiz wrote:
+> > > On Tue, Jun 27, 2023 at 07:48:15PM +0100, Conor Dooley wrote:
+> > > > On Tue, Jun 27, 2023 at 11:14:30AM -0700, Evan Green wrote:
+> > > > > On Tue, Jun 27, 2023 at 7:38=E2=80=AFAM Samuel Ortiz <sameo@rivos=
+inc.com> wrote:
+> >
+> > > > > It would be nice to consolidate the ones together that search for=
+ a
+> > > > > single string and set multiple bits, though I don't have any super
+> > > > > elegant ideas for how off the top of my head.
+> > > >
+> > > > I've got a refactor of this code in progress, dropping all of these
+> > > > copy-paste in place of a loop. It certainly looks more elegant than
+> > > > this, but it will fall over a bit for these "one string matches many
+> > > > extensions" cases. See here:
+> > > > https://patchwork.kernel.org/project/linux-riscv/patch/20230626-thi=
+eving-jockstrap-d35d20b535c5@wendy/
+> > > > My immediate thought is to add another element to riscv_isa_ext_dat=
+a,
+> > > > that contains "parent" extensions to check for. Should be fairly do=
+able,
+> > > > I'll whip something up on top of that...
+> > >
+> > > Nice, and thanks for the review.
+> >
+> > > Should I wait for your refactor to be merged before pushing this one?
+> >
+> > I don't know. I think that you should continue on with your series here,
+> > and whichever goes in second gets rebased on top of the other.
+> > I don't think it makes material difference to review of this patchset as
+> > to whether you rebase on top of what I'm working on, so I wouldn't
+> > bother until it gets merged.
+> >
+> > Rather hacky, had less time than expected this morning:
+> > https://git.kernel.org/pub/scm/linux/kernel/git/conor/linux.git/commit/=
+?h=3Driscv-extensions-strings-supersets
+> > Clearly there's issues with looping to RISCV_ISA_MAX_SUPERSETS & I just
+> > repurposed Zicsr for the sake of testing something in the time I had.
+> >
+> > Evan, at a high level, does that look more elegant to you, or have I ma=
+de
+> > things worse?
+> >
+>=20
+> I see what you're going for at least. It's unfortunate that when
+> someone bumps up RISCV_ISA_MAX_SUPERSETS it squares the whole array.
+> Another way to go might be to define the elements in a separate array,
+> like:
+>=20
+> unsigned int riscv_zks_exts[] =3D {
+>        RISCV_ISA_EXT_ZBKB,
+>        RISCV_ISA_EXT_ZBKC,
+>        ....
+> };
+>=20
+> then the macro entry looks like:
+>=20
+> SET_ISA_EXT_MAP_MULTI("zks", riscv_zks_exts),
+>=20
+> where the SET_ISA_EXT_MAP_MULTI() could use ARRAY_SIZE() to stash both
+> the pointer to the array and the number of elements.
+
+Yup, I like the sound of that. I like the variadic stuff as it'd not
+require defining a bunch of sub-arrays of supersets. I guess if it grows
+too badly, we can just dump it off into another file or w/e.
+
+--Nk2liGfu8KoG29TY
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZJxs2AAKCRB4tDGHoIJi
+0hyeAPoCJou4iW+SwgKBQCp5o/rvu8bFFnG2SdAC26nA3X5ifAD8Cev8fwX4Y1Qg
+5T7g/LvQlXnVSz10udi5To5hLiisfQM=
+=dznn
+-----END PGP SIGNATURE-----
+
+--Nk2liGfu8KoG29TY--
