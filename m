@@ -2,415 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A2EE741835
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 20:51:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C76B741848
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 20:52:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232633AbjF1Sux (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 14:50:53 -0400
-Received: from smtp-fw-2101.amazon.com ([72.21.196.25]:57835 "EHLO
-        smtp-fw-2101.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229823AbjF1Su3 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 14:50:29 -0400
+        id S231987AbjF1SvH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 14:51:07 -0400
+Received: from mail-bn8nam12on2121.outbound.protection.outlook.com ([40.107.237.121]:32769
+        "EHLO NAM12-BN8-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S232006AbjF1Sur (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 28 Jun 2023 14:50:47 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=CaQIK5dL5djFbOL/RQc/cjELDCF6kPTXA8dCh+mN2ZMb02CLd++7HLx0scThsV/irgCv5PmSYcII5p+cP/jxhmLVf4tVf5C9wsGqOrx0K2ezo7GfXBsOiFTjupA16jXxgEmSZIZvViDb4n7FC0YGRI+v/S1kWYuASbIcomFqZPr6BbEN42MMZJ09WMIBCKeuygzObuizYoD639cQxHb+RxkFpNiJDRvlkSORXGmb9YXVLZXc6G0nyMdn8udPnYjF8pXv+P29AL3jqMOoO6QjVFWzrRI+5AtreI0i51TUysbCEuXOfbLXWcE8TzU4PQg8pnFvjY0w+tfjQbtD9HiICg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=WK3p0WnfOi+GXDgJuW19dgP0J9qpuP5UEY7RQ9+K2CY=;
+ b=SWuIIIYTfkM4VO8zkcgAoNFGrnUzYYy7YI+2XdayNz+i938e/iWNktJuJBrnV7+3almKs5ZhNMWyQdCH73md9/RKsBoP+RVEE/r35QzmNKZQDG28t+fvjCZ9y4lJfC+tDcXY0yaU34/fx2PvKMKxSB/rnLBEcPQ5UUHMCRKoH7DW2a1wO2URNyHe+X+8JGhDnx1AQgo7B/3fF3l6odW/QiM8ayvIXbi0Uw7gn3uQxknycrt4dn7hITgrUgUlebF4qsXaQoKgZgC+cR+4Fdh6+gybdWGwlTk/NyKYM+97vRPfjOougoSBB45gWJXDdy9R7XK6TMZO0vqen9iJpvaTTQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=os.amperecomputing.com; dmarc=pass action=none
+ header.from=os.amperecomputing.com; dkim=pass
+ header.d=os.amperecomputing.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1687978230; x=1719514230;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=0C6AI79x8rcE4/d5YSavZ3njDTjpbEI5cdT3SSecK+w=;
-  b=lM4fm9zyulqABTAO0DA00Q0UctdKzz3QNZMQASUYDvr3JrpCeNL+Gk3d
-   OzT6DHJ/UT3q5FEQLnHeX+1HUozrY67QRLHhtx0zOQaxff43SvBZI/M00
-   eeZkRevec7jF5WxAlqkGN5olGUaZwg32HS4ednlTH1UEmWJ0naWZ2tDSd
-   8=;
-X-IronPort-AV: E=Sophos;i="6.01,166,1684800000"; 
-   d="scan'208";a="336712928"
-Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-pdx-2a-m6i4x-8a14c045.us-west-2.amazon.com) ([10.43.8.6])
-  by smtp-border-fw-2101.iad2.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2023 18:50:24 +0000
-Received: from EX19MTAUWC002.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan2.pdx.amazon.com [10.236.137.194])
-        by email-inbound-relay-pdx-2a-m6i4x-8a14c045.us-west-2.amazon.com (Postfix) with ESMTPS id 48C7B805C7;
-        Wed, 28 Jun 2023 18:50:22 +0000 (UTC)
-Received: from EX19D004ANA001.ant.amazon.com (10.37.240.138) by
- EX19MTAUWC002.ant.amazon.com (10.250.64.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Wed, 28 Jun 2023 18:50:21 +0000
-Received: from 88665a182662.ant.amazon.com.com (10.187.170.50) by
- EX19D004ANA001.ant.amazon.com (10.37.240.138) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.30; Wed, 28 Jun 2023 18:50:16 +0000
-From:   Kuniyuki Iwashima <kuniyu@amazon.com>
-To:     <lmb@isovalent.com>
-CC:     <andrii@kernel.org>, <ast@kernel.org>, <bpf@vger.kernel.org>,
-        <daniel@iogearbox.net>, <davem@davemloft.net>,
-        <dsahern@kernel.org>, <edumazet@google.com>, <haoluo@google.com>,
-        <hemanthmalla@gmail.com>, <joe@cilium.io>, <joe@wand.net.nz>,
-        <john.fastabend@gmail.com>, <jolsa@kernel.org>,
-        <kpsingh@kernel.org>, <kuba@kernel.org>, <kuniyu@amazon.com>,
-        <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-        <martin.lau@linux.dev>, <mykolal@fb.com>, <netdev@vger.kernel.org>,
-        <pabeni@redhat.com>, <sdf@google.com>, <shuah@kernel.org>,
-        <song@kernel.org>, <willemdebruijn.kernel@gmail.com>, <yhs@fb.com>
-Subject: Re: [PATCH bpf-next v4 6/7] bpf, net: Support SO_REUSEPORT sockets with bpf_sk_assign
-Date:   Wed, 28 Jun 2023 11:50:06 -0700
-Message-ID: <20230628185006.76632-1-kuniyu@amazon.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20230613-so-reuseport-v4-6-4ece76708bba@isovalent.com>
-References: <20230613-so-reuseport-v4-6-4ece76708bba@isovalent.com>
+ d=os.amperecomputing.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=WK3p0WnfOi+GXDgJuW19dgP0J9qpuP5UEY7RQ9+K2CY=;
+ b=vI1CaqqSoJREje/6Ergj4kM7/u9S+nLfxUIQCbW21xw9LJ9iRhwEoDCtBMzKT9SN7AFDEEChpXHcZ2m0xPp2Jh4uN/BPzOPaOkEK2zrVddGQOb48YslDxfE5AReuFW2qLm4YqzMngCjLqYo+KFKsDkQxU56pAlc+0zw/CkB34O4=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=os.amperecomputing.com;
+Received: from DM6PR01MB5259.prod.exchangelabs.com (2603:10b6:5:68::27) by
+ BL3PR01MB6914.prod.exchangelabs.com (2603:10b6:208:355::13) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6521.26; Wed, 28 Jun 2023 18:50:43 +0000
+Received: from DM6PR01MB5259.prod.exchangelabs.com
+ ([fe80::54e5:4e1d:aaf6:7c87]) by DM6PR01MB5259.prod.exchangelabs.com
+ ([fe80::54e5:4e1d:aaf6:7c87%4]) with mapi id 15.20.6521.023; Wed, 28 Jun 2023
+ 18:50:42 +0000
+Date:   Wed, 28 Jun 2023 11:50:36 -0700 (PDT)
+From:   "Lameter, Christopher" <cl@os.amperecomputing.com>
+To:     Roman Gushchin <roman.gushchin@linux.dev>
+cc:     David Rientjes <rientjes@google.com>,
+        Julian Pidancet <julian.pidancet@oracle.com>,
+        Christoph Lameter <cl@linux.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>, linux-mm@kvack.org,
+        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Matthew Wilcox <willy@infradead.org>,
+        Kees Cook <keescook@chromium.org>,
+        Rafael Aquini <aquini@redhat.com>
+Subject: Re: [PATCH] mm/slub: disable slab merging in the default
+ configuration
+In-Reply-To: <ZJxjgy/Mkh20WpXv@P9FQF9L96D.corp.robot.car>
+Message-ID: <2df9debe-cbdc-abf7-4db1-1628b29df801@os.amperecomputing.com>
+References: <20230627132131.214475-1-julian.pidancet@oracle.com> <48bd9819-3571-6b53-f1ad-ec013be742c0@google.com> <ZJxjgy/Mkh20WpXv@P9FQF9L96D.corp.robot.car>
+Content-Type: text/plain; charset=US-ASCII; format=flowed
+X-ClientProxiedBy: CH0PR04CA0008.namprd04.prod.outlook.com
+ (2603:10b6:610:76::13) To DM6PR01MB5259.prod.exchangelabs.com
+ (2603:10b6:5:68::27)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.187.170.50]
-X-ClientProxiedBy: EX19D041UWB003.ant.amazon.com (10.13.139.176) To
- EX19D004ANA001.ant.amazon.com (10.37.240.138)
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6PR01MB5259:EE_|BL3PR01MB6914:EE_
+X-MS-Office365-Filtering-Correlation-Id: 05865e48-82db-438a-2587-08db7808931c
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: eITMolkTg2Dcua3e5sGCwJ+REY7+KZzzBRNx/vk+HcXWykuQzKaVtf4J3eARonit76z2ffX/v7NdFtgFf5WBQI9gaK660CrcFa1+0C6LHd6Bz73wsHJVhGNzX5Hf2c2e+5bwsboWnx2mCvQ0NPhMQGiAbaRDNoliNvUlbnwKNTXdiS8Rphh6iUSxBn1x3ptEQjUYKzKBVuukCbgOFqKMbMxM2QhgnvZTXgtGsxfyWjhRQSRqL1Bio3jZA6a5V6AUw+J7hIqea8MXQHRTtWi3Mjdky8bVyiPpxUuDwDrSNUHJoGU7U4CVd2zqxeJOM59f575mbfU4PRov+T9KcFPCDvJEh6QBBzwfAwREz8zkERORLHO1a1Yd8cic1yyPstxe+r/FCVdfmpyjFfdYPRw/Wa4OmTevL0VlvG0uoeSzK7dycpsmKhatCDUqetiFNnZKWRfwC53PYe3tR36tFIE9b0l1Ndggk6N7RO3L9IkTj1/2PvLdBh/6HK/GZu/J8AoCWp1yTLhXw5eZR/WcaJAlny4rsIcE0tSGc4+Qnrpe9jVqHqSQNDJ+v04nNDC1oSRU
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR01MB5259.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(376002)(396003)(136003)(39850400004)(366004)(451199021)(478600001)(6486002)(2906002)(54906003)(26005)(6666004)(2616005)(83380400001)(186003)(6512007)(6506007)(86362001)(41300700001)(7416002)(38100700002)(5660300002)(31696002)(4326008)(66946007)(66556008)(316002)(8936002)(66476007)(6916009)(8676002)(31686004);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?ILAUI7UOL2zifxdetgjNQqrxVLfX55z/Ye2GRPLwL0+Wzgge1+xdhpbjp3ZE?=
+ =?us-ascii?Q?UtvlCNGZV2GhbJPm1JtiFLssMnW4cP3bJPNv/v33+t58CoC89gwpAPp8jmNZ?=
+ =?us-ascii?Q?ETyqJnAlsknn7RoHc93fXbOJZfFHABRyDazvYFrYaiPqF3qXfeO328Nosohj?=
+ =?us-ascii?Q?n0U9btPBIBb2EBNUN9CuCyLsxO/RFJfHwVeDeDm0CMzHvvYZ2PNHVXetwcVw?=
+ =?us-ascii?Q?zyV+HyQ6JRMFWuw29BXlgc7E92qrGIlJO99DgFnOuUSSOXn7LtTs5A693bNE?=
+ =?us-ascii?Q?dreHzwx4gla+4+71WY8Vqtml5c5LRaz3+eoANmi+7dpCuec1rFrZLtx2F9Lu?=
+ =?us-ascii?Q?pBbcoB2Lqq40j75ghJFzMn8sd7AAeoAMvVlMt8khHgQv52W4kwbUJRBZfvqV?=
+ =?us-ascii?Q?XxbNb5SbpTsZ2F2EvkVzYAqWWV0YUrO9Zbq3NIo18jze3BnrpfnHV+Qa0MpN?=
+ =?us-ascii?Q?9rFpzHSdTkDrPYbRx6dpbrGv7G9nYnZtyxqVIvQ/GoQ5xQEVniHmQ1JVauWW?=
+ =?us-ascii?Q?az5PXcXZ0QJ4uj2quvDcAo5OCkMyJiE/qiEhHwoC19iqQ1Xv8prvGkmVJFbQ?=
+ =?us-ascii?Q?j+e7E++20dFeczRqmbXkjFKn+Svi1To6DgdylkNbzIlKlS6mfsBSC4q0MKaP?=
+ =?us-ascii?Q?hoRU45BUluwq5c0zYfvx31aXYFTxkpsruV3UoGEr4nv3qHWGToy4/DYfi/Q2?=
+ =?us-ascii?Q?S1kRxApeiieyhJhbelDOLllzTjqFqcKHc2dRw1C1sTAb7ABmtthOEXa1M2qa?=
+ =?us-ascii?Q?B2d8o1cTQ70gLFJjq2mk5z59GmrZaSfnD+u41YqcTgnYThzdQ24/6dtlgWs3?=
+ =?us-ascii?Q?ifWA2U0lXze2V7RvirOm6oe3ddrAvUowOLveHN2yfZzPPT2//XLgqF439fWT?=
+ =?us-ascii?Q?4ESc5Sj0GDPVj4e3BSRgIaz4LOS2c7cBcmusofSkJJcJXe4L7BcDfHLU20JJ?=
+ =?us-ascii?Q?1N+nLtSlwrlfo1PS3nw8n6H4N/qt2hfGwAi3/HDKXAz0o2JyTWRq258WtUfe?=
+ =?us-ascii?Q?Edp8z3l5F09fVaTMd67TV/+NWQgrHP2qY2yXTf3IcS0fKLJlGM1qaRNytolo?=
+ =?us-ascii?Q?1exdMf3Qrw1B6Dc44yXfwEFE6aF6laOvDnGsSjW4hKHtk7IqjaDVz+RR/ylh?=
+ =?us-ascii?Q?xnGRbED8MUBg0d98a403BQ7vdbPErUWW1bUGvAIo9fUHEshZxbPXxmceR5bI?=
+ =?us-ascii?Q?E2pPQL+eG4Wp7S7mnQ4cETT+9E1HpjZW5BjYa/naUCDpjyh3s5ECJ8gfBZbq?=
+ =?us-ascii?Q?Lpr60kDWpv272UzRoATPv3hzuoLTE4RLPAV/0vnR0SERCtFM5Tlpfb4XL/xu?=
+ =?us-ascii?Q?ZqDrvjGxL4/0B8gdUUmrQxqkb4iZkTXU7nIM9Nh9Mp1zVdwQDSe+ls6FhESe?=
+ =?us-ascii?Q?0T67uVAVeKKcBAQB1LUrTEh+DHIALGRP+/SKNnS3GcvctSGOrg0zU0sMh5Vu?=
+ =?us-ascii?Q?ScvJcsI9aDMc9yzIw2HQCGKiPKF+Y3y+/NMLRzPF4A4mbOUa2ZlWhg65Seq5?=
+ =?us-ascii?Q?HLn0am5VsDQJ+aZ9Fg+IwatDJXqQ3PjXv02wI7j8h5E+qw/W5Zjljms16Uto?=
+ =?us-ascii?Q?Vas0zOoGpMpobnOFsOYE7ium9UASl8ak5VgO9yIyOB+EsEVCL0wmAI2gwWsk?=
+ =?us-ascii?Q?dQ=3D=3D?=
+X-OriginatorOrg: os.amperecomputing.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 05865e48-82db-438a-2587-08db7808931c
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR01MB5259.prod.exchangelabs.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Jun 2023 18:50:42.7865
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3bc2b170-fd94-476d-b0ce-4229bdc904a7
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: jE/1tpSdATXqLcqHWc5Hbqrl+HiKpgpveJOoyxRNBKrJvwD3fLScTie2beWfoMpQwnUEb7xg3IWBa9rpNev6nq7Rh9UGa66q34rq/u8NGcA=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL3PR01MB6914
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lorenz Bauer <lmb@isovalent.com>
-Date: Wed, 28 Jun 2023 10:48:21 +0100
-> Currently the bpf_sk_assign helper in tc BPF context refuses SO_REUSEPORT
-> sockets. This means we can't use the helper to steer traffic to Envoy,
-> which configures SO_REUSEPORT on its sockets. In turn, we're blocked
-> from removing TPROXY from our setup.
-> 
-> The reason that bpf_sk_assign refuses such sockets is that the
-> bpf_sk_lookup helpers don't execute SK_REUSEPORT programs. Instead,
-> one of the reuseport sockets is selected by hash. This could cause
-> dispatch to the "wrong" socket:
-> 
->     sk = bpf_sk_lookup_tcp(...) // select SO_REUSEPORT by hash
->     bpf_sk_assign(skb, sk) // SK_REUSEPORT wasn't executed
-> 
-> Fixing this isn't as simple as invoking SK_REUSEPORT from the lookup
-> helpers unfortunately. In the tc context, L2 headers are at the start
-> of the skb, while SK_REUSEPORT expects L3 headers instead.
-> 
-> Instead, we execute the SK_REUSEPORT program when the assigned socket
-> is pulled out of the skb, further up the stack. This creates some
-> trickiness with regards to refcounting as bpf_sk_assign will put both
-> refcounted and RCU freed sockets in skb->sk. reuseport sockets are RCU
-> freed. We can infer that the sk_assigned socket is RCU freed if the
-> reuseport lookup succeeds, but convincing yourself of this fact isn't
-> straight forward. Therefore we defensively check refcounting on the
-> sk_assign sock even though it's probably not required in practice.
-> 
-> Fixes: 8e368dc72e86 ("bpf: Fix use of sk->sk_reuseport from sk_assign")
-> Fixes: cf7fbe660f2d ("bpf: Add socket assign support")
-> Co-developed-by: Daniel Borkmann <daniel@iogearbox.net>
-> Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-> Signed-off-by: Lorenz Bauer <lmb@isovalent.com>
-> Cc: Joe Stringer <joe@cilium.io>
-> Link: https://lore.kernel.org/bpf/CACAyw98+qycmpQzKupquhkxbvWK4OFyDuuLMBNROnfWMZxUWeA@mail.gmail.com/
+On Wed, 28 Jun 2023, Roman Gushchin wrote:
 
-Reviewed-by: Kuniyuki Iwashima <kuniyu@amazon.com>
+> But I wonder if we need a new flag (SLAB_MERGE?) to explicitly force merging
+> on per-slab cache basis. I believe there are some cases when slab caches can
+> be created in noticeable numbers and in those cases the memory footprint might
+> be noticeable.
 
-I left minor comments below, but this series overall looks good.
+One of the uses for merging are the kmalloc like slab cache arrays 
+created by various subsystem for their allocations. This is particularly 
+useful for small frequently used caches that seem to have similar 
+configurations. See slabinfo output below.
 
-Thanks!
+Also you are doing the tests on a 4k page systems. We prefer 64k page 
+sized systems here where the waste due to duplication of structures is 
+higher. Also the move on x86 is to go to higher page sizes (see the 
+folio approach by Matthew Wilcox) and this approach would increase the 
+memory footprint if large folio sizes are used.
+
+Moreover our system here is sensitive to cpu cache pressure given our high 
+core count which will  be caused by the increased cache footprint due to 
+not merging caches if this patch is accepted.
 
 
-> ---
->  include/net/inet6_hashtables.h | 56 ++++++++++++++++++++++++++++++++++++++----
->  include/net/inet_hashtables.h  | 49 ++++++++++++++++++++++++++++++++++--
->  include/net/sock.h             |  7 ++++--
->  include/uapi/linux/bpf.h       |  3 ---
->  net/core/filter.c              |  2 --
->  net/ipv4/udp.c                 |  8 ++++--
->  net/ipv6/udp.c                 | 10 +++++---
->  tools/include/uapi/linux/bpf.h |  3 ---
->  8 files changed, 116 insertions(+), 22 deletions(-)
-> 
-> diff --git a/include/net/inet6_hashtables.h b/include/net/inet6_hashtables.h
-> index a6722d6ef80f..7d677b89f269 100644
-> --- a/include/net/inet6_hashtables.h
-> +++ b/include/net/inet6_hashtables.h
-> @@ -103,6 +103,46 @@ static inline struct sock *__inet6_lookup(struct net *net,
->  				     daddr, hnum, dif, sdif);
->  }
->  
-> +static inline
-> +struct sock *inet6_steal_sock(struct net *net, struct sk_buff *skb, int doff,
-> +			      const struct in6_addr *saddr, const __be16 sport,
-> +			      const struct in6_addr *daddr, const __be16 dport,
-> +			      bool *refcounted, inet6_ehashfn_t *ehashfn)
-> +{
-> +	struct sock *sk, *reuse_sk;
-> +	bool prefetched;
-> +
-> +	sk = skb_steal_sock(skb, refcounted, &prefetched);
-> +	if (!sk)
-> +		return NULL;
-> +
-> +	if (!prefetched)
-> +		return sk;
-> +
-> +	if (sk->sk_protocol == IPPROTO_TCP) {
-> +		if (sk->sk_state != TCP_LISTEN)
-> +			return sk;
-> +	} else if (sk->sk_protocol == IPPROTO_UDP) {
-> +		if (sk->sk_state != TCP_CLOSE)
-> +			return sk;
-> +	} else {
-> +		return sk;
-> +	}
-> +
-> +	reuse_sk = inet6_lookup_reuseport(net, sk, skb, doff,
-> +					  saddr, sport, daddr, ntohs(dport),
-> +					  ehashfn);
-> +	if (!reuse_sk || reuse_sk == sk)
+Here are the aliases on my Ampere Altra system:
 
-nit: compiler might have optimised though, given here is the fast path,
-we can save reuse_sk == sk check.
+root@eng08sys-r113:/home/cl/linux/tools/mm# ./slabinfo -a
 
+:0000024     <- audit_buffer lsm_file_cache
+:0000032     <- sd_ext_cdb ext4_io_end_vec fsnotify_mark_connector lsm_inode_cache xfs_refc_intent numa_policy
+:0000040     <- xfs_extfree_intent ext4_system_zone
+:0000048     <- Acpi-Namespace shared_policy_node xfs_log_ticket xfs_ifork ext4_bio_post_read_ctx ksm_mm_slot
+:0000056     <- ftrace_event_field Acpi-Parse xfs_defer_pending file_lock_ctx
+:0000064     <- fanotify_path_event ksm_stable_node xfs_rmap_intent jbd2_inode ksm_rmap_item io dmaengine-unmap-2 zswap_entry xfs_bmap_intent iommu_iova vmap_area
+:0000072     <- fanotify_perm_event fanotify_fid_event Acpi-Operand
+:0000080     <- Acpi-ParseExt Acpi-State audit_tree_mark
+:0000088     <- xfs_attr_intent trace_event_file configfs_dir_cache kernfs_iattrs_cache blkdev_ioc
+:0000128     <- kernfs_node_cache btree_node
+:0000176     <- xfs_iul_item xfs_attrd_item xfs_cud_item xfs_bud_item xfs_rud_item
+:0000184     <- xfs_icr ip6-frags
+:0000192     <- ip6_mrt_cache ip_dst_cache aio_kiocb uid_cache inet_peer_cache bio_integrity_payload ip_mrt_cache dmaengine-unmap-16 skbuff_ext_cache
+:0000200     <- xfs_inobt_cur xfs_refcbt_cur ip4-frags
 
-> +		return sk;
-> +
-> +	/* We've chosen a new reuseport sock which is never refcounted. This
-> +	 * implies that sk also isn't refcounted.
-> +	 */
-> +	WARN_ON_ONCE(*refcounted);
-> +
-> +	return reuse_sk;
-> +}
-> +
->  static inline struct sock *__inet6_lookup_skb(struct inet_hashinfo *hashinfo,
->  					      struct sk_buff *skb, int doff,
->  					      const __be16 sport,
-> @@ -110,14 +150,20 @@ static inline struct sock *__inet6_lookup_skb(struct inet_hashinfo *hashinfo,
->  					      int iif, int sdif,
->  					      bool *refcounted)
->  {
-> -	struct sock *sk = skb_steal_sock(skb, refcounted);
-> -
-> +	struct net *net = dev_net(skb_dst(skb)->dev);
-> +	const struct ipv6hdr *ip6h = ipv6_hdr(skb);
-> +	struct sock *sk;
-> +
-> +	sk = inet6_steal_sock(net, skb, doff, &ip6h->saddr, sport, &ip6h->daddr, dport,
-> +			      refcounted, inet6_ehashfn);
-> +	if (IS_ERR(sk))
-> +		return NULL;
->  	if (sk)
->  		return sk;
->  
-> -	return __inet6_lookup(dev_net(skb_dst(skb)->dev), hashinfo, skb,
-> -			      doff, &ipv6_hdr(skb)->saddr, sport,
-> -			      &ipv6_hdr(skb)->daddr, ntohs(dport),
-> +	return __inet6_lookup(net, hashinfo, skb,
-> +			      doff, &ip6h->saddr, sport,
-> +			      &ip6h->daddr, ntohs(dport),
->  			      iif, sdif, refcounted);
->  }
->  
-> diff --git a/include/net/inet_hashtables.h b/include/net/inet_hashtables.h
-> index c0532cc7587f..c6ae0af12ce0 100644
-> --- a/include/net/inet_hashtables.h
-> +++ b/include/net/inet_hashtables.h
-> @@ -449,6 +449,46 @@ static inline struct sock *inet_lookup(struct net *net,
->  	return sk;
->  }
->  
-> +static inline
-> +struct sock *inet_steal_sock(struct net *net, struct sk_buff *skb, int doff,
-> +			     const __be32 saddr, const __be16 sport,
-> +			     const __be32 daddr, const __be16 dport,
-> +			     bool *refcounted, inet_ehashfn_t *ehashfn)
-> +{
-> +	struct sock *sk, *reuse_sk;
-> +	bool prefetched;
-> +
-> +	sk = skb_steal_sock(skb, refcounted, &prefetched);
-> +	if (!sk)
-> +		return NULL;
-> +
-> +	if (!prefetched)
-> +		return sk;
-> +
-> +	if (sk->sk_protocol == IPPROTO_TCP) {
-> +		if (sk->sk_state != TCP_LISTEN)
-> +			return sk;
-> +	} else if (sk->sk_protocol == IPPROTO_UDP) {
-> +		if (sk->sk_state != TCP_CLOSE)
-> +			return sk;
-> +	} else {
-> +		return sk;
-> +	}
-> +
-> +	reuse_sk = inet_lookup_reuseport(net, sk, skb, doff,
-> +					 saddr, sport, daddr, ntohs(dport),
-> +					 ehashfn);
-> +	if (!reuse_sk || reuse_sk == sk)
-
-Same here.
-
-
-> +		return sk;
-> +
-> +	/* We've chosen a new reuseport sock which is never refcounted. This
-> +	 * implies that sk also isn't refcounted.
-> +	 */
-> +	WARN_ON_ONCE(*refcounted);
-> +
-> +	return reuse_sk;
-> +}
-> +
->  static inline struct sock *__inet_lookup_skb(struct inet_hashinfo *hashinfo,
->  					     struct sk_buff *skb,
->  					     int doff,
-> @@ -457,13 +497,18 @@ static inline struct sock *__inet_lookup_skb(struct inet_hashinfo *hashinfo,
->  					     const int sdif,
->  					     bool *refcounted)
->  {
-> -	struct sock *sk = skb_steal_sock(skb, refcounted);
-> +	struct net *net = dev_net(skb_dst(skb)->dev);
->  	const struct iphdr *iph = ip_hdr(skb);
-> +	struct sock *sk;
->  
-> +	sk = inet_steal_sock(net, skb, doff, iph->saddr, sport, iph->daddr, dport,
-> +			     refcounted, inet_ehashfn);
-> +	if (IS_ERR(sk))
-> +		return NULL;
->  	if (sk)
->  		return sk;
->  
-> -	return __inet_lookup(dev_net(skb_dst(skb)->dev), hashinfo, skb,
-> +	return __inet_lookup(net, hashinfo, skb,
->  			     doff, iph->saddr, sport,
->  			     iph->daddr, dport, inet_iif(skb), sdif,
->  			     refcounted);
-> diff --git a/include/net/sock.h b/include/net/sock.h
-> index 656ea89f60ff..5645570c2a64 100644
-> --- a/include/net/sock.h
-> +++ b/include/net/sock.h
-> @@ -2806,20 +2806,23 @@ sk_is_refcounted(struct sock *sk)
->   * skb_steal_sock - steal a socket from an sk_buff
->   * @skb: sk_buff to steal the socket from
->   * @refcounted: is set to true if the socket is reference-counted
-> + * @prefetched: is set to true if the socket was assigned from bpf
->   */
->  static inline struct sock *
-> -skb_steal_sock(struct sk_buff *skb, bool *refcounted)
-> +skb_steal_sock(struct sk_buff *skb, bool *refcounted, bool *prefetched)
->  {
->  	if (skb->sk) {
->  		struct sock *sk = skb->sk;
->  
->  		*refcounted = true;
-> -		if (skb_sk_is_prefetched(skb))
-> +		*prefetched = skb_sk_is_prefetched(skb);
-> +		if (*prefetched)
->  			*refcounted = sk_is_refcounted(sk);
->  		skb->destructor = NULL;
->  		skb->sk = NULL;
->  		return sk;
->  	}
-> +	*prefetched = false;
->  	*refcounted = false;
->  	return NULL;
->  }
-> diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-> index a7b5e91dd768..d6fb6f43b0f3 100644
-> --- a/include/uapi/linux/bpf.h
-> +++ b/include/uapi/linux/bpf.h
-> @@ -4158,9 +4158,6 @@ union bpf_attr {
->   *		**-EOPNOTSUPP** if the operation is not supported, for example
->   *		a call from outside of TC ingress.
->   *
-> - *		**-ESOCKTNOSUPPORT** if the socket type is not supported
-> - *		(reuseport).
-> - *
->   * long bpf_sk_assign(struct bpf_sk_lookup *ctx, struct bpf_sock *sk, u64 flags)
->   *	Description
->   *		Helper is overloaded depending on BPF program type. This
-> diff --git a/net/core/filter.c b/net/core/filter.c
-> index 428df050d021..d4be0a1d754c 100644
-> --- a/net/core/filter.c
-> +++ b/net/core/filter.c
-> @@ -7278,8 +7278,6 @@ BPF_CALL_3(bpf_sk_assign, struct sk_buff *, skb, struct sock *, sk, u64, flags)
->  		return -EOPNOTSUPP;
->  	if (unlikely(dev_net(skb->dev) != sock_net(sk)))
->  		return -ENETUNREACH;
-> -	if (unlikely(sk_fullsock(sk) && sk->sk_reuseport))
-> -		return -ESOCKTNOSUPPORT;
->  	if (sk_is_refcounted(sk) &&
->  	    unlikely(!refcount_inc_not_zero(&sk->sk_refcnt)))
->  		return -ENOENT;
-> diff --git a/net/ipv4/udp.c b/net/ipv4/udp.c
-> index eb79268f216d..b256f1f73b4d 100644
-> --- a/net/ipv4/udp.c
-> +++ b/net/ipv4/udp.c
-> @@ -2388,7 +2388,11 @@ int __udp4_lib_rcv(struct sk_buff *skb, struct udp_table *udptable,
->  	if (udp4_csum_init(skb, uh, proto))
->  		goto csum_error;
->  
-> -	sk = skb_steal_sock(skb, &refcounted);
-> +	sk = inet_steal_sock(net, skb, sizeof(struct udphdr), saddr, uh->source, daddr, uh->dest,
-> +			     &refcounted, udp_ehashfn);
-> +	if (IS_ERR(sk))
-> +		goto no_sk;
-> +
->  	if (sk) {
->  		struct dst_entry *dst = skb_dst(skb);
->  		int ret;
-> @@ -2409,7 +2413,7 @@ int __udp4_lib_rcv(struct sk_buff *skb, struct udp_table *udptable,
->  	sk = __udp4_lib_lookup_skb(skb, uh->source, uh->dest, udptable);
->  	if (sk)
->  		return udp_unicast_rcv_skb(sk, skb, uh);
-> -
-> +no_sk:
->  	if (!xfrm4_policy_check(NULL, XFRM_POLICY_IN, skb))
->  		goto drop;
->  	nf_reset_ct(skb);
-> diff --git a/net/ipv6/udp.c b/net/ipv6/udp.c
-> index 8a6d94cabee0..2d4c05bc322a 100644
-> --- a/net/ipv6/udp.c
-> +++ b/net/ipv6/udp.c
-> @@ -923,9 +923,9 @@ int __udp6_lib_rcv(struct sk_buff *skb, struct udp_table *udptable,
->  	enum skb_drop_reason reason = SKB_DROP_REASON_NOT_SPECIFIED;
->  	const struct in6_addr *saddr, *daddr;
->  	struct net *net = dev_net(skb->dev);
-> +	bool refcounted;
->  	struct udphdr *uh;
->  	struct sock *sk;
-> -	bool refcounted;
->  	u32 ulen = 0;
->  
->  	if (!pskb_may_pull(skb, sizeof(struct udphdr)))
-> @@ -962,7 +962,11 @@ int __udp6_lib_rcv(struct sk_buff *skb, struct udp_table *udptable,
->  		goto csum_error;
->  
->  	/* Check if the socket is already available, e.g. due to early demux */
-> -	sk = skb_steal_sock(skb, &refcounted);
-> +	sk = inet6_steal_sock(net, skb, sizeof(struct udphdr), saddr, uh->source, daddr, uh->dest,
-> +			      &refcounted, udp6_ehashfn);
-> +	if (IS_ERR(sk))
-> +		goto no_sk;
-> +
->  	if (sk) {
->  		struct dst_entry *dst = skb_dst(skb);
->  		int ret;
-> @@ -996,7 +1000,7 @@ int __udp6_lib_rcv(struct sk_buff *skb, struct udp_table *udptable,
->  			goto report_csum_error;
->  		return udp6_unicast_rcv_skb(sk, skb, uh);
->  	}
-> -
-> +no_sk:
->  	reason = SKB_DROP_REASON_NO_SOCKET;
->  
->  	if (!uh->check)
-> diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
-> index a7b5e91dd768..d6fb6f43b0f3 100644
-> --- a/tools/include/uapi/linux/bpf.h
-> +++ b/tools/include/uapi/linux/bpf.h
-> @@ -4158,9 +4158,6 @@ union bpf_attr {
->   *		**-EOPNOTSUPP** if the operation is not supported, for example
->   *		a call from outside of TC ingress.
->   *
-> - *		**-ESOCKTNOSUPPORT** if the socket type is not supported
-> - *		(reuseport).
-> - *
->   * long bpf_sk_assign(struct bpf_sk_lookup *ctx, struct bpf_sock *sk, u64 flags)
->   *	Description
->   *		Helper is overloaded depending on BPF program type. This
-> 
-> -- 
-> 2.40.1
