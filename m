@@ -2,140 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76B16741B9D
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 00:01:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EE30741BA4
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 00:08:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230353AbjF1WBt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 18:01:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41286 "EHLO
+        id S231536AbjF1WH6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 18:07:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230243AbjF1WBp (ORCPT
+        with ESMTP id S229972AbjF1WH4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 18:01:45 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFF27107
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 15:01:43 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1687989702;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=JlPsTklnnnm336I84+lRNtdD8MZIAjpKQwAL33RrC/w=;
-        b=sAyPGH1N4pNf9UEOKZvn7yuH/1KRvFtkyyaApk2QwcEG5oHLCo5f10RKmpCky2SmhplW+M
-        hoFbiM/5WoZ7UGKPwyCiZFzUfWW7sAsV1XDJBB/7X5ovLVH7oBkT4+c6iFASZntNZpwJsx
-        9YSFIMO/7P1LlZK2tGK10+fZmnWxAtlLdmrHPiNnaadK3uP9NNCrqgwwWHjgsXhCzHfOFi
-        7/zsV3T9mG5jJn1Y6b24WJfmXUK5z8IEc+UjUupjtKAGBpZZuLEUzS86kIVj5qdHBwzKjZ
-        NfZpo8IHW6MSW4WBRjmKsXllUMASxu6ClBvyq07EpTQuXs6dWJ88s2JYXn9aXg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1687989702;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=JlPsTklnnnm336I84+lRNtdD8MZIAjpKQwAL33RrC/w=;
-        b=+pJqfi4H7+8CUs2D8ZVkkYvaH8ya5QnNA3YBfTv3vRZ1KPfamcqHyNTCfEeTuPLd6P7BXQ
-        GVeWnOR414OBDWBA==
-To:     Vincent Guittot <vincent.guittot@linaro.org>
-Cc:     Xiongfeng Wang <wangxiongfeng2@huawei.com>, vschneid@redhat.com,
-        Phil Auld <pauld@redhat.com>, vdonnefort@google.com,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Wei Li <liwei391@huawei.com>,
-        "liaoyu (E)" <liaoyu15@huawei.com>, zhangqiao22@huawei.com,
-        Peter Zijlstra <peterz@infradead.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Ingo Molnar <mingo@kernel.org>
-Subject: Re: [Question] report a race condition between CPU hotplug state
- machine and hrtimer 'sched_cfs_period_timer' for cfs bandwidth throttling
-In-Reply-To: <CAKfTPtAzTy4KPrBNRA4cMeTonxn5EKLEAg0b9iH5ecJkAMEStw@mail.gmail.com>
-References: <8e785777-03aa-99e1-d20e-e956f5685be6@huawei.com>
- <87mt18it1y.ffs@tglx> <68baeac9-9fa7-5594-b5e7-4baf8ac86b77@huawei.com>
- <ba352e83-b8b1-d900-9c1f-56b8c8a8b8fb@huawei.com>
- <CAKfTPtBoe_jRn-EMsQxssQ4BcveT+Qcd+GmsRbQEXQDGfzFOMg@mail.gmail.com>
- <875y774wvp.ffs@tglx>
- <CAKfTPtAzTy4KPrBNRA4cMeTonxn5EKLEAg0b9iH5ecJkAMEStw@mail.gmail.com>
-Date:   Thu, 29 Jun 2023 00:01:41 +0200
-Message-ID: <87pm5f2qm2.ffs@tglx>
+        Wed, 28 Jun 2023 18:07:56 -0400
+Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3B212110
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 15:07:53 -0700 (PDT)
+Received: by mail-lj1-x236.google.com with SMTP id 38308e7fff4ca-2b69f71a7easo402341fa.1
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 15:07:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google; t=1687990072; x=1690582072;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=LafiJyNgbZmNNbdJGp4ZrkLO2f20OEreitolc2Mh/lo=;
+        b=PomxwqaIy6aeq7DBIgY2sb7PAqKolGDUIHD3x9dj1dacOIyh0CSbgclEIJEmA1lvIl
+         x32ck3Ce4ADhlFZkkwNqmAsPdevAKnIYHgWiyKhBDkhwdkmsf5h6R7LzByP0s9/oKdw6
+         3w6ZG5ThvR5Je9Nc0fw5+W82iGNVOFNkIeJu0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687990072; x=1690582072;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=LafiJyNgbZmNNbdJGp4ZrkLO2f20OEreitolc2Mh/lo=;
+        b=USiYoS7fHG+vbryrztRgWIymeg43bjvZSVDCGjKbY5DkTly2L/2bF/ZN0is9PBnOSP
+         eaeujsTzut+Xxq0ysyMc15GZ4w+Zj4dugf3pULJx5S3bXUYrsxAlAMZSZMM0NsWnPnb/
+         NY9iXaymoT494nIN7HbMCwr7KrQi6uKkTMw28qyvYIRtM16H7I8HbHkmr0RG4dRzxP9x
+         sYPLhqQeLVEatAqanGEtzx19NUXkkeisXMaweSfOJnhZ3ug3RA0IUz+B1YfjgZZGUk7n
+         V98qN5pAufd4+PBONh24F7r0CBetgD3wiX6d1ubcigoxUf9CMSZqKRlDAPA+TBqa3gOR
+         DZBA==
+X-Gm-Message-State: AC+VfDw4pij3TTUNOBgv79GYdBiY905qZ1RPRLp3rCKqCcEs5Tl2g562
+        pSU4RVCBuYVk9DkTC1TLy0cwP6GCH+TOCBAaNxYdUCek
+X-Google-Smtp-Source: ACHHUZ4an7LWGVXIAy9iF0KII8WFsjRZvihKmFvJ4G2SWCfhgwbQ2S87tol6LB4mGXCk+7EYyiKfiQ==
+X-Received: by 2002:a05:651c:14f:b0:2b6:a077:845 with SMTP id c15-20020a05651c014f00b002b6a0770845mr6791917ljd.5.1687990071870;
+        Wed, 28 Jun 2023 15:07:51 -0700 (PDT)
+Received: from mail-lf1-f45.google.com (mail-lf1-f45.google.com. [209.85.167.45])
+        by smtp.gmail.com with ESMTPSA id y12-20020a2e7d0c000000b002b4791745b6sm2296823ljc.109.2023.06.28.15.07.50
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 28 Jun 2023 15:07:51 -0700 (PDT)
+Received: by mail-lf1-f45.google.com with SMTP id 2adb3069b0e04-4fb94b1423eso50665e87.1
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 15:07:50 -0700 (PDT)
+X-Received: by 2002:aa7:c947:0:b0:51a:2c81:72ee with SMTP id
+ h7-20020aa7c947000000b0051a2c8172eemr23606011edt.20.1687990050285; Wed, 28
+ Jun 2023 15:07:30 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <ZHTCK2_1pF61yWIr@hovoldconsulting.com> <CAHk-=wg7ihygotpO9x5a6QJO5oAom9o91==L_Kx-gUHvRYuXiQ@mail.gmail.com>
+ <ZHYitt7P7W+8ZlSB@bombadil.infradead.org> <499e30cc-d015-8353-1364-50d17da58f47@redhat.com>
+ <ZHd8bLPY4OQCb/Z5@bombadil.infradead.org> <ba60bca6-b682-4c27-3c54-2512b6f16151@redhat.com>
+ <ZHoTFDkPIgglW0sU@bombadil.infradead.org> <fa3f1a1f-edc6-f13b-cc84-f3264b03b0b1@redhat.com>
+ <ZH38lpTHZ/RISC1v@bombadil.infradead.org> <ZH3/KVCHhX4D4yh9@bombadil.infradead.org>
+ <ZJyBhv6yrAfYvMh5@bombadil.infradead.org> <CAHk-=wiSRTEOgiDA5qUTPGcw=Fbk9Ou2i97kfSBcj3pey3X=fQ@mail.gmail.com>
+In-Reply-To: <CAHk-=wiSRTEOgiDA5qUTPGcw=Fbk9Ou2i97kfSBcj3pey3X=fQ@mail.gmail.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Wed, 28 Jun 2023 15:07:12 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wgPz4Fj9M_h7sRSHAK9QeJiTFaYMWX3fDyZ-Bj41HftmA@mail.gmail.com>
+Message-ID: <CAHk-=wgPz4Fj9M_h7sRSHAK9QeJiTFaYMWX3fDyZ-Bj41HftmA@mail.gmail.com>
+Subject: Re: [PATCH 2/2] module: add support to avoid duplicates early on load
+To:     Luis Chamberlain <mcgrof@kernel.org>
+Cc:     David Hildenbrand <david@redhat.com>, song@kernel.org,
+        Johan Hovold <johan@kernel.org>,
+        Lucas De Marchi <lucas.demarchi@intel.com>,
+        Petr Pavlu <petr.pavlu@suse.com>, gregkh@linuxfoundation.org,
+        rafael@kernel.org, lucas.de.marchi@gmail.com,
+        christophe.leroy@csgroup.eu, peterz@infradead.org, rppt@kernel.org,
+        dave@stgolabs.net, willy@infradead.org, vbabka@suse.cz,
+        mhocko@suse.com, dave.hansen@linux.intel.com,
+        colin.i.king@gmail.com, jim.cromie@gmail.com,
+        catalin.marinas@arm.com, jbaron@akamai.com,
+        rick.p.edgecombe@intel.com, yujie.liu@intel.com,
+        tglx@linutronix.de, hch@lst.de, patches@lists.linux.dev,
+        linux-modules@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, pmladek@suse.com, prarit@redhat.com,
+        lennart@poettering.net
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 28 2023 at 14:35, Vincent Guittot wrote:
-> On Wed, 28 Jun 2023 at 14:03, Thomas Gleixner <tglx@linutronix.de> wrote:
->> No, because this is fundamentally wrong.
->>
->> If the CPU is on the way out, then the scheduler hotplug machinery
->> has to handle the period timer so that the problem Xiongfeng analyzed
->> does not happen in the first place.
+On Wed, 28 Jun 2023 at 13:14, Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
 >
-> But the hrtimer was enqueued before it starts to offline the cpu
+> In other areas, I may send out patches, but I don't feel like I'm a
+> maintainer, so I then think that "the real maintainer can decide if
+> these patches are good or not".
 
-It does not really matter when it was enqueued. The important point is
-that it was enqueued on that outgoing CPU for whatever reason.
+Anyway, since I clearly didn't communicate clearly that I was throwing
+the patch over to you, let me go and find it and just apply it myself.
 
-> Then, hrtimers_dead_cpu should take care of migrating the hrtimer out
-> of the outgoing cpu but :
-> - it must run on another target cpu to migrate the hrtimer.
-> - it runs in the context of the caller which can be throttled.
-
-Sure. I completely understand the problem. The hrtimer hotplug callback
-does not run because the task is stuck and waits for the timer to
-expire. Circular dependency.
-
->> sched_cpu_wait_empty() would be the obvious place to cleanup armed CFS
->> timers, but let me look into whether we can migrate hrtimers early in
->> general.
->
-> but for that we must check if the timer is enqueued on the outgoing
-> cpu and we then need to choose a target cpu.
-
-You're right. I somehow assumed that cfs knows where it queued stuff,
-but obviously it does not.
-
-I think we can avoid all that by simply taking that user space task out
-of the picture completely, which avoids debating whether there are other
-possible weird conditions to consider alltogether.
-
-Something like the untested below should just work.
-
-Thanks,
-
-        tglx
----
---- a/kernel/cpu.c
-+++ b/kernel/cpu.c
-@@ -1490,6 +1490,13 @@ static int cpu_down(unsigned int cpu, en
- 	return err;
- }
- 
-+static long __cpu_device_down(void *arg)
-+{
-+	struct device *dev = arg;
-+
-+	return cpu_down(dev->id, CPUHP_OFFLINE);
-+}
-+
- /**
-  * cpu_device_down - Bring down a cpu device
-  * @dev: Pointer to the cpu device to offline
-@@ -1502,7 +1509,12 @@ static int cpu_down(unsigned int cpu, en
-  */
- int cpu_device_down(struct device *dev)
- {
--	return cpu_down(dev->id, CPUHP_OFFLINE);
-+	unsigned int cpu = cpumask_any_but(cpu_online_mask, dev->id);
-+
-+	if (cpu >= nr_cpu_ids)
-+		return -EBUSY;
-+
-+	return work_on_cpu(cpu, __cpu_device_down, dev);
- }
- 
- int remove_cpu(unsigned int cpu)
+           Linus
