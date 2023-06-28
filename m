@@ -2,221 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79ED47418B5
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 21:11:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA9337418C0
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 21:17:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230507AbjF1TK6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 15:10:58 -0400
-Received: from smtp-out1.suse.de ([195.135.220.28]:59678 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229501AbjF1TKy (ORCPT
+        id S231811AbjF1TQe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 15:16:34 -0400
+Received: from mx0b-0031df01.pphosted.com ([205.220.180.131]:37622 "EHLO
+        mx0b-0031df01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229622AbjF1TQc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 15:10:54 -0400
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id E56BD21861;
-        Wed, 28 Jun 2023 19:10:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1687979452; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=y163GLXlIY7qQsdU/MbbES2r1FokRyWxT2xQc4IuSco=;
-        b=17CHUniKf0kpKinjDite2jRJXssHfqK40e1/swrE7qF5cXCkgD2qvey1hwhZU8oG00/s0/
-        uyLuQgxHC/ZJ7AD0LS7wn6ws8zEfb4d2MXD89ZLYY0sOLqvdpaySzF2DjU2Zww9LQ+8KtF
-        GmviuAoMpLFTGt0XuYt/dGdbNIU2p+k=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1687979452;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=y163GLXlIY7qQsdU/MbbES2r1FokRyWxT2xQc4IuSco=;
-        b=IGpxo9K3rNcAG0ewnJPK+dXjMJIukTj3HK8YG5HtQCL5GCwttnChcPm7gjQoiYCDkZfZpV
-        ixTbk3vzz2h4oNDw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id D6DF0138EF;
-        Wed, 28 Jun 2023 19:10:52 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id /hEmNLyFnGRzIQAAMHmgww
-        (envelope-from <dwagner@suse.de>); Wed, 28 Jun 2023 19:10:52 +0000
-Date:   Wed, 28 Jun 2023 21:10:52 +0200
-From:   Daniel Wagner <dwagner@suse.de>
-To:     linux-nvme@lists.infradead.org
-Cc:     linux-kernel@vger.kernel.org, linux-block@vger.kernel.org,
-        Chaitanya Kulkarni <kch@nvidia.com>,
-        Shin'ichiro Kawasaki <shinichiro@wdc.com>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        Hannes Reinecke <hare@suse.de>,
-        James Smart <jsmart2021@gmail.com>
-Subject: Re: [PATCH blktests v2 2/3] nvme/rc: Avoid triggering host nvme-cli
- autoconnect
-Message-ID: <edoiq74rpu6qejs6m3dsvtp73ypjixafp6dsncg7kga7n4uwdr@xc7mgaerwqbk>
-References: <20230628151623.11340-1-dwagner@suse.de>
- <20230628151623.11340-3-dwagner@suse.de>
+        Wed, 28 Jun 2023 15:16:32 -0400
+Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35SIWEEx005881;
+        Wed, 28 Jun 2023 19:16:22 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=qcppdkim1;
+ bh=FQwzeHmbIM0Euxm6oEsZxszzIMDVVE6jcsQBFWvDU8s=;
+ b=C/135k2Y6pKLmmNhUc5Oi9I95FAYMd3ReWtv+Iw86I+TYjRGrNVrN5IAAPi9It5JTSxh
+ KYU9O+G9qGCKT6iZ7mN2OZ1g/smeS0rAFubf/+ktNsJUiNm4Okpri3Mbll116v4imJf6
+ i40r8GrqDFf9V89PsFQF6UC1ATkh0T4sLC7DX6cfOQ+fZgOmrc4qRL6ABVL5/H+8U1FI
+ 6r83Ozs3N8l0eq/Sv71BG2XRi7gGEJrQ1F8BqT5CJWp+j4j254sEJYNyIFp33H2+wVPo
+ gUuSI9QedoEaYx8vTyXTdVmhjfEFduhLUoNsMcb6Gv+ivUfj7fVNUVi/aIEFEdUw2HOo OA== 
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rg7x3tf9c-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 28 Jun 2023 19:16:22 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35SJGLIg016766
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 28 Jun 2023 19:16:21 GMT
+Received: from jhugo-lnx.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.7; Wed, 28 Jun 2023 12:16:19 -0700
+From:   Jeffrey Hugo <quic_jhugo@quicinc.com>
+To:     <quic_subashab@quicinc.com>, <quic_stranche@quicinc.com>,
+        <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+        <pabeni@redhat.com>, <corbet@lwn.net>, <andersson@kernel.org>
+CC:     <netdev@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        Jeffrey Hugo <quic_jhugo@quicinc.com>
+Subject: [PATCH] docs: networking: Update codeaurora references for rmnet
+Date:   Wed, 28 Jun 2023 13:16:06 -0600
+Message-ID: <20230628191606.25483-1-quic_jhugo@quicinc.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230628151623.11340-3-dwagner@suse.de>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: JdkZxa_cpm4G8N6Qmh1659DTuz0zTIEv
+X-Proofpoint-GUID: JdkZxa_cpm4G8N6Qmh1659DTuz0zTIEv
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-06-28_13,2023-06-27_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 impostorscore=0
+ spamscore=0 priorityscore=1501 suspectscore=0 malwarescore=0 mlxscore=0
+ adultscore=0 mlxlogscore=999 lowpriorityscore=0 phishscore=0 bulkscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2305260000
+ definitions=main-2306280168
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 28, 2023 at 05:16:22PM +0200, Daniel Wagner wrote:
-> When the host has enabled the udev/systemd autoconnect services for the
-> fc transport it interacts with blktests and make tests break.
-> 
-> nvme-cli learned to ignore connects attemps when using the --context
-> command line option paired with a volatile configuration. Thus we can
-> mark all the resources created by blktests and avoid any interaction
-> with the systemd autoconnect scripts.
-> 
-> Only enabled this for the fc transport.
-> 
-> Signed-off-by: Daniel Wagner <dwagner@suse.de>
-> ---
->  tests/nvme/rc | 81 ++++++++++++++++++++++++++++++++++++++++++++-------
->  1 file changed, 71 insertions(+), 10 deletions(-)
-> 
-> diff --git a/tests/nvme/rc b/tests/nvme/rc
-> index 191f3e2e0c43..06d98f46b471 100644
-> --- a/tests/nvme/rc
-> +++ b/tests/nvme/rc
-> @@ -14,8 +14,8 @@ def_remote_wwnn="0x10001100aa000001"
->  def_remote_wwpn="0x20001100aa000001"
->  def_local_wwnn="0x10001100aa000002"
->  def_local_wwpn="0x20001100aa000002"
-> -def_hostnqn="$(cat /etc/nvme/hostnqn 2> /dev/null)"
-> -def_hostid="$(cat /etc/nvme/hostid 2> /dev/null)"
-> +def_hostnqn="nqn.2014-08.org.nvmexpress:uuid:242d4a24-2484-4a80-8234-d0169409c5e8"
-> +def_hostid="242d4a24-2484-4a80-8234-d0169409c5e8"
->  nvme_trtype=${nvme_trtype:-"loop"}
->  nvme_img_size=${nvme_img_size:-"1G"}
->  nvme_num_iter=${nvme_num_iter:-"1000"}
-> @@ -161,6 +161,57 @@ _nvme_calc_rand_io_size() {
->  	echo "${io_size_kb}k"
->  }
->  
-> +_have_nvme_cli_context() {
-> +	# ignore all non-fc transports
-> +	if [[ "${nvme_trtype}" == "fc" ]] ||
+source.codeaurora.org is no longer accessible and so the reference link
+in the documentation is not useful.  The content was mirrored over to
+Code Linaro so lets update the references to point there instead.
 
-This should be !=, forgot to merge a fixup to this patch.
+Signed-off-by: Jeffrey Hugo <quic_jhugo@quicinc.com>
+---
+ .../networking/device_drivers/cellular/qualcomm/rmnet.rst     | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-> +	   ! nvme connect --help 2>&1 | grep -q -- '--context=<STR>' > /dev/null; then
-> +		    return 1
-> +	fi
-> +	return 0
-> +}
-> +
-> +_setup_nvme_cli() {
-> +	local local_wwnn="${1}"
-> +	local local_wwpn="${2}"
-> +	local remote_wwnn="${3}"
-> +	local remote_wwpn="${4}"
-> +
-> +	if ! _have_nvme_cli_context; then
-> +		return
-> +	fi
-> +
-> +	mkdir -p /run/nvme
-> +	cat >> /run/nvme/blktests.json <<-EOF
-> +	[
-> +	  {
-> +	    "hostnqn": "${def_hostnqn}",
-> +	    "hostid": "${def_hostid}",
-> +	    "subsystems": [
-> +	      {
-> +	        "application": "blktests",
-> +	        "nqn": "blktests-subsystem-1",
-> +	        "ports": [
-> +	          {
-> +	            "transport": "fc",
-> +	            "traddr": "nn-${remote_wwnn}:pn-${remote_wwpn}",
-> +	            "host_traddr": "nn-${local_wwnn}:pn-${local_wwpn}"
-> +	          }
-> +	        ]
-> +	      }
-> +	    ]
-> +	  }
-> +	]
-> +	EOF
-> +}
-> +
-> +_cleanup_nvme_cli() {
-> +	if ! _have_nvme_cli_context; then
-> +		return
-> +	fi
-> +
-> +	rm -f /run/nvme/blktests.json
-> +}
-> +
->  _nvme_fcloop_add_rport() {
->  	local local_wwnn="$1"
->  	local local_wwpn="$2"
-> @@ -193,6 +244,9 @@ _setup_fcloop() {
->  	local remote_wwnn="${3:-$def_remote_wwnn}"
->  	local remote_wwpn="${4:-$def_remote_wwpn}"
->  
-> +	_setup_nvme_cli "${local_wwnn}" "${local_wwpn}" \
-> +			"${remote_wwnn}" "${remote_wwpn}"
-> +
->  	_nvme_fcloop_add_tport "${remote_wwnn}" "${remote_wwpn}"
->  	_nvme_fcloop_add_lport "${local_wwnn}" "${local_wwpn}"
->  	_nvme_fcloop_add_rport "${local_wwnn}" "${local_wwpn}" \
-> @@ -235,6 +289,8 @@ _cleanup_fcloop() {
->  	_nvme_fcloop_del_lport "${local_wwnn}" "${local_wwpn}"
->  	_nvme_fcloop_del_rport "${local_wwnn}" "${local_wwpn}" \
->  			       "${remote_wwnn}" "${remote_wwpn}"
-> +
-> +	_cleanup_nvme_cli
->  }
->  
->  _cleanup_nvmet() {
-> @@ -436,18 +492,18 @@ _nvme_connect_subsys() {
->  	trtype="$1"
->  	subsysnqn="$2"
->  
-> -	ARGS=(-t "${trtype}" -n "${subsysnqn}")
-> +	ARGS=(-t "${trtype}"
-> +	      -n "${subsysnqn}"
-> +	      --hostnqn="${hostnqn}"
-> +	      --hostid="${hostid}")
-> +	if _have_nvme_cli_context; then
-> +		ARGS+=(--context="blktests")
-> +	fi
->  	if [[ "${trtype}" == "fc" ]] ; then
->  		ARGS+=(-a "${traddr}" -w "${host_traddr}")
->  	elif [[ "${trtype}" != "loop" ]]; then
->  		ARGS+=(-a "${traddr}" -s "${trsvcid}")
->  	fi
-> -	if [[ "${hostnqn}" != "$def_hostnqn" ]]; then
-> -		ARGS+=(--hostnqn="${hostnqn}")
-> -	fi
-> -	if [[ "${hostid}" != "$def_hostid" ]]; then
-> -		ARGS+=(--hostid="${hostid}")
-> -	fi
->  	if [[ -n "${hostkey}" ]]; then
->  		ARGS+=(--dhchap-secret="${hostkey}")
->  	fi
-> @@ -482,7 +538,12 @@ _nvme_discover() {
->  	local host_traddr="${3:-$def_host_traddr}"
->  	local trsvcid="${3:-$def_trsvcid}"
->  
-> -	ARGS=(-t "${trtype}")
-> +	ARGS=(-t "${trtype}"
-> +	      --hostnqn="${def_hostnqn}"
-> +	      --hostid="${def_hostid}")
-> +	if _have_nvme_cli_context; then
-> +		ARGS+=(--context="blktests")
-> +	fi
->  	if [[ "${trtype}" = "fc" ]]; then
->  		ARGS+=(-a "${traddr}" -w "${host_traddr}")
->  	elif [[ "${trtype}" != "loop" ]]; then
-> -- 
-> 2.41.0
-> 
+diff --git a/Documentation/networking/device_drivers/cellular/qualcomm/rmnet.rst b/Documentation/networking/device_drivers/cellular/qualcomm/rmnet.rst
+index 4118384cf8eb..a3d91034ef30 100644
+--- a/Documentation/networking/device_drivers/cellular/qualcomm/rmnet.rst
++++ b/Documentation/networking/device_drivers/cellular/qualcomm/rmnet.rst
+@@ -191,7 +191,7 @@ MAP header|IP Packet|Optional padding|MAP header|Command Packet|Optional pad...
+ ==========================
+ 
+ rmnet userspace configuration is done through netlink library librmnetctl
+-and command line utility rmnetcli. Utility is hosted in codeaurora forum git.
++and command line utility rmnetcli. Utility is hosted in Code Linaro git.
+ The driver uses rtnl_link_ops for communication.
+ 
+-https://source.codeaurora.org/quic/la/platform/vendor/qcom-opensource/dataservices/tree/rmnetctl
++https://git.codelinaro.org/clo/la/platform/vendor/qcom-opensource/dataservices/
+-- 
+2.40.1
+
