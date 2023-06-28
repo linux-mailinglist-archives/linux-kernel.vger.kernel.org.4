@@ -2,163 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AC5D741447
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 16:52:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3712174144B
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 16:53:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231987AbjF1Ov5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 10:51:57 -0400
-Received: from mx2.sberdevices.ru ([45.89.224.132]:53767 "EHLO
-        mx1.sberdevices.ru" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S231977AbjF1Ov3 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 10:51:29 -0400
-Received: from p-infra-ksmg-sc-msk02 (localhost [127.0.0.1])
-        by mx1.sberdevices.ru (Postfix) with ESMTP id BA890120019;
-        Wed, 28 Jun 2023 17:51:11 +0300 (MSK)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mx1.sberdevices.ru BA890120019
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1687963871;
-        bh=ijsYqbMrBgDeL0im1rxl0SGUF7eOfc45yINo+UI8MC4=;
-        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type:From;
-        b=Oe+k4MbnYaiC6F6uZRqqnKz+SRkhwtkRZ3YJ/ekh/TdOjH2aH3gBkDFjr1gETBnGC
-         fCP14LYp/96JhA6mgW2C3tbIQfEmtOgfa5a3azAY6seTm/rG8Asro4GxFlax56ZZnk
-         YM/aLipf/rrquca2rutqkoZrK3dys3RcUu8/9bCnXaOS9naoAIEEjY6SnwzsyBZAG+
-         VTZlh3nhsq4yEKTrCRd4gW/q6O9VMSdBnZpzRbdY7vnP0ZXePcK0NoPvNUGDGn+JSg
-         OkJ4LMJQEOm0l4RDlrE/0I/3JVL1RRhfqi2qE2Hb20LPitRPzGtjkK4JbUDuCk65Xk
-         RHrHyYNtEPnew==
-Received: from p-i-exch-sc-m01.sberdevices.ru (p-i-exch-sc-m01.sberdevices.ru [172.16.192.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mx1.sberdevices.ru (Postfix) with ESMTPS;
-        Wed, 28 Jun 2023 17:51:10 +0300 (MSK)
-Received: from localhost (100.64.160.123) by p-i-exch-sc-m01.sberdevices.ru
- (172.16.192.107) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.30; Wed, 28 Jun
- 2023 17:50:12 +0300
-Date:   Wed, 28 Jun 2023 17:51:10 +0300
-From:   Dmitry Rokosov <ddrokosov@sberdevices.ru>
-To:     <neil.armstrong@linaro.org>
-CC:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        <jbrunet@baylibre.com>, <mturquette@baylibre.com>,
-        <sboyd@kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <khilman@baylibre.com>,
-        <conor+dt@kernel.org>, <kernel@sberdevices.ru>,
-        <sdfw_system_team@sberdevices.ru>, <rockosov@gmail.com>,
-        <linux-amlogic@lists.infradead.org>, <linux-clk@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        Oleg Lyovin <ovlevin@sberdevices.ru>
-Subject: Re: [PATCH v1 5/6] arm64: dts: meson: a1: introduce UART_AO mux
- definitions
-Message-ID: <20230628145110.a7igezu7ts2aymkd@CAB-WSD-L081021>
-References: <20230607201641.20982-1-ddrokosov@sberdevices.ru>
- <20230607201641.20982-6-ddrokosov@sberdevices.ru>
- <CAFBinCD-5RD_iszZZRg58XqTHDEHnipJkf2aAex8MdUyh=bVCw@mail.gmail.com>
- <c41d2d9f-7ddd-160d-d455-ba4fece7ff93@linaro.org>
+        id S230315AbjF1Oxb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 10:53:31 -0400
+Received: from mga01.intel.com ([192.55.52.88]:10070 "EHLO mga01.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229987AbjF1OxF (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 28 Jun 2023 10:53:05 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1687963985; x=1719499985;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=cg7dkx2gsnXgVGaUug0ARzW7wx7R0VAqNKiR1u2VeAg=;
+  b=hfG3G3PGbOjiGqQ0nOi6eeR2mKC6Ag3YIQa+p4+wt77c3Rx5LUMEi+kW
+   Cxn+bneii5FHxYGgoRSZY0DFSsXpGLcvIifKiJ7sKT6wpLTh//prRRVJI
+   OGg2Hu4MVlrZmW/ca0YzrZY3kPeu6Hk4o4xXdW9JnlESYF9cg1csnInYt
+   ZLo+S0FbehALn0IfYg6OI7vBEyCgsTeIqSRIF695lOT5LUbyixLw7MRbO
+   75Iv/2FkfULAPIsqaohy2sfrv8LqT/46QA8PKF6k46VgVc3mXns66Hs78
+   PylNHjy0e79cgwynnzxF+JtLVqxEq5gRmYLnoGunZ1iD3t0fvx+Mlsk9z
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10755"; a="392586740"
+X-IronPort-AV: E=Sophos;i="6.01,165,1684825200"; 
+   d="scan'208";a="392586740"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2023 07:51:23 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10755"; a="752279641"
+X-IronPort-AV: E=Sophos;i="6.01,165,1684825200"; 
+   d="scan'208";a="752279641"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga001.jf.intel.com with ESMTP; 28 Jun 2023 07:51:19 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@intel.com>)
+        id 1qEWVp-000cvg-1B;
+        Wed, 28 Jun 2023 17:51:17 +0300
+Date:   Wed, 28 Jun 2023 17:51:17 +0300
+From:   Andy Shevchenko <andriy.shevchenko@intel.com>
+To:     Amadeusz =?utf-8?B?U8WCYXdpxYRza2k=?= 
+        <amadeuszx.slawinski@linux.intel.com>
+Cc:     Bjorn Helgaas <bhelgaas@google.com>,
+        Mark Brown <broonie@kernel.org>, Takashi Iwai <tiwai@suse.com>,
+        alsa-devel@alsa-project.org, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Cezary Rojewski <cezary.rojewski@intel.com>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Kai Vehmanen <kai.vehmanen@linux.intel.com>
+Subject: Re: [RFC PATCH 6/8] ASoC: Intel: avs: Update PCI ID list
+Message-ID: <ZJxI5cX6hLaBRC6w@smile.fi.intel.com>
+References: <20230628205135.517241-1-amadeuszx.slawinski@linux.intel.com>
+ <20230628205135.517241-7-amadeuszx.slawinski@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <c41d2d9f-7ddd-160d-d455-ba4fece7ff93@linaro.org>
-User-Agent: NeoMutt/20220415
-X-Originating-IP: [100.64.160.123]
-X-ClientProxiedBy: p-i-exch-sc-m01.sberdevices.ru (172.16.192.107) To
- p-i-exch-sc-m01.sberdevices.ru (172.16.192.107)
-X-KSMG-Rule-ID: 10
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Lua-Profiles: 178314 [Jun 28 2023]
-X-KSMG-AntiSpam-Version: 5.9.59.0
-X-KSMG-AntiSpam-Envelope-From: DDRokosov@sberdevices.ru
-X-KSMG-AntiSpam-Rate: 0
-X-KSMG-AntiSpam-Status: not_detected
-X-KSMG-AntiSpam-Method: none
-X-KSMG-AntiSpam-Auth: dkim=none
-X-KSMG-AntiSpam-Info: LuaCore: 517 517 b0056c19d8e10afbb16cb7aad7258dedb0179a79, {Track_E25351}, {Tracking_from_domain_doesnt_match_to}, 127.0.0.199:7.1.2;sberdevices.ru:7.1.1,5.0.1;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;p-i-exch-sc-m01.sberdevices.ru:7.1.1,5.0.1, FromAlignment: s, {Tracking_white_helo}, ApMailHostAddress: 100.64.160.123
-X-MS-Exchange-Organization-SCL: -1
-X-KSMG-AntiSpam-Interceptor-Info: scan successful
-X-KSMG-AntiPhishing: Clean
-X-KSMG-LinksScanning: Clean
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 2.0.1.6960, bases: 2023/06/28 08:00:00 #21591748
-X-KSMG-AntiVirus-Status: Clean, skipped
+In-Reply-To: <20230628205135.517241-7-amadeuszx.slawinski@linux.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Neil, Martin,
+On Wed, Jun 28, 2023 at 10:51:33PM +0200, Amadeusz Sławiński wrote:
+> Use PCI device IDs from pci_ids.h header. Adjust AVS_MACH_ENTRY macro,
 
-On Mon, Jun 26, 2023 at 03:34:38PM +0200, neil.armstrong@linaro.org wrote:
-> Hi,
-> 
-> On 25/06/2023 23:07, Martin Blumenstingl wrote:
-> > On Wed, Jun 7, 2023 at 10:16 PM Dmitry Rokosov <ddrokosov@sberdevices.ru> wrote:
-> > > 
-> > > From: Oleg Lyovin <ovlevin@sberdevices.ru>
-> > > 
-> > > The Amlogic A1 has a UART_AO port, which can be used, for example, for
-> > > BT HCI H4 connection.
-> > > 
-> > > This patch adds mux definitions for it.
-> > In the past we've only taken the pinctrl definitions if we have a
-> > board that uses them.
-> > Neil, do we still have the same policy in place? If so this patch
-> > should be sent with the series that adds support for your A1 board.
-> 
-> Yes and no, if the work is done I'll take it, but yeah since upstream linux
-> hates dead code, let's only define what's necessary.
-> 
+AVS_MACH_ENTRY()
 
-I'll prepare the patches for ad401 reference board, and share the in the
-next patch series version.
+> so device id can be provided in short form.
 
-> > 
-> > > Signed-off-by: Oleg Lyovin <ovlevin@sberdevices.ru>
-> > > Signed-off-by: Dmitry Rokosov <ddrokosov@sberdevices.ru>
-> > > ---
-> > >   arch/arm64/boot/dts/amlogic/meson-a1.dtsi | 16 ++++++++++++++++
-> > >   1 file changed, 16 insertions(+)
-> > > 
-> > > diff --git a/arch/arm64/boot/dts/amlogic/meson-a1.dtsi b/arch/arm64/boot/dts/amlogic/meson-a1.dtsi
-> > > index 0efd922ca7e1..3eb6aa9c00e0 100644
-> > > --- a/arch/arm64/boot/dts/amlogic/meson-a1.dtsi
-> > > +++ b/arch/arm64/boot/dts/amlogic/meson-a1.dtsi
-> > > @@ -118,6 +118,22 @@ gpio: bank@400 {
-> > >                                          gpio-ranges = <&periphs_pinctrl 0 0 62>;
-> > >                                  };
-> > > 
-> > > +                               uart_a_pins: uart_a {
-> > Only our newer .dtsi (e.g. meson-g12-common.dtsi) are following the
-> > pattern where node names should use dashes instead of underscores.
-> > So please use: uart_a_pins: uart-a { ...
-> 
-> The new scheme which should be use should be:
-> 
-> uart_a_pins: uart-a-pins-state {
-> 
-> but it wasn't enforced in the pinctrl yaml pushed by heiner, but for sure
-> no underscores in the node name.
-> 
+ID
 
-Okay, got it
+...
 
-> > 
-> > [...]
-> > > +                               uart_a_cts_rts_pins: uart_a_cts_rts {
-> > similar to the comment from above:
-> > uart_a_cts_rts_pins: uart-a-cts-rts { ...
-> > 
-> > > +                                       mux {
-> > > +                                               groups = "uart_a_cts",
-> > > +                                                        "uart_a_rts";
-> > > +                                               function = "uart_a";
-> > > +                                               bias-pull-down;
-> > Out of curiosity: is this pull down needed on all boards or just specific ones?
-> > It seems like all other SoCs use bias-disable for the RTS/CTS pins.
-> > 
-> > 
-> > Best regards,
-> > Martin
-> 
+>  #define AVS_MACH_ENTRY(_id, _mach) \
+> -	{ .id = (_id), .machs = (_mach), }
+> +	{ .id = PCI_DEVICE_ID_INTEL_HDA_##_id, .machs = (_mach), }
+
+I would duplicate HDA in all entries below in order to be compatible with
+PCI_DEVICE_DATA() (logically, so if I grep for one, I grep exactly for
+everything after PCI_DEVICE_ID_INTEL_ prefix and these won't show up.
 
 -- 
-Thank you,
-Dmitry
+With Best Regards,
+Andy Shevchenko
+
+
