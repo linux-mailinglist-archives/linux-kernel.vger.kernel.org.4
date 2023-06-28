@@ -2,77 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1CE77415D6
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 17:56:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 977B37415F1
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 18:00:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231874AbjF1P4N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 11:56:13 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:20083 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231983AbjF1Pz5 (ORCPT
+        id S231361AbjF1QAZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 12:00:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35980 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232288AbjF1QAO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 11:55:57 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1687967706;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=9qZSFuxG0IoUAkOzLqBAsv4mqf5Nr+aL9HVwyHW9Zro=;
-        b=XUM1qFE41xJltHdxRjqB/b7QuCINT1FgrYVtBybaZVr+eo+yKOzHLKaXQpl8PArhCtJjP3
-        2jSpEULevGIrbyCjENDK5XmehZ1HimTtMPIp3wxhpC8QYeNmL+EiJN59AiL9aK+c9xaAqm
-        9Wxa5LIUU4aDCu4ZS9bAqrUwVzGXXAk=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-375-zxQD8_t6NrCMSLSlLOuOGA-1; Wed, 28 Jun 2023 11:54:53 -0400
-X-MC-Unique: zxQD8_t6NrCMSLSlLOuOGA-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D3320280D21A;
-        Wed, 28 Jun 2023 15:54:05 +0000 (UTC)
-Received: from segfault.boston.devel.redhat.com (segfault.boston.devel.redhat.com [10.19.60.26])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 5CC97111F3B6;
-        Wed, 28 Jun 2023 15:54:05 +0000 (UTC)
-From:   Jeff Moyer <jmoyer@redhat.com>
-To:     Matteo Rizzo <matteorizzo@google.com>
-Cc:     Ricardo Ribalda <ribalda@chromium.org>,
-        Bart Van Assche <bvanassche@acm.org>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        io-uring@vger.kernel.org, jordyzomer@google.com, evn@google.com,
-        poprdi@google.com, corbet@lwn.net, axboe@kernel.dk,
-        asml.silence@gmail.com, akpm@linux-foundation.org,
-        keescook@chromium.org, rostedt@goodmis.org,
-        dave.hansen@linux.intel.com, chenhuacai@kernel.org, steve@sk2.org,
-        gpiccoli@igalia.com, ldufour@linux.ibm.com
-Subject: Re: [PATCH 1/1] Add a new sysctl to disable io_uring system-wide
-References: <20230627120058.2214509-1-matteorizzo@google.com>
-        <20230627120058.2214509-2-matteorizzo@google.com>
-        <e8924389-985a-42ad-9daf-eca2bf12fa57@acm.org>
-        <CAHKB1wJANtT27WM6hrhDy_x9H9Lsn4qRjPDmXdKosoL93TJRYg@mail.gmail.com>
-        <CANiDSCvjCoj3Q3phbmdhdG-veHNRrfD-gBu=FuZkmrgJ2uxiJg@mail.gmail.com>
-        <CAHKB1w+UyOnC_rOBABVhmzG+XeePaWYgPJWxX9NUeqnAi9WcgA@mail.gmail.com>
-X-PGP-KeyID: 1F78E1B4
-X-PGP-CertKey: F6FE 280D 8293 F72C 65FD  5A58 1FF8 A7CA 1F78 E1B4
-Date:   Wed, 28 Jun 2023 11:59:56 -0400
-In-Reply-To: <CAHKB1w+UyOnC_rOBABVhmzG+XeePaWYgPJWxX9NUeqnAi9WcgA@mail.gmail.com>
-        (Matteo Rizzo's message of "Wed, 28 Jun 2023 17:12:42 +0200")
-Message-ID: <x497crnefwj.fsf@segfault.boston.devel.redhat.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+        Wed, 28 Jun 2023 12:00:14 -0400
+Received: from mail-vk1-xa2e.google.com (mail-vk1-xa2e.google.com [IPv6:2607:f8b0:4864:20::a2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 824E41FF7
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 09:00:13 -0700 (PDT)
+Received: by mail-vk1-xa2e.google.com with SMTP id 71dfb90a1353d-47164fe4941so23927e0c.1
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 09:00:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1687968012; x=1690560012;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=GPpb/2tnOaLvPcmNVC1FnQTKYAdbc3TLfcGD1phxugk=;
+        b=SNRASh1Zsm6tbRz5f3GKr+JJaVqeig50e/xDwWncTjDVR19/GaoQmLg7PYlLSANOSf
+         BSPj4JK1nkfvj1gQjj0OkKSk2W0hblpgPsWmSPzeLoXiZUSO/lp8wOENjzJNgWq6/J7l
+         vBYXJTDNfeHcXvbVnYoKCGrsGSJzZu9Rse830=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687968012; x=1690560012;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=GPpb/2tnOaLvPcmNVC1FnQTKYAdbc3TLfcGD1phxugk=;
+        b=M5znOQTqbx/V1DrF9bxH6nCHiH1+FUiMdWIVY23izgK40xGAFwXk3BXBiwOA/m4yv6
+         cAU3oEnkyWgF6V15iA9+xzlfagHzUAuPgf8us/fnwMWUFbEgumFkhGFx1klkTKvxcb6g
+         V8gX3LYgCAl6kwRE/bDnl5PnXwixPGMWvJgk2Pq3SAFwgKNQU38KsxrmwAmBiWF90Lxd
+         xTZb12KLg1rVhXw3OKMF7vS4WOFb0qtlRv4sM1g1CAXlprjo7NT0Hdu6Dpv5U3X94HZz
+         REAGbip30I4Pkt/LBnDY//v5ie22lqmX2zdLUAtOVcIYhjOXhVt+TzHLJyzEyOReI0lu
+         e4ug==
+X-Gm-Message-State: AC+VfDwnYj9gGG8JMT9dJjl5wygIM0AVrh9PzOQmtJkQksE+lLRNot2d
+        wifePB0O/Pj5zW//gm2tipZFZp1/knWHByyZEsnvMA==
+X-Google-Smtp-Source: ACHHUZ6qDlk/vSg8s2EmqSTwaiB99MdxeO4WNgw8uOsw2rJRn+iLur1UIKJx8PSkzgJ0NRr2IXwK1A==
+X-Received: by 2002:a1f:e784:0:b0:471:6119:95cc with SMTP id e126-20020a1fe784000000b00471611995ccmr15924726vkh.14.1687968012466;
+        Wed, 28 Jun 2023 09:00:12 -0700 (PDT)
+Received: from mail-ua1-f43.google.com (mail-ua1-f43.google.com. [209.85.222.43])
+        by smtp.gmail.com with ESMTPSA id p185-20020a1f29c2000000b0047620e2e514sm1988435vkp.15.2023.06.28.09.00.11
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 28 Jun 2023 09:00:11 -0700 (PDT)
+Received: by mail-ua1-f43.google.com with SMTP id a1e0cc1a2514c-784f7f7deddso1802262241.3
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 09:00:11 -0700 (PDT)
+X-Received: by 2002:a67:f998:0:b0:443:6ad6:7915 with SMTP id
+ b24-20020a67f998000000b004436ad67915mr5063977vsq.27.1687968010482; Wed, 28
+ Jun 2023 09:00:10 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
+References: <20230627120058.2214509-1-matteorizzo@google.com>
+ <20230627120058.2214509-2-matteorizzo@google.com> <e8924389-985a-42ad-9daf-eca2bf12fa57@acm.org>
+ <CAHKB1wJANtT27WM6hrhDy_x9H9Lsn4qRjPDmXdKosoL93TJRYg@mail.gmail.com>
+ <CANiDSCvjCoj3Q3phbmdhdG-veHNRrfD-gBu=FuZkmrgJ2uxiJg@mail.gmail.com> <CAHKB1w+UyOnC_rOBABVhmzG+XeePaWYgPJWxX9NUeqnAi9WcgA@mail.gmail.com>
+In-Reply-To: <CAHKB1w+UyOnC_rOBABVhmzG+XeePaWYgPJWxX9NUeqnAi9WcgA@mail.gmail.com>
+From:   Ricardo Ribalda <ribalda@chromium.org>
+Date:   Wed, 28 Jun 2023 17:59:59 +0200
+X-Gmail-Original-Message-ID: <CANiDSCtu1OvoRe0ReqBVctzd8euZDt-h7dyx+xACWzdQeHkxBA@mail.gmail.com>
+Message-ID: <CANiDSCtu1OvoRe0ReqBVctzd8euZDt-h7dyx+xACWzdQeHkxBA@mail.gmail.com>
+Subject: Re: [PATCH 1/1] Add a new sysctl to disable io_uring system-wide
+To:     Matteo Rizzo <matteorizzo@google.com>
+Cc:     Bart Van Assche <bvanassche@acm.org>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, io-uring@vger.kernel.org,
+        jordyzomer@google.com, evn@google.com, poprdi@google.com,
+        corbet@lwn.net, axboe@kernel.dk, asml.silence@gmail.com,
+        akpm@linux-foundation.org, keescook@chromium.org,
+        rostedt@goodmis.org, dave.hansen@linux.intel.com,
+        chenhuacai@kernel.org, steve@sk2.org, gpiccoli@igalia.com,
+        ldufour@linux.ibm.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+        lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Matteo Rizzo <matteorizzo@google.com> writes:
+HI Matteo
 
+On Wed, 28 Jun 2023 at 17:12, Matteo Rizzo <matteorizzo@google.com> wrote:
+>
 > On Wed, 28 Jun 2023 at 13:44, Ricardo Ribalda <ribalda@chromium.org> wrote:
->>
->> Have you considered that the new sysctl is "sticky like kexec_load_disabled.
->> When the user disables it there is no way to turn it back on until the
->> system is rebooted.
+> >
+> > Have you considered that the new sysctl is "sticky like kexec_load_disabled.
+> > When the user disables it there is no way to turn it back on until the
+> > system is rebooted.
 >
 > Are you suggesting making this sysctl sticky? Are there any examples of how to
 > implement a sticky sysctl that can take more than 2 values in case we want to
@@ -80,8 +99,19 @@ Matteo Rizzo <matteorizzo@google.com> writes:
 > io_uring? Also, what would be the use case? Preventing privileged processes
 > from re-enabling io_uring?
 
-See unprivileged_bpf_disabled for an example.  I can't speak to the use
-case for a sticky value.
+Yes, if this sysctl is accepted, I think it would make sense to make it sticky.
 
--Jeff
+For more than one value take a look to  kexec_load_limit_reboot and
+kexec_load_limit_panic
 
+Thanks!
+
+>
+> Thanks!
+> --
+> Matteo
+
+
+
+-- 
+Ricardo Ribalda
