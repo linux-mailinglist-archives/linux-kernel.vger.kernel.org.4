@@ -2,152 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0D8E74130E
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 15:53:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C8D4741318
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 15:56:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231282AbjF1NxA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 09:53:00 -0400
-Received: from bg4.exmail.qq.com ([43.154.54.12]:24582 "EHLO bg4.exmail.qq.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230134AbjF1Nw7 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 09:52:59 -0400
-X-QQ-mid: bizesmtp70t1687960359tni690qj
-Received: from linux-lab-host.localdomain ( [116.30.129.193])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Wed, 28 Jun 2023 21:52:38 +0800 (CST)
-X-QQ-SSF: 01200000000000D0V000000A0000000
-X-QQ-FEAT: 3M0okmaRx3gKXKanXwgZabHXjbnoFngx1wvfnSz0uOskTN7UFKKfl8K9pwyoW
-        lLGGXQ8tWZlqCvyDZd0AS9Br15JwY11vDDscXdIG+B2xyH2CUJ3lhz/pVb/FlgJptB4/km+
-        ghISocdsunroAA+gCYmqxyiwuj5DrrEKclcEVznVP/9ztyYwXYLEF2KKM7OL21LdUXvqImY
-        Ld8SKewCaxu9d1+NIioVIiBEnxkpFptnqbaxkoT1zu4Xm+qIzoPVm49uns8mRQxOEIaIFeD
-        0VO9Cw7WUFs9mG78HATpmsnWEWqs52czIiLumoLQMWt6CbQBi/swc443hQqi3VjTXtfg7xf
-        0jbZlzFyg9BBUmBopZgsn4+QtumJG4YNBhYf8CeIe+VLdd46AdFhzio8IKJOi/7oBIPYOUg
-        ILQtAwD04Vg=
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 7823172912297135595
-From:   Zhangjin Wu <falcon@tinylab.org>
-To:     thomas@t-8ch.de, w@1wt.eu
-Cc:     falcon@tinylab.org, arnd@arndb.de, david.laight@aculab.com,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-riscv@lists.infradead.org,
-        =?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Subject: [PATCH v5 14/14] selftests/nolibc: add mmap and munmap test cases
-Date:   Wed, 28 Jun 2023 21:51:57 +0800
-Message-Id: <90179484b62c0bafb0fad9b03680136bd6fedee3.1687957589.git.falcon@tinylab.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <cover.1687957589.git.falcon@tinylab.org>
-References: <cover.1687957589.git.falcon@tinylab.org>
+        id S231607AbjF1Nyf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 09:54:35 -0400
+Received: from mx0b-0031df01.pphosted.com ([205.220.180.131]:49886 "EHLO
+        mx0b-0031df01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231542AbjF1Ny1 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 28 Jun 2023 09:54:27 -0400
+Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35S8JjLR002642;
+        Wed, 28 Jun 2023 13:53:26 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
+ cc : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=qcppdkim1; bh=9UCz4yEaBLsI1zCNNQCA7tKcSTDUIMBNJmFkNTE0KRI=;
+ b=C4uWvpJHh2bV9CyOLmpfN9wuIXe4M4r/Q/4Amu4o0hqwq6DUgKQkuvS4FsM1TZM8FseZ
+ vYV6o7Faur6wwj8csVoQgJFh+1cEMxMF66pewWfDDmH0O8cRCEKZfJwtE8V1BdO3/uP9
+ IIu7Kh9ijP0a1pDcBpP7+Se2TRd5dIRBU7kgABWL4FRE7cr1MN6dbiwMdhteR1q7CqV1
+ +roWNAZUpQzRYAxiUUMQkNSw3EDVkwM5ZH56Kd9/MARz4y2kq2UpE/8sxwRnf+srqtx0
+ fxb6UeR0oRtpNhDTBvcagpwvnpTz2XlJ8OA6dDda7zh3or6P6mmTdwQShZ9av64noMv3 pQ== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rgetph1u6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 28 Jun 2023 13:53:26 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35SDrOaL019508
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 28 Jun 2023 13:53:24 GMT
+Received: from hu-pkondeti-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.7; Wed, 28 Jun 2023 06:53:16 -0700
+Date:   Wed, 28 Jun 2023 19:23:12 +0530
+From:   Pavan Kondeti <quic_pkondeti@quicinc.com>
+To:     Mukesh Ojha <quic_mojha@quicinc.com>
+CC:     <corbet@lwn.net>, <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
+        <keescook@chromium.org>, <tony.luck@intel.com>,
+        <gpiccoli@igalia.com>, <mathieu.poirier@linaro.org>,
+        <catalin.marinas@arm.com>, <will@kernel.org>,
+        <linus.walleij@linaro.org>, <andy.shevchenko@gmail.com>,
+        <linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-hardening@vger.kernel.org>,
+        <linux-remoteproc@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-gpio@vger.kernel.org>
+Subject: Re: [PATCH v4 02/21] kallsyms: Export kallsyms_lookup_name
+Message-ID: <a26f22d2-95a7-4143-bff5-45ef0b53b30b@quicinc.com>
+References: <1687955688-20809-1-git-send-email-quic_mojha@quicinc.com>
+ <1687955688-20809-3-git-send-email-quic_mojha@quicinc.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrsz:qybglogicsvrsz3a-3
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <1687955688-20809-3-git-send-email-quic_mojha@quicinc.com>
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: dvP17vLT4h84mAiuU6uJVhi4iE_WqiWm
+X-Proofpoint-GUID: dvP17vLT4h84mAiuU6uJVhi4iE_WqiWm
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-06-28_09,2023-06-27_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 adultscore=0
+ mlxlogscore=869 spamscore=0 priorityscore=1501 suspectscore=0
+ clxscore=1011 bulkscore=0 mlxscore=0 phishscore=0 lowpriorityscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2305260000 definitions=main-2306280123
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Three mmap/munmap related test cases are added:
+On Wed, Jun 28, 2023 at 06:04:29PM +0530, Mukesh Ojha wrote:
+> Module like minidump providing debugging support will need to
+> get the symbol information from the core kernel e.g to get
+> the linux_banner, kernel section addresses bss, data, ro etc.
+> 
+One might ask why we would need such a debug driver to
+be compiled as module? What would you do if we need to capture more
+kernel data structures later? Do you plan to continue use
+kallsyms_lookup_name() to query all the symbols?
 
-- mmap_bad: the length argument must be greater than 0, otherwise, fail
-  with -EINVAL.
+I have seen v3 discussion where you are asked to compile this driver
+as module but that time there was no reason why your driver needs to
+be compiled as statically, now you have a reason (linux_banner) for
+it.
 
-- munmap_bad: invalid (void *)-1 address fail with -EINVAL.
+> commit 0bd476e6c671 ("kallsyms: unexport kallsyms_lookup_name()
+>  and kallsyms_on_each_symbol()") unexports kallsyms_lookup_name
+> due to lack of in-tree user of the symbol. Now, that minidump
+> will one of its user, export it.
+> 
+> Signed-off-by: Mukesh Ojha <quic_mojha@quicinc.com>
 
-- mmap_munmap_good: mmap() a file with good offset and then munmap().
-
-Note, it is not easy to find a unique file for mmap() in different
-scenes, so, a file list is used to search the right one:
-
-- /proc/1/exe, for 'run' and 'run-user' target
-  'run-user' can not find '/proc/self/exe'
-
-- /proc/self/exe, for 'libc-test' target
-  normal program 'libc-test' has no permission to access '/proc/1/exe'
-
-- the others, for kernel without procfs
-  let it pass even with 'worst case' kernel configs
-
-Suggested-by: Thomas Weißschuh <linux@weissschuh.net>
-Link: https://lore.kernel.org/lkml/bff82ea6-610b-4471-a28b-6c76c28604a6@t-8ch.de/
-Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
----
- tools/testing/selftests/nolibc/nolibc-test.c | 56 ++++++++++++++++++++
- 1 file changed, 56 insertions(+)
-
-diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
-index 80ab29e2887c..b178bfa29ad9 100644
---- a/tools/testing/selftests/nolibc/nolibc-test.c
-+++ b/tools/testing/selftests/nolibc/nolibc-test.c
-@@ -592,6 +592,59 @@ static int test_stat_timestamps(void)
- 	return 0;
- }
- 
-+int test_mmap_munmap(void)
-+{
-+	int ret, fd, i;
-+	void *mem;
-+	size_t page_size, file_size, length;
-+	off_t offset, pa_offset;
-+	struct stat stat_buf;
-+	static const char * const files[] = {
-+		"/proc/1/exe", "/proc/self/exe",
-+		"/init", "/sbin/init", "/etc/init", "/bin/init", "/bin/sh",
-+		NULL
-+	};
-+
-+	page_size = getpagesize();
-+	if (page_size < 0)
-+		return -1;
-+
-+	/* find a right file to mmap, existed and accessible */
-+	for (i = 0; files[i] != NULL; i++) {
-+		ret = fd = open(files[i], O_RDONLY);
-+		if (ret == -1)
-+			continue;
-+		else
-+			break;
-+	}
-+	if (ret == -1)
-+		return ret;
-+
-+	ret = stat(files[i], &stat_buf);
-+	if (ret == -1)
-+		goto end;
-+
-+	file_size = stat_buf.st_size;
-+	offset = file_size - 1;
-+	if (offset < 0)
-+		offset = 0;
-+	length = file_size - offset;
-+	pa_offset = offset & ~(page_size - 1);
-+
-+	mem = mmap(NULL, length + offset - pa_offset, PROT_READ, MAP_SHARED, fd, pa_offset);
-+	if (mem == MAP_FAILED) {
-+		ret = -1;
-+		goto end;
-+	}
-+
-+	ret = munmap(mem, length + offset - pa_offset);
-+
-+end:
-+	close(fd);
-+	return ret;
-+}
-+
-+
- /* Run syscall tests between IDs <min> and <max>.
-  * Return 0 on success, non-zero on failure.
-  */
-@@ -666,6 +719,9 @@ int run_syscall(int min, int max)
- 		CASE_TEST(lseek_m1);          EXPECT_SYSER(1, lseek(-1, 0, SEEK_SET), -1, EBADF); break;
- 		CASE_TEST(lseek_0);           EXPECT_SYSER(1, lseek(0, 0, SEEK_SET), -1, ESPIPE); break;
- 		CASE_TEST(mkdir_root);        EXPECT_SYSER(1, mkdir("/", 0755), -1, EEXIST); break;
-+		CASE_TEST(mmap_bad);          EXPECT_PTRER(1, mmap(NULL, 0, PROT_READ, MAP_PRIVATE, 0, 0), MAP_FAILED, EINVAL); break;
-+		CASE_TEST(munmap_bad);        EXPECT_SYSER(1, munmap((void *)-1, 0), -1, EINVAL); break;
-+		CASE_TEST(mmap_munmap_good);  EXPECT_SYSZR(1, test_mmap_munmap()); break;
- 		CASE_TEST(open_tty);          EXPECT_SYSNE(1, tmp = open("/dev/null", 0), -1); if (tmp != -1) close(tmp); break;
- 		CASE_TEST(open_blah);         EXPECT_SYSER(1, tmp = open("/proc/self/blah", 0), -1, ENOENT); if (tmp != -1) close(tmp); break;
- 		CASE_TEST(poll_null);         EXPECT_SYSZR(1, poll(NULL, 0, 0)); break;
--- 
-2.25.1
-
+Thanks,
+Pavan
