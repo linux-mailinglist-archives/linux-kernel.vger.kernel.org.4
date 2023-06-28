@@ -2,596 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8989C74160D
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 18:08:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF9BC74160F
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 18:09:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231236AbjF1QIQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 12:08:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36748 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230073AbjF1QIP (ORCPT
+        id S230363AbjF1QI1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 12:08:27 -0400
+Received: from dfw.source.kernel.org ([139.178.84.217]:44730 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230255AbjF1QIV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 12:08:15 -0400
-Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F7EC198D
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 09:08:12 -0700 (PDT)
-Received: by mail-lj1-x231.google.com with SMTP id 38308e7fff4ca-2b6afc1ceffso34917241fa.0
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 09:08:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sifive.com; s=google; t=1687968490; x=1690560490;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1WzUXa0xXOU/Eo6led9UbRzIFv547slzSzeCZ3gyrgw=;
-        b=mgIGl2JGdCC9cJx65n3TmLeE0i2VYuq4+QF/4mtTccgD3Z/m4c8P7/GuiZ+3zXop4J
-         jUqXKYnDRTVkJqTnzlPpe8+C6N3qpKjJxsn9nOsl0XNAdWDS+HE1wpr+B9YMpRLU67ZX
-         yCN2VAIPZzLx+0JZgDgUXaryGqBDLG9soLs7OOn3U5YFG85Ck3KjhA12fjKx9by6+4BB
-         V5bp2zhAVLgjxX7wZjal/yBc0nIamvs+aEV40luO1mU0oRZxa/LDnRufLcNB9jdh2KbN
-         tFEu56wyihDK0l9Kez2ChHfT3yQiBozrucWrChlq+3Nj0ZWs3yjMMQ6rZ+pP7Q607rY0
-         ZrUg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687968490; x=1690560490;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=1WzUXa0xXOU/Eo6led9UbRzIFv547slzSzeCZ3gyrgw=;
-        b=QoQ+oD7sobA9ONGEea1FYX7l8HZc9X9ECs+CT4BcSYvvlWkFB8m+EscZl/JivQbteb
-         PZ8e3Dtb+A6/6jWRp0iFom4NUj8Ci/WZt/jlxzIncrJG+v5SQmivbpDCJDSMJtrBkWdt
-         305weav16gpF4xSFXNTLbKLnkSFwSUITGfN3YSo93IGG5iulqKuDo0vbOdvvtJx3PAJQ
-         vVUCjExcCXsOpqNgkfLHFFGZwIQsJe4eq6wouDfHsoVZKx3SU0N5gS4XF4aII01QA4tz
-         d4OFQjCTkdjJmBYn/o90It+2my47wU8q84nZ7ecxtExlZE03S96N6Tu5HF2RjK2sXHL5
-         XWrw==
-X-Gm-Message-State: AC+VfDzSHjCBuSm2E/ua/ZnmtMtDSnSKPOGvz5yOLqNg+mWPjqo584SD
-        33+RgWhnE73IMBEA1UGR0Y6TCVMXZijxuLc0kcpcbQ==
-X-Google-Smtp-Source: ACHHUZ6R/A/dbac/yBLQqjErOEgL8opJJwSY0ELxFn0egVjVF//L+UxlirK+ITa7klLAikfBwk8BDfZgYd4amUTDByQ=
-X-Received: by 2002:a2e:81c6:0:b0:2b6:b779:c68 with SMTP id
- s6-20020a2e81c6000000b002b6b7790c68mr3329050ljg.15.1687968490231; Wed, 28 Jun
- 2023 09:08:10 -0700 (PDT)
+        Wed, 28 Jun 2023 12:08:21 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DE90F6137C
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 16:08:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6734C433C0;
+        Wed, 28 Jun 2023 16:08:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1687968500;
+        bh=zzI+4e5qB/Y/1hBjl2z9O6R0jHFDTQL1ch6yT7kHCEw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=LcMr6qstEgomqbZRyZh1jZXvCYFxfnKx82uiutkTKv0Julfhw8KE5lLA6l8FWpnjJ
+         D57xdLpVT//jAIP/Cw24UliknZaKPM0r4HFsXuBckfZ5BJnW8oPLvawO8jV/+zSNYc
+         zPylX5UNwBY+nvCbX9AawiKwefbEMRBGJeX/f2Qg=
+Date:   Wed, 28 Jun 2023 18:08:17 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Alexander Graf <graf@amazon.de>
+Cc:     Babis Chalios <bchalios@amazon.es>, Theodore Ts'o <tytso@mit.edu>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        linux-kernel@vger.kernel.org, mzxreary@0pointer.de,
+        xmarcalx@amazon.co.uk, Amit Shah <amit@kernel.org>
+Subject: Re: [PATCH 0/1] User space notifications about VM cloning
+Message-ID: <2023062823-upcoming-iguana-fe28@gregkh>
+References: <20230531095119.11202-1-bchalios@amazon.es>
+ <20f65557-766d-d954-f3ef-c26ad2b661dc@amazon.es>
+ <6ccec434-42f0-0ae8-8c7b-bea4646c5e7d@amazon.de>
+ <2023062834-lark-frostbite-9710@gregkh>
 MIME-Version: 1.0
-References: <20230622231305.631331-1-heiko@sntech.de> <20230622231305.631331-4-heiko@sntech.de>
- <20230623-excluding-sprint-aea9cca0cb02@wendy>
-In-Reply-To: <20230623-excluding-sprint-aea9cca0cb02@wendy>
-From:   Andy Chiu <andy.chiu@sifive.com>
-Date:   Thu, 29 Jun 2023 00:07:58 +0800
-Message-ID: <CABgGipWxZoagWu9=bTZZphsQqf7xjV0vnEZASVzL_qS1kPnKzA@mail.gmail.com>
-Subject: Re: [PATCH v2 3/3] RISC-V: add T-Head vector errata handling
-To:     Heiko Stuebner <heiko@sntech.de>
-Cc:     palmer@dabbelt.com, paul.walmsley@sifive.com,
-        linux-riscv@lists.infradead.org, samuel@sholland.org,
-        guoren@kernel.org, christoph.muellner@vrull.eu,
-        linux-kernel@vger.kernel.org,
-        Heiko Stuebner <heiko.stuebner@vrull.eu>,
-        Conor Dooley <conor.dooley@microchip.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-        lindbergh.monkeyblade.net
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2023062834-lark-frostbite-9710@gregkh>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 23, 2023 at 5:53=E2=80=AFPM Conor Dooley <conor.dooley@microchi=
-p.com> wrote:
->
-> Hey Heiko,
->
-> On Fri, Jun 23, 2023 at 01:13:05AM +0200, Heiko Stuebner wrote:
-> > From: Heiko Stuebner <heiko.stuebner@vrull.eu>
-> >
-> > T-Head C9xx cores implement an older version (0.7.1) of the vector
-> > specification.
-> >
-> > Relevant changes concerning the kernel are:
-> > - different placement of the SR_VS bit for the vector unit status
-> > - different encoding of the vsetvli instruction
-> > - different instructions for loads and stores
-> >
-> > And a fixed VLEN of 128.
-> >
-> > The in-kernel access to vector instances is limited to the save and
-> > restore of process states so the above mentioned areas can simply be
-> > handled via the alternatives framework, similar to other T-Head specifi=
-c
-> > issues.
-> >
-> > Signed-off-by: Heiko Stuebner <heiko.stuebner@vrull.eu>
-> > ---
-> >  arch/riscv/Kconfig.errata            |  13 +++
-> >  arch/riscv/errata/thead/errata.c     |  32 ++++++
-> >  arch/riscv/include/asm/csr.h         |  24 ++++-
-> >  arch/riscv/include/asm/errata_list.h |  45 ++++++++-
-> >  arch/riscv/include/asm/vector.h      | 139 +++++++++++++++++++++++++--
-> >  arch/riscv/kernel/vector.c           |   2 +-
-> >  6 files changed, 238 insertions(+), 17 deletions(-)
-> >
-> > diff --git a/arch/riscv/Kconfig.errata b/arch/riscv/Kconfig.errata
-> > index 0c8f4652cd82..b461312dd452 100644
-> > --- a/arch/riscv/Kconfig.errata
-> > +++ b/arch/riscv/Kconfig.errata
-> > @@ -77,4 +77,17 @@ config ERRATA_THEAD_PMU
-> >
-> >         If you don't know what to do here, say "Y".
-> >
-> > +config ERRATA_THEAD_VECTOR
-> > +     bool "Apply T-Head Vector errata"
-> > +     depends on ERRATA_THEAD && RISCV_ISA_V
-> > +     default y
-> > +     help
-> > +       The T-Head C9xx cores implement an earlier version 0.7.1
-> > +       of the vector extensions.
-> > +
-> > +       This will apply the necessary errata to handle the non-standard
-> > +       behaviour via when switch to and from vector mode for processes=
-.
-> > +
-> > +       If you don't know what to do here, say "Y".
-> > +
-> >  endmenu # "CPU errata selection"
-> > diff --git a/arch/riscv/errata/thead/errata.c b/arch/riscv/errata/thead=
-/errata.c
-> > index c259dc925ec1..c41ec84bc8a5 100644
-> > --- a/arch/riscv/errata/thead/errata.c
-> > +++ b/arch/riscv/errata/thead/errata.c
-> > @@ -15,6 +15,7 @@
-> >  #include <asm/errata_list.h>
-> >  #include <asm/hwprobe.h>
-> >  #include <asm/patch.h>
-> > +#include <asm/vector.h>
-> >  #include <asm/vendorid_list.h>
-> >
-> >  static bool errata_probe_pbmt(unsigned int stage,
-> > @@ -66,6 +67,34 @@ static bool errata_probe_pmu(unsigned int stage,
-> >       return true;
-> >  }
-> >
-> > +static bool errata_probe_vector(unsigned int stage,
-> > +                             unsigned long arch_id, unsigned long impi=
-d)
-> > +{
-> > +     if (!IS_ENABLED(CONFIG_ERRATA_THEAD_VECTOR))
-> > +             return false;
-> > +
-> > +     /* target-c9xx cores report arch_id and impid as 0 */
-> > +     if (arch_id !=3D 0 || impid !=3D 0)
-> > +             return false;
-> > +
-> > +     if (stage =3D=3D RISCV_ALTERNATIVES_EARLY_BOOT) {
-> > +             /*
-> > +              * Disable VECTOR to detect illegal usage of vector in ke=
-rnel.
-> > +              * This is normally done in _start_kernel but with the
-> > +              * vector-1.0 SR_VS bits. VS is using [24:23] on T-Head's
-> > +              * vector-0.7.1 and the vector-1.0-bits are unused there.
-> > +              */
-> > +             csr_clear(CSR_STATUS, SR_VS_THEAD);
-> > +             return false;
-> > +     }
-> > +
-> > +     /* let has_vector() return true and set the static vlen */
->
-> Hmm, I was wondering about how you were going to communicate this to
-> userspace, since you're not going to be setting "v" in your DT, so
-> there'll be nothing in /proc/cpuinfo indicating it. (I am assuming that
-> this is your intention, as you'd not need to drop the alternative-based
-> stuff from has_vector() if it wasn't)
->
-> I don't think you can do this, as things stand, because of how hwprobe
-> operates:
->
-> static void hwprobe_isa_ext0(struct riscv_hwprobe *pair,
->                              const struct cpumask *cpus)
-> {
->         ...
->
->         if (has_vector())
->                 pair->value |=3D RISCV_HWPROBE_IMA_V;
->
->         ...
-> }
->
->   * :c:macro:`RISCV_HWPROBE_IMA_V`: The V extension is supported, as defi=
-ned by
->     version 1.0 of the RISC-V Vector extension manual.
->
-> You'll need to change hwprobe to use has_vector() &&
-> riscv_has_extension_unlikely(v), or similar, as the condition for
-> reporting. You'll also need some other way to communicate to userspace
-> that T-Head's vector stuff is supported, no?
->
-> I'm also _really_ unconvinced that turning on extensions that were not
-> indicated in the DT or via ACPI is something we should be doing. Have I
-> missed something here that'd make that assessment inaccurate?
->
-> Cheers,
-> Conor.
->
-> FWIW I am currently working on kernel-side support for the new
-> extension properties that I have posted dt-binding patches for.
-> I'll go post it once Palmer has merged his current set of patches in his
-> staging repo into for-next, as I've got a lot of deps on riscv,isa
-> parser changes.
-> I'm really hoping that it provides an easier way to go off probing for
-> vendor specific stuff for DT-based systems, since it will no longer
-> require complex probing, just an of_property_match_string() for each
-> possible cpu and we could very well provide a vendor hook during that
-> process.
-> Clearly though, that stuff is not yet merged as it has not even been
-> posted yet.
->
-> Current WIP of that is here:
-> https://git.kernel.org/pub/scm/linux/kernel/git/conor/linux.git/log/?h=3D=
-riscv-extensions-strings-on-palmer
->
-> > +     riscv_vector_supported();
-> > +     riscv_v_vsize =3D 128 / 8 * 32;
-> > +
-> > +     return true;
-> > +}
-> > +
-> >  static u32 thead_errata_probe(unsigned int stage,
-> >                             unsigned long archid, unsigned long impid)
-> >  {
-> > @@ -80,6 +109,9 @@ static u32 thead_errata_probe(unsigned int stage,
-> >       if (errata_probe_pmu(stage, archid, impid))
-> >               cpu_req_errata |=3D BIT(ERRATA_THEAD_PMU);
-> >
-> > +     if (errata_probe_vector(stage, archid, impid))
-> > +             cpu_req_errata |=3D BIT(ERRATA_THEAD_VECTOR);
-> > +
-> >       return cpu_req_errata;
-> >  }
-> >
-> > diff --git a/arch/riscv/include/asm/csr.h b/arch/riscv/include/asm/csr.=
-h
-> > index 2d79bca6ffe8..521b3b939e51 100644
-> > --- a/arch/riscv/include/asm/csr.h
-> > +++ b/arch/riscv/include/asm/csr.h
-> > @@ -24,11 +24,25 @@
-> >  #define SR_FS_CLEAN  _AC(0x00004000, UL)
-> >  #define SR_FS_DIRTY  _AC(0x00006000, UL)
-> >
-> > -#define SR_VS                _AC(0x00000600, UL) /* Vector Status */
-> > -#define SR_VS_OFF    _AC(0x00000000, UL)
-> > -#define SR_VS_INITIAL        _AC(0x00000200, UL)
-> > -#define SR_VS_CLEAN  _AC(0x00000400, UL)
-> > -#define SR_VS_DIRTY  _AC(0x00000600, UL)
-> > +#define SR_VS_OFF            _AC(0x00000000, UL)
-> > +
-> > +#define SR_VS_1_0            _AC(0x00000600, UL) /* Vector Status */
-> > +#define SR_VS_INITIAL_1_0    _AC(0x00000200, UL)
-> > +#define SR_VS_CLEAN_1_0              _AC(0x00000400, UL)
-> > +#define SR_VS_DIRTY_1_0              _AC(0x00000600, UL)
-> > +
-> > +#define SR_VS_THEAD          _AC(0x01800000, UL) /* Vector Status */
-> > +#define SR_VS_INITIAL_THEAD  _AC(0x00800000, UL)
-> > +#define SR_VS_CLEAN_THEAD    _AC(0x01000000, UL)
-> > +#define SR_VS_DIRTY_THEAD    _AC(0x01800000, UL)
-> > +
-> > +/*
-> > + * Always default to vector-1.0 handling in assembly and let the broke=
-n
-> > + * implementations handle their case separately.
-> > + */
-> > +#ifdef __ASSEMBLY__
-> > +#define SR_VS                        SR_VS_1_0
-> > +#endif
-> >
-> >  #define SR_XS                _AC(0x00018000, UL) /* Extension Status *=
-/
-> >  #define SR_XS_OFF    _AC(0x00000000, UL)
-> > diff --git a/arch/riscv/include/asm/errata_list.h b/arch/riscv/include/=
-asm/errata_list.h
-> > index fb1a810f3d8c..ab21fadbe9c6 100644
-> > --- a/arch/riscv/include/asm/errata_list.h
-> > +++ b/arch/riscv/include/asm/errata_list.h
-> > @@ -21,7 +21,8 @@
-> >  #define      ERRATA_THEAD_PBMT 0
-> >  #define      ERRATA_THEAD_CMO 1
-> >  #define      ERRATA_THEAD_PMU 2
-> > -#define      ERRATA_THEAD_NUMBER 3
-> > +#define      ERRATA_THEAD_VECTOR 3
-> > +#define      ERRATA_THEAD_NUMBER 4
-> >  #endif
-> >
-> >  #ifdef __ASSEMBLY__
-> > @@ -154,6 +155,48 @@ asm volatile(ALTERNATIVE(                         =
-                       \
-> >       : "=3Dr" (__ovl) :                                               =
- \
-> >       : "memory")
-> >
-> > +#ifdef CONFIG_ERRATA_THEAD_VECTOR
-> > +
-> > +#define THEAD_C9XX_CSR_VXSAT                 0x9
-> > +#define THEAD_C9XX_CSR_VXRM                  0xa
-> > +
-> > +/*
-> > + * Vector 0.7.1 as used for example on T-Head Xuantie cores, uses an o=
-lder
-> > + * encoding for vsetvli (ta, ma vs. d1), so provide an instruction for
-> > + * vsetvli   t4, x0, e8, m8, d1
-> > + */
-> > +#define THEAD_VSETVLI_T4X0E8M8D1     ".long  0x00307ed7\n\t"
-> > +
-> > +/*
-> > + * While in theory, the vector-0.7.1 vsb.v and vlb.v result in the sam=
-e
-> > + * encoding as the standard vse8.v and vle8.v, compilers seem to optim=
-ize
-> > + * the call resulting in a different encoding and then using a value f=
-or
-> > + * the "mop" field that is not part of vector-0.7.1
-> > + * So encode specific variants for vstate_save and _restore.
-> > + */
-> > +#define THEAD_VSB_V_V0T0             ".long  0x02028027\n\t"
-> > +#define THEAD_VSB_V_V8T0             ".long  0x02028427\n\t"
-> > +#define THEAD_VSB_V_V16T0            ".long  0x02028827\n\t"
-> > +#define THEAD_VSB_V_V24T0            ".long  0x02028c27\n\t"
-> > +#define THEAD_VLB_V_V0T0             ".long  0x012028007\n\t"
-> > +#define THEAD_VLB_V_V8T0             ".long  0x012028407\n\t"
-> > +#define THEAD_VLB_V_V16T0            ".long  0x012028807\n\t"
-> > +#define THEAD_VLB_V_V24T0            ".long  0x012028c07\n\t"
-> > +
-> > +#define ALT_SR_VS_VECTOR_1_0_SHIFT   9
-> > +#define ALT_SR_VS_THEAD_SHIFT                23
-> > +
-> > +#define ALT_SR_VS(_val, prot)                                         =
-       \
-> > +asm(ALTERNATIVE("li %0, %1\t\nslli %0,%0,%3",                         =
-       \
-> > +             "li %0, %2\t\nslli %0,%0,%4", THEAD_VENDOR_ID,          \
-> > +             ERRATA_THEAD_VECTOR, CONFIG_ERRATA_THEAD_VECTOR)        \
-> > +             : "=3Dr"(_val)                                           =
- \
-> > +             : "I"(prot##_1_0 >> ALT_SR_VS_VECTOR_1_0_SHIFT),        \
-> > +               "I"(prot##_THEAD >> ALT_SR_VS_THEAD_SHIFT),           \
-> > +               "I"(ALT_SR_VS_VECTOR_1_0_SHIFT),                      \
-> > +               "I"(ALT_SR_VS_THEAD_SHIFT))
-> > +#endif /* CONFIG_ERRATA_THEAD_VECTOR */
-> > +
-> >  #endif /* __ASSEMBLY__ */
-> >
-> >  #endif
-> > diff --git a/arch/riscv/include/asm/vector.h b/arch/riscv/include/asm/v=
-ector.h
-> > index 315c96d2b4d0..fa47f60f81e3 100644
-> > --- a/arch/riscv/include/asm/vector.h
-> > +++ b/arch/riscv/include/asm/vector.h
-> > @@ -18,6 +18,55 @@
-> >  #include <asm/hwcap.h>
-> >  #include <asm/csr.h>
-> >  #include <asm/asm.h>
-> > +#include <asm/errata_list.h>
-> > +
-> > +#ifdef CONFIG_ERRATA_THEAD_VECTOR
-> > +
-> > +static inline unsigned long riscv_sr_vs(void)
-> > +{
-> > +     u32 val;
-> > +
-> > +     ALT_SR_VS(val, SR_VS);
-> > +     return val;
-> > +}
-> > +
-> > +static inline unsigned long riscv_sr_vs_initial(void)
-> > +{
-> > +     u32 val;
-> > +
-> > +     ALT_SR_VS(val, SR_VS_INITIAL);
-> > +     return val;
-> > +}
-> > +
-> > +static inline unsigned long riscv_sr_vs_clean(void)
-> > +{
-> > +     u32 val;
-> > +
-> > +     ALT_SR_VS(val, SR_VS_CLEAN);
-> > +     return val;
-> > +}
-> > +
-> > +static inline unsigned long riscv_sr_vs_dirty(void)
-> > +{
-> > +     u32 val;
-> > +
-> > +     ALT_SR_VS(val, SR_VS_DIRTY);
-> > +     return val;
-> > +}
-> > +
-> > +#define SR_VS                riscv_sr_vs()
-> > +#define SR_VS_INITIAL        riscv_sr_vs_initial()
-> > +#define SR_VS_CLEAN  riscv_sr_vs_clean()
-> > +#define SR_VS_DIRTY  riscv_sr_vs_dirty()
-> > +
-> > +#else /* CONFIG_ERRATA_THEAD_VECTOR */
-> > +
-> > +#define SR_VS                SR_VS_1_0
-> > +#define SR_VS_INITIAL        SR_VS_INITIAL_1_0
-> > +#define SR_VS_CLEAN  SR_VS_CLEAN_1_0
-> > +#define SR_VS_DIRTY  SR_VS_DIRTY_1_0
-> > +
-> > +#endif /* CONFIG_ERRATA_THEAD_VECTOR */
-> >
-> >  extern bool riscv_v_supported;
-> >  void riscv_vector_supported(void);
-> > @@ -63,26 +112,74 @@ static __always_inline void riscv_v_disable(void)
-> >
-> >  static __always_inline void __vstate_csr_save(struct __riscv_v_ext_sta=
-te *dest)
-> >  {
-> > -     asm volatile (
-> > +     register u32 t1 asm("t1") =3D (SR_FS);
-> > +
-> > +     /*
-> > +      * CSR_VCSR is defined as
-> > +      * [2:1] - vxrm[1:0]
-> > +      * [0] - vxsat
-> > +      * The earlier vector spec implemented by T-Head uses separate
-> > +      * registers for the same bit-elements, so just combine those
-> > +      * into the existing output field.
-> > +      *
-> > +      * Additionally T-Head cores need FS to be enabled when accessing
-> > +      * the VXRM and VXSAT CSRs, otherwise ending in illegal instructi=
-ons.
-> > +      * Though the cores do not implement the VXRM and VXSAT fields in=
- the
-> > +      * FCSR CSR that vector-0.7.1 specifies.
-> > +      */
-> > +     asm volatile (ALTERNATIVE(
-> >               "csrr   %0, " __stringify(CSR_VSTART) "\n\t"
-> >               "csrr   %1, " __stringify(CSR_VTYPE) "\n\t"
-> >               "csrr   %2, " __stringify(CSR_VL) "\n\t"
-> >               "csrr   %3, " __stringify(CSR_VCSR) "\n\t"
-> > +             __nops(5),
-> > +             "csrs   sstatus, t1\n\t"
-> > +             "csrr   %0, " __stringify(CSR_VSTART) "\n\t"
-> > +             "csrr   %1, " __stringify(CSR_VTYPE) "\n\t"
-> > +             "csrr   %2, " __stringify(CSR_VL) "\n\t"
-> > +             "csrr   %3, " __stringify(THEAD_C9XX_CSR_VXRM) "\n\t"
-> > +             "slliw  %3, %3, " __stringify(VCSR_VXRM_SHIFT) "\n\t"
-> > +             "csrr   t4, " __stringify(THEAD_C9XX_CSR_VXSAT) "\n\t"
-> > +             "or     %3, %3, t4\n\t"
-> > +             "csrc   sstatus, t1\n\t",
-> > +             THEAD_VENDOR_ID,
-> > +             ERRATA_THEAD_VECTOR, CONFIG_ERRATA_THEAD_VECTOR)
-> >               : "=3Dr" (dest->vstart), "=3Dr" (dest->vtype), "=3Dr" (de=
-st->vl),
-> > -               "=3Dr" (dest->vcsr) : :);
-> > +               "=3Dr" (dest->vcsr) : "r"(t1) : "t4");
-> >  }
-> >
-> >  static __always_inline void __vstate_csr_restore(struct __riscv_v_ext_=
-state *src)
-> >  {
-> > -     asm volatile (
-> > +     register u32 t1 asm("t1") =3D (SR_FS);
-> > +
-> > +     /*
-> > +      * Similar to __vstate_csr_save above, restore values for the
-> > +      * separate VXRM and VXSAT CSRs from the vcsr variable.
-> > +      */
-> > +     asm volatile (ALTERNATIVE(
-> >               ".option push\n\t"
-> >               ".option arch, +v\n\t"
-> >               "vsetvl  x0, %2, %1\n\t"
-> >               ".option pop\n\t"
-> >               "csrw   " __stringify(CSR_VSTART) ", %0\n\t"
-> >               "csrw   " __stringify(CSR_VCSR) ", %3\n\t"
-> > +             __nops(6),
-> > +             "csrs   sstatus, t1\n\t"
-> > +             ".option push\n\t"
-> > +             ".option arch, +v\n\t"
-> > +             "vsetvl  x0, %2, %1\n\t"
-> > +             ".option pop\n\t"
-> > +             "csrw   " __stringify(CSR_VSTART) ", %0\n\t"
-> > +             "srliw  t4, %3, " __stringify(VCSR_VXRM_SHIFT) "\n\t"
-> > +             "andi   t4, t4, " __stringify(VCSR_VXRM_MASK) "\n\t"
-> > +             "csrw   " __stringify(THEAD_C9XX_CSR_VXRM) ", t4\n\t"
-> > +             "andi   %3, %3, " __stringify(VCSR_VXSAT_MASK) "\n\t"
-> > +             "csrw   " __stringify(THEAD_C9XX_CSR_VXSAT) ", %3\n\t"
-> > +             "csrc   sstatus, t1\n\t",
-> > +             THEAD_VENDOR_ID,
-> > +             ERRATA_THEAD_VECTOR, CONFIG_ERRATA_THEAD_VECTOR)
-> >               : : "r" (src->vstart), "r" (src->vtype), "r" (src->vl),
-> > -                 "r" (src->vcsr) :);
-> > +                 "r" (src->vcsr), "r"(t1) : "t4");
-> >  }
-> >
-> >  static inline void __riscv_v_vstate_save(struct __riscv_v_ext_state *s=
-ave_to,
-> > @@ -92,7 +189,8 @@ static inline void __riscv_v_vstate_save(struct __ri=
-scv_v_ext_state *save_to,
-> >
-> >       riscv_v_enable();
-> >       __vstate_csr_save(save_to);
-> > -     asm volatile (
-> > +     asm volatile (ALTERNATIVE(
-> > +             "nop\n\t"
-> >               ".option push\n\t"
-> >               ".option arch, +v\n\t"
-> >               "vsetvli        %0, x0, e8, m8, ta, ma\n\t"
-> > @@ -103,8 +201,18 @@ static inline void __riscv_v_vstate_save(struct __=
-riscv_v_ext_state *save_to,
-> >               "vse8.v         v16, (%1)\n\t"
-> >               "add            %1, %1, %0\n\t"
-> >               "vse8.v         v24, (%1)\n\t"
-> > -             ".option pop\n\t"
-> > -             : "=3D&r" (vl) : "r" (datap) : "memory");
-> > +             ".option pop\n\t",
-> > +             "mv             t0, %1\n\t"
-> > +             THEAD_VSETVLI_T4X0E8M8D1
-> > +             THEAD_VSB_V_V0T0
-> > +             "addi           t0, t0, 128\n\t"
-> > +             THEAD_VSB_V_V8T0
-> > +             "addi           t0, t0, 128\n\t"
-> > +             THEAD_VSB_V_V16T0
-> > +             "addi           t0, t0, 128\n\t"
-> > +             THEAD_VSB_V_V24T0, THEAD_VENDOR_ID,
-> > +             ERRATA_THEAD_VECTOR, CONFIG_ERRATA_THEAD_VECTOR)
-> > +             : "=3D&r" (vl) : "r" (datap) : "t0", "t4", "memory");
-> >       riscv_v_disable();
-> >  }
-> >
-> > @@ -114,7 +222,8 @@ static inline void __riscv_v_vstate_restore(struct =
-__riscv_v_ext_state *restore_
-> >       unsigned long vl;
-> >
-> >       riscv_v_enable();
-> > -     asm volatile (
-> > +     asm volatile (ALTERNATIVE(
-> > +             "nop\n\t"
-> >               ".option push\n\t"
-> >               ".option arch, +v\n\t"
-> >               "vsetvli        %0, x0, e8, m8, ta, ma\n\t"
-> > @@ -125,8 +234,18 @@ static inline void __riscv_v_vstate_restore(struct=
- __riscv_v_ext_state *restore_
-> >               "vle8.v         v16, (%1)\n\t"
-> >               "add            %1, %1, %0\n\t"
-> >               "vle8.v         v24, (%1)\n\t"
-> > -             ".option pop\n\t"
-> > -             : "=3D&r" (vl) : "r" (datap) : "memory");
-> > +             ".option pop\n\t",
-> > +             "mv             t0, %1\n\t"
-> > +             THEAD_VSETVLI_T4X0E8M8D1
-> > +             THEAD_VLB_V_V0T0
-> > +             "addi           t0, t0, 128\n\t"
-> > +             THEAD_VLB_V_V8T0
-> > +             "addi           t0, t0, 128\n\t"
-> > +             THEAD_VLB_V_V16T0
-> > +             "addi           t0, t0, 128\n\t"
-> > +             THEAD_VLB_V_V24T0, THEAD_VENDOR_ID,
-> > +             ERRATA_THEAD_VECTOR, CONFIG_ERRATA_THEAD_VECTOR)
-> > +             : "=3D&r" (vl) : "r" (datap) : "t0", "t4");
-> >       __vstate_csr_restore(restore_from);
-> >       riscv_v_disable();
-> >  }
-> > diff --git a/arch/riscv/kernel/vector.c b/arch/riscv/kernel/vector.c
-> > index 74178fb71805..51726890a4d0 100644
-> > --- a/arch/riscv/kernel/vector.c
-> > +++ b/arch/riscv/kernel/vector.c
-> > @@ -140,7 +140,7 @@ bool riscv_v_first_use_handler(struct pt_regs *regs=
-)
-> >       u32 insn =3D (u32)regs->badaddr;
-> >
-> >       /* Do not handle if V is not supported, or disabled */
-> > -     if (!(ELF_HWCAP & COMPAT_HWCAP_ISA_V))
-> > +     if (!has_vector())
-> >               return false;
+On Wed, Jun 28, 2023 at 01:22:11PM +0200, Greg KH wrote:
+> On Wed, Jun 28, 2023 at 01:13:40PM +0200, Alexander Graf wrote:
+> > Hi folks,
+> > 
+> > On 16.06.23 17:07, Babis Chalios wrote:
+> > > Hello all,
+> > > 
+> > > Some time has passed since I sent this. Any comments/thoughts?
+> > 
+> > 
+> > Can we please get this merged somehow? Greg, any advise?
+> > 
+> > This is purely a device notification event to user space, similar to network
+> > link change events and the likes and has nothing to do with Jason's
+> > envisioned random reseed event exposure. We can happily send RFC patches for
+> > the latter after this is merged too.
+> 
+> Sure, I can take it, but it's the middle of the merge window and it's
+> too late for anything new right now, sorry.
+> 
+> I'll pick it up after 6.5-rc1 is out.
 
-riscv_v_first_use_handler() will not be able to detect if a process is
-running with PR_RISCV_V_VSTATE_CTRL_OFF here after applying this
-change IIIUC. This is the case where we disable the availability of V
-for a process but it still executes V instructions anyway.
+Wait, no, I'm not the maintainer of this, Jason is.  And he already
+rejected it (and based on the changelog text, I would too), so why are
+you asking me a month later to take this?
 
-> >
-> >       /* If V has been enabled then it is not the first-use trap */
-> > --
-> > 2.39.2
-> >
-> _______________________________________________
-> linux-riscv mailing list
-> linux-riscv@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-riscv
+Work with the maintainer please, don't try to route around them, you
+both know better than this.
+
+greg k-h
