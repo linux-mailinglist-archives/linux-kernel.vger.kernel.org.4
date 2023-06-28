@@ -2,149 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D31B741815
+	by mail.lfdr.de (Postfix) with ESMTP id 75840741816
 	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 20:34:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231886AbjF1Sdo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 14:33:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49894 "EHLO
+        id S232011AbjF1Sdr convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 28 Jun 2023 14:33:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232059AbjF1Sdj (ORCPT
+        with ESMTP id S232062AbjF1Sdj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 28 Jun 2023 14:33:39 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB8A91FE4;
+X-Greylist: delayed 26739 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 28 Jun 2023 11:33:37 PDT
+Received: from unicorn.mansr.com (unicorn.mansr.com [IPv6:2001:8b0:ca0d:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81C1E1FCC;
         Wed, 28 Jun 2023 11:33:37 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7113761418;
-        Wed, 28 Jun 2023 18:33:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A9501C433C8;
-        Wed, 28 Jun 2023 18:33:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687977216;
-        bh=PQylG1KdUstc1Cg/WoQUG20kCsvwqf/NgHAmIMpuUdk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=R0mZTZ0RKj5JbYPa2WjnbY8Bh47st/gO0VHS3b5WH+rsBw0D7pOpXT/oaLkQxh23H
-         skGrGU1yvdjS5oiBwPxLxDGaGjOBYaKJBw/hlwdow+V1/+EbAcEo5JMKjqoWOnSDhI
-         3TBG5UJR7iDP1syCoubUPXOi02b1Dk8gICHcCtLWlLIIOVh4AhZCd3faTF46mUnwZh
-         HO2eQxW5w4e7bx6XbfpNPa1Q6xUamE0ejIVEDKDjfGdgpSxWw37AAJsh3cRCK3tHh7
-         l2LmUTH2juuaBKuRRPjxCCweNdps5BLbgGLPs9FsCkHx0JTIihms5JYcrTfrkCmocn
-         r1DFGh2eMLZRQ==
-Date:   Wed, 28 Jun 2023 11:33:35 -0700
-From:   Jaegeuk Kim <jaegeuk@kernel.org>
-To:     Chao Yu <chao@kernel.org>
-Cc:     linux-kernel@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net, stable@vger.kernel.org
-Subject: Re: [PATCH v2] f2fs: fix deadlock in i_xattr_sem and inode page lock
- and fix the original issue
-Message-ID: <ZJx8/0eOB4PcftQe@google.com>
-References: <20230613233940.3643362-1-jaegeuk@kernel.org>
- <e5788348-b547-8e10-21af-90544f3aa75c@kernel.org>
- <ZJvqZTX1SIwvDCUn@google.com>
- <e4ee00c4-c20a-4613-87ec-3b144d6252ed@kernel.org>
+Received: from raven.mansr.com (raven.mansr.com [IPv6:2001:8b0:ca0d:1::3])
+        by unicorn.mansr.com (Postfix) with ESMTPS id 2509F15360;
+        Wed, 28 Jun 2023 19:33:35 +0100 (BST)
+Received: by raven.mansr.com (Postfix, from userid 51770)
+        id 17DD3219FD1; Wed, 28 Jun 2023 19:33:35 +0100 (BST)
+From:   =?iso-8859-1?Q?M=E5ns_Rullg=E5rd?= <mans@mansr.com>
+To:     Maxime Ripard <mripard@kernel.org>
+Cc:     Samuel Holland <samuel@sholland.org>, Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        linux-sunxi@lists.linux.dev,
+        Michael Turquette <mturquette@baylibre.com>,
+        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Stephen Boyd <sboyd@kernel.org>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 3/4] clk: sunxi-ng: Convert early providers to
+ platform drivers
+References: <20211119033338.25486-1-samuel@sholland.org>
+        <20211119033338.25486-4-samuel@sholland.org>
+        <yw1xedly2z3m.fsf@mansr.com>
+        <maqh4yir66agto4lyulvrqrim7qnixwd246jusvvhsjlhhrmmw@gjbubqc2cv4o>
+        <yw1xa5wj3kvn.fsf@mansr.com>
+        <un3xm7ybsm54qf56ojhrtr6kehlmhdoavzcaqr2jfbcyg2kr6u@rdlq7nelycs2>
+Date:   Wed, 28 Jun 2023 19:33:35 +0100
+In-Reply-To: <un3xm7ybsm54qf56ojhrtr6kehlmhdoavzcaqr2jfbcyg2kr6u@rdlq7nelycs2>
+        (Maxime Ripard's message of "Wed, 28 Jun 2023 13:41:30 +0200")
+Message-ID: <yw1x352b308w.fsf@mansr.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <e4ee00c4-c20a-4613-87ec-3b144d6252ed@kernel.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/28, Chao Yu wrote:
-> On 2023/6/28 16:08, Jaegeuk Kim wrote:
-> > Thread #1:
-> > 
-> > [122554.641906][   T92]  f2fs_getxattr+0xd4/0x5fc
-> >      -> waiting for f2fs_down_read(&F2FS_I(inode)->i_xattr_sem);
-> > 
-> > [122554.641927][   T92]  __f2fs_get_acl+0x50/0x284
-> > [122554.641948][   T92]  f2fs_init_acl+0x84/0x54c
-> > [122554.641969][   T92]  f2fs_init_inode_metadata+0x460/0x5f0
-> > [122554.641990][   T92]  f2fs_add_inline_entry+0x11c/0x350
-> >      -> Locked dir->inode_page by f2fs_get_node_page()
-> > 
-> > [122554.642009][   T92]  f2fs_do_add_link+0x100/0x1e4
-> > [122554.642025][   T92]  f2fs_create+0xf4/0x22c
-> > [122554.642047][   T92]  vfs_create+0x130/0x1f4
-> > 
-> > Thread #2:
-> > 
-> > [123996.386358][   T92]  __get_node_page+0x8c/0x504
-> >      -> waiting for dir->inode_page lock
-> > 
-> > [123996.386383][   T92]  read_all_xattrs+0x11c/0x1f4
-> > [123996.386405][   T92]  __f2fs_setxattr+0xcc/0x528
-> > [123996.386424][   T92]  f2fs_setxattr+0x158/0x1f4
-> >      -> f2fs_down_write(&F2FS_I(inode)->i_xattr_sem);
-> > 
-> > [123996.386443][   T92]  __f2fs_set_acl+0x328/0x430
-> > [123996.386618][   T92]  f2fs_set_acl+0x38/0x50
-> > [123996.386642][   T92]  posix_acl_chmod+0xc8/0x1c8
-> > [123996.386669][   T92]  f2fs_setattr+0x5e0/0x6bc
-> > [123996.386689][   T92]  notify_change+0x4d8/0x580
-> > [123996.386717][   T92]  chmod_common+0xd8/0x184
-> > [123996.386748][   T92]  do_fchmodat+0x60/0x124
-> > [123996.386766][   T92]  __arm64_sys_fchmodat+0x28/0x3c
-> 
-> Back to the race condition, my question is why we can chmod on inode before
-> it has been created?
+Maxime Ripard <mripard@kernel.org> writes:
 
-This is touching the directory.
+> On Wed, Jun 28, 2023 at 12:07:56PM +0100, Måns Rullgård wrote:
+>> Maxime Ripard <mripard@kernel.org> writes:
+>> 
+>> > On Mon, Jun 26, 2023 at 01:21:33PM +0100, Måns Rullgård wrote:
+>> >> Samuel Holland <samuel@sholland.org> writes:
+>> >> 
+>> >> > The PRCM CCU drivers depend on clocks provided by other CCU drivers. For
+>> >> > example, the sun8i-r-ccu driver uses the "pll-periph" clock provided by
+>> >> > the SoC's main CCU.
+>> >> >
+>> >> > However, sun8i-r-ccu is an early OF clock provider, and many of the
+>> >> > main CCUs (e.g. sun50i-a64-ccu) use platform drivers. This means that
+>> >> > the consumer clocks will be orphaned until the supplier driver is bound.
+>> >> > This can be avoided by converting the remaining CCUs to use platform
+>> >> > drivers. Then fw_devlink will ensure the drivers are bound in the
+>> >> > optimal order.
+>> >> >
+>> >> > The sun5i CCU is the only one which actually needs to be an early clock
+>> >> > provider, because it provides the clock for the system timer. That one
+>> >> > is left alone.
+>> >> >
+>> >> > Signed-off-by: Samuel Holland <samuel@sholland.org>
+>> >> > ---
+>> >> >
+>> >> > (no changes since v1)
+>> >> >
+>> >> >  drivers/clk/sunxi-ng/Kconfig             | 20 ++++----
+>> >> >  drivers/clk/sunxi-ng/ccu-sun4i-a10.c     | 58 +++++++++++++--------
+>> >> >  drivers/clk/sunxi-ng/ccu-sun50i-h6-r.c   | 56 ++++++++++++--------
+>> >> >  drivers/clk/sunxi-ng/ccu-sun50i-h616.c   | 33 ++++++++----
+>> >> >  drivers/clk/sunxi-ng/ccu-sun6i-a31.c     | 40 +++++++++++----
+>> >> >  drivers/clk/sunxi-ng/ccu-sun8i-a23.c     | 35 +++++++++----
+>> >> >  drivers/clk/sunxi-ng/ccu-sun8i-a33.c     | 40 +++++++++++----
+>> >> >  drivers/clk/sunxi-ng/ccu-sun8i-h3.c      | 62 ++++++++++++++--------
+>> >> >  drivers/clk/sunxi-ng/ccu-sun8i-r.c       | 65 ++++++++++++++----------
+>> >> >  drivers/clk/sunxi-ng/ccu-sun8i-v3s.c     | 57 +++++++++++++--------
+>> >> >  drivers/clk/sunxi-ng/ccu-suniv-f1c100s.c | 38 ++++++++++----
+>> >> >  11 files changed, 332 insertions(+), 172 deletions(-)
+>> >> 
+>> >> This broke the hstimer clocksource on A20 since it requires a clock
+>> >> provided by the sun4i ccu driver.
+>> >
+>> > The A10 is probably broken by this, but the A20 should be able to use
+>> > the arch timers just like all the other Cortex-A7-based SoCs.
+>> >
+>> > Do you have a dmesg log that could help debug why it's not working?
+>> 
+>> The A20 works as such since, as you say, it has other clocksources.
+>> However, the hstimer has become unusable.  If anyone was using, for
+>> whatever reason, it won't be working for them now.
+>> 
+>> Before this change, the kernel log used include this line:
+>> 
+>> clocksource: hstimer: mask: 0xffffffff max_cycles: 0xffffffff, max_idle_ns: 6370868154 ns
+>> 
+>> Now there is only a cryptic "Can't get timer clock" in its place.
+>> 
+>> As it is now, the hstimer driver is nothing but a waste of space.
+>> I figure it ought to be fixed one way or another.
+>
+> Yeah, definitely.
+>
+> IIRC, the situation is:
+>
+>  - A10 has just the "regular", old, timer
+>  - A10s/A13/GR8 has the A10 timer + hstimer
+>  - A20 has the A13 timers + arch timers
+>
+> We also default to the hstimer only for the A10s/A13 which aren't
+> affected by this patch series afaics.
+>
+> We also enable the HS timer for the A31, but just like the A20 it
+> doesn't use it by default, so it's probably been broken there too.
+>
+> I guess one way to fix it would be to switch the HS timer driver to a
+> lower priority than the A10 timer, so we pick that up by default instead
+> for the A10s/A13, and then convert the HS timer driver to a proper
+> platform_device driver that will be able to get its clock.
+>
+> The downside is that the A13 will lose some precision over its default
+> timer, but I don't think it's a big deal.
 
-> 
-> Thanks,
-> 
-> > 
-> > Fixes: 27161f13e3c3 "f2fs: avoid race in between read xattr & write xattr"
-> > Cc: <stable@vger.kernel.org>
-> > Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
-> > ---
-> >   fs/f2fs/dir.c   | 9 ++++++++-
-> >   fs/f2fs/xattr.c | 6 ++++--
-> >   2 files changed, 12 insertions(+), 3 deletions(-)
-> > 
-> > diff --git a/fs/f2fs/dir.c b/fs/f2fs/dir.c
-> > index 887e55988450..d635c58cf5a3 100644
-> > --- a/fs/f2fs/dir.c
-> > +++ b/fs/f2fs/dir.c
-> > @@ -775,8 +775,15 @@ int f2fs_add_dentry(struct inode *dir, const struct f2fs_filename *fname,
-> >   {
-> >   	int err = -EAGAIN;
-> > -	if (f2fs_has_inline_dentry(dir))
-> > +	if (f2fs_has_inline_dentry(dir)) {
-> > +		/*
-> > +		 * Should get i_xattr_sem to keep the lock order:
-> > +		 * i_xattr_sem -> inode_page lock used by f2fs_setxattr.
-> > +		 */
-> > +		f2fs_down_read(&F2FS_I(dir)->i_xattr_sem);
-> >   		err = f2fs_add_inline_entry(dir, fname, inode, ino, mode);
-> > +		f2fs_up_read(&F2FS_I(dir)->i_xattr_sem);
-> > +	}
-> >   	if (err == -EAGAIN)
-> >   		err = f2fs_add_regular_entry(dir, fname, inode, ino, mode);
-> > diff --git a/fs/f2fs/xattr.c b/fs/f2fs/xattr.c
-> > index 213805d3592c..476b186b90a6 100644
-> > --- a/fs/f2fs/xattr.c
-> > +++ b/fs/f2fs/xattr.c
-> > @@ -528,10 +528,12 @@ int f2fs_getxattr(struct inode *inode, int index, const char *name,
-> >   	if (len > F2FS_NAME_LEN)
-> >   		return -ERANGE;
-> > -	f2fs_down_read(&F2FS_I(inode)->i_xattr_sem);
-> > +	if (!ipage)
-> > +		f2fs_down_read(&F2FS_I(inode)->i_xattr_sem);
-> >   	error = lookup_all_xattrs(inode, ipage, index, len, name,
-> >   				&entry, &base_addr, &base_size, &is_inline);
-> > -	f2fs_up_read(&F2FS_I(inode)->i_xattr_sem);
-> > +	if (!ipage)
-> > +		f2fs_up_read(&F2FS_I(inode)->i_xattr_sem);
-> >   	if (error)
-> >   		return error;
+The options I see are converting the hstimer to a platform device or
+reverting the change to the sun4i ccu driver.
+
+I don't personally have much of an opinion on this since my systems
+aren't affected.  The only reason I looked at it was that I noticed
+a new error message in the kernel logs.
+
+-- 
+Måns Rullgård
