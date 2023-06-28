@@ -2,193 +2,400 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 384A4741601
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 18:04:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE8267415FC
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 18:03:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232033AbjF1QEh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 12:04:37 -0400
-Received: from mail-bn1nam02on2053.outbound.protection.outlook.com ([40.107.212.53]:46919
-        "EHLO NAM02-BN1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S230401AbjF1QEf (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 12:04:35 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=kmCWI2CO1X3fGXZ0ZSpyept9LBIwnF7JC24VmdzvXGoOXO1/xGT0Tr18GTpwxSXOxMOWUSIZaXXWsBzMjv7o5/2eezL7Ygj79iVuxlO7Q+TIDOXY0gcCCv7++Xdfi88La2Qc0pDZsN8UEjP7zIiGjR5/HTAWQDI8XSXRsg1wSAGbCkxNhNtjvFW/bZKoqIfc2pOKDqFOHToM+OZjjv32WHTT/+khCXhLwoA3mh9NrBKf4VF4yoWzQycEiwrX8fXn6bh7Ng2vQUoamkgfSSXxmOWQZwJFS/ZaFga/A4mG7+kb0etsavCp/WaLX19barke9JBd78f6/MVBOVplQj/DXQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ZgS6kGECvPoNxMZv5WdB7ShAjP3rtPhWeqqwvlYDjTA=;
- b=mQJN+rMb5754KfaKyrN6dz4NgBYBfydnRrC6jFfSBz1elxrKmotR5jBdJ3GfK6jpz+vnK+K5wZhqInNxrIpP6yxbDeY4dNqc5Ts0SvRwKRgxK42/I88MnKDzxYmWnim58+Ie6FyyozgQgmlqfjouuNWtPEy2LWaZDkq7Lf45QcwP1WI4jrSgpqggr1d1D/BPmS7HkU0e0i+1DUG2Wc0GZc0G8TP6Wxf3XoQZwhyLbRnzc44kkycA6If7SN+gBrc13zxColpJXK0kAe16Rb7q+njVjuXNke1iZfvlMjUhb10OUdTntMWEJK3CnjdXCHUCo3hihMivPAfXZvvjSckd2Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=intel.com smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ZgS6kGECvPoNxMZv5WdB7ShAjP3rtPhWeqqwvlYDjTA=;
- b=r60QjD0gMI4Le6ObpOE55W/SKOYtautB0pG47SWxmcdvjju9H7VvxB+TYeMoEqtF54IpkOdCkkAFFIs7Iav7ELWB1tw1ZPNSO5hJ16J/IRiaCTEZLByrLLejFN/AlxzeW739nfpQDTBm4AhzCJK33tFh7NLbNNqzWheRlacQaM8=
-Received: from BN9PR03CA0463.namprd03.prod.outlook.com (2603:10b6:408:139::18)
- by BL1PR12MB5320.namprd12.prod.outlook.com (2603:10b6:208:314::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.26; Wed, 28 Jun
- 2023 16:04:31 +0000
-Received: from BN8NAM11FT094.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:139:cafe::34) by BN9PR03CA0463.outlook.office365.com
- (2603:10b6:408:139::18) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.34 via Frontend
- Transport; Wed, 28 Jun 2023 16:04:31 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- BN8NAM11FT094.mail.protection.outlook.com (10.13.176.131) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6500.48 via Frontend Transport; Wed, 28 Jun 2023 16:04:31 +0000
-Received: from localhost (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Wed, 28 Jun
- 2023 11:04:30 -0500
-Date:   Wed, 28 Jun 2023 10:21:32 -0500
-From:   Michael Roth <michael.roth@amd.com>
-To:     <isaku.yamahata@intel.com>
-CC:     <kvm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <isaku.yamahata@gmail.com>, Paolo Bonzini <pbonzini@redhat.com>,
-        <erdemaktas@google.com>, Sean Christopherson <seanjc@google.com>,
-        Sagi Shahar <sagis@google.com>,
-        David Matlack <dmatlack@google.com>,
-        Kai Huang <kai.huang@intel.com>,
-        Zhi Wang <zhi.wang.linux@gmail.com>, <chen.bo@intel.com>,
-        <linux-coco@lists.linux.dev>,
-        Chao Peng <chao.p.peng@linux.intel.com>,
-        Ackerley Tng <ackerleytng@google.com>,
-        Vishal Annapurve <vannapurve@google.com>
-Subject: Re: [RFC PATCH v2 5/6] KVM: Add flags to struct kvm_gfn_range
-Message-ID: <20230628152132.xyfquj67vhklsvlu@amd.com>
-References: <cover.1687474039.git.isaku.yamahata@intel.com>
- <689da77417c2f4055f02a71aab51ff603bc195af.1687474039.git.isaku.yamahata@intel.com>
+        id S229610AbjF1QDW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 12:03:22 -0400
+Received: from mail-io1-f50.google.com ([209.85.166.50]:60598 "EHLO
+        mail-io1-f50.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231739AbjF1QDS (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 28 Jun 2023 12:03:18 -0400
+Received: by mail-io1-f50.google.com with SMTP id ca18e2360f4ac-783546553ddso3140439f.0;
+        Wed, 28 Jun 2023 09:03:18 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687968198; x=1690560198;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=DJLUn95bN50MLrjeQ6DO828FU9z5sEFCH/xfkgQbYuA=;
+        b=PIhj+1OspXLxzcUs8nJdf57JVgYDKMNKGwtNIHE1cVd/wpJLeFsYfTj6nNTref0zLC
+         DXepP5Qv/yXIuimTTCvxNgrlSRqu+vlulVbBzzkyMODqipjrLFZhp2v5XIBrakSnSGVM
+         wVolM/4SMFQQf0M9DkcWh9jBpZqRI3IXDxn2TsyXg6NWx1MPDtG0a0nVR83v9STf0g9b
+         V0NF6OeIe0FjzY3pmtK90UHyk529MNAGsKoPMUpuv+i3S0RipcU9l2E1QoQNO6ZZHgaO
+         RFnbGNZDIj+bWlyu/5AJPr3lNOvaQ0OXnZ/CZRtrNlZoEz4xQCmaRLX3f8qo82slN/Sp
+         gmEw==
+X-Gm-Message-State: AC+VfDylv6UJEBboCwBaBF6FiP2geTh5p73+UvnSNLEiRrxW5jl3+g+1
+        lw1DoaHCfBbPGrVA48j/pQ==
+X-Google-Smtp-Source: ACHHUZ6vF8sM1dJa0P6obie4OfmrkmvRN/fLsN9zJuvW23NtjX0y+Mx398XLT2XoDTkIb/GX8K6mMw==
+X-Received: by 2002:a05:6e02:4cb:b0:345:ba42:239d with SMTP id f11-20020a056e0204cb00b00345ba42239dmr5270270ils.9.1687968197659;
+        Wed, 28 Jun 2023 09:03:17 -0700 (PDT)
+Received: from robh_at_kernel.org ([64.188.179.250])
+        by smtp.gmail.com with ESMTPSA id l29-20020a02cd9d000000b0040f91082a4fsm3197303jap.75.2023.06.28.09.03.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 28 Jun 2023 09:03:16 -0700 (PDT)
+Received: (nullmailer pid 553215 invoked by uid 1000);
+        Wed, 28 Jun 2023 16:03:14 -0000
+Date:   Wed, 28 Jun 2023 10:03:14 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Niklas Cassel <nks@flawful.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Robert Marko <robimarko@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
+        Jeffrey Hugo <quic_jhugo@quicinc.com>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>
+Subject: Re: [PATCH v12 04/10] dt-bindings: soc: qcom: cpr3: Add bindings for
+ CPR3 driver
+Message-ID: <20230628160314.GB542106-robh@kernel.org>
+References: <20230217-topic-cpr3h-v12-0-1a4d050e1e67@linaro.org>
+ <20230217-topic-cpr3h-v12-4-1a4d050e1e67@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <689da77417c2f4055f02a71aab51ff603bc195af.1687474039.git.isaku.yamahata@intel.com>
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8NAM11FT094:EE_|BL1PR12MB5320:EE_
-X-MS-Office365-Filtering-Correlation-Id: 9c224ae6-2195-42a6-8473-08db77f15bbe
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: AYqOUpk6tDGC4QKxUDtextN9dLWteHmspsqwt61szAoZQ+juAR2nCk3brPMCvu6ZHpx2l157S0Holhv9Pzw1eue/Et8djXDrM7b8v2ng2Re8XW2qIz+MFz7DUaSEMpk0wwtxV+NQ+bLYaB8Ibi0uZs//hpbFuRNMd7TgEXeky8H+4xB5nRuG6m3cdA5k9JWl4kn2X4QovmV7XLQCiBbH8OktK01lhhnRkHzFpyjyXiLrE6tKZTlEyHXGQ+jyHJY5Cg4fH9cnFSjf4LwLuD3fpoOb744+LkE1/jG6TFyfJ00LMDfN+FcS5gnvm7TTkQUWMAEQjb2l083Vh1kLVsyHyNR4OMe8RUupjXJ69S5RUa1NtSwwsqcPulabqY20foDApinyTguKyIPPJK5dycepwqBn8TkmndIvzGELM51OtJMJ+UFJkF3400QVUUqdfe5m/31SOAenhHI+jBU869pCCGwa+3a7n+HuJlLItvkTFqdbnY2jO+ZlwiLaTqDwCXUpVHm02ijyz4crFRACzuGulU4GAw/pIyEtkC40oxj1hdCjUduL0unHiJx+vaDiU9oecjX6CKyEsBEUOAU1KCc6r5SJ2pTR64/HPPcaDbvpAM0vUateux1pDs48ZIsqrH1TSghppH1vCncw2MwnOqdcK9BQAME3Z2d7HDKQKseeBL5Zlt8U9Hbz+N7WM/Z6kwfWR/DglzzmKXR71Er6Vh2a+HcbYmpzR1IB9XLwkG72zvw=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(451199021)(40470700004)(36840700001)(46966006)(54906003)(508600001)(83380400001)(2616005)(47076005)(36860700001)(336012)(86362001)(40460700003)(426003)(82310400005)(16526019)(1076003)(26005)(186003)(81166007)(2906002)(4326008)(36756003)(6916009)(8936002)(70206006)(70586007)(316002)(356005)(7416002)(44832011)(8676002)(5660300002)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Jun 2023 16:04:31.2780
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9c224ae6-2195-42a6-8473-08db77f15bbe
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT094.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR12MB5320
+In-Reply-To: <20230217-topic-cpr3h-v12-4-1a4d050e1e67@linaro.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 22, 2023 at 04:16:29PM -0700, isaku.yamahata@intel.com wrote:
-> From: Isaku Yamahata <isaku.yamahata@intel.com>
+On Wed, Jun 28, 2023 at 04:00:43PM +0200, Konrad Dybcio wrote:
+> From: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
 > 
-> Add flags to strut kvm_gfn_range to indicate who triggered the callback
-> and new memory attributes.
-> 
-> TDX needs to know the reason for a callback by kvm_unmap_gfn_range().  mmu
-> notifier, set memory attributes ioctl or KVM gmem callback.  With TDX,
-> zapping a private page from the encrypted page table and adding the page
-> back to the same private GPA results in zeroing the page, and the guest has
-> to accept the page again.  On the change of memory attribute from private
-> to shared, zapping the GPA range irrespective to private-or-shared and
-> expecting the fault doesn't work for TDX.  Instead, zap shared pages only
-> and keep the private pages.  Concretely
-> - If it's from mmu notifier, zap shared pages.
-> - If it's from KVM gmem, zap private pages.
-> - If setting memory attributes to private, zap shared pages.
-> - If setting memory attributes to shared, zap private pages.
-> 
-> Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
-> 
-> ---
-> Changes v1 -> v2:
-> - consolidate KVM_GFN_RANGE_FLAGS_GMEM_{PUNCH_HOLE, RELEASE} into
->   KVM_GFN_RANGE_FLAGS_GMEM.
-> - Update the commit message to describe TDX more.  Drop SEV_SNP.
-> ---
->  include/linux/kvm_host.h | 10 +++++++++-
->  virt/kvm/guest_mem.c     |  9 ++++++---
->  virt/kvm/kvm_main.c      |  4 +++-
->  3 files changed, 18 insertions(+), 5 deletions(-)
-> 
-> diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
-> index 1a47cedae8a1..1fe0516fcddf 100644
-> --- a/include/linux/kvm_host.h
-> +++ b/include/linux/kvm_host.h
-> @@ -256,12 +256,20 @@ int kvm_async_pf_wakeup_all(struct kvm_vcpu *vcpu);
->  #endif
->  
->  #ifdef CONFIG_KVM_GENERIC_MMU_NOTIFIER
-> +
-> +#define KVM_GFN_RANGE_FLAGS_SET_MEM_ATTR	BIT(0)
-> +#define KVM_GFN_RANGE_FLAGS_GMEM		BIT(1)
-> +
->  struct kvm_gfn_range {
->  	struct kvm_memory_slot *slot;
->  	gfn_t start;
->  	gfn_t end;
-> -	pte_t pte;
-> +	union {
-> +		pte_t pte;
-> +		u64 attrs;
-> +	};
->  	bool may_block;
-> +	unsigned int flags;
->  };
->  bool kvm_unmap_gfn_range(struct kvm *kvm, struct kvm_gfn_range *range);
->  bool kvm_age_gfn(struct kvm *kvm, struct kvm_gfn_range *range);
-> diff --git a/virt/kvm/guest_mem.c b/virt/kvm/guest_mem.c
-> index cdf2d84683c8..387226136960 100644
-> --- a/virt/kvm/guest_mem.c
-> +++ b/virt/kvm/guest_mem.c
-> @@ -99,7 +99,8 @@ static struct folio *kvm_gmem_get_folio(struct file *file, pgoff_t index)
->  }
->  
->  static void kvm_gmem_invalidate_begin(struct kvm *kvm, struct kvm_gmem *gmem,
-> -				      pgoff_t start, pgoff_t end)
-> +				      pgoff_t start, pgoff_t end,
-> +				      unsigned int flags)
->  {
->  	struct kvm_memory_slot *slot;
->  	unsigned long index;
-> @@ -118,6 +119,7 @@ static void kvm_gmem_invalidate_begin(struct kvm *kvm, struct kvm_gmem *gmem,
->  			.slot = slot,
->  			.pte = __pte(0),
->  			.may_block = true,
-> +			.flags = flags,
->  		};
->  
->  		kvm_mmu_invalidate_range_add(kvm, gfn_range.start, gfn_range.end);
-> @@ -156,7 +158,8 @@ static long kvm_gmem_punch_hole(struct file *file, loff_t offset, loff_t len)
->  	 */
->  	filemap_invalidate_lock(file->f_mapping);
->  
-> -	kvm_gmem_invalidate_begin(kvm, gmem, start, end);
-> +	kvm_gmem_invalidate_begin(kvm, gmem, start, end,
-> +				  KVM_GFN_RANGE_FLAGS_GMEM);
+> Add the bindings for the CPR3 driver to the documentation.
 
-Do you anticipate ever needing to pass a different flag via
-kvm_gmem_invalidate_begin()? If not it might make sense to just
-hard-code it rather than passing as a parameter.
+Bindings are for h/w, not drivers.
 
--Mike
+> 
+> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
+> [Konrad: Make binding check pass; update AGdR's email]
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> ---
+>  .../devicetree/bindings/soc/qcom/qcom,cpr3.yaml    | 289 +++++++++++++++++++++
+>  1 file changed, 289 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/soc/qcom/qcom,cpr3.yaml b/Documentation/devicetree/bindings/soc/qcom/qcom,cpr3.yaml
+> new file mode 100644
+> index 000000000000..46b94dffaf85
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/soc/qcom/qcom,cpr3.yaml
+> @@ -0,0 +1,289 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: "http://devicetree.org/schemas/soc/qcom/qcom,cpr3.yaml#"
+> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
+
+Drop quotes
+
+> +
+> +title: Qualcomm Core Power Reduction v3/v4/Hardened (CPR3, CPR4, CPRh)
+> +
+> +description:
+> +  CPR (Core Power Reduction) is a technology to reduce core power of a CPU
+> +  (or another device). Each OPP of a device corresponds to a "corner" that
+> +  has a range of valid voltages for a particular frequency.
+> +  The CPR monitors dynamic factors such as temperature, etc. and suggests
+> +  or (in the CPR-hardened case) applies voltage adjustments to save power
+> +  and meet silicon characteristic requirements for a given chip unit.
+> +
+> +maintainers:
+> +  - AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> +
+> +properties:
+> +  compatible:
+> +    oneOf:
+> +      - description: CPRv3 controller
+> +        items:
+> +          - const: qcom,cpr3
+> +      - description: CPRv4 controller
+> +        items:
+> +          - const: qcom,cpr4
+> +      - description: CPRv4-Hardened controller
+> +        items:
+> +          - enum:
+> +              - qcom,msm8998-cprh
+> +              - qcom,sdm630-cprh
+> +          - const: qcom,cprh
+> +
+> +  reg:
+> +    description: Base address and size of the CPR controller(s)
+> +    maxItems: 2
+
+What is each entry?
+
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    items:
+> +      - description: CPR reference clock
+> +
+> +  vdd-supply:
+> +    description: Autonomous Phase Control (APC) or other power supply
+> +
+> +  '#power-domain-cells':
+> +    const: 1
+> +
+> +  qcom,acc:
+> +    $ref: /schemas/types.yaml#/definitions/phandle
+> +    description: phandle to syscon for writing ACC settings
+> +
+> +  nvmem-cells:
+> +    description: Cells containing the fuse corners and revision data
+> +    maxItems: 32
+> +
+> +  nvmem-cell-names:
+> +    maxItems: 32
+> +
+> +  operating-points-v2: true
+> +
+> +  power-domains: true
+
+Need to define how many.
+
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - clocks
+> +  - operating-points-v2
+> +  - "#power-domain-cells"
+> +  - nvmem-cells
+> +  - nvmem-cell-names
+> +
+> +additionalProperties: false
+> +
+> +allOf:
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            enum:
+> +              - qcom,msm8998-cprh
+> +    then:
+> +      properties:
+> +        nvmem-cell-names:
+> +          items:
+> +            - const: cpr_speed_bin
+> +            - const: cpr_fuse_revision
+> +            - const: cpr0_quotient1
+> +            - const: cpr0_quotient2
+> +            - const: cpr0_quotient3
+> +            - const: cpr0_quotient4
+> +            - const: cpr0_quotient_offset2
+> +            - const: cpr0_quotient_offset3
+> +            - const: cpr0_quotient_offset4
+> +            - const: cpr0_init_voltage1
+> +            - const: cpr0_init_voltage2
+> +            - const: cpr0_init_voltage3
+> +            - const: cpr0_init_voltage4
+> +            - const: cpr0_ring_osc1
+> +            - const: cpr0_ring_osc2
+> +            - const: cpr0_ring_osc3
+> +            - const: cpr0_ring_osc4
+> +            - const: cpr1_quotient1
+> +            - const: cpr1_quotient2
+> +            - const: cpr1_quotient3
+> +            - const: cpr1_quotient4
+> +            - const: cpr1_quotient_offset2
+> +            - const: cpr1_quotient_offset3
+> +            - const: cpr1_quotient_offset4
+> +            - const: cpr1_init_voltage1
+> +            - const: cpr1_init_voltage2
+> +            - const: cpr1_init_voltage3
+> +            - const: cpr1_init_voltage4
+> +            - const: cpr1_ring_osc1
+> +            - const: cpr1_ring_osc2
+> +            - const: cpr1_ring_osc3
+> +            - const: cpr1_ring_osc4
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/clock/qcom,gcc-msm8998.h>
+> +    #include <dt-bindings/interrupt-controller/irq.h>
+> +
+> +    cpus {
+> +        #address-cells = <2>;
+> +        #size-cells = <0>;
+> +
+> +        cpu@0 {
+> +            compatible = "qcom,kryo280";
+> +            device_type = "cpu";
+> +            reg = <0x0 0x0>;
+> +            operating-points-v2 = <&cpu0_opp_table>;
+> +            power-domains = <&apc_cprh 0>;
+> +            power-domain-names = "cprh";
+
+The name should be local to the device, not based on the provider.
+
+Do you really need a name here with only 1? 
+
+> +        };
+> +
+> +        cpu@100 {
+> +            compatible = "qcom,kryo280";
+> +            device_type = "cpu";
+> +            reg = <0x0 0x100>;
+> +            operating-points-v2 = <&cpu4_opp_table>;
+> +            power-domains = <&apc_cprh 1>;
+> +            power-domain-names = "cprh";
+> +        };
+> +    };
+> +
+> +    cpu0_opp_table: opp-table-cpu0 {
+> +        compatible = "operating-points-v2";
+> +        opp-shared;
+> +
+> +        opp-1843200000 {
+> +            opp-hz = /bits/ 64 <1843200000>;
+> +            required-opps = <&cprh_opp3>;
+> +        };
+> +
+> +        opp-1094400000 {
+> +            opp-hz = /bits/ 64 <1094400000>;
+> +            required-opps = <&cprh_opp2>;
+> +        };
+> +
+> +        opp-300000000 {
+> +            opp-hz = /bits/ 64 <300000000>;
+> +            required-opps = <&cprh_opp1>;
+> +        };
+> +    };
+> +
+> +    cpu4_opp_table: opp-table-cpu4 {
+> +        compatible = "operating-points-v2";
+> +        opp-shared;
+> +
+> +        opp-2208000000 {
+> +            opp-hz = /bits/ 64 <2208000000>;
+> +            required-opps = <&cprh_opp3>;
+> +        };
+> +
+> +        opp-1113600000 {
+> +            opp-hz = /bits/ 64 <1113600000>;
+> +            required-opps = <&cprh_opp2>;
+> +        };
+> +
+> +        opp-300000000 {
+> +            opp-hz = /bits/ 64 <300000000>;
+> +            required-opps = <&cprh_opp1>;
+> +        };
+> +    };
+> +
+> +    cprh_opp_table: opp-table-cprh {
+> +        compatible = "operating-points-v2-qcom-level";
+> +
+> +        cprh_opp1: opp-1 {
+> +            opp-level = <1>;
+> +            qcom,opp-fuse-level = <1>;
+> +            qcom,opp-cloop-vadj = <0>;
+> +            qcom,opp-oloop-vadj = <0>;
+> +        };
+> +
+> +        cprh_opp2: opp-2 {
+> +            opp-level = <2>;
+> +            qcom,opp-fuse-level = <2>;
+> +            qcom,opp-cloop-vadj = <0>;
+> +            qcom,opp-oloop-vadj = <0>;
+> +        };
+> +
+> +        cprh_opp3: opp-3 {
+> +            opp-level = <3>;
+> +            qcom,opp-fuse-level = <2 3>;
+> +            qcom,opp-cloop-vadj = <0>;
+> +            qcom,opp-oloop-vadj = <0>;
+> +        };
+> +    };
+> +
+> +    apc_cprh: power-controller@179c8000 {
+> +        compatible = "qcom,msm8998-cprh", "qcom,cprh";
+> +        reg = <0x0179c8000 0x4000>, <0x0179c4000 0x4000>;
+> +        clocks = <&gcc GCC_HMSS_RBCPR_CLK>;
+> +
+> +        operating-points-v2 = <&cprh_opp_table>;
+> +        #power-domain-cells = <1>;
+> +
+> +        nvmem-cells = <&cpr_efuse_speedbin>,
+> +                      <&cpr_fuse_revision>,
+> +                      <&cpr_quot0_pwrcl>,
+> +                      <&cpr_quot1_pwrcl>,
+> +                      <&cpr_quot2_pwrcl>,
+> +                      <&cpr_quot3_pwrcl>,
+> +                      <&cpr_quot_offset1_pwrcl>,
+> +                      <&cpr_quot_offset2_pwrcl>,
+> +                      <&cpr_quot_offset3_pwrcl>,
+> +                      <&cpr_init_voltage0_pwrcl>,
+> +                      <&cpr_init_voltage1_pwrcl>,
+> +                      <&cpr_init_voltage2_pwrcl>,
+> +                      <&cpr_init_voltage3_pwrcl>,
+> +                      <&cpr_ro_sel0_pwrcl>,
+> +                      <&cpr_ro_sel1_pwrcl>,
+> +                      <&cpr_ro_sel2_pwrcl>,
+> +                      <&cpr_ro_sel3_pwrcl>,
+> +                      <&cpr_quot0_perfcl>,
+> +                      <&cpr_quot1_perfcl>,
+> +                      <&cpr_quot2_perfcl>,
+> +                      <&cpr_quot3_perfcl>,
+> +                      <&cpr_quot_offset1_perfcl>,
+> +                      <&cpr_quot_offset2_perfcl>,
+> +                      <&cpr_quot_offset3_perfcl>,
+> +                      <&cpr_init_voltage0_perfcl>,
+> +                      <&cpr_init_voltage1_perfcl>,
+> +                      <&cpr_init_voltage2_perfcl>,
+> +                      <&cpr_init_voltage3_perfcl>,
+> +                      <&cpr_ro_sel0_perfcl>,
+> +                      <&cpr_ro_sel1_perfcl>,
+> +                      <&cpr_ro_sel2_perfcl>,
+> +                      <&cpr_ro_sel3_perfcl>;
+> +        nvmem-cell-names = "cpr_speed_bin",
+> +                           "cpr_fuse_revision",
+> +                           "cpr0_quotient1",
+> +                           "cpr0_quotient2",
+> +                           "cpr0_quotient3",
+> +                           "cpr0_quotient4",
+> +                           "cpr0_quotient_offset2",
+> +                           "cpr0_quotient_offset3",
+> +                           "cpr0_quotient_offset4",
+> +                           "cpr0_init_voltage1",
+> +                           "cpr0_init_voltage2",
+> +                           "cpr0_init_voltage3",
+> +                           "cpr0_init_voltage4",
+> +                           "cpr0_ring_osc1",
+> +                           "cpr0_ring_osc2",
+> +                           "cpr0_ring_osc3",
+> +                           "cpr0_ring_osc4",
+> +                           "cpr1_quotient1",
+> +                           "cpr1_quotient2",
+> +                           "cpr1_quotient3",
+> +                           "cpr1_quotient4",
+> +                           "cpr1_quotient_offset2",
+> +                           "cpr1_quotient_offset3",
+> +                           "cpr1_quotient_offset4",
+> +                           "cpr1_init_voltage1",
+> +                           "cpr1_init_voltage2",
+> +                           "cpr1_init_voltage3",
+> +                           "cpr1_init_voltage4",
+> +                           "cpr1_ring_osc1",
+> +                           "cpr1_ring_osc2",
+> +                           "cpr1_ring_osc3",
+> +                           "cpr1_ring_osc4";
+> +    };
+> +...
+> 
+> -- 
+> 2.41.0
+> 
