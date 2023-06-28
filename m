@@ -2,155 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1393741822
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 20:41:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A5BA7741825
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 20:42:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231449AbjF1SkW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 14:40:22 -0400
-Received: from smtp-fw-80006.amazon.com ([99.78.197.217]:54882 "EHLO
-        smtp-fw-80006.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229517AbjF1SkT (ORCPT
+        id S229936AbjF1SmP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 14:42:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50536 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229469AbjF1SmL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 14:40:19 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1687977620; x=1719513620;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=BL4ULAFej05+WRV13/0IUuXBJpcZCjd4OTT8VyAGeUo=;
-  b=md69R2XKNtIInjnpodcnZ8ZCRoSl0TFUSxMBAnm0cudPbrsS7/PTXU4u
-   K+PU8b/s2nIyom7cMzaFy+BQT1S6xCoHI+DbQs4ZToD9q9taXhaNuP9wG
-   yfPU5h6TDJvVgBe3vELVjWFjI+iml6KDWvNL8Y0ntwCzpCVKCD3Eclx0t
-   s=;
-X-IronPort-AV: E=Sophos;i="6.01,166,1684800000"; 
-   d="scan'208";a="223422365"
-Received: from pdx4-co-svc-p1-lb2-vlan2.amazon.com (HELO email-inbound-relay-iad-1a-m6i4x-9fe6ad2f.us-east-1.amazon.com) ([10.25.36.210])
-  by smtp-border-fw-80006.pdx80.corp.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2023 18:40:16 +0000
-Received: from EX19MTAUWB001.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan3.iad.amazon.com [10.40.163.38])
-        by email-inbound-relay-iad-1a-m6i4x-9fe6ad2f.us-east-1.amazon.com (Postfix) with ESMTPS id 1B2B7805E6;
-        Wed, 28 Jun 2023 18:40:08 +0000 (UTC)
-Received: from EX19D004ANA001.ant.amazon.com (10.37.240.138) by
- EX19MTAUWB001.ant.amazon.com (10.250.64.248) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Wed, 28 Jun 2023 18:40:04 +0000
-Received: from 88665a182662.ant.amazon.com.com (10.187.170.50) by
- EX19D004ANA001.ant.amazon.com (10.37.240.138) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.30; Wed, 28 Jun 2023 18:39:59 +0000
-From:   Kuniyuki Iwashima <kuniyu@amazon.com>
-To:     <lmb@isovalent.com>
-CC:     <andrii@kernel.org>, <ast@kernel.org>, <bpf@vger.kernel.org>,
-        <daniel@iogearbox.net>, <davem@davemloft.net>,
-        <dsahern@kernel.org>, <edumazet@google.com>, <haoluo@google.com>,
-        <hemanthmalla@gmail.com>, <joe@wand.net.nz>,
-        <john.fastabend@gmail.com>, <jolsa@kernel.org>,
-        <kpsingh@kernel.org>, <kuba@kernel.org>, <kuniyu@amazon.com>,
-        <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-        <martin.lau@linux.dev>, <mykolal@fb.com>, <netdev@vger.kernel.org>,
-        <pabeni@redhat.com>, <sdf@google.com>, <shuah@kernel.org>,
-        <song@kernel.org>, <willemdebruijn.kernel@gmail.com>, <yhs@fb.com>
-Subject: Re: [PATCH bpf-next v4 4/7] net: document inet[6]_lookup_reuseport sk_state requirements
-Date:   Wed, 28 Jun 2023 11:39:50 -0700
-Message-ID: <20230628183950.75449-1-kuniyu@amazon.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20230613-so-reuseport-v4-4-4ece76708bba@isovalent.com>
-References: <20230613-so-reuseport-v4-4-4ece76708bba@isovalent.com>
+        Wed, 28 Jun 2023 14:42:11 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE5C410F5;
+        Wed, 28 Jun 2023 11:42:09 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 639856142A;
+        Wed, 28 Jun 2023 18:42:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41A4BC433C8;
+        Wed, 28 Jun 2023 18:42:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1687977728;
+        bh=s+CFIQ47Nde7laYIREkJnwD6OP0zOQzRI431me7l5hM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=r96QzmwlwrrCKx+UBddlEPORTg571sdls578CN138pCbKjYbvVHbeEwBB+YEI/Pi3
+         WWYvoqWWWCuimtfQ3WjeWhwNlwhF0KtCIqtOaP+XN9kppPSgPqyU8jfWo84XdQyr5Y
+         PqlZT3ZXZgVIDHeStH6VizDAk1Xy0Qovl+03GMwI=
+Date:   Wed, 28 Jun 2023 20:42:05 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Suren Baghdasaryan <surenb@google.com>
+Cc:     Tejun Heo <tj@kernel.org>, Christian Brauner <brauner@kernel.org>,
+        peterz@infradead.org, lujialin4@huawei.com,
+        lizefan.x@bytedance.com, hannes@cmpxchg.org, mingo@redhat.com,
+        ebiggers@kernel.org, oleg@redhat.com, akpm@linux-foundation.org,
+        viro@zeniv.linux.org.uk, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, vschneid@redhat.com,
+        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, kernel-team@android.com
+Subject: Re: [PATCH 1/2] kernfs: add kernfs_ops.free operation to free
+ resources tied to the file
+Message-ID: <2023062845-stabilize-boogieman-1925@gregkh>
+References: <CAJuCfpG2_trH2DuudX_E0CWfMxyTKfPWqJU14zjVxpTk6kPiWQ@mail.gmail.com>
+ <ZJuSzlHfbLj3OjvM@slm.duckdns.org>
+ <CAJuCfpGoNbLOLm08LWKPOgn05+FB1GEqeMTUSJUZpRmDYQSjpA@mail.gmail.com>
+ <20230628-meisennest-redlich-c09e79fde7f7@brauner>
+ <CAJuCfpHqZ=5a_2k==FsdBbwDCF7+s7Ji3aZ37LBqUgyXLMz7gA@mail.gmail.com>
+ <20230628-faden-qualvoll-6c33b570f54c@brauner>
+ <CAJuCfpF=DjwpWuhugJkVzet2diLkf8eagqxjR8iad39odKdeYQ@mail.gmail.com>
+ <20230628-spotten-anzweifeln-e494d16de48a@brauner>
+ <ZJx1nkqbQRVCaKgF@slm.duckdns.org>
+ <CAJuCfpEFo6WowJ_4XPXH+=D4acFvFqEa4Fuc=+qF8=Jkhn=3pA@mail.gmail.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.187.170.50]
-X-ClientProxiedBy: EX19D041UWA003.ant.amazon.com (10.13.139.105) To
- EX19D004ANA001.ant.amazon.com (10.37.240.138)
+In-Reply-To: <CAJuCfpEFo6WowJ_4XPXH+=D4acFvFqEa4Fuc=+qF8=Jkhn=3pA@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+        lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lorenz Bauer <lmb@isovalent.com>
-Date: Wed, 28 Jun 2023 10:48:19 +0100
-> The current implementation was extracted from inet[6]_lhash2_lookup
-> in commit 80b373f74f9e ("inet: Extract helper for selecting socket
-> from reuseport group") and commit 5df6531292b5 ("inet6: Extract helper
-> for selecting socket from reuseport group"). In the original context,
-> sk is always in TCP_LISTEN state and so did not have a separate check.
+On Wed, Jun 28, 2023 at 11:18:20AM -0700, Suren Baghdasaryan wrote:
+> On Wed, Jun 28, 2023 at 11:02 AM Tejun Heo <tj@kernel.org> wrote:
+> >
+> > On Wed, Jun 28, 2023 at 07:35:20PM +0200, Christian Brauner wrote:
+> > > > To summarize my understanding of your proposal, you suggest adding new
+> > > > kernfs_ops for the case you marked (1) and change ->release() to do
+> > > > only (2). Please correct me if I misunderstood. Greg, Tejun, WDYT?
+> > >
+> > > Yes. I can't claim to know all the intricate implementation details of
+> > > kernfs ofc but this seems sane to me.
+> >
+> > This is going to be massively confusing for vast majority of kernfs users.
+> > The contract kernfs provides is that you can tell kernfs that you want out
+> > and then you can do so synchronously in a finite amount of time (you still
+> > have to wait for in-flight operations to finish but that's under your
+> > control). Adding an operation which outlives that contract as something
+> > usual to use is guaranteed to lead to obscure future crnashes. For a
+> > temporary fix, it's fine as long as it's marked clearly but please don't
+> > make it something seemingly widely useable.
+> >
+> > We have a long history of modules causing crashes because of this. The
+> > severing semantics is not there just for fun.
 > 
-> Add documentation that specifies which sk_state are valid to pass to
-> the function.
-> 
-> Signed-off-by: Lorenz Bauer <lmb@isovalent.com>
+> I'm sure there are reasons things are working as they do today. Sounds
+> like we can't change the ->release() logic from what it is today...
+> Then the question is how do we fix this case needing to release a
+> resource which can be released only when there are no users of the
+> file? My original suggestion was to add a kernfs_ops operation which
+> would indicate there are no more users but that seems to be confusing.
+> Are there better ways to fix this issue?
 
-Reviewed-by: Kuniyuki Iwashima <kuniyu@amazon.com>
+Just make sure that you really only remove the file when all users are
+done with it?  Do you have control of that from the driver side?
 
-2 nit below.
+But, why is this kernfs file so "special" that it must have this special
+construct?  Why not do what all other files that handle polling do and
+just remove and get out of there when done?
 
+thanks,
 
-> ---
->  net/ipv4/inet_hashtables.c  | 14 ++++++++++++++
->  net/ipv6/inet6_hashtables.c | 14 ++++++++++++++
->  2 files changed, 28 insertions(+)
-> 
-> diff --git a/net/ipv4/inet_hashtables.c b/net/ipv4/inet_hashtables.c
-> index 352eb371c93b..ac927a635a6f 100644
-> --- a/net/ipv4/inet_hashtables.c
-> +++ b/net/ipv4/inet_hashtables.c
-> @@ -335,6 +335,20 @@ static inline int compute_score(struct sock *sk, struct net *net,
->  
->  INDIRECT_CALLABLE_DECLARE(inet_ehashfn_t udp_ehashfn);
->  
-> +/**
-> + * inet_lookup_reuseport() - execute reuseport logic on AF_INET socket if necessary.
-> + * @net: network namespace.
-> + * @sk: AF_INET socket, must be in TCP_LISTEN state for TCP or TCP_CLOSE for UDP.
-> + * @skb: context for a potential SK_REUSEPORT program.
-> + * @doff: header offset.
-> + * @saddr: source address.
-> + * @sport: source port.
-> + * @daddr: destination address.
-> + * @hnum: destination port in host byte order.
-
-It seems you forgot to copy-and-paste the ehashfn description.
-
----8<---
-+ * @ehashfn: hash function used to generate the fallback hash.
----8<---
-https://lore.kernel.org/all/20230613-so-reuseport-v3-4-907b4cbb7b99@isovalent.com/
-
-
-> + *
-> + * Return: NULL if sk doesn't have SO_REUSEPORT set, otherwise a pointer to
-> + *         the selected sock or an error.
-> + */
->  struct sock *inet_lookup_reuseport(struct net *net, struct sock *sk,
->  				   struct sk_buff *skb, int doff,
->  				   __be32 saddr, __be16 sport,
-> diff --git a/net/ipv6/inet6_hashtables.c b/net/ipv6/inet6_hashtables.c
-> index 3616225c89ef..d37602fabc00 100644
-> --- a/net/ipv6/inet6_hashtables.c
-> +++ b/net/ipv6/inet6_hashtables.c
-> @@ -114,6 +114,20 @@ static inline int compute_score(struct sock *sk, struct net *net,
->  
->  INDIRECT_CALLABLE_DECLARE(inet6_ehashfn_t udp6_ehashfn);
->  
-> +/**
-> + * inet6_lookup_reuseport() - execute reuseport logic on AF_INET6 socket if necessary.
-> + * @net: network namespace.
-> + * @sk: AF_INET6 socket, must be in TCP_LISTEN state for TCP or TCP_CLOSE for UDP.
-> + * @skb: context for a potential SK_REUSEPORT program.
-> + * @doff: header offset.
-> + * @saddr: source address.
-> + * @sport: source port.
-> + * @daddr: destination address.
-> + * @hnum: destination port in host byte order.
-
-Same here.
-
-
-> + *
-> + * Return: NULL if sk doesn't have SO_REUSEPORT set, otherwise a pointer to
-> + *         the selected sock or an error.
-> + */
->  struct sock *inet6_lookup_reuseport(struct net *net, struct sock *sk,
->  				    struct sk_buff *skb, int doff,
->  				    const struct in6_addr *saddr,
-> 
-> -- 
-> 2.40.1
+greg k-h
