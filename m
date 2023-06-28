@@ -2,99 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F5DD740B3D
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 10:25:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9B08740B87
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 10:32:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233978AbjF1IY6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 04:24:58 -0400
-Received: from lelv0143.ext.ti.com ([198.47.23.248]:55534 "EHLO
-        lelv0143.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233817AbjF1IU7 (ORCPT
+        id S233912AbjF1IcM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 04:32:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41596 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234842AbjF1I1z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 04:20:59 -0400
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 35S8Kk9n120812;
-        Wed, 28 Jun 2023 03:20:46 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1687940446;
-        bh=jl//wheQUX9KT7i1/Iv7eiB6CFe7ES3HsUsD8F3mOEQ=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=PT2WIQrJxoQLC8BXqq1YBoDDf8MUjOi/iuMEBXSDtIlfqqjZos/okhlbsx2BFn7V6
-         If7e9uOP58QC2P7qWpQsliwAWeQoeW0uDAv3O1Z0fZzZELJrprbKMM/pmwhsLg6WAt
-         xPfPn4TddVhaMgKKX3nEU50XBO5RlP5rjSbYjvTk=
-Received: from DFLE102.ent.ti.com (dfle102.ent.ti.com [10.64.6.23])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 35S8Kk0Z058413
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 28 Jun 2023 03:20:46 -0500
-Received: from DFLE114.ent.ti.com (10.64.6.35) by DFLE102.ent.ti.com
- (10.64.6.23) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Wed, 28
- Jun 2023 03:20:46 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE114.ent.ti.com
- (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Wed, 28 Jun 2023 03:20:46 -0500
-Received: from [172.24.217.204] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 35S8KgHr116006;
-        Wed, 28 Jun 2023 03:20:43 -0500
-Message-ID: <7fe4adef-9be2-6dae-d53f-692f9775439c@ti.com>
-Date:   Wed, 28 Jun 2023 13:50:42 +0530
+        Wed, 28 Jun 2023 04:27:55 -0400
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02B201FE8;
+        Wed, 28 Jun 2023 01:21:46 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id 4fb4d7f45d1cf-51d80c5c834so1258115a12.1;
+        Wed, 28 Jun 2023 01:21:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687940504; x=1690532504;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Db2b1drcKZ8bYZGtiVSlYoLfHEvPC00Fe2KRsKbkAow=;
+        b=oyHT/PBTrBJOWW9uSHX8JHLMxyniJfcZ20guKjWbvOGKzO07bjOzXZFrOhoYRgOruS
+         C/w2IkHsAr1nqtgTbjtHhkWyaej1J1xS8vZxkZX0wDgwMXgSDevYNLuZfH2lHFMgwAUr
+         5Nzc4lHSRVNkKoS+pA1NqKw7PXagsxvmbmEG63Ctbwga4zmEbIbfDYc0nh9czC1NkU06
+         4EhUluL6BuFXB6HQlfcf7eq1k7WOsr+AOMp5s5W1J9Lvu7tloO4dwpj+IZjZDzS1ehEa
+         H3g2f5DdpcsbS1m33wP1amtox5rbdWKvImLDo83w9bsxmTvUrYTn7aonknHD7f31dhot
+         iPYw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687940504; x=1690532504;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Db2b1drcKZ8bYZGtiVSlYoLfHEvPC00Fe2KRsKbkAow=;
+        b=PxBey6orXJjXs+3eKKr1c1UzkJwwAXxCuh3kR0ZAotG9Yqt0sOJoKfGNJuFU7osS3G
+         3eqe1REeGqzNm3kLGA+DmiD/W2xHYmJZRyECvZha7dm6w5eet11by7Df3p8Me9qa9mpP
+         NkrmAibBD1GIcWVFymOuMktttrFMUqKSXrgDZhtrVZUyphZRzyOqzx+uFFBAnBp5hsoR
+         I/fljUpFV55vgi8QFJnBEB9/ad5vRHDMwD5ovdVYb1/mAxWzRBZW6k5LRt97ZZRpmNZ7
+         EUcde3cHqnNGsY4QbgvR2XAVj0HGmlCycGB5/BoLaNCTfkKKnZhpUWLZ2V8LbWK13b0j
+         xc0w==
+X-Gm-Message-State: AC+VfDwyoVnXBgeJMD56tXDq6SmS7YMH4fi/lN2LLTghNnFGJJVYxMTc
+        10JQl9EpfCQOUfn+5vVUuzuQiMZBgGx8nYRQMJY=
+X-Google-Smtp-Source: ACHHUZ4C2pT8MhQeLYD8j0yGFHFNONA2MaLYo8SvketYluYkViF3Vk0d0NH5E8q2lu+r1kqhvS1yoxQ5EXc0dwBSw+w=
+X-Received: by 2002:aa7:c388:0:b0:514:a21b:f137 with SMTP id
+ k8-20020aa7c388000000b00514a21bf137mr643963edq.6.1687940504022; Wed, 28 Jun
+ 2023 01:21:44 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v2] arm64: dts: ti: k3-j721s2-main: Enable support for
- SDR104 speed mode
-To:     Bhavya Kapoor <b-kapoor@ti.com>, <linux-kernel@vger.kernel.org>,
-        <devicetree@vger.kernel.org>
-CC:     <linux-arm-kernel@lists.infradead.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <robh+dt@kernel.org>,
-        <kristo@kernel.org>, <vigneshr@ti.com>, <nm@ti.com>,
-        <u-kumar1@ti.com>
-References: <20230412121415.860447-1-b-kapoor@ti.com>
-Content-Language: en-US
-From:   "Kumar, Udit" <u-kumar1@ti.com>
-In-Reply-To: <20230412121415.860447-1-b-kapoor@ti.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+References: <20230625123037.8384-1-dangel101@gmail.com>
+In-Reply-To: <20230625123037.8384-1-dangel101@gmail.com>
+From:   Enric Balletbo Serra <eballetbo@gmail.com>
+Date:   Wed, 28 Jun 2023 10:21:31 +0200
+Message-ID: <CAFqH_50RqvARZxVTnHz8fPm_CPQq0cwpr1kxGRxFzCjB_+RBCA@mail.gmail.com>
+Subject: Re: [PATCH v2] selftests/input: add tests for the EVIOCSABS ioctl
+To:     Dana Elfassy <delfassy@redhat.com>
+Cc:     shuah@kernel.org, eballetbo@kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Dana Elfassy <dangel101@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+        lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Dana,
 
-On 4/12/2023 5:44 PM, Bhavya Kapoor wrote:
-> According to TRM for J721S2, SDR104 speed mode is supported by the SoC
-> but its capabilities were masked in device tree. Remove sdhci-caps-mask
-> to enable support for SDR104 speed mode for SD card in J721S2 SoC.
+Thank you for the patch.
+
+Missatge de Dana Elfassy <delfassy@redhat.com> del dia dg., 25 de juny
+2023 a les 14:31:
 >
-> [+] Refer to : section 12.3.6.1.1 MMCSD Features, in J721S2 TRM
-> - https://www.ti.com/lit/zip/spruj28
+> This patch introduces two tests for the EVIOCSABS ioctl. The first one
+> checks that the ioctl fails when the EV_ABS bit was not set, and the
+> second one just checks that the normal workflow for this ioctl
+> succeeds.
 >
-> Fixes: b8545f9d3a54 ("arm64: dts: ti: Add initial support for J721S2 SoC")
-> Signed-off-by: Bhavya Kapoor <b-kapoor@ti.com>
+> Signed-off-by: Dana Elfassy <dangel101@gmail.com>
+
+Using gcov i see that this covers the code path when an EVIOCSABS
+ioctl is called, so
+
+Reviewed-by: Enric Balletbo i Serra <eballetbo@kernel.org>
+
+
 > ---
-> Changelog v1->v2:
-> 	- Modified Commit Message and Added Fixes tag
+> This patch depends on '[v3] selftests/input: Introduce basic tests for evdev ioctls' [1] sent to the ML.
+> [1] https://patchwork.kernel.org/project/linux-input/patch/20230607153214.15933-1-eballetbo@kernel.org/
 >
-> Link to v1 : https://lore.kernel.org/all/20230404091245.336732-1-b-kapoor@ti.com/
+>  tools/testing/selftests/input/evioc-test.c | 23 ++++++++++++++++++++++
+>  1 file changed, 23 insertions(+)
 >
->   arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi | 2 --
->   1 file changed, 2 deletions(-)
+> diff --git a/tools/testing/selftests/input/evioc-test.c b/tools/testing/selftests/input/evioc-test.c
+> index 4c0c8ebed378..7afd537f0b24 100644
+> --- a/tools/testing/selftests/input/evioc-test.c
+> +++ b/tools/testing/selftests/input/evioc-test.c
+> @@ -279,4 +279,27 @@ TEST(eviocgrep_get_repeat_settings)
+>         selftest_uinput_destroy(uidev);
+>  }
 >
-> diff --git a/arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi b/arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi
-> index 8915132efcc1..95c6151ed10c 100644
-> --- a/arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi
-> +++ b/arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi
-> @@ -400,8 +400,6 @@ main_sdhci1: mmc@4fb0000 {
->   		ti,clkbuf-sel = <0x7>;
->   		ti,trm-icp = <0x8>;
->   		dma-coherent;
-> -		/* Masking support for SDR104 capability */
-> -		sdhci-caps-mask = <0x00000003 0x00000000>;
-
-
-Reviewed-by: Udit Kumar <u-kumar1@ti.com>
-
->   	};
->   
->   	main_navss: bus@30000000 {
+> +TEST(eviocsabs_set_abs_value_limits)
+> +{
+> +       struct selftest_uinput *uidev;
+> +       struct input_absinfo absinfo;
+> +       int rc;
+> +
+> +       // fail test on dev->absinfo
+> +       rc = selftest_uinput_create_device(&uidev), -1;
+> +       ASSERT_EQ(0, rc);
+> +       ASSERT_NE(NULL, uidev);
+> +       rc = ioctl(uidev->evdev_fd, EVIOCSABS(0), &absinfo);
+> +       ASSERT_EQ(-1, rc);
+> +       selftest_uinput_destroy(uidev);
+> +
+> +       // ioctl normal flow
+> +       rc = selftest_uinput_create_device(&uidev, EV_ABS, -1);
+> +       ASSERT_EQ(0, rc);
+> +       ASSERT_NE(NULL, uidev);
+> +       rc = ioctl(uidev->evdev_fd, EVIOCSABS(0), &absinfo);
+> +       ASSERT_EQ(0, rc);
+> +       selftest_uinput_destroy(uidev);
+> +}
+> +
+>  TEST_HARNESS_MAIN
+> --
+> 2.41.0
+>
