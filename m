@@ -2,122 +2,203 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56FCD740F67
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 12:56:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6B63740F6F
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 12:57:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230113AbjF1K4j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 06:56:39 -0400
-Received: from mga07.intel.com ([134.134.136.100]:49747 "EHLO mga07.intel.com"
+        id S231126AbjF1K5H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 06:57:07 -0400
+Received: from foss.arm.com ([217.140.110.172]:53656 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230152AbjF1K4J (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 06:56:09 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687949769; x=1719485769;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=WgvMUlURPSf3sLuU7HCU3MKlq0fqlttjYS4ABXRfEVQ=;
-  b=Y90y69hPrFYoOqMjI9eJ8AsbNrP/Aq8IAbd69Qq0vkOzDN1NKw41XtON
-   6jDtuZKkb5SIayYcCXPniQCtBn7DxRBAPvmBKztsZjhBOsa++vZItplTn
-   O3sg6R02MA2qqcOgAz6rufTjgBWdpg9B/cyrzZlyQNTiOZaRG31x10h8V
-   xiFi01iELfT5Ms3Up6WgbRvir93gEQ4KZThSN3PMLrPvM6tfzGO3z5uGP
-   Wjmkh2ucwPLFatPJHQPnxfVnRdh5++5N72H9clCvkH2BDhxDle6uGYjVJ
-   EyXlmei1Yz9OYVIh98kfUIaYJeMmRDr2dC+vEQnSJGHJokun/hFWvFqyd
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10754"; a="427818562"
-X-IronPort-AV: E=Sophos;i="6.01,165,1684825200"; 
-   d="scan'208";a="427818562"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2023 03:54:30 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10754"; a="752196704"
-X-IronPort-AV: E=Sophos;i="6.01,165,1684825200"; 
-   d="scan'208";a="752196704"
-Received: from linux-pnp-server-30.sh.intel.com ([10.239.146.163])
-  by orsmga001.jf.intel.com with ESMTP; 28 Jun 2023 03:54:27 -0700
-From:   "Zhu, Lipeng" <lipeng.zhu@intel.com>
-To:     akpm@linux-foundation.org, viro@zeniv.linux.org.uk,
-        brauner@kernel.org
-Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, pan.deng@intel.com, yu.ma@intel.com,
-        tianyou.li@intel.com, tim.c.chen@linux.intel.com,
-        "Zhu, Lipeng" <lipeng.zhu@intel.com>
-Subject: [PATCH] fs/address_space: add alignment padding for i_map and i_mmap_rwsem to mitigate a false sharing.
-Date:   Wed, 28 Jun 2023 18:56:25 +0800
-Message-Id: <20230628105624.150352-1-lipeng.zhu@intel.com>
-X-Mailer: git-send-email 2.39.1
+        id S230451AbjF1K4z (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 28 Jun 2023 06:56:55 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6555AC14;
+        Wed, 28 Jun 2023 03:57:38 -0700 (PDT)
+Received: from [10.57.76.180] (unknown [10.57.76.180])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id BC1553F663;
+        Wed, 28 Jun 2023 03:56:51 -0700 (PDT)
+Message-ID: <b2c81404-67df-f841-ef02-919e841f49f2@arm.com>
+Date:   Wed, 28 Jun 2023 11:56:50 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.12.0
+Subject: Re: [PATCH v1 01/10] mm: Expose clear_huge_page() unconditionally
+To:     Yu Zhao <yuzhao@google.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Yin Fengwei <fengwei.yin@intel.com>,
+        David Hildenbrand <david@redhat.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-alpha@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, linux-s390@vger.kernel.org
+References: <20230626171430.3167004-1-ryan.roberts@arm.com>
+ <20230626171430.3167004-2-ryan.roberts@arm.com>
+ <CAOUHufacvArJh7NjL_3LT-e3s1X+bazkvbgvEU+KPKGKEoW+dw@mail.gmail.com>
+ <2ff8ccf6-bf36-48b2-7dc2-e6c0d962f8b7@arm.com>
+ <CAOUHufZoT-maN3kY5eYQmrYV48shmKAAancEvabXzfTDncDa9A@mail.gmail.com>
+ <91e3364f-1d1b-f959-636b-4f60bf5a577b@arm.com>
+ <CAOUHufaEwY=cm8mBi4HSbxYBvAr_x4_vyZZM2NYHEt-U7KaFhA@mail.gmail.com>
+From:   Ryan Roberts <ryan.roberts@arm.com>
+In-Reply-To: <CAOUHufaEwY=cm8mBi4HSbxYBvAr_x4_vyZZM2NYHEt-U7KaFhA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When running UnixBench/Shell Scripts, we observed high false sharing
-for accessing i_mmap against i_mmap_rwsem.
+On 27/06/2023 19:26, Yu Zhao wrote:
+> On Tue, Jun 27, 2023 at 3:41 AM Ryan Roberts <ryan.roberts@arm.com> wrote:
+>>
+>> On 27/06/2023 09:29, Yu Zhao wrote:
+>>> On Tue, Jun 27, 2023 at 1:21 AM Ryan Roberts <ryan.roberts@arm.com> wrote:
+>>>>
+>>>> On 27/06/2023 02:55, Yu Zhao wrote:
+>>>>> On Mon, Jun 26, 2023 at 11:14 AM Ryan Roberts <ryan.roberts@arm.com> wrote:
+>>>>>>
+>>>>>> In preparation for extending vma_alloc_zeroed_movable_folio() to
+>>>>>> allocate a arbitrary order folio, expose clear_huge_page()
+>>>>>> unconditionally, so that it can be used to zero the allocated folio in
+>>>>>> the generic implementation of vma_alloc_zeroed_movable_folio().
+>>>>>>
+>>>>>> Signed-off-by: Ryan Roberts <ryan.roberts@arm.com>
+>>>>>> ---
+>>>>>>  include/linux/mm.h | 3 ++-
+>>>>>>  mm/memory.c        | 2 +-
+>>>>>>  2 files changed, 3 insertions(+), 2 deletions(-)
+>>>>>>
+>>>>>> diff --git a/include/linux/mm.h b/include/linux/mm.h
+>>>>>> index 7f1741bd870a..7e3bf45e6491 100644
+>>>>>> --- a/include/linux/mm.h
+>>>>>> +++ b/include/linux/mm.h
+>>>>>> @@ -3684,10 +3684,11 @@ enum mf_action_page_type {
+>>>>>>   */
+>>>>>>  extern const struct attribute_group memory_failure_attr_group;
+>>>>>>
+>>>>>> -#if defined(CONFIG_TRANSPARENT_HUGEPAGE) || defined(CONFIG_HUGETLBFS)
+>>>>>>  extern void clear_huge_page(struct page *page,
+>>>>>>                             unsigned long addr_hint,
+>>>>>>                             unsigned int pages_per_huge_page);
+>>>>>> +
+>>>>>> +#if defined(CONFIG_TRANSPARENT_HUGEPAGE) || defined(CONFIG_HUGETLBFS)
+>>>>>
+>>>>> We might not want to depend on THP eventually. Right now, we still
+>>>>> have to, unless splitting is optional, which seems to contradict
+>>>>> 06/10. (deferred_split_folio()  is a nop without THP.)
+>>>>
+>>>> Yes, I agree - for large anon folios to work, we depend on THP. But I don't
+>>>> think that helps us here.
+>>>>
+>>>> In the next patch, I give vma_alloc_zeroed_movable_folio() an extra `order`
+>>>> parameter. So the generic/default version of the function now needs a way to
+>>>> clear a compound page.
+>>>>
+>>>> I guess I could do something like:
+>>>>
+>>>>  static inline
+>>>>  struct folio *vma_alloc_zeroed_movable_folio(struct vm_area_struct *vma,
+>>>>                                    unsigned long vaddr, gfp_t gfp, int order)
+>>>>  {
+>>>>         struct folio *folio;
+>>>>
+>>>>         folio = vma_alloc_folio(GFP_HIGHUSER_MOVABLE | gfp,
+>>>>                                         order, vma, vaddr, false);
+>>>>         if (folio) {
+>>>> #ifdef CONFIG_LARGE_FOLIO
+>>>>                 clear_huge_page(&folio->page, vaddr, 1U << order);
+>>>> #else
+>>>>                 BUG_ON(order != 0);
+>>>>                 clear_user_highpage(&folio->page, vaddr);
+>>>> #endif
+>>>>         }
+>>>>
+>>>>         return folio;
+>>>>  }
+>>>>
+>>>> But that's pretty messy and there's no reason why other users might come along
+>>>> that pass order != 0 and will be surprised by the BUG_ON.
+>>>
+>>> #ifdef CONFIG_LARGE_ANON_FOLIO // depends on CONFIG_TRANSPARENT_HUGE_PAGE
+>>> struct folio *alloc_anon_folio(struct vm_area_struct *vma, unsigned
+>>> long vaddr, int order)
+>>> {
+>>>   // how do_huge_pmd_anonymous_page() allocs and clears
+>>>   vma_alloc_folio(..., *true*);
+>>
+>> This controls the mem allocation policy (see mempolicy.c::vma_alloc_folio()) not
+>> clearing. Clearing is done in __do_huge_pmd_anonymous_page():
+>>
+>>   clear_huge_page(page, vmf->address, HPAGE_PMD_NR);
+> 
+> Sorry for rushing this previously. This is what I meant. The #ifdef
+> makes it safe to use clear_huge_page() without 01/10. I highlighted
+> the last parameter to vma_alloc_folio() only because it's different
+> from what you chose (not implying it clears the folio).>
+>>> }
+>>> #else
+>>> #define alloc_anon_folio(vma, addr, order)
+>>> vma_alloc_zeroed_movable_folio(vma, addr)
+>>> #endif
+>>
+>> Sorry I don't get this at all... If you are suggesting to bypass
+>> vma_alloc_zeroed_movable_folio() entirely for the LARGE_ANON_FOLIO case
+> 
+> Correct.
+> 
+>> I don't
+>> think that works because the arch code adds its own gfp flags there. For
+>> example, arm64 adds __GFP_ZEROTAGS for VM_MTE VMAs.
+> 
+> I think it's the opposite: it should be safer to reuse the THP code because
+> 1. It's an existing case that has been working for PMD_ORDER folios
+> mapped by PTEs, and it's an arch-independent API which would be easier
+> to review.
+> 2. Use vma_alloc_zeroed_movable_folio() for large folios is a *new*
+> case. It's an arch-*dependent* API which I have no idea what VM_MTE
+> does (should do) to large folios and don't plan to answer that for
+> now.
 
-UnixBench/Shell Scripts are typical load/execute command test scenarios,
-the i_mmap will be accessed frequently to insert/remove vma_interval_tree.
-Meanwhile, the i_mmap_rwsem is frequently loaded. Unfortunately, they are
-in the same cacheline.
+I've done some archaology on this now, and convinced myself that your suggestion
+is a good one - sorry for doubting it!
 
-The patch places the i_mmap and i_mmap_rwsem in separate cache lines to avoid
-this false sharing problem.
+If you are interested here are the details: Only arm64 and ia64 do something
+non-standard in vma_alloc_zeroed_movable_folio(). ia64 flushes the dcache for
+the folio - but given it does not support THP this is not a problem for the THP
+path. arm64 adds the __GFP_ZEROTAGS flag which means that the MTE tags will be
+zeroed at the same time as the page is zeroed. This is a perf optimization - if
+its not performed then it will be done at set_pte_at(), which is how this works
+for the THP path.
 
-With this patch, on Intel Sapphire Rapids 2 sockets 112c/224t platform, based
-on kernel v6.4-rc4, the 224 parallel score is improved ~2.5% for
-UnixBench/Shell Scripts case. And perf c2c tool shows the false sharing is
-resolved as expected, the symbol vma_interval_tree_remove disappeared in
-cache line 0 after this change.
+So on that basis, I agree we can use your proposed alloc_anon_folio() approach.
+arm64 will lose the MTE optimization but that can be added back later if needed.
+So no need to unconditionally expose clear_huge_page() and no need to modify all
+the arch vma_alloc_zeroed_movable_folio() implementations.
 
-Baseline:
-=================================================
-      Shared Cache Line Distribution Pareto
-=================================================
-  -------------------------------------------------------------
-      0    13642    19392     9012       63  0xff1ddd3f0c8a3b00
-  -------------------------------------------------------------
-    9.22%    7.37%    0.00%    0.00%    0x0     0       1  0xffffffffab344052       518       334       354     5490       160  [k] vma_interval_tree_remove    [kernel.kallsyms]  vma_interval_tree_remove+18      0  1
-    0.71%    0.73%    0.00%    0.00%    0x8     0       1  0xffffffffabb9a21f       574       338       458     1991       160  [k] rwsem_down_write_slowpath   [kernel.kallsyms]  rwsem_down_write_slowpath+655    0  1
-    0.52%    0.71%    5.34%    6.35%    0x8     0       1  0xffffffffabb9a236      1080       597       390     4848       160  [k] rwsem_down_write_slowpath   [kernel.kallsyms]  rwsem_down_write_slowpath+678    0  1
-    0.56%    0.47%   26.39%    6.35%    0x8     0       1  0xffffffffabb9a5ec      1327      1037       587     8537       160  [k] down_write                  [kernel.kallsyms]  down_write+28                    0  1
-    0.11%    0.08%   15.72%    1.59%    0x8     0       1  0xffffffffab17082b      1618      1077       735     7303       160  [k] up_write                    [kernel.kallsyms]  up_write+27                      0  1
-    0.01%    0.02%    0.08%    0.00%    0x8     0       1  0xffffffffabb9a27d      1594       593       512       53        43  [k] rwsem_down_write_slowpath   [kernel.kallsyms]  rwsem_down_write_slowpath+749    0  1
-    0.00%    0.01%    0.00%    0.00%    0x8     0       1  0xffffffffabb9a0c4         0       323       518       97        74  [k] rwsem_down_write_slowpath   [kernel.kallsyms]  rwsem_down_write_slowpath+308    0  1
-   44.74%   49.78%    0.00%    0.00%   0x10     0       1  0xffffffffab170995       609       344       430    26841       160  [k] rwsem_spin_on_owner         [kernel.kallsyms]  rwsem_spin_on_owner+53           0  1
-   26.62%   22.39%    0.00%    0.00%   0x10     0       1  0xffffffffab170965       514       347       437    13364       160  [k] rwsem_spin_on_owner         [kernel.kallsyms]  rwsem_spin_on_owner+5            0  1
+Thanks,
+Ryan
 
-With this change:
-  -------------------------------------------------------------
-      0    12726    18554     9039       49  0xff157a0f25b90c40
-  -------------------------------------------------------------
-    0.90%    0.72%    0.00%    0.00%    0x0     1       1  0xffffffffa5f9a21f       532       353       461     2200       160  [k] rwsem_down_write_slowpath   [kernel.kallsyms]  rwsem_down_write_slowpath+655    0  1
-    0.53%    0.70%    5.16%    6.12%    0x0     1       1  0xffffffffa5f9a236      1196       670       403     4774       160  [k] rwsem_down_write_slowpath   [kernel.kallsyms]  rwsem_down_write_slowpath+678    0  1
-    0.68%    0.51%   25.91%    6.12%    0x0     1       1  0xffffffffa5f9a5ec      1049       807       540     8552       160  [k] down_write                  [kernel.kallsyms]  down_write+28                    0  1
-    0.09%    0.06%   16.50%    2.04%    0x0     1       1  0xffffffffa557082b      1693      1351       758     7317       160  [k] up_write                    [kernel.kallsyms]  up_write+27                      0  1
-    0.01%    0.00%    0.00%    0.00%    0x0     1       1  0xffffffffa5f9a0c4       543         0       491       89        68  [k] rwsem_down_write_slowpath   [kernel.kallsyms]  rwsem_down_write_slowpath+308    0  1
-    0.00%    0.01%    0.02%    0.00%    0x0     1       1  0xffffffffa5f9a27d         0       597       742       45        40  [k] rwsem_down_write_slowpath   [kernel.kallsyms]  rwsem_down_write_slowpath+749    0  1
-   49.29%   53.01%    0.00%    0.00%    0x8     1       1  0xffffffffa5570995       580       310       413    27106       160  [k] rwsem_spin_on_owner         [kernel.kallsyms]  rwsem_spin_on_owner+53           0  1
-   28.60%   24.12%    0.00%    0.00%    0x8     1       1  0xffffffffa5570965       490       321       419    13244       160  [k] rwsem_spin_on_owner         [kernel.kallsyms]  rwsem_spin_on_owner+5            0  1
 
-Reviewed-by: Tim Chen <tim.c.chen@linux.intel.com>
-Signed-off-by: Lipeng Zhu <lipeng.zhu@intel.com>
----
- include/linux/fs.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/include/linux/fs.h b/include/linux/fs.h
-index c85916e9f7db..d3dd8dcc9b8b 100644
---- a/include/linux/fs.h
-+++ b/include/linux/fs.h
-@@ -434,7 +434,7 @@ struct address_space {
- 	atomic_t		nr_thps;
- #endif
- 	struct rb_root_cached	i_mmap;
--	struct rw_semaphore	i_mmap_rwsem;
-+	struct rw_semaphore	i_mmap_rwsem ____cacheline_aligned_in_smp;
- 	unsigned long		nrpages;
- 	pgoff_t			writeback_index;
- 	const struct address_space_operations *a_ops;
--- 
-2.39.1
+> 
+>> Perhaps we can do away with an arch-owned vma_alloc_zeroed_movable_folio() and
+>> replace it with a new arch_get_zeroed_movable_gfp_flags() then
+>> alloc_anon_folio() add in those flags?
+>>
+>> But I still think the cleanest, simplest change is just to unconditionally
+>> expose clear_huge_page() as I've done it.
+> 
+> The fundamental choice there as I see it is to whether the first step
+> of large anon folios should lean toward the THP code base or the base
+> page code base (I'm a big fan of the answer "Neither -- we should
+> create something entirely new instead"). My POV is that the THP code
+> base would allow us to move faster, since it's proven to work for a
+> very similar case (PMD_ORDER folios mapped by PTEs).
 
