@@ -2,153 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4F257410CF
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 14:14:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD6557410D4
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 14:18:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230054AbjF1MOU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 08:14:20 -0400
-Received: from www262.sakura.ne.jp ([202.181.97.72]:56474 "EHLO
-        www262.sakura.ne.jp" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229544AbjF1MOS (ORCPT
+        id S230271AbjF1MSU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 08:18:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38904 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229522AbjF1MSR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 08:14:18 -0400
-Received: from fsav112.sakura.ne.jp (fsav112.sakura.ne.jp [27.133.134.239])
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 35SCEHJP077978;
-        Wed, 28 Jun 2023 21:14:17 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Received: from www262.sakura.ne.jp (202.181.97.72)
- by fsav112.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav112.sakura.ne.jp);
- Wed, 28 Jun 2023 21:14:17 +0900 (JST)
-X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav112.sakura.ne.jp)
-Received: from [192.168.1.6] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
-        (authenticated bits=0)
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 35SCEG6P077973
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
-        Wed, 28 Jun 2023 21:14:16 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Message-ID: <a1c559b7-335e-5401-d167-301c5b1cd312@I-love.SAKURA.ne.jp>
-Date:   Wed, 28 Jun 2023 21:14:16 +0900
+        Wed, 28 Jun 2023 08:18:17 -0400
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C4F51BC3;
+        Wed, 28 Jun 2023 05:18:16 -0700 (PDT)
+Received: by mail-lf1-x134.google.com with SMTP id 2adb3069b0e04-4fb7dc16ff0so3694058e87.2;
+        Wed, 28 Jun 2023 05:18:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687954694; x=1690546694;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=4FYIxAMkhkhiAjDiPN+KI7EBsu/xU4FGXFKUcyj7bx8=;
+        b=FAdfpsuuwPtBqoIZEb1jLfLqbuc1jj3PzETRwPGNdTzsgFQ9fRpf08qU+QwLMi1Ia9
+         ZHWbThZFG6j5GKkkFG2szDHhcseNgS62ZmR5lZuF04vmJdo40ubsfXOkg8hbqMCHQdWa
+         GMnAPYcm3jO23oDxSY59hnhlNMk1FFu5dsnWZ8umoBeaZ+NbPCfRUyyD3FCnLzvFUw87
+         UsU0b5mCW0VMuhgHLcyMJQdH6ShdR/B2uOG2OF1sBkKyuMhC3zurMkUT/EFOVf5WIWYE
+         USBfFi6TkYQDIncrfH2f84H4t0fvZmjtep+hUZVmS3uEvYIyABrB6ePZx1JarEsZMVTX
+         pLwQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687954694; x=1690546694;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=4FYIxAMkhkhiAjDiPN+KI7EBsu/xU4FGXFKUcyj7bx8=;
+        b=Cuf2TDwzm0YKpJ8Ho9x7BOHBT8loLWntFk9YiWO2BtRyfm+MKFc1/XWOlkzuIasWWV
+         ILA27fIhJ36XK1GGkk1EIU8uh3UB/vHk9/+ZfJ+1ex9RgGl5DzTISInmG+w1KTVb+EeN
+         D2gPD+7VrIiI1gpsgrnZ4Ojl+sbeWGiMh6gSIz/Fr+oy4DvoNiPYDiWMPjOkQdTSjUgd
+         Tv6rUMaRevoKwfFKMmW6YdbBBFZsDC8UF/Wdpg/suY6ZzeYyLcRaAkJDuf6nKFA8pfeU
+         8UWErkmlHw0AOVATdOl71DYh/lF6/gYFGgtXT+9hmObwUNF5DEXNVV4MBPmiNwQrVG2Q
+         ep1A==
+X-Gm-Message-State: AC+VfDwKJJz3xUKi7eA71IlD8y8TYdTkJGbc6lPL4AEsxBhq4Cb+DtM1
+        Vd9W7phFIM6qs+zNLSRm4mI=
+X-Google-Smtp-Source: ACHHUZ7OXOQxRsAX0aD4U5RT8WOW8kqx2K3fjQ47nANcHQbcQoZbPLldxuOr9IJ+f8EpU3/bBSPrZw==
+X-Received: by 2002:ac2:4f0f:0:b0:4fb:8c2a:d43f with SMTP id k15-20020ac24f0f000000b004fb8c2ad43fmr2809030lfr.7.1687954693971;
+        Wed, 28 Jun 2023 05:18:13 -0700 (PDT)
+Received: from oberon.zico.biz (77-85-190-39.ip.btc-net.bg. [77.85.190.39])
+        by smtp.gmail.com with ESMTPSA id g11-20020a7bc4cb000000b003fbab76165asm2978672wmk.48.2023.06.28.05.18.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 28 Jun 2023 05:18:13 -0700 (PDT)
+From:   "Tzvetomir Stoyanov (VMware)" <tz.stoyanov@gmail.com>
+To:     rostedt@goodmis.org
+Cc:     mhiramat@kernel.org, dan.carpenter@linaro.org,
+        linux-trace-devel@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] kernel/trace: Fix cleanup logic of enable_trace_eprobe
+Date:   Wed, 28 Jun 2023 15:18:11 +0300
+Message-ID: <20230628121811.338655-1-tz.stoyanov@gmail.com>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v2 1/2] seqlock: Do the lockdep annotation before locking
- in do_write_seqcount_begin_nested()
-Content-Language: en-US
-To:     Petr Mladek <pmladek@suse.com>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        "Luis Claudio R. Goncalves" <lgoncalv@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        John Ogness <john.ogness@linutronix.de>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Michal Hocko <mhocko@suse.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Waiman Long <longman@redhat.com>, Will Deacon <will@kernel.org>
-References: <20230623171232.892937-1-bigeasy@linutronix.de>
- <20230623171232.892937-2-bigeasy@linutronix.de>
- <d9b7c170-ed0d-5d37-e099-20d233115943@I-love.SAKURA.ne.jp>
- <20230626081254.XmorFrhs@linutronix.de> <ZJmkPuqpW-wQAyNz@alley>
-From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-In-Reply-To: <ZJmkPuqpW-wQAyNz@alley>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+        lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/06/26 23:44, Petr Mladek wrote:
-> On Mon 2023-06-26 10:12:54, Sebastian Andrzej Siewior wrote:
->> On 2023-06-24 15:54:12 [+0900], Tetsuo Handa wrote:
->>> Why not to do the same on the end side?
->>>
->>>  static inline void do_write_seqcount_end(seqcount_t *s)
->>>  {
->>> - 	seqcount_release(&s->dep_map, _RET_IP_);
->>>  	do_raw_write_seqcount_end(s);
->>> +	seqcount_release(&s->dep_map, _RET_IP_);
->>>  }
->>
->> I don't have a compelling argument for doing it. It is probably better
->> to release the lock from lockdep's point of view and then really release
->> it (so it can't be acquired before it is released).
-> 
-> If this is true then we should not change the ordering on the _begin
-> side either. I mean that we should call the lockdep code only
-> after the lock is taken. Anyway, both sides should be symmetric.
-> 
-> That said, lockdep is about chains of locks and not about timing.
-> We must not call lockdep annotation when the lock is still available
-> for a nested context. So the ordering is probably important only when
-> the lock might be taken from both normal and interrupt context.
-> 
-> Anyway, please do not do this change only because of printk().
-> IMHO, the current ordering is more logical and the printk() problem
-> should be solved another way.
+The enable_trace_eprobe() function enables all event probes, attached
+to given trace probe. If an error occurs in enabling one of the event
+probes, all others should be roll backed. There is a bug in that roll
+back logic - instead of all event probes, only the failed one is
+disabled.
 
-Then, since [PATCH 1/2] cannot be applied, [PATCH 2/2] is automatically
-rejected.
+Reported-by: Dan Carpenter <dan.carpenter@linaro.org>
+Fixes: 7491e2c44278 ("tracing: Add a probe that attaches to trace events")
+Signed-off-by: Tzvetomir Stoyanov (VMware) <tz.stoyanov@gmail.com>
+---
+ kernel/trace/trace_eprobe.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-
-
-I found
-
-  /*
-   * Locking a pcp requires a PCP lookup followed by a spinlock. To avoid
-   * a migration causing the wrong PCP to be locked and remote memory being
-   * potentially allocated, pin the task to the CPU for the lookup+lock.
-   * preempt_disable is used on !RT because it is faster than migrate_disable.
-   * migrate_disable is used on RT because otherwise RT spinlock usage is
-   * interfered with and a high priority task cannot preempt the allocator.
-   */
-  #ifndef CONFIG_PREEMPT_RT
-  #define pcpu_task_pin()         preempt_disable()
-  #define pcpu_task_unpin()       preempt_enable()
-  #else
-  #define pcpu_task_pin()         migrate_disable()
-  #define pcpu_task_unpin()       migrate_enable()
-  #endif
-
-in mm/page_alloc.c . Thus, I think that calling migrate_disable() if CONFIG_PREEMPT_RT=y
-and calling local_irq_save() if CONFIG_PREEMPT_RT=n (i.e. Alternative 3) will work.
-
-But thinking again, since CONFIG_PREEMPT_RT=y uses special printk() approach where messages
-are printed from a dedicated kernel thread, do we need to call printk_deferred_enter() if
-CONFIG_PREEMPT_RT=y ? That is, isn't the fix as straightforward as below?
-
-----------------------------------------
-diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-index 47421bedc12b..a2a3bfa69a12 100644
---- a/mm/page_alloc.c
-+++ b/mm/page_alloc.c
-@@ -5805,6 +5805,7 @@ static void __build_all_zonelists(void *data)
- 	int nid;
- 	int __maybe_unused cpu;
- 	pg_data_t *self = data;
-+#ifndef CONFIG_PREEMPT_RT
- 	unsigned long flags;
+diff --git a/kernel/trace/trace_eprobe.c b/kernel/trace/trace_eprobe.c
+index 67e854979d53..ba9a28bc773f 100644
+--- a/kernel/trace/trace_eprobe.c
++++ b/kernel/trace/trace_eprobe.c
+@@ -702,8 +702,12 @@ static int enable_trace_eprobe(struct trace_event_call *call,
  
- 	/*
-@@ -5820,6 +5821,7 @@ static void __build_all_zonelists(void *data)
- 	 * calling kmalloc(GFP_ATOMIC | __GFP_NOWARN) with port->lock held.
- 	 */
- 	printk_deferred_enter();
-+#endif
- 	write_seqlock(&zonelist_update_seq);
- 
- #ifdef CONFIG_NUMA
-@@ -5858,8 +5860,10 @@ static void __build_all_zonelists(void *data)
- 	}
- 
- 	write_sequnlock(&zonelist_update_seq);
-+#ifndef CONFIG_PREEMPT_RT
- 	printk_deferred_exit();
- 	local_irq_restore(flags);
-+#endif
- }
- 
- static noinline void __init
-----------------------------------------
+ 	if (ret) {
+ 		/* Failed to enable one of them. Roll back all */
+-		if (enabled)
+-			disable_eprobe(ep, file->tr);
++		if (enabled) {
++			list_for_each_entry(pos, trace_probe_probe_list(tp), list) {
++				ep = container_of(pos, struct trace_eprobe, tp);
++				disable_eprobe(ep, file->tr);
++			}
++		}
+ 		if (file)
+ 			trace_probe_remove_file(tp, file);
+ 		else
+-- 
+2.41.0
 
