@@ -2,103 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 608537418A9
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 21:08:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D6127418AC
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 21:08:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232201AbjF1THa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 15:07:30 -0400
-Received: from bg4.exmail.qq.com ([43.154.54.12]:53345 "EHLO bg4.exmail.qq.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232160AbjF1THG (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 15:07:06 -0400
-X-QQ-mid: bizesmtp79t1687979217ti593xid
-Received: from linux-lab-host.localdomain ( [116.30.129.193])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Thu, 29 Jun 2023 03:06:55 +0800 (CST)
-X-QQ-SSF: 01200000000000D0W000000A0000000
-X-QQ-FEAT: D2GZf6M6C/jblY5+ez24uRSJrc6onlFKbVGlqPu9gz4C5VaEsHfPYV/+NbYNT
-        M1xzvZvpUGVdU4m30V11Y032mXFLtuUBz/mtlNUDT78V8fQ/lc5cTGseyv0F/f0q/eI4FDb
-        B2FbUnR/M5UMRVoi8g9xzAxpolnLJoudK9vMmMuJQ7xcbx68I+AHVvjOFo7ArkDBmY72K17
-        WpFiuGChYRn7DpN7ps7SrQCzwKzxAB0mOSMBUknzBEI0mP+u/OoB2NsfF4nMJXSIwPhcSgK
-        uX/3Z74F0cX7AiF4lVQeTGYbg+K8doDPqbNQ/9SiL4iEP7soaPyeIgLaT2FvFSs8jnE9qSo
-        Xd1YNJ9b6NQ4Od4okJQhNXhT4z0+qHgCdh0Nj/WbL1NR+KM2wI=
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 18249731880678126887
-From:   Zhangjin Wu <falcon@tinylab.org>
-To:     thomas@t-8ch.de, w@1wt.eu
-Cc:     falcon@tinylab.org, arnd@arndb.de, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org
-Subject: [PATCH v1 11/11] tools/nolibc: s390: shrink _start with _start_c
-Date:   Thu, 29 Jun 2023 03:06:44 +0800
-Message-Id: <2a63942b938ce0f016f3411f7c0d4b0c0d512e74.1687976753.git.falcon@tinylab.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <cover.1687976753.git.falcon@tinylab.org>
-References: <cover.1687976753.git.falcon@tinylab.org>
+        id S231910AbjF1THO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 15:07:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55238 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232109AbjF1TG6 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 28 Jun 2023 15:06:58 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA2201FE8
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 12:06:53 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id a640c23a62f3a-991ef0b464cso241521966b.0
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 12:06:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=metaspace-dk.20221208.gappssmtp.com; s=20221208; t=1687979212; x=1690571212;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=tHp3wJL5M2L2G+YbB2Q2IPPSaeVG/zhpefUOIq4q2Os=;
+        b=jDgSFPLYEQZXyfEfZwepmlvYqaf7ynGTJ/aFKkuF+COAMkmY5RIkoCJE95ml123D3X
+         UqZWhOf4hphOdA7/m4fHFsFpUS/J/mSoH8ZBxH2RGgl53vhshBiaN7SuwAJRhfooVX/x
+         WWNrTdXp1DqTl6AAr/hWDTEdkXv0ytzmp7ANidt/mJIlX4pEENnkZvzAmnA/QqEvu4gP
+         uQoECeyhbrWd471Vo0z5ntYEPpMAkwabOLZz59o1I2Lu6FhlbxyEdnZDSCsOO7G1Z1O3
+         FJ78dss+Xv1TrnD1mS8ISDOVB0TVcdv79MsmZPK0uFbMqe5mr3Xycd13426VHGsDgq2D
+         Uq7Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687979212; x=1690571212;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=tHp3wJL5M2L2G+YbB2Q2IPPSaeVG/zhpefUOIq4q2Os=;
+        b=i1kZcWUQ+6qRS9Xfog5S6uu4uiOum0uvEPD9qj3a2L1ybDUxSt0ydQYHGrhZmAzlzl
+         +jbhff55+yvNX6YQPXdulvtHACItOxvYgwih0vsiPJaGdTt8mT5yfxIlFau/ugZicNJV
+         zV1NsO8w7LaJTPFpWWgYjkKqBiyfsQFrEss0Qku4z+X+i5UZCt+RXzmVpCNRCiYytPP8
+         dUwC6SAUyphO9FxE0ehh44Pk4LcvV4hx4LQUe7ojIQnklz7WsC2HxgSkgAJkGyY+abia
+         9YfM5EMOIDGgkBF5w5DVMk4yVoHfhlLNz3BJqrf1/16+QImXrN4BYnIuKJvuMCRaIX0o
+         RjYw==
+X-Gm-Message-State: AC+VfDyGMM9AO3SF/bQPVu3RcX9Skf3fWM0hc03BMNB/uBhOMJMhXhsn
+        +Qwho8d2Mgjk8vGds9TurlzNpw==
+X-Google-Smtp-Source: ACHHUZ7DXPXOc7rcX2RdtEk+UOMmjqKmTj+kwlNVuFuW4fXpjyLiii3gpj23e1r4UYEmXLFngtcUmA==
+X-Received: by 2002:a17:907:60d5:b0:98d:f2c9:a1eb with SMTP id hv21-20020a17090760d500b0098df2c9a1ebmr2479087ejc.24.1687979212156;
+        Wed, 28 Jun 2023 12:06:52 -0700 (PDT)
+Received: from localhost ([79.142.230.34])
+        by smtp.gmail.com with ESMTPSA id r16-20020aa7da10000000b0051d2968b26asm5072022eds.77.2023.06.28.12.06.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 28 Jun 2023 12:06:51 -0700 (PDT)
+From:   Andreas Hindborg <nmi@metaspace.dk>
+To:     Ming Lei <ming.lei@redhat.com>
+Cc:     Hans Holmberg <Hans.Holmberg@wdc.com>,
+        Aravind Ramesh <Aravind.Ramesh@wdc.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        linux-block@vger.kernel.org (open list:BLOCK LAYER),
+        Christoph Hellwig <hch@infradead.org>,
+        Matias Bjorling <Matias.Bjorling@wdc.com>,
+        Andreas Hindborg <a.hindborg@samsung.com>,
+        linux-kernel@vger.kernel.org (open list),
+        Damien Le Moal <dlemoal@kernel.org>, gost.dev@samsung.com,
+        Minwoo Im <minwoo.im.dev@gmail.com>
+Subject: [PATCH v4 0/4] ublk: add zoned storage support
+Date:   Wed, 28 Jun 2023 21:06:45 +0200
+Message-ID: <20230628190649.11233-1-nmi@metaspace.dk>
+X-Mailer: git-send-email 2.41.0
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrsz:qybglogicsvrsz3a-3
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+        lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Let's move most of the _start operations to _start_c().
+From: Andreas Hindborg <a.hindborg@samsung.com>
 
-Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
----
- tools/include/nolibc/arch-s390.h | 35 ++++----------------------------
- 1 file changed, 4 insertions(+), 31 deletions(-)
+Hi All,
 
-diff --git a/tools/include/nolibc/arch-s390.h b/tools/include/nolibc/arch-s390.h
-index 5139e0e37e56..a28f94aa28ca 100644
---- a/tools/include/nolibc/arch-s390.h
-+++ b/tools/include/nolibc/arch-s390.h
-@@ -137,41 +137,14 @@
- 	_arg1;									\
- })
- 
--char **environ __attribute__((weak));
--const unsigned long *_auxv __attribute__((weak));
--
- /* startup code */
- void __attribute__((weak,noreturn,optimize("omit-frame-pointer"))) __no_stack_protector _start(void)
- {
- 	__asm__ volatile (
--		"lg	%r2,0(%r15)\n"		/* argument count */
--		"la	%r3,8(%r15)\n"		/* argument pointers */
--
--		"xgr	%r0,%r0\n"		/* r0 will be our NULL value */
--		/* search for envp */
--		"lgr	%r4,%r3\n"		/* start at argv */
--		"0:\n"
--		"clg	%r0,0(%r4)\n"		/* entry zero? */
--		"la	%r4,8(%r4)\n"		/* advance pointer */
--		"jnz	0b\n"			/* no -> test next pointer */
--						/* yes -> r4 now contains start of envp */
--		"larl	%r1,environ\n"
--		"stg	%r4,0(%r1)\n"
--
--		/* search for auxv */
--		"lgr	%r5,%r4\n"		/* start at envp */
--		"1:\n"
--		"clg	%r0,0(%r5)\n"		/* entry zero? */
--		"la	%r5,8(%r5)\n"		/* advance pointer */
--		"jnz	1b\n"			/* no -> test next pointer */
--		"larl	%r1,_auxv\n"		/* yes -> store value in _auxv */
--		"stg	%r5,0(%r1)\n"
--
--		"aghi	%r15,-160\n"		/* allocate new stackframe */
--		"xc	0(8,%r15),0(%r15)\n"	/* clear backchain */
--		"brasl	%r14,main\n"		/* ret value of main is arg to exit */
--		"lghi	%r1,1\n"		/* __NR_exit */
--		"svc	0\n"
-+		"lgr	%r2, %r15\n"		/* initialize stack protector	*/
-+		"aghi	%r15, -160\n"		/* allocate new stackframe	*/
-+		"xc	0(8,%r15), 0(%r15)\n"	/* clear backchain		*/
-+		"brasl	%r14, _start_c\n"	/* transfer to c runtime	*/
- 	);
- 	__builtin_unreachable();
- }
+This patch set adds zoned storage support to `ublk`. The first two patches does
+some house cleaning in preparation for the last two patches. The third patch
+adds support for report_zones and the following operations:
+
+ - REQ_OP_ZONE_OPEN
+ - REQ_OP_ZONE_CLOSE
+ - REQ_OP_ZONE_FINISH
+ - REQ_OP_ZONE_RES
+
+The last patch adds support for REQ_OP_ZONE_APPEND.
+
+v3 [2] -> v4 changes:
+ - Split up v3 patches
+ - Add zone append support
+ - Change order of variables in `ublk_report_zones`
+
+Read/write and zone operations are tested with zenfs [3].
+
+The zone append path is tested with fio -> zonefs -> ublk -> null_blk.
+
+The implementation of zone append requires ublk user copy feature, and therefore
+the series is based on branch for-next (6afa337a3789) of [4].
+
+[1] https://github.com/metaspace/ubdsrv/commit/7de0d901c329fde7dc5a2e998952dd88bf5e668b
+[2] https://lore.kernel.org/linux-block/20230316145539.300523-1-nmi@metaspace.dk/
+[3] https://github.com/westerndigitalcorporation/zenfs
+[4] https://git.kernel.dk/linux.git
+
+Andreas Hindborg (4):
+  ublk: change ublk IO command defines to enum
+  ublk: move types to shared header file
+  ublk: enable zoned storage support
+  ublk: add zone append
+
+ MAINTAINERS                    |   2 +
+ drivers/block/Kconfig          |   4 +
+ drivers/block/Makefile         |   4 +-
+ drivers/block/ublk_drv-zoned.c | 155 +++++++++++++++++++++++++++++++++
+ drivers/block/ublk_drv.c       | 150 +++++++++++++++++++------------
+ drivers/block/ublk_drv.h       |  71 +++++++++++++++
+ include/uapi/linux/ublk_cmd.h  |  38 ++++++--
+ 7 files changed, 363 insertions(+), 61 deletions(-)
+ create mode 100644 drivers/block/ublk_drv-zoned.c
+ create mode 100644 drivers/block/ublk_drv.h
+
+
+base-commit: 3261ea42710e9665c9151006049411bd23b5411f
 -- 
-2.25.1
+2.41.0
 
