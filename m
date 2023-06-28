@@ -2,78 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E47D741BA6
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 00:08:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 24EB5741BAD
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 00:14:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231882AbjF1WIr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 18:08:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42222 "EHLO
+        id S231952AbjF1WOP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 18:14:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231359AbjF1WIo (ORCPT
+        with ESMTP id S231359AbjF1WNw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 18:08:44 -0400
-Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 840692110
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 15:08:43 -0700 (PDT)
-Received: by mail-pg1-x549.google.com with SMTP id 41be03b00d2f7-5428d1915acso17445a12.0
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 15:08:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1687990123; x=1690582123;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=dWsQ+Zk7IjWGrlut4U5SpkgMPsmLAFUMniA+6zN69Ac=;
-        b=uTE1vo4MY53qGUepRvI/eb4jxvbxYUEOkPTTvvoD4kGkMDRhRLsKzlGL+vQLMjhKRi
-         rdeWPPHm+L2E8twFBAHl+ZoEMemoTY5PNpYWB+f1xGrPZGZ2la2YZiTaJab5HHqd1wGu
-         e8TDq18vFJWMtrUvtcJUxqp4yTMOBToJdy/ugfjzlaSzjWeyDaxn9ot07hn/Pbz02y9X
-         nLv8szoIVmDzsQGyNi1/NfgnmXBsbr3QltbMozbVHuKXTSLvqZ+0gEau2/8RUWMqkcYj
-         zbwadNSttgKKZPrqDNVQfevrq9jnrko7CL5qNbCNLrVhTgwrR3NdAPk4RY/cPRIrFlwf
-         sAjw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687990123; x=1690582123;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=dWsQ+Zk7IjWGrlut4U5SpkgMPsmLAFUMniA+6zN69Ac=;
-        b=D3hd5meVLeVkj4Qwu9abIkzO+m582CurRw/HtRyh3pIRM3gPTDGTaAgzeVRwyBc0dI
-         2agK1AODnItbTsiqVOzsq/b+JgwYIUxSxkCtTKt0c+H3iNMq0bnTrDDl3im+7Y/cAq86
-         +X/8KMUPDavQpb1pPhughBFcsa0fHsLjan+q7PYNKh4Ow4cDt3pCxQKhTa0zHaFMvvFG
-         Nb2zjAibcndpbUDYGm2mgcohNWnCY+be1Sw1FtWHguYQl5qv27p+6leYiGXqEm395P6r
-         BoumxboZiWe5LvgqIYq4Ul0xQWywT5zxnXgE6HrQEAxhFyidlJbw09sE/SXlBDXRG3rD
-         XtCA==
-X-Gm-Message-State: AC+VfDxFXNCWcggR6bek0JsA19cj6Y6rRJXxB4/bdWZZu2r69u0igA80
-        X9/cABkPpKC5hyG/bjv6Xu0KUIWg69M=
-X-Google-Smtp-Source: ACHHUZ7HOmJsurSrMF65FGkboY/aMr53gf5wL8po/HLlsjcs/5jxbF2RqSFGM05DvnggoK1dwXSa0P2+iKM=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a63:cd09:0:b0:553:8437:3db3 with SMTP id
- i9-20020a63cd09000000b0055384373db3mr490412pgg.3.1687990122897; Wed, 28 Jun
- 2023 15:08:42 -0700 (PDT)
-Date:   Wed, 28 Jun 2023 15:08:41 -0700
-In-Reply-To: <20230616023614.7261-1-yan.y.zhao@intel.com>
-Mime-Version: 1.0
-References: <20230616023101.7019-1-yan.y.zhao@intel.com> <20230616023614.7261-1-yan.y.zhao@intel.com>
-Message-ID: <ZJyvaVVyxPmhvYph@google.com>
-Subject: Re: [PATCH v3 04/11] KVM: x86/mmu: Use KVM honors guest MTRRs helper
- when update mtrr
-From:   Sean Christopherson <seanjc@google.com>
-To:     Yan Zhao <yan.y.zhao@intel.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        pbonzini@redhat.com, chao.gao@intel.com, kai.huang@intel.com,
-        robert.hoo.linux@gmail.com
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Wed, 28 Jun 2023 18:13:52 -0400
+Received: from out-32.mta1.migadu.com (out-32.mta1.migadu.com [95.215.58.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 140832118
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 15:13:49 -0700 (PDT)
+Date:   Wed, 28 Jun 2023 18:13:42 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1687990428;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=v8WVoQUFJwrHXrcj8iB/cmADxHGelZ4I+K1br+JoT3I=;
+        b=c2rOpx7HvgGzuU9oykOoqbse4XOSwYZ4wb/OkY+9zmp5xL/0qECfYdcr3bryvf+X8z/3lh
+        ImguE4Rp0ECCFxI6vwJL0XpIV/6ePGsHS591NZPBgP9gATRlDYB0Kq9Kf0dn89xmGFZRBQ
+        hOiS+AQCgaXsXCG+9t2kVRMbBIQieB4=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Kent Overstreet <kent.overstreet@linux.dev>
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     torvalds@linux-foundation.org, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-bcachefs@vger.kernel.org,
+        Christoph Hellwig <hch@lst.de>,
+        Christian Brauner <brauner@kernel.org>,
+        Al Viro <viro@zeniv.linux.org.uk>
+Subject: Re: [GIT PULL] bcachefs
+Message-ID: <20230628221342.4j3gr3zscnsu366p@moria.home.lan>
+References: <b92ea170-d531-00f3-ca7a-613c05dcbf5f@kernel.dk>
+ <23922545-917a-06bd-ec92-ff6aa66118e2@kernel.dk>
+ <20230627201524.ool73bps2lre2tsz@moria.home.lan>
+ <c06a9e0b-8f3e-4e47-53d0-b4854a98cc44@kernel.dk>
+ <20230628040114.oz46icbsjpa4egpp@moria.home.lan>
+ <b02657af-5bbb-b46b-cea0-ee89f385f3c1@kernel.dk>
+ <4b863e62-4406-53e4-f96a-f4d1daf098ab@kernel.dk>
+ <20230628175204.oeek4nnqx7ltlqmg@moria.home.lan>
+ <e1570c46-68da-22b7-5322-f34f3c2958d9@kernel.dk>
+ <2e635579-37ba-ddfc-a2ab-e6c080ab4971@kernel.dk>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2e635579-37ba-ddfc-a2ab-e6c080ab4971@kernel.dk>
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 16, 2023, Yan Zhao wrote:
-> Call helper to check if guest MTRRs are honored by KVM MMU before
-> calculation and zapping.
+On Wed, Jun 28, 2023 at 03:17:43PM -0600, Jens Axboe wrote:
+> Case in point, just changed my reproducer to use aio instead of
+> io_uring. Here's the full script:
+> 
+> #!/bin/bash
+> 
+> DEV=/dev/nvme1n1
+> MNT=/data
+> ITER=0
+> 
+> while true; do
+> 	echo loop $ITER
+> 	sudo mount $DEV $MNT
+> 	fio --name=test --ioengine=aio --iodepth=2 --filename=$MNT/foo --size=1g --buffered=1 --overwrite=0 --numjobs=12 --minimal --rw=randread --output=/dev/null &
+> 	Y=$(($RANDOM % 3))
+> 	X=$(($RANDOM % 10))
+> 	VAL="$Y.$X"
+> 	sleep $VAL
+> 	ps -e | grep fio > /dev/null 2>&1
+> 	while [ $? -eq 0 ]; do
+> 		killall -9 fio > /dev/null 2>&1
+> 		echo will wait
+> 		wait > /dev/null 2>&1
+> 		echo done waiting
+> 		ps -e | grep "fio " > /dev/null 2>&1
+> 	done
+> 	sudo umount /data
+> 	if [ $? -ne 0 ]; then
+> 		break
+> 	fi
+> 	((ITER++))
+> done
+> 
+> and if I run that, fails on the first umount attempt in that loop:
+> 
+> axboe@m1max-kvm ~> bash test2.sh
+> loop 0
+> will wait
+> done waiting
+> umount: /data: target is busy.
+> 
+> So yeah, this is _nothing_ new. I really don't think trying to address
+> this in the kernel is the right approach, it'd be a lot saner to harden
+> the xfstest side to deal with the umount a bit more sanely. There are
+> obviously tons of other ways that a mount could get pinned, which isn't
+> too relevant here since the bdev and mount point are basically exclusive
+> to the test being run. But the kill and delayed fput is enough to make
+> that case imho.
 
-Same comment here about stating the effect, not the literal code change.
+Uh, count me very much not in favor of hacking around bugs elsewhere.
 
-> Guest MTRRs only affect TDP memtypes when TDP honors guest MTRRs, there's
-> no meaning to do the calculation and zapping otherwise.
+Al, do you know if this has been considered before? We've got fput()
+being called from aio completion, which often runs out of a worqueue (if
+not a workqueue, a bottom half of some sort - what happens then, I
+wonder) - so the effect is that it goes on the global list, not the task
+work list.
+
+hence, kill -9ing a process doing aio (or io_uring io, for extra
+reasons) causes umount to fail with -EBUSY.
+
+and since there's no mechanism for userspace to deal with this besides
+sleep and retry, this seems pretty gross.
+
+I'd be willing to tackle this for aio since I know that code...
