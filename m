@@ -2,118 +2,219 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5B3C741BC1
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 00:29:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9ED82741BC5
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 00:34:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230523AbjF1W3e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 18:29:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45388 "EHLO
+        id S231209AbjF1WeE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 18:34:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229469AbjF1W3U (ORCPT
+        with ESMTP id S229581AbjF1WeA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 18:29:20 -0400
-Received: from mx3.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4998C213D;
-        Wed, 28 Jun 2023 15:29:18 -0700 (PDT)
-Received: from [192.168.0.2] (ip5f5aeb11.dynamic.kabel-deutschland.de [95.90.235.17])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: pmenzel)
-        by mx.molgen.mpg.de (Postfix) with ESMTPSA id A7C8E61E5FE03;
-        Thu, 29 Jun 2023 00:28:16 +0200 (CEST)
-Message-ID: <20b61d77-7397-e3ba-3215-232f49eb8c07@molgen.mpg.de>
-Date:   Thu, 29 Jun 2023 00:28:15 +0200
+        Wed, 28 Jun 2023 18:34:00 -0400
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71A9726BF
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 15:33:58 -0700 (PDT)
+Received: by mail-pf1-x436.google.com with SMTP id d2e1a72fcca58-656bc570a05so13912b3a.0
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 15:33:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20221208.gappssmtp.com; s=20221208; t=1687991638; x=1690583638;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=0oW5BXhQovw4TV6zdZd424J+I/WFKk4cAc5zD1n255c=;
+        b=c9gdujX9zi75jg4hmjr8oFrVx/hG1FqUKaICQS9v4vWmbwHtPoIvFmN2HPuH1nKOmH
+         Pr1msq3OxLAmq2VcgBoES9iaK9Zc8z+b5ZQZd71b7s5lgDlgAHwyTujMIW1MRU8a4rr2
+         p4/A8htbaVVzcTDo2KN3o+qS2x186ciX4lMjB8XYBjVnPZZh9ljhVdjpitMuL4FYAxBM
+         qGV5qyKojK31W9x0w3Y5llYh7hoHMKOqibL5dsKzLQhJs5KSD1DmJqhmRHbLM5tbRk6E
+         S9JurP+nkWdOKQDd9z/CfYnXAE2hhs8knpCXHLcZ978FdyBF8flULECq7F+jYV0tgouY
+         dGxQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687991638; x=1690583638;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=0oW5BXhQovw4TV6zdZd424J+I/WFKk4cAc5zD1n255c=;
+        b=SZ+8FSqAtNBg98BfoowmMWVQn5W7uh4elRhe10JnAIVncWGuwir8iWBAbeV/uU5aYP
+         MQwxdkBzPbrvD9cvyYZOmuexIN8Q7BksWVR9BlnaGh1e6NO64gb5uWySg25IpWUnox1S
+         2729q6xCT04NDXwaAWBV8frTdNI7qt4C1ssJxDwTdIEGKDx+WsPnVtjXtxGw2mbiE6yu
+         E1TruOcJ0WBjtULyphOQZ3aUMv+b99B8A15VYWh2EMyXObRctlsd4FQS/2n5pAwzDbDI
+         34kdfa2F5eqbP4ShPLO2G9Jgak1xW9i3HXbVg6psu3pGvhbSYY3TPyjugRTpp4N6U+zK
+         LxaA==
+X-Gm-Message-State: AC+VfDyLRbGL4HGqhdiCNzc4MIFRncVxBPboG2g4oqq7hK4YuCnWe5LC
+        pwU/b6cmHuBPTHElkFq5JnYrGw0zXpb1OliiSYA=
+X-Google-Smtp-Source: ACHHUZ65sNYPaxFEj9KlTSH6RYDS3nDfKpKwX6XXCBSTl0TgMRiDzLaDCl/l714R9NkUA/tbNESVpw==
+X-Received: by 2002:a05:6a20:8f04:b0:121:b5af:acbc with SMTP id b4-20020a056a208f0400b00121b5afacbcmr38497363pzk.3.1687991637811;
+        Wed, 28 Jun 2023 15:33:57 -0700 (PDT)
+Received: from [192.168.1.136] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id z6-20020aa791c6000000b0065434edd521sm1236833pfa.196.2023.06.28.15.33.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 28 Jun 2023 15:33:56 -0700 (PDT)
+Message-ID: <d697ec27-8008-2eb6-0950-f612a602dcf5@kernel.dk>
+Date:   Wed, 28 Jun 2023 16:33:55 -0600
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
  Thunderbird/102.12.0
-Subject: Re: [PATCH v3] Bluetooth: btmtk: add printing firmware information
-To:     Sean Wang <sean.wang@mediatek.com>,
-        Chris Lu <chris.lu@mediatek.com>
-Cc:     marcel@holtmann.org, johan.hedberg@gmail.com, luiz.dentz@gmail.com,
-        Soul.Huang@mediatek.com, Leon.Yen@mediatek.com,
-        Deren.Wu@mediatek.com, km.lin@mediatek.com,
-        robin.chiu@mediatek.com, Eddie.Chen@mediatek.com,
-        ch.yeh@mediatek.com, jenhao.yang@mediatek.com,
-        Stella.Chang@mediatek.com, Tom.Chou@mediatek.com,
-        steve.lee@mediatek.com, jsiuda@google.com, frankgor@google.com,
-        abhishekpandit@google.com, michaelfsun@google.com,
-        mmandlik@google.com, abhishekpandit@chromium.org,
-        mcchou@chromium.org, shawnku@google.com,
-        linux-bluetooth@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <1c40a12b51ccd6ee2ee002276f5b1ba92c377100.1687990098.git.objelf@gmail.com>
+Subject: Re: [GIT PULL] bcachefs
 Content-Language: en-US
-From:   Paul Menzel <pmenzel@molgen.mpg.de>
-In-Reply-To: <1c40a12b51ccd6ee2ee002276f5b1ba92c377100.1687990098.git.objelf@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Kent Overstreet <kent.overstreet@linux.dev>
+Cc:     torvalds@linux-foundation.org, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-bcachefs@vger.kernel.org,
+        Christoph Hellwig <hch@lst.de>,
+        Christian Brauner <brauner@kernel.org>,
+        Al Viro <viro@zeniv.linux.org.uk>
+References: <b92ea170-d531-00f3-ca7a-613c05dcbf5f@kernel.dk>
+ <23922545-917a-06bd-ec92-ff6aa66118e2@kernel.dk>
+ <20230627201524.ool73bps2lre2tsz@moria.home.lan>
+ <c06a9e0b-8f3e-4e47-53d0-b4854a98cc44@kernel.dk>
+ <20230628040114.oz46icbsjpa4egpp@moria.home.lan>
+ <b02657af-5bbb-b46b-cea0-ee89f385f3c1@kernel.dk>
+ <4b863e62-4406-53e4-f96a-f4d1daf098ab@kernel.dk>
+ <20230628175204.oeek4nnqx7ltlqmg@moria.home.lan>
+ <e1570c46-68da-22b7-5322-f34f3c2958d9@kernel.dk>
+ <2e635579-37ba-ddfc-a2ab-e6c080ab4971@kernel.dk>
+ <20230628221342.4j3gr3zscnsu366p@moria.home.lan>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <20230628221342.4j3gr3zscnsu366p@moria.home.lan>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear Sean, dear Chris,
-
-
-Thank you for your patch.
-
-Am 29.06.23 um 00:20 schrieb sean.wang@mediatek.com:
-> From: Chris Lu <chris.lu@mediatek.com>
+On 6/28/23 4:13?PM, Kent Overstreet wrote:
+> On Wed, Jun 28, 2023 at 03:17:43PM -0600, Jens Axboe wrote:
+>> Case in point, just changed my reproducer to use aio instead of
+>> io_uring. Here's the full script:
+>>
+>> #!/bin/bash
+>>
+>> DEV=/dev/nvme1n1
+>> MNT=/data
+>> ITER=0
+>>
+>> while true; do
+>> 	echo loop $ITER
+>> 	sudo mount $DEV $MNT
+>> 	fio --name=test --ioengine=aio --iodepth=2 --filename=$MNT/foo --size=1g --buffered=1 --overwrite=0 --numjobs=12 --minimal --rw=randread --output=/dev/null &
+>> 	Y=$(($RANDOM % 3))
+>> 	X=$(($RANDOM % 10))
+>> 	VAL="$Y.$X"
+>> 	sleep $VAL
+>> 	ps -e | grep fio > /dev/null 2>&1
+>> 	while [ $? -eq 0 ]; do
+>> 		killall -9 fio > /dev/null 2>&1
+>> 		echo will wait
+>> 		wait > /dev/null 2>&1
+>> 		echo done waiting
+>> 		ps -e | grep "fio " > /dev/null 2>&1
+>> 	done
+>> 	sudo umount /data
+>> 	if [ $? -ne 0 ]; then
+>> 		break
+>> 	fi
+>> 	((ITER++))
+>> done
+>>
+>> and if I run that, fails on the first umount attempt in that loop:
+>>
+>> axboe@m1max-kvm ~> bash test2.sh
+>> loop 0
+>> will wait
+>> done waiting
+>> umount: /data: target is busy.
+>>
+>> So yeah, this is _nothing_ new. I really don't think trying to address
+>> this in the kernel is the right approach, it'd be a lot saner to harden
+>> the xfstest side to deal with the umount a bit more sanely. There are
+>> obviously tons of other ways that a mount could get pinned, which isn't
+>> too relevant here since the bdev and mount point are basically exclusive
+>> to the test being run. But the kill and delayed fput is enough to make
+>> that case imho.
 > 
-> Add printing firmware information part when driver loading firmware that
-> user can get mediatek bluetooth information.
-
-Maybe use the commit message summary/title below:
-
-Bluetooth: btmtk: Log hw/sw version and fw build time
-
-Maybe also paste one log message example to the commit message.
-
-> Co-developed-by: Sean Wang <sean.wang@mediatek.com>
-> Signed-off-by: Sean Wang <sean.wang@mediatek.com>
-> Signed-off-by: Chris Lu <chris.lu@mediatek.com>
-> ---
-> v3: resend again with the latest tree
-> ---
->   drivers/bluetooth/btmtk.c | 5 +++++
->   1 file changed, 5 insertions(+)
+> Uh, count me very much not in favor of hacking around bugs elsewhere.
 > 
-> diff --git a/drivers/bluetooth/btmtk.c b/drivers/bluetooth/btmtk.c
-> index 9482401d97fa..8490d59502a5 100644
-> --- a/drivers/bluetooth/btmtk.c
-> +++ b/drivers/bluetooth/btmtk.c
-> @@ -57,6 +57,7 @@ int btmtk_setup_firmware_79xx(struct hci_dev *hdev, const char *fwname,
->   			      wmt_cmd_sync_func_t wmt_cmd_sync)
->   {
->   	struct btmtk_hci_wmt_params wmt_params;
-> +	struct btmtk_patch_header *hdr;
->   	struct btmtk_global_desc *globaldesc = NULL;
->   	struct btmtk_section_map *sectionmap;
->   	const struct firmware *fw;
-> @@ -75,9 +76,13 @@ int btmtk_setup_firmware_79xx(struct hci_dev *hdev, const char *fwname,
->   
->   	fw_ptr = fw->data;
->   	fw_bin_ptr = fw_ptr;
-> +	hdr = (struct btmtk_patch_header *)fw_ptr;
->   	globaldesc = (struct btmtk_global_desc *)(fw_ptr + MTK_FW_ROM_PATCH_HEADER_SIZE);
->   	section_num = le32_to_cpu(globaldesc->section_num);
->   
-> +	bt_dev_info(hdev, "HW/SW Version: 0x%04x%04x, Build Time: %s",
+> Al, do you know if this has been considered before? We've got fput()
+> being called from aio completion, which often runs out of a worqueue (if
+> not a workqueue, a bottom half of some sort - what happens then, I
+> wonder) - so the effect is that it goes on the global list, not the task
+> work list.
+> 
+> hence, kill -9ing a process doing aio (or io_uring io, for extra
+> reasons) causes umount to fail with -EBUSY.
+> 
+> and since there's no mechanism for userspace to deal with this besides
+> sleep and retry, this seems pretty gross.
 
-Why not print 0x%04x/0x%04x, that means with a slash?
+But there is, as Christian outlined. I would not call it pretty or
+intuitive, but you can in fact make it work just fine and not just for
+the deferred fput() case but also in the presence of other kinds of
+pins. Of which there are of course many.
 
-> +		    le16_to_cpu(hdr->hwver), le16_to_cpu(hdr->swver), hdr->datetime);
-> +
->   	for (i = 0; i < section_num; i++) {
->   		first_block = 1;
->   		fw_ptr = fw_bin_ptr;
+> I'd be willing to tackle this for aio since I know that code...
 
+But it's not aio (or io_uring or whatever), it's simply the fact that
+doing an fput() from an exiting task (for example) will end up being
+done async. And hence waiting for task exits is NOT enough to ensure
+that all file references have been released.
 
-Kind regards,
+Since there are a variety of other reasons why a mount may be pinned and
+fail to umount, perhaps it's worth considering that changing this
+behavior won't buy us that much. Especially since it's been around for
+more than 10 years:
 
-Paul
+commit 4a9d4b024a3102fc083c925c242d98ac27b1c5f6
+Author: Al Viro <viro@zeniv.linux.org.uk>
+Date:   Sun Jun 24 09:56:45 2012 +0400
+
+    switch fput to task_work_add
+
+though that commit message goes on to read:
+
+    We are guaranteed that __fput() will be done before we return
+    to userland (or exit).  Note that for fput() from a kernel
+    thread we get an async behaviour; it's almost always OK, but
+    sometimes you might need to have __fput() completed before
+    you do anything else.  There are two mechanisms for that -
+    a general barrier (flush_delayed_fput()) and explicit
+    __fput_sync().  Both should be used with care (as was the
+    case for fput() from kernel threads all along).  See comments
+    in fs/file_table.c for details.
+
+where that first sentence isn't true if the task is indeed exiting. I
+guess you can say that it is as it doesn't return to userland, but
+splitting hairs. Though the commit in question doesn't seem to handle
+that case, but assuming that came in with a later fixup.
+
+It is true if the task_work gets added, as that will get run before
+returning to userspace.
+
+If a case were to be made that we also guarantee that fput has been done
+by the time to task returns to userspace, or exits, then we'd probably
+want to move that deferred fput list to the task_struct and ensure that
+it gets run if the task exits rather than have a global deferred list.
+Currently we have:
+
+1) If kthread or in interrupt
+	1a) add to global fput list
+2) task_work_add if not. If that fails, goto 1a.
+
+which would then become:
+
+1) If kthread or in interrupt
+	1a) add to global fput list
+2) task_work_add if not. If that fails, we know task is existing. add to
+   per-task defer list to be run at a convenient time before task has
+   exited.
+
+and seems a lot saner than hacking around this in umount specifically.
+
+-- 
+Jens Axboe
+
