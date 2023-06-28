@@ -2,76 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7869741587
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 17:45:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A1F8741588
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 17:45:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230329AbjF1Poj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 11:44:39 -0400
-Received: from smtp-out1.suse.de ([195.135.220.28]:37552 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230147AbjF1Poh (ORCPT
+        id S231491AbjF1Poo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 11:44:44 -0400
+Received: from mail-il1-f180.google.com ([209.85.166.180]:42338 "EHLO
+        mail-il1-f180.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230147AbjF1Pol (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 11:44:37 -0400
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 37AD021860;
-        Wed, 28 Jun 2023 15:44:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1687967076; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=dWt+NQ2trkbmCDkp3DTfEFMkpDtna8XOkZHkmpeD4Ew=;
-        b=orQovuF0kkoJx4GMxTHEGaGRQrHr4iCHBJaw+Rhhr/cmpzUa5Va/vlVJhk0dVoz72SFXpp
-        rxapqWjk8C+OICxSgZp0bhXr4+s1JWdI6jv3QGd38YOsqOnV5ehoEAkJP6NfJSJwckFGeD
-        HLrqjpo8jDH7m539avIN/Vb1w0nceRk=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1687967076;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=dWt+NQ2trkbmCDkp3DTfEFMkpDtna8XOkZHkmpeD4Ew=;
-        b=1D8DQbSh3cs820HzADMqu5dm759DOQPLzfpcJcAnFbSLCtiZFpL+VZiPx9tmU1hCr8PWiv
-        IiZnKVtHswJSV1BA==
-Received: from lion.mk-sys.cz (mkubecek.udp.ovpn2.nue.suse.de [10.163.44.94])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 23DB42C361;
-        Wed, 28 Jun 2023 15:44:36 +0000 (UTC)
-Received: by lion.mk-sys.cz (Postfix, from userid 1000)
-        id 93356608BE; Wed, 28 Jun 2023 17:44:32 +0200 (CEST)
-Date:   Wed, 28 Jun 2023 17:44:32 +0200
-From:   Michal Kubecek <mkubecek@suse.cz>
-To:     Josh Poimboeuf <jpoimboe@kernel.org>
-Cc:     Peter Zijlstra <peterz@infradead.org>, linux-kernel@vger.kernel.org
-Subject: Re: build failure after commit eb0481bbc4ce ("objtool: Fix
- reloc_hash size")
-Message-ID: <20230628154432.4drtq4pivlkkg6v2@lion.mk-sys.cz>
-References: <20230628115825.ahqejf5y4hgxhyqj@lion.mk-sys.cz>
- <20230628151654.zqwy5zsc2cymqghr@treble>
+        Wed, 28 Jun 2023 11:44:41 -0400
+Received: by mail-il1-f180.google.com with SMTP id e9e14a558f8ab-345a32f3eeaso100695ab.1;
+        Wed, 28 Jun 2023 08:44:40 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687967080; x=1690559080;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=e8qi2/hGD1+QQV7LjWPANEr9l2yFXdhrRF59lxS51Ek=;
+        b=CI5QAJ/nMBEe+xR4CIrgL138WVhak4AT/8YFSWYb9j8DH+olIIa1V48455i5vQTMHj
+         BflqK58zNsVtuch91RPfTjxJWqj13z/VEcBBv/mhhhvhU0W+fZxL5H0vMNcrc27FqYJf
+         vbEy85SNeuMPW/JWBgarkCN7HDqodKFbtCy+o8FeOX/dTeunMVrd4CHWaUaBkG+33fHh
+         QZe2dAPaOSOIEWzpe75yvRlRQPD0qEaqdySvCydAnka6umSgUQUAs/hE2Vq4mAu3cewB
+         dQ8wIOS4E4dZj7/zglXmUFjRkZfsJNObAWGz5V6/VfNbOnornD5z6ny7eWKH7sWQYmZt
+         npOg==
+X-Gm-Message-State: AC+VfDz0wfQwF5MX3JcidD5cFLg9C0sSANm33nit9+pyslEfHb8O/oqc
+        CI3T3am/6KuAFmioSlE+xh/ROuBj6Q==
+X-Google-Smtp-Source: ACHHUZ79mRzg8+qZLbggc6AbavxNQm7x9oE4nROWahp4rP1eUGmg9coMWivmV3bV2fvmgRrNosi1Qw==
+X-Received: by 2002:a92:d94d:0:b0:341:24f1:3f74 with SMTP id l13-20020a92d94d000000b0034124f13f74mr1285671ilq.14.1687967080305;
+        Wed, 28 Jun 2023 08:44:40 -0700 (PDT)
+Received: from robh_at_kernel.org ([64.188.179.250])
+        by smtp.gmail.com with ESMTPSA id b3-20020a92ce03000000b00345c0eca0e7sm950361ilo.85.2023.06.28.08.44.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 28 Jun 2023 08:44:39 -0700 (PDT)
+Received: (nullmailer pid 530531 invoked by uid 1000);
+        Wed, 28 Jun 2023 15:44:37 -0000
+Date:   Wed, 28 Jun 2023 09:44:37 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Seven Lee <wtli@nuvoton.com>
+Cc:     linux-kernel@vger.kernel.org, supercraig0719@gmail.com,
+        dardar923@gmail.com, broonie@kernel.org, WTLI@nuvoton.com,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        SJLIN0@nuvoton.com, lgirdwood@gmail.com, KCHSU0@nuvoton.com,
+        YHCHuang@nuvoton.com, CTLIN0@nuvoton.com, scott6986@gmail.com,
+        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        conor+dt@kernel.org
+Subject: Re: [PATCH] ASoC: dt-bindings: nau8821: Convert to dtschema
+Message-ID: <168796707718.530473.9600429077455152027.robh@kernel.org>
+References: <20230628085009.1130318-1-wtli@nuvoton.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230628151654.zqwy5zsc2cymqghr@treble>
+In-Reply-To: <20230628085009.1130318-1-wtli@nuvoton.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 28, 2023 at 08:16:54AM -0700, Josh Poimboeuf wrote:
-> Interesting.  Can you add the below patch and also do:
+
+On Wed, 28 Jun 2023 16:50:09 +0800, Seven Lee wrote:
+> Convert the NAU8821 audio CODEC bindings to DT schema.
 > 
->   make net/ipv4/netfilter/iptable_nat.o OBJTOOL_ARGS="--stats"
+> Signed-off-by: Seven Lee <wtli@nuvoton.com>
+> ---
+>  .../devicetree/bindings/sound/nau8821.txt     |  55 --------
+>  .../bindings/sound/nuvoton,nau8821.yaml       | 125 ++++++++++++++++++
+>  2 files changed, 125 insertions(+), 55 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/sound/nau8821.txt
+>  create mode 100644 Documentation/devicetree/bindings/sound/nuvoton,nau8821.yaml
 > 
-> and report the output?
 
-With these, I get
-
-    ...
-      CC [M]  net/ipv4/netfilter/iptable_nat.o
-    nr_sections: 40
-    section_bits: 10
-    nr_symbols: 41
-    symbol_bits: 10
-    mmap reloc: Invalid argument
-    make[1]: Leaving directory '/srv/ram/kobj'
-
-Michal
+Reviewed-by: Rob Herring <robh@kernel.org>
 
