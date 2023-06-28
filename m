@@ -2,120 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2506740C33
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 11:02:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8784B740C41
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 11:04:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234322AbjF1I7l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 04:59:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44736 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232691AbjF1IvV (ORCPT
+        id S232450AbjF1JDS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 05:03:18 -0400
+Received: from mx0a-0031df01.pphosted.com ([205.220.168.131]:15138 "EHLO
+        mx0a-0031df01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S233797AbjF1IxX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 04:51:21 -0400
-Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18CE4187
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 01:51:19 -0700 (PDT)
-Received: by mail-pf1-x441.google.com with SMTP id d2e1a72fcca58-66767d628e2so3170210b3a.2
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 01:51:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=saviah-com.20221208.gappssmtp.com; s=20221208; t=1687942279; x=1690534279;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=/vZJ9KZ0nORDwUa8rVOPplQDUftdsKPRXoJD7pWWR6w=;
-        b=ZOr18CgDS7iAPXjfKCD67Vd6O0PRJdvitrvl6bv2E6OPbSWSPfkpB8RjenKKMW3YaE
-         OPaqIY68K4uurf/0ymdUsafRkohJGtySAizEuFBzl9ncZ4EDUpi8sXlS9NQspqTk8vYD
-         69xt4u1xbIEU/Pktj/oxLY6Qg9uwa1fvKWRRNb5dEusy02xqbcXZhH+2Ar4oN+yrZhqX
-         Zi3XFRUTxdN3w+fVhzPl//0aexBxB9nJJB45+LWUNAi7KDY0D5/6H1CPKUdvx9U3EazA
-         gfebVRKc9fCsfRRqfnrNlfs4WXDYMGWf9rJnnF/Q7n4ZIEFXXTMOqfS0qyR0chicbW8a
-         hnwg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687942279; x=1690534279;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=/vZJ9KZ0nORDwUa8rVOPplQDUftdsKPRXoJD7pWWR6w=;
-        b=UX/KmnZOqWaLS8kzfod0mYXV0nE2VJd1e72vfag4il2AaQ9dHg80eYWw1uX7tVaCSG
-         zBt9smI9qLDOBQz7o0+330JGdBXTNgVZ4A6JidtM+Ss/zsazAhlKgiswOyTxT3VGlkaZ
-         5QlwaUHETiXGB8+9oEgr9TnhcDzzzcIQJaGCVBzxtHtrduljcHW43Zd9ext8EjZY2JYK
-         uhjrSqLNnA/0mXxC1oah0AuFJw5704hP63ANd03EHMqhYPLxAGh86YCuFiTmp79fut0X
-         4jQmkjW+z0drrpEPW4GUHzSJvAzzWo6ehHZz4Kjgy7qGdMMC2jPjnOBL2VkW5FqYBTm2
-         2OYQ==
-X-Gm-Message-State: AC+VfDzgW0J4BNuDyFRI0skpBiQ4tWrrcyrT2T8Fw3k/mrYapvQFItLM
-        P4IcJVlTJUvo5q98+k6Q5CReAw==
-X-Google-Smtp-Source: ACHHUZ5XIlLdxi7pC8cJXFTN1+imiG3XKOQHdumh9hhxiPOzklzqNxuEyCBs6PfPRxTMRrODCAqglw==
-X-Received: by 2002:a05:6a20:914a:b0:10b:8e96:561 with SMTP id x10-20020a056a20914a00b0010b8e960561mr26391135pzc.62.1687942279331;
-        Wed, 28 Jun 2023 01:51:19 -0700 (PDT)
-Received: from localhost.localdomain (NCTU-Wireless-NAT220.nctu.edu.tw. [140.113.136.220])
-        by smtp.gmail.com with ESMTPSA id jj11-20020a170903048b00b001b80e07989csm4244899plb.200.2023.06.28.01.51.16
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 28 Jun 2023 01:51:18 -0700 (PDT)
-From:   Ian Chen <yi.chen@saviah.com>
-To:     davem@davemloft.net
-Cc:     edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        corbet@lwn.net, netdev@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Ian Chen <yi.chen@saviah.com>
-Subject: [PATCH] Documentation: networking: add UPF (User Plane Function in 5GC) description
-Date:   Wed, 28 Jun 2023 16:50:49 +0800
-Message-Id: <20230628085049.83803-1-yi.chen@saviah.com>
-X-Mailer: git-send-email 2.38.1
+        Wed, 28 Jun 2023 04:53:23 -0400
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35S7mYHj014442;
+        Wed, 28 Jun 2023 08:52:55 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=nxbHiyfMNnhx4XUpknlzeEjX+JkKUzyLXEMSoAFObQU=;
+ b=NH8rNzW6ByA07gT4EkOlMvFxOhcElpc4QPduqXQ/wzviPLRsXkabdSu4QDRdKAjaaxFP
+ 7VQYf1+ezrZBDyrDNdk2B1BWP4ZbK1yG70/YE9vuTEz7tawsO/6fd8oeSkfGGuRJO6ob
+ aw/Xyhhq22wkXFr4RpyJxXPn0t7KzZPzqCuWtjz2+/XmdkS7dB3U+atGp3uIRi/JTtfF
+ S9VFLl0p1DqI6foS9jyoDI2bQF5j2Bm8yFPXX0e5p5Teiq/LIzAJKGmgtr22X0OtevYu
+ 6AQuP2usEkBkzdOiyZwGHdTaIZeyBbY7QIxcpJBVFdixaj4fMY45Yj9g+X5o3mA5q3eL wQ== 
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rgfp3raed-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 28 Jun 2023 08:52:55 +0000
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35S8qsMN028810
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 28 Jun 2023 08:52:54 GMT
+Received: from [10.214.230.142] (10.80.80.8) by nalasex01b.na.qualcomm.com
+ (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Wed, 28 Jun
+ 2023 01:52:51 -0700
+Message-ID: <e80f0bd3-cf1e-dfed-bcc6-d22d4d934230@quicinc.com>
+Date:   Wed, 28 Jun 2023 14:22:46 +0530
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-        lindbergh.monkeyblade.net
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [PATCH v4 5/6] soc: qcom: Add LLCC support for multi channel DDR
+Content-Language: en-US
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>
+CC:     <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <devicetree@vger.kernel.org>
+References: <20230623141806.13388-1-quic_kbajaj@quicinc.com>
+ <20230623141806.13388-6-quic_kbajaj@quicinc.com>
+ <b84b2bfc-6f8f-f50f-27b5-52a982ae30f2@linaro.org>
+From:   Komal Bajaj <quic_kbajaj@quicinc.com>
+In-Reply-To: <b84b2bfc-6f8f-f50f-27b5-52a982ae30f2@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: cRMwfyNecBWdklBeIV7n11-jCEgFYkRh
+X-Proofpoint-ORIG-GUID: cRMwfyNecBWdklBeIV7n11-jCEgFYkRh
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-06-28_05,2023-06-27_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 mlxlogscore=956
+ clxscore=1015 suspectscore=0 bulkscore=0 malwarescore=0 impostorscore=0
+ phishscore=0 lowpriorityscore=0 priorityscore=1501 mlxscore=0 spamscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2305260000
+ definitions=main-2306280077
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the content of User Plnae Function (UPF),
-which was defined in 3GPP specifications since release 15.
 
-Signed-off-by: Ian Chen <yi.chen@saviah.com>
----
- Documentation/networking/gtp.rst | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/Documentation/networking/gtp.rst b/Documentation/networking/gtp.rst
-index 9a7835cc1..c02aa34c4 100644
---- a/Documentation/networking/gtp.rst
-+++ b/Documentation/networking/gtp.rst
-@@ -31,12 +31,12 @@ payload, such as LLC/SNDCP/RLC/MAC.
- 
- At some network element inside the cellular operator infrastructure
- (SGSN in case of GPRS/EGPRS or classic UMTS, hNodeB in case of a 3G
--femtocell, eNodeB in case of 4G/LTE), the cellular protocol stacking
-+femtocell, eNodeB in case of 4G/LTE, gNobeB in case of 5G), the cellular protocol stacking
- is translated into GTP *without breaking the end-to-end tunnel*.  So
- intermediate nodes just perform some specific relay function.
- 
--At some point the GTP packet ends up on the so-called GGSN (GSM/UMTS)
--or P-GW (LTE), which terminates the tunnel, decapsulates the packet
-+At some point the GTP packet ends up on the so-called GGSN (GSM/UMTS),
-+P-GW (LTE), or UPF (5G), which terminates the tunnel, decapsulates the packet
- and forwards it onto an external packet data network.  This can be
- public internet, but can also be any private IP network (or even
- theoretically some non-IP network like X.25).
-@@ -60,7 +60,7 @@ payload, called GTP-U.  It does not implement the 'control plane',
- which is a signaling protocol used for establishment and teardown of
- GTP tunnels (GTP-C).
- 
--So in order to have a working GGSN/P-GW setup, you will need a
-+So in order to have a working GGSN/P-GW/UPF setup, you will need a
- userspace program that implements the GTP-C protocol and which then
- uses the netlink interface provided by the GTP-U module in the kernel
- to configure the kernel module.
-@@ -162,7 +162,7 @@ Local GTP-U entity and tunnel identification
- GTP-U uses UDP for transporting PDU's. The receiving UDP port is 2152
- for GTPv1-U and 3386 for GTPv0-U.
- 
--There is only one GTP-U entity (and therefore SGSN/GGSN/S-GW/PDN-GW
-+There is only one GTP-U entity (and therefore SGSN/GGSN/S-GW/PDN-GW/UPF
- instance) per IP address. Tunnel Endpoint Identifier (TEID) are unique
- per GTP-U entity.
- 
--- 
-2.38.1
+On 6/23/2023 8:28 PM, Konrad Dybcio wrote:
+> On 23.06.2023 16:18, Komal Bajaj wrote:
+>> Add LLCC support for multi channel DDR configuration
+>> based on a feature register. Reading DDR channel
+>> confiuration uses nvmem framework, so select the
+>> dependency in Kconfig. Without this, there will be
+>> errors while building the driver with COMPILE_TEST only.
+>>
+>> Signed-off-by: Komal Bajaj <quic_kbajaj@quicinc.com>
+>> ---
+>>   drivers/soc/qcom/Kconfig     |  2 ++
+>>   drivers/soc/qcom/llcc-qcom.c | 33 ++++++++++++++++++++++++++++++---
+>>   2 files changed, 32 insertions(+), 3 deletions(-)
+>>
+>> diff --git a/drivers/soc/qcom/Kconfig b/drivers/soc/qcom/Kconfig
+>> index a491718f8064..cc9ad41c63aa 100644
+>> --- a/drivers/soc/qcom/Kconfig
+>> +++ b/drivers/soc/qcom/Kconfig
+>> @@ -64,6 +64,8 @@ config QCOM_LLCC
+>>   	tristate "Qualcomm Technologies, Inc. LLCC driver"
+>>   	depends on ARCH_QCOM || COMPILE_TEST
+>>   	select REGMAP_MMIO
+>> +	select NVMEM
+>> +	select QCOM_SCM
+>>   	help
+>>   	  Qualcomm Technologies, Inc. platform specific
+>>   	  Last Level Cache Controller(LLCC) driver for platforms such as,
+>> diff --git a/drivers/soc/qcom/llcc-qcom.c b/drivers/soc/qcom/llcc-qcom.c
+>> index 6cf373da5df9..3c29612da1c5 100644
+>> --- a/drivers/soc/qcom/llcc-qcom.c
+>> +++ b/drivers/soc/qcom/llcc-qcom.c
+>> @@ -12,6 +12,7 @@
+>>   #include <linux/kernel.h>
+>>   #include <linux/module.h>
+>>   #include <linux/mutex.h>
+>> +#include <linux/nvmem-consumer.h>
+>>   #include <linux/of.h>
+>>   #include <linux/of_device.h>
+>>   #include <linux/regmap.h>
+>> @@ -943,6 +944,19 @@ static int qcom_llcc_cfg_program(struct platform_device *pdev,
+>>   	return ret;
+>>   }
+>>   
+>> +static int qcom_llcc_get_cfg_index(struct platform_device *pdev, u8 *cfg_index)
+>> +{
+>> +	int ret;
+>> +
+>> +	ret = nvmem_cell_read_u8(&pdev->dev, "multi-chan-ddr", cfg_index);
+>> +	if (ret == -ENOENT) {
+>> +		*cfg_index = 0;
+>> +		return 0;
+>> +	}
+>> +
+>> +	return ret;
+>> +}
+>> +
+>>   static int qcom_llcc_remove(struct platform_device *pdev)
+>>   {
+>>   	/* Set the global pointer to a error code to avoid referencing it */
+>> @@ -975,11 +989,13 @@ static int qcom_llcc_probe(struct platform_device *pdev)
+>>   	struct device *dev = &pdev->dev;
+>>   	int ret, i;
+>>   	struct platform_device *llcc_edac;
+>> -	const struct qcom_llcc_config *cfg;
+>> +	const struct qcom_llcc_config *cfg, *entry;
+>>   	const struct llcc_slice_config *llcc_cfg;
+>>   	u32 sz;
+>> +	u8 cfg_index;
+>>   	u32 version;
+>>   	struct regmap *regmap;
+>> +	u32 num_entries = 0;
+>>   
+>>   	drv_data = devm_kzalloc(dev, sizeof(*drv_data), GFP_KERNEL);
+>>   	if (!drv_data) {
+>> @@ -1040,8 +1056,19 @@ static int qcom_llcc_probe(struct platform_device *pdev)
+>>   
+>>   	drv_data->version = version;
+>>   
+>> -	llcc_cfg = cfg[0]->sct_data;
+>> -	sz = cfg[0]->size;
+>> +	ret = qcom_llcc_get_cfg_index(pdev, &cfg_index);
+>> +	if (ret)
+>> +		goto err;
+>> +
+>
+>> +	for (entry = cfg; entry->sct_data; entry++, num_entries++)
+>> +		;
+>> +	if (cfg_index >= num_entries || cfg_index < 0) {
+> cfg_index is an unsigned variable, it can never be < 0
+
+Okay, will remove this condition.
+
+>
+>> +		ret = -EINVAL;
+>> +		goto err;
+>> +	}
+>> +
+> if (cfg_index >= entry->size)? With that, you can also keep the config
+> entries non-0-terminated in the previous patch, saving a whole lot of RAM.
+
+entry->size represents the size of sct table whereas num_entries 
+represents the number
+of sct tables that we can have. And by this check we are validating the 
+value read from the
+fuse register. Am I understanding your comment correctly?
+
+>
+> Konrad
+>> +	llcc_cfg = cfg[cfg_index].sct_data;
+>> +	sz = cfg[cfg_index].size;
+>>   
+>>   	for (i = 0; i < sz; i++)
+>>   		if (llcc_cfg[i].slice_id > drv_data->max_slices)
 
