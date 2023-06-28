@@ -2,96 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21BC57415E3
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 17:58:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C7DD7415C8
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 17:55:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231767AbjF1P6I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 11:58:08 -0400
-Received: from mga05.intel.com ([192.55.52.43]:20599 "EHLO mga05.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232067AbjF1P6D (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 11:58:03 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687967883; x=1719503883;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=K5zT2FY0Az4cbHZonZ/hBNeNzPWJNFzal6qbbQFy0DU=;
-  b=U64Ow9jXTUpQU+JRimRbhOu7QgI5l8iYFx+jhu0WWTOIPH1m+yWL4KzQ
-   19liz2OOkmeAxNcksaYUhqeB+ptRIFcr7uREdtPtW12uaOxDcHzuGYOBy
-   a41D/ZrHr52b48q2TMfJIJtvM5hFk0Htm9t2U++4XxbFIf2/tw2O1fANu
-   tPcIQmmMhUNE+OgjhNmudvvciOfE0Vd9GqWBP3iaCXeqGCBtEGR5n+VyD
-   Ug3aA6vAzub921r3jcikmQphAqHXvcv+bFcIs254blfDzpw446gNvv4u5
-   cQ3VSGJB46VE8IrYuSsFFDxWKzJVy32TAy7HGpkeYq1zJojziomFaQhhj
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10755"; a="448269762"
-X-IronPort-AV: E=Sophos;i="6.01,165,1684825200"; 
-   d="scan'208";a="448269762"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2023 08:58:03 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10755"; a="841122398"
-X-IronPort-AV: E=Sophos;i="6.01,165,1684825200"; 
-   d="scan'208";a="841122398"
-Received: from sdiskin-mobl.ger.corp.intel.com (HELO [10.251.217.207]) ([10.251.217.207])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2023 08:57:59 -0700
-Message-ID: <bbe9f772-e049-4ad3-18aa-cca0b793439f@linux.intel.com>
-Date:   Wed, 28 Jun 2023 17:57:56 +0200
+        id S231911AbjF1Pza (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 11:55:30 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:54417 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231863AbjF1PzK (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 28 Jun 2023 11:55:10 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1687967665;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=H9XkIQPUhWJqpcos5yICyN5nXtK7ObPVOfjAyLG61Jw=;
+        b=Spnmg5ikmMkgFshQ6M1yhAZSUZFC7yOp5pjz3y/FCucssf0EN1/4kMMBpHXoyMEGLizW9W
+        z6cNW73UvGd6pXtpgQOXMIMo6KjxWbmnx4O48xQE60qM8Oc/LRDxvkAqa2D1n/A9YKC1ay
+        otPZSO8nrNU2DsXGmwH0jIo8f5cL0zI=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-108-w473wJGPPy6hhyW6F0PIRw-1; Wed, 28 Jun 2023 11:54:20 -0400
+X-MC-Unique: w473wJGPPy6hhyW6F0PIRw-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id DECE18DBAEE;
+        Wed, 28 Jun 2023 15:53:34 +0000 (UTC)
+Received: from segfault.boston.devel.redhat.com (segfault.boston.devel.redhat.com [10.19.60.26])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 074D5154D8A1;
+        Wed, 28 Jun 2023 15:53:34 +0000 (UTC)
+From:   Jeff Moyer <jmoyer@redhat.com>
+To:     Gabriel Krisman Bertazi <krisman@suse.de>
+Cc:     Matteo Rizzo <matteorizzo@google.com>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, io-uring@vger.kernel.org,
+        jordyzomer@google.com, evn@google.com, poprdi@google.com,
+        corbet@lwn.net, axboe@kernel.dk, asml.silence@gmail.com,
+        akpm@linux-foundation.org, keescook@chromium.org,
+        rostedt@goodmis.org, dave.hansen@linux.intel.com,
+        ribalda@chromium.org, chenhuacai@kernel.org, steve@sk2.org,
+        gpiccoli@igalia.com, ldufour@linux.ibm.com
+Subject: Re: [PATCH 1/1] Add a new sysctl to disable io_uring system-wide
+References: <20230627120058.2214509-1-matteorizzo@google.com>
+        <20230627120058.2214509-2-matteorizzo@google.com>
+        <87ilb7ofv6.fsf@suse.de>
+X-PGP-KeyID: 1F78E1B4
+X-PGP-CertKey: F6FE 280D 8293 F72C 65FD  5A58 1FF8 A7CA 1F78 E1B4
+Date:   Wed, 28 Jun 2023 11:59:25 -0400
+In-Reply-To: <87ilb7ofv6.fsf@suse.de> (Gabriel Krisman Bertazi's message of
+        "Wed, 28 Jun 2023 09:50:37 -0400")
+Message-ID: <x49bkgzefxe.fsf@segfault.boston.devel.redhat.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.11.0
-Subject: Re: [RFC PATCH 0/8] PCI: Define Intel PCI IDs and use them in drivers
-Content-Language: en-US
-To:     Andy Shevchenko <andriy.shevchenko@intel.com>,
-        =?UTF-8?Q?Amadeusz_S=c5=82awi=c5=84ski?= 
-        <amadeuszx.slawinski@linux.intel.com>
-Cc:     Bjorn Helgaas <bhelgaas@google.com>,
-        Mark Brown <broonie@kernel.org>, Takashi Iwai <tiwai@suse.com>,
-        alsa-devel@alsa-project.org, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Cezary Rojewski <cezary.rojewski@intel.com>,
-        Kai Vehmanen <kai.vehmanen@linux.intel.com>
-References: <20230628205135.517241-1-amadeuszx.slawinski@linux.intel.com>
- <ZJxIZGV4+5Al0CpW@smile.fi.intel.com>
-From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-In-Reply-To: <ZJxIZGV4+5Al0CpW@smile.fi.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Gabriel Krisman Bertazi <krisman@suse.de> writes:
 
+> Matteo Rizzo <matteorizzo@google.com> writes:
+>
+>> diff --git a/Documentation/admin-guide/sysctl/kernel.rst b/Documentation/admin-guide/sysctl/kernel.rst
+>> index d85d90f5d000..3c53a238332a 100644
+>> --- a/Documentation/admin-guide/sysctl/kernel.rst
+>> +++ b/Documentation/admin-guide/sysctl/kernel.rst
+>> @@ -450,6 +450,20 @@ this allows system administrators to override the
+>>  ``IA64_THREAD_UAC_NOPRINT`` ``prctl`` and avoid logs being flooded.
+>>  
+>>  
+>> +io_uring_disabled
+>> +=========================
+>> +
+>> +Prevents all processes from creating new io_uring instances. Enabling this
+>> +shrinks the kernel's attack surface.
+>> +
+>> += =============================================================
+>> +0 All processes can create io_uring instances as normal. This is the default
+>> +  setting.
+>> +1 io_uring is disabled. io_uring_setup always fails with -EPERM. Existing
+>> +  io_uring instances can still be used.
+>> += =============================================================
+>
+> I had an internal request for something like this recently.  If we go
+> this route, we could use a intermediary option that limits io_uring
+> to root processes only.
 
-On 6/28/23 16:49, Andy Shevchenko wrote:
-> On Wed, Jun 28, 2023 at 10:51:27PM +0200, Amadeusz Sławiński wrote:
->> PCI IDs for Intel HDA are duplicated across quite a few drivers, due to
->> various configurations and historical reasons. Currently almost all uses
->> of HDA PCI IDs have corresponding comment telling which platform it is.
->> Additionally there are some inconsistencies between drivers about which
->> ID corresponds to which device.
->>
->> Simplify things, by adding PCI IDs to global header and make use of them
->> in drivers. This allows for removal of comments by having IDs themselves
->> being self explanatory. Additionally it allows for removal of existing
->> inconsistencies by having one source of truth.
-> 
-> I'm in favour of this series. It allows to use PCI_DEVICE_DATA() in many places.
-> With that said, I think you can also add some more definitions to PCI IDs header
-> for the sake of being able to use that macro.
+This is all regrettable, but this option makes the most sense to me.
+Testing for CAP_SYS_ADMIN or CAP_SYS_RAW_IO would work for that third
+option, I think.
 
-I don't have any objections on the change.
+-Jeff
 
-The big open is how we add new definitions without a 3-way deadlock
-between PCI, sound and ASoC trees, and how those definitions can be
-added to the -stable trees.
-
-This isn't an hypothetical case, we have 2 pending submissions for
-LunarLake [1] and ArrowLake [2] which will be provided as soon as the
-merge window closes.
-
-It's not clear to me if Bjorn is ok to let those audio-specific PCI IDs
-go the audio trees, and how things would work between Mark and Takashi.
-
-[1] https://github.com/thesofproject/linux/pull/4425
-[2] https://github.com/thesofproject/linux/pull/4437
