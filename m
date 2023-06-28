@@ -2,80 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A71A741480
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 17:05:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5928374147C
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 17:04:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231984AbjF1PER (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 11:04:17 -0400
-Received: from mga17.intel.com ([192.55.52.151]:32511 "EHLO mga17.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231950AbjF1PEI (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 11:04:08 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687964648; x=1719500648;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=GycD9dWOzwRCqNYrIYMYjM1P7I0T3JI7OkH4Yxa/z1c=;
-  b=kL1MZ12OWLrnLeNsTaIv7b8ZarKAE7u7wmYTHw6RyXDjBE8fVkjYDD6i
-   D9O+NvUXUy1gRCLUU4Fde97DGvSEsUGG+b1MJ1ntcVmABnVNuuqa1fcJ0
-   W/ExC/2zL701oc31OGuZFJhpiX60y49JMaRfeiX8Qbk6/ZzBHEaYPG3tb
-   FsHf00KepkaBAmThkiTquu16/FlFdZyFrnjjhg1279BLxa3orr5qay4QU
-   epV5NxZBrElrrVnMXxybRgE8flJ6tn7BeGw9idA/KXEiJbMDPPutUnBpv
-   bSPf2gz9ta0r9Bb89CpTC2C3SvVjM8KT13Ig9uYJqje02mfiq/9aYgp5x
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10755"; a="342206060"
-X-IronPort-AV: E=Sophos;i="6.01,165,1684825200"; 
-   d="scan'208";a="342206060"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2023 08:02:58 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10755"; a="667159966"
-X-IronPort-AV: E=Sophos;i="6.01,165,1684825200"; 
-   d="scan'208";a="667159966"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga003.jf.intel.com with ESMTP; 28 Jun 2023 08:02:53 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 06DE8E1; Wed, 28 Jun 2023 18:02:53 +0300 (EEST)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Marc Zyngier <maz@kernel.org>,
-        Johan Hovold <johan+linaro@kernel.org>,
-        linux-kernel@vger.kernel.org
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [PATCH v1 1/1] irqdomain: Use return value of strreplace()
-Date:   Wed, 28 Jun 2023 18:02:51 +0300
-Message-Id: <20230628150251.17832-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.40.0.1.gaa8946217a0b
+        id S231919AbjF1PDm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 11:03:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57878 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231940AbjF1PDh (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 28 Jun 2023 11:03:37 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC03A10D5;
+        Wed, 28 Jun 2023 08:03:36 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id a640c23a62f3a-98e011f45ffso474652066b.3;
+        Wed, 28 Jun 2023 08:03:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687964615; x=1690556615;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8wS0/tVVfYmWAxxo37y+v0M6HIvge1vajIKiOpWu/wQ=;
+        b=ME6xclwZwAKxvdbSiH7N5rG8ryo5U4E538D0nnDMbunKQdRXYX78PbUueytpfqLFhB
+         nm08tVIGha1qYoNPECIqFEOr8sams/BfwupmWtLEwvaZJUuaKt5dth9n41ZkWYLW0OBF
+         58vvJ9OclwmfZLNmoRSfzZrfs9sEBCIKTLFU59hrHX525xL9UnaJKwT/8RozQJWOIbYS
+         Hn52ieE/PTBNEveYm0ZQ5w38seM577yXEC2AFMLmrOg60VLG2wH5q1Tr1UpzIHIuhT4C
+         0QxQRRt7Op67cHEbPJjCJETKBf7cX9JIXGomfJtJeRl04FaW9ZXeIv7oFBWv9Xz80Pns
+         aw9A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687964615; x=1690556615;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=8wS0/tVVfYmWAxxo37y+v0M6HIvge1vajIKiOpWu/wQ=;
+        b=UvnIajN4KnO2WL323bENQcwoaDqRkp+wSSl9rycdpZGad2pynKuFSn84VQvETEhRS9
+         3p9vMun9Yh519QcohpdZzCSKzT6ldZjA7n99Kcr6qiQks/asUQ6G0dG8RaQ3PHvy10p/
+         i9rHn7JfLCCWlNabUuVePoMi487Qvgh0aoRM5g/UhVunYgrdef/NjfepqZtNYr8h25aX
+         3HxZxCaB082rJxJaOxzl1bsQMAWuV7sQ5Yjb5JWGBFAOjDAGVAnJ+JzDQuzOyzzrWhnD
+         ikSLbMYh555UDG9PcxkYGCCPlqjDHgqcYLAUVxZn8cQ6OpZC/177SBJAyR6ubp82EjMY
+         PvmA==
+X-Gm-Message-State: AC+VfDyrHetMobcKKMdnZ0wXaDcPPHSZ7I3uhXUIOICNG3Oo57a74ti7
+        lZzuyDKLmWreANZVBI6+wuVeL8amyYdmGu0NzCHYK9sM
+X-Google-Smtp-Source: ACHHUZ4bDstTP1DqJWuzHP2Nrm5f9oBvhMa44NotmxDjlNg0QAlbZg/QasCcLY/KGLdkWShNGNYgTSRq+ocENqiQQrA=
+X-Received: by 2002:a17:907:6d1d:b0:992:4a1b:30e2 with SMTP id
+ sa29-20020a1709076d1d00b009924a1b30e2mr3237054ejc.7.1687964614906; Wed, 28
+ Jun 2023 08:03:34 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20230628011439.159678-1-linux@treblig.org> <9343462e-6a4a-ca7b-03b8-4855e5a33b72@talpey.com>
+ <ZJw4iLlFWRMq6a3S@gallifrey> <ZJw50e0pvn/IN5Gj@gallifrey> <90f35697-5941-d42d-b600-245454cbd040@oracle.com>
+ <ZJxGFBzuhU8t5rcx@gallifrey>
+In-Reply-To: <ZJxGFBzuhU8t5rcx@gallifrey>
+From:   Steve French <smfrench@gmail.com>
+Date:   Wed, 28 Jun 2023 10:03:22 -0500
+Message-ID: <CAH2r5ms1UE4vAuakBLuayv1CXw3sC_OcuhtCrz5mV_ftR+=rjg@mail.gmail.com>
+Subject: Re: [Jfs-discussion] [PATCH 0/3] dedupe smb unicode files
+To:     "Dr. David Alan Gilbert" <linux@treblig.org>
+Cc:     Dave Kleikamp <dave.kleikamp@oracle.com>, krisman@collabora.com,
+        Tom Talpey <tom@talpey.com>, sfrench@samba.org,
+        linux-cifs@vger.kernel.org, jfs-discussion@lists.sourceforge.net,
+        linkinjeon@kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+        lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since strreplace() returns the pointer to the string itself,
-we may use it directly in the code.
+On Wed, Jun 28, 2023 at 9:40=E2=80=AFAM Dr. David Alan Gilbert
+<linux@treblig.org> wrote:
+> > > Actually, would you be ok with smb_unicode_common ?  The reason is th=
+at
+> > > you end up with a module named unicode_common  that sounds too generi=
+c.
+> >
+> > I'd suggest make it generic and move it to fs/nls/. I'd run it by the n=
+ls
+> > maintainers, but I don't think there are any.
+>
+> Steve & Tom - would you be OK with that?
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- kernel/irq/irqdomain.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+Yes - absolutely
 
-diff --git a/kernel/irq/irqdomain.c b/kernel/irq/irqdomain.c
-index 5bd01624e447..0bdef4fe925b 100644
---- a/kernel/irq/irqdomain.c
-+++ b/kernel/irq/irqdomain.c
-@@ -182,9 +182,7 @@ static struct irq_domain *__irq_domain_create(struct fwnode_handle *fwnode,
- 			return NULL;
- 		}
- 
--		strreplace(name, '/', ':');
--
--		domain->name = name;
-+		domain->name = strreplace(name, '/', ':');
- 		domain->fwnode = fwnode;
- 		domain->flags |= IRQ_DOMAIN_NAME_ALLOCATED;
- 	}
--- 
-2.40.0.1.gaa8946217a0b
+> (Copying in Gabriel Bertazi, owner of fs/unicode; although this isn't
+> utf-8)
 
+Unicode UCS-2
+
+
+--=20
+Thanks,
+
+Steve
