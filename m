@@ -2,101 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3E4F7411E8
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 15:05:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A0F87411ED
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 15:08:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231214AbjF1NEl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 09:04:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44030 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230517AbjF1NEj (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 09:04:39 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAE1E2115;
-        Wed, 28 Jun 2023 06:04:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=r4assKLUV0IbwzseqMfwCr0QBp5VHy4VpTRtS17tYNw=; b=etkAxCKGBrjRUymzYmu3Iqb/ae
-        QdZYyMV6oDZXdPvYVjaz66ZhMBhFGgIH6JCPAhAuuo6K+ZQFx0+yAEOg4Im4gBUHRoVY66e6IgNlo
-        cwB2kX6Lu/lte3Hm4L+l4XXgjAjkGJEpVR8Fprn5UOkFor2dJS3OvGDwc5VkGTTl1FU9BLg9JItTs
-        ndqf69xpeVeEkCo2GTcN6VS7cMch0jcRLbCv3IKQDqj2WGByGG9yjGsQws9tXVKYPa8hZl3NmviEC
-        /nYR+MKBUBr+eg3vS4/CULz7iOoBVQU/U8S41vHF3DYb8/hogtjEeC9c7ZG0mQz7SzdY1tGLHa+2G
-        5mrg9DWg==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1qEUqK-005eHM-1L;
-        Wed, 28 Jun 2023 13:04:20 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id ABB583002F0;
-        Wed, 28 Jun 2023 15:04:19 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 9C42C27F62BA3; Wed, 28 Jun 2023 15:04:19 +0200 (CEST)
-Date:   Wed, 28 Jun 2023 15:04:19 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Kai Huang <kai.huang@intel.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-mm@kvack.org, x86@kernel.org, dave.hansen@intel.com,
-        kirill.shutemov@linux.intel.com, tony.luck@intel.com,
-        tglx@linutronix.de, bp@alien8.de, mingo@redhat.com, hpa@zytor.com,
-        seanjc@google.com, pbonzini@redhat.com, david@redhat.com,
-        dan.j.williams@intel.com, rafael.j.wysocki@intel.com,
-        ashok.raj@intel.com, reinette.chatre@intel.com,
-        len.brown@intel.com, ak@linux.intel.com, isaku.yamahata@intel.com,
-        ying.huang@intel.com, chao.gao@intel.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com, nik.borisov@suse.com,
-        bagasdotme@gmail.com, sagis@google.com, imammedo@redhat.com
-Subject: Re: [PATCH v12 07/22] x86/virt/tdx: Add skeleton to enable TDX on
- demand
-Message-ID: <20230628130419.GC2438817@hirez.programming.kicks-ass.net>
-References: <cover.1687784645.git.kai.huang@intel.com>
- <104d324cd68b12e14722ee5d85a660cccccd8892.1687784645.git.kai.huang@intel.com>
+        id S231245AbjF1NHt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 09:07:49 -0400
+Received: from bg4.exmail.qq.com ([43.154.54.12]:25161 "EHLO bg4.exmail.qq.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230517AbjF1NHr (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 28 Jun 2023 09:07:47 -0400
+X-QQ-mid: bizesmtp65t1687957648tu9qyfcj
+Received: from linux-lab-host.localdomain ( [116.30.129.193])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Wed, 28 Jun 2023 21:07:27 +0800 (CST)
+X-QQ-SSF: 01200000000000D0V000000A0000000
+X-QQ-FEAT: 3M0okmaRx3gb4FdeRUhO6aTI0YLKsUxEqUK9Nx/Uxnu07QNHgt2LGMOPoBR/s
+        GPh7o8giMgIt60FJvxcE7e5uRKmM3LPCus9zqtpWhLnvkdQpDIxv78aaFlZDtvHnwaZlRvo
+        Po9QXf3TC7/3rx5coDBkXBvbt1tlCI+a0AR0zuWB6UpzZymRvSMZJEG8wczWFFQmVIjXUzM
+        QxsOGKF/smUpbO48jbVNMpfmAzXtcrI0FYkwdjpyNGAOwkfdM+6yh8VqMf2H5tZdMkT2pOf
+        thJyfho1d46/BmsEnLiUTEz0Kk9W10JyVGI7ZXubxvWKJqLPQaj7AQU/oqWmziSroABw4Gf
+        g/f0Afn0QLWyXsur/DiDeoSoirimQ==
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 15580650534271053015
+From:   Zhangjin Wu <falcon@tinylab.org>
+To:     thomas@t-8ch.de, w@1wt.eu
+Cc:     falcon@tinylab.org, arnd@arndb.de, david.laight@aculab.com,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-riscv@lists.infradead.org
+Subject: [PATCH v5 00/14] tools/nolibc: add a new syscall helper
+Date:   Wed, 28 Jun 2023 21:07:16 +0800
+Message-Id: <cover.1687957589.git.falcon@tinylab.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <cover.1687187451.git.falcon@tinylab.org>
+References: <cover.1687187451.git.falcon@tinylab.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <104d324cd68b12e14722ee5d85a660cccccd8892.1687784645.git.kai.huang@intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-        lindbergh.monkeyblade.net
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrsz:qybglogicsvrsz3a-3
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 27, 2023 at 02:12:37AM +1200, Kai Huang wrote:
+Willy, Thomas
 
-> +static int try_init_module_global(void)
-> +{
-> +	unsigned long flags;
-> +	int ret;
-> +
-> +	/*
-> +	 * The TDX module global initialization only needs to be done
-> +	 * once on any cpu.
-> +	 */
-> +	raw_spin_lock_irqsave(&tdx_global_init_lock, flags);
-> +
-> +	if (tdx_global_initialized) {
-> +		ret = 0;
-> +		goto out;
-> +	}
-> +
-> +	/* All '0's are just unused parameters. */
-> +	ret = seamcall(TDH_SYS_INIT, 0, 0, 0, 0, NULL, NULL);
-> +	if (!ret)
-> +		tdx_global_initialized = true;
-> +out:
-> +	raw_spin_unlock_irqrestore(&tdx_global_init_lock, flags);
-> +
-> +	return ret;
-> +}
+This is the revision of our 'tools/nolibc: add a new syscall helper'
+series [1].
 
-How long does that TDX_SYS_INIT take and why is a raw_spinlock with IRQs
-disabled the right way to serialize this?
+It mainly applies the core part of suggestions from Thomas (Many thanks)
+and cleans up the multiple whitespaces issues reported by
+scripts/checkpatch.pl.
+
+Changes from v4 --> v5:
+
+* tools/nolibc: sys.h: add a syscall return helper
+  tools/nolibc: unistd.h: apply __sysret() helper
+  tools/nolibc: sys.h: apply __sysret() helper
+  tools/nolibc: unistd.h: reorder the syscall macros
+  tools/nolibc: __sysret: support syscalls who return a pointer
+  selftests/nolibc: add EXPECT_PTREQ, EXPECT_PTRNE and EXPECT_PTRER
+  selftests/nolibc: add sbrk_0 to test current brk getting
+
+    The same to original v4 series, no code change.
+
+* tools/nolibc: string.h: clean up multiple whitespaces with tab
+  tools/nolibc: arch-*.h: clean up multiple whitespaces
+  tools/nolibc: arch-loongarch.h: shrink with SYSCALL_CLOBBERLIST
+  tools/nolibc: arch-mips.h: shrink with SYSCALL_CLOBBERLIST
+
+    Clean up the multiple whitespaces issues reported by
+    scripts/checkpatch.pl, prepare for the coming mips my_syscall6()
+
+    This cleanup is also required by another new arch shrink patchset.
+
+    In v4, we didn't touch multiple whitespaces, because the
+    changes are huge, but it is really important to do this
+    before being always 'complained' by scripts/checkpatch.pl in the
+    future.
+
+* tools/nolibc: add missing my_syscall6() for mips
+
+    Use tab instead of multiple whitespaces, let scripts/checkpatch.pl
+    happy, also apply SYSCALL_CLOBBERLIST
+
+* tools/nolibc: clean up mmap() support
+
+    Include <linux/mman.h> and remove more macros from nolibc side.
+
+    The return type of sys_mmap() is reserved as before, not changed
+    currently.
+  
+* selftests/nolibc: add mmap and munmap test cases
+
+    Applies some suggestions from Thomas,
+
+    - Rebase length and offset on page_size and file_size
+
+    - make sure the last offset argument is not always zero to test
+      my_syscall6()
+
+    - easier the for loop with NULL check
+
+    - use /proc/1/exe and /proc/self/exe for run, run-user and libc-test
+
+      but still reserve the old init files to align our another attempt
+      to remove the unnecessary dependency on procfs (this is important
+      to let developers happy to do all-architectures-test, the
+      accumulated time cost and wait is really appreciable, it is really
+      a pain for me to do repeated all-architectures-test for the new
+      'minimal' kernel config patchset [2], a v2 is ready for it).
+
+Best regards,
+Zhangjin
+---
+[1]: https://lore.kernel.org/lkml/cover.1687187451.git.falcon@tinylab.org/
+[2]: https://lore.kernel.org/lkml/cover.1687706332.git.falcon@tinylab.org/
+
+Zhangjin Wu (14):
+  tools/nolibc: sys.h: add a syscall return helper
+  tools/nolibc: unistd.h: apply __sysret() helper
+  tools/nolibc: sys.h: apply __sysret() helper
+  tools/nolibc: unistd.h: reorder the syscall macros
+  tools/nolibc: string.h: clean up multiple whitespaces with tab
+  tools/nolibc: arch-*.h: clean up multiple whitespaces
+  tools/nolibc: arch-loongarch.h: shrink with SYSCALL_CLOBBERLIST
+  tools/nolibc: arch-mips.h: shrink with SYSCALL_CLOBBERLIST
+  tools/nolibc: add missing my_syscall6() for mips
+  tools/nolibc: __sysret: support syscalls who return a pointer
+  tools/nolibc: clean up mmap() support
+  selftests/nolibc: add EXPECT_PTREQ, EXPECT_PTRNE and EXPECT_PTRER
+  selftests/nolibc: add sbrk_0 to test current brk getting
+  selftests/nolibc: add mmap and munmap test cases
+
+ tools/include/nolibc/arch-aarch64.h          | 210 +++++-----
+ tools/include/nolibc/arch-arm.h              | 240 ++++++------
+ tools/include/nolibc/arch-i386.h             | 226 +++++------
+ tools/include/nolibc/arch-loongarch.h        | 219 +++++------
+ tools/include/nolibc/arch-mips.h             | 241 ++++++------
+ tools/include/nolibc/arch-riscv.h            | 208 +++++-----
+ tools/include/nolibc/arch-s390.h             | 202 +++++-----
+ tools/include/nolibc/arch-x86_64.h           | 222 +++++------
+ tools/include/nolibc/nolibc.h                |   9 +-
+ tools/include/nolibc/string.h                |   8 +-
+ tools/include/nolibc/sys.h                   | 391 +++----------------
+ tools/include/nolibc/types.h                 |   6 +
+ tools/include/nolibc/unistd.h                |  13 +-
+ tools/testing/selftests/nolibc/nolibc-test.c | 115 ++++++
+ 14 files changed, 1083 insertions(+), 1227 deletions(-)
+
+-- 
+2.25.1
+
