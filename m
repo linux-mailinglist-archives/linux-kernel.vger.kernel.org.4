@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3676D741932
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 22:02:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB721741933
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 22:02:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231835AbjF1UCG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 16:02:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59418 "EHLO
+        id S231916AbjF1UCK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 16:02:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231555AbjF1UBu (ORCPT
+        with ESMTP id S230260AbjF1UBu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 28 Jun 2023 16:01:50 -0400
 Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8C782110;
-        Wed, 28 Jun 2023 13:01:48 -0700 (PDT)
-Received: by mail-pf1-x42a.google.com with SMTP id d2e1a72fcca58-666eef03ebdso120917b3a.1;
-        Wed, 28 Jun 2023 13:01:48 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3FE51FE7;
+        Wed, 28 Jun 2023 13:01:49 -0700 (PDT)
+Received: by mail-pf1-x42a.google.com with SMTP id d2e1a72fcca58-666ed230c81so151873b3a.0;
+        Wed, 28 Jun 2023 13:01:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687982508; x=1690574508;
+        d=gmail.com; s=20221208; t=1687982509; x=1690574509;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=PiWZYv4c06sxae6xC2ziSZRNA4QZoNeA1AhON9n731k=;
-        b=SIX1h/Jb8fu5N1K7e7gJJ2kt0hKA0VSaJBNwxaPyNAghmGdX64yRxNgXqc145Gq6Zn
-         Q7tUj7op8yPoFEb+GiHPkjHwso/tegnJuMh4Hndgwbhf1HkgYPQa+enWIvW7bM6QI+0z
-         i7aHZhWjcFgphEb+wDE/izT1MGfuERMG/Sgj1KrykFeCFihlAH0ePbIAIFjkEThufgHy
-         QpWq85mkEeX26kPCEDiQ724MDwkytXK0NW2DFa74Nl2ehLv4uW36WcwFqC7c7C8e8Ayd
-         VZyUN2/25oS/QxrqWMtbFFzKSKw+soievxD3vRXjusM/yZ8XgtDN5mj7E34U1pGrdTFI
-         YCKQ==
+        bh=BVELursx7ZDvBYQWp0incqgL1857WVtGQabwOfefQSc=;
+        b=gN/lr8UbwiJrrDE/KxtTTHGo8Y4o30+B6GIfeY7nBFzojGAOptzHMWWBaICsjeydhJ
+         uJ4On3ApMAVXjXLmYWNeCIY9dBzWUCUxmdbq+N8FgOEPi/cTuMHmBxn7fqrrkcpSLIeC
+         /0aVTVoQQMcEDP9htZcY1zQBA5Y6kO6Kc+4T62CICo69fcZd1TGuFxJ8yHttMopBfJty
+         TRXh/CQWSyFbUY8RSiYh2k2zk9yWpLEsPds0cUB/xa4KivQlnO95lIuAXZyh0YlULULn
+         VJTT+JM1xqEyFkhBgjmuGvd+7BegufSJ5JQW9mIr82B0g8dRnNLOIXVuDKNbTcOwOX1K
+         XmCw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687982508; x=1690574508;
+        d=1e100.net; s=20221208; t=1687982509; x=1690574509;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=PiWZYv4c06sxae6xC2ziSZRNA4QZoNeA1AhON9n731k=;
-        b=fc3EdQUBpujJEsE4wACVFHoQf525mnZJnTuQrZ0DI5a8ONiD+c4P7Y1qJU8IqauvQO
-         Ul5fQ4fIhdDBChdb3NgXjo2e2CDoOvGj9DqMdavA1drMkcy/Uklkk7neP5ZZQTcwvOAA
-         lxCCl3uOW3t2xEJJCiew4nIch5je9UgrtyV6ryrSgkoQycdkk3mOzB6sxcKvLZx7hdMW
-         9qeudcnRhvwNaoaQ6KVQ2pYlFmM0DRJHQ2KBM4xJC45U7OCxObmh6+RFY3emxmMrciH7
-         xU2h/EJHNrV2kO2VBZ40iFgPRukVbzbUw63IiKBKmzr3vVdeHTc18+z8ZMHLnkSb2vKO
-         Z4ig==
-X-Gm-Message-State: AC+VfDx1pvG4cG52kyidmrH3/m5dfyONtXnmP6Ws7zvNNxcLrTeKCRea
-        HdYRovJqcsekhv3vMU7bkS4=
-X-Google-Smtp-Source: ACHHUZ6Ha66K5dP0CLA0jV//XXTwd9FflnEioPRX/5mskqjL/nwtP/vL1DyIL3XC3nWzqthNO9eVNA==
-X-Received: by 2002:a05:6a20:3c89:b0:124:eea9:668d with SMTP id b9-20020a056a203c8900b00124eea9668dmr17069108pzj.40.1687982507844;
-        Wed, 28 Jun 2023 13:01:47 -0700 (PDT)
+        bh=BVELursx7ZDvBYQWp0incqgL1857WVtGQabwOfefQSc=;
+        b=lcPutIIZxIUUkr3zKNwLpHWI7AeckIOLv9w9qkQj0xn8Z+MgUS7lfjc5ZQV8R6NraF
+         8C6o/H+0RF5CLcUCKzoTKH4zBcpDrPEoADGt5eKGrl2TrVhqY9W9aSdxz0XSTLt/KKMn
+         scGIPXXx85vpsXp3geM/UUCUZNOBdU1x2GJQ5wv8uS58+Diq6Br8QWGMw6qRQztiAf4/
+         ut99S5+uMKgYwjT/50CR22JFatOOhyCeYxRpKIJrH74yP6S2PmChMc0xoHjEhUj3fEJJ
+         bGcun6p+KWQKnsleCeaYztqBJ8uQpS1e6VRJQKvaRVGE7X7Ebyf6uB7ubNSmsOvb33wR
+         1cxg==
+X-Gm-Message-State: AC+VfDxEfCLscvfZpm2kRGnz7WwnWkMeITe0zU0cs7tPlQuuYtn0hjoI
+        RNTcRWmLZXdTDBoEwwo57Vj/lOi33VE=
+X-Google-Smtp-Source: ACHHUZ593BLR6RNR8eoFC7C/7TumlbXFyDfhoijcz6m9Pw/s/2wogOCaZI0M05UiUMZUa5KJ+eS85A==
+X-Received: by 2002:a05:6a00:1504:b0:668:7325:e184 with SMTP id q4-20020a056a00150400b006687325e184mr39037691pfu.16.1687982509139;
+        Wed, 28 Jun 2023 13:01:49 -0700 (PDT)
 Received: from bangji.corp.google.com ([2620:15c:2c0:5:fc6b:e50c:c8f0:b09b])
-        by smtp.gmail.com with ESMTPSA id f3-20020aa78b03000000b0065e154bac6dsm7340376pfd.133.2023.06.28.13.01.46
+        by smtp.gmail.com with ESMTPSA id f3-20020aa78b03000000b0065e154bac6dsm7340376pfd.133.2023.06.28.13.01.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Jun 2023 13:01:47 -0700 (PDT)
+        Wed, 28 Jun 2023 13:01:48 -0700 (PDT)
 Sender: Namhyung Kim <namhyung@gmail.com>
 From:   Namhyung Kim <namhyung@kernel.org>
 To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
@@ -61,9 +61,9 @@ Cc:     Ian Rogers <irogers@google.com>,
         LKML <linux-kernel@vger.kernel.org>,
         linux-perf-users@vger.kernel.org, Song Liu <song@kernel.org>,
         Hao Luo <haoluo@google.com>
-Subject: [PATCH 3/4] perf lock contention: Add --output option
-Date:   Wed, 28 Jun 2023 13:01:40 -0700
-Message-ID: <20230628200141.2739587-4-namhyung@kernel.org>
+Subject: [PATCH 4/4] perf test: Test perf lock contention CSV output
+Date:   Wed, 28 Jun 2023 13:01:41 -0700
+Message-ID: <20230628200141.2739587-5-namhyung@kernel.org>
 X-Mailer: git-send-email 2.41.0.255.g8b1d071c50-goog
 In-Reply-To: <20230628200141.2739587-1-namhyung@kernel.org>
 References: <20230628200141.2739587-1-namhyung@kernel.org>
@@ -72,423 +72,105 @@ Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-To avoid formatting failures for example in CSV output due to debug
-messages, add --output option to put the result in a file.
-Unfortunately the short -o option was taken by the --owner already.
+To verify CSV output, just check the number of separators (",") using
+the tr and wc commands like this.
 
-  $ sudo ./perf lock con -ab --output lock-out.txt -v sleep 1
-  Looking at the vmlinux_path (8 entries long)
-  symsrc__init: cannot get elf header.
-  Using /proc/kcore for kernel data
-  Using /proc/kallsyms for symbols
+  grep -v "^#" ${result} | tr -d -c | wc -c
 
-  $ head lock-out.txt
-   contended   total wait     max wait     avg wait         type   caller
+Now it expects 6 columns (and 5 separators) in the output, but it may
+be changed later so count the field in the header first and compare it
+to the actual output lines.
 
-           3     76.79 us     26.89 us     25.60 us     rwlock:R   ep_poll_callback+0x2d
-  			0xffffffff9a23f4b5  _raw_read_lock_irqsave+0x45
-  			0xffffffff99bbd4dd  ep_poll_callback+0x2d
-  			0xffffffff999029f3  __wake_up_common+0x73
-  			0xffffffff99902b82  __wake_up_common_lock+0x82
-  			0xffffffff99fa5b1c  sock_def_readable+0x3c
-  			0xffffffff9a11521d  unix_stream_sendmsg+0x18d
-  			0xffffffff99f9fc9c  sock_sendmsg+0x5c
+  $ cat ${result}
+  # output: contended, total wait, max wait, avg wait, type, caller
+  1, 28787, 28787, 28787, spinlock, raw_spin_rq_lock_nested+0x1b
 
-Suggested-by: Ian Rogers <irogers@google.com>
+The test looks like below now:
+
+  $ sudo ./perf test -v contention
+   86: kernel lock contention analysis test                            :
+  --- start ---
+  test child forked, pid 2705822
+  Testing perf lock record and perf lock contention
+  Testing perf lock contention --use-bpf
+  Testing perf lock record and perf lock contention at the same time
+  Testing perf lock contention --threads
+  Testing perf lock contention --lock-addr
+  Testing perf lock contention --type-filter (w/ spinlock)
+  Testing perf lock contention --lock-filter (w/ tasklist_lock)
+  Testing perf lock contention --callstack-filter (w/ unix_stream)
+  Testing perf lock contention --callstack-filter with task aggregation
+  Testing perf lock contention CSV output
+  test child finished with 0
+  ---- end ----
+  kernel lock contention analysis test: Ok
+
 Signed-off-by: Namhyung Kim <namhyung@kernel.org>
 ---
- tools/perf/Documentation/perf-lock.txt |   3 +
- tools/perf/builtin-lock.c              | 140 +++++++++++++++----------
- 2 files changed, 85 insertions(+), 58 deletions(-)
+ tools/perf/tests/shell/lock_contention.sh | 36 +++++++++++++++++++++++
+ 1 file changed, 36 insertions(+)
 
-diff --git a/tools/perf/Documentation/perf-lock.txt b/tools/perf/Documentation/perf-lock.txt
-index d1efcbe7a470..30eea576721f 100644
---- a/tools/perf/Documentation/perf-lock.txt
-+++ b/tools/perf/Documentation/perf-lock.txt
-@@ -36,6 +36,9 @@ COMMON OPTIONS
- --input=<file>::
-         Input file name. (default: perf.data unless stdin is a fifo)
- 
-+--output=<file>::
-+        Output file name for perf lock contention and report.
-+
- -v::
- --verbose::
-         Be more verbose (show symbol address, etc).
-diff --git a/tools/perf/builtin-lock.c b/tools/perf/builtin-lock.c
-index 98b0c0b1b307..c15386cb1033 100644
---- a/tools/perf/builtin-lock.c
-+++ b/tools/perf/builtin-lock.c
-@@ -27,6 +27,7 @@
- #include "util/map.h"
- #include "util/util.h"
- 
-+#include <stdio.h>
- #include <sys/types.h>
- #include <sys/prctl.h>
- #include <semaphore.h>
-@@ -65,6 +66,8 @@ static int max_stack_depth = CONTENTION_STACK_DEPTH;
- static int stack_skip = CONTENTION_STACK_SKIP;
- static int print_nr_entries = INT_MAX / 2;
- static LIST_HEAD(callstack_filters);
-+static const char *output_name = NULL;
-+static FILE *lock_output;
- 
- struct callstack_filter {
- 	struct list_head list;
-@@ -227,7 +230,7 @@ static void lock_stat_key_print_time(unsigned long long nsec, int len)
- 
- 	/* for CSV output */
- 	if (len == 0) {
--		pr_info("%llu", nsec);
-+		fprintf(lock_output, "%llu", nsec);
- 		return;
- 	}
- 
-@@ -235,18 +238,18 @@ static void lock_stat_key_print_time(unsigned long long nsec, int len)
- 		if (nsec < table[i].base)
- 			continue;
- 
--		pr_info("%*.2f %s", len - 3, nsec / table[i].base, table[i].unit);
-+		fprintf(lock_output, "%*.2f %s", len - 3, nsec / table[i].base, table[i].unit);
- 		return;
- 	}
- 
--	pr_info("%*llu %s", len - 3, nsec, "ns");
-+	fprintf(lock_output, "%*llu %s", len - 3, nsec, "ns");
+diff --git a/tools/perf/tests/shell/lock_contention.sh b/tools/perf/tests/shell/lock_contention.sh
+index f2cc187b6186..4a194420416e 100755
+--- a/tools/perf/tests/shell/lock_contention.sh
++++ b/tools/perf/tests/shell/lock_contention.sh
+@@ -233,6 +233,41 @@ test_aggr_task_stack_filter()
+ 	fi
  }
  
- #define PRINT_KEY(member)						\
- static void lock_stat_key_print_ ## member(struct lock_key *key,	\
- 					   struct lock_stat *ls)	\
- {									\
--	pr_info("%*llu", key->len, (unsigned long long)ls->member);	\
-+	fprintf(lock_output, "%*llu", key->len, (unsigned long long)ls->member);\
- }
- 
- #define PRINT_TIME(member)						\
-@@ -1335,12 +1338,12 @@ static void print_bad_events(int bad, int total)
- 	if (quiet || total == 0 || (broken == 0 && verbose <= 0))
- 		return;
- 
--	pr_info("\n=== output for debug ===\n\n");
--	pr_info("bad: %d, total: %d\n", bad, total);
--	pr_info("bad rate: %.2f %%\n", (double)bad / (double)total * 100);
--	pr_info("histogram of events caused bad sequence\n");
-+	fprintf(lock_output, "\n=== output for debug ===\n\n");
-+	fprintf(lock_output, "bad: %d, total: %d\n", bad, total);
-+	fprintf(lock_output, "bad rate: %.2f %%\n", (double)bad / (double)total * 100);
-+	fprintf(lock_output, "histogram of events caused bad sequence\n");
- 	for (i = 0; i < BROKEN_MAX; i++)
--		pr_info(" %10s: %d\n", name[i], bad_hist[i]);
-+		fprintf(lock_output, " %10s: %d\n", name[i], bad_hist[i]);
- }
- 
- /* TODO: various way to print, coloring, nano or milli sec */
-@@ -1352,10 +1355,10 @@ static void print_result(void)
- 	int bad, total, printed;
- 
- 	if (!quiet) {
--		pr_info("%20s ", "Name");
-+		fprintf(lock_output, "%20s ", "Name");
- 		list_for_each_entry(key, &lock_keys, list)
--			pr_info("%*s ", key->len, key->header);
--		pr_info("\n\n");
-+			fprintf(lock_output, "%*s ", key->len, key->header);
-+		fprintf(lock_output, "\n\n");
- 	}
- 
- 	bad = total = printed = 0;
-@@ -1380,7 +1383,7 @@ static void print_result(void)
- 				name = thread__comm_str(t);
- 			}
- 
--			pr_info("%20s ", name);
-+			fprintf(lock_output, "%20s ", name);
- 		} else {
- 			strncpy(cut_name, st->name, 16);
- 			cut_name[16] = '.';
-@@ -1388,14 +1391,14 @@ static void print_result(void)
- 			cut_name[18] = '.';
- 			cut_name[19] = '\0';
- 			/* cut off name for saving output style */
--			pr_info("%20s ", cut_name);
-+			fprintf(lock_output, "%20s ", cut_name);
- 		}
- 
- 		list_for_each_entry(key, &lock_keys, list) {
- 			key->print(key, st);
--			pr_info(" ");
-+			fprintf(lock_output, " ");
- 		}
--		pr_info("\n");
-+		fprintf(lock_output, "\n");
- 
- 		if (++printed >= print_nr_entries)
- 			break;
-@@ -1412,13 +1415,13 @@ static void dump_threads(void)
- 	struct rb_node *node;
- 	struct thread *t;
- 
--	pr_info("%10s: comm\n", "Thread ID");
-+	fprintf(lock_output, "%10s: comm\n", "Thread ID");
- 
- 	node = rb_first(&thread_stats);
- 	while (node) {
- 		st = container_of(node, struct thread_stat, rb);
- 		t = perf_session__findnew(session, st->tid);
--		pr_info("%10d: %s\n", st->tid, thread__comm_str(t));
-+		fprintf(lock_output, "%10d: %s\n", st->tid, thread__comm_str(t));
- 		node = rb_next(node);
- 		thread__put(t);
- 	}
-@@ -1444,7 +1447,7 @@ static void dump_map(void)
- 	unsigned int i;
- 	struct lock_stat *st;
- 
--	pr_info("Address of instance: name of class\n");
-+	fprintf(lock_output, "Address of instance: name of class\n");
- 	for (i = 0; i < LOCKHASH_SIZE; i++) {
- 		hlist_for_each_entry(st, &lockhash_table[i], hash_entry) {
- 			insert_to_result(st, compare_maps);
-@@ -1452,7 +1455,7 @@ static void dump_map(void)
- 	}
- 
- 	while ((st = pop_from_result()))
--		pr_info(" %#llx: %s\n", (unsigned long long)st->addr, st->name);
-+		fprintf(lock_output, " %#llx: %s\n", (unsigned long long)st->addr, st->name);
- }
- 
- static int dump_info(void)
-@@ -1637,18 +1640,18 @@ static void print_header_stdio(void)
- 	struct lock_key *key;
- 
- 	list_for_each_entry(key, &lock_keys, list)
--		pr_info("%*s ", key->len, key->header);
-+		fprintf(lock_output, "%*s ", key->len, key->header);
- 
- 	switch (aggr_mode) {
- 	case LOCK_AGGR_TASK:
--		pr_info("  %10s   %s\n\n", "pid",
-+		fprintf(lock_output, "  %10s   %s\n\n", "pid",
- 			show_lock_owner ? "owner" : "comm");
- 		break;
- 	case LOCK_AGGR_CALLER:
--		pr_info("  %10s   %s\n\n", "type", "caller");
-+		fprintf(lock_output, "  %10s   %s\n\n", "type", "caller");
- 		break;
- 	case LOCK_AGGR_ADDR:
--		pr_info("  %16s   %s\n\n", "address", "symbol");
-+		fprintf(lock_output, "  %16s   %s\n\n", "address", "symbol");
- 		break;
- 	default:
- 		break;
-@@ -1659,23 +1662,23 @@ static void print_header_csv(const char *sep)
- {
- 	struct lock_key *key;
- 
--	pr_info("# output: ");
-+	fprintf(lock_output, "# output: ");
- 	list_for_each_entry(key, &lock_keys, list)
--		pr_info("%s%s ", key->header, sep);
-+		fprintf(lock_output, "%s%s ", key->header, sep);
- 
- 	switch (aggr_mode) {
- 	case LOCK_AGGR_TASK:
--		pr_info("%s%s %s\n", "pid", sep,
-+		fprintf(lock_output, "%s%s %s\n", "pid", sep,
- 			show_lock_owner ? "owner" : "comm");
- 		break;
- 	case LOCK_AGGR_CALLER:
--		pr_info("%s%s %s", "type", sep, "caller");
-+		fprintf(lock_output, "%s%s %s", "type", sep, "caller");
- 		if (verbose > 0)
--			pr_info("%s %s", sep, "stacktrace");
--		pr_info("\n");
-+			fprintf(lock_output, "%s %s", sep, "stacktrace");
-+		fprintf(lock_output, "\n");
- 		break;
- 	case LOCK_AGGR_ADDR:
--		pr_info("%s%s %s%s %s\n", "address", sep, "symbol", sep, "type");
-+		fprintf(lock_output, "%s%s %s%s %s\n", "address", sep, "symbol", sep, "type");
- 		break;
- 	default:
- 		break;
-@@ -1700,21 +1703,21 @@ static void print_lock_stat_stdio(struct lock_contention *con, struct lock_stat
- 
- 	list_for_each_entry(key, &lock_keys, list) {
- 		key->print(key, st);
--		pr_info(" ");
-+		fprintf(lock_output, " ");
- 	}
- 
- 	switch (aggr_mode) {
- 	case LOCK_AGGR_CALLER:
--		pr_info("  %10s   %s\n", get_type_str(st->flags), st->name);
-+		fprintf(lock_output, "  %10s   %s\n", get_type_str(st->flags), st->name);
- 		break;
- 	case LOCK_AGGR_TASK:
- 		pid = st->addr;
- 		t = perf_session__findnew(session, pid);
--		pr_info("  %10d   %s\n",
-+		fprintf(lock_output, "  %10d   %s\n",
- 			pid, pid == -1 ? "Unknown" : thread__comm_str(t));
- 		break;
- 	case LOCK_AGGR_ADDR:
--		pr_info("  %016llx   %s (%s)\n", (unsigned long long)st->addr,
-+		fprintf(lock_output, "  %016llx   %s (%s)\n", (unsigned long long)st->addr,
- 			st->name, get_type_name(st->flags));
- 		break;
- 	default:
-@@ -1734,7 +1737,7 @@ static void print_lock_stat_stdio(struct lock_contention *con, struct lock_stat
- 			ip = st->callstack[i];
- 			sym = machine__find_kernel_symbol(con->machine, ip, &kmap);
- 			get_symbol_name_offset(kmap, sym, ip, buf, sizeof(buf));
--			pr_info("\t\t\t%#lx  %s\n", (unsigned long)ip, buf);
-+			fprintf(lock_output, "\t\t\t%#lx  %s\n", (unsigned long)ip, buf);
- 		}
- 	}
- }
-@@ -1748,22 +1751,23 @@ static void print_lock_stat_csv(struct lock_contention *con, struct lock_stat *s
- 
- 	list_for_each_entry(key, &lock_keys, list) {
- 		key->print(key, st);
--		pr_info("%s ", sep);
-+		fprintf(lock_output, "%s ", sep);
- 	}
- 
- 	switch (aggr_mode) {
- 	case LOCK_AGGR_CALLER:
--		pr_info("%s%s %s", get_type_str(st->flags), sep, st->name);
-+		fprintf(lock_output, "%s%s %s", get_type_str(st->flags), sep, st->name);
- 		if (verbose <= 0)
--			pr_info("\n");
-+			fprintf(lock_output, "\n");
- 		break;
- 	case LOCK_AGGR_TASK:
- 		pid = st->addr;
- 		t = perf_session__findnew(session, pid);
--		pr_info("%d%s %s\n", pid, sep, pid == -1 ? "Unknown" : thread__comm_str(t));
-+		fprintf(lock_output, "%d%s %s\n", pid, sep,
-+			pid == -1 ? "Unknown" : thread__comm_str(t));
- 		break;
- 	case LOCK_AGGR_ADDR:
--		pr_info("%llx%s %s%s %s\n", (unsigned long long)st->addr, sep,
-+		fprintf(lock_output, "%llx%s %s%s %s\n", (unsigned long long)st->addr, sep,
- 			st->name, sep, get_type_name(st->flags));
- 		break;
- 	default:
-@@ -1783,9 +1787,9 @@ static void print_lock_stat_csv(struct lock_contention *con, struct lock_stat *s
- 			ip = st->callstack[i];
- 			sym = machine__find_kernel_symbol(con->machine, ip, &kmap);
- 			get_symbol_name_offset(kmap, sym, ip, buf, sizeof(buf));
--			pr_info("%s %#lx %s", i ? ":" : sep, (unsigned long) ip, buf);
-+			fprintf(lock_output, "%s %#lx %s", i ? ":" : sep, (unsigned long) ip, buf);
- 		}
--		pr_info("\n");
-+		fprintf(lock_output, "\n");
- 	}
- }
- 
-@@ -1809,15 +1813,15 @@ static void print_footer_stdio(int total, int bad, struct lock_contention_fails
- 		return;
- 
- 	total += broken;
--	pr_info("\n=== output for debug ===\n\n");
--	pr_info("bad: %d, total: %d\n", broken, total);
--	pr_info("bad rate: %.2f %%\n", (double)broken / (double)total * 100);
-+	fprintf(lock_output, "\n=== output for debug ===\n\n");
-+	fprintf(lock_output, "bad: %d, total: %d\n", broken, total);
-+	fprintf(lock_output, "bad rate: %.2f %%\n", 100.0 * broken / total);
- 
--	pr_info("histogram of failure reasons\n");
--	pr_info(" %10s: %d\n", "task", fails->task);
--	pr_info(" %10s: %d\n", "stack", fails->stack);
--	pr_info(" %10s: %d\n", "time", fails->time);
--	pr_info(" %10s: %d\n", "data", fails->data);
-+	fprintf(lock_output, "histogram of failure reasons\n");
-+	fprintf(lock_output, " %10s: %d\n", "task", fails->task);
-+	fprintf(lock_output, " %10s: %d\n", "stack", fails->stack);
-+	fprintf(lock_output, " %10s: %d\n", "time", fails->time);
-+	fprintf(lock_output, " %10s: %d\n", "data", fails->data);
- }
- 
- static void print_footer_csv(int total, int bad, struct lock_contention_fails *fails,
-@@ -1831,21 +1835,21 @@ static void print_footer_csv(int total, int bad, struct lock_contention_fails *f
- 		return;
- 
- 	total += bad;
--	pr_info("# debug: total=%d%s bad=%d", total, sep, bad);
-+	fprintf(lock_output, "# debug: total=%d%s bad=%d", total, sep, bad);
- 
- 	if (use_bpf) {
--		pr_info("%s bad_%s=%d", sep, "task", fails->task);
--		pr_info("%s bad_%s=%d", sep, "stack", fails->stack);
--		pr_info("%s bad_%s=%d", sep, "time", fails->time);
--		pr_info("%s bad_%s=%d", sep, "data", fails->data);
-+		fprintf(lock_output, "%s bad_%s=%d", sep, "task", fails->task);
-+		fprintf(lock_output, "%s bad_%s=%d", sep, "stack", fails->stack);
-+		fprintf(lock_output, "%s bad_%s=%d", sep, "time", fails->time);
-+		fprintf(lock_output, "%s bad_%s=%d", sep, "data", fails->data);
- 	} else {
- 		int i;
- 		const char *name[4] = { "acquire", "acquired", "contended", "release" };
- 
- 		for (i = 0; i < BROKEN_MAX; i++)
--			pr_info("%s bad_%s=%d", sep, name[i], bad_hist[i]);
-+			fprintf(lock_output, "%s bad_%s=%d", sep, name[i], bad_hist[i]);
- 	}
--	pr_info("\n");
-+	fprintf(lock_output, "\n");
- }
- 
- static void print_footer(int total, int bad, struct lock_contention_fails *fails)
-@@ -2427,10 +2431,29 @@ static int parse_call_stack(const struct option *opt __maybe_unused, const char
- 	return ret;
- }
- 
-+static int parse_output(const struct option *opt __maybe_unused, const char *str,
-+			int unset __maybe_unused)
++test_csv_output()
 +{
-+	const char **name = (const char **)opt->value;
++	echo "Testing perf lock contention CSV output"
++	perf lock contention -i ${perfdata} -E 1 -x , --output ${result}
++	# count the number of commas in the header
++	# it should have 5: contended, total-wait, max-wait, avg-wait, type, caller
++	header=$(grep "# output:" ${result} | tr -d -c , | wc -c)
++	if [ "${header}" != "5" ]; then
++		echo "[Fail] Recorded result does not have enough output columns: ${header} != 5"
++		err=1
++		exit
++	fi
++	# count the number of commas in the output
++	output=$(grep -v "^#" ${result} | tr -d -c , | wc -c)
++	if [ "${header}" != "${output}" ]; then
++		echo "[Fail] Recorded result does not match the number of commas: ${header} != ${output}"
++		err=1
++		exit
++	fi
 +
-+	if (str == NULL)
-+		return -1;
++	if ! perf lock con -b true > /dev/null 2>&1 ; then
++		echo "[Skip] No BPF support"
++		return
++	fi
 +
-+	lock_output = fopen(str, "w");
-+	if (lock_output == NULL) {
-+		pr_err("Cannot open %s\n", str);
-+		return -1;
-+	}
-+
-+	*name = str;
-+	return 0;
++	# the perf lock contention output goes to the stderr
++	perf lock con -a -b -E 1 -x , --output ${result} -- perf bench sched messaging > /dev/null 2>&1
++	output=$(grep -v "^#" ${result} | tr -d -c , | wc -c)
++	if [ "${header}" != "${output}" ]; then
++		echo "[Fail] BPF result does not match the number of commas: ${header} != ${output}"
++		err=1
++		exit
++	fi
 +}
 +
- int cmd_lock(int argc, const char **argv)
- {
- 	const struct option lock_options[] = {
- 	OPT_STRING('i', "input", &input_name, "file", "input file name"),
-+	OPT_CALLBACK(0, "output", &output_name, "file", "output file name", parse_output),
- 	OPT_INCR('v', "verbose", &verbose, "be more verbose (show symbol address, etc)"),
- 	OPT_BOOLEAN('D', "dump-raw-trace", &dump_trace, "dump raw trace in ASCII"),
- 	OPT_BOOLEAN('f', "force", &force, "don't complain, do it"),
-@@ -2530,6 +2553,7 @@ int cmd_lock(int argc, const char **argv)
- 	for (i = 0; i < LOCKHASH_SIZE; i++)
- 		INIT_HLIST_HEAD(lockhash_table + i);
+ check
  
-+	lock_output = stderr;
- 	argc = parse_options_subcommand(argc, argv, lock_options, lock_subcommands,
- 					lock_usage, PARSE_OPT_STOP_AT_NON_OPTION);
- 	if (!argc)
+ test_record
+@@ -244,5 +279,6 @@ test_type_filter
+ test_lock_filter
+ test_stack_filter
+ test_aggr_task_stack_filter
++test_csv_output
+ 
+ exit ${err}
 -- 
 2.41.0.255.g8b1d071c50-goog
 
