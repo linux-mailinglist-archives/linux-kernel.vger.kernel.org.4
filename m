@@ -2,144 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92BF7740722
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 02:19:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62794740726
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 02:21:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230086AbjF1ATS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 20:19:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57520 "EHLO
+        id S230249AbjF1AVT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 20:21:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbjF1ATN (ORCPT
+        with ESMTP id S229934AbjF1AVR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 20:19:13 -0400
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7E1C26B3
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 17:19:12 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id 3f1490d57ef6-c17812e30b4so4653774276.1
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 17:19:12 -0700 (PDT)
+        Tue, 27 Jun 2023 20:21:17 -0400
+Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com [IPv6:2607:f8b0:4864:20::112b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A82762704
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 17:21:15 -0700 (PDT)
+Received: by mail-yw1-x112b.google.com with SMTP id 00721157ae682-56ffd7d7fedso54232047b3.2
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 17:21:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1687911552; x=1690503552;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=JxI6sBdKFLWo5Ay5v2GBSHIoKPiwpGbdFIVlVPe/v4M=;
-        b=o7IzfuzhBh4HIx1i1BzhePb11oSoCkZdF5cXU1rZUb1WQ93wB5m8uCCACBFIHP34Nr
-         knyUQJ06dz8rz3+5HG6XTAtPLzdJLqONWk0jZ+gsWGHvqb0ZhqqnpemzA1Z0KfJSUIrA
-         ksnTQsJumX9JbFmfFR+VCu5jr7NfLGkMWfYqUKo7CcbIHbKsCghJ/eD4z2oauLow/LF5
-         kYA3mpHM1XCXMTVouhCUKDJMZ3Guf3f3D5dbWaoaa/kAXGeARWW1TNQwxcz6lChPMCkI
-         9xR1pFECo23PbVvl4RHotEqeXhMwD8qzZwU8o7lIxgjdfdZeC9jNYvmsRlFSNt1/1BW9
-         SDuw==
+        d=paul-moore.com; s=google; t=1687911674; x=1690503674;
+        h=content-transfer-encoding:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=fcaDa6W6WP89z4qNOjx+aoveTbeKQkmZrfgEbjf/kOw=;
+        b=Sjiyt5ZEmgyo0bCjrWHDYw+D5cIKyOyyOTbyJxE6Qu9YOsYz457EfjSW6xBV+ntTa5
+         8T1yQ7WqCOkwQJ3INqczJMTAtz6crYA05sk1HqULsRKaV2Sj0buXFXtA9oRZkLkyP1+L
+         LZwY2Yh87+d8ZHYnI2buK8M6wczvBEAeK/GUeuV/Cl1hs09MvIE4kyml9l1QrV9ox3nL
+         98JbtOY2KUV5HyQUTTela8g20oIIxUkahCaR28xhra65Yg1VOF/Z9dx0b/FKnWmI6l/U
+         Q1vtIxTz2ROHfL3SlJ16I2imJduboSBepdOsr4aCBBhFM2hZQacH+hv+yLvPT2NU5Ua9
+         wOkA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687911552; x=1690503552;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=JxI6sBdKFLWo5Ay5v2GBSHIoKPiwpGbdFIVlVPe/v4M=;
-        b=THarBGmUbPKu7usI/SQOGYBwhNJgezOp6vViy9ImY2S5OlJECpBd391J7RlWZrYnPa
-         +IPsZtulGwq7A5kCAR+yB50OO8X8m1UpMuNMXzz0WCGvbnWo07ia0F/z440Xu0MC4O3v
-         LrBnheIxG4VXykjKnYPskptOwAGAOC8Z3nFhUD7/d7ZVQFVHKaGXbeGmQFv8ppbsLbwE
-         IhNNoEVYcJuHhZ2NyAk3n5F+Ry2fy9AOp2EYbk7wp9uKkRLKIW4K4CGP1l/kVmzSTSoC
-         HOJIgJ7H8pQFNuNXwfvs/++JFa2ZN9+FTh5W56WWf3yUN4sV8fql47zEEwZOMqcUaS+j
-         C+sA==
-X-Gm-Message-State: AC+VfDx+mN/Fy51xq9/w+fc6wJogJLs2sPAp8kOCqaZRUs/AavoFHrMq
-        pPr7alEfIONqtAdy8KA1q3iesbf3FWw=
-X-Google-Smtp-Source: ACHHUZ7dTSjYNqSQljkBCaYubh27DakmyAQK55bDz+5RD15ftXpG6YHCof66yu7RUAC6POkSnUOpLyFBemc=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a25:248d:0:b0:c1a:b0e2:e933 with SMTP id
- k135-20020a25248d000000b00c1ab0e2e933mr3579839ybk.1.1687911551936; Tue, 27
- Jun 2023 17:19:11 -0700 (PDT)
-Date:   Tue, 27 Jun 2023 17:19:10 -0700
-In-Reply-To: <20230606091842.13123-6-binbin.wu@linux.intel.com>
-Mime-Version: 1.0
-References: <20230606091842.13123-1-binbin.wu@linux.intel.com> <20230606091842.13123-6-binbin.wu@linux.intel.com>
-Message-ID: <ZJt8fjfNQYIV9wVk@google.com>
-Subject: Re: [PATCH v9 5/6] KVM: x86: Untag address when LAM applicable
-From:   Sean Christopherson <seanjc@google.com>
-To:     Binbin Wu <binbin.wu@linux.intel.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        pbonzini@redhat.com, chao.gao@intel.com, kai.huang@intel.com,
-        David.Laight@aculab.com, robert.hu@linux.intel.com
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        d=1e100.net; s=20221208; t=1687911674; x=1690503674;
+        h=content-transfer-encoding:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=fcaDa6W6WP89z4qNOjx+aoveTbeKQkmZrfgEbjf/kOw=;
+        b=Gs2R83LuKRfdQRlXiXIIe3MbyADTbSMDtuMladmKhJiMgZ5H8WnLf2naXsYJNtW11J
+         jzd5XL4t9fIonO0yu1ejf0IMi+kANM+Ta6v/DKGNc3A606cTwp5dwMNGPQy59Pi8m47h
+         r7X6bk2Jex+un1CNw6WDFHUhhjqZVMJMEsv2ILb7rSX2eutlOo1KIgrM8O5VCiw+er1m
+         SZJJiI0i5QzCoARaKUkpA456uK7wD8Bknhsaf1hV2syuIIZTin+/U/73fmcPTV0htFFZ
+         hYTnu9VGHOcFUsZKG7JfgVKfJtc/ir4+VKuzAHUGtfPEPiipquNgqkr00lACz9JF8ASH
+         wj8w==
+X-Gm-Message-State: AC+VfDyMWlxnNha5fp0zXcaO1jTYLOdyJT4N1X1baWzJ0w9XCR7H6OuL
+        fKze/dBqySC0CMpOHMGGaLtEdWtNd/1O7ULyCV2y
+X-Google-Smtp-Source: ACHHUZ7r5LudDYQpLJkHN8R/+TVzZHocys370y7pm5ef5mP5GMOyfydAY2Il848iqMMnU/cUH2l+Q1fXn/YLegWUgtk=
+X-Received: by 2002:a81:7204:0:b0:568:be91:c2b1 with SMTP id
+ n4-20020a817204000000b00568be91c2b1mr37444410ywc.9.1687911673797; Tue, 27 Jun
+ 2023 17:21:13 -0700 (PDT)
+MIME-Version: 1.0
+References: <20221022182828.give.717-kees@kernel.org> <20221022182949.2684794-2-keescook@chromium.org>
+ <20221227234000.jgosvixx7eahqb3z@begin> <C95AF535-7A95-48BA-8921-1932C15A1931@kernel.org>
+ <20221228205726.rfevry7ud6gmttg5@begin> <20230625155625.s4kvy7m2vw74ow4i@begin>
+ <20230627215021.ajwlckics4ssquit@begin>
+In-Reply-To: <20230627215021.ajwlckics4ssquit@begin>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Tue, 27 Jun 2023 20:21:03 -0400
+Message-ID: <CAHC9VhQzSSV30nDpq2q3pNjLDygu_aAsQWiNWuGBB0bphc9kBA@mail.gmail.com>
+Subject: Re: [PATCH v3 2/2] tty: Allow TIOCSTI to be disabled
+To:     Samuel Thibault <samuel.thibault@ens-lyon.org>,
+        Kees Cook <kees@kernel.org>, Kees Cook <keescook@chromium.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Simon Brand <simon.brand@postadigitale.de>,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
+        Dave@mielke.cc
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 06, 2023, Binbin Wu wrote:
-> Untag address for 64-bit memory/MMIO operand in instruction emulations
-> and VMExit handlers when LAM is applicable.
-> 
-> For instruction emulation, untag address in __linearize() before
-> canonical check. LAM doesn't apply to addresses used for instruction
-> fetches or to those that specify the targets of jump and call instructions,
-> use X86EMUL_F_SKIPLAM to skip LAM untag.
-> 
-> For VMExit handlers related to 64-bit linear address:
-> - Cases need to untag address
->   Operand(s) of VMX instructions and INVPCID.
->   Operand(s) of SGX ENCLS.
-> - Cases LAM doesn't apply to
->   Operand of INVLPG.
->   Linear address in INVPCID descriptor (no change needed).
->   Linear address in INVVPID descriptor (it has been confirmed, although it is
->   not called out in LAM spec, no change needed).
->   BASEADDR specified in SESC of ECREATE (no change needed).
-> 
-> Note:
-> LAM doesn't apply to the writes to control registers or MSRs.
-> LAM masking applies before paging, so the faulting linear address in CR2
-> doesn't contain the metadata.
-> The guest linear address saved in VMCS doesn't contain metadata.
-> 
-> Co-developed-by: Robert Hoo <robert.hu@linux.intel.com>
-> Signed-off-by: Robert Hoo <robert.hu@linux.intel.com>
-> Signed-off-by: Binbin Wu <binbin.wu@linux.intel.com>
-> Reviewed-by: Chao Gao <chao.gao@intel.com>
-> Tested-by: Xuelian Guo <xuelian.guo@intel.com>
-> ---
->  arch/x86/kvm/emulate.c     | 16 +++++++++++++---
->  arch/x86/kvm/kvm_emulate.h |  2 ++
->  arch/x86/kvm/vmx/nested.c  |  2 ++
->  arch/x86/kvm/vmx/sgx.c     |  1 +
->  arch/x86/kvm/x86.c         |  7 +++++++
->  5 files changed, 25 insertions(+), 3 deletions(-)
-> 
-> diff --git a/arch/x86/kvm/emulate.c b/arch/x86/kvm/emulate.c
-> index e89afc39e56f..c135adb26f1e 100644
-> --- a/arch/x86/kvm/emulate.c
-> +++ b/arch/x86/kvm/emulate.c
-> @@ -701,6 +701,7 @@ static __always_inline int __linearize(struct x86_emulate_ctxt *ctxt,
->  	*max_size = 0;
->  	switch (mode) {
->  	case X86EMUL_MODE_PROT64:
-> +		ctxt->ops->untag_addr(ctxt, &la, flags);
->  		*linear = la;
+On Tue, Jun 27, 2023 at 5:50=E2=80=AFPM Samuel Thibault
+<samuel.thibault@ens-lyon.org> wrote:
+> Samuel Thibault, le dim. 25 juin 2023 17:56:25 +0200, a ecrit:
+> > Samuel Thibault, le mer. 28 d=C3=A9c. 2022 21:57:26 +0100, a ecrit:
+> > > Can we perhaps just introduce a CAP_TIOCSTI that the brltty daemon wo=
+uld
+> > > be able to use? We could even make it only allow TIOCSTI on the linux
+> > > console (tty->ops =3D=3D con_ops).
+> >
+> > *Please* comment on this so we can progress. ATM people are
+> > advising each other to set dev.tty.legacy_tiocsti=3D1, which is just
+> > counter-productive in terms of security...
+>
+> People are even discussing adding that configuration to the brltty
+> package, which e.g. on ubuntu is installed by default, and thus
+> defeating completely the security measure by default...
+>
+> Please do contribute to the discussion so we can fix this.
 
-Ha!  Returning the untagged address does help:
+Hi Samuel,
 
-		*linear = ctx->ops->get_untagged_address(ctxt, la, flags);
+I'm sorry to hear that this is impacting Braille terminals, but I do
+believe there are solutions in place which would allow affected users
+to re-enable TIOCSTI system-wide via the sysctl and then selectively
+allow access to the terminal applications.  However, I do believe they
+would all require some additional work on the distro/user's part if
+the user didn't want to continue to allow system-wide access to
+TIOCSTI.
 
->  		va_bits = ctxt_virt_addr_bits(ctxt);
->  		if (!__is_canonical_address(la, va_bits))
-> @@ -771,8 +772,12 @@ static inline int assign_eip(struct x86_emulate_ctxt *ctxt, ulong dst)
->  
->  	if (ctxt->op_bytes != sizeof(unsigned long))
->  		addr.ea = dst & ((1UL << (ctxt->op_bytes << 3)) - 1);
-> +	/*
-> +	 * LAM doesn't apply to addresses that specify the targets of jump and
-> +	 * call instructions.
-> +	 */
->  	rc = __linearize(ctxt, addr, &max_size, 1, ctxt->mode, &linear,
-> -			 X86EMUL_F_FETCH);
-> +			 X86EMUL_F_FETCH | X86EMUL_F_SKIPLAM);
+The first thing that comes to mind is an Android-esque filtering that
+Kees already mentioned in the commit itself.  I'm not an Android
+expert, but based on the linked "ioctl_macros" file in the Android
+source, it looks like Android is leveraging the SELinux ioctl extended
+permission functionality to limit access to TIOCSTI.  I'm not sure
+what experience you have with SELinux, but if you have some
+understanding of SELinux policy the documentation below might help you
+get started playing with this:
 
-No need for anything LAM specific here, just skip all FETCH access (unlike LASS
-which skips checks only for branch targets).
+* https://github.com/SELinuxProject/selinux-notebook/blob/main/src/xperm_ru=
+les.md
 
-> -	rc = linearize(ctxt, ctxt->src.addr.mem, 1, false, &linear);
-> +	/* LAM doesn't apply to invlpg */
+Another option to restrict TIOCSTI once it has been re-enabled
+system-wide would be to leverage seccomp to block `ioctl(..., TIOCSTI,
+...)`.  Sadly, I don't think one would be able to use systemd's
+existing seccomp filtering as it doesn't support syscall parameters,
+but I imagine with some work one could add some ioctl smarts to the
+systemd seccomp code and/or use an existing seccomp sandboxing tool to
+effectively remove TIOCSTI.  Using libseccomp, a simple filter would
+look something like this (untested pseudocode, you've been warned):
 
-Comment unneeded if X86EMUL_F_INVLPG is added.
+  ctx =3D seccomp_init(SCMP_ACT_ALLOW);
+  seccomp_rule_add(ctx, SCMP_ACT_ERRNO(EIO), SCMP_SYS(ioctl), 1,
+SCMP_A1(TIOCSTI));
+
+I'm sure there are some other good ideas that aren't coming to mind
+right now, but I tend to think that the solutions to this are going to
+be up in userspace.
+
+--=20
+paul-moore.com
