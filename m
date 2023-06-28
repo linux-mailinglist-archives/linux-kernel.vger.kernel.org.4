@@ -2,176 +2,203 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B31E7408D6
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 05:12:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E0127408DB
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 05:16:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230451AbjF1DMs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 23:12:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54038 "EHLO
+        id S229982AbjF1DQj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 23:16:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229651AbjF1DMq (ORCPT
+        with ESMTP id S229651AbjF1DQf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 23:12:46 -0400
-Received: from mail-qk1-x742.google.com (mail-qk1-x742.google.com [IPv6:2607:f8b0:4864:20::742])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17F1E1FCD
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 20:12:45 -0700 (PDT)
-Received: by mail-qk1-x742.google.com with SMTP id af79cd13be357-7672303c831so2180485a.2
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 20:12:45 -0700 (PDT)
+        Tue, 27 Jun 2023 23:16:35 -0400
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46BFE1FCD
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 20:16:34 -0700 (PDT)
+Received: by mail-pf1-x430.google.com with SMTP id d2e1a72fcca58-656bc570a05so1323068b3a.0
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 20:16:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687921964; x=1690513964;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=rQFnqlRY9Ayf2Ahh0aPEKPTmp8m8k9EoLrFDTq688fk=;
-        b=IBuDEKo0D1Uh11I4ooWMUIDiV8ZzO5Flc5tZkjkJkAKLGU/yzN2xTfWq63KS1o7r0C
-         PDBN8XAN2S6t4ZZmiSPsrocNwTbK8+a46yK+DILkAEaTO31rtUtlV9s93UsXx3tf6jvA
-         /QMtM8Fr8g90GmrLAV5k/Ix8jcVx33aokTC0jgEncoMNL72bDrqtLRMqONKXZAqW1H5C
-         L8FSSXmdrIu2znrR8gLKexhUwr28BxhONrTuqCTtofMcvKrhk2/NH3dyAxRDll3nU8+5
-         UPl7ldCVr5htvDi/xyupH8Pzlbv21uRekyRTSQLqGiCPm6sSsu7rYW70fVA2NU1kDyQR
-         oADw==
+        d=kernel-dk.20221208.gappssmtp.com; s=20221208; t=1687922194; x=1690514194;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=RIhtuSRiqrjXezeemJprapYEprlXOItnVIuU2+4Kb0c=;
+        b=if1+TA/D1PyQT9UmQ4rtsOuH2Nq4tapIkj0nVFP+G+d7FNRIf8JFHLmik8AfBb0OZ8
+         GvzgaveeVgsWlpm7m8/AcBqqYcDtIfAjp3cn7vP4Qcwip2OgOL5R9pu2/FGcnOkUZJPc
+         IzHEEuI2h27ORNtthM4q7GwSJsehjn6BFrA0fzSgWM7lkIMNMTHj6jYHPdTdjWTyFKf2
+         +0VB4BepSLUB+mjJETAQRMYJdFgB5dCRyluwU1bVzST0DakegtRn0DJ4UqqLRlXR4UGU
+         S/nkJfN6vrO3gmUlisg9rOMYQ9aBvhNRhXXtn8HEOpusszV/oxi4mH3ZYx86o8sRFF0q
+         Aj7g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687921964; x=1690513964;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=rQFnqlRY9Ayf2Ahh0aPEKPTmp8m8k9EoLrFDTq688fk=;
-        b=MsuyF8tgWZAOtwGx6kw1Z8Z1eli/q4SXsJjRqdUYzlfvgKPGYwUL8Df/USiNLkj651
-         mUPeeaWvFzq2ZTBaBmnPw91rKfrr3aDO4wY8c6y+D17JENJ/SvBkPd+OvmPoPGfiZ1xN
-         hjgA9Ku8FI9r2oGhSBhtRZ8sgTuxCpqweXztkn9b4DhxPITuvbHQeKhdtx9WxWekDGCR
-         51yCnauOnc7EhHbxo+nLsXG8Tu24ncbqMjPHkIqLkn2xkBCR1azmNd/yNdWBq5eusxCk
-         hjFs4cLiwyh9PdZpYgyPD8odDC6jBp3ipScDf43QajBW5OKc+sa5hwhABg/mTp0g+4bM
-         qG1Q==
-X-Gm-Message-State: AC+VfDxafbWrKT+GvSVGJ/pb5GnXZWTBS7AGnl4MhBdbQZyRweQpB85B
-        20C57WMGo7heqiH5VQ+TSX8=
-X-Google-Smtp-Source: ACHHUZ5fE+nCtAiS5q66CNGbWqtXaVbzNtYn8+AA48bsp+k/x/OKL3tSxED5z7ybqVa9a0kLIoIHhQ==
-X-Received: by 2002:a05:620a:444f:b0:765:ad28:2c6f with SMTP id w15-20020a05620a444f00b00765ad282c6fmr9514662qkp.20.1687921964006;
-        Tue, 27 Jun 2023 20:12:44 -0700 (PDT)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id oj3-20020a17090b4d8300b0024e4f169931sm8574690pjb.2.2023.06.27.20.12.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Jun 2023 20:12:43 -0700 (PDT)
-From:   xu xin <xu.xin.sc@gmail.com>
-X-Google-Original-From: xu xin <xu.xin16@zte.com.cn>
-To:     sunnanyong@huawei.com
-Cc:     akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, wangkefeng.wang@huawei.com,
-        yang.yang29@zte.com.cn, xu.xin16@zte.com.cn
-Subject: Re: [PATCH] mm/ksm: delete the redundant ksm_merging_pages interafce in proc
-Date:   Wed, 28 Jun 2023 11:12:33 +0800
-Message-Id: <20230628031233.9734-1-xu.xin16@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230627133542.2446285-1-sunnanyong@huawei.com>
-References: <20230627133542.2446285-1-sunnanyong@huawei.com>
+        d=1e100.net; s=20221208; t=1687922194; x=1690514194;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=RIhtuSRiqrjXezeemJprapYEprlXOItnVIuU2+4Kb0c=;
+        b=lNh58Enadg/ssUVMsEdzBaw2J4tRHPpBZdmokDHpKncESj9wNikG4Q+DxXj51Ar9lf
+         yMAPjrvj5qgkkoagMwYKVT6vKyzZPmgbVCAaNRW8+Ymv8in8/4jbqRRXnaa/4FAMMsCf
+         po7LufYh4MZWAGX+EFgQT73vBdQFIRD99FdGH+wKm5pyNmJGS3rdvy/yvG70IVKWe3vZ
+         UCJBQAUtMIkM/+hnxmSw93RYQiXdJTLoMx81g0Qhd6NTCkIK0QQ9v3hqk1mq3MC7HLup
+         B5c2Ptp41tNmQNDpDaV5MC9zVTVSNuqcfFPz4IpasGTHhLxeJWWsNtHDLbeRR6YAIpWE
+         QDZw==
+X-Gm-Message-State: AC+VfDykk1sgydnj3eJTFudXZixgkJYwUQ2TZHin6OXURHUn+jp70Jgh
+        O/uneWnr9YDiAwob+X9ETRhrKcZ/HcaFTEGRskI=
+X-Google-Smtp-Source: ACHHUZ4ho6TEGjNA4Lk8sLA/4sGHjIfiH9fAAJnwGQA4Wp7rFiJD/shNnAMtphMHE3/+JlGN5+PkXQ==
+X-Received: by 2002:a05:6a20:430c:b0:10b:e7d2:9066 with SMTP id h12-20020a056a20430c00b0010be7d29066mr42410880pzk.2.1687922193582;
+        Tue, 27 Jun 2023 20:16:33 -0700 (PDT)
+Received: from [192.168.1.136] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id q17-20020a62e111000000b006736bce8581sm4877904pfh.16.2023.06.27.20.16.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 27 Jun 2023 20:16:32 -0700 (PDT)
+Message-ID: <c06a9e0b-8f3e-4e47-53d0-b4854a98cc44@kernel.dk>
+Date:   Tue, 27 Jun 2023 21:16:31 -0600
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [GIT PULL] bcachefs
+Content-Language: en-US
+To:     Kent Overstreet <kent.overstreet@linux.dev>
+Cc:     torvalds@linux-foundation.org, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-bcachefs@vger.kernel.org,
+        Christoph Hellwig <hch@lst.de>
+References: <20230626214656.hcp4puionmtoloat@moria.home.lan>
+ <aeb2690c-4f0a-003d-ba8b-fe06cd4142d1@kernel.dk>
+ <20230627000635.43azxbkd2uf3tu6b@moria.home.lan>
+ <91e9064b-84e3-1712-0395-b017c7c4a964@kernel.dk>
+ <20230627020525.2vqnt2pxhtgiddyv@moria.home.lan>
+ <b92ea170-d531-00f3-ca7a-613c05dcbf5f@kernel.dk>
+ <23922545-917a-06bd-ec92-ff6aa66118e2@kernel.dk>
+ <20230627201524.ool73bps2lre2tsz@moria.home.lan>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <20230627201524.ool73bps2lre2tsz@moria.home.lan>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> Message-ID: <20230627133542.2446285-1-sunnanyong@huawei.com> (raw)
+On 6/27/23 2:15?PM, Kent Overstreet wrote:
+>> to ktest/tests/xfstests/ and run it with -bcachefs, otherwise it kept
+>> failing because it assumed it was XFS.
+>>
+>> I suspected this was just a timing issue, and it looks like that's
+>> exactly what it is. Looking at the test case, it'll randomly kill -9
+>> fsstress, and if that happens while we have io_uring IO pending, then we
+>> process completions inline (for a PF_EXITING current). This means they
+>> get pushed to fallback work, which runs out of line. If we hit that case
+>> AND the timing is such that it hasn't been processed yet, we'll still be
+>> holding a file reference under the mount point and umount will -EBUSY
+>> fail.
+>>
+>> As far as I can tell, this can happen with aio as well, it's just harder
+>> to hit. If the fput happens while the task is exiting, then fput will
+>> end up being delayed through a workqueue as well. The test case assumes
+>> that once it's reaped the exit of the killed task that all files are
+>> released, which isn't necessarily true if they are done out-of-line.
 > 
-> Since the ksm_merging_pages information already included in
-> /proc/<pid>/ksm_stat, we can delete /proc/<pid>/ksm_merging_pages to
-> make the directory more clean, and can save a little bit resources.
-
-I think it's ok to remove it because this interface was not proposed for a long time.
-I believe its users are not many yet. The earlier we delete it, the better.
-
-The patch is good except some grammar issues.
-
-Reviewed-by: xu xin <xu.xin16@zte.com.cn>
-
-> /proc/<pid>/ksm_stat, we can delete /proc/<pid>/ksm_merging_pages to
-> make the directory more clean, and can save a little bit resources.
+> Yeah, I traced it through to the delayed fput code as well.
 > 
-> Signed-off-by: Nanyong Sun <sunnanyong@huawei.com>
-> ---
->  Documentation/admin-guide/mm/ksm.rst              |  6 +++---
->  .../translations/zh_CN/admin-guide/mm/ksm.rst     |  4 ++--
->  fs/proc/base.c                                    | 15 ---------------
->  3 files changed, 5 insertions(+), 20 deletions(-)
+> I'm not sure delayed fput is responsible here; what I learned when I was
+> tracking this down has mostly fell out of my brain, so take anything I
+> say with a large grain of salt. But I believe I tested with delayed_fput
+> completely disabled, and found another thing in io_uring with the same
+> effect as delayed_fput that wasn't being flushed.
+
+I'm not saying it's delayed_fput(), I'm saying it's the delayed putting
+io_uring can end up doing. But yes, delayed_fput() is another candidate.
+
+>> For io_uring specifically, it may make sense to wait on the fallback
+>> work. The below patch does this, and should fix the issue. But I'm not
+>> fully convinced that this is really needed, as I do think this can
+>> happen without io_uring as well. It just doesn't right now as the test
+>> does buffered IO, and aio will be fully sync with buffered IO. That
+>> means there's either no gap where aio will hit it without O_DIRECT, or
+>> it's just small enough that it hasn't been hit.
 > 
-> diff --git a/Documentation/admin-guide/mm/ksm.rst b/Documentation/admin-guide/mm/ksm.rst
-> index 7626392fe82c..e668d4b5e800 100644
-> --- a/Documentation/admin-guide/mm/ksm.rst
-> +++ b/Documentation/admin-guide/mm/ksm.rst
-> @@ -208,9 +208,9 @@ several times, which are unprofitable memory consumed.
->  	process_profit =~ ksm_merging_pages * sizeof(page) -
->  			  ksm_rmap_items * sizeof(rmap_item).
->  
-> -   where ksm_merging_pages is shown under the directory ``/proc/<pid>/``,
-> -   and ksm_rmap_items is shown in ``/proc/<pid>/ksm_stat``. The process profit
-> -   is also shown in ``/proc/<pid>/ksm_stat`` as ksm_process_profit.
-> +   where ksm_merging_pages and ksm_rmap_items is shown in the file
+> I just tried your patch and I still have generic/388 failing - it
+> might've taken a bit longer to pop this time.
 
- is -> are
+Yep see the same here. Didn't have time to look into it after sending
+that email today, just took a quick stab at writing a reproducer and
+ended up crashing bcachefs:
 
-> +   ``/proc/<pid>/ksm_stat``. The process profit is also shown in
-> +   ``/proc/<pid>/ksm_stat`` as ksm_process_profit.
->  
->  From the perspective of application, a high ratio of ``ksm_rmap_items`` to
->  ``ksm_merging_pages`` means a bad madvise-applied policy, so developers or
-> diff --git a/Documentation/translations/zh_CN/admin-guide/mm/ksm.rst b/Documentation/translations/zh_CN/admin-guide/mm/ksm.rst
-> index 0029c4fd2201..1662f271efc8 100644
-> --- a/Documentation/translations/zh_CN/admin-guide/mm/ksm.rst
-> +++ b/Documentation/translations/zh_CN/admin-guide/mm/ksm.rst
-> @@ -167,8 +167,8 @@ KSM可以通过合并相同的页面来节省内存，但也会消耗额外的
->         process_profit =~ ksm_merging_pages * sizeof(page) -
->                           ksm_rmap_items * sizeof(rmap_item).
->  
-> -   其中ksm_merging_pages显示在 ``/proc/<pid>/`` 目录下，而ksm_rmap_items
-> -   显示在 ``/proc/<pid>/ksm_stat`` 。
-> +   其中ksm_merging_pages、ksm_rmap_items显示在 ``/proc/<pid>/ksm_stat`` 文件中，收益
-> +   值ksm_process_profit也显示在该文件中。
->  
->  从应用的角度来看， ``ksm_rmap_items`` 和 ``ksm_merging_pages`` 的高比例意
->  味着不好的madvise-applied策略，所以开发者或管理员必须重新考虑如何改变madvis策
-> diff --git a/fs/proc/base.c b/fs/proc/base.c
-> index 05452c3b9872..173261dbeaea 100644
-> --- a/fs/proc/base.c
-> +++ b/fs/proc/base.c
-> @@ -3186,19 +3186,6 @@ static int proc_pid_patch_state(struct seq_file *m, struct pid_namespace *ns,
->  #endif /* CONFIG_LIVEPATCH */
->  
->  #ifdef CONFIG_KSM
-> -static int proc_pid_ksm_merging_pages(struct seq_file *m, struct pid_namespace *ns,
-> -				struct pid *pid, struct task_struct *task)
-> -{
-> -	struct mm_struct *mm;
-> -
-> -	mm = get_task_mm(task);
-> -	if (mm) {
-> -		seq_printf(m, "%lu\n", mm->ksm_merging_pages);
-> -		mmput(mm);
-> -	}
-> -
-> -	return 0;
-> -}
->  static int proc_pid_ksm_stat(struct seq_file *m, struct pid_namespace *ns,
->  				struct pid *pid, struct task_struct *task)
->  {
-> @@ -3348,7 +3335,6 @@ static const struct pid_entry tgid_base_stuff[] = {
->  	ONE("seccomp_cache", S_IRUSR, proc_pid_seccomp_cache),
->  #endif
->  #ifdef CONFIG_KSM
-> -	ONE("ksm_merging_pages",  S_IRUSR, proc_pid_ksm_merging_pages),
->  	ONE("ksm_stat",  S_IRUSR, proc_pid_ksm_stat),
->  #endif
->  };
-> @@ -3686,7 +3672,6 @@ static const struct pid_entry tid_base_stuff[] = {
->  	ONE("seccomp_cache", S_IRUSR, proc_pid_seccomp_cache),
->  #endif
->  #ifdef CONFIG_KSM
-> -	ONE("ksm_merging_pages",  S_IRUSR, proc_pid_ksm_merging_pages),
->  	ONE("ksm_stat",  S_IRUSR, proc_pid_ksm_stat),
->  #endif
->  };
-> -- 
-> 2.25.1
+[ 1122.384909] workqueue: Failed to create a rescuer kthread for wq "bcachefs": -EINTR
+[ 1122.384915] Unable to handle kernel NULL pointer dereference at virtual address 0000000000000000
+[ 1122.385814] Mem abort info:
+[ 1122.385962]   ESR = 0x0000000096000004
+[ 1122.386161]   EC = 0x25: DABT (current EL), IL = 32 bits
+[ 1122.386444]   SET = 0, FnV = 0
+[ 1122.386612]   EA = 0, S1PTW = 0
+[ 1122.386842]   FSC = 0x04: level 0 translation fault
+[ 1122.387168] Data abort info:
+[ 1122.387321]   ISV = 0, ISS = 0x00000004
+[ 1122.387518]   CM = 0, WnR = 0
+[ 1122.387676] user pgtable: 4k pages, 48-bit VAs, pgdp=00000001133da000
+[ 1122.388014] [0000000000000000] pgd=0000000000000000, p4d=0000000000000000
+[ 1122.388363] Internal error: Oops: 0000000096000004 [#1] SMP
+[ 1122.388659] Modules linked in:
+[ 1122.388866] CPU: 4 PID: 23129 Comm: mount Not tainted 6.4.0-02556-ge61c7fc22b68-dirty #3647
+[ 1122.389389] Hardware name: linux,dummy-virt (DT)
+[ 1122.389682] pstate: 61400005 (nZCv daif +PAN -UAO -TCO +DIT -SSBS BTYPE=--)
+[ 1122.390118] pc : bch2_free_pending_node_rewrites+0x40/0x90
+[ 1122.390466] lr : bch2_free_pending_node_rewrites+0x28/0x90
+[ 1122.390815] sp : ffff80002481b770
+[ 1122.391030] x29: ffff80002481b770 x28: ffff0000e1d24000 x27: 00000000fffff7b7
+[ 1122.391475] x26: 0000000000000000 x25: ffff0000e1d00040 x24: dead000000000122
+[ 1122.391919] x23: dead000000000100 x22: ffff0000e1d031b8 x21: ffff0000e1d00040
+[ 1122.392366] x20: 0000000000000000 x19: ffff0000e1d031a8 x18: 0000000000000009
+[ 1122.392860] x17: 3a22736665686361 x16: 6362222071772072 x15: 6f66206461657268
+[ 1122.393622] x14: 746b207265756373 x13: 52544e49452d203a x12: 0000000000000001
+[ 1122.395170] x11: 0000000000000001 x10: 0000000000000000 x9 : 00000000000002d3
+[ 1122.396592] x8 : 00000000000003f8 x7 : 0000000000000000 x6 : ffff8000093c2e78
+[ 1122.397970] x5 : ffff000209de4240 x4 : ffff0000e1d00030 x3 : dead000000000122
+[ 1122.399263] x2 : 00000000000031a8 x1 : 0000000000000000 x0 : 0000000000000000
+[ 1122.400473] Call trace:
+[ 1122.400908]  bch2_free_pending_node_rewrites+0x40/0x90
+[ 1122.401783]  bch2_fs_release+0x48/0x24c
+[ 1122.402589]  kobject_put+0x7c/0xe8
+[ 1122.403271]  bch2_fs_free+0xa4/0xc8
+[ 1122.404033]  bch2_fs_alloc+0x5c8/0xbcc
+[ 1122.404888]  bch2_fs_open+0x19c/0x430
+[ 1122.405781]  bch2_mount+0x194/0x45c
+[ 1122.406643]  legacy_get_tree+0x2c/0x54
+[ 1122.407476]  vfs_get_tree+0x28/0xd4
+[ 1122.408251]  path_mount+0x5d0/0x6c8
+[ 1122.409056]  do_mount+0x80/0xa4
+[ 1122.409866]  __arm64_sys_mount+0x150/0x168
+[ 1122.410904]  invoke_syscall.constprop.0+0x70/0xb8
+[ 1122.411890]  do_el0_svc+0xbc/0xf0
+[ 1122.412596]  el0_svc+0x74/0x9c
+[ 1122.413343]  el0t_64_sync_handler+0xa8/0x134
+[ 1122.414148]  el0t_64_sync+0x168/0x16c
+[ 1122.414863] Code: f2fbd5b7 d2863502 91008af8 8b020273 (f85d8695) 
+[ 1122.415939] ---[ end trace 0000000000000000 ]---
+
+> I wonder if there might be a better way of solving this though? For aio,
+> when a process is exiting we just synchronously tear down the ioctx,
+> including waiting for outstanding iocbs.
+
+aio is pretty trivial, because the only async it supports is O_DIRECT
+on regular files which always completes in finite time. io_uring has to
+cancel etc, so we need to do a lot more.
+
+But the concept of my patch should be fine, but I think we must be
+missing a case. Which is why I started writing a small reproducer
+instead. I'll pick it up again tomorrow and see what is going on here.
+
+> delayed_fput, even though I believe not responsible here, seems sketchy
+> to me because there doesn't seem to be a straightforward way to flush
+> delayed fputs for a given _process_ - there's a single global work item,
+> and we can only flush globally.
+
+Yep as mentioned I don't think it's delayed_fput at all. And yeah we can
+only globally flush that, not per task/files_struct.
+
+-- 
+Jens Axboe
+
