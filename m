@@ -2,52 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA150741C27
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 01:06:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3C15741C2A
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 01:07:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231416AbjF1XGI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 19:06:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57668 "EHLO
+        id S230447AbjF1XHi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 19:07:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231543AbjF1XGC (ORCPT
+        with ESMTP id S230476AbjF1XHg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 19:06:02 -0400
-Received: from mail-oi1-f206.google.com (mail-oi1-f206.google.com [209.85.167.206])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36DCD1FE8
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 16:06:00 -0700 (PDT)
-Received: by mail-oi1-f206.google.com with SMTP id 5614622812f47-39ecef7a101so105561b6e.2
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 16:06:00 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687993559; x=1690585559;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=K+HZZJTaP1niJAASeD1Z5YiUeNBbVaSIkYrwhZkkWGE=;
-        b=BRBzFnz/rS8MNuW6emKeCqNZr4rolJbL7vdO0HBB2hX0TZpcVRhAhDj2EiOohHKvzn
-         lUe8VskuTl2utpxWVMwnKLJJWzHR0pekMykegioiAQB3A4OaEsOsJe7WYLi73eVRP+Jv
-         SFB1OvM123iXzc62lz83H7RXsKbuVvM9CDkGd0JtQb+MEunD9Qw08VXq1d7c7CGFBJf/
-         R7DZHB78RY5QE0MbgbRbKYMsdKCyJnIj1xVJa/luiMDEaJqsxnSRj5pCn5p9GFJ6AsIK
-         /3gserTbSKoXQVVxsRUw37sfxiOwMqDUkxpKQ4O0HJcQ+ZWDHB4RlKzP8Vq8S1H255hh
-         mc2w==
-X-Gm-Message-State: AC+VfDzwPM8MQL+aV0MyqyFcp/IhyyIcieVqKTgvP8Sye5AY5m91CCBa
-        i6xTs+4miJ243CUevw4QXhldG3S4yWsdNz8/CzKHvAU1H2Lt
-X-Google-Smtp-Source: ACHHUZ45uBzCfUUWpNuv+u0VAEYoN5K9kHXgLHorzGiwGb8GomNpLnMqlak7GVneuBrWBaRN+kdVdwjaMcPrpOvOZcySWavRKOcz
-MIME-Version: 1.0
-X-Received: by 2002:a05:6808:1987:b0:3a0:6079:3201 with SMTP id
- bj7-20020a056808198700b003a060793201mr5356926oib.8.1687993559555; Wed, 28 Jun
- 2023 16:05:59 -0700 (PDT)
-Date:   Wed, 28 Jun 2023 16:05:59 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000008023b805ff38a0af@google.com>
-Subject: [syzbot] [reiserfs?] general protection fault in __hrtimer_run_queues (3)
-From:   syzbot <syzbot+f13a9546e229c1a6e378@syzkaller.appspotmail.com>
-To:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        reiserfs-devel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
-        tglx@linutronix.de
+        Wed, 28 Jun 2023 19:07:36 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FDD010FE;
+        Wed, 28 Jun 2023 16:07:35 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C5A3361485;
+        Wed, 28 Jun 2023 23:07:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 822A4C433C0;
+        Wed, 28 Jun 2023 23:07:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687993654;
+        bh=53C7MomxKIvUQ7nkSMtiS9K6tPKxxxmP21jcwV8lafA=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=PkZZrge8omk9ElyRJAkXPrd/dypCeIzKxA35G30+61WGI9WVNc4FTVep4b8rQfzzq
+         9/cYXfw1Aocj8jVoerhoXrfUPXCMQ5Pt9UAvBkD3i+3HUGDULirVleHh4rENXZlKMH
+         jwwXhbx663yjqLHg5heXfoEwkfIzpttTKiIX9iv1n9qjyNrcASMI4a72PhaghYkJxg
+         FYKhMZvsYNVKb25SbdX9fVU8LxQnOqYCJMxzByZsl305jkBtS6UPOC2k51oESJ7Mbx
+         cWHAcnmJdrxI4345xN/1hr7K5lweU6C835Wnmdk0WBAQzO4aY6QDEHvLq+dXKhebGH
+         m3twOSh7qZzKQ==
+Message-ID: <b08bca2f9e7887cc4046b66bf2d8acb72c0e97e5.camel@kernel.org>
+Subject: Re: [PATCH v9 2/4] tpm: of: Make of-tree specific function commonly
+ available
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Stefan Berger <stefanb@linux.ibm.com>,
+        Jerry Snitselaar <jsnitsel@redhat.com>
+Cc:     kexec@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, nayna@linux.ibm.com,
+        nasastry@in.ibm.com, mpe@ellerman.id.au,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Nageswara R Sastry <rnsastry@linux.ibm.com>,
+        Coiby Xu <coxu@redhat.com>
+Date:   Thu, 29 Jun 2023 02:07:29 +0300
+In-Reply-To: <4afde78d-e138-9eee-50e0-dbd32f4dcfe0@linux.ibm.com>
+References: <20230418134409.177485-1-stefanb@linux.ibm.com>
+         <20230418134409.177485-3-stefanb@linux.ibm.com>
+         <e4dcxwp63uisirxwanjwrhzrnve45wqnxhijfp4oq274r4neco@v2btoy43ue5h>
+         <CT8BRJZS8RQU.9ICEA2UAFC7G@suppilovahvero>
+         <4afde78d-e138-9eee-50e0-dbd32f4dcfe0@linux.ibm.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.48.1-0ubuntu1 
+MIME-Version: 1.0
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,143 +70,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Fri, 2023-06-09 at 14:49 -0400, Stefan Berger wrote:
+>=20
+> On 6/9/23 14:18, Jarkko Sakkinen wrote:
+> > On Thu May 25, 2023 at 1:56 AM EEST, Jerry Snitselaar wrote:
+> > > On Tue, Apr 18, 2023 at 09:44:07AM -0400, Stefan Berger wrote:
+> > > > Simplify tpm_read_log_of() by moving reusable parts of the code int=
+o
+> > > > an inline function that makes it commonly available so it can be
+> > > > used also for kexec support. Call the new of_tpm_get_sml_parameters=
+()
+> > > > function from the TPM Open Firmware driver.
+> > > >=20
+> > > > Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
+> > > > Cc: Jarkko Sakkinen <jarkko@kernel.org>
+> > > > Cc: Jason Gunthorpe <jgg@ziepe.ca>
+> > > > Cc: Rob Herring <robh+dt@kernel.org>
+> > > > Cc: Frank Rowand <frowand.list@gmail.com>
+> > > > Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
+> > > > Tested-by: Nageswara R Sastry <rnsastry@linux.ibm.com>
+> > > > Tested-by: Coiby Xu <coxu@redhat.com>
+> > > > Acked-by: Jarkko Sakkinen <jarkko@kernel.org>
+> > > >=20
+> > >=20
+> > > Reviewed-by: Jerry Snitselaar <jsnitsel@redhat.com>
+> >=20
+> > If I just pick tpm only patches they won't apply so maybe TPM changes
+> > should be better separated if that is by any means possible.
+>=20
+> Per the comment here I am putting this series here on hold.
+> https://lore.kernel.org/linux-integrity/20230418134409.177485-1-stefanb@l=
+inux.ibm.com/T/#m03745c2af2c46f19f329522fcb6ccb2bf2eaedc7
 
-syzbot found the following issue on:
+Hi, sorry for late response. The Midsummer weekend really
+messed my schedules (it is a big thing Finland). This year
+the timing with the kernel cycle has been conflicting.
 
-HEAD commit:    e8f75c0270d9 Merge tag 'x86_sgx_for_v6.5' of git://git.ker..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=13710670a80000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=a98ec7f738e43bd4
-dashboard link: https://syzkaller.appspot.com/bug?extid=f13a9546e229c1a6e378
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1227af7b280000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=13803daf280000
+OK cool.
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/f27c1d41217a/disk-e8f75c02.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/843ae5d5c810/vmlinux-e8f75c02.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/da48bc4c0ec1/bzImage-e8f75c02.xz
-mounted in repro: https://storage.googleapis.com/syzbot-assets/667a76526623/mount_0.gz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+f13a9546e229c1a6e378@syzkaller.appspotmail.com
-
-==================================================================
-BUG: KASAN: global-out-of-bounds in lookup_object lib/debugobjects.c:195 [inline]
-BUG: KASAN: global-out-of-bounds in debug_object_deactivate lib/debugobjects.c:785 [inline]
-BUG: KASAN: global-out-of-bounds in debug_object_deactivate+0x27b/0x300 lib/debugobjects.c:771
-Read of size 8 at addr ffffffff8a49cd78 by task kauditd/27
-
-CPU: 1 PID: 27 Comm: kauditd Not tainted 6.4.0-syzkaller-01406-ge8f75c0270d9 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/27/2023
-Call Trace:
- <IRQ>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xd9/0x150 lib/dump_stack.c:106
- print_address_description.constprop.0+0x2c/0x3c0 mm/kasan/report.c:351
- print_report mm/kasan/report.c:462 [inline]
- kasan_report+0x11c/0x130 mm/kasan/report.c:572
- lookup_object lib/debugobjects.c:195 [inline]
- debug_object_deactivate lib/debugobjects.c:785 [inline]
- debug_object_deactivate+0x27b/0x300 lib/debugobjects.c:771
- debug_hrtimer_deactivate kernel/time/hrtimer.c:427 [inline]
- debug_deactivate kernel/time/hrtimer.c:483 [inline]
- __run_hrtimer kernel/time/hrtimer.c:1656 [inline]
- __hrtimer_run_queues+0x3f3/0xbe0 kernel/time/hrtimer.c:1752
- hrtimer_interrupt+0x320/0x7b0 kernel/time/hrtimer.c:1814
- local_apic_timer_interrupt arch/x86/kernel/apic/apic.c:1098 [inline]
- __sysvec_apic_timer_interrupt+0x14a/0x430 arch/x86/kernel/apic/apic.c:1115
- sysvec_apic_timer_interrupt+0x92/0xc0 arch/x86/kernel/apic/apic.c:1109
- </IRQ>
- <TASK>
- asm_sysvec_apic_timer_interrupt+0x1a/0x20 arch/x86/include/asm/idtentry.h:645
-RIP: 0010:__sanitizer_cov_trace_pc+0x0/0x70 kernel/kcov.c:200
-Code: 66 d4 8f 02 66 0f 1f 44 00 00 f3 0f 1e fa 48 8b be b0 01 00 00 e8 b0 ff ff ff 31 c0 c3 66 66 2e 0f 1f 84 00 00 00 00 00 66 90 <f3> 0f 1e fa 65 8b 05 3d 3a 7f 7e 89 c1 48 8b 34 24 81 e1 00 01 00
-RSP: 0018:ffffc90000a3faa8 EFLAGS: 00000293
-
-RAX: 0000000000000000 RBX: 0000000000000200 RCX: 0000000000000000
-RDX: ffff88801724bb80 RSI: ffffffff81686965 RDI: 0000000000000007
-RBP: ffffffff8d26a498 R08: 0000000000000007 R09: 0000000000000000
-R10: 0000000000000200 R11: 205d373254202020 R12: 0000000000000000
-R13: ffffffff8d26a440 R14: dffffc0000000000 R15: 0000000000000001
- console_emit_next_record arch/x86/include/asm/irqflags.h:42 [inline]
- console_flush_all+0x61b/0xcc0 kernel/printk/printk.c:2933
- console_unlock+0xb8/0x1f0 kernel/printk/printk.c:3007
- vprintk_emit+0x1bd/0x600 kernel/printk/printk.c:2307
- vprintk+0x84/0xa0 kernel/printk/printk_safe.c:50
- _printk+0xbf/0xf0 kernel/printk/printk.c:2328
- kauditd_printk_skb kernel/audit.c:536 [inline]
- kauditd_hold_skb+0x1fb/0x240 kernel/audit.c:571
- kauditd_send_queue+0x220/0x280 kernel/audit.c:756
- kauditd_thread+0x617/0xaa0 kernel/audit.c:880
- kthread+0x344/0x440 kernel/kthread.c:379
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
- </TASK>
-
-The buggy address belongs to the variable:
- ds.0+0x218/0x580
-
-The buggy address belongs to the physical page:
-page:ffffea0000292700 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0xa49c
-flags: 0xfff00000001000(reserved|node=0|zone=1|lastcpupid=0x7ff)
-page_type: 0xffffffff()
-raw: 00fff00000001000 ffffea0000292708 ffffea0000292708 0000000000000000
-raw: 0000000000000000 0000000000000000 00000001ffffffff 0000000000000000
-page dumped because: kasan: bad access detected
-page_owner info is not present (never set?)
-
-Memory state around the buggy address:
- ffffffff8a49cc00: f9 f9 f9 f9 00 00 00 00 03 f9 f9 f9 f9 f9 f9 f9
- ffffffff8a49cc80: 07 f9 f9 f9 f9 f9 f9 f9 00 00 00 00 00 05 f9 f9
->ffffffff8a49cd00: f9 f9 f9 f9 00 00 03 f9 f9 f9 f9 f9 00 00 01 f9
-                                                                ^
- ffffffff8a49cd80: f9 f9 f9 f9 00 00 00 00 00 00 00 00 06 f9 f9 f9
- ffffffff8a49ce00: f9 f9 f9 f9 00 00 00 03 f9 f9 f9 f9 00 00 00 00
-==================================================================
-----------------
-Code disassembly (best guess):
-   0:	66 d4                	data16 (bad)
-   2:	8f 02                	popq   (%rdx)
-   4:	66 0f 1f 44 00 00    	nopw   0x0(%rax,%rax,1)
-   a:	f3 0f 1e fa          	endbr64
-   e:	48 8b be b0 01 00 00 	mov    0x1b0(%rsi),%rdi
-  15:	e8 b0 ff ff ff       	callq  0xffffffca
-  1a:	31 c0                	xor    %eax,%eax
-  1c:	c3                   	retq
-  1d:	66 66 2e 0f 1f 84 00 	data16 nopw %cs:0x0(%rax,%rax,1)
-  24:	00 00 00 00
-  28:	66 90                	xchg   %ax,%ax
-* 2a:	f3 0f 1e fa          	endbr64 <-- trapping instruction
-  2e:	65 8b 05 3d 3a 7f 7e 	mov    %gs:0x7e7f3a3d(%rip),%eax        # 0x7e7f3a72
-  35:	89 c1                	mov    %eax,%ecx
-  37:	48 8b 34 24          	mov    (%rsp),%rsi
-  3b:	81                   	.byte 0x81
-  3c:	e1 00                	loope  0x3e
-  3e:	01 00                	add    %eax,(%rax)
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-
-If the bug is already fixed, let syzbot know by replying with:
-#syz fix: exact-commit-title
-
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
-
-If you want to change bug's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
-
-If the bug is a duplicate of another bug, reply with:
-#syz dup: exact-subject-of-another-report
-
-If you want to undo deduplication, reply with:
-#syz undup
+BR, Jarkko
