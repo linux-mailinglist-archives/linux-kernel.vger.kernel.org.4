@@ -2,203 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6B63740F6F
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 12:57:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 559A3740F74
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 12:57:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231126AbjF1K5H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 06:57:07 -0400
-Received: from foss.arm.com ([217.140.110.172]:53656 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230451AbjF1K4z (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 06:56:55 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6555AC14;
-        Wed, 28 Jun 2023 03:57:38 -0700 (PDT)
-Received: from [10.57.76.180] (unknown [10.57.76.180])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id BC1553F663;
-        Wed, 28 Jun 2023 03:56:51 -0700 (PDT)
-Message-ID: <b2c81404-67df-f841-ef02-919e841f49f2@arm.com>
-Date:   Wed, 28 Jun 2023 11:56:50 +0100
+        id S230456AbjF1K52 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 06:57:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60612 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230332AbjF1K5A (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 28 Jun 2023 06:57:00 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24EF410EC
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 03:56:58 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id a640c23a62f3a-98df69cacd1so397776166b.1
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 03:56:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1687949816; x=1690541816;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=mTQsoS+h53Vzzjs8qIkqE4wzhWloV1Y4NhbaPd70qbM=;
+        b=Fb/Wu62fN9GstdwqxVGC9NlOLfqSqYunhCsHpNEsTngqJ05R6sbGO6EgkSCfC1O1KU
+         Rp5DtAcNNhomPtbP1F/Zlc6CnHdUmNlh43TqMavwb4JcwmLgkdunqhQ0gF/HLPBhtVFb
+         pQ871BCyLXXhg7YbABeh4F6v8gJC29AbEIBjudezHIKkQe8dNPVq5CHfZvMCEecowkkH
+         bjfUdhjAoQgIcZ2FFoHdXJSNDylD2m2FdTquenR3st8z29J2qkgYZsDyTY0Y1o2zTc17
+         9t9x5vI0OEr6WZZEcF1tU02KQ9kr27Ma1nPLTLfrqipHihWq6LHtMQWFjCEIqfFW4MGA
+         7RkQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687949816; x=1690541816;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=mTQsoS+h53Vzzjs8qIkqE4wzhWloV1Y4NhbaPd70qbM=;
+        b=jWvhvqGKMvq6Moq0BnkeCzltoqxTcKXcynIVxnVJJUDnihL3ExRnOAPN/WMgaz759G
+         eF6P36NHnRKlqxPPwD31xHSF80EwiI76ffNKKKEBj1SRMFZlPBdsPTuLGJPgtAqi9Otd
+         Cq6fpwftvUHdD3PPX9SBuyENhIFtUqMN0M7J460njF4rXHRpydHZoBScppU4cX5hwLHv
+         9CQBvv2tRPC1HNQh0CSa+YXrQAXNsWkcfgO8KRBWF7sh3G8PXBIeFZnbdihopuMwhl+c
+         R03fupklS/w+vOOe9wIcdrcKmBTKv9sYqe7muCddadRj2oj6B80NwZ93YqyI9ntf0c5B
+         xjpA==
+X-Gm-Message-State: AC+VfDzNMg+fmxWFIRmxmNaxAss5q+9YflE4dmz4osEW4h1TMVKM9H8Z
+        9zObbXshpejbpjrJy5LszOQTGA==
+X-Google-Smtp-Source: ACHHUZ7Ck01xIBnrG3uP6P5tN/Jm9n8V/n4BxNQUecjRP3n5noyncuJBJMg954rqH4xX5H0F8x01hg==
+X-Received: by 2002:a17:907:7291:b0:98d:d26c:e142 with SMTP id dt17-20020a170907729100b0098dd26ce142mr11584981ejc.46.1687949816608;
+        Wed, 28 Jun 2023 03:56:56 -0700 (PDT)
+Received: from hackbox.lan ([62.231.110.100])
+        by smtp.gmail.com with ESMTPSA id e8-20020a1709062c0800b0098921e1b064sm5544678ejh.181.2023.06.28.03.56.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 28 Jun 2023 03:56:56 -0700 (PDT)
+From:   Abel Vesa <abel.vesa@linaro.org>
+To:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        avel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Mike Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Taniya Das <tdas@qti.qualcomm.com>
+Cc:     linux-pm@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arm-msm@vger.kernel.org
+Subject: [PATCH 0/2] PM: domains: Add control for switching back and forth to HW control
+Date:   Wed, 28 Jun 2023 13:56:50 +0300
+Message-Id: <20230628105652.1670316-1-abel.vesa@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.12.0
-Subject: Re: [PATCH v1 01/10] mm: Expose clear_huge_page() unconditionally
-To:     Yu Zhao <yuzhao@google.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Yin Fengwei <fengwei.yin@intel.com>,
-        David Hildenbrand <david@redhat.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-alpha@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, linux-s390@vger.kernel.org
-References: <20230626171430.3167004-1-ryan.roberts@arm.com>
- <20230626171430.3167004-2-ryan.roberts@arm.com>
- <CAOUHufacvArJh7NjL_3LT-e3s1X+bazkvbgvEU+KPKGKEoW+dw@mail.gmail.com>
- <2ff8ccf6-bf36-48b2-7dc2-e6c0d962f8b7@arm.com>
- <CAOUHufZoT-maN3kY5eYQmrYV48shmKAAancEvabXzfTDncDa9A@mail.gmail.com>
- <91e3364f-1d1b-f959-636b-4f60bf5a577b@arm.com>
- <CAOUHufaEwY=cm8mBi4HSbxYBvAr_x4_vyZZM2NYHEt-U7KaFhA@mail.gmail.com>
-From:   Ryan Roberts <ryan.roberts@arm.com>
-In-Reply-To: <CAOUHufaEwY=cm8mBi4HSbxYBvAr_x4_vyZZM2NYHEt-U7KaFhA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+        lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27/06/2023 19:26, Yu Zhao wrote:
-> On Tue, Jun 27, 2023 at 3:41 AM Ryan Roberts <ryan.roberts@arm.com> wrote:
->>
->> On 27/06/2023 09:29, Yu Zhao wrote:
->>> On Tue, Jun 27, 2023 at 1:21 AM Ryan Roberts <ryan.roberts@arm.com> wrote:
->>>>
->>>> On 27/06/2023 02:55, Yu Zhao wrote:
->>>>> On Mon, Jun 26, 2023 at 11:14 AM Ryan Roberts <ryan.roberts@arm.com> wrote:
->>>>>>
->>>>>> In preparation for extending vma_alloc_zeroed_movable_folio() to
->>>>>> allocate a arbitrary order folio, expose clear_huge_page()
->>>>>> unconditionally, so that it can be used to zero the allocated folio in
->>>>>> the generic implementation of vma_alloc_zeroed_movable_folio().
->>>>>>
->>>>>> Signed-off-by: Ryan Roberts <ryan.roberts@arm.com>
->>>>>> ---
->>>>>>  include/linux/mm.h | 3 ++-
->>>>>>  mm/memory.c        | 2 +-
->>>>>>  2 files changed, 3 insertions(+), 2 deletions(-)
->>>>>>
->>>>>> diff --git a/include/linux/mm.h b/include/linux/mm.h
->>>>>> index 7f1741bd870a..7e3bf45e6491 100644
->>>>>> --- a/include/linux/mm.h
->>>>>> +++ b/include/linux/mm.h
->>>>>> @@ -3684,10 +3684,11 @@ enum mf_action_page_type {
->>>>>>   */
->>>>>>  extern const struct attribute_group memory_failure_attr_group;
->>>>>>
->>>>>> -#if defined(CONFIG_TRANSPARENT_HUGEPAGE) || defined(CONFIG_HUGETLBFS)
->>>>>>  extern void clear_huge_page(struct page *page,
->>>>>>                             unsigned long addr_hint,
->>>>>>                             unsigned int pages_per_huge_page);
->>>>>> +
->>>>>> +#if defined(CONFIG_TRANSPARENT_HUGEPAGE) || defined(CONFIG_HUGETLBFS)
->>>>>
->>>>> We might not want to depend on THP eventually. Right now, we still
->>>>> have to, unless splitting is optional, which seems to contradict
->>>>> 06/10. (deferred_split_folio()  is a nop without THP.)
->>>>
->>>> Yes, I agree - for large anon folios to work, we depend on THP. But I don't
->>>> think that helps us here.
->>>>
->>>> In the next patch, I give vma_alloc_zeroed_movable_folio() an extra `order`
->>>> parameter. So the generic/default version of the function now needs a way to
->>>> clear a compound page.
->>>>
->>>> I guess I could do something like:
->>>>
->>>>  static inline
->>>>  struct folio *vma_alloc_zeroed_movable_folio(struct vm_area_struct *vma,
->>>>                                    unsigned long vaddr, gfp_t gfp, int order)
->>>>  {
->>>>         struct folio *folio;
->>>>
->>>>         folio = vma_alloc_folio(GFP_HIGHUSER_MOVABLE | gfp,
->>>>                                         order, vma, vaddr, false);
->>>>         if (folio) {
->>>> #ifdef CONFIG_LARGE_FOLIO
->>>>                 clear_huge_page(&folio->page, vaddr, 1U << order);
->>>> #else
->>>>                 BUG_ON(order != 0);
->>>>                 clear_user_highpage(&folio->page, vaddr);
->>>> #endif
->>>>         }
->>>>
->>>>         return folio;
->>>>  }
->>>>
->>>> But that's pretty messy and there's no reason why other users might come along
->>>> that pass order != 0 and will be surprised by the BUG_ON.
->>>
->>> #ifdef CONFIG_LARGE_ANON_FOLIO // depends on CONFIG_TRANSPARENT_HUGE_PAGE
->>> struct folio *alloc_anon_folio(struct vm_area_struct *vma, unsigned
->>> long vaddr, int order)
->>> {
->>>   // how do_huge_pmd_anonymous_page() allocs and clears
->>>   vma_alloc_folio(..., *true*);
->>
->> This controls the mem allocation policy (see mempolicy.c::vma_alloc_folio()) not
->> clearing. Clearing is done in __do_huge_pmd_anonymous_page():
->>
->>   clear_huge_page(page, vmf->address, HPAGE_PMD_NR);
-> 
-> Sorry for rushing this previously. This is what I meant. The #ifdef
-> makes it safe to use clear_huge_page() without 01/10. I highlighted
-> the last parameter to vma_alloc_folio() only because it's different
-> from what you chose (not implying it clears the folio).>
->>> }
->>> #else
->>> #define alloc_anon_folio(vma, addr, order)
->>> vma_alloc_zeroed_movable_folio(vma, addr)
->>> #endif
->>
->> Sorry I don't get this at all... If you are suggesting to bypass
->> vma_alloc_zeroed_movable_folio() entirely for the LARGE_ANON_FOLIO case
-> 
-> Correct.
-> 
->> I don't
->> think that works because the arch code adds its own gfp flags there. For
->> example, arm64 adds __GFP_ZEROTAGS for VM_MTE VMAs.
-> 
-> I think it's the opposite: it should be safer to reuse the THP code because
-> 1. It's an existing case that has been working for PMD_ORDER folios
-> mapped by PTEs, and it's an arch-independent API which would be easier
-> to review.
-> 2. Use vma_alloc_zeroed_movable_folio() for large folios is a *new*
-> case. It's an arch-*dependent* API which I have no idea what VM_MTE
-> does (should do) to large folios and don't plan to answer that for
-> now.
+This is just a resend of [1]. This resend just adds the back story behind
+the need for such a generic API as a cover letter. Also added my SoB tag
+to Ulf's patch.
 
-I've done some archaology on this now, and convinced myself that your suggestion
-is a good one - sorry for doubting it!
+Some of the newer Qualcomm platforms support handing of the control of
+some of the GDSCs (implemented as power domains in Linux) to some device
+firmware. The idea behind such approach is that the firmware knows best
+when such a power domain can be powered off or not and leads most of the
+time to better power consumption.
 
-If you are interested here are the details: Only arm64 and ia64 do something
-non-standard in vma_alloc_zeroed_movable_folio(). ia64 flushes the dcache for
-the folio - but given it does not support THP this is not a problem for the THP
-path. arm64 adds the __GFP_ZEROTAGS flag which means that the MTE tags will be
-zeroed at the same time as the page is zeroed. This is a perf optimization - if
-its not performed then it will be done at set_pte_at(), which is how this works
-for the THP path.
+At this point, if such GDSC provides HW control support, the current
+implementation is switching to HW control right after the GDSC gets
+powered on and it is left in HW control mode until right before the
+request for power off is done. This needs to remain as is for now, as we
+do not know for sure what each firmware expects from its related GDSCs.
+For example, the venus driver expects the codec GDSCs to remain always
+in HW control mode, otherwise the firmware would crush.
 
-So on that basis, I agree we can use your proposed alloc_anon_folio() approach.
-arm64 will lose the MTE optimization but that can be added back later if needed.
-So no need to unconditionally expose clear_huge_page() and no need to modify all
-the arch vma_alloc_zeroed_movable_folio() implementations.
+But in some cases, the consumer driver needs to switch back and forth.
+And the explanation for such case is when a driver needs to interract
+with the device (e.g. reading status bits) and the firmware doesn't
+guarantee the GDSC will be enabled when in HW mode. Therefore, the
+consumer would need to switch back to SW mode, do its thing, and then
+switch again back to HW mode.
 
-Thanks,
-Ryan
+This is where the patch from Ulf comes in. It allows consumers that
+actually need to control the HW/SW mode to do so.
 
+The GDSC patch just implemets the set_hwmode op and sets it for each
+GDSC that provides HW control mode.
 
-> 
->> Perhaps we can do away with an arch-owned vma_alloc_zeroed_movable_folio() and
->> replace it with a new arch_get_zeroed_movable_gfp_flags() then
->> alloc_anon_folio() add in those flags?
->>
->> But I still think the cleanest, simplest change is just to unconditionally
->> expose clear_huge_page() as I've done it.
-> 
-> The fundamental choice there as I see it is to whether the first step
-> of large anon folios should lean toward the THP code base or the base
-> page code base (I'm a big fan of the answer "Neither -- we should
-> create something entirely new instead"). My POV is that the THP code
-> base would allow us to move faster, since it's proven to work for a
-> very similar case (PMD_ORDER folios mapped by PTEs).
+[1] https://lore.kernel.org/all/20230627104033.3345659-1-abel.vesa@linaro.org/
+
+Abel Vesa (1):
+  clk: qcom: gdsc: Add support for set_hwmode_dev
+
+Ulf Hansson (1):
+  PM: domains: Allow devices attached to genpd to be managed by HW
+
+ drivers/base/power/domain.c | 66 +++++++++++++++++++++++++++++++++++++
+ drivers/clk/qcom/gdsc.c     | 22 +++++++++++++
+ include/linux/pm_domain.h   | 15 +++++++++
+ 3 files changed, 103 insertions(+)
+
+-- 
+2.34.1
 
