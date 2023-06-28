@@ -2,80 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F5D57418CB
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 21:19:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BAE07418C8
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 21:19:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231573AbjF1TT2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 15:19:28 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:23168 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230361AbjF1TTY (ORCPT
+        id S230304AbjF1TTC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 15:19:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56196 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231379AbjF1TSw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 15:19:24 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1687979917;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=z3+WfKV5Wz85M3f84YrJfAbIjSPqDA0LNe6BQbP5oxI=;
-        b=a8lYgvYeh20eA7MBW/kabaWwxEOC6NhP6Eb1GbVnUlM1RzawT+vvmXRl2nUOlkN5twrsXH
-        bh/Kd/2R5aObLnPORHj+o5FJbYcLPUe2rlK2e7iqwMm3o/eA+/1tDw9lEyqTwZSmt3CAAO
-        cNGTBm+1s9/YEFVCL64D4oc9F36KxiI=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-401-x-1JRoffOwuUYVdkw7tiHQ-1; Wed, 28 Jun 2023 15:18:34 -0400
-X-MC-Unique: x-1JRoffOwuUYVdkw7tiHQ-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 5A56F185A7A4;
-        Wed, 28 Jun 2023 19:18:33 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.42.28.4])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 8F7FF46EE28;
-        Wed, 28 Jun 2023 19:18:32 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <CAHk-=wie=MvQzmjhKGCCbRapK3Zz-b8GFUchEDJi7SkeLAX6Pw@mail.gmail.com>
-References: <CAHk-=wie=MvQzmjhKGCCbRapK3Zz-b8GFUchEDJi7SkeLAX6Pw@mail.gmail.com> <20230626085035.e66992e96b4c6d37dad54bd9@linux-foundation.org> <CAHk-=wjyJyV=Kyb8XJcLjFEPP-RMF0J6CQfT2OXLmJdM2yEv8w@mail.gmail.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     dhowells@redhat.com, Andrew Morton <akpm@linux-foundation.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>, linux-mm@kvack.org,
-        mm-commits@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [GIT PULL] MM updates for 6.5-rc1
+        Wed, 28 Jun 2023 15:18:52 -0400
+Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com [IPv6:2607:f8b0:4864:20::112b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 954B61FF1
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 12:18:50 -0700 (PDT)
+Received: by mail-yw1-x112b.google.com with SMTP id 00721157ae682-5702116762fso1842407b3.3
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 12:18:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1687979930; x=1690571930;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=7DUD/shWe46KMvA0LBMlGn2qbYD6iSa8fQ8POxlPlXM=;
+        b=bwFjvvNcUJo7//TF8Jp1vEu1xBV6qJmdrgeX0/ANiiVkekDwHHURXv+DV88cWYT6jW
+         RbHZEIn3r9PtHYcU4fIMjie5zJI6IS0zU0Yq+6jHzzBqH1S+8mbos0IDAI3y4O1YxynU
+         imdW1P2optY818M2gbNF5hU4q2ZU/cpterMPuJEU5VtKZ63vv5BOPOYpaOXFEVDcJCZe
+         njEyQ1uoFmFpp8jWN7ztedU+45WHoCMjLCJHxIZUoYY3yo0OHqUkekyUbJVC4tKKMOka
+         OguEhhd/Ez61qhzCh0w6nIJMbVWfYEit5vhI4og1FaIZ6NwTsVbGXZoQEAU8iEt/P0Zs
+         bmkQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687979930; x=1690571930;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=7DUD/shWe46KMvA0LBMlGn2qbYD6iSa8fQ8POxlPlXM=;
+        b=G7d1v8or+FyiJ5fTFEv60LczoxzN8MsSYXHNJCWO+rh6EpO3BfewZJvUHArf6KGjow
+         /3uL8+25FvTWTIcgXC389KzOiI3vHDthfaG6O+LwUkpGXeg/l+I3l1bG+mzXdWSy18+6
+         nfgxi7D8IDAWKboKO7akcVrnFTrbyNl/bf84VroGsrrTlhmqG9+kUbdDB3VM30DVUEcr
+         j22adUPnRBvgqmPHO21qVM9bpc0z3gDTQi3e3XOKOuinbXDTstpwNI4f2meDEJ2KN5zR
+         mrMO8zESjOUED6hCqYksoaRUf3yJvoWRHFe5G4H2Gm1m0D4CEfbejTF07w6HLXPzSrlq
+         u4rA==
+X-Gm-Message-State: AC+VfDzjkL3IQRv3DXFZ/Qk+K9nKOqnT1boEsvEaVMnIkpF5k/R3l8Dx
+        Aa0jtOQt1UIHnRoD6pBrQ3zaFeXxgl3yEAaZ1YNfKA==
+X-Google-Smtp-Source: ACHHUZ7rpDB3iLiEU8xufHcYAsfVBnrCQGv7FT1VlaIgweQmvXwzogrWdJylssczyf5duNaEFnucjJqA02PevJT363c=
+X-Received: by 2002:a05:6902:91:b0:bb8:4cc6:9d09 with SMTP id
+ h17-20020a056902009100b00bb84cc69d09mr28026725ybs.29.1687979929795; Wed, 28
+ Jun 2023 12:18:49 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <3696803.1687979912.1@warthog.procyon.org.uk>
-Date:   Wed, 28 Jun 2023 20:18:32 +0100
-Message-ID: <3696804.1687979912@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
+References: <20230521-drm-panels-sony-v1-0-541c341d6bee@somainline.org>
+ <20230521-drm-panels-sony-v1-10-541c341d6bee@somainline.org>
+ <CACRpkdbrk_pPqewo-bGPq4NQScHSRKNMeO0ik_aqEQ+BY12BBQ@mail.gmail.com> <a7h7hudmgg3ldb334o2knga7dqilvp47tfd46se4szpri2xi35@lxg5i5igjfmj>
+In-Reply-To: <a7h7hudmgg3ldb334o2knga7dqilvp47tfd46se4szpri2xi35@lxg5i5igjfmj>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Wed, 28 Jun 2023 21:18:38 +0200
+Message-ID: <CACRpkdZSNzeh8v=HW6948dJ8j0xNMhgrAz2+CpvQX=meGwPkyg@mail.gmail.com>
+Subject: Re: [PATCH RFC 10/10] drm/panel/sony-griffin-samsung: Add panel
+ driver for Sony Xperia 1
+To:     Marijn Suijten <marijn.suijten@somainline.org>
+Cc:     Neil Armstrong <neil.armstrong@linaro.org>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Caleb Connolly <caleb@connolly.tech>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        devicetree@vger.kernel.org,
+        Jami Kettunen <jami.kettunen@somainline.org>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        ~postmarketos/upstreaming@lists.sr.ht,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Jessica Zhang <quic_jesszhan@quicinc.com>,
+        Kuogee Hsieh <quic_khsieh@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+        lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Linus Torvalds <torvalds@linux-foundation.org> wrote:
+On Wed, Jun 28, 2023 at 4:20=E2=80=AFPM Marijn Suijten
+<marijn.suijten@somainline.org> wrote:
 
-> Side note: I think we should just do the "FOLL_GET" doesn't touch the
-> refcount either, which would make this all become just
+> But for now we might already create a step-up version of that by having
+> a "Samsung panel driver library" to deduplicate generic commands, which
+> drivers can freely call into?
 
-Yeah... but there's a lot of places that would potentially need fixing.
-iov_iter_get_pages*(), for example, is used to grab pages and push them to all
-sorts of destinations, including pipes and sk_buffs.
+Yeah something like that is likely what we want.
 
-> but then we would need to fix try_grab_page() and gup_put_folio() and
-> friends to match. And any other cases I haven't thought of.
+> On the other hand of the spectrum we currently have 4 downstream panels
+> for Sony devices that all declare to be using the sofef01 controller,
+> but with vastly different command sets.  And even if we "accidentally"
+> send the wrong set for the wrong device, the panel works anyway with no
+> noticeable color shifts or otherwise...
 
-And put_page(), folio_put(), ...  I wonder if there would be a noticeable
-performance loss from adding an is_zero_page() check into those.
+Yeah that is typically the case :/
 
-It might also make sense to include the entire kernel post-init static image
-in that, perhaps a check:
+We should try to group the similar code together and expect that sooner
+or later we will figure out what display controller(s) it is and name it af=
+ter
+that rather than after the panel (which I define as the combination of
+a display controller and an actual panel).
 
-	if ((unsigned long)(virt_address) & KERNEL_MASK == KERNEL_BASE)
-		return;
-
-David
-
+Yours,
+Linus Walleij
