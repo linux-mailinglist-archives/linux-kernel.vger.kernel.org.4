@@ -2,109 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDF757418B3
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 21:10:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 66F237418B6
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 21:11:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231727AbjF1TJl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 15:09:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55742 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230428AbjF1TJR (ORCPT
+        id S231520AbjF1TLf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 15:11:35 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:27623 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231509AbjF1TLd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 15:09:17 -0400
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D16312D66
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 12:08:07 -0700 (PDT)
-Received: by mail-wm1-x32f.google.com with SMTP id 5b1f17b1804b1-3fba64d9296so3557525e9.3
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 12:08:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687979286; x=1690571286;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=V86oWjjNEuXl6o/EBMJQN+A8G5HNEsX04qkYSpw2R6U=;
-        b=ekTdFutBVfgLPiwin9STCGajN3teM8Sn4JLaNZKFEK9hqi/cQMPJ2pIKT+tcjXzZHK
-         GRIyQK1ZNbccLOyBFXq3bCPbgYZQtVDPLDhysXmxDEj6pEtGhOkxfSi3KVipFdhAU2tD
-         WoOF3Ba1Kd0e3248tcsaukfguSYAN5GNAdxGFZwGle25+LsiZzV1YnzC/GPZ1Rht742d
-         IP7lWFR/CGDBm107hg7okTVX4eOR3NqUdRNV8KiGLcuahWU+7QjlREV7IkObhzEssFyQ
-         bFGGwnG2sZxhe6NGdTvGFTje3jPtWSnK7TyoJPlLi+IKlVaXzSq572JkmkwqsZj9OQxg
-         Wzcg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687979286; x=1690571286;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=V86oWjjNEuXl6o/EBMJQN+A8G5HNEsX04qkYSpw2R6U=;
-        b=UaUVgh4RcRp7SziGgtezpI/TEiNBXCYnppV9AnCicb6Qp1BvBOZt4KYOb1FjqXJqN6
-         PXatHn6FMmjBCCShkgD8A03Tbr4Hf25OSwbEnmq/BZc3IcN3xZA04+tfJCfGVLi6eWOZ
-         CnySzFtqtxNkUF6dSKxKXD5nHAKl4sx16pCc/wV0kKwc8/BUcq689fAzclBW3DJ0nG4w
-         K545s4fKE3jeyDTc980vNDmEl3t5k0TTIBEOjVafOfZqQLCLPgvJHpU/dMZwp/aVEQEt
-         SWl0esb/Rt04YwcMjexcmmyRn9zi1Zhej/QpZfAbqF2FT7ktJYTaIYQsP9pMF00L7ktk
-         LH1g==
-X-Gm-Message-State: AC+VfDy73L6aEeT2AgeClFExthLL2+OEMstoOhb+HN6lAaQHgCShh7Tp
-        u89G2QTr4b5HjyUwlQNakWVWNg==
-X-Google-Smtp-Source: ACHHUZ78Fg2V1rudVBeS/mIA9GfU2hgOyo11nlnXg/6Lf833VhrxicHFwsQyHnumD+84O3BnO1fWgg==
-X-Received: by 2002:a5d:58c1:0:b0:313:f580:68d with SMTP id o1-20020a5d58c1000000b00313f580068dmr6678255wrf.48.1687979286157;
-        Wed, 28 Jun 2023 12:08:06 -0700 (PDT)
-Received: from [192.168.0.162] (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
-        by smtp.gmail.com with ESMTPSA id d9-20020a5d6dc9000000b0030ae53550f5sm13941343wrz.51.2023.06.28.12.08.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 28 Jun 2023 12:08:05 -0700 (PDT)
-Message-ID: <924b819d-9d3c-e288-35cb-894028f40789@linaro.org>
-Date:   Wed, 28 Jun 2023 20:08:04 +0100
+        Wed, 28 Jun 2023 15:11:33 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1687979446;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=DHYzA765GPu9kX2/aCtAcTvHRHevAxD+3e5vQVRrgfY=;
+        b=Mv8Feepj0GIXHp1Jc1q5KBPzfO61T7YucEoCGVlZRb0FF3R5SQEt+R/odguqzXS6T9czu8
+        NK9XoJ/VtKdYA9FzOAEwNyE8Lj0MPOo4mSzKTjQhCa6luaqgwkrgJM2Ft1MDCvpcaq8I5L
+        dfGP4ljr6KHwGHTMtvSrY2bQChUxclw=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-478-yDhu-QUUMAKeu8FHPLXHfg-1; Wed, 28 Jun 2023 15:10:43 -0400
+X-MC-Unique: yDhu-QUUMAKeu8FHPLXHfg-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id DDC1E8DBAEE;
+        Wed, 28 Jun 2023 19:10:42 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.42.28.4])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id C1DFB200B677;
+        Wed, 28 Jun 2023 19:10:41 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <CAHk-=wjyJyV=Kyb8XJcLjFEPP-RMF0J6CQfT2OXLmJdM2yEv8w@mail.gmail.com>
+References: <CAHk-=wjyJyV=Kyb8XJcLjFEPP-RMF0J6CQfT2OXLmJdM2yEv8w@mail.gmail.com> <20230626085035.e66992e96b4c6d37dad54bd9@linux-foundation.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     dhowells@redhat.com, Andrew Morton <akpm@linux-foundation.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>, linux-mm@kvack.org,
+        mm-commits@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [GIT PULL] MM updates for 6.5-rc1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH] media: docs: qcom_camss: Update Code Aurora references
-Content-Language: en-US
-To:     Jeffrey Hugo <quic_jhugo@quicinc.com>, rfoss@kernel.org,
-        todor.too@gmail.com, mchehab@kernel.org, andersson@kernel.org
-Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230628190433.19050-1-quic_jhugo@quicinc.com>
-From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-In-Reply-To: <20230628190433.19050-1-quic_jhugo@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-        lindbergh.monkeyblade.net
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <3696705.1687979441.1@warthog.procyon.org.uk>
+Date:   Wed, 28 Jun 2023 20:10:41 +0100
+Message-ID: <3696706.1687979441@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 28/06/2023 20:04, Jeffrey Hugo wrote:
-> source.codeaurora.org is no longer accessible and so the reference links
-> in the documentation are not useful.  The content was mirrored over to
-> Code Linaro so lets update the references to point there instead.
-> 
-> Signed-off-by: Jeffrey Hugo <quic_jhugo@quicinc.com>
-> ---
->   Documentation/admin-guide/media/qcom_camss.rst | 6 +++---
->   1 file changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/Documentation/admin-guide/media/qcom_camss.rst b/Documentation/admin-guide/media/qcom_camss.rst
-> index a72e17d09cb7..8a8f3ff40105 100644
-> --- a/Documentation/admin-guide/media/qcom_camss.rst
-> +++ b/Documentation/admin-guide/media/qcom_camss.rst
-> @@ -18,7 +18,7 @@ The driver implements V4L2, Media controller and V4L2 subdev interfaces.
->   Camera sensor using V4L2 subdev interface in the kernel is supported.
->   
->   The driver is implemented using as a reference the Qualcomm Camera Subsystem
-> -driver for Android as found in Code Aurora [#f1]_ [#f2]_.
-> +driver for Android as found in Code Linaro [#f1]_ [#f2]_.
->   
->   
->   Qualcomm Camera Subsystem hardware
-> @@ -181,5 +181,5 @@ Referenced 2018-06-22.
->   References
->   ----------
->   
-> -.. [#f1] https://source.codeaurora.org/quic/la/kernel/msm-3.10/
-> -.. [#f2] https://source.codeaurora.org/quic/la/kernel/msm-3.18/
-> +.. [#f1] https://git.codelinaro.org/clo/la/kernel/msm-3.10/
-> +.. [#f2] https://git.codelinaro.org/clo/la/kernel/msm-3.18/
+Linus Torvalds <torvalds@linux-foundation.org> wrote:
 
-Reviewed-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+> So I think it needs to match the comment (and the try_grab_page()
+> logic), and just basically
+> 
+>         if (flags & FOLL_GET)
+>                 return try_get_folio(page, refs);
+> 
+>         if (is_zero_page(page))
+>                 return page_folio(page);
+> 
+>         folio = try_get_folio(page, refs);
+>         if (!folio)
+>                 return NULL;
+> 
+> instead.
+
+That looks right.
+
+David
+
