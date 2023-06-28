@@ -2,161 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7868741793
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 19:55:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50C9E741787
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 19:53:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232101AbjF1Ryy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 13:54:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46758 "EHLO
+        id S231286AbjF1Rxj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 13:53:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232109AbjF1Ry3 (ORCPT
+        with ESMTP id S229763AbjF1Rxe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 13:54:29 -0400
-Received: from out-26.mta1.migadu.com (out-26.mta1.migadu.com [IPv6:2001:41d0:203:375::1a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F196C26AB
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 10:54:27 -0700 (PDT)
-Date:   Wed, 28 Jun 2023 13:54:21 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1687974866;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=VRH/yiaIBt1BGCK3wtECdRcCU9jSpluW9EcBNgvsUZU=;
-        b=MNqyMbbnZiCc0I0Xram44Jla0y7J5h8Xng6BNCps9hB5HnKKtOt8PaTwzbl02cGEuytao1
-        fvIE5RX5Srmla/V6Oji1qfcWNYSvjHLfnM1Ymsl88LaXSIrrh6ixRrXYOj2DhnShnWI8fN
-        mImGAj5Z79IRah4+01pAZv1KBAjHnWE=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Kent Overstreet <kent.overstreet@linux.dev>
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     torvalds@linux-foundation.org, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-bcachefs@vger.kernel.org,
-        Christoph Hellwig <hch@lst.de>
-Subject: Re: [GIT PULL] bcachefs
-Message-ID: <20230628175421.funhhfbx5kdvhclx@moria.home.lan>
-References: <aeb2690c-4f0a-003d-ba8b-fe06cd4142d1@kernel.dk>
- <20230627000635.43azxbkd2uf3tu6b@moria.home.lan>
- <91e9064b-84e3-1712-0395-b017c7c4a964@kernel.dk>
- <20230627020525.2vqnt2pxhtgiddyv@moria.home.lan>
- <b92ea170-d531-00f3-ca7a-613c05dcbf5f@kernel.dk>
- <23922545-917a-06bd-ec92-ff6aa66118e2@kernel.dk>
- <20230627201524.ool73bps2lre2tsz@moria.home.lan>
- <c06a9e0b-8f3e-4e47-53d0-b4854a98cc44@kernel.dk>
- <20230628040114.oz46icbsjpa4egpp@moria.home.lan>
- <b02657af-5bbb-b46b-cea0-ee89f385f3c1@kernel.dk>
+        Wed, 28 Jun 2023 13:53:34 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEC1FD8;
+        Wed, 28 Jun 2023 10:53:33 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 73F4C6141D;
+        Wed, 28 Jun 2023 17:53:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03D96C433C8;
+        Wed, 28 Jun 2023 17:53:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687974812;
+        bh=RiuIgkhu77zPv+WhGnYLVNRE1+8TYz1yHFT8B0EbRN0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=i2dAsDjrx2FY+7CZ6IaD3SGF1mVQ62NvOZP1ffXHdTe9MIH6sAVnOqt8muzuDFh6g
+         +G8oPPveZdLQvXAexB57GUsz3YnFG+Jueo0lSfdNlzm9MaPHiEczuinsNkRr8QqP8t
+         KAPxgiK9dXNI057IMDrfucA+DSq1aurAjjm1a6/sNHQW0krpZZQmd60TkYcarpZXGs
+         6me+kvVwZhdykmGSwYFAYgcY+Z1s23OqD9HNVJM5Rf217TawDV14bpq778VfGklorS
+         TFWI3fVRQRFE1oBp/y65JaqYKx2TFnJbR7eBinkb+njJ+gfsnMZlYZ7jfFNz23kNn0
+         CiKdtBZV+Ahpw==
+Date:   Wed, 28 Jun 2023 11:54:27 -0600
+From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
+To:     aacraid@microsemi.com, "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Kees Cook <keescook@chromium.org>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        linux-hardening@vger.kernel.org
+Subject: [PATCH 01/10][next] scsi: aacraid: Replace one-element array with
+ flexible-array member
+Message-ID: <e4e881a51a51e6cb2a48d2bdd5feec38c722391c.1687974498.git.gustavoars@kernel.org>
+References: <cover.1687974498.git.gustavoars@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <b02657af-5bbb-b46b-cea0-ee89f385f3c1@kernel.dk>
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <cover.1687974498.git.gustavoars@kernel.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 28, 2023 at 08:58:45AM -0600, Jens Axboe wrote:
-> On 6/27/23 10:01?PM, Kent Overstreet wrote:
-> > On Tue, Jun 27, 2023 at 09:16:31PM -0600, Jens Axboe wrote:
-> >> On 6/27/23 2:15?PM, Kent Overstreet wrote:
-> >>>> to ktest/tests/xfstests/ and run it with -bcachefs, otherwise it kept
-> >>>> failing because it assumed it was XFS.
-> >>>>
-> >>>> I suspected this was just a timing issue, and it looks like that's
-> >>>> exactly what it is. Looking at the test case, it'll randomly kill -9
-> >>>> fsstress, and if that happens while we have io_uring IO pending, then we
-> >>>> process completions inline (for a PF_EXITING current). This means they
-> >>>> get pushed to fallback work, which runs out of line. If we hit that case
-> >>>> AND the timing is such that it hasn't been processed yet, we'll still be
-> >>>> holding a file reference under the mount point and umount will -EBUSY
-> >>>> fail.
-> >>>>
-> >>>> As far as I can tell, this can happen with aio as well, it's just harder
-> >>>> to hit. If the fput happens while the task is exiting, then fput will
-> >>>> end up being delayed through a workqueue as well. The test case assumes
-> >>>> that once it's reaped the exit of the killed task that all files are
-> >>>> released, which isn't necessarily true if they are done out-of-line.
-> >>>
-> >>> Yeah, I traced it through to the delayed fput code as well.
-> >>>
-> >>> I'm not sure delayed fput is responsible here; what I learned when I was
-> >>> tracking this down has mostly fell out of my brain, so take anything I
-> >>> say with a large grain of salt. But I believe I tested with delayed_fput
-> >>> completely disabled, and found another thing in io_uring with the same
-> >>> effect as delayed_fput that wasn't being flushed.
-> >>
-> >> I'm not saying it's delayed_fput(), I'm saying it's the delayed putting
-> >> io_uring can end up doing. But yes, delayed_fput() is another candidate.
-> > 
-> > Sorry - was just working through my recollections/initial thought
-> > process out loud
-> 
-> No worries, it might actually be a combination and this is why my
-> io_uring side patch didn't fully resolve it. Wrote a simple reproducer
-> and it seems to reliably trigger it, but is fixed with an flush of the
-> delayed fput list on mount -EBUSY return. Still digging...
-> 
-> >>>> For io_uring specifically, it may make sense to wait on the fallback
-> >>>> work. The below patch does this, and should fix the issue. But I'm not
-> >>>> fully convinced that this is really needed, as I do think this can
-> >>>> happen without io_uring as well. It just doesn't right now as the test
-> >>>> does buffered IO, and aio will be fully sync with buffered IO. That
-> >>>> means there's either no gap where aio will hit it without O_DIRECT, or
-> >>>> it's just small enough that it hasn't been hit.
-> >>>
-> >>> I just tried your patch and I still have generic/388 failing - it
-> >>> might've taken a bit longer to pop this time.
-> >>
-> >> Yep see the same here. Didn't have time to look into it after sending
-> >> that email today, just took a quick stab at writing a reproducer and
-> >> ended up crashing bcachefs:
-> > 
-> > You must have hit an error before we finished initializing the
-> > filesystem, the list head never got initialized. Patch for that will be
-> > in the testing branch momentarily.
-> 
-> I'll pull that in. In testing just now, I hit a few more leaks:
-> 
-> unreferenced object 0xffff0000e55cf200 (size 128):
->   comm "mount", pid 723, jiffies 4294899134 (age 85.868s)
->   hex dump (first 32 bytes):
->     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
->     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
->   backtrace:
->     [<000000001d69062c>] slab_post_alloc_hook.isra.0+0xb4/0xbc
->     [<00000000c503def2>] __kmem_cache_alloc_node+0xd0/0x178
->     [<00000000cde48528>] __kmalloc+0xac/0xd4
->     [<000000006cb9446a>] kmalloc_array.constprop.0+0x18/0x20
->     [<000000008341b32c>] bch2_fs_alloc+0x73c/0xbcc
+Replace one-element array with flexible-array member in struct
+aac_ciss_phys_luns_resp.
 
-Can you faddr2line this? I just did a bunch of kmemleak testing and
-didn't see it.
+This results in no differences in binary output.
 
-> unreferenced object 0xffff0000e55cf480 (size 128):
->   comm "mount", pid 723, jiffies 4294899134 (age 85.868s)
->   hex dump (first 32 bytes):
->     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
->     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
->   backtrace:
->     [<000000001d69062c>] slab_post_alloc_hook.isra.0+0xb4/0xbc
->     [<00000000c503def2>] __kmem_cache_alloc_node+0xd0/0x178
->     [<00000000cde48528>] __kmalloc+0xac/0xd4
->     [<0000000097f806f1>] __prealloc_shrinker+0x3c/0x60
->     [<000000008ff20762>] register_shrinker+0x14/0x34
->     [<000000003d050c32>] bch2_fs_btree_key_cache_init+0x88/0x90
->     [<00000000d9f351c0>] bch2_fs_alloc+0x7c0/0xbcc
->     [<000000003b8339fd>] bch2_fs_open+0x19c/0x430
->     [<00000000aef40a23>] bch2_mount+0x194/0x45c
->     [<0000000005e49357>] legacy_get_tree+0x2c/0x54
->     [<00000000f5813622>] vfs_get_tree+0x28/0xd4
->     [<00000000ea6972ec>] path_mount+0x5d0/0x6c8
->     [<00000000468ec307>] do_mount+0x80/0xa4
->     [<00000000ea5d305d>] __arm64_sys_mount+0x150/0x168
->     [<00000000da6d98cb>] invoke_syscall.constprop.0+0x70/0xb8
->     [<000000008f20c487>] do_el0_svc+0xbc/0xf0
+Issue found with the help of Coccinelle and audited and fixed,
+manually.
 
-This one is actually a bug in unregister_shrinker(), I have a patch I'll
-have to send to Andrew.
+Link: https://github.com/KSPP/linux/issues/79
+Link: https://github.com/ClangBuiltLinux/linux/issues/1851
+Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+---
+ drivers/scsi/aacraid/aachba.c  | 2 +-
+ drivers/scsi/aacraid/aacraid.h | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/scsi/aacraid/aachba.c b/drivers/scsi/aacraid/aachba.c
+index 70e1cac1975e..bba2d4d952ca 100644
+--- a/drivers/scsi/aacraid/aachba.c
++++ b/drivers/scsi/aacraid/aachba.c
+@@ -1833,7 +1833,7 @@ static int aac_get_safw_ciss_luns(struct aac_dev *dev)
+ 	struct aac_ciss_phys_luns_resp *phys_luns;
+ 
+ 	datasize = sizeof(struct aac_ciss_phys_luns_resp) +
+-		(AAC_MAX_TARGETS - 1) * sizeof(struct _ciss_lun);
++		   AAC_MAX_TARGETS * sizeof(struct _ciss_lun);
+ 	phys_luns = kmalloc(datasize, GFP_KERNEL);
+ 	if (phys_luns == NULL)
+ 		goto out;
+diff --git a/drivers/scsi/aacraid/aacraid.h b/drivers/scsi/aacraid/aacraid.h
+index 7c6efde75da6..83fa890f28be 100644
+--- a/drivers/scsi/aacraid/aacraid.h
++++ b/drivers/scsi/aacraid/aacraid.h
+@@ -322,7 +322,7 @@ struct aac_ciss_phys_luns_resp {
+ 		u8	level3[2];
+ 		u8	level2[2];
+ 		u8	node_ident[16];	/* phys. node identifier */
+-	} lun[1];			/* List of phys. devices */
++	} lun[];			/* List of phys. devices */
+ };
+ 
+ /*
+-- 
+2.34.1
+
