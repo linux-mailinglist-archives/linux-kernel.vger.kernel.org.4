@@ -2,122 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D88E174148C
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 17:06:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4DF4741490
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 17:07:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231810AbjF1PGR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 11:06:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58122 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231980AbjF1PGL (ORCPT
+        id S232029AbjF1PHF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 11:07:05 -0400
+Received: from dfw.source.kernel.org ([139.178.84.217]:55358 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231969AbjF1PGz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 11:06:11 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 220C710FD
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 08:06:10 -0700 (PDT)
+        Wed, 28 Jun 2023 11:06:55 -0400
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AB68361353
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 15:06:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC809C433C0;
-        Wed, 28 Jun 2023 15:06:07 +0000 (UTC)
-Date:   Wed, 28 Jun 2023 11:06:04 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        sunliming <sunliming@kylinos.cn>,
-        Beau Belgrave <beaub@linux.microsoft.com>
-Subject: [GIT PULL v3] tracing: tracing: user_event fix for 6.4
-Message-ID: <20230628110604.5cf29440@rorschach.local.home>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5C8AF6124B;
+        Wed, 28 Jun 2023 15:06:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C45C8C433C8;
+        Wed, 28 Jun 2023 15:06:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687964814;
+        bh=tYONJNnGCQMJ80wSHKkNy+/9k7bcbNipagC4FIaSVh4=;
+        h=In-Reply-To:References:From:Date:Subject:To:Cc:From;
+        b=fH3IUtR0gjCfGcOCNMckBP2f/Vs37X+rPVTO1uoh0Ocxu9vLx7mIfIgmE5UNXcRoM
+         ogAbNleaeEMIL8vXfLUV9xsABdJYxzznt/+oUqFmmJgFQwmfr4ykUEi5VdEqL4emt1
+         VBrN0WQBW8RAQNhUWwGsrd7t1QlsAWmwUIRBJveXODht9U2Z5gU0KpuSJvCl+MFffJ
+         ZJ1Pg/F3xXwfFeeY29HbU7PmpVANRdsdDrdVOqc+In+rrGj/DN+DLIwgZIC5FnbX8k
+         x0aRa3Iax38OyIKeajKR4UkyJWdPxg6NH7l2luXYY/3JH5xRtngl8too4lulS6neTZ
+         LmMjwNWo1RHZg==
+Received: by mail-oo1-f51.google.com with SMTP id 006d021491bc7-55b8f1c930eso3717093eaf.3;
+        Wed, 28 Jun 2023 08:06:54 -0700 (PDT)
+X-Gm-Message-State: AC+VfDynyw2x7qiJl5b2bHVt5o/pujFI9Aq8DGoUmYWrosoO9K1MoV2/
+        gkflC5YJvfSUFOVE4fxLgKNEip4oOHhE6c5cA+o=
+X-Google-Smtp-Source: ACHHUZ6B52reag+L2IlplUvg6F+aLqCsIPNfwwTs1JaQRfUZzOM5Xa4xbUxzeJQ+BYca+dwvBsArZR5zC0ac59AlOQA=
+X-Received: by 2002:a05:6820:396:b0:563:5542:c45 with SMTP id
+ r22-20020a056820039600b0056355420c45mr5562605ooj.7.1687964813976; Wed, 28 Jun
+ 2023 08:06:53 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-        lindbergh.monkeyblade.net
+Received: by 2002:ac9:7a97:0:b0:4e8:f6ff:2aab with HTTP; Wed, 28 Jun 2023
+ 08:06:53 -0700 (PDT)
+In-Reply-To: <20230628011439.159678-3-linux@treblig.org>
+References: <20230628011439.159678-1-linux@treblig.org> <20230628011439.159678-3-linux@treblig.org>
+From:   Namjae Jeon <linkinjeon@kernel.org>
+Date:   Thu, 29 Jun 2023 00:06:53 +0900
+X-Gmail-Original-Message-ID: <CAKYAXd-KeNM56ecmnaDR2wA4meTqPRa=e+KT3JJkpvC9=PCeiw@mail.gmail.com>
+Message-ID: <CAKYAXd-KeNM56ecmnaDR2wA4meTqPRa=e+KT3JJkpvC9=PCeiw@mail.gmail.com>
+Subject: Re: [PATCH 2/3] fs/smb: Swing unicode common code from server->common
+To:     linux@treblig.org
+Cc:     sfrench@samba.org, linux-cifs@vger.kernel.org,
+        jfs-discussion@lists.sourceforge.net, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+2023-06-28 10:14 GMT+09:00, linux@treblig.org <linux@treblig.org>:
+> From: "Dr. David Alan Gilbert" <linux@treblig.org>
+>
+> Swing most of the inline functions and unicode tables into smb/common
+> from the copy in smb/server.
+>
+> UniStrcat has different types between the client and server
+> versions so I've not moved it (although I suspect it's OK).
+ksmbd doesn't use this function. You can move it to smb_unicode_common.h.
 
-Linus,
-
-tracing: Fix user event write on buffer disabled
-
-The user events write currently returns the size of what was suppose to be
-written when tracing is disabled and nothing was written. Instead, behave like
-trace_marker and return -EBADF, as that is what is returned if a file is opened
-for read only, and a write is performed on it. Writing to the buffer
-that is disabled is like trying to write to a file opened for read
-only, as the buffer still can be read, but just not written to.
-
-This also includes test cases for this use case
-
-
-Please pull the latest trace-v6.4-rc7-v3 tree, which can be found at:
-
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/trace/linux-trace.git
-trace-v6.4-rc7-v3
-
-Tag SHA1: e50c9719e4ccc09a792544dee295b09f16877544
-Head SHA1: d34a271accf8fad00e05aad2cecb9fb53a840a94
-
-
-sunliming (3):
-      tracing/user_events: Fix incorrect return value for writing operation when events are disabled
-      selftests/user_events: Enable the event before write_fault test in ftrace self-test
-      selftests/user_events: Add test cases when event is disabled
-
-----
- kernel/trace/trace_events_user.c                  | 3 ++-
- tools/testing/selftests/user_events/ftrace_test.c | 8 ++++++++
- 2 files changed, 10 insertions(+), 1 deletion(-)
----------------------------
-diff --git a/kernel/trace/trace_events_user.c b/kernel/trace/trace_events_user.c
-index 8df0550415e7..09f7d9167b8e 100644
---- a/kernel/trace/trace_events_user.c
-+++ b/kernel/trace/trace_events_user.c
-@@ -2096,7 +2096,8 @@ static ssize_t user_events_write_core(struct file *file, struct iov_iter *i)
- 
- 		if (unlikely(faulted))
- 			return -EFAULT;
--	}
-+	} else
-+		return -EBADF;
- 
- 	return ret;
- }
-diff --git a/tools/testing/selftests/user_events/ftrace_test.c b/tools/testing/selftests/user_events/ftrace_test.c
-index eb6904d89f14..5beb0aef1d81 100644
---- a/tools/testing/selftests/user_events/ftrace_test.c
-+++ b/tools/testing/selftests/user_events/ftrace_test.c
-@@ -324,6 +324,10 @@ TEST_F(user, write_events) {
- 	io[0].iov_base = &reg.write_index;
- 	io[0].iov_len = sizeof(reg.write_index);
- 
-+	/* Write should return -EBADF when event is not enabled */
-+	ASSERT_EQ(-1, writev(self->data_fd, (const struct iovec *)io, 3));
-+	ASSERT_EQ(EBADF, errno);
-+
- 	/* Enable event */
- 	self->enable_fd = open(enable_file, O_RDWR);
- 	ASSERT_NE(-1, write(self->enable_fd, "1", sizeof("1")))
-@@ -400,6 +404,10 @@ TEST_F(user, write_fault) {
- 	ASSERT_EQ(0, ioctl(self->data_fd, DIAG_IOCSREG, &reg));
- 	ASSERT_EQ(0, reg.write_index);
- 
-+	/* Enable event */
-+	self->enable_fd = open(enable_file, O_RDWR);
-+	ASSERT_NE(-1, write(self->enable_fd, "1", sizeof("1")))
-+
- 	/* Write should work normally */
- 	ASSERT_NE(-1, writev(self->data_fd, (const struct iovec *)io, 2));
- 
+Thanks.
