@@ -2,408 +2,264 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F2027410C3
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 14:11:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BEE067410CB
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 14:12:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231492AbjF1MLO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 08:11:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38472 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231246AbjF1MLJ (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 08:11:09 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA5CD198A;
-        Wed, 28 Jun 2023 05:11:07 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 67B3C612B1;
-        Wed, 28 Jun 2023 12:11:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93359C433C8;
-        Wed, 28 Jun 2023 12:11:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687954266;
-        bh=JA+R2XlB4C7m0p4Tw4589bhUnb0HHMaSkAafPcIp0RM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=OGQjyn8OcRWZmwhl1UKN8w7OLayf/8R1XaVStZTmP7OXIGZudpoNOfhnol5/YWmjq
-         DT7Rcd6fYgjr4kYNWzqwESgOP8drBX0VXYxeZ1M/raD49mwisDKegxFYv7xfy10vLw
-         byDPCupLfLk2TLDX0kPooHUSn42c1V+fCATMESGn4RDZicg7wDx3WssiqSg5cI7mOd
-         NN2grZhKlRUmV0SiqtP1lzxmvLq7CEvdH5k3ydR2MlR00/lsYY5ofjKfWPifFyIfnH
-         jsF+BOvQ0xiWqV/UrECw2ZKqyg0dxp/eezwt4HorbsGiBRh0GKcKuYV5i5AciYIiib
-         RRQiDbpRtmuTg==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1qEU0o-0007Ld-Av; Wed, 28 Jun 2023 14:11:07 +0200
-Date:   Wed, 28 Jun 2023 14:11:06 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Maximilian Luz <luzmaximilian@gmail.com>
-Cc:     Bjorn Andersson <andersson@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Steev Klimaszewski <steev@kali.org>,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 3/4] firmware: qcom_scm: Add support for Qualcomm
- Secure Execution Environment SCM interface
-Message-ID: <ZJwjWoxm3GDkJ0cm@hovoldconsulting.com>
-References: <20230528230351.168210-1-luzmaximilian@gmail.com>
- <20230528230351.168210-4-luzmaximilian@gmail.com>
+        id S231127AbjF1MMK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 08:12:10 -0400
+Received: from mga12.intel.com ([192.55.52.136]:40684 "EHLO mga12.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231853AbjF1MLu (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 28 Jun 2023 08:11:50 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1687954310; x=1719490310;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=SO2aJTQFDpvmS5VCVuSHy31Q+lMPYy3bSbWqJ1yROBw=;
+  b=IM6pjkQPiPEORHdiSh8YUIG3TVT76xcV5G90upt/TuU13THCeZ/Ii3/q
+   a9zdoXXiVLsiF8uf/GMDAc6Kevq0FaeP0/wn/IqofDQLe5IDpGzJxx0x2
+   yUr2JpgUsQzHmULKg6nv0mlOBX9xkus7Tcu4ZZtqIwxqELk8QXOrvB4KL
+   trQhUF4ROuDP4bb7wAgk418y7S1YMWIvLNBguXUGdmzDJedqfunVT13rR
+   8xP5QCwXzhewBLJ3KHw11xwU4wilIPaZvDfrpeJIH9ajJCpxWNH34LV2B
+   gljeFIiffNHrkaqFFIpaaXCPd4YQAdbbLC113xeiGtdidvqn8jqi2Q0Ey
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10754"; a="341413253"
+X-IronPort-AV: E=Sophos;i="6.01,165,1684825200"; 
+   d="scan'208";a="341413253"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2023 05:11:49 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10754"; a="752230431"
+X-IronPort-AV: E=Sophos;i="6.01,165,1684825200"; 
+   d="scan'208";a="752230431"
+Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 28 Jun 2023 05:11:40 -0700
+Received: from kbuild by 783282924a45 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1qEU1L-000DFB-2e;
+        Wed, 28 Jun 2023 12:11:39 +0000
+Date:   Wed, 28 Jun 2023 20:11:10 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Nitesh Shetty <nj.shetty@samsung.com>,
+        Jens Axboe <axboe@kernel.dk>, Jonathan Corbet <corbet@lwn.net>,
+        Alasdair Kergon <agk@redhat.com>,
+        Mike Snitzer <snitzer@kernel.org>, dm-devel@redhat.com,
+        Keith Busch <kbusch@kernel.org>,
+        Christoph Hellwig <hch@lst.de>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        Chaitanya Kulkarni <kch@nvidia.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Christian Brauner <brauner@kernel.org>
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        martin.petersen@oracle.com, linux-scsi@vger.kernel.org,
+        willy@infradead.org, hare@suse.de, djwong@kernel.org,
+        bvanassche@acm.org, ming.lei@redhat.com, dlemoal@kernel.org,
+        nitheshshetty@gmail.com, gost.dev@samsung.com,
+        Nitesh Shetty <nj.shetty@samsung.com>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Anuj Gupta <anuj20.g@samsung.com>,
+        Vincent Fu <vincent.fu@samsung.com>,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-nvme@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org
+Subject: Re: [PATCH v13 9/9] null_blk: add support for copy offload
+Message-ID: <202306281909.TRNCf5eG-lkp@intel.com>
+References: <20230627183629.26571-10-nj.shetty@samsung.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230528230351.168210-4-luzmaximilian@gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-        lindbergh.monkeyblade.net
+In-Reply-To: <20230627183629.26571-10-nj.shetty@samsung.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 29, 2023 at 01:03:50AM +0200, Maximilian Luz wrote:
-> Add support for SCM calls to Secure OS and the Secure Execution
-> Environment (SEE) residing in the TrustZone (TZ) via the QSEECOM
-> interface. This allows communication with Secure/TZ applications, for
-> example 'uefisecapp' managing access to UEFI variables.
-> 
-> The added interface attempts to automatically detect known and supported
-> applications, creating a client (auxiliary) device for each one. The
-> respective client/auxiliary driver is then responsible for managing and
-> communicating with the application.
-> 
-> While this patch introduces only a very basic interface without the more
-> advanced features (such as re-entrant and blocking SCM calls and
-> listeners/callbacks), this is enough to talk to the aforementioned
-> 'uefisecapp'.
-> 
-> Signed-off-by: Maximilian Luz <luzmaximilian@gmail.com>
-> ---
-> 
-> Changes in v4:
->  - Remove instantiation of dedicated QSEECOM device and load the driver
->    via qcom_scm instead. In particular:
->    - Add a list of tested devices to ensure that we don't run into any
->      issues with the currently unimplemented re-entrant calls.
->    - Use the QSEECOM version to check for general availability of the
->      interface.
->    - Attempt to automatically detect available QSEECOM applications
->      (and instantiate respective clients) based on a fixed list.
->  - Use auxiliary bus and devices for clients instead of MFD.
->  - Restructure DMA allocations: Use dma_map_single() directly inside 
->    qcom_scm_qseecom_app_send() instead of requiring clients to allocate
->    DMA memory themselves.
- 
-> +#ifdef CONFIG_QCOM_SCM_QSEECOM
-> +
-> +/* Lock for QSEECOM SCM call executions */
-> +DEFINE_MUTEX(qcom_scm_qseecom_call_lock);
+Hi Nitesh,
 
-Missing static keyword.
+kernel test robot noticed the following build warnings:
 
-> +/**
-> + * qcom_scm_qseecom_call() - Perform a QSEECOM SCM call.
-> + * @desc: SCM call descriptor.
-> + * @res:  SCM call response (output).
-> + *
-> + * Performs the QSEECOM SCM call described by @desc, returning the response in
-> + * @rsp.
-> + *
-> + * Return: Returns zero on success, nonzero on failure.
+[auto build test WARNING on 53cdf865f90ba922a854c65ed05b519f9d728424]
 
-Nit: You should drop "Returns" here and capitalise Zero. Similar below.
+url:    https://github.com/intel-lab-lkp/linux/commits/Nitesh-Shetty/block-Introduce-queue-limits-for-copy-offload-support/20230628-163126
+base:   53cdf865f90ba922a854c65ed05b519f9d728424
+patch link:    https://lore.kernel.org/r/20230627183629.26571-10-nj.shetty%40samsung.com
+patch subject: [PATCH v13 9/9] null_blk: add support for copy offload
+config: hexagon-randconfig-r045-20230628 (https://download.01.org/0day-ci/archive/20230628/202306281909.TRNCf5eG-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce: (https://download.01.org/0day-ci/archive/20230628/202306281909.TRNCf5eG-lkp@intel.com/reproduce)
 
-> + */
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306281909.TRNCf5eG-lkp@intel.com/
 
-> +/**
-> + * qcom_scm_qseecom_get_version() - Query the QSEECOM version.
-> + * @version: Pointer where the QSEECOM version will be stored.
-> + *
-> + * Performs the QSEECOM SCM querying the QSEECOM version currently running in
-> + * the TrustZone.
-> + *
-> + * Return: Returns zero on success, nonzero on failure.
-> + */
-> +static int qcom_scm_qseecom_get_version(u32 *version)
-> +{
-> +	struct qcom_scm_desc desc = {};
-> +	struct qcom_scm_qseecom_resp res = {};
-> +	u32 feature = 10;
-> +	int ret;
-> +
-> +	desc.owner = QSEECOM_TZ_OWNER_SIP;
-> +	desc.svc = QSEECOM_TZ_SVC_INFO;
-> +	desc.cmd = 0x03;
+All warnings (new ones prefixed by >>):
 
-I know this has been reverse engineered, but is it possible to name also
-these cmd codes?
+   In file included from drivers/block/null_blk/main.c:12:
+   In file included from drivers/block/null_blk/null_blk.h:8:
+   In file included from include/linux/blkdev.h:9:
+   In file included from include/linux/blk_types.h:10:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     547 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+         |                                                   ^
+   In file included from drivers/block/null_blk/main.c:12:
+   In file included from drivers/block/null_blk/null_blk.h:8:
+   In file included from include/linux/blkdev.h:9:
+   In file included from include/linux/blk_types.h:10:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+         |                                                   ^
+   In file included from drivers/block/null_blk/main.c:12:
+   In file included from drivers/block/null_blk/null_blk.h:8:
+   In file included from include/linux/blkdev.h:9:
+   In file included from include/linux/blk_types.h:10:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     584 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+>> drivers/block/null_blk/main.c:1295:2: warning: variable 'rem' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+    1295 |         __rq_for_each_bio(bio, req) {
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/blk-mq.h:1012:2: note: expanded from macro '__rq_for_each_bio'
+    1012 |         if ((rq->bio))                  \
+         |         ^~~~~~~~~~~~~~
+   include/linux/compiler.h:55:28: note: expanded from macro 'if'
+      55 | #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+         |                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler.h:57:30: note: expanded from macro '__trace_if_var'
+      57 | #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
+         |                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/block/null_blk/main.c:1300:15: note: uninitialized use occurs here
+    1300 |         if (WARN_ON(!rem))
+         |                      ^~~
+   include/asm-generic/bug.h:123:25: note: expanded from macro 'WARN_ON'
+     123 |         int __ret_warn_on = !!(condition);                              \
+         |                                ^~~~~~~~~
+   include/linux/compiler.h:55:47: note: expanded from macro 'if'
+      55 | #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+         |                                               ^~~~
+   include/linux/compiler.h:57:52: note: expanded from macro '__trace_if_var'
+      57 | #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
+         |                                                    ^~~~
+   drivers/block/null_blk/main.c:1295:2: note: remove the 'if' if its condition is always true
+    1295 |         __rq_for_each_bio(bio, req) {
+         |         ^
+   include/linux/blk-mq.h:1012:2: note: expanded from macro '__rq_for_each_bio'
+    1012 |         if ((rq->bio))                  \
+         |         ^
+   include/linux/compiler.h:55:23: note: expanded from macro 'if'
+      55 | #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+         |                       ^
+   drivers/block/null_blk/main.c:1287:12: note: initialize the variable 'rem' to silence this warning
+    1287 |         size_t rem, temp;
+         |                   ^
+         |                    = 0
+   7 warnings generated.
 
-> +	desc.arginfo = QCOM_SCM_ARGS(1, QCOM_SCM_VAL);
-> +	desc.args[0] = feature;
-> +
-> +	ret = qcom_scm_qseecom_call(&desc, &res);
-> +	if (ret)
-> +		return ret;
-> +
-> +	*version = res.result;
-> +	return 0;
-> +}
-> +
-> +/**
-> + * qcom_scm_qseecom_app_get_id() - Query the app ID for a given QSEE app name.
-> + * @app_name: The name of the app.
-> + * @app_id:   The returned app ID.
-> + *
-> + * Query and return the application ID of the SEE app identified by the given
-> + * name. This returned ID is the unique identifier of the app required for
-> + * subsequent communication.
-> + *
-> + * Return: Returns zero on success, nonzero on failure. Returns -ENOENT if the
-> + * app has not been loaded or could not be found.
-> + */
-> +static int qcom_scm_qseecom_app_get_id(const char *app_name, u32 *app_id)
-> +{
-> +	unsigned long name_buf_size = QSEECOM_MAX_APP_NAME_SIZE;
-> +	unsigned long app_name_len = strlen(app_name);
-> +	struct qcom_scm_desc desc = {};
-> +	struct qcom_scm_qseecom_resp res = {};
-> +	dma_addr_t name_buf_phys;
-> +	char *name_buf;
-> +	int status;
-> +
-> +	if (app_name_len >= name_buf_size)
-> +		return -EINVAL;
-> +
-> +	name_buf = kzalloc(name_buf_size, GFP_KERNEL);
-> +	if (!name_buf)
-> +		return -ENOMEM;
-> +
-> +	memcpy(name_buf, app_name, app_name_len);
-> +
-> +	name_buf_phys = dma_map_single(__scm->dev, name_buf, name_buf_size, DMA_TO_DEVICE);
-> +	if (dma_mapping_error(__scm->dev, name_buf_phys)) {
-> +		kfree(name_buf);
-> +		dev_err(__scm->dev, "qseecom: failed to map dma address\n");
-> +		return -EFAULT;
 
-This should be -ENOMEM (you can also just use the return value from
-dma_mapping_error()). Similar below.
+vim +1295 drivers/block/null_blk/main.c
 
-> +	}
-> +
-> +	desc.owner = QSEECOM_TZ_OWNER_QSEE_OS;
-> +	desc.svc = QSEECOM_TZ_SVC_APP_MGR;
-> +	desc.cmd = 0x03;
-> +	desc.arginfo = QCOM_SCM_ARGS(2, QCOM_SCM_RW, QCOM_SCM_VAL);
-> +	desc.args[0] = name_buf_phys;
-> +	desc.args[1] = app_name_len;
-> +
-> +	status = qcom_scm_qseecom_call(&desc, &res);
-> +	dma_unmap_single(__scm->dev, name_buf_phys, name_buf_size, DMA_TO_DEVICE);
-> +	kfree(name_buf);
-> +
-> +	if (status)
-> +		return status;
-> +
-> +	if (res.result == QSEECOM_RESULT_FAILURE)
-> +		return -ENOENT;
-> +
-> +	if (res.result != QSEECOM_RESULT_SUCCESS)
-> +		return -EINVAL;
-> +
-> +	if (res.resp_type != QSEECOM_SCM_RES_APP_ID)
-> +		return -EINVAL;
-> +
-> +	*app_id = res.data;
-> +	return 0;
-> +}
-> +
-> +/**
-> + * qcom_scm_qseecom_app_send() - Send to and receive data from a given QSEE app.
-> + * @client:   The QSEECOM client device corresponding to the target app.
-> + * @req:      Request buffer sent to the app (must be DMA-mappable).
-> + * @req_size: Size of the request buffer.
-> + * @rsp:      Response buffer, written to by the app (must be DMA-mappable).
-> + * @rsp_size: Size of the response buffer.
-> + *
-> + * Sends a request to the QSEE app associated with the given client and read
-> + * back its response. The caller must provide two DMA memory regions, one for
-> + * the request and one for the response, and fill out the @req region with the
-> + * respective (app-specific) request data. The QSEE app reads this and returns
-> + * its response in the @rsp region.
-> + *
-> + * Return: Returns zero on success, nonzero error code on failure.
-> + */
-> +int qcom_scm_qseecom_app_send(struct qseecom_client *client, void *req,
-> +			      size_t req_size, void *rsp, size_t rsp_size)
-> +{
+  1281	
+  1282	static inline int nullb_setup_copy_write(struct nullb *nullb,
+  1283			struct request *req, bool is_fua)
+  1284	{
+  1285		sector_t sector_in, sector_out;
+  1286		void *in, *out;
+  1287		size_t rem, temp;
+  1288		struct bio *bio;
+  1289		unsigned long offset_in, offset_out;
+  1290		struct nullb_page *t_page_in, *t_page_out;
+  1291		int ret = -EIO;
+  1292	
+  1293		sector_out = blk_rq_pos(req);
+  1294	
+> 1295		__rq_for_each_bio(bio, req) {
+  1296			sector_in = bio->bi_iter.bi_sector;
+  1297			rem = bio->bi_iter.bi_size;
+  1298		}
+  1299	
+  1300		if (WARN_ON(!rem))
+  1301			return BLK_STS_NOTSUPP;
+  1302	
+  1303		spin_lock_irq(&nullb->lock);
+  1304		while (rem > 0) {
+  1305			temp = min_t(size_t, nullb->dev->blocksize, rem);
+  1306			offset_in = (sector_in & SECTOR_MASK) << SECTOR_SHIFT;
+  1307			offset_out = (sector_out & SECTOR_MASK) << SECTOR_SHIFT;
+  1308	
+  1309			if (null_cache_active(nullb) && !is_fua)
+  1310				null_make_cache_space(nullb, PAGE_SIZE);
+  1311	
+  1312			t_page_in = null_lookup_page(nullb, sector_in, false,
+  1313				!null_cache_active(nullb));
+  1314			if (!t_page_in)
+  1315				goto err;
+  1316			t_page_out = null_insert_page(nullb, sector_out,
+  1317				!null_cache_active(nullb) || is_fua);
+  1318			if (!t_page_out)
+  1319				goto err;
+  1320	
+  1321			in = kmap_local_page(t_page_in->page);
+  1322			out = kmap_local_page(t_page_out->page);
+  1323	
+  1324			memcpy(out + offset_out, in + offset_in, temp);
+  1325			kunmap_local(out);
+  1326			kunmap_local(in);
+  1327			__set_bit(sector_out & SECTOR_MASK, t_page_out->bitmap);
+  1328	
+  1329			if (is_fua)
+  1330				null_free_sector(nullb, sector_out, true);
+  1331	
+  1332			rem -= temp;
+  1333			sector_in += temp >> SECTOR_SHIFT;
+  1334			sector_out += temp >> SECTOR_SHIFT;
+  1335		}
+  1336	
+  1337		ret = 0;
+  1338	err:
+  1339		spin_unlock_irq(&nullb->lock);
+  1340		return ret;
+  1341	}
+  1342	
 
-> +}
-> +EXPORT_SYMBOL(qcom_scm_qseecom_app_send);
-
-Should this not be EXPORT_SYMBOL_GPL()?
-
-> +
-> +static void qseecom_client_release(struct device *dev)
-> +{
-> +	struct qseecom_client *client = container_of(dev, struct qseecom_client, aux_dev.dev);
-> +
-> +	kfree(client);
-> +}
-> +
-> +static void qseecom_client_remove(void *data)
-> +{
-> +	struct qseecom_client *client = data;
-> +
-> +	auxiliary_device_delete(&client->aux_dev);
-> +	auxiliary_device_uninit(&client->aux_dev);
-> +}
-> +
-> +static int qseecom_client_register(const struct qseecom_app_desc *desc)
-> +{
-> +	struct qseecom_client *client;
-> +	u32 app_id;
-> +	int ret;
-> +
-> +	/* Try to find the app ID, skip device if not found */
-> +	ret = qcom_scm_qseecom_app_get_id(desc->app_name, &app_id);
-> +	if (ret)
-> +		return ret == -ENOENT ? 0 : ret;
-> +
-> +	dev_info(__scm->dev, "qseecom: setting up client for %s\n", desc->app_name);
-> +
-> +	/* Allocate and set-up the client device */
-> +	client = kzalloc(sizeof(*client), GFP_KERNEL);
-> +	if (!client)
-> +		return -ENOMEM;
-> +
-> +	client->aux_dev.name = desc->dev_name;
-> +	client->aux_dev.dev.parent = __scm->dev;
-> +	client->aux_dev.dev.release = qseecom_client_release;
-> +	client->app_id = app_id;
-> +
-> +	ret = auxiliary_device_init(&client->aux_dev);
-> +	if (ret) {
-> +		kfree(client);
-> +		return ret;
-> +	}
-> +
-> +	ret = auxiliary_device_add(&client->aux_dev);
-> +	if (ret) {
-> +		auxiliary_device_uninit(&client->aux_dev);
-> +		return ret;
-> +	}
-> +
-> +	/*
-> +	 * Ensure that the device is properly cleaned up in case of removal or
-> +	 * errors.
-> +	 */
-> +	ret = devm_add_action_or_reset(__scm->dev, qseecom_client_remove, client);
-> +	if (ret)
-> +		return ret;
-> +
-> +	return 0;
-> +}
-> +
-> +/*
-> + * We do not yet support re-entrant calls via the qseecom interface. To prevent
-> + + any potential issues with this, only allow validated devices for now.
-> + */
-> +static const struct of_device_id qcom_scm_qseecom_allowlist[] = {
-> +	{ .compatible = "lenovo,thinkpad-x13s", },
-> +	{ }
-> +};
-> +
-> +static bool qcom_scm_qseecom_device_allowed(void)
-> +{
-> +	struct device_node *np;
-> +	bool match;
-> +
-> +	np = of_find_node_by_path("/");
-> +	match = of_match_node(qcom_scm_qseecom_allowlist, np);
-> +	of_node_put(np);
-> +
-> +	return match;
-> +}
-> +
-> +static const struct qseecom_app_desc qcom_scm_qseecom_apps[] = {};
-> +
-> +static int qcom_scm_qseecom_init(void)
-> +{
-> +	u32 version;
-> +	int ret, i;
-> +
-> +	/* Try to query the qseecom version, skip qseecom setup if this fails */
-> +	ret = qcom_scm_qseecom_get_version(&version);
-> +	if (ret)
-> +		return 0;
-> +
-> +	dev_info(__scm->dev, "qseecom: found qseecom with version 0x%x\n", version);
-> +
-> +	/* Check against tested/verified devices */
-> +	if (!qcom_scm_qseecom_device_allowed()) {
-> +		dev_info(__scm->dev, "qseecom: untested device, skipping\n");
-
-Perhaps call the helper machine_allowed() and update the commit message
-to match (cf. of_machine_is_compatible())?
-
-> +		return 0;
-> +	}
-> +
-> +	/* Set up client devices for each base application */
-> +	for (i = 0; i < ARRAY_SIZE(qcom_scm_qseecom_apps); i++) {
-> +		ret = qseecom_client_register(&qcom_scm_qseecom_apps[i]);
-> +		if (ret)
-> +			return ret;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +#else /* CONFIG_QCOM_SCM_QSEECOM */
-> +
-> +static int qcom_scm_qseecom_init(void)
-> +{
-> +	return 0;
-> +}
-> +
-> +#endif /* CONFIG_QCOM_SCM_QSEECOM */
-> +
->  /**
->   * qcom_scm_is_available() - Checks if SCM is available
->   */
-> @@ -1496,6 +1903,12 @@ static int qcom_scm_probe(struct platform_device *pdev)
->  
->  	__get_convention();
->  
-> +	ret = qcom_scm_qseecom_init();
-> +	if (ret < 0) {
-> +		__scm = NULL;
-
-So as I mentioned in my reply to 2/4, you can still have clients
-registered here when you clear the __scm pointer which they rely on
-after an error.
-
-Not sure how best to handle this, but perhaps registering a qseecom
-platform device here and have it's driver probe defer until scm is
-available would work?
-
-That way you could also separate out the qseecom implementation in a
-separate file (driver) rather than having the ifdef above.
-
-> +		return dev_err_probe(scm->dev, ret, "Failed to initialize qseecom\n");
-> +	}
-> +
->  	/*
->  	 * If requested enable "download mode", from this point on warmboot
->  	 * will cause the boot stages to enter download mode, unless
-
-Overall this looks really good. Nice job!
-
-Johan
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
