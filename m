@@ -2,95 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D323740A9F
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 10:08:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6F07740B2A
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 10:23:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233040AbjF1IIK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 04:08:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34618 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232280AbjF1IBw (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 04:01:52 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7BA31BE8;
-        Wed, 28 Jun 2023 00:59:49 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BAEEE6130B;
-        Wed, 28 Jun 2023 06:41:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B217C433C8;
-        Wed, 28 Jun 2023 06:41:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1687934509;
-        bh=H+UwcZ/vjGf77sZdNXoCybxM/WI1ACzxmM96uHWBNHY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=XteJZEHLN6bRybvpQ5dH0Lfv5gR3Lg9uD1uSf+ZsMr+VveSu91RqojbmvY39VLH8c
-         +fUhLebc7dEhDvEamyp7dmW7p9UmCBnfqe2gFB3dxgLkws/9L/puLPHWbk0KvT4HmC
-         9fKrmii1w/0lTsjHFVTZxiMQQvug6p1cZn3Lk5pc=
-Date:   Wed, 28 Jun 2023 08:41:46 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Souradeep Chowdhury <quic_schowdhu@quicinc.com>
-Cc:     Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, Alex Elder <elder@ieee.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        Sibi Sankar <quic_sibis@quicinc.com>,
-        Rajendra Nayak <quic_rjendra@quicinc.com>
-Subject: Re: [PATCH V24 0/3] misc: Add driver support for Data Capture and
- Compare unit(DCC)
-Message-ID: <2023062831-flail-deprecate-5eed@gregkh>
-References: <cover.1687855361.git.quic_schowdhu@quicinc.com>
- <2023062734-smuggling-bulldog-a46c@gregkh>
- <7b0b3f88-9ecd-090d-de65-3d4779b64a91@quicinc.com>
+        id S232831AbjF1IWy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 04:22:54 -0400
+Received: from mga14.intel.com ([192.55.52.115]:41314 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233297AbjF1IUH (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 28 Jun 2023 04:20:07 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1687940407; x=1719476407;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=JL27lh85xBZAEx37iqF0ZHE4UjNOgtCj+fG3vad4fao=;
+  b=Z83XemYPyuH3OYFDgwgFcL0FSRvUD0JQQq9laa1wzuPVqkaZbXW80dXG
+   8DOQkSvDgfh7lePXPmL51SVIzJI3h5Clk7DYyGaD+STj1j4MKac4CCzlj
+   klTcfUAgpumoE1Py+EmZtZtEcPGNQOsCkckzdJS6k14bcpIyMqJQSVW8p
+   M6/CWihvfOrUbnWwFSLm9jjrWzcWiGMjhf8wGvxzErfm274u6vhGLm+uV
+   nDviV2P445A/Mi3IetdBJr0pKkRbNcuJx2xS1re2WhBNTTPJ+762DtKzx
+   TB/VAhvTOEuxj7p6hVeyh+brCH8IUsm7Kq51KNf0TEzatK+tzkpqDvu/P
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10754"; a="361807724"
+X-IronPort-AV: E=Sophos;i="6.01,164,1684825200"; 
+   d="scan'208";a="361807724"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2023 23:42:01 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10754"; a="786952953"
+X-IronPort-AV: E=Sophos;i="6.01,164,1684825200"; 
+   d="scan'208";a="786952953"
+Received: from yy-desk-7060.sh.intel.com (HELO localhost) ([10.239.159.76])
+  by fmsmga004.fm.intel.com with ESMTP; 27 Jun 2023 23:41:57 -0700
+Date:   Wed, 28 Jun 2023 14:41:56 +0800
+From:   Yuan Yao <yuan.yao@linux.intel.com>
+To:     isaku.yamahata@intel.com
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        isaku.yamahata@gmail.com, Paolo Bonzini <pbonzini@redhat.com>,
+        erdemaktas@google.com, Sean Christopherson <seanjc@google.com>,
+        Sagi Shahar <sagis@google.com>,
+        David Matlack <dmatlack@google.com>,
+        Kai Huang <kai.huang@intel.com>,
+        Zhi Wang <zhi.wang.linux@gmail.com>, chen.bo@intel.com,
+        linux-coco@lists.linux.dev,
+        Chao Peng <chao.p.peng@linux.intel.com>,
+        Ackerley Tng <ackerleytng@google.com>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Michael Roth <michael.roth@amd.com>
+Subject: Re: [RFC PATCH v2 5/6] KVM: Add flags to struct kvm_gfn_range
+Message-ID: <20230628064156.pblgvaks4cvulb3g@yy-desk-7060>
+References: <cover.1687474039.git.isaku.yamahata@intel.com>
+ <689da77417c2f4055f02a71aab51ff603bc195af.1687474039.git.isaku.yamahata@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <7b0b3f88-9ecd-090d-de65-3d4779b64a91@quicinc.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-        lindbergh.monkeyblade.net
+In-Reply-To: <689da77417c2f4055f02a71aab51ff603bc195af.1687474039.git.isaku.yamahata@intel.com>
+User-Agent: NeoMutt/20171215
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 28, 2023 at 11:15:46AM +0530, Souradeep Chowdhury wrote:
-> 
-> 
-> On 6/27/2023 3:52 PM, Greg Kroah-Hartman wrote:
-> > On Tue, Jun 27, 2023 at 03:19:23PM +0530, Souradeep Chowdhury wrote:
-> > > Changes in v24
-> > > 
-> > > *Implemented the comments in v23
-> > 
-> > That explains absolutely nothing about what changed at all.
-> > 
-> > What would you do if you got a patch series that had this as a change
-> > list?  What do you expect us to do?
-> > 
-> > {sigh}
-> 
-> My apologies on missing out on the specifics.
-> 
-> The main changes in this version are as follows:-
-> 
-> * Updated the documentation of the structure dcc_config_entry
-> * Renamed "nr_link_list" to "max_link_list"
-> * Used u64 where applicable
-> * Removed the locks from ready_read method and also dropped
->   the use of unlikely keyword.
+On Thu, Jun 22, 2023 at 04:16:29PM -0700, isaku.yamahata@intel.com wrote:
+> From: Isaku Yamahata <isaku.yamahata@intel.com>
+>
+> Add flags to strut kvm_gfn_range to indicate who triggered the callback
+> and new memory attributes.
+>
+> TDX needs to know the reason for a callback by kvm_unmap_gfn_range().  mmu
+> notifier, set memory attributes ioctl or KVM gmem callback.  With TDX,
+> zapping a private page from the encrypted page table and adding the page
+> back to the same private GPA results in zeroing the page, and the guest has
+> to accept the page again.  On the change of memory attribute from private
 
-Please fix this up and send a new version.
+Is this part used to explains why on MMU notifier only shared pages should
+be zapped ?
 
-thanks,
+> to shared, zapping the GPA range irrespective to private-or-shared and
+> expecting the fault doesn't work for TDX.  Instead, zap shared pages only
+> and keep the private pages.  Concretely
 
-greg k-h
+Do you mean:
+
+On the change of memory attribute, zapping the GPA range irrespective to
+private-or-shared and expecting that the EPT mapping for attribute converts
+to doesn't exist at the time of changing the attribute, zap the "from"
+attribute range only and ignore the "to" attribute.
+
+> - If it's from mmu notifier, zap shared pages.
+> - If it's from KVM gmem, zap private pages.
+> - If setting memory attributes to private, zap shared pages.
+> - If setting memory attributes to shared, zap private pages.
+>
+> Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
+>
+> ---
+> Changes v1 -> v2:
+> - consolidate KVM_GFN_RANGE_FLAGS_GMEM_{PUNCH_HOLE, RELEASE} into
+>   KVM_GFN_RANGE_FLAGS_GMEM.
+> - Update the commit message to describe TDX more.  Drop SEV_SNP.
+> ---
+>  include/linux/kvm_host.h | 10 +++++++++-
+>  virt/kvm/guest_mem.c     |  9 ++++++---
+>  virt/kvm/kvm_main.c      |  4 +++-
+>  3 files changed, 18 insertions(+), 5 deletions(-)
+>
+> diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
+> index 1a47cedae8a1..1fe0516fcddf 100644
+> --- a/include/linux/kvm_host.h
+> +++ b/include/linux/kvm_host.h
+> @@ -256,12 +256,20 @@ int kvm_async_pf_wakeup_all(struct kvm_vcpu *vcpu);
+>  #endif
+>
+>  #ifdef CONFIG_KVM_GENERIC_MMU_NOTIFIER
+> +
+> +#define KVM_GFN_RANGE_FLAGS_SET_MEM_ATTR	BIT(0)
+> +#define KVM_GFN_RANGE_FLAGS_GMEM		BIT(1)
+> +
+>  struct kvm_gfn_range {
+>  	struct kvm_memory_slot *slot;
+>  	gfn_t start;
+>  	gfn_t end;
+> -	pte_t pte;
+> +	union {
+> +		pte_t pte;
+> +		u64 attrs;
+> +	};
+>  	bool may_block;
+> +	unsigned int flags;
+>  };
+>  bool kvm_unmap_gfn_range(struct kvm *kvm, struct kvm_gfn_range *range);
+>  bool kvm_age_gfn(struct kvm *kvm, struct kvm_gfn_range *range);
+> diff --git a/virt/kvm/guest_mem.c b/virt/kvm/guest_mem.c
+> index cdf2d84683c8..387226136960 100644
+> --- a/virt/kvm/guest_mem.c
+> +++ b/virt/kvm/guest_mem.c
+> @@ -99,7 +99,8 @@ static struct folio *kvm_gmem_get_folio(struct file *file, pgoff_t index)
+>  }
+>
+>  static void kvm_gmem_invalidate_begin(struct kvm *kvm, struct kvm_gmem *gmem,
+> -				      pgoff_t start, pgoff_t end)
+> +				      pgoff_t start, pgoff_t end,
+> +				      unsigned int flags)
+>  {
+>  	struct kvm_memory_slot *slot;
+>  	unsigned long index;
+> @@ -118,6 +119,7 @@ static void kvm_gmem_invalidate_begin(struct kvm *kvm, struct kvm_gmem *gmem,
+>  			.slot = slot,
+>  			.pte = __pte(0),
+>  			.may_block = true,
+> +			.flags = flags,
+>  		};
+>
+>  		kvm_mmu_invalidate_range_add(kvm, gfn_range.start, gfn_range.end);
+> @@ -156,7 +158,8 @@ static long kvm_gmem_punch_hole(struct file *file, loff_t offset, loff_t len)
+>  	 */
+>  	filemap_invalidate_lock(file->f_mapping);
+>
+> -	kvm_gmem_invalidate_begin(kvm, gmem, start, end);
+> +	kvm_gmem_invalidate_begin(kvm, gmem, start, end,
+> +				  KVM_GFN_RANGE_FLAGS_GMEM);
+>
+>  	truncate_inode_pages_range(file->f_mapping, offset, offset + len - 1);
+>
+> @@ -263,7 +266,7 @@ static int kvm_gmem_release(struct inode *inode, struct file *file)
+>  	 * Free the backing memory, and more importantly, zap all SPTEs that
+>  	 * pointed at this file.
+>  	 */
+> -	kvm_gmem_invalidate_begin(kvm, gmem, 0, -1ul);
+> +	kvm_gmem_invalidate_begin(kvm, gmem, 0, -1ul, KVM_GFN_RANGE_FLAGS_GMEM);
+>  	truncate_inode_pages_final(file->f_mapping);
+>  	kvm_gmem_invalidate_end(kvm, gmem, 0, -1ul);
+>
+> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+> index 422d49634c56..9cdfa2fb675f 100644
+> --- a/virt/kvm/kvm_main.c
+> +++ b/virt/kvm/kvm_main.c
+> @@ -613,6 +613,7 @@ static __always_inline int __kvm_handle_hva_range(struct kvm *kvm,
+>  			gfn_range.start = hva_to_gfn_memslot(hva_start, slot);
+>  			gfn_range.end = hva_to_gfn_memslot(hva_end + PAGE_SIZE - 1, slot);
+>  			gfn_range.slot = slot;
+> +			gfn_range.flags = 0;
+>
+>  			if (!locked) {
+>  				locked = true;
+> @@ -2391,8 +2392,9 @@ static void kvm_mem_attrs_changed(struct kvm *kvm, unsigned long attrs,
+>  	bool flush = false;
+>  	int i;
+>
+> -	gfn_range.pte = __pte(0);
+> +	gfn_range.attrs = attrs;
+>  	gfn_range.may_block = true;
+> +	gfn_range.flags = KVM_GFN_RANGE_FLAGS_SET_MEM_ATTR;
+>
+>  	for (i = 0; i < kvm_arch_nr_memslot_as_ids(kvm); i++) {
+>  		slots = __kvm_memslots(kvm, i);
+> --
+> 2.25.1
+>
