@@ -2,83 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A614E740CBF
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 11:27:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E84F740CD1
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 11:31:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232292AbjF1J0s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 05:26:48 -0400
-Received: from mail-sh.amlogic.com ([58.32.228.43]:22191 "EHLO
-        mail-sh.amlogic.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235315AbjF1JSB (ORCPT
+        id S232492AbjF1J1B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 05:27:01 -0400
+Received: from mail-wm1-f50.google.com ([209.85.128.50]:44353 "EHLO
+        mail-wm1-f50.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237953AbjF1JQB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 05:18:01 -0400
-Received: from rd02-sz.amlogic.software (10.28.11.83) by mail-sh.amlogic.com
- (10.18.11.5) with Microsoft SMTP Server id 15.1.2507.13; Wed, 28 Jun 2023
- 17:16:11 +0800
-From:   Huqiang Qin <huqiang.qin@amlogic.com>
-To:     <tglx@linutronix.de>, <maz@kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
-        <neil.armstrong@linaro.org>, <khilman@baylibre.com>,
-        <jbrunet@baylibre.com>, <martin.blumenstingl@googlemail.com>,
-        <hkallweit1@gmail.com>
-CC:     <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-amlogic@lists.infradead.org>,
-        Huqiang Qin <huqiang.qin@amlogic.com>
-Subject: [PATCH V2 2/2] irqchip: Add support for Amlogic-C3 SoCs
-Date:   Wed, 28 Jun 2023 17:15:33 +0800
-Message-ID: <20230628091533.3884385-3-huqiang.qin@amlogic.com>
-X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20230628091533.3884385-1-huqiang.qin@amlogic.com>
-References: <20230628091533.3884385-1-huqiang.qin@amlogic.com>
+        Wed, 28 Jun 2023 05:16:01 -0400
+Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-3fba9daf043so14233445e9.1
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 02:16:00 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687943759; x=1690535759;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=01gfdKzfF02P0jmnqST0ihntbXHOlNcCxH5v9bR5r+o=;
+        b=TiihWchIG73YfsGlzSKnKEk/8whaxTiSMp79ttuyq6lpSVmQMiCE9C92y8j/eiUvK1
+         d8vW4v5ydTh38n7SaL+Mt7yj5jz1sfCEAGV1FIY6CoA77+jMA3Gvqp5Q8uQCf6DZLRmK
+         in51an9AdOLRztzhvPOJLpfljISH7ZQlrDZUPUe4Wc3aidR5fNNYBMfolBTM3arZug0H
+         lz+doO47P+yZvgIOz3KrYSxbMTo3LOaypxHurl/IA3UyGyHCWHoPdES9GRtG+pWBB5R9
+         ga6WvQfx/FOgWKyzqzXRqzYe9rAtxlsbywCXDaM9ZdVqdEFpyYJB58RCaeMWuPWzIcET
+         Pcxw==
+X-Gm-Message-State: AC+VfDyYvfKPtWw0LRh61/BUqvEZwKrpNYaHcPLW6Uw9fR/InOIIp6fv
+        3Qblm63O7LKDkrLfNLnVK5Y=
+X-Google-Smtp-Source: ACHHUZ5hsARBwoIr3AF1HaRatYKrAwOdMNB28sX12tsvIXxXoqWb7tG6uwvpHQiXWEZCed0eK0iZUA==
+X-Received: by 2002:a05:600c:21c5:b0:3fa:74ae:df9f with SMTP id x5-20020a05600c21c500b003fa74aedf9fmr14272085wmj.37.1687943759325;
+        Wed, 28 Jun 2023 02:15:59 -0700 (PDT)
+Received: from gmail.com (fwdproxy-cln-118.fbsv.net. [2a03:2880:31ff:76::face:b00c])
+        by smtp.gmail.com with ESMTPSA id y12-20020a05600c364c00b003f7f249e7dfsm16262298wmq.4.2023.06.28.02.15.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 28 Jun 2023 02:15:58 -0700 (PDT)
+Date:   Wed, 28 Jun 2023 02:15:56 -0700
+From:   Breno Leitao <leitao@debian.org>
+To:     Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Josh Poimboeuf <jpoimboe@kernel.org>, leit@fb.com,
+        "open list:X86 ARCHITECTURE (32-BIT AND 64-BIT)" 
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2] x86/bugs: Break down mitigations configurations
+Message-ID: <ZJv6TL4yH4HbCe/h@gmail.com>
+References: <20230616164851.2559415-1-leitao@debian.org>
+ <20230621001327.qdyebewnx7r5aiy3@desk>
+ <ZJMdKUr98H8zPSAl@gmail.com>
+ <20230621173135.wiprtgzslhw5z5or@desk>
+ <ZJNDRSUZuZ2L+pwo@gmail.com>
+ <20230621194101.bmwesljror2yqjxx@desk>
+ <ZJseCvXVKFHu84Sv@gmail.com>
+ <20230627223040.bjacsmaotlderpdu@desk>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.28.11.83]
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230627223040.bjacsmaotlderpdu@desk>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The Amlogic-C3 SoCs support 12 GPIO IRQ lines compared with previous
-serial chips and have something different, details are as below.
+On Tue, Jun 27, 2023 at 03:30:40PM -0700, Pawan Gupta wrote:
+> On Tue, Jun 27, 2023 at 10:36:10AM -0700, Breno Leitao wrote:
+> > On Wed, Jun 21, 2023 at 12:41:01PM -0700, Pawan Gupta wrote:
+> > > On Wed, Jun 21, 2023 at 11:36:53AM -0700, Breno Leitao wrote:
+> > > > If I understand where you want to go, you think we should create a
+> > > > single patchset that creates a CONFIG_<MITIGATION> for each mitigation,
+> > > > and move get it under CONFIG_SPECULATION_MITIGATIONS.
+> > > 
+> > > Yes, a single series (or a patch) that adds config for each mitigation
+> > > would be good.
+> > 
+> > I've been working on this request, and I may need your help to validate
+> > the wordings and dependencies (as in architecture/vendors where the
+> > problem needs to be mitigations) for each entry.
+> 
+> Kconfig text looks fine to me. (Some comments on arch/vendor dependency
+> are down below).
 
-IRQ Number:
-- 54     1 pins on bank TESTN
-- 53:40 14 pins on bank X
-- 39:33  7 pins on bank D
-- 32:27  6 pins on bank A
-- 26:22  5 pins on bank E
-- 21:15  7 pins on bank C
-- 14:0  15 pins on bank B
-
-Signed-off-by: Huqiang Qin <huqiang.qin@amlogic.com>
----
- drivers/irqchip/irq-meson-gpio.c | 5 +++++
- 1 file changed, 5 insertions(+)
-
-diff --git a/drivers/irqchip/irq-meson-gpio.c b/drivers/irqchip/irq-meson-gpio.c
-index 7da18ef95211..f88df39f4129 100644
---- a/drivers/irqchip/irq-meson-gpio.c
-+++ b/drivers/irqchip/irq-meson-gpio.c
-@@ -150,6 +150,10 @@ static const struct meson_gpio_irq_params s4_params = {
- 	INIT_MESON_S4_COMMON_DATA(82)
- };
- 
-+static const struct meson_gpio_irq_params c3_params = {
-+	INIT_MESON_S4_COMMON_DATA(55)
-+};
-+
- static const struct of_device_id meson_irq_gpio_matches[] __maybe_unused = {
- 	{ .compatible = "amlogic,meson8-gpio-intc", .data = &meson8_params },
- 	{ .compatible = "amlogic,meson8b-gpio-intc", .data = &meson8b_params },
-@@ -160,6 +164,7 @@ static const struct of_device_id meson_irq_gpio_matches[] __maybe_unused = {
- 	{ .compatible = "amlogic,meson-sm1-gpio-intc", .data = &sm1_params },
- 	{ .compatible = "amlogic,meson-a1-gpio-intc", .data = &a1_params },
- 	{ .compatible = "amlogic,meson-s4-gpio-intc", .data = &s4_params },
-+	{ .compatible = "amlogic,c3-gpio-intc", .data = &c3_params },
- 	{ }
- };
- 
--- 
-2.37.1
-
+Neat, thanks for the clarifications. I will send v3 later today.
