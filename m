@@ -2,188 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F015A741443
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 16:51:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AC5D741447
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 16:52:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231922AbjF1Ovx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 10:51:53 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:1854 "EHLO
-        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231928AbjF1OvL (ORCPT
+        id S231987AbjF1Ov5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 10:51:57 -0400
+Received: from mx2.sberdevices.ru ([45.89.224.132]:53767 "EHLO
+        mx1.sberdevices.ru" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S231977AbjF1Ov3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 10:51:11 -0400
-Received: from pps.filterd (m0353723.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35SElKev000402;
-        Wed, 28 Jun 2023 14:50:57 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=lz8phgxwdI4fLjtVt3p9EZadjcu5lnjjzRctATPqjes=;
- b=QW0xyFVpR7B+khwUayz2IGt+pZKii4N7nzgOKRkQ323kTyhRFQkY8JMjn+vIJ4EKykUi
- TT9pwNwcHu1Jpse0MOv45K7v57wWdYMctoQw4GvdhdfVeXDcp5xVsS2MmbMyBwjRlT1i
- Rxu6xZ/8sbsEmw7HWcyhAMcQPZDy+gCNxNYmnRPa7CuaCWS+XEi1J535wUDfIEfno+h+
- t2Ooj783mvTyEknJ1TBLsOptkOh/4F+fFlF8sqEQJnG/D2TZTpGWqJFLBWCo9VlNcMgp
- ZTDIBlXw2RzekaNJAyX+uXbsrwbKc1rJciXRX/QGNZtG2trV33Q00lm9Ei/YjLdV3zvo IA== 
-Received: from ppma04dal.us.ibm.com (7a.29.35a9.ip4.static.sl-reverse.com [169.53.41.122])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3rgpxd82av-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 28 Jun 2023 14:50:56 +0000
-Received: from pps.filterd (ppma04dal.us.ibm.com [127.0.0.1])
-        by ppma04dal.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 35SCgURQ020446;
-        Wed, 28 Jun 2023 14:50:56 GMT
-Received: from smtprelay07.dal12v.mail.ibm.com ([9.208.130.99])
-        by ppma04dal.us.ibm.com (PPS) with ESMTPS id 3rdr46ahk6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 28 Jun 2023 14:50:56 +0000
-Received: from smtpav04.wdc07v.mail.ibm.com (smtpav04.wdc07v.mail.ibm.com [10.39.53.231])
-        by smtprelay07.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 35SEosFf18153868
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 28 Jun 2023 14:50:55 GMT
-Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id CBBEF58050;
-        Wed, 28 Jun 2023 14:50:54 +0000 (GMT)
-Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 7610E58052;
-        Wed, 28 Jun 2023 14:50:54 +0000 (GMT)
-Received: from [9.61.85.197] (unknown [9.61.85.197])
-        by smtpav04.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-        Wed, 28 Jun 2023 14:50:54 +0000 (GMT)
-Message-ID: <b3a5036e-83b2-a8be-cc9e-fafb161047ec@linux.ibm.com>
-Date:   Wed, 28 Jun 2023 09:50:54 -0500
+        Wed, 28 Jun 2023 10:51:29 -0400
+Received: from p-infra-ksmg-sc-msk02 (localhost [127.0.0.1])
+        by mx1.sberdevices.ru (Postfix) with ESMTP id BA890120019;
+        Wed, 28 Jun 2023 17:51:11 +0300 (MSK)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mx1.sberdevices.ru BA890120019
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
+        s=mail; t=1687963871;
+        bh=ijsYqbMrBgDeL0im1rxl0SGUF7eOfc45yINo+UI8MC4=;
+        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type:From;
+        b=Oe+k4MbnYaiC6F6uZRqqnKz+SRkhwtkRZ3YJ/ekh/TdOjH2aH3gBkDFjr1gETBnGC
+         fCP14LYp/96JhA6mgW2C3tbIQfEmtOgfa5a3azAY6seTm/rG8Asro4GxFlax56ZZnk
+         YM/aLipf/rrquca2rutqkoZrK3dys3RcUu8/9bCnXaOS9naoAIEEjY6SnwzsyBZAG+
+         VTZlh3nhsq4yEKTrCRd4gW/q6O9VMSdBnZpzRbdY7vnP0ZXePcK0NoPvNUGDGn+JSg
+         OkJ4LMJQEOm0l4RDlrE/0I/3JVL1RRhfqi2qE2Hb20LPitRPzGtjkK4JbUDuCk65Xk
+         RHrHyYNtEPnew==
+Received: from p-i-exch-sc-m01.sberdevices.ru (p-i-exch-sc-m01.sberdevices.ru [172.16.192.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mx1.sberdevices.ru (Postfix) with ESMTPS;
+        Wed, 28 Jun 2023 17:51:10 +0300 (MSK)
+Received: from localhost (100.64.160.123) by p-i-exch-sc-m01.sberdevices.ru
+ (172.16.192.107) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.30; Wed, 28 Jun
+ 2023 17:50:12 +0300
+Date:   Wed, 28 Jun 2023 17:51:10 +0300
+From:   Dmitry Rokosov <ddrokosov@sberdevices.ru>
+To:     <neil.armstrong@linaro.org>
+CC:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        <jbrunet@baylibre.com>, <mturquette@baylibre.com>,
+        <sboyd@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <khilman@baylibre.com>,
+        <conor+dt@kernel.org>, <kernel@sberdevices.ru>,
+        <sdfw_system_team@sberdevices.ru>, <rockosov@gmail.com>,
+        <linux-amlogic@lists.infradead.org>, <linux-clk@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        Oleg Lyovin <ovlevin@sberdevices.ru>
+Subject: Re: [PATCH v1 5/6] arm64: dts: meson: a1: introduce UART_AO mux
+ definitions
+Message-ID: <20230628145110.a7igezu7ts2aymkd@CAB-WSD-L081021>
+References: <20230607201641.20982-1-ddrokosov@sberdevices.ru>
+ <20230607201641.20982-6-ddrokosov@sberdevices.ru>
+ <CAFBinCD-5RD_iszZZRg58XqTHDEHnipJkf2aAex8MdUyh=bVCw@mail.gmail.com>
+ <c41d2d9f-7ddd-160d-d455-ba4fece7ff93@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH] hwmon: (pmbus/acbel-fsg032) Add firmware version debugfs
- attribute
-To:     Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, jdelvare@suse.com,
-        lakshmiy@us.ibm.com
-References: <20230627184027.16343-1-eajames@linux.ibm.com>
- <460709cb-3c5f-436a-e9e7-2562ab079677@roeck-us.net>
-Content-Language: en-US
-From:   Eddie James <eajames@linux.ibm.com>
-In-Reply-To: <460709cb-3c5f-436a-e9e7-2562ab079677@roeck-us.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 5luhO2kfIjcpt4v1lgfp4hyUMv_VEVIx
-X-Proofpoint-ORIG-GUID: 5luhO2kfIjcpt4v1lgfp4hyUMv_VEVIx
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-06-28_10,2023-06-27_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 clxscore=1015
- priorityscore=1501 malwarescore=0 lowpriorityscore=0 phishscore=0
- suspectscore=0 spamscore=0 mlxlogscore=999 adultscore=0 bulkscore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2305260000 definitions=main-2306280129
+In-Reply-To: <c41d2d9f-7ddd-160d-d455-ba4fece7ff93@linaro.org>
+User-Agent: NeoMutt/20220415
+X-Originating-IP: [100.64.160.123]
+X-ClientProxiedBy: p-i-exch-sc-m01.sberdevices.ru (172.16.192.107) To
+ p-i-exch-sc-m01.sberdevices.ru (172.16.192.107)
+X-KSMG-Rule-ID: 10
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Lua-Profiles: 178314 [Jun 28 2023]
+X-KSMG-AntiSpam-Version: 5.9.59.0
+X-KSMG-AntiSpam-Envelope-From: DDRokosov@sberdevices.ru
+X-KSMG-AntiSpam-Rate: 0
+X-KSMG-AntiSpam-Status: not_detected
+X-KSMG-AntiSpam-Method: none
+X-KSMG-AntiSpam-Auth: dkim=none
+X-KSMG-AntiSpam-Info: LuaCore: 517 517 b0056c19d8e10afbb16cb7aad7258dedb0179a79, {Track_E25351}, {Tracking_from_domain_doesnt_match_to}, 127.0.0.199:7.1.2;sberdevices.ru:7.1.1,5.0.1;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;p-i-exch-sc-m01.sberdevices.ru:7.1.1,5.0.1, FromAlignment: s, {Tracking_white_helo}, ApMailHostAddress: 100.64.160.123
+X-MS-Exchange-Organization-SCL: -1
+X-KSMG-AntiSpam-Interceptor-Info: scan successful
+X-KSMG-AntiPhishing: Clean
+X-KSMG-LinksScanning: Clean
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 2.0.1.6960, bases: 2023/06/28 08:00:00 #21591748
+X-KSMG-AntiVirus-Status: Clean, skipped
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Neil, Martin,
 
-On 6/27/23 17:19, Guenter Roeck wrote:
-> On 6/27/23 11:40, Eddie James wrote:
->> Like the IBM CFFPS driver, export the PSU's firmware version to a
->> debugfs attribute as reported in the manufacturer register.
->>
->> Signed-off-by: Eddie James <eajames@linux.ibm.com>
->> ---
->>   drivers/hwmon/pmbus/acbel-fsg032.c | 48 ++++++++++++++++++++++++++++++
->>   1 file changed, 48 insertions(+)
->>
->> diff --git a/drivers/hwmon/pmbus/acbel-fsg032.c 
->> b/drivers/hwmon/pmbus/acbel-fsg032.c
->> index 0a0ef4ce3493..4b97f108cfe3 100644
->> --- a/drivers/hwmon/pmbus/acbel-fsg032.c
->> +++ b/drivers/hwmon/pmbus/acbel-fsg032.c
->> @@ -3,6 +3,7 @@
->>    * Copyright 2023 IBM Corp.
->>    */
->>   +#include <linux/debugfs.h>
->>   #include <linux/device.h>
->>   #include <linux/fs.h>
->>   #include <linux/i2c.h>
->> @@ -11,6 +12,52 @@
->>   #include <linux/hwmon-sysfs.h>
->>   #include "pmbus.h"
->>   +#define ACBEL_MFR_FW_REVISION    0xd9
->> +
->> +static ssize_t acbel_fsg032_debugfs_read(struct file *file, char 
->> __user *buf, size_t count,
->> +                     loff_t *ppos)
->> +{
->> +    struct i2c_client *client = file->private_data;
->> +    char data[I2C_SMBUS_BLOCK_MAX + 2] = { 0 };
->> +    char out[8];
->> +    int rc;
->> +    int i;
->> +
->> +    rc = pmbus_lock_interruptible(client);
->
-> Is that needed here ?
+On Mon, Jun 26, 2023 at 03:34:38PM +0200, neil.armstrong@linaro.org wrote:
+> Hi,
+> 
+> On 25/06/2023 23:07, Martin Blumenstingl wrote:
+> > On Wed, Jun 7, 2023 at 10:16 PM Dmitry Rokosov <ddrokosov@sberdevices.ru> wrote:
+> > > 
+> > > From: Oleg Lyovin <ovlevin@sberdevices.ru>
+> > > 
+> > > The Amlogic A1 has a UART_AO port, which can be used, for example, for
+> > > BT HCI H4 connection.
+> > > 
+> > > This patch adds mux definitions for it.
+> > In the past we've only taken the pinctrl definitions if we have a
+> > board that uses them.
+> > Neil, do we still have the same policy in place? If so this patch
+> > should be sent with the series that adds support for your A1 board.
+> 
+> Yes and no, if the work is done I'll take it, but yeah since upstream linux
+> hates dead code, let's only define what's necessary.
+> 
 
+I'll prepare the patches for ad401 reference board, and share the in the
+next patch series version.
 
-Good point, it's not.
+> > 
+> > > Signed-off-by: Oleg Lyovin <ovlevin@sberdevices.ru>
+> > > Signed-off-by: Dmitry Rokosov <ddrokosov@sberdevices.ru>
+> > > ---
+> > >   arch/arm64/boot/dts/amlogic/meson-a1.dtsi | 16 ++++++++++++++++
+> > >   1 file changed, 16 insertions(+)
+> > > 
+> > > diff --git a/arch/arm64/boot/dts/amlogic/meson-a1.dtsi b/arch/arm64/boot/dts/amlogic/meson-a1.dtsi
+> > > index 0efd922ca7e1..3eb6aa9c00e0 100644
+> > > --- a/arch/arm64/boot/dts/amlogic/meson-a1.dtsi
+> > > +++ b/arch/arm64/boot/dts/amlogic/meson-a1.dtsi
+> > > @@ -118,6 +118,22 @@ gpio: bank@400 {
+> > >                                          gpio-ranges = <&periphs_pinctrl 0 0 62>;
+> > >                                  };
+> > > 
+> > > +                               uart_a_pins: uart_a {
+> > Only our newer .dtsi (e.g. meson-g12-common.dtsi) are following the
+> > pattern where node names should use dashes instead of underscores.
+> > So please use: uart_a_pins: uart-a { ...
+> 
+> The new scheme which should be use should be:
+> 
+> uart_a_pins: uart-a-pins-state {
+> 
+> but it wasn't enforced in the pinctrl yaml pushed by heiner, but for sure
+> no underscores in the node name.
+> 
 
+Okay, got it
 
->
->> +    if (rc)
->> +        return rc;
->> +
->> +    rc = i2c_smbus_read_block_data(client, ACBEL_MFR_FW_REVISION, 
->> data);
->> +    pmbus_unlock(client);
->> +    if (rc < 0)
->> +        return rc;
->> +
->> +    for (i = 0; i < rc && i < 3; ++i)
->> +        snprintf(&out[i * 2], 3, "%02X", data[i]);
->> +
->> +    rc = i * 2;
->> +    out[rc++] = '\n';
->> +    out[rc++] = 0;
->
-> Any reason for not using one of the %*ph variants ?
+> > 
+> > [...]
+> > > +                               uart_a_cts_rts_pins: uart_a_cts_rts {
+> > similar to the comment from above:
+> > uart_a_cts_rts_pins: uart-a-cts-rts { ...
+> > 
+> > > +                                       mux {
+> > > +                                               groups = "uart_a_cts",
+> > > +                                                        "uart_a_rts";
+> > > +                                               function = "uart_a";
+> > > +                                               bias-pull-down;
+> > Out of curiosity: is this pull down needed on all boards or just specific ones?
+> > It seems like all other SoCs use bias-disable for the RTS/CTS pins.
+> > 
+> > 
+> > Best regards,
+> > Martin
+> 
 
-
-Nope, that will work great, thanks.
-
-Eddie
-
-
->
-> Thanks,
-> Guenter
->
->> +    return simple_read_from_buffer(buf, count, ppos, out, rc);
->> +}
->> +
->> +static const struct file_operations acbel_debugfs_ops = {
->> +    .llseek = noop_llseek,
->> +    .read = acbel_fsg032_debugfs_read,
->> +    .write = NULL,
->> +    .open = simple_open,
->> +};
->> +
->> +static void acbel_fsg032_init_debugfs(struct i2c_client *client)
->> +{
->> +    struct dentry *debugfs = pmbus_get_debugfs_dir(client);
->> +
->> +    if (!debugfs)
->> +        return;
->> +
->> +    debugfs_create_file("fw_version", 0444, debugfs, client, 
->> &acbel_debugfs_ops);
->> +}
->> +
->>   static const struct i2c_device_id acbel_fsg032_id[] = {
->>       { "acbel_fsg032" },
->>       {}
->> @@ -59,6 +106,7 @@ static int acbel_fsg032_probe(struct i2c_client 
->> *client)
->>       if (rc)
->>           return rc;
->>   +    acbel_fsg032_init_debugfs(client);
->>       return 0;
->>   }
->
+-- 
+Thank you,
+Dmitry
