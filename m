@@ -2,382 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B892740D1B
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 11:39:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EEA2740DBD
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 11:51:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235174AbjF1JeE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 05:34:04 -0400
-Received: from mx0b-0031df01.pphosted.com ([205.220.180.131]:28742 "EHLO
-        mx0b-0031df01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232673AbjF1J3g (ORCPT
+        id S232477AbjF1JvC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 05:51:02 -0400
+Received: from mx1.sberdevices.ru ([37.18.73.165]:57466 "EHLO
+        mx1.sberdevices.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235491AbjF1Je6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 05:29:36 -0400
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35S9G4GR017058;
-        Wed, 28 Jun 2023 09:29:33 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=qcppdkim1;
- bh=3FytUtbs+XfebPfSw9fZcNpl00wgcp622huhLmYCbzw=;
- b=G/AHxKxNIOBYUOrJUCwtTvm3sICINPfhPes0b1MrHANowOy9P1vkhvtKO8aVHovtqws6
- +FyZDpkB3qoV20DAUTfujHrYbR+N8i3pv/9+bIMbHVHxSIWdr5lf1RdYpvEtyyk9n4Pf
- nc6O/pCE2ttK4t2lRU3PocM8SkH8/JgYwLm7uHqqf4F7s5H+BauTpZESuAmGozZzLKA1
- mhudL5kjwF3qMEvc9dYYNpjOlDz2rLPaA0t/C6kgGdaAsqU78kOwGDSxsGxFmc4C76PK
- iplVsRlJsNZmzUWQTQkOlrYaEaMomPz/oCwaxKJIjhW9IHLHfDWrpVUPbs5O84bm89fu xg== 
-Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rg7x3s7s9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 28 Jun 2023 09:29:32 +0000
-Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
-        by NASANPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35S9TV1w003606
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 28 Jun 2023 09:29:31 GMT
-Received: from hu-imrashai-hyd.qualcomm.com (10.80.80.8) by
- nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
+        Wed, 28 Jun 2023 05:34:58 -0400
+Received: from p-infra-ksmg-sc-msk01 (localhost [127.0.0.1])
+        by mx1.sberdevices.ru (Postfix) with ESMTP id E1AFF100008;
+        Wed, 28 Jun 2023 12:34:55 +0300 (MSK)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mx1.sberdevices.ru E1AFF100008
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
+        s=mail; t=1687944895;
+        bh=YWpvOe2q1AMTE1sllGg/LNi9S+Br6dLjsxHqUIOTn8c=;
+        h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type:From;
+        b=gpe9ie7Vz9TwKDqivSj8hCCJXesc8vTWwfL20YwI6ATxUYNLkg4sFLa1WGEVvByst
+         VJ2l1UMQU4HlpRAk4I8T1IQtKqU/s94PRm/gOWaS9X45NIz+ltFv76jQACLIcYdHdT
+         EnGgGlJEV+twVMSWFSViQg2IeyzCFhX6j9M3L1ippPT7BMtzXCu4JOv8rPjGL1wCDA
+         pggxIQyBV1mGl1/ySBE6wektxgabal9ZtLLbZnqnKviU83cvKPlLBkzcjuMZbOigb3
+         aYu/sQXaabW5szNot3VLN7ec5QlTzNr/SQNkW7Yhu6NDdE/AjsKyOMKftA78R4v1Xq
+         e+E4mn6qJ9oEg==
+Received: from p-i-exch-sc-m01.sberdevices.ru (p-i-exch-sc-m01.sberdevices.ru [172.16.192.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mx1.sberdevices.ru (Postfix) with ESMTPS;
+        Wed, 28 Jun 2023 12:34:55 +0300 (MSK)
+Received: from localhost.localdomain (100.64.160.123) by
+ p-i-exch-sc-m01.sberdevices.ru (172.16.192.107) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Wed, 28 Jun 2023 02:29:26 -0700
-From:   Imran Shaik <quic_imrashai@quicinc.com>
-To:     Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
+ 15.2.1118.30; Wed, 28 Jun 2023 12:33:59 +0300
+From:   Arseniy Krasnov <AVKrasnov@sberdevices.ru>
+To:     Liang Yang <liang.yang@amlogic.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>
-CC:     Taniya Das <quic_tdas@quicinc.com>,
-        Imran Shaik <quic_imrashai@quicinc.com>,
-        Melody Olvera <quic_molvera@quicinc.com>,
-        "Dmitry Baryshkov" <dmitry.baryshkov@linaro.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-clk@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Jagadeesh Kona <quic_jkona@quicinc.com>,
-        Satya Priya Kakitapalli <quic_skakitap@quicinc.com>,
-        Ajit Pandey <quic_ajipan@quicinc.com>
-Subject: [PATCH V2 5/5] clk: qcom: gcc-qdu1000: Update the RCGs ops
-Date:   Wed, 28 Jun 2023 14:58:37 +0530
-Message-ID: <20230628092837.3090801-6-quic_imrashai@quicinc.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230628092837.3090801-1-quic_imrashai@quicinc.com>
-References: <20230628092837.3090801-1-quic_imrashai@quicinc.com>
+        Conor Dooley <conor+dt@kernel.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+CC:     <oxffffaa@gmail.com>, <kernel@sberdevices.ru>,
+        Arseniy Krasnov <AVKrasnov@sberdevices.ru>,
+        <linux-mtd@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-amlogic@lists.infradead.org>, <linux-kernel@vger.kernel.org>
+Subject: [RFC PATCH v1 0/2] support 512B ECC step size for Meson NAND
+Date:   Wed, 28 Jun 2023 12:29:34 +0300
+Message-ID: <20230628092937.538683-1-AVKrasnov@sberdevices.ru>
+X-Mailer: git-send-email 2.35.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: qNGklIkVVXcqCyZOdJTBKsphk8NHuGEF
-X-Proofpoint-GUID: qNGklIkVVXcqCyZOdJTBKsphk8NHuGEF
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-06-28_06,2023-06-27_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 impostorscore=0
- spamscore=0 priorityscore=1501 suspectscore=0 malwarescore=0 mlxscore=0
- adultscore=0 mlxlogscore=941 lowpriorityscore=0 phishscore=0 bulkscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2305260000
- definitions=main-2306280082
+X-Originating-IP: [100.64.160.123]
+X-ClientProxiedBy: p-i-exch-sc-m02.sberdevices.ru (172.16.192.103) To
+ p-i-exch-sc-m01.sberdevices.ru (172.16.192.107)
+X-KSMG-Rule-ID: 10
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Lua-Profiles: 178300 [Jun 28 2023]
+X-KSMG-AntiSpam-Version: 5.9.59.0
+X-KSMG-AntiSpam-Envelope-From: AVKrasnov@sberdevices.ru
+X-KSMG-AntiSpam-Rate: 0
+X-KSMG-AntiSpam-Status: not_detected
+X-KSMG-AntiSpam-Method: none
+X-KSMG-AntiSpam-Auth: dkim=none
+X-KSMG-AntiSpam-Info: LuaCore: 517 517 b0056c19d8e10afbb16cb7aad7258dedb0179a79, {Tracking_from_domain_doesnt_match_to}, 127.0.0.199:7.1.2;sberdevices.ru:5.0.1,7.1.1;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;p-i-exch-sc-m01.sberdevices.ru:5.0.1,7.1.1, FromAlignment: s, {Tracking_white_helo}, ApMailHostAddress: 100.64.160.123
+X-MS-Exchange-Organization-SCL: -1
+X-KSMG-AntiSpam-Interceptor-Info: scan successful
+X-KSMG-AntiPhishing: Clean
+X-KSMG-LinksScanning: Clean
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 2.0.1.6960, bases: 2023/06/28 08:00:00 #21591748
+X-KSMG-AntiVirus-Status: Clean, skipped
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Update the SDCC clock RCG ops to floor_ops to avoid overclocking issues
-and remaining RCGs to shared_ops to park them at safe clock(XO) during
-disable.
+Hello,
 
-Co-developed-by: Taniya Das <quic_tdas@quicinc.com>
-Signed-off-by: Taniya Das <quic_tdas@quicinc.com>
-Signed-off-by: Imran Shaik <quic_imrashai@quicinc.com>
----
-Changes since v1:
- - Newly added
+this patchset adds support for 512B ECC step size for Meson NAND. Current
+implementation only supports 1024B. There are two patches:
 
- drivers/clk/qcom/gcc-qdu1000.c | 62 +++++++++++++++++-----------------
- 1 file changed, 31 insertions(+), 31 deletions(-)
+1) Update for device tree bindings to replace 'const' type of field
+   'nand-ecc-step-size' with 'enum' which contains 512 and 1024. Example
+   is also updated.
 
-diff --git a/drivers/clk/qcom/gcc-qdu1000.c b/drivers/clk/qcom/gcc-qdu1000.c
-index 718c34dca6e8..de35cdc93732 100644
---- a/drivers/clk/qcom/gcc-qdu1000.c
-+++ b/drivers/clk/qcom/gcc-qdu1000.c
-@@ -475,7 +475,7 @@ static struct clk_rcg2 gcc_aggre_noc_ecpri_dma_clk_src = {
- 		.name = "gcc_aggre_noc_ecpri_dma_clk_src",
- 		.parent_data = gcc_parent_data_4,
- 		.num_parents = ARRAY_SIZE(gcc_parent_data_4),
--		.ops = &clk_rcg2_ops,
-+		.ops = &clk_rcg2_shared_ops,
- 	},
- };
- 
-@@ -495,7 +495,7 @@ static struct clk_rcg2 gcc_aggre_noc_ecpri_gsi_clk_src = {
- 		.name = "gcc_aggre_noc_ecpri_gsi_clk_src",
- 		.parent_data = gcc_parent_data_5,
- 		.num_parents = ARRAY_SIZE(gcc_parent_data_5),
--		.ops = &clk_rcg2_ops,
-+		.ops = &clk_rcg2_shared_ops,
- 	},
- };
- 
-@@ -514,7 +514,7 @@ static struct clk_rcg2 gcc_gp1_clk_src = {
- 		.name = "gcc_gp1_clk_src",
- 		.parent_data = gcc_parent_data_1,
- 		.num_parents = ARRAY_SIZE(gcc_parent_data_1),
--		.ops = &clk_rcg2_ops,
-+		.ops = &clk_rcg2_shared_ops,
- 	},
- };
- 
-@@ -528,7 +528,7 @@ static struct clk_rcg2 gcc_gp2_clk_src = {
- 		.name = "gcc_gp2_clk_src",
- 		.parent_data = gcc_parent_data_1,
- 		.num_parents = ARRAY_SIZE(gcc_parent_data_1),
--		.ops = &clk_rcg2_ops,
-+		.ops = &clk_rcg2_shared_ops,
- 	},
- };
- 
-@@ -542,7 +542,7 @@ static struct clk_rcg2 gcc_gp3_clk_src = {
- 		.name = "gcc_gp3_clk_src",
- 		.parent_data = gcc_parent_data_1,
- 		.num_parents = ARRAY_SIZE(gcc_parent_data_1),
--		.ops = &clk_rcg2_ops,
-+		.ops = &clk_rcg2_shared_ops,
- 	},
- };
- 
-@@ -561,7 +561,7 @@ static struct clk_rcg2 gcc_pcie_0_aux_clk_src = {
- 		.name = "gcc_pcie_0_aux_clk_src",
- 		.parent_data = gcc_parent_data_3,
- 		.num_parents = ARRAY_SIZE(gcc_parent_data_3),
--		.ops = &clk_rcg2_ops,
-+		.ops = &clk_rcg2_shared_ops,
- 	},
- };
- 
-@@ -581,7 +581,7 @@ static struct clk_rcg2 gcc_pcie_0_phy_rchng_clk_src = {
- 		.name = "gcc_pcie_0_phy_rchng_clk_src",
- 		.parent_data = gcc_parent_data_0,
- 		.num_parents = ARRAY_SIZE(gcc_parent_data_0),
--		.ops = &clk_rcg2_ops,
-+		.ops = &clk_rcg2_shared_ops,
- 	},
- };
- 
-@@ -600,7 +600,7 @@ static struct clk_rcg2 gcc_pdm2_clk_src = {
- 		.name = "gcc_pdm2_clk_src",
- 		.parent_data = gcc_parent_data_0,
- 		.num_parents = ARRAY_SIZE(gcc_parent_data_0),
--		.ops = &clk_rcg2_ops,
-+		.ops = &clk_rcg2_shared_ops,
- 	},
- };
- 
-@@ -622,7 +622,7 @@ static struct clk_init_data gcc_qupv3_wrap0_s0_clk_src_init = {
- 	.name = "gcc_qupv3_wrap0_s0_clk_src",
- 	.parent_data = gcc_parent_data_0,
- 	.num_parents = ARRAY_SIZE(gcc_parent_data_0),
--	.ops = &clk_rcg2_ops,
-+	.ops = &clk_rcg2_shared_ops,
- };
- 
- static struct clk_rcg2 gcc_qupv3_wrap0_s0_clk_src = {
-@@ -638,7 +638,7 @@ static struct clk_init_data gcc_qupv3_wrap0_s1_clk_src_init = {
- 	.name = "gcc_qupv3_wrap0_s1_clk_src",
- 	.parent_data = gcc_parent_data_0,
- 	.num_parents = ARRAY_SIZE(gcc_parent_data_0),
--	.ops = &clk_rcg2_ops,
-+	.ops = &clk_rcg2_shared_ops,
- };
- 
- static struct clk_rcg2 gcc_qupv3_wrap0_s1_clk_src = {
-@@ -654,7 +654,7 @@ static struct clk_init_data gcc_qupv3_wrap0_s2_clk_src_init = {
- 	.name = "gcc_qupv3_wrap0_s2_clk_src",
- 	.parent_data = gcc_parent_data_0,
- 	.num_parents = ARRAY_SIZE(gcc_parent_data_0),
--	.ops = &clk_rcg2_ops,
-+	.ops = &clk_rcg2_shared_ops,
- };
- 
- static struct clk_rcg2 gcc_qupv3_wrap0_s2_clk_src = {
-@@ -670,7 +670,7 @@ static struct clk_init_data gcc_qupv3_wrap0_s3_clk_src_init = {
- 	.name = "gcc_qupv3_wrap0_s3_clk_src",
- 	.parent_data = gcc_parent_data_0,
- 	.num_parents = ARRAY_SIZE(gcc_parent_data_0),
--	.ops = &clk_rcg2_ops,
-+	.ops = &clk_rcg2_shared_ops,
- };
- 
- static struct clk_rcg2 gcc_qupv3_wrap0_s3_clk_src = {
-@@ -686,7 +686,7 @@ static struct clk_init_data gcc_qupv3_wrap0_s4_clk_src_init = {
- 	.name = "gcc_qupv3_wrap0_s4_clk_src",
- 	.parent_data = gcc_parent_data_0,
- 	.num_parents = ARRAY_SIZE(gcc_parent_data_0),
--	.ops = &clk_rcg2_ops,
-+	.ops = &clk_rcg2_shared_ops,
- };
- 
- static struct clk_rcg2 gcc_qupv3_wrap0_s4_clk_src = {
-@@ -707,7 +707,7 @@ static struct clk_init_data gcc_qupv3_wrap0_s5_clk_src_init = {
- 	.name = "gcc_qupv3_wrap0_s5_clk_src",
- 	.parent_data = gcc_parent_data_0,
- 	.num_parents = ARRAY_SIZE(gcc_parent_data_0),
--	.ops = &clk_rcg2_ops,
-+	.ops = &clk_rcg2_shared_ops,
- };
- 
- static struct clk_rcg2 gcc_qupv3_wrap0_s5_clk_src = {
-@@ -723,7 +723,7 @@ static struct clk_init_data gcc_qupv3_wrap0_s6_clk_src_init = {
- 	.name = "gcc_qupv3_wrap0_s6_clk_src",
- 	.parent_data = gcc_parent_data_0,
- 	.num_parents = ARRAY_SIZE(gcc_parent_data_0),
--	.ops = &clk_rcg2_ops,
-+	.ops = &clk_rcg2_shared_ops,
- };
- 
- static struct clk_rcg2 gcc_qupv3_wrap0_s6_clk_src = {
-@@ -739,7 +739,7 @@ static struct clk_init_data gcc_qupv3_wrap0_s7_clk_src_init = {
- 	.name = "gcc_qupv3_wrap0_s7_clk_src",
- 	.parent_data = gcc_parent_data_0,
- 	.num_parents = ARRAY_SIZE(gcc_parent_data_0),
--	.ops = &clk_rcg2_ops,
-+	.ops = &clk_rcg2_shared_ops,
- };
- 
- static struct clk_rcg2 gcc_qupv3_wrap0_s7_clk_src = {
-@@ -755,7 +755,7 @@ static struct clk_init_data gcc_qupv3_wrap1_s0_clk_src_init = {
- 	.name = "gcc_qupv3_wrap1_s0_clk_src",
- 	.parent_data = gcc_parent_data_0,
- 	.num_parents = ARRAY_SIZE(gcc_parent_data_0),
--	.ops = &clk_rcg2_ops,
-+	.ops = &clk_rcg2_shared_ops,
- };
- 
- static struct clk_rcg2 gcc_qupv3_wrap1_s0_clk_src = {
-@@ -771,7 +771,7 @@ static struct clk_init_data gcc_qupv3_wrap1_s1_clk_src_init = {
- 	.name = "gcc_qupv3_wrap1_s1_clk_src",
- 	.parent_data = gcc_parent_data_0,
- 	.num_parents = ARRAY_SIZE(gcc_parent_data_0),
--	.ops = &clk_rcg2_ops,
-+	.ops = &clk_rcg2_shared_ops,
- };
- 
- static struct clk_rcg2 gcc_qupv3_wrap1_s1_clk_src = {
-@@ -787,7 +787,7 @@ static struct clk_init_data gcc_qupv3_wrap1_s2_clk_src_init = {
- 	.name = "gcc_qupv3_wrap1_s2_clk_src",
- 	.parent_data = gcc_parent_data_0,
- 	.num_parents = ARRAY_SIZE(gcc_parent_data_0),
--	.ops = &clk_rcg2_ops,
-+	.ops = &clk_rcg2_shared_ops,
- };
- 
- static struct clk_rcg2 gcc_qupv3_wrap1_s2_clk_src = {
-@@ -803,7 +803,7 @@ static struct clk_init_data gcc_qupv3_wrap1_s3_clk_src_init = {
- 	.name = "gcc_qupv3_wrap1_s3_clk_src",
- 	.parent_data = gcc_parent_data_0,
- 	.num_parents = ARRAY_SIZE(gcc_parent_data_0),
--	.ops = &clk_rcg2_ops,
-+	.ops = &clk_rcg2_shared_ops,
- };
- 
- static struct clk_rcg2 gcc_qupv3_wrap1_s3_clk_src = {
-@@ -819,7 +819,7 @@ static struct clk_init_data gcc_qupv3_wrap1_s4_clk_src_init = {
- 	.name = "gcc_qupv3_wrap1_s4_clk_src",
- 	.parent_data = gcc_parent_data_0,
- 	.num_parents = ARRAY_SIZE(gcc_parent_data_0),
--	.ops = &clk_rcg2_ops,
-+	.ops = &clk_rcg2_shared_ops,
- };
- 
- static struct clk_rcg2 gcc_qupv3_wrap1_s4_clk_src = {
-@@ -835,7 +835,7 @@ static struct clk_init_data gcc_qupv3_wrap1_s5_clk_src_init = {
- 	.name = "gcc_qupv3_wrap1_s5_clk_src",
- 	.parent_data = gcc_parent_data_0,
- 	.num_parents = ARRAY_SIZE(gcc_parent_data_0),
--	.ops = &clk_rcg2_ops,
-+	.ops = &clk_rcg2_shared_ops,
- };
- 
- static struct clk_rcg2 gcc_qupv3_wrap1_s5_clk_src = {
-@@ -851,7 +851,7 @@ static struct clk_init_data gcc_qupv3_wrap1_s6_clk_src_init = {
- 	.name = "gcc_qupv3_wrap1_s6_clk_src",
- 	.parent_data = gcc_parent_data_0,
- 	.num_parents = ARRAY_SIZE(gcc_parent_data_0),
--	.ops = &clk_rcg2_ops,
-+	.ops = &clk_rcg2_shared_ops,
- };
- 
- static struct clk_rcg2 gcc_qupv3_wrap1_s6_clk_src = {
-@@ -867,7 +867,7 @@ static struct clk_init_data gcc_qupv3_wrap1_s7_clk_src_init = {
- 	.name = "gcc_qupv3_wrap1_s7_clk_src",
- 	.parent_data = gcc_parent_data_0,
- 	.num_parents = ARRAY_SIZE(gcc_parent_data_0),
--	.ops = &clk_rcg2_ops,
-+	.ops = &clk_rcg2_shared_ops,
- };
- 
- static struct clk_rcg2 gcc_qupv3_wrap1_s7_clk_src = {
-@@ -903,7 +903,7 @@ static struct clk_rcg2 gcc_sdcc5_apps_clk_src = {
- 		.name = "gcc_sdcc5_apps_clk_src",
- 		.parent_data = gcc_parent_data_8,
- 		.num_parents = ARRAY_SIZE(gcc_parent_data_8),
--		.ops = &clk_rcg2_ops,
-+		.ops = &clk_rcg2_floor_ops,
- 	},
- };
- 
-@@ -922,7 +922,7 @@ static struct clk_rcg2 gcc_sdcc5_ice_core_clk_src = {
- 		.name = "gcc_sdcc5_ice_core_clk_src",
- 		.parent_data = gcc_parent_data_2,
- 		.num_parents = ARRAY_SIZE(gcc_parent_data_2),
--		.ops = &clk_rcg2_ops,
-+		.ops = &clk_rcg2_floor_ops,
- 	},
- };
- 
-@@ -936,7 +936,7 @@ static struct clk_rcg2 gcc_sm_bus_xo_clk_src = {
- 		.name = "gcc_sm_bus_xo_clk_src",
- 		.parent_data = gcc_parent_data_2,
- 		.num_parents = ARRAY_SIZE(gcc_parent_data_2),
--		.ops = &clk_rcg2_ops,
-+		.ops = &clk_rcg2_shared_ops,
- 	},
- };
- 
-@@ -955,7 +955,7 @@ static struct clk_rcg2 gcc_tsc_clk_src = {
- 		.name = "gcc_tsc_clk_src",
- 		.parent_data = gcc_parent_data_9,
- 		.num_parents = ARRAY_SIZE(gcc_parent_data_9),
--		.ops = &clk_rcg2_ops,
-+		.ops = &clk_rcg2_shared_ops,
- 	},
- };
- 
-@@ -975,7 +975,7 @@ static struct clk_rcg2 gcc_usb30_prim_master_clk_src = {
- 		.name = "gcc_usb30_prim_master_clk_src",
- 		.parent_data = gcc_parent_data_0,
- 		.num_parents = ARRAY_SIZE(gcc_parent_data_0),
--		.ops = &clk_rcg2_ops,
-+		.ops = &clk_rcg2_shared_ops,
- 	},
- };
- 
-@@ -989,7 +989,7 @@ static struct clk_rcg2 gcc_usb30_prim_mock_utmi_clk_src = {
- 		.name = "gcc_usb30_prim_mock_utmi_clk_src",
- 		.parent_data = gcc_parent_data_0,
- 		.num_parents = ARRAY_SIZE(gcc_parent_data_0),
--		.ops = &clk_rcg2_ops,
-+		.ops = &clk_rcg2_shared_ops,
- 	},
- };
- 
-@@ -1003,7 +1003,7 @@ static struct clk_rcg2 gcc_usb3_prim_phy_aux_clk_src = {
- 		.name = "gcc_usb3_prim_phy_aux_clk_src",
- 		.parent_data = gcc_parent_data_3,
- 		.num_parents = ARRAY_SIZE(gcc_parent_data_3),
--		.ops = &clk_rcg2_ops,
-+		.ops = &clk_rcg2_shared_ops,
- 	},
- };
- 
+2) Update for Meson driver - new enum value for 512B ECC and reworked
+   ECC capabilities structure to support both 512B and 1024B ECC. By
+   default this driver uses 1024B ECC, 512B could be enabled in device
+   tree.
+
+Arseniy Krasnov (2):
+  dt-bindings: nand: meson: support for 512B ECC step size
+  mtd: rawnand: meson: support for 512B ECC step size
+
+ .../bindings/mtd/amlogic,meson-nand.yaml      |  3 +-
+ drivers/mtd/nand/raw/meson_nand.c             | 47 ++++++++++++++-----
+ 2 files changed, 37 insertions(+), 13 deletions(-)
+
 -- 
-2.25.1
+2.35.0
 
