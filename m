@@ -2,188 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2C3E741365
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 16:07:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46AEE741366
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 16:07:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232538AbjF1OFp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 10:05:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51868 "EHLO
+        id S232327AbjF1OFi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 10:05:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232318AbjF1OEO (ORCPT
+        with ESMTP id S232336AbjF1OEP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 10:04:14 -0400
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 630EB3A96
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 07:02:27 -0700 (PDT)
-Received: by mail-lf1-x12b.google.com with SMTP id 2adb3069b0e04-4faaaa476a9so6165456e87.2
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 07:02:27 -0700 (PDT)
+        Wed, 28 Jun 2023 10:04:15 -0400
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25D0B3AA4;
+        Wed, 28 Jun 2023 07:02:56 -0700 (PDT)
+Received: by mail-lj1-x232.google.com with SMTP id 38308e7fff4ca-2b69f958ef3so59151791fa.1;
+        Wed, 28 Jun 2023 07:02:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=resnulli-us.20221208.gappssmtp.com; s=20221208; t=1687960945; x=1690552945;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=NeJJDtPNApCUCSNLbnRFD2Juhjv5XOx3haoMLR3t3E0=;
-        b=ZK23Wz5Z8GgdygT07do/GeGr7NCgPtbZJrbEsqK+sYNbzD9dq931xi8plPBr2KO/YC
-         c2ElDHPq2AXJLH8RWwZpB9knsmuQiwkA75793nzLpisqpqvUa59/U20kPPeRdhQAkFFo
-         EcsePNHr4CjPy3GTkqp1HQZS4o+ge1jZitdNMcjjH282ksos55LbhmkEg5xKNUQUAHkW
-         6elrjwozhdUiF5BEcoPrNlp7uOlNgyP51atS4qs5XQofDSmEJm98Sjm1IBUOaK7EQWtK
-         w84yxmQahBhA3t//6ifI1+JN4mdssr5CTku4Y6hA7S2ImLAYmYaBhDJ+IlVLNrGKFrhO
-         3CqQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687960945; x=1690552945;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20221208; t=1687960974; x=1690552974;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=NeJJDtPNApCUCSNLbnRFD2Juhjv5XOx3haoMLR3t3E0=;
-        b=aqJBiK02wI5YcufrFcYsvWsaBAFanyH4kqQxU3u0uB0IIiFnanSpviBeV9GWxZf+Se
-         23e8hLz2z4j0RqhL47zmBwNOG2n7veOYtYSUjolzl8I+FXoBBw9YKwQzOEpAkQ84YSig
-         84DBtaIl1Yr5KJBYE/gi0n31wQSrob0hdoU2Wq+MT0T38m0z33xTfT18fXvrKkFsL9KB
-         a7dv4xwG2huOCCQNGN7XFTLKOzhcCnREEDsbvlEzkTLUQ/jdelp9ekXRM23RMwh+3p+n
-         w7rKeg0NeGd4opOYEUAjCpa5Q4IQUzIR0MdTIec8jbTzAvxxATLteJIRILxuTHUY00j8
-         JqCA==
-X-Gm-Message-State: AC+VfDwlPD7CVVCtyqfNrCoqh3cH63TEZvo/1E4EjnFuAthDEg3pETi0
-        6q2kQISz8tjkg6h66QdXgcdSHA==
-X-Google-Smtp-Source: ACHHUZ5ZxgNTxIxoQXOSx9k7rDEhnxIvqJQLYYOVQL1GcheSfi0K/9HAYhI29JpjcdxZaZ1hTbJv2w==
-X-Received: by 2002:a05:6512:3412:b0:4fb:242:6e00 with SMTP id i18-20020a056512341200b004fb02426e00mr7754216lfr.41.1687960945439;
-        Wed, 28 Jun 2023 07:02:25 -0700 (PDT)
-Received: from localhost (host-213-179-129-39.customer.m-online.net. [213.179.129.39])
-        by smtp.gmail.com with ESMTPSA id k8-20020a7bc408000000b003fba87298cesm4354984wmi.45.2023.06.28.07.02.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Jun 2023 07:02:24 -0700 (PDT)
-Date:   Wed, 28 Jun 2023 16:02:23 +0200
-From:   Jiri Pirko <jiri@resnulli.us>
-To:     Vadim Fedorenko <vadim.fedorenko@linux.dev>
-Cc:     "Kubalewski, Arkadiusz" <arkadiusz.kubalewski@intel.com>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "vadfed@meta.com" <vadfed@meta.com>,
-        "jonathan.lemon@gmail.com" <jonathan.lemon@gmail.com>,
-        "pabeni@redhat.com" <pabeni@redhat.com>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "Brandeburg, Jesse" <jesse.brandeburg@intel.com>,
-        "Nguyen, Anthony L" <anthony.l.nguyen@intel.com>,
-        "M, Saeed" <saeedm@nvidia.com>,
-        "leon@kernel.org" <leon@kernel.org>,
-        "richardcochran@gmail.com" <richardcochran@gmail.com>,
-        "sj@kernel.org" <sj@kernel.org>,
-        "javierm@redhat.com" <javierm@redhat.com>,
-        "ricardo.canuelo@collabora.com" <ricardo.canuelo@collabora.com>,
-        "mst@redhat.com" <mst@redhat.com>,
-        "tzimmermann@suse.de" <tzimmermann@suse.de>,
-        "Michalik, Michal" <michal.michalik@intel.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "jacek.lawrynowicz@linux.intel.com" 
-        <jacek.lawrynowicz@linux.intel.com>,
-        "airlied@redhat.com" <airlied@redhat.com>,
-        "ogabbay@kernel.org" <ogabbay@kernel.org>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "nipun.gupta@amd.com" <nipun.gupta@amd.com>,
-        "axboe@kernel.dk" <axboe@kernel.dk>,
-        "linux@zary.sk" <linux@zary.sk>,
-        "masahiroy@kernel.org" <masahiroy@kernel.org>,
-        "benjamin.tissoires@redhat.com" <benjamin.tissoires@redhat.com>,
-        "geert+renesas@glider.be" <geert+renesas@glider.be>,
-        "Olech, Milena" <milena.olech@intel.com>,
-        "kuniyu@amazon.com" <kuniyu@amazon.com>,
-        "liuhangbin@gmail.com" <liuhangbin@gmail.com>,
-        "hkallweit1@gmail.com" <hkallweit1@gmail.com>,
-        "razor@blackwall.org" <razor@blackwall.org>,
-        "idosch@nvidia.com" <idosch@nvidia.com>,
-        "lucien.xin@gmail.com" <lucien.xin@gmail.com>,
-        "nicolas.dichtel@6wind.com" <nicolas.dichtel@6wind.com>,
-        "phil@nwl.cc" <phil@nwl.cc>,
-        "claudiajkang@gmail.com" <claudiajkang@gmail.com>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "intel-wired-lan@lists.osuosl.org" <intel-wired-lan@lists.osuosl.org>,
-        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>, poros <poros@redhat.com>,
-        mschmidt <mschmidt@redhat.com>,
-        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>
-Subject: Re: [RFC PATCH v9 00/10] Create common DPLL configuration API
-Message-ID: <ZJw9b9RQamu0cLN+@nanopsycho>
-References: <20230623123820.42850-1-arkadiusz.kubalewski@intel.com>
- <ZJq3a6rl6dnPMV17@nanopsycho>
- <DM6PR11MB4657084DDD7554663F86C1C19B24A@DM6PR11MB4657.namprd11.prod.outlook.com>
- <DM6PR11MB4657A1ACB586AD9B45C7996E9B24A@DM6PR11MB4657.namprd11.prod.outlook.com>
- <2e9ce197-2732-d061-b11d-4f4513af6abc@linux.dev>
- <ZJwxHucKMwCQMMVM@nanopsycho>
- <4ebfa74e-8998-a1af-e6b9-3701008900ec@linux.dev>
+        bh=9++kyskAcuLSTCdvz4cuOcuwZ+7nEt7UgMySKIzNZkY=;
+        b=bZSr1gisAoHvMUzOjN2iYx4JPE9w+BVuk/wojslN7pMzeSLYX85uI+M/+vom43bFT2
+         c5uSzw0Q/mB5FjHmHh1ClZA4aiB/96Ez8s7t0bdFsLLDlvN7TR7NTkqBne+p9VwW6IRu
+         DK9Wd5tgF2foEFCdPNvr4zcn7JHEW8ChgEhWMdMnkJQjK7bd7Onh3k+O362NwEPUJmcW
+         jVHWq19UY3FVruPHq/L9UhM52jWwcnlWY8qQ7KLHPF2hZogrCmfLYwDHmMXkfJy9Nha8
+         FtFV6c9ZcEMN40q03KAof6TNPxw5e4Nf7ldmgD7eldle0DhWgpTsJwB/q5w6R4qCpjcJ
+         +PuQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687960974; x=1690552974;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=9++kyskAcuLSTCdvz4cuOcuwZ+7nEt7UgMySKIzNZkY=;
+        b=XzMD3SJVUXK3LbTJ0AVwHApGwJCGcUpGEuCyouAj7dvZHN9ftVME81RbiHVohXEZ6q
+         74zROhhJ6BmX7ndxj559HNk/xutLe5/1w+ZPVSxLw3tEsRamUwPIdW3lsNgR3P7bFq42
+         DjwHJa9IVxgY9d3gP2R5bznZ3MX/Yr6+pFusdmoyXAqK/bIlNnLlctReNG9rZ+mw95PK
+         00+/vEXGTOmsWsqxPxPU9XXoM5sG9lKhJh9MMQQHbhbPgyEQ12+diQe13yI/L1ZFQqNZ
+         Uj83rS0pcaqlBuIK1EpytCfzIXHQeralkGx25Lo3bYb/43t67/hWACqcSErQ6udRTk24
+         8Ulw==
+X-Gm-Message-State: AC+VfDy7GRosYv4a/hjbLSwMd4/Z/Tm0rcqCS0Nw1lk9ttucWh/mygNI
+        Zi2agjAUX9H+135e1tX5/3nxzIc5ujnZLSlEgjIXFvXX
+X-Google-Smtp-Source: ACHHUZ68oLVhXjotD3TU0EQBJWaKIPvJRdeVR/ctTiw1P3PXSMIZdlXmsFqY8H46WolZHg3+MW+co0zo2yZ7DRMflXk=
+X-Received: by 2002:a2e:854e:0:b0:2b5:80c9:9806 with SMTP id
+ u14-20020a2e854e000000b002b580c99806mr15449461ljj.6.1687960973954; Wed, 28
+ Jun 2023 07:02:53 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <4ebfa74e-8998-a1af-e6b9-3701008900ec@linux.dev>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20230628011439.159678-1-linux@treblig.org> <9343462e-6a4a-ca7b-03b8-4855e5a33b72@talpey.com>
+ <ZJw4iLlFWRMq6a3S@gallifrey> <ZJw50e0pvn/IN5Gj@gallifrey>
+In-Reply-To: <ZJw50e0pvn/IN5Gj@gallifrey>
+From:   Steve French <smfrench@gmail.com>
+Date:   Wed, 28 Jun 2023 09:02:42 -0500
+Message-ID: <CAH2r5muALCzCujwMZQFpWMtwvv97ZykP-1Wkf3PF4ybkgYNhGw@mail.gmail.com>
+Subject: Re: [PATCH 0/3] dedupe smb unicode files
+To:     "Dr. David Alan Gilbert" <linux@treblig.org>
+Cc:     Tom Talpey <tom@talpey.com>, sfrench@samba.org,
+        linkinjeon@kernel.org, linux-cifs@vger.kernel.org,
+        jfs-discussion@lists.sourceforge.net, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Wed, Jun 28, 2023 at 03:22:00PM CEST, vadim.fedorenko@linux.dev wrote:
->On 28/06/2023 14:09, Jiri Pirko wrote:
->> Wed, Jun 28, 2023 at 01:11:19PM CEST, vadim.fedorenko@linux.dev wrote:
->> > On 28/06/2023 10:27, Kubalewski, Arkadiusz wrote:
->> > > > From: Kubalewski, Arkadiusz
->> > > > Sent: Wednesday, June 28, 2023 11:15 AM
->> > > > 
->> > > > > From: Jiri Pirko <jiri@resnulli.us>
->> > > > > Sent: Tuesday, June 27, 2023 12:18 PM
->> > > > > 
->> > > > > Fri, Jun 23, 2023 at 02:38:10PM CEST, arkadiusz.kubalewski@intel.com
->> > > > wrote:
->> > > > > 
->> > > > > > v8 -> v9:
->> > > > > 
->> > > > > Could you please address all the unresolved issues from v8 and send v10?
->> > > > > I'm not reviewing this one.
->> > > > > 
->> > > > > Thanks!
->> > > > 
->> > > > Sure, will do, but first missing to-do/discuss list:
->> > > > 1) remove mode_set as not used by any driver
->> > > > 2) remove "no-added-value" static functions descriptions in
->> > > >     dpll_core/dpll_netlink
->> > > > 3) merge patches [ 03/10, 04/10, 05/10 ] into patches that are compiling
->> > > >     after each patch apply
->> > > > 4) remove function return values descriptions/lists
->> > > > 5) Fix patch [05/10]:
->> > > >     - status Supported
->> > > >     - additional maintainers
->> > > >     - remove callback:
->> > > >       int (*source_pin_idx_get)(...) from `struct dpll_device_ops`
->> > > > 6) Fix patch [08/10]: rethink ice mutex locking scheme
->> > > > 7) Fix patch [09/10]: multiple comments on
->> > > > https://lore.kernel.org/netdev/ZIQu+%2Fo4J0ZBspVg@nanopsycho/#t
->> > > > 8) add PPS DPLL phase offset to the netlink get-device API
->> > > > 
->> > > > Thank you!
->> > > > Arkadiusz
->> > > 
->> > > If someone has any objections please state them now, I will work on
->> > > all above except 5) and 7).
->> > > Vadim, could you take care of those 2 points?
->> > > 
->> > Yeah, sure, I'll update 5 and 7.
->> > I'm not sure about 8) - do we really need this info, I believe every
->> > supported DPLL device exports PTP device as well. But I'm Ok to add this
->> > feature too.
->> 
->> Could you add the notification work while you are at it? I don't want
->> that to be forgotten. Thanks!
+On Wed, Jun 28, 2023 at 8:56=E2=80=AFAM Dr. David Alan Gilbert
+<linux@treblig.org> wrote:
 >
->Sure, Jiri, I'm working on it for ptp_ocp.
+> * Dr. David Alan Gilbert (dave@treblig.org) wrote:
+> > * Tom Talpey (tom@talpey.com) wrote:
+> > > On 6/27/2023 9:14 PM, linux@treblig.org wrote:
+> > > > From: "Dr. David Alan Gilbert" <linux@treblig.org>
+> > > >
+> > > > The smb client and server code have (mostly) duplicated code
+> > > > for unicode manipulation, in particular upper case handling.
+> > > >
+> > > > Flatten this lot into shared code.
+> > > >
+> > > > There's some code that's slightly different between the two, and
+> > > > I've not attempted to share that - this should be strictly a no
+> > > > behaviour change set.
+> > > >
+> > > > I'd love to also boil out the same code from fs/jfs/ - but that's
+> > > > a thought for another time (and harder since there's no good test
+> > > > for it).
+> > > >
+> > > > Lightly tested with a module and a monolithic build, and just mount=
+ing
+> > > > itself.
+> > > >
+> > > > This dupe was found using PMD:
+> > > >    https://pmd.github.io/pmd/pmd_userdocs_cpd.html
+> > > >
+> > > > Dave
+> > > >
+> > > > Dr. David Alan Gilbert (3):
+> > > >    fs/smb: Remove unicode 'lower' tables
+> > > >    fs/smb: Swing unicode common code from server->common
+> > > >    fs/smb/client: Use common code in client
+> > > >
+> > > >   fs/smb/client/cifs_unicode.c                  |   1 -
+> > > >   fs/smb/client/cifs_unicode.h                  | 313 +------------=
+-----
+> > > >   fs/smb/client/cifs_uniupr.h                   | 239 -------------
+> > > >   fs/smb/common/Makefile                        |   1 +
+> > > >   .../uniupr.h =3D> common/cifs_unicode_common.c} | 156 +--------
+> > > >   fs/smb/common/cifs_unicode_common.h           | 279 +++++++++++++=
++++
+> > >
+> > > So far so good, but please drop the "cifs_" prefix from this new file=
+'s
+> > > name, since its contents apply to later smb dialects as well.
+> >
+> > Sure.
+>
+> Actually, would you be ok with smb_unicode_common ?  The reason is that
+> you end up with a module named unicode_common  that sounds too generic.
 
-Yep, cool!
+Since it is already in the smb/common directory, seems easier to name them:
+smb/common/unicode.c
+or smb/common/smb_unicode.c
 
->
->> > 
->> > > Thank you!
->> > > Arkadiusz
->> > 
->
+--=20
+Thanks,
+
+Steve
