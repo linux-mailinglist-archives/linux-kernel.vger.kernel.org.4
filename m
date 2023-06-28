@@ -2,122 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 631EF740800
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 04:00:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A31EB740803
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 04:00:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230054AbjF1CAj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 22:00:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57540 "EHLO
+        id S230372AbjF1CAn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 22:00:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229622AbjF1CAh (ORCPT
+        with ESMTP id S229763AbjF1CAh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 27 Jun 2023 22:00:37 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1B0DDA
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 19:00:35 -0700 (PDT)
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53D82297C;
+        Tue, 27 Jun 2023 19:00:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687917635; x=1719453635;
+  t=1687917636; x=1719453636;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=eAtorlL9hKbOWTYbIFentcep4Cr94YB9cjfXVwCiIj8=;
-  b=A27rpiNKQHI0dWG+EWcrOxlkJmCTBIgdjg1p8PhMrtnaYBW2ShYtS83G
-   frbT5/1Nx9H0lIMkQDEWE+MN+HUzawYmR+y/uEBmnA4S8XbDz+UwMBtF1
-   mCiXZ3xRrqVsZEfZp0aDivU3LuWqtosxZpYC5J5kmmttWa+EIpdewxi3t
-   pOkAcOCck194sKbLhDQgJWz1pp30TG50tg0eESmyAU/5q8BSUI05OCGzh
-   HKZ+jvOCtk1oUbSudRL28At0eNqIPSLdxRRptYAIyu5Qh4/Ihi4N5k54P
-   jZavJf/wLtHQOUrsC7XNGWmvGjY8qrZ3KAyQSPjhOONiYhzhrKsbuR/Jo
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10754"; a="361768845"
+  bh=Kf4OUq5f8e7JmaiUhbLO6qC90pOxyi/ygia+z/UvdLA=;
+  b=EXxteSgoq2ECGLhSoUD0S/aaTJd8aNVCEh1VvCfjCFqzlY+eWPaFqaFg
+   Okn5c993qTpvya1ioV/X/+LFKHtEjL9uZrKFGu3vlMeEfss8+vGjGsOU6
+   di9dls/rNnhSEHzuR16H3tAcYAxH0GbgqeMfreVWz1s9iksSlFlnbubwT
+   73gRuiKo1YGLEB7A1oD52D0tPv+g6LgO7xbyMGl6p8bKlpPRoBXvwNiIk
+   1GAOuXV/iXpBjYna2Qs4J1rPtyyYCVBP+IaTqS0Qm7lV49ckTtnsxhUAk
+   S83H/MBeU2KndrVYfn8kmzA4YnNPQr9mAn2+ezb7x3aXZXZ0sKFfcUp43
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10754"; a="346489025"
 X-IronPort-AV: E=Sophos;i="6.01,164,1684825200"; 
-   d="scan'208";a="361768845"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2023 19:00:35 -0700
+   d="scan'208";a="346489025"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2023 19:00:35 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10754"; a="694106856"
+X-IronPort-AV: E=McAfee;i="6600,9927,10754"; a="840895500"
 X-IronPort-AV: E=Sophos;i="6.01,164,1684825200"; 
-   d="scan'208";a="694106856"
+   d="scan'208";a="840895500"
 Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 27 Jun 2023 19:00:31 -0700
+  by orsmga004.jf.intel.com with ESMTP; 27 Jun 2023 19:00:31 -0700
 Received: from kbuild by 783282924a45 with local (Exim 4.96)
         (envelope-from <lkp@intel.com>)
-        id 1qEKTu-000CSr-2O;
+        id 1qEKTu-000CSt-2U;
         Wed, 28 Jun 2023 02:00:30 +0000
-Date:   Wed, 28 Jun 2023 10:00:17 +0800
+Date:   Wed, 28 Jun 2023 10:00:18 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     David Hildenbrand <david@redhat.com>, linux-kernel@vger.kernel.org
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        linux-mm@kvack.org, virtualization@lists.linux-foundation.org,
-        David Hildenbrand <david@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Oscar Salvador <osalvador@suse.de>,
-        Michal Hocko <mhocko@suse.com>,
-        Jason Wang <jasowang@redhat.com>,
-        Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-Subject: Re: [PATCH v1 3/5] mm/memory_hotplug: make
- offline_and_remove_memory() timeout instead of failing on fatal signals
-Message-ID: <202306280935.dKTWlHFD-lkp@intel.com>
-References: <20230627112220.229240-4-david@redhat.com>
+To:     Jim Shargo <jshargo@chromium.org>, mairacanal@riseup.net,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@gmail.com>,
+        Haneen Mohammed <hamohammed.sa@gmail.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Melissa Wen <melissa.srw@gmail.com>,
+        Rodrigo Siqueira <rodrigosiqueiramelo@gmail.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>
+Cc:     oe-kbuild-all@lists.linux.dev, Jim Shargo <jshargo@chromium.org>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-doc@vger.kernel.org
+Subject: Re: [PATCH v2 4/6] drm/vkms: Add ConfigFS scaffolding to VKMS
+Message-ID: <202306280759.b1BQCTXw-lkp@intel.com>
+References: <20230623222353.97283-5-jshargo@chromium.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230627112220.229240-4-david@redhat.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230623222353.97283-5-jshargo@chromium.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi David,
+Hi Jim,
 
 kernel test robot noticed the following build warnings:
 
-[auto build test WARNING on 6995e2de6891c724bfeb2db33d7b87775f913ad1]
+[auto build test WARNING on drm-misc/drm-misc-next]
+[also build test WARNING on drm-intel/for-linux-next next-20230627]
+[cannot apply to drm-intel/for-linux-next-fixes drm-tip/drm-tip linus/master v6.4]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/David-Hildenbrand/mm-memory_hotplug-check-for-fatal-signals-only-in-offline_pages/20230627-192444
-base:   6995e2de6891c724bfeb2db33d7b87775f913ad1
-patch link:    https://lore.kernel.org/r/20230627112220.229240-4-david%40redhat.com
-patch subject: [PATCH v1 3/5] mm/memory_hotplug: make offline_and_remove_memory() timeout instead of failing on fatal signals
-config: x86_64-randconfig-x006-20230627 (https://download.01.org/0day-ci/archive/20230628/202306280935.dKTWlHFD-lkp@intel.com/config)
-compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
-reproduce: (https://download.01.org/0day-ci/archive/20230628/202306280935.dKTWlHFD-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Jim-Shargo/drm-vkms-Back-VKMS-with-DRM-memory-management-instead-of-static-objects/20230624-062659
+base:   git://anongit.freedesktop.org/drm/drm-misc drm-misc-next
+patch link:    https://lore.kernel.org/r/20230623222353.97283-5-jshargo%40chromium.org
+patch subject: [PATCH v2 4/6] drm/vkms: Add ConfigFS scaffolding to VKMS
+config: xtensa-randconfig-r052-20230627 (https://download.01.org/0day-ci/archive/20230628/202306280759.b1BQCTXw-lkp@intel.com/config)
+compiler: xtensa-linux-gcc (GCC) 12.3.0
+reproduce: (https://download.01.org/0day-ci/archive/20230628/202306280759.b1BQCTXw-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306280935.dKTWlHFD-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306280759.b1BQCTXw-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
-
->> mm/memory_hotplug.c:163:13: warning: unused variable 'mhp_offlining_timer_active' [-Wunused-variable]
-   static bool mhp_offlining_timer_active;
-               ^
-   mm/memory_hotplug.c:166:13: warning: unused function 'mhp_offline_timer_fn' [-Wunused-function]
-   static void mhp_offline_timer_fn(struct timer_list *unused)
-               ^
-   2 warnings generated.
-
-
-vim +/mhp_offlining_timer_active +163 mm/memory_hotplug.c
-
-   154	
-   155	/*
-   156	 * Protected by the device hotplug lock: offline_and_remove_memory()
-   157	 * will activate a timer such that offlining cannot be stuck forever.
-   158	 *
-   159	 * With an active timer, fatal signals will be ignored, because they can be
-   160	 * counter-productive when dying user space triggers device unplug/driver
-   161	 * unloading that ends up offlining+removing device memory.
-   162	 */
- > 163	static bool mhp_offlining_timer_active;
-   164	static atomic_t mhp_offlining_timer_expired;
-   165	
+cocci warnings: (new ones prefixed by >>)
+>> drivers/gpu/drm/vkms/vkms_drv.c:266:9-16: WARNING: ERR_CAST can be used with pdev
 
 -- 
 0-DAY CI Kernel Test Service
