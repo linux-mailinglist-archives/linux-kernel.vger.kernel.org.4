@@ -2,260 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 781CF7414CF
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 17:22:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BD147414D8
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 17:24:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231267AbjF1PWX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 11:22:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59750 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230311AbjF1PWU (ORCPT
+        id S231379AbjF1PXj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 11:23:39 -0400
+Received: from mx0a-0031df01.pphosted.com ([205.220.168.131]:29278 "EHLO
+        mx0a-0031df01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231246AbjF1PXe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 11:22:20 -0400
-Received: from mail-il1-x130.google.com (mail-il1-x130.google.com [IPv6:2607:f8b0:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2015A268F
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 08:22:18 -0700 (PDT)
-Received: by mail-il1-x130.google.com with SMTP id e9e14a558f8ab-34577a22c7cso5032875ab.0
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 08:22:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20221208.gappssmtp.com; s=20221208; t=1687965737; x=1690557737;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=MvQDQrOqVmgpQjFzLOfLlunva873RcqwEO0Tt7aEIYA=;
-        b=ErWqZdIY1HduXefQcC65bezs3qnpEmO67tbDgV8uJAjCtJ6Yp5sOWaQfS5QSr7yjV0
-         XVJdxzcahXR8bjWVkI1Y9lOuUxo86C1aUJ47OXdFj4KnAT/Z//uoWh0BPXGIHFWnM8eN
-         HprTETcjmTPGsv7DSAGu0g4BiqNgYbO8miVjtrHaUySkpPDTspDWBmS5bjKsCNemofUz
-         N3UvQ7NoxaOu12nWmi9yQgWfd8y5eiFn6dic8zIdvWO1DipUqvX9p29USqXt1QvzHPA6
-         dd6qeavMqzm34ahVv4T0yXaBcYsjptDdub9UvkOvx5Ib56amBf/ysujDrxFc2kqyQcHQ
-         0c3Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687965737; x=1690557737;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=MvQDQrOqVmgpQjFzLOfLlunva873RcqwEO0Tt7aEIYA=;
-        b=YxugVtw5QiQCnv8TbyJ3mCVs7lofBgdu6od1d3fx26ObSDaTY0yszQp2FxwLeRfHHd
-         3QHm+tK8XLxW/n+Qr59bjNFyzd/3u1Z9kOXmtmbsxdbsg01A5id/ac1xfcKWD6PPc31T
-         Imf8f1C5HLitevA5BrFCHc1fp6mDpAB+url6+Jk5cW5JfDhZ8+ba0qfUJK63Q5tBKqbt
-         t8CA1/jjy90pv6r4/J4sez6zArOtATga0m2CzLiZfWanzmya9ECyCVt1zq/klJNVbL/Q
-         FAKCJfRFFNKNEAtKT+fSqx2dJj0trDCY+ifDs0bFpphoFJS0u5lK1OrOzlv2ZM7SXRT0
-         3EKA==
-X-Gm-Message-State: AC+VfDzcQ5BG5RxFxBeX1WCr5k8ULoYskl46UyORon07ywGLq0oYjD55
-        r3A6i4T9jCXFhsxFScIlafcsSA==
-X-Google-Smtp-Source: ACHHUZ4DX7uqUU8CdAqlLRFd7MykWx8/9UOLnCEQFrKqkAOOZdbIXIePCAD28a24zYZXTtOewoBpAQ==
-X-Received: by 2002:a6b:3b06:0:b0:780:cde6:3e22 with SMTP id i6-20020a6b3b06000000b00780cde63e22mr17460149ioa.0.1687965737367;
-        Wed, 28 Jun 2023 08:22:17 -0700 (PDT)
-Received: from [192.168.1.94] ([96.43.243.2])
-        by smtp.gmail.com with ESMTPSA id v20-20020a6b5b14000000b007836c7e8dccsm1522747ioh.17.2023.06.28.08.22.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 28 Jun 2023 08:22:16 -0700 (PDT)
-Message-ID: <03308df9-7a6f-4e55-40c8-6f57c5b67fe6@kernel.dk>
-Date:   Wed, 28 Jun 2023 09:22:15 -0600
+        Wed, 28 Jun 2023 11:23:34 -0400
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35SEboS8032604;
+        Wed, 28 Jun 2023 15:23:12 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=WFkKKkqtyqaZFCoepnWbsAmdxJT8uhDZrVsVu73pAn8=;
+ b=PpDvGt6bBkXi6ENnBU9PxLr4o/Js+whE8hX+6ViJxiBV6iFehCdMer9vAeYtApyD4O0u
+ indt7vGInUxJ74kfAQWsHhpuHBN3e1aRvtCYvXwN02zOzSTl8tIBGn+S8dHRFkjfzcCv
+ maeVF726Ny/hXit72YBtIS4iGG8oHhcfJGsSrFZy9vcpAqEMxMc3z/ccNFWEjpbrsWyq
+ tMiN/hcdY/JIZVzFjgz5zBoP858ZKTup0pCYhlF8ahTLKCZzqO31zYJG0TNPvZnoSU8M
+ 2KIV5DLw0j+me7Q674XP2GyZwfuN861dsi7EClb3h2ZCfBAH0sve8fXtRwf+Ueh8IfI6 sQ== 
+Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rgexthah8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 28 Jun 2023 15:23:11 +0000
+Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
+        by NASANPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35SFNBOM008369
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 28 Jun 2023 15:23:11 GMT
+Received: from [10.216.26.159] (10.80.80.8) by nasanex01c.na.qualcomm.com
+ (10.45.79.139) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Wed, 28 Jun
+ 2023 08:23:01 -0700
+Message-ID: <86c104a6-a685-4d05-08f4-e1be595f9d31@quicinc.com>
+Date:   Wed, 28 Jun 2023 20:52:57 +0530
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [GIT PULL] bcachefs
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v4 02/21] kallsyms: Export kallsyms_lookup_name
 Content-Language: en-US
-From:   Jens Axboe <axboe@kernel.dk>
-To:     Kent Overstreet <kent.overstreet@linux.dev>
-Cc:     torvalds@linux-foundation.org, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-bcachefs@vger.kernel.org,
-        Christoph Hellwig <hch@lst.de>
-References: <20230626214656.hcp4puionmtoloat@moria.home.lan>
- <aeb2690c-4f0a-003d-ba8b-fe06cd4142d1@kernel.dk>
- <20230627000635.43azxbkd2uf3tu6b@moria.home.lan>
- <91e9064b-84e3-1712-0395-b017c7c4a964@kernel.dk>
- <20230627020525.2vqnt2pxhtgiddyv@moria.home.lan>
- <b92ea170-d531-00f3-ca7a-613c05dcbf5f@kernel.dk>
- <23922545-917a-06bd-ec92-ff6aa66118e2@kernel.dk>
- <20230627201524.ool73bps2lre2tsz@moria.home.lan>
- <c06a9e0b-8f3e-4e47-53d0-b4854a98cc44@kernel.dk>
- <20230628040114.oz46icbsjpa4egpp@moria.home.lan>
- <b02657af-5bbb-b46b-cea0-ee89f385f3c1@kernel.dk>
-In-Reply-To: <b02657af-5bbb-b46b-cea0-ee89f385f3c1@kernel.dk>
-Content-Type: text/plain; charset=UTF-8
+To:     Pavan Kondeti <quic_pkondeti@quicinc.com>
+CC:     <corbet@lwn.net>, <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
+        <keescook@chromium.org>, <tony.luck@intel.com>,
+        <gpiccoli@igalia.com>, <mathieu.poirier@linaro.org>,
+        <catalin.marinas@arm.com>, <will@kernel.org>,
+        <linus.walleij@linaro.org>, <andy.shevchenko@gmail.com>,
+        <linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-hardening@vger.kernel.org>,
+        <linux-remoteproc@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-gpio@vger.kernel.org>
+References: <1687955688-20809-1-git-send-email-quic_mojha@quicinc.com>
+ <1687955688-20809-3-git-send-email-quic_mojha@quicinc.com>
+ <a26f22d2-95a7-4143-bff5-45ef0b53b30b@quicinc.com>
+From:   Mukesh Ojha <quic_mojha@quicinc.com>
+In-Reply-To: <a26f22d2-95a7-4143-bff5-45ef0b53b30b@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-        lindbergh.monkeyblade.net
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01c.na.qualcomm.com (10.45.79.139)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: xhyixVggvep4Hpw--p5GRvSXPJDLqlTn
+X-Proofpoint-GUID: xhyixVggvep4Hpw--p5GRvSXPJDLqlTn
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-06-28_10,2023-06-27_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ impostorscore=0 mlxscore=0 mlxlogscore=870 spamscore=0 malwarescore=0
+ bulkscore=0 clxscore=1015 adultscore=0 suspectscore=0 lowpriorityscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2305260000 definitions=main-2306280137
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/28/23 8:58?AM, Jens Axboe wrote:
-> I should have something later today, don't feel like I fully understand
-> all of it just yet.
-
-Might indeed be delayed_fput, just the flush is a bit broken in that it
-races with the worker doing the flush. In any case, with testing that, I
-hit this before I got an umount failure on loop 6 of generic/388:
 
 
-External UUID:                              724c7f1e-fed4-46e8-888a-2d5b170365b7
-Internal UUID:                              4c356134-e573-4aa4-a7b6-c22ab260e0ff
-Device index:                               0
-Label:                                      
-Version:                                    snapshot_trees
-Oldest version on disk:                     snapshot_trees
-Created:                                    Wed Jun 28 09:16:47 2023
-Sequence number:                            0
-Superblock size:                            816
-Clean:                                      0
-Devices:                                    1
-Sections:                                   members
-Features:                                   new_siphash,new_extent_overwrite,btree_ptr_v2,extents_above_btree_updates,btree_updates_journalled,new_varint,journal_no_flush,alloc_v2,extents_across_btree_nodes
-Compat features:                            
+On 6/28/2023 7:23 PM, Pavan Kondeti wrote:
+> On Wed, Jun 28, 2023 at 06:04:29PM +0530, Mukesh Ojha wrote:
+>> Module like minidump providing debugging support will need to
+>> get the symbol information from the core kernel e.g to get
+>> the linux_banner, kernel section addresses bss, data, ro etc.
+>>
+> One might ask why we would need such a debug driver to
+> be compiled as module? What would you do if we need to capture more
+> kernel data structures later? Do you plan to continue use
+> kallsyms_lookup_name() to query all the symbols?
 
-Options:
-  block_size:                               512 B
-  btree_node_size:                          256 KiB
-  errors:                                   continue [ro] panic 
-  metadata_replicas:                        1
-  data_replicas:                            1
-  metadata_replicas_required:               1
-  data_replicas_required:                   1
-  encoded_extent_max:                       64.0 KiB
-  metadata_checksum:                        none [crc32c] crc64 xxhash 
-  data_checksum:                            none [crc32c] crc64 xxhash 
-  compression:                              [none] lz4 gzip zstd 
-  background_compression:                   [none] lz4 gzip zstd 
-  str_hash:                                 crc32c crc64 [siphash] 
-  metadata_target:                          none
-  foreground_target:                        none
-  background_target:                        none
-  promote_target:                           none
-  erasure_code:                             0
-  inodes_32bit:                             1
-  shard_inode_numbers:                      1
-  inodes_use_key_cache:                     1
-  gc_reserve_percent:                       8
-  gc_reserve_bytes:                         0 B
-  root_reserve_percent:                     0
-  wide_macs:                                0
-  acl:                                      1
-  usrquota:                                 0
-  grpquota:                                 0
-  prjquota:                                 0
-  journal_flush_delay:                      1000
-  journal_flush_disabled:                   0
-  journal_reclaim_delay:                    100
-  journal_transaction_names:                1
-  nocow:                                    0
+You are on point, i needed this driver to be static but i don't have
+any example at present to collect more than just _linux_banner_ from
+my existing set of patches..
 
-members (size 64):
-  Device:                                   0
-    UUID:                                   dea79b51-ed22-4f11-9cb9-2117240419df
-    Size:                                   20.0 GiB
-    Bucket size:                            256 KiB
-    First bucket:                           0
-    Buckets:                                81920
-    Last mount:                             (never)
-    State:                                  rw
-    Label:                                  (none)
-    Data allowed:                           journal,btree,user
-    Has data:                               (none)
-    Discard:                                0
-    Freespace initialized:                  0
-initializing new filesystem
-going read-write
-initializing freespace
-mounted version=snapshot_trees
-seed = 1687442369
-seed = 1687347478
-seed = 1687934778
-seed = 1687706987
-seed = 1687173946
-seed = 1687488122
-seed = 1687828133
-seed = 1687316163
-seed = 1687511704
-seed = 1687772088
-seed = 1688057713
-seed = 1687321139
-seed = 1687166901
-seed = 1687602318
-seed = 1687659981
-seed = 1687457702
-seed = 1688000542
-seed = 1687221947
-seed = 1687740111
-seed = 1688083754
-seed = 1687314115
-seed = 1687189436
-seed = 1687664679
-seed = 1687631074
-seed = 1687691080
-seed = 1688089920
-seed = 1687962494
-seed = 1687646206
-seed = 1687636790
-seed = 1687442248
-seed = 1687532669
-seed = 1687436103
-seed = 1687626640
-seed = 1687594091
-seed = 1687235023
-seed = 1687525509
-seed = 1687766818
-seed = 1688040782
-seed = 1687293628
-seed = 1687468804
-seed = 1688129968
-seed = 1687176698
-seed = 1687603782
-seed = 1687642709
-seed = 1687844382
-seed = 1687696290
-seed = 1688169221
-_check_generic_filesystem: filesystem on /dev/nvme0n1 is inconsistent
-*** fsck.bcachefs output ***
-fsck from util-linux 2.38.1
-recovering from clean shutdown, journal seq 14642
-journal read done, replaying entries 14642-14642
-checking allocations
-starting journal replay, 0 keys
-checking need_discard and freespace btrees
-checking lrus
-checking backpointers to alloc keys
-checking backpointers to extents
-backpointer for missing extent
-  u64s 9 type backpointer 0:7950303232:0 len 0 ver 0: bucket=0:15164:0 btree=extents l=0 offset=0:0 len=88 pos=1342182431:5745:U32_MAX, not fixing
-checking extents to backpointers
-checking alloc to lru refs
-starting fsck
-going read-write
-mounted version=snapshot_trees opts=degraded,fsck,fix_errors,nochanges
-0xaaaafeb6b580g: still has errors
-*** end fsck.bcachefs output
-*** mount output ***
-/dev/vda2 on / type ext4 (rw,relatime,errors=remount-ro)
-devtmpfs on /dev type devtmpfs (rw,relatime,size=8174296k,nr_inodes=2043574,mode=755)
-proc on /proc type proc (rw,nosuid,nodev,noexec,relatime)
-sysfs on /sys type sysfs (rw,nosuid,nodev,noexec,relatime)
-securityfs on /sys/kernel/security type securityfs (rw,nosuid,nodev,noexec,relatime)
-tmpfs on /dev/shm type tmpfs (rw,nosuid,nodev)
-devpts on /dev/pts type devpts (rw,nosuid,noexec,relatime,gid=5,mode=620,ptmxmode=000)
-tmpfs on /run type tmpfs (rw,nosuid,nodev,size=3276876k,nr_inodes=819200,mode=755)
-tmpfs on /run/lock type tmpfs (rw,nosuid,nodev,noexec,relatime,size=5120k)
-cgroup2 on /sys/fs/cgroup type cgroup2 (rw,nosuid,nodev,noexec,relatime,nsdelegate,memory_recursiveprot)
-pstore on /sys/fs/pstore type pstore (rw,nosuid,nodev,noexec,relatime)
-hugetlbfs on /dev/hugepages type hugetlbfs (rw,relatime,pagesize=2M)
-mqueue on /dev/mqueue type mqueue (rw,nosuid,nodev,noexec,relatime)
-debugfs on /sys/kernel/debug type debugfs (rw,nosuid,nodev,noexec,relatime)
-tracefs on /sys/kernel/tracing type tracefs (rw,nosuid,nodev,noexec,relatime)
-configfs on /sys/kernel/config type configfs (rw,nosuid,nodev,noexec,relatime)
-fusectl on /sys/fs/fuse/connections type fusectl (rw,nosuid,nodev,noexec,relatime)
-ramfs on /run/credentials/systemd-sysctl.service type ramfs (ro,nosuid,nodev,noexec,relatime,mode=700)
-ramfs on /run/credentials/systemd-sysusers.service type ramfs (ro,nosuid,nodev,noexec,relatime,mode=700)
-ramfs on /run/credentials/systemd-tmpfiles-setup-dev.service type ramfs (ro,nosuid,nodev,noexec,relatime,mode=700)
-/dev/vda1 on /boot/efi type vfat (rw,relatime,fmask=0077,dmask=0077,codepage=437,iocharset=iso8859-1,shortname=mixed,errors=remount-ro)
-ramfs on /run/credentials/systemd-tmpfiles-setup.service type ramfs (ro,nosuid,nodev,noexec,relatime,mode=700)
-*** end mount output
+Agree, it will be easier to make this driver as static instead of
+opening up the doors for modules to abuse via exporting
+kallsyms_lookup_name() and also it will be very slow for production
+kernel uses.
 
--- 
-Jens Axboe
+> 
+> I have seen v3 discussion where you are asked to compile this driver
+> as module but that time there was no reason why your driver needs to
+> be compiled as statically, now you have a reason (linux_banner) for
+> it.
 
+Yes, at present minidump driver will not be able to compile without
+exporting kallsyms_lookup_name()
+
+-Mukesh
+
+> 
+>> commit 0bd476e6c671 ("kallsyms: unexport kallsyms_lookup_name()
+>>   and kallsyms_on_each_symbol()") unexports kallsyms_lookup_name
+>> due to lack of in-tree user of the symbol. Now, that minidump
+>> will one of its user, export it.
+>>
+>> Signed-off-by: Mukesh Ojha <quic_mojha@quicinc.com>
+> 
+> Thanks,
+> Pavan
