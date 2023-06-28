@@ -2,82 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE1BC740C28
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 11:02:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83C2C740BA4
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 10:37:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236565AbjF1JBf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 05:01:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43812 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236030AbjF1In4 (ORCPT
+        id S235464AbjF1IhA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 04:37:00 -0400
+Received: from sonata.ens-lyon.org ([140.77.166.138]:37174 "EHLO
+        sonata.ens-lyon.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233934AbjF1Icx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 04:43:56 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4F7B3C21;
-        Wed, 28 Jun 2023 01:36:52 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Wed, 28 Jun 2023 04:32:53 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by sonata.ens-lyon.org (Postfix) with ESMTP id 522972011A;
+        Wed, 28 Jun 2023 08:07:19 +0200 (CEST)
+Received: from sonata.ens-lyon.org ([127.0.0.1])
+        by localhost (sonata.ens-lyon.org [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id 8P8yQ3a3VF9W; Wed, 28 Jun 2023 08:07:19 +0200 (CEST)
+Received: from begin (unknown [91.151.117.182])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EDE1C612D8;
-        Wed, 28 Jun 2023 06:05:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 79D25C433C8;
-        Wed, 28 Jun 2023 06:05:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687932330;
-        bh=twiHrOPZB7Cgvszl3+g/k/ScexccFFEb5EWUW2A41Fo=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=BioGUNGwScYPlVG94Dmc41pSG0YnmkxnAjq06pLGC6Xor/LlqTzgKYeDb2fjeMbA/
-         FLFShvgCLtmU1zzhBbyRYUhfx/q3jpEOnCgFyAMhViU63W0+oL5/TVd+IOoflXyLvW
-         o9DwjALrw6VSPv+qbEnhgdIF2jfBkqtPMWPKxDAJPwUeAZZZ5+s5JU8lfIa0PHLg3d
-         xX5f/aLJdUko24gqPt2gqdrKEbAZn9ogTBHY3zyPYos5/F3s/NGyXukm33NwESzlix
-         HT7TO0Zz5NovQwWwfEVcfwGbGSF2V67tiaY1NF09bn3sf3r3XND3jE7if5Rz8iZf4k
-         xqiNEnh40EJrw==
-Message-ID: <6232885e-d841-8067-b238-dda6f89f33f2@kernel.org>
-Date:   Wed, 28 Jun 2023 15:05:28 +0900
+        by sonata.ens-lyon.org (Postfix) with ESMTPSA id 39C10200D5;
+        Wed, 28 Jun 2023 08:07:18 +0200 (CEST)
+Received: from samy by begin with local (Exim 4.96)
+        (envelope-from <samuel.thibault@ens-lyon.org>)
+        id 1qEOKi-009kLK-1u;
+        Wed, 28 Jun 2023 08:07:16 +0200
+Date:   Wed, 28 Jun 2023 08:07:16 +0200
+From:   Samuel Thibault <samuel.thibault@ens-lyon.org>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Kees Cook <kees@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Simon Brand <simon.brand@postadigitale.de>,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
+        Dave@mielke.cc
+Subject: Re: [PATCH v3 2/2] tty: Allow TIOCSTI to be disabled
+Message-ID: <20230628060716.vvgtlgbushyjh6km@begin>
+Mail-Followup-To: Samuel Thibault <samuel.thibault@ens-lyon.org>,
+        Kees Cook <keescook@chromium.org>, Kees Cook <kees@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Simon Brand <simon.brand@postadigitale.de>,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
+        Dave@mielke.cc
+References: <20221022182828.give.717-kees@kernel.org>
+ <20221022182949.2684794-2-keescook@chromium.org>
+ <20221227234000.jgosvixx7eahqb3z@begin>
+ <C95AF535-7A95-48BA-8921-1932C15A1931@kernel.org>
+ <20221228205726.rfevry7ud6gmttg5@begin>
+ <20230625155625.s4kvy7m2vw74ow4i@begin>
+ <202306271944.E80E1D0@keescook>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v3] block: add check that partition length needs to be
- aligned with block size
-Content-Language: en-US
-To:     Min Li <min15.li@samsung.com>, axboe@kernel.dk,
-        willy@infradead.org, hch@lst.de, gregkh@linuxfoundation.org
-Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@kernel.org
-References: <CGME20230628051122epcas5p45d70f2c36ce91b60863f702de1534321@epcas5p4.samsung.com>
- <20230628130941.10690-1-min15.li@samsung.com>
-From:   Damien Le Moal <dlemoal@kernel.org>
-Organization: Western Digital Research
-In-Reply-To: <20230628130941.10690-1-min15.li@samsung.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-        lindbergh.monkeyblade.net
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202306271944.E80E1D0@keescook>
+Organization: I am not organized
+User-Agent: NeoMutt/20170609 (1.8.3)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/28/23 22:09, Min Li wrote:
-> Before calling add partition or resize partition, there is no check
-> on whether the length is aligned with the logical block size.
-> If the logical block size of the disk is larger than 512 bytes,
-> then the partition size maybe not the multiple of the logical block size,
-> and when the last sector is read, bio_truncate() will adjust the bio size,
-> resulting in an IO error if the size of the read command is smaller than
-> the logical block size.If integrity data is supported, this will also
-> result in a null pointer dereference when calling bio_integrity_free.
+Kees Cook, le mar. 27 juin 2023 19:48:45 -0700, a ecrit:
+> On Sun, Jun 25, 2023 at 05:56:25PM +0200, Samuel Thibault wrote:
+> > > Can we perhaps just introduce a CAP_TIOCSTI that the brltty daemon would
+> > > be able to use? We could even make it only allow TIOCSTI on the linux
+> > > console (tty->ops == con_ops).
 > 
-> Signed-off-by: Min Li <min15.li@samsung.com>
+> Does brltty run with CAP_SYS_ADMIN?
 
-Reviewed-by: Damien Le Moal <dlemoal@kernel.org>
+ATM most often, yes, though we are trying to reduce the CAP_* privileges
+to what it actually needs.
 
+> > *Please* comment on this so we can progress. ATM people are
+> > advising each other to set dev.tty.legacy_tiocsti=1, which is just
+> > counter-productive in terms of security...
+> 
+> So is there really no solution for brltty and TIOCSTI being disabled?
 
--- 
-Damien Le Moal
-Western Digital Research
+No, there is no way to simulate characters on the Linux console. The
+alternative would be to use uinput, but that simulates keycodes, not
+characters, thus requiring backtranslating first, which is very fragile.
 
+> What is FreeBSD doing? I imagine it's the same situation there too,
+> though maybe there is just no support?
+
+There is just no support in the kernel, only a patch against "screen".
+
+> > Really, this a serious regression for the people affected by this.
+> 
+> Can you send a patch adding a CAP_SYS_ADMIN exception?
+
+Sure!
+
+Samuel
