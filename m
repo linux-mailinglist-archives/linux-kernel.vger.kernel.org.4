@@ -2,74 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E2C57416EA
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 19:03:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C10FE7416E9
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 19:03:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231395AbjF1RDh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 13:03:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42054 "EHLO
+        id S231919AbjF1RDp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 13:03:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229975AbjF1RDe (ORCPT
+        with ESMTP id S229975AbjF1RDn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 13:03:34 -0400
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EA8B1BD5
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 10:03:33 -0700 (PDT)
-Received: by mail-lf1-x12c.google.com with SMTP id 2adb3069b0e04-4fb94b1423eso1166361e87.1
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 10:03:33 -0700 (PDT)
+        Wed, 28 Jun 2023 13:03:43 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EE451BD5;
+        Wed, 28 Jun 2023 10:03:42 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id 98e67ed59e1d1-2633b669f5fso745455a91.2;
+        Wed, 28 Jun 2023 10:03:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sifive.com; s=google; t=1687971811; x=1690563811;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1fGniKrnRVqiskki+vMFs5QmWoxWcrUy88Xnd4dtv6E=;
-        b=UVR8HYdK9gFstICmY4hAkepr0QKxMKfOXwIhsNDGim9/jjneMNoGUKuh3t5n7laOBp
-         98wea9zROg8nb/7ZIrwfNifWqxofTMNzvvd0NQDsxf5rGU3Iz0FwyQ8THq3cLB79bRmt
-         jIeRJhjwn8Yn9BwkKcX6v9sKJ1ggN+WO/SEh4oDq/2ZleU+of05aCoazBHAgI0nCPOVb
-         fyiAAjRcdMdX46BfAWosXPvHaLIDJz1wbqO5Ye5W9vwoU9KUXjQXm0qT9JQGWe5d3lpE
-         6lTH94fx+GY7QDRXBFFs6agFadAmy1GMr/OueUfknMBIY6659OlXC7eF9w3SlP16RU70
-         rXMw==
+        d=gmail.com; s=20221208; t=1687971822; x=1690563822;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=7X1MQ2jmu23RjDWRI9rJrkgFC/BK54cuNgKhdsqxLjU=;
+        b=Z4gRdDg6dloZgXdyBlbQ+lpXAXWHb1k80IPgfN9UMMgQCqed2mr22Cl4qi0bhnMi/l
+         3EApUeRENd7MeS/DHRiHUYlP4pwF2n7dsv/6g+wVobHTErIwwbTesDTfKEppPHP7Yq3U
+         /WtUmZLwH9EvJCz8afkSBL0xnNdGcBAzINSZu2ZZpLhrHS4pRr/wo9Q0u5/h59P1n+yo
+         2Ldt9IV/DUKU8T/ylQeMhLLhx0FkWOGKih54m1bxGZ53T3pC+yVN8kEQtFHS1akyjXJD
+         cO7+P1cYD+gB8cBpZb+tXyLp5f2Ajopkyr3j5vw7fXGVvsbl+ifpiqCFg0DlP0G+9zB2
+         5UTw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687971811; x=1690563811;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=1fGniKrnRVqiskki+vMFs5QmWoxWcrUy88Xnd4dtv6E=;
-        b=f/4epvipzlADJ6Uj97kQ3IEPfNYNYI2WBOi7fVDRTIgZZaek9PyKVIm1HtKPmly7fe
-         yLESLu0ugvC0nvQNX7dWfy4ckPXldeAoaq4Q/9agV4ElI10spF+VQimb1BMuwmqvLmIH
-         Ec6w1tgMGV/XAXcsRau3Khg4nklZoVbg4QLmUcZe5YjStx3vOqcowB5sXV47dbyySvVt
-         HXJX0MTDWaKYEx7yoZZ1ksvG95A/uRtfQzVdEKxc8UljQEgokppqVdqnqLNhe/oB8nEq
-         gK5Zj7yMrKLdKfQp2E2220BCA53cH9/O3zHyFYoDnEjlWV6R8fkAc4gwVXfyOtALu289
-         BiKQ==
-X-Gm-Message-State: AC+VfDzQo7v9gRwPXh+rvNgyXrfH8ABLSkGE5b1YGokCbH51Khd4p7aI
-        UXxdYc877cB1305RXik2QU+btz5Qjfp5Poq8wxRKnAy5w75JU4+BzWc71w==
-X-Google-Smtp-Source: ACHHUZ5J1P85vLM25PblVSGE1F5G9PmOIFlymdbV93aCEGjSE0olGYNnab2Irx0SdIHbinxXdEqWJZdBltfet/iGYLo=
-X-Received: by 2002:a05:6512:3ec:b0:4fa:fc12:2bdd with SMTP id
- n12-20020a05651203ec00b004fafc122bddmr6092614lfq.40.1687971811374; Wed, 28
- Jun 2023 10:03:31 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1687971822; x=1690563822;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=7X1MQ2jmu23RjDWRI9rJrkgFC/BK54cuNgKhdsqxLjU=;
+        b=GWYFqmGHnxrQCG5WhGc+8bqZcxt1izFhyv9MiADqQhv8Oz+74Pe8MR7iBP34Mdv0la
+         ZVSS098IdzxdY/OfQBIYSQ9FtT+U1cov5fGQ9RKqbXq1y5Nyz9pILR+P/pDOld1oXHrh
+         5IQiW9/0N08LO7GUe1ZsExjdn0Fx8jnj9ngwmEvvzqDGCX8e07a2MhX3EUj6QmFFIBAn
+         rOb/mJf3uLby0UXEUcE75Jn6rR4MU8Zu7F2Tw1V2qy0X+J0Z49AxeZZb9Ck3BB6C4UhZ
+         cqgOHuNwdJiZnDIRw12FQ9x3wjuY47he3iGSDOUidgi0TYHy5+rh+T3lNsW1xL8EW2rK
+         SW+g==
+X-Gm-Message-State: AC+VfDzykJWhK1fPjmxqbq+90W4UIKT5bXWrer/ay0PuT3qspq0/iSNI
+        8PNU6fP5+Q2yIDnpOf5dqKY=
+X-Google-Smtp-Source: ACHHUZ4woOfcDRZoR6fRC0mD8qdnmXF08MYeIWpnENA+znOobZQnQkaxXVwF8L8R3yHfioJB/vJABw==
+X-Received: by 2002:a17:90a:3d82:b0:263:41ae:8163 with SMTP id i2-20020a17090a3d8200b0026341ae8163mr1765697pjc.12.1687971821556;
+        Wed, 28 Jun 2023 10:03:41 -0700 (PDT)
+Received: from localhost ([192.55.54.50])
+        by smtp.gmail.com with ESMTPSA id u18-20020a170902e81200b001b016313b27sm2082416plg.88.2023.06.28.10.03.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 28 Jun 2023 10:03:40 -0700 (PDT)
+Date:   Wed, 28 Jun 2023 10:03:39 -0700
+From:   Isaku Yamahata <isaku.yamahata@gmail.com>
+To:     Yuan Yao <yuan.yao@linux.intel.com>
+Cc:     isaku.yamahata@intel.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, isaku.yamahata@gmail.com,
+        Paolo Bonzini <pbonzini@redhat.com>, erdemaktas@google.com,
+        Sean Christopherson <seanjc@google.com>,
+        Sagi Shahar <sagis@google.com>,
+        David Matlack <dmatlack@google.com>,
+        Kai Huang <kai.huang@intel.com>,
+        Zhi Wang <zhi.wang.linux@gmail.com>, chen.bo@intel.com,
+        linux-coco@lists.linux.dev,
+        Chao Peng <chao.p.peng@linux.intel.com>,
+        Ackerley Tng <ackerleytng@google.com>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Michael Roth <michael.roth@amd.com>
+Subject: Re: [RFC PATCH v2 5/6] KVM: Add flags to struct kvm_gfn_range
+Message-ID: <20230628170339.GE3436214@ls.amr.corp.intel.com>
+References: <cover.1687474039.git.isaku.yamahata@intel.com>
+ <689da77417c2f4055f02a71aab51ff603bc195af.1687474039.git.isaku.yamahata@intel.com>
+ <20230628064156.pblgvaks4cvulb3g@yy-desk-7060>
 MIME-Version: 1.0
-References: <20230626165736.65927-1-bjorn@kernel.org> <CABgGipWUO6bXQQzMCXxpkv4MYTpH3MUtPHUVe-=VhsZk3HPNMg@mail.gmail.com>
- <87tturnabk.fsf@all.your.base.are.belong.to.us>
-In-Reply-To: <87tturnabk.fsf@all.your.base.are.belong.to.us>
-From:   Andy Chiu <andy.chiu@sifive.com>
-Date:   Thu, 29 Jun 2023 01:03:19 +0800
-Message-ID: <CABgGipUFPv0TOWdz_3LofARZ0DH6H2sSzxBD0t=h2-YhmzC2OQ@mail.gmail.com>
-Subject: Re: [PATCH v2] riscv: Discard vector state on syscalls
-To:     =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
-Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-riscv@lists.infradead.org,
-        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@rivosinc.com>,
-        linux-kernel@vger.kernel.org, linux@rivosinc.com,
-        Palmer Dabbelt <palmer@rivosinc.com>,
-        =?UTF-8?Q?R=C3=A9mi_Denis=2DCourmont?= <remi@remlab.net>,
-        Darius Rad <darius@bluespec.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230628064156.pblgvaks4cvulb3g@yy-desk-7060>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,167 +84,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 28, 2023 at 6:35=E2=80=AFPM Bj=C3=B6rn T=C3=B6pel <bjorn@kernel=
-.org> wrote:
->
-> Andy Chiu <andy.chiu@sifive.com> writes:
->
-> > On Tue, Jun 27, 2023 at 12:57=E2=80=AFAM Bj=C3=B6rn T=C3=B6pel <bjorn@k=
-ernel.org> wrote:
-> >>
-> >> From: Bj=C3=B6rn T=C3=B6pel <bjorn@rivosinc.com>
-> >>
-> >> The RISC-V vector specification states:
-> >>   Executing a system call causes all caller-saved vector registers
-> >>   (v0-v31, vl, vtype) and vstart to become unspecified.
-> >>
-> >> The vector registers are set to all 1s, vill is set (invalid), and the
-> >> vector status is set to Initial.
-> >>
-> >> That way we can prevent userspace from accidentally relying on the
-> >> stated save.
-> >>
-> >> R=C3=A9mi pointed out [1] that writing to the registers might be
-> >> superfluous, and setting vill is sufficient.
-> >>
-> >> Link: https://lore.kernel.org/linux-riscv/12784326.9UPPK3MAeB@basile.r=
-emlab.net/ # [1]
-> >> Suggested-by: Darius Rad <darius@bluespec.com>
-> >> Suggested-by: Palmer Dabbelt <palmer@rivosinc.com>
-> >> Suggested-by: R=C3=A9mi Denis-Courmont <remi@remlab.net>
-> >> Signed-off-by: Bj=C3=B6rn T=C3=B6pel <bjorn@rivosinc.com>
-> >> ---
-> >> v1->v2:
-> >>   Proper register restore for initial state (Andy)
-> >>   Set registers to 1s, and not 0s (Darius)
-> >> ---
-> >>  arch/riscv/include/asm/vector.h | 42 ++++++++++++++++++++++++++++++--=
--
-> >>  arch/riscv/kernel/traps.c       |  2 ++
-> >>  2 files changed, 41 insertions(+), 3 deletions(-)
-> >>
-> >> diff --git a/arch/riscv/include/asm/vector.h b/arch/riscv/include/asm/=
-vector.h
-> >> index 04c0b07bf6cd..93d702d9988c 100644
-> >> --- a/arch/riscv/include/asm/vector.h
-> >> +++ b/arch/riscv/include/asm/vector.h
-> >> @@ -139,14 +139,49 @@ static inline void riscv_v_vstate_save(struct ta=
-sk_struct *task,
-> >>         }
-> >>  }
-> >>
-> >> +static inline void __riscv_v_vstate_discard(void)
-> >> +{
-> >> +       unsigned long vl, vtype_inval =3D 1UL << (BITS_PER_LONG - 1);
-> >> +
-> >> +       riscv_v_enable();
-> >> +       asm volatile (
-> >> +               ".option push\n\t"
-> >> +               ".option arch, +v\n\t"
-> >> +               "vsetvli        %0, x0, e8, m8, ta, ma\n\t"
-> >> +               "vmv.v.i        v0, -1\n\t"
-> >> +               "vmv.v.i        v8, -1\n\t"
-> >> +               "vmv.v.i        v16, -1\n\t"
-> >> +               "vmv.v.i        v24, -1\n\t"
-> >> +               "vsetvl         %0, x0, %1\n\t"
-> >> +               ".option pop\n\t"
-> >> +               : "=3D&r" (vl) : "r" (vtype_inval) : "memory");
-> >> +       riscv_v_disable();
-> >> +}
-> >> +
-> >> +static inline void riscv_v_vstate_discard(struct pt_regs *regs)
-> >> +{
-> >> +       if (!riscv_v_vstate_query(regs))
-> >> +               return;
-> >> +
-> >> +       __riscv_v_vstate_discard();
-> >> +       riscv_v_vstate_on(regs);
-> >> +}
-> >> +
-> >>  static inline void riscv_v_vstate_restore(struct task_struct *task,
-> >>                                           struct pt_regs *regs)
-> >>  {
-> >> -       if ((regs->status & SR_VS) !=3D SR_VS_OFF) {
-> >> -               struct __riscv_v_ext_state *vstate =3D &task->thread.v=
-state;
-> >> -
-> >> +       struct __riscv_v_ext_state *vstate =3D &task->thread.vstate;
-> >> +       unsigned long status =3D regs->status & SR_VS;
-> >> +
-> >> +       switch (status) {
-> >> +       case SR_VS_INITIAL:
-> >> +               __riscv_v_vstate_discard();
-> >> +               break;
-> >> +       case SR_VS_CLEAN:
-> >> +       case SR_VS_DIRTY:
-> >>                 __riscv_v_vstate_restore(vstate, vstate->datap);
-> >>                 __riscv_v_vstate_clean(regs);
-> >> +               break;
-> >>         }
-> >>  }
-> >>
-> >> @@ -178,6 +213,7 @@ static inline bool riscv_v_vstate_ctrl_user_allowe=
-d(void) { return false; }
-> >>  #define __switch_to_vector(__prev, __next)     do {} while (0)
-> >>  #define riscv_v_vstate_off(regs)               do {} while (0)
-> >>  #define riscv_v_vstate_on(regs)                        do {} while (0=
-)
-> >> +#define riscv_v_vstate_discard(regs)           do {} while (0)
-> >>
-> >>  #endif /* CONFIG_RISCV_ISA_V */
-> >>
-> >> diff --git a/arch/riscv/kernel/traps.c b/arch/riscv/kernel/traps.c
-> >> index 5158961ea977..5ff63a784a6d 100644
-> >> --- a/arch/riscv/kernel/traps.c
-> >> +++ b/arch/riscv/kernel/traps.c
-> >> @@ -296,6 +296,8 @@ asmlinkage __visible __trap_section void do_trap_e=
-call_u(struct pt_regs *regs)
-> >>                 regs->epc +=3D 4;
-> >>                 regs->orig_a0 =3D regs->a0;
-> >>
-> >> +               riscv_v_vstate_discard(regs);
-> >> +
-> >>                 syscall =3D syscall_enter_from_user_mode(regs, syscall=
-);
-> >>
-> >>                 if (syscall < NR_syscalls)
-> >>
-> >> base-commit: 488833ccdcac118da16701f4ee0673b20ba47fe3
-> >> --
-> >> 2.39.2
-> >>
+On Wed, Jun 28, 2023 at 02:41:56PM +0800,
+Yuan Yao <yuan.yao@linux.intel.com> wrote:
+
+> On Thu, Jun 22, 2023 at 04:16:29PM -0700, isaku.yamahata@intel.com wrote:
+> > From: Isaku Yamahata <isaku.yamahata@intel.com>
 > >
-> > Hi, the above part looks good to me. In the context of kernel-mode
-> > vector, it would also be good to just discard V-context at the syscall
-> > entry. So the kernel can freely use Vector if needed. I will rebase my
-> > work on top of yours.
->
-> Ok!
->
-> > Another part that just came into my mind is the one for ptrace. Do we
-> > need to disallow, or immediately return all -1 if the tracee process
-> > is in the syscall path? It seems that we are likely to get stale
-> > values on datap if a tracee is being traced during a syscall.
->
-> Hmm, could you elaborate a bit on when the tracer would get stale regs?
+> > Add flags to strut kvm_gfn_range to indicate who triggered the callback
+> > and new memory attributes.
+> >
+> > TDX needs to know the reason for a callback by kvm_unmap_gfn_range().  mmu
+> > notifier, set memory attributes ioctl or KVM gmem callback.  With TDX,
+> > zapping a private page from the encrypted page table and adding the page
+> > back to the same private GPA results in zeroing the page, and the guest has
+> > to accept the page again.  On the change of memory attribute from private
+> 
+> Is this part used to explains why on MMU notifier only shared pages should
+> be zapped ?
 
-Yep, consider that our tracer process attaches to a tracee with
-PTRACE_SYSCALL. Then, the tracee will let the tracer to inspect it
-whenever it makes a syscall. The tracer wants to inspect V-registers
-at these PTRACE_SYSCALL stops. Assume the tracee context switches out
-before being inspected (Sadly I didn't find this part in the code, so
-maybe I was wrong). Now, we set all V-regs to -1 and VS to 'On'
-entering a syscall. However, -1 will not be saved into datap, which
-the tracer copies from, because riscv_v_vstate_save() only saves
-whenever VS is 'Dirty'. We intentionally want this because it saves
-unnecessary context saves. As a result, what we will get with REGSET_V
-will not reflect the latest one, and what we set will get lost since
-VS=3D'ON' restores V to -1.
+Right for TDX.
 
-Since we are planning to discard V registers on syscall, does it make
-sense to also make ptrace aware of this? Or, just leave it as-it
-because reading/writing V register at syscall is not meaningful
-already.
+> > to shared, zapping the GPA range irrespective to private-or-shared and
+> > expecting the fault doesn't work for TDX.  Instead, zap shared pages only
+> > and keep the private pages.  Concretely
+> 
+> Do you mean:
+> 
+> On the change of memory attribute, zapping the GPA range irrespective to
+> private-or-shared and expecting that the EPT mapping for attribute converts
+> to doesn't exist at the time of changing the attribute, zap the "from"
+> attribute range only and ignore the "to" attribute.
 
-Thanks,
-Andy
+That's what I meant. The requirement seems specific to TDX.
+I'll update this patch following the suggestion by Sean. [1]
+
+[1] https://lore.kernel.org/all/ZJX0hk+KpQP0KUyB@google.com/
+-- 
+Isaku Yamahata <isaku.yamahata@gmail.com>
