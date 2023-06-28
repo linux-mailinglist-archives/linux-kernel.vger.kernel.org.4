@@ -2,244 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B3B17419CD
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 22:40:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EFEC7419CE
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 22:41:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231502AbjF1Uj2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 16:39:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37100 "EHLO
+        id S232084AbjF1UlS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 16:41:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232223AbjF1Uiq (ORCPT
+        with ESMTP id S231767AbjF1UlB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 16:38:46 -0400
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9FE32D54
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 13:36:40 -0700 (PDT)
-Received: by mail-pf1-x436.google.com with SMTP id d2e1a72fcca58-666683eb028so157445b3a.0
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 13:36:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1687984600; x=1690576600;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=FTd9gs+JLXNSUN9G5qmFwQT5UBGhyuUIDz3ia4Gn7nk=;
-        b=GPy0Zf6gjV4znmNrJ1uBnnE0LvBnybeQ1VjgDHwQPY9pQVO6/fVUBkUcT4X+n5ZfLX
-         hRQOO671JUQStKch9ipzQpLyLpbSsGljyL4pdK2TiPGy2XOiPhanu4Ef0GUfz7Z9kF+p
-         hUsMCS8Gt9BC23RH13wgHBzwftfJ7L4/Z0Q3U=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687984600; x=1690576600;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=FTd9gs+JLXNSUN9G5qmFwQT5UBGhyuUIDz3ia4Gn7nk=;
-        b=WUs+dFGHLk+IRKqGcu90n1nWoCZvzwAo8J/7qBzTtI/7/isc1grmddKyirX7pNH1xG
-         nS306K2Dd5C/3xjYrLGJfYT43JGXw1IYTkE6Oowls2/e3pRhHewJ2CR3lHYQy3BHpJe3
-         YPLTCjLKFWCdLNXrOoFr0DqCLI070BKA2jTy4Ezij4YxmH6FKSr0OsomldaXs/0iOtXH
-         A8ZebHGFQ3fYl7ODkQFIps9KfH93A3uZMaNYAeggCF/HoGW7qdJEz7Fv4fTB9RYcaL4F
-         H6dxhSQPnJsCEOaE9CCTNqI5wuC0mx/scVPEEiP8JeUWjnBfj4z7FakVBZBxEeTyn4I6
-         TPxA==
-X-Gm-Message-State: AC+VfDzQPSHexnvX0s+pkkZAb2sj/8Pyj0BUSvY4bPYJ8H/a6uEYhB+u
-        Ufe7wkzKpa1Mq2IggMSvHeOtTg==
-X-Google-Smtp-Source: ACHHUZ5JSbI0ce1k8EZnnUwzRJCg/C5b0Pk7W1P4b4v1+xpCWmFrgeIE5+NVstSZtJr6q2KkuC/hvQ==
-X-Received: by 2002:a05:6a20:144a:b0:122:d1c3:59e9 with SMTP id a10-20020a056a20144a00b00122d1c359e9mr21993643pzi.1.1687984600238;
-        Wed, 28 Jun 2023 13:36:40 -0700 (PDT)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id x48-20020a056a000bf000b0064d32771fa8sm2814288pfu.134.2023.06.28.13.36.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Jun 2023 13:36:39 -0700 (PDT)
-Date:   Wed, 28 Jun 2023 13:36:38 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
-Cc:     aacraid@microsemi.com, "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org
-Subject: Re: [PATCH 08/10][next] scsi: aacraid: Replace one-element array
- with flexible-array member in struct sgmap
-Message-ID: <202306281311.3A69CB64@keescook>
-References: <cover.1687974498.git.gustavoars@kernel.org>
- <0c7402fe6448186cda5a2618a35eb5f8d1cbb313.1687974498.git.gustavoars@kernel.org>
+        Wed, 28 Jun 2023 16:41:01 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AD501FF7;
+        Wed, 28 Jun 2023 13:39:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=Q74U9h5cJqAF7kQMrqejEwYKPbZZwynJrbUyaN3UMdk=; b=U7ven3j1n/AGEZHnBs70CiAm3c
+        IFp7vZgZH+yI7tHPmRDhAxOv2CZ4gCjKF9xF4GFFql17CQMcuZsdavKL+gcE2vidJElANCkN/8Nlp
+        2Wi1Mxv7uQu7+LMDHIpCxsmPRFaciMupyA2OtLGyMmPZK3R+wiSQCLj3z19/8StnPgL1++XOAQOS8
+        Zm4KNBKwkc32cbwqyYjVZpp4wAMQtDJfxRPhUH2DlnwKFk6ZmIYyfJj7mDbnGRbWIgDUIo8M72um9
+        gTIhGZf2TIGG6gfoSjXoe3/DZawyJWKyubvPt63WJDlpJBmXc+ZlzlbsSKsW657uHq2vLD9F7d0vU
+        ffz4ertQ==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1qEbvl-004CII-F8; Wed, 28 Jun 2023 20:38:25 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 317E33002C5;
+        Wed, 28 Jun 2023 22:38:23 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 18B8C214D80C3; Wed, 28 Jun 2023 22:38:23 +0200 (CEST)
+Date:   Wed, 28 Jun 2023 22:38:23 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Kai Huang <kai.huang@intel.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-mm@kvack.org, x86@kernel.org, dave.hansen@intel.com,
+        kirill.shutemov@linux.intel.com, tony.luck@intel.com,
+        tglx@linutronix.de, bp@alien8.de, mingo@redhat.com, hpa@zytor.com,
+        seanjc@google.com, pbonzini@redhat.com, david@redhat.com,
+        dan.j.williams@intel.com, rafael.j.wysocki@intel.com,
+        ashok.raj@intel.com, reinette.chatre@intel.com,
+        len.brown@intel.com, ak@linux.intel.com, isaku.yamahata@intel.com,
+        ying.huang@intel.com, chao.gao@intel.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com, nik.borisov@suse.com,
+        bagasdotme@gmail.com, sagis@google.com, imammedo@redhat.com
+Subject: Re: [PATCH v12 20/22] x86/virt/tdx: Allow SEAMCALL to handle #UD and
+ #GP
+Message-ID: <20230628203823.GR38236@hirez.programming.kicks-ass.net>
+References: <cover.1687784645.git.kai.huang@intel.com>
+ <c124550719716f1f7759c2bdea70f4722d8e0167.1687784645.git.kai.huang@intel.com>
+ <20230628152900.GI2438817@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <0c7402fe6448186cda5a2618a35eb5f8d1cbb313.1687974498.git.gustavoars@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230628152900.GI2438817@hirez.programming.kicks-ass.net>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 28, 2023 at 11:57:13AM -0600, Gustavo A. R. Silva wrote:
-> Replace one-element array with flexible-array member in struct
-> sgmap and refactor the rest of the code, accordingly.
+On Wed, Jun 28, 2023 at 05:29:01PM +0200, Peter Zijlstra wrote:
+> On Tue, Jun 27, 2023 at 02:12:50AM +1200, Kai Huang wrote:
+> > diff --git a/arch/x86/virt/vmx/tdx/tdxcall.S b/arch/x86/virt/vmx/tdx/tdxcall.S
+> > index 49a54356ae99..757b0c34be10 100644
+> > --- a/arch/x86/virt/vmx/tdx/tdxcall.S
+> > +++ b/arch/x86/virt/vmx/tdx/tdxcall.S
+> > @@ -1,6 +1,7 @@
+> >  /* SPDX-License-Identifier: GPL-2.0 */
+> >  #include <asm/asm-offsets.h>
+> >  #include <asm/tdx.h>
+> > +#include <asm/asm.h>
+> >  
+> >  /*
+> >   * TDCALL and SEAMCALL are supported in Binutils >= 2.36.
+> > @@ -45,6 +46,7 @@
+> >  	/* Leave input param 2 in RDX */
+> >  
+> >  	.if \host
+> > +1:
+> >  	seamcall
 > 
-> Issue found with the help of Coccinelle and audited and fixed,
-> manually.
+> So what registers are actually clobbered by SEAMCALL ? There's a
+> distinct lack of it in SDM Vol.2 instruction list :-(
 
-This change _does_ have binary output differences, although it looks
-like you got most of them. I still see:
+With the exception of the abomination that is TDH.VP.ENTER all SEAMCALLs
+seem to be limited to the set presented here (c,d,8,9,10,11) and all
+other registers should be available.
 
-commsup.o:
--       mov    $0x40,%edx
-+       mov    $0x38,%edx
+Can we please make that a hard requirement, SEAMCALL must not use
+registers outside this? We can hardly program to random future
+extentions; we need hard ABI guarantees here.
 
-This appears to be the sizeof() here:
+That also means we should be able to use si,di for the cmovc below.
 
-        ret = aac_fib_send(ScsiPortCommand64, fibptr, sizeof(struct aac_srb),
-                                FsaNormal, 1, 1, NULL, NULL);
+Kirill, back when we did __tdx_hypercall() we got bp removed as a valid
+register, the 1.0 spec still lists that, and it is also listed in
+TDH.VP.ENTER, I'm assuming it will be removed there too?
 
-struct aac_srb includes struct sgmap. I think this needs to explicitly
-include the 1 sgmap, which seems to be sent in the fibptr:
+bp must not be used -- it violates the pre-existing calling convention.
 
-        srbcmd = (struct aac_srb *)fib_data(fibptr);
-	...
-        sg64 = (struct sgmap64 *)&srbcmd->sg;
-        sg64->count = cpu_to_le32(1);
-
-i.e. "sending 1". This seems to fix it:
-
--       ret = aac_fib_send(ScsiPortCommand64, fibptr, sizeof(struct aac_srb),
-+       ret = aac_fib_send(ScsiPortCommand64, fibptr,
-+                               struct_size(srbcmd, sg.sg, 1),
-
-Then I see changes in both aac_write_block() and aac_scsi_32(), but they
-match the changes you made to get the correct size (it's just an easier
-calculation for the compiler to perform, so the code is slightly
-simplified).
-
-So I think with the hunk I suggested at the start, and a comment on the
-(expected) binary changes, this should be good to go.
-
--Kees
-
-> Link: https://github.com/KSPP/linux/issues/79
-> Link: https://github.com/ClangBuiltLinux/linux/issues/1851
-> Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
-> ---
->  drivers/scsi/aacraid/aachba.c   | 24 ++++++++++--------------
->  drivers/scsi/aacraid/aacraid.h  |  2 +-
->  drivers/scsi/aacraid/commctrl.c |  4 ++--
->  drivers/scsi/aacraid/comminit.c |  3 +--
->  4 files changed, 14 insertions(+), 19 deletions(-)
-> 
-> diff --git a/drivers/scsi/aacraid/aachba.c b/drivers/scsi/aacraid/aachba.c
-> index 03ba974f6b2a..b2849e5cc104 100644
-> --- a/drivers/scsi/aacraid/aachba.c
-> +++ b/drivers/scsi/aacraid/aachba.c
-> @@ -1336,8 +1336,7 @@ static int aac_read_block(struct fib * fib, struct scsi_cmnd * cmd, u64 lba, u32
->  	if (ret < 0)
->  		return ret;
->  	fibsize = sizeof(struct aac_read) +
-> -			((le32_to_cpu(readcmd->sg.count) - 1) *
-> -			 sizeof (struct sgentry));
-> +		  le32_to_cpu(readcmd->sg.count) * sizeof(struct sgentry);
->  	BUG_ON (fibsize > (fib->dev->max_fib_size -
->  				sizeof(struct aac_fibhdr)));
->  	/*
-> @@ -1471,8 +1470,7 @@ static int aac_write_block(struct fib * fib, struct scsi_cmnd * cmd, u64 lba, u3
->  	if (ret < 0)
->  		return ret;
->  	fibsize = sizeof(struct aac_write) +
-> -		((le32_to_cpu(writecmd->sg.count) - 1) *
-> -		 sizeof (struct sgentry));
-> +		  le32_to_cpu(writecmd->sg.count) * sizeof(struct sgentry);
->  	BUG_ON (fibsize > (fib->dev->max_fib_size -
->  				sizeof(struct aac_fibhdr)));
->  	/*
-> @@ -1590,9 +1588,9 @@ static int aac_scsi_64(struct fib * fib, struct scsi_cmnd * cmd)
->  	/*
->  	 *	Build Scatter/Gather list
->  	 */
-> -	fibsize = sizeof (struct aac_srb) - sizeof (struct sgentry) +
-> -		((le32_to_cpu(srbcmd->sg.count) & 0xff) *
-> -		 sizeof (struct sgentry64));
-> +	fibsize = sizeof(struct aac_srb) +
-> +		  (le32_to_cpu(srbcmd->sg.count) & 0xff) *
-> +		  sizeof(struct sgentry64);
->  	BUG_ON (fibsize > (fib->dev->max_fib_size -
->  				sizeof(struct aac_fibhdr)));
->  
-> @@ -1621,9 +1619,9 @@ static int aac_scsi_32(struct fib * fib, struct scsi_cmnd * cmd)
->  	/*
->  	 *	Build Scatter/Gather list
->  	 */
-> -	fibsize = sizeof (struct aac_srb) +
-> -		(((le32_to_cpu(srbcmd->sg.count) & 0xff) - 1) *
-> -		 sizeof (struct sgentry));
-> +	fibsize = sizeof(struct aac_srb) +
-> +		  (le32_to_cpu(srbcmd->sg.count) & 0xff) *
-> +		  sizeof(struct sgentry);
->  	BUG_ON (fibsize > (fib->dev->max_fib_size -
->  				sizeof(struct aac_fibhdr)));
->  
-> @@ -1691,8 +1689,7 @@ static int aac_send_safw_bmic_cmd(struct aac_dev *dev,
->  	fibptr->hw_fib_va->header.XferState &=
->  		~cpu_to_le32(FastResponseCapable);
->  
-> -	fibsize  = sizeof(struct aac_srb) - sizeof(struct sgentry) +
-> -						sizeof(struct sgentry64);
-> +	fibsize  = sizeof(struct aac_srb) + sizeof(struct sgentry64);
->  
->  	/* allocate DMA buffer for response */
->  	addr = dma_map_single(&dev->pdev->dev, xfer_buf, xfer_len,
-> @@ -2264,8 +2261,7 @@ int aac_get_adapter_info(struct aac_dev* dev)
->  		dev->a_ops.adapter_bounds = aac_bounds_32;
->  		dev->scsi_host_ptr->sg_tablesize = (dev->max_fib_size -
->  			sizeof(struct aac_fibhdr) -
-> -			sizeof(struct aac_write) + sizeof(struct sgentry)) /
-> -				sizeof(struct sgentry);
-> +			sizeof(struct aac_write)) / sizeof(struct sgentry);
->  		if (dev->dac_support) {
->  			dev->a_ops.adapter_read = aac_read_block64;
->  			dev->a_ops.adapter_write = aac_write_block64;
-> diff --git a/drivers/scsi/aacraid/aacraid.h b/drivers/scsi/aacraid/aacraid.h
-> index 94eb83d38be6..3fbc22ae72b6 100644
-> --- a/drivers/scsi/aacraid/aacraid.h
-> +++ b/drivers/scsi/aacraid/aacraid.h
-> @@ -507,7 +507,7 @@ struct sge_ieee1212 {
->  
->  struct sgmap {
->  	__le32		count;
-> -	struct sgentry	sg[1];
-> +	struct sgentry	sg[];
->  };
->  
->  struct user_sgmap {
-> diff --git a/drivers/scsi/aacraid/commctrl.c b/drivers/scsi/aacraid/commctrl.c
-> index e7cc927ed952..df811ad4afaa 100644
-> --- a/drivers/scsi/aacraid/commctrl.c
-> +++ b/drivers/scsi/aacraid/commctrl.c
-> @@ -561,8 +561,8 @@ static int aac_send_raw_srb(struct aac_dev* dev, void __user * arg)
->  		rcode = -EINVAL;
->  		goto cleanup;
->  	}
-> -	actual_fibsize = sizeof(struct aac_srb) - sizeof(struct sgentry) +
-> -		((user_srbcmd->sg.count & 0xff) * sizeof(struct sgentry));
-> +	actual_fibsize = sizeof(struct aac_srb) +
-> +		(user_srbcmd->sg.count & 0xff) * sizeof(struct sgentry);
->  	actual_fibsize64 = actual_fibsize + (user_srbcmd->sg.count & 0xff) *
->  	  (sizeof(struct sgentry64) - sizeof(struct sgentry));
->  	/* User made a mistake - should not continue */
-> diff --git a/drivers/scsi/aacraid/comminit.c b/drivers/scsi/aacraid/comminit.c
-> index bd99c5492b7d..d8dd89c87b01 100644
-> --- a/drivers/scsi/aacraid/comminit.c
-> +++ b/drivers/scsi/aacraid/comminit.c
-> @@ -523,8 +523,7 @@ struct aac_dev *aac_init_adapter(struct aac_dev *dev)
->  	dev->max_fib_size = sizeof(struct hw_fib);
->  	dev->sg_tablesize = host->sg_tablesize = (dev->max_fib_size
->  		- sizeof(struct aac_fibhdr)
-> -		- sizeof(struct aac_write) + sizeof(struct sgentry))
-> -			/ sizeof(struct sgentry);
-> +		- sizeof(struct aac_write)) / sizeof(struct sgentry);
->  	dev->comm_interface = AAC_COMM_PRODUCER;
->  	dev->raw_io_interface = dev->raw_io_64 = 0;
->  
-> -- 
-> 2.34.1
-> 
-
--- 
-Kees Cook
