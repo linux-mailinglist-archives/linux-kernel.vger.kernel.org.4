@@ -2,295 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2EA07413E1
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 16:34:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BD6D7413E5
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 16:36:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231398AbjF1Ocv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 10:32:51 -0400
-Received: from mx0b-0031df01.pphosted.com ([205.220.180.131]:11160 "EHLO
-        mx0b-0031df01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231127AbjF1Ocl (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 10:32:41 -0400
-Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35SBEeoH026308;
-        Wed, 28 Jun 2023 14:32:24 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=W7WnL8mgHuMiFaub7gEfEGkF/nZF/hE5lIKpRJEdEjY=;
- b=gKRjO4/6SGMS8/6q6UZiww5JA600Q14Ao08rtvNKK2jkQ3uxHoSMOF8CiEDubvnfbNRF
- vx9fh8EJ7pVird/8mFFxShypEZgjoQi/OenLd8kBk72KRHrT1dTU7KUPg8pdOzMvDoT7
- Vyp2btEbHNScPTmXNB0F913cQ2LiQcqbKUvFmjGoBAc+XGEjS7UAf2NLZoupkPoezvfU
- kbKyf7+aKf1c+Lb9a1AxXje9e7/BzVMJzd6rwQ8j46aZAA/xHlHKnZPJEBZG+Vg18LCI
- 2vll5l4Ae/pmgxGcw5V6/t3hH4Kk+zhqMQwq0KgsebvEXUXuYu19KqfGtbrAIHvCYiBv dw== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rgemk15dp-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 28 Jun 2023 14:32:24 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35SEWMCj000945
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 28 Jun 2023 14:32:22 GMT
-Received: from [10.226.59.182] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.7; Wed, 28 Jun
- 2023 07:32:14 -0700
-Message-ID: <c3a6a217-dc5c-4814-1d32-c951f2f92495@quicinc.com>
-Date:   Wed, 28 Jun 2023 08:32:13 -0600
+        id S231236AbjF1Og2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 10:36:28 -0400
+Received: from mail-dm6nam11on2082.outbound.protection.outlook.com ([40.107.223.82]:18529
+        "EHLO NAM11-DM6-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S229982AbjF1Og0 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 28 Jun 2023 10:36:26 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=KIJ3DZ1K6bjfmG5nVDsCQwFmapiYo27wsObqr/jF7/XRoA/E2YLmWVupT0K8nHpxPmW3n12QI49krUDJm9IIANWZQKWgsWg/lKhtCNF+W4TKKYFQB5+VzvEa5pB8JRRYRtxo12m7+i1SJntKf62K34M0kvGtRi6mh1K8eOXas0BFanwhArdEfASuqmnv8mS7eWw5gkBNxcJ1N5hVtHTxhc3ZvDaIwye0fQ7kvnySYCZKfn7w/xhWK/1yoq+gRCdkmfcj4aV/nBahIMykCVXSKz2wOhlsWOSfcU8nfY9mXF+K5plVakMfGchLN7H/7zxVwL+XXMEfwQyamkm32G+8mg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=lFfjemtMirrQRE5ivZ91TRSFNdM287fw150rYEYiYcc=;
+ b=guzphXtnqoz+ZgFq3iRgtgTOZw3pKwIpoNt5S9eKvdasMEYRiGmKn3TQbYIf8tXf+DV5mNXMO3wi5jKcPjQrSC5ZZ0Z2Y+nTlj9ugFvh5zSb3eAbLUS6c3wEodeMk5Yq2llkTNhJ2zqC9XE+SOXNpOV71yXaM83/Pvsz5cqc32E+kBWa3ioKQDbCHc0uLVTm2r9NS7dbTYtkrD99UQwlLCYFc8/q6qj5FDqcWaMNdPkJy4GsHxfcaOz+UYwHLlARY+jWIKs8TnP8EH5b6az699zhkIK7S7Ck8kDdqnX8NsYfEjgHOvmcHh38U/4xNlWDGjOk3qgNbpvljSGUeL7Iyg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=lFfjemtMirrQRE5ivZ91TRSFNdM287fw150rYEYiYcc=;
+ b=oz8hIBpFK+mcIJBbPSjlk/Y2uNsWpv3bLg2Kmqa6teO+cFmasksmz83q1Uwu8hzB2sp9v5O+eY8Pzl7Br53vrJPwvaimg4aDw/HlOAAWqlhF9lSeV1JZjsHjGg9IcRqXXqGO4jSqMWUfZA9mAWyhhD3Cn/KuQCD2lCC6zCfCc0BghURUvK9U9Q4Sm3Or/MXvtgAAnXhYBolyi8SzWkVSZtfu7glpsds4sxy5pt1QfJiY5pgC8d+vaRlklRYesfEP0jdqcNQ85J8slHC2PD042ZQRJ2Fi5OZ0cGatHnalqFOeN9St2EoEyKsSVMttl8QJU8WZrr4lJq/4Fz6R70toPw==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
+ by DM6PR12MB4483.namprd12.prod.outlook.com (2603:10b6:5:2a2::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.26; Wed, 28 Jun
+ 2023 14:36:24 +0000
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::f7a7:a561:87e9:5fab]) by LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::f7a7:a561:87e9:5fab%7]) with mapi id 15.20.6521.024; Wed, 28 Jun 2023
+ 14:36:24 +0000
+Date:   Wed, 28 Jun 2023 11:36:22 -0300
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     Zenghui Yu <yuzenghui@huawei.com>
+Cc:     Lu Baolu <baolu.lu@linux.intel.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Kevin Tian <kevin.tian@intel.com>,
+        linux-kernel@vger.kernel.org, iommu@lists.linux.dev
+Subject: Re: [RESEND PATCH v8 04/11] bus: platform, amba, fsl-mc, PCI: Add
+ device DMA ownership management
+Message-ID: <ZJxFZkxvPNj74uQe@nvidia.com>
+References: <20220418005000.897664-1-baolu.lu@linux.intel.com>
+ <20220418005000.897664-5-baolu.lu@linux.intel.com>
+ <6472f254-c3c4-8610-4a37-8d9dfdd54ce8@huawei.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <6472f254-c3c4-8610-4a37-8d9dfdd54ce8@huawei.com>
+X-ClientProxiedBy: MN2PR01CA0002.prod.exchangelabs.com (2603:10b6:208:10c::15)
+ To LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.0
-Subject: Re: [PATCH v12 00/10] (no cover subject)
-Content-Language: en-US
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Niklas Cassel <nks@flawful.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>
-CC:     Robert Marko <robimarko@gmail.com>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-pm@vger.kernel.org>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>
-References: <20230217-topic-cpr3h-v12-0-1a4d050e1e67@linaro.org>
-From:   Jeffrey Hugo <quic_jhugo@quicinc.com>
-In-Reply-To: <20230217-topic-cpr3h-v12-0-1a4d050e1e67@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: 7VLS1VKQlhiTuDoTyXT8FpSL2LgcIDiN
-X-Proofpoint-ORIG-GUID: 7VLS1VKQlhiTuDoTyXT8FpSL2LgcIDiN
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-06-28_10,2023-06-27_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 adultscore=0
- phishscore=0 clxscore=1011 lowpriorityscore=0 suspectscore=0
- mlxlogscore=999 impostorscore=0 priorityscore=1501 mlxscore=0 spamscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2305260000 definitions=main-2306280129
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|DM6PR12MB4483:EE_
+X-MS-Office365-Filtering-Correlation-Id: bd6800b6-633e-44da-1ab7-08db77e50c3a
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: ugUl60xV67A0eSszonH8ZbbdZW7OHYeEC60iDXZEzEfz6DDec7NaGKJSqIQm6jr6lQWqBsYhAUMrquqmmBTIJONbPGS05wI4i4TlGItHqn9wISzgkGBUJJwbcQRt018P265fDuIlHKpf69qNonX0zZ8R98s7r757FoS4givMNUZKvC9H8vQuaWZHTuVkM/WNPleDj6v7SuzNxk4ZyxPPD0Wbq/b4rTvRTuR7ngeJKqMOfdm8xC4wPn8GIiPwCcwMP12xPJWKCiP4HXnRCQ95g0/Xv2Rgw2uDfJWROMxNXFw7xftjeF3n3dVaycLt4YrsswwDwSR79KMU92PC+8kZj8eHaAHk36bEjU5khP0Jcmi/WMCBcw0jvi9XVoy38YuU7/e+6waHeCMTdGaxEQ0LqCr/I7o8F+BOcXj3sXPoPsgHZJxwPxTfrSG0K5v/qSOQuFZ1P5Y2AIEsbx81QZZptbwmqc1D6suxcCwAvqm5fyEE9At3Nam9QXZnp/mtF23npWZIT0jsJa3KZ1Lu5DMt6mGMaJuELIaRGlbhe3M1Fv5rJfDubaQZYRsn9Fc3zPIZ
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(39860400002)(396003)(136003)(376002)(346002)(451199021)(36756003)(6506007)(66476007)(5660300002)(86362001)(316002)(6916009)(4326008)(66556008)(41300700001)(8936002)(38100700002)(66946007)(8676002)(6486002)(6512007)(2906002)(4744005)(186003)(26005)(478600001)(54906003)(2616005);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?3PQO15JMjgbxpAUDoVPs1Ljg/dpFHJtH/ej1xGTI3MDfHdO0X93viKRh1AIH?=
+ =?us-ascii?Q?GOi0ALfV+SnjZpO4xJ0daVrR+J+eu0icMOMoxato6vt7E9qxH4LrNrIqfG+J?=
+ =?us-ascii?Q?IPntQlA7rtMoflOU2zA+wdti7ai5ub5LmSFJL/esYhzcCQOUEm7azM+a57xS?=
+ =?us-ascii?Q?9pTGwemWeCpPQvkFUZpiR/PieWaG6oNsDo7uZSMn5n/ib4cCHHv1P9enti4z?=
+ =?us-ascii?Q?Jzp0C54+k0nnQSCwdijLDgQw2dVszdorPGF4/x7D7O6nsPrMS3+lSnS8eou+?=
+ =?us-ascii?Q?v9P8ebzxT6SvD6WmZeYoCGSC+dH7keu5g63bTrcfN3Zt5xy5Y6gcz3xe/oq4?=
+ =?us-ascii?Q?lT1AYLjdlqbqQUHpixzoBSy6ZLk07SNK5mpMHMwcwLz2vWl9LvtCN5+Ui5Vt?=
+ =?us-ascii?Q?sAe5CTNS5Cw3k5FXz9dIh+n8laZb+KlcKADM5SXcO4VdkLABCajtGH6tmEbD?=
+ =?us-ascii?Q?+ecmN8e/DxR6HCwBKKb1b1xL8IUZ0yWGaM4L55Y2oiWgX6X7bwikYXGeTolw?=
+ =?us-ascii?Q?WdlTrypBsd8R2ChcuFLLe6Md6tOaZ/XiLs2hBx+qvAe8axYmNHqtD0nGP760?=
+ =?us-ascii?Q?Fw/9lEXWdurbv4i7bdQ3QOCP+rEPyLuJiWsEIpjxJLRvPEiMaO2/x8FkpgMr?=
+ =?us-ascii?Q?K7iNJG9jpjIpW36oGidnXQVW6FNdKv9AmZxspX7ur1L7oV7brdH2DUIJ7iGF?=
+ =?us-ascii?Q?GmBUchyf4qvHZyWrMCJNuN2x2/M/uvm/jIJomJPiJ89332uh+kPizf40IPSu?=
+ =?us-ascii?Q?CqKjxdGNKcr6pdYpsQIoXNvE86XbulVNjyyURpKkmA6x9NXj67UG6okNkVgw?=
+ =?us-ascii?Q?OimGBMBBVe5h8FQHgXs/xa9YYi/eDEBUERJ8w+pf+siqg8MWnK7cdEQrbHGy?=
+ =?us-ascii?Q?btiYZsUvh4czFzEYthhWCgBuGtPrV9g1upPATXsEd7UFXrFeA5Uo3pZUbR+H?=
+ =?us-ascii?Q?h2Ji7EDMXpfgh9HB7DuJVaXPF1WBEfnQmmHRai9pUVQ1Sf4FrfbNLl3Acuif?=
+ =?us-ascii?Q?ifxb3pYShxm2c0Hhzgm5clBO49au1jeBI7gvJswdQJ1y9paP+iIr95qSKYzS?=
+ =?us-ascii?Q?hR4pU88XlX3SR33Vy/meEpyvF+ISZakr81p4n4adeEcrHDD+SqFOnhA4sABy?=
+ =?us-ascii?Q?MZf84tBq2tOukmpZi0a34hWwCqlOHjgmqNp/xP9BviL+mHADhDoXraPFp40Q?=
+ =?us-ascii?Q?5X0aZMWw/cFxykFOjx1GkoLFzMxAd0EUuPbMe5lRmD2OcbW6BkA5YlvpwTmB?=
+ =?us-ascii?Q?voLfxHSHmJqmTyJ2ipnS9S+oi65xPc+IWbb31YRNW89CJAW1jFQR8WfO2OYy?=
+ =?us-ascii?Q?vVsP+qm/X7BdUVD74mMhGJ4w5DX+OKI9NxNa6WQPk4qem4peKMKr4oa9LhSQ?=
+ =?us-ascii?Q?71SbX1SJQHzia5euNK+0h50xZ2Nocfybh5tlr+AHzU5mn8UfF1+Cagt0npho?=
+ =?us-ascii?Q?d6vywSeNyH6pwfZL61NTtafdxILr9hZX1JGU/NZ77YHBxjWGf2wbK1Qr3/Bi?=
+ =?us-ascii?Q?aA4r2K5NIzFNamfGwsBqkTFtvAzJx4AeuHSlaDNMtuHX6zENrviunVMO2es4?=
+ =?us-ascii?Q?27hWCekp0y5ktZ/rR1Z4psdTKeSVvFhZG9aWftqG?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: bd6800b6-633e-44da-1ab7-08db77e50c3a
+X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Jun 2023 14:36:24.0821
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: stNyoPnhbXiVQiH8y3YRI2qctvAA6W5Xw0/wHMgL+rO+L3FVuZrBHrQQfBsrrgIP
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4483
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/28/2023 8:00 AM, Konrad Dybcio wrote:
-> Changes in v12:
-> - Add the !independent! patch to block cpufreq-dt from probing on 8998 (it tries
->    to when we attach OPP tables to the CPU nodes)
-> - Include all promised changes to the CPR3 driver from v11 (I managed to
->    send the wrong version of that patch last time around..)
-> - Partially rewrite debugfs code (to make it work and be cleaner)
-> - use FIELD_PREP/GET throughout the driver (managed to squash a bug when
->    exploring that)
-> - Fix and finish the removal of cpr_get_ro_factor() by introducing
->    cpr_thread_desc.ro_scaling_factor_common
-> - Replace underscores in node names with '-'
-> - Fix some formatstring issues that clang apparently doesn't care about
-> - Link to v11: https://lore.kernel.org/r/20230217-topic-cpr3h-v11-0-ba22b4daa5d6@linaro.org
-> 
-> Add support for Core Power Reduction v3, v4 and Hardened
-> 
-> Changes in v11:
-> 
-> CPR COMMON:
-> - split the commonizing patch, make it actually do what it says on the
->    tin..
-> - fix some overflow bugs
-> 
-> CPR3:
-> - fix some overflow bugs
-> - don't assume "lack of qcom,opp-?loop-vadj" means val=0"
-> 
-> CPR BINDINGS:
-> - drop quotes in items
-> - drop clock-names (there's just a single one)
-> - rewrite the description a bit
-> - fix up the example
-> - drop bogus minItems
-> - "acc-syscon" -> "qcom,acc"
-> 
-> DTS:
-> - fix qfprom children so that the bits=<> doesn't overflow reg[size]
-> - drop unrelated changes
-> - place one reg entry per line
-> 
-> Link to v10: https://lore.kernel.org/r/20230217-topic-cpr3h-v10-0-67aed8fdfa61@linaro.org
-> 
-> Changes in v10:
-> - Skip "Let qcom,opp-fuse-level be a 2-long array" (Applied by Viresh)
-> - Use b4 (it may be the first time you're receiving this if git send-email
->    omitted you before..)
-> - +Cc Robert Marko (expressed interest in previous revisions)
-> - Add "Document CPR3 open/closed loop volt adjustment"
-> CPR:
-> - %hhu -> %u (checkpatch)
-> CPR BINDINGS:
-> - Drop QCS404 fuse set (it doesn't use this driver, what did I even think..)
->    but leave the allOf:if: block for expansion (sdm660, msm8996, ipqABCD should
->    follow soon..)
-> - Drop Rob's R-b (as things changed *again*, please take one more look to make
->    sure you're okay with this file, Rob..)
-> 
-> Link to v9:
-> https://lore.kernel.org/linux-arm-msm/20230116093845.72621-1-konrad.dybcio@linaro.org/
-> 
-> Changes in v9:
-> - Restore forgotten MAINTAINERS patch (oops)
-> CPR:
-> - Include the missing header (big oops!)
-> - Fix kconfig dependencies
-> CPR bindings:
-> - Fix cpu reg in example (why didn't dt_binding_check scream at that)
-> - Add newlines between nodes in example
-> - Change opp table node names to opp-table-cpu[04]
-> - Change opp table labels to cpu[04]_opp_table
-> - Change CPRh opp subnode names to opp-N from oppN
-> - Remove some stray newlines
-> - Bring back nvmem-cell-names and add the 8998's set
-> - Allow power-domains for VDDCX_AO voting
-> - Remove Rob's r-b, there's been quite a bit of changes..
-> CPR DT:
-> - Send the correct revision of the patch this time around..
-> OPP bindings:
-> - Add Rob's ack
-> 
-> Link to v8:
-> https://lore.kernel.org/linux-arm-msm/20230110175605.1240188-1-konrad.dybcio@linaro.org/
-> 
-> Changes in v8:
-> - Overtake this series from AGdR
-> - Apply all review comments from v7 except Vladimir's request to
->    not create the include/ header; it will be strictly necessary for
->    OSM-aware cpufreq_hw programming, which this series was more or
->    less created just for..
-> - Drop QCS404 dtsi change, account for not breaking backwards compat
->    in [3/5]
-> - Add type phandle type reference to acc-syscon in [1/5]
-> - Update AGdR's email addresses for maintainer entries
-> - Add [2/5] to make dt_binding_check happy
-> - Separate the CPRh DT addition from cpufreq_hw addition, sort and
->    properly indent new nodes
-> - Drop CPR yaml conversion, that happened in meantime
-> - Reorder the patches to make a bit more sense
-> - Tested again on MSM8998 Xperia XZ Premium (Maple)
-> - I take no responsibility for AGdR's cheeky jokes, only the code!
-> 
-> Link to v7:
-> https://lore.kernel.org/lkml/20210901155735.629282-1-angelogioacchino.delregno@somainline.org/
-> 
-> Changes in v7:
-> - Rebased on linux-next as of 210901
-> - Changed cpr_read_efuse calls to nvmem_cell_read_variable_le_u32,
->    following what was done in commit c77634b9d916
-> 
-> Changes in v6:
-> - Fixes from Bjorn's review
-> - After a conversation with Viresh, it turned out I was abusing the
->    OPP API to pass the APM and MEM-ACC thresholds to qcom-cpufreq-hw,
->    so now the driver is using the genpd created virtual device and
->    passing drvdata instead to stop the abuse
-> - Since the CPR commonization was ignored for more than 6 months,
->    it is now included in the CPRv3/4/h series, as there is no point
->    in commonizing without having this driver
-> - Rebased on v5.13
-> 
-> Changes in v5:
-> - Fixed getting OPP table when not yet installed by the caller
->    of power domain attachment
-> 
-> Changes in v4:
-> - Huge patch series has been split for better reviewability,
->    as suggested by Bjorn
-> 
-> Changes in v3:
-> - Fixed YAML doc issues
-> - Removed unused variables and redundant if branch
-> 
-> Changes in v2:
-> - Implemented dynamic Memory Accelerator corners support, needed
->    by MSM8998
-> - Added MSM8998 Silver/Gold parameters
-> 
-> This commit introduces a new driver, based on the one for cpr v1,
-> to enable support for the newer Qualcomm Core Power Reduction
-> hardware, known downstream as CPR3, CPR4 and CPRh, and support
-> for MSM8998 and SDM630 CPU power reduction.
-> 
-> In these new versions of the hardware, support for various new
-> features was introduced, including voltage reduction for the GPU,
-> security hardening and a new way of controlling CPU DVFS,
-> consisting in internal communication between microcontrollers,
-> specifically the CPR-Hardened and the Operating State Manager.
-> 
-> The CPR v3, v4 and CPRh are present in a broad range of SoCs,
-> from the mid-range to the high end ones including, but not limited
-> to, MSM8953/8996/8998, SDM630/636/660/845.
-> 
-> As to clarify, SDM845 does the CPR/SAW/OSM setup in TZ firmware, but
-> this is limited to the CPU context; despite GPU CPR support being not
-> implemented in this series, it is planned for the future, and some
-> SDM845 need the CPR (in the context of GPU CPR) to be configured from
-> this driver.
-> 
-> It is also planned to add the CPR data for MSM8996, since this driver
-> does support the CPRv4 found on that SoC, but I currently have no time
-> to properly test that on a real device, so I prefer getting this big
-> implementation merged before adding more things on top.
-> 
-> As for MSM8953, we (read: nobody from SoMainline) have no device with
-> this chip: since we are unable to test the cpr data and the entire
-> driver on that one, we currently have no plans to do this addition
-> in the future. This is left to other nice developers: I'm sure that
-> somebody will come up with that, sooner or later
-> 
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> ---
-> AngeloGioacchino Del Regno (8):
->        cpufreq: blacklist MSM8998 in cpufreq-dt-platdev
->        MAINTAINERS: Add entry for Qualcomm CPRv3/v4/Hardened driver
->        dt-bindings: soc: qcom: cpr3: Add bindings for CPR3 driver
->        soc: qcom: cpr: Move common functions to new file
->        soc: qcom: cpr-common: Add support for flat fuse adjustment
->        soc: qcom: cpr-common: Add threads support
->        soc: qcom: Add support for Core Power Reduction v3, v4 and Hardened
->        arm64: dts: qcom: msm8998: Configure CPRh
-> 
-> Konrad Dybcio (2):
->        dt-bindings: opp: v2-qcom-level: Document CPR3 open/closed loop volt adjustment
->        soc: qcom: cpr: Use u64 for frequency
-> 
->   .../devicetree/bindings/opp/opp-v2-qcom-level.yaml |   14 +
->   .../devicetree/bindings/soc/qcom/qcom,cpr3.yaml    |  289 ++
->   MAINTAINERS                                        |    6 +
->   arch/arm64/boot/dts/qcom/msm8998.dtsi              |  757 ++++++
->   drivers/cpufreq/cpufreq-dt-platdev.c               |    1 +
->   drivers/soc/qcom/Kconfig                           |   22 +
->   drivers/soc/qcom/Makefile                          |    2 +
->   drivers/soc/qcom/cpr-common.c                      |  362 +++
->   drivers/soc/qcom/cpr-common.h                      |  109 +
->   drivers/soc/qcom/cpr.c                             |  394 +--
->   drivers/soc/qcom/cpr3.c                            | 2855 ++++++++++++++++++++
->   include/soc/qcom/cpr.h                             |   17 +
->   12 files changed, 4460 insertions(+), 368 deletions(-)
-> ---
-> base-commit: 5c875096d59010cee4e00da1f9c7bdb07a025dc2
-> change-id: 20230217-topic-cpr3h-de232bfb47ec
-> 
-> Best regards,
+On Mon, Jun 26, 2023 at 09:02:40PM +0800, Zenghui Yu wrote:
 
-Tested on the Lenovo Miix 630 (8998).  No issues observed.
+> It looks like on device probe, with DEBUG_TEST_DRIVER_REMOVE,
+> .dma_configure() will be executed *twice* via the
+> really_probe()/re_probe path, and *no* .dma_cleanup() will be executed.
+> The resulting dev::iommu_group::owner_cnt is 2, which will confuse the
+> later iommu_group_dma_owner_claimed() call from VFIO on guest startup.
 
-Tested-by: Jeffrey Hugo <quic_jhugo@quicinc.com>
+Does this work for you?
+
+diff --git a/drivers/base/dd.c b/drivers/base/dd.c
+index 9c09ca5c4ab68e..7145d9b940b14b 100644
+--- a/drivers/base/dd.c
++++ b/drivers/base/dd.c
+@@ -693,6 +693,8 @@ static int really_probe(struct device *dev, struct device_driver *drv)
+ 
+ 		device_remove(dev);
+ 		driver_sysfs_remove(dev);
++		if (dev->bus && dev->bus->dma_cleanup)
++			dev->bus->dma_cleanup(dev);
+ 		device_unbind_cleanup(dev);
+ 
+ 		goto re_probe;
+ 
