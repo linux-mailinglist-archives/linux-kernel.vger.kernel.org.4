@@ -2,134 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DF20741064
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 13:50:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EBAE741076
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 13:54:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231468AbjF1Lum (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 07:50:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37008 "EHLO
+        id S231579AbjF1LyM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 07:54:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230314AbjF1Lui (ORCPT
+        with ESMTP id S231521AbjF1LyD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 07:50:38 -0400
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 948962D58
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 04:50:35 -0700 (PDT)
-Received: by mail-wr1-x42b.google.com with SMTP id ffacd0b85a97d-314090abb67so844866f8f.2
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 04:50:35 -0700 (PDT)
+        Wed, 28 Jun 2023 07:54:03 -0400
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9F332D7F
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 04:54:00 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id 4fb4d7f45d1cf-51d9c71fb4bso3403439a12.2
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 04:54:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687953034; x=1690545034;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=RmI//46qVgwWaxyrm4e1NNaPRXGQ1onr4x9kkX9CbHc=;
-        b=Kv4DaSxKEuJneE0L6S7fY5QoTV3kl3Kn5jlQsSLp4t9tlBgnFMcSYefu3BotPkK8is
-         d33RIGgo128fM+7Zb0lOSA+jj31xzEIBdXuBpkyfwqT4Ffu35sy4VILhBvu1sVlY5Zcd
-         2gdIpS9oSgMa3i/K2ncU2/uK91lOrX415/JtcDKURT9dgREPLAuHxELVxWemgNOin+1k
-         lT2OUEfSIiTvf/Z1HtaLpbtgF3i30iITfEUQg2TwIYLbPFaZXv5e4ewxeiIWcqdq7MTd
-         FdlPQauXg9g7uHjTrJh/7zdPSh6c3SvT9JMLT39ezEg8+a5aDTZEbSqLYFdik7fsicvY
-         DoBA==
+        d=metaspace-dk.20221208.gappssmtp.com; s=20221208; t=1687953239; x=1690545239;
+        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
+         :user-agent:references:from:to:cc:subject:date:message-id:reply-to;
+        bh=zkjLZhOVtTx/BDuXOcpTlp6uLGDZb2tSxiVbZH19B3g=;
+        b=WQbiZHh7jtzFTCFBty1UsvIzGe2BxcSNDw+uRQSl3ABnnlB792WNPxjyxVvqjLwuoZ
+         YithYe7wgk4QhmbwWR5SFFaXZl5b0fTgfkAZI7Z1SJVKwxLyaBW/VdCVIiZ5THFtIxrj
+         hFAd0EtXhwAaX4d7gR7XX+8tiUmxQ1n7lr6reZvgADjrWT6IXYkfYc2vwXIad9TDtrVU
+         8D+AwFWzrrCTrgETWPYH0QKjFHfjpZayUXzKJGiqsLUsJK81TaVnYy0H3HHPhOU1gk0L
+         7Foq87mXRwAf7T4mAWDojd2Zu/JcJoqO4XZdCHMHcNsvOfKxsNtrgLPR25xsclhcF9Ea
+         M03A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687953034; x=1690545034;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=1e100.net; s=20221208; t=1687953239; x=1690545239;
+        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
+         :user-agent:references:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=RmI//46qVgwWaxyrm4e1NNaPRXGQ1onr4x9kkX9CbHc=;
-        b=LpqFI19yO8P1a4Ke+B+PEDgWpfGKfkfr8Yv1WhZsf/A39S5oWVu89jnECJA0IvWkDE
-         +JnzLNW9XXnz+UEDS7XZ/yPBM7we+zXsIC6UR7ViiSvI5ZeVxRAJn0btPI6WaRlMynY8
-         5g2fQG/r2P0yqBQtoQNNK26AQPioarRY5dPcG7BHgqos4MMl53GmkW4aQm6OMmmvKbBX
-         0pslVyaaUVeO+CEiJP+Ndt/0anC1P+CdjPeM3Ka/NMcWjf+0F9kgiF9uYRCnegZk9/Ca
-         JXOHUlDFx2VcBZe45XqteQDeVeYJbTGPDXL4PFCrXDKAOhr/dFXfpwzApkE39nehttnp
-         V3tQ==
-X-Gm-Message-State: AC+VfDyQ0hOFlBjYPqUkVJ2r0HF/4oSqIHVIgtkJdYTdbc/UOPYIwuqi
-        CQP6ZXWMm8c71i0WFBjE6Lk0Rg==
-X-Google-Smtp-Source: ACHHUZ6etkknx/dNH1vqjcH8bRcYPnCPvwMhc97C9X8JRhQQGGPu8ODcyBoYEWU2yajNLMzayh8h0A==
-X-Received: by 2002:a5d:6a4d:0:b0:313:f1a4:4112 with SMTP id t13-20020a5d6a4d000000b00313f1a44112mr6740967wrw.33.1687953034057;
-        Wed, 28 Jun 2023 04:50:34 -0700 (PDT)
-Received: from linaro.org ([62.231.110.100])
-        by smtp.gmail.com with ESMTPSA id z3-20020a5d4c83000000b0030497b3224bsm13075296wrs.64.2023.06.28.04.50.32
+        bh=zkjLZhOVtTx/BDuXOcpTlp6uLGDZb2tSxiVbZH19B3g=;
+        b=YNBxYNxFKpbyzlE6fqHF5rkfeQDKv68jzSvesMctrHzV6DX0jJms9GDzZq2Pg7u4g8
+         AK4bRkfvBtFH77rJrw5hFK+UIa0YSG57wj/Doex3sVfK+c7C696Jca6/XGgjGOLylOQm
+         HlRNdZcfn0asG7LdKaY8AqYNujUeC+djJeUVK79laGvKPqNezB7Lon2SDEJpnt3dUcrm
+         xJqCjoHIfXBSaQhDHdvcDJgVNxDzbvNOFIoXn8mHbpQsc01fGXnycZHtiH/Twjzfg1sD
+         zuwhMBlC7cpTu76kjwWawX/SXipZFUS52YyNkDFkvcczZ/206XYJQF/hCcn7Kke1ISRQ
+         702Q==
+X-Gm-Message-State: AC+VfDzZLlf1oqYt53OC4aWOL6QIZqE8Gv/xbG0/s3bknV6n4NjpOq6w
+        P/SmkB6Co8eYPkDHG6ZMjLYEsBwsfL8orb/h8MY=
+X-Google-Smtp-Source: ACHHUZ5taKhBe+oR9xjBO6iSinRSEEDA5to8FKcrpf8yQrbBjraYeSDrcoXNDCiXfyEp3nD3l5ZfIw==
+X-Received: by 2002:a17:906:684c:b0:98e:4c96:6e1f with SMTP id a12-20020a170906684c00b0098e4c966e1fmr7878594ejs.69.1687953239351;
+        Wed, 28 Jun 2023 04:53:59 -0700 (PDT)
+Received: from localhost ([79.142.230.34])
+        by smtp.gmail.com with ESMTPSA id lo23-20020a170906fa1700b00992579c637bsm1003738ejb.57.2023.06.28.04.53.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Jun 2023 04:50:33 -0700 (PDT)
-Date:   Wed, 28 Jun 2023 14:50:31 +0300
-From:   Abel Vesa <abel.vesa@linaro.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Saravana Kannan <saravanak@google.com>,
-        Bjorn Andersson <andersson@kernel.org>,
-        linux-pm@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arm-msm@vger.kernel.org,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Subject: Re: [RFC PATCH v5 2/4] driver core: Add dev_is_drv_state_synced()
-Message-ID: <ZJweh0MTuSY9jtW9@linaro.org>
-References: <20230621144019.3219858-1-abel.vesa@linaro.org>
- <20230621144019.3219858-3-abel.vesa@linaro.org>
- <2023062103-chevron-sabotage-bf26@gregkh>
+        Wed, 28 Jun 2023 04:53:58 -0700 (PDT)
+References: <20230316145539.300523-1-nmi@metaspace.dk>
+ <ZBQ3sgoN8oX5HXOJ@x1-carbon>
+User-agent: mu4e 1.10.3; emacs 28.2.50
+From:   "Andreas Hindborg (Samsung)" <nmi@metaspace.dk>
+To:     Niklas Cassel <Niklas.Cassel@wdc.com>
+Cc:     "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
+        Hans Holmberg <Hans.Holmberg@wdc.com>,
+        Matias =?utf-8?Q?Bj=C3=B8rling?= <Matias.Bjorling@wdc.com>,
+        Minwoo Im <minwoo.im.dev@gmail.com>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Jens Axboe <axboe@kernel.dk>, Ming Lei <ming.lei@redhat.com>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v3] block: ublk: enable zoned storage support
+Date:   Wed, 28 Jun 2023 13:51:50 +0200
+In-reply-to: <ZBQ3sgoN8oX5HXOJ@x1-carbon>
+Message-ID: <87edlvhkfe.fsf@metaspace.dk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2023062103-chevron-sabotage-bf26@gregkh>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23-06-21 17:22:54, Greg Kroah-Hartman wrote:
-> On Wed, Jun 21, 2023 at 05:40:17PM +0300, Abel Vesa wrote:
-> > This can be used by drivers to figure out if a different device
-> > driver has state synced or not for a specific device.
-> > 
-> > Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
-> > ---
-> >  include/linux/device.h | 14 ++++++++++++++
-> >  1 file changed, 14 insertions(+)
-> > 
-> > diff --git a/include/linux/device.h b/include/linux/device.h
-> > index bae11928ef7e..8f042f04b5d9 100644
-> > --- a/include/linux/device.h
-> > +++ b/include/linux/device.h
-> > @@ -1007,6 +1007,20 @@ static inline int dev_set_drv_sync_state(struct device *dev,
-> >  	return 0;
-> >  }
-> >  
-> > +static inline bool dev_is_drv_state_synced(struct device *dev)
-> > +{
-> > +	bool ret = false;
-> > +
-> > +	if (!dev)
-> > +		return ret;
-> > +
-> > +	device_lock(dev);
-> > +	ret = dev->state_synced;
-> > +	device_unlock(dev);
-> 
-> This lock is "protecting" nothing, given that the value can instantly
-> change after it is read.
 
-Hmm, for some reason I thought it needs to be synchronized with the
-sync state callback being called already. But I just noticed that call
-to the sync state callback is independently locked after state_synced is
-set. So I guess the lock can go away here.
+Niklas Cassel <Niklas.Cassel@wdc.com> writes:
 
-> 
-> Because it can change, how will this function actually show anything
-> relevant?
+> On Thu, Mar 16, 2023 at 03:55:38PM +0100, Andreas Hindborg wrote:
+>> From: Andreas Hindborg <a.hindborg@samsung.com>
+>
+> Hello Andreas,
+>
+>
+> I think that this patch is starting to look very nice!
 
-The only usecase I can think of for this new API is for some driver
-to delay an action until ultimately the driver for a specific device
-gets state synced. So even if the value can change after it has
-been checked, such consumer driver will most likely retry later on.
+Thanks!
 
-Hope that makes sense.
+>
+>
+<snip>
+>> +
+>> +int ublk_report_zones(struct gendisk *disk, sector_t sector,
+>> +		      unsigned int nr_zones, report_zones_cb cb, void *data)
+>> +{
+>> +	unsigned int done_zones = 0;
+>> +	struct ublk_device *ub = disk->private_data;
+>> +	unsigned int zone_size_sectors = disk->queue->limits.chunk_sectors;
+>> +	unsigned int first_zone = sector >> ilog2(zone_size_sectors);
+>> +	struct blk_zone *buffer;
+>> +	size_t buffer_length;
+>> +	unsigned int max_zones_per_request;
+>
+> Nit: I would sort the variables differently.
+>
+> Perhaps:
+>> +	struct ublk_device *ub = disk->private_data;
+>> +	unsigned int zone_size_sectors = disk->queue->limits.chunk_sectors;
+>> +	unsigned int first_zone = sector >> ilog2(zone_size_sectors);
+>> +	unsigned int done_zones = 0;
+>> +	unsigned int max_zones_per_request;
+>> +	struct blk_zone *buffer;
+>> +	size_t buffer_length;
+>
 
-> 
-> thanks,
-> 
-> greg k-h
+Can I ask what is the reasoning behind this? I think they way you
+propose looks better, but are there any rules one can follow for this?
+
+Best regards
+Andreas
