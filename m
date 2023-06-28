@@ -2,98 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5C9874173D
+	by mail.lfdr.de (Postfix) with ESMTP id 6E3B074173C
 	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 19:33:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231134AbjF1RdD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 13:33:03 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:51481 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230425AbjF1Rc7 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 13:32:59 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1687973529;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=J0S2qMu17h8mlXEB7YzGyxzD+O5lnlad32j3R4zdlCU=;
-        b=dR1Tn1bv3hkJfFTjmlgHYyRIsQE2sJbTVqk36WYoxqF+HjofjIe+lfkntJAKXkCyGW/gZe
-        efoUIpD4HnxJvR/dfceeQ2JC0b3XpAqNbahJC2O0mAFvCP7CK7MxD+fpYwf2zuMZr/mTSu
-        1Q579Vw/raHwlZtC/pL/VOvflp48m5E=
-Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com
- [209.85.160.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-315-NjNbOOpCPTaosrWwCRcszw-1; Wed, 28 Jun 2023 13:32:07 -0400
-X-MC-Unique: NjNbOOpCPTaosrWwCRcszw-1
-Received: by mail-qt1-f200.google.com with SMTP id d75a77b69052e-40234d83032so251261cf.1
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 10:32:07 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687973527; x=1690565527;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=J0S2qMu17h8mlXEB7YzGyxzD+O5lnlad32j3R4zdlCU=;
-        b=fgcKoTBljJ6jaILWZnX0xoQ183NAE2hUs3YrNcUIKaOFiyAJtrX4ix86QHkYGWiGTZ
-         lM/7oquofXfLxgLLaSD7zqDCTvczPBtPMd4U8HcNPJx93A0VXZUOsKAX6b0rMqW1LGVE
-         OTYGC0o19IQCW5cdqmvY23nY8Dyy1DLzKHNp8fx/ykP8vlfMiuRZC+GvkuYHZgJGL4ek
-         juswwqNaupVni0H2eXNMM7k7oZOiWZdMoBNPOZoT9oDiuCQ5vNiG5Hd4zA4s/tCLvMQq
-         KAXlYCGDaVhjEpof7dKq+KqUgKpSCEcM5aotQCOZEUWPzZ7Q8fryy2LZ7ZXXjkWgKPrH
-         PdVA==
-X-Gm-Message-State: AC+VfDxP/nc8oHxbZ89+8cUKHKry7EtBEKk629pL/n06iHDyn5FzLfK4
-        q0V7H8yID7xP9gAHfUIIxzaBbUUr0jJstNdE38GcMPEalX55uN/ijo/eIqgCxaOTKRH+OgIGs4x
-        eKGhFnoyaidV4+V73AbAEGXk8
-X-Received: by 2002:a05:622a:1811:b0:3fd:eb2f:8627 with SMTP id t17-20020a05622a181100b003fdeb2f8627mr39939253qtc.6.1687973526685;
-        Wed, 28 Jun 2023 10:32:06 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ7zIbrpeVS1P//ROrLWn98rbJUqVC2cFPhvP6qO+5ZYOuBmYLSEJ8G5hmetYO7hG2lGw3zRQw==
-X-Received: by 2002:a05:622a:1811:b0:3fd:eb2f:8627 with SMTP id t17-20020a05622a181100b003fdeb2f8627mr39939221qtc.6.1687973526431;
-        Wed, 28 Jun 2023 10:32:06 -0700 (PDT)
-Received: from x1n (cpe5c7695f3aee0-cm5c7695f3aede.cpe.net.cable.rogers.com. [99.254.144.39])
-        by smtp.gmail.com with ESMTPSA id l25-20020ac848d9000000b003f7369c7302sm6095196qtr.89.2023.06.28.10.32.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Jun 2023 10:32:06 -0700 (PDT)
-Date:   Wed, 28 Jun 2023 13:32:04 -0400
-From:   Peter Xu <peterx@redhat.com>
-To:     Suren Baghdasaryan <surenb@google.com>
-Cc:     akpm@linux-foundation.org, willy@infradead.org, hannes@cmpxchg.org,
-        mhocko@suse.com, josef@toxicpanda.com, jack@suse.cz,
-        ldufour@linux.ibm.com, laurent.dufour@fr.ibm.com,
-        michel@lespinasse.org, liam.howlett@oracle.com, jglisse@google.com,
-        vbabka@suse.cz, minchan@google.com, dave@stgolabs.net,
-        punit.agrawal@bytedance.com, lstoakes@gmail.com, hdanton@sina.com,
-        apopple@nvidia.com, ying.huang@intel.com, david@redhat.com,
-        yuzhao@google.com, dhowells@redhat.com, hughd@google.com,
-        viro@zeniv.linux.org.uk, brauner@kernel.org,
-        pasha.tatashin@soleen.com, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-team@android.com
-Subject: Re: [PATCH v5 6/6] mm: handle userfaults under VMA lock
-Message-ID: <ZJxulItq9iHi2Uew@x1n>
-References: <20230628172529.744839-1-surenb@google.com>
- <20230628172529.744839-7-surenb@google.com>
+        id S230304AbjF1Rcy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 13:32:54 -0400
+Received: from mga14.intel.com ([192.55.52.115]:21793 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229789AbjF1Rcw (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 28 Jun 2023 13:32:52 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1687973572; x=1719509572;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=dnWzPfExhbshNDPQIUAoulQwTqJcg7XuV88po8XEsGU=;
+  b=ZjwQcnPH9KrcEQ/DsBuQj4fNhZ1hQ5hWv1e6npWzwXh1a5+AlSzjP3yF
+   JyI7iKshAXDpaPln+lWTqakmvh4MwWGwCsrJG3a4e/V0kNcldvrKq99EV
+   BfBg3ssM3NlJPh4jZT81WHLUR5+1OF1VNX8I7sKgp36yGKRPsZJrj7ocX
+   WmCvdnxQvCiLBmd2EjYDJQJy0QIUBfNobM9i8/L2jb0xpxlyTYHBrxB2Y
+   A1DxSA0pNJAvW/CA4WrfJHUfOVUN+tfO2pCj/erqslBY31F9dEsg4X1gH
+   swDnuXX7rzEOn/cjTEyoM6n/L8AC/yP38W5TFYxBSgEoarQeRgAf4GiH9
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10755"; a="361954866"
+X-IronPort-AV: E=Sophos;i="6.01,166,1684825200"; 
+   d="scan'208";a="361954866"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2023 10:32:51 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10755"; a="752344459"
+X-IronPort-AV: E=Sophos;i="6.01,166,1684825200"; 
+   d="scan'208";a="752344459"
+Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 28 Jun 2023 10:32:49 -0700
+Received: from kbuild by 783282924a45 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1qEZ29-000DPL-0O;
+        Wed, 28 Jun 2023 17:32:49 +0000
+Date:   Thu, 29 Jun 2023 01:32:28 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Evan Quan <evan.quan@amd.com>
+Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Alex Deucher <alexander.deucher@amd.com>
+Subject: drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu11/sienna_cichlid_ppt.c:2133
+ sienna_cichlid_update_pcie_parameters() warn: unsigned 'table_member1[0]' is
+ never less than zero.
+Message-ID: <202306290140.jvaRB2DW-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230628172529.744839-7-surenb@google.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 28, 2023 at 10:25:29AM -0700, Suren Baghdasaryan wrote:
-> Enable handle_userfault to operate under VMA lock by releasing VMA lock
-> instead of mmap_lock and retrying. Note that FAULT_FLAG_RETRY_NOWAIT
-> should never be used when handling faults under per-VMA lock protection
-> because that would break the assumption that lock is dropped on retry.
-> 
-> Signed-off-by: Suren Baghdasaryan <surenb@google.com>
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   6aeadf7896bff4ca230702daba8788455e6b866e
+commit: 38e4ced804796c5725e2a52ec3601951552c4a97 drm/amd/pm: conditionally disable pcie lane switching for some sienna_cichlid SKUs
+date:   3 weeks ago
+config: openrisc-randconfig-m041-20230628 (https://download.01.org/0day-ci/archive/20230629/202306290140.jvaRB2DW-lkp@intel.com/config)
+compiler: or1k-linux-gcc (GCC) 12.3.0
+reproduce: (https://download.01.org/0day-ci/archive/20230629/202306290140.jvaRB2DW-lkp@intel.com/reproduce)
 
-Maybe the sanitize_fault_flags() changes suite more in patch 3, but not a
-big deal I guess.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306290140.jvaRB2DW-lkp@intel.com/
 
-Acked-by: Peter Xu <peterx@redhat.com>
+smatch warnings:
+drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu11/sienna_cichlid_ppt.c:2133 sienna_cichlid_update_pcie_parameters() warn: unsigned 'table_member1[0]' is never less than zero.
 
-Thanks!
+vim +2133 drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu11/sienna_cichlid_ppt.c
+
+  2107	
+  2108	static int sienna_cichlid_update_pcie_parameters(struct smu_context *smu,
+  2109						 uint32_t pcie_gen_cap,
+  2110						 uint32_t pcie_width_cap)
+  2111	{
+  2112		struct smu_11_0_dpm_context *dpm_context = smu->smu_dpm.dpm_context;
+  2113		struct smu_11_0_pcie_table *pcie_table = &dpm_context->dpm_tables.pcie_table;
+  2114		uint32_t gen_speed_override, lane_width_override;
+  2115		uint8_t *table_member1, *table_member2;
+  2116		uint32_t min_gen_speed, max_gen_speed;
+  2117		uint32_t min_lane_width, max_lane_width;
+  2118		uint32_t smu_pcie_arg;
+  2119		int ret, i;
+  2120	
+  2121		GET_PPTABLE_MEMBER(PcieGenSpeed, &table_member1);
+  2122		GET_PPTABLE_MEMBER(PcieLaneCount, &table_member2);
+  2123	
+  2124		sienna_cichlid_get_override_pcie_settings(smu,
+  2125							  &gen_speed_override,
+  2126							  &lane_width_override);
+  2127	
+  2128		/* PCIE gen speed override */
+  2129		if (gen_speed_override != 0xff) {
+  2130			min_gen_speed = MIN(pcie_gen_cap, gen_speed_override);
+  2131			max_gen_speed = MIN(pcie_gen_cap, gen_speed_override);
+  2132		} else {
+> 2133			min_gen_speed = MAX(0, table_member1[0]);
+  2134			max_gen_speed = MIN(pcie_gen_cap, table_member1[1]);
+  2135			min_gen_speed = min_gen_speed > max_gen_speed ?
+  2136					max_gen_speed : min_gen_speed;
+  2137		}
+  2138		pcie_table->pcie_gen[0] = min_gen_speed;
+  2139		pcie_table->pcie_gen[1] = max_gen_speed;
+  2140	
+  2141		/* PCIE lane width override */
+  2142		if (lane_width_override != 0xff) {
+  2143			min_lane_width = MIN(pcie_width_cap, lane_width_override);
+  2144			max_lane_width = MIN(pcie_width_cap, lane_width_override);
+  2145		} else {
+  2146			min_lane_width = MAX(1, table_member2[0]);
+  2147			max_lane_width = MIN(pcie_width_cap, table_member2[1]);
+  2148			min_lane_width = min_lane_width > max_lane_width ?
+  2149					 max_lane_width : min_lane_width;
+  2150		}
+  2151		pcie_table->pcie_lane[0] = min_lane_width;
+  2152		pcie_table->pcie_lane[1] = max_lane_width;
+  2153	
+  2154		for (i = 0; i < NUM_LINK_LEVELS; i++) {
+  2155			smu_pcie_arg = (i << 16 |
+  2156					pcie_table->pcie_gen[i] << 8 |
+  2157					pcie_table->pcie_lane[i]);
+  2158	
+  2159			ret = smu_cmn_send_smc_msg_with_param(smu,
+  2160					SMU_MSG_OverridePcieParameters,
+  2161					smu_pcie_arg,
+  2162					NULL);
+  2163			if (ret)
+  2164				return ret;
+  2165		}
+  2166	
+  2167		return 0;
+  2168	}
+  2169	
 
 -- 
-Peter Xu
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
