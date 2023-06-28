@@ -2,302 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C79B740BB4
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 10:39:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81957740B91
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 10:32:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234312AbjF1Ii4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 04:38:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42234 "EHLO
+        id S233963AbjF1Ick (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 04:32:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235234AbjF1Ift (ORCPT
+        with ESMTP id S235221AbjF1IaP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 04:35:49 -0400
-Received: from mail-oo1-xc4a.google.com (mail-oo1-xc4a.google.com [IPv6:2607:f8b0:4864:20::c4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3468F3582
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 01:27:08 -0700 (PDT)
-Received: by mail-oo1-xc4a.google.com with SMTP id 006d021491bc7-56340665b09so2716650eaf.2
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 01:27:08 -0700 (PDT)
+        Wed, 28 Jun 2023 04:30:15 -0400
+Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90EC144AF;
+        Wed, 28 Jun 2023 01:22:53 -0700 (PDT)
+Received: by mail-qt1-x82e.google.com with SMTP id d75a77b69052e-4008d810c28so41011121cf.3;
+        Wed, 28 Jun 2023 01:22:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1687940827; x=1690532827;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=P/PrTNNebDD3ET79IWIr+QJG2wgn5QmJDayPL9+A73A=;
-        b=HgU6PDIaGLI3i9IQDTlFfVp8Tq3qnFFEnHPHIV/6IN3ChvwT+7vqljCmxVTAopTOPx
-         ZyZhwz0qkw1w5pQL05SM+sYKlVqVWYoMTfgCJb20YfVCqVAbM/Qs194aLplgtFKc9VTZ
-         n3AcFDQk6gsUiAnZ25G8NZtYoQ2drUX+Hil92tIFJyG+bsgp4enFYHyRRg7tRo0BUNrq
-         qPSZLe+WsA07DYHM6UR718iLA0Q9TumlE3VuDFWgkcK/G37Pr7CATqjy53T/8HN01HLK
-         18CsOhqu6MGIzRk/rhwv+xZpxe2huEAdbt3eNQdax5ZQ1kH5sFtMmIWnzf+QoGLeCG1N
-         u2uw==
+        d=gmail.com; s=20221208; t=1687940572; x=1690532572;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=AfH/3M1MI/78IiqObqTGPZhCo/6frficXtfBUG01mvM=;
+        b=JG8Ln/xENQUAhg5pM/bBg3Xc2mKBHBbInlZWJjKYqrdi/vhoN7Yc2ac0oMPhRBoJ7W
+         yRfcOFVTKwZitqJhkPKEA6kcwARHC6BtYt+m6FBJLxjhLjnhmxFJ5GzfOSexVyuFqLvm
+         v0pJdJIkobDHoRn190KwAcgmwqS+4cpj+RoEhXO8SZPuEa0ZWgpvQh0VsymIr/GbM91z
+         +J7nDuXydrnaT23ivsHkA+zyHa6Q4ux6lUhspsk1lCaVV8T3zYSjnPjE2rsWEWDs4D5m
+         Yi7VxfWGKXJgD3GJJbXUF9+K6Lrysp57F8Hh54sojCikfABGHG5luxlH6rV1OshMcYUr
+         +Ikw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687940827; x=1690532827;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=P/PrTNNebDD3ET79IWIr+QJG2wgn5QmJDayPL9+A73A=;
-        b=kEwNEKokY+1ANb4H0nv+PvJSKEcFbAZDPRwDArCvIWK7yc0B7PEYgYmcI9wn/AiePf
-         GCZ2Lw+87akLDLAMxL/2LRS6Lz1+HvDoiDfW3SgjzvwaDtGGsHW9I1GjT+bMmkfYdvgS
-         hWPjA7tiT9tx9knRbaad0yTJboHwjIirSh8iUcLzYLzK/t4LxvySfOYe8UrLpHQSEk1p
-         okwxK2DSb03QVoR4q330q/S6HSB2w3mJrEMJzWdko1zAVFiWqdiNhKW1TgQ6BsXPSRWL
-         dXBxgD0pi5DUy1N681E7aQRL1SNlG5BDUickSNzhq3pX+vZThJoSlsDYZzipb5M6K+bW
-         zUgg==
-X-Gm-Message-State: AC+VfDyjBW8orWKOz4+s1N3e0RJvOIXwz4p2HWjMXwFlPHio8TXVeOmz
-        +4ZHU5xCsfHo3q+ouigR0yMxtZd6F2A=
-X-Google-Smtp-Source: ACHHUZ7aI7icl9yP+XTVAxjb/B56LWhJlYyY/bkxia+e7VEwFYxsmG4eFO4RUCr5qbQXOHl5LdpkQKpzOJA=
-X-Received: from surenb-desktop.mtv.corp.google.com ([2620:15c:211:201:6664:8bd3:57fd:c83a])
- (user=surenb job=sendgmr) by 2002:a25:198a:0:b0:c00:a33:7 with SMTP id
- 132-20020a25198a000000b00c000a330007mr9718444ybz.8.1687936698504; Wed, 28 Jun
- 2023 00:18:18 -0700 (PDT)
-Date:   Wed, 28 Jun 2023 00:18:00 -0700
-In-Reply-To: <20230628071800.544800-1-surenb@google.com>
-Mime-Version: 1.0
-References: <20230628071800.544800-1-surenb@google.com>
-X-Mailer: git-send-email 2.41.0.162.gfafddb0af9-goog
-Message-ID: <20230628071800.544800-7-surenb@google.com>
-Subject: [PATCH v4 6/6] mm: handle userfaults under VMA lock
-From:   Suren Baghdasaryan <surenb@google.com>
-To:     akpm@linux-foundation.org
-Cc:     willy@infradead.org, hannes@cmpxchg.org, mhocko@suse.com,
-        josef@toxicpanda.com, jack@suse.cz, ldufour@linux.ibm.com,
-        laurent.dufour@fr.ibm.com, michel@lespinasse.org,
-        liam.howlett@oracle.com, jglisse@google.com, vbabka@suse.cz,
-        minchan@google.com, dave@stgolabs.net, punit.agrawal@bytedance.com,
-        lstoakes@gmail.com, hdanton@sina.com, apopple@nvidia.com,
-        peterx@redhat.com, ying.huang@intel.com, david@redhat.com,
-        yuzhao@google.com, dhowells@redhat.com, hughd@google.com,
-        viro@zeniv.linux.org.uk, brauner@kernel.org,
-        pasha.tatashin@soleen.com, surenb@google.com, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-team@android.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        d=1e100.net; s=20221208; t=1687940572; x=1690532572;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=AfH/3M1MI/78IiqObqTGPZhCo/6frficXtfBUG01mvM=;
+        b=EGoMKNRH0QWKukjoX1VV5tf3qbOMnUIoHeunLO+9cVlFhMlKSHmto6fwy56neM4uRd
+         U2cUu25qITFgItrzxMRIOkwxoBVWclp6YybrmYLx3H4gDAtlDb7fU3ZszIjO0uTrCjoe
+         HFvruudT9lTMd6fDwmtfdXH48NPsAMlXL2Vw3i7EYA/vsKWxXRoQudC7aCvayzy6Fo/7
+         1pQAEsSEP/bl450nCVkoY0hnPxrRoPe8N8YzWTy2WjZ2Ow6dtQBOxDnkmNXKoCzVCHj2
+         09vAROhP+M34/mBvvxXf4gc0BQl1G2UHxfmorX1ntUasFR/36ty0qf7EhUR3OV+L2vLa
+         B+Tw==
+X-Gm-Message-State: AC+VfDwpC5mwtGm+Jtu3pNZecMRITi5L8J/52hRdQFKYP+VokwDJYy5x
+        JPsrXgCsXg6mbHvRy8AinHGBs3jofU5NfQ==
+X-Google-Smtp-Source: ACHHUZ5pnQDNTECdgISJR0kDPKbUH3W5ZvqVvA3k0m/h+QnyvBTCn6jGI4qFNZv97UUyufGDuQIJTg==
+X-Received: by 2002:a05:6a21:7881:b0:121:ef3f:ed0b with SMTP id bf1-20020a056a21788100b00121ef3fed0bmr24448649pzc.60.1687936831745;
+        Wed, 28 Jun 2023 00:20:31 -0700 (PDT)
+Received: from oslab-pc.tsinghua.edu.cn ([166.111.139.122])
+        by smtp.gmail.com with ESMTPSA id l187-20020a6391c4000000b00543b4433aa9sm6924313pge.36.2023.06.28.00.20.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 28 Jun 2023 00:20:31 -0700 (PDT)
+From:   Tuo Li <islituo@gmail.com>
+To:     mchehab@kernel.org, hverkuil-cisco@xs4all.nl
+Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        baijiaju1990@outlook.com, Tuo Li <islituo@gmail.com>,
+        BassCheck <bass@buaa.edu.cn>
+Subject: [PATCH] media: bt8xx: Fix a possible data race in buffer_queue()
+Date:   Wed, 28 Jun 2023 15:19:51 +0800
+Message-Id: <20230628071951.1011421-1-islituo@gmail.com>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Enable handle_userfault to operate under VMA lock by releasing VMA lock
-instead of mmap_lock and retrying. Note that FAULT_FLAG_RETRY_NOWAIT
-should never be used when handling faults under per-VMA lock protection
-because that would break the assumption that lock is dropped on retry.
+The variable btv->loop_irq is often protected by the lock btv->s_lock when
+is accessed. Here is an example in bttv_irq_timeout():
 
-Signed-off-by: Suren Baghdasaryan <surenb@google.com>
+  spin_lock_irqsave(&btv->s_lock,flags); 
+  ...
+  btv->loop_irq = 0;
+  ...
+  spin_unlock_irqrestore(&btv->s_lock,flags);
+
+However, it is accessed without holding the lock btv->s_lock in 
+buffer_queue():
+
+  btv->loop_irq |= 1;
+
+And thus a data race can occur.
+To fix this possible data race, a lock and unlock pair is added when
+accessing the variable btv->loop_irq in buffer_queue().
+
+Reported-by: BassCheck <bass@buaa.edu.cn>
+Signed-off-by: Tuo Li <islituo@gmail.com>
 ---
- fs/userfaultfd.c   | 39 ++++++++++++++++++---------------------
- include/linux/mm.h | 39 +++++++++++++++++++++++++++++++++++++++
- mm/filemap.c       |  8 --------
- mm/memory.c        |  9 ---------
- 4 files changed, 57 insertions(+), 38 deletions(-)
+ drivers/media/pci/bt8xx/bttv-driver.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/fs/userfaultfd.c b/fs/userfaultfd.c
-index 4e800bb7d2ab..d019e7df6f15 100644
---- a/fs/userfaultfd.c
-+++ b/fs/userfaultfd.c
-@@ -277,17 +277,16 @@ static inline struct uffd_msg userfault_msg(unsigned long address,
-  * hugepmd ranges.
-  */
- static inline bool userfaultfd_huge_must_wait(struct userfaultfd_ctx *ctx,
--					 struct vm_area_struct *vma,
--					 unsigned long address,
--					 unsigned long flags,
--					 unsigned long reason)
-+					      struct vm_fault *vmf,
-+					      unsigned long reason)
- {
-+	struct vm_area_struct *vma = vmf->vma;
- 	pte_t *ptep, pte;
- 	bool ret = true;
+diff --git a/drivers/media/pci/bt8xx/bttv-driver.c b/drivers/media/pci/bt8xx/bttv-driver.c
+index 734f02b91aa3..241c51951627 100644
+--- a/drivers/media/pci/bt8xx/bttv-driver.c
++++ b/drivers/media/pci/bt8xx/bttv-driver.c
+@@ -1617,13 +1617,16 @@ buffer_queue(struct videobuf_queue *q, struct videobuf_buffer *vb)
+ 	struct bttv_buffer *buf = container_of(vb,struct bttv_buffer,vb);
+ 	struct bttv_fh *fh = q->priv_data;
+ 	struct bttv    *btv = fh->btv;
++	unsigned long flags;
  
--	mmap_assert_locked(ctx->mm);
-+	assert_fault_locked(ctx->mm, vmf);
- 
--	ptep = hugetlb_walk(vma, address, vma_mmu_pagesize(vma));
-+	ptep = hugetlb_walk(vma, vmf->address, vma_mmu_pagesize(vma));
- 	if (!ptep)
- 		goto out;
- 
-@@ -308,10 +307,8 @@ static inline bool userfaultfd_huge_must_wait(struct userfaultfd_ctx *ctx,
- }
- #else
- static inline bool userfaultfd_huge_must_wait(struct userfaultfd_ctx *ctx,
--					 struct vm_area_struct *vma,
--					 unsigned long address,
--					 unsigned long flags,
--					 unsigned long reason)
-+					      struct vm_fault *vmf,
-+					      unsigned long reason)
- {
- 	return false;	/* should never get here */
- }
-@@ -325,11 +322,11 @@ static inline bool userfaultfd_huge_must_wait(struct userfaultfd_ctx *ctx,
-  * threads.
-  */
- static inline bool userfaultfd_must_wait(struct userfaultfd_ctx *ctx,
--					 unsigned long address,
--					 unsigned long flags,
-+					 struct vm_fault *vmf,
- 					 unsigned long reason)
- {
- 	struct mm_struct *mm = ctx->mm;
-+	unsigned long address = vmf->address;
- 	pgd_t *pgd;
- 	p4d_t *p4d;
- 	pud_t *pud;
-@@ -337,7 +334,7 @@ static inline bool userfaultfd_must_wait(struct userfaultfd_ctx *ctx,
- 	pte_t *pte;
- 	bool ret = true;
- 
--	mmap_assert_locked(mm);
-+	assert_fault_locked(mm, vmf);
- 
- 	pgd = pgd_offset(mm, address);
- 	if (!pgd_present(*pgd))
-@@ -445,7 +442,7 @@ vm_fault_t handle_userfault(struct vm_fault *vmf, unsigned long reason)
- 	 * Coredumping runs without mmap_lock so we can only check that
- 	 * the mmap_lock is held, if PF_DUMPCORE was not set.
- 	 */
--	mmap_assert_locked(mm);
-+	assert_fault_locked(mm, vmf);
- 
- 	ctx = vma->vm_userfaultfd_ctx.ctx;
- 	if (!ctx)
-@@ -522,8 +519,11 @@ vm_fault_t handle_userfault(struct vm_fault *vmf, unsigned long reason)
- 	 * and wait.
- 	 */
- 	ret = VM_FAULT_RETRY;
--	if (vmf->flags & FAULT_FLAG_RETRY_NOWAIT)
-+	if (vmf->flags & FAULT_FLAG_RETRY_NOWAIT) {
-+		/* Per-VMA lock is expected to be dropped on VM_FAULT_RETRY */
-+		BUG_ON(vmf->flags & FAULT_FLAG_RETRY_NOWAIT);
- 		goto out;
-+	}
- 
- 	/* take the reference before dropping the mmap_lock */
- 	userfaultfd_ctx_get(ctx);
-@@ -561,15 +561,12 @@ vm_fault_t handle_userfault(struct vm_fault *vmf, unsigned long reason)
- 	spin_unlock_irq(&ctx->fault_pending_wqh.lock);
- 
- 	if (!is_vm_hugetlb_page(vma))
--		must_wait = userfaultfd_must_wait(ctx, vmf->address, vmf->flags,
--						  reason);
-+		must_wait = userfaultfd_must_wait(ctx, vmf, reason);
- 	else
--		must_wait = userfaultfd_huge_must_wait(ctx, vma,
--						       vmf->address,
--						       vmf->flags, reason);
-+		must_wait = userfaultfd_huge_must_wait(ctx, vmf, reason);
- 	if (is_vm_hugetlb_page(vma))
- 		hugetlb_vma_unlock_read(vma);
--	mmap_read_unlock(mm);
-+	release_fault_lock(vmf);
- 
- 	if (likely(must_wait && !READ_ONCE(ctx->released))) {
- 		wake_up_poll(&ctx->fd_wqh, EPOLLIN);
-diff --git a/include/linux/mm.h b/include/linux/mm.h
-index fec149585985..70bb2f923e33 100644
---- a/include/linux/mm.h
-+++ b/include/linux/mm.h
-@@ -705,6 +705,17 @@ static inline bool vma_try_start_write(struct vm_area_struct *vma)
- 	return true;
++	spin_lock_irqsave(&btv->s_lock,flags);
+ 	buf->vb.state = VIDEOBUF_QUEUED;
+ 	list_add_tail(&buf->vb.queue,&btv->capture);
+ 	if (!btv->curr.frame_irq) {
+ 		btv->loop_irq |= 1;
+ 		bttv_set_dma(btv, 0x03);
+ 	}
++	spin_unlock_irqrestore(&btv->s_lock,flags);
  }
  
-+static inline void vma_assert_locked(struct vm_area_struct *vma)
-+{
-+	int mm_lock_seq;
-+
-+	if (__is_vma_write_locked(vma, &mm_lock_seq))
-+		return;
-+
-+	lockdep_assert_held(&vma->vm_lock->lock);
-+	VM_BUG_ON_VMA(!rwsem_is_locked(&vma->vm_lock->lock), vma);
-+}
-+
- static inline void vma_assert_write_locked(struct vm_area_struct *vma)
- {
- 	int mm_lock_seq;
-@@ -723,6 +734,23 @@ static inline void vma_mark_detached(struct vm_area_struct *vma, bool detached)
- struct vm_area_struct *lock_vma_under_rcu(struct mm_struct *mm,
- 					  unsigned long address);
- 
-+static inline
-+void assert_fault_locked(struct mm_struct *mm, struct vm_fault *vmf)
-+{
-+	if (vmf->flags & FAULT_FLAG_VMA_LOCK)
-+		vma_assert_locked(vmf->vma);
-+	else
-+		mmap_assert_locked(mm);
-+}
-+
-+static inline void release_fault_lock(struct vm_fault *vmf)
-+{
-+	if (vmf->flags & FAULT_FLAG_VMA_LOCK)
-+		vma_end_read(vmf->vma);
-+	else
-+		mmap_read_unlock(vmf->vma->vm_mm);
-+}
-+
- #else /* CONFIG_PER_VMA_LOCK */
- 
- static inline void vma_init_lock(struct vm_area_struct *vma) {}
-@@ -736,6 +764,17 @@ static inline void vma_assert_write_locked(struct vm_area_struct *vma) {}
- static inline void vma_mark_detached(struct vm_area_struct *vma,
- 				     bool detached) {}
- 
-+static inline
-+void assert_fault_locked(struct mm_struct *mm, struct vm_fault *vmf)
-+{
-+	mmap_assert_locked(mm);
-+}
-+
-+static inline void release_fault_lock(struct vm_fault *vmf)
-+{
-+	mmap_read_unlock(vmf->vma->vm_mm);
-+}
-+
- #endif /* CONFIG_PER_VMA_LOCK */
- 
- /*
-diff --git a/mm/filemap.c b/mm/filemap.c
-index 7ee078e1a0d2..d4d8f474e0c5 100644
---- a/mm/filemap.c
-+++ b/mm/filemap.c
-@@ -1699,14 +1699,6 @@ static int __folio_lock_async(struct folio *folio, struct wait_page_queue *wait)
- 	return ret;
- }
- 
--static void release_fault_lock(struct vm_fault *vmf)
--{
--	if (vmf->flags & FAULT_FLAG_VMA_LOCK)
--		vma_end_read(vmf->vma);
--	else
--		mmap_read_unlock(vmf->vma->vm_mm);
--}
--
- /*
-  * Return values:
-  * 0 - folio is locked.
-diff --git a/mm/memory.c b/mm/memory.c
-index 76c7907e7286..c6c759922f39 100644
---- a/mm/memory.c
-+++ b/mm/memory.c
-@@ -5294,15 +5294,6 @@ struct vm_area_struct *lock_vma_under_rcu(struct mm_struct *mm,
- 	if (!vma_start_read(vma))
- 		goto inval;
- 
--	/*
--	 * Due to the possibility of userfault handler dropping mmap_lock, avoid
--	 * it for now and fall back to page fault handling under mmap_lock.
--	 */
--	if (userfaultfd_armed(vma)) {
--		vma_end_read(vma);
--		goto inval;
--	}
--
- 	/* Check since vm_start/vm_end might change before we lock the VMA */
- 	if (unlikely(address < vma->vm_start || address >= vma->vm_end)) {
- 		vma_end_read(vma);
+ static void buffer_release(struct videobuf_queue *q, struct videobuf_buffer *vb)
 -- 
-2.41.0.162.gfafddb0af9-goog
+2.34.1
 
