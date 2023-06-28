@@ -2,354 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF8FB741889
+	by mail.lfdr.de (Postfix) with ESMTP id 360A5741887
 	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 21:02:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231502AbjF1TCT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 15:02:19 -0400
-Received: from mail-4316.protonmail.ch ([185.70.43.16]:21641 "EHLO
-        mail-4316.protonmail.ch" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232042AbjF1TA6 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S230445AbjF1TCP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 15:02:15 -0400
+Received: from mail-bn8nam04on2041.outbound.protection.outlook.com ([40.107.100.41]:33888
+        "EHLO NAM04-BN8-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S232047AbjF1TA6 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 28 Jun 2023 15:00:58 -0400
-Date:   Wed, 28 Jun 2023 19:00:46 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=proton.me;
-        s=protonmail; t=1687978855; x=1688238055;
-        bh=Za+v7N4cBqD4xxc37Tzs7XY1PVNK9jmrJ+NyYokOKUg=;
-        h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-         Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
-         Message-ID:BIMI-Selector;
-        b=V6RYFnQrkuwj1lDs02GLn+yIXhknt1CzN0z9Js/x/pUI55bayC5opiKXh/Bis7/mt
-         1YJNJH43qUJCjLunnIjjy/CkjmOqxKzHH57uDEPZLuXxUUI9t5zePc1EBTxMWzJoY5
-         srBOc516XI2227TgXG0tK/ZiCPo+msJtkvWf9+F3djAfmR6Df+tEj6OokP7VZiqmbw
-         R4o9Sbqw9beeYgxljbMJQvKuBjDp+dia9ZQ1SDLZcgaw3CIE3VEsHtHciuEatNEMyV
-         iXMZ5EKz5pTJpGrt9QqpjPisy4uOP4QELSOXexygyOsxdxZwtGukykGnBx1hebuJP9
-         ldHDBXvpgLxKA==
-To:     Gary Guo <gary@garyguo.net>
-From:   Benno Lossin <benno.lossin@proton.me>
-Cc:     Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        =?utf-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
-        Andreas Hindborg <a.hindborg@samsung.com>,
-        Alice Ryhl <aliceryhl@google.com>,
-        linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org
-Subject: Re: [PATCH] rust: macros: add `paste!` proc macro
-Message-ID: <l3B61PMqabOJFPE9BJk8TX_tAyxJ4NKHrcqvr2v3_Xpbim-xjRV-G3Mfph6HlI_FoOpPIJjWXqo4ilAZVUmNhG-L8OcsEizvneVtXj2-mRg=@proton.me>
-In-Reply-To: <20230628171108.1150742-1-gary@garyguo.net>
-References: <20230628171108.1150742-1-gary@garyguo.net>
-Feedback-ID: 71780778:user:proton
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=XcQadPsZSAqngMwFiyCLxXxyEyk05hubirXv6Xipe8aMtY6ihGYZJL6335oZe1AJLhKmRqGqnqje2cl3U8TpPQzS62uid7NtdAl1+u1yMGijeKpWVSRFc/5WsyYgIUZ/puAdVbxGoJeEeEbo6rLcRsYoa9ZsIERGKtpW/LQiCJ7TixUryKrramzh8nl7w2zz0pZjm93hgl6C4TwjEfULwmFTXHBs+8QAXUQ8z8QW3XNFFMJu7OLBo0QesbccFYJJ5Tt1eEjlsuD0i441rJadJYAIs3llWmKJvrUk7I+XAq6VZeodOpYsbQcOAAskmrRgIJKDKzCwao1WzF+Qd9bpdw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=A0ir1+o0kwXtzUcw+7I8spbQPfPJtLl4Kwb1J1Buf24=;
+ b=oYUtnphp05HJpx/CEShTUBOQbqORBe8xteqD3nc45oB4tYhgFJYTPPus8ny6eG5oxiw4ljVjq8ViV2mQT0FadCtLmkVPFLzt2fLGJaLQXyRDhZfaDMHXfQ+mq1b0qV5hliwNfr+9DpWnqsltARS8goOetUk4wLJNhPgzf5xauemQj/LrGGLicOOIwYUW5J3qSQmZFrLUFxQINdRc9FjHqfYsVsLSeu5eP8VV7lX8m1/tCvKK9T9OGfqZkjwgdb8A1eySXSy7vi1q8WkOJFfZt7WkMyDuACED4iSopa+3NE7wGZK/DjtY+u+Ax2trAquuwEjjzN6GHhxIChAL1Wm0fA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=A0ir1+o0kwXtzUcw+7I8spbQPfPJtLl4Kwb1J1Buf24=;
+ b=THsYLFs0+igtY+aPXVjJywdH2ErFBNtCU5aYjCO4CeXp31BkLPfn1cZSlyhcdAI13Cst/TkLP0Ur3/KckftuRIGlPQT0qHAL9hVL7nqJxlxFlhacNMhMF3mfA0QE8kfrLfNYRQ3tVEeQMxcqefugxBSAyl1Oxli4xHWUiNJ4OjkfttkoE+qshc2JgNOBIBZIhvv4JUgLeO4ezeBvsNo8ikCoAJSC82ZmkYwmVlGcU3btVYghxit+RhVHCr6zZTaBdvkLZBbAGcCIUG9nSPFgqEPgjOiWQKdOO6knwMUVCLVsE91yRyJCgk6DumSHBWNp7KmYe7YUfvzJtZNjkh0O3A==
+Received: from BY5PR12MB3763.namprd12.prod.outlook.com (2603:10b6:a03:1a8::24)
+ by SN7PR12MB7809.namprd12.prod.outlook.com (2603:10b6:806:34e::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.24; Wed, 28 Jun
+ 2023 19:00:54 +0000
+Received: from BY5PR12MB3763.namprd12.prod.outlook.com
+ ([fe80::8634:5f0e:cf09:a084]) by BY5PR12MB3763.namprd12.prod.outlook.com
+ ([fe80::8634:5f0e:cf09:a084%7]) with mapi id 15.20.6521.024; Wed, 28 Jun 2023
+ 19:00:54 +0000
+From:   Ankit Agrawal <ankita@nvidia.com>
+To:     Jason Gunthorpe <jgg@nvidia.com>,
+        Alex Williamson <alex.williamson@redhat.com>
+CC:     Aniket Agashe <aniketa@nvidia.com>, Neo Jia <cjia@nvidia.com>,
+        Kirti Wankhede <kwankhede@nvidia.com>,
+        "Tarun Gupta (SW-GPU)" <targupta@nvidia.com>,
+        Vikram Sethi <vsethi@nvidia.com>,
+        Andy Currid <ACurrid@nvidia.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Dan Williams <danw@nvidia.com>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH v4 1/1] vfio/nvgpu: Add vfio pci variant module for grace
+ hopper
+Thread-Topic: [PATCH v4 1/1] vfio/nvgpu: Add vfio pci variant module for grace
+ hopper
+Thread-Index: AQHZpLaxSTuRkhXihUusFX/7jkP6ra+YYxiAgATjz4CAAASmgIADTv3w
+Date:   Wed, 28 Jun 2023 19:00:53 +0000
+Message-ID: <BY5PR12MB3763EC8E078A5C43FEBEF050B024A@BY5PR12MB3763.namprd12.prod.outlook.com>
+References: <20230622030720.19652-1-ankita@nvidia.com>
+ <ZJWdbbNESp1+6GVN@nvidia.com>
+ <20230626100629.3c318922.alex.williamson@redhat.com>
+ <ZJm7a1BpeLmQQ5Mj@nvidia.com>
+In-Reply-To: <ZJm7a1BpeLmQQ5Mj@nvidia.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BY5PR12MB3763:EE_|SN7PR12MB7809:EE_
+x-ms-office365-filtering-correlation-id: faef47ce-7250-42b3-57bb-08db7809ff88
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 44moyq27dL3wZKYc3N2//5gdx/luEh7iGWS+nR1mlNDXp3doTIiB7iWKSWnXqQI3qa/Eka5hseTbFELIfbX663zzus59krXu1ENq47pMNOQv8ZquqlRcSdDyqK1R/Lq3RuxYGswU33SdjFcy1nJGfOGdIajEw0g9dN83MZnew/I4rLiF7vFiVMLrEX9fMBAV7ZbzmeovdvvubvMRVbuD2MBLk2bCfGP8rTdnnLW4ycXyZqGodUtxjcP6xzF3c9p+bPbk+UC+kciwil3RDriRv3d4N3WPnU1aGf8v8gZYqlDs/ovxFjy2CFKQ7RryYIdlUHNAZxb/3I5qFsKygpt77xd7tT94FfukO2Gq9feWydkLBa1WuQDfeGs0Hu5zgi9MOqo9Wslz7Gvc7BXgmfZRzr+69N6ylebcgYl/QqUiyF/5fs0R/2NRsk0Tq+uSn7Or2aZ06VOACplVJduj8fKnOuE0QEehXadwf61ToPiT4YxpAAoqkbbdxAh26d4CSCvSW2GnjVdq76Ng8uFuqguwQxdsuOsQdQGQpXKC3Y3rx1lJaPy02cw/t98Fkn7bYcCLfNDdgGOdecaS/k2Tu6rl1gRxOVBgMggxe8NhGwK2C94MLczWs9E77q9ecyQn0BmY
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR12MB3763.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(136003)(396003)(376002)(39860400002)(366004)(451199021)(64756008)(26005)(33656002)(55016003)(66946007)(122000001)(86362001)(52536014)(5660300002)(41300700001)(4326008)(38070700005)(8676002)(316002)(66446008)(66556008)(8936002)(38100700002)(66476007)(186003)(6506007)(2906002)(76116006)(7696005)(9686003)(54906003)(478600001)(71200400001)(83380400001)(110136005);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?QabwE7h9vsMEneh+s02vzquta4Sj8njtSMLfttHziGXGQCzUEqZg45cINaYe?=
+ =?us-ascii?Q?fWHTMHMB1JHiwvhd5hCaLFaHyOTlpXMID2nSUWh+6ZowJyqmnJZqJ2lzJT04?=
+ =?us-ascii?Q?z1ntuAlFLTUUo1ur7B05OBUsWJunJbe1JP9ToVs+bb2D0a93LO6NLAwFSpVm?=
+ =?us-ascii?Q?/NxkjbjC8xLWSHezV9tjFebrtMm5Zp8TiFSLt4ut4ZBFT1fSs4rbinYSzrjl?=
+ =?us-ascii?Q?jSdS9R9l88srtLLQ5oP0CI5BC6YLlrAbQD2UlMTC61xRiVpQFrrt7/RNhJ/4?=
+ =?us-ascii?Q?L/4Thd3bu2UOsG8QCm13VcZPuz8BbDGIa846vXSHYPYa6AjN59ZFoe/GVgHN?=
+ =?us-ascii?Q?OvTQasqLMtBpaOA3wgMlXMQvDrfOJ9fFWeYM6v49S6D7IYeNWEnROlfPVP3k?=
+ =?us-ascii?Q?Of986s+yoYPCwpqLW4MphUNz2PPA/n0F/CjwwS+lAw1Epm2tWXJPy6wwMWjV?=
+ =?us-ascii?Q?dTBZG/OsUpjX4UYU+DsELVL9WjtR4gC5FxUL4qE7QZnZ+VZjX1Phgd8qBmv2?=
+ =?us-ascii?Q?rUSZWqRJKw6w2g/U/8D58aAVjx5ZdGPkLWHlJVpEyKN+OTC/qOON2sqGpRay?=
+ =?us-ascii?Q?hnk9XFXFmooOYH6u+5BP+PCd90xW0Q3tdMEA16a+cQLcxjAbf/IYr3XrGwyJ?=
+ =?us-ascii?Q?mBX0SYXZU6yERoxynOsaoAYVAhrlVR2fW1uVHdmICbk4IcOvTNvCbXpQ6lDz?=
+ =?us-ascii?Q?k/VlmrMFH55Mt3YI95dxTklP8O6AxJn3r3C4KdG/bXIw3NYP7/N+Kmm7tGpl?=
+ =?us-ascii?Q?GQiMiBA7ciMX3MDu0Xl0LVr1oKbP5F2GaQhjNB9R0eI800Huj4PQdaX6NJfb?=
+ =?us-ascii?Q?f+9bHK5td+zJzAbkLQWh/1rDKHGhLdQlD23ceEYK1kef3hq541bRKeX/D1Ze?=
+ =?us-ascii?Q?E+4m6ds2kL6fyqs2pxXaC6N6gju79gAeXQXlbY5O1q7m+UnNQpZ+m34yooGC?=
+ =?us-ascii?Q?VTAStAXtngTPFB86fOGLpEVOGSFv8qm2Dpdp0ocBUYPoi9Ri5vXlkRw3O6Yi?=
+ =?us-ascii?Q?mQYb0kkD2JU6zW1PNzcxfliWeXB7da8zeb9VoOUF19/8nh3tCsiq7oIO6QsQ?=
+ =?us-ascii?Q?fx6kXCsh0sI2Mn8dQm8M04zjbEu/W+Hp49hCufFV6RWVFxSoAsGeSP+WUbl9?=
+ =?us-ascii?Q?nymgfD1zcn/gIf2VammIGZLCDV/zLoUtBMR+9B+s4EzoLoSiBR+lLEku21Gg?=
+ =?us-ascii?Q?MgwUB7TQE6OGxhoT9mPQUevFPZlR5hFimDil/b8IQseJp+rFO95wscWWz25T?=
+ =?us-ascii?Q?48ujoCw/YmeLIa7coeRgyGXFj7Ps6x2oMD/NDDMDROpVpwRkjhafeJdAQRI1?=
+ =?us-ascii?Q?V82yD7673ax0/AHQxXNC7eu+3vfPjamxx8GIaag9VXRkjFRZlgNneRmBxisF?=
+ =?us-ascii?Q?Um2aOhV60SD6yJOak3+beqjxWqs2+YCRiSxrcd4ubBuse3Db7wJUw0S1gt1z?=
+ =?us-ascii?Q?ZzHQJ9RjappxrAgx3TZoWBAaPe1p1Sd7t6qnS2lkkF+298SmRe56HMViZo+B?=
+ =?us-ascii?Q?UU7ywP1Kj7su+bzNiSp2bRrDlI65UVVDecQTIcfrGiSgDv08B7ZCk6jmi9iq?=
+ =?us-ascii?Q?84r35MQBuilDw6i9OKVuLWwY15Xy8ZlDzloDAAub?=
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR12MB3763.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: faef47ce-7250-42b3-57bb-08db7809ff88
+X-MS-Exchange-CrossTenant-originalarrivaltime: 28 Jun 2023 19:00:54.0205
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 0G7jq+XNtg042+bc+qfkc/Xp0eblSourAjZ39DxtLUcWg7rI54AFmTtKCyu5L9WVFKOpMEi7bWNNsOEOPHW5QA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB7809
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 28.06.23 19:11, Gary Guo wrote:
-> This macro provides a flexible way to concatenated identifiers together
-> and it allows the resulting identifier to be used to declare new items,
-> which `concat_idents!` does not allow. It also allows identifiers to be
-> transformed before concatenated.
->=20
-> The `concat_idents!` example
->=20
->      let x_1 =3D 42;
->      let x_2 =3D concat_idents!(x, _1);
->      assert!(x_1 =3D=3D x_2);
->=20
-> can be written with `paste!` macro like this:
->=20
->      let x_1 =3D 42;
->      let x_2 =3D paste!([<x _1>]);
->      assert!(x_1 =3D=3D x_2);
->=20
-> However `paste!` macro is more flexible because it can be used to create
-> a new variable:
->=20
->      let x_1 =3D 42;
->      paste!(let [<x _2>] =3D [<x _1>];);
->      assert!(x_1 =3D=3D x_2);
->=20
-> While this is not possible with `concat_idents!`.
->=20
-> This macro is similar to the `paste!` crate [1], but this is a fresh
-> implementation to avoid vendoring large amount of code directly. Also, I
-> have augmented it to provide a way to specify span of the resulting
-> token, allowing precise control.
->=20
-> For example, this code is broken because the variable is declared inside
-> the macro, so Rust macro hygiene rules prevents access from the outside:
->=20
->      macro_rules! m {
->          ($id: ident) =3D> {
->              // The resulting token has hygiene of the macro.
->              paste!(let [<$id>] =3D 1;)
->          }
->      }
->=20
->      m!(a);
->      let _ =3D a;
->=20
-> In this versionn of `paste!` macro I added a `span` modifier to allow
-> this:
->=20
->      macro_rules! m {
->          ($id: ident) =3D> {
->              // The resulting token has hygiene of `$id`.
->              paste!(let [<$id:span>] =3D 1;)
->          }
->      }
->=20
->      m!(a);
->      let _ =3D a;
->=20
-> Link: http://docs.rs/paste/ [1]
-> Signed-off-by: Gary Guo <gary@garyguo.net>
+>>> +static ssize_t nvgpu_vfio_pci_read(struct vfio_device *core_vdev,
+>>> +           char __user *buf, size_t count, loff_t *ppos) {
+>>> +   unsigned int index =3D VFIO_PCI_OFFSET_TO_INDEX(*ppos);
+>>> +
+>>> +   /*
+>>> +    * Only the device memory present on the hardware is mapped, which =
+may
+>>> +    * not be power-of-2 aligned. A read to the BAR2 region implies an
+>>> +    * access outside the available device memory on the hardware.
+>>> +    */
+>>> +   if (index =3D=3D VFIO_PCI_BAR2_REGION_INDEX)
+>>> +           return -EINVAL;
+>>>
+>> What does the qemu do in this case? Crash the VM?
+>
+> Yes, I don't think return -errno matches what we discussed for returning =
+-1 on read and dropping writes outside of the device memory.
 
-Reviewed-by: Benno Lossin <benno.lossin@proton.me>
+I tried to replicate what is done by vfio-pci core module in vfio_pci_bar_r=
+w()
+where -EINVAL is returned in case of e.g. the access offset is outside the
+BAR range.
 
-> ---
->   rust/macros/lib.rs   | 97 ++++++++++++++++++++++++++++++++++++++++++++
->   rust/macros/paste.rs | 94 ++++++++++++++++++++++++++++++++++++++++++
->   2 files changed, 191 insertions(+)
->   create mode 100644 rust/macros/paste.rs
->=20
-> diff --git a/rust/macros/lib.rs b/rust/macros/lib.rs
-> index 3fc74cb4ea19..b4bc44c27bd4 100644
-> --- a/rust/macros/lib.rs
-> +++ b/rust/macros/lib.rs
-> @@ -7,6 +7,7 @@
->   mod concat_idents;
->   mod helpers;
->   mod module;
-> +mod paste;
->   mod pin_data;
->   mod pinned_drop;
->   mod vtable;
-> @@ -246,3 +247,99 @@ pub fn pin_data(inner: TokenStream, item: TokenStrea=
-m) -> TokenStream {
->   pub fn pinned_drop(args: TokenStream, input: TokenStream) -> TokenStrea=
-m {
->       pinned_drop::pinned_drop(args, input)
->   }
-> +
-> +/// Paste identifiers together.
-> +///
-> +/// Within the `paste!` macro, identifiers inside `[<` and `>]` are conc=
-atenated together to form a
-> +/// single identifier.
-> +///
-> +/// This is similar to the [`paste`] crate, but with pasting feature lim=
-ited to identifiers
-> +/// (literals, lifetimes and documentation strings are not supported). T=
-here is a difference in
-> +/// supported modifiers as well.
-> +///
-> +/// # Example
-> +///
-> +/// ```ignore
-> +/// use kernel::macro::paste;
-> +///
-> +/// macro_rules! pub_no_prefix {
-> +///     ($prefix:ident, $($newname:ident),+) =3D> {
-> +///         paste! {
-> +///             $(pub(crate) const $newname: u32 =3D [<$prefix $newname>=
-];)+
-> +///         }
-> +///     };
-> +/// }
-> +///
-> +/// pub_no_prefix!(
-> +///     binder_driver_return_protocol_,
-> +///     BR_OK,
-> +///     BR_ERROR,
-> +///     BR_TRANSACTION,
-> +///     BR_REPLY,
-> +///     BR_DEAD_REPLY,
-> +///     BR_TRANSACTION_COMPLETE,
-> +///     BR_INCREFS,
-> +///     BR_ACQUIRE,
-> +///     BR_RELEASE,
-> +///     BR_DECREFS,
-> +///     BR_NOOP,
-> +///     BR_SPAWN_LOOPER,
-> +///     BR_DEAD_BINDER,
-> +///     BR_CLEAR_DEATH_NOTIFICATION_DONE,
-> +///     BR_FAILED_REPLY
-> +/// );
-> +///
-> +/// assert_eq!(BR_OK, binder_driver_return_protocol_BR_OK);
-> +/// ```
-> +///
-> +/// # Modifiers
-> +///
-> +/// For each identifier, it is possible to attach one or multiple modifi=
-ers to
-> +/// it.
-> +///
-> +/// Currently supported modifiers are:
-> +/// * `span`: change the span of concatenated identifier to the span of =
-the specified token. By
-> +/// default the span of the `[< >]` group is used.
-> +/// * `lower`: change the identifier to lower case.
-> +/// * `upper`: change the identifier to upper case.
-> +///
-> +/// ```ignore
-> +/// use kernel::macro::paste;
-> +///
-> +/// macro_rules! pub_no_prefix {
-> +///     ($prefix:ident, $($newname:ident),+) =3D> {
-> +///         kernel::macros::paste! {
-> +///             $(pub(crate) const fn [<$newname:lower:span>]: u32 =3D [=
-<$prefix $newname:span>];)+
-> +///         }
-> +///     };
-> +/// }
-> +///
-> +/// pub_no_prefix!(
-> +///     binder_driver_return_protocol_,
-> +///     BR_OK,
-> +///     BR_ERROR,
-> +///     BR_TRANSACTION,
-> +///     BR_REPLY,
-> +///     BR_DEAD_REPLY,
-> +///     BR_TRANSACTION_COMPLETE,
-> +///     BR_INCREFS,
-> +///     BR_ACQUIRE,
-> +///     BR_RELEASE,
-> +///     BR_DECREFS,
-> +///     BR_NOOP,
-> +///     BR_SPAWN_LOOPER,
-> +///     BR_DEAD_BINDER,
-> +///     BR_CLEAR_DEATH_NOTIFICATION_DONE,
-> +///     BR_FAILED_REPLY
-> +/// );
-> +///
-> +/// assert_eq!(br_ok(), binder_driver_return_protocol_BR_OK);
-> +/// ```
-> +///
-> +/// [`paste`]: https://docs.rs/paste/
-> +#[proc_macro]
-> +pub fn paste(input: TokenStream) -> TokenStream {
-> +    let mut tokens =3D input.into_iter().collect();
-> +    paste::expand(&mut tokens);
-> +    tokens.into_iter().collect()
-> +}
-> diff --git a/rust/macros/paste.rs b/rust/macros/paste.rs
-> new file mode 100644
-> index 000000000000..42fde0930b05
-> --- /dev/null
-> +++ b/rust/macros/paste.rs
-> @@ -0,0 +1,94 @@
-> +use proc_macro::{Delimiter, Group, Ident, Spacing, Span, TokenTree};
-> +
-> +fn concat(tokens: &[TokenTree], group_span: Span) -> TokenTree {
-> +    let mut tokens =3D tokens.iter();
-> +    let mut segments =3D Vec::new();
-> +    let mut span =3D None;
-> +    loop {
-> +        match tokens.next() {
-> +            None =3D> break,
-> +            Some(TokenTree::Literal(lit)) =3D> segments.push((lit.to_str=
-ing(), lit.span())),
-> +            Some(TokenTree::Ident(ident)) =3D> {
-> +                let mut value =3D ident.to_string();
-> +                if value.starts_with("r#") {
-> +                    value.replace_range(0..2, "");
-> +                }
-> +                segments.push((value, ident.span()));
-> +            }
-> +            Some(TokenTree::Punct(p)) if p.as_char() =3D=3D ':' =3D> {
-> +                let Some(TokenTree::Ident(ident)) =3D tokens.next() else=
- {
-> +                    panic!("expected identifier as modifier");
-> +                };
-> +
-> +                let (mut value, sp) =3D segments.pop().expect("expected =
-identifier before modifier");
-> +                match ident.to_string().as_str() {
-> +                    // Set the overall span of concatenated token as cur=
-rent span
-> +                    "span" =3D> {
-> +                        assert!(
-> +                            span.is_none(),
-> +                            "span modifier should only appear at most on=
-ce"
-> +                        );
-> +                        span =3D Some(sp);
-> +                    }
-> +                    "lower" =3D> value =3D value.to_lowercase(),
-> +                    "upper" =3D> value =3D value.to_uppercase(),
-> +                    v =3D> panic!("unknown modifier `{v}`"),
-> +                };
-> +                segments.push((value, sp));
-> +            }
-> +            _ =3D> panic!("unexpected token in paste segments"),
-> +        };
-> +    }
-> +
-> +    let pasted: String =3D segments.into_iter().map(|x| x.0).collect();
-> +    TokenTree::Ident(Ident::new(&pasted, span.unwrap_or(group_span)))
-> +}
-> +
-> +pub(crate) fn expand(tokens: &mut Vec<TokenTree>) {
-> +    for token in tokens.iter_mut() {
-> +        if let TokenTree::Group(group) =3D token {
-> +            let delimiter =3D group.delimiter();
-> +            let span =3D group.span();
-> +            let mut stream: Vec<_> =3D group.stream().into_iter().collec=
-t();
-> +            // Find groups that looks like `[< A B C D >]`
-> +            if delimiter =3D=3D Delimiter::Bracket
-> +                && stream.len() >=3D 3
-> +                && matches!(&stream[0], TokenTree::Punct(p) if p.as_char=
-() =3D=3D '<')
-> +                && matches!(&stream[stream.len() - 1], TokenTree::Punct(=
-p) if p.as_char() =3D=3D '>')
-> +            {
-> +                // Replace the group with concatenated token
-> +                *token =3D concat(&stream[1..stream.len() - 1], span);
-> +            } else {
-> +                // Recursively expand tokens inside the group
-> +                expand(&mut stream);
-> +                let mut group =3D Group::new(delimiter, stream.into_iter=
-().collect());
-> +                group.set_span(span);
-> +                *token =3D TokenTree::Group(group);
-> +            }
-> +        }
-> +    }
-> +
-> +    // Path segments cannot contain invisible delimiter group, so remove=
- them if any.
-> +    for i in (0..tokens.len().saturating_sub(3)).rev() {
-> +        // Looking for a double colon
-> +        if matches!(
-> +            (&tokens[i + 1], &tokens[i + 2]),
-> +            (TokenTree::Punct(a), TokenTree::Punct(b))
-> +                if a.as_char() =3D=3D ':' && a.spacing() =3D=3D Spacing:=
-:Joint && b.as_char() =3D=3D ':'
-> +        ) {
-> +            match &tokens[i + 3] {
-> +                TokenTree::Group(group) if group.delimiter() =3D=3D Deli=
-miter::None =3D> {
-> +                    tokens.splice(i + 3..i + 4, group.stream());
-> +                }
-> +                _ =3D> (),
-> +            }
-> +
-> +            match &tokens[i] {
-> +                TokenTree::Group(group) if group.delimiter() =3D=3D Deli=
-miter::None =3D> {
-> +                    tokens.splice(i..i + 1, group.stream());
-> +                }
-> +                _ =3D> (),
-> +            }
-> +        }
-> +    }
-> +}
-> --
-> 2.34.1
-> 
+Such an error comes to Qemu in vfio_region_read/vfio_region_write() which=20
+handles the error by returning data as -1 on read and dropping on write.
+
+But it seems that we don't need such approach here. I will make the change
+so that vfio-pci variant driver's read/write explicitly reads -1 and drops =
+writes
+instead of returning -EINVAL.
