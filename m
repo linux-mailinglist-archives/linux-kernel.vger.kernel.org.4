@@ -2,110 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF28B7411FB
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 15:11:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65361741203
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 15:12:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231409AbjF1NKm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 09:10:42 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:20630 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230458AbjF1NKi (ORCPT
+        id S230271AbjF1NMi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 09:12:38 -0400
+Received: from bg4.exmail.qq.com ([43.155.65.254]:43529 "EHLO
+        bg4.exmail.qq.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231448AbjF1NMf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 09:10:38 -0400
-Received: from pps.filterd (m0353726.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35SCxjGr005743;
-        Wed, 28 Jun 2023 13:10:38 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding; s=pp1;
- bh=dqrHOtS23igrd6a15KgAzVG3EY30E0zNBaHr7o1S/Jo=;
- b=EH4bNd3Rf5uOpHXqTeH2FcfpSUajSvP/WZi2up0e5k0ffDgqhKkfSq7kKkjeIJ6sikAs
- okkfT6Y9JhTCsoTyJlcDR9/OHGKKIFbBL0MJuW90UuS6c8/ZLgTKb2izpaNR58ZtAbal
- LywpY4szPQ0GbmdBUpfwXvCTp8uE7+SSloTnte3DGec0uUsUMKrq0bHI3ffZ/eu0tJ27
- YcJCOnegNn6zzD3zpKjTRNRPFMLgZi/HcS4blVAIJRrJj5vG9PyxggTgrSWLaGEZlwro
- O1AJXAEG4mii7+zn8E92KkIfySGVPGEklss1tvObe1ZFWr/kb6yR6tDmqeopl5voDrTb 2g== 
-Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3rgn5w8u8d-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 28 Jun 2023 13:10:37 +0000
-Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
-        by ppma01fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 35SBktk6031198;
-        Wed, 28 Jun 2023 13:10:35 GMT
-Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
-        by ppma01fra.de.ibm.com (PPS) with ESMTPS id 3rdr451y53-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 28 Jun 2023 13:10:35 +0000
-Received: from smtpav07.fra02v.mail.ibm.com (smtpav07.fra02v.mail.ibm.com [10.20.54.106])
-        by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 35SDAToP59375886
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 28 Jun 2023 13:10:29 GMT
-Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C7ADE20043;
-        Wed, 28 Jun 2023 13:10:29 +0000 (GMT)
-Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 8843A20040;
-        Wed, 28 Jun 2023 13:10:29 +0000 (GMT)
-Received: from p-imbrenda.boeblingen.de.ibm.com (unknown [9.152.224.66])
-        by smtpav07.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Wed, 28 Jun 2023 13:10:29 +0000 (GMT)
-From:   Claudio Imbrenda <imbrenda@linux.ibm.com>
-To:     kvm@vger.kernel.org
-Cc:     linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
-        frankja@linux.ibm.com, mhartmay@linux.ibm.com, nsg@linux.ibm.com,
-        borntraeger@de.ibm.com
-Subject: [PATCH v1 1/1] KVM: s390: pv: simplify shutdown and fix race
-Date:   Wed, 28 Jun 2023 15:10:29 +0200
-Message-ID: <20230628131029.35145-1-imbrenda@linux.ibm.com>
-X-Mailer: git-send-email 2.41.0
+        Wed, 28 Jun 2023 09:12:35 -0400
+X-QQ-mid: bizesmtp82t1687957941t9p5g4ui
+Received: from linux-lab-host.localdomain ( [116.30.129.193])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Wed, 28 Jun 2023 21:12:19 +0800 (CST)
+X-QQ-SSF: 01200000000000D0V000000A0000000
+X-QQ-FEAT: 3M0okmaRx3gc349QTkQ7SU6ffMdAH/eQrZxvNwomvXA+s018/A5CbPdqWJXSW
+        bsMr2cGgOsXAIGORzyCtAvwWtBM3WGjAIgeGNA5LwvZ7A0C3R/qatX7x0uOqiKPa+jnPPoR
+        L6O/pCd7cphqFeTZFLjidIzWD70WfHXKJkoZbFrK5HGGqwJhJ/py1h1SDopPrTdtcEcqOQv
+        lRFN4dnH3wRAXA5a/sh6SEb0XzJiezI5dXuqOf2Nb2WVPqg39e1NbRSSCT8G10sKwrTgS7D
+        X5lHIUSGZX1OYsAM301CgLDgmN8KE+ZBq6zQ8OW3OC/MoqsucGHLIKLSmODCnkZ9jTTZOpI
+        AzADRoZVbljpu1ByHxS64uX+TfoCxi6lPdMSMwN
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 10617112051867632203
+From:   Zhangjin Wu <falcon@tinylab.org>
+To:     thomas@t-8ch.de, w@1wt.eu
+Cc:     falcon@tinylab.org, arnd@arndb.de, david.laight@aculab.com,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-riscv@lists.infradead.org,
+        =?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <linux@weissschuh.net>
+Subject: [PATCH v5 02/14] tools/nolibc: unistd.h: apply __sysret() helper
+Date:   Wed, 28 Jun 2023 21:11:44 +0800
+Message-Id: <d6dea45987fda7edc0bdc3a1f6865ab8edd3cfd8.1687957589.git.falcon@tinylab.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <cover.1687957589.git.falcon@tinylab.org>
+References: <cover.1687957589.git.falcon@tinylab.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: AD9XzmSmvwHs_EMjcbfnD80M6S02vQSl
-X-Proofpoint-GUID: AD9XzmSmvwHs_EMjcbfnD80M6S02vQSl
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-06-28_08,2023-06-27_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 phishscore=0
- mlxlogscore=851 malwarescore=0 spamscore=0 impostorscore=0
- lowpriorityscore=0 suspectscore=0 clxscore=1015 adultscore=0 bulkscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2305260000 definitions=main-2306280116
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrsz:qybglogicsvrsz3a-3
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Simplify the shutdown of non-protected VMs. There is no need to do
-complex manipulations of the counter if it was zero.
+Use __sysret() to shrink the whole _syscall() to oneline code.
 
-This also fixes a very rare race which caused pages to be torn down
-from the address space with a non-zero counter even on older machines
-that don't support the UVC instruction, causing a crash.
-
-Reported-by: Marc Hartmayer <mhartmay@linux.ibm.com>
-Fixes: fb491d5500a7 ("KVM: s390: pv: asynchronous destroy for reboot")
-Signed-off-by: Claudio Imbrenda <imbrenda@linux.ibm.com>
+Reviewed-by: Thomas Weißschuh <linux@weissschuh.net>
+Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
 ---
- arch/s390/kvm/pv.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+ tools/include/nolibc/unistd.h | 11 +----------
+ 1 file changed, 1 insertion(+), 10 deletions(-)
 
-diff --git a/arch/s390/kvm/pv.c b/arch/s390/kvm/pv.c
-index 3ce5f4351156..899f3b8ac011 100644
---- a/arch/s390/kvm/pv.c
-+++ b/arch/s390/kvm/pv.c
-@@ -411,8 +411,12 @@ int kvm_s390_pv_deinit_cleanup_all(struct kvm *kvm, u16 *rc, u16 *rrc)
- 	u16 _rc, _rrc;
- 	int cc = 0;
+diff --git a/tools/include/nolibc/unistd.h b/tools/include/nolibc/unistd.h
+index 0e832e10a0b2..fabc846f797b 100644
+--- a/tools/include/nolibc/unistd.h
++++ b/tools/include/nolibc/unistd.h
+@@ -56,16 +56,7 @@ int tcsetpgrp(int fd, pid_t pid)
+ 	return ioctl(fd, TIOCSPGRP, &pid);
+ }
  
--	/* Make sure the counter does not reach 0 before calling s390_uv_destroy_range */
--	atomic_inc(&kvm->mm->context.protected_count);
-+	/*
-+	 * Nothing to do if the counter was already 0. Otherwise make sure
-+	 * the counter does not reach 0 before calling s390_uv_destroy_range.
-+	 */
-+	if (!atomic_inc_not_zero(&kvm->mm->context.protected_count))
-+		return 0;
- 
- 	*rc = 1;
- 	/* If the current VM is protected, destroy it */
+-#define _syscall(N, ...)                                                      \
+-({                                                                            \
+-	long _ret = my_syscall##N(__VA_ARGS__);                               \
+-	if (_ret < 0) {                                                       \
+-		SET_ERRNO(-_ret);                                             \
+-		_ret = -1;                                                    \
+-	}                                                                     \
+-	_ret;                                                                 \
+-})
+-
++#define _syscall(N, ...) __sysret(my_syscall##N(__VA_ARGS__))
+ #define _syscall_narg(...) __syscall_narg(__VA_ARGS__, 6, 5, 4, 3, 2, 1, 0)
+ #define __syscall_narg(_0, _1, _2, _3, _4, _5, _6, N, ...) N
+ #define _syscall_n(N, ...) _syscall(N, __VA_ARGS__)
 -- 
-2.41.0
+2.25.1
 
