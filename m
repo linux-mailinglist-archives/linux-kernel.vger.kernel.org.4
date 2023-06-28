@@ -2,149 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3094740AE8
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 10:13:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE938740BC4
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 10:42:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231526AbjF1INV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 04:13:21 -0400
-Received: from mail-qk1-f205.google.com ([209.85.222.205]:56510 "EHLO
-        mail-qk1-f205.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233033AbjF1ILL (ORCPT
+        id S235824AbjF1ImY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 04:42:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42926 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234419AbjF1IjA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 04:11:11 -0400
-Received: by mail-qk1-f205.google.com with SMTP id af79cd13be357-766b225954aso298111585a.0
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 01:11:11 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687939871; x=1690531871;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=5mE2dRHeC7sKEs35oOzi4J/TBQK9oz2ZLXDJxpRfnoM=;
-        b=DpSpPUw1wPjCsq19tvus4ao/2Qh55qQUreab9LGJBO7sfJ09/ae0yjmQKEUZXyGlWu
-         Rq4PYXu3WEW50I/MMMAyWsy32z9XZf5xoRo/j/5RVif2W6Yha8fLj9KMf6HBmz+RhGT/
-         EyBQ06Sd8FINKtIMnQFNx5sRZPATRwtuReKSsN/Qr/jeW6Z6oPAG4JvEKwOEdkwK9ftl
-         936LRv+8lXc9Ca+cLa60ceE0jeiqCEdS/90OUsKqZHLuTiQm/Hz3Y0w2uvOvvdS15xrk
-         uIufkxWVsZP33V4cV3DWBMPq0Omeq8zhLN3OSZj7ryaYCrfq0dEFqbh7CvvZG3sAZlFE
-         hlBQ==
-X-Gm-Message-State: AC+VfDxU7/L8a5BGNVoV5ke5kbr8Uq+9Ydg7DZfbuMPdT6Kb40vFeADU
-        /nt19JeH7uk3njOqGMg78V6pwKPewR2OXi1spQdaKCczDv/B
-X-Google-Smtp-Source: ACHHUZ66QAk9hpbM8ZJwFPep4WtJ7K8AxcUoCJNcYRVBAf0aszBAaVK2g/ibqFpZt6is3gQrVOo8ILU0yCAYL9qne0GpJZriAHdK
+        Wed, 28 Jun 2023 04:39:00 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE1C0358A;
+        Wed, 28 Jun 2023 01:29:50 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8CF2E6131F;
+        Wed, 28 Jun 2023 07:10:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E7459C433CC;
+        Wed, 28 Jun 2023 07:10:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687936222;
+        bh=anrABNLH1B5VmYnoNV4fxFNHWXz9Qs7iNp8YB+h3NDc=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=SVGhRdHc7voHRN7iPtu1K0UNzNEpyXh+VA44LNjfLfDbV1iW+9/Kf4od9Cbwhe59O
+         yOuOzknF3g0Mx2pCfFhsttHmmGD34pzMCB2s9Y4JEDDX+deWPwSvTVK1Zq0EEVVG7U
+         a6nnBdl5RtU1RXDA8UKZMz80mw3RHUHU4gH+uSvrt7qf0MZIivHlxYygFgYrVe2807
+         bHWvbMaMXh7WipkXvLsIEEgfRx3++riD9RHQhV3xqNopNCtv4X5AiwYdIL+6lOE0x8
+         /ERGKkjmbl5WQrkFM+qYBWteqxdHl6KoFHhS+G30PD33NM7bpcQFIDu/ZehyYqiWpd
+         GoMAq3CDZJocw==
+Received: by mail-oi1-f177.google.com with SMTP id 5614622812f47-39eab4bbe8aso3903697b6e.1;
+        Wed, 28 Jun 2023 00:10:22 -0700 (PDT)
+X-Gm-Message-State: AC+VfDzVLtzdZtaeovf3coL8w8KQ/D7NehjO2NIT2mSYYT2t6zLaGS+k
+        M7p4P78IMCtsx+BuyVhnakOps5yuST8GIO6L1YE=
+X-Google-Smtp-Source: ACHHUZ4NupDIdxy4l7CGyjCTJaoOVdc4PpoS++lnjD56J+LwueuzJxCVgOU0PYXIaPH4Hhr4mxylAGJEn9GYJImoJnE=
+X-Received: by 2002:a05:6808:1141:b0:3a3:69de:d385 with SMTP id
+ u1-20020a056808114100b003a369ded385mr249269oiu.6.1687936222114; Wed, 28 Jun
+ 2023 00:10:22 -0700 (PDT)
 MIME-Version: 1.0
-X-Received: by 2002:a05:6808:2184:b0:3a1:f5bf:67db with SMTP id
- be4-20020a056808218400b003a1f5bf67dbmr1868987oib.1.1687936064695; Wed, 28 Jun
- 2023 00:07:44 -0700 (PDT)
-Date:   Wed, 28 Jun 2023 00:07:44 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000008a36d105ff2b3d83@google.com>
-Subject: [syzbot] [reiserfs?] kernel BUG in flush_commit_list
-From:   syzbot <syzbot+702d8ffe347fa9623624@syzkaller.appspotmail.com>
-To:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        reiserfs-devel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+References: <20230626233014.66549-1-masahiroy@kernel.org> <20230626233014.66549-3-masahiroy@kernel.org>
+In-Reply-To: <20230626233014.66549-3-masahiroy@kernel.org>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Wed, 28 Jun 2023 16:09:44 +0900
+X-Gmail-Original-Message-ID: <CAK7LNATtUBZo0bczb=bQyQ6UrXbK7V4Bp058+wzZQp3QREfniQ@mail.gmail.com>
+Message-ID: <CAK7LNATtUBZo0bczb=bQyQ6UrXbK7V4Bp058+wzZQp3QREfniQ@mail.gmail.com>
+Subject: Re: [PATCH v4 3/3] kbuild: respect GNU Make -w flag
+To:     linux-kbuild@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, Nicolas Schier <n.schier@avm.de>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nicolas Schier <nicolas@fjasle.eu>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+        lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
-
-syzbot found the following issue on:
-
-HEAD commit:    61dabacdad4e Merge tag 'sound-6.4' of git://git.kernel.org..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=17d009af280000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=e74b395fe4978721
-dashboard link: https://syzkaller.appspot.com/bug?extid=702d8ffe347fa9623624
-compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
-
-Unfortunately, I don't have any reproducer for this issue yet.
-
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/eba067fe8c35/disk-61dabacd.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/6800499a8694/vmlinux-61dabacd.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/4b4f8a7eda0e/bzImage-61dabacd.xz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+702d8ffe347fa9623624@syzkaller.appspotmail.com
-
-------------[ cut here ]------------
-kernel BUG at fs/reiserfs/journal.c:1108!
-invalid opcode: 0000 [#1] PREEMPT SMP KASAN
-CPU: 0 PID: 5035 Comm: syz-executor.0 Not tainted 6.4.0-rc7-syzkaller-00204-g61dabacdad4e #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/27/2023
-RIP: 0010:flush_commit_list+0x1bc3/0x1bf0 fs/reiserfs/journal.c:1108
-Code: ff ff e8 60 49 59 ff 0f 0b e8 59 49 59 ff 0f 0b e8 52 49 59 ff 0f 0b e8 4b 49 59 ff 0f 0b e8 44 49 59 ff 0f 0b e8 3d 49 59 ff <0f> 0b e8 36 49 59 ff 0f 0b 44 89 f1 80 e1 07 80 c1 03 38 c1 0f 8c
-RSP: 0018:ffffc9000409f748 EFLAGS: 00010293
-RAX: ffffffff82323bb3 RBX: ffff88807b35a0d0 RCX: ffff888028279dc0
-RDX: 0000000000000000 RSI: 0000000000000002 RDI: 0000000000000000
-RBP: 0000000000000002 R08: ffffffff82323044 R09: ffffed1011ebcce9
-R10: 0000000000000000 R11: dffffc0000000001 R12: ffff88807b35a01c
-R13: dffffc0000000000 R14: ffff88803c25c000 R15: 1ffff1100f66b41a
-FS:  0000555555b4f400(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f40f3952000 CR3: 0000000035d67000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- do_journal_end+0x3160/0x4770 fs/reiserfs/journal.c:4300
- do_journal_release+0x178/0x4d0 fs/reiserfs/journal.c:1917
- journal_release+0x1f/0x30 fs/reiserfs/journal.c:1971
- reiserfs_put_super+0x23b/0x4c0 fs/reiserfs/super.c:616
- generic_shutdown_super+0x134/0x340 fs/super.c:500
- kill_block_super+0x84/0xf0 fs/super.c:1407
- deactivate_locked_super+0xa4/0x110 fs/super.c:331
- cleanup_mnt+0x426/0x4c0 fs/namespace.c:1177
- task_work_run+0x24a/0x300 kernel/task_work.c:179
- resume_user_mode_work include/linux/resume_user_mode.h:49 [inline]
- exit_to_user_mode_loop+0xd9/0x100 kernel/entry/common.c:171
- exit_to_user_mode_prepare+0xb1/0x140 kernel/entry/common.c:204
- __syscall_exit_to_user_mode_work kernel/entry/common.c:286 [inline]
- syscall_exit_to_user_mode+0x64/0x280 kernel/entry/common.c:297
- do_syscall_64+0x4d/0xc0 arch/x86/entry/common.c:86
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f5255e8d7f7
-Code: ff ff ff f7 d8 64 89 01 48 83 c8 ff c3 66 0f 1f 44 00 00 31 f6 e9 09 00 00 00 66 0f 1f 84 00 00 00 00 00 b8 a6 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007fffc16d9fa8 EFLAGS: 00000246 ORIG_RAX: 00000000000000a6
-RAX: 0000000000000000 RBX: 0000000000000000 RCX: 00007f5255e8d7f7
-RDX: 00007fffc16da07b RSI: 000000000000000a RDI: 00007fffc16da070
-RBP: 00007fffc16da070 R08: 00000000ffffffff R09: 00007fffc16d9e40
-R10: 0000555555b50893 R11: 0000000000000246 R12: 00007f5255ed643b
-R13: 00007fffc16db130 R14: 0000555555b50810 R15: 00007fffc16db170
- </TASK>
-Modules linked in:
----[ end trace 0000000000000000 ]---
-RIP: 0010:flush_commit_list+0x1bc3/0x1bf0 fs/reiserfs/journal.c:1108
-Code: ff ff e8 60 49 59 ff 0f 0b e8 59 49 59 ff 0f 0b e8 52 49 59 ff 0f 0b e8 4b 49 59 ff 0f 0b e8 44 49 59 ff 0f 0b e8 3d 49 59 ff <0f> 0b e8 36 49 59 ff 0f 0b 44 89 f1 80 e1 07 80 c1 03 38 c1 0f 8c
-RSP: 0018:ffffc9000409f748 EFLAGS: 00010293
-RAX: ffffffff82323bb3 RBX: ffff88807b35a0d0 RCX: ffff888028279dc0
-RDX: 0000000000000000 RSI: 0000000000000002 RDI: 0000000000000000
-RBP: 0000000000000002 R08: ffffffff82323044 R09: ffffed1011ebcce9
-R10: 0000000000000000 R11: dffffc0000000001 R12: ffff88807b35a01c
-R13: dffffc0000000000 R14: ffff88803c25c000 R15: 1ffff1100f66b41a
-FS:  0000555555b4f400(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f40f3899000 CR3: 0000000035d67000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+On Tue, Jun 27, 2023 at 8:30=E2=80=AFAM Masahiro Yamada <masahiroy@kernel.o=
+rg> wrote:
+>
+> Currently, -w (--print-directory) option is ignored, but it is better
+> to respect the user's choice.
+>
+> This commit changes the behavior of "Entering directory ..." logging.
+>
+> If -w (or --print-directory) is given via the command line or the
+> MAKEFLAGS environment variable, print "Entering directory ..." for every
+> sub make.
+>
+> If --no-print-directory is given via the command line or the MAKEFLAGS
+> environment variable, suppress "Entering directory ..." completely.
+>
+> If none of them is given, print "Entering directory ..." when Kbuild
+> changes the working directory at the start of building. (default)
+>
+> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> Tested-by: Nicolas Schier <n.schier@avm.de>
+> ---
 
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+As it turns out, this patch does not work for GNU Make <=3D 4.3
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+I will drop (and give up) this patch.
 
-If the bug is already fixed, let syzbot know by replying with:
-#syz fix: exact-commit-title
 
-If you want to change bug's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
 
-If the bug is a duplicate of another bug, reply with:
-#syz dup: exact-subject-of-another-report
 
-If you want to undo deduplication, reply with:
-#syz undup
+
+
+>
+> (no changes since v2)
+>
+> Changes in v2:
+>   - new patch
+>
+>  Makefile | 16 ++++++++++------
+>  1 file changed, 10 insertions(+), 6 deletions(-)
+>
+> diff --git a/Makefile b/Makefile
+> index 7edb00603b7e..c9864f83a3d2 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -38,6 +38,12 @@ __all:
+>  # descending is started. They are now explicitly listed as the
+>  # prepare rule.
+>
+> +ifeq ($(filter 3.%,$(MAKE_VERSION)),)
+> +short-opts :=3D $(firstword -$(MAKEFLAGS))
+> +else
+> +short-opts :=3D $(filter-out --%,$(MAKEFLAGS))
+> +endif
+> +
+>  this-makefile :=3D $(lastword $(MAKEFILE_LIST))
+>  export abs_srctree :=3D $(realpath $(dir $(this-makefile)))
+>  export abs_objtree :=3D $(CURDIR)
+> @@ -95,12 +101,6 @@ endif
+>  # commands
+>  # make-4.0 (and later) keep single letter options in the 1st word of MAK=
+EFLAGS.
+>
+> -ifeq ($(filter 3.%,$(MAKE_VERSION)),)
+> -short-opts :=3D $(firstword -$(MAKEFLAGS))
+> -else
+> -short-opts :=3D $(filter-out --%,$(MAKEFLAGS))
+> -endif
+> -
+>  ifneq ($(findstring s,$(short-opts)),)
+>  quiet=3Dsilent_
+>  override KBUILD_VERBOSE :=3D
+> @@ -215,12 +215,16 @@ else
+>  need-sub-make :=3D 1
+>  endif
+>
+> +ifeq ($(findstring w, $(short-opts)),)
+>  ifeq ($(filter --no-print-directory, $(MAKEFLAGS)),)
+>  # If --no-print-directory is unset, recurse once again to set it.
+>  # You may end up recursing into __sub-make twice. This is needed due to =
+the
+>  # behavior change in GNU Make 4.4.1.
+>  need-sub-make :=3D 1
+>  endif
+> +else
+> +no-print-directory :=3D
+> +endif
+>
+>  ifeq ($(need-sub-make),1)
+>
+> --
+> 2.39.2
+>
+
+
+--=20
+Best Regards
+Masahiro Yamada
