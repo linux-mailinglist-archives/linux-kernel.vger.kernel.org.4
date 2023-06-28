@@ -2,249 +2,216 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1AE0741BE3
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 00:45:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A16BB741BE8
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 00:48:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232506AbjF1WpU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 18:45:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47072 "EHLO
+        id S231769AbjF1Ws1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 18:48:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231497AbjF1Wn1 (ORCPT
+        with ESMTP id S231650AbjF1Wr4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 18:43:27 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D93DF2728;
-        Wed, 28 Jun 2023 15:43:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687992206; x=1719528206;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=R6aeeOVtCVl/aF4rr9VOp5md60UJagkTMuBGcdbekMM=;
-  b=QOCMc1NmYINHU7HXGIdpdYk6l9m6WRlH8hbbzwzS/RUpFaMqc45O9WeT
-   u3vIyxtvJ+FuqTkOJF9wrBovBww+ODBibSgapAvHrHgcV0xri33plpoqn
-   ObvcdBNUzDdZKtv0JLJ67dTfytaNLwgOYACiQGDuuDHQ68m3BIn6KY4L1
-   DcPuj+o+FYHnRKH0o97+f4Jm+MnTdKB/Xfi7GdQWeEwySc3/PMBAABGPZ
-   BBB8PGGjWOuFEmGMM4LAubXkVRplUXx0CLuFao0vO+RDn2cdmd5CclaXt
-   bSXMkPk8Z7aSq89WNozP4Qo1LpdPleneg7pXExeJn0PukPZ61Q8fypJtp
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10755"; a="392699190"
-X-IronPort-AV: E=Sophos;i="6.01,166,1684825200"; 
-   d="scan'208";a="392699190"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2023 15:43:26 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10755"; a="830300029"
-X-IronPort-AV: E=Sophos;i="6.01,166,1684825200"; 
-   d="scan'208";a="830300029"
-Received: from ls.sc.intel.com (HELO localhost) ([172.25.112.31])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2023 15:43:25 -0700
-From:   isaku.yamahata@intel.com
-To:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     isaku.yamahata@intel.com, isaku.yamahata@gmail.com,
-        Paolo Bonzini <pbonzini@redhat.com>, erdemaktas@google.com,
-        Sean Christopherson <seanjc@google.com>,
-        Sagi Shahar <sagis@google.com>,
-        David Matlack <dmatlack@google.com>,
-        Kai Huang <kai.huang@intel.com>,
-        Zhi Wang <zhi.wang.linux@gmail.com>, chen.bo@intel.com,
-        linux-coco@lists.linux.dev,
-        Chao Peng <chao.p.peng@linux.intel.com>,
-        Ackerley Tng <ackerleytng@google.com>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Michael Roth <michael.roth@amd.com>,
-        Yuan Yao <yuan.yao@linux.intel.com>
-Subject: [RFC PATCH v3 11/11] KVM: x86: Add gmem hook for invalidating private memory
-Date:   Wed, 28 Jun 2023 15:43:10 -0700
-Message-Id: <e57fc6834a49e9773f0dc54eac650b21bb7e5476.1687991811.git.isaku.yamahata@intel.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <cover.1687991811.git.isaku.yamahata@intel.com>
-References: <cover.1687991811.git.isaku.yamahata@intel.com>
+        Wed, 28 Jun 2023 18:47:56 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 322063C0E;
+        Wed, 28 Jun 2023 15:44:37 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (aztw-30-b2-v4wan-166917-cust845.vm26.cable.virginm.net [82.37.23.78])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 2139C905;
+        Thu, 29 Jun 2023 00:43:54 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1687992234;
+        bh=8kUftu7lYSaZy3TqVKWV5nfS/HXx3yf+27+tAyJIkyk=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=iJ6U8CHr0KCHygB+rhCg58KJj/2gAUDwcbI9GZA/3cbYVkCDbLNSPNJUxRiMOBxL3
+         6QXplw2JoYKR1UHRlsFcIzvHMwb7eoxrf01EKEtVm0T6qZI2y2Pw1JRea8swrf7opv
+         B20v0j+nvh6J8xT2iNTjwNljt9CnWsDOkTD0aplY=
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20230627201628.207483-4-umang.jain@ideasonboard.com>
+References: <20230627201628.207483-1-umang.jain@ideasonboard.com> <20230627201628.207483-4-umang.jain@ideasonboard.com>
+Subject: Re: [PATCH v8 3/5] staging: bcm2835-camera: Register bcm2835-camera with vchiq_bus_type
+From:   Kieran Bingham <kieran.bingham@ideasonboard.com>
+Cc:     stefan.wahren@i2se.com, gregkh@linuxfoundation.org,
+        f.fainelli@gmail.com, athierry@redhat.com, error27@gmail.com,
+        dave.stevenson@raspberrypi.com, laurent.pinchart@ideasonboard.com,
+        Umang Jain <umang.jain@ideasonboard.com>
+To:     Umang Jain <umang.jain@ideasonboard.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
+        linux-staging@lists.linux.dev
+Date:   Wed, 28 Jun 2023 23:44:31 +0100
+Message-ID: <168799227183.3298351.12365161998104715465@Monstersaurus>
+User-Agent: alot/0.10
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,
+        T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Michael Roth <michael.roth@amd.com>
+Quoting Umang Jain (2023-06-27 21:16:26)
+> Register the bcm2835-camera with the vchiq_bus_type instead of using
+> platform driver/device.
+>=20
+> Also the VCHIQ firmware doesn't support device enumeration, hence
+> one has to maintain a list of devices to be registered in the interface.
+>=20
+> Signed-off-by: Umang Jain <umang.jain@ideasonboard.com>
+> ---
+>  .../bcm2835-camera/bcm2835-camera.c           | 16 +++++++-------
+>  .../interface/vchiq_arm/vchiq_arm.c           | 21 ++++++++++++++++---
+>  2 files changed, 26 insertions(+), 11 deletions(-)
+>=20
+> diff --git a/drivers/staging/vc04_services/bcm2835-camera/bcm2835-camera.=
+c b/drivers/staging/vc04_services/bcm2835-camera/bcm2835-camera.c
+> index 346d00df815a..f37b2a881d92 100644
+> --- a/drivers/staging/vc04_services/bcm2835-camera/bcm2835-camera.c
+> +++ b/drivers/staging/vc04_services/bcm2835-camera/bcm2835-camera.c
+> @@ -24,8 +24,9 @@
+>  #include <media/v4l2-event.h>
+>  #include <media/v4l2-common.h>
+>  #include <linux/delay.h>
+> -#include <linux/platform_device.h>
+> =20
+> +#include "../interface/vchiq_arm/vchiq_arm.h"
+> +#include "../interface/vchiq_arm/vchiq_device.h"
+>  #include "../vchiq-mmal/mmal-common.h"
+>  #include "../vchiq-mmal/mmal-encodings.h"
+>  #include "../vchiq-mmal/mmal-vchiq.h"
+> @@ -1841,7 +1842,7 @@ static struct v4l2_format default_v4l2_format =3D {
+>         .fmt.pix.sizeimage =3D 1024 * 768,
+>  };
+> =20
+> -static int bcm2835_mmal_probe(struct platform_device *pdev)
+> +static int bcm2835_mmal_probe(struct vchiq_device *device)
+>  {
+>         int ret;
+>         struct bcm2835_mmal_dev *dev;
+> @@ -1896,7 +1897,7 @@ static int bcm2835_mmal_probe(struct platform_devic=
+e *pdev)
+>                                                        &camera_instance);
+>                 ret =3D v4l2_device_register(NULL, &dev->v4l2_dev);
+>                 if (ret) {
+> -                       dev_err(&pdev->dev, "%s: could not register V4L2 =
+device: %d\n",
+> +                       dev_err(&device->dev, "%s: could not register V4L=
+2 device: %d\n",
+>                                 __func__, ret);
+>                         goto free_dev;
+>                 }
+> @@ -1976,7 +1977,7 @@ static int bcm2835_mmal_probe(struct platform_devic=
+e *pdev)
+>         return ret;
+>  }
+> =20
+> -static void bcm2835_mmal_remove(struct platform_device *pdev)
+> +static void bcm2835_mmal_remove(struct vchiq_device *device)
+>  {
+>         int camera;
+>         struct vchiq_mmal_instance *instance =3D gdev[0]->instance;
+> @@ -1988,17 +1989,16 @@ static void bcm2835_mmal_remove(struct platform_d=
+evice *pdev)
+>         vchiq_mmal_finalise(instance);
+>  }
+> =20
+> -static struct platform_driver bcm2835_camera_driver =3D {
+> +static struct vchiq_driver bcm2835_camera_driver =3D {
+>         .probe          =3D bcm2835_mmal_probe,
+> -       .remove_new     =3D bcm2835_mmal_remove,
+> +       .remove         =3D bcm2835_mmal_remove,
+>         .driver         =3D {
+>                 .name   =3D "bcm2835-camera",
+>         },
+>  };
+> =20
+> -module_platform_driver(bcm2835_camera_driver)
+> +module_vchiq_driver(bcm2835_camera_driver)
+> =20
+>  MODULE_DESCRIPTION("Broadcom 2835 MMAL video capture");
+>  MODULE_AUTHOR("Vincent Sanders");
+>  MODULE_LICENSE("GPL");
+> -MODULE_ALIAS("platform:bcm2835-camera");
 
-TODO: add a CONFIG option that can be to completely skip arch
-invalidation loop and avoid __weak references for arch/platforms that
-don't need an additional invalidation hook.
+This bit worries me. I think that's how module autoloading is handled.
 
-In some cases, like with SEV-SNP, guest memory needs to be updated in a
-platform-specific manner before it can be safely freed back to the host.
-Add hooks to wire up handling of this sort when freeing memory in
-response to FALLOC_FL_PUNCH_HOLE operations.
+Can you check into the details of MODULE_ALIAS and follow the rabbit
+hole for a bit? It's a few years since I last went down there so I can't
+remember the specifics right now.
 
-Also issue invalidations of all allocated pages when releasing the gmem
-file so that the pages are not left in an unusable state when they get
-freed back to the host.
+Except for that, I think this looks good.
 
-Signed-off-by: Michael Roth <michael.roth@amd.com>
-Link: https://lore.kernel.org/r/20230612042559.375660-3-michael.roth@amd.com
 
----
-Changes v2 -> v3:
-- Newly added
----
- arch/x86/include/asm/kvm-x86-ops.h |  1 +
- arch/x86/include/asm/kvm_host.h    |  1 +
- arch/x86/kvm/x86.c                 |  6 ++++
- include/linux/kvm_host.h           |  3 ++
- virt/kvm/guest_mem.c               | 48 ++++++++++++++++++++++++++++--
- 5 files changed, 57 insertions(+), 2 deletions(-)
-
-diff --git a/arch/x86/include/asm/kvm-x86-ops.h b/arch/x86/include/asm/kvm-x86-ops.h
-index cce8621e3216..a864a2093002 100644
---- a/arch/x86/include/asm/kvm-x86-ops.h
-+++ b/arch/x86/include/asm/kvm-x86-ops.h
-@@ -136,6 +136,7 @@ KVM_X86_OP(complete_emulated_msr)
- KVM_X86_OP(vcpu_deliver_sipi_vector)
- KVM_X86_OP_OPTIONAL_RET0(vcpu_get_apicv_inhibit_reasons);
- KVM_X86_OP_OPTIONAL_RET0(gmem_prepare)
-+KVM_X86_OP_OPTIONAL(gmem_invalidate)
- 
- #undef KVM_X86_OP
- #undef KVM_X86_OP_OPTIONAL
-diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
-index 653f208979cf..a91d17fa2fe8 100644
---- a/arch/x86/include/asm/kvm_host.h
-+++ b/arch/x86/include/asm/kvm_host.h
-@@ -1741,6 +1741,7 @@ struct kvm_x86_ops {
- 
- 	int (*gmem_prepare)(struct kvm *kvm, struct kvm_memory_slot *slot,
- 			    kvm_pfn_t pfn, gfn_t gfn, u8 *max_level);
-+	void (*gmem_invalidate)(struct kvm *kvm, kvm_pfn_t start, kvm_pfn_t end);
- };
- 
- struct kvm_x86_nested_ops {
-diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index b5f865f39a00..e722ace8150d 100644
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -13260,6 +13260,12 @@ bool kvm_arch_no_poll(struct kvm_vcpu *vcpu)
- }
- EXPORT_SYMBOL_GPL(kvm_arch_no_poll);
- 
-+#ifdef CONFIG_KVM_PRIVATE_MEM
-+void kvm_arch_gmem_invalidate(struct kvm *kvm, kvm_pfn_t start, kvm_pfn_t end)
-+{
-+	static_call_cond(kvm_x86_gmem_invalidate)(kvm, start, end);
-+}
-+#endif
- 
- int kvm_spec_ctrl_test_value(u64 value)
- {
-diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
-index 5ca0c8ee4292..cfd98572d8be 100644
---- a/include/linux/kvm_host.h
-+++ b/include/linux/kvm_host.h
-@@ -2346,6 +2346,7 @@ static inline bool kvm_mem_is_private(struct kvm *kvm, gfn_t gfn)
- #ifdef CONFIG_KVM_PRIVATE_MEM
- int kvm_gmem_get_pfn(struct kvm *kvm, struct kvm_memory_slot *slot,
- 			      gfn_t gfn, kvm_pfn_t *pfn, int *order);
-+void kvm_arch_gmem_invalidate(struct kvm *kvm, kvm_pfn_t start, kvm_pfn_t end);
- #else
- static inline int kvm_gmem_get_pfn(struct kvm *kvm,
- 				   struct kvm_memory_slot *slot, gfn_t gfn,
-@@ -2354,6 +2355,8 @@ static inline int kvm_gmem_get_pfn(struct kvm *kvm,
- 	KVM_BUG_ON(1, kvm);
- 	return -EIO;
- }
-+
-+void kvm_arch_gmem_invalidate(struct kvm *kvm, kvm_pfn_t start, kvm_pfn_t end) { }
- #endif /* CONFIG_KVM_PRIVATE_MEM */
- 
- #endif
-diff --git a/virt/kvm/guest_mem.c b/virt/kvm/guest_mem.c
-index 63ac006db7ee..5b8e11760d28 100644
---- a/virt/kvm/guest_mem.c
-+++ b/virt/kvm/guest_mem.c
-@@ -142,16 +142,58 @@ static void kvm_gmem_invalidate_end(struct kvm *kvm, struct kvm_gmem *gmem,
- 	KVM_MMU_UNLOCK(kvm);
- }
- 
-+void __weak kvm_arch_gmem_invalidate(struct kvm *kvm, kvm_pfn_t start, kvm_pfn_t end)
-+{
-+}
-+
-+/* Handle arch-specific hooks needed before releasing guarded pages. */
-+static void kvm_gmem_issue_arch_invalidate(struct kvm *kvm, struct file *file,
-+					   pgoff_t start, pgoff_t end)
-+{
-+	pgoff_t file_end = i_size_read(file_inode(file)) >> PAGE_SHIFT;
-+	pgoff_t index = start;
-+
-+	end = min(end, file_end);
-+
-+	while (index < end) {
-+		struct folio *folio;
-+		unsigned int order;
-+		struct page *page;
-+		kvm_pfn_t pfn;
-+
-+		folio = __filemap_get_folio(file->f_mapping, index,
-+					    FGP_LOCK, 0);
-+		if (!folio) {
-+			index++;
-+			continue;
-+		}
-+
-+		page = folio_file_page(folio, index);
-+		pfn = page_to_pfn(page);
-+		order = folio_order(folio);
-+
-+		kvm_arch_gmem_invalidate(kvm, pfn, pfn + min((1ul << order), end - index));
-+
-+		index = folio_next_index(folio);
-+		folio_unlock(folio);
-+		folio_put(folio);
-+
-+		cond_resched();
-+	}
-+}
-+
- static long kvm_gmem_punch_hole(struct file *file, loff_t offset, loff_t len)
- {
- 	struct kvm_gmem *gmem = file->private_data;
--	pgoff_t start = offset >> PAGE_SHIFT;
--	pgoff_t end = (offset + len) >> PAGE_SHIFT;
- 	struct kvm *kvm = gmem->kvm;
-+	pgoff_t start, end;
- 
- 	if (!PAGE_ALIGNED(offset) || !PAGE_ALIGNED(len))
- 		return 0;
- 
-+	start = offset >> PAGE_SHIFT;
-+	end = (offset + len) >> PAGE_SHIFT;
-+
- 	/*
- 	 * Bindings must stable across invalidation to ensure the start+end
- 	 * are balanced.
-@@ -160,6 +202,7 @@ static long kvm_gmem_punch_hole(struct file *file, loff_t offset, loff_t len)
- 
- 	kvm_gmem_invalidate_begin(kvm, gmem, start, end);
- 
-+	kvm_gmem_issue_arch_invalidate(kvm, file, start, end);
- 	truncate_inode_pages_range(file->f_mapping, offset, offset + len - 1);
- 
- 	kvm_gmem_invalidate_end(kvm, gmem, start, end);
-@@ -266,6 +309,7 @@ static int kvm_gmem_release(struct inode *inode, struct file *file)
- 	 * pointed at this file.
- 	 */
- 	kvm_gmem_invalidate_begin(kvm, gmem, 0, -1ul);
-+	kvm_gmem_issue_arch_invalidate(gmem->kvm, file, 0, -1ul);
- 	truncate_inode_pages_final(file->f_mapping);
- 	kvm_gmem_invalidate_end(kvm, gmem, 0, -1ul);
- 
--- 
-2.25.1
-
+> diff --git a/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.=
+c b/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c
+> index e8d40f891449..79d4d0eeb5fb 100644
+> --- a/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c
+> +++ b/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c
+> @@ -67,7 +67,6 @@ int vchiq_susp_log_level =3D VCHIQ_LOG_ERROR;
+>  DEFINE_SPINLOCK(msg_queue_spinlock);
+>  struct vchiq_state g_state;
+> =20
+> -static struct platform_device *bcm2835_camera;
+>  static struct platform_device *bcm2835_audio;
+> =20
+>  struct vchiq_drvdata {
+> @@ -134,6 +133,15 @@ struct vchiq_pagelist_info {
+>         unsigned int scatterlist_mapped;
+>  };
+> =20
+> +/*
+> + * The devices implemented in the VCHIQ firmware are not discoverable,
+> + * so we need to maintain a list of them in order to register them with
+> + * the interface.
+> + */
+> +static const char *const vchiq_devices[] =3D {
+> +       "bcm2835-camera",
+> +};
+> +
+>  static void __iomem *g_regs;
+>  /* This value is the size of the L2 cache lines as understood by the
+>   * VPU firmware, which determines the required alignment of the
+> @@ -1798,6 +1806,7 @@ static int vchiq_probe(struct platform_device *pdev)
+>         struct device_node *fw_node;
+>         const struct of_device_id *of_id;
+>         struct vchiq_drvdata *drvdata;
+> +       unsigned int i;
+>         int err;
+> =20
+>         of_id =3D of_match_node(vchiq_of_match, pdev->dev.of_node);
+> @@ -1840,9 +1849,15 @@ static int vchiq_probe(struct platform_device *pde=
+v)
+>                 goto error_exit;
+>         }
+> =20
+> -       bcm2835_camera =3D vchiq_register_child(pdev, "bcm2835-camera");
+>         bcm2835_audio =3D vchiq_register_child(pdev, "bcm2835_audio");
+> =20
+> +       for (i =3D 0; i < ARRAY_SIZE(vchiq_devices); i++) {
+> +               err =3D vchiq_device_register(&pdev->dev, vchiq_devices[i=
+]);
+> +               if (err)
+> +                       dev_err(&pdev->dev, "Failed to register %s vchiq =
+device\n",
+> +                       vchiq_devices[i]);
+> +       }
+> +
+>         return 0;
+> =20
+>  failed_platform_init:
+> @@ -1854,7 +1869,7 @@ static int vchiq_probe(struct platform_device *pdev)
+>  static void vchiq_remove(struct platform_device *pdev)
+>  {
+>         platform_device_unregister(bcm2835_audio);
+> -       platform_device_unregister(bcm2835_camera);
+> +       bus_for_each_dev(&vchiq_bus_type, NULL, NULL, vchiq_device_unregi=
+ster);
+>         vchiq_debugfs_deinit();
+>         vchiq_deregister_chrdev();
+>  }
+> --=20
+> 2.39.1
+>
