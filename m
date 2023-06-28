@@ -2,40 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C900741114
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 14:39:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CFADB741126
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 14:39:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231848AbjF1Mhz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 08:37:55 -0400
-Received: from mx0b-0031df01.pphosted.com ([205.220.180.131]:62976 "EHLO
+        id S232285AbjF1MiK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 08:38:10 -0400
+Received: from mx0b-0031df01.pphosted.com ([205.220.180.131]:63262 "EHLO
         mx0b-0031df01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231267AbjF1Mgg (ORCPT
+        by vger.kernel.org with ESMTP id S231321AbjF1Mgg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 28 Jun 2023 08:36:36 -0400
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35S7R01b029236;
-        Wed, 28 Jun 2023 12:36:04 GMT
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35SCTrlE025858;
+        Wed, 28 Jun 2023 12:36:11 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-type; s=qcppdkim1;
- bh=zUyJ/QKLk3qWrZpElgacmwy8J+Ca7776duwwY9ZJ+Hw=;
- b=F5PuK+eAdFLoh1DqWB6Yi76yJ4s+iW4IO3VfeaiPetFSuyNl8kZPT8QKbRbBe1u+fcZX
- CtNkwzW9uZrAE0ljfr/OINZF4aXt0aXmiSSGVTaO/Q+khiCqmFauwbprp0zXELhtfaOM
- 0EpVNRoAFprjW1jGInhcUu78LOnSZQB6oCbH3IDcuwizKwtekAcdVLk5S+uo2yjFOTnF
- pyGfuoiceFokYEjz3IMKbsCKYiCwDz3ayOY7++F9UlKgsodTn9Za20S9cZCj8Xk9SIUz
- pNL/3rzqklxf/5lGlv75zI4XB/QkFZZp2HOYJQNqhYih6UrVk832+Do7rajOZIwM3dzr 1Q== 
+ bh=vKhd0hCzjKWECoQ8ex5R8NLhg6eW+IOM7kKZ7L7MqSE=;
+ b=Zs1EZfc8tYL6+zA4HDFM8a8S284LoYDJvhhSmynmVoQAfG4HWIv+KZwfW8hpkt2jsw4e
+ B2i6O96FrkdplsKWQFsMJ4fRVkMyinJhg/koZt4xvcoOLwQjLbloWUs6yL/ASZQlpju9
+ 2lWsOkgaTQ9ILaoBtIr5l98ED2jXjiUa273i+7ZkX9+W1+fTZQH1i0OgfqAbJ8AxGX0I
+ t6v+lSgJ065vd2YqiZr/exXhPUo94+6zwMVoZXdPTWY+i3boR/OwQ7xuPasu+GKkwbkA
+ c2XUJSKjaEtL4JwtwrCRSnrFpjjJwf+fJlFD+Kzcj6g9qyjO/ecY/OJNsmPD6iiwipMN XQ== 
 Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rgbfss8dn-1
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rg9pb1esy-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 28 Jun 2023 12:36:04 +0000
+        Wed, 28 Jun 2023 12:36:10 +0000
 Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
-        by NASANPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35SCa3Ee024026
+        by NASANPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35SCa9Mb024209
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 28 Jun 2023 12:36:03 GMT
+        Wed, 28 Jun 2023 12:36:09 GMT
 Received: from hu-mojha-hyd.qualcomm.com (10.80.80.8) by
  nasanex01c.na.qualcomm.com (10.45.79.139) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Wed, 28 Jun 2023 05:35:56 -0700
+ 15.2.986.42; Wed, 28 Jun 2023 05:36:03 -0700
 From:   Mukesh Ojha <quic_mojha@quicinc.com>
 To:     <corbet@lwn.net>, <agross@kernel.org>, <andersson@kernel.org>,
         <konrad.dybcio@linaro.org>, <robh+dt@kernel.org>,
@@ -51,9 +51,9 @@ CC:     <linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
         <linux-gpio@vger.kernel.org>,
         "Mukesh Ojha" <quic_mojha@quicinc.com>
-Subject: [PATCH v4 07/21] soc: qcom: minidump: Add update region support
-Date:   Wed, 28 Jun 2023 18:04:34 +0530
-Message-ID: <1687955688-20809-8-git-send-email-quic_mojha@quicinc.com>
+Subject: [PATCH v4 08/21] dt-bindings: reserved-memory: Add qcom,ramoops binding
+Date:   Wed, 28 Jun 2023 18:04:35 +0530
+Message-ID: <1687955688-20809-9-git-send-email-quic_mojha@quicinc.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1687955688-20809-1-git-send-email-quic_mojha@quicinc.com>
 References: <1687955688-20809-1-git-send-email-quic_mojha@quicinc.com>
@@ -64,186 +64,167 @@ X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
  nasanex01c.na.qualcomm.com (10.45.79.139)
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: pJ9iiLd8x4SKlSEio83461EBkiGyS2qz
-X-Proofpoint-ORIG-GUID: pJ9iiLd8x4SKlSEio83461EBkiGyS2qz
+X-Proofpoint-GUID: lMrIh8eaOsYycp--0WBftOdLtQt8YtVb
+X-Proofpoint-ORIG-GUID: lMrIh8eaOsYycp--0WBftOdLtQt8YtVb
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
  definitions=2023-06-28_08,2023-06-27_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- spamscore=0 bulkscore=0 suspectscore=0 phishscore=0 mlxlogscore=999
- adultscore=0 priorityscore=1501 clxscore=1015 malwarescore=0 mlxscore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2305260000 definitions=main-2306280111
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 clxscore=1015
+ spamscore=0 bulkscore=0 priorityscore=1501 adultscore=0 lowpriorityscore=0
+ phishscore=0 mlxscore=0 mlxlogscore=999 impostorscore=0 malwarescore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2305260000
+ definitions=main-2306280111
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support to update client's region physical/virtual addresses,
-which is useful for dynamic loadable modules, dynamic address
-changing clients like if we want to collect current stack
-information for each core and the current stack is changing on
-each sched_switch event, So here virtual/physical address of
-the current stack is changing. So, to cover such use cases
-add the update region support in minidump driver and the
-corresponding smem backend support.
+Qualcomm ramoops minidump logger provide a means of storing
+the ramoops data to some dynamically reserved memory instead
+of traditionally implemented ramoops where the region should
+be statically fixed ram region. Its device tree binding
+would be exactly same as ramoops device tree binding and is
+going to contain traditional ramoops frontend data and this
+content will be collected via Qualcomm minidump infrastructure
+provided from the boot firmware.
 
 Signed-off-by: Mukesh Ojha <quic_mojha@quicinc.com>
 ---
- drivers/soc/qcom/qcom_minidump.c          | 55 +++++++++++++++++++++++++++++++
- drivers/soc/qcom/qcom_minidump_internal.h |  3 ++
- drivers/soc/qcom/qcom_minidump_smem.c     | 21 ++++++++++++
- include/soc/qcom/qcom_minidump.h          |  5 +++
- 4 files changed, 84 insertions(+)
+ .../devicetree/bindings/soc/qcom/qcom,ramoops.yaml | 126 +++++++++++++++++++++
+ 1 file changed, 126 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/soc/qcom/qcom,ramoops.yaml
 
-diff --git a/drivers/soc/qcom/qcom_minidump.c b/drivers/soc/qcom/qcom_minidump.c
-index cfdb63cc29d6..37d6ceb4d85c 100644
---- a/drivers/soc/qcom/qcom_minidump.c
-+++ b/drivers/soc/qcom/qcom_minidump.c
-@@ -318,6 +318,61 @@ int qcom_minidump_region_unregister(const struct qcom_minidump_region *region)
- }
- EXPORT_SYMBOL_GPL(qcom_minidump_region_unregister);
- 
-+/**
-+ * qcom_minidump_update_region() - Update region information with new physical
-+ * address and virtual address for already registered region e.g, current task
-+ * stack for a core keeps on changing on each context switch, there it needs to
-+ * change registered region with new updated addresses.
-+ *
-+ * @region: Should be already registered minidump region.
-+ *
-+ * Return: On success, it returns 0 and negative error value on failure.
-+ */
-+int qcom_minidump_update_region(const struct qcom_minidump_region *region)
-+{
-+	struct minidump_pregion *md_pregion;
-+	struct qcom_minidump_region *tmp;
-+	struct elfhdr *ehdr;
-+	struct elf_shdr *shdr;
-+	struct elf_phdr *phdr;
-+	int idx;
-+	int ret = 0;
+diff --git a/Documentation/devicetree/bindings/soc/qcom/qcom,ramoops.yaml b/Documentation/devicetree/bindings/soc/qcom/qcom,ramoops.yaml
+new file mode 100644
+index 000000000000..b1fdcf3f8ad4
+--- /dev/null
++++ b/Documentation/devicetree/bindings/soc/qcom/qcom,ramoops.yaml
+@@ -0,0 +1,126 @@
++# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: "http://devicetree.org/schemas/soc/qcom/qcom,ramoops.yaml#"
++$schema: "http://devicetree.org/meta-schemas/core.yaml#"
 +
-+	if (!qcom_minidump_valid_region(region))
-+		return -EINVAL;
++title: Qualcomm Ramoops minidump logger
 +
-+	mutex_lock(&md_lock);
-+	if (!md) {
-+		md_pregion = check_if_pending_region_exist(region);
-+		if (!md_pregion) {
-+			ret = -ENOENT;
-+			goto unlock;
-+		}
-+		tmp = &md_pregion->region;
-+		tmp->phys_addr = region->phys_addr;
-+		tmp->virt_addr = region->virt_addr;
-+		goto unlock;
-+	}
++description: |
++  Qualcomm ramoops minidump logger provide a means of storing the ramoops
++  data to some dynamically reserved memory instead of traditionally
++  implemented ramoops where the region should be statically fixed ram
++  region. Because of its similarity with ramoops it will also have same
++  set of property what ramoops have it in its schema and is going to
++  contain traditional ramoops frontend data and this region will be
++  collected via Qualcomm minidump infrastructure provided from the
++  boot firmware.
 +
-+	ret = md->ops->md_update_region(md, &idx, region);
-+	if (ret)
-+		goto unlock;
++maintainers:
++  - Mukesh Ojha <quic_mojha@quicinc.com>
 +
-+	/* Skip predefined shdr/phdr header entry at the start */
-+	ehdr = md->elf.ehdr;
-+	shdr = elf_shdr_entry_addr(ehdr, idx + 4);
-+	phdr = elf_phdr_entry_addr(ehdr, idx + 1);
++properties:
++  compatible:
++    items:
++      - enum:
++          - qcom,sm8450-ramoops
++      - const: qcom,ramoops
 +
-+	shdr->sh_addr = (elf_addr_t)region->virt_addr;
-+	phdr->p_vaddr = (elf_addr_t)region->virt_addr;
-+	phdr->p_paddr = region->phys_addr;
++  memory-region:
++    maxItems: 1
++    description: handle to memory reservation for qcom,ramoops region.
 +
-+unlock:
-+	mutex_unlock(&md_lock);
-+	return ret;
-+}
-+EXPORT_SYMBOL_GPL(qcom_minidump_update_region);
++  ecc-size:
++    $ref: /schemas/types.yaml#/definitions/uint32
++    description: enables ECC support and specifies ECC buffer size in bytes
++    default: 0 # no ECC
 +
- static int qcom_minidump_add_elf_header(struct minidump *md_data)
- {
- 	struct qcom_minidump_region elfregion;
-diff --git a/drivers/soc/qcom/qcom_minidump_internal.h b/drivers/soc/qcom/qcom_minidump_internal.h
-index 6993e3be10c2..dc1e76c1f063 100644
---- a/drivers/soc/qcom/qcom_minidump_internal.h
-+++ b/drivers/soc/qcom/qcom_minidump_internal.h
-@@ -21,6 +21,7 @@ struct minidump;
-  * @md_table_exit:	  Clean up the stuff populated while md_table_init()
-  * @md_region_register:	  Callback to register the region at the backend.
-  * @md_region_unregister: Callback to unregister the region at the backend.
-+ * @md_update_region:	  Callback to update address of already registered regions.
-  */
- struct minidump_ops {
- 	int (*md_table_init)(struct minidump *md);
-@@ -29,6 +30,8 @@ struct minidump_ops {
- 				 const struct qcom_minidump_region *region);
- 	int (*md_region_unregister)(struct minidump *md,
- 				 const struct qcom_minidump_region *region);
-+	int (*md_update_region)(struct minidump *md, int *idx,
-+                                 const struct qcom_minidump_region *region);
- };
- 
- /**
-diff --git a/drivers/soc/qcom/qcom_minidump_smem.c b/drivers/soc/qcom/qcom_minidump_smem.c
-index bdc75aa2f518..9d4021a5e4c8 100644
---- a/drivers/soc/qcom/qcom_minidump_smem.c
-+++ b/drivers/soc/qcom/qcom_minidump_smem.c
-@@ -263,6 +263,26 @@ static int smem_md_region_unregister(struct minidump *md,
- 	return 0;
- }
- 
-+static int smem_md_update_region(struct minidump *md, int *idx,
-+				 const struct qcom_minidump_region *region)
-+{
-+	struct minidump_ss_data *mdss_data = md->apss_data;
-+	struct minidump_region *mdr;
-+	int ret;
++  record-size:
++    $ref: /schemas/types.yaml#/definitions/uint32
++    description: maximum size in bytes of each kmsg dump
++    default: 0
 +
-+	ret = smem_md_get_region_index(mdss_data, region);
-+	if (ret < 0) {
-+		dev_err(md->dev, "%s region is not present\n", region->name);
-+		return ret;
-+	}
++  console-size:
++    $ref: /schemas/types.yaml#/definitions/uint32
++    description: size in bytes of log buffer reserved for kernel messages
++    default: 0
 +
-+	*idx = ret;
-+	mdr = &mdss_data->md_regions[*idx];
-+	mdr->address = cpu_to_le64(region->phys_addr);
++  ftrace-size:
++    $ref: /schemas/types.yaml#/definitions/uint32
++    description: size in bytes of log buffer reserved for function tracing and profiling
++    default: 0
 +
-+	return 0;
-+}
++  pmsg-size:
++    $ref: /schemas/types.yaml#/definitions/uint32
++    description: size in bytes of log buffer reserved for userspace messages
++    default: 0
 +
- static int smem_md_table_init(struct minidump *md)
- {
- 	struct minidump_global_toc *mdgtoc;
-@@ -324,6 +344,7 @@ static struct minidump_ops smem_md_ops = {
- 	.md_table_exit		= smem_md_table_exit,
- 	.md_region_register	= smem_md_region_register,
- 	.md_region_unregister	= smem_md_region_unregister,
-+	.md_update_region	= smem_md_update_region,
- };
- 
- static int qcom_minidump_smem_probe(struct platform_device *pdev)
-diff --git a/include/soc/qcom/qcom_minidump.h b/include/soc/qcom/qcom_minidump.h
-index d0bebc3daac5..a86b0313698f 100644
---- a/include/soc/qcom/qcom_minidump.h
-+++ b/include/soc/qcom/qcom_minidump.h
-@@ -29,6 +29,7 @@ struct qcom_minidump_region {
- #if IS_ENABLED(CONFIG_QCOM_MINIDUMP)
- int qcom_minidump_region_register(const struct qcom_minidump_region *region);
- int qcom_minidump_region_unregister(const struct qcom_minidump_region *region);
-+int qcom_minidump_update_region(const struct qcom_minidump_region *region);
- #else
- static inline int qcom_minidump_region_register(const struct qcom_minidump_region *region)
- {
-@@ -39,6 +40,10 @@ static inline int qcom_minidump_region_unregister(const struct qcom_minidump_reg
- {
- 	return 0;
- }
-+static inline int qcom_minidump_update_region(const struct qcom_minidump_region *region)
-+{
-+	return 0;
-+}
- #endif /* CONFIG_QCOM_MINIDUMP */
- 
- #if IS_ENABLED(CONFIG_QCOM_MINIDUMP_SMEM)
++  mem-type:
++    $ref: /schemas/types.yaml#/definitions/uint32
++    description: if present, sets the type of mapping is to be used to map the reserved region.
++    default: 0
++    oneOf:
++      - const: 0
++        description: write-combined
++      - const: 1
++        description: unbuffered
++      - const: 2
++        description: cached
++
++  max-reason:
++    $ref: /schemas/types.yaml#/definitions/uint32
++    default: 2 # log oopses and panics
++    maximum: 0x7fffffff
++    description: |
++      If present, sets maximum type of kmsg dump reasons to store.
++      This can be set to INT_MAX to store all kmsg dumps.
++      See include/linux/kmsg_dump.h KMSG_DUMP_* for other kmsg dump reason values.
++      Setting this to 0 (KMSG_DUMP_UNDEF), means the reason filtering will be
++      controlled by the printk.always_kmsg_dump boot param.
++      If unset, it will be 2 (KMSG_DUMP_OOPS), otherwise 5 (KMSG_DUMP_MAX).
++
++  flags:
++    $ref: /schemas/types.yaml#/definitions/uint32
++    default: 0
++    description: |
++      If present, pass ramoops behavioral flags
++      (see include/linux/pstore_ram.h RAMOOPS_FLAG_* for flag values).
++
++  no-dump-oops:
++    deprecated: true
++    type: boolean
++    description: |
++      Use max_reason instead. If present, and max_reason is not specified,
++      it is equivalent to max_reason = 1 (KMSG_DUMP_PANIC).
++
++  unbuffered:
++    deprecated: true
++    type: boolean
++    description: |
++      Use mem_type instead. If present, and mem_type is not specified,
++      it is equivalent to mem_type = 1 and uses unbuffered mappings to map
++      the reserved region (defaults to buffered mappings mem_type = 0).
++      If both are specified -- "mem_type" overrides "unbuffered".
++
++unevaluatedProperties: false
++
++required:
++  - compatible
++  - memory-region
++
++anyOf:
++  - required: [record-size]
++  - required: [console-size]
++  - required: [ftrace-size]
++  - required: [pmsg-size]
++
++examples:
++  - |
++
++    qcom_ramoops {
++        compatible = "qcom,sm8450-ramoops", "qcom,ramoops";
++        memory-region = <&qcom_ramoops_region>;
++        console-size = <0x8000>;    /* 32kB */
++        record-size = <0x400>;      /*  1kB */
++        ecc-size = <16>;
++    };
 -- 
 2.7.4
 
