@@ -2,123 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C4CA74189D
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 21:07:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E1CE741899
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 21:06:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231142AbjF1TGI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 15:06:08 -0400
-Received: from bg4.exmail.qq.com ([43.155.65.254]:51133 "EHLO
-        bg4.exmail.qq.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231614AbjF1TFt (ORCPT
+        id S231213AbjF1TFe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 15:05:34 -0400
+Received: from mx0b-0031df01.pphosted.com ([205.220.180.131]:28474 "EHLO
+        mx0b-0031df01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232425AbjF1TE7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 15:05:49 -0400
-X-QQ-mid: bizesmtp81t1687979140twy3oz5l
-Received: from linux-lab-host.localdomain ( [116.30.129.193])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Thu, 29 Jun 2023 03:05:38 +0800 (CST)
-X-QQ-SSF: 01200000000000D0W000000A0000000
-X-QQ-FEAT: QityeSR92A0ivM8Oe5i1P8PgBPy/0WKQrP/bau1yZUyBIMxZ5v5/nq5XSmhEo
-        YaCWksBQ8b9i4Oiy0QKM2HQhJUQxhtH6I0PmpEJH68qNQ2/UUaq1iQcgOX+RFZ7zBKo7g2i
-        8fglSXNIJqe1lroojRhULNzSXIilkUv2ECoShgSwtnYMb8eO2nqScTXKGmhyfnDiF9jnlDx
-        EoLxIAA7wqjl9DMajcD+s3Rmv+4Agv5M+PyV3e1dbGHOM6kMSvcfKligJTkTbcrf1Q4vzhI
-        RHzPS9ot3goSP+6inAJpovN0PDWV+1j5DgDpGx20+T9RNlw8H3wOshH2sdaJnutu92MSj60
-        JpBup9/hmlDjscis/Y5N6ZqzwwRTzi7UX5BHcqVDB3wJsLZSWcsAmohQngzAg==
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 17283120326487235982
-From:   Zhangjin Wu <falcon@tinylab.org>
-To:     thomas@t-8ch.de, w@1wt.eu
-Cc:     falcon@tinylab.org, arnd@arndb.de, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org
-Subject: [PATCH v1 10/11] tools/nolibc: riscv: shrink _start with _start_c
-Date:   Thu, 29 Jun 2023 03:04:12 +0800
-Message-Id: <4a6e7245c3aa07eb20fd6c6aa43bc663e480e0c5.1687976753.git.falcon@tinylab.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <cover.1687976753.git.falcon@tinylab.org>
-References: <cover.1687976753.git.falcon@tinylab.org>
+        Wed, 28 Jun 2023 15:04:59 -0400
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35SIWjSQ011106;
+        Wed, 28 Jun 2023 19:04:54 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=qcppdkim1;
+ bh=c6gV6DUPeseuoyeesDk6z1v7bVxPu3Jz3kaPMY40MHk=;
+ b=I/cJGUyUaSM4ghy8E/vjJl5Zpipgl73Ts1E2EWBRa8aTr7TDyJ20AFOuzhUIgyiVkL+r
+ 4sf9fPcWA8gCUoixYw1r3o+U17VXxMqPrtWZ9EE2HZEmT9Y52YEunjcvGG/K1s1icXdJ
+ 0ynQ+aLYBkcruYIFE3qosrlsunHZ1JEiG9KT1Z1zCmw6a21BPb9yE+BzFB6nJu0GzxyW
+ +sWjZCwYEdVtZsygVUzvyPXwc37GzITZzzZtZZB1liDTVGI0mpXlTQOuDHMiSAjVH5hQ
+ oyB/zYBYJUSYqe5Ot9HGGR519nyB/2VIjqN2gdNGxdPjNWlsXVpKk69Egx9tEiXAH5HY Fw== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rg9pb29c9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 28 Jun 2023 19:04:54 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35SJ4rl6023926
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 28 Jun 2023 19:04:53 GMT
+Received: from jhugo-lnx.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.7; Wed, 28 Jun 2023 12:04:51 -0700
+From:   Jeffrey Hugo <quic_jhugo@quicinc.com>
+To:     <rfoss@kernel.org>, <todor.too@gmail.com>,
+        <bryan.odonoghue@linaro.org>, <mchehab@kernel.org>,
+        <andersson@kernel.org>
+CC:     <linux-media@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        "Jeffrey Hugo" <quic_jhugo@quicinc.com>
+Subject: [PATCH] media: docs: qcom_camss: Update Code Aurora references
+Date:   Wed, 28 Jun 2023 13:04:33 -0600
+Message-ID: <20230628190433.19050-1-quic_jhugo@quicinc.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrsz:qybglogicsvrsz3a-3
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: VkRIRPim3zEAWN_ijA4XA-4P8A6veG3I
+X-Proofpoint-ORIG-GUID: VkRIRPim3zEAWN_ijA4XA-4P8A6veG3I
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-06-28_13,2023-06-27_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 clxscore=1011
+ spamscore=0 bulkscore=0 priorityscore=1501 adultscore=0 lowpriorityscore=0
+ phishscore=0 mlxscore=0 mlxlogscore=880 impostorscore=0 malwarescore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2305260000
+ definitions=main-2306280168
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Let's move most of the _start operations to _start_c().
+source.codeaurora.org is no longer accessible and so the reference links
+in the documentation are not useful.  The content was mirrored over to
+Code Linaro so lets update the references to point there instead.
 
-Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
+Signed-off-by: Jeffrey Hugo <quic_jhugo@quicinc.com>
 ---
- tools/include/nolibc/arch-riscv.h | 42 ++++---------------------------
- 1 file changed, 5 insertions(+), 37 deletions(-)
+ Documentation/admin-guide/media/qcom_camss.rst | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/tools/include/nolibc/arch-riscv.h b/tools/include/nolibc/arch-riscv.h
-index 7f4abcc15206..ec0f9c597d0b 100644
---- a/tools/include/nolibc/arch-riscv.h
-+++ b/tools/include/nolibc/arch-riscv.h
-@@ -9,18 +9,6 @@
+diff --git a/Documentation/admin-guide/media/qcom_camss.rst b/Documentation/admin-guide/media/qcom_camss.rst
+index a72e17d09cb7..8a8f3ff40105 100644
+--- a/Documentation/admin-guide/media/qcom_camss.rst
++++ b/Documentation/admin-guide/media/qcom_camss.rst
+@@ -18,7 +18,7 @@ The driver implements V4L2, Media controller and V4L2 subdev interfaces.
+ Camera sensor using V4L2 subdev interface in the kernel is supported.
  
- #include "compiler.h"
+ The driver is implemented using as a reference the Qualcomm Camera Subsystem
+-driver for Android as found in Code Aurora [#f1]_ [#f2]_.
++driver for Android as found in Code Linaro [#f1]_ [#f2]_.
  
--#if   __riscv_xlen == 64
--#define PTRLOG "3"
--#define SZREG  "8"
--#define REG_L  "ld"
--#define REG_S  "sd"
--#elif __riscv_xlen == 32
--#define PTRLOG "2"
--#define SZREG  "4"
--#define REG_L  "lw"
--#define REG_S  "sw"
--#endif
--
- /* Syscalls for RISCV :
-  *   - stack is 16-byte aligned
-  *   - syscall number is passed in a7
-@@ -153,40 +141,20 @@
- 	_arg1;									\
- })
  
--char **environ __attribute__((weak));
--const unsigned long *_auxv __attribute__((weak));
--
- /* startup code */
- void __attribute__((weak,noreturn,optimize("omit-frame-pointer"))) __no_stack_protector _start(void)
- {
- 	__asm__ volatile (
- 		".option push\n"
- 		".option norelax\n"
--		"lla   gp, __global_pointer$\n"
-+		"lla  gp, __global_pointer$\n"
- 		".option pop\n"
- #ifdef _NOLIBC_STACKPROTECTOR
--		"call __stack_chk_init\n"    /* initialize stack protector                          */
-+		"call __stack_chk_init\n"	/* initialize stack protector			*/
- #endif
--		REG_L" a0, 0(sp)\n"          /* argc (a0) was in the stack                          */
--		"add   a1, sp, "SZREG"\n"    /* argv (a1) = sp                                      */
--		"slli  a2, a0, "PTRLOG"\n"   /* envp (a2) = SZREG*argc ...                          */
--		"add   a2, a2, "SZREG"\n"    /*             + SZREG (skip null)                     */
--		"add   a2,a2,a1\n"           /*             + argv                                  */
--
--		"add   a3, a2, zero\n"       /* iterate a3 over envp to find auxv (after NULL)      */
--		"0:\n"                       /* do {                                                */
--		REG_L" a4, 0(a3)\n"          /*   a4 = *a3;                                         */
--		"add   a3, a3, "SZREG"\n"    /*   a3 += sizeof(void*);                              */
--		"bne   a4, zero, 0b\n"       /* } while (a4);                                       */
--		"lui   a4, %hi(_auxv)\n"     /* a4 = &_auxv (high bits)                             */
--		REG_S" a3, %lo(_auxv)(a4)\n" /* store a3 into _auxv                                 */
--
--		"lui   a3, %hi(environ)\n"   /* a3 = &environ (high bits)                           */
--		REG_S" a2,%lo(environ)(a3)\n"/* store envp(a2) into environ                         */
--		"andi  sp,a1,-16\n"          /* sp must be 16-byte aligned                          */
--		"call  main\n"               /* main() returns the status code, we'll exit with it. */
--		"li a7, 93\n"                /* NR_exit == 93                                       */
--		"ecall\n"
-+		"mv   a0, sp\n"			/* save stack pointer to a0, as arg1 of _start_c*/
-+		"andi sp, a0, -16\n"		/* sp must be 16-byte aligned			*/
-+		"call _start_c\n"		/* transfer to c runtime			*/
- 	);
- 	__builtin_unreachable();
- }
+ Qualcomm Camera Subsystem hardware
+@@ -181,5 +181,5 @@ Referenced 2018-06-22.
+ References
+ ----------
+ 
+-.. [#f1] https://source.codeaurora.org/quic/la/kernel/msm-3.10/
+-.. [#f2] https://source.codeaurora.org/quic/la/kernel/msm-3.18/
++.. [#f1] https://git.codelinaro.org/clo/la/kernel/msm-3.10/
++.. [#f2] https://git.codelinaro.org/clo/la/kernel/msm-3.18/
 -- 
-2.25.1
+2.40.1
 
