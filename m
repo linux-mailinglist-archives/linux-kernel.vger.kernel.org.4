@@ -2,85 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AAD8740AB5
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 10:11:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C061F740CEA
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 11:31:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231745AbjF1IKp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 04:10:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35384 "EHLO
+        id S233771AbjF1J3v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 05:29:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232234AbjF1IGO (ORCPT
+        with ESMTP id S231665AbjF1H4N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 04:06:14 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A97EF198;
-        Wed, 28 Jun 2023 01:04:49 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 93DF46133B;
-        Wed, 28 Jun 2023 07:49:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7511C433C9;
-        Wed, 28 Jun 2023 07:49:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687938552;
-        bh=dMPfHf1WanGtgCkRNc8s8fHX9o1lxEd1S+vhVrf+Rnw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Vf3GvOxHmfc3IrUcippeNuf03xnie0Mv5V8E68+tdrTgldOp6komTU/du8m++Pyvy
-         i8jKQIMHjT6+RsN34VeCnijjWgW+/d+SXvpSrLJu/QLaVnHq7FHglUdys/F4keGBUV
-         VF3bjmXqZsmRIPI7RxGJdMUE4geXAqcV8fRnA4ZiTl/4Xlt6Q3QmThCSauvSS47L7G
-         FC01+rj18oglpwyP7oDaHHyBBh1KUdh8bqxBANMj0T4cKb2qGpyKLHqSl4j5GS4/sl
-         ZsWgM6Y40afoAYLt9rUhWWYpRN/qS+xQassT+goLTArPu/XiDhULhadHd1ahCidf3j
-         RqWoL9A+pvXFQ==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1qEPvM-0002XF-2g; Wed, 28 Jun 2023 09:49:12 +0200
-Date:   Wed, 28 Jun 2023 09:49:12 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Robert Marko <robimarko@gmail.com>,
-        Das Srinagesh <quic_gurus@quicinc.com>,
-        Johan Hovold <johan+linaro@kernel.org>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>
-Subject: Re: [PATCH 0/2] Hook up 8280 SCM icc
-Message-ID: <ZJvl-J4aQQozown1@hovoldconsulting.com>
-References: <20230622-topic-8280scmicc-v1-0-6ef318919ea5@linaro.org>
+        Wed, 28 Jun 2023 03:56:13 -0400
+Received: from mail-ot1-x32d.google.com (mail-ot1-x32d.google.com [IPv6:2607:f8b0:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39BED30F6
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 00:55:32 -0700 (PDT)
+Received: by mail-ot1-x32d.google.com with SMTP id 46e09a7af769-6b73b839025so3177948a34.1
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 00:55:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687938931; x=1690530931;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Kl6zRFJwJX4TVX+FX/9X3H88Ay6pIJMzZMs21mv/0NU=;
+        b=iMGOC55B5TuwgnR0v4ok2zHDywa5XSYRfkgwD+tOItlxgD+o7Ujk3a2/I51UH0CApf
+         W9l75bcMGlz1BFFwVxW1+/jDWwtGDWo35h1LRP32v/EOYwdQTlL+2ddr6YsTlNCK2/9/
+         QjmWskclSCjQxPg70zFWRwkj7G4CfNCmFoDCFc20KEVKgVNGUHrkCBZOVwBhEXiVx8zk
+         31SaNpbyRhgUr20eldNGDrBuUuxUI7P2s6jOqcfADKB+xgyc0ZSZHMQXtcoVBSxcx2Zi
+         WQTWaKfTpuCfW/+0URiQPMJCcx+XqPXENNgZzXSuOlKxA+E1ogPWNSMvIKTvqtlYFYW/
+         f6eg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687938931; x=1690530931;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Kl6zRFJwJX4TVX+FX/9X3H88Ay6pIJMzZMs21mv/0NU=;
+        b=MtBSwpHopSwmOQy4sxpQAbK8fi1oq9opTqnPjYjbvUYb1kcwSJ70YHi1Gb482q06Z3
+         FhDjXpNrc17sRj44RVxBuNn3/Wb9/3xWS6cYfc/ATys7rKfSFo8hssyHmpP5hUt3fqUR
+         A6zoQKDBxCT3KD+DKrbHah6nedXP5j9G/UdeJZwoeWox0aSx6XtC53FQA7GPUAMlJrpo
+         EA6c+qL+dgsWmETtp1yfclqurTRzSWWA8Y9U1PfGPWw6EbUwP+BukrTdWZg/1DuTAzY1
+         oAxzORUOEjzVgh0qK3TA5cwE1U3bZ1987lyh+DbvAugJsDN6gDdSlpSry4J4PTS+QulN
+         1Xcw==
+X-Gm-Message-State: AC+VfDxn23MkwWgFKLQM1W6FakDZ+v9CzGtoj/8E7MOnV5kq/mytSaEo
+        4cj0PLu39w3HauKsvPE60NAteFiG4N0=
+X-Google-Smtp-Source: ACHHUZ6JRGIUhgEO5FJSQSbiiil8v67RVs0NzWdjFNveJ+SE3EwyVqvk0R0XDfh2xtMRMHlWi+ekJA==
+X-Received: by 2002:a05:6a20:7da1:b0:123:9582:e9fb with SMTP id v33-20020a056a207da100b001239582e9fbmr18239344pzj.50.1687938538548;
+        Wed, 28 Jun 2023 00:48:58 -0700 (PDT)
+Received: from localhost ([156.236.96.165])
+        by smtp.gmail.com with ESMTPSA id w5-20020a170902d3c500b001b1a2bf5277sm914932plb.39.2023.06.28.00.48.57
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Wed, 28 Jun 2023 00:48:58 -0700 (PDT)
+Date:   Wed, 28 Jun 2023 15:57:42 +0800
+From:   Yue Hu <zbestahu@gmail.com>
+To:     Gao Xiang <hsiangkao@linux.alibaba.com>
+Cc:     linux-erofs@lists.ozlabs.org, LKML <linux-kernel@vger.kernel.org>,
+        huyue2@coolpad.com
+Subject: Re: [PATCH 1/2] erofs: get rid of the remaining kmap_atomic()
+Message-ID: <20230628155742.0000038e.zbestahu@gmail.com>
+In-Reply-To: <20230627161240.331-1-hsiangkao@linux.alibaba.com>
+References: <20230627161240.331-1-hsiangkao@linux.alibaba.com>
+X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; i686-w64-mingw32)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230622-topic-8280scmicc-v1-0-6ef318919ea5@linaro.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 22, 2023 at 05:56:14PM +0200, Konrad Dybcio wrote:
-> The icc handle for SCM was missing on 8280. Add it.
+On Wed, 28 Jun 2023 00:12:39 +0800
+Gao Xiang <hsiangkao@linux.alibaba.com> wrote:
 
-> Konrad Dybcio (2):
->       dt-bindings: firmware: qcom,scm: Allow interconnect on SC8280XP
->       arm64: dts: qcom: sc8280xp: Add missing SCM interconnect
+> It's unnecessary to use kmap_atomic() compared with kmap_local_page().
+> In addition, kmap_atomic() is deprecated now.
+> 
+> Signed-off-by: Gao Xiang <hsiangkao@linux.alibaba.com>
 
-Appears to work and matches the vendor dts, but no sign of any
-"performance benefit" as mentioned in 65b7ebda5028 ("firmware: qcom_scm:
-Add bw voting support to the SCM interface") during fw load at boot.
-
-Reviewed-by: Johan Hovold <johan+linaro@kernel.org>
-Tested-by: Johan Hovold <johan+linaro@kernel.org>
-
-Johan
+Reviewed-by: Yue Hu <huyue2@coolpad.com>
