@@ -2,163 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50D3F741C62
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 01:23:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E44B741C6D
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 01:25:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231305AbjF1XXH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 19:23:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34330 "EHLO
+        id S231372AbjF1XZD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 19:25:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230014AbjF1XXF (ORCPT
+        with ESMTP id S231496AbjF1XYt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 19:23:05 -0400
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88BD7E9;
-        Wed, 28 Jun 2023 16:23:03 -0700 (PDT)
-Received: by mail-pf1-x42e.google.com with SMTP id d2e1a72fcca58-666e5f0d60bso67196b3a.3;
-        Wed, 28 Jun 2023 16:23:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687994583; x=1690586583;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=krWbw+BRsQITYVufaotBbsHrMdJirArhgEro2wyvZZw=;
-        b=VG4eVmV7X0PrRJabZhLepIPCn10VfwxhUFLDyxL3WER+FWdxOkKJRMDYIAmD3iGbsR
-         QscJf+8wHR01e1gZ6/22E3mlRfbx+EoXKlwwYZA53BTmjGI635oCwfrf2mJ0TkS5odJ8
-         rrdk4YAtvlhHZmKgIrfFphLaMnfPnjZBDVOPookObmHkpavbBB0O682UYDkUxfX9q9dT
-         XmVPf3ggYRyNgNRQUm6rrzkNMRSB55/79APdTgVjYqjDsZ9o1n5ykhANX8A2xfDJRnEa
-         3xxZ24Nnb1P76Grro/BrOm+iZfOs5J5Z+wovkAKeFs8no/nJgfwXQamh96ciBtCq12ei
-         xgKg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687994583; x=1690586583;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=krWbw+BRsQITYVufaotBbsHrMdJirArhgEro2wyvZZw=;
-        b=jdZVsJNs5rP7OJ2GE/KeM4rIHobrV4SvuRCAVRBkOuB+DEHFH7l9gnxM0ClVRfTWYp
-         kGojHlCVuIH9cwnUbLpFUC6MnZhAT/O/3CaUz+gJb/pdd0e673xlsL2iLIWIXFmAebnJ
-         gWV22T5I8vtg9KIk1G1YyNv6ZzjrfYLjaIkxy1S4sipgAk7Pg3o2Q4G25DdkGpcjrL0/
-         8QUgnkVIQxGYVL39p31xzyfYtQwfZd6Tj4yn45JeViKBlxhGOwjhPzdLKuGTgRFTYVQT
-         TZZmD29Kt2NcjlXW6oY3r7qPhQTXXfnOpbfvch0v9VSiFlB9PmQRk2xkPrBpJOp7DgR/
-         74cw==
-X-Gm-Message-State: AC+VfDz8mCgfmMYY/i1Q3nhUlwz8S5O0lojCQnA8ilhm/uXSRKD1uW19
-        q/yTC4h6BZ2TEpf5+eQXxa4=
-X-Google-Smtp-Source: ACHHUZ7tpawt47u9azMsFTmz1yUC6zRi1mISK+ZPaSdG3gpeOvA2QQqUeLQlHIVTmz1PQNyGQ4h8Eg==
-X-Received: by 2002:a05:6a20:8405:b0:12c:d44b:349 with SMTP id c5-20020a056a20840500b0012cd44b0349mr63898pzd.38.1687994582808;
-        Wed, 28 Jun 2023 16:23:02 -0700 (PDT)
-Received: from bangji.hsd1.ca.comcast.net ([2601:647:6700:7f00:6887:93d0:b9c9:df85])
-        by smtp.gmail.com with ESMTPSA id w8-20020a170902a70800b001b3d4d74749sm8213267plq.7.2023.06.28.16.23.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Jun 2023 16:23:01 -0700 (PDT)
-Sender: Namhyung Kim <namhyung@gmail.com>
-From:   Namhyung Kim <namhyung@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Ingo Molnar <mingo@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-perf-users@vger.kernel.org
-Subject: Re: [GIT PULL] perf tools changes for v6.5
-Date:   Wed, 28 Jun 2023 16:22:59 -0700
-Message-ID: <20230628232259.2777226-1-namhyung@kernel.org>
-X-Mailer: git-send-email 2.41.0.255.g8b1d071c50-goog
-In-Reply-To: <20230628215954.1230048-1-namhyung@kernel.org>
-References: <20230628215954.1230048-1-namhyung@kernel.org>
+        Wed, 28 Jun 2023 19:24:49 -0400
+Received: from mx.treblig.org (unknown [IPv6:2a00:1098:5b::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD6F8131;
+        Wed, 28 Jun 2023 16:24:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=treblig.org
+        ; s=bytemarkmx; h=Content-Transfer-Encoding:MIME-Version:Message-ID:Date:
+        Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=I6mOd3aGt7IBhtkudJQZT6k5aBQc6MxUgBycQg/Cs5I=; b=a83Tv9TIpQJv5ZtnBTsDgxFVPh
+        SIOggketT4m8GX08VNFiU5uY72vY2beAMlj5didxij6rtPETdocvzkrM9Ej4js60yXaXEYvIU8mDG
+        KrM11X+GcFvzEPukt0S6GjDBshMkvQEgYAn87Ym1c3X2ignspImXGGZPZaoT4kUCRo0pZMbvTNkdh
+        zOkKefnmjW5a0QEF2+XPsMWSB2hXS3Ia59OWBvidcCHgHr05Nl4HXQgBgxdKF0qONGoddUX7r4IF3
+        m91xFQt8+Lh/fLBOf6sh9VhW4tcqnmfuIJhH3zewcibbNMItzzfIHVBB//ltK1pEd+iBY7bjqTngy
+        7GJIKYXw==;
+Received: from localhost ([127.0.0.1] helo=dalek.home.treblig.org)
+        by mx.treblig.org with esmtp (Exim 4.94.2)
+        (envelope-from <linux@treblig.org>)
+        id 1qEeWU-00GXy3-Pt; Wed, 28 Jun 2023 23:24:29 +0000
+From:   linux@treblig.org
+To:     sfrench@samba.org, linkinjeon@kernel.org, tom@talpey.com,
+        linux-cifs@vger.kernel.org
+Cc:     krisman@collabora.com, jfs-discussion@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org,
+        "Dr. David Alan Gilbert" <linux@treblig.org>
+Subject: [PATCH v2 0/4] dedupe smb unicode files
+Date:   Thu, 29 Jun 2023 00:24:13 +0100
+Message-ID: <20230628232417.120844-1-linux@treblig.org>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RDNS_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Oh, I forgot to mention that it'd create a conflict with the tip tree because
-it contains some perf user space changes.
+From: "Dr. David Alan Gilbert" <linux@treblig.org>
 
-Stephen Rothwell already resolved this like below in the -next tree.
+The smb client and server code have (mostly) duplicated code
+for unicode manipulation, in particular upper case handling.
 
-  https://lore.kernel.org/r/CAM9d7ciqQSp3zWNeq-P0r8pGN=6jJBWyxK=LzUz2SYm_kAaG4g@mail.gmail.com
+Flatten this lot into shared code.
 
-I'm copying it in just case.
+There's some code that's slightly different between the two, and
+I've not attempted to share that - this should be strictly a no
+behaviour change set.
 
-Thanks,
-Namhyung
+In addition, the same tables and code are shared in jfs, however
+there's very little testing available for the unicode in there,
+so just share the raw data tables.
 
----
-commit de114f42b7c24d1e8373800e46c3a19b944e4665
-Merge: f78f1f477e06 ad5f604e186a
-Author: Stephen Rothwell <sfr@canb.auug.org.au>
-Date:   Wed Jun 28 09:54:39 2023 +1000
+I suspect there's more UCS-2 code that can be shared, in the NLS code
+and in the UCS-2 code used by the EFI interfaces.
 
-    Merge branch 'perf-tools-next' of git://git.kernel.org/pub/scm/linux/kernel/git/perf/perf-tools-next.git
-    
-    # Conflicts:
-    #       tools/perf/arch/x86/include/arch-tests.h
-    #       tools/perf/arch/x86/tests/arch-tests.c
+Lightly tested with a module and a monolithic build, and just mounting
+itself.
 
-diff --cc tools/perf/arch/x86/include/arch-tests.h
-index 93d3b8877baa,df133020d582..2b0684132f06
---- a/tools/perf/arch/x86/include/arch-tests.h
-+++ b/tools/perf/arch/x86/include/arch-tests.h
-@@@ -11,7 -13,7 +13,8 @@@ int test__intel_pt_pkt_decoder(struct t
-  int test__intel_pt_hybrid_compat(struct test_suite *test, int subtest);
-  int test__bp_modify(struct test_suite *test, int subtest);
-  int test__x86_sample_parsing(struct test_suite *test, int subtest);
-+ int test__hybrid(struct test_suite *test, int subtest);
- +int test__amd_ibs_via_core_pmu(struct test_suite *test, int subtest);
-  
-  extern struct test_suite *arch_tests[];
-  
-diff --cc tools/perf/arch/x86/tests/Build
-index fd02d8181718,394771c00dca..b87f46e5feea
---- a/tools/perf/arch/x86/tests/Build
-+++ b/tools/perf/arch/x86/tests/Build
-@@@ -3,6 -3,9 +3,10 @@@ perf-$(CONFIG_DWARF_UNWIND) += dwarf-un
-  
-  perf-y += arch-tests.o
-  perf-y += sample-parsing.o
-- perf-$(CONFIG_AUXTRACE) += insn-x86.o intel-pt-test.o
-+ perf-y += hybrid.o
-+ perf-$(CONFIG_AUXTRACE) += intel-pt-test.o
-+ ifeq ($(CONFIG_EXTRA_TESTS),y)
-+ perf-$(CONFIG_AUXTRACE) += insn-x86.o
-+ endif
-  perf-$(CONFIG_X86_64) += bp-modify.o
- +perf-y += amd-ibs-via-core-pmu.o
-diff --cc tools/perf/arch/x86/tests/arch-tests.c
-index b5c85ab8d92e,3f2b90c59f92..9808dc02fe79
---- a/tools/perf/arch/x86/tests/arch-tests.c
-+++ b/tools/perf/arch/x86/tests/arch-tests.c
-@@@ -22,7 -24,15 +24,16 @@@ struct test_suite suite__intel_pt = 
-  DEFINE_SUITE("x86 bp modify", bp_modify);
-  #endif
-  DEFINE_SUITE("x86 Sample parsing", x86_sample_parsing);
-+ static struct test_case hybrid_tests[] = {
-+ 	TEST_CASE_REASON("x86 hybrid event parsing", hybrid, "not hybrid"),
-+ 	{ .name = NULL, }
-+ };
-+ 
-+ struct test_suite suite__hybrid = {
-+ 	.desc = "x86 hybrid",
-+ 	.test_cases = hybrid_tests,
-+ };
- +DEFINE_SUITE("AMD IBS via core pmu", amd_ibs_via_core_pmu);
-  
-  struct test_suite *arch_tests[] = {
-  #ifdef HAVE_DWARF_UNWIND_SUPPORT
-@@@ -36,6 -48,6 +49,7 @@@
-  	&suite__bp_modify,
-  #endif
-  	&suite__x86_sample_parsing,
-+ 	&suite__hybrid,
- +	&suite__amd_ibs_via_core_pmu,
-  	NULL,
-  };
+This dupe was found using PMD:
+  https://pmd.github.io/pmd/pmd_userdocs_cpd.html
+
+Dave
+
+Version 2
+  Moved the shared code to fs/nls after v1 feedback.
+  Renamed shared tables from Smb to Nls prefix
+  Move UniStrcat as well
+  Share the JFS tables
+
+Dr. David Alan Gilbert (4):
+  fs/smb: Remove unicode 'lower' tables
+  fs/smb: Swing unicode common code from smb->NLS
+  fs/smb/client: Use common code in client
+  fs/jfs: Use common ucs2 upper case table
+
+ fs/jfs/Kconfig               |   1 +
+ fs/jfs/Makefile              |   2 +-
+ fs/jfs/jfs_unicode.h         |  17 +-
+ fs/jfs/jfs_uniupr.c          | 121 -------------
+ fs/nls/Kconfig               |   8 +
+ fs/nls/Makefile              |   1 +
+ fs/nls/nls_ucs2_data.h       |  15 ++
+ fs/nls/nls_ucs2_utils.c      | 144 +++++++++++++++
+ fs/nls/nls_ucs2_utils.h      | 285 ++++++++++++++++++++++++++++++
+ fs/smb/client/Kconfig        |   1 +
+ fs/smb/client/cifs_unicode.c |   1 -
+ fs/smb/client/cifs_unicode.h | 330 +----------------------------------
+ fs/smb/client/cifs_uniupr.h  | 239 -------------------------
+ fs/smb/server/Kconfig        |   1 +
+ fs/smb/server/unicode.c      |   1 -
+ fs/smb/server/unicode.h      | 325 +---------------------------------
+ fs/smb/server/uniupr.h       | 268 ----------------------------
+ 17 files changed, 467 insertions(+), 1293 deletions(-)
+ delete mode 100644 fs/jfs/jfs_uniupr.c
+ create mode 100644 fs/nls/nls_ucs2_data.h
+ create mode 100644 fs/nls/nls_ucs2_utils.c
+ create mode 100644 fs/nls/nls_ucs2_utils.h
+ delete mode 100644 fs/smb/client/cifs_uniupr.h
+ delete mode 100644 fs/smb/server/uniupr.h
+
+-- 
+2.41.0
+
