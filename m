@@ -2,94 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 008FB74149D
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 17:10:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E34777414A7
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 17:13:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232048AbjF1PK1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 11:10:27 -0400
-Received: from mx.kolabnow.com ([212.103.80.153]:16668 "EHLO mx.kolabnow.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232049AbjF1PKY (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 11:10:24 -0400
-Received: from localhost (unknown [127.0.0.1])
-        by mx.kolabnow.com (Postfix) with ESMTP id BE13D1507;
-        Wed, 28 Jun 2023 17:10:22 +0200 (CEST)
-Authentication-Results: ext-mx-out001.mykolab.com (amavisd-new);
-        dkim=pass (4096-bit key) reason="pass (just generated, assumed good)"
-        header.d=kolabnow.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kolabnow.com; h=
-        content-transfer-encoding:mime-version:references:in-reply-to
-        :message-id:date:date:subject:subject:from:from:received
-        :received:received; s=dkim20160331; t=1687965020; x=1689779421;
-         bh=PnmFSdNW/wOWghO5UEAYRn1lMYSvXrU0Di6n2YClNRw=; b=xE//y05Png43
-        ekRXGwpR/cfDzHiZganpGkB5IcrbTLX8nHCaqtQbnvbzrmO9Y9L3mE+xLh6DcW7E
-        cG2FXoCWfYDQpc1CLlbgb6XHlKmh/fy04egkM1QjmMHJiB9Bxn8DFArKdR6xBbKP
-        67ZbvwfeCie2fO/BltPR5B+GLDer328lj0jNpPwunVYiRGcqV7P47Cev1+MNSY5o
-        aXzN0gJjyGGBQ+WXRM9gCsn9zyzw+FNq3Y59jtUj3zyKmNTjXhmKCLDKFWNXThxg
-        WJDZm8K6e2GVk8Lzlxs7B5+U+YQasAcKIMBUr+2kJ9tqBXuZhqa9uxGKXPQYQGST
-        X369+953co8fbYVEn1Og7vVIKRv2UXFhOz4G3w2P3N0VtN/1gZvM9ZX5M+HUAWRG
-        6d1fppNK7mN+RHz3xIlWg7TOMLeJJ8YE0Syt4OHEteFqEDACHJuvdAp3pw3I8vT8
-        v1McwAJ/we1WgjSlYLHT8IViySn6v/qAP6T6y8O3vtYZHnnaz+N+vhXuDwG4wr6n
-        mg3vF4j6T9slBBcq/zTB9D9JILLMWPqVCi6mdVKlStE8PAJm3MMwmjGxp3WvzclX
-        34q+i6jbSt9twjK5xPsRtanUb6FcD8f4oXQNV5ZoG19Ci+P4Kq5YrhDGWSJOyOEt
-        cIbVaaozkSfUG6WNkuxpUrZVoFSjLZE=
-X-Virus-Scanned: amavisd-new at mykolab.com
-X-Spam-Flag: NO
-X-Spam-Score: -1.9
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.9 tagged_above=-10 required=4
-        tests=[BAYES_00=-1.9] autolearn=no autolearn_force=no
-Received: from mx.kolabnow.com ([127.0.0.1])
-        by localhost (ext-mx-out001.mykolab.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id ibB9jv9JpPOY; Wed, 28 Jun 2023 17:10:20 +0200 (CEST)
-Received: from int-mx003.mykolab.com (unknown [10.9.13.3])
-        by mx.kolabnow.com (Postfix) with ESMTPS id E1F64607;
-        Wed, 28 Jun 2023 17:10:19 +0200 (CEST)
-Received: from ext-subm003.mykolab.com (unknown [10.9.6.3])
-        by int-mx003.mykolab.com (Postfix) with ESMTPS id 016D433CA;
-        Wed, 28 Jun 2023 17:10:18 +0200 (CEST)
-From:   alison@she-devel.com
-To:     johan@kernel.org
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        conor+dt@kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, alison@she-devel.com,
-        achaiken@aurora.tech
-Subject: [PATCH v8 2/2] dt-bindings: gnss: Add U-Blox Zed-F9
-Date:   Wed, 28 Jun 2023 08:09:48 -0700
-Message-Id: <20230628150948.908273-3-alison@she-devel.com>
-In-Reply-To: <20230628150948.908273-1-alison@she-devel.com>
-References: <20230628150948.908273-1-alison@she-devel.com>
+        id S231409AbjF1PNB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 11:13:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58796 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230363AbjF1PM6 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 28 Jun 2023 11:12:58 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 106B52682
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 08:12:55 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id 4fb4d7f45d1cf-51a52a7d859so1943496a12.0
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 08:12:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1687965173; x=1690557173;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=TEPHgY7GKbiF+bbsFDPJ1N0ThqLb/95Yk4P2Ndq0Cf0=;
+        b=1HSbYA14PwbTl7aYIHkFeD4WrFU+1yU3qwZYGOcDz5Kg4jiCY4/xPW0Ba4ZZyh1ozn
+         RyQkFx3+XorZswA3SbauYwj+467/ZTVzAkFrdcdaHS+RFaNBW//EIwjneVySSVvCpII/
+         +nu1GrCqx/kJP+2kuEeyPvaW0e1l5/P8YpkJuubdQO4N4shz/sNJUaSkNqAPukX5Q7vT
+         jhGJCfvrnI8F5hBiHiMx6dStMtn3R7kBcVUv2MHUGLpXXNV4VFqBoWvuy2UDh1aU0ES6
+         IEg/hMzwZoMrkZb9tCN6l8d4tWYJ0C7FF1cxOeHzDQyCFOtfOhSZEiQxPrcTYlAHBnio
+         NZqQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687965173; x=1690557173;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=TEPHgY7GKbiF+bbsFDPJ1N0ThqLb/95Yk4P2Ndq0Cf0=;
+        b=J53HuHAwkmt+kLzG2vXF7X4zQGYor11o2reigJRmReFgCsgV1q12/aOCum1j7LF8b2
+         dxFCTv7YvHFlndnSiAgtG9Fl+gQDUcGoQjd8kQyrvc9EVOBg0alL2ruRsr4lw4ixVJgc
+         +aD/28RHz9RJd40NTeMLv7l3oWXQlrXFsFhO4HTXXSNVpzTZCJ+Dgt7w62QQrKeBLYfN
+         7rPiLxpV8v9UvnVJHwpJEzyZXAlcOnKG3ufA0fCvb2BhFvmSY7oShjyHxAsFdYMTfeEG
+         880VLFnDGtyvfP8jJ0VkMeKiZ5kPaWjpFcjUipPsNhpVGKnvnZ/6plF6pxT/XqrpWgw7
+         POuA==
+X-Gm-Message-State: AC+VfDxhDQr+z9KBKWaR2FPGWTjvnY+k00w1E0E5AihNrzbmIVXPC62o
+        5BMsL7pRs4rP5nwr5gCFe+BexNy2pGj+O03jk2qxkw==
+X-Google-Smtp-Source: ACHHUZ7UuL8ZBMWlyWdJrkY3dNefm8jZW8JSGnKNDdEDVURdgVH+tvbbzsH4uStA2/DZ58NExa0jwW00Jh2AaaCClJM=
+X-Received: by 2002:a17:907:2d25:b0:992:4723:76f4 with SMTP id
+ gs37-20020a1709072d2500b00992472376f4mr1378215ejc.6.1687965173386; Wed, 28
+ Jun 2023 08:12:53 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20230627120058.2214509-1-matteorizzo@google.com>
+ <20230627120058.2214509-2-matteorizzo@google.com> <e8924389-985a-42ad-9daf-eca2bf12fa57@acm.org>
+ <CAHKB1wJANtT27WM6hrhDy_x9H9Lsn4qRjPDmXdKosoL93TJRYg@mail.gmail.com> <CANiDSCvjCoj3Q3phbmdhdG-veHNRrfD-gBu=FuZkmrgJ2uxiJg@mail.gmail.com>
+In-Reply-To: <CANiDSCvjCoj3Q3phbmdhdG-veHNRrfD-gBu=FuZkmrgJ2uxiJg@mail.gmail.com>
+From:   Matteo Rizzo <matteorizzo@google.com>
+Date:   Wed, 28 Jun 2023 17:12:42 +0200
+Message-ID: <CAHKB1w+UyOnC_rOBABVhmzG+XeePaWYgPJWxX9NUeqnAi9WcgA@mail.gmail.com>
+Subject: Re: [PATCH 1/1] Add a new sysctl to disable io_uring system-wide
+To:     Ricardo Ribalda <ribalda@chromium.org>
+Cc:     Bart Van Assche <bvanassche@acm.org>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, io-uring@vger.kernel.org,
+        jordyzomer@google.com, evn@google.com, poprdi@google.com,
+        corbet@lwn.net, axboe@kernel.dk, asml.silence@gmail.com,
+        akpm@linux-foundation.org, keescook@chromium.org,
+        rostedt@goodmis.org, dave.hansen@linux.intel.com,
+        chenhuacai@kernel.org, steve@sk2.org, gpiccoli@igalia.com,
+        ldufour@linux.ibm.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+        lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alison Chaiken <achaiken@aurora.tech>
+On Wed, 28 Jun 2023 at 13:44, Ricardo Ribalda <ribalda@chromium.org> wrote:
+>
+> Have you considered that the new sysctl is "sticky like kexec_load_disabled.
+> When the user disables it there is no way to turn it back on until the
+> system is rebooted.
 
-Add support for the U-Blox Zed-F9P GNSS device.
+Are you suggesting making this sysctl sticky? Are there any examples of how to
+implement a sticky sysctl that can take more than 2 values in case we want to
+add an intermediate level that still allows privileged processes to use
+io_uring? Also, what would be the use case? Preventing privileged processes
+from re-enabling io_uring?
 
-Signed-off-by: Alison Chaiken <achaiken@aurora.tech>
-Acked-by: Rob Herring <robh@kernel.org>
----
-V7 -> V8 Rebased on v6.4.
-V7 -> V6 Moved Acked-by tag and fixed version.
-
- Documentation/devicetree/bindings/gnss/u-blox,neo-6m.yaml | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/Documentation/devicetree/bindings/gnss/u-blox,neo-6m.yaml b/Documentation/devicetree/bindings/gnss/u-blox,neo-6m.yaml
-index 4835a280b3bf..86b65d4d9266 100644
---- a/Documentation/devicetree/bindings/gnss/u-blox,neo-6m.yaml
-+++ b/Documentation/devicetree/bindings/gnss/u-blox,neo-6m.yaml
-@@ -21,6 +21,7 @@ properties:
-       - u-blox,neo-6m
-       - u-blox,neo-8
-       - u-blox,neo-m8
-+      - u-blox,zed-f9p
- 
-   reg:
-     description: >
--- 
-2.40.1
-
+Thanks!
+--
+Matteo
