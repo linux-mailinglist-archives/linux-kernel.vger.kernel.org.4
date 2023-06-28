@@ -2,209 +2,227 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 928C8740A32
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 10:00:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D32C5740A16
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 09:57:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232591AbjF1H7o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 03:59:44 -0400
-Received: from mga12.intel.com ([192.55.52.136]:19995 "EHLO mga12.intel.com"
+        id S232101AbjF1H5b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 03:57:31 -0400
+Received: from domac.alu.unizg.hr ([161.53.235.3]:59300 "EHLO domac.alu.hr"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232059AbjF1H5Y (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 03:57:24 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687939043; x=1719475043;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=+A3t/O80XmkceP/xFs5en3bj+zGJ/OIJe1Q3Wf3K4bk=;
-  b=AQDFUYh4pc7+/dwhF8fdE0b3o8NPbWXxk6Wkq+b8JhOACjC3lqOgY2jb
-   5G9Izi+FiF66UKpp3dsRU5BLY+A8KM4FCK+CupyXsz9nc+Zb8gnq7zJoV
-   Viy/ZnRc9yyYHqeZbDsi7qV0HfvmZqKryj3ImUJ4ySGrAwndY9KfKihlP
-   qQpmdbMKyt8BGvCdGji7oErDS+1UjwflW8Qjj+hfwxVPdZpb2ZkFXEhiR
-   zYGlyvmuQfVpZNX6nzS7gDQARE3NWpZ8fjGLsahvKpnFJeioD1E/y9Zws
-   ZZVtd1gTcBostQhJo5p3lWRg7+cIik156uIKSmjjR2Oyn5C6qYNg871JD
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10754"; a="341338534"
-X-IronPort-AV: E=Sophos;i="6.01,164,1684825200"; 
-   d="scan'208";a="341338534"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2023 22:18:56 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10754"; a="694144707"
-X-IronPort-AV: E=Sophos;i="6.01,164,1684825200"; 
-   d="scan'208";a="694144707"
-Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
-  by orsmga006.jf.intel.com with ESMTP; 27 Jun 2023 22:18:56 -0700
-Received: from orsmsx612.amr.corp.intel.com (10.22.229.25) by
- ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27; Tue, 27 Jun 2023 22:18:56 -0700
-Received: from orsmsx601.amr.corp.intel.com (10.22.229.14) by
- ORSMSX612.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27; Tue, 27 Jun 2023 22:18:55 -0700
-Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
- orsmsx601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27 via Frontend Transport; Tue, 27 Jun 2023 22:18:55 -0700
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (104.47.66.41) by
- edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.27; Tue, 27 Jun 2023 22:18:55 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=jJHemB+HDe9tchaUnzESC6QlQzyCEVgFICVVuO5aORQOGDHgeO/FoOzvv60b3opNbqm7dON8bAknf8c3kUzSsWTXfjiKi5MqyOVatRe/KS8JaaYKjXFZk7L3pxfmvq5TfN2fH/SdaPgGeXnbW9dQC4Ta2M+FGYXKUK6j8bsJ2A7g9iSfQaAmmY/1u8Zba+Fk30tlzw39kk25TSo4NCgD2m/oiRE7xW7vPYlQDl0g10/qfiI6ARdQ7xqZ+sjNNTl6GQV0+1OR4tu4ROqWlTvNj2bGJRQD4APj/grmKzYmjkXhndAMs59mvrEUpaVk1g24hojvRq+d6JEH2IhqmQGImA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=SSu1cVRKmTgn3FAWkNaa4f5UkYwG366WeCUTQVEcrks=;
- b=d+YXKw7io6sPn9qv1ZfCIZFdW4LE2u74KbTFycmOqHjLUCB0ufzYq7g/FGVTsF7rrBzQHwVoO80lZue95lGoz0tKSf24+hJB74bGTRZU3GKi7xGTem/bsH0JA8VHI97Zx7mA4DDYVQ60l++j8iqx0f4BI8ZpJrcaRMFoaQ2GQefFPdqwROpN6Wzi5w37P5TPIPpfJybf+TZwML8vUfAqegbf6MbTMCqqUVXU74T6+Mc/LHhURlkOaiCHJ7MhPu/9gXELZEC1ZxS1C2dJeVItlXIiTpJ39WHgf0M97MyZL7uEdEWgsUH4JhXQNvsBNmQdimPes4Mn9hV98zTB0/GASA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from BYAPR11MB3062.namprd11.prod.outlook.com (2603:10b6:a03:92::18)
- by BL3PR11MB6316.namprd11.prod.outlook.com (2603:10b6:208:3b3::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.23; Wed, 28 Jun
- 2023 05:18:47 +0000
-Received: from BYAPR11MB3062.namprd11.prod.outlook.com
- ([fe80::4103:d2e0:996d:cf1a]) by BYAPR11MB3062.namprd11.prod.outlook.com
- ([fe80::4103:d2e0:996d:cf1a%5]) with mapi id 15.20.6521.024; Wed, 28 Jun 2023
- 05:18:47 +0000
-Date:   Wed, 28 Jun 2023 13:18:34 +0800
-From:   Aaron Lu <aaron.lu@intel.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-CC:     Deng Pan <pan.deng@intel.com>, <tim.c.chen@intel.com>,
-        <vincent.guittot@linaro.org>, <linux-kernel@vger.kernel.org>,
-        <tianyou.li@intel.com>, <yu.ma@intel.com>, <lipeng.zhu@intel.com>,
-        <yu.c.chen@intel.com>, Tim Chen <tim.c.chen@linux.intel.com>
-Subject: Re: [PATCH v2] sched/task_group: Re-layout structure to reduce false
- sharing
-Message-ID: <20230628051419.GA565419@ziqianlu-dell>
-References: <20230621081425.420607-1-pan.deng@intel.com>
- <20230626054756.GA435374@ziqianlu-dell>
- <20230627101437.GY4253@hirez.programming.kicks-ass.net>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20230627101437.GY4253@hirez.programming.kicks-ass.net>
-X-ClientProxiedBy: SGXP274CA0002.SGPP274.PROD.OUTLOOK.COM (2603:1096:4:b8::14)
- To BYAPR11MB3062.namprd11.prod.outlook.com (2603:10b6:a03:92::18)
+        id S231416AbjF1HzV (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 28 Jun 2023 03:55:21 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by domac.alu.hr (Postfix) with ESMTP id 36C78601C6;
+        Wed, 28 Jun 2023 07:26:14 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1687929974; bh=R3Adk+Vp7beQRzKZSsyxacxg7sRWAmigJgHBXXIf6Jg=;
+        h=Date:To:Cc:From:Subject:From;
+        b=MSQTX3cPNFzeO/0KNrebRAlxQXl+WnyfrGxsmynXvJGAsb0txEP2eI4WgfJSsf8Nw
+         hBsSGf/INXMvwo2kiJwLgjpZHIg46NccVFajpZwblpUmWZujf6FJSBFbY9fVDlRy9T
+         uyhmTu8YHzqlUksilHxoRJENLpR9vrWVbVSb5ibEg7p+RWSVGkCloJkDqDG+8Pbiqa
+         A5nG2NNbqbW2e2f8ejLY3jhkOoYicEuNGMFJEPu8FdVA/zJfHiQjiSFJcQ9PGIGcNG
+         llC9pYE26qo9S93Me/328Tf/ma33Wzx2KAI+Y9GrfIvjVPDza6r0k6VLC6fwtWJjcF
+         laUJLAltYYLLA==
+X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
+Received: from domac.alu.hr ([127.0.0.1])
+        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id f-90LmHaFzYp; Wed, 28 Jun 2023 07:26:11 +0200 (CEST)
+Received: from [192.168.1.6] (unknown [94.250.191.183])
+        by domac.alu.hr (Postfix) with ESMTPSA id 4CBDC601B4;
+        Wed, 28 Jun 2023 07:26:11 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1687929971; bh=R3Adk+Vp7beQRzKZSsyxacxg7sRWAmigJgHBXXIf6Jg=;
+        h=Date:To:Cc:From:Subject:From;
+        b=RfpjWoiOU+J3EZjhZi2+/mWJiUHUEkVDI9O3n+qA/XKnVCgekb9g6X28nD5dnlOBZ
+         1GDxcs4gBnD6ImcuikPxsm8gV6YxjAQmRHxjDXjFBB+HW/KqnXVslMmAfwloS3KiOb
+         lFTuN2ZCZb2p05v9ObDM/9WelZ1RQw/lvHEC8XFYCX4D9KNcoDkFVKK7AW5IsLfXO5
+         Nq7dKJzeE5xyvuoVCTEN1J+TymuD0hTCOYvbV0ByBg26GCoHydTIxrJgN0TkOdU6Wm
+         MsmRwOHB6jfICmzF+VF2qC5ELH20oJhUgXcyytSv4njDP2VjpE4qE0Q46kVCI7igX6
+         jQJQYzQbBZLig==
+Message-ID: <e369408c-175a-e24a-c113-f63042bd1587@alu.unizg.hr>
+Date:   Wed, 28 Jun 2023 07:26:05 +0200
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BYAPR11MB3062:EE_|BL3PR11MB6316:EE_
-X-MS-Office365-Filtering-Correlation-Id: 38b6f095-7c10-4d75-4f0f-08db77972622
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: stzPJBdoSfUkp4MNxE2PgQd2YGBB+mtGgaXn+yzdKz/jzA3/FGN3iGXu+5iyJ43QIl3l4POs3cu4j0AfDMxI8JEZt+V7jnnMc4oh7/dBy0c6ur76WT16wttx4cxmlDMjyycUq6nKABM86afwMUQ1aMGVjswCQPo1OHo/qSVLQ8tvQ92A8UOnm6QZuwIdOQFHKejGo5R2z5kJe8XVXYIHHwHYRUcEXbdqTDoQNYS/7Ti4D02kqxNsH1mEUJrGw2Efz+fgONsYbLoSEiOxNX9ZRn33ym3v1dQ1W2l8Evd7Ue1kt9+BQIHnDx5VPoW74DzywRqZ0wEfsXk5lNCVkVKdyeAimVPo/824nL8NpJFCLFH4LScMG8S9bRSjzpTNrRiOPC7HAFHfimyAvoClIpg79ezNLt3gem++jgHv5QMZJVfMycVZ5SqsI+rBlaqs+QwLf3pqTyQD6ODjAX+VZU2TwpgXrFyLSljjLRnqH/hx7ih0ZOmYYiLUPGf1Xi182igd7BDurfxXYkl7m4GHKSTgKie7PUpJOwExqsL+NK5FVQoG46cflo4Hc+YXByTYUOB7
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR11MB3062.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(7916004)(39860400002)(136003)(346002)(396003)(376002)(366004)(451199021)(8676002)(8936002)(83380400001)(316002)(66946007)(41300700001)(66556008)(6512007)(6506007)(6916009)(4326008)(66476007)(186003)(26005)(1076003)(9686003)(54906003)(6666004)(33716001)(6486002)(2906002)(5660300002)(44832011)(478600001)(82960400001)(38100700002)(33656002)(86362001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?yCgG031hpcxeaiJe1thTSJsEd1MXvL5Sl8f2s5uR5w07tgGDKxeoxqwa1m/j?=
- =?us-ascii?Q?PR63uTkAdgHvyRd3+vcrS4Zx5werWopqzIqiv91AsbbXXdDrvF+f+t1mtjY9?=
- =?us-ascii?Q?4o5O4LwJHxomaeC22f61IkVVNsNHGS5gsRwG4BUccdIDgKoblWga6A4mwbvP?=
- =?us-ascii?Q?UeYZrgDEPtQ5iOIzlLXHTFkge8DOJDqpItfzGp0ddeD3fZ4QGLA2gTlPlQs9?=
- =?us-ascii?Q?XyERJrAhIc3Li+In71FtNJZjSJ8t0pyDWxBmrYAQBZQ2UXAx9CEosABSD/jh?=
- =?us-ascii?Q?ZjJt/NvPSwcNC/gzOUQHwGnXtia9jTUZqMpcH8VGBahyrmzS1cmYHnGEIvb0?=
- =?us-ascii?Q?VUW2RT1EQH5mqU57+MHqKCRf1U/cyhxGsITmd+L/VEpZ8febV0S0zMkE1QuA?=
- =?us-ascii?Q?FF5aEu1zvvxiS+aJjBTCWbyVv4lvilXMoECjDYSpDiMZommBx5OVS/h/dh2m?=
- =?us-ascii?Q?DmtlC8gBfii9lVM2M/15mPPREDupcvAY3lThopXVvRo6Sdw01XimSiv6aGpG?=
- =?us-ascii?Q?Vd7eKbl8qEDQHOeR85YS8QwgNJZF5r+WWJfWuamUBKg/RxWEVgCdN1tcyMuP?=
- =?us-ascii?Q?fSy3w4/+PLK098wOFlphgwYppq9s1kP1uAtP67UKdAKWGepkcvYxUiIPZo5y?=
- =?us-ascii?Q?+8EXBz6BL6aM2w5ewRH+jZIuNOIGlHvfx7U8tRPf6XpBkEiLYJq1r2sFDKI7?=
- =?us-ascii?Q?HWlsfG6y12iWKouqzAdJ3a4wX2mgRVp3n17LYFsWYZ9w3SNTnUTn6Q8/I72d?=
- =?us-ascii?Q?M9hI1qx7+ahp6kNH7N6btguW9ne7r1SgDM4q7YHeesKhYOz5NVg4LAwXMm/V?=
- =?us-ascii?Q?0+obzvGSifVhNl6uHaEfwJLawAwz+jTBvm+7I2Wfd+mRdq7ibi9zuzRqTm72?=
- =?us-ascii?Q?H93XbDLluG67MsUjeIZYlK+JYrVANcYFPzoqF/r3DajT6gJsxk+t1YRexfAU?=
- =?us-ascii?Q?Y95u/68iBZpYZsph+6vNW/8jKc5OeyvW1eJw8vVzoYkYqfFJKx+0oQSX/dc8?=
- =?us-ascii?Q?KCjMBrNy6MoVmvz3+XR2bNRCIPYP6PKdFMhJMrO6HCWbizIwSaoNU1Ocuob6?=
- =?us-ascii?Q?xHjzMg4cG8V/xdVLA/vJEK79XZi4IvhzxAUdmqndOhMAYulMJIPKXD+tZgBN?=
- =?us-ascii?Q?0U52DJMBoSu/hjL2LAM3U5zotpubKIdr9XAxWOjZtBTdgClorGssQ7rPWybz?=
- =?us-ascii?Q?fXaC3O6NOm53EviqY9eorT2qTvy/tzynyZnqqgVxrc6dBffWiOfrPMtozWVy?=
- =?us-ascii?Q?TaWaOpvazL509CGQCO1JKcGU1gPoZXZp7I/pbp/f14qfKe8mOCCTp136zj6z?=
- =?us-ascii?Q?L5FpEUCpsP9Usd6Sw8e/rc0BK/QvSMFCwOFr8/Gf8iMwV42EN9V08PfVBU2J?=
- =?us-ascii?Q?QiQS+vkcqv3hNflgq5DWabOka01+6g4I70+jrPwZR/HxuWUUCRW6K7oCiDpq?=
- =?us-ascii?Q?UlrB1l+JfzjP6U6+y4PqkaSzr6YdI5ZK80L1fFiISB51uKQb7FK+jLvahfCh?=
- =?us-ascii?Q?QQ0ddtPVgYJZ63fcmHLi8CGd3t4gJxSRyzHlOuaCTW8yc47I/q5UHrx1BhYM?=
- =?us-ascii?Q?P+9mvPb7b8trsO5NVDjwV5pKNcC96WMpCApiAJie?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 38b6f095-7c10-4d75-4f0f-08db77972622
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR11MB3062.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Jun 2023 05:18:47.0141
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 8c/42PWlFmDisBEGc4Hg3jY1pm9wAC4xCOOr4TIOijEst+eklxYfgHMcSFzITOafN/M1kjsigQ/8kylhZxGOcg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL3PR11MB6316
-X-OriginatorOrg: intel.com
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Content-Language: en-US
+To:     Btrfs BTRFS <linux-btrfs@vger.kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+From:   Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
+Subject: [POSSIBLE BUG]: btrfs partition: cat sees one version of the script,
+ exec the old version
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 27, 2023 at 12:14:37PM +0200, Peter Zijlstra wrote:
-> On Mon, Jun 26, 2023 at 01:47:56PM +0800, Aaron Lu wrote:
-> > diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
-> > index ec7b3e0a2b20..31b73e8d9568 100644
-> > --- a/kernel/sched/sched.h
-> > +++ b/kernel/sched/sched.h
-> > @@ -385,7 +385,9 @@ struct task_group {
-> >  	 * it in its own cacheline separated from the fields above which
-> >  	 * will also be accessed at each tick.
-> >  	 */
-> > -	atomic_long_t		load_avg ____cacheline_aligned;
-> > +	struct {
-> > +		atomic_long_t		load_avg;
-> > +	} ____cacheline_aligned_in_smp;
-> >  #endif
-> >  #endif
-> > 
-> > This way it can make sure there is no false sharing with load_avg no
-> > matter how the layout of this structure changes in the future.
-> 
-> This. Also, ISTR there was a series to split this atomic across nodes;
+Hi,
 
-Yes.
+Due to another bug discovered by kselftests, on the 6.4.0 kernel from Torvalds
+tree with Ubuntu generic config merged with per-kselftest configs ...
 
-> whatever happend to that, 
+It seems that the bash shell while executing a scripts sees the old version
+when compared to that seen in the editor like vi.
 
-After collecting more data, the test summary is:
-- on SPR, hackbench time reduced ~8% and netperf(UDP_RR/nr_thread=100%)                                                
-  performance increased ~50%;                                                                                          
-- on Icelake, performance regressed about 1%-2% for postgres_sysbench                                                  
-  and hackbench, netperf has no performance change;                                                                    
-- on Cascade Lake, netperf/UDP_RR/nr_thread=50% sees performance
-  drop ~3%; others have no performance change.
+The modified script on the btrfs partition is:
 
-So it is a win for SPR and has small regressions for Icelake and Cascade
-Lake. Daniel tested on AMD machines and he also saw some minor
-regressions. The win for SPR is most likely due to the per-node
-tg->load_avg patch made all CPUs contending on the same cacheline to
-contending on two cachelines and that helped SPR because when many CPUs
-contending on the same cacheline, SPR is likely to enter the "Ingress
-Queue Overflow" state and that is bad for performance. I also did some
-experiments on a 2 sockets SPR to place the two per-node tg->load_avg on
-the same node and I also saw similar performance improvement.
+root@defiant:/linux/kernel/linux_torvalds/tools/testing/selftests/drivers/net/bonding# cat ./test.sh
+#!/bin/sh
+# SPDX-License-Identifier: GPL-2.0
+#
+# cause kernel oops in bond_rr_gen_slave_id
+DEBUG=${DEBUG:-0}
 
-Based on the test results and the reason why SPR sees improvement, I
-didn't continue to push it.
+set -e -x
+test ${DEBUG} -ne 0 && set -x
 
-Another thing: after making tg->load_avg per node, update_tg_load_avg()
-is strictly local, that's good but update_cfs_group() needs to read all
-counters on each node and that means it will still cause the per-node
-tg->load_avg bounce across nodes and update_cfs_group() is called very
-frequently. I suppose it's where those small regressions come from but
-the solution is not obvious.
+finish()
+{
+	ip link show
+	ip link del link1_1 || true
+	ip netns delete server || true
+	ip netns delete client || true
+}
 
-> and can we still measure an improvement over this with that approach?
+trap finish EXIT
 
-Let me re-run those tests and see how things change.
+client_ip4=192.168.1.198
+server_ip4=192.168.1.254
 
-In my previous tests I didn't turn on CONFIG_RT_GROUP_SCHED. To test
-this, I suppose I'll turn CONFIG_RT_GROUP_SCHED on and apply this change
-here that made tg->load_avg in a dedicated cacheline, then see how
-performances change with the "Make tg->load_avg per node" patch. Will
-report back once done.
+# setup kernel so it reboots after causing the panic
+echo 180 >/proc/sys/kernel/panic
 
-Thanks,
-Aaron
+# build namespaces
+ip link add dev link1_1 type veth peer name link1_2
+
+ip netns add "server"
+ip link set dev link1_2 netns server up name eth0
+ip netns exec server ip addr add ${server_ip4}/24 dev eth0
+
+ip netns add "client"
+ip link set dev link1_1 netns client down name eth0
+ip netns exec client ip link add dev bond0 down type bond mode 1 \
+	miimon 100 all_slaves_active 1
+ip netns exec client ip link set dev eth0 down master bond0
+ip netns exec client ip link set dev bond0 up
+ip netns exec client ip addr add ${client_ip4}/24 dev bond0
+ip netns exec client ping -c 5 $server_ip4 >/dev/null
+
+ip netns exec client ip link set dev eth0 down nomaster
+ip netns exec client ip link set dev bond0 down
+ip netns exec client ip link set dev bond0 type bond mode 0 \
+	arp_interval 1000 arp_ip_target "+${server_ip4}"
+ip netns exec client ip link set dev eth0 down master bond0
+ip netns exec client ip link set dev bond0 up
+ip link show
+# ip netns exec client ping -c 5 $server_ip4 >/dev/null
+
+echo "Exiting"
+
+exit 0
+root@defiant:/linux/kernel/linux_torvalds/tools/testing/selftests/drivers/net/bonding#
+
+However, the bash appears to run the older version no matter what I try:
+
+# ./test.sh
+# bash ./test.sh
+# . ./test.sh
+# sh ./test.sh
+# cat test.sh | bash -
+
+What is executed is not what is in the test.sh, but the old version:
+
+root@defiant:/linux/kernel/linux_torvalds/tools/testing/selftests/drivers/net/bonding# sh ./test.sh
++ test 0 -ne 0
++ trap finish EXIT
++ client_ip4=192.168.1.198
++ server_ip4=192.168.1.254
++ echo 180
++ ip link add dev link1_1 type veth peer name link1_2
++ ip netns add server
++ ip link set dev link1_2 netns server up name eth0
++ ip netns exec server ip addr add 192.168.1.254/24 dev eth0
++ ip netns add client
++ ip link set dev link1_1 netns client down name eth0
++ ip netns exec client ip link add dev bond0 down type bond mode 1 miimon 100 all_slaves_active 1
++ ip netns exec client ip link set dev eth0 down master bond0
++ ip netns exec client ip link set dev bond0 up
++ ip netns exec client ip addr add 192.168.1.198/24 dev bond0
++ ip netns exec client ping -c 5 192.168.1.254
++ finish
++ ip link show
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN mode DEFAULT group default qlen 1000
+     link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+2: dummy0: <BROADCAST,NOARP> mtu 1500 qdisc noop state DOWN mode DEFAULT group default qlen 1000
+     link/ether 02:fc:ca:49:e2:d4 brd ff:ff:ff:ff:ff:ff
+3: tunl0@NONE: <NOARP> mtu 1480 qdisc noop state DOWN mode DEFAULT group default qlen 1000
+     link/ipip 0.0.0.0 brd 0.0.0.0
+4: gre0@NONE: <NOARP> mtu 1476 qdisc noop state DOWN mode DEFAULT group default qlen 1000
+     link/gre 0.0.0.0 brd 0.0.0.0
+5: gretap0@NONE: <BROADCAST,MULTICAST> mtu 1462 qdisc noop state DOWN mode DEFAULT group default qlen 1000
+     link/ether 00:00:00:00:00:00 brd ff:ff:ff:ff:ff:ff
+6: erspan0@NONE: <BROADCAST,MULTICAST> mtu 1450 qdisc noop state DOWN mode DEFAULT group default qlen 1000
+     link/ether 00:00:00:00:00:00 brd ff:ff:ff:ff:ff:ff
+7: ip_vti0@NONE: <NOARP> mtu 1480 qdisc noop state DOWN mode DEFAULT group default qlen 1000
+     link/ipip 0.0.0.0 brd 0.0.0.0
+8: ip6_vti0@NONE: <NOARP> mtu 1332 qdisc noop state DOWN mode DEFAULT group default qlen 1000
+     link/tunnel6 :: brd :: permaddr c689:f12:e1f6::
+9: sit0@NONE: <NOARP> mtu 1480 qdisc noop state DOWN mode DEFAULT group default qlen 1000
+     link/sit 0.0.0.0 brd 0.0.0.0
+10: ip6tnl0@NONE: <NOARP> mtu 1452 qdisc noop state DOWN mode DEFAULT group default qlen 1000
+     link/tunnel6 :: brd :: permaddr 7e18:b0ed:661a::
+11: ip6gre0@NONE: <NOARP> mtu 1448 qdisc noop state DOWN mode DEFAULT group default qlen 1000
+     link/gre6 :: brd :: permaddr ce4b:1aae:bc8f::
+12: enp16s0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP mode DEFAULT group default qlen 1000
+     link/ether 9c:6b:00:01:fb:80 brd ff:ff:ff:ff:ff:ff
++ ip link del link1_1
+Cannot find device "link1_1"
++ true
++ ip netns delete server
++ ip netns delete client
+root@defiant:/linux/kernel/linux_torvalds/tools/testing/selftests/drivers/net/bonding#
+
+(The ip netns exec client ping -c 5 192.168.1.254 is executed even when commented
+in the program.)
+
+The "strace ./test.sh" command shows that ./test.sh is really opened, so
+the only thing possible might be that bash and cat see different versions?
+
+# strace ./test.sh
+newfstatat(AT_FDCWD, ".", {st_mode=S_IFDIR|0755, st_size=522, ...}, 0) = 0
+openat(AT_FDCWD, "./test.sh", O_RDONLY) = 3
+fcntl(3, F_DUPFD, 10)                   = 10
+close(3)                                = 0
+fcntl(10, F_SETFD, FD_CLOEXEC)          = 0
+geteuid()                               = 0
+getegid()                               = 0
+rt_sigaction(SIGINT, NULL, {sa_handler=SIG_DFL, sa_mask=[], sa_flags=0}, 8) = 0
+rt_sigaction(SIGINT, {sa_handler=0x55d28c956aa0, sa_mask=~[RTMIN RT_1], sa_flags=SA_RESTORER, sa_restorer=0x7f5f1b842520}, NULL, 8) = 0
+rt_sigaction(SIGQUIT, NULL, {sa_handler=SIG_DFL, sa_mask=[], sa_flags=0}, 8) = 0
+rt_sigaction(SIGQUIT, {sa_handler=SIG_DFL, sa_mask=~[RTMIN RT_1], sa_flags=SA_RESTORER, sa_restorer=0x7f5f1b842520}, NULL, 8) = 0
+rt_sigaction(SIGTERM, NULL, {sa_handler=SIG_DFL, sa_mask=[], sa_flags=0}, 8) = 0
+rt_sigaction(SIGTERM, {sa_handler=SIG_DFL, sa_mask=~[RTMIN RT_1], sa_flags=SA_RESTORER, sa_restorer=0x7f5f1b842520}, NULL, 8) = 0
+read(10, "#!/bin/sh\n# SPDX-License-Identif"..., 8192) = 1441
+
+
+# strace cat ./test.sh
+
+newfstatat(1, "", {st_mode=S_IFIFO|0600, st_size=0, ...}, AT_EMPTY_PATH) = 0
+openat(AT_FDCWD, "./test.sh", O_RDONLY) = 3
+newfstatat(3, "", {st_mode=S_IFREG|0775, st_size=1441, ...}, AT_EMPTY_PATH) = 0
+fadvise64(3, 0, 0, POSIX_FADV_SEQUENTIAL) = 0
+mmap(NULL, 139264, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x7f9eceaa6000
+read(3, "#!/bin/sh\n# SPDX-License-Identif"..., 131072) = 1441
+write(1, "#!/bin/sh\n# SPDX-License-Identif"..., 1441#!/bin/sh
+
+Unless I'm not doing anything stupid, this could be a bug in btrfs COW?
+
+The kernel is 6.4.0 torvalds tree release.
+
+The /home partition is BTRFS on NVME Samsung 980 1 TB disk PCIe 3.0.
+
+# /home was on /dev/nvme0n1p7 during installation
+UUID=adfbacf5-c1d4-46c0-80ff-e1312696b829 /home           btrfs   defaults,subvol=@home 0       2
+
+Best regards,
+Mirsad Todorovac
