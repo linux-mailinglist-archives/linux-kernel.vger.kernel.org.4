@@ -2,115 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6513C740FFA
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 13:21:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DE06740FFD
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 13:22:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229501AbjF1LVm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 07:21:42 -0400
-Received: from perceval.ideasonboard.com ([213.167.242.64]:48884 "EHLO
-        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231890AbjF1LVe (ORCPT
+        id S231564AbjF1LWU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 07:22:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34864 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231142AbjF1LWQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 07:21:34 -0400
-Received: from pendragon.ideasonboard.com (aztw-30-b2-v4wan-166917-cust845.vm26.cable.virginm.net [82.37.23.78])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 5E620814;
-        Wed, 28 Jun 2023 13:20:52 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1687951252;
-        bh=abc8pk8RuvvZJla85WjtaH3AoscYHKj27LLRxuhLM+E=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=HKOQlmhowxdU42zNj6H3E6T3eOqEEhzXTKmfc8bXe9RwDb/A99rCqBjBX9uWt9xn3
-         tMnRI7u9H+OBkHZg+RwAQ1br5UzExCOZYoZldGLs3T7pjnX1iruPEU4E46qps37Uf6
-         ehh4URLI2YyUURVZ+mFfgZnBdKjVjohp4j3TwaEw=
-Content-Type: text/plain; charset="utf-8"
+        Wed, 28 Jun 2023 07:22:16 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 093C8199B
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 04:22:15 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 90A45612B7
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 11:22:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95B57C433C8;
+        Wed, 28 Jun 2023 11:22:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1687951334;
+        bh=UdjHHtljdKh3TkXQroEwg38Q3AKyMrmSNqOVLycQtJA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=KP/PwtGwVBW3u/SU/ZVP3/tceDdK0E+OXV6gh9rkPageecR5oFeSyvJ0XrbFmI0/l
+         t8HX9hoFcI+MHap1qdjlYEPfysK/iVKoo9XGM5NmzwIOHjMsWLBo//sbUmrbpxVv0g
+         oP2uEFphx1ne6rwmHfUBPOcOi79LSQqKFfwofw7M=
+Date:   Wed, 28 Jun 2023 13:22:11 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Alexander Graf <graf@amazon.de>
+Cc:     Babis Chalios <bchalios@amazon.es>, Theodore Ts'o <tytso@mit.edu>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        linux-kernel@vger.kernel.org, mzxreary@0pointer.de,
+        xmarcalx@amazon.co.uk, Amit Shah <amit@kernel.org>
+Subject: Re: [PATCH 0/1] User space notifications about VM cloning
+Message-ID: <2023062834-lark-frostbite-9710@gregkh>
+References: <20230531095119.11202-1-bchalios@amazon.es>
+ <20f65557-766d-d954-f3ef-c26ad2b661dc@amazon.es>
+ <6ccec434-42f0-0ae8-8c7b-bea4646c5e7d@amazon.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20230627201628.207483-3-umang.jain@ideasonboard.com>
-References: <20230627201628.207483-1-umang.jain@ideasonboard.com> <20230627201628.207483-3-umang.jain@ideasonboard.com>
-Subject: Re: [PATCH v8 2/5] staging: vc04_services: vchiq_arm: Register vchiq_bus_type
-From:   Kieran Bingham <kieran.bingham@ideasonboard.com>
-Cc:     stefan.wahren@i2se.com, gregkh@linuxfoundation.org,
-        f.fainelli@gmail.com, athierry@redhat.com, error27@gmail.com,
-        dave.stevenson@raspberrypi.com, laurent.pinchart@ideasonboard.com,
-        Umang Jain <umang.jain@ideasonboard.com>
-To:     Umang Jain <umang.jain@ideasonboard.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
-        linux-staging@lists.linux.dev
-Date:   Wed, 28 Jun 2023 12:21:29 +0100
-Message-ID: <168795128917.2878450.12280941046284606847@Monstersaurus>
-User-Agent: alot/0.10
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <6ccec434-42f0-0ae8-8c7b-bea4646c5e7d@amazon.de>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+        lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Umang Jain (2023-06-27 21:16:25)
-> Register the vchiq_bus_type bus with the vchiq interface.
-> The bcm2835-camera nad bcm2835_audio will be registered to this bus type
+On Wed, Jun 28, 2023 at 01:13:40PM +0200, Alexander Graf wrote:
+> Hi folks,
+> 
+> On 16.06.23 17:07, Babis Chalios wrote:
+> > Hello all,
+> > 
+> > Some time has passed since I sent this. Any comments/thoughts?
+> 
+> 
+> Can we please get this merged somehow? Greg, any advise?
+> 
+> This is purely a device notification event to user space, similar to network
+> link change events and the likes and has nothing to do with Jason's
+> envisioned random reseed event exposure. We can happily send RFC patches for
+> the latter after this is merged too.
 
-s/nad/and/
+Sure, I can take it, but it's the middle of the merge window and it's
+too late for anything new right now, sorry.
 
-Is it possible to rename bcm2835_audio to bcm2835-audio for consistency?
-Or is that baked into existing usage/abi already?
+I'll pick it up after 6.5-rc1 is out.
 
-If it can be changed, I think it's probably something to do in an
-independent patch at the end of the series anyway.
+thanks,
 
-I suspect this patch could be merged with 1/5 but I think it's ok
-separate too.
-
-
-Reviewed-by: Kieran Bingham <kieran.bingham@ideasonboard.com>
-
-> going ahead.
->=20
-> Signed-off-by: Umang Jain <umang.jain@ideasonboard.com>
-> ---
->  .../vc04_services/interface/vchiq_arm/vchiq_arm.c        | 9 +++++++++
->  1 file changed, 9 insertions(+)
->=20
-> diff --git a/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.=
-c b/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c
-> index aa2313f3bcab..e8d40f891449 100644
-> --- a/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c
-> +++ b/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c
-> @@ -12,6 +12,7 @@
->  #include <linux/cdev.h>
->  #include <linux/fs.h>
->  #include <linux/device.h>
-> +#include <linux/device/bus.h>
->  #include <linux/mm.h>
->  #include <linux/highmem.h>
->  #include <linux/pagemap.h>
-> @@ -34,6 +35,7 @@
->  #include "vchiq_ioctl.h"
->  #include "vchiq_arm.h"
->  #include "vchiq_debugfs.h"
-> +#include "vchiq_device.h"
->  #include "vchiq_connected.h"
->  #include "vchiq_pagelist.h"
-> =20
-> @@ -1870,6 +1872,12 @@ static int __init vchiq_driver_init(void)
->  {
->         int ret;
-> =20
-> +       ret =3D bus_register(&vchiq_bus_type);
-> +       if (ret) {
-> +               pr_err("Failed to register %s\n", vchiq_bus_type.name);
-> +               return ret;
-> +       }
-> +
->         ret =3D platform_driver_register(&vchiq_driver);
->         if (ret)
->                 pr_err("Failed to register vchiq driver\n");
-> @@ -1880,6 +1888,7 @@ module_init(vchiq_driver_init);
-> =20
->  static void __exit vchiq_driver_exit(void)
->  {
-> +       bus_unregister(&vchiq_bus_type);
->         platform_driver_unregister(&vchiq_driver);
->  }
->  module_exit(vchiq_driver_exit);
-> --=20
-> 2.39.1
->
+greg k-h
