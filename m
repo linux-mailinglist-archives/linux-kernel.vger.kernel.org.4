@@ -2,165 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2551174187A
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 21:01:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DFF7B741883
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 21:02:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231794AbjF1S7f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 14:59:35 -0400
-Received: from mga03.intel.com ([134.134.136.65]:10254 "EHLO mga03.intel.com"
+        id S231422AbjF1TAr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 15:00:47 -0400
+Received: from bg4.exmail.qq.com ([43.154.54.12]:64558 "EHLO bg4.exmail.qq.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229645AbjF1S5u (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 14:57:50 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687978670; x=1719514670;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:content-transfer-encoding:mime-version;
-  bh=tqSaGg/x+0pYMu8N0aigk6yCv/LZ/esxOgiIrlihxn0=;
-  b=TA3/KV8KkunJ9V46suPSv4IvsKI2XZUvM45dwsza4lAd39mb7WGS3aJr
-   c2xgM8vY2Lzz7cZqp8ubSGQtKrszX+bjik82JEoMMIG/7eFJc/QM2STer
-   zeSm/4RfiIXrRFjD8hKDpeit66++J86zfrJgFQN3etoIB6YEIfjhrQHu9
-   WiPuL3lxCGkumYJlijS+RiXldpVwvpD93PQ0rBCj60gZI07mc+PmqwXwu
-   QadK7lWkQmqqjieVLK+pmj4+wcWqbIFvFQJraFA2OXHd/LgXR6+3n66fr
-   PFtMPBeCFVFuZ8KOAg0bQR8mo6GU7rYP73VDLkmQgbTwo3+EsIyy3paWa
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10755"; a="365394220"
-X-IronPort-AV: E=Sophos;i="6.01,166,1684825200"; 
-   d="scan'208";a="365394220"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2023 11:57:49 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10755"; a="841200981"
-X-IronPort-AV: E=Sophos;i="6.01,166,1684825200"; 
-   d="scan'208";a="841200981"
-Received: from nagarw3-mobl1.amr.corp.intel.com ([10.212.93.40])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2023 11:57:47 -0700
-Message-ID: <8f2dd87ad58d5920e7bae4fea4cbe592074406c1.camel@linux.intel.com>
-Subject: Re: [PATCH v6 13/15] crypto: iaa - Add support for
- deflate-iaa-canned compression algorithm
-From:   Tom Zanussi <tom.zanussi@linux.intel.com>
-To:     Herbert Xu <herbert@gondor.apana.org.au>
-Cc:     davem@davemloft.net, fenghua.yu@intel.com, vkoul@kernel.org,
-        dave.jiang@intel.com, tony.luck@intel.com,
-        wajdi.k.feghali@intel.com, james.guilford@intel.com,
-        kanchana.p.sridhar@intel.com, vinodh.gopal@intel.com,
-        giovanni.cabiddu@intel.com, linux-kernel@vger.kernel.org,
-        linux-crypto@vger.kernel.org, dmaengine@vger.kernel.org
-Date:   Wed, 28 Jun 2023 13:57:45 -0500
-In-Reply-To: <ZIw/jtxdg6O1O0j3@gondor.apana.org.au>
-References: <20230605201536.738396-1-tom.zanussi@linux.intel.com>
-         <20230605201536.738396-14-tom.zanussi@linux.intel.com>
-         <ZIw/jtxdg6O1O0j3@gondor.apana.org.au>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.1-0ubuntu1 
+        id S232277AbjF1S7E (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 28 Jun 2023 14:59:04 -0400
+X-QQ-mid: bizesmtp78t1687978735t1k8oxv4
+Received: from linux-lab-host.localdomain ( [116.30.129.193])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Thu, 29 Jun 2023 02:58:53 +0800 (CST)
+X-QQ-SSF: 01200000000000D0W000000A0000000
+X-QQ-FEAT: znfcQSa1hKbNtlJaExe6GfPAoc0Ow5+wEWHtPLG7/Q1ge+0ox0JyU9wMZjrJB
+        FtypQUSuK8tr3GynT9yFI2sUEDe1ixy87NqzzYo8mCDDjD4dEQp9RNDNmknFPKNEDwCqTTl
+        rBh23PghpE0BeEpgR9KmVOl+x6kRiFqrD1NrVUE2gl94i2AKJsaWbJp3ZeZGKvRlk+DQ4Ua
+        uOO9ts/jzsDuTn2eozBWxv4Ec183BmS/Dt8SsvwS8U3L/XhRTcoe1D9KbI2yDgvp4zNzmoO
+        wqXMiCqMx94azMgzMWL/tOLzm3ucmctRTOQ1QXkNIK3OZP5rMZuFMNFnotyiTvh7b8t7Bx6
+        uFwXiRjLkfGw04uw1vIX0ZKUEPWkOUAKqz01NmfaznPq3tpd5uMtTO+IyQZMw==
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 10494488464373133128
+From:   Zhangjin Wu <falcon@tinylab.org>
+To:     thomas@t-8ch.de, w@1wt.eu
+Cc:     falcon@tinylab.org, arnd@arndb.de, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org
+Subject: [PATCH v1 06/11] tools/nolibc: i386: shrink _start with _start_c
+Date:   Thu, 29 Jun 2023 02:58:43 +0800
+Message-Id: <27783ab1bed69fd99319aa52e03e204ef1160d74.1687976753.git.falcon@tinylab.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <cover.1687976753.git.falcon@tinylab.org>
+References: <cover.1687976753.git.falcon@tinylab.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrsz:qybglogicsvrsz3a-3
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Herbert,
-=20
-Sorry for the delayed response, I was out on vacation.
+Let's move most of the _start operations to _start_c().
 
-On Fri, 2023-06-16 at 18:55 +0800, Herbert Xu wrote:
-> On Mon, Jun 05, 2023 at 03:15:34PM -0500, Tom Zanussi wrote:
-> > Add support for a 'canned' compression mode using the IAA
-> > compression
-> > mode in-kernel API.
-> >=20
-> > The IAA 'canned' compression mode is added alongside the existing
-> > 'fixed' compression mode and a crypto algorithm named
-> > 'deflate-iaa-canned' is registered using it.
->=20
-> So you said that canned is not compatible with the generic deflate
-> algorithm.=C2=A0 Does that mean that there is no way for it to decompress
-> something compressed by the generic deflate algorithm, and vice versa
-> its compressed output cannot be decompressed by generic deflate?
->=20
+Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
+---
+ tools/include/nolibc/arch-i386.h | 32 +++++++-------------------------
+ 1 file changed, 7 insertions(+), 25 deletions(-)
 
-Yes, for the most part...
-
-In canned mode, the header portion of the deflate block is stored
-separately from the body of the compressed data, but the header and
-body are both compliant with the deflate standard.  It can be
-decompressed with any software deflate decompressor by performing
-a	pre-processing step (basically prepending a deflate block header and
-the description of the codes before the first symbol).  The current
-code doesn=E2=80=99t do that, but it could.
-=20
-IAA canned mode can=E2=80=99t however decompress output generated by generi=
-c
-deflate, that is true.
-=20
-Below [1] are some more clarifying details in case you=E2=80=99re intereste=
-d.
-
-> We don't add an algorithm to the Crypto API if the only
-> implementation
-> is by hardware.=C2=A0 IOW if you are adding a new algorithm, then a
-> software version must be the first patch.
->=20
-=20
-One possibility for supporting canned mode might be to, as mentioned
-above, change the code to prepend the deflate block header and
-description of the codes before the first symbol so that it could be
-decompressed using only generic deflate in software; in that case,
-there would never be a worry about the canned data compressed by the
-IAA hardware being unrecoverable in case of hardware failure.  I=E2=80=99m =
-not
-sure if that would be acceptable or how that would work within the
-crypto framework - please let us know your thoughts on that.
-=20
-If that=E2=80=99s not an option, then I=E2=80=99d propose just dropping the=
- canned
-algorithm for now and resubmitting with fixed mode only for a v7 of
-this series, and later following up with an additional series
-consisting of this patch and a software-only implementation of canned
-mode, as you suggest. Does that make sense?  Please let us know your
-thoughts...
-=20
-Thanks,
-=20
-Tom
-=20
-=20
-[1] [From Vinodh Gopal] Deflate https://www.ietf.org/rfc/rfc1951.txt is
-an LZ77 style algorithm combined with Huffman encoding. LZ77 algorithms
-look for matching strings within a history-window. Deflate defines that
-maximal window to be 32KB. A typical software implementation such as
-zlib/gzip with default settings, would use 32KB as the history-window.
-IAA is a light-weight implementation that only supports a history-
-window of 4KB. There are advanced settings in many Software
-libraries/applications to limit history when compressing; if we limit a
-Software compressor to 4KB history, then any input compressed with such
-Software can always be decompressed by IAA. A special exception is that
-Software compression with default settings that works on a data input
-whose size is <=3D 4KB will always generate an output that can be
-decompressed with IAA; since the original input itself is no bigger
-than 4KB, the larger window of 32KB becomes irrelevant. This is the
-case with the ZSWAP/ZRAM usage and 4KB page compression.
-=20
-The LZ77 symbols in a deflate block can be encoded with 2 styles of
-Huffman codes. In the fixed mode, a predefined Huffman code from the
-standard is used for the encoding. The deflate block header specifies
-the type of block as fixed or dynamic (or stored, for incompressible
-data stored as raw bytes). Dynamic Huffman codes require a compact
-description of the code used for that block, before the encoded symbols
-representing the compressed data. IAA supports these types of codes.
-The choice of codes is made during the compression; the decompressor
-parses the deflate block header to determine the type of codes and does
-not need such information from another context.
-=20
-In addition, IAA defines a "canned mode", where the code is stored
-separately from the compressed bitstream. Here the compressed blob
-would start at the very first encoded symbol. The decompressor needs
-additional context to know what codes were used by the compressor. This
-context is provided to the IAA decompressor when it needs to process a
-canned-mode compressed stream. This can also be decompressed with any
-software deflate decompressor, by performing a pre-processing step
-(basically prepending a deflate block header and the description of the
-codes before the first symbol)
-
-> Thanks,
+diff --git a/tools/include/nolibc/arch-i386.h b/tools/include/nolibc/arch-i386.h
+index 418554435545..b56046f1d0c0 100644
+--- a/tools/include/nolibc/arch-i386.h
++++ b/tools/include/nolibc/arch-i386.h
+@@ -154,9 +154,6 @@
+ 	_eax;								\
+ })
+ 
+-char **environ __attribute__((weak));
+-const unsigned long *_auxv __attribute__((weak));
+-
+ /* startup code */
+ /*
+  * i386 System V ABI mandates:
+@@ -168,29 +165,14 @@ void __attribute__((weak,noreturn,optimize("omit-frame-pointer"))) __no_stack_pr
+ {
+ 	__asm__ volatile (
+ #ifdef _NOLIBC_STACKPROTECTOR
+-		"call __stack_chk_init\n"   /* initialize stack protector                    */
++		"call __stack_chk_init\n"	/* initialize stack protector				*/
+ #endif
+-		"pop %eax\n"                /* argc   (first arg, %eax)                      */
+-		"mov %esp, %ebx\n"          /* argv[] (second arg, %ebx)                     */
+-		"lea 4(%ebx,%eax,4),%ecx\n" /* then a NULL then envp (third arg, %ecx)       */
+-		"mov %ecx, environ\n"       /* save environ                                  */
+-		"xor %ebp, %ebp\n"          /* zero the stack frame                          */
+-		"mov %ecx, %edx\n"          /* search for auxv (follows NULL after last env) */
+-		"0:\n"
+-		"add $4, %edx\n"            /* search for auxv using edx, it follows the     */
+-		"cmp -4(%edx), %ebp\n"      /* ... NULL after last env (ebp is zero here)    */
+-		"jnz 0b\n"
+-		"mov %edx, _auxv\n"         /* save it into _auxv                            */
+-		"and $-16, %esp\n"          /* x86 ABI : esp must be 16-byte aligned before  */
+-		"sub $4, %esp\n"            /* the call instruction (args are aligned)       */
+-		"push %ecx\n"               /* push all registers on the stack so that we    */
+-		"push %ebx\n"               /* support both regparm and plain stack modes    */
+-		"push %eax\n"
+-		"call main\n"               /* main() returns the status code in %eax        */
+-		"mov %eax, %ebx\n"          /* retrieve exit code (32-bit int)               */
+-		"movl $1, %eax\n"           /* NR_exit == 1                                  */
+-		"int $0x80\n"               /* exit now                                      */
+-		"hlt\n"                     /* ensure it does not                            */
++		"xor  %ebp, %ebp\n"		/* zero the stack frame					*/
++		"mov  %esp, %eax\n"		/* save stack pointer to eax, as arg1 of _start_c	*/
++		"and  $-16, %esp\n"		/* last pushed argument must be 16-byte aligned		*/
++		"push %eax\n"			/* push arg1 on stack to support plain stack modes too	*/
++		"call _start_c\n"		/* transfer to c runtime				*/
++		"hlt\n"				/* ensure it does not return				*/
+ 	);
+ 	__builtin_unreachable();
+ }
+-- 
+2.25.1
 
