@@ -2,147 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C99A7413ED
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 16:39:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB0867413F4
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 16:40:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231453AbjF1Ojh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 10:39:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55154 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229832AbjF1Ojf (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 10:39:35 -0400
-Received: from mx.treblig.org (unknown [IPv6:2a00:1098:5b::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 104831BE9;
-        Wed, 28 Jun 2023 07:39:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=treblig.org
-        ; s=bytemarkmx; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID
-        :Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID
-        :Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:
-        Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe
-        :List-Post:List-Owner:List-Archive;
-        bh=Y+h3psH8kyepKt0SHm6nKIRinuAsAOc2xGKERSPlzLo=; b=qp5CNnbUzq2Bev6266GGIkarzA
-        4Lk6OATQG1sHfy87MfKK2/pMQn0OourcKXNT+8OS6dT2SlBzthbPlYz5Fh1zvpsvcKxf4EhHIw3o3
-        ExolsLzc3Gw6yKodX4Ggzs6q7FeD6Zoc1HlN+ICNu2uEIHNeziRJaCSTHLj3b+wkVmLQZ0qN50gdM
-        WZdO6nlo/C80lHStpmFTvO/+LWbbFfs+7FJ8BWUvs9d9OjpltMgBJIMkRxtncSBe5WRhE/RjfyZNt
-        9/HTqFj2FxfFT9kxn3pH/7w6fywboachTkuNNrOxQ1DgKNvcmg35skm20oFw0S0JNwjbNNu2nuJZm
-        MUfcIH9w==;
-Received: from dg by mx.treblig.org with local (Exim 4.94.2)
-        (envelope-from <dg@treblig.org>)
-        id 1qEWKC-00GTcI-69; Wed, 28 Jun 2023 14:39:16 +0000
-Date:   Wed, 28 Jun 2023 14:39:16 +0000
-From:   "Dr. David Alan Gilbert" <linux@treblig.org>
-To:     Dave Kleikamp <dave.kleikamp@oracle.com>, krisman@collabora.com
-Cc:     Tom Talpey <tom@talpey.com>, sfrench@samba.org,
-        linux-cifs@vger.kernel.org, jfs-discussion@lists.sourceforge.net,
-        linkinjeon@kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [Jfs-discussion] [PATCH 0/3] dedupe smb unicode files
-Message-ID: <ZJxGFBzuhU8t5rcx@gallifrey>
-References: <20230628011439.159678-1-linux@treblig.org>
- <9343462e-6a4a-ca7b-03b8-4855e5a33b72@talpey.com>
- <ZJw4iLlFWRMq6a3S@gallifrey>
- <ZJw50e0pvn/IN5Gj@gallifrey>
- <90f35697-5941-d42d-b600-245454cbd040@oracle.com>
+        id S230363AbjF1OkU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 10:40:20 -0400
+Received: from vps0.lunn.ch ([156.67.10.101]:40252 "EHLO vps0.lunn.ch"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230340AbjF1OkR (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 28 Jun 2023 10:40:17 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=cW+45nW3hJrB+ORXPsF9u401T/nSilM4vjgp2/JRVK8=; b=U1WferOlqrpgddhvvlvTWes0zc
+        gz9sFpyiKouuyXJTUYNzdFHYS6e6yVbKtT8Fkilt/42PZXz2BDJyjoEp+Q596vjZztfSB1KA5oUT3
+        w0vosHmfbAFtJLPTH97RuCn3S9Mc5r/aU/LSSbblgfHMV0vEIB88AAaMTA20vfI+hZ7c=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1qEWKW-0007sj-0E; Wed, 28 Jun 2023 16:39:36 +0200
+Date:   Wed, 28 Jun 2023 16:39:35 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     yunchuan <yunchuan@nfschina.com>
+Cc:     Hao Lan <lanhao@huawei.com>, f.fainelli@gmail.com,
+        olteanv@gmail.com, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, irusskikh@marvell.com,
+        yisen.zhuang@huawei.com, salil.mehta@huawei.com,
+        jesse.brandeburg@intel.com, anthony.l.nguyen@intel.com,
+        steve.glendinning@shawell.net, iyappan@os.amperecomputing.com,
+        keyur@os.amperecomputing.com, quan@os.amperecomputing.com,
+        hkallweit1@gmail.com, linux@armlinux.org.uk,
+        mostrows@earthlink.net, xeb@mail.ru, qiang.zhao@nxp.com,
+        yangyingliang@huawei.com, linux@rempel-privat.de,
+        ansuelsmth@gmail.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, intel-wired-lan@lists.osuosl.org,
+        linuxppc-dev@lists.ozlabs.org, kernel-janitors@vger.kernel.org
+Subject: Re: [PATCH net-next 00/10] Remove unnecessary (void*) conversions
+Message-ID: <ecd70c28-1629-4b6c-96fc-a0b8f8713a04@lunn.ch>
+References: <1f5652f7-7eb2-11f0-4a07-c87f2992e509@huawei.com>
+ <734b846f-3235-f2e3-db06-6e852803cd7f@nfschina.com>
+ <badb3550-e157-4a31-9e49-ad184990c06d@lunn.ch>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <90f35697-5941-d42d-b600-245454cbd040@oracle.com>
-X-Chocolate: 70 percent or better cocoa solids preferably
-X-Operating-System: Linux/5.10.0-21-amd64 (x86_64)
-X-Uptime: 14:38:21 up 101 days,  1:12,  1 user,  load average: 0.02, 0.01,
- 0.00
-User-Agent: Mutt/2.0.5 (2021-01-21)
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RDNS_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-        lindbergh.monkeyblade.net
+In-Reply-To: <badb3550-e157-4a31-9e49-ad184990c06d@lunn.ch>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-* Dave Kleikamp (dave.kleikamp@oracle.com) wrote:
-> On 6/28/23 8:46AM, Dr. David Alan Gilbert wrote:
-> > * Dr. David Alan Gilbert (dave@treblig.org) wrote:
-> > > * Tom Talpey (tom@talpey.com) wrote:
-> > > > On 6/27/2023 9:14 PM, linux@treblig.org wrote:
-> > > > > From: "Dr. David Alan Gilbert" <linux@treblig.org>
-> > > > > 
-> > > > > The smb client and server code have (mostly) duplicated code
-> > > > > for unicode manipulation, in particular upper case handling.
-> > > > > 
-> > > > > Flatten this lot into shared code.
-> > > > > 
-> > > > > There's some code that's slightly different between the two, and
-> > > > > I've not attempted to share that - this should be strictly a no
-> > > > > behaviour change set.
-> > > > > 
-> > > > > I'd love to also boil out the same code from fs/jfs/ - but that's
-> > > > > a thought for another time (and harder since there's no good test
-> > > > > for it).
-> > > > > 
-> > > > > Lightly tested with a module and a monolithic build, and just mounting
-> > > > > itself.
-> > > > > 
-> > > > > This dupe was found using PMD:
-> > > > >     https://pmd.github.io/pmd/pmd_userdocs_cpd.html
-> > > > > 
-> > > > > Dave
-> > > > > 
-> > > > > Dr. David Alan Gilbert (3):
-> > > > >     fs/smb: Remove unicode 'lower' tables
-> > > > >     fs/smb: Swing unicode common code from server->common
-> > > > >     fs/smb/client: Use common code in client
-> > > > > 
-> > > > >    fs/smb/client/cifs_unicode.c                  |   1 -
-> > > > >    fs/smb/client/cifs_unicode.h                  | 313 +-----------------
-> > > > >    fs/smb/client/cifs_uniupr.h                   | 239 -------------
-> > > > >    fs/smb/common/Makefile                        |   1 +
-> > > > >    .../uniupr.h => common/cifs_unicode_common.c} | 156 +--------
-> > > > >    fs/smb/common/cifs_unicode_common.h           | 279 ++++++++++++++++
-> > > > 
-> > > > So far so good, but please drop the "cifs_" prefix from this new file's
-> > > > name, since its contents apply to later smb dialects as well.
-> > > 
-> > > Sure.
+On Wed, Jun 28, 2023 at 04:37:43PM +0200, Andrew Lunn wrote:
+> > Hi, Hao Lan,
 > > 
-> > Actually, would you be ok with smb_unicode_common ?  The reason is that
-> > you end up with a module named unicode_common  that sounds too generic.
+> > Sorry for that, I just compiled these patches in the mainline branch.
+> > I know now, it's also necessary to compile patches in net and net-next
+> > branch.
+> > Thanks for your reply!
 > 
-> I'd suggest make it generic and move it to fs/nls/. I'd run it by the nls
-> maintainers, but I don't think there are any.
+> net-next is also closed at the moment due to the merge window. Please
+> wait two weeks before reposting, by which time net-next will be open
+> again.
 
-Steve & Tom - would you be OK with that?
+Your email threading also seems to be broken, there is no
+threading. That might cause pathworks an issue.
 
-(Copying in Gabriel Bertazi, owner of fs/unicode; although this isn't
-utf-8)
-
-Dave
-
-> Shaggy
-> 
-> > 
-> > Dave
-> > 
-> > > Dave
-> > > 
-> > > > Tom.
-> > > > 
-> > > > >    fs/smb/server/unicode.c                       |   1 -
-> > > > >    fs/smb/server/unicode.h                       | 301 +----------------
-> > > > >    8 files changed, 298 insertions(+), 993 deletions(-)
-> > > > >    delete mode 100644 fs/smb/client/cifs_uniupr.h
-> > > > >    rename fs/smb/{server/uniupr.h => common/cifs_unicode_common.c} (50%)
-> > > > >    create mode 100644 fs/smb/common/cifs_unicode_common.h
-> > > > > 
-> > > -- 
-> > >   -----Open up your eyes, open up your mind, open up your code -------
-> > > / Dr. David Alan Gilbert    |       Running GNU/Linux       | Happy  \
-> > > \        dave @ treblig.org |                               | In Hex /
-> > >   \ _________________________|_____ http://www.treblig.org   |_______/
--- 
- -----Open up your eyes, open up your mind, open up your code -------   
-/ Dr. David Alan Gilbert    |       Running GNU/Linux       | Happy  \ 
-\        dave @ treblig.org |                               | In Hex /
- \ _________________________|_____ http://www.treblig.org   |_______/
+	Andrew
