@@ -2,60 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B46AF741A67
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 23:11:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 15E39741A7F
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 23:17:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232738AbjF1VKe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 17:10:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50568 "EHLO
+        id S233097AbjF1VMM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 17:12:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232186AbjF1VJg (ORCPT
+        with ESMTP id S232634AbjF1VKB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 17:09:36 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 999791FE3
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 14:09:35 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3803B61460
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 21:09:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 99ACAC433CA;
-        Wed, 28 Jun 2023 21:09:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687986574;
-        bh=ZaLGGh76WFOG/+DKUPINFY/cQoKHfquNPr73rFSBYNc=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=CWPTBgyPSni5qmL+bkL4lQ2AR9rUMTmPbJphtgvLvHAzQN20+0snyfNT5Ahk9NVJZ
-         OAcShGKAj7AgeODve57x14U1QJmyP8p+KXLnnObb3aT7teHNm6r8F9HBGVE7EiFBA3
-         okY5kBqyXeVuJowhd5hVogEaIYaNQ3gugiSgV9CMu55B/uAw/gOnmI/u6uV7f9poNL
-         1ELcCoF0v+Jr4iR04HalxRobjZk2I9gcUTTl/ArLW695SaA6gbkcsHjVRKuZVHu3Nk
-         CRZeVk+Cqoh2hrCsZ5uTO540FGgBX4v0JKzQMzPLnw4W2Z8iri9Xh4vhLRDGS3nq0z
-         V2kwp5Myf3eoQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 881C6E5380A;
-        Wed, 28 Jun 2023 21:09:34 +0000 (UTC)
-Subject: Re: [GIT PULL] regulator updates for v6.5
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20230626133326.C5BFBC433C0@smtp.kernel.org>
-References: <20230626133326.C5BFBC433C0@smtp.kernel.org>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20230626133326.C5BFBC433C0@smtp.kernel.org>
-X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git tags/regulator-v6.5
-X-PR-Tracked-Commit-Id: 54e47eade73046e860634736d2651ddc118ca694
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 362067b6d5ca5b59a849a8e1183fb51d616fcf19
-Message-Id: <168798657455.29247.4138091011701896847.pr-tracker-bot@kernel.org>
-Date:   Wed, 28 Jun 2023 21:09:34 +0000
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        Wed, 28 Jun 2023 17:10:01 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 268771FDC
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 14:10:00 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1687986597;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=NfWivBbB9CVFPmfW5ghsqhRiOMsMXKFj03Bb7yAbSp8=;
+        b=iwxulBDyqoxoYc67idxuGHptPiqIEcYN4K6VgcWFrLzinJoQIJoCWiXwyq66wOOiMhsBYw
+        WjneLK8b51+VPCbFxPTAlLDZcwTP6naRW6BDbmbQwptP4uqGbvZFvSbSWLIjLOAouRxw8b
+        nldD2D2+NKBGvHs+59birCNOA7tnchadsquq8EXPBGbDXqt7ram36aY5UiaGnzgpXKjTt9
+        xQaTwhT5tFQy9J8vQYiEpH2rT5Bm6iZwCpaLpeAhyEd994p27rhYhUrU4EPmFzmnQAQAiW
+        X9t5p+MX0dPsFgORQUvYC+TaFsSz5ROA5P8DFwh54tItqws7rM3nOk4XzpbIgA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1687986597;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=NfWivBbB9CVFPmfW5ghsqhRiOMsMXKFj03Bb7yAbSp8=;
+        b=Prt+vhMvrIzR39qAU+NqSLzDhp4jinRyajpUKYGx0SKEFvHWr0cIwcutxl4oMRAv3Sek1P
+        6fV/yVMOFsdXZ5Aw==
+To:     Vincent Guittot <vincent.guittot@linaro.org>,
+        Xiongfeng Wang <wangxiongfeng2@huawei.com>
+Cc:     vschneid@redhat.com, Phil Auld <pauld@redhat.com>,
+        vdonnefort@google.com,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Wei Li <liwei391@huawei.com>,
+        "liaoyu (E)" <liaoyu15@huawei.com>, zhangqiao22@huawei.com,
+        Peter Zijlstra <peterz@infradead.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Ingo Molnar <mingo@kernel.org>
+Subject: Re: [Question] report a race condition between CPU hotplug state
+ machine and hrtimer 'sched_cfs_period_timer' for cfs bandwidth throttling
+In-Reply-To: <CAKfTPtDZN1gVgr0AqgtVe3arVWEtA35PA3PL99hT_WAR1D9S9g@mail.gmail.com>
+References: <8e785777-03aa-99e1-d20e-e956f5685be6@huawei.com>
+ <87mt18it1y.ffs@tglx> <68baeac9-9fa7-5594-b5e7-4baf8ac86b77@huawei.com>
+ <ba352e83-b8b1-d900-9c1f-56b8c8a8b8fb@huawei.com>
+ <CAKfTPtBoe_jRn-EMsQxssQ4BcveT+Qcd+GmsRbQEXQDGfzFOMg@mail.gmail.com>
+ <CAKfTPtDZN1gVgr0AqgtVe3arVWEtA35PA3PL99hT_WAR1D9S9g@mail.gmail.com>
+Date:   Wed, 28 Jun 2023 23:09:56 +0200
+Message-ID: <87zg4j2t0b.ffs@tglx>
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,15 +67,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Mon, 26 Jun 2023 14:33:17 +0100:
+On Wed, Jun 28 2023 at 15:30, Vincent Guittot wrote:
+> On Tue, 27 Jun 2023 at 18:46, Vincent Guittot
+>> > > +               struct hrtimer_clock_base *clock_base = cfs_b->period_timer.base;
+>> > > +               int cpu = clock_base->cpu_base->cpu;
+>> > > +               if (!cpu_active(cpu) && cpu != smp_processor_id())
+>> > > +                       hrtimer_start_expires(&cfs_b->period_timer,
+>> > > HRTIMER_MODE_ABS_PINNED);
+>> > >                 return;
+>> > > +       }
 
-> https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git tags/regulator-v6.5
+Can you please trim your replies?
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/362067b6d5ca5b59a849a8e1183fb51d616fcf19
+>> I have been able to reproduce your problem and run your fix on top. I
+>> still wonder if there is a
+>
+> Looks like I have been preempted and never finished the sentence. The
+> full sentence is:
+> I still wonder if there is a race condition where the hang can still
+> happen but i haven't been able to find one so far
 
-Thank you!
+As I explained before. Assume the timer fires on the outgoing CPU and
+the other CPU tries to rearm it concurrently. It will stay on the
+outgoing CPU and not move over.
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+Thanks,
+
+        tglx
