@@ -2,174 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADAFC7407AC
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 03:36:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 024B17407B0
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 03:38:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230280AbjF1BgY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 27 Jun 2023 21:36:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47944 "EHLO
+        id S230429AbjF1BiC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 27 Jun 2023 21:38:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbjF1BgW (ORCPT
+        with ESMTP id S229841AbjF1BiA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 27 Jun 2023 21:36:22 -0400
-Received: from mail-qt1-x82b.google.com (mail-qt1-x82b.google.com [IPv6:2607:f8b0:4864:20::82b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F9871737
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 18:36:20 -0700 (PDT)
-Received: by mail-qt1-x82b.google.com with SMTP id d75a77b69052e-401d1d967beso153181cf.0
-        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 18:36:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1687916179; x=1690508179;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=76q3czNHBGF97J8zUfgBzI1kFFF4VkjgowoEBA/iOwY=;
-        b=y26X29gqmEGqKXrFtZryTyXDzQ9ewY6D9loFvzylkwQasUaA3rhMju6tAIXM45FOCP
-         EiMe0MCGmWBUFKrsCbSYBusOLFWu0jf2ch1nvHU2ezj0YlibSSfCAj3pkfhCVHzE1K7H
-         Z7NtUDgJupEmpBLcz2JwUP0Ew4wYs1sF5cUDLma1QWvlN3N/adRlgN+tfnFyRaGsxpnh
-         SbXxUiJzn2QLtTTP3iL+pFTRkz2lk8L1MKva4dy/j5S7MgRwhh1nEATI68dFDXZfdONG
-         FhiCx9DGJTIiGbbLlNXJi17Unkk3M74ZWytzQwiWvh1eVm0Sq9lBTa4tZoll5SdOHuaw
-         8eCA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687916179; x=1690508179;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=76q3czNHBGF97J8zUfgBzI1kFFF4VkjgowoEBA/iOwY=;
-        b=hLm1ymTF3w911Fjztpxt7PalO1KLKxR/w3vOyft9wE2Z0YLf/doWNmRTK00FBODcWG
-         ICJXyEoJHCUFlJr8bZLbw36JdPVMIkcYPwVfqK0HiNljGM0q2n0JzkWyrXXTcOOHWIho
-         CJYuryr8Nx/SaxsYPIq6FTujUnDULu2SwGCvaan/ZsyEP2zrEXTuzeV7pniFI204h0SM
-         aw6iXZgMovA0ADG9yDtGOWJUlyvLyQCuAZ1saiQ4LCFg2khB7VX/HqAOgVnqZaWdln1y
-         EBqaSnp/2rBGPapRPQZdHUQ06rscEx80P12KU94qrq3ec4OirUURYgX4KeynVgbPM+H9
-         nxag==
-X-Gm-Message-State: AC+VfDyGYLGK+0u4/h2Z+D9TsgFbz5zpbftiQ9j+IB/XXqoKuBHl+znP
-        owuMeTNwATta5SrbvJ/pHwn0yhdAwPMATHW1/7B18A==
-X-Google-Smtp-Source: ACHHUZ7sVzuwnmV3HryX+9qLq3qI6jRIEjo2b86t4SeBiyuoth4UHt8vts7j6aJsIac12Y3Yp0QqGwhzwhLl3ASLDT8=
-X-Received: by 2002:ac8:5710:0:b0:3ef:343b:fe7e with SMTP id
- 16-20020ac85710000000b003ef343bfe7emr130387qtw.2.1687916179378; Tue, 27 Jun
- 2023 18:36:19 -0700 (PDT)
+        Tue, 27 Jun 2023 21:38:00 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC10B10D2;
+        Tue, 27 Jun 2023 18:37:57 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QrPNG0VtMz4wZr;
+        Wed, 28 Jun 2023 11:37:50 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1687916271;
+        bh=F2jbhWHZu1zHmf5CrAVBIXw1Itku4vZ3CAmsgn0kn3g=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=T4w+1dpE4OJFCKMTUetjZtVlq3aTgx5ZGlEc0JvNArBrSjJqBWbXXrG3uOKtVczmf
+         ip/Z4rtGNlE6uL5FCcm4w+Qh8nBQbq6JmSSaSzACisZJhJsMxHhgphWFEQFFmAXskt
+         aLYmVW4Gf0tM3PeED1UTbxinLpAP3qAgbu1w+944MfvOzKBU27/DoaUmWOki+52t2r
+         /nGNH9u4FS1MBbCWLF088410iTypuP7WPAPKU8ppyVM98Hjdz1FiIfczg9FhX2KC/V
+         9DRIY3eXH/jEbgCNjXvdJy1Uz5bDPSZCetzvoeNu49dBIFDeLBfXMCZ1D0fBrztCOq
+         RSavNXxP2RpfA==
+Date:   Wed, 28 Jun 2023 11:37:48 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
+        Namhyung Kim <namhyung@kernel.org>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>,
+        Ian Rogers <irogers@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Ravi Bangoria <ravi.bangoria@amd.com>
+Subject: Re: linux-next: manual merge of the tip tree with the perf tree
+Message-ID: <20230628113748.071d8d80@canb.auug.org.au>
+In-Reply-To: <20230516103413.21e34bb6@canb.auug.org.au>
+References: <20230516103413.21e34bb6@canb.auug.org.au>
 MIME-Version: 1.0
-References: <cover.1684048511.git.sathyanarayanan.kuppuswamy@linux.intel.com>
- <972e1d5c5ec53e2757fb17a586558c5385e987dd.1684048511.git.sathyanarayanan.kuppuswamy@linux.intel.com>
- <64876bf6c30e2_1433ac29415@dwillia2-xfh.jf.intel.com.notmuch>
- <64961c3baf8ce_142af829436@dwillia2-xfh.jf.intel.com.notmuch>
- <9437b176-e15a-3cec-e5cb-68ff57dbc25c@linux.intel.com> <CAAH4kHa85hCz0GhQM3f1OQ3wM+=-SfF77ShFAse0-eYGBHvO_A@mail.gmail.com>
- <649b7a9b69cb6_11e68529473@dwillia2-xfh.jf.intel.com.notmuch>
-In-Reply-To: <649b7a9b69cb6_11e68529473@dwillia2-xfh.jf.intel.com.notmuch>
-From:   Dionna Amalie Glaze <dionnaglaze@google.com>
-Date:   Tue, 27 Jun 2023 18:36:07 -0700
-Message-ID: <CAAH4kHY1-N+HOxPON6SuXE3QPowAGnwTjc5H=ZnNZwh7a+msnQ@mail.gmail.com>
-Subject: Re: [PATCH v3 3/3] selftests/tdx: Test GetQuote TDX attestation feature
-To:     Dan Williams <dan.j.williams@intel.com>
-Cc:     Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        Shuah Khan <shuah@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Wander Lairson Costa <wander@redhat.com>,
-        Erdem Aktas <erdemaktas@google.com>,
-        Chong Cai <chongc@google.com>, Qinkun Bao <qinkun@apache.org>,
-        Guorui Yu <GuoRui.Yu@linux.alibaba.com>,
-        Du Fan <fan.du@intel.com>, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
-        dhowells@redhat.com, brijesh.singh@amd.com, atishp@rivosinc.com,
-        gregkh@linuxfoundation.org, linux-coco@lists.linux.dev,
-        joey.gouly@arm.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/8gYG00IpxB6JdvIkzsRvLRq";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 27, 2023 at 5:13=E2=80=AFPM Dan Williams <dan.j.williams@intel.=
-com> wrote:
-> [..]
-> >
-> > The VMPL-based separation that will house the supervisor module known
-> > as SVSM can have protocols that implement a TPM command interface, or
-> > an RTMR-extension interface, and will also need to have an
-> > SVSM-specific protocol attestation report format to keep the secure
-> > chain of custody apparent. We'd have different formats and protocols
-> > in the kernel, at least, to speak to each technology.
->
-> That's where I hope the line can be drawn, i.e. that all of this vendor
-> differentiation really only matters inside the kernel in the end.
->
-> > I'm not sure it's worth the trouble of papering over all the... 3-4
-> > technologies with similar but still weirdly different formats and ways
-> > of doing things with an abstracted attestation ABI, especially since
-> > the output all has to be interpreted in an architecture-specific way
-> > anyway.
->
-> This is where I need help. Can you identify where the following
-> assertion falls over:
->
-> "The minimum viable key-server is one that can generically validate a
-> blob with an ECDSA signature".
->
-> I.e. the fact that SEV and TDX send different length blobs is less
-> important than validating that signature.
->
-> If it is always the case that specific fields in the blob need to be
-> decoded then yes, that weakens the assertion. However, maybe that means
-> that kernel code parses the blob and conveys that parsed info along with
-> vendor attestation payload all signed by a Linux key. I.e. still allow
-> for a unified output format + signed vendor blob and provide a path to
-> keep all the vendor specific handling internal to the kernel.
->
+--Sig_/8gYG00IpxB6JdvIkzsRvLRq
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-All the specific fields of the blob have to be decoded and subjected
-to an acceptance policy. That policy will most always be different
-across different platforms and VM owners. I wrote all of
-github.com/google/go-sev-guest, including the verification and
-validation logic, and it's going to get more complicated, and the
-sources of the data that provide validators with notions of what
-values can be trusted will be varied. The formats are not
-standardized. The Confidential Computing Consortium should be working
-toward that, but it's a slow process. There's IETF RATS. There's
-in-toto.io attestations. There's Azure's JWT thing. There's a signed
-serialized protocol buffer that I've decided is what Google is going
-to produce while we figure out all the "right" formats to use. There
-will be factions and absolute gridlock for multiple years if we
-require solidifying an abstraction for the kernel to manage all this
-logic before passing a report on to user space.
+Hi all,
 
-Now, not only are the field contents important, the certificates of
-the keys that signed the report are important. Each platform has its
-own special x509v3 extensions and key hierarchy to express what parts
-of the report should be what value if signed by this key, and in TDX's
-case there are extra endpoints that you need to query to determine if
-there's an active CVE on the associated TCB version. This is how they
-avoid adding every cpu's key to the leaf certificate's CRL.
+On Tue, 16 May 2023 10:34:13 +1000 Stephen Rothwell <sfr@canb.auug.org.au> =
+wrote:
+>=20
+> Today's linux-next merge of the tip tree got conflicts in:
+>=20
+>   tools/perf/arch/x86/include/arch-tests.h
+>   tools/perf/arch/x86/tests/arch-tests.c
+>=20
+> between commit:
+>=20
+>   ae4aa00a1a93 ("perf test: Move x86 hybrid tests to arch/x86")
+>=20
+> from the perf tree and commit:
+>=20
+>   78075d947534 ("perf test: Add selftest to test IBS invocation via core =
+pmu events")
+>=20
+> from the tip tree.
+>=20
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
+>=20
+> --=20
+> Cheers,
+> Stephen Rothwell
+>=20
+> diff --cc tools/perf/arch/x86/include/arch-tests.h
+> index 33d39c1d3e64,93d3b8877baa..000000000000
+> --- a/tools/perf/arch/x86/include/arch-tests.h
+> +++ b/tools/perf/arch/x86/include/arch-tests.h
+> @@@ -11,7 -11,7 +11,8 @@@ int test__intel_pt_pkt_decoder(struct t
+>   int test__intel_pt_hybrid_compat(struct test_suite *test, int subtest);
+>   int test__bp_modify(struct test_suite *test, int subtest);
+>   int test__x86_sample_parsing(struct test_suite *test, int subtest);
+>  +int test__hybrid(struct test_suite *test, int subtest);
+> + int test__amd_ibs_via_core_pmu(struct test_suite *test, int subtest);
+>  =20
+>   extern struct test_suite *arch_tests[];
+>  =20
+> diff --cc tools/perf/arch/x86/tests/arch-tests.c
+> index 147ad0638bbb,b5c85ab8d92e..000000000000
+> --- a/tools/perf/arch/x86/tests/arch-tests.c
+> +++ b/tools/perf/arch/x86/tests/arch-tests.c
+> @@@ -22,15 -22,7 +22,16 @@@ struct test_suite suite__intel_pt =3D=20
+>   DEFINE_SUITE("x86 bp modify", bp_modify);
+>   #endif
+>   DEFINE_SUITE("x86 Sample parsing", x86_sample_parsing);
+>  +static struct test_case hybrid_tests[] =3D {
+>  +	TEST_CASE_REASON("x86 hybrid event parsing", hybrid, "not hybrid"),
+>  +	{ .name =3D NULL, }
+>  +};
+>  +
+>  +struct test_suite suite__hybrid =3D {
+>  +	.desc =3D "x86 hybrid",
+>  +	.test_cases =3D hybrid_tests,
+>  +};
+> + DEFINE_SUITE("AMD IBS via core pmu", amd_ibs_via_core_pmu);
+>  =20
+>   struct test_suite *arch_tests[] =3D {
+>   #ifdef HAVE_DWARF_UNWIND_SUPPORT
+> @@@ -44,6 -36,6 +45,7 @@@
+>   	&suite__bp_modify,
+>   #endif
+>   	&suite__x86_sample_parsing,
+>  +	&suite__hybrid,
+> + 	&suite__amd_ibs_via_core_pmu,
+>   	NULL,
+>   };
 
-You really shouldn't be putting attestation validation logic in the
-kernel. It belongs outside of the VM entirely with the party that will
-only release access keys to the VM if it can prove it's running the
-software it claims, on the platform it claims. I think Windows puts a
-remote procedure call in their guest attestation driver to the Azure
-attestation service, and that is an anti-pattern in my mind.
-
-> > ARM's Confidential Computing Realm Management Extensions (RME) seems
-> > to be going along the lines of a runtime measurement register model
-> > with their hardware enforced security. The number of registers isn't
-> > prescribed in the spec.
-> >
-> > +Joey Gouly +linux-coco@lists.linux.dev as far as RME is concerned, do
-> > you know who would be best to weigh in on this discussion of a unified
-> > attestation model?
-
-
+This is now a conflict between the perf tree and Linus' tree.
 
 --=20
--Dionna Glaze, PhD (she/her)
+Cheers,
+Stephen Rothwell
+
+--Sig_/8gYG00IpxB6JdvIkzsRvLRq
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmSbjuwACgkQAVBC80lX
+0Gxmugf+P554wovd4Tm1A/gwphoP5Hr0ZU9uV5VbMqKT96+90FpUM0ikDI6NXHE/
+o+hpSwZ3s+p4NtNx+Tq32FALbsC2iPQnfAfgffBRcuVxDW8qkz3qqfCFaceh0ltG
+w7LSLgBtVS2u7Oo1iACi8ZlBLw2ZeKvZ6QG3/EjB4UiMHrDdCue+2/pkeERBmyPp
+3ltzsDZxQtefgJ8+uYXdFrCp+uUHGIZPEOFlQNORB8feBj8/jNV+Ka51NiCRtoSM
+caNlwkOrhx6n9kXbG904jpJZji9LhPHOQpAXDftKHhww3VDrs++ngsytUl9RHUv7
+KMPZvyduuD3Oyu21x+RprK41AuEwFw==
+=mtIU
+-----END PGP SIGNATURE-----
+
+--Sig_/8gYG00IpxB6JdvIkzsRvLRq--
