@@ -2,87 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D052D7413AB
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 16:20:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD9137413AE
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 16:20:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232495AbjF1OTo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 10:19:44 -0400
-Received: from mail-il1-f170.google.com ([209.85.166.170]:61767 "EHLO
-        mail-il1-f170.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231240AbjF1OTE (ORCPT
+        id S232111AbjF1OT0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 10:19:26 -0400
+Received: from mail-il1-f182.google.com ([209.85.166.182]:52459 "EHLO
+        mail-il1-f182.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231307AbjF1OTB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 10:19:04 -0400
-Received: by mail-il1-f170.google.com with SMTP id e9e14a558f8ab-345a4efb66dso14182155ab.3;
-        Wed, 28 Jun 2023 07:19:03 -0700 (PDT)
+        Wed, 28 Jun 2023 10:19:01 -0400
+Received: by mail-il1-f182.google.com with SMTP id e9e14a558f8ab-341c14e495fso28428005ab.0;
+        Wed, 28 Jun 2023 07:19:00 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687961943; x=1690553943;
+        d=1e100.net; s=20221208; t=1687961940; x=1690553940;
         h=date:subject:message-id:references:in-reply-to:cc:to:from
          :mime-version:content-transfer-encoding:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=6Vpxh2xDXkwAvdFmyCoGaCJeQa/x+hA8BuVws8Zvars=;
-        b=igNkECNy25t8ZOoNvqw56lrTa4L6SKJP6ewtlIHP0ZrMebTWqzojb/ZMf4SO15iWjU
-         aUox33GlhW67joJKs4CjreXHvevsqkD7j4LMOwMmSU1vcNAFjjKghCbuPc4D9R1fgd/j
-         tI9KxK7xOX5qddsDfNALuh1lBdJs2glGOylkwlFefRIzIRHbtrL971z1d1CIiuguwRvJ
-         5F3pGjryYR4WyTbllVisfwz12nlwhM/AyNZNNgZK38JmqZe1X7zVb8b8V+er8V844P7c
-         fRrPHHoieC7dd1zllgW2C7uBPxPsTyNvpb8JIQr6ATUAlFVJ0z78/+7ryQ6bEKWnQ8sc
-         kINw==
-X-Gm-Message-State: AC+VfDzDjctPkVVYOZEP+oC3/YXpFZtlqC7/Yphyt+NqOJD7xX44rsIz
-        Y6GqRT8mPsp4oYYYFM/RSA==
-X-Google-Smtp-Source: ACHHUZ5R264ibhHn2cXWozz8/AFWB6PMBi6n4+wNMuyb8WCQYpXTZ8Bbh9aL83tYblAqYTWwdV0p1Q==
-X-Received: by 2002:a5e:dd0a:0:b0:780:cd7d:4073 with SMTP id t10-20020a5edd0a000000b00780cd7d4073mr17255025iop.13.1687961943210;
-        Wed, 28 Jun 2023 07:19:03 -0700 (PDT)
+        bh=PF36ZZ7J5OM4qzZwFl3dqcHObhifWISFGwynxlCULwc=;
+        b=RXYwSRNvkWnIr6UPkcx2ix/JS4IAj1HzPKuI1jmUQ9Y0pDemxTz0aL6amtJv8XSs/J
+         dwajh/DiUk+MoN+3dVwZuAyOkpuUwz9UsEslqw8mXJ52s/D1nohUws2jdrU72fPDsMaf
+         1DSpOT8kZ3ZXE/BthkA1u5Ll6AB1qQnWaqr4EnvYjf403U9xTS2A1X/2bMvD8iILhTvR
+         GBFAQ5zOmosMI4ei8YXiyY0E7dgfJCO0T8UGind4us3kxfGYMY/Nw9Sg0JC280l5Loru
+         XvprBaiNms1PHHWAiw7Jyox18/ztULU8nAbR5vgJPhP6o+419N+YC/hjoaK0u7pqKYIQ
+         Qfcw==
+X-Gm-Message-State: AC+VfDwJOL3icnUvr32pH16t7G8wvcguqo/kwCxRmt/3eepz9fX8leiT
+        ibJCtNDtSvd9IKsahxciJg==
+X-Google-Smtp-Source: ACHHUZ5Bqd3vCNEOXiaXJ3DmgGLh133u4EyXj8e4/Okj037SiYRFZDYiAptYREZ3x0dcLAvONR/l0A==
+X-Received: by 2002:a6b:7012:0:b0:783:63d6:4c8 with SMTP id l18-20020a6b7012000000b0078363d604c8mr7474384ioc.16.1687961940217;
+        Wed, 28 Jun 2023 07:19:00 -0700 (PDT)
 Received: from robh_at_kernel.org ([64.188.179.250])
-        by smtp.gmail.com with ESMTPSA id d13-20020a056602064d00b00774efe6fa24sm1462204iox.10.2023.06.28.07.19.00
+        by smtp.gmail.com with ESMTPSA id f21-20020a02a815000000b0042683fb069csm3340818jaj.46.2023.06.28.07.18.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Jun 2023 07:19:02 -0700 (PDT)
-Received: (nullmailer pid 368757 invoked by uid 1000);
+        Wed, 28 Jun 2023 07:18:59 -0700 (PDT)
+Received: (nullmailer pid 368754 invoked by uid 1000);
         Wed, 28 Jun 2023 14:18:57 -0000
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 MIME-Version: 1.0
 From:   Rob Herring <robh@kernel.org>
 To:     Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Andy Gross <agross@kernel.org>,
-        Robert Marko <robimarko@gmail.com>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Viresh Kumar <vireshk@kernel.org>,
+Cc:     linux-kernel@vger.kernel.org, Conor Dooley <conor+dt@kernel.org>,
+        devicetree@vger.kernel.org, Robert Marko <robimarko@gmail.com>,
         Bjorn Andersson <andersson@kernel.org>,
-        Mark Brown <broonie@kernel.org>, devicetree@vger.kernel.org,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Viresh Kumar <vireshk@kernel.org>,
+        linux-arm-msm@vger.kernel.org, Nishanth Menon <nm@ti.com>,
+        Mark Brown <broonie@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Nishanth Menon <nm@ti.com>, Niklas Cassel <nks@flawful.org>,
-        Jeffrey Hugo <quic_jhugo@quicinc.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
         Marijn Suijten <marijn.suijten@somainline.org>,
-        linux-kernel@vger.kernel.org, Stephen Boyd <sboyd@kernel.org>
-In-Reply-To: <20230217-topic-cpr3h-v12-4-1a4d050e1e67@linaro.org>
+        linux-pm@vger.kernel.org, Niklas Cassel <nks@flawful.org>,
+        Andy Gross <agross@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Jeffrey Hugo <quic_jhugo@quicinc.com>
+In-Reply-To: <20230217-topic-cpr3h-v12-3-1a4d050e1e67@linaro.org>
 References: <20230217-topic-cpr3h-v12-0-1a4d050e1e67@linaro.org>
- <20230217-topic-cpr3h-v12-4-1a4d050e1e67@linaro.org>
-Message-Id: <168796193713.368698.17557837830037308933.robh@kernel.org>
-Subject: Re: [PATCH v12 04/10] dt-bindings: soc: qcom: cpr3: Add bindings
- for CPR3 driver
+ <20230217-topic-cpr3h-v12-3-1a4d050e1e67@linaro.org>
+Message-Id: <168796193528.368653.1076049997198394048.robh@kernel.org>
+Subject: Re: [PATCH v12 03/10] dt-bindings: opp: v2-qcom-level: Document
+ CPR3 open/closed loop volt adjustment
 Date:   Wed, 28 Jun 2023 08:18:57 -0600
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On Wed, 28 Jun 2023 16:00:43 +0200, Konrad Dybcio wrote:
-> From: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
+On Wed, 28 Jun 2023 16:00:42 +0200, Konrad Dybcio wrote:
+> CPR3 and newer can be fed per-OPP voltage adjustment values for both
+> open- and closed-loop paths to make better decisions about settling
+> on the final voltage offset target. Document these properties.
 > 
-> Add the bindings for the CPR3 driver to the documentation.
-> 
-> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
-> [Konrad: Make binding check pass; update AGdR's email]
 > Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 > ---
->  .../devicetree/bindings/soc/qcom/qcom,cpr3.yaml    | 289 +++++++++++++++++++++
->  1 file changed, 289 insertions(+)
+>  .../devicetree/bindings/opp/opp-v2-qcom-level.yaml         | 14 ++++++++++++++
+>  1 file changed, 14 insertions(+)
 > 
 
 My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
@@ -113,16 +109,10 @@ Documentation/devicetree/bindings/input/sprd,sc27xx-vibrator.example.dtb: /examp
 Documentation/devicetree/bindings/input/mediatek,pmic-keys.example.dtb: /example-0/pmic: failed to match any schema with compatible: ['mediatek,mt6397']
 Documentation/devicetree/bindings/thermal/brcm,avs-ro-thermal.example.dtb: /example-0/avs-monitor@7d5d2000: failed to match any schema with compatible: ['brcm,bcm2711-avs-monitor', 'syscon', 'simple-mfd']
 Documentation/devicetree/bindings/thermal/imx-thermal.example.dtb: /example-0/anatop@20c8000: failed to match any schema with compatible: ['fsl,imx6q-anatop', 'syscon', 'simple-mfd']
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/soc/qcom/qcom,cpr3.example.dtb: opp-table-cprh: opp-1: 'qcom,opp-cloop-vadj', 'qcom,opp-oloop-vadj' do not match any of the regexes: 'pinctrl-[0-9]+'
-	from schema $id: http://devicetree.org/schemas/opp/opp-v2-qcom-level.yaml#
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/soc/qcom/qcom,cpr3.example.dtb: opp-table-cprh: opp-2: 'qcom,opp-cloop-vadj', 'qcom,opp-oloop-vadj' do not match any of the regexes: 'pinctrl-[0-9]+'
-	from schema $id: http://devicetree.org/schemas/opp/opp-v2-qcom-level.yaml#
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/soc/qcom/qcom,cpr3.example.dtb: opp-table-cprh: opp-3: 'qcom,opp-cloop-vadj', 'qcom,opp-oloop-vadj' do not match any of the regexes: 'pinctrl-[0-9]+'
-	from schema $id: http://devicetree.org/schemas/opp/opp-v2-qcom-level.yaml#
 
 doc reference errors (make refcheckdocs):
 
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230217-topic-cpr3h-v12-4-1a4d050e1e67@linaro.org
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230217-topic-cpr3h-v12-3-1a4d050e1e67@linaro.org
 
 The base for the series is generally the latest rc1. A different dependency
 should be noted in *this* patch.
