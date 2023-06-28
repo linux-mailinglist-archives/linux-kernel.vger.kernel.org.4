@@ -2,99 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EE99740B89
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 10:32:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F679740B37
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 10:24:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231944AbjF1IcS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 04:32:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40694 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234816AbjF1I1r (ORCPT
+        id S232689AbjF1IYa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 04:24:30 -0400
+Received: from dfw.source.kernel.org ([139.178.84.217]:58888 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233065AbjF1ITt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 04:27:47 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AA043AB8;
-        Wed, 28 Jun 2023 01:20:37 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        Wed, 28 Jun 2023 04:19:49 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 8D4BE1F889;
-        Wed, 28 Jun 2023 05:52:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1687931540; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=sI2fzc8FIgVRp6/0G7OEBOQsc7dDWyTTvRQA68GkrJE=;
-        b=k+161G7z8ioudxMwi+XLxMLHq1hwIXR9LVsqtLWJEi98nGOtwRbBAjOGkMOJGCAApQvrHq
-        /oePJqE83iHoP0n6hyLQg+owuRj3WfmOA3bj/qDNokZfewoQqWygF3pPxU2dPpzGdbXRiW
-        B4KsS1TD10fnSjFpe4NBFEbJSwENhy8=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1687931540;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=sI2fzc8FIgVRp6/0G7OEBOQsc7dDWyTTvRQA68GkrJE=;
-        b=F5z1fUKdECyVhDAIDynzs/DRaJMTBnYpB0wU0CfQbWaEW7ncFZ7+skXJ1EtH6nVcG43fis
-        byvA1LRkfTx7cZCw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 7B86113483;
-        Wed, 28 Jun 2023 05:52:20 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id /eLfHZTKm2S/CgAAMHmgww
-        (envelope-from <dwagner@suse.de>); Wed, 28 Jun 2023 05:52:20 +0000
-Date:   Wed, 28 Jun 2023 07:52:19 +0200
-From:   Daniel Wagner <dwagner@suse.de>
-To:     Shinichiro Kawasaki <shinichiro.kawasaki@wdc.com>
-Cc:     "linux-nvme@lists.infradead.org" <linux-nvme@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
-        Chaitanya Kulkarni <kch@nvidia.com>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        Hannes Reinecke <hare@suse.de>,
-        James Smart <jsmart2021@gmail.com>,
-        Martin Belanger <Martin.Belanger@dell.com>
-Subject: Re: [PATCH blktests v1 1/3] nvme/048: Check for queue count check
- directly
-Message-ID: <bfkbjiznom3lddrec4skyi7245dff5sohpvitzv6fkaaln6w7t@bery27x4o7qd>
-References: <20230620132703.20648-1-dwagner@suse.de>
- <20230620132703.20648-2-dwagner@suse.de>
- <6he5owg5e6h4vq5uwhw7jo3cncwrrlgjdxnq6csr5wlopbwk5c@l434fr2edukp>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2CA61612E6
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 05:52:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5CF05C433C0;
+        Wed, 28 Jun 2023 05:52:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687931573;
+        bh=PPV5gFBUM+cLvTsnfUr0wCzl2695GOcuHmjuhb1pj24=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=LBpuumsnAWP8myDiXNDsmwsMUtxg5NoppaXFXDdBSjkhjck8TUBEgUhtmyPJbB/Pa
+         cvAV6FTrWfoVgZloADtlRbNkbxFN83upW3iQCqBY+3xfzCLHl3oph/JZepjO+oOQiV
+         G6zYZoL10K8nIrW6JSi5TYzWhVSNRelzJnzuvhnCz6XH/uli+f0jrTYBz7+7ghsK/F
+         OPR2K8IXJ9MO8D+FWW5ln8H0HteyDnEuiRksR0w66R0WOMuvnct8pGzX5wLcGc5MsU
+         zwFN8wNRGYlCUoN8AfHSZMEycFEsRONnfitjFbA2YNVDRy+AcvjWFzphcv/LTIRKQ1
+         B04+mw/5BhZ0Q==
+Date:   Tue, 27 Jun 2023 22:52:51 -0700
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     syzbot <syzbot+b67b270114065129f12b@syzkaller.appspotmail.com>
+Cc:     akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, syzkaller-bugs@googlegroups.com,
+        linux-f2fs-devel@lists.sourceforge.net
+Subject: Re: [syzbot] [mm?] possible deadlock in f2fs_file_write_iter
+Message-ID: <20230628055251.GB1908@sol.localdomain>
+References: <0000000000003b764f05ff09c1e2@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <6he5owg5e6h4vq5uwhw7jo3cncwrrlgjdxnq6csr5wlopbwk5c@l434fr2edukp>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-        lindbergh.monkeyblade.net
+In-Reply-To: <0000000000003b764f05ff09c1e2@google.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 27, 2023 at 10:13:48AM +0000, Shinichiro Kawasaki wrote:
-> > +	nvmf_wait_for_state "${subsys_name}" "live" || return 1
-> > +
-> > +	queue_count=$((queue_count + 1))
-> > +	if grep -q "${queue_count}" "${queue_count_file}"; then
+On Mon, Jun 26, 2023 at 08:10:45AM -0700, syzbot wrote:
+> Hello,
 > 
-> Does this check work when the number in queue_count_file has more digits than
-> queue_count? e.g.) queue_count_file=20, queue_count=2
-
-The idea is that it should be an exact match. Let me figure out if this does
-what it is supposed to do.
-
- > -	hostnqn="nqn.2014-08.org.nvmexpress:uuid:${hostid}"
-> > +	hostid="${def_hostid}"
-> > +	hostnqn="${def_hostnqn}"
+> syzbot found the following issue on:
 > 
-> I guess it's the better to move this hunk to the 3rd patch. Or we can mention it
-> in the commit message of this patch.
+> HEAD commit:    c87d46a9e8eb Add linux-next specific files for 20230622
+> git tree:       linux-next
+> console output: https://syzkaller.appspot.com/x/log.txt?x=129edf4b280000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=d8ac8dd33677e8e0
+> dashboard link: https://syzkaller.appspot.com/bug?extid=b67b270114065129f12b
+> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> 
+> Unfortunately, I don't have any reproducer for this issue yet.
+> 
+> Downloadable assets:
+> disk image: https://storage.googleapis.com/syzbot-assets/bdf5ea2db527/disk-c87d46a9.raw.xz
+> vmlinux: https://storage.googleapis.com/syzbot-assets/3201e576e2ad/vmlinux-c87d46a9.xz
+> kernel image: https://storage.googleapis.com/syzbot-assets/d011d9fa4e63/bzImage-c87d46a9.xz
+> 
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+b67b270114065129f12b@syzkaller.appspotmail.com
+> 
+> F2FS-fs (loop5): Mounted with checkpoint version = 48b305e5
+> ======================================================
+> WARNING: possible circular locking dependency detected
+> 6.4.0-rc7-next-20230622-syzkaller #0 Not tainted
+> ------------------------------------------------------
+> syz-executor.5/16876 is trying to acquire lock:
+> ffff88802a033120 (&mm->mmap_lock){++++}-{3:3}, at: percpu_ref_put include/linux/percpu-refcount.h:351 [inline]
+> ffff88802a033120 (&mm->mmap_lock){++++}-{3:3}, at: put_dev_pagemap include/linux/memremap.h:251 [inline]
+> ffff88802a033120 (&mm->mmap_lock){++++}-{3:3}, at: gup_pte_range mm/gup.c:2583 [inline]
+> ffff88802a033120 (&mm->mmap_lock){++++}-{3:3}, at: gup_pmd_range mm/gup.c:2950 [inline]
+> ffff88802a033120 (&mm->mmap_lock){++++}-{3:3}, at: gup_pud_range mm/gup.c:2978 [inline]
+> ffff88802a033120 (&mm->mmap_lock){++++}-{3:3}, at: gup_p4d_range mm/gup.c:3003 [inline]
+> ffff88802a033120 (&mm->mmap_lock){++++}-{3:3}, at: gup_pgd_range mm/gup.c:3031 [inline]
+> ffff88802a033120 (&mm->mmap_lock){++++}-{3:3}, at: lockless_pages_from_mm mm/gup.c:3084 [inline]
+> ffff88802a033120 (&mm->mmap_lock){++++}-{3:3}, at: internal_get_user_pages_fast+0x135f/0x3370 mm/gup.c:3133
+> 
+> but task is already holding lock:
+> ffff88808b20ea30 (&fi->i_gc_rwsem[WRITE]){++++}-{3:3}, at: f2fs_down_read fs/f2fs/f2fs.h:2107 [inline]
+> ffff88808b20ea30 (&fi->i_gc_rwsem[WRITE]){++++}-{3:3}, at: f2fs_dio_write_iter fs/f2fs/file.c:4643 [inline]
+> ffff88808b20ea30 (&fi->i_gc_rwsem[WRITE]){++++}-{3:3}, at: f2fs_file_write_iter+0x1161/0x2500 fs/f2fs/file.c:4766
+> 
 
-Good point, I'll move this to the 3rd patch so this change is in one patch.
+This was caused by the patch
+"f2fs: fix to avoid mmap vs set_compress_option case"
+(https://lore.kernel.org/linux-f2fs-devel/20230529104709.2560779-1-chao@kernel.org/)
+which has been dropped.
+
+#syz set subsystems: f2fs
+#syz invalid
+
+- Eric
