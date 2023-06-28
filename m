@@ -2,162 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EC64740FC8
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 13:09:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E770740FC9
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 13:10:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231583AbjF1LJ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 07:09:29 -0400
-Received: from foss.arm.com ([217.140.110.172]:53840 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231782AbjF1LJM (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 07:09:12 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9E2D2113E;
-        Wed, 28 Jun 2023 04:09:55 -0700 (PDT)
-Received: from [10.57.76.180] (unknown [10.57.76.180])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E67543F663;
-        Wed, 28 Jun 2023 04:09:08 -0700 (PDT)
-Message-ID: <e6318ca2-e385-87d5-28a2-d69b0d8a3d42@arm.com>
-Date:   Wed, 28 Jun 2023 12:09:07 +0100
+        id S231579AbjF1LKq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 07:10:46 -0400
+Received: from esa.microchip.iphmx.com ([68.232.153.233]:41143 "EHLO
+        esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231304AbjF1LKn (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 28 Jun 2023 07:10:43 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1687950643; x=1719486643;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=WPS8EgVmsuYKLwB/yZyqAD3qQxEAVrUEUVm4/Bk6ZlA=;
+  b=f45a2Vvg/1SqoCWNNeIkz+r8cjxjgWIMLkTKxWYwiUV2yjN7+2VqFxaE
+   XJ8XlwYINPRCclNKIgNtS08A4P7lUbUDIR/ARJT2iCA9VCHv8gXtHzv4s
+   k/mMBc1fUAIbCYfMSPIy9BH0YO7Ult2+EeGPS8jPrRWkNhcrgPJp4ujhY
+   a4ShgZrAoB4WvfnnsVmytASiw96d+3eBuBbvL6cLXB+u8sCB+QyEQ6SDe
+   bzGNYi2Ytlxl+dj6l3wGaiZ+lvKCxyJM1R7eMpEWKtPML/f7mJclbe3Ti
+   87JEe7TQ0/dg60k3G5/jD6faJnhRk/0msNA+pZxT8nkMiaix814tUk4XW
+   Q==;
+X-IronPort-AV: E=Sophos;i="6.01,165,1684825200"; 
+   d="asc'?scan'208";a="220273292"
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 28 Jun 2023 04:10:43 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Wed, 28 Jun 2023 04:10:42 -0700
+Received: from wendy (10.10.115.15) by chn-vm-ex02.mchp-main.com
+ (10.10.85.144) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
+ Transport; Wed, 28 Jun 2023 04:10:39 -0700
+Date:   Wed, 28 Jun 2023 12:10:11 +0100
+From:   Conor Dooley <conor.dooley@microchip.com>
+To:     Samuel Ortiz <sameo@rivosinc.com>
+CC:     Conor Dooley <conor@kernel.org>, Evan Green <evan@rivosinc.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        <linux-riscv@lists.infradead.org>,
+        "Hongren (Zenithal) Zheng" <i@zenithal.me>, <linux@rivosinc.com>,
+        Andrew Jones <ajones@ventanamicro.com>,
+        Heiko Stuebner <heiko.stuebner@vrull.eu>,
+        Anup Patel <apatel@ventanamicro.com>,
+        <linux-kernel@vger.kernel.org>, Guo Ren <guoren@kernel.org>,
+        Atish Patra <atishp@rivosinc.com>,
+        =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@rivosinc.com>,
+        Jiatai He <jiatai2021@iscas.ac.cn>
+Subject: Re: [PATCH 1/3] RISC-V: add Bitmanip/Scalar Crypto parsing from DT
+Message-ID: <20230628-unfeeling-tavern-edd4f58396fa@wendy>
+References: <20230627143747.1599218-1-sameo@rivosinc.com>
+ <20230627143747.1599218-2-sameo@rivosinc.com>
+ <CALs-HssMkVikspnEi-Ek2t=ABvFvgptAhsBjk1+aLuVjiP7P7w@mail.gmail.com>
+ <20230627-debating-twelve-da2c1ed60948@spud>
+ <ZJwE5wRVkoND3Z6P@vermeer>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.12.0
-Subject: Re: [PATCH v1 04/10] mm: Implement folio_add_new_anon_rmap_range()
-To:     Yin Fengwei <fengwei.yin@intel.com>, Yu Zhao <yuzhao@google.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        David Hildenbrand <david@redhat.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-alpha@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, linux-s390@vger.kernel.org
-References: <20230626171430.3167004-1-ryan.roberts@arm.com>
- <20230626171430.3167004-5-ryan.roberts@arm.com>
- <CAOUHufZ0ZzHoJXwbzNyZOv74L=XYdZzcxA8SXxLX0MXdykuWRA@mail.gmail.com>
- <b16636b3-b493-39c5-c605-c5701fcbed1f@arm.com>
- <8c01486f-3c1a-e50d-544e-502eadbddf05@intel.com>
-From:   Ryan Roberts <ryan.roberts@arm.com>
-In-Reply-To: <8c01486f-3c1a-e50d-544e-502eadbddf05@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="YhMMrLi4maVY432h"
+Content-Disposition: inline
+In-Reply-To: <ZJwE5wRVkoND3Z6P@vermeer>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 28/06/2023 03:20, Yin Fengwei wrote:
-> 
-> 
-> On 6/27/23 16:09, Ryan Roberts wrote:
->> On 27/06/2023 08:08, Yu Zhao wrote:
->>> On Mon, Jun 26, 2023 at 11:14 AM Ryan Roberts <ryan.roberts@arm.com> wrote:
->>>>
->>>> Like folio_add_new_anon_rmap() but batch-rmaps a range of pages
->>>> belonging to a folio, for effciency savings. All pages are accounted as
->>>> small pages.
->>>>
->>>> Signed-off-by: Ryan Roberts <ryan.roberts@arm.com>
->>>> ---
->>>>  include/linux/rmap.h |  2 ++
->>>>  mm/rmap.c            | 43 +++++++++++++++++++++++++++++++++++++++++++
->>>>  2 files changed, 45 insertions(+)
->>>>
->>>> diff --git a/include/linux/rmap.h b/include/linux/rmap.h
->>>> index a3825ce81102..15433a3d0cbf 100644
->>>> --- a/include/linux/rmap.h
->>>> +++ b/include/linux/rmap.h
->>>> @@ -196,6 +196,8 @@ void page_add_new_anon_rmap(struct page *, struct vm_area_struct *,
->>>>                 unsigned long address);
->>>>  void folio_add_new_anon_rmap(struct folio *, struct vm_area_struct *,
->>>>                 unsigned long address);
->>>> +void folio_add_new_anon_rmap_range(struct folio *folio, struct page *page,
->>>> +               int nr, struct vm_area_struct *vma, unsigned long address);
->>>
->>> We should update folio_add_new_anon_rmap() to support large() &&
->>> !folio_test_pmd_mappable() folios instead.
->>>
->>> I double checked all places currently using folio_add_new_anon_rmap(),
->>> and as expected, none actually allocates large() &&
->>> !folio_test_pmd_mappable() and maps it one by one, which makes the
->>> cases simpler, i.e.,
->>>   if (!large())
->>>     // the existing basepage case
->>>   else if (!folio_test_pmd_mappable())
->>>     // our new case
->>>   else
->>>     // the existing THP case
->>
->> I don't have a strong opinion either way. Happy to go with this suggestion. But
->> the reason I did it as a new function was because I was following the pattern in
->> [1] which adds a new folio_add_file_rmap_range() function.
->>
->> [1] https://lore.kernel.org/linux-mm/20230315051444.3229621-35-willy@infradead.org/
-> Oh. There is different here:
-> For page cache, large folio could be created by previous file access. But later
-> file access by other process just need map partial large folio. In this case, we need
-> _range for filemap.
-> 
-> But for anonymous, I suppose we always map whole folio in. So I agree with Yu. We
-> don't need _range for folio_add_new_anon_rmap(). Thanks.
+--YhMMrLi4maVY432h
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Yes that makes sense - thanks. I'll merge the new case into
-folio_add_new_anon_rmap() for v2.
+On Wed, Jun 28, 2023 at 12:01:11PM +0200, Samuel Ortiz wrote:
+> On Tue, Jun 27, 2023 at 07:48:15PM +0100, Conor Dooley wrote:
+> > On Tue, Jun 27, 2023 at 11:14:30AM -0700, Evan Green wrote:
+> > > On Tue, Jun 27, 2023 at 7:38=E2=80=AFAM Samuel Ortiz <sameo@rivosinc.=
+com> wrote:
 
-> 
-> 
-> Regards
-> Yin, Fengwei
-> 
->>
->>
->>>
->>>>  void page_add_file_rmap(struct page *, struct vm_area_struct *,
->>>>                 bool compound);
->>>>  void folio_add_file_rmap_range(struct folio *, struct page *, unsigned int nr,
->>>> diff --git a/mm/rmap.c b/mm/rmap.c
->>>> index 1d8369549424..4050bcea7ae7 100644
->>>> --- a/mm/rmap.c
->>>> +++ b/mm/rmap.c
->>>> @@ -1305,6 +1305,49 @@ void folio_add_new_anon_rmap(struct folio *folio, struct vm_area_struct *vma,
->>>>         __page_set_anon_rmap(folio, &folio->page, vma, address, 1);
->>>>  }
->>>>
->>>> +/**
->>>> + * folio_add_new_anon_rmap_range - Add mapping to a set of pages within a new
->>>> + * anonymous potentially large folio.
->>>> + * @folio:      The folio containing the pages to be mapped
->>>> + * @page:       First page in the folio to be mapped
->>>> + * @nr:         Number of pages to be mapped
->>>> + * @vma:        the vm area in which the mapping is added
->>>> + * @address:    the user virtual address of the first page to be mapped
->>>> + *
->>>> + * Like folio_add_new_anon_rmap() but batch-maps a range of pages within a folio
->>>> + * using non-THP accounting. Like folio_add_new_anon_rmap(), the inc-and-test is
->>>> + * bypassed and the folio does not have to be locked. All pages in the folio are
->>>> + * individually accounted.
->>>> + *
->>>> + * As the folio is new, it's assumed to be mapped exclusively by a single
->>>> + * process.
->>>> + */
->>>> +void folio_add_new_anon_rmap_range(struct folio *folio, struct page *page,
->>>> +               int nr, struct vm_area_struct *vma, unsigned long address)
->>>> +{
->>>> +       int i;
->>>> +
->>>> +       VM_BUG_ON_VMA(address < vma->vm_start ||
->>>> +                     address + (nr << PAGE_SHIFT) > vma->vm_end, vma);
->>>
->>> BTW, VM_BUG_ON* shouldn't be used in new code:
->>> Documentation/process/coding-style.rst
->>
->> Thanks, sorry about that. Was copy-pasting from folio_add_new_anon_rmap().
->>
+> > > It would be nice to consolidate the ones together that search for a
+> > > single string and set multiple bits, though I don't have any super
+> > > elegant ideas for how off the top of my head.
+> >=20
+> > I've got a refactor of this code in progress, dropping all of these
+> > copy-paste in place of a loop. It certainly looks more elegant than
+> > this, but it will fall over a bit for these "one string matches many
+> > extensions" cases. See here:
+> > https://patchwork.kernel.org/project/linux-riscv/patch/20230626-thievin=
+g-jockstrap-d35d20b535c5@wendy/
+> > My immediate thought is to add another element to riscv_isa_ext_data,
+> > that contains "parent" extensions to check for. Should be fairly doable,
+> > I'll whip something up on top of that...
+>=20
+> Nice, and thanks for the review.
 
+> Should I wait for your refactor to be merged before pushing this one?
+
+I don't know. I think that you should continue on with your series here,
+and whichever goes in second gets rebased on top of the other.
+I don't think it makes material difference to review of this patchset as
+to whether you rebase on top of what I'm working on, so I wouldn't
+bother until it gets merged.
+
+Rather hacky, had less time than expected this morning:
+https://git.kernel.org/pub/scm/linux/kernel/git/conor/linux.git/commit/?h=
+=3Driscv-extensions-strings-supersets
+Clearly there's issues with looping to RISCV_ISA_MAX_SUPERSETS & I just
+repurposed Zicsr for the sake of testing something in the time I had.
+
+Evan, at a high level, does that look more elegant to you, or have I made
+things worse?
+
+
+--YhMMrLi4maVY432h
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZJwVEwAKCRB4tDGHoIJi
+0odBAQCGhQC04g5NX1UwATx7PJIFcjSsuRX6bdBayXqjTHuUqwEA1YlIzLiAh68e
+R4OeRtEOFZOGNesu9GAsfbgm0Zx4DgE=
+=iWeD
+-----END PGP SIGNATURE-----
+
+--YhMMrLi4maVY432h--
