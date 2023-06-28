@@ -2,113 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6FE7740DFB
+	by mail.lfdr.de (Postfix) with ESMTP id 3D472740DF9
 	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 12:03:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234551AbjF1J6C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 05:58:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53002 "EHLO
+        id S234590AbjF1J6L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 05:58:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233512AbjF1Jy1 (ORCPT
+        with ESMTP id S233530AbjF1Jy1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 28 Jun 2023 05:54:27 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 941DC30FC;
-        Wed, 28 Jun 2023 02:49:53 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC0F13584;
+        Wed, 28 Jun 2023 02:50:04 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 246EE61260;
-        Wed, 28 Jun 2023 09:49:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7838BC433C0;
-        Wed, 28 Jun 2023 09:49:49 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 56F4261275;
+        Wed, 28 Jun 2023 09:50:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D230C433C8;
+        Wed, 28 Jun 2023 09:50:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687945792;
-        bh=rQo+ivr1Jk6fLZn+NaRy01I9YN0NbBC+DKUTXazksTM=;
-        h=From:To:Cc:Subject:Date:From;
-        b=f+0sJIxIinYqm1D3xPb+WilOJAfna6B8zybTiF74kKZTT5Pgszfx3sVzUtxjl9PQW
-         a1dVvDHbOipjBf7ktFnDjAyxjI3e8Gn01OwfBu3S61V/MlqeQfBpKyTyzI5XkvLggg
-         nAnZr6J4bU6PIQ13rsscic0Q4RTDF2rq6R8/KwYHYqPHgJUkOFJ/x8S3BCJ0sxxal1
-         5LLku+cMm6zV8wXuIO/5cym+y03rplp+d8FYpcHV4QwDlD6FMHf3gvPhpRbSRHBgvY
-         ryjTzj9lfAzZ6NbkI/Yd884E9FOkI91GTF4EDlWts1vnk1r0TOGaXN3AMMuNooL0zV
-         wCB3QXsHF4ykw==
-From:   Arnd Bergmann <arnd@kernel.org>
-To:     "David S. Miller" <davem@davemloft.net>,
-        Kees Cook <keescook@chromium.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Guenter Roeck <linux@roeck-us.net>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Andi Shyti <andi.shyti@linux.intel.com>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Palmer Dabbelt <palmer@rivosinc.com>,
-        sparclinux@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] sparc: mark __arch_xchg() as __always_inline
-Date:   Wed, 28 Jun 2023 11:49:18 +0200
-Message-Id: <20230628094938.2318171-1-arnd@kernel.org>
-X-Mailer: git-send-email 2.39.2
+        s=k20201202; t=1687945803;
+        bh=TXTgGw22TRrq/yHvL8i1FsJg0CZ5aaXG0yKvftRWvJY=;
+        h=From:Subject:Date:To:Cc:From;
+        b=rSouGZM4ruMEOKCFF8qlJjK3eBoVDscNPwo2NBLOP3rTHuEHxwl8U+C0SQfPZFC/t
+         wV4qM2BxhGZcoToRn7XQYgaUQe7jggMdAQAiZbdJWvOxesGWQ4k6mNG3y47iGFW2FL
+         dq6U1jKA89W+kZPpVAImy/HPlEk/Iu6JDfICmJ6Ji1WQ9rjD2/BJH2u1qepu/eAAMl
+         JbsneY/JcTpCrpx0C3Wkg38e8qcXQXOOGkGMi4c1HDFMGb1Dm3nGZZKN2HZ6iTYVsB
+         Ep4YPtbYzptqPb6THvyNgxsbra0En95h4ARH89f8x19gzh8ROIPMnpzAd3+aLzL3lZ
+         B67/DJJZKZFgg==
+From:   Maxime Ripard <mripard@kernel.org>
+Subject: [PATCH v2 0/3] drivers: base: Add tests showing devm handling
+ inconsistencies
+Date:   Wed, 28 Jun 2023 11:49:20 +0200
+Message-Id: <20230329-kunit-devm-inconsistencies-test-v2-0-19feb71e864b@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIACACnGQC/42OOw7CMBAFr4Jcs8gfQoCKe6AUjr0Qi7BGtmOBo
+ tydJSegnFfMvFlkTAGzOG9mkbCGHCIx6O1GuMHSHSF4ZqGlNtLoEzwmCgU81icEcpFyyAXJsQM
+ K5gINNrb1UuFBesGW3maEPllyA3toGkceXwlv4b1mrx3zwJKYPuuLqn7r/8GqQIIzRulW7o+mb
+ S4OE8VdQS52y7J8AXP4UY/kAAAA
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Brendan Higgins <brendan.higgins@linux.dev>,
+        David Gow <davidgow@google.com>,
+        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-kernel@vger.kernel.org, Maxime Ripard <mripard@kernel.org>,
+        Maxime Ripard <mripard@kernel.org>
+X-Mailer: b4 0.12.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2015; i=mripard@kernel.org;
+ h=from:subject:message-id; bh=TXTgGw22TRrq/yHvL8i1FsJg0CZ5aaXG0yKvftRWvJY=;
+ b=owGbwMvMwCX2+D1vfrpE4FHG02pJDClzmDTUP9sEqs069Uby7N36X3usJ61a+2R306SAILvES
+ 1ECRzx2dZSyMIhxMciKKbLECJsviTs163UnG988mDmsTCBDGLg4BWAiW5IYGZ7IHj7077PP9wv5
+ r9+27lMsu9NufeXNQ66aFZyPF547dHwWw38P5maxi9O3rCm9M+/qlXUT7Yzjeo4tUTmheEvQx0h
+ acTMTAA==
+X-Developer-Key: i=mripard@kernel.org; a=openpgp;
+ fpr=BE5675C37E818C8B5764241C254BCFC56BF6CE8D
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Arnd Bergmann <arnd@arndb.de>
+Hi,
 
-An otherwise correct change to the atomic operations uncovered an
-existing bug in the sparc __arch_xchg() function, which is calls
-__xchg_called_with_bad_pointer() when its arguments are unknown at
-compile time:
+This follows the discussion here:
+https://lore.kernel.org/linux-kselftest/20230324123157.bbwvfq4gsxnlnfwb@houat/
 
-ERROR: modpost: "__xchg_called_with_bad_pointer" [lib/atomic64_test.ko] undefined!
+This shows a couple of inconsistencies with regard to how device-managed
+resources are cleaned up. Basically, devm resources will only be cleaned up
+if the device is attached to a bus and bound to a driver. Failing any of
+these cases, a call to device_unregister will not end up in the devm
+resources being released.
 
-This now happens because gcc determines that it's better to not inline the
-function. Avoid this by just marking the function as __always_inline
-to force the compiler to do the right thing here.
+We had to work around it in DRM to provide helpers to create a device for
+kunit tests, but the current discussion around creating similar, generic,
+helpers for kunit resumed interest in fixing this.
 
-Reported-by: Guenter Roeck <linux@roeck-us.net>
-Link: https://lore.kernel.org/all/c525adc9-6623-4660-8718-e0c9311563b8@roeck-us.net/
-Fixes: d12157efc8e08 ("locking/atomic: make atomic*_{cmp,}xchg optional")
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+This can be tested using the command:
+./tools/testing/kunit/kunit.py run --kunitconfig=drivers/base/test/
+
+I added the fix David suggested back in that discussion which does fix
+the tests. The SoB is missing, since David didn't provide it back then.
+
+Let me know what you think,
+Maxime
+
+Signed-off-by: Maxime Ripard <maxime@cerno.tech>
 ---
- arch/sparc/include/asm/cmpxchg_32.h | 2 +-
- arch/sparc/include/asm/cmpxchg_64.h | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Changes in v2:
+- Use an init function
+- Document the tests
+- Add a fix for the bugs
+- Link to v1: https://lore.kernel.org/r/20230329-kunit-devm-inconsistencies-test-v1-0-c33127048375@cerno.tech
 
-diff --git a/arch/sparc/include/asm/cmpxchg_32.h b/arch/sparc/include/asm/cmpxchg_32.h
-index 7a1339533d1d7..d0af82c240b73 100644
---- a/arch/sparc/include/asm/cmpxchg_32.h
-+++ b/arch/sparc/include/asm/cmpxchg_32.h
-@@ -15,7 +15,7 @@
- unsigned long __xchg_u32(volatile u32 *m, u32 new);
- void __xchg_called_with_bad_pointer(void);
- 
--static inline unsigned long __arch_xchg(unsigned long x, __volatile__ void * ptr, int size)
-+static __always_inline unsigned long __arch_xchg(unsigned long x, __volatile__ void * ptr, int size)
- {
- 	switch (size) {
- 	case 4:
-diff --git a/arch/sparc/include/asm/cmpxchg_64.h b/arch/sparc/include/asm/cmpxchg_64.h
-index 66cd61dde9ec1..3de25262c4118 100644
---- a/arch/sparc/include/asm/cmpxchg_64.h
-+++ b/arch/sparc/include/asm/cmpxchg_64.h
-@@ -87,7 +87,7 @@ xchg16(__volatile__ unsigned short *m, unsigned short val)
- 	return (load32 & mask) >> bit_shift;
- }
- 
--static inline unsigned long
-+static __always_inline unsigned long
- __arch_xchg(unsigned long x, __volatile__ void * ptr, int size)
- {
- 	switch (size) {
+---
+David Gow (1):
+      drivers: base: Free devm resources when unregistering a device
+
+Maxime Ripard (2):
+      drivers: base: Add basic devm tests for root devices
+      drivers: base: Add basic devm tests for platform devices
+
+ drivers/base/core.c                      |  11 ++
+ drivers/base/test/.kunitconfig           |   2 +
+ drivers/base/test/Kconfig                |   4 +
+ drivers/base/test/Makefile               |   3 +
+ drivers/base/test/platform-device-test.c | 220 +++++++++++++++++++++++++++++++
+ drivers/base/test/root-device-test.c     | 108 +++++++++++++++
+ 6 files changed, 348 insertions(+)
+---
+base-commit: 53cdf865f90ba922a854c65ed05b519f9d728424
+change-id: 20230329-kunit-devm-inconsistencies-test-5e5a7d01e60d
+
+Best regards,
 -- 
-2.39.2
+Maxime Ripard <mripard@kernel.org>
 
