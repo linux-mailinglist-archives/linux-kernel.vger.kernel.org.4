@@ -2,85 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31F6C741440
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 16:51:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88C1C74143A
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 16:50:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231921AbjF1Oua (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 10:50:30 -0400
-Received: from mga03.intel.com ([134.134.136.65]:52191 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231712AbjF1OuV (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 10:50:21 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687963821; x=1719499821;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=bFRkg/A1N0s6zxPjY9fVqj3qwmWFac2EO4cGoT+BOGg=;
-  b=B2xLjE1vtCuEbCq+1vGg5o53ft0anMT5ib36v6tKAqN8ySeDnpP23zGU
-   O/tAmZbRKN1tPSaaKHsPFDY6ZVLKkcpDDsoUuCBSP4SI5KOqDAh5BnSaV
-   4ChUuDojY/Ai9rI5IGg7HfQxLa5XFrFzzh1Hp/kftPaMKOOnDx/vvP2TK
-   MsiD4pbc9yA+1UWbl35OwE8ukzz7hCk2FLEm1cjhAyhjfodTRkbM3Gxkk
-   9Es07loQc4GFN71fFERYqu40KD7Md4oJl6tAUe0BBMSSLLvZIVVxO3wPw
-   6IklKbdcUFeYOWEU2HUKQo4ZbPYxFKRETsj7FpXyZRKPZax9uKnzGUYBW
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10755"; a="365326304"
-X-IronPort-AV: E=Sophos;i="6.01,165,1684825200"; 
-   d="scan'208";a="365326304"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2023 07:49:14 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10755"; a="711064282"
-X-IronPort-AV: E=Sophos;i="6.01,165,1684825200"; 
-   d="scan'208";a="711064282"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga007.jf.intel.com with ESMTP; 28 Jun 2023 07:49:10 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@intel.com>)
-        id 1qEWTk-000ctw-1s;
-        Wed, 28 Jun 2023 17:49:08 +0300
-Date:   Wed, 28 Jun 2023 17:49:08 +0300
-From:   Andy Shevchenko <andriy.shevchenko@intel.com>
-To:     Amadeusz =?utf-8?B?U8WCYXdpxYRza2k=?= 
-        <amadeuszx.slawinski@linux.intel.com>
-Cc:     Bjorn Helgaas <bhelgaas@google.com>,
-        Mark Brown <broonie@kernel.org>, Takashi Iwai <tiwai@suse.com>,
-        alsa-devel@alsa-project.org, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Cezary Rojewski <cezary.rojewski@intel.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Kai Vehmanen <kai.vehmanen@linux.intel.com>
-Subject: Re: [RFC PATCH 0/8] PCI: Define Intel PCI IDs and use them in drivers
-Message-ID: <ZJxIZGV4+5Al0CpW@smile.fi.intel.com>
-References: <20230628205135.517241-1-amadeuszx.slawinski@linux.intel.com>
+        id S230458AbjF1OuU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 10:50:20 -0400
+Received: from mx2.sberdevices.ru ([45.89.224.132]:38861 "EHLO
+        mx1.sberdevices.ru" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S231921AbjF1Oty (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 28 Jun 2023 10:49:54 -0400
+Received: from p-infra-ksmg-sc-msk02 (localhost [127.0.0.1])
+        by mx1.sberdevices.ru (Postfix) with ESMTP id 24DCA120003;
+        Wed, 28 Jun 2023 17:49:36 +0300 (MSK)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mx1.sberdevices.ru 24DCA120003
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
+        s=mail; t=1687963776;
+        bh=ITqZMbjUWmbRB4x96Vne7PtoeN8QuM2q0MmJhQ/nKpI=;
+        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type:From;
+        b=oV2LGSLukBS6FXn4Jmetv8SIvz2qDSYr0Q2RjFXY/A19VryG+jlxdkMWEgN2vKlPd
+         JHgWHOnPPD8VGQLm554l10oy6gtmutSvkcXJADvRCFUOJazFW1etrWYXQ+G+39J1sV
+         TqKBYRRL1hx2r5iPUcNboflsWlLFRvDBFU1vTAU7Hi+hJpbqeyKd8VUkMCU3N0L3F7
+         CHBpY01TfRreGb/8FSvxPbjqtjZk9GfaBeqgvf1HepRnQEUzYMbfDQsuPQd5p4K+U9
+         7tvXebM5RDfQKs9+NLXJe2neZOhvK+DLLaOEItjqbX3acwaT0p8rJZyM8ZXUSZKM7K
+         fvTpo1qa8z5dw==
+Received: from p-i-exch-sc-m01.sberdevices.ru (p-i-exch-sc-m01.sberdevices.ru [172.16.192.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mx1.sberdevices.ru (Postfix) with ESMTPS;
+        Wed, 28 Jun 2023 17:49:35 +0300 (MSK)
+Received: from localhost (100.64.160.123) by p-i-exch-sc-m01.sberdevices.ru
+ (172.16.192.107) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.30; Wed, 28 Jun
+ 2023 17:48:37 +0300
+Date:   Wed, 28 Jun 2023 17:49:34 +0300
+From:   Dmitry Rokosov <ddrokosov@sberdevices.ru>
+To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+CC:     <neil.armstrong@linaro.org>, <jbrunet@baylibre.com>,
+        <mturquette@baylibre.com>, <sboyd@kernel.org>,
+        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <khilman@baylibre.com>, <conor+dt@kernel.org>,
+        <kernel@sberdevices.ru>, <sdfw_system_team@sberdevices.ru>,
+        <rockosov@gmail.com>, <linux-amlogic@lists.infradead.org>,
+        <linux-clk@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        Oleg Lyovin <ovlevin@sberdevices.ru>
+Subject: Re: [PATCH v1 5/6] arm64: dts: meson: a1: introduce UART_AO mux
+ definitions
+Message-ID: <20230628144934.sbtvdktg6boo5opj@CAB-WSD-L081021>
+References: <20230607201641.20982-1-ddrokosov@sberdevices.ru>
+ <20230607201641.20982-6-ddrokosov@sberdevices.ru>
+ <CAFBinCD-5RD_iszZZRg58XqTHDEHnipJkf2aAex8MdUyh=bVCw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset="utf-8"
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230628205135.517241-1-amadeuszx.slawinski@linux.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <CAFBinCD-5RD_iszZZRg58XqTHDEHnipJkf2aAex8MdUyh=bVCw@mail.gmail.com>
+User-Agent: NeoMutt/20220415
+X-Originating-IP: [100.64.160.123]
+X-ClientProxiedBy: p-i-exch-sc-m02.sberdevices.ru (172.16.192.103) To
+ p-i-exch-sc-m01.sberdevices.ru (172.16.192.107)
+X-KSMG-Rule-ID: 10
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Lua-Profiles: 178314 [Jun 28 2023]
+X-KSMG-AntiSpam-Version: 5.9.59.0
+X-KSMG-AntiSpam-Envelope-From: DDRokosov@sberdevices.ru
+X-KSMG-AntiSpam-Rate: 0
+X-KSMG-AntiSpam-Status: not_detected
+X-KSMG-AntiSpam-Method: none
+X-KSMG-AntiSpam-Auth: dkim=none
+X-KSMG-AntiSpam-Info: LuaCore: 517 517 b0056c19d8e10afbb16cb7aad7258dedb0179a79, {Track_E25351}, {Tracking_from_domain_doesnt_match_to}, 127.0.0.199:7.1.2;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;p-i-exch-sc-m01.sberdevices.ru:7.1.1,5.0.1;sberdevices.ru:7.1.1,5.0.1, FromAlignment: s, {Tracking_white_helo}, ApMailHostAddress: 100.64.160.123
+X-MS-Exchange-Organization-SCL: -1
+X-KSMG-AntiSpam-Interceptor-Info: scan successful
+X-KSMG-AntiPhishing: Clean
+X-KSMG-LinksScanning: Clean
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 2.0.1.6960, bases: 2023/06/28 08:00:00 #21591748
+X-KSMG-AntiVirus-Status: Clean, skipped
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 28, 2023 at 10:51:27PM +0200, Amadeusz Sławiński wrote:
-> PCI IDs for Intel HDA are duplicated across quite a few drivers, due to
-> various configurations and historical reasons. Currently almost all uses
-> of HDA PCI IDs have corresponding comment telling which platform it is.
-> Additionally there are some inconsistencies between drivers about which
-> ID corresponds to which device.
-> 
-> Simplify things, by adding PCI IDs to global header and make use of them
-> in drivers. This allows for removal of comments by having IDs themselves
-> being self explanatory. Additionally it allows for removal of existing
-> inconsistencies by having one source of truth.
+Martin,
 
-I'm in favour of this series. It allows to use PCI_DEVICE_DATA() in many places.
-With that said, I think you can also add some more definitions to PCI IDs header
-for the sake of being able to use that macro.
+On Sun, Jun 25, 2023 at 11:07:51PM +0200, Martin Blumenstingl wrote:
+> On Wed, Jun 7, 2023 at 10:16 PM Dmitry Rokosov <ddrokosov@sberdevices.ru> wrote:
+> >
+> > From: Oleg Lyovin <ovlevin@sberdevices.ru>
+> >
+> > The Amlogic A1 has a UART_AO port, which can be used, for example, for
+> > BT HCI H4 connection.
+> >
+> > This patch adds mux definitions for it.
+> In the past we've only taken the pinctrl definitions if we have a
+> board that uses them.
+> Neil, do we still have the same policy in place? If so this patch
+> should be sent with the series that adds support for your A1 board.
+> 
+> > Signed-off-by: Oleg Lyovin <ovlevin@sberdevices.ru>
+> > Signed-off-by: Dmitry Rokosov <ddrokosov@sberdevices.ru>
+> > ---
+> >  arch/arm64/boot/dts/amlogic/meson-a1.dtsi | 16 ++++++++++++++++
+> >  1 file changed, 16 insertions(+)
+> >
+> > diff --git a/arch/arm64/boot/dts/amlogic/meson-a1.dtsi b/arch/arm64/boot/dts/amlogic/meson-a1.dtsi
+> > index 0efd922ca7e1..3eb6aa9c00e0 100644
+> > --- a/arch/arm64/boot/dts/amlogic/meson-a1.dtsi
+> > +++ b/arch/arm64/boot/dts/amlogic/meson-a1.dtsi
+> > @@ -118,6 +118,22 @@ gpio: bank@400 {
+> >                                         gpio-ranges = <&periphs_pinctrl 0 0 62>;
+> >                                 };
+> >
+> > +                               uart_a_pins: uart_a {
+> Only our newer .dtsi (e.g. meson-g12-common.dtsi) are following the
+> pattern where node names should use dashes instead of underscores.
+> So please use: uart_a_pins: uart-a { ...
+> 
+
+Okay, no problem. I'll rename the nodes in the next patch series
+version.
+
+> [...]
+> > +                               uart_a_cts_rts_pins: uart_a_cts_rts {
+> similar to the comment from above:
+> uart_a_cts_rts_pins: uart-a-cts-rts { ...
+> 
+
+Ok
+
+> > +                                       mux {
+> > +                                               groups = "uart_a_cts",
+> > +                                                        "uart_a_rts";
+> > +                                               function = "uart_a";
+> > +                                               bias-pull-down;
+> Out of curiosity: is this pull down needed on all boards or just specific ones?
+> It seems like all other SoCs use bias-disable for the RTS/CTS pins.
+> 
+
+That's a good question. The Amlogic custom kernel DTSI declares
+bias-pull-down for CTS/RTS pins in UART_A. There is no information about
+this in the A1 datasheet. However, from my understanding, it is related
+to the usage of the UART_A. Typically, the UART_A endpoint on A1 boards
+is used for BT connections, which is why Amlogic applies bias-pull-down
+in the common DTSI. If my assumption is correct, it would be better to
+move the bias-pull-down node parameter to the custom board DTS. I will
+investigate this further and rework it in the next version if necessary.
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
-
+Thank you,
+Dmitry
