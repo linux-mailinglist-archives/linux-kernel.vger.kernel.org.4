@@ -2,145 +2,213 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EE59741AD1
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 23:27:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C82D1741AD6
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 23:27:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232269AbjF1V0v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 17:26:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59874 "EHLO
+        id S231916AbjF1V1e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 17:27:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232395AbjF1V03 (ORCPT
+        with ESMTP id S232404AbjF1V1L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 17:26:29 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5B562134;
-        Wed, 28 Jun 2023 14:26:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687987561; x=1719523561;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=M7aa333XpPNGYhk+GT02yvHRVbg6aw/odt14RBTj1RI=;
-  b=eVEP3igP/AlR4M0m/pRNdKrPH2bnEoBYV2Ov6sQ6f/8KXz5fMHH54rQy
-   2fIzOfyaKPhpid26dq127lz8KC+5hq6hpmEd/fcskyyvS3T9gVf8TR7yj
-   mZim+s8rAPXrC6DL14e7iV1DGvG6Mv4DrU49KgxARGputRlENch2HVPJ9
-   C+vIqNhExJsMbiOLmFXsJ78fcRsgOzN802j9EsWfuetBRtrVXNQ5SMCV2
-   x1xB6DqUTPKvGHOxHcxX6cIafHEPIHznCqD3NfESW9TuuPNNvA3RNIcXC
-   /7LuKdYQGzbGrgFJ4bWEsx8dB4cXV3Jbzn26qBcyUnfpPBZWUrPxTxvnh
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10755"; a="351756286"
-X-IronPort-AV: E=Sophos;i="6.01,166,1684825200"; 
-   d="scan'208";a="351756286"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2023 14:26:00 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10755"; a="861673519"
-X-IronPort-AV: E=Sophos;i="6.01,166,1684825200"; 
-   d="scan'208";a="861673519"
-Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 28 Jun 2023 14:25:54 -0700
-Received: from kbuild by 783282924a45 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1qEcfh-000DVB-2t;
-        Wed, 28 Jun 2023 21:25:53 +0000
-Date:   Thu, 29 Jun 2023 05:25:25 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Krishna Manikandan <quic_mkrishn@quicinc.com>
-Cc:     oe-kbuild-all@lists.linux.dev,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        Konrad Dybcio <konradybcio@kernel.org>,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org
-Subject: Re: [PATCH 2/4] regulator: Introduce Qualcomm REFGEN regulator driver
-Message-ID: <202306290533.nqqGHj1w-lkp@intel.com>
-References: <20230628-topic-refgen-v1-2-126e59573eeb@linaro.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230628-topic-refgen-v1-2-126e59573eeb@linaro.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        Wed, 28 Jun 2023 17:27:11 -0400
+Received: from mail-pf1-x449.google.com (mail-pf1-x449.google.com [IPv6:2607:f8b0:4864:20::449])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 483A82942
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 14:26:58 -0700 (PDT)
+Received: by mail-pf1-x449.google.com with SMTP id d2e1a72fcca58-6687243be0cso148679b3a.3
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 14:26:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1687987618; x=1690579618;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=pyzXbOu2iHo4bNrZ84ZYxz33c7D4C6GktNZyfo3X6aM=;
+        b=HpN1PYNdPY/TJZ5TToHhNzbXA2YDAIY/osWwoYAOlOTConcfCvAH569VZKY7zEiLAe
+         /ySERi+RKYmBC3SBn/xHlZA4kNAaTZwBf5a5+ZN5mCUppgIjFOgv1YQzsOZVS1fxz9N7
+         +rh6vpQNm7bwESJSeu3K7Nh5Ticg9+BZIyeQ8S7yjZTLkLaagA0/k9HbPyMqrn0oNnqe
+         X2BkejxA/B5ymwZ/77OuRjIlB8BHu7RdfzjSItEdNWqe+CYSc7zKJIb9Fqb5zXH2VnFF
+         uDd5C14abUgSjpswkjJElLTTypZDAi8T/cnFJ1SHk24M6T/VU5Br6a3MsGbX4LYYzKP1
+         fLhA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687987618; x=1690579618;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=pyzXbOu2iHo4bNrZ84ZYxz33c7D4C6GktNZyfo3X6aM=;
+        b=bhGrM5PNAtYpiWK1HCB/hCWGUk6UhUg1SoT5rZwqgmqYvq8thl5ikjWkufLcPrhJaM
+         cX3mthOFoeHfGkVHGj8e39ljN3uDQU01l03Egi4cz1BClbTqRbj5L33Sc1HfKnyKmv1J
+         mluonToALaykND95VGXswzF141BEBBvgHhdqxVznNfcWE7m2vjEAckiGEdIGiuhxb2sD
+         SnJvQmKXMtfQmp/0Hls3QoMowvOIosH8RymPhhexMPWvcO78SSz/dZAkIGEvjgxBNSkQ
+         JXmaoQxx4FajDIU/g4tcYbZ7LgLiq/pa/j0EshM3SzTxKsVcnoJj7KlHIOitIZQu3iFn
+         10bg==
+X-Gm-Message-State: AC+VfDwAG92A29yaBhZ5EbESnBCzO797HrR8CzGf1s8ZqzODTA0JAfET
+        j3ojmsS22TF0TeOT6SsdKkvBmqharLs=
+X-Google-Smtp-Source: ACHHUZ6SqBjL8WLU9ntWLkbW4cpGib2B3eVMnwt9ME+cviZdHbostKZ1xY1Ctml2JfDgOmQAQWfPSzavRuE=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a05:6a00:399b:b0:681:fccf:dd4d with SMTP id
+ fi27-20020a056a00399b00b00681fccfdd4dmr454659pfb.3.1687987618246; Wed, 28 Jun
+ 2023 14:26:58 -0700 (PDT)
+Date:   Wed, 28 Jun 2023 14:26:56 -0700
+In-Reply-To: <20230607123700.40229-3-cloudliang@tencent.com>
+Mime-Version: 1.0
+References: <20230607123700.40229-1-cloudliang@tencent.com> <20230607123700.40229-3-cloudliang@tencent.com>
+Message-ID: <ZJyloBGvASSXldCy@google.com>
+Subject: Re: [PATCH v3 2/4] KVM: selftests: Test unavailable event filters are rejected
+From:   Sean Christopherson <seanjc@google.com>
+To:     Jinrong Liang <ljr.kernel@gmail.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Aaron Lewis <aaronlewis@google.com>,
+        David Matlack <dmatlack@google.com>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Like Xu <like.xu.linux@gmail.com>,
+        Jinrong Liang <cloudliang@tencent.com>,
+        linux-kselftest@vger.kernel.org, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Konrad,
+On Wed, Jun 07, 2023, Jinrong Liang wrote:
+> From: Jinrong Liang <cloudliang@tencent.com>
+> 
+> This commit adds test cases for unsupported input values in the
 
-kernel test robot noticed the following build errors:
+Avoid "this commit" and "this patch", simply state what the patch does as a
+command, e.g. "Add test cases for ...".
 
-[auto build test ERROR on 5c875096d59010cee4e00da1f9c7bdb07a025dc2]
+> PMU event filter. The tests cover unsupported "action" values,
+> unsupported "flags" values, and unsupported "nevents" values.
+> All these cases should return an error, as they are currently
+> not supported by the filter. Additionally, the patch tests setting
+> non-exist fixed counters in the fixed bitmap doesn't fail.
+> 
+> Signed-off-by: Jinrong Liang <cloudliang@tencent.com>
+> ---
+>  .../kvm/x86_64/pmu_event_filter_test.c        | 48 +++++++++++++++++--
+>  1 file changed, 45 insertions(+), 3 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/kvm/x86_64/pmu_event_filter_test.c b/tools/testing/selftests/kvm/x86_64/pmu_event_filter_test.c
+> index 26f674c32cde..7555e0f4290c 100644
+> --- a/tools/testing/selftests/kvm/x86_64/pmu_event_filter_test.c
+> +++ b/tools/testing/selftests/kvm/x86_64/pmu_event_filter_test.c
+> @@ -11,9 +11,7 @@
+>   */
+>  
+>  #define _GNU_SOURCE /* for program_invocation_short_name */
+> -#include "test_util.h"
+> -#include "kvm_util.h"
+> -#include "processor.h"
+> +#include "pmu.h"
+>  
+>  /*
+>   * In lieu of copying perf_event.h into tools...
+> @@ -32,6 +30,10 @@
+>  #define MAX_FILTER_EVENTS	300
+>  #define MAX_TEST_EVENTS	10
+>  
+> +#define PMU_EVENT_FILTER_INVALID_ACTION		(KVM_PMU_EVENT_DENY + 1)
+> +#define PMU_EVENT_FILTER_INVALID_FLAGS			(KVM_PMU_EVENT_FLAG_MASKED_EVENTS + 1)
+> +#define PMU_EVENT_FILTER_INVALID_NEVENTS		(MAX_FILTER_EVENTS + 1)
+> +
+>  /*
+>   * This is how the event selector and unit mask are stored in an AMD
+>   * core performance event-select register. Intel's format is similar,
+> @@ -762,6 +764,7 @@ static void test_filter_ioctl(struct kvm_vcpu *vcpu)
+>  {
+>  	uint64_t e = ~0ul;
+>  	int r;
+> +	struct __kvm_pmu_event_filter f;
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Konrad-Dybcio/dt-bindings-regulator-Describe-Qualcomm-REFGEN-regulator/20230629-003148
-base:   5c875096d59010cee4e00da1f9c7bdb07a025dc2
-patch link:    https://lore.kernel.org/r/20230628-topic-refgen-v1-2-126e59573eeb%40linaro.org
-patch subject: [PATCH 2/4] regulator: Introduce Qualcomm REFGEN regulator driver
-config: loongarch-allmodconfig (https://download.01.org/0day-ci/archive/20230629/202306290533.nqqGHj1w-lkp@intel.com/config)
-compiler: loongarch64-linux-gcc (GCC) 12.3.0
-reproduce: (https://download.01.org/0day-ci/archive/20230629/202306290533.nqqGHj1w-lkp@intel.com/reproduce)
+Reverse xmas tree.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306290533.nqqGHj1w-lkp@intel.com/
+>  
+>  	/*
+>  	 * Unfortunately having invalid bits set in event data is expected to
+> @@ -780,6 +783,45 @@ static void test_filter_ioctl(struct kvm_vcpu *vcpu)
+>  					KVM_PMU_EVENT_FLAG_MASKED_EVENTS,
+>  					KVM_PMU_EVENT_ALLOW);
+>  	TEST_ASSERT(r == 0, "Valid PMU Event Filter is failing");
+> +
+> +	/*
+> +	 * Testing unsupported "action" input values should return an error.
 
-All errors (new ones prefixed by >>):
+Omit the "Testing", KVM's behavior isn't specific to "testing", any unsupported
+action should fail.
 
-   In file included from include/linux/irqflags.h:17,
-                    from include/linux/spinlock.h:59,
-                    from include/linux/kref.h:16,
-                    from include/linux/mm_types.h:8,
-                    from include/linux/buildid.h:5,
-                    from include/linux/module.h:14,
-                    from drivers/regulator/qcom-refgen-regulator.c:7:
-   arch/loongarch/include/asm/percpu.h:20:4: error: #error compiler support for the model attribute is necessary when a recent assembler is used
-      20 | #  error compiler support for the model attribute is necessary when a recent assembler is used
-         |    ^~~~~
-   drivers/regulator/qcom-refgen-regulator.c: In function 'qcom_sdm845_refgen_is_enabled':
->> drivers/regulator/qcom-refgen-regulator.c:64:13: error: implicit declaration of function 'FIELD_GET' [-Werror=implicit-function-declaration]
-      64 |         if (FIELD_GET(REFGEN_BG_CTRL_MASK, val) != REFGEN_BG_CTRL_ENABLE)
-         |             ^~~~~~~~~
-   cc1: some warnings being treated as errors
+	/* Unsupported actions should be rejected by KVM. */
 
+Though honestly, I would forego the comments entirely, the macro name plus the
+assert make it quite clear what's being tested.
 
-vim +/FIELD_GET +64 drivers/regulator/qcom-refgen-regulator.c
+> +	 * Currently, only values 0 or 1 are supported.
 
-    57	
-    58	static int qcom_sdm845_refgen_is_enabled(struct regulator_dev *rdev)
-    59	{
-    60		struct qcom_refgen *vreg = rdev_get_drvdata(rdev);
-    61		u32 val;
-    62	
-    63		regmap_read(vreg->base, REFGEN_REG_BG_CTRL, &val);
-  > 64		if (FIELD_GET(REFGEN_BG_CTRL_MASK, val) != REFGEN_BG_CTRL_ENABLE)
-    65			return 0;
-    66	
-    67		regmap_read(vreg->base, REFGEN_REG_BIAS_EN, &val);
-    68		if (FIELD_GET(REFGEN_BIAS_EN_MASK, val) != REFGEN_BIAS_EN_ENABLE)
-    69			return 0;
-    70	
-    71		return 1;
-    72	}
-    73	
+Drop this part of the comment, it will become stale if PMU_EVENT_FILTER_INVALID_ACTION
+is modified, and readers can look at the definition of PMU_EVENT_FILTER_INVALID_ACTION
+if they really care about the actual value.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> +	 */
+> +	f = base_event_filter;
+> +	f.action = PMU_EVENT_FILTER_INVALID_ACTION;
+> +	r = do_vcpu_set_pmu_event_filter(vcpu, &f);
+> +	TEST_ASSERT(r != 0, "Set invalid action is expected to fail.");
+
+Ignore the bad precedent set by this test, the preferred way to check for 0 and
+!0 is TEST_ASSERT(r, ...) and TEST_ASSERT(!r, ...);
+
+And no punctuation in the assert, i.e. drop the period.
+
+> +
+> +	/*
+> +	 * Testing unsupported "flags" input values should return an error.
+> +	 * Currently, only values 0 or 1 are supported.
+> +	 */
+
+Same here.
+
+> +	f = base_event_filter;
+> +	f.flags = PMU_EVENT_FILTER_INVALID_FLAGS;
+> +	r = do_vcpu_set_pmu_event_filter(vcpu, &f);
+> +	TEST_ASSERT(r != 0, "Set invalid flags is expected to fail.");
+> +
+> +	/*
+> +	 * Testing unsupported "nevents" input values should return an error.
+> +	 * Currently, only values less than or equal to
+> +	 * MAX_FILTER_EVENTS are supported.
+
+And here.
+
+> +	 */
+> +	f = base_event_filter;
+> +	f.nevents = PMU_EVENT_FILTER_INVALID_NEVENTS;
+> +	r = do_vcpu_set_pmu_event_filter(vcpu, &f);
+> +	TEST_ASSERT(r != 0,
+> +		    "Setting PMU event filters that exceeds the maximum supported value should fail");
+
+To avoid splitting lines,
+
+	TEST_ASSERT(r, "Exceeding the max number of filter events should fail");
+> +
+> +	/*
+> +	 * In this case, setting non-exist fixed counters in the fixed bitmap
+> +	 * doesn't fail.
+> +	 */
+
+And here.
+
+> +	f = base_event_filter;
+> +	f.fixed_counter_bitmap = ~GENMASK_ULL(X86_INTEL_MAX_FIXED_CTR_NUM, 0);
+> +	r = do_vcpu_set_pmu_event_filter(vcpu, &f);
+> +	TEST_ASSERT(r == 0,
+> +		    "Setting invalid or non-exist fixed cunters in the fixed bitmap fail.");
+
+Something like so to avoid multiple lines.
+
+	TEST_ASSERT(!r, "Masking non-existent fixed counters should be allowed");
