@@ -2,148 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DAC66740E7C
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 12:17:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 620B1740E73
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 12:14:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230054AbjF1KRm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 06:17:42 -0400
-Received: from smtp-out1.suse.de ([195.135.220.28]:49622 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233607AbjF1KLe (ORCPT
+        id S231208AbjF1KOC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 06:14:02 -0400
+Received: from mail.loongson.cn ([114.242.206.163]:60946 "EHLO
+        mail.loongson.cn" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230447AbjF1KLi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 06:11:34 -0400
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 5DBD02187F;
-        Wed, 28 Jun 2023 10:11:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1687947093; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=1nJNJSNTTNh2JCFGe0rsIE8YNFrRfLqpVv3jDwxu/kQ=;
-        b=1M/VOkpAPbO9GRW6aHPKoN3cQlCAucE1vQ7N7CBT+vzkvelbXTliGhw0pGtTk5XgTVFtzE
-        DR92gC/+BzEehG2JF804j5Zcsa51j/LkoeeZPc0cKbixg2PfHYBSxUA8cCamEaB1kZugGL
-        AR/25cIrPsciid74+7d94XYaz298Suo=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1687947093;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=1nJNJSNTTNh2JCFGe0rsIE8YNFrRfLqpVv3jDwxu/kQ=;
-        b=34b3usdD4lsSdoP5NYlxBteRGnPdiN8z8oI8KSKtFpNgapNeNrcHSEicyd96tDtCLAVQwT
-        mStHpGJjHh522VCA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 4E1CD138EF;
-        Wed, 28 Jun 2023 10:11:33 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id d3IME1UHnGTlEQAAMHmgww
-        (envelope-from <jack@suse.cz>); Wed, 28 Jun 2023 10:11:33 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id C47F6A0707; Wed, 28 Jun 2023 12:11:32 +0200 (CEST)
-Date:   Wed, 28 Jun 2023 12:11:32 +0200
-From:   Jan Kara <jack@suse.cz>
-To:     Amir Goldstein <amir73il@gmail.com>
-Cc:     Ahelenia =?utf-8?Q?Ziemia=C5=84ska?= 
-        <nabijaczleweli@nabijaczleweli.xyz>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <brauner@kernel.org>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jan Kara <jack@suse.cz>,
-        Chung-Chiang Cheng <cccheng@synology.com>, ltp@lists.linux.it
-Subject: Re: [PATCH v4 1/3] splice: always fsnotify_access(in),
- fsnotify_modify(out) on success
-Message-ID: <20230628101132.kvchg544mczxv2pm@quack3>
-References: <t5az5bvpfqd3rrwla43437r5vplmkujdytixcxgm7sc4hojspg@jcc63stk66hz>
- <cover.1687898895.git.nabijaczleweli@nabijaczleweli.xyz>
- <e770188fd86595c6f39d4da86d906a824f8abca3.1687898895.git.nabijaczleweli@nabijaczleweli.xyz>
- <CAOQ4uxjQcn9DUo_Z2LGTgG0SOViy8h5=ST_A5v1v=gdFLwj6Hw@mail.gmail.com>
+        Wed, 28 Jun 2023 06:11:38 -0400
+Received: from loongson.cn (unknown [10.20.42.170])
+        by gateway (Coremail) with SMTP id _____8Axy8ZYB5xkWXADAA--.5475S3;
+        Wed, 28 Jun 2023 18:11:36 +0800 (CST)
+Received: from [10.20.42.170] (unknown [10.20.42.170])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8CxF8xXB5xkuyUOAA--.13135S3;
+        Wed, 28 Jun 2023 18:11:35 +0800 (CST)
+Message-ID: <30261345-45de-8511-e285-fe16ee408ba1@loongson.cn>
+Date:   Wed, 28 Jun 2023 18:11:35 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH v15 27/30] LoongArch: KVM: Implement vcpu world switch
+Content-Language: en-US
+To:     WANG Xuerui <kernel@xen0n.name>,
+        zhaotianrui <zhaotianrui@loongson.cn>,
+        Jinyang He <hejinyang@loongson.cn>,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        loongarch@lists.linux.dev, Jens Axboe <axboe@kernel.dk>,
+        Mark Brown <broonie@kernel.org>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Xi Ruoyao <xry111@xry111.site>, tangyouling@loongson.cn
+References: <20230626084752.1138621-1-zhaotianrui@loongson.cn>
+ <20230626084752.1138621-28-zhaotianrui@loongson.cn>
+ <f648a182-7c26-5bbc-6ae5-584af26e9db1@loongson.cn>
+ <7017277c-3721-b417-5215-491efae7c8a9@loongson.cn>
+ <cfc87f85-3a09-8a9e-4258-4fb1fd8013ab@xen0n.name>
+From:   bibo mao <maobibo@loongson.cn>
+In-Reply-To: <cfc87f85-3a09-8a9e-4258-4fb1fd8013ab@xen0n.name>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAOQ4uxjQcn9DUo_Z2LGTgG0SOViy8h5=ST_A5v1v=gdFLwj6Hw@mail.gmail.com>
+X-CM-TRANSID: AQAAf8CxF8xXB5xkuyUOAA--.13135S3
+X-CM-SenderInfo: xpdruxter6z05rqj20fqof0/
+X-Coremail-Antispam: 1Uk129KBj93XoWxGry3CF4kKrWfXw15XrWUtrc_yoW5WFy5pF
+        18AFW3GrZ8Jrs5Gw1UK3WUZF9ayF18ta15Xr1Fqa45A348Kwn2gF10gr1q9F1fJw4rJryj
+        9r4jqws7ZF13AFXCm3ZEXasCq-sJn29KB7ZKAUJUUUU3529EdanIXcx71UUUUU7KY7ZEXa
+        sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+        0xBIdaVrnRJUUUPIb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+        IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+        e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+        0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AK
+        xVW8Jr0_Cr1UM2kKe7AKxVWUAVWUtwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07
+        AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWU
+        AVWUtwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI4
+        8JMxk0xIA0c2IEe2xFo4CEbIxvr21lc7CjxVAaw2AFwI0_JF0_Jw1l42xK82IYc2Ij64vI
+        r41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxYO2xFxVAFwI0_GFv_Wrylx2IqxVAqx4xG67
+        AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIY
+        rxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_JFI_Gr1lIxAIcVC0I7IYx2IY6xkF7I0E14
+        v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8
+        JwCI42IY6I8E87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x07j5o7tUUU
+        UU=
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed 28-06-23 09:33:43, Amir Goldstein wrote:
-> On Tue, Jun 27, 2023 at 11:50 PM Ahelenia Ziemiańska
-> <nabijaczleweli@nabijaczleweli.xyz> wrote:
-> >
-> > The current behaviour caused an asymmetry where some write APIs
-> > (write, sendfile) would notify the written-to/read-from objects,
-> > but splice wouldn't.
-> >
-> > This affected userspace which uses inotify, most notably coreutils
-> > tail -f, to monitor pipes.
-> > If the pipe buffer had been filled by a splice-family function:
-> >   * tail wouldn't know and thus wouldn't service the pipe, and
-> >   * all writes to the pipe would block because it's full,
-> > thus service was denied.
-> > (For the particular case of tail -f this could be worked around
-> >  with ---disable-inotify.)
-> >
+
+
+在 2023/6/28 17:51, WANG Xuerui 写道:
+> Hi,
 > 
-> Is my understanding of the tail code wrong?
-> My understanding was that tail_forever_inotify() is not called for
-> pipes, or is it being called when tailing a mixed collection of pipes
-> and regular files? If there are subtleties like those you need to
-> mention them , otherwise people will not be able to reproduce the
-> problem that you are describing.
-
-Well, on my openSUSE 15.4 at least, tail -f does use inotify on FIFOs and
-indeed when data is spliced to the FIFO, tail doesn't notice.
-
-> I need to warn you about something regarding this patch -
-> often there are colliding interests among different kernel users -
-> fsnotify use cases quite often collide with the interest of users tracking
-> performance regressions and IN_ACCESS/IN_MODIFY on anonymous pipes
-> specifically have been the source of several performance regression reports
-> in the past and have driven optimizations like:
+> On 2023/6/28 16:34, zhaotianrui wrote:
+>>
+>> 在 2023/6/28 上午11:42, Jinyang He 写道:
+>>> On 2023-06-26 16:47, Tianrui Zhao wrote:
+>>>
+>>>> [snip]
+>>>
+>>>> +    ldx.d   t0, t1, t0
+>>>> +    csrwr    t0, LOONGARCH_CSR_PGDL
+>>>> +
+>>>> +    /* Mix GID and RID */
+>>>> +    csrrd        t1, LOONGARCH_CSR_GSTAT
+>>>> +    bstrpick.w    t1, t1, CSR_GSTAT_GID_SHIFT_END, CSR_GSTAT_GID_SHIFT
+>>>> +    csrrd        t0, LOONGARCH_CSR_GTLBC
+>>>> +    bstrins.w    t0, t1, CSR_GTLBC_TGID_SHIFT_END, CSR_GTLBC_TGID_SHIFT
+>>>> +    csrwr        t0, LOONGARCH_CSR_GTLBC
+>>>> +
+>>>> +    /*
+>>>> +     * Switch to guest:
+>>>> +     *  GSTAT.PGM = 1, ERRCTL.ISERR = 0, TLBRPRMD.ISTLBR = 0
+>>>> +     *  ertn
+>>>> +     */
+>>>> +
+>>>> +    /*
+>>>> +     * Enable intr in root mode with future ertn so that host interrupt
+>>>> +     * can be responsed during VM runs
+>>>> +     * guest crmd comes from separate gcsr_CRMD register
+>>>> +     */
+>>>> +    ori    t0, zero, CSR_PRMD_PIE
+>>> li.w t0, CSR_PRMD_PIE
+>> Thanks for your advice, and I think it need not to replace it with "li.w" there, as it has the same meaning with "ori" instruction, and "ori" instruction is simple and clear enough. The same as the following "move" instructions. What do you think of it.
 > 
-> 71d734103edf ("fsnotify: Rearrange fast path to minimise overhead
-> when there is no watcher")
-> e43de7f0862b ("fsnotify: optimize the case of no marks of any type")
+> Just my 2c: I'd agree that pseudo-instructions should be used wherever possible and helping readability.
+"lu12i.w+srli.w" can be replaced by "li.w t0, KVM_GPGD" 
+we accept the suggestion two instructions should be replaced with pseudo-instruction.
+
+For the instruction "ori    t0, zero, CSR_PRMD_PIE"
+what is advantage of this pseudo-instruction
+    li.w t0, CSR_PRMD_PIE
+
+is "ori t0, zero, CSR_PRMD_PIE" hard to understand? It is basic arithmetic instr and easy to understand also. To be frank I do not see the advantage of using li.w, also there is no document that pseudo-instruction should be used with high priority.
+
+Regards
+Bibo Mao
 > 
-> The moral of this story is: even if your patches are accepted by fsnotify
-> reviewers, once they are staged for merging they will be subject to
-> performance regression tests and I can tell you with certainty that
-> performance regression will not be tolerated for the tail -f use case.
-> I will push your v4 patches to a branch in my github, to let the kernel
-> test bots run the performance regressions on it whenever they get to it.
+> FYI there were similar usages way before, but all were cleaned up with my previous commit 57ce5d3eefac ("LoongArch: Use the "move" pseudo-instruction where applicable").
 > 
-> Moreover, if coreutils will change tail -f to start setting inotify watches
-> on anonymous pipes (my understanding is that currently does not?),
-> then any tail -f on anonymous pipe can cripple the "no marks on sb"
-> performance optimization for all anonymous pipes and that would be
-> a *very* unfortunate outcome.
+> Such usages apparently came from an era when the LoongArch toolchains didn't support any pseudo-instruction, and are less intuitive especially for someone not familiar with LoongArch assembly. Given that familiarity with LoongArch won't be widespread (unlike with e.g. RISC-V that are adopted more widely), we should optimize for readability when writing code; it's also a best practice in general because code is read way more often than written, and people care about semantics not unnecessary details like "how are moves like this or that materialized".
+> 
 
-Do you mean the "s_fsnotify_connectors" check? Yeah, a fsnotify watch on
-any pipe inode is going to somewhat slow down the fsnotify calls for any
-pipe. OTOH I don't expect inotify watches on pipe inodes to be common and
-it is not like the overhead is huge. Also nobody really prevents you from
-placing watch on pipe inode now with similar consequences, this patch only
-makes it actually working with splice. So I'm not worried about the
-performance impact. At least until somebody comes with a realistic
-complaint ;-).
-
-> I think we need to add a rule to fanotify_events_supported() to ban
-> sb/mount marks on SB_KERNMOUNT and backport this
-> fix to LTS kernels (I will look into it) and then we can fine tune
-> the s_fsnotify_connectors optimization in fsnotify_parent() for
-> the SB_KERNMOUNT special case.
-
-Yeah, probably makes sense.
-
-								Honza
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
