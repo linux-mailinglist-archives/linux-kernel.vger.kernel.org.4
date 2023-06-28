@@ -2,107 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 066E17417D1
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 20:11:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 502987417D3
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 20:12:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231387AbjF1SLE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 14:11:04 -0400
-Received: from dfw.source.kernel.org ([139.178.84.217]:48202 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229517AbjF1SK5 (ORCPT
+        id S231342AbjF1SLs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 14:11:48 -0400
+Received: from fanzine2.igalia.com ([213.97.179.56]:48490 "EHLO
+        fanzine2.igalia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231454AbjF1SLj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 14:10:57 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 029A161374;
-        Wed, 28 Jun 2023 18:10:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30A2AC433C8;
-        Wed, 28 Jun 2023 18:10:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687975856;
-        bh=S8iFMTRFi4myYQxAkEhyB53zlJci8Gm8CA/jvNuBY2s=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=cPTY3bX1lk4GxRiSxlodx+ugOaPB3xpc1AmBC6B9gILVTJY8pSBfrCaCQ9rQ/Fv8y
-         pmWZm8dao4+74szOO2hgfa6SsbzICms/cgnhZ8JNoK166T+Y3D0SRev4qLf7OwAd54
-         0gnOc9wTbeW3k7JIfSTn6veo35Qq4EIvjub+CoAWLkstUS3XubjZjPClmKATV5psyB
-         DhUapJ8FeaXOPdB7oMzpfa7FY/vqDW8k4s+lWdD3/k2ecx6FuQ2WbgN4LqfDK+yAF8
-         Kh1wKQkKPg9Xyf/ZrdcT2SXk06B2HOxfY0qoj/8fOMtezSZUJnCR7NvTp8DnH2I8PS
-         TO9hWPdCw5uvA==
-Date:   Wed, 28 Jun 2023 19:10:50 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        krzysztof.kozlowski+dt@linaro.org, andersson@kernel.org,
-        robh+dt@kernel.org, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, johan+linaro@kernel.org,
-        perex@perex.cz, tiwai@suse.com, lgirdwood@gmail.com,
-        ckeepax@opensource.cirrus.com, kuninori.morimoto.gx@renesas.com,
-        linux-kernel@vger.kernel.org, pierre-louis.bossart@linux.intel.com,
-        alsa-devel@alsa-project.org
-Subject: Re: [PATCH 2/3] ASoC: qcom: q6apm: add support for reading firmware
- name from DT
-Message-ID: <c377aefe-2678-4ba7-96b3-2186e8f3f1b4@sirena.org.uk>
-References: <20230628102621.15016-1-srinivas.kandagatla@linaro.org>
- <20230628102621.15016-3-srinivas.kandagatla@linaro.org>
- <f71c8d2b-d5f4-42bb-932f-5b9ec6117ffc@sirena.org.uk>
- <73dce263-bee6-554f-9eb6-af4aa7badab1@linaro.org>
+        Wed, 28 Jun 2023 14:11:39 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=xRSiq7Rafs7M34eS/OFYDfhULalnpTg/cuwzQtHQsco=; b=PI7udsyRTWNT8t+lHm0W16OI4g
+        J97xeLtgbkhh1mHAe5gwSWFMp86rdK/uaIbJTtcZ+mOeqVutW0fIhcFbUqNF6P3r3Cjf0XFeXxcUS
+        YzTOHvSu5ktbw+xBeHhcls4xox+GNOBN+OEvQAaUQetZW+0bRHaZvGvTqx4vhtH2QwoUJ7/18MKti
+        48n6AqfUMNXP8P44ZCU1sX6qPX+a1Y6WofIysKnLTPbOZpQ5e+pMxTYr1ylDgq70sq6FsTo8GqPFd
+        jhybfi4Xdj8YZ9JC81fQrNswIIYN6++urXGn4BxDkF5s9vpYBLwnIBwHdydNW7BucOU8Frzc9t8e0
+        3Ci83m7Q==;
+Received: from [179.232.147.2] (helo=[192.168.0.5])
+        by fanzine2.igalia.com with esmtpsa 
+        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
+        id 1qEZdd-005N4W-0I; Wed, 28 Jun 2023 20:11:33 +0200
+Message-ID: <28718037-ccf1-c36b-4eb6-716c518ca98f@igalia.com>
+Date:   Wed, 28 Jun 2023 15:12:10 -0300
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="odJ0u5EEv+hukUFR"
-Content-Disposition: inline
-In-Reply-To: <73dce263-bee6-554f-9eb6-af4aa7badab1@linaro.org>
-X-Cookie: HELLO, everybody, I'm a HUMAN!!
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH] pstore: ramoops: support pmsg size larger than kmalloc
+ limitation
+Content-Language: en-US
+To:     Yuxiao Zhang <yuxiaozhang@google.com>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Tony Luck <tony.luck@intel.com>,
+        linux-hardening@vger.kernel.org, linux-kernel@vger.kernel.org,
+        wak@google.com
+References: <2023062832-barrier-strenuous-9499@gregkh>
+ <20230628171055.1312737-1-yuxiaozhang@google.com>
+From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+In-Reply-To: <20230628171055.1312737-1-yuxiaozhang@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 28/06/2023 19:10, Yuxiao Zhang wrote:
+> Thanks for reviewing the patch.
+> 
+> On 28 Jun 2023 07:30:16 +0200, Greg KH wrote:
+>> What is that max size?
+> 
+> The max size is arch dependent, it should be 2^(PAGE_SIZE+MAX_ORDER). In our environment it is 4M.
+> 
+>> what in-kernel user is hitting this in the pstore implementation?
+> 
+> We are trying to use pmsg to hold a core dump file, so we have pmsg-size=32M and thus hit this issue.
+> 
+> Other than us, here is one I found that trying to save dmesg beyond kmalloc limitaton:
+> https://lore.kernel.org/lkml/b2d66d9f-15a6-415c-2485-44649027a1d5@igalia.com/T/
 
---odJ0u5EEv+hukUFR
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Hi Yuxiao Zhang, thanks for the improvement! And also, thanks for
+mentioning the thread above - I tested your patch today and was soon to
+write you this message heh
 
-On Wed, Jun 28, 2023 at 07:57:38PM +0300, Dmitry Baryshkov wrote:
-> On 28/06/2023 14:53, Mark Brown wrote:
+So, first of all, the patch works for the Steam Deck case - kernel 6.4
+with or without your patch behaved the same, i.e., pstore/ramoops worked
+and it was possible to collect the dmesg.
 
-> > Why not try a series of firmware names/locations generated using the
-> > identifying information for the card/system?  That way we don't have to
-> > put a filename in the ABI which has fun scaling issues.
+But when I tried to increase the record size in ramoops, I got this
+error: https://termbin.com/b12e
 
-> This is what was done by Srini in the initial (currently committed) version.
-> Unfortunately this easily results in the audio topology being separated from
-> the rest of the platform-specific firmware. For example, for the mentioned
-> X13s we already have a subdir under /lib/firmware/qcom and several
-> firmware-name DT properties pointing to the files in that subdir:
+This is the same error as mentioned in the thread above. And it happens
+when I try to bump the record size to 4MB, the biggest working value is
+still 2MB. Maybe a missing spot, which remained using kmalloc() instead
+of the virtual variant?
 
-> $ grep firmware-name
-> arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
-> 		firmware-name = "qcom/sc8280xp/LENOVO/21BX/qcdxkmsuc8280.mbn";
-> 	firmware-name = "qcom/sc8280xp/LENOVO/21BX/qcadsp8280.mbn";
-> 	firmware-name = "qcom/sc8280xp/LENOVO/21BX/qccdsp8280.mbn";
+Also - Kees certainly knows that way better, but - are we 100% sure that
+the region for pstore can be non-contiguous? For some reason, I always
+thought this was a requirement - grepping the code, I found this
+(wrong?) comment:
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/fs/pstore/zone.c#n3
 
-> This is not unique to the X13s, other Qualcomm boards also use full paths.
+Cheers,
 
-If the goal here is to put all the firmwares for a given board in a
-single place surely it would be better to factor this all out of the
-individual drivers so that they ask some helper for a directory to use
-for firmware?  Adding these device specific firmware node properties
-doesn't seem to follow.
 
---odJ0u5EEv+hukUFR
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmScd6kACgkQJNaLcl1U
-h9CVewf/VRExNVrsgkLPa3cwHd22uiab7/9Pce7RpfyTmoA1zyYUbQvPZOsJgNZ+
-0Q5a15Cw4YMXpdQIE37xVukcWttL5myFf8ycUSU45WAS5+YLuDa/RcuGFP5/IEZm
-Lcq3wfX7zG0mxhE9Kj2E+k/rKieUPDbHGBfSikKrw8GL9jB8EZNG3tk7PXRLXpeJ
-FAN+BRcSuZTjKInCR0ErUSgbMqNXHinbdxC8VCtwDZd7U6R0YT9xaKlVzMf+aK0K
-+8ZptUCFFDR9THaCOXj3ujwF54WycL5Wo+9jIoPsVF92RTQcMwtzGmM48K6WY8tz
-86G2gU01b89cvJ2vMPpdqZqR/UxLig==
-=8mP1
------END PGP SIGNATURE-----
-
---odJ0u5EEv+hukUFR--
+Guilherme
