@@ -2,184 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D3A2740BC6
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 10:43:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4AA83740C18
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 10:59:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235654AbjF1Im6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 04:42:58 -0400
-Received: from dfw.source.kernel.org ([139.178.84.217]:45268 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234885AbjF1Ijt (ORCPT
+        id S235798AbjF1I6w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 04:58:52 -0400
+Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:38120
+        "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230399AbjF1ItW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 04:39:49 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Wed, 28 Jun 2023 04:49:22 -0400
+Received: from mail-oi1-f199.google.com (mail-oi1-f199.google.com [209.85.167.199])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CA7D7612DF;
-        Wed, 28 Jun 2023 05:00:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A9424C433C0;
-        Wed, 28 Jun 2023 05:00:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687928424;
-        bh=S9w9Ylazfr7gGMk55LWAdREn4bJPj4VRqpvqxNv5hV0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=peP2yC05HOPmvk9tkvMp2uX47B029yxV6vo4HWIwpxiq0UHmrXsBBeEfENlZhX2e/
-         PTF+NJt5upiW0JRdZ6usdewdVBmJiv2AEafsbuwlogF8AdTQlQFVwA1hhyU52a7N9f
-         RBY/0CqrFuc1uoUgYdya8yEcmUG3zIzM8ECx/dQdxLCzMjVyMsmfzSeMaZpKBdpG62
-         eJ2/qk4rP79dhegV4MOTT18LcZgJsyClNqBOvWZxuJgPHNP7LgN3czlOCkQuPvwEMa
-         XTLsguD8wLXLV8YUvw7pIsWNJAXT2dfNpUdBCBYMgGiPAoY1QjbfaISmUu6hxgHpcu
-         Pk7+DsG6800NA==
-Date:   Wed, 28 Jun 2023 08:00:19 +0300
-From:   Leon Romanovsky <leon@kernel.org>
-To:     Junxian Huang <huangjunxian6@hisilicon.com>
-Cc:     jgg@nvidia.com, linux-rdma@vger.kernel.org, linuxarm@huawei.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 for-next] RDMA/core: Get IB width and speed from netdev
-Message-ID: <20230628050019.GC23952@unreal>
-References: <20230603063833.541682-1-huangjunxian6@hisilicon.com>
- <20230611174605.GG12152@unreal>
- <1b11b9e9-a729-0d61-52e3-6bcf132ca356@hisilicon.com>
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id ED7443F72F
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 05:10:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1687929002;
+        bh=3bdC+uUyIZz0PgxeLe6K/fSeIXVXdbQUHA0MK3WxvKU=;
+        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+         To:Cc:Content-Type;
+        b=pPiHqZEyXktMSy2OoI57sTRe/hyUS9cEaElGEVt4J9JCmAKSJW62l//HnldyRrB2Z
+         YMUq6KVGdWsjnyzmgwEKWwC4ua5odQ4Iw3NVR5F56MDV3BM8Bj7tD9q2lGh19tXt6j
+         ZSrgVe5Iov+4ZSSiLzIXEAa8kObaZe7TYUVRj2pC/ZuQrNhEn2Xrlo9jZtCx69i6Gk
+         Jras8+ux+HS1jOSJa328v5YZOouXOvOkbLQAFRXqF8CZkJK7E9Uy7hioVKlgenCa8o
+         V6F4uYvUqUweEg/+KfffBtZxFMCGnFzhc4iiCKtUH/ijr2oWFiHGmyFFoKW9uSPeTJ
+         vMGFUn7sxS9jA==
+Received: by mail-oi1-f199.google.com with SMTP id 5614622812f47-3a1bcdd0966so4643958b6e.2
+        for <linux-kernel@vger.kernel.org>; Tue, 27 Jun 2023 22:10:02 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687929001; x=1690521001;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=3bdC+uUyIZz0PgxeLe6K/fSeIXVXdbQUHA0MK3WxvKU=;
+        b=flnqHOm/53aD+q8uSqbM43VI/HbRupxnTgYTkG5V6TUP36A/FBzgLX2w4fJKs5Erlz
+         r0DY5sCgtwlx8IUlEH3Ynw1GrYUNw9CRslNiTeTb7nVLMWjzfrb+daiTVtxT7CQbNNeo
+         Wz352RVCDmn2K3fJyDlp/VwpYYKK5aco0BdjJTXCFnqvFQSUNlrJtgyeLl2MOk0SwisZ
+         uYRjAhXGaVCzxI6yg2FN4Ps3UbTpE1kDKBTuMjtL8S6WNuuNAAgaV3JVfOVypxKObfBz
+         Yb+DsO+dGozJdMBHq/AFJZ/z1eqDl8WaWqtXwmvj390T7G7+D1EbzGfH5CxxNuRbGtGw
+         Nqyg==
+X-Gm-Message-State: AC+VfDyxhOnKddpBMdRP0PRRCf+MBdWbgm7n4gcdtAiSB7qO06Ds6iVh
+        bp5NL81A1tG4BzYji9fFxcBQ1+qleXy3vss4AKcvQuL1E0p/ZrAGksWD7DEvXAYEBlPSh1GD4Qp
+        94ldeUGS8dOPVHAngWcAWuApQm8yfTMyKWu4g9HG3dz5XxsY69Nk6CVup7g==
+X-Received: by 2002:a05:6808:f11:b0:3a0:663d:fd18 with SMTP id m17-20020a0568080f1100b003a0663dfd18mr20647403oiw.57.1687929001316;
+        Tue, 27 Jun 2023 22:10:01 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ42ji0zs3PoUsCX1nWOxZzCYOQcakZVi3alWc7EDIew9NqDWXdRzRhCW/XfEnOwyZd2T3eG1ytrMp03ePtGO48=
+X-Received: by 2002:a05:6808:f11:b0:3a0:663d:fd18 with SMTP id
+ m17-20020a0568080f1100b003a0663dfd18mr20647388oiw.57.1687929001077; Tue, 27
+ Jun 2023 22:10:01 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1b11b9e9-a729-0d61-52e3-6bcf132ca356@hisilicon.com>
+References: <CAAd53p4kH7E92++jabBhvsM_+M7Dpyk2JP+aoVdb_sxZn47eyQ@mail.gmail.com>
+ <20230627205417.GA366405@bhelgaas>
+In-Reply-To: <20230627205417.GA366405@bhelgaas>
+From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
+Date:   Wed, 28 Jun 2023 13:09:49 +0800
+Message-ID: <CAAd53p5YjKbOkzBUmhu=EctusO7d38tHhg_b+zzvfVt97hLuOA@mail.gmail.com>
+Subject: Re: [PATCH] PCI/ASPM: Enable ASPM on external PCIe devices
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     "Limonciello, Mario" <mario.limonciello@amd.com>,
+        bhelgaas@google.com,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Vidya Sagar <vidyas@nvidia.com>,
+        Michael Bottini <michael.a.bottini@linux.intel.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        intel-wired-lan@osuosl.org,
+        "Neftin, Sasha" <sasha.neftin@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 19, 2023 at 02:20:54PM +0800, Junxian Huang wrote:
-> 
-> 
-> On 2023/6/12 1:46, Leon Romanovsky wrote:
-> > On Sat, Jun 03, 2023 at 02:38:33PM +0800, Junxian Huang wrote:
-> >> From: Haoyue Xu <xuhaoyue1@hisilicon.com>
-> >>
-> >> Previously, there was no way to query the number of lanes for a network
-> >> card, so the same netdev_speed would result in a fixed pair of width and
-> >> speed. As network card specifications become more diverse, such fixed
-> >> mode is no longer suitable, so a method is needed to obtain the correct
-> >> width and speed based on the number of lanes.
-> > 
-> > I'm sorry but I didn't understand the problem statement. Can you please
-> > provide an example of configuration that will give different results 
-> > before this patch and after?
-> > 
-> 
-> I'll give examples with 20G and 200G netdevs respectively.
-> 
-> 20G:
-> Before this patch, regardless of the actual number of lanes, the width and
-> speed displayed in ibv_devinfo would be always fixed:
-> 	active_width: 4X
-> 	active_speed: 5 Gbps
-> After this patch, there will be different combinations of width and speed
-> according to the number of lanes. For example, for a 20G netdev whose number
-> of lanes is 2, the width and speed displayed in ibv_devinfo will be:
-> 	active_width: 2X
-> 	active_speed: 10 Gbps
-> 
-> 200G:
-> Before this patch, netdevs with netdev_speed more than 40G cannot get a right
-> width and speed in ibv_devinfo. Only the default result would be displayed:
-> 	active_width: 4X
-> 	active_speed: 25 Gbps
-> After this patch, taking an example with 4 lanes, the displayed results will be:
-> 	active_width: 4X
-> 	active_speed: 50 Gbps
-> 
+[+Cc Sasha and Intel Wired Lan]
 
-<...>
+On Wed, Jun 28, 2023 at 4:54=E2=80=AFAM Bjorn Helgaas <helgaas@kernel.org> =
+wrote:
+>
+> On Tue, Jun 27, 2023 at 04:35:25PM +0800, Kai-Heng Feng wrote:
+> > On Fri, Jun 23, 2023 at 7:06=E2=80=AFAM Bjorn Helgaas <helgaas@kernel.o=
+rg> wrote:
+> > > On Tue, Jun 20, 2023 at 01:36:59PM -0500, Limonciello, Mario wrote:
+> > > > <snip>
+> > > > > > A variety of Intel chipsets don't support lane width switching
+> > > > > > or speed switching.  When ASPM has been enabled on a dGPU,
+> > > > > > these features are utilized and breakage ensues.
+> > > > >
+> > > > > Maybe this helps explain all the completely unmaintainable ASPM
+> > > > > garbage in amdgpu and radeon.
+> > > > >
+> > > > > If these devices are broken, we need quirks for them.
+> > > >
+> > > > The problem is which device do you consider "broken"?
+> > > > The dGPU that uses these features when the platform advertises ASPM
+> > > > or the chipset which doesn't support the features that the device
+> > > > uses when ASPM is active?
+> > > >
+> > > > With this problem I'm talking about the dGPU works fine on hosts
+> > > > that support these features.
+> > >
+> > > Without more details about what's broken and when, I can't say.  What
+> > > I *think* is that a device that doesn't work per spec needs a quirk.
+> > > Typically it's a device that advertises a capability that doesn't wor=
+k
+> > > correctly.
+> >
+> > Many silicon vendors use the same "PCI IP" and integrate it into their
+> > own chip. That's one of the reason why the capability doesn't really
+> > reflect what actually being support.
+> > The vendors then send their private datasheet to system integrator so
+> > BIOS can enable what's really supported.
+>
+> It's perfectly fine for the IP to support PCI features that are not
+> and can not be enabled in a system design.  But I expect that
+> strapping or firmware would disable those features so they are not
+> advertised in config space.
+>
+> If BIOS leaves features disabled because they cannot work, but at the
+> same time leaves them advertised in config space, I'd say that's a
+> BIOS defect.  In that case, we should have a DMI quirk or something to
+> work around the defect.
 
-> >> +	cap_link_lanes_supported = netdev->ethtool_ops->cap_link_lanes_supported;
-> >>  	rtnl_unlock();
-> >>  
-> >>  	dev_put(netdev);
-> >>  
-> >>  	if (!rc && lksettings.base.speed != (u32)SPEED_UNKNOWN) {
-> >>  		netdev_speed = lksettings.base.speed;
-> >> +		if (cap_link_lanes_supported && lksettings.lanes) {
-> > 
-> > According to the documentation cap_link_lanes_supported defines if
-> > number of lanes can be supplied by user and I would expect from
-> > __ethtool_get_link_ksettings() to get right numbers after it was
-> > changed.
+That means most if not all BIOS are defected.
+BIOS vendors and ODM never bothered (and probably will not) to change
+the capabilities advertised by config space because "it already works
+under Windows".
 
-No, I'm saying that cap_link_lanes_supported is variable which only says
-if number of lanes can be changed and __ethtool_get_link_ksettings()
-will return right number of lanes every time it is called without need
-to call to ib_get_width_and_speed() again.
+>
+> > So the logic is to ignore the capability and trust the default set
+> > by BIOS.
+>
+> I think limiting ASPM support to whatever BIOS configured at boot-time
+> is problematic.  I don't think we can assume that all platforms have
+> firmware that configures ASPM as aggressively as possible, and
+> obviously firmware won't configure hot-added devices at all (in
+> general; I know ACPI _HPX can do some of that).
 
-Thanks
+Totally agree. I was not suggesting to limiting the setting at all.
+A boot-time parameter to flip ASPM setting is very useful. If none has
+been set, default to BIOS setting.
 
-> > 
-> > Thanks
-> > 
-> 
-> I'm sorry but I didn't quite understand. Do you mean the critical section of
-> rtnl_lock() here should be expanded to make sure getting the right number of
-> lanes?
-> 
-> Junxian
-> 
-> >> +			ib_get_width_and_speed(netdev_speed, lksettings.lanes,
-> >> +					       speed, width);
-> >> +			return 0;
-> >> +		}
-> >>  	} else {
-> >>  		netdev_speed = SPEED_1000;
-> >> -		pr_warn("%s speed is unknown, defaulting to %u\n", netdev->name,
-> >> -			netdev_speed);
-> >> +		if (rc)
-> >> +			pr_warn("%s speed is unknown, defaulting to %u\n",
-> >> +				netdev->name, netdev_speed);
-> >>  	}
-> >>  
-> >>  	if (netdev_speed <= SPEED_1000) {
-> >> diff --git a/include/rdma/ib_verbs.h b/include/rdma/ib_verbs.h
-> >> index 1e7774ac808f..7dc926ec7fee 100644
-> >> --- a/include/rdma/ib_verbs.h
-> >> +++ b/include/rdma/ib_verbs.h
-> >> @@ -552,6 +552,18 @@ static inline int ib_width_enum_to_int(enum ib_port_width width)
-> >>  	}
-> >>  }
-> >>  
-> >> +static inline int ib_int_to_ib_width(u32 lanes)
-> >> +{
-> >> +	switch (lanes) {
-> >> +	case 1: return IB_WIDTH_1X;
-> >> +	case 2: return IB_WIDTH_2X;
-> >> +	case 4: return IB_WIDTH_4X;
-> >> +	case 8: return IB_WIDTH_8X;
-> >> +	case 12: return IB_WIDTH_12X;
-> >> +	default: return IB_WIDTH_1X;
-> >> +	}
-> >> +}
-> >> +
-> >>  enum ib_port_speed {
-> >>  	IB_SPEED_SDR	= 1,
-> >>  	IB_SPEED_DDR	= 2,
-> >> @@ -563,6 +575,20 @@ enum ib_port_speed {
-> >>  	IB_SPEED_NDR	= 128,
-> >>  };
-> >>  
-> >> +static inline int ib_eth_to_ib_speed(u32 speed)
-> >> +{
-> >> +	switch (speed) {
-> >> +	case SPEED_2500: return IB_SPEED_SDR;
-> >> +	case SPEED_5000: return IB_SPEED_DDR;
-> >> +	case SPEED_10000: return IB_SPEED_FDR10;
-> >> +	case SPEED_14000: return IB_SPEED_FDR;
-> >> +	case SPEED_25000: return IB_SPEED_EDR;
-> >> +	case SPEED_50000: return IB_SPEED_HDR;
-> >> +	case SPEED_100000: return IB_SPEED_NDR;
-> >> +	default: return IB_SPEED_SDR;
-> >> +	}
-> >> +}
-> >> +
-> >>  enum ib_stat_flag {
-> >>  	IB_STAT_FLAG_OPTIONAL = 1 << 0,
-> >>  };
-> >> -- 
-> >> 2.30.0
-> >>
+>
+> It's possible we need some kind of policy that limits ASPM to the BIOS
+> config until date X, but I don't want to limit that forever.
+
+Desktop can have very different PCIe cards in the slots so BIOS date
+isn't a good indicator for ASPM support.
+Let alone BIOS date changes on each BIOS upgrade, this means potential
+regression risk.
+
+>
+> > > > If you follow my idea of hot added devices the policy follows
+> > > > the parent would it work for the i225 PCIe device case?
+> > >
+> > > That doesn't *sound* really robust to me because even if the default
+> > > config after hot-add works, the user can change things via sysfs, and
+> > > any configuration we set it to should work as well.  If there are
+> > > land-mines there, we need a quirk that prevents sysfs from running
+> > > into it.
+> >
+> > For this case it means driver needs to provide a ASPM callback to flip
+> > PTM based on ASPM sysfs.
+>
+> I'm not sure I follow this, but it sounds like you're saying PTM
+> doesn't work correctly with some ASPM configurations.  Is this allowed
+> by the PCIe spec or is it a hardware defect?  If the latter, maybe we
+> just need a quirk to disable PTM on the device.
+
+I'll leave this one to Intel folks.
+
+>
+> I'm not sure PTM is valuable enough to add a generic callback
+> mechanism to work around a defect in an individual device.
+
+Agree. Right now the issue is only observed when I225 is in a TBT dock.
+
+Kai-Heng
+
+>
+> Bjorn
