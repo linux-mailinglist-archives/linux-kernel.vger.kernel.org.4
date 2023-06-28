@@ -2,118 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66055740A74
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 10:06:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E0E2740B10
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 10:22:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232831AbjF1IGT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 04:06:19 -0400
-Received: from out-11.mta0.migadu.com ([91.218.175.11]:33301 "EHLO
-        out-11.mta0.migadu.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230401AbjF1H7f (ORCPT
+        id S234007AbjF1IVi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 04:21:38 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:32250 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S234270AbjF1IP1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 03:59:35 -0400
-Date:   Wed, 28 Jun 2023 00:01:14 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1687924878;
+        Wed, 28 Jun 2023 04:15:27 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1687940076;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=3MLw7YcFyHXR1rN5vXFnw1a8aCPs+A9s2/LGEzLo8qM=;
-        b=aj6TIes7oOUyqpykYgyoMBDptalfUM0KTr/OPLio/mbmnynZwD8KXLCDn3MRznzt7sygDX
-        8EIv/2H4MHtchcfITbpjvVtcZZWgjp75sSBSIkI2n989zgtnTcO/7yz86m60ocjM6j2y+a
-        Bc8yv9wy54HOUpQ3+APVfZYcFyI0vYU=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Kent Overstreet <kent.overstreet@linux.dev>
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     torvalds@linux-foundation.org, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-bcachefs@vger.kernel.org,
-        Christoph Hellwig <hch@lst.de>
-Subject: Re: [GIT PULL] bcachefs
-Message-ID: <20230628040114.oz46icbsjpa4egpp@moria.home.lan>
-References: <20230626214656.hcp4puionmtoloat@moria.home.lan>
- <aeb2690c-4f0a-003d-ba8b-fe06cd4142d1@kernel.dk>
- <20230627000635.43azxbkd2uf3tu6b@moria.home.lan>
- <91e9064b-84e3-1712-0395-b017c7c4a964@kernel.dk>
- <20230627020525.2vqnt2pxhtgiddyv@moria.home.lan>
- <b92ea170-d531-00f3-ca7a-613c05dcbf5f@kernel.dk>
- <23922545-917a-06bd-ec92-ff6aa66118e2@kernel.dk>
- <20230627201524.ool73bps2lre2tsz@moria.home.lan>
- <c06a9e0b-8f3e-4e47-53d0-b4854a98cc44@kernel.dk>
+        bh=Z1KUy+mSETB0Ymbiz3MZDrs6ZOWnVr5ABuTlCCBNInE=;
+        b=S3tqJeTclGtKSCj1KDso5UE0hinm13urRDY2nXdqGLYfta4B3Lq+gDI3X4sv/PZoboVyZh
+        zv/hmleOmlkB3l5L9r6s2o+5Wgl3Ml8CMzqbAgIZuXHxdUGb22dkqFcnH7UQWICdd727j3
+        N3HekIW1wT4oDMC9qGPnWO6g7M/nDHg=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-398-PNS-UaNNObak31gAYQU7LQ-1; Wed, 28 Jun 2023 00:13:47 -0400
+X-MC-Unique: PNS-UaNNObak31gAYQU7LQ-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 9C1F61C04B55;
+        Wed, 28 Jun 2023 04:13:46 +0000 (UTC)
+Received: from ovpn-8-21.pek2.redhat.com (ovpn-8-21.pek2.redhat.com [10.72.8.21])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id C68B8111F3B0;
+        Wed, 28 Jun 2023 04:13:25 +0000 (UTC)
+Date:   Wed, 28 Jun 2023 12:13:20 +0800
+From:   Ming Lei <ming.lei@redhat.com>
+To:     chengming.zhou@linux.dev
+Cc:     axboe@kernel.dk, tj@kernel.org, hch@lst.de,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        zhouchengming@bytedance.com
+Subject: Re: [PATCH 2/4] blk-flush: count inflight flush_data requests
+Message-ID: <ZJuzYMeVhP5cthbC@ovpn-8-21.pek2.redhat.com>
+References: <20230627120854.971475-1-chengming.zhou@linux.dev>
+ <20230627120854.971475-3-chengming.zhou@linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <c06a9e0b-8f3e-4e47-53d0-b4854a98cc44@kernel.dk>
-X-Migadu-Flow: FLOW_OUT
+In-Reply-To: <20230627120854.971475-3-chengming.zhou@linux.dev>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 27, 2023 at 09:16:31PM -0600, Jens Axboe wrote:
-> On 6/27/23 2:15?PM, Kent Overstreet wrote:
-> >> to ktest/tests/xfstests/ and run it with -bcachefs, otherwise it kept
-> >> failing because it assumed it was XFS.
-> >>
-> >> I suspected this was just a timing issue, and it looks like that's
-> >> exactly what it is. Looking at the test case, it'll randomly kill -9
-> >> fsstress, and if that happens while we have io_uring IO pending, then we
-> >> process completions inline (for a PF_EXITING current). This means they
-> >> get pushed to fallback work, which runs out of line. If we hit that case
-> >> AND the timing is such that it hasn't been processed yet, we'll still be
-> >> holding a file reference under the mount point and umount will -EBUSY
-> >> fail.
-> >>
-> >> As far as I can tell, this can happen with aio as well, it's just harder
-> >> to hit. If the fput happens while the task is exiting, then fput will
-> >> end up being delayed through a workqueue as well. The test case assumes
-> >> that once it's reaped the exit of the killed task that all files are
-> >> released, which isn't necessarily true if they are done out-of-line.
-> > 
-> > Yeah, I traced it through to the delayed fput code as well.
-> > 
-> > I'm not sure delayed fput is responsible here; what I learned when I was
-> > tracking this down has mostly fell out of my brain, so take anything I
-> > say with a large grain of salt. But I believe I tested with delayed_fput
-> > completely disabled, and found another thing in io_uring with the same
-> > effect as delayed_fput that wasn't being flushed.
+On Tue, Jun 27, 2023 at 08:08:52PM +0800, chengming.zhou@linux.dev wrote:
+> From: Chengming Zhou <zhouchengming@bytedance.com>
 > 
-> I'm not saying it's delayed_fput(), I'm saying it's the delayed putting
-> io_uring can end up doing. But yes, delayed_fput() is another candidate.
-
-Sorry - was just working through my recollections/initial thought
-process out loud
-
-> >> For io_uring specifically, it may make sense to wait on the fallback
-> >> work. The below patch does this, and should fix the issue. But I'm not
-> >> fully convinced that this is really needed, as I do think this can
-> >> happen without io_uring as well. It just doesn't right now as the test
-> >> does buffered IO, and aio will be fully sync with buffered IO. That
-> >> means there's either no gap where aio will hit it without O_DIRECT, or
-> >> it's just small enough that it hasn't been hit.
-> > 
-> > I just tried your patch and I still have generic/388 failing - it
-> > might've taken a bit longer to pop this time.
+> The flush state machine use a double list to link all inflight
+> flush_data requests, to avoid issuing separate post-flushes for
+> these flush_data requests which shared PREFLUSH.
 > 
-> Yep see the same here. Didn't have time to look into it after sending
-> that email today, just took a quick stab at writing a reproducer and
-> ended up crashing bcachefs:
-
-You must have hit an error before we finished initializing the
-filesystem, the list head never got initialized. Patch for that will be
-in the testing branch momentarily.
-
-> > I wonder if there might be a better way of solving this though? For aio,
-> > when a process is exiting we just synchronously tear down the ioctx,
-> > including waiting for outstanding iocbs.
+> So we can't reuse rq->queuelist, this is why we need rq->flush.list
 > 
-> aio is pretty trivial, because the only async it supports is O_DIRECT
-> on regular files which always completes in finite time. io_uring has to
-> cancel etc, so we need to do a lot more.
+> In preparation of the next patch that reuse rq->queuelist for flush
+> state machine, we change the double linked list to a u64 counter,
+> which count all inflight flush_data requests.
+> 
+> This is ok since we only need to know if there is any inflight
+> flush_data request, so a u64 counter is good. The only problem I can
+> think of is that u64 counter may overflow, which should be unlikely happen.
 
-ahh yes, buffered IO would complicate things
+It won't overflow, q->nr_requests is 'unsigned long', which should have
+been limited to one more reasonable value, such as 2 * BLK_MQ_MAX_DEPTH, so
+u16 should be big enough in theory.
 
-> But the concept of my patch should be fine, but I think we must be
-> missing a case. Which is why I started writing a small reproducer
-> instead. I'll pick it up again tomorrow and see what is going on here.
+> 
+> Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
+> ---
+>  block/blk-flush.c | 9 +++++----
+>  block/blk.h       | 5 ++---
+>  2 files changed, 7 insertions(+), 7 deletions(-)
+> 
+> diff --git a/block/blk-flush.c b/block/blk-flush.c
+> index dba392cf22be..bb7adfc2a5da 100644
+> --- a/block/blk-flush.c
+> +++ b/block/blk-flush.c
+> @@ -187,7 +187,8 @@ static void blk_flush_complete_seq(struct request *rq,
+>  		break;
+>  
+>  	case REQ_FSEQ_DATA:
+> -		list_move_tail(&rq->flush.list, &fq->flush_data_in_flight);
+> +		list_del_init(&rq->flush.list);
+> +		fq->flush_data_in_flight++;
+>  		spin_lock(&q->requeue_lock);
+>  		list_add_tail(&rq->queuelist, &q->flush_list);
+>  		spin_unlock(&q->requeue_lock);
+> @@ -299,7 +300,7 @@ static void blk_kick_flush(struct request_queue *q, struct blk_flush_queue *fq,
+>  		return;
+>  
+>  	/* C2 and C3 */
+> -	if (!list_empty(&fq->flush_data_in_flight) &&
+> +	if (fq->flush_data_in_flight &&
+>  	    time_before(jiffies,
+>  			fq->flush_pending_since + FLUSH_PENDING_TIMEOUT))
+>  		return;
+> @@ -374,6 +375,7 @@ static enum rq_end_io_ret mq_flush_data_end_io(struct request *rq,
+>  	 * the comment in flush_end_io().
+>  	 */
+>  	spin_lock_irqsave(&fq->mq_flush_lock, flags);
+> +	fq->flush_data_in_flight--;
+>  	blk_flush_complete_seq(rq, fq, REQ_FSEQ_DATA, error);
+>  	spin_unlock_irqrestore(&fq->mq_flush_lock, flags);
+>  
+> @@ -445,7 +447,7 @@ bool blk_insert_flush(struct request *rq)
+>  		blk_rq_init_flush(rq);
+>  		rq->flush.seq |= REQ_FSEQ_POSTFLUSH;
+>  		spin_lock_irq(&fq->mq_flush_lock);
+> -		list_move_tail(&rq->flush.list, &fq->flush_data_in_flight);
+> +		fq->flush_data_in_flight++;
+>  		spin_unlock_irq(&fq->mq_flush_lock);
+>  		return false;
+>  	default:
+> @@ -496,7 +498,6 @@ struct blk_flush_queue *blk_alloc_flush_queue(int node, int cmd_size,
+>  
+>  	INIT_LIST_HEAD(&fq->flush_queue[0]);
+>  	INIT_LIST_HEAD(&fq->flush_queue[1]);
+> -	INIT_LIST_HEAD(&fq->flush_data_in_flight);
+>  
+>  	return fq;
+>  
+> diff --git a/block/blk.h b/block/blk.h
+> index 608c5dcc516b..686712e13835 100644
+> --- a/block/blk.h
+> +++ b/block/blk.h
+> @@ -15,15 +15,14 @@ struct elevator_type;
+>  extern struct dentry *blk_debugfs_root;
+>  
+>  struct blk_flush_queue {
+> +	spinlock_t		mq_flush_lock;
+>  	unsigned int		flush_pending_idx:1;
+>  	unsigned int		flush_running_idx:1;
+>  	blk_status_t 		rq_status;
+>  	unsigned long		flush_pending_since;
+>  	struct list_head	flush_queue[2];
+> -	struct list_head	flush_data_in_flight;
+> +	unsigned long		flush_data_in_flight;
+>  	struct request		*flush_rq;
+> -
+> -	spinlock_t		mq_flush_lock;
+>  };
 
-Ok. Soon as you've got a patch I'll throw it at my CI, or I can point my
-CI at your branch if you have one.
+The part of replacing inflight data rq list with counter looks fine.
+
+Thanks,
+Ming
+
