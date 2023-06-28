@@ -2,164 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C19174186C
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 20:58:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F9D574187F
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 21:02:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232253AbjF1S53 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 14:57:29 -0400
-Received: from bg4.exmail.qq.com ([43.155.65.254]:17826 "EHLO
-        bg4.exmail.qq.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233094AbjF1Syx (ORCPT
+        id S231994AbjF1TAz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 15:00:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53920 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232438AbjF1S7J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 14:54:53 -0400
-X-QQ-mid: bizesmtp90t1687978484tji35iud
-Received: from linux-lab-host.localdomain ( [116.30.129.193])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Thu, 29 Jun 2023 02:54:42 +0800 (CST)
-X-QQ-SSF: 01200000000000D0W000000A0000000
-X-QQ-FEAT: Lc4bMlOoZUGkpC/7Ifsyooy6DUcO5i0KRvgdG3YbtX646PzLWnBy6Qxr2/y+U
-        ozNqeIN24oj33/Fotsv6FXjKjhpcf5dts1f4iXPVGjLEOyao8iLruCcBq410/Itbx/yQ82D
-        4a/DbSH5mlYrgjNVPOh+05Z7F8YWqIAq1qjLT4KMXlyNwrpo7QCsU1QCoKz7cIBCFcrr/Ty
-        IDCMxPgLOJFrecb2pQfzxgO73wk3O0vG3Jcs9W5Sk1Bx2FAaefhT0X35wITWlcT1vqd/uvw
-        bUFlzoPMtnjOpFjHio6NpWI5h0Xj5DFbj2dO5JQCyMdvzC+NNyc+s2q5cad0Yuidf0no2SX
-        kpAAdeYqkgMSQGSZPfd5ki6h4+yttF3ULm1K+4MDPrKxb1Fr2gGOQLmqydKkQ==
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 5556601059308245209
-From:   Zhangjin Wu <falcon@tinylab.org>
-To:     thomas@t-8ch.de, w@1wt.eu
-Cc:     falcon@tinylab.org, arnd@arndb.de, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org
-Subject: [PATCH v1 03/11] tools/nolibc: include crt.h before arch.h
-Date:   Thu, 29 Jun 2023 02:54:35 +0800
-Message-Id: <c61b5bc53895e8c6b2f30d59f86067973e6bbce0.1687976753.git.falcon@tinylab.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <cover.1687976753.git.falcon@tinylab.org>
-References: <cover.1687976753.git.falcon@tinylab.org>
+        Wed, 28 Jun 2023 14:59:09 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F27AC2102;
+        Wed, 28 Jun 2023 11:55:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
+        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
+        Content-Description:In-Reply-To:References;
+        bh=6P08QVXXRrbXoyateQxxQCk4bh+paRKekLCZ82zEgH8=; b=url2F0fZ01ji+ds4Rem0FLeG/t
+        3dBgDzfYIW7OTTtfNLTt4rIH8crndyry4OHdQvZbyIyMr7Ajb+Ot4P1UNdIXGYTPc2hf3qzLWaJFe
+        pspy9msXJ+wykOy3fBGL5CoAAPKY3IE7oB9mUn9o3bCcgNirkUg9veocsCNB8mPWiIf95QyUPcM2U
+        QxocqigmcFUM2BtK2mRWdF665uuL0dFsM3gIdK08lFx8RbxxTfbCJeh3vnoMChqvx3PkZ+mKXLbEM
+        Cg/NaR6/AbFocoTrKu1dv6QzWIfOmOAMf7EZ66V4Xww7T4aQdeNDAnbEs2Fbx5ZHJOwqsGouzITT0
+        zNLlPUsw==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1qEaKT-0047Ys-Ue; Wed, 28 Jun 2023 18:55:49 +0000
+From:   "Matthew Wilcox (Oracle)" <willy@infradead.org>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, Jan Kara <jack@suse.cz>,
+        Christoph Hellwig <hch@lst.de>
+Cc:     "Matthew Wilcox (Oracle)" <willy@infradead.org>
+Subject: [PATCH] writeback: Account the number of pages written back
+Date:   Wed, 28 Jun 2023 19:55:48 +0100
+Message-Id: <20230628185548.981888-1-willy@infradead.org>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrsz:qybglogicsvrsz3a-3
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+        lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The crt.h provides a new _start_c() function, which is required by the
-new assembly _start entry of arch-<ARCH>.h (included by arch.h), let's
-include crt.h before arch.h.
+nr_to_write is a count of pages, so we need to decrease it by the number
+of pages in the folio we just wrote, not by 1.  Most callers specify
+either LONG_MAX or 1, so are unaffected, but writeback_sb_inodes()
+might end up writing 512x as many pages as it asked for.
 
-This '#include "crt.h"' doesn't let the new _start_c() work immediately,
-but it is a base of the coming patches to move most of the assembly
-_start operations to the _start_c() function for every supported
-architecture.
-
-Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
+Fixes: 793917d997df ("mm/readahead: Add large folio readahead")
+Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
 ---
- tools/include/nolibc/Makefile | 1 +
- tools/include/nolibc/nolibc.h | 1 +
- tools/include/nolibc/signal.h | 1 +
- tools/include/nolibc/stdio.h  | 1 +
- tools/include/nolibc/stdlib.h | 1 +
- tools/include/nolibc/sys.h    | 1 +
- tools/include/nolibc/time.h   | 1 +
- tools/include/nolibc/unistd.h | 1 +
- 8 files changed, 8 insertions(+)
+ mm/page-writeback.c | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/tools/include/nolibc/Makefile b/tools/include/nolibc/Makefile
-index 875e13e3c851..00471e59b11e 100644
---- a/tools/include/nolibc/Makefile
-+++ b/tools/include/nolibc/Makefile
-@@ -37,6 +37,7 @@ NARCH            = $(or $(NARCH_$(ARCH)),$(ARCH))
- arch_file := arch-$(NARCH).h
- all_files := \
- 		compiler.h \
-+		crt.h \
- 		ctype.h \
- 		errno.h \
- 		nolibc.h \
-diff --git a/tools/include/nolibc/nolibc.h b/tools/include/nolibc/nolibc.h
-index 1f8d821000ac..2cc9ccd90d56 100644
---- a/tools/include/nolibc/nolibc.h
-+++ b/tools/include/nolibc/nolibc.h
-@@ -93,6 +93,7 @@
- #define _NOLIBC_H
+diff --git a/mm/page-writeback.c b/mm/page-writeback.c
+index 1d17fb1ec863..d3f42009bb70 100644
+--- a/mm/page-writeback.c
++++ b/mm/page-writeback.c
+@@ -2434,6 +2434,7 @@ int write_cache_pages(struct address_space *mapping,
  
- #include "std.h"
-+#include "crt.h"
- #include "arch.h"
- #include "types.h"
- #include "sys.h"
-diff --git a/tools/include/nolibc/signal.h b/tools/include/nolibc/signal.h
-index 137552216e46..f0a1418c1cb2 100644
---- a/tools/include/nolibc/signal.h
-+++ b/tools/include/nolibc/signal.h
-@@ -8,6 +8,7 @@
- #define _NOLIBC_SIGNAL_H
+ 		for (i = 0; i < nr_folios; i++) {
+ 			struct folio *folio = fbatch.folios[i];
++			unsigned long nr;
  
- #include "std.h"
-+#include "crt.h"
- #include "arch.h"
- #include "types.h"
- #include "sys.h"
-diff --git a/tools/include/nolibc/stdio.h b/tools/include/nolibc/stdio.h
-index 0eef91daf289..89d3749b3620 100644
---- a/tools/include/nolibc/stdio.h
-+++ b/tools/include/nolibc/stdio.h
-@@ -10,6 +10,7 @@
- #include <stdarg.h>
+ 			done_index = folio->index;
  
- #include "std.h"
-+#include "crt.h"
- #include "arch.h"
- #include "errno.h"
- #include "types.h"
-diff --git a/tools/include/nolibc/stdlib.h b/tools/include/nolibc/stdlib.h
-index 902162f80337..0ff7fac40bd4 100644
---- a/tools/include/nolibc/stdlib.h
-+++ b/tools/include/nolibc/stdlib.h
-@@ -8,6 +8,7 @@
- #define _NOLIBC_STDLIB_H
+@@ -2471,6 +2472,7 @@ int write_cache_pages(struct address_space *mapping,
  
- #include "std.h"
-+#include "crt.h"
- #include "arch.h"
- #include "types.h"
- #include "sys.h"
-diff --git a/tools/include/nolibc/sys.h b/tools/include/nolibc/sys.h
-index 2c302f3feb71..b6c33c40c037 100644
---- a/tools/include/nolibc/sys.h
-+++ b/tools/include/nolibc/sys.h
-@@ -24,6 +24,7 @@
- #include <linux/reboot.h> /* for LINUX_REBOOT_* */
- #include <linux/prctl.h>
- 
-+#include "crt.h"
- #include "arch.h"
- #include "errno.h"
- #include "types.h"
-diff --git a/tools/include/nolibc/time.h b/tools/include/nolibc/time.h
-index 84655361b9ad..bbe8f9aa3e9b 100644
---- a/tools/include/nolibc/time.h
-+++ b/tools/include/nolibc/time.h
-@@ -8,6 +8,7 @@
- #define _NOLIBC_TIME_H
- 
- #include "std.h"
-+#include "crt.h"
- #include "arch.h"
- #include "types.h"
- #include "sys.h"
-diff --git a/tools/include/nolibc/unistd.h b/tools/include/nolibc/unistd.h
-index e38f3660c051..f1677224bb5a 100644
---- a/tools/include/nolibc/unistd.h
-+++ b/tools/include/nolibc/unistd.h
-@@ -8,6 +8,7 @@
- #define _NOLIBC_UNISTD_H
- 
- #include "std.h"
-+#include "crt.h"
- #include "arch.h"
- #include "types.h"
- #include "sys.h"
+ 			trace_wbc_writepage(wbc, inode_to_bdi(mapping->host));
+ 			error = writepage(folio, wbc, data);
++			nr = folio_nr_pages(folio);
+ 			if (unlikely(error)) {
+ 				/*
+ 				 * Handle errors according to the type of
+@@ -2489,8 +2491,7 @@ int write_cache_pages(struct address_space *mapping,
+ 					error = 0;
+ 				} else if (wbc->sync_mode != WB_SYNC_ALL) {
+ 					ret = error;
+-					done_index = folio->index +
+-						folio_nr_pages(folio);
++					done_index = folio->index + nr;
+ 					done = 1;
+ 					break;
+ 				}
+@@ -2504,7 +2505,8 @@ int write_cache_pages(struct address_space *mapping,
+ 			 * keep going until we have written all the pages
+ 			 * we tagged for writeback prior to entering this loop.
+ 			 */
+-			if (--wbc->nr_to_write <= 0 &&
++			wbc->nr_to_write -= nr;
++			if (wbc->nr_to_write <= 0 &&
+ 			    wbc->sync_mode == WB_SYNC_NONE) {
+ 				done = 1;
+ 				break;
 -- 
-2.25.1
+2.39.2
 
