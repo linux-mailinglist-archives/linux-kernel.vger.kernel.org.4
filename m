@@ -2,122 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D564741173
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 14:44:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 107F6741145
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 14:39:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232096AbjF1Mko (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 08:40:44 -0400
-Received: from mx0b-0031df01.pphosted.com ([205.220.180.131]:7312 "EHLO
-        mx0b-0031df01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232208AbjF1Mh5 (ORCPT
+        id S229813AbjF1MgT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 08:36:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39980 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231214AbjF1MgF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 08:37:57 -0400
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35S8hwfV019656;
-        Wed, 28 Jun 2023 12:37:41 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=qcppdkim1;
- bh=orV3xaRgOXdBv+EvZhahI6WQdstYeA90CZqOQkv6cLI=;
- b=UkwnUQPzsvBy/N+7oBJ1VdTYqGgjVAQ70vfr1gECSNgCOZRfSiS5hMP42KYlrUYylgD6
- /OJU1KE8h0ljrxHe67E7qXGcUvGotbUze+XittlcOXVHIbyodTjAwG5xNBw1rGX5dLtj
- SU9goPMK1v4ufPtn34pZDdnUxIynyeGoR00i3sfyqXYbs+Q9JPpNzkK0uZD8x2chWaqE
- jt3ZnTU3DNIuOXThieOJ+mkvbntdigmlV1B1dXZFhqKY7fqYD9EQg7SNoBBYNRaMXIW+
- ntX9fQ8bsRl0gb9jW1B5FTBle9vlctw3Sk9AlfZB7pqwcGb2ileF5QCPHd1v3N9XFdbC +Q== 
-Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rg7x3skw1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 28 Jun 2023 12:37:40 +0000
-Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
-        by NASANPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35SCbdFH010228
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 28 Jun 2023 12:37:39 GMT
-Received: from hu-mojha-hyd.qualcomm.com (10.80.80.8) by
- nasanex01c.na.qualcomm.com (10.45.79.139) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Wed, 28 Jun 2023 05:37:33 -0700
-From:   Mukesh Ojha <quic_mojha@quicinc.com>
-To:     <corbet@lwn.net>, <agross@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
-        <keescook@chromium.org>, <tony.luck@intel.com>,
-        <gpiccoli@igalia.com>, <mathieu.poirier@linaro.org>,
-        <catalin.marinas@arm.com>, <will@kernel.org>,
-        <linus.walleij@linaro.org>, <andy.shevchenko@gmail.com>
-CC:     <linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-hardening@vger.kernel.org>,
-        <linux-remoteproc@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-gpio@vger.kernel.org>,
-        "Mukesh Ojha" <quic_mojha@quicinc.com>
-Subject: [PATCH v4 21/21] firmware: qcom_scm: Add multiple download mode support
-Date:   Wed, 28 Jun 2023 18:04:48 +0530
-Message-ID: <1687955688-20809-22-git-send-email-quic_mojha@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1687955688-20809-1-git-send-email-quic_mojha@quicinc.com>
-References: <1687955688-20809-1-git-send-email-quic_mojha@quicinc.com>
+        Wed, 28 Jun 2023 08:36:05 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08BA730E6
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 05:36:03 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id 4fb4d7f45d1cf-51d9124e1baso5153199a12.2
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 05:36:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1687955761; x=1690547761;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=GmuFganyxYV9oTk/s8YFRwqFcz+cn6L4jtzUfYMJZfY=;
+        b=HFoww3PY8H+PN1nGnfWDLVOYQs0OS9HmgPffbN7DsNnVsz/q+/QWgnM7dfndpE9592
+         H4Ohm4GbtuncosDi+CEZRMZKnnC63W8q+3S8F6W14WR0FHgtExqVzmqg+b0Re4PTnH8F
+         oe42jT2cv9MfubVMh9KYWFPaU7BTt5gaKUo0ycumz2biccHIvQOglMETo3s4VCzrynhq
+         QF08CoIue2oL9x6g8nhGGNqWv9F0cn/Q5qMpAh4shCAQ1LsjhLhSXa9RcxeOwKHVXVH+
+         01b1I7W0jMad8SRLVJHB0YvcbM4r2C79YbdpLl9hLMum9Pxi6Tlx2bZEz7UzvqSZynzu
+         oJlA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687955761; x=1690547761;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=GmuFganyxYV9oTk/s8YFRwqFcz+cn6L4jtzUfYMJZfY=;
+        b=ciS7qpOw/nptrIXgtKEc54jRrZVZW/j/0s68io77VULxKCPBbqcYddm9MqVgKbIymj
+         b1rW/XVu5kWOpPE1i7DwgpBVdii5vP2j8SaTs+fhyNl7kV2g0HPZM/mlSybDihpvokcq
+         TWMXkKG+AaR/YpQf3V+zFKO4STYy/CB4jcIpzar8iQjMFPYF5zbPtT2XOUhLKL+TGdgX
+         CcEcTpSp7FopJ0IifxcnfBbDFhiYl2TIN8FtRmpCdy9ZYJUDnOfEurBo3ieTEEeqgGQA
+         g5InL/wqxg/zF0uTAo67MR1k4siDseZy+nsAzKAyt5pGsl0KktJSqb8P541o19+08ky9
+         TpAA==
+X-Gm-Message-State: AC+VfDyaFJwBK32lVDkb94upvgF+D7EEK9vJP92KExjoTHz3ewrf5heW
+        h2V4lOudpboT0nBPi+QC/zpwcXK06AFYpDWwBacQWA==
+X-Google-Smtp-Source: ACHHUZ6D5ytOq1YfewFvAI1UJcz0ckd29b9U37Gp9+k5NYwHiOF0WE7/VKoEvgA9157hRVp3LxMy0w6dT0lJOIyGd1o=
+X-Received: by 2002:a05:6402:10c4:b0:514:9e91:f54 with SMTP id
+ p4-20020a05640210c400b005149e910f54mr23990257edu.26.1687955761447; Wed, 28
+ Jun 2023 05:36:01 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01c.na.qualcomm.com (10.45.79.139)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: 7N0NHCXx1HtIlnlWstC82DtCdSHMY6m1
-X-Proofpoint-GUID: 7N0NHCXx1HtIlnlWstC82DtCdSHMY6m1
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-06-28_08,2023-06-27_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 impostorscore=0
- spamscore=0 priorityscore=1501 suspectscore=0 malwarescore=0 mlxscore=0
- adultscore=0 mlxlogscore=999 lowpriorityscore=0 phishscore=0 bulkscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2305260000
- definitions=main-2306280111
+References: <8e785777-03aa-99e1-d20e-e956f5685be6@huawei.com>
+ <87mt18it1y.ffs@tglx> <68baeac9-9fa7-5594-b5e7-4baf8ac86b77@huawei.com>
+ <ba352e83-b8b1-d900-9c1f-56b8c8a8b8fb@huawei.com> <CAKfTPtBoe_jRn-EMsQxssQ4BcveT+Qcd+GmsRbQEXQDGfzFOMg@mail.gmail.com>
+ <875y774wvp.ffs@tglx>
+In-Reply-To: <875y774wvp.ffs@tglx>
+From:   Vincent Guittot <vincent.guittot@linaro.org>
+Date:   Wed, 28 Jun 2023 14:35:50 +0200
+Message-ID: <CAKfTPtAzTy4KPrBNRA4cMeTonxn5EKLEAg0b9iH5ecJkAMEStw@mail.gmail.com>
+Subject: Re: [Question] report a race condition between CPU hotplug state
+ machine and hrtimer 'sched_cfs_period_timer' for cfs bandwidth throttling
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     Xiongfeng Wang <wangxiongfeng2@huawei.com>, vschneid@redhat.com,
+        Phil Auld <pauld@redhat.com>, vdonnefort@google.com,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Wei Li <liwei391@huawei.com>,
+        "liaoyu (E)" <liaoyu15@huawei.com>, zhangqiao22@huawei.com,
+        Peter Zijlstra <peterz@infradead.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Ingo Molnar <mingo@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+        lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently, scm driver only supports full dump when download
-mode is selected. Add support to enable minidump as well as
-enable it along with fulldump.
+On Wed, 28 Jun 2023 at 14:03, Thomas Gleixner <tglx@linutronix.de> wrote:
+>
+> On Tue, Jun 27 2023 at 18:46, Vincent Guittot wrote:
+> > On Mon, 26 Jun 2023 at 10:23, Xiongfeng Wang <wangxiongfeng2@huawei.com> wrote:
+> >> > diff --cc kernel/sched/fair.c
+> >> > index d9d6519fae01,bd6624353608..000000000000
+> >> > --- a/kernel/sched/fair.c
+> >> > +++ b/kernel/sched/fair.c
+> >> > @@@ -5411,10 -5411,16 +5411,15 @@@ void start_cfs_bandwidth(struct cfs_ban
+> >> >   {
+> >> >         lockdep_assert_held(&cfs_b->lock);
+> >> >
+> >> > -       if (cfs_b->period_active)
+> >> > +       if (cfs_b->period_active) {
+> >> > +               struct hrtimer_clock_base *clock_base = cfs_b->period_timer.base;
+> >> > +               int cpu = clock_base->cpu_base->cpu;
+> >> > +               if (!cpu_active(cpu) && cpu != smp_processor_id())
+> >> > +                       hrtimer_start_expires(&cfs_b->period_timer,
+> >> > HRTIMER_MODE_ABS_PINNED);
+> >> >                 return;
+> >> > +       }
+> >
+> > I have been able to reproduce your problem and run your fix on top. I
+> > still wonder if there is a
+> > Could we have a helper from hrtimer to get the cpu of the clock_base ?
+>
+> No, because this is fundamentally wrong.
+>
+> If the CPU is on the way out, then the scheduler hotplug machinery
+> has to handle the period timer so that the problem Xiongfeng analyzed
+> does not happen in the first place.
 
-Signed-off-by: Mukesh Ojha <quic_mojha@quicinc.com>
----
- drivers/firmware/qcom_scm.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+But the hrtimer was enqueued before it starts to offline the cpu
+Then, hrtimers_dead_cpu should take care of migrating the hrtimer out
+of the outgoing cpu but :
+- it must run on another target cpu to migrate the hrtimer.
+- it runs in the context of the caller which can be throttled.
 
-diff --git a/drivers/firmware/qcom_scm.c b/drivers/firmware/qcom_scm.c
-index 946cb0f76a17..52e3b613a1af 100644
---- a/drivers/firmware/qcom_scm.c
-+++ b/drivers/firmware/qcom_scm.c
-@@ -31,6 +31,8 @@ static u32 download_mode;
- #define SCM_HAS_BUS_CLK		BIT(2)
- 
- #define QCOM_DOWNLOAD_FULLDUMP		 0x1
-+#define QCOM_DOWNLOAD_MINIDUMP		 0x2
-+#define QCOM_DOWNLOAD_BOTHDUMP		 (QCOM_DOWNLOAD_FULLDUMP | QCOM_DOWNLOAD_MINIDUMP)
- #define QCOM_DOWNLOAD_NODUMP		 0x0
- #define QCOM_DOWNLOAD_MODE_SHIFT	   4
- #define QCOM_DOWNLOAD_MODE_MASK		0x30
-@@ -85,6 +87,8 @@ static const char * const qcom_scm_convention_names[] = {
- static const char * const download_mode_name[] = {
- 	[QCOM_DOWNLOAD_NODUMP]	 = "off",
- 	[QCOM_DOWNLOAD_FULLDUMP] = "full",
-+	[QCOM_DOWNLOAD_MINIDUMP] = "mini",
-+	[QCOM_DOWNLOAD_BOTHDUMP] = "full,mini",
- };
- 
- static struct qcom_scm *__scm;
-@@ -1465,7 +1469,7 @@ static const struct kernel_param_ops download_mode_param_ops = {
- 
- module_param_cb(download_mode, &download_mode_param_ops, NULL, 0644);
- MODULE_PARM_DESC(download_mode,
--		"download mode: off/full are acceptable values");
-+		"download mode: off/full/mini/full,mini are acceptable values");
- 
- static int qcom_scm_probe(struct platform_device *pdev)
- {
--- 
-2.7.4
+>
+> sched_cpu_wait_empty() would be the obvious place to cleanup armed CFS
+> timers, but let me look into whether we can migrate hrtimers early in
+> general.
 
+but for that we must check if the timer is enqueued on the outgoing
+cpu and we then need to choose a target cpu
+
+>
+> Aside of that the above is wrong by itself.
+>
+>         if (cfs_b->period_active)
+>                 hrtimer_start_expires(&cfs_b->period_timer, HRTIMER_MODE_ABS_PINNED);
+>
+> This only ends up on the outgoing CPU if either:
+>
+>    1) The code runs on the outgoing CPU
+>
+> or
+>
+>    2) The hrtimer is concurrently executing the hrtimer callback on the
+>       outgoing CPU.
+>
+> So this:
+>
+>         if (cfs_b->period_active) {
+>                 struct hrtimer_clock_base *clock_base = cfs_b->period_timer.base;
+>                 int cpu = clock_base->cpu_base->cpu;
+>
+>                 if (!cpu_active(cpu) && cpu != smp_processor_id())
+>                         hrtimer_start_expires(&cfs_b->period_timer, HRTIMER_MODE_ABS_PINNED);
+>               return;
+>       }
+>
+> only works, if
+>
+>   1) The code runs _not_ on the outgoing CPU
+>
+> and
+>
+>   2) The hrtimer is _not_ concurrently executing the hrtimer callback on
+>      the outgoing CPU.
+>
+>      If the callback is executing (it spins on cfs_b->lock), then the
+>      timer is requeued on the outgoing CPU. Not what you want, right?
+>
+> Plus accessing hrtimer->clock_base->cpu_base->cpu lockless is fragile at
+> best.
+>
+> Thanks,
+>
+>         tglx
