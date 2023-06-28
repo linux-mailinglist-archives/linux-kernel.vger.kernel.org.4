@@ -2,111 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 808D17418A1
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 21:07:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 608537418A9
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 21:08:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231622AbjF1TGj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 15:06:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55074 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231996AbjF1TGU (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 15:06:20 -0400
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44BB6E4;
-        Wed, 28 Jun 2023 12:06:19 -0700 (PDT)
-Received: by mail-pj1-x102c.google.com with SMTP id 98e67ed59e1d1-263253063f9so1442262a91.1;
-        Wed, 28 Jun 2023 12:06:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687979178; x=1690571178;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=paHX3Iae9acGKLhSH26DZU14Gz3gF8upgejcn3o6KiI=;
-        b=C0BRN//vSTkyhBmMaTR0CaSA9MrlSPGVuT9kb0dUkTysLD4LneAvC1r0kDdQDBBaBM
-         4nXoPQK+CLs4lEXRyenQXJ8xkQUqPRGK5MXx0voqWXx2F+iCdgB++5YppcQNg35jpyH4
-         RO19u5zf2nvmTsPVNDKULIX+llwl+VaBHbqQIP6ezZEFlzIvyEQ7V13P1XceoaW0YO2E
-         x1n0f6XGFXrhlNvcYUhPmlFmbmXnNdwmlGXCpcb5MGIidTxzUmxo45niZcC4ios9MZ3j
-         GxROEmwsUJ/Cni6Mk/tmxMselQYvG1Vu2ztToJScRHLNXN4kHiPIEnoZGF9mo5BoDyS0
-         ToFQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687979178; x=1690571178;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=paHX3Iae9acGKLhSH26DZU14Gz3gF8upgejcn3o6KiI=;
-        b=D+QkDeQhBwWiQUHlXfW0BeuTxOSe4b7hkUxKbtnDvnAC7S4NTI2DzOHjJsuIZCISkg
-         /h2KSk9/5f6A8jtJSY06fk81XY6qKG017iycWDEVtHAAlM6dK7cf/Z9vAuZ89M+wPh2J
-         ZY5RKlGPqso5IfhyGJBEVt/sdCPJAoVJXM7epOU2XNtACslxi+4THiaN2pSbw7dnP5O1
-         XG1n/R3q90Ke35/dtTQzWCnOyiQKi0ww+o/eMcc8vymg0INJo5Qo/a9R/48+I3Qp6PSh
-         8T3tWh8vL35OTwVho08L74MDFdHDt8bGxea+sIEIfsLD6BYvSDvjFJKVjg5msqlZ4WTd
-         3qUw==
-X-Gm-Message-State: AC+VfDy+xim2QtOojwYBR+QA1sx5t9N7qF5Y/GG8nZc65/59d5ASu2Kl
-        eCGmbx5llc/Xi3pHq/DQ7HU=
-X-Google-Smtp-Source: ACHHUZ6LJ12DxLlblcInWmUxgPjgvhzSgwDwlucA/Gew9Vz3zYm3H0OAMop0dj5mjUNiSt4xMfAAIA==
-X-Received: by 2002:a17:90b:3906:b0:263:945:61ae with SMTP id ob6-20020a17090b390600b00263094561aemr7150878pjb.23.1687979178266;
-        Wed, 28 Jun 2023 12:06:18 -0700 (PDT)
-Received: from google.com ([2620:15c:9d:2:95ec:4c43:368:77b0])
-        by smtp.gmail.com with ESMTPSA id p16-20020a17090adf9000b0025bf330903esm3986824pjv.1.2023.06.28.12.06.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Jun 2023 12:06:17 -0700 (PDT)
-Date:   Wed, 28 Jun 2023 12:06:14 -0700
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     Jiri Valek - 2N <jiriv@axis.com>
-Cc:     krzysztof.kozlowski+dt@linaro.org, devicetree@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-        robh+dt@kernel.org, u.kleine-koenig@pengutronix.de
-Subject: Re: [PATCH v4 2/2] Input: cap11xx - add advanced sensitivity settings
-Message-ID: <ZJyEpuat1A8Z+Ft4@google.com>
-References: <20230627065316.1065911-1-jiriv@axis.com>
- <20230627065316.1065911-3-jiriv@axis.com>
+        id S232201AbjF1THa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 15:07:30 -0400
+Received: from bg4.exmail.qq.com ([43.154.54.12]:53345 "EHLO bg4.exmail.qq.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232160AbjF1THG (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 28 Jun 2023 15:07:06 -0400
+X-QQ-mid: bizesmtp79t1687979217ti593xid
+Received: from linux-lab-host.localdomain ( [116.30.129.193])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Thu, 29 Jun 2023 03:06:55 +0800 (CST)
+X-QQ-SSF: 01200000000000D0W000000A0000000
+X-QQ-FEAT: D2GZf6M6C/jblY5+ez24uRSJrc6onlFKbVGlqPu9gz4C5VaEsHfPYV/+NbYNT
+        M1xzvZvpUGVdU4m30V11Y032mXFLtuUBz/mtlNUDT78V8fQ/lc5cTGseyv0F/f0q/eI4FDb
+        B2FbUnR/M5UMRVoi8g9xzAxpolnLJoudK9vMmMuJQ7xcbx68I+AHVvjOFo7ArkDBmY72K17
+        WpFiuGChYRn7DpN7ps7SrQCzwKzxAB0mOSMBUknzBEI0mP+u/OoB2NsfF4nMJXSIwPhcSgK
+        uX/3Z74F0cX7AiF4lVQeTGYbg+K8doDPqbNQ/9SiL4iEP7soaPyeIgLaT2FvFSs8jnE9qSo
+        Xd1YNJ9b6NQ4Od4okJQhNXhT4z0+qHgCdh0Nj/WbL1NR+KM2wI=
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 18249731880678126887
+From:   Zhangjin Wu <falcon@tinylab.org>
+To:     thomas@t-8ch.de, w@1wt.eu
+Cc:     falcon@tinylab.org, arnd@arndb.de, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org
+Subject: [PATCH v1 11/11] tools/nolibc: s390: shrink _start with _start_c
+Date:   Thu, 29 Jun 2023 03:06:44 +0800
+Message-Id: <2a63942b938ce0f016f3411f7c0d4b0c0d512e74.1687976753.git.falcon@tinylab.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <cover.1687976753.git.falcon@tinylab.org>
+References: <cover.1687976753.git.falcon@tinylab.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230627065316.1065911-3-jiriv@axis.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-        lindbergh.monkeyblade.net
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrsz:qybglogicsvrsz3a-3
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jiri,
+Let's move most of the _start operations to _start_c().
 
-On Tue, Jun 27, 2023 at 08:53:16AM +0200, Jiri Valek - 2N wrote:
-> @@ -439,7 +589,7 @@ static int cap11xx_i2c_probe(struct i2c_client *i2c_client)
->  	priv->idev->id.bustype = BUS_I2C;
->  	priv->idev->evbit[0] = BIT_MASK(EV_KEY);
->  
-> -	if (of_property_read_bool(node, "autorepeat"))
-> +	if (of_property_read_bool(dev->of_node, "autorepeat"))
+Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
+---
+ tools/include/nolibc/arch-s390.h | 35 ++++----------------------------
+ 1 file changed, 4 insertions(+), 31 deletions(-)
 
-It would be good to have this driver switched from of_property_*() to
-device_property_() API.
-
->  		__set_bit(EV_REP, priv->idev->evbit);
->  
->  	for (i = 0; i < cap->num_channels; i++)
-> @@ -474,14 +624,8 @@ static int cap11xx_i2c_probe(struct i2c_client *i2c_client)
->  	if (error)
->  		return error;
->  
-> -	irq = irq_of_parse_and_map(node, 0);
-> -	if (!irq) {
-> -		dev_err(dev, "Unable to parse or map IRQ\n");
-> -		return -ENXIO;
-> -	}
-> -
-> -	error = devm_request_threaded_irq(dev, irq, NULL, cap11xx_thread_func,
-> -					  IRQF_ONESHOT, dev_name(dev), priv);
-> +	error = devm_request_threaded_irq(dev, i2c_client->irq, NULL,
-> +					cap11xx_thread_func, IRQF_ONESHOT, dev_name(dev), priv);
-
-I would prefer this change be a separate patch.
-
-Thanks.
-
+diff --git a/tools/include/nolibc/arch-s390.h b/tools/include/nolibc/arch-s390.h
+index 5139e0e37e56..a28f94aa28ca 100644
+--- a/tools/include/nolibc/arch-s390.h
++++ b/tools/include/nolibc/arch-s390.h
+@@ -137,41 +137,14 @@
+ 	_arg1;									\
+ })
+ 
+-char **environ __attribute__((weak));
+-const unsigned long *_auxv __attribute__((weak));
+-
+ /* startup code */
+ void __attribute__((weak,noreturn,optimize("omit-frame-pointer"))) __no_stack_protector _start(void)
+ {
+ 	__asm__ volatile (
+-		"lg	%r2,0(%r15)\n"		/* argument count */
+-		"la	%r3,8(%r15)\n"		/* argument pointers */
+-
+-		"xgr	%r0,%r0\n"		/* r0 will be our NULL value */
+-		/* search for envp */
+-		"lgr	%r4,%r3\n"		/* start at argv */
+-		"0:\n"
+-		"clg	%r0,0(%r4)\n"		/* entry zero? */
+-		"la	%r4,8(%r4)\n"		/* advance pointer */
+-		"jnz	0b\n"			/* no -> test next pointer */
+-						/* yes -> r4 now contains start of envp */
+-		"larl	%r1,environ\n"
+-		"stg	%r4,0(%r1)\n"
+-
+-		/* search for auxv */
+-		"lgr	%r5,%r4\n"		/* start at envp */
+-		"1:\n"
+-		"clg	%r0,0(%r5)\n"		/* entry zero? */
+-		"la	%r5,8(%r5)\n"		/* advance pointer */
+-		"jnz	1b\n"			/* no -> test next pointer */
+-		"larl	%r1,_auxv\n"		/* yes -> store value in _auxv */
+-		"stg	%r5,0(%r1)\n"
+-
+-		"aghi	%r15,-160\n"		/* allocate new stackframe */
+-		"xc	0(8,%r15),0(%r15)\n"	/* clear backchain */
+-		"brasl	%r14,main\n"		/* ret value of main is arg to exit */
+-		"lghi	%r1,1\n"		/* __NR_exit */
+-		"svc	0\n"
++		"lgr	%r2, %r15\n"		/* initialize stack protector	*/
++		"aghi	%r15, -160\n"		/* allocate new stackframe	*/
++		"xc	0(8,%r15), 0(%r15)\n"	/* clear backchain		*/
++		"brasl	%r14, _start_c\n"	/* transfer to c runtime	*/
+ 	);
+ 	__builtin_unreachable();
+ }
 -- 
-Dmitry
+2.25.1
+
