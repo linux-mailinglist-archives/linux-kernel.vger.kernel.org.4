@@ -2,327 +2,222 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA23B7412A1
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 15:37:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4650741286
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 15:33:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232180AbjF1NhD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 09:37:03 -0400
-Received: from mx0b-00069f02.pphosted.com ([205.220.177.32]:4698 "EHLO
-        mx0b-00069f02.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232042AbjF1Ngq (ORCPT
+        id S229823AbjF1Nci (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 09:32:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47434 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232031AbjF1Nbv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 09:36:46 -0400
-Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35SBTAjI003640;
-        Wed, 28 Jun 2023 13:30:59 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=corp-2023-03-30;
- bh=xcIR9+7IkYg8hVo+LNN0seB38kT5QlJ+/NVm/siVnCo=;
- b=B7iFCq4AiRJoab2n565ObD7zPfsEWNjMbOBpi6NAQvaSJKVw2SHfwYNSS/MOQJRtXLYb
- xFhYZGRBT8u/JrB91PeSRmuwMUbhFEvQpAShQDK2m/ndAygIzt0g1AFARDg+X1H2bCy6
- ppXQ9xFm73lZ6ZCp2s90yaOIHbUpcoV5+3uo4Dr5M1x+UtHTBpyizCrHeQITenvg5WTh
- gqR0VJhx/jcsxXDEFuai+LEDIArJbaKdCpGd43XvgBtEmpODciqBGa/JExy6LbDWXGg7
- isTZ0r9QTfELcHNFoXdI085/oQW7wPXNhY71QXYrJfHb5g0lOri4oKktCBFiSMTw4UEq qQ== 
-Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3rdq937gpf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 28 Jun 2023 13:30:58 +0000
-Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 35SDAuRI029607;
-        Wed, 28 Jun 2023 13:30:57 GMT
-Received: from nam12-dm6-obe.outbound.protection.outlook.com (mail-dm6nam12lp2173.outbound.protection.outlook.com [104.47.59.173])
-        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3rdpx60t3r-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 28 Jun 2023 13:30:57 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=aeveih347uUKwE1PDfVU57+tr4eH5JKzsVVt/v8abvGjwL+F1UBL1P7Z26LAGM6O+120ol04oUrZ5O2LuOEZCJo+GR1D5ShYXjsm390q/wvaW/E1AspsWfVd6rVGqf3JmbQeo2op4v7GGrD/uIO6us13R4Pfuc8chXkNTqKE59zWdJU2VCUoR8u2B5Crj0ZHsVD7FMOEawrd++srGfo+mQ8ZNe8g7koD6hQsWWzPdbZp1yasd+wBZ3uM6AwEdAAs+EWlKGw+okOWnGeCl6gLOBOb6ZYEeIAuBeG9y6WruuNhDxbN9XrhXomSMQZXysRp6F12MmQ0ql6VpJYArhLf+A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=xcIR9+7IkYg8hVo+LNN0seB38kT5QlJ+/NVm/siVnCo=;
- b=mXHeitUqH2kTcf/MfQZu7aWw91qXQpiCJazn4bCa0PA6vWp2JbvB6SaLV1t+ZSC9o0aZTSt/1qoIaqsiTMblzNE1p0SYA9FEb1X3uBhSFCycy5Z+99xNOZqqEBvtwmEzZRCKb2VAV6D5f7SCnCj1U2kx83zmm+it0a9WfTU2PuhE9wrLcQJ4a8SByOtH84zy9B7aWofBlqLI8DEaIVJR4ywd9i0XrNsuDi1Egg/33rCbER64jzOH1srbwZymPuMJqme8dhYhqxuhGgXbe1kRiRnkfAQkKOK99jZ6Hd9u6CtcP5CqKiytRjr78TOaND0g1EJ1fbBSC+5MeL9BvNj/mw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
+        Wed, 28 Jun 2023 09:31:51 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AF792D66
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 06:30:59 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id 4fb4d7f45d1cf-51d9128494cso4136607a12.0
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 06:30:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=xcIR9+7IkYg8hVo+LNN0seB38kT5QlJ+/NVm/siVnCo=;
- b=hU8IxlnpBnRF7rbSH+e5c7Fhvh7R1YCUVx9ZbWMZW1yM+EYv2ToEBUoPUDvEZUpTsY/mme7fIvgqzAtzSdfZ3O3E04XeKODyBOZetKAighM6wSbg7xYEmkFrbBg9ZLISVbBjMfp+HuO1iYD1SF9jClyctiWcOXe1aMv+5rtpoqA=
-Received: from CO1PR10MB4531.namprd10.prod.outlook.com (2603:10b6:303:6c::22)
- by DS7PR10MB5166.namprd10.prod.outlook.com (2603:10b6:5:3a4::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.26; Wed, 28 Jun
- 2023 13:30:53 +0000
-Received: from CO1PR10MB4531.namprd10.prod.outlook.com
- ([fe80::8b8f:b4b1:bb78:b048]) by CO1PR10MB4531.namprd10.prod.outlook.com
- ([fe80::8b8f:b4b1:bb78:b048%5]) with mapi id 15.20.6521.024; Wed, 28 Jun 2023
- 13:30:53 +0000
-Message-ID: <8158b5de-c2c5-2b4b-a2c4-5ace9a17a99b@oracle.com>
-Date:   Wed, 28 Jun 2023 08:30:42 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v3 11/13] riscv/kexec: refactor for kernel/Kconfig.kexec
-Content-Language: en-US
-To:     Conor Dooley <conor.dooley@microchip.com>
-Cc:     linux@armlinux.org.uk, catalin.marinas@arm.com, will@kernel.org,
-        chenhuacai@kernel.org, geert@linux-m68k.org,
-        tsbogend@alpha.franken.de, James.Bottomley@hansenpartnership.com,
-        deller@gmx.de, ysato@users.sourceforge.jp, dalias@libc.org,
-        glaubitz@physik.fu-berlin.de, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-ia64@vger.kernel.org, loongarch@lists.linux.dev,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, kernel@xen0n.name, mpe@ellerman.id.au,
-        npiggin@gmail.com, christophe.leroy@csgroup.eu,
-        paul.walmsley@sifive.com, palmer@dabbelt.com,
-        aou@eecs.berkeley.edu, hca@linux.ibm.com, gor@linux.ibm.com,
-        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
-        svens@linux.ibm.com, hpa@zytor.com, keescook@chromium.org,
-        paulmck@kernel.org, peterz@infradead.org, frederic@kernel.org,
-        akpm@linux-foundation.org, ardb@kernel.org,
-        samitolvanen@google.com, juerg.haefliger@canonical.com,
-        arnd@arndb.de, rmk+kernel@armlinux.org.uk,
-        linus.walleij@linaro.org, sebastian.reichel@collabora.com,
-        rppt@kernel.org, kirill.shutemov@linux.intel.com,
-        anshuman.khandual@arm.com, ziy@nvidia.com, masahiroy@kernel.org,
-        ndesaulniers@google.com, mhiramat@kernel.org, ojeda@kernel.org,
-        thunder.leizhen@huawei.com, xin3.li@intel.com, tj@kernel.org,
-        gregkh@linuxfoundation.org, tsi@tuyoix.net, bhe@redhat.com,
-        hbathini@linux.ibm.com, sourabhjain@linux.ibm.com,
-        boris.ostrovsky@oracle.com, konrad.wilk@oracle.com
-References: <20230626161332.183214-1-eric.devolder@oracle.com>
- <20230626161332.183214-12-eric.devolder@oracle.com>
- <20230628-urologist-faction-42ebe5372206@wendy>
-From:   Eric DeVolder <eric.devolder@oracle.com>
-In-Reply-To: <20230628-urologist-faction-42ebe5372206@wendy>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SJ0PR03CA0015.namprd03.prod.outlook.com
- (2603:10b6:a03:33a::20) To CO1PR10MB4531.namprd10.prod.outlook.com
- (2603:10b6:303:6c::22)
+        d=linaro.org; s=google; t=1687959058; x=1690551058;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Qi8ZWOlQKnb6tZLEsWPYx0hcKfZEPw/vCZpYrdYVcHY=;
+        b=xY6j3vE/DhPV808atFTXH0F0dDTZ2eeA25/Oq+LDFlOpHHG6UF2wkfZDdYKQmpo3Kp
+         RhCuW3ew1HdM8jzbeFkVMn69gxCeB1HPr7AXA5KUP4JNk6Uc4iSEc1HGYf3Wv33cqRTQ
+         hQJslfR3Okiy6Mt/h/JZrswZc72F77CcStnCkklgcEAvwWLGyDtVDQrmlLgRb/5juocl
+         ItW9YSylFzgW1ojIzBCvjvTsZR36269MOxz5zukDGf7N6NXxml4w5pZHzvuPwtu1pJKX
+         uy/NgvkGkJOzwEvLy+pREsowL56Uk17cAAlN6H0XGAYb0JtvMTHmi6j2iTPAV4DYVngJ
+         sJZg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687959058; x=1690551058;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Qi8ZWOlQKnb6tZLEsWPYx0hcKfZEPw/vCZpYrdYVcHY=;
+        b=Cf/xtGJPF/Z1GTXxjSKNzehRciVaxHYr3lIPKMhAaKPhTkV8rSnBgJBwWEgam9sBuu
+         jgsmMdwsm4wgt91AU4JTfPfsL8i30H6yukvyhRrVtEPga8ZoRisj1lZ3g+KDxrlRs/gu
+         H1gs98simV+XImzYP1PGxr17h/Tp9RUFWgjmzPSNo0C2ierozfAa1aePWbEGo3oQIXSt
+         3YSsuO/AXJTRdY/qH+98CnVVFAHpSY6Q51L5bpKXi/0tZ0EEa8ryR6yBvSU4FtM4YMj+
+         qzguntI6UUh6o+xI6+Iqi2ZmvZLJpMllDx05ney7n3QdyfH6Fs6srrImSHIqaeUy4GI9
+         W1/A==
+X-Gm-Message-State: AC+VfDwtWWRtTFDgTNwidvyKARBWa8gZJA4K0+8n8Tz7R+qPzLzdjarx
+        iaMaZqzp0a0+8qQsGsuzFJODQ+8mr3o761Zd8xVJwQ==
+X-Google-Smtp-Source: ACHHUZ4CM3oFYWAHJiXiroqEZ4EG0120bWv4gvuncP5SHoKmvkoH/pvtMvaT8KnhO1GCMXS70uqxEwnk1n7PUmf5Czo=
+X-Received: by 2002:aa7:d947:0:b0:51a:468c:b46c with SMTP id
+ l7-20020aa7d947000000b0051a468cb46cmr24163859eds.30.1687959057683; Wed, 28
+ Jun 2023 06:30:57 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1PR10MB4531:EE_|DS7PR10MB5166:EE_
-X-MS-Office365-Filtering-Correlation-Id: 2821a4fd-9f1b-4999-2bed-08db77dbe55d
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: zV/pq6YnW3nCMf2W925/J71RpoglFBi7KV9BQS2Doy+7D3xkEVzt+RhRBGJTPElZtAD1XaK3YXya2bl1PmdwIOlzt+i3SsoB0mnUtnwwEH1EAXQs2b0aX7ENqgVluJK0bC/UXugKelwt2gYbVgIokKafZABpzz/jslnkOXfmfQ2K0ixdT9GVQCL89GGxQnxsYPgKQHfBblep3RG2K3k8TYVZM2DyuW5airj7Af0OZTTHtHs180lYl7GuIIOfpRe60Q+unKejClhF4Q4xY6aKVP1+qZX6eQNeM7fhWAiripb0B3bKRWMrPDais4JcHGjKQl3GhZxsdytT7VhpKyrdZNYc8Wqf97ZmR80H8eJ3tEzuRpdPZL4l8sRTLDaFYZ0HrcQPT4MOWVfWJvoaw2UoYIVyFUecJ3Qn9yPOQ2hORIYi+J60oqlQiDB7ofr9FWKg2ncaRNyRRKZB+uWSxKuVqVyvXbQiVlYuLnCJb6k5NDBPgsFj6tHXm3HNILl0zB13rimyDtQIgymAEVSOspbQY1kzOWNMHESq4Mgcztuqx/nnHlBwZ8nOriQ+Y0FglaVlmn0Hi2jxfC+wqmw6rnb+F4phYYS8EcF7ZZScBib7qxs9YgDxborFwT2kKAHZcMzuGkfHw5hxqisueGrR4eYklg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO1PR10MB4531.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(39860400002)(136003)(346002)(366004)(396003)(376002)(451199021)(38100700002)(36756003)(83380400001)(31696002)(86362001)(31686004)(2616005)(8936002)(6486002)(6666004)(41300700001)(66556008)(66946007)(66476007)(8676002)(316002)(53546011)(6916009)(26005)(4326008)(6512007)(107886003)(186003)(6506007)(478600001)(7406005)(2906002)(7366002)(5660300002)(7416002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?bU1CQVhtRmtkWkhNRS9tTFpCVytXdVhhVXBNSzAyaHhGcTg5VHlpTUhmSjlr?=
- =?utf-8?B?SDY1Z1VsOGo4Ylc1bmgzMExTbWlUSDNkN3hRWjUvVUJWM09rNVh0aFZIdDNx?=
- =?utf-8?B?NVpYR3MyNU11bVNYY3NqSTdvckdCRkdSQ25nS0h2R2FvR2MwaEJSU0hCMlhW?=
- =?utf-8?B?aW1jbzJkb21rVDM3emVKSHFNUEx6MVZydGdGVG1KblhRSlVORkJVMWs5aFlF?=
- =?utf-8?B?MTNBR0lJZ00zSHEvODR3T0gvRnA5cnJiQXFFSHZYM0N6eDlZU09vNHlEcDQ5?=
- =?utf-8?B?SVd4TlkrazYySmp1YjRxWk9oVkVBc3lHMWRKT1dmRmJtMk5RVnNtMmhrdndV?=
- =?utf-8?B?eVVnQkttU3JtRk4zRHhoUFZra0hMN1ozT1dxaUhDd3hvc3BEVnFjamZGSG5M?=
- =?utf-8?B?YzBJNGdqall3U0JoZ0hwQXdLeWJzZi9xL21qcWdwdGUrbTFtdGI5S3QvY25n?=
- =?utf-8?B?ZnFlelVvQ08zSUFnMFZoNjI4R2lmaFhDLytCbjUvMnhIOGVJZnlUdFFSeU50?=
- =?utf-8?B?SHBYTyt2UTk0T0wvU3dsQlo3a2t1WW1yQkhDcWFXQ1U3Q0FzZjIzaHA4MktH?=
- =?utf-8?B?YTBYS3FQYzJNanhFejJ3ZytwOGdSaXZ6ZXk0b0pHWXhUU1VhNnVYdlVJSjAy?=
- =?utf-8?B?TnY3L1pjMkJ6aUwyd2ViVC8rZHNIZjdXdCtmajk3eEpnalJuR01vaTZZbzZx?=
- =?utf-8?B?L2dldk9adzZydHQ1dHVRUW0yWmtjZlFqMUZKMEVTMm9lRUp0V2hyUDllTDBX?=
- =?utf-8?B?ellzL0JvMXJJZENScDhwQjJGUnBoYTNwNjFXQ1NKbHgxTWpURTdPRlJ3Tkdu?=
- =?utf-8?B?dWI2endTV3ZTa2ZFUS9zaDA5MEhhRXViRFl0UzJhbUMzdkQ0SGVkWkZaV3JO?=
- =?utf-8?B?YTVRTEJQVGtoOVprUlpUdGEzNGpTcUJqRG5FUGljTFBJY3JOZ0dEZ0ZEdlB4?=
- =?utf-8?B?Tk04RkZrb0VTWlk5UFVONUVrWU50OGV2cENTMm1YWEJBSUdYZ0l0QkxaV1R2?=
- =?utf-8?B?RTJkVGZtZ08yT1RCUEpjL2hjVlNacUxWMG1MZjdwMUtuSWwvSEw1V2dUQVJS?=
- =?utf-8?B?OTlQd1puQ2ZTcEtSc01xOUdQR3VPNVJHK2FicVhRMi9wZmdkY2o5UEZkV1Yr?=
- =?utf-8?B?ZW56MDFTaXpNUkhJN0o1MlpLWncvUnpIZFJ1R3VEbzg5THpMdng1aTNJMUY2?=
- =?utf-8?B?MmVnL3lPMVBuQXVzM2FtUExQOWJXSk5aN1NLK0RTeTlKd2ZGRDZuaHROTDBJ?=
- =?utf-8?B?NlJSUzRteEQ2VlRRNjRnNjlhR0g1Z2RXQW45Y2psTnRNQ2N6K3R5RGdHK28r?=
- =?utf-8?B?NDVYd0tzdDQrWkhjaFh0QWQwV0lDVFkwck0zR1A2aW80OVBzVFV3ajYxK29t?=
- =?utf-8?B?SEZDa0lpZnNHczErbjVEako0TXU2Qm9xdnNyaXRtdHdxZTM0MlVUVEpxejhL?=
- =?utf-8?B?VnlXSEk3bkU5TzhMRmg5RXlaV2FFY3YrRjQyVVE1enZLM2ZPSDhpUEpQVTlq?=
- =?utf-8?B?aWhLUFBjbExvcXVaekhRcTBwbk0rMSt0YjM2MEZwYlRiSEhDd2t5L3QxUzhi?=
- =?utf-8?B?cmw1YkJWUFA4R3NldWw2dWpHYlcwRU0ydEdNZXVPTDNSeFc5N05TWlpTSDJQ?=
- =?utf-8?B?bVpKYWxhY1UrTGg2ZFcybHJLenBPOWQ0Wk9iOTZ3UEhCNjhXNHJ3VjVXSEtY?=
- =?utf-8?B?ZE1IdEgwTGtTd1BVSVVETVBKTU9wZDg1cTRjclBLMXJBL1pDVG5rQkt6M05k?=
- =?utf-8?B?YXF1emkraFpBTWV6djliVi9ZcWluYm5Obm5IeVZLZjJIOTRGbUUySk02endM?=
- =?utf-8?B?TVZQQ1ZSL3dicDFKd1ZqQWlteXdxd2xnSk00MlNYall2ZGNsU0lSZWMrQjlD?=
- =?utf-8?B?VTE2S0N2N1BYT2sxNVQ3UGNQUGhGL1JuOHMySk1rQlEzbWxESm5XOHZSR2Vu?=
- =?utf-8?B?blFzTzhMRnN1dGlyeXR2T3J3cS9YV21YcFRuaGY5SXdha2ZxcDF2L2xsSlNE?=
- =?utf-8?B?S090SkNibVpoVXlsSFp3WTgvcEFtMmt2QkFpUmhHTHp5UllFclBReklRK1R0?=
- =?utf-8?B?Y1lMMjE0N20wOFRpVlpsU3pSdDNwZjVtbFpYTmJTemhxdmQ5bnVPVnkvQ3dC?=
- =?utf-8?B?VEVsVjhqMFR1SGlUSDJCZDltdmZOU0Znck1qTG02djlSMVRiZmhvcFdJTUpC?=
- =?utf-8?B?Unc9PQ==?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 2
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: =?utf-8?B?U1V3aUI3VkE2MWNRWjl6bVhIdFNSbXhyTkxTSWRyekR0ZFJwQUhOYW5MUG1U?=
- =?utf-8?B?QUtqdVQ0R3c1akFvejNIMHRWVXNjS0o2NjB4T1dKQ2tkeHQ3NkdKUi9uTEpU?=
- =?utf-8?B?YmF0OW4wUlpoUEphRHdneXE2bngzQk51TGFHQ3hOMHBuUEE0elg5UWlFaXNP?=
- =?utf-8?B?YnFqS3QzdGh4WWdyc1NSTUlEOHlTcjhsK0pBTDVEZ3pDS0ZBRFF2QzIvTHFa?=
- =?utf-8?B?R0JKcjVtUEwwOWluOFUrRThzdTkyK1dmNUxXQ0VVTitUeXR5NEZBNFd0S0Ja?=
- =?utf-8?B?WTBFS2twZDlDbGV1RWFiUUNwV0UveDBOU3JlVzFXNjJmS1NMRnoxZHRsVGpz?=
- =?utf-8?B?cnc3eXpNUTYyTFpPTElmZHVHZkNoZGJjREFWZWVudllxdytYSS9yQnk4TmNz?=
- =?utf-8?B?R0JxRndvTkloc09JNGwrRTZDN0F3Szl0SUk3MSt6N25kOS9VdkFYSFk3NlZ4?=
- =?utf-8?B?TUx6cURzdytVd2NBSjhvd0pLcTd4WmhVNEkxUUVBcFFpN1d4dVJEYkhJR3c4?=
- =?utf-8?B?aU4rTjE3dTl0VTJHZEtvVk40VTZheXRTVmhhckxZdjFpaXdYaDVac3Njbzl6?=
- =?utf-8?B?R1Z1eFduN1dNUHBzTkk5bmlrNFhUY0FQTkRCaUlIdFNhODF2TUluMlZUaDA1?=
- =?utf-8?B?Q3p5ZGRtSmhnRzlCcjU3ZGdxcTlCZk8vU1YrTTIvTmorc0JMQURmTUxxMy9Q?=
- =?utf-8?B?cHlRbG1WTy92UnFEcGhhVkl0blBGQ2xJUmU2eUJwWmZmRXZuUGVTNWVxVEsx?=
- =?utf-8?B?OXlvamdvQ3QvZFk0eDU3dEs1VXh4L0s4TjYzWFNmWWFJbTB4anN4VDh4dVZa?=
- =?utf-8?B?cmZCdGZ1Z1dzbVJyYkl5bUhZWnJONEFMWk04Qmw3aXdoQW1SUlNPSEdDSXBh?=
- =?utf-8?B?WTdIYUhhT2VzZlBWRVBEbDhMdlNvOE9GQi9TSWg2LzhVZkFkRExoekFlRmhl?=
- =?utf-8?B?MlhxTWJhQ3JyMldRQmdrNXhuQUFhT1hWVTdBdlZMUm9nbHJSZ3pvbnV4clBq?=
- =?utf-8?B?WjljUC9TMmNtL1BqSEl5UXNQTWVjUGNvbUoyT2RnUjJHUDA2VkJjZHRpQVBK?=
- =?utf-8?B?TzRXNW9HRjdMRHNlSE5VTkVlMlRmRnNHellBRjRlaFR2R3NVN1drRnFrdTNT?=
- =?utf-8?B?Z05PNDZVY3FsRkgzU1VXaFlwQW4xeWltUE5mV0t5dDdJSy95SDlvTWNjK0RX?=
- =?utf-8?B?aS82aWYyTmcvcmhqQjVPM0dOREhSN3VzaTh4Q2ovZlAzYVhWbng3UmNNVGlj?=
- =?utf-8?B?TFl6SHVjcWV2OEFvK1JjaXU3emJFN3FyZUpTUVM4Mk9GYzBtWStFWDNUYVBH?=
- =?utf-8?B?NDJGUDRNRWNWb01NMGdLOVgxQ2hoRHFpN3g3M3FmT09xL01zejd2dFk1RVVv?=
- =?utf-8?B?Y0Y2VGcyaElOWU9kWkRzVGQ4M0duOTdRV2haSTRJdk5ybDRZQ2haaE5Ea2Zx?=
- =?utf-8?B?Vkd6Mkg2LzFQaERzdkF5L2FEdWQzR01zSy9yK09JT2tPUFR6bHp0Y0NmaWRS?=
- =?utf-8?B?cFIydUYrWFB4RlBzbjB2NlZvbERLUEN4VndGWTJWMGpoWWlsejdaQTg5QVE4?=
- =?utf-8?B?dkdkbzIrYUxzNi9BbEVQMGJuZkJxQVRIUXBvYWJqeEEzbkdESHRMcTM1SnEv?=
- =?utf-8?B?UHZjekR5aFFCa0VhbllSdjJWU1loSS9HNzFhaCtqdmx2dk5vMC9RS3FUZXNu?=
- =?utf-8?B?VjJmemhvS2k3NCtIYitQMmR1N2drTmlOeWFVYUdad1RaVVJ0dHNrVFhlL3Fl?=
- =?utf-8?B?eWlST2l1Zm16cHBFaHd1OENma0F1TTEwZEFjVDE5N2hab2QyR0FIY1IzQmtH?=
- =?utf-8?B?d3FjQk1NenEyTkpsSml4Z1FTOXNvRXlPR0FmWUMxSFpQOGxqbnQ4MTJielc3?=
- =?utf-8?B?VFZjd2V4STZTbS9kN2kvemsweFREOWZmNElQSUVhdkVXaGpySk9DZ3FXWDBF?=
- =?utf-8?B?emkrTlp4UnExNVg2cm1VRXpSaHN4S1lxdnpzSTBhM1Y2S2dmd1FWVmtTallo?=
- =?utf-8?B?Y0JqMW5XaU5OSHlUenFFL3lUSHFKZ2hTYW9sOTZ2ZGhkTlVZUnJxYXhZSStw?=
- =?utf-8?B?L3hVcXNQaFJMSS9aY0h4Tk83TEt1WW00RHE2NmMydUx3cDRpQ0Fadkp4Vm5Z?=
- =?utf-8?B?YTVkMmJyVm5OK2FRR2FpNzJGSy9JQklJazhxd0NmbSt6bFh3T2ZiQSswTUZ4?=
- =?utf-8?B?VmFJUXJ1VUk3ZTMwRGRHN1hydDBxZ2N5cEEzMFptZnpsUGoyWUFsazBLeVhI?=
- =?utf-8?B?aFEvU3BMZ2VQZ05teGlUa3I0MkVsREgrM2NOWTNoODJMLzVqQWxGZWIvOElz?=
- =?utf-8?B?VVJ5ZmVlWFdFdStKOGtyZDZ4MWlRMXpuUFJDRTBGOWxMM3JjdjA1a0FwRkNy?=
- =?utf-8?Q?tJ9cXQYTHDEphrs2oOJaUADo4LKqGHJ1AwK3Hzjw/vbfs?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-1: +Fjfx9FFApqFEiWXGg4T15wvTc7KISa+SbUl1w2rWgdRG6T7LnEfs5UnH84DJlVXdb/qMwchq5Br1GDpCLQVvUCIl2Su78MVSCIpJUO9aYFHi0DUBTwl/ocV3OBXWc5A28IWWwPimacWOuI0fd9hGkdVsGT718MRTWIuBVnFLYCDPgBx3yZJxfxlatFZeSL+QbxGqgXPdB0bD9+FNeFCBMBTh8xoWQMjiYrx08w787VzqO+nB7NeY8b0KhRjAtwmBToJzQqbrhL2UnT5CZ8NR+rIXNP6dPe8fPJkkImG54wcLZO074kjGhEU9yiArF2McRsaSlWZiQtH1T4h/a+D7GoYUfEeo/AOyaFCShgKHd/btYtbcGx2fAnPhFciItV4inKb0DPa0rYQO3CqjpYIF66MINgUcxWLcZb18aJgNX60PcGSUy9Uy5mO1ss2pgIGsuWJw8sqE5n9IFjvWQMmf5AK/KxIncFFGwXG4vDQRLZP77Unf5os9jWC
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2821a4fd-9f1b-4999-2bed-08db77dbe55d
-X-MS-Exchange-CrossTenant-AuthSource: CO1PR10MB4531.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Jun 2023 13:30:53.5530
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: COj5tdljajzTM5GwjG/czGSUNDPZ9ctwfGiNtWCfNMmto4UrgcbtO8em+fl4jgvIDH4RWyM61fTA1BHJMGSJgZPYQC0CVr890Xq56GMnkwo=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR10MB5166
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-06-28_09,2023-06-27_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 suspectscore=0
- malwarescore=0 adultscore=0 mlxlogscore=999 phishscore=0 bulkscore=0
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2305260000 definitions=main-2306280120
-X-Proofpoint-ORIG-GUID: 2R7_TIJwpnZhb78eOaUZ1eLNDHaj7McR
-X-Proofpoint-GUID: 2R7_TIJwpnZhb78eOaUZ1eLNDHaj7McR
+References: <8e785777-03aa-99e1-d20e-e956f5685be6@huawei.com>
+ <87mt18it1y.ffs@tglx> <68baeac9-9fa7-5594-b5e7-4baf8ac86b77@huawei.com>
+ <ba352e83-b8b1-d900-9c1f-56b8c8a8b8fb@huawei.com> <CAKfTPtBoe_jRn-EMsQxssQ4BcveT+Qcd+GmsRbQEXQDGfzFOMg@mail.gmail.com>
+In-Reply-To: <CAKfTPtBoe_jRn-EMsQxssQ4BcveT+Qcd+GmsRbQEXQDGfzFOMg@mail.gmail.com>
+From:   Vincent Guittot <vincent.guittot@linaro.org>
+Date:   Wed, 28 Jun 2023 15:30:46 +0200
+Message-ID: <CAKfTPtDZN1gVgr0AqgtVe3arVWEtA35PA3PL99hT_WAR1D9S9g@mail.gmail.com>
+Subject: Re: [Question] report a race condition between CPU hotplug state
+ machine and hrtimer 'sched_cfs_period_timer' for cfs bandwidth throttling
+To:     Xiongfeng Wang <wangxiongfeng2@huawei.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>, vschneid@redhat.com,
+        Phil Auld <pauld@redhat.com>, vdonnefort@google.com,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Wei Li <liwei391@huawei.com>,
+        "liaoyu (E)" <liaoyu15@huawei.com>, zhangqiao22@huawei.com,
+        Peter Zijlstra <peterz@infradead.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Ingo Molnar <mingo@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+        lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, 27 Jun 2023 at 18:46, Vincent Guittot
+<vincent.guittot@linaro.org> wrote:
+>
+> On Mon, 26 Jun 2023 at 10:23, Xiongfeng Wang <wangxiongfeng2@huawei.com> wrote:
+> >
+> > Hi,
+> >
+> > Kindly ping~
+> > Could you please take a look at this issue and the below temporary fix ?
+> >
+> > Thanks,
+> > Xiongfeng
+> >
+> > On 2023/6/12 20:49, Xiongfeng Wang wrote:
+> > >
+> > >
+> > > On 2023/6/9 22:55, Thomas Gleixner wrote:
+> > >> On Fri, Jun 09 2023 at 19:24, Xiongfeng Wang wrote:
+> > >>
+> > >> Cc+ scheduler people, leave context intact
+> > >>
+> > >>> Hello,
+> > >>>  When I do some low power tests, the following hung task is printed.
+> > >>>
+> > >>>   Call trace:
+> > >>>    __switch_to+0xd4/0x160
+> > >>>    __schedule+0x38c/0x8c4
+> > >>>    __cond_resched+0x24/0x50
+> > >>>    unmap_kernel_range_noflush+0x210/0x240
+> > >>>    kretprobe_trampoline+0x0/0xc8
+> > >>>    __vunmap+0x70/0x31c
+> > >>>    __vfree+0x34/0x8c
+> > >>>    vfree+0x40/0x58
+> > >>>    free_vm_stack_cache+0x44/0x74
+> > >>>    cpuhp_invoke_callback+0xc4/0x71c
+> > >>>    _cpu_down+0x108/0x284
+> > >>>    kretprobe_trampoline+0x0/0xc8
+> > >>>    suspend_enter+0xd8/0x8ec
+> > >>>    suspend_devices_and_enter+0x1f0/0x360
+> > >>>    pm_suspend.part.1+0x428/0x53c
+> > >>>    pm_suspend+0x3c/0xa0
+> > >>>    devdrv_suspend_proc+0x148/0x248 [drv_devmng]
+> > >>>    devdrv_manager_set_power_state+0x140/0x680 [drv_devmng]
+> > >>>    devdrv_manager_ioctl+0xcc/0x210 [drv_devmng]
+> > >>>    drv_ascend_intf_ioctl+0x84/0x248 [drv_davinci_intf]
+> > >>>    __arm64_sys_ioctl+0xb4/0xf0
+> > >>>    el0_svc_common.constprop.0+0x140/0x374
+> > >>>    do_el0_svc+0x80/0xa0
+> > >>>    el0_svc+0x1c/0x28
+> > >>>    el0_sync_handler+0x90/0xf0
+> > >>>    el0_sync+0x168/0x180
+> > >>>
+> > >>> After some analysis, I found it is caused by the following race condition.
+> > >>>
+> > >>> 1. A task running on CPU1 is throttled for cfs bandwidth. CPU1 starts the
+> > >>> hrtimer cfs_bandwidth 'period_timer' and enqueue the hrtimer on CPU1's rbtree.
+> > >>> 2. Then the task is migrated to CPU2 and starts to offline CPU1. CPU1 starts
+> > >>> CPUHP AP steps, and then the hrtimer 'period_timer' expires and re-enqueued on CPU1.
+> > >>> 3. CPU1 runs to take_cpu_down() and disable irq. After CPU1 finished CPUHP AP
+> > >>> steps, CPU2 starts the rest CPUHP step.
+> > >>> 4. When CPU2 runs to free_vm_stack_cache(), it is sched out in __vunmap()
+> > >>> because it run out of CPU quota. start_cfs_bandwidth() does not restart the
+> > >>> hrtimer because 'cfs_b->period_active' is set.
+> > >>> 5. The task waits the hrtimer 'period_timer' to expire to wake itself up, but
+> > >>> CPU1 has disabled irq and the hrtimer won't expire until it is migrated to CPU2
+> > >>> in hrtimers_dead_cpu(). But the task is blocked and cannot proceed to
+> > >>> hrtimers_dead_cpu() step. So the task hungs.
+> > >>>
+> > >>>     CPU1                                                     CPU2
+> > >>> Task set cfs_quota
+> > >>> start hrtimer cfs_bandwidth 'period_timer'
+> > >>>                                             start to offline CPU1
+> > >>> CPU1 start CPUHP AP step
+> > >>> ...
+> > >>> 'period_timer' expired and re-enqueued on CPU1
+> > >>> ...
+> > >>> disable irq in take_cpu_down()
+> > >>> ...
+> > >>>                                             CPU2 start the rest CPUHP steps
+> > >>>                                             ...
+> > >>>                                           sched out in free_vm_stack_cache()
+> > >>>                                             wait for 'period_timer' expires
+> > >>>
+> > >>>
+> > >>> Appreciate it a lot if anyone can give some suggestion on how fix this problem !
+> > >>>
+> > >>> Thanks,
+> > >>> Xiongfeng
+> > >> .
+> > >>
+> > >
+> > > Test script:
+> > > taskset -cp 1 $$
+> > > mkdir /sys/fs/cgroup/cpu/test
+> > > echo $$ > /sys/fs/cgroup/cpu/test/tasks
+> > > echo 80000 > /sys/fs/cgroup/cpu/test/cpu.cfs_quota_us
+> > > echo 100000 > /sys/fs/cgroup/cpu/test/cpu.cfs_period_us
+> > > taskset -cp 2 $$
+> > > echo 0 > /sys/devices/system/cpu/cpu1/online
+> > >
+> > >
+> > > Tests show that the following modification can solve the problem of above test
+> > > scripts. But I am not sure if there exists some other issues.
+> > >
+> > > diff --cc kernel/sched/fair.c
+> > > index d9d6519fae01,bd6624353608..000000000000
+> > > --- a/kernel/sched/fair.c
+> > > +++ b/kernel/sched/fair.c
+> > > @@@ -5411,10 -5411,16 +5411,15 @@@ void start_cfs_bandwidth(struct cfs_ban
+> > >   {
+> > >         lockdep_assert_held(&cfs_b->lock);
+> > >
+> > > -       if (cfs_b->period_active)
+> > > +       if (cfs_b->period_active) {
+> > > +               struct hrtimer_clock_base *clock_base = cfs_b->period_timer.base;
+> > > +               int cpu = clock_base->cpu_base->cpu;
+> > > +               if (!cpu_active(cpu) && cpu != smp_processor_id())
+> > > +                       hrtimer_start_expires(&cfs_b->period_timer,
+> > > HRTIMER_MODE_ABS_PINNED);
+> > >                 return;
+> > > +       }
+>
+> I have been able to reproduce your problem and run your fix on top. I
+> still wonder if there is a
 
+Looks like I have been preempted and never finished the sentence. The
+full sentence is:
+I still wonder if there is a race condition where the hang can still
+happen but i haven't been able to find one so far
 
-On 6/28/23 03:20, Conor Dooley wrote:
-> Hey Eric,
-> 
-> On Mon, Jun 26, 2023 at 12:13:30PM -0400, Eric DeVolder wrote:
->> The kexec and crash kernel options are provided in the common
->> kernel/Kconfig.kexec. Utilize the common options and provide
->> the ARCH_SUPPORTS_ and ARCH_SELECTS_ entries to recreate the
-> 
->> equivalent set of KEXEC and CRASH options.
-> 
-> I find this diff a little hard to follow (since the other half off the
-> change is in another patch), so it may be me missing something, but are
-> you sure?
-> 
->>
->> Signed-off-by: Eric DeVolder <eric.devolder@oracle.com>
->> ---
->>   arch/riscv/Kconfig | 48 ++++++++++++++--------------------------------
->>   1 file changed, 14 insertions(+), 34 deletions(-)
->>
->> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
->> index 5966ad97c30c..c484abd9bbfd 100644
->> --- a/arch/riscv/Kconfig
->> +++ b/arch/riscv/Kconfig
->> @@ -585,48 +585,28 @@ config RISCV_BOOT_SPINWAIT
->>   
->>   	  If unsure what to do here, say N.
->>   
->> -config KEXEC
->> -	bool "Kexec system call"
->> -	depends on MMU
->> +config ARCH_SUPPORTS_KEXEC
->> +	def_bool MMU
->> +
->> +config ARCH_SELECTS_KEXEC
->> +	def_bool y
->> +	depends on KEXEC
->>   	select HOTPLUG_CPU if SMP
->> -	select KEXEC_CORE
->> -	help
->> -	  kexec is a system call that implements the ability to shutdown your
->> -	  current kernel, and to start another kernel. It is like a reboot
->> -	  but it is independent of the system firmware. And like a reboot
->> -	  you can start any kernel with it, not just Linux.
->>   
->> -	  The name comes from the similarity to the exec system call.
->> +config ARCH_SUPPORTS_KEXEC_FILE
->> +	def_bool 64BIT && MMU && CRYPTO=y && CRYPTO_SHA256=y
-> 
-> This looks like a change to me. Previously, only KEXEC_PURGATORY
-> required these crypto options to be like so, but now KEXEC_FILE needs
-> them too.
-> 
-> What am I missing?
-Conor,
-Thanks for looking at this! Indeed I erroneously applied the CRYPTO=y && CRYPTO_SHA256=y
-to KEXEC_FILE rather than PURGATORY. I will correct for v4!
-Thanks!
-eric
-
-> 
-> Cheers,
-> Conor.
-> 
->>   
->> -config KEXEC_FILE
->> -	bool "kexec file based systmem call"
->> -	depends on 64BIT && MMU
->> -	select HAVE_IMA_KEXEC if IMA
->> -	select KEXEC_CORE
->> +config ARCH_SELECTS_KEXEC_FILE
->> +	def_bool y
->> +	depends on KEXEC_FILE
->>   	select KEXEC_ELF
->> -	help
->> -	  This is new version of kexec system call. This system call is
->> -	  file based and takes file descriptors as system call argument
->> -	  for kernel and initramfs as opposed to list of segments as
->> -	  accepted by previous system call.
->> -
->> -	  If you don't know what to do here, say Y.
->> +	select HAVE_IMA_KEXEC if IMA
->>   
->>   config ARCH_HAS_KEXEC_PURGATORY
->>   	def_bool KEXEC_FILE
->> -	depends on CRYPTO=y
->> -	depends on CRYPTO_SHA256=y
->>   
->> -config CRASH_DUMP
->> -	bool "Build kdump crash kernel"
->> -	help
->> -	  Generate crash dump after being started by kexec. This should
->> -	  be normally only set in special crash dump kernels which are
->> -	  loaded in the main kernel with kexec-tools into a specially
->> -	  reserved region and then later executed after a crash by
->> -	  kdump/kexec.
->> -
->> -	  For more details see Documentation/admin-guide/kdump/kdump.rst
->> +config ARCH_SUPPORTS_CRASH_DUMP
->> +	def_bool y
->>   
->>   config COMPAT
->>   	bool "Kernel support for 32-bit U-mode"
->> -- 
->> 2.31.1
->>
+> Could we have a helper from hrtimer to get the cpu of the clock_base ?
+>
+>
+> > >
+> > >         cfs_b->period_active = 1;
+> > >  -
+> > >         hrtimer_forward_now(&cfs_b->period_timer, cfs_b->period);
+> > >         hrtimer_start_expires(&cfs_b->period_timer, HRTIMER_MODE_ABS_PINNED);
+> > >   }
+> > >
+> > > Thanks,
+> > > Xiongfeng
+> > >
+> > > .
+> > >
