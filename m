@@ -2,197 +2,308 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BF5F740C75
+	by mail.lfdr.de (Postfix) with ESMTP id A589C740C77
 	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 11:11:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234222AbjF1JJW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 05:09:22 -0400
-Received: from mail-vi1eur05on2068.outbound.protection.outlook.com ([40.107.21.68]:7776
-        "EHLO EUR05-VI1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S234245AbjF1JEx (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 05:04:53 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=UATYBZ4SI2z/OaeJ1Md5yZ8tlBYQ988KMt9ZFyNH8uACscohwQupIwj88UByc9NO5QKs50yocgm3Tan8h40NcvWuZJGAplv9Joue8tIqndRUDuv14n3vaPsriDsO21WRhTgty7HIvJPCFOCdfX+zfw0OlyLSz0wVnu8lxNO/gc4uOEPBjVublQ4U2yX3euWekTTln86Iu+vwDFBE6PgtNsDC2cLcjrggIljGFlOfz4cnaSG72rTIXwmy8e9QF8fRbyTPX9E2q3etiAYYC7c93Kq1qcGbykiWi/KzQmQxOKLpV5BioQLWKSGlXfCBlSybGlPVvmQCtllJ5zopIDHwtQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=GfwlJtTfb9o9ohq3M0TQpLto4k+BBMEQAZTxXuFBJ3w=;
- b=MRb6zaPilBszisb/Nm9HCYq9m/SI1PU+cDoCANmSP/UeT3rEjhWJbi48EcOVI36s0RJIuBTtSQkh8+YcOYz9m+JW9jhmiQcP8kzZcHIBTzoZ4+4QqVqTa1TKZnct5jXTVe21SJMZsE2fSxHYUfJdzLGZ37bg8a/pTfBaMirkL15AJTfPghgG5/4CDoAmJVPkvW3XdoQ6nt8tTNlZy5MFZG/tQm8Zzh1vF1aFffnDkpaYqzSwvJQcGh+irMxd5WGsu5Z2puBwd5OPHcUpPFCVyPTUIXHHKUmvNWyuoNLPSmgGL5soQyYspUrBRrqcaEzYsNfrB+crBk57zpEF3oqnTg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
- dkim=pass header.d=suse.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=GfwlJtTfb9o9ohq3M0TQpLto4k+BBMEQAZTxXuFBJ3w=;
- b=xFVX8VvJMjksRa3HAeksthJexIQxwQ8WCB3IR5fbwJ8xV/pYZZio6F3v5jPBDt43yIz2+47YBfvu/ml+ulUCmvuDddtj17Z4bbGk8dykhMFOS+oDGWR9pXcqzv59TvFQY5PGZChJvZzPF2Il33l+bioNNilrSmOUg155v64y0rDbPD6lPNj4Mh4SXulbVY/I374Ro5IcdDc8NirwTSGAon4Y3YypmcPtkZNufvbaiAFsJ0nd45dhoQMQb7ikEZ3eNAF1o1KQKyDCWu670xUvvYy/CNECGrGeUMCKxXLYCkLYboJjNj/iCDX6bTO23Cicv/FQF6aqFf2syOeNSQ8a2g==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=suse.com;
-Received: from PA4PR04MB7790.eurprd04.prod.outlook.com (2603:10a6:102:cc::8)
- by PAXPR04MB9154.eurprd04.prod.outlook.com (2603:10a6:102:22d::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.26; Wed, 28 Jun
- 2023 09:04:48 +0000
-Received: from PA4PR04MB7790.eurprd04.prod.outlook.com
- ([fe80::66a2:8913:a22a:be8d]) by PA4PR04MB7790.eurprd04.prod.outlook.com
- ([fe80::66a2:8913:a22a:be8d%4]) with mapi id 15.20.6521.026; Wed, 28 Jun 2023
- 09:04:48 +0000
-Message-ID: <b8ba66c0-ea3c-24ec-9966-e8438d7c5626@suse.com>
-Date:   Wed, 28 Jun 2023 12:04:43 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v12 18/22] x86/virt/tdx: Keep TDMRs when module
- initialization is successful
-Content-Language: en-US
-To:     Kai Huang <kai.huang@intel.com>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org
-Cc:     linux-mm@kvack.org, x86@kernel.org, dave.hansen@intel.com,
-        kirill.shutemov@linux.intel.com, tony.luck@intel.com,
-        peterz@infradead.org, tglx@linutronix.de, bp@alien8.de,
-        mingo@redhat.com, hpa@zytor.com, seanjc@google.com,
-        pbonzini@redhat.com, david@redhat.com, dan.j.williams@intel.com,
-        rafael.j.wysocki@intel.com, ashok.raj@intel.com,
-        reinette.chatre@intel.com, len.brown@intel.com, ak@linux.intel.com,
-        isaku.yamahata@intel.com, ying.huang@intel.com, chao.gao@intel.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com, bagasdotme@gmail.com,
-        sagis@google.com, imammedo@redhat.com
-References: <cover.1687784645.git.kai.huang@intel.com>
- <7d06fe5fda0e330895c1c9043b881f3c2a2d4f3f.1687784645.git.kai.huang@intel.com>
-From:   Nikolay Borisov <nik.borisov@suse.com>
-In-Reply-To: <7d06fe5fda0e330895c1c9043b881f3c2a2d4f3f.1687784645.git.kai.huang@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: ZRAP278CA0005.CHEP278.PROD.OUTLOOK.COM
- (2603:10a6:910:10::15) To PA4PR04MB7790.eurprd04.prod.outlook.com
- (2603:10a6:102:cc::8)
+        id S233956AbjF1JJf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 05:09:35 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:35045 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S235701AbjF1JHP (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 28 Jun 2023 05:07:15 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1687943190;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=9Mt+AGh8pL9GItdGuqz+S5zOSB1kzaQK/lmag+rkrIs=;
+        b=HSg/r7Vdn88gSeEgY4rmFnx93wqs4tzuJHZN1glfRmfH/Nhe5CRLabjvsjniBkxgah3qvi
+        mvDQ5TgKs4RjHxuStMzYxgH2J18eP8nX1fpQKB/OXAkUbL2WyhcWlB9vOzOcecup+ZJU92
+        Ha9PDTvgDa6a5NP14g9XWNm6BO8oprk=
+Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
+ [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-644-0IrrE71zNdmgeT_Vrlk2Fg-1; Wed, 28 Jun 2023 05:06:28 -0400
+X-MC-Unique: 0IrrE71zNdmgeT_Vrlk2Fg-1
+Received: by mail-qk1-f199.google.com with SMTP id af79cd13be357-76716078e78so25930585a.1
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 02:06:28 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687943188; x=1690535188;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=9Mt+AGh8pL9GItdGuqz+S5zOSB1kzaQK/lmag+rkrIs=;
+        b=iGTMMN0UkOZNtiAMghtUsQP0nXCOs/taJnasifbNWGMcxFvkZgvTJy+SOmmdzV5apc
+         ewGgzzkEXmbzj04/6eE1iKq2UVxHCxRDDChKr/XndzuYJbqSEtTkTKDOT74BzmJN7X9k
+         dUL+wDvNZQjrXzLw//HAaXcsT4dx8aNs9QVEacPnQbCQWLIazOnG3ny41Tgel9GguPE0
+         /aCisxMWhkkaFPFjYB7pTO4mbIPY5qfeBSOJVog6zn9UU6Vb/n/b/NgK9WrcmP6Uh7lk
+         iitZPgEx2SVekctBIKqcNYJWRsCTXvHpxVLWQfDxmEBC4KvJktxEzjnLp3gr+MHcOJyo
+         dCXQ==
+X-Gm-Message-State: AC+VfDzekv+xxGr8ROUk1OPRCHYMv/9vlQh69bRf296zqIy2vQ7KEC5f
+        YksyHUjrHOYWMwZ5g0w5NYVOK5ttqi/nF41agtAyj6CelUf4a5UvrglBvQcasIv0V8HSglTGGXS
+        u+NUA+dqYggButkjDNOYyBZJA
+X-Received: by 2002:a05:620a:190e:b0:765:3b58:99ab with SMTP id bj14-20020a05620a190e00b007653b5899abmr6305782qkb.4.1687943187941;
+        Wed, 28 Jun 2023 02:06:27 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ7Pi+d+bIvaIEDtLwWVvkne70c3lcUzJGi2BHechnsH7bQHg9u9IfRMS66e/7JSp3u01eCa+w==
+X-Received: by 2002:a05:620a:190e:b0:765:3b58:99ab with SMTP id bj14-20020a05620a190e00b007653b5899abmr6305743qkb.4.1687943187280;
+        Wed, 28 Jun 2023 02:06:27 -0700 (PDT)
+Received: from gerbillo.redhat.com (146-241-226-127.dyn.eolo.it. [146.241.226.127])
+        by smtp.gmail.com with ESMTPSA id pe34-20020a05620a852200b007623c96430csm3426449qkn.111.2023.06.28.02.06.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 28 Jun 2023 02:06:26 -0700 (PDT)
+Message-ID: <486ae2687cd2e2624c0db1ea1f3d6ca36db15411.camel@redhat.com>
+Subject: Re: [Intel-wired-lan] bug with rx-udp-gro-forwarding offloading?
+From:   Paolo Abeni <pabeni@redhat.com>
+To:     Ian Kumlien <ian.kumlien@gmail.com>
+Cc:     Alexander Lobakin <aleksander.lobakin@intel.com>,
+        intel-wired-lan <intel-wired-lan@lists.osuosl.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Date:   Wed, 28 Jun 2023 11:06:23 +0200
+In-Reply-To: <CAA85sZurk7-_0XGmoCEM93vu3vbqRgPTH4QVymPR5BeeFw6iFg@mail.gmail.com>
+References: <CAA85sZukiFq4A+b9+en_G85eVDNXMQsnGc4o-4NZ9SfWKqaULA@mail.gmail.com>
+         <CAA85sZvm1dL3oGO85k4R+TaqBiJsggUTpZmGpH1+dqdC+U_s1w@mail.gmail.com>
+         <e7e49ed5-09e2-da48-002d-c7eccc9f9451@intel.com>
+         <CAA85sZtyM+X_oHcpOBNSgF=kmB6k32bpB8FCJN5cVE14YCba+A@mail.gmail.com>
+         <22aad588-47d6-6441-45b2-0e685ed84c8d@intel.com>
+         <CAA85sZti1=ET=Tc3MoqCX0FqthHLf6MSxGNAhJUNiMms1TfoKA@mail.gmail.com>
+         <CAA85sZvn04k7=oiTQ=4_C8x7pNEXRWzeEStcaXvi3v63ah7OUQ@mail.gmail.com>
+         <ffb554bfa4739381d928406ad24697a4dbbbe4a2.camel@redhat.com>
+         <CAA85sZunA=tf0FgLH=MNVYq3Edewb1j58oBAoXE1Tyuy3GJObg@mail.gmail.com>
+         <CAA85sZsH1tMwLtL=VDa5=GBdVNWgifvhK+eG-hQg69PeSxBWkg@mail.gmail.com>
+         <CAA85sZu=CzJx9QD87-vehOStzO9qHUSWk6DXZg3TzJeqOV5-aw@mail.gmail.com>
+         <0a040331995c072c56fce58794848f5e9853c44f.camel@redhat.com>
+         <CAA85sZuuwxtAQcMe3LHpFVeF7y-bVoHtO1nukAa2+NyJw3zcyg@mail.gmail.com>
+         <CAA85sZurk7-_0XGmoCEM93vu3vbqRgPTH4QVymPR5BeeFw6iFg@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PA4PR04MB7790:EE_|PAXPR04MB9154:EE_
-X-MS-Office365-Filtering-Correlation-Id: f7762d01-4be7-4d28-7fe5-08db77b6b911
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 5eOTrXe4OS5fkFFVbfkiV2PjbsXUP5QyFI6+TWBUYMUPUXuLkdQ0AGGGIC9cXzj/stdWLAXiycUd+hWPGPiD3tqE1gDQnlYlMmzgl2QaeYq2xkUvL7JYNuhI6H6q5zi6HKkZnuwgSLBFFSMlsJnSJrXa7uptfJKVPEpBS9ebr9aBQS0jWvzvc/pa4CxW0BvPJJKavIJxkmU8qS34zu5UOahmPg0uUTGdBLL1+Z3sNASnVFGp/jJ2HiNC5S2rP1cG1SwB4GnWQ4as7zUq82T0w7r+ktoTRkO3T+6Lw7oAf8mTT3P3gTdeWvlnsCTujw3pSWAzf4NfeiTuYdmKZN+RlRtG/A4GqD0BbgXpxJyggUb2YvMqbm8lTIAPF5e/ffN8angepxshLJkZEqjML5Rm95i8o7OnfH0WDABdGxvCQpkOgVGMguomxTCZzVZsVpaVmFPeMOr/kVxDLVRofc0pPxSKfQqYxNu0Tgx2xa8nI0sK7vjxg7Pj73W/Bl6MP004y+Tev9lMgANKrpQTGM2UozffzwZcE4ujiwOddFHP+h/Mg1VZWnXDCbubSP9t6SRbjpcwjDiC3vQmXFldKSj8B8uUviu4RaAPacRUdjMGn0Wk9qElsKR+Cfed7bjutmnSVN4knvrBPyvoq8pSW2MTDw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PA4PR04MB7790.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(346002)(376002)(396003)(366004)(39860400002)(136003)(451199021)(31686004)(6666004)(478600001)(6486002)(83380400001)(2616005)(86362001)(31696002)(66476007)(66556008)(6506007)(186003)(2906002)(6512007)(66946007)(4326008)(36756003)(8936002)(41300700001)(38100700002)(316002)(7416002)(8676002)(5660300002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?cWxqaW1ib3FiTHNFQnVNY2Y1bnYySFp6dnV3RUZ3TWwzcWxxT1VCV0xNamRF?=
- =?utf-8?B?WW52Z3VJZzhwK2dHdzBQZ1NNMENtZ1FyWjh5akZaTTZaVkdzajE4bDlVRlh3?=
- =?utf-8?B?ODlmQkxDblRJUklMUllTT0h5V3kzUU95ZzZrV0p4Rm5xakoySEhyR0NYV2ta?=
- =?utf-8?B?T3J4Vm9ibTlsRVR3NTlnZXRJKzVEeEZrVG9sL2xSOGtURmpHVFlOUis1Uzc4?=
- =?utf-8?B?MUpoTTkwanJBT01laDJEWjUrTzlCZmYyWWRBWkxUajJ3UlZub3dhaXB3YnMv?=
- =?utf-8?B?dEZadHJNYzJLK2phMTJKRm1PbzRUTGdoNXVLMm5xWjFGNVVQMXd5enNiZS9h?=
- =?utf-8?B?U0k3NUJCTm5HVFdOYlFSRXFZK3d6Z2pNRlh6UWZqWEpmbk1Zbk9ISEZENE13?=
- =?utf-8?B?MVpFZ2FmbkJ3QmhrVVBmTzZKcTBwbjJ2RXZ6b2JKb2RjWTYyaGJ4d3p5WEhl?=
- =?utf-8?B?SmFyd0QvOCtxakxPTmwvV0d4OUwxNUhyK24rTGI1T1Bhc01TSm1kWGUyeVEw?=
- =?utf-8?B?SFBLYkVTNERsS29LNHRvdWozMzhTZlZEemJ4Y3djTFU4WlRjciszWTNGdDEw?=
- =?utf-8?B?N291L2h6MHpOTUptMUxxc0thSHVBOGIvMlRCVyt0RFZjZTRVakJxSEpCQ1l2?=
- =?utf-8?B?Nnh5aEEzWGVhOEMvcUdOSEVBZ0JXZUVnK0dMU200UVpmVi91cFJWZGNtNTQ1?=
- =?utf-8?B?b0Y5K2NYSzJBQWtZN0pVY2prQXJucDVGQk0zV3g1N3NyY3NDbDd0Z044UWFl?=
- =?utf-8?B?bldGVlRSSDRIcU1hVzlUVFh3MEpIeGZvUUNWQjliMVAvL29KY2w1eDlBcS8z?=
- =?utf-8?B?Ly84ODlYc2EzV0prcWFKamx2TTdTUGpaQjljc21OQ0ZmZWFsVnpsNmxxcUwy?=
- =?utf-8?B?aFFhSHpDNTRWa3o0VjhsTTFjemVXZldhcjFsRnJJQTYvUzZYNGl1ZWRGVnZn?=
- =?utf-8?B?OUFFVmxxcW4rQVZwNUgxUWFSSDMyTW1OazIzaXp0amQrNXlGYXg3Z3M4dFBl?=
- =?utf-8?B?bUVYNXNBSDMzb0VaMjllc0duOWd0YlpVOFhZYnF1VzdtdEpkUWRIaFNFWU1z?=
- =?utf-8?B?QzdKZVFjTmEwcjB1b2ovbnVsaHc2Tzg4YnJwbG0vVU9PaXI4b1hITXcxREhp?=
- =?utf-8?B?UmRhMUJ5TzhMLzFvVE9CQzRRSmZOUDk3RXU1eGc1N0tOQXZLY3lVNHlGeFhC?=
- =?utf-8?B?a0ZjZC82NGJ1eTJkNEhYWTdjTkhwR2xjZ0Q4dVdKTnhpRE1TdVVHbDR2OXMz?=
- =?utf-8?B?bVN1MVhqeVVwcklYMFBvVGZLSFRrNmdNRTM2WEhqYU1UMWVZK1prMy81SllM?=
- =?utf-8?B?SEcyRnZmMzVaT0tmQUo0SVB0S0ZJT2Jna2t3SytvWHM1TkNvZ1M0WjZiaFll?=
- =?utf-8?B?RU5GZE9rQW1JR0RHRDBYcE42L2lRaTFhdHpwVmZ3SE92UmNwU2VJaS9UcHda?=
- =?utf-8?B?c0UzVVRtSnJPLyswa3UxWXV6MVcvRzBEajVIM1NJMGNlRzVJWE1MSlh0eDdk?=
- =?utf-8?B?U2VSQUJTeGRWTkw4MDQ4cWMzTG9ITTNmN2prWGZ1QXlFLzRuK0ZVcTBzek1z?=
- =?utf-8?B?aGlsMXcxajZ4N1hwSTU0dlBDU3lBYm9uL2gzWXJxZ09jQ2Q1SzhabEFnL1U0?=
- =?utf-8?B?TDhjUUZrSm9rczk5VXdxTFdRSmRpak5HejExZmcwSUJQTjhGUzhvc3c0S1BP?=
- =?utf-8?B?K1BlQWQ1MFE3TUlBY2liWWRiYklEUXVhd1lIb1RuSUFzTWhCeGM2TDdwVENQ?=
- =?utf-8?B?eFY2UEZsVWE2ZG8zSFRjdnhjT1hEd0xxdmVZSS94MWRXMG9PNnBrRjNzTGtD?=
- =?utf-8?B?cS9NeUs0WmU3QTVhQUNaOFJBWVpxK1BQb1hJWWxlTXNhZXF6dXpCRnB2RXNJ?=
- =?utf-8?B?Qm9lRkJpcUV1UlpScE1vRnRtUjFIb01Ib0hNNEpJSDM5YVR3OEtYQmhQQ2d1?=
- =?utf-8?B?a0M5ZmNiVXRNd3o3NHFTeE4rWWg1VmJENEc5RTQxVUNUZXg3YTQyVEU5MUd0?=
- =?utf-8?B?NFNqUTRIemtGSlMzMnVUUE0wdll3OGRRbUN0ZkpUSnJyc0U1ejlxQjlIVU0v?=
- =?utf-8?B?WUI1TGdsR0srVTVsekZCQkNOUGpWQXFIUGovYlppZ3BiNHNyZ1Avb0RwQTJD?=
- =?utf-8?B?a0NsQkJJTWVoMFlvMjFNTFkwVXUxc2hNeVBIbUVJVnNqYll1YnBySnI2cy9a?=
- =?utf-8?Q?bSL+96vmds3ZXE+GBjelWjuhfVNmUlurdK78cBqz1T7s?=
-X-OriginatorOrg: suse.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f7762d01-4be7-4d28-7fe5-08db77b6b911
-X-MS-Exchange-CrossTenant-AuthSource: PA4PR04MB7790.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Jun 2023 09:04:47.7667
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: p6PhLJKU0w/rKpk9SGMj0V2W/+4W+D5Ba/dHPsXLQLmdFsK0MwGd4nBAWC6xkVuGqK/YK8fNgZRnzFbkPw+Y8Q==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAXPR04MB9154
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello,
+
+On Wed, 2023-06-28 at 09:37 +0200, Ian Kumlien wrote:
+> Been running all night but eventually it crashed again...
+>=20
+> [21753.055795] Out of memory: Killed process 970 (qemu-system-x86)
+> total-vm:4709488kB, anon-rss:2172652kB, file-rss:4608kB,
+> shmem-rss:0kB, UID:77 pgtables:4800kB oom_score_adj:0
+> [24249.061154] general protection fault, probably for non-canonical
+> address 0xb0746d4e6bee35e2: 0000 [#1] PREEMPT SMP NOPTI
+> [24249.072138] CPU: 0 PID: 893 Comm: napi/eno1-68 Tainted: G        W
+>         6.4.0-dirty #366
+> [24249.080670] Hardware name: Supermicro Super Server/A2SDi-12C-HLN4F,
+> BIOS 1.7a 10/13/2022
+> [24249.088852] RIP: 0010:kmem_cache_alloc_bulk (mm/slub.c:377
+> mm/slub.c:388 mm/slub.c:395 mm/slub.c:3963 mm/slub.c:4026)
+> [24249.094086] Code: 0f 84 46 ff ff ff 65 ff 05 a4 bd e4 47 48 8b 4d
+> 00 65 48 03 0d e8 5f e3 47 9c 5e fa 45 31 d2 eb 2f 8b 45 28 48 01 d0
+> 48 89 c7 <48> 8b 00 48 33 85 b8 00 00 00 48 0f cf 48 31 f8 48 89 01 49
+> 89 17
+> All code
+> =3D=3D=3D=3D=3D=3D=3D=3D
+>    0: 0f 84 46 ff ff ff    je     0xffffffffffffff4c
+>    6: 65 ff 05 a4 bd e4 47 incl   %gs:0x47e4bda4(%rip)        # 0x47e4bdb=
+1
+>    d: 48 8b 4d 00          mov    0x0(%rbp),%rcx
+>   11: 65 48 03 0d e8 5f e3 add    %gs:0x47e35fe8(%rip),%rcx        # 0x47=
+e36001
+>   18: 47
+>   19: 9c                    pushf
+>   1a: 5e                    pop    %rsi
+>   1b: fa                    cli
+>   1c: 45 31 d2              xor    %r10d,%r10d
+>   1f: eb 2f                jmp    0x50
+>   21: 8b 45 28              mov    0x28(%rbp),%eax
+>   24: 48 01 d0              add    %rdx,%rax
+>   27: 48 89 c7              mov    %rax,%rdi
+>   2a:* 48 8b 00              mov    (%rax),%rax <-- trapping instruction
+>   2d: 48 33 85 b8 00 00 00 xor    0xb8(%rbp),%rax
+>   34: 48 0f cf              bswap  %rdi
+>   37: 48 31 f8              xor    %rdi,%rax
+>   3a: 48 89 01              mov    %rax,(%rcx)
+>   3d: 49 89 17              mov    %rdx,(%r15)
+>=20
+> Code starting with the faulting instruction
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+>    0: 48 8b 00              mov    (%rax),%rax
+>    3: 48 33 85 b8 00 00 00 xor    0xb8(%rbp),%rax
+>    a: 48 0f cf              bswap  %rdi
+>    d: 48 31 f8              xor    %rdi,%rax
+>   10: 48 89 01              mov    %rax,(%rcx)
+>   13: 49 89 17              mov    %rdx,(%r15)
+> [24249.112951] RSP: 0018:ffff9fc303973d20 EFLAGS: 00010086
+> [24249.118275] RAX: b0746d4e6bee35e2 RBX: 0000000000000001 RCX: ffff8d5a2=
+fa31da0
+> [24249.125501] RDX: b0746d4e6bee3572 RSI: 0000000000000286 RDI: b0746d4e6=
+bee35e2
+> [24249.132730] RBP: ffff8d56c016d500 R08: 0000000000000400 R09: ffff8d56e=
+de0e67a
+> [24249.139958] R10: 0000000000000001 R11: ffff8d56c59d88c0 R12: 000000000=
+0000010
+> [24249.147187] R13: 0000000000000820 R14: ffff8d5a2fa2a810 R15: ffff8d5a2=
+fa2a818
+> [24249.154415] FS:  0000000000000000(0000) GS:ffff8d5a2fa00000(0000)
+> knlGS:0000000000000000
+> [24249.162620] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> [24249.168471] CR2: 00007f0f3f7f8760 CR3: 0000000102466000 CR4: 000000000=
+03526f0
+> [24249.175717] Call Trace:
+> [24249.178268]  <TASK>
+> [24249.180476] ? die_addr (arch/x86/kernel/dumpstack.c:421
+> arch/x86/kernel/dumpstack.c:460)
+> [24249.183907] ? exc_general_protection (arch/x86/kernel/traps.c:783
+> arch/x86/kernel/traps.c:728)
+> [24249.188726] ? asm_exc_general_protection
+> (./arch/x86/include/asm/idtentry.h:564)
+> [24249.193720] ? kmem_cache_alloc_bulk (mm/slub.c:377 mm/slub.c:388
+> mm/slub.c:395 mm/slub.c:3963 mm/slub.c:4026)
+> [24249.198361] ? netif_receive_skb_list_internal (net/core/dev.c:5729)
+> [24249.203960] napi_skb_cache_get (net/core/skbuff.c:338)
+> [24249.208078] __napi_build_skb (net/core/skbuff.c:517)
+> [24249.211934] napi_build_skb (net/core/skbuff.c:541)
+> [24249.215616] ixgbe_poll
+> (drivers/net/ethernet/intel/ixgbe/ixgbe_main.c:2165
+> drivers/net/ethernet/intel/ixgbe/ixgbe_main.c:2361
+> drivers/net/ethernet/intel/ixgbe/ixgbe_main.c:3178)
+> [24249.219305] __napi_poll (net/core/dev.c:6498)
+> [24249.222905] napi_threaded_poll (./include/linux/netpoll.h:89
+> net/core/dev.c:6640)
+> [24249.227197] ? __napi_poll (net/core/dev.c:6625)
+> [24249.231050] kthread (kernel/kthread.c:379)
+> [24249.234300] ? kthread_complete_and_exit (kernel/kthread.c:332)
+> [24249.239207] ret_from_fork (arch/x86/entry/entry_64.S:314)
+> [24249.242892]  </TASK>
+> [24249.245185] Modules linked in: chaoskey
+> [24249.249133] ---[ end trace 0000000000000000 ]---
+> [24249.270157] pstore: backend (erst) writing error (-28)
+> [24249.275408] RIP: 0010:kmem_cache_alloc_bulk (mm/slub.c:377
+> mm/slub.c:388 mm/slub.c:395 mm/slub.c:3963 mm/slub.c:4026)
+> [24249.280660] Code: 0f 84 46 ff ff ff 65 ff 05 a4 bd e4 47 48 8b 4d
+> 00 65 48 03 0d e8 5f e3 47 9c 5e fa 45 31 d2 eb 2f 8b 45 28 48 01 d0
+> 48 89 c7 <48> 8b 00 48 33 85 b8 00 00 00 48 0f cf 48 31 f8 48 89 01 49
+> 89 17
+> All code
+> =3D=3D=3D=3D=3D=3D=3D=3D
+>    0: 0f 84 46 ff ff ff    je     0xffffffffffffff4c
+>    6: 65 ff 05 a4 bd e4 47 incl   %gs:0x47e4bda4(%rip)        # 0x47e4bdb=
+1
+>    d: 48 8b 4d 00          mov    0x0(%rbp),%rcx
+>   11: 65 48 03 0d e8 5f e3 add    %gs:0x47e35fe8(%rip),%rcx        # 0x47=
+e36001
+>   18: 47
+>   19: 9c                    pushf
+>   1a: 5e                    pop    %rsi
+>   1b: fa                    cli
+>   1c: 45 31 d2              xor    %r10d,%r10d
+>   1f: eb 2f                jmp    0x50
+>   21: 8b 45 28              mov    0x28(%rbp),%eax
+>   24: 48 01 d0              add    %rdx,%rax
+>   27: 48 89 c7              mov    %rax,%rdi
+>   2a:* 48 8b 00              mov    (%rax),%rax <-- trapping instruction
+>   2d: 48 33 85 b8 00 00 00 xor    0xb8(%rbp),%rax
+>   34: 48 0f cf              bswap  %rdi
+>   37: 48 31 f8              xor    %rdi,%rax
+>   3a: 48 89 01              mov    %rax,(%rcx)
+>   3d: 49 89 17              mov    %rdx,(%r15)
+>=20
+> Code starting with the faulting instruction
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+>    0: 48 8b 00              mov    (%rax),%rax
+>    3: 48 33 85 b8 00 00 00 xor    0xb8(%rbp),%rax
+>    a: 48 0f cf              bswap  %rdi
+>    d: 48 31 f8              xor    %rdi,%rax
+>   10: 48 89 01              mov    %rax,(%rcx)
+>   13: 49 89 17              mov    %rdx,(%r15)
+> [24249.299578] RSP: 0018:ffff9fc303973d20 EFLAGS: 00010086
+> [24249.304917] RAX: b0746d4e6bee35e2 RBX: 0000000000000001 RCX: ffff8d5a2=
+fa31da0
+> [24249.312161] RDX: b0746d4e6bee3572 RSI: 0000000000000286 RDI: b0746d4e6=
+bee35e2
+> [24249.319407] RBP: ffff8d56c016d500 R08: 0000000000000400 R09: ffff8d56e=
+de0e67a
+> [24249.326651] R10: 0000000000000001 R11: ffff8d56c59d88c0 R12: 000000000=
+0000010
+> [24249.333896] R13: 0000000000000820 R14: ffff8d5a2fa2a810 R15: ffff8d5a2=
+fa2a818
+> [24249.341141] FS:  0000000000000000(0000) GS:ffff8d5a2fa00000(0000)
+> knlGS:0000000000000000
+> [24249.349356] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> [24249.355206] CR2: 00007f0f3f7f8760 CR3: 0000000102466000 CR4: 000000000=
+03526f0
+> [24249.362452] Kernel panic - not syncing: Fatal exception in interrupt
+> [24249.566854] Kernel Offset: 0x36e00000 from 0xffffffff81000000
+> (relocation range: 0xffffffff80000000-0xffffffffbfffffff)
+> [24249.594124] ---[ end Kernel panic - not syncing: Fatal exception in
+> interrupt ]---
+>=20
+> It's also odd that i get a OOM - it only seems to happen when i enable
+> rx-gro-list=C2=A0
+
+Unfortunately, not the result I was looking for. That leads to more
+questions then answer, I'm sorry.
+
+How long did the host keep going with rx-gro-list enabled?
+
+Did you observe the WARN_ON() introduced by the tentative fix?
+
+> - it's also odd because this machine always has ~8GB of
+> memory available
+
+It looks like there is a memory leak somewhere, and I don't think the
+tentative fixup introduced such issue.
+
+It looks like the above splat is due to a slab corruption, which in
+turn could be unrelated from the mentioned leak, but it could/should=20
+be related to rx-gro-list.=20
+
+Could you please run the test with both kmemleak and kasan enabled?
+
+Additionally could you please disclose if you have non trivial
+netfilter and/or bridge filter and/or tc rules possibly modifying the
+incoming/egress packets?
+
+If kasan is not an option, could you please apply the debug the patch
+below? (on top of the previous one)
+
+Thanks!
+
+Paolo
+---
+diff --git a/net/core/skbuff.c b/net/core/skbuff.c
+index 6c5915efbc17..94adca27b205 100644
+--- a/net/core/skbuff.c
++++ b/net/core/skbuff.c
+@@ -4295,6 +4295,8 @@ struct sk_buff *skb_segment_list(struct sk_buff *skb,
+ 		delta_len +=3D nskb->len;
+=20
+ 		skb_push(nskb, -skb_network_offset(nskb) + offset);
++		if (WARN_ON_ONCE(nskb->data - skb->head > skb->tail))
++			goto err_linearize;
+=20
+ 		skb_release_head_state(nskb);
+ 		len_diff =3D skb_network_header_len(nskb) - skb_network_header_len(skb);
+@@ -4302,6 +4304,11 @@ struct sk_buff *skb_segment_list(struct sk_buff *skb=
+,
+=20
+ 		skb_headers_offset_update(nskb, skb_headroom(nskb) - skb_headroom(skb));
+ 		nskb->transport_header +=3D len_diff;
++		if (WARN_ON_ONCE(tnl_hlen > skb_headroom(nskb)))
++			goto err_linearize;
++		if (WARN_ON_ONCE(skb_headroom(nskb) + offset > nskb->tail))
++			goto err_linearize;
++
+ 		skb_copy_from_linear_data_offset(skb, -tnl_hlen,
+ 						 nskb->data - tnl_hlen,
+ 						 offset + tnl_hlen);
 
 
-On 26.06.23 г. 17:12 ч., Kai Huang wrote:
-> On the platforms with the "partial write machine check" erratum, the
-> kexec() needs to convert all TDX private pages back to normal before
-> booting to the new kernel.  Otherwise, the new kernel may get unexpected
-> machine check.
-> 
-> There's no existing infrastructure to track TDX private pages.  Change
-> to keep TDMRs when module initialization is successful so that they can
-> be used to find PAMTs.
-> 
-> With this change, only put_online_mems() and freeing the buffer of the
-> TDSYSINFO_STRUCT and CMR array still need to be done even when module
-> initialization is successful.  Adjust the error handling to explicitly
-> do them when module initialization is successful and unconditionally
-> clean up the rest when initialization fails.
-> 
-> Signed-off-by: Kai Huang <kai.huang@intel.com>
-> ---
-> 
-> v11 -> v12 (new patch):
->    - Defer keeping TDMRs logic to this patch for better review
->    - Improved error handling logic (Nikolay/Kirill in patch 15)
-> 
-> ---
->   arch/x86/virt/vmx/tdx/tdx.c | 84 ++++++++++++++++++-------------------
->   1 file changed, 42 insertions(+), 42 deletions(-)
-> 
-> diff --git a/arch/x86/virt/vmx/tdx/tdx.c b/arch/x86/virt/vmx/tdx/tdx.c
-> index 52b7267ea226..85b24b2e9417 100644
-> --- a/arch/x86/virt/vmx/tdx/tdx.c
-> +++ b/arch/x86/virt/vmx/tdx/tdx.c
-> @@ -49,6 +49,8 @@ static DEFINE_MUTEX(tdx_module_lock);
->   /* All TDX-usable memory regions.  Protected by mem_hotplug_lock. */
->   static LIST_HEAD(tdx_memlist);
->   
-> +static struct tdmr_info_list tdx_tdmr_list;
-> +
->   /*
->    * Wrapper of __seamcall() to convert SEAMCALL leaf function error code
->    * to kernel error code.  @seamcall_ret and @out contain the SEAMCALL
-> @@ -1047,7 +1049,6 @@ static int init_tdmrs(struct tdmr_info_list *tdmr_list)
->   static int init_tdx_module(void)
->   {
->   	struct tdsysinfo_struct *sysinfo;
-> -	struct tdmr_info_list tdmr_list;
->   	struct cmr_info *cmr_array;
->   	int ret;
->   
-> @@ -1088,17 +1089,17 @@ static int init_tdx_module(void)
->   		goto out_put_tdxmem;
->   
->   	/* Allocate enough space for constructing TDMRs */
-> -	ret = alloc_tdmr_list(&tdmr_list, sysinfo);
-> +	ret = alloc_tdmr_list(&tdx_tdmr_list, sysinfo);
->   	if (ret)
->   		goto out_free_tdxmem;
->   
->   	/* Cover all TDX-usable memory regions in TDMRs */
-> -	ret = construct_tdmrs(&tdx_memlist, &tdmr_list, sysinfo);
-> +	ret = construct_tdmrs(&tdx_memlist, &tdx_tdmr_list, sysinfo);
-
-nit: Does it make sense to keep passing those global variables are 
-function parameters? Since those functions are static it's unlikely that 
-they are going to be used with any other parameter so might as well use 
-the parameter directly. It makes the code somewhat easier to follow.
-
-<snip>
