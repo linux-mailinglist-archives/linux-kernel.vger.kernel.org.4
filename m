@@ -2,249 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BF38741660
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 18:29:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BAE8741671
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 18:30:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231817AbjF1Q2U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 12:28:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38420 "EHLO
+        id S231286AbjF1QaQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 12:30:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230311AbjF1Q2R (ORCPT
+        with ESMTP id S232102AbjF1Q3q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 12:28:17 -0400
-Received: from mail-oo1-xc2a.google.com (mail-oo1-xc2a.google.com [IPv6:2607:f8b0:4864:20::c2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E71472690
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 09:28:15 -0700 (PDT)
-Received: by mail-oo1-xc2a.google.com with SMTP id 006d021491bc7-565a8d9d832so70950eaf.1
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 09:28:15 -0700 (PDT)
+        Wed, 28 Jun 2023 12:29:46 -0400
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 596F42694
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 09:29:45 -0700 (PDT)
+Received: by mail-pl1-x62f.google.com with SMTP id d9443c01a7336-1b80512a7f2so660975ad.3
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 09:29:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1687969695; x=1690561695;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=vk9Ma8PHjIe8nBHU9Tz+Dpnfhv6Qv1Z0Rq6xA0WYD24=;
-        b=yHNTfrxGBFOW4I1D4j3xGL3prMRwB4VqrZd+oQbzt1v9GmVnxue/rRqQs9O5tG6Rma
-         tqKm8ycmdeozHiG6UOV7DHESuhV0ulqz7wdASTj3Hk8K9J7Cxuf/s7+KCcwdYnveGcz3
-         KkPuGlmOPY8D9qeejwYGmoGgpzJ1DckSn+hqQFBmPAqTRsotfF/xhT/JibQazLM26ylg
-         16yF0gld2Z0BqJ1ojmeS4QVTWkmd3uktowgpuPeiNbjwTKZv+Oq7r1ECR62LcP2FGK5O
-         Oy1YJ7VqlxQOiwsv7ocYP8d9jFYpUFWWpx2/BRm6kH9ISoLodtLpR8eqzqHhZ5AtFYQ7
-         DTpg==
+        d=chromium.org; s=google; t=1687969785; x=1690561785;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=sqKrDSgd4uFuqB+8yGDCf1EvrfOgDuHhZYf9n2oqenA=;
+        b=lQpayUTyjUp2A3gMubF0kw1VV3wpmvbGoT9P5eueQR0YRfymWkoTa+nRzmgPdH2pOi
+         BYTRLCEi3IRVDdUO9YEwrpp709o9iNkTa1tXPo96mY945Ni/iJSBEWl9WjfcEMV6IxHi
+         GO5fjMVQH/jGjoYH+UVlbhK+DSPKrId9uMcFg=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687969695; x=1690561695;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=vk9Ma8PHjIe8nBHU9Tz+Dpnfhv6Qv1Z0Rq6xA0WYD24=;
-        b=YzK9UNMDimhin4LqJUfhYYY8UfyQDfVYYzO2+8PX/yg7PnrR9TroGTBz04Q4PyUENU
-         Lf4u+CqWiSW3lDIMYIXBS7M2ZcICFDeXdvwkSmYUkzlnB6a6b01aGo/na6TX+imedZSu
-         V27/wySuq4U4lnyQy8zCefGKMSpBmO9U6v14v9WbQQCyAMmOxczGHbUBjLBf89W9I4FW
-         fEwrVQHU303WDm92GQWprqZcXw38SODqPKihzP5t5mmcdIJKPAxxVPSWg6tf6QH+BPDN
-         11EuLQqe9oysylRtrOIHdOMnQcIWVVAeZ7Z5IxF+SxYqvYzS9F3sXe84CDeB1ex0e19j
-         U7Wg==
-X-Gm-Message-State: AC+VfDy9OMaQ5V5WFooAXfcTSDsGdq1f0GKWnmk4oEwnHPMfoC+RnALW
-        Z+IbHX4gqDx4GC6Hn85NzXeq6bbchCe61b05StBmpg==
-X-Google-Smtp-Source: ACHHUZ61g6c+cebt5a5+lx02xCBTokStJ/vLCBLj9Zw+15RF2IKA/aXFIPF2r3qi4pRqHE4phsdPYoyRCE3RXYseP4g=
-X-Received: by 2002:a05:6358:f49:b0:131:94f:b4ff with SMTP id
- c9-20020a0563580f4900b00131094fb4ffmr17431955rwj.5.1687969694941; Wed, 28 Jun
- 2023 09:28:14 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1687969785; x=1690561785;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=sqKrDSgd4uFuqB+8yGDCf1EvrfOgDuHhZYf9n2oqenA=;
+        b=UnePmqo28kyZALkSUozxUYBOis5n8RDTyjAXRc1DPUS3r4qo2RqJLQ/zcud+UPrDUk
+         AfS0703b3uknHMXiN1QC2RX35AYrUBuNdc4oRUskcjdgr3K+dJZlHXmSRuwzqhKXmGll
+         KfIYLkImLSRRcJbeGLPnUtpTIV2An7D04j93MiXTYkBmKABs1CeK/Ww4GNxryyXgExtC
+         Z16Nc4QUZ/y9c4cFzGszzQM2/NxiS18BKRvOhavSGQWbD4/Z9AHUkdQnR65mLLgFLVvH
+         FJCfQ356SOshaXM+GtxFt28t7E2u9Bh4FDymwFMIU++K/1l/4u4+BGfpirUisfn6Wgre
+         mOLw==
+X-Gm-Message-State: AC+VfDz0VpdHFGQN1ewpbP4/PxZvmUPakexO47Lu1V89XzMLGXCnYSgD
+        w2RSjjYdpdb5vMtz9ObDWi7KQA==
+X-Google-Smtp-Source: ACHHUZ5RyEP72eBVHjbEP+KjEVKNgHCOmAIxs2p5S+EWBaAbypM5cXIocfGTAzvGLZYTuHlytZyHBg==
+X-Received: by 2002:a17:902:ab95:b0:1af:ffda:855a with SMTP id f21-20020a170902ab9500b001afffda855amr9488995plr.9.1687969784812;
+        Wed, 28 Jun 2023 09:29:44 -0700 (PDT)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id c3-20020a170902848300b001b53d3d8f3dsm7932959plo.299.2023.06.28.09.29.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 28 Jun 2023 09:29:43 -0700 (PDT)
+Date:   Wed, 28 Jun 2023 09:29:42 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Christoph Hellwig <hch@infradead.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Alexander Lobakin <aleksander.lobakin@intel.com>,
+        Alexander Potapenko <glider@google.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Arne Welzel <arne.welzel@corelight.com>,
+        Azeem Shaikh <azeemshaikh38@gmail.com>,
+        Bill Wendling <morbo@google.com>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        "Darrick J. Wong" <djwong@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Fangrui Song <maskray@google.com>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>, Jan Kara <jack@suse.cz>,
+        Joe Perches <joe@perches.com>,
+        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+        John Stultz <jstultz@google.com>,
+        Jozsef Kadlecsik <kadlec@netfilter.org>,
+        Marco Elver <elver@google.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Palmer Dabbelt <palmer@rivosinc.com>,
+        Simon Horman <simon.horman@corigine.com>,
+        Song Liu <song@kernel.org>,
+        Thorsten Leemhuis <linux@leemhuis.info>,
+        Tyrel Datwyler <tyreld@linux.ibm.com>,
+        Wyes Karny <wyes.karny@amd.com>, linux-kernel@vger.kernel.org,
+        linux-hardening@vger.kernel.org
+Subject: Re: [GIT PULL] hardening updates for v6.5-rc1
+Message-ID: <202306280920.CB69D0F75@keescook>
+References: <202306271729.813C8788@keescook>
+ <ZJvRFZeYq6ZWLAWj@infradead.org>
 MIME-Version: 1.0
-References: <CAJuCfpECKqYiekDK6Zw58w10n1T4Q3R+2nymfHX2ZGfQVDC3VQ@mail.gmail.com>
- <20230627-ausgaben-brauhaus-a33e292558d8@brauner> <ZJstlHU4Y3ZtiWJe@slm.duckdns.org>
- <CAJuCfpFUrPGVSnZ9+CmMz31GjRNN+tNf6nUmiCgx0Cs5ygD64A@mail.gmail.com>
- <CAJuCfpFe2OdBjZkwHW5UCFUbnQh7hbNeqs7B99PXMXdFNjKb5Q@mail.gmail.com>
- <CAJuCfpG2_trH2DuudX_E0CWfMxyTKfPWqJU14zjVxpTk6kPiWQ@mail.gmail.com>
- <ZJuSzlHfbLj3OjvM@slm.duckdns.org> <CAJuCfpGoNbLOLm08LWKPOgn05+FB1GEqeMTUSJUZpRmDYQSjpA@mail.gmail.com>
- <20230628-meisennest-redlich-c09e79fde7f7@brauner> <CAJuCfpHqZ=5a_2k==FsdBbwDCF7+s7Ji3aZ37LBqUgyXLMz7gA@mail.gmail.com>
- <20230628-faden-qualvoll-6c33b570f54c@brauner>
-In-Reply-To: <20230628-faden-qualvoll-6c33b570f54c@brauner>
-From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Wed, 28 Jun 2023 09:28:03 -0700
-Message-ID: <CAJuCfpF=DjwpWuhugJkVzet2diLkf8eagqxjR8iad39odKdeYQ@mail.gmail.com>
-Subject: Re: [PATCH 1/2] kernfs: add kernfs_ops.free operation to free
- resources tied to the file
-To:     Christian Brauner <brauner@kernel.org>
-Cc:     Tejun Heo <tj@kernel.org>, gregkh@linuxfoundation.org,
-        peterz@infradead.org, lujialin4@huawei.com,
-        lizefan.x@bytedance.com, hannes@cmpxchg.org, mingo@redhat.com,
-        ebiggers@kernel.org, oleg@redhat.com, akpm@linux-foundation.org,
-        viro@zeniv.linux.org.uk, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, vschneid@redhat.com,
-        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, kernel-team@android.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZJvRFZeYq6ZWLAWj@infradead.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 28, 2023 at 1:41=E2=80=AFAM Christian Brauner <brauner@kernel.o=
-rg> wrote:
->
-> On Wed, Jun 28, 2023 at 12:46:43AM -0700, Suren Baghdasaryan wrote:
-> > On Wed, Jun 28, 2023 at 12:26=E2=80=AFAM Christian Brauner <brauner@ker=
-nel.org> wrote:
-> > >
-> > > On Tue, Jun 27, 2023 at 08:09:46PM -0700, Suren Baghdasaryan wrote:
-> > > > On Tue, Jun 27, 2023 at 6:54=E2=80=AFPM Tejun Heo <tj@kernel.org> w=
-rote:
-> > > > >
-> > > > > Hello,
-> > > > >
-> > > > > On Tue, Jun 27, 2023 at 02:58:08PM -0700, Suren Baghdasaryan wrot=
-e:
-> > > > > > Ok in kernfs_generic_poll() we are using kernfs_open_node.poll
-> > > > > > waitqueue head for polling and kernfs_open_node is freed from i=
-nside
-> > > > > > kernfs_unlink_open_file() which is called from kernfs_fop_relea=
-se().
-> > > > > > So, it is destroyed only when the last fput() is done, unlike t=
-he
-> > > > > > ops->release() operation which we are using for destroying PSI
-> > > > > > trigger's waitqueue. So, it seems we still need an operation wh=
-ich
-> > > > > > would indicate that the file is truly going away.
-> > > > >
-> > > > > If we want to stay consistent with how kernfs behaves w.r.t. seve=
-ring, the
-> > > > > right thing to do would be preventing any future polling at sever=
-ing and
-> > > > > waking up everyone currently waiting, which sounds fine from cgro=
-up behavior
-> > > > > POV too.
-> > > >
-> > > > That's actually what we are currently doing for PSI triggers.
-> > > > ->release() is handled by cgroup_pressure_release() which signals t=
-he
-> > > > waiters, waits for RCU grace period to pass (per
-> > > > https://elixir.bootlin.com/linux/latest/source/include/linux/wait.h=
-#L258)
-> > > > and then releases all the trigger resources including the waitqueue
-> > > > head. However as reported in
-> > > > https://lore.kernel.org/all/20230613062306.101831-1-lujialin4@huawe=
-i.com
-> > > > this does not save us from the synchronous polling case:
-> > > >
-> > > >                                                   do_select
-> > > >                                                       vfs_poll
-> > > > cgroup_pressure_release
-> > > >     psi_trigger_destroy
-> > > >         wake_up_pollfree(&t->event_wait) -> unblocks vfs_poll
-> > > >         synchronize_rcu()
-> > > >         kfree(t) -> frees waitqueue head
-> > > >                                                      poll_freewait(=
-)
-> > > > -> uses waitqueue head
-> > > >
-> > > >
-> > > > This happens because we release the resources associated with the f=
-ile
-> > > > while there are still file users (the file's refcount is non-zero).
-> > > > And that happens because kernfs can call ->release() before the las=
-t
-> > > > fput().
-> > > >
-> > > > >
-> > > > > Now, the challenge is designing an interface which is difficult t=
-o make
-> > > > > mistake with. IOW, it'd be great if kernfs wraps poll call so tha=
-t severing
-> > > > > is implemented without kernfs users doing anything, or at least m=
-ake it
-> > > > > pretty obvious what the correct usage pattern is.
-> > > > >
-> > > > > > Christian's suggestion to rename current ops->release() operati=
-on into
-> > > > > > ops->drain() (or ops->flush() per Matthew's request) and introd=
-uce a
-> > > > > > "new" ops->release() which is called only when the last fput() =
-is done
-> > > > > > seems sane to me. Would everyone be happy with that approach?
-> > > > >
-> > > > > I'm not sure I'd go there. The contract is that once ->release() =
-is called,
-> > > > > the code backing that file can go away (e.g. rmmod'd). It really =
-should
-> > > > > behave just like the last put from kernfs users' POV.
-> > > >
-> > > > I 100% agree with the above statement.
-> > > >
-> > > > > For this specific fix,
-> > > > > it's safe because we know the ops is always built into the kernel=
- and won't
->
-> I don't know if this talks about kernfs_ops (likely) or talks about
-> f_ops but fyi for f_ops this isn't a problem. See fops_get() in
-> do_dentry_open() which takes a reference on the mode that provides the
-> fops. And debugfs - a little more elaborately - handles this as well.
->
-> > > > > go away but it'd be really bad if the interface says "this is a n=
-ormal thing
-> > > > > to do". We'd be calling into rmmod'd text pages in no time.
-> > > > >
-> > > > > So, I mean, even for temporary fix, we have to make it abundantly=
- clear that
-> > > > > this is not for usual usage and can only be used if the code back=
-ing the ops
-> > > > > is built into the kernel and so on.
-> > > >
-> > > > I think the root cause of this problem is that ->release() in kernf=
-s
-> > > > does not adhere to the common rule that ->release() is called only
-> > > > when the file is going away and has no users left. Am I wrong?
-> > >
-> > > So imho, ultimately this all comes down to rmdir() having special
-> > > semantics in kernfs. On any regular filesystem an rmdir() on a direct=
-ory
-> > > which is still referenced by a struct file doesn't trigger an
-> > > f_op->release() operation. It's just that directory is unlinked and
-> > > you get some sort of errno like ENOENT when you try to create new fil=
-es
-> > > in there or whatever. The actual f_op->release) however is triggered
-> > > on last fput().
-> > >
-> > > But in essence, kernfs treats an rmdir() operation as being equivalen=
-t
-> > > to a final fput() such that it somehow magically kills all file
-> > > references. And that's just wrong and not supported.
-> >
-> > Thanks for the explanation, Christian!
-> > If kernfs is special and needs different rules for calling
-> > f_op->release() then fine, but I need an operation which tells me
-> > there are no users of the file so that I can free the resources.
-> > What's the best way to do that?
->
-> Imho, if there's still someone with an fd referencing that file then
-> there's still a user. That's unlink() while holding an fd in a nutshell.
->
-> But generically, afaui what you seem to want is:
->
-> (1) a way to shutdown functionality provided by a kernfs node on removal
->     of that node
-> (2) a way to release the resources of a kernfs node
->
-> So (2) is seemingly what kernfs_ops->release() is about but it's also
-> used for (1). So while I initially thought about ->drain() or whatever
-> it seems what you really want is for struct kernfs_ops to gain an
-> unlink()/remove()/rmdir() method(s). The method can be implemented by
-> interested callers and should be called when the kernfs node is removed.
->
-> And that's when you can shutdown any functionality without freeing the
-> resources.
->
-> Imho, if you add struct gimmegimme_ops with same names as f_op you
-> really to mirror them as close as possible otherwise you're asking for
-> problems.
+On Tue, Jun 27, 2023 at 11:20:05PM -0700, Christoph Hellwig wrote:
+> On Tue, Jun 27, 2023 at 05:34:57PM -0700, Kees Cook wrote:
+> > - The under-development compiler attribute __counted_by has been added
+> >   so that we can start annotating flexible array members with their
+> >   associated structure member that tracks the count of flexible array
+> >   elements at run-time. It is possible (likely?) that the exact syntax
+> >   of the attribute will change before it is finalized, but GCC and Clang
+> >   are working together to sort it out. Any changes can be made to the
+> >   macro while we continue to add annotations. As an example, I have a
+> >   treewide commit waiting with such annotations found via Coccinelle:
+> >   https://git.kernel.org/linus/adc5b3cb48a049563dc673f348eab7b6beba8a9b
+> >   See commit dd06e72e68bcb4070ef211be100d2896e236c8fb for more details.
+> 
+> So I've been following the discussion of that feature for clang and
+> I can't wait to actually be able to use it.
 
-Thanks for the feedback!
-To summarize my understanding of your proposal, you suggest adding new
-kernfs_ops for the case you marked (1) and change ->release() to do
-only (2). Please correct me if I misunderstood. Greg, Tejun, WDYT?
+Me too! :)
+
+> But this feels a bit premature to me, not only due to the ongoing
+> discussions on the syntax, but more importantly because I fear it
+
+I was on the fence about this too, and in the end, I decided that any
+syntax changes are going to be mostly mechanical, and in the meantime
+we needed a way to capture the associations. This has been a pain point
+for years as we've been doing flexible array conversions, since when
+doing the work it usually becomes clear which struct member is tracking
+the element count, but that information couldn't be reliably recorded
+anywhere. Now we can include the annotation (which is the really important
+part). If/when the exact syntax changes, we can either adjust the macro,
+or at worst we can easily do a tree-wide change. But I really want to
+start capturing the associations _now_, and get us all into the habit
+of doing it, and I want it to be through some kind of regular syntax
+(now that there are patches to both GCC and Clang that can validate the
+results), not just comments.
+
+> will be completely misued before we have a compiler actually supporting
+> available widely enough that we have it in the usual test bots.
+
+How do you see it being misused? Your mention of the test bots, I think,
+means you're worried the annotations will go unchecked for valid syntax?
+FWIW, I've got builders with the GCC and Clang patches that should catch
+this.
+
+-- 
+Kees Cook
