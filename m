@@ -2,135 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 167AE741752
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 19:37:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B95D741755
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 19:38:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231616AbjF1RhQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 13:37:16 -0400
-Received: from mga18.intel.com ([134.134.136.126]:11724 "EHLO mga18.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231585AbjF1RhE (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 13:37:04 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687973824; x=1719509824;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=vTxGJoHsoj8xuM7czgOyMiPJFjlrc09vF1YazUZeyMc=;
-  b=mKaREc6vsCO5PKNgSQdo/hYTjIR5txjkWJx00skbfkJCc5OBOBtEF0gs
-   74lotPEEsIgSopfHuJaxKx0adb6XuK99LsFgkLyyZE3lPP8F2CXYDOAPz
-   hQ/tFzdYByaYzp03dh23MeY8BQ6rGpcg1JHTP+4WHV/8ees62thIVBpr7
-   wzpE40J4cTBicOQdDUoN2oY6YYSF6oF1oxV5G2egdVCNjevI5YWaUOVby
-   MSiuKPIrnIuF5ux+JKro1gZ74SuNY3rI14Tdih4vL7dCAWe5AVmxjyqET
-   zkSa7FDazwz+a6BAPaQWURFl/SiQTy2MQOtLkhNosPj+He+sHp66YSXwP
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10755"; a="346679449"
-X-IronPort-AV: E=Sophos;i="6.01,166,1684825200"; 
-   d="scan'208";a="346679449"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2023 10:37:03 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10755"; a="1047499368"
-X-IronPort-AV: E=Sophos;i="6.01,166,1684825200"; 
-   d="scan'208";a="1047499368"
-Received: from uhpatel-desk4.jf.intel.com ([10.23.15.157])
-  by fmsmga005.fm.intel.com with ESMTP; 28 Jun 2023 10:37:01 -0700
-From:   Utkarsh Patel <utkarsh.h.patel@intel.com>
-To:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        heikki.krogerus@linux.intel.com, pmalani@chromium.org,
-        bleung@chromium.org
-Cc:     Utkarsh Patel <utkarsh.h.patel@intel.com>
-Subject: [PATCH v2 2/2] usb: typec: intel_pmc_mux: Configure Active and Retimer Cable type
-Date:   Wed, 28 Jun 2023 10:37:27 -0700
-Message-Id: <20230628173727.701140-3-utkarsh.h.patel@intel.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230628173727.701140-1-utkarsh.h.patel@intel.com>
-References: <20230628173727.701140-1-utkarsh.h.patel@intel.com>
+        id S231721AbjF1RiB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 13:38:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45346 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232022AbjF1Rhl (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 28 Jun 2023 13:37:41 -0400
+Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C8342116;
+        Wed, 28 Jun 2023 10:37:40 -0700 (PDT)
+Received: by mail-pg1-x530.google.com with SMTP id 41be03b00d2f7-553a1f13d9fso4821768a12.1;
+        Wed, 28 Jun 2023 10:37:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687973860; x=1690565860;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=1yBs5D4wuN/Qn3dTB04DQldh1q8a2hbv1sJCNrinerQ=;
+        b=HWp/WrUb9iVyx1eK+ZvTzvrWC+7UTUHapR4hQT7zeei3AcUJVeobpacj+UcELGoHIV
+         iwqWGobm09SdUbNSxdLhA+BwcZgioTuxUvKzRK8jbhBks1fVebyHZTlAezIhJtSE3Yjl
+         vi161Svqtqi+l0WhJ29TqvqGdM9xpFcEsRYnEgc1g1XO+B7NHJws9Q7DAuHeVw+hBrT7
+         3xFAhzgLpXIxmJrD3pbfGXUS28FWSdXfomwDE3cCU1MS6fLdK5zN0/LT9wKGbUDHQ9cI
+         mfoYni20HXEAD1wvfcN3xd7QdIWctN3md/tiUNnIvohpOZ2bW9ATI4LSr7bCgfOW3gE7
+         aoRQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687973860; x=1690565860;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=1yBs5D4wuN/Qn3dTB04DQldh1q8a2hbv1sJCNrinerQ=;
+        b=bdm0hwvkxSA5ftH9tFxQ6IKcf7xwd6R81Ku4pSIvt5OPyECL/rnNHAMRMWz829jIWA
+         c81eej2hL+ai+x6sSNx0vin6PVSdRqcihhGZYiOoE3ZaTEwz7uPaeQKSiZ01YApCOCfz
+         HYzQ8IuCAzCufz+ShQBrGhWzHlIummbdIwo9i72h62nmnlTDh3kB9QB23sTf3cQhw1Hq
+         BGpHhZHmUGM/0CSX84P+S1ba0C4nB7r9wPV/Yjb74wBsbOnkeSDmIWnCEGFZ3JUJqzjo
+         eW7U/Ty+ZUuZigJhZ9BNC/ayw2HMrTGD+4I8Ov9eEkfUl/vNeUFOxw+ZYbvY21bTPPnS
+         PJcw==
+X-Gm-Message-State: AC+VfDwvqBMce1/YBXoMWo2IZOZEWfh6P0bEE5BORy/UFSOg/ibLmyBi
+        3BeBoSXYjDDdnVAt+ylKTuhHkNsESQ7kCddfMkk=
+X-Google-Smtp-Source: ACHHUZ4PYVYUjZfEER0mnrZe93juN7xF+PBfEMEb/F1Ax7S/khFtg1eYQxso9QE6WkFA9CfWoXK8t6ANuA3XfJyXa48=
+X-Received: by 2002:a17:90b:4d83:b0:263:4164:dfba with SMTP id
+ oj3-20020a17090b4d8300b002634164dfbamr2118362pjb.6.1687973859868; Wed, 28 Jun
+ 2023 10:37:39 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20230626180744.453069285@linuxfoundation.org>
+In-Reply-To: <20230626180744.453069285@linuxfoundation.org>
+From:   Allen Pais <stable.kernel.dev@gmail.com>
+Date:   Wed, 28 Jun 2023 10:37:28 -0700
+Message-ID: <CAJq+SaDykUQdMHsCvevXoHA18xGgqU=xhj6BBR64T8_H5M+0pg@mail.gmail.com>
+Subject: Re: [PATCH 5.10 00/81] 5.10.186-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de,
+        conor@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+        lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Cable type such as active and retimer received as a part of Thunderbolt3
-or Thunderbolt4 cable discover mode VDO needs to be configured in the
-thunderbolt alternate mode.
+> This is the start of the stable review cycle for the 5.10.186 release.
+> There are 81 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Wed, 28 Jun 2023 18:07:23 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.186-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
+>
 
-Configuring the register bits for this cable type is changed with Intel
-Meteor Lake platform. BIT2 for Retimer/Redriver cable and BIT22 for
-Active/Passive cable.
+Compiled and booted on my x86_64 and ARM64 test systems. No errors or
+regressions.
 
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Signed-off-by: Utkarsh Patel <utkarsh.h.patel@intel.com>
----
-Changes in v2:
- - No changes.
----
----
- drivers/usb/typec/mux/intel_pmc_mux.c | 28 +++++++++++++++++++++++----
- 1 file changed, 24 insertions(+), 4 deletions(-)
+Tested-by: Allen Pais <apais@linux.microsoft.com>
 
-diff --git a/drivers/usb/typec/mux/intel_pmc_mux.c b/drivers/usb/typec/mux/intel_pmc_mux.c
-index e049eadb591e..ac088e2e49bc 100644
---- a/drivers/usb/typec/mux/intel_pmc_mux.c
-+++ b/drivers/usb/typec/mux/intel_pmc_mux.c
-@@ -57,7 +57,7 @@ enum {
- };
- 
- /* Common Mode Data bits */
--#define PMC_USB_ALTMODE_ACTIVE_CABLE	BIT(2)
-+#define PMC_USB_ALTMODE_RETIMER_CABLE	BIT(2)
- 
- #define PMC_USB_ALTMODE_ORI_SHIFT	1
- #define PMC_USB_ALTMODE_UFP_SHIFT	3
-@@ -69,6 +69,7 @@ enum {
- #define PMC_USB_ALTMODE_TBT_TYPE	BIT(17)
- #define PMC_USB_ALTMODE_CABLE_TYPE	BIT(18)
- #define PMC_USB_ALTMODE_ACTIVE_LINK	BIT(20)
-+#define PMC_USB_ALTMODE_ACTIVE_CABLE	BIT(22)
- #define PMC_USB_ALTMODE_FORCE_LSR	BIT(23)
- #define PMC_USB_ALTMODE_CABLE_SPD(_s_)	(((_s_) & GENMASK(2, 0)) << 25)
- #define   PMC_USB_ALTMODE_CABLE_USB31	1
-@@ -313,8 +314,18 @@ pmc_usb_mux_tbt(struct pmc_usb_port *port, struct typec_mux_state *state)
- 	if (data->cable_mode & TBT_CABLE_LINK_TRAINING)
- 		req.mode_data |= PMC_USB_ALTMODE_ACTIVE_LINK;
- 
--	if (data->enter_vdo & TBT_ENTER_MODE_ACTIVE_CABLE)
--		req.mode_data |= PMC_USB_ALTMODE_ACTIVE_CABLE;
-+	if (acpi_dev_hid_uid_match(port->pmc->iom_adev, "INTC1072", NULL) ||
-+	    acpi_dev_hid_uid_match(port->pmc->iom_adev, "INTC1079", NULL)) {
-+		if ((data->enter_vdo & TBT_ENTER_MODE_ACTIVE_CABLE) ||
-+		    (data->cable_mode & TBT_CABLE_RETIMER))
-+			req.mode_data |= PMC_USB_ALTMODE_RETIMER_CABLE;
-+	} else {
-+		if (data->enter_vdo & TBT_ENTER_MODE_ACTIVE_CABLE)
-+			req.mode_data |= PMC_USB_ALTMODE_ACTIVE_CABLE;
-+
-+		if (data->cable_mode & TBT_CABLE_RETIMER)
-+			req.mode_data |= PMC_USB_ALTMODE_RETIMER_CABLE;
-+	}
- 
- 	req.mode_data |= PMC_USB_ALTMODE_CABLE_SPD(cable_speed);
- 
-@@ -353,8 +364,17 @@ pmc_usb_mux_usb4(struct pmc_usb_port *port, struct typec_mux_state *state)
- 	case EUDO_CABLE_TYPE_OPTICAL:
- 		req.mode_data |= PMC_USB_ALTMODE_CABLE_TYPE;
- 		fallthrough;
-+	case EUDO_CABLE_TYPE_RE_TIMER:
-+		if (!acpi_dev_hid_uid_match(port->pmc->iom_adev, "INTC1072", NULL) ||
-+		    !acpi_dev_hid_uid_match(port->pmc->iom_adev, "INTC1079", NULL))
-+			req.mode_data |= PMC_USB_ALTMODE_RETIMER_CABLE;
-+		fallthrough;
- 	default:
--		req.mode_data |= PMC_USB_ALTMODE_ACTIVE_CABLE;
-+		if (acpi_dev_hid_uid_match(port->pmc->iom_adev, "INTC1072", NULL) ||
-+		    acpi_dev_hid_uid_match(port->pmc->iom_adev, "INTC1079", NULL))
-+			req.mode_data |= PMC_USB_ALTMODE_RETIMER_CABLE;
-+		else
-+			req.mode_data |= PMC_USB_ALTMODE_ACTIVE_CABLE;
- 
- 		/* Configure data rate to rounded in the case of Active TBT3
- 		 * and USB4 cables.
--- 
-2.25.1
-
+Thanks.
