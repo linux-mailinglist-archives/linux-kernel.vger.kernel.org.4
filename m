@@ -2,93 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2D5B7412CA
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 15:44:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 063A97412CB
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 15:44:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230456AbjF1NnZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 09:43:25 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:26245 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231382AbjF1NnI (ORCPT
+        id S232100AbjF1Nnr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 09:43:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49294 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231903AbjF1Nnk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 09:43:08 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1687959739;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=rndt2IvyzL1bpq00OdsHzX63mJ29mnBqUBKzgaUOisQ=;
-        b=E1vo6W//54F4gMefK9N52tVpQVQJWpxfu90KQqTqqK95Jf6E2kWa+vRVvH/OAQXrtKU+ho
-        Yjsv4eO3ONJxxpnalFvbCmYYn2dA1tILI/JRPYP/H6X8pbQg4Ifm2NF40KzhddpToP41Wa
-        D0pMZ5PqoCCfkfo+3nZhexzNaupBhYo=
-Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
- [209.85.160.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-662-VFsD99TPO9aDnYYHSWFmsQ-1; Wed, 28 Jun 2023 09:42:15 -0400
-X-MC-Unique: VFsD99TPO9aDnYYHSWFmsQ-1
-Received: by mail-qt1-f199.google.com with SMTP id d75a77b69052e-4032a3ad8c0so167691cf.0
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 06:42:14 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687959734; x=1690551734;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        Wed, 28 Jun 2023 09:43:40 -0400
+Received: from mail-qt1-x82a.google.com (mail-qt1-x82a.google.com [IPv6:2607:f8b0:4864:20::82a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58F0D2690
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 06:43:39 -0700 (PDT)
+Received: by mail-qt1-x82a.google.com with SMTP id d75a77b69052e-4007b5bafceso241151cf.1
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 06:43:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1687959818; x=1690551818;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=rndt2IvyzL1bpq00OdsHzX63mJ29mnBqUBKzgaUOisQ=;
-        b=GrWMThkNtIo3BIgY7cvSuBSLEG338gR1m0Du68WrpL0pWUPjRNg8R2St1fQQmLSrSu
-         fH5RFqNSCKWGKXIjxj2l4FeZfbTd9VeFYXU6PXcn/4fTgdz73IpVp8HYDCuiYei2S+Xg
-         IxXmngA2qDKjVEL/amaDglBW5UGrQ/4MLSSy7r6BCK6sbxXkf1SuA1va8srBARCgzz87
-         vQZSzmpVtHzhWoayllMu3AuzjeBrLdPm0XswHFX9DT/I2dMfwbKRUv3KAsvtzyvLCSKN
-         6kstyUUr1mVEcHd0RwvBQjfHBjvXn8V7sYqMCoJWU23K7DfLkk/gFCDu+L6+UyjWG61/
-         uXaA==
-X-Gm-Message-State: AC+VfDwwwVBpxfh7fDjgLfYqrRwkOSbqWC/KR6AOWehlAUq2ASmCo6f7
-        C+XHTXWUh1u6EpKjzLdFlQQ3sWmLUqDAebGefhbgSA6zuT4PaoJcHQCYeKkCJHgddYKQx3B4V58
-        16HalF/EtjvJmQUYqR7IMaKzx
-X-Received: by 2002:a05:622a:cd:b0:400:7965:cfe with SMTP id p13-20020a05622a00cd00b0040079650cfemr25071924qtw.4.1687959734533;
-        Wed, 28 Jun 2023 06:42:14 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ4LJyKRZ1t9xeZ7f1URuPPES1doCxywGeau5zExcrD1uMnZePa5MPysl7HJ8/dtiT97DYpdRw==
-X-Received: by 2002:a05:622a:cd:b0:400:7965:cfe with SMTP id p13-20020a05622a00cd00b0040079650cfemr25071899qtw.4.1687959734190;
-        Wed, 28 Jun 2023 06:42:14 -0700 (PDT)
-Received: from x1n (cpe5c7695f3aee0-cm5c7695f3aede.cpe.net.cable.rogers.com. [99.254.144.39])
-        by smtp.gmail.com with ESMTPSA id ge6-20020a05622a5c8600b004009320adb0sm5867387qtb.80.2023.06.28.06.42.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Jun 2023 06:42:13 -0700 (PDT)
-Date:   Wed, 28 Jun 2023 09:42:11 -0400
-From:   Peter Xu <peterx@redhat.com>
-To:     Suren Baghdasaryan <surenb@google.com>
-Cc:     akpm@linux-foundation.org, willy@infradead.org, hannes@cmpxchg.org,
-        mhocko@suse.com, josef@toxicpanda.com, jack@suse.cz,
-        ldufour@linux.ibm.com, laurent.dufour@fr.ibm.com,
-        michel@lespinasse.org, liam.howlett@oracle.com, jglisse@google.com,
-        vbabka@suse.cz, minchan@google.com, dave@stgolabs.net,
-        punit.agrawal@bytedance.com, lstoakes@gmail.com, hdanton@sina.com,
-        apopple@nvidia.com, ying.huang@intel.com, david@redhat.com,
-        yuzhao@google.com, dhowells@redhat.com, hughd@google.com,
-        viro@zeniv.linux.org.uk, brauner@kernel.org,
-        pasha.tatashin@soleen.com, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-team@android.com
-Subject: Re: [PATCH v4 4/6] mm: change folio_lock_or_retry to use vm_fault
- directly
-Message-ID: <ZJw4s0k8E1exM5XH@x1n>
-References: <20230628071800.544800-1-surenb@google.com>
- <20230628071800.544800-5-surenb@google.com>
+        bh=O+iaMZwyBIh+11qrQSGLnV1Wu07chjDvH/4Aamfu59w=;
+        b=HiMTruj17NQKh3aQ7JiBVNXSofLwSd76IwEZQnN9fPPiO0AR5W77NsPh8Xp1x/8WmJ
+         X3jvWoRsB+ACfV3nd/3X/vxoF2kX4W46iMNnUjdCN6GLAPNcZ5Q/t/g9ds7XOI/QLI95
+         i+FNnGNonBF+yaBMUPSFiNn9ec3Z59ujQhWG9iuHFSIZ3jn+/3y69xRMNtTFzkZeHDST
+         PX5pgi9ER1J84aZ8NfvUV6uEEaU8JHRIuyPPsL9bxQnZBpD2kC9izUum41N3fwJNgAEa
+         NL7PysDCTgPWOp5mgE/VOaRpiWsrKWJc6hP7c4QOnflz86dSOyjneePhQEFJYmCdi209
+         PgpQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687959818; x=1690551818;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=O+iaMZwyBIh+11qrQSGLnV1Wu07chjDvH/4Aamfu59w=;
+        b=enFo+WD1E4kLX8WPkhJPaC5sHnuFI63GwyoJBerFJN7agHDf6ctAVTmm5MvHkDTx+y
+         YDDNd6lj3x61JOmJeoQRgatJIEpd4Y3MzL4xHGqaBTHhflYqQL0+LlsaVWZyCSsmQXzY
+         vnX3d+IFxMWq/bF+HYMNnE8LC6gQVlUBsYkTT1/Se6JmdJJi+cdc6fwQpDKOhv5wRhLp
+         lyA29anJUiUfxPbkZlTnY3kUxiUVHFs1/0FAzAD2kL6pxuknD27M1K+P/Db3WEMqSXOS
+         B+mU7XngRWTaoWvxCYqClQ+6ZbK74X8k8zcbJYp1+Y8WHhPL7Gplq0JoxqZ5fTpR65kJ
+         JTWQ==
+X-Gm-Message-State: AC+VfDwtLi68LIAWSjWuABxgMagtieehnihNODVRkiUj/O5b6eTp7Hc3
+        X0OOXXyvZdEZBqhKrTgcfdzsHgTIjkmgUllg+4uDtw==
+X-Google-Smtp-Source: ACHHUZ4WogTNREVg5u/95oFGa4sWXVU+6iCyc2kWX1TQbQZvq1XwK8rb+EFydSpQWW4vJUCNttfcK9GjATSMfRgTQDI=
+X-Received: by 2002:a05:622a:1b9f:b0:3fa:3c8f:3435 with SMTP id
+ bp31-20020a05622a1b9f00b003fa3c8f3435mr134285qtb.27.1687959818387; Wed, 28
+ Jun 2023 06:43:38 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230628071800.544800-5-surenb@google.com>
+References: <20230621174006.42533-1-tony.luck@intel.com> <20230621174006.42533-8-tony.luck@intel.com>
+ <CALPaoCi+A5TxoReh=HRMsRKYDWb4eQ-NOB75Lj9674L6aV0T=Q@mail.gmail.com> <SJ1PR11MB608334F6555F9CEF3F740DE8FC26A@SJ1PR11MB6083.namprd11.prod.outlook.com>
+In-Reply-To: <SJ1PR11MB608334F6555F9CEF3F740DE8FC26A@SJ1PR11MB6083.namprd11.prod.outlook.com>
+From:   Peter Newman <peternewman@google.com>
+Date:   Wed, 28 Jun 2023 15:43:27 +0200
+Message-ID: <CALPaoChuVYpv2aEycaT85mf_2kyEpHcsKbaeZSEVP94i1QHTRw@mail.gmail.com>
+Subject: Re: [PATCH v2 7/7] x86/resctrl: Determine if Sub-NUMA Cluster is
+ enabled and initialize.
+To:     "Luck, Tony" <tony.luck@intel.com>
+Cc:     "Yu, Fenghua" <fenghua.yu@intel.com>,
+        "Chatre, Reinette" <reinette.chatre@intel.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        "x86@kernel.org" <x86@kernel.org>,
+        Shaopeng Tan <tan.shaopeng@fujitsu.com>,
+        James Morse <james.morse@arm.com>,
+        Jamie Iles <quic_jiles@quicinc.com>,
+        Babu Moger <babu.moger@amd.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "patches@lists.linux.dev" <patches@lists.linux.dev>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+        lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 28, 2023 at 12:17:58AM -0700, Suren Baghdasaryan wrote:
-> Change folio_lock_or_retry to accept vm_fault struct and return the
-> vm_fault_t directly.
-> 
-> Suggested-by: Matthew Wilcox <willy@infradead.org>
-> Signed-off-by: Suren Baghdasaryan <surenb@google.com>
+Hi Tony,
 
-Acked-by: Peter Xu <peterx@redhat.com>
+On Mon, Jun 26, 2023 at 5:52=E2=80=AFPM Luck, Tony <tony.luck@intel.com> wr=
+ote:
 
--- 
-Peter Xu
+> Thanks for testing and review. Did you also test on one of your systems
+> with a memory-only node? I recall that was an issue with my very first
+> patch series.
 
+It turns out the people who reported the crash to me were running an
+experiment, but they were able to find one machine they hadn't yanked
+the AEP DIMMs out of yet.
+
+It was a cascade lake, so I had to yank the CPU family match check to
+ensure that your fix was actually exercised. I can confirm now that it
+booted successfully.
+
+-Peter
