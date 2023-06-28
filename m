@@ -2,130 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9F95741904
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 21:46:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1CE8741906
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 21:49:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231190AbjF1TqY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 15:46:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58510 "EHLO
+        id S231156AbjF1TtI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 15:49:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230113AbjF1TqW (ORCPT
+        with ESMTP id S229924AbjF1TtG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 15:46:22 -0400
-Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8B771BE9
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 12:46:20 -0700 (PDT)
-Received: by mail-pg1-x54a.google.com with SMTP id 41be03b00d2f7-528ab7097afso41439a12.1
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 12:46:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1687981580; x=1690573580;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=I7mcp5/4P8AP0xkXt/thddGLST36j3uQroOasjJw2kQ=;
-        b=3X3J2Y9E1VfBP9Ua7QLQHnf5tWOiCY196KrTDDRGoQT5j5w75S+ef9lJaxQf1I+Dr6
-         2ng0STjRGjZzYm7EtW7P3AqdvF4BpiTunzeqVHiCrNu8SLnudKTIoKMLwKyJ+dHLPtZx
-         Uy1kq7ORYYrbeGQK/jo2+9FBGCEtb3qnJypIwWIFe5dx+s8TQoFaJ9YZI1UhCqWeNfUG
-         wJ7PZQbwTrRcOtewooOJgYCoEZ9a9ay3tNFjuIrVPzJTK7o6U4C4oXVv4avxQuEpejEU
-         +mrUIUhzaO+zX+OZ8TzVl3OK/CB6e1shtdVkwtZV8PtCKhlGXpsxLKpVzlQEyBGrOjtP
-         Cd9Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687981580; x=1690573580;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=I7mcp5/4P8AP0xkXt/thddGLST36j3uQroOasjJw2kQ=;
-        b=WY3zN/h8fJ4b0+8n5qeMYRzhxVmnjCWzb16QL7VhZJcsulWnreXnRY2Buo9cIdbQqy
-         FDCUZEGJH7B1ii1qKV4RZNhS2Xu+tL6qII9nUgYqQ7rQQOhU3uGn9uWck+P/Uhp1cj9H
-         mAU8s8WXLat+X+xTol4a1nqtLefXq79rkwC86lUOnOuwmuk05V1U2RS39ikCT4QcyfYV
-         mHVHBUpEskrA8v0OjeLUs2Hi3cg+OIW+r4OJOy+XXgqVYfiq3Ic1g3eYF3eB2t+lcEv3
-         TJhjUnCb7DQg1/VLnBApWNztmUMeqjQMNTj+xbWZHmeNjNy5T57q/XOkzQERlVjDF0py
-         09aQ==
-X-Gm-Message-State: AC+VfDy2Ib3fQBwM7CJAApgwSHuYFN3jRAR7Pp2ORB+mqtYQtDQXMfpA
-        GV5waOikcAxnfpBgHGFx76pxjHtO6RM=
-X-Google-Smtp-Source: ACHHUZ63GagN7SvQAnsZIi3Pep1VIp9fjbRzI2L7PvnlNPi9oisw5tsVURUi8r1TgGB2Av+65c6uN1xbQbk=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a63:f50e:0:b0:54f:d3ef:539a with SMTP id
- w14-20020a63f50e000000b0054fd3ef539amr3666158pgh.4.1687981580106; Wed, 28 Jun
- 2023 12:46:20 -0700 (PDT)
-Date:   Wed, 28 Jun 2023 12:46:18 -0700
-In-Reply-To: <20230530134248.23998-2-cloudliang@tencent.com>
-Mime-Version: 1.0
-References: <20230530134248.23998-1-cloudliang@tencent.com> <20230530134248.23998-2-cloudliang@tencent.com>
-Message-ID: <ZJyOCpueM0viGDfX@google.com>
-Subject: Re: [PATCH v2 1/8] KVM: selftests: KVM: selftests: Add macros for
- fixed counters in processor.h
-From:   Sean Christopherson <seanjc@google.com>
-To:     Jinrong Liang <ljr.kernel@gmail.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, Like Xu <likexu@tencent.com>,
-        David Matlack <dmatlack@google.com>,
-        Aaron Lewis <aaronlewis@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jinrong Liang <cloudliang@tencent.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 28 Jun 2023 15:49:06 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70B8F1BE9;
+        Wed, 28 Jun 2023 12:49:05 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 076FA61446;
+        Wed, 28 Jun 2023 19:49:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5BEB4C433C8;
+        Wed, 28 Jun 2023 19:49:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687981744;
+        bh=F1SDy6om5FvcGfWGnomK4jMWzXGYxk5LjwftHO75iUE=;
+        h=From:To:Cc:Subject:Date:From;
+        b=USQqeiQ+R5urRUVwMUdR9enMdsK+s/6hobILgsdWjPqekIX4T7xppnc0GQrmZDn2V
+         RlyMrO7KvbuP3u/WmnwH+S7VX4UtNlA60bO2n/ysV2/IeozQFh9syFJc01vCQLMn4i
+         lpL5aUFa8tfTDEUk/8IpYGV6dop9ohyKK9kmioOkVEgVg1mVI8Dr5JnTBcA0r9wuI+
+         FY5hXuu+7tEFmudiB5/XmwP/t6YGi7UbYbbhr8ZVsoLR4E+Lc4D7cC4RYW0EkEnXtX
+         f/JaxY5ProNb82XEKFCX4Y3+t7ArxCAVSsDdBJP21BksDxKT8EPS8CratwmkeHwv2n
+         1GIKIaPXhpShg==
+Received: from mchehab by mail.kernel.org with local (Exim 4.96)
+        (envelope-from <mchehab@kernel.org>)
+        id 1qEb9x-001Nj0-23;
+        Wed, 28 Jun 2023 21:49:01 +0200
+From:   Mauro Carvalho Chehab <mchehab@kernel.org>
+To:     linux-media@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, Zhou jie <zhoujie@nfschina.com>,
+        llvm@lists.linux.dev
+Subject: [PATCH] media: wl128x: fix a clang warning
+Date:   Wed, 28 Jun 2023 21:48:53 +0200
+Message-ID: <6badd27ebfa718d5737f517f18b29a3e0f6e43f8.1687981726.git.mchehab@kernel.org>
+X-Mailer: git-send-email 2.41.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Heh, duplicate "KVM: selftests:" in the shortlog.
+Clang-16 produces this warning, which is fatal with CONFIG_WERROR:
 
-On Tue, May 30, 2023, Jinrong Liang wrote:
-> From: Jinrong Liang <cloudliang@tencent.com>
-> 
-> Add macro in processor.h, providing a efficient way to obtain
+	../drivers/media/radio/wl128x/fmdrv_common.c:1237:19: error: variable 'cmd_cnt' set but not used [-Werror,-Wunused-but-set-variable]
+	        int ret, fw_len, cmd_cnt;
+	                         ^
+	1 error generated.
 
-Try not to describe what the patch literally does in terms of code, the purpose
-of the shortlog+changelog is to complement the diff, e.g. it's super obvious from
-the diff that this patch adds macros in processor.h.
+What happens is that cmd_cnt tracks the amount of firmware data packets
+were transfered, which is printed only when debug is used.
 
-> the number of fixed counters and fixed counters bit mask. The
+Switch to use the firmware count, as the message is all about reporting
+a partial firmware transfer.
 
-Wrap closer to 75 chars, 60 is too aggressive.
+Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+---
+ drivers/media/radio/wl128x/fmdrv_common.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-> addition of these macro will simplify the handling of fixed
-> performance counters, while keeping the code maintainable and
-> clean.
+diff --git a/drivers/media/radio/wl128x/fmdrv_common.c b/drivers/media/radio/wl128x/fmdrv_common.c
+index cbd49dff6d74..b31b7ed60bbe 100644
+--- a/drivers/media/radio/wl128x/fmdrv_common.c
++++ b/drivers/media/radio/wl128x/fmdrv_common.c
+@@ -1234,9 +1234,8 @@ static int fm_download_firmware(struct fmdev *fmdev, const u8 *fw_name)
+ 	struct bts_action *action;
+ 	struct bts_action_delay *delay;
+ 	u8 *fw_data;
+-	int ret, fw_len, cmd_cnt;
++	int ret, fw_len;
+ 
+-	cmd_cnt = 0;
+ 	set_bit(FM_FW_DW_INPROGRESS, &fmdev->flag);
+ 
+ 	ret = request_firmware(&fw_entry, fw_name,
+@@ -1272,7 +1271,6 @@ static int fm_download_firmware(struct fmdev *fmdev, const u8 *fw_name)
+ 			if (ret)
+ 				goto rel_fw;
+ 
+-			cmd_cnt++;
+ 			break;
+ 
+ 		case ACTION_DELAY:	/* Delay */
+@@ -1284,7 +1282,7 @@ static int fm_download_firmware(struct fmdev *fmdev, const u8 *fw_name)
+ 		fw_data += (sizeof(struct bts_action) + (action->size));
+ 		fw_len -= (sizeof(struct bts_action) + (action->size));
+ 	}
+-	fmdbg("Firmware commands(%d) loaded to chip\n", cmd_cnt);
++	fmdbg("Transfered only %d of %d bytes of the firmware to chip\n", fw_entry->size - fw_len, fw_entry->size);
+ rel_fw:
+ 	release_firmware(fw_entry);
+ 	clear_bit(FM_FW_DW_INPROGRESS, &fmdev->flag);
+-- 
+2.41.0
 
-Instead of making assertions, justify the patch by stating the effects on code.
-Statements like "will simplify the handling" and "keeping the code maintainable
-and clean" are subjective.  In cases like these, it's extremely unlikely anyone
-will disagree, but getting into the habit of providing concrete justification
-even for simple cases makes it easier to write changelogs for more complex changes.
-
-E.g.
-
-  Add x86 properties for the number of PMU fixed counters and the bitmask
-  that allows for "discontiguous" fixed counters so that tests don't have
-  to manually retrieve the correct CPUID leaf+register, and so that the
-  resulting code is self-documenting.
-
-> Signed-off-by: Jinrong Liang <cloudliang@tencent.com>
-> ---
->  tools/testing/selftests/kvm/include/x86_64/processor.h | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/tools/testing/selftests/kvm/include/x86_64/processor.h b/tools/testing/selftests/kvm/include/x86_64/processor.h
-> index aa434c8f19c5..94751bddf1d9 100644
-> --- a/tools/testing/selftests/kvm/include/x86_64/processor.h
-> +++ b/tools/testing/selftests/kvm/include/x86_64/processor.h
-> @@ -240,6 +240,8 @@ struct kvm_x86_cpu_property {
->  #define X86_PROPERTY_PMU_VERSION		KVM_X86_CPU_PROPERTY(0xa, 0, EAX, 0, 7)
->  #define X86_PROPERTY_PMU_NR_GP_COUNTERS		KVM_X86_CPU_PROPERTY(0xa, 0, EAX, 8, 15)
->  #define X86_PROPERTY_PMU_EBX_BIT_VECTOR_LENGTH	KVM_X86_CPU_PROPERTY(0xa, 0, EAX, 24, 31)
-> +#define X86_PROPERTY_PMU_FIXED_CTRS_BITMASK	KVM_X86_CPU_PROPERTY(0xa, 0, ECX, 0, 31)
-
-Please spell out COUNTERS so that all the properties are consistent.
-
-> +#define X86_PROPERTY_PMU_NR_FIXED_COUNTERS	KVM_X86_CPU_PROPERTY(0xa, 0, EDX, 0, 4)
->  
->  #define X86_PROPERTY_SUPPORTED_XCR0_LO		KVM_X86_CPU_PROPERTY(0xd,  0, EAX,  0, 31)
->  #define X86_PROPERTY_XSTATE_MAX_SIZE_XCR0	KVM_X86_CPU_PROPERTY(0xd,  0, EBX,  0, 31)
-> -- 
-> 2.31.1
-> 
