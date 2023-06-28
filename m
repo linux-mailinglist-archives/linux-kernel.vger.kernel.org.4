@@ -2,91 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC54F74136C
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 16:08:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB48F741371
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 16:11:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231482AbjF1OIZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 10:08:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52568 "EHLO
+        id S230470AbjF1OLF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 10:11:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232651AbjF1OGn (ORCPT
+        with ESMTP id S230060AbjF1OLD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 10:06:43 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95BBE3580
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 07:06:42 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Wed, 28 Jun 2023 10:11:03 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10122FB;
+        Wed, 28 Jun 2023 07:11:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=t1UE1YcEx/3OUicSr8z/BxwdM98H5NewX/wXJaCdFrk=; b=KN9eHtrUeD8K5uBlduYTWdmVU0
+        BnoJhC4+EfIzFNgShMK+lgnKmk5ySokNqM4QQV2xRysgEDs2tfLnZVA2I9EeWgUH1cQ9eUSnOUvwJ
+        lsuJ5n4bDOA0ktg7bN+lJKhMKJyTKHCWZut/VURu+Th7hIvRZut9CPXuLJv4CAZboTJzIq5ub3OBG
+        +J1vzhZalUaW+f4qY5EhbZawLqYzk8ruZJSxspunCw53CuW+bIkPAitD4kpY6NHBbpJ5zZYMZKc5h
+        kgudLe2y3bI36Qsw9nHv53G3UldK+aajeE4zDbsslFbv//oqf7Gf6eZZPd/UoDqgx3ddnIYprUMy/
+        6JSD5CtQ==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1qEVs5-005fcL-0g;
+        Wed, 28 Jun 2023 14:10:13 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2B83D61341
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 14:06:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D70C1C433C0;
-        Wed, 28 Jun 2023 14:06:39 +0000 (UTC)
-Date:   Wed, 28 Jun 2023 10:06:34 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: Re: [for-linus][PATCH 0/3] tracing: Final updates for 6.4+
-Message-ID: <20230628100634.7b95e358@rorschach.local.home>
-In-Reply-To: <20230628125448.007243475@goodmis.org>
-References: <20230628125448.007243475@goodmis.org>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 690B5300023;
+        Wed, 28 Jun 2023 16:10:11 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 521712458D611; Wed, 28 Jun 2023 16:10:11 +0200 (CEST)
+Date:   Wed, 28 Jun 2023 16:10:11 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Kai Huang <kai.huang@intel.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-mm@kvack.org, x86@kernel.org, dave.hansen@intel.com,
+        kirill.shutemov@linux.intel.com, tony.luck@intel.com,
+        tglx@linutronix.de, bp@alien8.de, mingo@redhat.com, hpa@zytor.com,
+        seanjc@google.com, pbonzini@redhat.com, david@redhat.com,
+        dan.j.williams@intel.com, rafael.j.wysocki@intel.com,
+        ashok.raj@intel.com, reinette.chatre@intel.com,
+        len.brown@intel.com, ak@linux.intel.com, isaku.yamahata@intel.com,
+        ying.huang@intel.com, chao.gao@intel.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com, nik.borisov@suse.com,
+        bagasdotme@gmail.com, sagis@google.com, imammedo@redhat.com
+Subject: Re: [PATCH v12 08/22] x86/virt/tdx: Get information about TDX module
+ and TDX-capable memory
+Message-ID: <20230628141011.GG2438817@hirez.programming.kicks-ass.net>
+References: <cover.1687784645.git.kai.huang@intel.com>
+ <a33f372df345f6232b55e26d498ea67d4adc18f0.1687784645.git.kai.huang@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <a33f372df345f6232b55e26d498ea67d4adc18f0.1687784645.git.kai.huang@intel.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 28 Jun 2023 08:54:48 -0400
-Steven Rostedt <rostedt@goodmis.org> wrote:
+On Tue, Jun 27, 2023 at 02:12:38AM +1200, Kai Huang wrote:
+> +static int tdx_get_sysinfo(struct tdsysinfo_struct *sysinfo,
+> +			   struct cmr_info *cmr_array)
+> +{
+> +	struct tdx_module_output out;
+> +	u64 sysinfo_pa, cmr_array_pa;
+> +	int ret;
+> +
+> +	sysinfo_pa = __pa(sysinfo);
+> +	cmr_array_pa = __pa(cmr_array);
+> +	ret = seamcall(TDH_SYS_INFO, sysinfo_pa, TDSYSINFO_STRUCT_SIZE,
+> +			cmr_array_pa, MAX_CMRS, NULL, &out);
+> +	if (ret)
+> +		return ret;
+> +
+> +	pr_info("TDX module: attributes 0x%x, vendor_id 0x%x, major_version %u, minor_version %u, build_date %u, build_num %u",
+> +		sysinfo->attributes,	sysinfo->vendor_id,
+> +		sysinfo->major_version, sysinfo->minor_version,
+> +		sysinfo->build_date,	sysinfo->build_num);
+> +
+> +	/* R9 contains the actual entries written to the CMR array. */
 
-> The user events write currently returns the size of what was suppose to be
-> written when tracing is disabled and nothing was written. Instead, behave like
-> trace_marker and return -EBADF, as that is what is returned if a file is opened
-> for read only,
+So I'm vexed by this comment; it's either not enough or too much.
 
-I accidentally sent this before it was ready to go (I was editing the
-change log from the previous one) I didn't finish the above paragraph,
-and was suppose to delete the below one.
+I mean, as given you assume we all know about the magic parameters to
+TDH_SYS_INFO but then somehow need an explanation for how %r9 is changed
+from the array size to the number of used entries.
 
-That's because I was about to rush to a talk at EOSS, and hit save and
-exit forgetting that sends the emails out! (I'm using quilt)
+Either describe the whole thing or none of it.
 
-I'll finish it properly for when I do the proper pull request.
+Me, I would prefer all of it, because I've no idea where to begin
+looking for any of this, SDM doesn't seem to be the place. That doesn't
+even list TDCALL/SEAMCALL in Volume 2 :-( Let alone describe the magic
+values.
 
--- Steve
-
-
-> 
-> Before user events become an ABI, fix the return value of the write
-> operation when tracing is disabled. It should not return an error, but
-> simply report it wrote zero bytes. Just like any other write operation
-> that doesn't write but does not "fail".
-> 
-> This also includes test cases for this use case.
-> 
->   git://git.kernel.org/pub/scm/linux/kernel/git/trace/linux-trace.git
-> trace/urgent
-> 
-> Head SHA1: e155047e53d25f09d055c08ae9d6c269520e90d8
-> 
-> 
-> sunliming (3):
->       tracing/user_events: Fix incorrect return value for writing operation when events are disabled
->       selftests/user_events: Enable the event before write_fault test in ftrace self-test
->       selftests/user_events: Add test cases when event is disabled
-> 
-> ----
->  kernel/trace/trace_events_user.c                  | 3 ++-
->  tools/testing/selftests/user_events/ftrace_test.c | 8 ++++++++
->  2 files changed, 10 insertions(+), 1 deletion(-)
-
+> +	print_cmrs(cmr_array, out.r9);
+> +
+> +	return 0;
+> +}
