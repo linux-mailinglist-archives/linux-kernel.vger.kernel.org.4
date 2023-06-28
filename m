@@ -2,116 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FCDA741764
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 19:42:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5554C741766
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 19:43:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231214AbjF1Rmx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 13:42:53 -0400
-Received: from dfw.source.kernel.org ([139.178.84.217]:54786 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229652AbjF1Rmv (ORCPT
+        id S231468AbjF1RnZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 13:43:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45820 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229999AbjF1RnW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 13:42:51 -0400
+        Wed, 28 Jun 2023 13:43:22 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B24802123;
+        Wed, 28 Jun 2023 10:43:21 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 395116141D;
-        Wed, 28 Jun 2023 17:42:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 44D93C433C8;
-        Wed, 28 Jun 2023 17:42:47 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 471A261374;
+        Wed, 28 Jun 2023 17:43:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10EEFC433C0;
+        Wed, 28 Jun 2023 17:43:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687974170;
-        bh=lqDFjemWmplk7HOK0FDXsjyFPEZ6trWi4OmRwLFV/5M=;
+        s=k20201202; t=1687974200;
+        bh=DigUiMepEKZdpHMPnpx95fJpEWDaT/7V9w+BxtVC7MY=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Cm/4DEX2nbNEK3Lyi4lprLSxrrS6BvJE6GZxSx4V7hZoBmtsObVCdDFxffScaEzoU
-         zpoKJDIHPrv6LznJN61cXRAx+tK+xTUHZGrP6fJaMg1HTTK0wrM4fjUCOD7I2707co
-         4uezjJdsVDzYBI1dEV88F0nduy1MZH3/lRdNG/NzkTTKCCZ7u939C0msw9J9gnnC2/
-         5J7ygqQM6/o0Fxrz+IGMxSUfY+9ttOYaWuvg/uqXTdmnAoaGiRi8mnnpX8qUArd6nd
-         1MZ8an89pGr3FubGz43ikVU0pklxkUT+Y2mtsO7c7dUKdD/Z3d4qCC1tlxvpPhcizy
-         ze6YsJIw1OBDg==
-Date:   Wed, 28 Jun 2023 18:42:44 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Cc:     krzysztof.kozlowski+dt@linaro.org, andersson@kernel.org,
-        robh+dt@kernel.org, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, dmitry.baryshkov@linaro.org,
-        johan+linaro@kernel.org, perex@perex.cz, tiwai@suse.com,
-        lgirdwood@gmail.com, ckeepax@opensource.cirrus.com,
-        kuninori.morimoto.gx@renesas.com, linux-kernel@vger.kernel.org,
-        pierre-louis.bossart@linux.intel.com, alsa-devel@alsa-project.org
-Subject: Re: [PATCH 2/3] ASoC: qcom: q6apm: add support for reading firmware
- name from DT
-Message-ID: <bca929a1-03bd-4854-872a-07060e483d1b@sirena.org.uk>
-References: <20230628102621.15016-1-srinivas.kandagatla@linaro.org>
- <20230628102621.15016-3-srinivas.kandagatla@linaro.org>
- <f71c8d2b-d5f4-42bb-932f-5b9ec6117ffc@sirena.org.uk>
- <b2aef484-71c9-5655-c1f8-ddde57687491@linaro.org>
+        b=VU27FEMGNX7uLNDp3McHl6GNJMB5ErsahJsW4e9nUmvJxj0MpsU25chnCjvQ1uL0K
+         4GpFU2m7sSJO+j1nW2wWRD7jXl4G50U5jcGM4AW0e1kiKdQxl4TnLpjaJfVljtaKJN
+         bspgesvLD/sPcVRNqAc/ujhS342ec46lPfoHu0OB0DmCnia/xQCQ8wjuDZgpSoCgu7
+         1dE0bCEezgL54Vn/yltVu9Aoe9w1DbZhKuMwfw9YcIo3jJGjMTlTKR56gSGbP1c39f
+         7RvYs+Dt6s9ZK9vJszZlui9OrDVZkFb+excIzKhfJ1bKnhCnNkMV9rsqJ50malblT6
+         QwaXTZrA7hV6w==
+Date:   Wed, 28 Jun 2023 18:43:15 +0100
+From:   Conor Dooley <conor@kernel.org>
+To:     Evan Green <evan@rivosinc.com>
+Cc:     Conor Dooley <conor.dooley@microchip.com>, palmer@dabbelt.com,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Andrew Jones <ajones@ventanamicro.com>,
+        Heiko Stuebner <heiko.stuebner@vrull.eu>,
+        Sunil V L <sunilvl@ventanamicro.com>,
+        linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 6/9] RISC-V: add single letter extensions to
+ riscv_isa_ext
+Message-ID: <20230628-gizzard-trading-a5f9785128b5@spud>
+References: <20230626-provable-angrily-81760e8c3cc6@wendy>
+ <20230626-sensuous-clothing-124f7ae0aedf@wendy>
+ <CALs-HstDV3PjBk_8WDecwuvVK9rno1CKFzT1+8ohoUXE7X0GwA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="Iw1MrnpkR98xnaXf"
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="IEb0IsuCCuZUv+Ab"
 Content-Disposition: inline
-In-Reply-To: <b2aef484-71c9-5655-c1f8-ddde57687491@linaro.org>
-X-Cookie: HELLO, everybody, I'm a HUMAN!!
+In-Reply-To: <CALs-HstDV3PjBk_8WDecwuvVK9rno1CKFzT1+8ohoUXE7X0GwA@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+        lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---Iw1MrnpkR98xnaXf
-Content-Type: text/plain; charset=us-ascii
+--IEb0IsuCCuZUv+Ab
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Jun 28, 2023 at 05:30:15PM +0100, Srinivas Kandagatla wrote:
-> On 28/06/2023 12:53, Mark Brown wrote:
+On Wed, Jun 28, 2023 at 10:33:20AM -0700, Evan Green wrote:
+> On Mon, Jun 26, 2023 at 4:21=E2=80=AFAM Conor Dooley <conor.dooley@microc=
+hip.com> wrote:
+> >
+> > So that riscv_fill_hwcap() can use riscv_isa_ext to probe for single
+> > letter extensions, add them to it. riscv_isa_ext_data grows a new
+> > member, signifying whether an extension is multi-letter & thus requiring
+> > special handling.
+> > As a result, what gets spat out in /proc/cpuinfo will become borked, as
+> > single letter extensions will be printed as part of the base extensions
+> > and while printing from riscv_isa_arr. Take the opportunity to unify the
+> > printing of the isa string, using the new member of riscv_isa_ext_data
+> > in the process.
+> >
+> > Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+> > ---
+> >  arch/riscv/include/asm/hwcap.h |  1 +
+> >  arch/riscv/kernel/cpu.c        | 36 ++++++----------------
+> >  arch/riscv/kernel/cpufeature.c | 56 +++++++++++++++++++++-------------
+> >  3 files changed, 46 insertions(+), 47 deletions(-)
+> >
+> > diff --git a/arch/riscv/include/asm/hwcap.h b/arch/riscv/include/asm/hw=
+cap.h
+> > index a35bee219dd7..6ad896dc4342 100644
+> > --- a/arch/riscv/include/asm/hwcap.h
+> > +++ b/arch/riscv/include/asm/hwcap.h
+> > @@ -77,6 +77,7 @@ unsigned long riscv_get_elf_hwcap(void);
+> >  struct riscv_isa_ext_data {
+> >         const unsigned int id;
+> >         const char *name;
+> > +       const bool multi_letter;
+>=20
+> Instead of defining a new member, could we just infer this by making a
+> macro like #define MULTI_LETTER(name) (name[0] && name[1])?
 
-> > Why not try a series of firmware names/locations generated using the
-> > identifying information for the card/system?  That way we don't have to
+Or don't even try to be clever like this and just call strnlen on the
+name & check if it is 1? It's only used in 2 places.
 
-> There is no consistent way with the current state of what is available in
-> linux-firmware and what drivers can generate from DMI, atleast with Qualcomm
-> SoCs.
-
-What's in linux-firmware now is not relevant, we can change that however
-we like.
-
-> Example for x13s has all the firmwares are under qcom/sc8280xp/LENOVO/21BX
-> for two models 21BX, 21BY.
-
-> However none of the DMI properties match exactly to 21BX or 21BY.
-
-> These have to be either derived from product name 21BYZ9SNUS or some other
-> dmi properties.
-
-> This logic is not going to be very reliable, can differ across platforms.
-
-But the goal here is to have platform specific firmwares so that's fine?
-So long as we come up with something stable and platform specific
-userspace will have the information to provide the firmware it likes,
-even if that does end up involving a lot of symlinks.
-
-> All of the qcom platforms use firmware-name from DT to get the full firmware
-> path with name.
-
-> I know this has scaling issues, but with the current state of things, its
-> the only option I see.
-
-When you say "all the qcom platforms" what do you mean, you're proposing
-a new property here?
-
---Iw1MrnpkR98xnaXf
+--IEb0IsuCCuZUv+Ab
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmSccRMACgkQJNaLcl1U
-h9BRrwf8DRcauWHVO26sbyrZZ2DD0opRH8+s+6Omd6fL+MKJ8WXwMYpBKHxfHWFU
-2LchHvPwo+UVu/lj6qhkOM/B3RV8yt0VK1yMpjcKGEPqJWIQn6dH9lEIcnCnVmTU
-dIkoxX4fd0FjNthvyVBqjuzKHkHQsaanWH6S6zz2KtDRThROD6EuaJv4ODfOGYST
-55BSX3JIZ5rTOVhCsT9fMLCpK353CHOaqrO7xd4UdGDRoLYP8gNxIivjZPBBKnBy
-SEAtK3SVxhNBv0xRTYivVY0yvIBjf/XyVRuDrRlllCywc9vTZRDEYT6wXFfcyQ5z
-yS96KgbdGB1uTs/blOMFnzxh1peu+w==
-=/Cgk
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZJxxMwAKCRB4tDGHoIJi
+0hp+AP91DhkjewdtfZP1vKzJeISjYAdB7Bdm2bRrgqMPsu3f1AD/VqublU31lGDa
+NFdXAaLNImqjgRoRJ3JGTBfpN5735AM=
+=udNR
 -----END PGP SIGNATURE-----
 
---Iw1MrnpkR98xnaXf--
+--IEb0IsuCCuZUv+Ab--
