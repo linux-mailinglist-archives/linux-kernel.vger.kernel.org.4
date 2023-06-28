@@ -2,142 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 517237412CE
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 15:44:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9074D7412BC
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 15:41:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232059AbjF1NoO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 09:44:14 -0400
-Received: from bg4.exmail.qq.com ([43.155.65.254]:10251 "EHLO
-        bg4.exmail.qq.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231210AbjF1NoJ (ORCPT
+        id S231768AbjF1Nla (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 09:41:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48940 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229524AbjF1Nl2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 09:44:09 -0400
-X-QQ-mid: bizesmtp71t1687959834tnnavfbr
-Received: from linux-lab-host.localdomain ( [116.30.129.193])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Wed, 28 Jun 2023 21:43:53 +0800 (CST)
-X-QQ-SSF: 01200000000000D0V000000A0000000
-X-QQ-FEAT: Y6Kc/cQg3lZMtgn2kxiU6zmEGNcj28TJS0EgbFpP4twIX+T9y2B6p0bOn3MWv
-        kwvUR4P1W5/nG5q1ysHmSUWyO41+7CgGe/G/5Cr9uT7VV9/dHhRkxOPPx8eQM51V/NExjV5
-        NnAojSJ9NLly/nYfbygC8y0tCztiSKCNMJjl2tyv6UelKR7tTEonhyqEbq5SY9F/isScf+J
-        CVkN9WiXJ7yUkVDmYOdChCbet5bOziyBbcdV46eQkF+gQF230AShRQ//qpPP/8+FrE3HBc/
-        mlOEG2WWVXjDZZyYRWG4u/NjvjF3ZNtMw1lVdF+2tC8WkonX/j1Ou8lbp3JZSN6w1SZ/N1F
-        UT+xC1U6JoBtLl8IkZcz//WavDz3ZKXZZWvncWZbo14gwTYVbmwEqrTyZWtdg==
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 10849030665645760256
-From:   Zhangjin Wu <falcon@tinylab.org>
-To:     thomas@t-8ch.de, w@1wt.eu
-Cc:     falcon@tinylab.org, arnd@arndb.de, david.laight@aculab.com,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-riscv@lists.infradead.org
-Subject: [PATCH v5 11/14] tools/nolibc: clean up mmap() support
-Date:   Wed, 28 Jun 2023 21:41:13 +0800
-Message-Id: <f054cd45de26bccb330ad842bc2b3b708b2a429d.1687957589.git.falcon@tinylab.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <cover.1687957589.git.falcon@tinylab.org>
-References: <cover.1687957589.git.falcon@tinylab.org>
+        Wed, 28 Jun 2023 09:41:28 -0400
+Received: from mail-vs1-xe36.google.com (mail-vs1-xe36.google.com [IPv6:2607:f8b0:4864:20::e36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74282129;
+        Wed, 28 Jun 2023 06:41:27 -0700 (PDT)
+Received: by mail-vs1-xe36.google.com with SMTP id ada2fe7eead31-440db8e60c8so1800445137.0;
+        Wed, 28 Jun 2023 06:41:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687959686; x=1690551686;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=yPaxtyuBCwLPaD8RSS8EaZb02FifsjqRTvpRb30GE3g=;
+        b=MeeC6RLWsSHHMKVgYkYX5Lq5xXO530qEXgoVCmjTnZDhhtqQqxfvpry/S6KRJCYMGA
+         NpHRteUA6IubdjUoHto6TVrdJ2ZBm0Bl2+moTjlGHKkGZqQzZMzhO7H27SJ11yMtwpK0
+         Hp1506xYRo9SsYl3u7wTVSmvTzyjcNd6CeXgqC97J/eTsXk5qJ3P+BqT3YSn8FxSFVWe
+         SPp4MR1Vq7uUoz6QjvNVr6jeOMU3j4rDB3ul/nZ6B72ACvdhJ6ecq/myYX4dtgqQ1O4s
+         QIXHdHRR0a4LO8cLJe9MKPCRqSY5Fg1wLXzHLRxxF6Sht8Vy0yLUpgZQ547ZjLE8ynRx
+         TQoQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687959686; x=1690551686;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=yPaxtyuBCwLPaD8RSS8EaZb02FifsjqRTvpRb30GE3g=;
+        b=giKXdLRajMKvcABJyOCoYrEYwHIitFXb0exjnzwpqj7RwcUT8g3YrAUTsr11VZVit3
+         RSIqb7+TJkChE4t8gkaLG67b8nCHXXJOJ8pPbNBOLRiXiKnEn4AFl4qUfUdfeor0TtxR
+         i9fI5FLJ1+h/synjKUmZ5oeDhuYspjsfWY6lTlDxba6C/hwew/fXwDAAiQEY9NfGCL84
+         H/rxGuY7oLsNIiJ1i2v+j5lr5HCyToh7kT7d3Dmza0SSuduv3mdhjzOd2zq9ARofgdou
+         qKhwH2q782pQkPNLFvEpHw3jRPA1nJpcW6MfIKEv01K/1cQwPWNHVypG9/fMyqJAxA95
+         0rEw==
+X-Gm-Message-State: AC+VfDwCjYpgW8q8IgP8DLn4xWwJdWzGtivSm+XHX8tr04hgoRrIqccr
+        D+HZEwNmAhlCwXqrT6Y3yl0wsLtDojzD/Z7vgYI=
+X-Google-Smtp-Source: ACHHUZ5Lg9ZKuMYnhSqkSRu8lw7tcb/Q7Xk8kxyHjxhE0dtI1K7l83efi2hrJEz2uoI/7v3W+Y+mxpkO3EdHcrzbpaE=
+X-Received: by 2002:a67:f711:0:b0:443:9248:3410 with SMTP id
+ m17-20020a67f711000000b0044392483410mr484425vso.32.1687959686332; Wed, 28 Jun
+ 2023 06:41:26 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrsz:qybglogicsvrsz3a-3
+References: <t5az5bvpfqd3rrwla43437r5vplmkujdytixcxgm7sc4hojspg@jcc63stk66hz>
+ <cover.1687898895.git.nabijaczleweli@nabijaczleweli.xyz> <20230628113853.2b67fic5nvlisx3r@quack3>
+In-Reply-To: <20230628113853.2b67fic5nvlisx3r@quack3>
+From:   Amir Goldstein <amir73il@gmail.com>
+Date:   Wed, 28 Jun 2023 16:41:14 +0300
+Message-ID: <CAOQ4uxhcZY1XSZ74wUuy=3tqfEW0vbOuwghc4ZoQt=FZ+Lw4-A@mail.gmail.com>
+Subject: Re: [PATCH v4 0/3] fanotify accounting for fs/splice.c
+To:     Jan Kara <jack@suse.cz>
+Cc:     =?UTF-8?Q?Ahelenia_Ziemia=C5=84ska?= 
+        <nabijaczleweli@nabijaczleweli.xyz>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Christian Brauner <brauner@kernel.org>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Chung-Chiang Cheng <cccheng@synology.com>, ltp@lists.linux.it
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+        lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Do several cleanups together:
+On Wed, Jun 28, 2023 at 2:38=E2=80=AFPM Jan Kara <jack@suse.cz> wrote:
+>
+> Hello!
+>
+> On Tue 27-06-23 22:50:46, Ahelenia Ziemia=C5=84ska wrote:
+> > Always generate modify out, access in for splice;
+> > this gets automatically merged with no ugly special cases.
+> >
+> > No changes to 2/3 or 3/3.
+>
+> Thanks for the patches Ahelena! The code looks fine to me but to be hones=
+t
+> I still have one unresolved question so let me think about it loud here f=
+or
+> documentation purposes :). Do we want fsnotify (any filesystem
+> notification framework like inotify or fanotify) to actually generate
+> events on FIFOs? FIFOs are virtual objects and are not part of the
+> filesystem as such (well, the inode itself and the name is), hence
+> *filesystem* notification framework does not seem like a great fit to wat=
+ch
+> for changes or accesses there. And if we say "yes" for FIFOs, then why no=
+t
+> AF_UNIX sockets? Where do we draw the line? And is it all worth the
+> trouble?
+>
+> I understand the convenience of inotify working on FIFOs for the "tail -f=
+"
+> usecase but then wouldn't this better be fixed in tail(1) itself by using
+> epoll(7) for FIFOs which, as I've noted in my other reply, does not have
+> the problem that poll(2) has when there are no writers?
+>
+> Another issue with FIFOs is that they do not have a concept of file
+> position. For hierarchical storage usecase we are introducing events that
+> will report file ranges being modified / accessed and officially supporti=
+ng
+> FIFOs is one more special case to deal with.
+>
+> What is supporting your changes is that fsnotify mostly works for FIFOs
+> already now (normal reads & writes generate notification) so splice not
+> working could be viewed as an inconsistency. Sockets (although they are
+> visible in the filesystem) cannot be open so for them the illusion of bei=
+ng
+> a file is even weaker.
+>
+> So overall I guess I'm slightly in favor of making fsnotify generate even=
+ts
+> on FIFOs even with splice, provided Amir does not see a big trouble in
+> supporting this with his upcoming HSM changes.
+>
 
-- Since all supported architectures have my_syscall6() now, remove the
-  #ifdef check.
+I've also thought about this.
 
-- Move the mmap() related macros to tools/include/nolibc/types.h and
-  reuse most of them from <linux/mman.h>
+The thing about the HSM events is that they are permission events
+and just like FAN_ACCESS_PERM, they originate from the common
+access control helpers {rw,remap}_verify_area(), which also happen
+to have the file range info (with ppos NULL for pipes).
 
-- Apply the new __sysret() to convert the calling of sys_map() to
-  oneline code
+Ahelenia's patches do not add any new rw_verify_area() to pipes
+so no new FAN_ACCESS_PERM events were added.
 
-Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
----
- tools/include/nolibc/sys.h   | 24 +-----------------------
- tools/include/nolibc/types.h |  6 ++++++
- 2 files changed, 7 insertions(+), 23 deletions(-)
+If we could go back to the design of fanotify we would have probably
+made it explicit that permission events are only allowed on regular
+files and dirs. For the new HSM events we can (and will) do that.
 
-diff --git a/tools/include/nolibc/sys.h b/tools/include/nolibc/sys.h
-index b6125e600dc2..e0ac95a4bfa1 100644
---- a/tools/include/nolibc/sys.h
-+++ b/tools/include/nolibc/sys.h
-@@ -632,26 +632,11 @@ int mknod(const char *path, mode_t mode, dev_t dev)
- 	return __sysret(sys_mknod(path, mode, dev));
- }
- 
--#ifndef MAP_SHARED
--#define MAP_SHARED		0x01	/* Share changes */
--#define MAP_PRIVATE		0x02	/* Changes are private */
--#define MAP_SHARED_VALIDATE	0x03	/* share + validate extension flags */
--#endif
--
--#ifndef MAP_FAILED
--#define MAP_FAILED ((void *)-1)
--#endif
--
- #ifndef sys_mmap
- static __attribute__((unused))
- void *sys_mmap(void *addr, size_t length, int prot, int flags, int fd,
- 	       off_t offset)
- {
--#ifndef my_syscall6
--	/* Function not implemented. */
--	return (void *)-ENOSYS;
--#else
--
- 	int n;
- 
- #if defined(__NR_mmap2)
-@@ -662,20 +647,13 @@ void *sys_mmap(void *addr, size_t length, int prot, int flags, int fd,
- #endif
- 
- 	return (void *)my_syscall6(n, addr, length, prot, flags, fd, offset);
--#endif
- }
- #endif
- 
- static __attribute__((unused))
- void *mmap(void *addr, size_t length, int prot, int flags, int fd, off_t offset)
- {
--	void *ret = sys_mmap(addr, length, prot, flags, fd, offset);
--
--	if ((unsigned long)ret >= -4095UL) {
--		SET_ERRNO(-(long)ret);
--		ret = MAP_FAILED;
--	}
--	return ret;
-+	return (void *)__sysret((unsigned long)sys_mmap(addr, length, prot, flags, fd, offset));
- }
- 
- static __attribute__((unused))
-diff --git a/tools/include/nolibc/types.h b/tools/include/nolibc/types.h
-index f96e28bff4ba..bed62da7877c 100644
---- a/tools/include/nolibc/types.h
-+++ b/tools/include/nolibc/types.h
-@@ -10,6 +10,7 @@
- #include "std.h"
- #include <linux/time.h>
- #include <linux/stat.h>
-+#include <linux/mman.h>
- 
- 
- /* Only the generic macros and types may be defined here. The arch-specific
-@@ -81,6 +82,11 @@
- #define MAXPATHLEN     (PATH_MAX)
- #endif
- 
-+/* flags for mmap */
-+#ifndef MAP_FAILED
-+#define MAP_FAILED ((void *)-1)
-+#endif
-+
- /* whence values for lseek() */
- #define SEEK_SET       0
- #define SEEK_CUR       1
--- 
-2.25.1
+In any case, the new events are supposed to be delivered with
+file access range records, so delivering HSM events on pipes
+wouldn't make any sense.
 
+So I do not see any problem with these patches wrt upcomping
+HSM events.
+
+However, note that these patches create more inconsistencies
+between IN_ACCESS and FAN_ACCESS_PERM on pipes.
+
+We can leave it at that if we want, but fixing the inconsistencies
+by adding more FAN_ACCESS_PERM events on pipes - this
+is not something that I wouldn't be comfortable with.
+
+If anything, we can remove FAN_ACCESS_PERM events from
+special files and see if anybody complains.
+
+I don't know of any users of FAN_ACCESS_PERM and even for
+FAN_OPEN_PERM, I don't think that AV-vendors have anything
+useful to do with open permission events on special files.
+
+Thanks,
+Amir.
