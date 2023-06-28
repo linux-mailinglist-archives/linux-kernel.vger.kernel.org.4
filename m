@@ -2,75 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA9C37417EA
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 20:21:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4FDA7417F0
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 20:22:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231428AbjF1SVp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 14:21:45 -0400
-Received: from dfw.source.kernel.org ([139.178.84.217]:56240 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231538AbjF1SVh (ORCPT
+        id S229501AbjF1SWU convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 28 Jun 2023 14:22:20 -0400
+Received: from mail-yb1-f175.google.com ([209.85.219.175]:59582 "EHLO
+        mail-yb1-f175.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231388AbjF1SWQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 14:21:37 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C424361403;
-        Wed, 28 Jun 2023 18:21:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7604C433C8;
-        Wed, 28 Jun 2023 18:21:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1687976496;
-        bh=QCiRNpvCjRMEbgvpzeXiqnZIZU08GxFBBYgBZdY5tDc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=RrevFurZ03NOPYg79TiatLkR5xncPxFtmCuJHVwYKjFD0Ak1rdz3qB0NdKLrs2jon
-         59BsdFSfUWhXnJSOrt4jR82GrU1RHrAzMZW5w6Dh9Rdr7SYftApXGimGBk6/GoLC5G
-         K2O21funxsuqGwa8ZVBG14QYpFAkEsPOMHScjFdU=
-Date:   Wed, 28 Jun 2023 20:21:33 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Anastasia Belova <abelova@astralinux.ru>
-Cc:     stable@vger.kernel.org, Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Xiaomeng Tong <xiam0nd.tong@gmail.com>,
-        Tsuchiya Yuto <kitakar@gmail.com>, linux-media@vger.kernel.org,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        lvc-project@linuxtesting.org,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Subject: Re: [PATCH 5.10 1/1] media: atomisp: fix "variable dereferenced
- before check 'asd'"
-Message-ID: <2023062825-oops-unguided-501f@gregkh>
-References: <20230627102334.18781-1-abelova@astralinux.ru>
- <20230627102334.18781-2-abelova@astralinux.ru>
+        Wed, 28 Jun 2023 14:22:16 -0400
+Received: by mail-yb1-f175.google.com with SMTP id 3f1490d57ef6-bff89873d34so32740276.2;
+        Wed, 28 Jun 2023 11:22:16 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687976536; x=1690568536;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=uN9pyN3LvmrlubEFEmUp4FLP23KLhwvTmvzQKkIhMho=;
+        b=MCsZmSlSh/cn1wn7q1ASyhTFiZ54yBwAgwqQY7lKMqMYk3a2cuobnjEj8bWLudRgWB
+         zljgQbKft7Ux+SN/VbNDmx76OVZR3pTRW/ITpwZea3Mhan8GbXNHCbIcF/dh0DZ3orsE
+         r6iK0VErlizJsvF7ShLN78a4eDkYa32DiZ22DGY23PnBoOJklmyA7kYhpMbpJdRYAop3
+         ZGgRdk4HfqFHLXq4CE4QNpnvfopa2CnQGPFW3b+83R5RopD+1TlFwmhjN+sqR+0HAd1d
+         d99DNW5nhfvFZ8A4Qp/HDfpzUcVdtGjU6OwTcYO5NpM50/mk1Js7Bau5eo7Jf1AlTHk+
+         diXA==
+X-Gm-Message-State: AC+VfDyU4GwKsmYxzyN1x9hjYuk9W+1mHILgyW1N5SDWBQ4GIHAZY0BL
+        LEyeOu2ZotUx9RqfMVADSMfXZruV0qy/KIIXhnA=
+X-Google-Smtp-Source: ACHHUZ7qYcXP/WLsuFJNiIl/sAOmUw3kRaTQ0lISyJjoY7FMLNxKt5cB4mt+9oPXsOGS3LmH+x3V1+I2tuaglDC8fLo=
+X-Received: by 2002:a25:cf91:0:b0:c14:3d56:bf65 with SMTP id
+ f139-20020a25cf91000000b00c143d56bf65mr9674102ybg.4.1687976535709; Wed, 28
+ Jun 2023 11:22:15 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230627102334.18781-2-abelova@astralinux.ru>
+References: <20230516103413.21e34bb6@canb.auug.org.au> <20230628113748.071d8d80@canb.auug.org.au>
+In-Reply-To: <20230628113748.071d8d80@canb.auug.org.au>
+From:   Namhyung Kim <namhyung@kernel.org>
+Date:   Wed, 28 Jun 2023 11:22:04 -0700
+Message-ID: <CAM9d7ciqQSp3zWNeq-P0r8pGN=6jJBWyxK=LzUz2SYm_kAaG4g@mail.gmail.com>
+Subject: Re: linux-next: manual merge of the tip tree with the perf tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>,
+        Ian Rogers <irogers@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Ravi Bangoria <ravi.bangoria@amd.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 27, 2023 at 01:23:34PM +0300, Anastasia Belova wrote:
-> From: Tsuchiya Yuto <kitakar@gmail.com>
-> 
-> commit ac56760a8bbb4e654b2fd54e5de79dd5d72f937d upstream.
-> 
-> There are two occurrences where the variable 'asd' is dereferenced
-> before check. Fix this issue by using the variable after the check.
-> 
-> Link: https://lore.kernel.org/linux-media/20211122074122.GA6581@kili/
-> 
-> Link: https://lore.kernel.org/linux-media/20211201141904.47231-1-kitakar@gmail.com
-> Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
-> Signed-off-by: Tsuchiya Yuto <kitakar@gmail.com>
-> Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-> Signed-off-by: Anastasia Belova <abelova@astralinux.ru>
-> ---
->  drivers/staging/media/atomisp/pci/atomisp_cmd.c   | 3 ++-
->  drivers/staging/media/atomisp/pci/atomisp_ioctl.c | 3 ++-
->  2 files changed, 4 insertions(+), 2 deletions(-)
+Hello,
 
-Now queued up, thanks.
+On Tue, Jun 27, 2023 at 6:37 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>
+> Hi all,
+>
+> On Tue, 16 May 2023 10:34:13 +1000 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+> >
+> > Today's linux-next merge of the tip tree got conflicts in:
+> >
+> >   tools/perf/arch/x86/include/arch-tests.h
+> >   tools/perf/arch/x86/tests/arch-tests.c
+> >
+> > between commit:
+> >
+> >   ae4aa00a1a93 ("perf test: Move x86 hybrid tests to arch/x86")
+> >
+> > from the perf tree and commit:
+> >
+> >   78075d947534 ("perf test: Add selftest to test IBS invocation via core pmu events")
+> >
+> > from the tip tree.
+> >
+> > I fixed it up (see below) and can carry the fix as necessary. This
+> > is now fixed as far as linux-next is concerned, but any non trivial
+> > conflicts should be mentioned to your upstream maintainer when your tree
+> > is submitted for merging.  You may also want to consider cooperating
+> > with the maintainer of the conflicting tree to minimise any particularly
+> > complex conflicts.
 
-greg k-h
+Thanks for the email and the resolution.  Looks ok to me.
+I'll note this in my pull request.
+
+
+> >
+> > --
+> > Cheers,
+> > Stephen Rothwell
+> >
+> > diff --cc tools/perf/arch/x86/include/arch-tests.h
+> > index 33d39c1d3e64,93d3b8877baa..000000000000
+> > --- a/tools/perf/arch/x86/include/arch-tests.h
+> > +++ b/tools/perf/arch/x86/include/arch-tests.h
+> > @@@ -11,7 -11,7 +11,8 @@@ int test__intel_pt_pkt_decoder(struct t
+> >   int test__intel_pt_hybrid_compat(struct test_suite *test, int subtest);
+> >   int test__bp_modify(struct test_suite *test, int subtest);
+> >   int test__x86_sample_parsing(struct test_suite *test, int subtest);
+> >  +int test__hybrid(struct test_suite *test, int subtest);
+> > + int test__amd_ibs_via_core_pmu(struct test_suite *test, int subtest);
+> >
+> >   extern struct test_suite *arch_tests[];
+> >
+> > diff --cc tools/perf/arch/x86/tests/arch-tests.c
+> > index 147ad0638bbb,b5c85ab8d92e..000000000000
+> > --- a/tools/perf/arch/x86/tests/arch-tests.c
+> > +++ b/tools/perf/arch/x86/tests/arch-tests.c
+> > @@@ -22,15 -22,7 +22,16 @@@ struct test_suite suite__intel_pt =
+> >   DEFINE_SUITE("x86 bp modify", bp_modify);
+> >   #endif
+> >   DEFINE_SUITE("x86 Sample parsing", x86_sample_parsing);
+> >  +static struct test_case hybrid_tests[] = {
+> >  +    TEST_CASE_REASON("x86 hybrid event parsing", hybrid, "not hybrid"),
+> >  +    { .name = NULL, }
+> >  +};
+> >  +
+> >  +struct test_suite suite__hybrid = {
+> >  +    .desc = "x86 hybrid",
+> >  +    .test_cases = hybrid_tests,
+> >  +};
+> > + DEFINE_SUITE("AMD IBS via core pmu", amd_ibs_via_core_pmu);
+> >
+> >   struct test_suite *arch_tests[] = {
+> >   #ifdef HAVE_DWARF_UNWIND_SUPPORT
+> > @@@ -44,6 -36,6 +45,7 @@@
+> >       &suite__bp_modify,
+> >   #endif
+> >       &suite__x86_sample_parsing,
+> >  +    &suite__hybrid,
+> > +     &suite__amd_ibs_via_core_pmu,
+> >       NULL,
+> >   };
+>
+> This is now a conflict between the perf tree and Linus' tree.
+
+Yep, thanks!
+
+Namhyung
