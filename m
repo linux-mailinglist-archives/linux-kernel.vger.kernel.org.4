@@ -2,84 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AE52740CDC
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 11:31:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07013740C70
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 11:09:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232969AbjF1J16 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 05:27:58 -0400
-Received: from [42.101.60.195] ([42.101.60.195]:53662 "HELO mail.nfschina.com"
-        rhost-flags-FAIL-FAIL-OK-FAIL) by vger.kernel.org with SMTP
-        id S236728AbjF1JCU (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 05:02:20 -0400
-Received: from [172.30.11.106] (unknown [180.167.10.98])
-        by mail.nfschina.com (Maildata Gateway V2.8.8) with ESMTPSA id 38A89605F6240;
-        Wed, 28 Jun 2023 17:01:59 +0800 (CST)
-Message-ID: <734b846f-3235-f2e3-db06-6e852803cd7f@nfschina.com>
-Date:   Wed, 28 Jun 2023 17:01:58 +0800
+        id S237210AbjF1JI5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 05:08:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47056 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233916AbjF1JEY (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 28 Jun 2023 05:04:24 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18AEF3595;
+        Wed, 28 Jun 2023 02:02:35 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 89FE561276;
+        Wed, 28 Jun 2023 09:02:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2DDCAC433C0;
+        Wed, 28 Jun 2023 09:02:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1687942953;
+        bh=dZ8ewtgN7+nQ8HFCPwMwFbD5X/40NMNmnlkYkea6Iqo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=e4Ni7XDNzGqsmBfx9rCiTuMO4Rbz5g8lx7ujGD3cwkr3aUIVy8zh8n5HiwhgYrUEO
+         8Fn09MGTbBZWGIAO0UJiAwEfgWLT9oJoP1qajsNFxwm9mz/fdQ8E21qW3FOvXQ+v+w
+         upAwUY0M0SsU7obLCi96V8Utj+Xqp0CqbpNxW3Mw=
+Date:   Wed, 28 Jun 2023 11:02:30 +0200
+From:   "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
+To:     "Huang, Kai" <kai.huang@intel.com>
+Cc:     "corbet@lwn.net" <corbet@lwn.net>,
+        "linux-coco@lists.linux.dev" <linux-coco@lists.linux.dev>,
+        "shuah@kernel.org" <shuah@kernel.org>,
+        "Yu, Guorui" <guorui.yu@linux.alibaba.com>,
+        "Luck, Tony" <tony.luck@intel.com>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "joey.gouly@arm.com" <joey.gouly@arm.com>,
+        "dionnaglaze@google.com" <dionnaglaze@google.com>,
+        "qinkun@apache.org" <qinkun@apache.org>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Du, Fan" <fan.du@intel.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "wander@redhat.com" <wander@redhat.com>,
+        "atishp@rivosinc.com" <atishp@rivosinc.com>,
+        "Aktas, Erdem" <erdemaktas@google.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "chongc@google.com" <chongc@google.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "sathyanarayanan.kuppuswamy@linux.intel.com" 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        "brijesh.singh@amd.com" <brijesh.singh@amd.com>,
+        "Williams, Dan J" <dan.j.williams@intel.com>,
+        "dhowells@redhat.com" <dhowells@redhat.com>
+Subject: Re: [PATCH v3 3/3] selftests/tdx: Test GetQuote TDX attestation
+ feature
+Message-ID: <2023062825-rebel-happily-09fd@gregkh>
+References: <972e1d5c5ec53e2757fb17a586558c5385e987dd.1684048511.git.sathyanarayanan.kuppuswamy@linux.intel.com>
+ <64876bf6c30e2_1433ac29415@dwillia2-xfh.jf.intel.com.notmuch>
+ <64961c3baf8ce_142af829436@dwillia2-xfh.jf.intel.com.notmuch>
+ <9437b176-e15a-3cec-e5cb-68ff57dbc25c@linux.intel.com>
+ <CAAH4kHa85hCz0GhQM3f1OQ3wM+=-SfF77ShFAse0-eYGBHvO_A@mail.gmail.com>
+ <649b7a9b69cb6_11e68529473@dwillia2-xfh.jf.intel.com.notmuch>
+ <CAAH4kHY1-N+HOxPON6SuXE3QPowAGnwTjc5H=ZnNZwh7a+msnQ@mail.gmail.com>
+ <c85324480053af20e6f0409e28fbc5e156c54143.camel@intel.com>
+ <2023062805-drove-privatize-ae2c@gregkh>
+ <e30fb40d736ccc60672316c5d20aaf1ab7c94dcf.camel@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH net-next 00/10] Remove unnecessary (void*) conversions
-Content-Language: en-US
-To:     Hao Lan <lanhao@huawei.com>, andrew@lunn.ch, f.fainelli@gmail.com,
-        olteanv@gmail.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, irusskikh@marvell.com,
-        yisen.zhuang@huawei.com, salil.mehta@huawei.com,
-        jesse.brandeburg@intel.com, anthony.l.nguyen@intel.com,
-        steve.glendinning@shawell.net, iyappan@os.amperecomputing.com,
-        keyur@os.amperecomputing.com, quan@os.amperecomputing.com,
-        hkallweit1@gmail.com, linux@armlinux.org.uk,
-        mostrows@earthlink.net, xeb@mail.ru, qiang.zhao@nxp.com
-Cc:     yangyingliang@huawei.com, linux@rempel-privat.de,
-        ansuelsmth@gmail.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, intel-wired-lan@lists.osuosl.org,
-        linuxppc-dev@lists.ozlabs.org, kernel-janitors@vger.kernel.org
-X-MD-Sfrom: yunchuan@nfschina.com
-X-MD-SrcIP: 180.167.10.98
-From:   yunchuan <yunchuan@nfschina.com>
-In-Reply-To: <1f5652f7-7eb2-11f0-4a07-c87f2992e509@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <e30fb40d736ccc60672316c5d20aaf1ab7c94dcf.camel@intel.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+        lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/6/28 15:41, Hao Lan wrote:
->
-> On 2023/6/28 10:41, wuych wrote:
->> Remove (void*) conversions under "drivers/net" directory.
->> According to the suggestion[1] of Jakub Kicinski, send these patches
->> in series of 10.
->>
->> wuych (10):
->>    net: dsa: ar9331: remove unnecessary (void*) conversions
->>    net: dsa: qca8k: remove unnecessary (void*) conversions
->>    atlantic:hw_atl2:hw_atl2_utils_fw: Remove unnecessary (void*)
->>      conversions
->>    ice: Remove unnecessary (void*) conversions
->>    ethernet: smsc: remove unnecessary (void*) conversions
->>    net: hns: Remove unnecessary (void*) conversions
->>    net: hns3: remove unnecessary (void*) conversions
->>    net: mdio: Remove unnecessary (void*) conversions
->>    net: ppp: remove unnecessary (void*) conversions
->>    net: wan: Remove unnecessary (void*) conversions
->>
-> Hi wuych,
-> Thank you for your patch.
-> The following two patches conflict with the net-next branch, and others have modified the related code.
-> Please compile your series in net and net-next branch and upload your series again.
->    net: dsa: ar9331: remove unnecessary (void*) conversions
->    net: dsa: qca8k: remove unnecessary (void*) conversions
+On Wed, Jun 28, 2023 at 08:56:30AM +0000, Huang, Kai wrote:
+> On Wed, 2023-06-28 at 08:46 +0200, gregkh@linuxfoundation.org wrote:
+> > On Wed, Jun 28, 2023 at 02:16:45AM +0000, Huang, Kai wrote:
+> > > > You really shouldn't be putting attestation validation logic in the
+> > > > kernel.
+> > > 
+> > > Agreed.  The data blob for remote verification should be just some data blob to
+> > > the kernel.  I think the kernel shouldn't even try to understand the data blob
+> > > is for which architecture.  From the kernel's perspective, it should be just
+> > > some data blob that the kernel gets from hardware/firmware or whatever embedded
+> > > in the root-of-trust in the hardware after taking some input from usrspace for
+> > > the unique identity of the blob that can be used to, e.g., mitigate replay-
+> > > attack, etc.
+> > 
+> > Great, then use the common "data blob" api that we have in the kernel
+> > for a very long time now, the "firwmare download" api, or the sysfs
+> > binary file api.  Both of them just use the kernel as a pass-through and
+> > do not touch the data at all.  No need for crazy custom ioctls and all
+> > that mess :)
+> > 
+> 
+> I guess I was talking about from "kernel shouldn't try to parse attestation data
+> blob" perspective.  Looking at AMD's attestation flow (I have no deep
+> understanding of AMD's attestation flow), the assumption of "one remote
+> verifiable data blob" isn't even true -- AMD can return "attestation report"
+> (remote verifiable) and the "certificate" to verify it separately:
+> 
+> https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/snp-attestation.html
+> 
+> On the other hand, AFAICT Intel SGX-based attestation doesn't have a mechanism
+> "for the kernel" to return certificate(s), but choose to embed the
+> certificate(s) to the Quote itself.  I believe we can add such mechanism (e.g.,
+> another TDVMCALL) for the kernel to get certificate(s) separately, but AFAICT it
+> doesn't exist yet.
+> 
+> Btw, getting "remote verifiable blob" is only one step of the attestation flow.
+> For instance, before the blob can be generated, there must be a step to
+> establish the attestation key between the machine and the attestation service. 
+> And the flow to do this could be very different between vendors too.
+> 
+> That being said, while I believe all those differences can be unified in some
+> way, I think the question is whether it is worth to put such effort to try to
+> unify attestation flow for all vendors.  As Erdem Aktas mentioned earlier, "the
+> number of CPU vendors for confidential computing seems manageable".
 
-Hi, Hao Lan,
+So you think that there should be a custom user/kernel api for every
+single different CPU vendor?  That's not how kernel development works,
+sorry.  Let's try to unify them to make both the kernel, and userspace,
+sane.
 
-Sorry for that, I just compiled these patches in the mainline branch.
-I know now, it's also necessary to compile patches in net and net-next 
-branch.
-Thanks for your reply!
+And Dan is right, if this is handling keys, then the key subsystem needs
+to be used here instead of custom ioctls.
 
-wuych
+thanks,
 
->
-> Yours,
-> Hao Lan
+greg k-h
