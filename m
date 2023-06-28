@@ -2,135 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06DDC741057
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 13:47:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 979B774105C
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 13:48:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231545AbjF1Lrg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 07:47:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36746 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230298AbjF1Lre (ORCPT
+        id S231698AbjF1LsY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 07:48:24 -0400
+Received: from dfw.source.kernel.org ([139.178.84.217]:57412 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230324AbjF1Lr4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 07:47:34 -0400
-Received: from mail-ot1-x334.google.com (mail-ot1-x334.google.com [IPv6:2607:f8b0:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBBE72D73
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 04:47:32 -0700 (PDT)
-Received: by mail-ot1-x334.google.com with SMTP id 46e09a7af769-6b73741a632so3291217a34.3
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 04:47:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687952852; x=1690544852;
-        h=in-reply-to:content-disposition:mime-version:references:reply-to
-         :message-id:subject:cc:to:from:date:sender:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=YqXHGBqKxlgkWmLDRd9GTKbx3UAhvwTpUadWyVXxc+U=;
-        b=jF/YUrLEBqH15ntdhAQZbW/4ZWmEtFMkC5wNfTlau4HfB9upEgvLb5aoA91uCrHHYW
-         kXBdHXiNPbV+MevEWFjnHi0XekhK9TOrgRhezitVwmnHlS5SrQ0GqJoOY0sNi+Jxp/sp
-         TnhhtO185oUB+WxC8divhj7TIiS7MOMU0OwI9PBbp0BQGq/4BkcDQgkprRJeLc127g5i
-         FSpjF77N4BxZ8ahh4wmDBrn+jUckkzqyXUFB/SaeKQRCvnBpoXB+2zgnj29EEq9rmGt/
-         FBfxzlkprxOFPEN/PZx1KRs1S87laMVlGEcEWyo2wcvVfVvra143d19wvVTl7rLc2lmX
-         zWnw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687952852; x=1690544852;
-        h=in-reply-to:content-disposition:mime-version:references:reply-to
-         :message-id:subject:cc:to:from:date:sender:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=YqXHGBqKxlgkWmLDRd9GTKbx3UAhvwTpUadWyVXxc+U=;
-        b=QNhzuEw/Ps6Hpj7w64sh7i/HpED8vhPKWicRqCRCvw8Gru+lrDVoP5flOwPbM1LLaG
-         TqLhxZpBDOfRfK+hMjYIlpzmrjGtr2KCBcMylho6UDJfJfnq0qSnc4a+DAOf63+seUqe
-         sjDLiQAz4JKWB4duhz16HJgtlPwV4N/+hrLqlG0Noe1GKqRsnOr6955LSRzILyWSg4NC
-         punJOXj23wFkTHRkICB6BxvT4ESD5VHZ8DymLunp61z2cyHCzH7iLgydADC9TzXaeXu+
-         m9YBYLoTv8YV0GdmOZRCDPmGvTvugN8t+w3cz3HpmMMt+c3Aq0cAw3Bm5m84Ca1fn7/4
-         pQZg==
-X-Gm-Message-State: AC+VfDwAIW46oef69dplaAtmS6oqKhxqmwPSeghe6C71jbvJ8LAntd+c
-        LujDz4JwjjT89VBFrJ/LoA==
-X-Google-Smtp-Source: ACHHUZ6wbZ4nBKIip3Y9SIKMzwvdkhB4f9wjgS9rpDaCP5klHMNLClhSBc/pLTsVW3OHdgjNmij3YQ==
-X-Received: by 2002:a9d:4d12:0:b0:6b4:5ed3:8246 with SMTP id n18-20020a9d4d12000000b006b45ed38246mr28019494otf.2.1687952852062;
-        Wed, 28 Jun 2023 04:47:32 -0700 (PDT)
-Received: from serve.minyard.net ([47.184.186.55])
-        by smtp.gmail.com with ESMTPSA id e2-20020a9d63c2000000b006b8850ad193sm55218otl.56.2023.06.28.04.47.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Jun 2023 04:47:31 -0700 (PDT)
-Sender: Corey Minyard <tcminyard@gmail.com>
-Received: from mail.minyard.net (unknown [IPv6:2001:470:b8f6:1b:1e76:1406:a469:4f70])
-        by serve.minyard.net (Postfix) with ESMTPSA id 06A62180044;
-        Wed, 28 Jun 2023 11:47:31 +0000 (UTC)
-Date:   Wed, 28 Jun 2023 06:47:29 -0500
-From:   Corey Minyard <minyard@acm.org>
-To:     Andrew Jeffery <andrew@aj.id.au>
-Cc:     openipmi-developer@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org, Chengfeng Ye <dg573847474@gmail.com>
-Subject: Re: [PATCH] ipmi: fix potential deadlock on &kcs_bmc->lock
-Message-ID: <ZJwd0UDKYcK9AvSf@mail.minyard.net>
-Reply-To: minyard@acm.org
-References: <20230627152449.36093-1-dg573847474@gmail.com>
+        Wed, 28 Jun 2023 07:47:56 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 39753612CC;
+        Wed, 28 Jun 2023 11:47:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 067DEC433C0;
+        Wed, 28 Jun 2023 11:47:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687952875;
+        bh=Q1FhBIvMRelAU3h4x0qiEZ2oX2C87xJQ3oF5cUFma94=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=G1rhz9yINX4ma+xMgKtFDDwFQsuJcxD4UwoeVhDY7p/GDP1fxbxbKTWhEikuIFnTw
+         NQ3KuaXxw1ZlatyzefvArcs0tDxZ4kwyZemqIQ7qn1/OGYksi7vLiAkl2XwUPJEbbO
+         p0WkNLeemmMBKlJFKs+uc+qMXS5gVssFo144SVbVqIltOOc9IZT0B6SNOiUkQviWSM
+         FT1f+BCe1LEJ3YRGpPcLBu4um+uW7UofRWcIdrS2Xy46AnX3+9MoMl878mk96V5SYB
+         c10+jDC2eeh9jpQCa/jUubWS1I7OKA36hXWobtM9u/1U8jOIo2JRwb7Rt3qjthShuE
+         MAYxsQ+Qc0PjA==
+Date:   Wed, 28 Jun 2023 12:47:50 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     cy_huang@richtek.com
+Cc:     krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        robh+dt@kernel.org, lgirdwood@gmail.com,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] regulator: rt5739: Add DID check and compatible for
+ rt5733
+Message-ID: <2a8732f4-13fe-476d-9ae7-b970bd82c218@sirena.org.uk>
+References: <1687942037-14652-1-git-send-email-cy_huang@richtek.com>
+ <1687942037-14652-3-git-send-email-cy_huang@richtek.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="dZp7zQbwpodH2L5a"
 Content-Disposition: inline
-In-Reply-To: <20230627152449.36093-1-dg573847474@gmail.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-        lindbergh.monkeyblade.net
+In-Reply-To: <1687942037-14652-3-git-send-email-cy_huang@richtek.com>
+X-Cookie: HELLO, everybody, I'm a HUMAN!!
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Indeed, this looks like an issue.
 
-Andrew, any opinions on this?  The attached patch will work, the other
-option would be to disable interrupts when calling
-kcs_bmc_handle_event() in the timer handler.  But then you have to worry
-about RT.
+--dZp7zQbwpodH2L5a
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
--corey
+On Wed, Jun 28, 2023 at 04:47:17PM +0800, cy_huang@richtek.com wrote:
 
-On Tue, Jun 27, 2023 at 03:24:49PM +0000, Chengfeng Ye wrote:
-> As kcs_bmc_handle_event() is executed inside both a timer and a hardirq,
-> it should disable irq before lock acquisition otherwise deadlock could
-> happen if the timmer is preemtped by the irq.
-> 
-> Possible deadlock scenario:
-> aspeed_kcs_check_obe() (timer)
->     -> kcs_bmc_handle_event()
->     -> spin_lock(&kcs_bmc->lock)
->         <irq interruption>
->         -> aspeed_kcs_irq()
->         -> kcs_bmc_handle_event()
->         -> spin_lock(&kcs_bmc->lock) (deadlock here)
-> 
-> This flaw was found using an experimental static analysis tool we are
-> developing for irq-related deadlock.
-> 
-> The tentative patch fix the potential deadlock by spin_lock_irqsave()
-> 
-> Signed-off-by: Chengfeng Ye <dg573847474@gmail.com>
-> ---
->  drivers/char/ipmi/kcs_bmc.c | 5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/char/ipmi/kcs_bmc.c b/drivers/char/ipmi/kcs_bmc.c
-> index 03d02a848f3a..8b1161d5194a 100644
-> --- a/drivers/char/ipmi/kcs_bmc.c
-> +++ b/drivers/char/ipmi/kcs_bmc.c
-> @@ -56,12 +56,13 @@ irqreturn_t kcs_bmc_handle_event(struct kcs_bmc_device *kcs_bmc)
->  {
->  	struct kcs_bmc_client *client;
->  	irqreturn_t rc = IRQ_NONE;
-> +	unsigned long flags;
->  
-> -	spin_lock(&kcs_bmc->lock);
-> +	spin_lock_irqsave(&kcs_bmc->lock, flags);
->  	client = kcs_bmc->client;
->  	if (client)
->  		rc = client->ops->event(client);
-> -	spin_unlock(&kcs_bmc->lock);
-> +	spin_unlock_irqrestore(&kcs_bmc->lock, flags);
->  
->  	return rc;
->  }
-> -- 
-> 2.17.1
-> 
+> +	if (did == RT5733_CHIPDIE_ID) {
+> +		min_uV = RT5733_VOLT_MINUV;
+> +		max_uV = RT5733_VOLT_MAXUV;
+> +		step_uV = RT5733_VOLT_STPUV;
+> +	} else {
+> +		min_uV = RT5739_VOLT_MINUV;
+> +		max_uV = RT5739_VOLT_MAXUV;
+> +		step_uV = RT5739_VOLT_STPUV;
+> +	}
+
+It would be better to write these as switch statements so if any more
+variants turn up they can be added more easily.
+
+--dZp7zQbwpodH2L5a
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmScHeUACgkQJNaLcl1U
+h9CKKgf/eMaIvJ+GA0vHvvKksA4S1NUI7q/j1CaaMTXgwqcv9WCmMdTEZWJHb5GC
+sPxe1EOuqiz0RpkDk2NDzgYyUcJGNnY/cdhhYSaejkaaCHToEvz+sSZex642DVRQ
+mvwJrxVNlVKFWh7ZQbaqEjpKxy4cSLcaWI4PVq8BFIfS5QzxD04Xq1fqaZu7soSi
+Wmvn+XjxALwUEYCtlzDu2m/xncpWC3bcy+3t9lh/44lhwpWTM2keR5NQ7jZj1akB
+1X3jGXBOIzfjPPCUxEpgviXVVJik2w9wjUMHNa2FD7ub679cLdACJGL7gH4/CUv3
+Xz8F3/FpOBZcDe7otdRBIHTYTMfSPA==
+=e51C
+-----END PGP SIGNATURE-----
+
+--dZp7zQbwpodH2L5a--
