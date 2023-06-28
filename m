@@ -2,78 +2,221 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66F237418B6
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 21:11:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 79ED47418B5
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 21:11:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231520AbjF1TLf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 15:11:35 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:27623 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231509AbjF1TLd (ORCPT
+        id S230507AbjF1TK6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 15:10:58 -0400
+Received: from smtp-out1.suse.de ([195.135.220.28]:59678 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229501AbjF1TKy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 15:11:33 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1687979446;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=DHYzA765GPu9kX2/aCtAcTvHRHevAxD+3e5vQVRrgfY=;
-        b=Mv8Feepj0GIXHp1Jc1q5KBPzfO61T7YucEoCGVlZRb0FF3R5SQEt+R/odguqzXS6T9czu8
-        NK9XoJ/VtKdYA9FzOAEwNyE8Lj0MPOo4mSzKTjQhCa6luaqgwkrgJM2Ft1MDCvpcaq8I5L
-        dfGP4ljr6KHwGHTMtvSrY2bQChUxclw=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-478-yDhu-QUUMAKeu8FHPLXHfg-1; Wed, 28 Jun 2023 15:10:43 -0400
-X-MC-Unique: yDhu-QUUMAKeu8FHPLXHfg-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Wed, 28 Jun 2023 15:10:54 -0400
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id DDC1E8DBAEE;
-        Wed, 28 Jun 2023 19:10:42 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.42.28.4])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id C1DFB200B677;
-        Wed, 28 Jun 2023 19:10:41 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <CAHk-=wjyJyV=Kyb8XJcLjFEPP-RMF0J6CQfT2OXLmJdM2yEv8w@mail.gmail.com>
-References: <CAHk-=wjyJyV=Kyb8XJcLjFEPP-RMF0J6CQfT2OXLmJdM2yEv8w@mail.gmail.com> <20230626085035.e66992e96b4c6d37dad54bd9@linux-foundation.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     dhowells@redhat.com, Andrew Morton <akpm@linux-foundation.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>, linux-mm@kvack.org,
-        mm-commits@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [GIT PULL] MM updates for 6.5-rc1
+        by smtp-out1.suse.de (Postfix) with ESMTPS id E56BD21861;
+        Wed, 28 Jun 2023 19:10:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1687979452; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=y163GLXlIY7qQsdU/MbbES2r1FokRyWxT2xQc4IuSco=;
+        b=17CHUniKf0kpKinjDite2jRJXssHfqK40e1/swrE7qF5cXCkgD2qvey1hwhZU8oG00/s0/
+        uyLuQgxHC/ZJ7AD0LS7wn6ws8zEfb4d2MXD89ZLYY0sOLqvdpaySzF2DjU2Zww9LQ+8KtF
+        GmviuAoMpLFTGt0XuYt/dGdbNIU2p+k=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1687979452;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=y163GLXlIY7qQsdU/MbbES2r1FokRyWxT2xQc4IuSco=;
+        b=IGpxo9K3rNcAG0ewnJPK+dXjMJIukTj3HK8YG5HtQCL5GCwttnChcPm7gjQoiYCDkZfZpV
+        ixTbk3vzz2h4oNDw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id D6DF0138EF;
+        Wed, 28 Jun 2023 19:10:52 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id /hEmNLyFnGRzIQAAMHmgww
+        (envelope-from <dwagner@suse.de>); Wed, 28 Jun 2023 19:10:52 +0000
+Date:   Wed, 28 Jun 2023 21:10:52 +0200
+From:   Daniel Wagner <dwagner@suse.de>
+To:     linux-nvme@lists.infradead.org
+Cc:     linux-kernel@vger.kernel.org, linux-block@vger.kernel.org,
+        Chaitanya Kulkarni <kch@nvidia.com>,
+        Shin'ichiro Kawasaki <shinichiro@wdc.com>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        Hannes Reinecke <hare@suse.de>,
+        James Smart <jsmart2021@gmail.com>
+Subject: Re: [PATCH blktests v2 2/3] nvme/rc: Avoid triggering host nvme-cli
+ autoconnect
+Message-ID: <edoiq74rpu6qejs6m3dsvtp73ypjixafp6dsncg7kga7n4uwdr@xc7mgaerwqbk>
+References: <20230628151623.11340-1-dwagner@suse.de>
+ <20230628151623.11340-3-dwagner@suse.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <3696705.1687979441.1@warthog.procyon.org.uk>
-Date:   Wed, 28 Jun 2023 20:10:41 +0100
-Message-ID: <3696706.1687979441@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230628151623.11340-3-dwagner@suse.de>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Linus Torvalds <torvalds@linux-foundation.org> wrote:
-
-> So I think it needs to match the comment (and the try_grab_page()
-> logic), and just basically
+On Wed, Jun 28, 2023 at 05:16:22PM +0200, Daniel Wagner wrote:
+> When the host has enabled the udev/systemd autoconnect services for the
+> fc transport it interacts with blktests and make tests break.
 > 
->         if (flags & FOLL_GET)
->                 return try_get_folio(page, refs);
+> nvme-cli learned to ignore connects attemps when using the --context
+> command line option paired with a volatile configuration. Thus we can
+> mark all the resources created by blktests and avoid any interaction
+> with the systemd autoconnect scripts.
 > 
->         if (is_zero_page(page))
->                 return page_folio(page);
+> Only enabled this for the fc transport.
 > 
->         folio = try_get_folio(page, refs);
->         if (!folio)
->                 return NULL;
+> Signed-off-by: Daniel Wagner <dwagner@suse.de>
+> ---
+>  tests/nvme/rc | 81 ++++++++++++++++++++++++++++++++++++++++++++-------
+>  1 file changed, 71 insertions(+), 10 deletions(-)
 > 
-> instead.
+> diff --git a/tests/nvme/rc b/tests/nvme/rc
+> index 191f3e2e0c43..06d98f46b471 100644
+> --- a/tests/nvme/rc
+> +++ b/tests/nvme/rc
+> @@ -14,8 +14,8 @@ def_remote_wwnn="0x10001100aa000001"
+>  def_remote_wwpn="0x20001100aa000001"
+>  def_local_wwnn="0x10001100aa000002"
+>  def_local_wwpn="0x20001100aa000002"
+> -def_hostnqn="$(cat /etc/nvme/hostnqn 2> /dev/null)"
+> -def_hostid="$(cat /etc/nvme/hostid 2> /dev/null)"
+> +def_hostnqn="nqn.2014-08.org.nvmexpress:uuid:242d4a24-2484-4a80-8234-d0169409c5e8"
+> +def_hostid="242d4a24-2484-4a80-8234-d0169409c5e8"
+>  nvme_trtype=${nvme_trtype:-"loop"}
+>  nvme_img_size=${nvme_img_size:-"1G"}
+>  nvme_num_iter=${nvme_num_iter:-"1000"}
+> @@ -161,6 +161,57 @@ _nvme_calc_rand_io_size() {
+>  	echo "${io_size_kb}k"
+>  }
+>  
+> +_have_nvme_cli_context() {
+> +	# ignore all non-fc transports
+> +	if [[ "${nvme_trtype}" == "fc" ]] ||
 
-That looks right.
+This should be !=, forgot to merge a fixup to this patch.
 
-David
-
+> +	   ! nvme connect --help 2>&1 | grep -q -- '--context=<STR>' > /dev/null; then
+> +		    return 1
+> +	fi
+> +	return 0
+> +}
+> +
+> +_setup_nvme_cli() {
+> +	local local_wwnn="${1}"
+> +	local local_wwpn="${2}"
+> +	local remote_wwnn="${3}"
+> +	local remote_wwpn="${4}"
+> +
+> +	if ! _have_nvme_cli_context; then
+> +		return
+> +	fi
+> +
+> +	mkdir -p /run/nvme
+> +	cat >> /run/nvme/blktests.json <<-EOF
+> +	[
+> +	  {
+> +	    "hostnqn": "${def_hostnqn}",
+> +	    "hostid": "${def_hostid}",
+> +	    "subsystems": [
+> +	      {
+> +	        "application": "blktests",
+> +	        "nqn": "blktests-subsystem-1",
+> +	        "ports": [
+> +	          {
+> +	            "transport": "fc",
+> +	            "traddr": "nn-${remote_wwnn}:pn-${remote_wwpn}",
+> +	            "host_traddr": "nn-${local_wwnn}:pn-${local_wwpn}"
+> +	          }
+> +	        ]
+> +	      }
+> +	    ]
+> +	  }
+> +	]
+> +	EOF
+> +}
+> +
+> +_cleanup_nvme_cli() {
+> +	if ! _have_nvme_cli_context; then
+> +		return
+> +	fi
+> +
+> +	rm -f /run/nvme/blktests.json
+> +}
+> +
+>  _nvme_fcloop_add_rport() {
+>  	local local_wwnn="$1"
+>  	local local_wwpn="$2"
+> @@ -193,6 +244,9 @@ _setup_fcloop() {
+>  	local remote_wwnn="${3:-$def_remote_wwnn}"
+>  	local remote_wwpn="${4:-$def_remote_wwpn}"
+>  
+> +	_setup_nvme_cli "${local_wwnn}" "${local_wwpn}" \
+> +			"${remote_wwnn}" "${remote_wwpn}"
+> +
+>  	_nvme_fcloop_add_tport "${remote_wwnn}" "${remote_wwpn}"
+>  	_nvme_fcloop_add_lport "${local_wwnn}" "${local_wwpn}"
+>  	_nvme_fcloop_add_rport "${local_wwnn}" "${local_wwpn}" \
+> @@ -235,6 +289,8 @@ _cleanup_fcloop() {
+>  	_nvme_fcloop_del_lport "${local_wwnn}" "${local_wwpn}"
+>  	_nvme_fcloop_del_rport "${local_wwnn}" "${local_wwpn}" \
+>  			       "${remote_wwnn}" "${remote_wwpn}"
+> +
+> +	_cleanup_nvme_cli
+>  }
+>  
+>  _cleanup_nvmet() {
+> @@ -436,18 +492,18 @@ _nvme_connect_subsys() {
+>  	trtype="$1"
+>  	subsysnqn="$2"
+>  
+> -	ARGS=(-t "${trtype}" -n "${subsysnqn}")
+> +	ARGS=(-t "${trtype}"
+> +	      -n "${subsysnqn}"
+> +	      --hostnqn="${hostnqn}"
+> +	      --hostid="${hostid}")
+> +	if _have_nvme_cli_context; then
+> +		ARGS+=(--context="blktests")
+> +	fi
+>  	if [[ "${trtype}" == "fc" ]] ; then
+>  		ARGS+=(-a "${traddr}" -w "${host_traddr}")
+>  	elif [[ "${trtype}" != "loop" ]]; then
+>  		ARGS+=(-a "${traddr}" -s "${trsvcid}")
+>  	fi
+> -	if [[ "${hostnqn}" != "$def_hostnqn" ]]; then
+> -		ARGS+=(--hostnqn="${hostnqn}")
+> -	fi
+> -	if [[ "${hostid}" != "$def_hostid" ]]; then
+> -		ARGS+=(--hostid="${hostid}")
+> -	fi
+>  	if [[ -n "${hostkey}" ]]; then
+>  		ARGS+=(--dhchap-secret="${hostkey}")
+>  	fi
+> @@ -482,7 +538,12 @@ _nvme_discover() {
+>  	local host_traddr="${3:-$def_host_traddr}"
+>  	local trsvcid="${3:-$def_trsvcid}"
+>  
+> -	ARGS=(-t "${trtype}")
+> +	ARGS=(-t "${trtype}"
+> +	      --hostnqn="${def_hostnqn}"
+> +	      --hostid="${def_hostid}")
+> +	if _have_nvme_cli_context; then
+> +		ARGS+=(--context="blktests")
+> +	fi
+>  	if [[ "${trtype}" = "fc" ]]; then
+>  		ARGS+=(-a "${traddr}" -w "${host_traddr}")
+>  	elif [[ "${trtype}" != "loop" ]]; then
+> -- 
+> 2.41.0
+> 
