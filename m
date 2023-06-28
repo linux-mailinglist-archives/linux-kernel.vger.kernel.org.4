@@ -2,127 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E969F741734
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 19:29:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A3E2741738
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 19:32:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229900AbjF1R3R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 13:29:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44172 "EHLO
+        id S230054AbjF1RcL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 13:32:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231547AbjF1R2G (ORCPT
+        with ESMTP id S229645AbjF1RcJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 13:28:06 -0400
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 979251FFB
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 10:28:04 -0700 (PDT)
-Received: by mail-lj1-x22a.google.com with SMTP id 38308e7fff4ca-2b6a5fd1f46so968241fa.1
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 10:28:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1687973282; x=1690565282;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=k+2E0Rt8HIW6qnRJgQGPRjPuN/s1eCRBBVkSd2Fo7f8=;
-        b=ZnbhkWthy3eR2jV3Fa0jSGlCcQtNRPTMENE53fJR5/GZ1tUGT3arTsEAnmrZElUuTA
-         hoZmGBf55Q87kt0l2iQkxedGCZL+IPIiuNhVN6vkO345Uht2IpNi+288R8gt+PC2/YZg
-         sioXmIMls+2T/khoT/vOXP/w/19FzH2XWyIGQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687973282; x=1690565282;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=k+2E0Rt8HIW6qnRJgQGPRjPuN/s1eCRBBVkSd2Fo7f8=;
-        b=iBhzC1/rcoEpOAuA9Njzogo0AzOLnexSCHp4dkbV/XadhhNvlQsJGADaSW7cFxmE45
-         SfzI+4j1mwcMAztmc51S9k5P5hKx6GCWI8ccOJo4sEUiH12ohl30XBxj4YNY68LyswD0
-         B3L2j8Mb4o3QXopnPxRj/oDV1uCYoky/UYHJPMoFjMClXNt8l4eEIi3krZZkKvxNDgmw
-         Y+yLS8l7xXE2/M3MEifoC/bjXI/ykQKjirGhmZQkl1fUQYtW7/Ik4RfGsBJTG8wWD/xW
-         wzhx8frB2sRs0og6YKFSk6QUyac2A1gnFHaOTwzAkQG1WOLCWQd5ER+CZAN7qLwIv/is
-         KzGQ==
-X-Gm-Message-State: AC+VfDyHs/CBcl4rTn2PgtCHosc7vAdQdlw0Rn7ucmqGKKZYE/13hfx+
-        ySxHcfLfOtt1Bu1aDjsdwHv6Lx6zCfb9EltZDRx3JV0r
-X-Google-Smtp-Source: ACHHUZ5hrhk8V8bmV8gIpCWbkk6w4gqsJbyV/ylOylavzwalQsVvtiuur00hsds93N9nv+ITFOinZQ==
-X-Received: by 2002:a19:e602:0:b0:4f9:5711:2eb8 with SMTP id d2-20020a19e602000000b004f957112eb8mr14544721lfh.33.1687973282481;
-        Wed, 28 Jun 2023 10:28:02 -0700 (PDT)
-Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com. [209.85.208.47])
-        by smtp.gmail.com with ESMTPSA id y3-20020aa7c243000000b0051bdf152295sm4912384edo.76.2023.06.28.10.28.01
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 28 Jun 2023 10:28:01 -0700 (PDT)
-Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-51d9c71fb4bso3826698a12.2
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 10:28:01 -0700 (PDT)
-X-Received: by 2002:a05:6402:505:b0:51d:a24b:3d74 with SMTP id
- m5-20020a056402050500b0051da24b3d74mr6867136edv.20.1687973281251; Wed, 28 Jun
- 2023 10:28:01 -0700 (PDT)
+        Wed, 28 Jun 2023 13:32:09 -0400
+Received: from mx.treblig.org (unknown [IPv6:2a00:1098:5b::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 189C71715;
+        Wed, 28 Jun 2023 10:32:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=treblig.org
+        ; s=bytemarkmx; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID
+        :Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID
+        :Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:
+        Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe
+        :List-Post:List-Owner:List-Archive;
+        bh=4mtcRlXWQpbbslXjCfhS0B8/3iHNiw5vVznGMLX6XwQ=; b=hN89nE4eelVc4iK+8FPnE7PZBr
+        RF4dDkftNlYx1W/yDLUC661l1MUszbN91MrC25V6MePXXjZxbb1zMAZbg7yYAP07MnLn3/Iwrelua
+        tcX5YGVUWJ9eBW86grHHxwSkKh8suyGLVEFLgbFLcfb623nskQm0U8l8lNuLLkG4YPRfSyFEqArt5
+        c7knLC1K310NXbKBDnNRDN4wryygsQ7ARZhqlFbl5yOkG/6q3DtC411EzOni4EW5QTIRZnsUgSzx6
+        i1oZWGj7d/+ZfNdtIanqrfvNFvP8bbePZrKiFc3ZKpDKjUT2QQMbK7pdVliG1orAwZS6lcBvh2Ujt
+        SalUM0ng==;
+Received: from dg by mx.treblig.org with local (Exim 4.94.2)
+        (envelope-from <dg@treblig.org>)
+        id 1qEZ1C-00GV9p-AS; Wed, 28 Jun 2023 17:31:50 +0000
+Date:   Wed, 28 Jun 2023 17:31:50 +0000
+From:   "Dr. David Alan Gilbert" <linux@treblig.org>
+To:     Namjae Jeon <linkinjeon@kernel.org>
+Cc:     sfrench@samba.org, linux-cifs@vger.kernel.org,
+        jfs-discussion@lists.sourceforge.net, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/3] fs/smb: Swing unicode common code from server->common
+Message-ID: <ZJxuhjWdZlaV8iQw@gallifrey>
+References: <20230628011439.159678-1-linux@treblig.org>
+ <20230628011439.159678-3-linux@treblig.org>
+ <CAKYAXd-KeNM56ecmnaDR2wA4meTqPRa=e+KT3JJkpvC9=PCeiw@mail.gmail.com>
 MIME-Version: 1.0
-References: <20230626085035.e66992e96b4c6d37dad54bd9@linux-foundation.org>
-In-Reply-To: <20230626085035.e66992e96b4c6d37dad54bd9@linux-foundation.org>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Wed, 28 Jun 2023 10:27:44 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wjyJyV=Kyb8XJcLjFEPP-RMF0J6CQfT2OXLmJdM2yEv8w@mail.gmail.com>
-Message-ID: <CAHk-=wjyJyV=Kyb8XJcLjFEPP-RMF0J6CQfT2OXLmJdM2yEv8w@mail.gmail.com>
-Subject: Re: [GIT PULL] MM updates for 6.5-rc1
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        David Howells <dhowells@redhat.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     linux-mm@kvack.org, mm-commits@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+In-Reply-To: <CAKYAXd-KeNM56ecmnaDR2wA4meTqPRa=e+KT3JJkpvC9=PCeiw@mail.gmail.com>
+X-Chocolate: 70 percent or better cocoa solids preferably
+X-Operating-System: Linux/5.10.0-21-amd64 (x86_64)
+X-Uptime: 17:31:26 up 101 days,  4:05,  1 user,  load average: 0.00, 0.00,
+ 0.00
+User-Agent: Mutt/2.0.5 (2021-01-21)
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RDNS_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 26 Jun 2023 at 08:50, Andrew Morton <akpm@linux-foundation.org> wrote:
->
-> Linus, please merge the MM updates for the 6.5-rc cycle.
->  [...]
-> merge conflict in mm/gup.c, vs block tree:
-> https://lkml.kernel.org/r/20230616115856.3ce7682c@canb.auug.org.au
+* Namjae Jeon (linkinjeon@kernel.org) wrote:
+> 2023-06-28 10:14 GMT+09:00, linux@treblig.org <linux@treblig.org>:
+> > From: "Dr. David Alan Gilbert" <linux@treblig.org>
+> >
+> > Swing most of the inline functions and unicode tables into smb/common
+> > from the copy in smb/server.
+> >
+> > UniStrcat has different types between the client and server
+> > versions so I've not moved it (although I suspect it's OK).
+> ksmbd doesn't use this function. You can move it to smb_unicode_common.h.
 
-Hmm. I think this merge resolution in -next is wrong.
+Ah OK, thanks.
 
-It now does a common
+Dave
 
-        folio = try_get_folio(page, refs);
-        if (flags & FOLL_GET)
-                return folio;
-
-for both FOLL_GET and FOLL_PIN, and then *after* that for the FOLL_PIN
-case it does that
-
-        /*
-         * Don't take a pin on the zero page - it's not going anywhere
-         * and it is used in a *lot* of places.
-         */
-        if (is_zero_page(page))
-                return page_folio(page);
-
-but by then it has already done the try_get_folio().
-
-End result: it has already updated refcounts, despite the comment
-saying not to do that.
-
-So I think it needs to match the comment (and the try_grab_page()
-logic), and just basically
-
-        if (flags & FOLL_GET)
-                return try_get_folio(page, refs);
-
-        if (is_zero_page(page))
-                return page_folio(page);
-
-        folio = try_get_folio(page, refs);
-        if (!folio)
-                return NULL;
-
-instead.
-
-That's what my resolution is going to do, but let's add others to the
-participants list just in case somebody goes "No, Linus, the reason
--next does that is XYZ"...
-
-               Linus
+> Thanks.
+-- 
+ -----Open up your eyes, open up your mind, open up your code -------   
+/ Dr. David Alan Gilbert    |       Running GNU/Linux       | Happy  \ 
+\        dave @ treblig.org |                               | In Hex /
+ \ _________________________|_____ http://www.treblig.org   |_______/
