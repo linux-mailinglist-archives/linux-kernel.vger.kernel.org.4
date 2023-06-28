@@ -2,132 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C379740C0A
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 10:58:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02FB6740C17
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 10:59:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234292AbjF1I5w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 04:57:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43906 "EHLO
+        id S233817AbjF1I7E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 04:59:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234405AbjF1InQ (ORCPT
+        with ESMTP id S231509AbjF1Irv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 04:43:16 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E162B30C2;
-        Wed, 28 Jun 2023 01:35:30 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        Wed, 28 Jun 2023 04:47:51 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BD5146BA;
+        Wed, 28 Jun 2023 01:39:49 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id D4FBA21864;
-        Wed, 28 Jun 2023 06:09:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1687932593; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=pb1MWnUMmUFEexxqK5EEY1JTSgmlRyHzP6MrqQFpEXU=;
-        b=YaYej1+R30o+dQs1G1sudkf9gCXZ0aUOD8y7MDYkVUrM2fmAol6PYiPYlr8/urWhqNoxuv
-        pOz5DwJ0yjft0n+5PVkUBxNfVdphIqR89aw6bvhctKCYmYBx1HWz5ZSFE4h9FWIt2/1yzn
-        6TnSC/0XOK77BpGtD0iCczdutNkgAcI=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1687932593;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=pb1MWnUMmUFEexxqK5EEY1JTSgmlRyHzP6MrqQFpEXU=;
-        b=PUzBZ2/mZv5KJOFaiPsbNDAfkGGcOcY5hMmJO3e1mdDxJDKhWegvRSFRNcN6r6/SYK6dvQ
-        3EUUToqhETgvzJAQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id BF98B138E8;
-        Wed, 28 Jun 2023 06:09:53 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id c9RlLrHOm2QcEgAAMHmgww
-        (envelope-from <dwagner@suse.de>); Wed, 28 Jun 2023 06:09:53 +0000
-Date:   Wed, 28 Jun 2023 08:09:53 +0200
-From:   Daniel Wagner <dwagner@suse.de>
-To:     Shinichiro Kawasaki <shinichiro.kawasaki@wdc.com>
-Cc:     "linux-nvme@lists.infradead.org" <linux-nvme@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
-        Chaitanya Kulkarni <kch@nvidia.com>,
-        Shin'ichiro Kawasaki <shinichiro@fastmail.com>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        Hannes Reinecke <hare@suse.de>,
-        James Smart <jsmart2021@gmail.com>,
-        Martin Belanger <Martin.Belanger@dell.com>
-Subject: Re: [PATCH blktests v1 2/3] nvme/rc: Avoid triggering host nvme-cli
- autoconnect
-Message-ID: <ygfgqglmntpqiopzq44aqegehnlroarteqjtmih7mulan4oukv@jmtupz2jnafv>
-References: <20230620132703.20648-1-dwagner@suse.de>
- <20230620132703.20648-3-dwagner@suse.de>
- <oyhlgbqq6pjwln5ly47rt5iyjtai4jeepkascfaskn2z7nu3ks@te7yrwbcpsmi>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CD7B4612B7;
+        Wed, 28 Jun 2023 06:13:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2E86C433C0;
+        Wed, 28 Jun 2023 06:13:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1687932803;
+        bh=y5gpaPIxvC7kYScrAGS8wZ/4lUoTerPGKf4nOqB9B3E=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=CR6PN44qyxMNcjLomeUkpPtolrnDkMvNsJbWEjdqzQQUFELyBlIZnuLhonKI1zZ33
+         83he25TEoTcWEG2os5DvL8rE7eP2QAjuiYbO7413j2MYckQzKZHAsMk3upWvIVEsvg
+         RdzDZ6vxQoOLdwmuNslruX0MuUaFIjjT6sFjqkQg=
+Date:   Wed, 28 Jun 2023 08:13:20 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Tao Zhang <quic_taozha@quicinc.com>
+Cc:     Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Konrad Dybcio <konradybcio@gmail.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jinlong Mao <quic_jinlmao@quicinc.com>,
+        Leo Yan <leo.yan@linaro.org>, coresight@lists.linaro.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org,
+        Tingwei Zhang <quic_tingweiz@quicinc.com>,
+        Yuanfang Zhang <quic_yuanfang@quicinc.com>,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        Hao Zhang <quic_hazha@quicinc.com>,
+        linux-arm-msm@vger.kernel.org, andersson@kernel.org
+Subject: Re: [PATCH v6 09/13] Add nodes for dsb edge control
+Message-ID: <2023062848-shimmer-variety-c08e@gregkh>
+References: <1687246361-23607-1-git-send-email-quic_taozha@quicinc.com>
+ <1687246361-23607-10-git-send-email-quic_taozha@quicinc.com>
+ <2023062024-sincere-tripod-95dc@gregkh>
+ <3aca4a55-0dc7-b34c-d2c0-111a96c33ec3@quicinc.com>
+ <2023062000-jaws-extortion-f782@gregkh>
+ <23eae515-4262-d5b8-4629-ade11362d4a8@quicinc.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <oyhlgbqq6pjwln5ly47rt5iyjtai4jeepkascfaskn2z7nu3ks@te7yrwbcpsmi>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <23eae515-4262-d5b8-4629-ade11362d4a8@quicinc.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 27, 2023 at 10:22:53AM +0000, Shinichiro Kawasaki wrote:
-> On Jun 20, 2023 / 15:27, Daniel Wagner wrote:
-> > When the host has enabled the udev/systemd autoconnect services for the
-> > fc transport it interacts with blktests and make tests break.
-> > 
-> > nvme-cli learned to ignore connects attemps when using the
-> > --context command line option paired with a volatile configuration. Thus
-> > we can mark all the resources created by blktests and avoid any
-> > interaction with the systemd autoconnect scripts.
+On Wed, Jun 28, 2023 at 11:11:29AM +0800, Tao Zhang wrote:
 > 
-> This sounds a good idea. Question, is "--context" option of the nvme command
-> mandatory to run nvme test with nvme_trtype=fc?
-
-If nvme-cli is called without the '--context' option, the command will be
-executed. Though if '--context' is provided as option and there is a
-configuration which matches the connect parameters but doesn't match the context
-it will ignore the operation.
-
-The blktests tests expects that nothing behind it's back is fiddling on the
-setup while it is running. So far udev didn't trigger for rdma/tcp but with fc
-it will.
-
-Thus, it's mandatory to use either the '--context' parameter or alternatively
-disable the rule with
-
-  ln -s /etc/udev/rules.d/70-nvmf-autoconnect.rules /dev/null
-
-BTW, when the udev rule is active I observed crashes when running blktests. So
-there is more to fix, though one thing at the time.
-
-> Or is it nice-to-have feature
-> depending on the test system OS? If it is mandatory, it's the better to check
-> in _nvme_requires.
-
-Well, I didn't want to make this a hard requirement for all tests. I guess we
-could make it for fc only if this is what you had in mind. The question should
-it only test for nvme-cli supporting --context or should it be really clever and
-test if the udev rule is also active (no idea how but I assume it is possible)?
-
-> >  _cleanup_nvmet() {
-> > @@ -337,6 +383,8 @@ _setup_nvmet() {
-> >  		def_host_traddr=$(printf "nn-%s:pn-%s" \
-> >  					 "${def_local_wwnn}" \
-> >  					 "${def_local_wwpn}")
-> > +
-> > +		_setup_nvme_cli
+> On 6/20/2023 4:49 PM, Greg Kroah-Hartman wrote:
+> > On Tue, Jun 20, 2023 at 04:31:59PM +0800, Tao Zhang wrote:
+> > > On 6/20/2023 3:37 PM, Greg Kroah-Hartman wrote:
+> > > > On Tue, Jun 20, 2023 at 03:32:37PM +0800, Tao Zhang wrote:
+> > > > > Add the nodes to set value for DSB edge control and DSB edge
+> > > > > control mask. Each DSB subunit TPDM has maximum of n(n<16) EDCR
+> > > > > resgisters to configure edge control. DSB edge detection control
+> > > > > 00: Rising edge detection
+> > > > > 01: Falling edge detection
+> > > > > 10: Rising and falling edge detection (toggle detection)
+> > > > > And each DSB subunit TPDM has maximum of m(m<8) ECDMR registers to
+> > > > > configure mask. Eight 32 bit registers providing DSB interface
+> > > > > edge detection mask control.
+> > > > > 
+> > > > > Signed-off-by: Tao Zhang<quic_taozha@quicinc.com>
+> > > > > ---
+> > > > >    .../ABI/testing/sysfs-bus-coresight-devices-tpdm   |  32 +++++
+> > > > >    drivers/hwtracing/coresight/coresight-tpdm.c       | 143 ++++++++++++++++++++-
+> > > > >    drivers/hwtracing/coresight/coresight-tpdm.h       |  22 ++++
+> > > > >    3 files changed, 196 insertions(+), 1 deletion(-)
+> > > > > 
+> > > > > diff --git a/Documentation/ABI/testing/sysfs-bus-coresight-devices-tpdm b/Documentation/ABI/testing/sysfs-bus-coresight-devices-tpdm
+> > > > > index 2a82cd0..34189e4a 100644
+> > > > > --- a/Documentation/ABI/testing/sysfs-bus-coresight-devices-tpdm
+> > > > > +++ b/Documentation/ABI/testing/sysfs-bus-coresight-devices-tpdm
+> > > > > @@ -60,3 +60,35 @@ Description:
+> > > > >    		Bit[3] : Set to 0 for low performance mode.
+> > > > >    				 Set to 1 for high performance mode.
+> > > > >    		Bit[4:8] : Select byte lane for high performance mode.
+> > > > > +
+> > > > > +What:		/sys/bus/coresight/devices/<tpdm-name>/dsb_edge_ctrl
+> > > > > +Date:		March 2023
+> > > > > +KernelVersion	6.5
+> > > > > +Contact:	Jinlong Mao (QUIC)<quic_jinlmao@quicinc.com>, Tao Zhang (QUIC)<quic_taozha@quicinc.com>
+> > > > > +Description:
+> > > > > +		Read/Write a set of the edge control registers of the DSB
+> > > > > +		in TPDM.
+> > > > > +
+> > > > > +		Expected format is the following:
+> > > > > +		<integer1> <integer2> <integer3>
+> > > > sysfs is "one value", not 3.  Please never have to parse a sysfs file.
+> > > Do you mean sysfs file can only accept "one value"?
+> > Yes.
 > 
-> Can we move this _setup_nvme_cli call from _setup_nvmet to _setup_fcloop?
-> _cleanup_nvme_cli is called in _cleanup_fcloop. I think it is a bit cleaner
-> since those setup/cleanup functions are called at at same level.
+> Hi Greg,
+> 
+> 
+> I‘d like to clarify the usage of this sysfs file again.
+> 
+> In the current design, three integers will be written to "dsb_edge_ctrl" to
+> configure DSB edge detection.
+> 
+> Integer #1: The start number of edge detection which needs to be configured.
+> 
+> Integer #2: The end number of edge detection which needs to be configured.
+> 
+> Integer #3: The type of the edge detection needs to be configured.
 
-Sure, no problem.
+All of this is wrong.  Again, sysfs is "one value per file"
+
+> Below is an example.
+> 
+> echo 0x3 0x25 0x1 > dsb_edge_ctrl
+> 
+> It will configure edge detection #3 to #37 as "falling edge detection".
+> 
+> Since these three integers are interrelated and written to achieve the same
+> function, can we use these three integers as "one tuple" here?
+
+Nope!
+
+sorry,
+
+greg k-h
