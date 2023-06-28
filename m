@@ -2,182 +2,324 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C89937414FD
-	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 17:30:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19DD4741501
+	for <lists+linux-kernel@lfdr.de>; Wed, 28 Jun 2023 17:31:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230280AbjF1Pae (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 11:30:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60488 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232111AbjF1PaZ (ORCPT
+        id S229924AbjF1PbB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 11:31:01 -0400
+Received: from mail-io1-f48.google.com ([209.85.166.48]:46531 "EHLO
+        mail-io1-f48.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232012AbjF1Pa5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 11:30:25 -0400
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47ED6268F;
-        Wed, 28 Jun 2023 08:30:24 -0700 (PDT)
-Received: by mail-pf1-x430.google.com with SMTP id d2e1a72fcca58-6686a05bc66so3927525b3a.1;
-        Wed, 28 Jun 2023 08:30:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687966224; x=1690558224;
-        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=4eipvAP8cAn3qf+QI5BYy9KRsjhBE5RJHKH6KbEsvKw=;
-        b=DLCSvvkoZyzg/8xfkZLY7hLnKpqO2AfmVDGH7CazwOeuORTBSh9pLzonCgs9+rnW3/
-         Sr9lLBKxsdz9sfw5eF2BON0DHIIxyzQF3xcBHGmtsg3CQujkcFNeAIsnUmgtDSBF8LsL
-         azvmmJdr7NC9Fu2D/kYwY3FGgBR9xzYnGG90bV4/KYtLPY4xiPIS1DC4CDyUSYajy11f
-         Ejj1pVfGKdEQ4to387hki+9rpeKnzwOk/qavvLU0T9t7KDD8jnXRv2w/hD2jbe6Mpahc
-         w8Hb3mNRMk9y1w66tPY0Ni+R8JEPRd2rhjH+Yyg3KoDTUPtZog8l68srdcZHUKlx+BBH
-         kmTQ==
+        Wed, 28 Jun 2023 11:30:57 -0400
+Received: by mail-io1-f48.google.com with SMTP id ca18e2360f4ac-78363cc070aso1223539f.1;
+        Wed, 28 Jun 2023 08:30:56 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687966224; x=1690558224;
-        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=4eipvAP8cAn3qf+QI5BYy9KRsjhBE5RJHKH6KbEsvKw=;
-        b=lHhXrskL3WtdqfodlTS72YlAM2i3xTf3PS5ro/m8LwlpIgWEgFrOvaGLSedxE5fVVr
-         HUFNWRKlhbP2EHoTZVbtMbPhUb5BBsJSrbLdVdYlowwEOEiQNP0EcaoWFyoyR4GcLjU+
-         RAxPFJNvjpNcQavM1vpptuHTcsxRqRlJIw/+tfIXSCiNPOUhTs9icwRwAT6NfYwjJY34
-         xrQvJxDLkPM+cwYRony2+KcKtK1Uxt6ZGQsuA4Ma6JGS0oMSZtfFQ2cY4XVV4vlfL14p
-         1vcnyYo2tWFc7tuywbKTkNFdzxNiulm3FRkN8pYDjxz4A6FHadw85Mwvcu0NiiSGJhEU
-         HfYw==
-X-Gm-Message-State: AC+VfDy2uGpSYKDio8h+Y4PRosNR2KVSXvuChVnib6F4zxoCJlhinw3a
-        TrjQDf2+REaXrGKzuVHDXeAFJRTs1aoZDA==
-X-Google-Smtp-Source: ACHHUZ6ZbMYzkEt6o8nH76d/fZa9ZfWMAZIv91i5uWcQmfW2Hn824BfpaqeSWGgqIwgLiWqNP/CVgA==
-X-Received: by 2002:a05:6a20:938b:b0:e9:5b0a:deff with SMTP id x11-20020a056a20938b00b000e95b0adeffmr33939956pzh.22.1687966223619;
-        Wed, 28 Jun 2023 08:30:23 -0700 (PDT)
-Received: from 377044c6c369.cse.ust.hk (191host097.mobilenet.cse.ust.hk. [143.89.191.97])
-        by smtp.gmail.com with ESMTPSA id jh2-20020a170903328200b001b3fb1119fdsm1750669plb.297.2023.06.28.08.30.21
+        d=1e100.net; s=20221208; t=1687966256; x=1690558256;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0niG6qG4DqT/r1g966+PJqlCiFTcEvd91aBP54ZlXY8=;
+        b=b4LnUw2LaBWDCgY3OpBlU1MYfpSC0vinpvaVA+GrzGWqB8gRLL6OtQAHAGGNpOiZvQ
+         DAZ95rDOtNy1fzQsvfOUMERqz8xdMmeCoel5KKbDqRqzyQcVcPie8TdAZy1nWXpDDeTk
+         9sZp5ycs53blQ1zEy8BPwjnkXG0cecSNc5dRhUudzpjkDmP0Web02jb+t76T+j8v7oJh
+         KrXOEEZBO7JYKXeSAa1qVOdlwsaSKruE1ErAXjtj9Iob0rBYKhwczEDRy3gtkPrKvWHT
+         PmaZuYQJq0E3mEd8oC4BZPMJ7VBuYyQU2OfZ8RWGpe0y4NkIpWbJXIv5hO86HMGaQmJ/
+         KZfw==
+X-Gm-Message-State: AC+VfDww2pAx+pMTpeHalosLe4GdHjbaFx0agNrdt+4c0IFJOHmQ0QOr
+        FblSpALWOBgxasNcPF7x5w==
+X-Google-Smtp-Source: ACHHUZ6LB+/gdmYyZRvgWzuIiTCMmzPhOqUZFcSycE37KQbVQhh90RKEhAkscudg8T/mbyxLPZic4g==
+X-Received: by 2002:a6b:7218:0:b0:777:a970:b382 with SMTP id n24-20020a6b7218000000b00777a970b382mr39010929ioc.18.1687966256004;
+        Wed, 28 Jun 2023 08:30:56 -0700 (PDT)
+Received: from robh_at_kernel.org ([64.188.179.250])
+        by smtp.gmail.com with ESMTPSA id dp1-20020a0566381c8100b0042afa9b038csm220072jab.49.2023.06.28.08.30.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Jun 2023 08:30:23 -0700 (PDT)
-From:   Chengfeng Ye <dg573847474@gmail.com>
-To:     chenxiang66@hisilicon.com, jejb@linux.ibm.com,
-        martin.petersen@oracle.com
-Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Chengfeng Ye <dg573847474@gmail.com>
-Subject: [PATCH] scsi: hisi_sas: Fix potential deadlock on &hisi_hba->lock
-Date:   Wed, 28 Jun 2023 15:30:10 +0000
-Message-Id: <20230628153010.57705-1-dg573847474@gmail.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-        lindbergh.monkeyblade.net
+        Wed, 28 Jun 2023 08:30:55 -0700 (PDT)
+Received: (nullmailer pid 514857 invoked by uid 1000);
+        Wed, 28 Jun 2023 15:30:51 -0000
+Date:   Wed, 28 Jun 2023 09:30:51 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Marijn Suijten <marijn.suijten@somainline.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Krishna Manikandan <quic_mkrishn@quicinc.com>,
+        Loic Poulain <loic.poulain@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        ~postmarketos/upstreaming@lists.sr.ht,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        Jami Kettunen <jami.kettunen@somainline.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        linux-clk@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, Lux Aliaga <they@mint.lgbt>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: Re: [PATCH v2 07/15] dt-bindings: display/msm: Add SM6125 MDSS
+Message-ID: <20230628153051.GA507988-robh@kernel.org>
+References: <20230627-sm6125-dpu-v2-0-03e430a2078c@somainline.org>
+ <20230627-sm6125-dpu-v2-7-03e430a2078c@somainline.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230627-sm6125-dpu-v2-7-03e430a2078c@somainline.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As &hisi_hba->lock is acquired by hard irq int_abnormal_v1_hw(),
-other acquisition of the same lock under process context should
-disable irq, otherwise deadlock could happen if the
-irq preempt the execution while the lock is held in process context
-on the same CPU.
+On Tue, Jun 27, 2023 at 10:14:22PM +0200, Marijn Suijten wrote:
+> Document the SM6125 MDSS.
+> 
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
+> ---
+>  .../bindings/display/msm/qcom,sm6125-mdss.yaml     | 217 +++++++++++++++++++++
+>  1 file changed, 217 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/display/msm/qcom,sm6125-mdss.yaml b/Documentation/devicetree/bindings/display/msm/qcom,sm6125-mdss.yaml
+> new file mode 100644
+> index 000000000000..2525482424cb
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/display/msm/qcom,sm6125-mdss.yaml
+> @@ -0,0 +1,217 @@
+> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/display/msm/qcom,sm6125-mdss.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Qualcomm SM6125 Display MDSS
+> +
+> +maintainers:
+> +  - Marijn Suijten <marijn.suijten@somainline.org>
+> +
+> +description:
+> +  SM6125 MSM Mobile Display Subsystem (MDSS), which encapsulates sub-blocks
+> +  like DPU display controller, DSI and DP interfaces etc.
+> +
+> +$ref: /schemas/display/msm/mdss-common.yaml#
+> +
+> +properties:
+> +  compatible:
+> +    const: qcom,sm6125-mdss
+> +
+> +  clocks:
+> +    items:
+> +      - description: Display AHB clock from gcc
+> +      - description: Display AHB clock
+> +      - description: Display core clock
+> +
+> +  clock-names:
+> +    items:
+> +      - const: iface
+> +      - const: ahb
+> +      - const: core
+> +
+> +  iommus:
+> +    maxItems: 1
+> +
+> +  interconnects:
+> +    maxItems: 2
+> +
+> +  interconnect-names:
+> +    maxItems: 2
+> +
+> +patternProperties:
+> +  "^display-controller@[0-9a-f]+$":
+> +    type: object
+> +    properties:
+> +      compatible:
+> +        const: qcom,sm6125-dpu
+> +
+> +  "^dsi@[0-9a-f]+$":
+> +    type: object
+> +    properties:
+> +      compatible:
+> +        items:
+> +          - const: qcom,sm6125-dsi-ctrl
+> +          - const: qcom,mdss-dsi-ctrl
+> +
+> +  "^phy@[0-9a-f]+$":
+> +    type: object
+> +    properties:
+> +      compatible:
+> +        const: qcom,sm6125-dsi-phy-14nm
+> +
+> +unevaluatedProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/clock/qcom,dispcc-sm6125.h>
+> +    #include <dt-bindings/clock/qcom,gcc-sm6125.h>
+> +    #include <dt-bindings/clock/qcom,rpmcc.h>
+> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> +    #include <dt-bindings/power/qcom-rpmpd.h>
+> +
+> +    display-subsystem@5e00000 {
+> +        compatible = "qcom,sm6125-mdss";
+> +        reg = <0x05e00000 0x1000>;
+> +        reg-names = "mdss";
+> +
+> +        interrupts = <GIC_SPI 186 IRQ_TYPE_LEVEL_HIGH>;
+> +        interrupt-controller;
+> +        #interrupt-cells = <1>;
+> +
+> +        clocks = <&gcc GCC_DISP_AHB_CLK>,
+> +                 <&dispcc DISP_CC_MDSS_AHB_CLK>,
+> +                 <&dispcc DISP_CC_MDSS_MDP_CLK>;
+> +        clock-names = "iface",
+> +                      "ahb",
+> +                      "core";
+> +
+> +        power-domains = <&dispcc MDSS_GDSC>;
+> +
+> +        iommus = <&apps_smmu 0x400 0x0>;
+> +
+> +        #address-cells = <1>;
+> +        #size-cells = <1>;
+> +        ranges;
+> +
+> +        status = "disabled";
 
-[Interrupt]: int_abnormal_v1_hw()
-    -->/root/linux/drivers/scsi/hisi_sas/hisi_sas_v1_hw.c:1447
-    -->/root/linux/drivers/scsi/hisi_sas/hisi_sas_main.c:2050
-    -->/root/linux/drivers/scsi/hisi_sas/hisi_sas_main.c:1079
-    -->spin_lock_irqsave(&hisi_hba->lock, flags);
+Examples should not be disabled. Drop.
 
-[Process Context]: hisi_sas_clear_nexus_ha()
-    -->/root/linux/drivers/scsi/hisi_sas/hisi_sas_main.c:1932
-    -->/root/linux/drivers/scsi/hisi_sas/hisi_sas_main.c:1135
-    -->/root/linux/drivers/scsi/hisi_sas/hisi_sas_main.c:1116
-    -->/root/linux/drivers/scsi/hisi_sas/hisi_sas_main.c:1105
-    -->/root/linux/drivers/scsi/hisi_sas/hisi_sas_main.c:166
-    -->spin_lock(&hisi_hba->lock);
+> +
+> +        display-controller@5e01000 {
+> +            compatible = "qcom,sm6125-dpu";
+> +            reg = <0x05e01000 0x83208>,
+> +                  <0x05eb0000 0x2008>;
+> +            reg-names = "mdp", "vbif";
+> +
+> +            interrupt-parent = <&mdss>;
+> +            interrupts = <0>;
+> +
+> +            clocks = <&gcc GCC_DISP_HF_AXI_CLK>,
+> +                     <&dispcc DISP_CC_MDSS_AHB_CLK>,
+> +                     <&dispcc DISP_CC_MDSS_ROT_CLK>,
+> +                     <&dispcc DISP_CC_MDSS_MDP_LUT_CLK>,
+> +                     <&dispcc DISP_CC_MDSS_MDP_CLK>,
+> +                     <&dispcc DISP_CC_MDSS_VSYNC_CLK>;
+> +            clock-names = "bus",
+> +                          "iface",
+> +                          "rot",
+> +                          "lut",
+> +                          "core",
+> +                          "vsync";
+> +            assigned-clocks = <&dispcc DISP_CC_MDSS_VSYNC_CLK>;
+> +            assigned-clock-rates = <19200000>;
+> +
+> +            operating-points-v2 = <&mdp_opp_table>;
+> +            power-domains = <&rpmpd SM6125_VDDCX>;
+> +
+> +            ports {
+> +                #address-cells = <1>;
+> +                #size-cells = <0>;
+> +
+> +                port@0 {
+> +                    reg = <0>;
+> +                    dpu_intf1_out: endpoint {
+> +                        remote-endpoint = <&mdss_dsi0_in>;
+> +                    };
+> +                };
+> +            };
+> +        };
+> +
+> +        dsi@5e94000 {
+> +            compatible = "qcom,sm6125-dsi-ctrl", "qcom,mdss-dsi-ctrl";
+> +            reg = <0x05e94000 0x400>;
+> +            reg-names = "dsi_ctrl";
+> +
+> +            interrupt-parent = <&mdss>;
+> +            interrupts = <4>;
+> +
+> +            clocks = <&dispcc DISP_CC_MDSS_BYTE0_CLK>,
+> +                     <&dispcc DISP_CC_MDSS_BYTE0_INTF_CLK>,
+> +                     <&dispcc DISP_CC_MDSS_PCLK0_CLK>,
+> +                     <&dispcc DISP_CC_MDSS_ESC0_CLK>,
+> +                     <&dispcc DISP_CC_MDSS_AHB_CLK>,
+> +                     <&gcc GCC_DISP_HF_AXI_CLK>;
+> +            clock-names = "byte",
+> +                          "byte_intf",
+> +                          "pixel",
+> +                          "core",
+> +                          "iface",
+> +                          "bus";
+> +            assigned-clocks = <&dispcc DISP_CC_MDSS_BYTE0_CLK_SRC>,
+> +                      <&dispcc DISP_CC_MDSS_PCLK0_CLK_SRC>;
+> +            assigned-clock-parents = <&mdss_dsi0_phy 0>, <&mdss_dsi0_phy 1>;
+> +
+> +            operating-points-v2 = <&dsi_opp_table>;
+> +            power-domains = <&rpmpd SM6125_VDDCX>;
+> +
+> +            phys = <&mdss_dsi0_phy>;
+> +            phy-names = "dsi";
+> +
+> +            #address-cells = <1>;
+> +            #size-cells = <0>;
+> +
+> +            status = "disabled";
 
-[Process Context]: hisi_sas_dev_found()
-    -->/root/linux/drivers/scsi/hisi_sas/hisi_sas_main.c:665
-    -->spin_lock(&hisi_hba->lock);
+Ditto.
 
-[Process Context]: hisi_sas_queue_command()
-    -->/root/linux/drivers/scsi/hisi_sas/hisi_sas_main.c:188
-    -->spin_lock(&hisi_hba->lock);
+> +
+> +            ports {
+> +                #address-cells = <1>;
+> +                #size-cells = <0>;
+> +
+> +                port@0 {
+> +                    reg = <0>;
+> +                    mdss_dsi0_in: endpoint {
+> +                        remote-endpoint = <&dpu_intf1_out>;
+> +                    };
+> +                };
+> +
+> +                port@1 {
+> +                    reg = <1>;
+> +                    mdss_dsi0_out: endpoint {
+> +                    };
+> +                };
+> +            };
+> +        };
+> +
+> +        phy@5e94400 {
+> +            compatible = "qcom,sm6125-dsi-phy-14nm";
+> +            reg = <0x05e94400 0x100>,
+> +                  <0x05e94500 0x300>,
+> +                  <0x05e94800 0x188>;
+> +            reg-names = "dsi_phy",
+> +                        "dsi_phy_lane",
+> +                        "dsi_pll";
+> +
+> +            #clock-cells = <1>;
+> +            #phy-cells = <0>;
+> +
+> +            clocks = <&dispcc DISP_CC_MDSS_AHB_CLK>,
+> +                     <&rpmcc RPM_SMD_XO_CLK_SRC>;
+> +            clock-names = "iface",
+> +                          "ref";
+> +
+> +            required-opps = <&rpmpd_opp_svs>;
+> +            power-domains = <&rpmpd SM6125_VDDMX>;
+> +
+> +            status = "disabled";
 
-This flaw was found by an experimental static analysis tool I am
-developing for irq-related deadlock, which reported the above
-warning when analyzing the linux kernel 6.4-rc7 release.
+Ditto
 
-The tentative patch fix the potential deadlock by spin_lock_irqsave().
-
-Signed-off-by: Chengfeng Ye <dg573847474@gmail.com>
----
- drivers/scsi/hisi_sas/hisi_sas_main.c | 17 ++++++++++-------
- 1 file changed, 10 insertions(+), 7 deletions(-)
-
-diff --git a/drivers/scsi/hisi_sas/hisi_sas_main.c b/drivers/scsi/hisi_sas/hisi_sas_main.c
-index 412431c901a7..47c5062a732e 100644
---- a/drivers/scsi/hisi_sas/hisi_sas_main.c
-+++ b/drivers/scsi/hisi_sas/hisi_sas_main.c
-@@ -161,11 +161,12 @@ static void hisi_sas_slot_index_clear(struct hisi_hba *hisi_hba, int slot_idx)
- 
- static void hisi_sas_slot_index_free(struct hisi_hba *hisi_hba, int slot_idx)
- {
-+	unsigned long flags;
- 	if (hisi_hba->hw->slot_index_alloc ||
- 	    slot_idx < HISI_SAS_RESERVED_IPTT) {
--		spin_lock(&hisi_hba->lock);
-+		spin_lock_irqsave(&hisi_hba->lock, flags);
- 		hisi_sas_slot_index_clear(hisi_hba, slot_idx);
--		spin_unlock(&hisi_hba->lock);
-+		spin_unlock_irqrestore(&hisi_hba->lock, flags);
- 	}
- }
- 
-@@ -181,11 +182,12 @@ static int hisi_sas_slot_index_alloc(struct hisi_hba *hisi_hba,
- {
- 	int index;
- 	void *bitmap = hisi_hba->slot_index_tags;
-+	unsigned long flags;
- 
- 	if (rq)
- 		return rq->tag + HISI_SAS_RESERVED_IPTT;
- 
--	spin_lock(&hisi_hba->lock);
-+	spin_lock_irqsave(&hisi_hba->lock, flags);
- 	index = find_next_zero_bit(bitmap, HISI_SAS_RESERVED_IPTT,
- 				   hisi_hba->last_slot_index + 1);
- 	if (index >= HISI_SAS_RESERVED_IPTT) {
-@@ -193,13 +195,13 @@ static int hisi_sas_slot_index_alloc(struct hisi_hba *hisi_hba,
- 				HISI_SAS_RESERVED_IPTT,
- 				0);
- 		if (index >= HISI_SAS_RESERVED_IPTT) {
--			spin_unlock(&hisi_hba->lock);
-+			spin_unlock_irqrestore(&hisi_hba->lock, flags);
- 			return -SAS_QUEUE_FULL;
- 		}
- 	}
- 	hisi_sas_slot_index_set(hisi_hba, index);
- 	hisi_hba->last_slot_index = index;
--	spin_unlock(&hisi_hba->lock);
-+	spin_unlock_irqrestore(&hisi_hba->lock, flags);
- 
- 	return index;
- }
-@@ -658,11 +660,12 @@ static struct hisi_sas_device *hisi_sas_alloc_dev(struct domain_device *device)
- {
- 	struct hisi_hba *hisi_hba = dev_to_hisi_hba(device);
- 	struct hisi_sas_device *sas_dev = NULL;
-+	unsigned long flags;
- 	int last = hisi_hba->last_dev_id;
- 	int first = (hisi_hba->last_dev_id + 1) % HISI_SAS_MAX_DEVICES;
- 	int i;
- 
--	spin_lock(&hisi_hba->lock);
-+	spin_lock_irqsave(&hisi_hba->lock, flags);
- 	for (i = first; i != last; i %= HISI_SAS_MAX_DEVICES) {
- 		if (hisi_hba->devices[i].dev_type == SAS_PHY_UNUSED) {
- 			int queue = i % hisi_hba->queue_count;
-@@ -682,7 +685,7 @@ static struct hisi_sas_device *hisi_sas_alloc_dev(struct domain_device *device)
- 		i++;
- 	}
- 	hisi_hba->last_dev_id = i;
--	spin_unlock(&hisi_hba->lock);
-+	spin_unlock_irqrestore(&hisi_hba->lock, flags);
- 
- 	return sas_dev;
- }
--- 
-2.17.1
-
+> +        };
+> +    };
+> +...
+> 
+> -- 
+> 2.41.0
+> 
