@@ -2,98 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CE33741CDC
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 02:20:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FFDC741CDE
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 02:23:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232190AbjF2AUF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 20:20:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54682 "EHLO
+        id S230014AbjF2AXQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 20:23:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232174AbjF2AT5 (ORCPT
+        with ESMTP id S229624AbjF2AXN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 20:19:57 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 680F51FFA
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 17:19:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1687997990;
-        bh=UAvBoHJxAhhI6VZL1p6GQ890uUwi0Zaws3oDsYlxk0U=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=rkd/gQbSGO3o/VS8Tf0o5tjHTjK3MwpQzKuTjOFMzbGk1FjNt6IV4oXCFu16wEVmM
-         AuMJnUMQaqnQUYG22n8JE+SIvepPtJwoZlEaOKekqtmrGbIWj0gzGcBInV9PkrITxz
-         zCQ7V69gzpYc4IP1AJ3OctTK+mJAN4hSJrXq6poCAyDDrR6fRDZcGPae86cHwiZRCO
-         Sk0LBxgdV3YHo29BIbyVvXeZdn4Zkp6VWahkUI3exljy363Y7l6MXma/paqlmnE4K8
-         GEvDULwo4cWtYW5vcTBLruDRfKd/HgYDB8+WV5ovF3UOAbHIuVrFrBT0ZIJWXrj8Hk
-         AktZHn0Ke6NQw==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Qrzbn5zTpz4wbP;
-        Thu, 29 Jun 2023 10:19:49 +1000 (AEST)
-Date:   Thu, 29 Jun 2023 10:19:48 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Matthew Wilcox <willy@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org
-Subject: Re: Reunbreak the MEM_ENCRYPT build
-Message-ID: <20230629101948.2bc3fa84@canb.auug.org.au>
-In-Reply-To: <CAHk-=wghER2OsCc+H2USU+nmh72QJ-kqTmaHq=YFd=0xaivubw@mail.gmail.com>
-References: <ZJyECvfrOWhKJj4t@casper.infradead.org>
-        <CAHk-=wghER2OsCc+H2USU+nmh72QJ-kqTmaHq=YFd=0xaivubw@mail.gmail.com>
+        Wed, 28 Jun 2023 20:23:13 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1A091FE5;
+        Wed, 28 Jun 2023 17:23:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1687998192; x=1719534192;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=NSIVlTxQFEP8tWo4aGIX3eAE9P84KZXLcEh9LxBzi54=;
+  b=C8uXwh2iJblUjKMu/kVoYCyz48HTuGDMdcUA8nbDV2bZL0jAZz4XyOP1
+   2gYcHBxyZFJm5GtQ+5SY33tVnRi5NUNiwfjvaG0oOyWcBIYeLKateIes/
+   vH3qusoxD0sdxhRzWCyxpiU4H1XSGinYVXB6tC/ItqlR+F2vLZnA3q4+f
+   FIVvG4FeBsP37WfslyK9ccgQp4TAC+us3o+F5tJ87TNCaZJRCRVgmbAgT
+   2z/IciqehnrHHpoAHXRGQ20xmUltJkHRThadCffi/FyWt4svZoUUGxMWq
+   w/xlIpDNfxu6dr47C3MrZd9nI/0WwOtKcUYSgBAOQ9y+RkY9jOoB+PEil
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10755"; a="425662788"
+X-IronPort-AV: E=Sophos;i="6.01,166,1684825200"; 
+   d="scan'208";a="425662788"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2023 17:23:12 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10755"; a="807122983"
+X-IronPort-AV: E=Sophos;i="6.01,166,1684825200"; 
+   d="scan'208";a="807122983"
+Received: from scc823097.zsc7.intel.com ([10.148.153.229])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2023 17:23:11 -0700
+From:   Peter Colberg <peter.colberg@intel.com>
+To:     hao.wu@intel.com, yilun.xu@intel.com, gregkh@linuxfoundation.org,
+        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     aaron.j.grier@intel.com, tianfei.zhang@intel.com,
+        russell.h.weight@intel.com, matthew.gerlach@linux.intel.com,
+        marpagan@redhat.com, lgoncalv@redhat.com,
+        Peter Colberg <peter.colberg@intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v3] fpga: dfl: afu: use PFN_DOWN() helper macro
+Date:   Wed, 28 Jun 2023 20:22:55 -0400
+Message-Id: <20230629002255.25262-1-peter.colberg@intel.com>
+X-Mailer: git-send-email 2.28.0
+In-Reply-To: <ZJvLlHpJwr/tv3gq@yilunxu-OptiPlex-7050>
+References: <ZJvLlHpJwr/tv3gq@yilunxu-OptiPlex-7050>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/AvObYWVibh_dVuUE25CaKLe";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/AvObYWVibh_dVuUE25CaKLe
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Replace right shifts by PAGE_SHIFT with PFN_DOWN() helper macro to convert
+from physical addresses to page frame numbers.
 
-Hi Linus,
+These changes are cosmetic only; no functional changes.
 
-On Wed, 28 Jun 2023 12:52:24 -0700 Linus Torvalds <torvalds@linux-foundatio=
-n.org> wrote:
->
-> On Wed, 28 Jun 2023 at 12:03, Matthew Wilcox <willy@infradead.org> wrote:
-> >
-> > Probably this is the wrong fix. =20
->=20
-> No, that looks like the obviously correct fix, I just don't see how we
-> all missed that stale declaration.
->=20
-> I guess we all had X86_MEM_ENCRYPT enabled, which hides the problem.
-> And other architectures wouldn't have had the issue.
+Suggested-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Signed-off-by: Peter Colberg <peter.colberg@intel.com>
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+v3:
+- Revert afu_mmap(), which calculates file offsets, not physical pages
+v2:
+- Comment in commit message that changes are cosmetic only
+---
+ drivers/fpga/dfl-afu-dma-region.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-https://lore.kernel.org/all/20230620145357.12d6b23f@canb.auug.org.au/
+diff --git a/drivers/fpga/dfl-afu-dma-region.c b/drivers/fpga/dfl-afu-dma-region.c
+index 02b60fde0430..e8d54cfbb301 100644
+--- a/drivers/fpga/dfl-afu-dma-region.c
++++ b/drivers/fpga/dfl-afu-dma-region.c
+@@ -10,6 +10,7 @@
+  */
+ 
+ #include <linux/dma-mapping.h>
++#include <linux/pfn.h>
+ #include <linux/sched/signal.h>
+ #include <linux/uaccess.h>
+ #include <linux/mm.h>
+@@ -34,7 +35,7 @@ void afu_dma_region_init(struct dfl_feature_platform_data *pdata)
+ static int afu_dma_pin_pages(struct dfl_feature_platform_data *pdata,
+ 			     struct dfl_afu_dma_region *region)
+ {
+-	int npages = region->length >> PAGE_SHIFT;
++	int npages = PFN_DOWN(region->length);
+ 	struct device *dev = &pdata->dev->dev;
+ 	int ret, pinned;
+ 
+@@ -82,7 +83,7 @@ static int afu_dma_pin_pages(struct dfl_feature_platform_data *pdata,
+ static void afu_dma_unpin_pages(struct dfl_feature_platform_data *pdata,
+ 				struct dfl_afu_dma_region *region)
+ {
+-	long npages = region->length >> PAGE_SHIFT;
++	long npages = PFN_DOWN(region->length);
+ 	struct device *dev = &pdata->dev->dev;
+ 
+ 	unpin_user_pages(region->pages, npages);
+@@ -101,7 +102,7 @@ static void afu_dma_unpin_pages(struct dfl_feature_platform_data *pdata,
+  */
+ static bool afu_dma_check_continuous_pages(struct dfl_afu_dma_region *region)
+ {
+-	int npages = region->length >> PAGE_SHIFT;
++	int npages = PFN_DOWN(region->length);
+ 	int i;
+ 
+ 	for (i = 0; i < npages - 1; i++)
+-- 
+2.28.0
 
-:-(
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/AvObYWVibh_dVuUE25CaKLe
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmScziQACgkQAVBC80lX
-0GzW2wf9HZ7cINm6fG1xSFAVpjJqLeTSrLlWQwGY/N7f1mdSmm0unWjssI11K9Mp
-5JetVQFc+miiU8jT+GHi1JeJDzFp7TIzT+DF0VWlIor0iGxUNzC0RM3FqhLBgmMM
-jstzmsStzFrgRI9sgRT38NrOnkSIXQiYvnO5i7845iizbo5UmlU0e+/CAFj6+JEC
-/HDWBK8qEolwkCGsjvak1EMo0QvXwBlIC0OrloroCuTiQQ91lUXCIPj1IiN/SKRt
-NR3UcJx+44oliNhiY3iZE1p8icCvkq2oMdyKyleeNczUW9IuAlHUKZBdif5+Dz2v
-3/IV7jUET0/hvCKnKGGOn54iDOZIdw==
-=JSwi
------END PGP SIGNATURE-----
-
---Sig_/AvObYWVibh_dVuUE25CaKLe--
