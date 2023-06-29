@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCCB874200A
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 07:46:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A50674200F
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 07:46:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231502AbjF2Fqm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 01:46:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33320 "EHLO
+        id S231361AbjF2Fqu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 01:46:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230463AbjF2Fqi (ORCPT
+        with ESMTP id S231332AbjF2Fqj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 01:46:38 -0400
+        Thu, 29 Jun 2023 01:46:39 -0400
 Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 589E02733;
-        Wed, 28 Jun 2023 22:46:35 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AE73B294E;
+        Wed, 28 Jun 2023 22:46:37 -0700 (PDT)
 Authenticated-By: 
-X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 35T5jrmA7016330, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (rtexh36505.realtek.com.tw[172.21.6.25])
-        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 35T5jrmA7016330
+X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 35T5k3Ey9016346, This message is accepted by code: ctloc85258
+Received: from mail.realtek.com (rtexh36506.realtek.com.tw[172.21.6.27])
+        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 35T5k3Ey9016346
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=FAIL);
-        Thu, 29 Jun 2023 13:45:53 +0800
-Received: from RTEXMBS06.realtek.com.tw (172.21.6.99) by
- RTEXH36505.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
+        Thu, 29 Jun 2023 13:46:03 +0800
+Received: from RTEXDAG01.realtek.com.tw (172.21.6.100) by
+ RTEXH36506.realtek.com.tw (172.21.6.27) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.32; Thu, 29 Jun 2023 13:45:54 +0800
+ 15.1.2507.17; Thu, 29 Jun 2023 13:46:04 +0800
 Received: from RTEXH36506.realtek.com.tw (172.21.6.27) by
- RTEXMBS06.realtek.com.tw (172.21.6.99) with Microsoft SMTP Server
+ RTEXDAG01.realtek.com.tw (172.21.6.100) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.34; Thu, 29 Jun 2023 13:45:54 +0800
+ 15.1.2375.7; Thu, 29 Jun 2023 13:46:04 +0800
 Received: from localhost.localdomain (172.21.252.101) by
  RTEXH36506.realtek.com.tw (172.21.6.27) with Microsoft SMTP Server id
- 15.1.2507.17 via Frontend Transport; Thu, 29 Jun 2023 13:45:54 +0800
+ 15.1.2507.17 via Frontend Transport; Thu, 29 Jun 2023 13:46:04 +0800
 From:   Stanley Chang <stanley_chang@realtek.com>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 CC:     Stanley Chang <stanley_chang@realtek.com>,
@@ -42,26 +42,21 @@ CC:     Stanley Chang <stanley_chang@realtek.com>,
         Conor Dooley <conor+dt@kernel.org>,
         Alan Stern <stern@rowland.harvard.edu>,
         "Douglas Anderson" <dianders@chromium.org>,
+        Ray Chi <raychi@google.com>,
+        "Flavio Suligoi" <f.suligoi@asem.it>,
         Matthias Kaehlcke <mka@chromium.org>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        Flavio Suligoi <f.suligoi@asem.it>,
-        Ray Chi <raychi@google.com>, <linux-phy@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>
-Subject: [PATCH v6 4/5] dt-bindings: phy: realtek: Add the doc about the Realtek SoC USB 2.0 PHY
-Date:   Thu, 29 Jun 2023 13:45:12 +0800
-Message-ID: <20230629054523.7519-4-stanley_chang@realtek.com>
+        <linux-phy@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>
+Subject: [PATCH v6 5/5] dt-bindings: phy: realtek: Add the doc about the Realtek SoC USB 3.0 PHY
+Date:   Thu, 29 Jun 2023 13:45:13 +0800
+Message-ID: <20230629054523.7519-5-stanley_chang@realtek.com>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <20230629054523.7519-1-stanley_chang@realtek.com>
 References: <20230629054523.7519-1-stanley_chang@realtek.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7BIT
 Content-Type:   text/plain; charset=US-ASCII
-X-KSE-ServerInfo: RTEXMBS06.realtek.com.tw, 9
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-KSE-Antivirus-Interceptor-Info: fallback
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-KSE-ServerInfo: RTEXH36505.realtek.com.tw, 9
+X-KSE-ServerInfo: RTEXDAG01.realtek.com.tw, 9
 X-KSE-AntiSpam-Interceptor-Info: fallback
 X-KSE-Antivirus-Interceptor-Info: fallback
 X-KSE-AntiSpam-Interceptor-Info: fallback
@@ -77,18 +72,15 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 Add the documentation explain the property about Realtek USB PHY driver.
 
 Realtek DHC (digital home center) RTD SoCs support DWC3 XHCI USB
-controller. Added the driver to drive the USB 2.0 PHY transceivers.
+controller. Added the driver to drive the  USB 3.0 PHY transceivers.
 
 Signed-off-by: Stanley Chang <stanley_chang@realtek.com>
 ---
 v5 to v6 change:
-    Drop the redundant examples
-    Drop the label of example
+    Drop the labels of example.
 v4 to v5 change:
-    1. Add more examples.
-    2. Remove the compatible realtek,usb2phy.
-    3. Revise the descriptor of the property.
-    4. Add the default of the property.
+    1. Remove the compatible realtek,usb3phy.
+    2. Add the default of the property.
 v3 to v4 change:
     1. Remove the parameter and non hardware properties from dts.
     2. Using the compatible data included the config and parameter
@@ -102,31 +94,31 @@ v2 to v3 change:
 v1 to v2 change:
     Add phy-cells for generic phy driver
 ---
- .../bindings/phy/realtek,usb2phy.yaml         | 153 ++++++++++++++++++
- 1 file changed, 153 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/phy/realtek,usb2phy.yaml
+ .../bindings/phy/realtek,usb3phy.yaml         | 107 ++++++++++++++++++
+ 1 file changed, 107 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/phy/realtek,usb3phy.yaml
 
-diff --git a/Documentation/devicetree/bindings/phy/realtek,usb2phy.yaml b/Documentation/devicetree/bindings/phy/realtek,usb2phy.yaml
+diff --git a/Documentation/devicetree/bindings/phy/realtek,usb3phy.yaml b/Documentation/devicetree/bindings/phy/realtek,usb3phy.yaml
 new file mode 100644
-index 000000000000..773663bf5c62
+index 000000000000..1a6cdc1ee073
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/phy/realtek,usb2phy.yaml
-@@ -0,0 +1,153 @@
++++ b/Documentation/devicetree/bindings/phy/realtek,usb3phy.yaml
+@@ -0,0 +1,107 @@
 +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
 +# Copyright 2023 Realtek Semiconductor Corporation
 +%YAML 1.2
 +---
-+$id: http://devicetree.org/schemas/phy/realtek,usb2phy.yaml#
++$id: http://devicetree.org/schemas/phy/realtek,usb3phy.yaml#
 +$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
-+title: Realtek DHC SoCs USB 2.0 PHY
++title: Realtek DHC SoCs USB 3.0 PHY
 +
 +maintainers:
 +  - Stanley Chang <stanley_chang@realtek.com>
 +
 +description:
-+  Realtek USB 2.0 PHY support the digital home center (DHC) RTD series SoCs.
-+  The USB 2.0 PHY driver is designed to support the XHCI controller. The SoCs
++  Realtek USB 3.0 PHY support the digital home center (DHC) RTD series SoCs.
++  The USB 3.0 PHY driver is designed to support the XHCI controller. The SoCs
 +  support multiple XHCI controllers. One PHY device node maps to one XHCI
 +  controller.
 +
@@ -139,14 +131,6 @@ index 000000000000..773663bf5c62
 +  XHCI controller#1 -- usb2phy -- phy#0
 +  XHCI controller#2 -- usb2phy -- phy#0
 +                    |- usb3phy -- phy#0
-+
-+  RTD1395 SoCs USB
-+  The USB architecture includes two XHCI controllers.
-+  The controller#0 has one USB 2.0 PHY. The controller#1 includes two USB 2.0
-+  PHY.
-+  XHCI controller#0 -- usb2phy -- phy#0
-+  XHCI controller#1 -- usb2phy -- phy#0
-+                               |- phy#1
 +
 +  RTD1319/RTD1619b SoCs USB
 +  The USB architecture includes three XHCI controllers.
@@ -164,85 +148,49 @@ index 000000000000..773663bf5c62
 +  XHCI controller#1 -- usb2phy -- phy#0
 +  XHCI controller#2 -- usb2phy -- phy#0
 +
-+  RTD1312c/RTD1315e SoCs USB
-+  The USB architecture includes three XHCI controllers.
-+  Each XHCI maps to one USB 2.0 PHY.
-+  XHCI controller#0 -- usb2phy -- phy#0
-+  XHCI controller#1 -- usb2phy -- phy#0
-+  XHCI controller#2 -- usb2phy -- phy#0
-+
 +properties:
 +  compatible:
 +    enum:
-+      - realtek,rtd1295-usb2phy
-+      - realtek,rtd1312c-usb2phy
-+      - realtek,rtd1315e-usb2phy
-+      - realtek,rtd1319-usb2phy
-+      - realtek,rtd1319d-usb2phy
-+      - realtek,rtd1395-usb2phy
-+      - realtek,rtd1395-usb2phy-2port
-+      - realtek,rtd1619-usb2phy
-+      - realtek,rtd1619b-usb2phy
++      - realtek,rtd1295-usb3phy
++      - realtek,rtd1319-usb3phy
++      - realtek,rtd1319d-usb3phy
++      - realtek,rtd1619-usb3phy
++      - realtek,rtd1619b-usb3phy
 +
 +  reg:
-+    items:
-+      - description: PHY data registers
-+      - description: PHY control registers
++    maxItems: 1
 +
 +  "#phy-cells":
 +    const: 0
 +
 +  nvmem-cells:
-+    maxItems: 2
-+    description:
-+      Phandles to nvmem cell that contains the trimming data.
-+      If unspecified, default value is used.
++    maxItems: 1
++    description: A phandle to the tx lfps swing trim data provided by
++      a nvmem device, if unspecified, default values shall be used.
 +
 +  nvmem-cell-names:
 +    items:
-+      - const: usb-dc-cal
-+      - const: usb-dc-dis
-+    description:
-+      The following names, which correspond to each nvmem-cells.
-+      usb-dc-cal is the driving level for each phy specified via efuse.
-+      usb-dc-dis is the disconnection level for each phy specified via efuse.
++      - const: usb_u3_tx_lfps_swing_trim
 +
-+  realtek,inverse-hstx-sync-clock:
++  realtek,amplitude-control-coarse-tuning:
 +    description:
-+      For one of the phys of RTD1619b SoC, the synchronous clock of the
-+      high-speed tx must be inverted.
-+    type: boolean
-+
-+  realtek,driving-level:
-+    description:
-+      Control the magnitude of High speed Dp/Dm output swing.
-+      For a different board or port, the original magnitude maybe not meet
-+      the specification. In this situation we can adjust the value to meet
-+      the specification.
++      This adjusts the signal amplitude for normal operation and beacon LFPS.
++      This value is a parameter for coarse tuning.
++      For different boards, if the default value is inappropriate, this
++      property can be assigned to adjust.
 +    $ref: /schemas/types.yaml#/definitions/uint32
-+    default: 8
++    default: 255
 +    minimum: 0
-+    maximum: 31
++    maximum: 255
 +
-+  realtek,driving-compensate:
++  realtek,amplitude-control-fine-tuning:
 +    description:
-+      For RTD1315e SoC, the driving level can be adjusted by reading the
-+      efuse table. This property provides drive compensation.
-+      If the magnitude of High speed Dp/Dm output swing still not meet the
-+      specification, then we can set this value to meet the specification.
-+    $ref: /schemas/types.yaml#/definitions/int32
-+    default: 0
-+    minimum: -8
-+    maximum: 8
-+
-+  realtek,disconnection-compensate:
-+    description:
-+      This adjusts the disconnection level compensation for the different
-+      boards with different disconnection level.
-+    $ref: /schemas/types.yaml#/definitions/int32
-+    default: 0
-+    minimum: -8
-+    maximum: 8
++      This adjusts the signal amplitude for normal operation and beacon LFPS.
++      This value is used for fine-tuning parameters.
++    $ref: /schemas/types.yaml#/definitions/uint32
++    default: 65535
++    minimum: 0
++    maximum: 65535
 +
 +required:
 +  - compatible
@@ -253,17 +201,15 @@ index 000000000000..773663bf5c62
 +
 +examples:
 +  - |
-+    usb-phy@13214 {
-+        compatible = "realtek,rtd1619b-usb2phy";
-+        reg = <0x13214 0x4>, <0x28280 0x4>;
++    usb-phy@13e10 {
++        compatible = "realtek,rtd1319d-usb3phy";
++        reg = <0x13e10 0x4>;
 +        #phy-cells = <0>;
-+        nvmem-cells = <&otp_usb_port0_dc_cal>, <&otp_usb_port0_dc_dis>;
-+        nvmem-cell-names = "usb-dc-cal", "usb-dc-dis";
 +
-+        realtek,inverse-hstx-sync-clock;
-+        realtek,driving-level = <0xa>;
-+        realtek,driving-compensate = <(-1)>;
-+        realtek,disconnection-compensate = <(-1)>;
++        nvmem-cells = <&otp_usb_u3_tx_lfps_swing_trim>;
++        nvmem-cell-names = "usb_u3_tx_lfps_swing_trim";
++
++        realtek,amplitude-control-coarse-tuning = <0x77>;
 +    };
 -- 
 2.34.1
