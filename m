@@ -2,239 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E47CA743146
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 01:58:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D17374314C
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 01:58:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231490AbjF2Xwd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 19:52:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41586 "EHLO
+        id S231681AbjF2XxJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 19:53:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229936AbjF2Xwb (ORCPT
+        with ESMTP id S231587AbjF2XxG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 19:52:31 -0400
-Received: from mail-io1-f49.google.com (mail-io1-f49.google.com [209.85.166.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF477C3;
-        Thu, 29 Jun 2023 16:52:29 -0700 (PDT)
-Received: by mail-io1-f49.google.com with SMTP id ca18e2360f4ac-7836164a08aso56752439f.1;
-        Thu, 29 Jun 2023 16:52:29 -0700 (PDT)
+        Thu, 29 Jun 2023 19:53:06 -0400
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 759F410D8
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 16:53:03 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id 2adb3069b0e04-4f957a45b10so1962795e87.0
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 16:53:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google; t=1688082781; x=1690674781;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=xL8mcULkodeO8henHTncigIW09N/RJHH4EXE2kEHVXY=;
+        b=VR7LyvIg5ycsu40d1YeMolF985bGkOswvgg1Yh/UpplYzehKbR8yAIf/ez+Bie7h+K
+         nVJVg3XruBP8xJYogkxZI25e0fRCoiM3dUzXChlHtumE6EcB0Fbxtx2ANqh9if/EqRm7
+         PrJL6uJ7aPvQY+z8R4oockkOuvIqmmdCpNhO8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688082749; x=1690674749;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=p3MNWRldOkh7U93wCUf49rUZRsoE94jIXXfBzMK9MhQ=;
-        b=Cj84eAAgM3sy5e5i7gX0ztotUUCm82bVEsGh+BcIJidQrLUDK3wRsWLHnFK8N8tPe/
-         lfKjcvCEmfGSc15QQvYHGWIvPM+p/4HgR6rgU6W3+XaglS/P+riG1Kg4srUpJShpaBa+
-         UyFPOZ6tu1WZm+nWghQ/CkOKbyeBQ0ecWVN+HsM0DQIOj8S9wNylWizR9YYmxDpkqK9t
-         14pUFSrdbO6JsWNJ2rq2/PLXetMqn5oh9A0nKRPOOmusVgRvu97hKU0uNyvYtdRrg89k
-         Ch/zq8VKkDm5fnRskCATEaRZX/bHHUXTnFC84Xh01mSndq9ZQSnJCQok4NGF2rQFCBkZ
-         Rbtg==
-X-Gm-Message-State: AC+VfDyxSfvwVFm4S4/5pb2h6QEAxGNOQUFzlRxKGU0T2Wy7HE8k4Fei
-        P1a544sjwF0EHinMLeSkoFPT4+alQA==
-X-Google-Smtp-Source: ACHHUZ6w1i1dMZturyuh9h8vAl8vSVEogcFbvDOZTsizTlr9O17Dm2PJNHWCKQhBaqZynkazK94n8g==
-X-Received: by 2002:a5d:8183:0:b0:776:fd07:3c96 with SMTP id u3-20020a5d8183000000b00776fd073c96mr1254241ion.7.1688082748916;
-        Thu, 29 Jun 2023 16:52:28 -0700 (PDT)
-Received: from robh_at_kernel.org ([64.188.179.250])
-        by smtp.gmail.com with ESMTPSA id h23-20020a02c4d7000000b0041d878ccc12sm1006543jaj.45.2023.06.29.16.52.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Jun 2023 16:52:27 -0700 (PDT)
-Received: (nullmailer pid 126058 invoked by uid 1000);
-        Thu, 29 Jun 2023 23:52:26 -0000
-Date:   Thu, 29 Jun 2023 17:52:26 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Lizhi Hou <lizhi.hou@amd.com>, linux-pci@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        max.zhen@amd.com, sonal.santan@amd.com,
-        stefano.stabellini@xilinx.com
-Subject: Re: [PATCH V10 2/5] PCI: Create device tree node for bridge
-Message-ID: <20230629235226.GA92592-robh@kernel.org>
-References: <1688059190-4225-3-git-send-email-lizhi.hou@amd.com>
- <20230629225631.GA446944@bhelgaas>
+        d=1e100.net; s=20221208; t=1688082781; x=1690674781;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=xL8mcULkodeO8henHTncigIW09N/RJHH4EXE2kEHVXY=;
+        b=kU+G486LEXXNC/idkOSywuAwMdlmRfDthIwU833Tt6X+wdywHZaEfbtGGpFzRKm0Y2
+         4q8ctxXeCq+MHwgKVBBwfS50HiQtBUhiDrsR1/RPPkr+rq1YHvvKg1lKWdr30cmtVi7w
+         reR1D0hg4mP4wEmuTraIFPX81I+o5YKq5Y382GGLT5zy3uKGcUcadskTIOHK4X1xRGRl
+         xDgfpfldo1ciFTyIgooDvhnZZrLwZ/G0JwaU1fMwHRIF3zAELZHJsqb805Wu7qC3plBT
+         +uIAWRdi0hyIdDXa/c7y2Z8dWQrsdQVn+hXoLyuDHRse3K0R284pAxEVxa+KrOBDjqOY
+         EIAA==
+X-Gm-Message-State: ABy/qLacUGiPg9zXuDcCiUq7PxtoPvmTBomiqyGfJZ1DiQL4clIMJ+O/
+        GrjYwtObUZ4ljaDOrY9QAQFoNKuQg5JOx1p3Lc3K+lPW
+X-Google-Smtp-Source: APBJJlG58/pa9FeYCE0QdSvdirBWtxAy3BV75gzFp3gecAFStM7IzobSF39Ogxt5VIu9ojBAggML4Q==
+X-Received: by 2002:a05:6512:281e:b0:4fb:78a0:dd32 with SMTP id cf30-20020a056512281e00b004fb78a0dd32mr1000770lfb.60.1688082781372;
+        Thu, 29 Jun 2023 16:53:01 -0700 (PDT)
+Received: from mail-lf1-f43.google.com (mail-lf1-f43.google.com. [209.85.167.43])
+        by smtp.gmail.com with ESMTPSA id j18-20020ac24552000000b004f858249931sm2315964lfm.93.2023.06.29.16.53.00
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 29 Jun 2023 16:53:00 -0700 (PDT)
+Received: by mail-lf1-f43.google.com with SMTP id 2adb3069b0e04-4f957a45b10so1962769e87.0
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 16:53:00 -0700 (PDT)
+X-Received: by 2002:ac2:58f6:0:b0:4f9:5711:2eb6 with SMTP id
+ v22-20020ac258f6000000b004f957112eb6mr792637lfo.28.1688082780196; Thu, 29 Jun
+ 2023 16:53:00 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230629225631.GA446944@bhelgaas>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+References: <20230628-pokal-puzzeln-5199c679b051@brauner>
+In-Reply-To: <20230628-pokal-puzzeln-5199c679b051@brauner>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Thu, 29 Jun 2023 16:52:43 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wiBXJOzkez2Rd=cQ5ckttJq6OdYtArFmCtVQHyeuQBGrw@mail.gmail.com>
+Message-ID: <CAHk-=wiBXJOzkez2Rd=cQ5ckttJq6OdYtArFmCtVQHyeuQBGrw@mail.gmail.com>
+Subject: Re: [GIT PULL] pid: use flex array
+To:     Christian Brauner <brauner@kernel.org>,
+        Kees Cook <keescook@chromium.org>
+Cc:     linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 29, 2023 at 05:56:31PM -0500, Bjorn Helgaas wrote:
-> On Thu, Jun 29, 2023 at 10:19:47AM -0700, Lizhi Hou wrote:
-> > The PCI endpoint device such as Xilinx Alveo PCI card maps the register
-> > spaces from multiple hardware peripherals to its PCI BAR. Normally,
-> > the PCI core discovers devices and BARs using the PCI enumeration process.
-> > There is no infrastructure to discover the hardware peripherals that are
-> > present in a PCI device, and which can be accessed through the PCI BARs.
-> 
-> IIUC this is basically a multi-function device except that instead of
-> each device being a separate PCI Function, they all appear in a single
-> Function.  That would mean all the devices share the same config space
-> so a single PCI Command register controls all of them, they all share
-> the same IRQs (either INTx or MSI/MSI-X), any MMIO registers are likely
-> in a shared BAR, etc., right?
+On Wed, 28 Jun 2023 at 03:37, Christian Brauner <brauner@kernel.org> wrote:
+>
+> This contains Kees' work to make struct upid in struct pid a proper
+> flexible array and thus gets rid of a bunch of syzbot UBSAN warnings.
 
-Could be multiple BARs, but yes.
+Hmm. Of this, about half were replacing "array + index" with "&array[index]".
 
-> Obviously PCI enumeration only sees the single Function and binds a
-> single driver to it.  But IIUC, you want to use existing drivers for
-> each of these sub-devices, so this series adds a DT node for the
-> single Function (using the quirks that call of_pci_make_dev_node()).
-> And I assume that when the PCI driver claims the single Function, it
-> will use that DT node to add platform devices, and those existing
-> drivers can claim those?
+Honestly, it makes no difference, but the reverse is also true: the
+"array + index" is *very* traditional, and if people have problems
+with that simple syntax I really don't know what to say. It's kind of
+core C. It's *literally* how arrays work, and what the '[]' operator
+means.
 
-Yes. It will call some variant of of_platform_populate().
+And of the remaining half, half again is using a truly disgusting
 
-> I don't see the PCI driver for the single Function in this series.  Is
-> that coming?  Is this series useful without it?
+    struct_size((struct pid *)0, numbers, X)
 
-https://lore.kernel.org/all/20220305052304.726050-4-lizhi.hou@xilinx.com/
+thing. That is *GARBAGE*. It's garbage for too many reasons for me to
+actually pull this sh*t, but let me just name them:
 
-I asked for things to be split up as the original series did a lot 
-of new things at once. This series only works with the QEMU PCI test 
-device which the DT unittest will use.
+ - 0 isn't a pointer. Stop doing that.
 
-> > Apparently, the device tree framework requires a device tree node for the
-> > PCI device. Thus, it can generate the device tree nodes for hardware
-> > peripherals underneath. Because PCI is self discoverable bus, there might
-> > not be a device tree node created for PCI devices. Furthermore, if the PCI
-> > device is hot pluggable, when it is plugged in, the device tree nodes for
-> > its parent bridges are required. Add support to generate device tree node
-> > for PCI bridges.
-> 
-> Can you remind me why hot-adding a PCI device requires DT nodes for
-> parent bridges?
+ - dammit, we have 'struct_size_t' that does the above disgusting cast
+without getting that simple thing wrong.
 
-Because the PCI device needs a DT node and we can't just put PCI devices 
-in the DT root. We have to create the bus hierarchy.
+In other words, this pull request contained half pointless and
+unrelated churn, and 25% actual garbage.
 
-> I don't think we have those today, so maybe the DT
-> node for the PCI device requires a DT parent?  How far up does that
-> go?
+In other words, I'm not pulling this to just get the remaining 25%.
 
-All the way.
-
->  From this patch, I guess a Root Port would be the top DT node on
-> a PCIe system, since that's the top PCI-to-PCI bridge?
-
-Yes. Plus above the host bridge could have a hierarchy of nodes.
-
-> This patch adds a DT node for *every* PCI bridge in the system.  We
-> only actually need that node for these unusual devices.  Is there some
-> way the driver for the single PCI Function could add that node when it
-> is needed?  Sorry if you've answered this in the past; maybe the
-> answer could be in the commit log or a code comment in case somebody
-> else wonders.
-
-This was discussed early on. I don't think it would work to create the 
-nodes at the time we discover we have a device that wants a DT node. The 
-issue is decisions are made in the code based on whether there's a DT 
-node for a PCI device or not. It might work, but I think it's fragile to 
-have nodes attached to devices at different points in time.
-
-> 
-> > @@ -340,6 +340,8 @@ void pci_bus_add_device(struct pci_dev *dev)
-> >  	 */
-> >  	pcibios_bus_add_device(dev);
-> >  	pci_fixup_device(pci_fixup_final, dev);
-> > +	if (pci_is_bridge(dev))
-> > +		of_pci_make_dev_node(dev);
-> 
-> It'd be nice to have a clue here about why we need this, since this is
-> executed for *every* system, even ACPI platforms that typically don't
-> use OF things.
-> 
-> >  	pci_create_sysfs_dev_files(dev);
-> >  	pci_proc_attach_device(dev);
-> >  	pci_bridge_d3_update(dev);
-> > diff --git a/drivers/pci/of.c b/drivers/pci/of.c
-> > index 2c25f4fa0225..9786ae407948 100644
-> > --- a/drivers/pci/of.c
-> > +++ b/drivers/pci/of.c
-> > @@ -487,6 +487,15 @@ static int of_irq_parse_pci(const struct pci_dev *pdev, struct of_phandle_args *
-> >  		} else {
-> >  			/* We found a P2P bridge, check if it has a node */
-> >  			ppnode = pci_device_to_OF_node(ppdev);
-> > +#if IS_ENABLED(CONFIG_PCI_DYNAMIC_OF_NODES)
-> 
-> I would use plain #ifdef here instead of IS_ENABLED(), as you did in
-> pci.h below.  IS_ENABLED() is true if the Kconfig symbol is set to
-> either "y" or "m".
-> 
-> Using IS_ENABLED() suggests that the config option *could* be a
-> module, which is not the case here because CONFIG_PCI_DYNAMIC_OF_NODES
-> is a bool.
-> 
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/include/linux/kconfig.h?id=v6.4#n69
-> 
-> > @@ -617,6 +626,85 @@ int devm_of_pci_bridge_init(struct device *dev, struct pci_host_bridge *bridge)
-> >  	return pci_parse_request_of_pci_ranges(dev, bridge);
-> >  }
-> >  
-> > +#if IS_ENABLED(CONFIG_PCI_DYNAMIC_OF_NODES)
-> 
-> Same here, of course.
-> 
-> > +void of_pci_remove_node(struct pci_dev *pdev)
-> > +{
-> > +	struct device_node *np;
-> > +
-> > +	np = pci_device_to_OF_node(pdev);
-> > +	if (!np || !of_node_check_flag(np, OF_DYNAMIC))
-> 
-> > + * Each entry in the ranges table is a tuple containing the child address,
-> > + * the parent address, and the size of the region in the child address space.
-> > + * Thus, for PCI, in each entry parent address is an address on the primary
-> > + * side and the child address is the corresponding address on the secondary
-> > + * side.
-> > + */
-> > +struct of_pci_range {
-> > +	u32		child_addr[OF_PCI_ADDRESS_CELLS];
-> > +	u32		parent_addr[OF_PCI_ADDRESS_CELLS];
-> > +	u32		size[OF_PCI_SIZE_CELLS];
-> 
-> > +		if (pci_is_bridge(pdev)) {
-> > +			memcpy(rp[i].child_addr, rp[i].parent_addr,
-> > +			       sizeof(rp[i].child_addr));
-> > +		} else {
-> > +			/*
-> > +			 * For endpoint device, the lower 64-bits of child
-> > +			 * address is always zero.
-> 
-> I think this connects with the secondary side comment above, right?  I
-> think I would comment this as:
-> 
->   /*
->    * PCI-PCI bridges don't translate addresses, so the child
->    * (secondary side) address is identical to the parent (primary
->    * side) address.
->    */
-> 
-> and
-> 
->   /*
->    * Non-bridges have no child (secondary side) address, so clear it
->    * out.
->    */
-> 
-> > +			 */
-> > +			rp[i].child_addr[0] = j;
-> 
-> > +	ret = of_changeset_add_empty_prop(ocs, np, "dynamic");
-> 
-> It seems slightly confusing to use a "dynamic" property here when we
-> also have the OF_DYNAMIC dynamic flag above.  I think they have
-> different meanings, don't they?
-
-Hum, what's the property for? It's new in this version. Any DT property 
-needs to be documented, but I don't see why we need it.
-
-Rob
+              Linus
