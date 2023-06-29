@@ -2,47 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47AB6742CB7
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 21:03:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E772742CD1
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 21:03:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232895AbjF2TCV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 15:02:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36820 "EHLO
+        id S233191AbjF2TCc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 15:02:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232622AbjF2TBU (ORCPT
+        with ESMTP id S232786AbjF2TBZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 15:01:20 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA202E4B;
-        Thu, 29 Jun 2023 12:01:18 -0700 (PDT)
+        Thu, 29 Jun 2023 15:01:25 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AFC730DF;
+        Thu, 29 Jun 2023 12:01:24 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7EB40615FF;
-        Thu, 29 Jun 2023 19:01:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B2FAC433C0;
-        Thu, 29 Jun 2023 19:01:17 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E7D8D615FD;
+        Thu, 29 Jun 2023 19:01:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EDE73C433CD;
+        Thu, 29 Jun 2023 19:01:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688065277;
-        bh=qOWJR5B/v04A70X7Ke3al4vL7mXxqeyOb4QdNArum5Y=;
+        s=k20201202; t=1688065281;
+        bh=y9x06U1tVv44gNduxq6fUF2ydIzmA1HJ9n4cFuX6o94=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KYrpqu+rpzZw0ajizqBuyVyVSfKIaxV41OySwW8g9C+44WOF81gLzihgF4cLMeMk4
-         e5iQ4P7SP7ysbqJ+AVk1yF6M9BsqiQ91a7DauvTgEzA9NNoKULtQPpncFo1j8s3HEK
-         zTVi/pdyzwifGkxh+1ikJATiiimpzv+kuHnoTWrdF92aqxc0seoNb0myl7QfBe4w+U
-         3A1tyJcp9VAxJtkmHyRMX/bj0oUbOYtkX8IKy7FjXy1q+SUTExN2agIWFWgq7/Ipyi
-         M+KeTIeAPfvfnI7Bz4JHfNF0P+yxIExiTZM0D0CPJ2iFLqylewOL7dVUEg0syCdl2J
-         QVdE+NBfGERwQ==
+        b=hT0i0oUO3GoRSNLBQOLcb9uT0eSq6SOdAfa6RdEPhNeQyo04IHANlsEjR26n0n7Ut
+         z39bk0MQBPFXpMyg5FsEKg+3B2lj/3pI0uSajeVgGBzxyXUPy/Ld1LE8rMjHUSUnmV
+         nVJ9yY15nqheNtIcZsv9q9ccEnIVxuQSebnuDsCbPGPOuMH4EmlmGF4juvJwvuI3TI
+         fWP5Gb85W4AnjWDPGfayjQ9Wi2iMbvB7nVz+B0MGPnOZPvVlZJLZ9bp/kl3Kw4bVHt
+         SSl3y565mKIf8zMYQ7kzX6RlPAgragy+9G+D5yl4BvYQQkoFr79DC8BUOo7SG2d7Mq
+         az0CXo9+6vinQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Juerg Haefliger <juerg.haefliger@canonical.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>, shangxiaojing@huawei.com,
-        netdev@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.3 09/17] nfc: fdp: Add MODULE_FIRMWARE macros
-Date:   Thu, 29 Jun 2023 15:00:38 -0400
-Message-Id: <20230629190049.907558-9-sashal@kernel.org>
+Cc:     "Luke D. Jones" <luke@ljones.dev>, Takashi Iwai <tiwai@suse.de>,
+        Sasha Levin <sashal@kernel.org>, perex@perex.cz,
+        tiwai@suse.com, sbinding@opensource.cirrus.com,
+        andy.chi@canonical.com, tcrawford@system76.com,
+        tangmeng@uniontech.com, p.jungkamp@gmx.net, kasper93@gmail.com,
+        yangyuchi66@gmail.com, yangyingliang@huawei.com,
+        alsa-devel@alsa-project.org
+Subject: [PATCH AUTOSEL 6.3 10/17] ALSA: hda/realtek: Add quirk for ASUS ROG G634Z
+Date:   Thu, 29 Jun 2023 15:00:39 -0400
+Message-Id: <20230629190049.907558-10-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230629190049.907558-1-sashal@kernel.org>
 References: <20230629190049.907558-1-sashal@kernel.org>
@@ -51,8 +53,8 @@ X-stable: review
 X-Patchwork-Hint: Ignore
 X-stable-base: Linux 6.3.9
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -61,32 +63,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Juerg Haefliger <juerg.haefliger@canonical.com>
+From: "Luke D. Jones" <luke@ljones.dev>
 
-[ Upstream commit eb09fc2d14163c0c217846cfabec3d0cce7c8f8c ]
+[ Upstream commit 555434fd5c6b3589d9511ab6e88faf50346e19da ]
 
-The module loads firmware so add MODULE_FIRMWARE macros to provide that
-information via modinfo.
+Adds the required quirk to enable the Cirrus amp and correct pins
+on the ASUS ROG G634Z series.
 
-Signed-off-by: Juerg Haefliger <juerg.haefliger@canonical.com>
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+While this works if the related _DSD properties are made available, these
+aren't included in the ACPI of these laptops (yet).
+
+Signed-off-by: Luke D. Jones <luke@ljones.dev>
+Link: https://lore.kernel.org/r/20230619060320.1336455-1-luke@ljones.dev
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/nfc/fdp/fdp.c | 3 +++
- 1 file changed, 3 insertions(+)
+ sound/pci/hda/patch_realtek.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/nfc/fdp/fdp.c b/drivers/nfc/fdp/fdp.c
-index f12f903a9dd13..da3e2dce8e70a 100644
---- a/drivers/nfc/fdp/fdp.c
-+++ b/drivers/nfc/fdp/fdp.c
-@@ -762,3 +762,6 @@ EXPORT_SYMBOL(fdp_nci_remove);
- MODULE_LICENSE("GPL");
- MODULE_DESCRIPTION("NFC NCI driver for Intel Fields Peak NFC controller");
- MODULE_AUTHOR("Robert Dolca <robert.dolca@intel.com>");
-+
-+MODULE_FIRMWARE(FDP_OTP_PATCH_NAME);
-+MODULE_FIRMWARE(FDP_RAM_PATCH_NAME);
+diff --git a/sound/pci/hda/patch_realtek.c b/sound/pci/hda/patch_realtek.c
+index 920e44ba998a5..3889701bdb1c9 100644
+--- a/sound/pci/hda/patch_realtek.c
++++ b/sound/pci/hda/patch_realtek.c
+@@ -9552,6 +9552,7 @@ static const struct snd_pci_quirk alc269_fixup_tbl[] = {
+ 	SND_PCI_QUIRK(0x1043, 0x1c23, "Asus X55U", ALC269_FIXUP_LIMIT_INT_MIC_BOOST),
+ 	SND_PCI_QUIRK(0x1043, 0x1c62, "ASUS GU603", ALC289_FIXUP_ASUS_GA401),
+ 	SND_PCI_QUIRK(0x1043, 0x1c92, "ASUS ROG Strix G15", ALC285_FIXUP_ASUS_G533Z_PINS),
++	SND_PCI_QUIRK(0x1043, 0x1caf, "ASUS G634JYR/JZR", ALC285_FIXUP_ASUS_HEADSET_MIC),
+ 	SND_PCI_QUIRK(0x1043, 0x1ccd, "ASUS X555UB", ALC256_FIXUP_ASUS_MIC),
+ 	SND_PCI_QUIRK(0x1043, 0x1d42, "ASUS Zephyrus G14 2022", ALC289_FIXUP_ASUS_GA401),
+ 	SND_PCI_QUIRK(0x1043, 0x1d4e, "ASUS TM420", ALC256_FIXUP_ASUS_HPE),
 -- 
 2.39.2
 
