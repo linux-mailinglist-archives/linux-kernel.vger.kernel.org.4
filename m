@@ -2,222 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0561742B7D
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 19:45:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14020742B83
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 19:48:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231305AbjF2RpJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 13:45:09 -0400
-Received: from mail-bn8nam12on2056.outbound.protection.outlook.com ([40.107.237.56]:11616
-        "EHLO NAM12-BN8-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S231140AbjF2RpF (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 13:45:05 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=bXh5JU6+gYE+aTsVwVnzfxgp+2UrnsMqoeXh66WsyEBypP8RRRrGjG6EC5d9kiywCH5LXO8VDlQvHpzdHArAzOvDT1ApilZ4+G3Wz+HKZofsrqptbrs8TO0Eh0heZT1FTxLVjr1s0k84tZcF1tn8eKeXytxsiHgr91I4OjkzbKLDjr+M5E0bc5kyhJ2fLPF66Oy5xKOoyGS14Oud5vVzq/U7tLbf/9eZeXvCECWOXPG4Fl1b4bvfEZcg+d+WWl4cXCRoz/olT2ubFiNZvyS93gp32FbM+I1S0IDfQqhLs25FOAvkJnDHanNOcviEuY9RfAQsssXjp/XGKbs2dhxZjQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=T9lpN4BqNMr9rszDw/RbBBfjIKOfr4xrmeI1j8P4rE8=;
- b=RHbO5aZL806OnRz9AlQV+0F3CpXMcnnKTcTYnLI0e5Y5J33l7k9//gd4z2rIyVAGh/6bfieQ8U3Tj1sGZQGP2VgIooTN5JO+18Jpq8DDW43NB+wMeUjsc6roaYx+ILb7C24+HVG9KpYo1BIyVJ4qCKhgdlTqCMxhsf8QSgo+N4o4ajqzWKzBLiNmMk8W216TmgyAO9gYSdtr/yw7xwgTsZ3O+YCjNBnwpkZNH2s4iQSlFJtcT0g5t75NUWDzYOShuKgBi4Y4UB9Xa2CP8kaE9FtpX784oZIU3RpYN3OjF2/QDKrRrk022SAMqO/dOo5/u2Qj8GkCYI8xUHaHHTm+0g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=T9lpN4BqNMr9rszDw/RbBBfjIKOfr4xrmeI1j8P4rE8=;
- b=gGXkUNR/0ipQQorIczi4oktS373nnjQVOj3LHdwvDbD28E6FDGToLXLlAls+QILDMlW32FTg4vl9OBpAWr/64Wf9U7UPVxgYT9PyV7efFw0xJ2Er4j2uS3MitLxs5hpGVGPy0y4kPTT7w5IflApVbRV2j6qPthGrezKl3+7qSf0=
-Received: from MN0PR12MB6101.namprd12.prod.outlook.com (2603:10b6:208:3cb::10)
- by PH7PR12MB5999.namprd12.prod.outlook.com (2603:10b6:510:1db::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6544.15; Thu, 29 Jun
- 2023 17:45:02 +0000
-Received: from MN0PR12MB6101.namprd12.prod.outlook.com
- ([fe80::dfcf:f53c:c778:6f70]) by MN0PR12MB6101.namprd12.prod.outlook.com
- ([fe80::dfcf:f53c:c778:6f70%5]) with mapi id 15.20.6521.026; Thu, 29 Jun 2023
- 17:45:02 +0000
-From:   "Limonciello, Mario" <Mario.Limonciello@amd.com>
-To:     Jerry Snitselaar <jsnitsel@redhat.com>
-CC:     Michael Ellerman <mpe@ellerman.id.au>,
-        Linux regressions mailing list <regressions@lists.linux.dev>,
-        Sachin Sant <sachinp@linux.ibm.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        "jarkko@kernel.org" <jarkko@kernel.org>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>
-Subject: RE: [6.4-rc6] Crash during a kexec operation
- (tpm_amd_is_rng_defective)
-Thread-Topic: [6.4-rc6] Crash during a kexec operation
- (tpm_amd_is_rng_defective)
-Thread-Index: AQHZpQYzLgs+SZK7S0mjzkR6+Tm69a+W5EEAgAsp34CAAAN8UIAABrAAgAAAVtA=
-Date:   Thu, 29 Jun 2023 17:45:02 +0000
-Message-ID: <MN0PR12MB61012FB42B67E7A77A15CDD3E225A@MN0PR12MB6101.namprd12.prod.outlook.com>
-References: <99B81401-DB46-49B9-B321-CF832B50CAC3@linux.ibm.com>
- <87o7lhfmoh.fsf@mail.lhotse>
- <CA0088E4-2851-4AFF-94F8-2A07C5CDA8D8@linux.ibm.com>
- <675a8893-429d-05be-b647-089b249c814c@leemhuis.info>
- <87o7l7oer1.fsf@mail.lhotse> <3f5a37f1-70e0-3dcf-3bd3-acc8a04e53ee@amd.com>
- <c53ihvuesmymj2o5jyqz7gw7mvbrxjifmphuuhiux3qjabjnic@wcak4hfb77td>
- <MN0PR12MB6101C50288F6FE99A3DA5D4FE225A@MN0PR12MB6101.namprd12.prod.outlook.com>
- <baqjq4zvfwte2y5rpsznu26qzapjjzhycydwgir34yvttbzvzq@z3pfby7pdjo7>
-In-Reply-To: <baqjq4zvfwte2y5rpsznu26qzapjjzhycydwgir34yvttbzvzq@z3pfby7pdjo7>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_ActionId=57841338-780d-41e5-b4d6-bc21245ce8dc;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_ContentBits=0;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Enabled=true;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Method=Standard;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Name=General;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_SetDate=2023-06-29T17:44:23Z;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_SiteId=3dd8961f-e488-4e60-8e11-a82d994e183d;
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: MN0PR12MB6101:EE_|PH7PR12MB5999:EE_
-x-ms-office365-filtering-correlation-id: ef3e1cee-7fe8-4231-dc62-08db78c890de
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: Kzu+sqc0B1e0sp2C5YVUWwokOiPJx2Sl4Ich769vd4VWPFCfLniTCAbYmguqxMKyo7tA9Cs0EFoxVKy3rFcP1n1eoNJFA7YpdFXrJA8DKjWI07xIDrp7QQ+cJnDPOtiS+Tn5u2kQErzHvzUEh4AJmzZgGar8c+L4ybWtMoVGqu2C02BbOIZ7IplMHnV1V/eh+EZpsudDeXSQkMOHsk6t2p6Z1mYCPIjn7L/UaKkP4W/OG+49OVgcU4LaLxl80gQPvcftXIQ+6HabJdu9VigFM1HQqnnrAcem2cZjOh7KUMOyzHr9RTL0PFYof1Ch1EMCXLLG331vbt+5nDKbJpUEaTsn53xK1WP9Iyw0SNsLgUtygHnBXR/xQQwDdERisYDlqMUJXK5M/kCMMF6pUosn8qPQ7NKJlE75tYuTwH5puyPvF2q8AxSrzio6wo82XrZD6bw80WiiIaeTYTl71UOwPRYJN9xrdXaXlCKwfVwASwDyTGdMtPpBRckMKZqp7LVq738oBFKdu6GpGdmHUvqzBMIhjsYzFB3l3nB+0MBVYpJsxRioL6Fi6pRaJYITGyXtoyNb2Vqpg9ACBZyRcM2JdQql3ABsJ4rtBVSS6WC7vI8C+ExQXEE4l1XYm7vv3s/v
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB6101.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(346002)(136003)(396003)(376002)(39860400002)(451199021)(7696005)(38100700002)(53546011)(71200400001)(122000001)(83380400001)(26005)(6506007)(186003)(9686003)(55016003)(54906003)(41300700001)(38070700005)(86362001)(316002)(2906002)(66556008)(33656002)(66476007)(6916009)(66446008)(76116006)(66946007)(64756008)(4326008)(5660300002)(52536014)(8676002)(8936002)(478600001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?bENFeg/Jj9/sZaoo93tKHk9Ya6lIfg2DSNz0SQbz/XQUteiHwsB9hkrbwJCZ?=
- =?us-ascii?Q?WlzWGkMuk//4VVUMo/W3F7VVFVqHL2wFkxSQn194n5LKS9k67WgCDcugg4zu?=
- =?us-ascii?Q?es9M3/rSIfj/SjyCOwwLBhD/sPDXTbSD91lAF2sFNV3qIxfshZ/GI7wtg1X+?=
- =?us-ascii?Q?4MY9B2ZIY5saRTWZpeuCpspxWn2JglpnzbwrkzE7H5+fuCJLZvJKXplgrUvx?=
- =?us-ascii?Q?CbXnCaF2/SXqJ2GD5JOyYw1fw8LnedNoyH2MkHLcny/LO6s5ynYjEpJSYQ+8?=
- =?us-ascii?Q?dnOY/r0o1sybzGvihsCn2OuItnzcwEsVlsGf43OFUoKLR+dIssmCGTDGT8jx?=
- =?us-ascii?Q?J8JXtCbdcCV82R1U0gG5Jn+yqjQ257Vzwx8krSBbMFZJ1OOYWgPRlPCjzpkJ?=
- =?us-ascii?Q?2fDZaLUrtZEEYQfarTtVTm5ZUQdBdMXIfseChFwoPBWJrQ/bZs+Zx/OYjp2f?=
- =?us-ascii?Q?BNa/5R22nea07Ys3+nyfyrT+wekKDsFc6zyrEjR5KsGR5Ltdm2c/H44QhEuC?=
- =?us-ascii?Q?NBbDyG78U+Wgq70/EEIEhDTIs33QiIBEO9Pl5gZigYIYi/1REDNo/veJqPjW?=
- =?us-ascii?Q?zm1ePExS7SckCvysVP4lpAOC+gbeBRRgxaidbs7k++Czq1eAbWKf1hVyT+80?=
- =?us-ascii?Q?ON0cvHPvFdZjFgFUEUid/s+dKhRSuvo2N3Z4kk/foptOydBe8eKwRZEEMFpZ?=
- =?us-ascii?Q?IWzgVvetd0iR+epphfB/nnlGjbCeolulN3HUlCff0e6GwL870oIgSohskRQ5?=
- =?us-ascii?Q?GAXXr5YKX22hlx1teqwV30aTfiBDLZC0sqlU63r9qAQwA7fqumXuyZ/RtSj9?=
- =?us-ascii?Q?N0c5JklcFbKH4izhteOMXXNkv2P90umZNUU8tHIfPD7h15zo9ArlZMOMdTFE?=
- =?us-ascii?Q?yHkw74a2ma+0OjljgMxx5i4DjnsKPgag502Tukg7oQxnRReZxvQ1eRS3N10h?=
- =?us-ascii?Q?CD91cvC+0evaf6KwMeaZZUZsqC4uaGdYL6nob/CoHqwDW+5Dfy4ppM7ZofGR?=
- =?us-ascii?Q?9t+Xl4BGfhAKST5p/aOcLXBF5Rh556+lsXZY4uAZaeONIvB53fKHOFfhutUa?=
- =?us-ascii?Q?ZNlU3/Ozca9OEDE03uCJxKMeMznq3U0XeK/E0vd0jt5x2w47yuYbapPAGJf3?=
- =?us-ascii?Q?6npjbDolkYHgyeibg6ESrrR1VFBMpdGqoENHy70VrMx5O3wihwKKrnhDMCU1?=
- =?us-ascii?Q?e2AnuYzD8E9bEeYiJEojmYL90mY//vddCgJC6wyqpPylkcoZQOF8PkEirQ38?=
- =?us-ascii?Q?qIlNPpz+420Z4PqpNeLMdo8T7jCTM0VAFaRpJg1+pZ7YyWi3RpOUFE45/PA7?=
- =?us-ascii?Q?qYmS3lykadc9rdyLF9SQkqNAzIzLPMq3nmFouW+/P1sSlMazWIVrxRrXCcQP?=
- =?us-ascii?Q?/Xc9+38Aq4/SJqyeUovGjTynRPvkpSIcjMloIiCJByYF9JTxR9AFVZSoBuFs?=
- =?us-ascii?Q?nWicCLu04ygQqmOvSZaytX50y/rlue9zH4Zt0I+PE8l7RwX9J9qZGmIMiYb0?=
- =?us-ascii?Q?e+SV7Pdm860czaEEB6T3dM8p4jfPdbvegvxbII5ltQWsAKyjkqHvBDHAOR+/?=
- =?us-ascii?Q?4ESYsnVfhZu5+XBVmBY=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        id S231655AbjF2Rry (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 13:47:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35240 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231461AbjF2Rrv (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 29 Jun 2023 13:47:51 -0400
+Received: from mail-oa1-f79.google.com (mail-oa1-f79.google.com [209.85.160.79])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FD511FD8
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 10:47:48 -0700 (PDT)
+Received: by mail-oa1-f79.google.com with SMTP id 586e51a60fabf-1a67eee53e3so1440724fac.0
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 10:47:48 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688060867; x=1690652867;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=fqeJGSO+6mKx9mSGLaZAKOae/381NKNuveT6K24vxfg=;
+        b=Hfq35UF6JrCuinHzwX1unAr69tdrWXUYNrly31+qYGDUhDiVAPZBL+BjxjhgF+O5S0
+         zmT72Rc5/IvOpU8fZOgMwovHoJVAu6tH2ZoKJR8kX8G+Icu9iFIRXDhkJLJD/ALWbOYf
+         xFYGHtl2oFiiiyss+Y9RIokg9BgNUvy8td830H7T2UiztnDt6fjtMgTREI38MfOm/9IH
+         T2c0stlnsCjNvj/R8yMIvibXpOZ+DjPnvQK6qLmWT8WI8ewT1gCsza6oCkIvB+2DohOS
+         upE0uhYFzk93q1jzIGrLZ7ZVeclicHmTH/YVjLxp4L7zAQNjtSkZu9MCPexSzo+Wl31v
+         Vx4g==
+X-Gm-Message-State: AC+VfDyn+Zj7JwZwSBPdnh08SZyWNwP23fYtr6W//yot2iM994q1oU8R
+        JupXf40dVgG68eHmKgn5eT+DcBz5vGJjZG09YEM1ziOPe5bu
+X-Google-Smtp-Source: APBJJlH61aLO6HzohyCF4GOPTTpma/uLhk+bk4SmPwgDhoT8lQgiSxVIcpdBvVJ+qlI3IE+Y9rRRuPd6Qk3KhIpghv3yts8NFmVA
 MIME-Version: 1.0
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MN0PR12MB6101.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ef3e1cee-7fe8-4231-dc62-08db78c890de
-X-MS-Exchange-CrossTenant-originalarrivaltime: 29 Jun 2023 17:45:02.1812
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: DVQ6UMQbuRxm01maeFjfKITjB0p0sn9OWSxoxj+y7Fj/s0N9keb6EO77NDPkVOszBQ5K1JCXi/f5LNVG2leJ3Q==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB5999
+X-Received: by 2002:a05:6870:6b96:b0:1b0:9643:6f69 with SMTP id
+ ms22-20020a0568706b9600b001b096436f69mr520078oab.4.1688060867287; Thu, 29 Jun
+ 2023 10:47:47 -0700 (PDT)
+Date:   Thu, 29 Jun 2023 10:47:47 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000005a9fab05ff484cc4@google.com>
+Subject: [syzbot] [lsm?] [reiserfs?] general protection fault in fsnotify_perm
+From:   syzbot <syzbot+1d7062c505b34792ef90@syzkaller.appspotmail.com>
+To:     bpf@vger.kernel.org, jmorris@namei.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org, paul@paul-moore.com,
+        reiserfs-devel@vger.kernel.org, serge@hallyn.com,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+        lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[AMD Official Use Only - General]
+Hello,
 
-> -----Original Message-----
-> From: Jerry Snitselaar <jsnitsel@redhat.com>
-> Sent: Thursday, June 29, 2023 12:43 PM
-> To: Limonciello, Mario <Mario.Limonciello@amd.com>
-> Cc: Michael Ellerman <mpe@ellerman.id.au>; Linux regressions mailing list
-> <regressions@lists.linux.dev>; Sachin Sant <sachinp@linux.ibm.com>; open
-> list <linux-kernel@vger.kernel.org>; linuxppc-dev <linuxppc-
-> dev@lists.ozlabs.org>; jarkko@kernel.org; linux-integrity@vger.kernel.org
-> Subject: Re: [6.4-rc6] Crash during a kexec operation
-> (tpm_amd_is_rng_defective)
->
-> On Thu, Jun 29, 2023 at 05:28:58PM +0000, Limonciello, Mario wrote:
-> > [Public]
-> >
-> > > -----Original Message-----
-> > > From: Jerry Snitselaar <jsnitsel@redhat.com>
-> > > Sent: Thursday, June 29, 2023 12:07 PM
-> > > To: Limonciello, Mario <Mario.Limonciello@amd.com>
-> > > Cc: Michael Ellerman <mpe@ellerman.id.au>; Linux regressions mailing =
-list
-> > > <regressions@lists.linux.dev>; Sachin Sant <sachinp@linux.ibm.com>;
-> open
-> > > list <linux-kernel@vger.kernel.org>; linuxppc-dev <linuxppc-
-> > > dev@lists.ozlabs.org>; jarkko@kernel.org; linux-integrity@vger.kernel=
-.org
-> > > Subject: Re: [6.4-rc6] Crash during a kexec operation
-> > > (tpm_amd_is_rng_defective)
-> > >
-> > > On Thu, Jun 22, 2023 at 09:38:04AM -0500, Limonciello, Mario wrote:
-> > > >
-> > > > On 6/22/2023 7:36 AM, Michael Ellerman wrote:
-> > > > > "Linux regression tracking (Thorsten Leemhuis)"
-> > > <regressions@leemhuis.info> writes:
-> > > > > > Hi, Thorsten here, the Linux kernel's regression tracker. Top-p=
-osting
-> > > > > > for once, to make this easily accessible to everyone.
-> > > > > >
-> > > > > > As Linus will likely release 6.4 on this or the following Sunda=
-y a quick
-> > > > > > question: is there any hope this regression might be fixed any =
-time
-> > > > > > soon?
-> > > > > No.
-> > > > >
-> > > > > I have added the author of the commit to Cc, maybe they can help?
-> > > > >
-> > > > > The immediate question is, is it expected for chip->ops to be NUL=
-L in
-> > > > > this path? Obviously on actual AMD systems that isn't the case,
-> > > > > otherwise the code would crash there. But is the fact that chip->=
-ops is
-> > > > > NULL a bug in the ibmvtpm driver, or a possibility that has been
-> > > > > overlooked by the checking code.
-> > > > >
-> > > > > cheers
-> > > >
-> > > > All that code assumes that the TPM is still functional which
-> > > > seems not to be the case for your TPM.
-> > > >
-> > > > This should fix it:
-> > > >
-> > > > diff --git a/drivers/char/tpm/tpm-chip.c b/drivers/char/tpm/tpm-chi=
-p.c
-> > > > index 5be91591cb3b..7082b031741e 100644
-> > > > --- a/drivers/char/tpm/tpm-chip.c
-> > > > +++ b/drivers/char/tpm/tpm-chip.c
-> > > > @@ -525,6 +525,9 @@ static bool tpm_amd_is_rng_defective(struct
-> > > tpm_chip
-> > > > *chip)
-> > > >         u64 version;
-> > > >         int ret;
-> > > >
-> > > > +       if (!chip->ops)
-> > > > +               return false;
-> > > > +
-> > > >         if (!(chip->flags & TPM_CHIP_FLAG_TPM2))
-> > > >                 return false;
-> > >
-> > >
-> > > Should tpm_amd_is_rng_defective compile to nothing on non-x86
-> > > architectures? This code is all about
-> > > working around an issue with the AMD fTPM, right?
-> > >
-> >
-> > That's a good point.  Yes it could and that would also solve this probl=
-em.
-> >
-> Or I guess more accurately for non-x86 it should be:
->
-> static bool tpm_amd_is_rng_defective(struct tpm_chip *chip)
-> {
->       return false;
-> }
+syzbot found the following issue on:
+
+HEAD commit:    a92b7d26c743 Merge tag 'drm-fixes-2023-06-23' of git://ano..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=16cd10e0a80000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=24ce1b2abaee24cc
+dashboard link: https://syzkaller.appspot.com/bug?extid=1d7062c505b34792ef90
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1066cc77280000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=116850bf280000
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/f0158c6c02c9/disk-a92b7d26.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/91b4daaa4521/vmlinux-a92b7d26.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/b5e6c2198af0/bzImage-a92b7d26.xz
+mounted in repro: https://storage.googleapis.com/syzbot-assets/d48571c9b971/mount_0.gz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+1d7062c505b34792ef90@syzkaller.appspotmail.com
+
+general protection fault, probably for non-canonical address 0xdffffc0000000005: 0000 [#1] PREEMPT SMP KASAN
+KASAN: null-ptr-deref in range [0x0000000000000028-0x000000000000002f]
+CPU: 0 PID: 4987 Comm: udevd Not tainted 6.4.0-rc7-syzkaller-00226-ga92b7d26c743 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/27/2023
+RIP: 0010:fsnotify_parent include/linux/fsnotify.h:62 [inline]
+RIP: 0010:fsnotify_file include/linux/fsnotify.h:99 [inline]
+RIP: 0010:fsnotify_perm.part.0+0x12e/0x610 include/linux/fsnotify.h:124
+Code: 48 89 fa 48 c1 ea 03 80 3c 02 00 0f 85 75 04 00 00 48 b8 00 00 00 00 00 fc ff df 48 8b 5d 68 48 8d 7b 28 48 89 fa 48 c1 ea 03 <80> 3c 02 00 0f 85 5c 04 00 00 4c 8b 73 28 be 08 00 00 00 4d 8d a6
+RSP: 0018:ffffc9000347fa00 EFLAGS: 00010206
+RAX: dffffc0000000000 RBX: 0000000000000000 RCX: 0000000000000000
+RDX: 0000000000000005 RSI: ffffffff83cbf5e3 RDI: 0000000000000028
+RBP: ffff888067875bc0 R08: 0000000000000005 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000001 R12: 0000000000000000
+R13: ffff88802d0722d0 R14: ffff88802d07233c R15: 0000000000010000
+FS:  00007f538cf63c80(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f9b7c4d8718 CR3: 000000002eb3f000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ fsnotify_perm include/linux/fsnotify.h:108 [inline]
+ security_file_open+0x86/0xb0 security/security.c:2801
+ do_dentry_open+0x575/0x13f0 fs/open.c:907
+ do_open fs/namei.c:3636 [inline]
+ path_openat+0x1baa/0x2750 fs/namei.c:3791
+ do_filp_open+0x1ba/0x410 fs/namei.c:3818
+ do_sys_openat2+0x16d/0x4c0 fs/open.c:1356
+ do_sys_open fs/open.c:1372 [inline]
+ __do_sys_openat fs/open.c:1388 [inline]
+ __se_sys_openat fs/open.c:1383 [inline]
+ __x64_sys_openat+0x143/0x1f0 fs/open.c:1383
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f538cb169a4
+Code: 24 20 48 8d 44 24 30 48 89 44 24 28 64 8b 04 25 18 00 00 00 85 c0 75 2c 44 89 e2 48 89 ee bf 9c ff ff ff b8 01 01 00 00 0f 05 <48> 3d 00 f0 ff ff 76 60 48 8b 15 55 a4 0d 00 f7 d8 64 89 02 48 83
+RSP: 002b:00007fff8a905c40 EFLAGS: 00000246 ORIG_RAX: 0000000000000101
+RAX: ffffffffffffffda RBX: 0000000000000004 RCX: 00007f538cb169a4
+RDX: 0000000000080241 RSI: 00007fff8a906188 RDI: 00000000ffffff9c
+RBP: 00007fff8a906188 R08: 0000000000000004 R09: 0000000000000001
+R10: 00000000000001b6 R11: 0000000000000246 R12: 0000000000080241
+R13: 000056095d45972e R14: 0000000000000001 R15: 000056095e6332c0
+ </TASK>
+Modules linked in:
+----------------
+Code disassembly (best guess):
+   0:	48 89 fa             	mov    %rdi,%rdx
+   3:	48 c1 ea 03          	shr    $0x3,%rdx
+   7:	80 3c 02 00          	cmpb   $0x0,(%rdx,%rax,1)
+   b:	0f 85 75 04 00 00    	jne    0x486
+  11:	48 b8 00 00 00 00 00 	movabs $0xdffffc0000000000,%rax
+  18:	fc ff df
+  1b:	48 8b 5d 68          	mov    0x68(%rbp),%rbx
+  1f:	48 8d 7b 28          	lea    0x28(%rbx),%rdi
+  23:	48 89 fa             	mov    %rdi,%rdx
+  26:	48 c1 ea 03          	shr    $0x3,%rdx
+* 2a:	80 3c 02 00          	cmpb   $0x0,(%rdx,%rax,1) <-- trapping instruction
+  2e:	0f 85 5c 04 00 00    	jne    0x490
+  34:	4c 8b 73 28          	mov    0x28(%rbx),%r14
+  38:	be 08 00 00 00       	mov    $0x8,%esi
+  3d:	4d                   	rex.WRB
+  3e:	8d                   	.byte 0x8d
+  3f:	a6                   	cmpsb  %es:(%rdi),%ds:(%rsi)
 
 
-Right, but it should be inline.  Would you mind sending something out for
-your cleaner idea to supercede my other solution that still didn't merge?
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+
+If the bug is already fixed, let syzbot know by replying with:
+#syz fix: exact-commit-title
+
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
+
+If you want to change bug's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the bug is a duplicate of another bug, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
