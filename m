@@ -2,190 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01E46742B9A
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 19:56:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00004742BA4
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 19:59:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231787AbjF2R4c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 13:56:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36916 "EHLO
+        id S231908AbjF2R7R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 13:59:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229910AbjF2R42 (ORCPT
+        with ESMTP id S230207AbjF2R7J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 13:56:28 -0400
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0D501FD8
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 10:56:27 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-5704e551e8bso7882437b3.3
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 10:56:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1688061386; x=1690653386;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=4FkhFrr8w6aneHxfl/h27nLQhmkU8QpQuoyru1TLP4c=;
-        b=QBg6Sw4tvE6/pClUmxNda3MWefmw+W4KGc9WF6HW+rF0vuDvCBcf5loU3jRbHfnYig
-         i861uID1dQ78wFmjMi+gpotuXmWiokksT3ABBYgthg9VEjTpLXe4TrzIJhyzwNUk5HFh
-         9qHbnx2awjERX0lkB5i5W6ZngQIDkJb01cP7TPCOqlgtsO8uP2HPC/wVmmjbjWZigHXx
-         TtWWEoEkv5wmw7fV8AyWtGUG3tqc19WEekI6RjGmXtxPGURI/AmhqGmmHdaXHn7Rp0jF
-         OXszuPhwDcVKGF9EUrX3uHG91CZmh4bEum8bnNqC5COQJGndLYd7mfCX/mwj0KT/id4B
-         xIug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688061386; x=1690653386;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=4FkhFrr8w6aneHxfl/h27nLQhmkU8QpQuoyru1TLP4c=;
-        b=Hs3n2wq3n97CP/J9KbQMMpjqdzgqR8VosNmVQPrR8QMkaz0dMr+ZIimtuH/xxplead
-         jV2FP/tYmvbxdDywkLPKT7Rzixj9LbEs44NebPCvaebEw5oSP30X4lfOBdfXwUS1iy/E
-         0Jy0E03ZZyUli0E/hcWOdQp5VKID7uX6Hba8tNoBYhHO/+RvpJjZwTkMWBMp/k88GzIK
-         ox3WClmPfedlRV3WXp6mLZ/tl86P/nduIrJEpx1ux93IRL+Vy4uCSxHw+DzBstWlbTPE
-         rbI77Ce0/wrgqT0kZNlR7Hf5SG+GUoPog2u0Q6whuM7r2sLyukdfSYqr5FPA1eciKYfN
-         RdcA==
-X-Gm-Message-State: ABy/qLbSIa/Yf41uXSysVgkIXfvJrCKBc48ZOOYR4NchUCVm7NziC+iT
-        fWuXZy0+K6LlZfyV+B/dwhepKhkzI8Q=
-X-Google-Smtp-Source: APBJJlFJmT7oK8STRSANTG0ivP5lT2JUcbXj/ye4nh0QWb7UXGu2Pv6MV1qia3QdZDv0fFgARODG4ntvVgs=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a81:c845:0:b0:56c:f8b7:d4f7 with SMTP id
- k5-20020a81c845000000b0056cf8b7d4f7mr819ywl.6.1688061386259; Thu, 29 Jun 2023
- 10:56:26 -0700 (PDT)
-Date:   Thu, 29 Jun 2023 10:56:24 -0700
-In-Reply-To: <ZJ0w5pKk/41Zv26i@yzhao56-desk.sh.intel.com>
-Mime-Version: 1.0
-References: <20230628071217.71126-1-ishiir@g.ecc.u-tokyo.ac.jp>
- <ZJxTTZzZnfbyMVIH@google.com> <ZJ0w5pKk/41Zv26i@yzhao56-desk.sh.intel.com>
-Message-ID: <ZJ3FyLUYrlr6+HLw@google.com>
-Subject: Re: [PATCH] KVM: nVMX: Prevent vmlaunch with EPTP pointing outside
- assigned memory area
-From:   Sean Christopherson <seanjc@google.com>
-To:     Yan Zhao <yan.y.zhao@intel.com>
-Cc:     Reima Ishii <ishiir@g.ecc.u-tokyo.ac.jp>, shina@ecc.u-tokyo.ac.jp,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, yuan.yao@intel.com
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Thu, 29 Jun 2023 13:59:09 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D065910EC;
+        Thu, 29 Jun 2023 10:59:08 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4CFDA615D5;
+        Thu, 29 Jun 2023 17:59:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1B9CC433C9;
+        Thu, 29 Jun 2023 17:59:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688061547;
+        bh=KWuh+EtlgN9WgsuGzzN5S2e0JO8yjgAdyyzGc2r4JgM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=lgHCSLr4LI+gd3Bgw18ZI0ef9rt/JfwYNIy0RfQDQHclcOHCK/3jkuqrxGg3i2hCN
+         laW6+qyxaq+IANQ6TQVo8u0SfgUrD7wQHpHixdoqkT/gb57iZIvmQOhi2OFJG7LNHi
+         QgvIKpmnxXRINqB563yyxCuR56jd9SQLXKtbxqkpknGU8LF1D/utk0DIt0hvZsGTDw
+         TNx1MmHpAIo1hxsbPdkwk73Nu0zUU7qxLjdtoE91n7F8XyK2DE0EINbQ5eLv34aScl
+         szfL5+Ur+T0EeUVGYsYKgNVC8a+41LALLx+EwoH/jt0NdpZ4leTbJOytOXjnRfxIyQ
+         cScB8p/FmyjJg==
+Date:   Thu, 29 Jun 2023 18:58:59 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Lee Jones <lee@kernel.org>,
+        William Breathitt Gray <william.gray@linaro.org>,
+        "Sahin, Okan" <Okan.Sahin@analog.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Cosmin Tanislav <demonsingur@gmail.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Caleb Connolly <caleb.connolly@linaro.org>,
+        Marcus Folkesson <marcus.folkesson@gmail.com>,
+        "Bolboaca, Ramona" <Ramona.Bolboaca@analog.com>,
+        ChiYuan Huang <cy_huang@richtek.com>,
+        "Tilki, Ibrahim" <Ibrahim.Tilki@analog.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Hugo Villeneuve <hvilleneuve@dimonoff.com>,
+        ChiaEn Wu <chiaen_wu@richtek.com>,
+        Haibo Chen <haibo.chen@nxp.com>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>
+Subject: Re: [PATCH v7 5/5] mfd: max77541: Add ADI MAX77541/MAX77540 PMIC
+ Support
+Message-ID: <998ef8d8-594e-45e3-9aa3-ec9061cf7f11@sirena.org.uk>
+References: <ZJry8QTka8m6ag/j@fedora>
+ <20230627163344.GG10378@google.com>
+ <CAL_Jsq+Z64tuMO8a2Y=2GrXZ8q0L4Z2avCiphsn0HOOC71Dzjg@mail.gmail.com>
+ <20230628134013.GH10378@google.com>
+ <472a4d86-3bfb-4c2b-a099-f1254dd01e24@sirena.org.uk>
+ <20230629072500.GA2110266@google.com>
+ <d070eecd-cb3b-4968-803e-1817a1a4359a@sirena.org.uk>
+ <20230629155134.GB2110266@google.com>
+ <7987cbbe-55bc-49a9-b63a-7f1906bf5f74@sirena.org.uk>
+ <CAL_Jsq+AQrv7EGMtEkB-2cBCvA4mLHuMbyQ=f39yQkYPkvfVww@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="tDYfe0SN7PXC6vv2"
+Content-Disposition: inline
+In-Reply-To: <CAL_Jsq+AQrv7EGMtEkB-2cBCvA4mLHuMbyQ=f39yQkYPkvfVww@mail.gmail.com>
+X-Cookie: Surprise due today.  Also the rent.
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 29, 2023, Yan Zhao wrote:
-> On Wed, Jun 28, 2023 at 08:37:45AM -0700, Sean Christopherson wrote:
-> ...
-> > So I think we should try this:
-> > 
-> > ---
-> >  arch/x86/kvm/mmu/mmu.c   | 19 -------------------
-> >  include/linux/kvm_host.h |  1 -
-> >  virt/kvm/kvm_main.c      | 13 ++-----------
-> >  3 files changed, 2 insertions(+), 31 deletions(-)
-> > 
-> > diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-> > index 60397a1beda3..e305737edf84 100644
-> > --- a/arch/x86/kvm/mmu/mmu.c
-> > +++ b/arch/x86/kvm/mmu/mmu.c
-> > @@ -3671,19 +3671,6 @@ void kvm_mmu_free_guest_mode_roots(struct kvm *kvm, struct kvm_mmu *mmu)
-> >  }
-> >  EXPORT_SYMBOL_GPL(kvm_mmu_free_guest_mode_roots);
-> >  
-> > -
-> > -static int mmu_check_root(struct kvm_vcpu *vcpu, gfn_t root_gfn)
-> > -{
-> > -	int ret = 0;
-> > -
-> > -	if (!kvm_vcpu_is_visible_gfn(vcpu, root_gfn)) {
-> > -		kvm_make_request(KVM_REQ_TRIPLE_FAULT, vcpu);
-> > -		ret = 1;
-> > -	}
-> > -
-> > -	return ret;
-> > -}
-> > -
-> >  static hpa_t mmu_alloc_root(struct kvm_vcpu *vcpu, gfn_t gfn, int quadrant,
-> >  			    u8 level)
-> >  {
-> > @@ -3821,9 +3808,6 @@ static int mmu_alloc_shadow_roots(struct kvm_vcpu *vcpu)
-> >  	root_pgd = kvm_mmu_get_guest_pgd(vcpu, mmu);
-> >  	root_gfn = root_pgd >> PAGE_SHIFT;
-> >  
-> > -	if (mmu_check_root(vcpu, root_gfn))
-> > -		return 1;
-> > -
-> Hi Sean,
-> The checking of existence of memslot is still useful,
-> Otherwise NULL pointer dereference would be met as in below call trace.
->
-> mmu_alloc_shadow_roots
->  |->mmu_alloc_root
->     |->mmu_alloc_root(root_gfn)
->        |->kvm_mmu_get_shadow_page
->           |->__kvm_mmu_get_shadow_page
->              |->kvm_mmu_alloc_shadow_page
->                 |->account_shadowed
->                    |->slot = __gfn_to_memslot(slots, gfn);                    ==>NULL pointer
->                    |  kvm_slot_page_track_add_page(kvm, slot, gfn,KVM_PAGE_TRACK_WRITE);
->                       |->update_gfn_track(slot, gfn, mode, 1);
->                          |->index = gfn_to_index(gfn, slot->base_gfn, PG_LEVEL_4K);  ==>NULL pointer dereference
 
-Argh, right, the internal memslot might "work", but the no memslot case will not.
-The non-root path effectively injects a page fault if there's no memslot.
+--tDYfe0SN7PXC6vv2
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Oof, and simply skipping the accounting for the no-slot case would result in an
-imbalanced world if userspace creates a valid memslot before unaccount_shadowed()
-is called.
+On Thu, Jun 29, 2023 at 11:48:34AM -0600, Rob Herring wrote:
+> On Thu, Jun 29, 2023 at 10:00=E2=80=AFAM Mark Brown <broonie@kernel.org> =
+wrote:
 
-As much as it pains me to propagate KVM's arbitrary behavior, doing the right from
-an architectural perspective is really gross for KVM, e.g. would need all kinds of
-dedicated code in the MMU.
+> > That says it's a bit unusual to use a separate branch with a PR, it
+> > doesn't say anything about it being the end of the world to pick up
+> > parts of a series that are ready without picking up the whole lot,
+> > especially when we're getting to the merge window.
 
-I still don't like adding a non-architectural check to nested_vmx_check_eptp(),
-especially since there would be a race, e.g. if a memslot were deleted between
-nested_vmx_check_eptp() and allocating the root.
+> There's some risk the core part could change affecting the sub
+> components after you pick it up, or that the author just abandons
+> getting the core part upstream and we're left with a dead driver.
 
-This is the least awful solution I can think of (not yet tested):
+Right, I'm suggesting applying the core part without waiting for every
+single leaf driver to be lined up rather than the other way around -
+that way the core part is stable and the leaf drivers only have issues
+with changes in their subsystems that they'll have anyway even with
+waiting.  Leaf drivers can be added on top as they're ready and if
+something misses a release then it can go through the subsystem, and if
+people do end up wandering off then you've still got whatever did get
+merged in case someone else wants to pick things up.
 
-From: Sean Christopherson <seanjc@google.com>
-Date: Thu, 29 Jun 2023 10:54:12 -0700
-Subject: [PATCH] KVM: nVMX: Allow triple fault shutdown in L2 to cancel nested
- VM-Enter
+> I'm fine if the sub-components are picked up first (and land in next
+> first), but the MFD binding picked up first is a problem usually. And
+> that has happened multiple times. Also, it does mean the MFD branch
+> will have binding warnings, but that's Lee's problem if he cares
+> (probably not).
 
-<need to test and write a changelog>
+Linus complained about picking up the subcomponents without the core,
+especially if the MFD doesn't end up landing in the same release for
+whatever reason (which is fair enough, especially when the MFD does
+miss).
 
-Reported-by: Reima Ishii <ishiir@g.ecc.u-tokyo.ac.jp>
-Cc: Yan Zhao <yan.y.zhao@intel.com>
-Signed-off-by: Sean Christopherson <seanjc@google.com>
----
- arch/x86/kvm/vmx/nested.c | 11 +++++++++--
- 1 file changed, 9 insertions(+), 2 deletions(-)
+--tDYfe0SN7PXC6vv2
+Content-Type: application/pgp-signature; name="signature.asc"
 
-diff --git a/arch/x86/kvm/vmx/nested.c b/arch/x86/kvm/vmx/nested.c
-index 22e08d30baef..6da6db575a27 100644
---- a/arch/x86/kvm/vmx/nested.c
-+++ b/arch/x86/kvm/vmx/nested.c
-@@ -4729,8 +4729,15 @@ void nested_vmx_vmexit(struct kvm_vcpu *vcpu, u32 vm_exit_reason,
- 	/* Pending MTF traps are discarded on VM-Exit. */
- 	vmx->nested.mtf_pending = false;
- 
--	/* trying to cancel vmlaunch/vmresume is a bug */
--	WARN_ON_ONCE(vmx->nested.nested_run_pending);
-+	/*
-+	 * Canceling VMLAUNCH/VMRESUME is a KVM bug, but triple fault shutdown
-+	 * is allowed due to limitations with KVM's shadow MMU, which requires
-+	 * shadowed page tables to be associated with a valid memslot, and KVM
-+	 * can't complete VM-Enter without a valid shadow root.
-+	 */
-+	WARN_ON_ONCE(vmx->nested.nested_run_pending &&
-+		     vm_exit_reason != EXIT_REASON_TRIPLE_FAULT);
-+	vmx->nested.nested_run_pending = false;
- 
- 	if (kvm_check_request(KVM_REQ_GET_NESTED_STATE_PAGES, vcpu)) {
- 		/*
+-----BEGIN PGP SIGNATURE-----
 
-base-commit: 61eb0bb88e6c154a5e19e62edd99299a86a2c6a7
--- 
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmSdxmIACgkQJNaLcl1U
+h9CHYAf9EbdZGwiGICj8MmjmRrU64GcItZ0n3M0NJGW42FIOBaL27H9fX+gTv3m1
+6Qzdry927rL0wBh33M+lEVkcwkAyb2Gbb2o6OzVV1V1aY6nHZEBRZKV0dUa28al7
+oB8iwZrP4wjzyPOpMgivmlFrIVH1AgigZU0KUOFhTQ17LE9Wo14k7azm/rPUZVkX
+RZgrMDBHif8fjRxdjpGVPSfhPF9MefkHZlTOShYS5OxlKr/rNYqMqZcIAKx8Ii2e
+02SCG+B+/IOlTBjIMsYUyGfa47pgMq0CAd0Ukx3HFNcWcC6HOw5bjYzKC92IsS5P
+pESqhQQwJV8pV7rVWeSv9rp8ZPrGwQ==
+=jwih
+-----END PGP SIGNATURE-----
 
+--tDYfe0SN7PXC6vv2--
