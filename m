@@ -2,106 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA08874269B
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 14:37:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 265B4742693
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 14:36:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231681AbjF2MhW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 08:37:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59432 "EHLO
+        id S231493AbjF2Mg2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 08:36:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231901AbjF2Mg6 (ORCPT
+        with ESMTP id S231290AbjF2MgH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 08:36:58 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 594652D50;
-        Thu, 29 Jun 2023 05:36:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1688042212; x=1719578212;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Ew+sBiq1mrKtsMPMdcupe/wT5WsBH3u6CrMymQX01MM=;
-  b=Jf4HBrr5ph29FkY8RMHhKs3R+7oqafj/KgstfzShG7J05AV1o72bPfHK
-   Ko7lqXsLfUZH6CfpBA3byOJIIJcjB5QKxcjHehOCM6cNgIJceGr/hBoN/
-   LS1ijXGI05ASzHEjV96xVKcOz+txO4vHVr5qqO+1PJ3CtUVSPgDAprbT0
-   svLvHGIN8IDFdAmUFoxY/4YqUP70inSzCz/pMbVuOqSWsBXV1cZs1Tywl
-   bW5OanYBNV+OG3nzroWZ8Dw9caMpVR1TteG7OJ1IH4wCG1fruFzsiV9rV
-   YSPHfHO/+Opbd7ol4EL1UCNikU05ib0pNlIF7pJI5j/Zq7yTfR2Hjc0Bw
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10756"; a="359580931"
-X-IronPort-AV: E=Sophos;i="6.01,168,1684825200"; 
-   d="scan'208";a="359580931"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jun 2023 05:36:29 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10755"; a="830515630"
-X-IronPort-AV: E=Sophos;i="6.01,168,1684825200"; 
-   d="scan'208";a="830515630"
-Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
-  by fmsmga002.fm.intel.com with ESMTP; 29 Jun 2023 05:36:26 -0700
-Received: from kbuild by 783282924a45 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1qEqsr-000E9V-2w;
-        Thu, 29 Jun 2023 12:36:25 +0000
-Date:   Thu, 29 Jun 2023 20:35:54 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Sathesh Edara <sedara@marvell.com>, linux-kernel@vger.kernel.org,
-        sburla@marvell.com, vburru@marvell.com, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        netdev@vger.kernel.org, hgani@marvell.com
-Cc:     oe-kbuild-all@lists.linux.dev, sedara@marvell.com
-Subject: Re: [net-next PATCH] octeon_ep: Add control plane host and firmware
- versions.
-Message-ID: <202306292050.kg5Y1BXr-lkp@intel.com>
-References: <20230629084227.98848-1-sedara@marvell.com>
+        Thu, 29 Jun 2023 08:36:07 -0400
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FF842690
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 05:36:06 -0700 (PDT)
+Received: by mail-pj1-x1036.google.com with SMTP id 98e67ed59e1d1-262e81f6154so308560a91.2
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 05:36:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1688042166; x=1690634166;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Ewkyga5jWrBIrRzjRNQ0kt+SnJFF9Xml4dXQcN2EQhs=;
+        b=a/n7a52bRuhn9upZsTqFpiSSaog/awsdPngQx0nRwLqb939pQwSEsDJRilUUJKCAVT
+         2xHWQaB2i6CuNCU3S5BR3p8oyW9Fqshw+2mINi+ONwP/goFY48iWt6Dlq6o66k5GmU/b
+         OPt9z8Z7mGKLqKJHm+ZwUitOohXovc1AiXY+KJBcIP9HQKT8VD3oeuN2MmMecFbKFwzT
+         Dn6stxqJ3x3tMe8CtiCcwgTZaJg8SI71zTOFKfzy/Ptp7qnRAv5lRf1t8RNIh3IpB4cK
+         vSbh+dWr08SrIkKZ7rcT6Kl6A/EKMMUzvhhDZU0kkmd+W7dl4fNSN4mNx0i7RMA7xZYp
+         6u0w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688042166; x=1690634166;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Ewkyga5jWrBIrRzjRNQ0kt+SnJFF9Xml4dXQcN2EQhs=;
+        b=j6mMNzWDu5cVDPN8ZA2uLHRmoehnMpj3DcMLCZkEN5CC5ShsIxbcb/Xohy13FXhFl9
+         3PAUosIrJlLqpCEFWKIgvkBwZ0Mx268yT8NZ/PDGDBOAaM9dZP8kVZyYY4OpS6IMw6Lg
+         EuH89IvBOOvXtosdhy8E91h2fWuZDLbYBVGGI15EOncax5VHwexfo/BKCd+Ot0Pc6Zfl
+         Dexw7sMBzJihWFSqQZRns3yGJuFF2npWqA+rz15TqtIgQDOXubgGvV9JZpUg/gKeRbIQ
+         bqPb25Q/53TOhLbwXWO/fZVY28x8u49qWnpb2Yw0oDQsvRCSPuXERHTDF8j4y7I5brlK
+         f2dA==
+X-Gm-Message-State: ABy/qLY0nQ6kNo6hhfUPhssyCu+WyrsrY3NoY7P8kjsWQA0gyHx58uBk
+        LwIyn7B4/UQGMkNSevAqbizNh2c0mPN+9w==
+X-Google-Smtp-Source: APBJJlGBLnd7gjJdm87WA4wCa8zgoc8Ra7eNct8HOvxnpQ+i5cMra8J6Yw56T+FsknWe7Oak1nSamw==
+X-Received: by 2002:a17:902:c94f:b0:1b8:5541:9d32 with SMTP id i15-20020a170902c94f00b001b855419d32mr1374018pla.68.1688042165758;
+        Thu, 29 Jun 2023 05:36:05 -0700 (PDT)
+Received: from localhost.localdomain ([107.148.241.191])
+        by smtp.gmail.com with ESMTPSA id k12-20020a170902760c00b001b246dcffb7sm9026181pll.300.2023.06.29.05.36.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 29 Jun 2023 05:36:05 -0700 (PDT)
+From:   Huang Rui <vowstar@gmail.com>
+To:     tiwai@suse.com, perex@perex.cz
+Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        vitalyr@opensource.cirrus.com, Huang Rui <vowstar@gmail.com>
+Subject: [PATCHv2] ALSA: hda/realtek: fix mute/micmute LEDs for HP EliteBook G10
+Date:   Thu, 29 Jun 2023 20:35:57 +0800
+Message-ID: <20230629123557.3627401-1-vowstar@gmail.com>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230629084227.98848-1-sedara@marvell.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sathesh,
+In the commit 3e10f6ca76c4 ("ALSA: hda/realtek: Add quirk for
+HP EliteBook G10 laptops"), speakers are fixed but mute/micmute
+LEDs does not lit. Need the ALC287_FIXUP_CS35L41_I2C_2_HP_GPIO_LED
+to get all mute/micmute LEDs working.
 
-kernel test robot noticed the following build errors:
+Signed-off-by: Huang Rui <vowstar@gmail.com>
+Fixes: 3e10f6ca76c4 ("ALSA: hda/realtek: Add quirk for HP EliteBook G10 laptops")
+---
+V1 -> V2: Add fixes to link a previously committed issue
+---
+ sound/pci/hda/patch_realtek.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-[auto build test ERROR on net-next/main]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Sathesh-Edara/octeon_ep-Add-control-plane-host-and-firmware-versions/20230629-164335
-base:   net-next/main
-patch link:    https://lore.kernel.org/r/20230629084227.98848-1-sedara%40marvell.com
-patch subject: [net-next PATCH] octeon_ep: Add control plane host and firmware versions.
-config: alpha-allyesconfig (https://download.01.org/0day-ci/archive/20230629/202306292050.kg5Y1BXr-lkp@intel.com/config)
-compiler: alpha-linux-gcc (GCC) 12.3.0
-reproduce: (https://download.01.org/0day-ci/archive/20230629/202306292050.kg5Y1BXr-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306292050.kg5Y1BXr-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   In file included from drivers/net/ethernet/marvell/octeon_ep/octep_main.c:18:
->> drivers/net/ethernet/marvell/octeon_ep/octep_ctrl_net.h:10:10: fatal error: octep_cp_version.h: No such file or directory
-      10 | #include "octep_cp_version.h"
-         |          ^~~~~~~~~~~~~~~~~~~~
-   compilation terminated.
-
-
-vim +10 drivers/net/ethernet/marvell/octeon_ep/octep_ctrl_net.h
-
-     9	
-  > 10	#include "octep_cp_version.h"
-    11	
-
+diff --git a/sound/pci/hda/patch_realtek.c b/sound/pci/hda/patch_realtek.c
+index dabfdecece26..425c87733e79 100644
+--- a/sound/pci/hda/patch_realtek.c
++++ b/sound/pci/hda/patch_realtek.c
+@@ -9491,7 +9491,7 @@ static const struct snd_pci_quirk alc269_fixup_tbl[] = {
+ 	SND_PCI_QUIRK(0x103c, 0x8b65, "HP ProBook 455 15.6 inch G10 Notebook PC", ALC236_FIXUP_HP_MUTE_LED_MICMUTE_VREF),
+ 	SND_PCI_QUIRK(0x103c, 0x8b66, "HP", ALC236_FIXUP_HP_MUTE_LED_MICMUTE_VREF),
+ 	SND_PCI_QUIRK(0x103c, 0x8b70, "HP EliteBook 835 G10", ALC287_FIXUP_CS35L41_I2C_2),
+-	SND_PCI_QUIRK(0x103c, 0x8b72, "HP EliteBook 845 G10", ALC287_FIXUP_CS35L41_I2C_2),
++	SND_PCI_QUIRK(0x103c, 0x8b72, "HP EliteBook 845 G10", ALC287_FIXUP_CS35L41_I2C_2_HP_GPIO_LED),
+ 	SND_PCI_QUIRK(0x103c, 0x8b74, "HP EliteBook 845W G10", ALC287_FIXUP_CS35L41_I2C_2),
+ 	SND_PCI_QUIRK(0x103c, 0x8b77, "HP ElieBook 865 G10", ALC287_FIXUP_CS35L41_I2C_2),
+ 	SND_PCI_QUIRK(0x103c, 0x8b7a, "HP", ALC236_FIXUP_HP_GPIO_LED),
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.41.0
+
