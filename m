@@ -2,90 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC8D17422B9
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 10:54:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C20367422C6
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 10:56:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232086AbjF2IyP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 04:54:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58896 "EHLO
+        id S232100AbjF2I4B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 04:56:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231767AbjF2IyG (ORCPT
+        with ESMTP id S232296AbjF2Izu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 04:54:06 -0400
-Received: from mail-ot1-f72.google.com (mail-ot1-f72.google.com [209.85.210.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE4D01B1
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 01:54:02 -0700 (PDT)
-Received: by mail-ot1-f72.google.com with SMTP id 46e09a7af769-6b75143626fso669947a34.2
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 01:54:02 -0700 (PDT)
+        Thu, 29 Jun 2023 04:55:50 -0400
+Received: from mail-oi1-f197.google.com (mail-oi1-f197.google.com [209.85.167.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC23110D5
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 01:55:48 -0700 (PDT)
+Received: by mail-oi1-f197.google.com with SMTP id 5614622812f47-3a1e869ed0aso490123b6e.2
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 01:55:48 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688028842; x=1690620842;
+        d=1e100.net; s=20221208; t=1688028948; x=1690620948;
         h=to:from:subject:message-id:date:mime-version:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=zEUG58nL5iLmeTt4LnH06pyXU55y46fgRDzs9ZfJaKw=;
-        b=jCliP03pFWOXgQYOg680u8lDDvKvKQqBMbVcV95oW456H0PltJjWxadxpqFCNj1QA3
-         I+fN/KgeR72+ZcUJzkE9uqdtHLRMI33xr7gQIScyVLRuLGsKKIInbF88KodvI+k8hUYe
-         l3fgdRDEAy9DRFf3NhLpudYpxtN+MbD7Uvy/Ht4RyaHIu50aAuOf43q2z1CpWN7QfRV4
-         CNuKxe0XPWEqB02SqYrkLXUW4+O2FuFDK9cvKhPItrlnLDK5xgbaW/6VQwp0X2Te7VHP
-         XPnpjpWHC8ciHSSBrjDXlXnYtKPmgxseIeY2FvRIKoqCt2/bDHXIB3aNpKzIJ3cfw1VV
-         whaQ==
-X-Gm-Message-State: AC+VfDy9q2hgVfXvoJfw6p533ezT7vfMuMBRfnAu3jUYHqmeIv3UDvqF
-        mJFA62UW13rUmOoPQfboMoh79Z+VpbDTRgJqrkEmWY+XT2XV
-X-Google-Smtp-Source: ACHHUZ4oYdEE5FHWfiHBwn7fffeJLHHJch/YalC2dRBY7bZ2Hv371AeaSCXmkBauDLzffnM/TdG1hmxApe31kltI/KpGXjzScTS6
+        bh=gZCFMIpxa0ptUlveAwgu0zL5ZKeOcE1Em1HcIEUGRXM=;
+        b=jRgUuWikIMsz29UG4ypgGMVso6EXGZus3Xhvjjj0x9jZYb1eRrVYGFhyxYwz1cysiW
+         AgkyBF7G6Zc5rHncXM8/1vwhx2smaP4OB7eXfluFszNNoN8xtNPrWeZ8SPgfrdWS0Wve
+         VGYmBPxLkO+N9bm9kUyhri9JJ6iNrDYtUhwk52OtS8HYNP9s+WcF+bVzGH+rk1i7mAOw
+         XvZ6+KJUZ5bo+FTxR2dAPns56niPl1c4Ubye0IywR9n3OI0nDnjeCW6wsWT+tcIOC7iB
+         t4V/RYS2rv4SBOMw6Y15FT33OkHCRFRfOLBjcYbjMCsUtmsdLmm/1jCiuUSjExmdMI23
+         b+iA==
+X-Gm-Message-State: AC+VfDywrqlyuRsGcI7ibsczuAIt4qcZyxmjlfizqbwb3ORPVULhTfrA
+        iFJZZp8lzua7tkvq0lqbeqHPIxTB1kASI80KlVs1+jmzL+aS
+X-Google-Smtp-Source: ACHHUZ5zriaf07yeI220z8rKokKF9H2679aV5jf3hGMn8llUVPiOcgN12/2pSlu8FM9UW67kwxX95rJZ38q975q4ufPoKiFoZnto
 MIME-Version: 1.0
-X-Received: by 2002:a9d:7a94:0:b0:6b7:4aa6:77b3 with SMTP id
- l20-20020a9d7a94000000b006b74aa677b3mr3616673otn.3.1688028842186; Thu, 29 Jun
- 2023 01:54:02 -0700 (PDT)
-Date:   Thu, 29 Jun 2023 01:54:02 -0700
+X-Received: by 2002:a05:6808:1583:b0:3a2:214d:3da9 with SMTP id
+ t3-20020a056808158300b003a2214d3da9mr4522490oiw.10.1688028948339; Thu, 29 Jun
+ 2023 01:55:48 -0700 (PDT)
+Date:   Thu, 29 Jun 2023 01:55:48 -0700
 X-Google-Appengine-App-Id: s~syzkaller
 X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000825f0d05ff40d7ca@google.com>
-Subject: [syzbot] Monthly reiserfs report (Jun 2023)
-From:   syzbot <syzbot+list27f0754ef9e5b00bcfe9@syzkaller.appspotmail.com>
-To:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        reiserfs-devel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Message-ID: <000000000000d6218f05ff40dd65@google.com>
+Subject: [syzbot] Monthly nilfs report (Jun 2023)
+From:   syzbot <syzbot+list40acfa5dfd27772fa378@syzkaller.appspotmail.com>
+To:     konishi.ryusuke@gmail.com, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-nilfs@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello reiserfs maintainers/developers,
+Hello nilfs maintainers/developers,
 
-This is a 31-day syzbot report for the reiserfs subsystem.
+This is a 31-day syzbot report for the nilfs subsystem.
 All related reports/information can be found at:
-https://syzkaller.appspot.com/upstream/s/reiserfs
+https://syzkaller.appspot.com/upstream/s/nilfs
 
-During the period, 13 new issues were detected and 0 were fixed.
-In total, 84 issues are still open and 17 have been fixed so far.
+During the period, 2 new issues were detected and 2 were fixed.
+In total, 13 issues are still open and 33 have been fixed so far.
 
 Some of the still happening issues:
 
-Ref  Crashes Repro Title
-<1>  3597    Yes   possible deadlock in open_xa_dir
-                   https://syzkaller.appspot.com/bug?extid=8fb64a61fdd96b50f3b8
-<2>  2491    Yes   KASAN: null-ptr-deref Read in do_journal_end (2)
-                   https://syzkaller.appspot.com/bug?extid=845cd8e5c47f2a125683
-<3>  1474    Yes   kernel BUG in do_journal_begin_r
-                   https://syzkaller.appspot.com/bug?extid=2da5e132dd0268a9c0e4
-<4>  1394    Yes   kernel BUG at fs/reiserfs/journal.c:LINE!
-                   https://syzkaller.appspot.com/bug?extid=6820505ae5978f4f8f2f
-<5>  1197    Yes   WARNING in reiserfs_lookup
-                   https://syzkaller.appspot.com/bug?extid=392ac209604cc18792e5
-<6>  912     No    UBSAN: array-index-out-of-bounds in direntry_create_vi
-                   https://syzkaller.appspot.com/bug?extid=e5bb9eb00a5a5ed2a9a2
-<7>  861     Yes   possible deadlock in mnt_want_write_file
-                   https://syzkaller.appspot.com/bug?extid=1047e42179f502f2b0a2
-<8>  291     Yes   possible deadlock in reiserfs_ioctl
-                   https://syzkaller.appspot.com/bug?extid=79c303ad05f4041e0dad
-<9>  266     Yes   WARNING in journal_end
-                   https://syzkaller.appspot.com/bug?extid=d43f346675e449548021
-<10> 233     Yes   KASAN: out-of-bounds Read in leaf_paste_entries (2)
-                   https://syzkaller.appspot.com/bug?extid=38b79774b6c990637f95
+Ref Crashes Repro Title
+<1> 328     Yes   WARNING in nilfs_sufile_set_segment_usage
+                  https://syzkaller.appspot.com/bug?extid=14e9f834f6ddecece094
+<2> 258     Yes   kernel BUG at fs/buffer.c:LINE!
+                  https://syzkaller.appspot.com/bug?extid=cfed5b56649bddf80d6e
+<3> 71      Yes   INFO: task hung in nilfs_detach_log_writer
+                  https://syzkaller.appspot.com/bug?extid=e3973c409251e136fdd0
+<4> 58      Yes   WARNING in mark_buffer_dirty (5)
+                  https://syzkaller.appspot.com/bug?extid=cdfcae656bac88ba0e2d
+<5> 39      Yes   kernel BUG in folio_end_writeback
+                  https://syzkaller.appspot.com/bug?extid=7e5cf1d80677ec185e63
+<6> 11      No    BUG: unable to handle kernel NULL pointer dereference in nilfs_segctor_do_construct
+                  https://syzkaller.appspot.com/bug?extid=5afc832d6dbb2fd17538
+<7> 3       Yes   general protection fault in folio_create_empty_buffers
+                  https://syzkaller.appspot.com/bug?extid=0ad741797f4565e7e2d2
 
 ---
 This report is generated by a bot. It may contain errors.
