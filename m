@@ -2,58 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87FC77423C7
+	by mail.lfdr.de (Postfix) with ESMTP id 3FA9D7423C6
 	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 12:15:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230487AbjF2KPI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 06:15:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49606 "EHLO
+        id S231681AbjF2KPO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 06:15:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231691AbjF2KOV (ORCPT
+        with ESMTP id S232033AbjF2KOe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 06:14:21 -0400
+        Thu, 29 Jun 2023 06:14:34 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BE8230E5
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 03:09:59 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E14743C14;
+        Thu, 29 Jun 2023 03:11:30 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1274F61505
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 10:09:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE5A8C433C8;
-        Thu, 29 Jun 2023 10:09:57 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6C0BA61508;
+        Thu, 29 Jun 2023 10:11:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71EACC433C8;
+        Thu, 29 Jun 2023 10:11:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688033398;
-        bh=6JXx4Gu6gULpzK0aGRrmMgZMZhQoVcrgwox0JdbALSo=;
+        s=k20201202; t=1688033489;
+        bh=7QmvM1Ky6hyRub5lLoveiNRl1PkeunqIVXKu1oYNN5U=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=vO0Vau+QZQq+xbO2IedJ4O5yDAP+PX/bEabGY+lG1ivQVP9527b7uxW01GVBsvuqH
-         mwe80WFLHySytfDieAQ+PHXACiGk/ZWOmcmktnxuYWq4I+lhmM4RkhQA6OG0r0A+we
-         Fje/c2F7nZ9NehG1QPykWYq7PHJ7k+JLsS/gnFkaBYtGlPDnLJ4ksK83NHsPr0L9Im
-         qqc+e+u4xdi93bdvOZjm6GbJhigWf/f1Rj4VZLQJcpONKtvWTiXZ2qR5e8dqkWxMl2
-         gNMQWmZ7lTNDZIcPuFXS7yCugyd0IXI60ixQDPl4ZnCzXkB413RXiKD4FuD2qJb4qn
-         LQCR2oSsZJrgw==
-Date:   Thu, 29 Jun 2023 12:09:54 +0200
-From:   Frederic Weisbecker <frederic@kernel.org>
-To:     Cruz Zhao <CruzZhao@linux.alibaba.com>
-Cc:     gregkh@linuxfoundation.org, jirislaby@kernel.org, mingo@redhat.com,
-        peterz@infradead.org, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, vschneid@redhat.com, paulmck@kernel.org,
-        quic_neeraju@quicinc.com, joel@joelfernandes.org,
-        josh@joshtriplett.org, boqun.feng@gmail.com,
-        mathieu.desnoyers@efficios.com, jiangshanlai@gmail.com,
-        qiang1.zhang@intel.com, jstultz@google.com,
-        clingutla@codeaurora.org, nsaenzju@redhat.com, tglx@linutronix.de,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] sched/core: introduce sched_core_idle_cpu()
-Message-ID: <ZJ1YcgcuYCzwz6jI@lothringen>
-References: <1688011324-42406-1-git-send-email-CruzZhao@linux.alibaba.com>
+        b=mtZqsGNK+DgvnRm8fscT4hbHI2v/AUqGUlG1cuN2mjP0rZKvE2LrZRmgyv7PlTGuD
+         cSZFRWTtytdvIsPSWmaufVFvW+vb3fPgcf6gfxovk08W3zROucmqbUjnSmOaS+5hBg
+         TKom+2aMfhRgnePIZAsD2/a+IYIC8KvFX4Ie0naZukKd4mhqY9UFMw67aM6Fwb1ilG
+         zOOpi6G8RnTml8MC6dydSr42HoAttiZQp480bbqh7WOD4aE6QoLW4HbtIrlFknujXh
+         HMa4LLT2X40B4J/RyyB+RuSW233o9w3RDGoSH9x/VOC7dfmvKkfHSbOWfbq8PXaEoB
+         KMlAFB1KVxGnA==
+Date:   Thu, 29 Jun 2023 11:11:23 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     David Laight <David.Laight@aculab.com>
+Cc:     'Sameer Pujar' <spujar@nvidia.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzk+dt@kernel.org" <krzk+dt@kernel.org>,
+        "thierry.reding@gmail.com" <thierry.reding@gmail.com>,
+        "lgirdwood@gmail.com" <lgirdwood@gmail.com>,
+        "perex@perex.cz" <perex@perex.cz>,
+        "tiwai@suse.com" <tiwai@suse.com>,
+        "jonathanh@nvidia.com" <jonathanh@nvidia.com>,
+        "mkumard@nvidia.com" <mkumard@nvidia.com>,
+        "sheetal@nvidia.com" <sheetal@nvidia.com>,
+        "alsa-devel@alsa-project.org" <alsa-devel@alsa-project.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>,
+        Oder Chiou <oder_chiou@realtek.com>
+Subject: Re: [PATCH v2 3/5] ASoC: rt5640: Fix sleep in atomic context
+Message-ID: <550e5c8f-0bfb-4ffc-9a43-1ecb153c6a02@sirena.org.uk>
+References: <1688015537-31682-1-git-send-email-spujar@nvidia.com>
+ <1688015537-31682-4-git-send-email-spujar@nvidia.com>
+ <bae9f041867e4625ad293d284566bb4f@AcuMS.aculab.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="+aXQRe9dUQ7rrBkZ"
 Content-Disposition: inline
-In-Reply-To: <1688011324-42406-1-git-send-email-CruzZhao@linux.alibaba.com>
+In-Reply-To: <bae9f041867e4625ad293d284566bb4f@AcuMS.aculab.com>
+X-Cookie: Surprise due today.  Also the rent.
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -64,41 +73,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 29, 2023 at 12:02:04PM +0800, Cruz Zhao wrote:
-> As core scheduling introduced, a new state of idle is defined as
-> force idle, running idle task but nr_running greater than zero.
-> 
-> If a cpu is in force idle state, idle_cpu() will return zero. This
-> result makes sense in some scenarios, e.g., load balance,
-> showacpu when dumping, and judge the RCU boost kthread is starving.
-> 
-> But this will cause error in other scenarios, e.g., tick_irq_exit():
-> When force idle, rq->curr == rq->idle but rq->nr_running > 0, results
-> that idle_cpu() returns 0. In function tick_irq_exit(), if idle_cpu()
-> is 0, tick_nohz_irq_exit() will not be called, and ts->idle_active will
-> not become 1, which became 0 in tick_nohz_irq_enter().
-> ts->idle_sleeptime won't update in function update_ts_time_stats(), if
-> ts->idle_active is 0, which should be 1. And this bug will result that
-> ts->idle_sleeptime is less than the actual value, and finally will
-> result that the idle time in /proc/stat is less than the actual value.
-> 
-> To solve this problem, we introduce sched_core_idle_cpu(), which
-> returns 1 when force idle. We audit all users of idle_cpu(), and
-> change idle_cpu() into sched_core_idle_cpu() in function
-> tick_irq_exit().
-> 
-> v2-->v3: Only replace idle_cpu() with sched_core_idle_cpu() in
-> function tick_irq_exit(). And modify the corresponding commit log.
-> 
-> Signed-off-by: Cruz Zhao <CruzZhao@linux.alibaba.com>
-> Reviewed-by: Peter Zijlstra <peterz@infradead.org>
-> Reviewed-by: Frederic Weisbecker <frederic@kernel.org>
-> Reviewed-by: Joel Fernandes <joel@joelfernandes.org>
 
-Please wait for people to actually provide you with their Reviewed-by: tags
-before writing it.
+--+aXQRe9dUQ7rrBkZ
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Aside of that, the patch looks good so you can put this one:
+On Thu, Jun 29, 2023 at 08:38:09AM +0000, David Laight wrote:
+> From: Sameer Pujar
 
-Reviewed-by: Frederic Weisbecker <frederic@kernel.org>
+> > Following prints are observed while testing audio on Jetson AGX Orin wh=
+ich
+> > has onboard RT5640 audio codec:
+> >=20
+> >   BUG: sleeping function called from invalid context at kernel/workqueu=
+e.c:3027
+> >   in_atomic(): 1, irqs_disabled(): 128, non_block: 0, pid: 0, name: swa=
+pper/0
 
+> My 'gut feel' is that this will just move the problem elsewhere.
+
+> If the ISR is responsible for adding audio buffers (etc) then it is
+> also not unlikely that the scheduling delays in running a threaded ISR
+> will cause audio glitches if the system is busy.
+
+What makes you think this is anything to do with audio glitches?  The
+bug is literally what is described, it is not valid to sleep in atomic
+contexts and if we ever actually try things are likely to go badly.
+
+--+aXQRe9dUQ7rrBkZ
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmSdWMoACgkQJNaLcl1U
+h9AtaQf8CxjCsdB1iRGBoRv5utkgYwI0VNyGiPs7GW70GzZc456Z381WvE94jU01
+60leed9uBoJP3hs88KzS/G9Tg4StZFdmHQxVkjy78ArKLRUCPl4rMqc2bTODvWSf
+aYtTcgMRZZjgoY+mDHpBSFpPFJqB1DQs2CICy8BvoyOJDq05ghN8DU7dGQ+pl415
+QaHrjbbOJkj7d+e2PftSuXOHfcF7Y0mj5E8yFjWQn1WwVfMCAhbRJvhYtpbzry6X
+UBWlM5GC6Hi1rx8zvMiKx6LemyxK924I92k8HiIa+75Rq5jM8JxldvYj+FuWlgIE
+8BDY4GdfkgUBVHTn4ZJYjy2mb3nPEg==
+=eZLP
+-----END PGP SIGNATURE-----
+
+--+aXQRe9dUQ7rrBkZ--
