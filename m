@@ -2,171 +2,316 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EBCD742FC5
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 23:54:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 64C7E742FC7
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 23:54:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230158AbjF2Vyu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 17:54:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60948 "EHLO
+        id S232207AbjF2Vyz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 17:54:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232144AbjF2VyO (ORCPT
+        with ESMTP id S232155AbjF2VyW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 17:54:14 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43A4B30F1;
-        Thu, 29 Jun 2023 14:53:56 -0700 (PDT)
-Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35TLkQ42017475;
-        Thu, 29 Jun 2023 21:53:45 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=/XdqmJgBgI4NzRL9qQX8jk2AqYtbjs3ud9Ias1hDbTU=;
- b=OzhtrvK2wIUJNu43NHUkL8DI6lSfkcUF5Q6ILcKgaPzLt2VfXIR9xB7iaZHnkgRBPhgD
- mq1Sgkw9gbvAYhKLuoC+66twsrfZsecWkN+dkMUGSEj+Rryd/f2bF0GkLQqUYZ+4vV08
- uWmcz4L17JUWDb1tEYqnnnAG+w9bc7ic7iiJKnGjx5fAnWgNSpQhFj+WELHBgdc52I2w
- 73D1RLbR6dTaMOJyCp23pjVoWrpdQC4+1YGuQqmJB0+Y0LuYjCuA/Pr4EfKrzFGhxFV8
- 7w5twNJMTxYR02wm/eSdgHAbVEdcDuZb+ef013XEwD4qIEyXbcVB593gvRfFZaEkK42j lA== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rhgpgr5w8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 29 Jun 2023 21:53:45 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35TLriad029585
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 29 Jun 2023 21:53:44 GMT
-Received: from [10.134.66.165] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.7; Thu, 29 Jun
- 2023 14:53:43 -0700
-Message-ID: <fa12dd5d-af9d-235d-a6c7-3dcf690dcd67@quicinc.com>
-Date:   Thu, 29 Jun 2023 14:53:42 -0700
+        Thu, 29 Jun 2023 17:54:22 -0400
+Received: from mail-oa1-x2c.google.com (mail-oa1-x2c.google.com [IPv6:2001:4860:4864:20::2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1E0F3A96
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 14:54:15 -0700 (PDT)
+Received: by mail-oa1-x2c.google.com with SMTP id 586e51a60fabf-1b093c318b0so1022700fac.2
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 14:54:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1688075655; x=1690667655;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Fo4SI0ZZdp5y5LdeUtkVjTp5Ukyn89v3LaAcM7QXj80=;
+        b=lREZlaI/4e71j0PoDE3GODWpnHZvzzadtisH2kw3Bd4iIJhe+oxZVVjJX+TLKtT1AN
+         SxtirDCYI8+pQQ4v0kIJub362zB/G7+o09HTuwSO6/p9Th3RLzjkfSHcyl5yDvC2Jvp3
+         HEkmaMVPIDVVkm4OsJ2BHqH5Ga4IDuAIAOnb7VWp8B2IMtTvAzVNSk4n8FMHw/1AmyaJ
+         VHM3o68HAdrmqxBL3eQDnIMFLDR+ZsLIDvFLS6mUhWJQvv5SaiZjjQoasz3roxvImBdw
+         rlyRknBb2UJLeU+Co6FlYitLZEZhMSc6N2bw2uZ1QH9BobUpkjiYNSCo7/BHCruiU4fF
+         XyIA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688075655; x=1690667655;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Fo4SI0ZZdp5y5LdeUtkVjTp5Ukyn89v3LaAcM7QXj80=;
+        b=gdEd+KNRzv6r9ypJR25tH//OzsAykLcRZE3vvriF+D09VEZ+m1embsA/UrfaKIxf00
+         EnfhZH8/Eun0fW/8MHgCGNReelMewPap0oKYlixx3WynDPBNa6uFrEUBo6NLSgMxi7Gz
+         TBQUlicUDyfhgNpGGNXsHoLceaRnrMTtqnqaBwH+mEGhK644HxeGhN4sh8NBIspXaJ5T
+         JsZ36xCf8nN8fekqSu3XD9bv2GOgn+/VR9tOUr8BMnD6qXD1dcBwPWcEloc7SaxVcft7
+         KNiN3sUTi59IZcpi3vRI4ciipdz9DFA1yLAU4LYx+jl8R9bQixX4kxC1okw8cZoVeQdB
+         WlEw==
+X-Gm-Message-State: ABy/qLYDDpS2g8+j71V5jh/jMm0nSYx6OsxO7WUUN3Z/knUM1AtN2dD9
+        zwO+tltqt2R82qtdK4fIzNrof6NPTVYYV+4r8evjzw==
+X-Google-Smtp-Source: APBJJlEmXAkKSxp8c0Oo1M+N6TBRleb8fMUPCyYvMXR6viYtpSwcdOSDlFFbOmgfHSde+oYuAjDrmj8ELni3nhkbr8o=
+X-Received: by 2002:a05:6871:60cb:b0:1b0:4e46:7f12 with SMTP id
+ qz11-20020a05687160cb00b001b04e467f12mr874389oab.43.1688075654993; Thu, 29
+ Jun 2023 14:54:14 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 1/7] dt-bindings: soc: qcom: Add qcom-pbs bindings
-Content-Language: en-US
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Rob Herring <robh@kernel.org>
-CC:     <pavel@ucw.cz>, <lee@kernel.org>, <thierry.reding@gmail.com>,
-        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
-        <agross@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <u.kleine-koenig@pengutronix.de>,
-        <linux-leds@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-pwm@vger.kernel.org>
-References: <20230621185949.2068-1-quic_amelende@quicinc.com>
- <20230621185949.2068-2-quic_amelende@quicinc.com>
- <20230626135857.GA3118929-robh@kernel.org>
- <2e871e21-a81d-0d7d-993b-9a9d7bd9d962@quicinc.com>
- <f274247c-f45b-8a48-92f2-cff4597aff15@linaro.org>
-From:   Anjelique Melendez <quic_amelende@quicinc.com>
-In-Reply-To: <f274247c-f45b-8a48-92f2-cff4597aff15@linaro.org>
+References: <20230629184151.705870770@linuxfoundation.org>
+In-Reply-To: <20230629184151.705870770@linuxfoundation.org>
+From:   =?UTF-8?B?RGFuaWVsIETDrWF6?= <daniel.diaz@linaro.org>
+Date:   Thu, 29 Jun 2023 15:54:03 -0600
+Message-ID: <CAEUSe7__cNqH6d1D96m8XriVckS9MnL6CRfd+iTYXnNkqu9nvQ@mail.gmail.com>
+Subject: Re: [PATCH 6.3 00/29] 6.3.11-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de,
+        conor@kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: kZcRCS-GeKOiZb2XNIZgHnfikzARb_cZ
-X-Proofpoint-ORIG-GUID: kZcRCS-GeKOiZb2XNIZgHnfikzARb_cZ
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-06-29_08,2023-06-27_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 phishscore=0
- priorityscore=1501 bulkscore=0 mlxlogscore=999 adultscore=0 suspectscore=0
- lowpriorityscore=0 malwarescore=0 clxscore=1011 mlxscore=0 spamscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2305260000
- definitions=main-2306290198
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello!
 
+Early report of failures.
 
-On 6/29/2023 1:45 AM, Dmitry Baryshkov wrote:
-> On 29/06/2023 04:19, Anjelique Melendez wrote:
->>
->>
->> On 6/26/2023 6:58 AM, Rob Herring wrote:
->>> On Wed, Jun 21, 2023 at 11:59:45AM -0700, Anjelique Melendez wrote:
->>>> Add binding for the Qualcomm Programmable Boot Sequencer device.
->>>>
->>>> Signed-off-by: Anjelique Melendez <quic_amelende@quicinc.com>
->>>> ---
->>>>   .../bindings/soc/qcom/qcom-pbs.yaml           | 41 +++++++++++++++++++
->>>>   1 file changed, 41 insertions(+)
->>>>   create mode 100644 Documentation/devicetree/bindings/soc/qcom/qcom-pbs.yaml
->>>>
->>>> diff --git a/Documentation/devicetree/bindings/soc/qcom/qcom-pbs.yaml b/Documentation/devicetree/bindings/soc/qcom/qcom-pbs.yaml
->>>> new file mode 100644
->>>> index 000000000000..0a89c334f95c
->>>> --- /dev/null
->>>> +++ b/Documentation/devicetree/bindings/soc/qcom/qcom-pbs.yaml
->>>> @@ -0,0 +1,41 @@
->>>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->>>> +%YAML 1.2
->>>> +---
->>>> +$id: http://devicetree.org/schemas/soc/qcom/qcom-pbs.yaml#
->>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->>>> +
->>>> +title: Qualcomm Technologies, Inc. PBS
->>>> +
->>>> +maintainers:
->>>> +  - Anjelique Melendez <quic_amelende@quicinc.com>
->>>> +
->>>> +description: |
->>>> +  Qualcomm PBS (programmable boot sequencer) supports triggering sequences
->>>> +  for clients upon request.
->>>> +
->>>> +properties:
->>>> +  compatible:
->>>> +    const: qcom,pbs
->>>> +
->>>> +  reg:
->>>> +    description: |
->>>> +      Base address of the PBS peripheral.
->>>> +    maxItems: 1
->>>> +
->>>> +required:
->>>> + - compatible
->>>> + - reg
->>>> +
->>>> +additionalProperties: false
->>>> +
->>>> +examples:
->>>> +  - |
->>>> +    pmic {
->>>> +      #address-cells = <1>;
->>>> +      #size-cells = <0>;
->>>> +
->>>> +      qcom,pbs@7400 {
->>>> +        compatible = "qcom,pbs";
->>>> +        reg = <0x7400>;
->>>> +      };
->>>
->>> Why do you need a child node for this? Is there more than 1 instance in
->>> a PMIC? Every sub-function of a PMIC doesn't have to have a DT node.
->>>
->>
->> We currently have another downstream driver (which is planned to get upstreamed)
->> which also needs a handle to a pbs device in order to properly trigger events.
-> 
-> Does it have to be a separate driver? Or is it a part of the LPG driver, just being artificially split away?
+Arm64 fails with GCC-11 on the following configurations:
+* lkftconfig
+* lkftconfig-64k_page_size
+* lkftconfig-debug
+* lkftconfig-debug-kmemleak
+* lkftconfig-kasan
+* lkftconfig-kselftest
+* lkftconfig-kunit
+* lkftconfig-libgpiod
+* lkftconfig-perf
+* lkftconfig-rcutorture
 
-Sure, I just discussed with team and we are ok with removing this as a separate driver. Will have that 
-for next version. 
-> 
->>
->>> Rob
->>
->>
->>
-> 
+lkftconfig is basically defconfig + a few fragments [1]. The suffixes
+mean that we're enabling a few other kconfigs.
+
+Failure:
+-----8<-----
+/builds/linux/arch/arm64/mm/fault.c: In function 'do_page_fault':
+/builds/linux/arch/arm64/mm/fault.c:576:9: error: 'vma' undeclared
+(first use in this function); did you mean 'vmap'?
+  576 |         vma =3D lock_mm_and_find_vma(mm, addr, regs);
+      |         ^~~
+      |         vmap
+/builds/linux/arch/arm64/mm/fault.c:576:9: note: each undeclared
+identifier is reported only once for each function it appears in
+/builds/linux/arch/arm64/mm/fault.c:579:17: error: label 'done' used
+but not defined
+  579 |                 goto done;
+      |                 ^~~~
+make[4]: *** [/builds/linux/scripts/Makefile.build:252:
+arch/arm64/mm/fault.o] Error 1
+make[4]: Target 'arch/arm64/mm/' not remade because of errors.
+----->8-----
+
+We're expecting to see more failures on other architectures, and so
+will follow-up with that.
+
+[1] https://github.com/Linaro/meta-lkft/tree/kirkstone/meta/recipes-kernel/=
+linux/files
+
+Greetings!
+
+Daniel D=C3=ADaz
+daniel.diaz@linaro.org
+
+On Thu, 29 Jun 2023 at 12:47, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 6.3.11 release.
+> There are 29 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Sat, 01 Jul 2023 18:41:39 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-=
+6.3.11-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-6.3.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
+>
+> -------------
+> Pseudo-Shortlog of commits:
+>
+> Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+>     Linux 6.3.11-rc1
+>
+> Ricardo Ca=C3=B1uelo <ricardo.canuelo@collabora.com>
+>     Revert "thermal/drivers/mediatek: Use devm_of_iomap to avoid resource=
+ leak in mtk_thermal_probe"
+>
+> Mike Hommey <mh@glandium.org>
+>     HID: logitech-hidpp: add HIDPP_QUIRK_DELAYED_INIT for the T651.
+>
+> Jason Gerecke <jason.gerecke@wacom.com>
+>     HID: wacom: Use ktime_t rather than int when dealing with timestamps
+>
+> Ludvig Michaelsson <ludvig.michaelsson@yubico.com>
+>     HID: hidraw: fix data race on device refcount
+>
+> Zhang Shurong <zhang_shurong@foxmail.com>
+>     fbdev: fix potential OOB read in fast_imageblit()
+>
+> Linus Torvalds <torvalds@linux-foundation.org>
+>     gup: add warning if some caller would seem to want stack expansion
+>
+> Linus Torvalds <torvalds@linux-foundation.org>
+>     mm: always expand the stack with the mmap write lock held
+>
+> Linus Torvalds <torvalds@linux-foundation.org>
+>     execve: expand new process stack manually ahead of time
+>
+> Liam R. Howlett <Liam.Howlett@oracle.com>
+>     mm: make find_extend_vma() fail if write lock not held
+>
+> Linus Torvalds <torvalds@linux-foundation.org>
+>     powerpc/mm: convert coprocessor fault to lock_mm_and_find_vma()
+>
+> Linus Torvalds <torvalds@linux-foundation.org>
+>     mm/fault: convert remaining simple cases to lock_mm_and_find_vma()
+>
+> Ben Hutchings <ben@decadent.org.uk>
+>     arm/mm: Convert to using lock_mm_and_find_vma()
+>
+> Ben Hutchings <ben@decadent.org.uk>
+>     riscv/mm: Convert to using lock_mm_and_find_vma()
+>
+> Ben Hutchings <ben@decadent.org.uk>
+>     mips/mm: Convert to using lock_mm_and_find_vma()
+>
+> Michael Ellerman <mpe@ellerman.id.au>
+>     powerpc/mm: Convert to using lock_mm_and_find_vma()
+>
+> Linus Torvalds <torvalds@linux-foundation.org>
+>     arm64/mm: Convert to using lock_mm_and_find_vma()
+>
+> Linus Torvalds <torvalds@linux-foundation.org>
+>     mm: make the page fault mmap locking killable
+>
+> Linus Torvalds <torvalds@linux-foundation.org>
+>     mm: introduce new 'lock_mm_and_find_vma()' page fault helper
+>
+> Peng Zhang <zhangpeng.00@bytedance.com>
+>     maple_tree: fix potential out-of-bounds access in mas_wr_end_piv()
+>
+> Oliver Hartkopp <socketcan@hartkopp.net>
+>     can: isotp: isotp_sendmsg(): fix return error fix on TX path
+>
+> Wyes Karny <wyes.karny@amd.com>
+>     cpufreq: amd-pstate: Make amd-pstate EPP driver name hyphenated
+>
+> Thomas Gleixner <tglx@linutronix.de>
+>     x86/smp: Cure kexec() vs. mwait_play_dead() breakage
+>
+> Thomas Gleixner <tglx@linutronix.de>
+>     x86/smp: Use dedicated cache-line for mwait_play_dead()
+>
+> Thomas Gleixner <tglx@linutronix.de>
+>     x86/smp: Remove pointless wmb()s from native_stop_other_cpus()
+>
+> Tony Battersby <tonyb@cybernetics.com>
+>     x86/smp: Dont access non-existing CPUID leaf
+>
+> Thomas Gleixner <tglx@linutronix.de>
+>     x86/smp: Make stop_other_cpus() more robust
+>
+> Borislav Petkov (AMD) <bp@alien8.de>
+>     x86/microcode/AMD: Load late on both threads too
+>
+> David Woodhouse <dwmw@amazon.co.uk>
+>     mm/mmap: Fix error return in do_vmi_align_munmap()
+>
+> Liam R. Howlett <Liam.Howlett@oracle.com>
+>     mm/mmap: Fix error path in do_vmi_align_munmap()
+>
+>
+> -------------
+>
+> Diffstat:
+>
+>  Makefile                                  |   4 +-
+>  arch/alpha/Kconfig                        |   1 +
+>  arch/alpha/mm/fault.c                     |  13 +--
+>  arch/arc/Kconfig                          |   1 +
+>  arch/arc/mm/fault.c                       |  11 +--
+>  arch/arm/Kconfig                          |   1 +
+>  arch/arm/mm/fault.c                       |  63 +++---------
+>  arch/arm64/Kconfig                        |   1 +
+>  arch/arm64/mm/fault.c                     |  44 ++-------
+>  arch/csky/Kconfig                         |   1 +
+>  arch/csky/mm/fault.c                      |  22 +----
+>  arch/hexagon/Kconfig                      |   1 +
+>  arch/hexagon/mm/vm_fault.c                |  18 +---
+>  arch/ia64/mm/fault.c                      |  36 ++-----
+>  arch/loongarch/Kconfig                    |   1 +
+>  arch/loongarch/mm/fault.c                 |  16 ++--
+>  arch/m68k/mm/fault.c                      |   9 +-
+>  arch/microblaze/mm/fault.c                |   5 +-
+>  arch/mips/Kconfig                         |   1 +
+>  arch/mips/mm/fault.c                      |  12 +--
+>  arch/nios2/Kconfig                        |   1 +
+>  arch/nios2/mm/fault.c                     |  17 +---
+>  arch/openrisc/mm/fault.c                  |   5 +-
+>  arch/parisc/mm/fault.c                    |  23 +++--
+>  arch/powerpc/Kconfig                      |   1 +
+>  arch/powerpc/mm/copro_fault.c             |  14 +--
+>  arch/powerpc/mm/fault.c                   |  39 +-------
+>  arch/riscv/Kconfig                        |   1 +
+>  arch/riscv/mm/fault.c                     |  31 +++---
+>  arch/s390/mm/fault.c                      |   5 +-
+>  arch/sh/Kconfig                           |   1 +
+>  arch/sh/mm/fault.c                        |  17 +---
+>  arch/sparc/Kconfig                        |   1 +
+>  arch/sparc/mm/fault_32.c                  |  32 ++-----
+>  arch/sparc/mm/fault_64.c                  |   8 +-
+>  arch/um/kernel/trap.c                     |  11 ++-
+>  arch/x86/Kconfig                          |   1 +
+>  arch/x86/include/asm/cpu.h                |   2 +
+>  arch/x86/include/asm/smp.h                |   2 +
+>  arch/x86/kernel/cpu/microcode/amd.c       |   2 +-
+>  arch/x86/kernel/process.c                 |  28 +++++-
+>  arch/x86/kernel/smp.c                     |  73 ++++++++------
+>  arch/x86/kernel/smpboot.c                 |  81 ++++++++++++++--
+>  arch/x86/mm/fault.c                       |  52 +---------
+>  arch/xtensa/Kconfig                       |   1 +
+>  arch/xtensa/mm/fault.c                    |  14 +--
+>  drivers/cpufreq/amd-pstate.c              |   2 +-
+>  drivers/hid/hid-logitech-hidpp.c          |   2 +-
+>  drivers/hid/hidraw.c                      |   9 +-
+>  drivers/hid/wacom_wac.c                   |   6 +-
+>  drivers/hid/wacom_wac.h                   |   2 +-
+>  drivers/iommu/amd/iommu_v2.c              |   4 +-
+>  drivers/iommu/iommu-sva.c                 |   2 +-
+>  drivers/thermal/mediatek/auxadc_thermal.c |  14 +--
+>  drivers/video/fbdev/core/sysimgblt.c      |   2 +-
+>  fs/binfmt_elf.c                           |   6 +-
+>  fs/exec.c                                 |  38 ++++----
+>  include/linux/mm.h                        |  16 ++--
+>  lib/maple_tree.c                          |  11 ++-
+>  mm/Kconfig                                |   4 +
+>  mm/gup.c                                  |  14 ++-
+>  mm/memory.c                               | 127 ++++++++++++++++++++++++=
++
+>  mm/mmap.c                                 | 153 +++++++++++++++++++++++-=
+------
+>  mm/nommu.c                                |  17 ++--
+>  net/can/isotp.c                           |   5 +-
+>  65 files changed, 614 insertions(+), 544 deletions(-)
+>
+>
