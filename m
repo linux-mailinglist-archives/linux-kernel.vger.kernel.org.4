@@ -2,113 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02F5B742425
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 12:46:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 05A03742434
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 12:49:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231886AbjF2KqS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 06:46:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56992 "EHLO
+        id S231778AbjF2KtJ convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 29 Jun 2023 06:49:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231862AbjF2KqK (ORCPT
+        with ESMTP id S231204AbjF2Ksw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 06:46:10 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D689A1FD8
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 03:46:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1688035568; x=1719571568;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=9Y1oNOI6Iu45KvslBrhl/Teb6DyPllgKYWJpWorjH0M=;
-  b=OzRf6yMUtZNIggSm4ctt8xRjPf3ORZrxCHjyZKjpKd3Hesid8l++CtGe
-   bm2YZDABRflC98XkkBidZM/fQQeJS8QqS3gKMNK93OWvlRLo4Xk8TH5YR
-   vN+97YPsdx0Z0hvwApq8QAOweuXmwAvtG4WTAY4agbm396oOs48+08Gw3
-   btCVLSOk519SEGLlw9ib37a8XsMQePJcP4VAEhhyCRseyhUwd8j+C5eNC
-   /fHbMj9qwSBirvQ0aNcSkNFk4ZWF6FDEsKjO0W+Qy+KJt34wUyZR3igvw
-   glSiC1ec266o3Ziz3B35Uk3RCcJ3xJqKY4uRQxue08aZRz17tT2su14iN
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10755"; a="362115060"
-X-IronPort-AV: E=Sophos;i="6.01,168,1684825200"; 
-   d="scan'208";a="362115060"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jun 2023 03:46:06 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10755"; a="963948378"
-X-IronPort-AV: E=Sophos;i="6.01,168,1684825200"; 
-   d="scan'208";a="963948378"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga006.fm.intel.com with ESMTP; 29 Jun 2023 03:46:04 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id CEC003DA; Thu, 29 Jun 2023 13:46:05 +0300 (EEST)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
-Cc:     Oder Chiou <oder_chiou@realtek.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
-Subject: [PATCH v1 3/3] ASoC: rt5677: Sort headers alphabetically
-Date:   Thu, 29 Jun 2023 13:46:03 +0300
-Message-Id: <20230629104603.88612-4-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.40.0.1.gaa8946217a0b
-In-Reply-To: <20230629104603.88612-1-andriy.shevchenko@linux.intel.com>
-References: <20230629104603.88612-1-andriy.shevchenko@linux.intel.com>
+        Thu, 29 Jun 2023 06:48:52 -0400
+Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40011E6C;
+        Thu, 29 Jun 2023 03:48:51 -0700 (PDT)
+Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-98de322d11fso15068166b.1;
+        Thu, 29 Jun 2023 03:48:51 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688035730; x=1690627730;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=w8zOdiEV6AM9voeBO+/JtBD2h7O8pc56trtKT86vorg=;
+        b=LZBm3E5yEgUbY/SHvULv0xs5twqiFYk7xBTBdPRWz5fgB/dNZxEhwRy7IzEgyFLO6L
+         Eshd6pdxz5Y15I2PCzrPThTJUqtJmDqIXaFO1wVE60HnRw4tpr89pmCF8mQnFUkg6vyz
+         aGPNkBKQkMlKpFoEH24pqpQ/jkDmLS0L6TYo0HnZA8pQvswbLnoHYF6U7AYyLqXO3y1P
+         Y8P/SpYVRpg7jxTxg15DsH3O1ZT0Lw3t+2O3KPtvhnYC4+s91t37AjjPi/VCDQvw4zZr
+         DsrcdyG7Sgj6lDAtK1F49FiAO+k4X5VeXwhsCv+u+1I8HSKRc4jn1E5arJrv6QV3BV7E
+         hRGw==
+X-Gm-Message-State: AC+VfDwFe2lTSqRF0Yr0wpJKqJJMWggtGAe2c9poHc3QfsyoNR4dAHkH
+        vtI9soG0d0Q0alfeQJBuX8+t2CnOvSBNbVBw8ng=
+X-Google-Smtp-Source: ACHHUZ4VO+Eftv5Do3pkmbGF2NR+7KFwPE4oGz9V9boImW03fmvNEUzFwmhnW7touMA42vqT1KCmYearmdPLBGMG1Js=
+X-Received: by 2002:a17:906:74da:b0:976:50a4:ac40 with SMTP id
+ z26-20020a17090674da00b0097650a4ac40mr30824496ejl.0.1688035729518; Thu, 29
+ Jun 2023 03:48:49 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20230613161034.3496047-1-michal.wilczynski@intel.com> <20230613161034.3496047-3-michal.wilczynski@intel.com>
+In-Reply-To: <20230613161034.3496047-3-michal.wilczynski@intel.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 29 Jun 2023 12:48:38 +0200
+Message-ID: <CAJZ5v0gfvkhw1+QJkvaURn609oNYc_2c=CKk+fEvfjZvu4zN=A@mail.gmail.com>
+Subject: Re: [PATCH v3 2/5] acpi: Refactor arch_acpi_set_pdc_bits()
+To:     Michal Wilczynski <michal.wilczynski@intel.com>, x86@kernel.org
+Cc:     linux-acpi@vger.kernel.org, rafael@kernel.org,
+        andriy.shevchenko@intel.com, artem.bityutskiy@linux.intel.com,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        hpa@zytor.com, lenb@kernel.org, jgross@suse.com,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It's hard to see what's included and what's not on the glance.
-Sort headers alphabetically to improve maintenance.
+On Tue, Jun 13, 2023 at 6:12 PM Michal Wilczynski
+<michal.wilczynski@intel.com> wrote:
+>
+> Capabilities buffer modified by the arch_acpi_set_pdc_bits() is not
+> _PDC specific, as it is used by _OSC method as well. Change function
+> name to better reflect it's independence from PDC. Change function
+> expected argument to pass capability buffer directly without any
+> offset, as the offset differ among _OSC and _PDC methods.
+>
+> Suggested-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> Signed-off-by: Michal Wilczynski <michal.wilczynski@intel.com>
+> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- sound/soc/codecs/rt5677.c | 18 +++++++++---------
- 1 file changed, 9 insertions(+), 9 deletions(-)
+Any objections to this from the x86 arch side?  if not, I will route
+it via ACPI along with the rest of the series.
 
-diff --git a/sound/soc/codecs/rt5677.c b/sound/soc/codecs/rt5677.c
-index 4d09eb2a0755..01595205c1d9 100644
---- a/sound/soc/codecs/rt5677.c
-+++ b/sound/soc/codecs/rt5677.c
-@@ -6,21 +6,21 @@
-  * Author: Oder Chiou <oder_chiou@realtek.com>
-  */
- 
-+#include <linux/delay.h>
-+#include <linux/firmware.h>
- #include <linux/fs.h>
-+#include <linux/i2c.h>
-+#include <linux/init.h>
-+#include <linux/interrupt.h>
-+#include <linux/irqdomain.h>
-+#include <linux/irq.h>
- #include <linux/module.h>
- #include <linux/moduleparam.h>
--#include <linux/init.h>
--#include <linux/delay.h>
-+#include <linux/platform_device.h>
- #include <linux/pm.h>
-+#include <linux/property.h>
- #include <linux/regmap.h>
--#include <linux/i2c.h>
--#include <linux/platform_device.h>
- #include <linux/spi/spi.h>
--#include <linux/firmware.h>
--#include <linux/property.h>
--#include <linux/irq.h>
--#include <linux/interrupt.h>
--#include <linux/irqdomain.h>
- #include <linux/workqueue.h>
- #include <sound/core.h>
- #include <sound/pcm.h>
--- 
-2.40.0.1.gaa8946217a0b
-
+> ---
+>  arch/ia64/include/asm/acpi.h |  4 ++--
+>  arch/x86/include/asm/acpi.h  | 10 +++++-----
+>  drivers/acpi/processor_pdc.c |  2 +-
+>  3 files changed, 8 insertions(+), 8 deletions(-)
+>
+> diff --git a/arch/ia64/include/asm/acpi.h b/arch/ia64/include/asm/acpi.h
+> index 87927eb824cc..43797cb44383 100644
+> --- a/arch/ia64/include/asm/acpi.h
+> +++ b/arch/ia64/include/asm/acpi.h
+> @@ -69,9 +69,9 @@ extern int __initdata nid_to_pxm_map[MAX_NUMNODES];
+>  #endif
+>
+>  static inline bool arch_has_acpi_pdc(void) { return true; }
+> -static inline void arch_acpi_set_pdc_bits(u32 *buf)
+> +static inline void arch_acpi_set_proc_cap_bits(u32 *cap)
+>  {
+> -       buf[2] |= ACPI_PDC_EST_CAPABILITY_SMP;
+> +       *cap |= ACPI_PDC_EST_CAPABILITY_SMP;
+>  }
+>
+>  #ifdef CONFIG_ACPI_NUMA
+> diff --git a/arch/x86/include/asm/acpi.h b/arch/x86/include/asm/acpi.h
+> index 8eb74cf386db..6a498d1781e7 100644
+> --- a/arch/x86/include/asm/acpi.h
+> +++ b/arch/x86/include/asm/acpi.h
+> @@ -100,23 +100,23 @@ static inline bool arch_has_acpi_pdc(void)
+>                 c->x86_vendor == X86_VENDOR_CENTAUR);
+>  }
+>
+> -static inline void arch_acpi_set_pdc_bits(u32 *buf)
+> +static inline void arch_acpi_set_proc_cap_bits(u32 *cap)
+>  {
+>         struct cpuinfo_x86 *c = &cpu_data(0);
+>
+> -       buf[2] |= ACPI_PDC_C_CAPABILITY_SMP;
+> +       *cap |= ACPI_PDC_C_CAPABILITY_SMP;
+>
+>         if (cpu_has(c, X86_FEATURE_EST))
+> -               buf[2] |= ACPI_PDC_EST_CAPABILITY_SWSMP;
+> +               *cap |= ACPI_PDC_EST_CAPABILITY_SWSMP;
+>
+>         if (cpu_has(c, X86_FEATURE_ACPI))
+> -               buf[2] |= ACPI_PDC_T_FFH;
+> +               *cap |= ACPI_PDC_T_FFH;
+>
+>         /*
+>          * If mwait/monitor is unsupported, C2/C3_FFH will be disabled
+>          */
+>         if (!cpu_has(c, X86_FEATURE_MWAIT))
+> -               buf[2] &= ~(ACPI_PDC_C_C2C3_FFH);
+> +               *cap &= ~(ACPI_PDC_C_C2C3_FFH);
+>  }
+>
+>  static inline bool acpi_has_cpu_in_madt(void)
+> diff --git a/drivers/acpi/processor_pdc.c b/drivers/acpi/processor_pdc.c
+> index 5596862e6fea..ce3acd86dd12 100644
+> --- a/drivers/acpi/processor_pdc.c
+> +++ b/drivers/acpi/processor_pdc.c
+> @@ -24,7 +24,7 @@ static void acpi_set_pdc_bits(u32 *buf)
+>         buf[2] = ACPI_PDC_SMP_T_SWCOORD;
+>
+>         /* Twiddle arch-specific bits needed for _PDC */
+> -       arch_acpi_set_pdc_bits(buf);
+> +       arch_acpi_set_proc_cap_bits(&buf[2]);
+>  }
+>
+>  static struct acpi_object_list *acpi_processor_alloc_pdc(void)
+> --
+> 2.41.0
+>
