@@ -2,112 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EA52742D27
+	by mail.lfdr.de (Postfix) with ESMTP id E62D2742D28
 	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 21:20:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232139AbjF2TRz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 15:17:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47150 "EHLO
+        id S230181AbjF2TSB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 15:18:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230488AbjF2TRi (ORCPT
+        with ESMTP id S231781AbjF2TRl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 15:17:38 -0400
-Received: from mail-ot1-x32e.google.com (mail-ot1-x32e.google.com [IPv6:2607:f8b0:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD27618522
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 12:09:10 -0700 (PDT)
-Received: by mail-ot1-x32e.google.com with SMTP id 46e09a7af769-6b2e1023f30so913211a34.1
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 12:09:10 -0700 (PDT)
+        Thu, 29 Jun 2023 15:17:41 -0400
+Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1429E18536;
+        Thu, 29 Jun 2023 12:09:21 -0700 (PDT)
+Received: by mail-pg1-x530.google.com with SMTP id 41be03b00d2f7-55ae2075990so626591a12.0;
+        Thu, 29 Jun 2023 12:09:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1688065750; x=1690657750;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=eCd0ZqRIeqSfHypcZSJT9sdEc2KUqKzeoFloOSN5wUU=;
-        b=gj+Rqltr8TMqzRNLZwkI0jF5Qk+z1DvnSy2HVmWU7tWGU9a1t+fqdCCSk3RrCOZ9Hn
-         2c1S9c+RCtdqm2t3HwfbGKxOuBMpyhkW5GlhacTVJP7YROT6XF8OacQZqpjUTEUzPxEy
-         ENqwStGp8tYCaLRCz28oQ/1Y8c448G3qipDKk=
+        d=gmail.com; s=20221208; t=1688065760; x=1690657760;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:sender
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=GHxUo6xmiZ7UJTmxLdtD1BHWN7DAFibiiT2PwkiPplg=;
+        b=dkblGDhOczYF7XZYo470P1DCjNQH8FV9XL0PGG+hD+i2tKz8Zu4X8SYjDgm27akZnK
+         1TemU5ktkZmvu/TQupvUMEPDb3gprAG6dLvr/+qi1G90lQWDNyNtp9ViUkDhSw1463xR
+         FSdamd+Bycidk0/lP24wJrPsyskplBkpWJYiPBm9zpG7ABlX54DO2BSXhI5MiJALKgLv
+         y77rPBVeRS2ArpE+D8WyEQgZz6hGkBsSLDkbXwKyAsrG4CuOsgwKNZ3UkHECXVH5UmTt
+         /yCRZpQIZ+DaHttFVVDv3GrzWLiB9zHQY43TCTg/I15K12z45V2K4ZH8bG0qjjpqzyfp
+         Zhxg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688065750; x=1690657750;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=eCd0ZqRIeqSfHypcZSJT9sdEc2KUqKzeoFloOSN5wUU=;
-        b=MQ6RMSfV63Pxr4NlPdhNDGRwYc7SD4+nhn8dURB5my9jRXSVRht+6oDtWTqGZ3IaCQ
-         oFCnvTP4P1FjGBxx0x4hL29MMPn1gVd1lP8SxnMNmOvt9BiwUITOtP5RgkdjRyQ9MIGX
-         uIA0ph6U3Bvg/5Ea0ZkvtaUchkZvo+2+XlZYhA/nNBIjrkS+oz5p68MHNFXfG0wXCTDz
-         Q/BwdcjJm2VtOiepuDHcGVqfDgCTicYgKxdQRgHuy8ypF2q2pp050MLp42xSS83AfyBy
-         ctnsNO4XjrWSbYicmMkOUQlq3pO/j4izeOn+DT5Q2KBdaqGVV0Hvoq9dUgoJZycjoMYG
-         4n5Q==
-X-Gm-Message-State: AC+VfDwaLD9xKV+DP88JRGmGESYeeF4I+xx7PPgHV1J484Xn2EfgGYv8
-        QWg00QMq7WBP4eA0IfWY58eYTQ==
-X-Google-Smtp-Source: ACHHUZ6CEmx7u36kLT975Pivf2ZP9DGnCLcU7MTQcaNOh5YCzeld46GR+e5ZE+788N3ZC2z3j/70cA==
-X-Received: by 2002:aca:d12:0:b0:39b:5968:deb9 with SMTP id 18-20020aca0d12000000b0039b5968deb9mr251865oin.39.1688065750145;
-        Thu, 29 Jun 2023 12:09:10 -0700 (PDT)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id f4-20020a655504000000b0055af87fbb2fsm4874588pgr.27.2023.06.29.12.09.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Jun 2023 12:09:09 -0700 (PDT)
-From:   Kees Cook <keescook@chromium.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Kees Cook <keescook@chromium.org>, Borislav Petkov <bp@alien8.de>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        =?UTF-8?q?J=C3=B3=20=C3=81gila=20Bitsch?= <jgilab@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: [PATCH] usb: ch9: Replace bmSublinkSpeedAttr 1-element array with flexible array
-Date:   Thu, 29 Jun 2023 12:09:00 -0700
-Message-Id: <20230629190900.never.787-kees@kernel.org>
-X-Mailer: git-send-email 2.34.1
+        d=1e100.net; s=20221208; t=1688065760; x=1690657760;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:sender
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=GHxUo6xmiZ7UJTmxLdtD1BHWN7DAFibiiT2PwkiPplg=;
+        b=SuIvpCsk55L7kv8sIrhRXyYiXVoNAm5Jgn5vspoJZ7pRAk8jZHI+CxvZMYRH+wp3A/
+         agQDYRnZ0z1P5Y5d6EapnYEKQPrDbkwePOQ+91MyXnKHDNU8sZYR3rkub1Qb5OAVwF+K
+         clQGn7Zf/922odb3XYrBeCxQSl2yiOq+uILAONQ7y4e3OlbzH0ScjKSNufPDn0KYj5a+
+         Hz2cpRvHzRE6TEdJZvuPLFZ/eZ4BLD3Tq6W5CrZDVdztt98WwRrmLNWqORY9RfpFUNae
+         HCHPoAGJ83uTpzU66u1BR85zgKZtIFapjb6NuKybpnV1S9Ei/ZwfsSZbs/oZYHdCkLOA
+         JSBg==
+X-Gm-Message-State: AC+VfDxNFyBNobr0t4DMQJ4LacebFZfTmEf/h24MhVfDXTchftxiPsJf
+        5qmj4nPii0wZbzva2IfrmBuDOoHHN4Q=
+X-Google-Smtp-Source: ACHHUZ5ts0HuX+l+OlWWcaPzm44ZWfCrd+jBcwultPqhcIKPqEEJMAbPF34Pn5uh3O4z1VA32Ef9Cw==
+X-Received: by 2002:a05:6a20:258b:b0:124:3ad9:7455 with SMTP id k11-20020a056a20258b00b001243ad97455mr810517pzd.2.1688065760351;
+        Thu, 29 Jun 2023 12:09:20 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id j6-20020a655586000000b0054fe7736ac1sm8157228pgs.76.2023.06.29.12.09.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 29 Jun 2023 12:09:19 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <1a27469a-4cdb-8cf0-c539-05103f2e0b8f@roeck-us.net>
+Date:   Thu, 29 Jun 2023 12:09:17 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Content-Language: en-US
+To:     Dan Carpenter <dan.carpenter@linaro.org>,
+        oe-kbuild@lists.linux.dev, Eddie James <eajames@linux.ibm.com>,
+        linux-hwmon@vger.kernel.org
+Cc:     lkp@intel.com, oe-kbuild-all@lists.linux.dev,
+        linux-kernel@vger.kernel.org, jdelvare@suse.com,
+        lakshmiy@us.ibm.com
+References: <20230627184027.16343-1-eajames@linux.ibm.com>
+ <b12935a2-a8b7-4d70-8c7d-6fd1e92037c2@kadam.mountain>
+ <45a29025-4c06-4f88-b82f-a8002c25c376@kadam.mountain>
+From:   Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH] hwmon: (pmbus/acbel-fsg032) Add firmware version debugfs
+ attribute
+In-Reply-To: <45a29025-4c06-4f88-b82f-a8002c25c376@kadam.mountain>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since commit df8fc4e934c1 ("kbuild: Enable -fstrict-flex-arrays=3"),
-UBSAN_BOUNDS no longer pretends 1-element arrays are unbounded. Walking
-bmSublinkSpeedAttr will trigger a warning, so make it a proper flexible
-array. Add a union to keep the struct size identical for userspace in
-case anything was depending on the old size.
+On 6/29/23 11:59, Dan Carpenter wrote:
+> On Thu, Jun 29, 2023 at 09:53:16AM +0300, Dan Carpenter wrote:
+>> d2c6444389b625 Eddie James 2023-06-27  22  	char out[8];
+>> d2c6444389b625 Eddie James 2023-06-27  23  	int rc;
+>> d2c6444389b625 Eddie James 2023-06-27  24  	int i;
+>> d2c6444389b625 Eddie James 2023-06-27  25
+>> d2c6444389b625 Eddie James 2023-06-27  26  	rc = pmbus_lock_interruptible(client);
+>> d2c6444389b625 Eddie James 2023-06-27  27  	if (rc)
+>> d2c6444389b625 Eddie James 2023-06-27  28  		return rc;
+>> d2c6444389b625 Eddie James 2023-06-27  29
+>> d2c6444389b625 Eddie James 2023-06-27  30  	rc = i2c_smbus_read_block_data(client, ACBEL_MFR_FW_REVISION, data);
+>> d2c6444389b625 Eddie James 2023-06-27  31  	pmbus_unlock(client);
+>> d2c6444389b625 Eddie James 2023-06-27  32  	if (rc < 0)
+>> d2c6444389b625 Eddie James 2023-06-27  33  		return rc;
+>> d2c6444389b625 Eddie James 2023-06-27  34
+>> d2c6444389b625 Eddie James 2023-06-27  35  	for (i = 0; i < rc && i < 3; ++i)
+>> d2c6444389b625 Eddie James 2023-06-27 @36  		snprintf(&out[i * 2], 3, "%02X", data[i]);
+>>
+>> If data[i] is negative this will print FFFFFFF1 etc.  (This is an x86
+>> config...  Did we ever merge that patch to make char signed by default?)
+> 
+> I meant unsigned not signed.  But actually we debated both ways...
+> Signed by default would annoy PowerPC devs since they try to really
+> lean into the fact that char is unsigned on that arch.  :P
+> 
+> https://lwn.net/Articles/911914/
+> 
 
-False positive warning was:
+As if anything would be easy nowadays ;-). Anyway, in this case, the array
+should be explicitly unsigned, so changing the type to u8 was the right
+thing to do. Also, the driver should be usable on non-Intel systems,
+which is another reason to make the type sign-specific (even more so in
+the context of the above discussion).
 
-UBSAN: array-index-out-of-bounds in drivers/usb/host/xhci-hub.c:231:31 index 1 is out of range for type '__le32 [1]'
-
-for this line of code:
-
-	ssp_cap->bmSublinkSpeedAttr[offset++] = cpu_to_le32(attr);
-
-Reported-by: Borislav Petkov <bp@alien8.de>
-Closes: https://lore.kernel.org/lkml/2023062945-fencing-pebble-0411@gregkh/
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>
-Signed-off-by: Kees Cook <keescook@chromium.org>
----
- include/uapi/linux/usb/ch9.h | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
-
-diff --git a/include/uapi/linux/usb/ch9.h b/include/uapi/linux/usb/ch9.h
-index b17e3a21b15f..3ff98c7ba7e3 100644
---- a/include/uapi/linux/usb/ch9.h
-+++ b/include/uapi/linux/usb/ch9.h
-@@ -981,7 +981,11 @@ struct usb_ssp_cap_descriptor {
- #define USB_SSP_MIN_RX_LANE_COUNT		(0xf << 8)
- #define USB_SSP_MIN_TX_LANE_COUNT		(0xf << 12)
- 	__le16 wReserved;
--	__le32 bmSublinkSpeedAttr[1]; /* list of sublink speed attrib entries */
-+	union {
-+		__le32 legacy_padding;
-+		/* list of sublink speed attrib entries */
-+		__DECLARE_FLEX_ARRAY(__le32, bmSublinkSpeedAttr);
-+	};
- #define USB_SSP_SUBLINK_SPEED_SSID	(0xf)		/* sublink speed ID */
- #define USB_SSP_SUBLINK_SPEED_LSE	(0x3 << 4)	/* Lanespeed exponent */
- #define USB_SSP_SUBLINK_SPEED_LSE_BPS		0
--- 
-2.34.1
+Thanks,
+Guenter
 
