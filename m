@@ -2,62 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33ED97422A3
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 10:51:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C65B7422A4
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 10:51:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232708AbjF2Ivc convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 29 Jun 2023 04:51:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56528 "EHLO
+        id S231273AbjF2Ivj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 04:51:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233165AbjF2Iu7 (ORCPT
+        with ESMTP id S229632AbjF2IvH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 04:50:59 -0400
-Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 830E93A91;
-        Thu, 29 Jun 2023 01:49:30 -0700 (PDT)
-Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-991f9148334so12725166b.1;
-        Thu, 29 Jun 2023 01:49:30 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688028569; x=1690620569;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=zXyMfRHiL1jzRvsSV8HdmQH0P5MA6wvw18jFEiSEx6Y=;
-        b=ZMHyk4N+jab0F8DnrXu3pgj82jEDe6lHgDloF/AQQPbiCN6gZVMv868KyI+eg9Isc3
-         HME9Das80gAZ6JHShlfu0SqVqoNNYxZIfxpI9qO80HTjQ8RwyYkRpLo8ggHcnGRnHHZ5
-         fkPRhVOMltYH272tHXg/tabOvMaO9+b3ffpLT610XlRkFo+oGa8fRrbABCjdqaGTaGAG
-         GnzVNQ1h8MTMwLmiurxiqxUI8Z+j5M9lyaqINYIVMvsWPqhbsO5H9594oIQm/CFKWhSg
-         rwVJnmwRe+z72CzvkdZElSmcT69Ujdur0XJK2/j+n4TIEC4VM4U2QqaUPx8KLv2P8QCs
-         D7kA==
-X-Gm-Message-State: AC+VfDxqSa1z/76y1q4EQeanc/UEBg7SvCsPoiNrdvQ4VSf3JAIe7HSY
-        YYm+FxchPYtL6mAsjPJxog9ILXi2G8r0VnwndzA=
-X-Google-Smtp-Source: ACHHUZ7CxUdboIQICDiuTuZoiV5gIetxxMRGMMtz7BmRzvh0vX+WEHnwK6TRiLwZKuVWrZY3jiClssh6AfH5UMEg1jY=
-X-Received: by 2002:a17:906:73dd:b0:989:1ed3:d00b with SMTP id
- n29-20020a17090673dd00b009891ed3d00bmr20540813ejl.4.1688028568798; Thu, 29
- Jun 2023 01:49:28 -0700 (PDT)
+        Thu, 29 Jun 2023 04:51:07 -0400
+Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86DF03A99;
+        Thu, 29 Jun 2023 01:49:51 -0700 (PDT)
+Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35T8dVjv030703;
+        Thu, 29 Jun 2023 10:49:34 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=l8RvMrlTLa90NRnYyns4B2PhCeunLSOJB7Ln5p2pTI8=;
+ b=31NmLm5g1wkLE5clZjqZPBAXuPOu6PbXd3/Kn1OmJWvox2Jru9EGgbnidlqVFv0ZzR4u
+ 2uGQwbSDPdHUuNhZ2JFQ003kNncyCpCpZSjUauJ2TNzzaKGFNNixlZqE+JdDeMpvY+zb
+ ZAJmxWFIC7fssS7ReQB93v12tSvWNWzPj+AQe0ShEFQ7F7hmmze/Y4i+eXormYMNDb/V
+ 0HlMLZDYd982HAcakcCleNM6AFqHM0C0c4XL+ElwRS5eTIakwQE9hmHF50VlpwnplfKS
+ 1F7W5I0+C9wovxCDMPh/Yq8mjxkJyCvytWWucsmzKAMGckd7jeu3NcrsEpArFUIJ0h4q mg== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3rh6mxr23y-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 29 Jun 2023 10:49:34 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 308F910005F;
+        Thu, 29 Jun 2023 10:49:33 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node2.st.com [10.75.129.70])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 2525821863D;
+        Thu, 29 Jun 2023 10:49:33 +0200 (CEST)
+Received: from [10.129.178.187] (10.129.178.187) by SHFDAG1NODE2.st.com
+ (10.75.129.70) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Thu, 29 Jun
+ 2023 10:49:32 +0200
+Message-ID: <25fd302e-4478-c7ba-f361-5ce05bb9e106@foss.st.com>
+Date:   Thu, 29 Jun 2023 10:49:32 +0200
 MIME-Version: 1.0
-References: <20230626110026.65825-1-andriy.shevchenko@linux.intel.com> <20230626110026.65825-2-andriy.shevchenko@linux.intel.com>
-In-Reply-To: <20230626110026.65825-2-andriy.shevchenko@linux.intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 29 Jun 2023 10:49:17 +0200
-Message-ID: <CAJZ5v0jqP0N3=TB3w+HMwGMzctpRCjKa3a5iHKePP113T3CK-g@mail.gmail.com>
-Subject: Re: [PATCH v3 1/4] ACPI: bus: Constify acpi_companion_match()
- returned value
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-i2c@vger.kernel.org, acpica-devel@lists.linuxfoundation.org,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Andi Shyti <andi.shyti@kernel.org>,
-        Robert Moore <robert.moore@intel.com>,
-        Michael Walle <michael@walle.cc>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v5 1/3] ARM: dts: stm32: add ltdc support on stm32f746 MCU
+To:     Dario Binacchi <dario.binacchi@amarulasolutions.com>,
+        <linux-kernel@vger.kernel.org>
+CC:     <michael@amarulasolutions.com>,
+        Amarula patchwork <linux-amarula@amarulasolutions.com>,
+        Philippe Cornu <philippe.cornu@foss.st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>
+References: <20230629083726.84910-1-dario.binacchi@amarulasolutions.com>
+ <20230629083726.84910-2-dario.binacchi@amarulasolutions.com>
+Content-Language: en-US
+From:   Raphael Gallais-Pou <raphael.gallais-pou@foss.st.com>
+In-Reply-To: <20230629083726.84910-2-dario.binacchi@amarulasolutions.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.129.178.187]
+X-ClientProxiedBy: SHFCAS1NODE1.st.com (10.75.129.72) To SHFDAG1NODE2.st.com
+ (10.75.129.70)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-06-29_01,2023-06-27_01,2023-05-22_02
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,81 +82,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 26, 2023 at 1:00 PM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
->
-> acpi_companion_match() doesn't alter the contents of the passed
-> parameter, so we don't expect that returned value can be altered
-> either. So constify it.
->
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Hi,
 
-This makes sense even without the rest of the series, so I can queue
-it up right away if you want me to do that.
 
+On 6/29/23 10:37, Dario Binacchi wrote:
+> Add LTDC (Lcd-tft Display Controller) support.
+>
+> Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 > ---
->  drivers/acpi/bus.c          | 6 +++---
->  drivers/acpi/device_sysfs.c | 2 +-
->  drivers/acpi/internal.h     | 2 +-
->  3 files changed, 5 insertions(+), 5 deletions(-)
 >
-> diff --git a/drivers/acpi/bus.c b/drivers/acpi/bus.c
-> index e3e0bd0c5a50..20cdfb37da79 100644
-> --- a/drivers/acpi/bus.c
-> +++ b/drivers/acpi/bus.c
-> @@ -682,7 +682,7 @@ bool acpi_device_is_first_physical_node(struct acpi_device *adev,
->   * resources available from it but they will be matched normally using functions
->   * provided by their bus types (and analogously for their modalias).
->   */
-> -struct acpi_device *acpi_companion_match(const struct device *dev)
-> +const struct acpi_device *acpi_companion_match(const struct device *dev)
->  {
->         struct acpi_device *adev;
+> (no changes since v1)
 >
-> @@ -706,7 +706,7 @@ struct acpi_device *acpi_companion_match(const struct device *dev)
->   * identifiers and a _DSD object with the "compatible" property, use that
->   * property to match against the given list of identifiers.
->   */
-> -static bool acpi_of_match_device(struct acpi_device *adev,
-> +static bool acpi_of_match_device(const struct acpi_device *adev,
->                                  const struct of_device_id *of_match_table,
->                                  const struct of_device_id **of_id)
->  {
-> @@ -808,7 +808,7 @@ static bool __acpi_match_device_cls(const struct acpi_device_id *id,
->         return true;
->  }
->
-> -static bool __acpi_match_device(struct acpi_device *device,
-> +static bool __acpi_match_device(const struct acpi_device *device,
->                                 const struct acpi_device_id *acpi_ids,
->                                 const struct of_device_id *of_ids,
->                                 const struct acpi_device_id **acpi_id,
-> diff --git a/drivers/acpi/device_sysfs.c b/drivers/acpi/device_sysfs.c
-> index 0fbfbaa8d8e3..b9bbf0746199 100644
-> --- a/drivers/acpi/device_sysfs.c
-> +++ b/drivers/acpi/device_sysfs.c
-> @@ -283,7 +283,7 @@ int acpi_device_uevent_modalias(const struct device *dev, struct kobj_uevent_env
->  }
->  EXPORT_SYMBOL_GPL(acpi_device_uevent_modalias);
->
-> -static int __acpi_device_modalias(struct acpi_device *adev, char *buf, int size)
-> +static int __acpi_device_modalias(const struct acpi_device *adev, char *buf, int size)
->  {
->         int len, count;
->
-> diff --git a/drivers/acpi/internal.h b/drivers/acpi/internal.h
-> index 50dcb35c9965..f4148dc50b9c 100644
-> --- a/drivers/acpi/internal.h
-> +++ b/drivers/acpi/internal.h
-> @@ -121,7 +121,7 @@ int acpi_bus_register_early_device(int type);
->  /* --------------------------------------------------------------------------
->                       Device Matching and Notification
->     -------------------------------------------------------------------------- */
-> -struct acpi_device *acpi_companion_match(const struct device *dev);
-> +const struct acpi_device *acpi_companion_match(const struct device *dev);
->  int __acpi_device_uevent_modalias(const struct acpi_device *adev,
->                                   struct kobj_uevent_env *env);
->
-> --
-> 2.40.0.1.gaa8946217a0b
->
+>  arch/arm/boot/dts/stm32f746.dtsi | 10 ++++++++++
+>  1 file changed, 10 insertions(+)
+
+Reviewed-by: Raphaël Gallais-Pou <raphael.gallais-pou@foss.st.com>
+
