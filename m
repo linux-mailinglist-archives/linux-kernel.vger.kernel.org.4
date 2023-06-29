@@ -2,188 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AAA3E742D1D
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 21:20:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EA52742D27
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 21:20:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232607AbjF2TOo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 15:14:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46264 "EHLO
+        id S232139AbjF2TRz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 15:17:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232152AbjF2TOS (ORCPT
+        with ESMTP id S230488AbjF2TRi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 15:14:18 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 252706A72
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 12:06:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1688065573;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=AE2aKMiCkJOvSYaZpXVlA+7JrvIiezkhsVG3+JX0vy4=;
-        b=XeA3G0wAfGIP6nWwh1K5r3TOTz0MzlgSPnculOLquUyd2rPrxVQXOcyP1gJRMOdafns4/G
-        Llsi7Lmvz0GB25yAYf+IaSdLdTb84+xcTNAyKrR9AaSegn/XgqxYt6Mr0OjeIriObMulEx
-        9QRwOko4qc1/R8XBUVH8PV/HGSPSRT8=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-599-Gzh_LvMEMlu75v3Z6dTIGA-1; Thu, 29 Jun 2023 15:06:10 -0400
-X-MC-Unique: Gzh_LvMEMlu75v3Z6dTIGA-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 85FAF800159;
-        Thu, 29 Jun 2023 19:06:09 +0000 (UTC)
-Received: from lorien.usersys.redhat.com (unknown [10.22.32.141])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 21E5546EE28;
-        Thu, 29 Jun 2023 19:06:08 +0000 (UTC)
-Date:   Thu, 29 Jun 2023 15:06:04 -0400
-From:   Phil Auld <pauld@redhat.com>
-To:     Benjamin Segall <bsegall@google.com>
-Cc:     linux-kernel@vger.kernel.org, Juri Lelli <juri.lelli@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Mel Gorman <mgorman@suse.de>
-Subject: Re: [PATCH v2] Sched/fair: Block nohz tick_stop when cfs bandwidth
- in use
-Message-ID: <20230629190604.GA26677@lorien.usersys.redhat.com>
-References: <20230627191201.344110-1-pauld@redhat.com>
- <xm26jzvn8ds7.fsf@google.com>
- <20230629005342.GB8069@lorien.usersys.redhat.com>
- <xm26fs6a8867.fsf@google.com>
+        Thu, 29 Jun 2023 15:17:38 -0400
+Received: from mail-ot1-x32e.google.com (mail-ot1-x32e.google.com [IPv6:2607:f8b0:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD27618522
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 12:09:10 -0700 (PDT)
+Received: by mail-ot1-x32e.google.com with SMTP id 46e09a7af769-6b2e1023f30so913211a34.1
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 12:09:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1688065750; x=1690657750;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=eCd0ZqRIeqSfHypcZSJT9sdEc2KUqKzeoFloOSN5wUU=;
+        b=gj+Rqltr8TMqzRNLZwkI0jF5Qk+z1DvnSy2HVmWU7tWGU9a1t+fqdCCSk3RrCOZ9Hn
+         2c1S9c+RCtdqm2t3HwfbGKxOuBMpyhkW5GlhacTVJP7YROT6XF8OacQZqpjUTEUzPxEy
+         ENqwStGp8tYCaLRCz28oQ/1Y8c448G3qipDKk=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688065750; x=1690657750;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=eCd0ZqRIeqSfHypcZSJT9sdEc2KUqKzeoFloOSN5wUU=;
+        b=MQ6RMSfV63Pxr4NlPdhNDGRwYc7SD4+nhn8dURB5my9jRXSVRht+6oDtWTqGZ3IaCQ
+         oFCnvTP4P1FjGBxx0x4hL29MMPn1gVd1lP8SxnMNmOvt9BiwUITOtP5RgkdjRyQ9MIGX
+         uIA0ph6U3Bvg/5Ea0ZkvtaUchkZvo+2+XlZYhA/nNBIjrkS+oz5p68MHNFXfG0wXCTDz
+         Q/BwdcjJm2VtOiepuDHcGVqfDgCTicYgKxdQRgHuy8ypF2q2pp050MLp42xSS83AfyBy
+         ctnsNO4XjrWSbYicmMkOUQlq3pO/j4izeOn+DT5Q2KBdaqGVV0Hvoq9dUgoJZycjoMYG
+         4n5Q==
+X-Gm-Message-State: AC+VfDwaLD9xKV+DP88JRGmGESYeeF4I+xx7PPgHV1J484Xn2EfgGYv8
+        QWg00QMq7WBP4eA0IfWY58eYTQ==
+X-Google-Smtp-Source: ACHHUZ6CEmx7u36kLT975Pivf2ZP9DGnCLcU7MTQcaNOh5YCzeld46GR+e5ZE+788N3ZC2z3j/70cA==
+X-Received: by 2002:aca:d12:0:b0:39b:5968:deb9 with SMTP id 18-20020aca0d12000000b0039b5968deb9mr251865oin.39.1688065750145;
+        Thu, 29 Jun 2023 12:09:10 -0700 (PDT)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id f4-20020a655504000000b0055af87fbb2fsm4874588pgr.27.2023.06.29.12.09.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 29 Jun 2023 12:09:09 -0700 (PDT)
+From:   Kees Cook <keescook@chromium.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Kees Cook <keescook@chromium.org>, Borislav Petkov <bp@alien8.de>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        =?UTF-8?q?J=C3=B3=20=C3=81gila=20Bitsch?= <jgilab@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: [PATCH] usb: ch9: Replace bmSublinkSpeedAttr 1-element array with flexible array
+Date:   Thu, 29 Jun 2023 12:09:00 -0700
+Message-Id: <20230629190900.never.787-kees@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <xm26fs6a8867.fsf@google.com>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 29, 2023 at 10:55:44AM -0700 Benjamin Segall wrote:
-> Phil Auld <pauld@redhat.com> writes:
-> 
-> > On Wed, Jun 28, 2023 at 02:42:16PM -0700 Benjamin Segall wrote:
-> >> Phil Auld <pauld@redhat.com> writes:
-> >> 
-> >> > CFS bandwidth limits and NOHZ full don't play well together.  Tasks
-> >> > can easily run well past their quotas before a remote tick does
-> >> > accounting.  This leads to long, multi-period stalls before such
-> >> > tasks can run again. Currentlyi, when presented with these conflicting
-> >> > requirements the scheduler is favoring nohz_full and letting the tick
-> >> > be stopped. However, nohz tick stopping is already best-effort, there
-> >> > are a number of conditions that can prevent it, whereas cfs runtime
-> >> > bandwidth is expected to be enforced.
-> >> >
-> >> > Make the scheduler favor bandwidth over stopping the tick by setting
-> >> > TICK_DEP_BIT_SCHED when the only running task is a cfs task with
-> >> > runtime limit enabled.
-> >> >
-> >> > Add sched_feat HZ_BW (off by default) to control this behavior.
-> >> >
-> >> > Signed-off-by: Phil Auld <pauld@redhat.com>
-> >> > Cc: Ingo Molnar <mingo@redhat.com>
-> >> > Cc: Peter Zijlstra <peterz@infradead.org>
-> >> > Cc: Vincent Guittot <vincent.guittot@linaro.org>
-> >> > Cc: Juri Lelli <juri.lelli@redhat.com>
-> >> > Cc: Dietmar Eggemann <dietmar.eggemann@arm.com>
-> >> > Cc: Valentin Schneider <vschneid@redhat.com>
-> >> > Cc: Ben Segall <bsegall@google.com>
-> >> > ---
-> >> >
-> >> > v2:  Ben pointed out that the bit could get cleared in the dequeue path
-> >> > if we migrate a newly enqueued task without preempting curr. Added a 
-> >> > check for that edge case to sched_can_stop_tick. Removed the call to 
-> >> > sched_can_stop_tick from sched_fair_update_stop_tick since it was 
-> >> > redundant.
-> >> >
-> >> >  kernel/sched/core.c     | 12 +++++++++++
-> >> >  kernel/sched/fair.c     | 45 +++++++++++++++++++++++++++++++++++++++++
-> >> >  kernel/sched/features.h |  2 ++
-> >> >  3 files changed, 59 insertions(+)
-> >> >
-> >> > diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-> >> > index a68d1276bab0..646f60bfc7e7 100644
-> >> > --- a/kernel/sched/core.c
-> >> > +++ b/kernel/sched/core.c
-> >> > @@ -1194,6 +1194,8 @@ static void nohz_csd_func(void *info)
-> >> >  #endif /* CONFIG_NO_HZ_COMMON */
-> >> >  
-> >> >  #ifdef CONFIG_NO_HZ_FULL
-> >> > +extern bool sched_cfs_bandwidth_active(struct cfs_rq *cfs_rq);
-> >> > +
-> >> >  bool sched_can_stop_tick(struct rq *rq)
-> >> >  {
-> >> >  	int fifo_nr_running;
-> >> > @@ -1229,6 +1231,16 @@ bool sched_can_stop_tick(struct rq *rq)
-> >> >  	if (rq->nr_running > 1)
-> >> >  		return false;
-> >> >  
-> >> > +	/*
-> >> > +	 * If there is one task and it has CFS runtime bandwidth constraints
-> >> > +	 * and it's on the cpu now we don't want to stop the tick.
-> >> > +	 */
-> >> > +	if (sched_feat(HZ_BW) && rq->nr_running == 1 && rq->curr
-> >> > +	    && rq->curr->sched_class == &fair_sched_class && task_on_rq_queued(rq->curr)) {
-> >> > +		if (sched_cfs_bandwidth_active(task_cfs_rq(rq->curr)))
-> >> 
-> >> Actually, something I should have noticed earlier is that this should
-> >> probably be hierarchical, right? You need to check every ancestor
-> >> cfs_rq, not just the immediate parent. And at that point it probably
-> >> makes sense to have sched_cfs_bandwidth_active take a task_struct.
-> >> 
-> >
-> > Are you saying a child cfs_rq with a parent that has runtime_enabled could
-> > itself not have runtime_enabled?   I may be missing something but I don't
-> > see how that works.
-> 
-> Correct.
->
+Since commit df8fc4e934c1 ("kbuild: Enable -fstrict-flex-arrays=3"),
+UBSAN_BOUNDS no longer pretends 1-element arrays are unbounded. Walking
+bmSublinkSpeedAttr will trigger a warning, so make it a proper flexible
+array. Add a union to keep the struct size identical for userspace in
+case anything was depending on the old size.
 
-Go figure. I'd have thought that was inherited downwards.
+False positive warning was:
 
-> >
-> > account_cfs_rq_runtime() for example just looks at the immediate cfs_rq of
-> > curr and bails if it does not have runtime_enabled. How could that task get
-> > throttled if it exceeds some parent's limit?
-> 
-> account_cfs_rq_runtime() is called (primarily) from update_curr(), which
-> is called by enqueue_entity/dequeue_entity/entity_tick/etc, which are
-> called at each level of the hierarchy.
->
+UBSAN: array-index-out-of-bounds in drivers/usb/host/xhci-hub.c:231:31 index 1 is out of range for type '__le32 [1]'
 
-Yeah, I'm seeing that now, thanks!  
+for this line of code:
 
+	ssp_cap->bmSublinkSpeedAttr[offset++] = cpu_to_le32(attr);
 
-> The worse cache behavior of doing a separate walk in sched_can_stop_tick
-> aka add/sub_nr_running could I guess be avoided by having some
-> runtime_enabled flag on the task struct or rq that is up to date for
-> rq->curr only. That would only be a little annoying to keep accurate,
-> and there's the dual arguments of "task_struct/rq is already too
-> cluttered"/"well they're already so cluttered a little more won't hurt".
-> 
+Reported-by: Borislav Petkov <bp@alien8.de>
+Closes: https://lore.kernel.org/lkml/2023062945-fencing-pebble-0411@gregkh/
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>
+Signed-off-by: Kees Cook <keescook@chromium.org>
+---
+ include/uapi/linux/usb/ch9.h | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-I think since this is under a scheduler feat atm it will be okay to
-just do the loops in line and not add the machinery to track it. That's
-what it does every tick etc anyway.  I'll try that and see what it looks
-like. I guess it needs this in the check from PNT as well...
-
-
-Cheers,
-Phil
-
-
-
+diff --git a/include/uapi/linux/usb/ch9.h b/include/uapi/linux/usb/ch9.h
+index b17e3a21b15f..3ff98c7ba7e3 100644
+--- a/include/uapi/linux/usb/ch9.h
++++ b/include/uapi/linux/usb/ch9.h
+@@ -981,7 +981,11 @@ struct usb_ssp_cap_descriptor {
+ #define USB_SSP_MIN_RX_LANE_COUNT		(0xf << 8)
+ #define USB_SSP_MIN_TX_LANE_COUNT		(0xf << 12)
+ 	__le16 wReserved;
+-	__le32 bmSublinkSpeedAttr[1]; /* list of sublink speed attrib entries */
++	union {
++		__le32 legacy_padding;
++		/* list of sublink speed attrib entries */
++		__DECLARE_FLEX_ARRAY(__le32, bmSublinkSpeedAttr);
++	};
+ #define USB_SSP_SUBLINK_SPEED_SSID	(0xf)		/* sublink speed ID */
+ #define USB_SSP_SUBLINK_SPEED_LSE	(0x3 << 4)	/* Lanespeed exponent */
+ #define USB_SSP_SUBLINK_SPEED_LSE_BPS		0
 -- 
+2.34.1
 
