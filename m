@@ -2,155 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C653742F76
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 23:24:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA54A742F79
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 23:25:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231974AbjF2VYD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 17:24:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54516 "EHLO
+        id S231522AbjF2VYs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 17:24:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231499AbjF2VXv (ORCPT
+        with ESMTP id S232011AbjF2VYN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 17:23:51 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.65.254])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C0762D5B;
-        Thu, 29 Jun 2023 14:23:48 -0700 (PDT)
-X-QQ-mid: bizesmtp69t1688073816t6rn2wxp
-Received: from linux-lab-host.localdomain ( [119.123.131.49])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Fri, 30 Jun 2023 05:23:35 +0800 (CST)
-X-QQ-SSF: 01200000000000D0W000000A0000000
-X-QQ-FEAT: 3d/k9/GSbqqdYOgmaIVI6oSQFPKWPhUina+MSZdvM1lVs8hdfFSn2l+S1MGhM
-        AhRd8U/uFb0bUA1K72HFAsqeTjFP/MqKvv92L7Yw8O9S/3fq82lIouT2iFpUGGpwIH7y7US
-        o8usMbkY78sf/DpIG+AvXE3wQa7hg+5RpEZuCD7D9+J3RNJgOkUkkWNx9OdgPZpztFyI7AY
-        WgRQxxrpfNjSK1LxrBfbtvSPyhYsjfQTt1Qnzwi/Kc0HHGnd8bOSR2tPFhVrCQyp00Oz2O0
-        xBKBcjay+osjSR4cHiyEZnnmhMoGt4yBwP5b7tONfXobnZmaT/D3r6NsOimhY22dyVi0zcr
-        ZaHDl27emXN6W2UTDY=
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 17768331475880898827
-From:   Zhangjin Wu <falcon@tinylab.org>
-To:     thomas@t-8ch.de
-Cc:     arnd@arndb.de, falcon@tinylab.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, w@1wt.eu
-Subject: Re: [PATCH v1 05/17] selftests/nolibc: stat_timestamps: remove procfs dependency
-Date:   Fri, 30 Jun 2023 05:23:35 +0800
-Message-Id: <20230629212335.115754-1-falcon@tinylab.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <df1f8ba1-3040-465c-804e-495f046dba7a@t-8ch.de>
-References: <df1f8ba1-3040-465c-804e-495f046dba7a@t-8ch.de>
+        Thu, 29 Jun 2023 17:24:13 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 768733A91;
+        Thu, 29 Jun 2023 14:24:00 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9ABE36164F;
+        Thu, 29 Jun 2023 21:23:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 765C2C433C0;
+        Thu, 29 Jun 2023 21:23:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688073839;
+        bh=zOehGqKX+VYh9hnjIWi/Nq52SHkJn4rPs67np4lrfEg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ZELw7XXzZnOk5RfhnLMGd5rmjCOLIlzu82UcPR/O+XEQBVHkbxAqGBQJKtlEbYzmV
+         dmij9daTBQNjt+161eT2qunRcdDXVP+CuJlH1S2FE6O+dsdmNzxSbUxshFfpHtra9L
+         Uz1crmAGMycMHj1gqCk2qS26QlHAOVgPeJOeIRMl8r9AfVoufbauR99Ng9vQoZqubs
+         J+N5xh/KctU0tCATZdxr1yS0ZnF4YVGJs14LdTYGIpF1j7lIfR71gmeDUmsyj5EapA
+         i1bW3rNQ57Fbfd+YsaVio0WBv/NVIrR81oTOpHZJAqb8wmM6jDv0/r90JFcpGk8EtO
+         yPBmw2T2n9baw==
+Date:   Thu, 29 Jun 2023 22:23:53 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Greg KH <greg@kroah.com>
+Cc:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        johan+linaro@kernel.org, perex@perex.cz, tiwai@suse.com,
+        lgirdwood@gmail.com, ckeepax@opensource.cirrus.com,
+        kuninori.morimoto.gx@renesas.com, linux-kernel@vger.kernel.org,
+        pierre-louis.bossart@linux.intel.com, alsa-devel@alsa-project.org,
+        Stable@vger.kernel.org
+Subject: Re: [PATCH] ASoC: qdsp6: q6apm: use dai link pcm id as pcm device
+ number
+Message-ID: <00ac35ee-b507-43ee-b596-801b76972946@sirena.org.uk>
+References: <20230628092404.13927-1-srinivas.kandagatla@linaro.org>
+ <c22fcc94-aa41-4ffd-bfe8-f0b9f15a76c0@sirena.org.uk>
+ <2023062940-snore-brick-419b@gregkh>
+ <9699a960-74b0-4064-b264-6cde06cd16fc@sirena.org.uk>
+ <2023062958-thumping-ambulance-7a2f@gregkh>
+ <1c1dd19e-cbc4-41fe-9e97-a07cfebdaa4b@sirena.org.uk>
+ <2023062905-tiring-bauble-84ef@gregkh>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrgz:qybglogicsvrgz5a-1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="lwINwq5DE62imWCd"
+Content-Disposition: inline
+In-Reply-To: <2023062905-tiring-bauble-84ef@gregkh>
+X-Cookie: Surprise due today.  Also the rent.
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> Hi Zhangjin,
-> 
-> On 2023-06-28 21:59:22+0800, Zhangjin Wu wrote:
-> > I'm preparing a revision for this series, in the past days, when I was
-> > working on testing our new 'minimal' kernel config support for all of
-> > the architectures, the time cost (and wait) is really appreciable and the
-> > repeated develop and test is really a big pain, I can also image when you
-> > was working on stack-protector and Willy was working on lots of old
-> > features ;-)
-> 
-> To be honest I almost never built a kernel.
-> Most of the time I tested my stuff with qemu-user.
-> This made the dev-cycle really fast, especially with a binfmt setup that
-> launches foreign binaries automatically with qemu-user.
->
 
-Yeah, qemu-user-static + binfmt_misc work perfectly, but my host kernel
-is not that new, so, I'm still a little worried about that there may be
-some hidden issues.
+--lwINwq5DE62imWCd
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-> > As you explained before, I knew the idea of using '/proc/self' here is
-> > important to not using a fixed-time file, besides our proposed method (make
-> > sure it at least not fail, just skip for !procfs):
-> > 
-> >     - CASE_TEST(stat_timestamps);   EXPECT_SYSZR(1, test_stat_timestamps()); break;
-> >     + CASE_TEST(stat_timestamps);   EXPECT_SYSZR(proc, test_stat_timestamps()); break;
-> > 
-> > To further avoid skip it for !procfs (I don't mean relaly disable it for the
-> > default tinyconfig support, which need more discuss, at least provide the
-> > possibility to pass without procfs), do you like this change? it doesn't depend
-> > on 'proc' now.
-> > 
-> >     -	if (stat("/proc/self/", &st))
-> >     +	if (stat("/proc/self/", &st) && stat("/init", &st) && stat("/", &st))
-> > 
-> > The "/init" is compiled for 'run' target every time, so, the time stamp should
-> > be dynamic enough, for libc-test, the /proc/self should be always there (if
-> > still not enough, we can reuse the init file list here), the "/" here is only
-> > for the worst-case scene ;-)
-> 
-> Both aproaches seem fine. Just skipping on !proc seems good enough.
->
+On Thu, Jun 29, 2023 at 08:48:42PM +0200, Greg KH wrote:
+> On Thu, Jun 29, 2023 at 06:38:38PM +0100, Mark Brown wrote:
 
-To get less skips, let's use the second method, just updated my local
-patches ;-)
+> > As discussed before your tolerance for risk in stable is *far* higher
+> > than mine, if there's any value in doing this at all it's probably
+> > within what would get taken but that doesn't mean that it's something
+> > that it's sensible to highlight as an important fix like tagging for
+> > stable does.  It's extremely unclear that it fits the severity criteria
+> > that are supposed to be being applied to stable, though obviously the
+> > documentation doesn't fit the actual practice these days.
 
-> As for enabling proc in the test configs I just tested a plain
-> tinyconfig vs one with CONFIG_PROC_FS enabled:
-> 
-> tinyconfig:                  375.06user 53.21system 2:05.80elapsed
-> tinyconfig + CONFIG_PROC_FS: 397.77user 56.84system 2:09.24elapsed
-> 
-> The overhead seems acceptable.
->
+> It's not a matter of "tolerance for risk", it's a "if this change is
+> good enough for future releases, why isn't it good enough for older
+> releases as well?"
 
-Yeah, only one option is ok, but "multiple options x multiple
-architectures x multiple repeated runs", that is 'huge' ;-)
+> As you know, we don't break user interfaces, so either this is a break
+> or it isn't, stable trees have nothing to do with it as a normal user
+> would "hit" this when updating to run Linus's tree, just as easily as
+> they would "hit" it updating their stable kernel version.
 
-> 
-> Note as for disabling memfd:
-> 
-> It seems currently MEMFD_CREATE is hardwired to only be enabled when
-> either TMPFS or HUGETLBFS is enabled.
-> 
-> But the memfd code and syscalls seem to work perfectly fine with those
-> options disabled. I'll send a patch to fix up the Kconfigs to enable
-> that usecase.
+You know as well as I do that we have a bunch of interfaces where things
+end up getting dynamically numbered as they appear, and provided to
+userspace together with identifying information that allows userspace to
+figure out what's what in a stable fashion even though the numbers might
+change.  Like I said earlier in the thread this is one of them, better
+hardware support also has some risk of disturbing things (and some of
+the numbering is going to be hotplug dependent, though this patch isn't
+likely to run into that particular bit of things).
 
-Good catch!
+ABI stability is a continuum, from for example things relying on race
+conditions or other timing things that were lucky they ever worked to
+changes in interfaces that break clear and documented guarantees.
+Reliance on stability is similar, and how much of an issue it is when
+something does change and someone notices is going to vary depending on
+what changed and why.  While the risk here seems low if the reasoning is
+just to make things neater then it's even harder to justify for a stable
+kernel than it is for mainline.
 
-but for the vfprintf test cases, It is able to open a file from tmpfs
-directly. If no tmpfs, use the default ramfs (initramfs uses) instead,
-this will also avoid the new flags trying (to silence the warning).
+Note also that the patch is still under discussion for mainline...
 
-     static int expect_vfprintf(int llen, size_t c, const char *expected, const char *fmt, ...)
-     {
-    +       static const char *tmpfile = "/tmp/nolibc-vfprintf";
-    +       struct stat stat_buf;
-            int ret, fd, w, r;
-            char buf[100];
-            FILE *memfile;
-            va_list args;
+--lwINwq5DE62imWCd
+Content-Type: application/pgp-signature; name="signature.asc"
 
-    -       fd = memfd_create("vfprintf", 0);
-    +       if (stat("/tmp/.", &stat_buf)) {
-    +               pad_spc(llen, 64, "[SKIPPED]\n");
-    +               return 0;
-    +       }
-    +
-    +       fd = open(tmpfile, O_CREAT | O_TRUNC | O_RDWR, 0755);
-    ...
-    +       unlink(tmpfile);
-    ...
+-----BEGIN PGP SIGNATURE-----
 
-tmpfs is mounted (in another patch) like procfs in prepare() for pid==1.
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmSd9mgACgkQJNaLcl1U
+h9AXXwf9EFiOfs5GMkyWdupiHCqH36l3Y4SpOl/P9yNdpyTD2WLSl6757Is4Qp40
+fj/P/IN4C+yrSVsiAzviATS3iuHY1iwGc7ScLAyCiPezQjut/W8Wrrqm/bKBUVZ1
+jg2piqSGRhiHUW3srfU5oVZ1xRuL4phpD/mLHJzYghgCkS/qUPGuDcillURKktN0
+xeI2VFey0BHH4o/KHz/5d9mDrj97JmIGfqf7tTTlaSlG6p+UnpPGbPuPTX/oy+3m
+Oi0of1cmCvNP3moP1v0LZFHxZt9Mlo86w+erg9/PyYUT7wq5K+J9n3WmZjHgp/g8
+CxokZyuSOyFBktGFiou7KL49zgPM+Q==
+=72ZD
+-----END PGP SIGNATURE-----
 
-I plan to use this method in the revision, do you like this?
-
-memfd_create() was designed to do this work, but in current stage,
-opening tmpfile ourselves may be better.
-
-Thanks,
-Zhangjin
+--lwINwq5DE62imWCd--
