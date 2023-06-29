@@ -2,181 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 018C7742911
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 17:04:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70535742916
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 17:05:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231140AbjF2PEe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 11:04:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44492 "EHLO
+        id S232224AbjF2PFk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 11:05:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230525AbjF2PEb (ORCPT
+        with ESMTP id S231787AbjF2PFh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 11:04:31 -0400
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 888032D7F;
-        Thu, 29 Jun 2023 08:04:30 -0700 (PDT)
-Received: by mail-wm1-x32f.google.com with SMTP id 5b1f17b1804b1-3fbc1fd6335so2179065e9.2;
-        Thu, 29 Jun 2023 08:04:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688051069; x=1690643069;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=9T0VXws43hJjl+uJSROMwIKD7cE/AP2uivo3vISpPNI=;
-        b=LcHVTWUlAJfeAteEoMNOZzMOCFJyhJGPkS6wUVdtw59FTCTto96bVF1KpqeqGelZQo
-         0Iu0sdABeApD2lTFiZOA/uMOhhDn7AhL0BYSEbTBiJDN9ud03Ji8HTPtkfuM4UJVX2rU
-         6xYmdghWM9EMRVdT8X5SJbCh6jrVlOkZ77aUETj0w+9tKc/9QTpdRFPUIqe/w+L0h1MK
-         udFgXUtzZbWSbwc/j9UPcDozj/o7D0coV9AChyQTnGHx7Kn8PQ/PnyDfq8j/vQW9UOVy
-         aZmROjYUEAH0AhRj1ENQTsguVQ0cOtOoaI4Fh0nuNZWsgnifjjpDutBh+vD70Lwnogq0
-         1tOg==
+        Thu, 29 Jun 2023 11:05:37 -0400
+Received: from mail-il1-f181.google.com (mail-il1-f181.google.com [209.85.166.181])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27B712D7F;
+        Thu, 29 Jun 2023 08:05:36 -0700 (PDT)
+Received: by mail-il1-f181.google.com with SMTP id e9e14a558f8ab-345b347196cso3220365ab.3;
+        Thu, 29 Jun 2023 08:05:36 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688051069; x=1690643069;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=9T0VXws43hJjl+uJSROMwIKD7cE/AP2uivo3vISpPNI=;
-        b=QmvC1BuJH+DlJXqKYqSTSbxYm351+ws2rNpKqITYcsws0NOB8iyPxbt6th9t+s0hEW
-         3cFylYysn7QT7Ck6f5LxMVRnfkkuAkl1CRG5fimJN+QyzJcdyoPohcPQFwAn55UGnume
-         CuA3/Q/BKMXVZEuUJex6j0vWRNOqvjsEXI37G0IwzvM2TTOcIlR0fehykieBjGRZR7+M
-         4BVBQf7teBH0nRb6th5/UUXJVjxkvCBcpH8Sjr6LRWbkyixRFIn3+jhtmu4tuGbsQDWi
-         NZcw1AFmjO16gEh3mw8mUOGaWzr3aD3S/sD0nL1Y68mhfFC95iWQpons+zoKSx7bVruP
-         NQBg==
-X-Gm-Message-State: AC+VfDwG7/viP94avk4na8tAYsHmbGXXoXVSvRSTLa7bGw2eUUFuBGcQ
-        ArivQqjS3+rk8GGCiRAhMSY=
-X-Google-Smtp-Source: ACHHUZ4L1wP3qADBReKuZzejLsjm26j/3Ya7SyLGZc723LpSeVmdj8uvc7ZYJ78C4oJoKFHPOkHvig==
-X-Received: by 2002:a05:600c:3657:b0:3f9:b804:1785 with SMTP id y23-20020a05600c365700b003f9b8041785mr22616536wmq.0.1688051068690;
-        Thu, 29 Jun 2023 08:04:28 -0700 (PDT)
-Received: from suse.localnet (host-87-3-108-126.retail.telecomitalia.it. [87.3.108.126])
-        by smtp.gmail.com with ESMTPSA id 21-20020a05600c22d500b003f96d10eafbsm16731958wmg.12.2023.06.29.08.04.27
+        d=1e100.net; s=20221208; t=1688051135; x=1690643135;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=NhcKZLjWrDNttxGmNBxY3JBPC1dw1l/gq6LRekbNzq8=;
+        b=kwn0AuL3li29nlMeYm4DdfkPJfNeL7MpskGf825jVkJk8N/XdnsOaqFU8xHHWiSwIE
+         gn6XIkS0p2SahteuCJ5U/6ROcp9/Wh+cUxn2ehFVWFTXbIth7X9Sd4EOmN8gs3Nr+rt8
+         JSOUNfy/D06vN6QZF3eCpR9vN1fKE+dICVJdBzHa/QruaVAcGKbu9MMfUn4qKGXXvqDC
+         +CbRkWwlLwBmZQNxQ+2GDscRKPTGxqcTtUcPA0nKuypXKWx5Y0M+WAVb8LUTa+E9AhmQ
+         ADrJkPlHRtnf/qpI4ijEER6pNUYVcl6ayttPYQRYAOjpDIFHBXIxoH42TgvzXGUgjng4
+         w6ig==
+X-Gm-Message-State: AC+VfDyGjz0Z75ZcsvZeuQYsjs3+PJ2J45zVDdnA+hGvWWjuq3/yXCbM
+        2JHQfj32w5IJM+n3HihFyA==
+X-Google-Smtp-Source: ACHHUZ5/ubSHnOOsJs8hFdVdPR5AB9dDU59w9AQGzatEGCNhG/K02sYj6XVgHiA3uc2Ij1YRTnGiCw==
+X-Received: by 2002:a92:d08a:0:b0:345:8373:4ca8 with SMTP id h10-20020a92d08a000000b0034583734ca8mr15786460ilh.27.1688051135318;
+        Thu, 29 Jun 2023 08:05:35 -0700 (PDT)
+Received: from robh_at_kernel.org ([64.188.179.250])
+        by smtp.gmail.com with ESMTPSA id g6-20020a056638060600b0042b144abf71sm53204jar.179.2023.06.29.08.05.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Jun 2023 08:04:28 -0700 (PDT)
-From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     Sumitra Sharma <sumitraartsy@gmail.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Ira Weiny <ira.weiny@intel.com>, Deepak R Varma <drv@mailo.com>
-Subject: Re: [PATCH] fs/vboxsf: Replace kmap() with kmap_local_{page, folio}()
-Date:   Thu, 29 Jun 2023 17:04:26 +0200
-Message-ID: <1810516.8hzESeGDPO@suse>
-In-Reply-To: <ZJz3dO10o9+xV65F@casper.infradead.org>
-References: <20230627135115.GA452832@sumitra.com> <6924669.18pcnM708K@suse>
- <ZJz3dO10o9+xV65F@casper.infradead.org>
+        Thu, 29 Jun 2023 08:05:31 -0700 (PDT)
+Received: (nullmailer pid 2973007 invoked by uid 1000);
+        Thu, 29 Jun 2023 15:05:28 -0000
+Date:   Thu, 29 Jun 2023 09:05:28 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Maso Huang <maso.huang@mediatek.com>
+Cc:     Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Trevor Wu <trevor.wu@mediatek.com>,
+        Jiaxin Yu <jiaxin.yu@mediatek.com>,
+        Ren Zhijie <renzhijie2@huawei.com>,
+        Allen-KH Cheng <allen-kh.cheng@mediatek.com>,
+        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH v2 7/7] ASoC: dt-bindings: mediatek,mt7986-afe: add audio
+ afe document
+Message-ID: <20230629150528.GA2961718-robh@kernel.org>
+References: <20230626023501.11120-1-maso.huang@mediatek.com>
+ <20230626023501.11120-8-maso.huang@mediatek.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="iso-8859-1"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230626023501.11120-8-maso.huang@mediatek.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On gioved=EC 29 giugno 2023 05:16:04 CEST Matthew Wilcox wrote:
-> On Thu, Jun 29, 2023 at 12:23:54AM +0200, Fabio M. De Francesco wrote:
-> > > -	buf =3D kmap(page);
-> > > +	do {
-> >=20
-> > Please let me understand why you are calling vboxsf_read() in a loop, a
-> > PAGE_SIZE at a time.
->=20
-> Because kmap_local_folio() can only (guarantee to) map one page at a
-> time.
+On Mon, Jun 26, 2023 at 10:35:01AM +0800, Maso Huang wrote:
+> Add mt7986 audio afe document.
+> 
+> Signed-off-by: Maso Huang <maso.huang@mediatek.com>
+> ---
+>  .../bindings/sound/mediatek,mt7986-afe.yaml   | 89 +++++++++++++++++++
+>  1 file changed, 89 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/sound/mediatek,mt7986-afe.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/sound/mediatek,mt7986-afe.yaml b/Documentation/devicetree/bindings/sound/mediatek,mt7986-afe.yaml
+> new file mode 100644
+> index 000000000000..257327a33ea1
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/sound/mediatek,mt7986-afe.yaml
+> @@ -0,0 +1,89 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/sound/mediatek,mt7986-afe.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: MediaTek AFE PCM controller for MT7986
+> +
+> +maintainers:
+> +  - Maso Huang <maso.huang@mediatek.com>
+> +
+> +properties:
+> +  compatible:
+> +    oneOf:
+> +      - const: mediatek,mt7986-afe
+> +      - items:
+> +          - enum:
+> +              - mediatek,mt7981-afe
+> +              - mediatek,mt7988-afe
+> +          - const: mediatek,mt7986-afe
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    minItems: 5
+> +    items:
+> +      - description: audio bus clock
+> +      - description: audio 26M clock
+> +      - description: audio intbus clock
+> +      - description: audio hopping clock
+> +      - description: audio pll clock
+> +      - description: mux for pcm_mck
+> +      - description: audio i2s/pcm mck
+> +
+> +  clock-names:
+> +    minItems: 5
+> +    items:
+> +      - const: aud_bus_ck
+> +      - const: aud_26m_ck
+> +      - const: aud_l_ck
+> +      - const: aud_aud_ck
+> +      - const: aud_eg2_ck
+> +      - const: aud_sel
+> +      - const: aud_i2s_m
 
-Yes, one page at a time. This part served to introduce the _main_ question=
-=20
-that is the one you answered below (i.e., since the current code maps a pag=
-e a=20
-a time with no loops, do we need to manage folios spanning more than a sing=
-le=20
-page?)
+'aud_' is redundant.
 
-> Also vboxsf_read() is only tested with a single page at a time.
->=20
-> > If I understand the current code it reads a single page at offset zero =
-of=20
-a
-> > folio and then memset() with zeros from &buf[nread] up to the end of the
-> > page. Then it seems that this function currently assume that the folio
-> > doesn't need to be read until "offset < folio_size(folio)" becomes fals=
-e.
-> >=20
-> > Does it imply that the folio is always one page sized? Doesn't it? I'm
-> > surely
-> > missing some basics...
->=20
-> vboxsf does not yet claim to support large folios, so every folio that
-> it sees will be only a single page in size.
-> Hopefully at some point
-> that will change.  Again, somebody would need to test that.  In the
-> meantime, if someone is going to the trouble of switching over to using
-> the folio API, let's actually include support for large folios.
-
-"[...] at some point that will change." wrt larger folios spanning multiple=
-=20
-pages is the answer that justifies the loop. I couldn't know about this pla=
-n.=20
-Thanks for explaining that there is a plan towards that goal.
-
-I think that Sumitra can address the task to re-use your patch to=20
-vboxsf_read_folio() and then properly test it with VirtualBox.
-
-Instead the much larger effort to implement vboxsf_readahead() and actually=
- do=20
-an async call with deferred setting of the uptodate flag will surely requir=
-e a=20
-considerable amount of time and whoever wanted to address it would need you=
-r=20
-guidance.
-
-You said that you are ready to provide consult, but I'm not sure whether=20
-Sumitra would be allowed to spend a large part of her time to do an out of=
-=20
-scope task (wrt her internship).
-
-If yes, I have nothing against. If not, I'm pretty sure that someone else c=
-an=20
-set aside enough time to address this large task ;-)
-
->=20
-> > > -	kunmap(page);
-> > > -	unlock_page(page);
-> > > +	if (!err) {
-> > > +		flush_dcache_folio(folio);
-> > > +		folio_mark_uptodate(folio);
-> > > +	}
-> > > +	folio_unlock(folio);
-> >=20
-> > Shouldn't we call folio_lock() to lock the folio to be able to unlock w=
-ith
-> > folio_unlock()?
-> >=20
-> > If so, I can't find any neither a folio_lock() or a page_lock() in this
-> > filesystem.
-> >=20
-> > Again sorry for not understanding, can you please explain it?
->=20
-> Ira gave the minimal explanation, but a slightly fuller explanation is
-> that the folio is locked while it is being fetched from backing store.
-
-This explains why I could not easily find the call to lock it.=20
-
-> That prevents both a second thread from reading from it while another
-> thread is bringing it uptodate, and two threads trying to bring it
-> uptodate at the same time.
->=20
-> Most filesystems have an asynchronous read_folio, so you don't see the
-> folio_unlock() in the read_folio() function; instead it's in the I/O
-> completion path.  vboxsf is synchronous.
-
-And this explains different implementation between synchronous and=20
-asynchronous reads=20
-
-Again thanks,
-
-=46abio
-
-
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +  - clocks
+> +  - clock-names
+> +  - assigned-clocks
+> +  - assigned-clock-parents
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> +    #include <dt-bindings/interrupt-controller/irq.h>
+> +    #include <dt-bindings/clock/mt7986-clk.h>
+> +
+> +    afe@11210000 {
+> +        compatible = "mediatek,mt7986-afe";
+> +        reg = <0x11210000 0x9000>;
+> +        interrupts = <GIC_SPI 106 IRQ_TYPE_LEVEL_HIGH>;
+> +        clocks = <&infracfg_ao CLK_INFRA_AUD_BUS_CK>,
+> +                 <&infracfg_ao CLK_INFRA_AUD_26M_CK>,
+> +                 <&infracfg_ao CLK_INFRA_AUD_L_CK>,
+> +                 <&infracfg_ao CLK_INFRA_AUD_AUD_CK>,
+> +                 <&infracfg_ao CLK_INFRA_AUD_EG2_CK>;
+> +        clock-names = "aud_bus_ck",
+> +                      "aud_26m_ck",
+> +                      "aud_l_ck",
+> +                      "aud_aud_ck",
+> +                      "aud_eg2_ck";
+> +        assigned-clocks = <&topckgen CLK_TOP_A1SYS_SEL>,
+> +                          <&topckgen CLK_TOP_AUD_L_SEL>,
+> +                          <&topckgen CLK_TOP_A_TUNER_SEL>;
+> +        assigned-clock-parents = <&topckgen CLK_TOP_APLL2_D4>,
+> +                                 <&apmixedsys CLK_APMIXED_APLL2>,
+> +                                 <&topckgen CLK_TOP_APLL2_D4>;
+> +    };
+> +
+> +...
+> -- 
+> 2.18.0
+> 
