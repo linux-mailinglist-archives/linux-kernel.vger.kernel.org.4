@@ -2,385 +2,209 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10D2C7430D0
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 00:57:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 837C37430D2
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 00:58:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230476AbjF2W5d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 18:57:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54374 "EHLO
+        id S229972AbjF2W6Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 18:58:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230333AbjF2W5b (ORCPT
+        with ESMTP id S229459AbjF2W6W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 18:57:31 -0400
-Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEA302D66;
-        Thu, 29 Jun 2023 15:57:29 -0700 (PDT)
-Received: by mail-pg1-x52b.google.com with SMTP id 41be03b00d2f7-53482b44007so786830a12.2;
-        Thu, 29 Jun 2023 15:57:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688079449; x=1690671449;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=//XkPHnuGJf2IOvnDVtpFN7BiCi+0kU3RSXDqWDC4Jc=;
-        b=Ci1DOyXZuGKXKi5gnPldNe4WaQlpFnxx09Ku9PatH7c4QZRIkYCPltQUUcRo5QHFAt
-         nqpmTTm4acwzrrfwQ8iGWKShzCieA6wfKNPomLDAQG4R8zOafun4sY482vzhcwAMzqfD
-         S4YfUuwMgipdNLnrAbla+3zc+ooFjqKRoB2BgIWY05zID8HUp0JhnntjBPyKoa3JICMZ
-         vwe70LlAUs2QpjViUhIxH0JDSjVjyp4XYW3d1HrJ1mGzsvOsPtc/QgwlgYV66Vu4tbmk
-         x41PpoIEzhxl8aeg+GrRfZxOicPS0Ho+B5qMbTfSSDHk9gNO9qByE+EF4qUox0xYAnak
-         bJxA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688079449; x=1690671449;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=//XkPHnuGJf2IOvnDVtpFN7BiCi+0kU3RSXDqWDC4Jc=;
-        b=RDjriHJIIO7rAzcu54jetgQ9BUIJLICRyLJWkedor1TcbMNTH2PYV2UKE9/ZsaPJEW
-         FKZS/MRbl6r0ZUM/xDdrIHBV68vb6z4VaemnVYxJeRin6AvnrVYL4cOqP+JtQDirlii1
-         d8+BgPZ9cJsMNTCxq63gIE0IJk5DCqvkRN+dJ8im3tYu6P/OhF1G5G+eB23iFBcoIPVz
-         OuYv/popvji2UdNsdJ5NTrTTrNlDv3ccnzfCGfWkFwMYn/7nu48ai8DavQv+SmRC2W3K
-         s8gnnyacFQ7TWqzsgCqpo4/cRbv6XxduaVV0LF0ap4zQfhAEm9zOVQPkKfVeKw4rYiyo
-         a1MA==
-X-Gm-Message-State: AC+VfDxeISWb4uf6aa6SueszeenyJb4dlj5jD5afcKozsEXIh6hO6Bxg
-        2L65N57lUdGXxfbHHgfM2Dg=
-X-Google-Smtp-Source: ACHHUZ5Qfy2OmteyGVJccAEj/E8sstboiyb2RSM+vxGhgsZwnpLDLcJnurrXjyEVZzrlwSEajJsLgg==
-X-Received: by 2002:a05:6a20:414:b0:110:9210:f6ac with SMTP id a20-20020a056a20041400b001109210f6acmr828454pza.37.1688079448908;
-        Thu, 29 Jun 2023 15:57:28 -0700 (PDT)
-Received: from google.com ([2620:15c:9d:2:692a:e33f:89e4:fd27])
-        by smtp.gmail.com with ESMTPSA id c4-20020aa781c4000000b00653fe2d527esm8834525pfn.32.2023.06.29.15.57.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Jun 2023 15:57:28 -0700 (PDT)
-Date:   Thu, 29 Jun 2023 15:57:25 -0700
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     "jingle.wu" <jingle.wu@emc.com.tw>
-Cc:     linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
-        phoenix@emc.com.tw, josh.chen@emc.com.tw, dave.wang@emc.com.tw
-Subject: Re: [PATCH]  Input: elan_i2c - Implement inhibit/uninhibit functions.
-Message-ID: <ZJ4MVbTnBT5sM5XR@google.com>
-References: <20230531090340.1035499-1-jingle.wu@emc.com.tw>
+        Thu, 29 Jun 2023 18:58:22 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F31462D69;
+        Thu, 29 Jun 2023 15:58:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1688079500; x=1719615500;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-id:content-transfer-encoding:
+   mime-version;
+  bh=49P6jPl9XCUJGeOeu6B8+aIUE0RjO3Wq8ybMI6xcWA4=;
+  b=F8312cdC2PgDbaQnaWIwe5ZpAlPjOI/2nq98qSL+YRuvWPst0qmmrOz3
+   5vb5lb5SnKciQYpS5QLS4YjbeOlR40w77xTP+HPfzycKCnO12v4pFIH58
+   Na+ZrzFRb9o8CiBWe4CSxDa9AEQkxZd1AjvIvfmM7tQ4CBWvcsTQK3DX7
+   as504xGb1fb8IW25Rvu3p0V8KmHpscFtGmplZMBXJzt/3NohlXdBS8PY/
+   bQprYJmB74Im/AGQtjRwttJSQpm2GOlbNfukJjqQr2Gr2qW+eIDb7f2eR
+   mKq7EfsytTEvyowhiixjW+RvTdnIObL88r7i9FkMSAxiHKh6CBwe0MkR8
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10756"; a="341837904"
+X-IronPort-AV: E=Sophos;i="6.01,169,1684825200"; 
+   d="scan'208";a="341837904"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jun 2023 15:58:20 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10756"; a="694835968"
+X-IronPort-AV: E=Sophos;i="6.01,169,1684825200"; 
+   d="scan'208";a="694835968"
+Received: from orsmsx601.amr.corp.intel.com ([10.22.229.14])
+  by orsmga006.jf.intel.com with ESMTP; 29 Jun 2023 15:58:19 -0700
+Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
+ ORSMSX601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.27; Thu, 29 Jun 2023 15:58:18 -0700
+Received: from orsmsx601.amr.corp.intel.com (10.22.229.14) by
+ ORSMSX611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.27; Thu, 29 Jun 2023 15:58:18 -0700
+Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
+ orsmsx601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.27 via Frontend Transport; Thu, 29 Jun 2023 15:58:18 -0700
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (104.47.55.174)
+ by edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.27; Thu, 29 Jun 2023 15:58:15 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ly+ZB+M1+lLxnKZjC0oDKvOfT5vuBF1HZ6UUSUTcnqltmPe+qPy13I9XwlAU5Qzta8ceoSw/3ZIDClsPCKMZmgEs76pa7mS+/WT3Ej7WfgbyYhmNo0fPgRSm1y0cFfInPbWt3fKQLHf01O+DTbcn/UP0O1z3ZKRzATiRVB2gg0LujYXyrUzTo9Wzn0XBLmF6e1Oj6wr4szAtYimsIsPxEcrXI5ftEMg4ZkAkQZlLAelpj+WCK3g1OsU1vP+KaoGvAVSWXUvDvNE1ycoCv3rlVUn8bOCSbN6W2xU00/4KlF66mktEVSx2XXw+RynLfpTHMcIq3wS1PLjW2ByXMrzF1A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=49P6jPl9XCUJGeOeu6B8+aIUE0RjO3Wq8ybMI6xcWA4=;
+ b=WZ3GQheE9AloPCsgMeIpiM45rtluhlNeyDPLyZrz6y/iQeXbzrte66f9raRlv0olljJqgPmYESk48r+GE0NAyVrJcWuGS3XU04Y8QM1EPGKSv9C5RhsEF9CZUDQqOi2iqCA/H2F3wR18WHyIWfluezzKtzFVAlx+6cAaaigA6FWLOjeQsyHkq/nGjpTAu+DT+/lrTrCw5Q3q0BcrdsznSn+zAx+g+fjs4Ge2Jkb2QAVD2iCV/PB/zvXXQ6ENAa9uMMASsXdiDObjhbbTJQKWqFjk7RPHi0fs5Ny3pJ6oiBiOpPFfFzcx27QqaOGl1aoOZblzifuDScLOP6E6yY066g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from BL1PR11MB5978.namprd11.prod.outlook.com (2603:10b6:208:385::18)
+ by PH0PR11MB4854.namprd11.prod.outlook.com (2603:10b6:510:35::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.26; Thu, 29 Jun
+ 2023 22:58:08 +0000
+Received: from BL1PR11MB5978.namprd11.prod.outlook.com
+ ([fe80::19b7:466f:32ac:b764]) by BL1PR11MB5978.namprd11.prod.outlook.com
+ ([fe80::19b7:466f:32ac:b764%3]) with mapi id 15.20.6521.026; Thu, 29 Jun 2023
+ 22:58:08 +0000
+From:   "Huang, Kai" <kai.huang@intel.com>
+To:     "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "david@redhat.com" <david@redhat.com>
+CC:     "Raj, Ashok" <ashok.raj@intel.com>,
+        "Hansen, Dave" <dave.hansen@intel.com>,
+        "Luck, Tony" <tony.luck@intel.com>,
+        "bagasdotme@gmail.com" <bagasdotme@gmail.com>,
+        "ak@linux.intel.com" <ak@linux.intel.com>,
+        "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "Chatre, Reinette" <reinette.chatre@intel.com>,
+        "Christopherson,, Sean" <seanjc@google.com>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "Yamahata, Isaku" <isaku.yamahata@intel.com>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "nik.borisov@suse.com" <nik.borisov@suse.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "Shahar, Sagi" <sagis@google.com>,
+        "imammedo@redhat.com" <imammedo@redhat.com>,
+        "bp@alien8.de" <bp@alien8.de>, "Gao, Chao" <chao.gao@intel.com>,
+        "Brown, Len" <len.brown@intel.com>,
+        "sathyanarayanan.kuppuswamy@linux.intel.com" 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        "Huang, Ying" <ying.huang@intel.com>,
+        "Williams, Dan J" <dan.j.williams@intel.com>,
+        "x86@kernel.org" <x86@kernel.org>
+Subject: Re: [PATCH v12 07/22] x86/virt/tdx: Add skeleton to enable TDX on
+ demand
+Thread-Topic: [PATCH v12 07/22] x86/virt/tdx: Add skeleton to enable TDX on
+ demand
+Thread-Index: AQHZqDWtW8hO2PRC3kCMr0lha9GzWK+hqiOAgAC/xYA=
+Date:   Thu, 29 Jun 2023 22:58:08 +0000
+Message-ID: <6e3770b282ba4dab1ae8418840d3b6f265a41aa3.camel@intel.com>
+References: <cover.1687784645.git.kai.huang@intel.com>
+         <104d324cd68b12e14722ee5d85a660cccccd8892.1687784645.git.kai.huang@intel.com>
+         <bd9ce008-528b-2009-b157-6d69f1cf5530@redhat.com>
+In-Reply-To: <bd9ce008-528b-2009-b157-6d69f1cf5530@redhat.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Evolution 3.48.3 (3.48.3-1.fc38) 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BL1PR11MB5978:EE_|PH0PR11MB4854:EE_
+x-ms-office365-filtering-correlation-id: 50b1ed19-5676-4080-ca37-08db78f44e24
+x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: PCis7yQkK1uPYRwDRDGjKUhVLV8Pt4fQgxHylS/AcBIAG707wJ3X4jX+oUv0OwlGDU+v3IqFVw5F3s6ZZK/8+htBuMfljE23iyW2UJwZJ6AC4CtBW221dKQyJLyjxgxDNaDKjlvFmDqshUcZ05S8NljzTX1BEBsnH15vftIDamnA95Bl2o+h+go+Xvm/8GG5iCkpZ+ENmnWZt3uoSl2n+/5RBi1lkrqfZqCbmQoczt2m9HbMLWn5kALVXLBoC9N9DQT5dP+6AQ83wsfPpQ7JHeoNUo4mFhOZTgH42M/4yOvuS0BYGPQp9Wb9UZfyLjbFQ4GjcfKL38Neku/5ZQjX+ym/i9RUkejRKAf/2D6WbB8pG9IjgTRp70Vwsj631viAXBMdJMjpneOWjnnd7+pqguXliY49/HozVaAf096WGiIXKO0WRVZ1CjV58nB8Apo6rfNcm5VOBJZYU9lcWfemO8sVEM1D4bWp/yGfoncP/pPBcMe1fEIHdcP2NgY0rf5z/V/jNEtKienP4H6XNUzWeElEebjqXfVhPL/MR/3Cn8ueoJUQMv7d/WGM9NBGP2Zx1s09/jkQIakNjoDjPkYb+FRG+Pn3pTXdtNGv3geN3w0JBBeOjJTqy0g3bM0pzDsX
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL1PR11MB5978.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(396003)(366004)(39860400002)(376002)(136003)(346002)(451199021)(71200400001)(4744005)(2906002)(6486002)(122000001)(82960400001)(83380400001)(38100700002)(6512007)(6506007)(2616005)(86362001)(41300700001)(110136005)(186003)(54906003)(478600001)(38070700005)(66446008)(66476007)(36756003)(66946007)(76116006)(4326008)(316002)(91956017)(64756008)(66556008)(26005)(5660300002)(7416002)(8936002)(8676002);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?NUoxOGNGVlZjcWFOb0NxakJad1FjTjFKekhvNzM5ek1ReGFWZDB4WWdFK2py?=
+ =?utf-8?B?dGI2U0JabjJ1RDV3Mkl6OGJEd2FDZ1dxcEZURW9TN3p2aDJjb21iNTV2dmYz?=
+ =?utf-8?B?L2NnQjFhWUJ5aEVuQkV5Q013NXFZQUM4RW9MRklPQjBPM1g5eDdMR08rd1Qr?=
+ =?utf-8?B?QjR4MmVEeFk2Ry9ka21GMW5TMEZBR3dnUGlXNHloV2ZnRUhaOWdmbnhMWnlX?=
+ =?utf-8?B?V0JDcFJDS0JLMXdYeC9yejdqZXJyYng5TGRIK0x1K0U4Y2ZvcFFwWmdQQWJo?=
+ =?utf-8?B?d0NMNDZCVFF6cnhZdzVHNHMwMS80RnFZbGYyUUNiUUhodnFaU2lUUUdDNWVx?=
+ =?utf-8?B?TmJ4alVuRWZPaEdhamtUUVArOVQwOWIrTTVROFh1dFhlM1NuZ1h1WnlUSVZH?=
+ =?utf-8?B?eUlCb2hocStwTE5UWGg3dlN2Vm9JWkhXQXFBZGhHNU0rdVdVK3dTMXRUVXlZ?=
+ =?utf-8?B?NHRtOUdMaEVSYkdXM3I4MnJDa3I5TkYvd2pOMlUxSHl6TUhrZHlHZFBKbEZ2?=
+ =?utf-8?B?QmR2ZjM2U1dJcUR2SlNuZGw0LzZWNEs2YnowUVcrbXlFa0YzOWd3RFhDOEEz?=
+ =?utf-8?B?UzBhaWZvMklldkJkRlN6SGpYd1dtSFYwaitZL1IvZGtlZ1owVC9yc3hRYzVn?=
+ =?utf-8?B?L1liUzFTcFVWdjNncDB4OGsvWDJIRmFRbjdYVXBMMHhqc0dCUjFuSnE4WWx6?=
+ =?utf-8?B?SHRVR2FBYmVRMmpvZnNuYnNzMmp0eDh6NXh2dE93K0JETE5KalhXYjN6ZEtr?=
+ =?utf-8?B?NE9vZkxOU0JlaWQ3MVdocGtUMVBUc1pQZEE4cS9Db3g4TDRFVnV4WDJFeTJx?=
+ =?utf-8?B?ZlVIVmVTd3ZWZTUwRk1nbWxPSkVOV1VYY1RST1dvTXo1aVJqd1VkT0ttNUxT?=
+ =?utf-8?B?ZW1PUXdQdDhWVTFMRTl3QVFvWVRQcW1Da2pEN1k0WWtjRTIxbHZuWUZLcyt1?=
+ =?utf-8?B?RS9uM3JTQkVyY2pyMzFZMmk0a0NHSkQ3MDdVWlZWZ3BSSlJMQzlqR2NGREFq?=
+ =?utf-8?B?WjBOR0lCSTVETmxDQXAyYmFCdzhxUDh5UVJWYUJIVVlVTjBmdUdFaWFGMXlF?=
+ =?utf-8?B?VjRKWXhNbzg1TWwwMkZKZEFjQUlTU3FQbVpUa1E0RStUb3IrZlBENnFYVXY0?=
+ =?utf-8?B?NmdleUtEaGVqb2w4clN6UDFRTW1TbUc2SnhWd3hHSWhaYXowcXNUOUZNTVFU?=
+ =?utf-8?B?THhlM2REYWlyL1RIcWcyVWJZbUtlM3ZmeDJBbmxidzdhRmo5UG9XWWlBWjBU?=
+ =?utf-8?B?ZXo0MFVBN3RiM2hpRVRUeXpIRkRXa0pnN05JRDRsWUtnWld2aFV1Y2VFUE84?=
+ =?utf-8?B?ZnRQck9BdFNHNUw5WXhLaVRyWFBzN25SU3M2UzVyWnVmL3FuUHdmaGFESXRu?=
+ =?utf-8?B?T21IYkJxZ0FZelRHMFkrN0xIWmFSZHRhMGh0NFVhZmNteG9zdVRzWXJmN2dT?=
+ =?utf-8?B?dEhoV2dqVFZqeWJKL3pLSTdFR2duZ0RyNWt6SnFJMTN1ZXVmZGsyZndvMGdU?=
+ =?utf-8?B?THh6aVpxSHlvQk1pbHV1MzdnTlV4VHowdXlob1VndDg1WWRBTGZpcDFQOTVy?=
+ =?utf-8?B?cms2eWhrN0JjdDAxb2szTkRYVlNFb3NlNmEyS2wyVWYzd0ZSMlZvczQ0cTFS?=
+ =?utf-8?B?Ykk5SWtWKzJHL1RROE9teElZYnpObjlaeEJKaHZaLzFiY2pqMWZVaG5XT2x5?=
+ =?utf-8?B?WnNraEhhcms2OElCZS9VeWZjQUtqZmlyL1FQTkFjL05jbFhWN0Zoa2ZQclJV?=
+ =?utf-8?B?UUJ1YnFQVGlOdXUwUDhXRXpUTGt5TnVCYmpIWjU2RUk0NmZBUzlGc3pVais0?=
+ =?utf-8?B?MTFReTRVZGRsZENsa2toWXlnWTJrMExlV3dXWHNPZ2FTUDQ0ejlQRHZWeHc1?=
+ =?utf-8?B?MGlzcE4yYk9nQjdqL3gwWW54TEVxQ2tRdzVyNmJRMjl2Mmk1bldRWGNGdHhm?=
+ =?utf-8?B?Z0tOVFNadGhoeExGSE5KQTNDZXgxSUxwOFhiS1ZTdStaL0xVdThZUWpEbDY0?=
+ =?utf-8?B?M3JuYUFzMUpmZEE5Z3N5UXJ5djZPMllKRDhZcmUvenc1UTAwTHFEeFpveWFx?=
+ =?utf-8?B?Tnl3L21uWXBVTXJseURjVHhFQ2VIRUdMUFNVYzl4SFJOZjl4elN6MHJEM2VD?=
+ =?utf-8?B?NGtsQU5IdzBsWHNlbUhCclhlTitOL3lHMkhPT2pTdzdCbllaT0w4eXRyak11?=
+ =?utf-8?B?Q0E9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <069E7E85A8E8ED438D6429031FA97ABF@namprd11.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230531090340.1035499-1-jingle.wu@emc.com.tw>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FSL_HELO_FAKE,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BL1PR11MB5978.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 50b1ed19-5676-4080-ca37-08db78f44e24
+X-MS-Exchange-CrossTenant-originalarrivaltime: 29 Jun 2023 22:58:08.0954
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: BQCPsHUdwgyw1gh8IF4YrpG4AEAKHGNHD8wxfcb5K5WNG3ZVK+t47aa41HJyO+FCtmFxkKqYkR1Ew/HcPSrKbw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR11MB4854
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jingle,
-
-On Wed, May 31, 2023 at 05:03:40PM +0800, jingle.wu wrote:
->  Add inhibit/uninhibit functions.
-
-You need to provide justification for this change, i.e. explain why you
-need this/what is currently not working or working sub-optimally.
-
-> 
->  Signed-off-by: Jingle.wu <jingle.wu@emc.com.tw>
-> ---
->  drivers/input/mouse/elan_i2c_core.c | 207 ++++++++++++++++++++++++++++
->  1 file changed, 207 insertions(+)
-> 
-> diff --git a/drivers/input/mouse/elan_i2c_core.c b/drivers/input/mouse/elan_i2c_core.c
-> index 5f0d75a45c80..4ea57f4c7bd4 100644
-> --- a/drivers/input/mouse/elan_i2c_core.c
-> +++ b/drivers/input/mouse/elan_i2c_core.c
-> @@ -56,6 +56,7 @@ struct elan_tp_data {
->  	struct input_dev	*input;
->  	struct input_dev	*tp_input; /* trackpoint input node */
->  	struct regulator	*vcc;
-> +	struct list_head list;	/* for list of devices needing input handler */
->  
->  	const struct elan_transport_ops *ops;
->  
-> @@ -63,6 +64,11 @@ struct elan_tp_data {
->  	struct completion	fw_completion;
->  	bool			in_fw_update;
->  
-> +	struct work_struct	lid_work;
-> +	bool			lid_switch;
-> +	int			lid_value;
-> +	bool			in_inhibit;
-> +
->  	struct mutex		sysfs_mutex;
->  
->  	unsigned int		max_x;
-> @@ -96,6 +102,9 @@ struct elan_tp_data {
->  	u32			quirks;		/* Various quirks */
->  };
->  
-> +static struct workqueue_struct *elan_mode_wq;
-> +static LIST_HEAD(elan_devices_with_lid_handler);
-> +
->  static u32 elan_i2c_lookup_quirks(u16 ic_type, u16 product_id)
->  {
->  	static const struct {
-> @@ -329,6 +338,74 @@ static int elan_initialize(struct elan_tp_data *data, bool skip_reset)
->  	return error;
->  }
->  
-> +static int elan_reactivate(struct elan_tp_data *data)
-> +{
-> +	struct device *dev = &data->client->dev;
-> +	int error;
-> +
-> +	error = elan_set_power(data, true);
-> +	if (error)
-> +		dev_err(dev, "failed to restore power: %d\n", error);
-> +
-> +	error = data->ops->sleep_control(data->client, false);
-> +	if (error) {
-> +		dev_err(dev,
-> +			"failed to wake device up: %d\n", error);
-> +		return error;
-> +	}
-> +
-> +	return error;
-> +}
-> +
-> +static int elan_inhibit(struct input_dev *input_dev)
-
-I would rather you did not call it inhibit/uninhibit because this is not
-what it does.
-
-Please split the logic for recalibration from logic of powering on and
-off the device. I also hope in the future firmware revisions the
-distinction will be more clear (i.e. have a separate method/command to
-recalibrate baseline on demand).
-
-> +{
-> +	struct elan_tp_data *data = input_get_drvdata(input_dev);
-> +	struct i2c_client *client = data->client;
-> +	int error;
-> +
-> +	dev_dbg(&client->dev, "inhibiting\n");
-> +	/*
-> +	 * We are taking the mutex to make sure sysfs operations are
-> +	 * complete before we attempt to bring the device into low[er]
-> +	 * power mode.
-> +	 */
-> +	error = mutex_lock_interruptible(&data->sysfs_mutex);
-> +	if (error)
-> +		return error;
-> +
-> +	disable_irq(client->irq);
-> +
-> +	error = elan_set_power(data, false);
-> +	if (error)
-> +		enable_irq(client->irq);
-> +
-> +	data->in_inhibit = true;
-> +	mutex_unlock(&data->sysfs_mutex);
-> +
-> +	return error;
-> +}
-> +
-> +static int elan_uninhibit(struct input_dev *input_dev)
-> +{
-> +	struct elan_tp_data *data = input_get_drvdata(input_dev);
-> +	struct i2c_client *client = data->client;
-> +	int error;
-> +
-> +	dev_dbg(&client->dev, "uninhibiting\n");
-> +	error = mutex_lock_interruptible(&data->sysfs_mutex);
-> +	if (error)
-> +		return error;
-> +
-> +	error = elan_reactivate(data);
-> +	if (error == 0)
-> +		enable_irq(client->irq);
-> +
-> +	data->in_inhibit = false;
-> +	mutex_unlock(&data->sysfs_mutex);
-> +
-> +	return error;
-> +}
-> +
->  static int elan_query_device_info(struct elan_tp_data *data)
->  {
->  	int error;
-> @@ -1187,6 +1264,124 @@ static void elan_disable_regulator(void *_data)
->  	regulator_disable(data->vcc);
->  }
->  
-> +static void lid_work_handler(struct work_struct *work)
-> +{
-> +	struct elan_tp_data *data = container_of(work, struct elan_tp_data,
-> +					    lid_work);
-> +
-> +	if (data->lid_value)
-> +		elan_inhibit(data->input);
-> +	else
-> +		elan_uninhibit(data->input);
-> +
-> +}
-> +
-> +static void elan_input_lid_event(struct input_handle *handle, unsigned int type,
-> +			     unsigned int code, int value)
-> +{
-> +	struct elan_tp_data *data, *n;
-> +
-> +	if (type == EV_SW && code == SW_LID) {
-> +		list_for_each_entry_safe(data, n, &elan_devices_with_lid_handler, list) {
-
-Why do you need the "_safe()" variant here?
-
-> +			data->lid_value = value;
-> +			queue_work(elan_mode_wq, &data->lid_work);
-> +		}
-> +	}
-> +
-> +}
-> +
-> +struct elan_input_lid {
-> +	struct input_handle handle;
-> +};
-> +
-> +static int elan_input_lid_connect(struct input_handler *handler,
-> +				struct input_dev *dev,
-> +				const struct input_device_id *id)
-> +{
-> +	struct elan_input_lid *lid;
-> +	char *name;
-> +	int error;
-> +
-> +	lid = kzalloc(sizeof(*lid), GFP_KERNEL);
-> +	if (!lid)
-> +		return -ENOMEM;
-> +	name = kasprintf(GFP_KERNEL, "elan-i2c-lid-%s", dev_name(&dev->dev));
-> +	if (!name) {
-> +		error = -ENOMEM;
-> +		goto err_free_lid;
-> +	}
-> +	lid->handle.dev = dev;
-> +	lid->handle.handler = handler;
-> +	lid->handle.name = name;
-> +	lid->handle.private = lid;
-> +	error = input_register_handle(&lid->handle);
-> +	if (error)
-> +		goto err_free_name;
-> +	error = input_open_device(&lid->handle);
-> +	if (error)
-> +		goto err_unregister_handle;
-> +	return 0;
-> +err_unregister_handle:
-> +	input_unregister_handle(&lid->handle);
-> +err_free_name:
-> +	kfree(name);
-> +err_free_lid:
-> +	kfree(lid);
-> +	return error;
-> +}
-> +
-> +static void elan_input_lid_disconnect(struct input_handle *handle)
-> +{
-> +	struct elan_input_lid *lid = handle->private;
-> +
-> +	input_close_device(handle);
-> +	input_unregister_handle(handle);
-> +	kfree(handle->name);
-> +	kfree(lid);
-> +}
-> +
-> +static const struct input_device_id elan_input_lid_ids[] = {
-> +	{
-> +		.flags = INPUT_DEVICE_ID_MATCH_EVBIT | INPUT_DEVICE_ID_MATCH_SWBIT,
-> +		.evbit = { BIT_MASK(EV_SW) },
-> +		.swbit = { [BIT_WORD(SW_LID)] = BIT_MASK(SW_LID) },
-> +	},
-> +	{ },
-> +};
-> +
-> +static struct input_handler elan_input_lid_handler = {
-> +	.event =	elan_input_lid_event,
-> +	.connect =	elan_input_lid_connect,
-> +	.disconnect =	elan_input_lid_disconnect,
-> +	.name =		"elan-i2c-lid",
-> +	.id_table =	elan_input_lid_ids,
-> +};
-> +
-> +static int elan_create_lid_handler(struct elan_tp_data *data)
-> +{
-> +	int error = 0;
-> +
-> +	elan_mode_wq = create_singlethread_workqueue("elan-i2c-lid");
-> +	if (elan_mode_wq == NULL)
-> +		return -ENOMEM;
-> +	error = input_register_handler(&elan_input_lid_handler);
-> +	if (error)
-> +		goto remove_wq;
-> +
-> +	data->lid_switch = true;
-> +	INIT_LIST_HEAD(&data->list);
-> +	INIT_WORK(&data->lid_work, lid_work_handler);
-> +	list_add_tail(&data->list, &elan_devices_with_lid_handler);
-
-It looks like you call elan_create_lid_handler() from elan_probe() which
-means it can be called several times (we should not assume there is only
-one controller), I do not see it being destroyed in remove() either, so
-it will break if you bind/unbind the driver.
-
-I also not sure why you need the list of you have a handler per device.
-
-> +
-> +	return 0;
-> +
-> +remove_wq:
-> +	data->lid_switch = false;
-> +	destroy_workqueue(elan_mode_wq);
-> +	elan_mode_wq = NULL;
-> +	return error;
-> +}
-> +
->  static int elan_probe(struct i2c_client *client)
->  {
->  	const struct elan_transport_ops *transport_ops;
-> @@ -1325,6 +1520,10 @@ static int elan_probe(struct i2c_client *client)
->  		}
->  	}
->  
-> +	error = elan_create_lid_handler(data);
-> +	if (error)
-> +		dev_err(dev, "failed to create lid handler: %d\n", error);
-
-Do we need this on _ALL_ devices with ELan controllers, or just certain
-ones? If we need this on all devices how did it work before?
-
-> +
->  	return 0;
->  }
->  
-> @@ -1334,6 +1533,10 @@ static int elan_suspend(struct device *dev)
->  	struct elan_tp_data *data = i2c_get_clientdata(client);
->  	int ret;
->  
-> +	/* Wait for switch on completion */
-> +	if (data->lid_switch)
-> +		flush_workqueue(elan_mode_wq);
-> +
->  	/*
->  	 * We are taking the mutex to make sure sysfs operations are
->  	 * complete before we attempt to bring the device into low[er]
-> @@ -1371,6 +1574,10 @@ static int elan_resume(struct device *dev)
->  	struct elan_tp_data *data = i2c_get_clientdata(client);
->  	int error;
->  
-> +	/* Wait for switch on completion */
-> +	if (data->lid_switch)
-> +		flush_workqueue(elan_mode_wq);
-> +
->  	if (!device_may_wakeup(dev)) {
->  		error = regulator_enable(data->vcc);
->  		if (error) {
-> -- 
-> 2.34.1
-> 
-
-Thanks.
-
--- 
-Dmitry
+DQo+ID4gK3N0YXRpYyBlbnVtIHRkeF9tb2R1bGVfc3RhdHVzX3QgdGR4X21vZHVsZV9zdGF0dXM7
+DQo+IA0KPiBXaHkgY2FuJ3QgeW91IHN3aXRjaCB0byBhIHNpbXBsZSBib29sIGhlcmUgYXMgd2Vs
+bD8NCj4gDQo+IEl0J3MgZWl0aGVyIGluaXRpYWxpemVkIG9yIHVuaW5pdGlhbGl6ZWQuIElmIHVu
+aW5pdGlhbGl6ZWQgYW5kIHlvdSBnZXQgDQo+IGFuIGVycm9yLCBsZWF2ZSBpdCB1bmluaXRpYWxp
+emVkLiBUaGUgbmV4dCBjYWxsZXIgd2lsbCB0cnkgYWdhaW4gYW5kIA0KPiBmYWlsIGFnYWluLg0K
+PiANCg0KV2UgY2FuLCBidXQgaW4gdGhpcyBjYXNlIHRoZXJlIG1pZ2h0IGJlIG1lc3NhZ2UgcHJp
+bnRlZCBpbiBlYWNoIG1vZHVsZQ0KaW5pdGlhbGl6YXRpb24gY2FsbC4gIExldCdzIHNheSBUREgu
+U1lTLklORk8gaXMgc3VjY2Vzc2Z1bCBidXQgdGhlIGxhdGVyDQpUREguU1lTLkNPTkZJRyBmYWls
+cy4gIEluIHRoaXMgY2FzZSwgZWFjaCBpbml0aWFsaXphdGlvbiBjYWxsIHdpbGwgcHJpbnQgb3V0
+IFREWA0KbW9kdWxlIGluZm8gYW5kIENNUiBpbmZvLg0KDQpJIHRoaW5rIG9ubHkgYWxsb3cgaW5p
+dGlhbGl6YXRpb24gdG8gYmUgZG9uZSBvbmNlIHdvdWxkIGJlIGJldHRlciBpbiB0aGlzIGNhc2Uu
+DQpBcGFydCBmcm9tIHRoZSBtZXNzYWdlIHByaW50aW5nLCBpdCdzIE9LIHRvIGp1c3QgdXNlIGEg
+c2ltcGxlIGJvb2wuDQo=
