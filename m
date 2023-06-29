@@ -2,52 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BECB74220C
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 10:23:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 95D9674220D
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 10:23:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232240AbjF2IXO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 04:23:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45378 "EHLO
+        id S232546AbjF2IXo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 04:23:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232403AbjF2IWb (ORCPT
+        with ESMTP id S232564AbjF2IWv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 04:22:31 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03C032974;
-        Thu, 29 Jun 2023 01:20:48 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 65640614FE;
-        Thu, 29 Jun 2023 08:20:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53985C433C0;
-        Thu, 29 Jun 2023 08:20:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688026847;
-        bh=eix3asqgstSKaRDosqnGq1xt2TLM2YGz1j/+D6LUbUw=;
-        h=From:To:Cc:Subject:Date:From;
-        b=Li0ft4GpCx4QdjFx8Bu0MQQmbfINFOTqPW1UsMc2jx6iV2r5mI+jgoR1BT03Ekiv/
-         rNAh00T4LGxnPFaYaFYEJUeYMpjSkM5eX2vu5W5RYeqDDNG1/Nwsmts9edq2mbUxik
-         2uGZJVbqK6FnUezh+J1lnsFy8p8nF1VXy67qHcTGIT5vX6x04UmwLVNE5klSIvdTgS
-         Jh+kWdtbvGhEfTkZeUOBpuAJkliug8/4V1T5aYfNC4MlsAPttJU9rx5yNjIfFO/6K0
-         FPky9KXaVEq7VJgeg0KfUuKVP77C0qgeTgSoy67ARCVZPu84Qz8U3d4utxOdoV9n2t
-         nWYqdv2ygrGxg==
-From:   guoren@kernel.org
-To:     guoren@kernel.org, palmer@rivosinc.com, paul.walmsley@sifive.co,
-        zong.li@sifive.com, atishp@atishpatra.org, alex@ghiti.fr,
-        jszhang@kernel.org, bjorn@kernel.org
-Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org, Guo Ren <guoren@linux.alibaba.com>
-Subject: [PATCH] riscv: pageattr: Fixup synchronization problem between init_mm and active_mm
-Date:   Thu, 29 Jun 2023 04:20:32 -0400
-Message-Id: <20230629082032.3481237-1-guoren@kernel.org>
-X-Mailer: git-send-email 2.36.1
+        Thu, 29 Jun 2023 04:22:51 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58D3C30EF
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 01:21:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1688026918; x=1719562918;
+  h=from:to:cc:subject:in-reply-to:references:date:
+   message-id:mime-version;
+  bh=4orufNJFTU0KKwB1R0g7i45/dV0rMWf0T+wQWzKmwUY=;
+  b=YhXTy4UniQHinaaUR3JrQun1+Axk/Za9f30xgGJlkb9AUJbbtZQPui+G
+   4nsFDFzuyPky1T0HrxlbaDvDa3rd/e6P4mHIW2w7/cPX8smqSo+yT5/HS
+   4mEPrZMLDppiGnP7YgKmFpNsujTyyabOzWcM5MTSkTHidXYU193sxAL6I
+   YJ5ZktgNvn3yKdORoBpxY01t0tGi75nNvjodKxpM+QIa8G+HDabriTmzF
+   CKXFh8E/havcFvTSXis8R0DA3qcmzVCn3KGbXAdhr258u8MAeaULdZCkH
+   WXtoMyXmGiiAdzo+8gl5B4Es+52BfSnL2UcE24trMzFHGxAEGVrrZoNDs
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10755"; a="428070821"
+X-IronPort-AV: E=Sophos;i="6.01,168,1684825200"; 
+   d="scan'208";a="428070821"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jun 2023 01:21:21 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10755"; a="830444298"
+X-IronPort-AV: E=Sophos;i="6.01,168,1684825200"; 
+   d="scan'208";a="830444298"
+Received: from gyorgysx-mobl2.ger.corp.intel.com (HELO localhost) ([10.252.63.135])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jun 2023 01:21:18 -0700
+From:   Jani Nikula <jani.nikula@intel.com>
+To:     Ralph Campbell <rcampbell@nvidia.com>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Ralph Campbell <rcampbell@nvidia.com>
+Subject: Re: [PATCH v2] drm/edid: Add quirk for OSVR HDK 2.0
+In-Reply-To: <20230621061903.3422648-1-rcampbell@nvidia.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+References: <20230621061903.3422648-1-rcampbell@nvidia.com>
+Date:   Thu, 29 Jun 2023 11:20:59 +0300
+Message-ID: <87edlusmqc.fsf@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,67 +66,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Guo Ren <guoren@linux.alibaba.com>
+On Tue, 20 Jun 2023, Ralph Campbell <rcampbell@nvidia.com> wrote:
+> The OSVR virtual reality headset HDK 2.0 uses a different EDID
+> vendor and device identifier than the HDK 1.1 - 1.4 headsets.
+> Add the HDK 2.0 vendor and device identifier to the quirks table so
+> that window managers do not try to display the desktop screen on the
+> headset display.
+>
+> Signed-off-by: Ralph Campbell <rcampbell@nvidia.com>
+> Tested-by: Ralph Campbell <rcampbell@nvidia.com>
 
-The machine_kexec() uses set_memory_x to add the executable attribute to the
-page table entry of control_code_buffer. It only modifies the init_mm but not
-the current->active_mm. The current kexec process won't use init_mm directly,
-and it depends on minor_pagefault, which is removed by commit 7d3332be011e4
-("riscv: mm: Pre-allocate PGD entries for vmalloc/modules area") of 64BIT. So,
-when it met pud mapping on an MMU_SV39 machine, it caused the following:
+Thanks for the patch, pushed to drm-misc-next.
 
- kexec_core: Starting new kernel
- Will call new kernel at 00300000 from hart id 0
- FDT image at 747c7000
- Bye...
- Unable to handle kernel paging request at virtual address ffffffda23b0d000
- Oops [#1]
- Modules linked in:
- CPU: 0 PID: 53 Comm: uinit Not tainted 6.4.0-rc6 #15
- Hardware name: Sophgo Mango (DT)
- epc : 0xffffffda23b0d000
-  ra : machine_kexec+0xa6/0xb0
- epc : ffffffda23b0d000 ra : ffffffff80008272 sp : ffffffc80c173d10
-  gp : ffffffff8150e1e0 tp : ffffffd9073d2c40 t0 : 0000000000000000
-  t1 : 0000000000000042 t2 : 6567616d69205444 s0 : ffffffc80c173d50
-  s1 : ffffffd9076c4800 a0 : ffffffd9076c4800 a1 : 0000000000300000
-  a2 : 00000000747c7000 a3 : 0000000000000000 a4 : ffffffd800000000
-  a5 : 0000000000000000 a6 : ffffffd903619c40 a7 : ffffffffffffffff
-  s2 : ffffffda23b0d000 s3 : 0000000000300000 s4 : 00000000747c7000
-  s5 : 0000000000000000 s6 : 0000000000000000 s7 : 0000000000000000
-  s8 : 0000000000000000 s9 : 0000000000000000 s10: 0000000000000000
-  s11: 0000003f940001a0 t3 : ffffffff815351af t4 : ffffffff815351af
-  t5 : ffffffff815351b0 t6 : ffffffc80c173b50
- status: 0000000200000100 badaddr: ffffffda23b0d000 cause: 000000000000000c
+BR,
+Jani.
 
-Yes, Using set_memory_x API after boot has the limitation, and at least we
-should synchronize the current->active_mm to fix the problem.
+> ---
+>  drivers/gpu/drm/drm_edid.c | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> I don't know how many of these VR headsets are still around but I have a
+> working one and I saw an entry for HDK 1.x so I thought it would be good
+> to add HDK 2.0.
+>
+> v2: The vendor ID was byte swapped.
+> I'm not sure how I missed that in v1.
+>
+> diff --git a/drivers/gpu/drm/drm_edid.c b/drivers/gpu/drm/drm_edid.c
+> index 0454da505687..3b8cc1fe05e8 100644
+> --- a/drivers/gpu/drm/drm_edid.c
+> +++ b/drivers/gpu/drm/drm_edid.c
+> @@ -230,6 +230,7 @@ static const struct edid_quirk {
+>  
+>  	/* OSVR HDK and HDK2 VR Headsets */
+>  	EDID_QUIRK('S', 'V', 'R', 0x1019, EDID_QUIRK_NON_DESKTOP),
+> +	EDID_QUIRK('A', 'U', 'O', 0x1111, EDID_QUIRK_NON_DESKTOP),
+>  };
+>  
+>  /*
 
-Fixes: d3ab332a5021 ("riscv: add ARCH_HAS_SET_MEMORY support")
-Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-Signed-off-by: Guo Ren <guoren@kernel.org>
----
- arch/riscv/mm/pageattr.c | 7 +++++++
- 1 file changed, 7 insertions(+)
-
-diff --git a/arch/riscv/mm/pageattr.c b/arch/riscv/mm/pageattr.c
-index ea3d61de065b..23d169c4ee81 100644
---- a/arch/riscv/mm/pageattr.c
-+++ b/arch/riscv/mm/pageattr.c
-@@ -123,6 +123,13 @@ static int __set_memory(unsigned long addr, int numpages, pgprot_t set_mask,
- 				     &masks);
- 	mmap_write_unlock(&init_mm);
- 
-+	if (current->active_mm != &init_mm) {
-+		mmap_write_lock(current->active_mm);
-+		ret =  walk_page_range_novma(current->active_mm, start, end,
-+					     &pageattr_ops, NULL, &masks);
-+		mmap_write_unlock(current->active_mm);
-+	}
-+
- 	flush_tlb_kernel_range(start, end);
- 
- 	return ret;
 -- 
-2.36.1
-
+Jani Nikula, Intel Open Source Graphics Center
