@@ -2,194 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED2DC742EB0
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 22:43:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 165A3742EAC
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 22:43:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231979AbjF2UnJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 16:43:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44066 "EHLO
+        id S230462AbjF2Um4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 16:42:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231792AbjF2UnD (ORCPT
+        with ESMTP id S229812AbjF2Umx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 16:43:03 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE8FF2695
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 13:42:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1688071332;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=5xLUGx3Pr16QggBwM/nDREyvFR1ZE9/fpWNsWIVXh0E=;
-        b=FFrrUm1euJG6bXoNduy/qxD9v2x3nnO1kqFtt1P1UW/SPn8OZvm+XlmIb0gWYGBhkkTODH
-        B5r4Dt2nLLza0GPhFXhQKsNeMeDfd5xGwpW8DFshVTFNZJYmUJD470S31GAjb3WN4e3eZM
-        KRuIZjqnMeIiw0hCglEMNWF9WhuZx6Q=
-Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
- [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-156-qk5dRLgbNzGFhhX49IAXnA-1; Thu, 29 Jun 2023 16:42:10 -0400
-X-MC-Unique: qk5dRLgbNzGFhhX49IAXnA-1
-Received: by mail-qk1-f199.google.com with SMTP id af79cd13be357-763a36c3447so107652985a.3
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 13:42:10 -0700 (PDT)
+        Thu, 29 Jun 2023 16:42:53 -0400
+Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3061730F7
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 13:42:48 -0700 (PDT)
+Received: by mail-pg1-x549.google.com with SMTP id 41be03b00d2f7-55ac8fcc887so585903a12.0
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 13:42:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1688071367; x=1690663367;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=BQRaWvbWayXrUaV/AdYM8A6PgwM50YALn2m11rBg8qU=;
+        b=ZvuBCPvFjFFfa8d+zeaX46c2x0RijXWR6UrLD+BhybYRnBeiOyYlxDbqGIWXCZioD7
+         ZoWlSM3s10b16QVHRvcNSQ2ADgzCmL70OUrYzCYR4OOQf1RKZijla/OQ9FBA9/lkvON6
+         fphvlcXOJMhvX9CGodVsEzRcGS5MuxWZdhjdqH62iLroGXy5WRhF0Qe5LFdjlgkYAOsl
+         GXWbKs/cG6e3gqM7iMUXW45g4SBZKhdPOo9QQ1emhpLiPch1aJIJo/fee0+KFFC7NKMo
+         jKPIt5+Oa2r4lcoc5b+2hLIHg+GDaYRzlZBqQ8fquyFgs6FakYi2EhfTvXVKkV+dqZoV
+         y2UQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688071330; x=1690663330;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=5xLUGx3Pr16QggBwM/nDREyvFR1ZE9/fpWNsWIVXh0E=;
-        b=X4F5hBiDWYjjIkBJGOXqlPk1WU1/qJ3aGxUuWtHwPMDtRGnOC3iYB8eBRZujHTk08C
-         tbXpignAFvgQEKO5ooh4ljO7RL1wngd0hG6hYzTACzfPbQjlsTiOZc6Q4CGvvFeBbwRR
-         3q/+14skFAU4ZsvT8QbSa/YpjoPasJasyCotZIiOS0dWbRyV/u6oJdPaidkS341kQFJT
-         Sqn4q1Gfp5VQwPQxtJMM7P0GWKtjyClgRnqRYZ9Uzk2CY0Vx1+R7pMGCzMeLHPfCkKN/
-         Cn8dRa0ogZOlLUQYXmGqkCSB/3Of3bQJy0y6ujNG3NJsF2d8TiGq1fL56FT+aSFPBQEq
-         s25A==
-X-Gm-Message-State: ABy/qLaa5i26elB2DJK83+IJKOyg1XtalSb7ycy3SPW3qbFZndNfvS6F
-        obgyGsbda6atfGnP5QpLpjDj6JCiofEf5z8O8rFN65DAOJ1PfPfX8a8ZbUgj54PRri1JVGrhGET
-        D5sFDkB85JDAuR/SM7gJdXdGP
-X-Received: by 2002:a05:620a:4511:b0:767:2412:f269 with SMTP id t17-20020a05620a451100b007672412f269mr483038qkp.61.1688071329920;
-        Thu, 29 Jun 2023 13:42:09 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ5dZ99u0FexFz2CLm1Yt25aSRFz1tJwVcnRgmM9Nldf9fXEuZIjNdHPVzzgvFl6GERjW4GRbw==
-X-Received: by 2002:a05:620a:4511:b0:767:2412:f269 with SMTP id t17-20020a05620a451100b007672412f269mr483011qkp.61.1688071329586;
-        Thu, 29 Jun 2023 13:42:09 -0700 (PDT)
-Received: from thinkpad-p1.localdomain (cpe00fc8d79db03-cm00fc8d79db00.cpe.net.fido.ca. [72.137.118.218])
-        by smtp.gmail.com with ESMTPSA id 20-20020a05620a071400b007671cafbf5csm2266438qkc.85.2023.06.29.13.42.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Jun 2023 13:42:09 -0700 (PDT)
-Message-ID: <425880de38770e059ae4734fc72d6cdc77bf1870.camel@redhat.com>
-Subject: Re: [PATCH 1/1] PCI: dwc: Use regular interrupt instead of chained
-From:   Radu Rendec <rrendec@redhat.com>
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Jingoo Han <jingoohan1@gmail.com>,
-        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Krzysztof Wilczynski <kw@linux.com>,
-        Rob Herring <robh@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Thu, 29 Jun 2023 16:42:07 -0400
-In-Reply-To: <20230629195745.GA444039@bhelgaas>
-References: <20230629195745.GA444039@bhelgaas>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
-User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
-MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        d=1e100.net; s=20221208; t=1688071367; x=1690663367;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=BQRaWvbWayXrUaV/AdYM8A6PgwM50YALn2m11rBg8qU=;
+        b=fAjEBMmyeWxhAC6CoA4vLJPcvCxL8dfThZIRXxMV6mtR/lDV57OeIQT9SOUBJ2kafs
+         +8idt7ZunRd9qlto4/xokLTaUZh9VCQNyM////javFzMSgm2R9COVMx/L+q/FQtIAsci
+         m5+QjYw4ynZ9h1QH0c+5JOavDeR7ou/RUFZkdtxvI9vHJHtAdQsq19XCGxVm4DOvdIrt
+         QJxnfy16O/kgT8Dg8mDk984RiW4xRZNlSV9fjiGl7BhUdPoKeH4D14J/1NbzkgaFjK6G
+         JVV8DHLk0Ve/9i4iyqqGvWhkgp+b2scrERifIcncT0ArRa1kSaGMP8ZJoCwygjvZ3dgh
+         m4fQ==
+X-Gm-Message-State: ABy/qLayPteG1VVr8vEprVj1VGTwb/205fwKQMgZ0v7LCmpoYSWJ3rva
+        U4KsjAmVJf+XXCNj1CWOIpdSTgBqAmo=
+X-Google-Smtp-Source: APBJJlHgevTQgY2MJg54ip7lP9/UCiNLV/mV8dCTaL4KyHYq1c01ivdPXnryEBWLTlP3BFj3MZA2IesL2GU=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a65:67cd:0:b0:55b:583d:3fd9 with SMTP id
+ b13-20020a6567cd000000b0055b583d3fd9mr6024pgs.6.1688071367584; Thu, 29 Jun
+ 2023 13:42:47 -0700 (PDT)
+Date:   Thu, 29 Jun 2023 13:42:46 -0700
+In-Reply-To: <ZJzWZEsRWOUrF7TG@yzhao56-desk.sh.intel.com>
+Mime-Version: 1.0
+References: <20230616023101.7019-1-yan.y.zhao@intel.com> <20230616023858.7503-1-yan.y.zhao@intel.com>
+ <ZJy6xcIsOknHPQ9w@google.com> <ZJzWZEsRWOUrF7TG@yzhao56-desk.sh.intel.com>
+Message-ID: <ZJ3sxm6CngYC7pno@google.com>
+Subject: Re: [PATCH v3 08/11] KVM: x86: move vmx code to get EPT memtype when
+ CR0.CD=1 to x86 common code
+From:   Sean Christopherson <seanjc@google.com>
+To:     Yan Zhao <yan.y.zhao@intel.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        pbonzini@redhat.com, chao.gao@intel.com, kai.huang@intel.com,
+        robert.hoo.linux@gmail.com
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gVGh1LCAyMDIzLTA2LTI5IGF0IDE0OjU3IC0wNTAwLCBCam9ybiBIZWxnYWFzIHdyb3RlOgo+
-IE9uIFRodSwgSnVuIDI5LCAyMDIzIGF0IDAyOjMwOjE5UE0gLTA0MDAsIFJhZHUgUmVuZGVjIHdy
-b3RlOgo+ID4gVGhlIERlc2lnbldhcmUgUENJZSBob3N0IGRyaXZlciB1c2VzIGEgY2hhaW5lZCBp
-bnRlcnJ1cHQgdG8gZGVtdWx0aXBsZXgKPiA+IHRoZSBkb3duc3RyZWFtIE1TSSBpbnRlcnJ1cHRz
-LiBPbiBRdWFsY29tbSBTQTg1NDBQIFJpZGUsIGVuYWJsaW5nIGJvdGgKPiA+IHBjaWUyYSBhbmQg
-cGNpZTNhIGF0IHRoZSBzYW1lIHRpbWUgY2FuIGNyZWF0ZSBhbiBpbnRlcnJ1cHQgc3Rvcm0gd2hl
-cmUKPiA+IHRoZSBwYXJlbnQgaW50ZXJydXB0IGZpcmVzIGNvbnRpbnVvdXNseSwgZXZlbiB0aG91
-Z2ggcmVhZGluZyB0aGUgUENJZQo+ID4gaG9zdCByZWdpc3RlcnMgZG9lc24ndCBpZGVudGlmeSBh
-bnkgY2hpbGQgTVNJIGludGVycnVwdCBzb3VyY2UuIFRoaXMKPiA+IGVmZmVjdGl2ZWx5IGxvY2tz
-IHVwIENQVTAsIHdoaWNoIHNwZW5kcyBhbGwgdGhlIHRpbWUgc2VydmljaW5nIHRoZXNlCj4gPiBp
-bnRlcnJ1cHRzLgo+ID4gCj4gPiBUaGlzIGlzIGEgY2xlYXIgZXhhbXBsZSBvZiBob3cgYnlwYXNz
-aW5nIHRoZSBpbnRlcnJ1cHQgY29yZSBieSB1c2luZwo+ID4gY2hhaW5lZCBpbnRlcnJ1cHRzIGNh
-biBiZSB2ZXJ5IGRhbmdlcm91cyBpZiB0aGUgaGFyZHdhcmUgbWlzYmVoYXZlcy4KPiA+IAo+ID4g
-Q29udmVydCB0aGUgZHJpdmVyIHRvIHVzZSBhIHJlZ3VsYXIgaW50ZXJydXB0IGZvciB0aGUgZGVt
-dWx0aXBsZXgKPiA+IGhhbmRsZXIuIFRoaXMgYWxsb3dzIHRoZSBpbnRlcnJ1cHQgc3Rvcm0gZGV0
-ZWN0b3IgdG8gZGV0ZWN0IHRoZSBmYXVsdHkKPiA+IGludGVycnVwdCBhbmQgZGlzYWJsZSBpdCwg
-YWxsb3dpbmcgdGhlIHN5c3RlbSB0byBydW4gbm9ybWFsbHkuCj4gCj4gVGhlcmUgYXJlIG1hbnkg
-b3RoZXIgdXNlcnMgb2YgaXJxX3NldF9jaGFpbmVkX2hhbmRsZXJfYW5kX2RhdGEoKSBpbgo+IGRy
-aXZlcnMvcGNpL2NvbnRyb2xsZXIvLsKgIFNob3VsZCB0aGV5IGJlIHNpbWlsYXJseSBjb252ZXJ0
-ZWQ/wqAgSWYgbm90LAo+IGhvdyBkbyB3ZSBkZWNpZGUgd2hpY2ggbmVlZCB0byB1c2UgaXJxX3Nl
-dF9jaGFpbmVkX2hhbmRsZXJfYW5kX2RhdGEoKQo+IGFuZCB3aGljaCBkbyBub3Q/CgpBY2NvcmRp
-bmcgdG8gVGhvbWFzIEdsZWl4bmVyLCB5ZXMuIE9idmlvdXNseSBJIGRvbid0IHdhbnQgdG8gcHV0
-IHdvcmRzCmluIGhpcyBtb3V0aCwgYnV0IEkgdGhpbmsgdGhhdCdzIHRoZSBnaXN0IG9mIHdoYXQg
-aGUgc2FpZCBpbiBhIHJlcGx5IHRvCmFuIFJGQyBwYXRjaCB0aGF0IEkgc2VudCBhIGZldyB3ZWVr
-cyBhZ286Cmh0dHBzOi8vbG9yZS5rZXJuZWwub3JnL2FsbC84Nzdjc29oY2xsLmZmc0B0Z2x4LwoK
-PiA+IFNpZ25lZC1vZmYtYnk6IFJhZHUgUmVuZGVjIDxycmVuZGVjQHJlZGhhdC5jb20+Cj4gPiAt
-LS0KPiA+IMKgLi4uL3BjaS9jb250cm9sbGVyL2R3Yy9wY2llLWRlc2lnbndhcmUtaG9zdC5jIHwg
-MzUgKysrKysrKysrLS0tLS0tLS0tLQo+ID4gwqAxIGZpbGUgY2hhbmdlZCwgMTcgaW5zZXJ0aW9u
-cygrKSwgMTggZGVsZXRpb25zKC0pCj4gPiAKPiA+IGRpZmYgLS1naXQgYS9kcml2ZXJzL3BjaS9j
-b250cm9sbGVyL2R3Yy9wY2llLWRlc2lnbndhcmUtaG9zdC5jIGIvZHJpdmVycy9wY2kvY29udHJv
-bGxlci9kd2MvcGNpZS1kZXNpZ253YXJlLWhvc3QuYwo+ID4gaW5kZXggOTk1MjA1N2M4ODE5Yy4u
-YjYwMzc5NmQ0MTVkNyAxMDA2NDQKPiA+IC0tLSBhL2RyaXZlcnMvcGNpL2NvbnRyb2xsZXIvZHdj
-L3BjaWUtZGVzaWdud2FyZS1ob3N0LmMKPiA+ICsrKyBiL2RyaXZlcnMvcGNpL2NvbnRyb2xsZXIv
-ZHdjL3BjaWUtZGVzaWdud2FyZS1ob3N0LmMKPiA+IEBAIC04MywxOCArODMsOSBAQCBpcnFyZXR1
-cm5fdCBkd19oYW5kbGVfbXNpX2lycShzdHJ1Y3QgZHdfcGNpZV9ycCAqcHApCj4gPiDCoMKgwqDC
-oMKgwqDCoMKgcmV0dXJuIHJldDsKPiA+IMKgfQo+ID4gwqAKPiA+IC0vKiBDaGFpbmVkIE1TSSBp
-bnRlcnJ1cHQgc2VydmljZSByb3V0aW5lICovCj4gPiAtc3RhdGljIHZvaWQgZHdfY2hhaW5lZF9t
-c2lfaXNyKHN0cnVjdCBpcnFfZGVzYyAqZGVzYykKPiA+ICtzdGF0aWMgaXJxcmV0dXJuX3QgZHdf
-cGNpZV9tc2lfaXNyKGludCBpcnEsIHZvaWQgKmRldl9pZCkKPiA+IMKgewo+ID4gLcKgwqDCoMKg
-wqDCoMKgc3RydWN0IGlycV9jaGlwICpjaGlwID0gaXJxX2Rlc2NfZ2V0X2NoaXAoZGVzYyk7Cj4g
-PiAtwqDCoMKgwqDCoMKgwqBzdHJ1Y3QgZHdfcGNpZV9ycCAqcHA7Cj4gPiAtCj4gPiAtwqDCoMKg
-wqDCoMKgwqBjaGFpbmVkX2lycV9lbnRlcihjaGlwLCBkZXNjKTsKPiA+IC0KPiA+IC3CoMKgwqDC
-oMKgwqDCoHBwID0gaXJxX2Rlc2NfZ2V0X2hhbmRsZXJfZGF0YShkZXNjKTsKPiA+IC3CoMKgwqDC
-oMKgwqDCoGR3X2hhbmRsZV9tc2lfaXJxKHBwKTsKPiA+IC0KPiA+IC3CoMKgwqDCoMKgwqDCoGNo
-YWluZWRfaXJxX2V4aXQoY2hpcCwgZGVzYyk7Cj4gPiArwqDCoMKgwqDCoMKgwqByZXR1cm4gZHdf
-aGFuZGxlX21zaV9pcnEoZGV2X2lkKTsKPiA+IMKgfQo+ID4gwqAKPiA+IMKgc3RhdGljIHZvaWQg
-ZHdfcGNpX3NldHVwX21zaV9tc2coc3RydWN0IGlycV9kYXRhICpkLCBzdHJ1Y3QgbXNpX21zZyAq
-bXNnKQo+ID4gQEAgLTI1NCwyMCArMjQ1LDIxIEBAIGludCBkd19wY2llX2FsbG9jYXRlX2RvbWFp
-bnMoc3RydWN0IGR3X3BjaWVfcnAgKnBwKQo+ID4gwqDCoMKgwqDCoMKgwqDCoHJldHVybiAwOwo+
-ID4gwqB9Cj4gPiDCoAo+ID4gLXN0YXRpYyB2b2lkIGR3X3BjaWVfZnJlZV9tc2koc3RydWN0IGR3
-X3BjaWVfcnAgKnBwKQo+ID4gK3N0YXRpYyB2b2lkIF9fZHdfcGNpZV9mcmVlX21zaShzdHJ1Y3Qg
-ZHdfcGNpZV9ycCAqcHAsIHUzMiBudW1fY3RybHMpCj4gPiDCoHsKPiA+IMKgwqDCoMKgwqDCoMKg
-wqB1MzIgY3RybDsKPiA+IMKgCj4gPiAtwqDCoMKgwqDCoMKgwqBmb3IgKGN0cmwgPSAwOyBjdHJs
-IDwgTUFYX01TSV9DVFJMUzsgY3RybCsrKSB7Cj4gPiArwqDCoMKgwqDCoMKgwqBmb3IgKGN0cmwg
-PSAwOyBjdHJsIDwgbnVtX2N0cmxzOyBjdHJsKyspIHsKPiA+IMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgaWYgKHBwLT5tc2lfaXJxW2N0cmxdID4gMCkKPiA+IC3CoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgaXJxX3NldF9jaGFpbmVkX2hhbmRsZXJf
-YW5kX2RhdGEocHAtPm1zaV9pcnFbY3RybF0sCj4gPiAtwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgTlVMTCwgTlVMTCk7Cj4gPiArwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoGZyZWVfaXJxKHBwLT5tc2lfaXJx
-W2N0cmxdLCBwcCk7Cj4gPiDCoMKgwqDCoMKgwqDCoMKgfQo+ID4gwqAKPiA+IMKgwqDCoMKgwqDC
-oMKgwqBpcnFfZG9tYWluX3JlbW92ZShwcC0+bXNpX2RvbWFpbik7Cj4gPiDCoMKgwqDCoMKgwqDC
-oMKgaXJxX2RvbWFpbl9yZW1vdmUocHAtPmlycV9kb21haW4pOwo+ID4gwqB9Cj4gPiDCoAo+ID4g
-KyNkZWZpbmUgZHdfcGNpZV9mcmVlX21zaShwcCkgX19kd19wY2llX2ZyZWVfbXNpKHBwLCBNQVhf
-TVNJX0NUUkxTKQo+IAo+IFdoYXQgaXMgdGhlIGJlbmVmaXQgb2YgdGhlIGR3X3BjaWVfZnJlZV9t
-c2koKSBtYWNybz8KCkl0IGFsbG93cyBtZSB0byBhZGQgdGhlIG51bV9jdHJscyBwYXJhbWV0ZXIg
-dG8gdGhlIGNvcnJlc3BvbmRpbmcKZnVuY3Rpb24gKG5vdyByZW5hbWVkIHRvIF9fZHdfcGNpZV9m
-cmVlX21zaSgpKSB3aXRob3V0IGZvcmNpbmcgYWxsIHRoZQpleGlzdGluZyBjYWxsIHNpdGVzIHRv
-IHNlbmQgTUFYX01TSV9DVFJMUyBleHBsaWNpdGx5LgoKSSBuZWVkZWQgdGhhdCBleHRyYSBwYXJh
-bWV0ZXIgdG8gYXZvaWQgZHVwbGljYXRpbmcgdGhlIHRlYXIgZG93biBjb2RlCm9uIHRoZSAobmV3
-KSBlcnJvciBwYXRoIGluIGR3X3BjaWVfbXNpX2luaXQoKSAtIHNlZSBiZWxvdy4KCj4gPiDCoHN0
-YXRpYyB2b2lkIGR3X3BjaWVfbXNpX2luaXQoc3RydWN0IGR3X3BjaWVfcnAgKnBwKQo+ID4gwqB7
-Cj4gPiDCoMKgwqDCoMKgwqDCoMKgc3RydWN0IGR3X3BjaWUgKnBjaSA9IHRvX2R3X3BjaWVfZnJv
-bV9wcChwcCk7Cj4gPiBAQCAtMzYxLDkgKzM1MywxNiBAQCBzdGF0aWMgaW50IGR3X3BjaWVfbXNp
-X2hvc3RfaW5pdChzdHJ1Y3QgZHdfcGNpZV9ycCAqcHApCj4gPiDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoHJldHVybiByZXQ7Cj4gPiDCoAo+ID4gwqDCoMKgwqDCoMKgwqDCoGZvciAo
-Y3RybCA9IDA7IGN0cmwgPCBudW1fY3RybHM7IGN0cmwrKykgewo+ID4gLcKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoGlmIChwcC0+bXNpX2lycVtjdHJsXSA+IDApCj4gPiAtwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoGlycV9zZXRfY2hhaW5lZF9oYW5k
-bGVyX2FuZF9kYXRhKHBwLT5tc2lfaXJxW2N0cmxdLAo+ID4gLcKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgZHdfY2hhaW5lZF9tc2lfaXNyLCBwcCk7Cj4gPiArwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgaWYgKHBwLT5tc2lfaXJxW2N0cmxdID4gMCkgewo+
-ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqByZXQgPSBy
-ZXF1ZXN0X2lycShwcC0+bXNpX2lycVtjdHJsXSwgZHdfcGNpZV9tc2lfaXNyLCAwLAo+ID4gK8Kg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgIGRldl9uYW1lKGRldiksIHBwKTsKPiA+ICvCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgaWYgKHJldCkgewo+ID4gK8KgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-ZGV2X2VycihkZXYsICJGYWlsZWQgdG8gcmVxdWVzdCBpcnEgJWQ6ICVkXG4iLAo+ID4gK8KgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoHBwLT5tc2lfaXJxW2N0cmxdLCByZXQpOwo+ID4gK8KgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgX19kd19w
-Y2llX2ZyZWVfbXNpKHBwLCBjdHJsKTsKClRoaXMgaXMgd2hlcmUgSSdtIHVzaW5nIHRoZSBleHRy
-YSBwYXJhbWV0ZXIuIElmIHdlIGZhaWwgdG8gcmVxdWVzdCBhbgppbnRlcnJ1cHQsIHdlIG5lZWQg
-dG8gZnJlZSBhbGwgdGhlIG90aGVyIGludGVycnVwdHMgdGhhdCB3ZSBoYXZlCnJlcXVlc3RlZCBz
-byBmYXIsIHRvIGxlYXZlIGV2ZXJ5dGhpbmcgaW4gYSBjbGVhbiBzdGF0ZS4gQnV0IHdlIGNhbid0
-CnVzZSBNQVhfTVNJX0NUUkxTIHdpdGggX19kd19wY2llX2ZyZWVfbXNpKCkgYW5kIHJlbHkgb24g
-dGhlIGNoZWNrIHRoZXJlCmJlY2F1c2UgdGhlcmUgbWF5IGJlIGV4dHJhIGludGVycnVwdHMgdGhh
-dCB3ZSBoYXZlbid0IHJlcXVlc3RlZCAqeWV0KgphbmQgd2Ugd291bGQgYXR0ZW1wdCB0byBmcmVl
-IHRoZW0uCgo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgcmV0dXJuIHJldDsKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgfQo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoH0KPiA+IMKgwqDCoMKgwqDCoMKgwqB9Cj4gPiDCoAo+ID4gwqDCoMKgwqDCoMKgwqDCoC8q
-Cj4gPiAtLSAKPiA+IDIuNDEuMAo+ID4gCj4gCgo=
+On Thu, Jun 29, 2023, Yan Zhao wrote:
+> On Wed, Jun 28, 2023 at 03:57:09PM -0700, Sean Christopherson wrote:
+> > On Fri, Jun 16, 2023, Yan Zhao wrote:
+> > > Move code in vmx.c to get cache disabled memtype when non-coherent DMA
+> > > present to x86 common code.
+> > > 
+> > > This is the preparation patch for later implementation of fine-grained gfn
+> > > zap for CR0.CD toggles when guest MTRRs are honored.
+> > > 
+> > > No functional change intended.
+> > > 
+> > > Signed-off-by: Yan Zhao <yan.y.zhao@intel.com>
+> > > ---
+> > >  arch/x86/kvm/mtrr.c    | 19 +++++++++++++++++++
+> > >  arch/x86/kvm/vmx/vmx.c | 10 +++++-----
+> > >  arch/x86/kvm/x86.h     |  1 +
+> > >  3 files changed, 25 insertions(+), 5 deletions(-)
+> > > 
+> > > diff --git a/arch/x86/kvm/mtrr.c b/arch/x86/kvm/mtrr.c
+> > > index 3ce58734ad22..b35dd0bc9cad 100644
+> > > --- a/arch/x86/kvm/mtrr.c
+> > > +++ b/arch/x86/kvm/mtrr.c
+> > > @@ -721,3 +721,22 @@ bool kvm_mtrr_check_gfn_range_consistency(struct kvm_vcpu *vcpu, gfn_t gfn,
+> > >  
+> > >  	return type == mtrr_default_type(mtrr_state);
+> > >  }
+> > > +
+> > > +void kvm_mtrr_get_cd_memory_type(struct kvm_vcpu *vcpu, u8 *type, bool *ipat)
+> > 
+> > Hmm, I'm not convinced that this logic is subtle enough to warrant a common
+> I added this patch because the memtype to use under CR0.CD=1 is determined by
+> vmx specific code (i.e. vmx.c), while mtrr.c is a common code for x86.
+> 
+> I don't know if it's good to assume what vmx.c will return as in below open code. 
+> (e.g. if someone added IPAT bit for CR0.CD=1 under the quirk, and forgot
+> to update the code here, we actually need to zap everything rather than
+> zap only non-WB ranges).
+> 
+> That's why I want to introduce a helper and let vmx.c call into it.
+> (sorry, I didn't write a good commit message to explain the real intent).
 
+No need to apologize, I fully understood the intent.  I'm just not convinced that
+the risk of us screwing up this particular case is worth the extra layers of crud
+that are necessary to let VMX and MTRRs share the core logic.
+
+Absent emulating CR0.CD=1 with UC, setting IPAT is complete nonsense when KVM is
+honoring the guest memtype.
+
+I 100% agree that splitting the logic is less than ideal, but providing a common
+helper feels forced and IMO yields significantly less readable code.  And exporting
+kvm_mtrr_get_cd_memory_type() only adds to the confusion because calling it on
+SVM, which can't fully ignore gPAT, is also nonsensical.
