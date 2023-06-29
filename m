@@ -2,30 +2,30 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1763742805
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 16:15:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27FB9742808
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 16:15:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232311AbjF2OPM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 10:15:12 -0400
+        id S232316AbjF2OPR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 10:15:17 -0400
 Received: from mail-am6eur05on2065.outbound.protection.outlook.com ([40.107.22.65]:38400
         "EHLO EUR05-AM6-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S232251AbjF2OPJ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 10:15:09 -0400
+        id S230119AbjF2OPL (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 29 Jun 2023 10:15:11 -0400
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ELRwB5a3NShznqWhlmdr99V5/QinxhecMVhMf/erSDnRTJzzFaJCKdd5hTdhUP9s/XP7k65FItx3kAPbqVLI0AqdHgSZnD8hEfElRDw4VstOASvxo9k4Wqw54oJavx1Y1lgLcxmAM+YxAqv5FJGjGxgy95tUFYJ7DpJAS0uvQ/7c6F137pfBydFuFjgnaaq8DGH3mgcGiUkASrg4iRJHYIvyEukOSBqHMol5V8paikFJhd5YVn+ZFxC5mz/um7+LDvM0T15K2EbfX+KK70PdiOcYyPTbYxNLgQU5bTIFeqcX3Wv4iUkpf2o5AfLuDvWnv5cU2uuIKsNl/8zA1vxFvQ==
+ b=QsjThUH2gO0ps22feBEmyfPG1SBekIv9in72pJJx/hxoXvIEdC+sBkZBcfLFWRVHKZpeyGLKrsZFL2Sht3gXSjQUPtMwnkmYaVKGjH+BQDGr2uYLKNvGHfNeC7/873sw3IdYOxVNE3J2sED4bW9U+LlMfFtom616gG7LR8q9AP0urjo4NtErIqPPYv6ZYu0hyHz0D3Rv1F4grL1zTwkH9qke/IQ0M0N5tiu0tDOfF61ln6auQIS1KwTF7nSflUnU1dg7NpOZ+CwDWiMcTslM+rOlcSUnY4NeYwmYaTMCe2JXJcMHqrcFbckyd0MHoqfOuVseSFqEoJ4WBYbpY3eYoA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=u9uWXx5U6NJv9IJ4mulwa0UJoWk5HRI+kACPTEIAsE0=;
- b=aZ3OjGz9FzBHXoDJB5Hi2zgOeV8dJWxsnbcD0QsbhzOwb4J+QYhGEt2/TDdpaHYdKArIoc4gBfw9ntrMgBYRQSKcPpx+UjIPxggg0cWZlQMmexrxQG+KXMynp3HdMFW3kJwuYyKx9wsD6qV0CF+QVkA4Gb1+53e3fj8CVik7lecjwh15o1qonnWTzgt60aLLqNkNcH0b73tIGoJ8/AkBid+HxXCTra5NkwmOSqLuenN0/ioZ7JA/AzGOySNIog6YA9BhsMgHpUl4Lp1GPwJDd04D6gxsvvazO/elEujGDtjEgYKUD5/Nh8nI094ojwvM3zJEmvdkCgwiXDiXDmrAPg==
+ bh=jwRW/0ave4ugQ6i9W4UpkELO70kPhm8D6SPMJpY66pE=;
+ b=epoDsXsQo/OYIhYKM5hb0jcABicfTPBMuQ3gCTOT0yuXY2xZhiIpfpLY0FSn58crOwrVeoAynY0qhBx/V3MElQOs4Rh1nM3nCpI471+FOosX8EIkJ8RSz4L24uUn61x5fjHsO3j3nD+JWgQnCKk2A2FxPxnWWyaeVv2WN0Z1UojTwjSpwI0NJO2X+ATKyTiQafjPnBkrI78nMubD4Jc6IUlMLrFRuMkoTigoE4R85Hk015oKgecjf6AAEleWG73FEDsmkFFl8nTdf7xixKLK4ZdBMh2Z8Th3HeDrbMfWeisY06QTsoKJW9+C0s5pe1JPJhIxUT8iwOdaUPiStdaY4g==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
  header.d=nxp.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=u9uWXx5U6NJv9IJ4mulwa0UJoWk5HRI+kACPTEIAsE0=;
- b=K814XH6kIiLKbPylmLeW+noiSwP2vuo2S+jO1InXZoPuNQA+GS3Lr23GDCvcwciBLzlAHA54ojRYdjv49Qcy679NA93iwFWz85xG+2pX26OiPJ+QUlxUA390K0Vun3IyXIPUhqksvD/ir2kGTy9qLm+iRAt8VnW+GsnWBJr0xTE=
+ bh=jwRW/0ave4ugQ6i9W4UpkELO70kPhm8D6SPMJpY66pE=;
+ b=MOs7CgqF4DiaLCh0ERcruVKKk/sWSTUB7ToIbqaJb3KqLDUaf5Z7G62unqAmt61zLc1S3BB3j9ZAjYUOuo43YjRj1ML8PSAW8PGwBSSdTD3tK9K1BgDJVRIN2cJ7VrR54Px7Y/nkpDY+lsKh/RJ4ggSzuY/lpzIZCjg/zfThk1A=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=nxp.com;
 Received: from AM0PR04MB6452.eurprd04.prod.outlook.com (2603:10a6:208:16d::21)
@@ -45,10 +45,12 @@ Cc:     Andrew Lunn <andrew@lunn.ch>,
         Eric Dumazet <edumazet@google.com>,
         Jakub Kicinski <kuba@kernel.org>,
         Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org
-Subject: [PATCH net 0/2] Fix mangled link-local MAC DAs with SJA1105 DSA
-Date:   Thu, 29 Jun 2023 17:14:51 +0300
-Message-Id: <20230629141453.1112919-1-vladimir.oltean@nxp.com>
+Subject: [PATCH net 1/2] net: dsa: tag_sja1105: fix MAC DA patching from meta frames
+Date:   Thu, 29 Jun 2023 17:14:52 +0300
+Message-Id: <20230629141453.1112919-2-vladimir.oltean@nxp.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230629141453.1112919-1-vladimir.oltean@nxp.com>
+References: <20230629141453.1112919-1-vladimir.oltean@nxp.com>
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
 X-ClientProxiedBy: FR2P281CA0076.DEUP281.PROD.OUTLOOK.COM
@@ -57,83 +59,86 @@ X-ClientProxiedBy: FR2P281CA0076.DEUP281.PROD.OUTLOOK.COM
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: AM0PR04MB6452:EE_|PAXPR04MB8406:EE_
-X-MS-Office365-Filtering-Correlation-Id: 34e65408-0d1c-4269-5828-08db78ab3c40
+X-MS-Office365-Filtering-Correlation-Id: 658c6069-d10b-4204-02f4-08db78ab3cae
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: G5BRzQacdUK2HH+zeAIkKx2BBb4ga0IXZJYgHbBblYqGVI5HtbknnvXwXyZrjXxBzGe0FewoEpwaF2hNH29vZaKHfZUhPQLIRjFzA6WrjsT/1bbUWGzY2qkupiuxt5f7P6TNZIItVeEBvlIhY6z8IlK9vF2YcBRAlkdcgoRDQEojCZYW4W9XPe0KIvtoUVlm+l486+3IsUabnwx+NNksKqp1wppTZ5m/7Co6V+eB7s8ELyw0yOS1eWZ5kDJwGE1gj1c3MbLP1KSclXCbJapJqadcfpvOY770lRPNtSoni/k8Rs6C23/SToRxR4GSPCkSxOdan4IcwieHOPtqjWP0NpzSqzVbScLmSY4ieKXwNEHTehNRzA+ASV2l7DkJ0yOQZY2nokOnsNnZSYQD+sTNvQp/rQBgsr1XoJrh6wbPNEuZkteq02Tzb3SIufwgcBxxZTY0/1BeqkuKZwY8e8q8V82XSkYGPPCqejspJ81O/5tvUEHlX4rt5jm1w0JSZdvQvWaq9UpyGYBFnamjq/cuMWOv0r/HKfGTQSp9LXuvlUs7SdyQMrgzE4g00tEqXwm48Ptaz+ywL5vzYXn7tviGJpFJ7yj1SO4PQ7P9UGh4PwM=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0PR04MB6452.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(39860400002)(346002)(366004)(396003)(136003)(451199021)(1076003)(966005)(6666004)(54906003)(6486002)(52116002)(83380400001)(2906002)(26005)(2616005)(6512007)(186003)(478600001)(6506007)(5660300002)(44832011)(36756003)(4326008)(38350700002)(316002)(66946007)(38100700002)(8936002)(8676002)(66556008)(66476007)(86362001)(41300700001)(6916009);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: ITR6Ed/7vj6gEvnaqcN2xx1Q3c0x+U95pl3pcSi9A2l3CXvGY/QX4lL8sgSn/9HYt59fUrPgNOQUL0Uv3UaQiq3cdMWMdDO9Gupi7mb1oPfm4/6zWu8QDu0Cl2+zOVv/ZTd60ZZM5HsUD2SitT6tEVHm6elst3wAoL6fYTVfjXeLOkMZ8IjUqXAlwRlrWGjccBvB3uBOdNMjMWKB8EqrhNyWLmQS346cj6P//Ze0/r8D+Jud8yeDqdzUkNONqNeaE8VvaY4v3wkGEyedK39K6byfn6ruSX4wViOsvjI0qKdcDQF18db1zY06+0KXYZ94BwT/2Q1PI0gYVDfFfRJV7HwW3CrvwSORd3Po4z63DxTyqPmXTa+lvMTuc0rPc412dqAuZjAORQskxq3HBYUpyJzAjJKoBFMknY5TsXOAtEjXzT3xWTp4AjaibJjsdYxt4Xx8+Q9gZ1qid9z7TCg5vXZhpN18ZDi0FUcqw4PO/WdtodIt9RbB5nXAlXoqSvlmbJ7liqKnjyYSzE61ovCwJDIF+Xs3pzJLzzuwocoD3DALaVLMwnn+UBjXYjJVqamFOKdwfI9f+qdo5AdiPTHPn8172ys6Y0smOKOUviv7rzP7BUifgCtEXJ22FLsVNgPD
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0PR04MB6452.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(39860400002)(346002)(366004)(396003)(136003)(451199021)(1076003)(6666004)(54906003)(6486002)(52116002)(83380400001)(2906002)(26005)(2616005)(6512007)(186003)(478600001)(6506007)(5660300002)(44832011)(36756003)(4326008)(38350700002)(316002)(66946007)(38100700002)(8936002)(8676002)(66556008)(66476007)(86362001)(41300700001)(6916009);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?o/7mQbN2s7py8cfozXJHYLFo308/HtqV+GsWVPDt3E50o5URAJYsXZHLMSIu?=
- =?us-ascii?Q?jphTiC4HJmxdXhbDdi1jeBRfOPm7iqnUu+a/I+3Rg3zjHw+4YglftJjsdZNV?=
- =?us-ascii?Q?4eQ855PXnnqjxq4ngcsUla4grQ15Iy7t4mXZF/kVex4mJXIT6HIIe+9CV6CV?=
- =?us-ascii?Q?pZ+ubni2c92ZSh+LG4HQurOKu7z5Sl7DA1I/FFrRVMoBvx6OiyiwM5asQqG0?=
- =?us-ascii?Q?HYT68DkrJl3ftRioW5Y9ZbU/OoE8nQ2iSh9e0MAzSF+SjO9R+obxqGZiImjB?=
- =?us-ascii?Q?QncvaZgY/lGQbCgyuRxFA6/x4vtqvtBX3251gVdSEwvo5NOulmq6PvyLzOc7?=
- =?us-ascii?Q?CVGueOUbpXC3JALyy/UfZNCsJd3jRNiQviiU7wIEJlo1VhWxYk/qb82mP0Bm?=
- =?us-ascii?Q?AklkytLXUUMZDeC8UaOQHqh2IQAMUj0I+55epHCso2BMH8iw1WAXLGDQMftr?=
- =?us-ascii?Q?EpYrMJn45RfMOqpLtLn7/AS5bKU1KW7ntnqGZN8vX3EQEC36jtjBUbIKxslR?=
- =?us-ascii?Q?CrJ2D27wrp52mQPXhW5g0yXrh/gPktsWIF7y90pbPqtxY9Vbf/75Hw1lpNKU?=
- =?us-ascii?Q?1DwZr3a7Fx+ZLzjnwNkDKcQpRqIW6I/3IW97+3IKQ8bPO/Bne1mj83ixlscq?=
- =?us-ascii?Q?fMVE7pIOPyH7KoxjpQLyjBoV0sCYrlxa2ZwM6i7Zon3KJ0j/joAyEC+60QNn?=
- =?us-ascii?Q?/itPlNcgIrlE0Rdg2BE+kqaT9O++WQcoQ6dMZ5urGi5FeSM1JxML+Q6I/Rsh?=
- =?us-ascii?Q?B7gw53AkArJola42SmGPi1d/NRji6LcR5Zgdd45ouJ9sH7vBN4EyssNLa8kC?=
- =?us-ascii?Q?bP4vp52cs1EyELcsQ8zVLuMdI6UKzuLfFJ57imLhNSHzw07XAzXmv5vqik5M?=
- =?us-ascii?Q?6PswVYFABsPBKzt8476rV9gy6LrynCS++ycxSIW9fovcvDbPT9WDlzzVm1lc?=
- =?us-ascii?Q?5CA5WScXqHayqKNEO+U7LQxc0snDkz2l87QuIdnNOzAiZbnRdSXp7KiIjdpr?=
- =?us-ascii?Q?Lzd5bF/58Ao8ztp4sWgIRjyxUyWtDJmt1OLMwzC47SqsftYo17z7ULTEfN/A?=
- =?us-ascii?Q?d+NTXCCg7DSsY4KPZmisKs572y/NfvwB9+M3rIxjD4ah5sWXMwP51ZTdvMIE?=
- =?us-ascii?Q?fRVYX5M8XcMEqo3Hyr7KRSeaQAS6VtFxPvYlRWRwWQa5W9kroyqLZhU1jNyh?=
- =?us-ascii?Q?8g80RLgiicv/UxXGYyoXgkm63TyLQOlTRdiJWIyNir+SNhq+y00EWqjtqBqP?=
- =?us-ascii?Q?Ci44cQUbSmQd6FXwKpa8vMXqExPc2P4CYEfsZ3VYEtj+evRAyE/w2jZOajyT?=
- =?us-ascii?Q?T77X4uOMgipE+xHXBIa6yKf7NOQXgkd5YJ+UUe0eqlOPR9cf7yStVd9gCkf8?=
- =?us-ascii?Q?ZJ5o9nJnf813KHF7TLNyEKrfrTuHn40RTlrtbXZpsb0eZKXzUvJ5+a/+sdrT?=
- =?us-ascii?Q?2OpHumw5EdidHEVWKUmDZR4lWJoBJItb1vBbTwNR5+caAFksnSWlqR1Tg+JS?=
- =?us-ascii?Q?Kv6ERFeh7KljfLEy7bjeMRsSLNYlt13HV6R5cz1670te6nbY955RX7+/BQfq?=
- =?us-ascii?Q?WhyuEdjuE79IHbnNVz770FWTlCLbmIJzL+sFthkzoFBoXkuBPcnPRX+HUJJC?=
- =?us-ascii?Q?hw=3D=3D?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?SnbsXYc3iJmMk80uGT8k3R9ci43b3JpswAUnSZ/hZ6aQp0MsSb/lvEV5/f28?=
+ =?us-ascii?Q?1OHed5EjX6zuF9CGqyJecvcuy5vLBibPdQjH3nhV8zEXr1k9ky72kJY2Xukv?=
+ =?us-ascii?Q?cICvAZX4GKgI6d0R5bnqhJavMZO2UIyYG9hV0A6IauTL94cLU6Ok4DUiuqvY?=
+ =?us-ascii?Q?8I0Oo6f37pGFzB6H2Bih8YPxs/Y6S5/IX8Pt9uEv+EljHIrTOVTcsL/1mRxi?=
+ =?us-ascii?Q?moncTJ9a09EXfekzIN8UsrvNN3JHPVrH15yFm92mN6PBqq/3mvWye5lJDMoz?=
+ =?us-ascii?Q?JC1pOJT5DQs4YFgQZh81ZbZcxOfK7mrvPq2aAbvZvpsXKjAw1VUABO6z46mI?=
+ =?us-ascii?Q?VToEW06RZvpsY3wn+OHpriR46XT0oIqv+SECLWp043bN9FqkGcCSS7E0iqgx?=
+ =?us-ascii?Q?6t0dqGFBqCCqNR3bZLcfPr7UFhvJUWqL1mMEdkJlGwKRJLwK9DS8PJuwosa0?=
+ =?us-ascii?Q?thAr0rfGnXheoKrxkR5sz1q5hdBquoiGcVVSp33L/8N0Q0LsxurJEzvlZHGL?=
+ =?us-ascii?Q?ZmgHrT93ZLLU/WMA9TTGFKV4oHTJme5g5pJsx1rc+Inma9bd2o1Rx2WMQaBX?=
+ =?us-ascii?Q?NLSWPHQDVWVQIqld5YPCd3I7XjPOQ7vWE94LJm+GL8112IzA1r2mj+/Fgrg7?=
+ =?us-ascii?Q?OUSUxYyjvZJ6uyBsdptN98kr9UyMJYGlLM9XHe1FVtEgiH2/liSS465wrn9h?=
+ =?us-ascii?Q?fNXlzNOuyc4loVE6N8v71cWU+3U1MSPtbidkjFyZT1nU4g/jbT38eYiLAYwA?=
+ =?us-ascii?Q?QoNq8s42oM5hl2HEkoUywStJtq7K6jM1m8YwxTZ+M00TbazU9t+NL+3lnzwp?=
+ =?us-ascii?Q?tWM/LxppgPmhhhR8OY0tZR11gKYnl1pYrI2frw0POrlTK+x6sLZ01CJidvOD?=
+ =?us-ascii?Q?yUIyzdyAFcg9w77HholPSIHp6VTGtYqogCPZrrHCGBKXXSOqkvxoUAPFP7M8?=
+ =?us-ascii?Q?pzwE2KzMpedyX5f7HJztYH6CUTV8qsy3ZSYgO0oMPLTOLPpQXw58KROA75Ku?=
+ =?us-ascii?Q?lwOLRoMjcGjOfadc38vtXctRnkZO4ZmjeEVrGs/Rpn2vg8A0ytWf1aiockF+?=
+ =?us-ascii?Q?ecZHn5f39u/zDMaLVwKWJMqAPwt8Hvw9z1i3IHxhxa0WC2HS/GsmJtgUcvDp?=
+ =?us-ascii?Q?O9Icf2Hdlxq+nFsEa8Sz6nokhP7A7LuON7KpoHeV1AKKQ8njt4VNpQB6p4/0?=
+ =?us-ascii?Q?Xv5sL+XohHzxz0rzewu/HUmdwpr6uxBvJpMgOj5fltpaTXMPl5EK4E7puZBL?=
+ =?us-ascii?Q?KUwkSH0JpjYku/SKY7IpQhv3qQLUKzYOm5s90QjkP5TstuPIuq19jMmx/nCA?=
+ =?us-ascii?Q?ggWBx7zZXSuCzXNoDPcQUEtl58rn4nV46lNFa8jWMtZCVS8ueIkJu10c1rCG?=
+ =?us-ascii?Q?y47k//23rJFy0KyQkgvoLbU9Sq3jX3Q8HmqNle/g79p37H4oDszVRpQ5EOxd?=
+ =?us-ascii?Q?8cbFjoiPPC7+g7jybgtjVQcFR5ivD9Sf+BqawArSHVgyXw248Pis4bMUvjPW?=
+ =?us-ascii?Q?dJlTAROd8mXnBHJOWY3i9xTkhx9TKxlvn0SUJG71Zp4GOikBphqz/pPs+MpA?=
+ =?us-ascii?Q?xRH3FmTbbkgJIx+EtJbaQbOqTxFYqFh+NzUtcOu1h6yHnXk0bZNwMI+YVUhX?=
+ =?us-ascii?Q?KA=3D=3D?=
 X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 34e65408-0d1c-4269-5828-08db78ab3c40
+X-MS-Exchange-CrossTenant-Network-Message-Id: 658c6069-d10b-4204-02f4-08db78ab3cae
 X-MS-Exchange-CrossTenant-AuthSource: AM0PR04MB6452.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Jun 2023 14:15:05.0249
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Jun 2023 14:15:05.7681
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: V/GLNK4EjzQZB8TfWrcKxt2QeMZV1kWt2bF47FWwUoAWlUU7Q07nj77udtpS1j2d1m9NnBfM6KItccP+LKfipg==
+X-MS-Exchange-CrossTenant-UserPrincipalName: DIGvrZj2CL1u4DqX4yYIZkoPrzygngmKsDCgeAxbiXVxN8eK8csVyGeByM7ea5VYa4g/JbGyfcSAMs1fJqGeOQ==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAXPR04MB8406
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The SJA1105 hardware tagging protocol is weird and will put DSA
-information (source port, switch ID) in the MAC DA of the packets sent
-to the CPU, and then send some additional (meta) packets which contain
-the original bytes from the previous packet's MAC DA.
+The SJA1105 manual says that at offset 4 into the meta frame payload we
+have "MAC destination byte 2" and at offset 5 we have "MAC destination
+byte 1". These are counted from the LSB, so byte 1 is h_dest[ETH_HLEN-2]
+aka h_dest[4] and byte 2 is h_dest[ETH_HLEN-3] aka h_dest[3].
 
-The tagging protocol driver contains logic to handle this, but the meta
-frames are optional functionality, and there are configurations when
-they aren't received (no PTP RX timestamping). Thus, the MAC DA from
-packets sent to the stack is not correct in all cases.
+The sja1105_meta_unpack() function decodes these the other way around,
+so a frame with MAC DA 01:80:c2:11:22:33 is received by the network
+stack as having 01:80:c2:22:11:33.
 
-Also, during testing it was found that the MAC DA patching procedure was
-incorrect.
+Fixes: e53e18a6fe4d ("net: dsa: sja1105: Receive and decode meta frames")
+Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
+---
+ net/dsa/tag_sja1105.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-The investigation comes as a result of this discussion with Paolo:
-https://lore.kernel.org/netdev/f494387c8d55d9b1d5a3e88beedeeb448f2e6cc3.camel@redhat.com/
-
-Vladimir Oltean (2):
-  net: dsa: tag_sja1105: fix MAC DA patching from meta frames
-  net: dsa: sja1105: always enable the send_meta options
-
- drivers/net/dsa/sja1105/sja1105.h      |  2 +-
- drivers/net/dsa/sja1105/sja1105_main.c |  5 ++-
- drivers/net/dsa/sja1105/sja1105_ptp.c  | 48 +++----------------------
- include/linux/dsa/sja1105.h            |  4 ---
- net/dsa/tag_sja1105.c                  | 49 ++------------------------
- 5 files changed, 9 insertions(+), 99 deletions(-)
-
+diff --git a/net/dsa/tag_sja1105.c b/net/dsa/tag_sja1105.c
+index 92a626a05e82..226191ec654b 100644
+--- a/net/dsa/tag_sja1105.c
++++ b/net/dsa/tag_sja1105.c
+@@ -118,8 +118,8 @@ static void sja1105_meta_unpack(const struct sk_buff *skb,
+ 	 * a unified unpacking command for both device series.
+ 	 */
+ 	packing(buf,     &meta->tstamp,     31, 0, 4, UNPACK, 0);
+-	packing(buf + 4, &meta->dmac_byte_4, 7, 0, 1, UNPACK, 0);
+-	packing(buf + 5, &meta->dmac_byte_3, 7, 0, 1, UNPACK, 0);
++	packing(buf + 4, &meta->dmac_byte_3, 7, 0, 1, UNPACK, 0);
++	packing(buf + 5, &meta->dmac_byte_4, 7, 0, 1, UNPACK, 0);
+ 	packing(buf + 6, &meta->source_port, 7, 0, 1, UNPACK, 0);
+ 	packing(buf + 7, &meta->switch_id,   7, 0, 1, UNPACK, 0);
+ }
 -- 
 2.34.1
 
