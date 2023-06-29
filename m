@@ -2,117 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C9BF742455
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 12:52:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 048CE742457
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 12:52:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231655AbjF2KwI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 06:52:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58548 "EHLO
+        id S232033AbjF2KwP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 06:52:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232054AbjF2Kv2 (ORCPT
+        with ESMTP id S231557AbjF2Kvg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 06:51:28 -0400
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97BD9359B
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 03:50:40 -0700 (PDT)
-Received: by mail-lf1-x136.google.com with SMTP id 2adb3069b0e04-4f865f0e16cso807266e87.3
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 03:50:40 -0700 (PDT)
+        Thu, 29 Jun 2023 06:51:36 -0400
+Received: from mail-vs1-xe30.google.com (mail-vs1-xe30.google.com [IPv6:2607:f8b0:4864:20::e30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF03A35A7;
+        Thu, 29 Jun 2023 03:50:58 -0700 (PDT)
+Received: by mail-vs1-xe30.google.com with SMTP id ada2fe7eead31-440954dc5fcso194125137.2;
+        Thu, 29 Jun 2023 03:50:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1688035839; x=1690627839;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=guJGAnCCFO9fo+Q+lePAT4AatbNAwA3TFffGx0GvU2g=;
-        b=FeYShU0DV1r0J9WSZmSnq9d2EoVzRoh5p49t+fWb/LGP8ECl+Gy3WSNWdZtVUJHBQv
-         zqvtPfCyWiu7RTS6UJyBI4599ar9DmtwSdu/7fh/Vjtucc2wp5m5eXsuNeE5WuX1CAkp
-         Ayx2t3b56TRAucWstatE2y1GNO2zkjRXci5Zb3ts9pP9lbOr+CgDBRCOkg5Jto9t9f30
-         ftp5lkYdIuSlxkZLePjjCDcrrCm3LOSHoT46eKUjr+fpJfk1aIL33uCMTgNrWd3D1Kye
-         jNWN84Kg2J44iAJuyMeLJenjkPuPXNv8JiBsCHnxwWciS/nIa3Db2EawhD3a8rQaStyv
-         jx+Q==
+        d=gmail.com; s=20221208; t=1688035858; x=1690627858;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=1Bc1SqEnFsskSLnHHMk9CYcfhixRzxz4BpTXdjjVyoI=;
+        b=H5kYKgzRi3u4fLHhcDn3/9RT2+SXXz1L45No9cl2Up2JuZim36+ixeOpcKNsRrsQpQ
+         XVSk4/XTl610ymeWvNNtDYD4icqSqrKzbByxbL1rkL0Xu9li0qynzBnL4czPkzEzh2y4
+         rmEnLoJ0IIcW5o64XF9zMkUPb5sMYVr66ni+1R4ryOTyEFsdcByfvUxvbHDiVbrPC57P
+         O6OyT4cvRzO3wa/g7tVg2dn4YakPO61TpxpM7+ngc8z4u1dUT0Q8PaLeFUBhcfDi+fzI
+         I+G7QuTQro0yQ732af8DTzF3jVE/xkThSFHf2I7bIAZVLk0F9qJt2HrDoqCGN6kvQYCm
+         AKxg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688035839; x=1690627839;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=guJGAnCCFO9fo+Q+lePAT4AatbNAwA3TFffGx0GvU2g=;
-        b=UiJSPLZvVwCsOkIM48NxqtgNTBhX3+a21O/PXKjxpdyfI5yUNO9c3Dnr611Qg2aS+U
-         4zTXNDjDhvmXfwzY+3jv0Rp6VsA1n3gRXeiyYegXhmV0pRcqgiDYxXjeJQI74H3he4tT
-         EfN7c89MqO7/xj3elVpj3Wp9K6EnlFj/0akG2iLPOzGBE6DDBCqJYQWmp98L2ONEzs4W
-         yvdpIcmlIKptFBsdZWX751Qa7iKUtRfHngSnNz1EjEk9f0hwos7uK9KoufrQHHVfXmuC
-         BNFPw0fBqeudOgL/ireNUZzXReFcgk+kwmd402Od93ZhN6ZnvKCTRIOrl0HKoDynps/F
-         Roug==
-X-Gm-Message-State: AC+VfDy+jp+m6DKud8eWGCZ9M0BRJ05Z6BF/jy5qo8d5PhIiwdnKPbt+
-        eXBoYEwTVXjeaMrwTukaAkyK2A==
-X-Google-Smtp-Source: ACHHUZ5r4m7KdWWjT77yGYOUnmn6vM0l13dgN6t/mdKe0fnH9Xe8pYvpvGlo4fSP5Eyx3hzgL0RLSg==
-X-Received: by 2002:a05:6512:6f:b0:4fb:8987:734e with SMTP id i15-20020a056512006f00b004fb8987734emr4131316lfo.68.1688035838866;
-        Thu, 29 Jun 2023 03:50:38 -0700 (PDT)
-Received: from ?IPV6:2001:14ba:a0db:1f00::8a5? (dzdqv0yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a0db:1f00::8a5])
-        by smtp.gmail.com with ESMTPSA id v15-20020ac2592f000000b004ec6252aa37sm2297812lfi.116.2023.06.29.03.50.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 29 Jun 2023 03:50:38 -0700 (PDT)
-Message-ID: <0682f82e-0ca8-29c7-0ee6-e2438122bf5c@linaro.org>
-Date:   Thu, 29 Jun 2023 13:50:37 +0300
+        d=1e100.net; s=20221208; t=1688035858; x=1690627858;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=1Bc1SqEnFsskSLnHHMk9CYcfhixRzxz4BpTXdjjVyoI=;
+        b=JCZYTyJ19noACPcVtORHI5ZRMn6S/on7uYwFxcY9ayaRLiv0eyX+lefxW/yvEyMaCZ
+         dECSGPD/r/Yr6FipUWRyTiDd3cJdJ32BczudZqTu8ujc9Gin7p28IHNhR7G1GQOnmC25
+         x9sd/zwoxfhjy4lK7vaJnZLNghX1kGeWKhvkoAMy94+rbbUDe+yhagfOE9320t2MJArE
+         4mhf1/OQD/UyOQWeL+5LKfcWJ48295GjsMg7SV2vccUFW+4PzxYu2V+Y7+56LHwYIS3n
+         LigDFv68IYUM0kUvzKAPkOEKWQLZ5uH7OsKUyVush8T5k1KCFjiUyM50WBonBQOUQTRj
+         UAxA==
+X-Gm-Message-State: ABy/qLYz+PS24RdoTzm3VbJ3Vm5egK0a66oc5UMV7VX6jEtpr0fHdgPi
+        L4bAPJ+Krj4vtkSh3A6d3MjBOPwLKx7kK6Wk24E=
+X-Google-Smtp-Source: APBJJlEI+aDMiN1O2bKvv1N1CDEkTi6TIeFcVBvKGU9Za8J9APmDK/p2ETUabeXwv1eI5gPcw/3jX6FRYrhKDg+O0Ao=
+X-Received: by 2002:a05:6102:e55:b0:444:c1f6:5e3a with SMTP id
+ p21-20020a0561020e5500b00444c1f65e3amr367807vst.25.1688035857761; Thu, 29 Jun
+ 2023 03:50:57 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v2 05/15] dt-bindings: display/msm: dsi-controller-main:
- Document SM6125
-Content-Language: en-GB
-To:     Marijn Suijten <marijn.suijten@somainline.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Krishna Manikandan <quic_mkrishn@quicinc.com>,
-        Loic Poulain <loic.poulain@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>
-Cc:     ~postmarketos/upstreaming@lists.sr.ht,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Martin Botka <martin.botka@somainline.org>,
-        Jami Kettunen <jami.kettunen@somainline.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        linux-clk@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, Lux Aliaga <they@mint.lgbt>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-References: <20230627-sm6125-dpu-v2-0-03e430a2078c@somainline.org>
- <20230627-sm6125-dpu-v2-5-03e430a2078c@somainline.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20230627-sm6125-dpu-v2-5-03e430a2078c@somainline.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <CAA85sZukiFq4A+b9+en_G85eVDNXMQsnGc4o-4NZ9SfWKqaULA@mail.gmail.com>
+ <CAA85sZvm1dL3oGO85k4R+TaqBiJsggUTpZmGpH1+dqdC+U_s1w@mail.gmail.com>
+ <e7e49ed5-09e2-da48-002d-c7eccc9f9451@intel.com> <CAA85sZtyM+X_oHcpOBNSgF=kmB6k32bpB8FCJN5cVE14YCba+A@mail.gmail.com>
+ <22aad588-47d6-6441-45b2-0e685ed84c8d@intel.com> <CAA85sZti1=ET=Tc3MoqCX0FqthHLf6MSxGNAhJUNiMms1TfoKA@mail.gmail.com>
+ <CAA85sZvn04k7=oiTQ=4_C8x7pNEXRWzeEStcaXvi3v63ah7OUQ@mail.gmail.com>
+ <ffb554bfa4739381d928406ad24697a4dbbbe4a2.camel@redhat.com>
+ <CAA85sZunA=tf0FgLH=MNVYq3Edewb1j58oBAoXE1Tyuy3GJObg@mail.gmail.com>
+ <CAA85sZsH1tMwLtL=VDa5=GBdVNWgifvhK+eG-hQg69PeSxBWkg@mail.gmail.com>
+ <CAA85sZu=CzJx9QD87-vehOStzO9qHUSWk6DXZg3TzJeqOV5-aw@mail.gmail.com>
+ <0a040331995c072c56fce58794848f5e9853c44f.camel@redhat.com>
+ <CAA85sZuuwxtAQcMe3LHpFVeF7y-bVoHtO1nukAa2+NyJw3zcyg@mail.gmail.com>
+ <CAA85sZurk7-_0XGmoCEM93vu3vbqRgPTH4QVymPR5BeeFw6iFg@mail.gmail.com>
+ <486ae2687cd2e2624c0db1ea1f3d6ca36db15411.camel@redhat.com>
+ <CAA85sZsJEZK0g0fGfH+toiHm_o4pdN+Wo0Wq9fgsUjHXGxgxQA@mail.gmail.com>
+ <CAA85sZs4KkfVojx=vxbDaWhWRpxiHc-RCc2OLD2c+VefRjpTfw@mail.gmail.com>
+ <5688456234f5d15ea9ca0f000350c28610ed2639.camel@redhat.com> <CAA85sZvT-vAHQooy8+i0-bTxgv4JjkqMorLL1HjkXK6XDKX41w@mail.gmail.com>
+In-Reply-To: <CAA85sZvT-vAHQooy8+i0-bTxgv4JjkqMorLL1HjkXK6XDKX41w@mail.gmail.com>
+From:   Ian Kumlien <ian.kumlien@gmail.com>
+Date:   Thu, 29 Jun 2023 12:50:45 +0200
+Message-ID: <CAA85sZs2biYueZsbDqdrMyYfaqH6hnSMpymgbsk=b3W1B7TNRA@mail.gmail.com>
+Subject: Re: [Intel-wired-lan] bug with rx-udp-gro-forwarding offloading?
+To:     Paolo Abeni <pabeni@redhat.com>
+Cc:     Alexander Lobakin <aleksander.lobakin@intel.com>,
+        intel-wired-lan <intel-wired-lan@lists.osuosl.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27/06/2023 23:14, Marijn Suijten wrote:
-> Document general compatibility of the DSI controller on SM6125.
-> 
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
-> ---
->   Documentation/devicetree/bindings/display/msm/dsi-controller-main.yaml | 2 ++
->   1 file changed, 2 insertions(+)
+On Wed, Jun 28, 2023 at 10:18=E2=80=AFPM Ian Kumlien <ian.kumlien@gmail.com=
+> wrote:
+>
+> On Wed, Jun 28, 2023 at 5:15=E2=80=AFPM Paolo Abeni <pabeni@redhat.com> w=
+rote:
+> >
+> > On Wed, 2023-06-28 at 14:04 +0200, Ian Kumlien wrote:
+> > > So have some hits, would it be better without your warn on? ... Thing=
+s
+> > > are a bit slow atm - lets just say that i noticed the stacktraces
+> > > because a stream stuttered =3D)
+> >
+> > Sorry, I screwed-up completely a newly added check.
+>
+> Thats ok
+>
+> > If you have Kasan enabled you can simply and more safely remove my 2nd
+> > patch. Kasan should be able to catch all the out-of-buffer scenarios
+> > such checks were intended to prevent.
+>
+> I thought I'd run without any of the patches, preparing for that now,
+> but i have to stop testing tomorrow and will continue on monday if i
+> don't catch anything
 
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+So, KASAN caught the null pointer derefs, as expected, but it caught
+two of them which i didn't expect.
 
--- 
-With best wishes
-Dmitry
+Anyway, I'm off for the weekend so, I hope to be able to send
+something better on Monday, fyi
 
+> > Cheers,
+> >
+> > Paolo
+> >
