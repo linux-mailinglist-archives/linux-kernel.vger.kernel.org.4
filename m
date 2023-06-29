@@ -2,134 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A005742AB9
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 18:40:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B165742AC1
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 18:42:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231933AbjF2QkB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 12:40:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45910 "EHLO
+        id S232255AbjF2Qmg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 12:42:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232111AbjF2Qjz (ORCPT
+        with ESMTP id S232097AbjF2Qme (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 12:39:55 -0400
-Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59AE030EF
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 09:39:54 -0700 (PDT)
-Received: by mail-yb1-xb29.google.com with SMTP id 3f1490d57ef6-c14476f8401so785865276.3
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 09:39:54 -0700 (PDT)
+        Thu, 29 Jun 2023 12:42:34 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0675630E4
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 09:42:33 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id a640c23a62f3a-9891c73e0fbso154690066b.1
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 09:42:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1688056793; x=1690648793;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=iYKtv9j9EWY+qlSLxNSMyNgvkOT32/s3MoVou6QGXdk=;
-        b=0Bxjyvyvdg2n9f+zfkap6qHE3pcwPHyknCZHaeLUFmeO5WxX2baUzGVKhjFdnnVKWJ
-         yawFJeYuBM/63nZSBqwgJHqKMl2k9ocxzbD7d6oujPUv2DZoeCxNbYLbJwjFMzXQ64/L
-         hTHGf0zikrV2IvW9i4FXRzXsUIM1M5TAj2nA7j+W33Rb6RQyKBkKlulpHnA40N4n3QAn
-         WSSYDeRSLQK8B7emh+jneStAmWsqBP3YWXBub9xBI0R9VeF7+EVOWNzzdpMSEnvf0gKP
-         rdcS9JCYeg204W4hA4S4bF7KA9iyIMfuRCh6gdi/AHGvbRP6epDvg/4Hq0Yv+ZlR/Kgw
-         UwZA==
+        d=linux-foundation.org; s=google; t=1688056951; x=1690648951;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=5w9ol53Pbytsh9JJtWN5s3IG7GIlT/ijcbnJWBLshdM=;
+        b=KLEnhdgtu1c8kM62lKXQjj5JgvBYesh4er2kkookEOPNPvUhB+y6XBGIpsThY4Oz7c
+         RqoxMNfBA/d6bI/EI60+uuUD06gTkpYEAI5h5V8fB0cCJJXD/2n7qzNNP/cDrK/lWzxu
+         qg3NX0vGeSu/SOth9o5WfCH+j1hi/gtxz9+Jg=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688056793; x=1690648793;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=iYKtv9j9EWY+qlSLxNSMyNgvkOT32/s3MoVou6QGXdk=;
-        b=ZBRXDDGuih6FWj/Bw26BcizTNAOKho7s2FWzJR8BHJDSZBv4UT6ExnqFvsoxs+qBbk
-         hhQCgJSigZ9Zh4bQsanQyXr4qlNOHAyQcXENnjyMgdFp56hUrrVrA17IWX8RdzB9P9qT
-         8pE0g4WAtd7I8RZyq2rYfPRoqBr8tHj2+iTRulj02eH+OVOzNgQWP+XXGvIyV1owIUVm
-         8EMZZ9mCpdiyOgsj5FgV3oxHrtK9daGsA+X6QMD7siSMum5GKNc6tmb69IC2zZK4OjJQ
-         NCA2wlgIZqF0k/DBKxR35xCiSFY8DCQZCzprK6KQtB/0Q7NQd3oI4dvij5NwpUq3YLec
-         Vu4A==
-X-Gm-Message-State: ABy/qLbdfo4GIL+7yneeKMZHZ1ZnnLzYmJArY1IddW6kwzGfKhymoGXC
-        qpvGwU0zOq42zTzdCmIwEicrFREUrdI+d8lVD0uNjQ==
-X-Google-Smtp-Source: APBJJlFZzY82QJbByDeWwktFp9BbYuwkr1Kmyn9ua1mr5NBPoLe1UPj+2Snkn5RTrhUgo21lRxxlPYE1aP8AFayeBvQ=
-X-Received: by 2002:a25:23c8:0:b0:c1a:b15d:81b5 with SMTP id
- j191-20020a2523c8000000b00c1ab15d81b5mr385342ybj.35.1688056793361; Thu, 29
- Jun 2023 09:39:53 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1688056951; x=1690648951;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=5w9ol53Pbytsh9JJtWN5s3IG7GIlT/ijcbnJWBLshdM=;
+        b=d9zQY0st/J4Y8QkdFfpCF3HYj8UtQP6sYEXJ1m4HS49hhGp+r71plAG96rk4QwX1iJ
+         J/paD4FMDRn9/MBafYyT4zltSymNibOqz7nFadD6R2rGgz9Vuc2X5WtKQFlWWAWIOAoZ
+         G0jPV9yMCok79hcWAgrEulzbD71piWfwpI9ZVagA914o4r91IYhHLHAL5v+3MQ7OBYoc
+         jaM73I9WqhQgu9x2FbR2lJDrsKW4RCmeYovUgmmZbdN3U/PPyGAlJHPAd9jlnrnx2IUz
+         p1zN1gFt+rnzaPYLFCIRfi46pFc6uj9KUdXE6keBbLh6f4sGiapa0kInUBJG/3xP0q0j
+         GVqQ==
+X-Gm-Message-State: AC+VfDydZr+arMu8NCBgcjykkghXuqmHpVDmARLaMFXOfIXJy6995OZv
+        37nSrSjfcwhtZFcrE7gJXG3rzYkM+c2+Sd9FbZIRWonl
+X-Google-Smtp-Source: ACHHUZ4SS6DRqQoLyftMUj/lX9RP9IPTO/hfu6AWs5BKF1WKsOp6HMHVhl0Q7pApdy/kXkSPqGwB4g==
+X-Received: by 2002:a17:907:6d09:b0:991:f0dc:c930 with SMTP id sa9-20020a1709076d0900b00991f0dcc930mr4947224ejc.16.1688056951131;
+        Thu, 29 Jun 2023 09:42:31 -0700 (PDT)
+Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com. [209.85.208.45])
+        by smtp.gmail.com with ESMTPSA id t14-20020a170906948e00b0098d2f703408sm6984954ejx.118.2023.06.29.09.42.30
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 29 Jun 2023 09:42:30 -0700 (PDT)
+Received: by mail-ed1-f45.google.com with SMTP id 4fb4d7f45d1cf-51cff235226so1567907a12.0
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 09:42:30 -0700 (PDT)
+X-Received: by 2002:aa7:d94f:0:b0:51d:a2d9:85a3 with SMTP id
+ l15-20020aa7d94f000000b0051da2d985a3mr478016eds.8.1688056949878; Thu, 29 Jun
+ 2023 09:42:29 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230628172529.744839-1-surenb@google.com> <20230628172529.744839-7-surenb@google.com>
- <ZJxulItq9iHi2Uew@x1n> <CAJuCfpEPpdEScAG_UOiNfOTpue9ro0AP6414C4tBaK1rbVK7Hw@mail.gmail.com>
- <ZJ2yOACwp7B2poIw@x1n>
-In-Reply-To: <ZJ2yOACwp7B2poIw@x1n>
-From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Thu, 29 Jun 2023 09:39:41 -0700
-Message-ID: <CAJuCfpER=0GzcR3sWETYJAPK9SKAaRYtNfVXa-sXZu8MiL67NA@mail.gmail.com>
-Subject: Re: [PATCH v5 6/6] mm: handle userfaults under VMA lock
-To:     Peter Xu <peterx@redhat.com>
-Cc:     akpm@linux-foundation.org, willy@infradead.org, hannes@cmpxchg.org,
-        mhocko@suse.com, josef@toxicpanda.com, jack@suse.cz,
-        ldufour@linux.ibm.com, laurent.dufour@fr.ibm.com,
-        michel@lespinasse.org, liam.howlett@oracle.com, jglisse@google.com,
-        vbabka@suse.cz, minchan@google.com, dave@stgolabs.net,
-        punit.agrawal@bytedance.com, lstoakes@gmail.com, hdanton@sina.com,
-        apopple@nvidia.com, ying.huang@intel.com, david@redhat.com,
-        yuzhao@google.com, dhowells@redhat.com, hughd@google.com,
-        viro@zeniv.linux.org.uk, brauner@kernel.org,
-        pasha.tatashin@soleen.com, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-team@android.com
+References: <20230607053135.2087354-1-stevensd@google.com> <f18e4b64-3f88-a8ab-56cc-d1f5f9c58d4@google.com>
+ <CAD=HUj4vVbyHiT7vPmRorS+v9t2+N46ak=Xrew2cFf5+utC=tQ@mail.gmail.com>
+ <8ef3ee-ba41-8e9e-4453-73736ff27783@google.com> <df5819aa-c79-6b10-4ce1-a45af118c0f3@google.com>
+ <CAHk-=wj8b6joppjpYW=pi2r2LJgKHQKDwB9NkDmbsQAzWgf4AA@mail.gmail.com> <ee572217-204b-45d4-64f1-f6822fc6c35@google.com>
+In-Reply-To: <ee572217-204b-45d4-64f1-f6822fc6c35@google.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Thu, 29 Jun 2023 09:42:13 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wiWKTht64h8N6PcD=P-2mYTq3ThuqC4E2wZdzSyQxXt-Q@mail.gmail.com>
+Message-ID: <CAHk-=wiWKTht64h8N6PcD=P-2mYTq3ThuqC4E2wZdzSyQxXt-Q@mail.gmail.com>
+Subject: Re: [PATCH hotfix] mm/khugepaged: fix regression in collapse_file()
+To:     Hugh Dickins <hughd@google.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        David Stevens <stevensd@chromium.org>,
+        Peter Xu <peterx@redhat.com>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        Yang Shi <shy828301@gmail.com>,
+        David Hildenbrand <david@redhat.com>,
+        Jiaqi Yan <jiaqiyan@google.com>, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 29, 2023 at 9:33=E2=80=AFAM Peter Xu <peterx@redhat.com> wrote:
+On Wed, 28 Jun 2023 at 21:31, Hugh Dickins <hughd@google.com> wrote:
 >
-> On Wed, Jun 28, 2023 at 05:19:31PM -0700, Suren Baghdasaryan wrote:
-> > On Wed, Jun 28, 2023 at 10:32=E2=80=AFAM Peter Xu <peterx@redhat.com> w=
-rote:
-> > >
-> > > On Wed, Jun 28, 2023 at 10:25:29AM -0700, Suren Baghdasaryan wrote:
-> > > > Enable handle_userfault to operate under VMA lock by releasing VMA =
-lock
-> > > > instead of mmap_lock and retrying. Note that FAULT_FLAG_RETRY_NOWAI=
-T
-> > > > should never be used when handling faults under per-VMA lock protec=
-tion
-> > > > because that would break the assumption that lock is dropped on ret=
-ry.
-> > > >
-> > > > Signed-off-by: Suren Baghdasaryan <surenb@google.com>
-> > >
-> > > Maybe the sanitize_fault_flags() changes suite more in patch 3, but n=
-ot a
-> > > big deal I guess.
-> >
-> > IIUC FAULT_FLAG_RETRY_NOWAIT comes into play in this patchset only in
-> > the context of uffds, therefore that check seems to be needed when we
-> > enable per-VMA lock uffd support, which is this patch. Does that make
-> > sense?
->
-> I don't see why uffd is special in this regard, as e.g. swap also checks
-> NOWAIT when folio_lock_or_retry() so I assume it's also used there.
->
-> IMHO the "NOWAIT should never apply with VMA_LOCK so far" assumption star=
-ts
-> from patch 3 where it conditionally releases the vma lock when
-> !(RETRY|COMPLETE); that is the real place where it can start to go wrong =
-if
-> anyone breaks the assumption.
+> There is no xas_pause(&xas) in collapse_file()'s main loop, at the points
+> where it does xas_unlock_irq(&xas) and then continues.
 
-Um, yes, you are right as usual. It was clear to me from the code that
-NOWAIT is not used with swap under VMA_LOCK, that's why I didn't
-consider this check earlier. Yeah, patch 3 seems like a more
-appropriate place for it. I'll move it and post a new patchset later
-today or tomorrow morning with your Acks.
-Thanks,
-Suren.
+Thanks for reminding me. Now applied,
 
->
-> Thanks,
->
-> --
-> Peter Xu
->
+                   Linus
