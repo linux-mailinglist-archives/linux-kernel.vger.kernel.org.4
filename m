@@ -2,89 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B988742B2B
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 19:26:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9086D742B34
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 19:27:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231787AbjF2R0o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 13:26:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54900 "EHLO
+        id S230401AbjF2R1g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 13:27:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229520AbjF2R0l (ORCPT
+        with ESMTP id S230460AbjF2R1X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 13:26:41 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAD9210C9;
-        Thu, 29 Jun 2023 10:26:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1688059600; x=1719595600;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=HNJ1F4CHqqf6Cxe/kg2nLGIn5lZXHUbXh0rXt0mPCo0=;
-  b=lvWXQDUaHxu3VJzUaX42d2LKjb1qsmd/9ar4jEJ+LRil293tJ3R/s0Co
-   qSzoG3tMiN+PA6q5nEPZwFRzwLKnats33yrMBKsWg5JzP9hjxqI2Wsorc
-   UmzyrQC8nof17i98L5744WFd9Nzm6YZ7eFAF3G0z2AFw24T2Z8vMA6YM9
-   dQNwpB8ranwQs6nYayPam8dEeClst4Y86vCy45OWS16s9Qg6W0glJH4VE
-   HctN/Ye8YZjE8uf6oTkLjsN5h55qyqW9FCB/qEiikCkBKd6COClrbI+72
-   yvLvFXQlWdpNpIJhpG7jb6NRoFXqWqvZkMAJwH1DoVN/pyi0NexMJxqJH
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10756"; a="361019489"
-X-IronPort-AV: E=Sophos;i="6.01,169,1684825200"; 
-   d="scan'208";a="361019489"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jun 2023 10:26:37 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10756"; a="717462367"
-X-IronPort-AV: E=Sophos;i="6.01,169,1684825200"; 
-   d="scan'208";a="717462367"
-Received: from binbinwu-mobl.ccr.corp.intel.com (HELO [10.93.17.222]) ([10.93.17.222])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jun 2023 10:26:35 -0700
-Message-ID: <bf98965c-51c5-aaaa-efd9-ce2ecf1c2cbb@linux.intel.com>
-Date:   Fri, 30 Jun 2023 01:26:31 +0800
+        Thu, 29 Jun 2023 13:27:23 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51A903AAE;
+        Thu, 29 Jun 2023 10:27:05 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D65D0615C4;
+        Thu, 29 Jun 2023 17:27:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ABA6FC433C0;
+        Thu, 29 Jun 2023 17:26:58 +0000 (UTC)
+Date:   Thu, 29 Jun 2023 18:26:55 +0100
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Yicong Yang <yangyicong@huawei.com>
+Cc:     akpm@linux-foundation.org, linux-mm@kvack.org,
+        linux-arm-kernel@lists.infradead.org, x86@kernel.org,
+        mark.rutland@arm.com, ryan.roberts@arm.com, will@kernel.org,
+        anshuman.khandual@arm.com, linux-doc@vger.kernel.org,
+        corbet@lwn.net, peterz@infradead.org, arnd@arndb.de,
+        punit.agrawal@bytedance.com, linux-kernel@vger.kernel.org,
+        darren@os.amperecomputing.com, yangyicong@hisilicon.com,
+        huzhanyuan@oppo.com, lipeifeng@oppo.com, zhangshiming@oppo.com,
+        guojian@oppo.com, realmz6@gmail.com, linux-mips@vger.kernel.org,
+        openrisc@lists.librecores.org, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        Barry Song <21cnbao@gmail.com>, wangkefeng.wang@huawei.com,
+        xhao@linux.alibaba.com, prime.zeng@hisilicon.com,
+        Jonathan.Cameron@huawei.com, Barry Song <v-songbaohua@oppo.com>,
+        Nadav Amit <namit@vmware.com>, Mel Gorman <mgorman@suse.de>
+Subject: Re: [RESEND PATCH v9 2/2] arm64: support batched/deferred tlb
+ shootdown during page reclamation/migration
+Message-ID: <ZJ2+37Q7v4odMmEd@arm.com>
+References: <20230518065934.12877-1-yangyicong@huawei.com>
+ <20230518065934.12877-3-yangyicong@huawei.com>
+ <ZJ2x6DlmyA3kVh1n@arm.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v9 4/6] KVM: x86: Introduce untag_addr() in kvm_x86_ops
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        pbonzini@redhat.com, chao.gao@intel.com, kai.huang@intel.com,
-        David.Laight@aculab.com, robert.hu@linux.intel.com
-References: <20230606091842.13123-1-binbin.wu@linux.intel.com>
- <20230606091842.13123-5-binbin.wu@linux.intel.com>
- <ZJt7vud/2FJtcGjV@google.com>
- <bf5ef935-b676-4f2a-7df3-271eff24e6bb@linux.intel.com>
- <ZJ2gW1gD9noko8H6@google.com>
-From:   Binbin Wu <binbin.wu@linux.intel.com>
-In-Reply-To: <ZJ2gW1gD9noko8H6@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZJ2x6DlmyA3kVh1n@arm.com>
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Jun 29, 2023 at 05:31:36PM +0100, Catalin Marinas wrote:
+> On Thu, May 18, 2023 at 02:59:34PM +0800, Yicong Yang wrote:
+> > From: Barry Song <v-songbaohua@oppo.com>
+> > 
+> > on x86, batched and deferred tlb shootdown has lead to 90%
+> > performance increase on tlb shootdown. on arm64, HW can do
+> > tlb shootdown without software IPI. But sync tlbi is still
+> > quite expensive.
+> [...]
+> >  .../features/vm/TLB/arch-support.txt          |  2 +-
+> >  arch/arm64/Kconfig                            |  1 +
+> >  arch/arm64/include/asm/tlbbatch.h             | 12 ++++
+> >  arch/arm64/include/asm/tlbflush.h             | 33 ++++++++-
+> >  arch/arm64/mm/flush.c                         | 69 +++++++++++++++++++
+> >  arch/x86/include/asm/tlbflush.h               |  5 +-
+> >  include/linux/mm_types_task.h                 |  4 +-
+> >  mm/rmap.c                                     | 12 ++--
+> 
+> First of all, this patch needs to be split in some preparatory patches
+> introducing/renaming functions with no functional change for x86. Once
+> done, you can add the arm64-only changes.
+> 
+> Now, on the implementation, I had some comments on v7 but we didn't get
+> to a conclusion and the thread eventually died:
+> 
+> https://lore.kernel.org/linux-mm/Y7cToj5mWd1ZbMyQ@arm.com/
+> 
+> I know I said a command line argument is better than Kconfig or some
+> random number of CPUs heuristics but it would be even better if we don't
+> bother with any, just make this always on. Barry had some comments
+> around mprotect() being racy and that's why we have
+> flush_tlb_batched_pending() but I don't think it's needed (or, for
+> arm64, it can be a DSB since this patch issues the TLBIs but without the
+> DVM Sync). So we need to clarify this (see Barry's last email on the
+> above thread) and before attempting new versions of this patchset. With
+> flush_tlb_batched_pending() removed (or DSB), I have a suspicion such
+> implementation would be faster on any SoC irrespective of the number of
+> CPUs.
 
+I think I got the need for flush_tlb_batched_pending(). If
+try_to_unmap() marks the pte !present and we have a pending TLBI,
+change_pte_range() will skip the TLB maintenance altogether since it did
+not change the pte. So we could be left with stale TLB entries after
+mprotect() before TTU does the batch flushing.
 
-On 6/29/2023 11:16 PM, Sean Christopherson wrote:
->> And for LAM, X86EMUL_F_IMPLICIT will not be used because in the implicit
->> access to memory management registers or descriptors,
->> the linear base addresses still need to be canonical and no hooks will be
->> added to untag the addresses in these pathes.
->> So I probably will remove the check for X86EMUL_F_IMPLICIT here.
-> No, please keep it, e.g. so that changes in the emulator don't lead to breakage,
-> and to document that they are exempt.
->
-> If you want, you could do WARN_ON_ONCE() for the IMPLICIT case, but I don't know
-> that that's worthwhile, e.g. nothing will go wrong if KVM tries to untag an
-> implicit access, and deliberately avoiding the call make make it annoying to
-> consolidate code in the future.
-Right.
-Have a second thought, X86EMUL_F_IMPLICIT should be kept in case SVM has 
-a different implementation and needs to do untag for IMPLICIT cases.
+We can have an arch-specific flush_tlb_batched_pending() that can be a
+DSB only on arm64 and a full mm flush on x86.
 
-
+-- 
+Catalin
