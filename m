@@ -2,130 +2,263 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA54A742F79
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 23:25:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD9D1742F7F
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 23:28:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231522AbjF2VYs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 17:24:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54598 "EHLO
+        id S231899AbjF2V2x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 17:28:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232011AbjF2VYN (ORCPT
+        with ESMTP id S230410AbjF2V2u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 17:24:13 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 768733A91;
-        Thu, 29 Jun 2023 14:24:00 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9ABE36164F;
-        Thu, 29 Jun 2023 21:23:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 765C2C433C0;
-        Thu, 29 Jun 2023 21:23:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688073839;
-        bh=zOehGqKX+VYh9hnjIWi/Nq52SHkJn4rPs67np4lrfEg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ZELw7XXzZnOk5RfhnLMGd5rmjCOLIlzu82UcPR/O+XEQBVHkbxAqGBQJKtlEbYzmV
-         dmij9daTBQNjt+161eT2qunRcdDXVP+CuJlH1S2FE6O+dsdmNzxSbUxshFfpHtra9L
-         Uz1crmAGMycMHj1gqCk2qS26QlHAOVgPeJOeIRMl8r9AfVoufbauR99Ng9vQoZqubs
-         J+N5xh/KctU0tCATZdxr1yS0ZnF4YVGJs14LdTYGIpF1j7lIfR71gmeDUmsyj5EapA
-         i1bW3rNQ57Fbfd+YsaVio0WBv/NVIrR81oTOpHZJAqb8wmM6jDv0/r90JFcpGk8EtO
-         yPBmw2T2n9baw==
-Date:   Thu, 29 Jun 2023 22:23:53 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Greg KH <greg@kroah.com>
-Cc:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        johan+linaro@kernel.org, perex@perex.cz, tiwai@suse.com,
-        lgirdwood@gmail.com, ckeepax@opensource.cirrus.com,
-        kuninori.morimoto.gx@renesas.com, linux-kernel@vger.kernel.org,
-        pierre-louis.bossart@linux.intel.com, alsa-devel@alsa-project.org,
-        Stable@vger.kernel.org
-Subject: Re: [PATCH] ASoC: qdsp6: q6apm: use dai link pcm id as pcm device
- number
-Message-ID: <00ac35ee-b507-43ee-b596-801b76972946@sirena.org.uk>
-References: <20230628092404.13927-1-srinivas.kandagatla@linaro.org>
- <c22fcc94-aa41-4ffd-bfe8-f0b9f15a76c0@sirena.org.uk>
- <2023062940-snore-brick-419b@gregkh>
- <9699a960-74b0-4064-b264-6cde06cd16fc@sirena.org.uk>
- <2023062958-thumping-ambulance-7a2f@gregkh>
- <1c1dd19e-cbc4-41fe-9e97-a07cfebdaa4b@sirena.org.uk>
- <2023062905-tiring-bauble-84ef@gregkh>
+        Thu, 29 Jun 2023 17:28:50 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 173612D69
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 14:28:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1688074079;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=FtDP1Q6klKq+vrLWjMDjwV4PiAup+z6NgGkS2LHe5Nc=;
+        b=dwsTtL1eUPZfTKkKfk3t8VGMaQpnD4Ush+0AzR1ZHAh/Pm2f6QBL8P8xdBEcwUk+iQFgF4
+        3zd6jJ0VIqSLmdCs6twL5h87MzYc+c5Tim1l7rmglcUJPEgQ/YHvHv/McPzCoOjdYtRk4V
+        hKBhZ/u90dmqwyBgEz7vDHtN5hXBZOw=
+Received: from mail-oo1-f72.google.com (mail-oo1-f72.google.com
+ [209.85.161.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-441-viF12TKQPm6a8lKSds960w-1; Thu, 29 Jun 2023 17:27:57 -0400
+X-MC-Unique: viF12TKQPm6a8lKSds960w-1
+Received: by mail-oo1-f72.google.com with SMTP id 006d021491bc7-560ce5f7646so1265566eaf.3
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 14:27:57 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688074077; x=1690666077;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=FtDP1Q6klKq+vrLWjMDjwV4PiAup+z6NgGkS2LHe5Nc=;
+        b=BsJCOqNTo6vSMBB6UIbIJXZq77XHRVc3GcE9vCegpeOarzhQkd6FswzVAh2i6QaafM
+         vTNCdsE7ii/Wy7qSKB/p9gF0QAWMFyr7hWlnMG/MIFNuUAsP00wMmQrdZuN+c4zlMnH6
+         mmYlzQp48kIYDGyHrcDZV+HFup6qUzc94HmVD37nUdkP9ZF1EoeRE1UAJzZSERC9Rgz/
+         Kep1YNWHE5Fv2ijoGoFjYk+yItvs1iWCNW36e/ljnr4nawQOZkVp1/mFVGwpFx+1hFrQ
+         fVWPqBLZbpTKT69PjNLlo+7CuGGSVmZKG/eDfm5yCBwGr9Ikv3IGPMh6wCfS6QU/ES1h
+         2ouQ==
+X-Gm-Message-State: ABy/qLbKNB6YAWYtndqGi4ONjB2CtCcuwaGn8fNKdJ+s+khaU8+Zh7dr
+        fLWZqo4EyKdeojPwVtGoiykmbmCszmZhvj+AMERyqVMpx2nceKpUahw9UauRy+pUs/gx/8r74yK
+        6gWxUxYNH4JiDRCiAQv7m5wJq
+X-Received: by 2002:a05:6359:a2f:b0:130:afe8:43de with SMTP id el47-20020a0563590a2f00b00130afe843demr693808rwb.30.1688074076884;
+        Thu, 29 Jun 2023 14:27:56 -0700 (PDT)
+X-Google-Smtp-Source: APBJJlHzx3h21Xg8/xwK6dkJoKMUGl/nF1n+Ber6+b1C1nTGnByCFSLiEqMI7wHZ3ko1j+NUr89pAw==
+X-Received: by 2002:a05:6359:a2f:b0:130:afe8:43de with SMTP id el47-20020a0563590a2f00b00130afe843demr693797rwb.30.1688074076589;
+        Thu, 29 Jun 2023 14:27:56 -0700 (PDT)
+Received: from thinkpad-p1.localdomain (cpe00fc8d79db03-cm00fc8d79db00.cpe.net.fido.ca. [72.137.118.218])
+        by smtp.gmail.com with ESMTPSA id k28-20020a05620a143c00b0075785052e97sm6571404qkj.95.2023.06.29.14.27.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 29 Jun 2023 14:27:56 -0700 (PDT)
+Message-ID: <3a6ce0da4d37ed2ba9673a60062e109503adca78.camel@redhat.com>
+Subject: Re: [PATCH 1/1] PCI: dwc: Use regular interrupt instead of chained
+From:   Radu Rendec <rrendec@redhat.com>
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Jingoo Han <jingoohan1@gmail.com>,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Krzysztof Wilczynski <kw@linux.com>,
+        Rob Herring <robh@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Thu, 29 Jun 2023 17:27:54 -0400
+In-Reply-To: <20230629205830.GA447734@bhelgaas>
+References: <20230629205830.GA447734@bhelgaas>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="lwINwq5DE62imWCd"
-Content-Disposition: inline
-In-Reply-To: <2023062905-tiring-bauble-84ef@gregkh>
-X-Cookie: Surprise due today.  Also the rent.
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, 2023-06-29 at 15:58 -0500, Bjorn Helgaas wrote:
+> On Thu, Jun 29, 2023 at 04:42:07PM -0400, Radu Rendec wrote:
+> > On Thu, 2023-06-29 at 14:57 -0500, Bjorn Helgaas wrote:
+> > > On Thu, Jun 29, 2023 at 02:30:19PM -0400, Radu Rendec wrote:
+> > > > The DesignWare PCIe host driver uses a chained interrupt to demulti=
+plex
+> > > > the downstream MSI interrupts. On Qualcomm SA8540P Ride, enabling b=
+oth
+> > > > pcie2a and pcie3a at the same time can create an interrupt storm wh=
+ere
+> > > > the parent interrupt fires continuously, even though reading the PC=
+Ie
+> > > > host registers doesn't identify any child MSI interrupt source. Thi=
+s
+> > > > effectively locks up CPU0, which spends all the time servicing thes=
+e
+> > > > interrupts.
+> > > >=20
+> > > > This is a clear example of how bypassing the interrupt core by usin=
+g
+> > > > chained interrupts can be very dangerous if the hardware misbehaves=
+.
+> > > >=20
+> > > > Convert the driver to use a regular interrupt for the demultiplex
+> > > > handler. This allows the interrupt storm detector to detect the fau=
+lty
+> > > > interrupt and disable it, allowing the system to run normally.
+> > >=20
+> > > There are many other users of irq_set_chained_handler_and_data() in
+> > > drivers/pci/controller/.=C2=A0 Should they be similarly converted?=C2=
+=A0 If not,
+> > > how do we decide which need to use irq_set_chained_handler_and_data()
+> > > and which do not?
+> >=20
+> > According to Thomas Gleixner, yes. Obviously I don't want to put words
+> > in his mouth, but I think that's the gist of what he said in a reply to
+> > an RFC patch that I sent a few weeks ago:
+> > https://lore.kernel.org/all/877csohcll.ffs@tglx/
+>=20
+> Is it's a bug in pcie-designware-host.c, and it's also a bug in the
+> other callers, we should fix them all.
 
---lwINwq5DE62imWCd
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+I wouldn't call it a bug, because the driver works as long as the
+hardware behaves. But if the hardware misbehaves and generates an
+interrupt storm for whatever reason, you end up with an apparently
+frozen system and no clue as to what's going on. By contrast, using
+regular interrupts allows the interrupt storm detector to kick in. Then
+the system works fine, and there's also a useful log message pointing
+to that particular interrupt.
 
-On Thu, Jun 29, 2023 at 08:48:42PM +0200, Greg KH wrote:
-> On Thu, Jun 29, 2023 at 06:38:38PM +0100, Mark Brown wrote:
+> But you do imply that there's some DesignWare hardware issue involved,
+> too, so I guess it's possible the other drivers don't have an issue
+> and/or actually require the chained IRQs.=C2=A0 That's why I asked how we
+> should decide.
 
-> > As discussed before your tolerance for risk in stable is *far* higher
-> > than mine, if there's any value in doing this at all it's probably
-> > within what would get taken but that doesn't mean that it's something
-> > that it's sensible to highlight as an important fix like tagging for
-> > stable does.  It's extremely unclear that it fits the severity criteria
-> > that are supposed to be being applied to stable, though obviously the
-> > documentation doesn't fit the actual practice these days.
+That makes sense. I don't know if it's a DesignWare hardware issue or
+something else down the PCIe bus. Other folks in my team are
+investigating the root cause. This thread has the details:
+https://lore.kernel.org/all/pmodcoakbs25z2a7mlo5gpuz63zluh35vbgb5itn6k5aqhj=
+nny@jvphbpvahtse/
 
-> It's not a matter of "tolerance for risk", it's a "if this change is
-> good enough for future releases, why isn't it good enough for older
-> releases as well?"
+I want to point out that this patch doesn't *fix* the root problem (the
+interrupt storm). It just makes the kernel handle it (much) better if
+it occurs.
 
-> As you know, we don't break user interfaces, so either this is a break
-> or it isn't, stable trees have nothing to do with it as a normal user
-> would "hit" this when updating to run Linus's tree, just as easily as
-> they would "hit" it updating their stable kernel version.
+I can't see why any driver would _require_ chained IRQs. As I see it,
+chained interrupts are just a "shortcut" that circumvents the IRQ core
+for (debatable) performance reasons. Other than that, they should work
+the same as regular interrupts.
 
-You know as well as I do that we have a bunch of interfaces where things
-end up getting dynamically numbered as they appear, and provided to
-userspace together with identifying information that allows userspace to
-figure out what's what in a stable fashion even though the numbers might
-change.  Like I said earlier in the thread this is one of them, better
-hardware support also has some risk of disturbing things (and some of
-the numbering is going to be hotplug dependent, though this patch isn't
-likely to run into that particular bit of things).
+There are other benefits associated with using regular interrupts. One
+of them is the ability to control the SMP affinity of the parent
+interrupt. But that's a different topic.
 
-ABI stability is a continuum, from for example things relying on race
-conditions or other timing things that were lucky they ever worked to
-changes in interfaces that break clear and documented guarantees.
-Reliance on stability is similar, and how much of an issue it is when
-something does change and someone notices is going to vary depending on
-what changed and why.  While the risk here seems low if the reasoning is
-just to make things neater then it's even harder to justify for a stable
-kernel than it is for mainline.
+Radu
 
-Note also that the patch is still under discussion for mainline...
+> > > > -static void dw_pcie_free_msi(struct dw_pcie_rp *pp)
+> > > > +static void __dw_pcie_free_msi(struct dw_pcie_rp *pp, u32 num_ctrl=
+s)
+> > > > =C2=A0{
+> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0u32 ctrl;
+> > > > =C2=A0
+> > > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0for (ctrl =3D 0; ctrl < =
+MAX_MSI_CTRLS; ctrl++) {
+> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0for (ctrl =3D 0; ctrl < =
+num_ctrls; ctrl++) {
+> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (pp->msi_irq[ctrl] > 0)
+> > > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0irq=
+_set_chained_handler_and_data(pp->msi_irq[ctrl],
+> > > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 NULL, NULL);
+> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0fre=
+e_irq(pp->msi_irq[ctrl], pp);
+> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0}
+> > > > =C2=A0
+> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0irq_domain_remove(p=
+p->msi_domain);
+> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0irq_domain_remove(p=
+p->irq_domain);
+> > > > =C2=A0}
+> > > > =C2=A0
+> > > > +#define dw_pcie_free_msi(pp) __dw_pcie_free_msi(pp, MAX_MSI_CTRLS)
+> > >=20
+> > > What is the benefit of the dw_pcie_free_msi() macro?
+> >=20
+> > It allows me to add the num_ctrls parameter to the corresponding
+> > function (now renamed to __dw_pcie_free_msi()) without forcing all the
+> > existing call sites to send MAX_MSI_CTRLS explicitly.
+> >=20
+> > I needed that extra parameter to avoid duplicating the tear down code
+> > on the (new) error path in dw_pcie_msi_init() - see below.
+> >=20
+> > > > =C2=A0static void dw_pcie_msi_init(struct dw_pcie_rp *pp)
+> > > > =C2=A0{
+> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0struct dw_pcie *pci=
+ =3D to_dw_pcie_from_pp(pp);
+> > > > @@ -361,9 +353,16 @@ static int dw_pcie_msi_host_init(struct dw_pci=
+e_rp *pp)
+> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return ret;
+> > > > =C2=A0
+> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0for (ctrl =3D 0; ct=
+rl < num_ctrls; ctrl++) {
+> > > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0if (pp->msi_irq[ctrl] > 0)
+> > > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0irq=
+_set_chained_handler_and_data(pp->msi_irq[ctrl],
+> > > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0 dw_chained_msi_isr, pp);
+> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0if (pp->msi_irq[ctrl] > 0) {
+> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0ret=
+ =3D request_irq(pp->msi_irq[ctrl], dw_pcie_msi_isr, 0,
+> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0 dev_name(dev), pp);
+> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if =
+(ret) {
+> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0dev_err(dev, "Failed to reques=
+t irq %d: %d\n",
+> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0pp->msi_irq[ctrl], ret);
+> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0__dw_pcie_free_msi(pp, ctrl);
+> >=20
+> > This is where I'm using the extra parameter. If we fail to request an
+> > interrupt, we need to free all the other interrupts that we have
+> > requested so far, to leave everything in a clean state. But we can't
+> > use MAX_MSI_CTRLS with __dw_pcie_free_msi() and rely on the check there
+> > because there may be extra interrupts that we haven't requested *yet*
+> > and we would attempt to free them.
+>=20
+> Makes sense, thanks.
+>=20
+> Bjorn
+>=20
 
---lwINwq5DE62imWCd
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmSd9mgACgkQJNaLcl1U
-h9AXXwf9EFiOfs5GMkyWdupiHCqH36l3Y4SpOl/P9yNdpyTD2WLSl6757Is4Qp40
-fj/P/IN4C+yrSVsiAzviATS3iuHY1iwGc7ScLAyCiPezQjut/W8Wrrqm/bKBUVZ1
-jg2piqSGRhiHUW3srfU5oVZ1xRuL4phpD/mLHJzYghgCkS/qUPGuDcillURKktN0
-xeI2VFey0BHH4o/KHz/5d9mDrj97JmIGfqf7tTTlaSlG6p+UnpPGbPuPTX/oy+3m
-Oi0of1cmCvNP3moP1v0LZFHxZt9Mlo86w+erg9/PyYUT7wq5K+J9n3WmZjHgp/g8
-CxokZyuSOyFBktGFiou7KL49zgPM+Q==
-=72ZD
------END PGP SIGNATURE-----
-
---lwINwq5DE62imWCd--
