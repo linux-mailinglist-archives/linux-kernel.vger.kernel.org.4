@@ -2,67 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EECA7741EF2
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 05:54:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2B32741EEC
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 05:53:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231996AbjF2Dym (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 23:54:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42880 "EHLO
+        id S231290AbjF2Dxq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 23:53:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230056AbjF2DyK (ORCPT
+        with ESMTP id S231392AbjF2Dxf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 23:54:10 -0400
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 517CC30D1
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 20:54:08 -0700 (PDT)
-Received: by mail-pf1-x435.google.com with SMTP id d2e1a72fcca58-666fb8b1bc8so262453b3a.1
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 20:54:08 -0700 (PDT)
+        Wed, 28 Jun 2023 23:53:35 -0400
+Received: from mail-ot1-x32e.google.com (mail-ot1-x32e.google.com [IPv6:2607:f8b0:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 101CD2D50
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 20:53:29 -0700 (PDT)
+Received: by mail-ot1-x32e.google.com with SMTP id 46e09a7af769-6b5f362f4beso217413a34.2
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 20:53:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1688010847; x=1690602847;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=g2AHgNaBFK8JfNASOhLGds08CbGR9PY3Il9QtABWRh4=;
-        b=et3Vu15oD0I0/VTYf3k59eeXyPxFA0clBBCUdHY1eXEFWGvj23bz+/zkFatUsDfBch
-         IR+g/aHslPcC8iJreUR+tFMscRb6bLCjoLCrLTg+pc5CL/NHCvLT1Bez57oah4Kzbj9N
-         G9klaQXXF9rXjC7VFINlryTVLbGlwBCQ2vrcM=
+        d=chromium.org; s=google; t=1688010808; x=1690602808;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=F51EaCZBCjjsjVu5ApRgh9kG0gXJ3pj2CcPmr4xvEVA=;
+        b=kzU5jMblv0xz5lzjgtrnn4xxh6hlexJ7oarp6AhiqhBHF0Moc73IE9in1CSO6kbAFW
+         atB3woyHuTcXgQ2uvijtMt1KKQygW5Lwf2mIenqOO3tpZ7ldK90ybnGlmbaWo/caj6D3
+         pihx+DaOPGKUC5T61KTFucDLEsnntHKx03ilM=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688010847; x=1690602847;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=g2AHgNaBFK8JfNASOhLGds08CbGR9PY3Il9QtABWRh4=;
-        b=l7CdKGyvbxWq7R7sJqVZ8J8hirvi62xd5vhpxBeVEEsV9xIuHedo7c4ubGNLH5tiAM
-         IzfmDKZ6KTjRwmjN0WsFqVP9Ew1S9peZJxpkuW8bnqMbCiNyhv4BV64L3r3oo5lsRWCf
-         KnqVvyqC0oVe1DmxJxSVAZth2zqxoe3s+X08LFcab96QzxtrI7S90NaJzGSCpAX0HuKB
-         0wH5Wxd+FM2Rrp/Ztfyygk3LmQDVPVJbSUrUN93XSxomam1tZMuoa+rFzgmrOJex/JFy
-         XAY1inx/uurTi9yHDrgii5kXo0qttf55fNEraiqO7wUxwfAdJ+td6KHV/OTvTfYvVj1w
-         tGXA==
-X-Gm-Message-State: AC+VfDx5OMix7i4nzNelKkd6zuXlaHQO70gShrH7Qgtz2FF6t/vb5uFy
-        4FCTgYYXZt0oqYvVYsAhZDN6kw==
-X-Google-Smtp-Source: ACHHUZ6ERoeG3uQAKmubsGmF14KTacE2DDCjpJbY0mZaPsbsZ/WEjLnqr+/Rj0L6NaJstrbDu/M8GA==
-X-Received: by 2002:a05:6a20:7d96:b0:12b:fe14:907e with SMTP id v22-20020a056a207d9600b0012bfe14907emr5996043pzj.20.1688010847675;
-        Wed, 28 Jun 2023 20:54:07 -0700 (PDT)
-Received: from kuabhs-cdev.c.googlers.com.com (242.67.247.35.bc.googleusercontent.com. [35.247.67.242])
-        by smtp.gmail.com with ESMTPSA id r19-20020a634413000000b005579f12a238sm7019842pga.86.2023.06.28.20.54.07
+        d=1e100.net; s=20221208; t=1688010808; x=1690602808;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=F51EaCZBCjjsjVu5ApRgh9kG0gXJ3pj2CcPmr4xvEVA=;
+        b=FS6VqUe3vNfa3QQkIK4VpXTJr9LaBGyUoHI3jtl4CnXQPQa0T+W7g155ksRqbPZQaM
+         7GTqSmzt9PDyh08I+gaq9A49UYYKusQYy0r+YgtyWBx04wxKXcYzW50zwskdv+ZwnZE3
+         DtTaT6ZlfOJnBSsegZMOrfmKigwssTsny859xZWv93h//JgK96hMCEJFX7pg1Pknm8hH
+         04S+D4/mgHvju0QmkwpdsHcJDj27EXgOsTTAS7g/twblgkkdAl8RrXEIqdk8aiJ+cWrl
+         p3n8ojuGNDcJ6ZiGlgGFNOTVFHvfvuPhWStJz/we3yEoHlOlwpwYio67qvbaSSA0sUi5
+         ldOA==
+X-Gm-Message-State: AC+VfDxtsT9b+pPkaRfc0V5qxGpqgf5lEUysG7H4W7yR7hFktyIbjOY+
+        6aeX+sxfg8bkDaL3UqQz+nvhLA==
+X-Google-Smtp-Source: APBJJlFY5tmOsLx96KPJPQPsk+DLr/hc6W6E39YwYceSOPePO+snjxpcIvS/udSk3tYh/N0Rv0gBZg==
+X-Received: by 2002:a05:6359:608:b0:134:e8c6:a888 with SMTP id eh8-20020a056359060800b00134e8c6a888mr997521rwb.8.1688010808332;
+        Wed, 28 Jun 2023 20:53:28 -0700 (PDT)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id l187-20020a6391c4000000b00543b4433aa9sm8221454pge.36.2023.06.28.20.53.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Jun 2023 20:54:07 -0700 (PDT)
-From:   Abhishek Kumar <kuabhs@chromium.org>
-To:     johannes.berg@intel.com, kvalo@kernel.org
-Cc:     linux-kernel@vger.kernel.org, kuabhs@chromium.org,
-        netdev@vger.kernel.org, ath10k@lists.infradead.org,
-        linux-wireless@vger.kernel.org
-Subject: [PATCH 2/2] ath10k: mac: enable WIPHY_FLAG_CHANNEL_CHANGE_ON_BEACON on ath10k
-Date:   Thu, 29 Jun 2023 03:52:55 +0000
-Message-ID: <20230629035254.2.I23c5e51afcc6173299bb2806c8c38364ad15dd63@changeid>
-X-Mailer: git-send-email 2.41.0.162.gfafddb0af9-goog
-In-Reply-To: <20230629035254.1.I059fe585f9f9e896c2d51028ef804d197c8c009e@changeid>
-References: <20230629035254.1.I059fe585f9f9e896c2d51028ef804d197c8c009e@changeid>
+        Wed, 28 Jun 2023 20:53:27 -0700 (PDT)
+Date:   Wed, 28 Jun 2023 20:53:26 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Boris Brezillon <bbrezillon@kernel.org>,
+        Arnaud Ebalard <arno@natisbad.org>,
+        Srujana Challa <schalla@marvell.com>,
+        Mustafa Ismail <mustafa.ismail@intel.com>,
+        Shiraz Saleem <shiraz.saleem@intel.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Leon Romanovsky <leon@kernel.org>
+Subject: Re: Build error in crypto/marvell/cesa/cipher.c
+Message-ID: <202306282051.51D98294F@keescook>
+References: <CAHk-=whXn0YTojV=+J8B-r8KLvNtqc2JtCa4a_bdhf+=GN5OOw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHk-=whXn0YTojV=+J8B-r8KLvNtqc2JtCa4a_bdhf+=GN5OOw@mail.gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,32 +76,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Enabling this flag, ensures that reg_call_notifier is called
-on beacon hints from handle_reg_beacon in cfg80211. This call
-propagates the channel property changes to ath10k driver, thus
-changing the channel property from passive scan to active scan
-based on beacon hints.
-Once the channels are rightly changed from passive to active,the
-connection to hidden SSID does not fail.
+On Wed, Jun 28, 2023 at 08:13:25PM -0700, Linus Torvalds wrote:
+> I get a similar error in 'irdma_clr_wqes()' at
+> drivers/infiniband/hw/irdma/uk.c:103 (and same thing on line 105). I
+> don't see what the right solution there is, but it looks like we have
+> 
+>         IRDMA_CQP_WQE_SIZE = 8
+>         __le64 elem[IRDMA_CQP_WQE_SIZE];
+> 
+> and it's doing a 4kB memset to that element. The mistake is not as
+> obvious as in the cesa driver.
 
-Signed-off-by: Abhishek Kumar <kuabhs@chromium.org>
----
+I pressed "send" too fast. :)
 
- drivers/net/wireless/ath/ath10k/mac.c | 1 +
- 1 file changed, 1 insertion(+)
+This should also already be fixed:
+https://lore.kernel.org/all/20230523111859.2197825-1-arnd@kernel.org/
 
-diff --git a/drivers/net/wireless/ath/ath10k/mac.c b/drivers/net/wireless/ath/ath10k/mac.c
-index 7675858f069b..12df3228b120 100644
---- a/drivers/net/wireless/ath/ath10k/mac.c
-+++ b/drivers/net/wireless/ath/ath10k/mac.c
-@@ -10033,6 +10033,7 @@ int ath10k_mac_register(struct ath10k *ar)
- 
- 	ar->hw->wiphy->features |= NL80211_FEATURE_STATIC_SMPS;
- 	ar->hw->wiphy->flags |= WIPHY_FLAG_IBSS_RSN;
-+	ar->hw->wiphy->flags |= WIPHY_FLAG_CHANNEL_CHANGE_ON_BEACON;
- 
- 	if (ar->ht_cap_info & WMI_HT_CAP_DYNAMIC_SMPS)
- 		ar->hw->wiphy->features |= NL80211_FEATURE_DYNAMIC_SMPS;
 -- 
-2.41.0.162.gfafddb0af9-goog
-
+Kees Cook
