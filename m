@@ -2,227 +2,215 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 537047426CB
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 14:55:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5E747426CE
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 14:57:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231878AbjF2MzU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 08:55:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35834 "EHLO
+        id S230476AbjF2M5R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 08:57:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbjF2MzQ (ORCPT
+        with ESMTP id S229459AbjF2M5P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 08:55:16 -0400
-Received: from mailbox.box.xen0n.name (mail.xen0n.name [115.28.160.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DB5C2961;
-        Thu, 29 Jun 2023 05:55:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xen0n.name; s=mail;
-        t=1688043306; bh=qlzO1nAzqPvB+Hzmr0HgbCqGg7RmBSNwRMReUr64bck=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=jUu9zRsEygCOa39ZCgxRiLbKjXTQyAk3/vq1UdG1rNhZGoBj1lnigTzep51CpGxAI
-         Bi14AsqbPSnMerzIsKznCyRo9Sr6o9nEuXrSMeAlj3HQr2VxpcMMRF4Ii1rtyOqAct
-         kG/wvCT5WHvifhVE0+KGx6hx6hBDjd766/gHEM8M=
-Received: from [100.100.34.13] (unknown [220.248.53.61])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by mailbox.box.xen0n.name (Postfix) with ESMTPSA id D6696600AE;
-        Thu, 29 Jun 2023 20:55:02 +0800 (CST)
-Message-ID: <6906281a-baa8-a960-e679-69d1e714e713@xen0n.name>
-Date:   Thu, 29 Jun 2023 20:55:02 +0800
+        Thu, 29 Jun 2023 08:57:15 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23F7FE58;
+        Thu, 29 Jun 2023 05:57:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1688043434; x=1719579434;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=/QmFOMe/PCvIGdXwXzdOv9tn5csW9W1bsdoNeEspJYI=;
+  b=ATFX5TKPmNVun4Nttjd9AscGUkC1vEob/YQjt7PIltZOII7iBS03QbHn
+   hDHZCiX2aluZi9XkneXb7INPf4EMAo+uMr1RiiesgrbyDx1QdY8w9Mg3k
+   YeB+pafkRBV03xM0kHvHvf96P2qMt69wJAaRYliZHRdrnz6yZOa7dusM+
+   5IxI4fE0P6g4CgC4OB6t8v+8YXOwdvZ17n4WSQ6Er88cgvlrJZHQXkj0+
+   QyBuZWdnLKn2a68YCeR9xFy+/9e6PhYzgQ02K/nx7xpma3n2s3rgTmPaR
+   XY39Xd6y3scWZ1VwFcCR1I1KBzKyB1bbyGyETW5SII/VXX97UHeEXg0l0
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10756"; a="342437532"
+X-IronPort-AV: E=Sophos;i="6.01,168,1684825200"; 
+   d="scan'208";a="342437532"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jun 2023 05:57:13 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10756"; a="891396985"
+X-IronPort-AV: E=Sophos;i="6.01,168,1684825200"; 
+   d="scan'208";a="891396985"
+Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.49.81])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jun 2023 05:57:11 -0700
+Message-ID: <57dd6bdc-c8dc-219c-f9dd-d2f210a5ce2c@intel.com>
+Date:   Thu, 29 Jun 2023 15:57:06 +0300
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.12.0
-Subject: Re: [PATCH 06/12] arch: Declare screen_info in <asm/screen_info.h>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.12.0
+Subject: Re: [PATCH] mmc: sdhci-f-sdh30: Replace with sdhci_pltfm
 Content-Language: en-US
-To:     Thomas Zimmermann <tzimmermann@suse.de>, arnd@arndb.de,
-        deller@gmx.de, daniel@ffwll.ch, airlied@gmail.com
-Cc:     linux-kernel@vger.kernel.org, linux-alpha@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-efi@vger.kernel.org,
-        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
-        linux-ia64@vger.kernel.org, loongarch@lists.linux.dev,
-        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-sh@vger.kernel.org,
-        sparclinux@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-hyperv@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        linux-staging@lists.linux.dev, linux-arch@vger.kernel.org,
-        Richard Henderson <richard.henderson@linaro.org>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
-        Brian Cain <bcain@quicinc.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Kees Cook <keescook@chromium.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        Juerg Haefliger <juerg.haefliger@canonical.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Niklas Schnelle <schnelle@linux.ibm.com>,
-        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Sebastian Reichel <sebastian.reichel@collabora.com>,
-        "Mike Rapoport (IBM)" <rppt@kernel.org>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Zi Yan <ziy@nvidia.com>
-References: <20230629121952.10559-1-tzimmermann@suse.de>
- <20230629121952.10559-7-tzimmermann@suse.de>
-From:   WANG Xuerui <kernel@xen0n.name>
-In-Reply-To: <20230629121952.10559-7-tzimmermann@suse.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230629004959.22825-1-hayashi.kunihiko@socionext.com>
+From:   Adrian Hunter <adrian.hunter@intel.com>
+Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
+ Business Identity Code: 0357606 - 4, Domiciled in Helsinki
+In-Reply-To: <20230629004959.22825-1-hayashi.kunihiko@socionext.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/6/29 19:45, Thomas Zimmermann wrote:
-> The variable screen_info does not exist on all architectures. Declare
-> it in <asm-generic/screen_info.h>. All architectures that do declare it
-> will provide it via <asm/screen_info.h>.
+On 29/06/23 03:49, Kunihiko Hayashi wrote:
+> Even if sdhci_pltfm_pmops is specified for PM, this driver doesn't apply
+> sdhci_pltfm, so the structure is not correctly referenced in PM functions.
+> This applies sdhci_pltfm to this driver to fix this issue.
 > 
-> Add the Kconfig token ARCH_HAS_SCREEN_INFO to guard against access on
-> architectures that don't provide screen_info.
+> - Call sdhci_pltfm_init() instead of sdhci_alloc_host() and
+>   other functions that covered by sdhci_pltfm.
+> - Move ops and quirks to sdhci_pltfm_data
+> - Replace sdhci_priv() with own private function sdhci_f_sdh30_priv().
 > 
-> Signed-off-by: Thomas Zimmermann <tzimmermann@suse.de>
-> Cc: Richard Henderson <richard.henderson@linaro.org>
-> Cc: Ivan Kokshaysky <ink@jurassic.park.msu.ru>
-> Cc: Matt Turner <mattst88@gmail.com>
-> Cc: Russell King <linux@armlinux.org.uk>
-> Cc: Catalin Marinas <catalin.marinas@arm.com>
-> Cc: Will Deacon <will@kernel.org>
-> Cc: Guo Ren <guoren@kernel.org>
-> Cc: Brian Cain <bcain@quicinc.com>
-> Cc: Huacai Chen <chenhuacai@kernel.org>
-> Cc: WANG Xuerui <kernel@xen0n.name>
-> Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-> Cc: Dinh Nguyen <dinguyen@kernel.org>
-> Cc: Michael Ellerman <mpe@ellerman.id.au>
-> Cc: Nicholas Piggin <npiggin@gmail.com>
-> Cc: Christophe Leroy <christophe.leroy@csgroup.eu>
-> Cc: Paul Walmsley <paul.walmsley@sifive.com>
-> Cc: Palmer Dabbelt <palmer@dabbelt.com>
-> Cc: Albert Ou <aou@eecs.berkeley.edu>
-> Cc: Yoshinori Sato <ysato@users.sourceforge.jp>
-> Cc: Rich Felker <dalias@libc.org>
-> Cc: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-> Cc: "David S. Miller" <davem@davemloft.net>
-> Cc: Thomas Gleixner <tglx@linutronix.de>
-> Cc: Ingo Molnar <mingo@redhat.com>
-> Cc: Borislav Petkov <bp@alien8.de>
-> Cc: Dave Hansen <dave.hansen@linux.intel.com>
-> Cc: x86@kernel.org
-> Cc: "H. Peter Anvin" <hpa@zytor.com>
-> Cc: Chris Zankel <chris@zankel.net>
-> Cc: Max Filippov <jcmvbkbc@gmail.com>
-> Cc: Helge Deller <deller@gmx.de>
-> Cc: Arnd Bergmann <arnd@arndb.de>
-> Cc: Kees Cook <keescook@chromium.org>
-> Cc: "Paul E. McKenney" <paulmck@kernel.org>
-> Cc: Peter Zijlstra <peterz@infradead.org>
-> Cc: Frederic Weisbecker <frederic@kernel.org>
-> Cc: Andrew Morton <akpm@linux-foundation.org>
-> Cc: Ard Biesheuvel <ardb@kernel.org>
-> Cc: Sami Tolvanen <samitolvanen@google.com>
-> Cc: Juerg Haefliger <juerg.haefliger@canonical.com>
-> Cc: Geert Uytterhoeven <geert@linux-m68k.org>
-> Cc: Anshuman Khandual <anshuman.khandual@arm.com>
-> Cc: Niklas Schnelle <schnelle@linux.ibm.com>
-> Cc: "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
-> Cc: Linus Walleij <linus.walleij@linaro.org>
-> Cc: Sebastian Reichel <sebastian.reichel@collabora.com>
-> Cc: "Mike Rapoport (IBM)" <rppt@kernel.org>
-> Cc: "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-> Cc: Zi Yan <ziy@nvidia.com>
+
+Does it need a Fixes tag?
+
+> Signed-off-by: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
+
+Otherwise:
+
+Acked-by: Adrian Hunter <adrian.hunter@intel.com>
+
 > ---
->   arch/Kconfig                      |  6 ++++++
->   arch/alpha/Kconfig                |  1 +
->   arch/arm/Kconfig                  |  1 +
->   arch/arm64/Kconfig                |  1 +
->   arch/csky/Kconfig                 |  1 +
->   arch/hexagon/Kconfig              |  1 +
->   arch/ia64/Kconfig                 |  1 +
->   arch/loongarch/Kconfig            |  1 +
->   arch/mips/Kconfig                 |  1 +
->   arch/nios2/Kconfig                |  1 +
->   arch/powerpc/Kconfig              |  1 +
->   arch/riscv/Kconfig                |  1 +
->   arch/sh/Kconfig                   |  1 +
->   arch/sparc/Kconfig                |  1 +
->   arch/x86/Kconfig                  |  1 +
->   arch/xtensa/Kconfig               |  1 +
->   drivers/video/Kconfig             |  3 +++
->   include/asm-generic/Kbuild        |  1 +
->   include/asm-generic/screen_info.h | 12 ++++++++++++
->   include/linux/screen_info.h       |  2 +-
->   20 files changed, 38 insertions(+), 1 deletion(-)
->   create mode 100644 include/asm-generic/screen_info.h
+>  drivers/mmc/host/sdhci_f_sdh30.c | 60 ++++++++++++++------------------
+>  1 file changed, 27 insertions(+), 33 deletions(-)
 > 
-> diff --git a/arch/Kconfig b/arch/Kconfig
-> index 205fd23e0cada..2f58293fd7bcb 100644
-> --- a/arch/Kconfig
-> +++ b/arch/Kconfig
-> @@ -1466,6 +1466,12 @@ config ARCH_HAS_NONLEAF_PMD_YOUNG
->   	  address translations. Page table walkers that clear the accessed bit
->   	  may use this capability to reduce their search space.
->   
-> +config ARCH_HAS_SCREEN_INFO
-> +	bool
-> +	help
-> +	  Selected by architectures that provide a global instance of
-> +	  screen_info.
+> diff --git a/drivers/mmc/host/sdhci_f_sdh30.c b/drivers/mmc/host/sdhci_f_sdh30.c
+> index a202a69a4b08..b01ffb4d0973 100644
+> --- a/drivers/mmc/host/sdhci_f_sdh30.c
+> +++ b/drivers/mmc/host/sdhci_f_sdh30.c
+> @@ -29,9 +29,16 @@ struct f_sdhost_priv {
+>  	bool enable_cmd_dat_delay;
+>  };
+>  
+> +static void *sdhci_f_sdhost_priv(struct sdhci_host *host)
+> +{
+> +	struct sdhci_pltfm_host *pltfm_host = sdhci_priv(host);
 > +
->   source "kernel/gcov/Kconfig"
->   
->   source "scripts/gcc-plugins/Kconfig"
-> [snip]
-> diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
-> index d38b066fc931b..6aab2fb7753da 100644
-> --- a/arch/loongarch/Kconfig
-> +++ b/arch/loongarch/Kconfig
-> @@ -13,6 +13,7 @@ config LOONGARCH
->   	select ARCH_HAS_FORTIFY_SOURCE
->   	select ARCH_HAS_NMI_SAFE_THIS_CPU_OPS
->   	select ARCH_HAS_PTE_SPECIAL
-> +	select ARCH_HAS_SCREEN_INFO
->   	select ARCH_HAS_TICK_BROADCAST if GENERIC_CLOCKEVENTS_BROADCAST
->   	select ARCH_INLINE_READ_LOCK if !PREEMPTION
->   	select ARCH_INLINE_READ_LOCK_BH if !PREEMPTION
-> [snip]
-
-Acked-by: WANG Xuerui <git@xen0n.name> # loongarch
-
-Thanks!
-
--- 
-WANG "xen0n" Xuerui
-
-Linux/LoongArch mailing list: https://lore.kernel.org/loongarch/
+> +	return sdhci_pltfm_priv(pltfm_host);
+> +}
+> +
+>  static void sdhci_f_sdh30_soft_voltage_switch(struct sdhci_host *host)
+>  {
+> -	struct f_sdhost_priv *priv = sdhci_priv(host);
+> +	struct f_sdhost_priv *priv = sdhci_f_sdhost_priv(host);
+>  	u32 ctrl = 0;
+>  
+>  	usleep_range(2500, 3000);
+> @@ -64,7 +71,7 @@ static unsigned int sdhci_f_sdh30_get_min_clock(struct sdhci_host *host)
+>  
+>  static void sdhci_f_sdh30_reset(struct sdhci_host *host, u8 mask)
+>  {
+> -	struct f_sdhost_priv *priv = sdhci_priv(host);
+> +	struct f_sdhost_priv *priv = sdhci_f_sdhost_priv(host);
+>  	u32 ctl;
+>  
+>  	if (sdhci_readw(host, SDHCI_CLOCK_CONTROL) == 0)
+> @@ -95,30 +102,32 @@ static const struct sdhci_ops sdhci_f_sdh30_ops = {
+>  	.set_uhs_signaling = sdhci_set_uhs_signaling,
+>  };
+>  
+> +static const struct sdhci_pltfm_data sdhci_f_sdh30_pltfm_data = {
+> +	.ops = &sdhci_f_sdh30_ops,
+> +	.quirks = SDHCI_QUIRK_NO_ENDATTR_IN_NOPDESC
+> +		| SDHCI_QUIRK_INVERTED_WRITE_PROTECT,
+> +	.quirks2 = SDHCI_QUIRK2_SUPPORT_SINGLE
+> +		|  SDHCI_QUIRK2_TUNING_WORK_AROUND,
+> +};
+> +
+>  static int sdhci_f_sdh30_probe(struct platform_device *pdev)
+>  {
+>  	struct sdhci_host *host;
+>  	struct device *dev = &pdev->dev;
+> -	int irq, ctrl = 0, ret = 0;
+> +	int ctrl = 0, ret = 0;
+>  	struct f_sdhost_priv *priv;
+> +	struct sdhci_pltfm_host *pltfm_host;
+>  	u32 reg = 0;
+>  
+> -	irq = platform_get_irq(pdev, 0);
+> -	if (irq < 0)
+> -		return irq;
+> -
+> -	host = sdhci_alloc_host(dev, sizeof(struct f_sdhost_priv));
+> +	host = sdhci_pltfm_init(pdev, &sdhci_f_sdh30_pltfm_data,
+> +				sizeof(struct f_sdhost_priv));
+>  	if (IS_ERR(host))
+>  		return PTR_ERR(host);
+>  
+> -	priv = sdhci_priv(host);
+> +	pltfm_host = sdhci_priv(host);
+> +	priv = sdhci_pltfm_priv(pltfm_host);
+>  	priv->dev = dev;
+>  
+> -	host->quirks = SDHCI_QUIRK_NO_ENDATTR_IN_NOPDESC |
+> -		       SDHCI_QUIRK_INVERTED_WRITE_PROTECT;
+> -	host->quirks2 = SDHCI_QUIRK2_SUPPORT_SINGLE |
+> -			SDHCI_QUIRK2_TUNING_WORK_AROUND;
+> -
+>  	priv->enable_cmd_dat_delay = device_property_read_bool(dev,
+>  						"fujitsu,cmd-dat-delay-select");
+>  
+> @@ -126,18 +135,6 @@ static int sdhci_f_sdh30_probe(struct platform_device *pdev)
+>  	if (ret)
+>  		goto err;
+>  
+> -	platform_set_drvdata(pdev, host);
+> -
+> -	host->hw_name = "f_sdh30";
+> -	host->ops = &sdhci_f_sdh30_ops;
+> -	host->irq = irq;
+> -
+> -	host->ioaddr = devm_platform_ioremap_resource(pdev, 0);
+> -	if (IS_ERR(host->ioaddr)) {
+> -		ret = PTR_ERR(host->ioaddr);
+> -		goto err;
+> -	}
+> -
+>  	if (dev_of_node(dev)) {
+>  		sdhci_get_of_property(pdev);
+>  
+> @@ -204,24 +201,21 @@ static int sdhci_f_sdh30_probe(struct platform_device *pdev)
+>  err_clk:
+>  	clk_disable_unprepare(priv->clk_iface);
+>  err:
+> -	sdhci_free_host(host);
+> +	sdhci_pltfm_free(pdev);
+> +
+>  	return ret;
+>  }
+>  
+>  static int sdhci_f_sdh30_remove(struct platform_device *pdev)
+>  {
+>  	struct sdhci_host *host = platform_get_drvdata(pdev);
+> -	struct f_sdhost_priv *priv = sdhci_priv(host);
+> -
+> -	sdhci_remove_host(host, readl(host->ioaddr + SDHCI_INT_STATUS) ==
+> -			  0xffffffff);
+> +	struct f_sdhost_priv *priv = sdhci_f_sdhost_priv(host);
+>  
+>  	reset_control_assert(priv->rst);
+>  	clk_disable_unprepare(priv->clk);
+>  	clk_disable_unprepare(priv->clk_iface);
+>  
+> -	sdhci_free_host(host);
+> -	platform_set_drvdata(pdev, NULL);
+> +	sdhci_pltfm_unregister(pdev);
+>  
+>  	return 0;
+>  }
 
