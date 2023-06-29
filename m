@@ -2,107 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D75C1742BF5
+	by mail.lfdr.de (Postfix) with ESMTP id 8F4CD742BF4
 	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 20:36:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232526AbjF2Se7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 14:34:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51878 "EHLO
+        id S233929AbjF2SfE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 14:35:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234369AbjF2SeJ (ORCPT
+        with ESMTP id S232902AbjF2SeU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 14:34:09 -0400
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BD3C1988
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 11:33:52 -0700 (PDT)
-Received: by mail-wm1-x32f.google.com with SMTP id 5b1f17b1804b1-3fbc244d386so3960215e9.2
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 11:33:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688063630; x=1690655630;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=DP5uBK62gMjC6rOkCCdZlOO2En6flGgqBqs4cAOdDzQ=;
-        b=WWMQh1bqCQ7y6wYXZpyMPwHg++IgPNX2eOm0dO2tWkG0hZsR8LOYlLL+sf48crnIvF
-         KJmrnzh8dI8CJcuPdp8gHstB8SmMiZcYd/Fj3lDT7PoX1U7eIp8HDI/3itvt6Fxg4BwI
-         J/83rruGNCfzmPkaIQD9L02PqldSn/DgtylP4HX0GejHuQyZGBSUNx/d4nlDu4FzKn7t
-         xo45eM60nPijWAzh+Ut+kuI89fwsVfRof5b+D5//1ys5q4d9k/LU6CD/Ao/HlBoej2FY
-         Js/hynpHKk54icqcxy27C7AQ0S6wwZcHZBRJvvj95ye/kfQWaBXm7MttnMzchL2sq4KD
-         qahg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688063630; x=1690655630;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=DP5uBK62gMjC6rOkCCdZlOO2En6flGgqBqs4cAOdDzQ=;
-        b=Zf+AJ2Fgu8f1rC0MqYXrGTA3Zp/7D/joIHH+80Jw/VHjqgHZ2znc+8LsLNkac5uR9p
-         9F3ipSFteWyqo7oJIZ4vI+mt5Tk3eUCkpjHH0yM2AIwj5G8g+grwq+gXfTeONIaDfRX7
-         CaGFOFE+c7etu/r7gC6JpP9D2wyXO9UJ3dWb9+bxiDOc2gmy12fwMgopN7CSB22exUNk
-         HlyD2E62i0XALWaxzsCtIaVyUmhRJYYB03V0ZhOSclVkpTlCiGqfcsYHFa568HMsCHE6
-         eYCJ5ZZgpFommh/ukXCLSIkNHqLGzkRweR9jZqtGaWyk5UdlcCwwDyHDDSimHM/hUuD+
-         m1MA==
-X-Gm-Message-State: AC+VfDwv0iU30XqLksLo4HpZBQl+ikcBQMqj+KeNSoLBVQMdajyVgbre
-        45wqKs57z4hd9zZIzaOO2kx49LAI53X85daKRTU=
-X-Google-Smtp-Source: ACHHUZ60aeDsy5KSR1e0/2v8LN0ZxwtIIOWZuW6s+AXZjBYC+UX3ODxG5pBqwwAUvseXxzbKVsyrjX1qhBVDiZZ9mdw=
-X-Received: by 2002:a7b:c847:0:b0:3fb:be07:5343 with SMTP id
- c7-20020a7bc847000000b003fbbe075343mr139733wml.27.1688063630144; Thu, 29 Jun
- 2023 11:33:50 -0700 (PDT)
+        Thu, 29 Jun 2023 14:34:20 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CF1F1719;
+        Thu, 29 Jun 2023 11:34:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Transfer-Encoding:
+        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
+        Sender:Reply-To:Content-ID:Content-Description;
+        bh=8G2XND6WYYBgieuCNXQSJ0h8yM1THsepfLIyxBzOQdM=; b=aEGaXNVYMMI9ZJt0oeCDZ/svCc
+        exHWLiuPiysn9Ks+cpi3DZ0bmBihjeD6UviXcMmED95/uIQexzmrUsT6URaqJxmwGPhEfSfN10JU2
+        vtqXW3boponYUK8F66mpxozNHAPMLFh5fSS5ctUaWPG71ptmqXYI1MjMWeaXPenxEapadwkQ3423W
+        lMTDwe+8SgXWyR2aJNBeOulLYVSjjF/ywhBxoHzRHxDio0UWamQch2p7hwhXOtUYBR2FHuC9J4zjd
+        oNw24Mpswj9X1UqbXTc30lJCwFib7tZPcak83APHLqU+siC8/MSa0rFZIadFLzUxy8lDtOLqmgg3l
+        Xn51G4Lw==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1qEwT2-0054UW-Tl; Thu, 29 Jun 2023 18:34:08 +0000
+Date:   Thu, 29 Jun 2023 19:34:08 +0100
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Matt Whitlock <kernel@mattwhitlock.name>,
+        David Howells <dhowells@redhat.com>, netdev@vger.kernel.org,
+        Dave Chinner <david@fromorbit.com>,
+        Jens Axboe <axboe@kernel.dk>, linux-fsdevel@kvack.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH 0/4] splice: Fix corruption in data spliced to pipe
+Message-ID: <ZJ3OoCcSxZzzgUur@casper.infradead.org>
+References: <20230629155433.4170837-1-dhowells@redhat.com>
+ <CAHk-=wiDwfyj0CCupT-oEToqsNLcbsTQdcgDupF=ZETUjJQJtQ@mail.gmail.com>
+ <4bd92932-c9d2-4cc8-b730-24c749087e39@mattwhitlock.name>
+ <CAHk-=whYWEUU69nY6k4j1_EQnQDNPy4TqAMvpf1UA111UDdmYg@mail.gmail.com>
 MIME-Version: 1.0
-References: <20230628112958.45374-1-dg573847474@gmail.com> <2a1220fc-777c-4611-9f75-3a8e07a04850@app.fastmail.com>
-In-Reply-To: <2a1220fc-777c-4611-9f75-3a8e07a04850@app.fastmail.com>
-From:   Chengfeng Ye <dg573847474@gmail.com>
-Date:   Fri, 30 Jun 2023 02:33:38 +0800
-Message-ID: <CAAo+4rWgg7ZCTt1K=sdTb6Nt1unKEP5e5rWMknS3=cebXP818w@mail.gmail.com>
-Subject: Re: [PATCH v2] misc: bcm_vk: Fix potential deadlock on &vk->ctx_lock
-To:     Arnd Bergmann <arnd@arndb.de>, scott.branden@broadcom.com,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     bcm-kernel-feedback-list@broadcom.com, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAHk-=whYWEUU69nY6k4j1_EQnQDNPy4TqAMvpf1UA111UDdmYg@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> The timer function does not seem to be performance critical at all,
-> it might be nicer to just move it into process context using
-> a delayed workqueue instead of a timer.
-
-Thanks for the suggestion, new patch is sent with a delayed workqueue.
-
-Best Regards,
-Chengfeng
-
-Arnd Bergmann <arnd@arndb.de> =E4=BA=8E2023=E5=B9=B46=E6=9C=8828=E6=97=A5=
-=E5=91=A8=E4=B8=89 19:56=E5=86=99=E9=81=93=EF=BC=9A
->
-> On Wed, Jun 28, 2023, at 13:29, Chengfeng Ye wrote:
-> > As &vk->ctx_lock is acquired by timer bcm_vk_hb_poll() under softirq
-> > context, other process context code should disable irq or bottom-half
-> > before acquire the same lock, otherwise deadlock could happen if the
-> > timer preempt the execution while the lock is held in process context
-> > on the same CPU.
+On Thu, Jun 29, 2023 at 11:19:36AM -0700, Linus Torvalds wrote:
+> On Thu, 29 Jun 2023 at 11:05, Matt Whitlock <kernel@mattwhitlock.name> wrote:
 > >
-> > Possible deadlock scenario
-> > bcm_vk_open()
-> >     -> bcm_vk_get_ctx()
-> >     -> spin_lock(&vk->ctx_lock)
-> >       <timer iterrupt>
-> >       -> bcm_vk_hb_poll()
-> >       -> bcm_vk_blk_drv_access()
-> >       -> spin_lock_irqsave(&vk->ctx_lock, flags) (deadlock here)
-> >
-> > This flaw was found using an experimental static analysis tool we are
-> > developing for irq-related deadlock, which reported the following
-> > warning when analyzing the linux kernel 6.4-rc7 release.
->
-> The timer function does not seem to be performance critical at all,
-> it might be nicer to just move it into process context using
-> a delayed workqueue instead of a timer.
->
->      Arnd
+> > I don't know why SPLICE_F_MOVE is being ignored in this thread. Sure, maybe
+> > the way it has historically been implemented was only relevant when the
+> > input FD is a pipe, but that's not what the man page implies. You have the
+> > opportunity to make it actually do what it says on the tin.
+> 
+> First off, when documentation and reality disagree, it's the
+> documentation that is garbage.
+> 
+> Secondly, your point is literally moot, from what I can tell:
+> 
+>        SPLICE_F_MOVE
+>               Unused for vmsplice(); see splice(2).
+> 
+> that's the doc I see right now for "man vmsplice".
+> 
+> There's no "implies" there. There's an actual big honking clear
+> statement at the top of the man-page saying that what you claim is
+> simply not even remotely true.
+> 
+> Also, the reason SPLICE_F_MOVE is unused for vmsplice() is that
+> actually trying to move pages would involve having to *remove* them
+> from the VM source. And the TLB invalidation involved with that is
+> literally more expensive than the memory copy would be.
+
+I think David muddied the waters by talking about vmsplice().  The
+problem encountered is with splice() from the page cache.  Reading
+the documentation,
+
+       splice()  moves  data  between two file descriptors without copying be‐
+       tween kernel address space and user address space.  It transfers up  to
+       len bytes of data from the file descriptor fd_in to the file descriptor
+       fd_out, where one of the file descriptors must refer to a pipe.
+
+The bug reported is actually with using FALLOC_FL_PUNCH_HOLE, but a
+simpler problem is:
+
+#define _GNU_SOURCE
+#include <unistd.h>
+#include <fcntl.h>
+#include <stdio.h>
+
+#define PAGE_SIZE 4096
+
+int main(int argc, char **argv)
+{
+        int fd = open(argv[1], O_RDWR | O_CREAT, 0644);
+
+        err = ftruncate(fd, PAGE_SIZE);
+        pwrite(fd, "old", 3, 0);
+        splice(fd, NULL, 1, NULL, PAGE_SIZE, 0);
+        pwrite(fd, "new", 3, 0);
+
+        return 0;
+}
+
+That outputs "new".  Should it?  If so, the manpage is really wrong.
+It says the point of splice() is to remove the kernel-user-kernel copy,
+and notes that zerocopy might be happening, but that's an optimisation
+the user shouldn't notice.
