@@ -2,265 +2,321 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 571FF74217B
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 09:55:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BABB74217D
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 09:57:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231787AbjF2Hyj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 03:54:39 -0400
-Received: from mail-vi1eur02on2048.outbound.protection.outlook.com ([40.107.241.48]:31489
-        "EHLO EUR02-VI1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S232422AbjF2HxT (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 03:53:19 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=QEFqPCs6uE6RPpPVvAAKnAxOP6jsa1r0CuRVCtoG5zQK/QYN+3gA5X/xLtMYCxG+Ic8X4y+HKbMSeonmhb7h8aFJMgoeqEcDNy3GVTFflBlXCk5YASKqI0uEOXHdKbt73x9Q/URHxKiyBGdRuI2Jl3vplrZS0qWcOdPiweNwl/jGzHfFKuBxyPW39Bhvjt5ZiIXV2AsPza7TyvJn3uSSY1UoQLiY+A46lwj2qiYkOh4Zyh5tz5FlbqriV8WZkae7M7+SZBJmZBF/T1SguONFOU71nwmJG2ycgU07SwWrd9lZjalPsqjG1CLW2OmhyKwpfCo8rSNLAp9eeB5xYOY5/g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=eSI2Qmu64zQHLVJ57XQ4ze1rlixAColllgajHlYDBfg=;
- b=Wlf6Kfc0/9JLpIJo4gNiF4ANFCtg7ICbnb5ytQjY/aLzmgXuN/XTuMgjmeZgM16nAXpCeaqmV5sF/hpnhg3CCoiBmRVD7lR62ghL9pZi7sdiHobj0dcGjtnZSjjLzTO51qkQao1/EGsqU8MqerJ7S+7NCBPsh01PguTY5xtlJzGg/eVYy/BWzIZgK8f4IPiEqlLsZ0WbiaZsUBe9lDbZFeK+Es8w3jGWJYXjFhGeGewwEu85Nh7JDcemfkjtkJCamYehzli3N0G/ybIHg56tG6ORJ0D2Lv1mi07/gb2WevK5AUq3rRLECcCpyhR0tIPn7b2VD2Ohr8w7nhSGtU2nqQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=wolfvision.net; dmarc=pass action=none
- header.from=wolfvision.net; dkim=pass header.d=wolfvision.net; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wolfvision.net;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=eSI2Qmu64zQHLVJ57XQ4ze1rlixAColllgajHlYDBfg=;
- b=tAZBDV9WDHhBsG5rpfn+vKQ0Ni983ngk06sZtdmgz90UIKkijssZJ7s0KYcxARUrl1ziSlYDqWVcpYY3r6Ssu4RPEPteoLKbd2IOEjPJOS6NOlggJyLw3DHABBUDW3Onq8Xj1ipwknPfJl1gDr2Q4UxWrimyg5D+sWO49yNQ//0=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=wolfvision.net;
-Received: from VE1PR08MB4974.eurprd08.prod.outlook.com (2603:10a6:803:111::15)
- by DB3PR08MB9009.eurprd08.prod.outlook.com (2603:10a6:10:43f::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.23; Thu, 29 Jun
- 2023 07:53:15 +0000
-Received: from VE1PR08MB4974.eurprd08.prod.outlook.com
- ([fe80::bd0e:a139:9e67:b86d]) by VE1PR08MB4974.eurprd08.prod.outlook.com
- ([fe80::bd0e:a139:9e67:b86d%4]) with mapi id 15.20.6544.019; Thu, 29 Jun 2023
- 07:53:15 +0000
-Message-ID: <feb8931d-45e0-e701-d8a7-0f5e3c108a84@wolfvision.net>
-Date:   Thu, 29 Jun 2023 09:53:11 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v3 1/4] Input: ts-overlay - Add touchscreen overlay object
- handling
-To:     Jeff LaBundy <jeff@labundy.com>
-Cc:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Henrik Rydberg <rydberg@bitmath.org>,
-        Bastian Hecht <hechtb@gmail.com>,
-        Michael Riesch <michael.riesch@wolfvision.net>,
-        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
-        devicetree@vger.kernel.org
-References: <20230510-feature-ts_virtobj_patch-v3-0-b4fb7fc4bab7@wolfvision.net>
- <20230510-feature-ts_virtobj_patch-v3-1-b4fb7fc4bab7@wolfvision.net>
- <ZJj5VcHvfMMWMRx8@nixie71>
- <89cbb534-9371-c2be-0bad-776b51476ce8@wolfvision.net>
- <ZJmW/KOCJF25Z79t@nixie71>
- <543b2d74-eac4-3856-17c6-0654459a91b4@wolfvision.net>
- <ZJz6jnt9hDjuU3du@nixie71>
-Content-Language: en-US
-From:   Javier Carrasco <javier.carrasco@wolfvision.net>
-In-Reply-To: <ZJz6jnt9hDjuU3du@nixie71>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: VI1PR06CA0155.eurprd06.prod.outlook.com
- (2603:10a6:803:a0::48) To VE1PR08MB4974.eurprd08.prod.outlook.com
- (2603:10a6:803:111::15)
+        id S231865AbjF2H4x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 03:56:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34576 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232527AbjF2Hzz (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 29 Jun 2023 03:55:55 -0400
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8D2ECB1;
+        Thu, 29 Jun 2023 00:55:41 -0700 (PDT)
+Received: from loongson.cn (unknown [10.2.5.185])
+        by gateway (Coremail) with SMTP id _____8CxKsb7OJ1kncQDAA--.6144S3;
+        Thu, 29 Jun 2023 15:55:39 +0800 (CST)
+Received: from localhost.localdomain (unknown [10.2.5.185])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8AxzyP6OJ1kYGYQAA--.18424S2;
+        Thu, 29 Jun 2023 15:55:38 +0800 (CST)
+From:   Tianrui Zhao <zhaotianrui@loongson.cn>
+To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        loongarch@lists.linux.dev, Jens Axboe <axboe@kernel.dk>,
+        Mark Brown <broonie@kernel.org>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Oliver Upton <oliver.upton@linux.dev>, maobibo@loongson.cn,
+        Xi Ruoyao <xry111@xry111.site>, zhaotianrui@loongson.cn,
+        tangyouling@loongson.cn, hejinyang@loongson.cn
+Subject: [PATCH v16 00/30] Add KVM LoongArch support
+Date:   Thu, 29 Jun 2023 15:55:08 +0800
+Message-Id: <20230629075538.4063701-1-zhaotianrui@loongson.cn>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: VE1PR08MB4974:EE_|DB3PR08MB9009:EE_
-X-MS-Office365-Filtering-Correlation-Id: 45cd38f6-dcfa-4c55-4c68-08db7875e4ce
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: XsEROJ+dGk1JHA6AKyNim52G3JGqL+UY0Iq7Mh93U0E6PGrK/eEw9/ZTI0c5MW5LuIJVqPWMiOrHoWEH+JX5gS5aPQQqEi5Dq5ib9tzXfKQWJKpUe8CVCRWZCwsu77pjoE56NVaWouV/6HTtOsJ4006A7mk/26iyGud1KZXgJlxek+IRzzPEM60rGjWqg24TgyxkwxBKDW4GiIDaa6uh0tG/IGtwr3AJ33LD0CjrHYpkqAHoaHIVXfCJ+xKeaw4yLepRM7GQ3G0byoatqpd7tTi/GgQoU9Bv2NjkJRU6B7Zscu690WCbhqTx8nqN/ket5yeqiWji7pobEpHNE4vYbndI5lad3HtAkBxdegn2mFqdhVdkp9eAAdxmVjnL5EHvnAhAKnNM7h466U47sKjZUlPnlFO1TMhAK0HYyY7K2WQhAwCXtIfhy0/vItUstr96jkmkPgTLWQKlCotpViCkpWmKlMUhkxDArexMjHAb+iRh8KkTudMvNgoHhqkFrzeqLSXQB2X+fImbDln22j0q5Ymvo9V2os906dhjI/qHXeQlh2Yj4J9LRK2h2Qr9BUJeE8Oiz+fjoeS9X8k/520JbKYSgJ+beqEsNll3qZlPWxZdHNWq3CJNzS+r45hCnC9Etvi9gXUjzsGrvnyIwNEjYQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VE1PR08MB4974.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(346002)(136003)(39840400004)(376002)(366004)(84040400005)(451199021)(31686004)(7416002)(66946007)(316002)(44832011)(66476007)(6916009)(66556008)(478600001)(4326008)(36756003)(8936002)(66899021)(8676002)(5660300002)(86362001)(31696002)(2906002)(54906003)(41300700001)(6486002)(53546011)(6506007)(6512007)(6666004)(186003)(83380400001)(38100700002)(2616005)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Mjh3VmJjcmRvWXZnSytaNlZLTWVTSHMyNjFCK25GQjI1dmhrSDI1VGpWT01M?=
- =?utf-8?B?TzgrV3JiclJwN0xlRGh4WXFEM0RxNzNNVmNRK0xzMDkrdlBlTGdyZWpyV1NF?=
- =?utf-8?B?QkFuSFFRZnZNeGNlUzhUNGJCamdTcThFZGRNRzc1Yk9qSHZheEtuZWNGcDA4?=
- =?utf-8?B?aTUrV2NnZXM3UjkyQ2tYeHRjNzB0bzFuT3liMmU5VStsOG9wa29FOWtyUXNo?=
- =?utf-8?B?Q3o4Y285OEtaU3dsUFBVZjNLRC96eTBRRGtld3pEZGJrRnhCd0VaN2tCejRU?=
- =?utf-8?B?bW5TVHNWNHBkQk9WcEt5M1JEejRUMHI1V3JiNkloSXVNR2NRcW8yYjJBMFZs?=
- =?utf-8?B?Z0tEOFBOVUVBQ3J0d2JSY2cwRllGZ1pJUjBJcWdCWkFEVy9ObjZFekFQbWh5?=
- =?utf-8?B?MUd6RnFKK0NUSkh5ZFY3cUdDbGJhcEhBNkJ4VitWMnZnTzNjdGVNUThwZjVS?=
- =?utf-8?B?ZG0wVjM0U0NjSnpTcGRCOFhYQ2lFRnlvTWtLMU5jYUNVRUJBemFpYi8rTVVV?=
- =?utf-8?B?S1pPRWNPM09vSHBuSU9ySTFLcTJRem9GMmEwTDdlWXdkODZBWk1Lb21XNzN4?=
- =?utf-8?B?eTVpeHBmc2NhbDJ4WEw4a2NJSlREUkU5bFdMYzA1b3VLYnh0Slp5a1YvNmFi?=
- =?utf-8?B?Wm91RDlFQ3B0NFBWVzZoMitRaVRQTGo0U3FkdTBseVkxcks3SjFBYWN5V21x?=
- =?utf-8?B?ODBoRUpzYXk4Ylp2UXlpMzY1VHVFVDZ3Q0Yweit0TGhuZzVRN0RydHNnWGJO?=
- =?utf-8?B?SHpPei9heDlKa2habzVqUjBwbmxHTlQzMUJMK3NyWm9uTDE4TE9HNkRUa1ho?=
- =?utf-8?B?LzhDenBaMVRGUHB3eDFIb0ZoaUJNc054STZ6YlZGZ3ExZ05UeU56dmd1V1J2?=
- =?utf-8?B?RHlORm5IeksvbmJYL2xoakpzWi9LRHF0WHVpRms3SEhyR1BhbElENDg2N2Na?=
- =?utf-8?B?bVBnNVRibC9rbWsreDMvS2s4RWFGcWhSOXdsVlN4OFRBUzgrcjkyK2t4U0xj?=
- =?utf-8?B?RVQ4MStkdlVkOEp3dWh4MW0vTk96MHh3Nkp3V01MTFlUT1pMcmcxU3ZYNUVU?=
- =?utf-8?B?dlVtQUJ3UDdmNGplNGNDYXZ5Q0l2TG5Oek05ZzhBODd2NkJOa0N1YVY0bHFn?=
- =?utf-8?B?cGIrZ2MyRnlxN3ZaYzZBOWtGQ0xsc254YWI2MDY3UFRMVitza05zYnRmb0U3?=
- =?utf-8?B?OTMrNzE4OWNGTEozRGFDNlEvb1VYOERvQmxMQ1BOZVBiZ05tOXY1VTJMaHNM?=
- =?utf-8?B?V1grUysrMnhTR2VObUkzUWVTemJuWEluNTcxUy9hVG1XU1RrcmtzWkZObHha?=
- =?utf-8?B?cDV1MzE0cVEzMnl2VTQrVS82cWhDL1RraVdEWkNtNTI3MVR4cXpMQU9DalFE?=
- =?utf-8?B?eHhUZ2FoKzJSK2lnV2dWWS8xWUxJTUFpSHpyeTJ3WE9rRFNqb09IcXRWK1NT?=
- =?utf-8?B?K21VdW5XOGtFUXgrVG5mRmVjUjNBcWJNcG1IWnd5RmovcjA2WFRuS3BYMjZk?=
- =?utf-8?B?N0t6ZTVtZUc0aGx1NStYc1JneEh5RUxnRFB0ZkNPNkJZdXlIb1o3em5Cc3lu?=
- =?utf-8?B?ZktNS25aNy9WeW1VRVNORWFMTm1NVHM3RlFydk1hN1FhWXBwL1c0b3h6L2tL?=
- =?utf-8?B?M29pTXFjdnhHblZ6c2Vvb1NJVC9SMnVDVXpuUy91TE1venhBQ0huVGJMeHJl?=
- =?utf-8?B?VUhESTI2M1ZXTWxjWkdMcmI2RldiL05EU1d3aTMxQk1TZnVUQlZ5dTV1dWFF?=
- =?utf-8?B?bE9FSEhWeUFrR3RpcTdDTEdLcTZqNCtLRzBtT050L1Ewd2FNM29HVVFpSkRW?=
- =?utf-8?B?aEJaNi9IcmdvSG92VGJHZlhZVFNzWlJtT3NZdnp6U3NYTUlHV216bWgxWmxh?=
- =?utf-8?B?YS8wb3lSbUhrQnRkR0EwMzBjdnU5TWdITzlIVU9CZzVuN01ITjkxVHRsTW5x?=
- =?utf-8?B?eDduNHRYdWc4QlY0dld3LzFzQVF5RWxFTTQxeVBTMVlmVUZKMUViRzF3cy9m?=
- =?utf-8?B?Nnl1RS9wSDZoeWFSMXhPWXlBeitZVjRaZit6OVhXZHNub0hkeTFHTTNHNFdV?=
- =?utf-8?B?c2Z0S29vdEU3TGlSRUl2bTJRQVkxalVHdERMY0JuNzd5cDJXYnU3R0laczNi?=
- =?utf-8?B?THZHVUsreUdjSGNxYWc3Snd6QUViSjlnWGxDUVQ5WnpRdFRTWCtzU05SeUJv?=
- =?utf-8?B?MmFlMzE3WXoza1B5eGZlSkFBcHNLTEZOS1FQUmJ2RWZkNGcvSnVDRGZXaURQ?=
- =?utf-8?Q?SmVUVNmZtXi6vLT7+1DQAGh4Bdhy4cpgHpMlwNU5e8=3D?=
-X-OriginatorOrg: wolfvision.net
-X-MS-Exchange-CrossTenant-Network-Message-Id: 45cd38f6-dcfa-4c55-4c68-08db7875e4ce
-X-MS-Exchange-CrossTenant-AuthSource: VE1PR08MB4974.eurprd08.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Jun 2023 07:53:14.9755
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: e94ec9da-9183-471e-83b3-51baa8eb804f
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Rpr6jMMXp28RmAryHxrU+FDnpcePvNtiCISUDCh46FBr2jA1FXz0QPiRNIzsTGbaSS6/00fapQqTV4f+8wATd4hd5ljAJLd8zGgu2+sa7nc=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB3PR08MB9009
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8AxzyP6OJ1kYGYQAA--.18424S2
+X-CM-SenderInfo: p2kd03xldq233l6o00pqjv00gofq/
+X-Coremail-Antispam: 1Uk129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7KY7
+        ZEXasCq-sGcSsGvfJ3UbIjqfuFe4nvWSU5nxnvy29KBjDU0xBIdaVrnUUvcSsGvfC2Kfnx
+        nUUI43ZEXa7xR_UUUUUUUUU==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+        lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jeff,
+This series adds KVM LoongArch support. Loongson 3A5000 supports hardware
+assisted virtualization. With cpu virtualization, there are separate
+hw-supported user mode and kernel mode in guest mode. With memory
+virtualization, there are two-level hw mmu table for guest mode and host
+mode. Also there is separate hw cpu timer with consant frequency in
+guest mode, so that vm can migrate between hosts with different freq.
+Currently, we are able to boot LoongArch Linux Guests.
 
-On 29.06.23 05:29, Jeff LaBundy wrote:
-> Hi Javier,
-> 
-> On Wed, Jun 28, 2023 at 08:44:51AM +0200, Javier Carrasco wrote:
-> 
-> [...]
-> 
->>>>>> +static const char *const ts_overlay_names[] = {
->>>>>> +	[TOUCHSCREEN] = "overlay-touchscreen",
->>>>>
->>>>> I'm a little confused why we need new code for this particular function; it's
->>>>> what touchscreen-min-x/y and touchscreen-size-x/y were meant to define. Why
->>>>> can't we keep using those?
->>>>>
->>>> According to the bindings, touchscreen-min-x/y define the minimum
->>>> reported values, but the overlay-touchscreen is actually setting a new
->>>> origin. Therefore I might be misusing those properties. On the other
->>>> hand touchscreen-size-x/y would make more sense, but I also considered
->>>> the case where someone would like to describe the real size of the
->>>> touchscreen outside of the overlay node as well as the clipped size
->>>> inside the node. In that case using the same property twice would be
->>>> confusing.
->>>> So in the end I thought that the origin/size properties are more precise
->>>> and applicable for all objects and not only the overlay touchscreen.
->>>> These properties are needed for the buttons anyways and in the future
->>>> more overlay would use the same properties.
->>>
->>> Ah, I understand now. touchscreen-min-x/y define the lower limits of the axes
->>> reported to input but they don't move the origin. I'm aligned with the reason
->>> to introduce this function.
->>>
->>> This does beg the question as to whether we need two separate types of children
->>> and related parsing code. Can we not simply have one overlay definition, and
->>> make the decision as to whether we are dealing with a border or virtual button
->>> based on whether 'linux,code' is present?
->>>
->> A single overlay definition would be possible, but in case more objects
->> are added in the future, looking for single properties and then deciding
->> what object it is might get messy pretty fast. You could end up needing
->> a decision tree and the definition in the DT would get more complex.
->>
->> Now the decision tree is straightforward (linux,code -> button), but
->> that might not always be the case. In the current implementation there
->> are well-defined objects and adding a new one will never affect the
->> parsing of the rest.
->> Therefore I would like to keep it more readable and easily extendable.
-> 
-> As a potential customer of this feature, I'm ultimately looking to describe
-> the hardware as succinctly as possible. Currently we have two overlay types,
-> a border and button(s). The former will never have linux,code defined, while
-> the latter will. From my naive perspective, it seems redundant to define the
-> overlay types differently when their properties imply the difference already.
-> 
-> Ultimately it seems we are simply dealing with generic "segments" scattered
-> throughout a larger touch surface. These segments start to look something
-> like the following:
-> 
-> struct touch_segment {
-> 	unsigned int x_origin;
-> 	unsigned int y_origin;
-> 	unsigned int x_size;
-> 	unsigned int y_size;
-> 	unsigned int code;
-> };
-> 
-> You then have one exported function akin to touchscreen_parse_properties() that
-> simply walks the parent device looking for children named "touch-segment-0",
-> "touch-segment-1", etc. and parses the five properties, with the fifth (keycode)
-> being optional.
-> 
-> And then, you have one last exported function akin to touchscreen_report_pos()
-> that processes the touch coordinates. If the coordinates are in a given segment
-> and segment->code == KEY_RESERVED (i.e. linux,code was never given), then this
-> function simply passes the shifted coordinates to touchscreen_report_pos().
-> 
-> If however segment->code != KEY_RESERVED, it calls input_report_key() based on
-> whether the coordinates are within the segment. If this simplified solution
-> shrinks the code enough, it may even make sense to keep it in touchscreen.c
-> which this new feature is so tightly coupled to anyway.
-> 
-> I'm sure the devil is in the details however, and I understand the value in
-> future-proofing. Can you help me understand a potential future case where this
-> simplified view would break, and the existing definitions would be better?
-> 
-> Kind regards,
-> Jeff LaBundy
+Few key aspects of KVM LoongArch added by this series are:
+1. Enable kvm hardware function when kvm module is loaded.
+2. Implement VM and vcpu related ioctl interface such as vcpu create,
+   vcpu run etc. GET_ONE_REG/SET_ONE_REG ioctl commands are use to
+   get general registers one by one.
+3. Hardware access about MMU, timer and csr are emulated in kernel.
+4. Hardwares such as mmio and iocsr device are emulated in user space
+   such as APIC, IPI, pci devices etc.
 
-I agree that your approach would reduce the code and then moving this
-feature to touchscreen.c would be reasonable. So if in the end that is
-the desired solution, I will go for it. But there are some points where
-I think the bit of extra code would be worth it.
+The running environment of LoongArch virt machine:
+1. Cross tools to build kernel and uefi:
+   $ wget https://github.com/loongson/build-tools/releases/download/2022.09.06/loongarch64-clfs-6.3-cross-tools-gcc-glibc.tar.xz
+   tar -vxf loongarch64-clfs-6.3-cross-tools-gcc-glibc.tar.xz  -C /opt
+   export PATH=/opt/cross-tools/bin:$PATH
+   export LD_LIBRARY_PATH=/opt/cross-tools/lib:$LD_LIBRARY_PATH
+   export LD_LIBRARY_PATH=/opt/cross-tools/loongarch64-unknown-linux-gnu/lib/:$LD_LIBRARY_PATH
+2. This series is based on the linux source code:
+   https://github.com/loongson/linux-loongarch-kvm
+   Build command:
+   git checkout kvm-loongarch
+   make ARCH=loongarch CROSS_COMPILE=loongarch64-unknown-linux-gnu- loongson3_defconfig
+   make ARCH=loongarch CROSS_COMPILE=loongarch64-unknown-linux-gnu-
+3. QEMU hypervisor with LoongArch supported:
+   https://github.com/loongson/qemu
+   Build command:
+   git checkout kvm-loongarch
+   ./configure --target-list="loongarch64-softmmu"  --enable-kvm
+   make
+4. Uefi bios of LoongArch virt machine:
+   Link: https://github.com/tianocore/edk2-platforms/tree/master/Platform/Loongson/LoongArchQemuPkg#readme
+5. you can also access the binary files we have already build:
+   https://github.com/yangxiaojuan-loongson/qemu-binary
+The command to boot loongarch virt machine:
+   $ qemu-system-loongarch64 -machine virt -m 4G -cpu la464 \
+   -smp 1 -bios QEMU_EFI.fd -kernel vmlinuz.efi -initrd ramdisk \
+   -serial stdio   -monitor telnet:localhost:4495,server,nowait \
+   -append "root=/dev/ram rdinit=/sbin/init console=ttyS0,115200" \
+   --nographic
 
-From a DT perspective, I can imagine some scenarios where a bunch of
-segments scattered around would be messy. An example would be a keypad
-with let's say N=9 buttons. It could be described easily with a buttons
-node and the keys inside. Understanding what the node describes would be
-straightforward as well, let alone N being much bigger.
-You could argue that the buttons node could have segments inside instead
-of buttons, but in the case where a cropped touchscreen is also
-described, you would end up with a segment outside the buttons node and
-the rest inside. That would reduce the parsing savings. Some labeling
-would help in that case, but that would be not as clear as the current
-implementation.
-There is another point that I will just touch upon because I have no
-experience in the matter. I have seen that some keys use the
-'linux,input-type' property to define themselves as keys, switches, etc.
-If that property or any other that I do not know is necessary for other
-implementations, the button object will cover them better than a generic
-segment where half of the properties would be meaningless in some
-scenarios. Buttons/keys are so ubiquitous that a dedicated object for
-them does not look that bad imho.
-But as I said, I do not want to make a strong statement here because I
-have seen that you maintain several bindings where this properties are
-present and I am not the right person to explain that to you... or
-actually anyone else out there :)
+Changes for v16:
+1. Free allocated memory of vmcs,kvm_loongarch_ops in kvm module init,
+exit to avoid memory leak problem.
+2. Simplify some assemble codes in switch.S which are necessary to be
+replaced with pseudo-instructions. And any other instructions do not need
+to be replaced anymore.
+3. Add kvm_{save,restore}_guest_gprs macros to replace these ld.d,st.d
+guest regs instructions when vcpu world switch.
+4. It is more secure to disable irq when flush guest tlb by gpa, so replace
+preempt_disable with loacl_irq_save in kvm_flush_tlb_gpa.
 
-Talking about the code itself, having a structure for buttons is handy
-because you can keep track of the button status (e.g. pressed) and in
-the end it is just a child of the base shape that is used for the
-overlay touchscreen. The same applies to any function that handles
-buttons: they just wrap around the shape functions and add the
-button-specific management. So if the parsing is taken aside, the code
-does not get much savings from that side and it is again much more
-readable and comprehensible.
+Changes for v15:
+1. Re-order some macros and variables in LoongArch kvm headers, put them
+together which have the same meaning.
+2. Make some function definitions in one line, as it is not needed to split
+them.
+3. Re-name some macros such as KVM_REG_LOONGARCH_GPR.
 
-Thank you for your efforts to improve these patches and the constructive
-discussion.
+Changes for v14:
+1. Remove the macro CONFIG_KVM_GENERIC_HARDWARE_ENABLING in
+loongarch/kvm/main.c, as it is not useful.
+2. Add select KVM_GENERIC_HARDWARE_ENABLING in loongarch/kvm/Kconfig,
+as it is used by virt/kvm.
+3. Fix the LoongArch KVM source link in MAINTAINERS.
+4. Improve LoongArch KVM documentation, such as add comment for
+LoongArch kvm_regs.
 
-Best regards,
-Javier Carrasco
+Changes for v13:
+1. Remove patch-28 "Implement probe virtualization when cpu init", as the
+virtualization information about FPU,PMP,LSX in guest.options,options_dyn
+is not used and the gcfg reg value can be read in kvm_hardware_enable, so
+remove the previous cpu_probe_lvz function.
+2. Fix vcpu_enable_cap interface, it should return -EINVAL directly, as
+FPU cap is enable by default, and do not support any other caps now.
+3. Simplify the jirl instruction with jr when without return addr,
+simplify case HW0 ... HW7 statment in interrupt.c
+4. Rename host_stack,host_gp in kvm_vcpu_arch to host_sp,host_tp.
+5. Remove 'cpu' parameter in _kvm_check_requests, as 'cpu' is not used,
+and remove 'cpu' parameter in kvm_check_vmid function, as it can get
+cpu number by itself.
+
+Changes for v12:
+1. Improve the gcsr write/read/xchg interface to avoid the previous
+instruction statment like parse_r and make the code easy understanding,
+they are implemented in asm/insn-def.h and the instructions consistent
+of "opcode" "rj" "rd" "simm14" arguments.
+2. Fix the maintainers list of LoongArch KVM.
+
+Changes for v11:
+1. Add maintainers for LoongArch KVM.
+
+Changes for v10:
+1. Fix grammatical problems in LoongArch documentation.
+2. It is not necessary to save or restore the LOONGARCH_CSR_PGD when
+vcpu put and vcpu load, so we remove it.
+
+Changes for v9:
+1. Apply the new defined interrupt number macros in loongarch.h to kvm,
+such as INT_SWI0, INT_HWI0, INT_TI, INT_IPI, etc. And remove the
+previous unused macros.
+2. Remove unused variables in kvm_vcpu_arch, and reorder the variables
+to make them more standard.
+
+Changes for v8:
+1. Adjust the cpu_data.guest.options structure, add the ases flag into
+it, and remove the previous guest.ases. We do this to keep consistent
+with host cpu_data.options structure.
+2. Remove the "#include <asm/kvm_host.h>" in some files which also
+include the "<linux/kvm_host.h>". As linux/kvm_host.h already include
+the asm/kvm_host.h.
+3. Fix some unstandard spelling and grammar errors in comments, and
+improve a little code format to make it easier and standard.
+
+Changes for v7:
+1. Fix the kvm_save/restore_hw_gcsr compiling warnings reported by
+kernel test robot. The report link is:
+https://lore.kernel.org/oe-kbuild-all/202304131526.iXfLaVZc-lkp@intel.com/
+2. Fix loongarch kvm trace related compiling problems.
+
+Changes for v6:
+1. Fix the Documentation/virt/kvm/api.rst compile warning about
+loongarch parts.
+
+Changes for v5:
+1. Implement get/set mp_state ioctl interface, and only the
+KVM_MP_STATE_RUNNABLE state is supported now, and other states
+will be completed in the future. The state is also used when vcpu
+run idle instruction, if vcpu state is changed to RUNNABLE, the
+vcpu will have the possibility to be woken up.
+2. Supplement kvm document about loongarch-specific part, such as add
+api introduction for GET/SET_ONE_REG, GET/SET_FPU, GET/SET_MP_STATE,
+etc.
+3. Improve the kvm_switch_to_guest function in switch.S, remove the
+previous tmp,tmp1 arguments and replace it with t0,t1 reg.
+
+Changes for v4:
+1. Add a csr_need_update flag in _vcpu_put, as most csr registers keep
+unchanged during process context switch, so we need not to update it
+every time. We can do this only if the soft csr is different form hardware.
+That is to say all of csrs should update after vcpu enter guest, as for
+set_csr_ioctl, we have written soft csr to keep consistent with hardware.
+2. Improve get/set_csr_ioctl interface, we set SW or HW or INVALID flag
+for all csrs according to it's features when kvm init. In get/set_csr_ioctl,
+if csr is HW, we use gcsrrd/ gcsrwr instruction to access it, else if csr is
+SW, we use software to emulate it, and others return false.
+3. Add set_hw_gcsr function in csr_ops.S, and it is used in set_csr_ioctl.
+We have splited hw gcsr into three parts, so we can calculate the code offset
+by gcsrid and jump here to run the gcsrwr instruction. We use this function to
+make the code easier and avoid to use the previous SET_HW_GCSR(XXX) interface.
+4. Improve kvm mmu functions, such as flush page table and make clean page table
+interface.
+
+Changes for v3:
+1. Remove the vpid array list in kvm_vcpu_arch and use a vpid variable here,
+because a vpid will never be recycled if a vCPU migrates from physical CPU A
+to B and back to A.
+2. Make some constant variables in kvm_context to global such as vpid_mask,
+guest_eentry, enter_guest, etc.
+3. Add some new tracepoints, such as kvm_trace_idle, kvm_trace_cache,
+kvm_trace_gspr, etc.
+4. There are some duplicate codes in kvm_handle_exit and kvm_vcpu_run,
+so we move it to a new function kvm_pre_enter_guest.
+5. Change the RESUME_HOST, RESUME_GUEST value, return 1 for resume guest
+and "<= 0" for resume host.
+6. Fcsr and fpu registers are saved/restored together.
+
+Changes for v2:
+1. Seprate the original patch-01 and patch-03 into small patches, and the
+patches mainly contain kvm module init, module exit, vcpu create, vcpu run,
+etc.
+2. Remove the original KVM_{GET,SET}_CSRS ioctl in the kvm uapi header,
+and we use the common KVM_{GET,SET}_ONE_REG to access register.
+3. Use BIT(x) to replace the "1 << n_bits" statement.
+
+Tianrui Zhao (30):
+  LoongArch: KVM: Add kvm related header files
+  LoongArch: KVM: Implement kvm module related interface
+  LoongArch: KVM: Implement kvm hardware enable, disable interface
+  LoongArch: KVM: Implement VM related functions
+  LoongArch: KVM: Add vcpu related header files
+  LoongArch: KVM: Implement vcpu create and destroy interface
+  LoongArch: KVM: Implement vcpu run interface
+  LoongArch: KVM: Implement vcpu handle exit interface
+  LoongArch: KVM: Implement vcpu get, vcpu set registers
+  LoongArch: KVM: Implement vcpu ENABLE_CAP ioctl interface
+  LoongArch: KVM: Implement fpu related operations for vcpu
+  LoongArch: KVM: Implement vcpu interrupt operations
+  LoongArch: KVM: Implement misc vcpu related interfaces
+  LoongArch: KVM: Implement vcpu load and vcpu put operations
+  LoongArch: KVM: Implement vcpu status description
+  LoongArch: KVM: Implement update VM id function
+  LoongArch: KVM: Implement virtual machine tlb operations
+  LoongArch: KVM: Implement vcpu timer operations
+  LoongArch: KVM: Implement kvm mmu operations
+  LoongArch: KVM: Implement handle csr excption
+  LoongArch: KVM: Implement handle iocsr exception
+  LoongArch: KVM: Implement handle idle exception
+  LoongArch: KVM: Implement handle gspr exception
+  LoongArch: KVM: Implement handle mmio exception
+  LoongArch: KVM: Implement handle fpu exception
+  LoongArch: KVM: Implement kvm exception vector
+  LoongArch: KVM: Implement vcpu world switch
+  LoongArch: KVM: Enable kvm config and add the makefile
+  LoongArch: KVM: Supplement kvm document about LoongArch-specific part
+  LoongArch: KVM: Add maintainers for LoongArch KVM
+
+ Documentation/virt/kvm/api.rst             |  70 +-
+ MAINTAINERS                                |  12 +
+ arch/loongarch/Kbuild                      |   1 +
+ arch/loongarch/Kconfig                     |   2 +
+ arch/loongarch/configs/loongson3_defconfig |   2 +
+ arch/loongarch/include/asm/insn-def.h      |  55 ++
+ arch/loongarch/include/asm/inst.h          |  16 +
+ arch/loongarch/include/asm/kvm_csr.h       | 231 ++++++
+ arch/loongarch/include/asm/kvm_host.h      | 251 ++++++
+ arch/loongarch/include/asm/kvm_types.h     |  11 +
+ arch/loongarch/include/asm/kvm_vcpu.h      |  97 +++
+ arch/loongarch/include/asm/loongarch.h     |  20 +-
+ arch/loongarch/include/uapi/asm/kvm.h      | 106 +++
+ arch/loongarch/kernel/asm-offsets.c        |  32 +
+ arch/loongarch/kvm/Kconfig                 |  39 +
+ arch/loongarch/kvm/Makefile                |  22 +
+ arch/loongarch/kvm/csr_ops.S               |  76 ++
+ arch/loongarch/kvm/exit.c                  | 707 +++++++++++++++++
+ arch/loongarch/kvm/interrupt.c             | 113 +++
+ arch/loongarch/kvm/main.c                  | 361 +++++++++
+ arch/loongarch/kvm/mmu.c                   | 725 +++++++++++++++++
+ arch/loongarch/kvm/switch.S                | 256 ++++++
+ arch/loongarch/kvm/timer.c                 | 266 +++++++
+ arch/loongarch/kvm/tlb.c                   |  34 +
+ arch/loongarch/kvm/trace.h                 | 168 ++++
+ arch/loongarch/kvm/vcpu.c                  | 866 +++++++++++++++++++++
+ arch/loongarch/kvm/vm.c                    |  76 ++
+ arch/loongarch/kvm/vmid.c                  |  66 ++
+ include/uapi/linux/kvm.h                   |   9 +
+ 29 files changed, 4676 insertions(+), 14 deletions(-)
+ create mode 100644 arch/loongarch/include/asm/insn-def.h
+ create mode 100644 arch/loongarch/include/asm/kvm_csr.h
+ create mode 100644 arch/loongarch/include/asm/kvm_host.h
+ create mode 100644 arch/loongarch/include/asm/kvm_types.h
+ create mode 100644 arch/loongarch/include/asm/kvm_vcpu.h
+ create mode 100644 arch/loongarch/include/uapi/asm/kvm.h
+ create mode 100644 arch/loongarch/kvm/Kconfig
+ create mode 100644 arch/loongarch/kvm/Makefile
+ create mode 100644 arch/loongarch/kvm/csr_ops.S
+ create mode 100644 arch/loongarch/kvm/exit.c
+ create mode 100644 arch/loongarch/kvm/interrupt.c
+ create mode 100644 arch/loongarch/kvm/main.c
+ create mode 100644 arch/loongarch/kvm/mmu.c
+ create mode 100644 arch/loongarch/kvm/switch.S
+ create mode 100644 arch/loongarch/kvm/timer.c
+ create mode 100644 arch/loongarch/kvm/tlb.c
+ create mode 100644 arch/loongarch/kvm/trace.h
+ create mode 100644 arch/loongarch/kvm/vcpu.c
+ create mode 100644 arch/loongarch/kvm/vm.c
+ create mode 100644 arch/loongarch/kvm/vmid.c
+
+-- 
+2.39.1
+
