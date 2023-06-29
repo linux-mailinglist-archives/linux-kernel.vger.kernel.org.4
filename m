@@ -2,341 +2,451 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55A69741D57
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 02:47:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02E0A741D5C
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 02:49:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230329AbjF2ArA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 20:47:00 -0400
-Received: from mail-dm6nam11on2089.outbound.protection.outlook.com ([40.107.223.89]:8384
-        "EHLO NAM11-DM6-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S229621AbjF2Aq5 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 20:46:57 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=cf2gqSnNH7J2+XRU+7cbrCgPpNZXYIkN75N9EF54eOOBqeeONSOlInuURENmuQhChYpWQ8I1vN+rYNjuTO2EZ9N9kbkM5EMjJ54slQ7S+bmNrxgt1BDxB+FcNBw7X4DdO83q1Qd3f+GJAGSp5PkQKyGjDKtTY0M16zOFkm0OvEkf5tB5wKIgFpdhdnQNlbClIp1/7Ts3o8lLnXdplHM0UXMX6cHL3eOt2sxr8y7hUvbr0v9JxblrYeElNC38ZttF4QSkRl7gQucsclgcGMSJ49u0u5l5GowpGSFNkRHJTvRYTlYlNBSGPmuHk/BLIsKonTxVgX8aBxfT0i6OdS1vbQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=q7MJO2Foy8RITE55HpHMbZztqCNw77nzKHFpbVs2o3s=;
- b=eAaoObiFTGSwXFUmQsjpob+2fsyYUZ+0pzVFa62qcUZIQVSvuIBrb+MPihdIs7MiNMqweh99ajhl9goFgp5mA5sY9tQRo6TfFEhr342gL/Tdcdnr88vcpGa+WIXQi96+Iujy7eksyD1CDP7+7+ycGpVtcD9VnoiJYYDPdzZDH9isyHr9Y9zF3Un/wLFIEUpauy1j3n9ujL9HQdtla6DaA0sgdJMKn2X37RBpuDJJDNMup24wzBZp4/yxUyxZJ53WSqRtHV1Ko6HiPAzU8dzkRKmElFORoB5tPX1M5tm/I+ZeB2f3r1veYY3fn+qtN+VGqooXJb2bvDQV6crkGlXFQA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=q7MJO2Foy8RITE55HpHMbZztqCNw77nzKHFpbVs2o3s=;
- b=i4jDbO4KZLuBZZnv1/IipaXMynF0X4OM5q9oDpEgIQisfNkyU9m+i/ErK6YwJBR27vLYYS0IcL0XoLiIinBehdHZFuDWiFVhQbhNtB3phRNSvlF5VohKTQZw21a+hZz2ugXOsPDl9oQrFuApIL57ohPKy1rlFHqf0Ea6oC5XeGB3+ge6OXkLYNJqVD1wknFgLX0a1+wx6NxJFupwfPhKG46P0nzr4GtNU+2GlfYNHwE+4BldcI85obtHVxyD5bg7BlhMdVuBzNjxPCRMPOguj4U7oikqmxXy4scefsKNO3gXSZUuo3R5bQdPA5j+k4Hi9b/9rTOVQVdzMm0ZJIdUMg==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
- by DS7PR12MB8345.namprd12.prod.outlook.com (2603:10b6:8:e5::5) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6544.15; Thu, 29 Jun 2023 00:46:49 +0000
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::f7a7:a561:87e9:5fab]) by LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::f7a7:a561:87e9:5fab%7]) with mapi id 15.20.6521.024; Thu, 29 Jun 2023
- 00:46:49 +0000
-Date:   Wed, 28 Jun 2023 21:46:48 -0300
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Leon Romanovsky <leonro@nvidia.com>
-Subject: [GIT PULL] Please pull RDMA subsystem changes
-Message-ID: <ZJzUeFT7lLqEjMJn@nvidia.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="IOt70eyFN6Ufx8+s"
-Content-Disposition: inline
-X-ClientProxiedBy: BLAPR03CA0104.namprd03.prod.outlook.com
- (2603:10b6:208:32a::19) To LV2PR12MB5869.namprd12.prod.outlook.com
- (2603:10b6:408:176::16)
+        id S231300AbjF2AtH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 20:49:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33228 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229621AbjF2AtE (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 28 Jun 2023 20:49:04 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1ECA31BD1;
+        Wed, 28 Jun 2023 17:49:03 -0700 (PDT)
+Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35T0f28k019868;
+        Thu, 29 Jun 2023 00:48:52 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=W5fp75G0iHsqRCVJ/GEMsW47DwwGAHPrqIBlWc8o+Rw=;
+ b=G4LN6SEFk9P7ibKMdyTemW7qJL2jYECx99V5Lo/x3pKSr9HibnWrcs6kkc9YVrieqGYQ
+ HhrJrwqrW1foRHObJ8iuiiRFMeRdka4guaiM3FrvYGulMqXa64Jeor2E2lB+wHK5E8cu
+ N1Vmo64itwZ9sql5AQGm5/vSSxTSP+Q1Q6EzMqMFMSIop97YEJHViGnP3AHIj2X/dHhf
+ aMfXe7ZSwjfo1RWXRzk2m5CLqStyyJsMRh5BtfQNnSnU5DOozbnNTunHN4HiurkLd+XT
+ UdZKHexqQASAqlHfQ26ruQecIve6DTFRor67y7vZIlu7Ml8w7GPRIAK7Esr5xnICloL+ Jg== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rgbfstjr2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 29 Jun 2023 00:48:52 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35T0moJ6002374
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 29 Jun 2023 00:48:50 GMT
+Received: from [10.110.20.95] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.7; Wed, 28 Jun
+ 2023 17:48:49 -0700
+Message-ID: <16668207-b25c-f485-3d4c-94666bc8fb0f@quicinc.com>
+Date:   Wed, 28 Jun 2023 17:48:49 -0700
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|DS7PR12MB8345:EE_
-X-MS-Office365-Filtering-Correlation-Id: 3cf26df6-bfc2-4df0-6c40-08db783a528d
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: WNH0pLb7uok/P+kTh1kI8J9mR9Pmnb632k8YsP9S9jNy1J/BwsE5X/3X52CvKaPnQeJx2dXrHdFkVffAZZWD/PEQ64CWejS1TlTJRspYAVTd1xvc2Ec+ozCSkqgAq+aaaibcH+BUYrVTN7pXuAPeS2l376Y7ws6FG7Kfy+VH06I4AyrWVY0kEOqZrVORpfE1YzxEpZ2SStdrEat5YL8H0ujgnLW0kBmQt/YtgZNvwYhREViqFYdWOYh4Afzln6h1cjS+VVCJbwrZ+TLgVjqk2v4yAZ7HBDy1Zq35aCrEqTp23aAxf9rVKonc2YpKWiAlaMe+MQkI+1t63J47NAwVquGBfk0SJfn3PgTIfa5tmMW3XDNy9a8Ky8BTRn47TIMyrP3N6e7DrQqB+2pwjQnihIjtupsQaGbtKMWzE6hKy5fcSEsGZ2aKvc4wHdXjKnyRiLBLG4SNUph2N7e6YkBrAwR77IQaNj2rBIeIHSsMYTbxPQRMuWpiaj5QvxG1aby7qqXTgYHsbeF922d0FWXb1FOwFwJLTscwMBE1hELjJ/heJKsv1TvXBnaKkK3rnN2LHa5Y4ZHwxUS5ORh+xLaRK1iRPYzupYJKe2TZMKp/TEjDX3Ba6R7Y3lSmJmtl5qW4
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(39860400002)(366004)(376002)(346002)(396003)(451199021)(4326008)(2906002)(21480400003)(186003)(83380400001)(2616005)(316002)(6916009)(66946007)(44144004)(66476007)(66556008)(107886003)(45080400002)(6506007)(5660300002)(6512007)(26005)(8936002)(41300700001)(8676002)(6486002)(478600001)(38100700002)(86362001)(36756003)(2700100001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?J1ClT8x2xV2Hs7Eb2RCg+PTf6HyCtamnC4g0Wx3/P0MdXqh/aU3n8mfYmCLs?=
- =?us-ascii?Q?u3kO8PXQSn0p7rdWfBcyOxN+inGdxxkGhLEPUu3JCinf/h8C94q5mt3PQ2lD?=
- =?us-ascii?Q?5a76nji+iC9jAefDTrOu1BrMej3TaHCbFYKDlPZma5BizEyEn+dD5q/hMv3W?=
- =?us-ascii?Q?X39ODE+fKMsCL1hmlofAkeBO9hAwlHTgVoywMKHIrDF1HLIpLVnTNdEZyB5x?=
- =?us-ascii?Q?5nrTtaX/GMwIEqAioLWumabFr01tycmdstuu0W8MrydIJkrWEJwex6tCY/9U?=
- =?us-ascii?Q?2tC00RsFCq4Uf/CHMpJ0MkFakR5DXscYp4J3zHIB3BRENmRd2rCMjrB3PXUQ?=
- =?us-ascii?Q?TvUePw9xDVr/kEDUz4q8w1VIt6R9xMJZtd05MfE/ypddbzy8OyVAq+M3jXEU?=
- =?us-ascii?Q?vsA1hyTKPrIyqcXfSjZ2W7M2sSX3Wx4ufq7rkYU7hVQ5RkGz3qpU6pG4Ozj5?=
- =?us-ascii?Q?VCkRwsREc4uM/exVa5axSWx1WgfWj5XXUeShP8dSS+X6ZWl6zDJvDWh9YhXK?=
- =?us-ascii?Q?9rtOfq2QW7EhBU/tmTDk6q38JBV1o9UfnLroVw32WtVWSjhr/VTKh4Rkoz9D?=
- =?us-ascii?Q?Th9zJ1yxUKoX3IQ3ODX5lJixaOk/sF6mO7VThjN+smalNaekGMrJsSXIcNBP?=
- =?us-ascii?Q?YS1/pALhXu5gdeAJ47iFK0R6N12SWwZeGA0gjRkrNjAY9iO/Jjsm2r6ZJpuC?=
- =?us-ascii?Q?YTFGDxeVtVk8K2ILdJDtiaxID8TL2WxDZ4C/BTcnA5a46uPFIHqEaeaJBwYq?=
- =?us-ascii?Q?YFr8mU/qVIZa8rytNeVmwTx5O67LpcNPWY0OwXx/b2R1q3PK8W1/L79mUGWb?=
- =?us-ascii?Q?P7vSZullAT0a4c3ECIrsGhojW8vp14nlke64Y1qdWaDZUyr9pW1+xyzQd9jS?=
- =?us-ascii?Q?zaUSMClTiZ547ax0KEqW+TJfrgfS5Fshkuz6qTGDnc3XEVEXdRxkF2uR1hNK?=
- =?us-ascii?Q?oYOHbxh0k/r/S9YLXgkQdYr7o8WJECDBBiYpugVQiIjD8AXXCpeYmNL/yJ+I?=
- =?us-ascii?Q?AugBOJZ7cGWc6PkZxaAcJDi+IMSgQrW6YpsI6a6ZwKo1INEEo/bKS42mQRuq?=
- =?us-ascii?Q?tSHFSfTWzhzMggLfz9FDvIb3JTHsAXRbZ5GR5bKGMeXMc4PZlyOyYEPZWR/P?=
- =?us-ascii?Q?yEI7X7Keb6TUAszKlrTQbFClnWx5X+nnzZRKjXSEvT7pUbZy2rMoPfsYILHN?=
- =?us-ascii?Q?nbmLn5/QqiOB9fleUDoWzUrN++ad0K71uuA+fFTN3zD+8M+KWp3SWLcGU88G?=
- =?us-ascii?Q?yHUbNr1qofTkby/ToRUJC+jLgX7HH4FrXlYMioj21u+eXtb5yGrecJGlko/s?=
- =?us-ascii?Q?POV/9ejy4JaESdr9oZCe8LLu/i0DEoiT5gcRGDL7SBRWZopgWkXwdQt1OcRp?=
- =?us-ascii?Q?SJNUq+0/Xtr+ANdfn1OhPW4gRZjE6+cyI8fDs3n172SwCiTyPToAc2lgJwju?=
- =?us-ascii?Q?T76PbijP9+anGqY473Tf0vBAMuom9+KsmYOfCqGwp5mpE1+ENNPGsyRWUqX4?=
- =?us-ascii?Q?ZICpOjIfnPPbuv9mSrh7oLij2Mz077rNdL6JGZcRHrGZ9B/ECob+1Y67THS9?=
- =?us-ascii?Q?++D39gkyn0x7qpKm+UwbIDtAgecqlG6nXpfBMqQ6?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3cf26df6-bfc2-4df0-6c40-08db783a528d
-X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Jun 2023 00:46:49.3195
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 0l7nHCATB1urLN01LyTK7InmO9vXwjffKWWtWBuz1N2GwnDdk5vIjuvNW/N9JAns
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR12MB8345
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 3/7] soc: qcom: add QCOM PBS driver
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        <pavel@ucw.cz>, <lee@kernel.org>, <thierry.reding@gmail.com>,
+        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <conor+dt@kernel.org>, <agross@kernel.org>, <andersson@kernel.org>
+CC:     <konrad.dybcio@linaro.org>, <u.kleine-koenig@pengutronix.de>,
+        <linux-leds@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-pwm@vger.kernel.org>
+References: <20230621185949.2068-1-quic_amelende@quicinc.com>
+ <20230621185949.2068-4-quic_amelende@quicinc.com>
+ <42126265-75b6-83be-c3aa-ee2a16cb26dd@linaro.org>
+From:   Anjelique Melendez <quic_amelende@quicinc.com>
+In-Reply-To: <42126265-75b6-83be-c3aa-ee2a16cb26dd@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: naV8397F5Kad01DmHtl8VjW17Qnm2GaM
+X-Proofpoint-ORIG-GUID: naV8397F5Kad01DmHtl8VjW17Qnm2GaM
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-06-28_14,2023-06-27_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ spamscore=0 bulkscore=0 suspectscore=0 phishscore=0 mlxlogscore=999
+ adultscore=0 priorityscore=1501 clxscore=1015 malwarescore=0 mlxscore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2305260000 definitions=main-2306290005
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+        lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---IOt70eyFN6Ufx8+s
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
 
-Hi Linus,
 
-Here are the changes for RDMA for this cycle, there was a small rxe
-conflict with v6.4 that I resolved in the usual way.
+On 6/24/2023 2:55 AM, Krzysztof Kozlowski wrote:
+> On 21/06/2023 20:59, Anjelique Melendez wrote:
+>> Add the Qualcomm PBS (Programmable Boot Sequencer) driver. The QCOM PBS
+>> driver supports configuring software PBS trigger events through PBS RAM
+>> on Qualcomm Technologies, Inc (QTI) PMICs.
+>>
+>> Signed-off-by: Anjelique Melendez <quic_amelende@quicinc.com>
+>> ---
+>>  drivers/soc/qcom/Kconfig          |   9 +
+>>  drivers/soc/qcom/Makefile         |   1 +
+>>  drivers/soc/qcom/qcom-pbs.c       | 343 ++++++++++++++++++++++++++++++
+>>  include/linux/soc/qcom/qcom-pbs.h |  36 ++++
+>>  4 files changed, 389 insertions(+)
+>>  create mode 100644 drivers/soc/qcom/qcom-pbs.c
+>>  create mode 100644 include/linux/soc/qcom/qcom-pbs.h
+>>
+>> diff --git a/drivers/soc/qcom/Kconfig b/drivers/soc/qcom/Kconfig
+>> index a491718f8064..226b668f4690 100644
+>> --- a/drivers/soc/qcom/Kconfig
+>> +++ b/drivers/soc/qcom/Kconfig
+>> @@ -260,6 +260,15 @@ config QCOM_APR
+>>  	  used by audio driver to configure QDSP6
+>>  	  ASM, ADM and AFE modules.
+>>  
+>> +config QCOM_PBS
+>> +	tristate "PBS trigger support for Qualcomm PMIC"
+>> +	depends on SPMI
+>> +	help
+>> +	  This driver supports configuring software programmable boot sequencer (PBS)
+>> +	  trigger event through PBS RAM on Qualcomm Technologies, Inc. PMICs.
+>> +	  This module provides the APIs to the client drivers that wants to send the
+>> +	  PBS trigger event to the PBS RAM.
+>> +
+>>  config QCOM_ICC_BWMON
+>>  	tristate "QCOM Interconnect Bandwidth Monitor driver"
+>>  	depends on ARCH_QCOM || COMPILE_TEST
+>> diff --git a/drivers/soc/qcom/Makefile b/drivers/soc/qcom/Makefile
+>> index 0f43a88b4894..4e154af3877a 100644
+>> --- a/drivers/soc/qcom/Makefile
+>> +++ b/drivers/soc/qcom/Makefile
+>> @@ -31,5 +31,6 @@ obj-$(CONFIG_QCOM_LLCC) += llcc-qcom.o
+>>  obj-$(CONFIG_QCOM_RPMHPD) += rpmhpd.o
+>>  obj-$(CONFIG_QCOM_RPMPD) += rpmpd.o
+>>  obj-$(CONFIG_QCOM_KRYO_L2_ACCESSORS) +=	kryo-l2-accessors.o
+>> +obj-$(CONFIG_QCOM_PBS) += qcom-pbs.o
+>>  obj-$(CONFIG_QCOM_ICC_BWMON)	+= icc-bwmon.o
+>>  obj-$(CONFIG_QCOM_INLINE_CRYPTO_ENGINE)	+= ice.o
+>> diff --git a/drivers/soc/qcom/qcom-pbs.c b/drivers/soc/qcom/qcom-pbs.c
+>> new file mode 100644
+>> index 000000000000..4a2bb7ff8031
+>> --- /dev/null
+>> +++ b/drivers/soc/qcom/qcom-pbs.c
+>> @@ -0,0 +1,343 @@
+>> +// SPDX-License-Identifier: GPL-2.0-only
+>> +/*
+>> + * Copyright (c) 2023 Qualcomm Innovation Center, Inc. All rights reserved.
+>> + */
+>> +
+>> +#define pr_fmt(fmt)	"PBS: %s: " fmt, __func__
+>> +
+>> +#include <linux/delay.h>
+>> +#include <linux/err.h>
+>> +#include <linux/module.h>
+>> +#include <linux/of.h>
+>> +#include <linux/platform_device.h>
+>> +#include <linux/regmap.h>
+>> +#include <linux/spmi.h>
+>> +#include <linux/soc/qcom/qcom-pbs.h>
+>> +
+>> +#define PBS_CLIENT_TRIG_CTL		0x42
+>> +#define PBS_CLIENT_SW_TRIG_BIT		BIT(7)
+>> +#define PBS_CLIENT_SCRATCH1		0x50
+>> +#define PBS_CLIENT_SCRATCH2		0x51
+>> +
+>> +static LIST_HEAD(pbs_dev_list);
+>> +static DEFINE_MUTEX(pbs_list_lock);
+> 
+> No file-scope variables. Drop both. You don't even need it.
+Ack
+> 
+>> +
+>> +struct pbs_dev {
+>> +	struct device		*dev;
+>> +	struct device_node	*dev_node;
+>> +	struct regmap		*regmap;
+>> +	struct mutex		lock;
+>> +	struct list_head	link;
+>> +
+>> +	u32			base;
+>> +};
+>> +
+>> +static int qcom_pbs_read(struct pbs_dev *pbs, u32 address, u8 *val)
+>> +{
+>> +	int ret;
+>> +
+>> +	address += pbs->base;
+>> +	ret = regmap_bulk_read(pbs->regmap, address, val, 1);
+>> +	if (ret)
+>> +		pr_err("Failed to read address=%#x sid=%#x ret=%d\n",
+> 
+> dev_err
+Ack
+> 
+>> +			address, to_spmi_device(pbs->dev->parent)->usid, ret);
+>> +
+>> +	return ret;
+>> +}
+>> +
+>> +static int qcom_pbs_write(struct pbs_dev *pbs, u16 address, u8 val)
+>> +{
+>> +	int ret;
+>> +
+>> +	address += pbs->base;
+>> +	ret = regmap_bulk_write(pbs->regmap, address, &val, 1);
+>> +	if (ret < 0)
+>> +		pr_err("Failed to write address=%#x sid=%#x ret=%d\n",
+>> +			  address, to_spmi_device(pbs->dev->parent)->usid, ret);
+>> +	else
+>> +		pr_debug("Wrote %#x to addr %#x\n", val, address);
+> 
+> No, there is regmap debug for this. Drop such debug statements from the
+> driver.
+Ack
+> 
+> Actually the error print is also wrong, IMO> 
+>> +
+>> +	return ret;
+>> +}
+>> +
+>> +static int qcom_pbs_masked_write(struct pbs_dev *pbs, u16 address, u8 mask, u8 val)
+>> +{
+>> +	int ret;
+>> +
+>> +	address += pbs->base;
+>> +	ret = regmap_update_bits(pbs->regmap, address, mask, val);
+>> +	if (ret < 0)
+>> +		pr_err("Failed to write address=%#x ret=%d\n", address, ret);
+>> +	else
+>> +		pr_debug("Wrote %#x to addr %#x\n", val, address);
+> 
+> Drop
+Ack
+> 
+>> +
+>> +	return ret;
+>> +}
+>> +
+>> +static int qcom_pbs_wait_for_ack(struct pbs_dev *pbs, u8 bit_pos)
+>> +{
+>> +	u16 retries = 2000, delay = 1000;
+>> +	int ret;
+>> +	u8 val;
+>> +
+>> +	while (retries--) {
+>> +		ret = qcom_pbs_read(pbs, PBS_CLIENT_SCRATCH2, &val);
+>> +		if (ret < 0)
+>> +			return ret;
+>> +
+>> +		if (val == 0xFF) {
+>> +			/* PBS error - clear SCRATCH2 register */
+>> +			ret = qcom_pbs_write(pbs, PBS_CLIENT_SCRATCH2, 0);
+>> +			if (ret < 0)
+>> +				return ret;
+>> +
+>> +			pr_err("NACK from PBS for bit %u\n", bit_pos);
+>> +			return -EINVAL;
+>> +		}
+>> +
+>> +		if (val & BIT(bit_pos)) {
+>> +			pr_debug("PBS sequence for bit %u executed!\n", bit_pos);
+> 
+> dev_dbg
+Ack
+> 
+>> +			break;
+>> +		}
+>> +
+>> +		usleep_range(delay, delay + 100);
+>> +	}
+>> +
+>> +	if (!retries) {
+>> +		pr_err("Timeout for PBS ACK/NACK for bit %u\n", bit_pos);
+> 
+> dev_err
+Ack
+>> +		return -ETIMEDOUT;
+>> +	}
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +/**
+>> + * qcom_pbs_trigger_single_event() - Trigger PBS sequence without using bitmap.
+>> + * @pbs: Pointer to PBS device
+>> + *
+>> + * This function is used to trigger the PBS that is hooked on the
+>> + * SW_TRIGGER directly in PBS client.
+>> + *
+>> + * Return: 0 on success, < 0 on failure
+>> + */
+>> +int qcom_pbs_trigger_single_event(struct pbs_dev *pbs)
+>> +{
+>> +	int ret = 0;
+>> +
+>> +	if (IS_ERR_OR_NULL(pbs))
+>> +		return -EINVAL;
+>> +
+>> +	mutex_lock(&pbs->lock);
+>> +	ret = qcom_pbs_masked_write(pbs, PBS_CLIENT_TRIG_CTL, PBS_CLIENT_SW_TRIG_BIT,
+>> +				PBS_CLIENT_SW_TRIG_BIT);
+>> +	if (ret < 0)
+>> +		pr_err("Failed to write register %x ret=%d\n", PBS_CLIENT_TRIG_CTL, ret);
+> 
+> dev_* everywhere
+Ack
+> 
+>> +	mutex_unlock(&pbs->lock);
+>> +
+>> +	return ret;
+>> +}
+>> +EXPORT_SYMBOL(qcom_pbs_trigger_single_event);
+>> +
+> 
+> ...
+qcom_pbs_trigger_single_event() is used in our downstream haptics driver,
+will remove for now and add it back when haptics driver get upstreamed
+> 
+>> +/**
+>> + * get_pbs_client_device() - Get the PBS device used by client
+>> + * @dev: Client device
+>> + *
+>> + * This function is used to get the PBS device that is being
+>> + * used by the client.
+>> + *
+>> + * Returns: pbs_dev on success, ERR_PTR on failure
+>> + */
+>> +struct pbs_dev *get_pbs_client_device(struct device *dev)
+>> +{
+>> +	struct device_node *pbs_dev_node;
+>> +	struct pbs_dev *pbs;
+>> +
+>> +	pbs_dev_node = of_parse_phandle(dev->of_node, "qcom,pbs-client", 0);
+>> +	if (!pbs_dev_node) {
+>> +		pr_err("Missing qcom,pbs-client property\n");
+>> +		return ERR_PTR(-ENODEV);
+>> +	}
+>> +
+>> +	mutex_lock(&pbs_list_lock);
+>> +	list_for_each_entry(pbs, &pbs_dev_list, link) {
+> 
+> It does not make sense. You have the reference to the device, so you
+> have the pbs (via container_of). Don't add some
+> global-list-lookup-functions.
+> 
+> Look for example at Abel Vesa's ICE patchset.
+> 
+>> +		if (pbs_dev_node == pbs->dev_node) {
+>> +			of_node_put(pbs_dev_node);
+>> +			mutex_unlock(&pbs_list_lock);
+>> +			return pbs;
+>> +		}
+>> +	}
+>> +	mutex_unlock(&pbs_list_lock);
+> 
+> Where is device_link handling?
+Thank you for pointing me to Abel's ICE patchset! Will be updating patch to
+use container_of as well as having device_link_add().
+> 
+>> +
+>> +	pr_debug("Unable to find PBS dev_node\n");
+>> +	of_node_put(pbs_dev_node);
+>> +	return ERR_PTR(-EPROBE_DEFER);
+>> +}
+>> +EXPORT_SYMBOL(get_pbs_client_device);
+>> +
+>> +static int qcom_pbs_probe(struct platform_device *pdev)
+>> +{
+>> +	struct pbs_dev *pbs;
+>> +	u32 val;
+>> +	int ret;
+>> +
+>> +	pbs = devm_kzalloc(&pdev->dev, sizeof(*pbs), GFP_KERNEL);
+>> +	if (!pbs)
+>> +		return -ENOMEM;
+>> +
+>> +	pbs->dev = &pdev->dev;
+>> +	pbs->dev_node = pdev->dev.of_node;
+> 
+> Why do you need to store it?
+Ack - removing storing dev_node
+> 
+>> +	pbs->regmap = dev_get_regmap(pbs->dev->parent, NULL);
+>> +	if (!pbs->regmap) {
+>> +		dev_err(pbs->dev, "Couldn't get parent's regmap\n");
+>> +		return -EINVAL;
+>> +	}
+>> +
+>> +	ret = device_property_read_u32(pbs->dev, "reg", &val);
+>> +	if (ret < 0) {
+>> +		dev_err(pbs->dev, "Couldn't find reg, ret = %d\n", ret);
+>> +		return ret;
+>> +	}
+>> +
+>> +	pbs->base = val;
+>> +	mutex_init(&pbs->lock);
+>> +
+>> +	platform_set_drvdata(pdev, pbs);
+>> +
+>> +	mutex_lock(&pbs_list_lock);
+>> +	list_add(&pbs->link, &pbs_dev_list);
+>> +	mutex_unlock(&pbs_list_lock);
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +static int qcom_pbs_remove(struct platform_device *pdev)
+>> +{
+>> +	struct pbs_dev *pbs = platform_get_drvdata(pdev);
+>> +
+>> +	mutex_lock(&pbs_list_lock);
+>> +	list_del(&pbs->link);
+>> +	mutex_unlock(&pbs_list_lock);
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +static const struct of_device_id qcom_pbs_match_table[] = {
+>> +	{ .compatible = "qcom,pbs" },
+>> +	{}
+>> +};
+>> +MODULE_DEVICE_TABLE(of, qcom_pbs_match_table);
+>> +
+>> +static struct platform_driver qcom_pbs_driver = {
+>> +	.driver = {
+>> +		.name		= "qcom-pbs",
+>> +		.of_match_table	= qcom_pbs_match_table,
+>> +	},
+>> +	.probe = qcom_pbs_probe,
+>> +	.remove = qcom_pbs_remove,
+>> +};
+>> +module_platform_driver(qcom_pbs_driver)
+>> +
+>> +MODULE_DESCRIPTION("QCOM PBS DRIVER");
+>> +MODULE_LICENSE("GPL");
+>> +MODULE_ALIAS("platform:qcom-pbs");
+> 
+> Drop alias. Not needed. If you need it, you have missing ID table.
+Ack
+> 
+>> diff --git a/include/linux/soc/qcom/qcom-pbs.h b/include/linux/soc/qcom/qcom-pbs.h
+>> new file mode 100644
+>> index 000000000000..4b065951686a
+>> --- /dev/null
+> 
+> 
+> 
+> Best regards,
+> Krzysztof
+> 
 
 Thanks,
-Jason
-
-The following changes since commit 6995e2de6891c724bfeb2db33d7b87775f913ad1:
-
-  Linux 6.4 (2023-06-25 16:29:58 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/rdma/rdma.git tags/for-linus
-
-for you to fetch changes up to 5f004bcaee4cb552cf1b46a505f18f08777db7e5:
-
-  Merge tag 'v6.4' into rdma.git for-next (2023-06-27 14:06:29 -0300)
-
-----------------------------------------------------------------
-v6.5 merge window RDMA pull request
-
-This cycle saw a focus on rxe and bnxt_re drivers:
-
-- Code cleanups for irdma, rxe, rtrs, hns, vmw_pvrdma
-
-- rxe uses workqueues instead of tasklets
-
-- rxe has better compliance around access checks for MRs and rereg_mr
-
-- mana supportst he 'v2' FW interface for RX coalescing
-
-- hfi1 bug fix for stale cache entries in its MR cache
-
-- mlx5 buf fix to handle FW failures when destroying QPs
-
-- erdma HW has a new doorbell allocation mechanism for uverbs that is
-  secure
-
-- Lots of small cleanups and rework in bnxt_re
-   * Use the common mmap functions
-   * Support disassociation
-   * Improve FW command flow
-
-- bnxt_re support for "low latency push", this allows a packet
-
-----------------------------------------------------------------
-Arnd Bergmann (1):
-      RDMA/irdma: avoid fortify-string warning in irdma_clr_wqes
-
-Bob Pearson (10):
-      RDMA/rxe: Add workqueue support for rxe tasks
-      RDMA/rxe: Rename IB_ACCESS_REMOTE
-      RDMA//rxe: Optimize send path in rxe_resp.c
-      RDMA/rxe: Fix access checks in rxe_check_bind_mw
-      RDMA/rxe: Introduce rxe access supported flags
-      RDMA/rxe: Let rkey == lkey for local access
-      RDMA/rxe: Implement rereg_user_mr
-      RDMA/rxe: Send last wqe reached event on qp cleanup
-      RDMA/rxe: Fixes mr access supported list
-      RDMA/rxe: Simplify cq->notify code
-
-Brendan Cunningham (3):
-      IB/hfi1: Fix wrong mmu_node used for user SDMA packet after invalidate
-      IB/hfi1: Add mmu_rb_node refcount to hfi1_mmu_rb_template tracepoints
-      IB/hfi1: Remove unused struct mmu_rb_ops fields .insert, .invalidate
-
-Bryan Tan (1):
-      RDMA/vmw_pvrdma: Remove unnecessary check on wr->opcode
-
-Cheng Xu (4):
-      RDMA/erdma: Configure PAGE_SIZE to hardware
-      RDMA/erdma: Allocate doorbell resources from hardware
-      RDMA/erdma: Associate QPs/CQs with doorbells for authorization
-      RDMA/erdma: Refactor the original doorbell allocation mechanism
-
-Chengchang Tang (2):
-      RDMA/hns: Fix hns_roce_table_get return value
-      RDMA/hns: Add clear_hem return value to log
-
-Colin Ian King (1):
-      RDMA/bnxt_re: Fix spelling mistake "priviledged" -> "privileged"
-
-Daisuke Matsuda (1):
-      RDMA/rxe: Fix comments about removed tasklets
-
-Dan Carpenter (1):
-      RDMA/bnxt_re: Fix an IS_ERR() vs NULL check
-
-Jason Gunthorpe (1):
-      Merge tag 'v6.4' into rdma.git for-next
-
-Junxian Huang (1):
-      RDMA/hns: Remove unnecessary QP type checks
-
-Kalesh AP (6):
-      RDMA/bnxt_re: Fix to remove unnecessary return labels
-      RDMA/bnxt_re: Use unique names while registering interrupts
-      RDMA/bnxt_re: Remove a redundant check inside bnxt_re_update_gid
-      RDMA/bnxt_re: Fix to remove an unnecessary log
-      RDMA/bnxt_re: Return directly without goto jumps
-      RDMA/bnxt_re: Remove unnecessary checks
-
-Kamal Heib (3):
-      RDMA/irdma: Return void from irdma_init_iw_device()
-      RDMA/irdma: Return void from irdma_init_rdma_device()
-      RDMA/irdma: Move iw device ops initialization
-
-Kashyap Desai (19):
-      RDMA/bnxt_re: wraparound mbox producer index
-      RDMA/bnxt_re: Avoid calling wake_up threads from spin_lock context
-      RDMA/bnxt_re: remove virt_func check while creating RoCE FW channel
-      RDMA/bnxt_re: set fixed command queue depth
-      RDMA/bnxt_re: Enhance the existing functions that wait for FW responses
-      RDMA/bnxt_re: Avoid the command wait if firmware is inactive
-      RDMA/bnxt_re: use shadow qd while posting non blocking rcfw command
-      RDMA/bnxt_re: Simplify the function that sends the FW commands
-      RDMA/bnxt_re: add helper function __poll_for_resp
-      RDMA/bnxt_re: handle command completions after driver detect a timedout
-      RDMA/bnxt_re: Add firmware stall check detection
-      RDMA/bnxt_re: post destroy_ah for delayed completion of AH creation
-      RDMA/bnxt_re: consider timeout of destroy ah as success.
-      RDMA/bnxt_re: cancel all control path command waiters upon error
-      RDMA/bnxt_re: use firmware provided max request timeout
-      RDMA/bnxt_re: remove redundant cmdq_bitmap
-      RDMA/bnxt_re: optimize the parameters passed to helper functions
-      RDMA/bnxt_re: Remove incorrect return check from slow path
-      RDMA/bnxt_re: Refactor code around bnxt_qplib_map_rc()
-
-Leon Romanovsky (2):
-      RDMA/mlx5: Reduce QP table exposure
-      RDMA/bnxt_re: Initialize opcode while sending message
-
-Li Zhijian (1):
-      RDMA/rtrs: Remove duplicate cq_num assignment
-
-Long Li (1):
-      RDMA/mana_ib: Use v2 version of cfg_rx_steer_req to enable RX coalescing
-
-Nicolas Morey (1):
-      RDMA/rxe: Remove dangling declaration of rxe_cq_disable()
-
-Patrisious Haddad (3):
-      net/mlx5: Nullify qp->dbg pointer post destruction
-      RDMA/mlx5: Handle DCT QP logic separately from low level QP interface
-      RDMA/mlx5: Return the firmware result upon destroying QP/RQ
-
-Selvin Xavier (8):
-      RDMA/bnxt_re: Disable/kill tasklet only if it is enabled
-      RDMA/bnxt_re: Use the common mmap helper functions
-      RDMA/bnxt_re: Add disassociate ucontext support
-      RDMA/bnxt_re: Optimize the bnxt_re_init_hwrm_hdr usage
-      RDMA/bnxt_re: Query function capabilities from firmware
-      RDMA/bnxt_re: Move the interface version to chip context structure
-      RDMA/bnxt_re: Reorg the bar mapping
-      RDMA/bnxt_re: Enable low latency push
-
-Yang Li (2):
-      RDMA/cma: Remove NULL check before dev_{put, hold}
-      RDMA/bnxt_re: Remove duplicated include in bnxt_re/main.c
-
- drivers/infiniband/core/cma.c                     |   3 +-
- drivers/infiniband/hw/bnxt_re/bnxt_re.h           |   5 +
- drivers/infiniband/hw/bnxt_re/ib_verbs.c          | 292 +++++++++-
- drivers/infiniband/hw/bnxt_re/ib_verbs.h          |  19 +
- drivers/infiniband/hw/bnxt_re/main.c              | 192 +++++--
- drivers/infiniband/hw/bnxt_re/qplib_fp.c          | 104 ++--
- drivers/infiniband/hw/bnxt_re/qplib_fp.h          |   2 +-
- drivers/infiniband/hw/bnxt_re/qplib_rcfw.c        | 664 +++++++++++++++++-----
- drivers/infiniband/hw/bnxt_re/qplib_rcfw.h        |  52 +-
- drivers/infiniband/hw/bnxt_re/qplib_res.c         | 177 ++++--
- drivers/infiniband/hw/bnxt_re/qplib_res.h         |  34 +-
- drivers/infiniband/hw/bnxt_re/qplib_sp.c          |  19 +-
- drivers/infiniband/hw/bnxt_re/qplib_sp.h          |   5 +-
- drivers/infiniband/hw/erdma/erdma.h               |  16 +-
- drivers/infiniband/hw/erdma/erdma_hw.h            |  64 ++-
- drivers/infiniband/hw/erdma/erdma_main.c          |  53 +-
- drivers/infiniband/hw/erdma/erdma_verbs.c         | 178 +++---
- drivers/infiniband/hw/erdma/erdma_verbs.h         |  13 +-
- drivers/infiniband/hw/hfi1/ipoib_tx.c             |   4 +-
- drivers/infiniband/hw/hfi1/mmu_rb.c               | 108 ++--
- drivers/infiniband/hw/hfi1/mmu_rb.h               |  10 +-
- drivers/infiniband/hw/hfi1/sdma.c                 |  23 +-
- drivers/infiniband/hw/hfi1/sdma.h                 |  47 +-
- drivers/infiniband/hw/hfi1/sdma_txreq.h           |   2 +
- drivers/infiniband/hw/hfi1/trace_mmu.h            |  48 +-
- drivers/infiniband/hw/hfi1/user_sdma.c            | 137 ++---
- drivers/infiniband/hw/hfi1/user_sdma.h            |   1 -
- drivers/infiniband/hw/hfi1/vnic_sdma.c            |   4 +-
- drivers/infiniband/hw/hns/hns_roce_hem.c          |  51 +-
- drivers/infiniband/hw/hns/hns_roce_hw_v2.c        |  24 +-
- drivers/infiniband/hw/irdma/uk.c                  |  10 +-
- drivers/infiniband/hw/irdma/verbs.c               |  41 +-
- drivers/infiniband/hw/mana/qp.c                   |   5 +-
- drivers/infiniband/hw/mlx5/mlx5_ib.h              |   1 +
- drivers/infiniband/hw/mlx5/qp.h                   |  12 +-
- drivers/infiniband/hw/mlx5/qpc.c                  |  93 +--
- drivers/infiniband/hw/vmw_pvrdma/pvrdma_qp.c      |   8 -
- drivers/infiniband/sw/rxe/rxe.c                   |   9 +-
- drivers/infiniband/sw/rxe/rxe_comp.c              |   2 +-
- drivers/infiniband/sw/rxe/rxe_cq.c                |   5 +-
- drivers/infiniband/sw/rxe/rxe_loc.h               |   2 -
- drivers/infiniband/sw/rxe/rxe_mr.c                |  21 +-
- drivers/infiniband/sw/rxe/rxe_mw.c                |  22 +-
- drivers/infiniband/sw/rxe/rxe_opcode.h            |   3 +
- drivers/infiniband/sw/rxe/rxe_param.h             |   2 +-
- drivers/infiniband/sw/rxe/rxe_qp.c                |   7 +
- drivers/infiniband/sw/rxe/rxe_req.c               |   2 +-
- drivers/infiniband/sw/rxe/rxe_resp.c              |  25 +-
- drivers/infiniband/sw/rxe/rxe_task.c              | 110 ++--
- drivers/infiniband/sw/rxe/rxe_task.h              |   6 +-
- drivers/infiniband/sw/rxe/rxe_verbs.c             |  45 +-
- drivers/infiniband/sw/rxe/rxe_verbs.h             |  21 +
- drivers/infiniband/ulp/rtrs/rtrs-clt.c            |   1 -
- drivers/net/ethernet/mellanox/mlx5/core/debugfs.c |   6 +-
- drivers/net/ethernet/microsoft/mana/mana_en.c     |   5 +-
- include/linux/mlx5/driver.h                       |  10 -
- include/net/mana/mana.h                           |   4 +-
- include/uapi/rdma/bnxt_re-abi.h                   |  27 +
- 58 files changed, 1955 insertions(+), 901 deletions(-)
-
---IOt70eyFN6Ufx8+s
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRRRCHOFoQz/8F5bUaFwuHvBreFYQUCZJzUdgAKCRCFwuHvBreF
-Ya/2AP47zZnKrg1RhMjPOaNcg+uWrHi80Fv2LFpvwDRD0pQdwAD+P2CsCoTcJ6zn
-H/bMGdRxN6M60Wa9qyJCp0kw3dWTsAU=
-=nT2V
------END PGP SIGNATURE-----
-
---IOt70eyFN6Ufx8+s--
+Anjelque
