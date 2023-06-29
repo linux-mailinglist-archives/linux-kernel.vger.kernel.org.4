@@ -2,248 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64D06742C7D
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 20:53:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 51A4E742C0F
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 20:44:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232972AbjF2St0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 14:49:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33134 "EHLO
+        id S231633AbjF2SoO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 14:44:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232908AbjF2StL (ORCPT
+        with ESMTP id S232786AbjF2Sn5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 14:49:11 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 787A43AB3;
-        Thu, 29 Jun 2023 11:48:58 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 035A4615C8;
-        Thu, 29 Jun 2023 18:48:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0556C433C0;
-        Thu, 29 Jun 2023 18:48:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1688064537;
-        bh=ZfTLEH6IjyRqkwQp/uGdkTaLb9wo3gFLL56KATPt0pU=;
-        h=From:To:Cc:Subject:Date:From;
-        b=gLkWbuBU/g0Xy9wl5ZpzKztYTQUK5j55MsdRgFtUaWtRQ9D8iW0rLhSIG19Lt2KT5
-         Xe5CNtMX9N1owHxM9yUvULG0ppYBPj7/2Slfx+CPY25g8buK+FAKEoemYWbtU076/T
-         zXNDpOHcQ8sD3SOcSs0JAClLmLrrNa77NLSxNBB4=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     stable@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de, conor@kernel.org
-Subject: [PATCH 6.4 00/28] 6.4.1-rc1 review
-Date:   Thu, 29 Jun 2023 20:43:48 +0200
-Message-ID: <20230629184151.888604958@linuxfoundation.org>
-X-Mailer: git-send-email 2.41.0
+        Thu, 29 Jun 2023 14:43:57 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4881A2D55
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 11:43:56 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1688064234;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=6C/4O6IMGQUkL614VBtPLgXvHc0T28BWHO32tO50Ymk=;
+        b=KiO0NgWW8uR98f2mOLYwWVmqt8zvXtXXlnU/8uxNNvbKQ54r8eRRDsVGUpPTfsyYFop+5H
+        LcRVweK62Z7MuGHbE1PdLj/X/LNxM9gQ950CsRJjuXPNvUVdlhaSZ54m6go1o5dqifZjN7
+        WJkO3zw7tSUVPru/tEID0LnGS/FXn8yde+TCdon70KPSlW856tzJeSyZzMI+1DHD+HtZzI
+        nr3adWMRWb1mtxGSM2cAkMmugN3oiiJBN4nn5PlvEAFjPqQ3uIrQN4TcFcPIzWcQUlojwA
+        DtdwPN0xrcSVdyhmq2TIEbzHiJhN/mEB24IzjU64BZU6yRNfxjgVjqktA4yk+w==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1688064234;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=6C/4O6IMGQUkL614VBtPLgXvHc0T28BWHO32tO50Ymk=;
+        b=pg0yRGlXFPZr3rSZQsAOOSS/CRnGJFi3pQj8wDhb+kKJCjAIP1Nzqvu7QbO8QIOaX4tM83
+        mKl9tNaFZ3YqMMBg==
+To:     Frederic Weisbecker <frederic@kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Anna-Maria Behnsen <anna-maria@linutronix.de>,
+        John Stultz <jstultz@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Oleg Nesterov <oleg@redhat.com>
+Subject: Re: [patch 12/45] posix-cpu-timers: Simplify posix_cpu_timer_set()
+In-Reply-To: <ZJq/KHqjChLWtypG@lothringen>
+References: <20230606132949.068951363@linutronix.de>
+ <20230606142031.705286109@linutronix.de> <ZJq/KHqjChLWtypG@lothringen>
+Date:   Thu, 29 Jun 2023 20:43:54 +0200
+Message-ID: <87y1k2153p.ffs@tglx>
 MIME-Version: 1.0
-User-Agent: quilt/0.67
-X-stable: review
-X-Patchwork-Hint: ignore
-X-KernelTest-Patch: http://kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.4.1-rc1.gz
-X-KernelTest-Tree: git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
-X-KernelTest-Branch: linux-6.4.y
-X-KernelTest-Patches: git://git.kernel.org/pub/scm/linux/kernel/git/stable/stable-queue.git
-X-KernelTest-Version: 6.4.1-rc1
-X-KernelTest-Deadline: 2023-07-01T18:41+00:00
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is the start of the stable review cycle for the 6.4.1 release.
-There are 28 patches in this series, all will be posted as a response
-to this one.  If anyone has any issues with these being applied, please
-let me know.
+On Tue, Jun 27 2023 at 12:51, Frederic Weisbecker wrote:
+> On Tue, Jun 06, 2023 at 04:37:37PM +0200, Thomas Gleixner wrote:
+>> Avoid the late sighand lock/unlock dance when a timer is not armed to
+>> enforce reevaluation of the timer base so that the process wide CPU timer
+>> sampling can be disabled.
+>> +	 * SIGEV_NONE timers are never armed. In case the timer is not
+>> +	 * armed, enforce the reevaluation of the timer base so that the
+>> +	 * process wide cputime counter can be disabled eventually.
+>>  	 */
+>>  	if (!sigev_none && new_expires && now < new_expires)
+>>  		arm_timer(timer, p);
+>> +	else
+>> +		trigger_base_recalc_expires(timer, p);
+>
+> We don't need a recalc if sigev_none, right?
 
-Responses should be made by Sat, 01 Jul 2023 18:41:39 +0000.
-Anything received after that time might be too late.
-
-The whole patch series can be found in one patch at:
-	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.4.1-rc1.gz
-or in the git tree and branch at:
-	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.4.y
-and the diffstat can be found below.
-
-thanks,
-
-greg k-h
-
--------------
-Pseudo-Shortlog of commits:
-
-Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-    Linux 6.4.1-rc1
-
-Ricardo Cañuelo <ricardo.canuelo@collabora.com>
-    Revert "thermal/drivers/mediatek: Use devm_of_iomap to avoid resource leak in mtk_thermal_probe"
-
-Mike Hommey <mh@glandium.org>
-    HID: logitech-hidpp: add HIDPP_QUIRK_DELAYED_INIT for the T651.
-
-Ludvig Michaelsson <ludvig.michaelsson@yubico.com>
-    HID: hidraw: fix data race on device refcount
-
-Zhang Shurong <zhang_shurong@foxmail.com>
-    fbdev: fix potential OOB read in fast_imageblit()
-
-Hugh Dickins <hughd@google.com>
-    mm/khugepaged: fix regression in collapse_file()
-
-Linus Torvalds <torvalds@linux-foundation.org>
-    gup: add warning if some caller would seem to want stack expansion
-
-Jason Gerecke <jason.gerecke@wacom.com>
-    HID: wacom: Use ktime_t rather than int when dealing with timestamps
-
-Linus Torvalds <torvalds@linux-foundation.org>
-    mm: always expand the stack with the mmap write lock held
-
-Linus Torvalds <torvalds@linux-foundation.org>
-    execve: expand new process stack manually ahead of time
-
-Liam R. Howlett <Liam.Howlett@oracle.com>
-    mm: make find_extend_vma() fail if write lock not held
-
-Linus Torvalds <torvalds@linux-foundation.org>
-    powerpc/mm: convert coprocessor fault to lock_mm_and_find_vma()
-
-Linus Torvalds <torvalds@linux-foundation.org>
-    mm/fault: convert remaining simple cases to lock_mm_and_find_vma()
-
-Ben Hutchings <ben@decadent.org.uk>
-    arm/mm: Convert to using lock_mm_and_find_vma()
-
-Ben Hutchings <ben@decadent.org.uk>
-    riscv/mm: Convert to using lock_mm_and_find_vma()
-
-Ben Hutchings <ben@decadent.org.uk>
-    mips/mm: Convert to using lock_mm_and_find_vma()
-
-Michael Ellerman <mpe@ellerman.id.au>
-    powerpc/mm: Convert to using lock_mm_and_find_vma()
-
-Linus Torvalds <torvalds@linux-foundation.org>
-    arm64/mm: Convert to using lock_mm_and_find_vma()
-
-Linus Torvalds <torvalds@linux-foundation.org>
-    mm: make the page fault mmap locking killable
-
-Linus Torvalds <torvalds@linux-foundation.org>
-    mm: introduce new 'lock_mm_and_find_vma()' page fault helper
-
-Peng Zhang <zhangpeng.00@bytedance.com>
-    maple_tree: fix potential out-of-bounds access in mas_wr_end_piv()
-
-Oliver Hartkopp <socketcan@hartkopp.net>
-    can: isotp: isotp_sendmsg(): fix return error fix on TX path
-
-Wyes Karny <wyes.karny@amd.com>
-    cpufreq: amd-pstate: Make amd-pstate EPP driver name hyphenated
-
-Thomas Gleixner <tglx@linutronix.de>
-    x86/smp: Cure kexec() vs. mwait_play_dead() breakage
-
-Thomas Gleixner <tglx@linutronix.de>
-    x86/smp: Use dedicated cache-line for mwait_play_dead()
-
-Thomas Gleixner <tglx@linutronix.de>
-    x86/smp: Remove pointless wmb()s from native_stop_other_cpus()
-
-Tony Battersby <tonyb@cybernetics.com>
-    x86/smp: Dont access non-existing CPUID leaf
-
-Thomas Gleixner <tglx@linutronix.de>
-    x86/smp: Make stop_other_cpus() more robust
-
-Borislav Petkov (AMD) <bp@alien8.de>
-    x86/microcode/AMD: Load late on both threads too
-
-
--------------
-
-Diffstat:
-
- Makefile                                  |   4 +-
- arch/alpha/Kconfig                        |   1 +
- arch/alpha/mm/fault.c                     |  13 +--
- arch/arc/Kconfig                          |   1 +
- arch/arc/mm/fault.c                       |  11 +--
- arch/arm/Kconfig                          |   1 +
- arch/arm/mm/fault.c                       |  63 ++++-----------
- arch/arm64/Kconfig                        |   1 +
- arch/arm64/mm/fault.c                     |  47 ++---------
- arch/csky/Kconfig                         |   1 +
- arch/csky/mm/fault.c                      |  22 ++----
- arch/hexagon/Kconfig                      |   1 +
- arch/hexagon/mm/vm_fault.c                |  18 +----
- arch/ia64/mm/fault.c                      |  36 ++-------
- arch/loongarch/Kconfig                    |   1 +
- arch/loongarch/mm/fault.c                 |  16 ++--
- arch/m68k/mm/fault.c                      |   9 ++-
- arch/microblaze/mm/fault.c                |   5 +-
- arch/mips/Kconfig                         |   1 +
- arch/mips/mm/fault.c                      |  12 +--
- arch/nios2/Kconfig                        |   1 +
- arch/nios2/mm/fault.c                     |  17 +---
- arch/openrisc/mm/fault.c                  |   5 +-
- arch/parisc/mm/fault.c                    |  23 +++---
- arch/powerpc/Kconfig                      |   1 +
- arch/powerpc/mm/copro_fault.c             |  14 +---
- arch/powerpc/mm/fault.c                   |  39 +--------
- arch/riscv/Kconfig                        |   1 +
- arch/riscv/mm/fault.c                     |  31 +++-----
- arch/s390/mm/fault.c                      |   5 +-
- arch/sh/Kconfig                           |   1 +
- arch/sh/mm/fault.c                        |  17 +---
- arch/sparc/Kconfig                        |   1 +
- arch/sparc/mm/fault_32.c                  |  32 ++------
- arch/sparc/mm/fault_64.c                  |   8 +-
- arch/um/kernel/trap.c                     |  11 +--
- arch/x86/Kconfig                          |   1 +
- arch/x86/include/asm/cpu.h                |   2 +
- arch/x86/include/asm/smp.h                |   2 +
- arch/x86/kernel/cpu/microcode/amd.c       |   2 +-
- arch/x86/kernel/process.c                 |  28 ++++++-
- arch/x86/kernel/smp.c                     |  73 ++++++++++-------
- arch/x86/kernel/smpboot.c                 |  81 ++++++++++++++++---
- arch/x86/mm/fault.c                       |  52 +-----------
- arch/xtensa/Kconfig                       |   1 +
- arch/xtensa/mm/fault.c                    |  14 +---
- drivers/cpufreq/amd-pstate.c              |   2 +-
- drivers/hid/hid-logitech-hidpp.c          |   2 +-
- drivers/hid/hidraw.c                      |   9 ++-
- drivers/hid/wacom_wac.c                   |   6 +-
- drivers/hid/wacom_wac.h                   |   2 +-
- drivers/iommu/amd/iommu_v2.c              |   4 +-
- drivers/iommu/iommu-sva.c                 |   2 +-
- drivers/thermal/mediatek/auxadc_thermal.c |  14 +---
- drivers/video/fbdev/core/sysimgblt.c      |   2 +-
- fs/binfmt_elf.c                           |   6 +-
- fs/exec.c                                 |  38 +++++----
- include/linux/mm.h                        |  16 ++--
- lib/maple_tree.c                          |  11 +--
- mm/Kconfig                                |   4 +
- mm/gup.c                                  |  14 +++-
- mm/khugepaged.c                           |   7 +-
- mm/memory.c                               | 127 ++++++++++++++++++++++++++++++
- mm/mmap.c                                 | 121 ++++++++++++++++++++++++----
- mm/nommu.c                                |  17 ++--
- net/can/isotp.c                           |   5 +-
- 66 files changed, 605 insertions(+), 531 deletions(-)
-
-
+Correct.
