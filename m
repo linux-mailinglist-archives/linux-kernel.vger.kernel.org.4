@@ -2,70 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08786742663
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 14:27:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CCE474265D
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 14:27:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231929AbjF2M1Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 08:27:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55876 "EHLO
+        id S232091AbjF2M1U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 08:27:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232311AbjF2M06 (ORCPT
+        with ESMTP id S232307AbjF2M05 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 08:26:58 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43E973C06
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 05:26:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1688041590; x=1719577590;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=0o1PLQFg9YJAxU4F7OxUhopL9W2Htn2NqsUM9AgVd30=;
-  b=eOcYqXoTGUn13rk4b5Q2NGrRZ4nV7w2ALpi5T01cLtQhY0GGCsVsPgXT
-   cPY6xKuOAbRoquPnoA9T+trsuzgn001yWWkSIxjzw2FDUc8uElHEBnv+H
-   R/Q0awqGUA0z0Nu6jMNhlDPFF8c9TtkWBTuon17PoMWzhtB9Gd5CWyoAg
-   Z8YiSse7xAKNeJnxSbt9ppkcSa0edU+Fnau0So++sjxOiJha265Wjm0ZR
-   S2T0DFwkAlt5MKtoe3yYNJVrVjNWeDvI6MpHQ6hgRkRKiP0oJYXZSJRK1
-   R8xK/ir1sjiPVG0A8XgzmrDgKqR53K7ILzaXfxruZcwSt9WYjrKl/Utru
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10755"; a="360941775"
-X-IronPort-AV: E=Sophos;i="6.01,168,1684825200"; 
-   d="scan'208";a="360941775"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jun 2023 05:26:29 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10755"; a="711397816"
-X-IronPort-AV: E=Sophos;i="6.01,168,1684825200"; 
-   d="scan'208";a="711397816"
-Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 29 Jun 2023 05:26:26 -0700
-Received: from kbuild by 783282924a45 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1qEqjB-000E8z-1o;
-        Thu, 29 Jun 2023 12:26:25 +0000
-Date:   Thu, 29 Jun 2023 20:25:31 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-riscv@lists.infradead.org, Andy Chiu <andy.chiu@sifive.com>
-Cc:     oe-kbuild-all@lists.linux.dev,
-        =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@rivosinc.com>,
-        linux-kernel@vger.kernel.org, linux@rivosinc.com,
-        =?iso-8859-1?Q?R=E9mi?= Denis-Courmont <remi@remlab.net>,
-        Darius Rad <darius@bluespec.com>
-Subject: Re: [PATCH v3] riscv: Discard vector state on syscalls
-Message-ID: <202306292011.OGfLGBam-lkp@intel.com>
-References: <20230629062730.985184-1-bjorn@kernel.org>
+        Thu, 29 Jun 2023 08:26:57 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F197A10FD;
+        Thu, 29 Jun 2023 05:26:17 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7F34E61540;
+        Thu, 29 Jun 2023 12:26:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3B77C433C8;
+        Thu, 29 Jun 2023 12:26:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688041576;
+        bh=LS52vXkYfLsp8nOl2NekhIKUNII1QAdyPvLr7arBdP0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=mRxW0wUiy6WtBT08Rz/9diVeNseJ0fg3hzY3GLMmm0VovfhydkgknKPbpmuhCnQyy
+         UuRR1DXAGwNS0pxytNA/D/fC/yS6gqlOzLv2F8LHnZ6IPqCE2fsNIpPAex/4/aUKb9
+         oqvuUaPFHfmQlWAlRY0Bhq1c/CYNPnXFj0F3lY3TAR48JFrmDRpO3bKj5LlO9wSe9S
+         uoU++8QfLbXsg3gLPjXVeDE0WgsPkxv46bo2PTBG3AVYorqOT30hW7oT8Ivpf4aQUb
+         qsAcLobA6uY7SFlX+aMl629GlhVHlPai7tJ62jBnNGiQsJOCF5xvBMFrVpX2+mupKZ
+         w4Ki2FQ/ZB7jQ==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1qEqj5-0005zd-75; Thu, 29 Jun 2023 14:26:19 +0200
+Date:   Thu, 29 Jun 2023 14:26:19 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     Maximilian Luz <luzmaximilian@gmail.com>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Sumit Garg <sumit.garg@linaro.org>,
+        Steev Klimaszewski <steev@kali.org>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 4/4] firmware: Add support for Qualcomm UEFI Secure
+ Application
+Message-ID: <ZJ14a5SNS8L3XyFb@hovoldconsulting.com>
+References: <20230305022119.1331495-1-luzmaximilian@gmail.com>
+ <20230305022119.1331495-5-luzmaximilian@gmail.com>
+ <2eb4abde-579f-94ef-b6c3-81ef197329d0@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230629062730.985184-1-bjorn@kernel.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <2eb4abde-579f-94ef-b6c3-81ef197329d0@linaro.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,66 +72,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Björn,
+On Tue, Mar 07, 2023 at 05:51:35PM +0200, Dmitry Baryshkov wrote:
+> On 05/03/2023 04:21, Maximilian Luz wrote:
 
-kernel test robot noticed the following build errors:
+> > +static struct qcuefi_client *qcuefi_acquire(void)
+> 
+> Doesn't this need  the __locks annotation?
 
-[auto build test ERROR on 488833ccdcac118da16701f4ee0673b20ba47fe3]
+No, the mutex implementation does not use sparse annotation so adding
+__acquires() here will instead introduce new warnings.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Bj-rn-T-pel/riscv-Discard-vector-state-on-syscalls/20230629-142852
-base:   488833ccdcac118da16701f4ee0673b20ba47fe3
-patch link:    https://lore.kernel.org/r/20230629062730.985184-1-bjorn%40kernel.org
-patch subject: [PATCH v3] riscv: Discard vector state on syscalls
-config: riscv-allnoconfig (https://download.01.org/0day-ci/archive/20230629/202306292011.OGfLGBam-lkp@intel.com/config)
-compiler: riscv64-linux-gcc (GCC) 12.3.0
-reproduce: (https://download.01.org/0day-ci/archive/20230629/202306292011.OGfLGBam-lkp@intel.com/reproduce)
+> > +{
+> > +	mutex_lock(&__qcuefi_lock);
+> > +	return __qcuefi;
+> > +}
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306292011.OGfLGBam-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   arch/riscv/kernel/traps.c: In function 'do_trap_ecall_u':
->> arch/riscv/kernel/traps.c:299:17: error: implicit declaration of function 'riscv_v_vstate_discard'; did you mean 'riscv_v_vstate_restore'? [-Werror=implicit-function-declaration]
-     299 |                 riscv_v_vstate_discard(regs);
-         |                 ^~~~~~~~~~~~~~~~~~~~~~
-         |                 riscv_v_vstate_restore
-   cc1: some warnings being treated as errors
-
-
-vim +299 arch/riscv/kernel/traps.c
-
-   290	
-   291	asmlinkage __visible __trap_section void do_trap_ecall_u(struct pt_regs *regs)
-   292	{
-   293		if (user_mode(regs)) {
-   294			ulong syscall = regs->a7;
-   295	
-   296			regs->epc += 4;
-   297			regs->orig_a0 = regs->a0;
-   298	
- > 299			riscv_v_vstate_discard(regs);
-   300	
-   301			syscall = syscall_enter_from_user_mode(regs, syscall);
-   302	
-   303			if (syscall < NR_syscalls)
-   304				syscall_handler(regs, syscall);
-   305			else
-   306				regs->a0 = -ENOSYS;
-   307	
-   308			syscall_exit_to_user_mode(regs);
-   309		} else {
-   310			irqentry_state_t state = irqentry_nmi_enter(regs);
-   311	
-   312			do_trap_error(regs, SIGILL, ILL_ILLTRP, regs->epc,
-   313				"Oops - environment call from U-mode");
-   314	
-   315			irqentry_nmi_exit(regs, state);
-   316		}
-   317	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Johan
