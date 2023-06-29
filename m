@@ -2,121 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C85EC742A05
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 17:56:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DFAF1742A14
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 17:56:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232565AbjF2Pz5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 11:55:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59878 "EHLO
+        id S232482AbjF2P4n convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 29 Jun 2023 11:56:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232459AbjF2Pzt (ORCPT
+        with ESMTP id S232705AbjF2P4H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 11:55:49 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A708F35A0;
-        Thu, 29 Jun 2023 08:55:48 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3BEE16156B;
-        Thu, 29 Jun 2023 15:55:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9FE28C433C0;
-        Thu, 29 Jun 2023 15:55:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688054147;
-        bh=92HydDe45AGDX9dynHzLshwuSsch3BNAxhqa/UjZaHk=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=n1Gx1IW1T7DfRPDNYIGrKB5opyPVLvykoJxu869egG9sn4CgC9VEzGfVLEFV2UUfZ
-         E8zf+2xHglgfT3FWnkRR8PCSoucSI6TDSZ1FxCi1BlVP23QRAfaGL6z4cLTcGup47S
-         VkE2ftnUwIA0gl1EbFqyb9CBp4Vxsuc2vTVRbSBr0trv521ipGyxgfvVyayYaXkGz3
-         UP4lCZN2HE8acuAgilCTKepbEnJdDD0QALeq2JK7+zbmgYylmMjgDB0mBdMvWKtiHL
-         kUWmCD7seioZSgT0nShaf9Gp4atKrHi4rCLYZikUC9jSt294+YsjNebA5rU6LMXekC
-         WBOU8iwG4HDqA==
-Received: by mail-lj1-f178.google.com with SMTP id 38308e7fff4ca-2b698dd515dso12862531fa.3;
-        Thu, 29 Jun 2023 08:55:47 -0700 (PDT)
-X-Gm-Message-State: ABy/qLZcXeQ8HTJD5O+TOjp7EgHQ9rnhAunJVpUZo4OfOaaMutcuG9+V
-        tb8P6n3dGNpoRxCntflZCMQajt1XodA/SPV9Bac=
-X-Google-Smtp-Source: APBJJlFP2ARHuv/abBCve1LufqNBizctsmLOu0T/pB9oPTFpA4Ooj/qis7utDLa2lKr8qhXIN0qAX/4DwKDi7FvO9zM=
-X-Received: by 2002:a2e:980c:0:b0:2b6:9e83:73da with SMTP id
- a12-20020a2e980c000000b002b69e8373damr104154ljj.32.1688054145664; Thu, 29 Jun
- 2023 08:55:45 -0700 (PDT)
+        Thu, 29 Jun 2023 11:56:07 -0400
+Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EE633A90;
+        Thu, 29 Jun 2023 08:56:03 -0700 (PDT)
+Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-98e2865e2f2so21875366b.0;
+        Thu, 29 Jun 2023 08:56:03 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688054162; x=1690646162;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=NanhwP3ZvzSNrv3gc9fvxwRqCsfI8QWgmtWgVz7PxTU=;
+        b=YTLmTlkdlS9ylsynXd7KtjOACz1XZKC9RSL/7ktLInuNOdD2Aac/HqeXil21nEVQHD
+         pP5uzaeeSsGxzR96VMkYIcqLVrSfZQYxXPXC+/ZlAdHrZTNQCMNQz0OnfSo5TjoXMhsu
+         TVASknNN0R5Jq1I1jv0d0/zjSvfUUII2F+zhFNbkI8WWy+IHG1eaJUh1t1MV0yyi/F3f
+         425bPXXhyMrjyJggD0v34+6fVIOrR+i2D0/gsR3a/RebdywSAGlhzN29BalLIQ7Q4vjR
+         VrVQZro0JSTQPQ4LaNcEILK61lY28YGlM/RtfQdljLedIxYpiIArkZ8IzTuc9YlCt4nC
+         Q2Tg==
+X-Gm-Message-State: AC+VfDzXcgp5DAIr0gKaK9mtrSU0Hz9twBcK0NfmK/1PE0324oDCiaPz
+        mfpepqG/FchPeJS2e3z9IuQSmjQV4EhLAMoCmmzzdduc
+X-Google-Smtp-Source: ACHHUZ6JS90WyEgMYObZ9p9DRC2xaF5Mo3SHtPTnXmhMUmPa+3yMH2tHtxa/bayz2xhkDknvPVpKxFBXvXNpMQ8USYc=
+X-Received: by 2002:a17:906:7496:b0:988:815c:ba09 with SMTP id
+ e22-20020a170906749600b00988815cba09mr2452887ejl.4.1688054161659; Thu, 29 Jun
+ 2023 08:56:01 -0700 (PDT)
 MIME-Version: 1.0
-References: <ZJ2H5FWuo9oDMgPm@debian> <be9320b5-7613-be0f-ffcd-4b3041ea5836@huaweicloud.com>
- <13abe42f-2f5f-cbaf-21b8-baa4516963aa@leemhuis.info>
-In-Reply-To: <13abe42f-2f5f-cbaf-21b8-baa4516963aa@leemhuis.info>
-From:   Song Liu <song@kernel.org>
-Date:   Thu, 29 Jun 2023 08:55:33 -0700
-X-Gmail-Original-Message-ID: <CAPhsuW4Wf+PLDCZ7JpHzVT81ubj1Y6MCyLm-BWcVmB1jRqYEGg@mail.gmail.com>
-Message-ID: <CAPhsuW4Wf+PLDCZ7JpHzVT81ubj1Y6MCyLm-BWcVmB1jRqYEGg@mail.gmail.com>
-Subject: Re: mainline build failure due to 8295efbe68c0 ("md/raid1-10: factor
- out a helper to submit normal write")
-To:     Linux regressions mailing list <regressions@lists.linux.dev>
-Cc:     Yu Kuai <yukuai1@huaweicloud.com>,
-        "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>,
-        linux-raid@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>
+References: <20230616165034.3630141-1-michal.wilczynski@intel.com> <20230616165034.3630141-4-michal.wilczynski@intel.com>
+In-Reply-To: <20230616165034.3630141-4-michal.wilczynski@intel.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 29 Jun 2023 17:55:50 +0200
+Message-ID: <CAJZ5v0ippMo1Haa-YFszyWZNgUE_pPUtkFngQWjUyjJe4tm94g@mail.gmail.com>
+Subject: Re: [PATCH v5 03/10] acpi/ac: Move handler installing logic to driver
+To:     Michal Wilczynski <michal.wilczynski@intel.com>
+Cc:     linux-acpi@vger.kernel.org, rafael@kernel.org,
+        dan.j.williams@intel.com, vishal.l.verma@intel.com,
+        lenb@kernel.org, dave.jiang@intel.com, ira.weiny@intel.com,
+        rui.zhang@intel.com, linux-kernel@vger.kernel.org,
+        nvdimm@lists.linux.dev,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-+ Jens,
-
-On Thu, Jun 29, 2023 at 7:10=E2=80=AFAM Linux regression tracking (Thorsten
-Leemhuis) <regressions@leemhuis.info> wrote:
+On Fri, Jun 16, 2023 at 6:51 PM Michal Wilczynski
+<michal.wilczynski@intel.com> wrote:
 >
-> On 29.06.23 15:56, Yu Kuai wrote:
-> >
-> > =E5=9C=A8 2023/06/29 21:32, Sudip Mukherjee (Codethink) =E5=86=99=E9=81=
-=93:
-> >> The latest mainline kernel branch fails to build x86_64, arm64 and arm
-> >> allmodconfig
+> Currently logic for installing notifications from ACPI devices is
+> implemented using notify callback in struct acpi_driver. Preparations
+> are being made to replace acpi_driver with more generic struct
+> platform_driver, which doesn't contain notify callback. Furthermore
+> as of now handlers are being called indirectly through
+> acpi_notify_device(), which decreases performance.
 >
-> Thx for the report.
+> Call acpi_dev_install_notify_handler() at the end of .add() callback.
+> Call acpi_dev_remove_notify_handler() at the beginning of .remove()
+> callback. Change arguments passed to the notify function to match with
+> what's required by acpi_install_notify_handler(). Remove .notify
+> callback initialization in acpi_driver.
 >
-> > Thanks for the testing, which branch are you testing?
-> >
-> > This problem is already fixed in latest mainline kernel:
-> > https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/com=
-mit/?id=3Db5a99602b74bbfa655be509c615181dd95b0719e
-
-Hi Jens,
-
-The fix is in the for-6.5/block-late branch.
-
-https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git/commi=
-t/?h=3Dfor-6.5/block-late&id=3Db5a99602b74bbfa655be509c615181dd95b0719e
-
-Would you send a pull request with it? Or would you prefer
-some other solution for the issue?
-
-AFAICT, it will fix clang build with RANDSTRUCT.
-
-Thanks,
-Song
-
+> Suggested-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> Signed-off-by: Michal Wilczynski <michal.wilczynski@intel.com>
+> ---
+>  drivers/acpi/ac.c | 33 ++++++++++++++++++++++++---------
+>  1 file changed, 24 insertions(+), 9 deletions(-)
 >
-> And thx for the reply. :-D
+> diff --git a/drivers/acpi/ac.c b/drivers/acpi/ac.c
+> index 1ace70b831cd..207ee3c85bad 100644
+> --- a/drivers/acpi/ac.c
+> +++ b/drivers/acpi/ac.c
+> @@ -34,7 +34,7 @@ MODULE_LICENSE("GPL");
 >
-> FWIW, that fix afaics is still in -next and hasn't reached mainline yet.
-> But I guess that will change within a few days.
+>  static int acpi_ac_add(struct acpi_device *device);
+>  static void acpi_ac_remove(struct acpi_device *device);
+> -static void acpi_ac_notify(struct acpi_device *device, u32 event);
+> +static void acpi_ac_notify(acpi_handle handle, u32 event, void *data);
 >
-> >> #regzbot introduced: 8295efbe68c080047e98d9c0eb5cb933b238a8cb
+>  static const struct acpi_device_id ac_device_ids[] = {
+>         {"ACPI0003", 0},
+> @@ -54,11 +54,9 @@ static struct acpi_driver acpi_ac_driver = {
+>         .name = "ac",
+>         .class = ACPI_AC_CLASS,
+>         .ids = ac_device_ids,
+> -       .flags = ACPI_DRIVER_ALL_NOTIFY_EVENTS,
+>         .ops = {
+>                 .add = acpi_ac_add,
+>                 .remove = acpi_ac_remove,
+> -               .notify = acpi_ac_notify,
+>                 },
+>         .drv.pm = &acpi_ac_pm,
+>  };
+> @@ -128,9 +126,12 @@ static enum power_supply_property ac_props[] = {
+>  };
 >
-> #regzbot fix: b5a99602b74bbfa6
-> #regzbot dup-of: https://lore.kernel.org/all/ZJ2M4yqnOCqqGWH0@debian/
-> #regzbot ignore-activity
+>  /* Driver Model */
+> -static void acpi_ac_notify(struct acpi_device *device, u32 event)
+> +static void acpi_ac_notify(acpi_handle handle, u32 event, void *data)
+>  {
+> -       struct acpi_ac *ac = acpi_driver_data(device);
+
+This line doesn't need to be changed.  Just add the device variable
+definition above it.
+
+And the same pattern is present in the other patches in the series.
+
+> +       struct acpi_device *device = data;
+> +       struct acpi_ac *ac;
+> +
+> +       ac = acpi_driver_data(device);
 >
-> Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
-> --
-> Everything you wanna know about Linux kernel regression tracking:
-> https://linux-regtracking.leemhuis.info/about/#tldr
-> If I did something stupid, please tell me, as explained on that page.
+>         if (!ac)
+>                 return;
