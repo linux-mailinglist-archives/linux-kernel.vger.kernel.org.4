@@ -2,176 +2,392 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9DB5742ADC
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 18:53:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 901B4742ADF
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 18:55:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231843AbjF2Qxs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 12:53:48 -0400
-Received: from mail-bn8nam12on2121.outbound.protection.outlook.com ([40.107.237.121]:25089
-        "EHLO NAM12-BN8-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S229494AbjF2Qxq (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 12:53:46 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=HhdFUo38idtOiq/+M375XLRsF1amksxV0YWyKze/gFmPZvsbZ0d0ZJRPtIZmKxP17ddnrDFNraVDq6wD04aTz/TLhyOrjQTZSsQVb1w29QsHT/Riq0ESYt2HTdZzSsT1iRXPC8h01lGcxOkqd1sJQDNsz/CE644fFyJSrQA+ak7AVszvwtkoO92avLLyUSwO5xRGXOCkJsL4Fg8ZP+/tugFcyiQ9v7TcU7vwyzVEy7cMvsSCFDKWCNGf4lZXKed/FB8YZ3mSyfLpbvPjVQS8w2twxMtVn/0PMunvK8Lcs0UVrfQ1nXQEnCXQxGEH3SXhGYenL8/YT4+SLZkWDS0mJw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=INs4lopK9B3qHdy3prw8He8yWTuuiKwQhc6tDDsH03k=;
- b=TUT9zctSs93E4XWchNMF6bo64uJtGvP8yoCQrS6F2tHDF9guHVmm+d/jOhVkD3dvxe10FjTyyl/qbbPP3ZlNT0vIUAKEzWBGidp5A5T42AC9xjcCTwqp8QUnKY3TmkVq2IUUU7qwcKR9qjXAh9uHVxArIItYJaF5V653BrpIwpsA0hgyt88EUh7jX32iCnjYBJsQBSWyKanaTQwxUWr+OOkt0bhwAQJyOkGDSfhGo3jJpTQuqWx8dkOgN4II+mcaQUZ8jgCqAMPqKXnHfh3poS2Ch2j0B1wwuSiRBq+gU0aXQId7dJDCpVut0RK900hJhFtpp8rNw7SIEAvEEvqr4Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microsoft.com; dmarc=pass action=none
- header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=INs4lopK9B3qHdy3prw8He8yWTuuiKwQhc6tDDsH03k=;
- b=SZJDDVxnrITDUjTfEhIfyG1lELlpNsMeBY67TsWncHfflWdgdl6LmlqyG8HowM15wyvz26vGb0u2kp4kCsUhPxXtft+7U88AIh/Bcxci6SGy2T5jJxDOvuNyAOsoyXM9WuesOcUf8wS0+ylpD/K8jt26/ryfRJNknPpQrz1+SmU=
-Received: from PH7PR21MB3116.namprd21.prod.outlook.com (2603:10b6:510:1d0::10)
- by SJ0PR21MB1294.namprd21.prod.outlook.com (2603:10b6:a03:3f7::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6565.8; Thu, 29 Jun
- 2023 16:53:42 +0000
-Received: from PH7PR21MB3116.namprd21.prod.outlook.com
- ([fe80::848b:6d47:841d:20ff]) by PH7PR21MB3116.namprd21.prod.outlook.com
- ([fe80::848b:6d47:841d:20ff%4]) with mapi id 15.20.6544.006; Thu, 29 Jun 2023
- 16:53:42 +0000
-From:   Haiyang Zhang <haiyangz@microsoft.com>
-To:     Paolo Abeni <pabeni@redhat.com>,
-        "longli@linuxonhyperv.com" <longli@linuxonhyperv.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Leon Romanovsky <leon@kernel.org>,
-        Ajay Sharma <sharmaajay@microsoft.com>,
-        Dexuan Cui <decui@microsoft.com>,
-        KY Srinivasan <kys@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>,
+        id S231953AbjF2QzZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 12:55:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48910 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229494AbjF2QzV (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 29 Jun 2023 12:55:21 -0400
+Received: from mail-il1-x134.google.com (mail-il1-x134.google.com [IPv6:2607:f8b0:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0320E30EF;
+        Thu, 29 Jun 2023 09:55:18 -0700 (PDT)
+Received: by mail-il1-x134.google.com with SMTP id e9e14a558f8ab-341c14e495fso4071245ab.0;
+        Thu, 29 Jun 2023 09:55:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1688057717; x=1690649717;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=BNlqd9svLgndg6D9Q8M0Ft+q7ybf/RwHNx0LqnECd7U=;
+        b=B2ZBfc8giiu/RxCAWedWs2zJKgdpGeJQbtWfS3uywqOcJfF7W9WVTQl3UeYEJ4pNwO
+         gVE/Ti6h7BTo722qQj6SWcxIDwLGDs1tNPTpXC7n2h/ZHXS5awpLLTrxJCAuZatZFhvO
+         PDCRAwH5qQBwQl+oZFSI68oitu6ly8IR2nPsJ+KdV5OsEjE6OVeWH77GhsisqIj/ccYG
+         BUeEwKNMkR7g9DPFjclHJ1214PDzqXaI/XMyOhEPlO1T54mLqc+IDbNbOp/w+KWCxDdV
+         fHih6BbWwY/q09A9Ly38wEMh5Zaqjjh+u34GPnpfmboJ/28PZLlPFZ3YWUcrUyaOCwl1
+         lqAA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688057717; x=1690649717;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=BNlqd9svLgndg6D9Q8M0Ft+q7ybf/RwHNx0LqnECd7U=;
+        b=Bwz4exK4N7ZLvwCnaYChdu5MQ5aLOYLfs81kxga2a4eJMSbE8CxR6LdDpcZF978Hqv
+         9cMauqNT5oZZy2ygoo7i7/dQOhEydonknGWU3uXrqVGruqP8IO3k9yADVYyH6HO7pAEh
+         vc53MmBsbBENgm+V2ffUw9qCYAtmUrKv7QCskgeTrJOHfYiF7AneqSBd2spv8EjXN8wd
+         n9hF1eebKLLYEf5wETdgUJ4at4kx4sH0fALxD2pn7l2mgoUlx8CmtOSyH7Et5kQf0AvL
+         oizZcRzg4pNswlhmj7XQb719z5ihAWRUVVii/nXzct3knGmhSXrpvNBkKV2kh37RE9QW
+         wL6w==
+X-Gm-Message-State: AC+VfDxsOAfeZPsAOIetV6FJXhLaOY565itx4/IIRDhur4aqOU5u2ide
+        VJXpQ8Q3aNqnMIA4sw9zqOI=
+X-Google-Smtp-Source: ACHHUZ6RJg1zSBEAfJkKgH35cPJZ/Lo3JYHp6BS40a3JxJa8Knh6qnR/zeC/+G2nAc8adG0CL34gEg==
+X-Received: by 2002:a05:6e02:149:b0:345:9269:3420 with SMTP id j9-20020a056e02014900b0034592693420mr14037145ilr.3.1688057717043;
+        Thu, 29 Jun 2023 09:55:17 -0700 (PDT)
+Received: from ?IPv6:2605:59c8:448:b800:82ee:73ff:fe41:9a02? ([2605:59c8:448:b800:82ee:73ff:fe41:9a02])
+        by smtp.googlemail.com with ESMTPSA id 141-20020a630293000000b00514256c05c2sm9193576pgc.7.2023.06.29.09.55.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 29 Jun 2023 09:55:16 -0700 (PDT)
+Message-ID: <b7dda3fe88bb3d302b1cbb2016387d5e98e2f946.camel@gmail.com>
+Subject: Re: [PATCH RFC net-next 1/4] net: skbuff: don't include
+ <net/page_pool.h> to <linux/skbuff.h>
+From:   Alexander H Duyck <alexander.duyck@gmail.com>
+To:     Alexander Lobakin <aleksander.lobakin@intel.com>,
         "David S. Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>
-CC:     "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Long Li <longli@microsoft.com>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>
-Subject: RE: [Patch v3] net: mana: Batch ringing RX queue doorbell on
- receiving packets
-Thread-Topic: [Patch v3] net: mana: Batch ringing RX queue doorbell on
- receiving packets
-Thread-Index: AQHZqInu5QIPQqXV1UCF4asyOz+7fK+hejgAgACImMA=
-Date:   Thu, 29 Jun 2023 16:53:42 +0000
-Message-ID: <PH7PR21MB3116276E09BFD0950FB0FB49CA25A@PH7PR21MB3116.namprd21.prod.outlook.com>
-References: <1687823827-15850-1-git-send-email-longli@linuxonhyperv.com>
- <36c95dd6babb2202f70594d5dde13493af62dcad.camel@redhat.com>
-In-Reply-To: <36c95dd6babb2202f70594d5dde13493af62dcad.camel@redhat.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=429f960d-d77f-4361-b17a-0bbf1a84560f;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2023-06-29T16:51:27Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microsoft.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: PH7PR21MB3116:EE_|SJ0PR21MB1294:EE_
-x-ms-office365-filtering-correlation-id: 0fb12598-1e27-4b24-cefe-08db78c16537
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: NNqQ98WdiBMRaKlqrJUvYNSHytzytCdsVnxYfbj3ep+XynOD1AK1GW0MJJEDaPHypcIkG3JKndOIyVlW+qRKKdhZkBxaKhe78OJeCbJrd5gsxme9TT0mixd1exBDyEc8Oxnqv3tnjEwNIVaSuvIKxq0+9ABJHvMjlf5/mod+wUcqj5lBCV5HgDM+LaR0KbFg7ZzBkq0LZhXxYGIRfFXlTTtYKFGXLfqyM2U7P1IdUpNIdSClZ5EXNc2QpvURe0ch85ddJ5VrmPqVCea62mX6v2E/Je/mqAdl+uI64quUGypzT9OgK+sXA8IhYfhgkfcj729JE/Q9SfUzBnJMdEBnZiddZ1x4LMP2AcZLtSV0FXdvEn9jp5qtGtzL385BdO6OMBMEFB55OMZTeteoPOef1NW/rK+NHhK2VKPN/c/LmH6TS4O659DGp8FLC9T5wo+9JN4zXjeclhqG4Vw5GmbWeTnI3WVFxpZMv8sPyrJVNdLBmi6bh9f7CJXEHB50IvOOxxceF2/+PpSRxFoN8rJit6I2UTJTRDiYkKztvpOYNypO9zviiBBJEPbCPsX+l0SZUtacdHBpAHcJ4DgxRC8DgQWVrkU3WsqYXNb8+khf/V+MIpLLbclAWuhwDY0NVs+3kGT9Y1D/IP7NWnL4qxH/PsKxJKRVgUkDeV8JZzMJAiA=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR21MB3116.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(136003)(396003)(366004)(346002)(39860400002)(451199021)(64756008)(66446008)(66476007)(66556008)(76116006)(66946007)(41300700001)(316002)(54906003)(122000001)(82950400001)(82960400001)(4326008)(110136005)(921005)(83380400001)(38100700002)(10290500003)(478600001)(8936002)(8676002)(7416002)(26005)(55016003)(38070700005)(8990500004)(52536014)(5660300002)(186003)(7696005)(53546011)(71200400001)(86362001)(6506007)(9686003)(2906002)(33656002)(966005);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?Vi9XVzJ5S3p0TUxLYWN2bVQySkNTNmM4SFY4YVE4SXlkNGlsS0g2RXNZMkZq?=
- =?utf-8?B?UmdrbS8vbDN2RzQvVmpoem5keUFESngwMFpWbDJyK1FjZUlWdnE3cTZNZUxU?=
- =?utf-8?B?S0JCb3oxVitadWk1bDFxTkVtSnNad2hucFJndHh5RTY0bDNjK0ZmQ2xMT2hE?=
- =?utf-8?B?cmJwMnZYdktqYW1sOTJnMXNQalp5R1lGd0hRN0hoU3gxYmhRTXdzK0JhUGJ5?=
- =?utf-8?B?YllEYWd6MHVPdkVjaHpjdTc4cnRBNEJhSnoyY0FRakF5R2NEK1RzZmV0Q2Jr?=
- =?utf-8?B?Z3hvOGRpd3ZtZGJkNURKNkx4aWlIV0tmOVZFSkZJSDJpQmhtVlVNTUkyMTFu?=
- =?utf-8?B?TGVjN0NEVG5Za0ltZnBXakt5bXBjdm5Sd3ZUaUF4L20yYW9GY1ltR3ptUU1y?=
- =?utf-8?B?ZEROREFmOUpJTmVVSytXRWpwWSs4SFBrTTEwWU1XYWtPR05LbHNKSWNiVkFO?=
- =?utf-8?B?UG00TVBZSldBakMzMlhPeVdUSWFnMXRJbE10MlJ3c09IbzcwSnpLUHQyNFk0?=
- =?utf-8?B?Z09pQTR4bkVkLzVYSGlkdXZ2c3lJSWhSVEZqYjlKRnpCRzZiYUlVSDdNZDJE?=
- =?utf-8?B?TnNKOG1sR04vVmNoOFR2UVBhSVNCbVlFejVwREdyVGo4TEw1Zk5laXdZU1JE?=
- =?utf-8?B?WVZGSE1KV3JuTmxEajk4c1NvTlFpN0hOZzY4eUtWeHNGN2QrNzFVamVSOWxp?=
- =?utf-8?B?Q3UwZU5QWlNSb0RtVGdySVpSaDc3dURXRTlCcHZzS0c4TWxrQm9Bd1hVV25r?=
- =?utf-8?B?cGo2VkJGV0hoeFdrTU5pVVR6QVh0RlA0TC85dnJ0cWJBWEpoTkYvOXVNYW16?=
- =?utf-8?B?aVY3UUF6VXdlWXVVL3FQNXVUdkptZEltOE5jREZ1NDNsVTRPYU1rU0ZST3Iz?=
- =?utf-8?B?TVF5dmFJb2dHOUlsWnFLZWEvUjJVOENocjgvWHBoeDFicVRNYVMzQzJtb1N2?=
- =?utf-8?B?K2dSRU9pZk1uaTYxOE80NVZHM3M4bkM4R1lFRDJWY1d6T0s1WUQyU0xZdXZD?=
- =?utf-8?B?SUd5bThpeHI2Y1FKOEhlMjJEUmRoMG05RFRuRVpxZytsWFpXNFpreXp4WEhz?=
- =?utf-8?B?Z2VUcndQeDNCUldQZldONmpDUHlsVFJpQ3FIa2hVZUp4bXlVd3N0TmVKT0tD?=
- =?utf-8?B?a0FadWhsblY5YkExOWFkQS82YnR0a0wvMmo0ei91MExaWHJxeEhoQm9YaFJ2?=
- =?utf-8?B?QWZMZk9uV3FjQWVFUlI1SjBlUCszL0I2N2wvU2Vuc2RkSnVZaDdGZWlraGww?=
- =?utf-8?B?dk11MVE0eTh3M2V1OWJwZmxqcjQxbVRUbVlxMjVXOGpnajFUN3BsNUhOQUtt?=
- =?utf-8?B?SytkQ29BWkdzWGhlNTF3OFFsaEUrWjkxdkNRK2Z6SXZEblBnVFhYUzczNDBF?=
- =?utf-8?B?NUtoc05Pbm5mTkpHYzhabitVVytKclduSndxTFQxUG8yRXIvQjRqNkVRVzVj?=
- =?utf-8?B?UFhwRGh3Wmhqc2ZqdjdRb1dWbE8xYXNIZnFha3Z6dlpKYWJPeEczWFJkVXhE?=
- =?utf-8?B?SEd6RTh2dzlBVnQ4VUE5SlQ2a3VVU3RpYUZtN2VuMVZqNjFJRWo3a0crejIx?=
- =?utf-8?B?WWdmdGNvM09IcmIzUWR1VngrVDdpdGFHUGtZeFMzT3pEMmc4VGdycHQ3N3o3?=
- =?utf-8?B?dE01RExKQVovUlBsZCtDNzNIMWNEc0hCMzhlQWgwdGU3Vk1OcGhCUGFtUHJZ?=
- =?utf-8?B?bFhndW9PQXhyZXZFMU4wQk9IOW9EK3hMczljMFVwQ1FVNGIzUXpRNHFZRlZX?=
- =?utf-8?B?ZmxBN2lOcndRZi9scFBVbEZyVmdMVERFQ1BvWVZ3aXgwcVRXbmQ1bkRFOWtm?=
- =?utf-8?B?QS9ydXJEZmMzNTc3MUYzb1ZlVGRMK1hkeHdGK05pUzVwVWpiVkxDVWxpbTdt?=
- =?utf-8?B?ZXU3aDNna2VxYlRpTndIV3JUMWxpMUFjbjRQb0dReS8vVDVwU3hrZmdXM3NO?=
- =?utf-8?B?UmpZaTR0MThIL05Ydit4RkNRRkQ5ZWxMaFVzek5IN1ZuQW5GNmFLQUl3L2cv?=
- =?utf-8?B?U1Evai96Qm15WTdTK25DbFd3ZG5GV3JKWU41OVpQY0xVdC95N2NSa1ZFZ2tR?=
- =?utf-8?B?TU0xY3pqS1A1WTQ2aFRMQWZILzNNSFZ6K3NtUng3MThGdnNRbVl3ZVI2bFNX?=
- =?utf-8?Q?o8xoeuUUuuYRUTkHVjpYxNq+W?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Larysa Zaremba <larysa.zaremba@intel.com>,
+        Yunsheng Lin <linyunsheng@huawei.com>,
+        Alexander Duyck <alexanderduyck@fb.com>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Thu, 29 Jun 2023 09:55:15 -0700
+In-Reply-To: <20230629152305.905962-2-aleksander.lobakin@intel.com>
+References: <20230629152305.905962-1-aleksander.lobakin@intel.com>
+         <20230629152305.905962-2-aleksander.lobakin@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.48.3 (3.48.3-1.fc38) 
 MIME-Version: 1.0
-X-OriginatorOrg: microsoft.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PH7PR21MB3116.namprd21.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0fb12598-1e27-4b24-cefe-08db78c16537
-X-MS-Exchange-CrossTenant-originalarrivaltime: 29 Jun 2023 16:53:42.4762
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: cXbd6hR7swdqGakoZXyeB+fVDqludc6qv885gvbXk35fZNDNkMBN8KW9KycD+YOvSIK/kwPcg4J2o1/bhKTNVQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR21MB1294
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+        lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DQoNCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gRnJvbTogUGFvbG8gQWJlbmkgPHBh
-YmVuaUByZWRoYXQuY29tPg0KPiBTZW50OiBUaHVyc2RheSwgSnVuZSAyOSwgMjAyMyA0OjQzIEFN
-DQo+IFRvOiBsb25nbGlAbGludXhvbmh5cGVydi5jb207IEphc29uIEd1bnRob3JwZSA8amdnQHpp
-ZXBlLmNhPjsgTGVvbg0KPiBSb21hbm92c2t5IDxsZW9uQGtlcm5lbC5vcmc+OyBBamF5IFNoYXJt
-YSA8c2hhcm1hYWpheUBtaWNyb3NvZnQuY29tPjsNCj4gRGV4dWFuIEN1aSA8ZGVjdWlAbWljcm9z
-b2Z0LmNvbT47IEtZIFNyaW5pdmFzYW4gPGt5c0BtaWNyb3NvZnQuY29tPjsNCj4gSGFpeWFuZyBa
-aGFuZyA8aGFpeWFuZ3pAbWljcm9zb2Z0LmNvbT47IFdlaSBMaXUgPHdlaS5saXVAa2VybmVsLm9y
-Zz47DQo+IERhdmlkIFMuIE1pbGxlciA8ZGF2ZW1AZGF2ZW1sb2Z0Lm5ldD47IEVyaWMgRHVtYXpl
-dA0KPiA8ZWR1bWF6ZXRAZ29vZ2xlLmNvbT47IEpha3ViIEtpY2luc2tpIDxrdWJhQGtlcm5lbC5v
-cmc+DQo+IENjOiBsaW51eC1yZG1hQHZnZXIua2VybmVsLm9yZzsgbGludXgtaHlwZXJ2QHZnZXIu
-a2VybmVsLm9yZzsNCj4gbmV0ZGV2QHZnZXIua2VybmVsLm9yZzsgbGludXgta2VybmVsQHZnZXIu
-a2VybmVsLm9yZzsgTG9uZyBMaQ0KPiA8bG9uZ2xpQG1pY3Jvc29mdC5jb20+OyBzdGFibGVAdmdl
-ci5rZXJuZWwub3JnDQo+IFN1YmplY3Q6IFJlOiBbUGF0Y2ggdjNdIG5ldDogbWFuYTogQmF0Y2gg
-cmluZ2luZyBSWCBxdWV1ZSBkb29yYmVsbCBvbiByZWNlaXZpbmcNCj4gcGFja2V0cw0KPiANCj4g
-T24gTW9uLCAyMDIzLTA2LTI2IGF0IDE2OjU3IC0wNzAwLCBsb25nbGlAbGludXhvbmh5cGVydi5j
-b20gd3JvdGU6DQo+ID4gRnJvbTogTG9uZyBMaSA8bG9uZ2xpQG1pY3Jvc29mdC5jb20+DQo+ID4N
-Cj4gPiBJdCdzIGluZWZmaWNpZW50IHRvIHJpbmcgdGhlIGRvb3JiZWxsIHBhZ2UgZXZlcnkgdGlt
-ZSBhIFdRRSBpcyBwb3N0ZWQgdG8NCj4gPiB0aGUgcmVjZWl2ZWQgcXVldWUuIEV4Y2Vzc2l2ZSBN
-TUlPIHdyaXRlcyByZXN1bHQgaW4gQ1BVIHNwZW5kaW5nIG1vcmUNCj4gPiB0aW1lIHdhaXRpbmcg
-b24gTE9DSyBpbnN0cnVjdGlvbnMgKGF0b21pYyBvcGVyYXRpb25zKSwgcmVzdWx0aW5nIGluDQo+
-ID4gcG9vciBzY2FsaW5nIHBlcmZvcm1hbmNlLg0KPiA+DQo+ID4gTW92ZSB0aGUgY29kZSBmb3Ig
-cmluZ2luZyBkb29yYmVsbCBwYWdlIHRvIHdoZXJlIGFmdGVyIHdlIGhhdmUgcG9zdGVkIGFsbA0K
-PiA+IFdRRXMgdG8gdGhlIHJlY2VpdmUgcXVldWUgZHVyaW5nIGEgY2FsbGJhY2sgZnJvbSBuYXBp
-X3BvbGwoKS4NCj4gPg0KPiA+IFdpdGggdGhpcyBjaGFuZ2UsIHRlc3RzIHNob3dlZCBhbiBpbXBy
-b3ZlbWVudCBmcm9tIDEyMEcvcyB0byAxNjBHL3Mgb24gYQ0KPiA+IDIwMEcgcGh5c2ljYWwgbGlu
-aywgd2l0aCAxNiBvciAzMiBoYXJkd2FyZSBxdWV1ZXMuDQo+ID4NCj4gPiBUZXN0cyBzaG93ZWQg
-bm8gcmVncmVzc2lvbiBpbiBuZXR3b3JrIGxhdGVuY3kgYmVuY2htYXJrcyBvbiBzaW5nbGUNCj4g
-PiBjb25uZWN0aW9uLg0KPiA+DQo+ID4gV2hpbGUgd2UgYXJlIG1ha2luZyBjaGFuZ2VzIGluIHRo
-aXMgY29kZSBwYXRoLCBjaGFuZ2UgdGhlIGNvZGUgZm9yDQo+ID4gcmluZ2luZyBkb29yYmVsbCB0
-byBzZXQgdGhlIFdRRV9DT1VOVCB0byAwIGZvciBSZWNlaXZlIFF1ZXVlLiBUaGUNCj4gPiBoYXJk
-d2FyZSBzcGVjaWZpY2F0aW9uIHNwZWNpZmllcyB0aGF0IGl0IHNob3VsZCBzZXQgdG8gMC4gQWx0
-aG91Z2gNCj4gPiBjdXJyZW50bHkgdGhlIGhhcmR3YXJlIGRvZXNuJ3QgZW5mb3JjZSB0aGUgY2hl
-Y2ssIGluIHRoZSBmdXR1cmUgcmVsZWFzZXMNCj4gPiBpdCBtYXkgZG8uDQo+ID4NCj4gPiBDYzog
-c3RhYmxlQHZnZXIua2VybmVsLm9yZw0KPiA+IEZpeGVzOiBjYTljNTRkMmQ2YTUgKCJuZXQ6IG1h
-bmE6IEFkZCBhIGRyaXZlciBmb3IgTWljcm9zb2Z0IEF6dXJlIE5ldHdvcmsNCj4gQWRhcHRlciAo
-TUFOQSkiKQ0KPiANCj4gVWhtbW0uLi4gdGhpcyBsb29rcyBsaWtlIGEgcGVyZm9ybWFuY2UgaW1w
-cm92ZW1lbnQgdG8gbWUsIG1vcmUgc3VpdGFibGUNCj4gZm9yIHRoZSBuZXQtbmV4dCB0cmVlID8h
-PyAoTm90ZSB0aGF0IG5ldC1uZXh0IGlzIGNsb3NlZCBub3cpLg0KDQpUaGlzIHdlYiBwYWdlIHNo
-b3dzIHRoZSBuZXQtbmV4dCBpcyAib3BlbiI6DQpodHRwOi8vdmdlci5rZXJuZWwub3JnL35kYXZl
-bS9uZXQtbmV4dC5odG1sDQoNCklzIHRoaXMgc3RpbGwgdGhlIHJpZ2h0IHBsYWNlIHRvIGNoZWNr
-IG5ldC1uZXh0IHN0YXR1cz8NCg0KLSBIYWl5YW5nDQo=
+On Thu, 2023-06-29 at 17:23 +0200, Alexander Lobakin wrote:
+> Currently, touching <net/page_pool.h> triggers a rebuild of more than
+> a half of the kernel. That's because it's included in <linux/skbuff.h>.
+> And each new include to page_pool.h adds more [useless] data for the
+> toolchain to process per each source file from that pile.
+>=20
+> In commit 6a5bcd84e886 ("page_pool: Allow drivers to hint on SKB
+> recycling"), Matteo included it to be able to call a couple functions
+> defined there. Then, in commit 57f05bc2ab24 ("page_pool: keep pp info
+> as long as page pool owns the page") one of the calls was removed, so
+> only one left. It's the call to page_pool_return_skb_page() in
+> napi_frag_unref(). The function is external and doesn't have any
+> dependencies. Having include of very niche page_pool.h only for that
+> looks like an overkill.
+> As Alex noticed, the only thing that holds this function in page_pool.c
+> is %PP_SIGNATURE. By moving the check for magic a couple functions up,
+> the whole page_pool_return_skb_page() can be moved to skbuff.c.
+> The arguments for moving the check are the following:
+>=20
+> 1) It checks for a corner case that shouldn't ever happen when the code
+>    is sane. And execution speed doesn't matter on exception path, thus
+>    doing more calls before bailing out doesn't make any weather.
+> 2) There are 2 users of the internal __page_pool_put_page(), where this
+>    check is moved: page_pool_put_defragged_page() and
+>    page_pool_put_page_bulk(). Both are exported and can be called from
+>    the drivers, but previously only the skb recycling path of the former
+>    was protected with the magic check. So this also makes the code a bit
+>    more reliable.
+>=20
+> After the check is moved, teleport page_pool_return_skb_page() to
+> skbuff.c, just next to the main consumer, skb_pp_recycle(). It's used
+> also in napi_frag_unref() -> {__,}skb_frag_unref(), so no `static`
+> unfortunately. Maybe next time.
+> Now, after a few include fixes in the drivers, touching page_pool.h
+> only triggers rebuilding of the drivers using it and a couple core
+> networking files.
+>=20
+> Suggested-by: Jakub Kicinski <kuba@kernel.org> # make skbuff.h less heavy
+> Suggested-by: Alexander Duyck <alexanderduyck@fb.com> # move to skbuff.c
+> Signed-off-by: Alexander Lobakin <aleksander.lobakin@intel.com>
+> ---
+>  drivers/net/ethernet/engleder/tsnep_main.c    |  1 +
+>  drivers/net/ethernet/freescale/fec_main.c     |  1 +
+>  .../marvell/octeontx2/nic/otx2_common.c       |  1 +
+>  .../ethernet/marvell/octeontx2/nic/otx2_pf.c  |  1 +
+>  .../ethernet/mellanox/mlx5/core/en/params.c   |  1 +
+>  .../net/ethernet/mellanox/mlx5/core/en/xdp.c  |  1 +
+>  drivers/net/wireless/mediatek/mt76/mt76.h     |  1 +
+>  include/linux/skbuff.h                        |  3 +-
+>  include/net/page_pool.h                       |  2 -
+>  net/core/page_pool.c                          | 52 +++++--------------
+>  net/core/skbuff.c                             | 28 ++++++++++
+>  11 files changed, 50 insertions(+), 42 deletions(-)
+>=20
+> diff --git a/drivers/net/ethernet/engleder/tsnep_main.c b/drivers/net/eth=
+ernet/engleder/tsnep_main.c
+> index 84751bb303a6..6222aaa5157f 100644
+> --- a/drivers/net/ethernet/engleder/tsnep_main.c
+> +++ b/drivers/net/ethernet/engleder/tsnep_main.c
+> @@ -28,6 +28,7 @@
+>  #include <linux/iopoll.h>
+>  #include <linux/bpf.h>
+>  #include <linux/bpf_trace.h>
+> +#include <net/page_pool.h>
+>  #include <net/xdp_sock_drv.h>
+> =20
+>  #define TSNEP_RX_OFFSET (max(NET_SKB_PAD, XDP_PACKET_HEADROOM) + NET_IP_=
+ALIGN)
+> diff --git a/drivers/net/ethernet/freescale/fec_main.c b/drivers/net/ethe=
+rnet/freescale/fec_main.c
+> index 8fbe47703d47..99b3b4f79603 100644
+> --- a/drivers/net/ethernet/freescale/fec_main.c
+> +++ b/drivers/net/ethernet/freescale/fec_main.c
+> @@ -38,6 +38,7 @@
+>  #include <linux/in.h>
+>  #include <linux/ip.h>
+>  #include <net/ip.h>
+> +#include <net/page_pool.h>
+>  #include <net/selftests.h>
+>  #include <net/tso.h>
+>  #include <linux/tcp.h>
+> diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.c b/d=
+rivers/net/ethernet/marvell/octeontx2/nic/otx2_common.c
+> index a5d03583bf79..d17a0ebc9036 100644
+> --- a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.c
+> +++ b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.c
+> @@ -7,6 +7,7 @@
+> =20
+>  #include <linux/interrupt.h>
+>  #include <linux/pci.h>
+> +#include <net/page_pool.h>
+>  #include <net/tso.h>
+>  #include <linux/bitfield.h>
+> =20
+> diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_pf.c b/drive=
+rs/net/ethernet/marvell/octeontx2/nic/otx2_pf.c
+> index fe8ea4e531b7..7eca434a0550 100644
+> --- a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_pf.c
+> +++ b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_pf.c
+> @@ -16,6 +16,7 @@
+>  #include <linux/bpf.h>
+>  #include <linux/bpf_trace.h>
+>  #include <linux/bitfield.h>
+> +#include <net/page_pool.h>
+> =20
+>  #include "otx2_reg.h"
+>  #include "otx2_common.h"
+> diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en/params.c b/driver=
+s/net/ethernet/mellanox/mlx5/core/en/params.c
+> index 5ce28ff7685f..0f152f14165b 100644
+> --- a/drivers/net/ethernet/mellanox/mlx5/core/en/params.c
+> +++ b/drivers/net/ethernet/mellanox/mlx5/core/en/params.c
+> @@ -6,6 +6,7 @@
+>  #include "en/port.h"
+>  #include "en_accel/en_accel.h"
+>  #include "en_accel/ipsec.h"
+> +#include <net/page_pool.h>
+>  #include <net/xdp_sock_drv.h>
+> =20
+>  static u8 mlx5e_mpwrq_min_page_shift(struct mlx5_core_dev *mdev)
+> diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en/xdp.c b/drivers/n=
+et/ethernet/mellanox/mlx5/core/en/xdp.c
+> index f0e6095809fa..1bd91bc09eb8 100644
+> --- a/drivers/net/ethernet/mellanox/mlx5/core/en/xdp.c
+> +++ b/drivers/net/ethernet/mellanox/mlx5/core/en/xdp.c
+> @@ -35,6 +35,7 @@
+>  #include "en/xdp.h"
+>  #include "en/params.h"
+>  #include <linux/bitfield.h>
+> +#include <net/page_pool.h>
+> =20
+>  int mlx5e_xdp_max_mtu(struct mlx5e_params *params, struct mlx5e_xsk_para=
+m *xsk)
+>  {
+> diff --git a/drivers/net/wireless/mediatek/mt76/mt76.h b/drivers/net/wire=
+less/mediatek/mt76/mt76.h
+> index 6b07b8fafec2..95c16f11d156 100644
+> --- a/drivers/net/wireless/mediatek/mt76/mt76.h
+> +++ b/drivers/net/wireless/mediatek/mt76/mt76.h
+> @@ -15,6 +15,7 @@
+>  #include <linux/average.h>
+>  #include <linux/soc/mediatek/mtk_wed.h>
+>  #include <net/mac80211.h>
+> +#include <net/page_pool.h>
+>  #include "util.h"
+>  #include "testmode.h"
+> =20
+> diff --git a/include/linux/skbuff.h b/include/linux/skbuff.h
+> index 91ed66952580..f76d172ed262 100644
+> --- a/include/linux/skbuff.h
+> +++ b/include/linux/skbuff.h
+> @@ -32,7 +32,6 @@
+>  #include <linux/if_packet.h>
+>  #include <linux/llist.h>
+>  #include <net/flow.h>
+> -#include <net/page_pool.h>
+>  #if IS_ENABLED(CONFIG_NF_CONNTRACK)
+>  #include <linux/netfilter/nf_conntrack_common.h>
+>  #endif
+> @@ -3423,6 +3422,8 @@ static inline void skb_frag_ref(struct sk_buff *skb=
+, int f)
+>  	__skb_frag_ref(&skb_shinfo(skb)->frags[f]);
+>  }
+> =20
+> +bool page_pool_return_skb_page(struct page *page, bool napi_safe);
+> +
+>  static inline void
+>  napi_frag_unref(skb_frag_t *frag, bool recycle, bool napi_safe)
+>  {
+> diff --git a/include/net/page_pool.h b/include/net/page_pool.h
+> index 2b7db9992fc0..829dc1f8ba6b 100644
+> --- a/include/net/page_pool.h
+> +++ b/include/net/page_pool.h
+> @@ -307,8 +307,6 @@ inline enum dma_data_direction page_pool_get_dma_dir(=
+struct page_pool *pool)
+>  	return pool->p.dma_dir;
+>  }
+> =20
+> -bool page_pool_return_skb_page(struct page *page, bool napi_safe);
+> -
+>  struct page_pool *page_pool_create(const struct page_pool_params *params=
+);
+> =20
+>  struct xdp_mem_info;
+> diff --git a/net/core/page_pool.c b/net/core/page_pool.c
+> index 985ccaffc06a..dff0b4fa2316 100644
+> --- a/net/core/page_pool.c
+> +++ b/net/core/page_pool.c
+> @@ -582,6 +582,19 @@ static __always_inline struct page *
+>  __page_pool_put_page(struct page_pool *pool, struct page *page,
+>  		     unsigned int dma_sync_size, bool allow_direct)
+>  {
+> +	/* Avoid recycling non-PP pages, give them back to the page allocator.
+> +	 * page->pp_magic is OR'ed with PP_SIGNATURE after the allocation
+> +	 * in order to preserve any existing bits, such as bit 0 for the
+> +	 * head page of compound page and bit 1 for pfmemalloc page, so
+> +	 * mask those bits for freeing side when doing below checking,
+> +	 * and page_is_pfmemalloc() is checked in __page_pool_put_page()
+> +	 * to avoid recycling the pfmemalloc page.
+> +	 */
+> +	if (unlikely((page->pp_magic & ~0x3UL) !=3D PP_SIGNATURE)) {
+> +		put_page(page);
+> +		return NULL;
+> +	}
+> +
+
+Rather than moving this block of code down into here. You may just want
+to look at creating an inline function that would act as a accessor for
+retrieving the page pool for pages with the signature, and for those
+without just returning NULL.
+
+>  	/* This allocator is optimized for the XDP mode that uses
+>  	 * one-frame-per-page, but have fallbacks that act like the
+>  	 * regular page allocator APIs.
+> @@ -913,42 +926,3 @@ void page_pool_update_nid(struct page_pool *pool, in=
+t new_nid)
+>  	}
+>  }
+>  EXPORT_SYMBOL(page_pool_update_nid);
+> -
+> -bool page_pool_return_skb_page(struct page *page, bool napi_safe)
+> -{
+> -	struct napi_struct *napi;
+> -	struct page_pool *pp;
+> -	bool allow_direct;
+> -
+> -	page =3D compound_head(page);
+> -
+> -	/* page->pp_magic is OR'ed with PP_SIGNATURE after the allocation
+> -	 * in order to preserve any existing bits, such as bit 0 for the
+> -	 * head page of compound page and bit 1 for pfmemalloc page, so
+> -	 * mask those bits for freeing side when doing below checking,
+> -	 * and page_is_pfmemalloc() is checked in __page_pool_put_page()
+> -	 * to avoid recycling the pfmemalloc page.
+> -	 */
+> -	if (unlikely((page->pp_magic & ~0x3UL) !=3D PP_SIGNATURE))
+> -		return false;
+> -
+> -	pp =3D page->pp;
+> -
+> -	/* Allow direct recycle if we have reasons to believe that we are
+> -	 * in the same context as the consumer would run, so there's
+> -	 * no possible race.
+> -	 */
+> -	napi =3D READ_ONCE(pp->p.napi);
+> -	allow_direct =3D napi_safe && napi &&
+> -		READ_ONCE(napi->list_owner) =3D=3D smp_processor_id();
+> -
+> -	/* Driver set this to memory recycling info. Reset it on recycle.
+> -	 * This will *not* work for NIC using a split-page memory model.
+> -	 * The page will be returned to the pool here regardless of the
+> -	 * 'flipped' fragment being in use or not.
+> -	 */
+> -	page_pool_put_full_page(pp, page, allow_direct);
+> -
+> -	return true;
+> -}
+> -EXPORT_SYMBOL(page_pool_return_skb_page);
+> diff --git a/net/core/skbuff.c b/net/core/skbuff.c
+> index 7edabf17988a..4b7d00d5b5d7 100644
+> --- a/net/core/skbuff.c
+> +++ b/net/core/skbuff.c
+> @@ -879,6 +879,34 @@ static void skb_clone_fraglist(struct sk_buff *skb)
+>  		skb_get(list);
+>  }
+> =20
+> +bool page_pool_return_skb_page(struct page *page, bool napi_safe)
+> +{
+> +	struct napi_struct *napi;
+> +	struct page_pool *pp;
+> +	bool allow_direct;
+> +
+> +	page =3D compound_head(page);
+> +	pp =3D page->pp;
+
+So this is just assuming that any page we pass thru is a page pool
+page. The problem is there may be some other pointer stored here that
+could cause issues.
+
+I would suggest creating an accessor as mentioned above to verify it is
+a page pool page before you access page->pp.
+
+> +
+> +	/* Allow direct recycle if we have reasons to believe that we are
+> +	 * in the same context as the consumer would run, so there's
+> +	 * no possible race.
+> +	 */
+> +	napi =3D READ_ONCE(pp->p.napi);
+> +	allow_direct =3D napi_safe && napi &&
+> +		READ_ONCE(napi->list_owner) =3D=3D smp_processor_id();
+> +
+> +	/* Driver set this to memory recycling info. Reset it on recycle.
+> +	 * This will *not* work for NIC using a split-page memory model.
+> +	 * The page will be returned to the pool here regardless of the
+> +	 * 'flipped' fragment being in use or not.
+> +	 */
+> +	page_pool_put_full_page(pp, page, allow_direct);
+> +
+> +	return true;
+> +}
+> +EXPORT_SYMBOL(page_pool_return_skb_page);
+> +
+>  static bool skb_pp_recycle(struct sk_buff *skb, void *data, bool napi_sa=
+fe)
+>  {
+>  	if (!IS_ENABLED(CONFIG_PAGE_POOL) || !skb->pp_recycle)
+
