@@ -2,148 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05A03742434
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 12:49:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EB96742448
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 12:50:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231778AbjF2KtJ convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 29 Jun 2023 06:49:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58118 "EHLO
+        id S231974AbjF2KuV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 06:50:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231204AbjF2Ksw (ORCPT
+        with ESMTP id S231315AbjF2KuP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 06:48:52 -0400
-Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40011E6C;
-        Thu, 29 Jun 2023 03:48:51 -0700 (PDT)
-Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-98de322d11fso15068166b.1;
-        Thu, 29 Jun 2023 03:48:51 -0700 (PDT)
+        Thu, 29 Jun 2023 06:50:15 -0400
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C78AE1BE8
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 03:50:13 -0700 (PDT)
+Received: by mail-lf1-x130.google.com with SMTP id 2adb3069b0e04-4fb7acaa7a5so799137e87.1
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 03:50:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1688035812; x=1690627812;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=AlWKrukg5MkoBr6pmLqgyqkqs3HWwrV9mYN/fyCAiOY=;
+        b=WBlfWCh+qhrVWdYpLZ45TxWD+z+z59deD4crcXaYxzldSoovleEsfQTWo8vQ+fEygu
+         MknhUiiWRRkpolb/Yzvak/bdgHVGSmM0dLxUIA2eOCuaESZqD5gNPn2ZvQSM2AqHCiU1
+         Skv5s73xK4dr6rLkqrmN/8w+WBBn4Ysp5Qks3qGcBN91lBrOEguZRKWyaI8BaZigtVqU
+         HssxCXJRtl+KcFwdptvdA+hw6O2mhRpQuHTgd2ns1JpN54rm+n7Rbl/IUMfqls/YdAht
+         0XOzm0qMxB3367Uzv2CJnsMthpbxHJ8/NM+m+GZic3sFYgsgJx49jR6H5RlZMSpHsGpa
+         Zssw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688035730; x=1690627730;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=w8zOdiEV6AM9voeBO+/JtBD2h7O8pc56trtKT86vorg=;
-        b=LZBm3E5yEgUbY/SHvULv0xs5twqiFYk7xBTBdPRWz5fgB/dNZxEhwRy7IzEgyFLO6L
-         Eshd6pdxz5Y15I2PCzrPThTJUqtJmDqIXaFO1wVE60HnRw4tpr89pmCF8mQnFUkg6vyz
-         aGPNkBKQkMlKpFoEH24pqpQ/jkDmLS0L6TYo0HnZA8pQvswbLnoHYF6U7AYyLqXO3y1P
-         Y8P/SpYVRpg7jxTxg15DsH3O1ZT0Lw3t+2O3KPtvhnYC4+s91t37AjjPi/VCDQvw4zZr
-         DsrcdyG7Sgj6lDAtK1F49FiAO+k4X5VeXwhsCv+u+1I8HSKRc4jn1E5arJrv6QV3BV7E
-         hRGw==
-X-Gm-Message-State: AC+VfDwFe2lTSqRF0Yr0wpJKqJJMWggtGAe2c9poHc3QfsyoNR4dAHkH
-        vtI9soG0d0Q0alfeQJBuX8+t2CnOvSBNbVBw8ng=
-X-Google-Smtp-Source: ACHHUZ4VO+Eftv5Do3pkmbGF2NR+7KFwPE4oGz9V9boImW03fmvNEUzFwmhnW7touMA42vqT1KCmYearmdPLBGMG1Js=
-X-Received: by 2002:a17:906:74da:b0:976:50a4:ac40 with SMTP id
- z26-20020a17090674da00b0097650a4ac40mr30824496ejl.0.1688035729518; Thu, 29
- Jun 2023 03:48:49 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1688035812; x=1690627812;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=AlWKrukg5MkoBr6pmLqgyqkqs3HWwrV9mYN/fyCAiOY=;
+        b=l0GySQrEI9O13IYqyKhEn6r5ItSYCS5/52Xz0bQeArHsgI7IOt6LQKP9s/gXis4/b+
+         WuXAK9D9YPaJxmfqczOPDmoggnqbxCu2YorwGZCwVJDvRdyWExvo83YfFtopsCxAARvk
+         +rQW+XMjSUYVcPPKQjoSMFun/hCEaQEySbqg8ADItqAPPR99Tj7Km6EFFfV78wHZu8kW
+         coXnezHSl67lSMmC5TGWaOZ5JMAvWQ7g2KBcxH1865AJTSNtrGbZ42osTmAdMpeIF7zm
+         1ECk08MaCIrjmlmPt5n44cX2hCletugFMVWziQXj5mKq5W24Gn/QuAYYwxKu59pfyU+T
+         qL4g==
+X-Gm-Message-State: AC+VfDyIjrBciBy8sEBc2MJ5CXiccSaIBJO5OthHYw6nbrdNSP0FU6hi
+        hreoPRbgOMuXPpBhwzWmrEoQ9w==
+X-Google-Smtp-Source: ACHHUZ4MUaOhGLj+rMVCwGhuYzQmktcGM6s56V38iEDGRih5bps9QVtmpsk9PuqcaKJZSP1bMwcr+Q==
+X-Received: by 2002:a19:5f44:0:b0:4f6:2317:f387 with SMTP id a4-20020a195f44000000b004f62317f387mr20026659lfj.35.1688035812045;
+        Thu, 29 Jun 2023 03:50:12 -0700 (PDT)
+Received: from ?IPV6:2001:14ba:a0db:1f00::8a5? (dzdqv0yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a0db:1f00::8a5])
+        by smtp.gmail.com with ESMTPSA id b12-20020a056512024c00b004f87571a5c8sm2264826lfo.48.2023.06.29.03.50.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 29 Jun 2023 03:50:11 -0700 (PDT)
+Message-ID: <bf82cadd-025d-58b9-15b0-5fd4d7a5603e@linaro.org>
+Date:   Thu, 29 Jun 2023 13:50:10 +0300
 MIME-Version: 1.0
-References: <20230613161034.3496047-1-michal.wilczynski@intel.com> <20230613161034.3496047-3-michal.wilczynski@intel.com>
-In-Reply-To: <20230613161034.3496047-3-michal.wilczynski@intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 29 Jun 2023 12:48:38 +0200
-Message-ID: <CAJZ5v0gfvkhw1+QJkvaURn609oNYc_2c=CKk+fEvfjZvu4zN=A@mail.gmail.com>
-Subject: Re: [PATCH v3 2/5] acpi: Refactor arch_acpi_set_pdc_bits()
-To:     Michal Wilczynski <michal.wilczynski@intel.com>, x86@kernel.org
-Cc:     linux-acpi@vger.kernel.org, rafael@kernel.org,
-        andriy.shevchenko@intel.com, artem.bityutskiy@linux.intel.com,
-        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        hpa@zytor.com, lenb@kernel.org, jgross@suse.com,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v2 01/15] drm/msm/dsi: Drop unused regulators from QCM2290
+ 14nm DSI PHY config
+Content-Language: en-GB
+To:     Marijn Suijten <marijn.suijten@somainline.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Krishna Manikandan <quic_mkrishn@quicinc.com>,
+        Loic Poulain <loic.poulain@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>
+Cc:     ~postmarketos/upstreaming@lists.sr.ht,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        Jami Kettunen <jami.kettunen@somainline.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        linux-clk@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, Lux Aliaga <they@mint.lgbt>
+References: <20230627-sm6125-dpu-v2-0-03e430a2078c@somainline.org>
+ <20230627-sm6125-dpu-v2-1-03e430a2078c@somainline.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <20230627-sm6125-dpu-v2-1-03e430a2078c@somainline.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 13, 2023 at 6:12 PM Michal Wilczynski
-<michal.wilczynski@intel.com> wrote:
->
-> Capabilities buffer modified by the arch_acpi_set_pdc_bits() is not
-> _PDC specific, as it is used by _OSC method as well. Change function
-> name to better reflect it's independence from PDC. Change function
-> expected argument to pass capability buffer directly without any
-> offset, as the offset differ among _OSC and _PDC methods.
->
-> Suggested-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> Signed-off-by: Michal Wilczynski <michal.wilczynski@intel.com>
-> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-
-Any objections to this from the x86 arch side?  if not, I will route
-it via ACPI along with the rest of the series.
-
+On 27/06/2023 23:14, Marijn Suijten wrote:
+> The regulator setup was likely copied from other SoCs by mistake.  Just
+> like SM6125 the DSI PHY on this platform is not getting power from a
+> regulator but from the MX power domain.
+> 
+> Fixes: 572e9fd6d14a ("drm/msm/dsi: Add phy configuration for QCM2290")
+> Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
 > ---
->  arch/ia64/include/asm/acpi.h |  4 ++--
->  arch/x86/include/asm/acpi.h  | 10 +++++-----
->  drivers/acpi/processor_pdc.c |  2 +-
->  3 files changed, 8 insertions(+), 8 deletions(-)
->
-> diff --git a/arch/ia64/include/asm/acpi.h b/arch/ia64/include/asm/acpi.h
-> index 87927eb824cc..43797cb44383 100644
-> --- a/arch/ia64/include/asm/acpi.h
-> +++ b/arch/ia64/include/asm/acpi.h
-> @@ -69,9 +69,9 @@ extern int __initdata nid_to_pxm_map[MAX_NUMNODES];
->  #endif
->
->  static inline bool arch_has_acpi_pdc(void) { return true; }
-> -static inline void arch_acpi_set_pdc_bits(u32 *buf)
-> +static inline void arch_acpi_set_proc_cap_bits(u32 *cap)
->  {
-> -       buf[2] |= ACPI_PDC_EST_CAPABILITY_SMP;
-> +       *cap |= ACPI_PDC_EST_CAPABILITY_SMP;
->  }
->
->  #ifdef CONFIG_ACPI_NUMA
-> diff --git a/arch/x86/include/asm/acpi.h b/arch/x86/include/asm/acpi.h
-> index 8eb74cf386db..6a498d1781e7 100644
-> --- a/arch/x86/include/asm/acpi.h
-> +++ b/arch/x86/include/asm/acpi.h
-> @@ -100,23 +100,23 @@ static inline bool arch_has_acpi_pdc(void)
->                 c->x86_vendor == X86_VENDOR_CENTAUR);
->  }
->
-> -static inline void arch_acpi_set_pdc_bits(u32 *buf)
-> +static inline void arch_acpi_set_proc_cap_bits(u32 *cap)
->  {
->         struct cpuinfo_x86 *c = &cpu_data(0);
->
-> -       buf[2] |= ACPI_PDC_C_CAPABILITY_SMP;
-> +       *cap |= ACPI_PDC_C_CAPABILITY_SMP;
->
->         if (cpu_has(c, X86_FEATURE_EST))
-> -               buf[2] |= ACPI_PDC_EST_CAPABILITY_SWSMP;
-> +               *cap |= ACPI_PDC_EST_CAPABILITY_SWSMP;
->
->         if (cpu_has(c, X86_FEATURE_ACPI))
-> -               buf[2] |= ACPI_PDC_T_FFH;
-> +               *cap |= ACPI_PDC_T_FFH;
->
->         /*
->          * If mwait/monitor is unsupported, C2/C3_FFH will be disabled
->          */
->         if (!cpu_has(c, X86_FEATURE_MWAIT))
-> -               buf[2] &= ~(ACPI_PDC_C_C2C3_FFH);
-> +               *cap &= ~(ACPI_PDC_C_C2C3_FFH);
->  }
->
->  static inline bool acpi_has_cpu_in_madt(void)
-> diff --git a/drivers/acpi/processor_pdc.c b/drivers/acpi/processor_pdc.c
-> index 5596862e6fea..ce3acd86dd12 100644
-> --- a/drivers/acpi/processor_pdc.c
-> +++ b/drivers/acpi/processor_pdc.c
-> @@ -24,7 +24,7 @@ static void acpi_set_pdc_bits(u32 *buf)
->         buf[2] = ACPI_PDC_SMP_T_SWCOORD;
->
->         /* Twiddle arch-specific bits needed for _PDC */
-> -       arch_acpi_set_pdc_bits(buf);
-> +       arch_acpi_set_proc_cap_bits(&buf[2]);
->  }
->
->  static struct acpi_object_list *acpi_processor_alloc_pdc(void)
-> --
-> 2.41.0
->
+>   drivers/gpu/drm/msm/dsi/phy/dsi_phy_14nm.c | 2 --
+>   1 file changed, 2 deletions(-)
+
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+
+-- 
+With best wishes
+Dmitry
+
