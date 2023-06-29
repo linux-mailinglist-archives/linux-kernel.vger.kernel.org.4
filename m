@@ -2,123 +2,479 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09B7174281E
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 16:17:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23CB5742A35
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 18:04:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232395AbjF2ORG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 10:17:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55886 "EHLO
+        id S231843AbjF2QEC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 12:04:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232388AbjF2OQT (ORCPT
+        with ESMTP id S231537AbjF2QEA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 10:16:19 -0400
-Received: from forward501a.mail.yandex.net (forward501a.mail.yandex.net [IPv6:2a02:6b8:c0e:500:1:45:d181:d501])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E6483A98
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 07:16:16 -0700 (PDT)
-Received: from mail-nwsmtp-smtp-production-main-55.vla.yp-c.yandex.net (mail-nwsmtp-smtp-production-main-55.vla.yp-c.yandex.net [IPv6:2a02:6b8:c2a:210:0:640:45a:0])
-        by forward501a.mail.yandex.net (Yandex) with ESMTP id 5FF965E928;
-        Thu, 29 Jun 2023 17:16:13 +0300 (MSK)
-Received: by mail-nwsmtp-smtp-production-main-55.vla.yp-c.yandex.net (smtp/Yandex) with ESMTPSA id CGOPvJ4DXuQ0-V5jV4mQQ;
-        Thu, 29 Jun 2023 17:16:12 +0300
-X-Yandex-Fwd: 1
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=maquefel.me; s=mail; t=1688048173;
-        bh=ZFsWfVhNr0HGJy7+gq20H4yScbZMVlH24Hc8HOxfmJk=;
-        h=References:Date:In-Reply-To:Cc:To:From:Subject:Message-ID;
-        b=rmXZRomhtPvf0eem/8wie+zJ9IYhu16QjcUGZtii0Gz8IeoMWUFpEyPE2c/2/XGIU
-         t1XNby6YrwsR4Ou3kE05Q/79zdyBQ0AJk76CgccE/f4/XAF/7vnbIpaaXBc/bTXrIH
-         pG9ltuExcokvxTRsO0g/m7ORB4FZUP19OlGwBmAs=
-Authentication-Results: mail-nwsmtp-smtp-production-main-55.vla.yp-c.yandex.net; dkim=pass header.i=@maquefel.me
-Message-ID: <9a41dd21fdfe3f8b8f6788a1c3822b096162f61b.camel@maquefel.me>
-Subject: Re: [PATCH v1 09/43] clocksource: ep93xx: Add driver for Cirrus
- Logic EP93xx
-From:   Nikita Shubin <nikita.shubin@maquefel.me>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Alexander Sverdlin <alexander.sverdlin@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Michael Peters <mpeters@embeddedts.com>,
-        Kris Bahnsen <kris@embeddedts.com>,
-        linux-kernel@vger.kernel.org
-Date:   Thu, 29 Jun 2023 20:16:13 +0300
-In-Reply-To: <CAHp75VfxvBXkQJiMYzLByqM_s_eVK4+YSoB-0LALrhZKi0g8wQ@mail.gmail.com>
-References: <20230424123522.18302-1-nikita.shubin@maquefel.me>
-         <20230601053546.9574-10-nikita.shubin@maquefel.me>
-         <ZHudRkB1YcMD_DaQ@surfacebook>
-         <35bc18b2e685e8596b1fdc1a2e6212dc98725cd4.camel@maquefel.me>
-         <CAHp75VdygQvzeWUHcQBteKZmvC6nBDeQv1c2ZJ-SBCHcjn4h+A@mail.gmail.com>
-         <d5a5c0bcfecb96ea740337785623ed78a1591622.camel@maquefel.me>
-         <CAHp75VfxvBXkQJiMYzLByqM_s_eVK4+YSoB-0LALrhZKi0g8wQ@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.3 
+        Thu, 29 Jun 2023 12:04:00 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDF2C9E;
+        Thu, 29 Jun 2023 09:03:58 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6E08C6156B;
+        Thu, 29 Jun 2023 16:03:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE70BC433C0;
+        Thu, 29 Jun 2023 16:03:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688054637;
+        bh=qjOh8PcGvb2JP9QrZz6XnfZ+0K4P/pZ94BB3qlnKJPQ=;
+        h=From:To:Cc:Subject:Date:From;
+        b=EvYW5aYtfb8B+9Sn9it2ad+6bmQv8vbY0KJygXI0LRQY18hVTxm+7JTQNWR2roe2k
+         oDsZPEH8+nVL7kaDzfwprow6aAZvGvKq2thOglmYvDBjI8uow7HyZ6fNiQK/2PvSHi
+         AZRsilpZshWq5sN2jD5nang8sxgcJYYQRyv90MJ+fqnvm8+sjh0IL71jVqK0hLY6qX
+         fWnTjUopL6EzAYtZq+OytO8wA5bNVAu4r2gwzo5BZ1ecLqzneoRzLkK6Zpdh0+py61
+         I7P+r5ZK2EIAQsKD87UfHd8ixyyLXF0Z/QBaQbVC6TyPGeuq8AqCxZDlPFoQypes7x
+         ckvmkGsERYXBA==
+From:   Masahiro Yamada <masahiroy@kernel.org>
+To:     linux-kbuild@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Jesse Taube <Mr.Bossman075@gmail.com>,
+        Masahiro Yamada <masahiroy@kernel.org>
+Subject: [PATCH 1/2] kconfig: menuconfig: simplify global jump key assignment
+Date:   Fri, 30 Jun 2023 01:03:50 +0900
+Message-Id: <20230629160351.2996541-1-masahiroy@kernel.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2023-06-29 at 16:39 +0300, Andy Shevchenko wrote:
-> On Thu, Jun 29, 2023 at 4:10=E2=80=AFPM Nikita Shubin
-> <nikita.shubin@maquefel.me> wrote:
-> > On Wed, 2023-06-21 at 11:28 +0300, Andy Shevchenko wrote:
-> > > On Wed, Jun 21, 2023 at 11:22=E2=80=AFAM Nikita Shubin
-> > > <nikita.shubin@maquefel.me> wrote:
->=20
-> ...
->=20
-> > > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 irq =3D irq_of_parse_and_=
-map(np, 0);
-> > > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (irq <=3D 0) {
-> > > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0 pr_err("ERROR: invalid interrupt
-> > > > > > number\n");
-> > > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0 ret =3D -EINVAL;
-> > > > >=20
-> > > > > Shadowed error in case of negative returned code. Why?
-> > > >=20
-> > > > Majority of clocksource drivers shadow it. Same like above.
-> > >=20
-> > > It doesn't mean they are correct or using brand new APIs.
-> >=20
-> > Or may be this because irq_of_parse_and_map can return zero as
-> > error,
-> > and returning zero from timer_init means success ?
-> >=20
-> > Please correct me if i am wrong here.
->=20
-> 0 means no mapped IRQ.
->=20
-> > > Can you use fwnode_irq_get() instead?
-> >=20
-> > Will it help ?
->=20
-> Yes, definitely, in two aspects:
-> 1/ it makes code less OF-dependent (helps also OF people to clean up
-> the spread of OF headers and APIs where they are not needed);
-> 2/ it takes care about proper error codes.
->=20
+Commit 95ac9b3b585d ("menuconfig: Assign jump keys per-page instead
+of globally") injects a lot of hacks to the bottom of the textbox
+infrastructure.
 
-Well... every use of fwnode_irq_get in 6.4 looks like:
+I reverted many of them without changing the behavior. (almost)
+Now, the key markers are inserted when constructing the search result
+instead of updating the text buffer on-the-fly.
 
-	err =3D fwnode_irq_get(fwnode, 0);
-	if (err < 0)
-		return err;
-	if (!err)
-		return -EINVAL;
+The buffer passed to the textbox got back to a constant string.
+The ugly casts from (const char *) to (char *) went away.
 
-So i don't see any special care as it still calls of_irq_get just like
-irq_of_parse_and_map.
+A disadvantage is that the same key numbers might be diplayed multiple
+times in the dialog if you use a huge window (but I believe it is
+unlikely to happen).
 
-But i am convinced to use the same approach, thank you!
+Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+---
 
+ scripts/kconfig/lkc.h              |  1 +
+ scripts/kconfig/lxdialog/dialog.h  | 10 ++--
+ scripts/kconfig/lxdialog/textbox.c | 68 +++++++++--------------
+ scripts/kconfig/mconf.c            | 86 +++++++++++++++++-------------
+ scripts/kconfig/menu.c             | 22 ++++++--
+ 5 files changed, 97 insertions(+), 90 deletions(-)
 
-
+diff --git a/scripts/kconfig/lkc.h b/scripts/kconfig/lkc.h
+index e7118d62a45f..d5c27180ce91 100644
+--- a/scripts/kconfig/lkc.h
++++ b/scripts/kconfig/lkc.h
+@@ -101,6 +101,7 @@ const char *menu_get_prompt(struct menu *menu);
+ struct menu *menu_get_parent_menu(struct menu *menu);
+ bool menu_has_help(struct menu *menu);
+ const char *menu_get_help(struct menu *menu);
++int get_jump_key(void);
+ struct gstr get_relations_str(struct symbol **sym_arr, struct list_head *head);
+ void menu_get_ext_help(struct menu *menu, struct gstr *help);
+ 
+diff --git a/scripts/kconfig/lxdialog/dialog.h b/scripts/kconfig/lxdialog/dialog.h
+index 347daf25fdc8..cd1b59c24b21 100644
+--- a/scripts/kconfig/lxdialog/dialog.h
++++ b/scripts/kconfig/lxdialog/dialog.h
+@@ -196,13 +196,9 @@ int first_alpha(const char *string, const char *exempt);
+ int dialog_yesno(const char *title, const char *prompt, int height, int width);
+ int dialog_msgbox(const char *title, const char *prompt, int height,
+ 		  int width, int pause);
+-
+-
+-typedef void (*update_text_fn)(char *buf, size_t start, size_t end, void
+-			       *_data);
+-int dialog_textbox(const char *title, char *tbuf, int initial_height,
+-		   int initial_width, int *keys, int *_vscroll, int *_hscroll,
+-		   update_text_fn update_text, void *data);
++int dialog_textbox(const char *title, const char *tbuf, int initial_height,
++		   int initial_width, int *_vscroll, int *_hscroll,
++		   int (*extra_key_cb)(int, int, int, void *), void *data);
+ int dialog_menu(const char *title, const char *prompt,
+ 		const void *selected, int *s_scroll);
+ int dialog_checklist(const char *title, const char *prompt, int height,
+diff --git a/scripts/kconfig/lxdialog/textbox.c b/scripts/kconfig/lxdialog/textbox.c
+index bc4d4fb1dc75..e6cd7bb83746 100644
+--- a/scripts/kconfig/lxdialog/textbox.c
++++ b/scripts/kconfig/lxdialog/textbox.c
+@@ -10,8 +10,8 @@
+ 
+ static int hscroll;
+ static int begin_reached, end_reached, page_length;
+-static char *buf;
+-static char *page;
++static const char *buf, *page;
++static int start, end;
+ 
+ /*
+  * Go back 'n' lines in text. Called by dialog_textbox().
+@@ -98,21 +98,10 @@ static void print_line(WINDOW *win, int row, int width)
+ /*
+  * Print a new page of text.
+  */
+-static void print_page(WINDOW *win, int height, int width, update_text_fn
+-		       update_text, void *data)
++static void print_page(WINDOW *win, int height, int width)
+ {
+ 	int i, passed_end = 0;
+ 
+-	if (update_text) {
+-		char *end;
+-
+-		for (i = 0; i < height; i++)
+-			get_line();
+-		end = page;
+-		back_lines(height);
+-		update_text(buf, page - buf, end - buf, data);
+-	}
+-
+ 	page_length = 0;
+ 	for (i = 0; i < height; i++) {
+ 		print_line(win, i, width);
+@@ -142,24 +131,26 @@ static void print_position(WINDOW *win)
+  * refresh window content
+  */
+ static void refresh_text_box(WINDOW *dialog, WINDOW *box, int boxh, int boxw,
+-			     int cur_y, int cur_x, update_text_fn update_text,
+-			     void *data)
++			     int cur_y, int cur_x)
+ {
+-	print_page(box, boxh, boxw, update_text, data);
++	start = page - buf;
++
++	print_page(box, boxh, boxw);
+ 	print_position(dialog);
+ 	wmove(dialog, cur_y, cur_x);	/* Restore cursor position */
+ 	wrefresh(dialog);
++
++	end = page - buf;
+ }
+ 
+ /*
+  * Display text from a file in a dialog box.
+  *
+  * keys is a null-terminated array
+- * update_text() may not add or remove any '\n' or '\0' in tbuf
+  */
+-int dialog_textbox(const char *title, char *tbuf, int initial_height,
+-		   int initial_width, int *keys, int *_vscroll, int *_hscroll,
+-		   update_text_fn update_text, void *data)
++int dialog_textbox(const char *title, const char *tbuf, int initial_height,
++		   int initial_width, int *_vscroll, int *_hscroll,
++		   int (*extra_key_cb)(int, int, int, void *), void *data)
+ {
+ 	int i, x, y, cur_x, cur_y, key = 0;
+ 	int height, width, boxh, boxw;
+@@ -239,8 +230,7 @@ int dialog_textbox(const char *title, char *tbuf, int initial_height,
+ 
+ 	/* Print first page of text */
+ 	attr_clear(box, boxh, boxw, dlg.dialog.atr);
+-	refresh_text_box(dialog, box, boxh, boxw, cur_y, cur_x, update_text,
+-			 data);
++	refresh_text_box(dialog, box, boxh, boxw, cur_y, cur_x);
+ 
+ 	while (!done) {
+ 		key = wgetch(dialog);
+@@ -259,8 +249,7 @@ int dialog_textbox(const char *title, char *tbuf, int initial_height,
+ 				begin_reached = 1;
+ 				page = buf;
+ 				refresh_text_box(dialog, box, boxh, boxw,
+-						 cur_y, cur_x, update_text,
+-						 data);
++						 cur_y, cur_x);
+ 			}
+ 			break;
+ 		case 'G':	/* Last page */
+@@ -270,8 +259,7 @@ int dialog_textbox(const char *title, char *tbuf, int initial_height,
+ 			/* point to last char in buf */
+ 			page = buf + strlen(buf);
+ 			back_lines(boxh);
+-			refresh_text_box(dialog, box, boxh, boxw, cur_y,
+-					 cur_x, update_text, data);
++			refresh_text_box(dialog, box, boxh, boxw, cur_y, cur_x);
+ 			break;
+ 		case 'K':	/* Previous line */
+ 		case 'k':
+@@ -280,8 +268,7 @@ int dialog_textbox(const char *title, char *tbuf, int initial_height,
+ 				break;
+ 
+ 			back_lines(page_length + 1);
+-			refresh_text_box(dialog, box, boxh, boxw, cur_y,
+-					 cur_x, update_text, data);
++			refresh_text_box(dialog, box, boxh, boxw, cur_y, cur_x);
+ 			break;
+ 		case 'B':	/* Previous page */
+ 		case 'b':
+@@ -290,8 +277,7 @@ int dialog_textbox(const char *title, char *tbuf, int initial_height,
+ 			if (begin_reached)
+ 				break;
+ 			back_lines(page_length + boxh);
+-			refresh_text_box(dialog, box, boxh, boxw, cur_y,
+-					 cur_x, update_text, data);
++			refresh_text_box(dialog, box, boxh, boxw, cur_y, cur_x);
+ 			break;
+ 		case 'J':	/* Next line */
+ 		case 'j':
+@@ -300,8 +286,7 @@ int dialog_textbox(const char *title, char *tbuf, int initial_height,
+ 				break;
+ 
+ 			back_lines(page_length - 1);
+-			refresh_text_box(dialog, box, boxh, boxw, cur_y,
+-					 cur_x, update_text, data);
++			refresh_text_box(dialog, box, boxh, boxw, cur_y, cur_x);
+ 			break;
+ 		case KEY_NPAGE:	/* Next page */
+ 		case ' ':
+@@ -310,8 +295,7 @@ int dialog_textbox(const char *title, char *tbuf, int initial_height,
+ 				break;
+ 
+ 			begin_reached = 0;
+-			refresh_text_box(dialog, box, boxh, boxw, cur_y,
+-					 cur_x, update_text, data);
++			refresh_text_box(dialog, box, boxh, boxw, cur_y, cur_x);
+ 			break;
+ 		case '0':	/* Beginning of line */
+ 		case 'H':	/* Scroll left */
+@@ -326,8 +310,7 @@ int dialog_textbox(const char *title, char *tbuf, int initial_height,
+ 				hscroll--;
+ 			/* Reprint current page to scroll horizontally */
+ 			back_lines(page_length);
+-			refresh_text_box(dialog, box, boxh, boxw, cur_y,
+-					 cur_x, update_text, data);
++			refresh_text_box(dialog, box, boxh, boxw, cur_y, cur_x);
+ 			break;
+ 		case 'L':	/* Scroll right */
+ 		case 'l':
+@@ -337,8 +320,7 @@ int dialog_textbox(const char *title, char *tbuf, int initial_height,
+ 			hscroll++;
+ 			/* Reprint current page to scroll horizontally */
+ 			back_lines(page_length);
+-			refresh_text_box(dialog, box, boxh, boxw, cur_y,
+-					 cur_x, update_text, data);
++			refresh_text_box(dialog, box, boxh, boxw, cur_y, cur_x);
+ 			break;
+ 		case KEY_ESC:
+ 			if (on_key_esc(dialog) == KEY_ESC)
+@@ -351,11 +333,9 @@ int dialog_textbox(const char *title, char *tbuf, int initial_height,
+ 			on_key_resize();
+ 			goto do_resize;
+ 		default:
+-			for (i = 0; keys[i]; i++) {
+-				if (key == keys[i]) {
+-					done = true;
+-					break;
+-				}
++			if (extra_key_cb(key, start, end, data)) {
++				done = true;
++				break;
+ 			}
+ 		}
+ 	}
+diff --git a/scripts/kconfig/mconf.c b/scripts/kconfig/mconf.c
+index 53d8834d12fe..7adfd6537279 100644
+--- a/scripts/kconfig/mconf.c
++++ b/scripts/kconfig/mconf.c
+@@ -288,6 +288,7 @@ static int single_menu_mode;
+ static int show_all_options;
+ static int save_and_exit;
+ static int silent;
++static int jump_key;
+ 
+ static void conf(struct menu *menu, struct menu *active_menu);
+ 
+@@ -348,19 +349,19 @@ static void reset_subtitle(void)
+ 	set_dialog_subtitles(subtitles);
+ }
+ 
+-static int show_textbox_ext(const char *title, char *text, int r, int c, int
+-			    *keys, int *vscroll, int *hscroll, update_text_fn
+-			    update_text, void *data)
++static int show_textbox_ext(const char *title, const char *text, int r, int c,
++			    int *vscroll, int *hscroll,
++			    int (*extra_key_cb)(int, int, int, void *),
++			    void *data)
+ {
+ 	dialog_clear();
+-	return dialog_textbox(title, text, r, c, keys, vscroll, hscroll,
+-			      update_text, data);
++	return dialog_textbox(title, text, r, c, vscroll, hscroll,
++			      extra_key_cb, data);
+ }
+ 
+ static void show_textbox(const char *title, const char *text, int r, int c)
+ {
+-	show_textbox_ext(title, (char *) text, r, c, (int []) {0}, NULL, NULL,
+-			 NULL, NULL);
++	show_textbox_ext(title, text, r, c, NULL, NULL, NULL, NULL);
+ }
+ 
+ static void show_helptext(const char *title, const char *text)
+@@ -381,35 +382,51 @@ static void show_help(struct menu *menu)
+ 
+ struct search_data {
+ 	struct list_head *head;
+-	struct menu **targets;
+-	int *keys;
++	struct menu *target;
+ };
+ 
+-static void update_text(char *buf, size_t start, size_t end, void *_data)
++static int next_key(int key)
++{
++	key++;
++
++	if (key > '9')
++		key = '1';
++
++	return key;
++}
++
++static int handle_search_keys(int key, int start, int end, void *_data)
+ {
+ 	struct search_data *data = _data;
+ 	struct jump_key *pos;
+-	int k = 0;
++
++	if (key < '1' || key > '9')
++		return 0;
+ 
+ 	list_for_each_entry(pos, data->head, entries) {
+-		if (pos->offset >= start && pos->offset < end) {
+-			char header[4];
++		if (pos->offset >= start) {
++			if (pos->offset >= end)
++				break;
+ 
+-			if (k < JUMP_NB) {
+-				int key = '0' + (pos->index % JUMP_NB) + 1;
+-
+-				sprintf(header, "(%c)", key);
+-				data->keys[k] = key;
+-				data->targets[k] = pos->target;
+-				k++;
+-			} else {
+-				sprintf(header, "   ");
++			if (key == '1' + (pos->index % JUMP_NB)) {
++				data->target = pos->target;
++				return 1;
+ 			}
+-
+-			memcpy(buf + pos->offset, header, sizeof(header) - 1);
+ 		}
+ 	}
+-	data->keys[k] = 0;
++
++	return 0;
++}
++
++int get_jump_key(void)
++{
++	int cur_key;
++
++	cur_key = jump_key;
++
++	jump_key = next_key(cur_key);
++
++	return cur_key;
+ }
+ 
+ static void search_conf(void)
+@@ -456,26 +473,23 @@ static void search_conf(void)
+ 	sym_arr = sym_re_search(dialog_input);
+ 	do {
+ 		LIST_HEAD(head);
+-		struct menu *targets[JUMP_NB];
+-		int keys[JUMP_NB + 1], i;
+ 		struct search_data data = {
+ 			.head = &head,
+-			.targets = targets,
+-			.keys = keys,
+ 		};
+ 		struct jump_key *pos, *tmp;
+ 
++		jump_key = '1';
+ 		res = get_relations_str(sym_arr, &head);
+ 		set_subtitle();
+ 		dres = show_textbox_ext("Search Results", str_get(&res), 0, 0,
+-					keys, &vscroll, &hscroll, &update_text,
+-					&data);
++					&vscroll, &hscroll,
++					handle_search_keys, &data);
+ 		again = false;
+-		for (i = 0; i < JUMP_NB && keys[i]; i++)
+-			if (dres == keys[i]) {
+-				conf(targets[i]->parent, targets[i]);
+-				again = true;
+-			}
++		if (dres >= '1' && dres <= '9') {
++			assert(data.target != NULL);
++			conf(data.target->parent, data.target);
++			again = true;
++		}
+ 		str_free(&res);
+ 		list_for_each_entry_safe(pos, tmp, &head, entries)
+ 			free(pos);
+diff --git a/scripts/kconfig/menu.c b/scripts/kconfig/menu.c
+index b90fff833588..5578b8bc8a23 100644
+--- a/scripts/kconfig/menu.c
++++ b/scripts/kconfig/menu.c
+@@ -701,6 +701,11 @@ static void get_dep_str(struct gstr *r, struct expr *expr, const char *prefix)
+ 	}
+ }
+ 
++int __attribute__((weak)) get_jump_key(void)
++{
++	return -1;
++}
++
+ static void get_prompt_str(struct gstr *r, struct property *prop,
+ 			   struct list_head *head)
+ {
+@@ -743,11 +748,22 @@ static void get_prompt_str(struct gstr *r, struct property *prop,
+ 	}
+ 
+ 	str_printf(r, "  Location:\n");
+-	for (j = 4; --i >= 0; j += 2) {
++	for (j = 0; --i >= 0; j++) {
++		int jk = -1;
++		int indent = 2 * j + 4;
++
+ 		menu = submenu[i];
+-		if (jump && menu == location)
++		if (jump && menu == location) {
+ 			jump->offset = strlen(r->s);
+-		str_printf(r, "%*c-> %s", j, ' ', menu_get_prompt(menu));
++			jk = get_jump_key();
++		}
++
++		if (jk >= 0) {
++			str_printf(r, "(%c)", jk);
++			indent -= 3;
++		}
++
++		str_printf(r, "%*c-> %s", indent, ' ', menu_get_prompt(menu));
+ 		if (menu->sym) {
+ 			str_printf(r, " (%s [=%s])", menu->sym->name ?
+ 				menu->sym->name : "<choice>",
+-- 
+2.39.2
 
