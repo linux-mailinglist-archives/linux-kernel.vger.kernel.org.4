@@ -2,199 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35218742DC3
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 21:45:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9512F742DC9
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 21:51:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232174AbjF2TpZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 15:45:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58248 "EHLO
+        id S230476AbjF2Tup (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 15:50:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231140AbjF2TpW (ORCPT
+        with ESMTP id S231282AbjF2Tun (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 15:45:22 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9398D210E;
-        Thu, 29 Jun 2023 12:45:21 -0700 (PDT)
+        Thu, 29 Jun 2023 15:50:43 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9059B212C;
+        Thu, 29 Jun 2023 12:50:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1688067921; x=1719603921;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=geT+oGQMxV2zFLyPGdH8g9ALOVFH/UnqOkB/8QWYnzQ=;
-  b=JIzltdyGH9GudMgpcSz6JZcoQ6Ai9ioww1AFEs8We6g+bvZpn6AIxR1r
-   PaGAgCw1tXFFpJnDeGhNpJJZkmhtEUCJejAPpKzfDtINVdpMho7Ze5Vz7
-   lvE/RjLTsKuB9REgH0WHIWKsEiedVrln5fBRjUU4VSUr+QssHENrug++9
-   wROZk7iY+Omr3Jhxupb3sqV9Ph7rwmMcHgrG+4CnaWdaLC5O6XuBdqNsi
-   +ATqHjAZ1VV3JfdfTg+TihsSy5hvqGUlaZcOoZbPNfWGJ3icQViLxy2Vh
-   KcWXeeSUBFynUrKZehhpEkW413tLX2P0Ks5uOT9lr1Yw0sEE18482mXXX
+  t=1688068241; x=1719604241;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Pu2E/ANiZKrmpINz8MZ20SMOBjaaOcCaQ22Kk3xNhbE=;
+  b=fSndCD84LqHYuAnt9DOQdLyQ/ms3CEetDtokpy+g7vkYkd01P9eIGz+r
+   nS//jrzgudqX3SXP5V6KsB46QTJvHz5WmorgBzoLz9aTjJHeNoncoNLMK
+   zkHXr7+xub0xGwoWIw4Ae0uc161krl+R9hYVJZrc06tu+atrX4zdSGLFR
+   EfEabSVLWZfK3imkrhpFpxANb9vups53QnkWcWi2DI1RiVR8IjZA0o9PE
+   QMzQoLFmUaBNwcmLamwYrXXFwIz6klRdwn5MW5qQDGd8RoXXQNooRU58H
+   8BDU87TIrFjGMv/UTZTS9295vYheSBXglA1v1qvcifLI4sGPW2EFjvdNP
    Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10756"; a="425897624"
+X-IronPort-AV: E=McAfee;i="6600,9927,10756"; a="365701532"
 X-IronPort-AV: E=Sophos;i="6.01,169,1684825200"; 
-   d="scan'208";a="425897624"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jun 2023 12:45:17 -0700
+   d="scan'208";a="365701532"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jun 2023 12:50:40 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10756"; a="694781644"
+X-IronPort-AV: E=McAfee;i="6600,9927,10756"; a="667687546"
 X-IronPort-AV: E=Sophos;i="6.01,169,1684825200"; 
-   d="scan'208";a="694781644"
-Received: from spandruv-desk.jf.intel.com ([10.54.75.8])
-  by orsmga006.jf.intel.com with ESMTP; 29 Jun 2023 12:45:15 -0700
-From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-To:     rafael@kernel.org, lenb@kernel.org, viresh.kumar@linaro.org
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Subject: [PATCH v2] cpufreq: intel_pstate: Fix scaling for hybrid capable system with disabled E-cores
-Date:   Thu, 29 Jun 2023 12:45:09 -0700
-Message-Id: <20230629194509.4094455-1-srinivas.pandruvada@linux.intel.com>
-X-Mailer: git-send-email 2.39.1
+   d="scan'208";a="667687546"
+Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 29 Jun 2023 12:50:39 -0700
+Received: from kbuild by 783282924a45 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1qExf4-000EMX-0Q;
+        Thu, 29 Jun 2023 19:50:38 +0000
+Date:   Fri, 30 Jun 2023 03:49:41 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Bastien Nocera <hadess@hadess.net>, linux-input@vger.kernel.org
+Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Jiri Kosina <jikos@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Subject: Re: [PATCH] HID: steelseries: Add support for Arctis 1 XBox
+Message-ID: <202306300309.WEpmiIaW-lkp@intel.com>
+References: <20230629172041.3771-1-hadess@hadess.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230629172041.3771-1-hadess@hadess.net>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Some system BIOS configuration may provide option to disable E-cores.
-As part of this change, CPUID feature for hybrid (Leaf 7 sub leaf 0,
-EDX[15] = 0) may not be set. But HWP performance limits will still be
-using a scaling factor like any other hybrid enabled system.
+Hi Bastien,
 
-The current check for applying scaling factor will fail when hybrid
-CPUID feature is not set. Only way to make sure that scaling should be
-applied by checking CPPC nominal frequency and nominal performance. If
-CPPC nominal frequency and nominal performance is defined and nominal
-frequency is not in multiples of 100MHz of nominal performance, then use
-hybrid scaling factor.
+kernel test robot noticed the following build errors:
 
-The above check will fail for non hybrid capable systems as they don't
-publish nominal frequency field in CPPC, so this function can be used
-for all HWP systems without additional cpu model check.
+[auto build test ERROR on hid/for-next]
+[also build test ERROR on v6.4 next-20230629]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
----
-v2:
-Compile errors reported by kernel test robot and Rafael for the case
-when CONFIG_ACPI is not defined
+url:    https://github.com/intel-lab-lkp/linux/commits/Bastien-Nocera/HID-steelseries-Add-support-for-Arctis-1-XBox/20230630-012252
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/hid/hid.git for-next
+patch link:    https://lore.kernel.org/r/20230629172041.3771-1-hadess%40hadess.net
+patch subject: [PATCH] HID: steelseries: Add support for Arctis 1 XBox
+config: parisc-randconfig-r015-20230629 (https://download.01.org/0day-ci/archive/20230630/202306300309.WEpmiIaW-lkp@intel.com/config)
+compiler: hppa-linux-gcc (GCC) 12.3.0
+reproduce: (https://download.01.org/0day-ci/archive/20230630/202306300309.WEpmiIaW-lkp@intel.com/reproduce)
 
- drivers/cpufreq/intel_pstate.c | 58 ++++++++++++++++++++++++++++------
- 1 file changed, 48 insertions(+), 10 deletions(-)
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306300309.WEpmiIaW-lkp@intel.com/
 
-diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pstate.c
-index 2548ec92faa2..7e18999be46a 100644
---- a/drivers/cpufreq/intel_pstate.c
-+++ b/drivers/cpufreq/intel_pstate.c
-@@ -302,6 +302,13 @@ static bool hwp_forced __read_mostly;
- 
- static struct cpufreq_driver *intel_pstate_driver __read_mostly;
- 
-+#define HYBRID_SCALING_FACTOR	78741
-+
-+static inline int core_get_scaling(void)
-+{
-+	return 100000;
-+}
-+
- #ifdef CONFIG_ACPI
- static bool acpi_ppc;
- #endif
-@@ -400,6 +407,25 @@ static int intel_pstate_get_cppc_guaranteed(int cpu)
- 
- 	return cppc_perf.nominal_perf;
- }
-+
-+static int intel_pstate_cppc_get_scaling(int cpu)
-+{
-+	struct cppc_perf_caps cppc_perf;
-+	int ret;
-+
-+	ret = cppc_get_perf_caps(cpu, &cppc_perf);
-+
-+	/*
-+	 * Check if nominal frequency is multiples of 100 MHz, if
-+	 * not return hybrid scaling factor.
-+	 */
-+	if (!ret && cppc_perf.nominal_perf && cppc_perf.nominal_freq &&
-+	    (cppc_perf.nominal_perf * 100 != cppc_perf.nominal_freq))
-+		return HYBRID_SCALING_FACTOR;
-+
-+	return core_get_scaling();
-+}
-+
- #else /* CONFIG_ACPI_CPPC_LIB */
- static inline void intel_pstate_set_itmt_prio(int cpu)
- {
-@@ -492,6 +518,11 @@ static inline int intel_pstate_get_cppc_guaranteed(int cpu)
- {
- 	return -ENOTSUPP;
- }
-+
-+static int intel_pstate_cppc_get_scaling(int cpu)
-+{
-+	return core_get_scaling();
-+}
- #endif /* CONFIG_ACPI_CPPC_LIB */
- 
- /**
-@@ -1895,11 +1926,6 @@ static int core_get_turbo_pstate(int cpu)
- 	return ret;
- }
- 
--static inline int core_get_scaling(void)
--{
--	return 100000;
--}
--
- static u64 core_get_val(struct cpudata *cpudata, int pstate)
- {
- 	u64 val;
-@@ -1936,16 +1962,29 @@ static void hybrid_get_type(void *data)
- 	*cpu_type = get_this_hybrid_cpu_type();
- }
- 
--static int hybrid_get_cpu_scaling(int cpu)
-+static int hwp_get_cpu_scaling(int cpu)
- {
- 	u8 cpu_type = 0;
- 
- 	smp_call_function_single(cpu, hybrid_get_type, &cpu_type, 1);
- 	/* P-cores have a smaller perf level-to-freqency scaling factor. */
- 	if (cpu_type == 0x40)
--		return 78741;
-+		return HYBRID_SCALING_FACTOR;
- 
--	return core_get_scaling();
-+	/* Use default core scaling for E-cores */
-+	if (cpu_type == 0x20)
-+		return core_get_scaling();
-+
-+	/*
-+	 * If reached here, it means that, this system is either non
-+	 * hybrid system (like Tiger Lake) or hybrid capable system (like
-+	 * Alder Lake or Raptor Lake) with no E cores (CPUID for hybrid
-+	 * support is 0).
-+	 * All non hybrid systems, don't publish nominal_frequency
-+	 * field (means nominal frequency = 0), In that case
-+	 * the legacy core scaling is used.
-+	 */
-+	return intel_pstate_cppc_get_scaling(cpu);
- }
- 
- static void intel_pstate_set_pstate(struct cpudata *cpu, int pstate)
-@@ -3393,8 +3432,7 @@ static int __init intel_pstate_init(void)
- 			if (!default_driver)
- 				default_driver = &intel_pstate;
- 
--			if (boot_cpu_has(X86_FEATURE_HYBRID_CPU))
--				pstate_funcs.get_cpu_scaling = hybrid_get_cpu_scaling;
-+			pstate_funcs.get_cpu_scaling = hwp_get_cpu_scaling;
- 
- 			goto hwp_cpu_matched;
- 		}
+All errors (new ones prefixed by >>, old ones prefixed by <<):
+
+>> ERROR: modpost: "usb_set_wireless_status" [drivers/hid/hid-steelseries.ko] undefined!
+
 -- 
-2.38.1
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
