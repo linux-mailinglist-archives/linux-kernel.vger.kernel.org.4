@@ -2,284 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F390B741D89
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 03:13:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2795D741D8B
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 03:14:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231494AbjF2BNY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 21:13:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38934 "EHLO
+        id S231154AbjF2BOg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 21:14:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229524AbjF2BNW (ORCPT
+        with ESMTP id S229524AbjF2BOd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 21:13:22 -0400
+        Wed, 28 Jun 2023 21:14:33 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3284C2694
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 18:13:21 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 252E32694;
+        Wed, 28 Jun 2023 18:14:32 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BC8146146C
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 01:13:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5160C433C9;
-        Thu, 29 Jun 2023 01:13:18 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AE2BD612CA;
+        Thu, 29 Jun 2023 01:14:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC502C433C9;
+        Thu, 29 Jun 2023 01:14:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688001200;
-        bh=JuD1T/za6B0EtyTv80Ysg1Z1QaAYqpkLYzEb0Jl5A1U=;
-        h=Date:From:To:Cc:Subject:From;
-        b=KQkLm2LvEW9OI6tdWKNSolfKgA3RQ25dOq7+GAwGqn2OQVBQNgFzoON4kXXGuVRrO
-         LRU5FXNhmO9PSEOrsKNPejmoG4enE0U7Hy7ZlO+pu7V/C4aBRxkR2MNHOoYIYeJIMt
-         Ev7UVxjZau+SCGZ6z9UFj2yHZJOD3MYzz7rRafZ7dHG7iF/dZHSXIm4Yab53s/AivP
-         sAF8F4wqfe0Exoxbm/GpIfRwcHkNxD+3tVBH0QFxRJaRFoKdyFWgrN5WB2/ko2zG+I
-         didSjlDrjSaPWggGUcRRuVeIog7sh1yV47g4J3ZwCaE+sX4vO3BYcRpQU08qyy6Dqw
-         brkGepsfwJRpg==
-Date:   Thu, 29 Jun 2023 10:13:16 +0900
-From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Akanksha J N <akanksha@linux.ibm.com>,
-        Masami Hiramatsu (Google) <mhiramat@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        linux-kernel@vger.kernel.org
-Subject: [GIT PULL v2] probes: Update for v6.5
-Message-Id: <20230629101316.d8eff69f9899f6c895ac64f5@kernel.org>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+        s=k20201202; t=1688001271;
+        bh=OHfV9RkAhi/HBgdNbnfx7GoparhjCrP3HY0+yWmUQgo=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=tEth8uPntBrqzu+8geRiJPwf3br5LIsCMW/mtLPh+X5bqUakudEIGbXWin9DV77Fj
+         JnVZSk8PeVn+M0bpPZEDikBLGOzXJL09uzgPcHkQVZ2ZURW5VF0tGzhCTWOSSGBYd8
+         Y+JS83ULr5af10Hqsyp5Yc1aE8Dj9HDZRPtcHYkWEOguo3pHUZcSZ+QJXQUpqK4yHV
+         3SGe3EkjMDABAdNGIOl3QTYBTZbR8XDMH5sH6uYYU8LljuoqfX1NegxBkkZQPMyNtt
+         j11Q46yPwluXLhpuzluuuP8ZXvG+myMoVjYp/s64jMOtz8BbRN7/61uVUobkVzeHTg
+         3fxr33k+n2AOQ==
+Message-ID: <0f8160eb-f504-5069-5c78-783bce59b214@kernel.org>
+Date:   Thu, 29 Jun 2023 10:14:28 +0900
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH v4 1/4] ublk: change ublk IO command defines to enum
+Content-Language: en-US
+To:     Ming Lei <ming.lei@redhat.com>
+Cc:     Andreas Hindborg <nmi@metaspace.dk>,
+        Hans Holmberg <Hans.Holmberg@wdc.com>,
+        Aravind Ramesh <Aravind.Ramesh@wdc.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        "open list:BLOCK LAYER" <linux-block@vger.kernel.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Matias Bjorling <Matias.Bjorling@wdc.com>,
+        Andreas Hindborg <a.hindborg@samsung.com>,
+        open list <linux-kernel@vger.kernel.org>, gost.dev@samsung.com,
+        Minwoo Im <minwoo.im.dev@gmail.com>
+References: <20230628190649.11233-1-nmi@metaspace.dk>
+ <20230628190649.11233-2-nmi@metaspace.dk>
+ <d23bf48c-5bc9-aab6-4ca2-ebbb24a0878e@kernel.org>
+ <ZJzSjFbzzNxppH7p@ovpn-8-18.pek2.redhat.com>
+From:   Damien Le Moal <dlemoal@kernel.org>
+Organization: Western Digital Research
+In-Reply-To: <ZJzSjFbzzNxppH7p@ovpn-8-18.pek2.redhat.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+On 6/29/23 09:38, Ming Lei wrote:
+> On Thu, Jun 29, 2023 at 07:47:47AM +0900, Damien Le Moal wrote:
+>> On 6/29/23 04:06, Andreas Hindborg wrote:
+>>> From: Andreas Hindborg <a.hindborg@samsung.com>
+>>>
+>>> This change is in preparation for zoned storage support.
+>>>
+>>> Signed-off-by: Andreas Hindborg <a.hindborg@samsung.com>
+>>> ---
+>>>  include/uapi/linux/ublk_cmd.h | 23 +++++++++++++++++------
+>>>  1 file changed, 17 insertions(+), 6 deletions(-)
+>>>
+>>> diff --git a/include/uapi/linux/ublk_cmd.h b/include/uapi/linux/ublk_cmd.h
+>>> index 4b8558db90e1..471b3b983045 100644
+>>> --- a/include/uapi/linux/ublk_cmd.h
+>>> +++ b/include/uapi/linux/ublk_cmd.h
+>>> @@ -229,12 +229,23 @@ struct ublksrv_ctrl_dev_info {
+>>>  	__u64   reserved2;
+>>>  };
+>>>  
+>>> -#define		UBLK_IO_OP_READ		0
+>>> -#define		UBLK_IO_OP_WRITE		1
+>>> -#define		UBLK_IO_OP_FLUSH		2
+>>> -#define		UBLK_IO_OP_DISCARD	3
+>>> -#define		UBLK_IO_OP_WRITE_SAME	4
+>>> -#define		UBLK_IO_OP_WRITE_ZEROES	5
+>>> +enum ublk_op {
+>>> +	UBLK_IO_OP_READ = 0,
+>>> +	UBLK_IO_OP_WRITE = 1,
+>>> +	UBLK_IO_OP_FLUSH = 2,
+>>> +	UBLK_IO_OP_DISCARD = 3,
+>>> +	UBLK_IO_OP_WRITE_SAME = 4,
+>>> +	UBLK_IO_OP_WRITE_ZEROES = 5,
+>>> +	UBLK_IO_OP_ZONE_OPEN = 10,
+>>> +	UBLK_IO_OP_ZONE_CLOSE = 11,
+>>> +	UBLK_IO_OP_ZONE_FINISH = 12,
+>>> +	UBLK_IO_OP_ZONE_APPEND = 13,
+>>> +	UBLK_IO_OP_ZONE_RESET = 15,
+>>> +	__UBLK_IO_OP_DRV_IN_START = 32,
+>>> +	__UBLK_IO_OP_DRV_IN_END = 96,
+>>> +	__UBLK_IO_OP_DRV_OUT_START = __UBLK_IO_OP_DRV_IN_END,
+>>> +	__UBLK_IO_OP_DRV_OUT_END = 160,
+>>> +};
+>>
+>> This patch does not do what the title says. You are also introducing the zone
+>> operations, and the very obscure __UBLK_IO_OP_DRV_XXX operations without an
+>> explanation. Also, why the "__" prefix for these ? I do not see the point...
+> 
+> It should be to reserve space for ublk passthrough OP.
 
-Probes updates for v6.5:
+A comment about that would be nice.
 
-- fprobe: Pass return address to the fprobe entry/exit callbacks so that
-  the callbacks don't need to analyze pt_regs/stack to find the function
-  return address.
+> 
+>> Given that this is a uapi, a comment to explain the less obvious commands would
+>> be nice.
+>>
+>> So I think the change to an enum for the existing ops can be done either in
+>> patch 2 or as a separate patch and the introduction of the zone operations done
+>> in patch 3 or as a separate patch.
+> 
+> Also it might break userspace by changing to enum from macro for existed
+> definition, cause userspace may check something by '#ifdef UBLK_IO_OP_*',
+> so probably it is better to keep these OPs as enum, or at least keep
+> existed definition as macro.
 
-- kprobe events: cleanup usage of TPARG_FL_FENTRY and TPARG_FL_RETURN
-  flags so that those are not set at once.
+Then let's keep defining things with #define instead of an enum.
 
-- fprobe events:
- . Add a new fprobe events for tracing arbitrary function entry and
-   exit as a trace event.
- . Add a new tracepoint events for tracing raw tracepoint as a trace
-   event. This allows user to trace non user-exposed tracepoints.
- . Move eprobe's event parser code into probe event common file.
- . Introduce BTF (BPF type format) support to kernel probe (kprobe,
-   fprobe and tracepoint probe) events so that user can specify traced
-   function arguments by name. This also applies the type of argument
-   when fetching the argument.
- . Introduce '$arg*' wildcard support if BTF is available. This expands
-   the '$arg*' meta argument to all function argument automatically.
- . Check the return value types by BTF. If the function returns 'void',
-   '$retval' is rejected.
- . Add some selftest script for fprobe events, tracepoint events and
-   BTF support.
- . Update documentation about the fprobe events.
- . Some fixes for above features, document and selftests.
-
-- selftests for ftrace (except for new fprobe events):
- . Add a test case for multiple consecutive probes in a function which
-   checks if ftrace based kprobe, optimized kprobe and normal kprobe
-   can be defined in the same target function.
- . Add a test case for optimized probe, which checks whether kprobe
-   can be optimized or not.
-
-
-Please pull the latest probes-v6.5 tree, which can be found at:
-
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/trace/linux-trace.git
-probes-v6.5
-
-Tag SHA1: 08bb7e2de7f32619cd100419e719ef96d6cf0aab
-Head SHA1: 53431798f4bb60d214ae1ec4a79eefdd414f577b
-
-
-Akanksha J N (2):
-      selftests/ftrace: Add new test case which adds multiple consecutive probes in a function
-      selftests/ftrace: Add new test case which checks for optimized probes
-
-Masami Hiramatsu (Google) (15):
-      fprobe: Pass return address to the handlers
-      tracing/probes: Avoid setting TPARG_FL_FENTRY and TPARG_FL_RETURN
-      tracing/probes: Add fprobe events for tracing function entry and exit.
-      selftests/ftrace: Add fprobe related testcases
-      tracing/probes: Add tracepoint support on fprobe_events
-      tracing/probes: Move event parameter fetching code to common parser
-      tracing/probes: Support function parameters if BTF is available
-      tracing/probes: Add $arg* meta argument for all function args
-      tracing/probes: Add BTF retval type support
-      selftests/ftrace: Add tracepoint probe test case
-      selftests/ftrace: Add BTF arguments test cases
-      Documentation: tracing/probes: Add fprobe event tracing document
-      tracing/probes: Fix to return NULL and keep using current argc
-      Documentation: Fix typo of reference file name
-      tracing/probes: Fix tracepoint event with $arg* to fetch correct argument
-
-----
- Documentation/trace/fprobetrace.rst                |  188 +++
- Documentation/trace/index.rst                      |    1 +
- Documentation/trace/kprobetrace.rst                |    2 +
- include/linux/fprobe.h                             |   11 +-
- include/linux/rethook.h                            |    2 +-
- include/linux/trace_events.h                       |    3 +
- include/linux/tracepoint-defs.h                    |    1 +
- include/linux/tracepoint.h                         |    5 +
- kernel/kprobes.c                                   |    1 +
- kernel/trace/Kconfig                               |   26 +
- kernel/trace/Makefile                              |    1 +
- kernel/trace/bpf_trace.c                           |    6 +-
- kernel/trace/fprobe.c                              |   17 +-
- kernel/trace/rethook.c                             |    3 +-
- kernel/trace/trace.c                               |   13 +-
- kernel/trace/trace.h     Linus,
-
-Probes updates for v6.5:
-
-- fprobe: Pass return address to the fprobe entry/exit callbacks so that
-  the callbacks don't need to analyze pt_regs/stack to find the function
-  return address.
-
-- kprobe events: cleanup usage of TPARG_FL_FENTRY and TPARG_FL_RETURN
-  flags so that those are not set at once.
-
-- fprobe events:
- . Add a new fprobe events for tracing arbitrary function entry and
-   exit as a trace event.
- . Add a new tracepoint events for tracing raw tracepoint as a trace
-   event. This allows user to trace non user-exposed tracepoints.
- . Move eprobe's event parser code into probe event common file.
- . Introduce BTF (BPF type format) support to kernel probe (kprobe,
-   fprobe and tracepoint probe) events so that user can specify traced
-   function arguments by name. This also applies the type of argument
-   when fetching the argument.
- . Introduce '$arg*' wildcard support if BTF is available. This expands
-   the '$arg*' meta argument to all function argument automatically.
- . Check the return value types by BTF. If the function returns 'void',
-   '$retval' is rejected.
- . Add some selftest script for fprobe events, tracepoint events and
-   BTF support.
- . Update documentation about the fprobe events.
- . Some fixes for above features, document and selftests.
-
-- selftests for ftrace (except for new fprobe events):
- . Add a test case for multiple consecutive probes in a function which
-   checks if ftrace based kprobe, optimized kprobe and normal kprobe
-   can be defined in the same target function.
- . Add a test case for optimized probe, which checks whether kprobe
-   can be optimized or not.
-
-
-Please pull the latest probes-v6.5 tree, which can be found at:
-
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/trace/linux-trace.git
-probes-v6.5
-
-Tag SHA1: 08bb7e2de7f32619cd100419e719ef96d6cf0aab
-Head SHA1: 53431798f4bb60d214ae1ec4a79eefdd414f577b
-
-
-Akanksha J N (2):
-      selftests/ftrace: Add new test case which adds multiple consecutive probes in a function
-      selftests/ftrace: Add new test case which checks for optimized probes
-
-Masami Hiramatsu (Google) (15):
-      fprobe: Pass return address to the handlers
-      tracing/probes: Avoid setting TPARG_FL_FENTRY and TPARG_FL_RETURN
-      tracing/probes: Add fprobe events for tracing function entry and exit.
-      selftests/ftrace: Add fprobe related testcases
-      tracing/probes: Add tracepoint support on fprobe_events
-      tracing/probes: Move event parameter fetching code to common parser
-      tracing/probes: Support function parameters if BTF is available
-      tracing/probes: Add $arg* meta argument for all function args
-      tracing/probes: Add BTF retval type support
-      selftests/ftrace: Add tracepoint probe test case
-      selftests/ftrace: Add BTF arguments test cases
-      Documentation: tracing/probes: Add fprobe event tracing document
-      tracing/probes: Fix to return NULL and keep using current argc
-      Documentation: Fix typo of reference file name
-      tracing/probes: Fix tracepoint event with $arg* to fetch correct argument
-
-----
- Documentation/trace/fprobetrace.rst                |  188 +++
- Documentation/trace/index.rst                      |    1 +
- Documentation/trace/kprobetrace.rst                |    2 +
- include/linux/fprobe.h                             |   11 +-
- include/linux/rethook.h                            |    2 +-
- include/linux/trace_events.h                       |    3 +
- include/linux/tracepoint-defs.h                    |    1 +
- include/linux/tracepoint.h                         |    5 +
- kernel/kprobes.c                                   |    1 +
- kernel/trace/Kconfig                               |   26 +
- kernel/trace/Makefile                              |    1 +
- kernel/trace/bpf_trace.c                           |    6 +-
- kernel/trace/fprobe.c                              |   17 +-
- kernel/trace/rethook.c                             |    3 +-
- kernel/trace/trace.c                               |   13 +-
- kernel/trace/trace.h                               |   11 +
- kernel/trace/trace_eprobe.c                        |   44 +-
- kernel/trace/trace_fprobe.c                        | 1199 ++++++++++++++++++++
- kernel/trace/trace_kprobe.c                        |   35 +-
- kernel/trace/trace_probe.c                         |  659 +++++++++--
- kernel/trace/trace_probe.h                         |   49 +-
- kernel/trace/trace_uprobe.c                        |    8 +-
- lib/test_fprobe.c                                  |   10 +-
- samples/fprobe/fprobe_example.c                    |    6 +-
- .../ftrace/test.d/dynevent/add_remove_btfarg.tc    |   58 +
- .../ftrace/test.d/dynevent/add_remove_fprobe.tc    |   26 +
- .../ftrace/test.d/dynevent/add_remove_tprobe.tc    |   27 +
- .../ftrace/test.d/dynevent/fprobe_syntax_errors.tc |  111 ++
- .../ftrace/test.d/dynevent/tprobe_syntax_errors.tc |   82 ++
- .../ftrace/test.d/kprobe/kprobe_insn_boundary.tc   |   19 +
- .../ftrace/test.d/kprobe/kprobe_opt_types.tc       |   34 +
- .../ftrace/test.d/kprobe/kprobe_syntax_errors.tc   |   16 +-
- 32 files changed, 2510 insertions(+), 164 deletions(-)
- create mode 100644 Documentation/trace/fprobetrace.rst
- create mode 100644 kernel/trace/trace_fprobe.c
- create mode 100644 tools/testing/selftests/ftrace/test.d/dynevent/add_remove_btfarg.tc
- create mode 100644 tools/testing/selftests/ftrace/test.d/dynevent/add_remove_fprobe.tc
- create mode 100644 tools/testing/selftests/ftrace/test.d/dynevent/add_remove_tprobe.tc
- create mode 100644 tools/testing/selftests/ftrace/test.d/dynevent/fprobe_syntax_errors.tc
- create mode 100644 tools/testing/selftests/ftrace/test.d/dynevent/tprobe_syntax_errors.tc
- create mode 100644 tools/testing/selftests/ftrace/test.d/kprobe/kprobe_insn_boundary.tc
- create mode 100644 tools/testing/selftests/ftrace/test.d/kprobe/kprobe_opt_types.tc                          |   11 +
- kernel/trace/trace_eprobe.c                        |   44 +-
- kernel/trace/trace_fprobe.c                        | 1199 ++++++++++++++++++++
- kernel/trace/trace_kprobe.c                        |   35 +-
- kernel/trace/trace_probe.c                         |  659 +++++++++--
- kernel/trace/trace_probe.h                         |   49 +-
- kernel/trace/trace_uprobe.c                        |    8 +-
- lib/test_fprobe.c                                  |   10 +-
- samples/fprobe/fprobe_example.c                    |    6 +-
- .../ftrace/test.d/dynevent/add_remove_btfarg.tc    |   58 +
- .../ftrace/test.d/dynevent/add_remove_fprobe.tc    |   26 +
- .../ftrace/test.d/dynevent/add_remove_tprobe.tc    |   27 +
- .../ftrace/test.d/dynevent/fprobe_syntax_errors.tc |  111 ++
- .../ftrace/test.d/dynevent/tprobe_syntax_errors.tc |   82 ++
- .../ftrace/test.d/kprobe/kprobe_insn_boundary.tc   |   19 +
- .../ftrace/test.d/kprobe/kprobe_opt_types.tc       |   34 +
- .../ftrace/test.d/kprobe/kprobe_syntax_errors.tc   |   16 +-
- 32 files changed, 2510 insertions(+), 164 deletions(-)
- create mode 100644 Documentation/trace/fprobetrace.rst
- create mode 100644 kernel/trace/trace_fprobe.c
- create mode 100644 tools/testing/selftests/ftrace/test.d/dynevent/add_remove_btfarg.tc
- create mode 100644 tools/testing/selftests/ftrace/test.d/dynevent/add_remove_fprobe.tc
- create mode 100644 tools/testing/selftests/ftrace/test.d/dynevent/add_remove_tprobe.tc
- create mode 100644 tools/testing/selftests/ftrace/test.d/dynevent/fprobe_syntax_errors.tc
- create mode 100644 tools/testing/selftests/ftrace/test.d/dynevent/tprobe_syntax_errors.tc
- create mode 100644 tools/testing/selftests/ftrace/test.d/kprobe/kprobe_insn_boundary.tc
- create mode 100644 tools/testing/selftests/ftrace/test.d/kprobe/kprobe_opt_types.tc
-
+> 
+> Thanks,
+> Ming
+> 
 
 -- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+Damien Le Moal
+Western Digital Research
+
