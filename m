@@ -2,120 +2,214 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3CF87422D1
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 11:00:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DEE177422D4
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 11:01:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230401AbjF2JAQ convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 29 Jun 2023 05:00:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60730 "EHLO
+        id S231901AbjF2JBq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 05:01:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232375AbjF2I76 (ORCPT
+        with ESMTP id S230055AbjF2JBm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 04:59:58 -0400
-Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 781AF10D5;
-        Thu, 29 Jun 2023 01:59:57 -0700 (PDT)
-Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-98273ae42d0so12691966b.0;
-        Thu, 29 Jun 2023 01:59:57 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688029196; x=1690621196;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=uYjZj3THgvQsrzXivluwVI0Hwjsw98Y00KuXK0YUsxs=;
-        b=R7lDXMsw+8AtYSTwSB6E6hkjPwjhi07Ccsv0tx4ZqdiyEcIBDfUs9cV0e+L9wunbTA
-         oGMLDepallygHEW35whQts5S6cno7+3C+tN44T07oL7NPqiDaAPqhQBtuY8TxmbWhqpZ
-         8TNYYXxa+R1dHpV4U0XTGXQTBvz62KSl/2k6b6XNhZYAVEim23jhbyGk2HPXyEBxiIh/
-         LHzRXhhi25HLyTkF7rVjzAY7u0eCHipQukOBz8nABPt8mZ3NAXTGPDJsV2OJw8vNOekK
-         LEhqAgBkV0PRWyNRZLJkWTjmr1SIEpURXTLZ8Rwyhg+OWouKX/j/c6CXXOm2Yn9Aux0K
-         osWA==
-X-Gm-Message-State: AC+VfDzuSfx+DtiNzX83MhdrUnveYlt1JVH9XlKqlWHodOyaQ1uESfoW
-        LgDrD2f8FAQEk1GMXC7jcrOakE2zKRkPvDHEO7keh2WdUHA=
-X-Google-Smtp-Source: ACHHUZ53T3Owoz4/GKEcb66vGc1cbO3Z1LBxaDVyBbNWZrtsqPe9x/q7lnnrfTmP090y+kbschlQ39HIYGKafF5+QWo=
-X-Received: by 2002:a17:906:7a4f:b0:988:a037:9dad with SMTP id
- i15-20020a1709067a4f00b00988a0379dadmr24735746ejo.4.1688029195747; Thu, 29
- Jun 2023 01:59:55 -0700 (PDT)
+        Thu, 29 Jun 2023 05:01:42 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E38C410D5;
+        Thu, 29 Jun 2023 02:01:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1688029301; x=1719565301;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=w3S5KyMzhn3eCt7uu2HW5CUsu9QGVcQK3sBOL7pJmvU=;
+  b=nk9GZ6VKSMhHfYwnXaznXAPf9OSBK473WD/tVB+bHCjEljkGgSUUHpT6
+   /w4pQu9cOMvLneXnVb2Zf0iILzqYlvcNlfiGTHluU7ET7ar9fmh5zMbkW
+   auR2liX6OU+RGJXLQbxq8BI8v0SkE0Bwuq5KLET/P8lSxS209utq0QWFM
+   s4EiPUpk/DoCfIExwnDpusbqW6GVbmK9tRqcti44ILzRFO8id7krJUERx
+   HEZfHE/fgBZnX5wOP7uaA5LpoQ4Xqd5e2vWW+keDOposw4Owg3P6qV8Df
+   qbSdOr1uwk1hT9QEk60IzteP0fnMhDPGhVA/rseIpas0l4Y819ew9ry70
+   g==;
+X-IronPort-AV: E=Sophos;i="6.01,168,1684825200"; 
+   d="asc'?scan'208";a="218159678"
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 29 Jun 2023 02:01:40 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Thu, 29 Jun 2023 02:01:39 -0700
+Received: from wendy (10.10.115.15) by chn-vm-ex03.mchp-main.com
+ (10.10.85.151) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
+ Transport; Thu, 29 Jun 2023 02:01:36 -0700
+Date:   Thu, 29 Jun 2023 10:01:07 +0100
+From:   Conor Dooley <conor.dooley@microchip.com>
+To:     Xingyu Wu <xingyu.wu@starfivetech.com>
+CC:     Conor Dooley <conor@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        <linux-riscv@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Hal Feng <hal.feng@starfivetech.com>,
+        William Qiu <william.qiu@starfivetech.com>,
+        <linux-kernel@vger.kernel.org>, <linux-clk@vger.kernel.org>
+Subject: Re: [PATCH v5 2/7] dt-bindings: soc: starfive: Add StarFive syscon
+ module
+Message-ID: <20230629-throng-creation-a33bbd191c1a@wendy>
+References: <20230613125852.211636-1-xingyu.wu@starfivetech.com>
+ <20230613125852.211636-3-xingyu.wu@starfivetech.com>
+ <7e2d6bfe-5687-97c5-778b-c02e9c0894af@linaro.org>
+ <a83c98ae-2f6c-00c4-5d05-fc304718e05a@starfivetech.com>
+ <20230628-affix-maverick-84a08905f05b@spud>
+ <2270fd7f-1751-066a-0da5-e35cdd59fd2f@starfivetech.com>
 MIME-Version: 1.0
-References: <20230627071727.16646-1-Chung-kai.Yang@mediatek.com>
-In-Reply-To: <20230627071727.16646-1-Chung-kai.Yang@mediatek.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 29 Jun 2023 10:59:44 +0200
-Message-ID: <CAJZ5v0gxNOWhC58PHeUhW_tgf6d1fGJVZ1x91zkDdht11yUv-A@mail.gmail.com>
-Subject: Re: [PATCH v2] PM: QoS: Restore support for default value on
- frequency QoS
-To:     Chungkai Yang <Chung-kai.Yang@mediatek.com>
-Cc:     rafael@kernel.org, len.brown@intel.com, pavel@ucw.cz,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ccj.yeh@mediatek.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="dyYLTwA1dVYqX1L9"
+Content-Disposition: inline
+In-Reply-To: <2270fd7f-1751-066a-0da5-e35cdd59fd2f@starfivetech.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 27, 2023 at 9:18 AM Chungkai Yang
-<Chung-kai.Yang@mediatek.com> wrote:
->
-> PM_QOS_DEFAULT_VALUE case is not covered.
->
-> Commit 8d36694245f2 ("PM: QoS: Add check to make sure CPU freq is
-> non-negative") makes sure CPU freq is non-negative to avoid negative
-> value converting to unsigned data type. However, when the value is
-> PM_QOS_DEFAULT_VALUE, pm_qos_update_target specifically uses
-> c->default_value which is set to FREQ_QOS_MIN/MAX_DEFAULT_VALUE when
-> cpufreq_policy_alloc is executed, for this case handling.
->
-> Adding check for PM_QOS_DEFAULT_VALUE to let default setting work will
-> fix this problem.
->
-> Signed-off-by: Chungkai Yang <Chung-kai.Yang@mediatek.com>
->
-> ---
-> V1 -> V2: Check both freq_qos_add/update_request.
->
-> Link:
->   https://lore.kernel.org/lkml/20230626035144.19717-1-Chung-kai.Yang@mediatek.com/
-> ---
->  kernel/power/qos.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/kernel/power/qos.c b/kernel/power/qos.c
-> index af51ed6d45ef..260aca45c681 100644
-> --- a/kernel/power/qos.c
-> +++ b/kernel/power/qos.c
-> @@ -531,7 +531,7 @@ int freq_qos_add_request(struct freq_constraints *qos,
->  {
->         int ret;
->
-> -       if (IS_ERR_OR_NULL(qos) || !req || value < 0)
-> +       if (IS_ERR_OR_NULL(qos) || !req || (value < 0 && value != PM_QOS_DEFAULT_VALUE))
->                 return -EINVAL;
->
->         if (WARN(freq_qos_request_active(req),
-> @@ -563,7 +563,7 @@ EXPORT_SYMBOL_GPL(freq_qos_add_request);
->   */
->  int freq_qos_update_request(struct freq_qos_request *req, s32 new_value)
->  {
-> -       if (!req || new_value < 0)
-> +       if (!req || (new_value < 0 && new_value != PM_QOS_DEFAULT_VALUE))
+--dyYLTwA1dVYqX1L9
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-This is functionally correct, but it's better to avoid duplicating the
-value check, so please add a helper for it, for example:
+On Thu, Jun 29, 2023 at 02:42:39PM +0800, Xingyu Wu wrote:
+> On 2023/6/29 1:34, Conor Dooley wrote:
+> > On Wed, Jun 28, 2023 at 02:44:10PM +0800, Xingyu Wu wrote:
+> >> On 2023/6/14 2:31, Krzysztof Kozlowski wrote:
+> >> > On 13/06/2023 14:58, Xingyu Wu wrote:
+> >> >> From: William Qiu <william.qiu@starfivetech.com>
 
-static bool freq_qos_value_invalid(s32 value)
-{
-        return value < 0 && value != PM_QOS_DEFAULT_VALUE;
-}
+> >> >> +allOf:
+> >> >> +  - if:
+> >> >> +      properties:
+> >> >> +        compatible:
+> >> >> +          contains:
+> >> >> +            const: starfive,jh7110-aon-syscon
+> >> >> +    then:
+> >> >> +      required:
+> >> >> +        - "#power-domain-cells"
+> >> >=20
+> >> > Where did you implement the results of the discussion that only some
+> >> > devices can have power and clock controller?
+> >> >=20
+> >> > According to your code all of above - sys, aon and stg - have clock =
+and
+> >> > power controllers. If not, then the code is not correct, so please do
+> >> > not respond with what is where (like you did last time) but actually
+> >> > implement what you say.
 
-and call it in both places.
+> Yeah, following your advice, I modified the codes and there are two optio=
+ns:
+>=20
+> --- a/Documentation/devicetree/bindings/soc/starfive/starfive,jh7110-sysc=
+on.yaml
+> +++ b/Documentation/devicetree/bindings/soc/starfive/starfive,jh7110-sysc=
+on.yaml
+> @@ -41,6 +41,16 @@ required:
+>    - reg
+> =20
+>  allOf:
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            const: starfive,jh7110-sys-syscon
+> +    then:
+> +      required:
+> +        - clock-controller
+> +      properties:
+> +        "#power-domain-cells": false
+>    - if:
+>        properties:
+>          compatible:
+>            contains:
+>              const: starfive,jh7110-aon-syscon
+>      then:
+>        required:
+>          - "#power-domain-cells"
+> +      properties:
+> +        clock-controller: false
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            const: starfive,jh7110-stg-syscon
+> +    then:
+> +      properties:
+> +        clock-controller: false
+> +        "#power-domain-cells": false
+> =20
+>  additionalProperties: false
+>=20
+> Or :
+>=20
+> --- a/Documentation/devicetree/bindings/soc/starfive/starfive,jh7110-sysc=
+on.yaml
+> +++ b/Documentation/devicetree/bindings/soc/starfive/starfive,jh7110-sysc=
+on.yaml
+> @@ -41,6 +41,17 @@ required:
+>    - reg
+> =20
+>  allOf:
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            const: starfive,jh7110-sys-syscon
+> +    then:
+> +      required:
+> +        - clock-controller
+> +    else:
+> +      properties:
+> +        clock-controller: false
+>    - if:
+>        properties:
+>          compatible:
+>            contains:
+>              const: starfive,jh7110-aon-syscon
+>      then:
+>        required:
+>          - "#power-domain-cells"
+> +    else:
+> +      properties:
+> +        "#power-domain-cells": false
+> =20
+>  additionalProperties: false
+>=20
+> Which one is better? Thanks.
 
->                 return -EINVAL;
->
->         if (WARN(!freq_qos_request_active(req),
-> --
+This second one looks better to me, as it achieves the same thing in a
+simpler way.
+
+Cheers,
+Conor.
+
+--dyYLTwA1dVYqX1L9
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZJ1IUwAKCRB4tDGHoIJi
+0p+VAP0VjZDVhCo7waX9fMh6nsZdgK3duJg4TOoQ68hNJoD8xgEAvalmj5FLOA7Y
+XHTX3ksOnF8f5wfr2yjAkNY6DmfAng0=
+=bcF5
+-----END PGP SIGNATURE-----
+
+--dyYLTwA1dVYqX1L9--
