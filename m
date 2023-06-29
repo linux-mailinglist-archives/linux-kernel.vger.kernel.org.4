@@ -2,162 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A0D3742AA2
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 18:26:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20D33742AAC
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 18:31:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232095AbjF2Q0h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 12:26:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43322 "EHLO
+        id S231823AbjF2Qbt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 12:31:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229910AbjF2Q0d (ORCPT
+        with ESMTP id S229445AbjF2Qbq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 12:26:33 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1F82CF
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 09:26:32 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id 3f1490d57ef6-c38c87ea9ceso1349793276.1
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 09:26:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1688055992; x=1690647992;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=xMCpFTi4MEZLbHfM6PilnIIZPnyzbN27S0/lWwHLYHI=;
-        b=GMBD/LpzELPsRbxZKKzblbYWJ+sxqCFJh8sqXPWlxGp8U0A+UAgRmx8mtN4RFIKJLS
-         tWShDw0jJHclaaBavEJWjBB6dGPUFZoVr5twyAtBHN6qebVtacCXdYDnd93pZVkyKoZw
-         0+WJ/aWT6RPc8Os5dCvJyiYl0a4On2PNUBwQYaQq5U78afKLGz6jg3nVF/2Qhr5TQX0q
-         EK4td6N0JI9F5orF6SckKRYtzUbWYAUY5E5soJH6YcA1rYDGWhTJIbgdvG8mpTgqleWV
-         cCtNrROuiOoldk/CP0QNltmh6FMzC+iqKVsmsBNTqPYeMGPgjNuoHfAlcELNKCgayqlJ
-         pn6A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688055992; x=1690647992;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=xMCpFTi4MEZLbHfM6PilnIIZPnyzbN27S0/lWwHLYHI=;
-        b=LBxUIQNvKMOD9p1ywpph6FEIqz9C7nscWz+T5wlQzwTEZpkT1722SZVZS+RXOHHmKk
-         c6+hhRcO2ubOffFM3irKnim3Nb/pbEdNxa7zGkjRg6KaR1g6JS7vF4YQcMbo04I65mie
-         6uPc3RtOqTlLtcZDYKjOBZTYySJqIeaH2Pr1fVBmX2IlROGJdEw/L5g7DOGs9chbGeQE
-         NGA9VNvr2k9tvBo97mCIM83qSB47YkPqFWoilKDLhrcn5H8W7lu5gfixDHuJqpoU+dSF
-         W/RxM/4I7+Ybqzdc7AK757CuTuTS44anOikJK4Kr44jA0JbPJulrVM40UnXIEWrSa2ZE
-         RAlQ==
-X-Gm-Message-State: ABy/qLbMQ3S8VcoFazuMGKsvFwtt9bWDdCQnCcdHCveTk651edYThWyB
-        FzfZF+eJt3vNn2/4S4MskJw3eKqAFbQ=
-X-Google-Smtp-Source: APBJJlH5xRb4gXx8WB/VIhDJtQKmlpyV6We+v5eXJyNoDqtd/JFAFS3IGZnTMhoFhIMqhyEzV4FkH8V/jS8=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a05:6902:1105:b0:bc3:cdb7:4ec8 with SMTP id
- o5-20020a056902110500b00bc3cdb74ec8mr66497ybu.6.1688055992045; Thu, 29 Jun
- 2023 09:26:32 -0700 (PDT)
-Date:   Thu, 29 Jun 2023 09:26:30 -0700
-In-Reply-To: <9d9e9156-b9d9-86b4-9d20-77305e1e4d63@linux.intel.com>
-Mime-Version: 1.0
-References: <20230217231022.816138-1-seanjc@google.com> <20230217231022.816138-2-seanjc@google.com>
- <9d9e9156-b9d9-86b4-9d20-77305e1e4d63@linux.intel.com>
-Message-ID: <ZJ2wtg5KJyhD3cUe@google.com>
-Subject: Re: [PATCH 01/12] KVM: x86: Add a framework for enabling KVM-governed
- x86 features
-From:   Sean Christopherson <seanjc@google.com>
-To:     Binbin Wu <binbin.wu@linux.intel.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 29 Jun 2023 12:31:46 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7A92110;
+        Thu, 29 Jun 2023 09:31:45 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 66ED561597;
+        Thu, 29 Jun 2023 16:31:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38922C433C0;
+        Thu, 29 Jun 2023 16:31:39 +0000 (UTC)
+Date:   Thu, 29 Jun 2023 17:31:36 +0100
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Yicong Yang <yangyicong@huawei.com>
+Cc:     akpm@linux-foundation.org, linux-mm@kvack.org,
+        linux-arm-kernel@lists.infradead.org, x86@kernel.org,
+        mark.rutland@arm.com, ryan.roberts@arm.com, will@kernel.org,
+        anshuman.khandual@arm.com, linux-doc@vger.kernel.org,
+        corbet@lwn.net, peterz@infradead.org, arnd@arndb.de,
+        punit.agrawal@bytedance.com, linux-kernel@vger.kernel.org,
+        darren@os.amperecomputing.com, yangyicong@hisilicon.com,
+        huzhanyuan@oppo.com, lipeifeng@oppo.com, zhangshiming@oppo.com,
+        guojian@oppo.com, realmz6@gmail.com, linux-mips@vger.kernel.org,
+        openrisc@lists.librecores.org, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        Barry Song <21cnbao@gmail.com>, wangkefeng.wang@huawei.com,
+        xhao@linux.alibaba.com, prime.zeng@hisilicon.com,
+        Jonathan.Cameron@huawei.com, Barry Song <v-songbaohua@oppo.com>,
+        Nadav Amit <namit@vmware.com>, Mel Gorman <mgorman@suse.de>
+Subject: Re: [RESEND PATCH v9 2/2] arm64: support batched/deferred tlb
+ shootdown during page reclamation/migration
+Message-ID: <ZJ2x6DlmyA3kVh1n@arm.com>
+References: <20230518065934.12877-1-yangyicong@huawei.com>
+ <20230518065934.12877-3-yangyicong@huawei.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230518065934.12877-3-yangyicong@huawei.com>
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 29, 2023, Binbin Wu wrote:
->=20
->=20
-> On 2/18/2023 7:10 AM, Sean Christopherson wrote:
-> > diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm=
-_host.h
-> > index 792a6037047a..cd660de02f7b 100644
-> > --- a/arch/x86/include/asm/kvm_host.h
-> > +++ b/arch/x86/include/asm/kvm_host.h
-> > @@ -835,6 +835,17 @@ struct kvm_vcpu_arch {
-> >   	struct kvm_cpuid_entry2 *cpuid_entries;
-> >   	struct kvm_hypervisor_cpuid kvm_cpuid;
-> > +	/*
-> > +	 * Track whether or not the guest is allowed to use features that are
-> > +	 * governed by KVM, where "governed" means KVM needs to manage state
-> > +	 * and/or explicitly enable the feature in hardware.  Typically, but
-> > +	 * not always, governed features can be used by the guest if and only
-> > +	 * if both KVM and userspace want to expose the feature to the guest.
-> > +	 */
-> > +	struct {
-> > +		u32 enabled;
-> Although there are some guidances/preconditions of using the framework,
-> is it possible that u32 will be ran out quickly after people starts to us=
-e
-> the framework?
+On Thu, May 18, 2023 at 02:59:34PM +0800, Yicong Yang wrote:
+> From: Barry Song <v-songbaohua@oppo.com>
+> 
+> on x86, batched and deferred tlb shootdown has lead to 90%
+> performance increase on tlb shootdown. on arm64, HW can do
+> tlb shootdown without software IPI. But sync tlbi is still
+> quite expensive.
+[...]
+>  .../features/vm/TLB/arch-support.txt          |  2 +-
+>  arch/arm64/Kconfig                            |  1 +
+>  arch/arm64/include/asm/tlbbatch.h             | 12 ++++
+>  arch/arm64/include/asm/tlbflush.h             | 33 ++++++++-
+>  arch/arm64/mm/flush.c                         | 69 +++++++++++++++++++
+>  arch/x86/include/asm/tlbflush.h               |  5 +-
+>  include/linux/mm_types_task.h                 |  4 +-
+>  mm/rmap.c                                     | 12 ++--
 
-It's definitely possible.  And there's no reason to limit this to a u32, I =
-really
-have no idea why I did that.=20
+First of all, this patch needs to be split in some preparatory patches
+introducing/renaming functions with no functional change for x86. Once
+done, you can add the arm64-only changes.
 
-Ah, it's because "struct kvm_vcpu_arch" is defined in arch/x86/include/asm/=
-kvm_host.h,
-and I didn't want to expose governed_features.h in arch/x86/include/asm.  H=
-rm,
-that's really annoying.
+Now, on the implementation, I had some comments on v7 but we didn't get
+to a conclusion and the thread eventually died:
 
-Aha!  A better workaround for that conudrum would be to define an explicit =
-"max"
-and use that, with a FIXME to call out that this really should use
-KVM_NR_GOVERNED_FEATURES directly.  I have aspirations of moving kvm_host.h=
- to
-arch/<arch>/kvm, at which point this can be cleaned up by declaring "enum
-kvm_governed_features" in kvm_host.h (though it'll likely be named somethin=
-g
-like kvm_arch.h at that point).
+https://lore.kernel.org/linux-mm/Y7cToj5mWd1ZbMyQ@arm.com/
 
-	/*
-	 * FIXME: Drop this macro and use KVM_NR_GOVERNED_FEATURES directly
-	 * when "struct kvm_vcpu_arch" is no longer defined in an
-	 * arch/x86/include/asm header.  The max is mostly arbitrary, i.e.
-	 * can be increased as necessary.
-	 */
-#define KVM_MAX_NR_GOVERNED_FEATURES BITS_PER_LONG
+I know I said a command line argument is better than Kconfig or some
+random number of CPUs heuristics but it would be even better if we don't
+bother with any, just make this always on. Barry had some comments
+around mprotect() being racy and that's why we have
+flush_tlb_batched_pending() but I don't think it's needed (or, for
+arm64, it can be a DSB since this patch issues the TLBIs but without the
+DVM Sync). So we need to clarify this (see Barry's last email on the
+above thread) and before attempting new versions of this patchset. With
+flush_tlb_batched_pending() removed (or DSB), I have a suspicion such
+implementation would be faster on any SoC irrespective of the number of
+CPUs.
 
-	/*
-	 * Track whether or not the guest is allowed to use features that are
-	 * governed by KVM, where "governed" means KVM needs to manage state
-	 * and/or explicitly enable the feature in hardware.  Typically, but
-	 * not always, governed features can be used by the guest if and only
-	 * if both KVM and userspace want to expose the feature to the guest.
-	 */
-	struct {
-		DECLARE_BITMAP(enabled, KVM_MAX_NR_GOVERNED_FEATURES);
-	} governed_features;
-
-
-> Of course, I noticed there is build=EF=BF=BD bug check on the length, it =
-should be
-> OK to increase the length when needed.
-
-> > +static __always_inline int kvm_governed_feature_index(unsigned int x86=
-_feature)
-> > +{
-> > +	switch (x86_feature) {
-> > +#define KVM_GOVERNED_FEATURE(x) case x: return KVM_GOVERNED_##x;
-> > +#include "governed_features.h"
-> > +	default:
-> > +		return -1;
-> > +	}
-> > +}
-> > +
-> > +static __always_inline int kvm_is_governed_feature(unsigned int x86_fe=
-ature)
-> Is it better to use bool instead of int?
-
-Yes, this definitely should return a bool.
-
-Thanks!
+-- 
+Catalin
