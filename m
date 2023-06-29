@@ -2,147 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02958742F42
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 23:05:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 138C4742F46
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 23:08:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231625AbjF2VFg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 17:05:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51058 "EHLO
+        id S231634AbjF2VIN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 17:08:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229727AbjF2VFa (ORCPT
+        with ESMTP id S229727AbjF2VIL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 17:05:30 -0400
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 105601BF3
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 14:05:29 -0700 (PDT)
-Received: by mail-ed1-x52e.google.com with SMTP id 4fb4d7f45d1cf-51ddbf83ff9so3295a12.0
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 14:05:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1688072727; x=1690664727;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=OtqC5U06rpgElL+2bahbcyOiaEJkZ6SnNFt7jo/MOuI=;
-        b=rOm8Rha28FTOFOHSJ4pnBUfd88CBGxDDkHvCX9orLeRV9Nhd/sglXEJd9xFznwQwHd
-         5VlVBjdmO2LahD1b6cH3urkETtnXQfY/PbKiucJ5ryGf2a6JyzHzZEvRRXX4lmUUj7Yt
-         3Ua2g9qSC0sJjbtn1YD0JRohiBcpvGdV38pmMwau+r/H8ubR7PjdpvEeCKtsU6Yjwqck
-         XqKuFnhUZod82aios1qhFvFAHUziSU8mO29aziPIaf34KZcJJwoSdwZr/EOzJ6YOYyI7
-         j1sqKAOtQND52d+TYHNgKyFWag50AjMTuFYSYOL3uOXYYoV7VSCOU/H2qn6tiR53l3n6
-         9tcw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688072727; x=1690664727;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=OtqC5U06rpgElL+2bahbcyOiaEJkZ6SnNFt7jo/MOuI=;
-        b=kIdiDxspmvSrbgRBgE86oqjb1qES9Epwm7gTlT2EefsrmHHQhfm78Y4AJg52mlf/Iq
-         k/cXeVRGs2+dEE80esyr71dD+80/Dg9/iTqMQY4isJ36WJc/VfyEIKEewmgeK0cQSZdt
-         MlrexBRj6/Cwu4qUxYk9pGPg0Jurh5Y9Wxbnvo8Ch6Ufe0BkFPj4g/AFuUXGb7RMBEDK
-         YhEyW2DhVFlIhyRNepkZi5tVy65UdbYcjkFKzigNWONrHNA4nRIXwMMmP9cBLm5lwBUF
-         46wU9kUoWvOkhuC4KXjc7/SFDa7WozZhDoRtkkISRhPS42lnjuvGm5oazZb/WQ8KNYFt
-         +lLg==
-X-Gm-Message-State: AC+VfDx6zx3DpH6i7PR21ojaz0zKozK/uwcLcpWSIdtDIwEY12a4FrWK
-        qD3USJzGkHB2QVnyClcOUqeOkCnjgh29xB7ZY46eCQ==
-X-Google-Smtp-Source: ACHHUZ7GbEWD4nWGsAzJazQOkKf5PEoLuhvKRiEGkpHOQkEqtf1+QVWBi7bo8ZkwYTh5iQe+Oky1ZmARdNPs7TuWi+w=
-X-Received: by 2002:a50:9f85:0:b0:51a:1d77:e69d with SMTP id
- c5-20020a509f85000000b0051a1d77e69dmr166118edf.3.1688072727376; Thu, 29 Jun
- 2023 14:05:27 -0700 (PDT)
+        Thu, 29 Jun 2023 17:08:11 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CED2A2D4C;
+        Thu, 29 Jun 2023 14:08:10 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 699EB61640;
+        Thu, 29 Jun 2023 21:08:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC82BC433CC;
+        Thu, 29 Jun 2023 21:08:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688072889;
+        bh=QVWWSgeIDy9G1T0y1s1CguF1zCjfXWdS83lM64yH870=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=R0CzxeqamLxMSeOUudK9QLDYHXutU4k1i7YAU/+nbdoHGbbXXiPe7urw9sDNEJLAL
+         aVDE8AZM6wPuRaqrkBRJQ+Vsp7VabCX8CRCZyCzpLv0sGygnHpMeEzcuGK9nBIb98U
+         Wj3wtfiP8Or1RUoId9/E1N7KZdRJTK/S+EsW7yEiRpxUebQt52CKB3gnG9nY9/9Fo5
+         OE9oWn+jsh5oWgUc3BBhvjBbt72tozVDtgMUSHcEabrlow+kZqmeyfQ2/OJFpl9UTk
+         OeytmAd7bSVCpIXGYlID5yu9Gs8H4hh+ifQbjlMMRuDi4DLp9IO3GdvQOI7Qcl/6xJ
+         TTi8z1bczuBiw==
+Received: by mail-lf1-f44.google.com with SMTP id 2adb3069b0e04-4f13c41c957so333166e87.1;
+        Thu, 29 Jun 2023 14:08:09 -0700 (PDT)
+X-Gm-Message-State: ABy/qLaBOQEWDC8tMtpRYqtr8gNqtB1MmeW0zNSOh5SLjWwyBsNbSmpl
+        vx86PpG3za5NJjDdfxTRcFMUHyuoPf+1syur/Ps=
+X-Google-Smtp-Source: APBJJlFiLvq/00pxW1fSfw8POZDWzgKpN6sQ94B0C73Uomase4zWNPqdpHugOi5T3I9U3e3RhH+sUGWixwBHEGJceUE=
+X-Received: by 2002:a05:651c:c97:b0:2b6:b9ee:a7b1 with SMTP id
+ bz23-20020a05651c0c9700b002b6b9eea7b1mr708635ljb.5.1688072887642; Thu, 29 Jun
+ 2023 14:08:07 -0700 (PDT)
 MIME-Version: 1.0
-References: <20221215001205.51969-1-jeffxu@google.com> <20221215001205.51969-4-jeffxu@google.com>
- <ZJwcsU0vI-nzgOB_@codewreck.org> <ZJyKeeqRJxzwlMhk@codewreck.org>
- <CABi2SkWnAgHK1i6iqSqPMYuNEhtHBkO8jUuCvmG3RmUB5TKHJw@mail.gmail.com> <ZJ1dGvWkJVAbBPn7@codewreck.org>
-In-Reply-To: <ZJ1dGvWkJVAbBPn7@codewreck.org>
-From:   Jeff Xu <jeffxu@google.com>
-Date:   Thu, 29 Jun 2023 14:04:50 -0700
-Message-ID: <CALmYWFv=bmO3_SfojE0W0Lt4ZS6M-t3=sswncq+gwD7w8HLNhQ@mail.gmail.com>
-Subject: Re: [PATCH v8 3/5] mm/memfd: add MFD_NOEXEC_SEAL and MFD_EXEC
-To:     Dominique Martinet <asmadeus@codewreck.org>
-Cc:     Jeff Xu <jeffxu@chromium.org>, skhan@linuxfoundation.org,
-        keescook@chromium.org, akpm@linux-foundation.org,
-        dmitry.torokhov@gmail.com, dverkamp@chromium.org, hughd@google.com,
-        jorgelo@chromium.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
-        jannh@google.com, linux-hardening@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        kernel test robot <lkp@intel.com>
+References: <1c40a12b51ccd6ee2ee002276f5b1ba92c377100.1687990098.git.objelf@gmail.com>
+ <20b61d77-7397-e3ba-3215-232f49eb8c07@molgen.mpg.de>
+In-Reply-To: <20b61d77-7397-e3ba-3215-232f49eb8c07@molgen.mpg.de>
+From:   Sean Wang <sean.wang@kernel.org>
+Date:   Thu, 29 Jun 2023 14:07:55 -0700
+X-Gmail-Original-Message-ID: <CAGp9LzqbqAGe0AXN2zH-PViOtu0TcygE265S61QfLxczoHgm3Q@mail.gmail.com>
+Message-ID: <CAGp9LzqbqAGe0AXN2zH-PViOtu0TcygE265S61QfLxczoHgm3Q@mail.gmail.com>
+Subject: Re: [PATCH v3] Bluetooth: btmtk: add printing firmware information
+To:     Paul Menzel <pmenzel@molgen.mpg.de>
+Cc:     Sean Wang <sean.wang@mediatek.com>,
+        Chris Lu <chris.lu@mediatek.com>, marcel@holtmann.org,
+        johan.hedberg@gmail.com, luiz.dentz@gmail.com,
+        Soul.Huang@mediatek.com, Leon.Yen@mediatek.com,
+        Deren.Wu@mediatek.com, km.lin@mediatek.com,
+        robin.chiu@mediatek.com, Eddie.Chen@mediatek.com,
+        ch.yeh@mediatek.com, jenhao.yang@mediatek.com,
+        Stella.Chang@mediatek.com, Tom.Chou@mediatek.com,
+        steve.lee@mediatek.com, jsiuda@google.com, frankgor@google.com,
+        abhishekpandit@google.com, michaelfsun@google.com,
+        mmandlik@google.com, abhishekpandit@chromium.org,
+        mcchou@chromium.org, shawnku@google.com,
+        linux-bluetooth@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello
+HI Paul,
 
-On Thu, Jun 29, 2023 at 3:30=E2=80=AFAM Dominique Martinet
-<asmadeus@codewreck.org> wrote:
+Thanks! I will update the patch with your suggestions.
+
+thanks!
+Sean
+
+On Wed, Jun 28, 2023 at 3:44=E2=80=AFPM Paul Menzel <pmenzel@molgen.mpg.de>=
+ wrote:
 >
-> Jeff Xu wrote on Wed, Jun 28, 2023 at 09:33:27PM -0700:
-> > > > BTW I find the current behaviour rather hard to use: setting this t=
-o 2
-> > > > should still set NOEXEC by default in my opinion, just refuse anyth=
-ing
-> > > > that explicitly requested EXEC.
-> > >
-> > > And I just noticed it's not possible to lower the value despite havin=
-g
-> > > CAP_SYS_ADMIN: what the heck?! I have never seen such a sysctl and it
-> > > just forced me to reboot because I willy-nilly tested in the init pid
-> > > namespace, and quite a few applications that don't require exec broke
-> > > exactly as I described below.
-> > >
-> > > If the user has CAP_SYS_ADMIN there are more container escape methods
-> > > than I can count, this is basically free pass to root on main namespa=
-ce
-> > > anyway, you're not protecting anything. Please let people set the sys=
-ctl
-> > > to what they want.
+> Dear Sean, dear Chris,
+>
+>
+> Thank you for your patch.
+>
+> Am 29.06.23 um 00:20 schrieb sean.wang@mediatek.com:
+> > From: Chris Lu <chris.lu@mediatek.com>
 > >
-> > Yama has a similar setting,  for example, 3 (YAMA_SCOPE_NO_ATTACH)
-> > will not allow downgrading at runtime.
+> > Add printing firmware information part when driver loading firmware tha=
+t
+> > user can get mediatek bluetooth information.
+>
+> Maybe use the commit message summary/title below:
+>
+> Bluetooth: btmtk: Log hw/sw version and fw build time
+>
+> Maybe also paste one log message example to the commit message.
+>
+> > Co-developed-by: Sean Wang <sean.wang@mediatek.com>
+> > Signed-off-by: Sean Wang <sean.wang@mediatek.com>
+> > Signed-off-by: Chris Lu <chris.lu@mediatek.com>
+> > ---
+> > v3: resend again with the latest tree
+> > ---
+> >   drivers/bluetooth/btmtk.c | 5 +++++
+> >   1 file changed, 5 insertions(+)
 > >
-> > Since this is a security feature, not allowing downgrading at run time
-> > is part of the security consideration. I hope you understand.
+> > diff --git a/drivers/bluetooth/btmtk.c b/drivers/bluetooth/btmtk.c
+> > index 9482401d97fa..8490d59502a5 100644
+> > --- a/drivers/bluetooth/btmtk.c
+> > +++ b/drivers/bluetooth/btmtk.c
+> > @@ -57,6 +57,7 @@ int btmtk_setup_firmware_79xx(struct hci_dev *hdev, c=
+onst char *fwname,
+> >                             wmt_cmd_sync_func_t wmt_cmd_sync)
+> >   {
+> >       struct btmtk_hci_wmt_params wmt_params;
+> > +     struct btmtk_patch_header *hdr;
+> >       struct btmtk_global_desc *globaldesc =3D NULL;
+> >       struct btmtk_section_map *sectionmap;
+> >       const struct firmware *fw;
+> > @@ -75,9 +76,13 @@ int btmtk_setup_firmware_79xx(struct hci_dev *hdev, =
+const char *fwname,
+> >
+> >       fw_ptr =3D fw->data;
+> >       fw_bin_ptr =3D fw_ptr;
+> > +     hdr =3D (struct btmtk_patch_header *)fw_ptr;
+> >       globaldesc =3D (struct btmtk_global_desc *)(fw_ptr + MTK_FW_ROM_P=
+ATCH_HEADER_SIZE);
+> >       section_num =3D le32_to_cpu(globaldesc->section_num);
+> >
+> > +     bt_dev_info(hdev, "HW/SW Version: 0x%04x%04x, Build Time: %s",
 >
-> I didn't remember yama had this stuck bit; that still strikes me as
-> unusual, and if you require a custom LSM rule for memfd anyway I don't
-> see why it couldn't enforce that the sysctl is unchanged, but sure.
+> Why not print 0x%04x/0x%04x, that means with a slash?
 >
-> Please, though:
->  - I have a hard time thinking of 1 as a security flag in general (even
-> if I do agree a sloppy LSM rule could require it); I would only lock 2
->  - please make it clear, I don't see any entry in the sysctl
-> documentation[1] about memfd_noexec, there should be one and you can
-> copy the wording from yama's doc[2]: "Once set, this sysctl value cannot
-> be changed"
-> [1] Documentation/admin-guide/sysctl/vm.rst
-> [2] Documentation/admin-guide/LSM/Yama.rst
+> > +                 le16_to_cpu(hdr->hwver), le16_to_cpu(hdr->swver), hdr=
+->datetime);
+> > +
+> >       for (i =3D 0; i < section_num; i++) {
+> >               first_block =3D 1;
+> >               fw_ptr =3D fw_bin_ptr;
 >
-Thanks for the suggestion.
-Yes, it would be good to have some documentation.
-I will send patch to update Documentation/admin-guide/sysctl/vm.rst
-
 >
-> Either way as it stands I still don't think one can expect most
-> userspace applications to be converted until some libc wrapper takes
-> care of the retry logic and a couple of years, so I'll go look for
-> another way of filtering this (and eventually setting this to 1) as you
-> suggested.
-> I'll leave the follow-up up to you and won't bother you more.
+> Kind regards,
 >
-Not bothered at all! and thanks for reporting the bug to improve the
-quality of memfd_noexec !
-
-Much appreciated.
--Jeff
-
-
-> Thanks,
-> --
-> Dominique Martinet | Asmadeus
+> Paul
