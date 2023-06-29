@@ -2,155 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0C96741DB7
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 03:41:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A4F0F741DB2
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 03:41:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231496AbjF2Bd0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 21:33:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42630 "EHLO
+        id S231395AbjF2BfE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 21:35:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231416AbjF2BdX (ORCPT
+        with ESMTP id S229840AbjF2BfC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 21:33:23 -0400
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26E652701
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 18:33:22 -0700 (PDT)
-Received: by mail-pf1-x430.google.com with SMTP id d2e1a72fcca58-6764c90cbc9so46515b3a.0
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 18:33:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20221208.gappssmtp.com; s=20221208; t=1688002400; x=1690594400;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=7ThmVfXDix61iURcEU54u819vwIiq46rqbBRlmdFkhc=;
-        b=5Mk3qzY+GGwK5f0XG2PEP8F1bOz4F185+PKdeygae6A+UYODLBokJW+GNP3+PWHS8d
-         d5zNBixyu6zL01gbv6JgKD7lWAkyUdiTksr/IE/2IKZh4R8mZQMdOELxyyZKXqBTP6iW
-         p93JyFDpkAQy/KOLjmDyOR1rD34j2vVE7vTGUvjT/d/jh5WC1JItVDg7pHpjN2cMx10k
-         B5eAgCLH446/MgYszcNbhYm8qIdz0XdtO85g/G3S4bzzAxhLTxLZlHoJhJquNYmxuyX/
-         lclo4dreHZ+hMU1SiF7FOtsKdoHQEVeBv3t32cpMWtilpicKOC6PI6/V5EKwgq8rH0m7
-         0SIg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688002400; x=1690594400;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=7ThmVfXDix61iURcEU54u819vwIiq46rqbBRlmdFkhc=;
-        b=HudQpTHej90JBXgMysjygki/fBJqWwlX8Icv41MfVm/Dse7dvpY3KOblEuwEcJDVpa
-         LeIqPEN72xUvx2krwtnO2tjKjFj10rYrJbBfHZ9aX+3odenjH/YG/3UklpW7TzOOBkJY
-         FeHd+zm601aYmOM3GwmW38buHhJ+6xmc+CP2rcJJ+Wm8jm8fVCGtBKXTh20QGYX5Xj3h
-         B7yodFQZiowhqZFwyRVMXabHu+WwLZVBUYMcVMy4+FWUSu9pzg8zKSovcSOhQ96/H4V/
-         o/b46EHL0607cNWuFI4CWW3w9LC1feeJ/1pJlTyQeCevoDb2M6jiLo4RI0tOiA0ZdSj0
-         asqw==
-X-Gm-Message-State: AC+VfDzvJJvsOTS7s0JNTaYFhVdp5YHsdzPbVn/DkZjJ6ygzhFh22csm
-        Li7MXmpFP0i2beFVN7AUhmau3bAiMtP25oKfP2E=
-X-Google-Smtp-Source: ACHHUZ53nBn1+S49ohXzs5hHUpTioNTdZHS4ca3a2tM8yu35EDMUNWhK3xLR7CYm6Qbv+lAF238LRQ==
-X-Received: by 2002:a05:6a21:9985:b0:127:2dc1:c885 with SMTP id ve5-20020a056a21998500b001272dc1c885mr13915975pzb.4.1688002400208;
-        Wed, 28 Jun 2023 18:33:20 -0700 (PDT)
-Received: from [192.168.1.136] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id y11-20020a1709027c8b00b001b7e382dcdasm7951139pll.279.2023.06.28.18.33.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 28 Jun 2023 18:33:19 -0700 (PDT)
-Message-ID: <d6546c44-04db-cbca-1523-a914670a607f@kernel.dk>
-Date:   Wed, 28 Jun 2023 19:33:18 -0600
+        Wed, 28 Jun 2023 21:35:02 -0400
+Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 623891B0
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 18:35:00 -0700 (PDT)
+X-UUID: 307ba47fb3324b44bec63d7fad732c0a-20230629
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.27,REQID:b4ec874c-a06b-40cd-abd9-8a29c283655d,IP:5,U
+        RL:0,TC:0,Content:0,EDM:25,RT:0,SF:-15,FILE:0,BULK:0,RULE:Release_Ham,ACTI
+        ON:release,TS:15
+X-CID-INFO: VERSION:1.1.27,REQID:b4ec874c-a06b-40cd-abd9-8a29c283655d,IP:5,URL
+        :0,TC:0,Content:0,EDM:25,RT:0,SF:-15,FILE:0,BULK:0,RULE:Release_Ham,ACTION
+        :release,TS:15
+X-CID-META: VersionHash:01c9525,CLOUDID:ed537d82-5a99-42ae-a2dd-e4afb731b474,B
+        ulkID:2306290934523U986QMZ,BulkQuantity:0,Recheck:0,SF:24|17|19|44|102,TC:
+        nil,Content:0,EDM:5,IP:-2,URL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI
+        :0,OSA:0,AV:0,LES:1,SPR:NO
+X-CID-BVR: 0,NGT
+X-CID-BAS: 0,NGT,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_FAS,TF_CID_SPAM_FSD,TF_CID_SPAM_FSI
+X-UUID: 307ba47fb3324b44bec63d7fad732c0a-20230629
+X-User: huxiaoying@kylinos.cn
+Received: from localhost.localdomain [(112.64.161.44)] by mailgw
+        (envelope-from <huxiaoying@kylinos.cn>)
+        (Generic MTA)
+        with ESMTP id 1959421970; Thu, 29 Jun 2023 09:34:49 +0800
+From:   Hu Xiaoying <huxiaoying@kylinos.cn>
+To:     linux-kernel@vger.kernel.org
+Cc:     ast@kernel.org, daniel@iogearbox.net,
+        Hu Xiaoying <huxiaoying@kylinos.cn>
+Subject: [PATCH] samples/bpf: Fix outf leak in hbm's read_trace_pipe2
+Date:   Thu, 29 Jun 2023 09:34:44 +0800
+Message-Id: <20230629013444.50350-1-huxiaoying@kylinos.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [GIT PULL] bcachefs
-Content-Language: en-US
-To:     Dave Chinner <david@fromorbit.com>,
-        Kent Overstreet <kent.overstreet@linux.dev>
-Cc:     torvalds@linux-foundation.org, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-bcachefs@vger.kernel.org,
-        Christoph Hellwig <hch@lst.de>,
-        Christian Brauner <brauner@kernel.org>,
-        Al Viro <viro@zeniv.linux.org.uk>
-References: <b02657af-5bbb-b46b-cea0-ee89f385f3c1@kernel.dk>
- <4b863e62-4406-53e4-f96a-f4d1daf098ab@kernel.dk>
- <20230628175204.oeek4nnqx7ltlqmg@moria.home.lan>
- <e1570c46-68da-22b7-5322-f34f3c2958d9@kernel.dk>
- <2e635579-37ba-ddfc-a2ab-e6c080ab4971@kernel.dk>
- <20230628221342.4j3gr3zscnsu366p@moria.home.lan>
- <d697ec27-8008-2eb6-0950-f612a602dcf5@kernel.dk>
- <20230628225514.n3xtlgmjkgapgnrd@moria.home.lan>
- <1e2134f1-f48b-1459-a38e-eac9597cd64a@kernel.dk>
- <20230628235018.ttvtzpfe42fri4yq@moria.home.lan>
- <ZJzXs6C8G2SL10vq@dread.disaster.area>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <ZJzXs6C8G2SL10vq@dread.disaster.area>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,HK_RANDOM_ENVFROM,
+        HK_RANDOM_FROM,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNPARSEABLE_RELAY autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/28/23 7:00?PM, Dave Chinner wrote:
-> On Wed, Jun 28, 2023 at 07:50:18PM -0400, Kent Overstreet wrote:
->> On Wed, Jun 28, 2023 at 05:14:09PM -0600, Jens Axboe wrote:
->>> On 6/28/23 4:55?PM, Kent Overstreet wrote:
->>>>> But it's not aio (or io_uring or whatever), it's simply the fact that
->>>>> doing an fput() from an exiting task (for example) will end up being
->>>>> done async. And hence waiting for task exits is NOT enough to ensure
->>>>> that all file references have been released.
->>>>>
->>>>> Since there are a variety of other reasons why a mount may be pinned and
->>>>> fail to umount, perhaps it's worth considering that changing this
->>>>> behavior won't buy us that much. Especially since it's been around for
->>>>> more than 10 years:
->>>>
->>>> Because it seems that before io_uring the race was quite a bit harder to
->>>> hit - I only started seeing it when things started switching over to
->>>> io_uring. generic/388 used to pass reliably for me (pre backpointers),
->>>> now it doesn't.
->>>
->>> I literally just pasted a script that hits it in one second with aio. So
->>> maybe generic/388 doesn't hit it as easily, but it's surely TRIVIAL to
->>> hit with aio. As demonstrated. The io_uring is not hard to bring into
->>> parity on that front, here's one I posted earlier today for 6.5:
->>>
->>> https://lore.kernel.org/io-uring/20230628170953.952923-4-axboe@kernel.dk/
->>>
->>> Doesn't change the fact that you can easily hit this with io_uring or
->>> aio, and probably more things too (didn't look any further). Is it a
->>> realistic thing outside of funky tests? Probably not really, or at least
->>> if those guys hit it they'd probably have the work-around hack in place
->>> in their script already.
->>>
->>> But the fact is that it's been around for a decade. It's somehow a lot
->>> easier to hit with bcachefs than XFS, which may just be because the
->>> former has a bunch of workers and this may be deferring the delayed fput
->>> work more. Just hand waving.
->>
->> Not sure what you're arguing here...?
->>
->> We've had a long standing bug, it's recently become much easier to hit
->> (for multiple reasons); we seem to be in agreement on all that. All I'm
->> saying is that the existence of that bug previously is not reason to fix
->> it now.
-> 
-> I agree with Kent here  - the kernel bug needs to be fixed
-> regardless of how long it has been around. Blaming the messenger
-> (userspace, fstests, etc) and saying it should work around a
-> spurious, unpredictable, undesirable and user-undebuggable kernel
-> behaviour is not an acceptible solution here...
+Fix outf being fopen'ed but then not subsequently fclose'd. In the affected
+branch, outf is otherwise going out of scope.
+---
+ samples/bpf/hbm.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Not sure why you both are putting words in my mouth, I've merely been
-arguing pros and cons and the impact of this. I even linked the io_uring
-addition for ensuring that side will work better once the deferred fput
-is sorted out. I didn't like the idea of fixing this through umount, and
-even outlined how it could be fixed properly by ensuring we flush
-per-task deferred puts on task exit.
-
-Do I think it's a big issue? Not at all, because a) nobody has reported
-it until now, and b) it's kind of a stupid case. If we can fix it with
-minimal impact, should we? Yep. Particularly as the assumptions stated
-in the original commit I referenced were not even valid back then.
-
+diff --git a/samples/bpf/hbm.c b/samples/bpf/hbm.c
+index bf66277115e2..e28370741d9b 100644
+--- a/samples/bpf/hbm.c
++++ b/samples/bpf/hbm.c
+@@ -105,6 +105,8 @@ static void read_trace_pipe2(void)
+ 			}
+ 		}
+ 	}
++
++	fclose(outf);
+ }
+ 
+ static void do_error(char *msg, bool errno_flag)
 -- 
-Jens Axboe
+2.25.1
 
