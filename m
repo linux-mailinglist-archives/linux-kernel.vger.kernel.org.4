@@ -2,203 +2,240 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9539741ECC
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 05:41:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DBF97741ED1
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 05:43:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231249AbjF2DlE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 23:41:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39418 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231566AbjF2Dk4 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 23:40:56 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45BF4113;
-        Wed, 28 Jun 2023 20:40:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1688010055; x=1719546055;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=cWGT8wZOJd4+s79dAk+dBgg4rR00KJ/cHqvY6LvbAbE=;
-  b=aFHk6iKzxFDZtxP3YZQYx+GELSJMkIOV8liFpA11OkwrbnY+C5NvJ1GH
-   mM40+iib5ZOa31j99DboMEGR2mpcE5+uej2s6i/olGzcQg2q9UHv5fdut
-   o0SJNxOrQtQMHeLX6ElQZlQMx6J9CVoC1jv/b34pUstQTAIIDxFGn1OoD
-   LiLOqucZ73AZe3OziF0XRccxDF+PQ+y4ReRqc+TZo51rsfVBMVLJe4ka5
-   ZxnenTJI5L5Xazb4AWowaodXAwkWsyTGQ88NsscrL6OtCPjkMlPGsFbf+
-   CDJtNEJ3XHMy+Hh2kZzTSm/FfEP9vpIYzcoFE9CWiQVbWa+rLE6COhBGC
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10755"; a="360864867"
-X-IronPort-AV: E=Sophos;i="6.01,167,1684825200"; 
-   d="scan'208";a="360864867"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2023 20:40:54 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10755"; a="841316356"
-X-IronPort-AV: E=Sophos;i="6.01,167,1684825200"; 
-   d="scan'208";a="841316356"
-Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
-  by orsmga004.jf.intel.com with ESMTP; 28 Jun 2023 20:40:53 -0700
-Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
- fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27; Wed, 28 Jun 2023 20:40:53 -0700
-Received: from fmsmsx603.amr.corp.intel.com (10.18.126.83) by
- fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27; Wed, 28 Jun 2023 20:40:52 -0700
-Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
- fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27 via Frontend Transport; Wed, 28 Jun 2023 20:40:52 -0700
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (104.47.55.174)
- by edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.27; Wed, 28 Jun 2023 20:40:52 -0700
+        id S231709AbjF2Dnq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 23:43:46 -0400
+Received: from mail-dm3nam02on2072.outbound.protection.outlook.com ([40.107.95.72]:48482
+        "EHLO NAM02-DM3-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S230447AbjF2Dnk (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 28 Jun 2023 23:43:40 -0400
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=HPhg9Mz+B9Zh7RghTymGwVWftufkN8zVC81/VHXTJ3AzShqe0AeiakqASXJ4ZEGMnpN0fV8bF5J7sCILdtfPPGjjd46gokcUdMTvbtY+CBpROIsIeVeVg6/2wqSnX5Ai3hJmC1cx6yr4cRRm5tHo6yPGxfwieJ41Eo8dDKWjedYHulWjl7IblbchjMh1so1YTylzLBsy++XwXuvfaKohO2ZzbkbLT91d7NoIblO5gxfGlQgfgDgf0t0kMqJiD179/y6Pc+1kq+HZEJPK9XDYxk9fY7av+11zFO/SUosE668X2ABSrgN8HGphtvtlkChnmufNO3AV3z5Jc+YjFm5cdw==
+ b=QRX88r6OhKOb7Tj/taetBUtu3ypBBWw8PPLDljqs+ZHnazmQe0kDkS+E+PtXwSmDoYe6lwmGcyrTr4GD6hQMbG2YeoaqIrJdf2gtR+v+qJq0zuZ21ItJ5J4AmKp0MLwQORhMCeYjYFS1czkyBZDs5lLYV+53cZOlv/xdoCEmP3r7zy18PF7EGJUdofRRPgmcSXD0TX0Oqg5sSwg1MYOVmy/n4YVawicxqCxIOc3qx2leGT3xoBom3KdwLom/gSliPP8Fz3Gf8HMRUgyCnO2JJOYb2cOqNe88l9VyqZy3R0F8gs6hjbQu/vpH147i1cg7DgOGwimLedcKgkH5RZaV7Q==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=cWGT8wZOJd4+s79dAk+dBgg4rR00KJ/cHqvY6LvbAbE=;
- b=QU2Th/rD+ZG7NiLhp/hDx7lV/ANlKFslHJ+ESXtSNcNUjS4PBdBBQ0OehmyYHlm7xddOkJvn8dNOl8tTzCXSoH39z5cfMH8rY1XEvlRFA++H9X4OHfne3lC3nAP+1vAIb9gV9hUqDxq9W4nmNW/tlYY1NGuIK2EXq3fsmv5LDmTJb4OIE2BpE+OnKpsYnyn7RO9k6xcbt2vK6AAA40ffQ1XTxr84kqAAzqjj442M5508UNdpE70uCzynDDuh0IANzcbYPo0sa0qnqkhLeZCePG0Dt2SAxT5ijsq46+imyzGaUdh+NVXHdlVwG0jYeQIWEh0eauhIrRW++g4vTeq3tw==
+ bh=a0bk9W6HBFXXDYOtsPKWaoobGdv0ngoNdZXZwrsqbgE=;
+ b=meA/M85svFHKGHDBi/XgfFniaRWg6sVygMZtLSDAsSwvW3leFqFuoBtnMjNgAA8Hsf2Z/oDPaHCS/Qs1XpDIRs2X2l34hgy2lv1a1CN+2WgxVzRZJC+dsh1oXY2SQegveJv+oCNSS3aztK4ZV02cV6jdYDvxi5OgF3x8l2tYpBNU3ZOn+odrbvbqed+ROrjKlgs2Qgux0Q5JW1GJuF/4reNuReKvCtZ484+XhyPnX78oHoAzE6U4s6rCZZohXEVuVcQd528xyCzJeQ/UpEJZQmgiKwbfRV0Z9erT/HpbWd1tvU7HOxK9bcou16bQOQqLB7dPDCZ4Is62+rE4M5kNcw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from BL1PR11MB5978.namprd11.prod.outlook.com (2603:10b6:208:385::18)
- by DM4PR11MB6263.namprd11.prod.outlook.com (2603:10b6:8:a6::13) with
+ smtp.mailfrom=synaptics.com; dmarc=pass action=none
+ header.from=synaptics.com; dkim=pass header.d=synaptics.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=Synaptics.onmicrosoft.com; s=selector2-Synaptics-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=a0bk9W6HBFXXDYOtsPKWaoobGdv0ngoNdZXZwrsqbgE=;
+ b=SdPnzHzaNiDvRPtAUvMd2mhnrKaN8dvpBhZJMPhzVGt8LoQV6p0VT3F++wwFlM9/23RbW0xGek97RXPpAbfNzNFEPMFIAMuk1Z9sHkSGwRd93nbKY/si/n/lupRH87Qv72WJQFwy9/fKKgeyHEMyqGxoW4QPs44VI8hctPtyke0=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=synaptics.com;
+Received: from DM6PR03MB5196.namprd03.prod.outlook.com (2603:10b6:5:24a::19)
+ by SA2PR03MB5801.namprd03.prod.outlook.com (2603:10b6:806:11d::22) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.24; Thu, 29 Jun
- 2023 03:40:45 +0000
-Received: from BL1PR11MB5978.namprd11.prod.outlook.com
- ([fe80::19b7:466f:32ac:b764]) by BL1PR11MB5978.namprd11.prod.outlook.com
- ([fe80::19b7:466f:32ac:b764%3]) with mapi id 15.20.6521.026; Thu, 29 Jun 2023
- 03:40:45 +0000
-From:   "Huang, Kai" <kai.huang@intel.com>
-To:     "peterz@infradead.org" <peterz@infradead.org>
-CC:     "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "Raj, Ashok" <ashok.raj@intel.com>,
-        "Luck, Tony" <tony.luck@intel.com>,
-        "david@redhat.com" <david@redhat.com>,
-        "bagasdotme@gmail.com" <bagasdotme@gmail.com>,
-        "Hansen, Dave" <dave.hansen@intel.com>,
-        "ak@linux.intel.com" <ak@linux.intel.com>,
-        "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "Chatre, Reinette" <reinette.chatre@intel.com>,
-        "Christopherson,, Sean" <seanjc@google.com>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "Yamahata, Isaku" <isaku.yamahata@intel.com>,
-        "nik.borisov@suse.com" <nik.borisov@suse.com>,
-        "hpa@zytor.com" <hpa@zytor.com>, "Shahar, Sagi" <sagis@google.com>,
-        "imammedo@redhat.com" <imammedo@redhat.com>,
-        "bp@alien8.de" <bp@alien8.de>, "Gao, Chao" <chao.gao@intel.com>,
-        "Brown, Len" <len.brown@intel.com>,
-        "sathyanarayanan.kuppuswamy@linux.intel.com" 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        "Huang, Ying" <ying.huang@intel.com>,
-        "Williams, Dan J" <dan.j.williams@intel.com>,
-        "x86@kernel.org" <x86@kernel.org>
-Subject: Re: [PATCH v12 05/22] x86/virt/tdx: Add SEAMCALL infrastructure
-Thread-Topic: [PATCH v12 05/22] x86/virt/tdx: Add SEAMCALL infrastructure
-Thread-Index: AQHZqDWtRkTpkzZfa0qfwqSEOzdd8q+gL/mAgACuGQCAAEh3AA==
-Date:   Thu, 29 Jun 2023 03:40:45 +0000
-Message-ID: <d8f31af975aaba74828f7aeca5532712c9e0e0eb.camel@intel.com>
-References: <cover.1687784645.git.kai.huang@intel.com>
-         <b2a875fd855145728744617ac4425a06d8b46c90.1687784645.git.kai.huang@intel.com>
-         <20230628125813.GA2438817@hirez.programming.kicks-ass.net>
-         <84f0acd416aef0796317e76edcf0b63622583436.camel@intel.com>
-In-Reply-To: <84f0acd416aef0796317e76edcf0b63622583436.camel@intel.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Evolution 3.48.2 (3.48.2-1.fc38) 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BL1PR11MB5978:EE_|DM4PR11MB6263:EE_
-x-ms-office365-filtering-correlation-id: d372d056-ce17-4f09-3bf7-08db78529ed4
-x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: odPGaVtU+7NRkKuilcUX4d3HGVudmMCww9hE0/ebZGSh94kv4chxYm84YDL8fsBFR/qBuRdscgTzCYHbVphY4hbYPCGLd/bqarN3VGQ6H/lO0Jn9zM1OS6IoRLUrQumjva2Z7y/RhHCjDP5/RFQqskah9Jx1t2oyi9JmxOlG9iJY8x5wkA6yMaWcWHr1L9N8vwfxPM3KgeYel6IvBy/BAAe/wdxS9LkKaiHAX35yWjx4tWof28Jb7BC06fW/ge6q2rfcZB5naSkc8pa98l41uUlTo2LQb13WsV7Wy4P6CkMtm+1Wp+STA3WQ9sV4zriUSzGniTblq5za0/WKS1bA45eXgr2fqx+TD9X9sRCgDfDUodMbYFWywllTTEggonUhab4jDzSKj+zijFNfPS2OzK0ev6J+CmqrdMovt7AxEzv6kZTLhpRrJDJSLSF2U1JFEYxsfS1Yg3GJ3E+cg7UaBfW39kz0NEEy0OeaPa9kk78a0oOUcguDwouSJv/1xrAJqpOzd8ur65j80AWwfB1qcYPE6/RKgpdt7BZm5XuW2ZLf6qt6HuXSelov7vHk7+xx4a/wJDCCKAqoXO5IYuXACqU6P1F0VWe0Dps7HledtxTQro3cIF/ui5sO6ypJK6nP
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL1PR11MB5978.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(346002)(136003)(39860400002)(376002)(366004)(396003)(451199021)(6512007)(66446008)(38070700005)(26005)(66556008)(66476007)(4326008)(66946007)(36756003)(122000001)(7416002)(86362001)(6916009)(8936002)(41300700001)(316002)(8676002)(82960400001)(5660300002)(91956017)(64756008)(38100700002)(76116006)(6506007)(6486002)(186003)(2906002)(83380400001)(4744005)(71200400001)(54906003)(478600001)(2616005);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?bzBWYlVVWFFmOTVBYlI1bG9NbHRZckJMaEJQRnFjYUs0ZkpUZXFwZ0ZOWEJn?=
- =?utf-8?B?OXNvenFEYVA0VVBzNTAvbGdnYVlDS0tPYW5DWmRxd2VFajMvTVpGUVpHUVRn?=
- =?utf-8?B?c0RyMlFKNkZqRFYxWUh2elh0cGxwMTF3b2JLWnVmQXRFblZJckFwcUlKeW02?=
- =?utf-8?B?cjFaNk9WL2QvRFZWeXE4MHBWN2pnT01BOSsxOFFId0IzenVFcWZteFE1ajhZ?=
- =?utf-8?B?WWdyR1hERXJadmp3Z2l1RkR5YlJxaEJ5dU1zcmxDSzd5VFA1ZFgwWFNDbE9u?=
- =?utf-8?B?YzRkNFBIL0lBQ0dpYldackYvYjQxM0l4RU1LOFpOYnA2TEhzY0NRZU1nV05r?=
- =?utf-8?B?N0RmQnNQdGltVHhDNlBaS1RyOXM5aFFNZDY4MHVPMXNKbzEvWE9ENUdDVTZp?=
- =?utf-8?B?MDNucjdPV2Jvdnd0elF4MzhwVXpnVnc0VFBBNUcvSW9xbFFDZzA1UDQwQU0z?=
- =?utf-8?B?WTF3M2NEVzhpMWwzWU9SK0NUYy9ZNkVLelRwT056SFIyVFI0bUFpQVQvVWtm?=
- =?utf-8?B?dDBiOUQ4eTBWZUFIL2R2VFFjc1dlbEpSNDJYRWoweWtFTEZ4YWxqMFhqUnFK?=
- =?utf-8?B?UGVzMG1iTGtSSThZdk0rdmlKa2wyTzRDQjBXakJVSnE5TVpGVDBQSU40djlB?=
- =?utf-8?B?aVIzVDcrMURHTHYxV2JCakpZenIwL1NnSC9CNlJ5OC84eU4xVWI5cVNNcCsw?=
- =?utf-8?B?Q2RaNi96aFFneHlnMk15N2VyaVFNeXQ1RkJhd056NHBvdExVaTA1SVlDTVFQ?=
- =?utf-8?B?V05WR2lwUElVcGJsY2UvM2VwQVpwTUdZQWovNFRBektzWTl6eCswT052cVVi?=
- =?utf-8?B?NUdGZVRha0F3OWpkQWs0bitjNjFkUnprOVRiV3JTSXVOUmFnc1BmWHBiNnBu?=
- =?utf-8?B?bkFOM1RWc0MvamFFTURYV0Q5YzB4RFRaS0RXbVRTMFo4STFndmpsOStXL3VJ?=
- =?utf-8?B?UHQ3d1QzaHRjcjExSitjdWhmV054aHp0VnJSZE1MTjhKdjUvQWswQWN3a1lZ?=
- =?utf-8?B?QVBzUk5ITllpajY4c1AvV1pKYWVJRVhVSmpsK3ZiOW5MejF2cDJRenZpUVdP?=
- =?utf-8?B?V01iaGdRek55K0pkOGIwY2tZRk9kTExiMm1jWVV3TVlzN3lPbE51dWsvZTFt?=
- =?utf-8?B?Y1B4NFFQbkEzYnlRV1YyV2V2V2ovK0VBQjVxYloxckxKQlJ4d3cvWUJCNm16?=
- =?utf-8?B?TXJpRnFNSWdmZWoxUEpqT2FBSjZYVmlHMjBGRjBwTWc1OXlad1dVRW4rOG1B?=
- =?utf-8?B?Y2FyUklPUnBJR091UktweklvNFJCY29GeDhWMy9uM09PRXR6Q3JTdWRKUVpF?=
- =?utf-8?B?em5HRVV5SGZWRG9aN0pqdFU4NkVYNEF3ZjRyMGo1N3VUczFhenVUY1cwQmRF?=
- =?utf-8?B?VXMwZHZ4UEtMQUltNjk1NExuZTkwNVJES2hYN2hEbXpiSXdITEhwVTFlTXBK?=
- =?utf-8?B?dzJBT2hhdG44WkprTTZUUkRLNmh5MzNwYUhiMmEzWjRFKzVwNWQvekNmSXFD?=
- =?utf-8?B?b1VrdXYrSGxKWEZYS3VCamFRMFdySnpNWWtOUFNqZnB5UDdBK1QwNmY3RTZU?=
- =?utf-8?B?dENQT1hSUVJSaDR4blNHZXZLSllqODlPcTMvNjgyc3lrdlYwcmY2WU5RNWE5?=
- =?utf-8?B?TmRiUWdqZm5wbjFFWnVPQnF2ZlFtcGwweFdRNDZPWG1SaGlGVmRqdWVlblFV?=
- =?utf-8?B?ZkhiWG9SL1BxR2VZTkFEVkRqQXUxRDArVXhGY1htTkVMT095RHFCVEpDaysr?=
- =?utf-8?B?SDVrZTJCckZCbk1Ud20wNVBqK3ZxeFlhVVZMQlpwM28rQk9jcmEyTDZhQmtL?=
- =?utf-8?B?V1o0TEtFSzVybG5jN3BCVVNzT01hLzFsSXFDRUVjR2VyQjJlOGdmL2JYUlF3?=
- =?utf-8?B?WFlZaGlKQWwwSDNKK25FblV4eHpBampGbVEwSnFoN1UrYWJrYkZndDB4Vjl0?=
- =?utf-8?B?OHRBbnFHOVdHd1VvcUk0cnppd0syNVhJRXhyUUdnd2Y3K1pjSnZPc1NtZEdB?=
- =?utf-8?B?amNMb2o3ckJSQ2JDVmNlQjExNkdwZEIwV2RzOXc5NS9uZnFEN1FOY0F2T1VM?=
- =?utf-8?B?ZURNblQzTDU2TXhYWGJPNFlNNVEwbVA0ZUg5dklMLzRBVHNrUS9tRzM1TStj?=
- =?utf-8?B?ZXlhQzRsRzNhcjhzbmV4Z2M3cXJaRlJiVVlCdXI2KzVlNFN1cS81WXQ2dHpt?=
- =?utf-8?B?a3c9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <B1934397466D1C4282E7166438BA996F@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: base64
+ 2023 03:43:39 +0000
+Received: from DM6PR03MB5196.namprd03.prod.outlook.com
+ ([fe80::6882:b9c1:2b2d:998d]) by DM6PR03MB5196.namprd03.prod.outlook.com
+ ([fe80::6882:b9c1:2b2d:998d%5]) with mapi id 15.20.6521.023; Thu, 29 Jun 2023
+ 03:43:38 +0000
+Message-ID: <9b732791-87c0-c970-eb68-b02531cc1bdc@synaptics.com>
+Date:   Thu, 29 Jun 2023 11:43:30 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH v7 1/9] media: v4l2: Extend pixel formats to unify
+ single/multi-planar handling (and more)
+Content-Language: en-GB
+To:     Nicolas Dufresne <nicolas@ndufresne.ca>
+Cc:     linux-media@vger.kernel.org, ayaka <ayaka@soulik.info>,
+        Brian.Starkey@arm.com, boris.brezillon@collabora.com,
+        frkoenig@chromium.org, hans.verkuil@cisco.com, hiroh@chromium.org,
+        hverkuil@xs4all.nl, kernel@collabora.com,
+        laurent.pinchart@ideasonboard.com, linux-kernel@vger.kernel.org,
+        mchehab@kernel.org, narmstrong@baylibre.com, sakari.ailus@iki.fi,
+        stanimir.varbanov@linaro.org, tfiga@chromium.org,
+        Helen Koike <helen.koike@collabora.com>
+References: <20230206043308.28365-1-ayaka@soulik.info>
+ <20230206043308.28365-2-ayaka@soulik.info>
+ <1e3a583f-f9ef-d2d3-6571-ac3b79d800ce@synaptics.com>
+ <6674abe5681c0f4a4e4466e034393359346cfda7.camel@ndufresne.ca>
+From:   Hsia-Jun Li <Randy.Li@synaptics.com>
+In-Reply-To: <6674abe5681c0f4a4e4466e034393359346cfda7.camel@ndufresne.ca>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: PH0PR07CA0059.namprd07.prod.outlook.com
+ (2603:10b6:510:e::34) To DM6PR03MB5196.namprd03.prod.outlook.com
+ (2603:10b6:5:24a::19)
 MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6PR03MB5196:EE_|SA2PR03MB5801:EE_
+X-MS-Office365-Filtering-Correlation-Id: ba15a00f-b5d8-4b84-cca8-08db78530654
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: HlYC7mM9/gd4tctCz850oA+AX0BF6pHyxCZvyk2BzKuaB6vbYtcf8GEAFzWiVvuZAjTFba5PSqiIoZ6wdkg6aU04e6G9Nl/CeeNS6SZQmt7vZ9pjwxTIWEx5ef3/kzKZuC4ykSTB1h0XFNOAiCTzJlLYRl3Yt/48DqQRlPJwh/DBlZ0bBsKuWAg7k1mOPIEWwViZj+f7u1gUivKes5iuEzpXltJo7rVZmW2dRdCws1HSvYwTgutTin4+IOJVGGkjidNYaR3jdsD7tP8+OsiLIDK+g4GC/39hTex70m8os6W3oQBou0NfqgKj40DrvBrjTBN1ferXPTxZxE0CGMQKU+Az0bTE+tVE1vXgFIIcpcMdRoEnBuNVdYD6fQ4FSDBnhWeCn0da7MpbG+mcSToWtUk1PcblALEVnlhU0pS/i5OAKD+EA/nWHKjlUJFUswfJuvNYX0kI7Y/3DslgmtbKJryBH0Q7mScyUGkA20MqwL7jTYKHrRQ0U0F1mxetdg9CPDfl0gynWOFHmsLWGCimgwCxnafhOTm/3PYefehgTBbPGzX/V4sMv1Z9V+qx/DA0J64ByhPrq7TOxl2EIX4+aPNOgP4OCXBTLa832jG+wE+G0E+dLUmqyVLVDLVnPObG5bZNFhYH/Q0+nSGDrnduCOE0bz3WaMic7dzn9B5rXGCKguoW4vZ/vSBdj5BT6Yb+
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR03MB5196.namprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(346002)(366004)(39850400004)(136003)(396003)(376002)(451199021)(31686004)(186003)(2906002)(66476007)(5660300002)(26005)(6666004)(31696002)(36756003)(7416002)(8676002)(6916009)(52116002)(316002)(54906003)(86362001)(45080400002)(6486002)(478600001)(4326008)(38350700002)(2616005)(38100700002)(66946007)(41300700001)(66556008)(8936002)(83380400001)(6512007)(6506007)(66574015)(53546011)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?RGd3Sktkb1FMdXhUS2lscU13TXBXWHMremFoQ2VDdkJrYURlRlRtTWRtb0ZR?=
+ =?utf-8?B?MWcyLy9sOHl2NWJxcVV2MTRhVnNFMjBJRDllOVUyWFNoUk8xcWJBdjRiU0lG?=
+ =?utf-8?B?MnpzVXdSQmpGUnRqL3RGeGptdGVxWC8yeG1DYXUzNmVMQ2hSbEIvQkdWUVV2?=
+ =?utf-8?B?VUZHdmF4MFNPaGZFQUNlNFZQTmpEVGkwejBWdkhwSitOdE11Nm15UGpEM2lN?=
+ =?utf-8?B?MnNMNExqa01tSWNHK1JTM2ZmS0haMFhQVnNwTEVVUWFNVjcxTTFZSVVWTldT?=
+ =?utf-8?B?a3ZRR2VLU0ZFMitoM1MzZjFxMEJsTkJoSVo5N1VGYllnQkZDMVhjTVQ0SWc4?=
+ =?utf-8?B?MThiSFk2d1FEQWRjZDZsU0hyeGRzU1JWMlBwNmpRY3MzY2hLRXdwNUVFbEor?=
+ =?utf-8?B?MUVnYlVsdDVEVXNqZ09VZkplZWFPYXFFb29Cakg5cjhCZUZWRTYySmRrSmFJ?=
+ =?utf-8?B?VnlpKzN3VkpNRmZSMkNzY0hNL2lZMkJPcEVxUGMxOHQramp0VEltOXFadFFj?=
+ =?utf-8?B?MGpkVStrcUtwNDJXRjJpdEMySTI4NEpER3dmaWxYeGxiZUxFZUtRdUlhZzgy?=
+ =?utf-8?B?akxCOExYNERCRDJxdGZHQ0JiRnNMZEY3UHBtbnRBOW1UbEprREhUMmRrMGZJ?=
+ =?utf-8?B?SjdhMzJ0NVVhMTlUTjREc2dwNG1kZDgzSkkwbDZhSmxQaSt3NHk1YzF6MmU0?=
+ =?utf-8?B?cU9MclhNNEtPVU9QVU5temxybVBNS0xURWdLSHdnZEh1TkJ5OERrSndFSjlx?=
+ =?utf-8?B?TUZwUktPMkdNaWpmdEtleDgxZlhIaVVRSGZRem02dlN3R0txeEczQTNpNmFs?=
+ =?utf-8?B?bkZsRmNOU3lvT1U1WFpXRUpNRjM5R0d1SXlweXNjSWdSRlR4a05nQ1ZrRHpN?=
+ =?utf-8?B?a1VGa0xPMXhIT2VvSW8zV0VwdFdOdkFlT0E2SDFCRElPV1RuQlB1S3J0Wktn?=
+ =?utf-8?B?c3c3WDhmclUyU05tVklObDhER0QvRXQrMmpsdUpzMjAwdVpSYkFkZHJYOE9I?=
+ =?utf-8?B?UFZQWEhEM0xPN21EY1lSRzRSOFVTcEl4QW5iSy90Y3ZPbWo3YXU2dmFBczFJ?=
+ =?utf-8?B?YlJPR3JyZjZCWVh4M0pHbVBBUE12WjE2OFhuWXlZcUVVNUZETkErVnVhREtx?=
+ =?utf-8?B?SUl5TXdYcU1HTFZ0Tm5pUGtycUx0MjFpQURmTE12ckRxOEc2UkNoTTkvT1Nh?=
+ =?utf-8?B?dVc2TW5zcVBYUExFNW1yTmxzT1Rwd2tpd2QzZ0dKNHQxS1dLNXFvRURpa2ZO?=
+ =?utf-8?B?QnRJOUZLSVkwV0NMdzRhVFJHaUxEc2wzOU1McmJ0b2ZkVWh6cmJzT3oxKzY3?=
+ =?utf-8?B?YUZsT3NKOWRGRFhQZmpTQXViWnVOeVd5ZzFzd0RpRldLdXZZUXVnMlJ1Wlha?=
+ =?utf-8?B?Y25ZL0pSdVZBTWhCU0lFTUJKUTh3aTVQQkI1Z0swT0hGVFVVOXBZN3FhVTdy?=
+ =?utf-8?B?algwMk8wdkZiU0NpWEhnY2N4ZU9aMlpBTG5wdXFhM1hSSDhjZGc2V0J0UnZJ?=
+ =?utf-8?B?YkM0R1BBNTkrREpBUXoySyswbjlzMmFLeXNHVDIzbGJzN281dzg5aGpaSUkr?=
+ =?utf-8?B?UTJxUC9kV2xrb1F2OVZRY3FFcWhzRGhpNGRqdnh2a2JrT29NUHhRT2xhbVRl?=
+ =?utf-8?B?ZERlMjY3SXVyemxpSy81WU5nYW1KY3UvVDEva1VYK0k2eU5qSUp3cDhKTmhB?=
+ =?utf-8?B?eWRoNzJVaHdPM3IwcTdETlc2V2d2aS9BSjE5cWs4RUFsSkxEVlBYRzhSL3BO?=
+ =?utf-8?B?VEl5RWt0aXIvVUpyLzdMd29TcmI4TkNtY2FQaDJnbzJ0dE9pSk1nU2dJdEJ0?=
+ =?utf-8?B?REJXeTl5T3VadlNWTldvQWZBdXNTaTJJbnlEVlduWjBjd2FCVWtET0hYRVVv?=
+ =?utf-8?B?ekYrWXgzVEh3c3dSTXRVY054SERlZ2FYU0ZSVWlLdkhlRU5aOU1ZTy9DRjlv?=
+ =?utf-8?B?UDB1UjRNaXhwS2VZYTlJTllNenk4QjdUWFNFR2ZDVFR2ZFZoZjBGVFU2cU1S?=
+ =?utf-8?B?clp0OWpqcWp4WTNKTTVxbnNUTkxuVWIrZDVvQS9jMk5iVjdVMmVBS2x1RlZH?=
+ =?utf-8?B?ckxDUnc5Vy9WcS9sMEcyN2VyeWtPcTdkTC8rUTBhRHVOdzhxeGlCZVlUVU9u?=
+ =?utf-8?Q?kq3OYrUyfLmAiS3rmAvGFlB7i?=
+X-OriginatorOrg: synaptics.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ba15a00f-b5d8-4b84-cca8-08db78530654
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR03MB5196.namprd03.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BL1PR11MB5978.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d372d056-ce17-4f09-3bf7-08db78529ed4
-X-MS-Exchange-CrossTenant-originalarrivaltime: 29 Jun 2023 03:40:45.0386
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Jun 2023 03:43:38.8052
  (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: w6BUvovp84BlTympObhY1naZZHAQPavRnfSIQiIZR9IBhSW2Ivwieso9gsipksUMcS+jkbPLqszZ2KkS+0klyQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR11MB6263
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-        lindbergh.monkeyblade.net
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 335d1fbc-2124-4173-9863-17e7051a2a0e
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 8rgxZxQBFSTDb8ZrAEuRlVCwQSUyewCN8dAGI1O5b0tQMOeVxZQjYx40Av09MT5JHQLyLKROTkxi2JLQgxg/4Q==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA2PR03MB5801
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gV2VkLCAyMDIzLTA2LTI4IGF0IDIzOjIxICswMDAwLCBIdWFuZywgS2FpIHdyb3RlOg0KPiA+
-ID4gKwkvKiBOZWVkIGEgc3RhYmxlIENQVSBpZCBmb3IgcHJpbnRpbmcgZXJyb3IgbWVzc2FnZSAq
-Lw0KPiA+ID4gKwljcHUgPSBnZXRfY3B1KCk7DQo+ID4gDQo+ID4gQW5kIHRoYXQncyBpbXBvcnRh
-bnQgYmVjYXVzZT/CoA0KPiA+IA0KPiANCj4gSSB3YW50IHRvIGhhdmUgYSBzdGFibGUgY3B1IGZv
-ciBlcnJvciBtZXNzYWdlIHByaW50aW5nLg0KDQpTb3JyeSBtaXN1bmRlcnN0b29kIHlvdXIgcXVl
-c3Rpb24uDQoNCkkgdGhpbmsgaGF2aW5nIHRoZSBDUFUgaWQgb24gd2hpY2ggdGhlIFNFQU1DQUxM
-IGZhaWxlZCBpbiB0aGUgZG1lc2cgd291bGQgYmUNCmJldHRlcj8gIEJ1dCBpdCdzIG5vdCBhYnNv
-bHV0ZWx5IG5lZWRlZC4gIEkgY2FuIHJlbW92ZSBpdCAodGh1cyByZW1vdmUNCntnZXR8cHV0fV9j
-cHUoKSkgaWYgeW91IHByZWZlciBub3QgdG8gcHJpbnQ/DQo=
+
+On 6/29/23 00:27, Nicolas Dufresne wrote:
+> CAUTION: Email originated externally, do not click links or open attachments unless you recognize the sender and know the content is safe.
+>
+>
+> Hi,
+>
+> please avoid HTML replies on the mailing list.
+  I need to blame outlook.
+> Le mardi 27 juin 2023 à 14:42 +0800, Hsia-Jun Li a écrit :
+>>> +/**
+>>> + * struct v4l2_ext_pix_format - extended multiplanar format definition
+>>> + * @type:          enum v4l2_buf_type; type of the data stream
+>>> + * @width:         image width in pixels
+>>> + * @height:                image height in pixels
+>>> + * @pixelformat:   little endian four character code (fourcc)
+>>> + * @modifier:              modifier applied to the format (used for tiled formats
+>>> + *                 and other kind of HW-specific formats, like compressed
+>>> + *                 formats) as defined in drm_fourcc.h
+>>> + * @field:         enum v4l2_field; field order (for interlaced video)
+>>> + * @colorspace:            enum v4l2_colorspace; supplemental to pixelformat
+>>> + * @plane_fmt:             per-plane information
+>>> + * @flags:         format flags (V4L2_PIX_FMT_FLAG_*)
+>>> + * @ycbcr_enc:             enum v4l2_ycbcr_encoding, Y'CbCr encoding
+>>> + * @hsv_enc:               enum v4l2_hsv_encoding, HSV encoding
+>>> + * @quantization:  enum v4l2_quantization, colorspace quantization
+>>> + * @xfer_func:             enum v4l2_xfer_func, colorspace transfer function
+>>> + * @reserved:              drivers and applications must zero this array
+>>> + */
+>>> +struct v4l2_ext_pix_format {
+>>> +   __u32                           type;
+>>> +   __u32                           width;
+>>> +   __u32                           height;
+>>> +   __u32                           pixelformat;
+>>> +   __u64                           modifier;
+>>> +   __u32                           field;
+>>> +   __u32                           colorspace;
+>>> +
+>>> +   struct v4l2_plane_pix_format    plane_fmt[VIDEO_MAX_PLANES];
+>>> +   __u8                            flags;
+>>> +    union {
+>>> +           __u8                            ycbcr_enc;
+>>> +           __u8                            hsv_enc;
+>>> +   };
+>>> +   __u8                            quantization;
+>>> +   __u8                            xfer_func;
+>>>
+>>>
+>>>
+>>>
+>>>
+>>      I heard that a suggestion that we could remove colorimetry fields
+>>        here.
+>>      Although those are useless for codec M2M drivers if no pixel
+>>        formats translation invoked.
+>>      Even HDMI(DRM) cares about colorspace.
+>>      For example if a downsink(TV) shows RGB formats,  with an YUV
+>>        input frame buffer, colorimetry would be important or the wrong
+>>        EOTF would be used. If YUV is MPEG range(linear EOTF) while a
+>>        non-linear EOFT (full range) is used, you would found the black is
+>>        not black enough while the white looks a gray. Also color bias
+>>        would happen.
+>>      This problem may not happen to a ultra high resolution TV while
+>>        only YUV type color formats are supported due to HDMI bandwidth
+>>        limitation.
+>>      The problem I want to raise is the time cost for enumeration.
+>>        Each pixel format with a colorimetry setting would invoke a
+>>        ioctl(). For the application likes Gstreamer would enum all the
+>>        possible colorimetries.
+>>      It would be better we could have something like DRM blob id that
+>>        application could copy the data from a non-DMA buffer from the
+>>        kernel.
+> This is a good topic. Colorimetry could indeed be moved away from the format,
+> considering they cannot be enumerated. It remains that this information needs to
+> be passed around, and the format of a blob in media space is not has restricted
+> as with display HW. I think keeping an "exploded version" of the colorimetry
+> remains needed.
+>
+> Remember though that for stateful decoder, were the information could be stored
+> in the bitstream, the decoder is responsible for returning that information.
+> Currently its passed through the G_FMT call, it would need to be replaced with a
+> control, similar to the HDR10 static metadata. If the colorimetry is no longer
+> static in the future, and may change while streaming, one option would be RO
+> request. This was foreseen for HDR10+ and Dolby Vision metadata notably, though
+> other options exists.
+
+That is why I want to promote importing a whole buffer(framebuffer id) 
+from drm.
+
+We can't pass such DMA metadate with the main data(graphics here) in a 
+queue.
+
+>
+> There exist known decoders that can do YUV to RGB conversion using an inline
+> post procesor (VC8000D and newer is an example), and for these to return correct
+> colors, the colorimetry information needs to be passed. So its not strictly
+> useless.
+>
+> In short, if we drop colorimetry from format, we also need to go ahead and
+
+I am worrying when people setup up a UVC device(usb camera), they may 
+ignore this step.
+
+Camera could be in a BT.601 colorspace than BT.709 which has a slight 
+difference. And BT.601 has a full range variant.
+> design a replacement for it, that allow for the application to detect changes.
+>
+> regards,
+> Nicolas
+>
+-- 
+Hsia-Jun(Randy) Li
+
