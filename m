@@ -2,90 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17551742988
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 17:25:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63D4C742996
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 17:26:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232699AbjF2PZS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 11:25:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51732 "EHLO
+        id S232799AbjF2P0m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 11:26:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232693AbjF2PYh (ORCPT
+        with ESMTP id S232848AbjF2PZ5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 11:24:37 -0400
-Received: from mail-il1-f173.google.com (mail-il1-f173.google.com [209.85.166.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BDDC359C;
-        Thu, 29 Jun 2023 08:24:34 -0700 (PDT)
-Received: by mail-il1-f173.google.com with SMTP id e9e14a558f8ab-341ff6251f2so3289825ab.0;
-        Thu, 29 Jun 2023 08:24:34 -0700 (PDT)
+        Thu, 29 Jun 2023 11:25:57 -0400
+Received: from mail-io1-f47.google.com (mail-io1-f47.google.com [209.85.166.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E0D04209;
+        Thu, 29 Jun 2023 08:25:25 -0700 (PDT)
+Received: by mail-io1-f47.google.com with SMTP id ca18e2360f4ac-7837329a00aso33640239f.2;
+        Thu, 29 Jun 2023 08:25:25 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688052273; x=1690644273;
+        d=1e100.net; s=20221208; t=1688052325; x=1690644325;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=+eQgcjG/JNZBQYsHaOaghoEHW/pYFGXm2Ot9OAjBn+I=;
-        b=Nq2TvS/ZBwthT+5sf3AkLP6uvpP8O4K67rzv2UWNL6tS5DgiM17vLkwEiuQ0MgwvOx
-         TXAWJsfp4MSlVDudYR47jAU4VN0kePvhci5jpvJIrWvQGPv1V6KqCQ6249ibh+WFsdwz
-         EhjjBCfb6N9zckAh4Pl088NcsUw1Ftd0Jhq1LmhQe7gfEaUS13MdULOS98UurGoQls7C
-         bx/5hEfoZIDLY9Hqya27K+909eLtd4eRIRf2dH2qt4U4l5CfIGiiFirkTQU+LMa7U3ES
-         0YVV8v6goT0tAljKgx/2NtiZkXM9FRl0TVwdPTmMwKtkIPe+t+GpBGXg9yRX0O0cdYx3
-         DYeQ==
-X-Gm-Message-State: AC+VfDx6g3wbbVTjLabCHHLiSYG4H/XOFslzNZKb2Z/nt/L3igo2fI1h
-        Am6UT18Evya/IHauSoxEmA==
-X-Google-Smtp-Source: ACHHUZ6aWR2cNKLqqna8mhpYMU4KBK1rHsg3TJ2zE4I+ravgqHborA0R3NbQyITNWdKK9jJT6CE9HA==
-X-Received: by 2002:a92:c802:0:b0:33d:8720:7d98 with SMTP id v2-20020a92c802000000b0033d87207d98mr31008278iln.13.1688052273202;
-        Thu, 29 Jun 2023 08:24:33 -0700 (PDT)
+        bh=TnHuzw7CkVANTcF7RhSjmBYBRcPIhT7jREWwRFoM0uo=;
+        b=Q2Ax8WJAQebUa48iyEP+HUitMSPUQHK716f03TCFiK8Teoy4v3Nr3azxfqjtvZfRJO
+         RHQR664Xr3WpiQZlUeD6Pb0XDejzl3WOfhqhQhPBDJvgyIBmsZu3I6tCXhV3r59Jf/sp
+         /+nUbCOCeJN1ZUjE070Gl71Is2y5VQhYIEQauhUQJeycTpkuJ4VwT92kfxyNzlQfXEse
+         xUMV5iftClOHFV8RFSPd/QK9MmtpmPfeEci2XmofLqHVRg6JgvTIa/s3OvIEgalfvUtO
+         tCtKfPWdeHCbgwyLq3gO7rNJU1khlW7kU2gLvmWchzp0ug+AxVamsT7aVXzkjgpEVc0O
+         KGtA==
+X-Gm-Message-State: AC+VfDyDrvc/8daMCo9XmnGhYQ6A5Zx+JroL1EJ7LVIJ1bRhm67tQ5FJ
+        vnpKhddzm+iI8p3r0HUJeQ==
+X-Google-Smtp-Source: ACHHUZ4lZ0RzUIUB6cZqLxkPbdh8s9wacVYy2WiA/MADygWgpIkifl94VHt3S/snbZZ2XsWJonb1qw==
+X-Received: by 2002:a5e:8712:0:b0:785:d5d4:9f1c with SMTP id y18-20020a5e8712000000b00785d5d49f1cmr5593084ioj.18.1688052324947;
+        Thu, 29 Jun 2023 08:25:24 -0700 (PDT)
 Received: from robh_at_kernel.org ([64.188.179.250])
-        by smtp.gmail.com with ESMTPSA id o13-20020a92c04d000000b0033a50ad8176sm4232350ilf.18.2023.06.29.08.24.29
+        by smtp.gmail.com with ESMTPSA id h3-20020a02cd23000000b0042acbd3a791sm2764234jaq.9.2023.06.29.08.25.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Jun 2023 08:24:32 -0700 (PDT)
-Received: (nullmailer pid 3061956 invoked by uid 1000);
-        Thu, 29 Jun 2023 15:24:29 -0000
-Date:   Thu, 29 Jun 2023 09:24:29 -0600
+        Thu, 29 Jun 2023 08:25:24 -0700 (PDT)
+Received: (nullmailer pid 3063357 invoked by uid 1000);
+        Thu, 29 Jun 2023 15:25:22 -0000
+Date:   Thu, 29 Jun 2023 09:25:22 -0600
 From:   Rob Herring <robh@kernel.org>
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     Xu Yang <xu.yang_2@nxp.com>, iommu@lists.linux.dev,
-        Will Deacon <will@kernel.org>, Jun Nie <jun.nie@linaro.org>,
-        alsa-devel@alsa-project.org, Andy Gross <andy.gross@linaro.org>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        Max Chen <mchen@squareup.com>, Mark Brown <broonie@kernel.org>,
-        devicetree@vger.kernel.org, James Willcox <jwillcox@squareup.com>,
-        Andy Gross <agross@kernel.org>,
-        cros-qcom-dts-watchers@chromium.org,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Benjamin Li <benl@squareup.com>,
-        Vivek Gautam <vivek.gautam@codeaurora.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Zac Crosby <zac@squareup.com>, Peng Fan <peng.fan@nxp.com>,
-        Shawn Guo <shawn.guo@linaro.org>, Leo Yan <leo.yan@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Joseph Gates <jgates@squareup.com>,
-        linux-kernel@vger.kernel.org,
-        Vincent Knecht <vincent.knecht@mailoo.org>,
-        Banajit Goswami <bgoswami@quicinc.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Stephan Gerhold <stephan@gerhold.net>,
-        Lee Jones <lee@kernel.org>,
-        Konrad Dybcio <konradybcio@kernel.org>,
-        Wesley Cheng <quic_wcheng@quicinc.com>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Joerg Roedel <joro@8bytes.org>, linux-arm-msm@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        "Bryan O'Donoghue" <bryan.odonoghue@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>, linux-usb@vger.kernel.org
-Subject: Re: [PATCH 10/11] dt-bindings: usb: dwc3: Allow just 1 interrupt for
- MSM8996
-Message-ID: <168805226868.3061904.18194272296816895150.robh@kernel.org>
-References: <20230627-topic-more_bindings-v1-0-6b4b6cd081e5@linaro.org>
- <20230627-topic-more_bindings-v1-10-6b4b6cd081e5@linaro.org>
+To:     Taniya Das <quic_tdas@quicinc.com>
+Cc:     linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
+        sboyd@kernel.org, mturquette@baylibre.com,
+        bjorn.andersson@linaro.org, robh+dt@kernel.org, agross@kernel.org
+Subject: Re: [PATCH] dt-bindings: clock: qcom: Update my email address
+Message-ID: <168805232244.3063305.12279148321293876626.robh@kernel.org>
+References: <20230627173123.9221-1-quic_tdas@quicinc.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230627-topic-more_bindings-v1-10-6b4b6cd081e5@linaro.org>
+In-Reply-To: <20230627173123.9221-1-quic_tdas@quicinc.com>
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
@@ -98,15 +66,41 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On Tue, 27 Jun 2023 18:24:26 +0200, Konrad Dybcio wrote:
-> MSM8996, similarly to SDM660 has two DWC3 controllers: one for SS and
-> another one for HS operation. Allow just specifying the HS interrupt
-> in the latter case.
+On Tue, 27 Jun 2023 23:01:23 +0530, Taniya Das wrote:
+> Update my email address from the defunct codeaurora.org domain to the
+> current quicinc.com domain.
 > 
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> Signed-off-by: Taniya Das <quic_tdas@quicinc.com>
 > ---
->  Documentation/devicetree/bindings/usb/qcom,dwc3.yaml | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  Documentation/devicetree/bindings/clock/qcom,gcc-apq8064.yaml   | 2 +-
+>  Documentation/devicetree/bindings/clock/qcom,gcc-ipq4019.yaml   | 2 +-
+>  Documentation/devicetree/bindings/clock/qcom,gcc-ipq8074.yaml   | 2 +-
+>  Documentation/devicetree/bindings/clock/qcom,gcc-msm8976.yaml   | 2 +-
+>  Documentation/devicetree/bindings/clock/qcom,gcc-msm8996.yaml   | 2 +-
+>  Documentation/devicetree/bindings/clock/qcom,gcc-msm8998.yaml   | 2 +-
+>  Documentation/devicetree/bindings/clock/qcom,gcc-other.yaml     | 2 +-
+>  Documentation/devicetree/bindings/clock/qcom,gcc-qcs404.yaml    | 2 +-
+>  Documentation/devicetree/bindings/clock/qcom,gcc-sc7180.yaml    | 2 +-
+>  Documentation/devicetree/bindings/clock/qcom,gcc-sc7280.yaml    | 2 +-
+>  Documentation/devicetree/bindings/clock/qcom,gcc-sdm845.yaml    | 2 +-
+>  Documentation/devicetree/bindings/clock/qcom,gcc-sm8150.yaml    | 2 +-
+>  Documentation/devicetree/bindings/clock/qcom,gcc-sm8250.yaml    | 2 +-
+>  Documentation/devicetree/bindings/clock/qcom,gcc.yaml           | 2 +-
+>  Documentation/devicetree/bindings/clock/qcom,gpucc.yaml         | 2 +-
+>  Documentation/devicetree/bindings/clock/qcom,mmcc.yaml          | 2 +-
+>  Documentation/devicetree/bindings/clock/qcom,msm8998-gpucc.yaml | 2 +-
+>  Documentation/devicetree/bindings/clock/qcom,rpmhcc.yaml        | 2 +-
+>  Documentation/devicetree/bindings/clock/qcom,sc7180-camcc.yaml  | 2 +-
+>  Documentation/devicetree/bindings/clock/qcom,sc7180-dispcc.yaml | 2 +-
+>  .../devicetree/bindings/clock/qcom,sc7180-lpasscorecc.yaml      | 2 +-
+>  Documentation/devicetree/bindings/clock/qcom,sc7180-mss.yaml    | 2 +-
+>  Documentation/devicetree/bindings/clock/qcom,sc7280-camcc.yaml  | 2 +-
+>  Documentation/devicetree/bindings/clock/qcom,sc7280-dispcc.yaml | 2 +-
+>  .../devicetree/bindings/clock/qcom,sc7280-lpasscc.yaml          | 2 +-
+>  .../devicetree/bindings/clock/qcom,sc7280-lpasscorecc.yaml      | 2 +-
+>  Documentation/devicetree/bindings/clock/qcom,sdm845-dispcc.yaml | 2 +-
+>  Documentation/devicetree/bindings/clock/qcom,videocc.yaml       | 2 +-
+>  28 files changed, 28 insertions(+), 28 deletions(-)
 > 
 
 Acked-by: Rob Herring <robh@kernel.org>
