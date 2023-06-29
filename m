@@ -2,153 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 138C4742F46
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 23:08:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 784A0742F55
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 23:11:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231634AbjF2VIN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 17:08:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51450 "EHLO
+        id S231681AbjF2VLU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 17:11:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229727AbjF2VIL (ORCPT
+        with ESMTP id S230453AbjF2VLR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 17:08:11 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CED2A2D4C;
-        Thu, 29 Jun 2023 14:08:10 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 699EB61640;
-        Thu, 29 Jun 2023 21:08:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC82BC433CC;
-        Thu, 29 Jun 2023 21:08:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688072889;
-        bh=QVWWSgeIDy9G1T0y1s1CguF1zCjfXWdS83lM64yH870=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=R0CzxeqamLxMSeOUudK9QLDYHXutU4k1i7YAU/+nbdoHGbbXXiPe7urw9sDNEJLAL
-         aVDE8AZM6wPuRaqrkBRJQ+Vsp7VabCX8CRCZyCzpLv0sGygnHpMeEzcuGK9nBIb98U
-         Wj3wtfiP8Or1RUoId9/E1N7KZdRJTK/S+EsW7yEiRpxUebQt52CKB3gnG9nY9/9Fo5
-         OE9oWn+jsh5oWgUc3BBhvjBbt72tozVDtgMUSHcEabrlow+kZqmeyfQ2/OJFpl9UTk
-         OeytmAd7bSVCpIXGYlID5yu9Gs8H4hh+ifQbjlMMRuDi4DLp9IO3GdvQOI7Qcl/6xJ
-         TTi8z1bczuBiw==
-Received: by mail-lf1-f44.google.com with SMTP id 2adb3069b0e04-4f13c41c957so333166e87.1;
-        Thu, 29 Jun 2023 14:08:09 -0700 (PDT)
-X-Gm-Message-State: ABy/qLaBOQEWDC8tMtpRYqtr8gNqtB1MmeW0zNSOh5SLjWwyBsNbSmpl
-        vx86PpG3za5NJjDdfxTRcFMUHyuoPf+1syur/Ps=
-X-Google-Smtp-Source: APBJJlFiLvq/00pxW1fSfw8POZDWzgKpN6sQ94B0C73Uomase4zWNPqdpHugOi5T3I9U3e3RhH+sUGWixwBHEGJceUE=
-X-Received: by 2002:a05:651c:c97:b0:2b6:b9ee:a7b1 with SMTP id
- bz23-20020a05651c0c9700b002b6b9eea7b1mr708635ljb.5.1688072887642; Thu, 29 Jun
- 2023 14:08:07 -0700 (PDT)
+        Thu, 29 Jun 2023 17:11:17 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 335F92D4E
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 14:10:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1688073029;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=MGOWLH5yYZOQguU6z0SZDCNOwqtS2A+CXlPEXU7v820=;
+        b=LNr9mujZ6KvHRDJDlWu4hJleAuD/jeE3GSajpJgdJSBPsfxQSocy7kCVjiClvmZMVioST2
+        jpMrAIQd6FozyMmkq1hvCbXAAXkGbO0U7uReZQZ+WZCEsRwSgYALcTGLkEGrx+Ruk7emTK
+        5wU379XnSCPJ3qAmjtgKZxKPES9L4Ps=
+Received: from mail-yw1-f199.google.com (mail-yw1-f199.google.com
+ [209.85.128.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-519-V-vpMZduOCeaL8TkCaPh_g-1; Thu, 29 Jun 2023 17:10:27 -0400
+X-MC-Unique: V-vpMZduOCeaL8TkCaPh_g-1
+Received: by mail-yw1-f199.google.com with SMTP id 00721157ae682-56ff81be091so9880057b3.0
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 14:10:27 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688073026; x=1690665026;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=MGOWLH5yYZOQguU6z0SZDCNOwqtS2A+CXlPEXU7v820=;
+        b=ks/VXRh9dNvaJJ36gJxOBOi/a8ncHxGqpr9LVnBX77/AWVWYDKG8jWGoswosEgHv5q
+         xPBUkNZbPgEtyXMRN7J4tjumE1lALrFaPd65tmWv2FSpmoog+aBojm+UfVdogky5pZx0
+         Lx1IFiY+hf+6xZXppgovwu4vKJxUg0f2NXdbrkSOkIjKh1iPJHqELU3gdOg0o3UolD7C
+         CtSafA6iWzyJzWsxlaN+0MIww/v9mwoUE8DZZrUBzYt+NBISaaJ9tHjsMgKEe3nj06Ax
+         hheyaDpAvxx5vu0w2Jbha8x8Y+KxZptJvxtgPvo5DfamQ65JHGicMYKGvOwUVpLfaDVd
+         wfLA==
+X-Gm-Message-State: ABy/qLafO9sUYAkfBrdhPSXuGsB8tffM2a5ZsSceD0Xd4o7XpiIcd9Od
+        eJ365SywMU7n8OoppCzk7ihLLZdLtkCv1OyPYheTR7lg3AA6/aRi8VwQ5YnVg2WmP3BpVSrhWSa
+        svsBEcttyqnI+YV52+CDMF+NP
+X-Received: by 2002:a05:690c:360d:b0:56d:a2d:d08c with SMTP id ft13-20020a05690c360d00b0056d0a2dd08cmr399998ywb.51.1688073026765;
+        Thu, 29 Jun 2023 14:10:26 -0700 (PDT)
+X-Google-Smtp-Source: APBJJlFexhIe4+FSUhftLbXEZ7SljYaaxr3sHvF+qUjRjfjmLU8owbauYcWADujmTq/eC0LfyIjjVg==
+X-Received: by 2002:a05:690c:360d:b0:56d:a2d:d08c with SMTP id ft13-20020a05690c360d00b0056d0a2dd08cmr399983ywb.51.1688073026548;
+        Thu, 29 Jun 2023 14:10:26 -0700 (PDT)
+Received: from halaney-x13s ([2600:1700:1ff0:d0e0::22])
+        by smtp.gmail.com with ESMTPSA id a205-20020a8166d6000000b0057020aa41basm3041764ywc.65.2023.06.29.14.10.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 29 Jun 2023 14:10:25 -0700 (PDT)
+Date:   Thu, 29 Jun 2023 16:10:23 -0500
+From:   Andrew Halaney <ahalaney@redhat.com>
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-stm32@st-md-mailman.stormreply.com, netdev@vger.kernel.org,
+        mcoquelin.stm32@gmail.com, pabeni@redhat.com, kuba@kernel.org,
+        edumazet@google.com, davem@davemloft.net, joabreu@synopsys.com,
+        alexandre.torgue@foss.st.com, peppe.cavallaro@st.com,
+        bhupesh.sharma@linaro.org, vkoul@kernel.org,
+        bartosz.golaszewski@linaro.org
+Subject: Re: [PATCH 3/3] net: stmmac: dwmac-qcom-ethqos: Log more errors in
+ probe
+Message-ID: <20230629211023.pznzgue6arn7fzfl@halaney-x13s>
+References: <20230629191725.1434142-1-ahalaney@redhat.com>
+ <20230629191725.1434142-3-ahalaney@redhat.com>
+ <e9157117-bd7a-4b75-841e-090103f75d22@lunn.ch>
 MIME-Version: 1.0
-References: <1c40a12b51ccd6ee2ee002276f5b1ba92c377100.1687990098.git.objelf@gmail.com>
- <20b61d77-7397-e3ba-3215-232f49eb8c07@molgen.mpg.de>
-In-Reply-To: <20b61d77-7397-e3ba-3215-232f49eb8c07@molgen.mpg.de>
-From:   Sean Wang <sean.wang@kernel.org>
-Date:   Thu, 29 Jun 2023 14:07:55 -0700
-X-Gmail-Original-Message-ID: <CAGp9LzqbqAGe0AXN2zH-PViOtu0TcygE265S61QfLxczoHgm3Q@mail.gmail.com>
-Message-ID: <CAGp9LzqbqAGe0AXN2zH-PViOtu0TcygE265S61QfLxczoHgm3Q@mail.gmail.com>
-Subject: Re: [PATCH v3] Bluetooth: btmtk: add printing firmware information
-To:     Paul Menzel <pmenzel@molgen.mpg.de>
-Cc:     Sean Wang <sean.wang@mediatek.com>,
-        Chris Lu <chris.lu@mediatek.com>, marcel@holtmann.org,
-        johan.hedberg@gmail.com, luiz.dentz@gmail.com,
-        Soul.Huang@mediatek.com, Leon.Yen@mediatek.com,
-        Deren.Wu@mediatek.com, km.lin@mediatek.com,
-        robin.chiu@mediatek.com, Eddie.Chen@mediatek.com,
-        ch.yeh@mediatek.com, jenhao.yang@mediatek.com,
-        Stella.Chang@mediatek.com, Tom.Chou@mediatek.com,
-        steve.lee@mediatek.com, jsiuda@google.com, frankgor@google.com,
-        abhishekpandit@google.com, michaelfsun@google.com,
-        mmandlik@google.com, abhishekpandit@chromium.org,
-        mcchou@chromium.org, shawnku@google.com,
-        linux-bluetooth@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <e9157117-bd7a-4b75-841e-090103f75d22@lunn.ch>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-HI Paul,
+On Thu, Jun 29, 2023 at 10:32:24PM +0200, Andrew Lunn wrote:
+> On Thu, Jun 29, 2023 at 02:14:18PM -0500, Andrew Halaney wrote:
+> > These are useful to see when debugging a probe failure.
+> 
+> Since this is used for debugging, maybe netdev_dbg(). Anybody actually
+> doing debugging should be able to turn that on.
+> 
 
-Thanks! I will update the patch with your suggestions.
+In my opinion it is better to use dev_err_probe() as done here because:
 
-thanks!
-Sean
+1. If it's -EPROBE_DEFER it will be under debug level already
+2. If it's anything else, its an error and the logs are useful
 
-On Wed, Jun 28, 2023 at 3:44=E2=80=AFPM Paul Menzel <pmenzel@molgen.mpg.de>=
- wrote:
->
-> Dear Sean, dear Chris,
->
->
-> Thank you for your patch.
->
-> Am 29.06.23 um 00:20 schrieb sean.wang@mediatek.com:
-> > From: Chris Lu <chris.lu@mediatek.com>
-> >
-> > Add printing firmware information part when driver loading firmware tha=
-t
-> > user can get mediatek bluetooth information.
->
-> Maybe use the commit message summary/title below:
->
-> Bluetooth: btmtk: Log hw/sw version and fw build time
->
-> Maybe also paste one log message example to the commit message.
->
-> > Co-developed-by: Sean Wang <sean.wang@mediatek.com>
-> > Signed-off-by: Sean Wang <sean.wang@mediatek.com>
-> > Signed-off-by: Chris Lu <chris.lu@mediatek.com>
-> > ---
-> > v3: resend again with the latest tree
-> > ---
-> >   drivers/bluetooth/btmtk.c | 5 +++++
-> >   1 file changed, 5 insertions(+)
-> >
-> > diff --git a/drivers/bluetooth/btmtk.c b/drivers/bluetooth/btmtk.c
-> > index 9482401d97fa..8490d59502a5 100644
-> > --- a/drivers/bluetooth/btmtk.c
-> > +++ b/drivers/bluetooth/btmtk.c
-> > @@ -57,6 +57,7 @@ int btmtk_setup_firmware_79xx(struct hci_dev *hdev, c=
-onst char *fwname,
-> >                             wmt_cmd_sync_func_t wmt_cmd_sync)
-> >   {
-> >       struct btmtk_hci_wmt_params wmt_params;
-> > +     struct btmtk_patch_header *hdr;
-> >       struct btmtk_global_desc *globaldesc =3D NULL;
-> >       struct btmtk_section_map *sectionmap;
-> >       const struct firmware *fw;
-> > @@ -75,9 +76,13 @@ int btmtk_setup_firmware_79xx(struct hci_dev *hdev, =
-const char *fwname,
-> >
-> >       fw_ptr =3D fw->data;
-> >       fw_bin_ptr =3D fw_ptr;
-> > +     hdr =3D (struct btmtk_patch_header *)fw_ptr;
-> >       globaldesc =3D (struct btmtk_global_desc *)(fw_ptr + MTK_FW_ROM_P=
-ATCH_HEADER_SIZE);
-> >       section_num =3D le32_to_cpu(globaldesc->section_num);
-> >
-> > +     bt_dev_info(hdev, "HW/SW Version: 0x%04x%04x, Build Time: %s",
->
-> Why not print 0x%04x/0x%04x, that means with a slash?
->
-> > +                 le16_to_cpu(hdr->hwver), le16_to_cpu(hdr->swver), hdr=
-->datetime);
-> > +
-> >       for (i =3D 0; i < section_num; i++) {
-> >               first_block =3D 1;
-> >               fw_ptr =3D fw_bin_ptr;
->
->
-> Kind regards,
->
-> Paul
+I've ran into both ends of this now (failure of a platform dependency to
+load, be it a bug in the driver, or just failing to select said driver),
+and I've seen issues where new integrators (say you're bringing up a new
+board) leave something out, etc, and run into issues because of that.
+
+Thanks,
+Andrew
+
