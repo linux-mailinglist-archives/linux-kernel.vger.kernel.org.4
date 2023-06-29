@@ -2,90 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 723CC742F91
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 23:35:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B522742F98
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 23:41:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230207AbjF2Vfz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 17:35:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57608 "EHLO
+        id S231638AbjF2VlY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 17:41:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229812AbjF2Vfx (ORCPT
+        with ESMTP id S229812AbjF2VlW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 17:35:53 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E9EA2D69
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 14:35:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1688074506;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=vets7tG3ILEPoqG+7zzfJad8OpPNQJ5xWznjwspAC48=;
-        b=dpRkFnan2rNlEDW+Dr0WfPX73XpM4F+nsLc3hn7i4QmSEt3LFuO41t8aVoBiTMqQfmQ4q9
-        1Ivf2wwZbKGHSeS1uE5lpMUc56sLZaBi8UEeo5MAGS5uxQREsF9enF8S4HZKochjpG3FdW
-        e46KdJJydHiuPV2i0b/x8K8nA4OziUE=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-646-ygJyXz5vODysshN6s4CjSA-1; Thu, 29 Jun 2023 17:35:03 -0400
-X-MC-Unique: ygJyXz5vODysshN6s4CjSA-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 692412A5954E;
-        Thu, 29 Jun 2023 21:35:02 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.42.28.4])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 55AB0492C13;
-        Thu, 29 Jun 2023 21:35:00 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <253mt0il43o.fsf@mtr-vdi-124.i-did-not-set--mail-host-address--so-tickle-me>
-References: <253mt0il43o.fsf@mtr-vdi-124.i-did-not-set--mail-host-address--so-tickle-me> <20230620145338.1300897-1-dhowells@redhat.com> <20230620145338.1300897-11-dhowells@redhat.com>
-To:     Aurelien Aptel <aaptel@nvidia.com>
-Cc:     dhowells@redhat.com, netdev@vger.kernel.org,
-        Alexander Duyck <alexander.duyck@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-        David Ahern <dsahern@kernel.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Jens Axboe <axboe@kernel.dk>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, Sagi Grimberg <sagi@grimberg.me>,
-        Willem de Bruijn <willemb@google.com>,
-        Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@fb.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Chaitanya Kulkarni <kch@nvidia.com>,
-        linux-nvme@lists.infradead.org
-Subject: Re: [PATCH net-next v3 10/18] nvme/host: Use sendmsg(MSG_SPLICE_PAGES) rather then sendpage
+        Thu, 29 Jun 2023 17:41:22 -0400
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0B9D2D71;
+        Thu, 29 Jun 2023 14:41:20 -0700 (PDT)
+Received: by mail-wr1-x42c.google.com with SMTP id ffacd0b85a97d-307d58b3efbso1327938f8f.0;
+        Thu, 29 Jun 2023 14:41:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1688074879; x=1690666879;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=mlwouPfcUKeU2liu8ipQl7VYxOU9K6yP4hsdhfdrrEo=;
+        b=Hoo8acKR2XDr9/IhwMf5ve0jYOXSoJNTu+9SuoPFg2TyvYwiecGifT4T/QmaOH1i+S
+         UwTVJWO7ZjV1OQjaV0ZC9CNXrn+SI5+EMRenGBELeD3wHxVwBQBpj1DNmyotSYoDrHRC
+         RTQSJBQBS31CgwM9D668XvI7hL21VQZVpQ1vR2O4lF81T9ULxJLsOqKcUelfNpd2nQZ5
+         PdEYAWBw8gwTCDOhmNPggXddjdXfASk4OU0USyy8fi4I6f0XFDgHstzwwJFxZcCXP966
+         NsJrtCN0J+K9A7J5aunMvyJ8I7mkbHeHvm6Om8Lx97zCCLQNIzqOeLxtwo1Tj/UJl5l8
+         0KPA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688074879; x=1690666879;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=mlwouPfcUKeU2liu8ipQl7VYxOU9K6yP4hsdhfdrrEo=;
+        b=OEimfayLisciOT0j1F0Ky30ebMum6A6jzAdtK3yoZobS1Dd3V1nWhNsDFVEjlz4GI7
+         rktzUXY91ZxqqDOYsCq4vLzYGZaYxBsA2zOQmR0STTkG1eXtwifFImpO0obz5J/YezBC
+         uToZp45JMTF3da8/VypJBt5ceknx4VDKk6WwU6gdQql5NHegyfWk9/EATMJc43B4+OK5
+         loamQG6o6+99pYTzaA/VPLY0UVp5bOYOQepAur41AQzWb8fl7bqsbIz35+GXo7lcja9K
+         KezTAPv8HWHszvzz3VJ8qfA458jlkwucv2fGqVLHhhCxTIV7iGe+PEeRDFVXRGEjOsQb
+         89uw==
+X-Gm-Message-State: ABy/qLaQjl60/o8V6sSlhHCIgkj0NNRuICUk1muWmI/rbuLZHw46fLWf
+        Fx6GsZFVFXn/xGqsyfUM/7j9SDSnrNffzg==
+X-Google-Smtp-Source: APBJJlEfWfr/Lg+TsX5r9PZPUIQUlI0VZwrBjD4uxXCDqLB+XIS8Hr1GZ1kD6nkHm5SlvKP+rbeflQ==
+X-Received: by 2002:a5d:6546:0:b0:314:17c0:79d4 with SMTP id z6-20020a5d6546000000b0031417c079d4mr644302wrv.14.1688074879137;
+        Thu, 29 Jun 2023 14:41:19 -0700 (PDT)
+Received: from localhost.localdomain (cpc157791-rdng31-2-0-cust585.15-3.cable.virginm.net. [86.24.214.74])
+        by smtp.gmail.com with ESMTPSA id a25-20020a5d4579000000b003048477729asm16735651wrc.81.2023.06.29.14.41.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 29 Jun 2023 14:41:18 -0700 (PDT)
+From:   Stuart Hayhurst <stuart.a.hayhurst@gmail.com>
+Cc:     Stuart Hayhurst <stuart.a.hayhurst@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Jiri Kosina <jikos@kernel.org>,
+        Bastien Nocera <hadess@hadess.net>,
+        =?UTF-8?q?Filipe=20La=C3=ADns?= <lains@riseup.net>
+Subject: [PATCH] HID: logitech-hidpp: Add wired USB id for Logitech G502 Lightspeed
+Date:   Thu, 29 Jun 2023 22:40:12 +0100
+Message-ID: <20230629214011.987303-1-stuart.a.hayhurst@gmail.com>
+X-Mailer: git-send-email 2.40.1.521.gf1e218fcd8
+In-Reply-To: <20230629192422.980071-1-stuart.a.hayhurst@gmail.com>
+References: <20230629192422.980071-1-stuart.a.hayhurst@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <58465.1688074499.1@warthog.procyon.org.uk>
-Date:   Thu, 29 Jun 2023 22:34:59 +0100
-Message-ID: <58466.1688074499@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Meh:
+Previously, support for the G502 had been attempted in commit 27fc32f.
+This caused some issues and was reverted by addf338.
+Since then, a new version of this mouse has been released (Lightpseed Wireless), and works correctly.
 
-                if (!sendpage_ok(page))
--                       msg.msg_flags &= ~MSG_SPLICE_PAGES,
-+                       msg.msg_flags &= ~MSG_SPLICE_PAGES;
+This device has support for battery reporting with the driver
+
+Signed-off-by: Stuart Hayhurst <stuart.a.hayhurst@gmail.com>
+---
+ drivers/hid/hid-logitech-hidpp.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/drivers/hid/hid-logitech-hidpp.c b/drivers/hid/hid-logitech-hidpp.c
+index 5e1a412fd28f..94a045ef8e50 100644
+--- a/drivers/hid/hid-logitech-hidpp.c
++++ b/drivers/hid/hid-logitech-hidpp.c
+@@ -4598,6 +4598,8 @@ static const struct hid_device_id hidpp_devices[] = {
  
-                bvec_set_page(&bvec, page, len, offset);
-
-David
+ 	{ /* Logitech G403 Wireless Gaming Mouse over USB */
+ 	  HID_USB_DEVICE(USB_VENDOR_ID_LOGITECH, 0xC082) },
++	{ /* Logitech G502 Lightspeed Wireless Gaming Mouse over USB */
++	  HID_USB_DEVICE(USB_VENDOR_ID_LOGITECH, 0xC08D) },
+ 	{ /* Logitech G703 Gaming Mouse over USB */
+ 	  HID_USB_DEVICE(USB_VENDOR_ID_LOGITECH, 0xC087) },
+ 	{ /* Logitech G703 Hero Gaming Mouse over USB */
+-- 
+2.40.1.521.gf1e218fcd8
 
