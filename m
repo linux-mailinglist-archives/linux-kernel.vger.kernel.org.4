@@ -2,89 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0063A742658
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 14:27:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08786742663
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 14:27:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230487AbjF2M1H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 08:27:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55826 "EHLO
+        id S231929AbjF2M1Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 08:27:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231464AbjF2M0v (ORCPT
+        with ESMTP id S232311AbjF2M06 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 08:26:51 -0400
-Received: from mail-oo1-xc31.google.com (mail-oo1-xc31.google.com [IPv6:2607:f8b0:4864:20::c31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04A9935A0
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 05:24:56 -0700 (PDT)
-Received: by mail-oo1-xc31.google.com with SMTP id 006d021491bc7-5633b7e5f90so364823eaf.1
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 05:24:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1688041495; x=1690633495;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=VTzq8z32fPEVUV/pb5F02c76wadt+517zWU1LP37f6I=;
-        b=DdKwwRcm6kKObAvaWt9jtGNjXf7LTrmHooCR6YGQPIaorlgX0JHmP3WgVsautTT0K7
-         7iRsaq6x4mmE+B+yH4zJTvNqdWjiva0uZSJQBMH5b2VLfOH7V6471whoWPSLCl7I5WSg
-         +WYtWE1XJKhXB6tBK9Sv+ZXNGTPkBSbcCM2r2l6U8ngYC9+EopFcWY5IyUpWd3Xw92Bb
-         3GaQDC8qUK2uAIsoGfliUlXLR4Kcu9dUkg+PODaGhZMBdXPKzOks8uQxdTVDIWoX2Ycd
-         9GQfW5Vdr2s+ZZHppFXMRDRiTL50e4JLSzSdVwzik+hgY5BOHoFlPpfU2W63K4r67PVx
-         DQYg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688041495; x=1690633495;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=VTzq8z32fPEVUV/pb5F02c76wadt+517zWU1LP37f6I=;
-        b=dU+X2cl5TnUzvo4NT1egrXRZJ4ZKy/sBJPIY2JzobPwQL+s30pWHpu/XYHw+PAZqB3
-         YVcku9EZmfsh5oBjiikwLuRyXAiM6r6HzsyqpgYI3wD1hOH7iahYytwFDNPc50e1/Kpo
-         j5EXICBqz1HlB2vsna2dqgQb+viXDCwkftz1J3tWetis2pgcELSjkpnDZEwoaflzsgEP
-         exMgwKUbFGq+ofjPoGrZQDVOK7dmTP6+yVsFXUV7Gy4xK/MySIx792EfAisw/9HhKCDY
-         EB5Fvl919/zBlpNxou2CqPJ551g50XUZtwXXHg/4O3hHrOx3bnQaVsvue8b0jAvu1UBp
-         NpEQ==
-X-Gm-Message-State: ABy/qLaKE492M3BuzJUtyj0nvSh+JGNMGDT/hlG+BQPcB8QJdyp6QpCi
-        MDE3tQy9EnPTBaDdfiSK/6mqX0heicgBzpUfTgtCNQ==
-X-Google-Smtp-Source: ACHHUZ7ZZiE29h6TGG7y8pc6HUcITIR7bXk1i4baG8qfwxrOlHz3QTVC9dH5i23aoiJoczTwELcymGXmbTl6fASHlpY=
-X-Received: by 2002:a05:6358:1a85:b0:134:e4fe:e162 with SMTP id
- gm5-20020a0563581a8500b00134e4fee162mr2591806rwb.13.1688041495258; Thu, 29
- Jun 2023 05:24:55 -0700 (PDT)
+        Thu, 29 Jun 2023 08:26:58 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43E973C06
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 05:26:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1688041590; x=1719577590;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=0o1PLQFg9YJAxU4F7OxUhopL9W2Htn2NqsUM9AgVd30=;
+  b=eOcYqXoTGUn13rk4b5Q2NGrRZ4nV7w2ALpi5T01cLtQhY0GGCsVsPgXT
+   cPY6xKuOAbRoquPnoA9T+trsuzgn001yWWkSIxjzw2FDUc8uElHEBnv+H
+   R/Q0awqGUA0z0Nu6jMNhlDPFF8c9TtkWBTuon17PoMWzhtB9Gd5CWyoAg
+   Z8YiSse7xAKNeJnxSbt9ppkcSa0edU+Fnau0So++sjxOiJha265Wjm0ZR
+   S2T0DFwkAlt5MKtoe3yYNJVrVjNWeDvI6MpHQ6hgRkRKiP0oJYXZSJRK1
+   R8xK/ir1sjiPVG0A8XgzmrDgKqR53K7ILzaXfxruZcwSt9WYjrKl/Utru
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10755"; a="360941775"
+X-IronPort-AV: E=Sophos;i="6.01,168,1684825200"; 
+   d="scan'208";a="360941775"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jun 2023 05:26:29 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10755"; a="711397816"
+X-IronPort-AV: E=Sophos;i="6.01,168,1684825200"; 
+   d="scan'208";a="711397816"
+Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
+  by orsmga007.jf.intel.com with ESMTP; 29 Jun 2023 05:26:26 -0700
+Received: from kbuild by 783282924a45 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1qEqjB-000E8z-1o;
+        Thu, 29 Jun 2023 12:26:25 +0000
+Date:   Thu, 29 Jun 2023 20:25:31 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-riscv@lists.infradead.org, Andy Chiu <andy.chiu@sifive.com>
+Cc:     oe-kbuild-all@lists.linux.dev,
+        =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@rivosinc.com>,
+        linux-kernel@vger.kernel.org, linux@rivosinc.com,
+        =?iso-8859-1?Q?R=E9mi?= Denis-Courmont <remi@remlab.net>,
+        Darius Rad <darius@bluespec.com>
+Subject: Re: [PATCH v3] riscv: Discard vector state on syscalls
+Message-ID: <202306292011.OGfLGBam-lkp@intel.com>
+References: <20230629062730.985184-1-bjorn@kernel.org>
 MIME-Version: 1.0
-References: <20230627-sm6125-dpu-v2-0-03e430a2078c@somainline.org>
- <20230627-sm6125-dpu-v2-13-03e430a2078c@somainline.org> <4a267feb-5855-1427-c378-b2615eae4f84@linaro.org>
- <kisifidg4bdb4v6fb6nvgt5omsprssd4bxrn6wqehjo66l2y4a@7nfaydtafzpn>
-In-Reply-To: <kisifidg4bdb4v6fb6nvgt5omsprssd4bxrn6wqehjo66l2y4a@7nfaydtafzpn>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Thu, 29 Jun 2023 15:24:43 +0300
-Message-ID: <CAA8EJpr+PyjehSd4SEUVfh13+i=+-7v1esQasc+7gNaL2iqWJA@mail.gmail.com>
-Subject: Re: [PATCH v2 13/15] arm64: dts: qcom: sm6125: Add dispcc node
-To:     Marijn Suijten <marijn.suijten@somainline.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Krishna Manikandan <quic_mkrishn@quicinc.com>,
-        Loic Poulain <loic.poulain@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        ~postmarketos/upstreaming@lists.sr.ht,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Martin Botka <martin.botka@somainline.org>,
-        Jami Kettunen <jami.kettunen@somainline.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        linux-clk@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, Lux Aliaga <they@mint.lgbt>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230629062730.985184-1-bjorn@kernel.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -92,88 +73,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 29 Jun 2023 at 15:14, Marijn Suijten
-<marijn.suijten@somainline.org> wrote:
->
-> On 2023-06-29 13:56:25, Dmitry Baryshkov wrote:
-> > On 27/06/2023 23:14, Marijn Suijten wrote:
-> > > Enable and configure the dispcc node on SM6125 for consumption by MDSS
-> > > later on.
-> > >
-> > > Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
-> > > ---
-> > >   arch/arm64/boot/dts/qcom/sm6125.dtsi | 25 +++++++++++++++++++++++++
-> > >   1 file changed, 25 insertions(+)
-> > >
-> > > diff --git a/arch/arm64/boot/dts/qcom/sm6125.dtsi b/arch/arm64/boot/dts/qcom/sm6125.dtsi
-> > > index edb03508dba3..a5cc0d43d2d9 100644
-> > > --- a/arch/arm64/boot/dts/qcom/sm6125.dtsi
-> > > +++ b/arch/arm64/boot/dts/qcom/sm6125.dtsi
-> > > @@ -3,6 +3,7 @@
-> > >    * Copyright (c) 2021, Martin Botka <martin.botka@somainline.org>
-> > >    */
-> > >
-> > > +#include <dt-bindings/clock/qcom,dispcc-sm6125.h>
-> > >   #include <dt-bindings/clock/qcom,gcc-sm6125.h>
-> > >   #include <dt-bindings/clock/qcom,rpmcc.h>
-> > >   #include <dt-bindings/dma/qcom-gpi.h>
-> > > @@ -1203,6 +1204,30 @@ sram@4690000 {
-> > >                     reg = <0x04690000 0x10000>;
-> > >             };
-> > >
-> > > +           dispcc: clock-controller@5f00000 {
-> > > +                   compatible = "qcom,sm6125-dispcc";
-> > > +                   reg = <0x05f00000 0x20000>;
-> > > +                   clocks = <&rpmcc RPM_SMD_XO_CLK_SRC>,
-> > > +                            <0>,
-> > > +                            <0>,
-> > > +                            <0>,
-> > > +                            <0>,
-> > > +                            <0>,
-> > > +                            <&gcc GCC_DISP_AHB_CLK>,
-> > > +                            <&gcc GCC_DISP_GPLL0_DIV_CLK_SRC>;
-> > > +                   clock-names = "bi_tcxo",
-> > > +                                 "dsi0_phy_pll_out_byteclk",
-> > > +                                 "dsi0_phy_pll_out_dsiclk",
-> > > +                                 "dsi1_phy_pll_out_dsiclk",
-> > > +                                 "dp_phy_pll_link_clk",
-> > > +                                 "dp_phy_pll_vco_div_clk",
-> > > +                                 "cfg_ahb_clk",
-> > > +                                 "gcc_disp_gpll0_div_clk_src";
-> > > +                   power-domains = <&rpmpd SM6125_VDDCX>;
-> >
-> > Would it be logical to specify the required-opps too?
->
-> Perhaps, but barely any other SoC aside from sm8x50 sets it on dispcc.
-> What should it be, rpmhpd_opp_low_svs?  IIRC we used "svs" for the DSI
-> PHY despite not having a reference value downstream (it sets a range of
-> NOM-TURBO_NO_CPR, and RETENTION when it's off).
+Hi Björn,
 
-Then for DSI PHY the required-opps should be rpmpd_opp_nom.
+kernel test robot noticed the following build errors:
 
-For the dispcc I think the rpmpd_opp_ret, the lowest possible vote,
-should be enough.
+[auto build test ERROR on 488833ccdcac118da16701f4ee0673b20ba47fe3]
 
->
-> - Marijn
->
-> >
-> > > +                   #clock-cells = <1>;
-> > > +                   #power-domain-cells = <1>;
-> > > +           };
-> > > +
-> > >             apps_smmu: iommu@c600000 {
-> > >                     compatible = "qcom,sm6125-smmu-500", "qcom,smmu-500", "arm,mmu-500";
-> > >                     reg = <0x0c600000 0x80000>;
-> > >
-> >
-> > --
-> > With best wishes
-> > Dmitry
-> >
+url:    https://github.com/intel-lab-lkp/linux/commits/Bj-rn-T-pel/riscv-Discard-vector-state-on-syscalls/20230629-142852
+base:   488833ccdcac118da16701f4ee0673b20ba47fe3
+patch link:    https://lore.kernel.org/r/20230629062730.985184-1-bjorn%40kernel.org
+patch subject: [PATCH v3] riscv: Discard vector state on syscalls
+config: riscv-allnoconfig (https://download.01.org/0day-ci/archive/20230629/202306292011.OGfLGBam-lkp@intel.com/config)
+compiler: riscv64-linux-gcc (GCC) 12.3.0
+reproduce: (https://download.01.org/0day-ci/archive/20230629/202306292011.OGfLGBam-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306292011.OGfLGBam-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   arch/riscv/kernel/traps.c: In function 'do_trap_ecall_u':
+>> arch/riscv/kernel/traps.c:299:17: error: implicit declaration of function 'riscv_v_vstate_discard'; did you mean 'riscv_v_vstate_restore'? [-Werror=implicit-function-declaration]
+     299 |                 riscv_v_vstate_discard(regs);
+         |                 ^~~~~~~~~~~~~~~~~~~~~~
+         |                 riscv_v_vstate_restore
+   cc1: some warnings being treated as errors
 
 
+vim +299 arch/riscv/kernel/traps.c
+
+   290	
+   291	asmlinkage __visible __trap_section void do_trap_ecall_u(struct pt_regs *regs)
+   292	{
+   293		if (user_mode(regs)) {
+   294			ulong syscall = regs->a7;
+   295	
+   296			regs->epc += 4;
+   297			regs->orig_a0 = regs->a0;
+   298	
+ > 299			riscv_v_vstate_discard(regs);
+   300	
+   301			syscall = syscall_enter_from_user_mode(regs, syscall);
+   302	
+   303			if (syscall < NR_syscalls)
+   304				syscall_handler(regs, syscall);
+   305			else
+   306				regs->a0 = -ENOSYS;
+   307	
+   308			syscall_exit_to_user_mode(regs);
+   309		} else {
+   310			irqentry_state_t state = irqentry_nmi_enter(regs);
+   311	
+   312			do_trap_error(regs, SIGILL, ILL_ILLTRP, regs->epc,
+   313				"Oops - environment call from U-mode");
+   314	
+   315			irqentry_nmi_exit(regs, state);
+   316		}
+   317	
 
 -- 
-With best wishes
-Dmitry
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
