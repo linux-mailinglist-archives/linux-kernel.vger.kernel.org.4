@@ -2,50 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DED80742D37
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 21:21:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD4C0742D10
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 21:20:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233085AbjF2TIU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 15:08:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41750 "EHLO
+        id S233880AbjF2TIp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 15:08:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233013AbjF2TGK (ORCPT
+        with ESMTP id S233339AbjF2TGq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 15:06:10 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 660DE469D;
-        Thu, 29 Jun 2023 12:02:30 -0700 (PDT)
+        Thu, 29 Jun 2023 15:06:46 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4B6246B6;
+        Thu, 29 Jun 2023 12:02:32 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D568861633;
-        Thu, 29 Jun 2023 19:02:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12FAEC433C0;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4D2E7615FD;
+        Thu, 29 Jun 2023 19:02:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93043C43397;
         Thu, 29 Jun 2023 19:02:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1688065349;
-        bh=ZkpfVTv8FpSPMVgbkEwlj5m42xAIAHcl3ktcgmQASTM=;
+        bh=JZJm62kSdl7ABrTnShuW9exqvH2hUSIZGc/Sl6p/s7w=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=B6An4/QNuIKOba8mLWi1MbPo4FAVpYZCey6JEhG55GPrU5ldT15d1WNdKqyh7VWD5
-         cejuCSHHdqYMEvSFQxRlh+H95xBk5Pc0ayb47SYCRZGgbhCfbD7Z44bR937orswquc
-         z3XbHguu/+eTgTXgP945UHogBdBXLekFHPPIdSH+60Sr8z+wnr+RKog3OtDHwh/8pO
-         JhykmPAwL84GOkyUcJRfQA6UAKtQmNuKBMKcpyCbeiQTOAbPyNHjW8nrgi3HC1OuGS
-         Qectq0j9PKz+uWwFLoa5Gu76B0fnXAnCqHKTwakvXaTqzOZZ3HKkVmRcuO8Vg4g8Qu
-         amE+JH159I7nQ==
+        b=es8ziq9d/UCB9hPi1APfWPMnMDDycIszGvXDVVq2fSw0p5HJ3O+fKHrgqeIecUZyv
+         DL26K764ualv7ryDg016EQdlofQjtVyQdxlGZmsharyV7i2Cy9HKcF5cyQG2NCJQ2i
+         y3DzYJG6P0nxKifh+IsQ5jvrGQtjERjivsCbVGAmOlHyN2v/H9YT6v65vKSGy0tFoo
+         DsKT5opLCxxAjCFF8mlrgTrfFXhw5m1Vr8C4oU9nnE5drJB0obI0X+WtJR0CxwJVOS
+         5sE8wjILHrtVIPLVHBInF4OY2OJnWL1ueBs0uam1S78RKHRgb05tKHAqbXo/4vbXna
+         MSrEWjNInmYMg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Yasushi SHOJI <yasushi.shoji@gmail.com>,
-        Yasushi SHOJI <yashi@spacecubics.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Sasha Levin <sashal@kernel.org>, wg@grandegger.com,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, mailhol.vincent@wanadoo.fr,
-        socketcan@hartkopp.net, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 3/4] can: mcba_usb: Fix termination command argument
-Date:   Thu, 29 Jun 2023 15:02:23 -0400
-Message-Id: <20230629190225.908451-3-sashal@kernel.org>
+Cc:     Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Jacob Keller <jacob.e.keller@intel.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, netdev@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.14 4/4] net: loopback: use NET_NAME_PREDICTABLE for name_assign_type
+Date:   Thu, 29 Jun 2023 15:02:24 -0400
+Message-Id: <20230629190225.908451-4-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230629190225.908451-1-sashal@kernel.org>
 References: <20230629190225.908451-1-sashal@kernel.org>
@@ -54,8 +51,8 @@ X-stable: review
 X-Patchwork-Hint: Ignore
 X-stable-base: Linux 4.14.319
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -64,79 +61,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yasushi SHOJI <yasushi.shoji@gmail.com>
+From: Rasmus Villemoes <linux@rasmusvillemoes.dk>
 
-[ Upstream commit 1a8e3bd25f1e789c8154e11ea24dc3ec5a4c1da0 ]
+[ Upstream commit 31d929de5a112ee1b977a89c57de74710894bbbf ]
 
-Microchip USB Analyzer can activate the internal termination resistors
-by setting the "termination" option ON, or OFF to to deactivate them.
-As I've observed, both with my oscilloscope and captured USB packets
-below, you must send "0" to turn it ON, and "1" to turn it OFF.
+When the name_assign_type attribute was introduced (commit
+685343fc3ba6, "net: add name_assign_type netdev attribute"), the
+loopback device was explicitly mentioned as one which would make use
+of NET_NAME_PREDICTABLE:
 
-From the schematics in the user's guide, I can confirm that you must
-drive the CAN_RES signal LOW "0" to activate the resistors.
+    The name_assign_type attribute gives hints where the interface name of a
+    given net-device comes from. These values are currently defined:
+...
+      NET_NAME_PREDICTABLE:
+        The ifname has been assigned by the kernel in a predictable way
+        that is guaranteed to avoid reuse and always be the same for a
+        given device. Examples include statically created devices like
+        the loopback device [...]
 
-Reverse the argument value of usb_msg.termination to fix this.
+Switch to that so that reading /sys/class/net/lo/name_assign_type
+produces something sensible instead of returning -EINVAL.
 
-These are the two commands sequence, ON then OFF.
-
-> No.     Time           Source                Destination           Protocol Length Info
->       1 0.000000       host                  1.3.1                 USB      46     URB_BULK out
->
-> Frame 1: 46 bytes on wire (368 bits), 46 bytes captured (368 bits)
-> USB URB
-> Leftover Capture Data: a80000000000000000000000000000000000a8
->
-> No.     Time           Source                Destination           Protocol Length Info
->       2 4.372547       host                  1.3.1                 USB      46     URB_BULK out
->
-> Frame 2: 46 bytes on wire (368 bits), 46 bytes captured (368 bits)
-> USB URB
-> Leftover Capture Data: a80100000000000000000000000000000000a9
-
-Signed-off-by: Yasushi SHOJI <yashi@spacecubics.com>
-Link: https://lore.kernel.org/all/20221124152504.125994-1-yashi@spacecubics.com
-Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+Signed-off-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
+Reviewed-by: Jacob Keller <jacob.e.keller@intel.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/can/usb/mcba_usb.c | 10 +++++++---
- 1 file changed, 7 insertions(+), 3 deletions(-)
+ drivers/net/loopback.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/net/can/usb/mcba_usb.c b/drivers/net/can/usb/mcba_usb.c
-index f7c3fc3dabfe4..01ef5cabdc11e 100644
---- a/drivers/net/can/usb/mcba_usb.c
-+++ b/drivers/net/can/usb/mcba_usb.c
-@@ -58,6 +58,10 @@
- #define MCBA_VER_REQ_USB 1
- #define MCBA_VER_REQ_CAN 2
+diff --git a/drivers/net/loopback.c b/drivers/net/loopback.c
+index 30612497643c0..daef41ce23492 100644
+--- a/drivers/net/loopback.c
++++ b/drivers/net/loopback.c
+@@ -206,7 +206,7 @@ static __net_init int loopback_net_init(struct net *net)
+ 	int err;
  
-+/* Drive the CAN_RES signal LOW "0" to activate R24 and R25 */
-+#define MCBA_VER_TERMINATION_ON 0
-+#define MCBA_VER_TERMINATION_OFF 1
-+
- #define MCBA_SIDL_EXID_MASK 0x8
- #define MCBA_DLC_MASK 0xf
- #define MCBA_DLC_RTR_MASK 0x40
-@@ -480,7 +484,7 @@ static void mcba_usb_process_ka_usb(struct mcba_priv *priv,
- 		priv->usb_ka_first_pass = false;
- 	}
- 
--	if (msg->termination_state)
-+	if (msg->termination_state == MCBA_VER_TERMINATION_ON)
- 		priv->can.termination = MCBA_TERMINATION_ENABLED;
- 	else
- 		priv->can.termination = MCBA_TERMINATION_DISABLED;
-@@ -800,9 +804,9 @@ static int mcba_set_termination(struct net_device *netdev, u16 term)
- 	};
- 
- 	if (term == MCBA_TERMINATION_ENABLED)
--		usb_msg.termination = 1;
-+		usb_msg.termination = MCBA_VER_TERMINATION_ON;
- 	else
--		usb_msg.termination = 0;
-+		usb_msg.termination = MCBA_VER_TERMINATION_OFF;
- 
- 	mcba_usb_xmit_cmd(priv, (struct mcba_usb_msg *)&usb_msg);
+ 	err = -ENOMEM;
+-	dev = alloc_netdev(0, "lo", NET_NAME_UNKNOWN, loopback_setup);
++	dev = alloc_netdev(0, "lo", NET_NAME_PREDICTABLE, loopback_setup);
+ 	if (!dev)
+ 		goto out;
  
 -- 
 2.39.2
