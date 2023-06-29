@@ -2,121 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C13F174279D
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 15:43:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9E167427AB
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 15:47:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231430AbjF2Nnr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 09:43:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47324 "EHLO
+        id S232131AbjF2Nrt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 09:47:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232037AbjF2Nnn (ORCPT
+        with ESMTP id S232096AbjF2Nrq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 09:43:43 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B0B52681;
-        Thu, 29 Jun 2023 06:43:42 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id a640c23a62f3a-992ac92aed9so86202166b.3;
-        Thu, 29 Jun 2023 06:43:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688046220; x=1690638220;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=XudmxwalV4AlT0qJLqOHnMWwuiigipmsi3w0OPbf44c=;
-        b=Zhs3fgvt1G+iCtnPEYMZxQ2g9jPDRO3yYUKeQozSK4MYqD1FqZAD+nuCS5ym+L+RaI
-         duD2pbR+p9OqO0RZ7ZxLtZYd6CPenExqZnZYiuu56oq1o2LLnAquDIlc2cJMFiQP2ybs
-         e7RWYdvhlftVKPRbfklEKIRL1lBIwKpmck78AUGng5zriDs5STsE7UNui+ZJMhj01hoG
-         BeFERNcE7f2efp4qQvMMo47Kx1g24QC34yHyusdKDyl4Xof34yUtH1dcdkwRppvLj8D+
-         XOOgzJLMT4jJRHtEgeefKdHlhIV6RKaU+vGqmuDVmZSvzVCmLtcIVobTYui7jBy//qQW
-         Ytyw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688046220; x=1690638220;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=XudmxwalV4AlT0qJLqOHnMWwuiigipmsi3w0OPbf44c=;
-        b=YlKGm8Jsja0vBzuBONJnNVpSlw+5kEPHpBsT8Jjrqx6EwIYddrUzCjiCIVLbDeJqWk
-         m+KtlCJsFYu2+DY3RtGaFQ1RDtEjxchDQQzkthPPYQ4GL6uxyXihJ0ipZ2JGQJHb1hWG
-         jC0pxgtlVq0heak9N2cXSn5k0vXnVbPe4PZoCXpgDUqlT4AzQxQt7gNfVQFZNHZ0RH9E
-         ioSBi0VoShbSVy9xe6hHbdi9gLEF0majSpxs1O01HMeeQWBOZbb1ISPpyNpbzVAikUv7
-         brvLV9bZ/pVS0IT7WVroakOjC5RYWEq24gwWjTctMtUx8Ai7CfJXaddo04Q+QevDE8u7
-         pt5w==
-X-Gm-Message-State: AC+VfDxoIjdxlFQYASKOsrR3srPPhTDq0DwBjdvx1Va4R+hwnunFoJzA
-        vmLeO2TX8fuW7rKSsXr+dDs=
-X-Google-Smtp-Source: ACHHUZ6B80u4DW25Ogg7aE+QDNQ4h9KXySc0s2UC/n0LEEN2ZYI5mYC/YoRmVKDwg0HP2sGQinr9QQ==
-X-Received: by 2002:a17:907:3f18:b0:975:942e:81d5 with SMTP id hq24-20020a1709073f1800b00975942e81d5mr39118977ejc.1.1688046220384;
-        Thu, 29 Jun 2023 06:43:40 -0700 (PDT)
-Received: from localhost (dslb-094-220-187-252.094.220.pools.vodafone-ip.de. [94.220.187.252])
-        by smtp.gmail.com with ESMTPSA id bm6-20020a170906c04600b00988ae874fc3sm6894818ejb.40.2023.06.29.06.43.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Jun 2023 06:43:39 -0700 (PDT)
-From:   Jonas Gorski <jonas.gorski@gmail.com>
-To:     Kamal Dasu <kdasu.kdev@gmail.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Mark Brown <broonie@kernel.org>
-Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] spi: bcm-qspi: return error if neither hif_mspi nor mspi is available
-Date:   Thu, 29 Jun 2023 15:43:05 +0200
-Message-Id: <20230629134306.95823-1-jonas.gorski@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        Thu, 29 Jun 2023 09:47:46 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09CC63588;
+        Thu, 29 Jun 2023 06:47:45 -0700 (PDT)
+Received: from pps.filterd (m0353725.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35TDiliY003116;
+        Thu, 29 Jun 2023 13:47:28 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=dbRiAIZ0g8cUPtf7bZFwLT9yLNoqZAhs7QkDidxTlAk=;
+ b=ajX6+rkx6KLqsqwDCB5WeM4DqMS1DWnoeCPBhtJ4TJXOdNcmWPKHhXJgb5Y7/4PAe8kg
+ XLIBD/Qp5I6LuYjBn6koBrcqxLALhpAqSVhgaQd310nBDRDqdM7fFyv+jEoNzd957kIX
+ o6/UmCnCet+KGUEprwYrBYcs0EqiO9zp5Nx5xX9X+VvkXsbY1smqjAwh725q5sL5JogC
+ EHCj12ktc170T22oAMRAfpGLzM4ezIBE8qDe8/O1AlquX+QXbZ1rD1AEJ1sCIDM0JFOW
+ Lv1x9E+PHTFC5JRgoWVxZBL9uScO/4G9nsaVAXvar9BFCcAHonStsMWtRH3aqpldKiQ+ Hw== 
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3rhb3u04yf-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 29 Jun 2023 13:47:27 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 35T7voGf003733;
+        Thu, 29 Jun 2023 13:47:25 GMT
+Received: from smtprelay04.fra02v.mail.ibm.com ([9.218.2.228])
+        by ppma03ams.nl.ibm.com (PPS) with ESMTPS id 3rdr453cd0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 29 Jun 2023 13:47:25 +0000
+Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
+        by smtprelay04.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 35TDlNDx43451020
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 29 Jun 2023 13:47:23 GMT
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 847A02004D;
+        Thu, 29 Jun 2023 13:47:23 +0000 (GMT)
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id DBF0D20040;
+        Thu, 29 Jun 2023 13:47:21 +0000 (GMT)
+Received: from li-bb2b2a4c-3307-11b2-a85c-8fa5c3a69313.ibm.com.com (unknown [9.43.95.242])
+        by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Thu, 29 Jun 2023 13:47:21 +0000 (GMT)
+From:   Ojaswin Mujoo <ojaswin@linux.ibm.com>
+To:     linux-ext4@vger.kernel.org, "Theodore Ts'o" <tytso@mit.edu>
+Cc:     Ritesh Harjani <riteshh@linux.ibm.com>,
+        linux-kernel@vger.kernel.org, Jan Kara <jack@suse.cz>,
+        Kemeng Shi <shikemeng@huaweicloud.com>
+Subject: [PATCH] ext4: Replace CR_FAST macro with inline function for readability
+Date:   Thu, 29 Jun 2023 19:17:19 +0530
+Message-Id: <20230629134719.108104-1-ojaswin@linux.ibm.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: Xr3wRvvdaDjVBLg7-_5mr_6rGqNTZZe4
+X-Proofpoint-ORIG-GUID: Xr3wRvvdaDjVBLg7-_5mr_6rGqNTZZe4
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-06-29_03,2023-06-27_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 bulkscore=0
+ mlxscore=0 adultscore=0 priorityscore=1501 impostorscore=0 spamscore=0
+ clxscore=1015 lowpriorityscore=0 suspectscore=0 mlxlogscore=999
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2305260000 definitions=main-2306290122
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If neither a "hif_mspi" nor "mspi" resource is present, the driver will
-just early exit in probe but still return success. Apart from not doing
-anything meaningful, this would then also lead to a null pointer access
-on removal, as platform_get_drvdata() would return NULL, which it would
-then try to dereferce when trying to unregister the spi master.
+Replace CR_FAST with ext4_mb_cr_expensive() inline function for better
+readability. This function returns true if the criteria is one of the
+expensive/slower ones where lots of disk IO/prefetching is acceptable.
 
-Fix this by unconditionally calling devm_ioremap_resource(), as it can
-handle a NULL res and will then return a viable ERR_PTR() if we get one.
+No functional changes are intended in this patch.
 
-The "return 0;" was previously a "goto qspi_resource_err;" where then
-ret was returned, but since ret was still initialized to 0 at this place
-this was a valid conversion in 63c5395bb7a9 ("spi: bcm-qspi: Fix
-use-after-free on unbind"). The issue was not introduced by this commit,
-only made more obvious.
-
-Fixes: fa236a7ef240 ("spi: bcm-qspi: Add Broadcom MSPI driver")
-Signed-off-by: Jonas Gorski <jonas.gorski@gmail.com>
+Signed-off-by: Ojaswin Mujoo <ojaswin@linux.ibm.com>
 ---
-Found by looking a the driver while comparing it to its bindings.
+ fs/ext4/ext4.h    | 7 ++++---
+ fs/ext4/mballoc.c | 8 ++++----
+ 2 files changed, 8 insertions(+), 7 deletions(-)
 
-Only build tested, not runtested.
-
- drivers/spi/spi-bcm-qspi.c | 10 +++-------
- 1 file changed, 3 insertions(+), 7 deletions(-)
-
-diff --git a/drivers/spi/spi-bcm-qspi.c b/drivers/spi/spi-bcm-qspi.c
-index 6b46a3b67c41..d91dfbe47aa5 100644
---- a/drivers/spi/spi-bcm-qspi.c
-+++ b/drivers/spi/spi-bcm-qspi.c
-@@ -1543,13 +1543,9 @@ int bcm_qspi_probe(struct platform_device *pdev,
- 		res = platform_get_resource_byname(pdev, IORESOURCE_MEM,
- 						   "mspi");
+diff --git a/fs/ext4/ext4.h b/fs/ext4/ext4.h
+index 45a531446ea2..e404169a2858 100644
+--- a/fs/ext4/ext4.h
++++ b/fs/ext4/ext4.h
+@@ -176,9 +176,6 @@ enum criteria {
+ 	EXT4_MB_NUM_CRS
+ };
  
--	if (res) {
--		qspi->base[MSPI]  = devm_ioremap_resource(dev, res);
--		if (IS_ERR(qspi->base[MSPI]))
--			return PTR_ERR(qspi->base[MSPI]);
--	} else {
--		return 0;
--	}
-+	qspi->base[MSPI]  = devm_ioremap_resource(dev, res);
-+	if (IS_ERR(qspi->base[MSPI]))
-+		return PTR_ERR(qspi->base[MSPI]);
+-/* criteria below which we use fast block scanning and avoid unnecessary IO */
+-#define CR_FAST CR_GOAL_LEN_SLOW
+-
+ /*
+  * Flags used in mballoc's allocation_context flags field.
+  *
+@@ -2924,6 +2921,10 @@ extern int ext4_trim_fs(struct super_block *, struct fstrim_range *);
+ extern void ext4_process_freed_data(struct super_block *sb, tid_t commit_tid);
+ extern void ext4_mb_mark_bb(struct super_block *sb, ext4_fsblk_t block,
+ 		       int len, int state);
++static inline bool ext4_mb_cr_expensive(enum criteria cr)
++{
++	return cr >= CR_GOAL_LEN_SLOW;
++}
  
- 	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "bspi");
- 	if (res) {
+ /* inode.c */
+ void ext4_inode_csum_set(struct inode *inode, struct ext4_inode *raw,
+diff --git a/fs/ext4/mballoc.c b/fs/ext4/mballoc.c
+index a2475b8c9fb5..94fdcc757aa9 100644
+--- a/fs/ext4/mballoc.c
++++ b/fs/ext4/mballoc.c
+@@ -2446,7 +2446,7 @@ void ext4_mb_complex_scan_group(struct ext4_allocation_context *ac,
+ 			break;
+ 		}
+ 
+-		if (ac->ac_criteria < CR_FAST) {
++		if (!ext4_mb_cr_expensive(ac->ac_criteria)) {
+ 			/*
+ 			 * In CR_GOAL_LEN_FAST and CR_BEST_AVAIL_LEN, we are
+ 			 * sure that this group will have a large enough
+@@ -2630,7 +2630,7 @@ static int ext4_mb_good_group_nolock(struct ext4_allocation_context *ac,
+ 	free = grp->bb_free;
+ 	if (free == 0)
+ 		goto out;
+-	if (cr <= CR_FAST && free < ac->ac_g_ex.fe_len)
++	if (cr <= CR_GOAL_LEN_SLOW && free < ac->ac_g_ex.fe_len)
+ 		goto out;
+ 	if (unlikely(EXT4_MB_GRP_BBITMAP_CORRUPT(grp)))
+ 		goto out;
+@@ -2654,7 +2654,7 @@ static int ext4_mb_good_group_nolock(struct ext4_allocation_context *ac,
+ 		 * sure we locate metadata blocks in the first block group in
+ 		 * the flex_bg if possible.
+ 		 */
+-		if (cr < CR_FAST &&
++		if (!ext4_mb_cr_expensive(cr) &&
+ 		    (!sbi->s_log_groups_per_flex ||
+ 		     ((group & ((1 << sbi->s_log_groups_per_flex) - 1)) != 0)) &&
+ 		    !(ext4_has_group_desc_csum(sb) &&
+@@ -2848,7 +2848,7 @@ ext4_mb_regular_allocator(struct ext4_allocation_context *ac)
+ 			 * spend a lot of time loading imperfect groups
+ 			 */
+ 			if ((prefetch_grp == group) &&
+-			    (cr >= CR_FAST ||
++			    (ext4_mb_cr_expensive(cr) ||
+ 			     prefetch_ios < sbi->s_mb_prefetch_limit)) {
+ 				nr = sbi->s_mb_prefetch;
+ 				if (ext4_has_feature_flex_bg(sb)) {
 -- 
-2.34.1
+2.31.1
 
