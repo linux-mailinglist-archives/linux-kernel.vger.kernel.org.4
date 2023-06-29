@@ -2,23 +2,23 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 255BF741FA7
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 07:13:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 51551741FAB
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 07:14:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232047AbjF2FNv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 01:13:51 -0400
-Received: from mail-mw2nam12on2043.outbound.protection.outlook.com ([40.107.244.43]:12961
-        "EHLO NAM12-MW2-obe.outbound.protection.outlook.com"
+        id S231154AbjF2FOa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 01:14:30 -0400
+Received: from mail-co1nam11on2076.outbound.protection.outlook.com ([40.107.220.76]:12352
+        "EHLO NAM11-CO1-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S231848AbjF2FNI (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 01:13:08 -0400
+        id S231204AbjF2FNN (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 29 Jun 2023 01:13:13 -0400
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ODApN4UDHklRmBOeP9KKVp7kssrJTSJ944+0eJKFBIywXW2acUzdP8gY2VnzpMpge4Z/vHq119krquiP676IVUWLjvSeZWY1KyUANSXNxJ2CKhlsF4aS8lE3zzHu47y4IRSYrOEhQHpTzFikJihxw1F8ib0lFutzZRNWpmeX9EwGT0onaCWWeubA5VkvJkjkovBsX2TQCF4TrbXdViRXsUj50WyHMM5hA1W834TyokVm9KynIwNZgoDwdZl05/HptaNq4GI9gcAxIjK6BTXfxTyyAAYgcuE1uLcZKWOrO0/NTIlNDaNOAPRsOHvWRGocJS+kSVn1gcao5NpLtrvgqA==
+ b=IYeLgwkG4AVB8twE1ROuyZ8oMdsjso/46GalHGj3YYf3RjbWk2KoOMWmaeyl4J7+j85rCaZw2UDn30oLIRhTvv0uNxSeykhUKnHMQ/8kVkMoyV+/bC8Ogr3zFRqUhqYn6MsoDdDiIo4VXpiHuaZiL/AZHpmmAaP6H9boiyDf58hkOwThU8p+WmzC9euWx604pJoNIwcx+A+vwXYwKie+m6nWwu8lFX+Tl10wy9CqFkpufNJK3wIghZ+PkJUw7xkRQR6QjR0XpckKAQrybgHYgJUAckb5xnSU1YB3CRDOXsDtOH9muegbkBXT5x1ncqgjmXBOq+JxZPHo5dPfrhzFEw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=EuCwMM3vyXtufdb1uc4t1V6RwotqPAeFw7Fjw46Fgxc=;
- b=Zg+EUhCKZTY9Fe+XsCK9vVouy8iImOrgCRBsH/i2kCOiCw4ePhaBoIOnaiE6qCAxw4ngi3jeQv3bfLrtUQxIQWrMtIO0N7JYDvbMvlcBdcA5FY9MLYmTE0ChKk25iJCMRK56qehFUA5IgQSiBmHxyvoXntCJVl+ZjA4a8IL2Sfs/cwhEblxifzH6O3BHfmr8D07oVWj/QDGAwfA0ta+OC12eirlz15BOyxte9+O7XeVuXHZVP3qAabnnm5qv9qaxme6ETiWdw8fooT7sTgnKOtF0wiG51Bk46+1GpClEhoEePiusYDbdZrk2Ql28B0mPHA6uPV0a/0wrhlP8AySN1g==
+ bh=jGrVWp+S+O/NaInoHUg2uGXRtbSVDGzMISV7CfhHRhM=;
+ b=jwJsnd4Y/vFXIJsZG8s4Duj/nx9PGdzOamRvyelamXKHs4C+YqKqiaWv2/OtRP1nRx9Dm4LKTjSeS97T2d3AEYDew+wSmdAL4iQvnK1uN+hYbDvuZlt1GDIWn9sGMCds2wZgPBjaGLPvq7pZzLZVl2VaSj0VcN8KJkMyupQXTmrUmj3m44q762yay2KvyzUTfhO9ZkLtwDmKnJIJicPs2+PYULIvcclEGaDy1lZe1h59r3aqSso5jSq3cHYvilClQ3tTeJwVaNvEEEu4zJcJvjKJxyeWN45SMXHGuqkEQqk+8Pc7yqYYtZIg2hy1QmW/ipuXM7DmM1BYvaGNZvhbIg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  216.228.118.233) smtp.rcpttodomain=kernel.org smtp.mailfrom=nvidia.com;
  dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
@@ -26,18 +26,18 @@ ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=EuCwMM3vyXtufdb1uc4t1V6RwotqPAeFw7Fjw46Fgxc=;
- b=OhtxVqL5H4B7iFgb49vaT97D+27BXdOXjzG3lUI3WanS+KJCKldlUO8pujktf583kcYz1NmmX0qcbXOMpetis2zbSDHBiJbOsppgAetEcVeYN04PzNjDEi2jjIx43jcqW8NGXU67u3P+vnYdX2EMd2H8uebHc86R39t4xVkgj2WDDSZMEkfACS/URWkaqHopPSMHiCLoY4rYRzECkoR0XtOQYGz15N4szi1R5+eRFm9yMOzO6Oyq9Hc51wW+edEfCE8YTgq4zsqB5aSQd737E4zH/62fRlWZS65k8PT5j/4ZloAfpCpvbKicVD6venj9MI8n0QaFZY9rrqc0vMsBqw==
-Received: from SJ0PR13CA0224.namprd13.prod.outlook.com (2603:10b6:a03:2c1::19)
- by PH7PR12MB7235.namprd12.prod.outlook.com (2603:10b6:510:206::14) with
+ bh=jGrVWp+S+O/NaInoHUg2uGXRtbSVDGzMISV7CfhHRhM=;
+ b=C5WMKVvN5MWrYp3wQPxKwyLagEl9QzfJ2gYkNAfMebP46cVkmMc0TIqVQxYLbRqo/MaiMrnFd4QnQG1J1JHXyVKN1cvjzlPHVjRdQ9nCfzcYMrqzJhRF6AgEAB6ZliWCOgHBgmcyuWGVLXo3xdlLXTN0qsXPiGBuZxI0Ma26xxZGWgO6BHgG/Me3WzSUgpExnis1EFRMDqkSJDqa85/52aqSLPFs71NvWAFIBVbrm6VRBI1KNOvD4LegQuJ3Xt3YDXPBMaTELUtbT5BKNnPsdd55LWOb2ZfqY8CtzqbccodF5WsFJoPZLk5yS2+2U4uRvMLWvGLrTx2NFVx96/1kVQ==
+Received: from DM6PR13CA0042.namprd13.prod.outlook.com (2603:10b6:5:134::19)
+ by SA1PR12MB7102.namprd12.prod.outlook.com (2603:10b6:806:29f::13) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.24; Thu, 29 Jun
- 2023 05:13:05 +0000
-Received: from DM6NAM11FT077.eop-nam11.prod.protection.outlook.com
- (2603:10b6:a03:2c1:cafe::f5) by SJ0PR13CA0224.outlook.office365.com
- (2603:10b6:a03:2c1::19) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6565.6 via Frontend
- Transport; Thu, 29 Jun 2023 05:13:05 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.23; Thu, 29 Jun
+ 2023 05:13:09 +0000
+Received: from DM6NAM11FT021.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:5:134:cafe::9b) by DM6PR13CA0042.outlook.office365.com
+ (2603:10b6:5:134::19) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6565.8 via Frontend
+ Transport; Thu, 29 Jun 2023 05:13:09 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.118.233)
  smtp.mailfrom=nvidia.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=nvidia.com;
@@ -45,20 +45,20 @@ Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
  216.228.118.233 as permitted sender) receiver=protection.outlook.com;
  client-ip=216.228.118.233; helo=mail.nvidia.com; pr=C
 Received: from mail.nvidia.com (216.228.118.233) by
- DM6NAM11FT077.mail.protection.outlook.com (10.13.173.147) with Microsoft SMTP
+ DM6NAM11FT021.mail.protection.outlook.com (10.13.173.76) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6500.48 via Frontend Transport; Thu, 29 Jun 2023 05:13:04 +0000
-Received: from drhqmail201.nvidia.com (10.126.190.180) by mail.nvidia.com
+ 15.20.6500.49 via Frontend Transport; Thu, 29 Jun 2023 05:13:08 +0000
+Received: from drhqmail202.nvidia.com (10.126.190.181) by mail.nvidia.com
  (10.127.129.6) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Wed, 28 Jun 2023
- 22:12:53 -0700
+ 22:12:57 -0700
 Received: from drhqmail203.nvidia.com (10.126.190.182) by
- drhqmail201.nvidia.com (10.126.190.180) with Microsoft SMTP Server
+ drhqmail202.nvidia.com (10.126.190.181) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.37; Wed, 28 Jun 2023 22:12:53 -0700
+ 15.2.986.37; Wed, 28 Jun 2023 22:12:57 -0700
 Received: from audio.nvidia.com (10.127.8.10) by mail.nvidia.com
  (10.126.190.182) with Microsoft SMTP Server id 15.2.986.37 via Frontend
- Transport; Wed, 28 Jun 2023 22:12:49 -0700
+ Transport; Wed, 28 Jun 2023 22:12:53 -0700
 From:   Sameer Pujar <spujar@nvidia.com>
 To:     <broonie@kernel.org>, <robh+dt@kernel.org>, <krzk+dt@kernel.org>,
         <thierry.reding@gmail.com>, <lgirdwood@gmail.com>,
@@ -67,9 +67,9 @@ CC:     <jonathanh@nvidia.com>, <mkumard@nvidia.com>, <sheetal@nvidia.com>,
         <spujar@nvidia.com>, <alsa-devel@alsa-project.org>,
         <devicetree@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>, <stable@vger.kernel.org>
-Subject: [PATCH v2 4/5] arm64: tegra: Update AHUB clock parent and rate on Tegra234
-Date:   Thu, 29 Jun 2023 10:42:16 +0530
-Message-ID: <1688015537-31682-5-git-send-email-spujar@nvidia.com>
+Subject: [PATCH v2 5/5] arm64: tegra: Update AHUB clock parent and rate
+Date:   Thu, 29 Jun 2023 10:42:17 +0530
+Message-ID: <1688015537-31682-6-git-send-email-spujar@nvidia.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1688015537-31682-1-git-send-email-spujar@nvidia.com>
 References: <1688015537-31682-1-git-send-email-spujar@nvidia.com>
@@ -78,61 +78,84 @@ Content-Type: text/plain
 X-NV-OnPremToCloud: ExternallySecured
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6NAM11FT077:EE_|PH7PR12MB7235:EE_
-X-MS-Office365-Filtering-Correlation-Id: 3d58e787-e01f-4b7d-f5bc-08db785f84ec
+X-MS-TrafficTypeDiagnostic: DM6NAM11FT021:EE_|SA1PR12MB7102:EE_
+X-MS-Office365-Filtering-Correlation-Id: 2285d522-abbc-4074-a500-08db785f8755
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 4a+NXPR5I2IRaN3SetKaA4vsN6VGYaiXergXyDBVlkNjKy6QIluyx986o2whVwph3k36sc+y05EdFgGkPmsjJOOwS+l3Pgc0qoAXDuRY7m0WR8LH57ma+/Bf7PidoZ+qsjSh/5G++tl+TpAjkXT8Zqat6E5AQjTwD65G8zvQ02B0PMPBBT5myp4L5H5YE4M+3ByG2+ePuUKU+bfCKAV69iCw+eOUqhqbVY5woUuxsqlDbUYaXKin4kMg7hYbLt8yhQNgBRYBbfBfzIwKzcSGjRoAp4aa4YwAhkF7eCNVXKcuiTzaEAYmlYphGYS8/UGWAq16dkpRMcuiTFqjVR7iS3zaufhuJWbNAZ3k+fj1xkM4TTRVrGHjqegAFISEj6GU97+8wiOYe9yIqjRZiL16CGpLgV2yy17thNniALyO4/AKL5o894nPf6mcRZc6aZ7MCixX8pDS8LT34Xo4fEy5d8rPQIbQh5qB846crcYyqCwgAfo7Z95/IEC696V6GTs2LPUyHXCh2tfqVGRSEXZcqOUggMgti9AfXfbGovr5ZOY/b8N/WWvc3hcBYKdQIUz9DOvaLArWvQgieGhTSqOn9LCuGF4DCSfpdEZgQl25u1R/V5HO0YdsI/dX/p3UKr3MvyReIwlBGl+M8JvH7iMfW+hoMH4emT4yfHyDxb9Vnr2nJwz06KUDiTAtnriVPZ7AxNcqsGHM6rsVboXSJ+7SQLpQjlWE3fPdmDhiKMC0Dl21rvzWOESOe4W8Vfl+7DKR
-X-Forefront-Antispam-Report: CIP:216.228.118.233;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc7edge2.nvidia.com;CAT:NONE;SFS:(13230028)(4636009)(396003)(136003)(39860400002)(376002)(346002)(451199021)(36840700001)(46966006)(40470700004)(5660300002)(7416002)(70586007)(316002)(70206006)(8676002)(8936002)(2906002)(41300700001)(40480700001)(40460700003)(82310400005)(356005)(7636003)(82740400003)(86362001)(36756003)(36860700001)(6666004)(186003)(26005)(7696005)(478600001)(4326008)(110136005)(54906003)(83380400001)(47076005)(426003)(2616005)(336012);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: 9X2/hemBpqeNgMUeMbKlWZPHhT5FZ7xtQZGqTudFDg0dsn5Iru9c/qeb+24ZlckMf4YLfXd4cBiMIoxmpQvaw+saRrUlku/trjx9o4U70t5L6jl5mSDMb/RtjAPUfU7KbNxgQ5UTMfs/FUf0ZU5K+n5qKH2WqIlkEy+T7UYBdOlOs5Ms50QcwtcRxTdwBri/YsuvKM6IJkbJBx5qMkvBnTXNXR14b3meOiaxsC2XYW4i50qr2FY51te5vEoVzgT7NEUPxEeeQr6/ns3vclDc+C+TwY3024TBXn5Z7hKoi/CxijudSAA2RZOMDB6a6XU3F0dFl7pRHdmx9Z8OU14WgijITBD9ZIYdGKW19oi7Zz+6ngoMef+w0/hUWL6IbIEtWc/zGRT/6g97PxW4Y+v2nZOhnhq9W/5YIkIjimabuqsYz0LEUHmri3RnKMB/FaTnqsbFXo4N33HB34lixNZrxPfQ+IWZpAEPoPrgiL4mkQps4ohCYueMmQhQE4bIUlb3IHG0y9OVNZ6u81tkBy4Dsx+twidHznJLVOcrDS0d42VVUXkMhRaQ+GXN0EljFG61yXQg4u/0+/Rlwgn7vGhCzmtKuwfqMcXQ5D7LP5ZAv/EbdF8WF2+6srWfV7WF25ZElZMTdXSjMiEi9TZVuLnODKdFovFZpaKRacf9stXKXREbPWxlOcDVWWHDT5MknjIcLCdvdW/Ioe7QQ/QwYqUyBD5U95pdlp4SXEr1wKOfxXk=
+X-Forefront-Antispam-Report: CIP:216.228.118.233;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc7edge2.nvidia.com;CAT:NONE;SFS:(13230028)(4636009)(346002)(39860400002)(396003)(136003)(376002)(451199021)(46966006)(36840700001)(40470700004)(82310400005)(36860700001)(36756003)(356005)(5660300002)(86362001)(41300700001)(7416002)(70206006)(8936002)(8676002)(40480700001)(40460700003)(82740400003)(316002)(7636003)(4326008)(70586007)(110136005)(478600001)(47076005)(15650500001)(2906002)(426003)(26005)(54906003)(186003)(336012)(7696005)(83380400001)(2616005)(6666004);DIR:OUT;SFP:1101;
 X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Jun 2023 05:13:04.8843
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Jun 2023 05:13:08.8476
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3d58e787-e01f-4b7d-f5bc-08db785f84ec
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2285d522-abbc-4074-a500-08db785f8755
 X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.118.233];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT077.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT021.eop-nam11.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB7235
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR12MB7102
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sheetal <sheetal@nvidia.com>
+I2S data sanity test failures are seen at lower AHUB clock rates
+on Tegra234. The Tegra194 uses the same clock relationship for AHUB
+and it is likely that similar issues would be seen. Thus update the
+AHUB clock parent and rates here as well for Tegra194, Tegra186
+and Tegra210.
 
-I2S data sanity tests fail beyond a bit clock frequency of 6.144MHz.
-This happens because the AHUB clock rate is too low and it shows
-9.83MHz on boot.
-
-The maximum rate of PLLA_OUT0 is 49.152MHz and is used to serve I/O
-clocks. It is recommended that AHUB clock operates higher than this.
-Thus fix this by using PLLP_OUT0 as parent clock for AHUB instead of
-PLLA_OUT0 and fix the rate to 81.6MHz.
-
-Fixes: dc94a94daa39 ("arm64: tegra: Add audio devices on Tegra234")
+Fixes: 177208f7b06d ("arm64: tegra: Add DT binding for AHUB components")
 Cc: stable@vger.kernel.org
-Signed-off-by: Sheetal <sheetal@nvidia.com>
 Signed-off-by: Sameer Pujar <spujar@nvidia.com>
-Reviewed-by: Mohan Kumar D <mkumard@nvidia.com>
 ---
- arch/arm64/boot/dts/nvidia/tegra234.dtsi | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ arch/arm64/boot/dts/nvidia/tegra186.dtsi | 3 ++-
+ arch/arm64/boot/dts/nvidia/tegra194.dtsi | 3 ++-
+ arch/arm64/boot/dts/nvidia/tegra210.dtsi | 3 ++-
+ 3 files changed, 6 insertions(+), 3 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/nvidia/tegra234.dtsi b/arch/arm64/boot/dts/nvidia/tegra234.dtsi
-index f4974e8..0f12a8de 100644
---- a/arch/arm64/boot/dts/nvidia/tegra234.dtsi
-+++ b/arch/arm64/boot/dts/nvidia/tegra234.dtsi
-@@ -180,7 +180,8 @@
- 				clocks = <&bpmp TEGRA234_CLK_AHUB>;
+diff --git a/arch/arm64/boot/dts/nvidia/tegra186.dtsi b/arch/arm64/boot/dts/nvidia/tegra186.dtsi
+index 7e4c496f..2b3bb5d 100644
+--- a/arch/arm64/boot/dts/nvidia/tegra186.dtsi
++++ b/arch/arm64/boot/dts/nvidia/tegra186.dtsi
+@@ -135,7 +135,8 @@
+ 			clocks = <&bpmp TEGRA186_CLK_AHUB>;
+ 			clock-names = "ahub";
+ 			assigned-clocks = <&bpmp TEGRA186_CLK_AHUB>;
+-			assigned-clock-parents = <&bpmp TEGRA186_CLK_PLL_A_OUT0>;
++			assigned-clock-parents = <&bpmp TEGRA186_CLK_PLLP_OUT0>;
++			assigned-clock-rates = <81600000>;
+ 			#address-cells = <1>;
+ 			#size-cells = <1>;
+ 			ranges = <0x02900800 0x02900800 0x11800>;
+diff --git a/arch/arm64/boot/dts/nvidia/tegra194.dtsi b/arch/arm64/boot/dts/nvidia/tegra194.dtsi
+index 154fc8c..33f92b7 100644
+--- a/arch/arm64/boot/dts/nvidia/tegra194.dtsi
++++ b/arch/arm64/boot/dts/nvidia/tegra194.dtsi
+@@ -231,7 +231,8 @@
+ 				clocks = <&bpmp TEGRA194_CLK_AHUB>;
  				clock-names = "ahub";
- 				assigned-clocks = <&bpmp TEGRA234_CLK_AHUB>;
--				assigned-clock-parents = <&bpmp TEGRA234_CLK_PLLA_OUT0>;
-+				assigned-clock-parents = <&bpmp TEGRA234_CLK_PLLP_OUT0>;
+ 				assigned-clocks = <&bpmp TEGRA194_CLK_AHUB>;
+-				assigned-clock-parents = <&bpmp TEGRA194_CLK_PLLA_OUT0>;
++				assigned-clock-parents = <&bpmp TEGRA194_CLK_PLLP_OUT0>;
 +				assigned-clock-rates = <81600000>;
  				status = "disabled";
  
  				#address-cells = <2>;
+diff --git a/arch/arm64/boot/dts/nvidia/tegra210.dtsi b/arch/arm64/boot/dts/nvidia/tegra210.dtsi
+index 617583f..e7b4e30 100644
+--- a/arch/arm64/boot/dts/nvidia/tegra210.dtsi
++++ b/arch/arm64/boot/dts/nvidia/tegra210.dtsi
+@@ -1386,7 +1386,8 @@
+ 			clocks = <&tegra_car TEGRA210_CLK_D_AUDIO>;
+ 			clock-names = "ahub";
+ 			assigned-clocks = <&tegra_car TEGRA210_CLK_D_AUDIO>;
+-			assigned-clock-parents = <&tegra_car TEGRA210_CLK_PLL_A_OUT0>;
++			assigned-clock-parents = <&tegra_car TEGRA210_CLK_PLL_P>;
++			assigned-clock-rates = <81600000>;
+ 			#address-cells = <1>;
+ 			#size-cells = <1>;
+ 			ranges = <0x702d0000 0x702d0000 0x0000e400>;
 -- 
 2.7.4
 
