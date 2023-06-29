@@ -2,297 +2,509 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 103B6742E53
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 22:30:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA8A5742E56
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 22:30:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232042AbjF2UaJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 16:30:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40184 "EHLO
+        id S230436AbjF2Uai (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 16:30:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229972AbjF2UaG (ORCPT
+        with ESMTP id S229972AbjF2Uaf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 16:30:06 -0400
-Received: from mx0a-0039f301.pphosted.com (mx0a-0039f301.pphosted.com [148.163.133.242])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AFB82682
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 13:30:03 -0700 (PDT)
-Received: from pps.filterd (m0174676.ppops.net [127.0.0.1])
-        by mx0a-0039f301.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35TENTfY012576;
-        Thu, 29 Jun 2023 20:29:53 GMT
-Received: from eur04-db3-obe.outbound.protection.outlook.com (mail-db3eur04lp2059.outbound.protection.outlook.com [104.47.12.59])
-        by mx0a-0039f301.pphosted.com (PPS) with ESMTPS id 3rh36r3hj5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 29 Jun 2023 20:29:52 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=lbTawXO/MO+DEFF7Oh+JoMYVpXoxM8eFJarxrTC4lzzEO1O4nA5zZk175Lkd33x8iy2WrUleUlj2u0NzgIKyeDol5hJpW5hMd8n2XJCiV+W3G+9uqdkc1473DOdN8MeGqJfJJQ4YPcQ6DZUfvMl6PIbTOPC2zqahUwexjrAQO96ZScUmUuSVtfyryC5p0g6iAw7CweMhXJn72W1S1dGB630AfvcXSjgVrV7FQFOg55YotKtFEIdxkQiFi7agTsgTw/sWk3UqqRmUpRdnAVYGrMd+9SCjcAKd/7z46R6t0dF4un3hjhUzT9yDj5oCpehH7C6oVd3tI3HrKalMJ21xcA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=m0XXlomTzokxQbx++exL9EtW0cZqCKjlJmpJok+heME=;
- b=PwiB47BTEQhSMKCajdajfN4uclKlfT50oTLXUR5QDTUHQ1ab2Ne+UueXj+lnRrnO085ITi1kKmnsVnRRmsYUuEkUKL89MDIC3ROer+Z+mJWyJJV3ClrKlOnDVfOpxytR84Js09pXRWTvyRqVhla2fGfVV0+zhsm4u9FLdtGRrmeGnl7auYARF0UPNuiRhvPyEE8ef4mOvlYo7ArmS2YEE2XxLlKDY6j/VPClkfe5Y++KlT24uz7THfSozUtv9DJM6RgKd0JnRdQR4VMbFsqtftb+2SwSTMg+JtLCJrIPmAqcWBW0XWts5JoesJ7mxLXFFy7WRWYCXBq5Po+nLZfdEw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=epam.com; dmarc=pass action=none header.from=epam.com;
- dkim=pass header.d=epam.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=epam.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=m0XXlomTzokxQbx++exL9EtW0cZqCKjlJmpJok+heME=;
- b=fXsGfumuBZwXQoUw1Pq7CI9mdoJPgkyDk6EjJ+cBQnj6Na1UsaduRIyvo8N9S9UBSsrZWdiMCStrzmFUMG0JWLXjwfGzWJrB4mQJFvqQkXU99GzU0/9FXBiR48bDZnXJnhr3SaqhLd1R/Qs7zUonXTXRhLBGrbs+7/LuYuSyIzcEgMFbs++o8kbmouW1/ixD4Z/mPlh5fgxq0eCXnfRgG1zS5VTAltbs8zIsTvfrztD/wWPZdJITHSNiGEL+FgwUI3u94hR/v8v5+btXGZq43kDIN9mwuUhdCjk/fYCE5637Z+eLJj/AC8fJz3ZIerpiu6OHsoX/Qm0VoG0CBWK4tA==
-Received: from DB8PR03MB6108.eurprd03.prod.outlook.com (2603:10a6:10:ed::15)
- by PA4PR03MB6847.eurprd03.prod.outlook.com (2603:10a6:102:eb::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6544.15; Thu, 29 Jun
- 2023 20:29:49 +0000
-Received: from DB8PR03MB6108.eurprd03.prod.outlook.com
- ([fe80::11f9:615a:4d9a:a5d2]) by DB8PR03MB6108.eurprd03.prod.outlook.com
- ([fe80::11f9:615a:4d9a:a5d2%6]) with mapi id 15.20.6521.026; Thu, 29 Jun 2023
- 20:29:49 +0000
-From:   Oleksandr Tyshchenko <Oleksandr_Tyshchenko@epam.com>
-To:     Stefano Stabellini <sstabellini@kernel.org>
-CC:     Petr Pavlu <petr.pavlu@suse.com>,
-        "xen-devel@lists.xenproject.org" <xen-devel@lists.xenproject.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "jgross@suse.com" <jgross@suse.com>
-Subject: Re: [PATCH 2/2] xen/virtio: Avoid use of the dom0 backend in dom0
-Thread-Topic: [PATCH 2/2] xen/virtio: Avoid use of the dom0 backend in dom0
-Thread-Index: AQHZpEL/jQILjif4TEa2QZqecjVVUK+Vi2cAgAt2NQCAAUbCgA==
-Date:   Thu, 29 Jun 2023 20:29:49 +0000
-Message-ID: <b21398eb-2fb2-4fca-dd90-d2c81d8df1c4@epam.com>
-References: <20230621131214.9398-1-petr.pavlu@suse.com>
- <20230621131214.9398-3-petr.pavlu@suse.com>
- <15e31609-6c45-7372-76ee-0adf7a64fe88@epam.com>
- <alpine.DEB.2.22.394.2306281745010.3936094@ubuntu-linux-20-04-desktop>
-In-Reply-To: <alpine.DEB.2.22.394.2306281745010.3936094@ubuntu-linux-20-04-desktop>
-Accept-Language: en-US, ru-RU
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: DB8PR03MB6108:EE_|PA4PR03MB6847:EE_
-x-ms-office365-filtering-correlation-id: fd1ede75-7d70-4ff9-ac3e-08db78df95f8
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: EUa1+0PF4Tqo3Nnn7Q4osbVHmfu2IXhHH22Exru4aTVX0p6oPZcKwKDo8px0LNrvKa+5wAXdhRh2hVxvTd1OLP7Ea1im9jrX9XNaYPNi0/eXNxZ8aaEkTVvtN/bxhZEHeWUX3S7yEtUBcKSge0gAX8jJ4KM2axf9r/FzaxNFnTSRcjkDzR7HCNAgcftNWfTvt65aAy56vN1DRkg5RGHNUlqB4czlvbzERZJAW3c0FMKhzMmAgZSRoJ2NF+WGyR+95/dlV1hr2NPfRFRMNf69Fnhxee+pu/gdm3Hdmr7PgPbGrwuIN77+rXllRIqeiM2g9YXEr8BcsLQ2RFlvN+pvDkW68NJg1OE47putxeO00rYKo+enzLqHyk53alrRSr9Chk07twf+lJ1+cbiWoJDht6qij2Px+R+cnPZZUHVaScpu6AWlvX/SixmTAUKhs5z9bQy3SaCRyX2GxYanlv+aCcGLFeW+aiFYCcPI1VZFZeDa7PAyEGLUWDZZ6gg5Ad/KmWEBlJqRl2Bvo0UBRU0eBOJVbbWBcnM5IbPBPj713Z6xd6JwoN0AoiNg27uF2IHIf/4ji3k+R7NWLZrKtCtgnmvblC/cAgdBfRzwz9fi+OTjaghkM6st+R5fsrLqUOtEhRh6KhMLYn4ypB8VMuJFpw==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB8PR03MB6108.eurprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(136003)(376002)(346002)(39860400002)(366004)(451199021)(83380400001)(2906002)(2616005)(38070700005)(38100700002)(122000001)(36756003)(316002)(8676002)(41300700001)(6486002)(8936002)(5660300002)(91956017)(54906003)(66556008)(6916009)(4326008)(66476007)(66446008)(31686004)(76116006)(66946007)(478600001)(53546011)(6506007)(86362001)(71200400001)(64756008)(26005)(6512007)(186003)(31696002)(45980500001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?UXVid0IyUTB0N04yeWxIZ1AvQng0Q0I1REVhdTJvQWJjdTFZNG11LzBkMG1C?=
- =?utf-8?B?NEJTQmZzTHZzc0R4cXFhekNkSlE4alk5dTVyVkZXRFVmNmFNdndrMnBEU3hs?=
- =?utf-8?B?MVdpclB6ZHV5Snd1cmk1RlVrZW1vZ2hVZTV5WS94TG5FOXUrcVQvNmtHTlBq?=
- =?utf-8?B?Vm9TOWpqUTI5cXMxT2xreURVYkVVblpvaDBaZzhvWFREVlZ6TE5iQjhoUlMz?=
- =?utf-8?B?S1JKdXh0N3IxRlc5ZGhTbEZzOVBPMVFVUTdScWtLanpKbVVsemIvOStjUjFj?=
- =?utf-8?B?Um5vemJhVW8vcTJwajJqRmRrQThaZTJEa3BjTnFmR1BnWm52ZDFwSFBuSFhU?=
- =?utf-8?B?QWNOWmk2SFpCd2dWMGozVGNqcGI0aDhOd25PNXpLaWlMZGFkNi9BcDExZnFS?=
- =?utf-8?B?Y0U0Y24yTmJseVYzS3lMSmo5SU15czBpVWRWMGZxdlVJdCtDRHBJTHU2MzNN?=
- =?utf-8?B?RU9oWGdJT2RoWWhjcGg3cGRqb2lIYnE3Qm9pREpIVjdtV2hGcVh5QTA0U1I3?=
- =?utf-8?B?dmx4STRnOW90Z20veEtsdTVEY1VhZFBvRnFDWmxDZWRaRHhXQVlWTGFnTXFN?=
- =?utf-8?B?NTh2cmNUb2U4OEpQOWtjcVRFOHBuVXB0K2VYeDdka0kzNGZNVTNLNlFwS2Q2?=
- =?utf-8?B?SWhSYTk0N1BlRVhHaXFDSDFHNDRvRUM4S0NwMktpY3NTY3dKUmxGdWUzeDR4?=
- =?utf-8?B?cjh1VjdzaGhtWEdpN2xob0p4Y0R3TzNDRTFzRFRDeFVML0RYZG8rVEEwUXJ5?=
- =?utf-8?B?L2xFdFdEM0xTc1FKTE95OXlMcjVjd0VnMm9zUXRBOVNPWUhUb1FxKzd6SUkw?=
- =?utf-8?B?Q0lmUUdSSFY4Z3RWdVBGVFVEYlBRVnhNVkRYR09oTVk5U0d3di9KLzBhM0Ez?=
- =?utf-8?B?Y01BSVB5RXlIY0RGL3lIVTJoVXpVblNEYWNOOGd1U3NaeGxmMHg4aFQ5YXI1?=
- =?utf-8?B?SndRYjk1REpUM2pQNUZtZjFkcnZ0cCtaRE5SdDUrK2FLa3RHM0hFTC9FSVNk?=
- =?utf-8?B?UjUxWkg2WEJ3K0o2Zk9QZVBKTzFkN3VqVjJmdlNCK1RRRTlaR29FVUFlb0pH?=
- =?utf-8?B?Y3FFVm8wSmd6TWFXcy9xSnl4dSswY2NYZDVPd3Qrbmx6U1ZrK2dhN3VKRlJQ?=
- =?utf-8?B?dlU4WHRuRWtGSjZtTE4zdVJGV3k3ZUowaGhYdVB6TzRVdkIvcGxkSzdhbjNX?=
- =?utf-8?B?K1JFQXlORERRSzJMaFV4TXo4R2pYVjErU0FnTzNEYlR5YnhGUlNyVDJZcHVN?=
- =?utf-8?B?SHRxRUdTbDRiVkxjT2I3Sm5CbXFRUWkyQ1MxOU1mcmFUK2RHY1RxeTVEM0pl?=
- =?utf-8?B?R01aTU1PWDZ3VkRxOGZ0SXlDVzNUUDJ3WkRRdGxhbFJOcmQzbFh6eUJLZU91?=
- =?utf-8?B?QWc5QUpiN09iQjdqTjBqT3RXRzExbk16UEJVOEpEOEs0RUdxN2JoenhWSmo0?=
- =?utf-8?B?NUhBMW01UFRXQWYzRDNiRmJQRHVkWDNDK28wcVUxQzY1QjJVTDU4TFlUbURE?=
- =?utf-8?B?TE5qWVhjYS9GMjl3NmtqYjN6NDdvQUUxdGNTNE4xRXlYVllCenNBd2RHaDJQ?=
- =?utf-8?B?aUd0YXNFMXNKekRLVTRScnJKTVFYekw2czhOTHIzelZLaDBSQmY5WTR0N1RX?=
- =?utf-8?B?dFhQYjJHaGcyRy90UXFQemdKZUVyWkRVa0lrZmcvVTQrUHMrVFlxRXk1NVFX?=
- =?utf-8?B?WVNYZlZvdDQ3UEhYZWNQOWRnVzFSUHdPWUFnVnNGam9UdGcrZFNjUEx3Smh5?=
- =?utf-8?B?RnUrblFQNm84dm1UeklEWkpKNDdyTFpFamtCdEpEMGQ1bUhPQ0Z2dmdnUkJh?=
- =?utf-8?B?YStNcnVhbllCMnBpMmM4VkJYbWxhNXZ4OXM4Qk1RTDFqVmJOY3Bmdk5SNCtG?=
- =?utf-8?B?NVk3MTVlbEQ0N09ENnRLcmV3M0pJVjI1WW5YZnIvR0YxSG84bk9pWU5HVWFZ?=
- =?utf-8?B?ajR3aWZQcVB6TDhJMkR6bk8weW5MTkRkam5rcUdYVHJPeXdIT0tsU2JZWlZU?=
- =?utf-8?B?bitiUVFabWNzT3Qvc3hDUVFzbnZrQWdWMDdZYmJsMVd4U2tiRDNvQ1hNbUlV?=
- =?utf-8?B?OUlxTE1qNi8xOEEwUTNtVHA0cmlTYWxFMGJ3N0hvY09CTmk0TDdtL3ZVMnZC?=
- =?utf-8?B?RjRrUXZQbFlUSkNrYVBZejY3L1hBV0ViZFhTSXpTenpOWUQ1QUgvK0dPSjdV?=
- =?utf-8?Q?s5UmWThboDkpFhWwScSFUAk=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <80F22FC1D55B9642BF2AD10BCDF4ADC0@eurprd03.prod.outlook.com>
-Content-Transfer-Encoding: base64
-MIME-Version: 1.0
-X-OriginatorOrg: epam.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DB8PR03MB6108.eurprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: fd1ede75-7d70-4ff9-ac3e-08db78df95f8
-X-MS-Exchange-CrossTenant-originalarrivaltime: 29 Jun 2023 20:29:49.2163
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: b41b72d0-4e9f-4c26-8a69-f949f367c91d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: Fn4CalQS6ewLPaYk0wzqrdt1/oNIjmcJ0PrvCphc7inj4lS9eNORvDoQtT2iZA0TbSAXjGBOA/k0vz/80SbJBImxspQtpXnZVrNFNUXiVPc=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PA4PR03MB6847
-X-Proofpoint-GUID: xaXm9VOOpU_mXL9idKrizaGBoJM5rBuv
-X-Proofpoint-ORIG-GUID: xaXm9VOOpU_mXL9idKrizaGBoJM5rBuv
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-06-29_07,2023-06-27_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 spamscore=0
- priorityscore=1501 mlxscore=0 bulkscore=0 clxscore=1015 phishscore=0
- mlxlogscore=999 suspectscore=0 lowpriorityscore=0 adultscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2305260000 definitions=main-2306290185
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 29 Jun 2023 16:30:35 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D11EF2682
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 13:30:33 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id 3f1490d57ef6-bacfa4ef059so855456276.2
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 13:30:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1688070633; x=1690662633;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=fzTRzB9Fpjk0/kuH/2km63deID+1fZnt9MNVb73OsIg=;
+        b=ogmBKznJ3/8LHrHIkKbl5GdJvTlOVgs07JU9CB7a8+8Ed8UOqlbUcGstnsGSWWN6Eh
+         4+5pfLJgSMTEGaloFTir8foPPwtspouzlpAfuneUszwTt/iDwlAiOztsYzzRT6sY0hJx
+         7RjUx8AN4zlJdp8MvVf0UFJsUybRunZR6dcSNwmHUYPch4K/SG/I+3lpshkes39zj9Ty
+         ikOOh4YzSKEh/31NQ+jPYkJFliYq2t82M7WDLOZNkTcHpiB03sLYLjoBDj5bET0TwvwG
+         xq06rpO5S7eIYWEtH5VoF5+aDe5Y5KWd06+xYZNPMHHUxwSwco+IipLX79xZ+uSbNK6t
+         JR1Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688070633; x=1690662633;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=fzTRzB9Fpjk0/kuH/2km63deID+1fZnt9MNVb73OsIg=;
+        b=F1sQQvompdnQwwYt24EHa4xarCE2r1KrDlMnKvmw+uxLAXq5UN/5IPb6E3iiNcdVVj
+         28U7esz3+16XeJnuBjkmRKFJ8cfoBkIc0NYtVlf1HHhkcHIR84XiiVxve5AIxsmCAIzg
+         /pzWghD4839tqMbXKoCAeoOdyAYiKprK8Zlkt3HdZNsxaGiXDk8Coq8j6KQylgcuLqn3
+         pCIeG0dYppqafQFACH8rYUAkOKHOMwOu6Nwj4cmiOnpY3NwXskEjI2bXR2Py90PphSIe
+         DcEVLxjsyfSJeVBesuTux+jSvlZ+L/eEeF+Om729VjFlPx8fu8LmlgPvwH7H3lg7pkTS
+         MGqA==
+X-Gm-Message-State: ABy/qLbtCWcsP7FKIPQVaK1DDOT9+R0XcBc3dQMsi8T2QpNUdfIgdu+8
+        Ig4c8POpVvKY/aNUfRJC26UTYBVotSA=
+X-Google-Smtp-Source: APBJJlFIlYSlKCMPbv5gvrWaAVpda+CSatw98QKkkFB9TZnJdPl5F/NAh1buZtVRLAbFjndvT+QyZ4I8hK4=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a25:ab68:0:b0:bed:d03a:fc5f with SMTP id
+ u95-20020a25ab68000000b00bedd03afc5fmr5669ybi.11.1688070633064; Thu, 29 Jun
+ 2023 13:30:33 -0700 (PDT)
+Date:   Thu, 29 Jun 2023 13:30:31 -0700
+In-Reply-To: <ZJ3FyLUYrlr6+HLw@google.com>
+Mime-Version: 1.0
+References: <20230628071217.71126-1-ishiir@g.ecc.u-tokyo.ac.jp>
+ <ZJxTTZzZnfbyMVIH@google.com> <ZJ0w5pKk/41Zv26i@yzhao56-desk.sh.intel.com> <ZJ3FyLUYrlr6+HLw@google.com>
+Message-ID: <ZJ3p5wBwyQZ+aQOV@google.com>
+Subject: Re: [PATCH] KVM: nVMX: Prevent vmlaunch with EPTP pointing outside
+ assigned memory area
+From:   Sean Christopherson <seanjc@google.com>
+To:     Yan Zhao <yan.y.zhao@intel.com>
+Cc:     Reima Ishii <ishiir@g.ecc.u-tokyo.ac.jp>, shina@ecc.u-tokyo.ac.jp,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, yuan.yao@intel.com
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DQoNCk9uIDI5LjA2LjIzIDA0OjAwLCBTdGVmYW5vIFN0YWJlbGxpbmkgd3JvdGU6DQoNCkhlbGxv
-IFN0ZWZhbm8NCg0KPiBPbiBXZWQsIDIxIEp1biAyMDIzLCBPbGVrc2FuZHIgVHlzaGNoZW5rbyB3
-cm90ZToNCj4+IE9uIDIxLjA2LjIzIDE2OjEyLCBQZXRyIFBhdmx1IHdyb3RlOg0KPj4NCj4+DQo+
-PiBIZWxsbyBQZXRyDQo+Pg0KPj4NCj4+PiBXaGVuIGF0dGVtcHRpbmcgdG8gcnVuIFhlbiBvbiBh
-IFFFTVUvS1ZNIHZpcnR1YWwgbWFjaGluZSB3aXRoIHZpcnRpbw0KPj4+IGRldmljZXMgKGFsbCB4
-ODZfNjQpLCBkb20wIHRyaWVzIHRvIGVzdGFibGlzaCBhIGdyYW50IGZvciBpdHNlbGYgd2hpY2gN
-Cj4+PiBldmVudHVhbGx5IHJlc3VsdHMgaW4gYSBoYW5nIGR1cmluZyB0aGUgYm9vdC4NCj4+Pg0K
-Pj4+IFRoZSBiYWNrdHJhY2UgbG9va3MgYXMgZm9sbG93cywgdGhlIHdoaWxlIGxvb3AgaW4gX19z
-ZW5kX2NvbnRyb2xfbXNnKCkNCj4+PiBtYWtlcyBubyBwcm9ncmVzczoNCj4+Pg0KPj4+ICAgICAj
-MCAgdmlydHF1ZXVlX2dldF9idWZfY3R4IChfdnE9X3ZxQGVudHJ5PTB4ZmZmZjg4ODAwNzRhODQw
-MCwgbGVuPWxlbkBlbnRyeT0weGZmZmZjOTAwMDA0MTNjOTQsIGN0eD1jdHhAZW50cnk9MHgwIDxm
-aXhlZF9wZXJjcHVfZGF0YT4pIGF0IC4uL2RyaXZlcnMvdmlydGlvL3ZpcnRpb19yaW5nLmM6MjMy
-Ng0KPj4+ICAgICAjMSAgMHhmZmZmZmZmZjgxNzA4NmI3IGluIHZpcnRxdWV1ZV9nZXRfYnVmIChf
-dnE9X3ZxQGVudHJ5PTB4ZmZmZjg4ODAwNzRhODQwMCwgbGVuPWxlbkBlbnRyeT0weGZmZmZjOTAw
-MDA0MTNjOTQpIGF0IC4uL2RyaXZlcnMvdmlydGlvL3ZpcnRpb19yaW5nLmM6MjMzMw0KPj4+ICAg
-ICAjMiAgMHhmZmZmZmZmZjgxNzVmNmIyIGluIF9fc2VuZF9jb250cm9sX21zZyAocG9ydGRldj08
-b3B0aW1pemVkIG91dD4sIHBvcnRfaWQ9MHhmZmZmZmZmZiwgZXZlbnQ9MHgwLCB2YWx1ZT0weDEp
-IGF0IC4uL2RyaXZlcnMvY2hhci92aXJ0aW9fY29uc29sZS5jOjU2Mg0KPj4+ICAgICAjMyAgMHhm
-ZmZmZmZmZjgxNzVmNmVlIGluIF9fc2VuZF9jb250cm9sX21zZyAocG9ydGRldj08b3B0aW1pemVk
-IG91dD4sIHBvcnRfaWQ9PG9wdGltaXplZCBvdXQ+LCBldmVudD08b3B0aW1pemVkIG91dD4sIHZh
-bHVlPTxvcHRpbWl6ZWQgb3V0PikgYXQgLi4vZHJpdmVycy9jaGFyL3ZpcnRpb19jb25zb2xlLmM6
-NTY5DQo+Pj4gICAgICM0ICAweGZmZmZmZmZmODE3NjE4YjEgaW4gdmlydGNvbnNfcHJvYmUgKHZk
-ZXY9MHhmZmZmODg4MDA1ODVlODAwKSBhdCAuLi9kcml2ZXJzL2NoYXIvdmlydGlvX2NvbnNvbGUu
-YzoyMDk4DQo+Pj4gICAgICM1ICAweGZmZmZmZmZmODE3MDcxMTcgaW4gdmlydGlvX2Rldl9wcm9i
-ZSAoX2Q9MHhmZmZmODg4MDA1ODVlODEwKSBhdCAuLi9kcml2ZXJzL3ZpcnRpby92aXJ0aW8uYzoz
-MDUNCj4+PiAgICAgIzYgIDB4ZmZmZmZmZmY4MTk4ZTM0OCBpbiBjYWxsX2RyaXZlcl9wcm9iZSAo
-ZHJ2PTB4ZmZmZmZmZmY4MmJlNDBjMCA8dmlydGlvX2NvbnNvbGU+LCBkcnY9MHhmZmZmZmZmZjgy
-YmU0MGMwIDx2aXJ0aW9fY29uc29sZT4sIGRldj0weGZmZmY4ODgwMDU4NWU4MTApIGF0IC4uL2Ry
-aXZlcnMvYmFzZS9kZC5jOjU3OQ0KPj4+ICAgICAjNyAgcmVhbGx5X3Byb2JlIChkZXY9ZGV2QGVu
-dHJ5PTB4ZmZmZjg4ODAwNTg1ZTgxMCwgZHJ2PWRydkBlbnRyeT0weGZmZmZmZmZmODJiZTQwYzAg
-PHZpcnRpb19jb25zb2xlPikgYXQgLi4vZHJpdmVycy9iYXNlL2RkLmM6NjU4DQo+Pj4gICAgICM4
-ICAweGZmZmZmZmZmODE5OGU1OGYgaW4gX19kcml2ZXJfcHJvYmVfZGV2aWNlIChkcnY9ZHJ2QGVu
-dHJ5PTB4ZmZmZmZmZmY4MmJlNDBjMCA8dmlydGlvX2NvbnNvbGU+LCBkZXY9ZGV2QGVudHJ5PTB4
-ZmZmZjg4ODAwNTg1ZTgxMCkgYXQgLi4vZHJpdmVycy9iYXNlL2RkLmM6ODAwDQo+Pj4gICAgICM5
-ICAweGZmZmZmZmZmODE5OGU2NWEgaW4gZHJpdmVyX3Byb2JlX2RldmljZSAoZHJ2PWRydkBlbnRy
-eT0weGZmZmZmZmZmODJiZTQwYzAgPHZpcnRpb19jb25zb2xlPiwgZGV2PWRldkBlbnRyeT0weGZm
-ZmY4ODgwMDU4NWU4MTApIGF0IC4uL2RyaXZlcnMvYmFzZS9kZC5jOjgzMA0KPj4+ICAgICAjMTAg
-MHhmZmZmZmZmZjgxOThlODMyIGluIF9fZHJpdmVyX2F0dGFjaCAoZGV2PTB4ZmZmZjg4ODAwNTg1
-ZTgxMCwgZGF0YT0weGZmZmZmZmZmODJiZTQwYzAgPHZpcnRpb19jb25zb2xlPikgYXQgLi4vZHJp
-dmVycy9iYXNlL2RkLmM6MTIxNg0KPj4+ICAgICAjMTEgMHhmZmZmZmZmZjgxOThiZmIyIGluIGJ1
-c19mb3JfZWFjaF9kZXYgKGJ1cz08b3B0aW1pemVkIG91dD4sIHN0YXJ0PXN0YXJ0QGVudHJ5PTB4
-MCA8Zml4ZWRfcGVyY3B1X2RhdGE+LCBkYXRhPWRhdGFAZW50cnk9MHhmZmZmZmZmZjgyYmU0MGMw
-IDx2aXJ0aW9fY29uc29sZT4sDQo+Pj4gICAgICAgICBmbj1mbkBlbnRyeT0weGZmZmZmZmZmODE5
-OGU3YjAgPF9fZHJpdmVyX2F0dGFjaD4pIGF0IC4uL2RyaXZlcnMvYmFzZS9idXMuYzozNjgNCj4+
-PiAgICAgIzEyIDB4ZmZmZmZmZmY4MTk4ZGI2NSBpbiBkcml2ZXJfYXR0YWNoIChkcnY9ZHJ2QGVu
-dHJ5PTB4ZmZmZmZmZmY4MmJlNDBjMCA8dmlydGlvX2NvbnNvbGU+KSBhdCAuLi9kcml2ZXJzL2Jh
-c2UvZGQuYzoxMjMzDQo+Pj4gICAgICMxMyAweGZmZmZmZmZmODE5OGQyMDcgaW4gYnVzX2FkZF9k
-cml2ZXIgKGRydj1kcnZAZW50cnk9MHhmZmZmZmZmZjgyYmU0MGMwIDx2aXJ0aW9fY29uc29sZT4p
-IGF0IC4uL2RyaXZlcnMvYmFzZS9idXMuYzo2NzMNCj4+PiAgICAgIzE0IDB4ZmZmZmZmZmY4MTk4
-ZjU1MCBpbiBkcml2ZXJfcmVnaXN0ZXIgKGRydj1kcnZAZW50cnk9MHhmZmZmZmZmZjgyYmU0MGMw
-IDx2aXJ0aW9fY29uc29sZT4pIGF0IC4uL2RyaXZlcnMvYmFzZS9kcml2ZXIuYzoyNDYNCj4+PiAg
-ICAgIzE1IDB4ZmZmZmZmZmY4MTcwNmI0NyBpbiByZWdpc3Rlcl92aXJ0aW9fZHJpdmVyIChkcml2
-ZXI9ZHJpdmVyQGVudHJ5PTB4ZmZmZmZmZmY4MmJlNDBjMCA8dmlydGlvX2NvbnNvbGU+KSBhdCAu
-Li9kcml2ZXJzL3ZpcnRpby92aXJ0aW8uYzozNTcNCj4+PiAgICAgIzE2IDB4ZmZmZmZmZmY4MzJj
-ZDM0YiBpbiB2aXJ0aW9fY29uc29sZV9pbml0ICgpIGF0IC4uL2RyaXZlcnMvY2hhci92aXJ0aW9f
-Y29uc29sZS5jOjIyNTgNCj4+PiAgICAgIzE3IDB4ZmZmZmZmZmY4MTAwMTA1YyBpbiBkb19vbmVf
-aW5pdGNhbGwgKGZuPTB4ZmZmZmZmZmY4MzJjZDJlMCA8dmlydGlvX2NvbnNvbGVfaW5pdD4pIGF0
-IC4uL2luaXQvbWFpbi5jOjEyNDYNCj4+PiAgICAgIzE4IDB4ZmZmZmZmZmY4MzI3NzI5MyBpbiBk
-b19pbml0Y2FsbF9sZXZlbCAoY29tbWFuZF9saW5lPTB4ZmZmZjg4ODAwM2UyZjkwMCAicm9vdCIs
-IGxldmVsPTB4NikgYXQgLi4vaW5pdC9tYWluLmM6MTMxOQ0KPj4+ICAgICAjMTkgZG9faW5pdGNh
-bGxzICgpIGF0IC4uL2luaXQvbWFpbi5jOjEzMzUNCj4+PiAgICAgIzIwIGRvX2Jhc2ljX3NldHVw
-ICgpIGF0IC4uL2luaXQvbWFpbi5jOjEzNTQNCj4+PiAgICAgIzIxIGtlcm5lbF9pbml0X2ZyZWVh
-YmxlICgpIGF0IC4uL2luaXQvbWFpbi5jOjE1NzENCj4+PiAgICAgIzIyIDB4ZmZmZmZmZmY4MWY2
-NGJlMSBpbiBrZXJuZWxfaW5pdCAodW51c2VkPTxvcHRpbWl6ZWQgb3V0PikgYXQgLi4vaW5pdC9t
-YWluLmM6MTQ2Mg0KPj4+ICAgICAjMjMgMHhmZmZmZmZmZjgxMDAxZjQ5IGluIHJldF9mcm9tX2Zv
-cmsgKCkgYXQgLi4vYXJjaC94ODYvZW50cnkvZW50cnlfNjQuUzozMDgNCj4+PiAgICAgIzI0IDB4
-MDAwMDAwMDAwMDAwMDAwMCBpbiA/PyAoKQ0KPj4+DQo+Pj4gRml4IHRoZSBwcm9ibGVtIGJ5IHBy
-ZXZlbnRpbmcgeGVuX2dyYW50X2luaXRfYmFja2VuZF9kb21pZCgpIGZyb20NCj4+PiBzZXR0aW5n
-IGRvbTAgYXMgYSBiYWNrZW5kIHdoZW4gcnVubmluZyBpbiBkb20wLg0KPj4+DQo+Pj4gRml4ZXM6
-IDAzNWUzYTQzMjFmNyAoInhlbi92aXJ0aW86IE9wdGltaXplIHRoZSBzZXR1cCBvZiAieGVuLWdy
-YW50LWRtYSIgZGV2aWNlcyIpDQo+Pg0KPj4NCj4+IEkgYW0gbm90IDEwMCUgc3VyZSB3aGV0aGVy
-IHRoZSBGaXhlcyB0YWcgcG9pbnRzIHRvIHByZWNpc2UgY29tbWl0LiBJZiBJDQo+PiBhbSBub3Qg
-bWlzdGFrZW4sIHRoZSBzYWlkIGNvbW1pdCBqdXN0IG1vdmVzIHRoZSBjb2RlIGluIHRoZSBjb250
-ZXh0DQo+PiB3aXRob3V0IGNoYW5naW5nIHRoZSBsb2dpYyBvZiBDT05GSUdfWEVOX1ZJUlRJT19G
-T1JDRV9HUkFOVCwgdGhpcyB3YXMNCj4+IGludHJvZHVjZWQgYmVmb3JlLg0KPj4NCj4+DQo+Pj4g
-U2lnbmVkLW9mZi1ieTogUGV0ciBQYXZsdSA8cGV0ci5wYXZsdUBzdXNlLmNvbT4NCj4+PiAtLS0N
-Cj4+PiAgICBkcml2ZXJzL3hlbi9ncmFudC1kbWEtb3BzLmMgfCA0ICsrKy0NCj4+PiAgICAxIGZp
-bGUgY2hhbmdlZCwgMyBpbnNlcnRpb25zKCspLCAxIGRlbGV0aW9uKC0pDQo+Pj4NCj4+PiBkaWZm
-IC0tZ2l0IGEvZHJpdmVycy94ZW4vZ3JhbnQtZG1hLW9wcy5jIGIvZHJpdmVycy94ZW4vZ3JhbnQt
-ZG1hLW9wcy5jDQo+Pj4gaW5kZXggNzZmNmYyNjI2NWEzLi4yOWVkMjdhYzQ1MGUgMTAwNjQ0DQo+
-Pj4gLS0tIGEvZHJpdmVycy94ZW4vZ3JhbnQtZG1hLW9wcy5jDQo+Pj4gKysrIGIvZHJpdmVycy94
-ZW4vZ3JhbnQtZG1hLW9wcy5jDQo+Pj4gQEAgLTM2Miw3ICszNjIsOSBAQCBzdGF0aWMgaW50IHhl
-bl9ncmFudF9pbml0X2JhY2tlbmRfZG9taWQoc3RydWN0IGRldmljZSAqZGV2LA0KPj4+ICAgIAlp
-ZiAobnApIHsNCj4+PiAgICAJCXJldCA9IHhlbl9kdF9ncmFudF9pbml0X2JhY2tlbmRfZG9taWQo
-ZGV2LCBucCwgYmFja2VuZF9kb21pZCk7DQo+Pj4gICAgCQlvZl9ub2RlX3B1dChucCk7DQo+Pj4g
-LQl9IGVsc2UgaWYgKElTX0VOQUJMRUQoQ09ORklHX1hFTl9WSVJUSU9fRk9SQ0VfR1JBTlQpIHx8
-IHhlbl9wdl9kb21haW4oKSkgew0KPj4+ICsJfSBlbHNlIGlmICgoSVNfRU5BQkxFRChDT05GSUdf
-WEVOX1ZJUlRJT19GT1JDRV9HUkFOVCkgfHwNCj4+PiArCQkgICAgeGVuX3B2X2RvbWFpbigpKSAm
-Jg0KPj4+ICsJCSAgICF4ZW5faW5pdGlhbF9kb21haW4oKSkgew0KPj4NCj4+IFRoZSBjb21taXQg
-bGd0bSwganVzdCBvbmUgbm90ZToNCj4+DQo+Pg0KPj4gSSB3b3VsZCBldmVuIGJhaWwgb3V0IGVh
-cmx5IGluIHhlbl92aXJ0aW9fcmVzdHJpY3RlZF9tZW1fYWNjKCkgaW5zdGVhZCwNCj4+IGFzIEkg
-YXNzdW1lIHRoZSBzYW1lIGlzc3VlIGNvdWxkIGhhcHBlbiBvbiBBcm0gd2l0aCBEVCAoYWx0aG91
-Z2ggdGhlcmUNCj4+IHdlIGRvbid0IGd1ZXNzIHRoZSBiYWNrZW5kJ3MgZG9taWQsIHdlIHJlYWQg
-aXQgZnJvbSBEVCBhbmQgcXVpdGUNCj4+IHVubGlrZWx5IHdlIGdldCBEb20wIGJlaW5nIGluIERv
-bTAgd2l0aCBjb3JyZWN0IERUKS4NCj4+DQo+PiBTb21ldGhpbmcgbGlrZToNCj4+DQo+PiBAQCAt
-NDE2LDYgKzQyMSwxMCBAQCBib29sIHhlbl92aXJ0aW9fcmVzdHJpY3RlZF9tZW1fYWNjKHN0cnVj
-dA0KPj4gdmlydGlvX2RldmljZSAqZGV2KQ0KPj4gICAgew0KPj4gICAgICAgICAgIGRvbWlkX3Qg
-YmFja2VuZF9kb21pZDsNCj4+DQo+PiArICAgICAgIC8qIFhlbiBncmFudCBETUEgb3BzIGFyZSBu
-b3QgdXNlZCB3aGVuIHJ1bm5pbmcgYXMgaW5pdGlhbCBkb21haW4gKi8NCj4+ICsgICAgICAgaWYg
-KHhlbl9pbml0aWFsX2RvbWFpbigpKQ0KPj4gKyAgICAgICAgICAgICAgIHJldHVybiBmYWxzZTsN
-Cj4+ICsNCj4+ICAgICAgICAgICBpZiAoIXhlbl9ncmFudF9pbml0X2JhY2tlbmRfZG9taWQoZGV2
-LT5kZXYucGFyZW50LA0KPj4gJmJhY2tlbmRfZG9taWQpKSB7DQo+PiAgICAgICAgICAgICAgICAg
-ICB4ZW5fZ3JhbnRfc2V0dXBfZG1hX29wcyhkZXYtPmRldi5wYXJlbnQsIGJhY2tlbmRfZG9taWQp
-Ow0KPj4gICAgICAgICAgICAgICAgICAgcmV0dXJuIHRydWU7DQo+PiAoRU5EKQ0KPj4NCj4+DQo+
-Pg0KPj4gSWYgc28sIHRoYXQgY29tbWl0IHN1YmplY3Qgd291bGQgbmVlZCB0byBiZSB1cGRhdGVk
-IGFjY29yZGluZ2x5Lg0KPj4NCj4+IExldCdzIHNlZSB3aGF0IG90aGVyIHJldmlld2VycyB3aWxs
-IHNheS4NCj4gDQo+IFRoaXMgZG9lc24ndCB3b3JrIGluIGFsbCBjYXNlcy4gSW1hZ2luZSB1c2lu
-ZyBQQ0kgUGFzc3Rocm91Z2ggdG8gYXNzaWduDQo+IGEgInBoeXNpY2FsIiB2aXJ0aW8gZGV2aWNl
-IHRvIGEgZG9tVS4gVGhlIGRvbVUgd2lsbCBydW4gaW50byB0aGUgc2FtZQ0KPiBlcnJvciwgcmln
-aHQ/DQo+IA0KPiBUaGUgcHJvYmxlbSBpcyB0aGF0IHdlIG5lZWQgYSB3YXkgZm9yIHRoZSB2aXJ0
-aW8gYmFja2VuZCB0byBhZHZlcnRpc2UNCj4gaXRzIGFiaWxpdHkgb2YgaGFuZGxpbmcgZ3JhbnRz
-LiBSaWdodCBub3cgd2Ugb25seSBoYXZlIGEgd2F5IHRvIGRvIHdpdGgNCj4gdGhhdCB3aXRoIGRl
-dmljZSB0cmVlIG9uIEFSTS4gT24geDg2LCB3ZSBvbmx5IGhhdmUNCj4gQ09ORklHX1hFTl9WSVJU
-SU9fRk9SQ0VfR1JBTlQsIGFuZCBpZiB3ZSB0YWtlDQo+IENPTkZJR19YRU5fVklSVElPX0ZPUkNF
-X0dSQU5UIGF0IGZhY2UgdmFsdWUsIGl0IGFsc28gZW5hYmxlcyBncmFudHMgZm9yDQo+ICJwaHlz
-aWNhbCIgdmlydGlvIGRldmljZXMuIE5vdGUgdGhhdCBpbiB0aGlzIGNhc2Ugd2UgYXJlIGZpeGlu
-ZyBhDQo+IG5lc3RlZC12aXJ0dWFsaXphdGlvbiBidWcsIGJ1dCB0aGVyZSBhcmUgYWN0dWFsbHkg
-cGh5c2ljYWwNCj4gdmlydGlvLWNvbXBhdGlibGUgZGV2aWNlcyBvdXQgdGhlcmUuIENPTkZJR19Y
-RU5fVklSVElPX0ZPUkNFX0dSQU5UIHdpbGwNCj4gYnJlYWsgdGhvc2UgdG9vLg0KDQoNCklmIHRo
-ZXNlICJwaHlzaWNhbCIgdmlydGlvIGRldmljZXMgYXJlIGFsc28gc3Bhd25lZCBieQ0KZHJpdmVy
-cy92aXJ0aW8vdmlydGlvLmM6dmlydGlvX2Rldl9wcm9iZSgpLCB0aGVuIHllcywgb3RoZXJ3aXNl
-IEkgZG9uJ3QgDQpzZWUgaG93IHRoaXMgY291bGQgZXZlbiBiZSBwb3NzaWJsZSwgYnV0IEkgbWln
-aHQgbWlzcyBzb21ldGhpbmcgaGVyZS4NCg0KeGVuX3ZpcnRpb19yZXN0cmljdGVkX21lbV9hY2Mo
-KSBnZXRzIGNhbGxlZCBpbmRpcmVjdGx5IGZyb20gDQp2aXJ0aW9fZGV2X3Byb2JlKCktPnZpcnRp
-b19mZWF0dXJlc19vaygpLT4NCnZpcnRpb19jaGVja19tZW1fYWNjX2NiKCkuIFNvIHRoZSBYZW4g
-Z3JhbnQgRE1BIG9wcyBhcmUgb25seSBpbnN0YWxsZWQgDQpmb3IgdGhvc2UuDQoNCj4gDQo+IEkg
-dGhpbmsgd2UgbmVlZCB0byBhZGQgYSBzZWNvbmQgd2F5PyBJdCBjb3VsZCBiZSBhbnl0aGluZyB0
-aGF0IGNhbiBoZWxwDQo+IHVzIGRpc3Rpbmd1aXNoIGJldHdlZW4gYSBub24tZ3JhbnRzLWNhcGFi
-bGUgdmlydGlvIGJhY2tlbmQgYW5kIGENCj4gZ3JhbnRzLWNhcGFibGUgdmlydGlvIGJhY2tlbmQs
-IHN1Y2ggYXM6DQo+IC0gYSBzdHJpbmcgb24geGVuc3RvcmUNCj4gLSBhIHhlbiBwYXJhbQ0KPiAt
-IGEgc3BlY2lhbCBQQ0kgY29uZmlndXJhdGlvbiByZWdpc3RlciB2YWx1ZQ0KPiAtIHNvbWV0aGlu
-ZyBpbiB0aGUgQUNQSSB0YWJsZXMNCj4gLSB0aGUgUUVNVSBtYWNoaW5lIHR5cGUNCg0KDQpZZXMs
-IEkgcmVtZW1iZXIgdGhlcmUgd2FzIGEgZGlzY3Vzc2lvbiByZWdhcmRpbmcgdGhhdC4gVGhlIHBv
-aW50IGlzIHRvIA0KY2hvb3NlIGEgc29sdXRpb24gdG8gYmUgZnVuY3Rpb25hbCBmb3IgYm90aCBQ
-ViBhbmQgSFZNICphbmQqIHRvIGJlIGFibGUgDQp0byBzdXBwb3J0IGEgaG90cGx1Zy4gSUlSQywg
-dGhlIHhlbnN0b3JlIGNvdWxkIGJlIGEgcG9zc2libGUgY2FuZGlkYXRlLg0KDQoNCj4gDQo+IE9y
-IGF0IGxlYXN0IHNob3VsZCB3ZSBjaGFuZ2UgQ09ORklHX1hFTl9WSVJUSU9fRk9SQ0VfR1JBTlQg
-aW50byBhDQo+IGNvbW1hbmQgbGluZSBwYXJhbWV0ZXIgc28gdGhhdCBpdCBjYW4gYmUgZGlzYWJs
-ZWQgaW4gY2FzZXMgbGlrZSB0aGlzDQo+IG9uZT8NCg0KSUlVQywgdGhpcyB3aWxsIGhlbHAgd2l0
-aCBIVk0gb25seS4NCg0KDQo+IA0KPiBJIHJlYWxpemUgdGhhdCBmaXhpbmcgdGhpcyBwcm9ibGVt
-IHByb3Blcmx5IHRha2VzIGEgbG90IGxvbmdlciB0aGFuDQo+IGFkZGluZyBhIHRyaXZpYWwgaWYg
-KGRvbTApIHJldHVybjsgY2hlY2sgaW4gdGhlIGNvZGUuIElmIHlvdSBjYW5ub3QgZmluZA0KPiBh
-IGdvb2Qgd2F5IHRvIHNvbHZlIHRoZSBwcm9ibGVtIG9yIHlvdSBkb24ndCBoYXZlIHRpbWUgdG8g
-ZG8gdGhhdCBub3cNCj4gYW5kIHlvdSBuZWVkIHRoaXMgYnVnIGZpeGVkIHF1aWNrbHksIHRoZW4g
-SSB3b3VsZCBiZSBPSyB3aXRoIHRoZSBpZg0KPiAoZG9tMCkgcmV0dXJuOyBjaGVjayBidXQgcGxl
-YXNlIGFkZCBhIGRldGFpbGVkIFRPRE8gaW4tY29kZSBjb21tZW50IHRvDQo+IGV4cGxhaW4gdGhh
-dCB0aGlzIGlzIGp1c3QgYSBoYWNrIGFuZCB3ZSBhcmUgc3RpbGwgbG9va2luZyBmb3IgYSByZWFs
-DQo+IHNvbHV0aW9uLg0KPiANCj4gVGhlIGNoZWNrIGl0c2VsZiBJIHByZWZlciB0aGUgb3JpZ2lu
-YWwgcG9zaXRpb24gYmVjYXVzZSBJIHdhbnQgdG8gcmV0YWluDQo+IHRoZSBhYmlsaXR5IG9mIHVz
-aW5nIHZpcnRpbyBmcm9udGVuZHMgd2l0aCBncmFudCBvbiBBUk0gaW4gRG9tMCAoRG9tRA0KPiBj
-YXNlKS4NCg0KTWFrZXMgc2Vuc2UsIGFncmVlLg==
+On Thu, Jun 29, 2023, Sean Christopherson wrote:
+> On Thu, Jun 29, 2023, Yan Zhao wrote:
+> > On Wed, Jun 28, 2023 at 08:37:45AM -0700, Sean Christopherson wrote:
+> > ...
+> > > So I think we should try this:
+> > > 
+> > > ---
+> > >  arch/x86/kvm/mmu/mmu.c   | 19 -------------------
+> > >  include/linux/kvm_host.h |  1 -
+> > >  virt/kvm/kvm_main.c      | 13 ++-----------
+> > >  3 files changed, 2 insertions(+), 31 deletions(-)
+> > > 
+> > > diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+> > > index 60397a1beda3..e305737edf84 100644
+> > > --- a/arch/x86/kvm/mmu/mmu.c
+> > > +++ b/arch/x86/kvm/mmu/mmu.c
+> > > @@ -3671,19 +3671,6 @@ void kvm_mmu_free_guest_mode_roots(struct kvm *kvm, struct kvm_mmu *mmu)
+> > >  }
+> > >  EXPORT_SYMBOL_GPL(kvm_mmu_free_guest_mode_roots);
+> > >  
+> > > -
+> > > -static int mmu_check_root(struct kvm_vcpu *vcpu, gfn_t root_gfn)
+> > > -{
+> > > -	int ret = 0;
+> > > -
+> > > -	if (!kvm_vcpu_is_visible_gfn(vcpu, root_gfn)) {
+> > > -		kvm_make_request(KVM_REQ_TRIPLE_FAULT, vcpu);
+> > > -		ret = 1;
+> > > -	}
+> > > -
+> > > -	return ret;
+> > > -}
+> > > -
+> > >  static hpa_t mmu_alloc_root(struct kvm_vcpu *vcpu, gfn_t gfn, int quadrant,
+> > >  			    u8 level)
+> > >  {
+> > > @@ -3821,9 +3808,6 @@ static int mmu_alloc_shadow_roots(struct kvm_vcpu *vcpu)
+> > >  	root_pgd = kvm_mmu_get_guest_pgd(vcpu, mmu);
+> > >  	root_gfn = root_pgd >> PAGE_SHIFT;
+> > >  
+> > > -	if (mmu_check_root(vcpu, root_gfn))
+> > > -		return 1;
+> > > -
+> > Hi Sean,
+> > The checking of existence of memslot is still useful,
+> > Otherwise NULL pointer dereference would be met as in below call trace.
+> >
+> > mmu_alloc_shadow_roots
+> >  |->mmu_alloc_root
+> >     |->mmu_alloc_root(root_gfn)
+> >        |->kvm_mmu_get_shadow_page
+> >           |->__kvm_mmu_get_shadow_page
+> >              |->kvm_mmu_alloc_shadow_page
+> >                 |->account_shadowed
+> >                    |->slot = __gfn_to_memslot(slots, gfn);                    ==>NULL pointer
+> >                    |  kvm_slot_page_track_add_page(kvm, slot, gfn,KVM_PAGE_TRACK_WRITE);
+> >                       |->update_gfn_track(slot, gfn, mode, 1);
+> >                          |->index = gfn_to_index(gfn, slot->base_gfn, PG_LEVEL_4K);  ==>NULL pointer dereference
+> 
+> Argh, right, the internal memslot might "work", but the no memslot case will not.
+> The non-root path effectively injects a page fault if there's no memslot.
+> 
+> Oof, and simply skipping the accounting for the no-slot case would result in an
+> imbalanced world if userspace creates a valid memslot before unaccount_shadowed()
+> is called.
+> 
+> As much as it pains me to propagate KVM's arbitrary behavior, doing the right from
+> an architectural perspective is really gross for KVM, e.g. would need all kinds of
+> dedicated code in the MMU.
+
+Turns out, not _that_ gross.  Exempting triple fault "works", but as I called out
+earlier, it generates the incorrect exit reason in KVM-Unit-Tests, e.g. when KUT
+stuffs a bad GUEST_RFLAGS to trigger a VM-Exit consistency check, because the
+consistency check has higher priority than anything that can lead to triple fault.
+And I couldn't bring myself to propagate the hack into testing code.
+
+Lightly tested, but if this pans out, I'll post a series to (a) exempt triple
+fault so that there's a fix for stable@, (b) effect the below over several patches,
+and (c) revert the triple fault hack so that HEAD is architecturally less wrong.
+
+---
+ arch/x86/kvm/kvm_onhyperv.c     |  5 ++
+ arch/x86/kvm/mmu.h              |  7 +--
+ arch/x86/kvm/mmu/mmu.c          | 92 ++++++++++++++++-----------------
+ arch/x86/kvm/mmu/mmu_internal.h | 10 ++++
+ arch/x86/kvm/mmu/spte.h         | 12 +++++
+ arch/x86/kvm/mmu/tdp_iter.c     |  7 ++-
+ arch/x86/kvm/mmu/tdp_mmu.c      |  2 +-
+ 7 files changed, 79 insertions(+), 56 deletions(-)
+
+diff --git a/arch/x86/kvm/kvm_onhyperv.c b/arch/x86/kvm/kvm_onhyperv.c
+index ded0bd688c65..77add2afc92b 100644
+--- a/arch/x86/kvm/kvm_onhyperv.c
++++ b/arch/x86/kvm/kvm_onhyperv.c
+@@ -113,6 +113,11 @@ void hv_track_root_tdp(struct kvm_vcpu *vcpu, hpa_t root_tdp)
+ {
+ 	struct kvm_arch *kvm_arch = &vcpu->kvm->arch;
+ 
++	if (!kvm_mmu_is_usable_root(root_tdp)) {
++		vcpu->arch.hv_root_tdp = INVALID_PAGE;
++		return;
++	}
++
+ 	if (kvm_x86_ops.flush_remote_tlbs == hv_flush_remote_tlbs) {
+ 		spin_lock(&kvm_arch->hv_root_tdp_lock);
+ 		vcpu->arch.hv_root_tdp = root_tdp;
+diff --git a/arch/x86/kvm/mmu.h b/arch/x86/kvm/mmu.h
+index 92d5a1924fc1..6dcc81582afa 100644
+--- a/arch/x86/kvm/mmu.h
++++ b/arch/x86/kvm/mmu.h
+@@ -146,12 +146,7 @@ static inline unsigned long kvm_get_active_pcid(struct kvm_vcpu *vcpu)
+ 
+ static inline void kvm_mmu_load_pgd(struct kvm_vcpu *vcpu)
+ {
+-	u64 root_hpa = vcpu->arch.mmu->root.hpa;
+-
+-	if (!VALID_PAGE(root_hpa))
+-		return;
+-
+-	static_call(kvm_x86_load_mmu_pgd)(vcpu, root_hpa,
++	static_call(kvm_x86_load_mmu_pgd)(vcpu, vcpu->arch.mmu->root.hpa,
+ 					  vcpu->arch.mmu->root_role.level);
+ }
+ 
+diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+index 6e6078194ec7..64a918d89472 100644
+--- a/arch/x86/kvm/mmu/mmu.c
++++ b/arch/x86/kvm/mmu/mmu.c
+@@ -3574,11 +3574,7 @@ static void mmu_free_root_page(struct kvm *kvm, hpa_t *root_hpa,
+ 	if (!VALID_PAGE(*root_hpa))
+ 		return;
+ 
+-	/*
+-	 * The "root" may be a special root, e.g. a PAE entry, treat it as a
+-	 * SPTE to ensure any non-PA bits are dropped.
+-	 */
+-	sp = spte_to_child_sp(*root_hpa);
++	sp = root_to_sp(*root_hpa);
+ 	if (WARN_ON(!sp))
+ 		return;
+ 
+@@ -3624,7 +3620,9 @@ void kvm_mmu_free_roots(struct kvm *kvm, struct kvm_mmu *mmu,
+ 					   &invalid_list);
+ 
+ 	if (free_active_root) {
+-		if (to_shadow_page(mmu->root.hpa)) {
++		if (kvm_mmu_is_dummy_root(mmu->root.hpa)) {
++			/* Nothing to cleanup for dummy roots. */
++		} else if (root_to_sp(mmu->root.hpa)) {
+ 			mmu_free_root_page(kvm, &mmu->root.hpa, &invalid_list);
+ 		} else if (mmu->pae_root) {
+ 			for (i = 0; i < 4; ++i) {
+@@ -3648,6 +3646,7 @@ EXPORT_SYMBOL_GPL(kvm_mmu_free_roots);
+ void kvm_mmu_free_guest_mode_roots(struct kvm *kvm, struct kvm_mmu *mmu)
+ {
+ 	unsigned long roots_to_free = 0;
++	struct kvm_mmu_page *sp;
+ 	hpa_t root_hpa;
+ 	int i;
+ 
+@@ -3662,8 +3661,8 @@ void kvm_mmu_free_guest_mode_roots(struct kvm *kvm, struct kvm_mmu *mmu)
+ 		if (!VALID_PAGE(root_hpa))
+ 			continue;
+ 
+-		if (!to_shadow_page(root_hpa) ||
+-			to_shadow_page(root_hpa)->role.guest_mode)
++		sp = root_to_sp(root_hpa);
++		if (!sp || sp->role.guest_mode)
+ 			roots_to_free |= KVM_MMU_ROOT_PREVIOUS(i);
+ 	}
+ 
+@@ -3671,19 +3670,6 @@ void kvm_mmu_free_guest_mode_roots(struct kvm *kvm, struct kvm_mmu *mmu)
+ }
+ EXPORT_SYMBOL_GPL(kvm_mmu_free_guest_mode_roots);
+ 
+-
+-static int mmu_check_root(struct kvm_vcpu *vcpu, gfn_t root_gfn)
+-{
+-	int ret = 0;
+-
+-	if (!kvm_vcpu_is_visible_gfn(vcpu, root_gfn)) {
+-		kvm_make_request(KVM_REQ_TRIPLE_FAULT, vcpu);
+-		ret = 1;
+-	}
+-
+-	return ret;
+-}
+-
+ static hpa_t mmu_alloc_root(struct kvm_vcpu *vcpu, gfn_t gfn, int quadrant,
+ 			    u8 level)
+ {
+@@ -3821,8 +3807,10 @@ static int mmu_alloc_shadow_roots(struct kvm_vcpu *vcpu)
+ 	root_pgd = kvm_mmu_get_guest_pgd(vcpu, mmu);
+ 	root_gfn = root_pgd >> PAGE_SHIFT;
+ 
+-	if (mmu_check_root(vcpu, root_gfn))
+-		return 1;
++	if (!kvm_vcpu_is_visible_gfn(vcpu, root_gfn)) {
++		mmu->root.hpa = kvm_mmu_get_dummy_root();
++		return 0;
++	}
+ 
+ 	/*
+ 	 * On SVM, reading PDPTRs might access guest memory, which might fault
+@@ -3834,8 +3822,8 @@ static int mmu_alloc_shadow_roots(struct kvm_vcpu *vcpu)
+ 			if (!(pdptrs[i] & PT_PRESENT_MASK))
+ 				continue;
+ 
+-			if (mmu_check_root(vcpu, pdptrs[i] >> PAGE_SHIFT))
+-				return 1;
++			if (kvm_vcpu_is_visible_gfn(vcpu, pdptrs[i] >> PAGE_SHIFT))
++				pdptrs[i] = 0;
+ 		}
+ 	}
+ 
+@@ -4002,7 +3990,7 @@ static bool is_unsync_root(hpa_t root)
+ {
+ 	struct kvm_mmu_page *sp;
+ 
+-	if (!VALID_PAGE(root))
++	if (!VALID_PAGE(root) || kvm_mmu_is_dummy_root(root))
+ 		return false;
+ 
+ 	/*
+@@ -4018,7 +4006,7 @@ static bool is_unsync_root(hpa_t root)
+ 	 * requirement isn't satisfied.
+ 	 */
+ 	smp_rmb();
+-	sp = to_shadow_page(root);
++	sp = root_to_sp(root);
+ 
+ 	/*
+ 	 * PAE roots (somewhat arbitrarily) aren't backed by shadow pages, the
+@@ -4035,8 +4023,9 @@ static bool is_unsync_root(hpa_t root)
+ 
+ void kvm_mmu_sync_roots(struct kvm_vcpu *vcpu)
+ {
+-	int i;
+ 	struct kvm_mmu_page *sp;
++	hpa_t root;
++	int i;
+ 
+ 	if (vcpu->arch.mmu->root_role.direct)
+ 		return;
+@@ -4047,12 +4036,12 @@ void kvm_mmu_sync_roots(struct kvm_vcpu *vcpu)
+ 	vcpu_clear_mmio_info(vcpu, MMIO_GVA_ANY);
+ 
+ 	if (vcpu->arch.mmu->cpu_role.base.level >= PT64_ROOT_4LEVEL) {
+-		hpa_t root = vcpu->arch.mmu->root.hpa;
+-		sp = to_shadow_page(root);
+-
++		root = vcpu->arch.mmu->root.hpa;
+ 		if (!is_unsync_root(root))
+ 			return;
+ 
++		sp = root_to_sp(root);
++
+ 		write_lock(&vcpu->kvm->mmu_lock);
+ 		mmu_sync_children(vcpu, sp, true);
+ 		write_unlock(&vcpu->kvm->mmu_lock);
+@@ -4062,8 +4051,7 @@ void kvm_mmu_sync_roots(struct kvm_vcpu *vcpu)
+ 	write_lock(&vcpu->kvm->mmu_lock);
+ 
+ 	for (i = 0; i < 4; ++i) {
+-		hpa_t root = vcpu->arch.mmu->pae_root[i];
+-
++		root = vcpu->arch.mmu->pae_root[i];
+ 		if (IS_VALID_PAE_ROOT(root)) {
+ 			sp = spte_to_child_sp(root);
+ 			mmu_sync_children(vcpu, sp, true);
+@@ -4382,7 +4370,7 @@ static int kvm_faultin_pfn(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault,
+ static bool is_page_fault_stale(struct kvm_vcpu *vcpu,
+ 				struct kvm_page_fault *fault)
+ {
+-	struct kvm_mmu_page *sp = to_shadow_page(vcpu->arch.mmu->root.hpa);
++	struct kvm_mmu_page *sp = root_to_sp(vcpu->arch.mmu->root.hpa);
+ 
+ 	/* Special roots, e.g. pae_root, are not backed by shadow pages. */
+ 	if (sp && is_obsolete_sp(vcpu->kvm, sp))
+@@ -4562,9 +4550,16 @@ static void nonpaging_init_context(struct kvm_mmu *context)
+ static inline bool is_root_usable(struct kvm_mmu_root_info *root, gpa_t pgd,
+ 				  union kvm_mmu_page_role role)
+ {
+-	return (role.direct || pgd == root->pgd) &&
+-	       VALID_PAGE(root->hpa) &&
+-	       role.word == to_shadow_page(root->hpa)->role.word;
++	struct kvm_mmu_page *sp;
++
++	if (!VALID_PAGE(root->hpa))
++		return false;
++
++	if (!role.direct && pgd != root->pgd)
++		return false;
++
++	sp = root_to_sp(root->hpa);
++	return sp && role.word == sp->role.word;
+ }
+ 
+ /*
+@@ -4634,11 +4629,10 @@ static bool fast_pgd_switch(struct kvm *kvm, struct kvm_mmu *mmu,
+ 			    gpa_t new_pgd, union kvm_mmu_page_role new_role)
+ {
+ 	/*
+-	 * For now, limit the caching to 64-bit hosts+VMs in order to avoid
+-	 * having to deal with PDPTEs. We may add support for 32-bit hosts/VMs
+-	 * later if necessary.
++	 * Limit reuse to 64-bit hosts+VMs without "special" roots in order to
++	 * avoid having to deal with PDPTEs and other complexities.
+ 	 */
+-	if (VALID_PAGE(mmu->root.hpa) && !to_shadow_page(mmu->root.hpa))
++	if (VALID_PAGE(mmu->root.hpa) && !root_to_sp(mmu->root.hpa))
+ 		kvm_mmu_free_roots(kvm, mmu, KVM_MMU_ROOT_CURRENT);
+ 
+ 	if (VALID_PAGE(mmu->root.hpa))
+@@ -4684,9 +4678,12 @@ void kvm_mmu_new_pgd(struct kvm_vcpu *vcpu, gpa_t new_pgd)
+ 	 * If this is a direct root page, it doesn't have a write flooding
+ 	 * count. Otherwise, clear the write flooding count.
+ 	 */
+-	if (!new_role.direct)
+-		__clear_sp_write_flooding_count(
+-				to_shadow_page(vcpu->arch.mmu->root.hpa));
++	if (!new_role.direct) {
++		struct kvm_mmu_page *sp = root_to_sp(vcpu->arch.mmu->root.hpa);
++
++		if (!WARN_ON_ONCE(!sp))
++			__clear_sp_write_flooding_count(sp);
++	}
+ }
+ EXPORT_SYMBOL_GPL(kvm_mmu_new_pgd);
+ 
+@@ -5536,12 +5533,13 @@ static bool is_obsolete_root(struct kvm *kvm, hpa_t root_hpa)
+ 	 * positives and free roots that don't strictly need to be freed, but
+ 	 * such false positives are relatively rare:
+ 	 *
+-	 *  (a) only PAE paging and nested NPT has roots without shadow pages
++	 *  (a) only PAE paging and nested NPT have roots without shadow pages
++	 *      (or any shadow paging flavor with a dummy root)
+ 	 *  (b) remote reloads due to a memslot update obsoletes _all_ roots
+ 	 *  (c) KVM doesn't track previous roots for PAE paging, and the guest
+ 	 *      is unlikely to zap an in-use PGD.
+ 	 */
+-	sp = to_shadow_page(root_hpa);
++	sp = root_to_sp(root_hpa);
+ 	return !sp || is_obsolete_sp(kvm, sp);
+ }
+ 
+@@ -5728,7 +5726,7 @@ int noinline kvm_mmu_page_fault(struct kvm_vcpu *vcpu, gpa_t cr2_or_gpa, u64 err
+ 	int r, emulation_type = EMULTYPE_PF;
+ 	bool direct = vcpu->arch.mmu->root_role.direct;
+ 
+-	if (WARN_ON(!VALID_PAGE(vcpu->arch.mmu->root.hpa)))
++	if (WARN_ON_ONCE(!VALID_PAGE(vcpu->arch.mmu->root.hpa)))
+ 		return RET_PF_RETRY;
+ 
+ 	r = RET_PF_INVALID;
+diff --git a/arch/x86/kvm/mmu/mmu_internal.h b/arch/x86/kvm/mmu/mmu_internal.h
+index d39af5639ce9..3ca986450393 100644
+--- a/arch/x86/kvm/mmu/mmu_internal.h
++++ b/arch/x86/kvm/mmu/mmu_internal.h
+@@ -44,6 +44,16 @@ extern bool dbg;
+ #define INVALID_PAE_ROOT	0
+ #define IS_VALID_PAE_ROOT(x)	(!!(x))
+ 
++static inline hpa_t kvm_mmu_get_dummy_root(void)
++{
++	return my_zero_pfn(0) << PAGE_SHIFT;
++}
++
++static inline bool kvm_mmu_is_dummy_root(hpa_t shadow_page)
++{
++	return is_zero_pfn(shadow_page >> PAGE_SHIFT);
++}
++
+ typedef u64 __rcu *tdp_ptep_t;
+ 
+ struct kvm_mmu_page {
+diff --git a/arch/x86/kvm/mmu/spte.h b/arch/x86/kvm/mmu/spte.h
+index 1279db2eab44..ac8ad12f9698 100644
+--- a/arch/x86/kvm/mmu/spte.h
++++ b/arch/x86/kvm/mmu/spte.h
+@@ -236,6 +236,18 @@ static inline struct kvm_mmu_page *sptep_to_sp(u64 *sptep)
+ 	return to_shadow_page(__pa(sptep));
+ }
+ 
++static inline struct kvm_mmu_page *root_to_sp(hpa_t root)
++{
++	if (kvm_mmu_is_dummy_root(root))
++		return NULL;
++
++	/*
++	 * The "root" may be a special root, e.g. a PAE entry, treat it as a
++	 * SPTE to ensure any non-PA bits are dropped.
++	 */
++	return spte_to_child_sp(root);
++}
++
+ static inline bool is_mmio_spte(u64 spte)
+ {
+ 	return (spte & shadow_mmio_mask) == shadow_mmio_value &&
+diff --git a/arch/x86/kvm/mmu/tdp_iter.c b/arch/x86/kvm/mmu/tdp_iter.c
+index d2eb0d4f8710..eda82a0e7fdb 100644
+--- a/arch/x86/kvm/mmu/tdp_iter.c
++++ b/arch/x86/kvm/mmu/tdp_iter.c
+@@ -41,8 +41,11 @@ void tdp_iter_start(struct tdp_iter *iter, struct kvm_mmu_page *root,
+ {
+ 	int root_level = root->role.level;
+ 
+-	WARN_ON(root_level < 1);
+-	WARN_ON(root_level > PT64_ROOT_MAX_LEVEL);
++	if (WARN_ON_ONCE(!root || (root_level < 1) ||
++			 (root_level > PT64_ROOT_MAX_LEVEL))) {
++		iter->valid = false;
++		return;
++	}
+ 
+ 	iter->next_last_level_gfn = next_last_level_gfn;
+ 	iter->root_level = root_level;
+diff --git a/arch/x86/kvm/mmu/tdp_mmu.c b/arch/x86/kvm/mmu/tdp_mmu.c
+index 512163d52194..046ac2589611 100644
+--- a/arch/x86/kvm/mmu/tdp_mmu.c
++++ b/arch/x86/kvm/mmu/tdp_mmu.c
+@@ -689,7 +689,7 @@ static inline void tdp_mmu_iter_set_spte(struct kvm *kvm, struct tdp_iter *iter,
+ 		else
+ 
+ #define tdp_mmu_for_each_pte(_iter, _mmu, _start, _end)		\
+-	for_each_tdp_pte(_iter, to_shadow_page(_mmu->root.hpa), _start, _end)
++	for_each_tdp_pte(_iter, root_to_sp(_mmu->root.hpa), _start, _end)
+ 
+ /*
+  * Yield if the MMU lock is contended or this thread needs to return control
+
+base-commit: 9bee9f1881ecd4eb68ba1ca88b56bff88e50fc8a
+-- 
+
