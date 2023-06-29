@@ -2,57 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BB95742671
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 14:30:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CB8E742683
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 14:35:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230036AbjF2MaT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 08:30:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57322 "EHLO
+        id S230164AbjF2Mev (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 08:34:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231593AbjF2MaF (ORCPT
+        with ESMTP id S231593AbjF2MeW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 08:30:05 -0400
-Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2511010FD;
-        Thu, 29 Jun 2023 05:30:04 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.30.67.143])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4QsHpH3xrtz4f3kpX;
-        Thu, 29 Jun 2023 20:29:59 +0800 (CST)
-Received: from ubuntu20.huawei.com (unknown [10.67.174.33])
-        by APP1 (Coremail) with SMTP id cCh0CgDHLCcveZ1kP+JxMA--.20756S2;
-        Thu, 29 Jun 2023 20:30:00 +0800 (CST)
-From:   "GONG, Ruiqi" <gongruiqi@huaweicloud.com>
-To:     Corey Minyard <minyard@acm.org>, Yi Yang <yiyang13@huawei.com>
-Cc:     openipmi-developer@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Wang Weiyang <wangweiyang2@huawei.com>,
-        Xiu Jianfeng <xiujianfeng@huawei.com>, gongruiqi1@huawei.com
-Subject: [PATCH] ipmi_si: fix a memleak in try_smi_init()
-Date:   Thu, 29 Jun 2023 20:33:28 +0800
-Message-Id: <20230629123328.2402075-1-gongruiqi@huaweicloud.com>
-X-Mailer: git-send-email 2.25.1
+        Thu, 29 Jun 2023 08:34:22 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67A8A26B6
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 05:34:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1688042060; x=1719578060;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=V3orB8X2pnGHKa4XQHvRaYEdUceUMOeLKtK+nBaNFd8=;
+  b=Cq3m0wKL5ftIk7Q98ZHuGr1ZpIwXWpKzCfqqclo8wyGgSOPuUUigPROH
+   7h3+UgybnfzdGit2wNkeDTszUQXRu82qb/s9WEZ8DKkLNWYBObwCfW6OY
+   RszA4AUqEAx0EoTN3PdN8z5vkcNnmZMtM0G/daXKiAlsFKIt6sbJftUYA
+   51bxyAsLjR6mS8oAepWutXQNSll3P7AQkqg7cGksb3VaTlDTy1FLa31tr
+   3seQF+UEvWE8jOH3Y6Cp3eritNkyecAf7XOgDFDQigiTN3Hmv19iGNRZ6
+   D1kdgHQpZhr6dDMNU/VIl/ijXPKqsijfMRaeytLNDbasrq7XMPpaCHwpT
+   g==;
+X-IronPort-AV: E=Sophos;i="6.01,168,1684825200"; 
+   d="asc'?scan'208";a="220483366"
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 29 Jun 2023 05:34:19 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Thu, 29 Jun 2023 05:34:19 -0700
+Received: from wendy (10.10.115.15) by chn-vm-ex03.mchp-main.com
+ (10.10.85.151) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
+ Transport; Thu, 29 Jun 2023 05:34:17 -0700
+Date:   Thu, 29 Jun 2023 13:33:48 +0100
+From:   Conor Dooley <conor.dooley@microchip.com>
+To:     Song Shuai <suagrfillet@gmail.com>
+CC:     <paul.walmsley@sifive.com>, <palmer@dabbelt.com>,
+        <aou@eecs.berkeley.edu>, <ajones@ventanamicro.com>,
+        <sunilvl@ventanamicro.com>, <heiko.stuebner@vrull.eu>,
+        <apatel@ventanamicro.com>, <evan@rivosinc.com>,
+        <greentime.hu@sifive.com>, <leyfoon.tan@starfivetech.com>,
+        <linux-riscv@lists.infradead.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] riscv: BUG_ON() for no cpu nodes in setup_smp
+Message-ID: <20230629-maverick-kelp-17327f04482a@wendy>
+References: <20230629105839.1160895-1-suagrfillet@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: cCh0CgDHLCcveZ1kP+JxMA--.20756S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7ZFWDZFyxCFy3try8Gry5CFg_yoW8uryxp3
-        y5u34DCr4kJr47Ca17Xry7uF98Ja1DCF4UKF47Cw1UXF1DWFyjgr10q3ya9ryDKr4FqF4f
-        Arsruw4rt3yUCw7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUgKb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
-        0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
-        6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
-        Cjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCj
-        c4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4
-        CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1x
-        MIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_WFyUJV
-        Cq3wCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r1j6r4UYxBI
-        daVFxhVjvjDU0xZFpf9x07UWE__UUUUU=
-X-CM-SenderInfo: pjrqw2pxltxq5kxd4v5lfo033gof0z/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="+Xe4Uyu39cOMQrN6"
+Content-Disposition: inline
+In-Reply-To: <20230629105839.1160895-1-suagrfillet@gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,58 +69,90 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yi Yang <yiyang13@huawei.com>
+--+Xe4Uyu39cOMQrN6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Kmemleak reported the following leak info in try_smi_init():
+Hey,
 
-unreferenced object 0xffff00018ecf9400 (size 1024):
-  comm "modprobe", pid 2707763, jiffies 4300851415 (age 773.308s)
-  backtrace:
-    [<000000004ca5b312>] __kmalloc+0x4b8/0x7b0
-    [<00000000953b1072>] try_smi_init+0x148/0x5dc [ipmi_si]
-    [<000000006460d325>] 0xffff800081b10148
-    [<0000000039206ea5>] do_one_initcall+0x64/0x2a4
-    [<00000000601399ce>] do_init_module+0x50/0x300
-    [<000000003c12ba3c>] load_module+0x7a8/0x9e0
-    [<00000000c246fffe>] __se_sys_init_module+0x104/0x180
-    [<00000000eea99093>] __arm64_sys_init_module+0x24/0x30
-    [<0000000021b1ef87>] el0_svc_common.constprop.0+0x94/0x250
-    [<0000000070f4f8b7>] do_el0_svc+0x48/0xe0
-    [<000000005a05337f>] el0_svc+0x24/0x3c
-    [<000000005eb248d6>] el0_sync_handler+0x160/0x164
-    [<0000000030a59039>] el0_sync+0x160/0x180
+On Thu, Jun 29, 2023 at 06:58:39PM +0800, Song Shuai wrote:
+> When booting with ACPI tables, the tiny devictree created by
+> EFI Stub doesn't provide cpu nodes.
 
-The problem was that when an error occurred before handlers registration
-and after allocating `new_smi->si_sm`, the variable wouldn't be freed in
-the error handling afterwards since `shutdown_smi()` hadn't been
-registered yet. Fix it by adding a `kfree()` in the error handling path
-in `try_smi_init()`.
+What are the conditions that are required to reproduce this issue?
+When booting with ACPI, why is acpi_disabled true?
+In my naivety, that seems like a bigger problem to address..
 
-Cc: stable@vger.kernel.org # 4.19+
-Fixes: 7960f18a5647 ("ipmi_si: Convert over to a shutdown handler")
-Signed-off-by: Yi Yang <yiyang13@huawei.com>
-Co-developed-by: GONG, Ruiqi <gongruiqi@huaweicloud.com>
-Signed-off-by: GONG, Ruiqi <gongruiqi@huaweicloud.com>
----
- drivers/char/ipmi/ipmi_si_intf.c | 5 +++++
- 1 file changed, 5 insertions(+)
+> In setup_smp(), of_parse_and_init_cpus() will bug on !found_boot_cpu
 
-diff --git a/drivers/char/ipmi/ipmi_si_intf.c b/drivers/char/ipmi/ipmi_si_intf.c
-index abddd7e43a9a..5cd031f3fc97 100644
---- a/drivers/char/ipmi/ipmi_si_intf.c
-+++ b/drivers/char/ipmi/ipmi_si_intf.c
-@@ -2082,6 +2082,11 @@ static int try_smi_init(struct smi_info *new_smi)
- 		new_smi->io.io_cleanup = NULL;
- 	}
- 
-+	if (rv && new_smi->si_sm) {
-+		kfree(new_smi->si_sm);
-+		new_smi->si_sm = NULL;
-+	}
-+
- 	return rv;
- }
- 
--- 
-2.25.1
+Please, s/on !found_boot_cpu/if the boot cpu is not found in the
+devicetree/, or similar.
 
+> if acpi_disabled.
+
+Why would of_parse_and_init_cpus() be called in any other case? There's
+only this one caller, right?
+
+> That's unclear, so bug for no cpu nodes before
+> of_parse_and_init_cpus().
+
+What is unclear? That the reason for the BUG() was that there were no
+cpu nodes, since it could also be that there were CPU nodes but they
+were disabled etc?
+
+> Signed-off-by: Song Shuai <suagrfillet@gmail.com>
+> ---
+>  arch/riscv/kernel/smpboot.c | 7 ++++++-
+>  1 file changed, 6 insertions(+), 1 deletion(-)
+>=20
+> diff --git a/arch/riscv/kernel/smpboot.c b/arch/riscv/kernel/smpboot.c
+> index 6ca2b5309aab..243a7b533ad7 100644
+> --- a/arch/riscv/kernel/smpboot.c
+> +++ b/arch/riscv/kernel/smpboot.c
+> @@ -187,8 +187,13 @@ static void __init of_parse_and_init_cpus(void)
+> =20
+>  void __init setup_smp(void)
+>  {
+> -	if (acpi_disabled)
+> +	if (acpi_disabled) {
+> +		/* When booting with ACPI tables, the devictree created by EFI Stub
+
+This is not netdev, please use the correct comment style :/
+
+> +		 * doesn't provide cpu nodes. So BUG here for any acpi_disabled.
+> +		 */
+> +		BUG_ON(!of_get_next_cpu_node(NULL));
+>  		of_parse_and_init_cpus();
+> +	}
+>  	else
+>  		acpi_parse_and_init_cpus();
+
+checkpatch should have told you that you now need to add braces on all
+arms of this statement.
+
+Or, better yet, move the whole thing into of_parse_and_init_cpus() in
+the first place? You could drop most of the comment in the process,
+since I think the details of how you hit this problem would likely not
+be helpful to anyone that hit it under different conditions.
+
+Cheers,
+Conor.
+
+>  }
+> --=20
+> 2.20.1
+>=20
+
+--+Xe4Uyu39cOMQrN6
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZJ16LAAKCRB4tDGHoIJi
+0kjfAQDJJ0vTpSJCysk3tWFZuO7Zk8aSbHHO0s+tldla0nXdZAD5AYH55vxAQeSf
+VUtbo0CsM0uDGuFly0pPfOcvM0iKOgA=
+=JAVg
+-----END PGP SIGNATURE-----
+
+--+Xe4Uyu39cOMQrN6--
