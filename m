@@ -2,121 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47F2F742BA5
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 19:59:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BEDF742BA7
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 19:59:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231208AbjF2R7L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 13:59:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37486 "EHLO
+        id S231794AbjF2R7c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 13:59:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229794AbjF2R7J (ORCPT
+        with ESMTP id S231878AbjF2R71 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 13:59:09 -0400
-Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4694EE49;
-        Thu, 29 Jun 2023 10:59:08 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.nyi.internal (Postfix) with ESMTP id 99BFF5C030F;
-        Thu, 29 Jun 2023 13:59:07 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute6.internal (MEProxy); Thu, 29 Jun 2023 13:59:07 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=cc
-        :cc:content-transfer-encoding:content-type:content-type:date
-        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to; s=fm1; t=
-        1688061547; x=1688147947; bh=zcTZxE9rpOoRkiMqNrWJKVYoGMOyFfMOjEX
-        rxqdBCO0=; b=QOcUfjyvHJ6D2L3Dlwp0WTQ344bF9/0nbhpJze8piFkWG8+MkX+
-        UOCg6rcslYY1EqcOC9he1B8AmiuhRwPu0c2DeD7QPI0hWv/1sYtWjycs1MDaWBfY
-        mY+9LtflSl5HTTi2SXulWzPe+sOwJQGOzk7LLeObAaWQOjlLOx1Y0CImH1dXkCYa
-        +p/ajyTPybxU/CG5mpPwuZ5D2CO7rrhj1mxhl9sG48oG6LGHk40C1J7Uo/WE8/zo
-        y/P1NFDLv3zKD9xTfd8TYmlMsUe0+56nnDxgyNm7rksmrEnE2MqOv3KFYr9o6mb/
-        6HimsdiRxljAD0epXrfU2FI5ifeO98xrRgQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:content-type:date:date:feedback-id:feedback-id
-        :from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
-        1688061547; x=1688147947; bh=zcTZxE9rpOoRkiMqNrWJKVYoGMOyFfMOjEX
-        rxqdBCO0=; b=KvDjFlOX3It/jB2DidOzLexu8tyDdbcVc97bseorb+kgeE6Cp+t
-        xGOuDCM0m5yGblZCDv8LYKshsajzIOIC8/TmFYxCcQeo/LwnR6uN2cb1t85vLXM8
-        w8KWP9sQqPmxhc0iZXCacKSbIRDZUdlTzzMAWXpR18Hau423nXMoGGllJOmdsJq4
-        IahcQpjXUnAKpCxqQ4CIcsk6fs+Qoyqwj6dRfDI8z1+2Wzcxqa1itwWI48h3v6Mu
-        7GKFr5iEe0+FvG3kXsrrxnAJLVbgREk1y+TmVJtGh2JES8ZaDKKYTVdoU8szn/m0
-        H3cBGwJOcsa3wYE24ChLDIpLLVaRKygqdsA==
-X-ME-Sender: <xms:asadZDjkKMaWuDTze6cFuJbqwcwnWbMh16BQlZdyNeTgGDdC3P9hIg>
-    <xme:asadZACYCVgLwjQtSadOrI9bn_iBQmGEFgioAGdIDwu78UbZ2eHW8piFHKvOnmDxC
-    lzZ_eb7jn4zaeTISw>
-X-ME-Received: <xmr:asadZDEQBjLJcoOU0ux7N7J5jGQEa_C4EYqpuOP4j7RmLSicnzRv7_bZd90I6ttiIqCtB3PythTSGUeEhICiJED0CWun6AZxXU-_>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrtdeggdduudelucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    gfrhhlucfvnfffucdlvdefmdenucfjughrpeffhffvvefukfhfgggtugfgjgestheksfdt
-    tddtudenucfhrhhomhepffgrnhhivghlucgiuhcuoegugihusegugihuuhhurdighiiiqe
-    enucggtffrrghtthgvrhhnpedufeeitdeiheffueffleffgeehgeejkeetkefgtdekfeej
-    heffjedtgfekieetleenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrih
-    hlfhhrohhmpegugihusegugihuuhhurdighiii
-X-ME-Proxy: <xmx:asadZARXMG_Xg5rfhd2yeyDHqx1XwQBXhhaBr0DDozekyiC_-39tvw>
-    <xmx:asadZAxptrHuJMR4cUkl-YO_rGhERLHkICobjSNACkhSoTozdLe1iw>
-    <xmx:asadZG4eAk216siHH6UQI0kuyExIcLUmG4Ty_24wADoCLFTcg360rQ>
-    <xmx:a8adZPlmja08QxHviOqdJjap12poRut-N_BKnVIyu1k6y7RXWpoQ5Q>
-Feedback-ID: i6a694271:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 29 Jun 2023 13:59:06 -0400 (EDT)
-Date:   Thu, 29 Jun 2023 11:59:04 -0600
-From:   Daniel Xu <dxu@dxuuu.xyz>
-To:     Florian Westphal <fw@strlen.de>
-Cc:     Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
-        bpf@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        coreteam@netfilter.org, netfilter-devel@vger.kernel.org,
-        daniel@iogearbox.net, dsahern@kernel.org
-Subject: Re: [PATCH bpf-next 0/7] Support defragmenting IPv(4|6) packets in
- BPF
-Message-ID: <nk6jl4hqougwim4sfgnm6rleh64dqad6qbqghbmjcfi6o7qrae@q3jtw34azrml>
-References: <cover.1687819413.git.dxu@dxuuu.xyz>
- <874jmthtiu.fsf@toke.dk>
- <20230627154439.GA18285@breakpoint.cc>
- <87o7kyfoqf.fsf@toke.dk>
- <20230629132141.GA10165@breakpoint.cc>
- <87leg2fia0.fsf@toke.dk>
- <20230629145315.GB10165@breakpoint.cc>
+        Thu, 29 Jun 2023 13:59:27 -0400
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B275330EE
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 10:59:25 -0700 (PDT)
+Received: by mail-lj1-x233.google.com with SMTP id 38308e7fff4ca-2b69f216c73so15014601fa.3
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 10:59:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1688061564; x=1690653564;
+        h=content-transfer-encoding:to:subject:message-id:date:from
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=UFwrr80Kb1N/6sO3WTMK7kCswr9ccgbZi7qJt2dECrA=;
+        b=au2HS2Ft/uHW3BmOlZ3MivrkaJMZ8P0F4fC7yqqNYw5sVsFw4mXkHBUXHfBWr1ST52
+         d7/NEI7ITAp+tBZ/cCaHesAfdg1HgKUR6oUWOdqf37AkGk2oFgOjDzpdMlI1LmhYIQ39
+         VZ3fs3wEDgciRAfmyUwffMsYBCW5NfI4N7k9hRDkI8c4y8XFNQdH7PH7Yq0PMTW6eDM2
+         9gzsY30VFjtuMuHNp8VmeYncPSDa/kfTvgrv2pit597XF+j23JwIPA6uADVQnU2jZEo/
+         wklHzeyUHeqNIbsASxDTYXQ7hIRnDD4io6ML7wfeEg2BY836F0UiS7VveUkTaoN/QcNb
+         nogw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688061564; x=1690653564;
+        h=content-transfer-encoding:to:subject:message-id:date:from
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=UFwrr80Kb1N/6sO3WTMK7kCswr9ccgbZi7qJt2dECrA=;
+        b=kRi3k3bUFDlgsqlXXDYYGv9zHX+aziX9op3jOoPkZI16nbgvRJyPBSRrwk91w0mnXs
+         e2mWlpN6IJy42cpfD/RR2G5QMvYWtjMF5ibI0s7ph8gYUvCy3nrwHG/quY3ea8e7OjTE
+         yDPM6IA5LM0ftRuLAfntINOoqBwC0GT2+Xo2LLsdMpmy7yxD7E6ue5PSpQlgL7A9IEz0
+         1UZ6lLfsk6fobclNRjhdPHdFgBar01UaD6FdkCc1NMkWpeUwJunmBvg+94Xjpz4D/mUT
+         2eOwmlHzAyuRped3qMkeLCgOk6tU2NXBdfLHZgZTXLjJG3tn2sDJ2SvzYOzJgXySqIsR
+         lEkQ==
+X-Gm-Message-State: ABy/qLaFsHnIhXenfFxNf+9mdBpQXpqMgbb7PU++NwfxK/h0Mqxsjq61
+        MWg8DARY5vnXmtSVbfWwXXBWMPUWCjaoRoI6qj9ylrzrUhI=
+X-Google-Smtp-Source: APBJJlHarO5T+Dk7lSZsesWrREGFbVPlOdDugUbifIpej4IgI44Y32NzURbTC/2OPeZ8voF1ztPYFtJg+bmoDDNvGBE=
+X-Received: by 2002:a2e:95d3:0:b0:2b6:a85e:4c3d with SMTP id
+ y19-20020a2e95d3000000b002b6a85e4c3dmr349529ljh.32.1688061563748; Thu, 29 Jun
+ 2023 10:59:23 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230629145315.GB10165@breakpoint.cc>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+From:   =?UTF-8?B?Vm9qdMSbY2ggTWFyxaHDoWw=?= <vojmar213@gmail.com>
+Date:   Thu, 29 Jun 2023 19:59:12 +0200
+Message-ID: <CAHneum6-Y4niCe7rp11Mpw9+rsZUDfK8ErETzWUfvqkjrxvZGw@mail.gmail.com>
+Subject: [BUGREPORT] Issue with FM350_GL modem and suspend/resume on Linux
+ kernel 6.1
+To:     linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 29, 2023 at 04:53:15PM +0200, Florian Westphal wrote:
-> Toke Høiland-Jørgensen <toke@redhat.com> wrote:
-> > Florian Westphal <fw@strlen.de> writes:
-> > As for the original question, that's answered by your point above: If
-> > those two modules are the only ones that are likely to need this, then a
-> > flag for each is fine by me - that was the key piece I was missing (I'm
-> > not a netfilter expert, as you well know).
-> 
-> No problem, I was worried I was missing an important piece of kfunc
-> plumbing :-)
-> 
-> You do raise a good point though.  With kfuncs, module is pinned.
-> So, should a "please turn on defrag for this bpf_link" pin
-> the defrag modules too?
-> 
-> For plain netfilter we don't do that, i.e. you can just do
-> "rmmod nf_defrag_ipv4".  But I suspect that for the new bpf-link
-> defrag we probably should grab a reference to prevent unwanted
-> functionality breakage of the bpf prog.
+Hello Linux Kernel Mailing List,
 
-Ack. Will add to v3.
+I am writing to seek assistance regarding a persistent issue I have
+been facing with modem functionality and the suspend/resume feature on
+my Linux system running kernel version 6.1. I have already searched
+through bug reports but have not found a resolution or response to a
+similar issue. I would appreciate any guidance or insights you can
+provide to help me resolve this problem.
 
-Thanks,
-Daniel
+Description of the issue: Whenever I set my notebook to deep sleep
+mode, the system suspends successfully for the first time. However,
+subsequent attempts to suspend the system result in an error related
+to the modem. The error message in the kernel logs is as follows:
+
+[ 375.151668] mtk_t7xx 0000:2c:00.0: [PM] Exiting suspend, modem in
+invalid state
+[ 375.151680] mtk_t7xx 0000:2c:00.0: PM: pci_pm_suspend():
+t7xx_pci_pm_suspend+0x0/0x20 [mtk_t7xx] returns -14
+ [ 375.151719] mtk_t7xx 0000:2c:00.0: PM: dpm_run_callback():
+pci_pm_suspend+0x0/0x1b0 returns -14
+[ 375.151736] mtk_t7xx 0000:2c:00.0: PM: failed to suspend async: error -14
+[ 375.152120] PM: Some devices failed to suspend, or early wake event detec=
+ted
+
+Steps taken so far:
+
+- Updated kernel and modem drivers to the latest available versions.
+- Checked for BIOS updates for my notebook model, but none were available.
+- Disabled power management for the modem by adding "options mtk_t7xx
+power_save=3D0" to a configuration file, but the issue persisted.
+
+
+I have also confirmed that there is an existing bug report related to
+this issue in Bugzilla, but it has been unanswered for an extended
+period.
+
+https://bugzilla.kernel.org/show_bug.cgi?id=3D216523
+
+https://bugzilla.kernel.org/show_bug.cgi?id=3D217590
+
+Additional details:
+
+Notebook model: ASUS Expertbook B2
+Modem model: FM350_GL
+Linux distribution: Ubuntu 20.04LTS
+Kernel version: Linux 6.1
+
+I kindly request your assistance in resolving this issue or providing
+any further troubleshooting steps that may help. I am open to any
+suggestions or insights you can offer. Please let me know if any
+additional information is required.
+
+Thank you for your attention and support.
+
+Best regards, Vojt=C4=9Bch Mar=C5=A1=C3=A1l
