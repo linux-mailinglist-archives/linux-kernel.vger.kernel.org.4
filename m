@@ -2,150 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45D7874206B
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 08:35:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03D0C742072
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 08:37:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231833AbjF2Gff (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 02:35:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41204 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230353AbjF2Gfb (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 02:35:31 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DA501727;
-        Wed, 28 Jun 2023 23:35:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1688020530; x=1719556530;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=AFzg3FqF7514HUhQf1w+sr/2SUF9as8V/MqUkh+gBzY=;
-  b=boxZYx59pMdMQudXTrFgF90Z3kZ14Vs+wXuTqFVf8aJMFFZPy4LtDiNa
-   lWTo1qkjwLVB3feeJy9zJop4RFdKCuG8jJ3tcwnPlBN+Sh9c0kDXsRhmf
-   o1pEgwy7ZSvUFd8nzNdK+Jt2kfFS4D5qgSzQSHZ+cvzXXb2eroeNQO0QA
-   4rQFF5JqgELQOdfGC0NdDsqiTFtZoo/B8PUEE5g9zl/6+XWigEeG6MdXi
-   hzLk2ac7xPSlrkHsNScIb0KHoC/CJF3KmvaL+s2dGtP9BaKs+5PhnBcwr
-   jB8sX1SGirAShPYqI6VnMklXtlzbliXgCJZq2/2LgdYWWbagTXQFnPzdy
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10755"; a="392759195"
-X-IronPort-AV: E=Sophos;i="6.01,167,1684825200"; 
-   d="scan'208";a="392759195"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2023 23:35:29 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10755"; a="891299887"
-X-IronPort-AV: E=Sophos;i="6.01,167,1684825200"; 
-   d="scan'208";a="891299887"
-Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.49.81])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2023 23:35:26 -0700
-Message-ID: <287bf3c8-fa0e-8c36-df14-7d728c63c265@intel.com>
-Date:   Thu, 29 Jun 2023 09:35:22 +0300
-MIME-Version: 1.0
+        id S231573AbjF2Ghx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 02:37:53 -0400
+Received: from mail-bn7nam10on2049.outbound.protection.outlook.com ([40.107.92.49]:41313
+        "EHLO NAM10-BN7-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S230353AbjF2Ghr (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 29 Jun 2023 02:37:47 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=anVg5lGJQMJX2Q8akaWJUiqhy02yd9GFLsICOCYWBKJfFgcMalyxhpPP255Ik4E2Pwn/e/d3MNvBt784fhr5qgsJyxz1dwa+m0V7PgkeeBmj44Neuh1GOP/KbOim2nTEVIRRVKSCfzC4JzyfX8Nh6SXUpI8VYzAu4Su6oUAEHw8LZhVZItwJMAWLST6I7zYhYuvrIG3zJLeGtI1+GXsiQsW6r5bQoFPDOtTDSQX5fb7RqkhGpSkYEf8/IB+HRAkdl9qjVKG5qKAJfQ5WhhfNI8OL1FHFXZY82AbiVkLa7prxVQiXAGvWdinQjK771M7EJnQFDtvGOldBmnLniXrgNQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Q4YYPkIrpz/4CMO8zxEWkzr/uq93ua1yDY0pXaDvsTg=;
+ b=JIi+Br4HzpIFTiPn06uVkuOdNPZLuozndpxH3oIFAapdqjWdHelLTqlFfPSWyGZfmjPrkUZm0ddknwOY0InriJOUzShS/PSet6x1OXn11pUSX9sS4XvTOM1+INqdZZ/NTwLKmt7/Rfq5keU4mBNTPLv5lc2lFRqf3JSlsn9TqoxUakG/HieR84/UqqXDM+5WRGXE/tENLFIAUG4Q63YMbWfAdgI3xvRdvmzz+9/JOlHZWHeECXz6mkzg3j1UJoOOHTuii2P3BvLSSKmTus2YCXUvaNJWoRtcUbllzqUIcsIpLllOfrzFrY0BXo+YfL9ZVi2T3RNxvgBKxflFxq80sw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Q4YYPkIrpz/4CMO8zxEWkzr/uq93ua1yDY0pXaDvsTg=;
+ b=J48w9wNnVS5T+cf3LcTceRZYpCfOEaDzzQ4rDtC/HKSBImnwxp/6UOzy539BqVRHgttdlylys8ZA5fFW/AbV728GcvndYmlkHR3cRqfVjNJib5g96nykSrCIlWV729oTEQ3kMtm0o8dz2ur1n1jDih3OfOjhGhE2E3qCdp6aqI8=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BN8PR12MB3587.namprd12.prod.outlook.com (2603:10b6:408:43::13)
+ by MW3PR12MB4411.namprd12.prod.outlook.com (2603:10b6:303:5e::24) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.26; Thu, 29 Jun
+ 2023 06:37:44 +0000
+Received: from BN8PR12MB3587.namprd12.prod.outlook.com
+ ([fe80::384a:95a4:8819:ee84]) by BN8PR12MB3587.namprd12.prod.outlook.com
+ ([fe80::384a:95a4:8819:ee84%7]) with mapi id 15.20.6521.026; Thu, 29 Jun 2023
+ 06:37:44 +0000
+Message-ID: <cfdc6818-ff20-1e57-34c8-3b5b40a837d7@amd.com>
+Date:   Thu, 29 Jun 2023 08:37:38 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.12.0
-Subject: Re: [RFC] Adding Support for Firefox's Gecko Profile Format
+ Thunderbird/102.11.0
+Subject: Re: [PATCH] drm/ttm: Remove duplicate assignments to ttm->caching
+To:     Feng Jiang <jiangfeng@kylinos.cn>, ray.huang@amd.com,
+        airlied@gmail.com, daniel@ffwll.ch, michael.j.ruhl@intel.com
+Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+References: <20230625024528.13668-1-jiangfeng@kylinos.cn>
 Content-Language: en-US
-To:     Namhyung Kim <namhyung@kernel.org>,
-        Anup Sharma <anupnewsmail@gmail.com>
-Cc:     Ian Rogers <irogers@google.com>, linux-perf-users@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>, linux-kernel@vger.kernel.org
-References: <ZG5kjDN63HqqMuJJ@yoga>
- <CAM9d7ciUsJM1kZhGbhQUfdxq1rsvLig2C-mAki13a92EjW37kw@mail.gmail.com>
- <CAP-5=fVekEnC1s=xUG-jFeL20qM=EPNkPO8aw8bcg4cVM=m5wg@mail.gmail.com>
- <ZHENW4HOIo0F6FnN@yoga> <ZHkEWse0NVZhwKR7@yoga> <ZH5YBBWW5ANckoMp@yoga>
- <CAP-5=fU7ukrQSh_8OwH9C+a-EwCamCrMaZxjqDhE9f+bFJwQBQ@mail.gmail.com>
- <ZIHPXV5/ZopqcSSc@yoga> <ZIofrGKElc3nkNk0@yoga>
- <CAP-5=fV9tXNpYHH9DW0cVbRoFLGvG9SNn-MUhuyKuVBRuDqjoA@mail.gmail.com>
- <ZJyT8bt0LFLw6hKV@yoga>
- <CAM9d7ch7TdagV+dzj6MCp4fY15Vc4oGJjKAoQDyc=BXqy7qi+A@mail.gmail.com>
-From:   Adrian Hunter <adrian.hunter@intel.com>
-Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
- Business Identity Code: 0357606 - 4, Domiciled in Helsinki
-In-Reply-To: <CAM9d7ch7TdagV+dzj6MCp4fY15Vc4oGJjKAoQDyc=BXqy7qi+A@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
+From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
+In-Reply-To: <20230625024528.13668-1-jiangfeng@kylinos.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-        lindbergh.monkeyblade.net
+X-ClientProxiedBy: FR0P281CA0017.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:15::22) To BN8PR12MB3587.namprd12.prod.outlook.com
+ (2603:10b6:408:43::13)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN8PR12MB3587:EE_|MW3PR12MB4411:EE_
+X-MS-Office365-Filtering-Correlation-Id: 8abbf952-1411-4457-e689-08db786b5862
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: iM7S5NOe9n+AEc13QAtqu2bgI3KIEKKvXK22zaYatNZcykpA+wk6Beqc3WcE0HmgBwIP1Fzxrip4IziTvKGW51q0XSs50mno98cnbAZIiJdPkX2X50KC+0owfOd+SNLu6O5EmJObIGSUM5RdRgs3coi/GawQhap8+KwO1myJDO4Ps5yF7JIYOpo/l/B0e60rLaEQhKYQ/kWAmA3O5oyAwBh+yxRQAXBpX/48bcBwrN7z9pRpFXA/jdmytp/l2IR++kU6e4lxfLAJHwVcKVDmz/Qs8m6pN6ILRL89gq7eNYkWAo/hqZW4Vxm45iFib7ZkG/0PZv2ZyWCN2hrNzxcpceE7r4H/NKS89KTQgyPSltDofuvUvF+J3VqpNQ6ijNX0nYoNUXVBt6ri8kl5JWEcVO6PgmJKIag4Q3K0xF7GnsOVhNjqIDqKwfWu59FBBx3rOGEbW20XNsBmeZCHL17arKEm4Oyn1GE8W0Nn+k5Xaz5N1/pw9pxofpzsy8DFsDDpt27NgjlP6MmdGYilKJHZHJ1rUvWTgtDMffuS3qgVbbX+3xcrwpBeNHMdrAUCdETBtGevynF2L9/fNh1nzU1j+OQ9RIW4dNXPsIQyGPQe9zsQAFflfS0waZDb9orAuro9
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3587.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(376002)(366004)(136003)(346002)(39860400002)(451199021)(8936002)(8676002)(66946007)(316002)(41300700001)(83380400001)(66556008)(6512007)(6506007)(66476007)(186003)(26005)(4326008)(2616005)(966005)(6666004)(6486002)(2906002)(5660300002)(478600001)(38100700002)(31696002)(86362001)(31686004)(36756003)(66574015)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?c05ERmNlZTBQV2VLWlJ2Ry9zcG1KZHowWlRYeGIwYU8rcGZ1cnVSRkVqTUlt?=
+ =?utf-8?B?YlE3VVBkSkpxWGZrR0J0K3hmUEVsRTZ3cDU1M2ZxeERRSDQ1RW9KelE3cE0x?=
+ =?utf-8?B?MU1EVFp6THFYeXNVMUgrZWtGMDV4QTE3b2VLNmZCcnFoeDNJMjd5NzlFRXBR?=
+ =?utf-8?B?RmNwVTVZOUsyZ2c1d0ZZKzJUMStOSDVCUlRKTmZEMUFqNUZwWmE1Y1psNEhr?=
+ =?utf-8?B?aU5VTEVGTEZRWFRWeTM2cFBYd2RWTHF6QmVacE5Sdm9EVEtVbXRkSWlId2FO?=
+ =?utf-8?B?MDV1blZlamZYQUhOVjZxZkJmMlh5NzIxTy9RcmF0blhnRDVKd3FLY2o1M0JJ?=
+ =?utf-8?B?L1RKMTQxK3pQam5ac3Y3cXpZYitGbUhyMDdaK25XK2YyL2p3TGl0dFlKTUNw?=
+ =?utf-8?B?Z1NGY09mNjduUHdreDZ2b0FHRUpRQ1BnVlZwUVBNZDVGeFdNUkZBOFZlUDZ0?=
+ =?utf-8?B?Vk10Ym01T1cyN2luaVAzYWF3T3hrRzRWWXhFUDBobUo4OXgvN1RkT1VSQXB6?=
+ =?utf-8?B?RXpkWkpCb25MaENXTWpHUWFzRjdXc3RKdEE0NVVSQjhJL2JDdXhacXRyOXN0?=
+ =?utf-8?B?ZUJSZkozbHRjZTJXMGZuc2djTWVURUVQZWVBWWlRMzVFT2lFZUJrV042NjBO?=
+ =?utf-8?B?VjU1dUtiMklnQXUyMzd6cXRJYUFKQWo3bnhGWXlzRG1uZDR5OStXTTVmMmpy?=
+ =?utf-8?B?K04wQ3hyZEhBbktLZnJpZThOZ1kzZTJ3bHIybXBzTGpVMVB3ZTNsMFV3Zk9i?=
+ =?utf-8?B?U1FHaTRoV01qZ1ZpQzZuN21EUjlqRUo1QXVsZXBDaVpqY25ocjVIdGN2Z3VQ?=
+ =?utf-8?B?WmFlKzRKR09HVHhUYWVYUUhZczBoakJwREROV2puTTU1VklqK0ZiVkVwN1Vi?=
+ =?utf-8?B?WVNTOWlYbHhTK2JxZlZMTm85VFhzTEU0Z1VoQ1FuUHljMEpMc0ZJS0t4LzlQ?=
+ =?utf-8?B?QlV2VVNuWmdYM2xXeWh5ZTdGMk43MElPdlFoc09vVVJ6YUtJNEpBQ1FSdmNQ?=
+ =?utf-8?B?cVArOE45aVhBU0kveVptT09JRW1hUjQrc1VYUmEzWGFBaElWRGtFVkJDVWlx?=
+ =?utf-8?B?OVQzVkV2OWJmSFQzVWVNam9RM2dqcHRRNS9EK0pzZ0U1VTY3WW5qczdjWXVC?=
+ =?utf-8?B?UmUyVkJRZVBIOFdOQ2VDUkRUWXE1Y0pMYWMyVFpSbnFCNmt6QVJSSkJSTWxY?=
+ =?utf-8?B?TjMyQnJmRHk0NG5IRWdROFJ0V3dEN0RNTHE1OFloOXFGbmRSTnhnNHdCQnV1?=
+ =?utf-8?B?azVid240SmNRQkJTU1hBMmk3Z1Q3UmRyM21UM0ZQTmJqQTNPeTFIRXNZZ3Nx?=
+ =?utf-8?B?azN6L1ZnTjRyOGVXcVBIS1praUxDQ0lqVW5tc1U4TWlHaVVpTzVreWJ5VElO?=
+ =?utf-8?B?UXI2NEs3MTVqeFZiVGVHY1pFejlCMHJLNXJGaHl1enplZW5wMGNOWklXUGlR?=
+ =?utf-8?B?T0YvU1c1L25aNWhwYWFwZ2hXUEQydUZyTmFwSUxjNEJvbno5dkNmVVNNeWMw?=
+ =?utf-8?B?SU5vR1phRngxZUIvOGhUcXl1S2k1aUJsVzZJKzJqWUdhRkFWSi9pcHE1V3BE?=
+ =?utf-8?B?ZWdkZ1JBYkNiRkdkUjdscnBlOGMzWm12ZjcrR2FnaXlxR3pKZUkyZjVRb1hM?=
+ =?utf-8?B?eFlGZmNUaUFnemJqV0hhS0NlU2I1Vm9ENDQ1WWNweks4SXVzSzZqcG9oem92?=
+ =?utf-8?B?SkRQZm1zSFRITDNjWUgzRmRqOHpCQlQ2M042UXhSWkw2TGo5VUxFZ2N4ZHRz?=
+ =?utf-8?B?WVZsKzNRVDg3R09LbkY3VjVCVlQrQjE2bE5yZE81RUFuWThsTG9SNS82QU1Q?=
+ =?utf-8?B?Qk92U3pIMS9LUHY2czhhRWJCcmM2aXBNN2p1bzQ0VTI1Z0MvVEg1dXovWTk3?=
+ =?utf-8?B?QVNzOU54Q0Q3UXJSY0U2S3BmV1hkMnFra2NwV1NkemcveXNQL09lWkRHRXBu?=
+ =?utf-8?B?OTNJV0NFSVpWWVFnM2xUUWMrZ0UvYTlPMmY4WnJiYS9UWEEzMVVXempqdHdu?=
+ =?utf-8?B?b0VqV3VyT1RSVThFdjk3U0NXMXNyclhTMmtRWlF5Qk9TT3R1WVF3anJBOEd4?=
+ =?utf-8?B?Q3l2LzczS2JXSmdqQ0Q4ZXptMEVHa0RCL25hQ0pwTmI1VlQ0eFhYdjF2Znds?=
+ =?utf-8?Q?Ldsc=3D?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8abbf952-1411-4457-e689-08db786b5862
+X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3587.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Jun 2023 06:37:44.5746
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: c/WLztKJ/rDkE+Rp/uYwfjt0gX/ZkJxQ3txag101l25q+PdXF5G5tgdV4Ri6GTKj
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW3PR12MB4411
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 29/06/23 09:26, Namhyung Kim wrote:
-> Hi Anup,
-> 
-> On Wed, Jun 28, 2023 at 1:11 PM Anup Sharma <anupnewsmail@gmail.com> wrote:
->>
->> On Wed, Jun 14, 2023 at 01:17:52PM -0700, Ian Rogers wrote:
->>> On Wed, Jun 14, 2023 at 1:14 PM Anup Sharma <anupnewsmail@gmail.com> wrote:
->>>>
->>>> On Thu, Jun 08, 2023 at 06:23:49PM +0530, Anup Sharma wrote:
->>>> I wanted to take a moment to provide you with an update on the progress
->>>> of our Firefox Gecko converter work. While I must emphasize that the code
->>>> I'm sharing is not the final version, I wanted to share the advancements
->>>> I have made thus far.
->>>>
->>>> This script can generate a JSON format from the output of the "perf script" command.
->>>> I attempted to load this JSON file into profile.firefox.com, and although it
->>>> successfully loaded, the call tree are not visible. I'm certain this issue
->>>> is related to the format of the JSON file or if there is another underlying
->>>> cause. I will continue investigating to determine the cause of this problem.
->>>
->>> Great Anup, progress can be frustrating slow at first but it is a good
->>> milestone to be generating output and having firefox profiler consume
->>> it. You can open up the JavaScript console for the firefox profiler
->>> and it will give some debug output. This should hopefully help you
->>> make progress.
->>
->> This week I tried playing with perf-script-python, the first challenge was
->> figuring out how to parse the data coming from the process_events.
->> Understanding the structure and extracting the necessary information
->> proved to be more complex than anticipated. This required me to spend
->> a significant amount of time researching and experimenting with different
->> parsing techniques.
-> 
-> I'm not sure what kind of parsing you meant.  IIRC the sample data is
-> in a dict and all the information should be available there.  Maybe we
-> missed some new sample data types though.
+This has already been fixed with:
 
-Most data is there.  There are existing scripts in
-tools/perf/scripts/python/ for reference.
+commit 2ce977df10c179138e2723b25c2d2c055a3e3cc6
+Author: Ma Jun <Jun.Ma2@amd.com>
+Date:   Wed May 31 13:30:51 2023 +0800
 
-There is also the dlfilter API:
+     drm/ttm: Remove redundant code in ttm_tt_init_fields
 
-https://perf.wiki.kernel.org/index.php/Latest_Manual_Page_of_perf-dlfilter.1
+     Remove redundant assignment code for ttm->caching as it's overwritten
+     just a few lines later.
 
-> 
->>
->> The second challenge revolved around the usage of event hooks provided with the perf script
->> python event handlers. I found myself deliberating between two approaches. The first
->> approach involved creating custom functions that would be called using the event
->> handlers. These functions would then save the data in an organized format within
->> globally created data structures. The alternative approach was to write the entire
->> logic inside the event handlers themselves.
->>
->> Additionally, I contemplated whether it would be more suitable to handle the creation of
->> a Gecko format for JSON and the profile format within the same script or to separate
->> them into different scripts.
->>
->> I will discuss this points during tomorrow's office hour.
->>
->> However, I have gained a deeper understanding of the problem at hand and will use this
->> knowledge to make more informed decisions and progress more effectively in the coming weeks.
-> 
-> Sounds like you did a good amount of research on how perf script
-> works.  We can talk about the details in the meeting.
-> 
-> Thanks,
-> Namhyung
+     v2:
+      - Update the commit message.
+
+     Signed-off-by: Ma Jun <Jun.Ma2@amd.com>
+     Reviewed-by: Guchun Chen <guchun.chen@amd.com>
+     Reviewed-by: Christian König <christian.koenig@amd.com>
+     Signed-off-by: Christian König <christian.koenig@amd.com>
+     Link: 
+https://patchwork.freedesktop.org/patch/msgid/20230531053051.3453509-1-Jun.Ma2@amd.com
+
+
+Regards,
+Christian.
+
+Am 25.06.23 um 04:45 schrieb Feng Jiang:
+> The parameter 'caching' has already been assigned to
+> 'ttm->caching', so 'ttm_cached' is redundant.
+>
+> Fixes: 1b4ea4c5980f ("drm/ttm: set the tt caching state at creation time")
+> Signed-off-by: Feng Jiang <jiangfeng@kylinos.cn>
+> ---
+>   drivers/gpu/drm/ttm/ttm_tt.c | 1 -
+>   1 file changed, 1 deletion(-)
+>
+> diff --git a/drivers/gpu/drm/ttm/ttm_tt.c b/drivers/gpu/drm/ttm/ttm_tt.c
+> index ab725d9d14a6..1ce4b36ab33b 100644
+> --- a/drivers/gpu/drm/ttm/ttm_tt.c
+> +++ b/drivers/gpu/drm/ttm/ttm_tt.c
+> @@ -137,7 +137,6 @@ static void ttm_tt_init_fields(struct ttm_tt *ttm,
+>   			       unsigned long extra_pages)
+>   {
+>   	ttm->num_pages = (PAGE_ALIGN(bo->base.size) >> PAGE_SHIFT) + extra_pages;
+> -	ttm->caching = ttm_cached;
+>   	ttm->page_flags = page_flags;
+>   	ttm->dma_address = NULL;
+>   	ttm->swap_storage = NULL;
 
