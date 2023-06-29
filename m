@@ -2,96 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1911474247E
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 12:56:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1837E742484
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 12:57:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231969AbjF2K4r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 06:56:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60200 "EHLO
+        id S232159AbjF2K5V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 06:57:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232161AbjF2Kzp (ORCPT
+        with ESMTP id S232174AbjF2K4Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 06:55:45 -0400
-Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C488268F
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 03:55:32 -0700 (PDT)
-Received: by mail-lj1-x22b.google.com with SMTP id 38308e7fff4ca-2b6a675743dso6976361fa.2
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 03:55:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1688036130; x=1690628130;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=uR/dK7cnl1TOAv90dRpkTTyWoJWXcXjhVWHMYmmHHe0=;
-        b=r1y1qbZUFPs/jNqQXZH0XiAheiLYuBDah3ATxxVptmzHTlxJj8dBwooas4cthzoTdy
-         WzIt81N5dWa0MyHtFb2+pEI/zfvnIw+m3CrEelDHbsHfsb8IK/BCCX0Mzs7ROIYmaJ6F
-         TL5+5m9ZwdS2nnvNF03NM+fUOnQqDEX4Kxf7U14Kw72zCrG/gu6JOr7tgsvBsLafamOE
-         iugAJfsqUjZ4NjUpiNoiycqa5637iOu0kODUB6zOip+VSbu8IgBx+5CCo0T1CX5Qrlpp
-         ZJhR9+6jPSThdp755+Aqoejnv9IAm8GQGGxuRCEmrR+ochB/0tyJoxL4CPOF+q0Lvyx5
-         5d+w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688036130; x=1690628130;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=uR/dK7cnl1TOAv90dRpkTTyWoJWXcXjhVWHMYmmHHe0=;
-        b=KpBUCLW9erf5vZW432O6uGLPR7vCME4cXRmyquwqnWupQTdYJAPFeEWCorZ/DucGHf
-         2QWC3bT/zumL+X5rYjHPnVHl7VDjLTqeT1w/ibfOi2/tWDvTze4DqWRiUPmLxokNEEUu
-         LKiSBPKhXKz7Yqa33q73MfYygNn0AZXLmAUgsEhz7d9MfH0TYKUywNklH086Mc6hjfCY
-         fZfpgdrKrTRBW95V44Hsvtku9JAJkmUhnI05NTV1CD9X59WMAbBEO891tmZeC0Qgt+5B
-         P4yFyuzqdASi1fVT4fiquGEpoLJ7YT0JebqcmLcQ2ZU/ofvJEFHIasYDfs3ubD3CHvTd
-         Kw3g==
-X-Gm-Message-State: AC+VfDwFhdKogC8enQDWwrG2P2mMXxMVP3heHW3PhHCt6lmT801Kv0DY
-        0+qiUrYxHlKT4cGFCzLliDE0Rw==
-X-Google-Smtp-Source: ACHHUZ5p8UBH7vKbUX3uxCQ+NHRtzhhvbvpOuj87ASCvmdXdOVMcyeDyv3SSYzDcrclrVJPlH3520Q==
-X-Received: by 2002:a2e:96d0:0:b0:2b6:9e1e:f048 with SMTP id d16-20020a2e96d0000000b002b69e1ef048mr11474428ljj.31.1688036130360;
-        Thu, 29 Jun 2023 03:55:30 -0700 (PDT)
-Received: from ?IPV6:2001:14ba:a0db:1f00::8a5? (dzdqv0yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a0db:1f00::8a5])
-        by smtp.gmail.com with ESMTPSA id a12-20020a05651c010c00b002b6a5dfc7f3sm1640778ljb.30.2023.06.29.03.55.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 29 Jun 2023 03:55:29 -0700 (PDT)
-Message-ID: <84eb1d40-436b-a5b4-a4e3-75a511ad5a90@linaro.org>
-Date:   Thu, 29 Jun 2023 13:55:28 +0300
+        Thu, 29 Jun 2023 06:56:16 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFA133591
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 03:56:15 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 428B76151F
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 10:56:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A1FCC433C0;
+        Thu, 29 Jun 2023 10:56:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688036174;
+        bh=SsHrd0a3xX9lEFW/D91waJ2yGupj0If+hXa08iyds88=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=qJPT6SimAVLOSHLWyLfu2C7DNtd/C/0d6uycUVAVI3vaW9zorMPRVOPRsZbfXN0gQ
+         kQapHh0LR/Pez1DnBA5VfsDmdcYl00bLFkqkv+szIojKHp4dRJl77SnYH+8aibNLuF
+         WwiiHJL1QyYp6VSjQq4WgXE20V7veuR27kCFtLfV/+HQ4oBI99zLXXb0845MNnv5Bf
+         B28LiUz8NkryaBjNsmqy3BxOzwQaaQ+D5eFSZlI/q3CxwJaCLVzOEv2d0rxaAdBo10
+         XhJvvBU72YvVTauEPWhiSWh6diejT9TcsRmSN3bdb9ThVm10oMbfZVJ73JHCvdx+hz
+         yZXiLEynL1zjw==
+Date:   Thu, 29 Jun 2023 11:56:10 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        Oder Chiou <oder_chiou@realtek.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
+Subject: Re: [PATCH v1 2/3] ASoC: rt5677: Use device_get_match_data()
+Message-ID: <33d3ba54-e391-454f-942c-67f498711078@sirena.org.uk>
+References: <20230629104603.88612-1-andriy.shevchenko@linux.intel.com>
+ <20230629104603.88612-3-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v2 12/15] arm64: dts: qcom: sm6125: Switch fixed xo_board
- clock to RPM XO clock
-Content-Language: en-GB
-To:     Marijn Suijten <marijn.suijten@somainline.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Krishna Manikandan <quic_mkrishn@quicinc.com>,
-        Loic Poulain <loic.poulain@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>
-Cc:     ~postmarketos/upstreaming@lists.sr.ht,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Martin Botka <martin.botka@somainline.org>,
-        Jami Kettunen <jami.kettunen@somainline.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        linux-clk@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, Lux Aliaga <they@mint.lgbt>
-References: <20230627-sm6125-dpu-v2-0-03e430a2078c@somainline.org>
- <20230627-sm6125-dpu-v2-12-03e430a2078c@somainline.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20230627-sm6125-dpu-v2-12-03e430a2078c@somainline.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="ITgdYOOT/qXXKL5O"
+Content-Disposition: inline
+In-Reply-To: <20230629104603.88612-3-andriy.shevchenko@linux.intel.com>
+X-Cookie: Surprise due today.  Also the rent.
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -100,67 +60,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27/06/2023 23:14, Marijn Suijten wrote:
-> We have a working RPM XO clock; no other driver except rpmcc should be
-> parenting directly to the fixed-factor xo_board clock nor should it be
-> reachable by that global name.  Remove the name to that effect, so that
-> every clock relation is explicitly defined in DTS.
-> 
-> Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
-> ---
->   arch/arm64/boot/dts/qcom/sm6125.dtsi | 7 ++++---
->   1 file changed, 4 insertions(+), 3 deletions(-)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sm6125.dtsi b/arch/arm64/boot/dts/qcom/sm6125.dtsi
-> index 722dde560bec..edb03508dba3 100644
-> --- a/arch/arm64/boot/dts/qcom/sm6125.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sm6125.dtsi
-> @@ -22,7 +22,6 @@ xo_board: xo-board {
->   			compatible = "fixed-clock";
->   			#clock-cells = <0>;
->   			clock-frequency = <19200000>;
-> -			clock-output-names = "xo_board";
 
-Why? I'd say, leave it.
+--ITgdYOOT/qXXKL5O
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-With that fixed:
+On Thu, Jun 29, 2023 at 01:46:02PM +0300, Andy Shevchenko wrote:
 
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> +	rt5677->type =3D (enum rt5677_type)(uintptr_t)device_get_match_data(dev=
+);
 
->   		};
->   
->   		sleep_clk: sleep-clk {
-> @@ -306,6 +305,8 @@ rpm_requests: rpm-requests {
->   			rpmcc: clock-controller {
->   				compatible = "qcom,rpmcc-sm6125", "qcom,rpmcc";
->   				#clock-cells = <1>;
-> +				clocks = <&xo_board>;
-> +				clock-names = "xo";
->   			};
->   
->   			rpmpd: power-controller {
-> @@ -713,7 +714,7 @@ sdhc_1: mmc@4744000 {
->   
->   			clocks = <&gcc GCC_SDCC1_AHB_CLK>,
->   				 <&gcc GCC_SDCC1_APPS_CLK>,
-> -				 <&xo_board>;
-> +				 <&rpmcc RPM_SMD_XO_CLK_SRC>;
->   			clock-names = "iface", "core", "xo";
->   			iommus = <&apps_smmu 0x160 0x0>;
->   
-> @@ -740,7 +741,7 @@ sdhc_2: mmc@4784000 {
->   
->   			clocks = <&gcc GCC_SDCC2_AHB_CLK>,
->   				 <&gcc GCC_SDCC2_APPS_CLK>,
-> -				 <&xo_board>;
-> +				 <&rpmcc RPM_SMD_XO_CLK_SRC>;
->   			clock-names = "iface", "core", "xo";
->   			iommus = <&apps_smmu 0x180 0x0>;
->   
-> 
+Double casts, always a sign of a successful simplification! :P
 
--- 
-With best wishes
-Dmitry
+> +	if (rt5677->type =3D=3D 0)
+>  		return -EINVAL;
+> -	}
+> =20
+>  	rt5677_read_device_properties(rt5677, &i2c->dev);
+> =20
+> @@ -5702,7 +5689,7 @@ static struct i2c_driver rt5677_i2c_driver =3D {
+>  	.driver =3D {
+>  		.name =3D RT5677_DRV_NAME,
+>  		.of_match_table =3D rt5677_of_match,
+> -		.acpi_match_table =3D ACPI_PTR(rt5677_acpi_match),
+> +		.acpi_match_table =3D rt5677_acpi_match,
+>  	},
+>  	.probe    =3D rt5677_i2c_probe,
+>  	.remove   =3D rt5677_i2c_remove,
+> diff --git a/sound/soc/codecs/rt5677.h b/sound/soc/codecs/rt5677.h
+> index 944ae02aafc2..5ccdf1ba613a 100644
+> --- a/sound/soc/codecs/rt5677.h
+> +++ b/sound/soc/codecs/rt5677.h
+> @@ -1753,8 +1753,8 @@ enum {
+>  };
+> =20
+>  enum rt5677_type {
+> -	RT5677,
+> -	RT5676,
+> +	RT5677 =3D 1,
+> +	RT5676 =3D 2,
+>  };
+> =20
+>  /* ASRC clock source selection */
+> --=20
+> 2.40.0.1.gaa8946217a0b
+>=20
 
+--ITgdYOOT/qXXKL5O
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmSdY0kACgkQJNaLcl1U
+h9A/uwf/XhlnE0dgB/Bcb7Wz8z1De7mVWcI1CYqnZpqIlzClWb7v/zejlqV83AQJ
+kJvRuZ0v016zardfxoiBl9yLKoFRhRHd36/8w9BsHtMDxFO5lKlAPaj6kDtnlt2h
+WDD0YOnOtl2GAA+TcknCFOPtGBa19X3+FrQ9LJXh2V+ljPPNH4CMa/0HI8ZSXkMB
+hY+JR7C5OIeYQG895C6y+hNZiB6KIRSFs8uCfSHFnZ6A7pYV8Ez1AAh2IXL+mzoJ
+bguR/J/XzNErNC1cKPfgXnZOBlVuGqZfhPnFlCskIyK/s0XpQDcUZQ1ZC2USBic8
+5tYH/ZACgsiRnIoe31ig8bJRVVblTQ==
+=E4y7
+-----END PGP SIGNATURE-----
+
+--ITgdYOOT/qXXKL5O--
