@@ -2,93 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D9627423A6
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 12:04:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C56C07423AC
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 12:04:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231269AbjF2KDw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 06:03:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46946 "EHLO
+        id S231482AbjF2KEZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 06:04:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232456AbjF2KBk (ORCPT
+        with ESMTP id S231395AbjF2KDW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 06:01:40 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 761B73582;
-        Thu, 29 Jun 2023 03:00:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1369D6150C;
-        Thu, 29 Jun 2023 10:00:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 5E0E1C433C9;
-        Thu, 29 Jun 2023 10:00:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688032821;
-        bh=6BSYODeXAvBc1bYzqyJYg+UUhE64/mpp9Tu40F5CwoU=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=oDHVOrr/5JM70o8y0DmxBWIVGGiaWWXfzS94TATG7gX18UJiEXtcnfnbjgS14itYd
-         RjDupaiQALNLc4zEyV9ElOhba0fYXYHoDfJ8tZlsfgOg1DJaaeZZK48ThBknPuQxOc
-         /7gEQdxojynYXj5ZWNDMbsuGzHRw6KBoX5a+8Wna1pZuuPXLPuKXxMndlqBCyoRav7
-         mGuQVJGE6lMiPKEWQdF9qjiHgVRjXoivbJ/ASo3o5t76qKE40VFbLNBe5mw9QHMw4u
-         5oN9H5Ihhy4pdzSmD/s49gZuNXWuInDrpEWATZHph7ul1/wK8ZNnhRUc3KEzn2s27h
-         gp9+ZfzIrhcnA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 40A04C395D8;
-        Thu, 29 Jun 2023 10:00:21 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Thu, 29 Jun 2023 06:03:22 -0400
+Received: from mail.nsr.re.kr (unknown [210.104.33.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 290BCA2;
+        Thu, 29 Jun 2023 03:01:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; s=LIY0OQ3MUMW6182UNI14; d=nsr.re.kr; t=1688032763; c=relaxed/relaxed; h=content-type:date:from:message-id:mime-version:subject:to; bh=Zafm6bhK5+g2pK+OZH6WFKiywi+VCeOoYHGecdFYKnw=; b=aEKRcS33y5MRO4r7i3L8Qk9RgJ4CNG5NED3OSgsQG7NhpbA8b16V2nb9+1gzJ16punKh6SG8mWIzGpqza8YsZb2WBFSC/3ak9OSutv/7g57MGn/DsuuJTAxYOXNPfH1rYSc0jlaQ7l3xh3MtMytZIAen9PlXWq9b5ndf34A3rowFBo+UqMdceMZBhjn4qnpybwFOTMGegYu8fke65tNFB6z7jFZ8cPNB34ETxsuuzBayOVLhT5xwIn+2x/Pr/50vkPEp0LtvnxZWMK8RO4JcMdr3NigSCTmi9N3JrP5DWzP/4/GLNPVrAFjLMIrG/QlWkwDXTngXq/2azBVQtMGnQw==
+Received: from 210.104.33.70 (nsr.re.kr)
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128 bits))
+        by mail.nsr.re.kr with SMTP; Thu, 29 Jun 2023 18:59:08 +0900
+Received: from 192.168.155.188 ([192.168.155.188])
+          by mail.nsr.re.kr (Crinity Message Backbone-7.0.1) with SMTP ID 209;
+          Thu, 29 Jun 2023 19:01:14 +0900 (KST)
+From:   Dongsoo Lee <letrhee@nsr.re.kr>
+To:     'Eric Biggers' <ebiggers@kernel.org>
+Cc:     'Herbert Xu' <herbert@gondor.apana.org.au>,
+        "'David S. Miller'" <davem@davemloft.net>,
+        'Jens Axboe' <axboe@kernel.dk>,
+        "'Theodore Y. Ts'o'" <tytso@mit.edu>,
+        'Jaegeuk Kim' <jaegeuk@kernel.org>,
+        linux-crypto@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-fscrypt@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230626084703.907331-1-letrhee@nsr.re.kr> <20230626084703.907331-5-letrhee@nsr.re.kr> <20230628063830.GA7920@sol.localdomain>
+In-Reply-To: <20230628063830.GA7920@sol.localdomain>
+Subject: RE: [PATCH v3 4/4] fscrypt: Add LEA-256-XTS, LEA-256-CTS support
+Date:   Thu, 29 Jun 2023 19:01:11 +0900
+Message-ID: <000901d9aa70$a228c420$e67a4c60$@nsr.re.kr>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] sctp: fix potential deadlock on &net->sctp.addr_wq_lock
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <168803282125.4865.3870530612120862542.git-patchwork-notify@kernel.org>
-Date:   Thu, 29 Jun 2023 10:00:21 +0000
-References: <20230627120340.19432-1-dg573847474@gmail.com>
-In-Reply-To: <20230627120340.19432-1-dg573847474@gmail.com>
-To:     Chengfeng Ye <dg573847474@gmail.com>
-Cc:     marcelo.leitner@gmail.com, lucien.xin@gmail.com,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, linux-sctp@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain;
+        charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+X-Mailer: Microsoft Outlook 16.0
+Content-Language: ko
+Thread-Index: AQHHxDRlmstc7qqNSJFY4M8BkkyX4gFqzZG4AcdR3rmvq8ZzIA==
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNPARSEABLE_RELAY autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+On Tue, Jun 27, 2023 at 23:38:30 -0700, Eric Biggers wrote:
+>On Mon, Jun 26, 2023 at 05:47:03PM +0900, Dongsoo Lee wrote:
+>> when SIMD instructions are available, it performs even faster.
+>
+>This will only be true once there is actually an applicable implementation
+of
+>LEA-XTS and LEA-CTS using SIMD instructions included in the kernel.
+>
+>Perhaps it is your plan to go through and accelerate LEA-XTS and LEA-CTS
+for the
+>common CPU architectures.  However, it is not included in this patchset
+yet, so
+>it should not be claimed in the documentation yet.
+>
+>> Particularly, it outperforms AES when the dedicated crypto
+>> +instructions for AES are unavailable, regardless of the presence of SIMD
+>> +instructions. However, it is not recommended to use LEA unless there is
+>> +a clear reason (such as the absence of dedicated crypto instructions for
+>> +AES or a mandatory requirement) to do so. Also, to enable LEA support,
+>> +it needs to be enabled in the kernel crypto API.
+>
+>I think I'd prefer that you omit the mention of the "absence of dedicated
+crypto
+>instructions" use case for now.  fscrypt already supports another algorithm
+that
+>fulfills exactly that use case (Adiantum), and that algorithm already has
+>optimized implementations for arm32, arm64, and x86_64.  LEA does not have
+that
+>yet.  So it does not really bring anything new to the table.  I'm also
+unsure it
+>would be appropriate to recommend a "lightweight" cipher at this point...
+>
+>That would leave "mandatory requirement" as the rationale, at least for
+now,
+>similar to SM4.
+>
+>- Eric
 
-This patch was applied to netdev/net.git (main)
-by Paolo Abeni <pabeni@redhat.com>:
+As you might expect, we are working on a SIMD implementation of LEA in a
+general-purpose CPU environment. However, since no such implementation has
+been submitted yet, we agree that it's right to leave it out for now.
 
-On Tue, 27 Jun 2023 12:03:40 +0000 you wrote:
-> As &net->sctp.addr_wq_lock is also acquired by the timer
-> sctp_addr_wq_timeout_handler() in protocal.c, the same lock acquisition
-> at sctp_auto_asconf_init() seems should disable irq since it is called
-> from sctp_accept() under process context.
-> 
-> Possible deadlock scenario:
-> sctp_accept()
->     -> sctp_sock_migrate()
->     -> sctp_auto_asconf_init()
->     -> spin_lock(&net->sctp.addr_wq_lock)
->         <timer interrupt>
->         -> sctp_addr_wq_timeout_handler()
->         -> spin_lock_bh(&net->sctp.addr_wq_lock); (deadlock here)
-> 
-> [...]
+In the next version, we would like to change the description to the
+following:
 
-Here is the summary with links:
-  - sctp: fix potential deadlock on &net->sctp.addr_wq_lock
-    https://git.kernel.org/netdev/net/c/6feb37b3b06e
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+LEA is a South Korean 128-bit block cipher (with 128/192/256-bit keys)
+included in the ISO/IEC 29192-2:2019 standard (Information security -
+Lightweight cryptography - Part 2: Block ciphers). If dedicated cipher
+instructions are available, or other options with performance benefits
+are available, using LEA is likely not a suitable choice. Therefore,
+it is not recommended to use LEA-256-XTS unless there is a clear reason
+to do so, such as if there is a mandate. Also, to enable LEA support,
+it needs to be enabled in the kernel crypto API.
