@@ -2,111 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26BA8742BAC
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 19:59:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DAF2742DC0
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 21:43:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229794AbjF2R7r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 13:59:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37848 "EHLO
+        id S232155AbjF2TnB convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 29 Jun 2023 15:43:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231933AbjF2R7n (ORCPT
+        with ESMTP id S232106AbjF2Tm7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 13:59:43 -0400
-Received: from mail-il1-f170.google.com (mail-il1-f170.google.com [209.85.166.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFD18E49;
-        Thu, 29 Jun 2023 10:59:42 -0700 (PDT)
-Received: by mail-il1-f170.google.com with SMTP id e9e14a558f8ab-345a4efb66dso4157185ab.3;
-        Thu, 29 Jun 2023 10:59:42 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688061582; x=1690653582;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Ltsj44Ysm9Ir8gMsSRtpiAJhqVybd6I1k73Eyk2Y9bo=;
-        b=I5SXYCSC86iwt1piBpyaxfkw3bk8qDP8pjvZ1Tv3tsBNmYnkQecQsS/N5n0IJKDwuJ
-         GBe9qdkESGt2RK1APvYDYxBAUm4rx4Pn6XT58Q6Tm58oVxdcUO/DGvgM3M40l9Gaozs0
-         k/b0K/erbMeObHizbq4PRpJkwQfkgHukHi1KQCIDFL9QTYpdbbLaUHg9VqUvWAbUn7oY
-         /x+1n5pwH19kRf41AUhomXkEybso3Jz3HxK4bcprKswaep25xQzaik/EgNXQTMCRx810
-         kxbLYb04IpX6EaU+bAmOnFyv6op2+1NwASKGxinZ5Fx0q2ZWzE3FlB3dLOFq7w/iUTU8
-         SoPw==
-X-Gm-Message-State: AC+VfDyAF+O5Lkb4zq/9SHKTdS1lj52ApNT5ShMZCDE6QoBbOzQoKIM8
-        SEohjpwsIL7a4CNTJ5bGYA==
-X-Google-Smtp-Source: ACHHUZ54eMsTJJWCtPoEJIejljl2L1fgaKzjT7pk8sgNMmOGvqHqFhQZWVJA6mYIXW00z9Mh2DfH2g==
-X-Received: by 2002:a92:c742:0:b0:345:b35e:38ce with SMTP id y2-20020a92c742000000b00345b35e38cemr10456290ilp.31.1688061581994;
-        Thu, 29 Jun 2023 10:59:41 -0700 (PDT)
-Received: from robh_at_kernel.org ([64.188.179.250])
-        by smtp.gmail.com with ESMTPSA id o5-20020a92c685000000b00342612c48f6sm4187871ilg.53.2023.06.29.10.59.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Jun 2023 10:59:41 -0700 (PDT)
-Received: (nullmailer pid 3269993 invoked by uid 1000);
-        Thu, 29 Jun 2023 17:59:39 -0000
-Date:   Thu, 29 Jun 2023 11:59:39 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Astrid Rost <astrid.rost@axis.com>
-Cc:     Dan Murphy <dmurphy@ti.com>, Andrew Davis <afd@ti.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>, kernel@axis.com,
-        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 2/2] dt: bindings: lp50xx: Add max-brightness as in
- leds-pwm
-Message-ID: <20230629175939.GA3260807-robh@kernel.org>
-References: <20230629134722.3908637-1-astrid.rost@axis.com>
- <20230629134722.3908637-3-astrid.rost@axis.com>
+        Thu, 29 Jun 2023 15:42:59 -0400
+X-Greylist: delayed 10803 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 29 Jun 2023 12:42:56 PDT
+Received: from 1.mo582.mail-out.ovh.net (1.mo582.mail-out.ovh.net [46.105.56.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8975210E
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 12:42:56 -0700 (PDT)
+Received: from director8.ghost.mail-out.ovh.net (unknown [10.109.146.86])
+        by mo582.mail-out.ovh.net (Postfix) with ESMTP id 1B22F27328
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 16:06:06 +0000 (UTC)
+Received: from ghost-submission-6684bf9d7b-jjccx (unknown [10.110.115.101])
+        by director8.ghost.mail-out.ovh.net (Postfix) with ESMTPS id 5CA781FD81;
+        Thu, 29 Jun 2023 16:06:05 +0000 (UTC)
+Received: from courmont.net ([37.59.142.102])
+        by ghost-submission-6684bf9d7b-jjccx with ESMTPSA
+        id 6K0SEu2rnWRLegEAx5K4IQ
+        (envelope-from <remi@remlab.net>); Thu, 29 Jun 2023 16:06:05 +0000
+Authentication-Results: garm.ovh; auth=pass (GARM-102R00462b49bf9-edcf-4eeb-9952-1c40042ce9f5,
+                    F84C1CB5A676BA8784C093282B10E490F1B88DE6) smtp.auth=postmaster@courmont.net
+X-OVh-ClientIp: 87.92.194.88
+From:   =?ISO-8859-1?Q?R=E9mi?= Denis-Courmont <remi@remlab.net>
+To:     palmer@dabbelt.com, linux-riscv@lists.infradead.org,
+        heiko@sntech.de, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 3/3] RISC-V: add T-Head vector errata handling
+Date:   Thu, 29 Jun 2023 19:06:04 +0300
+Message-ID: <3235072.aeNJFYEL58@basile.remlab.net>
+Organization: Remlab
+In-Reply-To: <20230622231305.631331-4-heiko@sntech.de>
+References: <20230622231305.631331-1-heiko@sntech.de>
+ <20230622231305.631331-4-heiko@sntech.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230629134722.3908637-3-astrid.rost@axis.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset="UTF-8"
+X-Ovh-Tracer-Id: 12388839627150727643
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: 0
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedviedrtdeggdeljecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfqggfjpdevjffgvefmvefgnecuuegrihhlohhuthemucehtddtnecunecujfgurhephffvufffkfhojghfggfgtgesthhqredttddtjeenucfhrhhomheptformhhiucffvghnihhsqdevohhurhhmohhnthcuoehrvghmihesrhgvmhhlrggsrdhnvghtqeenucggtffrrghtthgvrhhnpeffgedthfegveefhffhffehvddtvdetgfelveeuueekkeetvefgtdfgffdvhfegveenucffohhmrghinheprhgvmhhlrggsrdhnvghtnecukfhppeduvdejrddtrddtrddupdekjedrledvrdduleegrdekkedpfeejrdehledrudegvddruddtvdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduvdejrddtrddtrddupdhmrghilhhfrhhomhepoehrvghmihesrhgvmhhlrggsrdhnvghtqedpnhgspghrtghpthhtohepuddprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdpoffvtefjohhsthepmhhoheekvddpmhhouggvpehsmhhtphhouhht
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 29, 2023 at 03:47:22PM +0200, Astrid Rost wrote:
-> Add max-brightness in order to reduce the current on the connected LEDs.
-> Normally, the maximum brightness is determined by the hardware, and this
-> property is not required. This property is used to set a software limit.
-> It could happen that an LED is made so bright that it gets damaged or
-> causes damage due to restrictions in a specific system, such as mounting
-> conditions.
+	Hi,
+
+Le perjantaina 23. kesäkuuta 2023, 2.13.05 EEST Heiko Stuebner a écrit :
+> diff --git a/arch/riscv/include/asm/errata_list.h
+> b/arch/riscv/include/asm/errata_list.h index fb1a810f3d8c..ab21fadbe9c6
+> 100644
+> --- a/arch/riscv/include/asm/errata_list.h
+> +++ b/arch/riscv/include/asm/errata_list.h
+> @@ -154,6 +155,48 @@ asm volatile(ALTERNATIVE(				
+		\
 > 
-> Signed-off-by: Astrid Rost <astrid.rost@axis.com>
-> ---
->  Documentation/devicetree/bindings/leds/leds-lp50xx.yaml | 9 +++++++++
->  1 file changed, 9 insertions(+)
+>  	: "=r" (__ovl) :						
+\
+>  	: "memory")
 > 
-> diff --git a/Documentation/devicetree/bindings/leds/leds-lp50xx.yaml b/Documentation/devicetree/bindings/leds/leds-lp50xx.yaml
-> index 402c25424525..6a1425969cb4 100644
-> --- a/Documentation/devicetree/bindings/leds/leds-lp50xx.yaml
-> +++ b/Documentation/devicetree/bindings/leds/leds-lp50xx.yaml
-> @@ -73,6 +73,15 @@ patternProperties:
->        '#size-cells':
->          const: 0
->  
-> +      max-brightness:
-> +        description:
-> +          Normally, the maximum brightness is determined by the hardware, and
-> +          this property is not required. This property is used to set a software
-> +          limit. It could happen that an LED is made so bright that it gets
-> +          damaged or causes damage due to restrictions in a specific system,
-> +          such as mounting conditions.
-> +        $ref: /schemas/types.yaml#definitions/uint32
+> +#ifdef CONFIG_ERRATA_THEAD_VECTOR
+> +
+> +#define THEAD_C9XX_CSR_VXSAT			0x9
+> +#define THEAD_C9XX_CSR_VXRM			0xa
+> +
+> +/*
+> + * Vector 0.7.1 as used for example on T-Head Xuantie cores, uses an older
+> + * encoding for vsetvli (ta, ma vs. d1), so provide an instruction for
+> + * vsetvli	t4, x0, e8, m8, d1
+> + */
+> +#define THEAD_VSETVLI_T4X0E8M8D1	".long	0x00307ed7\n\t"
 
-We already have led-max-microamp. If this h/w works by controlling the 
-current, then that is what you should use. "max-brightness" makes more 
-sense for PWM based control.
+That is equivalent to, and (IMHO) much less legible than:
+".insn   i OP_V, 7, t4, x0, 3"
+Or even if you don't mind second-guessing RVV 1.0 assemblers:
+"vsetvli t4, zero, e8, m8, tu, mu"
 
-If you do end up keeping this, it belongs in the 'led' nodes not the 
-controller as brightness is a property of the LED, not the LED 
-driver(controller). And it should be in common schema rather than 
-defining the type yet again.
+Either way, you don't need to hard-code X-register operands in assembler 
+macros (though you do unfortunately need to hard-code V register operands if 
+you use .insn).
 
-Rob
+> +
+> +/*
+> + * While in theory, the vector-0.7.1 vsb.v and vlb.v result in the same
+> + * encoding as the standard vse8.v and vle8.v,
+
+Not only in theory. vse8.v and vle8.v have only one possible encoding each 
+(for given operands).
+
+> compilers seem to optimize
+
+Nit: By "compilers", do you mean "assemblers"? That's a bit misleading to me.
+
+> + * the call resulting in a different encoding and then using a value for
+> + * the "mop" field that is not part of vector-0.7.1
+
+Uh, no? They use mew = 0b0 and mop = 0b00, which corresponds to mop = 0b000.
+
+> + * So encode specific variants for vstate_save and _restore.
+> + */
+> +#define THEAD_VSB_V_V0T0		".long	0x02028027\n\t"
+
+That's "vse8.v v0, (t0)", at least as assembled with binutils 2.40.50.20230625 
+(from Debian unstable). I don't understand the rationale for hard-coding from 
+the above comment. Maybe that's just me being an idiot, but if so, then the 
+comment ought to be clarified.
+
+(I do realise that vse8.v and vsb.v are not exactly equivalent in behaviour, 
+but here, the concern should be the assembler, not the processor.)
+
+> +#define THEAD_VSB_V_V8T0		".long	0x02028427\n\t"
+> +#define THEAD_VSB_V_V16T0		".long	0x02028827\n\t"
+> +#define THEAD_VSB_V_V24T0		".long	0x02028c27\n\t"
+> +#define THEAD_VLB_V_V0T0		".long	0x012028007\n\t"
+
+This has one nibble too many for a 32-bit value.
+
+And why use sign-extended loads? Zero-extended loads would have the exact same 
+encoding as vle8.v, and not need this dark magic, AFAICT.
+
+> +#define THEAD_VLB_V_V8T0		".long	0x012028407\n\t"
+> +#define THEAD_VLB_V_V16T0		".long	0x012028807\n\t"
+> +#define THEAD_VLB_V_V24T0		".long	0x012028c07\n\t"
+> +
+> +#define ALT_SR_VS_VECTOR_1_0_SHIFT	9
+> +#define ALT_SR_VS_THEAD_SHIFT		23
+> +
+> +#define ALT_SR_VS(_val, prot)					
+	\
+> +asm(ALTERNATIVE("li %0, %1\t\nslli %0,%0,%3",				
+\
+> +		"li %0, %2\t\nslli %0,%0,%4", THEAD_VENDOR_ID,		
+\
+> +		ERRATA_THEAD_VECTOR, CONFIG_ERRATA_THEAD_VECTOR)	\
+> +		: "=r"(_val)					
+	\
+> +		: "I"(prot##_1_0 >> ALT_SR_VS_VECTOR_1_0_SHIFT),	\
+> +		  "I"(prot##_THEAD >> ALT_SR_VS_THEAD_SHIFT),		
+\
+> +		  "I"(ALT_SR_VS_VECTOR_1_0_SHIFT),			
+\
+> +		  "I"(ALT_SR_VS_THEAD_SHIFT))
+> +#endif /* CONFIG_ERRATA_THEAD_VECTOR */
+> +
+>  #endif /* __ASSEMBLY__ */
+> 
+>  #endif
+
+-- 
+レミ・デニ-クールモン
+http://www.remlab.net/
+
+
+
