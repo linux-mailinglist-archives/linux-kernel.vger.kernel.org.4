@@ -2,135 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B93E742891
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 16:36:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F85774288E
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 16:36:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232431AbjF2Og4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 10:36:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34466 "EHLO
+        id S232345AbjF2Ogp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 10:36:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231208AbjF2Ogt (ORCPT
+        with ESMTP id S232361AbjF2Ogi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 10:36:49 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB7673595
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 07:35:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1688049339;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=h8R5NWbxG8vczdgWdFQsQrHOmepgax0uH77iAdWT6/Y=;
-        b=SvKgEmJ23/JFk8w3EWorMgAsWunEXyovlF1SsCt3sFhOjWuFBaGkh7X4IC9f6M2c0PHvF6
-        DRDun8y3YnywwY7jpJoCFNCWWiu/cZdp54kFiIZx902HCwdyRbrZ36TVvVr2nc3EnLJAA0
-        seNNlXPHoXh3CpuQ2SCAGQrN6BhjFT8=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-32-QXrMTTdjOxujQ9X9RGqzMw-1; Thu, 29 Jun 2023 10:35:38 -0400
-X-MC-Unique: QXrMTTdjOxujQ9X9RGqzMw-1
-Received: by mail-wm1-f72.google.com with SMTP id 5b1f17b1804b1-3fbb0fdd060so3980615e9.0
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 07:35:37 -0700 (PDT)
+        Thu, 29 Jun 2023 10:36:38 -0400
+Received: from mail-qk1-x72b.google.com (mail-qk1-x72b.google.com [IPv6:2607:f8b0:4864:20::72b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E2FF35B7
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 07:36:36 -0700 (PDT)
+Received: by mail-qk1-x72b.google.com with SMTP id af79cd13be357-763a2e39b88so73256785a.1
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 07:36:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ziepe.ca; s=google; t=1688049395; x=1690641395;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=l0Z9EHkxsMojDfIG/k9qkoelknrnfRSmn3Ow7k1MaPE=;
+        b=F4poY21W6hcqbJLOEbHh3sabaLWv2chcW5xmlM/K7y2TWq2gKHYRY+RdZ/sNbNZyHw
+         tzqwWBc8ALyXT2kvmdfjTL0lSOVsKiv1hWHvUoVhRxijNn+butlhHTQgbCj1FdggqzPX
+         TJUrCwxjZFHAhvVwkeQuOpixpv1TBCaNxLF+yNoFiN1GHWTZlSLVZpgLwZZCsj7bM3dh
+         xh+2dzh26Ccndaz5JTaXUAf/KG1uQ0QMHC9+EpbqLBkz5GUEZ5jesAptDyrbUAW+8oad
+         UhRQBYxlr2bMxFzJTqJEIxiB1F14+lwuZIkD54opB4i0UONspS39p3gC3ipjzyfbRhkI
+         ihqw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688049337; x=1690641337;
-        h=content-transfer-encoding:mime-version:message-id:date:references
-         :in-reply-to:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=h8R5NWbxG8vczdgWdFQsQrHOmepgax0uH77iAdWT6/Y=;
-        b=ftdIi3UhgX/vQGbdw4MF4ss9XJ6sH1YZRb6nlUwRg2DZNLsR6arZuTbyz15bWOT8+v
-         PHkCzXgB+twe3MDaJeh7kP3eClVpWUJusvjDFkgYomiuQhlGFC8PY+QjtW7QM6OJg6oR
-         85EQ3DfBH13GWsO6lBQXaabLSsa96kwx2QMTTLx4Zu6dggpwg5XNodxcfBrLhqvt2GH2
-         zU7+8dGaQu65hfjAEbwd7vP2068qUUFc2o++3QGMkH8TGtMDbA9Cszjy8ic/tR61Mk/+
-         5bf5k11ijHdJcT8MJ1xgcsgeJRT+G7hX3S9CtVuQ2l78EZv2O5GSictJH6bQ9W2peIaV
-         Leew==
-X-Gm-Message-State: AC+VfDwE5nugykirJzRp47RuE7zcfgyo/dKeZTKgaozLmEc5yrXnsf73
-        CjmqAf/TO8Vfy9vvS7RafpHcvrsTU3nPKGJBWXOnqsgaGx7697AuAVIShIRy5e95bv+wltpNDqa
-        5WZtqFQ+q4VPI6+mwgfAr+9Z0
-X-Received: by 2002:a7b:cd1a:0:b0:3fb:7184:53eb with SMTP id f26-20020a7bcd1a000000b003fb718453ebmr7354227wmj.18.1688049336967;
-        Thu, 29 Jun 2023 07:35:36 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ6h7QlIhkGzTRnVyTU2NsDFOF3dILJkeijSsCDj9Q06ewfBcGoUzfIOspcHXewvLQsf+b6htQ==
-X-Received: by 2002:a7b:cd1a:0:b0:3fb:7184:53eb with SMTP id f26-20020a7bcd1a000000b003fb718453ebmr7354206wmj.18.1688049336544;
-        Thu, 29 Jun 2023 07:35:36 -0700 (PDT)
-Received: from alrua-x1.borgediget.toke.dk ([45.145.92.2])
-        by smtp.gmail.com with ESMTPSA id 14-20020a05600c020e00b003fba92fad35sm4237514wmi.26.2023.06.29.07.35.35
+        d=1e100.net; s=20221208; t=1688049395; x=1690641395;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=l0Z9EHkxsMojDfIG/k9qkoelknrnfRSmn3Ow7k1MaPE=;
+        b=aszPYTVxefmpiSmExOhWmse8rAxlzzl8OCW3nFGINWB+U+ke0t7th/fSWCP7hw1A2O
+         wCSeQw0bq2uxliCbKj7Ncx4eqYluqUZ6bBgb+H7PdA7ZdJzYdfoOlvd5VJZ7/AUgGXZV
+         8+Qz+fH1pkaSlAwCMcxplseTISF1mJS4Viv8gDGdbrdsjReqQpXaHR7SGZFl4evSo/6G
+         LwC/sHAkuI1ulfCN3O6PVxmMTwOYO9kiA1w43RKTjfjuYHCIUZ3A/SAW5f0jij0FPklc
+         wWzZejqWv3onU40DqFkKSPYPU18dXvm8P1B7RkLi902fHCblIOqXIHiHLSPELNIJpDgU
+         XsIw==
+X-Gm-Message-State: AC+VfDxo2FcLTv5h5bfD2/iHd61h2uDxG+aAEdTsNA4NKL28eoxC0Yj6
+        N0WGIkDtjnYQZwz8MlUVyRAJRw==
+X-Google-Smtp-Source: ACHHUZ5pB2c69T7VmW1zJ57G8s1Pb6Y3ihqEO07bMaoudhMGPexaLnS1zfBqc1+w7Qy5+JKyeVfOFg==
+X-Received: by 2002:a05:620a:44d0:b0:765:5441:3193 with SMTP id y16-20020a05620a44d000b0076554413193mr27610256qkp.6.1688049395369;
+        Thu, 29 Jun 2023 07:36:35 -0700 (PDT)
+Received: from ziepe.ca (hlfxns017vw-142-68-25-194.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.68.25.194])
+        by smtp.gmail.com with ESMTPSA id a4-20020a05620a124400b0075aff6f835bsm6312732qkl.19.2023.06.29.07.36.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Jun 2023 07:35:36 -0700 (PDT)
-Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-        id 5FF87BC0476; Thu, 29 Jun 2023 16:35:35 +0200 (CEST)
-From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
-To:     Florian Westphal <fw@strlen.de>
-Cc:     Florian Westphal <fw@strlen.de>, Daniel Xu <dxu@dxuuu.xyz>,
-        bpf@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        coreteam@netfilter.org, netfilter-devel@vger.kernel.org,
-        daniel@iogearbox.net, dsahern@kernel.org
-Subject: Re: [PATCH bpf-next 0/7] Support defragmenting IPv(4|6) packets in BPF
-In-Reply-To: <20230629132141.GA10165@breakpoint.cc>
-References: <cover.1687819413.git.dxu@dxuuu.xyz> <874jmthtiu.fsf@toke.dk>
- <20230627154439.GA18285@breakpoint.cc> <87o7kyfoqf.fsf@toke.dk>
- <20230629132141.GA10165@breakpoint.cc>
-X-Clacks-Overhead: GNU Terry Pratchett
-Date:   Thu, 29 Jun 2023 16:35:35 +0200
-Message-ID: <87leg2fia0.fsf@toke.dk>
+        Thu, 29 Jun 2023 07:36:34 -0700 (PDT)
+Received: from jgg by wakko with local (Exim 4.95)
+        (envelope-from <jgg@ziepe.ca>)
+        id 1qEsl8-009s8J-82;
+        Thu, 29 Jun 2023 11:36:34 -0300
+Date:   Thu, 29 Jun 2023 11:36:34 -0300
+From:   Jason Gunthorpe <jgg@ziepe.ca>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Boris Brezillon <bbrezillon@kernel.org>,
+        Arnaud Ebalard <arno@natisbad.org>,
+        Srujana Challa <schalla@marvell.com>,
+        Mustafa Ismail <mustafa.ismail@intel.com>,
+        Shiraz Saleem <shiraz.saleem@intel.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Leon Romanovsky <leon@kernel.org>
+Subject: Re: Build error in crypto/marvell/cesa/cipher.c
+Message-ID: <ZJ2W8vQjljJej1tw@ziepe.ca>
+References: <CAHk-=whXn0YTojV=+J8B-r8KLvNtqc2JtCa4a_bdhf+=GN5OOw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHk-=whXn0YTojV=+J8B-r8KLvNtqc2JtCa4a_bdhf+=GN5OOw@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Florian Westphal <fw@strlen.de> writes:
+On Wed, Jun 28, 2023 at 08:13:25PM -0700, Linus Torvalds wrote:
 
-> Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com> wrote:
->> Florian Westphal <fw@strlen.de> writes:
->> > For bpf a flag during link attachment seemed like the best way
->> > to go.
->>=20
->> Right, I wasn't disputing that having a flag to load a module was a good
->> idea. On the contrary, I was thinking we'd need many more of these
->> if/when BPF wants to take advantage of more netfilter code. Say, if a
->> BPF module wants to call into TPROXY, that module would also need go be
->> loaded and kept around, no?
->
-> That seems to be a different topic that has nothing to do with
-> either bpf_link or netfilter?
->
-> If the program calls into say, TPROXY, then I'd expect that this needs
-> to be handled via kfuncs, no? Or if I misunderstand, what do you mean
-> by "call into TPROXY"?
->
-> And if so, thats already handled at bpf_prog load time, not
-> at link creation time, or do I miss something here?
->
-> AFAIU, if prog uses such kfuncs, verifier will grab needed module ref
-> and if module isn't loaded the kfuncs won't be found and program load
-> fails.
+> I get a similar error in 'irdma_clr_wqes()' at
+> drivers/infiniband/hw/irdma/uk.c:103 (and same thing on line 105). I
+> don't see what the right solution there is, but it looks like we have
+> 
+>         IRDMA_CQP_WQE_SIZE = 8
+>         __le64 elem[IRDMA_CQP_WQE_SIZE];
+> 
+> and it's doing a 4kB memset to that element. The mistake is not as
+> obvious as in the cesa driver.
 
-...
+I think this fix is in the RDMA PR i just sent you:
 
-> Or we are talking about implicit dependencies, where program doesn't
-> call function X but needs functionality handled earlier in the pipeline?
->
-> The only two instances I know where this is the case for netfilter
-> is defrag + conntrack.
+commit b002760f877c0d91ecd3c78565b52f4bbac379dd
+Author: Arnd Bergmann <arnd@arndb.de>
+Date:   Tue May 23 13:18:45 2023 +0200
 
-Well, I was kinda mixing the two cases above, sorry about that. The
-"kfuncs locking the module" was not present in my mind when starting to
-talk about that bit...
+    RDMA/irdma: avoid fortify-string warning in irdma_clr_wqes
+    
+    Commit df8fc4e934c1 ("kbuild: Enable -fstrict-flex-arrays=3") triggers a
+    warning for fortified memset():
+    
+    In function 'fortify_memset_chk',
+        inlined from 'irdma_clr_wqes' at drivers/infiniband/hw/irdma/uk.c:103:4:
+    include/linux/fortify-string.h:493:25: error: call to '__write_overflow_field' declared with attribute warning: detected write b>
+      493 |                         __write_overflow_field(p_size_field, size);
+          |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    
+    The problem here isthat the inner array only has four 8-byte elements, so
+    clearing 4096 bytes overflows that. As this structure is part of an outer
+    array, change the code to pass a pointer to the irdma_qp_quanta instead,
+    and change the size argument for readability, matching the comment above
+    it.
+    
+    Fixes: 551c46edc769 ("RDMA/irdma: Add user/kernel shared libraries")
+    Link: https://lore.kernel.org/r/20230523111859.2197825-1-arnd@kernel.org
+    Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+    Acked-by: Shiraz Saleem <shiraz.saleem@intel.com>
+    Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
 
-As for the original question, that's answered by your point above: If
-those two modules are the only ones that are likely to need this, then a
-flag for each is fine by me - that was the key piece I was missing (I'm
-not a netfilter expert, as you well know).
-
-Thanks for clarifying, and apologies for the muddled thinking! :)
-
--Toke
-
+Jason
