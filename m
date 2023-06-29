@@ -2,120 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3711B742F83
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 23:32:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 820BA742F89
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 23:33:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231933AbjF2Vb4 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 29 Jun 2023 17:31:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56340 "EHLO
+        id S232029AbjF2VdQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 17:33:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230410AbjF2Vbt (ORCPT
+        with ESMTP id S232042AbjF2VdM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 17:31:49 -0400
-Received: from mail-yw1-f177.google.com (mail-yw1-f177.google.com [209.85.128.177])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30013F5;
-        Thu, 29 Jun 2023 14:31:47 -0700 (PDT)
-Received: by mail-yw1-f177.google.com with SMTP id 00721157ae682-5773f41c1dcso2132707b3.1;
-        Thu, 29 Jun 2023 14:31:47 -0700 (PDT)
+        Thu, 29 Jun 2023 17:33:12 -0400
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 266552D7F
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 14:33:10 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id 98e67ed59e1d1-2637ab3d8efso64603a91.3
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 14:33:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=purestorage.com; s=google2022; t=1688074389; x=1690666389;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=o83jcI1G1ZsT+qyL5GtnXINDpgyMSgFFKrn+OMZU0bQ=;
+        b=P6RliEi/7YAsD7DwWKzXpii8hPyr7p3rLn3FzoQAlOOE2B2qRc7BNrCKD/DmISvMwk
+         4AKLYqD2h4W/zXycI1fpFatKWcafdlOIK483g3FaoZWAmMv7GS/6tW8SKkdWFTdg2x0R
+         MmgA9VZAJ+1UQ3GY/BNwrjzhDfSHyXbA/l4agQIG8nMeDY5FLKKAkBrjtQayLm5Efup5
+         q5D3u9fHdabRzmh+eZFPAoDG1uZF4uvj1PnFd7nJP4rGRo3/TUVI15l2kipXuTPf0lQC
+         k+stO5QQ+3zrrK0t/5lDzbZaXtS/yApFq3lpWfrM0Z9k6rHynEAc5VZCWUFdy+Y45j/S
+         H0zg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688074306; x=1690666306;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=GoENgYvXFLite5/xMgXTrtXiVpAbaDQ9fsoEG3w0OLA=;
-        b=Lp4EkjHxJNUEmrX9VtFdA6xnngVpiCjlAM6ml9fl1IH1aUP3b7oY5SbgEdfIDrVJvJ
-         BgBrqCAsKZe95OcecnhsaEbPfA++F9RvpJmDCb4O83AmayvMpstT1wgYL/XCAfERgAEB
-         Ag9E9TfVxr73LhKJHzAYwWnF08jMJ1cH8+wD9DmGkElam0QxtlIfWRyfi+6KzwvnuT1y
-         Fjt/M127qvfJok7rss/1dAfC7eHNLW9jIP1sfY84xZN3q60Bo4mqPLGUkAD51NjWQ5hz
-         Q+4/M45usIZ/rvB5NgvM17T1DPhXtwyNG3vIgJNx+c5fUubQZQTFf9w5kU8e9G8YtkTt
-         DBlA==
-X-Gm-Message-State: ABy/qLah7vaZa4Kmb3OiRzRsiQgBkTki6m3uJ4VZnYPzFyw8OpekO1YX
-        OOFM+Gglzz108vaOLidNKc6lJDYV2v9/CCsApRY=
-X-Google-Smtp-Source: APBJJlHokpAkUFadL2QgrAZ2q/30Xl/epYQBSSEn/8mKrLBcEzR0CGXdNOWWDltlmQfe3fiUrDiwRZOUzf6KRLkIgHY=
-X-Received: by 2002:a25:19c1:0:b0:c00:92c8:542f with SMTP id
- 184-20020a2519c1000000b00c0092c8542fmr779020ybz.60.1688074306279; Thu, 29 Jun
- 2023 14:31:46 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1688074389; x=1690666389;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=o83jcI1G1ZsT+qyL5GtnXINDpgyMSgFFKrn+OMZU0bQ=;
+        b=VV2PEVh1u5/szx+NA4wjbL4zB1M9bFfhmVy4U0ikH21yFF2cj/EQImQvPMgdRgve0Q
+         3rahyzNSjkSvA2iZVlyclDSNyiqPk0n7FF2T2A0QAWQAOs6hyOaOCHb3m0v6qdNXDn/Y
+         rJaCwn9xY4ELMF1cRUWPUmSQaIAd/Zxn4Hh8bWK8M7seEKOjIgmrIjY+LM7tC/EIsmTA
+         I9v0nIszcjAkLyc+FEjqiSBsA51sCFVH0/2D3rclGe9Uc72+/TAhzVspoO3UQBTLj/Pi
+         VWFeixMTaia5HjDcE6HZviW4PYqxeQxsKeXBQy7MEXRMi+xXF+r0tg8aaDvfrybWjMCy
+         rBkg==
+X-Gm-Message-State: ABy/qLbnVdPxlLW03zALj8xp9jVVQC2z2uHF/WLqvm9ksLwUhzkQUdfC
+        HS4zGe1QSNGycS4UJB3+0OyEyQ==
+X-Google-Smtp-Source: APBJJlGWMQ6gS+bisZayuJKzqMgM5EqxAN2JKKHwbcvp71/M91QNObD9ajE7HrirTEsEPmZxPlTMoQ==
+X-Received: by 2002:a17:90a:17e5:b0:263:1661:1d1a with SMTP id q92-20020a17090a17e500b0026316611d1amr626383pja.7.1688074389493;
+        Thu, 29 Jun 2023 14:33:09 -0700 (PDT)
+Received: from dev-yzhong.dev.purestorage.com ([208.88.159.129])
+        by smtp.googlemail.com with ESMTPSA id t8-20020a17090a024800b0025bcdada95asm4830016pje.38.2023.06.29.14.33.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 29 Jun 2023 14:33:08 -0700 (PDT)
+From:   Yuanyuan Zhong <yzhong@purestorage.com>
+To:     leon@kernel.org, jgg@ziepe.ca
+Cc:     cachen@purestorage.com, linux-rdma@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Yuanyuan Zhong <yzhong@purestorage.com>
+Subject: [PATCH 0/1] RDMA/mlx5: align MR mem allocation size to power-of-two
+Date:   Thu, 29 Jun 2023 15:32:47 -0600
+Message-Id: <20230629213248.3184245-1-yzhong@purestorage.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20230623151016.4193660-1-irogers@google.com>
-In-Reply-To: <20230623151016.4193660-1-irogers@google.com>
-From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Thu, 29 Jun 2023 14:31:34 -0700
-Message-ID: <CAM9d7cgX-vnwkrQMMHn2C1sCjm3YO=xaigmMTsrbkg+fHk2H2g@mail.gmail.com>
-Subject: Re: [PATCH v2 00/12] Add metric has_event, update intel vendor events
-To:     Ian Rogers <irogers@google.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
-        Kajol Jain <kjain@linux.ibm.com>,
-        John Garry <john.g.garry@oracle.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Eduard Zingerman <eddyz87@gmail.com>,
-        Jing Zhang <renyu.zj@linux.alibaba.com>,
-        Sohom Datta <sohomdatta1@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        Perry Taylor <perry.taylor@intel.com>,
-        Samantha Alt <samantha.alt@intel.com>,
-        Caleb Biggers <caleb.biggers@intel.com>,
-        Weilin Wang <weilin.wang@intel.com>,
-        Edward Baker <edward.baker@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_PERMERROR autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Ian,
+Hello,
 
-On Fri, Jun 23, 2023 at 8:10 AM Ian Rogers <irogers@google.com> wrote:
->
-> Add a new has_event function for metrics so that events that can be
-> disabled by the kernel/firmware don't cause metrics to fail. Use this
-> function for Intel transaction metrics fixing "perf all metrics test"
-> on systems with TSX disabled. The update conversion script is posted in:
-> https://github.com/intel/perfmon/pull/90
->
-> Re-generate Intel vendor events using:
-> https://github.com/intel/perfmon/blob/main/scripts/create_perf_json.py
-> Adding rocketlake support, uncore and many core events for meteorlake,
-> and smaller updates for cascakelakex, icelake, icelakex,
-> sapphirerapids, skylake, skylakex and tigerlake.
->
-> v2. Handle failed memory allocated for evlist, John Garry.
->
-> Ian Rogers (12):
->   perf expr: Add has_event function
->   perf jevents: Support for has_event function
->   perf vendor metrics intel: Make transaction metrics conditional
->   perf vendor events intel: Add rocketlake events/metrics
->   perf vendor events intel: Update meteorlake to 1.03
->   perf vendor events intel: Update cascadelakex to 1.19
->   perf vendor events intel: Update icelake to 1.19
->   perf vendor events intel: Update icelakex to 1.21
->   perf vendor events intel: Update sapphirerapids to 1.14
->   perf vendor events intel: Update skylake to 57
->   perf vendor events intel: Update skylakex to 1.31
->   perf vendor events intel: Update tigerlake to 1.13
+Recently I noticed the mlx5_alloc_priv_descs() do many allocations from
+kmalloc-8k. It's called from following chain:
+cma_cm_event_handler => nvme_rdma_cm_handler => nvme_rdma_create_queue_ib
+=> ib_mr_pool_init => ib_alloc_mr => __mlx5_ib_alloc_mr
+=> _mlx5_alloc_mkey_descs
 
-My tigerlake laptop now passes the all metrics test with this.
-It used to fail like below:
+When the nvme-rdma asks to allocate memory regions that support maximum 257
+sg entries, the real MR memory allocation size is slightly bigger than 2048.
 
-  event syntax error:
-'{cpu/cycles-t,metric-id=cpu!3cycles!1t!3/,cpu/tx-start,m..'
-                            \___ unknown term 'cycles-t' for pmu 'cpu'
+The MR memory allocation seems adding "add_size" to guarantee that there
+is enough space to find the memory aligned to 2048 (MLX5_UMR_ALIGN).
 
-Tested-by: Namhyung Kim <namhyung@kernel.org>
+The requested size is bigger than 4096 after adding the extra bytes.
+Then kmalloc uses 8192 as the actual allocation size.
 
-Thanks,
-Namhyung
+For power-of-two sizes, the alignment can be guaranteed by kmalloc()
+according to commit 59bb47985c1d ("mm, sl[aou]b: guarantee natural
+alignment for kmalloc(power-of-two)").
+
+Here comes a draft patch that uses the lesser of existing requested
+size or the next power-of-two size.
+
+I'm not sure if it's better to simply allocate roundup_pow_of_two(),
+or if it's true to assume that slab will not have intermediate size
+between 2 power-of-two sizes. Also not sure if a generic memalign()
+will be the better approach.
+
+Can you please let me know what's the preferred fix, or fix it directly
+to let the allocation use the smaller slab if possible? Thanks
+
+
+Yuanyuan Zhong (1):
+  RDMA/mlx5: align MR mem allocation size to power-of-two
+
+ drivers/infiniband/hw/mlx5/mr.c | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+-- 
+2.34.1
+
