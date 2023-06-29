@@ -2,127 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F547742B6C
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 19:43:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 813C2742B70
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 19:44:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230476AbjF2RnI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 13:43:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33862 "EHLO
+        id S230181AbjF2RoK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 13:44:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229609AbjF2RnG (ORCPT
+        with ESMTP id S229520AbjF2RoI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 13:43:06 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B2F61B1;
-        Thu, 29 Jun 2023 10:43:05 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1842C615A0;
-        Thu, 29 Jun 2023 17:43:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 260B1C433C8;
-        Thu, 29 Jun 2023 17:43:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688060583;
-        bh=V0qOlSWOHFdUJBrnvcm/PQeKhRzaF57NyRNow0c11k8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=YuNoCsqM9ReRiaGyA5ytN3QwAUueul5O8O1wCoDJaNq7G9gSCsPX0mznPtslOkyp+
-         n8mGu0EjvWTL/7nRV3lFwez4OukXd3QdNLSUJYc30EiwhKa7qg8326oIKkztYra7EZ
-         kHtKbLvJS4UVKlrnqovbCdSmX8HtWEzrha3UWjIQraS94YBEguubq1dM0AJFnzB8Vg
-         5gxMgMJ8qC/sVjVMeixuAuDjbVpojZXdQuJS/Yqeu2T1u8Kc2woeZhRQRH9PqkscRd
-         Bn6XO+DQ4feXXo+Kx1TvvipEafsdo1b1R+6R7H02PRhXX8Gpuakhys3DADnXLDfR7x
-         sGs91kfTKENxg==
-Date:   Thu, 29 Jun 2023 18:42:57 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Cc:     johan+linaro@kernel.org, perex@perex.cz, tiwai@suse.com,
-        lgirdwood@gmail.com, ckeepax@opensource.cirrus.com,
-        kuninori.morimoto.gx@renesas.com, linux-kernel@vger.kernel.org,
-        pierre-louis.bossart@linux.intel.com, alsa-devel@alsa-project.org,
-        Stable@vger.kernel.org
-Subject: Re: [PATCH] ASoC: qdsp6: q6apm: use dai link pcm id as pcm device
- number
-Message-ID: <8c3be94e-56c0-4820-853d-669e90969c24@sirena.org.uk>
-References: <20230628092404.13927-1-srinivas.kandagatla@linaro.org>
- <c22fcc94-aa41-4ffd-bfe8-f0b9f15a76c0@sirena.org.uk>
- <77b348f7-0475-5e16-95e1-0e5831408d2b@linaro.org>
+        Thu, 29 Jun 2023 13:44:08 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13C3719B
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 10:43:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1688060596;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=EuVtH4//9ixVPbYzIxcKCDvS3vv7wF8XPbIE+9o6mxc=;
+        b=EtrkpOKZ0OiOPzGnkzhdBhHHVyCA1fFjhnjPAA60aU3eLH2TItTiAgX0Xi7K1KgYLmr5V5
+        DGAbS3NlmvV7rHHa1GRGP+ixk3jHzG9W7pPXZDoJHQ36w1Aqunj5uWJwCcd3/WWdXBrx77
+        pYjA4tnbx5wu7BKj+4y+cR72eoZZFLY=
+Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
+ [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-368-JgE6t5JIM2GP8UzXvkLeKw-1; Thu, 29 Jun 2023 13:43:14 -0400
+X-MC-Unique: JgE6t5JIM2GP8UzXvkLeKw-1
+Received: by mail-qk1-f198.google.com with SMTP id af79cd13be357-7624ca834b5so112783685a.0
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 10:43:14 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688060594; x=1690652594;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=EuVtH4//9ixVPbYzIxcKCDvS3vv7wF8XPbIE+9o6mxc=;
+        b=aDpZ0TEHeu1BeKNdMtcvYwhFDeAWf45PS1r0IyDLI8uxYRIts3FOAtCwdGh5poOGu4
+         6zvOtKpCKBlTAP4M7eNnpcRDVwues8m9qZIFL0Xzf2gG8ooLF6anJfegQtgZaGrICdtn
+         SKdUKYiSgU1kXE7tfa1ewKWRIm+4r1fWJXsA9eyHM7H8xhekNJlIB0/wLQl0ezpg1FqM
+         kNXfL6MSOi3fy84psuE7/Ke2eBn8BsHh9e4Cp3AKycMwiZavqu62HBW1EJLV0rSNGFfg
+         Vn+hw/B3excHymsV1+9Tyg7I+HTMQF1DE8SKf6uizPXD7jVmokiOMXw6oe2xVYaouxVg
+         Dj/A==
+X-Gm-Message-State: AC+VfDzxKbLwWwNrOwEI4LHxzpacRmuEPoAKJo4NLsQGw1ABokO0ow//
+        pC0yzObdJhKXxRuOS6Go0OvlTZp5MOLWRWBhifT9z/li0WsHFQR/Rx/5lTM9vmHClrSD7X1twSi
+        iwMsWvnsj5oaLNkZAlIfjAk+3
+X-Received: by 2002:a05:620a:2983:b0:765:4e03:b136 with SMTP id r3-20020a05620a298300b007654e03b136mr12908472qkp.53.1688060594466;
+        Thu, 29 Jun 2023 10:43:14 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ6wUvoKtw61bEx8CLR5eCKB4AQLfhTW4aNAJ+TKGlBZC1NadeujK87p+MvIOiYmY7JuI+2Ytg==
+X-Received: by 2002:a05:620a:2983:b0:765:4e03:b136 with SMTP id r3-20020a05620a298300b007654e03b136mr12908457qkp.53.1688060594241;
+        Thu, 29 Jun 2023 10:43:14 -0700 (PDT)
+Received: from localhost (ip98-179-76-75.ph.ph.cox.net. [98.179.76.75])
+        by smtp.gmail.com with ESMTPSA id h14-20020a05620a10ae00b007670ee46528sm3106075qkk.116.2023.06.29.10.43.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 29 Jun 2023 10:43:13 -0700 (PDT)
+Date:   Thu, 29 Jun 2023 10:43:12 -0700
+From:   Jerry Snitselaar <jsnitsel@redhat.com>
+To:     "Limonciello, Mario" <Mario.Limonciello@amd.com>
+Cc:     Michael Ellerman <mpe@ellerman.id.au>,
+        Linux regressions mailing list <regressions@lists.linux.dev>,
+        Sachin Sant <sachinp@linux.ibm.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        "jarkko@kernel.org" <jarkko@kernel.org>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>
+Subject: Re: [6.4-rc6] Crash during a kexec operation
+ (tpm_amd_is_rng_defective)
+Message-ID: <baqjq4zvfwte2y5rpsznu26qzapjjzhycydwgir34yvttbzvzq@z3pfby7pdjo7>
+References: <99B81401-DB46-49B9-B321-CF832B50CAC3@linux.ibm.com>
+ <87o7lhfmoh.fsf@mail.lhotse>
+ <CA0088E4-2851-4AFF-94F8-2A07C5CDA8D8@linux.ibm.com>
+ <675a8893-429d-05be-b647-089b249c814c@leemhuis.info>
+ <87o7l7oer1.fsf@mail.lhotse>
+ <3f5a37f1-70e0-3dcf-3bd3-acc8a04e53ee@amd.com>
+ <c53ihvuesmymj2o5jyqz7gw7mvbrxjifmphuuhiux3qjabjnic@wcak4hfb77td>
+ <MN0PR12MB6101C50288F6FE99A3DA5D4FE225A@MN0PR12MB6101.namprd12.prod.outlook.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="bypcLNqvoaiunsId"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <77b348f7-0475-5e16-95e1-0e5831408d2b@linaro.org>
-X-Cookie: Surprise due today.  Also the rent.
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <MN0PR12MB6101C50288F6FE99A3DA5D4FE225A@MN0PR12MB6101.namprd12.prod.outlook.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Jun 29, 2023 at 05:28:58PM +0000, Limonciello, Mario wrote:
+> [Public]
+> 
+> > -----Original Message-----
+> > From: Jerry Snitselaar <jsnitsel@redhat.com>
+> > Sent: Thursday, June 29, 2023 12:07 PM
+> > To: Limonciello, Mario <Mario.Limonciello@amd.com>
+> > Cc: Michael Ellerman <mpe@ellerman.id.au>; Linux regressions mailing list
+> > <regressions@lists.linux.dev>; Sachin Sant <sachinp@linux.ibm.com>; open
+> > list <linux-kernel@vger.kernel.org>; linuxppc-dev <linuxppc-
+> > dev@lists.ozlabs.org>; jarkko@kernel.org; linux-integrity@vger.kernel.org
+> > Subject: Re: [6.4-rc6] Crash during a kexec operation
+> > (tpm_amd_is_rng_defective)
+> >
+> > On Thu, Jun 22, 2023 at 09:38:04AM -0500, Limonciello, Mario wrote:
+> > >
+> > > On 6/22/2023 7:36 AM, Michael Ellerman wrote:
+> > > > "Linux regression tracking (Thorsten Leemhuis)"
+> > <regressions@leemhuis.info> writes:
+> > > > > Hi, Thorsten here, the Linux kernel's regression tracker. Top-posting
+> > > > > for once, to make this easily accessible to everyone.
+> > > > >
+> > > > > As Linus will likely release 6.4 on this or the following Sunday a quick
+> > > > > question: is there any hope this regression might be fixed any time
+> > > > > soon?
+> > > > No.
+> > > >
+> > > > I have added the author of the commit to Cc, maybe they can help?
+> > > >
+> > > > The immediate question is, is it expected for chip->ops to be NULL in
+> > > > this path? Obviously on actual AMD systems that isn't the case,
+> > > > otherwise the code would crash there. But is the fact that chip->ops is
+> > > > NULL a bug in the ibmvtpm driver, or a possibility that has been
+> > > > overlooked by the checking code.
+> > > >
+> > > > cheers
+> > >
+> > > All that code assumes that the TPM is still functional which
+> > > seems not to be the case for your TPM.
+> > >
+> > > This should fix it:
+> > >
+> > > diff --git a/drivers/char/tpm/tpm-chip.c b/drivers/char/tpm/tpm-chip.c
+> > > index 5be91591cb3b..7082b031741e 100644
+> > > --- a/drivers/char/tpm/tpm-chip.c
+> > > +++ b/drivers/char/tpm/tpm-chip.c
+> > > @@ -525,6 +525,9 @@ static bool tpm_amd_is_rng_defective(struct
+> > tpm_chip
+> > > *chip)
+> > >         u64 version;
+> > >         int ret;
+> > >
+> > > +       if (!chip->ops)
+> > > +               return false;
+> > > +
+> > >         if (!(chip->flags & TPM_CHIP_FLAG_TPM2))
+> > >                 return false;
+> >
+> >
+> > Should tpm_amd_is_rng_defective compile to nothing on non-x86
+> > architectures? This code is all about
+> > working around an issue with the AMD fTPM, right?
+> >
+> 
+> That's a good point.  Yes it could and that would also solve this problem.
+> 
+Or I guess more accurately for non-x86 it should be:
 
---bypcLNqvoaiunsId
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+static bool tpm_amd_is_rng_defective(struct tpm_chip *chip)
+{
+	return false;
+}
 
-On Thu, Jun 29, 2023 at 06:33:09PM +0100, Srinivas Kandagatla wrote:
-> On 29/06/2023 16:43, Mark Brown wrote:
-> > On Wed, Jun 28, 2023 at 10:24:04AM +0100, Srinivas Kandagatla wrote:
-
-> > > For some reason we ended up with a setup without this flag.
-> > > This resulted in inconsistent sound card devices numbers which
-> > >   are also not starting as expected at dai_link->id.
-> > >   (Ex: MultiMedia1 pcm ended up with device number 4 instead of 0)
-
-> > Why is this a problem?
-
-> In existing Qualcomm setup the backend pcm are added first, which results=
- in
-> frontend pcms getting pcm numbers after this.
-
-> For example: with 3 backend dailinks in DT we have frontend pcm start at =
-3.
-> Now if we add new backend dai-link in DT we now have frontend pcm start at
-> 4.
-
-> This is a bug in qualcomm driver.
-
-Why is this an actual problem rather than just being a bit ugly?  What
-is the negative consequence of having a PCM with this number?
-
-> > > With this patch patch now the MultiMedia1 PCM ends up with device num=
-ber 0
-> > > as expected.
-> > >=20
-> > > Fixes: 9b4fe0f1cd79 ("ASoC: qdsp6: audioreach: add q6apm-dai support")
-> > > Cc: <Stable@vger.kernel.org>
-> >=20
-> > Won't this be an ABI change?  That seems like it'd disrupt things in
-> > stable.
-
-> Yes, but this is a real bug. without fixing this also results in abi(pcm
-> number) change when we add new backend dai-link. I have also sent fix for
-> UCM to handle this.
-
-I'm still not clear why you believe this to be a bug.
-
---bypcLNqvoaiunsId
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmSdwqAACgkQJNaLcl1U
-h9BKfQf+JaDl48bnioUDhQMuI6KqIfybuy9qh+7M+gWOmuwGSdFJwByoifsnUGPL
-9KOh0gRw6dNjOwFtQ2CKSdedM+9+gUDhm3dLe9JNt7SC3x2Cf9e6RVPZVZdwVKLi
-N9bG7Ci9yGDg1OlNpE0tdu5ocoui2v3HAQyaKlTCBUskQPP1urHgNgz73L5pfXsp
-+mJR5GtZMwxnYejkE/IKc0gJP/IgPwqcxwb929ppfxx2mH4wFS2lMx0YwtrG1i1N
-LEg/sMGXl0mnileFhSpDedb5hViiGOckQr+Gs7IPSiMVjwAKsp/NluD4p9uSTTsl
-CdSgGlutumZ4wOhHt21s5hq4iqrrqw==
-=Ygv3
------END PGP SIGNATURE-----
-
---bypcLNqvoaiunsId--
