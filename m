@@ -2,81 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE12D7426F5
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 15:06:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90111742713
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 15:16:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229632AbjF2NGb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 09:06:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37318 "EHLO
+        id S231248AbjF2NP6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 09:15:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230463AbjF2NGW (ORCPT
+        with ESMTP id S229540AbjF2NP4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 09:06:22 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 132C12D78
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 06:05:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1688043931;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=RuqwY8/gS82e1/jf17RcGvVlu8cmWt3V0VXO9BfoCxE=;
-        b=TK8on7NmB/nKiAfT/O4hHnxKLpSBqiQv0Sy9PoM7cfjPa32NHFduZzaHIY1B4zt+WUCnNV
-        um2CMwMf1TkE11E33nT9G1dNu+kEnNChep5PvsozLPEKoafJI/EUHjeCfqA5S8oq2KoShm
-        6+Vjhwb+MhGOPVaDs6Ezis5S5W+CtW0=
-Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
- [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-206-_p3dVmhMMiO8U9iyiyn_WA-1; Thu, 29 Jun 2023 09:05:27 -0400
-X-MC-Unique: _p3dVmhMMiO8U9iyiyn_WA-1
-Received: by mail-qk1-f200.google.com with SMTP id af79cd13be357-76716078e78so14203385a.1
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 06:05:27 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688043927; x=1690635927;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=RuqwY8/gS82e1/jf17RcGvVlu8cmWt3V0VXO9BfoCxE=;
-        b=UC61T5W4vPrvQ0Rz6TqtakUhqeAT3bmzWnFlypjeQbcMh2Fx+xo888evut1WLuC6FT
-         z6SXvWy3Z1bKO7nemLXkSK0rLMzNt9jehWwlXKm+WFUal6WQL4hj+ggUjychePpw0W5K
-         gFTe2Xg1s+BKLd2Pht34MginEkL+7cqxduAJsugAF1SlFH2q9ZyZbBGnM0IAnX8cixo6
-         LLKIMpDcAzw13osavJ/6awlIUDpOZPf9pcce05Whxq9ps5LpSsZqoSisAsnnOeyqakjL
-         wEgCz1newuSZIfrdSJC7Xzc5Tijig+15CTVsuI3nQHHdcjVvp07uPkg6XoYvfyK5f81v
-         k6Ug==
-X-Gm-Message-State: AC+VfDymo05261Z1AlSN7YbkvBXmCxIwWPIIwwuglkXAYYgcaS/2rqJD
-        fm/2kb1y78uSAonAZJ2ojWt4qhpAd3obE/6ra46nzb8+NHfSZfcsb8iue3bcYaxmc2HRp5uvYHc
-        P5Voe0MOuEtDX7V6x6YzNOdRY
-X-Received: by 2002:a05:620a:3955:b0:75b:23a1:82a4 with SMTP id qs21-20020a05620a395500b0075b23a182a4mr3119014qkn.5.1688043927396;
-        Thu, 29 Jun 2023 06:05:27 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ53zxq1krSKA1rYCWbi9iXjsVV1RVgAxxlVVAGIM7eh3ieMXpDfidkUyqa/sPpBWwmlyENA3A==
-X-Received: by 2002:a05:620a:3955:b0:75b:23a1:82a4 with SMTP id qs21-20020a05620a395500b0075b23a182a4mr3118995qkn.5.1688043927136;
-        Thu, 29 Jun 2023 06:05:27 -0700 (PDT)
-Received: from gerbillo.redhat.com (146-241-231-196.dyn.eolo.it. [146.241.231.196])
-        by smtp.gmail.com with ESMTPSA id x13-20020ae9e90d000000b00767291640e8sm1408731qkf.90.2023.06.29.06.05.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Jun 2023 06:05:26 -0700 (PDT)
-Message-ID: <aa84a2f559a246b82779198d3ca60205691baa94.camel@redhat.com>
-Subject: Re: [PATCH] Add MODULE_FIRMWARE() for FIRMWARE_TG357766.
-From:   Paolo Abeni <pabeni@redhat.com>
-To:     Michael Chan <michael.chan@broadcom.com>,
-        Tobias Heider <me@tobhe.de>
-Cc:     Siva Reddy Kallam <siva.kallam@broadcom.com>,
-        Prashant Sreedharan <prashant@broadcom.com>,
-        Michael Chan <mchan@broadcom.com>, netdev@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        linux-kernel@vger.kernel.org
-Date:   Thu, 29 Jun 2023 15:05:23 +0200
-In-Reply-To: <CACKFLinEbG_VVcMTPVuHeoQ6OLtPRaG7q2U5rvqPqdvk7T2HwA@mail.gmail.com>
-References: <ZJt7LKzjdz8+dClx@tobhe.de>
-         <CACKFLinEbG_VVcMTPVuHeoQ6OLtPRaG7q2U5rvqPqdvk7T2HwA@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
+        Thu, 29 Jun 2023 09:15:56 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C028C213D
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 06:15:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1688044554; x=1719580554;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=CmFAGKdbvZV2LRKqPH8f4taWvGmmPRCv0r8vdINfC7Y=;
+  b=WZz8NpCriWiU8pLJob8s1/Z/5xnjg/EyfiuGqJJkMZYpTs0Ah2ZNfFAd
+   cJvFSfvKcnizhwhn8K9WuLh3pFzVNnqpqCvleXb6ak58g2XKar5wqMPFo
+   NyfGrb2wnjKkTDbwq4IR3DLklBaKFU2M1Z9We22y9Tp7B0xIzcQ034bJ1
+   OvmJZ7BJUQyfajBIjkDK3xs1Xd3+9xFaxCUZVbrFUVSk6DPcIpxFj5Z94
+   uP6LqrGKlNkmknkbO5fGPWfENmCf/qlZy/Qr2bEKfj/dEDPlQLymPPAur
+   uXGZD1any3R1ZVfzzz/5yDdbGsFc1/IrUrgxpgTkn+4OAql2hg4AE+SiJ
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10756"; a="351905933"
+X-IronPort-AV: E=Sophos;i="6.01,168,1684825200"; 
+   d="scan'208";a="351905933"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jun 2023 06:07:29 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10756"; a="841436602"
+X-IronPort-AV: E=Sophos;i="6.01,168,1684825200"; 
+   d="scan'208";a="841436602"
+Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 29 Jun 2023 06:07:27 -0700
+Received: from kbuild by 783282924a45 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1qErMs-000EAL-1o;
+        Thu, 29 Jun 2023 13:07:26 +0000
+Date:   Thu, 29 Jun 2023 21:06:45 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Guo Ren <guoren@linux.alibaba.com>
+Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Palmer Dabbelt <palmer@rivosinc.com>
+Subject: arch/riscv/include/asm/atomic.h:317 arch_atomic_dec_if_positive()
+ warn: inconsistent indenting
+Message-ID: <202306292044.M7rvGInB-lkp@intel.com>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,23 +63,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2023-06-27 at 18:31 -0700, Michael Chan wrote:
-> On Tue, Jun 27, 2023 at 5:13=E2=80=AFPM Tobias Heider <me@tobhe.de> wrote=
-:
-> >=20
-> > Fixes a bug where on the M1 mac mini initramfs-tools fails to
-> > include the necessary firmware into the initrd.
-> >=20
-> > Signed-off-by: Tobias Heider <me@tobhe.de>
->=20
-> Thanks.
-> Reviewed-by: Michael Chan <michael.chan@broadcom.com>
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   3a8a670eeeaa40d87bd38a587438952741980c18
+commit: 1d7f6932c522ea95668e14265175ce3d753d0c24 riscv: atomic: Optimize dec_if_positive functions
+date:   1 year, 1 month ago
+config: riscv-randconfig-m031-20230629 (https://download.01.org/0day-ci/archive/20230629/202306292044.M7rvGInB-lkp@intel.com/config)
+compiler: riscv64-linux-gcc (GCC) 12.3.0
+reproduce: (https://download.01.org/0day-ci/archive/20230629/202306292044.M7rvGInB-lkp@intel.com/reproduce)
 
-This is a borderline situation, but ...=C2=A0
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306292044.M7rvGInB-lkp@intel.com/
 
-Is there a suitable 'Fixes:' tag we can add here?
+smatch warnings:
+arch/riscv/include/asm/atomic.h:317 arch_atomic_dec_if_positive() warn: inconsistent indenting
 
-Thanks!
+vim +317 arch/riscv/include/asm/atomic.h
 
-Paolo
+fab957c11efe2f Palmer Dabbelt 2017-07-10  312  
+1d7f6932c522ea Guo Ren        2022-05-05  313  static __always_inline int arch_atomic_dec_if_positive(atomic_t *v)
+fab957c11efe2f Palmer Dabbelt 2017-07-10  314  {
+fab957c11efe2f Palmer Dabbelt 2017-07-10  315         int prev, rc;
+fab957c11efe2f Palmer Dabbelt 2017-07-10  316  
+fab957c11efe2f Palmer Dabbelt 2017-07-10 @317  	__asm__ __volatile__ (
+5ce6c1f3535fa8 Andrea Parri   2018-03-09  318  		"0:	lr.w     %[p],  %[c]\n"
+1d7f6932c522ea Guo Ren        2022-05-05  319  		"	addi     %[rc], %[p], -1\n"
+5ce6c1f3535fa8 Andrea Parri   2018-03-09  320  		"	bltz     %[rc], 1f\n"
+5ce6c1f3535fa8 Andrea Parri   2018-03-09  321  		"	sc.w.rl  %[rc], %[rc], %[c]\n"
+5ce6c1f3535fa8 Andrea Parri   2018-03-09  322  		"	bnez     %[rc], 0b\n"
+5ce6c1f3535fa8 Andrea Parri   2018-03-09  323  		"	fence    rw, rw\n"
+5ce6c1f3535fa8 Andrea Parri   2018-03-09  324  		"1:\n"
+fab957c11efe2f Palmer Dabbelt 2017-07-10  325  		: [p]"=&r" (prev), [rc]"=&r" (rc), [c]"+A" (v->counter)
+1d7f6932c522ea Guo Ren        2022-05-05  326  		:
+fab957c11efe2f Palmer Dabbelt 2017-07-10  327  		: "memory");
+1d7f6932c522ea Guo Ren        2022-05-05  328  	return prev - 1;
+fab957c11efe2f Palmer Dabbelt 2017-07-10  329  }
+fab957c11efe2f Palmer Dabbelt 2017-07-10  330  
 
+:::::: The code at line 317 was first introduced by commit
+:::::: fab957c11efe2f405e08b9f0d080524bc2631428 RISC-V: Atomic and Locking Code
+
+:::::: TO: Palmer Dabbelt <palmer@dabbelt.com>
+:::::: CC: Palmer Dabbelt <palmer@dabbelt.com>
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
