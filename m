@@ -2,105 +2,214 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E11E27420CF
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 09:15:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D0BF7420DA
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 09:17:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231994AbjF2HPM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 03:15:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49932 "EHLO
+        id S232099AbjF2HR2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 03:17:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231465AbjF2HPH (ORCPT
+        with ESMTP id S232052AbjF2HRY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 03:15:07 -0400
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C31322117;
-        Thu, 29 Jun 2023 00:15:06 -0700 (PDT)
-Received: by mail-ed1-x532.google.com with SMTP id 4fb4d7f45d1cf-51dd0205b2cso618504a12.1;
-        Thu, 29 Jun 2023 00:15:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688022905; x=1690614905;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=thvMoW85YpoDD9DqAHD+r7lZvI1+3RLNdnIDoKSwMvo=;
-        b=KUMUe3OAXpTmLkBxd7SKIOXEXv8B6k9/Ue/bVVu4DVT5n7R01OhAgnFsikqf9o3jGa
-         je/YYsQI2qptIRLB9fd6SrxQwvmh/L1Lb8cyF15dZge1aV/wxn7L70EncETjCOywrdkl
-         804uMSpUqHM1tHWHxsDTgZ9o3haSJVo8b8hKwL8yAxMRrrXqVuCNKpG/NKSrqgfwSZd6
-         0wtMs5nrXaxr4HsIhyH37U44+oy1ZqLbYkALag9u2lmW46KrKCUFlJsb3gacMmAAv7Fw
-         1IFGbXzzdc9CT7zg8sL3SZB0FeuXxCtWnH4rQqlXjG+PpOq7fRN3qPxu/TZwdmHejvvh
-         lbMw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688022905; x=1690614905;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=thvMoW85YpoDD9DqAHD+r7lZvI1+3RLNdnIDoKSwMvo=;
-        b=IPLxqH/sxHUSToKypw6oAc4aU62zGtcy2hPrA4JRE52fbpbb1mUUAX9IuxHAowo7up
-         etTs0PEuW3aJX0wteb8XxVeGxDWwT6TigVx2+M0WYgJqGy/yhTaN+ipxLKz+WvBALdyw
-         NTwDTTZFwBVwhvn/gPE92WyAA9fIvhcSvuI29jnoQKIUhbCWXPGsHiNZAVQZcwdPx3tY
-         uiYpny8R+PjNVJ1gxHfYqcOpxVRqdVFA41+XcwoIRNL0s9VXXV3gDodsTAdhPyFTQtOd
-         EkU9KS5VeBIsCPI2BMimevuP96ykG0cgUtqXgPzGfPSPghyMVSalnexAU0xSK6XzLqT/
-         azzA==
-X-Gm-Message-State: AC+VfDyidMSLkv6dgxxb24tm4umf7LCP9r20xojshUnSbIEl94AOCvvV
-        k5IUOvTdVN7S9P9QwFxl0w0=
-X-Google-Smtp-Source: ACHHUZ667/WX4TLVu0v9Y52VPKGHmH9wZYDu+t1Z1fZv3Lf2UV5U2MGDaqmHtKG6rTxSJTJTUhKXgw==
-X-Received: by 2002:a17:907:2d8f:b0:96a:2dd7:2ee0 with SMTP id gt15-20020a1709072d8f00b0096a2dd72ee0mr3256724ejc.5.1688022905033;
-        Thu, 29 Jun 2023 00:15:05 -0700 (PDT)
-Received: from localhost (dslb-094-220-187-252.094.220.pools.vodafone-ip.de. [94.220.187.252])
-        by smtp.gmail.com with ESMTPSA id jo10-20020a170906f6ca00b0099290e2c161sm1183823ejb.89.2023.06.29.00.15.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Jun 2023 00:15:04 -0700 (PDT)
-From:   Jonas Gorski <jonas.gorski@gmail.com>
-To:     Mark Brown <broonie@kernel.org>,
-        Grant Likely <grant.likely@secretlab.ca>
-Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] spi: bcm63xx: fix max prepend length
-Date:   Thu, 29 Jun 2023 09:14:52 +0200
-Message-Id: <20230629071453.62024-1-jonas.gorski@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        Thu, 29 Jun 2023 03:17:24 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B0DA2117
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 00:17:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1688023040; x=1719559040;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=nK8BedOH27UtXwec6PHB9EByjtu/2aErMUP6wGpmuCk=;
+  b=xbAjcOiJs2pq+HUQBAgXe53uu8/vqlxVa+P5qVEKd6ofMkJyNowMSKp+
+   WYzL6gKtR8uxH4Y+XK30ahSCqvUnQV2fucW6M/tLnwhJvPXYCTgHLZ9cT
+   mz16EoNHYCWKm/kTBX57JjJUmBIsI6Wub2VG/9D203uoRVZfiDCQz/gO/
+   7TM2berwVyUoS2OJZ4XsZmMgRbywgZzZyCtk0pgv2ShsBoSRF3MKB3tzP
+   OekaIRMxCjhyqfiRAksLbZm2/hIFUgAtzKVaXPxEO9efI/TriadXfPpAf
+   Njy6fHkUJgxyFCs4HzsmWzeCJQKLsYfMIenf29djpyq48zZHwTlhl47y4
+   g==;
+X-IronPort-AV: E=Sophos;i="6.01,167,1684825200"; 
+   d="asc'?scan'208";a="159095504"
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 29 Jun 2023 00:17:19 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Thu, 29 Jun 2023 00:17:10 -0700
+Received: from wendy (10.10.115.15) by chn-vm-ex04.mchp-main.com
+ (10.10.85.152) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
+ Transport; Thu, 29 Jun 2023 00:17:08 -0700
+Date:   Thu, 29 Jun 2023 08:16:39 +0100
+From:   Conor Dooley <conor.dooley@microchip.com>
+To:     =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@kernel.org>
+CC:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        <linux-riscv@lists.infradead.org>,
+        Andy Chiu <andy.chiu@sifive.com>,
+        =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@rivosinc.com>,
+        <linux-kernel@vger.kernel.org>, <linux@rivosinc.com>,
+        Palmer Dabbelt <palmer@rivosinc.com>,
+        =?iso-8859-1?Q?R=E9mi?= Denis-Courmont <remi@remlab.net>,
+        Darius Rad <darius@bluespec.com>
+Subject: Re: [PATCH v3] riscv: Discard vector state on syscalls
+Message-ID: <20230629-flight-vanity-c1c86240e7fc@wendy>
+References: <20230629062730.985184-1-bjorn@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="gPSfqy8IpN60HMsQ"
+Content-Disposition: inline
+In-Reply-To: <20230629062730.985184-1-bjorn@kernel.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The command word is defined as following:
+--gPSfqy8IpN60HMsQ
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-    /* Command */
-    #define SPI_CMD_COMMAND_SHIFT           0
-    #define SPI_CMD_DEVICE_ID_SHIFT         4
-    #define SPI_CMD_PREPEND_BYTE_CNT_SHIFT  8
-    #define SPI_CMD_ONE_BYTE_SHIFT          11
-    #define SPI_CMD_ONE_WIRE_SHIFT          12
+Hey,
 
-If the prepend byte count field starts at bit 8, and the next defined
-bit is SPI_CMD_ONE_BYTE at bit 11, it can be at most 3 bits wide, and
-thus the max value is 7, not 15.
+On Thu, Jun 29, 2023 at 08:27:30AM +0200, Bj=F6rn T=F6pel wrote:
+> From: Bj=F6rn T=F6pel <bjorn@rivosinc.com>
+>=20
+> The RISC-V vector specification states:
+>   Executing a system call causes all caller-saved vector registers
+>   (v0-v31, vl, vtype) and vstart to become unspecified.
+>=20
+> The vector registers are set to all 1s, vill is set (invalid), and the
+> vector status is set to Dirty.
+>=20
+> That way we can prevent userspace from accidentally relying on the
+> stated save.
+>=20
+> R=E9mi pointed out [1] that writing to the registers might be
+> superfluous, and setting vill is sufficient.
+>=20
+> Link: https://lore.kernel.org/linux-riscv/12784326.9UPPK3MAeB@basile.reml=
+ab.net/ # [1]
+> Suggested-by: Darius Rad <darius@bluespec.com>
+> Suggested-by: Palmer Dabbelt <palmer@rivosinc.com>
+> Suggested-by: R=E9mi Denis-Courmont <remi@remlab.net>
+> Signed-off-by: Bj=F6rn T=F6pel <bjorn@rivosinc.com>
 
-Fixes: b17de076062a ("spi/bcm63xx: work around inability to keep CS up")
-Signed-off-by: Jonas Gorski <jonas.gorski@gmail.com>
----
- drivers/spi/spi-bcm63xx.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+clang allmodconfig and rv32_defconfig fail to build with this patch,
+according to patchwork:
+=2E./arch/riscv/kernel/traps.c:299:3: error: call to undeclared function 'r=
+iscv_v_vstate_discard'; ISO C99 and later do not support implicit function =
+declarations [-Wimplicit-function-declaration]
 
-diff --git a/drivers/spi/spi-bcm63xx.c b/drivers/spi/spi-bcm63xx.c
-index 9aecb77c3d89..07b5b71b2352 100644
---- a/drivers/spi/spi-bcm63xx.c
-+++ b/drivers/spi/spi-bcm63xx.c
-@@ -126,7 +126,7 @@ enum bcm63xx_regs_spi {
- 	SPI_MSG_DATA_SIZE,
- };
- 
--#define BCM63XX_SPI_MAX_PREPEND		15
-+#define BCM63XX_SPI_MAX_PREPEND		7
- 
- #define BCM63XX_SPI_MAX_CS		8
- #define BCM63XX_SPI_BUS_NUM		0
--- 
-2.34.1
+Cheers,
+Conor.
 
+> ---
+>=20
+> v2->v3:
+>   Set state to Dirty after discard, for proper ptrace() handling
+>   (Andy)
+>=20
+> v1->v2:
+>   Proper register restore for initial state (Andy)
+>   Set registers to 1s, and not 0s (Darius)
+>=20
+> ---
+>  arch/riscv/include/asm/vector.h | 33 +++++++++++++++++++++++++++++++++
+>  arch/riscv/kernel/traps.c       |  2 ++
+>  2 files changed, 35 insertions(+)
+>=20
+> diff --git a/arch/riscv/include/asm/vector.h b/arch/riscv/include/asm/vec=
+tor.h
+> index 04c0b07bf6cd..0b23056503c5 100644
+> --- a/arch/riscv/include/asm/vector.h
+> +++ b/arch/riscv/include/asm/vector.h
+> @@ -33,6 +33,11 @@ static inline void __riscv_v_vstate_clean(struct pt_re=
+gs *regs)
+>  	regs->status =3D (regs->status & ~SR_VS) | SR_VS_CLEAN;
+>  }
+> =20
+> +static inline void __riscv_v_vstate_dirty(struct pt_regs *regs)
+> +{
+> +	regs->status =3D (regs->status & ~SR_VS) | SR_VS_DIRTY;
+> +}
+> +
+>  static inline void riscv_v_vstate_off(struct pt_regs *regs)
+>  {
+>  	regs->status =3D (regs->status & ~SR_VS) | SR_VS_OFF;
+> @@ -128,6 +133,34 @@ static inline void __riscv_v_vstate_restore(struct _=
+_riscv_v_ext_state *restore_
+>  	riscv_v_disable();
+>  }
+> =20
+> +static inline void __riscv_v_vstate_discard(void)
+> +{
+> +	unsigned long vl, vtype_inval =3D 1UL << (BITS_PER_LONG - 1);
+> +
+> +	riscv_v_enable();
+> +	asm volatile (
+> +		".option push\n\t"
+> +		".option arch, +v\n\t"
+> +		"vsetvli	%0, x0, e8, m8, ta, ma\n\t"
+> +		"vmv.v.i	v0, -1\n\t"
+> +		"vmv.v.i	v8, -1\n\t"
+> +		"vmv.v.i	v16, -1\n\t"
+> +		"vmv.v.i	v24, -1\n\t"
+> +		"vsetvl		%0, x0, %1\n\t"
+> +		".option pop\n\t"
+> +		: "=3D&r" (vl) : "r" (vtype_inval) : "memory");
+> +	riscv_v_disable();
+> +}
+> +
+> +static inline void riscv_v_vstate_discard(struct pt_regs *regs)
+> +{
+> +	if ((regs->status & SR_VS) =3D=3D SR_VS_OFF)
+> +		return;
+> +
+> +	__riscv_v_vstate_discard();
+> +	__riscv_v_vstate_dirty(regs);
+> +}
+> +
+>  static inline void riscv_v_vstate_save(struct task_struct *task,
+>  				       struct pt_regs *regs)
+>  {
+> diff --git a/arch/riscv/kernel/traps.c b/arch/riscv/kernel/traps.c
+> index 5158961ea977..5ff63a784a6d 100644
+> --- a/arch/riscv/kernel/traps.c
+> +++ b/arch/riscv/kernel/traps.c
+> @@ -296,6 +296,8 @@ asmlinkage __visible __trap_section void do_trap_ecal=
+l_u(struct pt_regs *regs)
+>  		regs->epc +=3D 4;
+>  		regs->orig_a0 =3D regs->a0;
+> =20
+> +		riscv_v_vstate_discard(regs);
+> +
+>  		syscall =3D syscall_enter_from_user_mode(regs, syscall);
+> =20
+>  		if (syscall < NR_syscalls)
+>=20
+> base-commit: 488833ccdcac118da16701f4ee0673b20ba47fe3
+> --=20
+> 2.39.2
+>=20
+
+--gPSfqy8IpN60HMsQ
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZJ0vyAAKCRB4tDGHoIJi
+0lq4AQDJmBkHL9uIQXrGq+rw+KjV4YUtkqA5kGQjaCE1hV7yRgD+IhiI2ceg403c
+DPXV+9dDiRYpV22IGnuLTS/P4kB8dAU=
+=gsD+
+-----END PGP SIGNATURE-----
+
+--gPSfqy8IpN60HMsQ--
