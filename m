@@ -2,101 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DB407423CA
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 12:15:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A358B7423D2
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 12:17:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230190AbjF2KPd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 06:15:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49600 "EHLO
+        id S230119AbjF2KRA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 06:17:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232182AbjF2KOt (ORCPT
+        with ESMTP id S231834AbjF2KPu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 06:14:49 -0400
-Received: from mail-oo1-f70.google.com (mail-oo1-f70.google.com [209.85.161.70])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0442C3593
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 03:14:03 -0700 (PDT)
-Received: by mail-oo1-f70.google.com with SMTP id 006d021491bc7-558c1394636so647585eaf.0
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 03:14:02 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688033642; x=1690625642;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=nbTDt8O8YnKp6qSkf23f21/gUgnuCkFPdBbsf+Eovdg=;
-        b=LuUY5E2DJa/awKtKWO+BJTCBsSy76Eb8k9NtHwx+OrzyNzOlsVhSaocWgvFL12Hxdp
-         TxIsAxbL2urLeR31GU3zASYrOSk7s8SBd7rkMPcFjUtUjF7DxeXtppdWeuHKfgXzXRvs
-         wKMVgkTi3L6AhmkdG1J45Quw02l5SVDUCIALGh9BzZVb0Yc3F5rg1vM4wOonhSC5fpoR
-         c/2Ove0gxkfwLlaut3NgfgGNg7SING03iG3zIjpWOU2UrYPehhRVUVEFBoVEVg59weMv
-         HPC0a+q3OzC2Q3FTaVs1VVTxwnlyjXmi4jnzi6o9QSh+L638M7wylzjDA1dMYkT9Qvz6
-         fTlw==
-X-Gm-Message-State: AC+VfDxH/hJXn8R6qMlqfdhBFMXctiF83R1ExzsELsPVW4zT0BwlS5WU
-        zPYYvHplJkBKjpT1NI4M/ypbXRULefnVgQLPv+wUCpCgV5qJ
-X-Google-Smtp-Source: ACHHUZ4TDuu4wLKEbVkIRWqidc5fW5oERyi9bovBtN9/nZFZ60TWvJocbnPLlZyHmb74xnJB42DcXz+4Db0kZUQihT94vE/CYU/x
+        Thu, 29 Jun 2023 06:15:50 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CCB63582;
+        Thu, 29 Jun 2023 03:15:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1688033730; x=1719569730;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=X08EZN+DaChxrUMPDyxcVgkqN2it75n3TMT5gy+uEis=;
+  b=L5d3evnNqWGW76tiJqtGFD7voBsrSWu0SXiIO9ugJ9xls9PHvuLyK3No
+   POgwlozs3TdTMDxFiS1PzRmKd+svLW5vvDzXemunWRBSuUQBUhb2KPray
+   Ti8m1Y3M8E3mqjO9lh/iHZF/HPvaJ9XBEtffKIalDpogQfdgGTznUnRXv
+   rE2MKl1n9W2LDaaFQH6X1CdrgsdR45o/PXIYOVqGACBpO0QU3mcn8w6QG
+   PRxcVnWwBMWt7lmiCcEZDXw9161ryZDComIs+pQ3G/exrgz29/LADwdlU
+   H3HebIwUV2gFydY8gVI1QbFCr1aha+9icVNO8XScxNC7oYClfLtiRGKv7
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10755"; a="448452077"
+X-IronPort-AV: E=Sophos;i="6.01,168,1684825200"; 
+   d="scan'208";a="448452077"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jun 2023 03:15:29 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10755"; a="694569273"
+X-IronPort-AV: E=Sophos;i="6.01,168,1684825200"; 
+   d="scan'208";a="694569273"
+Received: from aahouzi-mobl.ger.corp.intel.com (HELO box.shutemov.name) ([10.249.47.115])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jun 2023 03:15:22 -0700
+Received: by box.shutemov.name (Postfix, from userid 1000)
+        id 29F1F1095C8; Thu, 29 Jun 2023 13:15:19 +0300 (+03)
+Date:   Thu, 29 Jun 2023 13:15:19 +0300
+From:   kirill.shutemov@linux.intel.com
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Kai Huang <kai.huang@intel.com>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, linux-mm@kvack.org, x86@kernel.org,
+        dave.hansen@intel.com, tony.luck@intel.com, tglx@linutronix.de,
+        bp@alien8.de, mingo@redhat.com, hpa@zytor.com, seanjc@google.com,
+        pbonzini@redhat.com, david@redhat.com, dan.j.williams@intel.com,
+        rafael.j.wysocki@intel.com, ashok.raj@intel.com,
+        reinette.chatre@intel.com, len.brown@intel.com, ak@linux.intel.com,
+        isaku.yamahata@intel.com, ying.huang@intel.com, chao.gao@intel.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com, nik.borisov@suse.com,
+        bagasdotme@gmail.com, sagis@google.com, imammedo@redhat.com
+Subject: Re: [PATCH v12 05/22] x86/virt/tdx: Add SEAMCALL infrastructure
+Message-ID: <20230629101519.xhuia6d4gtiosesh@box.shutemov.name>
+References: <cover.1687784645.git.kai.huang@intel.com>
+ <b2a875fd855145728744617ac4425a06d8b46c90.1687784645.git.kai.huang@intel.com>
+ <20230628125813.GA2438817@hirez.programming.kicks-ass.net>
+ <20230628135436.GC2439977@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-X-Received: by 2002:a4a:d028:0:b0:563:47e5:d5a4 with SMTP id
- w8-20020a4ad028000000b0056347e5d5a4mr2227835oor.0.1688033642417; Thu, 29 Jun
- 2023 03:14:02 -0700 (PDT)
-Date:   Thu, 29 Jun 2023 03:14:02 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000a015e205ff41f54a@google.com>
-Subject: [syzbot] Monthly btrfs report (Jun 2023)
-From:   syzbot <syzbot+list8679aaba80d87386e95e@syzkaller.appspotmail.com>
-To:     clm@fb.com, dsterba@suse.com, josef@toxicpanda.com,
-        linux-btrfs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230628135436.GC2439977@hirez.programming.kicks-ass.net>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello btrfs maintainers/developers,
+On Wed, Jun 28, 2023 at 03:54:36PM +0200, Peter Zijlstra wrote:
+> On Wed, Jun 28, 2023 at 02:58:13PM +0200, Peter Zijlstra wrote:
+> 
+> > Can someone explain to me why __tdx_hypercall() is sane (per the above)
+> > but then we grew __tdx_module_call() as an absolute abomination and are
+> > apparently using that for seam too?
+> 
+> That is, why do we have two different TDCALL wrappers? Makes no sense.
 
-This is a 31-day syzbot report for the btrfs subsystem.
-All related reports/information can be found at:
-https://syzkaller.appspot.com/upstream/s/btrfs
+__tdx_module_call() is the wrapper for TDCALL.
 
-During the period, 5 new issues were detected and 2 were fixed.
-In total, 52 issues are still open and 30 have been fixed so far.
+__tdx_hypercall() is the wrapper for TDG.VP.VMCALL leaf function of
+TDCALL. The function is used often and it uses wider range or registers
+comparing to the rest of the TDCALL functions.
 
-Some of the still happening issues:
-
-Ref  Crashes Repro Title
-<1>  3774    Yes   kernel BUG in close_ctree
-                   https://syzkaller.appspot.com/bug?extid=2665d678fffcc4608e18
-<2>  898     Yes   VFS: Busy inodes after unmount (use-after-free)
-                   https://syzkaller.appspot.com/bug?extid=0af00f6a2cba2058b5db
-<3>  573     Yes   WARNING in btrfs_space_info_update_bytes_may_use
-                   https://syzkaller.appspot.com/bug?extid=8edfa01e46fd9fe3fbfb
-<4>  550     Yes   WARNING in __kernel_write_iter
-                   https://syzkaller.appspot.com/bug?extid=12e098239d20385264d3
-<5>  273     Yes   kernel BUG at fs/inode.c:LINE! (2)
-                   https://syzkaller.appspot.com/bug?extid=c92c93d1f1aaaacdb9db
-<6>  223     Yes   WARNING in lookup_inline_extent_backref
-                   https://syzkaller.appspot.com/bug?extid=d6f9ff86c1d804ba2bc6
-<7>  208     Yes   WARNING in btrfs_remove_chunk
-                   https://syzkaller.appspot.com/bug?extid=e8582cc16881ec70a430
-<8>  197     Yes   WARNING in btrfs_chunk_alloc
-                   https://syzkaller.appspot.com/bug?extid=e8e56d5d31d38b5b47e7
-<9>  187     Yes   possible deadlock in btrfs_search_slot
-                   https://syzkaller.appspot.com/bug?extid=c06034aecf9f5eab1ac1
-<10> 162     Yes   kernel BUG in assertfail (2)
-                   https://syzkaller.appspot.com/bug?extid=c4614eae20a166c25bf0
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-To disable reminders for individual bugs, reply with the following command:
-#syz set <Ref> no-reminders
-
-To change bug's subsystems, reply with:
-#syz set <Ref> subsystems: new-subsystem
-
-You may send multiple commands in a single email message.
+-- 
+  Kiryl Shutsemau / Kirill A. Shutemov
