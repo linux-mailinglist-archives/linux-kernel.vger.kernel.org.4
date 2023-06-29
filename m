@@ -2,125 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ABA2D742AB1
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 18:34:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BA71742AAF
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 18:33:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232174AbjF2QeD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 12:34:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44638 "EHLO
+        id S232091AbjF2Qdr convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 29 Jun 2023 12:33:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232096AbjF2QeB (ORCPT
+        with ESMTP id S229445AbjF2Qdp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 12:34:01 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2F0030DF
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 09:33:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1688056390;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=T9WhCFKDeQiwQ9P8Z4ZmNdOekWIBt/DtpJr87ziAM18=;
-        b=b3LQwxzABBnHbZK7z49S53ZrBl/EsBzFEj3qU2BD5Ni2rMvy9W5VfMtMG6DBGfNpL47EnJ
-        q+egCDPfjwSh1iR6P1vzN2G4uwtPBjNfCye5ZZ4Gz7JJlDh5J7+lcIBnr2/DmZXskGYuRC
-        fiE6od1MS+yqkeYdmIaM1yI8d2BP9Vk=
-Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
- [209.85.219.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-618-4TqSVGPkO8-U1TGome_zkg-1; Thu, 29 Jun 2023 12:33:08 -0400
-X-MC-Unique: 4TqSVGPkO8-U1TGome_zkg-1
-Received: by mail-qv1-f70.google.com with SMTP id 6a1803df08f44-635eb5b04e1so1930146d6.1
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 09:33:08 -0700 (PDT)
+        Thu, 29 Jun 2023 12:33:45 -0400
+Received: from mail-yw1-f177.google.com (mail-yw1-f177.google.com [209.85.128.177])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 698BA30EC;
+        Thu, 29 Jun 2023 09:33:43 -0700 (PDT)
+Received: by mail-yw1-f177.google.com with SMTP id 00721157ae682-56ff9cc91b4so8633227b3.0;
+        Thu, 29 Jun 2023 09:33:43 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688056387; x=1690648387;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=T9WhCFKDeQiwQ9P8Z4ZmNdOekWIBt/DtpJr87ziAM18=;
-        b=awB4bMFgQVJyiY/UWSfoxOoRumnI6mIPDBK7V7p+CH8dhrEzeW81KLHJm4Z+EZX2Ub
-         PHQWK/Sxd9JG+8VgzXTO2SmVK7ObH3si24cT2pduebnRHCW4KneoBqxVgBx0/b/yeaqr
-         gZYtLeUrnPw2DELttJb6E4ZLNN3+3jtknTrEXewD6oNc2Mur6n6m8923gYeRUaecqO4Y
-         JFRiYXJrunXZuHnYdt4ZWsIIcQBlfcVzb5w7gNqlt7K+tQSnS1PIZjeD7V5CGTBpsdlm
-         04DApvoNZyV6rFQgkyjfy4eNoj6dnAZWVCq3hL5oKal63iWak2IAjLA9Cg0U5CeaAWFQ
-         BvPQ==
-X-Gm-Message-State: ABy/qLasB/KrriVbBRsHhXzg1n8IB6ggQy5JenCYPgJIJrTAkqtVC+UD
-        Jq4sWlDMNTujma3eec1A+WS09RSY9t74kBW+GBYv07kZyh6QX589IPhj9EaxaxQPTWBVY+5eLDL
-        ggRYbNlLPK0beFLbKYzglHca8
-X-Received: by 2002:a0c:fbcf:0:b0:62b:5410:322d with SMTP id n15-20020a0cfbcf000000b0062b5410322dmr183812qvp.6.1688056387479;
-        Thu, 29 Jun 2023 09:33:07 -0700 (PDT)
-X-Google-Smtp-Source: APBJJlEsboSyRALJa4QGaJl+D6XdcWr9w6NJmcI+LBYwqVfR+4ZEGxEM7LvIqdoVBmRJd0KtsVwtMg==
-X-Received: by 2002:a0c:fbcf:0:b0:62b:5410:322d with SMTP id n15-20020a0cfbcf000000b0062b5410322dmr183772qvp.6.1688056387069;
-        Thu, 29 Jun 2023 09:33:07 -0700 (PDT)
-Received: from x1n (cpe5c7695f3aee0-cm5c7695f3aede.cpe.net.cable.rogers.com. [99.254.144.39])
-        by smtp.gmail.com with ESMTPSA id w2-20020a0cfc42000000b005ef81cc63ccsm7174643qvp.117.2023.06.29.09.33.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Jun 2023 09:33:06 -0700 (PDT)
-Date:   Thu, 29 Jun 2023 12:32:56 -0400
-From:   Peter Xu <peterx@redhat.com>
-To:     Suren Baghdasaryan <surenb@google.com>
-Cc:     akpm@linux-foundation.org, willy@infradead.org, hannes@cmpxchg.org,
-        mhocko@suse.com, josef@toxicpanda.com, jack@suse.cz,
-        ldufour@linux.ibm.com, laurent.dufour@fr.ibm.com,
-        michel@lespinasse.org, liam.howlett@oracle.com, jglisse@google.com,
-        vbabka@suse.cz, minchan@google.com, dave@stgolabs.net,
-        punit.agrawal@bytedance.com, lstoakes@gmail.com, hdanton@sina.com,
-        apopple@nvidia.com, ying.huang@intel.com, david@redhat.com,
-        yuzhao@google.com, dhowells@redhat.com, hughd@google.com,
-        viro@zeniv.linux.org.uk, brauner@kernel.org,
-        pasha.tatashin@soleen.com, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-team@android.com
-Subject: Re: [PATCH v5 6/6] mm: handle userfaults under VMA lock
-Message-ID: <ZJ2yOACwp7B2poIw@x1n>
-References: <20230628172529.744839-1-surenb@google.com>
- <20230628172529.744839-7-surenb@google.com>
- <ZJxulItq9iHi2Uew@x1n>
- <CAJuCfpEPpdEScAG_UOiNfOTpue9ro0AP6414C4tBaK1rbVK7Hw@mail.gmail.com>
+        d=1e100.net; s=20221208; t=1688056422; x=1690648422;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :reply-to:in-reply-to:references:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=kxwLFy9k5SNI8Gdm+Tnj9m12doV32P23RU600L8QjFM=;
+        b=gVznQFVknbOmCARjquBMr1OT8KRbF3We6ulGs2cNxw9OXyWZX+5FKs+Zxv3Ub2g+ma
+         bcC85fsWSk0LRs8MsO3L14u8XtipkU8DCKCmJeiPRys3fcEq7TgKinQEHKTxi8Qh/F4O
+         vm/0nykSctWTlbCze73VxO9nXcgVW2fyouE8iUX8nxFIB1S78xrrAziKSv4PeWfTIKVO
+         396/gpFmiCFxGTs0aSSeOCYfMh5Qs26N9sBhRvf+4Q5+wyNveLI7JZVR1cgtlDs8H2Dc
+         E0MWz8DzhhLtHAsI6PolGQamHHhRlBauxk3ZQrrmBFe1ky5xXVJHHjMs9ao9mwCfMklE
+         IHRg==
+X-Gm-Message-State: AC+VfDwo9N1GEF6CC4qL9jxkmDk4Vypa5ZIAG+g7OYVpAsf7wl2B3uQJ
+        5F2SR4trcMTR1bf1xBAynSKC3PinJvUQZu1q
+X-Google-Smtp-Source: ACHHUZ5iyGmPuvQukcLpT2LzCpG3w8iqjWw+QfhU7G7jklt/n3IM5gQnPQhXemCRw8Wk7zNBapCtKQ==
+X-Received: by 2002:a81:6cd7:0:b0:56d:9e9:c2a1 with SMTP id h206-20020a816cd7000000b0056d09e9c2a1mr44903395ywc.16.1688056422260;
+        Thu, 29 Jun 2023 09:33:42 -0700 (PDT)
+Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com. [209.85.219.177])
+        by smtp.gmail.com with ESMTPSA id q130-20020a817588000000b0057725aeb4afsm399314ywc.84.2023.06.29.09.33.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 29 Jun 2023 09:33:41 -0700 (PDT)
+Received: by mail-yb1-f177.google.com with SMTP id 3f1490d57ef6-bd77424c886so809508276.0;
+        Thu, 29 Jun 2023 09:33:40 -0700 (PDT)
+X-Received: by 2002:a25:3252:0:b0:c1a:bff5:377d with SMTP id
+ y79-20020a253252000000b00c1abff5377dmr299680yby.64.1688056420537; Thu, 29 Jun
+ 2023 09:33:40 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAJuCfpEPpdEScAG_UOiNfOTpue9ro0AP6414C4tBaK1rbVK7Hw@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230626095223.721011-1-xianwei.zhao@amlogic.com>
+ <20230626-viewless-marrow-17838c2172f6@wendy> <676db602-54d8-d6b0-274f-365e65a2102c@amlogic.com>
+ <20230627-unsure-uniformly-079cad2c26e6@wendy> <061bb829-fb75-d154-0c15-9f0f982fec41@amlogic.com>
+In-Reply-To: <061bb829-fb75-d154-0c15-9f0f982fec41@amlogic.com>
+Reply-To: tanure@linux.com
+From:   Lucas Tanure <tanure@linux.com>
+Date:   Thu, 29 Jun 2023 17:33:29 +0100
+X-Gmail-Original-Message-ID: <CAJX_Q+0Kf3zFyUtkCEkm7K8zXwaovxQmo1DWFwy8y25GQ2wqXg@mail.gmail.com>
+Message-ID: <CAJX_Q+0Kf3zFyUtkCEkm7K8zXwaovxQmo1DWFwy8y25GQ2wqXg@mail.gmail.com>
+Subject: Re: [PATCH 0/2] Baisc devicetree support for Amlogic T7
+To:     Xianwei Zhao <xianwei.zhao@amlogic.com>
+Cc:     Conor Dooley <conor.dooley@microchip.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-amlogic@lists.infradead.org, devicetree@vger.kernel.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 28, 2023 at 05:19:31PM -0700, Suren Baghdasaryan wrote:
-> On Wed, Jun 28, 2023 at 10:32 AM Peter Xu <peterx@redhat.com> wrote:
-> >
-> > On Wed, Jun 28, 2023 at 10:25:29AM -0700, Suren Baghdasaryan wrote:
-> > > Enable handle_userfault to operate under VMA lock by releasing VMA lock
-> > > instead of mmap_lock and retrying. Note that FAULT_FLAG_RETRY_NOWAIT
-> > > should never be used when handling faults under per-VMA lock protection
-> > > because that would break the assumption that lock is dropped on retry.
-> > >
-> > > Signed-off-by: Suren Baghdasaryan <surenb@google.com>
-> >
-> > Maybe the sanitize_fault_flags() changes suite more in patch 3, but not a
-> > big deal I guess.
-> 
-> IIUC FAULT_FLAG_RETRY_NOWAIT comes into play in this patchset only in
-> the context of uffds, therefore that check seems to be needed when we
-> enable per-VMA lock uffd support, which is this patch. Does that make
-> sense?
+On Tue, Jun 27, 2023 at 8:52 AM Xianwei Zhao <xianwei.zhao@amlogic.com> wrote:
+>
+>
+> On 2023/6/27 15:23, Conor Dooley wrote:
+>
+>
+>  > [ EXTERNAL EMAIL ]
+>  >
+>  > On Tue, Jun 27, 2023 at 02:13:34PM +0800, Xianwei Zhao wrote:
+>  >> Hi Conor,
+>  >>      Thanks for you reply.
+>  >> On 2023/6/26 18:02, Conor Dooley wrote:
+>  >>
+>  >>
+>  >>> [ EXTERNAL EMAIL ]
+>  >>>
+>  >>> Hey,
+>  >>>
+>  >>> On Mon, Jun 26, 2023 at 05:52:21PM +0800, Xianwei Zhao wrote:
+>  >>>> T7 is an advanced application processor designed for smart display.
+>  >>>>
+>  >>>> Add the new T7 SoC/board device tree bindings.
+>  >>>>
+>  >>>> Add basic support for the T7 based Amlogic AN400 board, which
+>  >>>> describesthe following components: CPU, GIC, IRQ, Timer, UART. It's
+>  >>>> capable of booting up into the serial console.
+>  >>>
+>  >>> Lucas has already sent patches for the T7 SoC & is at v5:
+>  >>> https://lore.kernel.org/linux-devicetree/20230623081242.109131-1-
+>  >>> tanure@linux.com/
+>  >>> There's been a bit of discussion there, and there serial stuff in
+>  >>> particular is different in his series (it doesn't use always-on for
+>  >>> examples).
+>  >>> Could you please go and take a look at his series?
+>  >>>
+>  >>> Cheers,
+>  >>> Conor.
+>  >>>
+>  >> AN400 is the reference board designed by Amlogic, which is different
+>  >> from Khadas VIM4.
+>  >
+>  > Yet you share the same dtsi, which he has got through several
+>  > iterations of before you arrived.
+>  >
+> Hi Lucas,
+> Are you going to continue with the dtsi part?
+>
+>  >> And T7 serial is the same as S4, so I follow S4 serial.
+>  >
+>  > Yeah, no. SoC specific compatible please.
+>  >
+>  >
+>  > _______________________________________________
+>  > linux-amlogic mailing list
+>  > linux-amlogic@lists.infradead.org
+>  > http://lists.infradead.org/mailman/listinfo/linux-amlogic
 
-I don't see why uffd is special in this regard, as e.g. swap also checks
-NOWAIT when folio_lock_or_retry() so I assume it's also used there.
+Hi Xianwei,
 
-IMHO the "NOWAIT should never apply with VMA_LOCK so far" assumption starts
-from patch 3 where it conditionally releases the vma lock when
-!(RETRY|COMPLETE); that is the real place where it can start to go wrong if
-anyone breaks the assumption.
+I am doing the basics for Amlogic T7 A311D2, but the next step ( sd
+card or emmc, something to boot on) would be more difficult for me
+than you.
+After the first series for Vim4 gets merged, I will start to work on
+how to get sd cards working.
+But if you already have that working for the AN400 board, please send
+it. And I will look at that work and use it for Vim4.
 
-Thanks,
+Or, if you don't have it ready and want to share it with me, we can
+work together on these A311D2 patches.
+You test on AN400, and I test on Vim4.
 
--- 
-Peter Xu
-
+Thanks
+Lucas
