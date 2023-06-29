@@ -2,284 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04F9A742504
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 13:32:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1B7E742500
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 13:32:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231842AbjF2Lco (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 07:32:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41962 "EHLO
+        id S231681AbjF2LcA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 07:32:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230446AbjF2Lcm (ORCPT
+        with ESMTP id S229615AbjF2Lb6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 07:32:42 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAFED30EF
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 04:31:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1688038310;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=GoRf97kbYDZBwP3J/hRLkmLH66DPLZ1hXk0cIFzlfrw=;
-        b=UHqhwF6xjt988sSEBupUu9ISBiXf7lhcEpC5VewolOS7sQ5EwrDDq53s0F2/b98ILu4Jyv
-        c0y1aaIa/N5nP542j2L9rbpreLXYfznkGJMUhAIEy7z+pAdw3dY0L7b+btjIfTKcLliIn4
-        MkRyF9HBJ4u2oXIj1CYQuju7UOKyirY=
-Received: from mail-lf1-f69.google.com (mail-lf1-f69.google.com
- [209.85.167.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-609-nc5NhRObPNqx-pUd6wb2zw-1; Thu, 29 Jun 2023 07:31:47 -0400
-X-MC-Unique: nc5NhRObPNqx-pUd6wb2zw-1
-Received: by mail-lf1-f69.google.com with SMTP id 2adb3069b0e04-4fb76659d44so566354e87.3
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 04:31:47 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688038306; x=1690630306;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=GoRf97kbYDZBwP3J/hRLkmLH66DPLZ1hXk0cIFzlfrw=;
-        b=IMcwJJODkF72Q07gSBcnYmkmSeBjLVzQRIVRhpCXhY1Pud3HvCpdakrobvuyAEh4XV
-         7Qf1HRDarM14vPJGUmJwq7YsQ2YgkR49HBMz3zgsqXgZR/qnlq7F4RCobDBCEeiWHg7e
-         dOe0u9HSmvccwqxY4W9cwFod18XcaSb+NAX9eu8CHIFne6TJzW/Lr92QiDZW3Npy1k5p
-         lWFIA+7CQmWSG1ciD/XDC9ZRZGt61SAIo2OWYxAQs+c+0wrAB7WwAhjLzVt6nZOark2g
-         8sL6GVjhhfU+Mkg0WjLd1azBEZZVtJJBBxV0btRW4q3bJY+xYbvfC3omKrEFJQqCXwo5
-         JOkg==
-X-Gm-Message-State: ABy/qLb+mlfgJ6Ik7/H3LQ48ZYzlRZIVcdXIOQXxL0hedstRTCsnuA/f
-        N/u6gOnlPk+CS50qEz2cR4Rz3rdbLQgu061EQvYj3dl9Lmq83y6qutxl9QhL7nCODicI3P228Dc
-        pRx1hvv7BnnmOUE2RAnDnOy5g
-X-Received: by 2002:ac2:4c48:0:b0:4fb:9595:15e9 with SMTP id o8-20020ac24c48000000b004fb959515e9mr3245786lfk.22.1688038305945;
-        Thu, 29 Jun 2023 04:31:45 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ759QKQQgqTCxa6IKWpXNlinwcvLHmiY40QmBJrFlDbDPxQTAATynaKDRxhNlc/1jVC7j3A+Q==
-X-Received: by 2002:ac2:4c48:0:b0:4fb:9595:15e9 with SMTP id o8-20020ac24c48000000b004fb959515e9mr3245756lfk.22.1688038305499;
-        Thu, 29 Jun 2023 04:31:45 -0700 (PDT)
-Received: from ?IPV6:2a09:80c0:192:0:5dac:bf3d:c41:c3e7? ([2a09:80c0:192:0:5dac:bf3d:c41:c3e7])
-        by smtp.gmail.com with ESMTPSA id hn8-20020a05600ca38800b003fa722e8b48sm19303141wmb.32.2023.06.29.04.31.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 29 Jun 2023 04:31:45 -0700 (PDT)
-Message-ID: <bd9ce008-528b-2009-b157-6d69f1cf5530@redhat.com>
-Date:   Thu, 29 Jun 2023 13:31:43 +0200
+        Thu, 29 Jun 2023 07:31:58 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 714C8132;
+        Thu, 29 Jun 2023 04:31:56 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C511DC14;
+        Thu, 29 Jun 2023 04:32:39 -0700 (PDT)
+Received: from [10.1.27.40] (C02Z41KALVDN.cambridge.arm.com [10.1.27.40])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 45CFC3F64C;
+        Thu, 29 Jun 2023 04:31:53 -0700 (PDT)
+Message-ID: <09ef8f66-6697-d803-89ac-228a6fe2e604@arm.com>
+Date:   Thu, 29 Jun 2023 12:31:52 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v12 07/22] x86/virt/tdx: Add skeleton to enable TDX on
- demand
-Content-Language: en-US
-To:     Kai Huang <kai.huang@intel.com>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org
-Cc:     linux-mm@kvack.org, x86@kernel.org, dave.hansen@intel.com,
-        kirill.shutemov@linux.intel.com, tony.luck@intel.com,
-        peterz@infradead.org, tglx@linutronix.de, bp@alien8.de,
-        mingo@redhat.com, hpa@zytor.com, seanjc@google.com,
-        pbonzini@redhat.com, dan.j.williams@intel.com,
-        rafael.j.wysocki@intel.com, ashok.raj@intel.com,
-        reinette.chatre@intel.com, len.brown@intel.com, ak@linux.intel.com,
-        isaku.yamahata@intel.com, ying.huang@intel.com, chao.gao@intel.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com, nik.borisov@suse.com,
-        bagasdotme@gmail.com, sagis@google.com, imammedo@redhat.com
-References: <cover.1687784645.git.kai.huang@intel.com>
- <104d324cd68b12e14722ee5d85a660cccccd8892.1687784645.git.kai.huang@intel.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <104d324cd68b12e14722ee5d85a660cccccd8892.1687784645.git.kai.huang@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.12.0
+Subject: Re: [PATCH v1 08/10] mm: Kconfig hooks to determine max anon folio
+ allocation order
+To:     Yang Shi <shy828301@gmail.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Yin Fengwei <fengwei.yin@intel.com>,
+        David Hildenbrand <david@redhat.com>,
+        Yu Zhao <yuzhao@google.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-alpha@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, linux-s390@vger.kernel.org
+References: <20230626171430.3167004-1-ryan.roberts@arm.com>
+ <20230626171430.3167004-9-ryan.roberts@arm.com>
+ <CAHbLzkpScGq-ja2A6dRffG8qbrVuwXzkMpFvSq_Fzdqp2wUwPA@mail.gmail.com>
+From:   Ryan Roberts <ryan.roberts@arm.com>
+In-Reply-To: <CAHbLzkpScGq-ja2A6dRffG8qbrVuwXzkMpFvSq_Fzdqp2wUwPA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 26.06.23 16:12, Kai Huang wrote:
-> To enable TDX the kernel needs to initialize TDX from two perspectives:
-> 1) Do a set of SEAMCALLs to initialize the TDX module to make it ready
-> to create and run TDX guests; 2) Do the per-cpu initialization SEAMCALL
-> on one logical cpu before the kernel wants to make any other SEAMCALLs
-> on that cpu (including those involved during module initialization and
-> running TDX guests).
+On 29/06/2023 02:38, Yang Shi wrote:
+> On Mon, Jun 26, 2023 at 10:15 AM Ryan Roberts <ryan.roberts@arm.com> wrote:
+>>
+>> For variable-order anonymous folios, we need to determine the order that
+>> we will allocate. From a SW perspective, the higher the order we
+>> allocate, the less overhead we will have; fewer faults, fewer folios in
+>> lists, etc. But of course there will also be more memory wastage as the
+>> order increases.
+>>
+>> From a HW perspective, there are memory block sizes that can be
+>> beneficial to reducing TLB pressure. arm64, for example, has the ability
+>> to map "contpte" sized chunks (64K for a 4K base page, 2M for 16K and
+>> 64K base pages) such that one of these chunks only uses a single TLB
+>> entry.
+>>
+>> So we let the architecture specify the order of the maximally beneficial
+>> mapping unit when PTE-mapped. Furthermore, because in some cases, this
+>> order may be quite big (and therefore potentially wasteful of memory),
+>> allow the arch to specify 2 values; One is the max order for a mapping
+>> that _would not_ use THP if all size and alignment constraints were met,
+>> and the other is the max order for a mapping that _would_ use THP if all
+>> those constraints were met.
+>>
+>> Implement this with Kconfig by introducing some new options to allow the
+>> architecture to declare that it supports large anonymous folios along
+>> with these 2 preferred max order values. Then introduce a user-facing
+>> option, LARGE_ANON_FOLIO, which defaults to disabled and can only be
+>> enabled if the architecture has declared its support. When disabled, it
+>> forces the max order values, LARGE_ANON_FOLIO_NOTHP_ORDER_MAX and
+>> LARGE_ANON_FOLIO_THP_ORDER_MAX to 0, meaning only a single page is ever
+>> allocated.
+>>
+>> Signed-off-by: Ryan Roberts <ryan.roberts@arm.com>
+>> ---
+>>  mm/Kconfig  | 39 +++++++++++++++++++++++++++++++++++++++
+>>  mm/memory.c |  8 ++++++++
+>>  2 files changed, 47 insertions(+)
+>>
+>> diff --git a/mm/Kconfig b/mm/Kconfig
+>> index 7672a22647b4..f4ba48c37b75 100644
+>> --- a/mm/Kconfig
+>> +++ b/mm/Kconfig
+>> @@ -1208,4 +1208,43 @@ config PER_VMA_LOCK
+>>
+>>  source "mm/damon/Kconfig"
+>>
+>> +config ARCH_SUPPORTS_LARGE_ANON_FOLIO
+>> +       def_bool n
+>> +       help
+>> +         An arch should select this symbol if wants to allow LARGE_ANON_FOLIO
+>> +         to be enabled. It must also set the following integer values:
+>> +         - ARCH_LARGE_ANON_FOLIO_NOTHP_ORDER_MAX
+>> +         - ARCH_LARGE_ANON_FOLIO_THP_ORDER_MAX
+>> +
+>> +config ARCH_LARGE_ANON_FOLIO_NOTHP_ORDER_MAX
+>> +       int
+>> +       help
+>> +         The maximum size of folio to allocate for an anonymous VMA PTE-mapping
+>> +         that does not have the MADV_HUGEPAGE hint set.
+>> +
+>> +config ARCH_LARGE_ANON_FOLIO_THP_ORDER_MAX
+>> +       int
+>> +       help
+>> +         The maximum size of folio to allocate for an anonymous VMA PTE-mapping
+>> +         that has the MADV_HUGEPAGE hint set.
+>> +
+>> +config LARGE_ANON_FOLIO
+>> +       bool "Allocate large folios for anonymous memory"
+>> +       depends on ARCH_SUPPORTS_LARGE_ANON_FOLIO
+>> +       default n
+>> +       help
+>> +         Use large (bigger than order-0) folios to back anonymous memory where
+>> +         possible. This reduces the number of page faults, as well as other
+>> +         per-page overheads to improve performance for many workloads.
+>> +
+>> +config LARGE_ANON_FOLIO_NOTHP_ORDER_MAX
+>> +       int
+>> +       default 0 if !LARGE_ANON_FOLIO
+>> +       default ARCH_LARGE_ANON_FOLIO_NOTHP_ORDER_MAX
+>> +
+>> +config LARGE_ANON_FOLIO_THP_ORDER_MAX
+>> +       int
+>> +       default 0 if !LARGE_ANON_FOLIO
+>> +       default ARCH_LARGE_ANON_FOLIO_THP_ORDER_MAX
+>> +
 > 
-> The TDX module can be initialized only once in its lifetime.  Instead
-> of always initializing it at boot time, this implementation chooses an
-> "on demand" approach to initialize TDX until there is a real need (e.g
-> when requested by KVM).  This approach has below pros:
+> IMHO I don't think we need all of the new kconfigs. Ideally the large
+> anon folios could be supported by all arches, although some of them
+> may not benefit from larger TLB entries due to lack of hardware
+> support.t
 > 
-> 1) It avoids consuming the memory that must be allocated by kernel and
-> given to the TDX module as metadata (~1/256th of the TDX-usable memory),
-> and also saves the CPU cycles of initializing the TDX module (and the
-> metadata) when TDX is not used at all.
-> 
-> 2) The TDX module design allows it to be updated while the system is
-> running.  The update procedure shares quite a few steps with this "on
-> demand" initialization mechanism.  The hope is that much of "on demand"
-> mechanism can be shared with a future "update" mechanism.  A boot-time
-> TDX module implementation would not be able to share much code with the
-> update mechanism.
-> 
-> 3) Making SEAMCALL requires VMX to be enabled.  Currently, only the KVM
-> code mucks with VMX enabling.  If the TDX module were to be initialized
-> separately from KVM (like at boot), the boot code would need to be
-> taught how to muck with VMX enabling and KVM would need to be taught how
-> to cope with that.  Making KVM itself responsible for TDX initialization
-> lets the rest of the kernel stay blissfully unaware of VMX.
-> 
-> Similar to module initialization, also make the per-cpu initialization
-> "on demand" as it also depends on VMX being enabled.
-> 
-> Add two functions, tdx_enable() and tdx_cpu_enable(), to enable the TDX
-> module and enable TDX on local cpu respectively.  For now tdx_enable()
-> is a placeholder.  The TODO list will be pared down as functionality is
-> added.
-> 
-> Export both tdx_cpu_enable() and tdx_enable() for KVM use.
-> 
-> In tdx_enable() use a state machine protected by mutex to make sure the
-> initialization will only be done once, as tdx_enable() can be called
-> multiple times (i.e. KVM module can be reloaded) and may be called
-> concurrently by other kernel components in the future.
-> 
-> The per-cpu initialization on each cpu can only be done once during the
-> module's life time.  Use a per-cpu variable to track its status to make
-> sure it is only done once in tdx_cpu_enable().
-> 
-> Also, a SEAMCALL to do TDX module global initialization must be done
-> once on any logical cpu before any per-cpu initialization SEAMCALL.  Do
-> it inside tdx_cpu_enable() too (if hasn't been done).
-> 
-> tdx_enable() can potentially invoke SEAMCALLs on any online cpus.  The
-> per-cpu initialization must be done before those SEAMCALLs are invoked
-> on some cpu.  To keep things simple, in tdx_cpu_enable(), always do the
-> per-cpu initialization regardless of whether the TDX module has been
-> initialized or not.  And in tdx_enable(), don't call tdx_cpu_enable()
-> but assume the caller has disabled CPU hotplug, done VMXON and
-> tdx_cpu_enable() on all online cpus before calling tdx_enable().
-> 
-> Signed-off-by: Kai Huang <kai.huang@intel.com>
-> ---
-> 
-> v11 -> v12:
->   - Simplified TDX module global init and lp init status tracking (David).
->   - Added comment around try_init_module_global() for using
->     raw_spin_lock() (Dave).
->   - Added one sentence to changelog to explain why to expose tdx_enable()
->     and tdx_cpu_enable() (Dave).
->   - Simplifed comments around tdx_enable() and tdx_cpu_enable() to use
->     lockdep_assert_*() instead. (Dave)
->   - Removed redundent "TDX" in error message (Dave).
-> 
-> v10 -> v11:
->   - Return -NODEV instead of -EINVAL when CONFIG_INTEL_TDX_HOST is off.
->   - Return the actual error code for tdx_enable() instead of -EINVAL.
->   - Added Isaku's Reviewed-by.
-> 
-> v9 -> v10:
->   - Merged the patch to handle per-cpu initialization to this patch to
->     tell the story better.
->   - Changed how to handle the per-cpu initialization to only provide a
->     tdx_cpu_enable() function to let the user of TDX to do it when the
->     user wants to run TDX code on a certain cpu.
->   - Changed tdx_enable() to not call cpus_read_lock() explicitly, but
->     call lockdep_assert_cpus_held() to assume the caller has done that.
->   - Improved comments around tdx_enable() and tdx_cpu_enable().
->   - Improved changelog to tell the story better accordingly.
-> 
-> v8 -> v9:
->   - Removed detailed TODO list in the changelog (Dave).
->   - Added back steps to do module global initialization and per-cpu
->     initialization in the TODO list comment.
->   - Moved the 'enum tdx_module_status_t' from tdx.c to local tdx.h
-> 
-> v7 -> v8:
->   - Refined changelog (Dave).
->   - Removed "all BIOS-enabled cpus" related code (Peter/Thomas/Dave).
->   - Add a "TODO list" comment in init_tdx_module() to list all steps of
->     initializing the TDX Module to tell the story (Dave).
->   - Made tdx_enable() unverisally return -EINVAL, and removed nonsense
->     comments (Dave).
->   - Simplified __tdx_enable() to only handle success or failure.
->   - TDX_MODULE_SHUTDOWN -> TDX_MODULE_ERROR
->   - Removed TDX_MODULE_NONE (not loaded) as it is not necessary.
->   - Improved comments (Dave).
->   - Pointed out 'tdx_module_status' is software thing (Dave).
-> 
-> v6 -> v7:
->   - No change.
-> 
-> v5 -> v6:
->   - Added code to set status to TDX_MODULE_NONE if TDX module is not
->     loaded (Chao)
->   - Added Chao's Reviewed-by.
->   - Improved comments around cpus_read_lock().
-> 
-> - v3->v5 (no feedback on v4):
->   - Removed the check that SEAMRR and TDX KeyID have been detected on
->     all present cpus.
->   - Removed tdx_detect().
->   - Added num_online_cpus() to MADT-enabled CPUs check within the CPU
->     hotplug lock and return early with error message.
->   - Improved dmesg printing for TDX module detection and initialization.
-> 
-> 
-> ---
->   arch/x86/include/asm/tdx.h  |   4 +
->   arch/x86/virt/vmx/tdx/tdx.c | 162 ++++++++++++++++++++++++++++++++++++
->   arch/x86/virt/vmx/tdx/tdx.h |  13 +++
->   3 files changed, 179 insertions(+)
-> 
-> diff --git a/arch/x86/include/asm/tdx.h b/arch/x86/include/asm/tdx.h
-> index 4dfe2e794411..d8226a50c58c 100644
-> --- a/arch/x86/include/asm/tdx.h
-> +++ b/arch/x86/include/asm/tdx.h
-> @@ -97,8 +97,12 @@ static inline long tdx_kvm_hypercall(unsigned int nr, unsigned long p1,
->   
->   #ifdef CONFIG_INTEL_TDX_HOST
->   bool platform_tdx_enabled(void);
-> +int tdx_cpu_enable(void);
-> +int tdx_enable(void);
->   #else	/* !CONFIG_INTEL_TDX_HOST */
->   static inline bool platform_tdx_enabled(void) { return false; }
-> +static inline int tdx_cpu_enable(void) { return -ENODEV; }
-> +static inline int tdx_enable(void)  { return -ENODEV; }
->   #endif	/* CONFIG_INTEL_TDX_HOST */
->   
->   #endif /* !__ASSEMBLY__ */
-> diff --git a/arch/x86/virt/vmx/tdx/tdx.c b/arch/x86/virt/vmx/tdx/tdx.c
-> index 141d12376c4d..29ca18f66d61 100644
-> --- a/arch/x86/virt/vmx/tdx/tdx.c
-> +++ b/arch/x86/virt/vmx/tdx/tdx.c
-> @@ -13,6 +13,10 @@
->   #include <linux/errno.h>
->   #include <linux/printk.h>
->   #include <linux/smp.h>
-> +#include <linux/cpu.h>
-> +#include <linux/spinlock.h>
-> +#include <linux/percpu-defs.h>
-> +#include <linux/mutex.h>
->   #include <asm/msr-index.h>
->   #include <asm/msr.h>
->   #include <asm/archrandom.h>
-> @@ -23,6 +27,13 @@ static u32 tdx_global_keyid __ro_after_init;
->   static u32 tdx_guest_keyid_start __ro_after_init;
->   static u32 tdx_nr_guest_keyids __ro_after_init;
->   
-> +static bool tdx_global_initialized;
-> +static DEFINE_RAW_SPINLOCK(tdx_global_init_lock);
-> +static DEFINE_PER_CPU(bool, tdx_lp_initialized);
-> +
-> +static enum tdx_module_status_t tdx_module_status;
+> For now with a minimum implementation, I think you could define a
+> macro or a function that returns the hardware preferred order.
 
-Why can't you switch to a simple bool here as well?
+Thanks for the feedback - that aligns with what Yu Zhao suggested. I'm
+implementing it for v2.
 
-It's either initialized or uninitialized. If uninitialized and you get 
-an error, leave it uninitialized. The next caller will try again and 
-fail again.
+Thanks,
+Ryan
 
--- 
-Cheers,
 
-David / dhildenb
+> 
+>>  endmenu
+>> diff --git a/mm/memory.c b/mm/memory.c
+>> index 9165ed1b9fc2..a8f7e2b28d7a 100644
+>> --- a/mm/memory.c
+>> +++ b/mm/memory.c
+>> @@ -3153,6 +3153,14 @@ static struct folio *try_vma_alloc_movable_folio(struct vm_area_struct *vma,
+>>         return vma_alloc_movable_folio(vma, vaddr, 0, zeroed);
+>>  }
+>>
+>> +static inline int max_anon_folio_order(struct vm_area_struct *vma)
+>> +{
+>> +       if (hugepage_vma_check(vma, vma->vm_flags, false, true, true))
+>> +               return CONFIG_LARGE_ANON_FOLIO_THP_ORDER_MAX;
+>> +       else
+>> +               return CONFIG_LARGE_ANON_FOLIO_NOTHP_ORDER_MAX;
+>> +}
+>> +
+>>  /*
+>>   * Handle write page faults for pages that can be reused in the current vma
+>>   *
+>> --
+>> 2.25.1
+>>
+>>
 
