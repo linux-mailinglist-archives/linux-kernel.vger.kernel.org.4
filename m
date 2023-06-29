@@ -2,124 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA954742732
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 15:21:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DFD7774274D
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 15:24:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231691AbjF2NVv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 09:21:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41110 "EHLO
+        id S231430AbjF2NYA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 09:24:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229494AbjF2NVt (ORCPT
+        with ESMTP id S230256AbjF2NX5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 09:21:49 -0400
-Received: from Chamillionaire.breakpoint.cc (Chamillionaire.breakpoint.cc [IPv6:2a0a:51c0:0:237:300::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4258F2707;
-        Thu, 29 Jun 2023 06:21:47 -0700 (PDT)
-Received: from fw by Chamillionaire.breakpoint.cc with local (Exim 4.92)
-        (envelope-from <fw@strlen.de>)
-        id 1qEraf-0006iS-KY; Thu, 29 Jun 2023 15:21:41 +0200
-Date:   Thu, 29 Jun 2023 15:21:41 +0200
-From:   Florian Westphal <fw@strlen.de>
-To:     Toke =?iso-8859-15?Q?H=F8iland-J=F8rgensen?= <toke@redhat.com>
-Cc:     Florian Westphal <fw@strlen.de>, Daniel Xu <dxu@dxuuu.xyz>,
-        bpf@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        coreteam@netfilter.org, netfilter-devel@vger.kernel.org,
-        daniel@iogearbox.net, dsahern@kernel.org
-Subject: Re: [PATCH bpf-next 0/7] Support defragmenting IPv(4|6) packets in
- BPF
-Message-ID: <20230629132141.GA10165@breakpoint.cc>
-References: <cover.1687819413.git.dxu@dxuuu.xyz>
- <874jmthtiu.fsf@toke.dk>
- <20230627154439.GA18285@breakpoint.cc>
- <87o7kyfoqf.fsf@toke.dk>
+        Thu, 29 Jun 2023 09:23:57 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16C362D4A;
+        Thu, 29 Jun 2023 06:23:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=AZtS5X9BKaHL97b40HBwXNlyolqkhlUBrklOIKnvU6U=; b=sX4yjEO/PAps8WzH/CszrUMrzZ
+        2V1d/zUJumY/hQLYkAUAt1LhgmxcjB5FeZ5A5MgLQj7MPs/pqHte9+blIn29PhZxmPYS699TsvVV3
+        8Egv77NN/BG89UZuujij3If9z0XhEe0mJJol3u1etKhh3hxc2sBW3+jDjnU/EwQPda6M=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1qErci-000EDO-PF; Thu, 29 Jun 2023 15:23:48 +0200
+Date:   Thu, 29 Jun 2023 15:23:48 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Luo Jie <quic_luoj@quicinc.com>
+Cc:     hkallweit1@gmail.com, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, linux@armlinux.org.uk,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        quic_sricharan@quicinc.com
+Subject: Re: [PATCH 3/3] net: phy: at803x: add qca8081 fifo reset on the link
+ down
+Message-ID: <e1cf3666-fecc-4272-b91b-5921ada45ade@lunn.ch>
+References: <20230629034846.30600-1-quic_luoj@quicinc.com>
+ <20230629034846.30600-4-quic_luoj@quicinc.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-15
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <87o7kyfoqf.fsf@toke.dk>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230629034846.30600-4-quic_luoj@quicinc.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Toke Høiland-Jørgensen <toke@redhat.com> wrote:
-> Florian Westphal <fw@strlen.de> writes:
-> > For bpf a flag during link attachment seemed like the best way
-> > to go.
-> 
-> Right, I wasn't disputing that having a flag to load a module was a good
-> idea. On the contrary, I was thinking we'd need many more of these
-> if/when BPF wants to take advantage of more netfilter code. Say, if a
-> BPF module wants to call into TPROXY, that module would also need go be
-> loaded and kept around, no?
+> +static int qca808x_fifo_reset(struct phy_device *phydev)
+> +{
+> +	/* Reset serdes fifo on link down, Release serdes fifo on link up,
+> +	 * the serdes address is phy address added by 1.
+> +	 */
+> +	return mdiobus_c45_modify_changed(phydev->mdio.bus, phydev->mdio.addr + 1,
+> +			MDIO_MMD_PMAPMD, QCA8081_PHY_SERDES_MMD1_FIFO_CTRL,
+> +			QCA8081_PHY_FIFO_RSTN, phydev->link ? QCA8081_PHY_FIFO_RSTN : 0);
 
-That seems to be a different topic that has nothing to do with
-either bpf_link or netfilter?
+In polling mode, this is going to be called once per second. Do you
+really want to be setting that register all the time? Consider using
+the link_change_notify callback.
 
-If the program calls into say, TPROXY, then I'd expect that this needs
-to be handled via kfuncs, no? Or if I misunderstand, what do you mean
-by "call into TPROXY"?
+Also, can you tell us more about this SERDES device on the bus. I just
+want to make sure this is not a PCS and should have its own driver.
 
-And if so, thats already handled at bpf_prog load time, not
-at link creation time, or do I miss something here?
-
-AFAIU, if prog uses such kfuncs, verifier will grab needed module ref
-and if module isn't loaded the kfuncs won't be found and program load
-fails.
-
-> I was thinking something along the lines of just having a field
-> 'netfilter_modules[]' where userspace could put an arbitrary number of
-> module names into, and we'd load all of them and put a ref into the
-> bpf_link.
-
-Why?  I fail to understand the connection between bpf_link, netfilter
-and modules.  What makes netfilter so special that we need such a
-module array, and what does that have to do with bpf_link interface?
-
-> In principle, we could just have that be a string array f
-> module names, but that's probably a bit cumbersome (and, well, building
-> a generic module loader interface into the bpf_like API is not
-> desirable either). But maybe with an explicit ENUM?
-
-What functionality does that provide? I can't think of a single module
-where this functionality is needed.
-
-Either we're talking about future kfuncs, then, as far as i understand
-how kfuncs work, this is handled at bpf_prog load time, not when the
-bpf_link is created.
-
-Or we are talking about implicit dependencies, where program doesn't
-call function X but needs functionality handled earlier in the pipeline?
-
-The only two instances I know where this is the case for netfilter
-is defrag + conntrack.
-
-> > For conntrack, we MIGHT be able to not need a flag but
-> > maybe verifier could "guess" based on kfuncs used.
-> 
-> If the verifier can just identify the modules from the kfuncs and do the
-> whole thing automatically, that would of course be even better from an
-> ease-of-use PoV. Not sure what that would take, though? I seem to recall
-> having discussions around these lines before that fell down on various
-> points.
-
-AFAICS the conntrack kfuncs are wired to nf_conntrack already, so I
-would expect that the module has to be loaded already for the verifier
-to accept the program.
-
-Those kfuncs are not yet exposed to NETFILTER program types.
-Once they are, all that would be needed is for the netfilter bpf_link
-to be able tp detect that the prog is calling into those kfuncs, and
-then make the needed register/unregister calls to enable the conntrack
-hooks.
-
-Wheter thats better than using an explicit "please turn on conntrack for
-me", I don't know.  Perhaps future bpf programs could access skb->_nfct
-directly without kfuncs so I'd say the flag is a better approach
-from an uapi point of view.
+     Andrew
