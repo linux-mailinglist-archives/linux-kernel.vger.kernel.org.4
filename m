@@ -2,136 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 399BD742DB9
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 21:40:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DDE6742DBF
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 21:42:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231882AbjF2TkM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 15:40:12 -0400
-Received: from mail-dm6nam10on2090.outbound.protection.outlook.com ([40.107.93.90]:51105
-        "EHLO NAM10-DM6-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S229742AbjF2TkK (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 15:40:10 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Joa4ZjrucHKaj7cXIFEdSigtRSB5il5bAapsXsmWzBP313j2yQKw4SbT2QbCPqFBouwIZEepwsUtsLMaQETGviyS/vjSBx7yW3TJx9dtJc4GlEWtv2FYxrTR8pE6k63GtwVdD1EUiDL4FM2x4oq77RKV6JnTV3DdgwjJTetdNhUSwm5QtblUbwYfRGfmwACsEND2BUgYEgkWUF4zNy3yFlphVul4UIGBQaW0HhfUKkxboI9rimgSfvXTun0BGrZcP5ERncrPwlG0+dHnWzprEBmI99rKjfu5MA2iiGXN3XVKJcd7c1ghbWm6QcPiw2tBRuarX6Z5P5Vo9QNvbzEF/w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=tIWRn2+Da3yu9uiVYvGeI1cIa7PojfDx0sd9Zlbmb3I=;
- b=Cwt0iLrx5iprgigqu4yDZ9oVYChfqrihm2AeTYaDztnVeYk4jEORMK51PJYwr3ERoI1xjksPQ+tJJuTdXo1/VlzGgzmZDV0NLibQJHMYk9h2kTw3y9pjPwbCPaXxRbsgHDOoiV6qdZFyCGXtARd5c9qNEYzEhxp9OaXNfINrbUmrkyBXm+cuHs7gkRV334PklaKtDsDFWwOXzn01cWlVKBnnqx9DAe5S1CXsV2BIishRstm/BysxPtVkgkAwW0yBp8X6zYP3XdliViZgcSJ6TJ5GbGUXBbSrBHqd8RddkhNSFVWmxEb7vcoxFNmbH32IdhH7TLPVcQeidO3bygZf+g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
- dkim=pass header.d=corigine.com; arc=none
+        id S232095AbjF2TmT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 15:42:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57474 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229742AbjF2TmQ (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 29 Jun 2023 15:42:16 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01A08210E;
+        Thu, 29 Jun 2023 12:42:14 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id 4fb4d7f45d1cf-51d7f4c1cfeso1212110a12.0;
+        Thu, 29 Jun 2023 12:42:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=tIWRn2+Da3yu9uiVYvGeI1cIa7PojfDx0sd9Zlbmb3I=;
- b=D/n/CcmlZu9E30Pl899jshGs0MIYXVsZ0XXkhAxUdA4IqX8RWHUkw5xZfP98ZNAu+9e6l3bLo+FMtct67LUpvZFTRsSJtCt3aHqoZb1jaz6DaTOemw+5lNVNVwKvZUDWCPF9u/di/MarvAa5XNlCuQuAGUBHF0Ju+hkwlzs+B0w=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=corigine.com;
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
- by SJ2PR13MB6428.namprd13.prod.outlook.com (2603:10b6:a03:55a::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6500.44; Thu, 29 Jun
- 2023 19:40:06 +0000
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::eb8f:e482:76e0:fe6e]) by PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::eb8f:e482:76e0:fe6e%5]) with mapi id 15.20.6521.023; Thu, 29 Jun 2023
- 19:40:05 +0000
-Date:   Thu, 29 Jun 2023 21:39:57 +0200
-From:   Simon Horman <simon.horman@corigine.com>
-To:     Andrew Halaney <ahalaney@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-stm32@st-md-mailman.stormreply.com, netdev@vger.kernel.org,
-        mcoquelin.stm32@gmail.com, pabeni@redhat.com, kuba@kernel.org,
-        edumazet@google.com, davem@davemloft.net, joabreu@synopsys.com,
-        alexandre.torgue@foss.st.com, peppe.cavallaro@st.com,
-        bhupesh.sharma@linaro.org, vkoul@kernel.org,
-        bartosz.golaszewski@linaro.org
-Subject: Re: [PATCH 1/3] net: stmmac: dwmac-qcom-ethqos: Return
- device_get_phy_mode() errors properly
-Message-ID: <ZJ3eDZcWUz2vBK6q@corigine.com>
-References: <20230629191725.1434142-1-ahalaney@redhat.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230629191725.1434142-1-ahalaney@redhat.com>
-X-ClientProxiedBy: AM0PR10CA0080.EURPRD10.PROD.OUTLOOK.COM
- (2603:10a6:208:15::33) To PH0PR13MB4842.namprd13.prod.outlook.com
- (2603:10b6:510:78::6)
+        d=gmail.com; s=20221208; t=1688067733; x=1690659733;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=J8xfd3Bi3FUEg2mdjjnrWh1F35O1rgPB2ctPxtJWJao=;
+        b=LgBKMetrxewlKIGdFCcpoEPRF6NFs6XJRRca6Pvs1nL7hpytucBzWMjjhB6DivoOkT
+         nqkSHsiswr4OJ5TPcl1HDBDEX3X01uWyUl34o8Qk7wqTqJ6XUGB/JlF/lWy6IYXXzd2j
+         TNwn5f9XlqfqW9URN60MRZgDedy4THbCjfC0tIlbmkuATPbAb5fw5Ye67MY7fY5w4JHI
+         8fS5xnHf0h3e7UjdnX9E1FMiA6HgrheVR5Zwu1j+EDg37QlmB9xQlC57u7JpoGBx1OVz
+         BO+fSSJs9wIr4JHfKqIneRTn/Fl5uapvTuJIe6LWEdaiXxurU1C2KdKply9lMOsMhrTO
+         i5jg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688067733; x=1690659733;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=J8xfd3Bi3FUEg2mdjjnrWh1F35O1rgPB2ctPxtJWJao=;
+        b=fXnc5eJ8YTebi5Tx9oVvOeDMS68goxg6hkM0WirD0s8pYAdBVhiT3DjkWqys6Vhan5
+         vzZv9tilo3hBKvmHjXcv9feOrHnYV15DOqCUi7WuEj6wbdgp3rUedHS3HX9nhg2vvS8n
+         jMn1VoDDKp814z+fC3VMSdJvehz7dUlEKnTq0iso2ru9t80j9GauIJ4ygHtYg+ocWkaf
+         CvyAvEhrfoNfIj+uDvl86BFZsLUqGMBsnzpPj8pP22yAeF2JbPtwfL3lXgYP6UEAll4D
+         zI3G50r9+bNppHzvPIPFbWrqCBtH3h7v5bAwVJmkxaHQ70xZ30Bu13Z7xjGTGtQWM8ol
+         XN2w==
+X-Gm-Message-State: ABy/qLb0u/AK4P2YVQQtugm72o/NBSJcbTaGbnMO1uLmfEnPcciy48Cf
+        ysBplfX0JTc9Q1vue8apuw==
+X-Google-Smtp-Source: APBJJlEeUZAGifvNNwYzIvE081khgiSAJja1TtD3q2wF1Yzd9TXgi1C48M+JMyOUgYcqh1bFDGtfKw==
+X-Received: by 2002:a05:6402:205c:b0:51d:91cc:32e8 with SMTP id bc28-20020a056402205c00b0051d91cc32e8mr122204edb.29.1688067733196;
+        Thu, 29 Jun 2023 12:42:13 -0700 (PDT)
+Received: from p183 ([46.53.248.48])
+        by smtp.gmail.com with ESMTPSA id b5-20020aa7cd05000000b0051da8fd7570sm773742edw.41.2023.06.29.12.42.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 29 Jun 2023 12:42:12 -0700 (PDT)
+Date:   Thu, 29 Jun 2023 22:42:10 +0300
+From:   Alexey Dobriyan <adobriyan@gmail.com>
+To:     =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
+Cc:     Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
+        =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@rivosinc.com>,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org,
+        Anders Roxell <anders.roxell@linaro.org>
+Subject: Re: [PATCH 2/2] selftests/proc: Do not build x86-64 tests on
+ non-x86-64 builds
+Message-ID: <fd61fd96-f06f-4a2d-8707-0e1e395c9e51@p183>
+References: <20230629162301.1234157-1-bjorn@kernel.org>
+ <20230629162301.1234157-3-bjorn@kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|SJ2PR13MB6428:EE_
-X-MS-Office365-Filtering-Correlation-Id: acf61677-15a3-4154-fe6c-08db78d8a3a1
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: zJtRfInCWAIh/FSSG3XBbwBz86DkTwz59prvW2BT5KhGtHznHbA08pi02EcQ1jAeVlQD+7lGeH9QBYz1akTmzpmzqHFyovbdottlSuoZHHM5SCS6N883Sa/LJ7tj5jJidcLwOK8Xx8i7teoffOQ+86mp5sNoIcjdNLqGBxtdjDfF6hIXPL8qvAR4r3M2yxq6xw2jnpeAmEjzDqyN2akhLNeeJwErTzq1lE5prCRElZpeld0YgEzJs1FnqCtYAd+4EDXjSQENusvVisGPFonxRHeHUeFgGB/ysMHsUBA+JQUClzyflsPwcxDA54jnHz7nUm6WJLR16GpVw3+B0XbIo+dmEu1N8GroaLYAk4vTdwIyeu5RitSL5eq9ibWjhIQwukpzI5BQP856wB4Lveqv7QrNJzlMSIXAgftDYMuxff7RVGZKM6JF9RDjpHQjgte0b4p+gLumrjUSacIeVK+oJikBqHBWsR5pWpIEpnk3CIlLhR29K+VJduQl/uAUOddVWzwtyHXD2fEw3Myzjh2veYvuhJJsXMQAgWe77Lr+P9NLNi4qMlYDXg5WJSFZIXldIb0PdcYNiopDlN/GQWj7nCvs0HOTWVnFpaLvE3MKrlU=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(39840400004)(376002)(136003)(346002)(396003)(451199021)(7416002)(44832011)(66476007)(66556008)(66946007)(36756003)(8936002)(478600001)(2906002)(316002)(4326008)(8676002)(6916009)(5660300002)(6512007)(6506007)(6666004)(966005)(4744005)(86362001)(41300700001)(38100700002)(6486002)(2616005)(186003)(83380400001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?jmJ7URcIPt2U13F+L2ufAFBBjL6LMulZUEDQzGsdgyrqsF/S4x1w9XHT6IsH?=
- =?us-ascii?Q?XmP49cFR2cfjeZtvqXwB4KZf2Q+5+si2jIGn9Cy2mLnU2IhfWuDlDw+5ZUvD?=
- =?us-ascii?Q?bXEfm1tdLkAs7oS4he7xmue0nwfvHRMiuVNv6Bi0p/MqXH2Z74ItFo8RoPA0?=
- =?us-ascii?Q?bbhhqOsS5DXNsoYgyIEoH3m5GfKe6MCer/6pB6NQg5OUmfV3A1QH2MvqhpOq?=
- =?us-ascii?Q?CeDab2xEvJLKKLQLNVlOElEb+gKWqhmCsnTOf3IbNrKbX3TKIXl0V5iuGG7U?=
- =?us-ascii?Q?5qbImJXZ0sn4OcIofJZwLOsIXAypTiYHPgpcESNHlphIT3UtM5nbvfMk1UM0?=
- =?us-ascii?Q?DZ9WkfrjlipiVWfIccl6aLyy5T7sH+fVVV9P1yKeicE1DVgXRAnsjOfPr4C5?=
- =?us-ascii?Q?xRqjBPmSpDN4s/beMqengp3oLEP+PjoZE4tZhytMOKojn92uLl2fBQ9DgZZK?=
- =?us-ascii?Q?voJX4aQfml047roxnEnY1V4y+bvi8lU5mx7b7AMFf+nAjbRn1fN2aMyZpARm?=
- =?us-ascii?Q?4LfQf5x12+oLNl2tF8cxf7y0ZDOGv6YgZf/3Ica7oOaSvEtEE9pwMAwORgs5?=
- =?us-ascii?Q?Xljz5NHSIeEuBWncpRTnNhzNWGfxUhIViuIF9UxiQObhKfUAwk9OfLXoo/Bc?=
- =?us-ascii?Q?2/TCB3UMm/AVqmuhGSxd2L9ebncjiRUXM2C/rolNwkrqz9bCLpukRFSWJ7AE?=
- =?us-ascii?Q?9Xwe2VKnbH1791gywOuoOkLj6L3lUB3f4ADiKR+mQPfDsYmP5KMFE02/5Q8C?=
- =?us-ascii?Q?fggO9Wv4auZRLSjB8SneF6FVMV5UB7dJr7GpJWJL+AR2hArnVxl3MpoJzRGc?=
- =?us-ascii?Q?EqH/UpTzy+57k4PsJxXPKELbmQ575tC8ouZ6AyXhqrRmKpXvzZCzrUkRV8C7?=
- =?us-ascii?Q?XouJYWXrfBMo34H8/UN1QDWyVrq1TJIgA0SBHoJhGz5kiwSrlyfu+/vwccI3?=
- =?us-ascii?Q?ncyCDoRDkf3alkEInueKvEEdV+6Kl49dpaQjLluwtzSSsFWZ0bED3h+AHPhp?=
- =?us-ascii?Q?z9FskmfWnGmeK+o6BJ7F9BQDFCjAz6iotAaPVW9gbERARoNrmKjdMZzUPqlU?=
- =?us-ascii?Q?naxAYnTE3NHI6ttfXcxHE6AV3KoYtsA4/Ol6t6uIyxoF4pOTujYBv35RlzxI?=
- =?us-ascii?Q?C3eWu41UJLzWZvrTSkoQhCkcoZc5PZecVV4OlBXvqZjY64Z4lGB51TdDO3VG?=
- =?us-ascii?Q?K0feiQpY/rfAw3xzRJ/y3zUUpDiwf7HZumYluixmVkHLFN18fU+sxRKyLhvr?=
- =?us-ascii?Q?bH35zH32Gt1YbDn1jjcrsuzUz8gNnYXfWqtsYz+yW3Ku5x6rzdCT9eXUgBxe?=
- =?us-ascii?Q?Jmllw3KKZZA2igDHNLrncMnciYIXuijhLLjzxgZWpfcIq5xf/Yv+MSxdeqdI?=
- =?us-ascii?Q?9JfeJLZd7Kudkg621TLLMGFVf7ABSjlmISR31HOZ2FGDXhkbloJmBL77QzuY?=
- =?us-ascii?Q?kGfmRSjeCjrgK3qz3c+2CE/a8kVCr2UuuijGrli+b84233uOpvFJ8c6vrPw2?=
- =?us-ascii?Q?/zK0VS4Ftiunw3VKzY+ZfjcesQZUQxqGk5Pnsf9SCT1qMMcjyEHgsWNQK9My?=
- =?us-ascii?Q?x54K142YhbweWUVQlLabAk8iaLPnHiS7ECAmS0RG2DA7p3oZUQS9m/F5JeXm?=
- =?us-ascii?Q?Ku12kDdMfSAQSvem5ouq6y6c+wbov+rsHESJwniuAOwIMzH5DIV3PsipmvO2?=
- =?us-ascii?Q?uBIQ0w=3D=3D?=
-X-OriginatorOrg: corigine.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: acf61677-15a3-4154-fe6c-08db78d8a3a1
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Jun 2023 19:40:05.8617
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: dUqnLTaRRPzA+jJz68DbrSWo3OSU7OZECONr0KlMq/Kbp5O3jz1QJ/0AsdCqkOvRWYf4QKu/AZfC8JpgUH7imqlEo2W+QdGc6rjHO9oehEc=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR13MB6428
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230629162301.1234157-3-bjorn@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+        lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 29, 2023 at 02:14:16PM -0500, Andrew Halaney wrote:
-> Other than -ENODEV, other errors resulted in -EINVAL being returned
-> instead of the actual error.
+On Thu, Jun 29, 2023 at 06:23:00PM +0200, Björn Töpel wrote:
+> From: Björn Töpel <bjorn@rivosinc.com>
 > 
-> Signed-off-by: Andrew Halaney <ahalaney@redhat.com>
+> The proc-empty-vm test is x86-64 only. Remove that test from
+> non-x86-64 builds.
+> 
+> Signed-off-by: Björn Töpel <bjorn@rivosinc.com>
 
-Hi Andrew,
+What's the address space size on risc-v?
 
-I'm assuming this series is targeted at 'net-next', as opposed to 'net',
-which is for fixes. In any case, the target tree should be included in the
-subject.
-
-        Subject: [PATCH net-next v2 1/3] ...
-
-If it is for net-next, then please repost when net-next reopens after July 10th.
-
-Link: https://www.kernel.org/doc/html/next/process/maintainer-netdev.html#development-cycle
-
-Also, it usually best to provide a cover-letter for patch-sets with more than
-once patch.
-
---
-pw-bot: deferred
+> --- a/tools/testing/selftests/proc/Makefile
+> +++ b/tools/testing/selftests/proc/Makefile
+> @@ -8,7 +8,11 @@ TEST_GEN_PROGS += fd-001-lookup
+>  TEST_GEN_PROGS += fd-002-posix-eq
+>  TEST_GEN_PROGS += fd-003-kthread
+>  TEST_GEN_PROGS += proc-loadavg-001
+> +
+> +ifneq (,$(filter $(ARCH),x86_64))
+>  TEST_GEN_PROGS += proc-empty-vm
+> +endif
+> +
+>  TEST_GEN_PROGS += proc-pid-vm
+>  TEST_GEN_PROGS += proc-self-map-files-001
+>  TEST_GEN_PROGS += proc-self-map-files-002
