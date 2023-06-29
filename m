@@ -2,510 +2,367 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4130741E6A
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 04:40:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5275741E61
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 04:39:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231361AbjF2Ckh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 22:40:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57270 "EHLO
+        id S231494AbjF2Cjh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 22:39:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231616AbjF2Ck0 (ORCPT
+        with ESMTP id S229749AbjF2Cje (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 22:40:26 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A034D2682
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 19:39:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1688006373;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=mlNgGDntwJwFJFcJw5ZHEd+1mXug8P2rWNXrlhXtw8g=;
-        b=OviCNHKe1OkE1LQoZv2xxZgzborYyqUWLYWrDaypvxJIWu/1R96O3xDWB/sVeJzBSyVakL
-        6lqXjxtBFg5cnKvmqyT9xZc+pSdnfeWmMnSvE+prdRhO5euLJfEN4WKDCm4ccFSLYoHAdg
-        CcNC+TZVyeuCRWmY0f8EdMgbUC3mXls=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-427-7HtxYaFNMF65cFey1Is0QA-1; Wed, 28 Jun 2023 22:39:30 -0400
-X-MC-Unique: 7HtxYaFNMF65cFey1Is0QA-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id EEDB2185A792;
-        Thu, 29 Jun 2023 02:39:29 +0000 (UTC)
-Received: from ovpn-8-18.pek2.redhat.com (ovpn-8-18.pek2.redhat.com [10.72.8.18])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id C7EA440C206F;
-        Thu, 29 Jun 2023 02:39:21 +0000 (UTC)
-Date:   Thu, 29 Jun 2023 10:39:16 +0800
-From:   Ming Lei <ming.lei@redhat.com>
-To:     Andreas Hindborg <nmi@metaspace.dk>
-Cc:     Hans Holmberg <Hans.Holmberg@wdc.com>,
-        Aravind Ramesh <Aravind.Ramesh@wdc.com>,
-        Jens Axboe <axboe@kernel.dk>,
-        "open list:BLOCK LAYER" <linux-block@vger.kernel.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Matias Bjorling <Matias.Bjorling@wdc.com>,
-        Andreas Hindborg <a.hindborg@samsung.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        Damien Le Moal <dlemoal@kernel.org>, gost.dev@samsung.com,
-        Minwoo Im <minwoo.im.dev@gmail.com>, ming.lei@redhat.com
-Subject: Re: [PATCH v4 3/4] ublk: enable zoned storage support
-Message-ID: <ZJzu1ECR3Cp+IW+5@ovpn-8-18.pek2.redhat.com>
-References: <20230628190649.11233-1-nmi@metaspace.dk>
- <20230628190649.11233-4-nmi@metaspace.dk>
+        Wed, 28 Jun 2023 22:39:34 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C82E2213D;
+        Wed, 28 Jun 2023 19:39:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1688006371; x=1719542371;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=fSM9UNqIfkqDP44/4YLL7afHDLe4stiwp7Rz1OCzmLk=;
+  b=QxkMAQxNje2/gonLHvYsLg/Z9xmbPWN2bSRK6GfsauvSvlnr+wZ7UjWR
+   ChjOFwwELWyr+8ePQuRjQheoWLPIglglIWXOYgjwGa+gvaETSB2QSmvua
+   itKW10HZO4uFQ97RM+79Zb9hiynRc3QAMyz2iC1dR2Ym6EXs8T+MqNSg8
+   PJOJhkYwJ9/0E8E7u0yi7FXWvFatNhhTFD6Jxf52HhONSvCeAL5EhDj7E
+   f1vJn6X5vMEtA8CWqRfON98Pn4CjBa1aOby0l67AoeqQQbMFGJAd2IVV/
+   CqphSxn6D4Xg74qUd3vK8nKZ8CrTAJy/+dDnUqXCi65TxBqcQDmD5NE6F
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10755"; a="360857490"
+X-IronPort-AV: E=Sophos;i="6.01,167,1684825200"; 
+   d="scan'208";a="360857490"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2023 19:39:31 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10755"; a="711257234"
+X-IronPort-AV: E=Sophos;i="6.01,167,1684825200"; 
+   d="scan'208";a="711257234"
+Received: from fmsmsx603.amr.corp.intel.com ([10.18.126.83])
+  by orsmga007.jf.intel.com with ESMTP; 28 Jun 2023 19:39:30 -0700
+Received: from fmsmsx601.amr.corp.intel.com (10.18.126.81) by
+ fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.27; Wed, 28 Jun 2023 19:39:29 -0700
+Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
+ fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.27 via Frontend Transport; Wed, 28 Jun 2023 19:39:29 -0700
+Received: from NAM02-SN1-obe.outbound.protection.outlook.com (104.47.57.42) by
+ edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.27; Wed, 28 Jun 2023 19:39:29 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=lfr5BFClAZckr8CyyXd5myhemBrQgWA/JxZOFO8Nm1qnaURbuocV6K+NoF+QEMkiJ/HMhI7Xy2fmdxw+7wPAfK+cwdnHc1vltDiL27zb6zXtldzR62qdN5zGrt0Rj/LaypZAfenWaA6n+NCKUTDZR/+BTzSDuhUbqgoYD3jyEh8uvzkXCs3psjuxKn1R1/3qJExSVt+b8A5kZouWpYjguaLvslGwfjHArZyvbhgzFM4YrHktmJlwRnOYIB4hgFKHHrncU4RYTZQuXgQI/jUm1fLnKEBrdMaQoI3LM3/z46TXgUYEScqtbVv7k1jYZ3QcRSedjlJtxhvQXdtTK/CdpQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=fSM9UNqIfkqDP44/4YLL7afHDLe4stiwp7Rz1OCzmLk=;
+ b=KOD/GzBKtDkhgHbdgK4vypFxHN+7PE+3KnqQMgQtVgNOZcTY7AzxUwVO7PwczoKgaHbABEfpx6O1siqmLl29+rPc4hhLnS/1zoDpJsmYBjVKwO/l8t649B9g0CuxITjVqDVw7FZpDD2ly+EtQ3Y5shYiCSBFOMixgZGD9YRQO/nZpEAlTXCZuL+vpTWSfzs+Rgc/ATNLtJD1XJRyG9EzWbWWh0ayYWrG6wKUrVudbrjFvs9wjazm6rbppj3tsnLKSjuUXmcSrQq4BUnhMEItGJLraLH+OGvkuuc75jTEnqP9VXUSaAFD46guzCs9VDwSx0WRqWxyTHGRNvOVhLl2XA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from MW4PR11MB5824.namprd11.prod.outlook.com (2603:10b6:303:187::19)
+ by BN9PR11MB5450.namprd11.prod.outlook.com (2603:10b6:408:11f::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.26; Thu, 29 Jun
+ 2023 02:39:21 +0000
+Received: from MW4PR11MB5824.namprd11.prod.outlook.com
+ ([fe80::c3fd:5b99:a829:ebc6]) by MW4PR11MB5824.namprd11.prod.outlook.com
+ ([fe80::c3fd:5b99:a829:ebc6%5]) with mapi id 15.20.6521.024; Thu, 29 Jun 2023
+ 02:39:21 +0000
+From:   "Zhang, Xiong Y" <xiong.y.zhang@intel.com>
+To:     Like Xu <like.xu.linux@gmail.com>
+CC:     "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "kan.liang@linux.intel.com" <kan.liang@linux.intel.com>,
+        "zhenyuw@linux.intel.com" <zhenyuw@linux.intel.com>,
+        "Lv, Zhiyuan" <zhiyuan.lv@intel.com>,
+        kvm list <kvm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Christopherson,, Sean" <seanjc@google.com>
+Subject: RE: [PATCH 4/4] KVM: selftests: Add test case for guest and host LBR
+ preemption
+Thread-Topic: [PATCH 4/4] KVM: selftests: Add test case for guest and host LBR
+ preemption
+Thread-Index: AQHZoEaiWSzRwvS6d0G5N9ttxRt7mq+f0pMAgAA03gA=
+Date:   Thu, 29 Jun 2023 02:39:21 +0000
+Message-ID: <MW4PR11MB5824354353F19FF3B49236B7BB25A@MW4PR11MB5824.namprd11.prod.outlook.com>
+References: <20230616113353.45202-1-xiong.y.zhang@intel.com>
+ <20230616113353.45202-5-xiong.y.zhang@intel.com>
+ <c8ae0068-2484-85a3-819e-d71cee23c640@gmail.com>
+In-Reply-To: <c8ae0068-2484-85a3-819e-d71cee23c640@gmail.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: MW4PR11MB5824:EE_|BN9PR11MB5450:EE_
+x-ms-office365-filtering-correlation-id: dfe341a6-acda-4407-5668-08db784a0b47
+x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: TRW/aFIjNhNfYMwXrSB5JPPo0kQb0tSPGi+KajLuYCaQdgzL5BkmZ4OdgS7u8RgoVA3Eq9zdlo0f9/C+f6j30Nr4yBGR0ula2HGwS63rlK4A2oSoRX7LSnciVKwTSLlyNDSANrtbf8Q9TUEy80xpacY6S4P/sJWSgqz/dMsE6NAIlx6f/knhS4RMD8i6E6UBwRIlFw/n0c6Sxy7HXu3CBZCwy1wLKMbmx2xC2d5n1a9xx4WSlBjKeevd7lD3Q/hNyAk16W39AdTUgs+Ymqp5WPg3EpnCT/pJlPpVjcNLvy2NKXX2/RtCs/u3eedgX74cTR2T7HHNB26ZPJCp81VJqpKqIaoJOaGv51aHDkf/UMQaT669Rod08VgepOAPW/ku2vt33rV40ps2rxZLHBRqTIWik5bELZZVPGBeup17BNYQCHrhSCKpIpuf9C+TRLEEfqsYywveOGdJqTPeMqo4xLo4zqJO7o2s/drrsn7zV0V9+831tX9eN2elvtmVIrz9gee+cqFY5QWnLK4Z3od70WLzXNiIY3aIEKxjHQ7V8mYvVRketuXnL8omC1O28Hjdx5LZ4//fKCDqsQHflEklaKqtFtwI0YCBUhfLl4qyKE2ngVAVkrd/5bZNjLY2k7z3
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW4PR11MB5824.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(396003)(376002)(366004)(136003)(346002)(39860400002)(451199021)(316002)(55016003)(8676002)(66946007)(64756008)(66476007)(76116006)(9686003)(6506007)(66446008)(186003)(4326008)(53546011)(6916009)(26005)(8936002)(7696005)(54906003)(71200400001)(41300700001)(66556008)(52536014)(5660300002)(2906002)(30864003)(478600001)(38070700005)(82960400001)(38100700002)(122000001)(33656002)(86362001)(83380400001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?NnFZV0VuTnRiU0NKVnB5RHNCYUxyVlNkR0pNNk1ocE45NHEwOWZwQjlzTVpP?=
+ =?utf-8?B?ZU53N1VqbFFvRXJJM2dTY203eXFVeEJLWGFVbUJRY3F2c3VCVDNMTzBMNUwr?=
+ =?utf-8?B?cDA3Y2VFVG1XU0FSaGNrYmNIMVdyNDYvSnhLUkw2cnMxK3N5T1EzM29iOWRw?=
+ =?utf-8?B?Y21NU21pSDJxcTRqaVBzb1JZdFN1QTZQckpORVVxZy9wemNBTzlSWFRvRlU3?=
+ =?utf-8?B?QkkzcUhXWExIM28wZlRIQmpiR3JtWjZkUWQycG1zdVc5eThPVWNQMGcySS9z?=
+ =?utf-8?B?RWplcVcxeG1RTm1QN3Z2ejB6Q1E2QXU3c0dSd1ErWlB2djVVNXBMTGxpSFdZ?=
+ =?utf-8?B?M0JTak9IQ0JJd1Mzbkdxczd5YlRBQ1RLWVpKZGJUUEhiQ2xTbkY4QmpaL1c4?=
+ =?utf-8?B?ZmxzV3hudFNLQXU3S0hGbUY1YTkxRzNpMERwODYzcTVXRnU5aFpud3dlUkdK?=
+ =?utf-8?B?aWhlQW1RMzJ2TWthbTJnbjNwL0JGSytmcU44ZmNBSTVsd3pLbEFZTnZCL01u?=
+ =?utf-8?B?WU9JbklXMDVXZTZhTGhKWktVcXlURUpiTE52dlpqczY5cWN0bFpGNUdCaE45?=
+ =?utf-8?B?SGl1dWRqTERPWDFVR1ExdzdFR3Q0VUM3dXFrWktyN2ZRSndCWnZBVW5PcWJ4?=
+ =?utf-8?B?YlVQU2VObkdmMkU2WnkyM3k3M2NuVzdpUGhiaU1vVy9WYnRML0RML2tXME5R?=
+ =?utf-8?B?WUxuL2QxY0hoUzkrbW1UclY0bGhqTlpVcE84SmpiV3IwcmJFdkQzdmpHVUdi?=
+ =?utf-8?B?Q2lCMDAzbWFGb25PN05LY0NSTmRVSTJXT2Vwdnc2cVNWdFBIMEt2dTFFOEMy?=
+ =?utf-8?B?dUM4S0h2SVU3ZUVuTEdqcDJMOWNLR0NkcnFlTkZiMG1wSC8wWVBjcStDbkFC?=
+ =?utf-8?B?cGFzYWd1VEhHcGxlaXFzbGlSNjc4M3JYTk1Zdzd4WXU4bWRoalBZVGZnalNH?=
+ =?utf-8?B?YXNFRmU3L0xqaDBnQ3RoaW50c1YwWS9YaE84RlV3b0xwNmJqQ2I5TWJhNnlq?=
+ =?utf-8?B?ZDhuMjAvYkVwNktQOXdOc3dadERQSHpZdDd3by95QXg2WWdFbURUY3dhYWVI?=
+ =?utf-8?B?U1dFUWswd1NsWS9FTU85QzMrSGFRaVBQNUdYOUxQNmRmTXJhWmpEWkxqdkRv?=
+ =?utf-8?B?RFdBSE5zamplamYzQU14SG9TdndJNDRBbGlCcW9QVHB6eXBOell4WElJQTI1?=
+ =?utf-8?B?SkMzU25zTklaYUN4U2dCTTYzWllEdWFOMFJXb3BacFpXTmNTOGhzKytRaEor?=
+ =?utf-8?B?dTlxakhCOStscG9hR1FPM0Q4VVJnRExQVzB3NGxXTzh6dDZvM1l5emNZeXUv?=
+ =?utf-8?B?K2RsSXVpMHViN3NlMUZaSnc0cGh0UlpyRWhzTWxnYXVQMXcwN3V0VENkT2kx?=
+ =?utf-8?B?RWdrTEtZa0lNSVkxUVRmc2kxWDI5SG44Wm5wMm43RVg3QjYra1ZiTUFILzR0?=
+ =?utf-8?B?L09lU3I4Sk1BaGMxSERFVXIzREhuVWhsNjFibFluQll6aTBFQldJdXNiYjVT?=
+ =?utf-8?B?LzZycDdwTUFVSXQvcDkzWnlXdk9yMW14VGtydjBlM0dvTDl3SXloaUhDaTEx?=
+ =?utf-8?B?b21CTWdYSW51STZEWG9ibENnSXhRTTY4eDlmT3E4d0grekRsVHNsV3ZyWlVw?=
+ =?utf-8?B?a2ZrWDdGbm1mcVp1UnkzU3ExVm5XOEZuVDRueEFoeHRoVkFyZ1o0UklqSy9q?=
+ =?utf-8?B?dHlXMmtKL1h0ODRzOGRLZUxUTHFaTzIwT09mZUdrSXQrT050alBQSWJ0RnRZ?=
+ =?utf-8?B?TDNlQmVzdm1JclZkaTl4WjZqUU5vNzVNVVNRTVJUVE94RnVvSUVaY2Q2dXZs?=
+ =?utf-8?B?UTFFRjgrNG9lR3NObVQrR0tpRkZDZ3AxM3A2TnI2Z2ttZ21YbHFkZ1lIblRu?=
+ =?utf-8?B?cmIxeFJrV29NRm1nbSs2SGdYTmY3NnBNR3NiYlQvdEgzY2I1YlJqYWx5SERW?=
+ =?utf-8?B?VXFUbnAyM2c5UDdhbElRZC8rT2xTRzZRQ3pYc0xWUGlVTEtGRXRtUmc4enZP?=
+ =?utf-8?B?UWl1VWtWYkZ0RHk2NEJnU1N2bUZaRGsrOGlGcW9DZzhEaWpRWWZMRDNWZHQ1?=
+ =?utf-8?B?YSt5c3lDN1JYR0IzcVNyNFRDRm9PVTdmUlBLRHl2dmd1UEV5MnBVcGZ3emVp?=
+ =?utf-8?Q?igt9ocjezYJlmZg8TqeJsAE6L?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230628190649.11233-4-nmi@metaspace.dk>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MW4PR11MB5824.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: dfe341a6-acda-4407-5668-08db784a0b47
+X-MS-Exchange-CrossTenant-originalarrivaltime: 29 Jun 2023 02:39:21.4928
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: fEYzX+Di9g7U9eC3x5S0pUwm6BWVDRlAvbKmjeJSlnvCciLeRLN1EbkhrfpzGkrjji5P8ZEUjqQ3v+lpsjinVw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN9PR11MB5450
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 28, 2023 at 09:06:48PM +0200, Andreas Hindborg wrote:
-> From: Andreas Hindborg <a.hindborg@samsung.com>
-> 
-> Add zoned storage support to ublk: report_zones and operations:
->  - REQ_OP_ZONE_OPEN
->  - REQ_OP_ZONE_CLOSE
->  - REQ_OP_ZONE_FINISH
->  - REQ_OP_ZONE_RESET
-> 
-> Note: This commit changes the ublk kernel module name from `ublk_drv.ko` to
-> `ublk.ko` in order to link multiple translation units into the module.
-> 
-> Signed-off-by: Andreas Hindborg <a.hindborg@samsung.com>
-> ---
->  MAINTAINERS                    |   1 +
->  drivers/block/Kconfig          |   4 +
->  drivers/block/Makefile         |   4 +-
->  drivers/block/ublk_drv-zoned.c | 144 +++++++++++++++++++++++++++++++++
->  drivers/block/ublk_drv.c       |  64 +++++++++++++--
->  drivers/block/ublk_drv.h       |  15 ++++
->  include/uapi/linux/ublk_cmd.h  |  14 ++++
->  7 files changed, 239 insertions(+), 7 deletions(-)
->  create mode 100644 drivers/block/ublk_drv-zoned.c
-> 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index ace71c90751c..db8a8deb5926 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -21555,6 +21555,7 @@ S:	Maintained
->  F:	Documentation/block/ublk.rst
->  F:	drivers/block/ublk_drv.c
->  F:	drivers/block/ublk_drv.h
-> +F:	drivers/block/ublk_drv-zoned.c
->  F:	include/uapi/linux/ublk_cmd.h
->  
->  UCLINUX (M68KNOMMU AND COLDFIRE)
-> diff --git a/drivers/block/Kconfig b/drivers/block/Kconfig
-> index 5b9d4aaebb81..c58dfd035557 100644
-> --- a/drivers/block/Kconfig
-> +++ b/drivers/block/Kconfig
-> @@ -402,6 +402,10 @@ config BLKDEV_UBLK_LEGACY_OPCODES
->  	  suggested to enable N if your application(ublk server) switches to
->  	  ioctl command encoding.
->  
-> +config BLK_DEV_UBLK_ZONED
-> +	def_bool y
-> +	depends on BLK_DEV_UBLK && BLK_DEV_ZONED
-> +
->  source "drivers/block/rnbd/Kconfig"
->  
->  endif # BLK_DEV
-> diff --git a/drivers/block/Makefile b/drivers/block/Makefile
-> index 101612cba303..bc1649e20ec2 100644
-> --- a/drivers/block/Makefile
-> +++ b/drivers/block/Makefile
-> @@ -37,6 +37,8 @@ obj-$(CONFIG_BLK_DEV_RNBD)	+= rnbd/
->  
->  obj-$(CONFIG_BLK_DEV_NULL_BLK)	+= null_blk/
->  
-> -obj-$(CONFIG_BLK_DEV_UBLK)			+= ublk_drv.o
-> +obj-$(CONFIG_BLK_DEV_UBLK)		+= ublk.o
-> +ublk-$(CONFIG_BLK_DEV_UBLK)		+= ublk_drv.o
-> +ublk-$(CONFIG_BLK_DEV_UBLK_ZONED)	+= ublk_drv-zoned.o
->  
->  swim_mod-y	:= swim.o swim_asm.o
-> diff --git a/drivers/block/ublk_drv-zoned.c b/drivers/block/ublk_drv-zoned.c
-> new file mode 100644
-> index 000000000000..ea86bf4b3681
-> --- /dev/null
-> +++ b/drivers/block/ublk_drv-zoned.c
-> @@ -0,0 +1,144 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Copyright 2023 Andreas Hindborg <a.hindborg@samsung.com>
-> + */
-> +#include <linux/blkzoned.h>
-> +#include <linux/ublk_cmd.h>
-> +#include <linux/vmalloc.h>
-> +
-> +#include "ublk_drv.h"
-> +
-> +void ublk_set_nr_zones(struct ublk_device *ub)
-> +{
-> +	const struct ublk_param_basic *p = &ub->params.basic;
-> +
-> +	if (ub->dev_info.flags & UBLK_F_ZONED && p->chunk_sectors)
-> +		ub->ub_disk->nr_zones = p->dev_sectors / p->chunk_sectors;
-> +}
-> +
-> +void ublk_dev_param_zoned_apply(struct ublk_device *ub)
-> +{
-> +	const struct ublk_param_zoned *p = &ub->params.zoned;
-> +
-> +	if (ub->dev_info.flags & UBLK_F_ZONED) {
-> +		disk_set_max_active_zones(ub->ub_disk, p->max_active_zones);
-> +		disk_set_max_open_zones(ub->ub_disk, p->max_open_zones);
-> +	}
-> +}
-> +
-> +int ublk_revalidate_disk_zones(struct gendisk *disk)
-> +{
-> +	return blk_revalidate_disk_zones(disk, NULL);
-> +}
-> +
-> +/* Based on virtblk_alloc_report_buffer */
-> +static void *ublk_alloc_report_buffer(struct ublk_device *ublk,
-> +				      unsigned int nr_zones,
-> +				      unsigned int zone_sectors, size_t *buflen)
-> +{
-> +	struct request_queue *q = ublk->ub_disk->queue;
-> +	size_t bufsize;
-> +	void *buf;
-> +
-> +	nr_zones = min_t(unsigned int, nr_zones,
-> +			 get_capacity(ublk->ub_disk) >> ilog2(zone_sectors));
-> +
-> +	bufsize = nr_zones * sizeof(struct blk_zone);
-> +	bufsize =
-> +		min_t(size_t, bufsize, queue_max_hw_sectors(q) << SECTOR_SHIFT);
-> +	bufsize = min_t(size_t, bufsize, queue_max_segments(q) << PAGE_SHIFT);
-
-This means 'blk_zone'(includes any sub-field type) is reused as part of ublk's UAPI,
-and it is smart, please document it around UBLK_IO_OP_REPORT_ZONES's definition.
-
-> +
-> +	while (bufsize >= sizeof(struct blk_zone)) {
-> +		buf = __vmalloc(bufsize, GFP_KERNEL | __GFP_NORETRY);
-> +		if (buf) {
-> +			*buflen = bufsize;
-> +			return buf;
-> +		}
-> +		bufsize >>= 1;
-> +	}
-> +
-> +	bufsize = 0;
-> +	return NULL;
-> +}
-> +
-> +int ublk_report_zones(struct gendisk *disk, sector_t sector,
-> +		      unsigned int nr_zones, report_zones_cb cb, void *data)
-> +{
-> +	struct ublk_device *ub = disk->private_data;
-> +	unsigned int zone_size_sectors = disk->queue->limits.chunk_sectors;
-> +	unsigned int first_zone = sector >> ilog2(zone_size_sectors);
-> +	unsigned int done_zones = 0;
-> +	unsigned int max_zones_per_request;
-> +	struct blk_zone *buffer;
-> +	size_t buffer_length;
-> +
-> +	if (!(ub->dev_info.flags & UBLK_F_ZONED))
-> +		return -EOPNOTSUPP;
-> +
-> +	nr_zones = min_t(unsigned int, ub->ub_disk->nr_zones - first_zone,
-> +			 nr_zones);
-> +
-> +	buffer = ublk_alloc_report_buffer(ub, nr_zones, zone_size_sectors,
-> +					  &buffer_length);
-> +	if (!buffer)
-> +		return -ENOMEM;
-> +
-> +	max_zones_per_request = buffer_length / sizeof(struct blk_zone);
-> +
-> +	while (done_zones < nr_zones) {
-> +		unsigned int remaining_zones = nr_zones - done_zones;
-> +		unsigned int zones_in_request = min_t(
-> +			unsigned int, remaining_zones, max_zones_per_request);
-> +		int err = 0;
-> +		struct request *req;
-> +		struct ublk_rq_data *pdu;
-> +		blk_status_t status;
-> +
-> +		memset(buffer, 0, buffer_length);
-> +
-> +		req = blk_mq_alloc_request(disk->queue, REQ_OP_DRV_IN, 0);
-> +		if (IS_ERR(req))
-> +			return PTR_ERR(req);
-> +
-> +		pdu = blk_mq_rq_to_pdu(req);
-> +		pdu->operation = UBLK_IO_OP_REPORT_ZONES;
-> +		pdu->sector = sector;
-> +		pdu->nr_sectors = remaining_zones * zone_size_sectors;
-> +
-> +		err = blk_rq_map_kern(disk->queue, req, buffer, buffer_length,
-> +					GFP_KERNEL);
-> +		if (err) {
-> +			blk_mq_free_request(req);
-> +			kvfree(buffer);
-> +			return err;
-> +		}
-> +
-> +		status = blk_execute_rq(req, 0);
-> +		err = blk_status_to_errno(status);
-> +		blk_mq_free_request(req);
-> +		if (err) {
-> +			kvfree(buffer);
-> +			return err;
-> +		}
-> +
-> +		for (unsigned int i = 0; i < zones_in_request; i++) {
-> +			struct blk_zone *zone = buffer + i;
-> +
-> +			err = cb(zone, i, data);
-> +			if (err)
-> +				return err;
-> +
-> +			done_zones++;
-> +			sector += zone_size_sectors;
-> +
-> +			/* A zero length zone means don't ask for more zones */
-> +			if (!zone->len) {
-
-This way is part of UAPI UBLK_IO_OP_REPORT_ZONES, please document it
-around UBLK_IO_OP_REPORT_ZONES.
-
-> +				kvfree(buffer);
-> +				return done_zones;
-> +			}
-> +		}
-> +	}
-> +
-> +	kvfree(buffer);
-> +	return done_zones;
-> +}
-> diff --git a/drivers/block/ublk_drv.c b/drivers/block/ublk_drv.c
-> index e519dc0d9fe7..88fa39853c61 100644
-> --- a/drivers/block/ublk_drv.c
-> +++ b/drivers/block/ublk_drv.c
-> @@ -57,12 +57,13 @@
->  		| UBLK_F_USER_RECOVERY_REISSUE \
->  		| UBLK_F_UNPRIVILEGED_DEV \
->  		| UBLK_F_CMD_IOCTL_ENCODE \
-> -		| UBLK_F_USER_COPY)
-> +		| UBLK_F_USER_COPY \
-> +		| UBLK_F_ZONED)
->  
->  /* All UBLK_PARAM_TYPE_* should be included here */
-> -#define UBLK_PARAM_TYPE_ALL (UBLK_PARAM_TYPE_BASIC | \
-> -		UBLK_PARAM_TYPE_DISCARD | UBLK_PARAM_TYPE_DEVT)
-> -
-> +#define UBLK_PARAM_TYPE_ALL                                \
-> +	(UBLK_PARAM_TYPE_BASIC | UBLK_PARAM_TYPE_DISCARD | \
-> +	 UBLK_PARAM_TYPE_DEVT | UBLK_PARAM_TYPE_ZONED)
->  
->  struct ublk_uring_cmd_pdu {
->  	struct ublk_queue *ubq;
-> @@ -209,6 +210,9 @@ static void ublk_dev_param_basic_apply(struct ublk_device *ub)
->  		set_disk_ro(ub->ub_disk, true);
->  
->  	set_capacity(ub->ub_disk, p->dev_sectors);
-> +
-> +	if (IS_ENABLED(CONFIG_BLK_DEV_ZONED))
-> +		ublk_set_nr_zones(ub);
->  }
->  
->  static void ublk_dev_param_discard_apply(struct ublk_device *ub)
-> @@ -269,6 +273,9 @@ static int ublk_apply_params(struct ublk_device *ub)
->  	if (ub->params.types & UBLK_PARAM_TYPE_DISCARD)
->  		ublk_dev_param_discard_apply(ub);
->  
-> +	if (IS_ENABLED(CONFIG_BLK_DEV_ZONED) && (ub->params.types & UBLK_PARAM_TYPE_ZONED))
-> +		ublk_dev_param_zoned_apply(ub);
-> +
->  	return 0;
->  }
->  
-> @@ -439,6 +446,7 @@ static const struct block_device_operations ub_fops = {
->  	.owner =	THIS_MODULE,
->  	.open =		ublk_open,
->  	.free_disk =	ublk_free_disk,
-> +	.report_zones =	ublk_report_zones,
->  };
->  
->  #define UBLK_MAX_PIN_PAGES	32
-> @@ -553,7 +561,8 @@ static inline bool ublk_need_map_req(const struct request *req)
->  
->  static inline bool ublk_need_unmap_req(const struct request *req)
->  {
-> -	return ublk_rq_has_data(req) && req_op(req) == REQ_OP_READ;
-> +	return ublk_rq_has_data(req) &&
-> +	       (req_op(req) == REQ_OP_READ || req_op(req) == REQ_OP_DRV_IN);
->  }
->  
->  static int ublk_map_io(const struct ublk_queue *ubq, const struct request *req,
-> @@ -637,6 +646,7 @@ static blk_status_t ublk_setup_iod(struct ublk_queue *ubq, struct request *req)
->  {
->  	struct ublksrv_io_desc *iod = ublk_get_iod(ubq, req->tag);
->  	struct ublk_io *io = &ubq->ios[req->tag];
-> +	struct ublk_rq_data *pdu = blk_mq_rq_to_pdu(req);
->  	u32 ublk_op;
->  
->  	switch (req_op(req)) {
-> @@ -655,6 +665,35 @@ static blk_status_t ublk_setup_iod(struct ublk_queue *ubq, struct request *req)
->  	case REQ_OP_WRITE_ZEROES:
->  		ublk_op = UBLK_IO_OP_WRITE_ZEROES;
->  		break;
-> +	case REQ_OP_ZONE_OPEN:
-> +		ublk_op = UBLK_IO_OP_ZONE_OPEN;
-> +		break;
-> +	case REQ_OP_ZONE_CLOSE:
-> +		ublk_op = UBLK_IO_OP_ZONE_CLOSE;
-> +		break;
-> +	case REQ_OP_ZONE_FINISH:
-> +		ublk_op = UBLK_IO_OP_ZONE_FINISH;
-> +		break;
-> +	case REQ_OP_ZONE_RESET:
-> +		ublk_op = UBLK_IO_OP_ZONE_RESET;
-> +		break;
-> +	case REQ_OP_DRV_IN:
-> +		ublk_op = pdu->operation;
-> +		switch (ublk_op) {
-> +		case UBLK_IO_OP_REPORT_ZONES:
-> +			iod->op_flags = ublk_op | ublk_req_build_flags(req);
-> +			iod->nr_sectors = pdu->nr_sectors;
-> +			iod->start_sector = pdu->sector;
-> +			iod->addr = io->addr;
-
-As Damien commented, zone append needs to be moved into this patch,
-so zoned depends on user copy feature, and you can simply fail to
-add device if user copy isn't enabled.
-
-So the above 'iod->addr = io->addr' can be removed.
-
-> +			return BLK_STS_OK;
-> +		default:
-> +			return BLK_STS_IOERR;
-> +		}
-> +	case REQ_OP_ZONE_APPEND:
-> +	case REQ_OP_ZONE_RESET_ALL:
-> +	case REQ_OP_DRV_OUT:
-> +		/* We do not support zone append or reset_all yet */
-> +		fallthrough;
->  	default:
->  		return BLK_STS_IOERR;
->  	}
-> @@ -708,7 +747,8 @@ static inline void __ublk_complete_rq(struct request *req)
->  	 *
->  	 * Both the two needn't unmap.
->  	 */
-> -	if (req_op(req) != REQ_OP_READ && req_op(req) != REQ_OP_WRITE)
-> +	if (req_op(req) != REQ_OP_READ && req_op(req) != REQ_OP_WRITE &&
-> +	    req_op(req) != REQ_OP_DRV_IN)
->  		goto exit;
->  
->  	/* for READ request, writing data in iod->addr to rq buffers */
-> @@ -1835,6 +1875,15 @@ static int ublk_ctrl_start_dev(struct ublk_device *ub, struct io_uring_cmd *cmd)
->  	if (ub->nr_privileged_daemon != ub->nr_queues_ready)
->  		set_bit(GD_SUPPRESS_PART_SCAN, &disk->state);
->  
-> +	if (IS_ENABLED(CONFIG_BLK_DEV_ZONED) &&
-> +	    ub->dev_info.flags & UBLK_F_ZONED) {
-> +		disk_set_zoned(disk, BLK_ZONED_HM);
-> +		blk_queue_required_elevator_features(disk->queue, ELEVATOR_F_ZBD_SEQ_WRITE);
-> +		ret = ublk_revalidate_disk_zones(disk);
-> +		if (ret)
-> +			goto out_put_disk;
-> +	}
-> +
->  	get_device(&ub->cdev_dev);
->  	ub->dev_info.state = UBLK_S_DEV_LIVE;
->  	ret = add_disk(disk);
-> @@ -1997,6 +2046,9 @@ static int ublk_ctrl_add_dev(struct io_uring_cmd *cmd)
->  	if (ub->dev_info.flags & UBLK_F_USER_COPY)
->  		ub->dev_info.flags &= ~UBLK_F_NEED_GET_DATA;
->  
-> +	if (!IS_ENABLED(CONFIG_BLK_DEV_ZONED))
-> +		ub->dev_info.flags &= ~UBLK_F_ZONED;
-> +
->  	/* We are not ready to support zero copy */
->  	ub->dev_info.flags &= ~UBLK_F_SUPPORT_ZERO_COPY;
->  
-> diff --git a/drivers/block/ublk_drv.h b/drivers/block/ublk_drv.h
-> index f81e62256456..7242430fd6b9 100644
-> --- a/drivers/block/ublk_drv.h
-> +++ b/drivers/block/ublk_drv.h
-> @@ -50,6 +50,21 @@ struct ublk_rq_data {
->  	struct llist_node node;
->  
->  	struct kref ref;
-> +	enum ublk_op operation;
-> +	__u64 sector;
-> +	__u32 nr_sectors;
->  };
->  
-> +void ublk_set_nr_zones(struct ublk_device *ub);
-> +void ublk_dev_param_zoned_apply(struct ublk_device *ub);
-> +int ublk_revalidate_disk_zones(struct gendisk *disk);
-> +
-> +#ifdef CONFIG_BLK_DEV_UBLK_ZONED
-> +int ublk_report_zones(struct gendisk *disk, sector_t sector,
-> +		      unsigned int nr_zones, report_zones_cb cb,
-> +		      void *data);
-> +#else
-> +#define ublk_report_zones NULL
-> +#endif
-> +
->  #endif
-> diff --git a/include/uapi/linux/ublk_cmd.h b/include/uapi/linux/ublk_cmd.h
-> index 471b3b983045..436525afffe8 100644
-> --- a/include/uapi/linux/ublk_cmd.h
-> +++ b/include/uapi/linux/ublk_cmd.h
-> @@ -176,6 +176,11 @@
->  /* Copy between request and user buffer by pread()/pwrite() */
->  #define UBLK_F_USER_COPY	(1UL << 7)
->  
-> +/*
-> + * Enable zoned device support
-> + */
-> +#define UBLK_F_ZONED (1ULL << 8)
-> +
->  /* device state */
->  #define UBLK_S_DEV_DEAD	0
->  #define UBLK_S_DEV_LIVE	1
-> @@ -242,6 +247,7 @@ enum ublk_op {
->  	UBLK_IO_OP_ZONE_APPEND = 13,
->  	UBLK_IO_OP_ZONE_RESET = 15,
->  	__UBLK_IO_OP_DRV_IN_START = 32,
-> +	UBLK_IO_OP_REPORT_ZONES = __UBLK_IO_OP_DRV_IN_START,
->  	__UBLK_IO_OP_DRV_IN_END = 96,
->  	__UBLK_IO_OP_DRV_OUT_START = __UBLK_IO_OP_DRV_IN_END,
->  	__UBLK_IO_OP_DRV_OUT_END = 160,
-> @@ -342,6 +348,12 @@ struct ublk_param_devt {
->  	__u32   disk_minor;
->  };
->  
-> +struct ublk_param_zoned {
-> +	__u32	max_open_zones;
-> +	__u32	max_active_zones;
-> +	__u8	reserved[24];
-> +};
-
-Maybe you can simply borrow virtio_blk_zoned_characteristics definition
-here, and make several reserved words.
-
-But that is fine, given six u32 should be flexible enough compared with
-virtio_blk_zoned_characteristics.
-
-
-Thanks,
-Ming
-
+PiBUaGlzIGRpcmVjdGlvbiBjb3VsZCBiZSBhIHZQTVUgImNvZXhpc3RlbmNlIiBmZWF0dXJlLCBw
+bGVhc2UgZmVlbCBmcmVlIHRvIHRlc3QgaXQuDQo+IEJ1dCB0aGUgZmlyc3Qgc3RlcCBtaWdodCBi
+ZSB0byB0ZXN0IHRoZSBiZWhhdmlvciBvZiB2UE1DIHdoZW4gaXRzIGV2ZW50IGlzDQo+IHByZWVt
+cHRlZC4NCkl0IGlzIGhhcmRlciB0byBjb25zdHJ1Y3QgdlBNQyBwcmVlbXB0aW9uIGFzIHNldmVy
+YWwgY291bnRlcnMgZXhpc3QgaW4gcHJvY2Vzc29yLCB3aGlsZSBvbmx5IG9uZSBMQlIgYW5kIG9u
+ZSBQRUJTIGV4aXN0IGluIHByb2Nlc3Nvci4gDQo+IFRoZW4gZXhwYW5kIHRvIEd1ZXN0IExCUiBh
+bmQgR3Vlc3QgUEVCUyBldGMuDQo+IA0KPiBPbiAxNi82LzIwMjMgNzozMyBwbSwgWGlvbmcgWmhh
+bmcgd3JvdGU6DQo+ID4gV2hlbiBndWVzdCBhY2Nlc3MgTEJSIG1zciBhdCB0aGUgZmlyc3QgdGlt
+ZSwga3ZtIHdpbGwgY3JlYXRlIGEgdkxCUg0KPiA+IGV2ZW50LCB2TEJSIGV2ZW50IGpvaW5zIHBl
+cmYgc2NoZWR1bGVyIGFuZCBvY2N1cHkgcGh5c2ljYWwgTEJSIGZvciBndWVzdCB1c2FnZS4NCj4g
+PiBPbmNlIHZMQlIgZXZlbnQgaXMgYWN0aXZlIGFuZCBvd24gTEJSLCBndWVzdCBjb3VsZCBhY2Nl
+c3MgTEJSIG1zci4NCj4gPg0KPiA+IEJ1dCB2TEJSIGV2ZW50IGlzIHBlciBwcm9jZXNzIHBpbm5l
+ZCBldmVudCwgcGVyZiBoYXMgaGlnaGVyIHByaW9yaXR5IGV2ZW50Og0KPiA+IHBlciBjcHUgcGlu
+bmVkIExCUiBldmVudCwgcGVyZiBoYXMgbG93ZXIgcHJpb3JpdHkgZXZlbnRzIGFsc286IHBlciBj
+cHUNCj4gPiBMQlIgZXZlbnQgYW5kIHBlciBwcm9jZXNzIExCUiBldmVudC4NCj4gPiBTbyBpZiBo
+b3N0IGRvZXNuJ3QgaGF2ZSBoaWdoZXIgcHJpb3JpdHkgcGVyIGNwdSBwaW5uZWQgTEJSIGV2ZW50
+LCB2TEJSDQo+ID4gZXZlbnQgY291bGQgb2NjdXB5IHBoeXNpY2FsIExCUiBhbHdheXMuIEJ1dCBv
+bmNlIHBlciBjcHUgcGlubmVkIExCUg0KPiA+IGV2ZW50IGlzIGFjdGl2ZSwgdkxCUiBldmVudCBj
+b3VsZG4ndCBiZSBhY3RpdmUgYW55bW9yZSwgdGhlbiBndWVzdA0KPiA+IGNvdWxkbid0IGFjY2Vz
+cyBMQlIgbXNyLg0KPiA+DQo+ID4gVGhpcyBjb21taXQgYWRkcyB0ZXN0IGNhc2UgdG8gY292ZXIg
+Z3Vlc3QgYW5kIGhvc3QgbGJyIGNvbnRlbmQuDQo+ID4NCj4gPiBTaWduZWQtb2ZmLWJ5OiBYaW9u
+ZyBaaGFuZyA8eGlvbmcueS56aGFuZ0BpbnRlbC5jb20+DQo+ID4gLS0tDQo+ID4gICB0b29scy90
+ZXN0aW5nL3NlbGZ0ZXN0cy9rdm0vTWFrZWZpbGUgICAgICAgICAgfCAgIDEgKw0KPiA+ICAgLi4u
+L3NlbGZ0ZXN0cy9rdm0vaW5jbHVkZS91Y2FsbF9jb21tb24uaCAgICAgIHwgIDE3ICsrDQo+ID4g
+ICAuLi4va3ZtL3g4Nl82NC9wbXVfZXZlbnRfZmlsdGVyX3Rlc3QuYyAgICAgICAgfCAgMTYgLS0N
+Cj4gPiAgIC4uLi9rdm0veDg2XzY0L3ZteF9wbXVfbGJyX2NvbnRlbmQuYyAgICAgICAgICB8IDE3
+MSArKysrKysrKysrKysrKysrKysNCj4gPiAgIDQgZmlsZXMgY2hhbmdlZCwgMTg5IGluc2VydGlv
+bnMoKyksIDE2IGRlbGV0aW9ucygtKQ0KPiA+ICAgY3JlYXRlIG1vZGUgMTAwNjQ0DQo+ID4gdG9v
+bHMvdGVzdGluZy9zZWxmdGVzdHMva3ZtL3g4Nl82NC92bXhfcG11X2xicl9jb250ZW5kLmMNCj4g
+Pg0KPiA+IGRpZmYgLS1naXQgYS90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9rdm0vTWFrZWZpbGUN
+Cj4gPiBiL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL2t2bS9NYWtlZmlsZQ0KPiA+IGluZGV4IDQ3
+NjFiNzY4Yjc3My4uNDIyYmJjMTZiYTJhIDEwMDY0NA0KPiA+IC0tLSBhL3Rvb2xzL3Rlc3Rpbmcv
+c2VsZnRlc3RzL2t2bS9NYWtlZmlsZQ0KPiA+ICsrKyBiL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3Rz
+L2t2bS9NYWtlZmlsZQ0KPiA+IEBAIC0xMDAsNiArMTAwLDcgQEAgVEVTVF9HRU5fUFJPR1NfeDg2
+XzY0ICs9DQo+IHg4Nl82NC92bXhfZGlydHlfbG9nX3Rlc3QNCj4gPiAgIFRFU1RfR0VOX1BST0dT
+X3g4Nl82NCArPQ0KPiB4ODZfNjQvdm14X2V4Y2VwdGlvbl93aXRoX2ludmFsaWRfZ3Vlc3Rfc3Rh
+dGUNCj4gPiAgIFRFU1RfR0VOX1BST0dTX3g4Nl82NCArPSB4ODZfNjQvdm14X21zcnNfdGVzdA0K
+PiA+ICAgVEVTVF9HRU5fUFJPR1NfeDg2XzY0ICs9IHg4Nl82NC92bXhfaW52YWxpZF9uZXN0ZWRf
+Z3Vlc3Rfc3RhdGUNCj4gPiArVEVTVF9HRU5fUFJPR1NfeDg2XzY0ICs9IHg4Nl82NC92bXhfcG11
+X2xicl9jb250ZW5kDQo+IA0KPiB4ODZfNjQvdm14X3BtdV9jb2V4aXN0ZW5jZSA/DQpZZXMsIG9u
+Y2UgdGhpcyBleHBhbmQgdG8gdlBNQyBhbmQgUEVCUw0KPiANCj4gPiAgIFRFU1RfR0VOX1BST0dT
+X3g4Nl82NCArPSB4ODZfNjQvdm14X3NldF9uZXN0ZWRfc3RhdGVfdGVzdA0KPiA+ICAgVEVTVF9H
+RU5fUFJPR1NfeDg2XzY0ICs9IHg4Nl82NC92bXhfdHNjX2FkanVzdF90ZXN0DQo+ID4gICBURVNU
+X0dFTl9QUk9HU194ODZfNjQgKz0geDg2XzY0L3ZteF9uZXN0ZWRfdHNjX3NjYWxpbmdfdGVzdA0K
+PiA+IGRpZmYgLS1naXQgYS90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9rdm0vaW5jbHVkZS91Y2Fs
+bF9jb21tb24uaA0KPiA+IGIvdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMva3ZtL2luY2x1ZGUvdWNh
+bGxfY29tbW9uLmgNCj4gPiBpbmRleCAxYTZhYWVmNWNjYWUuLmMxYmIwY2FjZjM5MCAxMDA2NDQN
+Cj4gPiAtLS0gYS90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9rdm0vaW5jbHVkZS91Y2FsbF9jb21t
+b24uaA0KPiA+ICsrKyBiL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL2t2bS9pbmNsdWRlL3VjYWxs
+X2NvbW1vbi5oDQo+ID4gQEAgLTM1LDYgKzM1LDIzIEBAIHZvaWQgdWNhbGwodWludDY0X3QgY21k
+LCBpbnQgbmFyZ3MsIC4uLik7DQo+ID4gICB1aW50NjRfdCBnZXRfdWNhbGwoc3RydWN0IGt2bV92
+Y3B1ICp2Y3B1LCBzdHJ1Y3QgdWNhbGwgKnVjKTsNCj4gPiAgIHZvaWQgdWNhbGxfaW5pdChzdHJ1
+Y3Qga3ZtX3ZtICp2bSwgdm1fcGFkZHJfdCBtbWlvX2dwYSk7DQo+ID4NCj4gPiArLyoNCj4gPiAr
+ICogUnVuIHRoZSBWTSB0byB0aGUgbmV4dCBHVUVTVF9TWU5DKHZhbHVlKSwgYW5kIHJldHVybiB0
+aGUgdmFsdWUNCj4gPiArcGFzc2VkDQo+ID4gKyAqIHRvIHRoZSBzeW5jLiBBbnkgb3RoZXIgZXhp
+dCBmcm9tIHRoZSBndWVzdCBpcyBmYXRhbC4NCj4gPiArICovDQo+ID4gK3N0YXRpYyBpbmxpbmUg
+dWludDY0X3QgcnVuX3ZjcHVfdG9fc3luYyhzdHJ1Y3Qga3ZtX3ZjcHUgKnZjcHUpIHsNCj4gPiAr
+CXN0cnVjdCB1Y2FsbCB1YzsNCj4gPiArDQo+ID4gKwl2Y3B1X3J1bih2Y3B1KTsNCj4gPiArCVRF
+U1RfQVNTRVJUX0tWTV9FWElUX1JFQVNPTih2Y3B1LCBLVk1fRVhJVF9JTyk7DQo+ID4gKwlnZXRf
+dWNhbGwodmNwdSwgJnVjKTsNCj4gPiArCVRFU1RfQVNTRVJUKHVjLmNtZCA9PSBVQ0FMTF9TWU5D
+LA0KPiA+ICsJCSAgICAiUmVjZWl2ZWQgdWNhbGwgb3RoZXIgdGhhbiBVQ0FMTF9TWU5DOiAlbHUi
+LCB1Yy5jbWQpOw0KPiA+ICsNCj4gPiArCXJldHVybiB1Yy5hcmdzWzFdOw0KPiA+ICt9DQo+ID4g
+Kw0KPiA+ICAgLyoNCj4gPiAgICAqIFBlcmZvcm0gdXNlcnNwYWNlIGNhbGwgd2l0aG91dCBhbnkg
+YXNzb2NpYXRlZCBkYXRhLiAgVGhpcyBiYXJlIGNhbGwgYXZvaWRzDQo+ID4gICAgKiBhbGxvY2F0
+aW5nIGEgdWNhbGwgc3RydWN0LCB3aGljaCBjYW4gYmUgdXNlZnVsIGlmIHRoZSBhdG9taWMNCj4g
+PiBvcGVyYXRpb25zIGluIGRpZmYgLS1naXQNCj4gPiBhL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3Rz
+L2t2bS94ODZfNjQvcG11X2V2ZW50X2ZpbHRlcl90ZXN0LmMNCj4gPiBiL3Rvb2xzL3Rlc3Rpbmcv
+c2VsZnRlc3RzL2t2bS94ODZfNjQvcG11X2V2ZW50X2ZpbHRlcl90ZXN0LmMNCj4gPiBpbmRleCA0
+MDUwN2VkOWZlOGEuLjhjNjgwMjljZmI0YiAxMDA2NDQNCj4gPiAtLS0gYS90b29scy90ZXN0aW5n
+L3NlbGZ0ZXN0cy9rdm0veDg2XzY0L3BtdV9ldmVudF9maWx0ZXJfdGVzdC5jDQo+ID4gKysrIGIv
+dG9vbHMvdGVzdGluZy9zZWxmdGVzdHMva3ZtL3g4Nl82NC9wbXVfZXZlbnRfZmlsdGVyX3Rlc3Qu
+Yw0KPiA+IEBAIC0xNzcsMjIgKzE3Nyw2IEBAIHN0YXRpYyB2b2lkIGFtZF9ndWVzdF9jb2RlKHZv
+aWQpDQo+ID4gICAJfQ0KPiA+ICAgfQ0KPiA+DQo+ID4gLS8qDQo+ID4gLSAqIFJ1biB0aGUgVk0g
+dG8gdGhlIG5leHQgR1VFU1RfU1lOQyh2YWx1ZSksIGFuZCByZXR1cm4gdGhlIHZhbHVlDQo+ID4g
+cGFzc2VkDQo+ID4gLSAqIHRvIHRoZSBzeW5jLiBBbnkgb3RoZXIgZXhpdCBmcm9tIHRoZSBndWVz
+dCBpcyBmYXRhbC4NCj4gPiAtICovDQo+ID4gLXN0YXRpYyB1aW50NjRfdCBydW5fdmNwdV90b19z
+eW5jKHN0cnVjdCBrdm1fdmNwdSAqdmNwdSkgLXsNCj4gPiAtCXN0cnVjdCB1Y2FsbCB1YzsNCj4g
+PiAtDQo+ID4gLQl2Y3B1X3J1bih2Y3B1KTsNCj4gPiAtCVRFU1RfQVNTRVJUX0tWTV9FWElUX1JF
+QVNPTih2Y3B1LCBLVk1fRVhJVF9JTyk7DQo+ID4gLQlnZXRfdWNhbGwodmNwdSwgJnVjKTsNCj4g
+PiAtCVRFU1RfQVNTRVJUKHVjLmNtZCA9PSBVQ0FMTF9TWU5DLA0KPiA+IC0JCSAgICAiUmVjZWl2
+ZWQgdWNhbGwgb3RoZXIgdGhhbiBVQ0FMTF9TWU5DOiAlbHUiLCB1Yy5jbWQpOw0KPiA+IC0JcmV0
+dXJuIHVjLmFyZ3NbMV07DQo+ID4gLX0NCj4gDQo+IENhbiB0aGlzIHBhcnQgYmUgYSBzZXBhcmF0
+ZSBwYXRjaCA/DQpPSy4NCj4gDQo+ID4gLQ0KPiA+ICAgc3RhdGljIHZvaWQgcnVuX3ZjcHVfYW5k
+X3N5bmNfcG1jX3Jlc3VsdHMoc3RydWN0IGt2bV92Y3B1ICp2Y3B1KQ0KPiA+ICAgew0KPiA+ICAg
+CXVpbnQ2NF90IHI7DQo+ID4gZGlmZiAtLWdpdCBhL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL2t2
+bS94ODZfNjQvdm14X3BtdV9sYnJfY29udGVuZC5jDQo+ID4gYi90b29scy90ZXN0aW5nL3NlbGZ0
+ZXN0cy9rdm0veDg2XzY0L3ZteF9wbXVfbGJyX2NvbnRlbmQuYw0KPiA+IG5ldyBmaWxlIG1vZGUg
+MTAwNjQ0DQo+ID4gaW5kZXggMDAwMDAwMDAwMDAwLi5hNmE3OTNmMDg1MTUNCj4gPiAtLS0gL2Rl
+di9udWxsDQo+ID4gKysrIGIvdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMva3ZtL3g4Nl82NC92bXhf
+cG11X2xicl9jb250ZW5kLmMNCj4gPiBAQCAtMCwwICsxLDE3MSBAQA0KPiA+ICsvLyBTUERYLUxp
+Y2Vuc2UtSWRlbnRpZmllcjogR1BMLTIuMA0KPiA+ICsvKg0KPiA+ICsgKiBUZXN0IGZvciBob3N0
+IGFuZCBndWVzdCBMQlIgcHJlZW1wdGlvbg0KPiA+ICsgKg0KPiA+ICsgKiBDb3B5cmlnaHQgKEMp
+IDIwMjEgSW50ZWwgQ29ycG9yYXRpb24NCj4gPiArICoNCj4gPiArICovDQo+ID4gKw0KPiA+ICsj
+ZGVmaW5lIF9HTlVfU09VUkNFR0cNCj4gPiArDQo+ID4gKyNpbmNsdWRlIDxsaW51eC9wZXJmX2V2
+ZW50Lmg+DQo+ID4gKyNpbmNsdWRlIDxzeXMvc3lzY2FsbC5oPg0KPiA+ICsjaW5jbHVkZSA8c3lz
+L3N5c2luZm8uaD4NCj4gPiArI2luY2x1ZGUgPHVuaXN0ZC5oPg0KPiA+ICsNCj4gPiArI2luY2x1
+ZGUgInRlc3RfdXRpbC5oIg0KPiA+ICsjaW5jbHVkZSAia3ZtX3V0aWwuaCINCj4gPiArI2luY2x1
+ZGUgInByb2Nlc3Nvci5oIg0KPiA+ICsNCj4gPiArc3RhdGljIHZvaWQgY3JlYXRlX3BlcmZfZXZl
+bnRzKGludCAqZmRzLCBpbnQgY3B1X251bSwgYm9vbCBwaW5uZWQpIHsNCj4gPiArCXN0cnVjdCBw
+ZXJmX2V2ZW50X2F0dHIgYXR0ciA9IHsNCj4gPiArCQkudHlwZSA9IFBFUkZfVFlQRV9IQVJEV0FS
+RSwNCj4gPiArCQkuc2l6ZSA9IHNpemVvZihhdHRyKSwNCj4gPiArCQkuY29uZmlnID0gUEVSRl9D
+T1VOVF9IV19DUFVfQ1lDTEVTLA0KPiA+ICsJCS5zYW1wbGVfdHlwZSA9IFBFUkZfU0FNUExFX0JS
+QU5DSF9TVEFDSywNCj4gPiArCQkuc2FtcGxlX3BlcmlvZCA9IDEwMDAsDQo+ID4gKwkJLnBpbm5l
+ZCA9IHBpbm5lZCwNCj4gPiArCQkuYnJhbmNoX3NhbXBsZV90eXBlID0gUEVSRl9TQU1QTEVfQlJB
+TkNIX0NBTExfU1RBQ0sgfA0KPiA+ICsJCQkJICAgICAgUEVSRl9TQU1QTEVfQlJBTkNIX1VTRVIg
+fA0KPiA+ICsJCQkJICAgICAgUEVSRl9TQU1QTEVfQlJBTkNIX0tFUk5FTCwNCj4gPiArCX07DQo+
+ID4gKwlpbnQgaTsNCj4gPiArDQo+ID4gKwlmb3IgKGkgPSAwOyBpIDwgY3B1X251bTsgaSsrKSB7
+DQo+ID4gKwkJZmRzW2ldID0gc3lzY2FsbChfX05SX3BlcmZfZXZlbnRfb3BlbiwgJmF0dHIsIC0x
+LCBpLCAtMSwNCj4gPiArUEVSRl9GTEFHX0ZEX0NMT0VYRUMpOw0KPiANCj4gV2hpY2ggZmllbGQg
+Y2FuIHBvaW50IHRvIHRoZSBnZW5lcmF0aW9uIG9mIGEgInBlciBjcHUgcGlubmVkIiBldmVudCA/
+DQo+IE1vcmUgY29tbWVudHMgYXJlIHJlcXVpcmVkLg0KWWVzLCBJIHNob3VsZCBhZGQgbW9yZSBj
+b21tZW50cy4gVGhpcyBmdW5jdGlvbiBjcmVhdGUgcGlubmVkIGFuZCBmbGV4aWJsZSBldmVudCwg
+aXQgaXMgY29udHJvbGxlZCBieSBpbnB1dCBwYXJhbWV0ZXIgImJvb2wgcGlubmVkIi4NCj4gDQo+
+ID4gKwkJVEVTVF9BU1NFUlQoZmRzW2ldICE9IC0xLCAiRmFpbGVkIHRvIGNyZWF0ZSBsYnIgZXZl
+bnQgb24gY3B1JWQiLA0KPiBpKTsNCj4gPiArCX0NCj4gPiArfQ0KPiA+ICsNCj4gPiArc3RhdGlj
+IHZvaWQgcmVsZWFzZV9wZXJmX2V2ZW50cyhpbnQgKmZkcywgaW50IGNwdV9udW0pIHsNCj4gPiAr
+CWludCBpOw0KPiA+ICsNCj4gPiArCWZvciAoaSA9IDA7IGkgPCBjcHVfbnVtOyBpKyspDQo+ID4g
+KwkJY2xvc2UoZmRzW2ldKTsNCj4gPiArfQ0KPiA+ICsNCj4gPiArI2RlZmluZSBQRVJGX0NBUF9M
+QlJfRk1UX01BU0sgIDB4MUYNCj4gPiArDQo+ID4gKyNkZWZpbmUgTEJSX05PVF9TVVBQT1JURUQg
+IDB4RkZGRQ0KPiA+ICsjZGVmaW5lIExCUl9NU1JfV1JJVEVfRVJST1IgMHhGRkZEDQo+ID4gKw0K
+PiA+ICsjZGVmaW5lIExCUl9NT0RFX0NIRUNLX1BBU1MgMHgwDQo+ID4gKyNkZWZpbmUgTEJSX01T
+Ul9XUklURV9TVUNDICAweDENCj4gPiArDQo+ID4gK3N0YXRpYyBib29sIGNoZWNrX2xicl9tc3Io
+dm9pZCkNCj4gPiArew0KPiA+ICsJdWludDY0X3Qgdiwgb2xkX3ZhbDsNCj4gPiArDQo+ID4gKwlv
+bGRfdmFsID0gcmRtc3IoTVNSX0xCUl9UT1MpOw0KPiANCj4gV2h5IGZvY3VzIG9ubHkgb24gTVNS
+X0xCUl9UT1MgPw0KTVNSX0xCUl9GUk9NeC9UT3ggY291bGQgYmUgdXNlZCBhbHNvLCBJIGNob29z
+ZSBUT1Mgd2l0aG91dCBzcGVjaWFsIHJlYXNvbi4NCj4gDQo+ID4gKw0KPiA+ICsJdiAgPSBvbGRf
+dmFsIF4gMHgzVUw7DQo+ID4gKw0KPiA+ICsJd3Jtc3IoTVNSX0xCUl9UT1MsIHYpOw0KPiA+ICsJ
+aWYgKHJkbXNyKE1TUl9MQlJfVE9TKSAhPSB2KQ0KPiA+ICsJCXJldHVybiBmYWxzZTsNCj4gPiAr
+DQo+ID4gKwl3cm1zcihNU1JfTEJSX1RPUywgb2xkX3ZhbCk7DQo+ID4gKwlpZiAocmRtc3IoTVNS
+X0xCUl9UT1MpICE9IG9sZF92YWwpDQo+ID4gKwkJcmV0dXJuIGZhbHNlOw0KPiA+ICsNCj4gPiAr
+CXJldHVybiB0cnVlOw0KPiA+ICt9DQo+ID4gKw0KPiA+ICtzdGF0aWMgdm9pZCBndWVzdF9jb2Rl
+KHZvaWQpDQo+ID4gK3sNCj4gPiArCXVpbnQ2NF90IHY7DQo+ID4gKw0KPiA+ICsJdiA9IHJkbXNy
+KE1TUl9JQTMyX1BFUkZfQ0FQQUJJTElUSUVTKTsNCj4gPiArCWlmICgodiAmIFBFUkZfQ0FQX0xC
+Ul9GTVRfTUFTSykgPT0gMCkNCj4gPiArCQlHVUVTVF9TWU5DKExCUl9OT1RfU1VQUE9SVEVEKTsN
+Cj4gPiArDQo+ID4gKwlHVUVTVF9TWU5DKExCUl9NT0RFX0NIRUNLX1BBU1MpOw0KPiA+ICsNCj4g
+PiArCXdoaWxlICgxKSB7DQo+ID4gKwkJaWYgKCFjaGVja19sYnJfbXNyKCkpIHsNCj4gPiArCQkJ
+R1VFU1RfU1lOQyhMQlJfTVNSX1dSSVRFX0VSUk9SKTsNCj4gPiArCQkJY29udGludWU7DQo+ID4g
+KwkJfQ0KPiA+ICsNCj4gPiArCQkvKiBFbmFibGUgTEJSIHRvIGF2b2lkIEtWTSByZWN5bGluZyBM
+QlIuICovDQo+ID4gKwkJIHYgPSByZG1zcihNU1JfSUEzMl9ERUJVR0NUTE1TUik7DQo+ID4gKwkJ
+IHYgfD0gREVCVUdDVExNU1JfTEJSOw0KPiA+ICsJCSB3cm1zcihNU1JfSUEzMl9ERUJVR0NUTE1T
+Uiwgdik7DQo+ID4gKw0KPiA+ICsJCUdVRVNUX1NZTkMoTEJSX01TUl9XUklURV9TVUNDKTsNCj4g
+PiArCX0NCj4gPiArfQ0KPiA+ICsNCj4gPiAraW50IG1haW4oaW50IGFyZ2MsIGNoYXIgKmFyZ3Zb
+XSkNCj4gPiArew0KPiA+ICsJaW50ICpmZHMsIG5jcHVzOw0KPiA+ICsJc3RydWN0IGt2bV92Y3B1
+ICp2Y3B1Ow0KPiA+ICsJc3RydWN0IGt2bV92bSAqdm07DQo+ID4gKwl1aW50NjRfdCByOw0KPiA+
+ICsNCj4gPiArCVRFU1RfUkVRVUlSRShnZXRfa3ZtX3BhcmFtX2Jvb2woImVuYWJsZV9wbXUiKSk7
+DQo+ID4gKwlURVNUX1JFUVVJUkUoaG9zdF9jcHVfaXNfaW50ZWwpOw0KPiA+ICsJVEVTVF9SRVFV
+SVJFKGt2bV9jcHVfcHJvcGVydHkoWDg2X1BST1BFUlRZX1BNVV9WRVJTSU9OKSk7DQo+ID4gKw0K
+PiA+ICsJdm0gPSB2bV9jcmVhdGVfd2l0aF9vbmVfdmNwdSgmdmNwdSwgZ3Vlc3RfY29kZSk7DQo+
+ID4gKwlyID0gcnVuX3ZjcHVfdG9fc3luYyh2Y3B1KTsNCj4gPiArCVRFU1RfQVNTRVJUKHIgPT0g
+TEJSX01PREVfQ0hFQ0tfUEFTUywNCj4gPiArCQkgICAgIkxCUiBmb3JtYXQgaW4gZ3Vlc3QgUEVS
+Rl9DQVAgbXNyIGlzbid0IGNvcnJlY3QiKTsNCj4gPiArDQo+ID4gKwluY3B1cyA9IGdldF9ucHJv
+Y3MoKTsNCj4gDQo+IENvdWxkIHdlIGxpbWl0IHRoZSB0ZXN0IHRvIGEgc3BlY2lmaWMgY3B1LCBz
+aW5jZSBpdCB3aWxsIGFmZmVjdCB0aGUgbG9hZCBvbiBvdGhlcg0KPiBjcHVzPw0KWWVzLCBJZiBz
+ZWxmdGVzdCBvciB2Y3B1IGNvdWxkIGJlIGJpbmQgdG8gYSBzcGVjaWZpYyBjcHUsIG9ubHkgb25l
+IHBlcmYgZXZlbnQgY291bGQgYmUgY3JlYXRlZCBvbiB0aGUgdGFyZ2V0IGNwdS4gQnV0IEkgZG9u
+J3Qga25vdyBob3cgdG8gc3BlY2lmeSBjcHUuIA0KPiANCj4gPiArCWZkcyA9IG1hbGxvYyhzaXpl
+b2YoaW50KSAqIG5jcHVzKTsNCj4gPiArCVRFU1RfQVNTRVJUKGZkcyAhPSBOVUxMLCAiRmFpbGVk
+IHRvIGNyZWF0ZSBmZHMgZm9yIGFsbCBjcHVzIik7DQo+ID4gKw0KPiA+ICsJLyogQ3JlYXRlIHBl
+ciBjcHUgcGlubmVkIExCUiBldmVudCwgdGhlbiBpdCB3aWxsIG93biBMQlIuICovDQo+ID4gKwlj
+cmVhdGVfcGVyZl9ldmVudHMoZmRzLCBuY3B1cywgdHJ1ZSk7DQo+ID4gKw0KPiA+ICsJLyogU2lu
+Y2UgTEJSIGlzIG93bmVkIGJ5IHBlciBjcHUgcGlubmVkIExCUiBldmVudCwgZ3Vlc3QgY291bGRu
+J3QgZ2V0IGl0LA0KPiA+ICsJICogc28gZ3Vlc3QgY291bGRuJ3QgYWNjZXNzIExCUl9UT1MgbXNy
+Lg0KPiA+ICsJICovDQo+ID4gKwlyID0gcnVuX3ZjcHVfdG9fc3luYyh2Y3B1KTsNCj4gPiArCVRF
+U1RfQVNTRVJUKHIgPT0gTEJSX01TUl9XUklURV9FUlJPUiwNCj4gPiArCQkgICAgIjEuIFVuZXhw
+ZWN0ZWQgc3VjY2Vzc2Z1bGx5IHJlYWQvd3JpdGUgZ3Vlc3QgTEJSX1RPIG1zciIpOw0KPiA+ICsN
+Cj4gPiArCXJlbGVhc2VfcGVyZl9ldmVudHMoZmRzLCBuY3B1cyk7DQo+IA0KPiBPYnZpb3VzbHkg
+dGhlcmUgYXJlIGR1cGxpY2F0ZSBjYWxscyBvbiByZWxlYXNlX3BlcmZfZXZlbnRzKCkgdGhhdCBj
+YW4gYmUgb21pdHRlZC4NCj4gDQo+ID4gKw0KPiA+ICsJLyogU2luY2UgcGVyIGNwdSBwaW5uZWQg
+ZXZlbnQgaXMgY2xvc2VkIGFuZCBMQlIgaXMgZnJlZSwgZ3Vlc3QgY291bGQgZ2V0IGl0LA0KPiA+
+ICsJICogc28gZ3Vlc3QgY291bGQgYWNjZXNzIExCUl9UT1MgbXNyLg0KPiA+ICsJICovDQo+ID4g
+KwlyID0gcnVuX3ZjcHVfdG9fc3luYyh2Y3B1KTsNCj4gPiArCVRFU1RfQVNTRVJUKHIgPT0gTEJS
+X01TUl9XUklURV9TVUNDLA0KPiA+ICsJCSAgICAiMi4gRmFpbGVkIHRvIHJlYWQvd3JpdGUgZ3Vl
+c3QgTEJSX1RPIG1zciIpOw0KPiA+ICsNCj4gPiArCS8qIENyZWF0ZSBwZXIgY3B1IExCUiBldmVu
+dCwgaXRzIHByaW9yaXR5IGlzIGxvd2VyIHRoYW4gdkxCUiBldmVudCwgYW5kIGl0DQo+ID4gKwkg
+KiAgY291bGRuJ3QgZ2V0IExCUiBiYWNrIGZyb20gdkxCUg0KPiA+ICsJICovDQo+ID4gKwljcmVh
+dGVfcGVyZl9ldmVudHMoZmRzLCBuY3B1cywgZmFsc2UpOw0KPiA+ICsNCj4gPiArCS8qIExCUiBp
+cyBzdGlsbCBvd25lZCBieSBndWVzdCwgU28gZ3Vlc3QgY291bGQgYWNjZXNzIExCUl9UT1MNCj4g
+c3VjY2Vzc2Z1bGx5LiAqLw0KPiA+ICsJciA9IHJ1bl92Y3B1X3RvX3N5bmModmNwdSk7DQo+ID4g
+KwlURVNUX0FTU0VSVChyID09IExCUl9NU1JfV1JJVEVfU1VDQywNCj4gPiArCQkgICAgIjMuIEZh
+aWxlZCByZWFkL3dyaXRlIGd1ZXN0IExCUl9UTyBtc3IiKTsNCj4gPiArDQo+ID4gKwlyZWxlYXNl
+X3BlcmZfZXZlbnRzKGZkcywgbmNwdXMpOw0KPiA+ICsNCj4gPiArCS8qIENyZWF0ZSBwZXIgY3B1
+IHBpbm5lZCBMQlIgZXZlbnQsIGl0cyBwcmlvcml0eSBpcyBoaWdoZXIgdGhhbiB2TEJSIGV2ZW50
+LA0KPiA+ICsJICogc28gaXQgd2lsbCBnZXQgTEJSIGJhY2sgZnJvbSB2TEJSLg0KPiA+ICsJICov
+DQo+ID4gKwljcmVhdGVfcGVyZl9ldmVudHMoZmRzLCBuY3B1cywgdHJ1ZSk7DQo+ID4gKw0KPiA+
+ICsJLyogTEJSIGlzIHByZWVwbXRlZCBieSBwZXIgY3B1IHBpbm5lZCBMQlIgZXZlbnQsIGd1ZXN0
+IGNvdWxkbid0IGFjY2Vzcw0KPiA+ICsJICogTEJSX1RPUyBtc3IuDQo+ID4gKwkgKi8NCj4gPiAr
+CXIgPSBydW5fdmNwdV90b19zeW5jKHZjcHUpOw0KPiA+ICsJVEVTVF9BU1NFUlQociA9PSBMQlJf
+TVNSX1dSSVRFX0VSUk9SLA0KPiA+ICsJCSAgICAiNC4gVW5leHBlY3RlZCBzdWNjZXNzZnVsbHkg
+cmVhZC93cml0ZSBndWVzdCBMQlJfVE8gbXNyIik7DQo+ID4gKw0KPiA+ICsJcmVsZWFzZV9wZXJm
+X2V2ZW50cyhmZHMsIG5jcHVzKTsNCj4gDQo+ICAgV2h5IG5vdCBhZGQgbW9yZSB0ZXN0cyB0byBj
+b3ZlciBhbGwgcG9zc2liaWxpdGllcyA/DQo+IA0KPiAJcGVyIGNwdSBwaW5uZWQgZXZlbnQNCj4g
+CXBlciBwcm9jZXNzIHBpbm5lZCBldmVudA0KPiAJcGVyIGNwdSBldmVudA0KPiAJcGVyIHByb2Nl
+c3MgZXZlbnQNClBlciBjcHUgcGlubmVkL2ZsZXhpYmxlIGV2ZW50IGhhdmUgYmVlbiBjb3ZlcmVk
+IGhlcmUuDQpQZXIgcHJvY2VzcywgSSB0aGluayBpdCBtZWFucyBhdHRhY2hpbmcgcGVyZiBvbnRv
+IHFlbXUncyBwcm9jZXNzLCBJIHdpbGwgYWRkIGl0Lg0KDQpBbnl3YXksIHdpdGhvdXQgdGhlIHBy
+ZXZpb3VzIGNvbW1pdHMsIHZMQlIgaGFzIGhpZ2hlc3QgcHJpb3JpdHksIHRoaXMgdGVzdCByZXN1
+bHQgd2lsbCBjaGFuZ2UgYSBsb3QuDQo+IA0KPiA+ICsNCj4gPiArCWt2bV92bV9mcmVlKHZtKTsN
+Cj4gPiArDQo+ID4gKwlmcmVlKGZkcyk7DQo+ID4gKw0KPiA+ICsJcmV0dXJuIDA7DQo+ID4gK30N
+Cg==
