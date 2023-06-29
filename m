@@ -2,193 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2750B7420A8
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 08:49:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A615742092
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 08:40:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231977AbjF2Gtt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 02:49:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45646 "EHLO
+        id S232260AbjF2GkW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 02:40:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232102AbjF2GtQ (ORCPT
+        with ESMTP id S231493AbjF2GjW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 02:49:16 -0400
-Received: from mailout3.samsung.com (mailout3.samsung.com [203.254.224.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 989DD2D52
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 23:49:12 -0700 (PDT)
-Received: from epcas5p2.samsung.com (unknown [182.195.41.40])
-        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20230629064908epoutp03b34fbafaa94188da700ccdf68f10b371~tDnkj7Em22507725077epoutp03X
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 06:49:08 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20230629064908epoutp03b34fbafaa94188da700ccdf68f10b371~tDnkj7Em22507725077epoutp03X
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1688021348;
-        bh=KEpV/SR7y0dLoMKT0bZXWc67BvkeWQIdOruf7uuQ4ZA=;
-        h=From:To:Cc:Subject:Date:References:From;
-        b=ZFlwTvt+QAg75S4wkBhao5iElvEXV9mFlH/JmQo6tg7cQ3LlJhcVaX9/a1NOdSj5T
-         StArv0llErKSXLZQbVlW9ElxnT5V832Gk4Dto2/LOKjqykPdja0C0YBKIiRtOmDaSI
-         9bWE/U9bv+hQs9P/8Yiz1QYcSG7aU25UQoHZ4E7Y=
-Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
-        epcas5p4.samsung.com (KnoxPortal) with ESMTP id
-        20230629064908epcas5p40d0c100961b82debe6e742d08f3db5ba~tDnkBsHPj1752417524epcas5p4c;
-        Thu, 29 Jun 2023 06:49:08 +0000 (GMT)
-Received: from epsmgec5p1-new.samsung.com (unknown [182.195.38.179]) by
-        epsnrtp4.localdomain (Postfix) with ESMTP id 4Qs8Dy2KlJz4x9Px; Thu, 29 Jun
-        2023 06:49:06 +0000 (GMT)
-Received: from epcas5p3.samsung.com ( [182.195.41.41]) by
-        epsmgec5p1-new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        5F.35.55173.2692D946; Thu, 29 Jun 2023 15:49:06 +0900 (KST)
-Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-        epcas5p2.samsung.com (KnoxPortal) with ESMTPA id
-        20230629062728epcas5p2bb48fea42a380039c0eb06c19a44aad1~tDUpsFQG-2800828008epcas5p2I;
-        Thu, 29 Jun 2023 06:27:28 +0000 (GMT)
-Received: from epsmgms1p2new.samsung.com (unknown [182.195.42.42]) by
-        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20230629062728epsmtrp2f7f3edcfa873ad996c2bb7067cf9c52a~tDUprEaJV3223132231epsmtrp2d;
-        Thu, 29 Jun 2023 06:27:28 +0000 (GMT)
-X-AuditID: b6c32a50-df1ff7000001d785-74-649d296246d5
-Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
-        epsmgms1p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        A2.B7.30535.0542D946; Thu, 29 Jun 2023 15:27:28 +0900 (KST)
-Received: from ubuntu.. (unknown [109.105.118.54]) by epsmtip1.samsung.com
-        (KnoxPortal) with ESMTPA id
-        20230629062727epsmtip1ca4ed67758bcd5b83b2a1396a6185aba~tDUoSgo3u1157711577epsmtip1O;
-        Thu, 29 Jun 2023 06:27:27 +0000 (GMT)
-From:   Min Li <min15.li@samsung.com>
-To:     axboe@kernel.dk, willy@infradead.org, hch@lst.de,
-        dlemoal@kernel.org, gregkh@linuxfoundation.org
-Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org, Min Li <min15.li@samsung.com>,
-        Chaitanya Kulkarni <kch@nvidia.com>
-Subject: [PATCH v5] block: add check that partition length needs to be
- aligned with block size
-Date:   Thu, 29 Jun 2023 14:25:17 +0000
-Message-Id: <20230629142517.121241-1-min15.li@samsung.com>
-X-Mailer: git-send-email 2.34.1
+        Thu, 29 Jun 2023 02:39:22 -0400
+Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC1C62705;
+        Wed, 28 Jun 2023 23:39:19 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.143])
+        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4Qs81S4SjBz4f449G;
+        Thu, 29 Jun 2023 14:39:08 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.175.124.27])
+        by APP1 (Coremail) with SMTP id cCh0CgDnUy4LJ51kJfVfMA--.3175S2;
+        Thu, 29 Jun 2023 14:39:08 +0800 (CST)
+From:   Kemeng Shi <shikemeng@huaweicloud.com>
+To:     tytso@mit.edu, adilger.kernel@dilger.ca, ojaswin@linux.ibm.com
+Cc:     linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
+        shikemeng@huaweicloud.com
+Subject: [PATCH v5 0/8] cleanups and unit test for mballoc
+Date:   Thu, 29 Jun 2023 22:39:59 +0800
+Message-Id: <20230629144007.1263510-1-shikemeng@huaweicloud.com>
+X-Mailer: git-send-email 2.30.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrIJsWRmVeSWpSXmKPExsWy7bCmpm6S5twUgzl3+S1W3+1ns3iw396i
-        efF6Nosbx98xW8x9fYnFYuXqo0wWT6/OYrLYe0vb4vKuOWwWy1d1MFmcnfCB1WLBxkeMFr9/
-        AMVurLvK4sDnsXmFlsfls6Uem1Z1snnsn7uG3WP3zQY2j97md2wefVtWMXp83iQXwBGVbZOR
-        mpiSWqSQmpecn5KZl26r5B0c7xxvamZgqGtoaWGupJCXmJtqq+TiE6DrlpkDdLSSQlliTilQ
-        KCCxuFhJ386mKL+0JFUhI7+4xFYptSAlp8CkQK84Mbe4NC9dLy+1xMrQwMDIFKgwITtj543p
-        zAUtIhXzmhpZGxhnCXQxcnJICJhI7L53mqmLkYtDSGAPo8SRDTNZIZxPjBKPls6Fcr4xSjw4
-        2MkC09K8ciIjiC0ksJdRYvcaMYii54wSB1oXAs3i4GATUJbYttQHpEZEIE1iacdPNpAaZoG5
-        jBIXF7YxgSSEBRIkNp/+wAZiswioSkx4NA9sAa+AlcT0H+2MEMvkJfYfPMsMEReUODnzCVgN
-        M1C8eetsZpChEgJTOSSOPJnFBNHgIvHy6BRWCFtY4tXxLewQtpTE53d72UCOkxAolnj5Iwwi
-        XCOx+9ttqFZriW3r14HdzyygKbF+lz5EWFZi6ql1TBBr+SR6fz+BKueV2DEPxlaS+HvhHNTJ
-        EhKL9z+EusBDYvvJ86yQsIqV+Db3KusERvlZSL6ZheSbWQibFzAyr2KUSi0ozk1PTTYtMNTN
-        Sy2HR2xyfu4mRnDa1QrYwbh6w1+9Q4xMHIyHGCU4mJVEeG+/mZ0ixJuSWFmVWpQfX1Sak1p8
-        iNEUGMYTmaVEk/OBiT+vJN7QxNLAxMzMzMTS2MxQSZz3nntnipBAemJJanZqakFqEUwfEwen
-        VAPTmso9Ih+OqLE/NJxw/eOb3VdvPbDcu4/rlNOpE4cdTAts3sidvOzi92DB55kaXPO+8yXw
-        uPyTvGNnu3TCdevt8xjeTEu5UuRofHZZ0uw4y5ibe57onGefJ95txu3s0jL3+kWFK11Tl2++
-        4uPu9Co1WLtXUvrtr9YPIRka8+6KKHrYOrxJVI5vCxXnrZ5z5YVOlndUftLuSqu0kzvr7EPF
-        uNrNnf/Iv1r3+viu71yVLoeibWa4sBQfUta83mO9egbb1CN+H9YqzrZb6yTvtvWiw8lpbRzX
-        RUI2fJkdNd3q2CLWh7oHOTydvwrcLzJ/4i/ns3OJ+seLAg5Z60wSP6aGnG5S6fzyQb5hl7zd
-        Z4lIJZbijERDLeai4kQA6EKnVkQEAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrNLMWRmVeSWpSXmKPExsWy7bCSnG6AytwUgzlXFCxW3+1ns3iw396i
-        efF6Nosbx98xW8x9fYnFYuXqo0wWT6/OYrLYe0vb4vKuOWwWy1d1MFmcnfCB1WLBxkeMFr9/
-        AMVurLvK4sDnsXmFlsfls6Uem1Z1snnsn7uG3WP3zQY2j97md2wefVtWMXp83iQXwBHFZZOS
-        mpNZllqkb5fAlbHzxnTmghaRinlNjawNjLMEuhg5OSQETCSaV05kBLGFBHYzSmx/bQsRl5A4
-        P+8XG4QtLLHy33P2LkYuoJqnjBLXDt8Fcjg42ASUJbYt9QExRQRyJFZ89wcpYRZYyChxe/pL
-        VpBeYYE4ia9tXWDzWQRUJSY8mscCYvMKWElM/9HOCDFfXmL/wbPMEHFBiZMzn4DVMAPFm7fO
-        Zp7AyDcLSWoWktQCRqZVjJKpBcW56bnFhgVGeanlesWJucWleel6yfm5mxjB4a+ltYNxz6oP
-        eocYmTgYDzFKcDArifDefjM7RYg3JbGyKrUoP76oNCe1+BCjNAeLkjjvt9e9KUIC6Yklqdmp
-        qQWpRTBZJg5OqQamMxeYThjtebJG6d22zQeaZlo3ST9UEPV9PvPX2afbXx+vfcDLteH/TukX
-        OYesLzKlbny16oGypscH7hUFV/gXyHA1l+menG2bc8/3y8+uz73LlCeJ77x2gG1D0JwN/+YI
-        sF7/bn7VJOsVW2J5stDSCeyChlNvTf679NPXcL6yhoUHDHP3njixfkLqVdGU3W+yme+9LZi4
-        /9z1WXoKs/t1H0xrNtofuPtzw59triaFLCx7riZ+ENj9b3lS5gJXjnePWfz9DJ5prrP4kbn5
-        Q9bNI0dn7gq62/xh/fddD1Z6lMfdPz/Z/lppe06KRP0bzY5N7Jl6tlV18VIL/VKLNrpfSoxX
-        dFg/9dn5CWw2zfb5mnlKLMUZiYZazEXFiQD7Hgea7gIAAA==
-X-CMS-MailID: 20230629062728epcas5p2bb48fea42a380039c0eb06c19a44aad1
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: REQ_APPROVE
-CMS-TYPE: 105P
-DLP-Filter: Pass
+X-CM-TRANSID: cCh0CgDnUy4LJ51kJfVfMA--.3175S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxtrW5KFy5GF1UAryfGw4fAFb_yoW7KF4Dpr
+        sFkFn8Kr1xJr1qva1fC3y7Wr1xKw4xAa1UWryfK34xuFW3urn7u3Z7KFWY9a4DGr4DZFyY
+        9F1UCr45CFn29aDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUU9q14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2jI8I6cxK62vIxIIY0VWUZVW8XwA2ocxC64kIII
+        0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xv
+        wVC0I7IYx2IY6xkF7I0E14v26r4UJVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4
+        x0Y4vEx4A2jsIEc7CjxVAFwI0_GcCE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG
+        64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_JrI_JrylYx0Ec7CjxVAajcxG14
+        v26r1j6r4UMcIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY
+        c2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxAIw28IcxkI7VAKI48JMxC20s026x
+        CaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_
+        JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r
+        1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_
+        WFyUJVCq3wCI42IY6I8E87Iv67AKxVW8JVWxJwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r
+        4UJbIYCTnIWIevJa73UjIFyTuYvjTRC38nUUUUU
+X-CM-SenderInfo: 5vklyvpphqwq5kxd4v5lfo033gof0z/
 X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20230629062728epcas5p2bb48fea42a380039c0eb06c19a44aad1
-References: <CGME20230629062728epcas5p2bb48fea42a380039c0eb06c19a44aad1@epcas5p2.samsung.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_06_12,
-        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=0.0 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_06_12,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Before calling add partition or resize partition, there is no check
-on whether the length is aligned with the logical block size.
-If the logical block size of the disk is larger than 512 bytes,
-then the partition size maybe not the multiple of the logical block size,
-and when the last sector is read, bio_truncate() will adjust the bio size,
-resulting in an IO error if the size of the read command is smaller than
-the logical block size.If integrity data is supported, this will also
-result in a null pointer dereference when calling bio_integrity_free.
+v4->v5
+1. WARN on free blocks to uninitialized group is removed as normal
+fast commit route may triggers this, see [1] for details. The review
+tag from Ojaswin of changed patch is also removed and a futher review
+is needed.
 
-Cc: stable@vger.kernel.org
-Signed-off-by: Min Li <min15.li@samsung.com>
-Reviewed-by: Damien Le Moal <dlemoal@kernel.org>
-Reviewed-by: Chaitanya Kulkarni <kch@nvidia.com>
+v3->v4:
+1. Collect Reviewed-by from Ojaswin
+2. Do improve as Ojaswin kindly suggested: Fix typo in commit,
+WARN if try to clear bit of uninitialized group and improve
+refactoring of AGGRESSIVE_CHECK code.
+3. Fix conflic on patch 16
+4. Improve git log in patch 16,17
 
----
-Changes from v1:
+v2->v3:
+1. Fix build warnings on "ext4: add some kunit stub for mballoc kunit
+test" and "ext4: add first unit test for ext4_mb_new_blocks_simple in
+mballoc"
 
-- Add a space after /* and before */.
-- Move length alignment check before the "start = p.start >> SECTOR_SHIFT"
-- Move check for p.start being aligned together with this length alignment check.
+This series is a new version of unmerged patches from [1]. The first 6
+patches of this series factor out codes to mark blocks used or freed
+which will update on disk block bitmap and group descriptor. Several
+reasons to do this:
+1. pair behavior of alloc/free bits. For example,
+ext4_mb_new_blocks_simple will update free_clusters in struct flex_groups
+in ext4_mb_mark_bb while ext4_free_blocks_simple forgets this.
+2. remove repeat code to read from disk, update and write back to disk.
+3. reduce future unit test mocks to avoid real IO to update structure
+on disk.
 
-Changes from v2:
+The last 2 patches add a unit test for mballoc. Before more unit tests
+are added, there are something should be discussed:
+1. How to test static function in mballoc.c
+Currently, include mballoc-test.c in mballoc.c to test static function
+in mballoc.c from mballoc-test.c which is one way suggested in [2].
+Not sure if there is any more elegant way to test static function without
+touch mballoc.c.
+2. How to add mocks to function in mballoc.c which may issue IO to disk
+Currently, KUNIT_STATIC_STUB_REDIRECT is added to functions as suggested
+in kunit document [3].
+3. How to simulate a block bitmap.
+Currently, a fake buffer_head with bitmap data is returned, then no
+futher change is needed.
+If we simulate a block bitmap with an array of data structure like:
+struct test_bitmap {
+       unsigned int	start;
+       unsigned int	len;
+}
+which is suggested by Theodore in [4], then we need to add mocks to
+function which expected bitmap from bitmap_bh->b_data, like
+mb_find_next_bit, mb_find_next_zero_bit and maybe more.
 
-- Add the assignment on the first line and merge the two lines into one.
+Would like to hear any suggestion! Thanks!
 
-Changes from v3:
+I run kvm-xfstest with config "ext4/all" and "-g auto" together with
+patchset for resize, you can see detail report in [6].
 
-- Change the blksz to unsigned int.
-- Add check if p.start and p.length are negative.
+Unit test result is as followings:
+# ./tools/testing/kunit/kunit.py run --kunitconfig=fs/ext4/.kunitconfig --raw_output
+[18:44:39] Configuring KUnit Kernel ...
+[18:44:39] Building KUnit Kernel ...
+Populating config with:
+$ make ARCH=um O=.kunit olddefconfig
+Building with:
+$ make ARCH=um O=.kunit --jobs=88
+[18:44:47] Starting KUnit Kernel (1/1)...
+KTAP version 1
+1..2
+    KTAP version 1
+    # Subtest: ext4_mballoc_test
+    1..1
+    ok 1 test_new_blocks_simple
+ok 1 ext4_mballoc_test
+    KTAP version 1
+    # Subtest: ext4_inode_test
+    1..1
+        KTAP version 1
+        # Subtest: inode_test_xtimestamp_decoding
+        ok 1 1901-12-13 Lower bound of 32bit < 0 timestamp, no extra bits
+        ok 2 1969-12-31 Upper bound of 32bit < 0 timestamp, no extra bits
+        ok 3 1970-01-01 Lower bound of 32bit >=0 timestamp, no extra bits
+        ok 4 2038-01-19 Upper bound of 32bit >=0 timestamp, no extra bits
+        ok 5 2038-01-19 Lower bound of 32bit <0 timestamp, lo extra sec bit on
+        ok 6 2106-02-07 Upper bound of 32bit <0 timestamp, lo extra sec bit on
+        ok 7 2106-02-07 Lower bound of 32bit >=0 timestamp, lo extra sec bit on
+        ok 8 2174-02-25 Upper bound of 32bit >=0 timestamp, lo extra sec bit on
+        ok 9 2174-02-25 Lower bound of 32bit <0 timestamp, hi extra sec bit on
+        ok 10 2242-03-16 Upper bound of 32bit <0 timestamp, hi extra sec bit on
+        ok 11 2242-03-16 Lower bound of 32bit >=0 timestamp, hi extra sec bit on
+        ok 12 2310-04-04 Upper bound of 32bit >=0 timestamp, hi extra sec bit on
+        ok 13 2310-04-04 Upper bound of 32bit>=0 timestamp, hi extra sec bit 1. 1 ns
+        ok 14 2378-04-22 Lower bound of 32bit>= timestamp. Extra sec bits 1. Max ns
+        ok 15 2378-04-22 Lower bound of 32bit >=0 timestamp. All extra sec bits on
+        ok 16 2446-05-10 Upper bound of 32bit >=0 timestamp. All extra sec bits on
+    # inode_test_xtimestamp_decoding: pass:16 fail:0 skip:0 total:16
+    ok 1 inode_test_xtimestamp_decoding
+# Totals: pass:16 fail:0 skip:0 total:16
+ok 2 ext4_inode_test
+[18:44:48] Elapsed time: 8.602s total, 0.001s configuring, 8.483s building, 0.072s running
 
-Changes from v4:
+[1]
+https://lore.kernel.org/linux-ext4/20230603150327.3596033-1-shikemeng@huaweicloud.com/T/#m5ff8e3a058ce1cb272dfef3262cd3202ce6e4358
+[2]
+https://lore.kernel.org/linux-ext4/ZC3MoWn2UO6p+Swp@li-bb2b2a4c-3307-11b2-a85c-8fa5c3a69313.ibm.com/
+[3]
+https://docs.kernel.org/dev-tools/kunit/usage.html#testing-static-functions
+[4]
+https://docs.kernel.org/dev-tools/kunit/api/functionredirection.html#c.KUNIT_STATIC_STUB_REDIRECT
+[5]
+https://lore.kernel.org/linux-ext4/20230317155047.GB3270589@mit.edu/
+[6]
+https://lore.kernel.org/linux-ext4/20230629120044.1261968-1-shikemeng@huaweicloud.com/T/#mcc8fb0697fd54d9267c02c027e1eb3468026ae56
 
-- Remove the local variable blksz and use bdev_logical_block_size(bdev) directly.
----
- block/ioctl.c | 11 +++++++----
- 1 file changed, 7 insertions(+), 4 deletions(-)
+Kemeng Shi (8):
+  ext4: factor out codes to update block bitmap and group descriptor on
+    disk from ext4_mb_mark_bb
+  ext4: call ext4_mb_mark_group_bb in ext4_free_blocks_simple
+  ext4: extent ext4_mb_mark_group_bb to support allocation under journal
+  ext4: call ext4_mb_mark_group_bb in ext4_mb_mark_diskspace_used
+  ext4: call ext4_mb_mark_group_bb in ext4_mb_clear_bb
+  ext4: call ext4_mb_mark_group_bb in ext4_group_add_blocks
+  ext4: add some kunit stub for mballoc kunit test
+  ext4: add first unit test for ext4_mb_new_blocks_simple in mballoc
 
-diff --git a/block/ioctl.c b/block/ioctl.c
-index 3be11941fb2d..0e8723c1a807 100644
---- a/block/ioctl.c
-+++ b/block/ioctl.c
-@@ -18,7 +18,7 @@ static int blkpg_do_ioctl(struct block_device *bdev,
- {
- 	struct gendisk *disk = bdev->bd_disk;
- 	struct blkpg_partition p;
--	long long start, length;
-+	sector_t start, length;
- 
- 	if (!capable(CAP_SYS_ADMIN))
- 		return -EACCES;
-@@ -33,14 +33,17 @@ static int blkpg_do_ioctl(struct block_device *bdev,
- 	if (op == BLKPG_DEL_PARTITION)
- 		return bdev_del_partition(disk, p.pno);
- 
-+	if (p.start < 0 || p.length <= 0 || p.start + p.length < 0)
-+		return -EINVAL;
-+	/* Check that the partition is aligned to the block size */
-+	if (!IS_ALIGNED(p.start | p.length, bdev_logical_block_size(bdev)))
-+		return -EINVAL;
-+
- 	start = p.start >> SECTOR_SHIFT;
- 	length = p.length >> SECTOR_SHIFT;
- 
- 	switch (op) {
- 	case BLKPG_ADD_PARTITION:
--		/* check if partition is aligned to blocksize */
--		if (p.start & (bdev_logical_block_size(bdev) - 1))
--			return -EINVAL;
- 		return bdev_add_partition(disk, p.pno, start, length);
- 	case BLKPG_RESIZE_PARTITION:
- 		return bdev_resize_partition(disk, p.pno, start, length);
+ fs/ext4/balloc.c       |  16 ++
+ fs/ext4/mballoc-test.c | 323 ++++++++++++++++++++++++++
+ fs/ext4/mballoc.c      | 506 ++++++++++++++++-------------------------
+ 3 files changed, 535 insertions(+), 310 deletions(-)
+ create mode 100644 fs/ext4/mballoc-test.c
+
 -- 
-2.34.1
+2.30.0
 
