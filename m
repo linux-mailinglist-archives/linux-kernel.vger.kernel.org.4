@@ -2,126 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A35B7424A6
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 13:05:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 288747424AA
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 13:06:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232103AbjF2LFw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 07:05:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35274 "EHLO
+        id S232128AbjF2LGc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 07:06:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230181AbjF2LFt (ORCPT
+        with ESMTP id S229632AbjF2LG3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 07:05:49 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CF21E4C;
-        Thu, 29 Jun 2023 04:05:49 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id B950A1F8AA;
-        Thu, 29 Jun 2023 11:05:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1688036747; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=DxZG+eGbesMc+qW7i7D8iQT3Knlr73r/mfe4sTHLErc=;
-        b=g7u6RHC1eRr6vSIwplw/P90srh4AWrJx3RtZWc461xSV49K/qI7vEQY5nZHcnYRmKL5qCk
-        uS1eyb9Uqjr+y0/3yeZAMWIFospnDclbEGC4/nWUGkbN79DQlKObMCyCJt9D0iDR03hFtG
-        OOj6dH9xnx9XQJTB1wjvRhIg+8b34wI=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1688036747;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=DxZG+eGbesMc+qW7i7D8iQT3Knlr73r/mfe4sTHLErc=;
-        b=GrKPRyKdBdL7Gg1aiB3i/PdvQROhF7OHTAj2e/ohm7wnxK7kG+dLgRchP1bg0FiYeTYoob
-        PwWp5O7f59uXHyCA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id AB07B139FF;
-        Thu, 29 Jun 2023 11:05:47 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id fGK2KYtlnWSpLwAAMHmgww
-        (envelope-from <jack@suse.cz>); Thu, 29 Jun 2023 11:05:47 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id 3E4C9A0722; Thu, 29 Jun 2023 13:05:47 +0200 (CEST)
-Date:   Thu, 29 Jun 2023 13:05:47 +0200
-From:   Jan Kara <jack@suse.cz>
-To:     Baokun Li <libaokun1@huawei.com>
-Cc:     jack@suse.cz, linux-fsdevel@vger.kernel.org,
-        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yi.zhang@huawei.com, yangerkun@huawei.com, chengzhihao1@huawei.com,
-        yukuai3@huawei.com
-Subject: Re: [PATCH v2 7/7] quota: remove unused function put_dquot_list()
-Message-ID: <20230629110547.oppa5crrgzt6xrkf@quack3>
-References: <20230628132155.1560425-1-libaokun1@huawei.com>
- <20230628132155.1560425-8-libaokun1@huawei.com>
+        Thu, 29 Jun 2023 07:06:29 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A20ABE4C;
+        Thu, 29 Jun 2023 04:06:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1688036788; x=1719572788;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=W2cppJmOBSXO1P/UyN7qi1Jn6DHPKLt2MNzx8ozIQCM=;
+  b=CvW9LfROqOgOvNzJJRdMjmVfwyVWgl2GfgserDil75itPleHkd2c6+pP
+   oH06yIo46nmac2AV5KSYZhwbaGCRE1xSZupQpSUmXu/0oX1SVfgsGaNRF
+   QDb+CGkV9ysRqMRQSTlhSkmg5QGxVVrT3BzEtZNzbtBvovEuZTMiB0HfW
+   BU3nS+yXel3m3b+QiWQnPTPzi1ynZ01rCyyd/MKWzRjxQMC25tteNmLCJ
+   ifGdfkVe4kpg4sG0Du0R/7Ugz83CoIwYapULCeOWjoN2b/xVMhouf4WTk
+   oYnL7HC9SpWhfYrH6tmfV4KEoO84NErU9MDVZlE4krg/wJHGotjnGisBh
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10755"; a="392803824"
+X-IronPort-AV: E=Sophos;i="6.01,168,1684825200"; 
+   d="scan'208";a="392803824"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jun 2023 04:06:25 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10755"; a="694586230"
+X-IronPort-AV: E=Sophos;i="6.01,168,1684825200"; 
+   d="scan'208";a="694586230"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga006.jf.intel.com with ESMTP; 29 Jun 2023 04:06:21 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1qEpTf-000ppe-2t;
+        Thu, 29 Jun 2023 14:06:19 +0300
+Date:   Thu, 29 Jun 2023 14:06:19 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     ruihongluo <colorsu1922@gmail.com>
+Cc:     gregkh@linuxfoundation.org, ilpo.jarvinen@linux.intel.com,
+        jirislaby@kernel.org, linux-kernel@vger.kernel.org,
+        linux-serial@vger.kernel.org, luoruihong@xiaomi.com,
+        wengjinfei@xiaomi.com, weipengliang@xiaomi.com
+Subject: Re: [PATCH v2 1/1] serial: 8250: Preserve original value of DLF
+ register
+Message-ID: <ZJ1lq8mVU8NbZRcV@smile.fi.intel.com>
+References: <ZJ1M5QvyWzgWNlpE@smile.fi.intel.com>
+ <20230629094204.60246-1-luoruihong@xiaomi.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230628132155.1560425-8-libaokun1@huawei.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20230629094204.60246-1-luoruihong@xiaomi.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed 28-06-23 21:21:55, Baokun Li wrote:
-> Now that no one is calling put_dquot_list(), remove it.
+On Thu, Jun 29, 2023 at 05:42:05PM +0800, ruihongluo wrote:
+> This commit is aimed at preserving the original value of the
+> DLF(Divisor Latch Fraction Register). When the DLF register is
+> modified without preservation, it can disrupt the baudrate settings
+> established by firmware or bootloader , leading to data corruption
+> and the generation of unreadable or distorted characters.
+
+> Fixes: 701c5e73b296 ("serial: 8250_dw: add fractional divisor support")
 > 
-> Signed-off-by: Baokun Li <libaokun1@huawei.com>
 
-I guess you can merge this with patch 6. When there was only a single user,
-there's no good reason to separate the removal of the unused function...
+To make it a tag you should avoid blank lines in the tag block.
 
-								Honza
-
+> Signed-off-by: ruihongluo <luoruihong@xiaomi.com>
 > ---
->  fs/quota/dquot.c | 20 --------------------
->  1 file changed, 20 deletions(-)
-> 
-> diff --git a/fs/quota/dquot.c b/fs/quota/dquot.c
-> index df028fb2ce72..ba0125473be3 100644
-> --- a/fs/quota/dquot.c
-> +++ b/fs/quota/dquot.c
-> @@ -1102,26 +1102,6 @@ static void remove_inode_dquot_ref(struct inode *inode, int type)
->  	dqput(dquot);
->  }
->  
-> -/*
-> - * Free list of dquots
-> - * Dquots are removed from inodes and no new references can be got so we are
-> - * the only ones holding reference
-> - */
-> -static void put_dquot_list(struct list_head *tofree_head)
-> -{
-> -	struct list_head *act_head;
-> -	struct dquot *dquot;
-> -
-> -	act_head = tofree_head->next;
-> -	while (act_head != tofree_head) {
-> -		dquot = list_entry(act_head, struct dquot, dq_free);
-> -		act_head = act_head->next;
-> -		/* Remove dquot from the list so we won't have problems... */
-> -		list_del_init(&dquot->dq_free);
-> -		dqput(dquot);
-> -	}
-> -}
-> -
->  static void remove_dquot_ref(struct super_block *sb, int type)
->  {
->  	struct inode *inode;
-> -- 
-> 2.31.1
-> 
+> v2:
+> - added fixes tag
+
+Actually not. See above.
+
+And what about the  rest of the comments?
+
+...
+
+> Just wanted to drop a quick note to say thanks for your help with git
+> send-email and code modifications.
+> Your assistance on the details was much appreciated.
+
+You're welcome!
+
+> Ruihong Luo
+
+This seems needs to be in your Git config:
+
+$ cat ~/.gitconfig
+[user]
+	name = Ruihong Luo
+	email = luoruihon@xiaomi.com
+
 -- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+With Best Regards,
+Andy Shevchenko
+
+
