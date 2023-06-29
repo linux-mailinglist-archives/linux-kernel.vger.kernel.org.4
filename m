@@ -2,108 +2,301 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41690742F54
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 23:11:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09CB7742F5D
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 23:17:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231267AbjF2VLE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 17:11:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51606 "EHLO
+        id S230499AbjF2VQz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 17:16:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231655AbjF2VKq (ORCPT
+        with ESMTP id S230189AbjF2VQx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 17:10:46 -0400
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94EF52D50
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 14:10:45 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-5766e49b802so9865257b3.1
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 14:10:45 -0700 (PDT)
+        Thu, 29 Jun 2023 17:16:53 -0400
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B56CCA
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 14:16:52 -0700 (PDT)
+Received: by mail-pf1-x42a.google.com with SMTP id d2e1a72fcca58-668711086f4so736673b3a.1
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 14:16:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1688073045; x=1690665045;
-        h=to:from:subject:message-id:references:mime-version:in-reply-to:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=UsEbpxav6ahWUqWRHokyvYOjnwAiA6+4Ey/eDy9iyeU=;
-        b=JmeOa/NQ4KueDONJPzGt46ULv/Jx9QjQEPEc2dClt0Ea4EBBgbSFvapBXh1anHJjb8
-         vZSrkH9Fav/wClwA+7JKy0RXxPz6qRYJvWCQi+puyQQBgenTzZXqYgB7IZ28knjbyAY6
-         R8uCRsS/NVb82NvjnA1LX88cCt92rgaLFEuQjwyMa3rW4j989BAJrg4M1UMRF+eOKLRM
-         LNSIGbRGUXck9LY0Wd8nseZoC48wuTh1DnfAknOtlQRuV2HRMb7lMgFCcMJPqSfJUl1J
-         flg1KBNKWk415VWIARpC8y+BAvk8F5r0/T8Z6/KRaOi2Wi0wrNrNtGjX+FIaozCGgfwm
-         LiKQ==
+        d=rivosinc-com.20221208.gappssmtp.com; s=20221208; t=1688073412; x=1690665412;
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=hF59tCLB3i2ZSoqiIO+QZt0MgqaxDzN1p9jJHZT4o+s=;
+        b=uJs9KJk6RGq0HhR7GKju0z6egwb7wxB+esjqPBd+t9q0Idj2H4/W5fcpz5BalQjpxb
+         kJ/1ZJoq78fN1zsmRVQakK08c6JSVIFi9IdPT8U9EYVYWx/bmp9ZcYyXRhjkpA8XpEsw
+         fX21run5W6Pzcmk6qFlVwzRm1K1g+ISxCzH+aP1X4KhTpL+wupXPV0OlS2CaQhd+rc7E
+         7yllj4OqVWMyeK7TIX6qAE6iXs4aoNSPIkC5P5O66+L3289HbOXDpx0Ex9+I6MEFwtFm
+         Xp+2xmsbqmk5sEdsau03wGoii0c9R99HvqxpL9zVRBBkpuhqoGp03Izjy0eVwIYdGuWj
+         Mxeg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688073045; x=1690665045;
-        h=to:from:subject:message-id:references:mime-version:in-reply-to:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=UsEbpxav6ahWUqWRHokyvYOjnwAiA6+4Ey/eDy9iyeU=;
-        b=fMpzRgtfDa1FcTugf23atRO7q1lDqv4feqXBuKI+Xq3SSwuBoie80AdbRiVX3ISMfC
-         DfIXBtz3zcdx9gxHJVM1EMoCswHfQFl2a/adoCItfi/6hqWOirQEhZRCikWcO3/pMveR
-         ZL3zVyRtjCbhqZmXLVikbthgTLceURoMSqsPzOR4q9DQ9h8atkY7k9JTLqOvj+/47DBF
-         yMoEjSQSCPTkjOeKQeqDVbG0gdvjo42GSn1tWI/Fxsyvno3btDDmEp4DhxHibkerJ5cl
-         pQAw171k/W0FoxnQInukdC2QjG0cLsZMPgnS/k+NVKOykUuZCFOVa5xKIttfyfe5ih2D
-         jbNg==
-X-Gm-Message-State: ABy/qLa5yuTrvrp11Rz3zbvkWGe0dMol3l1EXr84RXcyULcVzY7vJ6de
-        3y9TZkRFvqfo3N7WdtLwG7HTgtKJy0E=
-X-Google-Smtp-Source: APBJJlEk8/5Ea2X6pRItOxTeUL+Uh//8L0CrzsASNmcIyDjTUxF9X5fS+sl+JJC5fcPXB6Sl9EYJC4G4Y0s=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a25:7412:0:b0:ba6:e7ee:bb99 with SMTP id
- p18-20020a257412000000b00ba6e7eebb99mr5728ybc.12.1688073044874; Thu, 29 Jun
- 2023 14:10:44 -0700 (PDT)
-Date:   Thu, 29 Jun 2023 14:10:43 -0700
-In-Reply-To: <20230627230654.2934968-1-seanjc@google.com>
-Mime-Version: 1.0
-References: <20230627230654.2934968-1-seanjc@google.com>
-Message-ID: <ZJ3zU52uK0N+uoDn@google.com>
-Subject: Re: [ANNOUNCE] PUCK Agenda - 2023.06.28 - CANCELED
-From:   Sean Christopherson <seanjc@google.com>
-To:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        d=1e100.net; s=20221208; t=1688073412; x=1690665412;
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=hF59tCLB3i2ZSoqiIO+QZt0MgqaxDzN1p9jJHZT4o+s=;
+        b=DiRwG1KPwd9G3T9PtCJ9P3H9jgiAAe2agjfSsp6ascjqGgwVRsb02CjFDT19e5Easa
+         BsgiLG7qjOuAdEp6WOXZBMYjSvTuDb+j5KMFHl48tBtTrr5Bfnj/NmYNx+0BwZYfzixL
+         0Pwcy12WtF4FpYeowAc8hHMEM1OK1LwYOiAvICstWN8hjZ/2Btb5ykF4dfPAEDvu+n6o
+         pDCQn15c0mJ+IoE4qbdTjHYE72wfTacEdJ3eI16CwkFRXC4vY3AzVTzUuZQeCI6cCyNa
+         N1/8JkTS+T5nPLSamyZdqfVH5XlJNjP8WDMD/LO/EI7C18LwVC9OoyJOWFxXGKNXEDWl
+         k5Pw==
+X-Gm-Message-State: AC+VfDz5Eu4cFEr5KNrr+GB996V+omg6RFkt5hfkc5L8zLO9r+gDS3VC
+        rpbwEz94VZxOd+1mPQ728INwiQ==
+X-Google-Smtp-Source: ACHHUZ7Auq8rFwwTGtUSvrhxsKs6/7bdYvH4fWA7K/VE+Y1vOb62kTbTAFbRXyz4qwl5TBhNqJoUYQ==
+X-Received: by 2002:a05:6a00:1388:b0:668:93e7:6800 with SMTP id t8-20020a056a00138800b0066893e76800mr7718754pfg.14.1688073411489;
+        Thu, 29 Jun 2023 14:16:51 -0700 (PDT)
+Received: from localhost ([50.221.140.188])
+        by smtp.gmail.com with ESMTPSA id a17-20020a62e211000000b0066ccb8e8024sm8411714pfi.30.2023.06.29.14.16.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 29 Jun 2023 14:16:49 -0700 (PDT)
+Date:   Thu, 29 Jun 2023 14:16:49 -0700 (PDT)
+X-Google-Original-Date: Thu, 29 Jun 2023 14:16:07 PDT (-0700)
+Subject:     Re: [PATCH v2 10/10] RISC-V: provide a Kconfig option to disable parsing "riscv,isa"
+In-Reply-To: <20230629-landed-popsicle-ab46ab3b46d9@spud>
+CC:     ajones@ventanamicro.com, Conor Dooley <conor.dooley@microchip.com>,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        aou@eecs.berkeley.edu, heiko.stuebner@vrull.eu,
+        Evan Green <evan@rivosinc.com>, sunilvl@ventanamicro.com,
+        linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+From:   Palmer Dabbelt <palmer@rivosinc.com>
+To:     Conor Dooley <conor@kernel.org>
+Message-ID: <mhng-f060b5c8-aa99-4952-b1e1-ee85a92e6b07@palmer-ri-x1c9a>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-+maintainers and other interested parties
+On Thu, 29 Jun 2023 13:20:55 PDT (-0700), Conor Dooley wrote:
+> On Thu, Jun 29, 2023 at 03:53:08PM +0200, Andrew Jones wrote:
+>> On Thu, Jun 29, 2023 at 12:39:51PM +0100, Conor Dooley wrote:
+>> > On Thu, Jun 29, 2023 at 11:31:33AM +0200, Andrew Jones wrote:
+>> > > On Thu, Jun 29, 2023 at 09:28:56AM +0100, Conor Dooley wrote:
+>> > > > As it says on the tin, provide a Kconfig option to disabling parsing the
+>> > > > "riscv,isa" devicetree property. Hide the option behind NONPORTABLE so
+>> > > > that only those willing to keep the pieces enable it, and make sure the
+>> > > > default kernel contains the fallback code.
+>> > > > 
+>> > > > Suggested-by: Palmer Dabbelt <palmer@rivosinc.com>
+>> > > > Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+>> > > > ---
+>> > > >  arch/riscv/Kconfig             | 16 ++++++++++++++++
+>> > > >  arch/riscv/kernel/cpu.c        |  3 +++
+>> > > >  arch/riscv/kernel/cpufeature.c |  2 +-
+>> > > >  3 files changed, 20 insertions(+), 1 deletion(-)
+>> > > > 
+>> > > > diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+>> > > > index 1d39efe2b940..0e1909ac5947 100644
+>> > > > --- a/arch/riscv/Kconfig
+>> > > > +++ b/arch/riscv/Kconfig
+>> > > > @@ -291,6 +291,22 @@ config NONPORTABLE
+>> > > >  
+>> > > >  	  If unsure, say N.
+>> > > >  
+>> > > > +config NO_RISCV_ISA_FALLBACK
+>> > > > +	bool "Permit falling back to parsing riscv,isa for extension support"
+>> > > > +	depends on NONPORTABLE
+>> > > > +	help
+>> > > > +	  Parsing the "riscv,isa" devicetree property has been deprecated and
+>> > > > +	  replaced by a list of explicitly defined strings. For compatibility
+>> > > > +	  with existing platforms, the kernel will fall back to parsing the
+>> > > > +	  "riscv,isa" property if the replacements are not found.
+>> > > > +
+>> > > > +	  Selecting Y here will result in a kernel without this fallback, and
+>> > > > +	  will not work on platforms where the devicetree does not contain the
+>> > > > +	  replacement 	  properties of "riscv,isa-base" and
+>> > >                      ^ spacing issue
+>> > 
+>> > Huh, weird. Given the tab followed by spaces, it must have snuck in
+>> > during reflow of the text after some rewording.
+>> > Wonder how I missed it, given that...
 
-On Tue, Jun 27, 2023, Sean Christopherson wrote:
-> No topic this week, and I need to reclaim some time this week as I will be OOO
-> all of next week.
-> 
-> For future topics, a few things on my radar that I am hoping to discuss in the
-> not-too-distant future, but that need additional work before they're worth
-> discussing:
-> 
->  - Coordinating guest_mem() development.  I need to post patches, plan is to do
->    that the week after I get back.
-> 
->  - Overhauling KVM's gfn_to_pfn() APIs.  Need a status update from David S., e.g.
->    I don't even know if this being actively worked.
-> 
->    https://lore.kernel.org/all/ZGvUsf7lMkrNDHuE@google.com
-> 
->  - KVM + UFFD scalability.  We're not yet at the point where we need a synchronous
->    discussion, but I suspect we'll want a live discussion before merging.
-> 
->    https://lore.kernel.org/all/20230602161921.208564-1-amoorthy@google.com
-> 
->  - Hiding KVM internals from the kernel at large, e.g. moving kvm_host.h into
->    arch/<arch>/kvm and virt/kvm/, and exporting "internal" KVM symbols if and
->    only if there are vendor modules.  Needs an RFC from us (Google GCE people).
+I sometimes end up with these when reflowing in vim, the Kconfig help 
+text indent confuses things (though many things confuse whatever vim 
+reflowing I'm using, so I should probably find something better).
 
-Actually, one semi-urgent topic that I'd like to discuss is the LPC KVM Microconference.
-Specifically, how we want to utilize the allotted three hours.  E.g. we can squeeze
-in ~9 topics if we do 20 minutes per topic, but 20 minutes feels too short for some
-of the "big" topics like guest_mem(), fine-grained permissions, KVM vs. perf, and pKVM.
-But I don't want to focus on just 3-4 topics and not leave time to sync on other
-things.  IMO, a mix would work well, e.g. use 2 hours for 3-4 big topics, and then
-1 hour for 4-6 small topics.
+>> > > Should we also have a kernel command line option, 'isa_fallback', where
+>> > > without this config the command line option is not necessary to fallback,
+>> > > but, with this config, no fallback will be done unless 'isa_fallback' is
+>> > > provided?
+>> > 
+>> > I don't know, maybe I have the wrong end of the stick but it feels a bit
+>> > premature for something that may never not be hidden behind NONPORTABLE?
+>> > Perhaps that could be left for a point in time where the default value
+>> > of the symbol changes, or the dependency on NONPORTABLE is removed?
+>> > 
 
-I'm thinking we could use a PUCK session in mid July to get input on what folks
-generally want the KVM MC to look like so that we can broadcast rough details.
-And then maybe another session in the September timeframe (after submissions have
-closed) to go over the "official" schedule before it becomes officially official.
+I agree it might not be worth the work, but looks like that's done...
 
-Thoughts?
+>> With the command line option, we could consider dropping NONPORTABLE (but
+>> still default off this config). What I'm thinking is that if we want to
+>> encourage the adoption of the new format, then there should be a bit of
+>> pain when it's not used, but not enough pain to risk rebellion. So,
+>> 
+>>  * defconfig builds will silently/painlessly fallback
+>> 
+>>  * builds that want to encourage adoption enable this config and will
+>>    fail to boot when they don't get what they want and don't have the
+>>    command line option
+>> 
+>>  * users still working through the growing pains can manage when
+>>    the boot fails, and when it doesn't, with the command line
+>
+> So, something like the following squashed in? I inverted the config
+> option, seemed more natural that way.
+>
+> diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+> index d910fba25f2c..6c0d0bc06048 100644
+> --- a/Documentation/admin-guide/kernel-parameters.txt
+> +++ b/Documentation/admin-guide/kernel-parameters.txt
+> @@ -5437,6 +5437,13 @@
+>  			[KNL] Disable ring 3 MONITOR/MWAIT feature on supported
+>  			CPUs.
+>  
+> +	riscv_isa_fallback [RISCV]
+> +			Fall back to detecting extension support using the
+> +			"riscv,isa" property on devicetree systems when the
+> +			replacement properties are not found, on kernels where
+> +			RISCV_ISA_FALLBACK is not enabled. See the Kconfig entry
+> +			for RISCV_ISA_FALLBACK.
+> +
+>  	ro		[KNL] Mount root device read-only on boot
+>  
+>  	rodata=		[KNL]
+> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+> index 0370713ad965..a9a473b67182 100644
+> --- a/arch/riscv/Kconfig
+> +++ b/arch/riscv/Kconfig
+> @@ -291,22 +291,6 @@ config NONPORTABLE
+>  
+>  	  If unsure, say N.
+>  
+> -config NO_RISCV_ISA_FALLBACK
+> -	bool "Permit falling back to parsing riscv,isa for extension support"
+> -	depends on NONPORTABLE
+> -	help
+> -	  Parsing the "riscv,isa" devicetree property has been deprecated and
+> -	  replaced by a list of explicitly defined strings. For compatibility
+> -	  with existing platforms, the kernel will fall back to parsing the
+> -	  "riscv,isa" property if the replacements are not found.
+> -
+> -	  Selecting Y here will result in a kernel without this fallback, and
+> -	  will not work on platforms where the devicetree does not contain the
+> -	  replacement properties of "riscv,isa-base" and "riscv,isa-extensions".
+> -	  Please see the dt-binding, located at
+> -	  Documentation/devicetree/bindings/riscv/extensions.yaml for details
+> -	  on the replacement properties.
+> -
+>  choice
+>  	prompt "Base ISA"
+>  	default ARCH_RV64I
+> @@ -857,6 +841,24 @@ config XIP_PHYS_ADDR
+>  	  be linked for and stored to.  This address is dependent on your
+>  	  own flash usage.
+>  
+> +config RISCV_ISA_FALLBACK
+> +	bool "Permit falling back to parsing riscv,isa for extension support by default"
+> +	default y
+
+I think the only risk here is that randconfig will result in systems 
+that don't boot, but we're already stuck with no meaningful base 
+requirements.  Fixing that is a way bigger hurdle than this, so IMO it's 
+fine.
+
+> +	help
+> +	  Parsing the "riscv,isa" devicetree property has been deprecated and
+> +	  replaced by a list of explicitly defined strings. For compatibility
+> +	  with existing platforms, the kernel will fall back to parsing the
+> +	  "riscv,isa" property if the replacements are not found.
+> +
+> +	  Selecting N here will result in a kernel that does not use the
+> +	  fallback, unless the commandline "riscv_isa_fallback" parameter is
+> +	  present.
+> +
+> +	  Please see the dt-binding, located at
+> +	  Documentation/devicetree/bindings/riscv/extensions.yaml for details
+> +	  on the replacement properties of "riscv,isa-base" and
+> +	  "riscv,isa-extensions".
+> +
+>  endmenu # "Boot options"
+>  
+>  config BUILTIN_DTB
+> diff --git a/arch/riscv/include/asm/hwcap.h b/arch/riscv/include/asm/hwcap.h
+> index e3cda14a486b..52fa607a1691 100644
+> --- a/arch/riscv/include/asm/hwcap.h
+> +++ b/arch/riscv/include/asm/hwcap.h
+> @@ -81,6 +81,7 @@ struct riscv_isa_ext_data {
+>  
+>  extern const struct riscv_isa_ext_data riscv_isa_ext[];
+>  extern const size_t riscv_isa_ext_count;
+> +extern bool riscv_isa_fallback_cmdline;
+>
+>  unsigned long riscv_isa_extension_base(const unsigned long *isa_bitmap);
+>  
+> diff --git a/arch/riscv/kernel/cpu.c b/arch/riscv/kernel/cpu.c
+> index 86a1d98b8b3b..1e4cbdedc7fc 100644
+> --- a/arch/riscv/kernel/cpu.c
+> +++ b/arch/riscv/kernel/cpu.c
+> @@ -81,7 +81,7 @@ int riscv_early_of_processor_hartid(struct device_node *node, unsigned long *har
+>  	return 0;
+>  
+>  old_interface:
+> -	if (IS_ENABLED(CONFIG_NO_RISCV_ISA_FALLBACK))
+> +	if (!IS_ENABLED(CONFIG_RISCV_ISA_FALLBACK) && !riscv_isa_fallback_cmdline)
+>  		return -ENODEV;
+>  
+>  	if (of_property_read_string(node, "riscv,isa", &isa)) {
+> diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpufeature.c
+> index f6fb18d2af84..5d848b7c1dde 100644
+> --- a/arch/riscv/kernel/cpufeature.c
+> +++ b/arch/riscv/kernel/cpufeature.c
+> @@ -471,6 +471,14 @@ static int __init riscv_fill_hwcap_from_ext_list(unsigned long *isa2hwcap)
+>  	return 0;
+>  }
+>  
+> +bool __initdata riscv_isa_fallback_cmdline = false;
+> +static int __init riscv_isa_fallback_setup(char *__unused)
+
+Maybe it's better to support =true and =false here?  Not sure it 
+matters, we're already down a rabbit hole ;)
+
+> +{
+> +	riscv_isa_fallback_cmdline = true;
+> +	return 1;
+> +}
+> +early_param("riscv_isa_fallback", riscv_isa_fallback_setup);
+
+IMO it's cleaner to just set the default based on the Kconfig, that way 
+there's only one thing to check.  We're already duplicating the "check 
+both Kconfig and cmdline" logic twice, there's probably going to be 
+others eventually.
+
+> +
+>  void __init riscv_fill_hwcap(void)
+>  {
+>  	char print_str[NUM_ALPHA_EXTS + 1];
+> @@ -490,7 +498,7 @@ void __init riscv_fill_hwcap(void)
+>  	} else {
+>  		int ret = riscv_fill_hwcap_from_ext_list(isa2hwcap);
+>  
+> -		if (ret && !IS_ENABLED(CONFIG_NO_RISCV_ISA_FALLBACK)) {
+> +		if (ret && (IS_ENABLED(CONFIG_RISCV_ISA_FALLBACK) || riscv_isa_fallback_cmdline)) {
+>  			pr_info("Falling back to deprecated \"riscv,isa\"\n");
+>  			riscv_fill_hwcap_from_isa_string(isa2hwcap);
+>  		}
+
+I haven't read the whole patch set, but at least having a nice error for 
+why probing didn't happen seems like the right way to go here.  IIUC 
+this is just silent when ISA string fallbacks are disabled and the new 
+properties aren't there.
+
+Sorry in advance if it's just somewhere outside the diff, though.
