@@ -2,76 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F58F742B5A
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 19:35:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 564DE742B5F
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 19:37:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232459AbjF2RfO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 13:35:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56854 "EHLO
+        id S232125AbjF2Rhp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 13:37:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232875AbjF2Rep (ORCPT
+        with ESMTP id S232054AbjF2Rhm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 13:34:45 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3515E35A9
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 10:34:44 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4C876615CD
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 17:34:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id B0A4CC433C8;
-        Thu, 29 Jun 2023 17:34:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688060080;
-        bh=GQ9/neat5zxuupInFaFWDMGt9QBw67rQHs0Hhp2Xw4g=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=AzfQd1mNAzOAarksS4qaYq67QfGV9T7yHkaPIq+SV9M7K9ifDGl+wd7Kx7j7dxv2r
-         Nn2EkBRo93C3e6y92i+5UYIl/xQ+eRaej6ZHe95GvyS8O2NrpwhWYnaJWELFhBmXD5
-         ZmxdhlsMCM4Fvt/Pw2ZiEODv3evpOPF3hEE0kEmbEt+ZOqkh7JNCPGP9Lo0gRb/8Z2
-         AFki7NpDhqCFuhXcDc0FG06rVlkbqjCeUSxi2OZ1axkh3LkN8eWeY1xlXr8Azj8cNh
-         39k84X8gtbPo6EghnjfBFz3nfy+JPJRTBzDjAuMfAQeQnHocP1kxAtuXNjNs2nrZeA
-         9Pjv9jSWeqtNA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 9D81CC43158;
-        Thu, 29 Jun 2023 17:34:40 +0000 (UTC)
-Subject: Re: [GIT PULL] HID for 6.5
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <nycvar.YFH.7.76.2306272250390.5716@cbobk.fhfr.pm>
-References: <nycvar.YFH.7.76.2306272250390.5716@cbobk.fhfr.pm>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <nycvar.YFH.7.76.2306272250390.5716@cbobk.fhfr.pm>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/hid/hid.git tags/for-linus-2023062701
-X-PR-Tracked-Commit-Id: b571809ec3b0af1a93d46bb09fece4ddeafe5a97
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 0e382fa72bbf0610be40af9af9b03b0cd149df82
-Message-Id: <168806008064.7356.14808968149921025933.pr-tracker-bot@kernel.org>
-Date:   Thu, 29 Jun 2023 17:34:40 +0000
-To:     Jiri Kosina <jikos@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 29 Jun 2023 13:37:42 -0400
+Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EB15A1;
+        Thu, 29 Jun 2023 10:37:41 -0700 (PDT)
+Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-666e97fcc60so873806b3a.3;
+        Thu, 29 Jun 2023 10:37:41 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688060261; x=1690652261;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=x9y4omLSTUEBUieUvzd6rekQFuwG36HDtIqDRR92oWw=;
+        b=L8xZmek1h/x0rva9tU69miFoE5MULXsaod2VSWvMe+5kS0ejIxkD8iBSALs6/BVDQS
+         OhsBhCuW1h+PzNeeYFXYSB8pPf7jBK9YsMmWlcWNy0e0u6ctA6Y/2hod5STItXIYHihm
+         exMBPDhcyeGOZJfryjgB4V6G11q2JARkDqdhvVUjLwsR+45yZ2dIIZ6xyoKnLkwM49uI
+         NTPbWRrJ/BJelK0xLjah0hX94u/FaHX5zgk2QToMw2usw6v7zPQI6SVVQE2PI9IL1iIB
+         OuNVLRDsIEKEMTEgELe6RDBcnsxOboRtN4p4vn+EB5AYYns+yAbtHpyGsxL1/mpdBtvS
+         QqdA==
+X-Gm-Message-State: ABy/qLaLIrbRj2gZrqJUvoTqIBzKBg2jq5kdVYuXVtB5ZsRy0NmTxPpI
+        JUXLuM8iw255Du19BpaaT+I=
+X-Google-Smtp-Source: APBJJlFTlk8wIDskGAI9zd2Hj0xnmbIxFkWni+tt21MHkFoarpjEPMCqwJmv4CcuTN/y1U6kJMmJFg==
+X-Received: by 2002:a05:6a00:1402:b0:681:6169:e403 with SMTP id l2-20020a056a00140200b006816169e403mr587306pfu.8.1688060260830;
+        Thu, 29 Jun 2023 10:37:40 -0700 (PDT)
+Received: from ?IPV6:2620:15c:211:201:a601:6da1:e847:d4b1? ([2620:15c:211:201:a601:6da1:e847:d4b1])
+        by smtp.gmail.com with ESMTPSA id i26-20020aa7909a000000b006661562429fsm8847746pfa.97.2023.06.29.10.37.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 29 Jun 2023 10:37:40 -0700 (PDT)
+Message-ID: <6b7f5603-8ac1-6f29-798c-02d0b9a5543e@acm.org>
+Date:   Thu, 29 Jun 2023 10:37:36 -0700
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v2 1/1] Add a new sysctl to disable io_uring system-wide
+Content-Language: en-US
+To:     Matteo Rizzo <matteorizzo@google.com>
+Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        io-uring@vger.kernel.org, jordyzomer@google.com, evn@google.com,
+        poprdi@google.com, corbet@lwn.net, axboe@kernel.dk,
+        asml.silence@gmail.com, akpm@linux-foundation.org,
+        keescook@chromium.org, rostedt@goodmis.org,
+        dave.hansen@linux.intel.com, ribalda@chromium.org,
+        chenhuacai@kernel.org, steve@sk2.org, gpiccoli@igalia.com,
+        ldufour@linux.ibm.com, bhe@redhat.com, oleksandr@natalenko.name
+References: <20230629132711.1712536-1-matteorizzo@google.com>
+ <20230629132711.1712536-2-matteorizzo@google.com>
+ <a0c8d74a-dcfe-78a7-74bd-4447ed6944dc@acm.org>
+ <CAHKB1wKbSoK+=ceM_WLgBConNaua=0UPQv9ZmDp6LNXh3QNr=Q@mail.gmail.com>
+From:   Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <CAHKB1wKbSoK+=ceM_WLgBConNaua=0UPQv9ZmDp6LNXh3QNr=Q@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Tue, 27 Jun 2023 22:54:30 +0200 (CEST):
+On 6/29/23 08:28, Matteo Rizzo wrote:
+> On Thu, 29 Jun 2023 at 17:16, Bart Van Assche <bvanassche@acm.org> wrote:
+>>
+>> On 6/29/23 06:27, Matteo Rizzo wrote:
+>>> +static int __read_mostly sysctl_io_uring_disabled;
+>>
+>> Shouldn't this be a static key instead of an int in order to minimize the
+>> performance impact on the io_uring_setup() system call? See also
+>> Documentation/staging/static-keys.rst.
+>>
+> Is io_uring_setup in any hot path? io_uring_create is marked as __cold.
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/hid/hid.git tags/for-linus-2023062701
+I confused io_uring_setup() with io_uring_enter() so please ignore my comment.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/0e382fa72bbf0610be40af9af9b03b0cd149df82
-
-Thank you!
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+Bart.
