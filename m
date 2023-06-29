@@ -2,114 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 566D87430C0
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 00:53:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1747C7430CB
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 00:56:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231984AbjF2Wwc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 18:52:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53042 "EHLO
+        id S232091AbjF2W4i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 18:56:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232185AbjF2WwM (ORCPT
+        with ESMTP id S231768AbjF2W4g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 18:52:12 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 004912D66
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 15:51:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1688079085;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=h2j2ItE1hrzXRdyDj1d7Zvc9rzISUnAdMoZSXdbcCVc=;
-        b=Ixkx0xVaopsJM6EZAoYpHtD20832k1NNYwsk/l6rWHECyu8GM2GHqFKRQ9PKizA3j1WeWR
-        Ze6LXgWVIM9D3vXYhHo7ni1C7jwVOzMP3dipsOx16XwgPRd7sjR1jL0bCtkX+ZSaCi95ik
-        D8s0RwWH8xLYbeszqvyJSpSbgBsTNrE=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-382-wzG1ImCNNzSzim01CwCSkA-1; Thu, 29 Jun 2023 18:51:23 -0400
-X-MC-Unique: wzG1ImCNNzSzim01CwCSkA-1
-Received: by mail-wr1-f71.google.com with SMTP id ffacd0b85a97d-313f5021d9bso597565f8f.2
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 15:51:23 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688079082; x=1690671082;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=h2j2ItE1hrzXRdyDj1d7Zvc9rzISUnAdMoZSXdbcCVc=;
-        b=GjXQ/W68eeafXmQVHUY1QCT0cv9e9OzHoEqM2nQzI5Iv90opZnDA6xPIOLOJ5XeY0L
-         r1kYnLmBkWwRzvwxKBkLiaTz+dt4kWIVOsj1blUfwmhupNVNZiYKOIsOhQ65nS5GMJu2
-         5yK+dbiQhVMRV5oT+x/H9lrNT00bN/kEV28RvW0i7CwMGOYIuNGdVfcY5K2yB2uZUvYp
-         z7q6x6Vi0MmMatH0ZO9bSOnSObM/NjW1T72PaPrnORPEq/YseyHMBblDpMn43+cc9u3J
-         cfuZFEvU/rlpIbq7uREvIThwXzo7p/qy0P5+v5MeLWVKv5xT+56sOpqIyIHVda4nlaip
-         eQuQ==
-X-Gm-Message-State: ABy/qLY41pPz8+BKNjdGM+0z0PRAYw2EDqx0PGkCtCb/oYNcREmPtaNK
-        XslsMwf1NL4TfwWNOterBA9tUjXmr/ZamZAFosBlNSK+8q4/NwBekymBcTSR2cJmSn4dqWrlyN2
-        2uNsRFBpT+lGWnf31/98esyX/4pAdpb1V8X/WyKQR4I7YxrC8BJFKA4Uhvm2NWltwyXL6uZxrtt
-        +49h1xc5Q=
-X-Received: by 2002:adf:e5c4:0:b0:313:f59f:986d with SMTP id a4-20020adfe5c4000000b00313f59f986dmr442369wrn.65.1688079082198;
-        Thu, 29 Jun 2023 15:51:22 -0700 (PDT)
-X-Google-Smtp-Source: APBJJlHd4GmNb5anZfo6xpKRMdPTwJkkfzyxrFg+R0KEc4n5GMsAHWEd5iM2tVUcAeQlbNqHWI4p8Q==
-X-Received: by 2002:adf:e5c4:0:b0:313:f59f:986d with SMTP id a4-20020adfe5c4000000b00313f59f986dmr442352wrn.65.1688079081824;
-        Thu, 29 Jun 2023 15:51:21 -0700 (PDT)
-Received: from minerva.home (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id i6-20020adff306000000b00311339f5b06sm16795690wro.57.2023.06.29.15.51.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Jun 2023 15:51:21 -0700 (PDT)
-From:   Javier Martinez Canillas <javierm@redhat.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@gmail.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        dri-devel@lists.freedesktop.org
-Subject: [PATCH 2/2] drm: Make fbdev emulation depend on FB_CORE instead of FB
-Date:   Fri, 30 Jun 2023 00:51:04 +0200
-Message-ID: <20230629225113.297512-3-javierm@redhat.com>
-X-Mailer: git-send-email 2.41.0
-In-Reply-To: <20230629225113.297512-1-javierm@redhat.com>
-References: <20230629225113.297512-1-javierm@redhat.com>
+        Thu, 29 Jun 2023 18:56:36 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A94092728;
+        Thu, 29 Jun 2023 15:56:34 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DFB0B61616;
+        Thu, 29 Jun 2023 22:56:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1BF62C433C8;
+        Thu, 29 Jun 2023 22:56:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688079393;
+        bh=3TnYQudVtFlXxE58kTi/EBiMxfubypuHndomsfjsV1M=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=L9JqTkO1i1PrVyAUM7r1c2hdYDHrbvgLACn5dXzseCc4rSZ65Ig6Ti9k+okZwpaqn
+         mCsY/0MxkhVccPjpDlD57ZSkUsJ9xMOvivEJgL9DR92gDcMxfpUTAo7HTLzt0Kykxh
+         A+4QvoBXFl/ftp2kOYipG0svUeeH6mAXdMZvLaBL5dwTrt+wTnNSOmQ+CaKqmQUKyC
+         gLBLXOIrK0phjbcp61tnYqcZgVlI1UwyrMmPttQ5Z6oi5CZu+7KFFY96AiFPmlvRSV
+         /I42c85/ixx929OzlK+O9MeRN9003u6TGfAvq9JqDZx+yYM3VHJCOHPl3wXyvvyZFw
+         leHLopiuked9A==
+Date:   Thu, 29 Jun 2023 17:56:31 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Lizhi Hou <lizhi.hou@amd.com>
+Cc:     linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, robh@kernel.org, max.zhen@amd.com,
+        sonal.santan@amd.com, stefano.stabellini@xilinx.com
+Subject: Re: [PATCH V10 2/5] PCI: Create device tree node for bridge
+Message-ID: <20230629225631.GA446944@bhelgaas>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1688059190-4225-3-git-send-email-lizhi.hou@amd.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Now that the fbdev core has been split in FB_CORE and FB, make DRM fbdev
-emulation layer to just depend on the former.
+On Thu, Jun 29, 2023 at 10:19:47AM -0700, Lizhi Hou wrote:
+> The PCI endpoint device such as Xilinx Alveo PCI card maps the register
+> spaces from multiple hardware peripherals to its PCI BAR. Normally,
+> the PCI core discovers devices and BARs using the PCI enumeration process.
+> There is no infrastructure to discover the hardware peripherals that are
+> present in a PCI device, and which can be accessed through the PCI BARs.
 
-This allows to disable the CONFIG_FB option if is not needed, which will
-avoid the need to explicitly disable each of the legacy fbdev drivers.
+IIUC this is basically a multi-function device except that instead of
+each device being a separate PCI Function, they all appear in a single
+Function.  That would mean all the devices share the same config space
+so a single PCI Command register controls all of them, they all share
+the same IRQs (either INTx or MSI/MSI-X), any MMIO registers are likely
+in a shared BAR, etc., right?
 
-Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
----
+Obviously PCI enumeration only sees the single Function and binds a
+single driver to it.  But IIUC, you want to use existing drivers for
+each of these sub-devices, so this series adds a DT node for the
+single Function (using the quirks that call of_pci_make_dev_node()).
+And I assume that when the PCI driver claims the single Function, it
+will use that DT node to add platform devices, and those existing
+drivers can claim those?
 
- drivers/gpu/drm/Kconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+I don't see the PCI driver for the single Function in this series.  Is
+that coming?  Is this series useful without it?
 
-diff --git a/drivers/gpu/drm/Kconfig b/drivers/gpu/drm/Kconfig
-index afb3b2f5f425..6ecb984d213a 100644
---- a/drivers/gpu/drm/Kconfig
-+++ b/drivers/gpu/drm/Kconfig
-@@ -132,7 +132,7 @@ config DRM_DEBUG_MODESET_LOCK
- config DRM_FBDEV_EMULATION
- 	bool "Enable legacy fbdev support for your modesetting driver"
- 	depends on DRM_KMS_HELPER
--	depends on FB=y || FB=DRM_KMS_HELPER
-+	depends on FB_CORE=y || FB=DRM_KMS_HELPER
- 	select FRAMEBUFFER_CONSOLE if !EXPERT
- 	select FRAMEBUFFER_CONSOLE_DETECT_PRIMARY if FRAMEBUFFER_CONSOLE
- 	default y
--- 
-2.41.0
+> Apparently, the device tree framework requires a device tree node for the
+> PCI device. Thus, it can generate the device tree nodes for hardware
+> peripherals underneath. Because PCI is self discoverable bus, there might
+> not be a device tree node created for PCI devices. Furthermore, if the PCI
+> device is hot pluggable, when it is plugged in, the device tree nodes for
+> its parent bridges are required. Add support to generate device tree node
+> for PCI bridges.
 
+Can you remind me why hot-adding a PCI device requires DT nodes for
+parent bridges?  I don't think we have those today, so maybe the DT
+node for the PCI device requires a DT parent?  How far up does that
+go?  From this patch, I guess a Root Port would be the top DT node on
+a PCIe system, since that's the top PCI-to-PCI bridge?
+
+This patch adds a DT node for *every* PCI bridge in the system.  We
+only actually need that node for these unusual devices.  Is there some
+way the driver for the single PCI Function could add that node when it
+is needed?  Sorry if you've answered this in the past; maybe the
+answer could be in the commit log or a code comment in case somebody
+else wonders.
+
+> @@ -340,6 +340,8 @@ void pci_bus_add_device(struct pci_dev *dev)
+>  	 */
+>  	pcibios_bus_add_device(dev);
+>  	pci_fixup_device(pci_fixup_final, dev);
+> +	if (pci_is_bridge(dev))
+> +		of_pci_make_dev_node(dev);
+
+It'd be nice to have a clue here about why we need this, since this is
+executed for *every* system, even ACPI platforms that typically don't
+use OF things.
+
+>  	pci_create_sysfs_dev_files(dev);
+>  	pci_proc_attach_device(dev);
+>  	pci_bridge_d3_update(dev);
+> diff --git a/drivers/pci/of.c b/drivers/pci/of.c
+> index 2c25f4fa0225..9786ae407948 100644
+> --- a/drivers/pci/of.c
+> +++ b/drivers/pci/of.c
+> @@ -487,6 +487,15 @@ static int of_irq_parse_pci(const struct pci_dev *pdev, struct of_phandle_args *
+>  		} else {
+>  			/* We found a P2P bridge, check if it has a node */
+>  			ppnode = pci_device_to_OF_node(ppdev);
+> +#if IS_ENABLED(CONFIG_PCI_DYNAMIC_OF_NODES)
+
+I would use plain #ifdef here instead of IS_ENABLED(), as you did in
+pci.h below.  IS_ENABLED() is true if the Kconfig symbol is set to
+either "y" or "m".
+
+Using IS_ENABLED() suggests that the config option *could* be a
+module, which is not the case here because CONFIG_PCI_DYNAMIC_OF_NODES
+is a bool.
+
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/include/linux/kconfig.h?id=v6.4#n69
+
+> @@ -617,6 +626,85 @@ int devm_of_pci_bridge_init(struct device *dev, struct pci_host_bridge *bridge)
+>  	return pci_parse_request_of_pci_ranges(dev, bridge);
+>  }
+>  
+> +#if IS_ENABLED(CONFIG_PCI_DYNAMIC_OF_NODES)
+
+Same here, of course.
+
+> +void of_pci_remove_node(struct pci_dev *pdev)
+> +{
+> +	struct device_node *np;
+> +
+> +	np = pci_device_to_OF_node(pdev);
+> +	if (!np || !of_node_check_flag(np, OF_DYNAMIC))
+
+> + * Each entry in the ranges table is a tuple containing the child address,
+> + * the parent address, and the size of the region in the child address space.
+> + * Thus, for PCI, in each entry parent address is an address on the primary
+> + * side and the child address is the corresponding address on the secondary
+> + * side.
+> + */
+> +struct of_pci_range {
+> +	u32		child_addr[OF_PCI_ADDRESS_CELLS];
+> +	u32		parent_addr[OF_PCI_ADDRESS_CELLS];
+> +	u32		size[OF_PCI_SIZE_CELLS];
+
+> +		if (pci_is_bridge(pdev)) {
+> +			memcpy(rp[i].child_addr, rp[i].parent_addr,
+> +			       sizeof(rp[i].child_addr));
+> +		} else {
+> +			/*
+> +			 * For endpoint device, the lower 64-bits of child
+> +			 * address is always zero.
+
+I think this connects with the secondary side comment above, right?  I
+think I would comment this as:
+
+  /*
+   * PCI-PCI bridges don't translate addresses, so the child
+   * (secondary side) address is identical to the parent (primary
+   * side) address.
+   */
+
+and
+
+  /*
+   * Non-bridges have no child (secondary side) address, so clear it
+   * out.
+   */
+
+> +			 */
+> +			rp[i].child_addr[0] = j;
+
+> +	ret = of_changeset_add_empty_prop(ocs, np, "dynamic");
+
+It seems slightly confusing to use a "dynamic" property here when we
+also have the OF_DYNAMIC dynamic flag above.  I think they have
+different meanings, don't they?
+
+Bjorn
