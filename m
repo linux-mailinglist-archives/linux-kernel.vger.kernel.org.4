@@ -2,94 +2,230 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89C55742A93
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 18:23:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF8AB742A9D
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 18:25:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232491AbjF2QXV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 12:23:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41702 "EHLO
+        id S232035AbjF2QZl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 12:25:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232421AbjF2QXQ (ORCPT
+        with ESMTP id S231272AbjF2QZi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 12:23:16 -0400
-Received: from mail-il1-f180.google.com (mail-il1-f180.google.com [209.85.166.180])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3397187;
-        Thu, 29 Jun 2023 09:23:15 -0700 (PDT)
-Received: by mail-il1-f180.google.com with SMTP id e9e14a558f8ab-341ff6251f2so3619755ab.0;
-        Thu, 29 Jun 2023 09:23:15 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688055795; x=1690647795;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        Thu, 29 Jun 2023 12:25:38 -0400
+Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD09B187
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 09:25:33 -0700 (PDT)
+Received: by mail-qt1-x831.google.com with SMTP id d75a77b69052e-401f4408955so295411cf.1
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 09:25:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1688055933; x=1690647933;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=QPh8e75fI5DgK1FIHoQuqCb5ZMtTAcx7+QMfAfjXghk=;
-        b=c/BzyIwmiZkjzhgQs5L9BtCE9ZvYyxwkHuuGhB/kqBsM6MN0CZyUOKO6u6ymTc9Lq8
-         Zbszd07e4EIR5N28l+O0mdWhtGO6Ab9pJNlGc4ZsZa3Y8Cs6spodYTU+PFVET3+3MAz7
-         QGamn6Ae6lNfMCRS4oog5UteGHPRV2WFzEcmNHlyB85n9RTm0gd9weBrO4Fwji1FlTse
-         aHtprcb6a+xpuaOdNyhFh1yXPXf9eg5p2rMBV1qO8FtBdWMqejeqwgGh+yHQvmTFegH5
-         FyyKacvGH8BcswbAE32PwLKa3QBI+MYIjgKw0WmcUDD8SMj6Parw3saEQkuMyFy/sRmY
-         zPhQ==
-X-Gm-Message-State: AC+VfDwV/cA5d7pIz9E694T0X6xhyhJjgMJOo8WHaUO+3UXPcYQaCKyz
-        LkQq2v+1iJChYIriJRLFVw==
-X-Google-Smtp-Source: ACHHUZ4Kcv1UA5oX8BJmHwp8UVcuaRFAtds/5zfPnZvvG9i/NDjjwMOVlcnm/2bZb+YynlmohRZQUw==
-X-Received: by 2002:a92:de50:0:b0:345:d277:18eb with SMTP id e16-20020a92de50000000b00345d27718ebmr3614130ilr.30.1688055795161;
-        Thu, 29 Jun 2023 09:23:15 -0700 (PDT)
-Received: from robh_at_kernel.org ([64.188.179.250])
-        by smtp.gmail.com with ESMTPSA id t7-20020a92cc47000000b0034255d2d3c5sm4172219ilq.48.2023.06.29.09.23.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Jun 2023 09:23:14 -0700 (PDT)
-Received: (nullmailer pid 3142728 invoked by uid 1000);
-        Thu, 29 Jun 2023 16:23:12 -0000
-Date:   Thu, 29 Jun 2023 10:23:12 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     Konrad Dybcio <konradybcio@kernel.org>,
-        linux-kernel@vger.kernel.org, freedreno@lists.freedesktop.org,
-        Mark Brown <broonie@kernel.org>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Krishna Manikandan <quic_mkrishn@quicinc.com>,
-        dri-devel@lists.freedesktop.org, David Airlie <airlied@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Sean Paul <sean@poorly.run>, Andy Gross <agross@kernel.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        linux-arm-msm@vger.kernel.org, Liam Girdwood <lgirdwood@gmail.com>,
-        devicetree@vger.kernel.org,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Rob Clark <robdclark@gmail.com>
-Subject: Re: [PATCH 3/4] dt-bindings: display/msm: dsi-controller-main: Allow
- refgen-supply
-Message-ID: <168805579134.3142664.11063512171591617294.robh@kernel.org>
-References: <20230628-topic-refgen-v1-0-126e59573eeb@linaro.org>
- <20230628-topic-refgen-v1-3-126e59573eeb@linaro.org>
+        bh=0i+VclhX9JPA4GYKeZEUom4kBRpZ1KIdf8SKnr6Czlk=;
+        b=lYYVQ83POTy6/9CC8ArxHOFEL2r2JwFNPyDWX+P2beZLfK82lg/k/QqEiUVFBWPCgo
+         VmeFAKZKkCzoVlfdqlFTWDVXzNRikIvKionHxYyx1RSL88UsmNo8BH8U5k4Ylma7/sDh
+         fFxg/9wDt+eK/72umGrPtF/2wN9RReAjVAYHDHF+jMx84TJyhn8POoLRKrvz4TWF4ue2
+         xConQRz9n8xU9Z1SHa8AjD9LE8dgnrIp5+7GRd7o73hkXnik5wnoetttJyzpknEMpT7k
+         2xQaj+QRos+VqCRitgTeAx6UoB6HGVgOG0bXdQSF6Hb1YkYFFLJr83x3QjwHOLu8PcZg
+         hSGw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688055933; x=1690647933;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=0i+VclhX9JPA4GYKeZEUom4kBRpZ1KIdf8SKnr6Czlk=;
+        b=B0IGNLLVWsUTsoR6n3y8CTisuv9E8z3/UQ9MYNOqmm5pdVFWNAzKdoaoHtr2hFmyEH
+         JnWT/or06CncmjxNJPQFEB+RrRGXMYdZlgGBKGQQnEkC/2wOl0InsTd/LjhZ+vCVmLvS
+         SG6lAWOTFBDRd90d9TObLEjXLzP1LQi0DbSmC/0k301N7hexSDBwPIxUEEP024eV/P1d
+         Hq/Oz3SRECu8r+GEwIxatv0PUZG39DkX+g7CFOdU4gxrfszSvVhfK4zuZR34OnHHxfuD
+         5w4tf2cmnX2IG3k0x8oi3i+qS4qzv1dvmVSrnga8vIueMhAKnkr/BoqDedyJGz+MuxUM
+         NY+g==
+X-Gm-Message-State: AC+VfDyL4cTeOnd3HP4qzMYq9ff5z5N1XH9UXeUFSLuyaYz35RMZhlcK
+        8BaJsbfT1pCZWoMEJrZD0mBuJyz/4RvW6f4pS2zOeg==
+X-Google-Smtp-Source: ACHHUZ4GlcdhSG6HvWkFXq7A7do/fjnsIN9VLRkINS6bTK3+6Z8sQeiMBbqJ2leEce8ozWN8saz37CEHTk7PdmgSBCQ=
+X-Received: by 2002:ac8:5b46:0:b0:3f7:ffc8:2f6f with SMTP id
+ n6-20020ac85b46000000b003f7ffc82f6fmr703437qtw.28.1688055932634; Thu, 29 Jun
+ 2023 09:25:32 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230628-topic-refgen-v1-3-126e59573eeb@linaro.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+References: <cover.1684048511.git.sathyanarayanan.kuppuswamy@linux.intel.com>
+ <972e1d5c5ec53e2757fb17a586558c5385e987dd.1684048511.git.sathyanarayanan.kuppuswamy@linux.intel.com>
+ <64876bf6c30e2_1433ac29415@dwillia2-xfh.jf.intel.com.notmuch>
+ <64961c3baf8ce_142af829436@dwillia2-xfh.jf.intel.com.notmuch>
+ <9437b176-e15a-3cec-e5cb-68ff57dbc25c@linux.intel.com> <CAAH4kHa85hCz0GhQM3f1OQ3wM+=-SfF77ShFAse0-eYGBHvO_A@mail.gmail.com>
+ <649b7a9b69cb6_11e68529473@dwillia2-xfh.jf.intel.com.notmuch>
+ <CAAH4kHY1-N+HOxPON6SuXE3QPowAGnwTjc5H=ZnNZwh7a+msnQ@mail.gmail.com> <649ba059a086_11e68529458@dwillia2-xfh.jf.intel.com.notmuch>
+In-Reply-To: <649ba059a086_11e68529458@dwillia2-xfh.jf.intel.com.notmuch>
+From:   Dionna Amalie Glaze <dionnaglaze@google.com>
+Date:   Thu, 29 Jun 2023 09:25:21 -0700
+Message-ID: <CAAH4kHYLETfPk-sMD-QSJd0fJ7Qnt04FBwFuEkpnehB5U7D_yw@mail.gmail.com>
+Subject: Re: [PATCH v3 3/3] selftests/tdx: Test GetQuote TDX attestation feature
+To:     Dan Williams <dan.j.williams@intel.com>
+Cc:     Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        Shuah Khan <shuah@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Wander Lairson Costa <wander@redhat.com>,
+        Erdem Aktas <erdemaktas@google.com>,
+        Chong Cai <chongc@google.com>, Qinkun Bao <qinkun@apache.org>,
+        Guorui Yu <GuoRui.Yu@linux.alibaba.com>,
+        Du Fan <fan.du@intel.com>, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
+        dhowells@redhat.com, brijesh.singh@amd.com, atishp@rivosinc.com,
+        gregkh@linuxfoundation.org, linux-coco@lists.linux.dev,
+        joey.gouly@arm.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+>
+> First, thank you for engaging, it speeds up the iteration. This
+> confirmed my worry that the secondary goal of this proposal, a common
+> verification implementation, is indeed unachievable in the near term. A
+> few clarifying questions below, but I will let this go.
+>
+> The primary goal, achievable on a short runway, is more for kernel
+> developers. It is to have a common infrastructure for marshaling vendor
+> payloads, provide a mechanism to facilitate kernel initiated requests to
+> a key-server, and to deploy a common frontend for concepts like runtime
+> measurement (likely as another backend to what Keys already understands
+> for various TPM PCR implementations).
+>
 
-On Wed, 28 Jun 2023 18:29:47 +0200, Konrad Dybcio wrote:
-> DSI host needs REFGEN to be enabled (if it's present on a given platform).
-> Allow consuming it.
-> 
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> ---
->  .../devicetree/bindings/display/msm/dsi-controller-main.yaml          | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
+That sounds good, though the devil is in the details. The TPM
+situation will be exacerbated by a lower root of trust. The TPM itself
+doesn't have a specification for its own attested firmware.
 
-Acked-by: Rob Herring <robh@kernel.org>
+> > All the specific fields of the blob have to be decoded and subjected
+> > to an acceptance policy. That policy will most always be different
+> > across different platforms and VM owners. I wrote all of
+> > github.com/google/go-sev-guest, including the verification and
+> > validation logic, and it's going to get more complicated, and the
+> > sources of the data that provide validators with notions of what
+> > values can be trusted will be varied.
+>
+> Can you provide an example? I ask only to include it in the kernel
+> commit log for a crisp explanation why this proposed Keys format will
+> continue to convey a raw vendor blob with no kernel abstraction as part
+> of its payload for the foreseeable future.
+>
 
+An example is that while there is a common notion that each report
+will have some attestation key whose certificate needs to be verified,
+there is additional collateral that must be downloaded to
+
+* verify a TDX key certificate against updates to known weaknesses of
+the key's details
+* verify the measurement in the report against a vendor's signed
+golden measurement
+* [usually offline and signed by the analyzing principal that the
+analysis was done] fully verify the measurement given a build
+provenance document like SLSA. The complexity of this analysis could
+even engage in static analysis of every commit since a certain date,
+or from a developer of low repute... whatever the verifier wants to
+do.
+
+These are all in the realm of interpreting the blob for acceptance, so
+it's best to keep uninterpreted.
+
+> > The formats are not standardized. The Confidential Computing
+> > Consortium should be working toward that, but it's a slow process.
+> > There's IETF RATS. There's in-toto.io attestations. There's Azure's
+> > JWT thing. There's a signed serialized protocol buffer that I've
+> > decided is what Google is going to produce while we figure out all the
+> > "right" formats to use. There will be factions and absolute gridlock
+> > for multiple years if we require solidifying an abstraction for the
+> > kernel to manage all this logic before passing a report on to user
+> > space.
+>
+> Understood. When that standardization process completes my expectation
+> is that it slots into the common conveyance method and no need to go
+> rewrite code that already knows how to interface with Keys to get
+> attestation evidence.
+>
+
+I can get on board with that. I don't think there will be much cause
+for more than a handful of attestation requests with different report
+data, so it shouldn't overwhelm the key subsystem.
+
+> >
+> > You really shouldn't be putting attestation validation logic in the
+> > kernel.
+>
+> It was less putting validation logic in the kernel, and more hoping for
+> a way to abstract some common parsing in advance of a true standard
+> attestation format, but point taken.
+>
+
+I think we'll have hardware-provided blobs and host-provided cached
+collateral. The caching could be achieved with a hosted proxy server,
+but given SEV-SNP already has GET_EXT_GUEST_REQUEST to simplify
+delivery, I think it's fair to offer other technologies the chance at
+supporting a similar simple solution.
+
+Everything else will have to come from the network or the workload itself.
+
+
+> > It belongs outside of the VM entirely with the party that will
+> > only release access keys to the VM if it can prove it's running the
+> > software it claims, on the platform it claims. I think Windows puts a
+> > remote procedure call in their guest attestation driver to the Azure
+> > attestation service, and that is an anti-pattern in my mind.
+>
+> I can not speak to the Windows implementation, but the Linux Keys
+> subsystem is there to handle Key construction that may be requested by
+> userspace or the kernel and may be serviced by built-in keys,
+> device/platform instantiated keys, or keys retrieved via an upcall to
+> userspace.
+>
+> The observation is that existing calls to request_key() in the kernel
+> likely have reason to be serviced by a confidential computing key server
+> somewhere in the chain. So, might as well enlighten the Keys subsystem
+> to retrieve this information and skip round trips to userspace run
+> vendor specific ioctls. Make the kernel as self sufficient as possible,
+> and make SEV, TDX, etc. developers talk more to each other about their
+> needs.
+
+That sounds reasonable. I think one wrinkle in the current design is
+that SGX and SEV-SNP provide derived keys as a thing separate from
+attestation but still based on firmware measurement, and TDX doesn't
+yet. It may in the future come with a TDX module update that gets
+derived keys through an SGX enclave=E2=80=93who knows. The MSG_KEY_REQ gues=
+t
+request for a SEV-SNP derived key has some bits and bobs to select
+different VM material to mix into the key derivation, so that would
+need to be in the API as well. It makes request_key a little weird to
+use for both. I don't even think there's a sufficient abstraction for
+the guest-attest device to provide, since there isn't a common
+REPORT_DATA + attestation level pair of inputs that drive it. If we're
+fine with a technology-tagged uninterpreted input blob for key
+derivation, and the device returns an error if the real hardware
+doesn't match the technology tag, then that could be an okay enough
+interface.
+
+I could be convinced to leave MSG_KEY_REQ out of Linux entirely, but
+only for selfish reasons. The alternative is to set up a sealing key
+escrow service that releases sealing keys when a VM's attestation
+matches a pre-registered policy, which is extremely heavy-handed when
+you can enforce workload identity at VM launch time and have a safe
+derived key with this technology. I think there's a Decentriq blog
+post about setting that whole supply chain up ("swiss cheese to
+cheddar"), so they'd likely have some words about that.
+
+--=20
+-Dionna Glaze, PhD (she/her)
