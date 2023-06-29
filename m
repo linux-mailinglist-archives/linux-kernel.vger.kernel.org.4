@@ -2,164 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77B35742296
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 10:49:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2418074229B
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 10:51:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232697AbjF2ItA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 04:49:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53814 "EHLO
+        id S232666AbjF2Itm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 04:49:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232607AbjF2IsM (ORCPT
+        with ESMTP id S231272AbjF2ItM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 04:48:12 -0400
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 727FA44BD
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 01:45:28 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id 2adb3069b0e04-4fb960b7c9dso667147e87.0
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 01:45:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1688028326; x=1690620326;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=F9c/Sgnntrd4PLPE97fe1hO07h+vpbHzWVDhlUf4NLE=;
-        b=o6Bt7kUqI6c73rmx2IZbT+oK/jw8EAUelXUlO2gDsHwXvf3MjL8oFp/n6JFHZwzoqK
-         BLsDSI2zlFrU8fPPM/51ElJTnXqnPcjjc9A4mLveHt2EMunBe6OLmZBYXQ9pA4x693a1
-         Lk1p5pIhKP0EzqiYbD3H05AuDt4thQpGRLJWU74lm3W1IJCHeawEUD99NrSgpYadEQnR
-         DlKilvUXNiZUkO4uP4em1uAl3sXDwQddNr9VkQy+/7o6rnHmYOBC4nTqbfeOCHqoYsLn
-         IXjKWDSSU8CI2lWcsqsusVusZm/BQVmM0yVf6Od/n49P0/KXFoZjnqrpNeTs7M9i6+gd
-         HtvA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688028326; x=1690620326;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=F9c/Sgnntrd4PLPE97fe1hO07h+vpbHzWVDhlUf4NLE=;
-        b=jU4mfmXPrPgL2OR/xdCfXKye57owArdqcwGu96iu7wa4/WgfEHNWhOGZ56/n7Pd+tN
-         V7THhux6dqDLux/6t1bqLGADZUPFCQN/SFj6eo0EQUNIGvFxYYGjBgDbMB2N5EEhXjqJ
-         CBH0sYf2kGYma+MGVHEr7xeHpRsLdz1JMTVXrHsy7s1hIf9j6jykoPf5h9CDbeeaDKIC
-         XHt/YbnYpXNiC36zZXHQHV5nV9gY5wp4HG5KofwhsRIzEw1NHxpHvqlhsewaeUoiGjuq
-         6R69yqTXmAqHBY6BodIY9L2xP/puA5560HLtxJYroq7TOVxQ0E0TOQVugLwPgjl1A6CG
-         X1jg==
-X-Gm-Message-State: ABy/qLYB2pgqsC7ZsZWbjmepN3hNyJm16/xN4PUAs2jMb2JoDfWGrXjL
-        p0tyhajUBWzkPoudKiDo2rdOTA==
-X-Google-Smtp-Source: APBJJlH8LQwEMkOFJdbdn8IrGr/8WOtmsjrUEho66Yg7p5fPZKa4NzYigSxuH+FneC10rjP/rXqLgA==
-X-Received: by 2002:a05:6512:2310:b0:4fb:9a1e:1262 with SMTP id o16-20020a056512231000b004fb9a1e1262mr1202033lfu.65.1688028326533;
-        Thu, 29 Jun 2023 01:45:26 -0700 (PDT)
-Received: from ?IPV6:2001:14ba:a0db:1f00::8a5? (dzdqv0yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a0db:1f00::8a5])
-        by smtp.gmail.com with ESMTPSA id b7-20020a056512024700b004f85d80ca64sm2233550lfo.221.2023.06.29.01.45.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 29 Jun 2023 01:45:26 -0700 (PDT)
-Message-ID: <f274247c-f45b-8a48-92f2-cff4597aff15@linaro.org>
-Date:   Thu, 29 Jun 2023 11:45:25 +0300
+        Thu, 29 Jun 2023 04:49:12 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2012C49E2;
+        Thu, 29 Jun 2023 01:45:42 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id AA7321F892;
+        Thu, 29 Jun 2023 08:45:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1688028341; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=qpp+eteAanAusl2RdhSlDfGKBCbUSpm0x04ccu9yCqA=;
+        b=ttrFoC+STj0/u0pdDzeKR0HdhBNNRb0R4PhZUK+KKZNBXKjGQmARJstn6OyrNNVsFNQuFn
+        RXdRYCtXMVVJO0xjqvE+Z1v4eLNrvVbRhsZatBbYST1Xju+8lEs2/fJ2SBiO7UlM8vNUVK
+        BK/O52g5Mxk0B3jnxLR/uZMeKaHRDgY=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1688028341;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=qpp+eteAanAusl2RdhSlDfGKBCbUSpm0x04ccu9yCqA=;
+        b=B1I5LC/MLGhf18IWYapbh45QWue5BQBWp1qN/0ebxZqKvTI3+PgyokeqQdNKTYSIj2dGyw
+        yj08aLiWjjSZUnCg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 99319139FF;
+        Thu, 29 Jun 2023 08:45:41 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id l5deJbVEnWTAZwAAMHmgww
+        (envelope-from <jack@suse.cz>); Thu, 29 Jun 2023 08:45:41 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id 25F1CA0722; Thu, 29 Jun 2023 10:45:41 +0200 (CEST)
+Date:   Thu, 29 Jun 2023 10:45:41 +0200
+From:   Jan Kara <jack@suse.cz>
+To:     Ahelenia =?utf-8?Q?Ziemia=C5=84ska?= 
+        <nabijaczleweli@nabijaczleweli.xyz>
+Cc:     Jan Kara <jack@suse.cz>, Amir Goldstein <amir73il@gmail.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Christian Brauner <brauner@kernel.org>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Chung-Chiang Cheng <cccheng@synology.com>, ltp@lists.linux.it
+Subject: Re: [PATCH v4 0/3] fanotify accounting for fs/splice.c
+Message-ID: <20230629084541.5hjyskliqntcr5y4@quack3>
+References: <t5az5bvpfqd3rrwla43437r5vplmkujdytixcxgm7sc4hojspg@jcc63stk66hz>
+ <cover.1687898895.git.nabijaczleweli@nabijaczleweli.xyz>
+ <20230628113853.2b67fic5nvlisx3r@quack3>
+ <ns6dcoilztzcutuduujfnbz5eggy3fk7z4t2bajy545zbay5d7@4bodludrpxe6>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH 1/7] dt-bindings: soc: qcom: Add qcom-pbs bindings
-Content-Language: en-GB
-To:     Anjelique Melendez <quic_amelende@quicinc.com>,
-        Rob Herring <robh@kernel.org>
-Cc:     pavel@ucw.cz, lee@kernel.org, thierry.reding@gmail.com,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        u.kleine-koenig@pengutronix.de, linux-leds@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-pwm@vger.kernel.org
-References: <20230621185949.2068-1-quic_amelende@quicinc.com>
- <20230621185949.2068-2-quic_amelende@quicinc.com>
- <20230626135857.GA3118929-robh@kernel.org>
- <2e871e21-a81d-0d7d-993b-9a9d7bd9d962@quicinc.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <2e871e21-a81d-0d7d-993b-9a9d7bd9d962@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <ns6dcoilztzcutuduujfnbz5eggy3fk7z4t2bajy545zbay5d7@4bodludrpxe6>
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 29/06/2023 04:19, Anjelique Melendez wrote:
-> 
-> 
-> On 6/26/2023 6:58 AM, Rob Herring wrote:
->> On Wed, Jun 21, 2023 at 11:59:45AM -0700, Anjelique Melendez wrote:
->>> Add binding for the Qualcomm Programmable Boot Sequencer device.
->>>
->>> Signed-off-by: Anjelique Melendez <quic_amelende@quicinc.com>
->>> ---
->>>   .../bindings/soc/qcom/qcom-pbs.yaml           | 41 +++++++++++++++++++
->>>   1 file changed, 41 insertions(+)
->>>   create mode 100644 Documentation/devicetree/bindings/soc/qcom/qcom-pbs.yaml
->>>
->>> diff --git a/Documentation/devicetree/bindings/soc/qcom/qcom-pbs.yaml b/Documentation/devicetree/bindings/soc/qcom/qcom-pbs.yaml
->>> new file mode 100644
->>> index 000000000000..0a89c334f95c
->>> --- /dev/null
->>> +++ b/Documentation/devicetree/bindings/soc/qcom/qcom-pbs.yaml
->>> @@ -0,0 +1,41 @@
->>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->>> +%YAML 1.2
->>> +---
->>> +$id: http://devicetree.org/schemas/soc/qcom/qcom-pbs.yaml#
->>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->>> +
->>> +title: Qualcomm Technologies, Inc. PBS
->>> +
->>> +maintainers:
->>> +  - Anjelique Melendez <quic_amelende@quicinc.com>
->>> +
->>> +description: |
->>> +  Qualcomm PBS (programmable boot sequencer) supports triggering sequences
->>> +  for clients upon request.
->>> +
->>> +properties:
->>> +  compatible:
->>> +    const: qcom,pbs
->>> +
->>> +  reg:
->>> +    description: |
->>> +      Base address of the PBS peripheral.
->>> +    maxItems: 1
->>> +
->>> +required:
->>> + - compatible
->>> + - reg
->>> +
->>> +additionalProperties: false
->>> +
->>> +examples:
->>> +  - |
->>> +    pmic {
->>> +      #address-cells = <1>;
->>> +      #size-cells = <0>;
->>> +
->>> +      qcom,pbs@7400 {
->>> +        compatible = "qcom,pbs";
->>> +        reg = <0x7400>;
->>> +      };
->>
->> Why do you need a child node for this? Is there more than 1 instance in
->> a PMIC? Every sub-function of a PMIC doesn't have to have a DT node.
->>
-> 
-> We currently have another downstream driver (which is planned to get upstreamed)
-> which also needs a handle to a pbs device in order to properly trigger events.
+Hi!
 
-Does it have to be a separate driver? Or is it a part of the LPG driver, 
-just being artificially split away?
+On Wed 28-06-23 20:54:28, Ahelenia Ziemiańska wrote:
+> On Wed, Jun 28, 2023 at 01:38:53PM +0200, Jan Kara wrote:
+> > On Tue 27-06-23 22:50:46, Ahelenia Ziemiańska wrote:
+> > > Always generate modify out, access in for splice;
+> > > this gets automatically merged with no ugly special cases.
+> > > 
+> > > No changes to 2/3 or 3/3.
+> > Thanks for the patches Ahelena! The code looks fine to me but to be honest
+> > I still have one unresolved question so let me think about it loud here for
+> > documentation purposes :). Do we want fsnotify (any filesystem
+> > notification framework like inotify or fanotify) to actually generate
+> > events on FIFOs? FIFOs are virtual objects and are not part of the
+> > filesystem as such (well, the inode itself and the name is), hence
+> > *filesystem* notification framework does not seem like a great fit to watch
+> > for changes or accesses there. And if we say "yes" for FIFOs, then why not
+> > AF_UNIX sockets? Where do we draw the line? And is it all worth the
+> > trouble?
+> As a relative outsider (I haven't used inotify before this, and have not
+>  been subjected to it or its peripheries before),
+> I interpreted inotify as being the Correct solution for:
+>   1. stuff you can find in a normal
+>      (non-/dev, you don't want to touch devices)
+>      filesystem traversal
+>   2. stuff you can open
+> where, going down the list in inode(7):
+>   S_IFSOCK   can't open
+>   S_IFLNK    can't open
+>   S_IFREG    yes!
+>   S_IFBLK    it's a device
+>   S_IFDIR    yes!
+>   S_IFCHR    it's a device
+>   S_IFIFO    yes!
+> 
+> It appears that I'm not the only one who's interpreted it that way,
+> especially since neither regular files nor pipes are pollable.
+> (Though, under that same categorisation, I wouldn't be surprised
+>  if anonymous pipes had been refused, for example, since those are
+>  conventionally unnameable.)
+> 
+> To this end, I'd say we're leaving the line precisely where it was drawn
+> before, even if by accident.
 
-> 
->> Rob
-> 
-> 
-> 
+I agree, although I'd note that there are S_IFREG inodes under /sys or
+/proc where it would be too difficult to provide fsnotify events (exactly
+because the file contents is not "data stored somewhere" but rather
+something "generated on the fly") so the illusion is not perfect already.
 
+> > I understand the convenience of inotify working on FIFOs for the "tail -f"
+> > usecase but then wouldn't this better be fixed in tail(1) itself by using
+> > epoll(7) for FIFOs which, as I've noted in my other reply, does not have
+> > the problem that poll(2) has when there are no writers?
+> Yes, epoll in ET mode returns POLLHUP only once, but you /also/ need the
+> inotify anyway for regular files, which epoll refuses
+> (and, with -F, you may want both epoll for a pipe and inotify for the
+>  directory it's contained in).
+> Is it possible to do? yes. Is it more annoying than just having pipes
+> report when they were written to? very much so.
+> 
+> inotify actually working(*) is presumably why coreutils tail doesn't use
+> epoll ‒ inotify already provides all required events(*), you can use the
+> same code for regular files and fifos, and with one fewer level of
+> indirection: there's just no need(*).
+> 
+> (*: except with a magic syscall only I use apparently)
+
+Yeah, I've slept to this and I still think adding fsnotify events to splice
+is a nicer option so feel free to add:
+
+Acked-by: Jan Kara <jack@suse.cz>
+
+to all kernel patches in your series. Since the changes are in splice code,
+Christian or Al Viro (who you already have on CC list) should be merging
+this so please make sure to also include them in the v5 submission.
+
+								Honza
 -- 
-With best wishes
-Dmitry
-
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
