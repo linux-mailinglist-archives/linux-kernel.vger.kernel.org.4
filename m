@@ -2,91 +2,227 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DBC87426BB
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 14:50:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 537047426CB
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 14:55:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231787AbjF2Mu1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 08:50:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35050 "EHLO
+        id S231878AbjF2MzU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 08:55:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbjF2MuZ (ORCPT
+        with ESMTP id S229459AbjF2MzQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 08:50:25 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F21E187
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 05:50:23 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Thu, 29 Jun 2023 08:55:16 -0400
+Received: from mailbox.box.xen0n.name (mail.xen0n.name [115.28.160.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DB5C2961;
+        Thu, 29 Jun 2023 05:55:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xen0n.name; s=mail;
+        t=1688043306; bh=qlzO1nAzqPvB+Hzmr0HgbCqGg7RmBSNwRMReUr64bck=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=jUu9zRsEygCOa39ZCgxRiLbKjXTQyAk3/vq1UdG1rNhZGoBj1lnigTzep51CpGxAI
+         Bi14AsqbPSnMerzIsKznCyRo9Sr6o9nEuXrSMeAlj3HQr2VxpcMMRF4Ii1rtyOqAct
+         kG/wvCT5WHvifhVE0+KGx6hx6hBDjd766/gHEM8M=
+Received: from [100.100.34.13] (unknown [220.248.53.61])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2C0AE61549
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 12:50:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 6A1FFC433C0;
-        Thu, 29 Jun 2023 12:50:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688043022;
-        bh=DKCUwS9fNnDUPqi4x9AuhHJ2m4N+pv/9wWzYhF4owzU=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=gQxlIXpuAZdK9RJhKIimXOhII1uH6J9scez4VPCbseIuxeuzbU9OnPT48h5v9WP+b
-         Vt3Qd1cmng2/XreIUWNucO8SaVvtjbLY7Tnrg2py+WtGHJZHbVX8a2N1F2w/j0kAou
-         eu44oEFEdiAqBW5PaywiMoRPQvnVysV9jlCNkU3jmvA9eCiIBQY5/hPl8oCUXgymMp
-         d9DkuThpcAuZqS9sApY2iQd42GKElkGRq7a8fUwCRACVDjYUM9mmi4B/aAI6rHJaU5
-         82xr3BdFx44GvVEkCiPY4lpBfwJKm7PWdgY88lgeWjEWvIfZWm7RZEJKg/dTwRNHng
-         KdGaUHXcP/IAg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 352A2C395D8;
-        Thu, 29 Jun 2023 12:50:22 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        by mailbox.box.xen0n.name (Postfix) with ESMTPSA id D6696600AE;
+        Thu, 29 Jun 2023 20:55:02 +0800 (CST)
+Message-ID: <6906281a-baa8-a960-e679-69d1e714e713@xen0n.name>
+Date:   Thu, 29 Jun 2023 20:55:02 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v2 net 0/2] Fix PTP received on wrong port with bridged
- SJA1105 DSA
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <168804302220.3649.11033934879595741710.git-patchwork-notify@kernel.org>
-Date:   Thu, 29 Jun 2023 12:50:22 +0000
-References: <20230627094207.3385231-1-vladimir.oltean@nxp.com>
-In-Reply-To: <20230627094207.3385231-1-vladimir.oltean@nxp.com>
-To:     Vladimir Oltean <vladimir.oltean@nxp.com>
-Cc:     netdev@vger.kernel.org, andrew@lunn.ch, f.fainelli@gmail.com,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.12.0
+Subject: Re: [PATCH 06/12] arch: Declare screen_info in <asm/screen_info.h>
+Content-Language: en-US
+To:     Thomas Zimmermann <tzimmermann@suse.de>, arnd@arndb.de,
+        deller@gmx.de, daniel@ffwll.ch, airlied@gmail.com
+Cc:     linux-kernel@vger.kernel.org, linux-alpha@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-efi@vger.kernel.org,
+        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
+        linux-ia64@vger.kernel.org, loongarch@lists.linux.dev,
+        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-hyperv@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        linux-staging@lists.linux.dev, linux-arch@vger.kernel.org,
+        Richard Henderson <richard.henderson@linaro.org>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
+        Brian Cain <bcain@quicinc.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Kees Cook <keescook@chromium.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Juerg Haefliger <juerg.haefliger@canonical.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Niklas Schnelle <schnelle@linux.ibm.com>,
+        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Sebastian Reichel <sebastian.reichel@collabora.com>,
+        "Mike Rapoport (IBM)" <rppt@kernel.org>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Zi Yan <ziy@nvidia.com>
+References: <20230629121952.10559-1-tzimmermann@suse.de>
+ <20230629121952.10559-7-tzimmermann@suse.de>
+From:   WANG Xuerui <kernel@xen0n.name>
+In-Reply-To: <20230629121952.10559-7-tzimmermann@suse.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
-
-This series was applied to netdev/net.git (main)
-by Paolo Abeni <pabeni@redhat.com>:
-
-On Tue, 27 Jun 2023 12:42:05 +0300 you wrote:
-> Since the changes were made to tag_8021q to support imprecise RX for
-> bridged ports, the tag_sja1105 driver still prefers the source port
-> information deduced from the VLAN headers for link-local traffic, even
-> though the switch can theoretically do better and report the precise
-> source port.
+On 2023/6/29 19:45, Thomas Zimmermann wrote:
+> The variable screen_info does not exist on all architectures. Declare
+> it in <asm-generic/screen_info.h>. All architectures that do declare it
+> will provide it via <asm/screen_info.h>.
 > 
-> The problem is that the tagger doesn't know when to trust one source of
-> information over another, because the INCL_SRCPT option (to "tag" link
-> local frames) is sometimes enabled and sometimes it isn't.
+> Add the Kconfig token ARCH_HAS_SCREEN_INFO to guard against access on
+> architectures that don't provide screen_info.
 > 
-> [...]
+> Signed-off-by: Thomas Zimmermann <tzimmermann@suse.de>
+> Cc: Richard Henderson <richard.henderson@linaro.org>
+> Cc: Ivan Kokshaysky <ink@jurassic.park.msu.ru>
+> Cc: Matt Turner <mattst88@gmail.com>
+> Cc: Russell King <linux@armlinux.org.uk>
+> Cc: Catalin Marinas <catalin.marinas@arm.com>
+> Cc: Will Deacon <will@kernel.org>
+> Cc: Guo Ren <guoren@kernel.org>
+> Cc: Brian Cain <bcain@quicinc.com>
+> Cc: Huacai Chen <chenhuacai@kernel.org>
+> Cc: WANG Xuerui <kernel@xen0n.name>
+> Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+> Cc: Dinh Nguyen <dinguyen@kernel.org>
+> Cc: Michael Ellerman <mpe@ellerman.id.au>
+> Cc: Nicholas Piggin <npiggin@gmail.com>
+> Cc: Christophe Leroy <christophe.leroy@csgroup.eu>
+> Cc: Paul Walmsley <paul.walmsley@sifive.com>
+> Cc: Palmer Dabbelt <palmer@dabbelt.com>
+> Cc: Albert Ou <aou@eecs.berkeley.edu>
+> Cc: Yoshinori Sato <ysato@users.sourceforge.jp>
+> Cc: Rich Felker <dalias@libc.org>
+> Cc: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+> Cc: "David S. Miller" <davem@davemloft.net>
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+> Cc: Ingo Molnar <mingo@redhat.com>
+> Cc: Borislav Petkov <bp@alien8.de>
+> Cc: Dave Hansen <dave.hansen@linux.intel.com>
+> Cc: x86@kernel.org
+> Cc: "H. Peter Anvin" <hpa@zytor.com>
+> Cc: Chris Zankel <chris@zankel.net>
+> Cc: Max Filippov <jcmvbkbc@gmail.com>
+> Cc: Helge Deller <deller@gmx.de>
+> Cc: Arnd Bergmann <arnd@arndb.de>
+> Cc: Kees Cook <keescook@chromium.org>
+> Cc: "Paul E. McKenney" <paulmck@kernel.org>
+> Cc: Peter Zijlstra <peterz@infradead.org>
+> Cc: Frederic Weisbecker <frederic@kernel.org>
+> Cc: Andrew Morton <akpm@linux-foundation.org>
+> Cc: Ard Biesheuvel <ardb@kernel.org>
+> Cc: Sami Tolvanen <samitolvanen@google.com>
+> Cc: Juerg Haefliger <juerg.haefliger@canonical.com>
+> Cc: Geert Uytterhoeven <geert@linux-m68k.org>
+> Cc: Anshuman Khandual <anshuman.khandual@arm.com>
+> Cc: Niklas Schnelle <schnelle@linux.ibm.com>
+> Cc: "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
+> Cc: Linus Walleij <linus.walleij@linaro.org>
+> Cc: Sebastian Reichel <sebastian.reichel@collabora.com>
+> Cc: "Mike Rapoport (IBM)" <rppt@kernel.org>
+> Cc: "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+> Cc: Zi Yan <ziy@nvidia.com>
+> ---
+>   arch/Kconfig                      |  6 ++++++
+>   arch/alpha/Kconfig                |  1 +
+>   arch/arm/Kconfig                  |  1 +
+>   arch/arm64/Kconfig                |  1 +
+>   arch/csky/Kconfig                 |  1 +
+>   arch/hexagon/Kconfig              |  1 +
+>   arch/ia64/Kconfig                 |  1 +
+>   arch/loongarch/Kconfig            |  1 +
+>   arch/mips/Kconfig                 |  1 +
+>   arch/nios2/Kconfig                |  1 +
+>   arch/powerpc/Kconfig              |  1 +
+>   arch/riscv/Kconfig                |  1 +
+>   arch/sh/Kconfig                   |  1 +
+>   arch/sparc/Kconfig                |  1 +
+>   arch/x86/Kconfig                  |  1 +
+>   arch/xtensa/Kconfig               |  1 +
+>   drivers/video/Kconfig             |  3 +++
+>   include/asm-generic/Kbuild        |  1 +
+>   include/asm-generic/screen_info.h | 12 ++++++++++++
+>   include/linux/screen_info.h       |  2 +-
+>   20 files changed, 38 insertions(+), 1 deletion(-)
+>   create mode 100644 include/asm-generic/screen_info.h
+> 
+> diff --git a/arch/Kconfig b/arch/Kconfig
+> index 205fd23e0cada..2f58293fd7bcb 100644
+> --- a/arch/Kconfig
+> +++ b/arch/Kconfig
+> @@ -1466,6 +1466,12 @@ config ARCH_HAS_NONLEAF_PMD_YOUNG
+>   	  address translations. Page table walkers that clear the accessed bit
+>   	  may use this capability to reduce their search space.
+>   
+> +config ARCH_HAS_SCREEN_INFO
+> +	bool
+> +	help
+> +	  Selected by architectures that provide a global instance of
+> +	  screen_info.
+> +
+>   source "kernel/gcov/Kconfig"
+>   
+>   source "scripts/gcc-plugins/Kconfig"
+> [snip]
+> diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
+> index d38b066fc931b..6aab2fb7753da 100644
+> --- a/arch/loongarch/Kconfig
+> +++ b/arch/loongarch/Kconfig
+> @@ -13,6 +13,7 @@ config LOONGARCH
+>   	select ARCH_HAS_FORTIFY_SOURCE
+>   	select ARCH_HAS_NMI_SAFE_THIS_CPU_OPS
+>   	select ARCH_HAS_PTE_SPECIAL
+> +	select ARCH_HAS_SCREEN_INFO
+>   	select ARCH_HAS_TICK_BROADCAST if GENERIC_CLOCKEVENTS_BROADCAST
+>   	select ARCH_INLINE_READ_LOCK if !PREEMPTION
+>   	select ARCH_INLINE_READ_LOCK_BH if !PREEMPTION
+> [snip]
 
-Here is the summary with links:
-  - [v2,net,1/2] net: dsa: sja1105: always enable the INCL_SRCPT option
-    https://git.kernel.org/netdev/net/c/b4638af8885a
-  - [v2,net,2/2] net: dsa: tag_sja1105: always prefer source port information from INCL_SRCPT
-    https://git.kernel.org/netdev/net/c/c1ae02d87689
+Acked-by: WANG Xuerui <git@xen0n.name> # loongarch
 
-You are awesome, thank you!
+Thanks!
+
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+WANG "xen0n" Xuerui
 
+Linux/LoongArch mailing list: https://lore.kernel.org/loongarch/
 
