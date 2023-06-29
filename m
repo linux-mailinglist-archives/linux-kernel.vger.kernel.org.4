@@ -2,99 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDB5A742A6A
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 18:15:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0755D742A69
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 18:15:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232377AbjF2QPP convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 29 Jun 2023 12:15:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39002 "EHLO
+        id S232307AbjF2QPJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 12:15:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232568AbjF2QPH (ORCPT
+        with ESMTP id S232515AbjF2QPC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 12:15:07 -0400
-Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98E3E10E5;
-        Thu, 29 Jun 2023 09:15:06 -0700 (PDT)
-Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-98e1fc9d130so24105666b.0;
-        Thu, 29 Jun 2023 09:15:06 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688055305; x=1690647305;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=2asz2ubuH2qetgbcysClqW7znNeW2vYR8Y5n9yx7dNQ=;
-        b=eu+XOq+FfQIO4gi1Qc8YdAEKGgZ6QaHJIZixs10PcPnzBF70b3h80B10tILnGlIzBX
-         sq81ANntAvJ4C9zzyGgPkWbRdYwRZshtoerkEcxVgH9hSRl0qT/RJZy5kKil9qcYi9r6
-         2k6Wc0JfEUUInKjxo6kWz1EVxpPu9YYtVi2khe51ZdMWp2c2AZ6CNqRA5dQmt0csyKt0
-         DS9Rnzm+L6tzgGwDg5d8uPO+GjSWwFyDsd0kBgKtR4qywAKegDKMkSts0oE7+0WpRBYg
-         QGhGigjS92A/F+XBAGyTIJKzSWD4v2hVwXAyR0qoTVCtbhq3JhoVc/hXlUUCclLD/2ok
-         L45w==
-X-Gm-Message-State: AC+VfDzAlzH09oGjawDwHx0xG/OmncATvEFOqhou0RcM6cazaql2Zz0i
-        cV3zHfZfCYlvSyYmhddahOB6W7dUyttEahBzcwDF8wbW
-X-Google-Smtp-Source: ACHHUZ5/QdCY5R7J3odu7HQae4qVM960Ldl0f0ONcSdWCpVyCWdGZEis60/MfjC11Ncx1onHXrhUbkrTUeasMlq2sJM=
-X-Received: by 2002:a17:906:518f:b0:974:ae1d:ad0b with SMTP id
- y15-20020a170906518f00b00974ae1dad0bmr13460817ejk.3.1688055304918; Thu, 29
- Jun 2023 09:15:04 -0700 (PDT)
+        Thu, 29 Jun 2023 12:15:02 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EE5B170F
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 09:15:01 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 046C96156E
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 16:15:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17EA1C433C0;
+        Thu, 29 Jun 2023 16:15:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688055300;
+        bh=ZZ0x/hfKHeOr7h69Wp129mhxshiks3zVTS8Y7lb2+Dk=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=PFhVcRaysQqUKb92I6zVf3GTwCJFBnGsYiGsW7XDdQLB1Pmk28lq78fhcQmj/mHAx
+         7wJ+Oi3uiV6f0WQ0ZgyPlB9lup3N8ZsMRWbvPfG6pX8FRiBSa3HcdxujBYAzVX9LHV
+         ATdClk7KBcfPVW6IUCJgbL2iHQDD5uq8g1fHBXNwl5+LUosSHeMD3GkNQrYys6wE1J
+         tpi7rGqRKY2VH/zGf5uI2UJ3QhzOetvBUo8GQgy3kxha+tdPg1JLxuMNPCfr0EOtDk
+         ny8dxnVDuhujbG+/LlFCdNaNrKJ/bEKWC4wpZ37Yx9/qufkr7E9XsdoaYUonVDNIML
+         kmDNBbN9PZJ+g==
+Date:   Thu, 29 Jun 2023 09:14:59 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Tobias Heider <me@tobhe.de>
+Cc:     Paolo Abeni <pabeni@redhat.com>,
+        Michael Chan <michael.chan@broadcom.com>,
+        Siva Reddy Kallam <siva.kallam@broadcom.com>,
+        Prashant Sreedharan <prashant@broadcom.com>,
+        Michael Chan <mchan@broadcom.com>, netdev@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] Add MODULE_FIRMWARE() for FIRMWARE_TG357766.
+Message-ID: <20230629091459.5e442d21@kernel.org>
+In-Reply-To: <ZJ2JARrRUUd4YRvX@tobhe.de>
+References: <ZJt7LKzjdz8+dClx@tobhe.de>
+        <CACKFLinEbG_VVcMTPVuHeoQ6OLtPRaG7q2U5rvqPqdvk7T2HwA@mail.gmail.com>
+        <aa84a2f559a246b82779198d3ca60205691baa94.camel@redhat.com>
+        <ZJ2JARrRUUd4YRvX@tobhe.de>
 MIME-Version: 1.0
-References: <20230616165034.3630141-1-michal.wilczynski@intel.com> <20230616165034.3630141-9-michal.wilczynski@intel.com>
-In-Reply-To: <20230616165034.3630141-9-michal.wilczynski@intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 29 Jun 2023 18:14:53 +0200
-Message-ID: <CAJZ5v0hPY=nermvRKiyqGg4R+jLW13B-MUr0exEuEnw33VUj7g@mail.gmail.com>
-Subject: Re: [PATCH v5 08/10] acpi/nfit: Improve terminator line in acpi_nfit_ids
-To:     Michal Wilczynski <michal.wilczynski@intel.com>
-Cc:     linux-acpi@vger.kernel.org, rafael@kernel.org,
-        dan.j.williams@intel.com, vishal.l.verma@intel.com,
-        lenb@kernel.org, dave.jiang@intel.com, ira.weiny@intel.com,
-        rui.zhang@intel.com, linux-kernel@vger.kernel.org,
-        nvdimm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 16, 2023 at 6:51 PM Michal Wilczynski
-<michal.wilczynski@intel.com> wrote:
->
-> Currently terminator line contains redunant characters.
+On Thu, 29 Jun 2023 15:37:05 +0200 Tobias Heider wrote:
+> Would "Fixes: c4dab50697ff ("video: remove unnecessary platform_set_drvdata()")"
+> work?
 
-Well, they are terminating the list properly AFAICS, so they aren't
-redundant and the size of it before and after the change is actually
-the same, isn't it?
-
-> Remove them and also remove a comma at the end.
-
-I suppose that this change is made for consistency with the other ACPI
-code, so this would be the motivation to give in the changelog.
-
-In any case, it doesn't seem to be related to the rest of the series.
-
-> Signed-off-by: Michal Wilczynski <michal.wilczynski@intel.com>
-> ---
->  drivers/acpi/nfit/core.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/acpi/nfit/core.c b/drivers/acpi/nfit/core.c
-> index aff79cbc2190..95930e9d776c 100644
-> --- a/drivers/acpi/nfit/core.c
-> +++ b/drivers/acpi/nfit/core.c
-> @@ -3455,7 +3455,7 @@ EXPORT_SYMBOL_GPL(__acpi_nfit_notify);
->
->  static const struct acpi_device_id acpi_nfit_ids[] = {
->         { "ACPI0012", 0 },
-> -       { "", 0 },
-> +       {}
->  };
->  MODULE_DEVICE_TABLE(acpi, acpi_nfit_ids);
->
-> --
-> 2.41.0
->
+Modulo the text in the brackets but yes ;) I'll add when applying.
