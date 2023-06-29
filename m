@@ -2,148 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD3C6742929
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 17:11:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 571AD74292D
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 17:13:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232492AbjF2PLi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 11:11:38 -0400
-Received: from mail-dm6nam10on2091.outbound.protection.outlook.com ([40.107.93.91]:58401
-        "EHLO NAM10-DM6-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S231132AbjF2PLc (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 11:11:32 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=aoqzT/csyuuEC2Wm4/QtsCcXMf/2Sh+AhQaiZUBI+T6CHl9FIIii0VvI5JK4DdrYY5fs4p1NIBoO3fY99gpSCUeqfzv7HhGapAwMsgX+JGJAL+GnYfjyl/+hJY9okZX+OdniN7kMaBLu02cVpzImBz3lv2h21VPHHY8TPf6kDbhmz7b9tZ0N5ZoFfgXrKmr3wE13Kg2f84NtYyFH+0Ps6HkHudXAxOHZ1wziU9Mvj7nVrsSdyoX/qUBsm+FoVau909VCP41im/AS9zMolgioZb/SOqsTBT72UjRoGqy+lm/Hfpf64oyPwJ9OvBfTYuRtaIzM+obV6PionxsHwhEKIQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=uAjyYwDFd/X8kODfQ1FGGG/Y/9aTBIR5bOuWk2BIAiA=;
- b=Gt3+4DN6MxoVN7eeZM1Pc8PIVZsM7iS2UMHQQ+9lD+ztG4LtIGDNSEqdeueone8dYheIpgZU+4d9X5cIVUIl4Bx5Twkh8+I0qhsyj4hRo63re2JZfKcUjOsIh420HB1tbGjUTKzyGKrEzk85ZQA86C8g5O+hoLogyowkvDSW/9uWMEGJfi+aoGD/jNxdbodOONpynpZk7SVbk1xlH5KunSfByr4OQbeUVneDbqc1BkLpf4d9hqYwEqPR+4GZGO1oExQBFA4ZHZjVQKvjDN9j0wM78Ucp2GH9w8UbYZ77JOWpV7iq5as/NC3wLAnsVWyskmkdQQjjhELcVU7q+XXP0g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
- dkim=pass header.d=corigine.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=uAjyYwDFd/X8kODfQ1FGGG/Y/9aTBIR5bOuWk2BIAiA=;
- b=f5Ws5BbncsANw/rZbaWUlE/iQIvrOy8W1pCz3UrQkuyA7lo7nELPClipC+4+RWfxEIPs+ugYNv5uMAazsZl1Vw5yRotJUfJN1gWj50aaklwQchJEgkkB04an85im6DgjSlYNh6cAphW/ma87svJTmlSA17T8cJsLUXcQn/nuKyw=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=corigine.com;
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
- by SN4PR13MB5791.namprd13.prod.outlook.com (2603:10b6:806:21a::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.36; Thu, 29 Jun
- 2023 15:11:29 +0000
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::eb8f:e482:76e0:fe6e]) by PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::eb8f:e482:76e0:fe6e%5]) with mapi id 15.20.6521.023; Thu, 29 Jun 2023
- 15:11:29 +0000
-Date:   Thu, 29 Jun 2023 17:11:23 +0200
-From:   Simon Horman <simon.horman@corigine.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>
-Subject: Re: [PATCH v1 1/1] netlink: Don't use int as bool in
- netlink_update_socket_mc()
-Message-ID: <ZJ2fG/2AzJ5O0IFr@corigine.com>
-References: <20230629133131.83284-1-andriy.shevchenko@linux.intel.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230629133131.83284-1-andriy.shevchenko@linux.intel.com>
-X-ClientProxiedBy: AM8P191CA0003.EURP191.PROD.OUTLOOK.COM
- (2603:10a6:20b:21a::8) To PH0PR13MB4842.namprd13.prod.outlook.com
- (2603:10b6:510:78::6)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|SN4PR13MB5791:EE_
-X-MS-Office365-Filtering-Correlation-Id: ed2c6354-4f1a-44cc-59d5-08db78b31d80
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: JqaqCqkFzkzdkneIWsSiavHu8NTU3gWTf+P6P6bSs4nI2iiWLV7sPmYf2T/muwhy6dThXWTjYuj4Mq/pypnwyAbwx/3Rp5bcGUJhc3FNwh6E4Af81iow38R/yb+YVe4VhhjeidjeM0aenAsaYBBHIVS1qllWJDHn28zl5wgJuAGQwyNJrXkXd985sR2GMOql4xVR6fHowrlc1DpTyX/bVpzaw1JP39imU5UMbFBo3VfUau/ndJDiws74kMBujl8bylCFA1Gr7TT6OkaYRHuUaBsWThbzsSdW4dBOSCvgQ8CIQr5yPQBFSR692vrub6KlyRoOUlKN3pg9kr7MauUl7C2fur8IXHj1uDkzAs8YHwCWGf/PAp8Pz0XZEXFI1XSHOiqGbT0Y8sN1zn33wdQ48+36HtNRCPmetsrQQFIYXgLCRfyuQ21iNKhPT9SfLVNRAE5q2B7w9M35AQStfoDmKEUrSDia9k8yB4JgMY5t8RJSsk/8Z1bbYcq6VAgvF3amLjq6v7xlH8kVjlL/3ZaCK5qiDDUaIWga/uYE+bZ3P6X4h6k35iERka9F1ed3hki6ASbVC3+r2EViKbxuxf1ZSXu1hG97atRvWP2O/YKjPZFjwApYqougpfenULMF2jgwd2FJ1dIwltsJsb45NxvN+YXxPbmK+2j8WJMZTW7MVWs=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39840400004)(366004)(376002)(136003)(346002)(396003)(451199021)(6666004)(41300700001)(316002)(6486002)(2616005)(44832011)(186003)(6512007)(86362001)(2906002)(83380400001)(6506007)(38100700002)(8936002)(5660300002)(36756003)(66946007)(6916009)(66556008)(54906003)(478600001)(4326008)(8676002)(66476007)(309714004);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?31OCaLbZzI7oJqM4UsGgbuL0yB/54LIm/pKEmQGow9ZUBI2K6IWSIFMM3M3M?=
- =?us-ascii?Q?NBFVKgw2Rr2sT+Z4yz1QtaMDnuWJhBoWKW4nPeAKQIyV0d/8jTzve4h6QV3b?=
- =?us-ascii?Q?46wRI7apjhqbxR5gkcGX4yX9O6Z2biJTUq4Y2Cgd2mWYuVGxvFfNvaUs46So?=
- =?us-ascii?Q?smRf0b42vs3q8yAwsx/KF4Sk70Kz5+ovH4b8tqm2Hs8tKvw/pv8Pbitqa8fa?=
- =?us-ascii?Q?ppKn+qTX/f5Vl25ZzURGfXfagvNH4CIbTkT8H+F5vUBny+08r0hTYBESVR48?=
- =?us-ascii?Q?TDYfjOfIxfLHDrnN3gyTYXbn1gervZKRK/u6/bVU9FAJN2niRw9atBNiuaBb?=
- =?us-ascii?Q?cKnSw9EkfX/sdXjCNH1wKm1z5fIq7NT42YWUf5Z81ko9Xq+HsLIXVwJcskMw?=
- =?us-ascii?Q?pXij2JPwZ51+uoWNB2vji6BYrwYJWPW+srYvhggWGP+l4IcJycYxkcCC0H3Z?=
- =?us-ascii?Q?jyMfRtSKRdDmyqScaV9L66H9wZ5FndYr199CteYj57nHrYTuj5BXjE4hNDJp?=
- =?us-ascii?Q?orkCsJ8bk2vaYiTwdmQMEITGbTWSHC6t4lBT/1SEMtHK8XwxSsoyjlhbZzTR?=
- =?us-ascii?Q?1FcX99Z8aMadhcm6rcIHENv09EzsIjIsP51ZiGRi6fXpGxdZHsiqZiTy+C1R?=
- =?us-ascii?Q?2rGyNcr8HqkmHy8xfxdZoxu8oera/QlXDKt97K/1W69eozekUsoT5QIhnWR9?=
- =?us-ascii?Q?nnxPoRVltBquAxv9P++c8zg6ye7HW1KalkOfHF3/j9IIn5NQBhSBGStKALug?=
- =?us-ascii?Q?nMsLKwH5nZrrkCr2HcrYslDM8bLDXa6tAC7S/m3OOK5Wk3ouPt0Ud/ORka3m?=
- =?us-ascii?Q?HamtK7yRivFcDUHcyrscJWr+UBWudlPcHA1UbRqVFUK4wisvrZ20ooRg2VEc?=
- =?us-ascii?Q?b2GpMV+UZj27fn7CHz/+REofw+yE+JD3LcNm/aIfVpZmsezHGQTmLOZyGmc0?=
- =?us-ascii?Q?u1kTrbuva/+/Xdcq4e+54Jf36sjaCuXHjJSQ8mAJxbQcwYJlIlHvhgiv4H0l?=
- =?us-ascii?Q?PcRbX6GWGI7G+lXSuxVazj+0S81ZsMIESl9eHhDu8RMapIfbe8CPjCkJcGYP?=
- =?us-ascii?Q?a8POpv4DiR47J4iPRaseSJ914YnJj2XfSrQBwBQ0m8Zz7ebqXUyEoXA0xXmf?=
- =?us-ascii?Q?Z/3xeLOlHWcabKRXgMyPlJRg/1U6WjZxKmug1WDd9eBpxhh888i3cTQt74sW?=
- =?us-ascii?Q?N8LwgBk1fX8kmqyNgqt+8nW5FIJFY7SXaMv64ioA3seQfsXtOis4BX6n93dP?=
- =?us-ascii?Q?6luWbuCXQmuiTEnvs2xOmh9CgZBv7p43SQNA0Rqkuo+Co9SzcrjSHlZ5J5En?=
- =?us-ascii?Q?sbDeihHdbB9fsmzcSh2Zhp0G0TBP4sf6SJJINzZzu9DOrqOHhDjrfPmqdxIX?=
- =?us-ascii?Q?CqqOi+azXuGdbMbZivoF88tTG6pBeKJUotMpLUBNu6sQUuCr32hihQLUIwP5?=
- =?us-ascii?Q?rhEYdztBEEX3xL5QJ5jgBR0obhiXOVjKZgBiGBFhVfr0lbq17S2vAy4vWRT1?=
- =?us-ascii?Q?vkG7asugdbMQB02QJUAqFWE1eC16xxNaWT9BWPQCAapJZpKNXOHSZk7bqZYK?=
- =?us-ascii?Q?W6Ww6WhebsfcZ/CkfPbB54ZL7MrtQy1qv665kmfHYzMb7kVlBEZE7i/p7kqS?=
- =?us-ascii?Q?uZChPWgFrK2agOSYl8yvglpn4mTyEVsYdZ/MSh3pnvS9WgqgE8dq7o+kMsVM?=
- =?us-ascii?Q?GXZmoQ=3D=3D?=
-X-OriginatorOrg: corigine.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ed2c6354-4f1a-44cc-59d5-08db78b31d80
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Jun 2023 15:11:29.4098
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: indXXDV5fE9QaMq1mEvKN2NAg+apBvYhTqSXste/dYti4claNzja4FNYUJkvv1ebTvVN+7s++2AutSdB0oqfHdCM1Z2vNS/nFFAYthvTlDs=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN4PR13MB5791
+        id S231778AbjF2PNg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 11:13:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46616 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231132AbjF2PNe (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 29 Jun 2023 11:13:34 -0400
+Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BE971BD1
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 08:13:33 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.west.internal (Postfix) with ESMTP id 7B74A3200927;
+        Thu, 29 Jun 2023 11:13:30 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Thu, 29 Jun 2023 11:13:30 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-transfer-encoding:content-type:content-type:date
+        :date:from:from:in-reply-to:message-id:mime-version:reply-to
+        :sender:subject:subject:to:to; s=fm1; t=1688051610; x=
+        1688138010; bh=XeIvPk5ko2AMp3S+4HUOBL42jph3ztzXitHWLUGtnyo=; b=T
+        47bABH4HuaPsYxVhK3Bnux5Iq2JUgC2eGv4dvL0Q4k+NMNu5f15LiaaWormh3iKO
+        soRzQNAiv4nv1FJ4nNz35dQVLEOOCQbclraJnJBmM11McdMS4pkYGf9WVCIjwe6r
+        NRZJzsEbqmEWkN6kqjprqe7NpHuRAgC1iJnBtBZlXTZAaAwKiz/MQpSYPfMR4v9o
+        pJ+bxpZd+gzDvq0Tj9rwk1b9dQoZNFH9KfIRWObzAysoUb9E4BrhWz1VsAiAqJvt
+        uGlerbis2CWPgJvY1qYrpmQ58c9HynI5aH3H4VBuUtBfxhQEYhDDJyVEgK5ORKb7
+        k/XHFB5mD1yyl8ZcEdBwg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:content-type:date:date:feedback-id:feedback-id
+        :from:from:in-reply-to:message-id:mime-version:reply-to:sender
+        :subject:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender
+        :x-me-sender:x-sasl-enc; s=fm2; t=1688051610; x=1688138010; bh=X
+        eIvPk5ko2AMp3S+4HUOBL42jph3ztzXitHWLUGtnyo=; b=HJCB6rr4s1FFq/6G2
+        NGJlhAO3bOeShRpCrNyO4GchqI3BZbdDtDYQvuXKL5uHUCTs9a6vSV+haRKk7Lhn
+        L9U46/oHf7DbA4ql0GjoqckRvN+74QcqWbqkPEuwQYk7/y0BmuPTr2rvlY9CEsR9
+        DbgTECWcXTiLR0dCA5Hrvje3yGCuXIhsOklpNk4ccoOSTT9wkCvRb/tURM5WJ+Qc
+        o2Le8/dJKANgu3nVXBpj0vmT05UhNtRj6CXJRhEi1XlCjoBEAnwJaFo5faCEry1S
+        mIJL+X6YlmNXlhX00nbcKfppCYmVXfE0J1Peru+5dCrm6hhec6a7+bljnY4Y4WDe
+        msbpg==
+X-ME-Sender: <xms:mZ-dZP21BbUcWVWtMctHpBKFR0xDDLGNqouLik4Q4Ydy0fZAFk-FWg>
+    <xme:mZ-dZOHmIajaSKKFGyAAnpXzqba8ayZkJztoTNr1XLUHlkYUaAy5J-JKTN14S_5hc
+    hCMEf6yUCPR-jQOUi4>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrtdeggdekiecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefofgggkfffhffvvefutgfgsehtqhertderreejnecuhfhrohhmpedftehrnhgu
+    uceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrthhtvg
+    hrnhepfeehleefteehledvieeifeeftefhkedvheehudelteevieekhefhgefhveekffeu
+    necuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprghrnh
+    gusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:mZ-dZP7LqfhqH4_gxqvUkoja6NgegdsPEa1ub31T44ljN382EsyAag>
+    <xmx:mZ-dZE17nQToPZkSQ6tGLI9EJewwigvs2_PNcdT-rFjexkbOWAkaEw>
+    <xmx:mZ-dZCFyFCHu122QnwZqlTKzZOg_3D_1Ci72jutKwj0aZzB2biIe8A>
+    <xmx:mp-dZEPDWSihYKBa7qaJICOI1WZ_ztRLqgp2uGO9ctpYKTQkeH9GKw>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id B880BB6008D; Thu, 29 Jun 2023 11:13:29 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-499-gf27bbf33e2-fm-20230619.001-gf27bbf33
+Mime-Version: 1.0
+Message-Id: <80fba92e-3836-4d27-8be6-1e5f7b5b2f53@app.fastmail.com>
+Date:   Thu, 29 Jun 2023 17:11:48 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Linus Torvalds" <torvalds@linux-foundation.org>
+Cc:     soc@kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: [GIT PULL 0/5] ARM: SoC tree changes for 6.5
+Content-Type: text/plain;charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+        lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 29, 2023 at 04:31:31PM +0300, Andy Shevchenko wrote:
-> The bit operations take boolean parameter and return also boolean
-> (in test_bit()-like cases). Don't threat booleans as integers when
-> it's not needed.
-> 
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> ---
->  net/netlink/af_netlink.c | 7 ++++---
->  1 file changed, 4 insertions(+), 3 deletions(-)
-> 
-> diff --git a/net/netlink/af_netlink.c b/net/netlink/af_netlink.c
-> index 9c9df143a2ec..81e4b802f3f9 100644
-> --- a/net/netlink/af_netlink.c
-> +++ b/net/netlink/af_netlink.c
-> @@ -1623,9 +1623,10 @@ EXPORT_SYMBOL(netlink_set_err);
->  /* must be called with netlink table grabbed */
->  static void netlink_update_socket_mc(struct netlink_sock *nlk,
->  				     unsigned int group,
-> -				     int is_new)
-> +				     bool new)
->  {
-> -	int old, new = !!is_new, subscriptions;
-> +	int subscriptions;
-> +	bool old;
->  
->  	old = test_bit(group - 1, nlk->groups);
->  	subscriptions = nlk->subscriptions - old + new;
+We have the usual large number of devicetree updates, mostly for arm64
+and a little bit of arm32 and riscv. The most notable contents this
+time are the move of all 32-bit dts files into subdirectories, as it
+was getting very much out of hand to have everything in one place.
 
-Hi Andy,
+Among the newly added hardware, the rv64 TH1520 and the three added
+arm64/cortex-a35 based stm32mp2, ma35d1 and amlogic C3 are the
+most notable.
 
-Doing arithmetic with boolean values doesn't seem right to me.
+Overall, there are 1132 non-merge changesets ion 74 branches, which
+is large but not overly so. There were 214 individual contributors
+this time, the and the most active ones by number of changesets are
 
-In any case, net-next is closed.
-Please consider reposting once it re-opens, after 10th July.
+    103 Krzysztof Kozlowski
+     84 Nishanth Menon
+     32 Konrad Dybcio
+     30 Fabio Estevam
+     29 Stephan Gerhold
+     26 Michal Simek
+     21 Linus Walleij
+     21 Dmitry Baryshkov
+     18 Rafa=C5=82 Mi=C5=82ecki
+     18 AngeloGioacchino Del Regno
+     17 Arnd Bergmann
+     16 Neil Armstrong
+     16 Kathiravan T
+     15 Tony Lindgren
+     14 Devi Priya
+     14 Bhupesh Sharma
+     13 Marek Vasut
+     13 Luca Weiss
+     13 Bjorn Andersson
+     12 Thierry Reding
+     12 Jacky Huang
+     11 Robert Marko
+     11 Oleksij Rempel
+     11 Biju Das
+     11 Bartosz Golaszewski
+     11 Artur Weber
 
---
-pw-bot: deferred
+The diff/dirstat now shows the dts file modifications in their
+new location, not including the changes of the actual merge:
+
+   0.3% Documentation/devicetree/bindings/arm/
+   0.4% Documentation/devicetree/bindings/clock/
+   0.2% Documentation/devicetree/bindings/interrupt-controller/
+   0.3% Documentation/devicetree/bindings/media/
+   0.2% Documentation/devicetree/bindings/soc/
+   0.7% Documentation/devicetree/bindings/
+   0.4% Documentation/process/
+   0.7% arch/arm/boot/dts/allwinner/
+   1.1% arch/arm/boot/dts/broadcom/
+   0.2% arch/arm/boot/dts/hisilicon/
+   0.4% arch/arm/boot/dts/marvell/
+   0.3% arch/arm/boot/dts/mediatek/
+   0.4% arch/arm/boot/dts/microchip/
+   1.7% arch/arm/boot/dts/nxp/imx/
+   0.2% arch/arm/boot/dts/nxp/
+   1.5% arch/arm/boot/dts/qcom/
+   0.9% arch/arm/boot/dts/samsung/
+   1.8% arch/arm/boot/dts/st/
+   0.2% arch/arm/boot/dts/ti/keystone/
+   4.9% arch/arm/boot/dts/ti/omap/
+   3.3% arch/arm/boot/dts/
+   0.8% arch/arm/mach-omap1/
+   0.5% arch/arm/mach-omap2/
+   0.6% arch/arm/
+   3.6% arch/arm64/boot/dts/freescale/
+   0.7% arch/arm64/boot/dts/hisilicon/
+   3.2% arch/arm64/boot/dts/mediatek/
+   0.4% arch/arm64/boot/dts/nuvoton/
+   1.0% arch/arm64/boot/dts/nvidia/
+  28.5% arch/arm64/boot/dts/qcom/
+   1.1% arch/arm64/boot/dts/renesas/
+   3.5% arch/arm64/boot/dts/rockchip/
+   0.7% arch/arm64/boot/dts/st/
+  15.1% arch/arm64/boot/dts/ti/
+   1.1% arch/arm64/boot/dts/xilinx/
+   0.4% arch/arm64/boot/dts/
+   0.6% arch/riscv/boot/dts/thead/
+   0.2% arch/
+   2.9% drivers/clk/nuvoton/
+   0.2% drivers/firmware/arm_scmi/
+   0.2% drivers/firmware/tegra/
+   0.2% drivers/input/touchscreen/
+   0.9% drivers/memory/tegra/
+   0.2% drivers/memory/
+   4.5% drivers/pinctrl/stm32/
+   0.7% drivers/reset/
+   0.5% drivers/soc/mediatek/
+   0.7% drivers/soc/qcom/
+   0.4% drivers/soc/rockchip/
+   0.5% drivers/soc/ti/
+   0.2% drivers/soc/
+   0.7% drivers/
+   0.9% include/dt-bindings/clock/
+   0.2% include/dt-bindings/reset/
+   0.5% include/linux/
+   0.2% include/
