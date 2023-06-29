@@ -2,265 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0447E742035
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 08:12:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF7A574203B
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 08:14:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231878AbjF2GMh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 02:12:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37714 "EHLO
+        id S231430AbjF2GOh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 02:14:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229539AbjF2GMe (ORCPT
+        with ESMTP id S231303AbjF2GOd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 02:12:34 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC2F61BC3;
-        Wed, 28 Jun 2023 23:12:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1688019152; x=1719555152;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=Yf+fYjG28gCGti2Jv4VQ+aICiUpwirP4kbsfLmOgn54=;
-  b=bfqhs03NNji4H8KL7huPeMmrC4rAjwyXuOWy6v/EyrtanKugM4yU9gU7
-   5aKuu3y8nMMevmD583w09023l10MONGu09E0KvNnL+Bdjp/kPzCKlTi5H
-   lvJhT8cYE9V8LdXUe8yzQjQ+3VWtmsji3LfeN+oDjkzIhQZYzQhgE/xvk
-   JZdX83i1ohByN+IcbK0MPXdRFtJThxk362NX/r66GoyAG61PEnmEAZ0bm
-   +DLL4lgUbtOY3oJPG/dMxL/jPR7eq6dsS9NAntzHpZD3q/CPCRk2gwyV/
-   2wXSO8xBU8wAK4kjKO9qknmTU/xsyEB6QlsqmkJhxg5Lkwcp2YEPa7jth
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10755"; a="360884049"
-X-IronPort-AV: E=Sophos;i="6.01,167,1684825200"; 
-   d="scan'208";a="360884049"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2023 23:12:32 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10755"; a="1047674675"
-X-IronPort-AV: E=Sophos;i="6.01,167,1684825200"; 
-   d="scan'208";a="1047674675"
-Received: from binbinwu-mobl.ccr.corp.intel.com (HELO [10.238.9.27]) ([10.238.9.27])
-  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2023 23:12:30 -0700
-Message-ID: <bf5ef935-b676-4f2a-7df3-271eff24e6bb@linux.intel.com>
-Date:   Thu, 29 Jun 2023 14:12:27 +0800
+        Thu, 29 Jun 2023 02:14:33 -0400
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B0EE2690
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 23:14:29 -0700 (PDT)
+Received: by mail-wr1-x429.google.com with SMTP id ffacd0b85a97d-314172bb818so317627f8f.1
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 23:14:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=resnulli-us.20221208.gappssmtp.com; s=20221208; t=1688019267; x=1690611267;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=BxPmChzKXR1dj/ko+9tzcHvICaNxDCij9PscVU1CwGY=;
+        b=g4spu/YTypGbdobXCPpsNMEE7fZgSTh6dwO8ck/RlyJzKG32ec8qbcH4voInoYNI6o
+         nG6/zJ1n82WItH1lu3qQCRFI8uw3L8ph8dhnODO74Jobt9mAAC6aVPmcAOEeHa3CijaY
+         GQ0EQQTgLWtAzMyQV8sZkz9pP1Q5sB+jGzX0IRtVzmIH7vRZDqd7kAqk/QYf3QTa8aEJ
+         QSuo/h0rl0fcrDEeomgjT4HhlbHIS1Bzm651nwZXtQyAM08WdVMOLO0uppwo8McOoT1j
+         8CGh366oXSh0q2wYy6HTFoOLtXKgeVtSm3qpnqhqbheagjwO+/UJVS4tnevaSr7XLabv
+         Rrig==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688019267; x=1690611267;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=BxPmChzKXR1dj/ko+9tzcHvICaNxDCij9PscVU1CwGY=;
+        b=kQm/LWJIKjAevlLfViRuFsySQEx7gd/wy2AWeDaM99oRe/f89pkzqQtchU90RqrKNm
+         utnFAVK/JzgryDbYXDB6fcP9HTwTFkes/e2vC6yvVMLzuxAPjsGznYLsTgC5bWMBNcKl
+         KaS0uIWg47BEJmSE0cytCL35+mXd0HSWTYHM2ZOwk6cfUunR5H/zgpAokyVFs5Dj/o9u
+         AezviSPQTeqY8v1WoB+9ZnTe0RNQb4/Zw1FFNcf14CEQfBTk18uo5rdmBw54r7WW7Qf9
+         khrGSUJZkAwdtqzV6BjZKBbgnGfvrtj6klU4IAQV9AZGP/r+Y4VgFJ0SE/hwdRetcD+t
+         AhEQ==
+X-Gm-Message-State: AC+VfDy25BgntO9ecW447yFPWp84+NWqd0uG+Wy1WHrWKuoPVkGctVTC
+        dO52V/Pj0Yk6kXEYsbp+t6Rjzw==
+X-Google-Smtp-Source: ACHHUZ7KKCQek3b9yJkpoCmAdgzst9lXvnl9IF1wrn2teksRP3fkGVdr25X0T5kABFTNqxM9KgVooQ==
+X-Received: by 2002:a05:6000:181:b0:30f:d218:584a with SMTP id p1-20020a056000018100b0030fd218584amr32939868wrx.23.1688019267545;
+        Wed, 28 Jun 2023 23:14:27 -0700 (PDT)
+Received: from localhost (host-213-179-129-39.customer.m-online.net. [213.179.129.39])
+        by smtp.gmail.com with ESMTPSA id b7-20020a5d45c7000000b003141a3c4353sm460558wrs.30.2023.06.28.23.14.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 28 Jun 2023 23:14:26 -0700 (PDT)
+Date:   Thu, 29 Jun 2023 08:14:25 +0200
+From:   Jiri Pirko <jiri@resnulli.us>
+To:     "Kubalewski, Arkadiusz" <arkadiusz.kubalewski@intel.com>
+Cc:     "kuba@kernel.org" <kuba@kernel.org>,
+        "vadfed@meta.com" <vadfed@meta.com>,
+        "jonathan.lemon@gmail.com" <jonathan.lemon@gmail.com>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "vadfed@fb.com" <vadfed@fb.com>,
+        "Brandeburg, Jesse" <jesse.brandeburg@intel.com>,
+        "Nguyen, Anthony L" <anthony.l.nguyen@intel.com>,
+        "M, Saeed" <saeedm@nvidia.com>,
+        "leon@kernel.org" <leon@kernel.org>,
+        "richardcochran@gmail.com" <richardcochran@gmail.com>,
+        "sj@kernel.org" <sj@kernel.org>,
+        "javierm@redhat.com" <javierm@redhat.com>,
+        "ricardo.canuelo@collabora.com" <ricardo.canuelo@collabora.com>,
+        "mst@redhat.com" <mst@redhat.com>,
+        "tzimmermann@suse.de" <tzimmermann@suse.de>,
+        "Michalik, Michal" <michal.michalik@intel.com>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "jacek.lawrynowicz@linux.intel.com" 
+        <jacek.lawrynowicz@linux.intel.com>,
+        "airlied@redhat.com" <airlied@redhat.com>,
+        "ogabbay@kernel.org" <ogabbay@kernel.org>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "nipun.gupta@amd.com" <nipun.gupta@amd.com>,
+        "axboe@kernel.dk" <axboe@kernel.dk>,
+        "linux@zary.sk" <linux@zary.sk>,
+        "masahiroy@kernel.org" <masahiroy@kernel.org>,
+        "benjamin.tissoires@redhat.com" <benjamin.tissoires@redhat.com>,
+        "geert+renesas@glider.be" <geert+renesas@glider.be>,
+        "Olech, Milena" <milena.olech@intel.com>,
+        "kuniyu@amazon.com" <kuniyu@amazon.com>,
+        "liuhangbin@gmail.com" <liuhangbin@gmail.com>,
+        "hkallweit1@gmail.com" <hkallweit1@gmail.com>,
+        "andy.ren@getcruise.com" <andy.ren@getcruise.com>,
+        "razor@blackwall.org" <razor@blackwall.org>,
+        "idosch@nvidia.com" <idosch@nvidia.com>,
+        "lucien.xin@gmail.com" <lucien.xin@gmail.com>,
+        "nicolas.dichtel@6wind.com" <nicolas.dichtel@6wind.com>,
+        "phil@nwl.cc" <phil@nwl.cc>,
+        "claudiajkang@gmail.com" <claudiajkang@gmail.com>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "intel-wired-lan@lists.osuosl.org" <intel-wired-lan@lists.osuosl.org>,
+        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>, poros <poros@redhat.com>,
+        mschmidt <mschmidt@redhat.com>,
+        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
+        "vadim.fedorenko@linux.dev" <vadim.fedorenko@linux.dev>
+Subject: Re: [RFC PATCH v8 08/10] ice: implement dpll interface to control cgu
+Message-ID: <ZJ0hQRcm6S05r8VE@nanopsycho>
+References: <20230609121853.3607724-1-arkadiusz.kubalewski@intel.com>
+ <20230609121853.3607724-9-arkadiusz.kubalewski@intel.com>
+ <ZISmmH0jqxZRB4VX@nanopsycho>
+ <DM6PR11MB4657161D2871747A7B404EDD9B5FA@DM6PR11MB4657.namprd11.prod.outlook.com>
+ <ZJLtR0c+tvCbUgri@nanopsycho>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v9 4/6] KVM: x86: Introduce untag_addr() in kvm_x86_ops
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        pbonzini@redhat.com, chao.gao@intel.com, kai.huang@intel.com,
-        David.Laight@aculab.com, robert.hu@linux.intel.com
-References: <20230606091842.13123-1-binbin.wu@linux.intel.com>
- <20230606091842.13123-5-binbin.wu@linux.intel.com>
- <ZJt7vud/2FJtcGjV@google.com>
-From:   Binbin Wu <binbin.wu@linux.intel.com>
-In-Reply-To: <ZJt7vud/2FJtcGjV@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZJLtR0c+tvCbUgri@nanopsycho>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 6/28/2023 8:15 AM, Sean Christopherson wrote:
-> On Tue, Jun 06, 2023, Binbin Wu wrote:
->> diff --git a/arch/x86/kvm/kvm_emulate.h b/arch/x86/kvm/kvm_emulate.h
->> index 5b9ec610b2cb..c2091e24a6b9 100644
->> --- a/arch/x86/kvm/kvm_emulate.h
->> +++ b/arch/x86/kvm/kvm_emulate.h
->> @@ -91,6 +91,7 @@ struct x86_instruction_info {
->>   /* x86-specific emulation flags */
->>   #define X86EMUL_F_FETCH			BIT(0)
->>   #define X86EMUL_F_WRITE			BIT(1)
->> +#define X86EMUL_F_SKIPLAM		BIT(2)
-> See my comments in the LASS series about describing the access, not dictating
-> the end behavior.
-
-The suggestion do decouple the code to specific feature in common 
-emulator code, thanks.
-
+Wed, Jun 21, 2023 at 02:29:59PM CEST, jiri@resnulli.us wrote:
+>Mon, Jun 19, 2023 at 10:34:12PM CEST, arkadiusz.kubalewski@intel.com wrote:
+>>>From: Jiri Pirko <jiri@resnulli.us>
+>>>Sent: Saturday, June 10, 2023 6:37 PM
+>>>
+>>>Fri, Jun 09, 2023 at 02:18:51PM CEST, arkadiusz.kubalewski@intel.com wrote:
+>>>
+>>>[...]
+>>>
+>>>
+>>>>+static int ice_dpll_mode_get(const struct dpll_device *dpll, void *priv,
+>>>>+			     enum dpll_mode *mode,
+>>>>+			     struct netlink_ext_ack *extack)
+>>>>+{
+>>>>+	*mode = DPLL_MODE_AUTOMATIC;
+>>>
+>>>I don't understand how the automatic mode could work with SyncE. The
+>>>There is one pin exposed for one netdev. The SyncE daemon should select
+>>>exacly one pin. How do you achieve that?
+>>>Is is by setting DPLL_PIN_STATE_SELECTABLE on the pin-netdev you want to
+>>>select and DPLL_PIN_STATE_DISCONNECTED on the rest?
+>>>
+>>>
+>>>[...]
+>>
+>>AUTOMATIC mode autoselects highest priority valid signal.
+>>As you have pointed out, for SyncE selection, the user must be able to manually
+>>select a pin state to enable recovery of signal from particular port.
+>>
+>>In "ice" case there are 2 pins for network PHY clock signal recovery, and both
+>>are parent pins (MUX-type). There are also 4 pins assigned to netdevs (one per
+>>port). Thus passing a signal from PHY to the pin is done through the MUX-pin,
+>>by selecting proper state on pin-parent pair (where parent pins is highest prio
+>>pin on dpll).
 >
->>   
->>   struct x86_emulate_ops {
->>   	void (*vm_bugged)(struct x86_emulate_ctxt *ctxt);
->> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
->> index 52dcf3c00bb8..82a225d1000e 100644
->> --- a/arch/x86/kvm/vmx/vmx.c
->> +++ b/arch/x86/kvm/vmx/vmx.c
->> @@ -8133,6 +8133,77 @@ static void vmx_vm_destroy(struct kvm *kvm)
->>   	free_pages((unsigned long)kvm_vmx->pid_table, vmx_get_pid_table_order(kvm));
->>   }
->>   
->> +#define LAM_S57_EN_MASK (X86_CR4_LAM_SUP | X86_CR4_LA57)
->> +static int lam_sign_extend_bit(struct kvm_vcpu *vcpu, gva_t addr)
->> +{
->> +	u64 cr3, cr4;
->> +
->> +	/*
->> +	 * The LAM identification of a pointer as user or supervisor is
->> +	 * based solely on the value of pointer bit 63.
->> +	 */
->> +	if (!(addr >> 63)) {
-> BIT_ULL(63)
->
->> +		cr3 = kvm_read_cr3(vcpu);
-> Use the perfectly good helper added earlier in the series:
->
-> 		cr3_lam = kvm_get_active_lam_bits();
-Good suggestion. Thanks.
+>Could you show me some examples please?
+
+Arkadiusz, could you please reply to this?
+Thanks!
 
 >
-> That has the added bonus of avoiding a VMREAD of CR3 when LAM is disabled in CR4.
-Why? I don't get the point.
-
 >
->> +		if (cr3 & X86_CR3_LAM_U57)
->> +			return 56;
->> +		if (cr3 & X86_CR3_LAM_U48)
->> +			return 47;
->> +	} else {
->> +		cr4 = kvm_read_cr4_bits(vcpu, LAM_S57_EN_MASK);
->> +		if (cr4 == LAM_S57_EN_MASK)
->> +			return 56;
->> +		if (cr4 & X86_CR4_LAM_SUP)
->> +			return 47;
-> This is way too complicated for a simple thing.  Burying multiple bits in a #define
-> and then relying on specific bits being in the mask is unnecessarily subtle.
->
-> And this whole helper shouldn't exist.  There's one caller, and will only ever
-> be one caller.  Defining magic numbers, i.e. using -1 to signal "disabled", makes
-> it that much harder to read the code.
->
-> More below.
->
->> +	}
->> +	return -1;
->> +}
->> +
->> +/*
->> + * Only called in 64-bit mode.
->> + *
->> + * LAM has a modified canonical check when applicable:
->> + * LAM_S48                : [ 1 ][ metadata ][ 1 ]
->> + *                            63               47
->> + * LAM_U48                : [ 0 ][ metadata ][ 0 ]
->> + *                            63               47
->> + * LAM_S57                : [ 1 ][ metadata ][ 1 ]
->> + *                            63               56
->> + * LAM_U57 + 5-lvl paging : [ 0 ][ metadata ][ 0 ]
->> + *                            63               56
->> + * LAM_U57 + 4-lvl paging : [ 0 ][ metadata ][ 0...0 ]
->> + *                            63               56..47
->> + *
->> + * Untag the metadata bits by sign-extending the value of bit 47 (LAM48) or
->> + * bit 56 (LAM57). The resulting address after untag isn't guaranteed to be
->> + * canonical. Callers should perform the original canonical check and raise
->> + * #GP/#SS if the address is non-canonical.
->> + *
->> + * Note that KVM masks the metadata in addresses, performs the (original)
->> + * canonicality checking and then walks page table. This is slightly
->> + * different from hardware behavior but achieves the same effect.
->> + * Specifically, if LAM is enabled, the processor performs a modified
->> + * canonicality checking where the metadata are ignored instead of
->> + * masked. After the modified canonicality checking, the processor masks
->> + * the metadata before passing addresses for paging translation.
->> + */
->> +void vmx_untag_addr(struct kvm_vcpu *vcpu, gva_t *gva, u32 flags)
-> Rather than modify the pointer, return the untagged address.  That's more flexible
-> as it allows using the result in if-statements and whatnot.  That might not ever
-> come into play, but there's no good reason to use an in/out param in a void
-> function.
-In earlier version, it did return the untagged address.
-In this version, I changed it as an in/out param to make the interface 
-conditional and avoid to add a dummy one in SVM.
-Is it can be a reason?
-
-
->
->> +{
->> +	int sign_ext_bit;
->> +
->> +	/*
->> +	 * Check LAM_U48 in cr3_ctrl_bits to avoid guest_cpuid_has().
->> +	 * If not set, vCPU doesn't supports LAM.
->> +	 */
->> +	if (!(vcpu->arch.cr3_ctrl_bits & X86_CR3_LAM_U48) ||
-> This is unnecessary, KVM should never allow the LAM bits in CR3 to be set if LAM
-> isn't supported.
-
-OK.
->
->> +	    (flags & X86EMUL_F_SKIPLAM) || WARN_ON_ONCE(!is_64_bit_mode(vcpu)))
-> Same comments as the LASS series, don't WARN, just put the check here.
-OK.
-
->
->> +		return;
->> +
->> +	sign_ext_bit = lam_sign_extend_bit(vcpu, *gva);
->> +	if (sign_ext_bit > 0)
->> +		*gva = (sign_extend64(*gva, sign_ext_bit) & ~BIT_ULL(63)) |
->> +		       (*gva & BIT_ULL(63));
->
-> Something like this?  The early return in the user path is a bit forced, e.g. it
-> could also be:
->
-> 	if (cr3 & X86_CR3_LAM_U57)
-> 		lam_bit = 56;
-> 	else if (X86_CR3_LAM_U48)
-> 		lam_bit = 48;
-> 	else
-> 		return gva;
->
-> but IMO making the CR3 and CR4 paths somewhat symmetrical is valuable.
->
-> gva_t vmx_get_untagged_addr(struct kvm_vcpu *vcpu, gva_t gva,
-> 			    unsigned int flags)
-> {
-> 	unsigned long cr3_bits, cr4_bits;
-> 	int lam_bit;
->
-> 	if (flags & (X86EMUL_F_FETCH | X86EMUL_F_BRANCH_INVLPG | X86EMUL_F_IMPLICIT))
-Thanks for the suggestion. Overall, it looks good to me.
-
-Suppose "X86EMUL_F_BRANCH_INVLPG "  should be two flags for branch and 
-invlpg, right？
-
-And for LAM, X86EMUL_F_IMPLICIT will not be used because in the implicit 
-access to memory management registers or descriptors,
-the linear base addresses still need to be canonical and no hooks will 
-be added to untag the addresses in these pathes.
-So I probably will remove the check for X86EMUL_F_IMPLICIT here.
-
-> 		return gva;
->
-> 	if (!is_64_bit_mode(vcpu))
-> 		return gva;
->
-> 	/*
-> 	 * Bit 63 determines if the address should be treated as user address
-> 	 * or a supervisor address.
-> 	 */
-> 	if (!(gva & BIT_ULL(63))) {
-> 		cr3_bits = kvm_get_active_lam_bits(vcpu);
-> 		if (!(cr3 & (X86_CR3_LAM_U57 | X86_CR3_LAM_U48))
-> 			return gva;
->
-> 		/* LAM_U48 is ignored if LAM_U57 is set. */
-> 		lam_bit = cr3_bits & X86_CR3_LAM_U57 ? 56 : 47;
-> 	} else {
-> 		if (!kvm_is_cr4_bit_set(vcpu, X86_CR4_LAM_SUP_BIT))
-> 			return gva;
->
-> 		lam_bit = kvm_is_cr4_bit_set(vcpu, X86_CR4_LA57) ? 56 : 47;
-> 	}
-> 	return (sign_extend64(gva, lam_bit) & ~BIT_ULL(63)) | (gva & BIT_ULL(63));
-> }
->
-
+>>
+>>Thank you!
+>>Arkadiusz
