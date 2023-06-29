@@ -2,146 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B2CE741D63
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 02:52:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DCF0741D67
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 02:54:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231285AbjF2Awa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 20:52:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34026 "EHLO
+        id S230446AbjF2Ayp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 20:54:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230413AbjF2AwZ (ORCPT
+        with ESMTP id S229749AbjF2Ayk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 20:52:25 -0400
-Received: from mail-oa1-x2a.google.com (mail-oa1-x2a.google.com [IPv6:2001:4860:4864:20::2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE68F2118;
-        Wed, 28 Jun 2023 17:52:23 -0700 (PDT)
-Received: by mail-oa1-x2a.google.com with SMTP id 586e51a60fabf-1b01b43577fso124920fac.0;
-        Wed, 28 Jun 2023 17:52:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687999943; x=1690591943;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=gw+0BOjq4yN+eWHXyUzI2LVAIZHQf86ZjZGyLq017bk=;
-        b=FBFsmXx6zjT7OEI8fd9vMQ3rKsG+IuC3ThvO0Da+2zY+f69L3m1AZga6IdGXaTLrDb
-         PLvPOtGFjC28UNibVxEsrgTAxVWtuprNaO1iOkCOGpkeW8hv2wMq2am9cOw7TWPg4N7d
-         S7M2ANJ+OZanxjSYktC7uhYIlIEeCh7xnAjPdVy2u3iyKaCnrzg49edlj7NI5mR+gN+t
-         zDyR1EuW15ZNMx0G6vuD5bg4UQdTQpyfZLSR1RogoNi1OyZWqUKDa03/OZDAxMju3swt
-         7d01Q0yxdnVt+c29S+gss68y/ln7548Rz/COTBneMi1kz+kj1b//Q1dGJ2U/+C4YAw0C
-         HTVA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687999943; x=1690591943;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=gw+0BOjq4yN+eWHXyUzI2LVAIZHQf86ZjZGyLq017bk=;
-        b=kywqML6vYPtJR4N8R0EzwRBVm6AXBBzcvXxtSN4+84E1ZtX1RX1SeLu+M8EzMxLfCC
-         dqorjkluB5981YTDT2a3kEn+xGhSjXAsqjCZn0pXQcn5I4ui3dkD84UApJ8xt22ab7tI
-         fYef6GHO1hfiUg0NHOfeCczYlWxyBdxRz7jbOPHngyL92K2ox0hYd+K59kfSWTkBEron
-         sf+J5p6q9MuW+LL29buhcTUmHJvk82fvXPyFm0PVTTJp3TPrdBhWzWvQJqz98vXXNy0j
-         2SUZeviiZeLOAU9JXzHyhlwRHDIJlLQUhZy7dRaBRxJeDLnPGG3l1sy2FFxlwTiFsDJd
-         ZaCA==
-X-Gm-Message-State: AC+VfDzWexeTnZc/YpJo+M32c6xQnlQ7fvuULHnan7opFtfof3DuTTuU
-        yl3L9sVD4CgCjXk+0JfxWmM=
-X-Google-Smtp-Source: ACHHUZ6dEsmjdMIXr24d/njV7n8FdllB83aFglf6j+as0HzzWQaXDvjI2FQHo6KThlvsc3kqVnyqyQ==
-X-Received: by 2002:a05:6870:bc19:b0:1b0:7f57:1e28 with SMTP id oa25-20020a056870bc1900b001b07f571e28mr3384680oab.11.1687999943126;
-        Wed, 28 Jun 2023 17:52:23 -0700 (PDT)
-Received: from [192.168.54.90] (static.220.238.itcsa.net. [190.15.220.238])
-        by smtp.gmail.com with ESMTPSA id s11-20020a05683004cb00b006b8703c11fesm1831120otd.13.2023.06.28.17.52.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 28 Jun 2023 17:52:22 -0700 (PDT)
-Message-ID: <4342b487-7e2c-750b-4de0-cfc03da042ec@gmail.com>
-Date:   Wed, 28 Jun 2023 21:51:28 -0300
+        Wed, 28 Jun 2023 20:54:40 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86DA12117
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 17:53:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1688000030;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=xzZHhIzDDuackwUVlvpBeapF4XcO6szZYosiE5wGDwM=;
+        b=ffA65hFWlXy8jb4hAAdwuZ3fTEOd/oy3mGOA0Ab/3ZAdfSTuksZyTWEwhynWKgRz3E8rDC
+        PEdU5bySkjK9YSVyQHSO8IK0fsRUzz3ri82EqDafZywt0VY5fTasGrNYZdAediOiUyvMmZ
+        16ddEUah0Ke4mxHrA152lxs/UYA4NOw=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-161-1tWZ0C-HNQ6LNvr3pFuuIA-1; Wed, 28 Jun 2023 20:53:46 -0400
+X-MC-Unique: 1tWZ0C-HNQ6LNvr3pFuuIA-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 8BCDB2814250;
+        Thu, 29 Jun 2023 00:53:45 +0000 (UTC)
+Received: from lorien.usersys.redhat.com (unknown [10.22.17.16])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id EEC02F5CE4;
+        Thu, 29 Jun 2023 00:53:44 +0000 (UTC)
+Date:   Wed, 28 Jun 2023 20:53:42 -0400
+From:   Phil Auld <pauld@redhat.com>
+To:     Benjamin Segall <bsegall@google.com>
+Cc:     linux-kernel@vger.kernel.org, Juri Lelli <juri.lelli@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Mel Gorman <mgorman@suse.de>
+Subject: Re: [PATCH v2] Sched/fair: Block nohz tick_stop when cfs bandwidth
+ in use
+Message-ID: <20230629005342.GB8069@lorien.usersys.redhat.com>
+References: <20230627191201.344110-1-pauld@redhat.com>
+ <xm26jzvn8ds7.fsf@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH] rust: macros: add `paste!` proc macro
-Content-Language: en-US
-To:     Gary Guo <gary@garyguo.net>, Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        =?UTF-8?Q?Bj=c3=b6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
-        Benno Lossin <benno.lossin@proton.me>,
-        Andreas Hindborg <a.hindborg@samsung.com>,
-        Alice Ryhl <aliceryhl@google.com>
-Cc:     linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org
-References: <20230628171108.1150742-1-gary@garyguo.net>
-From:   Martin Rodriguez Reboredo <yakoyoku@gmail.com>
-In-Reply-To: <20230628171108.1150742-1-gary@garyguo.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <xm26jzvn8ds7.fsf@google.com>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/28/23 14:11, Gary Guo wrote:
-> This macro provides a flexible way to concatenated identifiers together
-> and it allows the resulting identifier to be used to declare new items,
-> which `concat_idents!` does not allow. It also allows identifiers to be
-> transformed before concatenated.
+On Wed, Jun 28, 2023 at 02:42:16PM -0700 Benjamin Segall wrote:
+> Phil Auld <pauld@redhat.com> writes:
 > 
-> The `concat_idents!` example
+> > CFS bandwidth limits and NOHZ full don't play well together.  Tasks
+> > can easily run well past their quotas before a remote tick does
+> > accounting.  This leads to long, multi-period stalls before such
+> > tasks can run again. Currentlyi, when presented with these conflicting
+> > requirements the scheduler is favoring nohz_full and letting the tick
+> > be stopped. However, nohz tick stopping is already best-effort, there
+> > are a number of conditions that can prevent it, whereas cfs runtime
+> > bandwidth is expected to be enforced.
+> >
+> > Make the scheduler favor bandwidth over stopping the tick by setting
+> > TICK_DEP_BIT_SCHED when the only running task is a cfs task with
+> > runtime limit enabled.
+> >
+> > Add sched_feat HZ_BW (off by default) to control this behavior.
+> >
+> > Signed-off-by: Phil Auld <pauld@redhat.com>
+> > Cc: Ingo Molnar <mingo@redhat.com>
+> > Cc: Peter Zijlstra <peterz@infradead.org>
+> > Cc: Vincent Guittot <vincent.guittot@linaro.org>
+> > Cc: Juri Lelli <juri.lelli@redhat.com>
+> > Cc: Dietmar Eggemann <dietmar.eggemann@arm.com>
+> > Cc: Valentin Schneider <vschneid@redhat.com>
+> > Cc: Ben Segall <bsegall@google.com>
+> > ---
+> >
+> > v2:  Ben pointed out that the bit could get cleared in the dequeue path
+> > if we migrate a newly enqueued task without preempting curr. Added a 
+> > check for that edge case to sched_can_stop_tick. Removed the call to 
+> > sched_can_stop_tick from sched_fair_update_stop_tick since it was 
+> > redundant.
+> >
+> >  kernel/sched/core.c     | 12 +++++++++++
+> >  kernel/sched/fair.c     | 45 +++++++++++++++++++++++++++++++++++++++++
+> >  kernel/sched/features.h |  2 ++
+> >  3 files changed, 59 insertions(+)
+> >
+> > diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+> > index a68d1276bab0..646f60bfc7e7 100644
+> > --- a/kernel/sched/core.c
+> > +++ b/kernel/sched/core.c
+> > @@ -1194,6 +1194,8 @@ static void nohz_csd_func(void *info)
+> >  #endif /* CONFIG_NO_HZ_COMMON */
+> >  
+> >  #ifdef CONFIG_NO_HZ_FULL
+> > +extern bool sched_cfs_bandwidth_active(struct cfs_rq *cfs_rq);
+> > +
+> >  bool sched_can_stop_tick(struct rq *rq)
+> >  {
+> >  	int fifo_nr_running;
+> > @@ -1229,6 +1231,16 @@ bool sched_can_stop_tick(struct rq *rq)
+> >  	if (rq->nr_running > 1)
+> >  		return false;
+> >  
+> > +	/*
+> > +	 * If there is one task and it has CFS runtime bandwidth constraints
+> > +	 * and it's on the cpu now we don't want to stop the tick.
+> > +	 */
+> > +	if (sched_feat(HZ_BW) && rq->nr_running == 1 && rq->curr
+> > +	    && rq->curr->sched_class == &fair_sched_class && task_on_rq_queued(rq->curr)) {
+> > +		if (sched_cfs_bandwidth_active(task_cfs_rq(rq->curr)))
 > 
->      let x_1 = 42;
->      let x_2 = concat_idents!(x, _1);
->      assert!(x_1 == x_2);
+> Actually, something I should have noticed earlier is that this should
+> probably be hierarchical, right? You need to check every ancestor
+> cfs_rq, not just the immediate parent. And at that point it probably
+> makes sense to have sched_cfs_bandwidth_active take a task_struct.
 > 
-> can be written with `paste!` macro like this:
-> 
->      let x_1 = 42;
->      let x_2 = paste!([<x _1>]);
->      assert!(x_1 == x_2);
-> 
-> However `paste!` macro is more flexible because it can be used to create
-> a new variable:
-> 
->      let x_1 = 42;
->      paste!(let [<x _2>] = [<x _1>];);
->      assert!(x_1 == x_2);
-> 
-> While this is not possible with `concat_idents!`.
-> 
-> This macro is similar to the `paste!` crate [1], but this is a fresh
-> implementation to avoid vendoring large amount of code directly. Also, I
-> have augmented it to provide a way to specify span of the resulting
-> token, allowing precise control.
-> 
-> For example, this code is broken because the variable is declared inside
-> the macro, so Rust macro hygiene rules prevents access from the outside:
-> 
->      macro_rules! m {
->          ($id: ident) => {
->              // The resulting token has hygiene of the macro.
->              paste!(let [<$id>] = 1;)
->          }
->      }
-> 
->      m!(a);
->      let _ = a;
-> 
-> In this versionn of `paste!` macro I added a `span` modifier to allow
-> this:
-> 
->      macro_rules! m {
->          ($id: ident) => {
->              // The resulting token has hygiene of `$id`.
->              paste!(let [<$id:span>] = 1;)
->          }
->      }
-> 
->      m!(a);
->      let _ = a;
-> 
-> Link: http://docs.rs/paste/ [1]
-> Signed-off-by: Gary Guo <gary@garyguo.net>
-> ---
-> [...]
 
-Reviewed-by: Martin Rodriguez Reboredo <yakoyoku@gmail.com>
+Are you saying a child cfs_rq with a parent that has runtime_enabled could
+itself not have runtime_enabled?   I may be missing something but I don't
+see how that works.
+
+account_cfs_rq_runtime() for example just looks at the immediate cfs_rq of
+curr and bails if it does not have runtime_enabled. How could that task get
+throttled if it exceeds some parent's limit?
+
+Confused :)
+
+Cheers,
+Phil
+
+
+-- 
+
