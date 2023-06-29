@@ -2,223 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3439E741E7A
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 04:47:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A7EBB741E82
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 04:50:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230082AbjF2CrQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 22:47:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59662 "EHLO
+        id S231861AbjF2Cuf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 22:50:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229501AbjF2CrN (ORCPT
+        with ESMTP id S231285AbjF2Cuc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 22:47:13 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 323AF194
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 19:46:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1688006784;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=rVLdsWOmQBxqARi/qW7wtOC+NsUkxgphMkG6gapsdHg=;
-        b=K6xBq7KL4V2zLT/9O7j5V/d0LGgVXt5W0B3Cvvb0mvx8Rcuera7QZWBpiV0iif1knglGxH
-        G1pwmWIuUCwjdotdo0TSZfYMcbNIfniit0FzFG7Zvlg6RkQAzuM1sThm2TGVl2g8GVQqK4
-        rz4YgsD6Q7en14HuYKI+8v9E6f4fhr8=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-408-o-CNUUy4M7S-6Ra2N-pdhw-1; Wed, 28 Jun 2023 22:46:21 -0400
-X-MC-Unique: o-CNUUy4M7S-6Ra2N-pdhw-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 459DE3810D3B;
-        Thu, 29 Jun 2023 02:46:20 +0000 (UTC)
-Received: from ovpn-8-18.pek2.redhat.com (ovpn-8-18.pek2.redhat.com [10.72.8.18])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 8B7D140BB4D;
-        Thu, 29 Jun 2023 02:46:13 +0000 (UTC)
-Date:   Thu, 29 Jun 2023 10:46:08 +0800
-From:   Ming Lei <ming.lei@redhat.com>
-To:     Andreas Hindborg <nmi@metaspace.dk>
-Cc:     Hans Holmberg <Hans.Holmberg@wdc.com>,
-        Aravind Ramesh <Aravind.Ramesh@wdc.com>,
-        Jens Axboe <axboe@kernel.dk>,
-        "open list:BLOCK LAYER" <linux-block@vger.kernel.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Matias Bjorling <Matias.Bjorling@wdc.com>,
-        Andreas Hindborg <a.hindborg@samsung.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        Damien Le Moal <dlemoal@kernel.org>, gost.dev@samsung.com,
-        Minwoo Im <minwoo.im.dev@gmail.com>, ming.lei@redhat.com
-Subject: Re: [PATCH v4 4/4] ublk: add zone append
-Message-ID: <ZJzwcG2gIxXh8HbE@ovpn-8-18.pek2.redhat.com>
-References: <20230628190649.11233-1-nmi@metaspace.dk>
- <20230628190649.11233-5-nmi@metaspace.dk>
+        Wed, 28 Jun 2023 22:50:32 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79B1C19C;
+        Wed, 28 Jun 2023 19:50:31 -0700 (PDT)
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35T24SRr027932;
+        Thu, 29 Jun 2023 02:49:52 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
+ cc : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=qcppdkim1; bh=IHjvrAZZ2vFqcGZoFB5wbCguNxEyOpwq3+w0MVzF6/c=;
+ b=iZGpYfLHpxzbvPjXTusp5G/4TxEUpZhOqONYbRYYpsFYkczGSqApHKEzP1jiBa/HhcmD
+ OLo/GG2YQtcDd6kLrm4koUXdcA9YDTx1rso03Hv6aqamM7ZHBguoWkhwH6hNqeQ+rC9E
+ /xjfmiCcbOepSFmlvweK/76irtpIfE/+XXQMfD7pIl9aF5H9pkLnicpU81go7RjnpXi7
+ /mrONZUoXNbcENJySiuNzRVWX+hHRUDf03IBOmChX+vP4HFIclDzDCDlPkgYLPxbuKIx
+ Sr67eQ5gcD8+CA/Y84k+1uoCwuimqUGvSvCKK4rXa6V0paI6TsJSI8zZB5Rl8+NV/R7m Mw== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rgextjdjb-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 29 Jun 2023 02:49:51 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35T2npEB016922
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 29 Jun 2023 02:49:51 GMT
+Received: from hu-pkondeti-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.7; Wed, 28 Jun 2023 19:49:44 -0700
+Date:   Thu, 29 Jun 2023 08:19:40 +0530
+From:   Pavan Kondeti <quic_pkondeti@quicinc.com>
+To:     Mukesh Ojha <quic_mojha@quicinc.com>
+CC:     <corbet@lwn.net>, <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
+        <keescook@chromium.org>, <tony.luck@intel.com>,
+        <gpiccoli@igalia.com>, <mathieu.poirier@linaro.org>,
+        <catalin.marinas@arm.com>, <will@kernel.org>,
+        <linus.walleij@linaro.org>, <andy.shevchenko@gmail.com>,
+        <linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-hardening@vger.kernel.org>,
+        <linux-remoteproc@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-gpio@vger.kernel.org>
+Subject: Re: [PATCH v4 07/21] soc: qcom: minidump: Add update region support
+Message-ID: <b099458b-8e37-43cb-831e-fe7812d11a65@quicinc.com>
+References: <1687955688-20809-1-git-send-email-quic_mojha@quicinc.com>
+ <1687955688-20809-8-git-send-email-quic_mojha@quicinc.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <20230628190649.11233-5-nmi@metaspace.dk>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <1687955688-20809-8-git-send-email-quic_mojha@quicinc.com>
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: dl9a09ObcanbRwkFLT70EtpbFSz1yUaB
+X-Proofpoint-GUID: dl9a09ObcanbRwkFLT70EtpbFSz1yUaB
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-06-28_14,2023-06-27_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ impostorscore=0 mlxscore=0 mlxlogscore=999 spamscore=0 malwarescore=0
+ bulkscore=0 clxscore=1015 adultscore=0 suspectscore=0 lowpriorityscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2305260000 definitions=main-2306290024
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 28, 2023 at 09:06:49PM +0200, Andreas Hindborg wrote:
-> From: Andreas Hindborg <a.hindborg@samsung.com>
+On Wed, Jun 28, 2023 at 06:04:34PM +0530, Mukesh Ojha wrote:
+> Add support to update client's region physical/virtual addresses,
+> which is useful for dynamic loadable modules, dynamic address
+> changing clients like if we want to collect current stack
+> information for each core and the current stack is changing on
+> each sched_switch event, So here virtual/physical address of
+> the current stack is changing. So, to cover such use cases
+> add the update region support in minidump driver and the
+> corresponding smem backend support.
 > 
-> Add zone append feature to ublk. This feature uses the `addr` field of `struct
-> ublksrv_io_cmd`. Therefore ublk must be used with the user copy
-> feature (UBLK_F_USER_COPY) for zone append to be available. Without this
-> feature, ublk will fail zone append requests.
-
-Given zone append is a must, please fail to add device in case of zoned
-and !user_copy, then we can make fast IO code path clean.
-
-> 
-> Suggested-by: Ming Lei <ming.lei@redhat.com>
-> Signed-off-by: Andreas Hindborg <a.hindborg@samsung.com>
+> Signed-off-by: Mukesh Ojha <quic_mojha@quicinc.com>
 > ---
->  drivers/block/ublk_drv-zoned.c | 11 +++++++++
->  drivers/block/ublk_drv.c       | 43 ++++++++++++++++++++++++++++++----
->  drivers/block/ublk_drv.h       |  1 +
->  include/uapi/linux/ublk_cmd.h  |  3 ++-
->  4 files changed, 52 insertions(+), 6 deletions(-)
+>  drivers/soc/qcom/qcom_minidump.c          | 55 +++++++++++++++++++++++++++++++
+>  drivers/soc/qcom/qcom_minidump_internal.h |  3 ++
+>  drivers/soc/qcom/qcom_minidump_smem.c     | 21 ++++++++++++
+>  include/soc/qcom/qcom_minidump.h          |  5 +++
+>  4 files changed, 84 insertions(+)
 > 
-> diff --git a/drivers/block/ublk_drv-zoned.c b/drivers/block/ublk_drv-zoned.c
-> index ea86bf4b3681..007e8fc7ff25 100644
-> --- a/drivers/block/ublk_drv-zoned.c
-> +++ b/drivers/block/ublk_drv-zoned.c
-> @@ -16,6 +16,16 @@ void ublk_set_nr_zones(struct ublk_device *ub)
->  		ub->ub_disk->nr_zones = p->dev_sectors / p->chunk_sectors;
+> diff --git a/drivers/soc/qcom/qcom_minidump.c b/drivers/soc/qcom/qcom_minidump.c
+> index cfdb63cc29d6..37d6ceb4d85c 100644
+> --- a/drivers/soc/qcom/qcom_minidump.c
+> +++ b/drivers/soc/qcom/qcom_minidump.c
+> @@ -318,6 +318,61 @@ int qcom_minidump_region_unregister(const struct qcom_minidump_region *region)
 >  }
+>  EXPORT_SYMBOL_GPL(qcom_minidump_region_unregister);
 >  
-> +int ublk_dev_param_zoned_validate(const struct ublk_device *ub)
-> +{
-> +	const struct ublk_param_zoned *p = &ub->params.zoned;
-> +
-> +	if (! p->max_zone_append_sectors)
-> +		return -EINVAL;
-> +
-> +	return 0;
-> +}
-> +
->  void ublk_dev_param_zoned_apply(struct ublk_device *ub)
->  {
->  	const struct ublk_param_zoned *p = &ub->params.zoned;
-> @@ -23,6 +33,7 @@ void ublk_dev_param_zoned_apply(struct ublk_device *ub)
->  	if (ub->dev_info.flags & UBLK_F_ZONED) {
->  		disk_set_max_active_zones(ub->ub_disk, p->max_active_zones);
->  		disk_set_max_open_zones(ub->ub_disk, p->max_open_zones);
-> +		blk_queue_max_zone_append_sectors(ub->ub_disk->queue, p->max_zone_append_sectors);
->  	}
->  }
->  
-> diff --git a/drivers/block/ublk_drv.c b/drivers/block/ublk_drv.c
-> index 88fa39853c61..6a949669b47e 100644
-> --- a/drivers/block/ublk_drv.c
-> +++ b/drivers/block/ublk_drv.c
-> @@ -107,6 +107,11 @@ struct ublk_uring_cmd_pdu {
->   */
->  #define UBLK_IO_FLAG_NEED_GET_DATA 0x08
->  
-> +/*
-> + * Set when IO is Zone Append
+> +/**
+> + * qcom_minidump_update_region() - Update region information with new physical
+> + * address and virtual address for already registered region e.g, current task
+> + * stack for a core keeps on changing on each context switch, there it needs to
+> + * change registered region with new updated addresses.
+> + *
+> + * @region: Should be already registered minidump region.
+> + *
+> + * Return: On success, it returns 0 and negative error value on failure.
 > + */
-> +#define UBLK_IO_FLAG_ZONE_APPEND 0x10
-> +
->  struct ublk_io {
->  	/* userspace buffer address from io cmd */
->  	__u64	addr;
-> @@ -230,6 +235,8 @@ static void ublk_dev_param_discard_apply(struct ublk_device *ub)
->  
->  static int ublk_validate_params(const struct ublk_device *ub)
->  {
+> +int qcom_minidump_update_region(const struct qcom_minidump_region *region)
+> +{
+> +	struct minidump_pregion *md_pregion;
+> +	struct qcom_minidump_region *tmp;
+> +	struct elfhdr *ehdr;
+> +	struct elf_shdr *shdr;
+> +	struct elf_phdr *phdr;
+> +	int idx;
 > +	int ret = 0;
 > +
->  	/* basic param is the only one which must be set */
->  	if (ub->params.types & UBLK_PARAM_TYPE_BASIC) {
->  		const struct ublk_param_basic *p = &ub->params.basic;
-> @@ -260,6 +267,13 @@ static int ublk_validate_params(const struct ublk_device *ub)
->  	if (ub->params.types & UBLK_PARAM_TYPE_DEVT)
->  		return -EINVAL;
->  
-> +	if (IS_ENABLED(CONFIG_BLK_DEV_ZONED) &&
-> +	    (ub->params.types & UBLK_PARAM_TYPE_ZONED)) {
-> +		ret = ublk_dev_param_zoned_validate(ub);
-> +		if (ret)
-> +			return ret;
+> +	if (!qcom_minidump_valid_region(region))
+> +		return -EINVAL;
+> +
+> +	mutex_lock(&md_lock);
+> +	if (!md) {
+> +		md_pregion = check_if_pending_region_exist(region);
+> +		if (!md_pregion) {
+> +			ret = -ENOENT;
+> +			goto unlock;
+> +		}
+> +		tmp = &md_pregion->region;
+> +		tmp->phys_addr = region->phys_addr;
+> +		tmp->virt_addr = region->virt_addr;
+> +		goto unlock;
 > +	}
 > +
->  	return 0;
->  }
->  
-> @@ -690,6 +704,11 @@ static blk_status_t ublk_setup_iod(struct ublk_queue *ubq, struct request *req)
->  			return BLK_STS_IOERR;
->  		}
->  	case REQ_OP_ZONE_APPEND:
-> +		if (!(ubq->dev->dev_info.flags & UBLK_F_USER_COPY))
-> +			return BLK_STS_IOERR;
-> +		ublk_op = UBLK_IO_OP_ZONE_APPEND;
-> +		io->flags |= UBLK_IO_FLAG_ZONE_APPEND;
-> +		break;
->  	case REQ_OP_ZONE_RESET_ALL:
->  	case REQ_OP_DRV_OUT:
->  		/* We do not support zone append or reset_all yet */
-> @@ -1112,6 +1131,12 @@ static void ublk_commit_completion(struct ublk_device *ub,
->  	/* find the io request and complete */
->  	req = blk_mq_tag_to_rq(ub->tag_set.tags[qid], tag);
->  
-> +	if (IS_ENABLED(CONFIG_BLK_DEV_ZONED)) {
-> +		if (io->flags & UBLK_IO_FLAG_ZONE_APPEND)
-> +			req->__sector = ub_cmd->addr;
-> +		io->flags &= ~UBLK_IO_FLAG_ZONE_APPEND;
-> +	}
+> +	ret = md->ops->md_update_region(md, &idx, region);
+> +	if (ret)
+> +		goto unlock;
 > +
->  	if (req && likely(!blk_should_fake_timeout(req->q)))
->  		ublk_put_req_ref(ubq, req);
->  }
-> @@ -1411,7 +1436,8 @@ static int __ublk_ch_uring_cmd(struct io_uring_cmd *cmd,
->  			^ (_IOC_NR(cmd_op) == UBLK_IO_NEED_GET_DATA))
->  		goto out;
->  
-> -	if (ublk_support_user_copy(ubq) && ub_cmd->addr) {
-> +	if (ublk_support_user_copy(ubq) &&
-> +	    !(io->flags & UBLK_IO_FLAG_ZONE_APPEND) && ub_cmd->addr) {
->  		ret = -EINVAL;
->  		goto out;
->  	}
-> @@ -1534,11 +1560,14 @@ static inline bool ublk_check_ubuf_dir(const struct request *req,
->  		int ubuf_dir)
->  {
->  	/* copy ubuf to request pages */
-> -	if (req_op(req) == REQ_OP_READ && ubuf_dir == ITER_SOURCE)
-> +	if ((req_op(req) == REQ_OP_READ || req_op(req) == REQ_OP_DRV_IN) &&
-> +	    ubuf_dir == ITER_SOURCE)
->  		return true;
->  
->  	/* copy request pages to ubuf */
-> -	if (req_op(req) == REQ_OP_WRITE && ubuf_dir == ITER_DEST)
-> +	if ((req_op(req) == REQ_OP_WRITE ||
-> +	     req_op(req) == REQ_OP_ZONE_APPEND) &&
-> +	    ubuf_dir == ITER_DEST)
->  		return true;
->  
->  	return false;
-> @@ -1867,6 +1896,12 @@ static int ublk_ctrl_start_dev(struct ublk_device *ub, struct io_uring_cmd *cmd)
->  	ub->dev_info.ublksrv_pid = ublksrv_pid;
->  	ub->ub_disk = disk;
->  
-> +	ub->dev_info.state = UBLK_S_DEV_LIVE;
+> +	/* Skip predefined shdr/phdr header entry at the start */
+> +	ehdr = md->elf.ehdr;
+> +	shdr = elf_shdr_entry_addr(ehdr, idx + 4);
+> +	phdr = elf_phdr_entry_addr(ehdr, idx + 1);
+> +
+> +	shdr->sh_addr = (elf_addr_t)region->virt_addr;
+> +	phdr->p_vaddr = (elf_addr_t)region->virt_addr;
+> +	phdr->p_paddr = region->phys_addr;
+> +
+> +unlock:
+> +	mutex_unlock(&md_lock);
+> +	return ret;
+> +}
+> +EXPORT_SYMBOL_GPL(qcom_minidump_update_region);
+> +
 
-I guess the above line change isn't necessary?
+I don't see any use of this API in the series. Do you plan to add one in
+the next version?
 
-
-Thanks, 
-Ming
-
+Thanks,
+Pavan
