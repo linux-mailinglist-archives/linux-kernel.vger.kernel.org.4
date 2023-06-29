@@ -2,76 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 605297430AF
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 00:40:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 56E157430B1
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 00:45:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233437AbjF2WkF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 18:40:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50454 "EHLO
+        id S231634AbjF2WoU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 18:44:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232562AbjF2Wj4 (ORCPT
+        with ESMTP id S232200AbjF2WoI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 18:39:56 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1E0A359E
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 15:39:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1688078381; x=1719614381;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Ur0LSLrGMzGqTlgNMlPlfCzPuJql2NDXTGyIc4TyJy4=;
-  b=IMEAssfjZHtYrTEV5B0zkm5NeDE8HxnxCLF7T7tfQhZVnnFJC90Zp9kG
-   DqDDeog4DHssgC3P2M1NUbpfpWyONcAQzjKb66WZr8OBYSFJ+AzGIuyCF
-   +XjpLnWppy/O0iCjuzNWHb5AHldtM7QzlHwUaiscQnoxP7b/htSrXXAOr
-   Rqq/tD+VBsMVXBNmTV7N8+c0jSwFZ5AetbU3uMg7H96WzmCFDJXhoZCxW
-   NJyrsnIGLh+7qcX1KgV/kAFqxDYXbWxnM/yjMcnGR/b5Govefhp5s2Ntk
-   ASb8BcTKCmA4yt03m2MAYYzwCbm/0LQltII8GUPr9c2oiQHeRgQ/XRrhI
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10756"; a="341834050"
-X-IronPort-AV: E=Sophos;i="6.01,169,1684825200"; 
-   d="scan'208";a="341834050"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jun 2023 15:39:40 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10756"; a="807520478"
-X-IronPort-AV: E=Sophos;i="6.01,169,1684825200"; 
-   d="scan'208";a="807520478"
-Received: from agluck-desk3.sc.intel.com (HELO agluck-desk3) ([172.25.222.74])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jun 2023 15:39:40 -0700
-Date:   Thu, 29 Jun 2023 15:39:39 -0700
-From:   Tony Luck <tony.luck@intel.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     "kan.liang@linux.intel.com" <kan.liang@linux.intel.com>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "acme@kernel.org" <acme@kernel.org>,
+        Thu, 29 Jun 2023 18:44:08 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32A472681
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 15:44:07 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B349061648
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 22:44:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E260C433C0;
+        Thu, 29 Jun 2023 22:44:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688078646;
+        bh=9filNv0J2cotGulkPBa7/YioCxziO3ygn5pSV3LDoq0=;
+        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
+        b=TUm4SyCcjZ83+JixEE8t+MVWjHfHLxLRtxWkxEYXUK/FC29xUwYMZr164TfXb/o7l
+         DSf2nooqn4mdBSBvFI9YBcb++QposdQYmMS6Kmw4+TPHybuhquS6C37FsX5sj6QRNF
+         n01sUX9c4ly6/U3EUjVFrTv69H/VODKAyFtPAUeoFY0D3oLRHqLZsY+szcW0/KLLoB
+         AEGzzBcIMdWne1tiVGLsFoqGONGecZpnoSjTMrfzytsghgnueDwCud3AmUnUYMr6PX
+         Nc3cGRZ37zkYvtxEWxpnx4+/A3mju1BkrmKzOYv47C2DtOxRXrAPt8I3V289unjdpz
+         +2Q7Bb0KcE06w==
+Date:   Thu, 29 Jun 2023 15:44:04 -0700 (PDT)
+From:   Stefano Stabellini <sstabellini@kernel.org>
+X-X-Sender: sstabellini@ubuntu-linux-20-04-desktop
+To:     Oleksandr Tyshchenko <Oleksandr_Tyshchenko@epam.com>
+cc:     Stefano Stabellini <sstabellini@kernel.org>,
+        Petr Pavlu <petr.pavlu@suse.com>,
+        "xen-devel@lists.xenproject.org" <xen-devel@lists.xenproject.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "mark.rutland@arm.com" <mark.rutland@arm.com>,
-        "alexander.shishkin@linux.intel.com" 
-        <alexander.shishkin@linux.intel.com>,
-        "jolsa@kernel.org" <jolsa@kernel.org>,
-        "namhyung@kernel.org" <namhyung@kernel.org>,
-        "irogers@google.com" <irogers@google.com>,
-        "Hunter, Adrian" <adrian.hunter@intel.com>,
-        "ak@linux.intel.com" <ak@linux.intel.com>,
-        "Eranian, Stephane" <eranian@google.com>,
-        "alexey.v.bayduraev@linux.intel.com" 
-        <alexey.v.bayduraev@linux.intel.com>,
-        "Zhang, Tinghao" <tinghao.zhang@intel.com>
-Subject: Re: [PATCH V2 1/6] perf/x86/intel: Add Grand Ridge and Sierra Forest
-Message-ID: <ZJ4IK/Rybg8f05Nb@agluck-desk3>
-References: <20230522113040.2329924-1-kan.liang@linux.intel.com>
- <20230522202659.GC3334667@hirez.programming.kicks-ass.net>
- <SJ1PR11MB608367DC5D25856073C86FCFFC53A@SJ1PR11MB6083.namprd11.prod.outlook.com>
- <20230608072420.GB998233@hirez.programming.kicks-ass.net>
- <SJ1PR11MB608366EC800DBE389EE75E0CFC50A@SJ1PR11MB6083.namprd11.prod.outlook.com>
+        "jgross@suse.com" <jgross@suse.com>, vikram.garhwal@amd.com
+Subject: Re: [PATCH 2/2] xen/virtio: Avoid use of the dom0 backend in dom0
+In-Reply-To: <b21398eb-2fb2-4fca-dd90-d2c81d8df1c4@epam.com>
+Message-ID: <alpine.DEB.2.22.394.2306291502150.3936094@ubuntu-linux-20-04-desktop>
+References: <20230621131214.9398-1-petr.pavlu@suse.com> <20230621131214.9398-3-petr.pavlu@suse.com> <15e31609-6c45-7372-76ee-0adf7a64fe88@epam.com> <alpine.DEB.2.22.394.2306281745010.3936094@ubuntu-linux-20-04-desktop>
+ <b21398eb-2fb2-4fca-dd90-d2c81d8df1c4@epam.com>
+User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <SJ1PR11MB608366EC800DBE389EE75E0CFC50A@SJ1PR11MB6083.namprd11.prod.outlook.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,37 +60,185 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 08, 2023 at 04:20:22PM +0000, Luck, Tony wrote:
-> > Then I'm hoping their take-away is that random gibberish names don't
-> > help anybody. The whole Intel naming scheme is impenetrable crap.
+On Thu, 29 Jun 2023, Oleksandr Tyshchenko wrote:
+> On 29.06.23 04:00, Stefano Stabellini wrote:
 > 
-> > > +#define INTEL_FAM6_ATOM_CRESTMONT_X  0xAF /* Sierra Forest */
-> > > +#define INTEL_FAM6_ATOM_CRESTMONT    0xB6 /* Grand Ridge */
+> Hello Stefano
 > 
-> This just adds another layer of confusion. Sure, these two models are based
-> on the same core. But giving the illusion that they are somehow the same will
-> lead to tears before bedtime:
+> > On Wed, 21 Jun 2023, Oleksandr Tyshchenko wrote:
+> >> On 21.06.23 16:12, Petr Pavlu wrote:
+> >>
+> >>
+> >> Hello Petr
+> >>
+> >>
+> >>> When attempting to run Xen on a QEMU/KVM virtual machine with virtio
+> >>> devices (all x86_64), dom0 tries to establish a grant for itself which
+> >>> eventually results in a hang during the boot.
+> >>>
+> >>> The backtrace looks as follows, the while loop in __send_control_msg()
+> >>> makes no progress:
+> >>>
+> >>>     #0  virtqueue_get_buf_ctx (_vq=_vq@entry=0xffff8880074a8400, len=len@entry=0xffffc90000413c94, ctx=ctx@entry=0x0 <fixed_percpu_data>) at ../drivers/virtio/virtio_ring.c:2326
+> >>>     #1  0xffffffff817086b7 in virtqueue_get_buf (_vq=_vq@entry=0xffff8880074a8400, len=len@entry=0xffffc90000413c94) at ../drivers/virtio/virtio_ring.c:2333
+> >>>     #2  0xffffffff8175f6b2 in __send_control_msg (portdev=<optimized out>, port_id=0xffffffff, event=0x0, value=0x1) at ../drivers/char/virtio_console.c:562
+> >>>     #3  0xffffffff8175f6ee in __send_control_msg (portdev=<optimized out>, port_id=<optimized out>, event=<optimized out>, value=<optimized out>) at ../drivers/char/virtio_console.c:569
+> >>>     #4  0xffffffff817618b1 in virtcons_probe (vdev=0xffff88800585e800) at ../drivers/char/virtio_console.c:2098
+> >>>     #5  0xffffffff81707117 in virtio_dev_probe (_d=0xffff88800585e810) at ../drivers/virtio/virtio.c:305
+> >>>     #6  0xffffffff8198e348 in call_driver_probe (drv=0xffffffff82be40c0 <virtio_console>, drv=0xffffffff82be40c0 <virtio_console>, dev=0xffff88800585e810) at ../drivers/base/dd.c:579
+> >>>     #7  really_probe (dev=dev@entry=0xffff88800585e810, drv=drv@entry=0xffffffff82be40c0 <virtio_console>) at ../drivers/base/dd.c:658
+> >>>     #8  0xffffffff8198e58f in __driver_probe_device (drv=drv@entry=0xffffffff82be40c0 <virtio_console>, dev=dev@entry=0xffff88800585e810) at ../drivers/base/dd.c:800
+> >>>     #9  0xffffffff8198e65a in driver_probe_device (drv=drv@entry=0xffffffff82be40c0 <virtio_console>, dev=dev@entry=0xffff88800585e810) at ../drivers/base/dd.c:830
+> >>>     #10 0xffffffff8198e832 in __driver_attach (dev=0xffff88800585e810, data=0xffffffff82be40c0 <virtio_console>) at ../drivers/base/dd.c:1216
+> >>>     #11 0xffffffff8198bfb2 in bus_for_each_dev (bus=<optimized out>, start=start@entry=0x0 <fixed_percpu_data>, data=data@entry=0xffffffff82be40c0 <virtio_console>,
+> >>>         fn=fn@entry=0xffffffff8198e7b0 <__driver_attach>) at ../drivers/base/bus.c:368
+> >>>     #12 0xffffffff8198db65 in driver_attach (drv=drv@entry=0xffffffff82be40c0 <virtio_console>) at ../drivers/base/dd.c:1233
+> >>>     #13 0xffffffff8198d207 in bus_add_driver (drv=drv@entry=0xffffffff82be40c0 <virtio_console>) at ../drivers/base/bus.c:673
+> >>>     #14 0xffffffff8198f550 in driver_register (drv=drv@entry=0xffffffff82be40c0 <virtio_console>) at ../drivers/base/driver.c:246
+> >>>     #15 0xffffffff81706b47 in register_virtio_driver (driver=driver@entry=0xffffffff82be40c0 <virtio_console>) at ../drivers/virtio/virtio.c:357
+> >>>     #16 0xffffffff832cd34b in virtio_console_init () at ../drivers/char/virtio_console.c:2258
+> >>>     #17 0xffffffff8100105c in do_one_initcall (fn=0xffffffff832cd2e0 <virtio_console_init>) at ../init/main.c:1246
+> >>>     #18 0xffffffff83277293 in do_initcall_level (command_line=0xffff888003e2f900 "root", level=0x6) at ../init/main.c:1319
+> >>>     #19 do_initcalls () at ../init/main.c:1335
+> >>>     #20 do_basic_setup () at ../init/main.c:1354
+> >>>     #21 kernel_init_freeable () at ../init/main.c:1571
+> >>>     #22 0xffffffff81f64be1 in kernel_init (unused=<optimized out>) at ../init/main.c:1462
+> >>>     #23 0xffffffff81001f49 in ret_from_fork () at ../arch/x86/entry/entry_64.S:308
+> >>>     #24 0x0000000000000000 in ?? ()
+> >>>
+> >>> Fix the problem by preventing xen_grant_init_backend_domid() from
+> >>> setting dom0 as a backend when running in dom0.
+> >>>
+> >>> Fixes: 035e3a4321f7 ("xen/virtio: Optimize the setup of "xen-grant-dma" devices")
+> >>
+> >>
+> >> I am not 100% sure whether the Fixes tag points to precise commit. If I
+> >> am not mistaken, the said commit just moves the code in the context
+> >> without changing the logic of CONFIG_XEN_VIRTIO_FORCE_GRANT, this was
+> >> introduced before.
+> >>
+> >>
+> >>> Signed-off-by: Petr Pavlu <petr.pavlu@suse.com>
+> >>> ---
+> >>>    drivers/xen/grant-dma-ops.c | 4 +++-
+> >>>    1 file changed, 3 insertions(+), 1 deletion(-)
+> >>>
+> >>> diff --git a/drivers/xen/grant-dma-ops.c b/drivers/xen/grant-dma-ops.c
+> >>> index 76f6f26265a3..29ed27ac450e 100644
+> >>> --- a/drivers/xen/grant-dma-ops.c
+> >>> +++ b/drivers/xen/grant-dma-ops.c
+> >>> @@ -362,7 +362,9 @@ static int xen_grant_init_backend_domid(struct device *dev,
+> >>>    	if (np) {
+> >>>    		ret = xen_dt_grant_init_backend_domid(dev, np, backend_domid);
+> >>>    		of_node_put(np);
+> >>> -	} else if (IS_ENABLED(CONFIG_XEN_VIRTIO_FORCE_GRANT) || xen_pv_domain()) {
+> >>> +	} else if ((IS_ENABLED(CONFIG_XEN_VIRTIO_FORCE_GRANT) ||
+> >>> +		    xen_pv_domain()) &&
+> >>> +		   !xen_initial_domain()) {
+> >>
+> >> The commit lgtm, just one note:
+> >>
+> >>
+> >> I would even bail out early in xen_virtio_restricted_mem_acc() instead,
+> >> as I assume the same issue could happen on Arm with DT (although there
+> >> we don't guess the backend's domid, we read it from DT and quite
+> >> unlikely we get Dom0 being in Dom0 with correct DT).
+> >>
+> >> Something like:
+> >>
+> >> @@ -416,6 +421,10 @@ bool xen_virtio_restricted_mem_acc(struct
+> >> virtio_device *dev)
+> >>    {
+> >>           domid_t backend_domid;
+> >>
+> >> +       /* Xen grant DMA ops are not used when running as initial domain */
+> >> +       if (xen_initial_domain())
+> >> +               return false;
+> >> +
+> >>           if (!xen_grant_init_backend_domid(dev->dev.parent,
+> >> &backend_domid)) {
+> >>                   xen_grant_setup_dma_ops(dev->dev.parent, backend_domid);
+> >>                   return true;
+> >> (END)
+> >>
+> >>
+> >>
+> >> If so, that commit subject would need to be updated accordingly.
+> >>
+> >> Let's see what other reviewers will say.
+> > 
+> > This doesn't work in all cases. Imagine using PCI Passthrough to assign
+> > a "physical" virtio device to a domU. The domU will run into the same
+> > error, right?
+> > 
+> > The problem is that we need a way for the virtio backend to advertise
+> > its ability of handling grants. Right now we only have a way to do with
+> > that with device tree on ARM. On x86, we only have
+> > CONFIG_XEN_VIRTIO_FORCE_GRANT, and if we take
+> > CONFIG_XEN_VIRTIO_FORCE_GRANT at face value, it also enables grants for
+> > "physical" virtio devices. Note that in this case we are fixing a
+> > nested-virtualization bug, but there are actually physical
+> > virtio-compatible devices out there. CONFIG_XEN_VIRTIO_FORCE_GRANT will
+> > break those too.
 > 
-> 1) They each took a snapshot of that core design on different dates, so there
->    are logic differences.
-> 2) Feature fuses will be different
-> 3) Microcode will be different
-> 4) BIOS will be different
-> 5) "uncore" is different, so anything implemented outside of the core
->     will be different.
+> 
+> If these "physical" virtio devices are also spawned by
+> drivers/virtio/virtio.c:virtio_dev_probe(), then yes, otherwise I don't 
+> see how this could even be possible, but I might miss something here.
 
-This thread stalled. But the internal conversation continued. There
-seems a strong argument that enough things changed when Xeon-izing
-the core to go into Sierra Forest that using Crestmont will cause
-confusion in more places than it helps. There seem to be some internal
-folks using an entirely different name for this core (which I won't
-repeat here, but some of the usual external sites have mentions of
-this other name).
+Yes, I would imagine virtio_dev_probe() would be called for them too
 
-Can we just keep:
 
-#define INTEL_FAM6_SIERRAFOREST_X       0xAF
 
-and move on to more interesting things?
+> xen_virtio_restricted_mem_acc() gets called indirectly from 
+> virtio_dev_probe()->virtio_features_ok()->
+> virtio_check_mem_acc_cb(). So the Xen grant DMA ops are only installed 
+> for those.
+>
+>
+> > 
+> > I think we need to add a second way? It could be anything that can help
+> > us distinguish between a non-grants-capable virtio backend and a
+> > grants-capable virtio backend, such as:
+> > - a string on xenstore
+> > - a xen param
+> > - a special PCI configuration register value
+> > - something in the ACPI tables
+> > - the QEMU machine type
+> 
+> 
+> Yes, I remember there was a discussion regarding that. The point is to 
+> choose a solution to be functional for both PV and HVM *and* to be able 
+> to support a hotplug. IIRC, the xenstore could be a possible candidate.
 
--Tony
+xenstore would be among the easiest to make work. The only downside is
+the dependency on xenstore which otherwise virtio+grants doesn't have.
+
+Vikram is working on virtio with grants support in QEMU as we speak.
+Maybe we could find a way to add a flag in QEMU so that we can detect at
+runtime if a given virtio device support grants or not.
+
+ 
+> > Or at least should we change CONFIG_XEN_VIRTIO_FORCE_GRANT into a
+> > command line parameter so that it can be disabled in cases like this
+> > one?
+> 
+> IIUC, this will help with HVM only.
+
+For sure this is the least attractive solution, only marginally better
+than the fix proposed in this patch
+ 
+
+> > I realize that fixing this problem properly takes a lot longer than
+> > adding a trivial if (dom0) return; check in the code. If you cannot find
+> > a good way to solve the problem or you don't have time to do that now
+> > and you need this bug fixed quickly, then I would be OK with the if
+> > (dom0) return; check but please add a detailed TODO in-code comment to
+> > explain that this is just a hack and we are still looking for a real
+> > solution.
+> > 
+> > The check itself I prefer the original position because I want to retain
+> > the ability of using virtio frontends with grant on ARM in Dom0 (DomD
+> > case).
+> 
+> Makes sense, agree.
