@@ -2,105 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 974B0742211
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 10:24:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC52174221C
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 10:27:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230181AbjF2IYK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 04:24:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46712 "EHLO
+        id S231634AbjF2I07 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 29 Jun 2023 04:26:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231709AbjF2IXD (ORCPT
+        with ESMTP id S232131AbjF2I0U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 04:23:03 -0400
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67A043A90
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 01:22:38 -0700 (PDT)
-Received: by mail-wr1-x42a.google.com with SMTP id ffacd0b85a97d-313df030ccaso435741f8f.1
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 01:22:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=resnulli-us.20221208.gappssmtp.com; s=20221208; t=1688026957; x=1690618957;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=pnekQegzwsRisctNnmboo1Flv3vcYES0Lp+fckFN5sY=;
-        b=QAmw8VvKPSKCa2K72rY2EW7V5lfX1lj+u/ACfv1Lx26QU/dIWS9faLaO9CZ17mMODc
-         b6o/klntMdQqnroCYdNwla8FudZSYjpcRttWd5o8K5Gtlq9bcYQWm/SHdoKkCAhs9WW1
-         KXp3TvZhEX/NLfsF/peaplmVa7L8ChKCi2Ykc2Gy4gLnFbYvgeDYufZ+b6ZIUq7lR9Ik
-         grbNHJXGfMr3ChwJ3EnstUMChWbIT3wqtJDUA5u81A23t9LYLCAoU41TZxGUmHOcBrE/
-         P1MM/p/SDZM9S2D59RbMaL94BIUGSkPWAhGmwBDC37C/V4VyCgZN200t/RgDEX7n3TaO
-         GkNw==
+        Thu, 29 Jun 2023 04:26:20 -0400
+Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7EE0297B;
+        Thu, 29 Jun 2023 01:26:13 -0700 (PDT)
+Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-991f9148334so12140366b.1;
+        Thu, 29 Jun 2023 01:26:13 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688026957; x=1690618957;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=pnekQegzwsRisctNnmboo1Flv3vcYES0Lp+fckFN5sY=;
-        b=j2fW86fA3ENONXQjeQgKn+xa5YcbjW8PlAxrZSRXTn0h9VceLPXyikUiGQd2IDDRss
-         +nER1YOxaR6YJwyFLrJSy4qdbZiUm49t8sPxcT0t1IKQ4c1GGHvNP6kg41g0wIIvUXVT
-         ih3Ze6VFwyc2+9jLg992cr0Zhf/Bf6KIT80ZQcEzzIxIJVX4rxwS+omEzfpk/MBFhDVt
-         DYF4Z9pbUpMmhjJQ9TJpQy3HnSTPurY0UH6H44CDxdHSDoLlWlwCtCvPGuV+w3nNNj/f
-         gjUb8OeO0xsLFLQdMp7SKCWLibsYXZQed+ROtJnpjAv2QbsT5XWq5bXplEnAXoPWRzMA
-         ffSw==
-X-Gm-Message-State: AC+VfDwNS68BXwtvukWZHbBQzo+zfY2TDsIopU9ftybgucQ91rpHrGXw
-        1VToKesJD9kWCGuhYhLpoy9vzg==
-X-Google-Smtp-Source: ACHHUZ4JXzVgHJuPgHk885EhxpRoKdPImG5fW7Lkuhbe5Byutu+bzpvcBvxdLy7fTClkzPvy9enJ1Q==
-X-Received: by 2002:a5d:4985:0:b0:313:f5f0:8efa with SMTP id r5-20020a5d4985000000b00313f5f08efamr8300725wrq.18.1688026956848;
-        Thu, 29 Jun 2023 01:22:36 -0700 (PDT)
-Received: from localhost (host-213-179-129-39.customer.m-online.net. [213.179.129.39])
-        by smtp.gmail.com with ESMTPSA id j9-20020a5d4649000000b0030aefa3a957sm15272550wrs.28.2023.06.29.01.22.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Jun 2023 01:22:36 -0700 (PDT)
-Date:   Thu, 29 Jun 2023 10:22:34 +0200
-From:   Jiri Pirko <jiri@resnulli.us>
-To:     Vitaly Grinberg <vgrinber@redhat.com>
-Cc:     "Kubalewski, Arkadiusz" <arkadiusz.kubalewski@intel.com>,
-        David Airlie <airlied@redhat.com>, andy.ren@getcruise.com,
-        anthony.l.nguyen@intel.com, arnd@arndb.de, axboe@kernel.dk,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        claudiajkang@gmail.com, corbet@lwn.net, davem@davemloft.net,
-        edumazet@google.com, geert+renesas@glider.be,
-        gregkh@linuxfoundation.org, hkallweit1@gmail.com,
-        idosch@nvidia.com, intel-wired-lan@lists.osuosl.org,
-        jacek.lawrynowicz@linux.intel.com,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        jesse.brandeburg@intel.com, jonathan.lemon@gmail.com,
-        kuba@kernel.org, kuniyu@amazon.com, leon@kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-rdma@vger.kernel.org, linux@zary.sk, liuhangbin@gmail.com,
-        lucien.xin@gmail.com, masahiroy@kernel.org,
-        michal.michalik@intel.com, milena.olech@intel.com,
-        Michal Schmidt <mschmidt@redhat.com>,
-        Michael Tsirkin <mst@redhat.com>, netdev@vger.kernel.org,
-        nicolas.dichtel@6wind.com, nipun.gupta@amd.com, ogabbay@kernel.org,
-        Paolo Abeni <pabeni@redhat.com>, phil@nwl.cc,
-        Petr Oros <poros@redhat.com>, razor@blackwall.org,
-        ricardo.canuelo@collabora.com, richardcochran@gmail.com,
-        saeedm@nvidia.com, sj@kernel.org, tzimmermann@suse.de,
-        vadfed@fb.com, vadfed@meta.com, vadim.fedorenko@linux.dev
-Subject: Re: [RFC PATCH v8 00/10] Create common DPLL configuration API
-Message-ID: <ZJ0/StDYFANB1COA@nanopsycho>
-References: <CACLnSDhkUA=19905RKk=f1WBkd3jTEDcvytJCgavi90FroXb5w@mail.gmail.com>
+        d=1e100.net; s=20221208; t=1688027172; x=1690619172;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=mcoeEMptu8D0NAxYrvJpfZG4mBLFHI5XmeFegUh6FYE=;
+        b=CC8+rYb0uYVafBn83zDBSVUkusGMjpwoF2PrpwBETV5LNbH6oGz+yaT7sZb7icBSGk
+         zb0xGL/MtkZX7bsbz8NRe4LR3x3b979TZmNfenc6aAkDLumn6Ha57/QDtCObbRI1czvR
+         J6kp8Frj9fj6Nk7K3ZgWS99n+hdzlRjhzL8c8LJbmNGCloVnQeEZNXynFMFeuIE2UARm
+         bNWITDUyQHtYGbEg2Wh++6K64kUc4RnKnhFf5Wp2SORqCgDqvo4n5VFHwVWhtLvSNkVH
+         Ca5CepIutG/yKa/94M8BUg94Ox1RfOzxB/m3QtqO6q/wRoGmJmsQjLyTXjqBhO2b6pzQ
+         /bSQ==
+X-Gm-Message-State: AC+VfDxxEpqCkQHa/e4tA503T60blDlHwbfJMxsiw3d7SlZkCoJTTKrL
+        usZIPDc7sW/QfZtvBATfZ62InhbG909Mw/qt+3Q=
+X-Google-Smtp-Source: ACHHUZ5I1YUITTiwuNaGJRhEAVUxvdz45PNbS+KgIsVW0LO/GbPa8OHkL/ixpQy58lXWNknd7Fzke4lYgKnwJTVvR1E=
+X-Received: by 2002:a17:906:73dd:b0:989:1ed3:d00b with SMTP id
+ n29-20020a17090673dd00b009891ed3d00bmr20500149ejl.4.1688027171871; Thu, 29
+ Jun 2023 01:26:11 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CACLnSDhkUA=19905RKk=f1WBkd3jTEDcvytJCgavi90FroXb5w@mail.gmail.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20230626220525.1654780-1-abmainkar@nvidia.com>
+In-Reply-To: <20230626220525.1654780-1-abmainkar@nvidia.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 29 Jun 2023 10:26:00 +0200
+Message-ID: <CAJZ5v0iE4MtjnBWwq0dS7x8B8AsZS0sJFfO6fRwtLJOfUhbEUg@mail.gmail.com>
+Subject: Re: [Patch] acpica: Add AML_NO_OPERAND_RESOLVE flag to Timer
+To:     Abhishek Mainkar <abmainkar@nvidia.com>
+Cc:     robert.moore@intel.com, rafael.j.wysocki@intel.com,
+        lenb@kernel.org, linux-acpi@vger.kernel.org,
+        acpica-devel@lists.linuxfoundation.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thu, Jun 22, 2023 at 09:44:19AM CEST, vgrinber@redhat.com wrote:
->Hi,
->Could it be possible to add PPS DPLL phase offset to the netlink API? We
->are relying on it in the E810-based grandmaster implementation.
+On Tue, Jun 27, 2023 at 12:10 AM Abhishek Mainkar <abmainkar@nvidia.com> wrote:
+>
+> According to the ACPI specification 19.6.134, no argument is
+> required to be passed for ASL Timer instruction. For taking
+> care of no argument, AML_NO_OPERAND_RESOLVE flag is added to
+> ASL Timer instruction opcode.
+>
+> When ASL timer instruction interpreted by ACPI interpreter,
+> getting error. After adding AML_NO_OPERAND_RESOLVE flag to
+> ASL Timer instruction opcode, issue is not observed.
+>
+> =============================================================
+> UBSAN: array-index-out-of-bounds in acpica/dswexec.c:401:12
+> index -1 is out of range for type 'acpi_operand_object *[9]'
+> CPU: 37 PID: 1678 Comm: cat Not tainted
+> 6.0.0-dev-th500-6.0.y-1+bcf8c46459e407-generic-64k
+> HW name: NVIDIA BIOS v1.1.1-d7acbfc-dirty 12/19/2022 Call trace:
+>  dump_backtrace+0xe0/0x130
+>  show_stack+0x20/0x60
+>  dump_stack_lvl+0x68/0x84
+>  dump_stack+0x18/0x34
+>  ubsan_epilogue+0x10/0x50
+>  __ubsan_handle_out_of_bounds+0x80/0x90
+>  acpi_ds_exec_end_op+0x1bc/0x6d8
+>  acpi_ps_parse_loop+0x57c/0x618
+>  acpi_ps_parse_aml+0x1e0/0x4b4
+>  acpi_ps_execute_method+0x24c/0x2b8
+>  acpi_ns_evaluate+0x3a8/0x4bc
+>  acpi_evaluate_object+0x15c/0x37c
+>  acpi_evaluate_integer+0x54/0x15c
+>  show_power+0x8c/0x12c [acpi_power_meter]
+>
+> Signed-off-by: Abhishek Mainkar <abmainkar@nvidia.com>
 
-In which driver you need to implement this?
+ACPICA changes need to be submitted as pull requests to the upstream
+ACPICA project on GitHub.
 
+Once you have submitted an ACPICA pull request, please resend the
+corresponding Linux patch with a Link: tag pointing to that pull
+request.
 
->Thanks,
->Vitaly
+Thanks!
+
+> ---
+>  drivers/acpi/acpica/psopcode.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/acpi/acpica/psopcode.c b/drivers/acpi/acpica/psopcode.c
+> index bef69e87a0a2..8c34c0ffb1d9 100644
+> --- a/drivers/acpi/acpica/psopcode.c
+> +++ b/drivers/acpi/acpica/psopcode.c
+> @@ -603,7 +603,7 @@ const struct acpi_opcode_info acpi_gbl_aml_op_info[AML_NUM_OPCODES] = {
+>
+>  /* 7E */ ACPI_OP("Timer", ARGP_TIMER_OP, ARGI_TIMER_OP, ACPI_TYPE_ANY,
+>                          AML_CLASS_EXECUTE, AML_TYPE_EXEC_0A_0T_1R,
+> -                        AML_FLAGS_EXEC_0A_0T_1R),
+> +                        AML_FLAGS_EXEC_0A_0T_1R | AML_NO_OPERAND_RESOLVE),
+>
+>  /* ACPI 5.0 opcodes */
+>
+> --
+> 2.17.1
+>
