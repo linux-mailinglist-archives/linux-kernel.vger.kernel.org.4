@@ -2,130 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6D2C742AB4
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 18:34:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A005742AB9
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 18:40:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232224AbjF2QeO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 12:34:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44834 "EHLO
+        id S231933AbjF2QkB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 12:40:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232131AbjF2QeE (ORCPT
+        with ESMTP id S232111AbjF2Qjz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 12:34:04 -0400
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8181830DF
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 09:34:03 -0700 (PDT)
-Received: by mail-wr1-x42a.google.com with SMTP id ffacd0b85a97d-313f1085ac2so878654f8f.1
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 09:34:03 -0700 (PDT)
+        Thu, 29 Jun 2023 12:39:55 -0400
+Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59AE030EF
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 09:39:54 -0700 (PDT)
+Received: by mail-yb1-xb29.google.com with SMTP id 3f1490d57ef6-c14476f8401so785865276.3
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 09:39:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1688056442; x=1690648442;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=LqHUnlso1hdG3VJ+pTodHLUrLXzUMRTfH8n86mBkWGM=;
-        b=saB8+ZA/oTbFO22dlhNSOJr/pdy2C0eJ7wQf/+uf2obs9efHuHzrvZpqTi3DGfHlXl
-         VQ//6jSxIUjflGsQ0rUwQwp9cLVWKhU7QC4C7eRaMPUiCY9zWAgAoAdLTLF2vEG5kFIt
-         TAbyonrAC/vbfB2cICF3ivWy89e/CnJzt2Xy2VOwbPYDVqk7lzLOWcJbUtwdtZdtqAvU
-         Y2grNnXuaH1qlKeRMIq3SfTl4whEaENe0k71GLGfVgxoEDk0W59mBfN6ckeY281FZgRz
-         t3bdJ0o0T+ZcVKTZoGLlzGTrwhTK1mKX6jOMNuIEpmkQDCOSprERyKEnmAcTzpi8lt4E
-         Mwzg==
+        d=google.com; s=20221208; t=1688056793; x=1690648793;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=iYKtv9j9EWY+qlSLxNSMyNgvkOT32/s3MoVou6QGXdk=;
+        b=0Bxjyvyvdg2n9f+zfkap6qHE3pcwPHyknCZHaeLUFmeO5WxX2baUzGVKhjFdnnVKWJ
+         yawFJeYuBM/63nZSBqwgJHqKMl2k9ocxzbD7d6oujPUv2DZoeCxNbYLbJwjFMzXQ64/L
+         hTHGf0zikrV2IvW9i4FXRzXsUIM1M5TAj2nA7j+W33Rb6RQyKBkKlulpHnA40N4n3QAn
+         WSSYDeRSLQK8B7emh+jneStAmWsqBP3YWXBub9xBI0R9VeF7+EVOWNzzdpMSEnvf0gKP
+         rdcS9JCYeg204W4hA4S4bF7KA9iyIMfuRCh6gdi/AHGvbRP6epDvg/4Hq0Yv+ZlR/Kgw
+         UwZA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688056442; x=1690648442;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=LqHUnlso1hdG3VJ+pTodHLUrLXzUMRTfH8n86mBkWGM=;
-        b=Bk2rEFm2veUeBSfXTqUGPtNg60T9fbRCM4m3PVcLYJeyuvAw/7bfzw8ez78odn9HfN
-         TZiA6WblACQjx2yE30ESficOLFZZjpXhym1dfM5AnWQ8484HzegqHNEfQSXOcw1uiUx9
-         YJ23P3eqpSUDW7VcZabJURldgWDrYKBQw3ajhOBmdi5N0mh97Q0tIKXUj49uc78GtXfA
-         +LQLLcps4gRVCsJ9l5udFNd4XdjZE0E70oGJFvqIKVhQ0+WzJbNpoaZT3SUHBWu4qWEz
-         fmsz/FMcTZ0l9rE1wPtWYHvbwjaWaq4JRKEiJPvn+8vb8m2wRjeEIvzMh9BVHAQBF2hL
-         GJhA==
-X-Gm-Message-State: ABy/qLbJF8AC7fytB3rwQeCGy+BHf6/Pq9JpFBnrppzsfEg5hM93Aof8
-        Nsvp5GC0t0AeRHB59W+B1bswbD2Jfk/bqlYMA5izTQ==
-X-Google-Smtp-Source: APBJJlH/H/FYY6FeQt1Oek53lXyD6oByP8yaDCmrg1kMkO65pcFhmlQTa2fqTCAXe9fMg23H4mNeE7N6tPZ6UxLbdbk=
-X-Received: by 2002:adf:ef0c:0:b0:314:1de3:f9e0 with SMTP id
- e12-20020adfef0c000000b003141de3f9e0mr122057wro.12.1688056441962; Thu, 29 Jun
- 2023 09:34:01 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1688056793; x=1690648793;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=iYKtv9j9EWY+qlSLxNSMyNgvkOT32/s3MoVou6QGXdk=;
+        b=ZBRXDDGuih6FWj/Bw26BcizTNAOKho7s2FWzJR8BHJDSZBv4UT6ExnqFvsoxs+qBbk
+         hhQCgJSigZ9Zh4bQsanQyXr4qlNOHAyQcXENnjyMgdFp56hUrrVrA17IWX8RdzB9P9qT
+         8pE0g4WAtd7I8RZyq2rYfPRoqBr8tHj2+iTRulj02eH+OVOzNgQWP+XXGvIyV1owIUVm
+         8EMZZ9mCpdiyOgsj5FgV3oxHrtK9daGsA+X6QMD7siSMum5GKNc6tmb69IC2zZK4OjJQ
+         NCA2wlgIZqF0k/DBKxR35xCiSFY8DCQZCzprK6KQtB/0Q7NQd3oI4dvij5NwpUq3YLec
+         Vu4A==
+X-Gm-Message-State: ABy/qLbdfo4GIL+7yneeKMZHZ1ZnnLzYmJArY1IddW6kwzGfKhymoGXC
+        qpvGwU0zOq42zTzdCmIwEicrFREUrdI+d8lVD0uNjQ==
+X-Google-Smtp-Source: APBJJlFZzY82QJbByDeWwktFp9BbYuwkr1Kmyn9ua1mr5NBPoLe1UPj+2Snkn5RTrhUgo21lRxxlPYE1aP8AFayeBvQ=
+X-Received: by 2002:a25:23c8:0:b0:c1a:b15d:81b5 with SMTP id
+ j191-20020a2523c8000000b00c1ab15d81b5mr385342ybj.35.1688056793361; Thu, 29
+ Jun 2023 09:39:53 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230629093327.3376308-1-peng.fan@oss.nxp.com>
-In-Reply-To: <20230629093327.3376308-1-peng.fan@oss.nxp.com>
-From:   Mathieu Poirier <mathieu.poirier@linaro.org>
-Date:   Thu, 29 Jun 2023 10:33:51 -0600
-Message-ID: <CANLsYkzek+hb6_eRb-wN3qQfV+WCDqVHd3q_H03VR+k7NRkF1Q@mail.gmail.com>
-Subject: Re: [PATCH V3] remoteproc: imx_rproc: iterate all notifiyids in rx callback
-To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
-Cc:     andersson@kernel.org, shawnguo@kernel.org, s.hauer@pengutronix.de,
-        daniel.baluta@nxp.com, iuliana.prodan@nxp.com,
-        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
-        linux-remoteproc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Peng Fan <peng.fan@nxp.com>
+References: <20230628172529.744839-1-surenb@google.com> <20230628172529.744839-7-surenb@google.com>
+ <ZJxulItq9iHi2Uew@x1n> <CAJuCfpEPpdEScAG_UOiNfOTpue9ro0AP6414C4tBaK1rbVK7Hw@mail.gmail.com>
+ <ZJ2yOACwp7B2poIw@x1n>
+In-Reply-To: <ZJ2yOACwp7B2poIw@x1n>
+From:   Suren Baghdasaryan <surenb@google.com>
+Date:   Thu, 29 Jun 2023 09:39:41 -0700
+Message-ID: <CAJuCfpER=0GzcR3sWETYJAPK9SKAaRYtNfVXa-sXZu8MiL67NA@mail.gmail.com>
+Subject: Re: [PATCH v5 6/6] mm: handle userfaults under VMA lock
+To:     Peter Xu <peterx@redhat.com>
+Cc:     akpm@linux-foundation.org, willy@infradead.org, hannes@cmpxchg.org,
+        mhocko@suse.com, josef@toxicpanda.com, jack@suse.cz,
+        ldufour@linux.ibm.com, laurent.dufour@fr.ibm.com,
+        michel@lespinasse.org, liam.howlett@oracle.com, jglisse@google.com,
+        vbabka@suse.cz, minchan@google.com, dave@stgolabs.net,
+        punit.agrawal@bytedance.com, lstoakes@gmail.com, hdanton@sina.com,
+        apopple@nvidia.com, ying.huang@intel.com, david@redhat.com,
+        yuzhao@google.com, dhowells@redhat.com, hughd@google.com,
+        viro@zeniv.linux.org.uk, brauner@kernel.org,
+        pasha.tatashin@soleen.com, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-team@android.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 29 Jun 2023 at 03:28, Peng Fan (OSS) <peng.fan@oss.nxp.com> wrote:
+On Thu, Jun 29, 2023 at 9:33=E2=80=AFAM Peter Xu <peterx@redhat.com> wrote:
 >
-> From: Peng Fan <peng.fan@nxp.com>
+> On Wed, Jun 28, 2023 at 05:19:31PM -0700, Suren Baghdasaryan wrote:
+> > On Wed, Jun 28, 2023 at 10:32=E2=80=AFAM Peter Xu <peterx@redhat.com> w=
+rote:
+> > >
+> > > On Wed, Jun 28, 2023 at 10:25:29AM -0700, Suren Baghdasaryan wrote:
+> > > > Enable handle_userfault to operate under VMA lock by releasing VMA =
+lock
+> > > > instead of mmap_lock and retrying. Note that FAULT_FLAG_RETRY_NOWAI=
+T
+> > > > should never be used when handling faults under per-VMA lock protec=
+tion
+> > > > because that would break the assumption that lock is dropped on ret=
+ry.
+> > > >
+> > > > Signed-off-by: Suren Baghdasaryan <surenb@google.com>
+> > >
+> > > Maybe the sanitize_fault_flags() changes suite more in patch 3, but n=
+ot a
+> > > big deal I guess.
+> >
+> > IIUC FAULT_FLAG_RETRY_NOWAIT comes into play in this patchset only in
+> > the context of uffds, therefore that check seems to be needed when we
+> > enable per-VMA lock uffd support, which is this patch. Does that make
+> > sense?
 >
-> The current code only supports one vdev and a single callback,
-> but there are cases need more vdevs. So iterate all notifyids to
-> support more vdevs with the single callback.
+> I don't see why uffd is special in this regard, as e.g. swap also checks
+> NOWAIT when folio_lock_or_retry() so I assume it's also used there.
 >
+> IMHO the "NOWAIT should never apply with VMA_LOCK so far" assumption star=
+ts
+> from patch 3 where it conditionally releases the vma lock when
+> !(RETRY|COMPLETE); that is the real place where it can start to go wrong =
+if
+> anyone breaks the assumption.
 
-Much better - I'll pick this up when rc2 comes out.
-
+Um, yes, you are right as usual. It was clear to me from the code that
+NOWAIT is not used with swap under VMA_LOCK, that's why I didn't
+consider this check earlier. Yeah, patch 3 seems like a more
+appropriate place for it. I'll move it and post a new patchset later
+today or tomorrow morning with your Acks.
 Thanks,
-Mathieu
+Suren.
 
-> Signed-off-by: Peng Fan <peng.fan@nxp.com>
-> ---
 >
-> V3:
->  Drop debug message in callback
+> Thanks,
 >
-> V2:
->  Update commit log
->
->  drivers/remoteproc/imx_rproc.c | 13 +++++++++++--
->  1 file changed, 11 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/remoteproc/imx_rproc.c b/drivers/remoteproc/imx_rproc.c
-> index f9874fc5a80f..986d3db81596 100644
-> --- a/drivers/remoteproc/imx_rproc.c
-> +++ b/drivers/remoteproc/imx_rproc.c
-> @@ -725,13 +725,22 @@ static int imx_rproc_addr_init(struct imx_rproc *priv,
->         return 0;
->  }
->
-> +static int imx_rproc_notified_idr_cb(int id, void *ptr, void *data)
-> +{
-> +       struct rproc *rproc = data;
-> +
-> +       rproc_vq_interrupt(rproc, id);
-> +
-> +       return 0;
-> +}
-> +
->  static void imx_rproc_vq_work(struct work_struct *work)
->  {
->         struct imx_rproc *priv = container_of(work, struct imx_rproc,
->                                               rproc_work);
-> +       struct rproc *rproc = priv->rproc;
->
-> -       rproc_vq_interrupt(priv->rproc, 0);
-> -       rproc_vq_interrupt(priv->rproc, 1);
-> +       idr_for_each(&rproc->notifyids, imx_rproc_notified_idr_cb, rproc);
->  }
->
->  static void imx_rproc_rx_callback(struct mbox_client *cl, void *msg)
 > --
-> 2.37.1
+> Peter Xu
 >
