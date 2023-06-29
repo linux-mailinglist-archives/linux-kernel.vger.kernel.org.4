@@ -2,196 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A1F0742A16
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 17:57:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 068397429F5
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 17:54:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231766AbjF2P46 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 11:56:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59814 "EHLO
+        id S231631AbjF2Pyn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 11:54:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232584AbjF2P4Q (ORCPT
+        with ESMTP id S230487AbjF2Pyl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 11:56:16 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCADD10FB
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 08:55:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1688054128;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=TOAbgctNJNzSTZB1BB4d4WqHvbP5DttnG4JuN21nRvU=;
-        b=io9kQ8VQGJ0rPoNDlBr3iv3AxLAFsNHaLVH2RI7oF5TtcRVKD2DFUFjvTBMt7h7maWhLzb
-        PPamQyR6yahp5zgFpjVMY2e+0SIPFFVrh5tRHrzmTIQmO7j+jnqguuFeWumGA7F+BS0z0/
-        ocRnsWAeHj+c+TA3cdgTl8UMQqnzL7s=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-158--w3bQ03qP3q32efbcBKCww-1; Thu, 29 Jun 2023 11:55:21 -0400
-X-MC-Unique: -w3bQ03qP3q32efbcBKCww-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Thu, 29 Jun 2023 11:54:41 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D23BF10FB;
+        Thu, 29 Jun 2023 08:54:39 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 9792B1C06ED8;
-        Thu, 29 Jun 2023 15:54:45 +0000 (UTC)
-Received: from warthog.procyon.org.uk.com (unknown [10.42.28.4])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 398D84CD0C2;
-        Thu, 29 Jun 2023 15:54:44 +0000 (UTC)
-From:   David Howells <dhowells@redhat.com>
-To:     netdev@vger.kernel.org
-Cc:     David Howells <dhowells@redhat.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Dave Chinner <david@fromorbit.com>,
-        Matt Whitlock <kernel@mattwhitlock.name>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Jens Axboe <axboe@kernel.dk>, linux-fsdevel@kvack.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Christoph Hellwig <hch@lst.de>, linux-fsdevel@vger.kernel.org
-Subject: [RFC PATCH 4/4] splice: Record some statistics
-Date:   Thu, 29 Jun 2023 16:54:33 +0100
-Message-ID: <20230629155433.4170837-5-dhowells@redhat.com>
-In-Reply-To: <20230629155433.4170837-1-dhowells@redhat.com>
-References: <20230629155433.4170837-1-dhowells@redhat.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6CC226153C;
+        Thu, 29 Jun 2023 15:54:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28680C433C8;
+        Thu, 29 Jun 2023 15:54:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688054078;
+        bh=L6FQS4d7vn+9QEms0SfAm1VLkLjV+bIazDI0tjMBu5g=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=k8QvCfS9YYp1B+ART94SdyS5GCq+kzg+y0GcPPcxH+Mz9b1I4fFjWlHyii0LCx/Zb
+         6oqHcWtiuE3GTIm5ZtGtpI5GJoj+Uki8akhd/tLN8XIvFLJ4vCNRMSzWFjh3vcU96P
+         F6nnnWDIE4ZC6jcq+iQOB7KR1kmI5HAuZgfRETPIGLrJefP/K7dQk2FX6jv6Do9o62
+         6dFS9sWsPtWknyZX4osw36zBl8rdJv7ce0BtqwOjDubXmJlfxwaLWPMCaZA0PiKewB
+         /QBRqLcnYPOwgUGemUscA0GTUkIR0SFl9qk65pBR8RcIQJ0ANd+rxatzb7VXpj8G2x
+         dcnTEBewzlWmg==
+Date:   Thu, 29 Jun 2023 10:54:36 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Sui Jingfeng <suijingfeng@loongson.cn>
+Cc:     Sui Jingfeng <15330273260@189.cn>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        linux-fbdev@vger.kernel.org, Cornelia Huck <cohuck@redhat.com>,
+        Karol Herbst <kherbst@redhat.com>,
+        nouveau@lists.freedesktop.org,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        dri-devel@lists.freedesktop.org, YiPeng Chai <YiPeng.Chai@amd.com>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        Likun Gao <Likun.Gao@amd.com>,
+        David Airlie <airlied@gmail.com>,
+        Ville Syrjala <ville.syrjala@linux.intel.com>,
+        Yi Liu <yi.l.liu@intel.com>, kvm@vger.kernel.org,
+        amd-gfx@lists.freedesktop.org, Jason Gunthorpe <jgg@ziepe.ca>,
+        Ben Skeggs <bskeggs@redhat.com>, linux-pci@vger.kernel.org,
+        Kevin Tian <kevin.tian@intel.com>,
+        Lijo Lazar <lijo.lazar@amd.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Bokun Zhang <Bokun.Zhang@amd.com>,
+        intel-gfx@lists.freedesktop.org,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Abhishek Sahu <abhsahu@nvidia.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        Yishai Hadas <yishaih@nvidia.com>,
+        Pan Xinhui <Xinhui.Pan@amd.com>, linux-kernel@vger.kernel.org,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Christian Konig <christian.koenig@amd.com>,
+        Hawking Zhang <Hawking.Zhang@amd.com>
+Subject: Re: [PATCH v7 6/8] PCI/VGA: Introduce is_boot_device function
+ callback to vga_client_register
+Message-ID: <20230629155436.GA397963@bhelgaas>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <0dd961ae-78a7-0b67-af51-008ecbcdbbef@loongson.cn>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a proc file to export some statistics for debugging purposes.
+On Thu, Jun 22, 2023 at 01:08:15PM +0800, Sui Jingfeng wrote:
+> Hi,
+> 
+> 
+> A nouveau developer(Lyude) from redhat send me a R-B,
+> 
+> Thanks for the developers of nouveau project.
+> 
+> 
+> Please allow me add a link[1] here.
+> 
+> 
+> [1] https://lore.kernel.org/all/0afadc69f99a36bc9d03ecf54ff25859dbc10e28.camel@redhat.com/
 
-Signed-off-by: David Howells <dhowells@redhat.com>
-cc: Matthew Wilcox <willy@infradead.org>
-cc: Dave Chinner <david@fromorbit.com>
-cc: Christoph Hellwig <hch@lst.de>
-cc: Jens Axboe <axboe@kernel.dk>
-cc: linux-fsdevel@vger.kernel.org
----
- fs/splice.c            | 28 ++++++++++++++++++++++++++++
- include/linux/splice.h |  3 +++
- mm/filemap.c           |  6 +++++-
- 3 files changed, 36 insertions(+), 1 deletion(-)
+1) Thanks for this.  If you post another version of this series,
+   please pick up Lyude's Reviewed-by and include it in the relevant
+   patches (as long as you haven't made significant changes to the
+   code Lyude reviewed).  Whoever applies this should automatically
+   pick up Reviewed-by/Ack/etc that are replies to the version being
+   applied, but they won't go through previous revisions to find them.
 
-diff --git a/fs/splice.c b/fs/splice.c
-index 2b1f109a7d4f..831973ea6b3f 100644
---- a/fs/splice.c
-+++ b/fs/splice.c
-@@ -36,10 +36,15 @@
- #include <linux/net.h>
- #include <linux/socket.h>
- #include <linux/sched/signal.h>
-+#include <linux/proc_fs.h>
- 
- #include "../mm/internal.h"
- #include "internal.h"
- 
-+atomic_t splice_stat_filemap_copied, splice_stat_filemap_moved;
-+static atomic_t splice_stat_directly_copied;
-+static atomic_t vmsplice_stat_copied, vmsplice_stat_stole;
-+
- /*
-  * Splice doesn't support FMODE_NOWAIT. Since pipes may set this flag to
-  * indicate they support non-blocking reads or writes, we must clear it
-@@ -276,6 +281,7 @@ ssize_t copy_splice_read(struct file *in, loff_t *ppos,
- 		remain -= chunk;
- 	}
- 
-+	atomic_add(keep, &splice_stat_directly_copied);
- 	kfree(bv);
- 	return ret;
- }
-@@ -1299,6 +1305,7 @@ static int splice_try_to_steal_page(struct pipe_inode_info *pipe,
- 	unmap_mapping_folio(folio);
- 	if (remove_mapping(folio->mapping, folio)) {
- 		folio_clear_mappedtodisk(folio);
-+		atomic_inc(&vmsplice_stat_stole);
- 		flags |= PIPE_BUF_FLAG_LRU;
- 		goto add_to_pipe;
- 	}
-@@ -1316,6 +1323,7 @@ static int splice_try_to_steal_page(struct pipe_inode_info *pipe,
- 	folio_put(folio);
- 	folio = copy;
- 	offset = 0;
-+	atomic_inc(&vmsplice_stat_copied);
- 
- add_to_pipe:
- 	page = folio_page(folio, offset / PAGE_SIZE);
-@@ -1905,3 +1913,23 @@ SYSCALL_DEFINE4(tee, int, fdin, int, fdout, size_t, len, unsigned int, flags)
- 
- 	return error;
- }
-+
-+static int splice_stats_show(struct seq_file *m, void *data)
-+{
-+	seq_printf(m, "filemap: copied=%u moved=%u\n",
-+		   atomic_read(&splice_stat_filemap_copied),
-+		   atomic_read(&splice_stat_filemap_moved));
-+	seq_printf(m, "direct : copied=%u\n",
-+		   atomic_read(&splice_stat_directly_copied));
-+	seq_printf(m, "vmsplice: copied=%u stole=%u\n",
-+		   atomic_read(&vmsplice_stat_copied),
-+		   atomic_read(&vmsplice_stat_stole));
-+	return 0;
-+}
-+
-+static int splice_stats_init(void)
-+{
-+	proc_create_single("fs/splice", S_IFREG | 0444, NULL, splice_stats_show);
-+	return 0;
-+}
-+late_initcall(splice_stats_init);
-diff --git a/include/linux/splice.h b/include/linux/splice.h
-index 3c5abbd49ff2..4f04dc338010 100644
---- a/include/linux/splice.h
-+++ b/include/linux/splice.h
-@@ -98,4 +98,7 @@ extern int splice_grow_spd(const struct pipe_inode_info *, struct splice_pipe_de
- extern void splice_shrink_spd(struct splice_pipe_desc *);
- 
- extern const struct pipe_buf_operations default_pipe_buf_ops;
-+
-+extern atomic_t splice_stat_filemap_copied, splice_stat_filemap_moved;
-+
- #endif
-diff --git a/mm/filemap.c b/mm/filemap.c
-index dd144b0dab69..38d38cc826fa 100644
---- a/mm/filemap.c
-+++ b/mm/filemap.c
-@@ -2872,7 +2872,8 @@ ssize_t splice_folio_into_pipe(struct pipe_inode_info *pipe,
- 	struct address_space *mapping;
- 	struct folio *copy = NULL;
- 	struct page *page;
--	unsigned int flags = 0;
-+	unsigned int flags = 0, count = 0;
-+	atomic_t *stat = &splice_stat_filemap_copied;
- 	ssize_t ret;
- 	size_t spliced = 0, offset = offset_in_folio(folio, fpos);
- 
-@@ -2902,6 +2903,7 @@ ssize_t splice_folio_into_pipe(struct pipe_inode_info *pipe,
- 	/* If we succeed in removing the mapping, set LRU flag and add it. */
- 	if (remove_mapping(mapping, folio)) {
- 		folio_unlock(folio);
-+		stat = &splice_stat_filemap_moved;
- 		flags = PIPE_BUF_FLAG_LRU;
- 		goto add_to_pipe;
- 	}
-@@ -2940,8 +2942,10 @@ ssize_t splice_folio_into_pipe(struct pipe_inode_info *pipe,
- 		page++;
- 		spliced += part;
- 		offset = 0;
-+		count++;
- 	}
- 
-+	atomic_add(count, stat);
- 	if (copy)
- 		folio_put(copy);
- 	return spliced;
+2) Please mention the commit to which the series applies.  I tried to
+   apply this on v6.4-rc1, but it doesn't apply cleanly.
 
+3) Thanks for including cover letters in your postings.  Please
+   include a little changelog in the cover letter so we know what
+   changed between v6 and v7, etc.
+
+4) Right now we're in the middle of the v6.5 merge window, so new
+   content, e.g., this series, is too late for v6.5.  Most
+   maintainers, including me, wait to merge new content until the
+   merge window closes and a new -rc1 is tagged.  This merge window
+   should close on July 9, and people will start merging content for
+   v6.6, typically based on v6.5-rc1.
+
+Bjorn
