@@ -2,153 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BFFF742965
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 17:22:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 22A7474296C
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 17:23:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232584AbjF2PWb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 11:22:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50446 "EHLO
+        id S232000AbjF2PXT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 11:23:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231778AbjF2PW1 (ORCPT
+        with ESMTP id S232700AbjF2PXF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 11:22:27 -0400
-Received: from mail-qk1-x736.google.com (mail-qk1-x736.google.com [IPv6:2607:f8b0:4864:20::736])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45A262952
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 08:22:26 -0700 (PDT)
-Received: by mail-qk1-x736.google.com with SMTP id af79cd13be357-7659dc74da1so74193985a.3
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 08:22:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google; t=1688052145; x=1690644145;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=52QGPi56OcZzeoQSr1+Puoh9x/N7TMLxPpl1Fa9yAkI=;
-        b=bQ+QaBv9kQgn0a/ZUWEzUp17QKK8mKbvu7OHRhiOucSgX3eSl924Wd32DWKpaETuWG
-         AJZQFb8MZEkw10neO7Emyiwf0zs4rexcslIhj26xYbfhNY61Fs/S3zXUfnMd8nKlLHbq
-         CU/gaxpgXz0Fcq+WROZl7v82TmZhyriMp8ghnPjAipqNQvOQZDcDHIDAAILg7qaaRj4g
-         cROZVqbL1LvLpBfUtSNqoHdAU+QoeC+43TKUBXk9yEuGi9WwmY8edNie6xIXgtH/0lEz
-         iYMbIENsQdCcb6GkheV3Ph/F1WPNpdDYyBYfX2SSNtzeR7J1HM4TRkmoUI53LbULfuQV
-         wSDA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688052145; x=1690644145;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=52QGPi56OcZzeoQSr1+Puoh9x/N7TMLxPpl1Fa9yAkI=;
-        b=EoT3DZ8eJlbZV1P6WH06qhc9pIvGndjoCVTYM57JWbRbrij9gakFXqJdPWw3tC7WXk
-         qVaoF4iqQeIVhi5kMKnaQhJ7jdb1anAoimiMS2v85aHArpF6Af85ZQF3l5JBAq8/iheF
-         hi5vAmcKcahmp4LRA0SSLgpf0w6zykHKS1ZF2AI+U0fPZ2NzJLWSqKiwzxNu1Md6Yf88
-         zUYJdD27g1uQp398IVouuSlljEczzDhXC8dZpfxTefOCKsPFZBAdIfDq2GMRqp/4bA+z
-         WG1LZvlGcZl+d4+5g++UvGXbSOGMJOMXi23XmNzcH729awokf3t64VQngUzMhQ0sBwWe
-         lkhQ==
-X-Gm-Message-State: AC+VfDx0SSqo1mPPhRpUqS2B/edQhPr90QzHGPfyBzaNfoB6oqWKvea4
-        WNCZmLzEfQZNFAy/VTE5yvPaeg==
-X-Google-Smtp-Source: ACHHUZ49j4zxCkMnm+oSSx+2qlaiByXDG1BTDACn1CIjXnwSTZE7XCbDUFEFLrSlPKTofnqYvOeuSg==
-X-Received: by 2002:a05:620a:e92:b0:767:90a:ae9e with SMTP id w18-20020a05620a0e9200b00767090aae9emr8621873qkm.65.1688052145311;
-        Thu, 29 Jun 2023 08:22:25 -0700 (PDT)
-Received: from ziepe.ca (hlfxns017vw-142-68-25-194.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.68.25.194])
-        by smtp.gmail.com with ESMTPSA id r15-20020a05620a03cf00b0074e0951c7e7sm6340805qkm.28.2023.06.29.08.22.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Jun 2023 08:22:24 -0700 (PDT)
-Received: from jgg by wakko with local (Exim 4.95)
-        (envelope-from <jgg@ziepe.ca>)
-        id 1qEtTU-009snj-1H;
-        Thu, 29 Jun 2023 12:22:24 -0300
-Date:   Thu, 29 Jun 2023 12:22:24 -0300
-From:   Jason Gunthorpe <jgg@ziepe.ca>
-To:     Hugh Dickins <hughd@google.com>
-Cc:     Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        David Hildenbrand <david@redhat.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Qi Zheng <zhengqi.arch@bytedance.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Peter Xu <peterx@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Will Deacon <will@kernel.org>, Yu Zhao <yuzhao@google.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Ralph Campbell <rcampbell@nvidia.com>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Steven Price <steven.price@arm.com>,
-        SeongJae Park <sj@kernel.org>,
-        Lorenzo Stoakes <lstoakes@gmail.com>,
-        Huang Ying <ying.huang@intel.com>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Zack Rusin <zackr@vmware.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Minchan Kim <minchan@kernel.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Song Liu <song@kernel.org>,
-        Thomas Hellstrom <thomas.hellstrom@linux.intel.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Jann Horn <jannh@google.com>,
-        Vishal Moola <vishal.moola@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        linux-arm-kernel@lists.infradead.org, sparclinux@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [PATCH v2 07/12] s390: add pte_free_defer() for pgtables sharing
- page
-Message-ID: <ZJ2hsM5Tn+yUZ5ZV@ziepe.ca>
-References: <54cb04f-3762-987f-8294-91dafd8ebfb0@google.com>
- <a722dbec-bd9e-1213-1edd-53cd547aa4f@google.com>
- <20230628211624.531cdc58@thinkpad-T15>
- <cd7c2851-1440-7220-6c53-16b343b1474@google.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cd7c2851-1440-7220-6c53-16b343b1474@google.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 29 Jun 2023 11:23:05 -0400
+Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A165330EF
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 08:23:03 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.west.internal (Postfix) with ESMTP id EC6DE3200905;
+        Thu, 29 Jun 2023 11:23:02 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Thu, 29 Jun 2023 11:23:03 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm1; t=1688052182; x=1688138582; bh=k3
+        y023L2+HLrN0+wxOQ3ndaGyRDKGKPIMKVbeyqnFTg=; b=LEan1GEE23w2wAvQNH
+        zSUetYPYH4wDi7bFOBebhAST38OcRzNflwxFH8L5jz+wcuZVPKo4bJnNkmcAoLZR
+        ot2sBw+0UY7TmStJxgd1Jhx/We+B+LLwB+Jh+JtJUtH75i+yqZy2cdusEPAtIe33
+        16pbkQeMCgWlCHgG/Bc3jb0GdZ1zBFpBXoWfe/NqDgMqzCj864zCy0/7D6QP1tsH
+        L8eIIRGjEhqlVy0IMqs6UYWRCUjK70c1Ss8i2Kba2saAOoFO4QFrluiudJz6Habn
+        UXcZSYSUZFYzffJ73vmRoS+L/KYi09515bfvJG6XNPZvAn6IlokG6sWy6TcsXsOg
+        HgMA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1688052182; x=1688138582; bh=k3y023L2+HLrN
+        0+wxOQ3ndaGyRDKGKPIMKVbeyqnFTg=; b=AxYo8qEVWbaewqTgoXy7qjsATlldY
+        lLQZh0IJVfcIYKHA9DHRf3R95YwftK0XfcM+nK3AhYIDhdtiw0cqsBqkMA9rPxMQ
+        1wVZxh8iyhxbCPe4oZmWIjP8A0GiDt7UltRlrBFJyZv/H/9liLy6eZG4D6uMP+ue
+        9oL4O3J+ulEZAsR8ilm8bqSW6ahnpQJeqbZ/W/e6rU7cn9rNYy4+52mrMvaSYByg
+        luXKHCOryWDeWOhUswtwNwocNmQCScvnXWnlb9OIU8R8rCN1X4TtOzE5fCPiYuYy
+        PlljMXfD2P6MFELBXv38/xK/j7EpBrmNnXHLVKgvyK9QWbwCpa5OLR6oA==
+X-ME-Sender: <xms:1qGdZDRbVdKPA_8rqaKQgPwmrmGRHcS8rWzC8Mx9nSgNJUmwPuShjw>
+    <xme:1qGdZEypLrLFsorRrKe_KFPqThUKSPrHp9wUs9LpSGg9LjqPH4-SmdfUKFtrTDWLc
+    ANYXDOsCQ6WZwG6q4M>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrtdeggdekkecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhn
+    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
+    gvrhhnpeevhfffledtgeehfeffhfdtgedvheejtdfgkeeuvefgudffteettdekkeeufeeh
+    udenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivgeptd
+    enucfrrghrrghmpehmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:1qGdZI21aLu2GQqPbSkDy0Ve1IRoyJizx4TNxeOFB4AQqwFygccUhg>
+    <xmx:1qGdZDBnkcdbx2pJ0v0EICi69VB0bY1FVhaHeOwCgcm1-GDxTf2wrA>
+    <xmx:1qGdZMjTIZjTuwOVYgwkfzXqhdSlcgV5-1eWq2qqcBK32VtDFd84gw>
+    <xmx:1qGdZIYoHN4sDgjjCk6m9biN1Tt3rK8goYHuaW3BhpZ7ASG1axe9mA>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 552D4B60086; Thu, 29 Jun 2023 11:23:02 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-499-gf27bbf33e2-fm-20230619.001-gf27bbf33
+Mime-Version: 1.0
+Message-Id: <850b11a6-4f23-41dd-ac14-d8663683d1f6@app.fastmail.com>
+In-Reply-To: <80fba92e-3836-4d27-8be6-1e5f7b5b2f53@app.fastmail.com>
+References: <80fba92e-3836-4d27-8be6-1e5f7b5b2f53@app.fastmail.com>
+Date:   Thu, 29 Jun 2023 17:22:41 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Linus Torvalds" <torvalds@linux-foundation.org>
+Cc:     soc@kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: [GIT PULL 4/5] ARM: SoC defconfig changes for 6.5
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 28, 2023 at 10:08:08PM -0700, Hugh Dickins wrote:
-> On Wed, 28 Jun 2023, Gerald Schaefer wrote:
-> > 
-> > As discussed in the other thread, we would rather go with less complexity,
-> > possibly switching to an approach w/o the list and fragment re-use in the
-> > future. For now, as a first step in that direction, we can try with not
-> > adding fragments back only for pte_free_defer(). Here is an adjusted
-> > version of your patch, copying most of your pte_free_defer() logic and
-> > also description, tested with LTP and all three of your patch series applied:
-> 
-> Thanks, Gerald: I don't mind abandoning my 13/12 SLAB_TYPESAFE_BY_RCU
-> patch (posted with fewer Cc's to the s390 list last week), and switching
-> to your simpler who-cares-if-we-sometimes-don't-make-maximal-use-of-page
-> patch.
-> 
-> But I didn't get deep enough into it today to confirm it - and disappointed
-> that you've found it necessary to play with pt_frag_refcount in addition to
-> _refcount and HH bits.  No real problem with that, but my instinct says it
-> should be simpler.
+The following changes since commit 44c026a73be8038f03dbdeef028b642880cf1511:
 
-Is there any reason it should be any different at all from what PPC is
-doing?
+  Linux 6.4-rc3 (2023-05-21 14:05:48 -0700)
 
-I still think the right thing to do here is make the PPC code common
-(with Hugh's proposed RCU modification) and just use it in both
-arches....
+are available in the Git repository at:
 
-Jason
+  https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/soc-defconfig-6.5
+
+for you to fetch changes up to 2b24391767ae6897dff6eeb521f01d495bc27b55:
+
+  arm64: defconfig: Enable Rockchip I2S TDM and ES8316 drivers (2023-06-21 15:04:01 +0200)
+
+----------------------------------------------------------------
+ARM: SoC defconfig changes for 6.5
+
+The arm64 defconfig file gets the usual updates to enable addition
+device drivers as well as the sparx5 and realtek SoC platforms.
+
+For arm32, there are only a couple of cleanup patches for imx,
+renesas and rockchips.
+
+----------------------------------------------------------------
+Adam Ford (1):
+      arm64: defconfig: Enable video capture drivers on imx8mm/imx8mn
+
+Alexandre Mergnat (2):
+      arm64: defconfig: enable MT6357 regulator
+      arm64: defconfig: enable Mediatek PMIC key
+
+Arnd Bergmann (7):
+      Merge tag 'renesas-arm-defconfig-for-v6.5-tag1' of git://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-devel into soc/defconfig
+      Merge tag 'renesas-arm-defconfig-for-v6.5-tag2' of git://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-devel into soc/defconfig
+      Merge tag 'imx-defconfig-6.5' of git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux into soc/defconfig
+      Merge tag 'qcom-arm64-defconfig-for-6.5' of https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux into soc/defconfig
+      Merge tag 'qcom-arm64-defconfig-for-6.5-2' of https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux into soc/defconfig
+      Merge tag 'ti-k3-config-for-v6.5' of https://git.kernel.org/pub/scm/linux/kernel/git/ti/linux into soc/defconfig
+      Merge tag 'v6.4-next-defconfig' of https://git.kernel.org/pub/scm/linux/kernel/git/matthias.bgg/linux into soc/defconfig
+
+Bartosz Golaszewski (1):
+      arm64: defconfig: enable the SA8775P GPUCC driver
+
+Biju Das (1):
+      arm64: defconfig: Enable Renesas MTU3a counter config
+
+Cristian Ciocaltea (1):
+      arm64: defconfig: Enable Rockchip I2S TDM and ES8316 drivers
+
+Devi Priya (1):
+      arm64: defconfig: Enable ipq6018 apss clock and PLL controller
+
+Dhruva Gole (1):
+      arm64: defconfig: Enable UBIFS
+
+Fabio Estevam (2):
+      ARM: imx_v6_v7_defconfig: Remove firmware loader helper
+      arm64: defconfig: Enable the TI SN65DSI83 driver
+
+Francesco Dolcini (1):
+      arm64: defconfig: enable drivers for Verdin AM62
+
+Geert Uytterhoeven (1):
+      ARM: shmobile: defconfig: Refresh for v6.4-rc1
+
+Konrad Dybcio (1):
+      arm64: defconfig: Build SM6115 display and GPU clock controller drivers
+
+Krzysztof Kozlowski (1):
+      arm64: defconfig: Enable ARCH_SPARX5 and ARCH_REALTEK
+
+Neil Armstrong (1):
+      arm64: defconfig: enable FSA4480 driver as module
+
+Otavio Salvador (1):
+      ARM: imx_v6_v7_defconfig: Remove KERNEL_LZO config
+
+Sebastian Reichel (2):
+      ARM: multi_v7_defconfig: update MFD_RK808 name
+      arm64: defconfig: update RK8XX MFD config
+
+Srinivas Kandagatla (1):
+      arm64: defconfig: Enable sc828x0xp lpasscc clock controller
+
+Vladimir Zapolskiy (4):
+      arm64: defconfig: Build MSM power manager driver
+      arm64: defconfig: Build Global Clock Controller driver for QCM2290
+      arm64: defconfig: Build interconnect driver for QCM2290
+      arm64: defconfig: Build display clock controller driver for QCM2290
+
+ arch/arm/configs/imx_v6_v7_defconfig |  3 ---
+ arch/arm/configs/multi_v7_defconfig  |  2 +-
+ arch/arm/configs/shmobile_defconfig  |  3 +--
+ arch/arm64/configs/defconfig         | 32 +++++++++++++++++++++++++++++++-
+ 4 files changed, 33 insertions(+), 7 deletions(-)
