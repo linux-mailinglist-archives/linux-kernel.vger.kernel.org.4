@@ -2,115 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D63A3742901
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 17:00:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A28C74290C
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 17:02:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232397AbjF2PAv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 11:00:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43598 "EHLO
+        id S232475AbjF2PCv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 11:02:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231461AbjF2PAt (ORCPT
+        with ESMTP id S232480AbjF2PCr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 11:00:49 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3E1730C5
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 08:00:46 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id 4fb4d7f45d1cf-51d89664272so903942a12.1
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 08:00:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tessares.net; s=google; t=1688050845; x=1690642845;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ETtFCrnQYr6edNt0WVaM+W5aXpK84RAz4fMfEZi0yeQ=;
-        b=oOc2PMCKLQtUygz9R3kfuh3OBo1ycIMvWCDG0yarF+iXan9VDs1fISgxu/BMiL3n3s
-         XlywPH7WGKhtHOjhCtVVb8BjeclApoFnizZ4k1DfiVTLUchpWepnkM5VfI/qKVkVaVll
-         s9P/60YGApZqQbcbMlUcS699RFXKzMIWMsXewzJ2OrTP9q4wNzRYQklEB3q89ktyxzT5
-         su5Zjx/F921/hJaBBjQAzA3i9Q23rjif63n6n1dlE9UcHmtw7fh7kqDFwFzqaFPDMQes
-         N60ItOvmWi4GXQCov7o14Mz8i1y0BGgD5uz8Q909yshxT4eq0sPixqTaHGCOO7OBybXS
-         jqpw==
+        Thu, 29 Jun 2023 11:02:47 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A77872D7F
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 08:01:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1688050914;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=7TagWYkIx09Iw+gbpjDsNk+epNEazk8amf//OqWTu8E=;
+        b=X1uRQbsaTU05UNMs5SVpQAINRqxCM0uA+8jiGr1t7H34x9xbnEhSDAW7N5iUa9TErxXIMs
+        lradUPjYMflrq3KkkbtrKY81tDxgkPowsIR+Ev/QunW2zZlN5/1X8bomzCldT3+sYauMUU
+        As1WZrzcvj5LdaiM0I6S832zGDfmksQ=
+Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
+ [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-410-n9B7csWxPuGpzSm9EjshTg-1; Thu, 29 Jun 2023 11:01:53 -0400
+X-MC-Unique: n9B7csWxPuGpzSm9EjshTg-1
+Received: by mail-ej1-f71.google.com with SMTP id a640c23a62f3a-9885a936d01so62916266b.0
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 08:01:52 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688050845; x=1690642845;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20221208; t=1688050912; x=1690642912;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ETtFCrnQYr6edNt0WVaM+W5aXpK84RAz4fMfEZi0yeQ=;
-        b=Icp3aQ7wxZk9BQfKdayrS9vaY66gNabvyLA21U3RNNeDte2+BH1p2DAJ5ADwvb0HGr
-         b4MZZrtAI4L6ILq5/QTr31g+f6QlVo0p9mX5BHaTHhL/QvG6ZmqBPlcfOTM3jvudASiU
-         fY1+MHyTLxm1xG1s3J0vY/Cz3K4oefHmepQCAibjS0hq5/ZsSVRdEl8IoJq0XhyTJmJc
-         KGW2v6k+lid0Gvi1EhoDSPbOlVg1FQhu5A603LGlD03gzX4sMSN0mrzcqn/5cxg00NAD
-         2BbD2U7rwPiFCibO6gQWW7b5UIZhOis0eYLEpTvxrczCjavMGZnB/k+3Lom9E5niL896
-         sQLA==
-X-Gm-Message-State: AC+VfDzkhSOHYcq55RQDdXQtA88zZqzUQl6lMhiubxSusg8IYY+RNSAl
-        NkbG8pMC566tOKg7yldMWVFmfw==
-X-Google-Smtp-Source: ACHHUZ7/9js9dCjrJ006AuaYMdp1J6y7o8m3P5jVaH9sZtjpFLuE68IHcbd9Php3srq3KjmxaNLpmA==
-X-Received: by 2002:a50:ef01:0:b0:51d:adc5:22c1 with SMTP id m1-20020a50ef01000000b0051dadc522c1mr5376300eds.36.1688050845242;
-        Thu, 29 Jun 2023 08:00:45 -0700 (PDT)
-Received: from [10.120.18.108] ([84.17.46.13])
-        by smtp.gmail.com with ESMTPSA id v1-20020a056402184100b0050488d1d376sm5864875edy.0.2023.06.29.08.00.44
+        bh=7TagWYkIx09Iw+gbpjDsNk+epNEazk8amf//OqWTu8E=;
+        b=Ktzv6dVIkEbAqSeBvU2M4Qa1R/iz270fFaqg4V16psXx4dhObvhAJl2YYLGwZZw70L
+         hlcv4etnqVXrQlwnhzgmzJHscBVY8ABR6yYIpnWrLFByZhc+fjUO1G7tIgC1ZLQz5I0v
+         6rBcZY6bgxh9yim3T++U+Vgc58Fnyjx8aCiTHm937SzqIeJr1JXVd+Hkf0rVzvmAoCAU
+         9aPjUQpO1wc9XmclFgWalEfINBhm+ey0Mo5vvqKEp1peaz9syp6q60cGmD95mhhbZOPR
+         xNrCJksscZgRyqre/k6kUfRZ5WnVxMGFkfUQQZ5d4aBghzalIrOWPHrXT5w7JL6u3RKA
+         7mNQ==
+X-Gm-Message-State: AC+VfDygs3qIYRrN92bvxUqoAZma0ZWfPqYcbWArgUDYiAMOanZOAbww
+        vi1g7UhBs7abShH6laLHALK5pteLrqZJZPoDH51yWYt+QFybB6V5j3m8KWATPi+12aEHNlein3/
+        QeEPmdqKLdQF2iWLAuVx3SzEm
+X-Received: by 2002:a17:907:36c2:b0:965:fb87:4215 with SMTP id bj2-20020a17090736c200b00965fb874215mr33557523ejc.15.1688050911849;
+        Thu, 29 Jun 2023 08:01:51 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ7+8rDitga7zWbpxe+denviTv8miXqX+MrKFoCjHDQ8dIH+n35G5Sde/5XaM2b1NOpdYwJHPg==
+X-Received: by 2002:a17:907:36c2:b0:965:fb87:4215 with SMTP id bj2-20020a17090736c200b00965fb874215mr33557493ejc.15.1688050911458;
+        Thu, 29 Jun 2023 08:01:51 -0700 (PDT)
+Received: from ?IPV6:2001:1c00:2a07:3a01:67e5:daf9:cec0:df6? (2001-1c00-2a07-3a01-67e5-daf9-cec0-0df6.cable.dynamic.v6.ziggo.nl. [2001:1c00:2a07:3a01:67e5:daf9:cec0:df6])
+        by smtp.gmail.com with ESMTPSA id v21-20020a170906565500b00991bba473e1sm4920866ejr.3.2023.06.29.08.01.50
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 29 Jun 2023 08:00:44 -0700 (PDT)
-Message-ID: <29968249-3fce-d53f-4515-1c7b815cd4b4@tessares.net>
-Date:   Thu, 29 Jun 2023 17:00:42 +0200
+        Thu, 29 Jun 2023 08:01:50 -0700 (PDT)
+Message-ID: <c24577db-80ca-8682-c7f8-466cf9dab0c9@redhat.com>
+Date:   Thu, 29 Jun 2023 17:01:49 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.12.0
-Subject: Re: [PATCH] sysctl: fix unused proc_cap_handler() function warning
-Content-Language: en-GB
-To:     Arnd Bergmann <arnd@kernel.org>,
-        Luis Chamberlain <mcgrof@kernel.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        linux-kernel@vger.kernel.org
-References: <20230607120857.3621364-1-arnd@kernel.org>
-From:   Matthieu Baerts <matthieu.baerts@tessares.net>
-In-Reply-To: <20230607120857.3621364-1-arnd@kernel.org>
+Subject: Re: [PATCH] fs/vboxsf: Replace kmap() with kmap_local_{page, folio}()
+To:     Matthew Wilcox <willy@infradead.org>,
+        Sumitra Sharma <sumitraartsy@gmail.com>
+Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Ira Weiny <ira.weiny@intel.com>,
+        Fabio <fmdefrancesco@gmail.com>, Deepak R Varma <drv@mailo.com>
+References: <20230627135115.GA452832@sumitra.com>
+ <ZJxqmEVKoxxftfXM@casper.infradead.org> <20230629092844.GA456505@sumitra.com>
+ <ZJ2Yb8YOpakO7SbY@casper.infradead.org>
+Content-Language: en-US
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <ZJ2Yb8YOpakO7SbY@casper.infradead.org>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Arnd,
+Hi,
 
-On 07/06/2023 14:08, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
+On 6/29/23 16:42, Matthew Wilcox wrote:
+> On Thu, Jun 29, 2023 at 02:28:44AM -0700, Sumitra Sharma wrote:
+>> On Wed, Jun 28, 2023 at 06:15:04PM +0100, Matthew Wilcox wrote:
+>>> Here's a more comprehensive read_folio patch.  It's not at all
+>>> efficient, but then if we wanted an efficient vboxsf, we'd implement
+>>> vboxsf_readahead() and actually do an async call with deferred setting
+>>> of the uptodate flag.  I can consult with anyone who wants to do all
+>>> this work.
+>>
+>> So, after reading the comments, I understood that the problem presented 
+>> by Hans and Matthew is as follows:
+>>
+>> 1) In the current code, the buffers used by vboxsf_write()/vboxsf_read() are 
+>> translated to PAGELIST-s before passing to the hypervisor, 
+>> but inefficiently— it first maps a page in vboxsf_read_folio() and then 
+>> calls page_to_phys(virt_to_page()) in the function hgcm_call_init_linaddr(). 
 > 
-> Since usermodehelper_table() is marked static now, we get a
-> warning about it being unused when SYSCTL is disabled:
+> It does ... and I'm not even sure that virt_to_page() works for kmapped
+> pages.  Has it been tested with a 32-bit guest with, say, 4-8GB of memory?
 > 
-> kernel/umh.c:497:12: error: 'proc_cap_handler' defined but not used [-Werror=unused-function]
-
-Thank you for the patch!
-
-We also hit the same issue on our side after today's sync with Linus'
-tree. I confirm this patch fixes the issue.
-
-Tested-by: Matthieu Baerts <matthieu.baerts@tessares.net>
-
-I didn't see this patch applied in Luis' sysctl-next branch, do you know
-who is taking care of it?
-
-> Just move it inside of the same #ifdef.
+>> The inefficiency in the current implementation arises due to the unnecessary 
+>> mapping of a page in vboxsf_read_folio() because the mapping output, i.e. the 
+>> linear address, is used deep down in file 'drivers/virt/vboxguest/vboxguest_utils.c'. 
+>> Hence, the mapping must be done in this file; to do so, the folio must be passed 
+>> until this point. It can be done by adding a new member, 'struct folio *folio', 
+>> in the 'struct vmmdev_hgcm_function_parameter64'. 
 > 
-> Fixes: e6944e3b75df7 ("sysctl: move umh sysctl registration to its own file")
+> That's not the way to do it (as Hans already said).
+> 
+> The other problem is that vboxsf_read() is synchronous.  It makes the
+> call to the host, then waits for the outcome.  What we really need is
+> a vboxsf_readahead() that looks something like this:
+> 
+> static void vboxsf_readahead(struct readahead_control *ractl)
+> {
+> 	unsigned int nr = readahead_count(ractl);
+> 	req = vbg_req_alloc(... something involving nr ...);
+> 	... fill in the page array ...
+> 	... submit the request ...
+> }
+> 
+> You also need to set up a kthread that will sit on the hgcm_wq and handle
+> the completions that come in (where you'd call folio_mark_uptodate() if
+> the call is successful, folio_unlock() to indicate the I/O has completed,
+> etc, etc).
+> 
+> Then go back to read_folio() (which can be synchronous), and maybe factor
+> out the parts of vboxsf_readahead() that can be reused for filling in
+> the vbg_req.
+> 
+> Hans might well have better ideas about this could be structured; I'm
+> new to the vbox code.
 
-A small detail: it looks like the SHA has been modified, it should be
-861dc0b46432 instead of e6944e3b75df7:
+I think that moving to directly passing vbox PAGELIST structs on
+read is something which should not be too much work.
 
-Fixes: 861dc0b46432 ("sysctl: move umh sysctl registration to its own file")
+Moving to an async model is a lot more involved and has a much
+larger chance of causing problems. So we need not only someone
+to step up to not only make the change to async, but that person
+also need to commit to help with maintaining vboxsf going forward,
+esp. wrt debug + fix any problems stemming from the move to async
+which are likely to only pop up much later as more and more
+distros move to the new code.
 
-Cheers,
-Matt
--- 
-Tessares | Belgium | Hybrid Access Solutions
-www.tessares.net
+Regards,
+
+Hans
+
