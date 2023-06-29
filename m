@@ -2,69 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FD78742F71
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 23:23:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F1BA742F73
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 23:23:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230460AbjF2VXr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 17:23:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54500 "EHLO
+        id S232003AbjF2VX4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 17:23:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230036AbjF2VXo (ORCPT
+        with ESMTP id S231278AbjF2VXs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 17:23:44 -0400
+        Thu, 29 Jun 2023 17:23:48 -0400
 Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD0D52D4E
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 14:23:43 -0700 (PDT)
-Received: from mail-ot1-f69.google.com (mail-ot1-f69.google.com [209.85.210.69])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B8202D52
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 14:23:47 -0700 (PDT)
+Received: from mail-ot1-f70.google.com (mail-ot1-f70.google.com [209.85.210.70])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 94F973F36A
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 21:23:41 +0000 (UTC)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id BE6753F171
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 21:23:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1688073821;
-        bh=RI4vrq5yGYsPdUmTvun8DtN4hoztwswwCj0aAlaqqY4=;
-        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
-        b=PjhuNpNdr4DddW64oIYLuHdyDQRpI5vr5IH3AbbkFtgTkszXB+Re5FwkUJDu73Fv1
-         ZERw6f+REilTTGAOLqxc645HVWDD4a+I1B1RiJRAOI+H/B5ON8d2Kh574sHQNkNPUh
-         4ugtzgWfW5kFZkUEQPcdzuuHVJwJ518qA7l4DZc+kREnneYKmMUOfBeNYZ+PRkYpy3
-         tyQf+3K9NI2EyskBwctd6Zfh5QuhnzEZrPCPCciItPdTqJj0VW1XZNv8JR7uPaDoXJ
-         HKJ5ZF2eNoUxzWkBTwjZnk2wEMTYiRuc3PkvUKt6EnFJjnOogo755Q+BqElifhwiXR
-         SSEILZ0pRcqfA==
-Received: by mail-ot1-f69.google.com with SMTP id 46e09a7af769-6b75210454eso1520005a34.2
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 14:23:41 -0700 (PDT)
+        s=20210705; t=1688073824;
+        bh=lBu3qM/V63MFPKIE8Q51C0JVShDE9+Oj/gb/00UQ8Pk=;
+        h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+         MIME-Version;
+        b=MDAx3stWZHLXjRZI+48SZpPBMPBUcopSguX5YZrw6lGsp59YK9SPaVu1huo+oixwm
+         EGl463mt3TqaxwQYSLnaY9Q27/5jJ2g6FoJeu6+IiUVVbanYg+GIcS1dF6NfDTFPag
+         ot9/KZqAhmovTPnS5BUCWs5f3IZC3VpxLwYVU543CI9Fv8wHusnDYFB+fIqMqyK3J0
+         wfwmXokA+l1PeUEHaemjSdscB5wYsX8Bo1ts+pwPHIP0H25isl4tgXIlYfyFCxGzxB
+         OVMGqnBHHh0DvHCKcw7jH0jicdTipJxS3SJBc1EzLmz5TL7JJZcU/U0Zay2GgwJgVH
+         d4XV40w95Sw6A==
+Received: by mail-ot1-f70.google.com with SMTP id 46e09a7af769-6b2ac1fe3d6so1669787a34.1
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 14:23:44 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688073820; x=1690665820;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=RI4vrq5yGYsPdUmTvun8DtN4hoztwswwCj0aAlaqqY4=;
-        b=TzAVaMnOyUlSIddJMhMSnxR7snz243z+Zy98rkpPau2zQwRqrIeMe8Dn5hSkj76Iju
-         4v7bR5rzI1gbGMGguuG0aE4fiR2JGkHrBs6Z1Fd01RqoR6LVrzc8Aj5sqJ0TsP2PzhsK
-         O844BJoq7KYdYr5reQRlV/yNV7nudXhmVNKCDsvBCmhVJAsriaFZn5gfP7+QrnJDZogw
-         VfYZGcBt2u6GRdS1TmP48reo3cfVhGEb+rMa5/XY1mKgQpadInLVZwLZevSo0Dz1RKt+
-         C2S6eo1anCUEScB6+sEhSlZO9IR5/NDnr79Y5gb9ddGXV74MeK3Orz7ytLiDPE7QkqRc
-         LWqA==
-X-Gm-Message-State: AC+VfDyunZjfo1BFWjlD3Zt6OG297BhGEm6brLttyN8cKw462odzupyU
-        YpQmD75Nh2LRlE6cnHDabsrTA417TKdugpeCjI1oQXpyPfVyTZjU6TCzyszvvwqLGjQqNEXuUY+
-        ZEyNV3Z+a0pRjD10YcwOKh+dJW/j3UxYVa9UuwAPmyg==
-X-Received: by 2002:a9d:66d9:0:b0:6b7:53df:1db3 with SMTP id t25-20020a9d66d9000000b006b753df1db3mr1324954otm.0.1688073820319;
-        Thu, 29 Jun 2023 14:23:40 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ4RJuKxP3PTOwPcoWYtMbpk2lOl27RytpNxFaqdrEnw8uaiA//2INIHK+RGmNiAgbwhY6lrvw==
-X-Received: by 2002:a9d:66d9:0:b0:6b7:53df:1db3 with SMTP id t25-20020a9d66d9000000b006b753df1db3mr1324947otm.0.1688073820127;
-        Thu, 29 Jun 2023 14:23:40 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1688073822; x=1690665822;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=lBu3qM/V63MFPKIE8Q51C0JVShDE9+Oj/gb/00UQ8Pk=;
+        b=LlgTD6e2fScY8CZvA3arUjQm9TK3ASFrJCRbGgLaIdIJhKZy1WKAQiFpIoLIV/342L
+         tlGvg573mQ/bR3N4fs1IApyCqrJWXtrZL3hQoImXJ8kWXHpRPZX0XKgiSmS/tDpo1WQR
+         REawF3uMOw6HLzT05PL/qK9jxHU/PHHQudy2ZCsJ23dyeCAF9CCN6sMMQwI2pNaj1v/s
+         ydaXyx7qrnNI1tvv/9leoWP30ynpNpf/+4fX01TDCtE+X92Ftm14HklW/SsPxG0t7B+1
+         DoZSPMThGfTC1FT5R5wdrKQMB+qD5JeBbWIptziZjzkmmxYnMJpKJQnS0bBEftNNuycj
+         iVPQ==
+X-Gm-Message-State: AC+VfDwx8C52gpu6CgXTR5Cdn4xinTyouqp8+BzhdyKlbWdZaXbaf8HV
+        szKZtXM75ZW20KgF8PomneXNcnFqUm6qnlK8fLhCvyA/PKKGG2C/yUNiFnBTxitaLCn2prH9BEg
+        M8ca4CpakXW6optERJoaQVZNDBHrlcRBzB3V7o/PQUg==
+X-Received: by 2002:a9d:7412:0:b0:6b3:70ee:3055 with SMTP id n18-20020a9d7412000000b006b370ee3055mr1118629otk.13.1688073822631;
+        Thu, 29 Jun 2023 14:23:42 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ5BSkQ14DJnLGsVYL3rkT1q6lTW+tOQ0ujOLMJuBmJHltoGd6bcezyTaH/cgHrQoi/rbwjVig==
+X-Received: by 2002:a9d:7412:0:b0:6b3:70ee:3055 with SMTP id n18-20020a9d7412000000b006b370ee3055mr1118618otk.13.1688073822478;
+        Thu, 29 Jun 2023 14:23:42 -0700 (PDT)
 Received: from localhost.localdomain ([2804:14c:4e1:83a2:7720:9030:a195:e622])
-        by smtp.gmail.com with ESMTPSA id q6-20020a9d6646000000b006b871010cb1sm2711764otm.46.2023.06.29.14.23.37
+        by smtp.gmail.com with ESMTPSA id q6-20020a9d6646000000b006b871010cb1sm2711764otm.46.2023.06.29.14.23.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Jun 2023 14:23:39 -0700 (PDT)
+        Thu, 29 Jun 2023 14:23:42 -0700 (PDT)
 From:   Mauricio Faria de Oliveira <mfo@canonical.com>
 To:     Jens Axboe <axboe@kernel.dk>, linux-block@vger.kernel.org
 Cc:     "Isaac J. Manjarres" <isaacmanjarres@google.com>,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 0/2] loop: fix regression from max_loop default value change
-Date:   Thu, 29 Jun 2023 18:22:54 -0300
-Message-Id: <20230629212256.918239-1-mfo@canonical.com>
+Subject: [PATCH 1/2] loop: deprecate autoloading callback loop_probe()
+Date:   Thu, 29 Jun 2023 18:22:55 -0300
+Message-Id: <20230629212256.918239-2-mfo@canonical.com>
 X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230629212256.918239-1-mfo@canonical.com>
+References: <20230629212256.918239-1-mfo@canonical.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -77,32 +80,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Apparently, there's an unintended consequence of the improvement for max_loop=0
-in commit 85c50197716c ("loop: Fix the max_loop commandline argument treatment
-when it is set to 0") which might break programs that handle /dev/loop devices.
+The 'probe' callback in __register_blkdev() is only used
+under the CONFIG_BLOCK_LEGACY_AUTOLOAD deprecation guard.
 
-The (deprecated) autoloading path fails (ENXIO) if the requested minor number
-is greater than or equal to the (new) default (CONFIG_BLK_DEV_LOOP_MIN_COUNT),
-when [loop.]max_loop is not specified.  This behavior used to work previously.
+The loop_probe() function is only used for that callback,
+so guard it too, accordingly.
 
-Patch 1/2 just notes the loop driver's autoloading path is deprecated/legacy.
-Patch 2/2 detects whether or not max_loop is set to restore default behavior
-as before the regression (and keeps the improvement done by the commit above).
+See commit fbdee71bb5d8 ("block: deprecate autoloading based on dev_t").
 
-More details in the commit message. This does not seem to be urgent, as the
-impact is to very specific/custom applications, and most users (eg, losetup)
-should not be impacted, as the dynamic add ioctl() is used.
+Signed-off-by: Mauricio Faria de Oliveira <mfo@canonical.com>
+---
+ drivers/block/loop.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-Thanks,
-Mauricio
-
-Mauricio Faria de Oliveira (2):
-  loop: deprecate autoloading callback loop_probe()
-  loop: do not enforce max_loop hard limit by (new) default
-
- drivers/block/loop.c | 43 ++++++++++++++++++++++++++++++++++++++++---
- 1 file changed, 40 insertions(+), 3 deletions(-)
-
+diff --git a/drivers/block/loop.c b/drivers/block/loop.c
+index bc31bb7072a2..21bcd6ffe241 100644
+--- a/drivers/block/loop.c
++++ b/drivers/block/loop.c
+@@ -2095,6 +2095,7 @@ static void loop_remove(struct loop_device *lo)
+ 	put_disk(lo->lo_disk);
+ }
+ 
++#ifdef CONFIG_BLOCK_LEGACY_AUTOLOAD
+ static void loop_probe(dev_t dev)
+ {
+ 	int idx = MINOR(dev) >> part_shift;
+@@ -2103,6 +2104,7 @@ static void loop_probe(dev_t dev)
+ 		return;
+ 	loop_add(idx);
+ }
++#endif
+ 
+ static int loop_control_remove(int idx)
+ {
+@@ -2237,8 +2239,11 @@ static int __init loop_init(void)
+ 	if (err < 0)
+ 		goto err_out;
+ 
+-
++#ifdef CONFIG_BLOCK_LEGACY_AUTOLOAD
+ 	if (__register_blkdev(LOOP_MAJOR, "loop", loop_probe)) {
++#else
++	if (register_blkdev(LOOP_MAJOR, "loop")) {
++#endif
+ 		err = -EIO;
+ 		goto misc_out;
+ 	}
 -- 
 2.39.2
 
