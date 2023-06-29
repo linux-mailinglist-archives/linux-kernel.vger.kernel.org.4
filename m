@@ -2,110 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D3CD741EDC
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 05:49:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41BF7741EE0
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 05:49:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231882AbjF2Ds5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 23:48:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41170 "EHLO
+        id S231392AbjF2Dtn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 23:49:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231919AbjF2Dsv (ORCPT
+        with ESMTP id S231899AbjF2Dt1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 23:48:51 -0400
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 153032D7B
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 20:48:21 -0700 (PDT)
-Received: by mail-pf1-x431.google.com with SMTP id d2e1a72fcca58-666eef03ebdso156009b3a.1
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 20:48:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1688010500; x=1690602500;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=sl9cDs+dMZ1xPRPSdclW6Nu0fFDs2pGjl1gH1ncuWpU=;
-        b=S3tEQGyhVNsWNlMiKokWkq9tSUkkHRwRK9tvImQlxLgyrkeFMLHXMWUp4ncvv36IF1
-         oODr14JP7j4qASBPJTJ+OcFFtXTplk8wcupj04Jxys3Mlz4qT+GB+BLujgQQecAUBcwa
-         XYHo/Gpg6pfH9eT72nDnrNvROfKligDEU1wyA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688010500; x=1690602500;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=sl9cDs+dMZ1xPRPSdclW6Nu0fFDs2pGjl1gH1ncuWpU=;
-        b=J0Xj2pVk1V0PmPIDwAyA4Hw3NhjIu2LmepovTPz9FYq8GQyZ8ohPLbqxe5NfCDOWHx
-         fEIm+N+FzIedVcTYINFztshQlw1xSftv7imb2Ll/o5Ym0B7LmypeOt811i9szXmJ5ojS
-         FNyfcRpreVCyCGPFbgSogRyYOfd2T7yvAAz/m+59bPmamkM63Dcj2/On9FidNlbEO6LH
-         0wHLDaKdM0YdQnw736aH63A86dEXHZb8FwltASuNWxtz9PE6p8TSWHPpekRL63IMCZk7
-         xcGipdq3pxdTP2JEU4SgEBdpDdaiJQNYNl+zTMO33aWt+xYA0GzRTnqiDm1m/BgFlQhJ
-         szUA==
-X-Gm-Message-State: AC+VfDwm5W3IVtlqgdpigLT/X+m3LwDX6JnKDRnZ0BX0gRGCS/qhaXz3
-        KZDLaaERtBwTMP1XmmKdC4mpjQ==
-X-Google-Smtp-Source: ACHHUZ5jmiEQVjJFz/DV5JdL3d/2zSGGMRBiVq3Ge1NiIwpgvh1yKPzoJf6FwnsVhLHmt/VEDNCA1g==
-X-Received: by 2002:a05:6a20:96c6:b0:12c:a57:6e46 with SMTP id hq6-20020a056a2096c600b0012c0a576e46mr3403176pzc.18.1688010500519;
-        Wed, 28 Jun 2023 20:48:20 -0700 (PDT)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id n13-20020a170903110d00b001b558c37f91sm8243240plh.288.2023.06.28.20.48.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Jun 2023 20:48:19 -0700 (PDT)
-Date:   Wed, 28 Jun 2023 20:48:19 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Boris Brezillon <bbrezillon@kernel.org>,
-        Arnaud Ebalard <arno@natisbad.org>,
-        Srujana Challa <schalla@marvell.com>,
-        Mustafa Ismail <mustafa.ismail@intel.com>,
-        Shiraz Saleem <shiraz.saleem@intel.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Leon Romanovsky <leon@kernel.org>
-Subject: Re: Build error in crypto/marvell/cesa/cipher.c
-Message-ID: <202306282038.C3A12326A@keescook>
-References: <CAHk-=whXn0YTojV=+J8B-r8KLvNtqc2JtCa4a_bdhf+=GN5OOw@mail.gmail.com>
+        Wed, 28 Jun 2023 23:49:27 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1E6F272D;
+        Wed, 28 Jun 2023 20:49:25 -0700 (PDT)
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35T3e9ox003236;
+        Thu, 29 Jun 2023 03:49:07 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=QNEB0DBltSLS10Mp5KhryDGdmT/xI1ynZUs/jysRrQk=;
+ b=jD0zOlrlfghslqLU+8esTioSUdwOzdueDUePz8YMAh57FpoeK7br47gCHeYkEogT5SwN
+ hAghNwr3P4K4zpKPQHOsIdcUKf6HTGoXy8n4B6HP7Y1LlPtRKDbhYKNpa9vfxVHPsaJ1
+ wzP7lLSLE9QFpl/muGWnTVzuB+zonQ6S2PD8XmxCyRLqIcjghKmv9c4AJXKXDseyIbVv
+ 6eAS8mc65c7Sxm6CBqGSW1KHK1ByFtLNAsKTJnrNugHaXBFzHjC+HqXDeldQycw2UfmT
+ EInZQvUfW7iTJ9Bj9JTXOg2QDChNZ4dXL+wbup+bO5kczPAkABlSwhw0qnlXVUCbb6tI eg== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rgfp3tc0t-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 29 Jun 2023 03:49:07 +0000
+Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35T3n6wQ021634
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 29 Jun 2023 03:49:06 GMT
+Received: from akronite-sh-dev02.qualcomm.com (10.80.80.8) by
+ nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.42; Wed, 28 Jun 2023 20:49:03 -0700
+From:   Luo Jie <quic_luoj@quicinc.com>
+To:     <andrew@lunn.ch>, <hkallweit1@gmail.com>, <davem@davemloft.net>,
+        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
+        <linux@armlinux.org.uk>
+CC:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <quic_sricharan@quicinc.com>, Luo Jie <quic_luoj@quicinc.com>
+Subject: [PATCH 0/3] net: phy: at803x: support qca8081 1G version chip
+Date:   Thu, 29 Jun 2023 11:48:43 +0800
+Message-ID: <20230629034846.30600-1-quic_luoj@quicinc.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHk-=whXn0YTojV=+J8B-r8KLvNtqc2JtCa4a_bdhf+=GN5OOw@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01c.na.qualcomm.com (10.47.97.35)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: dKDfZuQcpqdeSMEHxqnn1vKM47qirvvY
+X-Proofpoint-ORIG-GUID: dKDfZuQcpqdeSMEHxqnn1vKM47qirvvY
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-06-28_14,2023-06-27_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 mlxlogscore=545
+ clxscore=1011 suspectscore=0 bulkscore=0 malwarescore=0 impostorscore=0
+ phishscore=0 lowpriorityscore=0 priorityscore=1501 mlxscore=0 spamscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2305260000
+ definitions=main-2306290032
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 28, 2023 at 08:13:25PM -0700, Linus Torvalds wrote:
-> So I don't see anything that has changed, and I suspect the only
-> change is that my compiler version changed, but my arm64 build fails
-> right now with FORTIFY_STRING enabled.
-> 
-> On arm64 I now get this warning:
-> 
->   In function 'fortify_memcpy_chk',
->     inlined from 'mv_cesa_des3_ede_setkey' and
-> drivers/crypto/marvell/cesa/cipher.c:307:2:
->   ./include/linux/fortify-string.h:583:25: error: call to
-> '__write_overflow_field' declared with attribute warning: detected
-> write beyond size of field (1st parameter); maybe use struct_group()?
-> [-Werror=attribute-warning[
+This patch series add supporting qca8081 1G version chip, the 1G version
+chip can be identified by the register mmd7.0x901d bit0.
 
-This was fixed very recently here:
-https://lore.kernel.org/all/20230523083313.899332-1-arnd@kernel.org/
-and Herbert took it.
+In addition, qca8081 does not support 1000BaseX mode and the fifo reset
+is added on the link changed, which assert the fifo on the link down,
+deassert the fifo on the link up.
 
-I assume the crypto tree hasn't been merged yet?
+Luo Jie (3):
+  net: phy: at803x: support qca8081 1G chip type
+  net: phy: at803x: remove 1000BaseX mode of qca8081
+  net: phy: at803x: add qca8081 fifo reset on the link down
 
-> Kees, any idea why I'm seeing it now? Is it the new
-> -fstrict-flex-arrays=3? And if so, why? None of this is about flex
-> arrays...
+ drivers/net/phy/at803x.c | 79 +++++++++++++++++++++++++++++-----------
+ 1 file changed, 58 insertions(+), 21 deletions(-)
 
-The unexpected bit is that without -fstrict-flex-arrays=3 (i.e. the
-default since the dawn of time), the compiler treats any array that
-happens to be the last struct member as a flexible array. So with it
-enabled, FORTIFY_SOURCE gains coverage over things it should have been
-examining before.
 
+base-commit: ae230642190a51b85656d6da2df744d534d59544
 -- 
-Kees Cook
+2.17.1
+
