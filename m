@@ -2,119 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 877E5741EF5
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 05:56:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 154CD741EF1
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 05:54:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231731AbjF2DxE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 23:53:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42608 "EHLO
+        id S231169AbjF2Dyc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 23:54:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230056AbjF2Dwu (ORCPT
+        with ESMTP id S231989AbjF2DyC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 23:52:50 -0400
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3984A2724
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 20:52:49 -0700 (PDT)
-Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 0FACA3F26A
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 03:52:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1688010767;
-        bh=ln7LWd40lnjGepxvFLRyaxcRyxZ30/1SOSyaN+ooqhU=;
-        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-         To:Cc:Content-Type;
-        b=QIpPVd77DbiwRV+SI1GrWj1L/oA8VXduVNWPQmMSHyHEZdp/JxrzuKb8E2Kj7D23n
-         brRU3uRg/qrdVnvM0cG7k0VW8AVz5QVK3JC7In+BjPiZP8/a4BhRD25oM7IxpubqKJ
-         LAU4dzEiaWUh6gU5Jm76m/ZziJ0WNe/fDc6w2yTszEN5aogu6hjy2BGtrLj3JdVoV4
-         0ifoik3HNm/3akIZnndq8AAn//9yv4ADyz21V+HYQvEgNM91ODkm3sRxJLNzeUgRDS
-         Ce+IRjHFQFVO0nvzJN89Ucam1HaZxs6jItbgoND1zo9Z/dh35Qjkczkj0sbwQa1M6E
-         xVKeWyqh/qZvg==
-Received: by mail-io1-f69.google.com with SMTP id ca18e2360f4ac-7835d5bfaecso11898039f.3
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 20:52:46 -0700 (PDT)
+        Wed, 28 Jun 2023 23:54:02 -0400
+Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59E242D7D
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 20:54:00 -0700 (PDT)
+Received: by mail-pg1-x52f.google.com with SMTP id 41be03b00d2f7-55b1238a024so217864a12.0
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 20:54:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1688010840; x=1690602840;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=PgRCWuAL+JILQAuJVgnpzN1VGDR5+ycwundGmuPsvAc=;
+        b=Zp7/05od1Hzmg3DamsY4xVwfn6tMykIurlQXX5Rz4Xuof4ze/XQSv561GpHeqSpoKh
+         2v+EzzaIXKRz/2+ZwPdbePYm00aj+7lpLYrNJ4hAYEhBfPYw1efyvEasC85ra7aPmZY2
+         HvVIPX6DZQ3ldkpxDKKby+eFfCylabLuTSQA0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688010765; x=1690602765;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ln7LWd40lnjGepxvFLRyaxcRyxZ30/1SOSyaN+ooqhU=;
-        b=PC4snC1dT41Me+ElNTi2LFxKXiQuCN3PR/YPqOOEfQDQ2XG+8h40ZmLYjriGGGYns9
-         Vw8GLiX94Pq2QZkYFFnCAF7sVMV2gTG1KpC8/p0Z4r4Kz1VNZv2hUAGpSDVZmXqmRyWD
-         Yje13T7q5ITUIkfV50IRuoNXKQ8+/VryTsLZegPmXC+HX/OdP43S9G/Lgd8ffmotliJP
-         J1kLLi2h5bhc4bha/fe/dD88V0XthDiTrkMb3m5YAo9882cLp+ah8ZbaEJPdNCiL82zC
-         ifQL6T0C7Ec2HsaFqGjtgSlVwVv+LkOGKASIfj97IbVdAkeZnqUBbge54iC6/OM4UIRg
-         twLA==
-X-Gm-Message-State: AC+VfDwOZoqKJ6e3e2kcHGQ2B4+gB4n4hbIN7mRu+DXjsOu8juMq6wxG
-        b9QrjBzdDz9K8EgCDnSR/RvVtikwZdGfBb1hX22eJYCzvmUO+OeNwFAACczsEXvBjgHC/x6vJca
-        ioi+v2u4Gi8I9y1ZciYSxq+BwHsPXXB3xpZnyQGtsnqEkKwaIRmSA77LFcA==
-X-Received: by 2002:a05:6602:19c7:b0:783:7307:faea with SMTP id ba7-20020a05660219c700b007837307faeamr7544501iob.2.1688010765017;
-        Wed, 28 Jun 2023 20:52:45 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ7ahLOnBMgwMBsY52+7hoRe2i6gCDHsrz6TZy1dtXaKOLZeiNExKjYO+GHTOJMSyok6Q0EEBkJFQLvNqRPoS4U=
-X-Received: by 2002:a05:6602:19c7:b0:783:7307:faea with SMTP id
- ba7-20020a05660219c700b007837307faeamr7544484iob.2.1688010764714; Wed, 28 Jun
- 2023 20:52:44 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1688010840; x=1690602840;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=PgRCWuAL+JILQAuJVgnpzN1VGDR5+ycwundGmuPsvAc=;
+        b=FULKJ4nMjDsJEx9bzeGx81UiA9Dqi/EqYr3jMs3vfx0OxRKJlrdrA4Gs8PpPk81HAu
+         WCf4gtDtTEq5alKKALVCWp+Or7k3+GdMCrgKTEGTB66KSDztzLGGfXul/w7jthmzquXN
+         hPCXgsVP0MyN33/EKjPNza2kdWfUjDf9Z0YNIlWE7P+ZYNiSWoboKozYNOQWrcUvdJor
+         gW9rz1aNBR9XKvAS8haLi73y05rApuW6ULgEg0KLgqwpMTWDlpfQ7abvscVBrv3lrQer
+         veKD9YxFshyEbUm2Q0DlpSJojWvzF8cuSb12OhRh+YD/SKmkdxDWTgRhVdx1wAybeBYf
+         Gsbg==
+X-Gm-Message-State: AC+VfDyuvCl/EiqWYyJe6dfNndNFYUonC+bRCAeGsEhHantrBh00503Q
+        euZTkdd19YYqFCF0OIXT6/BnfA==
+X-Google-Smtp-Source: ACHHUZ6y8ticW17Bm2FXqsOoVj+oMchk8icLpia+Wu94tK8W+NMrPIcN6NkM7fNXF21kuk4TIlr51g==
+X-Received: by 2002:a05:6a20:1605:b0:115:83f:fce1 with SMTP id l5-20020a056a20160500b00115083ffce1mr48159642pzj.5.1688010839715;
+        Wed, 28 Jun 2023 20:53:59 -0700 (PDT)
+Received: from kuabhs-cdev.c.googlers.com.com (242.67.247.35.bc.googleusercontent.com. [35.247.67.242])
+        by smtp.gmail.com with ESMTPSA id r19-20020a634413000000b005579f12a238sm7019842pga.86.2023.06.28.20.53.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 28 Jun 2023 20:53:59 -0700 (PDT)
+From:   Abhishek Kumar <kuabhs@chromium.org>
+To:     johannes.berg@intel.com, kvalo@kernel.org
+Cc:     linux-kernel@vger.kernel.org, kuabhs@chromium.org,
+        netdev@vger.kernel.org, ath10k@lists.infradead.org,
+        linux-wireless@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Paolo Abeni <pabeni@redhat.com>
+Subject: [PATCH 1/2] wifi: cfg80211: call reg_call_notifier on beacon hints
+Date:   Thu, 29 Jun 2023 03:52:54 +0000
+Message-ID: <20230629035254.1.I059fe585f9f9e896c2d51028ef804d197c8c009e@changeid>
+X-Mailer: git-send-email 2.41.0.162.gfafddb0af9-goog
 MIME-Version: 1.0
-References: <20230628085253.1013799-1-koba.ko@canonical.com> <SJ1PR11MB608340E81A15F20EBAD75F08FC24A@SJ1PR11MB6083.namprd11.prod.outlook.com>
-In-Reply-To: <SJ1PR11MB608340E81A15F20EBAD75F08FC24A@SJ1PR11MB6083.namprd11.prod.outlook.com>
-From:   Koba Ko <koba.ko@canonical.com>
-Date:   Thu, 29 Jun 2023 11:52:33 +0800
-Message-ID: <CAJB-X+U7Af3ypru3O0quGTqrsJPMO3b7uoBTNjTLSixrmrvXJw@mail.gmail.com>
-Subject: Re: [PATCH] EDAC/i10nm: shift exponent is negative
-To:     "Luck, Tony" <tony.luck@intel.com>
-Cc:     Borislav Petkov <bp@alien8.de>, James Morse <james.morse@arm.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Robert Richter <rric@kernel.org>,
-        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-hi Luck,
-I agree with your points
-is it expected to shift with negative?
+Currently the channel property updates are not propagated to
+driver. This causes issues in the discovery of hidden SSIDs and
+fails to connect to them.
+This change defines a new wiphy flag which when enabled by vendor
+driver, the reg_call_notifier callback will be trigger on beacon
+hints. This ensures that the channel property changes are visible
+to the vendor driver. The vendor changes the channels for active
+scans. This fixes the discovery issue of hidden SSID.
 
-Thanks
-Koba Ko
+Signed-off-by: Abhishek Kumar <kuabhs@chromium.org>
+---
 
-On Thu, Jun 29, 2023 at 12:41=E2=80=AFAM Luck, Tony <tony.luck@intel.com> w=
-rote:
->
-> >       ranks =3D numrank(mtr);
-> >       rows =3D numrow(mtr);
-> >       cols =3D imc->hbm_mc ? 6 : numcol(mtr);
-> > +     if (ranks =3D=3D -EINVAL || rows =3D=3D -EINVAL || cols =3D=3D -E=
-INVAL)
-> > +             return 0;
->
-> This seems to be just hiding the real problem that a DIMM was found
-> with some number of ranks, rows, or columns that the EDAC driver
-> didn't expect to see. Your fix makes the driver skip over this DIMM.
->
-> Can you build your kernel with CONFIG_EDAC_DEBUG=3Dy and see
-> what messages you get from this code:
->
-> static int skx_get_dimm_attr(u32 reg, int lobit, int hibit, int add,
->                              int minval, int maxval, const char *name)
-> {
->         u32 val =3D GET_BITFIELD(reg, lobit, hibit);
->
->         if (val < minval || val > maxval) {
->                 edac_dbg(2, "bad %s =3D %d (raw=3D0x%x)\n", name, val, re=
-g);
->                 return -EINVAL;
->         }
->
-> -Tony
->
->
+ include/net/cfg80211.h |  3 +++
+ net/wireless/reg.c     | 20 ++++++++++++--------
+ 2 files changed, 15 insertions(+), 8 deletions(-)
+
+diff --git a/include/net/cfg80211.h b/include/net/cfg80211.h
+index 9e04f69712b1..48e6ebcdacb3 100644
+--- a/include/net/cfg80211.h
++++ b/include/net/cfg80211.h
+@@ -4783,6 +4783,8 @@ struct cfg80211_ops {
+  * @WIPHY_FLAG_SUPPORTS_EXT_KCK_32: The device supports 32-byte KCK keys.
+  * @WIPHY_FLAG_NOTIFY_REGDOM_BY_DRIVER: The device could handle reg notify for
+  *	NL80211_REGDOM_SET_BY_DRIVER.
++ * @WIPHY_FLAG_CHANNEL_CHANGE_ON_BEACON: reg_call_notifier() is called if driver
++ *	set this flag to update channels on beacon hints.
+  */
+ enum wiphy_flags {
+ 	WIPHY_FLAG_SUPPORTS_EXT_KEK_KCK		= BIT(0),
+@@ -4809,6 +4811,7 @@ enum wiphy_flags {
+ 	WIPHY_FLAG_SUPPORTS_5_10_MHZ		= BIT(22),
+ 	WIPHY_FLAG_HAS_CHANNEL_SWITCH		= BIT(23),
+ 	WIPHY_FLAG_NOTIFY_REGDOM_BY_DRIVER	= BIT(24),
++	WIPHY_FLAG_CHANNEL_CHANGE_ON_BEACON     = BIT(25),
+ };
+ 
+ /**
+diff --git a/net/wireless/reg.c b/net/wireless/reg.c
+index 26f11e4746c0..c76bfaad650b 100644
+--- a/net/wireless/reg.c
++++ b/net/wireless/reg.c
+@@ -2149,6 +2149,13 @@ static bool reg_is_world_roaming(struct wiphy *wiphy)
+ 	return false;
+ }
+ 
++static void reg_call_notifier(struct wiphy *wiphy,
++			      struct regulatory_request *request)
++{
++	if (wiphy->reg_notifier)
++		wiphy->reg_notifier(wiphy, request);
++}
++
+ static void handle_reg_beacon(struct wiphy *wiphy, unsigned int chan_idx,
+ 			      struct reg_beacon *reg_beacon)
+ {
+@@ -2156,6 +2163,7 @@ static void handle_reg_beacon(struct wiphy *wiphy, unsigned int chan_idx,
+ 	struct ieee80211_channel *chan;
+ 	bool channel_changed = false;
+ 	struct ieee80211_channel chan_before;
++	struct regulatory_request *lr = get_last_request();
+ 
+ 	sband = wiphy->bands[reg_beacon->chan.band];
+ 	chan = &sband->channels[chan_idx];
+@@ -2181,8 +2189,11 @@ static void handle_reg_beacon(struct wiphy *wiphy, unsigned int chan_idx,
+ 		channel_changed = true;
+ 	}
+ 
+-	if (channel_changed)
++	if (channel_changed) {
+ 		nl80211_send_beacon_hint_event(wiphy, &chan_before, chan);
++		if (wiphy->flags & WIPHY_FLAG_CHANNEL_CHANGE_ON_BEACON)
++			reg_call_notifier(wiphy, lr);
++	}
+ }
+ 
+ /*
+@@ -2325,13 +2336,6 @@ static void reg_process_ht_flags(struct wiphy *wiphy)
+ 		reg_process_ht_flags_band(wiphy, wiphy->bands[band]);
+ }
+ 
+-static void reg_call_notifier(struct wiphy *wiphy,
+-			      struct regulatory_request *request)
+-{
+-	if (wiphy->reg_notifier)
+-		wiphy->reg_notifier(wiphy, request);
+-}
+-
+ static bool reg_wdev_chan_valid(struct wiphy *wiphy, struct wireless_dev *wdev)
+ {
+ 	struct cfg80211_chan_def chandef = {};
+-- 
+2.41.0.162.gfafddb0af9-goog
+
