@@ -2,94 +2,276 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1255B742498
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 13:00:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB970742494
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 13:00:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232197AbjF2LAT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 07:00:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33236 "EHLO
+        id S231204AbjF2LAK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 07:00:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232103AbjF2LAI (ORCPT
+        with ESMTP id S232314AbjF2K76 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 07:00:08 -0400
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D377F10CF;
-        Thu, 29 Jun 2023 04:00:03 -0700 (PDT)
-Received: by mail-pf1-x433.google.com with SMTP id d2e1a72fcca58-668842bc50dso140252b3a.1;
-        Thu, 29 Jun 2023 04:00:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688036403; x=1690628403;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=SNuvCv0VFWJ1T/BA1jgFsWK/sbewukgBLN8NThITlGY=;
-        b=IJJG70VRTfv6SzZDiw5KgcGaeym0vz6jCVdSX8aL1AtgKYxIKxEz+FbieZyrRKMKt6
-         XCNCfb6e0kP4qrLVYCOdleUjQ0iPjzq7WtSDVVd1E/SnYE0lqHji5iXyEH54McdjI3Q6
-         aGP09g3gRxxOG3bTuanQqLSGUYvKcsHm5AbgJBGY2+BeZSDjm6FHWKrH5NokTFFFcK4n
-         5M0DelgYVruwm87q4YsvLXl0PCpvA7mJRxPfLrw0EJJgh1S2hE6eMETfer+m2znDNGz+
-         rx7t9Pn79B0zCEhWoBBcJnDez2ncEfQAzyDnYf6kYmZsBkPiLUqjN+/nFgPhNsy3lsLQ
-         N82w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688036403; x=1690628403;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=SNuvCv0VFWJ1T/BA1jgFsWK/sbewukgBLN8NThITlGY=;
-        b=KWzZCwbaT209fAl8th0nAIu0bNdo1MY7Ps4H5przFHLuXZn7iCGX490QCj7E08q+M5
-         tr0r2OZPjO45NTSuDNTePbuVplXAZTPn1qdLhGBfMxlJpnJI3SgAMawHV5pfKKtkNUxh
-         De7UL6S1IztOzZICZJDctxw9YSkkOLEhPD96S6XHgrgVaNH7BhbG7mp6yNeqe60P3ZA5
-         TftvmETrxhDHSeicqhSrjTaqVTraFzgFouH4u3Wz+7jjLgH47AdDhzi7GMOBFzT8I5T1
-         tuC6XZAGg+CoDGbVH6LYUFi+pcutHIdVlIP8/9VCyGmoOrPEjrGvFdmD19O01hGWNfcI
-         HYjw==
-X-Gm-Message-State: AC+VfDyL4H5W2iM4VnvmwvCC/BCia23SHtfiaTkp50aeXSmFovs8hG3H
-        vK4Gh+TJxtuqjccALnQxG87xXwfeJY6ZfReYWoE=
-X-Google-Smtp-Source: ACHHUZ4241Q0Xok00mtSesZ0ScAf8EpY8gqClpDPFmqvjMGqm+Sl0vzMI5IyImuqQIvVL0JNHSy7d4g+Mx22zwDE2r4=
-X-Received: by 2002:a05:6a20:7295:b0:111:fba0:bd3b with SMTP id
- o21-20020a056a20729500b00111fba0bd3bmr45440823pzk.1.1688036403198; Thu, 29
- Jun 2023 04:00:03 -0700 (PDT)
+        Thu, 29 Jun 2023 06:59:58 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1164A1719;
+        Thu, 29 Jun 2023 03:59:56 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id BCB4F1F8AA;
+        Thu, 29 Jun 2023 10:59:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1688036394; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=UflGxvJZAGlcSQONkPiY7NaAwRRyehPihG1F0eVZXlg=;
+        b=h39xgmrQKPLoSQ1QSVePdodyofGGwsexYVjD+yv7QDs4lfJT7VCpZqrOCoUVTJbMEOFQHN
+        ofv9TawCHSgtgr0VfWaBBlXQuNT3BYVjlYNzvQTmYAG2S+vW/4KMYeviMpvV2T8QfHnWil
+        0mVJ301Pi5qcg9nGj+99wD0WuOFdcYc=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1688036394;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=UflGxvJZAGlcSQONkPiY7NaAwRRyehPihG1F0eVZXlg=;
+        b=Zt+MiqTIwiDrgQRQYGDy9g50IHnD/cFZwWfijiBZfYvtcFnS6LfCorxk22or5wcl2hIFPu
+        Y4nnWMCfsOqDO3Ag==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id A9906139FF;
+        Thu, 29 Jun 2023 10:59:54 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id uIlYKSpknWS/LAAAMHmgww
+        (envelope-from <jack@suse.cz>); Thu, 29 Jun 2023 10:59:54 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id 395CEA0722; Thu, 29 Jun 2023 12:59:54 +0200 (CEST)
+Date:   Thu, 29 Jun 2023 12:59:54 +0200
+From:   Jan Kara <jack@suse.cz>
+To:     Baokun Li <libaokun1@huawei.com>
+Cc:     jack@suse.cz, linux-fsdevel@vger.kernel.org,
+        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yi.zhang@huawei.com, yangerkun@huawei.com, chengzhihao1@huawei.com,
+        yukuai3@huawei.com
+Subject: Re: [PATCH v2 5/7] quota: fix dqput() to follow the guarantees
+ dquot_srcu should provide
+Message-ID: <20230629105954.5cpqpch46ik4bg27@quack3>
+References: <20230628132155.1560425-1-libaokun1@huawei.com>
+ <20230628132155.1560425-6-libaokun1@huawei.com>
 MIME-Version: 1.0
-References: <1688002673-28493-1-git-send-email-shengjiu.wang@nxp.com> <1688002673-28493-4-git-send-email-shengjiu.wang@nxp.com>
-In-Reply-To: <1688002673-28493-4-git-send-email-shengjiu.wang@nxp.com>
-From:   Fabio Estevam <festevam@gmail.com>
-Date:   Thu, 29 Jun 2023 07:59:53 -0300
-Message-ID: <CAOMZO5DPHmm7YuHBfYHpx2-g4R6t1BQ93GBAZvyyb_rBz7+hFg@mail.gmail.com>
-Subject: Re: [PATCH 3/6] ASoC: fsl_easrc: define functions for memory to
- memory usage
-To:     Shengjiu Wang <shengjiu.wang@nxp.com>
-Cc:     tfiga@chromium.org, m.szyprowski@samsung.com, mchehab@kernel.org,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        shengjiu.wang@gmail.com, Xiubo.Lee@gmail.com,
-        nicoleotsuka@gmail.com, lgirdwood@gmail.com, broonie@kernel.org,
-        perex@perex.cz, tiwai@suse.com, alsa-devel@alsa-project.org,
-        linuxppc-dev@lists.ozlabs.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230628132155.1560425-6-libaokun1@huawei.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Shengjiu,
+On Wed 28-06-23 21:21:53, Baokun Li wrote:
+> The dquot_mark_dquot_dirty() using dquot references from the inode
+> should be protected by dquot_srcu. quota_off code takes care to call
+> synchronize_srcu(&dquot_srcu) to not drop dquot references while they
+> are used by other users. But dquot_transfer() breaks this assumption.
+> We call dquot_transfer() to drop the last reference of dquot and add
+> it to free_dquots, but there may still be other users using the dquot
+> at this time, as shown in the function graph below:
+> 
+>        cpu1              cpu2
+> _________________|_________________
+> wb_do_writeback         CHOWN(1)
+>  ...
+>   ext4_da_update_reserve_space
+>    dquot_claim_block
+>     ...
+>      dquot_mark_dquot_dirty // try to dirty old quota
+>       test_bit(DQ_ACTIVE_B, &dquot->dq_flags) // still ACTIVE
+>       if (test_bit(DQ_MOD_B, &dquot->dq_flags))
+>       // test no dirty, wait dq_list_lock
+>                     ...
+>                      dquot_transfer
+>                       __dquot_transfer
+>                       dqput_all(transfer_from) // rls old dquot
+>                        dqput // last dqput
+>                         dquot_release
+>                          clear_bit(DQ_ACTIVE_B, &dquot->dq_flags)
+>                         atomic_dec(&dquot->dq_count)
+>                         put_dquot_last(dquot)
+>                          list_add_tail(&dquot->dq_free, &free_dquots)
+>                          // add the dquot to free_dquots
+>       if (!test_and_set_bit(DQ_MOD_B, &dquot->dq_flags))
+>         add dqi_dirty_list // add released dquot to dirty_list
+> 
+> This can cause various issues, such as dquot being destroyed by
+> dqcache_shrink_scan() after being added to free_dquots, which can trigger
+> a UAF in dquot_mark_dquot_dirty(); or after dquot is added to free_dquots
+> and then to dirty_list, it is added to free_dquots again after
+> dquot_writeback_dquots() is executed, which causes the free_dquots list to
+> be corrupted and triggers a UAF when dqcache_shrink_scan() is called for
+> freeing dquot twice.
+> 
+> As Honza said, we need to fix dquot_transfer() to follow the guarantees
+> dquot_srcu should provide. But calling synchronize_srcu() directly from
+> dquot_transfer() is too expensive (and mostly unnecessary). So we add
+> dquot whose last reference should be dropped to the new global dquot
+> list releasing_dquots, and then queue work item which would call
+> synchronize_srcu() and after that perform the final cleanup of all the
+> dquots on releasing_dquots.
+> 
+> Fixes: 4580b30ea887 ("quota: Do not dirty bad dquots")
+> Suggested-by: Jan Kara <jack@suse.cz>
+> Signed-off-by: Baokun Li <libaokun1@huawei.com>
+> ---
+>  fs/quota/dquot.c | 85 ++++++++++++++++++++++++++++++++++++++++--------
+>  1 file changed, 71 insertions(+), 14 deletions(-)
+> 
+> diff --git a/fs/quota/dquot.c b/fs/quota/dquot.c
+> index 09787e4f6a00..e8e702ac64e5 100644
+> --- a/fs/quota/dquot.c
+> +++ b/fs/quota/dquot.c
+> @@ -270,6 +270,9 @@ static qsize_t inode_get_rsv_space(struct inode *inode);
+>  static qsize_t __inode_get_rsv_space(struct inode *inode);
+>  static int __dquot_initialize(struct inode *inode, int type);
+>  
+> +static void quota_release_workfn(struct work_struct *work);
+> +static DECLARE_DELAYED_WORK(quota_release_work, quota_release_workfn);
+> +
+>  static inline unsigned int
+>  hashfn(const struct super_block *sb, struct kqid qid)
+>  {
+> @@ -569,6 +572,8 @@ static void invalidate_dquots(struct super_block *sb, int type)
+>  	struct dquot *dquot, *tmp;
+>  
+>  restart:
+> +	flush_delayed_work(&quota_release_work);
+> +
+>  	spin_lock(&dq_list_lock);
+>  	list_for_each_entry_safe(dquot, tmp, &inuse_list, dq_inuse) {
+>  		if (dquot->dq_sb != sb)
+> @@ -577,6 +582,12 @@ static void invalidate_dquots(struct super_block *sb, int type)
+>  			continue;
+>  		/* Wait for dquot users */
+>  		if (atomic_read(&dquot->dq_count)) {
+> +			/* dquot in releasing_dquots, flush and retry */
+> +			if (!list_empty(&dquot->dq_free)) {
+> +				spin_unlock(&dq_list_lock);
+> +				goto restart;
+> +			}
+> +
+>  			atomic_inc(&dquot->dq_count);
+>  			spin_unlock(&dq_list_lock);
+>  			/*
+> @@ -760,6 +771,8 @@ dqcache_shrink_scan(struct shrinker *shrink, struct shrink_control *sc)
+>  	struct dquot *dquot;
+>  	unsigned long freed = 0;
+>  
+> +	flush_delayed_work(&quota_release_work);
+> +
 
-On Wed, Jun 28, 2023 at 11:10=E2=80=AFPM Shengjiu Wang <shengjiu.wang@nxp.c=
-om> wrote:
->
-> ASRC can be used on memory to memory case, define several
-> functions for m2m usage and export them as function pointer.
->
-> Signed-off-by: Shengjiu Wang <shengjiu.wang@nxp.com>
+I would not flush the work here. Sure, it can make more dquots available
+for reclaim but I think it is more important for the shrinker to not wait
+on srcu period as shrinker can be called very frequently under memory
+pressure.
 
-Could you please explain what is the benefit of using M2M in the EASRC driv=
-er?
+>  	spin_lock(&dq_list_lock);
+>  	while (!list_empty(&free_dquots) && sc->nr_to_scan) {
+>  		dquot = list_first_entry(&free_dquots, struct dquot, dq_free);
+> @@ -787,6 +800,60 @@ static struct shrinker dqcache_shrinker = {
+>  	.seeks = DEFAULT_SEEKS,
+>  };
+>  
+> +/*
+> + * Safely release dquot and put reference to dquot.
+> + */
+> +static void quota_release_workfn(struct work_struct *work)
+> +{
+> +	struct dquot *dquot;
+> +	struct list_head rls_head;
+> +
+> +	spin_lock(&dq_list_lock);
+> +	/* Exchange the list head to avoid livelock. */
+> +	list_replace_init(&releasing_dquots, &rls_head);
+> +	spin_unlock(&dq_list_lock);
+> +
+> +restart:
+> +	synchronize_srcu(&dquot_srcu);
+> +	spin_lock(&dq_list_lock);
+> +	while (!list_empty(&rls_head)) {
 
-A few weeks ago, an imx8mn user reported that the EASRC with the
-mainline kernel introduces huge delays.
+I think the logic below needs a bit more work. Firstly, I think that
+dqget() should removing dquots from releasing_dquots list - basically just
+replace the:
+	if (!atomic_read(&dquot->dq_count))
+		remove_free_dquot(dquot);
+with
+	/* Dquot on releasing_dquots list? Drop ref kept by that list. */
+	if (atomic_read(&dquot->dq_count) == 1 && !list_empty(&dquot->dq_free))
+		atomic_dec(&dquot->dq_count);
+	remove_free_dquot(dquot);
+	atomic_inc(&dquot->dq_count);
 
-Does M2M help with this aspect?
+That way we are sure that while we are holding dq_list_lock, all dquots on
+rls_head list have dq_count == 1.
 
-Thanks
+> +		dquot = list_first_entry(&rls_head, struct dquot, dq_free);
+> +		if (dquot_dirty(dquot)) {
+> +			spin_unlock(&dq_list_lock);
+> +			/* Commit dquot before releasing */
+> +			dquot_write_dquot(dquot);
+> +			goto restart;
+> +		}
+> +		/* Always clear DQ_ACTIVE_B, unless racing with dqget() */
+> +		if (dquot_active(dquot)) {
+> +			spin_unlock(&dq_list_lock);
+> +			dquot->dq_sb->dq_op->release_dquot(dquot);
+
+I'd just go to restart here to make the logic simple. Forward progress is
+guaranteed anyway and it isn't really much less efficient.
+
+> +			spin_lock(&dq_list_lock);
+> +		}
+> +		/*
+> +		 * During the execution of dquot_release() outside the
+> +		 * dq_list_lock, another process may have completed
+> +		 * dqget()/dqput()/mark_dirty().
+> +		 */
+> +		if (atomic_read(&dquot->dq_count) == 1 &&
+> +		    (dquot_active(dquot) || dquot_dirty(dquot))) {
+> +			spin_unlock(&dq_list_lock);
+> +			goto restart;
+> +		}
+
+This can be dropped then...
+
+> +		/*
+> +		 * Now it is safe to remove this dquot from releasing_dquots
+> +		 * and reduce its reference count.
+> +		 */
+> +		remove_free_dquot(dquot);
+> +		atomic_dec(&dquot->dq_count);
+> +
+> +		/* We may be racing with some other dqget(). */
+> +		if (!atomic_read(&dquot->dq_count))
+
+This condition can also be dropped then.
+
+> +			put_dquot_last(dquot);
+> +	}
+> +	spin_unlock(&dq_list_lock);
+> +}
+> +
+
+The rest looks good.
+
+								Honza
+
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
