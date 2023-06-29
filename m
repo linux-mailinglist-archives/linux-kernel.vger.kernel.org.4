@@ -2,98 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5CF17424C6
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 13:10:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D65BD7424D0
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 13:10:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231794AbjF2LKD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 07:10:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36804 "EHLO
+        id S231445AbjF2LKt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 07:10:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232177AbjF2LJk (ORCPT
+        with ESMTP id S232240AbjF2LKb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 07:09:40 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADCF8294E
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 04:09:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1688036950; x=1719572950;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Dt51Frbc0VtpgKsRkoOje6ipINA90raC3oWM4OnSZKU=;
-  b=WUiuah0w5Gq9nhxaN7UTxQllcv7lgi4UHpWTHrtT6Yt403QJIOhFyxIS
-   bVpNyFhbcdzqtvWJWjup6aEfnpmWb/ngBJG2UexPvYWUQmzXCYOLqWX9U
-   OVCrLf3+OuM72rPEDqb1OnHsUKASaSRjcu3L52akLdTEvWsqNR30lVdPc
-   keHJxtyyJbwxelteIC9CQ/UMil2ZvgfaX/UV9zmdbwJiLw56K2LTZEJr5
-   eYaCVc3v1VGeQEJwOcUg2JTewKlXCXdTgQzcW+yz9BCVAb0m2M+EB5B5r
-   MqKFPIRMR4f05Ve/5rsCNVm7bcMnETJJEw0/aZJQldxkVKEoauw5yaIRG
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10755"; a="362118837"
-X-IronPort-AV: E=Sophos;i="6.01,168,1684825200"; 
-   d="scan'208";a="362118837"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jun 2023 04:09:10 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10755"; a="861890475"
-X-IronPort-AV: E=Sophos;i="6.01,168,1684825200"; 
-   d="scan'208";a="861890475"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga001.fm.intel.com with ESMTP; 29 Jun 2023 04:09:08 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1qEpWM-000ps9-1A;
-        Thu, 29 Jun 2023 14:09:06 +0300
-Date:   Thu, 29 Jun 2023 14:09:06 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
-        Oder Chiou <oder_chiou@realtek.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
-Subject: Re: [PATCH v1 2/3] ASoC: rt5677: Use device_get_match_data()
-Message-ID: <ZJ1mUmI7wOhp710M@smile.fi.intel.com>
-References: <20230629104603.88612-1-andriy.shevchenko@linux.intel.com>
- <20230629104603.88612-3-andriy.shevchenko@linux.intel.com>
- <33d3ba54-e391-454f-942c-67f498711078@sirena.org.uk>
+        Thu, 29 Jun 2023 07:10:31 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FECD30C4;
+        Thu, 29 Jun 2023 04:10:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
+        s=201909; t=1688037027;
+        bh=sv/JdQWXY6nWSKNJyVKNtJGaF1eiIkhg3/IJgGGitu0=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=JHtvQCEEKCFpe536YpnBQY4lzDoxafqWNvDqcJZfV0kdQQ+u0REqsHyuSl1CKrUMy
+         W1LoOm199ryLQ0WjvAzM2VoFXwq9YGq0j16IsN7QYgL3Kbykd67g/EJKefxd/pK8PS
+         PDvxu1qWXbXujyjcooYA8QDRy884V0RZdUTySP7eyhyJ2A0FgBS5ybm/dM5YUb4Cax
+         IEvSrElRkPOB9/F30mXrwhCk9syA1dwcFcFrkPXFENJM6XIXowYKFUpeU/Iu1XnF2N
+         mnVtEWlhUV3H4MshIKtxy/qtt04eqaY56cyMhkiKF7Ta8Wcc26MS5NrmyeH/Vj3Y5K
+         yfVEdWBMV+SuQ==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QsG2V61t6z4wp1;
+        Thu, 29 Jun 2023 21:10:26 +1000 (AEST)
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     Sachin Sant <sachinp@linux.ibm.com>,
+        Laurent Dufour <ldufour@linux.ibm.com>
+Cc:     linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        linux-arch@vger.kernel.org, dave.hansen@linux.intel.com,
+        open list <linux-kernel@vger.kernel.org>,
+        Ingo Molnar <mingo@redhat.com>, bp@alien8.de,
+        npiggin@gmail.com, tglx@linutronix.de
+Subject: Re: [PATCH v2 0/9]  Introduce SMT level and add PowerPC support
+In-Reply-To: <88E208A6-F4E0-4DE9-8752-C9652B978BC6@linux.ibm.com>
+References: <20230628100558.43482-1-ldufour@linux.ibm.com>
+ <88E208A6-F4E0-4DE9-8752-C9652B978BC6@linux.ibm.com>
+Date:   Thu, 29 Jun 2023 21:10:25 +1000
+Message-ID: <87edluh6ce.fsf@mail.lhotse>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <33d3ba54-e391-454f-942c-67f498711078@sirena.org.uk>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 29, 2023 at 11:56:10AM +0100, Mark Brown wrote:
-> On Thu, Jun 29, 2023 at 01:46:02PM +0300, Andy Shevchenko wrote:
+Sachin Sant <sachinp@linux.ibm.com> writes:
+>> On 28-Jun-2023, at 3:35 PM, Laurent Dufour <ldufour@linux.ibm.com> wrote:
+>>=20
+>> I'm taking over the series Michael sent previously [1] which is smartly
+>> reviewing the initial series I sent [2].  This series is addressing the
+>> comments sent by Thomas and me on the Michael's one.
+>>=20
+>> Here is a short introduction to the issue this series is addressing:
+>>=20
+>> When a new CPU is added, the kernel is activating all its threads. This
+>> leads to weird, but functional, result when adding CPU on a SMT 4 system
+>> for instance.
+>>=20
+>> Here the newly added CPU 1 has 8 threads while the other one has 4 threa=
+ds
+>> active (system has been booted with the 'smt-enabled=3D4' kernel option):
+>>=20
+>> ltcden3-lp12:~ # ppc64_cpu --info
+>> Core   0:    0*    1*    2*    3*    4     5     6     7
+>> Core   1:    8*    9*   10*   11*   12*   13*   14*   15*
+>>=20
+>> This mixed SMT level may confused end users and/or some applications.
+>>=20
+>
+> Thanks for the patches Laurent.
+>
+> Is the SMT level retained even when dynamically changing SMT values?
+> I am observing difference in behaviour with and without smt-enabled
+> kernel command line option.
+>
+> When smt-enabled=3D option is specified SMT level is retained across=20
+> cpu core remove and add.
+>
+> Without this option but changing SMT level during runtime using
+> ppc64_cpu =E2=80=94smt=3D<level>, the SMT level is not retained after
+> cpu core add.
 
-...
+That's because ppc64_cpu is not using the sysfs SMT control file, it's
+just onlining/offlining threads manually.
 
-> > +	rt5677->type = (enum rt5677_type)(uintptr_t)device_get_match_data(dev);
+If you run:
+ $ ppc64_cpu --smt=3D4=20
 
-> Double casts, always a sign of a successful simplification! :P
+And then also do:
 
-Unfortunate of the C language and use of plain numbers when
-pointers are required. :-( I feel your pain.
+ $ echo 4 > /sys/devices/system/cpu/smt/control
 
-> > +	if (rt5677->type == 0)
-> >  		return -EINVAL;
-> > -	}
+It should work as expected?
 
-I would prefer to see in the ID table something like
+ppc64_cpu will need to be updated to do that automatically.
 
-	.compatible = "foo", .data = &codec[RT5677],
-
-but in this driver it seems it will require quite a refactoring.
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+cheers
