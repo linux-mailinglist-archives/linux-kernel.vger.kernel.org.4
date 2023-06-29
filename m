@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43AD77427D3
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 15:58:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 582787427CD
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 15:57:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232144AbjF2N6m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 09:58:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50958 "EHLO
+        id S231831AbjF2N5I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 09:57:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232125AbjF2N6g (ORCPT
+        with ESMTP id S229522AbjF2N5H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 09:58:36 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B04819B5;
-        Thu, 29 Jun 2023 06:58:35 -0700 (PDT)
+        Thu, 29 Jun 2023 09:57:07 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38AEECF;
+        Thu, 29 Jun 2023 06:57:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1688047115; x=1719583115;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=JBVx5Ym2vAExG1tYB6c4UHYbnpcxSOc+rFilPNsQ0VI=;
-  b=m/MxCOvGuotauVvHp88U30xN6V4lHbSZSDoPLLhnfPTncoSbJKjNBKQx
-   evup+wExrHFoV2xfG5oEhoihhItzJjyhN+D7br6hMaQY0CAIilfsrMCdi
-   LGwCAHJnewCJAZ5K+uQ8uBl7MA/tyMZQYMtAw1MxfsekYbOi1rzt8CLL3
-   3kp+zEpwLERIkyOyD8HpQcYYcTIV5N5xTMm4cbIHcLqNGtVcx4Qa+i+Dj
-   8tHjT7BRwB2NildcnR/AWNTGFu17g3Mcbb4KzCBCCt9UrM7CYIGR1yOSB
-   MUj0DJDMPae8ioqRxN7ZWZwt/LYWWFVy00b9Ef+vyqpt08BME6VHuAv2h
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10756"; a="351925090"
+  t=1688047026; x=1719583026;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=KHiB3abkj5VcQDjRlKOb0Tkf6LNR98NT71l0fvJAq0Y=;
+  b=SvEDfQv0E7bWrTuc3zhRtxTVgJ1D5S7JX5zoEXKRPtK5jz2S5tj5yDc2
+   nJuMACCxFF51CWn1xuwjymNfxpo9VFwVspFoh9g+XtiSH9cAXXI6s2Qz4
+   b8GKqhW1yJDuSpV/aClTO+FM3uPhD+QeOTWSSGuUVPn9S7RIKq8TBNqaE
+   pW7UurB629zh4Z8qI8TfXzABa2qdAnSeqTNK7zJ7kHTHo1PDt6wiz1g6v
+   5FV0POvtwsomD7KFAgfH38bc2Y8KyAGHBgnq2b0MFrNJ3Z6y0iuQFpNMb
+   Tb9WcydAGyv+cqkjoqNzMyWq7Le4t0D8/Lsf64xRjrIWo6WwgGJ6JGEQV
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10756"; a="365584724"
 X-IronPort-AV: E=Sophos;i="6.01,168,1684825200"; 
-   d="scan'208";a="351925090"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jun 2023 06:22:47 -0700
+   d="scan'208";a="365584724"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jun 2023 06:22:48 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10756"; a="963984684"
+X-IronPort-AV: E=McAfee;i="6600,9927,10756"; a="711430122"
 X-IronPort-AV: E=Sophos;i="6.01,168,1684825200"; 
-   d="scan'208";a="963984684"
+   d="scan'208";a="711430122"
 Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga006.fm.intel.com with ESMTP; 29 Jun 2023 06:22:45 -0700
+  by orsmga007.jf.intel.com with ESMTP; 29 Jun 2023 06:22:45 -0700
 Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 38F73358; Thu, 29 Jun 2023 16:22:47 +0300 (EEST)
+        id E2BC93DA; Thu, 29 Jun 2023 16:22:47 +0300 (EEST)
 From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To:     Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
         linux-kernel@vger.kernel.org
@@ -49,92 +49,54 @@ Cc:     "David S. Miller" <davem@davemloft.net>,
         Paolo Abeni <pabeni@redhat.com>,
         Christian Brauner <brauner@kernel.org>,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [PATCH v1 1/2] net/core: Make use of assign_bit() API
-Date:   Thu, 29 Jun 2023 16:22:39 +0300
-Message-Id: <20230629132240.80372-1-andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v1 2/2] netlink: Make use of __assign_bit() API
+Date:   Thu, 29 Jun 2023 16:22:40 +0300
+Message-Id: <20230629132240.80372-2-andriy.shevchenko@linux.intel.com>
 X-Mailer: git-send-email 2.40.0.1.gaa8946217a0b
+In-Reply-To: <20230629132240.80372-1-andriy.shevchenko@linux.intel.com>
+References: <20230629132240.80372-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We have for some time the assign_bit() API to replace open coded
+We have for some time the __assign_bit() API to replace open coded
 
 	if (foo)
-		set_bit(n, bar);
+		__set_bit(n, bar);
 	else
-		clear_bit(n, bar);
+		__clear_bit(n, bar);
 
 Use this API in the code. No functional change intended.
 
 Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
- net/core/dev.c  |  8 ++------
- net/core/sock.c | 15 +++------------
- 2 files changed, 5 insertions(+), 18 deletions(-)
+ net/netlink/af_netlink.c | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
 
-diff --git a/net/core/dev.c b/net/core/dev.c
-index 69a3e544676c..d6e1b786c5c5 100644
---- a/net/core/dev.c
-+++ b/net/core/dev.c
-@@ -6316,12 +6316,8 @@ int dev_set_threaded(struct net_device *dev, bool threaded)
- 	 * softirq mode will happen in the next round of napi_schedule().
- 	 * This should not cause hiccups/stalls to the live traffic.
- 	 */
--	list_for_each_entry(napi, &dev->napi_list, dev_list) {
--		if (threaded)
--			set_bit(NAPI_STATE_THREADED, &napi->state);
--		else
--			clear_bit(NAPI_STATE_THREADED, &napi->state);
--	}
-+	list_for_each_entry(napi, &dev->napi_list, dev_list)
-+		assign_bit(NAPI_STATE_THREADED, &napi->state, threaded);
+diff --git a/net/netlink/af_netlink.c b/net/netlink/af_netlink.c
+index 383631873748..9c9df143a2ec 100644
+--- a/net/netlink/af_netlink.c
++++ b/net/netlink/af_netlink.c
+@@ -1629,10 +1629,7 @@ static void netlink_update_socket_mc(struct netlink_sock *nlk,
  
- 	return err;
+ 	old = test_bit(group - 1, nlk->groups);
+ 	subscriptions = nlk->subscriptions - old + new;
+-	if (new)
+-		__set_bit(group - 1, nlk->groups);
+-	else
+-		__clear_bit(group - 1, nlk->groups);
++	__assign_bit(group - 1, nlk->groups, new);
+ 	netlink_update_subscriptions(&nlk->sk, subscriptions);
+ 	netlink_update_listeners(&nlk->sk);
  }
-diff --git a/net/core/sock.c b/net/core/sock.c
-index 9370fd50aa2c..ab1e8d1bd5a1 100644
---- a/net/core/sock.c
-+++ b/net/core/sock.c
-@@ -1244,17 +1244,11 @@ int sk_setsockopt(struct sock *sk, int level, int optname,
- 		break;
- 
- 	case SO_PASSCRED:
--		if (valbool)
--			set_bit(SOCK_PASSCRED, &sock->flags);
--		else
--			clear_bit(SOCK_PASSCRED, &sock->flags);
-+		assign_bit(SOCK_PASSCRED, &sock->flags, valbool);
- 		break;
- 
- 	case SO_PASSPIDFD:
--		if (valbool)
--			set_bit(SOCK_PASSPIDFD, &sock->flags);
--		else
--			clear_bit(SOCK_PASSPIDFD, &sock->flags);
-+		assign_bit(SOCK_PASSPIDFD, &sock->flags, valbool);
- 		break;
- 
- 	case SO_TIMESTAMP_OLD:
-@@ -1358,10 +1352,7 @@ int sk_setsockopt(struct sock *sk, int level, int optname,
- 		break;
- 
- 	case SO_PASSSEC:
--		if (valbool)
--			set_bit(SOCK_PASSSEC, &sock->flags);
--		else
--			clear_bit(SOCK_PASSSEC, &sock->flags);
-+		assign_bit(SOCK_PASSSEC, &sock->flags, valbool);
- 		break;
- 	case SO_MARK:
- 		if (!sockopt_ns_capable(sock_net(sk)->user_ns, CAP_NET_RAW) &&
 -- 
 2.40.0.1.gaa8946217a0b
 
