@@ -2,47 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE038742CAC
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 21:03:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29F09742CA1
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 21:03:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233051AbjF2TBt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 15:01:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36920 "EHLO
+        id S232911AbjF2TBj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 15:01:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232821AbjF2TBQ (ORCPT
+        with ESMTP id S232814AbjF2TBP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 15:01:16 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1ECF3593;
+        Thu, 29 Jun 2023 15:01:15 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D1F33591;
         Thu, 29 Jun 2023 12:01:13 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EAACF61575;
-        Thu, 29 Jun 2023 19:01:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3FA70C433C9;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9C0C961607;
+        Thu, 29 Jun 2023 19:01:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3D0BC433C8;
         Thu, 29 Jun 2023 19:01:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688065271;
-        bh=bqydMEeG0Xm6PkNRJNTSzNvr4tSuM+az5ZB4GfP+xew=;
+        s=k20201202; t=1688065272;
+        bh=4yKJJVHut3d9Sly9KPcxcIqJNazp/tDpdtVbUNvd0Aw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Hdc3NMfdQP1a9RSmIRQY8BuJY8w6Tma8eDEbmH5vDixPdlF9xgjy8VT5pFqTSv5+R
-         bWmjIk7yEtZcRgwESGkemZUDpXbEW2f1YHEaJ6ZSJZo25a6V3Q9gO4c//IpTUlDASG
-         c+I6EBgOVKv4fRRBdGCgC1Kl8DSTCyynNvqbnXTJ3n8Ev3sQfCthuHrTFdpQUefeuM
-         +AHcAKQ7pVPcnyzJr3aV9LvNxnfItK+doIIyH4gvgpLrPOIy7aOBs8Wek1HdqjWogO
-         6c+yNCbtPNSEEMStOTDocYimTg7x54duPuuCrJsdVE9e9k9NPDULxINaTUoRY/Ub2C
-         F6E7u8oxb7GSg==
+        b=C3pyMkfAsRY0NKCKY8LG7w54R/XeU3gcZxPNa7sskwK32YDuh1swC54EH5R+X781C
+         HXhXKitJRCBipASQNlh8T4q5v2PFXOkTg8aDYAvDLStKYgj4JyUuvNtxqTnVmzmK41
+         8pie+khUEdd99Wplvis/+Xvys/Ou4DBMzIyMrkhzIxlO6qyzyW3QbWSSasiIirtWtB
+         rRHwgOt+zu5Ih/ae8QJIGs3ZhB7zmi4c6Tmbb/bcUGywPq7cSAU0flRvmp0RK8BAm9
+         CwARHky2og46AChsgHJYJ6m/0qGkglZVqOXuorQ6WO2aF2+eQrzMBqpX/w/KqqTHKh
+         p1VvvIFDlcRlQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     sunliming <sunliming@kylinos.cn>,
+        Beau Belgrave <beaub@linux.microsoft.com>,
         Masami Hiramatsu <mhiramat@kernel.org>,
         Steven Rostedt <rostedt@goodmis.org>,
         Sasha Levin <sashal@kernel.org>,
         linux-trace-kernel@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.3 04/17] tracing/user_events: Handle matching arguments that is null from dyn_events
-Date:   Thu, 29 Jun 2023 15:00:33 -0400
-Message-Id: <20230629190049.907558-4-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.3 05/17] tracing/user_events: Fix the incorrect trace record for empty arguments events
+Date:   Thu, 29 Jun 2023 15:00:34 -0400
+Message-Id: <20230629190049.907558-5-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230629190049.907558-1-sashal@kernel.org>
 References: <20230629190049.907558-1-sashal@kernel.org>
@@ -51,8 +52,8 @@ X-stable: review
 X-Patchwork-Hint: Ignore
 X-stable-base: Linux 6.3.9
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -63,36 +64,45 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: sunliming <sunliming@kylinos.cn>
 
-[ Upstream commit cfac4ed7279d056df6167bd665e460787dc9e0c4 ]
+[ Upstream commit 6f05dcabe5c241d066ec472cf38ac8b84f8c9c6f ]
 
-When A registering user event from dyn_events has no argments, it will pass the
-matching check, regardless of whether there is a user event with the same name
-and arguments. Add the matching check when the arguments of registering user
-event is null.
+The user_events support events that has empty arguments. But the trace event
+is discarded and not really committed when the arguments is empty. Fix this
+by not attempting to copy in zero-length data.
 
-Link: https://lore.kernel.org/linux-trace-kernel/20230529065110.303440-1-sunliming@kylinos.cn
+Link: https://lkml.kernel.org/r/20230606062027.1008398-2-sunliming@kylinos.cn
 
-Signed-off-by: sunliming <sunliming@kylinos.cn>
+Acked-by: Beau Belgrave <beaub@linux.microsoft.com>
 Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+Signed-off-by: sunliming <sunliming@kylinos.cn>
 Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- kernel/trace/trace_events_user.c | 2 ++
- 1 file changed, 2 insertions(+)
+ kernel/trace/trace_events_user.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/kernel/trace/trace_events_user.c b/kernel/trace/trace_events_user.c
-index 774d146c2c2ca..ad64da21c34aa 100644
+index ad64da21c34aa..49e114d250136 100644
 --- a/kernel/trace/trace_events_user.c
 +++ b/kernel/trace/trace_events_user.c
-@@ -1232,6 +1232,8 @@ static bool user_event_match(const char *system, const char *event,
+@@ -916,7 +916,7 @@ static void user_event_ftrace(struct user_event *user, struct iov_iter *i,
+ 	if (unlikely(!entry))
+ 		return;
  
- 	if (match && argc > 0)
- 		match = user_fields_match(user, argc, argv);
-+	else if (match && argc == 0)
-+		match = list_empty(&user->fields);
+-	if (unlikely(!copy_nofault(entry + 1, i->count, i)))
++	if (unlikely(i->count != 0 && !copy_nofault(entry + 1, i->count, i)))
+ 		goto discard;
  
- 	return match;
- }
+ 	if (!list_empty(&user->validators) &&
+@@ -957,7 +957,7 @@ static void user_event_perf(struct user_event *user, struct iov_iter *i,
+ 
+ 		perf_fetch_caller_regs(regs);
+ 
+-		if (unlikely(!copy_nofault(perf_entry + 1, i->count, i)))
++		if (unlikely(i->count != 0 && !copy_nofault(perf_entry + 1, i->count, i)))
+ 			goto discard;
+ 
+ 		if (!list_empty(&user->validators) &&
 -- 
 2.39.2
 
