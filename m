@@ -2,194 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BAEBF742E1F
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 22:09:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 32D93742E24
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 22:09:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232410AbjF2UFq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 16:05:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36078 "EHLO
+        id S232420AbjF2UFu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 16:05:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232601AbjF2UFD (ORCPT
+        with ESMTP id S232316AbjF2UFp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 16:05:03 -0400
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 593F52D60
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 13:05:01 -0700 (PDT)
-Received: by mail-lf1-x133.google.com with SMTP id 2adb3069b0e04-4fb7373dd35so1351951e87.1
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 13:05:01 -0700 (PDT)
+        Thu, 29 Jun 2023 16:05:45 -0400
+Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com [IPv6:2607:f8b0:4864:20::d2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30713212C
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 13:05:44 -0700 (PDT)
+Received: by mail-io1-xd2d.google.com with SMTP id ca18e2360f4ac-77dcff76e35so17498739f.1
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 13:05:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1688069099; x=1690661099;
+        d=kernel-dk.20221208.gappssmtp.com; s=20221208; t=1688069143; x=1690661143;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=OF3SWHQBitllVPlaYnVLF/iiTBXMytWTZQU29N7FmDM=;
-        b=gxSfIjzJgF4o6hdReIGjdG8oDb8YMY+FvG9DOf48gJS/uXUgVgdRBxWOyIbIwZURQ6
-         qqlLtGy9beddY4617elmaPql81XYUQ8zxW7WylayUjuELQrLfAH6Ort+7wOGubNRvfjs
-         vPUnouklFBiwE0tQK5VjdKd6ndIr8to+h+Q9RDGQzK+DZDXTIUQ1jVsZKarH3Pku08RX
-         2QvOPHNXoyjvlv7ryV1D7SN/jNZctB6mPECftJZV3hBBGOiv7QrR0qAJLqP8YAr1Kln/
-         XVdozh/5IpjZyWV41qXtrBGwBcWg4aLtVJRCcZRZeIvobORm50LcEvt3gPIPCgI5UMbS
-         PLwg==
+        bh=y4tq5eP75MWhv6841WPIqTGQTd0wmAvIyZR6YMM91cU=;
+        b=kt4y6BEf8FjwOMV3pk/CMHocQI2zxrK/0DPy8nfGhKmxrGsb65ZnyBk+RzELx7IxdD
+         04Ssa46bdvqfxULj03WxMa9fcLlxSY63jScz96ALYVx09vgtscokAI9SfKbVWv4H7PYj
+         gyiiqBnpaQCX4E9KDfK1xQyoOQdI0XQF7unrkr6IlDkz4WUDKDAbUL8X/oBFXev85tpn
+         aMDqQMNCAMTRTqS01YP3lvh4K737d+lAlgczZoU1zxUTUZmk8R5INS1HnSgkB6mHnQ/j
+         AvGcSR7A01zpQXCkY/TiqTwvZ4zJmhORcCgYf0//mnUBMXqCkfX9vfyV2HBbLpc/oTYL
+         scKw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688069099; x=1690661099;
+        d=1e100.net; s=20221208; t=1688069143; x=1690661143;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=OF3SWHQBitllVPlaYnVLF/iiTBXMytWTZQU29N7FmDM=;
-        b=N5516aSvb/nhH/AMgKCmrA6h2P8FCzmvc/ZFspH7kGooedjC4lRqrNdYg735rXX/Po
-         AzqPHRejWxNCSjYrQmu9rmwQ7n93DKhkG8Kl6NWX0oMDNi099ZfwOco/GMFVXlG9SOLG
-         fGUr2e+fz3CCPFG5D9a9D7r/EeOcZY4EyRxK7kb8zjqZEbsySx4bSW4D1/83fCl3iP/M
-         kFxMnWbQPNU6jg2bXIesR4PBbQ9xVVtYLkHltpTM5K2WIXq9ojF7YcsP/GFcqDNNgfW7
-         JwfTkRfdJgpQQxyd/ltDTJQwt66s/iIugVXsEUtszmf0BbHF48nJr5d9K7GnNHDwZ6eG
-         i0rA==
-X-Gm-Message-State: ABy/qLZ2otaJisy8+rxLnBc837MuM/t2+LYHZbdh5XC2Rm7xQEF7BphE
-        Ag5HqyDD0z2JYwcHrSLghNxlKg==
-X-Google-Smtp-Source: APBJJlHCImMszh08qroN+ScqTvW+Lm4kzbNBHCoakjGE3swSx6rZ5XyHj9KuN68oeeMW8B9bxhKuoQ==
-X-Received: by 2002:a05:6512:693:b0:4f8:6d9d:abe0 with SMTP id t19-20020a056512069300b004f86d9dabe0mr365281lfe.33.1688069099306;
-        Thu, 29 Jun 2023 13:04:59 -0700 (PDT)
-Received: from [192.168.1.101] (abyk82.neoplus.adsl.tpnet.pl. [83.9.30.82])
-        by smtp.gmail.com with ESMTPSA id k28-20020ac2457c000000b004fb9fbdd8fcsm207623lfm.252.2023.06.29.13.04.56
+        bh=y4tq5eP75MWhv6841WPIqTGQTd0wmAvIyZR6YMM91cU=;
+        b=fbWc+FjegX5pjrT+vZyzAB9dh1zOQSjw2rU7wf3+W0MGZuFx192v8rk6qvtWQLNsMz
+         leV13OsG3WVhDVxeEPeUk54o7uzCgWkLMEN20hSCI+6u5e3qbmLv6edRRtP702R1nHKN
+         HVc7Cv4v2PdwS3/4lxPqOW2oXO6p2DCBVgeiTzl9nkQhnE3s24HoZoPEYJ/RJ9/pwoGR
+         +SKBGrB2jl5naSq05XJHtm1oSO4U0bUoh6s6cdXDTpVrGk6hKc/arD9JEItogyRo9I3k
+         BpMtTya1fFyNMRJXKwzQGbnwVRDU0FNa7Bs3v0l7tOByGcdHmWP9rOJMfvighJkRE7Ai
+         oWww==
+X-Gm-Message-State: AC+VfDyKilTF3hanneBAtaM5wu5MzFlwRS9MswbLjwyj1RAqoIIhxgoj
+        gO3O4HXX8SihjMh1B2WoCo6r+Q==
+X-Google-Smtp-Source: ACHHUZ7pGQ6LKbesXl3hlbRX1AckZ5mzpygexKjVW7CU51oKAJKLyAWwhk1jdwG4cE4v0XY9sALCiw==
+X-Received: by 2002:a05:6602:3e94:b0:783:5df5:950d with SMTP id el20-20020a0566023e9400b007835df5950dmr579213iob.1.1688069143431;
+        Thu, 29 Jun 2023 13:05:43 -0700 (PDT)
+Received: from [192.168.1.94] ([96.43.243.2])
+        by smtp.gmail.com with ESMTPSA id t5-20020a02cca5000000b0042aca9978c6sm2865041jap.0.2023.06.29.13.05.42
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 29 Jun 2023 13:04:58 -0700 (PDT)
-Message-ID: <ef515514-43e8-e4c9-e013-09aa27bc2110@linaro.org>
-Date:   Thu, 29 Jun 2023 22:04:55 +0200
+        Thu, 29 Jun 2023 13:05:42 -0700 (PDT)
+Message-ID: <d6130a0c-5d91-b0a3-f6a9-d1fa6edbba92@kernel.dk>
+Date:   Thu, 29 Jun 2023 14:05:41 -0600
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
  Thunderbird/102.12.0
-Subject: Re: [PATCH 08/11] dt-bindings: usb: ci-hdrc-usb2: Fix handling
- pinctrl properties
+Subject: Re: mainline build failure due to 8295efbe68c0 ("md/raid1-10: factor
+ out a helper to submit normal write")
 Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>
-Cc:     cros-qcom-dts-watchers@chromium.org,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Benjamin Li <benl@squareup.com>,
-        James Willcox <jwillcox@squareup.com>,
-        Joseph Gates <jgates@squareup.com>,
-        Stephan Gerhold <stephan@gerhold.net>,
-        Zac Crosby <zac@squareup.com>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Banajit Goswami <bgoswami@quicinc.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>, Lee Jones <lee@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Xu Yang <xu.yang_2@nxp.com>, Peng Fan <peng.fan@nxp.com>,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        Wesley Cheng <quic_wcheng@quicinc.com>,
-        Jun Nie <jun.nie@linaro.org>, Max Chen <mchen@squareup.com>,
-        Shawn Guo <shawn.guo@linaro.org>,
-        Vivek Gautam <vivek.gautam@codeaurora.org>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Vincent Knecht <vincent.knecht@mailoo.org>,
-        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        Konrad Dybcio <konradybcio@kernel.org>,
-        alsa-devel@alsa-project.org, iommu@lists.linux.dev,
-        linux-usb@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        Andy Gross <andy.gross@linaro.org>
-References: <20230627-topic-more_bindings-v1-0-6b4b6cd081e5@linaro.org>
- <20230627-topic-more_bindings-v1-8-6b4b6cd081e5@linaro.org>
- <20230629152335.GA3055525-robh@kernel.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230629152335.GA3055525-robh@kernel.org>
+To:     Song Liu <song@kernel.org>,
+        Linux regressions mailing list <regressions@lists.linux.dev>
+Cc:     Yu Kuai <yukuai1@huaweicloud.com>,
+        "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>,
+        linux-raid@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>
+References: <ZJ2H5FWuo9oDMgPm@debian>
+ <be9320b5-7613-be0f-ffcd-4b3041ea5836@huaweicloud.com>
+ <13abe42f-2f5f-cbaf-21b8-baa4516963aa@leemhuis.info>
+ <CAPhsuW4Wf+PLDCZ7JpHzVT81ubj1Y6MCyLm-BWcVmB1jRqYEGg@mail.gmail.com>
+ <CAPhsuW7VK6O6RKQTAcAVk4XxUzNALUW5nKMnMFkm3pW+4F23yw@mail.gmail.com>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <CAPhsuW7VK6O6RKQTAcAVk4XxUzNALUW5nKMnMFkm3pW+4F23yw@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 29.06.2023 17:23, Rob Herring wrote:
-> On Tue, Jun 27, 2023 at 06:24:24PM +0200, Konrad Dybcio wrote:
->> Untangle the bit messy oneOf trees and add the missing pinctrl-2 mention
->> to handle the different pinctrl combinations.
->>
->> Fixes: 4c8375d35f72 ("dt-bindings: usb: ci-hdrc-usb2: convert to DT schema format")
->> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
->> ---
->>  .../devicetree/bindings/usb/ci-hdrc-usb2.yaml      | 27 ++++++----------------
->>  1 file changed, 7 insertions(+), 20 deletions(-)
->>
->> diff --git a/Documentation/devicetree/bindings/usb/ci-hdrc-usb2.yaml b/Documentation/devicetree/bindings/usb/ci-hdrc-usb2.yaml
->> index 782402800d4a..24431a7adf3e 100644
->> --- a/Documentation/devicetree/bindings/usb/ci-hdrc-usb2.yaml
->> +++ b/Documentation/devicetree/bindings/usb/ci-hdrc-usb2.yaml
->> @@ -199,17 +199,6 @@ properties:
->>        In case of HSIC-mode, "idle" and "active" pin modes are mandatory.
->>        In this case, the "idle" state needs to pull down the data and
->>        strobe pin and the "active" state needs to pull up the strobe pin.
->> -    oneOf:
->> -      - items:
->> -          - const: idle
->> -          - const: active
-> 
-> These are no longer valid values? The description still mentions them.
-I believe allOf: now covers them all?
+The late branch will go out some time next week.
 
-> 
->> -      - items:
->> -          - const: default
->> -          - enum:
->> -              - host
->> -              - device
->> -      - items:
->> -          - const: default
->>  
->>    pinctrl-0:
->>      maxItems: 1
->> @@ -357,17 +346,15 @@ allOf:
->>              - const: active
->>      else:
->>        properties:
->> +        pinctrl-2:
-> 
-> This should be implicitly allowed. Is it not?
-No, it errored out for me.
 
+On 6/29/23 9:56?AM, Song Liu wrote:
+> Oops, didn't really add Jens in the previous email.
 > 
-> I'm reallly at a loss as to what problem this patch solves.
-Specifying all 3 pin states is impossible with the current state of
-this binding, even though it's a supported configuration (check
-qcom/apq8039-t2.dtb). I should have been more clear in the commit
-message.
-
-Konrad
-
+> Add Jens now.
 > 
->> +          maxItems: 1
->> +
->>          pinctrl-names:
->>            minItems: 1
->> -          maxItems: 2
->> -          oneOf:
->> -            - items:
->> -                - const: default
->> -                - enum:
->> -                    - host
->> -                    - device
->> -            - items:
->> -                - const: default
->> +          items:
->> +            - const: default
->> +            - const: host
->> +            - const: device
->>    - if:
->>        properties:
->>          compatible:
+> On Thu, Jun 29, 2023 at 8:55?AM Song Liu <song@kernel.org> wrote:
 >>
->> -- 
->> 2.41.0
+>> + Jens,
 >>
+>> On Thu, Jun 29, 2023 at 7:10?AM Linux regression tracking (Thorsten
+>> Leemhuis) <regressions@leemhuis.info> wrote:
+>>>
+>>> On 29.06.23 15:56, Yu Kuai wrote:
+>>>>
+>>>> ? 2023/06/29 21:32, Sudip Mukherjee (Codethink) ??:
+>>>>> The latest mainline kernel branch fails to build x86_64, arm64 and arm
+>>>>> allmodconfig
+>>>
+>>> Thx for the report.
+>>>
+>>>> Thanks for the testing, which branch are you testing?
+>>>>
+>>>> This problem is already fixed in latest mainline kernel:
+>>>> https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=b5a99602b74bbfa655be509c615181dd95b0719e
+>>
+>> Hi Jens,
+>>
+>> The fix is in the for-6.5/block-late branch.
+>>
+>> https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git/commit/?h=for-6.5/block-late&id=b5a99602b74bbfa655be509c615181dd95b0719e
+>>
+>> Would you send a pull request with it? Or would you prefer
+>> some other solution for the issue?
+>>
+>> AFAICT, it will fix clang build with RANDSTRUCT.
+>>
+>> Thanks,
+>> Song
+>>
+>>>
+>>> And thx for the reply. :-D
+>>>
+>>> FWIW, that fix afaics is still in -next and hasn't reached mainline yet.
+>>> But I guess that will change within a few days.
+>>>
+>>>>> #regzbot introduced: 8295efbe68c080047e98d9c0eb5cb933b238a8cb
+>>>
+>>> #regzbot fix: b5a99602b74bbfa6
+>>> #regzbot dup-of: https://lore.kernel.org/all/ZJ2M4yqnOCqqGWH0@debian/
+>>> #regzbot ignore-activity
+>>>
+>>> Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+>>> --
+>>> Everything you wanna know about Linux kernel regression tracking:
+>>> https://linux-regtracking.leemhuis.info/about/#tldr
+>>> If I did something stupid, please tell me, as explained on that page.
+
+-- 
+Jens Axboe
+
