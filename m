@@ -2,89 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A7FE7429B5
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 17:32:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AA4B7429A2
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 17:28:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232392AbjF2Pco (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 11:32:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55212 "EHLO
+        id S231952AbjF2P2B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 11:28:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232091AbjF2Pcn (ORCPT
+        with ESMTP id S230487AbjF2P1u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 11:32:43 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EE581737;
-        Thu, 29 Jun 2023 08:32:42 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 925BF21852;
-        Thu, 29 Jun 2023 15:32:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1688052760;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=CF39aHuJ5fGh0Y07POJtC3zLyQWYmZ4Z6FG2uk56rSY=;
-        b=kNK7h4h6nQ4ozBm7MdH6vd/lLI0Iordok3WuLf6jbRIGy52ze1LOfJYnSSbxhT/s892wOQ
-        gsqx/AlPnuQzl0IpCE3saolOlZA2yfNUCECeHW7pyhfgh2cEjHB7innVAHd82khL6ELHsv
-        H/KNNl7CPvG48S1Ij4gba980D524hyg=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1688052760;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=CF39aHuJ5fGh0Y07POJtC3zLyQWYmZ4Z6FG2uk56rSY=;
-        b=OFRsrxZan+iL8O1yjgF6HJik9toGtqw5Ast9VD0hVU8eck18o7BkpxZNZf3qqI4ZX72En5
-        iobaY7vtwhp2e8BA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 65D4213905;
-        Thu, 29 Jun 2023 15:32:40 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id zZjsFxiknWSGOAAAMHmgww
-        (envelope-from <dsterba@suse.cz>); Thu, 29 Jun 2023 15:32:40 +0000
-Date:   Thu, 29 Jun 2023 17:26:12 +0200
-From:   David Sterba <dsterba@suse.cz>
-To:     Colin Ian King <colin.i.king@gmail.com>
-Cc:     Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
-        David Sterba <dsterba@suse.com>, linux-btrfs@vger.kernel.org,
-        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH][next] btrfs: remove redundant initialization of
- variables leaf and slot
-Message-ID: <20230629152611.GM16168@twin.jikos.cz>
-Reply-To: dsterba@suse.cz
-References: <20230622075430.2794134-1-colin.i.king@gmail.com>
+        Thu, 29 Jun 2023 11:27:50 -0400
+Received: from mail-io1-f49.google.com (mail-io1-f49.google.com [209.85.166.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD6DAE57;
+        Thu, 29 Jun 2023 08:27:48 -0700 (PDT)
+Received: by mail-io1-f49.google.com with SMTP id ca18e2360f4ac-783544a1c90so33585039f.1;
+        Thu, 29 Jun 2023 08:27:48 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688052468; x=1690644468;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=VZR9sZh+9bjHT/NeBWN3KSD8INZ5F1XGNWsIgo61+bw=;
+        b=WGuX7TOe7g3Vn5OECSraMNCk52ob8wEu4AguwZ4TTgo9V8y64dSGkQ+ksPwRUe5PuZ
+         N1tlvjDIWMriF54ytl+ZCJ8RYhsVle8f3h78apO36+GAQe2kTAVqQWsuoJHETngPl1ck
+         fxTIYXGYJfgA1K90pgPWkR9FC3qk+q3Y5sEe7b/hdcXtKvGeYewV2ZR6rw5HbPWjsvZt
+         mKBFn5tDfgOvFLn4kkwMlDhMPl8yCFnlRCqAuALGlEC9numaaO4EtNHLSavQGAaaYAAy
+         EcLthhkJd+Rb5PeO8ITLnSBzJxywgA9+6HRpbf9Ax3FhcgxNVfAUr+ND9v/WCRYlbC35
+         klUw==
+X-Gm-Message-State: AC+VfDwOwTktjkpBf5BgnlDXunbkhl1Inp5ZdX+cuYfO2nYbPLO2lcZe
+        jgnH1/iKcGlDrUcyl5HMUDUqh8S/lA==
+X-Google-Smtp-Source: ACHHUZ4KLxkCInEQQQCS9qmNAEIF532E5Hd6Y2pqUoJrYe3Vdsqc/jeuYEguX546tpcpPckCkDYkiA==
+X-Received: by 2002:a05:6602:424e:b0:775:5f74:f4c7 with SMTP id cc14-20020a056602424e00b007755f74f4c7mr42469927iob.17.1688052468076;
+        Thu, 29 Jun 2023 08:27:48 -0700 (PDT)
+Received: from robh_at_kernel.org ([64.188.179.250])
+        by smtp.gmail.com with ESMTPSA id t10-20020a02878a000000b00428722c1c51sm3875373jai.32.2023.06.29.08.27.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 29 Jun 2023 08:27:47 -0700 (PDT)
+Received: (nullmailer pid 3066583 invoked by uid 1000);
+        Thu, 29 Jun 2023 15:27:44 -0000
+Date:   Thu, 29 Jun 2023 09:27:44 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Marijn Suijten <marijn.suijten@somainline.org>
+Cc:     Daniel Vetter <daniel@ffwll.ch>, Sean Paul <sean@poorly.run>,
+        Krishna Manikandan <quic_mkrishn@quicinc.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        linux-kernel@vger.kernel.org,
+        Martin Botka <martin.botka@somainline.org>,
+        dri-devel@lists.freedesktop.org, linux-clk@vger.kernel.org,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        freedreno@lists.freedesktop.org, Rob Clark <robdclark@gmail.com>,
+        Jami Kettunen <jami.kettunen@somainline.org>,
+        ~postmarketos/upstreaming@lists.sr.ht,
+        linux-arm-msm@vger.kernel.org,
+        Michael Turquette <mturquette@baylibre.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        David Airlie <airlied@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Andy Gross <agross@kernel.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Loic Poulain <loic.poulain@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Lux Aliaga <they@mint.lgbt>, devicetree@vger.kernel.org
+Subject: Re: [PATCH v2 03/15] dt-bindings: clock: qcom,dispcc-sm6125: Require
+ GCC PLL0 DIV clock
+Message-ID: <168805246390.3066499.7212254924681716912.robh@kernel.org>
+References: <20230627-sm6125-dpu-v2-0-03e430a2078c@somainline.org>
+ <20230627-sm6125-dpu-v2-3-03e430a2078c@somainline.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230622075430.2794134-1-colin.i.king@gmail.com>
-User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20230627-sm6125-dpu-v2-3-03e430a2078c@somainline.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 22, 2023 at 08:54:30AM +0100, Colin Ian King wrote:
-> The variables leaf and slot are initialized when declared but the values
-> assigned to them are never read as they are being re-assigned later on.
-> The initializations are redundant and can be removed. Cleans up clang
-> scan build warings:
-> 
-> fs/btrfs/tree-log.c:6797:25: warning: Value stored to 'leaf' during its
-> initialization is never read [deadcode.DeadStores]
-> fs/btrfs/tree-log.c:6798:7: warning: Value stored to 'slot' during its
-> initialization is never read [deadcode.DeadStores]
-> 
-> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
 
-Added to misc-next, thanks.
+On Tue, 27 Jun 2023 22:14:18 +0200, Marijn Suijten wrote:
+> The "gcc_disp_gpll0_div_clk_src" clock is consumed by the driver, will
+> be passed from DT, and should be required by the bindings.
+> 
+> Fixes: 8397c9c0c26b ("dt-bindings: clock: add QCOM SM6125 display clock bindings")
+> Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
+> ---
+>  Documentation/devicetree/bindings/clock/qcom,dispcc-sm6125.yaml | 8 ++++++--
+>  1 file changed, 6 insertions(+), 2 deletions(-)
+> 
+
+Reviewed-by: Rob Herring <robh@kernel.org>
+
