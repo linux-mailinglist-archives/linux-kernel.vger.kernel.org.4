@@ -2,95 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41E1B742FAE
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 23:49:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 96F59742FAF
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 23:49:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230487AbjF2VtD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 17:49:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60050 "EHLO
+        id S231831AbjF2Vtt convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 29 Jun 2023 17:49:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230106AbjF2Vsz (ORCPT
+        with ESMTP id S230106AbjF2Vtl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 17:48:55 -0400
-Received: from msg-4.mailo.com (msg-4.mailo.com [213.182.54.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1E3330C4
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 14:48:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
-        t=1688075328; bh=FmbTdi5zuk0SN6bL1GqPa/XWvQtYc/7aqiZNLWHawfs=;
-        h=X-EA-Auth:Date:From:To:Cc:Subject:Message-ID:MIME-Version:
-         Content-Type;
-        b=NEiKHIJ0TUMYNtqnwBh+nXrpc/xNRmaFOGHgjNsXoei9R5BGYQKVn5NmDjKh1V94J
-         1HV9c7P5WWoYcneL9f/UPyMoRDHxIAzq4gN0ebLt8XV0hj/b2fX3x8gzpg7KnqJrTO
-         AbedOhy3yPVCoKnuuogWyjyFYWXJy/rN4Oz4PPzw=
-Received: by b221-3.in.mailobj.net [192.168.90.23] with ESMTP
-        via ip-20.mailobj.net [213.182.54.20]
-        Thu, 29 Jun 2023 23:48:48 +0200 (CEST)
-X-EA-Auth: 3d8hHa0w8x3ZBksDX9dBDvaPGrI6/UQcOzXV03+dW5/YH8jZrj6A54owRMUqSTdC4zEFF+HTckpwy1YG1yyVVQC252uw6y2c
-Date:   Fri, 30 Jun 2023 03:18:37 +0530
-From:   Deepak R Varma <drv@mailo.com>
-To:     Bob Peterson <rpeterso@redhat.com>,
-        Andreas Gruenbacher <agruenba@redhat.com>,
-        cluster-devel@redhat.com, linux-kernel@vger.kernel.org
-Cc:     Ira Weiny <ira.weiny@intel.com>,
-        "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
-        Sumitra Sharma <sumitraartsy@gmail.com>,
-        Deepak R Varma <drv@mailo.com>
-Subject: [PATCH v3 0/6] gfs2: kmap{_atomic} conversion to
- kmap_local_{page/folio}
-Message-ID: <cover.1688073459.git.drv@mailo.com>
+        Thu, 29 Jun 2023 17:49:41 -0400
+Received: from mail-oo1-f41.google.com (mail-oo1-f41.google.com [209.85.161.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01A2730C4;
+        Thu, 29 Jun 2023 14:49:40 -0700 (PDT)
+Received: by mail-oo1-f41.google.com with SMTP id 006d021491bc7-5634d8d1db0so816840eaf.0;
+        Thu, 29 Jun 2023 14:49:40 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688075380; x=1690667380;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=0l23JP6S9GF/LAJfWcHkkcP43ONSxdFrMmfEO7H0kkE=;
+        b=Gk90oRB+UAgMNfNRfbBae4fhx0Mtg0JN+CZujOejRaDwVfEoAn0yqUhYQ/HaJwJmpY
+         QkQp0hkHPtsKbte00flgZBwneXD+hlSLrSHOMRPK4WLALkEwJBbO7fk/wXhF+yBZGRWV
+         ZTQwp6dxQLLk6GTSJLVIf08BI96f9Wa4CT8554OG4qTV7tgDx3NBUSRWrpDbPJJVnQ/H
+         0mj/YGm4N3VZFJaa1QUBD4dH5TF/hpP6CqRHISeNJ29NxgGoM8FTj04gFyvuQ1jdOe3t
+         fKeef94nKQMtu9j5K3NxlG60Fv0v+/sASlIpafqAAPpLTPk3jpwXZWfYpy15l7wFojaQ
+         Cd9Q==
+X-Gm-Message-State: ABy/qLaxl1HN7r/FSUDMB3HGixrppHVVnHLqn91AU6b8DUyPdkGkPRtY
+        4oKbBt1GB4pMC+QSLMugCsH2+y+AJkpe40jNujCYiKiz
+X-Google-Smtp-Source: APBJJlHlXlntMH5DzeJI8yA4KDyrBXcKEoP2+taRKkbY3XHfuf2wz3KNvVIpxBG8F2/r6sGSfWxsetWTCuw8LQI1VMk=
+X-Received: by 2002:a05:6358:e907:b0:134:e34e:ec49 with SMTP id
+ gk7-20020a056358e90700b00134e34eec49mr891794rwb.2.1688075380126; Thu, 29 Jun
+ 2023 14:49:40 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230627181030.95608-1-irogers@google.com> <20230627181030.95608-14-irogers@google.com>
+In-Reply-To: <20230627181030.95608-14-irogers@google.com>
+From:   Namhyung Kim <namhyung@kernel.org>
+Date:   Thu, 29 Jun 2023 14:49:29 -0700
+Message-ID: <CAM9d7cjxrNTOUGxmTAycko_Gn_uY5aX8cBWTa-jrhLoc-Bur1g@mail.gmail.com>
+Subject: Re: [PATCH v2 13/13] perf parse-events: Remove ABORT_ON
+To:     Ian Rogers <irogers@google.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch series proposes to replace the kmap/kmap_atomic implementation to the
-preferred kmap_local_* APIs.
+On Tue, Jun 27, 2023 at 11:11 AM Ian Rogers <irogers@google.com> wrote:
+>
+> Prefer informative messages rather than none with ABORT_ON. Document
+> one failure mode and add an error message for another.
+>
+> Signed-off-by: Ian Rogers <irogers@google.com>
+> ---
+>  tools/perf/util/parse-events.y | 22 ++++++++++++++--------
+>  1 file changed, 14 insertions(+), 8 deletions(-)
+>
+> diff --git a/tools/perf/util/parse-events.y b/tools/perf/util/parse-events.y
+> index 844646752462..454577f7aff6 100644
+> --- a/tools/perf/util/parse-events.y
+> +++ b/tools/perf/util/parse-events.y
+> @@ -22,12 +22,6 @@
+>
+>  void parse_events_error(YYLTYPE *loc, void *parse_state, void *scanner, char const *msg);
+>
+> -#define ABORT_ON(val) \
+> -do { \
+> -       if (val) \
+> -               YYABORT; \
+> -} while (0)
+> -
+>  #define PE_ABORT(val) \
+>  do { \
+>         if (val == -ENOMEM) \
+> @@ -618,7 +612,9 @@ PE_RAW opt_event_config
+>                 YYNOMEM;
+>         errno = 0;
+>         num = strtoull($1 + 1, NULL, 16);
+> -       ABORT_ON(errno);
+> +       /* Given the lexer will only give [a-fA-F0-9]+ a failure here should be impossible. */
+> +       if (errno)
+> +               YYABORT;
+>         free($1);
+>         err = parse_events_add_numeric(_parse_state, list, PERF_TYPE_RAW, num, $2,
+>                                        /*wildcard=*/false);
+> @@ -978,7 +974,17 @@ PE_VALUE PE_ARRAY_RANGE PE_VALUE
+>  {
+>         struct parse_events_array array;
+>
+> -       ABORT_ON($3 < $1);
+> +       if ($3 < $1) {
+> +               struct parse_events_state *parse_state = _parse_state;
+> +               struct parse_events_error *error = parse_state->error;
+> +               char *err_str;
+> +
+> +               if (asprintf(&err_str, "Expected '%ld' to be less-than '%ld'", $3, $1) < 0)
 
-The code blocks for this module where kmap/kmap_atomic calls are implemented do
-not appear to depend on disabling page-faults or preemption. Hence such code
-blocks are safe for converting to improved kmap_local_{page,folio} APIs.
+Isn't it to be "greater-than or equal" ?
 
-Note: The proposed patches are build tested only.
-
-Initially, only a single patch was sent and now being converted into a patch
-series including the other files/functions of this module. Hence all patches,
-that are included for the first time in this series are also marked as v3.
-
-Changes in v3:
-   - Patch set introduced to include all gfs2 kmap conversions
-   - Patches 3/6 through 6/6 are included to build the series
-   - Initial stand-alone patch split into 2 patches [1/6 and 2/6]
-
-Changes in v2:
-   - 3/6 to 6/6: None.
-   - 1/6 + 2/6: Correct patch description for the replacement function name from
-     kmap_local_folio to kmap_local_page
-
-Deepak R Varma (6):
-  gfs2: Replace kmap_atomic() by kmap_local_page() in stuffed_readpage
-  gfs2: Replace kmap_atomic()+memcpy by memcpy_from_page()
-  gfs2: Replace kmap() by kmap_local_page() in gfs2_unstuffer_page
-  gfs2: Replace kmap_atomic() by kmap_local_page() in lops.c
-  gfs2: Replace kmap() by kmap_local_page() in gfs2_read_super
-  gfs2: Replace kmap_atomic() by kmap_local_page() in
-    gfs2_write_buf_to_page
-
- fs/gfs2/aops.c       | 13 ++++++-------
- fs/gfs2/bmap.c       |  4 ++--
- fs/gfs2/lops.c       | 12 ++++++------
- fs/gfs2/ops_fstype.c |  4 ++--
- fs/gfs2/quota.c      |  4 ++--
- 5 files changed, 18 insertions(+), 19 deletions(-)
-
--- 
-2.34.1
+Thanks,
+Namhyung
 
 
-
+> +                       err_str = NULL;
+> +
+> +               parse_events_error__handle(error, @1.first_column, err_str, NULL);
+> +               YYABORT;
+> +       }
+>         array.nr_ranges = 1;
+>         array.ranges = malloc(sizeof(array.ranges[0]));
+>         if (!array.ranges)
+> --
+> 2.41.0.162.gfafddb0af9-goog
+>
