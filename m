@@ -2,153 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 294CF7430E2
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 01:10:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BED347430E4
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 01:10:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230308AbjF2XK3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 19:10:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56216 "EHLO
+        id S230436AbjF2XKw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 19:10:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbjF2XK0 (ORCPT
+        with ESMTP id S230345AbjF2XKu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 19:10:26 -0400
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CC2E30C4
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 16:10:24 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id 2adb3069b0e04-4f766777605so2001625e87.1
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 16:10:24 -0700 (PDT)
+        Thu, 29 Jun 2023 19:10:50 -0400
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8DC930E6
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 16:10:48 -0700 (PDT)
+Received: by mail-lf1-x132.google.com with SMTP id 2adb3069b0e04-4fb960b7c9dso2020290e87.0
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 16:10:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20221208.gappssmtp.com; s=20221208; t=1688080223; x=1690672223;
+        d=rivosinc-com.20221208.gappssmtp.com; s=20221208; t=1688080247; x=1690672247;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=s1fWEnH0sdbyAOEH6UFoh83BPgBAF+lwm2DoFeYlQSk=;
-        b=5bGVU2MaUkUfhQDs6c1WAjUyAqUmx30DMW/hAm9jx0x8uDUV1zUNCKaqUSH4hzt1p0
-         rN9gCnNRsDgItfj7rs7/aHQvp7m4nT3p7bIJ3YvHwpGpGDJgBpbxcGjYtu1jFbRICPHc
-         DV2R0fEicsDIJfQrBL57qdl+3uJ9u7DjebiqGSIl5PZLhEr3LujO6QE63N+pQh9NqVXo
-         SnZNLpyLIa423MT1NbXgQ9jR/v4dttdQJKnh53vAaJKGR7Id07yFaS7pM8hmZzvkB9Mx
-         zeV3mQxGziBYMqETfztiSTfF8Cyr3dDasRAtzR4atBINHRLBuTh50y6dIVT7pXOH9SSM
-         yg/w==
+        bh=UOurnaMZUdb/k4kFNvbu1tJhgntbSJLOIlDNG1veMtc=;
+        b=fRvpjUyIzWosp4wJZ9+CgVdvvl+cSgO0d9f4px0w9swQ5qz9TN5Sp2CHyAOqco6PCi
+         0G7/8pE+tDu+++XoUtR7P+tnfsdvo2tXbwpbpSBvCbH8jr8Hm7UG4HF5sWPbuVtNZapv
+         XOUZe+6Rlw4RDGKfqaB7crYWWG9AeD8xxdm9MytaL9GB5XYSlwc8PW2h/pAOdQiGKKoH
+         eAtdrLW60XDOWld398pHoNySi1Y1uuGOgcs01gF48qlXMNZy61zGiS7Rb5nf6ZzaxzBX
+         f6PvRexNJupNK5jRs1nyf8d/DnlGh8HzQB1vTch2WCK7I5Y3rUHUQAU00j1U+rDx1WsY
+         UgCg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688080223; x=1690672223;
+        d=1e100.net; s=20221208; t=1688080247; x=1690672247;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=s1fWEnH0sdbyAOEH6UFoh83BPgBAF+lwm2DoFeYlQSk=;
-        b=SAfYMrdb6X4MyONoyDs3xyZGi+FopMRVvnyJ+UlYT0QHx0SIjla4LoM+t8WjimL75v
-         ilO7ugs5Aa9XpEKpXQigO9ESOTjj3+3w7wFkGKHgbHVePtiFFp0VrALUjXBTTQE5ru4Q
-         xfjO7z+PWeyGlI9C2U6xbdU2GneHAUZxwmr9jo0OsIF1PtVqKtMjy70ej81mdUG0bxTE
-         fPHF1NOaoBvHZcZGppbp1BhapMqin9gE/Oibr9mMhaQH6y8+y7EZ3MnPwstTCFx+WTLy
-         H7+LmLtHG5DjGiOdeU1eAOPhqudaAscpZrspZI5dcxPBWp+EOTK3zU1yqnjmiL7lamQl
-         L7bw==
-X-Gm-Message-State: ABy/qLYXOIrw6MaL/m8M95LBkYiIx6eUVJEejl0lsEQLxy4lSVdY4m7e
-        I7Y0hwT4BLRsp0tzAS8a9yPQq1swFpadLIeHGG1fbA==
-X-Google-Smtp-Source: APBJJlGPLoLbN3j/MYaWDb+BS3m3rP3at/zt6fvbleRSvozMEhN8Jx0lax5nME4zrea3unZFbnd7KR+3GW/NDralX8c=
-X-Received: by 2002:a05:6512:314b:b0:4fb:92a9:cbe8 with SMTP id
- s11-20020a056512314b00b004fb92a9cbe8mr845289lfi.18.1688080222801; Thu, 29 Jun
- 2023 16:10:22 -0700 (PDT)
+        bh=UOurnaMZUdb/k4kFNvbu1tJhgntbSJLOIlDNG1veMtc=;
+        b=j/ATDrdAix/WY0xXIV4QSSFf8QwRStP0BZuvLJLRTA5L31j0zKTck+/E/w/TRtj9Yu
+         KqMwUg8Ds4N1a5PjuFF8R1AxR9UlSfkpNXn8og6SHqGXH822aMg0GjAHYHZJvRbcoa/E
+         UwAmKH5dqIUYpL5RFh+G8tr4VCrt1Wk5jpaeJuvKW5wLFyg+L3TrzbJHsOnYn6iE+YWj
+         FAlkocJmVcSoU5BbvPom891kpN6KNX3cOOb3xUKjppzCc8Wd5hfrwcPsTagpGVzWtTfP
+         HEdNLLUl7lz4z3441Wde5YIcPkATNOPNB9PLVMHLwGt8vX6wIv+KHcV3f/XD3YdN8sxf
+         6NMg==
+X-Gm-Message-State: ABy/qLafuDVH94VCvMpPxptHrKP75pVoxctD/qoST1nVXSDeyH2SYcPL
+        FCoGIFYjxOgA5L5vp3icVof0ILVYY8U7Hyi71Hzntg==
+X-Google-Smtp-Source: APBJJlGjycSr7eiVtsYdR8UO8c7yL6rvjBfztXjuRS86wMWH1lovN1IhFs/b0VgwmKIxlYDpwEDhcHF13Dot6nWJINo=
+X-Received: by 2002:a05:6512:348e:b0:4f8:6aa4:17ec with SMTP id
+ v14-20020a056512348e00b004f86aa417ecmr771881lfr.43.1688080247044; Thu, 29 Jun
+ 2023 16:10:47 -0700 (PDT)
 MIME-Version: 1.0
 References: <20230623222016.3742145-1-evan@rivosinc.com> <20230623222016.3742145-2-evan@rivosinc.com>
- <64F2D853-61E5-49CF-BAB5-AAFB8697683E@jrtc27.com> <CALs-HssZG8daTJaRK8JPT0VRk=23CtO6B_5kq4Xa_DdLELjaZw@mail.gmail.com>
- <53dc6959cc8849d6b66676ad48c1376a@AcuMS.aculab.com>
-In-Reply-To: <53dc6959cc8849d6b66676ad48c1376a@AcuMS.aculab.com>
+ <20230626-veneering-superglue-751719bd967c@wendy> <CALs-HsskE1-OkZxFzH9bM6bR9NBW5R4mh5AJScVtnvHbv+Pi6A@mail.gmail.com>
+ <20230629-untaxed-tripping-6000bc8c1873@wendy>
+In-Reply-To: <20230629-untaxed-tripping-6000bc8c1873@wendy>
 From:   Evan Green <evan@rivosinc.com>
-Date:   Thu, 29 Jun 2023 16:09:46 -0700
-Message-ID: <CALs-HstgcnK=prSHm9D7bqWc05q52ObA5kozmxzr-euR=CFfKw@mail.gmail.com>
+Date:   Thu, 29 Jun 2023 16:10:11 -0700
+Message-ID: <CALs-HstWNYD7HW3kNKjSHF9gd5+DB6ByH-Ay5xboh6dwBxv+-A@mail.gmail.com>
 Subject: Re: [PATCH 1/2] RISC-V: Probe for unaligned access speed
-To:     David Laight <David.Laight@aculab.com>
-Cc:     Jessica Clarke <jrtc27@jrtc27.com>,
-        Palmer Dabbelt <palmer@rivosinc.com>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        Yangyu Chen <cyy@cyyself.name>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Guo Ren <guoren@kernel.org>,
-        Jisheng Zhang <jszhang@kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Xianting Tian <xianting.tian@linux.alibaba.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Greentime Hu <greentime.hu@sifive.com>,
+To:     Conor Dooley <conor.dooley@microchip.com>
+Cc:     Palmer Dabbelt <palmer@rivosinc.com>,
         Simon Hosie <shosie@rivosinc.com>,
-        Li Zhengyu <lizhengyu3@huawei.com>,
-        Andrew Jones <ajones@ventanamicro.com>,
         Albert Ou <aou@eecs.berkeley.edu>,
         Alexandre Ghiti <alexghiti@rivosinc.com>,
-        Ley Foon Tan <leyfoon.tan@starfivetech.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Heiko Stuebner <heiko.stuebner@vrull.eu>,
+        Andrew Jones <ajones@ventanamicro.com>,
+        Andy Chiu <andy.chiu@sifive.com>,
         Anup Patel <apatel@ventanamicro.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Sia Jee Heng <jeeheng.sia@starfivetech.com>,
+        Greentime Hu <greentime.hu@sifive.com>,
+        Guo Ren <guoren@kernel.org>,
+        Heiko Stuebner <heiko.stuebner@vrull.eu>,
+        Jisheng Zhang <jszhang@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Ley Foon Tan <leyfoon.tan@starfivetech.com>,
+        Li Zhengyu <lizhengyu3@huawei.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
         Palmer Dabbelt <palmer@dabbelt.com>,
-        Andy Chiu <andy.chiu@sifive.com>
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Sia Jee Heng <jeeheng.sia@starfivetech.com>,
+        Sunil V L <sunilvl@ventanamicro.com>,
+        Xianting Tian <xianting.tian@linux.alibaba.com>,
+        Yangyu Chen <cyy@cyyself.name>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 29, 2023 at 5:05=E2=80=AFAM David Laight <David.Laight@aculab.c=
-om> wrote:
+On Thu, Jun 29, 2023 at 7:03=E2=80=AFAM Conor Dooley <conor.dooley@microchi=
+p.com> wrote:
 >
-> From: Evan Green
-> > Sent: 27 June 2023 20:12
-> >
-> > On Mon, Jun 26, 2023 at 2:42=E2=80=AFPM Jessica Clarke <jrtc27@jrtc27.c=
-om> wrote:
+> On Tue, Jun 27, 2023 at 12:11:25PM -0700, Evan Green wrote:
+> > On Mon, Jun 26, 2023 at 7:15=E2=80=AFAM Conor Dooley <conor.dooley@micr=
+ochip.com> wrote:
+> > > > +void check_misaligned_access(int cpu)
+> > > > +{
+> > > > +     unsigned long j0, j1;
+> > > > +     struct page *page;
+> > > > +     void *dst;
+> > > > +     void *src;
+> > > > +     long word_copies =3D 0;
+> > > > +     long byte_copies =3D 0;
+> > > > +     long speed =3D RISCV_HWPROBE_MISALIGNED_SLOW;
 > > >
-> > > On 23 Jun 2023, at 23:20, Evan Green <evan@rivosinc.com> wrote:
-> > > >
-> > > > Rather than deferring misaligned access speed determinations to a v=
-endor
-> > > > function, let's probe them and find out how fast they are. If we
-> > > > determine that a misaligned word access is faster than N byte acces=
-ses,
-> > > > mark the hardware's misaligned access as "fast".
+> > > Is this not a change from current behaviour, that may actually lead t=
+o
+> > > incorrect reporting. Presently, only T-Head stuff sets a speed, so
+> > > hwprobe falls back to UNKNOWN for everything else. With this, we will
+> > > get slow set, for anything failing the test.
+> > > Slow is defined as "Misaligned accesses are supported in hardware, bu=
+t
+> > > are slower than the cooresponding aligned accesses sequences (sic)", =
+but
+> > > you have no way of knowing, based on the test you are performing, whe=
+ther
+> > > the hardware supports it or if it is emulated by firmware.
+> > > Perhaps that is not relevant to userspace, but wanted to know your
+> > > thoughts.
 > > >
-> > > How sure are you that your measurements can be extrapolated and aren=
-=E2=80=99t
-> > > an artefact of the testing process? For example, off the top of my he=
-ad:
-> > >
-> > > * The first run will potentially be penalised by data cache misses,
-> > >   untrained prefetchers, TLB misses, branch predictors, etc. compared
-> > >   with later runs. You have one warmup, but who knows how many
-> > >   iterations it will take to converge?
 > >
-> > I'd expect the cache penalties to be reasonably covered by a single
-> > warmup. You're right about branch prediction, which is why I tried to
-> > use a large-ish buffer size, minimize the ratio of conditionals to
-> > loads/stores, and do the test for a decent number of iterations (on my
-> > THead, about 1800 and 400 for words and bytes).
+> > Hm, that's true. EMULATED was an easy one when we were planning to get
+> > this info from the DT. It also might be an easy one in the future, if
+> > we get an SBI call that allows the kernel to take over misaligned trap
+> > handling. We'd then be able to do a misaligned access and see if our
+> > trap handler got called.
 > >
-> > When I ran the test a handful of times, I did see variation on the
-> > order of ~5%. But the comparison of the two numbers doesn't seem to be
-> > anywhere near that margin (THead C906 was ~4x faster doing misaligned
-> > word accesses, others with slow misaligned accesses also reporting
-> > numbers not anywhere close to each other).
+> > One option is to leave the value alone if we fail the FAST test
+> > (rather than changing it from UNKNOWN to SLOW). This isn't great
+> > though, as it effectively makes UNKNOWN synonymous with SLOW, but in a
+> > way where usermode can't tell the difference between "I truly don't
+> > know" and "I tried the fast test and it failed".
+> >
+> > The alternative, as it is now, may mislabel some emulated systems as
+> > slow until the new SBI call shows up.
 >
-> Isn't the EMULATED case so much slower than anything else that
-> it is even pretty obvious from a single access?
-> (Possibly the 2nd access to avoid 'cold cache'.)
->
-> One of the things that can perturb measurements is hardware
-> interrupts. That can be mitigated by counting clocks for a few
-> (10 is plenty) iterations of a short request and taking the
-> fastest value.
-> For short hot-cache code sequences you can actually compare the
-> actual clock counts with theoretical minimum values.
+> Make that "mislabel some emulated systems forever", existing systems
+> don't magically grow support for new extensions unfortunately.
 
-Yeah, one thing I could do is disable interrupts, measure the cycle
-count of doing an individual iteration, do this N times, and take the
-minimum value as the time to compare. In the end I'll then have two
-numbers to compare, like I do in this patch. In theory the variance on
-that should be really tight. N will have to depend on the overall
-amount of time I'm taking so as not to shut interrupts off for very
-long. Let me experiment with this and see how the results look.
+Right.
+
+>
+> Realistically though, does it matter to userspace if it is slow because
+> the hardware is slow, or if the emulation is slow, since there's not
+> really a way for userspace to tell from the syscall by how much it is
+> slower.
+> It can probably guess that emulation is worse, given how crap the
+> speed I see on mpfs is.
+>
+> I'd rather we did say slow, rather than people start to interpret
+> UNKNOWN as slow.
+
+I think I agree.
+
+>
+> > I'm not sure how bad this is in
+> > practice. We could add a subsequent performance bar below which we
+> > guess "emulated".
+>
+> Nah, I don't really think that that is required.
+>
+> > This probably matches what usermode will use that
+> > value for anyway (a synonym for "very slow"), but it's basically the
+> > same problem with reversed polarity (we mislabel some slow systems as
+> > emulated). I'm open to suggestions!
+>
+> I think I just agreed with you, give or take. If it is fast, say fast.
+> If it is slow, we say it is slow. If we know it is emulated, then we can
+> report it being emulated. Is it too late to remove the "hardware" from
+> the syscall documentation, IOW s/supported in hardware/supported/?
+>
+> Please actually describe the assumptions/subtleties in the commit
+> message though, so that the rationale for stuff is in the history :)
+
+Will do. I pondered an alternative of creating a "gray zone" where if
+misaligned words and bytes come out close to each other (which I don't
+expect them to), we leave the setting of UNKNOWN alone. But I'm not
+sure this really solves anything, it just moves the "waffle point"
+around, so I couldn't convince myself it was valuable.
 -Evan
