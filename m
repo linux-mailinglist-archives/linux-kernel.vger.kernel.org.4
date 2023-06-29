@@ -2,211 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27A5C74292F
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 17:13:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF74B74293D
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 17:16:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232475AbjF2PNx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 11:13:53 -0400
-Received: from mail-dbaeur03on2063.outbound.protection.outlook.com ([40.107.104.63]:7179
-        "EHLO EUR03-DBA-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S232251AbjF2PNr (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 11:13:47 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=V+PxuzfSboXwRKpWBpSvqH2EkD+tdboisnK96KE02EmxqaAtHmfTaBGA6mSsIJj6ddPpj4Zn0WVEvhpI/IZX4NrCyUoXGjkQwLUGymsSfw+OjmRIiMj4f3/RU/1w/TAQC2FZyntmLcadnOeyANbWDbNKQEM0hNTHPXNZ+7PuX5nb1IDosaG00J4kYRTZuJUZOYUcxuCCk+Jp1bnfuX94pS5SR/krqNouY5/TbuzVnsoZjBXBqaLAqPKAjbEd4ypYmr9FOncr8bGpVK30aMxOHlPS6gnMr+Rhvuh2eJZGMs/XukKjn/ayI2Ys3hZnJprDLVOyU3h1wij1vj3Md3t81g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=/4nz0LiUsG2Da4OXYI1AndBd6LZ7MY2MAcJH1xBxDz0=;
- b=aVO9ZbEbKCGXFQiihi5fBbgSTIg3BcDyIbUH8OSOfRyoBNj1fTcBH2q7vzcqsQKHD7ZjjUVkA6kPw1eneYEDH1ISqvXieK/wLd0FtrwagNVdZ+WyOVwVXlvkgVBYwmXKfpERsquPIGzOx4wxdOwZWNMscdXymaNF13NCA7MwqIck0F5Y2RBQpkzF9ecB8nry8ogSQDnzc1cKVgkDkJTOkCdsaxmHl6JM2vBOr2hy3yP+20/DUvw86b0G3l9UBhD75h5m38Qdu+GOsn2b4uQUwc0XlhQZ6OEoruwm2+qlrL7d7o+P/n6uqmkYs1UHwdHxSXz/0rasU/h2gkK5ZqKIjw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=/4nz0LiUsG2Da4OXYI1AndBd6LZ7MY2MAcJH1xBxDz0=;
- b=JPHSRe4aK7LV73Htm4AfyJERV5eMolC6YwdRgh4znoiPVdG1XuyQoDqHopEimYoYqNSCfehY6dE29WmyliEz3M8/G1FrB9NFm4KbCpD4TxWrMBSlNUT1FqtFP8NlWkcYZJqzjNbpsLsMZLwh86qTZZyc7J6KpsqRKyD0i5BXqs8=
-Received: from AM0PR04MB6289.eurprd04.prod.outlook.com (2603:10a6:208:145::23)
- by DBAPR04MB7288.eurprd04.prod.outlook.com (2603:10a6:10:1a3::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.26; Thu, 29 Jun
- 2023 15:13:44 +0000
-Received: from AM0PR04MB6289.eurprd04.prod.outlook.com
- ([fe80::7aac:2f58:b7e3:2c24]) by AM0PR04MB6289.eurprd04.prod.outlook.com
- ([fe80::7aac:2f58:b7e3:2c24%7]) with mapi id 15.20.6521.026; Thu, 29 Jun 2023
- 15:13:44 +0000
-From:   Leo Li <leoyang.li@nxp.com>
-To:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>
-CC:     Ma Ke <make_ruc2021@163.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH] usb: gadget: fsl_qe_udc: validate endpoint index for ch9
- udc
-Thread-Topic: [PATCH] usb: gadget: fsl_qe_udc: validate endpoint index for ch9
- udc
-Thread-Index: AQHZqZi9K7bLkqeFik2hEi3PRtnNM6+gcHbggAAtAQCAABgTIIAAlCoAgAAuA4CAAG1lAA==
-Date:   Thu, 29 Jun 2023 15:13:43 +0000
-Message-ID: <AM0PR04MB6289FD7D57831D113BAAC8348F25A@AM0PR04MB6289.eurprd04.prod.outlook.com>
-References: <20230628081511.186850-1-make_ruc2021@163.com>
- <AM0PR04MB62893E77D085030A6E2C37B28F24A@AM0PR04MB6289.eurprd04.prod.outlook.com>
- <f321287d-8156-b805-26fd-58acfa26e324@csgroup.eu>
- <AM0PR04MB628929736762F5DF46C55D708F24A@AM0PR04MB6289.eurprd04.prod.outlook.com>
- <7975b5bf-c8e0-237e-d6f4-98e641d39959@csgroup.eu>
- <2023062958-graffiti-skyrocket-cfee@gregkh>
-In-Reply-To: <2023062958-graffiti-skyrocket-cfee@gregkh>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: AM0PR04MB6289:EE_|DBAPR04MB7288:EE_
-x-ms-office365-filtering-correlation-id: fdeef337-1a1c-43e1-8558-08db78b36dbe
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: ada/y+xxr8skz7N4pnKCcHNX28rUAzMUmAYyc0QrMugULPQHHCZyqhUqjReZLOeBoj7P0/GZJE6qvbdmxOLMSdg6JcPEbTQWqT6z7YL6BTHS7XgxQSUuz5heNvLIOAI0AcTLXOoELZVmpiFp6EWh2htc66tQh0pp919Hi6gRrDa81YB6ctlnrT39eSDKq6WEdYNJTRHmKL1MbR6XrfpTE/j0hqdA250QDhPKkOgWeDCshCOxxZ4osu9p/6A/A5u3WrDVl0/C34mx/gGofjmPFYQ64t1oX24uxntKdIxYeD3KiYbGn3Ksa8rtGxCH6bDdWPvUdJ7N3kiqD/dnWMXzOZ4TYJGk/EY4bnOde5dN2fLAiyuPCFIwWNAKEb2WfKCoL3IL6P7XJKjEVlHYHSaHlRx5u7EftIyXDiRg5eiYvzXevhZU2LMi3nMWxKd/ybjeyKiXD/eUQh/JDwhxm9YSYHpEoTbAKRz8XldAyRec9sUSwtp9eYtJZK6xYD15NYEQ14e5/UwRnXDYKppVijKjPaxLpKVDd1W21UEqyEsqQrF21DkZFq6tdu0ZQiTemdOE/0jcnrvb4VKaXPvHeNE91/NGQtdzBJfpH/Od5fmMUOTPk6h5OFNMXtmz6Oy7bKiQ
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0PR04MB6289.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(39860400002)(366004)(346002)(396003)(136003)(451199021)(66574015)(7696005)(53546011)(2906002)(9686003)(71200400001)(83380400001)(38100700002)(122000001)(26005)(6506007)(186003)(55236004)(55016003)(41300700001)(110136005)(86362001)(54906003)(4326008)(38070700005)(5660300002)(478600001)(33656002)(66946007)(76116006)(66556008)(66476007)(66446008)(64756008)(8676002)(8936002)(52536014)(316002)(15650500001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?ftnVbHFV5h1nBYnX4YKJmCd5AisGNlYGb1MSOql3xVVWnPOXBZDLwkw8VO?=
- =?iso-8859-1?Q?vDGxL78e5SyNXTemVv5UPd4G/Td3PrnlQKQrQxzNedeyRn9Rtjs3q4G6a1?=
- =?iso-8859-1?Q?xAb2g9D5bQXHEXSiMWlx7GpFQAkf9Dg1qln6t2FtFvDk/BddpUoHM3axtc?=
- =?iso-8859-1?Q?3dlutVyYf+nNi4eRNLkO8U2haVc6/4kJgBZ39b/0C4pnzcHR8gLwRBNtfB?=
- =?iso-8859-1?Q?8Pr82z6lYmR59nkCgxJd3b5lVKKDib2BwvDXEn7B5aevhZJzJwvEQVkWsg?=
- =?iso-8859-1?Q?njyD0MgPOq0ovFyWX7RAIBXc7pNQ0xuoDyp3XO0iigBVWgnoVH2wqUrC8m?=
- =?iso-8859-1?Q?12D2G48EXDCMGchrRXVtxJq4UW/j5GfOwFLn/NMW9B848c3mcqOM72yEwr?=
- =?iso-8859-1?Q?06N9AYeRwvIqwVBXIYtpqL0ApYFf3dTgXTiWG359Gn8S4761K7lRlvXPhW?=
- =?iso-8859-1?Q?IyDPlWA2ZvaU/Zvz6IIm2hF6hU2dByRKRk9J7viB4YHqzPMiA9HttY+nBO?=
- =?iso-8859-1?Q?CSfgFt3L8dxnlgzQmcqw28Vk/CvOVoRC0lkZbgvOKcJFbkq0Np25PyI+bY?=
- =?iso-8859-1?Q?3jbL+KlfgzlnY3oNvs9AgZZjXANTY8i3Rk3eBPYADpeA9T+zvcCKwDxR84?=
- =?iso-8859-1?Q?Oc8WPGwwSsXOO5WT6tXcfjR6fByJXq/L1tsfM4l1CSYA6nySIrFkJZ2NEc?=
- =?iso-8859-1?Q?VVumbLp4YhYVOuhAxec/yEt/UU1ihiNS1v0/RpBZsBgs8wlAQRoPclhpaO?=
- =?iso-8859-1?Q?kfg6wbUdHH2OyZh98mIdG6L/aKBM92USO5wgcs5upHhRVlINWvU9rc6Ade?=
- =?iso-8859-1?Q?cFWaBPKvuOkFuZVIOhvZBSkTH7AptZACpO8LpHpzhoirUmJZlW5ebeLAgF?=
- =?iso-8859-1?Q?vwa+fsNjZcXJHswA+Fz0/qnzfGOwvBeazV3Fsy9w4NpyX6q5Y8z8gAqNSI?=
- =?iso-8859-1?Q?ScW7nqGV3KZGceUcCxVh/Y6A4WZg4499pi/GlOIWqq3scs7ythz7QElhhV?=
- =?iso-8859-1?Q?+Nany+pO2EF20bts3qhpl7+VFMUXJsM6RjDoLVJkgi2vBTOgnT4omAfKk6?=
- =?iso-8859-1?Q?hQHImjEM1XD+MJXm9OUGg3c2MxqybctG93qN3qjh6qE3j2swrrDIT5KK6C?=
- =?iso-8859-1?Q?l0Mn5Lo2Ntep1a1IyGs1zBgGxjuogbqX+TOfbiJlvm08nBwe8nsfDpJMIn?=
- =?iso-8859-1?Q?BZQJt5XQzy7MTGeBZV4cWtJzJhDMHIO726JcoB1/zj5VkgntNiJAxFSYGt?=
- =?iso-8859-1?Q?J1jAOraTLzV+aJGSToXSkrh0PBUhfwPmYwz8Ea4BqaFoem8gONZ/VuQjiX?=
- =?iso-8859-1?Q?YlsTMMa4+xjymrey9I+5nWECotF+37WnJhx4/8eX8wU9ffPuWPWzRZEn3F?=
- =?iso-8859-1?Q?TTqY3HnEdJe35OwvTjPVoP+k2izs4RKgj5T7aaaInZgp+J45HKE0LGomrQ?=
- =?iso-8859-1?Q?JpEyysBawzVXMNiCMwuSJsOe/R1sHDmeYD1pQyekCFKjuTzTQcd3UZmQhL?=
- =?iso-8859-1?Q?v2blujPpYD4++vVZxaGM4sAgmRlkwC5R02AngSvXEUC93X+oZIfPrjEV2h?=
- =?iso-8859-1?Q?f3DF5XWhBh8dnyvJj4GFNAaJKN0Wf4hG5aDGa+c4VK/F9RK87r2mB74YRY?=
- =?iso-8859-1?Q?4bpkN6yup2/ZA=3D?=
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+        id S232440AbjF2PQA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 11:16:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47562 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231638AbjF2PP6 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 29 Jun 2023 11:15:58 -0400
+Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 474C31BD1;
+        Thu, 29 Jun 2023 08:15:57 -0700 (PDT)
+Received: by mail-pf1-f172.google.com with SMTP id d2e1a72fcca58-66767d628e2so703150b3a.2;
+        Thu, 29 Jun 2023 08:15:57 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688051757; x=1690643757;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=qccKYp1AYuLT7GaG2xqJdVkZtWkl4Hon6oeAGOJVG9o=;
+        b=FPirHep/dRCRIRtVtWB4zEdOwQyomPy/bVmo5toyA8ErJNR0lH6yTYM4wQ5j1kl8HO
+         G2f7JNPyK7IehoR33djsmqQEMPiHjUhwKYPkYcqHWFdYrwk6vWljDFHS17pU06qyarwR
+         bQVT1XYJAEFyC+K+zxVno5Z9Ar7AnFs0KJwkrOf6ZFPCpkQIpjmS1r3xoIZ1HHChsoGp
+         dUX32UCqJVLawzaUxkuz/c125oosU18rLixHPVRZv5bLnYWJ0X9dMhTAfIRtXtKGIVVH
+         QRTJnRm5kCM8IQUJtY8LbkaSN05s/7trn8kn0WdgH4wgOnSoFTH2PQxV94xYsan+lZgL
+         qXEw==
+X-Gm-Message-State: ABy/qLZ2vlk417tnJTaOJC/qfOhU3SBx+Dt02tBNeJWKcT8O8lpmYXhD
+        3P8lYN/Z3BNvccN/Skbl7vQ=
+X-Google-Smtp-Source: APBJJlGyZ1UKPPOKrKHSQ6VdlmgU0fE9xg8EakgcqFmnS7khGAVYo81mwX7BkeKiQ9Kpxr+S9FcqSA==
+X-Received: by 2002:a05:6a00:150c:b0:64f:7a9c:cb15 with SMTP id q12-20020a056a00150c00b0064f7a9ccb15mr273446pfu.11.1688051756513;
+        Thu, 29 Jun 2023 08:15:56 -0700 (PDT)
+Received: from ?IPV6:2620:15c:211:201:9df8:7301:777:30db? ([2620:15c:211:201:9df8:7301:777:30db])
+        by smtp.gmail.com with ESMTPSA id a19-20020a62e213000000b0063f0c9eadc7sm3191514pfi.200.2023.06.29.08.15.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 29 Jun 2023 08:15:55 -0700 (PDT)
+Message-ID: <a0c8d74a-dcfe-78a7-74bd-4447ed6944dc@acm.org>
+Date:   Thu, 29 Jun 2023 08:15:52 -0700
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: AM0PR04MB6289.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: fdeef337-1a1c-43e1-8558-08db78b36dbe
-X-MS-Exchange-CrossTenant-originalarrivaltime: 29 Jun 2023 15:13:43.8240
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: l8uSpbHMY06YLhPI2du2k9MhYoLerBdrEeN7KrQsblLxYhUuJrY0FQybR7GxS4FQolLbuP00WX1veFEBCvvjzw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DBAPR04MB7288
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v2 1/1] Add a new sysctl to disable io_uring system-wide
+Content-Language: en-US
+To:     Matteo Rizzo <matteorizzo@google.com>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, io-uring@vger.kernel.org
+Cc:     jordyzomer@google.com, evn@google.com, poprdi@google.com,
+        corbet@lwn.net, axboe@kernel.dk, asml.silence@gmail.com,
+        akpm@linux-foundation.org, keescook@chromium.org,
+        rostedt@goodmis.org, dave.hansen@linux.intel.com,
+        ribalda@chromium.org, chenhuacai@kernel.org, steve@sk2.org,
+        gpiccoli@igalia.com, ldufour@linux.ibm.com, bhe@redhat.com,
+        oleksandr@natalenko.name
+References: <20230629132711.1712536-1-matteorizzo@google.com>
+ <20230629132711.1712536-2-matteorizzo@google.com>
+From:   Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <20230629132711.1712536-2-matteorizzo@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+        lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 6/29/23 06:27, Matteo Rizzo wrote:
+> +static int __read_mostly sysctl_io_uring_disabled;
 
+Shouldn't this be a static key instead of an int in order to minimize the
+performance impact on the io_uring_setup() system call? See also
+Documentation/staging/static-keys.rst.
 
-> -----Original Message-----
-> From: gregkh@linuxfoundation.org <gregkh@linuxfoundation.org>
-> Sent: Thursday, June 29, 2023 3:41 AM
-> To: Christophe Leroy <christophe.leroy@csgroup.eu>
-> Cc: Leo Li <leoyang.li@nxp.com>; Ma Ke <make_ruc2021@163.com>; linux-
-> usb@vger.kernel.org; linuxppc-dev@lists.ozlabs.org; linux-
-> kernel@vger.kernel.org
-> Subject: Re: [PATCH] usb: gadget: fsl_qe_udc: validate endpoint index for
-> ch9 udc
->=20
-> On Thu, Jun 29, 2023 at 05:56:30AM +0000, Christophe Leroy wrote:
-> >
-> >
-> > Le 28/06/2023 =E0 23:10, Leo Li a =E9crit=A0:
-> > >
-> > >
-> > >> -----Original Message-----
-> > >> From: Christophe Leroy <christophe.leroy@csgroup.eu>
-> > >> Sent: Wednesday, June 28, 2023 2:40 PM
-> > >> To: Leo Li <leoyang.li@nxp.com>; Ma Ke <make_ruc2021@163.com>
-> > >> Cc: gregkh@linuxfoundation.org; linux-usb@vger.kernel.org;
-> > >> linuxppc- dev@lists.ozlabs.org; linux-kernel@vger.kernel.org
-> > >> Subject: Re: [PATCH] usb: gadget: fsl_qe_udc: validate endpoint
-> > >> index for
-> > >> ch9 udc
-> > >>
-> > >>
-> > >>
-> > >> Le 28/06/2023 =E0 19:04, Leo Li a =E9crit=A0:
-> > >>>
-> > >>>
-> > >>>> -----Original Message-----
-> > >>>> From: Ma Ke <make_ruc2021@163.com>
-> > >>>> Sent: Wednesday, June 28, 2023 3:15 AM
-> > >>>> To: Leo Li <leoyang.li@nxp.com>
-> > >>>> Cc: gregkh@linuxfoundation.org; linux-usb@vger.kernel.org;
-> > >>>> linuxppc- dev@lists.ozlabs.org; linux-kernel@vger.kernel.org; Ma
-> > >>>> Ke <make_ruc2021@163.com>
-> > >>>> Subject: [PATCH] usb: gadget: fsl_qe_udc: validate endpoint index
-> > >>>> for
-> > >>>> ch9 udc
-> > >>>>
-> > >>>> We should verify the bound of the array to assure that host may
-> > >>>> not manipulate the index to point past endpoint array.
-> > >>>>
-> > >>>> Signed-off-by: Ma Ke <make_ruc2021@163.com>
-> > >>>> ---
-> > >>>>    drivers/usb/gadget/udc/fsl_qe_udc.c | 2 ++
-> > >>>>    1 file changed, 2 insertions(+)
-> > >>>>
-> > >>>> diff --git a/drivers/usb/gadget/udc/fsl_qe_udc.c
-> > >>>> b/drivers/usb/gadget/udc/fsl_qe_udc.c
-> > >>>> index 3b1cc8fa30c8..f4e5cbd193b7 100644
-> > >>>> --- a/drivers/usb/gadget/udc/fsl_qe_udc.c
-> > >>>> +++ b/drivers/usb/gadget/udc/fsl_qe_udc.c
-> > >>>> @@ -1959,6 +1959,8 @@ static void ch9getstatus(struct qe_udc
-> > >>>> *udc, u8 request_type, u16 value,
-> > >>>>    	} else if ((request_type & USB_RECIP_MASK) =3D=3D
-> > >>>> USB_RECIP_ENDPOINT) {
-> > >>>>    		/* Get endpoint status */
-> > >>>>    		int pipe =3D index & USB_ENDPOINT_NUMBER_MASK;
-> > >>>> +		if (pipe >=3D USB_MAX_ENDPOINTS)
-> > >>>> +			goto stall;
-> > >>>
-> > >>> Thanks.  This seems to be the right thing to do.  But normally we
-> > >>> don't mix
-> > >> declarations with code within a code block.  Could we re-arrange
-> > >> the code a little bit so declarations stay on top?
-> > >>
-> > >> But we are at the start of a code block aren't we ?
-> > >
-> > > But they were at the beginning of a { } block which is compliant with=
- the
-> C89 standard.  I know gcc is more relaxed from this.  But it is probably =
-still
-> good to stick to the standard?
-> >
-> > Sorry I misread the patch and failed to see that the declaration block
-> > was continuing after the change.
-> >
-> > So yes don't interleave code with declarations. Leave declaration at
-> > the top of a block with a blank line between declarations and code.
->=20
-> This is fine as-is, no need to change anything.
+Thanks,
 
-With the approval from Greg, I have no objection to the patch.
-
-Acked-by: Li Yang <leoyang.li@nxp.com>
-
-Regards,
-Leo
+Bart.
