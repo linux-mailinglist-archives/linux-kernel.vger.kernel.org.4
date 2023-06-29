@@ -2,182 +2,262 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E749B742A5D
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 18:12:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB25E742A79
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 18:19:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232248AbjF2QMa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 12:12:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37590 "EHLO
+        id S232367AbjF2QTC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 12:19:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232006AbjF2QM2 (ORCPT
+        with ESMTP id S232159AbjF2QSl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 12:12:28 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85B913596
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 09:11:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1688055097;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=hXzn/T+eskwyoHAIYDRxcHdpwP2+My4amFKoi/35Pwg=;
-        b=NfHnsDuY+2s4kzk9soFGpcBfZwELZ1aqvSagZu63oa2b7Y1WuZgtUPmCe+hc7xJrNM0XgY
-        ZW3GWOdFB6W440BvSCkd7lCdstQPO9OtBuYF8yFWBYO4eOmIRqhRuwx77qvGVXT6UWjdkr
-        5KXJn7a2nUB8A44MWGGsxhu8nuLOUm0=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-569-Wpeqv30fOWmfcZrSHaZ9ug-1; Thu, 29 Jun 2023 12:11:32 -0400
-X-MC-Unique: Wpeqv30fOWmfcZrSHaZ9ug-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id BF2C81C31C4B;
-        Thu, 29 Jun 2023 16:11:30 +0000 (UTC)
-Received: from segfault.boston.devel.redhat.com (segfault.boston.devel.redhat.com [10.19.60.26])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 05AF2492B02;
-        Thu, 29 Jun 2023 16:11:29 +0000 (UTC)
-From:   Jeff Moyer <jmoyer@redhat.com>
-To:     Matteo Rizzo <matteorizzo@google.com>
-Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        io-uring@vger.kernel.org, jordyzomer@google.com, evn@google.com,
-        poprdi@google.com, corbet@lwn.net, axboe@kernel.dk,
-        asml.silence@gmail.com, akpm@linux-foundation.org,
-        keescook@chromium.org, rostedt@goodmis.org,
-        dave.hansen@linux.intel.com, ribalda@chromium.org,
-        chenhuacai@kernel.org, steve@sk2.org, gpiccoli@igalia.com,
-        ldufour@linux.ibm.com, bhe@redhat.com, oleksandr@natalenko.name
-Subject: Re: [PATCH v2 1/1] Add a new sysctl to disable io_uring system-wide
-References: <20230629132711.1712536-1-matteorizzo@google.com>
-        <20230629132711.1712536-2-matteorizzo@google.com>
-X-PGP-KeyID: 1F78E1B4
-X-PGP-CertKey: F6FE 280D 8293 F72C 65FD  5A58 1FF8 A7CA 1F78 E1B4
-Date:   Thu, 29 Jun 2023 12:17:20 -0400
-In-Reply-To: <20230629132711.1712536-2-matteorizzo@google.com> (Matteo Rizzo's
-        message of "Thu, 29 Jun 2023 13:27:11 +0000")
-Message-ID: <x49mt0i5jlb.fsf@segfault.boston.devel.redhat.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+        Thu, 29 Jun 2023 12:18:41 -0400
+Received: from mail-il1-x130.google.com (mail-il1-x130.google.com [IPv6:2607:f8b0:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E16B82D7F
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 09:18:38 -0700 (PDT)
+Received: by mail-il1-x130.google.com with SMTP id e9e14a558f8ab-345c343ce29so3843465ab.3
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 09:18:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=broadcom.com; s=google; t=1688055518; x=1690647518;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=dI+vxECRyY3M/Rdu95pvj0tL1PCBmoWAf3eDvwREIRs=;
+        b=Myh6OhMdjqsdEZ9Ybgw4bqMA4ND+qx2dbKkWk1m+aNMkl9dMLDBOtSNVslYP1C+43c
+         yPoHEdO86DHkwgc2ZuolHzusqTDez9Lnva8pDDWoS3G02ncrN4vEUWIrJEOH3eMk1Y9j
+         1La5wHTvj+uPH2/XH3R0mA7/XIcR80+SdUZzY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688055518; x=1690647518;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=dI+vxECRyY3M/Rdu95pvj0tL1PCBmoWAf3eDvwREIRs=;
+        b=icvAT8yX9e2YtIndZKgUDmQVUeO/FqPPLVg7CNkwuzxKTvNCrXDoHuufw09FsUAag2
+         fUUKvfVkjgAVgPAU0KH/ox7aocC8BjLiHQ5a6h+nJ2r226oaOzIesjfZexMr3e5BPQ+d
+         Rd1ON7Ib1uEPd/Ca9phMoOrOmuGgYwhkFMuWw0sOgdfX98TwgS9Pa7nQD/Cw0neWdeNy
+         SWhrFiqNoDRFNMEMa9774QgDtxeAtxCqRiFDVBO95khuUZ23KOYp0B4e1wJf22jTFzWG
+         nuw9CGpPA8jydyaO6MXFMyRvBJDlVJpNEG4v4obbfAmWJD5PasiJeIlmXHCw4cORLwcV
+         0cjw==
+X-Gm-Message-State: AC+VfDxEW+GF3HBZDaiq5EV2cXzndTI9go59gsuTEw8xe8HRsXQVaZ8k
+        8nZ2IxS53b3SPPl7oMcikiOnT8NDonn88oWk4+2Jjw==
+X-Google-Smtp-Source: ACHHUZ5rU/XAY1A2Xe5i1KDjxdaldeL3tVTYtVT1k/RjPLK58HiLRwY06mjq4ywKGJ+yys64uIrs7QQoVU72Z0TOvm8=
+X-Received: by 2002:a05:6e02:6ca:b0:345:a3c6:87ba with SMTP id
+ p10-20020a056e0206ca00b00345a3c687bamr16063914ils.22.1688055518271; Thu, 29
+ Jun 2023 09:18:38 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
+References: <20230629134306.95823-1-jonas.gorski@gmail.com>
+ <CAKekbeuMjUPpzfgKrxgZzFpiQ4FbeYtBtbrzkWKeBy4u2Symhg@mail.gmail.com> <CAOiHx=kh79=zBM=P8BhrU+3BHcgF71ZZdJR-hV9Tsm59=jELHw@mail.gmail.com>
+In-Reply-To: <CAOiHx=kh79=zBM=P8BhrU+3BHcgF71ZZdJR-hV9Tsm59=jELHw@mail.gmail.com>
+From:   Kamal Dasu <kamal.dasu@broadcom.com>
+Date:   Thu, 29 Jun 2023 12:18:01 -0400
+Message-ID: <CAKekbesHXh+ba6x=3_DjGH1HRmdnkn4phYG5tMobxsF_u+DBHw@mail.gmail.com>
+Subject: Re: [PATCH] spi: bcm-qspi: return error if neither hif_mspi nor mspi
+ is available
+To:     Jonas Gorski <jonas.gorski@gmail.com>
+Cc:     Kamal Dasu <kdasu.kdev@gmail.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="0000000000008ad27305ff470d65"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Matteo Rizzo <matteorizzo@google.com> writes:
+--0000000000008ad27305ff470d65
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-> Introduce a new sysctl (io_uring_disabled) which can be either 0, 1,
-> or 2. When 0 (the default), all processes are allowed to create io_uring
-> instances, which is the current behavior. When 1, all calls to
-> io_uring_setup fail with -EPERM unless the calling process has
-> CAP_SYS_ADMIN. When 2, calls to io_uring_setup fail with -EPERM
-> regardless of privilege.
+On Thu, Jun 29, 2023 at 11:38=E2=80=AFAM Jonas Gorski <jonas.gorski@gmail.c=
+om> wrote:
 >
-> Signed-off-by: Matteo Rizzo <matteorizzo@google.com>
+> On Thu, 29 Jun 2023 at 17:07, Kamal Dasu <kamal.dasu@broadcom.com> wrote:
+> >
+> > On Thu, Jun 29, 2023 at 9:43=E2=80=AFAM Jonas Gorski <jonas.gorski@gmai=
+l.com> wrote:
+> > >
+> > > If neither a "hif_mspi" nor "mspi" resource is present, the driver wi=
+ll
+> > > just early exit in probe but still return success. Apart from not doi=
+ng
+> > > anything meaningful, this would then also lead to a null pointer acce=
+ss
+> > > on removal, as platform_get_drvdata() would return NULL, which it wou=
+ld
+> > > then try to dereferce when trying to unregister the spi master.
 
-This looks good to me.  You may also consider updating the
-io_uring_setup(2) man page (part of liburing) to reflect this new
-meaning for -EPERM.
+s/dereferce/ dereference
 
-Reviewed-by: Jeff Moyer <jmoyer@redhat.com>
+> > >
+> > > Fix this by unconditionally calling devm_ioremap_resource(), as it ca=
+n
+> > > handle a NULL res and will then return a viable ERR_PTR() if we get o=
+ne.
+> > >
+> > > The "return 0;" was previously a "goto qspi_resource_err;" where then
+> > > ret was returned, but since ret was still initialized to 0 at this pl=
+ace
+> > > this was a valid conversion in 63c5395bb7a9 ("spi: bcm-qspi: Fix
+> > > use-after-free on unbind"). The issue was not introduced by this comm=
+it,
+> > > only made more obvious.
+> > >
+> > > Fixes: fa236a7ef240 ("spi: bcm-qspi: Add Broadcom MSPI driver")
+> > > Signed-off-by: Jonas Gorski <jonas.gorski@gmail.com>
+> > > ---
 
-> ---
->  Documentation/admin-guide/sysctl/kernel.rst | 19 +++++++++++++
->  io_uring/io_uring.c                         | 30 +++++++++++++++++++++
->  2 files changed, 49 insertions(+)
+Reviewed-by:  Kamal Dasu <kamal.dasu@broadcom.com>
+
+> > > Found by looking a the driver while comparing it to its bindings.
+> > >
+> > > Only build tested, not runtested.
+> > >
+> > >  drivers/spi/spi-bcm-qspi.c | 10 +++-------
+> > >  1 file changed, 3 insertions(+), 7 deletions(-)
+> > >
+> > > diff --git a/drivers/spi/spi-bcm-qspi.c b/drivers/spi/spi-bcm-qspi.c
+> > > index 6b46a3b67c41..d91dfbe47aa5 100644
+> > > --- a/drivers/spi/spi-bcm-qspi.c
+> > > +++ b/drivers/spi/spi-bcm-qspi.c
+> > > @@ -1543,13 +1543,9 @@ int bcm_qspi_probe(struct platform_device *pde=
+v,
+> > >                 res =3D platform_get_resource_byname(pdev, IORESOURCE=
+_MEM,
+> > >                                                    "mspi");
+> > >
+> > > -       if (res) {
+> > > -               qspi->base[MSPI]  =3D devm_ioremap_resource(dev, res)=
+;
+> > > -               if (IS_ERR(qspi->base[MSPI]))
+> > > -                       return PTR_ERR(qspi->base[MSPI]);
+> > > -       } else {
+> > > -               return 0;
+> > > -       }
+> >
+> > I would rather just do this in the else case
+> >
+> > } else {
+> >  -              return 0;
+> >  +             return -ENODEV;
+> > }
+> >
+> >  The change below does not check the return of
+> > platform_get_resource_byname() in my opinion rather relies on
+> > devm_ioremap_resource() doing the right thing.
 >
-> diff --git a/Documentation/admin-guide/sysctl/kernel.rst b/Documentation/admin-guide/sysctl/kernel.rst
-> index 3800fab1619b..ee65f7aeb0cf 100644
-> --- a/Documentation/admin-guide/sysctl/kernel.rst
-> +++ b/Documentation/admin-guide/sysctl/kernel.rst
-> @@ -450,6 +450,25 @@ this allows system administrators to override the
->  ``IA64_THREAD_UAC_NOPRINT`` ``prctl`` and avoid logs being flooded.
->  
->  
-> +io_uring_disabled
-> +=================
-> +
-> +Prevents all processes from creating new io_uring instances. Enabling this
-> +shrinks the kernel's attack surface.
-> +
-> += ==================================================================
-> +0 All processes can create io_uring instances as normal. This is the
-> +  default setting.
-> +1 io_uring creation is disabled for unprivileged processes.
-> +  io_uring_setup fails with -EPERM unless the calling process is
-> +  privileged (CAP_SYS_ADMIN). Existing io_uring instances can
-> +  still be used.
-> +2 io_uring creation is disabled for all processes. io_uring_setup
-> +  always fails with -EPERM. Existing io_uring instances can still be
-> +  used.
-> += ==================================================================
-> +
-> +
->  kexec_load_disabled
->  ===================
->  
-> diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
-> index 1b53a2ab0a27..2343ae518546 100644
-> --- a/io_uring/io_uring.c
-> +++ b/io_uring/io_uring.c
-> @@ -153,6 +153,22 @@ static __cold void io_fallback_tw(struct io_uring_task *tctx);
->  
->  struct kmem_cache *req_cachep;
->  
-> +static int __read_mostly sysctl_io_uring_disabled;
-> +#ifdef CONFIG_SYSCTL
-> +static struct ctl_table kernel_io_uring_disabled_table[] = {
-> +	{
-> +		.procname	= "io_uring_disabled",
-> +		.data		= &sysctl_io_uring_disabled,
-> +		.maxlen		= sizeof(sysctl_io_uring_disabled),
-> +		.mode		= 0644,
-> +		.proc_handler	= proc_dointvec_minmax,
-> +		.extra1		= SYSCTL_ZERO,
-> +		.extra2		= SYSCTL_TWO,
-> +	},
-> +	{},
-> +};
-> +#endif
-> +
->  struct sock *io_uring_get_socket(struct file *file)
->  {
->  #if defined(CONFIG_UNIX)
-> @@ -4000,9 +4016,18 @@ static long io_uring_setup(u32 entries, struct io_uring_params __user *params)
->  	return io_uring_create(entries, &p, params);
->  }
->  
-> +static inline bool io_uring_allowed(void)
-> +{
-> +	return sysctl_io_uring_disabled == 0 ||
-> +		(sysctl_io_uring_disabled == 1 && capable(CAP_SYS_ADMIN));
-> +}
-> +
->  SYSCALL_DEFINE2(io_uring_setup, u32, entries,
->  		struct io_uring_params __user *, params)
->  {
-> +	if (!io_uring_allowed())
-> +		return -EPERM;
-> +
->  	return io_uring_setup(entries, params);
->  }
->  
-> @@ -4577,6 +4602,11 @@ static int __init io_uring_init(void)
->  
->  	req_cachep = KMEM_CACHE(io_kiocb, SLAB_HWCACHE_ALIGN | SLAB_PANIC |
->  				SLAB_ACCOUNT | SLAB_TYPESAFE_BY_RCU);
-> +
-> +#ifdef CONFIG_SYSCTL
-> +	register_sysctl_init("kernel", kernel_io_uring_disabled_table);
-> +#endif
-> +
->  	return 0;
->  };
->  __initcall(io_uring_init);
+> This is how devm_ioremap_resource() is intended to be used, see e.g.
+> the example in its kernel documentation:
+>
+> https://elixir.bootlin.com/linux/latest/source/lib/devres.c#L167
+>
+> So I don't see what's wrong with relying on functions doing the right thi=
+ng.
+>
+> Also AFAIU the appropriate return code in this case would be rather
+> -EINVAL, not -ENODEV.
+>
+> >
+> > > +       qspi->base[MSPI]  =3D devm_ioremap_resource(dev, res);
+> > > +       if (IS_ERR(qspi->base[MSPI]))
+> > > +               return PTR_ERR(qspi->base[MSPI]);
+> > >
+> > >         res =3D platform_get_resource_byname(pdev, IORESOURCE_MEM, "b=
+spi");
+> > >         if (res) {
+> > > --
+> > > 2.34.1
+> > >
+>
 
+
+
+> Regards,
+> Jonas
+
+--0000000000008ad27305ff470d65
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
+
+MIIQZwYJKoZIhvcNAQcCoIIQWDCCEFQCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
+gg2+MIIFDTCCA/WgAwIBAgIQeEqpED+lv77edQixNJMdADANBgkqhkiG9w0BAQsFADBMMSAwHgYD
+VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
+AxMKR2xvYmFsU2lnbjAeFw0yMDA5MTYwMDAwMDBaFw0yODA5MTYwMDAwMDBaMFsxCzAJBgNVBAYT
+AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYDVQQDEyhHbG9iYWxTaWduIEdDQyBS
+MyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA
+vbCmXCcsbZ/a0fRIQMBxp4gJnnyeneFYpEtNydrZZ+GeKSMdHiDgXD1UnRSIudKo+moQ6YlCOu4t
+rVWO/EiXfYnK7zeop26ry1RpKtogB7/O115zultAz64ydQYLe+a1e/czkALg3sgTcOOcFZTXk38e
+aqsXsipoX1vsNurqPtnC27TWsA7pk4uKXscFjkeUE8JZu9BDKaswZygxBOPBQBwrA5+20Wxlk6k1
+e6EKaaNaNZUy30q3ArEf30ZDpXyfCtiXnupjSK8WU2cK4qsEtj09JS4+mhi0CTCrCnXAzum3tgcH
+cHRg0prcSzzEUDQWoFxyuqwiwhHu3sPQNmFOMwIDAQABo4IB2jCCAdYwDgYDVR0PAQH/BAQDAgGG
+MGAGA1UdJQRZMFcGCCsGAQUFBwMCBggrBgEFBQcDBAYKKwYBBAGCNxQCAgYKKwYBBAGCNwoDBAYJ
+KwYBBAGCNxUGBgorBgEEAYI3CgMMBggrBgEFBQcDBwYIKwYBBQUHAxEwEgYDVR0TAQH/BAgwBgEB
+/wIBADAdBgNVHQ4EFgQUljPR5lgXWzR1ioFWZNW+SN6hj88wHwYDVR0jBBgwFoAUj/BLf6guRSSu
+TVD6Y5qL3uLdG7wwegYIKwYBBQUHAQEEbjBsMC0GCCsGAQUFBzABhiFodHRwOi8vb2NzcC5nbG9i
+YWxzaWduLmNvbS9yb290cjMwOwYIKwYBBQUHMAKGL2h0dHA6Ly9zZWN1cmUuZ2xvYmFsc2lnbi5j
+b20vY2FjZXJ0L3Jvb3QtcjMuY3J0MDYGA1UdHwQvMC0wK6ApoCeGJWh0dHA6Ly9jcmwuZ2xvYmFs
+c2lnbi5jb20vcm9vdC1yMy5jcmwwWgYDVR0gBFMwUTALBgkrBgEEAaAyASgwQgYKKwYBBAGgMgEo
+CjA0MDIGCCsGAQUFBwIBFiZodHRwczovL3d3dy5nbG9iYWxzaWduLmNvbS9yZXBvc2l0b3J5LzAN
+BgkqhkiG9w0BAQsFAAOCAQEAdAXk/XCnDeAOd9nNEUvWPxblOQ/5o/q6OIeTYvoEvUUi2qHUOtbf
+jBGdTptFsXXe4RgjVF9b6DuizgYfy+cILmvi5hfk3Iq8MAZsgtW+A/otQsJvK2wRatLE61RbzkX8
+9/OXEZ1zT7t/q2RiJqzpvV8NChxIj+P7WTtepPm9AIj0Keue+gS2qvzAZAY34ZZeRHgA7g5O4TPJ
+/oTd+4rgiU++wLDlcZYd/slFkaT3xg4qWDepEMjT4T1qFOQIL+ijUArYS4owpPg9NISTKa1qqKWJ
+jFoyms0d0GwOniIIbBvhI2MJ7BSY9MYtWVT5jJO3tsVHwj4cp92CSFuGwunFMzCCA18wggJHoAMC
+AQICCwQAAAAAASFYUwiiMA0GCSqGSIb3DQEBCwUAMEwxIDAeBgNVBAsTF0dsb2JhbFNpZ24gUm9v
+dCBDQSAtIFIzMRMwEQYDVQQKEwpHbG9iYWxTaWduMRMwEQYDVQQDEwpHbG9iYWxTaWduMB4XDTA5
+MDMxODEwMDAwMFoXDTI5MDMxODEwMDAwMFowTDEgMB4GA1UECxMXR2xvYmFsU2lnbiBSb290IENB
+IC0gUjMxEzARBgNVBAoTCkdsb2JhbFNpZ24xEzARBgNVBAMTCkdsb2JhbFNpZ24wggEiMA0GCSqG
+SIb3DQEBAQUAA4IBDwAwggEKAoIBAQDMJXaQeQZ4Ihb1wIO2hMoonv0FdhHFrYhy/EYCQ8eyip0E
+XyTLLkvhYIJG4VKrDIFHcGzdZNHr9SyjD4I9DCuul9e2FIYQebs7E4B3jAjhSdJqYi8fXvqWaN+J
+J5U4nwbXPsnLJlkNc96wyOkmDoMVxu9bi9IEYMpJpij2aTv2y8gokeWdimFXN6x0FNx04Druci8u
+nPvQu7/1PQDhBjPogiuuU6Y6FnOM3UEOIDrAtKeh6bJPkC4yYOlXy7kEkmho5TgmYHWyn3f/kRTv
+riBJ/K1AFUjRAjFhGV64l++td7dkmnq/X8ET75ti+w1s4FRpFqkD2m7pg5NxdsZphYIXAgMBAAGj
+QjBAMA4GA1UdDwEB/wQEAwIBBjAPBgNVHRMBAf8EBTADAQH/MB0GA1UdDgQWBBSP8Et/qC5FJK5N
+UPpjmove4t0bvDANBgkqhkiG9w0BAQsFAAOCAQEAS0DbwFCq/sgM7/eWVEVJu5YACUGssxOGhigH
+M8pr5nS5ugAtrqQK0/Xx8Q+Kv3NnSoPHRHt44K9ubG8DKY4zOUXDjuS5V2yq/BKW7FPGLeQkbLmU
+Y/vcU2hnVj6DuM81IcPJaP7O2sJTqsyQiunwXUaMld16WCgaLx3ezQA3QY/tRG3XUyiXfvNnBB4V
+14qWtNPeTCekTBtzc3b0F5nCH3oO4y0IrQocLP88q1UOD5F+NuvDV0m+4S4tfGCLw0FREyOdzvcy
+a5QBqJnnLDMfOjsl0oZAzjsshnjJYS8Uuu7bVW/fhO4FCU29KNhyztNiUGUe65KXgzHZs7XKR1g/
+XzCCBUYwggQuoAMCAQICDDz1ZfY+nu573bZBWTANBgkqhkiG9w0BAQsFADBbMQswCQYDVQQGEwJC
+RTEZMBcGA1UEChMQR2xvYmFsU2lnbiBudi1zYTExMC8GA1UEAxMoR2xvYmFsU2lnbiBHQ0MgUjMg
+UGVyc29uYWxTaWduIDIgQ0EgMjAyMDAeFw0yMjA5MTAxMjIwMjFaFw0yNTA5MTAxMjIwMjFaMIGK
+MQswCQYDVQQGEwJJTjESMBAGA1UECBMJS2FybmF0YWthMRIwEAYDVQQHEwlCYW5nYWxvcmUxFjAU
+BgNVBAoTDUJyb2FkY29tIEluYy4xEzARBgNVBAMTCkthbWFsIERhc3UxJjAkBgkqhkiG9w0BCQEW
+F2thbWFsLmRhc3VAYnJvYWRjb20uY29tMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA
+qleMIXx8Zwh2WP/jpzRzyh3axDm5qIpwHevp+tTA7EztFd+5EoriRj5/goGYkJH+HbVOvY9bS1dJ
+swWsylPFAKpuHPnJb+W9ZTJZnmOd6GHO+37b4rcsxsmbw9IWIy7tPWrKaLQXNjwEp/dum+FWlB8L
+sCrKsoN6HxDhqzjLGMNy1lpKvkF/+5mDUeBn4hSdjLMRejcZnlnB/vk4aU/sBzFzK6gkhpoH1V+H
+DxuNuBlySpn/GYqPcDcRZd8EENWqnZrjtjHMk0j7ZfrPGXq8sQkbG3OX+DOwSaefPRq1pLGWBZaZ
+YuUo5O7CNHo7h7Hc9GgjiW+6X9BjKAzSaDy8jwIDAQABo4IB2DCCAdQwDgYDVR0PAQH/BAQDAgWg
+MIGjBggrBgEFBQcBAQSBljCBkzBOBggrBgEFBQcwAoZCaHR0cDovL3NlY3VyZS5nbG9iYWxzaWdu
+LmNvbS9jYWNlcnQvZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3J0MEEGCCsGAQUFBzABhjVo
+dHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAyMDBNBgNV
+HSAERjBEMEIGCisGAQQBoDIBKAowNDAyBggrBgEFBQcCARYmaHR0cHM6Ly93d3cuZ2xvYmFsc2ln
+bi5jb20vcmVwb3NpdG9yeS8wCQYDVR0TBAIwADBJBgNVHR8EQjBAMD6gPKA6hjhodHRwOi8vY3Js
+Lmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNybDAiBgNVHREEGzAZ
+gRdrYW1hbC5kYXN1QGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggrBgEFBQcDBDAfBgNVHSMEGDAW
+gBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUcRYSWvAVyA3hgTrQ2c4AFquBsG0wDQYJ
+KoZIhvcNAQELBQADggEBAIKB2IOweF2sIYGBZTDm+Hwmhga+sjekM167Sk/KwxxvQFwZYP6i0SnR
+7aR59vbfVQVaAiZH/a+35EYxP/sXaIM4+E3bFykBuXwcGEnYyEn6MceiOCkjkWQq1Co2JyOdNvkP
+nAxyPoWlsJtr+N/MF1EYKGpYMdPM7S2T/gujjO9N56BCGu9yJElszWcXHmBl5IsaQqMS36vhsV0b
+NxffjNkeAdgfN/SS9S9Rj4WXD7pF1M0Xq8gPLCLyXrx1i2KkYOYJsj0PWlC6VRg6E1xXkYDte0VL
+fAAG4QsETU27E1HBNQyp5zF1PoPCPvq3EnWQnbLgYk+Jz2iwIUwiqwr/bDgxggJtMIICaQIBATBr
+MFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYDVQQDEyhHbG9i
+YWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgw89WX2Pp7ue922QVkwDQYJYIZI
+AWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIBpRtDSz0hHejDnQDBFKXZ8igRtAM08n5VgKLWCq
+DCzcMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIzMDYyOTE2MTgz
+OFowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsGCWCGSAFlAwQB
+AjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFlAwQCATANBgkq
+hkiG9w0BAQEFAASCAQAZQ1ExlvawAIXxhUr7Q6PXUlr4ntd4og1C7WuvitBtJqRTFr089EMsfiNt
+A0f4FBEal6nVjb1hDZkEXFK++pQ+rWVQTEF8n97lWNMO4FYYpQK14Nlt4OlkTlQSwo1N5ywb0eFS
+yrUfyVu2RaTy5zqDJVDakNl5MsSi4lksWIXtNxWiIucFbAK2NuGlSqM754Fp8opyt1vRI9WezMPH
+uKSQKGdbnh+oQzrdnvFLNoFPxDSVQih9MdkJnh0V2vPgK6aW9fzNU2cNXvq/TkLzX518eEVnujSq
+irrX2a2GC1bd9onIVGl0NfTCyfXmcjR5ZNxpqDhk32hxqHJLQsWIjjBy
+--0000000000008ad27305ff470d65--
