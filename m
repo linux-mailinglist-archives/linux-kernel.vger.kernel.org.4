@@ -2,82 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82C9E741D97
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 03:20:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A06D741D9C
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 03:27:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231768AbjF2BTy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 21:19:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40094 "EHLO
+        id S230490AbjF2B0T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 21:26:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229955AbjF2BTn (ORCPT
+        with ESMTP id S229469AbjF2B0R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 21:19:43 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95B5626AD;
-        Wed, 28 Jun 2023 18:19:42 -0700 (PDT)
-Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35T1EvEf031451;
-        Thu, 29 Jun 2023 01:19:30 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=oO3Cd6/0cmdN9gn+GWK3iWlbDsuo17nygEG2aeXxfaQ=;
- b=is0FlJ6EUnBeAeCD4pXg9d++NoO8z6Db/Ga+Zz7k0B1YmiBS0psPZWbhDswTwQnWDvLv
- A1xp7R/ymt/4Kc37n8GcTUqZMCb15SYbLGu/s+5nNNU1wUpFs5/2PwQfS/MgWF21b1w4
- 9by4xF64zb+S1/+6qeysb4WNGOQIAUOY6DHtA2U1e3Lov33eSzAXtc9j0aUcObmJ7M+y
- zMtYKpRMj4916Aj9i/EZ/pAUiei5jX54qXn7cYnPv9h6XpRyPFoEfPVhY22KTk+2iikN
- koqKCDeGvDwVU4d3/rSKnlZYkubDJ0paekAkmQRA31W187Yau/FKYHbuWTemOldXbiNQ pQ== 
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rgnxr97n7-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 29 Jun 2023 01:19:30 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35T1JTXH029246
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 29 Jun 2023 01:19:29 GMT
-Received: from [10.110.20.95] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.7; Wed, 28 Jun
- 2023 18:19:28 -0700
-Message-ID: <2e871e21-a81d-0d7d-993b-9a9d7bd9d962@quicinc.com>
-Date:   Wed, 28 Jun 2023 18:19:27 -0700
+        Wed, 28 Jun 2023 21:26:17 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9037F10CF
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 18:26:15 -0700 (PDT)
+Received: from dggpemm500002.china.huawei.com (unknown [172.30.72.57])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Qs13N1ZGhzTlWJ;
+        Thu, 29 Jun 2023 09:25:20 +0800 (CST)
+Received: from [10.174.179.5] (10.174.179.5) by dggpemm500002.china.huawei.com
+ (7.185.36.229) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Thu, 29 Jun
+ 2023 09:26:12 +0800
+Subject: Re: [Question] report a race condition between CPU hotplug state
+ machine and hrtimer 'sched_cfs_period_timer' for cfs bandwidth throttling
+To:     Vincent Guittot <vincent.guittot@linaro.org>
+CC:     Thomas Gleixner <tglx@linutronix.de>, <vschneid@redhat.com>,
+        Phil Auld <pauld@redhat.com>, <vdonnefort@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Wei Li <liwei391@huawei.com>,
+        "liaoyu (E)" <liaoyu15@huawei.com>, <zhangqiao22@huawei.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Ingo Molnar <mingo@kernel.org>
+References: <8e785777-03aa-99e1-d20e-e956f5685be6@huawei.com>
+ <87mt18it1y.ffs@tglx> <68baeac9-9fa7-5594-b5e7-4baf8ac86b77@huawei.com>
+ <ba352e83-b8b1-d900-9c1f-56b8c8a8b8fb@huawei.com>
+ <CAKfTPtBoe_jRn-EMsQxssQ4BcveT+Qcd+GmsRbQEXQDGfzFOMg@mail.gmail.com>
+From:   Xiongfeng Wang <wangxiongfeng2@huawei.com>
+Message-ID: <a0c76a11-9c18-6473-b0be-fd5ffa864599@huawei.com>
+Date:   Thu, 29 Jun 2023 09:26:12 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 1/7] dt-bindings: soc: qcom: Add qcom-pbs bindings
-Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>
-CC:     <pavel@ucw.cz>, <lee@kernel.org>, <thierry.reding@gmail.com>,
-        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
-        <agross@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <u.kleine-koenig@pengutronix.de>,
-        <linux-leds@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-pwm@vger.kernel.org>
-References: <20230621185949.2068-1-quic_amelende@quicinc.com>
- <20230621185949.2068-2-quic_amelende@quicinc.com>
- <20230626135857.GA3118929-robh@kernel.org>
-From:   Anjelique Melendez <quic_amelende@quicinc.com>
-In-Reply-To: <20230626135857.GA3118929-robh@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <CAKfTPtBoe_jRn-EMsQxssQ4BcveT+Qcd+GmsRbQEXQDGfzFOMg@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: 6Efzwhmw1uFevjBrwBdPfibktLtBEN3w
-X-Proofpoint-GUID: 6Efzwhmw1uFevjBrwBdPfibktLtBEN3w
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-06-28_14,2023-06-27_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- clxscore=1011 impostorscore=0 mlxscore=0 spamscore=0 adultscore=0
- bulkscore=0 suspectscore=0 phishscore=0 malwarescore=0 mlxlogscore=999
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2305260000 definitions=main-2306290010
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+X-Originating-IP: [10.174.179.5]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggpemm500002.china.huawei.com (7.185.36.229)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -88,71 +62,176 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 6/26/2023 6:58 AM, Rob Herring wrote:
-> On Wed, Jun 21, 2023 at 11:59:45AM -0700, Anjelique Melendez wrote:
->> Add binding for the Qualcomm Programmable Boot Sequencer device.
+On 2023/6/28 0:46, Vincent Guittot wrote:
+> On Mon, 26 Jun 2023 at 10:23, Xiongfeng Wang <wangxiongfeng2@huawei.com> wrote:
 >>
->> Signed-off-by: Anjelique Melendez <quic_amelende@quicinc.com>
->> ---
->>  .../bindings/soc/qcom/qcom-pbs.yaml           | 41 +++++++++++++++++++
->>  1 file changed, 41 insertions(+)
->>  create mode 100644 Documentation/devicetree/bindings/soc/qcom/qcom-pbs.yaml
+>> Hi,
 >>
->> diff --git a/Documentation/devicetree/bindings/soc/qcom/qcom-pbs.yaml b/Documentation/devicetree/bindings/soc/qcom/qcom-pbs.yaml
->> new file mode 100644
->> index 000000000000..0a89c334f95c
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/soc/qcom/qcom-pbs.yaml
->> @@ -0,0 +1,41 @@
->> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->> +%YAML 1.2
->> +---
->> +$id: http://devicetree.org/schemas/soc/qcom/qcom-pbs.yaml#
->> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->> +
->> +title: Qualcomm Technologies, Inc. PBS
->> +
->> +maintainers:
->> +  - Anjelique Melendez <quic_amelende@quicinc.com>
->> +
->> +description: |
->> +  Qualcomm PBS (programmable boot sequencer) supports triggering sequences
->> +  for clients upon request.
->> +
->> +properties:
->> +  compatible:
->> +    const: qcom,pbs
->> +
->> +  reg:
->> +    description: |
->> +      Base address of the PBS peripheral.
->> +    maxItems: 1
->> +
->> +required:
->> + - compatible
->> + - reg
->> +
->> +additionalProperties: false
->> +
->> +examples:
->> +  - |
->> +    pmic {
->> +      #address-cells = <1>;
->> +      #size-cells = <0>;
->> +
->> +      qcom,pbs@7400 {
->> +        compatible = "qcom,pbs";
->> +        reg = <0x7400>;
->> +      };
+>> Kindly ping~
+>> Could you please take a look at this issue and the below temporary fix ?
+>>
+>> Thanks,
+>> Xiongfeng
+>>
+>> On 2023/6/12 20:49, Xiongfeng Wang wrote:
+>>>
+>>>
+>>> On 2023/6/9 22:55, Thomas Gleixner wrote:
+>>>> On Fri, Jun 09 2023 at 19:24, Xiongfeng Wang wrote:
+>>>>
+>>>> Cc+ scheduler people, leave context intact
+>>>>
+>>>>> Hello,
+>>>>>  When I do some low power tests, the following hung task is printed.
+>>>>>
+>>>>>   Call trace:
+>>>>>    __switch_to+0xd4/0x160
+>>>>>    __schedule+0x38c/0x8c4
+>>>>>    __cond_resched+0x24/0x50
+>>>>>    unmap_kernel_range_noflush+0x210/0x240
+>>>>>    kretprobe_trampoline+0x0/0xc8
+>>>>>    __vunmap+0x70/0x31c
+>>>>>    __vfree+0x34/0x8c
+>>>>>    vfree+0x40/0x58
+>>>>>    free_vm_stack_cache+0x44/0x74
+>>>>>    cpuhp_invoke_callback+0xc4/0x71c
+>>>>>    _cpu_down+0x108/0x284
+>>>>>    kretprobe_trampoline+0x0/0xc8
+>>>>>    suspend_enter+0xd8/0x8ec
+>>>>>    suspend_devices_and_enter+0x1f0/0x360
+>>>>>    pm_suspend.part.1+0x428/0x53c
+>>>>>    pm_suspend+0x3c/0xa0
+>>>>>    devdrv_suspend_proc+0x148/0x248 [drv_devmng]
+>>>>>    devdrv_manager_set_power_state+0x140/0x680 [drv_devmng]
+>>>>>    devdrv_manager_ioctl+0xcc/0x210 [drv_devmng]
+>>>>>    drv_ascend_intf_ioctl+0x84/0x248 [drv_davinci_intf]
+>>>>>    __arm64_sys_ioctl+0xb4/0xf0
+>>>>>    el0_svc_common.constprop.0+0x140/0x374
+>>>>>    do_el0_svc+0x80/0xa0
+>>>>>    el0_svc+0x1c/0x28
+>>>>>    el0_sync_handler+0x90/0xf0
+>>>>>    el0_sync+0x168/0x180
+>>>>>
+>>>>> After some analysis, I found it is caused by the following race condition.
+>>>>>
+>>>>> 1. A task running on CPU1 is throttled for cfs bandwidth. CPU1 starts the
+>>>>> hrtimer cfs_bandwidth 'period_timer' and enqueue the hrtimer on CPU1's rbtree.
+>>>>> 2. Then the task is migrated to CPU2 and starts to offline CPU1. CPU1 starts
+>>>>> CPUHP AP steps, and then the hrtimer 'period_timer' expires and re-enqueued on CPU1.
+>>>>> 3. CPU1 runs to take_cpu_down() and disable irq. After CPU1 finished CPUHP AP
+>>>>> steps, CPU2 starts the rest CPUHP step.
+>>>>> 4. When CPU2 runs to free_vm_stack_cache(), it is sched out in __vunmap()
+>>>>> because it run out of CPU quota. start_cfs_bandwidth() does not restart the
+>>>>> hrtimer because 'cfs_b->period_active' is set.
+>>>>> 5. The task waits the hrtimer 'period_timer' to expire to wake itself up, but
+>>>>> CPU1 has disabled irq and the hrtimer won't expire until it is migrated to CPU2
+>>>>> in hrtimers_dead_cpu(). But the task is blocked and cannot proceed to
+>>>>> hrtimers_dead_cpu() step. So the task hungs.
+>>>>>
+>>>>>     CPU1                                                     CPU2
+>>>>> Task set cfs_quota
+>>>>> start hrtimer cfs_bandwidth 'period_timer'
+>>>>>                                             start to offline CPU1
+>>>>> CPU1 start CPUHP AP step
+>>>>> ...
+>>>>> 'period_timer' expired and re-enqueued on CPU1
+>>>>> ...
+>>>>> disable irq in take_cpu_down()
+>>>>> ...
+>>>>>                                             CPU2 start the rest CPUHP steps
+>>>>>                                             ...
+>>>>>                                           sched out in free_vm_stack_cache()
+>>>>>                                             wait for 'period_timer' expires
+>>>>>
+>>>>>
+>>>>> Appreciate it a lot if anyone can give some suggestion on how fix this problem !
+>>>>>
+>>>>> Thanks,
+>>>>> Xiongfeng
+>>>> .
+>>>>
+>>>
+>>> Test script:
+>>> taskset -cp 1 $$
+>>> mkdir /sys/fs/cgroup/cpu/test
+>>> echo $$ > /sys/fs/cgroup/cpu/test/tasks
+>>> echo 80000 > /sys/fs/cgroup/cpu/test/cpu.cfs_quota_us
+>>> echo 100000 > /sys/fs/cgroup/cpu/test/cpu.cfs_period_us
+>>> taskset -cp 2 $$
+>>> echo 0 > /sys/devices/system/cpu/cpu1/online
+>>>
+>>>
+>>> Tests show that the following modification can solve the problem of above test
+>>> scripts. But I am not sure if there exists some other issues.
+>>>
+>>> diff --cc kernel/sched/fair.c
+>>> index d9d6519fae01,bd6624353608..000000000000
+>>> --- a/kernel/sched/fair.c
+>>> +++ b/kernel/sched/fair.c
+>>> @@@ -5411,10 -5411,16 +5411,15 @@@ void start_cfs_bandwidth(struct cfs_ban
+>>>   {
+>>>         lockdep_assert_held(&cfs_b->lock);
+>>>
+>>> -       if (cfs_b->period_active)
+>>> +       if (cfs_b->period_active) {
+>>> +               struct hrtimer_clock_base *clock_base = cfs_b->period_timer.base;
+>>> +               int cpu = clock_base->cpu_base->cpu;
+>>> +               if (!cpu_active(cpu) && cpu != smp_processor_id())
+>>> +                       hrtimer_start_expires(&cfs_b->period_timer,
+>>> HRTIMER_MODE_ABS_PINNED);
+>>>                 return;
+>>> +       }
 > 
-> Why do you need a child node for this? Is there more than 1 instance in 
-> a PMIC? Every sub-function of a PMIC doesn't have to have a DT node.
->
+> I have been able to reproduce your problem and run your fix on top. I
+> still wonder if there is a
 
-We currently have another downstream driver (which is planned to get upstreamed)
-which also needs a handle to a pbs device in order to properly trigger events. 
+Sorry, I forgot to provide the kernel modification to help reproduce the issue.
+At first, the issue can only be reproduced on the product environment with
+product stress testcase. After firguring out the reason, I add the following
+modification. It make sure the process ran out cfs quota and can be sched out in
+free_vm_stack_cache. Although the real schedule point is in __vunmap(), this can
+also show the issue exists.
 
-> Rob
+diff --git a/kernel/fork.c b/kernel/fork.c
+index 0fb86b65ae60..3b2d83fb407a 100644
+--- a/kernel/fork.c
++++ b/kernel/fork.c
+@@ -110,6 +110,8 @@
+ #define CREATE_TRACE_POINTS
+ #include <trace/events/task.h>
 
++#include <linux/delay.h>
++
+ /*
+  * Minimum number of threads to boot the kernel
+  */
+@@ -199,6 +201,9 @@ static int free_vm_stack_cache(unsigned int cpu)
+        struct vm_struct **cached_vm_stacks = per_cpu_ptr(cached_stacks, cpu);
+        int i;
 
++       mdelay(2000);
++       cond_resched();
++
+        for (i = 0; i < NR_CACHED_STACKS; i++) {
+                struct vm_struct *vm_stack = cached_vm_stacks[i];
 
+Thanks,
+Xiongfeng
+
+> Could we have a helper from hrtimer to get the cpu of the clock_base ?
+> 
+> 
+>>>
+>>>         cfs_b->period_active = 1;
+>>>  -
+>>>         hrtimer_forward_now(&cfs_b->period_timer, cfs_b->period);
+>>>         hrtimer_start_expires(&cfs_b->period_timer, HRTIMER_MODE_ABS_PINNED);
+>>>   }
+>>>
+>>> Thanks,
+>>> Xiongfeng
+>>>
+>>> .
+>>>
+> .
+> 
