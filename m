@@ -2,190 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6862742B38
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 19:29:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C41F742B51
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 19:33:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231768AbjF2R3E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 13:29:04 -0400
-Received: from mail-dm6nam11on2085.outbound.protection.outlook.com ([40.107.223.85]:43585
-        "EHLO NAM11-DM6-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S230330AbjF2R3B (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 13:29:01 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=W44VfxYoTmWZGNLyUeGFSHYYChg3A6Kzir9lC2fKMHmhoueklGjWWKpu304Tx3a2nyjfZHNZaDOOaqw2nM8QNAxvTuXYz78XZWqB0YQDH/uy8KqDXXpj/8MPaRnzLZWs238ejiH0VavWjjPw4d/Z09BGq1fidOxOodzAZF6b5QLvGBACMSZBeAGwurVvuXvDCZ6W0i8ot8/GM1NEMFM1y3p/KiobIJT3rYwT2xuXOv9r92wXP0qODEkcEM3q4YmIcUC7Zl/krBoJfNA+GVnZP5Sxel7mlIqPNdArC4A9FdiHtzSJppp/D0dLLAaXE8LiIFRLHVHAfMaP3pCI6Sidrw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=PN+JkhweTcR/AIo67IQquW7hZi0lSdnbv/1if/KndRc=;
- b=gcMbwiPzzDlYcvMD+qx7KWMZbASTJkLleis0Ys9Tdcrd6ih8aJTcBuFBjc89/+X3Au0I9XBFBtLFcVDKO3RzIrKrD6kb1U4ZSxJkOB5Dzvfl8IYWIqEz6nNJizv5A77+yI81h+wRBBD8qVwwEDrryJwUOFC4rzLTsoKIhM+H5kTnQWAzp+GzEWsKXGkjodf8qhjGu64jP6i8a3SvFhPsCwLmloVSXC7d6OV8o/c/pMrKiQ7mJIU2xeAQj7Qg1QC1cFdl+vBK8k/0sm56FeD6wVkG5QelYXWf6zW3cpvEJEcgJ/ybbDIOlglgCWbQp0vuhqgvEo+oUFoQgKaF95csDQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=PN+JkhweTcR/AIo67IQquW7hZi0lSdnbv/1if/KndRc=;
- b=KLDxah2RdkoXljk44FBI3EyiklMS3pZsKGoQmFsFc6J1agjk1P7xVn7PN7HLUx00vdgQ9+nsk2ISV6tBenyjQdlLBu8qHpZ+NUjqQA8fAR0E8KHHIQwd2Q7eGSYYCZKZ3GMvz6ZfXd1ecgfSA9teNzRPm0E0nOHscYGq1dvGZ6g=
-Received: from MN0PR12MB6101.namprd12.prod.outlook.com (2603:10b6:208:3cb::10)
- by PH7PR12MB8796.namprd12.prod.outlook.com (2603:10b6:510:272::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.26; Thu, 29 Jun
- 2023 17:28:58 +0000
-Received: from MN0PR12MB6101.namprd12.prod.outlook.com
- ([fe80::dfcf:f53c:c778:6f70]) by MN0PR12MB6101.namprd12.prod.outlook.com
- ([fe80::dfcf:f53c:c778:6f70%5]) with mapi id 15.20.6521.026; Thu, 29 Jun 2023
- 17:28:58 +0000
-From:   "Limonciello, Mario" <Mario.Limonciello@amd.com>
-To:     Jerry Snitselaar <jsnitsel@redhat.com>
-CC:     Michael Ellerman <mpe@ellerman.id.au>,
-        Linux regressions mailing list <regressions@lists.linux.dev>,
-        Sachin Sant <sachinp@linux.ibm.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        "jarkko@kernel.org" <jarkko@kernel.org>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>
-Subject: RE: [6.4-rc6] Crash during a kexec operation
- (tpm_amd_is_rng_defective)
-Thread-Topic: [6.4-rc6] Crash during a kexec operation
- (tpm_amd_is_rng_defective)
-Thread-Index: AQHZpQYzLgs+SZK7S0mjzkR6+Tm69a+W5EEAgAsp34CAAAN8UA==
-Date:   Thu, 29 Jun 2023 17:28:58 +0000
-Message-ID: <MN0PR12MB6101C50288F6FE99A3DA5D4FE225A@MN0PR12MB6101.namprd12.prod.outlook.com>
-References: <99B81401-DB46-49B9-B321-CF832B50CAC3@linux.ibm.com>
- <87o7lhfmoh.fsf@mail.lhotse>
- <CA0088E4-2851-4AFF-94F8-2A07C5CDA8D8@linux.ibm.com>
- <675a8893-429d-05be-b647-089b249c814c@leemhuis.info>
- <87o7l7oer1.fsf@mail.lhotse> <3f5a37f1-70e0-3dcf-3bd3-acc8a04e53ee@amd.com>
- <c53ihvuesmymj2o5jyqz7gw7mvbrxjifmphuuhiux3qjabjnic@wcak4hfb77td>
-In-Reply-To: <c53ihvuesmymj2o5jyqz7gw7mvbrxjifmphuuhiux3qjabjnic@wcak4hfb77td>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_ActionId=fdae868f-0e70-4c8f-90c6-2c8fc418b73f;MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_ContentBits=0;MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_Enabled=true;MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_Method=Privileged;MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_Name=Public-AIP
- 2.0;MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_SetDate=2023-06-29T17:19:35Z;MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_SiteId=3dd8961f-e488-4e60-8e11-a82d994e183d;
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: MN0PR12MB6101:EE_|PH7PR12MB8796:EE_
-x-ms-office365-filtering-correlation-id: 5212af7f-2fba-431f-9578-08db78c65235
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: iKhoa4iOQsa9v8wRDK2hibn8ZKED9wCBnwAjNyzEEV4wd4sEcGQFe4094oPKy/PPODeXXpNBz7nBmosTawqRc56KQUUU5tqslTOiTG0m176IWuavwl+nzq6AL6pxk/QcvPo+PtHPitWlwC/Zyint/XqXfcGNqV41fjCT8vHyeAeWTAepsYV5hcJyPyZjHcL/rtXUIQErWlg3fpmOdGD7xD+7GP8HzQzkF2Ioew1Yp/+O+xpKyaRSrI93K2OmGfSI9h4+T6CKFoBSDYEDlV0fgqrU7+bHxnDRB/XsLJgJC+EicQUrwuRdUyn3LxbZ3XRDhor1HSN6LzJnVffmFgzKkFchTVvZq0Y9SQD49bkHaOGlOiIYRGhJw9yU3GlyKy+3HkDHcltxBnMWHxFwt1/IJSNybYjKQUfC8B8+Brfswo515LtLbYIn766X1d+S4wxrlnVvyY9NYIN+5pFeu6McHOlRIXLzPRpAtOilF7FWcM6/UsMZ02KVWnWE4mFBCWR5RnQ3ADeK8wvdOVNztSoCFvdKyyD3m+J5lW+pggaLlXdCxd7awMKP65cT7PX+nAagdQBkZE9Qol371yZbbo67oRmo+pG54zo+YJJc3U1gGWWxTwC/7nohiJnnXiTL7riZ
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB6101.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(39860400002)(396003)(136003)(346002)(376002)(451199021)(33656002)(38100700002)(5660300002)(86362001)(41300700001)(6916009)(66476007)(8936002)(8676002)(66446008)(64756008)(38070700005)(316002)(66946007)(122000001)(55016003)(4326008)(66556008)(76116006)(478600001)(52536014)(71200400001)(53546011)(2906002)(9686003)(6506007)(54906003)(186003)(7696005)(26005)(83380400001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?INyTCnLulZnR6KBQKULcSnrIxOV9/gTYL43XcajZLCGY9/pZobddNklawc?=
- =?iso-8859-1?Q?12IasoEDKV3F2MD1Mt5qrF6+aiKziulgo+SVTM/o7+JbmnqiDanh9caAAi?=
- =?iso-8859-1?Q?UgbkaYtkRkljOsQMSJqMw3Iifk7kNwTKCjkeFiW6eHb2LhKR9mO1FWAwjw?=
- =?iso-8859-1?Q?Sc7uuShQHqGF3qw/jkDDcbiB3tRQVzVPLwLo25NlRuXZoWuTtvRDXUcopx?=
- =?iso-8859-1?Q?WnR7/N1payaXtycoBpbWxxUwUMrsr6Ub+p4gyfo5M8g3TV5ZrpuEYckLek?=
- =?iso-8859-1?Q?OyMdZgL0btWyAngDthzaWt7IWsnH8XAnNX4r+fQ2pF0sTy2wEY7ZSQi0xB?=
- =?iso-8859-1?Q?mKUTquQTHQu3KHNCXtqDu2HdtvPw1X8GVnxbygi/FXtqq/8V3dqhUVeuDO?=
- =?iso-8859-1?Q?Bs8QPeLeXXsi3e1tlq/Rciev/kczY15/vOurwWPtz8m5yp2a1H6yaZCpOi?=
- =?iso-8859-1?Q?dQQdxITDc2XlR9e1nGy86RrdgW9HzIufmeFq+C8EpJO15m3c43oFQE5S+y?=
- =?iso-8859-1?Q?RsfGD8kgq+EUDijGt2LaTd4XX6rOoDtQENAbLEKKSgd6KlmRAE3f8Am7u2?=
- =?iso-8859-1?Q?wqVjWtOLRGwIwzlaWlKyz4h8DNkSs0ADeYxuU4eF9aor5BXHfXn9LyhotQ?=
- =?iso-8859-1?Q?UPPJkbR2DthDuec5x4HCAwf12XNtUMOw/Jiv0W7BrMYDHjrUbxT5KE9uvw?=
- =?iso-8859-1?Q?IBa/G2K4bWOPCDi1Z7cfkoJYLHTJnl3+kHNqzVoTCVyOdzWOZMKRMFuwSl?=
- =?iso-8859-1?Q?e+nSfuHOcsOzt45950Ik96VNURQeOk2EnV63rMwcd+uhSOXJUx9ab4T8LB?=
- =?iso-8859-1?Q?JXL+v0HEeZDh9o6LLCDmSTpJYkhgNOY+LUCeM8BOnTUFDXoMcm7ujWj17z?=
- =?iso-8859-1?Q?ZOjIjJ1NJdweUFxMvPZE7QHtId+WGvLtawTcMQZJcxhkyXDRFu3/PaP6gb?=
- =?iso-8859-1?Q?vci47SYZgZ2Wfm93goXQqXwoalMG9oyynRtMiBPmHpLt95lqDjvEM+iVla?=
- =?iso-8859-1?Q?s1jTrIpnqiJ6garePWtCl+H+RuxB7vTLqS91A+nelo4DgAyW2lkGqBH5kE?=
- =?iso-8859-1?Q?4pOcLjiRidNmB7L9z7rBPfCqTMQ7mB1anN+uz9O8trhtT6oAxBv5oKzFKN?=
- =?iso-8859-1?Q?mwYCKRHsGmwpzo+WxnpjxB9XTJyBw/pht37bxk9bt90Y4ZVlotmWI+II7j?=
- =?iso-8859-1?Q?wNDyqFh07ffeCrL3LZv1pR2moSeJXEbpa5HHPW/uPdt/n8tjzxVGEY+mmM?=
- =?iso-8859-1?Q?1RbE0xr9rIdrIp91d4J6q+LrSTbAgrQmwrICpYwh8b3SnHJmn5wX3kPwOj?=
- =?iso-8859-1?Q?UoncKnjURzmg7KPdjVpr52ckodWrtD1qc92aoupCx4JbbFSIpz/UoIRJgD?=
- =?iso-8859-1?Q?4cxOhg3q4vEuWVYeRBXSRrClibsGrfehXD+/v3mvMAX5cgOAF1Baw8kF1I?=
- =?iso-8859-1?Q?RlPZzY+FDBrp97RrcyfNlVNKQKpYbuj4TJzMzOv9Xs0ttptygfM70gmLE/?=
- =?iso-8859-1?Q?1lIebGvYyLquS9VnPpTouBCtptqlJqVfFFWQES55tG2oXIadNqBKOY3qii?=
- =?iso-8859-1?Q?g1Gzv7q0AQyojgRsmaH2bWe/+lwlWvvsOimvDCC5zgmO7zut2fhj5Kk68Q?=
- =?iso-8859-1?Q?u5M70dLs0sYBQ=3D?=
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+        id S232091AbjF2Rd0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 13:33:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57000 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232521AbjF2RdP (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 29 Jun 2023 13:33:15 -0400
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 084C13AA1
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 10:33:13 -0700 (PDT)
+Received: by mail-wr1-x42a.google.com with SMTP id ffacd0b85a97d-307d20548adso1045965f8f.0
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 10:33:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1688059991; x=1690651991;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:subject:from:user-agent:mime-version:date:message-id:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=EZxvYIZuxAB+lwUWpz3iVved5/FIuiHwGeX7NNNfKPs=;
+        b=oXBlUOCsey6+rQUYnSJFVtS5AWj+TbJrKzuUNlXTOUDDPjK+vhhuNDtuh7MyHlBUsP
+         Ukjnxt4TxiOim3clDHs754DtEm602HxHBTOIFJ0b+NopLsIPE7rA6+oD7LY51iHYJR+m
+         20c1zNfsyGl1cEqDtSLlm2/WFFdvFlgAXUdIIuHRpGLhBRs7n6Vo6gIFhGFosIPlOi4S
+         yXGkdGT17L0B9ls3SA7mR8Ki+y/tYlW9/UAiFJkGqX9DfynoLqqQm+0tLR8EkHpzejP+
+         ACbLaqzMjnVZAM3SRHoK93fl0XcLt5aKHocBM8O01XqnbrNSQzYssz1m6CnwHxWqyscx
+         rFkw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688059991; x=1690651991;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:subject:from:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=EZxvYIZuxAB+lwUWpz3iVved5/FIuiHwGeX7NNNfKPs=;
+        b=Nvd6OgH5TrQwA4H69TX3YH8ynbonLkwHXwoB9DTh/5kG2sOlj0rvlDpU/tkEGoAOfe
+         B8muJwRYgLWEWHpi2y8CDof6TFpo1GmuGYTwMLRWptcPg920ywNCzvl1GuLn1kyHVQ6M
+         sM4eUugTfLfPRmklFDox2+BDhsWAO+XVnRVJINRw/T4A2EipjekIKs4Nv7rjkohuW2Z/
+         LaXNFnc6ha4cZ87BI0/mEZp0cmDUJqJqIZsOl7r2gdnM8SD288OKZhixZNWcF5S5Xxh2
+         tfcdaiEh4nNj2LI7GrEikSc1YpwFKYatuQ74kuKLeDG2z3sk+e82VUAxwh0XinRVKAsK
+         GxyQ==
+X-Gm-Message-State: ABy/qLYhGmvkx0doNSkbNR1ingh8w75TXitT5BunYousHw8M2c/qP/lr
+        HFRCvEuIujEoRZUlVacHOaqCZw==
+X-Google-Smtp-Source: APBJJlE8XZRIPMaI6hNQHvv0XXg37ddZC1ZtloaleapPkcO90Mg1HZkMU3CBxM8wYYCsAhqtCIVBew==
+X-Received: by 2002:adf:fd43:0:b0:314:77a:c2b2 with SMTP id h3-20020adffd43000000b00314077ac2b2mr223834wrs.32.1688059991220;
+        Thu, 29 Jun 2023 10:33:11 -0700 (PDT)
+Received: from [192.168.1.195] ([5.133.47.210])
+        by smtp.googlemail.com with ESMTPSA id c1-20020a05600c0ac100b003fba6a0c881sm7762482wmr.43.2023.06.29.10.33.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 29 Jun 2023 10:33:10 -0700 (PDT)
+Message-ID: <77b348f7-0475-5e16-95e1-0e5831408d2b@linaro.org>
+Date:   Thu, 29 Jun 2023 18:33:09 +0100
 MIME-Version: 1.0
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MN0PR12MB6101.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5212af7f-2fba-431f-9578-08db78c65235
-X-MS-Exchange-CrossTenant-originalarrivaltime: 29 Jun 2023 17:28:58.0697
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: f7F8Xxe7+XnWlnouu3nABAv3vhLoVDSY7gwTJ0x5agpIpA5a/O3/1uXGh2hJYe6DBkb/WpbnEpPA0l/NzMdDWQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB8796
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Subject: Re: [PATCH] ASoC: qdsp6: q6apm: use dai link pcm id as pcm device
+ number
+To:     Mark Brown <broonie@kernel.org>
+Cc:     johan+linaro@kernel.org, perex@perex.cz, tiwai@suse.com,
+        lgirdwood@gmail.com, ckeepax@opensource.cirrus.com,
+        kuninori.morimoto.gx@renesas.com, linux-kernel@vger.kernel.org,
+        pierre-louis.bossart@linux.intel.com, alsa-devel@alsa-project.org,
+        Stable@vger.kernel.org
+References: <20230628092404.13927-1-srinivas.kandagatla@linaro.org>
+ <c22fcc94-aa41-4ffd-bfe8-f0b9f15a76c0@sirena.org.uk>
+Content-Language: en-US
+In-Reply-To: <c22fcc94-aa41-4ffd-bfe8-f0b9f15a76c0@sirena.org.uk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+        lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[Public]
 
-> -----Original Message-----
-> From: Jerry Snitselaar <jsnitsel@redhat.com>
-> Sent: Thursday, June 29, 2023 12:07 PM
-> To: Limonciello, Mario <Mario.Limonciello@amd.com>
-> Cc: Michael Ellerman <mpe@ellerman.id.au>; Linux regressions mailing list
-> <regressions@lists.linux.dev>; Sachin Sant <sachinp@linux.ibm.com>; open
-> list <linux-kernel@vger.kernel.org>; linuxppc-dev <linuxppc-
-> dev@lists.ozlabs.org>; jarkko@kernel.org; linux-integrity@vger.kernel.org
-> Subject: Re: [6.4-rc6] Crash during a kexec operation
-> (tpm_amd_is_rng_defective)
->
-> On Thu, Jun 22, 2023 at 09:38:04AM -0500, Limonciello, Mario wrote:
-> >
-> > On 6/22/2023 7:36 AM, Michael Ellerman wrote:
-> > > "Linux regression tracking (Thorsten Leemhuis)"
-> <regressions@leemhuis.info> writes:
-> > > > Hi, Thorsten here, the Linux kernel's regression tracker. Top-posti=
-ng
-> > > > for once, to make this easily accessible to everyone.
-> > > >
-> > > > As Linus will likely release 6.4 on this or the following Sunday a =
-quick
-> > > > question: is there any hope this regression might be fixed any time
-> > > > soon?
-> > > No.
-> > >
-> > > I have added the author of the commit to Cc, maybe they can help?
-> > >
-> > > The immediate question is, is it expected for chip->ops to be NULL in
-> > > this path? Obviously on actual AMD systems that isn't the case,
-> > > otherwise the code would crash there. But is the fact that chip->ops =
-is
-> > > NULL a bug in the ibmvtpm driver, or a possibility that has been
-> > > overlooked by the checking code.
-> > >
-> > > cheers
-> >
-> > All that code assumes that the TPM is still functional which
-> > seems not to be the case for your TPM.
-> >
-> > This should fix it:
-> >
-> > diff --git a/drivers/char/tpm/tpm-chip.c b/drivers/char/tpm/tpm-chip.c
-> > index 5be91591cb3b..7082b031741e 100644
-> > --- a/drivers/char/tpm/tpm-chip.c
-> > +++ b/drivers/char/tpm/tpm-chip.c
-> > @@ -525,6 +525,9 @@ static bool tpm_amd_is_rng_defective(struct
-> tpm_chip
-> > *chip)
-> >         u64 version;
-> >         int ret;
-> >
-> > +       if (!chip->ops)
-> > +               return false;
-> > +
-> >         if (!(chip->flags & TPM_CHIP_FLAG_TPM2))
-> >                 return false;
->
->
-> Should tpm_amd_is_rng_defective compile to nothing on non-x86
-> architectures? This code is all about
-> working around an issue with the AMD fTPM, right?
->
 
-That's a good point.  Yes it could and that would also solve this problem.
+On 29/06/2023 16:43, Mark Brown wrote:
+> On Wed, Jun 28, 2023 at 10:24:04AM +0100, Srinivas Kandagatla wrote:
+>> For some reason we ended up with a setup without this flag.
+>> This resulted in inconsistent sound card devices numbers which
+>>   are also not starting as expected at dai_link->id.
+>>   (Ex: MultiMedia1 pcm ended up with device number 4 instead of 0)
+> 
+> Why is this a problem?
 
+In existing Qualcomm setup the backend pcm are added first, which 
+results in frontend pcms getting pcm numbers after this.
+
+For example: with 3 backend dailinks in DT we have frontend pcm start at 
+3. Now if we add new backend dai-link in DT we now have frontend pcm 
+start at 4.
+
+This is a bug in qualcomm driver.
+
+> 
+>> With this patch patch now the MultiMedia1 PCM ends up with device number 0
+>> as expected.
+>>
+>> Fixes: 9b4fe0f1cd79 ("ASoC: qdsp6: audioreach: add q6apm-dai support")
+>> Cc: <Stable@vger.kernel.org>
+> 
+> Won't this be an ABI change?  That seems like it'd disrupt things in
+> stable.
+Yes, but this is a real bug. without fixing this also results in abi(pcm 
+number) change when we add new backend dai-link. I have also sent fix 
+for UCM to handle this.
+
+
+--srini
