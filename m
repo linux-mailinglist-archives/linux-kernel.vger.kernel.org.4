@@ -2,222 +2,452 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A322974291C
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 17:07:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1159874292B
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 17:11:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231709AbjF2PH1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 11:07:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45368 "EHLO
+        id S232509AbjF2PLp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 11:11:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231248AbjF2PHY (ORCPT
+        with ESMTP id S232475AbjF2PLi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 11:07:24 -0400
-Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com [IPv6:2607:f8b0:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28DA410CE
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 08:07:22 -0700 (PDT)
-Received: by mail-il1-x12e.google.com with SMTP id e9e14a558f8ab-3422d37d316so3285975ab.3
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 08:07:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google; t=1688051241; x=1690643241;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=er1e5j1imJu7MTcJPZUydNBwyz5rkIDwYfm6gIf1yC8=;
-        b=DR46dXIIMNN9mx6nyKuIaP2SpVEgFZd+a0g20bkueTWg7iMmrtWoOzfO1W8MTGlTxy
-         I//ND4izOACXeCJClyDR+DYBn+5bUoCBEawsZwav030JOMO1QvGCr8FI00Q1mc7t/hzF
-         Y6qp69aDdyYNLjJFKWKlZmL6qBLdtnBODf4Mc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688051241; x=1690643241;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=er1e5j1imJu7MTcJPZUydNBwyz5rkIDwYfm6gIf1yC8=;
-        b=VgERo1q9kUEY+hE36Bb0uYm/EXqUw3/lykAUmH9tdFiZQDqTG2bHC+FPuNtDsnr3Qa
-         eCjgHKNc5/z8SfuwG2MM4mcuk/trZwcOx+aNrpe2yo35IO9SUkfTuy28ejUQYIpjyM7X
-         tZibGUeKXPqv5jmvCEgiKgBFrGBhWao4wQuYGqBCozzfGPMrMpuKtQ9VPs9aFkbe2M2w
-         H1M8JhfHk1/64i/rcuo4L179g6cXUDMw4nenx7aq2dnd1cn+L5+nbQ5DrHM4nzzuvvDE
-         lQb2ryA4rNAEHxdL4y0mbHmCbWAD7/WcrVX2QnLd1kvVsdyuJiiSl8pOqoqgOiPolF98
-         EoxA==
-X-Gm-Message-State: AC+VfDx1vobEZ6A2Nvp+8OLVr9L9P6OtGYPfLapMCx9pIyVoKAVZMU3q
-        ZZfMrdd+qp2OIZgoYUhdkByC1SvoOiIFO4EhUYly+Q==
-X-Google-Smtp-Source: ACHHUZ4jZJ6Ic+T1r7OZI5veLnjdBHmJ6O7KJIZdEwtcWnnv9eqpTsjiTodtnD8bWHVankx2nOO3NnJm/DH717rJ9uQ=
-X-Received: by 2002:a92:c68e:0:b0:345:a3c6:87b8 with SMTP id
- o14-20020a92c68e000000b00345a3c687b8mr13917623ilg.12.1688051241353; Thu, 29
- Jun 2023 08:07:21 -0700 (PDT)
+        Thu, 29 Jun 2023 11:11:38 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5E1210CE
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 08:11:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1688051495; x=1719587495;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=N8Ugpq8ZQfcZ2Z6IggLq/f9MiRzED5tHNiTzV6ZRUkw=;
+  b=jk0vpBeLm6FeKUpw3jFsaMIwRbq0mPZ6YlqgBA/mnlSKnazb+5cJyABT
+   4clV0mXHAR24pAeXfXek8BS5/6gssbNfss+1LlUqakt7zzfHOuW7NWNEd
+   hYJG8XkZmjobo5QilC9XoGe4YM62qSx43E2oYtO/2Y4S2qxMrPHoJ+cCp
+   pWvLEDNog6opDLmyba5kDxY9uI4SxPVQTSLXtp+1xWvvCKkn7ieSc9uYW
+   GgZGZ7jSd4QbwD4iIpKz/TT8LjHPx3GZePRMPk3Iw2z0W8rQBLFY0KNHt
+   OT0iODSPdl8dwjImNrLNHEEObD+2Ar6mbcDBxera33etCaQKBncccFCfL
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10756"; a="392856816"
+X-IronPort-AV: E=Sophos;i="6.01,168,1684825200"; 
+   d="scan'208";a="392856816"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jun 2023 08:11:34 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10756"; a="841481447"
+X-IronPort-AV: E=Sophos;i="6.01,168,1684825200"; 
+   d="scan'208";a="841481447"
+Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 29 Jun 2023 08:11:30 -0700
+Received: from kbuild by 783282924a45 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1qEtIv-000EDZ-2k;
+        Thu, 29 Jun 2023 15:11:29 +0000
+Date:   Thu, 29 Jun 2023 23:10:33 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>
+Subject: Re: [PATCH 2/2] mm: make show_free_areas() static
+Message-ID: <202306292233.w0XhREe0-lkp@intel.com>
+References: <20230629104357.35455-2-wangkefeng.wang@huawei.com>
 MIME-Version: 1.0
-References: <20230629134306.95823-1-jonas.gorski@gmail.com>
-In-Reply-To: <20230629134306.95823-1-jonas.gorski@gmail.com>
-From:   Kamal Dasu <kamal.dasu@broadcom.com>
-Date:   Thu, 29 Jun 2023 11:06:44 -0400
-Message-ID: <CAKekbeuMjUPpzfgKrxgZzFpiQ4FbeYtBtbrzkWKeBy4u2Symhg@mail.gmail.com>
-Subject: Re: [PATCH] spi: bcm-qspi: return error if neither hif_mspi nor mspi
- is available
-To:     Jonas Gorski <jonas.gorski@gmail.com>
-Cc:     Kamal Dasu <kdasu.kdev@gmail.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="0000000000009ed7c605ff460e7f"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230629104357.35455-2-wangkefeng.wang@huawei.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---0000000000009ed7c605ff460e7f
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Hi Kefeng,
 
-On Thu, Jun 29, 2023 at 9:43=E2=80=AFAM Jonas Gorski <jonas.gorski@gmail.co=
-m> wrote:
->
-> If neither a "hif_mspi" nor "mspi" resource is present, the driver will
-> just early exit in probe but still return success. Apart from not doing
-> anything meaningful, this would then also lead to a null pointer access
-> on removal, as platform_get_drvdata() would return NULL, which it would
-> then try to dereferce when trying to unregister the spi master.
->
-> Fix this by unconditionally calling devm_ioremap_resource(), as it can
-> handle a NULL res and will then return a viable ERR_PTR() if we get one.
->
-> The "return 0;" was previously a "goto qspi_resource_err;" where then
-> ret was returned, but since ret was still initialized to 0 at this place
-> this was a valid conversion in 63c5395bb7a9 ("spi: bcm-qspi: Fix
-> use-after-free on unbind"). The issue was not introduced by this commit,
-> only made more obvious.
->
-> Fixes: fa236a7ef240 ("spi: bcm-qspi: Add Broadcom MSPI driver")
-> Signed-off-by: Jonas Gorski <jonas.gorski@gmail.com>
-> ---
-> Found by looking a the driver while comparing it to its bindings.
->
-> Only build tested, not runtested.
->
->  drivers/spi/spi-bcm-qspi.c | 10 +++-------
->  1 file changed, 3 insertions(+), 7 deletions(-)
->
-> diff --git a/drivers/spi/spi-bcm-qspi.c b/drivers/spi/spi-bcm-qspi.c
-> index 6b46a3b67c41..d91dfbe47aa5 100644
-> --- a/drivers/spi/spi-bcm-qspi.c
-> +++ b/drivers/spi/spi-bcm-qspi.c
-> @@ -1543,13 +1543,9 @@ int bcm_qspi_probe(struct platform_device *pdev,
->                 res =3D platform_get_resource_byname(pdev, IORESOURCE_MEM=
-,
->                                                    "mspi");
->
-> -       if (res) {
-> -               qspi->base[MSPI]  =3D devm_ioremap_resource(dev, res);
-> -               if (IS_ERR(qspi->base[MSPI]))
-> -                       return PTR_ERR(qspi->base[MSPI]);
-> -       } else {
-> -               return 0;
-> -       }
+kernel test robot noticed the following build errors:
 
-I would rather just do this in the else case
+[auto build test ERROR on akpm-mm/mm-everything]
 
-} else {
- -              return 0;
- +             return -ENODEV;
-}
+url:    https://github.com/intel-lab-lkp/linux/commits/Kefeng-Wang/mm-make-show_free_areas-static/20230629-182958
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+patch link:    https://lore.kernel.org/r/20230629104357.35455-2-wangkefeng.wang%40huawei.com
+patch subject: [PATCH 2/2] mm: make show_free_areas() static
+config: riscv-randconfig-r042-20230629 (https://download.01.org/0day-ci/archive/20230629/202306292233.w0XhREe0-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce: (https://download.01.org/0day-ci/archive/20230629/202306292233.w0XhREe0-lkp@intel.com/reproduce)
 
- The change below does not check the return of
-platform_get_resource_byname() in my opinion rather relies on
-devm_ioremap_resource() doing the right thing.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306292233.w0XhREe0-lkp@intel.com/
 
-> +       qspi->base[MSPI]  =3D devm_ioremap_resource(dev, res);
-> +       if (IS_ERR(qspi->base[MSPI]))
-> +               return PTR_ERR(qspi->base[MSPI]);
->
->         res =3D platform_get_resource_byname(pdev, IORESOURCE_MEM, "bspi"=
-);
->         if (res) {
-> --
-> 2.34.1
->
+All errors (new ones prefixed by >>):
 
---0000000000009ed7c605ff460e7f
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:751:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     751 |         insw(addr, buffer, count);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/io.h:105:53: note: expanded from macro 'insw'
+     105 | #define insw(addr, buffer, count) __insw(PCI_IOBASE + (addr), buffer, count)
+         |                                          ~~~~~~~~~~ ^
+   In file included from mm/nommu.c:23:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:759:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     759 |         insl(addr, buffer, count);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/io.h:106:53: note: expanded from macro 'insl'
+     106 | #define insl(addr, buffer, count) __insl(PCI_IOBASE + (addr), buffer, count)
+         |                                          ~~~~~~~~~~ ^
+   In file included from mm/nommu.c:23:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:768:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     768 |         outsb(addr, buffer, count);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/io.h:118:55: note: expanded from macro 'outsb'
+     118 | #define outsb(addr, buffer, count) __outsb(PCI_IOBASE + (addr), buffer, count)
+         |                                            ~~~~~~~~~~ ^
+   In file included from mm/nommu.c:23:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:777:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     777 |         outsw(addr, buffer, count);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/io.h:119:55: note: expanded from macro 'outsw'
+     119 | #define outsw(addr, buffer, count) __outsw(PCI_IOBASE + (addr), buffer, count)
+         |                                            ~~~~~~~~~~ ^
+   In file included from mm/nommu.c:23:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:786:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     786 |         outsl(addr, buffer, count);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/io.h:120:55: note: expanded from macro 'outsl'
+     120 | #define outsl(addr, buffer, count) __outsl(PCI_IOBASE + (addr), buffer, count)
+         |                                            ~~~~~~~~~~ ^
+   In file included from mm/nommu.c:23:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:1134:55: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    1134 |         return (port > MMIO_UPPER_LIMIT) ? NULL : PCI_IOBASE + port;
+         |                                                   ~~~~~~~~~~ ^
+>> mm/nommu.c:1239:2: error: call to undeclared function 'show_free_areas'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    1239 |         show_free_areas(0, NULL);
+         |         ^
+   13 warnings and 1 error generated.
 
-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
-DxuNuBlySpn/GYqPcDcRZd8EENWqnZrjtjHMk0j7ZfrPGXq8sQkbG3OX+DOwSaefPRq1pLGWBZaZ
-YuUo5O7CNHo7h7Hc9GgjiW+6X9BjKAzSaDy8jwIDAQABo4IB2DCCAdQwDgYDVR0PAQH/BAQDAgWg
-MIGjBggrBgEFBQcBAQSBljCBkzBOBggrBgEFBQcwAoZCaHR0cDovL3NlY3VyZS5nbG9iYWxzaWdu
-LmNvbS9jYWNlcnQvZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3J0MEEGCCsGAQUFBzABhjVo
-dHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAyMDBNBgNV
-HSAERjBEMEIGCisGAQQBoDIBKAowNDAyBggrBgEFBQcCARYmaHR0cHM6Ly93d3cuZ2xvYmFsc2ln
-bi5jb20vcmVwb3NpdG9yeS8wCQYDVR0TBAIwADBJBgNVHR8EQjBAMD6gPKA6hjhodHRwOi8vY3Js
-Lmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNybDAiBgNVHREEGzAZ
-gRdrYW1hbC5kYXN1QGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggrBgEFBQcDBDAfBgNVHSMEGDAW
-gBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUcRYSWvAVyA3hgTrQ2c4AFquBsG0wDQYJ
-KoZIhvcNAQELBQADggEBAIKB2IOweF2sIYGBZTDm+Hwmhga+sjekM167Sk/KwxxvQFwZYP6i0SnR
-7aR59vbfVQVaAiZH/a+35EYxP/sXaIM4+E3bFykBuXwcGEnYyEn6MceiOCkjkWQq1Co2JyOdNvkP
-nAxyPoWlsJtr+N/MF1EYKGpYMdPM7S2T/gujjO9N56BCGu9yJElszWcXHmBl5IsaQqMS36vhsV0b
-NxffjNkeAdgfN/SS9S9Rj4WXD7pF1M0Xq8gPLCLyXrx1i2KkYOYJsj0PWlC6VRg6E1xXkYDte0VL
-fAAG4QsETU27E1HBNQyp5zF1PoPCPvq3EnWQnbLgYk+Jz2iwIUwiqwr/bDgxggJtMIICaQIBATBr
-MFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYDVQQDEyhHbG9i
-YWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgw89WX2Pp7ue922QVkwDQYJYIZI
-AWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIAtkiqlDxfzJXejk0cMByyAD/isc55KFXGDkKT0U
-mN+0MBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIzMDYyOTE1MDcy
-MVowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsGCWCGSAFlAwQB
-AjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFlAwQCATANBgkq
-hkiG9w0BAQEFAASCAQBAVZayY66wyq7QHWwEAF05azwfUUEKQnA5rbKqUc8Zp/pek/8ayOjdoj8U
-Dt1zxk6khcxeXUe2GsnIXvOW8I6gIUGVp8sCxBsJYhzY0+m3SLWu8PElI+GOYRTCD3b3UoBl8x/5
-FBVQxUVuNS75P3Iiuxukr1I/Uq41wwMNhKy+LqFNR0Wg+snOaVd8AaoMOqCdwoLFf92BSEnH/MnY
-0SezR68MprvOBOslwOTeqTJ6yyYwmgy9FWJemh9Dline3ZPN8mtx4gDp1MqQUwy5hPCcl4wzNM63
-xkixjGtQk1iffJ560c3Rt3Lpk0fnhXJrMl0+bbUuixxVzJuFBoJjcOkM
---0000000000009ed7c605ff460e7f--
+
+vim +/show_free_areas +1239 mm/nommu.c
+
+^1da177e4c3f41 Linus Torvalds          2005-04-16   996  
+^1da177e4c3f41 Linus Torvalds          2005-04-16   997  /*
+^1da177e4c3f41 Linus Torvalds          2005-04-16   998   * handle mapping creation for uClinux
+^1da177e4c3f41 Linus Torvalds          2005-04-16   999   */
+1fcfd8db7f82fa Oleg Nesterov           2015-09-09  1000  unsigned long do_mmap(struct file *file,
+^1da177e4c3f41 Linus Torvalds          2005-04-16  1001  			unsigned long addr,
+^1da177e4c3f41 Linus Torvalds          2005-04-16  1002  			unsigned long len,
+^1da177e4c3f41 Linus Torvalds          2005-04-16  1003  			unsigned long prot,
+^1da177e4c3f41 Linus Torvalds          2005-04-16  1004  			unsigned long flags,
+bebeb3d68b24bb Michel Lespinasse       2013-02-22  1005  			unsigned long pgoff,
+897ab3e0c49e24 Mike Rapoport           2017-02-24  1006  			unsigned long *populate,
+897ab3e0c49e24 Mike Rapoport           2017-02-24  1007  			struct list_head *uf)
+^1da177e4c3f41 Linus Torvalds          2005-04-16  1008  {
+8feae13110d60c David Howells           2009-01-08  1009  	struct vm_area_struct *vma;
+8feae13110d60c David Howells           2009-01-08  1010  	struct vm_region *region;
+^1da177e4c3f41 Linus Torvalds          2005-04-16  1011  	struct rb_node *rb;
+45e55300f11495 Peter Collingbourne     2020-08-06  1012  	vm_flags_t vm_flags;
+1fcfd8db7f82fa Oleg Nesterov           2015-09-09  1013  	unsigned long capabilities, result;
+^1da177e4c3f41 Linus Torvalds          2005-04-16  1014  	int ret;
+47d9644de92c1a Liam R. Howlett         2023-01-20  1015  	VMA_ITERATOR(vmi, current->mm, 0);
+^1da177e4c3f41 Linus Torvalds          2005-04-16  1016  
+41badc15cbad03 Michel Lespinasse       2013-02-22  1017  	*populate = 0;
+bebeb3d68b24bb Michel Lespinasse       2013-02-22  1018  
+^1da177e4c3f41 Linus Torvalds          2005-04-16  1019  	/* decide whether we should attempt the mapping, and if so what sort of
+^1da177e4c3f41 Linus Torvalds          2005-04-16  1020  	 * mapping */
+^1da177e4c3f41 Linus Torvalds          2005-04-16  1021  	ret = validate_mmap_request(file, addr, len, prot, flags, pgoff,
+^1da177e4c3f41 Linus Torvalds          2005-04-16  1022  				    &capabilities);
+22cc877b32202b Leon Romanovsky         2015-06-24  1023  	if (ret < 0)
+^1da177e4c3f41 Linus Torvalds          2005-04-16  1024  		return ret;
+^1da177e4c3f41 Linus Torvalds          2005-04-16  1025  
+06aab5a3084e1d David Howells           2009-09-24  1026  	/* we ignore the address hint */
+06aab5a3084e1d David Howells           2009-09-24  1027  	addr = 0;
+f67d9b1576c1c6 Bob Liu                 2011-05-24  1028  	len = PAGE_ALIGN(len);
+06aab5a3084e1d David Howells           2009-09-24  1029  
+^1da177e4c3f41 Linus Torvalds          2005-04-16  1030  	/* we've determined that we can make the mapping, now translate what we
+^1da177e4c3f41 Linus Torvalds          2005-04-16  1031  	 * now know into VMA flags */
+45e55300f11495 Peter Collingbourne     2020-08-06  1032  	vm_flags = determine_vm_flags(file, prot, flags, capabilities);
+^1da177e4c3f41 Linus Torvalds          2005-04-16  1033  
+8220543df1489e Matthew Wilcox (Oracle  2022-09-06  1034) 
+8feae13110d60c David Howells           2009-01-08  1035  	/* we're going to need to record the mapping */
+8feae13110d60c David Howells           2009-01-08  1036  	region = kmem_cache_zalloc(vm_region_jar, GFP_KERNEL);
+8feae13110d60c David Howells           2009-01-08  1037  	if (!region)
+8feae13110d60c David Howells           2009-01-08  1038  		goto error_getting_region;
+8feae13110d60c David Howells           2009-01-08  1039  
+490fc053865c9c Linus Torvalds          2018-07-21  1040  	vma = vm_area_alloc(current->mm);
+8feae13110d60c David Howells           2009-01-08  1041  	if (!vma)
+8feae13110d60c David Howells           2009-01-08  1042  		goto error_getting_vma;
+8feae13110d60c David Howells           2009-01-08  1043  
+47d9644de92c1a Liam R. Howlett         2023-01-20  1044  	if (vma_iter_prealloc(&vmi))
+47d9644de92c1a Liam R. Howlett         2023-01-20  1045  		goto error_vma_iter_prealloc;
+8220543df1489e Matthew Wilcox (Oracle  2022-09-06  1046) 
+1e2ae599d37e60 David Howells           2010-01-15  1047  	region->vm_usage = 1;
+8feae13110d60c David Howells           2009-01-08  1048  	region->vm_flags = vm_flags;
+8feae13110d60c David Howells           2009-01-08  1049  	region->vm_pgoff = pgoff;
+8feae13110d60c David Howells           2009-01-08  1050  
+1c71222e5f2393 Suren Baghdasaryan      2023-01-26  1051  	vm_flags_init(vma, vm_flags);
+8feae13110d60c David Howells           2009-01-08  1052  	vma->vm_pgoff = pgoff;
+8feae13110d60c David Howells           2009-01-08  1053  
+8feae13110d60c David Howells           2009-01-08  1054  	if (file) {
+cb0942b8124979 Al Viro                 2012-08-27  1055  		region->vm_file = get_file(file);
+cb0942b8124979 Al Viro                 2012-08-27  1056  		vma->vm_file = get_file(file);
+8feae13110d60c David Howells           2009-01-08  1057  	}
+^1da177e4c3f41 Linus Torvalds          2005-04-16  1058  
+8feae13110d60c David Howells           2009-01-08  1059  	down_write(&nommu_region_sem);
+^1da177e4c3f41 Linus Torvalds          2005-04-16  1060  
+8feae13110d60c David Howells           2009-01-08  1061  	/* if we want to share, we need to check for regions created by other
+^1da177e4c3f41 Linus Torvalds          2005-04-16  1062  	 * mmap() calls that overlap with our proposed mapping
+8feae13110d60c David Howells           2009-01-08  1063  	 * - we can only share with a superset match on most regular files
+^1da177e4c3f41 Linus Torvalds          2005-04-16  1064  	 * - shared mappings on character devices and memory backed files are
+^1da177e4c3f41 Linus Torvalds          2005-04-16  1065  	 *   permitted to overlap inexactly as far as we are concerned for in
+^1da177e4c3f41 Linus Torvalds          2005-04-16  1066  	 *   these cases, sharing is handled in the driver or filesystem rather
+^1da177e4c3f41 Linus Torvalds          2005-04-16  1067  	 *   than here
+^1da177e4c3f41 Linus Torvalds          2005-04-16  1068  	 */
+fc4f4be9b5271e David Hildenbrand       2023-01-02  1069  	if (is_nommu_shared_mapping(vm_flags)) {
+8feae13110d60c David Howells           2009-01-08  1070  		struct vm_region *pregion;
+8feae13110d60c David Howells           2009-01-08  1071  		unsigned long pglen, rpglen, pgend, rpgend, start;
+^1da177e4c3f41 Linus Torvalds          2005-04-16  1072  
+8feae13110d60c David Howells           2009-01-08  1073  		pglen = (len + PAGE_SIZE - 1) >> PAGE_SHIFT;
+8feae13110d60c David Howells           2009-01-08  1074  		pgend = pgoff + pglen;
+165b239270be61 David Howells           2007-03-22  1075  
+8feae13110d60c David Howells           2009-01-08  1076  		for (rb = rb_first(&nommu_region_tree); rb; rb = rb_next(rb)) {
+8feae13110d60c David Howells           2009-01-08  1077  			pregion = rb_entry(rb, struct vm_region, vm_rb);
+^1da177e4c3f41 Linus Torvalds          2005-04-16  1078  
+fc4f4be9b5271e David Hildenbrand       2023-01-02  1079  			if (!is_nommu_shared_mapping(pregion->vm_flags))
+^1da177e4c3f41 Linus Torvalds          2005-04-16  1080  				continue;
+^1da177e4c3f41 Linus Torvalds          2005-04-16  1081  
+^1da177e4c3f41 Linus Torvalds          2005-04-16  1082  			/* search for overlapping mappings on the same file */
+496ad9aa8ef448 Al Viro                 2013-01-23  1083  			if (file_inode(pregion->vm_file) !=
+496ad9aa8ef448 Al Viro                 2013-01-23  1084  			    file_inode(file))
+^1da177e4c3f41 Linus Torvalds          2005-04-16  1085  				continue;
+^1da177e4c3f41 Linus Torvalds          2005-04-16  1086  
+8feae13110d60c David Howells           2009-01-08  1087  			if (pregion->vm_pgoff >= pgend)
+^1da177e4c3f41 Linus Torvalds          2005-04-16  1088  				continue;
+^1da177e4c3f41 Linus Torvalds          2005-04-16  1089  
+8feae13110d60c David Howells           2009-01-08  1090  			rpglen = pregion->vm_end - pregion->vm_start;
+8feae13110d60c David Howells           2009-01-08  1091  			rpglen = (rpglen + PAGE_SIZE - 1) >> PAGE_SHIFT;
+8feae13110d60c David Howells           2009-01-08  1092  			rpgend = pregion->vm_pgoff + rpglen;
+8feae13110d60c David Howells           2009-01-08  1093  			if (pgoff >= rpgend)
+^1da177e4c3f41 Linus Torvalds          2005-04-16  1094  				continue;
+^1da177e4c3f41 Linus Torvalds          2005-04-16  1095  
+8feae13110d60c David Howells           2009-01-08  1096  			/* handle inexactly overlapping matches between
+8feae13110d60c David Howells           2009-01-08  1097  			 * mappings */
+8feae13110d60c David Howells           2009-01-08  1098  			if ((pregion->vm_pgoff != pgoff || rpglen != pglen) &&
+8feae13110d60c David Howells           2009-01-08  1099  			    !(pgoff >= pregion->vm_pgoff && pgend <= rpgend)) {
+8feae13110d60c David Howells           2009-01-08  1100  				/* new mapping is not a subset of the region */
+b4caecd48005fb Christoph Hellwig       2015-01-14  1101  				if (!(capabilities & NOMMU_MAP_DIRECT))
+^1da177e4c3f41 Linus Torvalds          2005-04-16  1102  					goto sharing_violation;
+^1da177e4c3f41 Linus Torvalds          2005-04-16  1103  				continue;
+^1da177e4c3f41 Linus Torvalds          2005-04-16  1104  			}
+^1da177e4c3f41 Linus Torvalds          2005-04-16  1105  
+8feae13110d60c David Howells           2009-01-08  1106  			/* we've found a region we can share */
+1e2ae599d37e60 David Howells           2010-01-15  1107  			pregion->vm_usage++;
+8feae13110d60c David Howells           2009-01-08  1108  			vma->vm_region = pregion;
+8feae13110d60c David Howells           2009-01-08  1109  			start = pregion->vm_start;
+8feae13110d60c David Howells           2009-01-08  1110  			start += (pgoff - pregion->vm_pgoff) << PAGE_SHIFT;
+8feae13110d60c David Howells           2009-01-08  1111  			vma->vm_start = start;
+8feae13110d60c David Howells           2009-01-08  1112  			vma->vm_end = start + len;
+^1da177e4c3f41 Linus Torvalds          2005-04-16  1113  
+22cc877b32202b Leon Romanovsky         2015-06-24  1114  			if (pregion->vm_flags & VM_MAPPED_COPY)
+1c71222e5f2393 Suren Baghdasaryan      2023-01-26  1115  				vm_flags_set(vma, VM_MAPPED_COPY);
+22cc877b32202b Leon Romanovsky         2015-06-24  1116  			else {
+8feae13110d60c David Howells           2009-01-08  1117  				ret = do_mmap_shared_file(vma);
+8feae13110d60c David Howells           2009-01-08  1118  				if (ret < 0) {
+8feae13110d60c David Howells           2009-01-08  1119  					vma->vm_region = NULL;
+8feae13110d60c David Howells           2009-01-08  1120  					vma->vm_start = 0;
+8feae13110d60c David Howells           2009-01-08  1121  					vma->vm_end = 0;
+1e2ae599d37e60 David Howells           2010-01-15  1122  					pregion->vm_usage--;
+8feae13110d60c David Howells           2009-01-08  1123  					pregion = NULL;
+8feae13110d60c David Howells           2009-01-08  1124  					goto error_just_free;
+8feae13110d60c David Howells           2009-01-08  1125  				}
+8feae13110d60c David Howells           2009-01-08  1126  			}
+8feae13110d60c David Howells           2009-01-08  1127  			fput(region->vm_file);
+8feae13110d60c David Howells           2009-01-08  1128  			kmem_cache_free(vm_region_jar, region);
+8feae13110d60c David Howells           2009-01-08  1129  			region = pregion;
+8feae13110d60c David Howells           2009-01-08  1130  			result = start;
+8feae13110d60c David Howells           2009-01-08  1131  			goto share;
+^1da177e4c3f41 Linus Torvalds          2005-04-16  1132  		}
+^1da177e4c3f41 Linus Torvalds          2005-04-16  1133  
+^1da177e4c3f41 Linus Torvalds          2005-04-16  1134  		/* obtain the address at which to make a shared mapping
+^1da177e4c3f41 Linus Torvalds          2005-04-16  1135  		 * - this is the hook for quasi-memory character devices to
+^1da177e4c3f41 Linus Torvalds          2005-04-16  1136  		 *   tell us the location of a shared mapping
+^1da177e4c3f41 Linus Torvalds          2005-04-16  1137  		 */
+b4caecd48005fb Christoph Hellwig       2015-01-14  1138  		if (capabilities & NOMMU_MAP_DIRECT) {
+^1da177e4c3f41 Linus Torvalds          2005-04-16  1139  			addr = file->f_op->get_unmapped_area(file, addr, len,
+^1da177e4c3f41 Linus Torvalds          2005-04-16  1140  							     pgoff, flags);
+bb005a59e08733 Namhyung Kim            2011-05-24  1141  			if (IS_ERR_VALUE(addr)) {
+^1da177e4c3f41 Linus Torvalds          2005-04-16  1142  				ret = addr;
+bb005a59e08733 Namhyung Kim            2011-05-24  1143  				if (ret != -ENOSYS)
+8feae13110d60c David Howells           2009-01-08  1144  					goto error_just_free;
+^1da177e4c3f41 Linus Torvalds          2005-04-16  1145  
+^1da177e4c3f41 Linus Torvalds          2005-04-16  1146  				/* the driver refused to tell us where to site
+^1da177e4c3f41 Linus Torvalds          2005-04-16  1147  				 * the mapping so we'll have to attempt to copy
+^1da177e4c3f41 Linus Torvalds          2005-04-16  1148  				 * it */
+bb005a59e08733 Namhyung Kim            2011-05-24  1149  				ret = -ENODEV;
+b4caecd48005fb Christoph Hellwig       2015-01-14  1150  				if (!(capabilities & NOMMU_MAP_COPY))
+8feae13110d60c David Howells           2009-01-08  1151  					goto error_just_free;
+^1da177e4c3f41 Linus Torvalds          2005-04-16  1152  
+b4caecd48005fb Christoph Hellwig       2015-01-14  1153  				capabilities &= ~NOMMU_MAP_DIRECT;
+8feae13110d60c David Howells           2009-01-08  1154  			} else {
+8feae13110d60c David Howells           2009-01-08  1155  				vma->vm_start = region->vm_start = addr;
+8feae13110d60c David Howells           2009-01-08  1156  				vma->vm_end = region->vm_end = addr + len;
+^1da177e4c3f41 Linus Torvalds          2005-04-16  1157  			}
+^1da177e4c3f41 Linus Torvalds          2005-04-16  1158  		}
+^1da177e4c3f41 Linus Torvalds          2005-04-16  1159  	}
+^1da177e4c3f41 Linus Torvalds          2005-04-16  1160  
+8feae13110d60c David Howells           2009-01-08  1161  	vma->vm_region = region;
+^1da177e4c3f41 Linus Torvalds          2005-04-16  1162  
+645d83c5db970a David Howells           2009-09-24  1163  	/* set up the mapping
+b4caecd48005fb Christoph Hellwig       2015-01-14  1164  	 * - the region is filled in if NOMMU_MAP_DIRECT is still set
+645d83c5db970a David Howells           2009-09-24  1165  	 */
+^1da177e4c3f41 Linus Torvalds          2005-04-16  1166  	if (file && vma->vm_flags & VM_SHARED)
+8feae13110d60c David Howells           2009-01-08  1167  		ret = do_mmap_shared_file(vma);
+^1da177e4c3f41 Linus Torvalds          2005-04-16  1168  	else
+645d83c5db970a David Howells           2009-09-24  1169  		ret = do_mmap_private(vma, region, len, capabilities);
+^1da177e4c3f41 Linus Torvalds          2005-04-16  1170  	if (ret < 0)
+645d83c5db970a David Howells           2009-09-24  1171  		goto error_just_free;
+645d83c5db970a David Howells           2009-09-24  1172  	add_nommu_region(region);
+8feae13110d60c David Howells           2009-01-08  1173  
+ea637639591def Jie Zhang               2009-12-14  1174  	/* clear anonymous mappings that don't ask for uninitialized data */
+0bf5f9492389aa Christoph Hellwig       2019-07-16  1175  	if (!vma->vm_file &&
+0bf5f9492389aa Christoph Hellwig       2019-07-16  1176  	    (!IS_ENABLED(CONFIG_MMAP_ALLOW_UNINITIALIZED) ||
+0bf5f9492389aa Christoph Hellwig       2019-07-16  1177  	     !(flags & MAP_UNINITIALIZED)))
+ea637639591def Jie Zhang               2009-12-14  1178  		memset((void *)region->vm_start, 0,
+ea637639591def Jie Zhang               2009-12-14  1179  		       region->vm_end - region->vm_start);
+ea637639591def Jie Zhang               2009-12-14  1180  
+^1da177e4c3f41 Linus Torvalds          2005-04-16  1181  	/* okay... we have a mapping; now we have to register it */
+8feae13110d60c David Howells           2009-01-08  1182  	result = vma->vm_start;
+^1da177e4c3f41 Linus Torvalds          2005-04-16  1183  
+^1da177e4c3f41 Linus Torvalds          2005-04-16  1184  	current->mm->total_vm += len >> PAGE_SHIFT;
+^1da177e4c3f41 Linus Torvalds          2005-04-16  1185  
+8feae13110d60c David Howells           2009-01-08  1186  share:
+07f1bc5ad79833 Liam R. Howlett         2023-01-20  1187  	BUG_ON(!vma->vm_region);
+07f1bc5ad79833 Liam R. Howlett         2023-01-20  1188  	setup_vma_to_mm(vma, current->mm);
+07f1bc5ad79833 Liam R. Howlett         2023-01-20  1189  	current->mm->map_count++;
+07f1bc5ad79833 Liam R. Howlett         2023-01-20  1190  	/* add the VMA to the tree */
+07f1bc5ad79833 Liam R. Howlett         2023-01-20  1191  	vma_iter_store(&vmi, vma);
+^1da177e4c3f41 Linus Torvalds          2005-04-16  1192  
+cfe79c00a2f4f6 Mike Frysinger          2010-01-06  1193  	/* we flush the region from the icache only when the first executable
+cfe79c00a2f4f6 Mike Frysinger          2010-01-06  1194  	 * mapping of it is made  */
+cfe79c00a2f4f6 Mike Frysinger          2010-01-06  1195  	if (vma->vm_flags & VM_EXEC && !region->vm_icache_flushed) {
+a75a2df68f87c4 Christoph Hellwig       2020-06-07  1196  		flush_icache_user_range(region->vm_start, region->vm_end);
+cfe79c00a2f4f6 Mike Frysinger          2010-01-06  1197  		region->vm_icache_flushed = true;
+cfe79c00a2f4f6 Mike Frysinger          2010-01-06  1198  	}
+^1da177e4c3f41 Linus Torvalds          2005-04-16  1199  
+cfe79c00a2f4f6 Mike Frysinger          2010-01-06  1200  	up_write(&nommu_region_sem);
+^1da177e4c3f41 Linus Torvalds          2005-04-16  1201  
+8feae13110d60c David Howells           2009-01-08  1202  	return result;
+^1da177e4c3f41 Linus Torvalds          2005-04-16  1203  
+8feae13110d60c David Howells           2009-01-08  1204  error_just_free:
+8feae13110d60c David Howells           2009-01-08  1205  	up_write(&nommu_region_sem);
+8feae13110d60c David Howells           2009-01-08  1206  error:
+47d9644de92c1a Liam R. Howlett         2023-01-20  1207  	vma_iter_free(&vmi);
+89a8640279f8bb David Howells           2009-10-30  1208  	if (region->vm_file)
+8feae13110d60c David Howells           2009-01-08  1209  		fput(region->vm_file);
+8feae13110d60c David Howells           2009-01-08  1210  	kmem_cache_free(vm_region_jar, region);
+89a8640279f8bb David Howells           2009-10-30  1211  	if (vma->vm_file)
+8feae13110d60c David Howells           2009-01-08  1212  		fput(vma->vm_file);
+3928d4f5ee37cd Linus Torvalds          2018-07-21  1213  	vm_area_free(vma);
+^1da177e4c3f41 Linus Torvalds          2005-04-16  1214  	return ret;
+^1da177e4c3f41 Linus Torvalds          2005-04-16  1215  
+^1da177e4c3f41 Linus Torvalds          2005-04-16  1216  sharing_violation:
+8feae13110d60c David Howells           2009-01-08  1217  	up_write(&nommu_region_sem);
+22cc877b32202b Leon Romanovsky         2015-06-24  1218  	pr_warn("Attempt to share mismatched mappings\n");
+8feae13110d60c David Howells           2009-01-08  1219  	ret = -EINVAL;
+8feae13110d60c David Howells           2009-01-08  1220  	goto error;
+^1da177e4c3f41 Linus Torvalds          2005-04-16  1221  
+^1da177e4c3f41 Linus Torvalds          2005-04-16  1222  error_getting_vma:
+8feae13110d60c David Howells           2009-01-08  1223  	kmem_cache_free(vm_region_jar, region);
+22cc877b32202b Leon Romanovsky         2015-06-24  1224  	pr_warn("Allocation of vma for %lu byte allocation from process %d failed\n",
+^1da177e4c3f41 Linus Torvalds          2005-04-16  1225  			len, current->pid);
+7c669cfbec1271 Kefeng Wang             2023-06-29  1226  	show_mem();
+^1da177e4c3f41 Linus Torvalds          2005-04-16  1227  	return -ENOMEM;
+^1da177e4c3f41 Linus Torvalds          2005-04-16  1228  
+8feae13110d60c David Howells           2009-01-08  1229  error_getting_region:
+22cc877b32202b Leon Romanovsky         2015-06-24  1230  	pr_warn("Allocation of vm region for %lu byte allocation from process %d failed\n",
+^1da177e4c3f41 Linus Torvalds          2005-04-16  1231  			len, current->pid);
+7c669cfbec1271 Kefeng Wang             2023-06-29  1232  	show_mem();
+^1da177e4c3f41 Linus Torvalds          2005-04-16  1233  	return -ENOMEM;
+8220543df1489e Matthew Wilcox (Oracle  2022-09-06  1234) 
+47d9644de92c1a Liam R. Howlett         2023-01-20  1235  error_vma_iter_prealloc:
+8220543df1489e Matthew Wilcox (Oracle  2022-09-06  1236) 	kmem_cache_free(vm_region_jar, region);
+8220543df1489e Matthew Wilcox (Oracle  2022-09-06  1237) 	vm_area_free(vma);
+8220543df1489e Matthew Wilcox (Oracle  2022-09-06  1238) 	pr_warn("Allocation of vma tree for process %d failed\n", current->pid);
+8220543df1489e Matthew Wilcox (Oracle  2022-09-06 @1239) 	show_free_areas(0, NULL);
+8220543df1489e Matthew Wilcox (Oracle  2022-09-06  1240) 	return -ENOMEM;
+8220543df1489e Matthew Wilcox (Oracle  2022-09-06  1241) 
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
