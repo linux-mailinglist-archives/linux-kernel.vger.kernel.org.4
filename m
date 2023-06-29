@@ -2,123 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF92E741D61
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 02:51:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B2CE741D63
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 02:52:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230382AbjF2AvH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 20:51:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33740 "EHLO
+        id S231285AbjF2Awa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 20:52:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229621AbjF2AvF (ORCPT
+        with ESMTP id S230413AbjF2AwZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 20:51:05 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13E211FD5;
-        Wed, 28 Jun 2023 17:51:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687999864; x=1719535864;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ZtDwz1dpFO9Rkw4NeGBtQuTcNaIevvwwYyoSd6yK944=;
-  b=Dq+is7OR9K/WVxjD3tgeouk+RD7pjzAOyg8HN5jA/HwUH+wTtVbwb3jH
-   C7WGBIjIsg8n/ugtSmF1t4N5hSPhd3h49BhsyWnfNVcjBwklK1xbd4lcQ
-   6Us+RBU6M46f30uuRlt9pGDqPNG8k6ZBreZtOzaQr+eP82KS6RvbGGrYu
-   glsQnvDiyZEXV/JtRZzgYpa2a5Io1QpHX3RZx2uO1H0dZi9OG7VRIpIgu
-   rKefFlr/6b4lPlaV/JstQUIocIS3BtIiTk6Lg9ftnCwMcjDY8mMkMJA6P
-   RT+/TAufmbobhqhATTdJQwutiDqVyYC8/ww00afF30kqI+2x16FP0ORfX
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10755"; a="365457326"
-X-IronPort-AV: E=Sophos;i="6.01,167,1684825200"; 
-   d="scan'208";a="365457326"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2023 17:51:03 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10755"; a="841278417"
-X-IronPort-AV: E=Sophos;i="6.01,167,1684825200"; 
-   d="scan'208";a="841278417"
-Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 28 Jun 2023 17:51:01 -0700
-Received: from kbuild by 783282924a45 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1qEfsC-000DdZ-2p;
-        Thu, 29 Jun 2023 00:51:00 +0000
-Date:   Thu, 29 Jun 2023 08:50:25 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Eddie James <eajames@linux.ibm.com>, linux-hwmon@vger.kernel.org
-Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-        linux@roeck-us.net, jdelvare@suse.com, lakshmiy@us.ibm.com,
-        Eddie James <eajames@linux.ibm.com>
-Subject: Re: [PATCH v2] hwmon: (pmbus/acbel-fsg032) Add firmware version
- debugfs attribute
-Message-ID: <202306290818.2IuC4QCQ-lkp@intel.com>
-References: <20230628153453.122213-1-eajames@linux.ibm.com>
+        Wed, 28 Jun 2023 20:52:25 -0400
+Received: from mail-oa1-x2a.google.com (mail-oa1-x2a.google.com [IPv6:2001:4860:4864:20::2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE68F2118;
+        Wed, 28 Jun 2023 17:52:23 -0700 (PDT)
+Received: by mail-oa1-x2a.google.com with SMTP id 586e51a60fabf-1b01b43577fso124920fac.0;
+        Wed, 28 Jun 2023 17:52:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687999943; x=1690591943;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=gw+0BOjq4yN+eWHXyUzI2LVAIZHQf86ZjZGyLq017bk=;
+        b=FBFsmXx6zjT7OEI8fd9vMQ3rKsG+IuC3ThvO0Da+2zY+f69L3m1AZga6IdGXaTLrDb
+         PLvPOtGFjC28UNibVxEsrgTAxVWtuprNaO1iOkCOGpkeW8hv2wMq2am9cOw7TWPg4N7d
+         S7M2ANJ+OZanxjSYktC7uhYIlIEeCh7xnAjPdVy2u3iyKaCnrzg49edlj7NI5mR+gN+t
+         zDyR1EuW15ZNMx0G6vuD5bg4UQdTQpyfZLSR1RogoNi1OyZWqUKDa03/OZDAxMju3swt
+         7d01Q0yxdnVt+c29S+gss68y/ln7548Rz/COTBneMi1kz+kj1b//Q1dGJ2U/+C4YAw0C
+         HTVA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687999943; x=1690591943;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=gw+0BOjq4yN+eWHXyUzI2LVAIZHQf86ZjZGyLq017bk=;
+        b=kywqML6vYPtJR4N8R0EzwRBVm6AXBBzcvXxtSN4+84E1ZtX1RX1SeLu+M8EzMxLfCC
+         dqorjkluB5981YTDT2a3kEn+xGhSjXAsqjCZn0pXQcn5I4ui3dkD84UApJ8xt22ab7tI
+         fYef6GHO1hfiUg0NHOfeCczYlWxyBdxRz7jbOPHngyL92K2ox0hYd+K59kfSWTkBEron
+         sf+J5p6q9MuW+LL29buhcTUmHJvk82fvXPyFm0PVTTJp3TPrdBhWzWvQJqz98vXXNy0j
+         2SUZeviiZeLOAU9JXzHyhlwRHDIJlLQUhZy7dRaBRxJeDLnPGG3l1sy2FFxlwTiFsDJd
+         ZaCA==
+X-Gm-Message-State: AC+VfDzWexeTnZc/YpJo+M32c6xQnlQ7fvuULHnan7opFtfof3DuTTuU
+        yl3L9sVD4CgCjXk+0JfxWmM=
+X-Google-Smtp-Source: ACHHUZ6dEsmjdMIXr24d/njV7n8FdllB83aFglf6j+as0HzzWQaXDvjI2FQHo6KThlvsc3kqVnyqyQ==
+X-Received: by 2002:a05:6870:bc19:b0:1b0:7f57:1e28 with SMTP id oa25-20020a056870bc1900b001b07f571e28mr3384680oab.11.1687999943126;
+        Wed, 28 Jun 2023 17:52:23 -0700 (PDT)
+Received: from [192.168.54.90] (static.220.238.itcsa.net. [190.15.220.238])
+        by smtp.gmail.com with ESMTPSA id s11-20020a05683004cb00b006b8703c11fesm1831120otd.13.2023.06.28.17.52.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 28 Jun 2023 17:52:22 -0700 (PDT)
+Message-ID: <4342b487-7e2c-750b-4de0-cfc03da042ec@gmail.com>
+Date:   Wed, 28 Jun 2023 21:51:28 -0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230628153453.122213-1-eajames@linux.ibm.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH] rust: macros: add `paste!` proc macro
+Content-Language: en-US
+To:     Gary Guo <gary@garyguo.net>, Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        =?UTF-8?Q?Bj=c3=b6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+        Benno Lossin <benno.lossin@proton.me>,
+        Andreas Hindborg <a.hindborg@samsung.com>,
+        Alice Ryhl <aliceryhl@google.com>
+Cc:     linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org
+References: <20230628171108.1150742-1-gary@garyguo.net>
+From:   Martin Rodriguez Reboredo <yakoyoku@gmail.com>
+In-Reply-To: <20230628171108.1150742-1-gary@garyguo.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Eddie,
+On 6/28/23 14:11, Gary Guo wrote:
+> This macro provides a flexible way to concatenated identifiers together
+> and it allows the resulting identifier to be used to declare new items,
+> which `concat_idents!` does not allow. It also allows identifiers to be
+> transformed before concatenated.
+> 
+> The `concat_idents!` example
+> 
+>      let x_1 = 42;
+>      let x_2 = concat_idents!(x, _1);
+>      assert!(x_1 == x_2);
+> 
+> can be written with `paste!` macro like this:
+> 
+>      let x_1 = 42;
+>      let x_2 = paste!([<x _1>]);
+>      assert!(x_1 == x_2);
+> 
+> However `paste!` macro is more flexible because it can be used to create
+> a new variable:
+> 
+>      let x_1 = 42;
+>      paste!(let [<x _2>] = [<x _1>];);
+>      assert!(x_1 == x_2);
+> 
+> While this is not possible with `concat_idents!`.
+> 
+> This macro is similar to the `paste!` crate [1], but this is a fresh
+> implementation to avoid vendoring large amount of code directly. Also, I
+> have augmented it to provide a way to specify span of the resulting
+> token, allowing precise control.
+> 
+> For example, this code is broken because the variable is declared inside
+> the macro, so Rust macro hygiene rules prevents access from the outside:
+> 
+>      macro_rules! m {
+>          ($id: ident) => {
+>              // The resulting token has hygiene of the macro.
+>              paste!(let [<$id>] = 1;)
+>          }
+>      }
+> 
+>      m!(a);
+>      let _ = a;
+> 
+> In this versionn of `paste!` macro I added a `span` modifier to allow
+> this:
+> 
+>      macro_rules! m {
+>          ($id: ident) => {
+>              // The resulting token has hygiene of `$id`.
+>              paste!(let [<$id:span>] = 1;)
+>          }
+>      }
+> 
+>      m!(a);
+>      let _ = a;
+> 
+> Link: http://docs.rs/paste/ [1]
+> Signed-off-by: Gary Guo <gary@garyguo.net>
+> ---
+> [...]
 
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on groeck-staging/hwmon-next]
-[also build test WARNING on linus/master v6.4 next-20230628]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Eddie-James/hwmon-pmbus-acbel-fsg032-Add-firmware-version-debugfs-attribute/20230628-233840
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-patch link:    https://lore.kernel.org/r/20230628153453.122213-1-eajames%40linux.ibm.com
-patch subject: [PATCH v2] hwmon: (pmbus/acbel-fsg032) Add firmware version debugfs attribute
-config: i386-randconfig-i012-20230628 (https://download.01.org/0day-ci/archive/20230629/202306290818.2IuC4QCQ-lkp@intel.com/config)
-compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
-reproduce: (https://download.01.org/0day-ci/archive/20230629/202306290818.2IuC4QCQ-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306290818.2IuC4QCQ-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   drivers/hwmon/pmbus/acbel-fsg032.c: In function 'acbel_fsg032_debugfs_read':
->> drivers/hwmon/pmbus/acbel-fsg032.c:25:13: warning: unused variable 'i' [-Wunused-variable]
-      25 |         int i;
-         |             ^
-
-
-vim +/i +25 drivers/hwmon/pmbus/acbel-fsg032.c
-
-    17	
-    18	static ssize_t acbel_fsg032_debugfs_read(struct file *file, char __user *buf, size_t count,
-    19						 loff_t *ppos)
-    20	{
-    21		struct i2c_client *client = file->private_data;
-    22		char data[I2C_SMBUS_BLOCK_MAX + 2] = { 0 };
-    23		char out[8];
-    24		int rc;
-  > 25		int i;
-    26	
-    27		rc = i2c_smbus_read_block_data(client, ACBEL_MFR_FW_REVISION, data);
-    28		if (rc < 0)
-    29			return rc;
-    30	
-    31		rc = snprintf(out, sizeof(out), "%*phN\n", min(rc, 3), data);
-    32		return simple_read_from_buffer(buf, count, ppos, out, rc);
-    33	}
-    34	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Reviewed-by: Martin Rodriguez Reboredo <yakoyoku@gmail.com>
