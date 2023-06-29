@@ -2,64 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 582787427CD
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 15:57:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA31974279F
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 15:44:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231831AbjF2N5I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 09:57:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50698 "EHLO
+        id S232066AbjF2Noa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 09:44:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229522AbjF2N5H (ORCPT
+        with ESMTP id S230036AbjF2No2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 09:57:07 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38AEECF;
-        Thu, 29 Jun 2023 06:57:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1688047026; x=1719583026;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=KHiB3abkj5VcQDjRlKOb0Tkf6LNR98NT71l0fvJAq0Y=;
-  b=SvEDfQv0E7bWrTuc3zhRtxTVgJ1D5S7JX5zoEXKRPtK5jz2S5tj5yDc2
-   nJuMACCxFF51CWn1xuwjymNfxpo9VFwVspFoh9g+XtiSH9cAXXI6s2Qz4
-   b8GKqhW1yJDuSpV/aClTO+FM3uPhD+QeOTWSSGuUVPn9S7RIKq8TBNqaE
-   pW7UurB629zh4Z8qI8TfXzABa2qdAnSeqTNK7zJ7kHTHo1PDt6wiz1g6v
-   5FV0POvtwsomD7KFAgfH38bc2Y8KyAGHBgnq2b0MFrNJ3Z6y0iuQFpNMb
-   Tb9WcydAGyv+cqkjoqNzMyWq7Le4t0D8/Lsf64xRjrIWo6WwgGJ6JGEQV
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10756"; a="365584724"
-X-IronPort-AV: E=Sophos;i="6.01,168,1684825200"; 
-   d="scan'208";a="365584724"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jun 2023 06:22:48 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10756"; a="711430122"
-X-IronPort-AV: E=Sophos;i="6.01,168,1684825200"; 
-   d="scan'208";a="711430122"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga007.jf.intel.com with ESMTP; 29 Jun 2023 06:22:45 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id E2BC93DA; Thu, 29 Jun 2023 16:22:47 +0300 (EEST)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
+        Thu, 29 Jun 2023 09:44:28 -0400
+X-Greylist: delayed 430 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 29 Jun 2023 06:44:23 PDT
+Received: from smtpout11.ifi.lmu.de (smtpout11.ifi.lmu.de [IPv6:2001:4ca0:4000:0:141:84:214:246])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55E5F30C4;
+        Thu, 29 Jun 2023 06:44:22 -0700 (PDT)
+Received: from tobhe.de (p200300eeaf18710014db52e6e13db9f4.dip0.t-ipconnect.de [IPv6:2003:ee:af18:7100:14db:52e6:e13d:b9f4])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: heidert)
+        by smtpin1.ifi.lmu.de (Postfix) with ESMTPSA id 81692AE99FB;
+        Thu, 29 Jun 2023 15:37:07 +0200 (CEST)
+Date:   Thu, 29 Jun 2023 15:37:05 +0200
+From:   Tobias Heider <me@tobhe.de>
+To:     Paolo Abeni <pabeni@redhat.com>
+Cc:     Michael Chan <michael.chan@broadcom.com>,
+        Siva Reddy Kallam <siva.kallam@broadcom.com>,
+        Prashant Sreedharan <prashant@broadcom.com>,
+        Michael Chan <mchan@broadcom.com>, netdev@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>,
         linux-kernel@vger.kernel.org
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [PATCH v1 2/2] netlink: Make use of __assign_bit() API
-Date:   Thu, 29 Jun 2023 16:22:40 +0300
-Message-Id: <20230629132240.80372-2-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.40.0.1.gaa8946217a0b
-In-Reply-To: <20230629132240.80372-1-andriy.shevchenko@linux.intel.com>
-References: <20230629132240.80372-1-andriy.shevchenko@linux.intel.com>
+Subject: Re: [PATCH] Add MODULE_FIRMWARE() for FIRMWARE_TG357766.
+Message-ID: <ZJ2JARrRUUd4YRvX@tobhe.de>
+References: <ZJt7LKzjdz8+dClx@tobhe.de>
+ <CACKFLinEbG_VVcMTPVuHeoQ6OLtPRaG7q2U5rvqPqdvk7T2HwA@mail.gmail.com>
+ <aa84a2f559a246b82779198d3ca60205691baa94.camel@redhat.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+In-Reply-To: <aa84a2f559a246b82779198d3ca60205691baa94.camel@redhat.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,36 +50,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We have for some time the __assign_bit() API to replace open coded
+On Thu, Jun 29, 2023 at 03:05:23PM +0200, Paolo Abeni wrote:
+> On Tue, 2023-06-27 at 18:31 -0700, Michael Chan wrote:
+> > On Tue, Jun 27, 2023 at 5:13 PM Tobias Heider <me@tobhe.de> wrote:
+> > > 
+> > > Fixes a bug where on the M1 mac mini initramfs-tools fails to
+> > > include the necessary firmware into the initrd.
+> > > 
+> > > Signed-off-by: Tobias Heider <me@tobhe.de>
+> > 
+> > Thanks.
+> > Reviewed-by: Michael Chan <michael.chan@broadcom.com>
+> 
+> This is a borderline situation, but ... 
+> 
+> Is there a suitable 'Fixes:' tag we can add here?
+> 
+> Thanks!
+> 
+> Paolo
+> 
 
-	if (foo)
-		__set_bit(n, bar);
-	else
-		__clear_bit(n, bar);
-
-Use this API in the code. No functional change intended.
-
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- net/netlink/af_netlink.c | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
-
-diff --git a/net/netlink/af_netlink.c b/net/netlink/af_netlink.c
-index 383631873748..9c9df143a2ec 100644
---- a/net/netlink/af_netlink.c
-+++ b/net/netlink/af_netlink.c
-@@ -1629,10 +1629,7 @@ static void netlink_update_socket_mc(struct netlink_sock *nlk,
- 
- 	old = test_bit(group - 1, nlk->groups);
- 	subscriptions = nlk->subscriptions - old + new;
--	if (new)
--		__set_bit(group - 1, nlk->groups);
--	else
--		__clear_bit(group - 1, nlk->groups);
-+	__assign_bit(group - 1, nlk->groups, new);
- 	netlink_update_subscriptions(&nlk->sk, subscriptions);
- 	netlink_update_listeners(&nlk->sk);
- }
--- 
-2.40.0.1.gaa8946217a0b
-
+Would "Fixes: c4dab50697ff ("video: remove unnecessary platform_set_drvdata()")"
+work?
