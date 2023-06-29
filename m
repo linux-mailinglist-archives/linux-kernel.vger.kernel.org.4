@@ -2,42 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DCC97427A6
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 15:47:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E2B97427A9
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 15:47:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232088AbjF2Nrb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 09:47:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48346 "EHLO
+        id S232101AbjF2Nre (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 09:47:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230036AbjF2Nr3 (ORCPT
+        with ESMTP id S229794AbjF2Nrc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 09:47:29 -0400
-Received: from smtp1.axis.com (smtp1.axis.com [195.60.68.17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A8C63588;
-        Thu, 29 Jun 2023 06:47:27 -0700 (PDT)
+        Thu, 29 Jun 2023 09:47:32 -0400
+Received: from smtp2.axis.com (smtp2.axis.com [195.60.68.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02AB5358A;
+        Thu, 29 Jun 2023 06:47:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=axis.com; q=dns/txt; s=axis-central1; t=1688046448;
-  x=1719582448;
+  d=axis.com; q=dns/txt; s=axis-central1; t=1688046452;
+  x=1719582452;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=oivdCWpWhN5qlKpC0P4lDqtzGqA01OdlG871VKH1xqo=;
-  b=dcB3N3vJOErNkhoE9GwVIDVeXO7huEOSnu+DuNlqFd4W756O7uDRQCXS
-   7bbT/lQt+YROd1O4R/nNR4EJMwBUSag/IefoBQEXmntjDRe52gu19+hTe
-   IGnqN+flLM+mI1GYKfU6zwuWnVjrR8fGHoSc61zx6En99ZJ19yI92d058
-   CGQcGV50qgY515Z3bSxTt5fsRmbzQoO+NXqQHlLML0q8K1I7NYLdnTG95
-   qlSEBhmf10fDvGJuzR7PAnuGhaDFJPoJZ+888fmvgFIU02uJx+/OWjjNr
-   09EvE/HOLHD3OMQhnqZUweDswbXHUUudnf3iYK7F4CuSRbNR+yW2YLcPQ
+  bh=mRwhJbcypJGWdkrQyemMfvhuOL1PFCUxpQrwdJedum4=;
+  b=dKfXCQCN2vA5NEY0E47gha8oEDzuiNiCFHsPSfN3jPSzYzSOfvULH5j+
+   idHpzxvVV4ZxWhzB98MDKPoZ6mZNAvcgZp6bqleGXFNQ19ZQ+45cfwq+3
+   oIanOoHxfW/sEmP4viFSyLRqUvDdfILDwXEyvFuhh7GK0fhZgNYi6WZUO
+   5pOjo1gLEAg/xzuE6em4X8yzV4IwuTUXOj6nlX6J5kv4btfC4LWsWdn1i
+   CSZ/StfhRuDHZkKllnA6zqsNrIXIRFkyi4dBfRZjIcIXxP3vsO94A9dRW
+   XHwUINOonQ1nvRAlGlswzILMAv+up10G6yUsjbgAEbwhjc29vzwNtaIqr
    Q==;
 From:   Astrid Rost <astrid.rost@axis.com>
 To:     Dan Murphy <dmurphy@ti.com>, Andrew Davis <afd@ti.com>,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>
+        Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>
 CC:     <kernel@axis.com>, Astrid Rost <astrid.rost@axis.com>,
-        <linux-leds@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v1 1/2] led: leds-lp50xx: Add max-brightness as in leds-pwm
-Date:   Thu, 29 Jun 2023 15:47:21 +0200
-Message-ID: <20230629134722.3908637-2-astrid.rost@axis.com>
+        <linux-leds@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH v1 2/2] dt: bindings: lp50xx: Add max-brightness as in leds-pwm
+Date:   Thu, 29 Jun 2023 15:47:22 +0200
+Message-ID: <20230629134722.3908637-3-astrid.rost@axis.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20230629134722.3908637-1-astrid.rost@axis.com>
 References: <20230629134722.3908637-1-astrid.rost@axis.com>
@@ -63,22 +66,29 @@ conditions.
 
 Signed-off-by: Astrid Rost <astrid.rost@axis.com>
 ---
- drivers/leds/leds-lp50xx.c | 2 ++
- 1 file changed, 2 insertions(+)
+ Documentation/devicetree/bindings/leds/leds-lp50xx.yaml | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-diff --git a/drivers/leds/leds-lp50xx.c b/drivers/leds/leds-lp50xx.c
-index 28d6b39fa72d..1cb54c0524a1 100644
---- a/drivers/leds/leds-lp50xx.c
-+++ b/drivers/leds/leds-lp50xx.c
-@@ -502,6 +502,8 @@ static int lp50xx_probe_dt(struct lp50xx *priv)
- 		led->mc_cdev.num_colors = num_colors;
- 		led->mc_cdev.subled_info = mc_led_info;
- 		led_cdev = &led->mc_cdev.led_cdev;
-+		fwnode_property_read_u32(child, "max-brightness",
-+					 &led_cdev->max_brightness);
- 		led_cdev->brightness_set_blocking = lp50xx_brightness_set;
+diff --git a/Documentation/devicetree/bindings/leds/leds-lp50xx.yaml b/Documentation/devicetree/bindings/leds/leds-lp50xx.yaml
+index 402c25424525..6a1425969cb4 100644
+--- a/Documentation/devicetree/bindings/leds/leds-lp50xx.yaml
++++ b/Documentation/devicetree/bindings/leds/leds-lp50xx.yaml
+@@ -73,6 +73,15 @@ patternProperties:
+       '#size-cells':
+         const: 0
  
- 		ret = devm_led_classdev_multicolor_register_ext(priv->dev,
++      max-brightness:
++        description:
++          Normally, the maximum brightness is determined by the hardware, and
++          this property is not required. This property is used to set a software
++          limit. It could happen that an LED is made so bright that it gets
++          damaged or causes damage due to restrictions in a specific system,
++          such as mounting conditions.
++        $ref: /schemas/types.yaml#definitions/uint32
++
+     patternProperties:
+       "^led@[0-9a-f]+$":
+         type: object
 -- 
 2.30.2
 
