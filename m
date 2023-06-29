@@ -2,76 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C8BB74313D
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 01:50:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FAB474312F
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 01:43:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232233AbjF2XpR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 19:45:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37468 "EHLO
+        id S231245AbjF2XlX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 19:41:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232358AbjF2Xo6 (ORCPT
+        with ESMTP id S229459AbjF2XlV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 19:44:58 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 068843A9E;
-        Thu, 29 Jun 2023 16:44:31 -0700 (PDT)
-X-QQ-mid: bizesmtp71t1688082237td2r7nrs
-Received: from linux-lab-host.localdomain ( [119.123.131.49])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Fri, 30 Jun 2023 07:43:57 +0800 (CST)
-X-QQ-SSF: 01200000000000D0W000000A0000000
-X-QQ-FEAT: 9fp+MOMfZT3B2+27Lz2FTtpHEdP5j3lylTTpTlkY+1W9tYtMODtQHajOyUa+u
-        KjzLT8Qc3eQVG5pPIeHgQ5dEURdQ2cV62nDeE9XHkM2MvowgrDTcEq1J+MR+p2lBpjqDlHc
-        tmi8mq8yEz4+BD0xkYc1YeDmRD++G0w1cUIY9KI046I1CS8lX0PcziIAYWisMdC9QHlVUwM
-        hR+oTfgO3MsLZfc3/7PNuAUYridqhYq4hM/1uuCK1ba9SyEP7nnM6tmkOtQ0vVt/NgPqU3U
-        3FHxEbPs/Dv4lcsYnMSZJ+xCqVW1y3+NJe4pF1nK122Bh9r3H7TYDjwy/7O9s3fM9xmypyg
-        I3b3Aw9jgd9IHLy+5b7dY2iJnlWWr+OA/fedR4Ss3GD+2BOQy3BrmSl9H/qoA==
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 15543981623249164707
-From:   Zhangjin Wu <falcon@tinylab.org>
-To:     thomas@t-8ch.de, w@1wt.eu
-Cc:     falcon@tinylab.org, arnd@arndb.de, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: [PATCH v2 07/15] selftests/nolibc: link_cross: use /proc/self/cmdline
-Date:   Fri, 30 Jun 2023 07:37:00 +0800
-Message-Id: <c792f3a55323a9eb118fd23efbd0e686f8d45185.1688078605.git.falcon@tinylab.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <cover.1688078604.git.falcon@tinylab.org>
-References: <cover.1688078604.git.falcon@tinylab.org>
+        Thu, 29 Jun 2023 19:41:21 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD5D0170B
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 16:41:19 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id a640c23a62f3a-98e109525d6so222660666b.0
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 16:41:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google; t=1688082078; x=1690674078;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=MXt+lksofF+9QajMg5KFkux1Y51FEVAStlJ8D4Gn9U8=;
+        b=TiSYapsJyNvcCW3/7ksyHr/MEXi0omJNCN06O/4J/PMOdzE7fPWCIRHM6DF7dt9wjI
+         j1Vrqm9IOvtlyskTeV1aiS/h3xdaanaKURYZ21jctoqtTFaCY48XpiYR+jx+M1Ur52js
+         ovBDbCaLA+BT4bj90Q5x1eh5RFHJODvWM5DXc=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688082078; x=1690674078;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=MXt+lksofF+9QajMg5KFkux1Y51FEVAStlJ8D4Gn9U8=;
+        b=Sx42SkKtaHYbCTifL+FAWbXSnQ5QR2slBIOOaRDyOMLqY5pZ48mqTPPk0Q18Hg9qb/
+         XVPY3PeZ2aH+LGfw0lXgZCa1RxtKCLi6pQwFN7uX6v5KJNwKfdId0HvQJFgndmneNQVB
+         KsZDcobV8gP5BDGvNgBttTFLPyLyrNFIUE1IuDIho3TrpVbnSHIgdB5yqOwTfYEiFB6c
+         UvonJw+nLvxPx72n0UO3hVXcr1OkQLs7Qu9hldCiA4kASaBnxmp866mqhPe1fRRuINHe
+         Hmf9FBj0wGPRH0RgjRk/9QRECl+sbiYHA1K9GHFSgp7icNOyMi7i1FE28+nNjzGxSISH
+         TAPQ==
+X-Gm-Message-State: AC+VfDxM8zpG3D3E5BPZ2GDVpzAftftWOltiTdRiaY5Y0VaOkg2VyxW3
+        b8yYKrK/JDyEdTOpLdUlid7sdWa326QM0IRgFobfBFS2
+X-Google-Smtp-Source: ACHHUZ73xaIbvXSZ1sBEU1F+ertYWxUGyd1ZsVdjGwK8LpJs3W+WZaTzFPLvDnR2vBNUxZ0L1x0+5w==
+X-Received: by 2002:a17:907:1623:b0:982:a022:a540 with SMTP id hb35-20020a170907162300b00982a022a540mr5581000ejc.11.1688082078238;
+        Thu, 29 Jun 2023 16:41:18 -0700 (PDT)
+Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com. [209.85.208.47])
+        by smtp.gmail.com with ESMTPSA id bx1-20020a170906a1c100b00992665694f7sm2572725ejb.107.2023.06.29.16.41.16
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 29 Jun 2023 16:41:16 -0700 (PDT)
+Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-51a52a7d859so2167949a12.0
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 16:41:16 -0700 (PDT)
+X-Received: by 2002:aa7:d3cc:0:b0:51d:d19c:298a with SMTP id
+ o12-20020aa7d3cc000000b0051dd19c298amr1601506edr.2.1688082076332; Thu, 29 Jun
+ 2023 16:41:16 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrgz:qybglogicsvrgz5a-1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H5,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230627084058.GM52412@kernel.org>
+In-Reply-To: <20230627084058.GM52412@kernel.org>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Thu, 29 Jun 2023 16:40:59 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wgkp6Cp_vNaJ02KGWwR6aj2JA5rMcTo505cuN__gknYfQ@mail.gmail.com>
+Message-ID: <CAHk-=wgkp6Cp_vNaJ02KGWwR6aj2JA5rMcTo505cuN__gknYfQ@mail.gmail.com>
+Subject: Re: [GIT PULL] memblock: small updates for v6.5-rc1
+To:     Mike Rapoport <rppt@kernel.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Claudio Migliorelli <claudio.migliorelli@mail.polimi.it>,
+        Yuwei Guan <ssawgyw@gmail.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-For CONFIG_NET=n, there would be no /proc/self/net, so, use
-/proc/self/cmdline instead.
+On Tue, 27 Jun 2023 at 01:41, Mike Rapoport <rppt@kernel.org> wrote:
+>
+> are available in the Git repository at:
+>
+>   https://git.kernel.org/pub/scm/linux/kernel/git/rppt/memblock memblock-v6.5-rc1
 
-Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
----
- tools/testing/selftests/nolibc/nolibc-test.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Nope, nothing there.
 
-diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
-index 1d2be52d44a5..0bb222eaafca 100644
---- a/tools/testing/selftests/nolibc/nolibc-test.c
-+++ b/tools/testing/selftests/nolibc/nolibc-test.c
-@@ -724,7 +724,7 @@ int run_syscall(int min, int max)
- 		CASE_TEST(link_root1);        EXPECT_SYSER(1, link("/", "/"), -1, EEXIST); break;
- 		CASE_TEST(link_blah);         EXPECT_SYSER(1, link("/proc/self/blah", "/blah"), -1, ENOENT); break;
- 		CASE_TEST(link_dir);          EXPECT_SYSER(euid0, link("/", "/blah"), -1, EPERM); break;
--		CASE_TEST(link_cross);        EXPECT_SYSER(proc, link("/proc/self/net", "/blah"), -1, EXDEV); break;
-+		CASE_TEST(link_cross);        EXPECT_SYSER(proc, link("/proc/self/cmdline", "/blah"), -1, EXDEV); break;
- 		CASE_TEST(lseek_m1);          EXPECT_SYSER(1, lseek(-1, 0, SEEK_SET), -1, EBADF); break;
- 		CASE_TEST(lseek_0);           EXPECT_SYSER(1, lseek(0, 0, SEEK_SET), -1, ESPIPE); break;
- 		CASE_TEST(mkdir_root);        EXPECT_SYSER(1, mkdir("/", 0755), -1, EEXIST); break;
--- 
-2.25.1
+I see the for-next branch, but no tag with that name, and no other tag
+with those contents.
 
+Forgot to push?
+
+               Linus
