@@ -2,45 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A5CA742044
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 08:19:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A857574204A
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 08:24:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231638AbjF2GTn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 02:19:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38772 "EHLO
+        id S231726AbjF2GYC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 02:24:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230222AbjF2GTk (ORCPT
+        with ESMTP id S231609AbjF2GXz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 02:19:40 -0400
-Received: from mail.nfschina.com (unknown [42.101.60.195])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id E891310B;
-        Wed, 28 Jun 2023 23:19:38 -0700 (PDT)
-Received: from [172.30.11.106] (unknown [180.167.10.98])
-        by mail.nfschina.com (Maildata Gateway V2.8.8) with ESMTPSA id 2908D60562F6B;
-        Thu, 29 Jun 2023 14:19:34 +0800 (CST)
-Message-ID: <05d56f16-a4fd-10ca-22af-3bc1c6395335@nfschina.com>
-Date:   Thu, 29 Jun 2023 14:19:33 +0800
+        Thu, 29 Jun 2023 02:23:55 -0400
+Received: from mail-oi1-f197.google.com (mail-oi1-f197.google.com [209.85.167.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 405A62D55
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 23:23:53 -0700 (PDT)
+Received: by mail-oi1-f197.google.com with SMTP id 5614622812f47-3a034580aafso472689b6e.0
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 23:23:53 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688019832; x=1690611832;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=IpcX8yoGQwtDbbS2InhwrDWLqMJ+UOKxIROuGAmi4E4=;
+        b=g6HGdUr3kLLn/PObD/B/oIPAzLHfZ679AcZ/hzAgpFuVqiYVgP/Vz5HBnbFU8+hIhE
+         cm8cGcOGFFZY5Futq6N+RNmY53ALNVaUjTzY7ygk+rY2Ohx5S8TWgNcLhfy5xwyyH49t
+         wfbUBCMiNv+STSBl2cVayct2EedPzAMGKrDh2zdAXd4yIn+iDSDgY2PW90Z5/FzRDuxK
+         H6WifLiTFaPVd5kN7/60nqe+TM+0u6sp3DCSz75EQiYQImYN14jblRcREHqcQIHUZnqD
+         L5QipVMu2/QP1WY8mYkGYEU28ipNnMtuaBfmhooyRWB2gsVqvOIQ0iMpgY720Cnqbyu0
+         5Cdg==
+X-Gm-Message-State: AC+VfDxai51wYhl/JcIlNwaUARZBfCnJ6XqPngDm47B378qayH+qLgEU
+        69EHtPQsXwlO6OrN3UTdEJx+La/tNv4KJToNuCrTnLW7Hfxb
+X-Google-Smtp-Source: ACHHUZ4OWqm0vehdzke3e3J+zETMbhDo9DI9nEBAGnL7yoqoyvW+/2sgnywN3ZZ+y+SSlxsWCFji9OEyNL2l7l4rcUPxsNr0edsv
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH net-next 08/10] net: mdio: Remove unnecessary (void*)
- conversions
-Content-Language: en-US
-To:     Dan Carpenter <dan.carpenter@linaro.org>,
-        "Russell King (Oracle)" <linux@armlinux.org.uk>
-Cc:     iyappan@os.amperecomputing.com, keyur@os.amperecomputing.com,
-        quan@os.amperecomputing.com, andrew@lunn.ch, hkallweit1@gmail.com,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
-X-MD-Sfrom: yunchuan@nfschina.com
-X-MD-SrcIP: 180.167.10.98
-From:   yunchuan <yunchuan@nfschina.com>
-In-Reply-To: <3fda1d81-e350-42e9-8fec-6f107ae75932@kadam.mountain>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+X-Received: by 2002:aca:de43:0:b0:39c:bfd3:7e with SMTP id v64-20020acade43000000b0039cbfd3007emr12130030oig.10.1688019832673;
+ Wed, 28 Jun 2023 23:23:52 -0700 (PDT)
+Date:   Wed, 28 Jun 2023 23:23:52 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000801b1a05ff3ebee0@google.com>
+Subject: [syzbot] linux-next build error (15)
+From:   syzbot <syzbot+4c222134dc629d256ee8@syzkaller.appspotmail.com>
+To:     linux-cifs@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-next@vger.kernel.org, lsahlber@redhat.com, pc@manguebit.com,
+        samba-technical@lists.samba.org, sfr@canb.auug.org.au,
+        sfrench@samba.org, sprasad@microsoft.com,
+        syzkaller-bugs@googlegroups.com, tom@talpey.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -48,38 +56,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello,
 
-On 2023/6/29 13:50, Dan Carpenter wrote:
-> On Thu, Jun 29, 2023 at 09:59:56AM +0800, yunchuan wrote:
->> On 2023/6/28 17:50, Russell King (Oracle) wrote:
->>> On Wed, Jun 28, 2023 at 10:45:17AM +0800, wuych wrote:
->>>> @@ -211,7 +211,7 @@ static void xgene_enet_wr_mdio_csr(void __iomem *base_addr,
->>>>    static int xgene_xfi_mdio_write(struct mii_bus *bus, int phy_id,
->>>>    				int reg, u16 data)
->>>>    {
->>>> -	void __iomem *addr = (void __iomem *)bus->priv;
->>>> +	void __iomem *addr = bus->priv;
->>>>    	int timeout = 100;
->>>>    	u32 status, val;
->>>> @@ -234,7 +234,7 @@ static int xgene_xfi_mdio_write(struct mii_bus *bus, int phy_id,
->>>>    static int xgene_xfi_mdio_read(struct mii_bus *bus, int phy_id, int reg)
->>>>    {
->>>> -	void __iomem *addr = (void __iomem *)bus->priv;
->>>> +	void __iomem *addr = bus->priv;
->>>>    	u32 data, status, val;
->>>>    	int timeout = 100;
->>> These probably cause Sparse to warn whether or not the cast is there.
->> Hi, Russell King,
->>
->> I didn't notice this Sparse warning.
->> Should I remove this cast although it cause Sparse warning?
-> No.  Don't introduce new Sparse warnings.
+syzbot found the following issue on:
 
-Got it, thanks for your answer!
+HEAD commit:    8b14b70331aa Add linux-next specific files for 20230629
+git tree:       linux-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=11079dbf280000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=83c17849d18e7a86
+dashboard link: https://syzkaller.appspot.com/bug?extid=4c222134dc629d256ee8
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
 
-wuych
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+4c222134dc629d256ee8@syzkaller.appspotmail.com
 
->
-> regards,
-> dan carpenter
->
+fs/smb/client/cifs_debug.c:169:1: error: label at end of compound statement
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+
+If the bug is already fixed, let syzbot know by replying with:
+#syz fix: exact-commit-title
+
+If you want to change bug's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the bug is a duplicate of another bug, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
