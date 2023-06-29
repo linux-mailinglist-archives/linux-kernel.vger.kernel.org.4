@@ -2,70 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C667E74237E
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 11:49:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DED41742385
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 11:51:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232048AbjF2Jtn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 05:49:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44638 "EHLO
+        id S231910AbjF2Jvp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 05:51:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231273AbjF2Jtk (ORCPT
+        with ESMTP id S232095AbjF2Jvi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 05:49:40 -0400
-Received: from mail-il1-x12f.google.com (mail-il1-x12f.google.com [IPv6:2607:f8b0:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A74C2118
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 02:49:39 -0700 (PDT)
-Received: by mail-il1-x12f.google.com with SMTP id e9e14a558f8ab-34271602c32so1913455ab.0
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 02:49:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1688032178; x=1690624178;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=TAVGxraTdF0jlMOrg7ntj6lybpeMD144G6in0dHdRZA=;
-        b=GpRxs+aleVtUN6747CSY0iOpvbhoyhuMWoIGQlWKBzrWJE550cx2lgDWbgdZMl4Djk
-         v3p3zJiHeZkivIAblRrYzwYBRfZgLITuLcl8AKwSl5Zng5c/gAP40SUW3KiSY6YbipKn
-         krLwu4gnBt0ZHFuIOJGyE/8ULH3hsht2UkKdE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688032178; x=1690624178;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=TAVGxraTdF0jlMOrg7ntj6lybpeMD144G6in0dHdRZA=;
-        b=l39xS+AWxwQeOQ1qrqgZMh+P4cuG9Oz+IAlOambNN9lbAE044Sp6vMnoiXBduf4oCd
-         GJWwL7MV7AYf1F1+U0MykeK/rENJ1M10vPcwBUYzASYbujrZf6F6p3M8bykhkCNjgvfm
-         Agm2Aekc8rJceNDi4KdHnKrvs6JLz8fr+MP2pqQr28WoQNFkvZ4TQXaGywZ9g6lLEJtl
-         MsLK8KWM4dc/2pb++X1wQDqT4U+pH7bWsbTYkq+HWmsYGNE883G5pBV1CTY90yqOPg0y
-         p6x3Ph8iwJxsHd+MZtaOgcihWcVGcwzTI7gq5vhy9M29gMOUP+vA6AK1qU0YDf09KG6e
-         +ApQ==
-X-Gm-Message-State: AC+VfDwBN6ZpmH4YwzbDyAOA42rfH3B5kKUoqfRa+MB8lNxSzAwjFJPk
-        R9BG+4eboy96kmgyjZtkK2kOKHrUPYSkN/qDS8Fi1g==
-X-Google-Smtp-Source: ACHHUZ7mK7Q+1Xafu/kxH685oMb9yrF8QB4qddorUULJqvyJQ6sKfxgGtNUFrxxp4MjgbtdUD6tVGkWijqgxIANzikA=
-X-Received: by 2002:a92:dc0e:0:b0:345:baef:842b with SMTP id
- t14-20020a92dc0e000000b00345baef842bmr6733308iln.25.1688032178627; Thu, 29
- Jun 2023 02:49:38 -0700 (PDT)
+        Thu, 29 Jun 2023 05:51:38 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 72069297B
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 02:51:35 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 80060C14
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 02:52:18 -0700 (PDT)
+Received: from e110455-lin.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id A66233F663
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 02:51:34 -0700 (PDT)
+Date:   Thu, 29 Jun 2023 10:51:33 +0100
+From:   Liviu Dudau <liviu.dudau@arm.com>
+To:     Faiz Abbas <faiz.abbas@arm.com>
+Cc:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        airlied@gmail.com, daniel@ffwll.ch
+Subject: Re: [PATCH] drm/arm/komeda: Remove component framework and add a
+ simple encoder
+Message-ID: <ZJ1UJaNJese6g2Ia@e110455-lin.cambridge.arm.com>
+References: <20230621084116.26882-1-faiz.abbas@arm.com>
 MIME-Version: 1.0
-References: <20230519001709.2563-1-tj@kernel.org> <ZIewlkGJJJUXPFL0@google.com>
- <ZIfY5zhhHU9IgOqx@slm.duckdns.org> <CAEXTbpconFReyAKxerNCQW5e51CMG=_RU9JHAquyEfSH1aqajA@mail.gmail.com>
- <ZJNMk9oSp1_IYXLU@slm.duckdns.org> <CAHk-=wgXoyxy99HnEFcvf+eUZAS5=ekWt_y84LC3P+0osxh6Jw@mail.gmail.com>
-In-Reply-To: <CAHk-=wgXoyxy99HnEFcvf+eUZAS5=ekWt_y84LC3P+0osxh6Jw@mail.gmail.com>
-From:   Pin-yen Lin <treapking@chromium.org>
-Date:   Thu, 29 Jun 2023 17:49:27 +0800
-Message-ID: <CAEXTbpcDS4SV=h41QKE_HkBhsmSa6Pe=63JtQZW8h2Fpc8Vo0w@mail.gmail.com>
-Subject: Re: [PATCHSET v1 wq/for-6.5] workqueue: Improve unbound workqueue
- execution locality
-To:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Tejun Heo <tj@kernel.org>
-Cc:     Brian Norris <briannorris@chromium.org>, jiangshanlai@gmail.com,
-        peterz@infradead.org, linux-kernel@vger.kernel.org,
-        kernel-team@meta.com, joshdon@google.com, brho@google.com,
-        nhuck@google.com, agk@redhat.com, snitzer@kernel.org,
-        void@manifault.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230621084116.26882-1-faiz.abbas@arm.com>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,47 +44,246 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus and Tejun,
+Hi Faiz,
 
-On Thu, Jun 22, 2023 at 3:32=E2=80=AFAM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
+Thanks for the patch and for addressing what was at some moment on my "nice to
+improve / cleanup" list. Sorry for the delay in responding, I had to revive
+the bits of an old setup to be able to test this properly, with 2 encoders
+attached.
+
+On Wed, Jun 21, 2023 at 02:11:16PM +0530, Faiz Abbas wrote:
+> The Komeda driver always expects the remote connector node to initialize
+> an encoder. It uses the component aggregator framework which consists
+> of component->bind() calls used to initialize the remote encoder and attach
+> it to the crtc. This is different from other drm implementations which expect
+> the display driver to supply a crtc and connect an encoder to it.
+
+I think both approaches are valid in DRM. We don't want to remove the component
+framework because it is doing the wrong thing, but because we cannot use it
+with drivers that implement the drm_bridge API. Given that we usually pair with
+a component encoder that also implements a drm_bridge, dropping support for
+component framework should not affect the users of the driver.
+
+> 
+> Remove all component framework calls from the komeda driver and declare and
+> attach an encoder inside komeda_crtc_add().
+
+Unfortunately you haven't removed all component framework calls. The hint for
+that is that you have not removed the #include <linux/component.h> line from
+any of the files. Specifically, komeda_kms_attach()/detach() still calls
+component_unbind_all() which will crash with your patch applied.
+
+> 
+> The remote connector driver has to implement the DRM bridge APIs which
+> can be used to glue the encoder to the remote connector.
+> 
+> Signed-off-by: Faiz Abbas <faiz.abbas@arm.com>
+> ---
+>  .../gpu/drm/arm/display/komeda/komeda_crtc.c  | 22 +++++++-
+>  .../gpu/drm/arm/display/komeda/komeda_drv.c   | 56 ++-----------------
+>  .../gpu/drm/arm/display/komeda/komeda_kms.c   |  4 --
+>  .../gpu/drm/arm/display/komeda/komeda_kms.h   |  3 +
+>  4 files changed, 30 insertions(+), 55 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/arm/display/komeda/komeda_crtc.c b/drivers/gpu/drm/arm/display/komeda/komeda_crtc.c
+> index cea3fd5772b57..144736a69b0ee 100644
+> --- a/drivers/gpu/drm/arm/display/komeda/komeda_crtc.c
+> +++ b/drivers/gpu/drm/arm/display/komeda/komeda_crtc.c
+> @@ -12,6 +12,8 @@
+>  #include <drm/drm_atomic_helper.h>
+>  #include <drm/drm_print.h>
+>  #include <drm/drm_vblank.h>
+> +#include <drm/drm_simple_kms_helper.h>
+> +#include <drm/drm_bridge.h>
+>  
+>  #include "komeda_dev.h"
+>  #include "komeda_kms.h"
+> @@ -612,9 +614,11 @@ static int komeda_crtc_add(struct komeda_kms_dev *kms,
+>  			   struct komeda_crtc *kcrtc)
+>  {
+>  	struct drm_crtc *crtc = &kcrtc->base;
+> +	struct drm_device *base = &kms->base;
+> +	struct drm_bridge *bridge;
+>  	int err;
+>  
+> -	err = drm_crtc_init_with_planes(&kms->base, crtc,
+> +	err = drm_crtc_init_with_planes(base, crtc,
+>  					get_crtc_primary(kms, kcrtc), NULL,
+>  					&komeda_crtc_funcs, NULL);
+>  	if (err)
+> @@ -626,6 +630,22 @@ static int komeda_crtc_add(struct komeda_kms_dev *kms,
+>  
+>  	drm_crtc_enable_color_mgmt(crtc, 0, true, KOMEDA_COLOR_LUT_SIZE);
+
+I would move this line after the bridges are being initialised, just in case in the future
+colour management will propagate some info down to the bridges.
+
+>  
+> +	/* Construct an encoder for each pipeline and attach it to the remote
+> +	 * bridge
+> +	 */
+> +	kcrtc->encoder.possible_crtcs = drm_crtc_mask(crtc);
+> +	err = drm_simple_encoder_init(base, &kcrtc->encoder,
+> +				      DRM_MODE_ENCODER_TMDS);
+> +	if (err)
+> +		return err;
+> +
+> +	bridge = devm_drm_of_get_bridge(base->dev, kcrtc->master->of_node,
+> +					KOMEDA_OF_PORT_OUTPUT, 0);
+> +	if (IS_ERR(bridge))
+> +		return PTR_ERR(bridge);
+
+I'm a bit undecided on whether to make the absence of a bridge here fatal or not.
+For the second pipeline it should be possible to act as a slave to the first
+pipeline even if it doesn't have a bridge attached, but I need to investigate a
+bit more here. The bindings suggest that this is mandatory, so keep it for now.
+
+
+> +
+> +	err = drm_bridge_attach(&kcrtc->encoder, bridge, NULL, 0);
+> +
+>  	return err;
+>  }
+>  
+> diff --git a/drivers/gpu/drm/arm/display/komeda/komeda_drv.c b/drivers/gpu/drm/arm/display/komeda/komeda_drv.c
+> index 28f76e07dd958..70b1b693c6eff 100644
+> --- a/drivers/gpu/drm/arm/display/komeda/komeda_drv.c
+> +++ b/drivers/gpu/drm/arm/display/komeda/komeda_drv.c
+> @@ -28,13 +28,11 @@ struct komeda_dev *dev_to_mdev(struct device *dev)
+>  	return mdrv ? mdrv->mdev : NULL;
+>  }
+>  
+> -static void komeda_unbind(struct device *dev)
+> +static int komeda_platform_remove(struct platform_device *pdev)
+>  {
+> +	struct device *dev = &pdev->dev;
+>  	struct komeda_drv *mdrv = dev_get_drvdata(dev);
+>  
+> -	if (!mdrv)
+> -		return;
+> -
+>  	komeda_kms_detach(mdrv->kms);
+>  
+>  	if (pm_runtime_enabled(dev))
+> @@ -46,10 +44,13 @@ static void komeda_unbind(struct device *dev)
+>  
+>  	dev_set_drvdata(dev, NULL);
+>  	devm_kfree(dev, mdrv);
+> +
+> +	return 0;
+>  }
+>  
+> -static int komeda_bind(struct device *dev)
+> +static int komeda_platform_probe(struct platform_device *pdev)
+>  {
+> +	struct device *dev = &pdev->dev;
+>  	struct komeda_drv *mdrv;
+>  	int err;
+>  
+> @@ -89,52 +90,7 @@ static int komeda_bind(struct device *dev)
+>  free_mdrv:
+>  	devm_kfree(dev, mdrv);
+>  	return err;
+> -}
+> -
+> -static const struct component_master_ops komeda_master_ops = {
+> -	.bind	= komeda_bind,
+> -	.unbind	= komeda_unbind,
+> -};
+>  
+> -static void komeda_add_slave(struct device *master,
+> -			     struct component_match **match,
+> -			     struct device_node *np,
+> -			     u32 port, u32 endpoint)
+> -{
+> -	struct device_node *remote;
+> -
+> -	remote = of_graph_get_remote_node(np, port, endpoint);
+> -	if (remote) {
+> -		drm_of_component_match_add(master, match, component_compare_of, remote);
+> -		of_node_put(remote);
+> -	}
+> -}
+> -
+> -static int komeda_platform_probe(struct platform_device *pdev)
+> -{
+> -	struct device *dev = &pdev->dev;
+> -	struct component_match *match = NULL;
+> -	struct device_node *child;
+> -
+> -	if (!dev->of_node)
+> -		return -ENODEV;
+> -
+> -	for_each_available_child_of_node(dev->of_node, child) {
+> -		if (of_node_cmp(child->name, "pipeline") != 0)
+> -			continue;
+> -
+> -		/* add connector */
+> -		komeda_add_slave(dev, &match, child, KOMEDA_OF_PORT_OUTPUT, 0);
+> -		komeda_add_slave(dev, &match, child, KOMEDA_OF_PORT_OUTPUT, 1);
+> -	}
+> -
+> -	return component_master_add_with_match(dev, &komeda_master_ops, match);
+> -}
+> -
+> -static int komeda_platform_remove(struct platform_device *pdev)
+> -{
+> -	component_master_del(&pdev->dev, &komeda_master_ops);
+> -	return 0;
+>  }
+>  
+>  static const struct of_device_id komeda_of_match[] = {
+> diff --git a/drivers/gpu/drm/arm/display/komeda/komeda_kms.c b/drivers/gpu/drm/arm/display/komeda/komeda_kms.c
+> index 62dc64550793e..91cbcb6974021 100644
+> --- a/drivers/gpu/drm/arm/display/komeda/komeda_kms.c
+> +++ b/drivers/gpu/drm/arm/display/komeda/komeda_kms.c
+> @@ -305,10 +305,6 @@ struct komeda_kms_dev *komeda_kms_attach(struct komeda_dev *mdev)
+>  	if (err)
+>  		goto cleanup_mode_config;
+>  
+> -	err = component_bind_all(mdev->dev, kms);
+> -	if (err)
+> -		goto cleanup_mode_config;
+> -
+>  	drm_mode_config_reset(drm);
+>  
+>  	err = devm_request_irq(drm->dev, mdev->irq,
+> diff --git a/drivers/gpu/drm/arm/display/komeda/komeda_kms.h b/drivers/gpu/drm/arm/display/komeda/komeda_kms.h
+> index 3a872c2920912..6ef6553263570 100644
+> --- a/drivers/gpu/drm/arm/display/komeda/komeda_kms.h
+> +++ b/drivers/gpu/drm/arm/display/komeda/komeda_kms.h
+> @@ -84,6 +84,9 @@ struct komeda_crtc {
+>  
+>  	/** @disable_done: this flip_done is for tracing the disable */
+>  	struct completion *disable_done;
+> +
+> +	/** @encoder: encoder at the end of the pipeline */
+> +	struct drm_encoder encoder;
+>  };
+>  
+>  /**
+> -- 
+> 2.25.1
 >
-> On Wed, 21 Jun 2023 at 12:16, Tejun Heo <tj@kernel.org> wrote:
-> >
-> > I find that perplexing given that switching to a per-cpu workqueue reme=
-dies
-> > the situation quite a bit, which is how this patchset came to be. #3 is=
- the
-> > same as per-cpu workqueue, so if you're seeing noticeably different
-> > performance numbers between #3 and per-cpu workqueue, there's something
-> > wrong with either the code or test setup.
->
-In our case, per-cpu workqueue (removing WQ_UNBOUND) doesn't bring us
-better results. But given that pinning tasks to a single CPU core
-helps, we thought that the regression is related to the behavior of
-WQ_UNBOUND. Our findings are listed in [1].
 
-We already use WQ_SYSFS and the sysfs interface to pin the tasks, but
-thanks for the suggestion.
+Code looks good and turns out swapping drm_bridge for component framework is not that painful. If you send v2
+with the comments addressed I should be able to test it now and review the patch much sooner.
 
-[1]: https://lore.kernel.org/all/ZFvpJb9Dh0FCkLQA@google.com/
-
-> Or maybe there's some silly thinko in the wq code that is hidden by
-> the percpu code.
->
-> For example, WQ_UNBOUND triggers a lot of other overhead at least on
-> wq allocation and free. Maybe some of that stuff then indirectly
-> affects workqueue execution even when strict cpu affinity is set.
->
-> Pin-Yen Li - can you do a system-wide profile of the two cases (the
-> percpu case vs the "strict cpu affinity" one), to see if something
-> stands out?
-
-The two actually have similar performances, so I guess the profiling
-is not interesting for you. Please let me know if you want to see any
-data and I'll be happy to collect them and update here.
+One issue I have observed from my testing of your patch is that on `rmmod komeda` we fail to disable the
+interrupts after drm_kms_helper_poll_fini() call in komeda_kms_detach(), then we NULL the drm->dev_private
+before we get an interrupt which causes komeda_kms_irq_handler() to access the NULL pointer. This is not
+something caused by your patch, but if you want to test module removal I think you should be aware of this.
 
 Best regards,
-Pin-yen
->
->              Linus
+Liviu
+
+
+-- 
+====================
+| I would like to |
+| fix the world,  |
+| but they're not |
+| giving me the   |
+ \ source code!  /
+  ---------------
+    ¯\_(ツ)_/¯
