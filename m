@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCF59742473
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 12:55:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 68EC2742475
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 12:55:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231981AbjF2KzH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 06:55:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59494 "EHLO
+        id S232146AbjF2KzM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 06:55:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232101AbjF2KyS (ORCPT
+        with ESMTP id S231969AbjF2Kye (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 06:54:18 -0400
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 613E530E4
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 03:54:16 -0700 (PDT)
-Received: by mail-lf1-x132.google.com with SMTP id 2adb3069b0e04-4f8735ac3e3so786579e87.2
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 03:54:16 -0700 (PDT)
+        Thu, 29 Jun 2023 06:54:34 -0400
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10C893582
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 03:54:33 -0700 (PDT)
+Received: by mail-lj1-x22f.google.com with SMTP id 38308e7fff4ca-2b5c2433134so6615621fa.0
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 03:54:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1688036054; x=1690628054;
+        d=linaro.org; s=google; t=1688036071; x=1690628071;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=GdebpG7B8F9V87V7yH4LCy/dhZPhyIgN9dJcDBkczVw=;
-        b=VrpOfyJdIJ9MON/Z0bV6uX+sHS2LQMC72u4SbppyuaJrHjVpt2tFG3n/rH134Vbv5U
-         lf2Cv4yL6acniiPWzN9CQyEVmakHo86fEGxBCShAwqol9jYWfhU+4w/4M4e3coK3dZfK
-         AQ1CMDUqP9DYCuRWbT6Z6kjCmL9b6joScDvB5glVsiqkOfxt1ZlF67u/4U8QnVTD2qoI
-         Lsw6hGxpwt1D/q+bC7aP2Hy+dA08eLtcYnLltZHXi2Np8+XpmCY9cU6qWZcK2XfJUypH
-         PmGIYPG2ZnHIoudq6B/iJUn+loxHpx/m7SptzQmT1ObTWchlw5KIGkCr8sp8fx7tfuoi
-         543Q==
+        bh=iTXI6CJfUgN0RkR7OSBSOq34dP4Vu0vUzUeM36qnJjU=;
+        b=kleJqrTtjGkW4dFKIPB6vxzmObhquZgAUpmPBNGTjSQRmLtKwnsDL0NNLuNeML/jsL
+         EXULn+B4g+kowqcf9lCmkB+xSpkbvMmtSYaySbje2aIDjRaGlCKDHEWEiJmWpejrk+7n
+         Cp6A7h8g5JKlzwhOeC6E1a/tHQwhyCRcbnB1BrSIpHYUoUY+bqB6ysNjAsnFNvrn2Fik
+         7gpTtcci8AZd+NLxdRg2tEtV6qhjfPv65jjVtgWTR60rahmGxGIza3h9YupryLLzTWyC
+         V6balF67Uxcsrbd8mP5S9EuUYH1mYPEyg0jotsb3tu2NzVpnY/Wt4z2KSpOLWbl+yXmY
+         mdgQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688036054; x=1690628054;
+        d=1e100.net; s=20221208; t=1688036071; x=1690628071;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=GdebpG7B8F9V87V7yH4LCy/dhZPhyIgN9dJcDBkczVw=;
-        b=U3afD2TyNzRNX7iaYAdTSljnaBg8Jo3sH+cp/wzF90Cn0rwMlZWKAjctNt2Fg252OC
-         26qvWnjUIOxihqZKOGAkp1U6cWApl29Vf4dgOnIrYeqYA+7N8AsVUfHrpxIehXvVzG8O
-         HmaMJ9ahO6R8Q9adiy4IcjPlhWxJIBabrdGsu6Vn4lbjsJJYr/5EcsUR6R2OyIAjlwdm
-         ehNxGNcuic8gW2Nyjl5ZYSPUwe8nLXrpRtBpU0cf2sNCnw81nb3u5kFCuFymoswJuEWj
-         u7idrZ7PtAol1N0gGR8JOaMPhwfBttfmNx3p9UJyGUSeNSyI2CiQx5DCwqF2B6Fm5eFn
-         uf1w==
-X-Gm-Message-State: AC+VfDyo9/Jj9aMs68KZid3X2XJyx8cG4kRmNQjPmFAeuHWmrYoCPCNi
-        ihUHu4Rf+HPOUK+aZUc5s3e2OA==
-X-Google-Smtp-Source: ACHHUZ6Cti6WxaFYw3foMujEF8+CPZ3PjzVSYVH3Roqu+83hzJ8iDF3e8skqPsrGSzjqtdXvPdNL5g==
-X-Received: by 2002:a05:6512:3f01:b0:4fb:89bb:ca19 with SMTP id y1-20020a0565123f0100b004fb89bbca19mr5407601lfa.66.1688036054645;
-        Thu, 29 Jun 2023 03:54:14 -0700 (PDT)
+        bh=iTXI6CJfUgN0RkR7OSBSOq34dP4Vu0vUzUeM36qnJjU=;
+        b=T5BAMrme0e1NT1KGJKccEyQkgBPX4BUswc9SxCTyeEPY3BeHvk2dWzHw0nyY06K3FR
+         zfH5sALCD6pItn8ImkCxIWOtIXizBD38o32BJExKr7e8YqqvhCjqe3yybzfT7l/8jN/5
+         3aqWypMI0Fa0/uotx0DB8x2heur0devY3BgtQ4tX6cc/MV1ElwcvHJP5I0HGdxokrdpm
+         jHwiN51hgBLpYdoOQ71ue8V3lkYWRkAj+PusieMFLjU6W9MLI8UG2sEHvtXDCy9ZRE0K
+         vbQXNMipF8ffVuocV+ctXRfXd4atJap+vp/mTfI5Nx9PJlHidwAx+CsG3irwV7YtZ7K/
+         X8FA==
+X-Gm-Message-State: AC+VfDxYIaK6G6HeNjpcFv45LCDRv3Yr0auXtZbYQTdWk92B2mS2bXk/
+        B/3iLw5KG8OueDCVHuVfY0a6Yg==
+X-Google-Smtp-Source: ACHHUZ7c7z0nJmNIzNSn+wAu96QJ6uw0uwgrEtuJSTlB3Jox0BXxHo5YhxY4OtpXlfofq/p+O6eZSw==
+X-Received: by 2002:a2e:a453:0:b0:2b6:a570:1d5 with SMTP id v19-20020a2ea453000000b002b6a57001d5mr1418688ljn.10.1688036071437;
+        Thu, 29 Jun 2023 03:54:31 -0700 (PDT)
 Received: from ?IPV6:2001:14ba:a0db:1f00::8a5? (dzdqv0yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a0db:1f00::8a5])
-        by smtp.gmail.com with ESMTPSA id r23-20020ac252b7000000b004f60be0c685sm2271993lfm.123.2023.06.29.03.54.13
+        by smtp.gmail.com with ESMTPSA id y9-20020a2eb009000000b002b6c476ed9csm367215ljk.9.2023.06.29.03.54.30
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 29 Jun 2023 03:54:14 -0700 (PDT)
-Message-ID: <285facd1-bf20-aff2-b680-f796e8830038@linaro.org>
-Date:   Thu, 29 Jun 2023 13:54:13 +0300
+        Thu, 29 Jun 2023 03:54:31 -0700 (PDT)
+Message-ID: <000440cd-07f4-4698-7341-3aa7dedd22d1@linaro.org>
+Date:   Thu, 29 Jun 2023 13:54:30 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.11.0
-Subject: Re: [PATCH v2 10/15] dt-bindings: msm: dsi-phy-14nm: Document SM6125
- variant
+Subject: Re: [PATCH v2 11/15] drm/msm/dsi: Reuse QCM2290 14nm DSI PHY
+ configuration for SM6125
 Content-Language: en-GB
 To:     Marijn Suijten <marijn.suijten@somainline.org>,
         Andy Gross <agross@kernel.org>,
@@ -83,12 +83,11 @@ Cc:     ~postmarketos/upstreaming@lists.sr.ht,
         linux-kernel@vger.kernel.org,
         Krzysztof Kozlowski <krzk@kernel.org>,
         linux-clk@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, Lux Aliaga <they@mint.lgbt>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+        freedreno@lists.freedesktop.org, Lux Aliaga <they@mint.lgbt>
 References: <20230627-sm6125-dpu-v2-0-03e430a2078c@somainline.org>
- <20230627-sm6125-dpu-v2-10-03e430a2078c@somainline.org>
+ <20230627-sm6125-dpu-v2-11-03e430a2078c@somainline.org>
 From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20230627-sm6125-dpu-v2-10-03e430a2078c@somainline.org>
+In-Reply-To: <20230627-sm6125-dpu-v2-11-03e430a2078c@somainline.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -102,53 +101,18 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 On 27/06/2023 23:14, Marijn Suijten wrote:
-> Document availability of the 14nm DSI PHY on SM6125.  Note that this
-> compatible uses the SoC-suffix variant, intead of postfixing an
-> arbitrary number without the sm/sdm portion.  The PHY is not powered by
-> a vcca regulator like on most SoCs, but by the MX power domain that is
-> provided via the power-domains property and a single corresponding
-> required-opps.
+> SM6125 features only a single PHY (despite a secondary PHY PLL source
+> being available to the disp_cc_mdss_pclk0_clk_src clock), and downstream
+> sources for this "trinket" SoC do not define the typical "vcca"
+> regulator to be available nor used.  This, including the register offset
+> is identical to QCM2290, whose config struct can trivially be reused.
 > 
-> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 > Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
 > ---
->   .../devicetree/bindings/display/msm/dsi-phy-14nm.yaml         | 11 +++++++++++
->   1 file changed, 11 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/display/msm/dsi-phy-14nm.yaml b/Documentation/devicetree/bindings/display/msm/dsi-phy-14nm.yaml
-> index a43e11d3b00d..183a26f8a6dc 100644
-> --- a/Documentation/devicetree/bindings/display/msm/dsi-phy-14nm.yaml
-> +++ b/Documentation/devicetree/bindings/display/msm/dsi-phy-14nm.yaml
-> @@ -19,6 +19,7 @@ properties:
->         - qcom,dsi-phy-14nm-2290
->         - qcom,dsi-phy-14nm-660
->         - qcom,dsi-phy-14nm-8953
-> +      - qcom,sm6125-dsi-phy-14nm
->   
->     reg:
->       items:
-> @@ -35,6 +36,16 @@ properties:
->     vcca-supply:
->       description: Phandle to vcca regulator device node.
->   
-> +  power-domains:
-> +    description:
-> +      A phandle and PM domain specifier for an optional power domain.
-> +    maxItems: 1
-> +
-> +  required-opps:
-> +    description:
-> +      A phandle to an OPP node describing an optional performance point.
+>   drivers/gpu/drm/msm/dsi/phy/dsi_phy.c | 2 ++
+>   1 file changed, 2 insertions(+)
 
-I'd rephrase this to be something more exact, like 'desribing power 
-domain's performance point'.
-
-> +    maxItems: 1
-> +
->   required:
->     - compatible
->     - reg
-> 
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
 -- 
 With best wishes
