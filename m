@@ -2,35 +2,35 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9887A742C14
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 20:44:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AFE1742C10
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 20:44:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232727AbjF2Snx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 14:43:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57646 "EHLO
+        id S232561AbjF2Sn7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 14:43:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232445AbjF2Snk (ORCPT
+        with ESMTP id S232480AbjF2Sno (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 14:43:40 -0400
+        Thu, 29 Jun 2023 14:43:44 -0400
 Received: from mxout3.routing.net (mxout3.routing.net [IPv6:2a03:2900:1:a::8])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26D252693;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 757AF2D55;
         Thu, 29 Jun 2023 11:43:36 -0700 (PDT)
 Received: from mxbox2.masterlogin.de (unknown [192.168.10.89])
-        by mxout3.routing.net (Postfix) with ESMTP id A99DF605D2;
-        Thu, 29 Jun 2023 18:43:33 +0000 (UTC)
+        by mxout3.routing.net (Postfix) with ESMTP id 92923605D4;
+        Thu, 29 Jun 2023 18:43:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailerdienst.de;
-        s=20200217; t=1688064213;
+        s=20200217; t=1688064214;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=KKwn4pI+xbCMED6ZrjRNts/9bUc9vmXTiZ+7Mh6MCJo=;
-        b=IuoPkO4nES4sD7aKHkl3yJuMO9wW83z8euR0VrDgqxiD4ItrWnf57ouhYuJaBZxvn7Awcd
-        tosMG8V2vFIr8FsCGgrRB+ucVrOwuzr7W6gmpfqDmh5KydHrSgF6VohYv5O4ANOqpcWYRq
-        +H0bMt/M9A8r6wQyhcwS1Xu8ysdteoQ=
+        bh=I8cdP6cF+nwTWlyfboIiQYyzWM6TGbsre5s255hDw1E=;
+        b=OGbX55DGj/xtkG/hWVz4Qo4R1i22zFNmJxp55CTfnwcpyzy+ao4f+YL/q9cUmFsKtmh3WQ
+        SfRGV00+DKFU+AFks3cdLH1xvu04AOhJ1j452P0Cwd2PdgQB6gWydKc7cZXbj/KnAUW/gn
+        Ox6Nxq39V7ltXPJoF8QFFi+sFdSePNc=
 Received: from frank-G5.. (fttx-pool-157.180.227.241.bambit.de [157.180.227.241])
-        by mxbox2.masterlogin.de (Postfix) with ESMTPSA id C0D411007BC;
-        Thu, 29 Jun 2023 18:43:32 +0000 (UTC)
+        by mxbox2.masterlogin.de (Postfix) with ESMTPSA id 916DD10009B;
+        Thu, 29 Jun 2023 18:43:33 +0000 (UTC)
 From:   Frank Wunderlich <linux@fw-web.de>
 To:     linux-mediatek@lists.infradead.org
 Cc:     Frank Wunderlich <frank-w@public-files.de>,
@@ -45,16 +45,17 @@ Cc:     Frank Wunderlich <frank-w@public-files.de>,
         Wenbin Mei <wenbin.mei@mediatek.com>,
         Sam Shih <sam.shih@mediatek.com>, linux-mmc@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: [PATCH v2 1/2] dt-bindings: mmc: mtk-sd: drop assigned-clocks/clock-parents
-Date:   Thu, 29 Jun 2023 20:43:17 +0200
-Message-Id: <20230629184318.551317-2-linux@fw-web.de>
+        linux-arm-kernel@lists.infradead.org,
+        Eric Woudstra <ericwouds@gmail.com>, stable@vger.kernel.org
+Subject: [PATCH v2 2/2] arm64: dts: mt7986: fix emmc hs400 mode without uboot initialization
+Date:   Thu, 29 Jun 2023 20:43:18 +0200
+Message-Id: <20230629184318.551317-3-linux@fw-web.de>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230629184318.551317-1-linux@fw-web.de>
 References: <20230629184318.551317-1-linux@fw-web.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Mail-ID: d645d265-62e5-466c-9f7d-58ccb7702d42
+X-Mail-ID: 79a3025b-a2bb-4026-a6d2-40902656f0e4
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,
         T_SPF_TEMPERROR autolearn=ham autolearn_force=no version=3.4.6
@@ -64,40 +65,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Frank Wunderlich <frank-w@public-files.de>
+From: Eric Woudstra <ericwouds@gmail.com>
 
-MT7986 has 2 clock-parents and these properties are not needed in driver
-binding. So drop them completely.
+Eric reports errors on emmc with hs400 mode when booting linux on bpi-r3
+without uboot [1]. Booting with uboot does not show this because clocks
+seem to be initialized by uboot.
 
+Fix this by adding assigned-clocks and assigned-clock-parents like it's
+done in uboot [2].
+
+[1] https://forum.banana-pi.org/t/bpi-r3-kernel-fails-setting-emmc-clock-to-416m-depends-on-u-boot/15170
+[2] https://github.com/u-boot/u-boot/blob/master/arch/arm/dts/mt7986.dtsi#L287
+
+Cc: stable@vger.kernel.org
+Fixes: 513b49d19b34 ("arm64: dts: mt7986: add mmc related device nodes")
+Signed-off-by: Eric Woudstra <ericwouds@gmail.com>
 Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
 ---
-v2:
-- drop assigned-clock* completely based on discussion with Krzysztof in v1
----
- Documentation/devicetree/bindings/mmc/mtk-sd.yaml | 10 ----------
- 1 file changed, 10 deletions(-)
+ arch/arm64/boot/dts/mediatek/mt7986a.dtsi | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/mmc/mtk-sd.yaml b/Documentation/devicetree/bindings/mmc/mtk-sd.yaml
-index 46eefdd19a2c..3fffa467e4e1 100644
---- a/Documentation/devicetree/bindings/mmc/mtk-sd.yaml
-+++ b/Documentation/devicetree/bindings/mmc/mtk-sd.yaml
-@@ -91,16 +91,6 @@ properties:
-       should switch dat1 pin to GPIO mode.
-     maxItems: 1
- 
--  assigned-clocks:
--    description:
--      PLL of the source clock.
--    maxItems: 1
--
--  assigned-clock-parents:
--    description:
--      parent of source clock, used for HS400 mode to get 400Mhz source clock.
--    maxItems: 1
--
-   hs400-ds-delay:
-     $ref: /schemas/types.yaml#/definitions/uint32
-     description:
+diff --git a/arch/arm64/boot/dts/mediatek/mt7986a.dtsi b/arch/arm64/boot/dts/mediatek/mt7986a.dtsi
+index 68539ea788df..207510abda89 100644
+--- a/arch/arm64/boot/dts/mediatek/mt7986a.dtsi
++++ b/arch/arm64/boot/dts/mediatek/mt7986a.dtsi
+@@ -374,6 +374,10 @@ mmc0: mmc@11230000 {
+ 			reg = <0 0x11230000 0 0x1000>,
+ 			      <0 0x11c20000 0 0x1000>;
+ 			interrupts = <GIC_SPI 143 IRQ_TYPE_LEVEL_HIGH>;
++			assigned-clocks = <&topckgen CLK_TOP_EMMC_416M_SEL>,
++					  <&topckgen CLK_TOP_EMMC_250M_SEL>;
++			assigned-clock-parents = <&apmixedsys CLK_APMIXED_MPLL>,
++						 <&topckgen CLK_TOP_NET1PLL_D5_D2>;
+ 			clocks = <&topckgen CLK_TOP_EMMC_416M_SEL>,
+ 				 <&infracfg CLK_INFRA_MSDC_HCK_CK>,
+ 				 <&infracfg CLK_INFRA_MSDC_CK>,
 -- 
 2.34.1
 
