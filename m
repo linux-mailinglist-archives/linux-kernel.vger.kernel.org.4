@@ -2,104 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01663742A55
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 18:11:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 24CA6742A5A
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 18:11:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232308AbjF2QLG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 12:11:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37358 "EHLO
+        id S232269AbjF2QLf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 12:11:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232073AbjF2QLF (ORCPT
+        with ESMTP id S231794AbjF2QLd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 12:11:05 -0400
-Received: from mail-wr1-x449.google.com (mail-wr1-x449.google.com [IPv6:2a00:1450:4864:20::449])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1170F1FD2
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 09:11:04 -0700 (PDT)
-Received: by mail-wr1-x449.google.com with SMTP id ffacd0b85a97d-313f10072daso440396f8f.1
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 09:11:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1688055062; x=1690647062;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=NL2SfduPuknbakdHrvQPYI8YmFq0SZdmNsLJ3kLZ9cI=;
-        b=QlfLLSyhKrffp5bj7j/booxuvQr86XsATuUxXtNZqRPzTaEUjLpkCMkZUYFX/3Eb9d
-         RB8o4oGbBQBwUckbJZodb4pC5WzxWVOU7s9B1BqeZva1nlh2Z7QE1Dx6LTs1OQTCV6hh
-         Nj3CHmCz/Lv5ALT9jqzI3p+HDUmMoaxM2PFRHMFX+Ph/LZQ68EsF0GwrTtQwfcXyGlhA
-         ztUwtHXKQAjx0v98Rh+61rKdlHvDHajSPYLioqZZPDlQNokeq1SzCWkHV8tOtRmwlk3/
-         RTKNGz3TzTW1F4x2Vrm/qfbaYVyklDDBjyN0kbFDSyIhNEQ+f0+4o1sH4TmY0R49KA1n
-         0glg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688055062; x=1690647062;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=NL2SfduPuknbakdHrvQPYI8YmFq0SZdmNsLJ3kLZ9cI=;
-        b=X5TiQLpziNCtrVxALDQQJRRjNOHDG5iPoNyc2VvO8iewmCU/lV/TS14sK2ZjuGxZG6
-         zG6/xrrnwY8FLRmGSkotLkwzdE4mtsXsJv7EgKHXYP1G33nD1ju6MXp2JQRB+cRBX/Gb
-         ZB6FcdsJNjtwtnA+ufEg/ifRB7LwUWZpq+NvVh1JTGLIViT1gjvHNpah/90l8NxjtDVH
-         TH65mAjbmtPfoZHVbH8H12mYetYec9JHXESJrgoGr21NTuFXvh7ZgcolIb+vEFMdiZt2
-         f1Tj4GKCdgCvXNsNHnNiJSBUswXVmpy59sVI3JdC7x35pBHz6GhBMxXltSqjAlYoivBv
-         /lHA==
-X-Gm-Message-State: ABy/qLbd8mlDqQSlcbqVulStazXZrz1oLz1I+WL2bgxq4s1wMdyZWvHm
-        0bc3WW2N3u9M9SwNELeeqXPrANDtZtKIFwAKBQ==
-X-Google-Smtp-Source: APBJJlFgdr6gdNPQ0uaRW2SqtkizbITGJ2VAih/vbVXoSl7InI+uaV1/j8N9uy6kGcGvC8g4AOUYIc2NbnXpfSZJcw==
-X-Received: from mr-cloudtop2.c.googlers.com ([fda3:e722:ac3:cc00:31:98fb:c0a8:fb5])
- (user=matteorizzo job=sendgmr) by 2002:adf:e989:0:b0:313:f6f2:5eda with SMTP
- id h9-20020adfe989000000b00313f6f25edamr2746wrm.3.1688055062533; Thu, 29 Jun
- 2023 09:11:02 -0700 (PDT)
-Date:   Thu, 29 Jun 2023 16:10:44 +0000
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.41.0.162.gfafddb0af9-goog
-Message-ID: <20230629161044.1995505-1-matteorizzo@google.com>
-Subject: [PATCH] umh: fix build warning with CONFIG_SYSCTL disabled
-From:   Matteo Rizzo <matteorizzo@google.com>
-To:     jarkko@kernel.org, mcgrof@kernel.org, linux-kernel@vger.kernel.org
-Cc:     Matteo Rizzo <matteorizzo@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 29 Jun 2023 12:11:33 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C9B89E;
+        Thu, 29 Jun 2023 09:11:32 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B86A86157B;
+        Thu, 29 Jun 2023 16:11:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96951C433C0;
+        Thu, 29 Jun 2023 16:11:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688055091;
+        bh=poaFO3/bPh14xOgLxoo80j/K9Q/PKlqqhRQVP/H2PzY=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=qux7W8jRi3usYygYWoKQ80BcrBb8GJWqLvuGuwL8lbBwBavexsXOYZo/YD8NXuGDQ
+         d1242atZe6+maXcqWu2UAnmYyd7J7+MA4DN1eT1MDIHRkyEzElW6VSEb3knMaRxKVW
+         XEppM1gEwcAG3KvCTuYd1XN0lhyMaDdVi+bDG9Xza9K/Yxe3evXQMuZbe1q8stHxpw
+         jFl+XugO0YcGPCK7GH6CqDyUXfsresz9YrZfrbnLfuigc4HXzyiy3N4mFJYza82u5e
+         UronuKaEFZqz/r813jLP8q4qjeNA/rQDcvX4hMDW6iDW1hqjlUjnGMF6i94Uc3bgst
+         bhOgvbvlqGHhA==
+Date:   Thu, 29 Jun 2023 09:11:29 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     longli@linuxonhyperv.com
+Cc:     Paolo Abeni <pabeni@redhat.com>, Jason Gunthorpe <jgg@ziepe.ca>,
+        Leon Romanovsky <leon@kernel.org>,
+        Ajay Sharma <sharmaajay@microsoft.com>,
+        Dexuan Cui <decui@microsoft.com>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>, linux-rdma@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Long Li <longli@microsoft.com>,
+        stable@vger.kernel.org
+Subject: Re: [Patch v3] net: mana: Batch ringing RX queue doorbell on
+ receiving packets
+Message-ID: <20230629091129.19217388@kernel.org>
+In-Reply-To: <36c95dd6babb2202f70594d5dde13493af62dcad.camel@redhat.com>
+References: <1687823827-15850-1-git-send-email-longli@linuxonhyperv.com>
+        <36c95dd6babb2202f70594d5dde13493af62dcad.camel@redhat.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When CONFIG_SYSCTL is not defined proc_cap_handler is not used. This
-causes a build warning with -Wunused-function.
+On Thu, 29 Jun 2023 10:42:34 +0200 Paolo Abeni wrote:
+> > While we are making changes in this code path, change the code for
+> > ringing doorbell to set the WQE_COUNT to 0 for Receive Queue. The
+> > hardware specification specifies that it should set to 0. Although
+> > currently the hardware doesn't enforce the check, in the future releases
+> > it may do.
 
-kernel/umh.c:497:12: error: unused function 'proc_cap_handler'
-[-Werror,-Wunused-function]
-static int proc_cap_handler(struct ctl_table *table, int write,
-           ^
-1 error generated.
-
-Fixes: 861dc0b46432 ("sysctl: move umh sysctl registration to its own file")
-Signed-off-by: Matteo Rizzo <matteorizzo@google.com>
----
- kernel/umh.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/kernel/umh.c b/kernel/umh.c
-index 41088c5c39fd..1b13c5d34624 100644
---- a/kernel/umh.c
-+++ b/kernel/umh.c
-@@ -494,6 +494,7 @@ int call_usermodehelper(const char *path, char **argv, char **envp, int wait)
- }
- EXPORT_SYMBOL(call_usermodehelper);
- 
-+#if defined(CONFIG_SYSCTL)
- static int proc_cap_handler(struct ctl_table *table, int write,
- 			 void *buffer, size_t *lenp, loff_t *ppos)
- {
-@@ -544,7 +545,6 @@ static int proc_cap_handler(struct ctl_table *table, int write,
- 	return 0;
- }
- 
--#if defined(CONFIG_SYSCTL)
- static struct ctl_table usermodehelper_table[] = {
- 	{
- 		.procname	= "bset",
--- 
-2.41.0.162.gfafddb0af9-goog
-
+And please split this cleanup into a separate patch, it doesn't sound
+like it has to be done as part of the optimization.
