@@ -2,55 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DD4574275E
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 15:27:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 365E3742762
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 15:28:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232012AbjF2N1m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 09:27:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43540 "EHLO
+        id S232042AbjF2N1x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 09:27:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231855AbjF2N1k (ORCPT
+        with ESMTP id S230353AbjF2N1s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 09:27:40 -0400
-Received: from mail-ed1-x54a.google.com (mail-ed1-x54a.google.com [IPv6:2a00:1450:4864:20::54a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 998422689
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 06:27:39 -0700 (PDT)
-Received: by mail-ed1-x54a.google.com with SMTP id 4fb4d7f45d1cf-51dd18ca0a2so450196a12.1
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 06:27:39 -0700 (PDT)
+        Thu, 29 Jun 2023 09:27:48 -0400
+Received: from mail-ed1-x549.google.com (mail-ed1-x549.google.com [IPv6:2a00:1450:4864:20::549])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B7E830EC
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 06:27:47 -0700 (PDT)
+Received: by mail-ed1-x549.google.com with SMTP id 4fb4d7f45d1cf-51dcfda6760so509252a12.0
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 06:27:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1688045258; x=1690637258;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=RBX/ZfKOmZybnCy+TJCC1Khkdf0JaxSO6nOHYL3602s=;
-        b=74Ac2Po/8YOM/O803qScwIOjP8gYg8G4wgHxyw5rZCTNWIAlHSyGb9SzNo9Xnf5sQE
-         qzan4SM0hGh4dAHfg8JrtmpEF/sZ2DHeotQDS3yXSGNuwTKxqCLJUy2FBE/GS6RJ0JBj
-         lMH/r5u8eQ5j8+xaJAqcCaNWpwxYsUaf0VJkMFMj0Xztjh9h3z0me4Pm2E75CiDzgW1O
-         gopD6LcMIvae2qAnyV0jf4iFCXfxK2l2GJApT0fhEWXmyerE3Ghhmezd6x5eVhW/VGEJ
-         /xStz4RtSKlO3l1WpCXgOc910qGmb1vb7ex4f23C/e4mVgmMeZfJ67s5z/MxghQ6zRUA
-         gsgA==
+        d=google.com; s=20221208; t=1688045266; x=1690637266;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=kY7/aamj2EYJQ18ZqzDDw0qtsWDVxqm6PPibtWgkSrk=;
+        b=JCTZZvCiBVSUwY/VlOx6zbqdMgQ8vDXSYLPyW51p0SzRVnKdolQReI6SJCJ5vCJQkI
+         m6z3kLVUXRfoEy4ST9FRMGwRZ0LOUAsuQ3QUT2uZyIm+z20kRfnO0L/k2pEiKKfnhioe
+         zlGZQQH5njPlya0jsgBopxygTxKMhnUaV/AxCKZdlfMEKO+IeFjrBuhi74rHneSf3IUx
+         Rmu4B+vK7Ty0HmmhD4zU5q/ULFCW/yDPJIUGaztpIXYM35urnp5FMWLaYg9l9vu8jPkZ
+         vwQVGrR+8gKRKvK4tywtkM1IsCxqrFmtJum9cyU+UAaiKCUirO9zfZfuSr04D6cXK4ke
+         00aA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688045258; x=1690637258;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=RBX/ZfKOmZybnCy+TJCC1Khkdf0JaxSO6nOHYL3602s=;
-        b=O+mTCEB4Lx+2cnKq19xGBX6Os3gQo1xbGymX6Uv3OBM4OfpwOAaczOZuM4s4+h7RiT
-         eUHZoDMDnxs1dQVJBBhSsDTWeUBIPf0FyT/wMRR+mJ4mU+tpNC6wlOcP9LvsY98goKri
-         TMSCnFCgwsXASijYB5TXwccraYB+bcUb+06latFUDb2yGk5lY5FEP1FDFK3rOQ6Lkmd2
-         FDMqrk44geIT/1ovbl+e2qvfO2XvQny+ZlvklqdMpLNyFHpGOXXkDlflIxvu3wLRdO3a
-         VXsGv2QmR7XAdfKm7s5bLsatGZF6WVgYiSQDcuUzwYfgP5n1Z7WAnxQUlfK7fN5ZX7+2
-         4mwQ==
-X-Gm-Message-State: AC+VfDxqYQokUL1a92TAosbJQs5DAXekQsn07mbUqKoluYFZfUX/szx6
-        d94lhqrYotxXap9JRqilkKAJvPqaLPv9M2MRIA==
-X-Google-Smtp-Source: ACHHUZ68x22hc/u7loDafI2EMqho0Kd4jMofvcMTzF5nV3k/Nt4gqftj8nkSDifh1eoZn4ve45CvYUjPmmUUfNKVFw==
+        d=1e100.net; s=20221208; t=1688045266; x=1690637266;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=kY7/aamj2EYJQ18ZqzDDw0qtsWDVxqm6PPibtWgkSrk=;
+        b=RTjzlYtj0e81gzPWBGC3p6dUFTt2mGLj468JvOtj6wZI9T5sGgh0KfyoV4M/SvDITV
+         yGanoyETDN4kLniXzVNIjwJ8I82zwSW4ubZWMjiuo2vuKk/w3R8RSpir+vlBKPz9g2wQ
+         z783t6fgaYAKcEjEL0FMZhkPrTvDZP/CYG7ZWaRz643+D98ajxvnjIoaQZ8Pcw1AtlH5
+         U5rjzmXGQXYr8I2BdAlj8z42QZq8zQx50C6Z3B76cgsegFxcDU3JkImKJcaM+c1PMnuj
+         tXzTa8eqi5IVgR7qhDk8l6187iZuPj0NrrOqc5S6AZNqZuvOYi4cm3sIMqSQsUI7OnUy
+         vSFw==
+X-Gm-Message-State: AC+VfDw4LJM38nJVxswxGKCPxiJzF+zGjZsGru7PUxL6IEMFhH0EY/mW
+        M7lccatrNd5FTcEDXw7NZv72lQaFlTXnn8wglA==
+X-Google-Smtp-Source: ACHHUZ4Z1JPrtb+B8F/xAtxs24V0Tz1SdqWlwA36W8Imxf2YTr59tVZmNrQf6uEf1YGFSzBZ24dfMO6dorroRhl/Sg==
 X-Received: from mr-cloudtop2.c.googlers.com ([fda3:e722:ac3:cc00:31:98fb:c0a8:fb5])
- (user=matteorizzo job=sendgmr) by 2002:a50:cdc8:0:b0:51d:7d61:a833 with SMTP
- id h8-20020a50cdc8000000b0051d7d61a833mr1674482edj.0.1688045258087; Thu, 29
- Jun 2023 06:27:38 -0700 (PDT)
-Date:   Thu, 29 Jun 2023 13:27:10 +0000
+ (user=matteorizzo job=sendgmr) by 2002:a50:9f8e:0:b0:51b:df2d:60c5 with SMTP
+ id c14-20020a509f8e000000b0051bdf2d60c5mr3202943edf.5.1688045265970; Thu, 29
+ Jun 2023 06:27:45 -0700 (PDT)
+Date:   Thu, 29 Jun 2023 13:27:11 +0000
+In-Reply-To: <20230629132711.1712536-1-matteorizzo@google.com>
 Mime-Version: 1.0
+References: <20230629132711.1712536-1-matteorizzo@google.com>
 X-Mailer: git-send-email 2.41.0.162.gfafddb0af9-goog
-Message-ID: <20230629132711.1712536-1-matteorizzo@google.com>
-Subject: [PATCH v2 0/1] Add a sysctl to disable io_uring system-wide
+Message-ID: <20230629132711.1712536-2-matteorizzo@google.com>
+Subject: [PATCH v2 1/1] Add a new sysctl to disable io_uring system-wide
 From:   Matteo Rizzo <matteorizzo@google.com>
 To:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
         io-uring@vger.kernel.org
@@ -72,36 +74,107 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Over the last few years we've seen many critical vulnerabilities in
-io_uring[1] which could be exploited by an unprivileged process to gain
-control over the kernel. This patch introduces a new sysctl which disables
-the creation of new io_uring instances system-wide.
+Introduce a new sysctl (io_uring_disabled) which can be either 0, 1,
+or 2. When 0 (the default), all processes are allowed to create io_uring
+instances, which is the current behavior. When 1, all calls to
+io_uring_setup fail with -EPERM unless the calling process has
+CAP_SYS_ADMIN. When 2, calls to io_uring_setup fail with -EPERM
+regardless of privilege.
 
-The goal of this patch is to give distros, system admins, and cloud
-providers a way to reduce the risk of privilege escalation through io_uring
-where disabling it with seccomp or at compile time is not practical. For
-example a distro or cloud provider might want to disable io_uring by
-default and have users enable it again if they need to run a program that
-requires it. The new sysctl is designed to let a user with root on the
-machine enable and disable io_uring systemwide at runtime without requiring
-a kernel recompilation or a reboot.
-
-[1] Link: https://goo.gle/limit-iouring
-
+Signed-off-by: Matteo Rizzo <matteorizzo@google.com>
 ---
-v2:
-	* Documentation style fixes
-	* Add a third level that only disables io_uring for unprivileged
-	  processes
-
-
-Matteo Rizzo (1):
-  Add a new sysctl to disable io_uring system-wide
-
  Documentation/admin-guide/sysctl/kernel.rst | 19 +++++++++++++
  io_uring/io_uring.c                         | 30 +++++++++++++++++++++
  2 files changed, 49 insertions(+)
 
+diff --git a/Documentation/admin-guide/sysctl/kernel.rst b/Documentation/admin-guide/sysctl/kernel.rst
+index 3800fab1619b..ee65f7aeb0cf 100644
+--- a/Documentation/admin-guide/sysctl/kernel.rst
++++ b/Documentation/admin-guide/sysctl/kernel.rst
+@@ -450,6 +450,25 @@ this allows system administrators to override the
+ ``IA64_THREAD_UAC_NOPRINT`` ``prctl`` and avoid logs being flooded.
+ 
+ 
++io_uring_disabled
++=================
++
++Prevents all processes from creating new io_uring instances. Enabling this
++shrinks the kernel's attack surface.
++
++= ==================================================================
++0 All processes can create io_uring instances as normal. This is the
++  default setting.
++1 io_uring creation is disabled for unprivileged processes.
++  io_uring_setup fails with -EPERM unless the calling process is
++  privileged (CAP_SYS_ADMIN). Existing io_uring instances can
++  still be used.
++2 io_uring creation is disabled for all processes. io_uring_setup
++  always fails with -EPERM. Existing io_uring instances can still be
++  used.
++= ==================================================================
++
++
+ kexec_load_disabled
+ ===================
+ 
+diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
+index 1b53a2ab0a27..2343ae518546 100644
+--- a/io_uring/io_uring.c
++++ b/io_uring/io_uring.c
+@@ -153,6 +153,22 @@ static __cold void io_fallback_tw(struct io_uring_task *tctx);
+ 
+ struct kmem_cache *req_cachep;
+ 
++static int __read_mostly sysctl_io_uring_disabled;
++#ifdef CONFIG_SYSCTL
++static struct ctl_table kernel_io_uring_disabled_table[] = {
++	{
++		.procname	= "io_uring_disabled",
++		.data		= &sysctl_io_uring_disabled,
++		.maxlen		= sizeof(sysctl_io_uring_disabled),
++		.mode		= 0644,
++		.proc_handler	= proc_dointvec_minmax,
++		.extra1		= SYSCTL_ZERO,
++		.extra2		= SYSCTL_TWO,
++	},
++	{},
++};
++#endif
++
+ struct sock *io_uring_get_socket(struct file *file)
+ {
+ #if defined(CONFIG_UNIX)
+@@ -4000,9 +4016,18 @@ static long io_uring_setup(u32 entries, struct io_uring_params __user *params)
+ 	return io_uring_create(entries, &p, params);
+ }
+ 
++static inline bool io_uring_allowed(void)
++{
++	return sysctl_io_uring_disabled == 0 ||
++		(sysctl_io_uring_disabled == 1 && capable(CAP_SYS_ADMIN));
++}
++
+ SYSCALL_DEFINE2(io_uring_setup, u32, entries,
+ 		struct io_uring_params __user *, params)
+ {
++	if (!io_uring_allowed())
++		return -EPERM;
++
+ 	return io_uring_setup(entries, params);
+ }
+ 
+@@ -4577,6 +4602,11 @@ static int __init io_uring_init(void)
+ 
+ 	req_cachep = KMEM_CACHE(io_kiocb, SLAB_HWCACHE_ALIGN | SLAB_PANIC |
+ 				SLAB_ACCOUNT | SLAB_TYPESAFE_BY_RCU);
++
++#ifdef CONFIG_SYSCTL
++	register_sysctl_init("kernel", kernel_io_uring_disabled_table);
++#endif
++
+ 	return 0;
+ };
+ __initcall(io_uring_init);
 -- 
 2.41.0.162.gfafddb0af9-goog
 
