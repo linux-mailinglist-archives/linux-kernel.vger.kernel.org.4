@@ -2,63 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 674B3741E63
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 04:40:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD1CE741E6D
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 04:41:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229539AbjF2CkO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 22:40:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57486 "EHLO
+        id S230449AbjF2Clf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 22:41:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231616AbjF2CkK (ORCPT
+        with ESMTP id S229749AbjF2Cld (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 22:40:10 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B13262684;
-        Wed, 28 Jun 2023 19:40:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1688006409; x=1719542409;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=NBGKY2OQl+ZXznkW7PDekHsVhcGeyx0U1jsDZsZb9fE=;
-  b=DJM0ix3YIae/2NjTJ0VM/cBzisa7lO0xcHa+icgAP3AOM/eN2pcm48eW
-   D845PweU/ck7YBBaEo/Kb3dRdQXhqPggvVuQlyLtiV3mCk6zQxMEpCUqp
-   6u67/YnCSWrR6p31yNQguB9Z9S+rJtyYWAFCNuyvAcIUQ8XhRhNf56zl0
-   dbDZb5khUTJp2gpOqp7yHRXsCoq5v+wdYJlW0sr4ENMTF5KfoXOqJ3Y/Z
-   7Elj6u+iyOWSuCeNs290wFCX4TY0+EkN/lazz1QdBnBjZdcWvqKLiJf4+
-   /i/N9ecTKaMYX9R1teLO4zJIFfpmkuWVKS634lC7A5U0MZGFajRJJTryO
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10755"; a="351805471"
-X-IronPort-AV: E=Sophos;i="6.01,167,1684825200"; 
-   d="scan'208";a="351805471"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2023 19:40:09 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10755"; a="841306371"
-X-IronPort-AV: E=Sophos;i="6.01,167,1684825200"; 
-   d="scan'208";a="841306371"
-Received: from binbinwu-mobl.ccr.corp.intel.com (HELO [10.93.25.116]) ([10.93.25.116])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2023 19:40:07 -0700
-Message-ID: <9d9e9156-b9d9-86b4-9d20-77305e1e4d63@linux.intel.com>
-Date:   Thu, 29 Jun 2023 10:40:01 +0800
+        Wed, 28 Jun 2023 22:41:33 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 589B52682;
+        Wed, 28 Jun 2023 19:41:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1688006485;
+        bh=DOTiWuRdS6j3Ik12nAEtdLMioHxNbY4GxWaOWz72ozM=;
+        h=Date:From:To:Cc:Subject:From;
+        b=AsqolizoW2carOyzzDEJs87sAMvC2KWOSB2rXlw/J0SIyJLVrBkvcZysoEVtYQU4U
+         Cp5s8hoKRoD8eEAMAu2QtnPd+q/CfCwcc3RLihcTuQl/gJq2d7/znc2ByuGBXsHkCy
+         LUjpsiwGGw/YJDy1kr63yb5iIRGYWwPhZi0yXCowx04ttC7veGLJRoKmlT+2BgLt6s
+         scGJC6BGBrrab/AwXkRU0AXJjO6YnZAVdpx6u6Y9tQqYeteAqpOYD4eqlywKJ+N1Bf
+         GAk5BQ3o3zTIC8DvcNB+UsaItX+JkSF+N5nSSzJKBtOYfZPFLct4Zh4wjRakIPq8DN
+         5+usmoRiz1hKA==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Qs2l85wzpz4wbP;
+        Thu, 29 Jun 2023 12:41:24 +1000 (AEST)
+Date:   Thu, 29 Jun 2023 12:40:55 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Andrei Vagin <avagin@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the seccomp tree
+Message-ID: <20230629124055.7edf4493@canb.auug.org.au>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH 01/12] KVM: x86: Add a framework for enabling KVM-governed
- x86 features
-To:     Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230217231022.816138-1-seanjc@google.com>
- <20230217231022.816138-2-seanjc@google.com>
-From:   Binbin Wu <binbin.wu@linux.intel.com>
-In-Reply-To: <20230217231022.816138-2-seanjc@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+Content-Type: multipart/signed; boundary="Sig_/u3i+xUXvWO/3h02EueDp+bQ";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,146 +51,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+--Sig_/u3i+xUXvWO/3h02EueDp+bQ
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
+Hi all,
 
-On 2/18/2023 7:10 AM, Sean Christopherson wrote:
-> Introduce yet another X86_FEATURE flag framework to manage and cache KVM
-> governed features (for lack of a better term).  "Governed" in this case
-> means that KVM has some level of involvement and/or vested interest in
-> whether or not an X86_FEATURE can be used by the guest.  The intent of the
-> framework is twofold: to simplify caching of guest CPUID flags that KVM
-> needs to frequently query, and to add clarity to such caching, e.g. it
-> isn't immediately obvious that SVM's bundle of flags for "optional nested]
-spare ]
+After merging the seccomp tree, today's linux-next build (native perf)
+failed like this:
 
-> SVM features" track whether or not a flag is exposed to L1.
->
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
-> ---
->   arch/x86/include/asm/kvm_host.h  | 11 +++++++
->   arch/x86/kvm/cpuid.c             |  2 ++
->   arch/x86/kvm/cpuid.h             | 51 ++++++++++++++++++++++++++++++++
->   arch/x86/kvm/governed_features.h |  9 ++++++
->   4 files changed, 73 insertions(+)
->   create mode 100644 arch/x86/kvm/governed_features.h
->
-> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
-> index 792a6037047a..cd660de02f7b 100644
-> --- a/arch/x86/include/asm/kvm_host.h
-> +++ b/arch/x86/include/asm/kvm_host.h
-> @@ -835,6 +835,17 @@ struct kvm_vcpu_arch {
->   	struct kvm_cpuid_entry2 *cpuid_entries;
->   	struct kvm_hypervisor_cpuid kvm_cpuid;
->   
-> +	/*
-> +	 * Track whether or not the guest is allowed to use features that are
-> +	 * governed by KVM, where "governed" means KVM needs to manage state
-> +	 * and/or explicitly enable the feature in hardware.  Typically, but
-> +	 * not always, governed features can be used by the guest if and only
-> +	 * if both KVM and userspace want to expose the feature to the guest.
-> +	 */
-> +	struct {
-> +		u32 enabled;
-Although there are some guidances/preconditions of using the framework,
-is it possible that u32 will be ran out quickly after people starts to 
-use the framework?
+make[3]: *** No rule to make target '/home/sfr/next/perf/bench/sched-seccom=
+p-notify.o', needed by '/home/sfr/next/perf/bench/perf-in.o'.  Stop.
+make[3]: *** Waiting for unfinished jobs....
+make[2]: *** [/home/sfr/next/next/tools/build/Makefile.build:140: bench] Er=
+ror 2
+make[2]: *** Waiting for unfinished jobs....
+make[1]: *** [Makefile.perf:682: /home/sfr/next/perf/perf-in.o] Error 2
+make: *** [Makefile.perf:242: sub-make] Error 2
+Command exited with non-zero status 2
 
-Of course, I noticed there is build  bug check on the length, it should 
-be OK to increase the length when needed.
+Presumably caused by commit
 
-> +	} governed_features;
-> +
->   	u64 reserved_gpa_bits;
->   	int maxphyaddr;
->   
-> diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
-> index 8f8edeaf8177..013fdc27fc8f 100644
-> --- a/arch/x86/kvm/cpuid.c
-> +++ b/arch/x86/kvm/cpuid.c
-> @@ -335,6 +335,8 @@ static void kvm_vcpu_after_set_cpuid(struct kvm_vcpu *vcpu)
->   	struct kvm_lapic *apic = vcpu->arch.apic;
->   	struct kvm_cpuid_entry2 *best;
->   
-> +	vcpu->arch.governed_features.enabled = 0;
-> +
->   	best = kvm_find_cpuid_entry(vcpu, 1);
->   	if (best && apic) {
->   		if (cpuid_entry_has(best, X86_FEATURE_TSC_DEADLINE_TIMER))
-> diff --git a/arch/x86/kvm/cpuid.h b/arch/x86/kvm/cpuid.h
-> index b1658c0de847..f61a2106ba90 100644
-> --- a/arch/x86/kvm/cpuid.h
-> +++ b/arch/x86/kvm/cpuid.h
-> @@ -232,4 +232,55 @@ static __always_inline bool guest_pv_has(struct kvm_vcpu *vcpu,
->   	return vcpu->arch.pv_cpuid.features & (1u << kvm_feature);
->   }
->   
-> +enum kvm_governed_features {
-> +#define KVM_GOVERNED_FEATURE(x) KVM_GOVERNED_##x,
-> +#include "governed_features.h"
-> +	KVM_NR_GOVERNED_FEATURES
-> +};
-> +
-> +static __always_inline int kvm_governed_feature_index(unsigned int x86_feature)
-> +{
-> +	switch (x86_feature) {
-> +#define KVM_GOVERNED_FEATURE(x) case x: return KVM_GOVERNED_##x;
-> +#include "governed_features.h"
-> +	default:
-> +		return -1;
-> +	}
-> +}
-> +
-> +static __always_inline int kvm_is_governed_feature(unsigned int x86_feature)
-Is it better to use bool instead of int?
+  df614e369b5c ("perf/benchmark: add a new benchmark for seccom_unotify")
 
-> +{
-> +	return kvm_governed_feature_index(x86_feature) >= 0;
-> +}
-> +
-> +static __always_inline u32 kvm_governed_feature_bit(unsigned int x86_feature)
-> +{
-> +	int index = kvm_governed_feature_index(x86_feature);
-> +
-> +	BUILD_BUG_ON(index < 0);
-> +	return BIT(index);
-> +}
-> +
-> +static __always_inline void kvm_governed_feature_set(struct kvm_vcpu *vcpu,
-> +						     unsigned int x86_feature)
-> +{
-> +	BUILD_BUG_ON(KVM_NR_GOVERNED_FEATURES >
-> +		     sizeof(vcpu->arch.governed_features.enabled) * BITS_PER_BYTE);
-> +
-> +	vcpu->arch.governed_features.enabled |= kvm_governed_feature_bit(x86_feature);
-> +}
-> +
-> +static __always_inline void kvm_governed_feature_check_and_set(struct kvm_vcpu *vcpu,
-> +							       unsigned int x86_feature)
-> +{
-> +	if (guest_cpuid_has(vcpu, x86_feature))
-> +		kvm_governed_feature_set(vcpu, x86_feature);
-> +}
-> +
-> +static __always_inline bool guest_can_use(struct kvm_vcpu *vcpu,
-> +					  unsigned int x86_feature)
-> +{
-> +	return vcpu->arch.governed_features.enabled & kvm_governed_feature_bit(x86_feature);
-> +}
-> +
->   #endif
-> diff --git a/arch/x86/kvm/governed_features.h b/arch/x86/kvm/governed_features.h
-> new file mode 100644
-> index 000000000000..40ce8e6608cd
-> --- /dev/null
-> +++ b/arch/x86/kvm/governed_features.h
-> @@ -0,0 +1,9 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +#if !defined(KVM_GOVERNED_FEATURE) || defined(KVM_GOVERNED_X86_FEATURE)
-> +BUILD_BUG()
-> +#endif
-> +
-> +#define KVM_GOVERNED_X86_FEATURE(x) KVM_GOVERNED_FEATURE(X86_FEATURE_##x)
-> +
-> +#undef KVM_GOVERNED_X86_FEATURE
-> +#undef KVM_GOVERNED_FEATURE
+This is a native build of perf on a PowerPC 46 bit LE host.
 
+I have used the seccomp tree from next-20230628 for today.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/u3i+xUXvWO/3h02EueDp+bQ
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmSc7zgACgkQAVBC80lX
+0Gw/aggAlBqaKB9WQSwfiLjxofutJP39cwOvc+pFP3canGhsUQZk27+dR/J398zH
+fJC5WbShUDpIuS8Uz93EHPg7gcvetAldGBj6wAJk/8mo97oazbpb+BKC6xv3MZsJ
+tmeuOPwK+GlHU2Mia61XWR/KnTikK9owU73Fn8C2CbPjMmJ0KiYqm5Guk6TYuRVf
+3V4B26e1Rwx5uzdyhNy4+5wzHDUkDNjp/RoczVUvunjh4Yk98T354mM0rZKFsWAX
+PD0kZ4NkO/TTdD5enVe4/d1/peLyxpdHcdVvkfyEB4AsjHbbrTha2/v61MlbUg6/
+xYicVLb3kHTtlot6NIEQ5D+7CtE9tQ==
+=nBb2
+-----END PGP SIGNATURE-----
+
+--Sig_/u3i+xUXvWO/3h02EueDp+bQ--
