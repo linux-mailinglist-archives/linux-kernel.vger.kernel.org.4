@@ -2,239 +2,213 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC80B7421DD
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 10:17:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 340147421E4
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 10:19:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232428AbjF2IRi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 04:17:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44818 "EHLO
+        id S232111AbjF2ITA convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 29 Jun 2023 04:19:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232224AbjF2IQW (ORCPT
+        with ESMTP id S232528AbjF2ISF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 04:16:22 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AB4944B7
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 01:05:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1688025920; x=1719561920;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=5Y+YCSow5LvUte0a0y0qeDa2mDYP7COwAuMVhjDb7ms=;
-  b=iJf3c2K3RmPpiseOjIXOzKXXbQVmwrqZRk9MEghLANCKbWgC1LRT7DwZ
-   BeqOtXlcfb1AdFGaKFittx8ktZ2T9U1DaC9/+npj453CTcRfTi0+SRWZP
-   Oo9JnLqtZeU55bGE2av98eQxdw/rhRXinJhQa97/rl1BI6RQHys+7ESgn
-   s9L8wOPpQz6quZW/CAevXvGGH2UfeMVtmbdAHJns+YVhf7cdghBTnyhhE
-   9QunDjCsfKruclAK4DaRIwknkSaLmAc+JinhYKrRlZsmFFP5Iv67YZwUY
-   CsxawfRrVgGTZFUWKAdn3xuNOEJsKhJFjcgKl6Mw3kpXr/R/gfBYcvcVe
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10755"; a="364596598"
-X-IronPort-AV: E=Sophos;i="6.01,168,1684825200"; 
-   d="scan'208";a="364596598"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jun 2023 01:05:19 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10755"; a="807220312"
-X-IronPort-AV: E=Sophos;i="6.01,168,1684825200"; 
-   d="scan'208";a="807220312"
-Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 29 Jun 2023 01:05:16 -0700
-Received: from kbuild by 783282924a45 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1qEmeR-000Dys-37;
-        Thu, 29 Jun 2023 08:05:15 +0000
-Date:   Thu, 29 Jun 2023 16:04:21 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-riscv@lists.infradead.org, Andy Chiu <andy.chiu@sifive.com>
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@rivosinc.com>,
-        linux-kernel@vger.kernel.org, linux@rivosinc.com,
-        =?iso-8859-1?Q?R=E9mi?= Denis-Courmont <remi@remlab.net>,
-        Darius Rad <darius@bluespec.com>
-Subject: Re: [PATCH v3] riscv: Discard vector state on syscalls
-Message-ID: <202306291513.DwaMo6k7-lkp@intel.com>
-References: <20230629062730.985184-1-bjorn@kernel.org>
+        Thu, 29 Jun 2023 04:18:05 -0400
+Received: from frasgout13.his.huawei.com (unknown [14.137.139.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C50CE35AF;
+        Thu, 29 Jun 2023 01:12:24 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.18.147.228])
+        by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4Qs9rX0XNWz9xGn5;
+        Thu, 29 Jun 2023 16:01:32 +0800 (CST)
+Received: from [127.0.0.1] (unknown [10.204.63.22])
+        by APP1 (Coremail) with SMTP id LxC2BwB34+6xPJ1kmC3dAw--.43057S2;
+        Thu, 29 Jun 2023 09:11:46 +0100 (CET)
+Message-ID: <14599d8216f1b7520ff5f6cfb27377fa79709f13.camel@huaweicloud.com>
+Subject: Re: [QUESTION] Full user space process isolation?
+From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
+To:     "Serge E. Hallyn" <serge@hallyn.com>
+Cc:     Oleg Nesterov <oleg@redhat.com>, Paul Moore <paul@paul-moore.com>,
+        James Morris <jmorris@namei.org>,
+        Stephen Smalley <stephen.smalley.work@gmail.com>,
+        Eric Paris <eparis@parisplace.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Kees Cook <keescook@chromium.org>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        David Howells <dhowells@redhat.com>,
+        LuisChamberlain <mcgrof@kernel.org>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Petr Tesarik <petrtesarik@huaweicloud.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Tejun Heo <tj@kernel.org>, linux-mm@kvack.org,
+        linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, keyrings@vger.kernel.org,
+        linux-integrity@vger.kernel.org, linux-hardening@vger.kernel.org,
+        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>
+Date:   Thu, 29 Jun 2023 10:11:26 +0200
+In-Reply-To: <20230629021000.GA368825@mail.hallyn.com>
+References: <eb31920bd00e2c921b0aa6ebed8745cb0130b0e1.camel@huaweicloud.com>
+         <20230629021000.GA368825@mail.hallyn.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.44.4-0ubuntu1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230629062730.985184-1-bjorn@kernel.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-CM-TRANSID: LxC2BwB34+6xPJ1kmC3dAw--.43057S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxuF1xCry7WF1rZw15Cr1Dtrb_yoW7Gr15pF
+        WqkFW5GFn8trs7CFZFqw4UGayFyrZ3JFW7Xrn3GryfZ34Y9FyIkrySkF13WFnIgrsY934j
+        vrs8JrW2kan8ZaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkK14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26r1j6r1xM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
+        6F4UM28EF7xvwVC2z280aVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4j6r
+        4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
+        I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
+        4UM4x0Y48IcVAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628vn2kI
+        c2xKxwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14
+        v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_WrylIxkG
+        c2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI
+        0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_Jr0_
+        Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUbJ73D
+        UUUUU==
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQADBF1jj4+H0QACss
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
+        PDS_RDNS_DYNAMIC_FP,RDNS_DYNAMIC,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Björn,
+On Wed, 2023-06-28 at 21:10 -0500, Serge E. Hallyn wrote:
+> On Thu, Jun 22, 2023 at 04:42:37PM +0200, Roberto Sassu wrote:
+> > Hi everyone
+> > 
+> > I briefly discussed this topic at LSS NA 2023, but I wanted to have an
+> > opinion from a broader audience.
+> > 
+> > 
+> > In short:
+> > 
+> > I wanted to execute some kernel workloads in a fully isolated user
+> > space process, started from a binary statically linked with klibc,
+> > connected to the kernel only through a pipe.
+> > 
+> > I also wanted that, for the root user, tampering with that process is
+> > as hard as if the same code runs in kernel space.
+> > 
+> > I would use the fully isolated process to parse and convert unsupported
+> > data formats to a supported one, after the kernel verified the
+> 
+> Can you give some examples here of supported and unsupported data
+> formats?  ext2 is supported, but we sadly don't trust the sb parser
+> to read a an ext2fs coming from unknown source.  So I'm not quite
+> clear what problem you're trying to solve.
 
-kernel test robot noticed the following build errors:
++ eBPF guys (as I'm talking about eBPF)
 
-[auto build test ERROR on 488833ccdcac118da16701f4ee0673b20ba47fe3]
+File digests are distributed in a multitude of formats: RPM packages
+provide them in RPMTAG_FILEDIGESTS, DEB packages in md5sum (now
+sha256sum), containers I guess they have a manifest.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Bj-rn-T-pel/riscv-Discard-vector-state-on-syscalls/20230629-142852
-base:   488833ccdcac118da16701f4ee0673b20ba47fe3
-patch link:    https://lore.kernel.org/r/20230629062730.985184-1-bjorn%40kernel.org
-patch subject: [PATCH v3] riscv: Discard vector state on syscalls
-config: riscv-randconfig-r042-20230629 (https://download.01.org/0day-ci/archive/20230629/202306291513.DwaMo6k7-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce: (https://download.01.org/0day-ci/archive/20230629/202306291513.DwaMo6k7-lkp@intel.com/reproduce)
+File digests would be used as reference values for IMA Appraisal and
+IMA Measurement (to have a predictable PCR).
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306291513.DwaMo6k7-lkp@intel.com/
+If we manage to write a tiny parser for RPM headers (I'm talking about
+something like 200 lines) to extract the file digests, basically we
+have all the information we need to do IMA Appraisal on current, past
+and future RPM-based Linux distributions.
 
-All errors (new ones prefixed by >>):
+If we do the same for DEB (ok, well, when they switch from MD5 to
+SHA256), we can support all DEB-based Linux distributions too.
 
-         |                                          ~~~~~~~~~~ ^
-   In file included from arch/riscv/kernel/traps.c:15:
-   In file included from include/linux/kprobes.h:28:
-   In file included from include/linux/ftrace.h:10:
-   In file included from include/linux/trace_recursion.h:5:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/riscv/include/asm/io.h:136:
-   include/asm-generic/io.h:751:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     751 |         insw(addr, buffer, count);
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/riscv/include/asm/io.h:105:53: note: expanded from macro 'insw'
-     105 | #define insw(addr, buffer, count) __insw(PCI_IOBASE + (addr), buffer, count)
-         |                                          ~~~~~~~~~~ ^
-   In file included from arch/riscv/kernel/traps.c:15:
-   In file included from include/linux/kprobes.h:28:
-   In file included from include/linux/ftrace.h:10:
-   In file included from include/linux/trace_recursion.h:5:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/riscv/include/asm/io.h:136:
-   include/asm-generic/io.h:759:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     759 |         insl(addr, buffer, count);
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/riscv/include/asm/io.h:106:53: note: expanded from macro 'insl'
-     106 | #define insl(addr, buffer, count) __insl(PCI_IOBASE + (addr), buffer, count)
-         |                                          ~~~~~~~~~~ ^
-   In file included from arch/riscv/kernel/traps.c:15:
-   In file included from include/linux/kprobes.h:28:
-   In file included from include/linux/ftrace.h:10:
-   In file included from include/linux/trace_recursion.h:5:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/riscv/include/asm/io.h:136:
-   include/asm-generic/io.h:768:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     768 |         outsb(addr, buffer, count);
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/riscv/include/asm/io.h:118:55: note: expanded from macro 'outsb'
-     118 | #define outsb(addr, buffer, count) __outsb(PCI_IOBASE + (addr), buffer, count)
-         |                                            ~~~~~~~~~~ ^
-   In file included from arch/riscv/kernel/traps.c:15:
-   In file included from include/linux/kprobes.h:28:
-   In file included from include/linux/ftrace.h:10:
-   In file included from include/linux/trace_recursion.h:5:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/riscv/include/asm/io.h:136:
-   include/asm-generic/io.h:777:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     777 |         outsw(addr, buffer, count);
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/riscv/include/asm/io.h:119:55: note: expanded from macro 'outsw'
-     119 | #define outsw(addr, buffer, count) __outsw(PCI_IOBASE + (addr), buffer, count)
-         |                                            ~~~~~~~~~~ ^
-   In file included from arch/riscv/kernel/traps.c:15:
-   In file included from include/linux/kprobes.h:28:
-   In file included from include/linux/ftrace.h:10:
-   In file included from include/linux/trace_recursion.h:5:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/riscv/include/asm/io.h:136:
-   include/asm-generic/io.h:786:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     786 |         outsl(addr, buffer, count);
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/riscv/include/asm/io.h:120:55: note: expanded from macro 'outsl'
-     120 | #define outsl(addr, buffer, count) __outsl(PCI_IOBASE + (addr), buffer, count)
-         |                                            ~~~~~~~~~~ ^
-   In file included from arch/riscv/kernel/traps.c:15:
-   In file included from include/linux/kprobes.h:28:
-   In file included from include/linux/ftrace.h:10:
-   In file included from include/linux/trace_recursion.h:5:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/riscv/include/asm/io.h:136:
-   include/asm-generic/io.h:1134:55: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-    1134 |         return (port > MMIO_UPPER_LIMIT) ? NULL : PCI_IOBASE + port;
-         |                                                   ~~~~~~~~~~ ^
->> arch/riscv/kernel/traps.c:299:3: error: call to undeclared function 'riscv_v_vstate_discard'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     299 |                 riscv_v_vstate_discard(regs);
-         |                 ^
-   arch/riscv/kernel/traps.c:299:3: note: did you mean 'riscv_v_vstate_query'?
-   arch/riscv/include/asm/vector.h:206:20: note: 'riscv_v_vstate_query' declared here
-     206 | static inline bool riscv_v_vstate_query(struct pt_regs *regs) { return false; }
-         |                    ^
-   13 warnings and 1 error generated.
+On the opposite side, yes, we can change the RPM format, ask the
+distributions to sign per-file. If it was that easy, we would not be
+(still) waiting for the first distribution (Fedora 38) to support file
+signatures since 2016, when the feature was proposed (sorry if it looks
+like diminishing what Mimi and IBM proposed, I'm trying to convey the
+idea of how difficult is to realize that architecture).
 
+What about other formats? How long it could take for them to be adapted
+to store file signatures?
 
-vim +/riscv_v_vstate_discard +299 arch/riscv/kernel/traps.c
+Immediate support for IMA Appraisal is as far as looping into the RPM
+header sections to obtain the data offset of RPMTAG_FILEDIGESTS and
+converting the digests at that offset from hex to bin (we need also to
+verify the PGP signature of the RPM header, but I would leave it for
+later).
 
-   290	
-   291	asmlinkage __visible __trap_section void do_trap_ecall_u(struct pt_regs *regs)
-   292	{
-   293		if (user_mode(regs)) {
-   294			ulong syscall = regs->a7;
-   295	
-   296			regs->epc += 4;
-   297			regs->orig_a0 = regs->a0;
-   298	
- > 299			riscv_v_vstate_discard(regs);
-   300	
-   301			syscall = syscall_enter_from_user_mode(regs, syscall);
-   302	
-   303			if (syscall < NR_syscalls)
-   304				syscall_handler(regs, syscall);
-   305			else
-   306				regs->a0 = -ENOSYS;
-   307	
-   308			syscall_exit_to_user_mode(regs);
-   309		} else {
-   310			irqentry_state_t state = irqentry_nmi_enter(regs);
-   311	
-   312			do_trap_error(regs, SIGILL, ILL_ILLTRP, regs->epc,
-   313				"Oops - environment call from U-mode");
-   314	
-   315			irqentry_nmi_exit(regs, state);
-   316		}
-   317	
+You probably also see how close we are to accomplish the goal. I'm open
+to suggestions: if this idea of an isolated process doing the parsing
+is not suitable, I could implement it in a different way.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+So far I proposed:
+
+- In-kernel parser (dangerous, not scalable)
+https://lore.kernel.org/linux-integrity/20210914163401.864635-1-roberto.sassu@huawei.com/
+- eBPF (no program signatures, not compliant with the LSM conventions,
+  unsolved security issues)
+https://github.com/robertosassu/diglim-ebpf/commit/693745cb388bca7354233cadae1fe2d23d47ff9d
+- Isolated user space process (not enough isolation guarantees)
+https://lore.kernel.org/linux-kernel//20230317145240.363908-1-roberto.sassu@huaweicloud.com/
+https://lore.kernel.org/linux-kernel//20230425173557.724688-1-roberto.sassu@huaweicloud.com/
+
+Thanks
+
+Roberto
+
+> > authenticity of the original format (that already exists and cannot
+> > change).
+> > 
+> > Preventing tampering of the process ensures that the conversion goes as
+> > expected. Also, the integrity of the binary needs to be verified.
+> > 
+> > 
+> > List of wished data formats:
+> > 
+> > PGP: verify the authenticity of RPM/DEB/... headers
+> > RPM/DEB/... headers: extract reference file checksums for
+> >                     (kernel-based) file integrity check (e.g. with IMA)
+> > 
+> > 
+> > Alternative #1:
+> > 
+> > Write the parsers to run in kernel space. That was rejected due to
+> > security and scalability concerns. If that changed, please let me know.
+> > 
+> > 
+> > Alternative #2:
+> > 
+> > Linux distributions could provide what the kernel supports. However,
+> > from personal experience, the effort seems orders of magnitude higher
+> > than just writing a tiny component to support the original format. And
+> > there is no guarantee that all Linux distributions will do it.
+> > 
+> > 
+> > Full process isolation could be achieved in this way:
+> > 
+> > process -> outside: set seccomp strict profile at process creation
+> >                     so that the process can only read/write/close the
+> >                     pipe and exit, no other system calls are allowed
+> > 
+> > outside -> process: deny ptrace/kill with the process as target
+> > 
+> > Anything else?
+> > 
+> > 
+> > The only risk I see is that a new feature allowing to interact with
+> > another process is added to the kernel, without the ptrace permission
+> > being asked.
+> > 
+> > With the restrictions above, can we say that the code inside the
+> > process is as safe (against tampering) to execute as if it runs in
+> > kernel space?
+> > 
+> > Thanks
+> > 
+> > Roberto
+
