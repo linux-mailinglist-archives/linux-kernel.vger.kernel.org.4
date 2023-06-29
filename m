@@ -2,250 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26F94741F32
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 06:14:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A06DB741F3D
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 06:29:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231290AbjF2EOP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 00:14:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48292 "EHLO
+        id S230523AbjF2E3V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 00:29:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230293AbjF2EOL (ORCPT
+        with ESMTP id S230456AbjF2E2v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 00:14:11 -0400
-Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com [IPv6:2607:f8b0:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA053130
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 21:14:09 -0700 (PDT)
-Received: by mail-oi1-x22a.google.com with SMTP id 5614622812f47-39e86b3da52so192243b6e.0
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 21:14:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1688012049; x=1690604049;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=gFI0ylmPxIwEVqfEdxipNZjolrHgwmHjIaIurmggdCk=;
-        b=lPERBNzh9oBZQ+QUplulviVjCOP/BA2YFs+vzqqvva8Lh9HBJ3T/XqpVdZVvIJCV5R
-         oiUD0xCDsg8ZRy/IuoMjPMt6X0bw9U1BBP/72qABBfaPmwufk6rXtWqIwV0r5guJjFGN
-         ODCSn8zVYcvXw+OlqM3CRrhAxTBJUNYWGe9PY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688012049; x=1690604049;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=gFI0ylmPxIwEVqfEdxipNZjolrHgwmHjIaIurmggdCk=;
-        b=gJDJ9PRGu4gaBoTq3BN4uDHLO4nPiTZxUYrr7YzZn33E3qTUc53hW1BtOcMw82tn92
-         VxedcZu3O01df5QUqVly9dZiAue76UPY3tL9iOx/FA/HrCWm+o+K3EeBWeFeYW7s0zQ+
-         Vr804DXQP4RSJ15yqiolD2L2GmuVbJajDOc+Z3HvA8yBtfrlZpSYM/LrFNnzk0Mc86nO
-         dw1Z7pLAToLYIcgk5yGIFGOskHsYRGvDak4puvO8jKD1V3pXU6HTfkmfQp2PaD7b3MKT
-         7v3hvA4ykr/k9DPLLSQ/Dperq1N98pnQ96nvr741k28Z0p2TEpRM4aeYME2Z+h13ok8f
-         6suQ==
-X-Gm-Message-State: AC+VfDzm3oo+fzD2AHF17xT5IxbHUYjvvzSRc6a1O/t4NtlAjzT6y0Cd
-        avNrwFVKYJWczHmZ7qHq35KsQj5bddBFabes5k+u+w==
-X-Google-Smtp-Source: ACHHUZ4SX0IpPrAi8VAGsBsq9P7eKVBPxCksuggGgL4DjpZRAebGQhJ6Xnawo7+AkZotPjkeDDXTPwlHAh/4d5FsqCM=
-X-Received: by 2002:aca:bbc5:0:b0:3a0:54ea:e416 with SMTP id
- l188-20020acabbc5000000b003a054eae416mr2055075oif.17.1688012049129; Wed, 28
- Jun 2023 21:14:09 -0700 (PDT)
+        Thu, 29 Jun 2023 00:28:51 -0400
+Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12CD61FFA
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 21:28:49 -0700 (PDT)
+Received: from cwcc.thunk.org (pool-173-48-117-150.bstnma.fios.verizon.net [173.48.117.150])
+        (authenticated bits=0)
+        (User authenticated as tytso@ATHENA.MIT.EDU)
+        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 35T4SdNS028271
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 29 Jun 2023 00:28:40 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
+        t=1688012921; bh=G1WywpSC7JbNF3VsEtkgr5IRIuWVWKPrradmgoLImzQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To;
+        b=hMd79orpIHdr7WocGloof1z2O9ZX12vsq9VbYdJ38vtZvIwjhMjKrgytgMH7FhN3i
+         0vxIbMbRlxg5jQtIPcbXHjAxmP2FJ/fEOX252QUk/cxkyY8QyIVgFOVe1oixmKmweb
+         tTIJBNjciUDhVqqz0Yn0h9LPl0z5ubaPGaqPOQ35h1xzvVjKduEG2/99IpFfogB7wh
+         w1+u4EnnqTfxch4fS3Be9CHidiTlQ9lfzeBpYU18hUGpTTBLKAPxjTyjxLl+rc88uM
+         ZNLNYPNatVwV1jRPVvhZfLu/fhUAzlbmLOxNxL6SN1Hgmvaj3lsyVZURI1IPnKAcPE
+         zn2pLhc0mGUEQ==
+Received: by cwcc.thunk.org (Postfix, from userid 15806)
+        id 1168B15C027F; Thu, 29 Jun 2023 00:28:39 -0400 (EDT)
+Date:   Thu, 29 Jun 2023 00:28:39 -0400
+From:   "Theodore Ts'o" <tytso@mit.edu>
+To:     syzbot <syzbot+5407ecf3112f882d2ef3@syzkaller.appspotmail.com>
+Cc:     adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        reiserfs-devel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Subject: Re: [syzbot] [ext4?] KASAN: slab-use-after-free Read in __ext4_iget
+Message-ID: <20230629042839.GK8954@mit.edu>
+References: <000000000000ddfe0405fd7ef847@google.com>
 MIME-Version: 1.0
-References: <20221215001205.51969-1-jeffxu@google.com> <20221215001205.51969-4-jeffxu@google.com>
- <ZJwcsU0vI-nzgOB_@codewreck.org>
-In-Reply-To: <ZJwcsU0vI-nzgOB_@codewreck.org>
-From:   Jeff Xu <jeffxu@chromium.org>
-Date:   Wed, 28 Jun 2023 21:13:58 -0700
-Message-ID: <CABi2SkXUX_QqTQ10Yx9bBUGpN1wByOi_=gZU6WEy5a8MaQY3Jw@mail.gmail.com>
-Subject: Re: [PATCH v8 3/5] mm/memfd: add MFD_NOEXEC_SEAL and MFD_EXEC
-To:     Dominique Martinet <asmadeus@codewreck.org>
-Cc:     skhan@linuxfoundation.org, keescook@chromium.org,
-        akpm@linux-foundation.org, dmitry.torokhov@gmail.com,
-        dverkamp@chromium.org, hughd@google.com, jeffxu@google.com,
-        jorgelo@chromium.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
-        jannh@google.com, linux-hardening@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        kernel test robot <lkp@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <000000000000ddfe0405fd7ef847@google.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_MED,SORTED_RECIPS,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello.
+#syz set subsystems: fs, reiserfs
 
-Thank you for your email and interested in using memfd_noexec !
+On Tue, Jun 06, 2023 at 05:11:06PM -0700, syzbot wrote:
+> Hello,
+> 
+> syzbot found the following issue on:
+> 
+> HEAD commit:    a4d7d7011219 Merge tag 'spi-fix-v6.4-rc5' of git://git.ker..
+> git tree:       upstream
+> console output: https://syzkaller.appspot.com/x/log.txt?x=1455f745280000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=7474de833c217bf4
+> dashboard link: https://syzkaller.appspot.com/bug?extid=5407ecf3112f882d2ef3
+> compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
 
-On Wed, Jun 28, 2023 at 4:43=E2=80=AFAM Dominique Martinet
-<asmadeus@codewreck.org> wrote:
->
-> jeffxu@chromium.org wrote on Thu, Dec 15, 2022 at 12:12:03AM +0000:
-> > From: Jeff Xu <jeffxu@google.com>
-> >
-> > The new MFD_NOEXEC_SEAL and MFD_EXEC flags allows application to
-> > set executable bit at creation time (memfd_create).
-> >
-> > When MFD_NOEXEC_SEAL is set, memfd is created without executable bit
-> > (mode:0666), and sealed with F_SEAL_EXEC, so it can't be chmod to
-> > be executable (mode: 0777) after creation.
-> >
-> > when MFD_EXEC flag is set, memfd is created with executable bit
-> > (mode:0777), this is the same as the old behavior of memfd_create.
-> >
-> > The new pid namespaced sysctl vm.memfd_noexec has 3 values:
-> > 0: memfd_create() without MFD_EXEC nor MFD_NOEXEC_SEAL acts like
-> >         MFD_EXEC was set.
-> > 1: memfd_create() without MFD_EXEC nor MFD_NOEXEC_SEAL acts like
-> >         MFD_NOEXEC_SEAL was set.
-> > 2: memfd_create() without MFD_NOEXEC_SEAL will be rejected.
->
-> So, erm, I'm a bit late to the party but I was just looking at a way of
-> blocking memfd_create+exec in a container and this sounded perfect: my
-> reading is that this is a security feature meant to be set for
-> container's namespaces that'd totally disable something like
-> memfd_create followed by fexecve (because we don't want weird binaries
-> coming from who knows where to be executed on a shiny secure system),
-> but. . . is this actually supposed to work?
-> (see below)
->
-> > [...]
-> > --- a/mm/memfd.c
-> > +++ b/mm/memfd.c
-> > @@ -263,12 +264,14 @@ long memfd_fcntl(struct file *file, unsigned int =
-cmd, unsigned long arg)
-> >  #define MFD_NAME_PREFIX_LEN (sizeof(MFD_NAME_PREFIX) - 1)
-> >  #define MFD_NAME_MAX_LEN (NAME_MAX - MFD_NAME_PREFIX_LEN)
-> >
-> > -#define MFD_ALL_FLAGS (MFD_CLOEXEC | MFD_ALLOW_SEALING | MFD_HUGETLB)
-> > +#define MFD_ALL_FLAGS (MFD_CLOEXEC | MFD_ALLOW_SEALING | MFD_HUGETLB |=
- MFD_NOEXEC_SEAL | MFD_EXEC)
-> >
-> >  SYSCALL_DEFINE2(memfd_create,
-> >               const char __user *, uname,
-> >               unsigned int, flags)
-> >  {
-> > +     char comm[TASK_COMM_LEN];
-> > +     struct pid_namespace *ns;
-> >       unsigned int *file_seals;
-> >       struct file *file;
-> >       int fd, error;
-> > @@ -285,6 +288,39 @@ SYSCALL_DEFINE2(memfd_create,
-> >                       return -EINVAL;
-> >       }
-> >
-> > +     /* Invalid if both EXEC and NOEXEC_SEAL are set.*/
-> > +     if ((flags & MFD_EXEC) && (flags & MFD_NOEXEC_SEAL))
-> > +             return -EINVAL;
-> > +
-> > +     if (!(flags & (MFD_EXEC | MFD_NOEXEC_SEAL))) {
-> > +             [code that checks the sysctl]
->
-> If flags already has either MFD_EXEC or MFD_NOEXEC_SEAL, you don't check
-> the sysctl at all.
->
-> This can be verified easily:
-> -----
-> $ cat > memfd_exec.c <<'EOF'
-> #define _GNU_SOURCE
->
-> #include <errno.h>
-> #include <stdio.h>
-> #include <sys/mman.h>
-> #include <sys/types.h>
-> #include <sys/wait.h>
->
-> #ifndef MFD_EXEC
-> #define MFD_EXEC                0x0010U
-> #endif
->
-> int main() {
->     int fd =3D memfd_create("script", MFD_EXEC);
->     if (fd =3D=3D -1)l
->         perror("memfd");
->
->     char prog[] =3D "#!/bin/sh\necho Ran script\n";
->     if (write(fd, prog, sizeof(prog)-1) !=3D sizeof(prog)-1)
->             perror("write");
->
->     char *const argv[] =3D { "script", NULL };
->     char *const envp[] =3D { NULL };
->     fexecve(fd, argv, envp);
->     perror("fexecve");
-> }
-> EOF
-> $ gcc -o memfd_exec memfd_exec.c
-> $ ./memfd_exec
-> Ran script
-> $ sysctl vm.memfd_noexec
-> vm.memfd_noexec =3D 2
-> -----
-> (as opposed to failing hard on memfd_create if flag unset on sysctl=3D2,
-> and failing on fexecve with flag unset and sysctl=3D1)
->
-> What am I missing?
->
->
-At one point, I was thinking of having a security hook to block
-executable memfd [1], so this sysctl only works for the application
-that doesn't set EXEC bit. Now I think it makes sense to use
-vm.memfd_noexec =3D 2 to block the MFD_EXEC also.
-Anyway the commit msg says:
-2: memfd_create() without MFD_NOEXEC_SEAL will be rejected.
-Not doing that is a bug. I will send a fix for that.
+The stack traces on this are... intersting.  The use-after free is
+coming when ext4_fill_super() tries to get the root inode, via
+iget_locked(sb, EXT2_ROOT_INO)
 
-[1] https://lore.kernel.org/lkml/20221206150233.1963717-7-jeffxu@google.com=
-/
+> BUG: KASAN: slab-use-after-free in __ext4_iget+0x2f2/0x3f30 fs/ext4/inode.c:4700
+> Read of size 8 at addr ffff888078ca5550 by task syz-executor.5/26112
+	...
+>  __ext4_iget+0x2f2/0x3f30 fs/ext4/inode.c:4700
+>  __ext4_fill_super fs/ext4/super.c:5446 [inline]
+>  ext4_fill_super+0x545b/0x6c60 fs/ext4/super.c:5672
 
->
-> BTW I find the current behaviour rather hard to use: setting this to 2
-> should still set NOEXEC by default in my opinion, just refuse anything
-> that explicitly requested EXEC.
->
-At one point [2] (v2 of patch) there were two sysctls, one is doing
-overwrite, one is enforcing, later I decided with one sysctl, the
-rationale is the kernel will eventually get out of the business of
-overwriting user space code.  Yes. It might take a long time to
-migrate all of the userspace.
+However, we are getting back an object which is freed, and which was
+originally allocated by reiserfs(!):
 
-In the meantime,  to meet what you want, the solution is keep
-vm.memfd_noexec =3D 1 (for overwrite), and a new security policy
-(SELInux or Landlock) that uses security hook security_memfd_create,
-this can block one process from creating executable memfd. Indeed,
-security policy is better fit to cases like this than sysctl.
+> Allocated by task 20729:
+>  kasan_save_stack mm/kasan/common.c:45 [inline]
+>  kasan_set_track+0x4f/0x70 mm/kasan/common.c:52
+>  __kasan_slab_alloc+0x66/0x70 mm/kasan/common.c:328
+>  kasan_slab_alloc include/linux/kasan.h:186 [inline]
+>  slab_post_alloc_hook+0x68/0x3a0 mm/slab.h:711
+>  slab_alloc_node mm/slub.c:3451 [inline]
+>  slab_alloc mm/slub.c:3459 [inline]
+>  __kmem_cache_alloc_lru mm/slub.c:3466 [inline]
+>  kmem_cache_alloc_lru+0x11f/0x2e0 mm/slub.c:3482
+>  alloc_inode_sb include/linux/fs.h:2705 [inline]
+>  reiserfs_alloc_inode+0x2a/0xc0 fs/reiserfs/super.c:642
+>  alloc_inode fs/inode.c:260 [inline]
+>  iget5_locked+0xa0/0x270 fs/inode.c:1241
+>  reiserfs_fill_super+0x12e4/0x2620 fs/reiserfs/super.c:2053
+>  mount_bdev+0x2d0/0x3f0 fs/super.c:1380
 
-[2] https://lore.kernel.org/linux-mm/CABi2SkWGo9Jrd=3Di1e2PoDWYGenGhR=3DpG=
-=3DyGsQP5VLmizTmg-iA@mail.gmail.com/
+There is no reproducer, but it seems to be triggering quite frequently
+(over once day --- 20 times since June 16, 2023 as of this writing).
+I've checked a number of the reports in the Syzkaller dashboard, and
+they are all quite similar; somehow ext4 is getting an inode which is
+freed, and whose memory was originally allocated by reiserfs.
 
-> Sure there's a warn_once that memfd_create was used without seal, but
-> right now on my system it's "used up" 5 seconds after boot by systemd:
-> [    5.854378] memfd_create() without MFD_EXEC nor MFD_NOEXEC_SEAL, pid=
-=3D1 'systemd'
->
-> And anyway, older kernels will barf up EINVAL when calling memfd_create
-> with MFD_NOEXEC_SEAL, so even if userspace will want to adapt they'll
-> need to try calling memfd_create with the flag once and retry on EINVAL,
-> which let's face it is going to take a while to happen.
-> (Also, the flag has been added to glibc, but not in any release yet)
->
-Yes. Application will need to do some detection of the kernel. This is
-not avoidable.
+I'm not sure if this is a reiserfs bug or a core VFS bug, since this
+seems to imply that an an old reiserfs inode was left on the
+inode_hashtable when a reiserfs file system was unmounted, and then
+the struct super was reused and returned for a fresh ext4 mount, and
+then when ext4 tried do an iget_locked(), it got the reserifs inode.
 
-> Making calls default to noexec AND refuse exec does what you want
-> (forbid use of exec in an app that wasn't in a namespace that allows
-> exec) while allowing apps that require it to work; that sounds better
-> than making all applications that haven't taken the pain of adding the
-> new flag to me.
-> Well, I guess an app that did require exec without setting the flag will
-> fail in a weird place instead of failing at memfd_create and having a
-> chance to fallback, so it's not like it doesn't make any sense;
-> I don't have such strong feelings about this if the sysctl works, but
-> for my use case I'm more likely to want to take a chance at memfd_create
-> not needing exec than having the flag set. Perhaps a third value if I
-> cared enough...
->
-> --
-> Dominique Martinet | Asmadeus
+That reiserfs inode was either freed and left on the inode_hashtable,
+or lifetime of the reiserfs root inode was allowed to last longer than
+the reiserfs superblock (maybe someone is playing RCU games?) and so
+since it was left on the inode_hashtable, the attempt to free reiserfs
+root inode raced with ext4's attempt to fetch the ext4 inode via
+iget_locked().
 
-Thanks
--Jeff
+Perhaps one of the VFS or reiserfs maintainers could take a look?
+
+       	       	  	   	      	       - Ted
