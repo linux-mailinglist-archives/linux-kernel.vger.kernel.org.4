@@ -2,43 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A204742E17
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 22:09:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BAEBF742E1F
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 22:09:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232388AbjF2UEL convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 29 Jun 2023 16:04:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33836 "EHLO
+        id S232410AbjF2UFq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 16:05:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232370AbjF2UDk (ORCPT
+        with ESMTP id S232601AbjF2UFD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 16:03:40 -0400
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FE723ABD;
-        Thu, 29 Jun 2023 13:03:08 -0700 (PDT)
-X-GND-Sasl: hadess@hadess.net
-X-GND-Sasl: hadess@hadess.net
-X-GND-Sasl: hadess@hadess.net
-X-GND-Sasl: hadess@hadess.net
-X-GND-Sasl: hadess@hadess.net
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 76FB7FF805;
-        Thu, 29 Jun 2023 20:03:06 +0000 (UTC)
-Message-ID: <8b8d8d78bb8856b933ee92ba2b9c8a256f90d29b.camel@hadess.net>
-Subject: Re: [PATCH] HID: steelseries: Add support for Arctis 1 XBox
-From:   Bastien Nocera <hadess@hadess.net>
-To:     Rahul Rameshbabu <rrameshbabu@nvidia.com>
-Cc:     linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jiri Kosina <jikos@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Date:   Thu, 29 Jun 2023 22:03:05 +0200
-In-Reply-To: <87wmzm9k7l.fsf@nvidia.com>
-References: <20230629172041.3771-1-hadess@hadess.net>
-         <87wmzm9k7l.fsf@nvidia.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.48.3 (3.48.3-1.fc38) 
+        Thu, 29 Jun 2023 16:05:03 -0400
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 593F52D60
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 13:05:01 -0700 (PDT)
+Received: by mail-lf1-x133.google.com with SMTP id 2adb3069b0e04-4fb7373dd35so1351951e87.1
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 13:05:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1688069099; x=1690661099;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=OF3SWHQBitllVPlaYnVLF/iiTBXMytWTZQU29N7FmDM=;
+        b=gxSfIjzJgF4o6hdReIGjdG8oDb8YMY+FvG9DOf48gJS/uXUgVgdRBxWOyIbIwZURQ6
+         qqlLtGy9beddY4617elmaPql81XYUQ8zxW7WylayUjuELQrLfAH6Ort+7wOGubNRvfjs
+         vPUnouklFBiwE0tQK5VjdKd6ndIr8to+h+Q9RDGQzK+DZDXTIUQ1jVsZKarH3Pku08RX
+         2QvOPHNXoyjvlv7ryV1D7SN/jNZctB6mPECftJZV3hBBGOiv7QrR0qAJLqP8YAr1Kln/
+         XVdozh/5IpjZyWV41qXtrBGwBcWg4aLtVJRCcZRZeIvobORm50LcEvt3gPIPCgI5UMbS
+         PLwg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688069099; x=1690661099;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=OF3SWHQBitllVPlaYnVLF/iiTBXMytWTZQU29N7FmDM=;
+        b=N5516aSvb/nhH/AMgKCmrA6h2P8FCzmvc/ZFspH7kGooedjC4lRqrNdYg735rXX/Po
+         AzqPHRejWxNCSjYrQmu9rmwQ7n93DKhkG8Kl6NWX0oMDNi099ZfwOco/GMFVXlG9SOLG
+         fGUr2e+fz3CCPFG5D9a9D7r/EeOcZY4EyRxK7kb8zjqZEbsySx4bSW4D1/83fCl3iP/M
+         kFxMnWbQPNU6jg2bXIesR4PBbQ9xVVtYLkHltpTM5K2WIXq9ojF7YcsP/GFcqDNNgfW7
+         JwfTkRfdJgpQQxyd/ltDTJQwt66s/iIugVXsEUtszmf0BbHF48nJr5d9K7GnNHDwZ6eG
+         i0rA==
+X-Gm-Message-State: ABy/qLZ2otaJisy8+rxLnBc837MuM/t2+LYHZbdh5XC2Rm7xQEF7BphE
+        Ag5HqyDD0z2JYwcHrSLghNxlKg==
+X-Google-Smtp-Source: APBJJlHCImMszh08qroN+ScqTvW+Lm4kzbNBHCoakjGE3swSx6rZ5XyHj9KuN68oeeMW8B9bxhKuoQ==
+X-Received: by 2002:a05:6512:693:b0:4f8:6d9d:abe0 with SMTP id t19-20020a056512069300b004f86d9dabe0mr365281lfe.33.1688069099306;
+        Thu, 29 Jun 2023 13:04:59 -0700 (PDT)
+Received: from [192.168.1.101] (abyk82.neoplus.adsl.tpnet.pl. [83.9.30.82])
+        by smtp.gmail.com with ESMTPSA id k28-20020ac2457c000000b004fb9fbdd8fcsm207623lfm.252.2023.06.29.13.04.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 29 Jun 2023 13:04:58 -0700 (PDT)
+Message-ID: <ef515514-43e8-e4c9-e013-09aa27bc2110@linaro.org>
+Date:   Thu, 29 Jun 2023 22:04:55 +0200
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH 08/11] dt-bindings: usb: ci-hdrc-usb2: Fix handling
+ pinctrl properties
+Content-Language: en-US
+To:     Rob Herring <robh@kernel.org>
+Cc:     cros-qcom-dts-watchers@chromium.org,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Benjamin Li <benl@squareup.com>,
+        James Willcox <jwillcox@squareup.com>,
+        Joseph Gates <jgates@squareup.com>,
+        Stephan Gerhold <stephan@gerhold.net>,
+        Zac Crosby <zac@squareup.com>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Banajit Goswami <bgoswami@quicinc.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>, Lee Jones <lee@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Xu Yang <xu.yang_2@nxp.com>, Peng Fan <peng.fan@nxp.com>,
+        Christian Marangi <ansuelsmth@gmail.com>,
+        Wesley Cheng <quic_wcheng@quicinc.com>,
+        Jun Nie <jun.nie@linaro.org>, Max Chen <mchen@squareup.com>,
+        Shawn Guo <shawn.guo@linaro.org>,
+        Vivek Gautam <vivek.gautam@codeaurora.org>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Vincent Knecht <vincent.knecht@mailoo.org>,
+        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+        Konrad Dybcio <konradybcio@kernel.org>,
+        alsa-devel@alsa-project.org, iommu@lists.linux.dev,
+        linux-usb@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        Andy Gross <andy.gross@linaro.org>
+References: <20230627-topic-more_bindings-v1-0-6b4b6cd081e5@linaro.org>
+ <20230627-topic-more_bindings-v1-8-6b4b6cd081e5@linaro.org>
+ <20230629152335.GA3055525-robh@kernel.org>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230629152335.GA3055525-robh@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -46,47 +112,84 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2023-06-29 at 11:50 -0700, Rahul Rameshbabu wrote:
-> On Thu, 29 Jun, 2023 19:20:27 +0200 Bastien Nocera
-> <hadess@hadess.net> wrote:
-> > +static const struct hid_device_id steelseries_devices[] = {
-> > +       { HID_USB_DEVICE(USB_VENDOR_ID_STEELSERIES,
-> > USB_DEVICE_ID_STEELSERIES_SRWS1),
-> > +         .driver_data = STEELSERIES_SRWS1 },
-> > +
-> > +       { /* SteelSeries Arctis 1 Wireless for XBox */
-> > +         HID_USB_DEVICE(USB_VENDOR_ID_STEELSERIES, 0x12b6),
+On 29.06.2023 17:23, Rob Herring wrote:
+> On Tue, Jun 27, 2023 at 06:24:24PM +0200, Konrad Dybcio wrote:
+>> Untangle the bit messy oneOf trees and add the missing pinctrl-2 mention
+>> to handle the different pinctrl combinations.
+>>
+>> Fixes: 4c8375d35f72 ("dt-bindings: usb: ci-hdrc-usb2: convert to DT schema format")
+>> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+>> ---
+>>  .../devicetree/bindings/usb/ci-hdrc-usb2.yaml      | 27 ++++++----------------
+>>  1 file changed, 7 insertions(+), 20 deletions(-)
+>>
+>> diff --git a/Documentation/devicetree/bindings/usb/ci-hdrc-usb2.yaml b/Documentation/devicetree/bindings/usb/ci-hdrc-usb2.yaml
+>> index 782402800d4a..24431a7adf3e 100644
+>> --- a/Documentation/devicetree/bindings/usb/ci-hdrc-usb2.yaml
+>> +++ b/Documentation/devicetree/bindings/usb/ci-hdrc-usb2.yaml
+>> @@ -199,17 +199,6 @@ properties:
+>>        In case of HSIC-mode, "idle" and "active" pin modes are mandatory.
+>>        In this case, the "idle" state needs to pull down the data and
+>>        strobe pin and the "active" state needs to pull up the strobe pin.
+>> -    oneOf:
+>> -      - items:
+>> -          - const: idle
+>> -          - const: active
 > 
-> Shouldn't the USB device id be added to drivers/hid/hid-ids.h?
-
-No, the hid-ids.h is only used if 2 files in the hid directory need to
-reference the same device.
-
-Since changes to the way hid drivers are loaded, there's no need to
-blocklist the devices in the core to handle them in a driver, so
-there's no need to reference the device in another place than the
-driver itself, so no need to add it to hid-ids.h
+> These are no longer valid values? The description still mentions them.
+I believe allOf: now covers them all?
 
 > 
-> > +       .driver_data = STEELSERIES_ARCTIS_1 },
-> > +
-> >         { }
-> >  };
-> > -MODULE_DEVICE_TABLE(hid, steelseries_srws1_devices);
-> > -
-> > -static struct hid_driver steelseries_srws1_driver = {
-> > -       .name = "steelseries_srws1",
-> > -       .id_table = steelseries_srws1_devices,
-> > -#if IS_BUILTIN(CONFIG_LEDS_CLASS) || \
-> > -    (IS_MODULE(CONFIG_LEDS_CLASS) &&
-> > IS_MODULE(CONFIG_HID_STEELSERIES))
-> > -       .probe = steelseries_srws1_probe,
-> > -       .remove = steelseries_srws1_remove,
-> > -#endif
-> > -       .report_fixup = steelseries_srws1_report_fixup
-> > +MODULE_DEVICE_TABLE(hid, steelseries_devices);
+>> -      - items:
+>> -          - const: default
+>> -          - enum:
+>> -              - host
+>> -              - device
+>> -      - items:
+>> -          - const: default
+>>  
+>>    pinctrl-0:
+>>      maxItems: 1
+>> @@ -357,17 +346,15 @@ allOf:
+>>              - const: active
+>>      else:
+>>        properties:
+>> +        pinctrl-2:
 > 
-> Thanks,
-> 
-> Rahul Rameshbabu
+> This should be implicitly allowed. Is it not?
+No, it errored out for me.
 
+> 
+> I'm reallly at a loss as to what problem this patch solves.
+Specifying all 3 pin states is impossible with the current state of
+this binding, even though it's a supported configuration (check
+qcom/apq8039-t2.dtb). I should have been more clear in the commit
+message.
+
+Konrad
+
+> 
+>> +          maxItems: 1
+>> +
+>>          pinctrl-names:
+>>            minItems: 1
+>> -          maxItems: 2
+>> -          oneOf:
+>> -            - items:
+>> -                - const: default
+>> -                - enum:
+>> -                    - host
+>> -                    - device
+>> -            - items:
+>> -                - const: default
+>> +          items:
+>> +            - const: default
+>> +            - const: host
+>> +            - const: device
+>>    - if:
+>>        properties:
+>>          compatible:
+>>
+>> -- 
+>> 2.41.0
+>>
