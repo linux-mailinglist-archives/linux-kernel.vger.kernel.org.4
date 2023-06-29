@@ -2,182 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC4867427E4
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 16:03:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8F287427EB
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 16:04:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232161AbjF2ODy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 10:03:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52160 "EHLO
+        id S232006AbjF2OEi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 10:04:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231899AbjF2ODw (ORCPT
+        with ESMTP id S231443AbjF2OEg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 10:03:52 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E40A1FE4;
-        Thu, 29 Jun 2023 07:03:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1688047430; x=1719583430;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=0LCje66TrgfndvZbz38XLfCZaJE3/THeERjOD2/AstY=;
-  b=pD6y9J85HsERg0DbTeB+Smy7meSqEtSGZ4p/P1hKZyMynCPzJcABaf4o
-   Y9d44jBCBqbcEM3Pk3mtOLQ5xDoL2KXJ6HGJ+1Se0r7L1SBfYKNa8DAQ/
-   kga3hBZsaiT3ltp1E+IuaqG/B+CZt6Didq8VEpjXCFL8MoCeZveNPgttV
-   d1LBNN2+pqFQzWfL7oAmh59xaMxhTHJXMaGuAMoaX0UwOB+ZXYqjX2+Q/
-   O1OoywQpq7UYo/3Xx2kV6QozNmHVAxHaEJ63D9qr+cx51L6zkDzBfB7bE
-   pjJF+tcunFfGoJ5ISQBFn6sQ7Nw+eL2RUpc6JbzMkNrhu6J25TZ9rjSNh
-   Q==;
-X-IronPort-AV: E=Sophos;i="6.01,168,1684825200"; 
-   d="asc'?scan'208";a="232893173"
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 29 Jun 2023 07:03:40 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Thu, 29 Jun 2023 07:03:40 -0700
-Received: from wendy (10.10.115.15) by chn-vm-ex04.mchp-main.com
- (10.10.85.152) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
- Transport; Thu, 29 Jun 2023 07:03:37 -0700
-Date:   Thu, 29 Jun 2023 15:03:08 +0100
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     Evan Green <evan@rivosinc.com>
-CC:     Palmer Dabbelt <palmer@rivosinc.com>,
-        Simon Hosie <shosie@rivosinc.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Alexandre Ghiti <alexghiti@rivosinc.com>,
-        Andrew Jones <ajones@ventanamicro.com>,
-        Andy Chiu <andy.chiu@sifive.com>,
-        Anup Patel <apatel@ventanamicro.com>,
-        Greentime Hu <greentime.hu@sifive.com>,
-        Guo Ren <guoren@kernel.org>,
-        Heiko Stuebner <heiko.stuebner@vrull.eu>,
-        Jisheng Zhang <jszhang@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Ley Foon Tan <leyfoon.tan@starfivetech.com>,
-        Li Zhengyu <lizhengyu3@huawei.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Sia Jee Heng <jeeheng.sia@starfivetech.com>,
-        Sunil V L <sunilvl@ventanamicro.com>,
-        Xianting Tian <xianting.tian@linux.alibaba.com>,
-        Yangyu Chen <cyy@cyyself.name>, <linux-doc@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-riscv@lists.infradead.org>
-Subject: Re: [PATCH 1/2] RISC-V: Probe for unaligned access speed
-Message-ID: <20230629-untaxed-tripping-6000bc8c1873@wendy>
-References: <20230623222016.3742145-1-evan@rivosinc.com>
- <20230623222016.3742145-2-evan@rivosinc.com>
- <20230626-veneering-superglue-751719bd967c@wendy>
- <CALs-HsskE1-OkZxFzH9bM6bR9NBW5R4mh5AJScVtnvHbv+Pi6A@mail.gmail.com>
+        Thu, 29 Jun 2023 10:04:36 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F00DA26B6
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 07:04:34 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-230-5oQ8jz6OMYi6w2bJDof4Jw-1; Thu, 29 Jun 2023 15:04:32 +0100
+X-MC-Unique: 5oQ8jz6OMYi6w2bJDof4Jw-1
+Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
+ (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Thu, 29 Jun
+ 2023 15:04:31 +0100
+Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
+ id 15.00.1497.048; Thu, 29 Jun 2023 15:04:31 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Borislav Petkov' <bp@alien8.de>,
+        Noah Goldstein <goldstein.w.n@gmail.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+CC:     "x86@kernel.org" <x86@kernel.org>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        lkml <linux-kernel@vger.kernel.org>
+Subject: RE: x86/csum: Remove unnecessary odd handling
+Thread-Topic: x86/csum: Remove unnecessary odd handling
+Thread-Index: AQHZqaKlrhaTNuKhJ0qJMNdg92SDBq+hy3VQ
+Date:   Thu, 29 Jun 2023 14:04:30 +0000
+Message-ID: <a6fce3b915e04125b15aa33317ce07ff@AcuMS.aculab.com>
+References: <20230628020657.957880-1-goldstein.w.n@gmail.com>
+ <20230628091241.GAZJv5ie0xVGvnMKIM@fat_crate.local>
+In-Reply-To: <20230628091241.GAZJv5ie0xVGvnMKIM@fat_crate.local>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="H5dFwnc5H1LxQund"
-Content-Disposition: inline
-In-Reply-To: <CALs-HsskE1-OkZxFzH9bM6bR9NBW5R4mh5AJScVtnvHbv+Pi6A@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---H5dFwnc5H1LxQund
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+RnJvbTogQm9yaXNsYXYgUGV0a292DQo+IFNlbnQ6IDI4IEp1bmUgMjAyMyAxMDoxMw0KPiANCj4g
+KyBMaW51cyB3aG8ncyBiZWVuIHBva2luZyBhdCB0aGlzIHllc3RlcmRheS4NCj4gDQo+ICsgbGtt
+bC4gUGxlYXNlIGFsd2F5cyBDQyBsa21sIHdoZW4gc2VuZGluZyBwYXRjaGVzLg0KPiANCj4gT24g
+VHVlLCBKdW4gMjcsIDIwMjMgYXQgMDk6MDY6NTdQTSAtMDUwMCwgTm9haCBHb2xkc3RlaW4gd3Jv
+dGU6DQo+ID4gVGhlIHNwZWNpYWwgY2FzZSBmb3Igb2RkIGFsaWduZWQgYnVmZmVycyBpcyB1bm5l
+Y2Vzc2FyeSBhbmQgbW9zdGx5DQo+ID4ganVzdCBhZGRzIG92ZXJoZWFkLiBBbGlnbmVkIGJ1ZmZl
+cnMgaXMgdGhlIGV4cGVjdGF0aW9ucywgYW5kIGV2ZW4gZm9yDQo+ID4gdW5hbGlnbmVkIGJ1ZmZl
+ciwgdGhlIG9ubHkgY2FzZSB0aGF0IHdhcyBoZWxwZWQgaXMgaWYgdGhlIGJ1ZmZlciB3YXMNCj4g
+PiAxLWJ5dGUgZnJvbSB3b3JkIGFsaWduZWQgd2hpY2ggaXMgfjEvNyBvZiB0aGUgY2FzZXMuIE92
+ZXJhbGwgaXQgc2VlbXMNCj4gPiBoaWdobHkgdW5saWtlbHkgdG8gYmUgd29ydGggdG8gZXh0cmEg
+YnJhbmNoLg0KPiA+DQo+ID4gSXQgd2FzIGxlZnQgaW4gdGhlIHByZXZpb3VzIHBlcmYgaW1wcm92
+ZW1lbnQgcGF0Y2ggYmVjYXVzZSBJIHdhcw0KPiA+IGVycm9uZW91c2x5IGNvbXBhcmluZyB0aGUg
+ZXhhY3Qgb3V0cHV0IG9mIGBjc3VtX3BhcnRpYWwoLi4uKWAsIGJ1dA0KPiA+IHJlYWxseSB3ZSBv
+bmx5IG5lZWQgYGNzdW1fZm9sZChjc3VtX3BhcnRpYWwoLi4uKSlgIHRvIG1hdGNoIHNvIGl0cw0K
+PiA+IHNhZmUgdG8gcmVtb3ZlLg0KDQpJJ20gc3VyZSBJJ3ZlIHN1Z2dlc3RlZCB0aGlzIGJlZm9y
+ZS4NClRoZSAnb2RkJyBjaGVjayB3YXMgbmVlZGVkIGJ5IGFuIGVhcmxpZXIgaW1wbGVtZW50YXRp
+b24uDQoNCk1pc2FsaWduZWQgYnVmZmVycyBhcmUgKGp1c3QgYWJvdXQpIG1lYXN1cmFibHkgc2xv
+d2VyLg0KQnV0IGl0IGlzIHByZXR0eSBtdWNoIG5vaXNlIGFuZCB0aGUgZXh0cmEgY29kZSBpbiB0
+aGUNCmFsaWduZWQgY2FzZSB3aWxsIGNvZGUgbW9yZS4NCg0KSXQgaXMgcHJldHR5IG11Y2ggaW1w
+b3NzaWJsZSB0byBmaW5kIG91dCB3aGF0IHRoZSBjcHUgaXMgZG9pbmcsDQpidXQgaWYgeW91IGRv
+IG1pc2FsaWduZWQgYWNjZXNzZXMgdG8gYSBQQ0llIHRhcmdldCB5b3UgY2FuDQood2l0aCBzdWl0
+YWJsZSBoYXJkd2FyZSkgbG9vayBhdCB0aGUgZ2VuZXJhdGVkIFRMUC4NCg0KV2hhdCB0aGF0IHNo
+b3dzIGlzIG1pc2FsaWduZWQgdHJhbnNmZXJzIGJlaW5nIGRvbmUgaW4gOC1ieXRlDQpjaHVua3Mg
+YW5kIGJlaW5nIHNwbGl0IGludG8gdHdvIFRMUCBpZiB0aGV5IGNyb3NzIGEgNjQgYnl0ZQ0KKHBy
+b2JhYmx5IGNhY2hlIGxpbmUpIGJvdW5kYXJ5Lg0KDQpJdCBpcyBsaWtlbHkgdGhhdCB0aGUgc2Ft
+ZSBoYXBwZW5zIGZvciBjYWNoZWQgYWNjZXNzZXMuDQoNCkdpdmVuIHRoYXQgdGhlIGNwdSBjYW4g
+ZG8gdHdvIG1lbW9yeSByZWFkcyBlYWNoIGNsb2NrDQppdCBpc24ndCBzdXJwcmlzaW5nIHRoYXQg
+dGhlIGNoZWNrc3VtIGxvb3AgKHdoaWNoIGRvZXNuJ3QNCmV2ZW4gbWFuYWdlIGEgcmVhZCBldmVy
+eSBjbG9jaykgaXMgc2xvd2VyIGJ5IGxlc3MgdGhhbg0Kb25lIGNsb2NrIGV2ZXJ5IGNhY2hlIGxp
+bmUuDQoNClNvbWVvbmUgbWlnaHQgYWxzbyB3YW50IHRvIHVzZSB0aGUgJ2FyYycgQyB2ZXJzaW9u
+IG9mIGNzdW1fZm9sZCgpDQpvbiBwcmV0dHkgbXVjaCBldmVyeSBhcmNoaXRlY3R1cmUgWzFdLg0K
+SXQgaXM6DQoJcmV0dXJuICh+c3VtIC0gcm9yMzIoc3VtLCAxNikpID4+IDE2Ow0Kc2lnbmlmaWNh
+bnRseSBiZXR0ZXIgdGhhbiB0aGUgeDg2IGFzbSAoZXZlbiBvbiBtb3JlIHJlY2VudA0KY3B1IHRo
+YXQgZG9uJ3QgdGFrZSAyIGNsb2NrcyBmb3IgYW4gJ2FkYycpLg0KDQpbMV0gYXJtIGNhbiBkbyBh
+IGJpdCBiZXR0ZXIgYmVjYXVzZSBvZiB0aGUgYmFycmVsIHNoaWZ0ZXIuDQogICAgc3BhcmMgaXMg
+c2xvd2VyIGJlY2F1c2UgaXQgaGFzIGEgY2FycnkgZmxhZyBidXQgbm8gcm90YXRlLg0KDQoJRGF2
+aWQNCg0KLQ0KUmVnaXN0ZXJlZCBBZGRyZXNzIExha2VzaWRlLCBCcmFtbGV5IFJvYWQsIE1vdW50
+IEZhcm0sIE1pbHRvbiBLZXluZXMsIE1LMSAxUFQsIFVLDQpSZWdpc3RyYXRpb24gTm86IDEzOTcz
+ODYgKFdhbGVzKQ0K
 
-On Tue, Jun 27, 2023 at 12:11:25PM -0700, Evan Green wrote:
-> On Mon, Jun 26, 2023 at 7:15=E2=80=AFAM Conor Dooley <conor.dooley@microc=
-hip.com> wrote:
-> > > +void check_misaligned_access(int cpu)
-> > > +{
-> > > +     unsigned long j0, j1;
-> > > +     struct page *page;
-> > > +     void *dst;
-> > > +     void *src;
-> > > +     long word_copies =3D 0;
-> > > +     long byte_copies =3D 0;
-> > > +     long speed =3D RISCV_HWPROBE_MISALIGNED_SLOW;
-> >
-> > Is this not a change from current behaviour, that may actually lead to
-> > incorrect reporting. Presently, only T-Head stuff sets a speed, so
-> > hwprobe falls back to UNKNOWN for everything else. With this, we will
-> > get slow set, for anything failing the test.
-> > Slow is defined as "Misaligned accesses are supported in hardware, but
-> > are slower than the cooresponding aligned accesses sequences (sic)", but
-> > you have no way of knowing, based on the test you are performing, wheth=
-er
-> > the hardware supports it or if it is emulated by firmware.
-> > Perhaps that is not relevant to userspace, but wanted to know your
-> > thoughts.
-> >
->=20
-> Hm, that's true. EMULATED was an easy one when we were planning to get
-> this info from the DT. It also might be an easy one in the future, if
-> we get an SBI call that allows the kernel to take over misaligned trap
-> handling. We'd then be able to do a misaligned access and see if our
-> trap handler got called.
->=20
-> One option is to leave the value alone if we fail the FAST test
-> (rather than changing it from UNKNOWN to SLOW). This isn't great
-> though, as it effectively makes UNKNOWN synonymous with SLOW, but in a
-> way where usermode can't tell the difference between "I truly don't
-> know" and "I tried the fast test and it failed".
->=20
-> The alternative, as it is now, may mislabel some emulated systems as
-> slow until the new SBI call shows up.
-
-Make that "mislabel some emulated systems forever", existing systems
-don't magically grow support for new extensions unfortunately.
-
-Realistically though, does it matter to userspace if it is slow because
-the hardware is slow, or if the emulation is slow, since there's not
-really a way for userspace to tell from the syscall by how much it is
-slower.
-It can probably guess that emulation is worse, given how crap the
-speed I see on mpfs is.
-
-I'd rather we did say slow, rather than people start to interpret
-UNKNOWN as slow.
-
-> I'm not sure how bad this is in
-> practice. We could add a subsequent performance bar below which we
-> guess "emulated".
-
-Nah, I don't really think that that is required.
-
-> This probably matches what usermode will use that
-> value for anyway (a synonym for "very slow"), but it's basically the
-> same problem with reversed polarity (we mislabel some slow systems as
-> emulated). I'm open to suggestions!
-
-I think I just agreed with you, give or take. If it is fast, say fast.
-If it is slow, we say it is slow. If we know it is emulated, then we can
-report it being emulated. Is it too late to remove the "hardware" from
-the syscall documentation, IOW s/supported in hardware/supported/?
-
-Please actually describe the assumptions/subtleties in the commit
-message though, so that the rationale for stuff is in the history :)
-
-Cheers,
-Conor.
-
---H5dFwnc5H1LxQund
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZJ2PHAAKCRB4tDGHoIJi
-0u12AP9Y4hnYqRbH89CmxyncXU2SpQInIjF2gv52xpsfjjHjSgD+Kupcyjx9JdXL
-IXyCwSeqVgJgGgNYQaIGXrmI/E/Biwo=
-=2Coz
------END PGP SIGNATURE-----
-
---H5dFwnc5H1LxQund--
