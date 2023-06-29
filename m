@@ -2,90 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E18B374231F
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 11:21:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1ECB7742319
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 11:20:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232082AbjF2JVL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 05:21:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36780 "EHLO
+        id S231737AbjF2JUs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 05:20:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232081AbjF2JVH (ORCPT
+        with ESMTP id S229891AbjF2JUq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 05:21:07 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 400E0107;
-        Thu, 29 Jun 2023 02:21:06 -0700 (PDT)
-Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35T6rtB1017260;
-        Thu, 29 Jun 2023 09:20:46 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=MjdhA6zR0it5eEfUJ7/Fm6mpZWONkCOu6eACt6f/6sY=;
- b=P0Hsysd+jfP7/3EC7/PblShuoOapIjr3CLNKJWu/dyFm4jhLvT3B/AP+lP7oHHHbupao
- htPfXzE7k3DjTduzWcv8n/5uGfEvUHneETynIJE/Jk4xZlZApSwtAVoWHrgeD2VVQkQE
- SnFC+LkObLlhuVUdTIH5Eoyk7eiaU4IMdL6YSuoWajAM1IR2iwzXzJ81D1gTL0zRpHUF
- AweacokoZ70r0qPqlYGKc+Mw57dzmt5dgYJc8hlGAgMVCT9WKVXbNPn6yUybSuqx2TRx
- N5OLqRvt7TmPFN8xyvYkwPOjpHS5oAtCoVA3lH3OhWJu/a2VEgBbM1ig9YVoWxKTzhFG PA== 
-Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rgetpjwp0-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 29 Jun 2023 09:20:46 +0000
-Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
-        by NASANPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35T9KjHa004095
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 29 Jun 2023 09:20:45 GMT
-Received: from [10.216.42.4] (10.80.80.8) by nasanex01c.na.qualcomm.com
- (10.45.79.139) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Thu, 29 Jun
- 2023 02:20:37 -0700
-Message-ID: <cd4b7be5-4cfd-e330-458d-3e22019839b9@quicinc.com>
-Date:   Thu, 29 Jun 2023 14:50:34 +0530
+        Thu, 29 Jun 2023 05:20:46 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E230107;
+        Thu, 29 Jun 2023 02:20:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1688030442; x=1719566442;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=7gZ4/CukNppLRuBzD2qOl8DYO973DAjz6Z0U7eO0W4c=;
+  b=G4r/Fe1wRrH31bB+E5waaFFclxRj5wS6MImiX56qJz1AWDRnXi/Jam/p
+   0BHUsxrsghtwwXdX4oY34aMWFyrgohDS/cDOfL5QkrfgYwuAC0Vw3CO7Y
+   fn2N7/GZyNWTUl85H9HBX2AKKxwlXM0ppr56RoHY7QyX1wE4rghXu8GuS
+   EQMdLk1ewbbpFf4+uwKslIvkrxIXbSdOT4NyN8Qp2OlCi6QJZcL14JSmS
+   3xUy6R5Xbf1e48DJWeuJywVhikwLcpybyFBUBSOYsOcCNC8qQR1dGBRQD
+   sevLV39kaw83Qn8fnfsuTn+KJPrGvXeiz2m6G77jKwdY880mMSwf48/PQ
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10755"; a="425735227"
+X-IronPort-AV: E=Sophos;i="6.01,168,1684825200"; 
+   d="scan'208";a="425735227"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jun 2023 02:20:41 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10755"; a="963924757"
+X-IronPort-AV: E=Sophos;i="6.01,168,1684825200"; 
+   d="scan'208";a="963924757"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga006.fm.intel.com with ESMTP; 29 Jun 2023 02:20:39 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1qEnpN-000oND-29;
+        Thu, 29 Jun 2023 12:20:37 +0300
+Date:   Thu, 29 Jun 2023 12:20:37 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     ruihongluo <colorsu1922@gmail.com>
+Cc:     Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jiri Slaby <jirislaby@kernel.org>,
+        ruihongluo <luoruihong@xiaomi.com>
+Subject: Re: [PATCH v1 1/1] serial: 8250: Preserve original value of DLF
+ register
+Message-ID: <ZJ1M5QvyWzgWNlpE@smile.fi.intel.com>
+References: <20230628152135.56286-1-luoruihong@xiaomi.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v4 13/21] remoterproc: qcom: refactor to leverage exported
- minidump symbol
-Content-Language: en-US
-To:     Pavan Kondeti <quic_pkondeti@quicinc.com>
-CC:     <corbet@lwn.net>, <agross@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
-        <keescook@chromium.org>, <tony.luck@intel.com>,
-        <gpiccoli@igalia.com>, <mathieu.poirier@linaro.org>,
-        <catalin.marinas@arm.com>, <will@kernel.org>,
-        <linus.walleij@linaro.org>, <andy.shevchenko@gmail.com>,
-        <linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-hardening@vger.kernel.org>,
-        <linux-remoteproc@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-gpio@vger.kernel.org>
-References: <1687955688-20809-1-git-send-email-quic_mojha@quicinc.com>
- <1687955688-20809-14-git-send-email-quic_mojha@quicinc.com>
- <f1581356-97ba-4faa-8e1c-0d5c7ba994e3@quicinc.com>
-From:   Mukesh Ojha <quic_mojha@quicinc.com>
-In-Reply-To: <f1581356-97ba-4faa-8e1c-0d5c7ba994e3@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01c.na.qualcomm.com (10.45.79.139)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: YTcs0TExrbISpA_QGieGSozxYDyOmlZN
-X-Proofpoint-GUID: YTcs0TExrbISpA_QGieGSozxYDyOmlZN
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-06-29_01,2023-06-27_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 adultscore=0
- mlxlogscore=981 spamscore=0 priorityscore=1501 suspectscore=0
- clxscore=1015 bulkscore=0 mlxscore=0 phishscore=0 lowpriorityscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2305260000 definitions=main-2306290082
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230628152135.56286-1-luoruihong@xiaomi.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -93,133 +70,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Jun 28, 2023 at 11:21:37PM +0800, ruihongluo wrote:
+> This commit is aimed at preserving the original value of the
+
+"This commit is aimed at preserving the original..." -->
+"Preserve the original..."
+
+> DLF(Divisor Latch Fraction Register). When the DLF register is
+> modified without preservation, it can disrupt the baudrate settings
+> established by firmware or bootloader , leading to data corruption
+> and the generation of unreadable or distorted characters.
+
+You have From different to SoB. You need to fix this.
+It can be done by setting corresponding values in the ~/.gitconfig
+of your machine where you are making patches on.
+
+Quick fix is to run
+
+	git commit --amend --author="ruihongluo <luoruihong@xiaomi.com>"
+
+and resend as a v2.
+
+Code wise looks good to me, thank you for fixing this.
+Perhaps it needs a Fixes tag, as
+
+Fixes: 701c5e73b296 ("serial: 8250_dw: add fractional divisor support")
+
+added before your SoB line. (Again, use `git commit --amend` to address
+this.)
+
+> Signed-off-by: ruihongluo <luoruihong@xiaomi.com>
+> ---
+
+Also don't forget to add a changelog here for v2 to describe your changes.
+
+-- 
+With Best Regards,
+Andy Shevchenko
 
 
-On 6/28/2023 9:21 PM, Pavan Kondeti wrote:
-> On Wed, Jun 28, 2023 at 06:04:40PM +0530, Mukesh Ojha wrote:
->> -static int qcom_add_minidump_segments(struct rproc *rproc, struct minidump_subsystem *subsystem,
->> -			void (*rproc_dumpfn_t)(struct rproc *rproc, struct rproc_dump_segment *segment,
->> -				void *dest, size_t offset, size_t size))
->> +void qcom_minidump(struct rproc *rproc, unsigned int minidump_id,
->> +		void (*rproc_dumpfn_t)(struct rproc *rproc,
->> +		struct rproc_dump_segment *segment, void *dest, size_t offset,
->> +		size_t size))
->>   {
->> -	struct minidump_region __iomem *ptr;
->> -	struct minidump_region region;
->> -	int seg_cnt, i;
->>   	dma_addr_t da;
->>   	size_t size;
->> +	int seg_cnt;
->>   	char *name;
->> +	void *ptr;
->> +	int ret;
->> +	int i;
->>   
->>   	if (WARN_ON(!list_empty(&rproc->dump_segments))) {
->>   		dev_err(&rproc->dev, "dump segment list already populated\n");
->> -		return -EUCLEAN;
->> +		return;
->>   	}
->>   
->> -	seg_cnt = le32_to_cpu(subsystem->region_count);
->> -	ptr = ioremap((unsigned long)le64_to_cpu(subsystem->regions_baseptr),
->> -		      seg_cnt * sizeof(struct minidump_region));
->> +	ptr = qcom_ss_md_mapped_base(minidump_id, &seg_cnt);
->>   	if (!ptr)
->> -		return -EFAULT;
->> +		return;
->>   
->>   	for (i = 0; i < seg_cnt; i++) {
->> -		memcpy_fromio(&region, ptr + i, sizeof(region));
->> -		if (le32_to_cpu(region.valid) == MINIDUMP_REGION_VALID) {
->> -			name = kstrndup(region.name, MAX_REGION_NAME_LENGTH - 1, GFP_KERNEL);
->> -			if (!name) {
->> -				iounmap(ptr);
->> -				return -ENOMEM;
->> -			}
->> -			da = le64_to_cpu(region.address);
->> -			size = le64_to_cpu(region.size);
->> -			rproc_coredump_add_custom_segment(rproc, da, size, rproc_dumpfn_t, name);
->> +		ret = qcom_ss_valid_segment_info(ptr, i, &name, &da, &size);
->> +		if (ret < 0) {
->> +			iounmap(ptr);
->> +			dev_err(&rproc->dev,
->> +				"Failed with error: %d while adding minidump entries\n",
->> +				ret);
->> +			goto clean_minidump;
->>   		}
->> -	}
->> -
->> -	iounmap(ptr);
->> -	return 0;
->> -}
->> -
->> -void qcom_minidump(struct rproc *rproc, unsigned int minidump_id,
->> -		void (*rproc_dumpfn_t)(struct rproc *rproc,
->> -		struct rproc_dump_segment *segment, void *dest, size_t offset,
->> -		size_t size))
->> -{
->> -	int ret;
->> -	struct minidump_subsystem *subsystem;
->> -	struct minidump_global_toc *toc;
->> -
->> -	/* Get Global minidump ToC*/
->> -	toc = qcom_smem_get(QCOM_SMEM_HOST_ANY, SBL_MINIDUMP_SMEM_ID, NULL);
->> -
->> -	/* check if global table pointer exists and init is set */
->> -	if (IS_ERR(toc) || !toc->status) {
->> -		dev_err(&rproc->dev, "Minidump TOC not found in SMEM\n");
->> -		return;
->> -	}
->>   
->> -	/* Get subsystem table of contents using the minidump id */
->> -	subsystem = &toc->subsystems[minidump_id];
->> -
->> -	/**
->> -	 * Collect minidump if SS ToC is valid and segment table
->> -	 * is initialized in memory and encryption status is set.
->> -	 */
->> -	if (subsystem->regions_baseptr == 0 ||
->> -	    le32_to_cpu(subsystem->status) != 1 ||
->> -	    le32_to_cpu(subsystem->enabled) != MINIDUMP_SS_ENABLED ||
->> -	    le32_to_cpu(subsystem->encryption_status) != MINIDUMP_SS_ENCR_DONE) {
->> -		dev_err(&rproc->dev, "Minidump not ready, skipping\n");
->> -		return;
->> +		/* if it is a valid segment */
->> +		if (!ret)
->> +			rproc_coredump_add_custom_segment(rproc, da, size,
->> +							  rproc_dumpfn_t, name);
->>   	}
->>   
->> -	ret = qcom_add_minidump_segments(rproc, subsystem, rproc_dumpfn_t);
->> -	if (ret) {
->> -		dev_err(&rproc->dev, "Failed with error: %d while adding minidump entries\n", ret);
->> -		goto clean_minidump;
->> -	}
->> +	iounmap(ptr);
->>   	rproc_coredump_using_sections(rproc);
->> +
->>   clean_minidump:
->>   	qcom_minidump_cleanup(rproc);
->>   }
-> 
-> I like the idea of moving minidump pieces to drivers/soc/qcom/*minidump*.
-> 
-> Is it possible to accept one function callback from remoteproc and do
-> all of this in one function exported by minidump?
-> 
-> qcom_ss_valid_segment_info() seems a low level function to be exported..
-
-It was ending up with circular dependency due to
-rproc_coredump_add_custom_segment()
-
-
-rproc_coredump => qcom_common => qcom_minidump_smem => rproc_coredump
-
--Mukesh
-
-> 
-> Thanks,
-> Pavan
-> 
