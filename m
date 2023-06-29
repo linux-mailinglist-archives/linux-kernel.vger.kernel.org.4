@@ -2,138 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77511742C77
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 20:53:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D34B742C81
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 20:53:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233030AbjF2Suh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 14:50:37 -0400
-Received: from mail-bn1nam02on2084.outbound.protection.outlook.com ([40.107.212.84]:23470
-        "EHLO NAM02-BN1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S233019AbjF2Suf (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 14:50:35 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=jIvaEt4qi8aAHU3DpSN+zRqZmxV32TyXbMamvqHpinEn17RfnGyWf+gCftBgE+3UxQxEx4yjGD66ZVlcxqJ7oX/ckM4C2+S6Arfi0ck80PQyf27DHBImQe4j9UcI4jYY3Mqq2YkU57t93HV6QJf+MdaGoitO0CXy1btvR5XcMWMx6K9687r+cMbbF5inEWbacmq2ZNh8+6znPE3Of3khKIrsZpfTnaGzdFaU3IqQ0T+tABKYydo76XxwccJiuEEulTpGUunVqV7twdTkPVo5ql1lO3BoKirDaLrqL9MeoSg8lGbXCtMrtYP4ewG5RdLWVYkychQLaV6h1nhXilbCNw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=P7s76AW4ShqaxEP3wTZltPIF21nHMVHMPwoy9wdzBLs=;
- b=Fa8kASJA9n9J/xC94SyoECq57AVSteefRHtvE5U7IaTBqgZ1Qrx4GNiUWLIMcEvc0xGMHUDq1N4hg0sis/6xqVxD2v+2fSlRWZrOInU0N4hA5PLLYjWhlak0kGHoSTyIOR29sYr9pvJXjSNIKU2j6HdgVTSQooPNIQ0V3reWyqAkiu0Ay0R2k9IkQEiE9g5Dm87cLjV90w3BTbHgQ8VDEYVIuIoXmLzypFVJVflnYJUoPefwnDa0H0SJ0KGlRFZFEvrobZPbQiIbylr8TqWIFVDa4IC/+zj8uOli1Gvrez8XX2C7jsUSjemmFl+1MtqHPnaZ2yNYHRnErvhdhiUBpw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=P7s76AW4ShqaxEP3wTZltPIF21nHMVHMPwoy9wdzBLs=;
- b=txaeCNuy5sDoa8D2BLJ+CHiLRo+0/XKSYP8SMGWHenOqfGh9C6BoAY4tizlY3AW0fNoHyg2JLgeyDpO/eNOvsjBVeklUTPc1Hqt/+yM0F62FmhMcIJ1Dcsjey6mdHCOjPFyoMLPyTLDS0xgh4TiU+yNqBZFhfRhmmJxbH1rErFlQmRSgPyEQSf4KXa1yimyKGrwEWD3dGoe7kRDaggULbyB8cpqfonR9QTyyV+IDWam04UpydlOMqXZqdXA9NM4zu9wAsuTvIF7jZbv5JKv/eyYuI7WK/8hSnlvqyfNv6aBIhzPIJdkyM6hBw8DLz0bf+bD1d5Zi9vJ5Th2Zt0an0w==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from BYAPR12MB2743.namprd12.prod.outlook.com (2603:10b6:a03:61::28)
- by SJ1PR12MB6220.namprd12.prod.outlook.com (2603:10b6:a03:455::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.23; Thu, 29 Jun
- 2023 18:50:33 +0000
-Received: from BYAPR12MB2743.namprd12.prod.outlook.com
- ([fe80::ecb0:2f8e:c4bf:b471]) by BYAPR12MB2743.namprd12.prod.outlook.com
- ([fe80::ecb0:2f8e:c4bf:b471%7]) with mapi id 15.20.6521.024; Thu, 29 Jun 2023
- 18:50:33 +0000
-From:   Rahul Rameshbabu <rrameshbabu@nvidia.com>
-To:     Bastien Nocera <hadess@hadess.net>
-Cc:     linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jiri Kosina <jikos@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Subject: Re: [PATCH] HID: steelseries: Add support for Arctis 1 XBox
-References: <20230629172041.3771-1-hadess@hadess.net>
-Date:   Thu, 29 Jun 2023 11:50:22 -0700
-In-Reply-To: <20230629172041.3771-1-hadess@hadess.net> (Bastien Nocera's
-        message of "Thu, 29 Jun 2023 19:20:27 +0200")
-Message-ID: <87wmzm9k7l.fsf@nvidia.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
-Content-Type: text/plain
-X-ClientProxiedBy: SJ0PR13CA0038.namprd13.prod.outlook.com
- (2603:10b6:a03:2c2::13) To BYAPR12MB2743.namprd12.prod.outlook.com
- (2603:10b6:a03:61::28)
+        id S232795AbjF2Sxi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 14:53:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34260 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232757AbjF2Sxe (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 29 Jun 2023 14:53:34 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD70AA2
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 11:53:32 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id 4fb4d7f45d1cf-51de841a727so467464a12.3
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 11:53:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google; t=1688064811; x=1690656811;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=oiqBI6HJiAQKTdUamzsYg0eRal+ETXSDiBXUd1jkkc8=;
+        b=DBh/dJlAnYjrWVHe2S0hSw3z8FR2ILmnwnvz5iL9rHZaAh/43qoHsnskAOP07F9xqj
+         rJhtJC1pu5gSVKdMJCMlNKxn/ZFYMN7mnaOiL+4QJv/HmM48EAFnJDdKLV0ellkV98OV
+         Qn0jMNS02qDNVTR5Clzfw+ALGFNXxGiOylv7g=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688064811; x=1690656811;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=oiqBI6HJiAQKTdUamzsYg0eRal+ETXSDiBXUd1jkkc8=;
+        b=H0+SECO1bbFOoI+WsHYPj5SsUMeVOlwIgXj3wgSXPmFqFjkDWqSPndf8RiFzWLFWxS
+         pTISZ8/xb64axAi0YL5NRkYHiJHmMSqY/dS2AwRHAYS3UDhYPG46QYTVpO+UHGfSen0V
+         mEYFEsJVOMFGkwmBvNo+IWpBU0uEgO77ba+hVvYmTl5uPhu47RIT8i10Uu+TYWRMpNvr
+         +AXDLbCLL4XCiIWhIPTwnOKTEs6tijkHfW7Qa7TL+8fXfqiRcePISlqozNMiWIA1x10B
+         pbXdXfNVniYzq7ZvwHoA1nHHhJ2kqTzjzep+wgCOE4tH3bZZsvbjwVWYTUkxFMyA/gzK
+         NoSQ==
+X-Gm-Message-State: ABy/qLYWiTJiDz4c6b0sGR14DKfmQ1agJu4bB5EavojQtXkrahGIbj/p
+        I11Hey5fRza3HzYnV0zo1d75nXgW2shW2M7UbYS5z9nL
+X-Google-Smtp-Source: APBJJlFXbaD6olpqZ2d+G4lKpkBc2aWa28DvPnCyPHNcWPNd6rrYIYSPysz7xGLY/wNLAeSWc1QODQ==
+X-Received: by 2002:aa7:c544:0:b0:51d:ec12:32f8 with SMTP id s4-20020aa7c544000000b0051dec1232f8mr16547edr.40.1688064811050;
+        Thu, 29 Jun 2023 11:53:31 -0700 (PDT)
+Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com. [209.85.208.53])
+        by smtp.gmail.com with ESMTPSA id z24-20020aa7cf98000000b0051bfcd3c4desm5886029edx.19.2023.06.29.11.53.30
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 29 Jun 2023 11:53:30 -0700 (PDT)
+Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-51d9124e1baso1142640a12.2
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 11:53:30 -0700 (PDT)
+X-Received: by 2002:aa7:d450:0:b0:51d:8953:1c89 with SMTP id
+ q16-20020aa7d450000000b0051d89531c89mr100997edr.8.1688064809998; Thu, 29 Jun
+ 2023 11:53:29 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BYAPR12MB2743:EE_|SJ1PR12MB6220:EE_
-X-MS-Office365-Filtering-Correlation-Id: d103358e-ffab-4d6d-c94c-08db78d1b7fd
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: LJAJynyg6ZShRyjYPNW4wTz15lpljkJzvitfsOGRzhlptamOzsLj4DIi52GPm+xbG4kEhPmCfXUM/0NGIFmt9utlgwDsRd4PxKez+sYoBK3f3TV96Oq35ma0nhxx+Rduw7I9epMHS8p39lIF3oKBuN69fSyIqPpRxfQ2RVB/HnssuplvB3Fu3MTydsKogAB616/bziq2+z+1clEKJyXWAWW8KGEpUhDlU1IiEY6l1ChtmsK2bPSOBzA06eEzFvIfuP0/GDDosNsUZfEFIwZZu8CjAWSoiq6KhXofYut+IQ7Vrr/JeVsaJRUwH9iE0H8BxUS0xp2cGbJ0lLgvU8pgHmqDFbXxyi5yE2JvXGwkc/b3hbJpZ4On/w4CqkCkQqOTGYgiiaANtsoyfDpzYD/VKWEzbQHRfuEA/l42U9s4h3Vhipr9QGkZ0PEesjtGHhy9m1/cAKsycmaxW2qlw8wTe/q6GuPWoUN+fU3zhFS/N+S7Sdraz7PwMgOAcgIWGuQKWHpF3QwZp0E1sFQV28ZUt5WXiitUONhxgOWqC3DhalTJ15VNSbgsBuy+IS9+VXBv
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR12MB2743.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(396003)(376002)(39860400002)(366004)(136003)(47620400004)(451199021)(5660300002)(66946007)(66556008)(4326008)(66476007)(6916009)(478600001)(36756003)(316002)(8936002)(8676002)(2906002)(6512007)(6666004)(54906003)(41300700001)(6486002)(186003)(6506007)(26005)(52230400001)(86362001)(38100700002)(2616005);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?7RIT7tiwsZIsEyHL6nOsEA+YFp721Ge17opDVoeVtmorQrLvQ6SRz97VYEQy?=
- =?us-ascii?Q?QqV9WXXkPDrO9nvVnm/A4EACXWbxN4L1KqSq4tzhectm1HT1q4Qs0yScx0bL?=
- =?us-ascii?Q?JNyz9cs+xeXs28n8yyEnGQTC1tdxJJ7xn8qoNQW7Fv8tBupzTAb57kYXO8xI?=
- =?us-ascii?Q?WB5N/X42K45nw04mcIKzc4gPkpT+oiLYEdYPrS7GV020cQ7SVs35n3Lnx61b?=
- =?us-ascii?Q?2e3EH+BF9q146/neT1yhrUEy/kAo96+ZEkFW8B/kNEofcB4duTijI46RVZ4w?=
- =?us-ascii?Q?iT2OVE753BJ0g5GhNj8RxN2AlkfuFwxvVRGUin7NhJ2L+H9NfqqCmDvbkogx?=
- =?us-ascii?Q?xtKyOYizq72D+4HC08/UAYx1r07wGv0Fk6Pvdwt1zhNis6P0tYioZYphhZoO?=
- =?us-ascii?Q?a8gdl+rm23P8dpe+3lbO9uGm0N+Ji6jyzTu+9mxgOpGMfYOeY+2mxg0zAOJW?=
- =?us-ascii?Q?z2RhPPXwYW+ZdacccYgR4tzaHtUILZc4mweRWkJYchA9uUd79LHu+Ll1EKki?=
- =?us-ascii?Q?p/7o8DgPRauzAvGtBsaD8d2y7P464TGdCnRBwozR2ge5HuFCIQ+SplwdMg5l?=
- =?us-ascii?Q?Fm8xCNcZYYprPockotRubo4LYiRMVc7Z9KKoVEnJOo6pu+Z2bDOe7eFomLsS?=
- =?us-ascii?Q?qdI8vD930HwVFeqyipIdgzzwQkBWECGKTFxMLDeYDOTs43dPgUsIlCns+kwX?=
- =?us-ascii?Q?NTQfAd2aF+7QtfbS7+GzDhn5izLjaOJb+Z1S3VShBxEblEW/Pj/DEOjkGMIX?=
- =?us-ascii?Q?YS2JCtyu/6fAKHKOZGuJdJ+NqXhyKkY2wJZpGQUWQuyzCMvA0IdMaYw4Ou87?=
- =?us-ascii?Q?E2a8UqEJNn6FDtx5MduZu1EvbpSdBMLLrs2umzV9KNz9jWj05q5lIV4jetzP?=
- =?us-ascii?Q?XX8WZmtNl89kVYIbi2KS+U4M8iZ8KApu/Kc7bLi4uXK8CdSugKaKz4SiFcnz?=
- =?us-ascii?Q?VImPO7D6X2Qbx+X8hAm20A6WYn4FK7+iVbMv/pmcAH/2YZ9JlnhQ90WT5QRH?=
- =?us-ascii?Q?bHsDaP2HRhcE33zfmRQTfJyFVQrxvpgUW+DPgtCR7Rhc2Ei8jg+fImOUmEO+?=
- =?us-ascii?Q?XCTLckdng3hhm5Gb0hy+JII0oOkFAu57mzYOMD4g3Sz9JxUP2MeHttp1/W1h?=
- =?us-ascii?Q?d4+Q3EqQwxOVjVTBtOIVMDu655wdBVC912l4YiylenjmQPgLPUkWWNTSsSd9?=
- =?us-ascii?Q?iuXEzEb5jsPra1mk1oSrv4bakhoThu8bM6f2zRrldC14Qfs/FRMEf1IWFNUf?=
- =?us-ascii?Q?boLppLhWzpZBFn3h/c0EhfST+W2CH+kXFcMWnsm0gGteAG7ttKTq5FkIxdxg?=
- =?us-ascii?Q?tJClX3HjSPKOL6qwQ5sETpWHktkwO7+z9LGAj/Qx8iLEhotW3sGxDGbtTdxd?=
- =?us-ascii?Q?aG3RN5VG7VDDNlwXgmdjUAPneEDl3t2wfr8rjJGIw02fTgRHTAW7OuDQOfXR?=
- =?us-ascii?Q?Q5P1Dea6w53AJvGpvxD49ZFvwtKHhApIpENyavyej7RgjB3SZVo3JWFETRum?=
- =?us-ascii?Q?EvhuD+u+dgvQdSmeO8ciR74cBUNepjrLuL3DXaTqKVLuo7dWswoRvw5AMvGc?=
- =?us-ascii?Q?CNWOz9R6a555qVbnf4GXElGg7efFT9EY6cXg68+nYbPZxsOI1JqFYECGAGQc?=
- =?us-ascii?Q?1Q=3D=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d103358e-ffab-4d6d-c94c-08db78d1b7fd
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR12MB2743.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Jun 2023 18:50:33.4862
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: ooeOErVs622xxXCbRw0Z8RxqNZ5OIAzXUmfLAvX0QXP7GbYECodpc8plvYa9I7AymY+bnDLsiLe1amJgrc4h3g==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ1PR12MB6220
+References: <20230629155433.4170837-1-dhowells@redhat.com> <CAHk-=wiDwfyj0CCupT-oEToqsNLcbsTQdcgDupF=ZETUjJQJtQ@mail.gmail.com>
+ <4bd92932-c9d2-4cc8-b730-24c749087e39@mattwhitlock.name> <CAHk-=whYWEUU69nY6k4j1_EQnQDNPy4TqAMvpf1UA111UDdmYg@mail.gmail.com>
+ <ZJ3OoCcSxZzzgUur@casper.infradead.org>
+In-Reply-To: <ZJ3OoCcSxZzzgUur@casper.infradead.org>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Thu, 29 Jun 2023 11:53:13 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wjixHw6n_R5TQWW1r0a+GgFAPGw21KMj6obkzr3qXXbYA@mail.gmail.com>
+Message-ID: <CAHk-=wjixHw6n_R5TQWW1r0a+GgFAPGw21KMj6obkzr3qXXbYA@mail.gmail.com>
+Subject: Re: [RFC PATCH 0/4] splice: Fix corruption in data spliced to pipe
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     Matt Whitlock <kernel@mattwhitlock.name>,
+        David Howells <dhowells@redhat.com>, netdev@vger.kernel.org,
+        Dave Chinner <david@fromorbit.com>,
+        Jens Axboe <axboe@kernel.dk>, linux-fsdevel@kvack.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+        lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 29 Jun, 2023 19:20:27 +0200 Bastien Nocera <hadess@hadess.net> wrote:
-> +static const struct hid_device_id steelseries_devices[] = {
-> +	{ HID_USB_DEVICE(USB_VENDOR_ID_STEELSERIES, USB_DEVICE_ID_STEELSERIES_SRWS1),
-> +	  .driver_data = STEELSERIES_SRWS1 },
-> +
-> +	{ /* SteelSeries Arctis 1 Wireless for XBox */
-> +	  HID_USB_DEVICE(USB_VENDOR_ID_STEELSERIES, 0x12b6),
+On Thu, 29 Jun 2023 at 11:34, Matthew Wilcox <willy@infradead.org> wrote:
+>
+> I think David muddied the waters by talking about vmsplice().  The
+> problem encountered is with splice() from the page cache.  Reading
+> the documentation,
+>
+>        splice()  moves  data  between two file descriptors without copyin=
+g be=E2=80=90
+>        tween kernel address space and user address space.  It transfers u=
+p  to
+>        len bytes of data from the file descriptor fd_in to the file descr=
+iptor
+>        fd_out, where one of the file descriptors must refer to a pipe.
 
-Shouldn't the USB device id be added to drivers/hid/hid-ids.h?
+Well, the original intent really always was that it's about zero-copy.
 
-> +	.driver_data = STEELSERIES_ARCTIS_1 },
-> +
->  	{ }
->  };
-> -MODULE_DEVICE_TABLE(hid, steelseries_srws1_devices);
-> -
-> -static struct hid_driver steelseries_srws1_driver = {
-> -	.name = "steelseries_srws1",
-> -	.id_table = steelseries_srws1_devices,
-> -#if IS_BUILTIN(CONFIG_LEDS_CLASS) || \
-> -    (IS_MODULE(CONFIG_LEDS_CLASS) && IS_MODULE(CONFIG_HID_STEELSERIES))
-> -	.probe = steelseries_srws1_probe,
-> -	.remove = steelseries_srws1_remove,
-> -#endif
-> -	.report_fixup = steelseries_srws1_report_fixup
-> +MODULE_DEVICE_TABLE(hid, steelseries_devices);
+So I do think that the answer to your test-program is that yes, it
+really traditionally *should* output "new".
 
-Thanks,
+A splice from a file acts like a scatter-gather mmap() in the kernel.
+It's the original intent, and it's the whole reason it's noticeably
+faster than doing a write.
 
-Rahul Rameshbabu
+Now, do I then agree that splice() has turned out to be a nasty morass
+of problems?  Yes.
+
+And I even agree that while I actually *think* that your test program
+should output "new" (because that is the whole point of the exercise),
+it also means that people who use splice() need to *understand* that,
+and it's much too easy to get things wrong if you don't understand
+that the whole point of splice is to act as a kind of ad-hoc in-kernel
+mmap thing.
+
+And to make matters worse, for mmap() we actually do have some
+coherency helpers. For splice(), the page ref stays around.
+
+It's kind of like GUP and page pinning - another area where we have
+had lots of problems and lots of nasty semantics and complications
+with other VM operations over the years.
+
+So I really *really* don't want to complicate splice() even more to
+give it some new semantics that it has never ever really had, because
+people didn't understand it and used it wrong.
+
+Quite the reverse. I'd be willing to *simplify* splice() by just
+saying "it was all a mistake", and just turning it into wrappers
+around read/write. But those patches would have to be radical
+simplifications, not adding yet more crud on top of the pain that is
+splice().
+
+Because it will hurt performance. And I'm ok with that as long as it
+comes with huge simplifications. What I'm *not* ok with is "I mis-used
+splice, now I want splice to act differently, so let's make it even
+more complicated".
+
+               Linus
