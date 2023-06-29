@@ -2,117 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1DC87424E6
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 13:20:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85B887424EC
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 13:23:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232210AbjF2LUI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 07:20:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39672 "EHLO
+        id S232252AbjF2LXJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 07:23:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232161AbjF2LUF (ORCPT
+        with ESMTP id S231842AbjF2LXF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 07:20:05 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D90C2952
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 04:20:04 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2B0EF61522
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 11:20:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 767FDC433C9;
-        Thu, 29 Jun 2023 11:20:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688037603;
-        bh=lf5l31b+1kZiavyQaxGKgW6+S8GvQnNY9EfwHS/FG08=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=BmXsAdw9u/wZNr47deLpIkJwDF05eKVVVW4VdJjBvSas8kLgo7lQ0MjGOtNY551nu
-         /lDN+b33Us14ekLWfAysN4RLbPZu5ujVD+uY+IbQonX+xD388seepMs+Li6yyOuIIV
-         A1Y7rmEsm0JEHfEz2ok/JMiC7yAR7H3ntC97aUe3ZL1IWgNcc4Z6hJ8fbfJb8qlWVs
-         G3lcapwNdAH2G0nqNmwGSdfdNXWFCRTLl7cRhy+NrpHkvPOx7ennP3IstMf5wlenZq
-         wpphq4DGocW0mR4aR8Vru+nhW/sgfbGM3l3sWWdnso/EhNfQ+VzxIi5Pu1w6GAwCYd
-         B3iBJXoEjASgw==
-Date:   Thu, 29 Jun 2023 13:19:59 +0200
-From:   Christian Brauner <brauner@kernel.org>
-To:     =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
-Cc:     syzbot <syzbot+522a57d8d5a0f7ac5c6c@syzkaller.appspotmail.com>,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Subject: Re: [syzbot] [kernel?] upstream test error: UBSAN:
- array-index-out-of-bounds in alloc_pid
-Message-ID: <20230629-ozonkonzentration-elche-0484e2c863dc@brauner>
-References: <000000000000dde2fb05ff2d39c6@google.com>
- <87352a7dwe.fsf@all.your.base.are.belong.to.us>
+        Thu, 29 Jun 2023 07:23:05 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9B762117
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 04:22:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1688037733;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=EdhcgbMrVqcwBO72p4YdB+Tlm3/fEdhj6DWO3Cu42oI=;
+        b=YaM8pdjjJGI3A9vmYO9b067Q4wt/KlRQKt2Kgxr2VhJjAHT26u8+dcM1hF+WwjYJRWy6gQ
+        XBTUwXiG1CGkbdkC8+fn2Z7JQ86ZApkMIatTgDkDCr0ZMdKlWCN4E7Nz6nkqtqwW8yUT6G
+        OIr1+K1hCGqxy+Kk8u8e5nw6pijWKCs=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-407-6FdJNWKlOGeQv1Otou5tVQ-1; Thu, 29 Jun 2023 07:22:11 -0400
+X-MC-Unique: 6FdJNWKlOGeQv1Otou5tVQ-1
+Received: by mail-wm1-f72.google.com with SMTP id 5b1f17b1804b1-3fa8f8fb7b3so8717925e9.2
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 04:22:11 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688037730; x=1690629730;
+        h=content-transfer-encoding:in-reply-to:organization:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=EdhcgbMrVqcwBO72p4YdB+Tlm3/fEdhj6DWO3Cu42oI=;
+        b=dSHUf2ydOBz4bTTHdLBjZ3oGhacRTHvDSYhCP2r3duZgH5Br92GYG45MWtELjDkDmi
+         f3b+bru6VULmSi7NxUOdO2/6AoMEIwH+i5vBDm3bBRj/YTltvMf734URun4sTJTcWuWD
+         j3A0ulBw699HeGf3W89bHF8N50xZ+6Jz7k9ysURMbYsmdFZL5XNQOGaMHPKwBVb9mdu7
+         0Fl95KXbIviSGEGgY4JrgPUI0IZ8+IhkiILaui20AzN/0UtHyTAnkvi8vGXhCZ2WtAxa
+         JRSKurc+jOrgDWTSOhDY7m3JM8NjDm8CkjxnH019QVDUVjxce+SUQcVqGZ345wWDRoI4
+         zCuw==
+X-Gm-Message-State: AC+VfDxbqLVVUBzNmYF3xCY8eNbbAn2rT6poqym+En+ZdTzovzwvoEnN
+        a3D+ZkRfKmJachIFYc7VT0L4dG62kAdY8+otWkIfOHmzrhUhxDTui4Um3bl5K6lH9aVfYbBJ1uD
+        F4MZFmA7CcT0wSAxmfamk7xmS
+X-Received: by 2002:a05:600c:2041:b0:3fb:9ef1:34ef with SMTP id p1-20020a05600c204100b003fb9ef134efmr9178933wmg.37.1688037730302;
+        Thu, 29 Jun 2023 04:22:10 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ7wqwgjIqNoVKiMHXKOfrLuvRz9SMghs4Sk6YyXQuWFdCux2FfsbPa2XdfcbUoqSB1b1YT5rg==
+X-Received: by 2002:a05:600c:2041:b0:3fb:9ef1:34ef with SMTP id p1-20020a05600c204100b003fb9ef134efmr9178909wmg.37.1688037729942;
+        Thu, 29 Jun 2023 04:22:09 -0700 (PDT)
+Received: from ?IPV6:2a09:80c0:192:0:5dac:bf3d:c41:c3e7? ([2a09:80c0:192:0:5dac:bf3d:c41:c3e7])
+        by smtp.gmail.com with ESMTPSA id y19-20020a05600c365300b003fa8dbb7b5dsm12475267wmq.25.2023.06.29.04.22.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 29 Jun 2023 04:22:09 -0700 (PDT)
+Message-ID: <cb4d6abb-4ced-adbf-2ca1-2038795ffc27@redhat.com>
+Date:   Thu, 29 Jun 2023 13:22:08 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <87352a7dwe.fsf@all.your.base.are.belong.to.us>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH v12 04/22] x86/cpu: Detect TDX partial write machine check
+ erratum
+To:     Kai Huang <kai.huang@intel.com>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org
+Cc:     linux-mm@kvack.org, x86@kernel.org, dave.hansen@intel.com,
+        kirill.shutemov@linux.intel.com, tony.luck@intel.com,
+        peterz@infradead.org, tglx@linutronix.de, bp@alien8.de,
+        mingo@redhat.com, hpa@zytor.com, seanjc@google.com,
+        pbonzini@redhat.com, dan.j.williams@intel.com,
+        rafael.j.wysocki@intel.com, ashok.raj@intel.com,
+        reinette.chatre@intel.com, len.brown@intel.com, ak@linux.intel.com,
+        isaku.yamahata@intel.com, ying.huang@intel.com, chao.gao@intel.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com, nik.borisov@suse.com,
+        bagasdotme@gmail.com, sagis@google.com, imammedo@redhat.com
+References: <cover.1687784645.git.kai.huang@intel.com>
+ <0f701502157029989617bcb3f5940ff48e19a2b2.1687784645.git.kai.huang@intel.com>
+Content-Language: en-US
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <0f701502157029989617bcb3f5940ff48e19a2b2.1687784645.git.kai.huang@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 29, 2023 at 12:37:21PM +0200, Björn Töpel wrote:
-> syzbot <syzbot+522a57d8d5a0f7ac5c6c@syzkaller.appspotmail.com> writes:
+On 26.06.23 16:12, Kai Huang wrote:
+> TDX memory has integrity and confidentiality protections.  Violations of
+> this integrity protection are supposed to only affect TDX operations and
+> are never supposed to affect the host kernel itself.  In other words,
+> the host kernel should never, itself, see machine checks induced by the
+> TDX integrity hardware.
 > 
-> > Hello,
-> >
-> > syzbot found the following issue on:
-> >
-> > HEAD commit:    6aeadf7896bf Merge tag 'docs-arm64-move' of git://git.lwn...
-> > git tree:       upstream
-> > console output: https://syzkaller.appspot.com/x/log.txt?x=12cea2c7280000
-> > kernel config:  https://syzkaller.appspot.com/x/.config?x=652d39e0420afbb8
-> > dashboard link: https://syzkaller.appspot.com/bug?extid=522a57d8d5a0f7ac5c6c
-> > compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
-> >
-> > Downloadable assets:
-> > disk image: https://storage.googleapis.com/syzbot-assets/3887d048a41c/disk-6aeadf78.raw.xz
-> > vmlinux: https://storage.googleapis.com/syzbot-assets/b25a7d5f9034/vmlinux-6aeadf78.xz
-> > kernel image: https://storage.googleapis.com/syzbot-assets/96457fbed62d/bzImage-6aeadf78.xz
-> >
-> > IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> > Reported-by: syzbot+522a57d8d5a0f7ac5c6c@syzkaller.appspotmail.com
-> >
-> > ================================================================================
-> > UBSAN: array-index-out-of-bounds in kernel/pid.c:244:3
-> > index 1 is out of range for type 'struct upid[1]'
-> > CPU: 1 PID: 4996 Comm: syz-executor.0 Not tainted 6.4.0-syzkaller-01761-g6aeadf7896bf #0
-> > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/27/2023
-> > Call Trace:
-> >  <TASK>
-> >  __dump_stack lib/dump_stack.c:88 [inline]
-> >  dump_stack_lvl+0x1e7/0x2d0 lib/dump_stack.c:106
-> >  ubsan_epilogue lib/ubsan.c:217 [inline]
-> >  __ubsan_handle_out_of_bounds+0x11c/0x150 lib/ubsan.c:348
-> >  alloc_pid+0x405/0xc40 kernel/pid.c:244
-> >  copy_process+0x1f2f/0x4350 kernel/fork.c:2523
-> >  kernel_clone+0x222/0x800 kernel/fork.c:2915
-> >  __do_sys_clone kernel/fork.c:3058 [inline]
-> >  __se_sys_clone kernel/fork.c:3042 [inline]
-> >  __x64_sys_clone+0x258/0x2a0 kernel/fork.c:3042
-> >  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-> >  do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
-> >  entry_SYSCALL_64_after_hwframe+0x63/0xcd
-> > RIP: 0033:0x7f30e5e89fab
-> > Code: ed 0f 85 60 01 00 00 64 4c 8b 0c 25 10 00 00 00 45 31 c0 4d 8d 91 d0 02 00 00 31 d2 31 f6 bf 11 00 20 01 b8 38 00 00 00 0f 05 <48> 3d 00 f0 ff ff 0f 87 89 00 00 00 41 89 c5 85 c0 0f 85 90 00 00
-> > RSP: 002b:00007ffe72312890 EFLAGS: 00000246 ORIG_RAX: 0000000000000038
-> > RAX: ffffffffffffffda RBX: 00007ffe72312ee8 RCX: 00007f30e5e89fab
-> > RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000001200011
-> > RBP: 0000000000000000 R08: 0000000000000000 R09: 000055555643c400
-> > R10: 000055555643c6d0 R11: 0000000000000246 R12: 0000000000000000
-> > R13: 00007ffe72312980 R14: 00007f30e5fac9d8 R15: 000000000000000c
-> >  </TASK>
-> > ================================================================================
+> Alas, the first few generations of TDX hardware have an erratum.  A
+> partial write to a TDX private memory cacheline will silently "poison"
+> the line.  Subsequent reads will consume the poison and generate a
+> machine check.  According to the TDX hardware spec, neither of these
+> things should have happened.
 > 
-> FWIW, I hit this with the clone3 kselftest (on riscv).
+> Virtually all kernel memory accesses operations happen in full
+> cachelines.  In practice, writing a "byte" of memory usually reads a 64
+> byte cacheline of memory, modifies it, then writes the whole line back.
+> Those operations do not trigger this problem.
+> 
+> This problem is triggered by "partial" writes where a write transaction
+> of less than cacheline lands at the memory controller.  The CPU does
+> these via non-temporal write instructions (like MOVNTI), or through
+> UC/WC memory mappings.  The issue can also be triggered away from the
+> CPU by devices doing partial writes via DMA.
+> 
+> With this erratum, there are additional things need to be done.  Similar
+> to other CPU bugs, use a CPU bug bit to indicate this erratum, and
+> detect this erratum during early boot.  Note this bug reflects the
+> hardware thus it is detected regardless of whether the kernel is built
+> with TDX support or not.
+> 
+> Signed-off-by: Kai Huang <kai.huang@intel.com>
+> Reviewed-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+> ---
 
-This is caused by not using a proper flexible array member for struct
-upid in struct pid. I sent a pull request with Kees' fix for this
-yesterday.
+Reviewed-by: David Hildenbrand <david@redhat.com>
+
+-- 
+Cheers,
+
+David / dhildenb
+
