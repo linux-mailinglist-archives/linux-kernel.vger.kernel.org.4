@@ -2,215 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5E747426CE
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 14:57:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 643A47426DE
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 15:01:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230476AbjF2M5R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 08:57:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36178 "EHLO
+        id S231839AbjF2NB0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 09:01:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbjF2M5P (ORCPT
+        with ESMTP id S229459AbjF2NBV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 08:57:15 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23F7FE58;
-        Thu, 29 Jun 2023 05:57:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1688043434; x=1719579434;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=/QmFOMe/PCvIGdXwXzdOv9tn5csW9W1bsdoNeEspJYI=;
-  b=ATFX5TKPmNVun4Nttjd9AscGUkC1vEob/YQjt7PIltZOII7iBS03QbHn
-   hDHZCiX2aluZi9XkneXb7INPf4EMAo+uMr1RiiesgrbyDx1QdY8w9Mg3k
-   YeB+pafkRBV03xM0kHvHvf96P2qMt69wJAaRYliZHRdrnz6yZOa7dusM+
-   5IxI4fE0P6g4CgC4OB6t8v+8YXOwdvZ17n4WSQ6Er88cgvlrJZHQXkj0+
-   QyBuZWdnLKn2a68YCeR9xFy+/9e6PhYzgQ02K/nx7xpma3n2s3rgTmPaR
-   XY39Xd6y3scWZ1VwFcCR1I1KBzKyB1bbyGyETW5SII/VXX97UHeEXg0l0
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10756"; a="342437532"
-X-IronPort-AV: E=Sophos;i="6.01,168,1684825200"; 
-   d="scan'208";a="342437532"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jun 2023 05:57:13 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10756"; a="891396985"
-X-IronPort-AV: E=Sophos;i="6.01,168,1684825200"; 
-   d="scan'208";a="891396985"
-Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.49.81])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jun 2023 05:57:11 -0700
-Message-ID: <57dd6bdc-c8dc-219c-f9dd-d2f210a5ce2c@intel.com>
-Date:   Thu, 29 Jun 2023 15:57:06 +0300
+        Thu, 29 Jun 2023 09:01:21 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18D3C2D50;
+        Thu, 29 Jun 2023 06:01:16 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id BA3AD2185F;
+        Thu, 29 Jun 2023 13:01:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1688043674; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=4m+LxHrP4v5vDuAdscRPXrBhg7ZxGweHb/obubiZPnU=;
+        b=si2B6/wUmvLGD2VMznJt8GhKzcvK6hB4Sm3g0IU7DBWdt854TRtT+6KzgjHASsdcHT2qXk
+        HCPraip0LJ7GF8hGnLz+Li5PFau6wyGSGdtuH5p1TsbrSWE9WHMo/TJgIPtsD+nBI4LdkS
+        t3de5D5uJ1xmBO3TJMDA/rEcFDiX/Qo=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1688043674;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=4m+LxHrP4v5vDuAdscRPXrBhg7ZxGweHb/obubiZPnU=;
+        b=lrze9wdpBnC4u8EeddONENmfXDlROyI+lNkipjgMxJMypMKJCgGHMuhra1DagsLCA5P7ab
+        +ASGEZPEce8WvCBA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 160DE139FF;
+        Thu, 29 Jun 2023 13:01:14 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id AMtCBJqAnWSeagAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Thu, 29 Jun 2023 13:01:14 +0000
+Message-ID: <d3de124c-6aa8-e930-e238-7bd6dd7929a6@suse.de>
+Date:   Thu, 29 Jun 2023 15:01:13 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.12.0
-Subject: Re: [PATCH] mmc: sdhci-f-sdh30: Replace with sdhci_pltfm
+ Thunderbird/102.12.0
+Subject: Re: [PATCH 07/12] arch/x86: Declare edid_info in <asm/screen_info.h>
+To:     Arnd Bergmann <arnd@arndb.de>, Helge Deller <deller@gmx.de>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Dave Airlie <airlied@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, linux-alpha@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-efi@vger.kernel.org,
+        "linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
+        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-hyperv@vger.kernel.org,
+        linux-fbdev@vger.kernel.org, linux-staging@lists.linux.dev,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Kees Cook <keescook@chromium.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Juerg Haefliger <juerg.haefliger@canonical.com>
+References: <20230629121952.10559-1-tzimmermann@suse.de>
+ <20230629121952.10559-8-tzimmermann@suse.de>
+ <80e3a583-805e-4e8f-a67b-ebe2e4b9a7e5@app.fastmail.com>
 Content-Language: en-US
-To:     Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230629004959.22825-1-hayashi.kunihiko@socionext.com>
-From:   Adrian Hunter <adrian.hunter@intel.com>
-Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
- Business Identity Code: 0357606 - 4, Domiciled in Helsinki
-In-Reply-To: <20230629004959.22825-1-hayashi.kunihiko@socionext.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+In-Reply-To: <80e3a583-805e-4e8f-a67b-ebe2e4b9a7e5@app.fastmail.com>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------SZ3Fp31sJnYOAqWyCv8ANxZ2"
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 29/06/23 03:49, Kunihiko Hayashi wrote:
-> Even if sdhci_pltfm_pmops is specified for PM, this driver doesn't apply
-> sdhci_pltfm, so the structure is not correctly referenced in PM functions.
-> This applies sdhci_pltfm to this driver to fix this issue.
-> 
-> - Call sdhci_pltfm_init() instead of sdhci_alloc_host() and
->   other functions that covered by sdhci_pltfm.
-> - Move ops and quirks to sdhci_pltfm_data
-> - Replace sdhci_priv() with own private function sdhci_f_sdh30_priv().
-> 
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------SZ3Fp31sJnYOAqWyCv8ANxZ2
+Content-Type: multipart/mixed; boundary="------------Fba4i0vDnEvGaqqh9SwG9WxN";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: Arnd Bergmann <arnd@arndb.de>, Helge Deller <deller@gmx.de>,
+ Daniel Vetter <daniel@ffwll.ch>, Dave Airlie <airlied@gmail.com>
+Cc: linux-kernel@vger.kernel.org, linux-alpha@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-efi@vger.kernel.org,
+ "linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
+ linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
+ loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
+ linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+ linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+ dri-devel@lists.freedesktop.org, linux-hyperv@vger.kernel.org,
+ linux-fbdev@vger.kernel.org, linux-staging@lists.linux.dev,
+ Linux-Arch <linux-arch@vger.kernel.org>, Thomas Gleixner
+ <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+ Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
+ x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+ Kees Cook <keescook@chromium.org>, "Paul E. McKenney" <paulmck@kernel.org>,
+ Peter Zijlstra <peterz@infradead.org>,
+ Andrew Morton <akpm@linux-foundation.org>,
+ Frederic Weisbecker <frederic@kernel.org>,
+ Nicholas Piggin <npiggin@gmail.com>, Ard Biesheuvel <ardb@kernel.org>,
+ Sami Tolvanen <samitolvanen@google.com>,
+ Juerg Haefliger <juerg.haefliger@canonical.com>
+Message-ID: <d3de124c-6aa8-e930-e238-7bd6dd7929a6@suse.de>
+Subject: Re: [PATCH 07/12] arch/x86: Declare edid_info in <asm/screen_info.h>
+References: <20230629121952.10559-1-tzimmermann@suse.de>
+ <20230629121952.10559-8-tzimmermann@suse.de>
+ <80e3a583-805e-4e8f-a67b-ebe2e4b9a7e5@app.fastmail.com>
+In-Reply-To: <80e3a583-805e-4e8f-a67b-ebe2e4b9a7e5@app.fastmail.com>
 
-Does it need a Fixes tag?
+--------------Fba4i0vDnEvGaqqh9SwG9WxN
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-> Signed-off-by: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
+SGkNCg0KQW0gMjkuMDYuMjMgdW0gMTQ6MzUgc2NocmllYiBBcm5kIEJlcmdtYW5uOg0KPiBP
+biBUaHUsIEp1biAyOSwgMjAyMywgYXQgMTM6NDUsIFRob21hcyBaaW1tZXJtYW5uIHdyb3Rl
+Og0KPj4gVGhlIGdsb2JhbCB2YXJpYWJsZSBlZGlkX2luZm8gY29udGFpbnMgdGhlIGZpcm13
+YXJlJ3MgRURJRCBpbmZvcm1hdGlvbg0KPj4gYXMgYW4gZXh0ZW5zaW9uIHRvIHRoZSByZWd1
+bGFyIHNjcmVlbl9pbmZvIG9uIHg4Ni4gVGhlcmVmb3JlIG1vdmUgaXQgdG8NCj4+IDxhc20v
+c2NyZWVuX2luZm8uaD4uDQo+Pg0KPj4gQWRkIHRoZSBLY29uZmlnIHRva2VuIEFSQ0hfSEFT
+X0VESURfSU5GTyB0byBndWFyZCBhZ2FpbnN0IGFjY2VzcyBvbg0KPj4gYXJjaGl0ZWN0dXJl
+cyB0aGF0IGRvbid0IHByb3ZpZGUgZWRpZF9pbmZvLiBTZWxlY3QgaXQgb24geDg2Lg0KPiAN
+Cj4gSSdtIG5vdCBzdXJlIHdlIG5lZWQgYW5vdGhlciBzeW1ib2wgaW4gYWRkaXRpb24gdG8N
+Cj4gQ09ORklHX0ZJUk1XQVJFX0VESUQuIFNpbmNlIGFsbCB0aGUgY29kZSBiZWhpbmQgdGhh
+dA0KPiBleGlzdGluZyBzeW1ib2wgaXMgYWxzbyB4ODYgc3BlY2lmaWMsIHdvdWxkIGl0IGJl
+IGVub3VnaA0KPiB0byBqdXN0IGFkZCBlaXRoZXIgJ2RlcGVuZHMgb24gWDg2JyBvciAnZGVw
+ZW5kcyBvbiBYODYgfHwNCj4gQ09NUElMRV9URVNUJyB0aGVyZT8NCg0KRklSTVdBUkVfRURJ
+RCBpcyBhIHVzZXItc2VsZWN0YWJsZSBmZWF0dXJlLCB3aGlsZSBBUkNIX0hBU19FRElEX0lO
+Rk8gDQphbm5vdW5jZXMgYW4gYXJjaGl0ZWN0dXJlIGZlYXR1cmUuIFRoZXkgZG8gZGlmZmVy
+ZW50IHRoaW5ncy4NCg0KUmlnaHQgbm93LCBBUkNIX0hBU19FRElEX0lORk8gb25seSB3b3Jr
+cyBvbiB0aGUgb2xkIEJJT1MtYmFzZWQgVkVTQSANCnN5c3RlbXMuIEluIHRoZSBmdXR1cmUs
+IEkgd2FudCB0byBhZGQgc3VwcG9ydCBmb3IgRURJRCBkYXRhIGZyb20gRUZJIGFuZCANCk9G
+IGFzIHdlbGwuIEl0IHdvdWxkIGJlIHN0b3JlZCBpbiBlZGlkX2luZm8uIEkgYXNzdW1lIHRo
+YXQgdGhlIG5ldyANCnN5bWJvbCB3aWxsIGJlY29tZSB1c2VmdWwgdGhlbi4NCg0KQmVmb3Jl
+IHRoaXMgcGF0Y2hzZXQsIEkgb3JpZ2luYWxseSB3YW50ZWQgdG8gbWFrZSB1c2Ugb2YgZWRp
+ZF9pbmZvIGluIA0KdGhlIHNpbXBsZWRybSBncmFwaGljcyBkcml2ZXIuIEJ1dCBJIGZvdW5k
+IHRoYXQgdGhlIHJzcCBjb2RlIGNvdWxkIHVzZSANCnNvbWUgd29yayBmaXJzdC4gTWF5YmUg
+dGhlIHBhdGNoc2V0IGFyZSBhbHJlYWR5IHRhaWxvcmVkIHRvd2FyZHMgdGhlIA0KZnV0dXJl
+IGNoYW5nZXMuDQoNCkJlc3QgcmVnYXJkcw0KVGhvbWFzDQoNCj4gDQo+ICAgICAgICBBcm5k
+DQoNCi0tIA0KVGhvbWFzIFppbW1lcm1hbm4NCkdyYXBoaWNzIERyaXZlciBEZXZlbG9wZXIN
+ClNVU0UgU29mdHdhcmUgU29sdXRpb25zIEdlcm1hbnkgR21iSA0KRnJhbmtlbnN0cmFzc2Ug
+MTQ2LCA5MDQ2MSBOdWVybmJlcmcsIEdlcm1hbnkNCkdGOiBJdm8gVG90ZXYsIEFuZHJldyBN
+eWVycywgQW5kcmV3IE1jRG9uYWxkLCBCb3VkaWVuIE1vZXJtYW4NCkhSQiAzNjgwOSAoQUcg
+TnVlcm5iZXJnKQ0K
 
-Otherwise:
+--------------Fba4i0vDnEvGaqqh9SwG9WxN--
 
-Acked-by: Adrian Hunter <adrian.hunter@intel.com>
+--------------SZ3Fp31sJnYOAqWyCv8ANxZ2
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
 
-> ---
->  drivers/mmc/host/sdhci_f_sdh30.c | 60 ++++++++++++++------------------
->  1 file changed, 27 insertions(+), 33 deletions(-)
-> 
-> diff --git a/drivers/mmc/host/sdhci_f_sdh30.c b/drivers/mmc/host/sdhci_f_sdh30.c
-> index a202a69a4b08..b01ffb4d0973 100644
-> --- a/drivers/mmc/host/sdhci_f_sdh30.c
-> +++ b/drivers/mmc/host/sdhci_f_sdh30.c
-> @@ -29,9 +29,16 @@ struct f_sdhost_priv {
->  	bool enable_cmd_dat_delay;
->  };
->  
-> +static void *sdhci_f_sdhost_priv(struct sdhci_host *host)
-> +{
-> +	struct sdhci_pltfm_host *pltfm_host = sdhci_priv(host);
-> +
-> +	return sdhci_pltfm_priv(pltfm_host);
-> +}
-> +
->  static void sdhci_f_sdh30_soft_voltage_switch(struct sdhci_host *host)
->  {
-> -	struct f_sdhost_priv *priv = sdhci_priv(host);
-> +	struct f_sdhost_priv *priv = sdhci_f_sdhost_priv(host);
->  	u32 ctrl = 0;
->  
->  	usleep_range(2500, 3000);
-> @@ -64,7 +71,7 @@ static unsigned int sdhci_f_sdh30_get_min_clock(struct sdhci_host *host)
->  
->  static void sdhci_f_sdh30_reset(struct sdhci_host *host, u8 mask)
->  {
-> -	struct f_sdhost_priv *priv = sdhci_priv(host);
-> +	struct f_sdhost_priv *priv = sdhci_f_sdhost_priv(host);
->  	u32 ctl;
->  
->  	if (sdhci_readw(host, SDHCI_CLOCK_CONTROL) == 0)
-> @@ -95,30 +102,32 @@ static const struct sdhci_ops sdhci_f_sdh30_ops = {
->  	.set_uhs_signaling = sdhci_set_uhs_signaling,
->  };
->  
-> +static const struct sdhci_pltfm_data sdhci_f_sdh30_pltfm_data = {
-> +	.ops = &sdhci_f_sdh30_ops,
-> +	.quirks = SDHCI_QUIRK_NO_ENDATTR_IN_NOPDESC
-> +		| SDHCI_QUIRK_INVERTED_WRITE_PROTECT,
-> +	.quirks2 = SDHCI_QUIRK2_SUPPORT_SINGLE
-> +		|  SDHCI_QUIRK2_TUNING_WORK_AROUND,
-> +};
-> +
->  static int sdhci_f_sdh30_probe(struct platform_device *pdev)
->  {
->  	struct sdhci_host *host;
->  	struct device *dev = &pdev->dev;
-> -	int irq, ctrl = 0, ret = 0;
-> +	int ctrl = 0, ret = 0;
->  	struct f_sdhost_priv *priv;
-> +	struct sdhci_pltfm_host *pltfm_host;
->  	u32 reg = 0;
->  
-> -	irq = platform_get_irq(pdev, 0);
-> -	if (irq < 0)
-> -		return irq;
-> -
-> -	host = sdhci_alloc_host(dev, sizeof(struct f_sdhost_priv));
-> +	host = sdhci_pltfm_init(pdev, &sdhci_f_sdh30_pltfm_data,
-> +				sizeof(struct f_sdhost_priv));
->  	if (IS_ERR(host))
->  		return PTR_ERR(host);
->  
-> -	priv = sdhci_priv(host);
-> +	pltfm_host = sdhci_priv(host);
-> +	priv = sdhci_pltfm_priv(pltfm_host);
->  	priv->dev = dev;
->  
-> -	host->quirks = SDHCI_QUIRK_NO_ENDATTR_IN_NOPDESC |
-> -		       SDHCI_QUIRK_INVERTED_WRITE_PROTECT;
-> -	host->quirks2 = SDHCI_QUIRK2_SUPPORT_SINGLE |
-> -			SDHCI_QUIRK2_TUNING_WORK_AROUND;
-> -
->  	priv->enable_cmd_dat_delay = device_property_read_bool(dev,
->  						"fujitsu,cmd-dat-delay-select");
->  
-> @@ -126,18 +135,6 @@ static int sdhci_f_sdh30_probe(struct platform_device *pdev)
->  	if (ret)
->  		goto err;
->  
-> -	platform_set_drvdata(pdev, host);
-> -
-> -	host->hw_name = "f_sdh30";
-> -	host->ops = &sdhci_f_sdh30_ops;
-> -	host->irq = irq;
-> -
-> -	host->ioaddr = devm_platform_ioremap_resource(pdev, 0);
-> -	if (IS_ERR(host->ioaddr)) {
-> -		ret = PTR_ERR(host->ioaddr);
-> -		goto err;
-> -	}
-> -
->  	if (dev_of_node(dev)) {
->  		sdhci_get_of_property(pdev);
->  
-> @@ -204,24 +201,21 @@ static int sdhci_f_sdh30_probe(struct platform_device *pdev)
->  err_clk:
->  	clk_disable_unprepare(priv->clk_iface);
->  err:
-> -	sdhci_free_host(host);
-> +	sdhci_pltfm_free(pdev);
-> +
->  	return ret;
->  }
->  
->  static int sdhci_f_sdh30_remove(struct platform_device *pdev)
->  {
->  	struct sdhci_host *host = platform_get_drvdata(pdev);
-> -	struct f_sdhost_priv *priv = sdhci_priv(host);
-> -
-> -	sdhci_remove_host(host, readl(host->ioaddr + SDHCI_INT_STATUS) ==
-> -			  0xffffffff);
-> +	struct f_sdhost_priv *priv = sdhci_f_sdhost_priv(host);
->  
->  	reset_control_assert(priv->rst);
->  	clk_disable_unprepare(priv->clk);
->  	clk_disable_unprepare(priv->clk_iface);
->  
-> -	sdhci_free_host(host);
-> -	platform_set_drvdata(pdev, NULL);
-> +	sdhci_pltfm_unregister(pdev);
->  
->  	return 0;
->  }
+-----BEGIN PGP SIGNATURE-----
 
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmSdgJkFAwAAAAAACgkQlh/E3EQov+Cl
+bxAAm+hGmlLm1iLWXP6jD2U5nsiXRjJcsGyJdloLEa0TBl/4XdOzljHvQSLp2jQ9hLPoWaYoRyPd
+D9cWI1UaCcGh+9WCeX0mforFfLFs7K3CuOwUXPP9Dfe/c5d5wy+SubTjvPRw2+Z3jdwZrz8GZ1Tw
+HGtRvA1xIK12wyil9CFCyGKonc8sIItE1FWd8C0qIIG85oE4U4N1Zg+UgMeFt6AiyWuPiu6Lojse
+YbUMT9KLt/J5dKTeDe8oJtkFzlopQIyZkik9XyRTV12/zAWnzNXOS237Kqj6PkzyD7Y0ExWX/91F
+2y+e7rflzXYzEO2eUjEuZ1e8xsYZNuvXFHvCqYRh5QAUykF1GE5j73eNth0gY+y0AqRGDPCnBoJ9
+alTkBF9VnCAJgQBlJwUHMTXj6m5JmZvQNqH9hde1g9eqeu33rU9MgVqsjKzIZP2D2AIAFLwdZAM/
+u3ywiagO9K2LVWYORCJ0A3QGMxYm+bGOMUAn0lavFHENLB0Q/UAByw70L8cneLamlb2hiI0sqBKH
+gGvTY4ZOrQV2qVfh0KOM6phWAHMf9O78kpg4hHuNnbF2I6zeZKbW/rJKUTUJMevtpA+c9vceIOQC
+ni2rIZCmtVyAOh2lpbfiI1Ed9NMc1I7pB7dOpq9/3sG0DGptpxoGUwo0BrTkqqpxM34KSw/lQMQo
+Ql0=
+=PuWP
+-----END PGP SIGNATURE-----
+
+--------------SZ3Fp31sJnYOAqWyCv8ANxZ2--
