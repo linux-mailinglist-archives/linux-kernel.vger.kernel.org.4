@@ -2,49 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39FDB742410
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 12:37:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B6D4742417
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 12:39:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230463AbjF2Khb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 06:37:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55472 "EHLO
+        id S231631AbjF2KjK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 06:39:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229494AbjF2Kh1 (ORCPT
+        with ESMTP id S230314AbjF2KjD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 06:37:27 -0400
+        Thu, 29 Jun 2023 06:39:03 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8210A1719
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 03:37:26 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C5621719;
+        Thu, 29 Jun 2023 03:39:02 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 173D161519
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 10:37:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C500CC433C8;
-        Thu, 29 Jun 2023 10:37:24 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 31AB4614B4;
+        Thu, 29 Jun 2023 10:39:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0118C433C0;
+        Thu, 29 Jun 2023 10:38:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688035045;
-        bh=sONaYv6UlgXbLD/aLQtYnVckSjlCsweTqAbtdSSP5zM=;
-        h=From:To:Subject:In-Reply-To:References:Date:From;
-        b=Uzj6h2JqtcxAN20DXkkU6uIHwrEK0txzz9xT3T72nX8OymgoSrnuMrlntqt8TH//H
-         Zkoy12uP5E6S1B4arAgk7C2x55bOsWxaKEztqGcE2YTaIrmtKQTDqkqjoBvKQ11tbx
-         KsAFupaqBjgQcUmpcOjDMgqHN25VIQ9G8e5Aq6yIYQQFzqLYpHg+DZlfj38uF0cd3a
-         yux9CcAF8cx7sgk7FGJWdwzdxddUahIHuLX2ac4e/Z8aQmD/TZyjim+MqDzyXpsBtb
-         DomWQSQp6O11yDkzIkeL5vc63prQYZU9lB4LB4lZMNkQdu/zF/WhRTWttPN05OazHP
-         dD5QEklr204/g==
-From:   =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
-To:     syzbot <syzbot+522a57d8d5a0f7ac5c6c@syzkaller.appspotmail.com>,
-        brauner@kernel.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Subject: Re: [syzbot] [kernel?] upstream test error: UBSAN:
- array-index-out-of-bounds in alloc_pid
-In-Reply-To: <000000000000dde2fb05ff2d39c6@google.com>
-References: <000000000000dde2fb05ff2d39c6@google.com>
-Date:   Thu, 29 Jun 2023 12:37:21 +0200
-Message-ID: <87352a7dwe.fsf@all.your.base.are.belong.to.us>
+        s=k20201202; t=1688035141;
+        bh=LT9sQu3sBE6MeeU7W2CcEtZVUtDNU15gwVQl3P4L+rc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Ahl/LM9sX2m0wBNtg9WRjubZY2LLH+/7DQMP+yMiAI9dB4SwWa/yTI8GSjXSFaruR
+         y9OWAbMsxLRPa/jvVbEdJ0ua8VZXGeWi/xHL2CtA8JM+4L9wIXclhhGUQNFqgZ4qYi
+         8nMNYW8au9ABod6S2oYZDH9Q7m7xtnU0K7B7COC+hm8z1Z7swluxvnkourk865Prus
+         c7VpjLtLGxWQjGgXRHaFGXuTal5eWMe1SULjwMoDEU672LRrsfMURhubM9Z6fMZQuS
+         kgEABuSe+0lS4siE0uI/AbPXulkezt44IOgMY63TDeNNGPov7COYuVm0YL6DoiAHrn
+         EJw5u/dSSKP9Q==
+Date:   Thu, 29 Jun 2023 11:38:53 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Lee Jones <lee@kernel.org>
+Cc:     Rob Herring <robh@kernel.org>,
+        William Breathitt Gray <william.gray@linaro.org>,
+        "Sahin, Okan" <Okan.Sahin@analog.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Cosmin Tanislav <demonsingur@gmail.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Caleb Connolly <caleb.connolly@linaro.org>,
+        Marcus Folkesson <marcus.folkesson@gmail.com>,
+        "Bolboaca, Ramona" <Ramona.Bolboaca@analog.com>,
+        ChiYuan Huang <cy_huang@richtek.com>,
+        "Tilki, Ibrahim" <Ibrahim.Tilki@analog.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Hugo Villeneuve <hvilleneuve@dimonoff.com>,
+        ChiaEn Wu <chiaen_wu@richtek.com>,
+        Haibo Chen <haibo.chen@nxp.com>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>
+Subject: Re: [PATCH v7 5/5] mfd: max77541: Add ADI MAX77541/MAX77540 PMIC
+ Support
+Message-ID: <d070eecd-cb3b-4968-803e-1817a1a4359a@sirena.org.uk>
+References: <20230621171315.GL10378@google.com>
+ <20230626175443.GA3446604-robh@kernel.org>
+ <20230627135615.GF10378@google.com>
+ <CAL_JsqL3T6pjnTFgFvbYMeATD6cjhc-Sm0vZW2cv5k+w9Oxjuw@mail.gmail.com>
+ <ZJry8QTka8m6ag/j@fedora>
+ <20230627163344.GG10378@google.com>
+ <CAL_Jsq+Z64tuMO8a2Y=2GrXZ8q0L4Z2avCiphsn0HOOC71Dzjg@mail.gmail.com>
+ <20230628134013.GH10378@google.com>
+ <472a4d86-3bfb-4c2b-a099-f1254dd01e24@sirena.org.uk>
+ <20230629072500.GA2110266@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="slMax2aHJcAmlvoZ"
+Content-Disposition: inline
+In-Reply-To: <20230629072500.GA2110266@google.com>
+X-Cookie: Surprise due today.  Also the rent.
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -55,56 +88,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot <syzbot+522a57d8d5a0f7ac5c6c@syzkaller.appspotmail.com> writes:
 
-> Hello,
->
-> syzbot found the following issue on:
->
-> HEAD commit:    6aeadf7896bf Merge tag 'docs-arm64-move' of git://git.lwn...
-> git tree:       upstream
-> console output: https://syzkaller.appspot.com/x/log.txt?x=12cea2c7280000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=652d39e0420afbb8
-> dashboard link: https://syzkaller.appspot.com/bug?extid=522a57d8d5a0f7ac5c6c
-> compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
->
-> Downloadable assets:
-> disk image: https://storage.googleapis.com/syzbot-assets/3887d048a41c/disk-6aeadf78.raw.xz
-> vmlinux: https://storage.googleapis.com/syzbot-assets/b25a7d5f9034/vmlinux-6aeadf78.xz
-> kernel image: https://storage.googleapis.com/syzbot-assets/96457fbed62d/bzImage-6aeadf78.xz
->
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+522a57d8d5a0f7ac5c6c@syzkaller.appspotmail.com
->
-> ================================================================================
-> UBSAN: array-index-out-of-bounds in kernel/pid.c:244:3
-> index 1 is out of range for type 'struct upid[1]'
-> CPU: 1 PID: 4996 Comm: syz-executor.0 Not tainted 6.4.0-syzkaller-01761-g6aeadf7896bf #0
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/27/2023
-> Call Trace:
->  <TASK>
->  __dump_stack lib/dump_stack.c:88 [inline]
->  dump_stack_lvl+0x1e7/0x2d0 lib/dump_stack.c:106
->  ubsan_epilogue lib/ubsan.c:217 [inline]
->  __ubsan_handle_out_of_bounds+0x11c/0x150 lib/ubsan.c:348
->  alloc_pid+0x405/0xc40 kernel/pid.c:244
->  copy_process+0x1f2f/0x4350 kernel/fork.c:2523
->  kernel_clone+0x222/0x800 kernel/fork.c:2915
->  __do_sys_clone kernel/fork.c:3058 [inline]
->  __se_sys_clone kernel/fork.c:3042 [inline]
->  __x64_sys_clone+0x258/0x2a0 kernel/fork.c:3042
->  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
->  do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
->  entry_SYSCALL_64_after_hwframe+0x63/0xcd
-> RIP: 0033:0x7f30e5e89fab
-> Code: ed 0f 85 60 01 00 00 64 4c 8b 0c 25 10 00 00 00 45 31 c0 4d 8d 91 d0 02 00 00 31 d2 31 f6 bf 11 00 20 01 b8 38 00 00 00 0f 05 <48> 3d 00 f0 ff ff 0f 87 89 00 00 00 41 89 c5 85 c0 0f 85 90 00 00
-> RSP: 002b:00007ffe72312890 EFLAGS: 00000246 ORIG_RAX: 0000000000000038
-> RAX: ffffffffffffffda RBX: 00007ffe72312ee8 RCX: 00007f30e5e89fab
-> RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000001200011
-> RBP: 0000000000000000 R08: 0000000000000000 R09: 000055555643c400
-> R10: 000055555643c6d0 R11: 0000000000000246 R12: 0000000000000000
-> R13: 00007ffe72312980 R14: 00007f30e5fac9d8 R15: 000000000000000c
->  </TASK>
-> ================================================================================
+--slMax2aHJcAmlvoZ
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-FWIW, I hit this with the clone3 kselftest (on riscv).
+On Thu, Jun 29, 2023 at 08:25:00AM +0100, Lee Jones wrote:
+> On Wed, 28 Jun 2023, Mark Brown wrote:
+
+> > As I mentioned before the number of resends of what are frequently very
+> > similar serieses (eg, two PMICs from the same vendor in flight at the
+> > same time) was causing me real issues with tags going AWOL and things
+> > getting lost in the noise.
+
+> As much as I empathise with each of these points (I feel it too), the
+> alternative seems to be causing more issues for more people.  With that
+> in mind, I'm going to revert back to how we've been doing things for a
+> long time now.  Please try to Ack and forget.  If a contributor fails to
+> apply a previously issued tag, we'll have to bring that up at the time.
+
+The thing that's causing a lot of the issues here is that you're only
+applying the serieses en masse, blocking things on getting absolutely
+everything lined up (including this time over a merge window).  I really
+don't understand why you feel you're forced to batch everything together
+like this.
+
+--slMax2aHJcAmlvoZ
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmSdXz0ACgkQJNaLcl1U
+h9CYEgf+K8srDgv971qBaPL/U8ocHN7gG0JxkI0/h/Ax6C3PBmoPp9vF4f2IleaR
+v51nTp/6Lq1SPS17XPz0v0Xf4kwfLfYUv1LryRUFh0bEsI49PKl9anUW8IV7exPs
+TnG1Vay3EjprUKmzYzmTR9jH1EuSDn2iocRcjI2CfyY9MYby9TjtFyI/Hv3MtU0h
+pMI9JtNGLxmQnoTCW2aC5mc4/UfZJtQ0BEDziu+9R97Cw9h3Lj9ygXV/5GE/KI8J
+C+oTj3YDBcPSOIm7i2mr+JpstEf5zqfZAW1obLehIa1ZIENpIClmZ/UxJjB7atnY
+pRkRC7/RC2WyqfuDLo5yupgbcAEuIg==
+=b6uW
+-----END PGP SIGNATURE-----
+
+--slMax2aHJcAmlvoZ--
