@@ -2,94 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8917742362
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 11:43:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7667742366
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 11:44:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231546AbjF2JnS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 05:43:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43194 "EHLO
+        id S231270AbjF2Jn6 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 29 Jun 2023 05:43:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229739AbjF2JnO (ORCPT
+        with ESMTP id S229739AbjF2Jno (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 05:43:14 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9A77ED;
-        Thu, 29 Jun 2023 02:43:13 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5E98A6150C;
-        Thu, 29 Jun 2023 09:43:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D8F7C433C0;
-        Thu, 29 Jun 2023 09:43:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688031792;
-        bh=wzR8YZnxm3FG7gwYs5SdxjfCUJ2NXEhOFnOR0leXfts=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=TxlqtQPOajshWpjFna9G6VbJOeh8zHECorIIqQlvPPPQyHYCRbGuSIuZlYyeilevd
-         5Lia1h5+HRqmaM1fej92tx1ZC7o7S2CgedzSniTSwOKxGTJB96ZbUhtFy0+JQQP7az
-         MMMcBFjv06KbCdIpK/mCrznNAppuXgT+dkUp614c3cg8HKv19CY4/pXBgnRqSzBbNW
-         7wXcWilQnGauItgDfq3a+xZLhBatp5mYGIxeUruqr/THmVHNzVDel6RZ68aBrfFPZj
-         ACGyPmy3EPmNaWjpeDLBAH/umcemXf2S3dpgclpXvx8Xb/8RrEoi8zLTHDGjkNP4WY
-         WKEdpiIQhIyWQ==
-Message-ID: <cefae2c3-c8b5-f5ff-13dc-e8527ca2346f@kernel.org>
-Date:   Thu, 29 Jun 2023 18:43:10 +0900
+        Thu, 29 Jun 2023 05:43:44 -0400
+Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 920E11727;
+        Thu, 29 Jun 2023 02:43:43 -0700 (PDT)
+Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-98e1fc9d130so13603466b.0;
+        Thu, 29 Jun 2023 02:43:43 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688031822; x=1690623822;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=8BOa2cA+os6Sirozpo+vKmIp/ZPBpwZIKMHVNEkdkAo=;
+        b=FXLair9F1rsWjrg/DCklv5Ruhl/qoU3p6Kz8+S8C8VxPwKmJsvvMZXJxJPvcs2u+DA
+         BVeIbRw58YsIk1MWwnDn84dp58CvTtZMFbcdIg6qNyGG5xtL8hMyI7u2qBUKmpdGAkzI
+         Ui6bmkN0KlBvDphUJviuOW6vTrNzmhnZqwgOGRSp84SQOtFT5eDb4EuJ68aewHjxGopH
+         hM/OPRyxagX9TKQWe/8JR2LPvUimGUt33QpUHUWo5sKp7cRFB4g8uStZJ63UZUcUn+er
+         EyHkavW9diWHErllHJHymQpO/yKcJuBTdrGl6t+GdfdqL3Ia9YgDrh5B4dQVobCUhj54
+         aiLg==
+X-Gm-Message-State: AC+VfDxPrqKaZSBNXFyfhFqTkhmzQlmkncKJ7PZPiHSssqLbkea47u+U
+        84hDL90rJ1TTECWtkJfb2PxtOFnSL52WtueNe+s=
+X-Google-Smtp-Source: ACHHUZ7G91aFKoB+8LU9G+96kOiiq1furXLbqPGGVuciGs3Uxa/vAfBN7Q6yvT2GQPwiQM3yZ8MI5YaXyKqNY6RF5fc=
+X-Received: by 2002:a17:906:73cc:b0:98d:b10f:f3cd with SMTP id
+ n12-20020a17090673cc00b0098db10ff3cdmr10261241ejl.7.1688031821981; Thu, 29
+ Jun 2023 02:43:41 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v4 4/4] ublk: add zone append
-Content-Language: en-US
-To:     "Andreas Hindborg (Samsung)" <nmi@metaspace.dk>,
-        Ming Lei <ming.lei@redhat.com>
-Cc:     Hans Holmberg <Hans.Holmberg@wdc.com>,
-        Aravind Ramesh <Aravind.Ramesh@wdc.com>,
-        Jens Axboe <axboe@kernel.dk>,
-        "open list:BLOCK LAYER" <linux-block@vger.kernel.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Matias Bjorling <Matias.Bjorling@wdc.com>,
-        open list <linux-kernel@vger.kernel.org>, gost.dev@samsung.com,
-        Minwoo Im <minwoo.im.dev@gmail.com>
-References: <20230628190649.11233-1-nmi@metaspace.dk>
- <20230628190649.11233-5-nmi@metaspace.dk>
- <ZJzwcG2gIxXh8HbE@ovpn-8-18.pek2.redhat.com> <87edluy5l3.fsf@metaspace.dk>
-From:   Damien Le Moal <dlemoal@kernel.org>
-Organization: Western Digital Research
-In-Reply-To: <87edluy5l3.fsf@metaspace.dk>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230626110026.65825-1-andriy.shevchenko@linux.intel.com>
+ <20230626110026.65825-2-andriy.shevchenko@linux.intel.com>
+ <CAJZ5v0jqP0N3=TB3w+HMwGMzctpRCjKa3a5iHKePP113T3CK-g@mail.gmail.com> <ZJ1KHJW6Jhma/rHc@smile.fi.intel.com>
+In-Reply-To: <ZJ1KHJW6Jhma/rHc@smile.fi.intel.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 29 Jun 2023 11:43:30 +0200
+Message-ID: <CAJZ5v0hf49hneyE7a-qjcdUBBhtvPUhkM6XorecaOrSjn=PbAQ@mail.gmail.com>
+Subject: Re: [PATCH v3 1/4] ACPI: bus: Constify acpi_companion_match()
+ returned value
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-i2c@vger.kernel.org, acpica-devel@lists.linuxfoundation.org,
+        Len Brown <lenb@kernel.org>,
+        Andi Shyti <andi.shyti@kernel.org>,
+        Robert Moore <robert.moore@intel.com>,
+        Michael Walle <michael@walle.cc>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/29/23 18:17, Andreas Hindborg (Samsung) wrote:
-> 
-> Ming Lei <ming.lei@redhat.com> writes:
-> 
->> On Wed, Jun 28, 2023 at 09:06:49PM +0200, Andreas Hindborg wrote:
->>> From: Andreas Hindborg <a.hindborg@samsung.com>
->>>
->>> Add zone append feature to ublk. This feature uses the `addr` field of `struct
->>> ublksrv_io_cmd`. Therefore ublk must be used with the user copy
->>> feature (UBLK_F_USER_COPY) for zone append to be available. Without this
->>> feature, ublk will fail zone append requests.
->>
->> Given zone append is a must, please fail to add device in case of zoned
->> and !user_copy, then we can make fast IO code path clean.
-> 
-> I will squash the patches and reject zone support if not user copy is
-> enabled 👍
+On Thu, Jun 29, 2023 at 11:08 AM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
+>
+> On Thu, Jun 29, 2023 at 10:49:17AM +0200, Rafael J. Wysocki wrote:
+> > On Mon, Jun 26, 2023 at 1:00 PM Andy Shevchenko
+> > <andriy.shevchenko@linux.intel.com> wrote:
+> > >
+> > > acpi_companion_match() doesn't alter the contents of the passed
+> > > parameter, so we don't expect that returned value can be altered
+> > > either. So constify it.
+> > >
+> > > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> >
+> > This makes sense even without the rest of the series, so I can queue
+> > it up right away if you want me to do that.
+>
+> Please, go ahead and thank you!
 
-Or if !CONFIG_BLK_DEV_ZONED or if the user specifies a bad parameter (invalid
-limits etc).
-
--- 
-Damien Le Moal
-Western Digital Research
-
+Done, thanks!
