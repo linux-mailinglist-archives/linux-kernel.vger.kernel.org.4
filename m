@@ -2,189 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6215741E45
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 04:30:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E287741F13
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 06:01:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231633AbjF2CaX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 22:30:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55472 "EHLO
+        id S232240AbjF2EA7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 00:00:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230475AbjF2CaU (ORCPT
+        with ESMTP id S231915AbjF2D7z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 22:30:20 -0400
-Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81CC01BE4
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 19:30:17 -0700 (PDT)
-Received: from epcas5p4.samsung.com (unknown [182.195.41.42])
-        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20230629023013epoutp04f348cd7d4f926c62f8357a6b46c52268~tAFf-lqck1008310083epoutp04h
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 02:30:13 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20230629023013epoutp04f348cd7d4f926c62f8357a6b46c52268~tAFf-lqck1008310083epoutp04h
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1688005813;
-        bh=O0eE20a/HBLrMkmuqgRHpbrSQmDarVAefptM3rzo4z0=;
-        h=From:To:Cc:Subject:Date:References:From;
-        b=D8LxJ7EuCARRvHVwIfAvZAXav6hNeKXSuZUB+jC8DGyiVZqTSe1UDjsM1nLuvPRHb
-         bEniHV/G3wHePvhl7mKKt0IlfQCdPZmunawPxrUhojG+HtvbkJRVJCoxp/nzc51tpB
-         NX/rj6MrJOrjeYiP9qGtNTJH3Drms1u+oy0JWqik=
-Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
-        epcas5p3.samsung.com (KnoxPortal) with ESMTP id
-        20230629023012epcas5p3968fe95b7c0c53814dd746ed98ab439f~tAFfJLSvk1161911619epcas5p3T;
-        Thu, 29 Jun 2023 02:30:12 +0000 (GMT)
-Received: from epsmges5p1new.samsung.com (unknown [182.195.38.177]) by
-        epsnrtp3.localdomain (Postfix) with ESMTP id 4Qs2VB2XMbz4x9Pp; Thu, 29 Jun
-        2023 02:30:10 +0000 (GMT)
-Received: from epcas5p1.samsung.com ( [182.195.41.39]) by
-        epsmges5p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        82.2F.55522.2BCEC946; Thu, 29 Jun 2023 11:30:10 +0900 (KST)
-Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-        epcas5p2.samsung.com (KnoxPortal) with ESMTPA id
-        20230629022807epcas5p23765f81f547eed72135c802f83543908~tADqpu1Kv1886318863epcas5p2L;
-        Thu, 29 Jun 2023 02:28:07 +0000 (GMT)
-Received: from epsmgmcp1.samsung.com (unknown [182.195.42.82]) by
-        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20230629022807epsmtrp234c155afb9c8e0754095ca248174a1ea~tADqo5-qo2057720577epsmtrp2K;
-        Thu, 29 Jun 2023 02:28:07 +0000 (GMT)
-X-AuditID: b6c32a49-67ffa7000000d8e2-b7-649cecb2f931
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-        epsmgmcp1.samsung.com (Symantec Messaging Gateway) with SMTP id
-        AC.FC.64355.73CEC946; Thu, 29 Jun 2023 11:28:07 +0900 (KST)
-Received: from ubuntu.. (unknown [109.105.118.54]) by epsmtip2.samsung.com
-        (KnoxPortal) with ESMTPA id
-        20230629022805epsmtip2899b981322b7361e068a71d950dddce6~tADpTf30f1947319473epsmtip2P;
-        Thu, 29 Jun 2023 02:28:05 +0000 (GMT)
-From:   Min Li <min15.li@samsung.com>
-To:     axboe@kernel.dk, willy@infradead.org, hch@lst.de,
-        dlemoal@kernel.org, gregkh@linuxfoundation.org
-Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org, Min Li <min15.li@samsung.com>
-Subject: [PATCH v4] block: add check that partition length needs to be
- aligned with block size
-Date:   Thu, 29 Jun 2023 10:26:23 +0000
-Message-Id: <20230629102623.7410-1-min15.li@samsung.com>
-X-Mailer: git-send-email 2.34.1
+        Wed, 28 Jun 2023 23:59:55 -0400
+Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD19A2D4A;
+        Wed, 28 Jun 2023 20:59:51 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.143])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4Qs4Tb15wDz4f3kpf;
+        Thu, 29 Jun 2023 11:59:47 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.175.124.27])
+        by APP2 (Coremail) with SMTP id Syh0CgC3quiwAZ1kw6DMMg--.26995S2;
+        Thu, 29 Jun 2023 11:59:46 +0800 (CST)
+From:   Kemeng Shi <shikemeng@huaweicloud.com>
+To:     tytso@mit.edu, adilger.kernel@dilger.ca
+Cc:     linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 00/13] fixes and cleanups to ext4 resize
+Date:   Thu, 29 Jun 2023 20:00:31 +0800
+Message-Id: <20230629120044.1261968-1-shikemeng@huaweicloud.com>
+X-Mailer: git-send-email 2.30.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrIJsWRmVeSWpSXmKPExsWy7bCmuu6mN3NSDH5vEbJYfbefzeLBfnuL
-        5sXr2SxuHH/HbDH39SUWi5WrjzJZ7L2lbXF51xw2i+WrOpgszk74wGqxYOMjRovfP4BiN9Zd
-        ZXHg9di8Qsvj8tlSj02rOtk89s9dw+6x+2YDm0ffllWMHp83yQWwR2XbZKQmpqQWKaTmJeen
-        ZOal2yp5B8c7x5uaGRjqGlpamCsp5CXmptoqufgE6Lpl5gCdqqRQlphTChQKSCwuVtK3synK
-        Ly1JVcjILy6xVUotSMkpMCnQK07MLS7NS9fLSy2xMjQwMDIFKkzIzujZfYGtoF+4Yt+0+8wN
-        jGv5uxg5OSQETCT+3NnCDGILCexmlHjVxNTFyAVkf2KU+DVlDgucM/fWZRaYjnt7p7NCdOxk
-        lGje4ApR9JxR4u+MvexdjBwcbALKEtuW+oDUiAikSSzt+MkGYjMLlEn8vHQNbJuwQILEnJeN
-        bCDlLAKqEn+agkDCvAIWEtv/b2SGWCUvsf/gWWaIuKDEyZlPWCDGyEs0b50NVfOXXeLpEzkI
-        20Wi7cF8NghbWOLV8S3sELaUxOd3e8FWSQgUS7z8EQYRrpHY/e02E4RtLbFt/TomkBJmAU2J
-        9bv0IcKyElNPrWOC2Mon0fv7CVQ5r8SOeTC2ksTfC+cYIWwJicX7H7JCbPKQ2LNYGRJOsRJn
-        599mnMAoPwvJL7OQ/DILYfECRuZVjJKpBcW56anFpgWGeanl8ChNzs/dxAhOq1qeOxjvPvig
-        d4iRiYPxEKMEB7OSCO/tN7NThHhTEiurUovy44tKc1KLDzGaAsN3IrOUaHI+MLHnlcQbmlga
-        mJiZmZlYGpsZKonzHj7TmyIkkJ5YkpqdmlqQWgTTx8TBKdXApHjI3tJVVXGBKuO3lFhnxk/9
-        S/jWmOzZHjs97J+38Lnodvsy3WtMqTJn14QZLlQ8+dFb5npMwpvOaaWX8x/uXr/za2bvVz8+
-        7y2pH/7lrtDgevJj081rNyZEr6g5ecc2+67vBO57B+/cry3NfHU3TIC77WtN4z+P3bIev7+9
-        UJB5anBpf73b2882e7v3LXlpoLAxQOjVlxSvEwJHY5ale05dkRlmd8gwg4v3ajfXNDmlY+nS
-        1ZP5xGZwsxsZXJWff63RMePK7vfdsR+D/F4+SEvxLW88FFZmvdLx1mXmvNqXKpP+uhpkTq5e
-        vz3l3yfhdWdNYxm+LHR/rf6Nt+r5tDMKPasahU78ctJaaBXxS4mlOCPRUIu5qDgRALM4NLc0
-        BAAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrFLMWRmVeSWpSXmKPExsWy7bCSvK75mzkpBotfcFmsvtvPZvFgv71F
-        8+L1bBY3jr9jtpj7+hKLxcrVR5ks9t7Stri8aw6bxfJVHUwWZyd8YLVYsPERo8XvH0CxG+uu
-        sjjwemxeoeVx+Wypx6ZVnWwe++euYffYfbOBzaNvyypGj8+b5ALYo7hsUlJzMstSi/TtErgy
-        enZfYCvoF67YN+0+cwPjWv4uRk4OCQETiXt7p7OC2EIC2xklnq4thIhLSJyf94sNwhaWWPnv
-        OXsXIxdQzVNGiYVP2lm6GDk42ASUJbYt9QExRQRyJFZ89wcpZxaokrg6dR8TSFhYIE5iyS51
-        EJNFQFXiT1MQSAWvgIXE9v8bmSGGy0vsP3iWGSIuKHFy5hMWiCnyEs1bZzNPYOSbhSQ1C0lq
-        ASPTKkbR1ILi3PTc5AJDveLE3OLSvHS95PzcTYzg4NYK2sG4bP1fvUOMTByMhxglOJiVRHhv
-        v5mdIsSbklhZlVqUH19UmpNafIhRmoNFSZxXOaczRUggPbEkNTs1tSC1CCbLxMEp1cBkbHXv
-        zpbFfwK+NgvO59a5uCvoyw42W4aJDJc43h3fkhtyxH+z5oF8v+5ENivhV1V9QVJOqvdkv1nf
-        ETU4nlJ9+TJ3MRf/shkb3C8v2aT+QHql1uus8hfrnlbKekZ+/fY5avnNl21ebJNsOa682XNV
-        i/1Q5uyFqWsXL6iLCTieeU19w+Mt574bGZUt278nKmdpxKvZCp7t3z6Ff7+bOSPnVo5Phrfh
-        Z6EVTnuPfw12VHvYvV7xxeEXCVMehRYFhZqoTm1OEf3huFI9sCv00FMGgUq/ydNaE+SmfTdt
-        nap7MI7nVmvZREWpl+fSun72h2y+e3rHA5Yv4UuX361r/pjjn/4kKOttGd/7KTw3njnKKLEU
-        ZyQaajEXFScCAEOmG4/dAgAA
-X-CMS-MailID: 20230629022807epcas5p23765f81f547eed72135c802f83543908
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: REQ_APPROVE
-CMS-TYPE: 105P
-DLP-Filter: Pass
+X-CM-TRANSID: Syh0CgC3quiwAZ1kw6DMMg--.26995S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxGr18Zw48JFy8GF18Cr43trb_yoWrGw18pa
+        1Sgw13Kr95Xw13Cw47t3sxWF95Xws7GF4UWr13G3Z7KF1UZw18WF9xWan5AFW5KFWrZ3W0
+        q3s7Xrs8WF18ZaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkFb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M280x2IEY4vEnII2IxkI6r1a6r45M2
+        8lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_
+        tr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26r
+        xl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv
+        0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z2
+        80aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JMxAIw28I
+        cxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2
+        IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0EwIxGrwCI
+        42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42
+        IY6xAIw20EY4v20xvaj40_WFyUJVCq3wCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E
+        87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x07j-6pPUUUUU=
+X-CM-SenderInfo: 5vklyvpphqwq5kxd4v5lfo033gof0z/
 X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20230629022807epcas5p23765f81f547eed72135c802f83543908
-References: <CGME20230629022807epcas5p23765f81f547eed72135c802f83543908@epcas5p2.samsung.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_06_12,
-        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=0.0 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_06_12,
+        KHOP_HELO_FCRDNS,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Before calling add partition or resize partition, there is no check
-on whether the length is aligned with the logical block size.
-If the logical block size of the disk is larger than 512 bytes,
-then the partition size maybe not the multiple of the logical block size,
-and when the last sector is read, bio_truncate() will adjust the bio size,
-resulting in an IO error if the size of the read command is smaller than
-the logical block size.If integrity data is supported, this will also
-result in a null pointer dereference when calling bio_integrity_free.
+This series contains some random cleanups and a few fixes to correct gdb
+backup copy, fix buffer_head leak and so on. More details can be found
+in respective log messages.
+I run kvm-xfstest with config "ext4/all" and "-g auto" together with
+mballoc patchset I sent before.
 
-Cc: stable@vger.kernel.org
-Signed-off-by: Min Li <min15.li@samsung.com>
+-------------------- Summary report
+KERNEL:    kernel 6.4.0-rc5-xfstests-g90158dd3c06b #23 SMP PREEMPT_DYNAMIC
+Wed Jun 28 17:19:32 CST 2023 x86_64
+CPUS:      2
+MEM:       1975.36
 
----
-Changes from v1:
+ext4/4k: 531 tests, 31 skipped, 3421 seconds
+ext4/1k: 527 tests, 33 skipped, 4638 seconds
+ext4/ext3: 523 tests, 119 skipped, 3289 seconds
+ext4/encrypt: 509 tests, 3 failures, 138 skipped, 2163 seconds
+  Failures: generic/681 generic/682 generic/691
+ext4/nojournal: 526 tests, 5 failures, 98 skipped, 3469 seconds
+  Failures: ext4/301 ext4/304 generic/455 generic/459 generic/581
+ext4/ext3conv: 528 tests, 31 skipped, 3877 seconds
+ext4/adv: 528 tests, 4 failures, 38 skipped, 4170 seconds
+  Failures: generic/475 generic/477
+  Flaky: generic/455: 80% (4/5)   generic/482: 80% (4/5)
+ext4/dioread_nolock: 529 tests, 31 skipped, 3825 seconds
+ext4/data_journal: 527 tests, 3 failures, 99 skipped, 3307 seconds
+  Failures: generic/455 generic/484
+  Flaky: generic/068: 40% (2/5)
+ext4/bigalloc_4k: 503 tests, 35 skipped, 3286 seconds
+ext4/bigalloc_1k: 503 tests, 1 failures, 43 skipped, 4421 seconds
+  Failures: shared/298
+Totals: 5798 tests, 696 skipped, 75 failures, 0 errors, 39645s
 
-- Add a space after /* and before */.
-- Move length alignment check before the "start = p.start >> SECTOR_SHIFT"
-- Move check for p.start being aligned together with this length alignment check.
+FSTESTVER: blktests 676d42c (Thu, 2 Mar 2023 15:25:44 +0900)
+FSTESTVER: e2fsprogs archive/debian/1.47.0-1 (Mon, 6 Feb 2023 22:36:16 -0500)
+FSTESTVER: fio  fio-3.31 (Tue, 9 Aug 2022 14:41:25 -0600)
+FSTESTVER: fsverity v1.5-6-g5d6f7c4 (Mon, 30 Jan 2023 23:22:45 -0800)
+FSTESTVER: ima-evm-utils v1.3.2 (Wed, 28 Oct 2020 13:18:08 -0400)
+FSTESTVER: nvme-cli v1.16 (Thu, 11 Nov 2021 13:09:06 -0800)
+FSTESTVER: quota  v4.05-53-gd90b7d5 (Tue, 6 Dec 2022 12:59:03 +0100)
+FSTESTVER: util-linux v2.38.1 (Thu, 4 Aug 2022 11:06:21 +0200)
+FSTESTVER: xfsprogs v6.1.1 (Fri, 13 Jan 2023 19:06:37 +0100)
+FSTESTVER: xfstests v2023.02.26-8-g821ef488 (Thu, 2 Mar 2023 10:23:51 -0500)
+FSTESTVER: xfstests-bld 35650073 (Mon, 6 Mar 2023 20:48:08 -0500)
+FSTESTVER: zz_build-distro bullseye
+FSTESTCFG: ext4/all
+FSTESTSET: -g auto
+FSTESTOPT: aex
 
-Changes from v2:
+There more failures compared with "good" report in reply from Ted [1] as
+following:
+ext4/nojournal: generic/459 generic/581
+ext4/adv: Flaky: generic/455: 80% (4/5)   generic/482: 80% (4/5)
+ext4/data_journal: Flaky: generic/068: 40% (2/5)
+It seems still a "good" test run according to rules listed in [1].
+Please let me know if more tests to run. Thanks!
 
-- Add the assignment on the first line and merge the two lines into one.
+[1] https://lore.kernel.org/linux-ext4/db478a24-39f5-3cef-8814-89406ce4d2ca@huawei.com/T/#ma9de3f355f0300291d32fe1f0b32c5660c9bd191
 
-Changes from v3:
+Kemeng Shi (13):
+  ext4: correct offset of gdb backup in non meta_bg group to
+    update_backups
+  ext4: add missed brelse in update_backups
+  ext4: correct return value of ext4_convert_meta_bg
+  ext4: remove gdb backup copy for meta bg in
+    setup_new_flex_group_blocks
+  ext4: fix typo in setup_new_flex_group_blocks
+  ext4: remove redundant check of count
+  ext4: remove commented code in reserve_backup_gdb
+  ext4: calculate free_clusters_count in cluster unit in
+    verify_group_input
+  ext4: remove EXT4FS_DEBUG defination in resize.c
+  ext4: use saved local variable sbi instead of EXT4_SB(sb)
+  ext4: correct gdblock calculation in add_new_gdb_meta_bg to support
+    non first group
+  ext4: remove unnecessary check for avoiding multiple update_backups in
+    ext4_flex_group_add
+  ext4: remove unnecessary initialization of count2 in
+    set_flexbg_block_bitmap
 
-- Change the blksz to unsigned int.
-- Add check if p.start and p.length are negative.
----
- block/ioctl.c | 12 ++++++++----
- 1 file changed, 8 insertions(+), 4 deletions(-)
+ fs/ext4/resize.c | 81 +++++++++++++++++++-----------------------------
+ 1 file changed, 32 insertions(+), 49 deletions(-)
 
-diff --git a/block/ioctl.c b/block/ioctl.c
-index 3be11941fb2d..a8061c2fcae0 100644
---- a/block/ioctl.c
-+++ b/block/ioctl.c
-@@ -16,9 +16,10 @@
- static int blkpg_do_ioctl(struct block_device *bdev,
- 			  struct blkpg_partition __user *upart, int op)
- {
-+	unsigned int blksz = bdev_logical_block_size(bdev);
- 	struct gendisk *disk = bdev->bd_disk;
- 	struct blkpg_partition p;
--	long long start, length;
-+	sector_t start, length;
- 
- 	if (!capable(CAP_SYS_ADMIN))
- 		return -EACCES;
-@@ -33,14 +34,17 @@ static int blkpg_do_ioctl(struct block_device *bdev,
- 	if (op == BLKPG_DEL_PARTITION)
- 		return bdev_del_partition(disk, p.pno);
- 
-+	if (p.start < 0 || p.length <= 0 || p.start + p.length < 0)
-+		return -EINVAL;
-+	/* Check that the partition is aligned to the block size */
-+	if (!IS_ALIGNED(p.start | p.length, blksz))
-+		return -EINVAL;
-+
- 	start = p.start >> SECTOR_SHIFT;
- 	length = p.length >> SECTOR_SHIFT;
- 
- 	switch (op) {
- 	case BLKPG_ADD_PARTITION:
--		/* check if partition is aligned to blocksize */
--		if (p.start & (bdev_logical_block_size(bdev) - 1))
--			return -EINVAL;
- 		return bdev_add_partition(disk, p.pno, start, length);
- 	case BLKPG_RESIZE_PARTITION:
- 		return bdev_resize_partition(disk, p.pno, start, length);
 -- 
-2.34.1
+2.30.0
 
