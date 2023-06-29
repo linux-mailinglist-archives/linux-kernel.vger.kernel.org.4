@@ -2,65 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B2D2742C8D
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 20:59:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB6AE742C8B
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 20:59:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232631AbjF2S6u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 14:58:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35818 "EHLO
+        id S232665AbjF2S7P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 14:59:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232154AbjF2S6q (ORCPT
+        with ESMTP id S232666AbjF2S7M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 14:58:46 -0400
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A3C11B1
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 11:58:45 -0700 (PDT)
-Received: by mail-pl1-x631.google.com with SMTP id d9443c01a7336-1b7fdc66e30so6576535ad.2
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 11:58:45 -0700 (PDT)
+        Thu, 29 Jun 2023 14:59:12 -0400
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C430FCA
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 11:59:10 -0700 (PDT)
+Received: by mail-wm1-x32f.google.com with SMTP id 5b1f17b1804b1-3fbaed1ac99so10550375e9.1
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 11:59:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1688065125; x=1690657125;
+        d=linaro.org; s=google; t=1688065149; x=1690657149;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=CtoO7wxtO66WKs7HcsIYHnyEK9qS2ptNje4197iQ+WQ=;
-        b=FqDckJGHOAILns8g8SssjEEqPgFGcqCyYEpxv0IIM+kBYWw18HQ3wDZvDveym6Iexv
-         MuHvgZIebcIjQg0yrloXjPPrh9JqXGUM7vT/pkXe7VZ3HOOu4XClZnKHCXl4HzTZj6XZ
-         brONgjMBygrSxQDYjk6T4XM5k4ImQ0xpweSjI=
+        bh=/FlO6Jg75h7o7gINpngRzGw5kuFzFb/sRPAmynbpWL4=;
+        b=WNa2WqtwhDEFGZyeP3X1GuyXVe6QeR2n2jhIdc8gOr1KXIKZ09eD1yTtWDdh1ttCv+
+         s5BT2021wqRbiDHRIBJwWy80hewSh4Qo9PcZhnMN5A3PFOzrgy4vfRGjNmwvVreROl5E
+         tdxHLgjPd0A+hWD59C93r6O9SSU1K/IVTxdwZxwLv/2k7ZMxhKdUeb3+XF3kEMBanxd/
+         cN/jDDcfItExCzIAAe5ledowEqjq5jzrgMoDbqs+6pCfabTuySDQDdro6yOq332RV4MF
+         eS40zefM0IEKgWq20lJSBDfq3AU3738aGtzH6cvCBq8UR4Om+SbolC9gbKaqijN5x6d1
+         TT7w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688065125; x=1690657125;
+        d=1e100.net; s=20221208; t=1688065149; x=1690657149;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=CtoO7wxtO66WKs7HcsIYHnyEK9qS2ptNje4197iQ+WQ=;
-        b=E0fk7G+TR53/n8J1wnkDcK+ZYDU1imP1MQEw3k1z80qc4imvIjSUYE9MMaCR8Erb6O
-         MPhYKvM+1rokVFGPd8t6UsH8Boa4W9HlBO3Nu93VG2qjcc6sj9hny/UzbPjVpoPp4GAh
-         3EXfGFteNNhnibuVMou+4ynDtZbrHRSwS0hmT5J8XpIB+Rmk9BdmxnqE6EcuhxmL5JZG
-         Fmb8ylxYhIwyH3gdO1puhRxIurENPDa0DOw18FqC+BYRG9meqoHFSJ/ZfLpX/ff7vW7p
-         bz+aySMjYDILM4RXWrfTtDtfxQTYOs52AO5/JpM7CQ/D0GXmxQ4/7l9/EIoeIdy8fLrc
-         K+UQ==
-X-Gm-Message-State: ABy/qLYWSwpDcSmWcJqhVoKbOEv1V6ecBC1OA57O4/WOtSJUHu5dFaiH
-        xeyghAqWM4PfYnmrQgn0F1TJPA==
-X-Google-Smtp-Source: APBJJlE2bSL3RaiK4vRaauIvsS0try4vm6SYiy+L//V/kX9bwLc2aK/E9ffrCixlwmqbMMkIt+XsuQ==
-X-Received: by 2002:a17:902:f544:b0:1b5:2b12:6f50 with SMTP id h4-20020a170902f54400b001b52b126f50mr121980plf.12.1688065125035;
-        Thu, 29 Jun 2023 11:58:45 -0700 (PDT)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id x3-20020a1709027c0300b001ae5d21f760sm9382247pll.146.2023.06.29.11.58.43
+        bh=/FlO6Jg75h7o7gINpngRzGw5kuFzFb/sRPAmynbpWL4=;
+        b=i2iLYEGWZQhB5iyYKe6qnJjIzzJJC7Ip3lt07iXjBxL5o7CoDubpHMrjI3qWrh9SAt
+         mshxeyNiZiVcVxIyFCVyUTpRZby+qIoxbLdzH3jJ3V83EPaPd4eMthFiVMNJOUW0tCzh
+         mZzcDaNoItZUhrt1WTNXwcoYo4fMV3xGqdwSXa1pYKtQGs6dnHgaUJJr8qOO+8UFsckP
+         KCQSU5dqQWN9SOM0niO1kezQ1PflOH7DhhV61DrFrDXDzM/ADoXTTHIHFlIx2CDZkXnx
+         wuTKfc6II2szXsfNpSO9+PR/j+jQbLCYKU09mzR5csEXWCaOI15TNVgm96JmUVtbSr/U
+         ZH3g==
+X-Gm-Message-State: AC+VfDxFmgKMg4RhnkuGoQxoOIfi4op6SRPbz6xiceKLktkcy379u/nR
+        WG0XlZ6NWrFGItqzFHavpN0zXw==
+X-Google-Smtp-Source: ACHHUZ4XSSjq9/3ccSAd+4dK8gj9M+sps2SRU6Al/tfzcEUz4yRg1TX76PohGxqk7bXWla/9EpCt0Q==
+X-Received: by 2002:a7b:cc15:0:b0:3fa:77ed:9894 with SMTP id f21-20020a7bcc15000000b003fa77ed9894mr236281wmh.7.1688065149269;
+        Thu, 29 Jun 2023 11:59:09 -0700 (PDT)
+Received: from localhost ([102.36.222.112])
+        by smtp.gmail.com with ESMTPSA id s25-20020a7bc399000000b003fa96fe2bebsm12106523wmj.41.2023.06.29.11.59.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Jun 2023 11:58:44 -0700 (PDT)
-Date:   Thu, 29 Jun 2023 11:58:43 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     llvm@lists.linux.dev, linux-kbuild@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
-        Borislav Petkov <bp@alien8.de>, linux-usb@vger.kernel.org
-Subject: Re: UBSAN spat in valid xhci code in Linus's current tree (6.4+)
-Message-ID: <202306291147.4CE126CE5@keescook>
-References: <2023062945-fencing-pebble-0411@gregkh>
+        Thu, 29 Jun 2023 11:59:07 -0700 (PDT)
+Date:   Thu, 29 Jun 2023 21:59:04 +0300
+From:   Dan Carpenter <dan.carpenter@linaro.org>
+To:     oe-kbuild@lists.linux.dev, Eddie James <eajames@linux.ibm.com>,
+        linux-hwmon@vger.kernel.org
+Cc:     lkp@intel.com, oe-kbuild-all@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux@roeck-us.net,
+        jdelvare@suse.com, lakshmiy@us.ibm.com
+Subject: Re: [PATCH] hwmon: (pmbus/acbel-fsg032) Add firmware version debugfs
+ attribute
+Message-ID: <45a29025-4c06-4f88-b82f-a8002c25c376@kadam.mountain>
+References: <20230627184027.16343-1-eajames@linux.ibm.com>
+ <b12935a2-a8b7-4d70-8c7d-6fd1e92037c2@kadam.mountain>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <2023062945-fencing-pebble-0411@gregkh>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+In-Reply-To: <b12935a2-a8b7-4d70-8c7d-6fd1e92037c2@kadam.mountain>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -69,36 +75,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 29, 2023 at 05:36:51PM +0200, Greg KH wrote:
-> Boris just reported to me a UBSAN splat in the USB xhci driver in
-> Linus's tree that wasn't present in 6.4-final, and given that no USB
-> changes are merged yet there, I was confused.
+On Thu, Jun 29, 2023 at 09:53:16AM +0300, Dan Carpenter wrote:
+> d2c6444389b625 Eddie James 2023-06-27  22  	char out[8];
+> d2c6444389b625 Eddie James 2023-06-27  23  	int rc;
+> d2c6444389b625 Eddie James 2023-06-27  24  	int i;
+> d2c6444389b625 Eddie James 2023-06-27  25  
+> d2c6444389b625 Eddie James 2023-06-27  26  	rc = pmbus_lock_interruptible(client);
+> d2c6444389b625 Eddie James 2023-06-27  27  	if (rc)
+> d2c6444389b625 Eddie James 2023-06-27  28  		return rc;
+> d2c6444389b625 Eddie James 2023-06-27  29  
+> d2c6444389b625 Eddie James 2023-06-27  30  	rc = i2c_smbus_read_block_data(client, ACBEL_MFR_FW_REVISION, data);
+> d2c6444389b625 Eddie James 2023-06-27  31  	pmbus_unlock(client);
+> d2c6444389b625 Eddie James 2023-06-27  32  	if (rc < 0)
+> d2c6444389b625 Eddie James 2023-06-27  33  		return rc;
+> d2c6444389b625 Eddie James 2023-06-27  34  
+> d2c6444389b625 Eddie James 2023-06-27  35  	for (i = 0; i < rc && i < 3; ++i)
+> d2c6444389b625 Eddie James 2023-06-27 @36  		snprintf(&out[i * 2], 3, "%02X", data[i]);
 > 
-> Turns out, I think you all missed a "variable length" structure in the
-> xhci driver, which UBSAN is calling out a being an overrun, when really
-> it isn't (it's just written that way...)
-> 
-> The splat is:
-> 
-> UBSAN: array-index-out-of-bounds in drivers/usb/host/xhci-hub.c:231:31
-> index 1 is out of range for type '__le32 [1]'
-> CPU: 0 PID: 1556 Comm: kworker/0:2 Not tainted 6.4.0+ #7
+> If data[i] is negative this will print FFFFFFF1 etc.  (This is an x86
+> config...  Did we ever merge that patch to make char signed by default?)
 
-This is fixed here, a couple weeks ago, but maybe it missed your tree:
-https://lore.kernel.org/lkml/20230614181307.gonna.256-kees@kernel.org/
+I meant unsigned not signed.  But actually we debated both ways...
+Signed by default would annoy PowerPC devs since they try to really
+lean into the fact that char is unsigned on that arch.  :P
 
-Would you prefer I carry it?
+https://lwn.net/Articles/911914/
 
-> So perhaps 2d47c6956ab3 ("ubsan: Tighten UBSAN_BOUNDS on GCC") should be
-> reverted for now?  Or this field fixed up to properly be marked as a
-> variable length array of at least one entry?
+regards,
+dan carpenter
 
-We've been turning these things on further and further so we can catch
-stuff like this (and we did while it lived in -next). FWIW, it shouldn't
-cause any problems beyond the splat (i.e. everything should continue
-working normally).
-
--Kees
-
--- 
-Kees Cook
