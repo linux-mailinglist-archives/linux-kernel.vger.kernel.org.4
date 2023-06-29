@@ -2,361 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FA87741E0B
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 04:13:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC792741E0E
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 04:14:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231300AbjF2CNa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 22:13:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50954 "EHLO
+        id S231546AbjF2COJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 22:14:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229487AbjF2CNT (ORCPT
+        with ESMTP id S231305AbjF2CN5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 22:13:19 -0400
-Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B875210E;
-        Wed, 28 Jun 2023 19:13:17 -0700 (PDT)
-Received: by mail-pg1-x52a.google.com with SMTP id 41be03b00d2f7-51452556acdso138425a12.2;
-        Wed, 28 Jun 2023 19:13:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688004797; x=1690596797;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=eK+GZTvaI9GpF+th2wx0qAS291ZJaIQUkAYN/lJSnjk=;
-        b=LtAm9OJENmFL/CFUxR0GtVCgkyBqDLDbHwNCmdUe4dzkenU0TuMr2ghkJhYLxw9rEU
-         dFL6JDHZTObecMqWehZFBU9vxW46742veERYUyPfemzgxdJCMK1cAMi47wbMRsnHKbfl
-         OcQCaeHRnnvpR22oLYQD/YtL5KnEy0eYqVcyYta+q2H33aXUtc+7OGKyQU+iasEm0EEe
-         Rc+Uti77Airh8wlvU5hSOuEoWh59aMW6RI2qz0sbg1WYFkI/nVvhc3PSY4RFbCm7klLn
-         wg8lbeBS0OCm2po1Q07W5oAXAuSzzr1LHHc+1RdVSszXXSdZp78PSUKFyyrGYUBqu4Cd
-         dxvg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688004797; x=1690596797;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=eK+GZTvaI9GpF+th2wx0qAS291ZJaIQUkAYN/lJSnjk=;
-        b=W8K1gS7PBwrmSVs1utaTOa4dXys6xkmDh9fSemij56BCgb/vzM5/1s+mjORE5NvMhe
-         lFnAROGM6Pfxn76nLpGK5Ll8ndL+cYIB52kblM93MwWKmY3wuOamcv9C2HmyqpfTdyNV
-         Xspj42lkN+56tpNsENjPPveBkfMIPSz8v4PfIJDmM85dqg5WTKgllo4QaOtYt9Ekb4nP
-         bIAd2wbYw+q9gLilcdHycX32hXxHcSCAQ+nDXmxJ/jlseEOVQizf0NAiGTD8sKHMDLXd
-         uvpt7Dn1uHb8rHXSzQfGE6wLa/N84iVgVkWUKsAK3PxnE/iHUXHGZS7GtlrpbDZj+I+n
-         X4zw==
-X-Gm-Message-State: AC+VfDwgjw4THVCvLBKN88oGNfonByqC5bjLIAfvHnSOuxeWm74C0EJp
-        ql7GaqCbJzZQudrLeAbTumn/NzQHcA2gtj1NVLc=
-X-Google-Smtp-Source: ACHHUZ7XN+3LeDvOmFnc3BOChJihvOylEkKOtArWWP3fQVUXkBx23yqNUrbBUPNK4DV+EZeYdINPVsUg8Vd2O3ZLJ1Q=
-X-Received: by 2002:a17:90a:c301:b0:262:c8dc:5ab0 with SMTP id
- g1-20020a17090ac30100b00262c8dc5ab0mr9049662pjt.39.1688004796832; Wed, 28 Jun
- 2023 19:13:16 -0700 (PDT)
+        Wed, 28 Jun 2023 22:13:57 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58EE130C4;
+        Wed, 28 Jun 2023 19:13:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1688004823; x=1719540823;
+  h=date:from:to:cc:subject:message-id:references:
+   content-transfer-encoding:in-reply-to:mime-version;
+  bh=KCw5v6yYPEevA+8tDWEVbKGLvtQ2GsYVbzNdHYMMNLc=;
+  b=lB4M4YAzpIO+LbcYUafCJJucf+UIYVp3qBhGbQz6HfgTeTmRvevGPQfd
+   95KPMhYwRgwSjPHkrVFfh/dO5tzv9os0/RRfTxb34AROVG8AxZD+SqGaT
+   kvGRH4VbN7DUHJKEnRDxOH4Y0AKYpmH0DtTLc9hwvm3kfsXppLQ+IzYfK
+   54MYcMR2sFgmA8FaFwcOHYJhsa7rQASYD5aCwVLU39EHvPwNATmjycPFC
+   HpWPaLPFHDpNdnjUejhLGVVTfxOF/Op4Oq8oqUM3gruU2e1YEasdXUXFr
+   4HZzKfoItbITv/AWx6FJ9UOpZrvfhRsxIJEP+uYNR/k/mi9KyqmhJ6Oz6
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10755"; a="428022226"
+X-IronPort-AV: E=Sophos;i="6.01,167,1684825200"; 
+   d="scan'208";a="428022226"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2023 19:13:42 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10755"; a="963831311"
+X-IronPort-AV: E=Sophos;i="6.01,167,1684825200"; 
+   d="scan'208";a="963831311"
+Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
+  by fmsmga006.fm.intel.com with ESMTP; 28 Jun 2023 19:13:41 -0700
+Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.27; Wed, 28 Jun 2023 19:13:41 -0700
+Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
+ orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.27 via Frontend Transport; Wed, 28 Jun 2023 19:13:41 -0700
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (104.47.55.168)
+ by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.27; Wed, 28 Jun 2023 19:13:41 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=VF+/KT1qRmKkRi02IvlHU7Zw1+yTn08IHyk+u/vsNpgfQ08mReJCYxsGpqdBWRCqrPJtFRLmO20ncGgjXU7StUscJhydIN7cOqvO9A453AFzaqlb/ipOXrz6SRFG29FExOKcqqUyahvMt1+3/NGlvEIcMP7fJ+A+SDXrFHmp1ok3uSL/isp86cRVHze9uHPhO8vPxEpsjg7cSavdKj5NzjGBudA13LHxhqaJZxA0XZW1ZXk2O9JibjM9/Qzjw2Irh+u3IChiXGUCFY4qo7WcFo9C+VUOJsspTsC4z+aiWn8AzfOA/dPMRRFJafFdNAD52pmWcMZJMPz7QvbUvBZEbw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Cg2rk7CHMWyYprzWfkjxlYB6/TkEYecxNA/ZmbINVy0=;
+ b=lpWozFfazE46VXAOlOHKX6mgF+pcXl+HlRjSt4LvUVaZ3BahUe45ODxVMvZkngAbhQJdJsizHbl/J0n5aMONWkLAV62fnUUGRhQDuwEdlnxm4DM2pL0aRPwmDS5FjeMY7LRaNktXOcWrQcXB77rTSzOj+BSmwYWy5N8eGvyDW3S5pMY28/GS08CaHIcxiV8l0g3Sb9sPGrgqXL1STPJKKTN6xyvTw4SFLeUd6eA/2n90fCeLe5O1+oUy6hJRvGIEgFzQC2Czy81rEhwwKtw/Q/rXh6s9NEbr/CEU3AyuLVSE+P9Y46SAgixwQaUx+8eB877FDmcoFvQauA6IJciPCw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from SA1PR11MB6733.namprd11.prod.outlook.com (2603:10b6:806:25c::17)
+ by DS7PR11MB6077.namprd11.prod.outlook.com (2603:10b6:8:87::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.26; Thu, 29 Jun
+ 2023 02:13:38 +0000
+Received: from SA1PR11MB6733.namprd11.prod.outlook.com
+ ([fe80::7237:cab8:f7f:52a5]) by SA1PR11MB6733.namprd11.prod.outlook.com
+ ([fe80::7237:cab8:f7f:52a5%7]) with mapi id 15.20.6521.024; Thu, 29 Jun 2023
+ 02:13:37 +0000
+Date:   Wed, 28 Jun 2023 19:13:32 -0700
+From:   Ira Weiny <ira.weiny@intel.com>
+To:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
+        Matthew Wilcox <willy@infradead.org>
+CC:     Sumitra Sharma <sumitraartsy@gmail.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        <linux-fsdevel@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Ira Weiny <ira.weiny@intel.com>,
+        "Deepak R Varma" <drv@mailo.com>
+Subject: Re: [PATCH] fs/vboxsf: Replace kmap() with kmap_local_{page, folio}()
+Message-ID: <649ce8cc8375e_92a162947@iweiny-mobl.notmuch>
+References: <20230627135115.GA452832@sumitra.com>
+ <ZJxqmEVKoxxftfXM@casper.infradead.org>
+ <6924669.18pcnM708K@suse>
+ <2882298.SvYEEZNnvj@suse>
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <2882298.SvYEEZNnvj@suse>
+X-ClientProxiedBy: SJ0PR13CA0235.namprd13.prod.outlook.com
+ (2603:10b6:a03:2c1::30) To SA1PR11MB6733.namprd11.prod.outlook.com
+ (2603:10b6:806:25c::17)
 MIME-Version: 1.0
-References: <20230626171430.3167004-1-ryan.roberts@arm.com> <20230626171430.3167004-11-ryan.roberts@arm.com>
-In-Reply-To: <20230626171430.3167004-11-ryan.roberts@arm.com>
-From:   Yang Shi <shy828301@gmail.com>
-Date:   Wed, 28 Jun 2023 19:13:05 -0700
-Message-ID: <CAHbLzkoZf=5PLrC0HNT4Owy=xM4HfA9HDjdCHC+h5RYXUwp0gw@mail.gmail.com>
-Subject: Re: [PATCH v1 10/10] mm: Allocate large folios for anonymous memory
-To:     Ryan Roberts <ryan.roberts@arm.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Yin Fengwei <fengwei.yin@intel.com>,
-        David Hildenbrand <david@redhat.com>,
-        Yu Zhao <yuzhao@google.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-alpha@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, linux-s390@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SA1PR11MB6733:EE_|DS7PR11MB6077:EE_
+X-MS-Office365-Filtering-Correlation-Id: 9ac830bc-8c0e-4346-c861-08db784672ec
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: wzaXjccjGAwHRl9HH0bLEPgB0B8w8DXQHF3xXZB9s/PnbVkeAgzDJv5ayrFhVrspwMTHZQrXer3LQHeWQvtvc+O6YRMDWdys0wbYBp1n32e+N+cX+9d9IxYbsoOUgutjMG/pgFc/CJHNxfqFmN9XD53wAIhm/RizCCbQWo34keKF8kIAi+V4hjeIvip0/TIDKZjeZpUQvzY4jTovNCM1dgBoNjpKs80mDI4Yl1b794OKKCxU+laIMySjZmuGyWv1O+Ez8kAWO8vtntEFpBDjv47nWuqG+W6wy2c9+fUemy99fOaF6JZ/Qvd9ClzuetFWnx3KcmDYmveO79y0eFS0oFtZxd0Ascv008YKdrq30NvAgkrmeH7iGDDcTtxuwrJojB1RaoHsw+/z+VJKtV1KFVfoiZYIOfS8vBbXtHhAGW98EqT2hStDiyumWzgNC28WoOoL5gpjq57/KqZ+NoQijwOhYTpNZm/tVG11wp4copD4AIZArXwRtJUckWjqx2zCCNZ7QCYwZL3rZVj6qnqZ2N4ebNQL/F1FqwEYc25ye49eRoEFNn3h6RGuoqKQ+PIG
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR11MB6733.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(366004)(39860400002)(396003)(136003)(346002)(376002)(451199021)(41300700001)(9686003)(5660300002)(44832011)(38100700002)(66476007)(316002)(4326008)(86362001)(8676002)(66556008)(8936002)(66946007)(82960400001)(6486002)(26005)(186003)(6506007)(2906002)(4744005)(6512007)(6666004)(54906003)(478600001)(110136005)(83380400001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?iso-8859-1?Q?VGqqog+k33RergG5XUB9WmEcyVR1BMzhnIfiDR4PdZKeHcSu3G3VddAqf7?=
+ =?iso-8859-1?Q?lfcMQdBt/3rYntcFyS+mi2RfSABURNFwFH321A9iMNzye4WCLtdfXkfpNm?=
+ =?iso-8859-1?Q?J09pFk/Jio0e0uxzW4VYtPr4hdhuAR7G3inhEV1auOzc6gutPeAmc6c33j?=
+ =?iso-8859-1?Q?zXqO2cuytHjR2zbyNzm/W8tkyC/6AceMphXEhmPEg6w7GDEwsEURIc4ueZ?=
+ =?iso-8859-1?Q?WksGvCVyOlg11Mj7RAHry4eyPvNzQmZa2T/AT8LOI8eP3QOiWuibXIFw/+?=
+ =?iso-8859-1?Q?CecjIBfAU2WV6PRyC8cEX5FsZgel5QC0pguHcu8zVutZUWRY6m81q2kGxs?=
+ =?iso-8859-1?Q?nAbUF2JHMfY1ahCnrN7AlkwYQsZzj54tDoMh4PQDsaQB7Zj/fmWkoSlpbk?=
+ =?iso-8859-1?Q?ZWDlMmHTVmQ5TyMyC2rwXdHXtZhuExcibM73pWdpIlBFbBEz5/FnsC0j+X?=
+ =?iso-8859-1?Q?VnuyBXKpgGEtVulkpHvYsZ9OBRyMEZrboi/phvmlIKwlw1Zyty4GdhAaAu?=
+ =?iso-8859-1?Q?ymjdgupvSRTQRta5DFfTOdGt7r1isHqmq1TgJYEvufiKjgsFZuZgkIoPgw?=
+ =?iso-8859-1?Q?CmBs3aK60MUm+nn9GTRA7TVZevOSlyTDRDdCZK8epYCgxapgjp4OZ3MtaP?=
+ =?iso-8859-1?Q?RneSIsf0GIeUXDuLjCvWPCGZ4JwPo/Qm5vhaCCfOgYm/nRNPXAZkHjZtHw?=
+ =?iso-8859-1?Q?HNE46CSTi8TtmfTFdKgyloSvWxonUCF7Ss0kUibt4VNRjbJlTssLEaDBbR?=
+ =?iso-8859-1?Q?IVP4leIZViOAAfT1JhqKBSpOhhuTHZ0Lbg5FCT3tQhecDXd8vaNVDNLHa7?=
+ =?iso-8859-1?Q?MkWxwTTJgg9fx0LQmAUgQ7vHye300bZKrUZYj4kD0MY8pobGuOtZFSkMe7?=
+ =?iso-8859-1?Q?MBWBww8JWLDe+mVS9czTVsG6pPveegXmQjDMX+giuY177jlKvNb0Ciiwdp?=
+ =?iso-8859-1?Q?lnKkFDWwNBW46Cv4XoQpCGzTPxZlLwrJT5c9IvaJ+2SjEr8gFrRLUhLq5f?=
+ =?iso-8859-1?Q?rdPoRLnHFJO+KMZ4cbGU2vO9w2hRnUcyA4KE3MrqITTcPiRMQ2p5anW9WP?=
+ =?iso-8859-1?Q?lIV/5kEySBn47dTpGR5voB51hQbUAmwWjlxqnFqkVKDWuvpyiUQSPzjwx5?=
+ =?iso-8859-1?Q?QMexmMVl4Dyff5F5e1B+AdlqWyOHyhYvUdU9UwgYISoxFGnoK0rC+NDJoh?=
+ =?iso-8859-1?Q?UfG5/V9YwKcANlx49Tni/0SfdqIMOefKZbvrq1Pl/drOlnv7MSZUFQKwqs?=
+ =?iso-8859-1?Q?sYVrRvUzqPaOJZ+QlKfN8to1pnQqMyubrZ3AGJZPvVMmiuGyrq1rrWQ7Dy?=
+ =?iso-8859-1?Q?0nB3toJWg7JJn7IPSlgVtTRVeGbpbqZXl25tghMhgTcbGBsTJEVSY58qpN?=
+ =?iso-8859-1?Q?TcG1NFP+voak73IkOrNV/rZKikDyK4uz1FG8DskmAQ51JiS0GpRpntIj3Q?=
+ =?iso-8859-1?Q?4SNToFhp7tg22QIEKAb/+RVrl5YGsajoDI7VqRrduI8lJCY5mwnkx6iWao?=
+ =?iso-8859-1?Q?mIZYNC6zgXtb+OXHOz30h5Ud8ffR198xZOhARp1sOu23RgZLxd6jJdyQU/?=
+ =?iso-8859-1?Q?ClpTU6vxnyhn9My+6yHY4BworvpPsRPATX8Ynsp0kIbeYSRLZlfzpSP7WH?=
+ =?iso-8859-1?Q?9hWWDEWakmteTifqzCfTQGqvaWMHh1S07Y?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9ac830bc-8c0e-4346-c861-08db784672ec
+X-MS-Exchange-CrossTenant-AuthSource: SA1PR11MB6733.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Jun 2023 02:13:37.7712
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: bfahqhs7xEJ1l0WFcUJSYagXOnM/hicPeUoZrPTL1/0LZIBZOjkn45lHaqQfDu7fxZF10ma5O/H+Y0JelgBxIg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR11MB6077
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 26, 2023 at 10:15=E2=80=AFAM Ryan Roberts <ryan.roberts@arm.com=
-> wrote:
->
-> With all of the enabler patches in place, modify the anonymous memory
-> write allocation path so that it opportunistically attempts to allocate
-> a large folio up to `max_anon_folio_order()` size (This value is
-> ultimately configured by the architecture). This reduces the number of
-> page faults, reduces the size of (e.g. LRU) lists, and generally
-> improves performance by batching what were per-page operations into
-> per-(large)-folio operations.
->
-> If CONFIG_LARGE_ANON_FOLIO is not enabled (the default) then
-> `max_anon_folio_order()` always returns 0, meaning we get the existing
-> allocation behaviour.
->
-> Signed-off-by: Ryan Roberts <ryan.roberts@arm.com>
-> ---
->  mm/memory.c | 159 +++++++++++++++++++++++++++++++++++++++++++++++-----
->  1 file changed, 144 insertions(+), 15 deletions(-)
->
-> diff --git a/mm/memory.c b/mm/memory.c
-> index a8f7e2b28d7a..d23c44cc5092 100644
-> --- a/mm/memory.c
-> +++ b/mm/memory.c
-> @@ -3161,6 +3161,90 @@ static inline int max_anon_folio_order(struct vm_a=
-rea_struct *vma)
->                 return CONFIG_LARGE_ANON_FOLIO_NOTHP_ORDER_MAX;
->  }
->
-> +/*
-> + * Returns index of first pte that is not none, or nr if all are none.
-> + */
-> +static inline int check_ptes_none(pte_t *pte, int nr)
-> +{
-> +       int i;
-> +
-> +       for (i =3D 0; i < nr; i++) {
-> +               if (!pte_none(ptep_get(pte++)))
-> +                       return i;
-> +       }
-> +
-> +       return nr;
-> +}
-> +
-> +static int calc_anon_folio_order_alloc(struct vm_fault *vmf, int order)
-> +{
-> +       /*
-> +        * The aim here is to determine what size of folio we should allo=
-cate
-> +        * for this fault. Factors include:
-> +        * - Order must not be higher than `order` upon entry
-> +        * - Folio must be naturally aligned within VA space
-> +        * - Folio must not breach boundaries of vma
-> +        * - Folio must be fully contained inside one pmd entry
-> +        * - Folio must not overlap any non-none ptes
-> +        *
-> +        * Additionally, we do not allow order-1 since this breaks assump=
-tions
-> +        * elsewhere in the mm; THP pages must be at least order-2 (since=
- they
-> +        * store state up to the 3rd struct page subpage), and these page=
-s must
-> +        * be THP in order to correctly use pre-existing THP infrastructu=
-re such
-> +        * as folio_split().
-> +        *
-> +        * As a consequence of relying on the THP infrastructure, if the =
-system
-> +        * does not support THP, we always fallback to order-0.
-> +        *
-> +        * Note that the caller may or may not choose to lock the pte. If
-> +        * unlocked, the calculation should be considered an estimate tha=
-t will
-> +        * need to be validated under the lock.
-> +        */
-> +
-> +       struct vm_area_struct *vma =3D vmf->vma;
-> +       int nr;
-> +       unsigned long addr;
-> +       pte_t *pte;
-> +       pte_t *first_set =3D NULL;
-> +       int ret;
-> +
-> +       if (has_transparent_hugepage()) {
-> +               order =3D min(order, PMD_SHIFT - PAGE_SHIFT);
-> +
-> +               for (; order > 1; order--) {
-> +                       nr =3D 1 << order;
-> +                       addr =3D ALIGN_DOWN(vmf->address, nr << PAGE_SHIF=
-T);
-> +                       pte =3D vmf->pte - ((vmf->address - addr) >> PAGE=
-_SHIFT);
-> +
-> +                       /* Check vma bounds. */
-> +                       if (addr < vma->vm_start ||
-> +                           addr + (nr << PAGE_SHIFT) > vma->vm_end)
-> +                               continue;
-> +
-> +                       /* Ptes covered by order already known to be none=
-. */
-> +                       if (pte + nr <=3D first_set)
-> +                               break;
-> +
-> +                       /* Already found set pte in range covered by orde=
-r. */
-> +                       if (pte <=3D first_set)
-> +                               continue;
-> +
-> +                       /* Need to check if all the ptes are none. */
-> +                       ret =3D check_ptes_none(pte, nr);
-> +                       if (ret =3D=3D nr)
-> +                               break;
-> +
-> +                       first_set =3D pte + ret;
-> +               }
-> +
-> +               if (order =3D=3D 1)
-> +                       order =3D 0;
-> +       } else
-> +               order =3D 0;
-> +
-> +       return order;
-> +}
-> +
->  /*
->   * Handle write page faults for pages that can be reused in the current =
-vma
->   *
-> @@ -4201,6 +4285,9 @@ static vm_fault_t do_anonymous_page(struct vm_fault=
- *vmf)
->         struct folio *folio;
->         vm_fault_t ret =3D 0;
->         pte_t entry;
-> +       unsigned long addr;
-> +       int order =3D uffd_wp ? 0 : max_anon_folio_order(vma);
-> +       int pgcount =3D BIT(order);
->
->         /* File mapping without ->vm_ops ? */
->         if (vma->vm_flags & VM_SHARED)
-> @@ -4242,24 +4329,44 @@ static vm_fault_t do_anonymous_page(struct vm_fau=
-lt *vmf)
->                         pte_unmap_unlock(vmf->pte, vmf->ptl);
->                         return handle_userfault(vmf, VM_UFFD_MISSING);
->                 }
-> -               goto setpte;
-> +               if (uffd_wp)
-> +                       entry =3D pte_mkuffd_wp(entry);
-> +               set_pte_at(vma->vm_mm, vmf->address, vmf->pte, entry);
-> +
-> +               /* No need to invalidate - it was non-present before */
-> +               update_mmu_cache(vma, vmf->address, vmf->pte);
-> +               goto unlock;
->         }
->
-> -       /* Allocate our own private page. */
-> +retry:
-> +       /*
-> +        * Estimate the folio order to allocate. We are not under the ptl=
- here
-> +        * so this estiamte needs to be re-checked later once we have the=
- lock.
-> +        */
-> +       vmf->pte =3D pte_offset_map(vmf->pmd, vmf->address);
-> +       order =3D calc_anon_folio_order_alloc(vmf, order);
-> +       pte_unmap(vmf->pte);
-> +
-> +       /* Allocate our own private folio. */
->         if (unlikely(anon_vma_prepare(vma)))
->                 goto oom;
-> -       folio =3D vma_alloc_zeroed_movable_folio(vma, vmf->address, 0, 0)=
-;
-> +       folio =3D try_vma_alloc_movable_folio(vma, vmf->address, order, t=
-rue);
->         if (!folio)
->                 goto oom;
->
-> +       /* We may have been granted less than we asked for. */
-> +       order =3D folio_order(folio);
-> +       pgcount =3D BIT(order);
-> +       addr =3D ALIGN_DOWN(vmf->address, pgcount << PAGE_SHIFT);
-> +
->         if (mem_cgroup_charge(folio, vma->vm_mm, GFP_KERNEL))
->                 goto oom_free_page;
->         folio_throttle_swaprate(folio, GFP_KERNEL);
->
->         /*
->          * The memory barrier inside __folio_mark_uptodate makes sure tha=
-t
-> -        * preceding stores to the page contents become visible before
-> -        * the set_pte_at() write.
-> +        * preceding stores to the folio contents become visible before
-> +        * the set_ptes() write.
->          */
->         __folio_mark_uptodate(folio);
->
-> @@ -4268,11 +4375,31 @@ static vm_fault_t do_anonymous_page(struct vm_fau=
-lt *vmf)
->         if (vma->vm_flags & VM_WRITE)
->                 entry =3D pte_mkwrite(pte_mkdirty(entry));
->
-> -       vmf->pte =3D pte_offset_map_lock(vma->vm_mm, vmf->pmd, vmf->addre=
-ss,
-> -                       &vmf->ptl);
-> -       if (vmf_pte_changed(vmf)) {
-> -               update_mmu_tlb(vma, vmf->address, vmf->pte);
-> -               goto release;
-> +       vmf->pte =3D pte_offset_map_lock(vma->vm_mm, vmf->pmd, addr, &vmf=
-->ptl);
-> +
-> +       /*
-> +        * Ensure our estimate above is still correct; we could have race=
-d with
-> +        * another thread to service a fault in the region.
-> +        */
-> +       if (order =3D=3D 0) {
-> +               if (vmf_pte_changed(vmf)) {
-> +                       update_mmu_tlb(vma, vmf->address, vmf->pte);
-> +                       goto release;
-> +               }
-> +       } else if (check_ptes_none(vmf->pte, pgcount) !=3D pgcount) {
-> +               pte_t *pte =3D vmf->pte + ((vmf->address - addr) >> PAGE_=
-SHIFT);
-> +
-> +               /* If faulting pte was allocated by another, exit early. =
-*/
-> +               if (!pte_none(ptep_get(pte))) {
-> +                       update_mmu_tlb(vma, vmf->address, pte);
-> +                       goto release;
-> +               }
-> +
-> +               /* Else try again, with a lower order. */
-> +               pte_unmap_unlock(vmf->pte, vmf->ptl);
-> +               folio_put(folio);
-> +               order--;
-> +               goto retry;
+Fabio M. De Francesco wrote:
+> On giovedì 29 giugno 2023 00:23:54 CEST Fabio M. De Francesco wrote:
+> 
+> [...]
+> 
+> > 
+> > Shouldn't we call folio_lock() to lock the folio to be able to unlock with
+> > folio_unlock()?
+> 
+> Sorry, I wanted to write "If so, I can't find either a folio_lock() or a 
+> page_lock() in this filesystem.".
 
-I'm not sure whether this extra fallback logic is worth it or not. Do
-you have any benchmark data or is it just an arbitrary design choice?
-If it is just an arbitrary design choice, I'd like to go with the
-simplest way by just exiting page fault handler, just like the
-order-0, IMHO.
+Check the documentation for read_folio:
 
->         }
->
->         ret =3D check_stable_address_space(vma->vm_mm);
-> @@ -4286,16 +4413,18 @@ static vm_fault_t do_anonymous_page(struct vm_fau=
-lt *vmf)
->                 return handle_userfault(vmf, VM_UFFD_MISSING);
->         }
->
-> -       inc_mm_counter(vma->vm_mm, MM_ANONPAGES);
-> -       folio_add_new_anon_rmap(folio, vma, vmf->address);
-> +       folio_ref_add(folio, pgcount - 1);
-> +
-> +       add_mm_counter(vma->vm_mm, MM_ANONPAGES, pgcount);
-> +       folio_add_new_anon_rmap_range(folio, &folio->page, pgcount, vma, =
-addr);
->         folio_add_lru_vma(folio, vma);
-> -setpte:
-> +
->         if (uffd_wp)
->                 entry =3D pte_mkuffd_wp(entry);
-> -       set_pte_at(vma->vm_mm, vmf->address, vmf->pte, entry);
-> +       set_ptes(vma->vm_mm, addr, vmf->pte, entry, pgcount);
->
->         /* No need to invalidate - it was non-present before */
-> -       update_mmu_cache(vma, vmf->address, vmf->pte);
-> +       update_mmu_cache_range(vma, addr, vmf->pte, pgcount);
->  unlock:
->         pte_unmap_unlock(vmf->pte, vmf->ptl);
->         return ret;
-> --
-> 2.25.1
->
->
+	... "The filesystem should unlock the folio once the read has
+	completed, whether it was successful or not." ...
+
+Ira
