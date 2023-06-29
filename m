@@ -2,42 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5BE67429E1
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 17:46:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DC117429EB
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 17:51:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232082AbjF2Pqn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 11:46:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58352 "EHLO
+        id S232509AbjF2Pvq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 11:51:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230036AbjF2Pql (ORCPT
+        with ESMTP id S231496AbjF2Pvn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 11:46:41 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E68062D4E
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 08:46:39 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6866DC14;
-        Thu, 29 Jun 2023 08:47:23 -0700 (PDT)
-Received: from e109506.cambridge.arm.com (e109506.cambridge.arm.com [10.1.199.62])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 769FB3F64C;
-        Thu, 29 Jun 2023 08:46:38 -0700 (PDT)
-From:   Rahul Singh <rahul.singh@arm.com>
-To:     xen-devel@lists.xenproject.org, linux-kernel@vger.kernel.org
-Cc:     rahul.singh@arm.com, Juergen Gross <jgross@suse.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-        Samuel Holland <samuel@sholland.org>,
-        David Woodhouse <dwmw@amazon.co.uk>,
-        Jane Malalane <jane.malalane@citrix.com>
-Subject: [PATCH v2] xen/evtchn: Introduce new IOCTL to bind static evtchn
-Date:   Thu, 29 Jun 2023 16:46:18 +0100
-Message-Id: <764d561e3aecb7e63e8601dc50aaef9fc40834e4.1688051342.git.rahul.singh@arm.com>
-X-Mailer: git-send-email 2.25.1
+        Thu, 29 Jun 2023 11:51:43 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB3A530D1;
+        Thu, 29 Jun 2023 08:51:42 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 53F1F61512;
+        Thu, 29 Jun 2023 15:51:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F0CEC433C0;
+        Thu, 29 Jun 2023 15:51:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688053901;
+        bh=0+IOMK6WhZShNaFf3O0bh+KyvYLal+y1KgYHkEx7OUo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=bRnyyiZbJkO7ai5MWKdWLd0maxGj4i1sNZrEB9vFlT9XCeUTcc9EAmfWK7cmJP2m8
+         TiXhrfMT9qTKz9jyfp9xG1099d9l6Fs55XDqaLsw6g5hmg+eb+/fh1gO7l8JrZQ5pS
+         n9tw0fb9h+rFSrFvPQdyEtFW44c9CGu86dlykzG7jqyEhAJ+sKMQolRhlB4eLzsSNo
+         RYWy1LQEkacvPwDf+oKdDUOo+jP+5STPBH4U5QTY+XkodHZmtEipUf+9MWNRFh0Vw8
+         q2DCCVaSa+3JSWV2KT+v97OY7N62qMkWyO8FNTRtdzjMtwJf+kvAe/jVPpm18aiEqT
+         1vFcSZOoDBDfA==
+Date:   Thu, 29 Jun 2023 16:51:34 +0100
+From:   Lee Jones <lee@kernel.org>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Rob Herring <robh@kernel.org>,
+        William Breathitt Gray <william.gray@linaro.org>,
+        "Sahin, Okan" <Okan.Sahin@analog.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Cosmin Tanislav <demonsingur@gmail.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Caleb Connolly <caleb.connolly@linaro.org>,
+        Marcus Folkesson <marcus.folkesson@gmail.com>,
+        "Bolboaca, Ramona" <Ramona.Bolboaca@analog.com>,
+        ChiYuan Huang <cy_huang@richtek.com>,
+        "Tilki, Ibrahim" <Ibrahim.Tilki@analog.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Hugo Villeneuve <hvilleneuve@dimonoff.com>,
+        ChiaEn Wu <chiaen_wu@richtek.com>,
+        Haibo Chen <haibo.chen@nxp.com>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>
+Subject: Re: [PATCH v7 5/5] mfd: max77541: Add ADI MAX77541/MAX77540 PMIC
+ Support
+Message-ID: <20230629155134.GB2110266@google.com>
+References: <20230626175443.GA3446604-robh@kernel.org>
+ <20230627135615.GF10378@google.com>
+ <CAL_JsqL3T6pjnTFgFvbYMeATD6cjhc-Sm0vZW2cv5k+w9Oxjuw@mail.gmail.com>
+ <ZJry8QTka8m6ag/j@fedora>
+ <20230627163344.GG10378@google.com>
+ <CAL_Jsq+Z64tuMO8a2Y=2GrXZ8q0L4Z2avCiphsn0HOOC71Dzjg@mail.gmail.com>
+ <20230628134013.GH10378@google.com>
+ <472a4d86-3bfb-4c2b-a099-f1254dd01e24@sirena.org.uk>
+ <20230629072500.GA2110266@google.com>
+ <d070eecd-cb3b-4968-803e-1817a1a4359a@sirena.org.uk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <d070eecd-cb3b-4968-803e-1817a1a4359a@sirena.org.uk>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -45,184 +87,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Xen 4.17 supports the creation of static evtchns. To allow user space
-application to bind static evtchns introduce new ioctl
-"IOCTL_EVTCHN_BIND_STATIC". Existing IOCTL doing more than binding
-that’s why we need to introduce the new IOCTL to only bind the static
-event channels.
+On Thu, 29 Jun 2023, Mark Brown wrote:
 
-Also, static evtchns to be available for use during the lifetime of the
-guest. When the application exits, __unbind_from_irq() ends up being
-called from release() file operations because of that static evtchns
-are getting closed. To avoid closing the static event channel, add the
-new bool variable "is_static" in "struct irq_info" to mark the event
-channel static when creating the event channel to avoid closing the
-static evtchn.
+> On Thu, Jun 29, 2023 at 08:25:00AM +0100, Lee Jones wrote:
+> > On Wed, 28 Jun 2023, Mark Brown wrote:
+> 
+> > > As I mentioned before the number of resends of what are frequently very
+> > > similar serieses (eg, two PMICs from the same vendor in flight at the
+> > > same time) was causing me real issues with tags going AWOL and things
+> > > getting lost in the noise.
+> 
+> > As much as I empathise with each of these points (I feel it too), the
+> > alternative seems to be causing more issues for more people.  With that
+> > in mind, I'm going to revert back to how we've been doing things for a
+> > long time now.  Please try to Ack and forget.  If a contributor fails to
+> > apply a previously issued tag, we'll have to bring that up at the time.
+> 
+> The thing that's causing a lot of the issues here is that you're only
+> applying the serieses en masse, blocking things on getting absolutely
+> everything lined up (including this time over a merge window).  I really
+> don't understand why you feel you're forced to batch everything together
+> like this.
 
-Signed-off-by: Rahul Singh <rahul.singh@arm.com>
----
-v2:
- * Use bool in place u8 to define is_static variable.
- * Avoid closing the static evtchns in error path.
----
- drivers/xen/events/events_base.c |  7 +++++--
- drivers/xen/evtchn.c             | 30 ++++++++++++++++++++++--------
- include/uapi/xen/evtchn.h        |  9 +++++++++
- include/xen/events.h             |  2 +-
- 4 files changed, 37 insertions(+), 11 deletions(-)
+https://lore.kernel.org/all/CAL_Jsq+Z64tuMO8a2Y=2GrXZ8q0L4Z2avCiphsn0HOOC71Dzjg@mail.gmail.com/
 
-diff --git a/drivers/xen/events/events_base.c b/drivers/xen/events/events_base.c
-index c7715f8bd452..5d3b5c7cfe64 100644
---- a/drivers/xen/events/events_base.c
-+++ b/drivers/xen/events/events_base.c
-@@ -112,6 +112,7 @@ struct irq_info {
- 	unsigned int irq_epoch; /* If eoi_cpu valid: irq_epoch of event */
- 	u64 eoi_time;           /* Time in jiffies when to EOI. */
- 	raw_spinlock_t lock;
-+	bool is_static;           /* Is event channel static */
- 
- 	union {
- 		unsigned short virq;
-@@ -982,7 +983,8 @@ static void __unbind_from_irq(unsigned int irq)
- 		unsigned int cpu = cpu_from_irq(irq);
- 		struct xenbus_device *dev;
- 
--		xen_evtchn_close(evtchn);
-+		if (!info->is_static)
-+			xen_evtchn_close(evtchn);
- 
- 		switch (type_from_irq(irq)) {
- 		case IRQT_VIRQ:
-@@ -1574,7 +1576,7 @@ int xen_set_irq_priority(unsigned irq, unsigned priority)
- }
- EXPORT_SYMBOL_GPL(xen_set_irq_priority);
- 
--int evtchn_make_refcounted(evtchn_port_t evtchn)
-+int evtchn_make_refcounted(evtchn_port_t evtchn, bool is_static)
- {
- 	int irq = get_evtchn_to_irq(evtchn);
- 	struct irq_info *info;
-@@ -1590,6 +1592,7 @@ int evtchn_make_refcounted(evtchn_port_t evtchn)
- 	WARN_ON(info->refcnt != -1);
- 
- 	info->refcnt = 1;
-+	info->is_static = is_static;
- 
- 	return 0;
- }
-diff --git a/drivers/xen/evtchn.c b/drivers/xen/evtchn.c
-index c99415a70051..e6d2303478b2 100644
---- a/drivers/xen/evtchn.c
-+++ b/drivers/xen/evtchn.c
-@@ -366,7 +366,8 @@ static int evtchn_resize_ring(struct per_user_data *u)
- 	return 0;
- }
- 
--static int evtchn_bind_to_user(struct per_user_data *u, evtchn_port_t port)
-+static int evtchn_bind_to_user(struct per_user_data *u, evtchn_port_t port,
-+			bool is_static)
- {
- 	struct user_evtchn *evtchn;
- 	struct evtchn_close close;
-@@ -402,14 +403,16 @@ static int evtchn_bind_to_user(struct per_user_data *u, evtchn_port_t port)
- 	if (rc < 0)
- 		goto err;
- 
--	rc = evtchn_make_refcounted(port);
-+	rc = evtchn_make_refcounted(port, is_static);
- 	return rc;
- 
- err:
- 	/* bind failed, should close the port now */
--	close.port = port;
--	if (HYPERVISOR_event_channel_op(EVTCHNOP_close, &close) != 0)
--		BUG();
-+	if (!is_static) {
-+		close.port = port;
-+		if (HYPERVISOR_event_channel_op(EVTCHNOP_close, &close) != 0)
-+			BUG();
-+	}
- 	del_evtchn(u, evtchn);
- 	return rc;
- }
-@@ -456,7 +459,7 @@ static long evtchn_ioctl(struct file *file,
- 		if (rc != 0)
- 			break;
- 
--		rc = evtchn_bind_to_user(u, bind_virq.port);
-+		rc = evtchn_bind_to_user(u, bind_virq.port, false);
- 		if (rc == 0)
- 			rc = bind_virq.port;
- 		break;
-@@ -482,7 +485,7 @@ static long evtchn_ioctl(struct file *file,
- 		if (rc != 0)
- 			break;
- 
--		rc = evtchn_bind_to_user(u, bind_interdomain.local_port);
-+		rc = evtchn_bind_to_user(u, bind_interdomain.local_port, false);
- 		if (rc == 0)
- 			rc = bind_interdomain.local_port;
- 		break;
-@@ -507,7 +510,7 @@ static long evtchn_ioctl(struct file *file,
- 		if (rc != 0)
- 			break;
- 
--		rc = evtchn_bind_to_user(u, alloc_unbound.port);
-+		rc = evtchn_bind_to_user(u, alloc_unbound.port, false);
- 		if (rc == 0)
- 			rc = alloc_unbound.port;
- 		break;
-@@ -536,6 +539,17 @@ static long evtchn_ioctl(struct file *file,
- 		break;
- 	}
- 
-+	case IOCTL_EVTCHN_BIND_STATIC: {
-+		struct ioctl_evtchn_bind bind;
-+
-+		rc = -EFAULT;
-+		if (copy_from_user(&bind, uarg, sizeof(bind)))
-+			break;
-+
-+		rc = evtchn_bind_to_user(u, bind.port, true);
-+		break;
-+	}
-+
- 	case IOCTL_EVTCHN_NOTIFY: {
- 		struct ioctl_evtchn_notify notify;
- 		struct user_evtchn *evtchn;
-diff --git a/include/uapi/xen/evtchn.h b/include/uapi/xen/evtchn.h
-index 7fbf732f168f..aef2b75f3413 100644
---- a/include/uapi/xen/evtchn.h
-+++ b/include/uapi/xen/evtchn.h
-@@ -101,4 +101,13 @@ struct ioctl_evtchn_restrict_domid {
- 	domid_t domid;
- };
- 
-+/*
-+ * Bind statically allocated @port.
-+ */
-+#define IOCTL_EVTCHN_BIND_STATIC			\
-+	_IOC(_IOC_NONE, 'E', 7, sizeof(struct ioctl_evtchn_bind))
-+struct ioctl_evtchn_bind {
-+	unsigned int port;
-+};
-+
- #endif /* __LINUX_PUBLIC_EVTCHN_H__ */
-diff --git a/include/xen/events.h b/include/xen/events.h
-index ac1281c5ead6..377ad7e391e8 100644
---- a/include/xen/events.h
-+++ b/include/xen/events.h
-@@ -69,7 +69,7 @@ int xen_set_irq_priority(unsigned irq, unsigned priority);
- /*
-  * Allow extra references to event channels exposed to userspace by evtchn
-  */
--int evtchn_make_refcounted(evtchn_port_t evtchn);
-+int evtchn_make_refcounted(evtchn_port_t evtchn, bool is_static);
- int evtchn_get(evtchn_port_t evtchn);
- void evtchn_put(evtchn_port_t evtchn);
- 
-
-base-commit: 3a8a670eeeaa40d87bd38a587438952741980c18
 -- 
-2.25.1
-
+Lee Jones [李琼斯]
