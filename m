@@ -2,123 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 048CE742457
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 12:52:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B08B742461
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 12:53:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232033AbjF2KwP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 06:52:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58408 "EHLO
+        id S231874AbjF2KxF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 06:53:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231557AbjF2Kvg (ORCPT
+        with ESMTP id S232144AbjF2KwY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 06:51:36 -0400
-Received: from mail-vs1-xe30.google.com (mail-vs1-xe30.google.com [IPv6:2607:f8b0:4864:20::e30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF03A35A7;
-        Thu, 29 Jun 2023 03:50:58 -0700 (PDT)
-Received: by mail-vs1-xe30.google.com with SMTP id ada2fe7eead31-440954dc5fcso194125137.2;
-        Thu, 29 Jun 2023 03:50:58 -0700 (PDT)
+        Thu, 29 Jun 2023 06:52:24 -0400
+Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AE7B30E4
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 03:52:22 -0700 (PDT)
+Received: by mail-lj1-x22e.google.com with SMTP id 38308e7fff4ca-2b6c5ede714so6142821fa.1
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 03:52:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688035858; x=1690627858;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1Bc1SqEnFsskSLnHHMk9CYcfhixRzxz4BpTXdjjVyoI=;
-        b=H5kYKgzRi3u4fLHhcDn3/9RT2+SXXz1L45No9cl2Up2JuZim36+ixeOpcKNsRrsQpQ
-         XVSk4/XTl610ymeWvNNtDYD4icqSqrKzbByxbL1rkL0Xu9li0qynzBnL4czPkzEzh2y4
-         rmEnLoJ0IIcW5o64XF9zMkUPb5sMYVr66ni+1R4ryOTyEFsdcByfvUxvbHDiVbrPC57P
-         O6OyT4cvRzO3wa/g7tVg2dn4YakPO61TpxpM7+ngc8z4u1dUT0Q8PaLeFUBhcfDi+fzI
-         I+G7QuTQro0yQ732af8DTzF3jVE/xkThSFHf2I7bIAZVLk0F9qJt2HrDoqCGN6kvQYCm
-         AKxg==
+        d=linaro.org; s=google; t=1688035940; x=1690627940;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=/ww5r6ehcjTwcaBETj8atUTtDfztCZTd5T+zbk2x5b0=;
+        b=RK8XEAUhfo/4CKAgSU5yoeJ25LM/lt/RQHajNtFocyf9lgSBGTpUTD+9/2CUBq9N9M
+         ZwU7wumFrZgvoX5Xel4e1Z/ObJ0wakytMCATqJ2sekp7ZYGUx54aI++Owoh21ot2Xy++
+         IyRlGvMiwrlvuKNY3bqjpcyhTB2n2gGKhxyDYUwOpQohM3+0xcLsDkRRmrZbydDMDZYE
+         qWWZCBVP+vMrGhbin0ZQ1+3C7hxx1t9uuyNN90nIpl9R1u4MaqtqjknuVNOk7E+Olpia
+         ZKeDNXT/UExnmuxQd67OCp3ihnRy+MG1RXOZaG2ZtIitd5mDrcnMK7xX0/2H5DiMS7T9
+         ch6g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688035858; x=1690627858;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=1Bc1SqEnFsskSLnHHMk9CYcfhixRzxz4BpTXdjjVyoI=;
-        b=JCZYTyJ19noACPcVtORHI5ZRMn6S/on7uYwFxcY9ayaRLiv0eyX+lefxW/yvEyMaCZ
-         dECSGPD/r/Yr6FipUWRyTiDd3cJdJ32BczudZqTu8ujc9Gin7p28IHNhR7G1GQOnmC25
-         x9sd/zwoxfhjy4lK7vaJnZLNghX1kGeWKhvkoAMy94+rbbUDe+yhagfOE9320t2MJArE
-         4mhf1/OQD/UyOQWeL+5LKfcWJ48295GjsMg7SV2vccUFW+4PzxYu2V+Y7+56LHwYIS3n
-         LigDFv68IYUM0kUvzKAPkOEKWQLZ5uH7OsKUyVush8T5k1KCFjiUyM50WBonBQOUQTRj
-         UAxA==
-X-Gm-Message-State: ABy/qLYz+PS24RdoTzm3VbJ3Vm5egK0a66oc5UMV7VX6jEtpr0fHdgPi
-        L4bAPJ+Krj4vtkSh3A6d3MjBOPwLKx7kK6Wk24E=
-X-Google-Smtp-Source: APBJJlEI+aDMiN1O2bKvv1N1CDEkTi6TIeFcVBvKGU9Za8J9APmDK/p2ETUabeXwv1eI5gPcw/3jX6FRYrhKDg+O0Ao=
-X-Received: by 2002:a05:6102:e55:b0:444:c1f6:5e3a with SMTP id
- p21-20020a0561020e5500b00444c1f65e3amr367807vst.25.1688035857761; Thu, 29 Jun
- 2023 03:50:57 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1688035940; x=1690627940;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=/ww5r6ehcjTwcaBETj8atUTtDfztCZTd5T+zbk2x5b0=;
+        b=UhPQ8SqIc1oiFnaUrw3eDwELJfdvjj5jRtgESlfLJ15fHNxgcql++dD8u/Pmro/uU+
+         pghXRz8S4GbAJOKR6dOHEjDqSgSJcPtCKPktaMjmxKvW+6MMAJeGTXX/7QqPsxP7eN5u
+         00xjVp/SCFMsoe2IFRjvwmTe7C5EuwbM7fFvr0gFdpHBliX/8Ok7VRDpz5E0zjfIDUfB
+         WBycImft37d8+WoPE8KbekIJ8rAoPMXKbH4bsQOazzl4mLmgCl/pg4iOGWcrfALIPz01
+         5GfAvcMJUWhHQoW/UemC5XpwBoYu3Vgd5T6+edvNkA7wTrh+8fdBBRt+/hvB9Sukj5fA
+         Ymvw==
+X-Gm-Message-State: AC+VfDxow0ZXnllBeKV27MmhDCKQlmB+xVbuXZoItTIXfBoTGYJqbVCn
+        6wwRhDGisfkP3gse5pBHRBT/zw==
+X-Google-Smtp-Source: ACHHUZ5/uLH0p626QLEMqtTMX6NRz6Qh5Jj3UWxEK1I0C3SvsxOzlED7EitXGpxRj73sD4YnV05uJg==
+X-Received: by 2002:a19:e05a:0:b0:4f9:56b8:45e5 with SMTP id g26-20020a19e05a000000b004f956b845e5mr1386133lfj.25.1688035940348;
+        Thu, 29 Jun 2023 03:52:20 -0700 (PDT)
+Received: from ?IPV6:2001:14ba:a0db:1f00::8a5? (dzdqv0yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a0db:1f00::8a5])
+        by smtp.gmail.com with ESMTPSA id x28-20020ac259dc000000b004fb9d7b9914sm136870lfn.185.2023.06.29.03.52.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 29 Jun 2023 03:52:19 -0700 (PDT)
+Message-ID: <8b3d708d-58d2-60ff-7acf-8c1eac7d8dc5@linaro.org>
+Date:   Thu, 29 Jun 2023 13:52:18 +0300
 MIME-Version: 1.0
-References: <CAA85sZukiFq4A+b9+en_G85eVDNXMQsnGc4o-4NZ9SfWKqaULA@mail.gmail.com>
- <CAA85sZvm1dL3oGO85k4R+TaqBiJsggUTpZmGpH1+dqdC+U_s1w@mail.gmail.com>
- <e7e49ed5-09e2-da48-002d-c7eccc9f9451@intel.com> <CAA85sZtyM+X_oHcpOBNSgF=kmB6k32bpB8FCJN5cVE14YCba+A@mail.gmail.com>
- <22aad588-47d6-6441-45b2-0e685ed84c8d@intel.com> <CAA85sZti1=ET=Tc3MoqCX0FqthHLf6MSxGNAhJUNiMms1TfoKA@mail.gmail.com>
- <CAA85sZvn04k7=oiTQ=4_C8x7pNEXRWzeEStcaXvi3v63ah7OUQ@mail.gmail.com>
- <ffb554bfa4739381d928406ad24697a4dbbbe4a2.camel@redhat.com>
- <CAA85sZunA=tf0FgLH=MNVYq3Edewb1j58oBAoXE1Tyuy3GJObg@mail.gmail.com>
- <CAA85sZsH1tMwLtL=VDa5=GBdVNWgifvhK+eG-hQg69PeSxBWkg@mail.gmail.com>
- <CAA85sZu=CzJx9QD87-vehOStzO9qHUSWk6DXZg3TzJeqOV5-aw@mail.gmail.com>
- <0a040331995c072c56fce58794848f5e9853c44f.camel@redhat.com>
- <CAA85sZuuwxtAQcMe3LHpFVeF7y-bVoHtO1nukAa2+NyJw3zcyg@mail.gmail.com>
- <CAA85sZurk7-_0XGmoCEM93vu3vbqRgPTH4QVymPR5BeeFw6iFg@mail.gmail.com>
- <486ae2687cd2e2624c0db1ea1f3d6ca36db15411.camel@redhat.com>
- <CAA85sZsJEZK0g0fGfH+toiHm_o4pdN+Wo0Wq9fgsUjHXGxgxQA@mail.gmail.com>
- <CAA85sZs4KkfVojx=vxbDaWhWRpxiHc-RCc2OLD2c+VefRjpTfw@mail.gmail.com>
- <5688456234f5d15ea9ca0f000350c28610ed2639.camel@redhat.com> <CAA85sZvT-vAHQooy8+i0-bTxgv4JjkqMorLL1HjkXK6XDKX41w@mail.gmail.com>
-In-Reply-To: <CAA85sZvT-vAHQooy8+i0-bTxgv4JjkqMorLL1HjkXK6XDKX41w@mail.gmail.com>
-From:   Ian Kumlien <ian.kumlien@gmail.com>
-Date:   Thu, 29 Jun 2023 12:50:45 +0200
-Message-ID: <CAA85sZs2biYueZsbDqdrMyYfaqH6hnSMpymgbsk=b3W1B7TNRA@mail.gmail.com>
-Subject: Re: [Intel-wired-lan] bug with rx-udp-gro-forwarding offloading?
-To:     Paolo Abeni <pabeni@redhat.com>
-Cc:     Alexander Lobakin <aleksander.lobakin@intel.com>,
-        intel-wired-lan <intel-wired-lan@lists.osuosl.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v2 08/15] drm/msm/dpu: Add SM6125 support
+Content-Language: en-GB
+To:     Marijn Suijten <marijn.suijten@somainline.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Krishna Manikandan <quic_mkrishn@quicinc.com>,
+        Loic Poulain <loic.poulain@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>
+Cc:     ~postmarketos/upstreaming@lists.sr.ht,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        Jami Kettunen <jami.kettunen@somainline.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        linux-clk@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, Lux Aliaga <they@mint.lgbt>
+References: <20230627-sm6125-dpu-v2-0-03e430a2078c@somainline.org>
+ <20230627-sm6125-dpu-v2-8-03e430a2078c@somainline.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <20230627-sm6125-dpu-v2-8-03e430a2078c@somainline.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 28, 2023 at 10:18=E2=80=AFPM Ian Kumlien <ian.kumlien@gmail.com=
-> wrote:
->
-> On Wed, Jun 28, 2023 at 5:15=E2=80=AFPM Paolo Abeni <pabeni@redhat.com> w=
-rote:
-> >
-> > On Wed, 2023-06-28 at 14:04 +0200, Ian Kumlien wrote:
-> > > So have some hits, would it be better without your warn on? ... Thing=
-s
-> > > are a bit slow atm - lets just say that i noticed the stacktraces
-> > > because a stream stuttered =3D)
-> >
-> > Sorry, I screwed-up completely a newly added check.
->
-> Thats ok
->
-> > If you have Kasan enabled you can simply and more safely remove my 2nd
-> > patch. Kasan should be able to catch all the out-of-buffer scenarios
-> > such checks were intended to prevent.
->
-> I thought I'd run without any of the patches, preparing for that now,
-> but i have to stop testing tomorrow and will continue on monday if i
-> don't catch anything
+On 27/06/2023 23:14, Marijn Suijten wrote:
+> Add definitions for the display hardware used on the Qualcomm SM6125
+> platform.
+> 
+> Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
+> ---
+>   .../gpu/drm/msm/disp/dpu1/catalog/dpu_5_4_sm6125.h | 230 +++++++++++++++++++++
+>   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c     |   6 +
+>   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h     |   1 +
+>   drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c            |   1 +
+>   4 files changed, 238 insertions(+)
 
-So, KASAN caught the null pointer derefs, as expected, but it caught
-two of them which i didn't expect.
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
-Anyway, I'm off for the weekend so, I hope to be able to send
-something better on Monday, fyi
+-- 
+With best wishes
+Dmitry
 
-> > Cheers,
-> >
-> > Paolo
-> >
