@@ -2,154 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A31A2743097
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 00:30:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63AB9743061
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 00:25:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232449AbjF2W3w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 18:29:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40798 "EHLO
+        id S230455AbjF2WZ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 18:25:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232200AbjF2W3N (ORCPT
+        with ESMTP id S230233AbjF2WZy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 18:29:13 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51E433A89
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 15:27:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1688077673;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=VFFV/4pnGfS5xOgVl1lU4W1qf1MMs0lzrapLnGgOEpU=;
-        b=QOe/kSWHa1KAhC5cFXz4CU4t6nSGIzKzeiRrmhMk3Cj844psaD9wepZbGHXgRIZxOUiQpb
-        iQWajvkN7uQYItXcvZoMSyM67EB8y/yjlH6YfMtyBx0OXJQ99JYq5P7oXu2sp2jFa1hdu6
-        5EssJnIJHEpZxEK3NbQCftjT1PnXfqY=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-166-LXuHOmlTOZCmlaa3zGl9PA-1; Thu, 29 Jun 2023 18:27:52 -0400
-X-MC-Unique: LXuHOmlTOZCmlaa3zGl9PA-1
-Received: by mail-wm1-f72.google.com with SMTP id 5b1f17b1804b1-3fb40ec952bso7290435e9.0
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 15:27:52 -0700 (PDT)
+        Thu, 29 Jun 2023 18:25:54 -0400
+Received: from mail-oa1-x2e.google.com (mail-oa1-x2e.google.com [IPv6:2001:4860:4864:20::2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4CB630F1
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 15:25:52 -0700 (PDT)
+Received: by mail-oa1-x2e.google.com with SMTP id 586e51a60fabf-1b055511b85so1016613fac.2
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 15:25:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1688077552; x=1690669552;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=7VVwwX9nrMtDElUTnksCD2hg1pI6WoLui9hZmUXkOUA=;
+        b=Cfs4r+3s2G+oZHEEH9djQBz/4niZR/nRv7oITEeuxXy9yc60cdW+HiGgXqBrzYrPM5
+         RBVCviYxVc9gPRZXtjKNMjIuENGu2pJ8qjIuQHF+aznANdAk3BoxfKvVh4pKOyvZFWa1
+         x6fPGUt7aVne9mouyw6xk+YjGo+yIpeXWa5JigKh1uRdjwRP2AOH8z+Gf0gwnab3eVsN
+         DU1rwW41gB6TAxThhK2ze0S+pqKe3tlbO8WyqTGExzKEemomds5h/WY8pYjauqS9QnOr
+         WyQWfgzQVigPo1brWfpaaq1XSZLJJBTw5kWgvHW16QE69VQ/3KinzVrpsB3UY2jpO8+q
+         SE8g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688077671; x=1690669671;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20221208; t=1688077552; x=1690669552;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=VFFV/4pnGfS5xOgVl1lU4W1qf1MMs0lzrapLnGgOEpU=;
-        b=SO7tznnxaC8ErVujCDUSXXblLZxki1HF/2SUFCJtBBDUnnUe8NF17XJfTot7eMUiOm
-         An+yQ9AP4SL9Q9Eu5YSkMwKXS3We55e6cC3tqGmmBNqJQ9ZLRlS0Az2djHYLA7bOw5oD
-         4X75oeQLRyj3dt8FpIS38o3AUBe5katfNCBH+FE/GuXezYi+b3XNR40sDA9qB0ulPI6f
-         sLNh05txqOLpl1mKmLd7hetvaq7l8d2oDH2KATeRSnnOKHhOlTGi0u4nx7/NIyF6K/qi
-         3k9o250X9rHXy1BX55cnpSrO8WdoYv7Wkh3mg7OeAnb3gQ1THnEdDVXka6aZNe5pwL50
-         xvxw==
-X-Gm-Message-State: AC+VfDw1cxXmvZH+xzQx8++aCUDcVqA99IDh62u6qO1WOBiOQ7udUCJn
-        5xZCG/SYWbn2tlp2dnaQI45aZF+MHKIpL6hMma2LGSsYelGxOznavMa/3SQn3oxJgt4f5zkCbWn
-        fOl3h8tM/ovTYZ1A1ifn5MW16
-X-Received: by 2002:a1c:7918:0:b0:3fa:abd8:fcc4 with SMTP id l24-20020a1c7918000000b003faabd8fcc4mr550310wme.35.1688077671212;
-        Thu, 29 Jun 2023 15:27:51 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ6Bxj2O4VX+ANE4bPO+hAqfIWGrOSWlNPHwSQm4+DaMqibvET6swHf0UksZ5J5oprSJ2UE6LQ==
-X-Received: by 2002:a1c:7918:0:b0:3fa:abd8:fcc4 with SMTP id l24-20020a1c7918000000b003faabd8fcc4mr550301wme.35.1688077671037;
-        Thu, 29 Jun 2023 15:27:51 -0700 (PDT)
-Received: from cassiopeiae.. ([2a02:810d:4b3f:de9c:642:1aff:fe31:a19f])
-        by smtp.gmail.com with ESMTPSA id p23-20020a1c7417000000b003f9b0f640b1sm17419090wmc.22.2023.06.29.15.27.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Jun 2023 15:27:50 -0700 (PDT)
-From:   Danilo Krummrich <dakr@redhat.com>
-To:     airlied@gmail.com, daniel@ffwll.ch, tzimmermann@suse.de,
-        mripard@kernel.org, corbet@lwn.net, christian.koenig@amd.com,
-        bskeggs@redhat.com, Liam.Howlett@oracle.com,
-        matthew.brost@intel.com, boris.brezillon@collabora.com,
-        alexdeucher@gmail.com, ogabbay@kernel.org, bagasdotme@gmail.com,
-        willy@infradead.org, jason@jlekstrand.net
-Cc:     dri-devel@lists.freedesktop.org, nouveau@lists.freedesktop.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Danilo Krummrich <dakr@redhat.com>
-Subject: [PATCH drm-next v6 13/13] drm/nouveau: debugfs: implement DRM GPU VA debugfs
-Date:   Fri, 30 Jun 2023 00:25:29 +0200
-Message-ID: <20230629222651.3196-14-dakr@redhat.com>
-X-Mailer: git-send-email 2.41.0
-In-Reply-To: <20230629222651.3196-1-dakr@redhat.com>
-References: <20230629222651.3196-1-dakr@redhat.com>
+        bh=7VVwwX9nrMtDElUTnksCD2hg1pI6WoLui9hZmUXkOUA=;
+        b=XignCks6GCeHIE7VfEFqet8RY6W4NKXywRzf8WSAAo3/bTdO0Y5ICVPRDY52JgJWUB
+         7CpcrMm0KasYH+m7o1kbsG1LLfOL1Of1k7LSVhtNIGASpgrak2+6t8vs69wxWDq4CL6t
+         wR6NbZkLB5bxAXgATo6UKyJpT5eVssItNZjAwQvkZO8MkXUFDU4R2H9d+RqcZoYMnx8r
+         oPg3slK6KxM9Lx0jyitCmGC8CMoLdp3p0WWdqug+b94rvZgdU2pjWgSCnQQFH6tvkguf
+         HD1/4yUwXb6XpakzZBfyR1vp14usNuA61GJBVSGSoGELm9S3TO5Htm0x9Oz0a++qRXUF
+         uQXw==
+X-Gm-Message-State: ABy/qLbvZkKxkIlr0N7mvvFv5G5V0rkHGJtc+mbWLpvvp+b6XE2NuUM6
+        cN1xManSU/S85JPRSBlBWGFRY8efDHCY0XQSbyZfQQ==
+X-Google-Smtp-Source: APBJJlFx9uA/lUNE2OdWk+UeiIFn0pq5/dwhD/X5fjiA+mq6gLzQ/Hxb60CSmTsJt7uZQ+kheHPbEjiOe5RLarRxLaQ=
+X-Received: by 2002:a05:6870:56ac:b0:1ad:1984:9620 with SMTP id
+ p44-20020a05687056ac00b001ad19849620mr1523464oao.43.1688077552177; Thu, 29
+ Jun 2023 15:25:52 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20230629184151.651069086@linuxfoundation.org>
+In-Reply-To: <20230629184151.651069086@linuxfoundation.org>
+From:   =?UTF-8?B?RGFuaWVsIETDrWF6?= <daniel.diaz@linaro.org>
+Date:   Thu, 29 Jun 2023 16:25:40 -0600
+Message-ID: <CAEUSe7-xC90CGpJjQD4w10ea=nXMiGhsFouhaa8fVK5W-WJJJQ@mail.gmail.com>
+Subject: Re: [PATCH 6.1 00/30] 6.1.37-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de,
+        conor@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Provide the driver indirection iterating over all DRM GPU VA spaces to
-enable the common 'gpuvas' debugfs file for dumping DRM GPU VA spaces.
+Hello!
 
-Signed-off-by: Danilo Krummrich <dakr@redhat.com>
----
- drivers/gpu/drm/nouveau/nouveau_debugfs.c | 39 +++++++++++++++++++++++
- 1 file changed, 39 insertions(+)
+On Thu, 29 Jun 2023 at 12:46, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+> This is the start of the stable review cycle for the 6.1.37 release.
+> There are 30 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Sat, 01 Jul 2023 18:41:39 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-=
+6.1.37-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-6.1.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-diff --git a/drivers/gpu/drm/nouveau/nouveau_debugfs.c b/drivers/gpu/drm/nouveau/nouveau_debugfs.c
-index 99d022a91afc..053f703f2f68 100644
---- a/drivers/gpu/drm/nouveau/nouveau_debugfs.c
-+++ b/drivers/gpu/drm/nouveau/nouveau_debugfs.c
-@@ -203,6 +203,44 @@ nouveau_debugfs_pstate_open(struct inode *inode, struct file *file)
- 	return single_open(file, nouveau_debugfs_pstate_get, inode->i_private);
- }
- 
-+static void
-+nouveau_debugfs_gpuva_regions(struct seq_file *m, struct nouveau_uvmm *uvmm)
-+{
-+	MA_STATE(mas, &uvmm->region_mt, 0, 0);
-+	struct nouveau_uvma_region *reg;
-+
-+	seq_puts  (m, " VA regions  | start              | range              | end                \n");
-+	seq_puts  (m, "----------------------------------------------------------------------------\n");
-+	mas_for_each(&mas, reg, ULONG_MAX)
-+		seq_printf(m, "             | 0x%016llx | 0x%016llx | 0x%016llx\n",
-+			   reg->va.addr, reg->va.range, reg->va.addr + reg->va.range);
-+}
-+
-+static int
-+nouveau_debugfs_gpuva(struct seq_file *m, void *data)
-+{
-+	struct drm_info_node *node = (struct drm_info_node *) m->private;
-+	struct nouveau_drm *drm = nouveau_drm(node->minor->dev);
-+	struct nouveau_cli *cli;
-+
-+	mutex_lock(&drm->clients_lock);
-+	list_for_each_entry(cli, &drm->clients, head) {
-+		struct nouveau_uvmm *uvmm = nouveau_cli_uvmm(cli);
-+
-+		if (!uvmm)
-+			continue;
-+
-+		nouveau_uvmm_lock(uvmm);
-+		drm_debugfs_gpuva_info(m, &uvmm->umgr);
-+		seq_puts(m, "\n");
-+		nouveau_debugfs_gpuva_regions(m, uvmm);
-+		nouveau_uvmm_unlock(uvmm);
-+	}
-+	mutex_unlock(&drm->clients_lock);
-+
-+	return 0;
-+}
-+
- static const struct file_operations nouveau_pstate_fops = {
- 	.owner = THIS_MODULE,
- 	.open = nouveau_debugfs_pstate_open,
-@@ -214,6 +252,7 @@ static const struct file_operations nouveau_pstate_fops = {
- static struct drm_info_list nouveau_debugfs_list[] = {
- 	{ "vbios.rom",  nouveau_debugfs_vbios_image, 0, NULL },
- 	{ "strap_peek", nouveau_debugfs_strap_peek, 0, NULL },
-+	DRM_DEBUGFS_GPUVA_INFO(nouveau_debugfs_gpuva, NULL),
- };
- #define NOUVEAU_DEBUGFS_ENTRIES ARRAY_SIZE(nouveau_debugfs_list)
- 
--- 
-2.41.0
+Early report of failures.
 
+SPARC and PA-RISC both fail to build (GCC-8 and GCC-11).
+
+For SPARC:
+* allnoconfig
+* defconfig
+* tinyconfig
+
+-----8<-----
+/builds/linux/arch/sparc/mm/fault_32.c: In function 'force_user_fault':
+/builds/linux/arch/sparc/mm/fault_32.c:312:49: error: 'regs'
+undeclared (first use in this function)
+  312 |         vma =3D lock_mm_and_find_vma(mm, address, regs);
+      |                                                 ^~~~
+/builds/linux/arch/sparc/mm/fault_32.c:312:49: note: each undeclared
+identifier is reported only once for each function it appears in
+make[4]: *** [/builds/linux/scripts/Makefile.build:250:
+arch/sparc/mm/fault_32.o] Error 1
+make[4]: Target 'arch/sparc/mm/' not remade because of errors.
+----->8-----
+
+For PA-RISC:
+* allnoconfig
+* tinyconfig
+
+-----8<-----
+/builds/linux/arch/parisc/mm/fault.c: In function 'do_page_fault':
+/builds/linux/arch/parisc/mm/fault.c:292:22: error: 'prev' undeclared
+(first use in this function)
+  292 |                 if (!prev || !(prev->vm_flags & VM_GROWSUP))
+      |                      ^~~~
+/builds/linux/arch/parisc/mm/fault.c:292:22: note: each undeclared
+identifier is reported only once for each function it appears in
+make[4]: *** [/builds/linux/scripts/Makefile.build:250:
+arch/parisc/mm/fault.o] Error 1
+make[4]: Target 'arch/parisc/mm/' not remade because of errors.
+----->8-----
+
+Greetings!
+
+Daniel D=C3=ADaz
+daniel.diaz@linaro.org
