@@ -2,51 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07806741E3F
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 04:25:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B07D741E52
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 04:34:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231833AbjF2CZh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 22:25:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55024 "EHLO
+        id S231494AbjF2Ces (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 22:34:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231453AbjF2CZf (ORCPT
+        with ESMTP id S229647AbjF2Cep (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 22:25:35 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDC592682
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 19:25:33 -0700 (PDT)
-Received: from dggpemm500006.china.huawei.com (unknown [172.30.72.57])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Qs2NT5Y5RzqSqY;
-        Thu, 29 Jun 2023 10:25:13 +0800 (CST)
-Received: from [10.174.178.55] (10.174.178.55) by
- dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27; Thu, 29 Jun 2023 10:25:31 +0800
-Subject: Re: [PATCH v2] kallsyms: strip LTO-only suffixes from promoted global
- functions
-To:     Yonghong Song <yhs@fb.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Petr Mladek <pmladek@suse.com>, Song Liu <song@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>
-CC:     Fangrui Song <maskray@google.com>, <kernel-team@fb.com>,
-        <linux-kernel@vger.kernel.org>, <llvm@lists.linux.dev>
-References: <20230628181926.4102448-1-yhs@fb.com>
-From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
-Message-ID: <0bcb9470-4b39-1fe1-fcab-4d945f10fe7b@huawei.com>
-Date:   Thu, 29 Jun 2023 10:25:30 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
+        Wed, 28 Jun 2023 22:34:45 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AFC6213D;
+        Wed, 28 Jun 2023 19:34:43 -0700 (PDT)
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35T1peCM003075;
+        Thu, 29 Jun 2023 02:34:18 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
+ cc : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=qcppdkim1; bh=d1xxjDKKxjYzsTNuy7Mx3AfwCH5hklFJ313CSEx4CDc=;
+ b=UrL4p8AxZNvIkpoZ8lDGC/EXh2IB4JSGFiUlscNhRpy5tgpPRepBr1tnPjnmMyQwgTdH
+ ZFL8C21xW9wy/yX1BB5ZZmLpc4bUdUAVWW91ar1DXwqRJjVdHj4HpXwEkv6xtFsJm68m
+ 4ya0mtsfmGpBdZpMLL0BOZa/XfLKZ5Xvoxoii0qvEZMSBJNyqeFU5IJBOv+hiEn1BMVF
+ 0xN36nzxugD1u7IQd4vg32HLJwgKnJ1J3Ij6QxmEwLstU5gDvG/i/TT31QI1P43VOh3S
+ NcJAMXnZ0sMGUbS2MvQDsOMB76Vr5+BNhnHLKty4ENNF+JHrSBaxkLoKgjfJj2hMD47S 5g== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rgextjcvk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 29 Jun 2023 02:34:17 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35T2Xr8m004431
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 29 Jun 2023 02:33:53 GMT
+Received: from hu-pkondeti-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.7; Wed, 28 Jun 2023 19:33:45 -0700
+Date:   Thu, 29 Jun 2023 08:03:42 +0530
+From:   Pavan Kondeti <quic_pkondeti@quicinc.com>
+To:     Mukesh Ojha <quic_mojha@quicinc.com>
+CC:     <corbet@lwn.net>, <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
+        <keescook@chromium.org>, <tony.luck@intel.com>,
+        <gpiccoli@igalia.com>, <mathieu.poirier@linaro.org>,
+        <catalin.marinas@arm.com>, <will@kernel.org>,
+        <linus.walleij@linaro.org>, <andy.shevchenko@gmail.com>,
+        <linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-hardening@vger.kernel.org>,
+        <linux-remoteproc@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-gpio@vger.kernel.org>
+Subject: Re: [PATCH v4 04/21] soc: qcom: Add Qualcomm APSS minidump
+ (frontend) feature support
+Message-ID: <8f00beed-f07b-43b6-820e-87af719598c6@quicinc.com>
+References: <1687955688-20809-1-git-send-email-quic_mojha@quicinc.com>
+ <1687955688-20809-5-git-send-email-quic_mojha@quicinc.com>
 MIME-Version: 1.0
-In-Reply-To: <20230628181926.4102448-1-yhs@fb.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.178.55]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggpemm500006.china.huawei.com (7.185.36.236)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <1687955688-20809-5-git-send-email-quic_mojha@quicinc.com>
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: _PtAZJKIv8wUIJtY7Dr0KaYF-ZLooNex
+X-Proofpoint-GUID: _PtAZJKIv8wUIJtY7Dr0KaYF-ZLooNex
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-06-28_14,2023-06-27_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ impostorscore=0 mlxscore=0 mlxlogscore=999 spamscore=0 malwarescore=0
+ bulkscore=0 clxscore=1015 adultscore=0 suspectscore=0 lowpriorityscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2305260000 definitions=main-2306290021
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -55,105 +88,343 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2023/6/29 2:19, Yonghong Song wrote:
-> Commit 6eb4bd92c1ce ("kallsyms: strip LTO suffixes from static functions")
-> stripped all function/variable suffixes started with '.' regardless
-> of whether those suffixes are generated at LTO mode or not. In fact,
-> as far as I know, in LTO mode, when a static function/variable is
-> promoted to the global scope, '.llvm.<...>' suffix is added.
+On Wed, Jun 28, 2023 at 06:04:31PM +0530, Mukesh Ojha wrote:
+> Minidump is a best effort mechanism to collect useful and predefined
+> data for first level of debugging on end user devices running on
+> Qualcomm SoCs. It is built on the premise that System on Chip (SoC)
+> or subsystem part of SoC crashes, due to a range of hardware and
+> software bugs. Hence, the ability to collect accurate data is only
+> a best-effort. The data collected could be invalid or corrupted,
+> data collection itself could fail, and so on.
 > 
-> The existing mechanism breaks live patch for a LTO kernel even if
-> no <symbol>.llvm.<...> symbols are involved. For example, for the following
-> kernel symbols:
->   $ grep bpf_verifier_vlog /proc/kallsyms
->   ffffffff81549f60 t bpf_verifier_vlog
->   ffffffff8268b430 d bpf_verifier_vlog._entry
->   ffffffff8282a958 d bpf_verifier_vlog._entry_ptr
->   ffffffff82e12a1f d bpf_verifier_vlog.__already_done
-> 'bpf_verifier_vlog' is a static function. '_entry', '_entry_ptr' and
-> '__already_done' are static variables used inside 'bpf_verifier_vlog',
-> so llvm promotes them to file-level static with prefix 'bpf_verifier_vlog.'.
-> Note that the func-level to file-level static function promotion also
-> happens without LTO.
+> Qualcomm devices in engineering mode provides a mechanism for
+> generating full system ramdumps for post mortem debugging. But in some
+> cases it's however not feasible to capture the entire content of RAM.
+> The minidump mechanism provides the means for selecting region should
+> be included in the ramdump. The solution supports extracting the
+> ramdump/minidump produced either over USB or stored to an attached
+> storage device.
 > 
-> Given a symbol name 'bpf_verifier_vlog', with LTO kernel, current mechanism will
-> return 4 symbols to live patch subsystem which current live patching
-> subsystem cannot handle it. With non-LTO kernel, only one symbol
-> is returned.
+> Minidump kernel driver implementation is divided into two parts for
+> simplicity, one is minidump core which can also be called minidump
+> frontend(As API gets exported from this driver for registration with
+> backend) and the other part is minidump backend i.e, where the underlying
+> implementation of minidump will be there. There could be different way
+> how the backend is implemented like Shared memory, Memory mapped IO
+> or Resource manager based where the guest region information is passed
+> to hypervisor via hypercalls.
 > 
-> In [1], we have a lengthy discussion, the suggestion is to separate two
-> cases:
->   (1). new symbols with suffix which are generated regardless of whether
->        LTO is enabled or not, and
->   (2). new symbols with suffix generated only when LTO is enabled.
+> Minidump Client-1     Client-2      Client-5    Client-n
+>          |               |              |             |
+>          |               |    ...       |   ...       |
+>          |               |              |             |
+>          |               |              |             |
+>          |               |              |             |
+>          |               |              |             |
+>          |               |              |             |
+>          |               |              |             |
+>          |           +---+--------------+----+        |
+>          +-----------+  qcom_minidump(core)  +--------+
+>                      |                       |
+>                      +------+-----+------+---+
+>                             |     |      |
+>                             |     |      |
+>             +---------------+     |      +--------------------+
+>             |                     |                           |
+>             |                     |                           |
+>             |                     |                           |
+>             v                     v                           v
+>  +-------------------+      +-------------------+     +------------------+
+>  |qcom_minidump_smem |      |qcom_minidump_mmio |     | qcom_minidump_rm |
+>  |                   |      |                   |     |                  |
+>  +-------------------+      +-------------------+     +------------------+
+>    Shared memory              Memory mapped IO           Resource manager
+>     (backend)                   (backend)                   (backend)
 > 
-> The cleanup_symbol_name() should only remove suffixes for case (2).
-> Case (1) should not be changed so it can work uniformly with or without LTO.
+> Here, we will be giving all analogy of backend with SMEM as it is the
+> only implemented backend at present but general idea remains the same.
 > 
-> This patch removed LTO-only suffix '.llvm.<...>' so live patching and
-> tracing should work the same way for non-LTO kernel.
-> The cleanup_symbol_name() in scripts/kallsyms.c is also changed to have the same
-> filtering pattern so both kernel and kallsyms tool have the same
-> expectation on the order of symbols.
-
-Reviewed-by: Zhen Lei <thunder.leizhen@huawei.com>
-
+> The core of minidump feature is part of Qualcomm's boot firmware code.
+> It initializes shared memory (SMEM), which is a part of DDR and
+> allocates a small section of it to minidump table i.e also called
+> global table of content (G-ToC). Each subsystem (APSS, ADSP, ...) has
+> their own table of segments to be included in the minidump, all
+> references from a descriptor in SMEM (G-ToC). Each segment/region has
+> some details like name, physical address and it's size etc. and it
+> could be anywhere scattered in the DDR.
 > 
->  [1] https://lore.kernel.org/live-patching/20230615170048.2382735-1-song@kernel.org/T/#u
+> qcom_minidump(core or frontend) driver adds the capability to add APSS
+> region to be dumped as part of ram dump collection. It provides
+> appropriate symbol register/unregister client regions.
 > 
-> Fixes: 6eb4bd92c1ce ("kallsyms: strip LTO suffixes from static functions")
-> Reported-by: Song Liu <song@kernel.org>
-> Signed-off-by: Yonghong Song <yhs@fb.com>
+> To simplify post mortem debugging, it creates and maintain an ELF
+> header as first region that gets updated upon registration
+> of a new region.
+> 
+> Signed-off-by: Mukesh Ojha <quic_mojha@quicinc.com>
 > ---
->  kernel/kallsyms.c  | 5 ++---
->  scripts/kallsyms.c | 6 +++---
->  2 files changed, 5 insertions(+), 6 deletions(-)
+>  drivers/soc/qcom/Kconfig                  |  15 +
+>  drivers/soc/qcom/Makefile                 |   2 +
+>  drivers/soc/qcom/qcom_minidump.c          | 456 ++++++++++++++++++++++++++++++
+>  drivers/soc/qcom/qcom_minidump_internal.h |  75 +++++
+>  include/soc/qcom/qcom_minidump.h          |  35 +++
+>  5 files changed, 583 insertions(+)
+>  create mode 100644 drivers/soc/qcom/qcom_minidump.c
+>  create mode 100644 drivers/soc/qcom/qcom_minidump_internal.h
 > 
-> Changelogs:
->   v1 -> v2:
->     . add 'Reported-by: Song Liu <song@kernel.org>'
->     . also fix in scripts/kallsyms.c.
-> 
-> diff --git a/kernel/kallsyms.c b/kernel/kallsyms.c
-> index 77747391f49b..4874508bb950 100644
-> --- a/kernel/kallsyms.c
-> +++ b/kernel/kallsyms.c
-> @@ -174,11 +174,10 @@ static bool cleanup_symbol_name(char *s)
->  	 * LLVM appends various suffixes for local functions and variables that
->  	 * must be promoted to global scope as part of LTO.  This can break
->  	 * hooking of static functions with kprobes. '.' is not a valid
-> -	 * character in an identifier in C. Suffixes observed:
-> +	 * character in an identifier in C. Suffixes only in LLVM LTO observed:
->  	 * - foo.llvm.[0-9a-f]+
-> -	 * - foo.[0-9a-f]+
->  	 */
-> -	res = strchr(s, '.');
-> +	res = strstr(s, ".llvm.");
->  	if (res) {
->  		*res = '\0';
->  		return true;
-> diff --git a/scripts/kallsyms.c b/scripts/kallsyms.c
-> index 0d2db41177b2..13af6d0ff845 100644
-> --- a/scripts/kallsyms.c
-> +++ b/scripts/kallsyms.c
-> @@ -346,10 +346,10 @@ static void cleanup_symbol_name(char *s)
->  	 * ASCII[_]   = 5f
->  	 * ASCII[a-z] = 61,7a
->  	 *
-> -	 * As above, replacing '.' with '\0' does not affect the main sorting,
-> -	 * but it helps us with subsorting.
-> +	 * As above, replacing the first '.' in ".llvm." with '\0' does not
-> +	 * affect the main sorting, but it helps us with subsorting.
->  	 */
-> -	p = strchr(s, '.');
-> +	p = strstr(s, ".llvm.");
->  	if (p)
->  		*p = '\0';
->  }
-> 
+> diff --git a/drivers/soc/qcom/Kconfig b/drivers/soc/qcom/Kconfig
+> index 982310b5a1cb..874ee8c3efe0 100644
+> --- a/drivers/soc/qcom/Kconfig
+> +++ b/drivers/soc/qcom/Kconfig
+> @@ -279,6 +279,21 @@ config QCOM_INLINE_CRYPTO_ENGINE
+>  	tristate
+>  	select QCOM_SCM
+>  
+> +config QCOM_MINIDUMP
+> +	tristate "QCOM Minidump APSS Core Infrastructure"
+> +	depends on ARCH_QCOM
+> +	help
+> +	  This config allow linux core infrastructure for APSS minidump for
+> +	  underlying backend(smem etc.) which can hook themselves to this and
+> +	  work as one unit. So, this config should be selected in combination
+> +	  with its backend.
+> +
+> +	  After this Linux clients driver can register their internal data
+> +	  structures and debug messages as part of the apss minidump region
+> +	  and when the SoC is crashed, and these selective regions will be
+> +	  dumped instead of the entire DDR. This saves significant amount
+> +	  of time and/or storage space.
+> +
+>  config QCOM_MINIDUMP_SMEM
+>  	tristate "QCOM Minidump SMEM (as backend) Support"
+>  	depends on ARCH_QCOM
+> diff --git a/drivers/soc/qcom/Makefile b/drivers/soc/qcom/Makefile
+> index 89b775512bef..737d868757ac 100644
+> --- a/drivers/soc/qcom/Makefile
+> +++ b/drivers/soc/qcom/Makefile
+> @@ -34,3 +34,5 @@ obj-$(CONFIG_QCOM_KRYO_L2_ACCESSORS) +=	kryo-l2-accessors.o
+>  obj-$(CONFIG_QCOM_ICC_BWMON)	+= icc-bwmon.o
+>  qcom_ice-objs			+= ice.o
+>  obj-$(CONFIG_QCOM_INLINE_CRYPTO_ENGINE)	+= qcom_ice.o
+> +obj-$(CONFIG_QCOM_MINIDUMP) += qcom_minidump.o
+> +obj-$(CONFIG_QCOM_MINIDUMP_SMEM) += qcom_minidump_smem.o
+> diff --git a/drivers/soc/qcom/qcom_minidump.c b/drivers/soc/qcom/qcom_minidump.c
+> new file mode 100644
+> index 000000000000..7744e57843ab
+> --- /dev/null
+> +++ b/drivers/soc/qcom/qcom_minidump.c
+> @@ -0,0 +1,456 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * Copyright (c) 2023 Qualcomm Innovation Center, Inc. All rights reserved.
+> + */
+> +
+> +#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+> +
+> +#include <linux/device.h>
+> +#include <linux/export.h>
+> +#include <linux/kallsyms.h>
+> +#include <linux/kernel.h>
+> +#include <linux/module.h>
+> +#include <linux/printk.h>
+> +#include <linux/string.h>
+> +
+> +#include "qcom_minidump_internal.h"
+> +
+> +/*
+> + * In some of the Old Qualcomm devices, boot firmware statically allocates 300
+> + * as total number of supported region (including all co-processors) in
+> + * minidump table out of which linux was using 201. In future, this limitation
+> + * from boot firmware might get removed by allocating the region dynamically.
+> + * So, keep it compatible with older devices, we can keep the current limit for
+> + * Linux to 201.
+> + */
+> +#define MAX_NUM_ENTRIES	  201
+> +#define MAX_STRTBL_SIZE	  (MAX_NUM_ENTRIES * MAX_REGION_NAME_LENGTH)
+> +
 
--- 
-Regards,
-  Zhen Lei
+Should not we receive these constraints from backend?
+
+> +/*
+> + * md_lock protects "md" during calls to qcom_minidump_backend_register(),
+> + * qcom_minidump_backend_unregister().
+> + */
+> +static DEFINE_MUTEX(md_lock);
+> +
+> +/* Only one front end will be attached to one back-end */
+> +static struct minidump *md;
+> +static char *md_backend;
+> +
+
+Can you explain this a bit more? There is just one fronend, correct?
+Multiple possibilites of backend.
+
+Is it a limitation at the moment that we support only one backend or
+plan to support more backends later for the same frontend. Pls clarify.
+
+> +static struct elf_shdr *elf_shdr_entry_addr(struct elfhdr *ehdr, int idx)
+> +{
+> +	struct elf_shdr *eshdr = (struct elf_shdr *)((size_t)ehdr + ehdr->e_shoff);
+> +
+> +	return &eshdr[idx];
+> +}
+> +
+
+[...]
+
+> +/**
+> + * qcom_minidump_region_register() - Register region in APSS Minidump table.
+> + * @region: minidump region.
+> + *
+> + * Return: On success, it returns 0 and negative error value on failure.
+> + */
+
+Are we not going to return any cookie upon success which can be passed
+to us during unregistration?
+
+> +int qcom_minidump_region_register(const struct qcom_minidump_region *region)
+> +{
+> +	int ret;
+> +
+> +	if (!qcom_minidump_valid_region(region))
+> +		return -EINVAL;
+> +
+> +	mutex_lock(&md_lock);
+> +	if (!md) {
+> +		mutex_unlock(&md_lock);
+> +		pr_err("No backend registered yet, try again..");
+> +		return -EPROBE_DEFER;
+> +	}
+> +
+> +	ret = md->ops->md_region_register(md, region);
+> +	if (ret)
+> +		goto unlock;
+> +
+
+The md_lock description in the beginning does not seems to be correct.
+It is not limited to backend registration. It has much wider usage.
+
+You are holding the lock while calling into backend. Basically the
+synchronization is done in the front end.
+
+> +	qcom_md_update_elf_header(region);
+> +unlock:
+> +	mutex_unlock(&md_lock);
+> +	return ret;
+> +}
+> +EXPORT_SYMBOL_GPL(qcom_minidump_region_register);
+> +
+> +/**
+> + * qcom_minidump_region_unregister() - Unregister region from APSS Minidump table.
+> + * @region: minidump region.
+> + *
+> + * Return: On success, it returns 0 and negative error value on failure.
+> + */
+> +int qcom_minidump_region_unregister(const struct qcom_minidump_region *region)
+> +{
+> +	int ret;
+> +
+> +	if (!qcom_minidump_valid_region(region))
+> +		return -EINVAL;
+> +
+> +	mutex_lock(&md_lock);
+> +	if (!md) {
+> +		mutex_unlock(&md_lock);
+> +		pr_err("No backend registered yet, try again..");
+> +		return -EPROBE_DEFER;
+> +	}
+> +
+> +	ret = md->ops->md_region_unregister(md, region);
+> +	if (ret)
+> +		goto unlock;
+> +
+
+The frontend is not validing that it is actually a registered client, it
+is left to backend. Seems that is more duplication in the backend(s).
+
+> +	ret = qcom_minidump_clear_header(region);
+> +unlock:
+> +	mutex_unlock(&md_lock);
+> +	return ret;
+> +}
+> +EXPORT_SYMBOL_GPL(qcom_minidump_region_unregister);
+
+can we create a namespace for exporting these symbols?
+
+> +
+> +static int qcom_minidump_add_elf_header(struct minidump *md_data)
+> +{
+
+[...]
+
+> +
+> +/**
+> + * qcom_minidump_backend_register() - Register backend minidump device.
+> + * @md_data: minidump backend driver data
+> + *
+> + * Return: On success, it returns 0 and negative error value on failure.
+> + */
+> +int qcom_minidump_backend_register(struct minidump *md_data)
+> +{
+> +	int ret;
+> +
+> +	if (!md_data->name || !md_data->dev ||
+> +	    !md_data->ops ||
+> +	    !md_data->ops->md_table_init ||
+> +	    !md_data->ops->md_region_register ||
+> +	    !md_data->ops->md_region_unregister ||
+> +	    !md_data->ops->md_table_exit) {
+> +		pr_warn("backend '%s' must fill/implement necessary fields\n", md->name);
+> +		return -EINVAL;
+> +	}
+> +
+> +	if (md_backend && strcmp(md_backend, md_data->name)) {
+> +		pr_warn("backend '%s' already in use: ignoring '%s'\n",
+> +			 md_backend, md_data->name);
+> +		return -EBUSY;
+> +	}
+> +
+> +	mutex_lock(&md_lock);
+> +	if (md) {
+> +		dev_warn(md->dev, "backend '%s' already loaded: ignoring '%s'\n",
+> +			 md->name, md_data->name);
+> +		ret = -EBUSY;
+> +		goto unlock;
+> +	}
+> +
+> +	if (!md_data->max_region_limit || md_data->max_region_limit > MAX_NUM_ENTRIES)
+> +		md_data->max_region_limit = MAX_NUM_ENTRIES;
+> +
+> +	ret = md_data->ops->md_table_init(md_data);
+> +	if (ret) {
+> +		dev_err(md_data->dev, "minidump backend initialization failed: %d\n", ret);
+> +		goto unlock;
+> +	}
+> +
+> +	/* First entry would be ELF header */
+> +	ret = qcom_minidump_add_elf_header(md_data);
+> +	if (ret) {
+> +		dev_err(md_data->dev, "Failed to add elf header: %d\n", ret);
+> +		md_data->ops->md_table_exit(md_data);
+> +		goto unlock;
+> +	}
+> +
+> +	md = md_data;
+> +	md_backend = kstrdup(md->name, GFP_KERNEL);
+> +	dev_info(md->dev, "Registered minidump backend : %s\n", md->name);
+> +
+
+What is the need for keeping md_backend separately? md::name is already
+present.
+
+Also, how do we prevent backend module unloading while it is inuse? or
+we don't need that constraint?
+
+> +unlock:
+> +	mutex_unlock(&md_lock);
+> +	return ret;
+> +}
+> +EXPORT_SYMBOL_GPL(qcom_minidump_backend_register);
+
+Thanks,
+Pavan
