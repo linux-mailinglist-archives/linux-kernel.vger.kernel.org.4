@@ -2,110 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D65BD7424D0
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 13:10:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 831537424D3
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 13:11:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231445AbjF2LKt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 07:10:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36354 "EHLO
+        id S232238AbjF2LK6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 07:10:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232240AbjF2LKb (ORCPT
+        with ESMTP id S231842AbjF2LKx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 07:10:31 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FECD30C4;
-        Thu, 29 Jun 2023 04:10:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-        s=201909; t=1688037027;
-        bh=sv/JdQWXY6nWSKNJyVKNtJGaF1eiIkhg3/IJgGGitu0=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=JHtvQCEEKCFpe536YpnBQY4lzDoxafqWNvDqcJZfV0kdQQ+u0REqsHyuSl1CKrUMy
-         W1LoOm199ryLQ0WjvAzM2VoFXwq9YGq0j16IsN7QYgL3Kbykd67g/EJKefxd/pK8PS
-         PDvxu1qWXbXujyjcooYA8QDRy884V0RZdUTySP7eyhyJ2A0FgBS5ybm/dM5YUb4Cax
-         IEvSrElRkPOB9/F30mXrwhCk9syA1dwcFcFrkPXFENJM6XIXowYKFUpeU/Iu1XnF2N
-         mnVtEWlhUV3H4MshIKtxy/qtt04eqaY56cyMhkiKF7Ta8Wcc26MS5NrmyeH/Vj3Y5K
-         yfVEdWBMV+SuQ==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QsG2V61t6z4wp1;
-        Thu, 29 Jun 2023 21:10:26 +1000 (AEST)
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     Sachin Sant <sachinp@linux.ibm.com>,
-        Laurent Dufour <ldufour@linux.ibm.com>
-Cc:     linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        linux-arch@vger.kernel.org, dave.hansen@linux.intel.com,
-        open list <linux-kernel@vger.kernel.org>,
-        Ingo Molnar <mingo@redhat.com>, bp@alien8.de,
-        npiggin@gmail.com, tglx@linutronix.de
-Subject: Re: [PATCH v2 0/9]  Introduce SMT level and add PowerPC support
-In-Reply-To: <88E208A6-F4E0-4DE9-8752-C9652B978BC6@linux.ibm.com>
-References: <20230628100558.43482-1-ldufour@linux.ibm.com>
- <88E208A6-F4E0-4DE9-8752-C9652B978BC6@linux.ibm.com>
-Date:   Thu, 29 Jun 2023 21:10:25 +1000
-Message-ID: <87edluh6ce.fsf@mail.lhotse>
+        Thu, 29 Jun 2023 07:10:53 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B79C10CF;
+        Thu, 29 Jun 2023 04:10:51 -0700 (PDT)
+Received: from dggpeml500021.china.huawei.com (unknown [172.30.72.53])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4QsFzl64BgzqVFd;
+        Thu, 29 Jun 2023 19:08:03 +0800 (CST)
+Received: from [10.174.177.174] (10.174.177.174) by
+ dggpeml500021.china.huawei.com (7.185.36.21) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.27; Thu, 29 Jun 2023 19:10:48 +0800
+Message-ID: <e2b328fa-f5ed-c1ec-2b20-60ed53c9b8a7@huawei.com>
+Date:   Thu, 29 Jun 2023 19:10:47 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.2
+Subject: Re: [PATCH v2 2/7] quota: add new global dquot list releasing_dquots
+Content-Language: en-US
+To:     Jan Kara <jack@suse.cz>
+CC:     <linux-fsdevel@vger.kernel.org>, <linux-ext4@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <yi.zhang@huawei.com>,
+        <yangerkun@huawei.com>, <chengzhihao1@huawei.com>,
+        <yukuai3@huawei.com>, Baokun Li <libaokun1@huawei.com>
+References: <20230628132155.1560425-1-libaokun1@huawei.com>
+ <20230628132155.1560425-3-libaokun1@huawei.com>
+ <20230629102952.ifn3qdoh632ybsb5@quack3>
+From:   Baokun Li <libaokun1@huawei.com>
+In-Reply-To: <20230629102952.ifn3qdoh632ybsb5@quack3>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.177.174]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggpeml500021.china.huawei.com (7.185.36.21)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sachin Sant <sachinp@linux.ibm.com> writes:
->> On 28-Jun-2023, at 3:35 PM, Laurent Dufour <ldufour@linux.ibm.com> wrote:
->>=20
->> I'm taking over the series Michael sent previously [1] which is smartly
->> reviewing the initial series I sent [2].  This series is addressing the
->> comments sent by Thomas and me on the Michael's one.
->>=20
->> Here is a short introduction to the issue this series is addressing:
->>=20
->> When a new CPU is added, the kernel is activating all its threads. This
->> leads to weird, but functional, result when adding CPU on a SMT 4 system
->> for instance.
->>=20
->> Here the newly added CPU 1 has 8 threads while the other one has 4 threa=
-ds
->> active (system has been booted with the 'smt-enabled=3D4' kernel option):
->>=20
->> ltcden3-lp12:~ # ppc64_cpu --info
->> Core   0:    0*    1*    2*    3*    4     5     6     7
->> Core   1:    8*    9*   10*   11*   12*   13*   14*   15*
->>=20
->> This mixed SMT level may confused end users and/or some applications.
->>=20
+On 2023/6/29 18:29, Jan Kara wrote:
+> On Wed 28-06-23 21:21:50, Baokun Li wrote:
+>> Add a new global dquot list that obeys the following rules:
+>>
+>>   1). A dquot is added to this list when its last reference count is about
+>>       to be dropped.
+>>   2). The reference count of the dquot in the list is greater than or equal
+>>       to 1 ( due to possible race with dqget()).
+>>   3). When a dquot is removed from this list, a reference count is always
+>>       subtracted, and if the reference count is then 0, the dquot is added
+>>       to the free_dquots list.
+>>
+>> This list is used to safely perform the final cleanup before releasing
+>> the last reference count, to avoid various contention issues caused by
+>> performing cleanup directly in dqput(), and to avoid the performance impact
+>> caused by calling synchronize_srcu(&dquot_srcu) directly in dqput(). Here
+>> it is just defining the list and implementing the corresponding operation
+>> function, which we will use later.
+>>
+>> Suggested-by: Jan Kara <jack@suse.cz>
+>> Signed-off-by: Baokun Li <libaokun1@huawei.com>
+> I think you can merge this patch with patch 5. It is not like separating
+> this bit helps in review or anything...
+OK, I just don't want to cram a lot of stuff into patch 5, I will merge 
+this patch
+into patch 5 in the next version.
+>> diff --git a/fs/quota/dquot.c b/fs/quota/dquot.c
+>> index 108ba9f1e420..a8b43b5b5623 100644
+>> --- a/fs/quota/dquot.c
+>> +++ b/fs/quota/dquot.c
+>> @@ -226,12 +226,21 @@ static void put_quota_format(struct quota_format_type *fmt)
+>>   /*
+>>    * Dquot List Management:
+>>    * The quota code uses four lists for dquot management: the inuse_list,
+>                            ^^^ five now :)
+Yes, indeed, I forgot to correct here.
 >
-> Thanks for the patches Laurent.
->
-> Is the SMT level retained even when dynamically changing SMT values?
-> I am observing difference in behaviour with and without smt-enabled
-> kernel command line option.
->
-> When smt-enabled=3D option is specified SMT level is retained across=20
-> cpu core remove and add.
->
-> Without this option but changing SMT level during runtime using
-> ppc64_cpu =E2=80=94smt=3D<level>, the SMT level is not retained after
-> cpu core add.
+>> - * free_dquots, dqi_dirty_list, and dquot_hash[] array. A single dquot
+>> - * structure may be on some of those lists, depending on its current state.
+>> + * releasing_dquots, free_dquots, dqi_dirty_list, and dquot_hash[] array.
+>> + * A single dquot structure may be on some of those lists, depending on
+>> + * its current state.
+>>    *
+>>    * All dquots are placed to the end of inuse_list when first created, and this
+>>    * list is used for invalidate operation, which must look at every dquot.
+>>    *
+>> + * When the last reference of a dquot will be dropped, the dquot will be
+>> + * added to releasing_dquots. We'd then queue work item which would call
+>> + * synchronize_srcu() and after that perform the final cleanup of all the
+>> + * dquots on the list. Both releasing_dquots and free_dquots use the
+>> + * dq_free list_head in the dquot struct. when a dquot is removed from
+> 					     ^^^ Capital W please
+Good catch！Very sorry for the oversight here.
+>> + * releasing_dquots, a reference count is always subtracted, and if
+>> + * dq_count == 0 at that point, the dquot will be added to the free_dquots.
+>> + *
+> 								Honza
+Thank you very much for your careful REVIEW! I will fix those in the 
+next version!
 
-That's because ppc64_cpu is not using the sysfs SMT control file, it's
-just onlining/offlining threads manually.
-
-If you run:
- $ ppc64_cpu --smt=3D4=20
-
-And then also do:
-
- $ echo 4 > /sys/devices/system/cpu/smt/control
-
-It should work as expected?
-
-ppc64_cpu will need to be updated to do that automatically.
-
-cheers
+-- 
+With Best Regards,
+Baokun Li
+.
