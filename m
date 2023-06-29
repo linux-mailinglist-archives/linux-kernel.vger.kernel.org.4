@@ -2,69 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFD7774274D
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 15:24:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CBEF74274E
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 15:24:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231430AbjF2NYA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 09:24:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42008 "EHLO
+        id S231823AbjF2NYR convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 29 Jun 2023 09:24:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230256AbjF2NX5 (ORCPT
+        with ESMTP id S231663AbjF2NYP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 09:23:57 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16C362D4A;
-        Thu, 29 Jun 2023 06:23:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=AZtS5X9BKaHL97b40HBwXNlyolqkhlUBrklOIKnvU6U=; b=sX4yjEO/PAps8WzH/CszrUMrzZ
-        2V1d/zUJumY/hQLYkAUAt1LhgmxcjB5FeZ5A5MgLQj7MPs/pqHte9+blIn29PhZxmPYS699TsvVV3
-        8Egv77NN/BG89UZuujij3If9z0XhEe0mJJol3u1etKhh3hxc2sBW3+jDjnU/EwQPda6M=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1qErci-000EDO-PF; Thu, 29 Jun 2023 15:23:48 +0200
-Date:   Thu, 29 Jun 2023 15:23:48 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Luo Jie <quic_luoj@quicinc.com>
-Cc:     hkallweit1@gmail.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, linux@armlinux.org.uk,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        quic_sricharan@quicinc.com
-Subject: Re: [PATCH 3/3] net: phy: at803x: add qca8081 fifo reset on the link
- down
-Message-ID: <e1cf3666-fecc-4272-b91b-5921ada45ade@lunn.ch>
-References: <20230629034846.30600-1-quic_luoj@quicinc.com>
- <20230629034846.30600-4-quic_luoj@quicinc.com>
+        Thu, 29 Jun 2023 09:24:15 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E41E30DF
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 06:24:14 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-54-8rh9MoxjMk2CwbwNRMsZVQ-1; Thu, 29 Jun 2023 14:23:55 +0100
+X-MC-Unique: 8rh9MoxjMk2CwbwNRMsZVQ-1
+Received: from AcuMS.Aculab.com (10.202.163.4) by AcuMS.aculab.com
+ (10.202.163.4) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Thu, 29 Jun
+ 2023 14:23:54 +0100
+Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
+ id 15.00.1497.048; Thu, 29 Jun 2023 14:23:54 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Samuel Thibault' <samuel.thibault@ens-lyon.org>,
+        Kees Cook <keescook@chromium.org>
+CC:     Kees Cook <kees@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Simon Brand <simon.brand@postadigitale.de>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-hardening@vger.kernel.org" <linux-hardening@vger.kernel.org>,
+        "Dave@mielke.cc" <Dave@mielke.cc>
+Subject: RE: [PATCH v3 2/2] tty: Allow TIOCSTI to be disabled
+Thread-Topic: [PATCH v3 2/2] tty: Allow TIOCSTI to be disabled
+Thread-Index: AQHZqZu1MI//nXKQnEKNH07rOK4tp6+hxWvQ
+Date:   Thu, 29 Jun 2023 13:23:54 +0000
+Message-ID: <55c209a024a94d1f9c6af85dfddb11a0@AcuMS.aculab.com>
+References: <20221022182828.give.717-kees@kernel.org>
+ <20221022182949.2684794-2-keescook@chromium.org>
+ <20221227234000.jgosvixx7eahqb3z@begin>
+ <C95AF535-7A95-48BA-8921-1932C15A1931@kernel.org>
+ <20221228205726.rfevry7ud6gmttg5@begin>
+ <20230625155625.s4kvy7m2vw74ow4i@begin> <202306271944.E80E1D0@keescook>
+ <20230628060716.vvgtlgbushyjh6km@begin>
+In-Reply-To: <20230628060716.vvgtlgbushyjh6km@begin>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230629034846.30600-4-quic_luoj@quicinc.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,PDS_BAD_THREAD_QP_64,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> +static int qca808x_fifo_reset(struct phy_device *phydev)
-> +{
-> +	/* Reset serdes fifo on link down, Release serdes fifo on link up,
-> +	 * the serdes address is phy address added by 1.
-> +	 */
-> +	return mdiobus_c45_modify_changed(phydev->mdio.bus, phydev->mdio.addr + 1,
-> +			MDIO_MMD_PMAPMD, QCA8081_PHY_SERDES_MMD1_FIFO_CTRL,
-> +			QCA8081_PHY_FIFO_RSTN, phydev->link ? QCA8081_PHY_FIFO_RSTN : 0);
+From: Samuel Thibault
+> Sent: 28 June 2023 07:07
+...
+> > So is there really no solution for brltty and TIOCSTI being disabled?
+> 
+> No, there is no way to simulate characters on the Linux console. The
+> alternative would be to use uinput, but that simulates keycodes, not
+> characters, thus requiring backtranslating first, which is very fragile.
 
-In polling mode, this is going to be called once per second. Do you
-really want to be setting that register all the time? Consider using
-the link_change_notify callback.
+It could probably be rewritten to use a pseudo-tty pair.
+It might even be possible to emulate (the functionality of) TIOCSTI
+in the relay process that handles the pseudo-tty.
 
-Also, can you tell us more about this SERDES device on the bus. I just
-want to make sure this is not a PCS and should have its own driver.
+	David
 
-     Andrew
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
+
