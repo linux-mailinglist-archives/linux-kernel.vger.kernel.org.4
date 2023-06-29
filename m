@@ -2,58 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 714297429D6
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 17:44:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5BE67429E1
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 17:46:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232444AbjF2PoI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 11:44:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57866 "EHLO
+        id S232082AbjF2Pqn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 11:46:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232287AbjF2PoF (ORCPT
+        with ESMTP id S230036AbjF2Pql (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 11:44:05 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB6062D51;
-        Thu, 29 Jun 2023 08:44:04 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 51ECC61575;
-        Thu, 29 Jun 2023 15:44:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2EF21C433C0;
-        Thu, 29 Jun 2023 15:44:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688053443;
-        bh=oFbwbaYZ7miTeEicmpAwOWw6KnWiitf02o31s9XNxgk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=SPrDjawA7h6uOw2dna84rNP+2QX8PeYOcxYWShOQm1d+BAcRmfl5dtoKzNzPTf8/x
-         lNV1ED63afrSNMXdNDLmmfqXKb2lz1gxaeDo6PNhPBIaZYLBp0yFOHI0kVFKP7ajLj
-         EbmxD+3IBFi2FXFlwPThooy7Yxfv5AsXgJO6GvS/kfAzS5AvciBtYdrbK6Z4+CojeZ
-         01qLep/3yir0mNJaH1sM673ttVzA7NGhiPtqiGi3CePjNiDystNTaYfJHJ7Qje3z1E
-         YZt6CSJTtWqaUvVtUYLzPXvwG585NZRE4zACuvv6NXhSJvkJlQC1jObuwFmVPxj5Ri
-         lyMHYspPkd0kw==
-Date:   Thu, 29 Jun 2023 16:43:57 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Cc:     johan+linaro@kernel.org, perex@perex.cz, tiwai@suse.com,
-        lgirdwood@gmail.com, ckeepax@opensource.cirrus.com,
-        kuninori.morimoto.gx@renesas.com, linux-kernel@vger.kernel.org,
-        pierre-louis.bossart@linux.intel.com, alsa-devel@alsa-project.org,
-        Stable@vger.kernel.org
-Subject: Re: [PATCH] ASoC: qdsp6: q6apm: use dai link pcm id as pcm device
- number
-Message-ID: <c22fcc94-aa41-4ffd-bfe8-f0b9f15a76c0@sirena.org.uk>
-References: <20230628092404.13927-1-srinivas.kandagatla@linaro.org>
+        Thu, 29 Jun 2023 11:46:41 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E68062D4E
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 08:46:39 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6866DC14;
+        Thu, 29 Jun 2023 08:47:23 -0700 (PDT)
+Received: from e109506.cambridge.arm.com (e109506.cambridge.arm.com [10.1.199.62])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 769FB3F64C;
+        Thu, 29 Jun 2023 08:46:38 -0700 (PDT)
+From:   Rahul Singh <rahul.singh@arm.com>
+To:     xen-devel@lists.xenproject.org, linux-kernel@vger.kernel.org
+Cc:     rahul.singh@arm.com, Juergen Gross <jgross@suse.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
+        Samuel Holland <samuel@sholland.org>,
+        David Woodhouse <dwmw@amazon.co.uk>,
+        Jane Malalane <jane.malalane@citrix.com>
+Subject: [PATCH v2] xen/evtchn: Introduce new IOCTL to bind static evtchn
+Date:   Thu, 29 Jun 2023 16:46:18 +0100
+Message-Id: <764d561e3aecb7e63e8601dc50aaef9fc40834e4.1688051342.git.rahul.singh@arm.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="8bc6I2dYpV5RLa6+"
-Content-Disposition: inline
-In-Reply-To: <20230628092404.13927-1-srinivas.kandagatla@linaro.org>
-X-Cookie: Surprise due today.  Also the rent.
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,42 +45,184 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Xen 4.17 supports the creation of static evtchns. To allow user space
+application to bind static evtchns introduce new ioctl
+"IOCTL_EVTCHN_BIND_STATIC". Existing IOCTL doing more than binding
+that’s why we need to introduce the new IOCTL to only bind the static
+event channels.
 
---8bc6I2dYpV5RLa6+
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Also, static evtchns to be available for use during the lifetime of the
+guest. When the application exits, __unbind_from_irq() ends up being
+called from release() file operations because of that static evtchns
+are getting closed. To avoid closing the static event channel, add the
+new bool variable "is_static" in "struct irq_info" to mark the event
+channel static when creating the event channel to avoid closing the
+static evtchn.
 
-On Wed, Jun 28, 2023 at 10:24:04AM +0100, Srinivas Kandagatla wrote:
-> For some reason we ended up with a setup without this flag.
-> This resulted in inconsistent sound card devices numbers which
->  are also not starting as expected at dai_link->id.
->  (Ex: MultiMedia1 pcm ended up with device number 4 instead of 0)
+Signed-off-by: Rahul Singh <rahul.singh@arm.com>
+---
+v2:
+ * Use bool in place u8 to define is_static variable.
+ * Avoid closing the static evtchns in error path.
+---
+ drivers/xen/events/events_base.c |  7 +++++--
+ drivers/xen/evtchn.c             | 30 ++++++++++++++++++++++--------
+ include/uapi/xen/evtchn.h        |  9 +++++++++
+ include/xen/events.h             |  2 +-
+ 4 files changed, 37 insertions(+), 11 deletions(-)
 
-Why is this a problem?
+diff --git a/drivers/xen/events/events_base.c b/drivers/xen/events/events_base.c
+index c7715f8bd452..5d3b5c7cfe64 100644
+--- a/drivers/xen/events/events_base.c
++++ b/drivers/xen/events/events_base.c
+@@ -112,6 +112,7 @@ struct irq_info {
+ 	unsigned int irq_epoch; /* If eoi_cpu valid: irq_epoch of event */
+ 	u64 eoi_time;           /* Time in jiffies when to EOI. */
+ 	raw_spinlock_t lock;
++	bool is_static;           /* Is event channel static */
+ 
+ 	union {
+ 		unsigned short virq;
+@@ -982,7 +983,8 @@ static void __unbind_from_irq(unsigned int irq)
+ 		unsigned int cpu = cpu_from_irq(irq);
+ 		struct xenbus_device *dev;
+ 
+-		xen_evtchn_close(evtchn);
++		if (!info->is_static)
++			xen_evtchn_close(evtchn);
+ 
+ 		switch (type_from_irq(irq)) {
+ 		case IRQT_VIRQ:
+@@ -1574,7 +1576,7 @@ int xen_set_irq_priority(unsigned irq, unsigned priority)
+ }
+ EXPORT_SYMBOL_GPL(xen_set_irq_priority);
+ 
+-int evtchn_make_refcounted(evtchn_port_t evtchn)
++int evtchn_make_refcounted(evtchn_port_t evtchn, bool is_static)
+ {
+ 	int irq = get_evtchn_to_irq(evtchn);
+ 	struct irq_info *info;
+@@ -1590,6 +1592,7 @@ int evtchn_make_refcounted(evtchn_port_t evtchn)
+ 	WARN_ON(info->refcnt != -1);
+ 
+ 	info->refcnt = 1;
++	info->is_static = is_static;
+ 
+ 	return 0;
+ }
+diff --git a/drivers/xen/evtchn.c b/drivers/xen/evtchn.c
+index c99415a70051..e6d2303478b2 100644
+--- a/drivers/xen/evtchn.c
++++ b/drivers/xen/evtchn.c
+@@ -366,7 +366,8 @@ static int evtchn_resize_ring(struct per_user_data *u)
+ 	return 0;
+ }
+ 
+-static int evtchn_bind_to_user(struct per_user_data *u, evtchn_port_t port)
++static int evtchn_bind_to_user(struct per_user_data *u, evtchn_port_t port,
++			bool is_static)
+ {
+ 	struct user_evtchn *evtchn;
+ 	struct evtchn_close close;
+@@ -402,14 +403,16 @@ static int evtchn_bind_to_user(struct per_user_data *u, evtchn_port_t port)
+ 	if (rc < 0)
+ 		goto err;
+ 
+-	rc = evtchn_make_refcounted(port);
++	rc = evtchn_make_refcounted(port, is_static);
+ 	return rc;
+ 
+ err:
+ 	/* bind failed, should close the port now */
+-	close.port = port;
+-	if (HYPERVISOR_event_channel_op(EVTCHNOP_close, &close) != 0)
+-		BUG();
++	if (!is_static) {
++		close.port = port;
++		if (HYPERVISOR_event_channel_op(EVTCHNOP_close, &close) != 0)
++			BUG();
++	}
+ 	del_evtchn(u, evtchn);
+ 	return rc;
+ }
+@@ -456,7 +459,7 @@ static long evtchn_ioctl(struct file *file,
+ 		if (rc != 0)
+ 			break;
+ 
+-		rc = evtchn_bind_to_user(u, bind_virq.port);
++		rc = evtchn_bind_to_user(u, bind_virq.port, false);
+ 		if (rc == 0)
+ 			rc = bind_virq.port;
+ 		break;
+@@ -482,7 +485,7 @@ static long evtchn_ioctl(struct file *file,
+ 		if (rc != 0)
+ 			break;
+ 
+-		rc = evtchn_bind_to_user(u, bind_interdomain.local_port);
++		rc = evtchn_bind_to_user(u, bind_interdomain.local_port, false);
+ 		if (rc == 0)
+ 			rc = bind_interdomain.local_port;
+ 		break;
+@@ -507,7 +510,7 @@ static long evtchn_ioctl(struct file *file,
+ 		if (rc != 0)
+ 			break;
+ 
+-		rc = evtchn_bind_to_user(u, alloc_unbound.port);
++		rc = evtchn_bind_to_user(u, alloc_unbound.port, false);
+ 		if (rc == 0)
+ 			rc = alloc_unbound.port;
+ 		break;
+@@ -536,6 +539,17 @@ static long evtchn_ioctl(struct file *file,
+ 		break;
+ 	}
+ 
++	case IOCTL_EVTCHN_BIND_STATIC: {
++		struct ioctl_evtchn_bind bind;
++
++		rc = -EFAULT;
++		if (copy_from_user(&bind, uarg, sizeof(bind)))
++			break;
++
++		rc = evtchn_bind_to_user(u, bind.port, true);
++		break;
++	}
++
+ 	case IOCTL_EVTCHN_NOTIFY: {
+ 		struct ioctl_evtchn_notify notify;
+ 		struct user_evtchn *evtchn;
+diff --git a/include/uapi/xen/evtchn.h b/include/uapi/xen/evtchn.h
+index 7fbf732f168f..aef2b75f3413 100644
+--- a/include/uapi/xen/evtchn.h
++++ b/include/uapi/xen/evtchn.h
+@@ -101,4 +101,13 @@ struct ioctl_evtchn_restrict_domid {
+ 	domid_t domid;
+ };
+ 
++/*
++ * Bind statically allocated @port.
++ */
++#define IOCTL_EVTCHN_BIND_STATIC			\
++	_IOC(_IOC_NONE, 'E', 7, sizeof(struct ioctl_evtchn_bind))
++struct ioctl_evtchn_bind {
++	unsigned int port;
++};
++
+ #endif /* __LINUX_PUBLIC_EVTCHN_H__ */
+diff --git a/include/xen/events.h b/include/xen/events.h
+index ac1281c5ead6..377ad7e391e8 100644
+--- a/include/xen/events.h
++++ b/include/xen/events.h
+@@ -69,7 +69,7 @@ int xen_set_irq_priority(unsigned irq, unsigned priority);
+ /*
+  * Allow extra references to event channels exposed to userspace by evtchn
+  */
+-int evtchn_make_refcounted(evtchn_port_t evtchn);
++int evtchn_make_refcounted(evtchn_port_t evtchn, bool is_static);
+ int evtchn_get(evtchn_port_t evtchn);
+ void evtchn_put(evtchn_port_t evtchn);
+ 
 
-> With this patch patch now the MultiMedia1 PCM ends up with device number 0
-> as expected.
->=20
-> Fixes: 9b4fe0f1cd79 ("ASoC: qdsp6: audioreach: add q6apm-dai support")
-> Cc: <Stable@vger.kernel.org>
+base-commit: 3a8a670eeeaa40d87bd38a587438952741980c18
+-- 
+2.25.1
 
-Won't this be an ABI change?  That seems like it'd disrupt things in
-stable.
-
---8bc6I2dYpV5RLa6+
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmSdprwACgkQJNaLcl1U
-h9Bxhwf/dRqOJwBGONvDNGWdiQqXTCARa1cZb/fPFJNqdwS5EFz8B5791vslE7oN
-uoUsLEC8VgPFaQ0cLq2s9NEDlMfgQmMbCoKmS1mlxGMQKLwcGeC9ahtf2H8YSgyp
-D8Gq3/bVdYBvhXM7EbsEo2+LVlyZgKfMioGnc1p3p24GK7sq6DqYUhSEZwwRgY0R
-aU7Wk5ys8U9QMlwQ4DyznHd9tEVXKu7HhCce1+qxsbFXHFg/OEI17X1MxQEMRKB5
-3zcs9LHnaOcIdQi12y79ubmhQ1nrfupBHdz8CA5RxZfWCFkAKxVc/u4pQ5hCfRt3
-wv0YoiXXnyclAf7gpeuiHLVueG/XEQ==
-=yiRQ
------END PGP SIGNATURE-----
-
---8bc6I2dYpV5RLa6+--
