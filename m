@@ -2,144 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A596741D6F
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 03:00:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CC05741D72
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 03:01:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231185AbjF2BAp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 21:00:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35886 "EHLO
+        id S231509AbjF2BBc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 21:01:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231406AbjF2BAl (ORCPT
+        with ESMTP id S229918AbjF2BB3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 21:00:41 -0400
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63B0A2689
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 18:00:40 -0700 (PDT)
-Received: by mail-pl1-x62e.google.com with SMTP id d9443c01a7336-1b8033987baso879915ad.0
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 18:00:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fromorbit-com.20221208.gappssmtp.com; s=20221208; t=1688000440; x=1690592440;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=YFSh4UQMxigzwwvL8diZTzDsQNOBblrcP22N90L84Vs=;
-        b=kCcBmQYr8egVuJFSES59uunr/I5DWWW/oVY38mczGq9tVtawHM54hG6vXq0XMkcXvw
-         Walcv4qUS5C/tNKmiS0r2O02x49/+QmbVMQZm5lmGrJS6+S8fr3vDTCceDeigPa4wze7
-         wNMdtjOvk6TNdR5NGk95jN8A19ZSo6zHnyLY7VSOBE8Q3fdqQwr+DZ3IZfKncZ87eNKR
-         8fVvodAsY9k+EaQ823GLrU4al1j6bu8T9+NVSHRAaMjRngyvx/6bqNYOQroUGh2F0QWc
-         LMvARJ/xA5WAVQYxU624wwuV3w8GYPQ2TUiiCmyK/f3fVn/u9ZEPXXvdgC6CjYDf6H8Q
-         gerQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688000440; x=1690592440;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=YFSh4UQMxigzwwvL8diZTzDsQNOBblrcP22N90L84Vs=;
-        b=QPr1c5c7O3cpJb9Jc8nSy+1zxH4XcU+wLt8eS2CXFytrlisQGLx1UH6KnSzaBXgX1q
-         ZIhJFRmrssKm/yXQll8/86tvY16GUDoo9+gMa2E/PuPlKHKJyni4zg2xuQQIpyu2mH9a
-         c9rt0XVJl4WP3OAZPCS7QXyssfJwGywg5iZfuWSC8GCLZmKixvZU0DIgnAxhtNmlipYA
-         X6e6J3w/qzV/Xr0Fh0cOL68ZmjpbHUkHvbpyOoVpgjMf/xANdxQ65AYH58v0szqCGNgw
-         BkGIfefdCVn92aqJJprtvKM9a5lt/vWiebXeYl7ltWn91EvMzHjjLDw9I2xxbbUGnpCN
-         qaHA==
-X-Gm-Message-State: AC+VfDyWGrbg37hOAKPYf61uagPl83OwbdXAR2rd0WX08Vi/lxP1e+Oo
-        LdvfNmagltiJbyezfofYIMbe8vlGuOUnx3k79Wo=
-X-Google-Smtp-Source: ACHHUZ7qSZvmo9NUERFxGeAPqZFDi+YuhlJdqnu8fHjovL+tHuyu4rUYhLvJ904+Q1hbaS+67nP7ag==
-X-Received: by 2002:a17:902:e551:b0:1b8:3936:7b64 with SMTP id n17-20020a170902e55100b001b839367b64mr4104977plf.1.1688000439787;
-        Wed, 28 Jun 2023 18:00:39 -0700 (PDT)
-Received: from dread.disaster.area (pa49-186-94-37.pa.vic.optusnet.com.au. [49.186.94.37])
-        by smtp.gmail.com with ESMTPSA id t7-20020a1709028c8700b001b03842ab78sm8224744plo.89.2023.06.28.18.00.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Jun 2023 18:00:38 -0700 (PDT)
-Received: from dave by dread.disaster.area with local (Exim 4.96)
-        (envelope-from <david@fromorbit.com>)
-        id 1qEg1T-00HR8i-1z;
-        Thu, 29 Jun 2023 11:00:35 +1000
-Date:   Thu, 29 Jun 2023 11:00:35 +1000
-From:   Dave Chinner <david@fromorbit.com>
-To:     Kent Overstreet <kent.overstreet@linux.dev>
-Cc:     Jens Axboe <axboe@kernel.dk>, torvalds@linux-foundation.org,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-bcachefs@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
-        Christian Brauner <brauner@kernel.org>,
-        Al Viro <viro@zeniv.linux.org.uk>
-Subject: Re: [GIT PULL] bcachefs
-Message-ID: <ZJzXs6C8G2SL10vq@dread.disaster.area>
-References: <b02657af-5bbb-b46b-cea0-ee89f385f3c1@kernel.dk>
- <4b863e62-4406-53e4-f96a-f4d1daf098ab@kernel.dk>
- <20230628175204.oeek4nnqx7ltlqmg@moria.home.lan>
- <e1570c46-68da-22b7-5322-f34f3c2958d9@kernel.dk>
- <2e635579-37ba-ddfc-a2ab-e6c080ab4971@kernel.dk>
- <20230628221342.4j3gr3zscnsu366p@moria.home.lan>
- <d697ec27-8008-2eb6-0950-f612a602dcf5@kernel.dk>
- <20230628225514.n3xtlgmjkgapgnrd@moria.home.lan>
- <1e2134f1-f48b-1459-a38e-eac9597cd64a@kernel.dk>
- <20230628235018.ttvtzpfe42fri4yq@moria.home.lan>
+        Wed, 28 Jun 2023 21:01:29 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7DAF212F;
+        Wed, 28 Jun 2023 18:01:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1688000488; x=1719536488;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=wvcp0oNxhAZF/jxUcax6I76yc5ZgM67abJCJcCMwEVU=;
+  b=Dua44uzStFNn/I53Kgp9FOoplvE9I2dt2fRTT+57MfImjDk9VMvkUh+3
+   Tpp66o8u0OpQwoV7xSK3eo/2RUAPSv4cFVuRd6aGh2juUoRF+CJFxQuLS
+   I4NXivDNXCakXlhXiMBLUPsDzR9SyLA3nfbC3JBz0PY2c2WA0hFTSg+kx
+   ehk2I6SjZt7EJiWt2V8d4am04LgVXbNFbLx+uWqtp75oU00qcHgIwTqLh
+   ZfQi16jVn43xJw2EedCRJAeJuQqvUcxGxRdF/ox4Y2832JJHFbZiZce6m
+   MJtl8D90OMzLOuZVIjIyJw3+/9ro8JREJDEXJuvKr/5hx6Jgraw+tdCmU
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10755"; a="362038594"
+X-IronPort-AV: E=Sophos;i="6.01,167,1684825200"; 
+   d="scan'208";a="362038594"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2023 18:01:28 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10755"; a="1047600854"
+X-IronPort-AV: E=Sophos;i="6.01,167,1684825200"; 
+   d="scan'208";a="1047600854"
+Received: from yy-desk-7060.sh.intel.com (HELO localhost) ([10.239.159.76])
+  by fmsmga005.fm.intel.com with ESMTP; 28 Jun 2023 18:01:21 -0700
+Date:   Thu, 29 Jun 2023 09:01:20 +0800
+From:   Yuan Yao <yuan.yao@linux.intel.com>
+To:     "Huang, Kai" <kai.huang@intel.com>
+Cc:     "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "Raj, Ashok" <ashok.raj@intel.com>,
+        "Hansen, Dave" <dave.hansen@intel.com>,
+        "david@redhat.com" <david@redhat.com>,
+        "bagasdotme@gmail.com" <bagasdotme@gmail.com>,
+        "Luck, Tony" <tony.luck@intel.com>,
+        "ak@linux.intel.com" <ak@linux.intel.com>,
+        "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Christopherson,, Sean" <seanjc@google.com>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "Chatre, Reinette" <reinette.chatre@intel.com>,
+        "Yamahata, Isaku" <isaku.yamahata@intel.com>,
+        "nik.borisov@suse.com" <nik.borisov@suse.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "Shahar, Sagi" <sagis@google.com>,
+        "imammedo@redhat.com" <imammedo@redhat.com>,
+        "bp@alien8.de" <bp@alien8.de>, "Gao, Chao" <chao.gao@intel.com>,
+        "Brown, Len" <len.brown@intel.com>,
+        "sathyanarayanan.kuppuswamy@linux.intel.com" 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        "Huang, Ying" <ying.huang@intel.com>,
+        "Williams, Dan J" <dan.j.williams@intel.com>,
+        "x86@kernel.org" <x86@kernel.org>
+Subject: Re: [PATCH v12 00/22] TDX host kernel support
+Message-ID: <20230629010120.odlfyf7ka7oexdls@yy-desk-7060>
+References: <cover.1687784645.git.kai.huang@intel.com>
+ <20230628070418.6dky65allycok4us@yy-desk-7060>
+ <cd5dbba41bee8ad679607a18409863054e5fbdcc.camel@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230628235018.ttvtzpfe42fri4yq@moria.home.lan>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <cd5dbba41bee8ad679607a18409863054e5fbdcc.camel@intel.com>
+User-Agent: NeoMutt/20171215
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 28, 2023 at 07:50:18PM -0400, Kent Overstreet wrote:
-> On Wed, Jun 28, 2023 at 05:14:09PM -0600, Jens Axboe wrote:
-> > On 6/28/23 4:55?PM, Kent Overstreet wrote:
-> > >> But it's not aio (or io_uring or whatever), it's simply the fact that
-> > >> doing an fput() from an exiting task (for example) will end up being
-> > >> done async. And hence waiting for task exits is NOT enough to ensure
-> > >> that all file references have been released.
-> > >>
-> > >> Since there are a variety of other reasons why a mount may be pinned and
-> > >> fail to umount, perhaps it's worth considering that changing this
-> > >> behavior won't buy us that much. Especially since it's been around for
-> > >> more than 10 years:
-> > > 
-> > > Because it seems that before io_uring the race was quite a bit harder to
-> > > hit - I only started seeing it when things started switching over to
-> > > io_uring. generic/388 used to pass reliably for me (pre backpointers),
-> > > now it doesn't.
-> > 
-> > I literally just pasted a script that hits it in one second with aio. So
-> > maybe generic/388 doesn't hit it as easily, but it's surely TRIVIAL to
-> > hit with aio. As demonstrated. The io_uring is not hard to bring into
-> > parity on that front, here's one I posted earlier today for 6.5:
-> > 
-> > https://lore.kernel.org/io-uring/20230628170953.952923-4-axboe@kernel.dk/
-> > 
-> > Doesn't change the fact that you can easily hit this with io_uring or
-> > aio, and probably more things too (didn't look any further). Is it a
-> > realistic thing outside of funky tests? Probably not really, or at least
-> > if those guys hit it they'd probably have the work-around hack in place
-> > in their script already.
-> > 
-> > But the fact is that it's been around for a decade. It's somehow a lot
-> > easier to hit with bcachefs than XFS, which may just be because the
-> > former has a bunch of workers and this may be deferring the delayed fput
-> > work more. Just hand waving.
-> 
-> Not sure what you're arguing here...?
-> 
-> We've had a long standing bug, it's recently become much easier to hit
-> (for multiple reasons); we seem to be in agreement on all that. All I'm
-> saying is that the existence of that bug previously is not reason to fix
-> it now.
+On Wed, Jun 28, 2023 at 08:12:55AM +0000, Huang, Kai wrote:
+> > >
+> > > 2. CPU hotplug
+> > >
+> > > DX doesn't support physical (ACPI) CPU hotplug.  A non-buggy BIOS should
+> >   ^^
+> >
+> > Need T here.
+>
+> Thanks!
+>
+> >
+> [...]
+>
+> > > 4. Memory Hotplug
+> > >
+> > > After the kernel passes all "TDX-usable" memory regions to the TDX
+> > > module, the set of "TDX-usable" memory regions are fixed during module's
+> > > runtime.  No more "TDX-usable" memory can be added to the TDX module
+> > > after that.
+> > >
+> > > To achieve above "to guarantee all pages in the page allocator are TDX
+> > > pages", this series simply choose to reject any non-TDX-usable memory in
+> > > memory hotplug.
+> > >
+> > > 5. Physical Memory Hotplug
+> > >
+> > > Note TDX assumes convertible memory is always physically present during
+> > > machine's runtime.  A non-buggy BIOS should never support hot-removal of
+> > > any convertible memory.  This implementation doesn't handle ACPI memory
+> > > removal but depends on the BIOS to behave correctly.
+> > >
+> > > Also, if something insane really happened, 4) makes sure either TDX
+> >
+> > Please remove "4)" if have no specific meaning here.
+> >
+>
+> It means the mechanism mentioned in "4. Memory hotplug".
 
-I agree with Kent here  - the kernel bug needs to be fixed
-regardless of how long it has been around. Blaming the messenger
-(userspace, fstests, etc) and saying it should work around a
-spurious, unpredictable, undesirable and user-undebuggable kernel
-behaviour is not an acceptible solution here...
+Ah I see, it's fine to me, thanks.
 
-I don't care how the kernel bug gets fixed, I just want the spurious
-unmount failures when there are no userspace processes actively
-using the filesytsem to go away forever.
-
--Dave.
--- 
-Dave Chinner
-david@fromorbit.com
+> >
