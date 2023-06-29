@@ -2,156 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36B5C742909
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 17:02:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 018C7742911
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 17:04:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232465AbjF2PCh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 11:02:37 -0400
-Received: from mail-dm3nam02on2068.outbound.protection.outlook.com ([40.107.95.68]:13297
-        "EHLO NAM02-DM3-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S230353AbjF2PCe (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 11:02:34 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=JVgR/mE5L/1RTZrPLS7OBr+FfdTpUM5ljoLWc82i/hGaQO+GfuOV+Ik/T7ydiJZyll9ArX9d5I2xJnhxWxv7W2UQe4XjW/nPkt/CBVFWdhVMYAwMBaJlW9c9djrlOoOQm6h8+MDkvHWW3oWog39nROQCtS9JbVGpudx6P3PufbjBjp+cV0t3Ibl76YJAY85qrVk/Gu0U/MnVFcqy39sKSAnScLX+2uPnP/TJumph8yDAuRt5PC/6Ijfx4ho9UawSm6J1u2IJWPIs5XW29IBjDWFdyiRzn1ZJd6lxn/PQ+s2Mn3BnUt5hxyfqtByOm9BadrfQoHPvrlVGTv64UDsPfg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=uBnuqZyB3arxQIr4T8j1Kvb+OYCEAsmUMkPM8DWdDFE=;
- b=E/M7cg++ssJdwh8BMc46j7bwewnGq9Bk9D7tS1CAvkonb7d5IZk0LLg2ogOQqYZZ+L30gyYy0yr3ut94gxuNfcd73w2vqlWNanmvbxlBsFsDXxrn8footfp7Av4GZbsdxM7FKlKTe8RMrVCNBJhfqWKPQnLx1OF1Yj/DhP6zLnD2NB7OoZtehjpcZMHqau/irjsS1pz9LqmREkdzCOPtYr2xx/7Z+0pVPT2pAzdHkF5zPJZ8ZFa9yl4kVKb8AhX3XOby2GXzAfSz5Hgd3WcsKK0h598lTJ5nZbWZ09is/1yz8nqdvm8G9/2cymTVpjhTO7nIqwS711+HP9snuBunDQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=uBnuqZyB3arxQIr4T8j1Kvb+OYCEAsmUMkPM8DWdDFE=;
- b=kvEBtvbF9vRN8tEAUACjFwygkg0H3ckicTV0K9QptY4vaQ/6ku9FQ4v6U8PhDto4qy5/JK0i909/rGH5icq9qDvYozvUQjXL9HzOWWcnunbiEt/ZYZal8EMbawJ/N/EcUWPrGuXVo555CuPIbk1r8B1oNu4St2uy5ClXhZ/7umwYW2CZ0KNWHd0iPkEqiFTH3l07fbHeN9sOALc6+Z6PCuqGl6C2a5sd85OISW7MSljf6yeojd6gWEIU4qILWwDH0eCwpr/3bzu2514pKfM0HoOeMpgY586nw79uEc/wJfvs3piOMbSHoN9lm7rzRQSRXAdF2uiKm7BgAjpgGETtdw==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from SJ1PR12MB6075.namprd12.prod.outlook.com (2603:10b6:a03:45e::8)
- by SJ2PR12MB8781.namprd12.prod.outlook.com (2603:10b6:a03:4d0::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.24; Thu, 29 Jun
- 2023 15:02:32 +0000
-Received: from SJ1PR12MB6075.namprd12.prod.outlook.com
- ([fe80::4651:eac6:ec70:dc3d]) by SJ1PR12MB6075.namprd12.prod.outlook.com
- ([fe80::4651:eac6:ec70:dc3d%4]) with mapi id 15.20.6521.023; Thu, 29 Jun 2023
- 15:02:32 +0000
-From:   Aurelien Aptel <aaptel@nvidia.com>
-To:     Sagi Grimberg <sagi@grimberg.me>,
-        David Howells <dhowells@redhat.com>, netdev@vger.kernel.org
-Cc:     Alexander Duyck <alexander.duyck@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-        David Ahern <dsahern@kernel.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Jens Axboe <axboe@kernel.dk>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        Willem de Bruijn <willemb@google.com>,
-        Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@fb.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Chaitanya Kulkarni <kch@nvidia.com>,
-        linux-nvme@lists.infradead.org
-Subject: Re: [PATCH net-next v3 10/18] nvme/host: Use
- sendmsg(MSG_SPLICE_PAGES) rather then sendpage
-In-Reply-To: <a1b7984a-d0a0-087c-2db9-6dbb6400a2bb@grimberg.me>
-References: <20230620145338.1300897-1-dhowells@redhat.com>
- <20230620145338.1300897-11-dhowells@redhat.com>
- <253mt0il43o.fsf@mtr-vdi-124.i-did-not-set--mail-host-address--so-tickle-me>
- <a1b7984a-d0a0-087c-2db9-6dbb6400a2bb@grimberg.me>
-Date:   Thu, 29 Jun 2023 18:02:27 +0300
-Message-ID: <253jzvml3b0.fsf@mtr-vdi-124.i-did-not-set--mail-host-address--so-tickle-me>
-Content-Type: text/plain
-X-ClientProxiedBy: FR3P281CA0142.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:95::16) To SJ1PR12MB6075.namprd12.prod.outlook.com
- (2603:10b6:a03:45e::8)
+        id S231140AbjF2PEe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 11:04:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44492 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230525AbjF2PEb (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 29 Jun 2023 11:04:31 -0400
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 888032D7F;
+        Thu, 29 Jun 2023 08:04:30 -0700 (PDT)
+Received: by mail-wm1-x32f.google.com with SMTP id 5b1f17b1804b1-3fbc1fd6335so2179065e9.2;
+        Thu, 29 Jun 2023 08:04:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1688051069; x=1690643069;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=9T0VXws43hJjl+uJSROMwIKD7cE/AP2uivo3vISpPNI=;
+        b=LcHVTWUlAJfeAteEoMNOZzMOCFJyhJGPkS6wUVdtw59FTCTto96bVF1KpqeqGelZQo
+         0Iu0sdABeApD2lTFiZOA/uMOhhDn7AhL0BYSEbTBiJDN9ud03Ji8HTPtkfuM4UJVX2rU
+         6xYmdghWM9EMRVdT8X5SJbCh6jrVlOkZ77aUETj0w+9tKc/9QTpdRFPUIqe/w+L0h1MK
+         udFgXUtzZbWSbwc/j9UPcDozj/o7D0coV9AChyQTnGHx7Kn8PQ/PnyDfq8j/vQW9UOVy
+         aZmROjYUEAH0AhRj1ENQTsguVQ0cOtOoaI4Fh0nuNZWsgnifjjpDutBh+vD70Lwnogq0
+         1tOg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688051069; x=1690643069;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=9T0VXws43hJjl+uJSROMwIKD7cE/AP2uivo3vISpPNI=;
+        b=QmvC1BuJH+DlJXqKYqSTSbxYm351+ws2rNpKqITYcsws0NOB8iyPxbt6th9t+s0hEW
+         3cFylYysn7QT7Ck6f5LxMVRnfkkuAkl1CRG5fimJN+QyzJcdyoPohcPQFwAn55UGnume
+         CuA3/Q/BKMXVZEuUJex6j0vWRNOqvjsEXI37G0IwzvM2TTOcIlR0fehykieBjGRZR7+M
+         4BVBQf7teBH0nRb6th5/UUXJVjxkvCBcpH8Sjr6LRWbkyixRFIn3+jhtmu4tuGbsQDWi
+         NZcw1AFmjO16gEh3mw8mUOGaWzr3aD3S/sD0nL1Y68mhfFC95iWQpons+zoKSx7bVruP
+         NQBg==
+X-Gm-Message-State: AC+VfDwG7/viP94avk4na8tAYsHmbGXXoXVSvRSTLa7bGw2eUUFuBGcQ
+        ArivQqjS3+rk8GGCiRAhMSY=
+X-Google-Smtp-Source: ACHHUZ4L1wP3qADBReKuZzejLsjm26j/3Ya7SyLGZc723LpSeVmdj8uvc7ZYJ78C4oJoKFHPOkHvig==
+X-Received: by 2002:a05:600c:3657:b0:3f9:b804:1785 with SMTP id y23-20020a05600c365700b003f9b8041785mr22616536wmq.0.1688051068690;
+        Thu, 29 Jun 2023 08:04:28 -0700 (PDT)
+Received: from suse.localnet (host-87-3-108-126.retail.telecomitalia.it. [87.3.108.126])
+        by smtp.gmail.com with ESMTPSA id 21-20020a05600c22d500b003f96d10eafbsm16731958wmg.12.2023.06.29.08.04.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 29 Jun 2023 08:04:28 -0700 (PDT)
+From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     Sumitra Sharma <sumitraartsy@gmail.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Ira Weiny <ira.weiny@intel.com>, Deepak R Varma <drv@mailo.com>
+Subject: Re: [PATCH] fs/vboxsf: Replace kmap() with kmap_local_{page, folio}()
+Date:   Thu, 29 Jun 2023 17:04:26 +0200
+Message-ID: <1810516.8hzESeGDPO@suse>
+In-Reply-To: <ZJz3dO10o9+xV65F@casper.infradead.org>
+References: <20230627135115.GA452832@sumitra.com> <6924669.18pcnM708K@suse>
+ <ZJz3dO10o9+xV65F@casper.infradead.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SJ1PR12MB6075:EE_|SJ2PR12MB8781:EE_
-X-MS-Office365-Filtering-Correlation-Id: 02633a7f-af58-4092-a6b6-08db78b1dd45
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: vuC+kShPaVUyHtCvUoD4BE3b5R9sX1fBAIMVg58iQt0avX6QKBr9ZJgjil4nBP3pQnqpobeLnK/uASzV4EJR5FDGCsRlw4pKMD1p1vMRx2CDzQsffEDpm3hRJtxbn5R5bxxlpMDItyMKZgrGCXaHOk9AkaTZYy6uS1yvIGjve5f4bg9SYyhsilzGe0bNTZAiAMu6QUwRRJ69rpylWqcXP8uWV0VWulIJ+jZ6eJGSmq+EhyM7wKNx9sKRAfHAtHiXu1MEXEt0t8WjfjQftpWc8N3O17Tmjk3Axd2rlA8ezqfUMklQZ7ZKLakPVSLJZlcDuTOlFqdcF6wUpxY0flEGCTnF7Oke7yTLgaQPt/SBiVLeLgZECAiEtvbAj3TY+g7kZL+03XYv0KggrFYuFoJiJx9sKCiH9veIqfp+7aT8MPTGp4x0enboRU1NxxnFJV0CkGvbn33zoEfaWexNvQpEf6sz2ISQrWscZ8/QimSm/bv/4lTPrNrpuGA4Lx9QM4xDSO8BExN+mFe1P/MdMFxg5Y1BeNwqY7t9/B9K7d/cOfzykpJET2CtiXVTfscgzCBNlGJLHCbjiXoJ2eeuRPi3QX8m3LvdObSPcuapc9+aY1E=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ1PR12MB6075.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(39860400002)(366004)(346002)(396003)(136003)(451199021)(6666004)(966005)(6486002)(2906002)(9686003)(83380400001)(38100700002)(26005)(6506007)(6512007)(186003)(41300700001)(110136005)(86362001)(54906003)(4326008)(5660300002)(478600001)(66946007)(66556008)(66476007)(8676002)(8936002)(316002)(7416002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?vxpHW8daRLkbic/vjFD5vK6HqSBwTvCM6qbf5QA03EIyJg+TCzzIsU4B9RjO?=
- =?us-ascii?Q?zP1Uvr7uOGEbob/r3HBvzVizqWzH9iJvnFMMkDmbO4GIA/d09bwM9UN8ysWw?=
- =?us-ascii?Q?u8LK1QKHfd101PXPyGQUJY2xfD9q4FaUsUXDGEwInyR3MvKWFvpd5adRhkAs?=
- =?us-ascii?Q?/oreQyNCIzggCg6Dml3DPCKriVYav6X4gRqyHgMGA76o3CJqNA0CPRHYu357?=
- =?us-ascii?Q?CCwYHrAPpzyVCThUliQQ3GedLUGMfbv1y+dUKvUPPAl6SsBpAuwyb/FYeDwl?=
- =?us-ascii?Q?ctkG8J9FfU5mqyabLjHdMPWbuO4mWs7z61qBalr/oodZFXKiO/a92WBtN0VJ?=
- =?us-ascii?Q?DwCWeqxR51Pog3mksqeJCNk3gTlu+HYfA5VPHmpP7/RaHlFtHPwcNGwXWmyI?=
- =?us-ascii?Q?eK61nEUlOQsHKdFEwIxeLXwyc1TovbAZ/xUds0wKmHWUgG9wWRyBFisoxOAr?=
- =?us-ascii?Q?swsJo0lRi9Lf+xexTbzkeyX43MXIhBWU5W597WFIvxni0KDCNiLKGnm1rvOi?=
- =?us-ascii?Q?6lPsCXI7cA0u9/12dTDrQSFeKc09/PBA7ufrhEdYAhe4UjfQOoLGRTTVm/Gx?=
- =?us-ascii?Q?xuaFwmjrId/wZhp19+KW+7/XyzDykyzkLGmPZue6LBza7NTJ6ZP0PUQUKtz2?=
- =?us-ascii?Q?tshW6fbRiTtVt1UpYrMuVDsVwu/t9wSXh2sAUejppsKFU8bD5/l5lA+CB5Tg?=
- =?us-ascii?Q?C8EwSrLKTnecTnUK51ZtXqitTOwaHNYjLTibD/jwkg7qf3rvepMB8520di2m?=
- =?us-ascii?Q?rAXRa58T3w46osWw+ghP0Dh4GEbpKbsdns9Y3lFcvda2XA/oFrIbvPW2oXB3?=
- =?us-ascii?Q?VsiPWhjvYd+4MKovUOoGpDAz+Wf+lHqEG+RN32LpdgsEz23WolpTovi3Ioic?=
- =?us-ascii?Q?98ntQw3q/wW3EhiwEvEMWeF//KawfG8IcME2KYMmLc6rzX4mVGzJ59vGZmz0?=
- =?us-ascii?Q?35I5bvXvzf1Sqael8/BctzZB2MX6IDcM4KRUcpGSu4agJ8bTnohsEGsQJB4A?=
- =?us-ascii?Q?E/aZ34l2mGULRYQZFKpo9RKGZ0BO6eoC0W4rOlc4LHCtpmmJYHPqipFxLB+u?=
- =?us-ascii?Q?6sm4nSuvNRLO3+Zx14CGI7YkN0n3Y4wU40BJyx6ilen1HqbWqHOF27UyTht0?=
- =?us-ascii?Q?YbB4okDz4Fw2NxodO4CUx21V91V7izR482KDwlJ3Na7J/+ZqvmIbVpUXolyE?=
- =?us-ascii?Q?DezqtVDOrKu7G1kVt55FmQ8QL3Nx5cXwwGqVeGLhgMZ8bka6JFNmRA/lCEVo?=
- =?us-ascii?Q?OQiZYCVvMqN5wGGi0xZFTZGISH1GvagfEjYKgsLpLdYrTvSqznA6XFFZZxHu?=
- =?us-ascii?Q?ODlFkZuTSr0DQCG5eGn/B6oTH0jiPPleMjPx4deM0qK1mz5kSII1IyCP5sX/?=
- =?us-ascii?Q?Ff5YTUC0uvPmh61ZA6EKLp8V8isiaf/yMsjGu7a99QdGahYa01upliELkavG?=
- =?us-ascii?Q?VsyB9VIUMTrzdQdQyfuN/3PxFh2Sh8uuvBEiex1dpaEsDRn5FlFI8e34lqZV?=
- =?us-ascii?Q?ib0YMv4ERcFS4s6cotapxCyffmKGd0sG+mFun2ymIWWD5wjrVJ7zjd1gz20K?=
- =?us-ascii?Q?O7UPNJbRCZpF7+rAtwFSgC//t5YRFrk+92oM4ZFB?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 02633a7f-af58-4092-a6b6-08db78b1dd45
-X-MS-Exchange-CrossTenant-AuthSource: SJ1PR12MB6075.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Jun 2023 15:02:32.1095
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: UqrzbbCHeVdk12Yq+EKrnnKrYFCEPwbtSE20B/aJJpHKOPdPBjshx9Ijbzp8FlEIGAia7+BmcxWyxQBoMtdouA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR12MB8781
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="iso-8859-1"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+        lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sagi Grimberg <sagi@grimberg.me> writes:
-> Most likely this also reproduces with blktests?
-> https://github.com/osandov/blktests
->
-> simple way to check is to run:
-> nvme_trtype=tcp ./check nvme
->
-> This runs nvme tests over nvme-tcp.
+On gioved=EC 29 giugno 2023 05:16:04 CEST Matthew Wilcox wrote:
+> On Thu, Jun 29, 2023 at 12:23:54AM +0200, Fabio M. De Francesco wrote:
+> > > -	buf =3D kmap(page);
+> > > +	do {
+> >=20
+> > Please let me understand why you are calling vboxsf_read() in a loop, a
+> > PAGE_SIZE at a time.
+>=20
+> Because kmap_local_folio() can only (guarantee to) map one page at a
+> time.
 
-Yes, it crashes similarly during test 10:
+Yes, one page at a time. This part served to introduce the _main_ question=
+=20
+that is the one you answered below (i.e., since the current code maps a pag=
+e a=20
+a time with no loops, do we need to manage folios spanning more than a sing=
+le=20
+page?)
 
-root@ktest:~/blktests# nvme_trtype=tcp ./check nvme
-nvme/002 (create many subsystems and test discovery)         [not run]
-    nvme_trtype=tcp is not supported in this test
-nvme/003 (test if we're sending keep-alives to a discovery controller) [passed]
-    runtime    ...  10.389s
-nvme/004 (test nvme and nvmet UUID NS descriptors)           [passed]
-    runtime    ...  1.264s
-nvme/005 (reset local loopback target)                       [passed]
-    runtime    ...  1.403s
-nvme/006 (create an NVMeOF target with a block device-backed ns) [passed]
-    runtime    ...  0.129s
-nvme/007 (create an NVMeOF target with a file-backed ns)     [passed]
-    runtime    ...  0.083s
-nvme/008 (create an NVMeOF host with a block device-backed ns) [passed]
-    runtime    ...  1.239s
-nvme/009 (create an NVMeOF host with a file-backed ns)       [passed]
-    runtime    ...  1.229s
-nvme/010 (run data verification fio job on NVMeOF block device-backed
-ns)
+> Also vboxsf_read() is only tested with a single page at a time.
+>=20
+> > If I understand the current code it reads a single page at offset zero =
+of=20
+a
+> > folio and then memset() with zeros from &buf[nread] up to the end of the
+> > page. Then it seems that this function currently assume that the folio
+> > doesn't need to be read until "offset < folio_size(folio)" becomes fals=
+e.
+> >=20
+> > Does it imply that the folio is always one page sized? Doesn't it? I'm
+> > surely
+> > missing some basics...
+>=20
+> vboxsf does not yet claim to support large folios, so every folio that
+> it sees will be only a single page in size.
+> Hopefully at some point
+> that will change.  Again, somebody would need to test that.  In the
+> meantime, if someone is going to the trouble of switching over to using
+> the folio API, let's actually include support for large folios.
 
-Same trace, null ptr deref at skb_splice_from_iter+0x10a/0x370
+"[...] at some point that will change." wrt larger folios spanning multiple=
+=20
+pages is the answer that justifies the loop. I couldn't know about this pla=
+n.=20
+Thanks for explaining that there is a plan towards that goal.
 
-Cheers,
+I think that Sumitra can address the task to re-use your patch to=20
+vboxsf_read_folio() and then properly test it with VirtualBox.
+
+Instead the much larger effort to implement vboxsf_readahead() and actually=
+ do=20
+an async call with deferred setting of the uptodate flag will surely requir=
+e a=20
+considerable amount of time and whoever wanted to address it would need you=
+r=20
+guidance.
+
+You said that you are ready to provide consult, but I'm not sure whether=20
+Sumitra would be allowed to spend a large part of her time to do an out of=
+=20
+scope task (wrt her internship).
+
+If yes, I have nothing against. If not, I'm pretty sure that someone else c=
+an=20
+set aside enough time to address this large task ;-)
+
+>=20
+> > > -	kunmap(page);
+> > > -	unlock_page(page);
+> > > +	if (!err) {
+> > > +		flush_dcache_folio(folio);
+> > > +		folio_mark_uptodate(folio);
+> > > +	}
+> > > +	folio_unlock(folio);
+> >=20
+> > Shouldn't we call folio_lock() to lock the folio to be able to unlock w=
+ith
+> > folio_unlock()?
+> >=20
+> > If so, I can't find any neither a folio_lock() or a page_lock() in this
+> > filesystem.
+> >=20
+> > Again sorry for not understanding, can you please explain it?
+>=20
+> Ira gave the minimal explanation, but a slightly fuller explanation is
+> that the folio is locked while it is being fetched from backing store.
+
+This explains why I could not easily find the call to lock it.=20
+
+> That prevents both a second thread from reading from it while another
+> thread is bringing it uptodate, and two threads trying to bring it
+> uptodate at the same time.
+>=20
+> Most filesystems have an asynchronous read_folio, so you don't see the
+> folio_unlock() in the read_folio() function; instead it's in the I/O
+> completion path.  vboxsf is synchronous.
+
+And this explains different implementation between synchronous and=20
+asynchronous reads=20
+
+Again thanks,
+
+=46abio
+
+
