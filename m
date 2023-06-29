@@ -2,131 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3466B74223E
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 10:32:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CD9C742244
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 10:34:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232841AbjF2IcZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 04:32:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49152 "EHLO
+        id S232609AbjF2IeB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 04:34:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232300AbjF2Iay (ORCPT
+        with ESMTP id S232773AbjF2IcF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 04:30:54 -0400
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 230022733
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 01:30:51 -0700 (PDT)
-Received: by mail-pl1-x632.google.com with SMTP id d9443c01a7336-1b7f223994fso3523315ad.3
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 01:30:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688027450; x=1690619450;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=sQtoyriN4YYQEmPoScMjRZhWgO3u3DHPKL9H+7yd4ag=;
-        b=bhYiZhEYMXPEQmlagzmx8BkE8mTZrMu9plkEvpagqvFG45XJflWMpwO4WZdRhWgGOb
-         m3B84AN3plYpEf36mpfaIZamaiTARQpjp7abLyO6kCjlDdMfOOXh/uPvP0AsffZccxdQ
-         SB0GrqNYTWuSvdIY8YVzu4Qb4sttJafkebdkecMCGszD4TQ5FC+R7S3nGZHlCPulr/mp
-         QjXK0QKEgCE2laWeLFZl+phSnMRrQF6MP5C9jDSC5wD+BsbDoCTlgNUgbZQpM62eJ0QB
-         r1XGwVbjCM/OX46f7gYa8I6yU1SoV0hu2jzDro5hoU8kVa2V0ydGfSGZKhql2aFNIPAw
-         Jshg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688027450; x=1690619450;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=sQtoyriN4YYQEmPoScMjRZhWgO3u3DHPKL9H+7yd4ag=;
-        b=Cw3rdv5cBciTj6kGri0cD+/qtjEh7t8vAS+DEJKoV70LzEDfaWv4zsKSqZ6dwA+Op4
-         hjtPCD4s2vnhH5SqUfxaYjJ+HpZ5Eq+4R4S7oBYBrz1WshU4yqRvSJW0Vyh74d+eZcgh
-         DVmSMJKIZF56YdqZTyXAhqUGfio34WOk3B8ScmewEGfD9NEofhlIopXyTI2KGwjuWM7t
-         1SXLf+cxzX5IJ8W38n7pI5Ty49FWVK/ekKP93FNSPE9gyLujR7xfoebUQRBDuu7zvhBX
-         BGkajOiKzJqBt8OG9WSqEsMUqhkk3FJBUQWwzpO6qYuW8dUcUBFhXS4L86H3DAhNmIxG
-         ioZQ==
-X-Gm-Message-State: ABy/qLYYXsOOtJiSCdDInDEe4rfBvrE2PSfqovteac9ErAxYB/tUGZhk
-        PGjNcI7UfZSy/2u0inupCRM=
-X-Google-Smtp-Source: APBJJlHMgc0hCPFKyNQNfgbDVxaFS6OSks11zv8bFXQ9kEqtMV8eh276rLldNh4SHiTuXGNCOAUYhw==
-X-Received: by 2002:a17:903:451:b0:1b8:4b87:20dc with SMTP id iw17-20020a170903045100b001b84b8720dcmr2620093plb.37.1688027450373;
-        Thu, 29 Jun 2023 01:30:50 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id z15-20020a170903018f00b001a072aedec7sm8728140plg.75.2023.06.29.01.30.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Jun 2023 01:30:49 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     linux-kernel@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Christoph Hellwig <hch@lst.de>,
-        Phillip Potter <phil@philpotter.co.uk>,
-        Hannes Reinecke <hare@suse.de>,
-        Christian Brauner <brauner@kernel.org>
-Subject: [PATCH] cdrom/gdrom: Fix build error
-Date:   Thu, 29 Jun 2023 01:30:47 -0700
-Message-Id: <20230629083047.3487172-1-linux@roeck-us.net>
-X-Mailer: git-send-email 2.39.2
+        Thu, 29 Jun 2023 04:32:05 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 537CD35B7
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 01:31:06 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-188-ZvKUV6J3PPaZX2o5EdTfCA-1; Thu, 29 Jun 2023 09:31:02 +0100
+X-MC-Unique: ZvKUV6J3PPaZX2o5EdTfCA-1
+Received: from AcuMS.Aculab.com (10.202.163.4) by AcuMS.aculab.com
+ (10.202.163.4) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Thu, 29 Jun
+ 2023 09:30:55 +0100
+Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
+ id 15.00.1497.048; Thu, 29 Jun 2023 09:30:55 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Binbin Wu' <binbin.wu@linux.intel.com>,
+        Sean Christopherson <seanjc@google.com>
+CC:     "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "chao.gao@intel.com" <chao.gao@intel.com>,
+        "kai.huang@intel.com" <kai.huang@intel.com>,
+        "robert.hu@linux.intel.com" <robert.hu@linux.intel.com>
+Subject: RE: [PATCH v9 4/6] KVM: x86: Introduce untag_addr() in kvm_x86_ops
+Thread-Topic: [PATCH v9 4/6] KVM: x86: Introduce untag_addr() in kvm_x86_ops
+Thread-Index: AQHZqlC0uINXWfrAwkGeA7kqt5GlV6+hciGw
+Date:   Thu, 29 Jun 2023 08:30:55 +0000
+Message-ID: <5a130fdd3a8e4bc6a86f595653cd53cc@AcuMS.aculab.com>
+References: <20230606091842.13123-1-binbin.wu@linux.intel.com>
+ <20230606091842.13123-5-binbin.wu@linux.intel.com>
+ <ZJt7vud/2FJtcGjV@google.com>
+ <bf5ef935-b676-4f2a-7df3-271eff24e6bb@linux.intel.com>
+In-Reply-To: <bf5ef935-b676-4f2a-7df3-271eff24e6bb@linux.intel.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit 7ae24fcee992 ("cdrom: remove the unused mode argument to
-cdrom_release") was supposed to remove an unused argument from
-cdrom_release(). but instead removed a used argument from
-cdrom_open(). This results in the following build error.
-
-drivers/cdrom/gdrom.c: In function 'gdrom_bdops_open':
-drivers/cdrom/gdrom.c:484:15: error: too few arguments to function 'cdrom_open'
-
-drivers/cdrom/gdrom.c: In function 'gdrom_bdops_release':
-drivers/cdrom/gdrom.c:492:35: error: 'mode' undeclared
-
-Fix it up.
-
-Fixes: 7ae24fcee992 ("cdrom: remove the unused mode argument to cdrom_release")
-Cc: Christoph Hellwig <hch@lst.de>
-Cc: Phillip Potter <phil@philpotter.co.uk>
-Cc: Hannes Reinecke <hare@suse.de>
-Cc: Christian Brauner <brauner@kernel.org>
-Cc: Jens Axboe <axboe@kernel.dk>
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
----
-My apologies for the noise if this has already been submitted.
-If so I didn't find it. Also apologies for the wide distribution,
-but the file doesn't seem to have a maintainer and I have no idea
-who would/should apply the patch.
-
- drivers/cdrom/gdrom.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/cdrom/gdrom.c b/drivers/cdrom/gdrom.c
-index 3a46e27479ff..d668b174ace9 100644
---- a/drivers/cdrom/gdrom.c
-+++ b/drivers/cdrom/gdrom.c
-@@ -481,7 +481,7 @@ static int gdrom_bdops_open(struct gendisk *disk, blk_mode_t mode)
- 	disk_check_media_change(disk);
- 
- 	mutex_lock(&gdrom_mutex);
--	ret = cdrom_open(gd.cd_info);
-+	ret = cdrom_open(gd.cd_info, mode);
- 	mutex_unlock(&gdrom_mutex);
- 	return ret;
- }
-@@ -489,7 +489,7 @@ static int gdrom_bdops_open(struct gendisk *disk, blk_mode_t mode)
- static void gdrom_bdops_release(struct gendisk *disk)
- {
- 	mutex_lock(&gdrom_mutex);
--	cdrom_release(gd.cd_info, mode);
-+	cdrom_release(gd.cd_info);
- 	mutex_unlock(&gdrom_mutex);
- }
- 
--- 
-2.39.2
+RnJvbTogQmluYmluIFd1DQo+IFNlbnQ6IDI5IEp1bmUgMjAyMyAwNzoxMg0KLi4uDQo+ID4+ICt2
+b2lkIHZteF91bnRhZ19hZGRyKHN0cnVjdCBrdm1fdmNwdSAqdmNwdSwgZ3ZhX3QgKmd2YSwgdTMy
+IGZsYWdzKQ0KPiA+DQo+ID4gUmF0aGVyIHRoYW4gbW9kaWZ5IHRoZSBwb2ludGVyLCByZXR1cm4g
+dGhlIHVudGFnZ2VkIGFkZHJlc3MuICBUaGF0J3MgbW9yZSBmbGV4aWJsZQ0KPiA+IGFzIGl0IGFs
+bG93cyB1c2luZyB0aGUgcmVzdWx0IGluIGlmLXN0YXRlbWVudHMgYW5kIHdoYXRub3QuICBUaGF0
+IG1pZ2h0IG5vdCBldmVyDQo+ID4gY29tZSBpbnRvIHBsYXksIGJ1dCB0aGVyZSdzIG5vIGdvb2Qg
+cmVhc29uIHRvIHVzZSBhbiBpbi9vdXQgcGFyYW0gaW4gYSB2b2lkDQo+ID4gZnVuY3Rpb24uDQo+
+DQo+IEluIGVhcmxpZXIgdmVyc2lvbiwgaXQgZGlkIHJldHVybiB0aGUgdW50YWdnZWQgYWRkcmVz
+cy4NCj4gSW4gdGhpcyB2ZXJzaW9uLCBJIGNoYW5nZWQgaXQgYXMgYW4gaW4vb3V0IHBhcmFtIHRv
+IG1ha2UgdGhlIGludGVyZmFjZQ0KPiBjb25kaXRpb25hbCBhbmQgYXZvaWQgdG8gYWRkIGEgZHVt
+bXkgb25lIGluIFNWTS4NCj4gSXMgaXQgY2FuIGJlIGEgcmVhc29uPw0KDQpZb3UgYXJlIGFsd2F5
+cyBnb2luZyB0byBuZWVkIGEgJ2R1bW15JyB2ZXJzaW9uLg0KSWYgaXQgZW5kcyB1cCBiZWluZyAn
+eCA9IHgnIHRoZSBjb21waWxlciB3aWxsIGp1c3Qgb3B0aW1pc2UNCml0IGF3YXkuDQoNCkJ1dCBm
+b3IgYSByZWFsIGZ1bmN0aW9uIHlvdSdsbCBnZXQgbXVjaCBiZXR0ZXIgY29kZSBmcm9tOg0KCXgg
+PSBmbih4KTsNCnRoYW4NCglmbigmeCk7DQoNCkl0IGFsc28gbGV0cyB5b3UgdXNlZCAndm9pZCAq
+JyAoZXRjKSB0byBhdm9pZCBjYXN0cyB3aGljaA0KY2FuIGVhc2lseSBoaWRlIGJ1Z3MuDQoNCglE
+YXZpZA0KDQotDQpSZWdpc3RlcmVkIEFkZHJlc3MgTGFrZXNpZGUsIEJyYW1sZXkgUm9hZCwgTW91
+bnQgRmFybSwgTWlsdG9uIEtleW5lcywgTUsxIDFQVCwgVUsNClJlZ2lzdHJhdGlvbiBObzogMTM5
+NzM4NiAoV2FsZXMpDQo=
 
