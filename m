@@ -2,142 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90F0774254F
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 14:06:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29405742543
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 14:04:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232054AbjF2MGC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 08:06:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47702 "EHLO
+        id S231609AbjF2MEn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 08:04:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231878AbjF2MFp (ORCPT
+        with ESMTP id S230198AbjF2MEl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 08:05:45 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F356B3AAC;
-        Thu, 29 Jun 2023 05:05:11 -0700 (PDT)
-Received: from dggpemm500005.china.huawei.com (unknown [172.30.72.56])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4QsHC26D4kzLnP3;
-        Thu, 29 Jun 2023 20:02:54 +0800 (CST)
-Received: from localhost.localdomain (10.69.192.56) by
- dggpemm500005.china.huawei.com (7.185.36.74) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27; Thu, 29 Jun 2023 20:04:56 +0800
-From:   Yunsheng Lin <linyunsheng@huawei.com>
-To:     <davem@davemloft.net>, <kuba@kernel.org>, <pabeni@redhat.com>
-CC:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Yunsheng Lin <linyunsheng@huawei.com>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Alexander Duyck <alexander.duyck@gmail.com>,
-        Liang Chen <liangchen.linux@gmail.com>,
-        Alexander Lobakin <aleksander.lobakin@intel.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        <bpf@vger.kernel.org>
-Subject: [PATCH v5 RFC 6/6] net: veth: use newly added page pool API for veth with xdp
-Date:   Thu, 29 Jun 2023 20:02:26 +0800
-Message-ID: <20230629120226.14854-7-linyunsheng@huawei.com>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20230629120226.14854-1-linyunsheng@huawei.com>
-References: <20230629120226.14854-1-linyunsheng@huawei.com>
+        Thu, 29 Jun 2023 08:04:41 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E65AA2D71;
+        Thu, 29 Jun 2023 05:04:39 -0700 (PDT)
+Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35TBlb6h014110;
+        Thu, 29 Jun 2023 12:04:14 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=FFcWFhPXK4s5EhufV5iP50/C3C+p/BQChJ9YUO6Wogs=;
+ b=UNx7oT3DvlVOz5pk0UY8ZUpqPKoFDq2aQ2IEiLqdDzzbU88NCWYMTrXnxeR8wZT4+7aY
+ oCCoMwdpI6hdRAlbBAjVyZt2nUfK4D4qoscePARhmUZWDb/Klm7VezQhLdj0lJ448bk3
+ XIl8dvniU9fHssKeXijLtp+KcPUNkWI/E1pC6LpGz4Wgt3YDq47xbGLvpriAT3u7HvqA
+ G3lgfvriY6mWun8GxVKvlv/XHflxW1nXadnFB9mPY28zJs6RiyS2bMe6ZEeKJI7WkmxY
+ IvrjGI/T/xy109Hf8o9kzgZHACMWYQz49vfC8GE7p9w1RjzLjlsAvdk4Fcz0uB5nl/AC xg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3rh9d28bk3-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 29 Jun 2023 12:04:13 +0000
+Received: from m0360083.ppops.net (m0360083.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 35TC0k2k030829;
+        Thu, 29 Jun 2023 12:04:12 GMT
+Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3rh9d28bhn-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 29 Jun 2023 12:04:12 +0000
+Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
+        by ppma03fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 35TBYLAi011422;
+        Thu, 29 Jun 2023 12:04:09 GMT
+Received: from smtprelay05.fra02v.mail.ibm.com ([9.218.2.225])
+        by ppma03fra.de.ibm.com (PPS) with ESMTPS id 3rdr452ge1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 29 Jun 2023 12:04:09 +0000
+Received: from smtpav05.fra02v.mail.ibm.com (smtpav05.fra02v.mail.ibm.com [10.20.54.104])
+        by smtprelay05.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 35TC47JX19268186
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 29 Jun 2023 12:04:07 GMT
+Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 3781C20043;
+        Thu, 29 Jun 2023 12:04:07 +0000 (GMT)
+Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id C468320040;
+        Thu, 29 Jun 2023 12:04:06 +0000 (GMT)
+Received: from [9.144.158.239] (unknown [9.144.158.239])
+        by smtpav05.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Thu, 29 Jun 2023 12:04:06 +0000 (GMT)
+Message-ID: <91dc3a14-4f1b-ebff-69d7-ff15469b5dcb@linux.ibm.com>
+Date:   Thu, 29 Jun 2023 14:04:06 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.69.192.56]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- dggpemm500005.china.huawei.com (7.185.36.74)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.12.0
+Subject: Re: [PATCH v2 0/9] Introduce SMT level and add PowerPC support
+Content-Language: fr
+To:     Michael Ellerman <mpe@ellerman.id.au>,
+        Sachin Sant <sachinp@linux.ibm.com>
+Cc:     linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        linux-arch@vger.kernel.org, dave.hansen@linux.intel.com,
+        open list <linux-kernel@vger.kernel.org>,
+        Ingo Molnar <mingo@redhat.com>, bp@alien8.de,
+        npiggin@gmail.com, tglx@linutronix.de
+References: <20230628100558.43482-1-ldufour@linux.ibm.com>
+ <88E208A6-F4E0-4DE9-8752-C9652B978BC6@linux.ibm.com>
+ <87edluh6ce.fsf@mail.lhotse>
+From:   Laurent Dufour <ldufour@linux.ibm.com>
+In-Reply-To: <87edluh6ce.fsf@mail.lhotse>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: 0UOBMfegDE_I71F22zNx5oVM0tK1OamE
+X-Proofpoint-GUID: UpmLjj2GgeXEOoGf8Ebdt0bsAN_eXqAi
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-06-29_03,2023-06-27_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ priorityscore=1501 mlxscore=0 spamscore=0 bulkscore=0 clxscore=1015
+ adultscore=0 lowpriorityscore=0 mlxlogscore=999 suspectscore=0
+ malwarescore=0 phishscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2305260000 definitions=main-2306290108
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H5,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use page_pool[_cache]_alloc() API to allocate memory with
-least memory utilization and performance penalty.
 
-Signed-off-by: Yunsheng Lin <linyunsheng@huawei.com>
-CC: Lorenzo Bianconi <lorenzo@kernel.org>
-CC: Alexander Duyck <alexander.duyck@gmail.com>
-CC: Liang Chen <liangchen.linux@gmail.com>
-CC: Alexander Lobakin <aleksander.lobakin@intel.com>
----
- drivers/net/veth.c | 24 +++++++++++++++---------
- 1 file changed, 15 insertions(+), 9 deletions(-)
 
-diff --git a/drivers/net/veth.c b/drivers/net/veth.c
-index 614f3e3efab0..d3dc754ba7f8 100644
---- a/drivers/net/veth.c
-+++ b/drivers/net/veth.c
-@@ -736,10 +736,11 @@ static int veth_convert_skb_to_xdp_buff(struct veth_rq *rq,
- 	if (skb_shared(skb) || skb_head_is_locked(skb) ||
- 	    skb_shinfo(skb)->nr_frags ||
- 	    skb_headroom(skb) < XDP_PACKET_HEADROOM) {
--		u32 size, len, max_head_size, off;
-+		u32 size, len, max_head_size, off, truesize, page_offset;
- 		struct sk_buff *nskb;
- 		struct page *page;
- 		int i, head_off;
-+		void *data;
- 
- 		/* We need a private copy of the skb and data buffers since
- 		 * the ebpf program can modify it. We segment the original skb
-@@ -752,14 +753,17 @@ static int veth_convert_skb_to_xdp_buff(struct veth_rq *rq,
- 		if (skb->len > PAGE_SIZE * MAX_SKB_FRAGS + max_head_size)
- 			goto drop;
- 
-+		size = min_t(u32, skb->len, max_head_size);
-+		truesize = size;
-+
- 		/* Allocate skb head */
--		page = page_pool_dev_alloc_pages(rq->page_pool);
--		if (!page)
-+		data = page_pool_dev_cache_alloc(rq->page_pool, &truesize);
-+		if (!data)
- 			goto drop;
- 
--		nskb = napi_build_skb(page_address(page), PAGE_SIZE);
-+		nskb = napi_build_skb(data, truesize);
- 		if (!nskb) {
--			page_pool_put_full_page(rq->page_pool, page, true);
-+			page_pool_cache_free(rq->page_pool, data, true);
- 			goto drop;
- 		}
- 
-@@ -767,7 +771,6 @@ static int veth_convert_skb_to_xdp_buff(struct veth_rq *rq,
- 		skb_copy_header(nskb, skb);
- 		skb_mark_for_recycle(nskb);
- 
--		size = min_t(u32, skb->len, max_head_size);
- 		if (skb_copy_bits(skb, 0, nskb->data, size)) {
- 			consume_skb(nskb);
- 			goto drop;
-@@ -782,14 +785,17 @@ static int veth_convert_skb_to_xdp_buff(struct veth_rq *rq,
- 		len = skb->len - off;
- 
- 		for (i = 0; i < MAX_SKB_FRAGS && off < skb->len; i++) {
--			page = page_pool_dev_alloc_pages(rq->page_pool);
-+			size = min_t(u32, len, PAGE_SIZE);
-+			truesize = size;
-+
-+			page = page_pool_dev_alloc(rq->page_pool, &page_offset,
-+						   &truesize);
- 			if (!page) {
- 				consume_skb(nskb);
- 				goto drop;
- 			}
- 
--			size = min_t(u32, len, PAGE_SIZE);
--			skb_add_rx_frag(nskb, i, page, 0, size, PAGE_SIZE);
-+			skb_add_rx_frag(nskb, i, page, page_offset, size, truesize);
- 			if (skb_copy_bits(skb, off, page_address(page),
- 					  size)) {
- 				consume_skb(nskb);
--- 
-2.33.0
+Le 29/06/2023 à 13:10, Michael Ellerman a écrit :
+> Sachin Sant <sachinp@linux.ibm.com> writes:
+>>> On 28-Jun-2023, at 3:35 PM, Laurent Dufour <ldufour@linux.ibm.com> wrote:
+>>>
+>>> I'm taking over the series Michael sent previously [1] which is smartly
+>>> reviewing the initial series I sent [2].  This series is addressing the
+>>> comments sent by Thomas and me on the Michael's one.
+>>>
+>>> Here is a short introduction to the issue this series is addressing:
+>>>
+>>> When a new CPU is added, the kernel is activating all its threads. This
+>>> leads to weird, but functional, result when adding CPU on a SMT 4 system
+>>> for instance.
+>>>
+>>> Here the newly added CPU 1 has 8 threads while the other one has 4 threads
+>>> active (system has been booted with the 'smt-enabled=4' kernel option):
+>>>
+>>> ltcden3-lp12:~ # ppc64_cpu --info
+>>> Core   0:    0*    1*    2*    3*    4     5     6     7
+>>> Core   1:    8*    9*   10*   11*   12*   13*   14*   15*
+>>>
+>>> This mixed SMT level may confused end users and/or some applications.
+>>>
+>>
+>> Thanks for the patches Laurent.
+>>
+>> Is the SMT level retained even when dynamically changing SMT values?
+>> I am observing difference in behaviour with and without smt-enabled
+>> kernel command line option.
+>>
+>> When smt-enabled= option is specified SMT level is retained across
+>> cpu core remove and add.
+>>
+>> Without this option but changing SMT level during runtime using
+>> ppc64_cpu —smt=<level>, the SMT level is not retained after
+>> cpu core add.
+> 
+> That's because ppc64_cpu is not using the sysfs SMT control file, it's
+> just onlining/offlining threads manually.
+> 
+> If you run:
+>   $ ppc64_cpu --smt=4
+> 
+> And then also do:
+> 
+>   $ echo 4 > /sys/devices/system/cpu/smt/control
+> 
+> It should work as expected?
+> 
+> ppc64_cpu will need to be updated to do that automatically.
 
+Hi Sachin and Michael,
+
+Yes, ppc64_cpu will need an update, and I have a patch ready to be sent 
+once this series will be accepted.
+
+By the way, I've a fix for the build issue reported against the patch 
+6/9. I'll send a v3 soon.
+
+Cheers,
+
+Laurent.
