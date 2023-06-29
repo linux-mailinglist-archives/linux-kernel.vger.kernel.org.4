@@ -2,64 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 045CD7430ED
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 01:13:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 32D0D743100
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 01:20:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230233AbjF2XNb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 19:13:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57430 "EHLO
+        id S230446AbjF2XUn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 19:20:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229483AbjF2XN3 (ORCPT
+        with ESMTP id S229483AbjF2XUk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 19:13:29 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B9AE12F;
-        Thu, 29 Jun 2023 16:13:28 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3A30761659;
-        Thu, 29 Jun 2023 23:13:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 11FBEC433C8;
-        Thu, 29 Jun 2023 23:13:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688080407;
-        bh=2awjKHX4Yc3J7yyhiD16O0HE9smL0d+ZJRJ1b6FGCdY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=gBH4/tNSFm9WdrCxJAuarB7CnL3BK0WdGtrqTNPsZqRhSlGAZJDcQd0DMPa4DtvIG
-         LYvI6Z/5NK2aZIxKi8CV2byiwJ3qf4QMUkCdZUeewOzTELM85xY/PTMKSmOf+hhB0k
-         cflm3hh5CoMderrowZQszFa0whC6mZ1k2UV9Pykl3U3/dKnJemasvh73P+KO1e3FGN
-         SbtLQgHCKyQNw7etW0PGrUWvwzUHKB/6AjPtxOJkoVLRzR/t3wN07wzN3Cqm8n5uoM
-         j11KT46ptOs5+I2fNvi7NhXOCIN4ql3jalKUb3FxuhwkHAhseYNlwVX8k6zO8tE7CD
-         xnzJSyG++LBVg==
-Date:   Fri, 30 Jun 2023 00:13:22 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     Evan Green <evan@rivosinc.com>
-Cc:     Conor Dooley <conor.dooley@microchip.com>, palmer@dabbelt.com,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Andrew Jones <ajones@ventanamicro.com>,
-        Heiko Stuebner <heiko.stuebner@vrull.eu>,
-        Sunil V L <sunilvl@ventanamicro.com>,
-        linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 01/10] RISC-V: don't parse dt/acpi isa string to get
- rv32/rv64
-Message-ID: <20230630-detection-jogger-c60ea71ee6b6@spud>
-References: <20230629-rebuttal-vagueness-a699deb7c7b3@wendy>
- <20230629-fruit-syndrome-74e32af9c8ad@wendy>
- <CALs-HstMTxJFHEoSCaAUtYzT+a-2RSYAhWMQmkVw2+WE=y0agQ@mail.gmail.com>
+        Thu, 29 Jun 2023 19:20:40 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07A7D11F;
+        Thu, 29 Jun 2023 16:20:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=jK2yIsW4r1gDHXlMqYKPZXOCEW8BMnll+kWpXMp/vls=; b=Vo3RBGyRjdpY7V3NsOz8z5hVIH
+        hLX5uQ4ws4il38w7vKSpMutyd0oC432Pn4E9mq/Cu8PrMTZbjjAY4PAx+l9DMUjOF+t8BSgY8fzZe
+        dm5zsxnaYX4yJr8BuIiGoVpRqgcUzFXSFvCVKNo5hKAn4WueSo22bQkW2Csd+k1Ds+t4PcshENcU+
+        eOMFlIsr0MNFVotbg78pscD1DoRTIrdLNykIlfg+2GVXo39lFxbXP6hrYiawM81pyOgFieuvTYEJS
+        OM+rgtqhiSwHtU4QcNe3QPxhL0FLvBXA/QWbeAh20oSJD+GNIMILs+fwlIrVu+m9mWcUYbIUvgqJN
+        PX4s7WjQ==;
+Received: from [2601:1c2:980:9ec0::2764]
+        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1qF0wG-002SBW-16;
+        Thu, 29 Jun 2023 23:20:36 +0000
+Message-ID: <f907d71b-bd00-5649-d577-bf9f53fc2f83@infradead.org>
+Date:   Thu, 29 Jun 2023 16:20:34 -0700
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="Op4eXmT/eGWY9/iV"
-Content-Disposition: inline
-In-Reply-To: <CALs-HstMTxJFHEoSCaAUtYzT+a-2RSYAhWMQmkVw2+WE=y0agQ@mail.gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH v25 06/10] crash: memory and CPU hotplug sysfs attributes
+To:     Eric DeVolder <eric.devolder@oracle.com>,
+        linux-kernel@vger.kernel.org, david@redhat.com, osalvador@suse.de,
+        corbet@lwn.net, tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, bhe@redhat.com,
+        ebiederm@xmission.com, kexec@lists.infradead.org
+Cc:     hpa@zytor.com, gregkh@linuxfoundation.org, rafael@kernel.org,
+        vgoyal@redhat.com, dyoung@redhat.com, lf32.dev@gmail.com,
+        akpm@linux-foundation.org, naveen.n.rao@linux.vnet.ibm.com,
+        zohar@linux.ibm.com, bhelgaas@google.com, vbabka@suse.cz,
+        tiwai@suse.de, seanjc@google.com, linux@weissschuh.net,
+        vschneid@redhat.com, linux-mm@kvack.org, linux-doc@vger.kernel.org,
+        sourabhjain@linux.ibm.com, konrad.wilk@oracle.com,
+        boris.ostrovsky@oracle.com
+References: <20230629192119.6613-1-eric.devolder@oracle.com>
+ <20230629192119.6613-7-eric.devolder@oracle.com>
+ <c9d4e623-5c8c-885f-4343-980798647a0a@infradead.org>
+ <e0f5adf6-4f47-75c7-5697-5e928bee14b7@oracle.com>
+Content-Language: en-US
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <e0f5adf6-4f47-75c7-5697-5e928bee14b7@oracle.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,28 +68,16 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---Op4eXmT/eGWY9/iV
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Thu, Jun 29, 2023 at 04:10:48PM -0700, Evan Green wrote:
+On 6/29/23 15:31, Eric DeVolder wrote:
+>> Did you test build the documentation?
+>> It looks to me like the end-of-table '=' signs line needs 3 more === to be long
+>> enough for the text above it.
+> 
+> Hmm, the 'make htmldocs' renders and views ok. Is there perhaps another method I should use?
 
-> > +               print_mmu(m);
->=20
-> Did the indent get wonky here or am I just seeing it wrong because gmail?
+No, that's it.
+Sorry about the noise.
 
-Nope, you're right. Thanks!
-
---Op4eXmT/eGWY9/iV
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZJ4QEgAKCRB4tDGHoIJi
-0vq+AP98TaZYGhjpm9uC0HHIvRVzFL0ZATKN5slrUBu8PZ27QQD/VZKNm18gMlPa
-SPpca1cy7ZS/8C5V+Sui5QYuupbzFAo=
-=6I9B
------END PGP SIGNATURE-----
-
---Op4eXmT/eGWY9/iV--
+-- 
+~Randy
