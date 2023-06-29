@@ -2,48 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A798742D23
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 21:20:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EB19742D54
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 21:21:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233237AbjF2TEi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 15:04:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37268 "EHLO
+        id S233174AbjF2TGX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 15:06:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233348AbjF2TCz (ORCPT
+        with ESMTP id S232210AbjF2TC6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 15:02:55 -0400
+        Thu, 29 Jun 2023 15:02:58 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FEB130F6;
-        Thu, 29 Jun 2023 12:01:49 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01E0B3C04;
+        Thu, 29 Jun 2023 12:01:53 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D9ED361615;
-        Thu, 29 Jun 2023 19:01:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B40D5C433CC;
-        Thu, 29 Jun 2023 19:01:47 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AAEF7615FF;
+        Thu, 29 Jun 2023 19:01:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE846C433CB;
+        Thu, 29 Jun 2023 19:01:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688065308;
-        bh=843jaKBD1k8owvqU/g+zjN+qonnvgOsHX7Jb+KRGfjs=;
+        s=k20201202; t=1688065311;
+        bh=f4U2mnHC17deILTlIjHR/zjNCQG4W2AmYyWztzIAOXo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=LVN3C7rswFnWgrp09d/NjIpOqgveemOYplMzwN/BX6/kb387fmHhaHS7LVWOErtrg
-         ErIfsgC9TFqWBNE8kmKfd1RQQsVAJfemvBfuPjtXmS0+zVQuIGrMmjG1u8DU1z//ZJ
-         AM3pyaTgwGigrijo2hoVEKa1p8QGY8a2FCXzOCK0dxN1yzmR+8CfPZiWvQFGNE7aL7
-         kT/3th2n/3849X/FZ/GGTkLztPMDr5mbCAsbxxE9t/Vc8KUK1gayGWW4g8WXrQiADI
-         Y9FoRJCiZ/F3Hx0J64NpMdAF8U0m98K47cFTygURrZun9+cX58aa3eFih5yjQL4Y5T
-         yRDsgonTxzcTA==
+        b=Mosd/zNnjqmCXMGlkNZNHc1e5vrcosXtvK6XMaqGHw/PjFHRuxQekVlarzCm3Vp0X
+         Rcpu8n5pg+3ywCl3H8psT+L4ZJe8xTU1cWqe4+oiiXOsIivPIrU+TX8rOuHdEbBo50
+         Jkr8WF+J3C4oiJxo0tYQOL/RPPbsd0ziTswZmqn3+1+c42Pr/4UOZTi6VUH0AGFgAe
+         lAzy7Q3NBXYLXa7reOZ7sEq97jACthSNi85dVC0/XzL0S4lHsU/nz4bsPFiM0ermWH
+         vXWF8PTpmr+35QT16JXJnR5IHiyHHlbvsEmdMGBqnhIUKnhQODtlTRQDNyBMex7AGO
+         yApDRSsf3Jo4Q==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Josua Mayer <josua@solid-run.com>,
-        Russell King <rmk+kernel@armlinux.org.uk>,
-        "David S . Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>, ioana.ciornei@nxp.com,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        linux@armlinux.org.uk, netdev@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.1 08/12] net: dpaa2-mac: add 25gbase-r support
-Date:   Thu, 29 Jun 2023 15:01:28 -0400
-Message-Id: <20230629190134.907949-8-sashal@kernel.org>
+Cc:     Jeff Layton <jlayton@kernel.org>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Jani Nikula <jani.nikula@intel.com>,
+        Lyude Paul <lyude@redhat.com>, Sasha Levin <sashal@kernel.org>,
+        airlied@gmail.com, daniel@ffwll.ch, imre.deak@intel.com,
+        Wayne.Lin@amd.com, alexander.deucher@amd.com,
+        dri-devel@lists.freedesktop.org
+Subject: [PATCH AUTOSEL 6.1 09/12] drm: use mgr->dev in drm_dbg_kms in drm_dp_add_payload_part2
+Date:   Thu, 29 Jun 2023 15:01:29 -0400
+Message-Id: <20230629190134.907949-9-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230629190134.907949-1-sashal@kernel.org>
 References: <20230629190134.907949-1-sashal@kernel.org>
@@ -62,56 +63,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Josua Mayer <josua@solid-run.com>
+From: Jeff Layton <jlayton@kernel.org>
 
-[ Upstream commit 9a43827e876c9a071826cc81783aa2222b020f1d ]
+[ Upstream commit 54d217406afe250d7a768783baaa79a035f21d38 ]
 
-Layerscape MACs support 25Gbps network speed with dpmac "CAUI" mode.
-Add the mappings between DPMAC_ETH_IF_* and HY_INTERFACE_MODE_*, as well
-as the 25000 mac capability.
+I've been experiencing some intermittent crashes down in the display
+driver code. The symptoms are ususally a line like this in dmesg:
 
-Tested on SolidRun LX2162a Clearfog, serdes 1 protocol 18.
+    amdgpu 0000:30:00.0: [drm] Failed to create MST payload for port 000000006d3a3885: -5
 
-Signed-off-by: Josua Mayer <josua@solid-run.com>
-Reviewed-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+...followed by an Oops due to a NULL pointer dereference.
+
+Switch to using mgr->dev instead of state->dev since "state" can be
+NULL in some cases.
+
+Link: https://bugzilla.redhat.com/show_bug.cgi?id=2184855
+Suggested-by: Jani Nikula <jani.nikula@linux.intel.com>
+Signed-off-by: Jeff Layton <jlayton@kernel.org>
+Reviewed-by: Jani Nikula <jani.nikula@intel.com>
+Reviewed-by: Lyude Paul <lyude@redhat.com>
+Signed-off-by: Lyude Paul <lyude@redhat.com>
+Link: https://patchwork.freedesktop.org/patch/msgid/20230419112447.18471-1-jlayton@kernel.org
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/freescale/dpaa2/dpaa2-mac.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+ drivers/gpu/drm/display/drm_dp_mst_topology.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/net/ethernet/freescale/dpaa2/dpaa2-mac.c b/drivers/net/ethernet/freescale/dpaa2/dpaa2-mac.c
-index 49ff85633783a..c6d73c9a30396 100644
---- a/drivers/net/ethernet/freescale/dpaa2/dpaa2-mac.c
-+++ b/drivers/net/ethernet/freescale/dpaa2/dpaa2-mac.c
-@@ -54,6 +54,9 @@ static int phy_mode(enum dpmac_eth_if eth_if, phy_interface_t *if_mode)
- 	case DPMAC_ETH_IF_XFI:
- 		*if_mode = PHY_INTERFACE_MODE_10GBASER;
- 		break;
-+	case DPMAC_ETH_IF_CAUI:
-+		*if_mode = PHY_INTERFACE_MODE_25GBASER;
-+		break;
- 	default:
- 		return -EINVAL;
+diff --git a/drivers/gpu/drm/display/drm_dp_mst_topology.c b/drivers/gpu/drm/display/drm_dp_mst_topology.c
+index 38dab76ae69ea..e2e21ce79510e 100644
+--- a/drivers/gpu/drm/display/drm_dp_mst_topology.c
++++ b/drivers/gpu/drm/display/drm_dp_mst_topology.c
+@@ -3404,7 +3404,7 @@ int drm_dp_add_payload_part2(struct drm_dp_mst_topology_mgr *mgr,
+ 
+ 	/* Skip failed payloads */
+ 	if (payload->vc_start_slot == -1) {
+-		drm_dbg_kms(state->dev, "Part 1 of payload creation for %s failed, skipping part 2\n",
++		drm_dbg_kms(mgr->dev, "Part 1 of payload creation for %s failed, skipping part 2\n",
+ 			    payload->port->connector->name);
+ 		return -EIO;
  	}
-@@ -79,6 +82,8 @@ static enum dpmac_eth_if dpmac_eth_if_mode(phy_interface_t if_mode)
- 		return DPMAC_ETH_IF_XFI;
- 	case PHY_INTERFACE_MODE_1000BASEX:
- 		return DPMAC_ETH_IF_1000BASEX;
-+	case PHY_INTERFACE_MODE_25GBASER:
-+		return DPMAC_ETH_IF_CAUI;
- 	default:
- 		return DPMAC_ETH_IF_MII;
- 	}
-@@ -407,7 +412,7 @@ int dpaa2_mac_connect(struct dpaa2_mac *mac)
- 
- 	mac->phylink_config.mac_capabilities = MAC_SYM_PAUSE | MAC_ASYM_PAUSE |
- 		MAC_10FD | MAC_100FD | MAC_1000FD | MAC_2500FD | MAC_5000FD |
--		MAC_10000FD;
-+		MAC_10000FD | MAC_25000FD;
- 
- 	dpaa2_mac_set_supported_interfaces(mac);
- 
 -- 
 2.39.2
 
