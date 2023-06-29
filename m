@@ -2,81 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D501D7427FC
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 16:10:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BEFAC742800
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 16:13:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231743AbjF2OKH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 10:10:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53570 "EHLO
+        id S231882AbjF2ONp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 10:13:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232083AbjF2OKE (ORCPT
+        with ESMTP id S230119AbjF2ONn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 10:10:04 -0400
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A29826B6;
-        Thu, 29 Jun 2023 07:10:03 -0700 (PDT)
-Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1qEsLP-0000pI-R2; Thu, 29 Jun 2023 16:09:59 +0200
-Message-ID: <13abe42f-2f5f-cbaf-21b8-baa4516963aa@leemhuis.info>
-Date:   Thu, 29 Jun 2023 16:09:59 +0200
+        Thu, 29 Jun 2023 10:13:43 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59E2C10F8;
+        Thu, 29 Jun 2023 07:13:42 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E456661549;
+        Thu, 29 Jun 2023 14:13:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4CA63C433C8;
+        Thu, 29 Jun 2023 14:13:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688048021;
+        bh=9MwUN893Ig8ehSU507eveoN1wJ9s9BdAYtp6F4n2bGA=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=efCckezHD5t9FmZAUmE/G2pFeQXeI9d3uX4gH96AyWHp6aTYseK7bpZntlrhgwhLe
+         in3pswAMBLdxO4CX8DWSOTWdjOPeFX/pfzN8MNp4X1TC+hcuweA9senDo6MTc2LKmB
+         +j4V4LNTYym0OfNwpBPx1aEPA+3lqBAXS5R9xgJMt8YfzPiQG0eyog5ETZRpCbCWCD
+         CHyUFBez43BtRevcv9BefDm5P5tJl8VRSPaCL8AsACrDQC2k3LikHHGi0pZQheYDaU
+         lTWEJO5cAeNtxxloigE0P50tJmQ+DE+qlEAswiCI/RCBCBsnfvTlQQftK9kjuRyUvE
+         5Bo6qpBLO6kQg==
+From:   "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Dan Carpenter <dan.carpenter@linaro.org>,
+        linux-trace-kernel@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>
+Subject: [PATCH 1/2] tracing/probes: Fix to avoid double count of the string length on the array
+Date:   Thu, 29 Jun 2023 23:13:37 +0900
+Message-ID:  <168804801788.2028538.4620519547242506783.stgit@mhiramat.roam.corp.google.com>
+X-Mailer: git-send-email 2.41.0.162.gfafddb0af9-goog
+In-Reply-To: <8819b154-2ba1-43c3-98a2-cbde20892023@moroto.mountain>
+References: <8819b154-2ba1-43c3-98a2-cbde20892023@moroto.mountain>
+User-Agent: StGit/0.19
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: mainline build failure due to 8295efbe68c0 ("md/raid1-10: factor
- out a helper to submit normal write")
-Content-Language: en-US, de-DE
-To:     Yu Kuai <yukuai1@huaweicloud.com>,
-        "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>,
-        Song Liu <song@kernel.org>
-Cc:     linux-raid@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        regressions@lists.linux.dev
-References: <ZJ2H5FWuo9oDMgPm@debian>
- <be9320b5-7613-be0f-ffcd-4b3041ea5836@huaweicloud.com>
-From:   "Linux regression tracking (Thorsten Leemhuis)" 
-        <regressions@leemhuis.info>
-Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
-In-Reply-To: <be9320b5-7613-be0f-ffcd-4b3041ea5836@huaweicloud.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1688047803;35e158db;
-X-HE-SMSGID: 1qEsLP-0000pI-R2
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 29.06.23 15:56, Yu Kuai wrote:
-> 
-> 在 2023/06/29 21:32, Sudip Mukherjee (Codethink) 写道:
->> The latest mainline kernel branch fails to build x86_64, arm64 and arm
->> allmodconfig
+From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
 
-Thx for the report.
+If there is an array is specified with the ustring or symstr, the length of
+the strings are accumlated on both of 'ret' and 'total', which means the
+length is double counted.
+Just set the length to the 'ret' value to aviud double count.
 
-> Thanks for the testing, which branch are you testing?
-> 
-> This problem is already fixed in latest mainline kernel:
-> https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=b5a99602b74bbfa655be509c615181dd95b0719e
+Reported-by: Dan Carpenter <dan.carpenter@linaro.org>
+Closes: https://lore.kernel.org/all/8819b154-2ba1-43c3-98a2-cbde20892023@moroto.mountain/
+Fixes: 88903c464321 ("tracing/probe: Add ustring type for user-space string")
+Cc: stable@vger.kernel.org
+Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+---
+ kernel/trace/trace_probe_tmpl.h |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-And thx for the reply. :-D
+diff --git a/kernel/trace/trace_probe_tmpl.h b/kernel/trace/trace_probe_tmpl.h
+index 00707630788d..4735c5cb76fa 100644
+--- a/kernel/trace/trace_probe_tmpl.h
++++ b/kernel/trace/trace_probe_tmpl.h
+@@ -156,11 +156,11 @@ process_fetch_insn_bottom(struct fetch_insn *code, unsigned long val,
+ 			code++;
+ 			goto array;
+ 		case FETCH_OP_ST_USTRING:
+-			ret += fetch_store_strlen_user(val + code->offset);
++			ret = fetch_store_strlen_user(val + code->offset);
+ 			code++;
+ 			goto array;
+ 		case FETCH_OP_ST_SYMSTR:
+-			ret += fetch_store_symstrlen(val + code->offset);
++			ret = fetch_store_symstrlen(val + code->offset);
+ 			code++;
+ 			goto array;
+ 		default:
 
-FWIW, that fix afaics is still in -next and hasn't reached mainline yet.
-But I guess that will change within a few days.
-
->> #regzbot introduced: 8295efbe68c080047e98d9c0eb5cb933b238a8cb
-
-#regzbot fix: b5a99602b74bbfa6
-#regzbot dup-of: https://lore.kernel.org/all/ZJ2M4yqnOCqqGWH0@debian/
-#regzbot ignore-activity
-
-Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
---
-Everything you wanna know about Linux kernel regression tracking:
-https://linux-regtracking.leemhuis.info/about/#tldr
-If I did something stupid, please tell me, as explained on that page.
