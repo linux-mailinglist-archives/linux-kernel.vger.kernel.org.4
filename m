@@ -2,104 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E2B2742FA9
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 23:46:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41E1B742FAE
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 23:49:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231422AbjF2Vqi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 17:46:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59636 "EHLO
+        id S230487AbjF2VtD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 17:49:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229670AbjF2Vqf (ORCPT
+        with ESMTP id S230106AbjF2Vsz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 17:46:35 -0400
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD8FD2D7F;
-        Thu, 29 Jun 2023 14:46:34 -0700 (PDT)
-Received: by mail-wm1-x334.google.com with SMTP id 5b1f17b1804b1-3fbc0981757so9332045e9.3;
-        Thu, 29 Jun 2023 14:46:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688075193; x=1690667193;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=mlwouPfcUKeU2liu8ipQl7VYxOU9K6yP4hsdhfdrrEo=;
-        b=TWOt1SITfaWW4ov3/HUejB6kVlbGQdPexTvpswa+QBw1O2N250zeu88DaBGkdB3oyX
-         /c/pV96gaBHbPQUgQTkfRdAeG0+HWV+GRnCeH+RWqgToGTjUyFWBNx3swddAkudoK8v0
-         XLE2dVNpf4kyOTX2wgybvnPv7/zkQBZSJaOYm09wuwZ7CUiJr531A3xs123zayPLuQ8f
-         vLuupWwJv4+NfOdtTOvsbLPI3KqbG/k1wOVpAaWhi8+YW8K33jlTe8BXUdbo3hXJ3s2s
-         BzUBzP+KjtCoPAjFweqH7cQTbzRxT0BYDlp2J9wEO4CuM8uLeJAB1dmga5zgSJTI8jZ+
-         QK+g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688075193; x=1690667193;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=mlwouPfcUKeU2liu8ipQl7VYxOU9K6yP4hsdhfdrrEo=;
-        b=fOt591cKHQV+ymY55qmrq1ZvVYgs3vr2DuGSHk3da0ZXLMpZibnvWuRLwRmwa6jCli
-         uLK+F5fMPYBS2cgTxbEfHHmv0k45QHlsGsIov7do4JpTTzut0uGGIKc1FXTL4olStOmt
-         fasX9CfoSxd8fpCgye9boGKA5OqEJZP7SAPNKjqCnE/S39ufHXIuhiA7L8ppM3n7ThBK
-         a27MUBx6oMFdtDCwXyits3i0VJdwEPe0VvrahrkRRqGRR/f6ogQzW2PE2vNToLhfJj4a
-         d1Yw2wY9F1CkfPgnuM6ZjnKlk3weNzvQ+nQHyZ35e/9lfcCImMz3+EKCYx2+BvgrwvR5
-         hImw==
-X-Gm-Message-State: AC+VfDwLDAVvCXOPcrIfDMRsHp1JAzdwGtN8z4CrSAwznoMQNywXuM/s
-        LxOHrBYuaGbWN6RWr9p/LOM=
-X-Google-Smtp-Source: ACHHUZ6CamCENH70lMpK+j6IW681aDT2jBhH2nyYAniB9hDjli5y7psGG/yQFu4NS+dMclotEV7YqQ==
-X-Received: by 2002:a05:600c:218f:b0:3fa:a6ce:54ad with SMTP id e15-20020a05600c218f00b003faa6ce54admr512722wme.6.1688075193114;
-        Thu, 29 Jun 2023 14:46:33 -0700 (PDT)
-Received: from localhost.localdomain (cpc157791-rdng31-2-0-cust585.15-3.cable.virginm.net. [86.24.214.74])
-        by smtp.gmail.com with ESMTPSA id y23-20020a7bcd97000000b003fbb2c0fce5sm4922034wmj.25.2023.06.29.14.46.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Jun 2023 14:46:32 -0700 (PDT)
-From:   Stuart Hayhurst <stuart.a.hayhurst@gmail.com>
-Cc:     Stuart Hayhurst <stuart.a.hayhurst@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Jiri Kosina <jikos@kernel.org>,
-        Bastien Nocera <hadess@hadess.net>,
-        =?UTF-8?q?Filipe=20La=C3=ADns?= <lains@riseup.net>
-Subject: [PATCH v2] HID: logitech-hidpp: Add wired USB id for Logitech G502 Lightspeed
-Date:   Thu, 29 Jun 2023 22:46:03 +0100
-Message-ID: <20230629214602.987600-1-stuart.a.hayhurst@gmail.com>
-X-Mailer: git-send-email 2.40.1.521.gf1e218fcd8
-In-Reply-To: <20230629192422.980071-1-stuart.a.hayhurst@gmail.com>
-References: <20230629192422.980071-1-stuart.a.hayhurst@gmail.com>
+        Thu, 29 Jun 2023 17:48:55 -0400
+Received: from msg-4.mailo.com (msg-4.mailo.com [213.182.54.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1E3330C4
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 14:48:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
+        t=1688075328; bh=FmbTdi5zuk0SN6bL1GqPa/XWvQtYc/7aqiZNLWHawfs=;
+        h=X-EA-Auth:Date:From:To:Cc:Subject:Message-ID:MIME-Version:
+         Content-Type;
+        b=NEiKHIJ0TUMYNtqnwBh+nXrpc/xNRmaFOGHgjNsXoei9R5BGYQKVn5NmDjKh1V94J
+         1HV9c7P5WWoYcneL9f/UPyMoRDHxIAzq4gN0ebLt8XV0hj/b2fX3x8gzpg7KnqJrTO
+         AbedOhy3yPVCoKnuuogWyjyFYWXJy/rN4Oz4PPzw=
+Received: by b221-3.in.mailobj.net [192.168.90.23] with ESMTP
+        via ip-20.mailobj.net [213.182.54.20]
+        Thu, 29 Jun 2023 23:48:48 +0200 (CEST)
+X-EA-Auth: 3d8hHa0w8x3ZBksDX9dBDvaPGrI6/UQcOzXV03+dW5/YH8jZrj6A54owRMUqSTdC4zEFF+HTckpwy1YG1yyVVQC252uw6y2c
+Date:   Fri, 30 Jun 2023 03:18:37 +0530
+From:   Deepak R Varma <drv@mailo.com>
+To:     Bob Peterson <rpeterso@redhat.com>,
+        Andreas Gruenbacher <agruenba@redhat.com>,
+        cluster-devel@redhat.com, linux-kernel@vger.kernel.org
+Cc:     Ira Weiny <ira.weiny@intel.com>,
+        "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
+        Sumitra Sharma <sumitraartsy@gmail.com>,
+        Deepak R Varma <drv@mailo.com>
+Subject: [PATCH v3 0/6] gfs2: kmap{_atomic} conversion to
+ kmap_local_{page/folio}
+Message-ID: <cover.1688073459.git.drv@mailo.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Previously, support for the G502 had been attempted in commit 27fc32f.
-This caused some issues and was reverted by addf338.
-Since then, a new version of this mouse has been released (Lightpseed Wireless), and works correctly.
+This patch series proposes to replace the kmap/kmap_atomic implementation to the
+preferred kmap_local_* APIs.
 
-This device has support for battery reporting with the driver
+The code blocks for this module where kmap/kmap_atomic calls are implemented do
+not appear to depend on disabling page-faults or preemption. Hence such code
+blocks are safe for converting to improved kmap_local_{page,folio} APIs.
 
-Signed-off-by: Stuart Hayhurst <stuart.a.hayhurst@gmail.com>
----
- drivers/hid/hid-logitech-hidpp.c | 2 ++
- 1 file changed, 2 insertions(+)
+Note: The proposed patches are build tested only.
 
-diff --git a/drivers/hid/hid-logitech-hidpp.c b/drivers/hid/hid-logitech-hidpp.c
-index 5e1a412fd28f..94a045ef8e50 100644
---- a/drivers/hid/hid-logitech-hidpp.c
-+++ b/drivers/hid/hid-logitech-hidpp.c
-@@ -4598,6 +4598,8 @@ static const struct hid_device_id hidpp_devices[] = {
- 
- 	{ /* Logitech G403 Wireless Gaming Mouse over USB */
- 	  HID_USB_DEVICE(USB_VENDOR_ID_LOGITECH, 0xC082) },
-+	{ /* Logitech G502 Lightspeed Wireless Gaming Mouse over USB */
-+	  HID_USB_DEVICE(USB_VENDOR_ID_LOGITECH, 0xC08D) },
- 	{ /* Logitech G703 Gaming Mouse over USB */
- 	  HID_USB_DEVICE(USB_VENDOR_ID_LOGITECH, 0xC087) },
- 	{ /* Logitech G703 Hero Gaming Mouse over USB */
+Initially, only a single patch was sent and now being converted into a patch
+series including the other files/functions of this module. Hence all patches,
+that are included for the first time in this series are also marked as v3.
+
+Changes in v3:
+   - Patch set introduced to include all gfs2 kmap conversions
+   - Patches 3/6 through 6/6 are included to build the series
+   - Initial stand-alone patch split into 2 patches [1/6 and 2/6]
+
+Changes in v2:
+   - 3/6 to 6/6: None.
+   - 1/6 + 2/6: Correct patch description for the replacement function name from
+     kmap_local_folio to kmap_local_page
+
+Deepak R Varma (6):
+  gfs2: Replace kmap_atomic() by kmap_local_page() in stuffed_readpage
+  gfs2: Replace kmap_atomic()+memcpy by memcpy_from_page()
+  gfs2: Replace kmap() by kmap_local_page() in gfs2_unstuffer_page
+  gfs2: Replace kmap_atomic() by kmap_local_page() in lops.c
+  gfs2: Replace kmap() by kmap_local_page() in gfs2_read_super
+  gfs2: Replace kmap_atomic() by kmap_local_page() in
+    gfs2_write_buf_to_page
+
+ fs/gfs2/aops.c       | 13 ++++++-------
+ fs/gfs2/bmap.c       |  4 ++--
+ fs/gfs2/lops.c       | 12 ++++++------
+ fs/gfs2/ops_fstype.c |  4 ++--
+ fs/gfs2/quota.c      |  4 ++--
+ 5 files changed, 18 insertions(+), 19 deletions(-)
+
 -- 
-2.40.1.521.gf1e218fcd8
+2.34.1
+
+
 
