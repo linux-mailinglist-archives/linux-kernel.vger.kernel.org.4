@@ -2,193 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD718741D6C
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 02:58:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AA60741D6D
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 03:00:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231315AbjF2A6y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 20:58:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35252 "EHLO
+        id S231359AbjF2BAX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 21:00:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229749AbjF2A6u (ORCPT
+        with ESMTP id S229533AbjF2BAU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 20:58:50 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB796212F;
-        Wed, 28 Jun 2023 17:58:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1688000329; x=1719536329;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=yLBtAzaKFYgTfIgj0Ym/G1wyKVlA8QtVrSwmxa70ixA=;
-  b=NspMvW7xgGDcnYkBeA7UfdstQiLp7gr1N8b31OPAaCUEa7pqafKMeHbG
-   m/3z+OOu0K9u3NkuSr6UWcsmO9mVcslV1JlMWycOEQSQgn+7S7i9iwG6r
-   RQ5HLDOe3R72QEunu8BUT4/8DCtk+KbINOvO5EvaZj7RYroxbPiasM6lL
-   qs5bwQybP/R5Hv0Oz/rJvGJG5E0nNIEbN3ORTNNBucD2wkm2OYyX+x9MV
-   XKMp7Emlq4QegOWhvuIyGtEvvcZaI49GISdy3VSflP5PrJeQjVnWys7z5
-   1IzOTQZvNLTK7DPuOP33+xf2VUmMTnTdgZtt8jgQkmTaKhzgNmham9amt
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10755"; a="360847964"
-X-IronPort-AV: E=Sophos;i="6.01,167,1684825200"; 
-   d="scan'208";a="360847964"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2023 17:58:49 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10755"; a="717177848"
-X-IronPort-AV: E=Sophos;i="6.01,167,1684825200"; 
-   d="scan'208";a="717177848"
-Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
-  by orsmga002.jf.intel.com with ESMTP; 28 Jun 2023 17:58:48 -0700
-Received: from fmsmsx612.amr.corp.intel.com (10.18.126.92) by
- fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27; Wed, 28 Jun 2023 17:58:47 -0700
-Received: from fmsmsx612.amr.corp.intel.com (10.18.126.92) by
- fmsmsx612.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27; Wed, 28 Jun 2023 17:58:47 -0700
-Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
- fmsmsx612.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27 via Frontend Transport; Wed, 28 Jun 2023 17:58:47 -0700
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (104.47.57.169)
- by edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.27; Wed, 28 Jun 2023 17:58:47 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=oGNCletgSlAkZnuiKG86R9scsy2LliD+L0M56f3Hjj1esC1+Sh/8lOZ4YEtZZGFPBPkdcVxb7rH+Mm4fGwH3ka/sGlw6heK0MI0J2ulRYbuAILbY5Lugwl8ztMonOa5adaPI+4HvY02djNt+Mn1Uzm3rEuIpphvbi+4XAOLdBSowBvV6p4Wigj89xo3nUn2CmL8+3pkO1aa4xKaPExJUK0DzeFgtzkIv2GVDHgipbSoE4zUGIl3di8MdNzOA2JvBMQ/kuaqsT59GraJVjzrfc90UxzECFmQn7hcbubKA85pzFRgXnKN/zXFRn0L9mdXpJYjxoPVHBPPM4Zu7Rncx7w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=yLBtAzaKFYgTfIgj0Ym/G1wyKVlA8QtVrSwmxa70ixA=;
- b=RM/IiPuXZ3MWTJG0pqOodpHdwYOFbZo6kf2VvvcgLrdugPQEJCH0L4NFus5sNcEvmAhZFb1YcprWUTUwtXbQ+TgrVX6+e2BLUcXGm0XBl4DTfHvDeahB4xnn743NFB1CWSHiM8spggT1OuR2Qerw29lqjGXd8Qj5yxeOWK9mjP7Qlew9BoDEuW5YX2eV9vWBayszkMT8Sg+x5WVkHXhAdKb39nNDu3s6Q1ouJ/T+CiHelKoZeo32yB1MHjnBjUDGaVU41efYwdpgNyoC6wii+atb66l+uFqh9/yUnSjkFAjtFVmZewFs9rDZf8anuRI6tnHyNo2sgJ202jBuFhGOhg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from BL1PR11MB5978.namprd11.prod.outlook.com (2603:10b6:208:385::18)
- by DS0PR11MB7189.namprd11.prod.outlook.com (2603:10b6:8:137::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.23; Thu, 29 Jun
- 2023 00:58:44 +0000
-Received: from BL1PR11MB5978.namprd11.prod.outlook.com
- ([fe80::19b7:466f:32ac:b764]) by BL1PR11MB5978.namprd11.prod.outlook.com
- ([fe80::19b7:466f:32ac:b764%3]) with mapi id 15.20.6521.026; Thu, 29 Jun 2023
- 00:58:44 +0000
-From:   "Huang, Kai" <kai.huang@intel.com>
-To:     "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "Hansen, Dave" <dave.hansen@intel.com>,
-        "nik.borisov@suse.com" <nik.borisov@suse.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-CC:     "Raj, Ashok" <ashok.raj@intel.com>,
-        "Luck, Tony" <tony.luck@intel.com>,
-        "david@redhat.com" <david@redhat.com>,
-        "bagasdotme@gmail.com" <bagasdotme@gmail.com>,
-        "ak@linux.intel.com" <ak@linux.intel.com>,
-        "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "Chatre, Reinette" <reinette.chatre@intel.com>,
-        "Christopherson,, Sean" <seanjc@google.com>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "Yamahata, Isaku" <isaku.yamahata@intel.com>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "Shahar, Sagi" <sagis@google.com>,
-        "imammedo@redhat.com" <imammedo@redhat.com>,
-        "bp@alien8.de" <bp@alien8.de>, "Gao, Chao" <chao.gao@intel.com>,
-        "Brown, Len" <len.brown@intel.com>,
-        "sathyanarayanan.kuppuswamy@linux.intel.com" 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        "Huang, Ying" <ying.huang@intel.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "Williams, Dan J" <dan.j.williams@intel.com>
-Subject: Re: [PATCH v12 19/22] x86/kexec(): Reset TDX private memory on
- platforms with TDX erratum
-Thread-Topic: [PATCH v12 19/22] x86/kexec(): Reset TDX private memory on
- platforms with TDX erratum
-Thread-Index: AQHZqDW1qzOe/uWSAkmVYoaVetZlS6+f8x4AgAD+woCAAAdlgA==
-Date:   Thu, 29 Jun 2023 00:58:44 +0000
-Message-ID: <eddd7d0e31dab9efabfa6f830c8bc51c277e83a8.camel@intel.com>
-References: <cover.1687784645.git.kai.huang@intel.com>
-         <28aece770321e307d58df77eddee2d3fa851d15a.1687784645.git.kai.huang@intel.com>
-         <1662a5ef-c333-d6d6-7605-060f4bcca6fd@suse.com>
-         <dc30a8c6-c313-9d85-c41e-07171dfdf056@intel.com>
-In-Reply-To: <dc30a8c6-c313-9d85-c41e-07171dfdf056@intel.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Evolution 3.48.2 (3.48.2-1.fc38) 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BL1PR11MB5978:EE_|DS0PR11MB7189:EE_
-x-ms-office365-filtering-correlation-id: a6db7c62-e236-4ff9-4665-08db783bfcee
-x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: kKbFnAugABePITNEGfihwCR7q6UfL52JG3rLcPseRAk3Z44mzelnHv2Tv0zxRGDila7mcEAzsjBds3FAHICshI9dYrxZ+C+kf8ZzlOsIuNp7qDAgWKTlwKYVq05vAQGWqLyUxcKwMmc2xkgi+HbEj/Xjjuq9ZeaL/OZ8+C2JoizFVTxF2aruB4jI7l3NUWeCYOE+u8yvVnEWJ/C9owJGPSrPKiYnjpE3dab9xaT/ymipTp69z74H89J1Ieoemo4PN5tO0Slu0q+YroLSj/THOe5uH7IC1+nRLGb0V9xvUr2+nCEDUr0l7e8WX/la7M8C0TNIIDhfE2y1lSXohBJTjNHOyIhK2ZkupIrWg6ISEM0z5R05SiVHFDFUy8FSHVroNhzloEzfOoax7AhwLRf1RmBIuNVRXb8mhEJlh+/IPydbW3gybUufHAXLv7WM+zhU1+ElFBCVeB84KkhKL8X5nIDzVGTK9klZfR7AYhjClEUxPAv3fUX1MHuFckdwD7QE3Srxpe9XapeBH4SZBicT9K0nof4FEUYIgu1VqvH69o6Cu19Q3SKLV0tbNHBHfK8xNQNsaSs7wzOFbTmgDAhaR+vugSbmOmolFc4C85C90EC6l8//3mRgU994g6d92J9T
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL1PR11MB5978.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(366004)(376002)(346002)(136003)(396003)(39860400002)(451199021)(6512007)(2906002)(186003)(6486002)(71200400001)(122000001)(2616005)(83380400001)(38100700002)(82960400001)(6506007)(53546011)(26005)(86362001)(110136005)(41300700001)(54906003)(38070700005)(478600001)(316002)(36756003)(76116006)(66556008)(66446008)(4326008)(66946007)(91956017)(64756008)(66476007)(7416002)(5660300002)(8676002)(8936002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?WEFMZU5iRVBKdHB4NmhXa3pPWHUvNEF3SjkzVXdGbTBhaDh6Z0hCWEVHblhM?=
- =?utf-8?B?OUc4WlVLcmt6RjV0UFk2NXhMamdVYmwyQTdGaWxJclk4YnJvS052UnFjY1BM?=
- =?utf-8?B?ejVJMWRUcWJZT0Y2UnFGUlFwUERUak1TZ0xEUms5cXIxaFZ5cGJMWVVRQXk3?=
- =?utf-8?B?SWFkZlI4OGFJbXQyUGxuaE5zNWxkbk02ZFdpMnpVdy9xY1ZaKy9tcHdVUHdo?=
- =?utf-8?B?TUNHbEZCeHB0amZmWUcrRzcxenM3bW8xZTdCaFJLSElRLzUyaVFYbXplcUxo?=
- =?utf-8?B?NGNvMnF6WS84K2NCOUl3aWJDTlNLT3huWTlzT0V0K2Z4M000bXNLcjlQUCtB?=
- =?utf-8?B?V0VTelc1aG1UVlRNZEtweEUyU3o2MVpMcVdROGMwaFhvN0EzREV5bjBVMVFw?=
- =?utf-8?B?OGMyNmNkeUd3RFZ2czZmMllSU2QraFdBMUVPbEJuYmt1a21KWlJHUlBCQndr?=
- =?utf-8?B?UTlqTE40V0dOU3ZROVVmaDk3L2lPOWVSeU5WTWd4SWlBRTQwOGIyaDU4Tkdh?=
- =?utf-8?B?d0QycytZOVR1OVJZRUFocnVyV1ZPdmZQczdVUkpaaldHLzJZYlhvcm8xNjZ0?=
- =?utf-8?B?OTFIWG1oYnpneENUWC9yL2Fnc2wycVE2czdJeEZ0d1lwS3FqdUpKdzNXMWFL?=
- =?utf-8?B?b3grZWE4KzhCMktHR2dKUzJnaEdnOElzakE3V3o5UDNUc0h4bDRScC9LcW1S?=
- =?utf-8?B?ZnNRSk9naXNnUUUvT0NXSGcvM1VOSlpEazh3SlRYQmdJMFArUkY0a2pZTVVn?=
- =?utf-8?B?ekNNa1ZRL1JJY3MzRUhPakVoaFJzQ0I5MmlVUlp0UHE3K0RIRkZVbkEydVVD?=
- =?utf-8?B?MWh3bjQxeFZ2VzBxd2p3S25EYURpRUVEVGtIeXU3M0orb2FaLy9vcWpJS1NI?=
- =?utf-8?B?NWY3OGQyelhSNnVwdTFWTTBFdTZzaWhFeFRlTFJUVkdoamVYSk00bERJNlZo?=
- =?utf-8?B?VWVUY29ZdlE0TGd1TGFRZXJTMEtLWTRIeUsrWFF4TnBja0hHb0ZyZkxsMEt1?=
- =?utf-8?B?bk1Ydk1zM3J1U2tQZm9GTUFtUkdESStyK0lRYWJNUzJkankzKzliUjZ6QzdP?=
- =?utf-8?B?aDIvVVBFZElqLzJ0VTgvWitYSXd5UjBKZ1c2Uis1d21IWGNwa3Q1R1J5ZGsz?=
- =?utf-8?B?UEppM1habWRDWFZJajYrUDQrR0dLVHlIYzJieFJySkZsWHBoSmtqaW03N3lN?=
- =?utf-8?B?b3FuVy9IQTRVL3cxZ0ljY25lbVVxNW1HQTNlOXpHeCt4bE9mOGszNmhrdUZH?=
- =?utf-8?B?d3d0WFZWMkF5UmdXeTc4UW0zeFkwUHZHRm85WHcvRm9uVFgrTVJZVGtFZGEv?=
- =?utf-8?B?MlZITHRLengzL1RSMnBuVkg0em1jSVpUQVNLSHprM1JESC84cU1xUXlmTWpk?=
- =?utf-8?B?QS9aVlJwNUZzZU5hbHVZS2JDc3JoNUU3SGNwWmp3blh6UTY1ZGs3ZytUREhV?=
- =?utf-8?B?S29hM0N6a0lsMGt5RTV1eGJQbitZR0FkTEZwdWJOZ0tlUkN4UndlTHg2QU1J?=
- =?utf-8?B?RE1CeTZUcXBBN1lwMGVwZE9YWXVZMjBwSytkY1I0WUQybDc4alExRUFObGph?=
- =?utf-8?B?K0c1aHF5NnE3cDZZZ29PZHd4Z0xsbHJkeUFrRklGbWsyZldvbi82aEo5dDdu?=
- =?utf-8?B?ODJsOGlxYlE4ODNjR1RqMGxRaDllK1V3Uy9mWjJBYUVjTnFCbkdpQ3pGeGVJ?=
- =?utf-8?B?OXNQOTloU1JYZzd3Mk9EMzhjVm5GL1ZBd2JNQklwZEVhL0xWZXEzNHYzd2o1?=
- =?utf-8?B?M2hwVnJFdSsrUDRPWjB6QzF4Y1lvZGVXYlRNdDFoajVwbVYvNFZlUWhOUFZt?=
- =?utf-8?B?L2VneElqVFdFajhWY3hFWGlWVmtJQnJKYXRWSVREZDNrWDdMY1ZQeWtLZWlD?=
- =?utf-8?B?M01Rc2gxNUJqTHUyVmFyQWx3MlBhU0dQNEdKeERxWmRaMGxBZGx4eUUzelNG?=
- =?utf-8?B?OHkweWZ5QmJIM2w3Z1dBeTNzK0oxSzZHMEE2ak9lS1JoOXhDaGRoeU5qc0RB?=
- =?utf-8?B?aU1WdnAyaCtXT2RVR0NGVkxtZVVURlk0ZXNwT2ZGRTZseXJnK0hGbDl4WmlJ?=
- =?utf-8?B?MlA5U3BRdUNsZlN2b281d0tGNjhhZzhvWmp2S0xtQUdoaUdZR1F5THRTcGNs?=
- =?utf-8?B?YlZSTmxwU1F6WTF1Nnl1MTJyaXg2eDlUUFluTlBuZ1plRTNwaFFUMG50dFJj?=
- =?utf-8?B?aUE9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <88FE5E133519DD4C87039536D4F06B20@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        Wed, 28 Jun 2023 21:00:20 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C3D7212F
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 18:00:19 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9ECF461414
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 01:00:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30740C433C0;
+        Thu, 29 Jun 2023 01:00:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688000418;
+        bh=FD+u4Jx72lkITuCJ3DPK48ZKDryeaIXbtxbzNPuF8Zg=;
+        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
+        b=IjsiU2jqEYsMKNymR/TTywV35IzVH35qogmKfAl08pE9oXVCQjLkR2iM4soTDuhod
+         CYlAbDisZwjRkAjVLgq5iJH6y8hca8abUUP66wBWSnGf1h8lpt335xuBhIxvQD03sR
+         dyfRaaIqWG1lMrpV35VG9F+Atv8yBBezBT4OVMXlCnTAXOzqXsVx7URPPjxkXWP48w
+         xQl5f3GLS+wTn7tYmp/G4OHf4QHVauARdjY4Z6k0hGv8XYj3a7QVWgDoJpyR8Xw2/R
+         7Hq/OebMU5w123rChzt2Uol87n0Ou/t6a182qWJsI22upikx1NzzqQ+y2t7GzBYzJw
+         fIIkNA9MMvlmA==
+Date:   Wed, 28 Jun 2023 18:00:16 -0700 (PDT)
+From:   Stefano Stabellini <sstabellini@kernel.org>
+X-X-Sender: sstabellini@ubuntu-linux-20-04-desktop
+To:     Oleksandr Tyshchenko <Oleksandr_Tyshchenko@epam.com>
+cc:     Petr Pavlu <petr.pavlu@suse.com>,
+        "xen-devel@lists.xenproject.org" <xen-devel@lists.xenproject.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "jgross@suse.com" <jgross@suse.com>,
+        "sstabellini@kernel.org" <sstabellini@kernel.org>
+Subject: Re: [PATCH 2/2] xen/virtio: Avoid use of the dom0 backend in dom0
+In-Reply-To: <15e31609-6c45-7372-76ee-0adf7a64fe88@epam.com>
+Message-ID: <alpine.DEB.2.22.394.2306281745010.3936094@ubuntu-linux-20-04-desktop>
+References: <20230621131214.9398-1-petr.pavlu@suse.com> <20230621131214.9398-3-petr.pavlu@suse.com> <15e31609-6c45-7372-76ee-0adf7a64fe88@epam.com>
+User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BL1PR11MB5978.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a6db7c62-e236-4ff9-4665-08db783bfcee
-X-MS-Exchange-CrossTenant-originalarrivaltime: 29 Jun 2023 00:58:44.4525
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: rxWqVy85YNmd+5gPQxdURc7XGupCK5ZW9g4g/sHoi6axm6R3TPbEvLIm4G7DOzvNgPI2lkQKX5/kZcqcAnRsKw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR11MB7189
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -196,28 +59,143 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gV2VkLCAyMDIzLTA2LTI4IGF0IDE3OjMyIC0wNzAwLCBEYXZlIEhhbnNlbiB3cm90ZToNCj4g
-T24gNi8yOC8yMyAwMjoyMCwgTmlrb2xheSBCb3Jpc292IHdyb3RlOg0KPiA+ID4gDQo+ID4gPiDC
-oCArwqDCoMKgIC8qDQo+ID4gPiArwqDCoMKgwqAgKiBTdGFydGluZyBmcm9tIHRoaXMgcG9pbnQg
-dGhlIHN5c3RlbSBtYXkgaGF2ZSBURFggcHJpdmF0ZQ0KPiA+ID4gK8KgwqDCoMKgICogbWVtb3J5
-LsKgIE1ha2UgaXQgZ2xvYmFsbHkgdmlzaWJsZSBzbyB0ZHhfcmVzZXRfbWVtb3J5KCkgb25seQ0K
-PiA+ID4gK8KgwqDCoMKgICogcmVhZHMgVERNUnMvUEFNVHMgd2hlbiB0aGV5IGFyZSBzdGFibGUu
-DQo+ID4gPiArwqDCoMKgwqAgKg0KPiA+ID4gK8KgwqDCoMKgICogTm90ZSB1c2luZyBhdG9taWNf
-aW5jX3JldHVybigpIHRvIHByb3ZpZGUgdGhlIGV4cGxpY2l0IG1lbW9yeQ0KPiA+ID4gK8KgwqDC
-oMKgICogb3JkZXJpbmcgaXNuJ3QgbWFuZGF0b3J5IGhlcmUgYXMgdGhlIFdCSU5WRCBhYm92ZSBh
-bHJlYWR5DQo+ID4gPiArwqDCoMKgwqAgKiBkb2VzIHRoYXQuwqAgQ29tcGlsZXIgYmFycmllciBp
-c24ndCBuZWVkZWQgaGVyZSBlaXRoZXIuDQo+ID4gPiArwqDCoMKgwqAgKi8NCj4gPiANCj4gPiBJ
-ZiBpdCdzIG5vdCBuZWVkZWQsIHRoZW4gd2h5IHVzZSBpdD8gU2ltcGx5IGRvIGF0b21pY19pbmMo
-KSBhbmQgaW5zdGVhZA0KPiA+IHJlcGhyYXNlIHRoZSBjb21tZW50IHRvIHN0YXRlIHdoYXQgYXJl
-IHRoZSBvcmRlcmluZyBndWFyYW50ZWVzIGFuZCBob3cNCj4gPiB0aGV5IGFyZSBhY2hpZXZlZCAo
-aS5lIGJ5IHVzaW5nIHdiaW52ZCBhYm92ZSkuDQo+IA0KPiBFdmVuIGJldHRlciwgZXhwbGFpbiB3
-aHkgdGhlIGJhcnJpZXIgbmVlZHMgdG8gYmUgdGhlcmUgYW5kICpJR05PUkUqIHRoZQ0KPiBXQlZJ
-TkQuDQo+IA0KPiBJZiB0aGUgV0JJTlZEIGdldHMgbW92ZWQgLS0gb3IgaWYgdGhlIGdvZHMgZXZl
-ciBibGVzcyB1cyB3aXRoIGEgaGFsZndheQ0KPiByZWFzb25hYmxlIHdheSB0byBmbHVzaCB0aGUg
-Y2FjaGVzIHRoYXQncyBub3QgZnVsbCBzZXJpYWxpemluZyAtLSB0aGlzDQo+IGNvZGUgaXMgc2Ny
-ZXdlZC4NCj4gDQo+IFRoZXJlIGlzIF96ZXJvXyByZWFzb24gdG8gdHJ5IGFuZCAib3B0aW1pemUi
-IHRoaXMganVuayBieSB0cnlpbmcgdG8gZ2V0DQo+IHJpZCBvZiBhIG1lbW9yeSBiYXJyaWVyIGF0
-IHRoZSByaXNrIG9mIHNjcmV3aW5nIGl0IG92ZXIgbGF0ZXIuDQo+IA0KPiBJIHVzZSAib3B0aW1p
-emUiIGluIHF1b3RlcyBiZWNhdXNlIHRoYXQncyBhIGhpZ2hseSBjaGFyaXRhYmxlIHdheSBvZg0K
-PiBkZXNjcmliaW5nIHRoaXMgYWN0aXZpdHkuDQo+IA0KDQpBZ3JlZWQuICBJJ2xsIHRyeSB0byBl
-eHBsYWluIHRoaXMgd2VsbCBhbmQgY29tZSBiYWNrLg0KDQpUaGFua3MhDQo=
+On Wed, 21 Jun 2023, Oleksandr Tyshchenko wrote:
+> On 21.06.23 16:12, Petr Pavlu wrote:
+> 
+> 
+> Hello Petr
+> 
+> 
+> > When attempting to run Xen on a QEMU/KVM virtual machine with virtio
+> > devices (all x86_64), dom0 tries to establish a grant for itself which
+> > eventually results in a hang during the boot.
+> > 
+> > The backtrace looks as follows, the while loop in __send_control_msg()
+> > makes no progress:
+> > 
+> >    #0  virtqueue_get_buf_ctx (_vq=_vq@entry=0xffff8880074a8400, len=len@entry=0xffffc90000413c94, ctx=ctx@entry=0x0 <fixed_percpu_data>) at ../drivers/virtio/virtio_ring.c:2326
+> >    #1  0xffffffff817086b7 in virtqueue_get_buf (_vq=_vq@entry=0xffff8880074a8400, len=len@entry=0xffffc90000413c94) at ../drivers/virtio/virtio_ring.c:2333
+> >    #2  0xffffffff8175f6b2 in __send_control_msg (portdev=<optimized out>, port_id=0xffffffff, event=0x0, value=0x1) at ../drivers/char/virtio_console.c:562
+> >    #3  0xffffffff8175f6ee in __send_control_msg (portdev=<optimized out>, port_id=<optimized out>, event=<optimized out>, value=<optimized out>) at ../drivers/char/virtio_console.c:569
+> >    #4  0xffffffff817618b1 in virtcons_probe (vdev=0xffff88800585e800) at ../drivers/char/virtio_console.c:2098
+> >    #5  0xffffffff81707117 in virtio_dev_probe (_d=0xffff88800585e810) at ../drivers/virtio/virtio.c:305
+> >    #6  0xffffffff8198e348 in call_driver_probe (drv=0xffffffff82be40c0 <virtio_console>, drv=0xffffffff82be40c0 <virtio_console>, dev=0xffff88800585e810) at ../drivers/base/dd.c:579
+> >    #7  really_probe (dev=dev@entry=0xffff88800585e810, drv=drv@entry=0xffffffff82be40c0 <virtio_console>) at ../drivers/base/dd.c:658
+> >    #8  0xffffffff8198e58f in __driver_probe_device (drv=drv@entry=0xffffffff82be40c0 <virtio_console>, dev=dev@entry=0xffff88800585e810) at ../drivers/base/dd.c:800
+> >    #9  0xffffffff8198e65a in driver_probe_device (drv=drv@entry=0xffffffff82be40c0 <virtio_console>, dev=dev@entry=0xffff88800585e810) at ../drivers/base/dd.c:830
+> >    #10 0xffffffff8198e832 in __driver_attach (dev=0xffff88800585e810, data=0xffffffff82be40c0 <virtio_console>) at ../drivers/base/dd.c:1216
+> >    #11 0xffffffff8198bfb2 in bus_for_each_dev (bus=<optimized out>, start=start@entry=0x0 <fixed_percpu_data>, data=data@entry=0xffffffff82be40c0 <virtio_console>,
+> >        fn=fn@entry=0xffffffff8198e7b0 <__driver_attach>) at ../drivers/base/bus.c:368
+> >    #12 0xffffffff8198db65 in driver_attach (drv=drv@entry=0xffffffff82be40c0 <virtio_console>) at ../drivers/base/dd.c:1233
+> >    #13 0xffffffff8198d207 in bus_add_driver (drv=drv@entry=0xffffffff82be40c0 <virtio_console>) at ../drivers/base/bus.c:673
+> >    #14 0xffffffff8198f550 in driver_register (drv=drv@entry=0xffffffff82be40c0 <virtio_console>) at ../drivers/base/driver.c:246
+> >    #15 0xffffffff81706b47 in register_virtio_driver (driver=driver@entry=0xffffffff82be40c0 <virtio_console>) at ../drivers/virtio/virtio.c:357
+> >    #16 0xffffffff832cd34b in virtio_console_init () at ../drivers/char/virtio_console.c:2258
+> >    #17 0xffffffff8100105c in do_one_initcall (fn=0xffffffff832cd2e0 <virtio_console_init>) at ../init/main.c:1246
+> >    #18 0xffffffff83277293 in do_initcall_level (command_line=0xffff888003e2f900 "root", level=0x6) at ../init/main.c:1319
+> >    #19 do_initcalls () at ../init/main.c:1335
+> >    #20 do_basic_setup () at ../init/main.c:1354
+> >    #21 kernel_init_freeable () at ../init/main.c:1571
+> >    #22 0xffffffff81f64be1 in kernel_init (unused=<optimized out>) at ../init/main.c:1462
+> >    #23 0xffffffff81001f49 in ret_from_fork () at ../arch/x86/entry/entry_64.S:308
+> >    #24 0x0000000000000000 in ?? ()
+> > 
+> > Fix the problem by preventing xen_grant_init_backend_domid() from
+> > setting dom0 as a backend when running in dom0.
+> > 
+> > Fixes: 035e3a4321f7 ("xen/virtio: Optimize the setup of "xen-grant-dma" devices")
+> 
+> 
+> I am not 100% sure whether the Fixes tag points to precise commit. If I 
+> am not mistaken, the said commit just moves the code in the context 
+> without changing the logic of CONFIG_XEN_VIRTIO_FORCE_GRANT, this was 
+> introduced before.
+> 
+> 
+> > Signed-off-by: Petr Pavlu <petr.pavlu@suse.com>
+> > ---
+> >   drivers/xen/grant-dma-ops.c | 4 +++-
+> >   1 file changed, 3 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/drivers/xen/grant-dma-ops.c b/drivers/xen/grant-dma-ops.c
+> > index 76f6f26265a3..29ed27ac450e 100644
+> > --- a/drivers/xen/grant-dma-ops.c
+> > +++ b/drivers/xen/grant-dma-ops.c
+> > @@ -362,7 +362,9 @@ static int xen_grant_init_backend_domid(struct device *dev,
+> >   	if (np) {
+> >   		ret = xen_dt_grant_init_backend_domid(dev, np, backend_domid);
+> >   		of_node_put(np);
+> > -	} else if (IS_ENABLED(CONFIG_XEN_VIRTIO_FORCE_GRANT) || xen_pv_domain()) {
+> > +	} else if ((IS_ENABLED(CONFIG_XEN_VIRTIO_FORCE_GRANT) ||
+> > +		    xen_pv_domain()) &&
+> > +		   !xen_initial_domain()) {
+> 
+> The commit lgtm, just one note:
+> 
+> 
+> I would even bail out early in xen_virtio_restricted_mem_acc() instead,
+> as I assume the same issue could happen on Arm with DT (although there 
+> we don't guess the backend's domid, we read it from DT and quite 
+> unlikely we get Dom0 being in Dom0 with correct DT).
+> 
+> Something like:
+> 
+> @@ -416,6 +421,10 @@ bool xen_virtio_restricted_mem_acc(struct 
+> virtio_device *dev)
+>   {
+>          domid_t backend_domid;
+> 
+> +       /* Xen grant DMA ops are not used when running as initial domain */
+> +       if (xen_initial_domain())
+> +               return false;
+> +
+>          if (!xen_grant_init_backend_domid(dev->dev.parent, 
+> &backend_domid)) {
+>                  xen_grant_setup_dma_ops(dev->dev.parent, backend_domid);
+>                  return true;
+> (END)
+> 
+> 
+> 
+> If so, that commit subject would need to be updated accordingly.
+> 
+> Let's see what other reviewers will say.
+
+This doesn't work in all cases. Imagine using PCI Passthrough to assign
+a "physical" virtio device to a domU. The domU will run into the same
+error, right?
+
+The problem is that we need a way for the virtio backend to advertise
+its ability of handling grants. Right now we only have a way to do with
+that with device tree on ARM. On x86, we only have
+CONFIG_XEN_VIRTIO_FORCE_GRANT, and if we take
+CONFIG_XEN_VIRTIO_FORCE_GRANT at face value, it also enables grants for
+"physical" virtio devices. Note that in this case we are fixing a
+nested-virtualization bug, but there are actually physical
+virtio-compatible devices out there. CONFIG_XEN_VIRTIO_FORCE_GRANT will
+break those too.
+
+I think we need to add a second way? It could be anything that can help
+us distinguish between a non-grants-capable virtio backend and a
+grants-capable virtio backend, such as:
+- a string on xenstore
+- a xen param
+- a special PCI configuration register value
+- something in the ACPI tables
+- the QEMU machine type
+
+Or at least should we change CONFIG_XEN_VIRTIO_FORCE_GRANT into a
+command line parameter so that it can be disabled in cases like this
+one?
+
+I realize that fixing this problem properly takes a lot longer than
+adding a trivial if (dom0) return; check in the code. If you cannot find
+a good way to solve the problem or you don't have time to do that now
+and you need this bug fixed quickly, then I would be OK with the if
+(dom0) return; check but please add a detailed TODO in-code comment to
+explain that this is just a hack and we are still looking for a real
+solution.
+
+The check itself I prefer the original position because I want to retain
+the ability of using virtio frontends with grant on ARM in Dom0 (DomD
+case).
