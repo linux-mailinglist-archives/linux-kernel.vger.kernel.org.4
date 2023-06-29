@@ -2,135 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8771C742AA0
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 18:25:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A0D3742AA2
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 18:26:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232116AbjF2QZz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 12:25:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42854 "EHLO
+        id S232095AbjF2Q0h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 12:26:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232047AbjF2QZr (ORCPT
+        with ESMTP id S229910AbjF2Q0d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 12:25:47 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33D1E30C5;
-        Thu, 29 Jun 2023 09:25:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1688055946; x=1719591946;
-  h=from:to:cc:subject:in-reply-to:references:date:
-   message-id:mime-version;
-  bh=GMipEncNpFuzbp3Y+IWzNKkgCXn6RBM75OjxnGRggWw=;
-  b=NrPWlEWiIdpeni7tO1fYdsoTPccIGc/5658ie7TTX66Cab2seFiCcs/v
-   XWT19BaAoLCq2Z0KAPWqyEDZQkk3bVYA0Ywo57C6AjsjCoA8oPe60meyu
-   TdGk3wqn/tCvxX3ayeyTaSs69oQBgp5OSh50puV1hAQV7hcDPwFrO9Siy
-   2GFQBxyURt8WPdy1yIheJofxgqjDxIm065sEuqbTu8gIA1dJFDoxsMimF
-   ERn5VheCu8rtfgCd3+JoXGb70wpOavIAFIjss5eEhuhTQDOx8OMsdatgQ
-   2qIUuyenYhte9vVzB0mk+ihXZKYGAH7Xu1qeULFdmhXx3zOvmeTHOYMI+
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10756"; a="448535718"
-X-IronPort-AV: E=Sophos;i="6.01,168,1684825200"; 
-   d="scan'208";a="448535718"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jun 2023 09:25:44 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10756"; a="752704992"
-X-IronPort-AV: E=Sophos;i="6.01,168,1684825200"; 
-   d="scan'208";a="752704992"
-Received: from pdurugk-mobl1.amr.corp.intel.com (HELO vcostago-mobl3) ([10.209.78.99])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jun 2023 09:25:43 -0700
-From:   Vinicius Costa Gomes <vinicius.gomes@intel.com>
-To:     Florian Kauer <florian.kauer@linutronix.de>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Vedang Patel <vedang.patel@intel.com>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Jithu Joseph <jithu.joseph@intel.com>,
-        Andre Guedes <andre.guedes@intel.com>,
-        Simon Horman <simon.horman@corigine.com>
-Cc:     netdev@vger.kernel.org, kurt@linutronix.de,
-        intel-wired-lan@lists.osuosl.org, linux-kernel@vger.kernel.org
-Subject: Re: [Intel-wired-lan] [PATCH net v2] igc: Prevent garbled TX queue
- with XDP ZEROCOPY
-In-Reply-To: <b64dc5c7-600c-66db-d125-2d747a21c1d8@linutronix.de>
-References: <20230628091148.62256-1-florian.kauer@linutronix.de>
- <87a5wjqnjk.fsf@intel.com>
- <b64dc5c7-600c-66db-d125-2d747a21c1d8@linutronix.de>
-Date:   Thu, 29 Jun 2023 09:25:43 -0700
-Message-ID: <87edlup75k.fsf@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 29 Jun 2023 12:26:33 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1F82CF
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 09:26:32 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id 3f1490d57ef6-c38c87ea9ceso1349793276.1
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 09:26:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1688055992; x=1690647992;
+        h=content-transfer-encoding:cc:to:from:subject:message-id:references
+         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=xMCpFTi4MEZLbHfM6PilnIIZPnyzbN27S0/lWwHLYHI=;
+        b=GMBD/LpzELPsRbxZKKzblbYWJ+sxqCFJh8sqXPWlxGp8U0A+UAgRmx8mtN4RFIKJLS
+         tWShDw0jJHclaaBavEJWjBB6dGPUFZoVr5twyAtBHN6qebVtacCXdYDnd93pZVkyKoZw
+         0+WJ/aWT6RPc8Os5dCvJyiYl0a4On2PNUBwQYaQq5U78afKLGz6jg3nVF/2Qhr5TQX0q
+         EK4td6N0JI9F5orF6SckKRYtzUbWYAUY5E5soJH6YcA1rYDGWhTJIbgdvG8mpTgqleWV
+         cCtNrROuiOoldk/CP0QNltmh6FMzC+iqKVsmsBNTqPYeMGPgjNuoHfAlcELNKCgayqlJ
+         pn6A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688055992; x=1690647992;
+        h=content-transfer-encoding:cc:to:from:subject:message-id:references
+         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=xMCpFTi4MEZLbHfM6PilnIIZPnyzbN27S0/lWwHLYHI=;
+        b=LBxUIQNvKMOD9p1ywpph6FEIqz9C7nscWz+T5wlQzwTEZpkT1722SZVZS+RXOHHmKk
+         c6+hhRcO2ubOffFM3irKnim3Nb/pbEdNxa7zGkjRg6KaR1g6JS7vF4YQcMbo04I65mie
+         6uPc3RtOqTlLtcZDYKjOBZTYySJqIeaH2Pr1fVBmX2IlROGJdEw/L5g7DOGs9chbGeQE
+         NGA9VNvr2k9tvBo97mCIM83qSB47YkPqFWoilKDLhrcn5H8W7lu5gfixDHuJqpoU+dSF
+         W/RxM/4I7+Ybqzdc7AK757CuTuTS44anOikJK4Kr44jA0JbPJulrVM40UnXIEWrSa2ZE
+         RAlQ==
+X-Gm-Message-State: ABy/qLbMQ3S8VcoFazuMGKsvFwtt9bWDdCQnCcdHCveTk651edYThWyB
+        FzfZF+eJt3vNn2/4S4MskJw3eKqAFbQ=
+X-Google-Smtp-Source: APBJJlH5xRb4gXx8WB/VIhDJtQKmlpyV6We+v5eXJyNoDqtd/JFAFS3IGZnTMhoFhIMqhyEzV4FkH8V/jS8=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a05:6902:1105:b0:bc3:cdb7:4ec8 with SMTP id
+ o5-20020a056902110500b00bc3cdb74ec8mr66497ybu.6.1688055992045; Thu, 29 Jun
+ 2023 09:26:32 -0700 (PDT)
+Date:   Thu, 29 Jun 2023 09:26:30 -0700
+In-Reply-To: <9d9e9156-b9d9-86b4-9d20-77305e1e4d63@linux.intel.com>
+Mime-Version: 1.0
+References: <20230217231022.816138-1-seanjc@google.com> <20230217231022.816138-2-seanjc@google.com>
+ <9d9e9156-b9d9-86b4-9d20-77305e1e4d63@linux.intel.com>
+Message-ID: <ZJ2wtg5KJyhD3cUe@google.com>
+Subject: Re: [PATCH 01/12] KVM: x86: Add a framework for enabling KVM-governed
+ x86 features
+From:   Sean Christopherson <seanjc@google.com>
+To:     Binbin Wu <binbin.wu@linux.intel.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Florian Kauer <florian.kauer@linutronix.de> writes:
+On Thu, Jun 29, 2023, Binbin Wu wrote:
+>=20
+>=20
+> On 2/18/2023 7:10 AM, Sean Christopherson wrote:
+> > diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm=
+_host.h
+> > index 792a6037047a..cd660de02f7b 100644
+> > --- a/arch/x86/include/asm/kvm_host.h
+> > +++ b/arch/x86/include/asm/kvm_host.h
+> > @@ -835,6 +835,17 @@ struct kvm_vcpu_arch {
+> >   	struct kvm_cpuid_entry2 *cpuid_entries;
+> >   	struct kvm_hypervisor_cpuid kvm_cpuid;
+> > +	/*
+> > +	 * Track whether or not the guest is allowed to use features that are
+> > +	 * governed by KVM, where "governed" means KVM needs to manage state
+> > +	 * and/or explicitly enable the feature in hardware.  Typically, but
+> > +	 * not always, governed features can be used by the guest if and only
+> > +	 * if both KVM and userspace want to expose the feature to the guest.
+> > +	 */
+> > +	struct {
+> > +		u32 enabled;
+> Although there are some guidances/preconditions of using the framework,
+> is it possible that u32 will be ran out quickly after people starts to us=
+e
+> the framework?
 
-> Hi Vinicius,
->
-> On 28.06.23 23:34, Vinicius Costa Gomes wrote:
->> Florian Kauer <florian.kauer@linutronix.de> writes:
->> 
->>> In normal operation, each populated queue item has
->>> next_to_watch pointing to the last TX desc of the packet,
->>> while each cleaned item has it set to 0. In particular,
->>> next_to_use that points to the next (necessarily clean)
->>> item to use has next_to_watch set to 0.
->>>
->>> When the TX queue is used both by an application using
->>> AF_XDP with ZEROCOPY as well as a second non-XDP application
->>> generating high traffic, the queue pointers can get in
->>> an invalid state where next_to_use points to an item
->>> where next_to_watch is NOT set to 0.
->>>
->>> However, the implementation assumes at several places
->>> that this is never the case, so if it does hold,
->>> bad things happen. In particular, within the loop inside
->>> of igc_clean_tx_irq(), next_to_clean can overtake next_to_use.
->>> Finally, this prevents any further transmission via
->>> this queue and it never gets unblocked or signaled.
->>> Secondly, if the queue is in this garbled state,
->>> the inner loop of igc_clean_tx_ring() will never terminate,
->>> completely hogging a CPU core.
->>>
->>> The reason is that igc_xdp_xmit_zc() reads next_to_use
->>> before acquiring the lock, and writing it back
->>> (potentially unmodified) later. If it got modified
->>> before locking, the outdated next_to_use is written
->>> pointing to an item that was already used elsewhere
->>> (and thus next_to_watch got written).
->>>
->>> Fixes: 9acf59a752d4 ("igc: Enable TX via AF_XDP zero-copy")
->>> Signed-off-by: Florian Kauer <florian.kauer@linutronix.de>
->>> Reviewed-by: Kurt Kanzenbach <kurt@linutronix.de>
->>> Tested-by: Kurt Kanzenbach <kurt@linutronix.de>
->>> ---
->> 
->> This patch doesn't directly apply because there's a small conflict with
->> commit 95b681485563 ("igc: Avoid transmit queue timeout for XDP"),
->> but really easy to solve.
->> 
->> Anyway, good catch:
->> 
->> Acked-by: Vinicius Costa Gomes <vinicius.gomes@intel.com>
->
-> I am sorry, that was bad timing. I prepared the initial patch on Friday and overlooked the merge.
-> Shall I send a v3 or will someone else take care of the conflict
-> resolution?
+It's definitely possible.  And there's no reason to limit this to a u32, I =
+really
+have no idea why I did that.=20
 
-I think it's easier if you send a v3.
+Ah, it's because "struct kvm_vcpu_arch" is defined in arch/x86/include/asm/=
+kvm_host.h,
+and I didn't want to expose governed_features.h in arch/x86/include/asm.  H=
+rm,
+that's really annoying.
+
+Aha!  A better workaround for that conudrum would be to define an explicit =
+"max"
+and use that, with a FIXME to call out that this really should use
+KVM_NR_GOVERNED_FEATURES directly.  I have aspirations of moving kvm_host.h=
+ to
+arch/<arch>/kvm, at which point this can be cleaned up by declaring "enum
+kvm_governed_features" in kvm_host.h (though it'll likely be named somethin=
+g
+like kvm_arch.h at that point).
+
+	/*
+	 * FIXME: Drop this macro and use KVM_NR_GOVERNED_FEATURES directly
+	 * when "struct kvm_vcpu_arch" is no longer defined in an
+	 * arch/x86/include/asm header.  The max is mostly arbitrary, i.e.
+	 * can be increased as necessary.
+	 */
+#define KVM_MAX_NR_GOVERNED_FEATURES BITS_PER_LONG
+
+	/*
+	 * Track whether or not the guest is allowed to use features that are
+	 * governed by KVM, where "governed" means KVM needs to manage state
+	 * and/or explicitly enable the feature in hardware.  Typically, but
+	 * not always, governed features can be used by the guest if and only
+	 * if both KVM and userspace want to expose the feature to the guest.
+	 */
+	struct {
+		DECLARE_BITMAP(enabled, KVM_MAX_NR_GOVERNED_FEATURES);
+	} governed_features;
 
 
-Cheers,
--- 
-Vinicius
+> Of course, I noticed there is build=EF=BF=BD bug check on the length, it =
+should be
+> OK to increase the length when needed.
+
+> > +static __always_inline int kvm_governed_feature_index(unsigned int x86=
+_feature)
+> > +{
+> > +	switch (x86_feature) {
+> > +#define KVM_GOVERNED_FEATURE(x) case x: return KVM_GOVERNED_##x;
+> > +#include "governed_features.h"
+> > +	default:
+> > +		return -1;
+> > +	}
+> > +}
+> > +
+> > +static __always_inline int kvm_is_governed_feature(unsigned int x86_fe=
+ature)
+> Is it better to use bool instead of int?
+
+Yes, this definitely should return a bool.
+
+Thanks!
