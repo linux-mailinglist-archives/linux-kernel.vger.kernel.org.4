@@ -2,59 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D3CD74250A
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 13:39:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A4811742512
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 13:40:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231634AbjF2LjH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 07:39:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42902 "EHLO
+        id S232355AbjF2Lkj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 07:40:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229615AbjF2LjF (ORCPT
+        with ESMTP id S232106AbjF2Lk3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 07:39:05 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1A9110F0;
-        Thu, 29 Jun 2023 04:39:04 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6F94A61534;
-        Thu, 29 Jun 2023 11:39:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD05BC433C9;
-        Thu, 29 Jun 2023 11:39:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688038743;
-        bh=ZC+wZcsNqTKU5rNSzVYdvo0zLQKLbGqao3ypI8BdBE0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=jWkoWDbBBcpFOLjtTNnyd7FR1EivjbdWs6gBTaqni4KaZqF/ruLkyUVmsD7MpURYP
-         rXIN6812xuvPL8rk0LvfkXPuPpUz1hQpXTXa4FmQwwGc4RRFqK4mmMMTzeIArd67oU
-         QZcm5IUq/AQMmKyNc3fMndC2bFEoYx2awCnLw3/Ev1c/+YT6650iKtBTNj/dBdVdve
-         X+Ud11/lJBD+QtlrGrRW9J3zz5XHuwXazBHkZmMxBt9V+251CtV1rkc5Im8D16te6T
-         F05OsCRJG8fdaGAvxfw/oT3wVHmryquRfhTQ94WLRfDU/zi2YD5TLF+jkUPnjwvNgW
-         RVeTq7plHPfAw==
-Date:   Thu, 29 Jun 2023 12:38:57 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Shengjiu Wang <shengjiu.wang@nxp.com>
-Cc:     tfiga@chromium.org, m.szyprowski@samsung.com, mchehab@kernel.org,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        shengjiu.wang@gmail.com, Xiubo.Lee@gmail.com, festevam@gmail.com,
-        nicoleotsuka@gmail.com, lgirdwood@gmail.com, perex@perex.cz,
-        tiwai@suse.com, alsa-devel@alsa-project.org,
-        linuxppc-dev@lists.ozlabs.org
-Subject: Re: [PATCH 4/6] ASoC: fsl_asrc: Add memory to memory driver
-Message-ID: <f6598cb0-6773-4475-85e1-5dfacaa16de3@sirena.org.uk>
-References: <1688002673-28493-1-git-send-email-shengjiu.wang@nxp.com>
- <1688002673-28493-5-git-send-email-shengjiu.wang@nxp.com>
+        Thu, 29 Jun 2023 07:40:29 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C83D10F0;
+        Thu, 29 Jun 2023 04:40:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1688038826; x=1719574826;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=sAr1yW8ms9qKdVY87lLEN9RPbOLSC7vvBYXs60c7FDI=;
+  b=u05q+pJZZssCqlezI/w0BorKOqAo/eiI4+c4cyMhF6eCF21w0OQAKVmr
+   /M/3XeCEudZ6hlVS0vZgCclrsj3rdKedet0Wa/2F5ROnBpDB4GZZrr3hR
+   rYF9LUFlcWIyYoAhfD4fpjjsMKldxgmRc+cepWnSHB1vfR0EY+uMwkdA4
+   3wdGXcApbpMVjQArj5MjHdDEI6dOvvuwRnQbiC3M4TUz8HEPfQ0ZjpMx/
+   gjsxRkqi+Mry7iUMawm9vkCzwZymZr9ZYIt2VnNKP1tmuBjwCaCTgi7qv
+   nyKsLuB2ctlqgD7zHUfg6NMV3LskL/cQya9LnmSbs9pXtdd5Cz0HWdKlB
+   Q==;
+X-IronPort-AV: E=Sophos;i="6.01,168,1684825200"; 
+   d="asc'?scan'208";a="218175038"
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 29 Jun 2023 04:40:24 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Thu, 29 Jun 2023 04:40:22 -0700
+Received: from wendy (10.10.115.15) by chn-vm-ex02.mchp-main.com
+ (10.10.85.144) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
+ Transport; Thu, 29 Jun 2023 04:40:20 -0700
+Date:   Thu, 29 Jun 2023 12:39:51 +0100
+From:   Conor Dooley <conor.dooley@microchip.com>
+To:     Andrew Jones <ajones@ventanamicro.com>
+CC:     <palmer@dabbelt.com>, <conor@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Heiko Stuebner <heiko.stuebner@vrull.eu>,
+        Evan Green <evan@rivosinc.com>,
+        Sunil V L <sunilvl@ventanamicro.com>,
+        <linux-riscv@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        Palmer Dabbelt <palmer@rivosinc.com>
+Subject: Re: [PATCH v2 10/10] RISC-V: provide a Kconfig option to disable
+ parsing "riscv,isa"
+Message-ID: <20230629-deceit-macarena-2a744ac70148@wendy>
+References: <20230629-rebuttal-vagueness-a699deb7c7b3@wendy>
+ <20230629-resilient-grievance-d782163b09d6@wendy>
+ <20230629-a80f112e6ed4158080867694@orel>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="FP1aqfO0iq4vQLEp"
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="Sze7hK0PNyYVfnYw"
 Content-Disposition: inline
-In-Reply-To: <1688002673-28493-5-git-send-email-shengjiu.wang@nxp.com>
-X-Cookie: Surprise due today.  Also the rent.
+In-Reply-To: <20230629-a80f112e6ed4158080867694@orel>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,49 +77,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
---FP1aqfO0iq4vQLEp
+--Sze7hK0PNyYVfnYw
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Jun 29, 2023 at 09:37:51AM +0800, Shengjiu Wang wrote:
-> Implement the ASRC memory to memory function using
-> the v4l2 framework, user can use this function with
-> v4l2 ioctl interface.
->=20
-> User send the output and capture buffer to driver and
-> driver store the converted data to the capture buffer.
->=20
-> This feature can be shared by ASRC and EASRC drivers
->=20
-> Signed-off-by: Shengjiu Wang <shengjiu.wang@nxp.com>
-> ---
->  sound/soc/fsl/Kconfig        |  13 +
->  sound/soc/fsl/Makefile       |   2 +
->  sound/soc/fsl/fsl_asrc_m2m.c | 878 +++++++++++++++++++++++++++++++++++
->  sound/soc/fsl/fsl_asrc_m2m.h |  48 ++
+On Thu, Jun 29, 2023 at 11:31:33AM +0200, Andrew Jones wrote:
+> On Thu, Jun 29, 2023 at 09:28:56AM +0100, Conor Dooley wrote:
+> > As it says on the tin, provide a Kconfig option to disabling parsing the
+> > "riscv,isa" devicetree property. Hide the option behind NONPORTABLE so
+> > that only those willing to keep the pieces enable it, and make sure the
+> > default kernel contains the fallback code.
+> >=20
+> > Suggested-by: Palmer Dabbelt <palmer@rivosinc.com>
+> > Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+> > ---
+> >  arch/riscv/Kconfig             | 16 ++++++++++++++++
+> >  arch/riscv/kernel/cpu.c        |  3 +++
+> >  arch/riscv/kernel/cpufeature.c |  2 +-
+> >  3 files changed, 20 insertions(+), 1 deletion(-)
+> >=20
+> > diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+> > index 1d39efe2b940..0e1909ac5947 100644
+> > --- a/arch/riscv/Kconfig
+> > +++ b/arch/riscv/Kconfig
+> > @@ -291,6 +291,22 @@ config NONPORTABLE
+> > =20
+> >  	  If unsure, say N.
+> > =20
+> > +config NO_RISCV_ISA_FALLBACK
+> > +	bool "Permit falling back to parsing riscv,isa for extension support"
+> > +	depends on NONPORTABLE
+> > +	help
+> > +	  Parsing the "riscv,isa" devicetree property has been deprecated and
+> > +	  replaced by a list of explicitly defined strings. For compatibility
+> > +	  with existing platforms, the kernel will fall back to parsing the
+> > +	  "riscv,isa" property if the replacements are not found.
+> > +
+> > +	  Selecting Y here will result in a kernel without this fallback, and
+> > +	  will not work on platforms where the devicetree does not contain the
+> > +	  replacement 	  properties of "riscv,isa-base" and
+>                      ^ spacing issue
 
-This feels like the bit where we interface v4l to ASoC should be a
-separate library, there shouldn't be anything device specific about
-getting an audio stream into a block of memory.  I'm thinking something
-like the way we handle dmaengine here.
+Huh, weird. Given the tab followed by spaces, it must have snuck in
+during reflow of the text after some rewording.
+Wonder how I missed it, given that...
 
-I've not dug into the code yet though.
+> Should we also have a kernel command line option, 'isa_fallback', where
+> without this config the command line option is not necessary to fallback,
+> but, with this config, no fallback will be done unless 'isa_fallback' is
+> provided?
 
---FP1aqfO0iq4vQLEp
+I don't know, maybe I have the wrong end of the stick but it feels a bit
+premature for something that may never not be hidden behind NONPORTABLE?
+Perhaps that could be left for a point in time where the default value
+of the symbol changes, or the dependency on NONPORTABLE is removed?
+
+Cheers,
+Conor.
+
+--Sze7hK0PNyYVfnYw
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmSdbVEACgkQJNaLcl1U
-h9DmOgf/eCvmgKO/us13curwY8vW24n389PS/2sTaVssYszEQB7BvNfQV5atoKU8
-Ba6RqJPl8PRNwurpLqyF4NLOA0EOlv8h0P3cCC/XZ6ticWK2lAy80EmU5XUgR742
-FCzts7URNns+y3cZAepJ7a38vxNUQLJh/tbkB5aJGXr9X30sntOepWDMnUgoW4KB
-UzzayZWUilTjl2LYkvbiIEf8MfC7VcptLU2Y7DevFjMm27aRoV2yBreIhEbrexsW
-ngXnBwKOoR7SCgS68ZtsyD/RzZIeVx+mZI2/I9P0EiGXjcJnBcJAVlehJp+Wrhgl
-0IHUq6WGmLFkATfM0fclKq7dykS7UA==
-=K8a/
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZJ1thwAKCRB4tDGHoIJi
+0vzDAQDP9JlWlUGwMAoSKSxFjb6GGIDX8Mbn07UsWcWTcqMgAgD+JkZNTy1Vf7gU
+LgyClwNQJHHQVT0Xj7BVnlyqzAn93Aw=
+=bH7a
 -----END PGP SIGNATURE-----
 
---FP1aqfO0iq4vQLEp--
+--Sze7hK0PNyYVfnYw--
