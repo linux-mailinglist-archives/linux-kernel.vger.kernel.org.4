@@ -2,107 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C539741FEE
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 07:30:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 96189741FF0
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 07:32:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231848AbjF2Fas (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 01:30:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58604 "EHLO
+        id S231450AbjF2FcO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 01:32:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231842AbjF2FaZ (ORCPT
+        with ESMTP id S229624AbjF2FcG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 01:30:25 -0400
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA79530EE
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 22:30:09 -0700 (PDT)
-Received: by mail-pl1-x636.google.com with SMTP id d9443c01a7336-1b8303cd32aso2741645ad.2
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 22:30:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1688016609; x=1690608609;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=p0Pt77Eq3P/4JE1MNXb8oRAxrpAUrii1SyyUisTc1no=;
-        b=L8yUdbuauG4abzMewjIMlqk+gki4Pt//LOoEYqHe9mjDdfMqht2XoG5anlj0GTRblE
-         r+qE5gqV/mcZSUZLkE9nCccfa8PlR22dcKJGLxoAEZEqKFsSm+BoBQBgUsSL0qH3Pupc
-         iZ3ot3L49B3Btte8v5Z/DoOY8Ffmd5xgzp874=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688016609; x=1690608609;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=p0Pt77Eq3P/4JE1MNXb8oRAxrpAUrii1SyyUisTc1no=;
-        b=XMQI78VIgHDfXMFle/VC8tEzpckfpK4REUqIyJ6Y4WtnCI7BiAhod+iPtwpxjJMvF/
-         KYjeqX2T3yKe3X4gNZZINZ2NBWELztBQ96HR2eISPI6xaTXdritaX3UnyIqZx/VJpd1r
-         38vzm1WNq3/SJTHhNy4DfMfHnLiy0LyrrK6TndLx/BnVU9UwZ7tJNaxV2XVCYxlMvPzI
-         CvBxzkk3VyzVcer2IUYDdpImb57ICy5tVCbqPDCC+MsmAxU9h8BjQaxuKKeZwUqQEvw9
-         djsc1pXs5F7f/6EuyNDyM1Itn0eLhA3klRZ/9tGjWFBcI/0IjrQkZkHALrKU6Veup6be
-         ClUg==
-X-Gm-Message-State: AC+VfDw+qiqQIHB1dJriy4271a+YrL8vBbvJRbO535ED3qf9rC+Ej6ym
-        K0PnKQojquxdSM5Z591RYoO2IQ==
-X-Google-Smtp-Source: ACHHUZ7M/Xi5oibkkU/VtACMwELsNKDWAAZr8IegWQGJkYMUoH6N+DkmZZkbVVTVhP0V3zQyyuxCMw==
-X-Received: by 2002:a17:903:444:b0:1b8:c60:ac7 with SMTP id iw4-20020a170903044400b001b80c600ac7mr9949316plb.23.1688016608837;
-        Wed, 28 Jun 2023 22:30:08 -0700 (PDT)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id az10-20020a170902a58a00b001b1866f7b5csm8403070plb.138.2023.06.28.22.30.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Jun 2023 22:30:08 -0700 (PDT)
-Date:   Wed, 28 Jun 2023 22:30:07 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Andrei Vagin <avagin@gmail.com>
-Cc:     Andrei Vagin <avagin@google.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-Subject: Re: linux-next: build failure after merge of the seccomp tree
-Message-ID: <202306282228.0048876DF@keescook>
-References: <20230629124055.7edf4493@canb.auug.org.au>
- <CANaxB-z0gLxOU-EVnag=pi3cC164stbOVOMmaGMwNs_g43z9_w@mail.gmail.com>
+        Thu, 29 Jun 2023 01:32:06 -0400
+Received: from verein.lst.de (verein.lst.de [213.95.11.211])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B129C1BE8;
+        Wed, 28 Jun 2023 22:32:05 -0700 (PDT)
+Received: by verein.lst.de (Postfix, from userid 2407)
+        id 2102F67373; Thu, 29 Jun 2023 07:32:02 +0200 (CEST)
+Date:   Thu, 29 Jun 2023 07:32:01 +0200
+From:   Christoph Hellwig <hch@lst.de>
+To:     chengming.zhou@linux.dev
+Cc:     axboe@kernel.dk, tj@kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, zhouchengming@bytedance.com,
+        ming.lei@redhat.com, hch@lst.de
+Subject: Re: [PATCH v3 3/3] blk-mq: fix start_time_ns and alloc_time_ns for
+ pre-allocated rq
+Message-ID: <20230629053201.GF16819@lst.de>
+References: <20230628124546.1056698-1-chengming.zhou@linux.dev> <20230628124546.1056698-4-chengming.zhou@linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CANaxB-z0gLxOU-EVnag=pi3cC164stbOVOMmaGMwNs_g43z9_w@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230628124546.1056698-4-chengming.zhou@linux.dev>
+User-Agent: Mutt/1.5.17 (2007-11-01)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 28, 2023 at 10:27:09PM -0700, Andrei Vagin wrote:
-> On Wed, Jun 28, 2023 at 7:50 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
-> >
-> > Hi all,
-> >
-> > After merging the seccomp tree, today's linux-next build (native perf)
-> > failed like this:
-> >
-> > make[3]: *** No rule to make target '/home/sfr/next/perf/bench/sched-seccomp-notify.o', needed by '/home/sfr/next/perf/bench/perf-in.o'.  Stop.
-> > make[3]: *** Waiting for unfinished jobs....
-> > make[2]: *** [/home/sfr/next/next/tools/build/Makefile.build:140: bench] Error 2
-> > make[2]: *** Waiting for unfinished jobs....
-> > make[1]: *** [Makefile.perf:682: /home/sfr/next/perf/perf-in.o] Error 2
-> > make: *** [Makefile.perf:242: sub-make] Error 2
-> > Command exited with non-zero status 2
-> >
-> > Presumably caused by commit
-> >
-> >   df614e369b5c ("perf/benchmark: add a new benchmark for seccom_unotify")
-> 
-> tools/perf/bench/sched-seccomp-notify.c should be in this commit too.
-> Probably something went wrong when the patch was applied. I've checked
-> that the patch contains this file:
-> 
-> https://patchew.org/linux/20230308073201.3102738-1-avagin@google.com/20230308073201.3102738-7-avagin@google.com/
-> 
-> Kees, could you take a look at this?
+> +/* Set rq alloc and start time when pre-allocated rq is actually used */
+> +static inline void blk_mq_rq_time_init(struct request_queue *q, struct request *rq)
+> +{
+> +	if (blk_mq_need_time_stamp(rq->rq_flags)) {
+> +		u64 now = ktime_get_ns();
+> +
+> +#ifdef CONFIG_BLK_RQ_ALLOC_TIME
+> +		/*
+> +		 * alloc time is only used by iocost for now,
+> +		 * only possible when blk_mq_need_time_stamp().
+> +		 */
+> +		if (blk_queue_rq_alloc_time(q))
+> +			rq->alloc_time_ns = now;
+> +#endif
+> +		rq->start_time_ns = now;
+> +	}
+> +}
 
-Yeah, I had to fix the merge and it looks like I missed the needed "git
-add", yet it compiled for me locally. Ugh. I will get this fixed.
+No need to pass q separately here, you can just use rq->q.
 
--- 
-Kees Cook
+While you're at it please capitalize the first letter of block comments.
+
