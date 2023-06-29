@@ -2,86 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9687474301B
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 00:02:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 99D8374301E
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 00:04:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232048AbjF2WCh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 18:02:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35566 "EHLO
+        id S232155AbjF2WEL convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 29 Jun 2023 18:04:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229632AbjF2WCf (ORCPT
+        with ESMTP id S229632AbjF2WEI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 18:02:35 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DFFE30D1;
-        Thu, 29 Jun 2023 15:02:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1688076149;
-        bh=F28ZahlgXjExh+5XAqY7bmPHaUAnSIwr50lEZalnpTY=;
-        h=Date:From:To:Cc:Subject:From;
-        b=XGqma75sFI5y83ziB3mhzXgBVIuGtnOCwMX0ua0irNag/d2Per2/4mRWD5KPqW3y6
-         q38jnpmvxRPoLZWytXXOPtVu5ALThyY8ZB/ZXk/lXJaM96IKKCBtOSmHYeXQdKBDk/
-         Fk6NQjTcnzk8oGse/+KfDcc4DFyAmsaAKk6D28o14krIhjFE9+0Hyin8VM5dEK3FV6
-         jLANic++8G8uLnAaOlPXeUql77TFoelW+noqHsxvO7JdMOfky2vkoo2iasftUZmLi+
-         bJe9m7/2zcqyiHKkIQiVIGWTJlSX2Kk1/5jWjCxYfqn5N2z0MxyguOMc102p1mZ0jI
-         gKu+kVDy3KT3A==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QsXVs5SClz4w2B;
-        Fri, 30 Jun 2023 08:02:29 +1000 (AEST)
-Date:   Fri, 30 Jun 2023 08:02:29 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Steven Whitehouse <swhiteho@redhat.com>,
-        Bob Peterson <rpeterso@redhat.com>
-Cc:     Andreas Gruenbacher <agruenba@redhat.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Signed-off-by missing for commit in the gfs2 tree
-Message-ID: <20230630080229.16ed7427@canb.auug.org.au>
+        Thu, 29 Jun 2023 18:04:08 -0400
+Received: from mail-yb1-f180.google.com (mail-yb1-f180.google.com [209.85.219.180])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A518630D1;
+        Thu, 29 Jun 2023 15:04:07 -0700 (PDT)
+Received: by mail-yb1-f180.google.com with SMTP id 3f1490d57ef6-bad0c4f6f50so1790533276.1;
+        Thu, 29 Jun 2023 15:04:07 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688076247; x=1690668247;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=u7291qckVfYWCuKWv0VcLn223mZh7f/lbFxCabc9sbE=;
+        b=jmzqg7iXkUIjrg4+0VioG2aemaX6sAg6PzM4d/nF4OD0lwq8ONkDTFzZI6EXvQ+V4D
+         gAe3LY1YN/KshlH67Rx2kFkzA+aFRgyEq4ryjqsRgkUHVPw47YwFNFTDRmzmPQM6DUcP
+         v6Hx1/397lDfuNBuk1UOLIGzF7zMW/ajHQzPRIws+neSHNEzi0nPQMUyPOjoO6J80RnE
+         xLH5Hx/K57N3FLDTRd8GUyuIIxVD/bFzDeT13M8L0ITx4P0BuVrwKUPdfY7e/Cvdadx3
+         gBIxxtwicvEWQRpQ1s3Gw2Im5MAU9PRU/mTRxLBc2c+I5zSI9mYdffj4ZY2cIfq48jvo
+         Hfog==
+X-Gm-Message-State: ABy/qLZ8lCG8hyWPK3nMAKQchnCyK6DvTF8WCrVrxdr+cyfWWBUdvBkk
+        2f0MJC05KYz8r83afqUDxuYSMxUGJ1fsMKPJftM=
+X-Google-Smtp-Source: APBJJlHRvuFCduHH5tQ2+DYic01wPkU/kvXGJwnlInLOsKGdvKug0WZYtaRoBE45TmehG+RPz7wMlc1hz9PXv2etPBc=
+X-Received: by 2002:a25:ad94:0:b0:c12:29ac:1d35 with SMTP id
+ z20-20020a25ad94000000b00c1229ac1d35mr1447153ybi.13.1688076246741; Thu, 29
+ Jun 2023 15:04:06 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/v7kpd+GpS/UEEZf_XL+A/Ri";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230628105303.4053478-1-james.clark@arm.com>
+In-Reply-To: <20230628105303.4053478-1-james.clark@arm.com>
+From:   Namhyung Kim <namhyung@kernel.org>
+Date:   Thu, 29 Jun 2023 15:03:55 -0700
+Message-ID: <CAM9d7cgo97jJTTTV7F2kJ=sF9MBoRwegN4r0dWotbUD=Nr1_cQ@mail.gmail.com>
+Subject: Re: [PATCH v1 0/1] perf tools: Add a place to put kernel config
+ fragments for test runs
+To:     James Clark <james.clark@arm.com>
+Cc:     linux-perf-users@vger.kernel.org, acme@kernel.org,
+        masahiroy@kernel.org, leo.yan@linaro.org, broonie@kernel.org,
+        Aishwarya.TCV@arm.com, Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/v7kpd+GpS/UEEZf_XL+A/Ri
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Hi James,
 
-Hi all,
+On Wed, Jun 28, 2023 at 3:53 AM James Clark <james.clark@arm.com> wrote:
+>
+> Changes since RFC:
+>
+>  * Changed arch filename convention to use the ARCH= build time values
+>    instead of uname
+>
+> It seems like there were no objections on the RFC, apart from maybe
+> changing the perf tests to run as a kself test. But that's probably not
+> going to happen for a while, if ever, and these fragments can always
+> be moved in that case.
 
-Commit
+I missed the RFC, sorry.  Could you please add a link for that?
 
-  de33661d31f7 ("fs: Fix bug in gfs2_freeze_func that can cause deadlock")
+Thanks,
+Namhyung
 
-is missing a Signed-off-by from its committer.
 
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/v7kpd+GpS/UEEZf_XL+A/Ri
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmSd/3UACgkQAVBC80lX
-0Gx0pgf+Ix+y3dBr6d6gOwVLj34EQMxa7JJ72Rn9GTLJ4splhlhzRmtb2Qo8mqHK
-BjGr7EEcvit/WE37VBS6PfxC1imyG9FI9C5yfVCof0c9heNshU2dKfyLWR6gzY6G
-AQ+1topA2vBNugbo2LONB6r+1IAYcQchalu/G4Sd0tx7aX5a3o/p4iY7vY+ZtOqw
-WN5l0zgg3H1bM70NZzQH/HAAxXfs+Qt0tk72oNAv4wN9HHY6CbbNqxcnHaUfTBF+
-FhW2tA/5typRQmEcxLCZAdnfVsj5aiom1Rb40pB0WGP8AC2ezqvz9x/GyXvVhdQh
-eaK6BDgDIhGpCNtQhzYheQXVfzQYyw==
-=O6O9
------END PGP SIGNATURE-----
-
---Sig_/v7kpd+GpS/UEEZf_XL+A/Ri--
+>
+> James Clark (1):
+>   perf tools: Add a place to put kernel config fragments for test runs
+>
+>  tools/perf/tests/config-fragments/README |  7 +++++++
+>  tools/perf/tests/config-fragments/arm64  |  1 +
+>  tools/perf/tests/config-fragments/config | 11 +++++++++++
+>  3 files changed, 19 insertions(+)
+>  create mode 100644 tools/perf/tests/config-fragments/README
+>  create mode 100644 tools/perf/tests/config-fragments/arm64
+>  create mode 100644 tools/perf/tests/config-fragments/config
+>
+>
+> base-commit: ad5f604e186ac08d12c401e34ea96c09c38ddbc5
+> --
+> 2.34.1
+>
