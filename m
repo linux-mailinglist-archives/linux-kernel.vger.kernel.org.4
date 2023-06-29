@@ -2,215 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A50674200F
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 07:46:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B95E742019
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 07:52:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231361AbjF2Fqu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 01:46:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33326 "EHLO
+        id S231319AbjF2Fv5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 01:51:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231332AbjF2Fqj (ORCPT
+        with ESMTP id S231794AbjF2FvI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 01:46:39 -0400
-Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AE73B294E;
-        Wed, 28 Jun 2023 22:46:37 -0700 (PDT)
-Authenticated-By: 
-X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 35T5k3Ey9016346, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (rtexh36506.realtek.com.tw[172.21.6.27])
-        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 35T5k3Ey9016346
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=FAIL);
-        Thu, 29 Jun 2023 13:46:03 +0800
-Received: from RTEXDAG01.realtek.com.tw (172.21.6.100) by
- RTEXH36506.realtek.com.tw (172.21.6.27) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.17; Thu, 29 Jun 2023 13:46:04 +0800
-Received: from RTEXH36506.realtek.com.tw (172.21.6.27) by
- RTEXDAG01.realtek.com.tw (172.21.6.100) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.7; Thu, 29 Jun 2023 13:46:04 +0800
-Received: from localhost.localdomain (172.21.252.101) by
- RTEXH36506.realtek.com.tw (172.21.6.27) with Microsoft SMTP Server id
- 15.1.2507.17 via Frontend Transport; Thu, 29 Jun 2023 13:46:04 +0800
-From:   Stanley Chang <stanley_chang@realtek.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     Stanley Chang <stanley_chang@realtek.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        "Douglas Anderson" <dianders@chromium.org>,
-        Ray Chi <raychi@google.com>,
-        "Flavio Suligoi" <f.suligoi@asem.it>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        <linux-phy@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>
-Subject: [PATCH v6 5/5] dt-bindings: phy: realtek: Add the doc about the Realtek SoC USB 3.0 PHY
-Date:   Thu, 29 Jun 2023 13:45:13 +0800
-Message-ID: <20230629054523.7519-5-stanley_chang@realtek.com>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230629054523.7519-1-stanley_chang@realtek.com>
-References: <20230629054523.7519-1-stanley_chang@realtek.com>
+        Thu, 29 Jun 2023 01:51:08 -0400
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43AC42D4C
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 22:51:03 -0700 (PDT)
+Received: by mail-wr1-x42a.google.com with SMTP id ffacd0b85a97d-313e742a787so191167f8f.1
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 22:51:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1688017862; x=1690609862;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=peZonunRaJ95r6T1skx2hyGoFsSu6wDgzOW9qrfM4Kc=;
+        b=tgfy8qGSD65HWBeWSIUrq2wWBy9Vd26n+4f51LYynMfXR3xx01skrGd0sgmMs9OpTA
+         cDfcerpQwY09qL8vel86+NmxTEhQm3d7DtER7CT5WcpLGRGcWN4tn6MU+ZAPaOy5EGMt
+         9ONOUxTd0gHb4ERi6CPsC0jpfU6kqDRFQ/VbLOZJpmY/DHvICxEkLpC5RzneK7k7+bAs
+         +5P3tk4Bk0OmQUYahxXdYCKj+cg1pSHaWjtPI7661o5+BEAMmXdiPABIbXPe8IcwZ37r
+         nsFbf99Gk5ZwMYha6mtBhmDaM4auoL9kE8but4ai5jRteblHx2prqqfj8oZ6nV1zQtTz
+         APoA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688017862; x=1690609862;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=peZonunRaJ95r6T1skx2hyGoFsSu6wDgzOW9qrfM4Kc=;
+        b=ZMAYoOun+DzgHaeL4XK37zojjp7EkIkqM9d4zUftZDLpcrEZQJ7bU66LIR0NjWB4CE
+         k5RlvgM5PPHUIB0zD7r3Y4B7blok7UZ+BFxHV++etGsx7eDDN9LR4Wv6NZQGcKN+8tCI
+         4Gb817isLh7DMGlf6fxoQTxXzMChQa7zYLhGINW4fIb7L7dD9p626Jffzquu417JoOcl
+         O7ZiAUhAVU5lDa0ZLrF6poc5wp4y/XuZGMVtjOha8Tjknigb0YNZbzKPR3wDUez1P8on
+         I76VsJFhZbq+T9pdBYLDcadZGkLaRmlI69NuuUxo87TqrwRELci3+CHK3dNyM0hbWily
+         MGmg==
+X-Gm-Message-State: AC+VfDybQHze8bla6pauPJ0N2WQGIMadYHtXyFEsc50vVKBs9DbMvMmX
+        USIeohsnZeQ/RlFOynaO8etJ+Q==
+X-Google-Smtp-Source: ACHHUZ46bnTv4fp7Jqwr00dopnJCmcDpYeZN2PzIZLASW0OP/E6OKDKyB66Uq90f9l+06/VSKbnd8w==
+X-Received: by 2002:adf:fd51:0:b0:313:eeb0:224c with SMTP id h17-20020adffd51000000b00313eeb0224cmr3055104wrs.28.1688017861739;
+        Wed, 28 Jun 2023 22:51:01 -0700 (PDT)
+Received: from localhost ([102.36.222.112])
+        by smtp.gmail.com with ESMTPSA id z16-20020a5d4d10000000b00313eeca9f4asm11425249wrt.14.2023.06.28.22.50.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 28 Jun 2023 22:50:59 -0700 (PDT)
+Date:   Thu, 29 Jun 2023 08:50:57 +0300
+From:   Dan Carpenter <dan.carpenter@linaro.org>
+To:     yunchuan <yunchuan@nfschina.com>
+Cc:     "Russell King (Oracle)" <linux@armlinux.org.uk>,
+        iyappan@os.amperecomputing.com, keyur@os.amperecomputing.com,
+        quan@os.amperecomputing.com, andrew@lunn.ch, hkallweit1@gmail.com,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
+Subject: Re: [PATCH net-next 08/10] net: mdio: Remove unnecessary (void*)
+ conversions
+Message-ID: <3fda1d81-e350-42e9-8fec-6f107ae75932@kadam.mountain>
+References: <ZJwCcWgi0d6kEepI@shell.armlinux.org.uk>
+ <325f00e3-1dfd-f77b-9795-6f89e44c0417@nfschina.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-KSE-ServerInfo: RTEXDAG01.realtek.com.tw, 9
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-KSE-Antivirus-Interceptor-Info: fallback
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <325f00e3-1dfd-f77b-9795-6f89e44c0417@nfschina.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the documentation explain the property about Realtek USB PHY driver.
+On Thu, Jun 29, 2023 at 09:59:56AM +0800, yunchuan wrote:
+> On 2023/6/28 17:50, Russell King (Oracle) wrote:
+> > On Wed, Jun 28, 2023 at 10:45:17AM +0800, wuych wrote:
+> > > @@ -211,7 +211,7 @@ static void xgene_enet_wr_mdio_csr(void __iomem *base_addr,
+> > >   static int xgene_xfi_mdio_write(struct mii_bus *bus, int phy_id,
+> > >   				int reg, u16 data)
+> > >   {
+> > > -	void __iomem *addr = (void __iomem *)bus->priv;
+> > > +	void __iomem *addr = bus->priv;
+> > >   	int timeout = 100;
+> > >   	u32 status, val;
+> > > @@ -234,7 +234,7 @@ static int xgene_xfi_mdio_write(struct mii_bus *bus, int phy_id,
+> > >   static int xgene_xfi_mdio_read(struct mii_bus *bus, int phy_id, int reg)
+> > >   {
+> > > -	void __iomem *addr = (void __iomem *)bus->priv;
+> > > +	void __iomem *addr = bus->priv;
+> > >   	u32 data, status, val;
+> > >   	int timeout = 100;
+> > These probably cause Sparse to warn whether or not the cast is there.
+> 
+> Hi, Russell King,
+> 
+> I didn't notice this Sparse warning.
+> Should I remove this cast although it cause Sparse warning?
 
-Realtek DHC (digital home center) RTD SoCs support DWC3 XHCI USB
-controller. Added the driver to drive the  USB 3.0 PHY transceivers.
+No.  Don't introduce new Sparse warnings.
 
-Signed-off-by: Stanley Chang <stanley_chang@realtek.com>
----
-v5 to v6 change:
-    Drop the labels of example.
-v4 to v5 change:
-    1. Remove the compatible realtek,usb3phy.
-    2. Add the default of the property.
-v3 to v4 change:
-    1. Remove the parameter and non hardware properties from dts.
-    2. Using the compatible data included the config and parameter
-       in driver.
-v2 to v3 change:
-    1. Broken down into two patches, one for each of USB 2 & 3.
-    2. Add more description about Realtek RTD SoCs architecture.
-    3. Removed parameter v1 support for simplification.
-    4. Revised the compatible name for fallback compatible.
-    5. Remove some properties that can be set in the driver.
-v1 to v2 change:
-    Add phy-cells for generic phy driver
----
- .../bindings/phy/realtek,usb3phy.yaml         | 107 ++++++++++++++++++
- 1 file changed, 107 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/phy/realtek,usb3phy.yaml
-
-diff --git a/Documentation/devicetree/bindings/phy/realtek,usb3phy.yaml b/Documentation/devicetree/bindings/phy/realtek,usb3phy.yaml
-new file mode 100644
-index 000000000000..1a6cdc1ee073
---- /dev/null
-+++ b/Documentation/devicetree/bindings/phy/realtek,usb3phy.yaml
-@@ -0,0 +1,107 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-+# Copyright 2023 Realtek Semiconductor Corporation
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/phy/realtek,usb3phy.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Realtek DHC SoCs USB 3.0 PHY
-+
-+maintainers:
-+  - Stanley Chang <stanley_chang@realtek.com>
-+
-+description:
-+  Realtek USB 3.0 PHY support the digital home center (DHC) RTD series SoCs.
-+  The USB 3.0 PHY driver is designed to support the XHCI controller. The SoCs
-+  support multiple XHCI controllers. One PHY device node maps to one XHCI
-+  controller.
-+
-+  RTD1295/RTD1619 SoCs USB
-+  The USB architecture includes three XHCI controllers.
-+  Each XHCI maps to one USB 2.0 PHY and map one USB 3.0 PHY on some
-+  controllers.
-+  XHCI controller#0 -- usb2phy -- phy#0
-+                    |- usb3phy -- phy#0
-+  XHCI controller#1 -- usb2phy -- phy#0
-+  XHCI controller#2 -- usb2phy -- phy#0
-+                    |- usb3phy -- phy#0
-+
-+  RTD1319/RTD1619b SoCs USB
-+  The USB architecture includes three XHCI controllers.
-+  Each XHCI maps to one USB 2.0 PHY and map one USB 3.0 PHY on controllers#2.
-+  XHCI controller#0 -- usb2phy -- phy#0
-+  XHCI controller#1 -- usb2phy -- phy#0
-+  XHCI controller#2 -- usb2phy -- phy#0
-+                    |- usb3phy -- phy#0
-+
-+  RTD1319d SoCs USB
-+  The USB architecture includes three XHCI controllers.
-+  Each xhci maps to one USB 2.0 PHY and map one USB 3.0 PHY on controllers#0.
-+  XHCI controller#0 -- usb2phy -- phy#0
-+                    |- usb3phy -- phy#0
-+  XHCI controller#1 -- usb2phy -- phy#0
-+  XHCI controller#2 -- usb2phy -- phy#0
-+
-+properties:
-+  compatible:
-+    enum:
-+      - realtek,rtd1295-usb3phy
-+      - realtek,rtd1319-usb3phy
-+      - realtek,rtd1319d-usb3phy
-+      - realtek,rtd1619-usb3phy
-+      - realtek,rtd1619b-usb3phy
-+
-+  reg:
-+    maxItems: 1
-+
-+  "#phy-cells":
-+    const: 0
-+
-+  nvmem-cells:
-+    maxItems: 1
-+    description: A phandle to the tx lfps swing trim data provided by
-+      a nvmem device, if unspecified, default values shall be used.
-+
-+  nvmem-cell-names:
-+    items:
-+      - const: usb_u3_tx_lfps_swing_trim
-+
-+  realtek,amplitude-control-coarse-tuning:
-+    description:
-+      This adjusts the signal amplitude for normal operation and beacon LFPS.
-+      This value is a parameter for coarse tuning.
-+      For different boards, if the default value is inappropriate, this
-+      property can be assigned to adjust.
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    default: 255
-+    minimum: 0
-+    maximum: 255
-+
-+  realtek,amplitude-control-fine-tuning:
-+    description:
-+      This adjusts the signal amplitude for normal operation and beacon LFPS.
-+      This value is used for fine-tuning parameters.
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    default: 65535
-+    minimum: 0
-+    maximum: 65535
-+
-+required:
-+  - compatible
-+  - reg
-+  - "#phy-cells"
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    usb-phy@13e10 {
-+        compatible = "realtek,rtd1319d-usb3phy";
-+        reg = <0x13e10 0x4>;
-+        #phy-cells = <0>;
-+
-+        nvmem-cells = <&otp_usb_u3_tx_lfps_swing_trim>;
-+        nvmem-cell-names = "usb_u3_tx_lfps_swing_trim";
-+
-+        realtek,amplitude-control-coarse-tuning = <0x77>;
-+    };
--- 
-2.34.1
+regards,
+dan carpenter
 
