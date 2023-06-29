@@ -2,127 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F675742387
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 11:52:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B8917742362
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 11:43:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231899AbjF2JwA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 05:52:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45420 "EHLO
+        id S231546AbjF2JnS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 05:43:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231668AbjF2Jv5 (ORCPT
+        with ESMTP id S229739AbjF2JnO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 05:51:57 -0400
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1DF510B;
-        Thu, 29 Jun 2023 02:51:56 -0700 (PDT)
-Received: by mail-pg1-x52d.google.com with SMTP id 41be03b00d2f7-54fb23ff7d3so280743a12.0;
-        Thu, 29 Jun 2023 02:51:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688032316; x=1690624316;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=qCVMSh+Gk7RDucVnKBNJ47jVZEjgab0+pY4wh/BjYmA=;
-        b=rJZQYkVlRrCwXyjUd1VxsL/89t9+rbNH9Vn8RGDDYB1utPax3YE7YtaM7jINyNL9Uk
-         mM/MeD2Ys4O/TbpQ60UelcpoXBiu4Y/T/63lw5JKTXpkB3UZmNnW/YmvX23JuNTDjr1k
-         S+4//VjOQYwhEHDfLigBOSEid1qrHpP+WRtiB4T7sy1yUdIDJ8lQEaBF7HsdMq+3UT3s
-         336vBe21TrPs7b8xkiHoq8Nv0G0wBdpmKO7op56Y3jOlKG6HiWn3ee553ckcuVM4zJQi
-         dttYYhKx54eoVJMAgkHdJdfa4YiR1y/ccYTXp2o4E0aWfWZF1HY3TSSYXINYl/y3ZK0F
-         tHxw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688032316; x=1690624316;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=qCVMSh+Gk7RDucVnKBNJ47jVZEjgab0+pY4wh/BjYmA=;
-        b=aalMKdZsw0AIU+bo7ELjML3bSPIAtrp98y6QoAVpcRDNpLwX2HYo6ygDSVsEybGWGW
-         iESJg7FQO+Pmo4GjQ53LlVwKOX+FNySF5nlOpQKjadiD915iYNuDDaVGFCF60j6ccEZ7
-         MNZyGGXoFga7Sl+Hx4PqaVYeJEn7j/8Lt62H979bure6tLd00dhnD4y0rx3P4DdsFMON
-         7z/rb15KTfZwO8rlKj8FJyAhdV/IjlMJ9+VeLs9gSfAjGK+y2lLnp8St9+T/TXXqbFUj
-         bXZdj4z6zxHF8Q2NwOdUR6qgNpjOgLaHY4VBPn/5ChJedvvBt303Zh3HerUdduyCxNnU
-         xwAw==
-X-Gm-Message-State: AC+VfDyfV7O1k+YuOHoT4QEcjXZ6q7r1ry1F/42T5F0muTHxbRlvxzm0
-        Bk2uqmrrjMtCcZm772ITKUQ=
-X-Google-Smtp-Source: ACHHUZ6KvjHX1bdqc4J+WW2IvvT5dOtpHWA8sqwO0KOM07SCJ3+GVZ155FnzXHavmTxfYkKmNvyc9Q==
-X-Received: by 2002:a05:6a20:244a:b0:12b:b9c0:aa61 with SMTP id t10-20020a056a20244a00b0012bb9c0aa61mr6503693pzc.29.1688032315991;
-        Thu, 29 Jun 2023 02:51:55 -0700 (PDT)
-Received: from localhost.localdomain ([43.224.245.252])
-        by smtp.gmail.com with ESMTPSA id q11-20020a170902dacb00b001b20dc1b3b9sm8776905plx.104.2023.06.29.02.51.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Jun 2023 02:51:55 -0700 (PDT)
-From:   ruihongluo <colorsu1922@gmail.com>
-X-Google-Original-From: ruihongluo <luoruihong@xiaomi.com>
-To:     andriy.shevchenko@linux.intel.com
-Cc:     colorsu1922@gmail.com, gregkh@linuxfoundation.org,
-        ilpo.jarvinen@linux.intel.com, jirislaby@kernel.org,
-        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
-        luoruihong@xiaomi.com, wengjinfei@xiaomi.com,
-        weipengliang@xiaomi.com
-Subject: [PATCH v2 1/1] serial: 8250: Preserve original value of DLF register
-Date:   Thu, 29 Jun 2023 17:42:05 +0800
-Message-Id: <20230629094204.60246-1-luoruihong@xiaomi.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <ZJ1M5QvyWzgWNlpE@smile.fi.intel.com>
-References: <ZJ1M5QvyWzgWNlpE@smile.fi.intel.com>
+        Thu, 29 Jun 2023 05:43:14 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9A77ED;
+        Thu, 29 Jun 2023 02:43:13 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5E98A6150C;
+        Thu, 29 Jun 2023 09:43:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D8F7C433C0;
+        Thu, 29 Jun 2023 09:43:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688031792;
+        bh=wzR8YZnxm3FG7gwYs5SdxjfCUJ2NXEhOFnOR0leXfts=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=TxlqtQPOajshWpjFna9G6VbJOeh8zHECorIIqQlvPPPQyHYCRbGuSIuZlYyeilevd
+         5Lia1h5+HRqmaM1fej92tx1ZC7o7S2CgedzSniTSwOKxGTJB96ZbUhtFy0+JQQP7az
+         MMMcBFjv06KbCdIpK/mCrznNAppuXgT+dkUp614c3cg8HKv19CY4/pXBgnRqSzBbNW
+         7wXcWilQnGauItgDfq3a+xZLhBatp5mYGIxeUruqr/THmVHNzVDel6RZ68aBrfFPZj
+         ACGyPmy3EPmNaWjpeDLBAH/umcemXf2S3dpgclpXvx8Xb/8RrEoi8zLTHDGjkNP4WY
+         WKEdpiIQhIyWQ==
+Message-ID: <cefae2c3-c8b5-f5ff-13dc-e8527ca2346f@kernel.org>
+Date:   Thu, 29 Jun 2023 18:43:10 +0900
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH v4 4/4] ublk: add zone append
+Content-Language: en-US
+To:     "Andreas Hindborg (Samsung)" <nmi@metaspace.dk>,
+        Ming Lei <ming.lei@redhat.com>
+Cc:     Hans Holmberg <Hans.Holmberg@wdc.com>,
+        Aravind Ramesh <Aravind.Ramesh@wdc.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        "open list:BLOCK LAYER" <linux-block@vger.kernel.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Matias Bjorling <Matias.Bjorling@wdc.com>,
+        open list <linux-kernel@vger.kernel.org>, gost.dev@samsung.com,
+        Minwoo Im <minwoo.im.dev@gmail.com>
+References: <20230628190649.11233-1-nmi@metaspace.dk>
+ <20230628190649.11233-5-nmi@metaspace.dk>
+ <ZJzwcG2gIxXh8HbE@ovpn-8-18.pek2.redhat.com> <87edluy5l3.fsf@metaspace.dk>
+From:   Damien Le Moal <dlemoal@kernel.org>
+Organization: Western Digital Research
+In-Reply-To: <87edluy5l3.fsf@metaspace.dk>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This commit is aimed at preserving the original value of the
-DLF(Divisor Latch Fraction Register). When the DLF register is
-modified without preservation, it can disrupt the baudrate settings
-established by firmware or bootloader , leading to data corruption
-and the generation of unreadable or distorted characters.
+On 6/29/23 18:17, Andreas Hindborg (Samsung) wrote:
+> 
+> Ming Lei <ming.lei@redhat.com> writes:
+> 
+>> On Wed, Jun 28, 2023 at 09:06:49PM +0200, Andreas Hindborg wrote:
+>>> From: Andreas Hindborg <a.hindborg@samsung.com>
+>>>
+>>> Add zone append feature to ublk. This feature uses the `addr` field of `struct
+>>> ublksrv_io_cmd`. Therefore ublk must be used with the user copy
+>>> feature (UBLK_F_USER_COPY) for zone append to be available. Without this
+>>> feature, ublk will fail zone append requests.
+>>
+>> Given zone append is a must, please fail to add device in case of zoned
+>> and !user_copy, then we can make fast IO code path clean.
+> 
+> I will squash the patches and reject zone support if not user copy is
+> enabled 👍
 
-Fixes: 701c5e73b296 ("serial: 8250_dw: add fractional divisor support")
+Or if !CONFIG_BLK_DEV_ZONED or if the user specifies a bad parameter (invalid
+limits etc).
 
-Signed-off-by: ruihongluo <luoruihong@xiaomi.com>
----
-v2:
-- added fixes tag
- 
- drivers/tty/serial/8250/8250_dwlib.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/tty/serial/8250/8250_dwlib.c b/drivers/tty/serial/8250/8250_dwlib.c
-index 75f32f054ebb..d30957722da8 100644
---- a/drivers/tty/serial/8250/8250_dwlib.c
-+++ b/drivers/tty/serial/8250/8250_dwlib.c
-@@ -244,7 +244,7 @@ void dw8250_setup_port(struct uart_port *p)
- 	struct dw8250_port_data *pd = p->private_data;
- 	struct dw8250_data *data = to_dw8250_data(pd);
- 	struct uart_8250_port *up = up_to_u8250p(p);
--	u32 reg;
-+	u32 reg, orig;
- 
- 	pd->hw_rs485_support = dw8250_detect_rs485_hw(p);
- 	if (pd->hw_rs485_support) {
-@@ -270,9 +270,11 @@ void dw8250_setup_port(struct uart_port *p)
- 	dev_dbg(p->dev, "Designware UART version %c.%c%c\n",
- 		(reg >> 24) & 0xff, (reg >> 16) & 0xff, (reg >> 8) & 0xff);
- 
-+	/* Preserve value written by firmware or bootloader  */
-+	orig = dw8250_readl_ext(p, DW_UART_DLF);
- 	dw8250_writel_ext(p, DW_UART_DLF, ~0U);
- 	reg = dw8250_readl_ext(p, DW_UART_DLF);
--	dw8250_writel_ext(p, DW_UART_DLF, 0);
-+	dw8250_writel_ext(p, DW_UART_DLF, orig);
- 
- 	if (reg) {
- 		pd->dlf_size = fls(reg);
 -- 
-Just wanted to drop a quick note to say thanks for your help with git
-send-email and code modifications.
-Your assistance on the details was much appreciated.
-
-Best regards,
-Ruihong Luo
+Damien Le Moal
+Western Digital Research
 
