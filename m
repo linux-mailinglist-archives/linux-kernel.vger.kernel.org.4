@@ -2,89 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B103B7427F4
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 16:08:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 246857427E0
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 16:02:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232196AbjF2OIS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 10:08:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53226 "EHLO
+        id S231821AbjF2OCy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 10:02:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231443AbjF2OIP (ORCPT
+        with ESMTP id S230119AbjF2OCw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 10:08:15 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 498A626B6;
-        Thu, 29 Jun 2023 07:08:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1688047694; x=1719583694;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=xmDZpF6sc1XpPDTUdv/IYr02rtOyyvGSFPAQ64hfvSc=;
-  b=O9a6JblVm8P/sVHwidDQ0hN+lXyUZDUdaPvOvweRUcP1nf4X4bMWsoh3
-   yfGaUh33Z4hgxvzDj6RQJgURzTwP7aYERKiKbesPhgNLT/8+CbCM03OmY
-   weyUDKgusHAQzyLZWJPkFEwzYKbb3U/+dmi/EdxqDXhZpk36XQ4xAjqn3
-   nK3wZufEiJ98gC/P4Qsn/y6gBNaFFYbcR8VJIc5z0uMAW91JRB52JLyfT
-   RtdATzwgMW1KOJPTy9ROCGoS3SYhV80g0vWPwLqidiUdvyijT3k3cO7L5
-   pASNYetcqLzrcAoZ46Fymobo2696uqjq2hWlFcihlxQc+xxsR7dcCPcEG
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10756"; a="428149996"
-X-IronPort-AV: E=Sophos;i="6.01,168,1684825200"; 
-   d="scan'208";a="428149996"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jun 2023 06:55:50 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10756"; a="1047776124"
-X-IronPort-AV: E=Sophos;i="6.01,168,1684825200"; 
-   d="scan'208";a="1047776124"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga005.fm.intel.com with ESMTP; 29 Jun 2023 06:55:47 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1qEs7e-000sBw-1G;
-        Thu, 29 Jun 2023 16:55:46 +0300
-Date:   Thu, 29 Jun 2023 16:55:46 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Astrid Rost <astrid.rost@axis.com>
-Cc:     Dan Murphy <dmurphy@ti.com>, Andrew Davis <afd@ti.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>,
-        kernel@axis.com, linux-leds@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 1/2] led: leds-lp50xx: Add max-brightness as in
- leds-pwm
-Message-ID: <ZJ2NYrskskXCNJZv@smile.fi.intel.com>
-References: <20230629134722.3908637-1-astrid.rost@axis.com>
- <20230629134722.3908637-2-astrid.rost@axis.com>
+        Thu, 29 Jun 2023 10:02:52 -0400
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFA911FD8
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 07:02:50 -0700 (PDT)
+Received: by mail-wm1-x335.google.com with SMTP id 5b1f17b1804b1-3fbc244d384so324675e9.0
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 07:02:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1688047369; x=1690639369;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=YHaMB6/FLbcCsrNQHZRYMsF90ZUBoVOl41MzNpLMLOg=;
+        b=MI2xn5x+fXgHT4JtTHtDW2sVILJEsu7p+gjpesVu7Irqocx3MGZa8AalZWTBVjMTCH
+         eb0mU46F0aXNLos8OIYuFs/OYJVkzA9XzoPzYjWFvymqqvrWnU+tqC4DWE96QnXvvEq4
+         j2mkLWRxZwxiVoC0EdKrs53jlt5g5Ge8JgJWAyVPuGQ4WLSjlrY28FDZxZOLWHA3/fWt
+         qvDNOmpvmzdiUhEmfLd4rvo9CWse+hOboN0eiq3UhsgmsNP0QnfnnIhwew7lvq4jMQlG
+         CHI4XSAknM6d8d5D2OpdYd9jjIGqfXJbwiRatK1I6qJnja0ri+ctw5ue/f8TsX4JbPTO
+         XPgg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688047369; x=1690639369;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=YHaMB6/FLbcCsrNQHZRYMsF90ZUBoVOl41MzNpLMLOg=;
+        b=E/qMFCNeAC6IM5/HdD+BAjQhu/a/z2LqwaJ1zeqBBB3rxhVbHXn6rWCFVyzbdGuyNA
+         rIbHip9mt1e7dRWCd5j2rTKd8LN0233L/rWMq2t8ceFh6XljTeGOqMc0Xd8V5Jatl3oy
+         XiRU+qoqJuybWFLLBDQ+zw3kVRyG8aXzSrgdTo+9mjYoYhJRByksB+9TbIGfcDxm8qJu
+         VuGuMt/wrgBxTbSZP9XAWqqe8FBY66dXcR05/YcFgxE8Vh6ov9i46ZUCgqygnlWs0pph
+         d6Iv+Rt4giJCUj3joJECsb1XGQ+elxBjb4iuRkUtJgoBV9dWbEqXxgvXVZm9D7NX1PUE
+         oN3g==
+X-Gm-Message-State: AC+VfDxgcJpWszo9COgt20iD3HCwmJOjXsGtaz2mRkWIgRzFkfdG7wtG
+        h6PzqEq7llt47pIJ5cVFSfSRhA==
+X-Google-Smtp-Source: ACHHUZ6Q6NuL7NW14CNjoHX5Owgtx0nXSOiYSjO3hoclgCq4/YkT20HjZSUWkc8hEOQGN4FxMeLOjA==
+X-Received: by 2002:a1c:4b0d:0:b0:3fa:e92e:7a8b with SMTP id y13-20020a1c4b0d000000b003fae92e7a8bmr7962800wma.13.1688047369354;
+        Thu, 29 Jun 2023 07:02:49 -0700 (PDT)
+Received: from wychelm (aztw-34-b2-v4wan-166919-cust780.vm26.cable.virginm.net. [82.37.195.13])
+        by smtp.gmail.com with ESMTPSA id p8-20020a7bcc88000000b003fb225d414fsm10140509wma.21.2023.06.29.07.02.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 29 Jun 2023 07:02:49 -0700 (PDT)
+Date:   Thu, 29 Jun 2023 15:02:46 +0100
+From:   Daniel Thompson <daniel.thompson@linaro.org>
+To:     guoren@kernel.org
+Cc:     arnd@arndb.de, palmer@rivosinc.com, tglx@linutronix.de,
+        peterz@infradead.org, luto@kernel.org, conor.dooley@microchip.com,
+        heiko@sntech.de, jszhang@kernel.org, lazyparser@gmail.com,
+        falcon@tinylab.org, chenhuacai@kernel.org, apatel@ventanamicro.com,
+        atishp@atishpatra.org, mark.rutland@arm.com, ben@decadent.org.uk,
+        bjorn@kernel.org, palmer@dabbelt.com, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        Guo Ren <guoren@linux.alibaba.com>,
+        =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@rivosinc.com>,
+        Yipeng Zou <zouyipeng@huawei.com>,
+        Vincent Chen <vincent.chen@sifive.com>
+Subject: Re: [PATCH -next V17 4/7] riscv: entry: Convert to generic entry
+Message-ID: <ZJ2PBosSQtSX28Mf@wychelm>
+References: <20230222033021.983168-1-guoren@kernel.org>
+ <20230222033021.983168-5-guoren@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20230629134722.3908637-2-astrid.rost@axis.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230222033021.983168-5-guoren@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 29, 2023 at 03:47:21PM +0200, Astrid Rost wrote:
-> Add max-brightness in order to reduce the current on the connected LEDs.
-> Normally, the maximum brightness is determined by the hardware, and this
-> property is not required. This property is used to set a software limit.
-> It could happen that an LED is made so bright that it gets damaged or
-> causes damage due to restrictions in a specific system, such as mounting
-> conditions.
+On Tue, Feb 21, 2023 at 10:30:18PM -0500, guoren@kernel.org wrote:
+> From: Guo Ren <guoren@linux.alibaba.com>
+>
+> This patch converts riscv to use the generic entry infrastructure from
+> kernel/entry/*. The generic entry makes maintainers' work easier and
+> codes more elegant. Here are the changes:
+>
+>  - More clear entry.S with handle_exception and ret_from_exception
+>  - Get rid of complex custom signal implementation
+>  - Move syscall procedure from assembly to C, which is much more
+>    readable.
+>  - Connect ret_from_fork & ret_from_kernel_thread to generic entry.
+>  - Wrap with irqentry_enter/exit and syscall_enter/exit_from_user_mode
+>  - Use the standard preemption code instead of custom
+>
+> Suggested-by: Huacai Chen <chenhuacai@kernel.org>
+> Reviewed-by: Björn Töpel <bjorn@rivosinc.com>
+> Tested-by: Yipeng Zou <zouyipeng@huawei.com>
+> Tested-by: Jisheng Zhang <jszhang@kernel.org>
+> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+> Signed-off-by: Guo Ren <guoren@kernel.org>
+> Cc: Ben Hutchings <ben@decadent.org.uk>
 
-This will be 4th driver in the LED subsystem that will use this (optional)
-property. Perhaps it's time to actually move it to the LED generic bindings
-and call this from led_parse_fwnode_props()?
+Apologies for the late feedback but I've been swamped lately and only
+recently got round to running the full kgdb test suite on the v6.4
+series.
 
--- 
-With Best Regards,
-Andy Shevchenko
+The kgdb test suite includes a couple of tests that verify that the
+system resumes after breakpointing due to a BUG():
+https://github.com/daniel-thompson/kgdbtest/blob/master/tests/test_kdb_fault_injection.py#L24-L45
+
+These tests have regressed on riscv between v6.3 and v6.4 and a bisect
+is pointing at this patch. With these changes in place then, after kdb
+resumes the system, the BUG() message is printed as normal but then
+immediately fails. From the backtrace it looks like the new entry/exit
+code cannot advance past a compiled breakpoint instruction:
+~~~
+PANIC: Fatal exception in interrupt
+
+Entering kdb (current=0xff60000001a2a280, pid 104) on processor 1 due to
+NonMask
+able Interrupt @ 0xffffffff800bb3c4
+[1]kdb> bt
+Stack traceback for pid 104
+0xff60000001a2a280      104       92  1    1   R  0xff60000001a2ac50
+*echo
+CPU: 1 PID: 104 Comm: echo Tainted: G      D
+6.3.0-rc1-00003-gf0bddf50586d #119
+Hardware name: riscv-virtio,qemu (DT)
+Call Trace:
+[<ffffffff800050dc>] dump_backtrace+0x1c/0x24
+[<ffffffff808458f8>] show_stack+0x2c/0x38
+[<ffffffff80851b00>] dump_stack_lvl+0x3c/0x54
+[<ffffffff80851b2c>] dump_stack+0x14/0x1c
+[<ffffffff800bc4b8>] kdb_dump_stack_on_cpu+0x64/0x66
+[<ffffffff800c3d2a>] kdb_show_stack+0x82/0x88
+[<ffffffff800c3dc0>] kdb_bt1+0x90/0xf2
+[<ffffffff800c4206>] kdb_bt+0x34c/0x384
+[<ffffffff800c1d28>] kdb_parse+0x27a/0x618
+[<ffffffff800c2566>] kdb_main_loop+0x3b2/0x8fa
+[<ffffffff800c4c5a>] kdb_stub+0x1ba/0x3a8
+[<ffffffff800bbba8>] kgdb_cpu_enter+0x342/0x5ba
+[<ffffffff800bc3da>] kgdb_handle_exception+0xe0/0x11a
+[<ffffffff8000810c>] kgdb_riscv_notify+0x86/0xb4
+[<ffffffff8002f210>] notify_die+0x6a/0xa6
+[<ffffffff80004db0>] handle_break+0x70/0xe0
+[<ffffffff80852462>] do_trap_break+0x48/0x5c
+[<ffffffff80003598>] ret_from_exception+0x0/0x64
+[<ffffffff800bb3c4>] kgdb_compiled_break+0x0/0x14
+~~~
 
 
+Daniel.
