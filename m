@@ -2,59 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6190742A51
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 18:10:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01663742A55
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 18:11:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232279AbjF2QKB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 12:10:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36970 "EHLO
+        id S232308AbjF2QLG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 12:11:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232212AbjF2QJx (ORCPT
+        with ESMTP id S232073AbjF2QLF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 12:09:53 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AE651FD2;
-        Thu, 29 Jun 2023 09:09:52 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CD1B16156D;
-        Thu, 29 Jun 2023 16:09:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F6EDC433C0;
-        Thu, 29 Jun 2023 16:09:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688054991;
-        bh=vhzCcDGrCZn7v/AnfX+ZlH4QkMwDK30If/JXCB4OF1I=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=VkVAWEkBpAUYJ1VHDghx8U2eug8D2go4ktax+QI74KbTtX9ZuyMle1c//inrZ5+W1
-         z2uuCOeOy3afDTZqlHJK7kzn2XOobOrrNW+8kROq49Bb5XT8zYvhV55kkcE4QpWiGG
-         5ORA/tY+0NmiYqL69wtae/pnhVu6YsmSK6UzOYKWVtOipscoWzhw7VIi66D8kwXfoR
-         OXLBlndW03mlgWAalhulj/OnkwZgx78DQgD1/GWtZeIdTw4s5KaTj4rVoaVF1CwsRO
-         X7ae9IR2Y5fvY4yqlqky7hTWfPjYTnW+gkw8dz4ggA39RsX7rk4vYaVWgYRmY4YCUg
-         pwOsMozFGEBWg==
-Date:   Thu, 29 Jun 2023 11:09:49 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Amadeusz =?utf-8?B?U8WCYXdpxYRza2k=?= 
-        <amadeuszx.slawinski@linux.intel.com>
-Cc:     Bjorn Helgaas <bhelgaas@google.com>,
-        Mark Brown <broonie@kernel.org>, Takashi Iwai <tiwai@suse.com>,
-        alsa-devel@alsa-project.org, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Cezary Rojewski <cezary.rojewski@intel.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
-        Andy Shevchenko <andriy.shevchenko@intel.com>
-Subject: Re: [RFC PATCH 1/8] PCI: Add Intel Audio DSP devices to pci_ids.h
-Message-ID: <20230629160949.GA399417@bhelgaas>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230628205135.517241-2-amadeuszx.slawinski@linux.intel.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UPPERCASE_50_75
+        Thu, 29 Jun 2023 12:11:05 -0400
+Received: from mail-wr1-x449.google.com (mail-wr1-x449.google.com [IPv6:2a00:1450:4864:20::449])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1170F1FD2
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 09:11:04 -0700 (PDT)
+Received: by mail-wr1-x449.google.com with SMTP id ffacd0b85a97d-313f10072daso440396f8f.1
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 09:11:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1688055062; x=1690647062;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=NL2SfduPuknbakdHrvQPYI8YmFq0SZdmNsLJ3kLZ9cI=;
+        b=QlfLLSyhKrffp5bj7j/booxuvQr86XsATuUxXtNZqRPzTaEUjLpkCMkZUYFX/3Eb9d
+         RB8o4oGbBQBwUckbJZodb4pC5WzxWVOU7s9B1BqeZva1nlh2Z7QE1Dx6LTs1OQTCV6hh
+         Nj3CHmCz/Lv5ALT9jqzI3p+HDUmMoaxM2PFRHMFX+Ph/LZQ68EsF0GwrTtQwfcXyGlhA
+         ztUwtHXKQAjx0v98Rh+61rKdlHvDHajSPYLioqZZPDlQNokeq1SzCWkHV8tOtRmwlk3/
+         RTKNGz3TzTW1F4x2Vrm/qfbaYVyklDDBjyN0kbFDSyIhNEQ+f0+4o1sH4TmY0R49KA1n
+         0glg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688055062; x=1690647062;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=NL2SfduPuknbakdHrvQPYI8YmFq0SZdmNsLJ3kLZ9cI=;
+        b=X5TiQLpziNCtrVxALDQQJRRjNOHDG5iPoNyc2VvO8iewmCU/lV/TS14sK2ZjuGxZG6
+         zG6/xrrnwY8FLRmGSkotLkwzdE4mtsXsJv7EgKHXYP1G33nD1ju6MXp2JQRB+cRBX/Gb
+         ZB6FcdsJNjtwtnA+ufEg/ifRB7LwUWZpq+NvVh1JTGLIViT1gjvHNpah/90l8NxjtDVH
+         TH65mAjbmtPfoZHVbH8H12mYetYec9JHXESJrgoGr21NTuFXvh7ZgcolIb+vEFMdiZt2
+         f1Tj4GKCdgCvXNsNHnNiJSBUswXVmpy59sVI3JdC7x35pBHz6GhBMxXltSqjAlYoivBv
+         /lHA==
+X-Gm-Message-State: ABy/qLbd8mlDqQSlcbqVulStazXZrz1oLz1I+WL2bgxq4s1wMdyZWvHm
+        0bc3WW2N3u9M9SwNELeeqXPrANDtZtKIFwAKBQ==
+X-Google-Smtp-Source: APBJJlFgdr6gdNPQ0uaRW2SqtkizbITGJ2VAih/vbVXoSl7InI+uaV1/j8N9uy6kGcGvC8g4AOUYIc2NbnXpfSZJcw==
+X-Received: from mr-cloudtop2.c.googlers.com ([fda3:e722:ac3:cc00:31:98fb:c0a8:fb5])
+ (user=matteorizzo job=sendgmr) by 2002:adf:e989:0:b0:313:f6f2:5eda with SMTP
+ id h9-20020adfe989000000b00313f6f25edamr2746wrm.3.1688055062533; Thu, 29 Jun
+ 2023 09:11:02 -0700 (PDT)
+Date:   Thu, 29 Jun 2023 16:10:44 +0000
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.41.0.162.gfafddb0af9-goog
+Message-ID: <20230629161044.1995505-1-matteorizzo@google.com>
+Subject: [PATCH] umh: fix build warning with CONFIG_SYSCTL disabled
+From:   Matteo Rizzo <matteorizzo@google.com>
+To:     jarkko@kernel.org, mcgrof@kernel.org, linux-kernel@vger.kernel.org
+Cc:     Matteo Rizzo <matteorizzo@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,155 +65,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 28, 2023 at 10:51:28PM +0200, Amadeusz Sławiński wrote:
-> Those IDs are mostly sprinkled between HDA, Skylake, SOF and avs drivers.
-> Almost every use contains additional comments to identify to which
-> platform those IDs refer to. Add those IDs to pci_ids.h header, so that
-> there is one place which defines those names.
-> 
-> Signed-off-by: Amadeusz Sławiński <amadeuszx.slawinski@linux.intel.com>
+When CONFIG_SYSCTL is not defined proc_cap_handler is not used. This
+causes a build warning with -Wunused-function.
 
-Acked-by: Bjorn Helgaas <bhelgaas@google.com>
+kernel/umh.c:497:12: error: unused function 'proc_cap_handler'
+[-Werror,-Wunused-function]
+static int proc_cap_handler(struct ctl_table *table, int write,
+           ^
+1 error generated.
 
-Thanks for keeping these all sorted!  Feel free to merge this via the
-ALSA tree or whereever the rest of the series goes.
+Fixes: 861dc0b46432 ("sysctl: move umh sysctl registration to its own file")
+Signed-off-by: Matteo Rizzo <matteorizzo@google.com>
+---
+ kernel/umh.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> ---
->  include/linux/pci_ids.h | 44 +++++++++++++++++++++++++++++++++++++++++
->  1 file changed, 44 insertions(+)
-> 
-> diff --git a/include/linux/pci_ids.h b/include/linux/pci_ids.h
-> index a99b1fcfc617..de675c6cfb63 100644
-> --- a/include/linux/pci_ids.h
-> +++ b/include/linux/pci_ids.h
-> @@ -2636,6 +2636,7 @@
->  
->  #define PCI_VENDOR_ID_INTEL		0x8086
->  #define PCI_DEVICE_ID_INTEL_EESSC	0x0008
-> +#define PCI_DEVICE_ID_INTEL_HDA_CML_LP	0x02c8
->  #define PCI_DEVICE_ID_INTEL_PXHD_0	0x0320
->  #define PCI_DEVICE_ID_INTEL_PXHD_1	0x0321
->  #define PCI_DEVICE_ID_INTEL_PXH_0	0x0329
-> @@ -2651,6 +2652,7 @@
->  #define PCI_DEVICE_ID_INTEL_82424	0x0483
->  #define PCI_DEVICE_ID_INTEL_82378	0x0484
->  #define PCI_DEVICE_ID_INTEL_82425	0x0486
-> +#define PCI_DEVICE_ID_INTEL_HDA_CML_H	0x06c8
->  #define PCI_DEVICE_ID_INTEL_MRST_SD0	0x0807
->  #define PCI_DEVICE_ID_INTEL_MRST_SD1	0x0808
->  #define PCI_DEVICE_ID_INTEL_MFD_SD	0x0820
-> @@ -2662,12 +2664,19 @@
->  #define PCI_DEVICE_ID_INTEL_QUARK_X1000_ILB	0x095e
->  #define PCI_DEVICE_ID_INTEL_I960	0x0960
->  #define PCI_DEVICE_ID_INTEL_I960RM	0x0962
-> +#define PCI_DEVICE_ID_INTEL_HDA_HSW_0	0x0a0c
-> +#define PCI_DEVICE_ID_INTEL_HDA_HSW_2	0x0c0c
->  #define PCI_DEVICE_ID_INTEL_CENTERTON_ILB	0x0c60
-> +#define PCI_DEVICE_ID_INTEL_HDA_HSW_3	0x0d0c
-> +#define PCI_DEVICE_ID_INTEL_HDA_BYT	0x0f04
->  #define PCI_DEVICE_ID_INTEL_8257X_SOL	0x1062
->  #define PCI_DEVICE_ID_INTEL_82573E_SOL	0x1085
->  #define PCI_DEVICE_ID_INTEL_82573L_SOL	0x108f
->  #define PCI_DEVICE_ID_INTEL_82815_MC	0x1130
->  #define PCI_DEVICE_ID_INTEL_82815_CGC	0x1132
-> +#define PCI_DEVICE_ID_INTEL_HDA_MRFLD	0x119a
-> +#define PCI_DEVICE_ID_INTEL_HDA_BDW	0x160c
-> +#define PCI_DEVICE_ID_INTEL_HDA_APL_T	0x1a98
->  #define PCI_DEVICE_ID_INTEL_82092AA_0	0x1221
->  #define PCI_DEVICE_ID_INTEL_7505_0	0x2550
->  #define PCI_DEVICE_ID_INTEL_7205_0	0x255d
-> @@ -2710,6 +2719,7 @@
->  #define PCI_DEVICE_ID_INTEL_PANTHERPOINT_LPC_MIN	0x1e40
->  #define PCI_DEVICE_ID_INTEL_PANTHERPOINT_LPC_MAX	0x1e5f
->  #define PCI_DEVICE_ID_INTEL_VMD_201D	0x201d
-> +#define PCI_DEVICE_ID_INTEL_HDA_BSW	0x2284
->  #define PCI_DEVICE_ID_INTEL_DH89XXCC_LPC_MIN	0x2310
->  #define PCI_DEVICE_ID_INTEL_DH89XXCC_LPC_MAX	0x231f
->  #define PCI_DEVICE_ID_INTEL_82801AA_0	0x2410
-> @@ -2875,6 +2885,7 @@
->  #define PCI_DEVICE_ID_INTEL_LYNNFIELD_MC_CH2_ADDR_REV2  0x2db1
->  #define PCI_DEVICE_ID_INTEL_LYNNFIELD_MC_CH2_RANK_REV2  0x2db2
->  #define PCI_DEVICE_ID_INTEL_LYNNFIELD_MC_CH2_TC_REV2    0x2db3
-> +#define PCI_DEVICE_ID_INTEL_HDA_GML	0x3198
->  #define PCI_DEVICE_ID_INTEL_82855PM_HB	0x3340
->  #define PCI_DEVICE_ID_INTEL_IOAT_TBG4	0x3429
->  #define PCI_DEVICE_ID_INTEL_IOAT_TBG5	0x342a
-> @@ -2885,6 +2896,7 @@
->  #define PCI_DEVICE_ID_INTEL_IOAT_TBG1	0x3431
->  #define PCI_DEVICE_ID_INTEL_IOAT_TBG2	0x3432
->  #define PCI_DEVICE_ID_INTEL_IOAT_TBG3	0x3433
-> +#define PCI_DEVICE_ID_INTEL_HDA_ICL_LP	0x34c8
->  #define PCI_DEVICE_ID_INTEL_82830_HB	0x3575
->  #define PCI_DEVICE_ID_INTEL_82830_CGC	0x3577
->  #define PCI_DEVICE_ID_INTEL_82854_HB	0x358c
-> @@ -2917,6 +2929,7 @@
->  #define PCI_DEVICE_ID_INTEL_IOAT_JSF9	0x3719
->  #define PCI_DEVICE_ID_INTEL_QAT_C62X	0x37c8
->  #define PCI_DEVICE_ID_INTEL_QAT_C62X_VF	0x37c9
-> +#define PCI_DEVICE_ID_INTEL_HDA_ICL_N	0x38c8
->  #define PCI_DEVICE_ID_INTEL_ICH10_0	0x3a14
->  #define PCI_DEVICE_ID_INTEL_ICH10_1	0x3a16
->  #define PCI_DEVICE_ID_INTEL_ICH10_2	0x3a18
-> @@ -2961,12 +2974,27 @@
->  #define PCI_DEVICE_ID_INTEL_SBRIDGE_SAD0	0x3cf4	/* 12.6 */
->  #define PCI_DEVICE_ID_INTEL_SBRIDGE_BR		0x3cf5	/* 13.6 */
->  #define PCI_DEVICE_ID_INTEL_SBRIDGE_SAD1	0x3cf6	/* 12.7 */
-> +#define PCI_DEVICE_ID_INTEL_HDA_ICL_H	0x3dc8
->  #define PCI_DEVICE_ID_INTEL_IOAT_SNB	0x402f
->  #define PCI_DEVICE_ID_INTEL_5400_ERR	0x4030
->  #define PCI_DEVICE_ID_INTEL_5400_FBD0	0x4035
->  #define PCI_DEVICE_ID_INTEL_5400_FBD1	0x4036
-> +#define PCI_DEVICE_ID_INTEL_HDA_JSL_N	0x4dc8
-> +#define PCI_DEVICE_ID_INTEL_HDA_TGL_H	0x43c8
-> +#define PCI_DEVICE_ID_INTEL_HDA_EHL_0	0x4b55
-> +#define PCI_DEVICE_ID_INTEL_HDA_EHL_3	0x4b58
->  #define PCI_DEVICE_ID_INTEL_EP80579_0	0x5031
->  #define PCI_DEVICE_ID_INTEL_EP80579_1	0x5032
-> +#define PCI_DEVICE_ID_INTEL_HDA_ADL_P	0x51c8
-> +#define PCI_DEVICE_ID_INTEL_HDA_ADL_PS	0x51c9
-> +#define PCI_DEVICE_ID_INTEL_HDA_RPL_P_0	0x51ca
-> +#define PCI_DEVICE_ID_INTEL_HDA_RPL_P_1	0x51cb
-> +#define PCI_DEVICE_ID_INTEL_HDA_ADL_M	0x51cc
-> +#define PCI_DEVICE_ID_INTEL_HDA_ADL_PX	0x51cd
-> +#define PCI_DEVICE_ID_INTEL_HDA_RPL_M	0x51ce
-> +#define PCI_DEVICE_ID_INTEL_HDA_RPL_PX	0x51cf
-> +#define PCI_DEVICE_ID_INTEL_HDA_ADL_N	0x54c8
-> +#define PCI_DEVICE_ID_INTEL_HDA_APL	0x5a98
->  #define PCI_DEVICE_ID_INTEL_5100_16	0x65f0
->  #define PCI_DEVICE_ID_INTEL_5100_19	0x65f3
->  #define PCI_DEVICE_ID_INTEL_5100_21	0x65f5
-> @@ -3000,6 +3028,9 @@
->  #define PCI_DEVICE_ID_INTEL_82443GX_0	0x71a0
->  #define PCI_DEVICE_ID_INTEL_82443GX_2	0x71a2
->  #define PCI_DEVICE_ID_INTEL_82372FB_1	0x7601
-> +#define PCI_DEVICE_ID_INTEL_HDA_RPL_S	0x7a50
-> +#define PCI_DEVICE_ID_INTEL_HDA_ADL_S	0x7ad0
-> +#define PCI_DEVICE_ID_INTEL_HDA_MTL	0x7e28
->  #define PCI_DEVICE_ID_INTEL_SCH_LPC	0x8119
->  #define PCI_DEVICE_ID_INTEL_SCH_IDE	0x811a
->  #define PCI_DEVICE_ID_INTEL_E6XX_CU	0x8183
-> @@ -3011,8 +3042,21 @@
->  #define PCI_DEVICE_ID_INTEL_84460GX	0x84ea
->  #define PCI_DEVICE_ID_INTEL_IXP4XX	0x8500
->  #define PCI_DEVICE_ID_INTEL_IXP2800	0x9004
-> +#define PCI_DEVICE_ID_INTEL_HDA_LKF	0x98c8
->  #define PCI_DEVICE_ID_INTEL_VMD_9A0B	0x9a0b
-> +#define PCI_DEVICE_ID_INTEL_HDA_SKL_LP	0x9d70
-> +#define PCI_DEVICE_ID_INTEL_HDA_KBL_LP	0x9d71
-> +#define PCI_DEVICE_ID_INTEL_HDA_CNL_LP	0x9dc8
-> +#define PCI_DEVICE_ID_INTEL_HDA_TGL_LP	0xa0c8
-> +#define PCI_DEVICE_ID_INTEL_HDA_SKL	0xa170
-> +#define PCI_DEVICE_ID_INTEL_HDA_KBL	0xa171
-> +#define PCI_DEVICE_ID_INTEL_HDA_KBL_H	0xa2f0
-> +#define PCI_DEVICE_ID_INTEL_HDA_CNL_H	0xa348
-> +#define PCI_DEVICE_ID_INTEL_HDA_CML_S	0xa3f0
-> +#define PCI_DEVICE_ID_INTEL_HDA_LNL_P	0xa828
->  #define PCI_DEVICE_ID_INTEL_S21152BB	0xb152
-> +#define PCI_DEVICE_ID_INTEL_HDA_CML_R	0xf0c8
-> +#define PCI_DEVICE_ID_INTEL_HDA_RKL_S	0xf1c8
->  
->  #define PCI_VENDOR_ID_WANGXUN		0x8088
->  
-> -- 
-> 2.34.1
-> 
+diff --git a/kernel/umh.c b/kernel/umh.c
+index 41088c5c39fd..1b13c5d34624 100644
+--- a/kernel/umh.c
++++ b/kernel/umh.c
+@@ -494,6 +494,7 @@ int call_usermodehelper(const char *path, char **argv, char **envp, int wait)
+ }
+ EXPORT_SYMBOL(call_usermodehelper);
+ 
++#if defined(CONFIG_SYSCTL)
+ static int proc_cap_handler(struct ctl_table *table, int write,
+ 			 void *buffer, size_t *lenp, loff_t *ppos)
+ {
+@@ -544,7 +545,6 @@ static int proc_cap_handler(struct ctl_table *table, int write,
+ 	return 0;
+ }
+ 
+-#if defined(CONFIG_SYSCTL)
+ static struct ctl_table usermodehelper_table[] = {
+ 	{
+ 		.procname	= "bset",
+-- 
+2.41.0.162.gfafddb0af9-goog
+
