@@ -2,233 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31FB67424E4
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 13:18:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C1157424E8
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 13:20:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231842AbjF2LSY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 07:18:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39344 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231445AbjF2LSU (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 07:18:20 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12B512703;
-        Thu, 29 Jun 2023 04:18:18 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 96AEE61522;
-        Thu, 29 Jun 2023 11:18:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EAE0DC433C8;
-        Thu, 29 Jun 2023 11:18:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688037497;
-        bh=F6aQm3JGRbxp1vVmcdBNImvGLgBiTDukPCEtjAqZ/xg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=fP9q6HJkta54m3RQLSt2OCchKkQ50cCHHoPnfkFh3HXIRtvOBH4vXpeTbtc5Ua6jf
-         6NplaOhs1ICiScViDJcTnnfwifj4zKwratwFZw7PofKVdofY/Ig7eywi0NV0KcpFA6
-         aQwrieQYFiYp6WdqBA3kO8LfAPfkzkzd+cokjUFI8KeHi04Rt0Qr8l+MGQmxW0z3Gc
-         +Yy+/f+Wh/MYPo3Q4V1uE4GLX8pWB6mOWZXTPQR/G6DGdU1dSJnYNBN/EHMOVYyuPo
-         k0kqltc8QoJjz4m2CzMApK8iJ9lrURMQO0PH0qbEXHBMsusWsNIMZCeEwXRiFqDapX
-         wQbWEbKr0vTuw==
-Date:   Thu, 29 Jun 2023 13:18:11 +0200
-From:   Christian Brauner <brauner@kernel.org>
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     Dave Chinner <david@fromorbit.com>,
-        Kent Overstreet <kent.overstreet@linux.dev>,
-        torvalds@linux-foundation.org, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-bcachefs@vger.kernel.org,
-        Christoph Hellwig <hch@lst.de>,
-        Al Viro <viro@zeniv.linux.org.uk>
-Subject: Re: [GIT PULL] bcachefs
-Message-ID: <20230629-fragen-dennoch-fb5265aaba23@brauner>
-References: <20230628175204.oeek4nnqx7ltlqmg@moria.home.lan>
- <e1570c46-68da-22b7-5322-f34f3c2958d9@kernel.dk>
- <2e635579-37ba-ddfc-a2ab-e6c080ab4971@kernel.dk>
- <20230628221342.4j3gr3zscnsu366p@moria.home.lan>
- <d697ec27-8008-2eb6-0950-f612a602dcf5@kernel.dk>
- <20230628225514.n3xtlgmjkgapgnrd@moria.home.lan>
- <1e2134f1-f48b-1459-a38e-eac9597cd64a@kernel.dk>
- <20230628235018.ttvtzpfe42fri4yq@moria.home.lan>
- <ZJzXs6C8G2SL10vq@dread.disaster.area>
- <d6546c44-04db-cbca-1523-a914670a607f@kernel.dk>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+        id S232254AbjF2LUO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 07:20:14 -0400
+Received: from mail-dm6nam10on2116.outbound.protection.outlook.com ([40.107.93.116]:6945
+        "EHLO NAM10-DM6-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S232177AbjF2LUI (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 29 Jun 2023 07:20:08 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=gTLsrD8xGeHmkvn/kR/45tig0Cr51qsVKXZIM+3ZJhcAYJk8Bkz43m7jdIAdcvkwuRDMPH4dhycbe3t/yCnpvqtyVTDmWU1wV4YbNu4Xj/J8R9xTpr6ZZ/X7rYzjKvuOQRl1r6Ohs3m9DbYzYblaIpeFnv5cRUUiMYvQwWFzx+iUqfx1sJMBu1sMZz5RaFQzw6URwcpubTDrIoC3lW2h6jKH9AZDX+aqZuvOoc7e1XgqFLjXBF4gGusrnZygcEebErdvoBAueKbO3DQdnwITM9ouqjOHWKfzBb1OcvHAgslZiISfxHkRT0WqGsvJF2JLHvtXg3Zs5CqUUV9UC+MDxg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=+SUt+r4uAzCxKh0nbKz1EGi1TfVwgFDkNMsRtVbFxCM=;
+ b=Fm65Nq76vjHUH4MLiXxIG9nD8C88sU6wSGX5FV1ZTz0lcWmlLdvdOi6ZGQuhlWlUNeRnP7gegaOTYpv1y8ORxJqB20lyPre8dkOGU7meckqreteyoUaa2sC4PWMh2o0UDj5Kx8WE56vncoKQ5PQe1V7mI15raYKAJbI/rEhsBEGk0FZs2953Lm891C21FlzYLC1/lp3WyKn0IDuu40JXFODEGlfr3qF8ifYAcXR/mhJPjrT4GXlwNWHpLys01U15FE9jd3Mjzii0nVQHqlsEp2JNvFRKQucFcKb+7JjnwPu1nMP7D94nxp8sYgApTX3Tef1/YkhbC/Dmcw4lKhyhIA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
+ dkim=pass header.d=corigine.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=+SUt+r4uAzCxKh0nbKz1EGi1TfVwgFDkNMsRtVbFxCM=;
+ b=s2m6ic19IBmPyfCuf+7nKmWuU5ltIZhJm6x6WY/RTr++1bRJmim80LUiIaErxRFExWTaYasUD7sMQ8bH9eHWNdaK3gAuEGMpZBOKb4VwceJAOMomdRxID+d3PoHUNp0fb/shrteaXtT4zdLvEgxNT4/8wG24BlOkWXPfNibYGyY=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=corigine.com;
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
+ by MW3PR13MB4139.namprd13.prod.outlook.com (2603:10b6:303:5c::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.24; Thu, 29 Jun
+ 2023 11:20:05 +0000
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::eb8f:e482:76e0:fe6e]) by PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::eb8f:e482:76e0:fe6e%5]) with mapi id 15.20.6521.023; Thu, 29 Jun 2023
+ 11:20:04 +0000
+Date:   Thu, 29 Jun 2023 13:19:51 +0200
+From:   Simon Horman <simon.horman@corigine.com>
+To:     Sathesh Edara <sedara@marvell.com>
+Cc:     linux-kernel@vger.kernel.org, sburla@marvell.com,
+        vburru@marvell.com, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, netdev@vger.kernel.org,
+        hgani@marvell.com
+Subject: Re: [net-next PATCH] octeon_ep: Add control plane host and firmware
+ versions.
+Message-ID: <ZJ1obqExufmgq4k1@corigine.com>
+References: <20230629084227.98848-1-sedara@marvell.com>
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <d6546c44-04db-cbca-1523-a914670a607f@kernel.dk>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-        lindbergh.monkeyblade.net
+In-Reply-To: <20230629084227.98848-1-sedara@marvell.com>
+X-ClientProxiedBy: AM0PR02CA0205.eurprd02.prod.outlook.com
+ (2603:10a6:20b:28f::12) To PH0PR13MB4842.namprd13.prod.outlook.com
+ (2603:10b6:510:78::6)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|MW3PR13MB4139:EE_
+X-MS-Office365-Filtering-Correlation-Id: dd3c4efc-80ec-4e76-018c-08db7892c94c
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: k+KN+2Fked0E/u3bvquXxYHj+0k7O3H5F4g6v/FK/kHtmnYf9aYiOi6mulu+Ojg6ybZDGgNL3SRxTZvOYMo/J7SPiSLW37ApA2kc0+h6zfA3Gm9fgmdJQqFE6zn2g1o/cRo1mQKBimMGqWRoGEAqdQ5012l6TY/IRuPdy3az4UyT6EG8ua19PqZmfgKFmh33SKb0WBPzc61X/7GLPRpyN2Bze3rI7OeuB3w7gX3e5IHTfQNBzdmIx7GEGYlRLHscpI5zQTsads1y7rPsezmys8NC281k+YpyjIU/RFJ1Fivv6+ggBR6K6o8c9fnbcnoGbPtcvnhSMJ1KGSXTG805PCa4cody6vLmHn7bD8RcJ6VUw6MvFQXHKg3okcY8QedT+8Zya+WPtP+ZdOTPRmrBN06+PlwB0Ax51TrDQ1OWmPsL8+I1ThO7vwhER7lGKmoA4xxsPdGXzfAGIhkrYeSQ4LgBNkMBPPSZrMCArjvH66YJu6of+r1GNxUCU26seQIlYNby2sbazAf3j9+X/cu0IDvmi4Gzhdm9Pk2XKaZWTppT8nYQzgT7lTpHL83h6Vw3fm6eB9QwZIwbK3O0cg+g74Subac7x476eY5D4MhhsPE=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(346002)(396003)(39840400004)(366004)(136003)(451199021)(66476007)(66946007)(66556008)(478600001)(6916009)(36756003)(4326008)(83380400001)(38100700002)(2616005)(86362001)(8936002)(41300700001)(4744005)(2906002)(8676002)(6666004)(6512007)(186003)(966005)(316002)(5660300002)(6506007)(44832011)(6486002)(7416002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?9Lb+NVRXuiNZRfaqypdU7tQlywjOOJfrVGik2QMnvwmt+QPeFqOVhrBMZsym?=
+ =?us-ascii?Q?S2cYCLFa8+GjQ/l0MEeSaS33mpIkqYMkJBOu0KJbq9h7Zin9gf3TMNksullT?=
+ =?us-ascii?Q?7KE3QJjC3K568MMiWB6k1RJonlmXRpXBlZdAUDO0xvj7s8KcMpGM27zrq2Av?=
+ =?us-ascii?Q?87dLs6SOOAs0cE+sXlciNUaHNMWrywQRmlYS/hIfNnQk0mjhVorX2Xq99neN?=
+ =?us-ascii?Q?teE2oOju60dEGwEctBGvDMnSOTbLeeUdMy2oRIhcdOejEpEDctFjrSrrK9X+?=
+ =?us-ascii?Q?bsWfG9uWDpnw9/Noiptc1ktc3W4IbFYqJYVKqYgdXQGTifIhxTcEhlsBhR4m?=
+ =?us-ascii?Q?B7yYgkRIyQJFFSIzJcPSCKiGGapzQMJqPTJIQiA+rRm6Qbq7xFm4Fcva/pOD?=
+ =?us-ascii?Q?v32zvhF+cvk9t8Db4qgR0I+fbfDmNMgDlfXVT/HAV1wJGHNByJYcGxECGCmk?=
+ =?us-ascii?Q?ApyV1MmCQt4s6Ymc8wzpI/YqO4/QzAmzN9PpwQ1cJs26gk485QYaf5CWGK4Z?=
+ =?us-ascii?Q?GI7Hx9Rvo7646BwKO55wDKTKHz3lXo+6Xoljlo2b4/OXX4rCftnHJEk9WqRW?=
+ =?us-ascii?Q?yrbKrogCWO8cJD0xTIXhEoTLNG6ygRDGt3eKF8luSxPLC3dhP8vdq61dnYny?=
+ =?us-ascii?Q?s/MK5tlqNtDDzHtT/MuesBdX4S0yAux02O30Bkbg1iy3JDWwm9/DZG5lZbmq?=
+ =?us-ascii?Q?DrFXnleTTrKljcnwRF8/JkFO216Bh1PcEykpKyiuxUinZoga9akSq5GnkTPk?=
+ =?us-ascii?Q?zKobsZ56jaeB0NGbT162u5Kd8wn87qcKuz/X+f4RDQ7UeDgIZwncl9V8KfQT?=
+ =?us-ascii?Q?6vpcCkpx54lhdu3sDz3P3X8/vpn0zxUuo7bhybLB8rri9Viacsf682Nd/rKn?=
+ =?us-ascii?Q?2SWxtnqwRWV7aJnOgZ6KHV7fFpm42sbysM0T8Mc0tO+oi7T5sgBbp2/Jnt9H?=
+ =?us-ascii?Q?kRNn640q+5625G40T25VnK224UgHp3UBd8A1PMYgj3gQg5yDERuoQkuD6LmT?=
+ =?us-ascii?Q?41aUmu6HZcdSJwYXBnrlrXzA59AWlNktFWtwOwkKjAV3xgifGmXCN5uv5+0n?=
+ =?us-ascii?Q?E+gF1iBYpxZ1gi2Gl0aPfkTDytx/o0PvY7zWahTxvXtjMXTHS0/H3oJsAuCC?=
+ =?us-ascii?Q?8B2gQzUQNzhRsfp7WtzNlEMbAPqaxZGykuNfNshfKq5BVl/2e0ib2azXjpLY?=
+ =?us-ascii?Q?IRFhthqdZK6REDpkaN2plnPcmIbv+SU8kL2NYw6zl2mylEtcgJqe6ODYNkyO?=
+ =?us-ascii?Q?iQ4OHkHxGLov8GH/VE2jLwL+G9WURrQGFpCluIalwBjmZwmXdAY55tZTMLfH?=
+ =?us-ascii?Q?/1arC9U5OhCOH6243LA8SOevkXACk/4fyQIKGP9uGKqeeH02R+kEWPtjMUa2?=
+ =?us-ascii?Q?SwhqIiKUCc2bHNE/Phby2SUTg8kzDBUXryMegeb9UlNfRLCoaX20/HKp2wi3?=
+ =?us-ascii?Q?Tijh4ccUJaf1kewzXmp3gZe1E8YajHGGmBeGGiKQQKeN9xipdWn2qZpVHjXY?=
+ =?us-ascii?Q?E7HDcznIprSSDdtFJIWjSPVv+jRpV9gKQ6p3FX8Gp5eR4qvEes8eFsQn0Y3O?=
+ =?us-ascii?Q?pzG7sYKb0XKFELkm5Q00nEI3KKcZF75qWq7+W1bz795lh6R6vlJuGuh1xfF7?=
+ =?us-ascii?Q?S5aX+CVYbSmBLgLbJ6W3d9ulfQuvLTPISLj+7RQxtZXK/m+Rmn0EfrCEw2sF?=
+ =?us-ascii?Q?qpJPRQ=3D=3D?=
+X-OriginatorOrg: corigine.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: dd3c4efc-80ec-4e76-018c-08db7892c94c
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Jun 2023 11:20:04.2036
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: PHPCcahmwyv9fxnv4wJEomFcG7SpQROYaeRNJQeTChsTFubP9dFPHHgWCC/aqEmhVj/kBon1yBLcVXfFEhNX+Qg66PMiDPSx0n30nwuq5x8=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW3PR13MB4139
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 28, 2023 at 07:33:18PM -0600, Jens Axboe wrote:
-> On 6/28/23 7:00?PM, Dave Chinner wrote:
-> > On Wed, Jun 28, 2023 at 07:50:18PM -0400, Kent Overstreet wrote:
-> >> On Wed, Jun 28, 2023 at 05:14:09PM -0600, Jens Axboe wrote:
-> >>> On 6/28/23 4:55?PM, Kent Overstreet wrote:
-> >>>>> But it's not aio (or io_uring or whatever), it's simply the fact that
-> >>>>> doing an fput() from an exiting task (for example) will end up being
-> >>>>> done async. And hence waiting for task exits is NOT enough to ensure
-> >>>>> that all file references have been released.
-> >>>>>
-> >>>>> Since there are a variety of other reasons why a mount may be pinned and
-> >>>>> fail to umount, perhaps it's worth considering that changing this
-> >>>>> behavior won't buy us that much. Especially since it's been around for
-> >>>>> more than 10 years:
-> >>>>
-> >>>> Because it seems that before io_uring the race was quite a bit harder to
-> >>>> hit - I only started seeing it when things started switching over to
-> >>>> io_uring. generic/388 used to pass reliably for me (pre backpointers),
-> >>>> now it doesn't.
-> >>>
-> >>> I literally just pasted a script that hits it in one second with aio. So
-> >>> maybe generic/388 doesn't hit it as easily, but it's surely TRIVIAL to
-> >>> hit with aio. As demonstrated. The io_uring is not hard to bring into
-> >>> parity on that front, here's one I posted earlier today for 6.5:
-> >>>
-> >>> https://lore.kernel.org/io-uring/20230628170953.952923-4-axboe@kernel.dk/
-> >>>
-> >>> Doesn't change the fact that you can easily hit this with io_uring or
-> >>> aio, and probably more things too (didn't look any further). Is it a
-> >>> realistic thing outside of funky tests? Probably not really, or at least
-> >>> if those guys hit it they'd probably have the work-around hack in place
-> >>> in their script already.
-> >>>
-> >>> But the fact is that it's been around for a decade. It's somehow a lot
-> >>> easier to hit with bcachefs than XFS, which may just be because the
-> >>> former has a bunch of workers and this may be deferring the delayed fput
-> >>> work more. Just hand waving.
-> >>
-> >> Not sure what you're arguing here...?
-> >>
-> >> We've had a long standing bug, it's recently become much easier to hit
-> >> (for multiple reasons); we seem to be in agreement on all that. All I'm
-> >> saying is that the existence of that bug previously is not reason to fix
-> >> it now.
-> > 
-> > I agree with Kent here  - the kernel bug needs to be fixed
-> > regardless of how long it has been around. Blaming the messenger
-> > (userspace, fstests, etc) and saying it should work around a
-> > spurious, unpredictable, undesirable and user-undebuggable kernel
-> > behaviour is not an acceptible solution here...
-> 
-> Not sure why you both are putting words in my mouth, I've merely been
-> arguing pros and cons and the impact of this. I even linked the io_uring
-> addition for ensuring that side will work better once the deferred fput
-> is sorted out. I didn't like the idea of fixing this through umount, and
-> even outlined how it could be fixed properly by ensuring we flush
-> per-task deferred puts on task exit.
-> 
-> Do I think it's a big issue? Not at all, because a) nobody has reported
-> it until now, and b) it's kind of a stupid case. If we can fix it with
+On Thu, Jun 29, 2023 at 01:42:27AM -0700, Sathesh Edara wrote:
 
-Agreed.
+...
 
-> minimal impact, should we? Yep. Particularly as the assumptions stated
-> in the original commit I referenced were not even valid back then.
+> diff --git a/drivers/net/ethernet/marvell/octeon_ep/octep_ctrl_net.h b/drivers/net/ethernet/marvell/octeon_ep/octep_ctrl_net.h
+> index 37880dd79116..dd4f055fa8da 100644
+> --- a/drivers/net/ethernet/marvell/octeon_ep/octep_ctrl_net.h
+> +++ b/drivers/net/ethernet/marvell/octeon_ep/octep_ctrl_net.h
+> @@ -7,6 +7,8 @@
+>  #ifndef __OCTEP_CTRL_NET_H__
+>  #define __OCTEP_CTRL_NET_H__
+>  
+> +#include "octep_cp_version.h"
+> +
 
-There seems to be a wild misconception here which frankly is very
-concering. Afaik, it is absolutely not the case that an fput() from an
-exiting task ends up in delayed_work(). But I'm happy to be convinced
-otherwise.
+...
 
-But thinking about it for more than a second, it would mean that __every
-single task__ that passes through do_exit() would punt all its files to
-delayed_fput() for closing. __Every single task on the system__.
+Hi Sathesh,
 
-What sort of DOS vector do people think we built into the kernel's exit
-path? Hundreds or thousands of systemd services can have thousands of
-fds open and somehow we punt them all to delayed_fput() when they get
-killed, shutdown, or exit?
+octep_cp_version.h does not seem to be present in net-next,
+nor is it provided by this patch. Perhaps a git add was forgotten.
 
-do_exit()
--> io_uring_files_cancel() /* can register task work */
--> exit_files()            /* can register task work */
--> exit_task_work()
-   -> task_work_run()      /* run queued task work and when done set &work_exited sentinel */
+net-next is currently closed.
+Please consider reposting when net-next reopens after July 10th.
 
-Only after exit_task_work() is called do we need to rely on
-delayed_fput(). But all files in the tasks fd table will have already
-been registered for cleaned up in exit_files() via task work if that
-task does indeed hold the last reference.
-
-Unless, we're in an interrupt context or we're dealing with a
-PF_KTHREAD...
-
-So, generic/388 calls fsstress. If aio and/or io_uring is present
-fsstress will be linked against aio/io_uring and will execute these
-codepaths in its default invocation.
-
-Compile out the aio and io_uring support, register a kretprobe via
-bpftrace and snoop on how many times delayed_fput() is called when the
-test is run with however many threads you want: absolutely not a single
-time. Every SIGKILLed task goes through do_exit(), exit_files(),
-registers their fputs as task work and then calls exit_task_work(), runs
-task work, then disables task work and finally dies peacefully.
-
-Now compile in aio and io_uring support, register a kretprobe via
-bpftrace and snoop on how many times delayed_fput() is called and see
-frequent delayed_fput() calls for aio and less frequent delayed_fput()
-calls for io_uring.
-
-Taking aio as an example, if we SIGKILL the last userspace process with
-the aio fd it will exit and at some point the kernel will hit exit_aio()
-on last __mmput():
-
-do_exit()
--> exit_mm()
-   -> mmput() /* mm could be pinned by some crap somewhere */
-      -> exit_aio()
--> io_uring_files_cancel() /* can use task work */
--> exit_files()            /* can use task work */
--> exit_task_work()	   /* no more task work after that */
-   -> task_work_run()      /* run queued task work and only when done set &work_exited sentinel */
-
-If there are any outstanding io requests that haven't been completed
-then aio will cancel them and punt them onto the system work queue.
-Which is, surprise, a PF_KTHREAD. So then delayed_fput() is hit.
-
-io_uring hits this less frequently but it does punt work to a kthread
-via io_fallback_tw() iirc if the current task is PF_EXITING and so uses
-delayed_fput() in these scenarios.
-
-So this is async io punting to a kthread for cleanup _explicitly_ that's
-causing issues here and it is an async io problem.
-
-Why is this racy? For this to become a problem delayed_fput() work
-must've been registered plus the delayed_fput() being called from the
-system workqueue must take longer than the task work by all of the other
-exiting threads.
-
-We give zero f***s about legacy aio - Heidi meme-style. Not a single
-line of code in the VFS will be complicated because of this legacy
-cruft that everyone hates with a passion. Ultimately it's even why we
-ended up with the nice io_uring io_worker model.
-
-And io_uring - Jens can correct me - can probably be improved to rely
-task work even if the task is PF_EXITING as long as exit_task_work()
-hasn't been called for that task which I reckon it hasn't. So probably
-how io_uring cancels work in io_uring_files_cancel() needs to be tweaked
-if that really is an issue.
-
-But hard NAK on fiddling with umount for any of this. Umount has never
-and will never give any guarantee that a superblock is gone when it
-returns. Even if it succeeds and returns it doesn't mean that the
-superblock has gone away and that the filesystem can be mounted again
-fresh.
-
-Bind mounts, mount namespaces, mount propagation, independent of someone
-pinning files in a given mount or kthread based async io fput cleaning
-make this completely meaningless. We can't guarantee that and we will
-absolutely not get in the business of that in the umount code.
-
-If this generic/388 test is to be reliable rn in the face of async io,
-the synchronization method via fsnotify that allows you get notified
-about superblock destruction should be used.
+See: https://www.kernel.org/doc/html/next/process/maintainer-netdev.html#development-cycle
+--
+pw-bot: defer
