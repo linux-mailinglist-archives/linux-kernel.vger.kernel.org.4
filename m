@@ -2,58 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C9EB742E0A
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 22:01:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78589742DF0
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 22:01:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232377AbjF2T7J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 15:59:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60888 "EHLO
+        id S232371AbjF2T7U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 15:59:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232201AbjF2T7B (ORCPT
+        with ESMTP id S232324AbjF2T7C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 15:59:01 -0400
-Received: from sonic309-27.consmr.mail.ne1.yahoo.com (sonic309-27.consmr.mail.ne1.yahoo.com [66.163.184.153])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 293DD2D5B
+        Thu, 29 Jun 2023 15:59:02 -0400
+Received: from sonic313-15.consmr.mail.ne1.yahoo.com (sonic313-15.consmr.mail.ne1.yahoo.com [66.163.185.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEE152D66
         for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 12:59:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1688068739; bh=VDC7nSb24+TiQjjwtfbSyQDZ6atY+2bn2kkmV6iO130=; h=From:To:Cc:Subject:Date:In-Reply-To:References:From:Subject:Reply-To; b=X6utnhH2CbigCO/704tZ8do7uKV7H7fEsx73z+2iwiXzeDWsMDi6m5k25n76XuBhRKlG50MTYUUVT/xpabMR6/MVbCMQW/pb89CGrpAv+SRUApmCDt7hybtevj16qgJZMQDkn1vMFe83wHgvpxK0qZx8iiQjd/k/XoxSwzHGmCzcbuH0jOuQCL41+6PGuhniVAgwrHJ/YEn6htOm19l6UfoEDytRDQjD8Oof5t8/sBvM4oPg04+uJX26CD8CZmDUuIZ1x2MotzgQYHLgyopvwOVtYO1a9sKRRoYDN8V/F+HaMd7f6DUoaiNUPmyfGyYfSnP0eHhOdYBgeKl4V3pWFA==
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1688068739; bh=1DFK0hdy92/LnwyeY33pVbqXS24sXmzmoyFQ3Hl8eJF=; h=X-Sonic-MF:From:To:Subject:Date:From:Subject; b=IK1+wbfEXQ5n6/xIz0KHo8u1A4lGVMemlMepIgFg6/znIQYFjnrjEzmrbe9tczqzGqKVfyiBAELjY94nXjK/p6kp/83fgAlAfA/QyJkyEOhrdE1LXDI2OQOqa8ToMhm47uTaZYFbl4PyZJzSqt9CnzMYu9qZcfdF+SUeGbWUo1n3Ghoo8gT6BhCjsOcernXRTbKkMJlToaATOxOYyYja1hVxo6M/pEVNZLJ1SNpm8WJhNluomoDtEISHM+9AzJ+TgWHp//x2h2oq923jDNTeMTYlIkGk4ttjPZjZC4wlCHPzTYGgSLEqlgFzwgOfwI3cawWCOJdcxbZdQPv99QB5uA==
-X-YMail-OSG: VCkSsXEVM1m3jPoY8hzMJ68cN_lvbI3F11sMDI3tVndrKr5xuwypN1peuaEL8Cp
- 7XCK3HPrtqD6.GJXRo6k7H3jbD3QXmClNiPh3Kd2wIIN6M09EVZA1Ffo9_b7nNHLgTSU947H0Hbd
- 0uoq147.KBreXPE9ew87ognWPGocO_MT98.rrYWytgxAVnN8xmQrafXyao1lxB2HGcdIl3hPuU8d
- W5L2X2xKyZaS0AW4otrrcZjxBGEat7WAl2Vcd.U02CDLNSyy27cXTAT_caKsCWMaYMJU82Ir46lS
- MJxO8KfzzQ6kuvoyu3YHFs6xajpV_IF.6Zu3aLkiWpG15o0_4J1Rmb6F2KxCnbHU3JYk4Ofof2hd
- Xeu4voUyrPFlYMU02bRCQTSPqyTOFYwf4Qr0fGKiV6bldXjmWvZzw6.6r_34K2JZZIJqatLi.WbA
- yl8XMEsA32iLHhbiPmfNHPQLHHH8oiwUh9nySid_65an1OjOjV.RHhu3jZwcd3GV4dZ53wc03Cgd
- wmrv3jassDzg6HX4nh_rkZMrPzTrDPOgblEZL7LtIlu7todMVyh3BaPD2kYNE8In.uLxnUG33equ
- .D9cUTTnMuxQ0e84OL4OgPTgEmfwzvSnSA3j8ae4E1rTZnT4W7Fp_fbvDC0GR6fE44M0qoCO4ml3
- KA_M6EDBQLmNs9Ng3SvFZaAb3uZkUApl2EXoDBhzHlwQU3iQc7_JZt_7ES97B4wfbi7X2pLHvqY.
- YD4gyzojqx17DWvmR22.PRz9C_lxvXIl9YvxXNPwaKBCt8CRpjWZR_wUCw99zqLlxE1rhLQm26xk
- f4B4o.ga8erfJV62smbl7EFtTJctyR4pKaHN0kAXEMhsIp.nDkPcDXFEUJtGuoKOCEaGoYWbQvvT
- OzSIPGDOF.39NmLAJ2tPkenNTz6XB_zgmDPc_edbUIW5p1xK1mtVTPcA4K7k6u5v6ZwPDFKhrd0u
- 4KMg7yArGrJz45WAsvQ0lXTVtY_rZzlYKsA3akVfP42Gzwc32BF_5R0E1ZZ7grMUDk_u0VidXmFi
- iZOhg7rqZG.sHic6WxsPQaN6kGPabG0lb05lei_8Uw9ytpjJMNaMmVqWcdzmBtv0Af1tCETfUIvd
- OuAJXS5zwNtIWZfuSVpkt9cELpc2Y14LXmkasHMIRyEcKT.VLGg6fr5BfQHyWFwH6a_6bzaY9hcj
- zFeooLXZDtH0UWuVLHS0tJevTYv4I9Jg8zMPTIw27Uwdwjdi4OsC1s7OPN89UicyN18Yzpju2SJO
- iRLW1dpQ6SphxFg.BGloYU7zfQQSBTf_5esgKLn36DWgVrbdGuuEjHmcxQY_Ojc2BxYTF8b9QJaC
- 6I3g4aFwrP2SFIUmuW7a9zzkeXeybv2J7ggFJilPHxMvJprbzVS5Zoup3t6C0etvxXrQQXqi6tSZ
- YzwaO2HqKA1bAFfFTx6O5iCIeWk7.CuxLDin0ZtH8GNiw1PA1FgNRqZcCse6Gima1fSGxB.OPIEx
- dlAFOh8Lp_2sE_R_5iu4hOIXkgBbd9VLM670BIyiogdSRo4hx8AE6Dsn5UFA6FKryDALkLcC.lMR
- dwo6yFOshdTkiW2R0p7sXAww5A7V75k7Rr84tBRjfV5ecVPXBQV4FM0vi3LBPEGzQDEamMQ7mVbv
- PAWw3Dc9EQmw7f9kIm69rIUkxT00XVRNPhUqZ5fTTwHMhVqZ1DFw8jTX4evfXhSGI.3pluB28RHl
- XXLQpBHNSp74LYLRZ8DjwLr1fBSPaiXisnrRiG30uTqVkt9aALvv3qo7.ofi34E8pV6TGmCGl13A
- sGMyQTGsd3VpdrLTxWXatjWpr4qI5J_D70RTG7aI69f8B6PL2ndOpw.saR4sV1M6m0L7_iTUZSjI
- NGSBYrVcMfEtLWF3Xg3LFt7IZm5bptrWq2WfS2OM5x8DTu5c8y6l7Ui_mG.nAX7CkbPns8mqfGS3
- 6786LjQCo8sC6PuRKPV.kRgCRycX8ToxjbIFCGCI_AcXyMu.L3gAsVkfpWDJ6I7yMkT4exOHSA1v
- 6cJOy.fVcJB.45XxddlCNEM_baLC0c81w.3DL4vrW3jb7OeRDg4hi3jiWU.SRXcWK7iCARQsj5TJ
- Jg_KsrLglld7qEgajyZilEhNe8N0WRvjtOvgI7x9OrG6BljPba1Whd20FIL10CFt6aj5xv3FWJaV
- A2ZwkZ9zl.5T.Ld.e0coZ5iewHhn4o52IGlJ4R4ZgHGFTZjwBRPIxRY1HzoRWuz1qoht8QLziWbW
- XMBrO36oGMtkr5B1.BJr2_Wm9v_oGfc4Qlem5rDYQfEb4ggM7BCuL1nbbbgJqcwzVOOvV1iVP6PQ
- AqvbanouOvacBWKmVwws-
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1688068740; bh=lB5ScsLeZipeYbWB53q9EtR+VBviso3GISiFZDLC1tU=; h=From:To:Cc:Subject:Date:In-Reply-To:References:From:Subject:Reply-To; b=kKYcAq42/GvzhValfB64otUu/gJo/+yHfhd1vV5djelghBiPA8taSojf7CMPDX/qtd4XrF3I05h2AxcI/xiFxbZqZ2mePtF+BizNGzCHti0PoIXs2uPBx8Gri359jABn62Oa6BgwM963rR50X1bpo7IZsYQR26oO3AbLFOfKIamzLtsXxjFegPlAGELuUDY1euUZG1afkq8YB/P1qebv0DNEeM3g6hpizc1muQg9jX+vroJ6Ej8ls0VPm/p55icTaEOC4kiIZnlTdF6CLB6RASSwdZBXbkTKXkjBsKxS0dl46hi3MAMVHOEjqhj3FgmBtKZTWUyHIK0HRm6iW9H+kQ==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1688068740; bh=FbFR4UK41Jj1PS6b4T8YimEPCcktJJVZdza2S1b9tl8=; h=X-Sonic-MF:From:To:Subject:Date:From:Subject; b=CvSWk1f1dQVefWBkmLsJicqjPhrSbZ7oLoFfGxunXtCa7i65E0MAltmCRQq+qDRus58/iuiCKFZMFbBLduywK7ROntgKDEEhfx3qLYdTJKXfBJF3NE3FX7mO/qRhKqdbFhXuxUcPwg17o6V91iDELRPQ97wDQZiPtxeg5Z/QdqkUZ+AYkITJpXBOdRreSYxUIA1QvmdP7eJrxFfX/9C3brAywGW6NhVzst5vC2frh3U2uWl9wftRdiYX0Hb65nFrKiNQrPUuheVZFLmLosFuLbzQQLl7Sg5NWczL7Wud6jBfENRl628l7uOKT2HvRbwlA9hGMh/s1vOmhgAbklRn+g==
+X-YMail-OSG: QiyV49wVM1n0EJDPbuAUYW3calWZdB8dYjaIyZHLN.fDIf8DDqoMN2RexbuNTSU
+ f1qAv1k0qTEl01fJxyfjSS9KcaBMgAH5HVboVF_bSwJv4ylJnOug9F9XhLAcPjOiTKZYS71KDcIi
+ A29noVuA3bOjys9S7X0Bk.2cusOkdtpHipfZkcLZW07y0pYnQVf2h57dr7bOWy5PPFpjff.IVxRk
+ Gkkpwhsgl6NvvfTnUF8DK9UwM0jsNlm3o1137DUoK0h72EuM_.s.cgE1wlpMC1DQnYpyHJkhT0M1
+ qxpfF7HBjB6PJcTetfPxNC3mZHx.3eFDVD1UmcwQfysxC.F.qkoajRCTRClSOsiI3y7hSHoOc7s8
+ s_RCLod5cLZT9Nb47JI8SFbgdxwDHveCFQPSHaCgdx1F3jQ1EZpJg1LNu1cGfnBJiQSSVjqtty30
+ 5AMkYL8wvMqNl6VOV97lLdKjipXShZS0doyHVq4EK4usj70u3eogETWHfB49bOPWZPfvKckVmm1w
+ rz3Fkm9R89XQKQk2JBLBdHx7baLdDVvM4vdSbWO_qjVxn1uFFfWT406OtbT_MbKYEYGkf0U3dVa7
+ 5C_ARnL1UCW50i1kbm5AXxNHogNQPArawqckUoCBvHjs.yUwh2QwxLhiz_UCPjo4SP2ol2ReKdON
+ suGbQqKi__POjWu9lzhHqza88gKFQV_omHRmGjyt5VoRO.8i_d6E2EyMpQ8Q70KmfosJk5kblTbI
+ Yxj.4oQ9INNMR0wICOzW19qZrpym_6PdX00e6nmmI6dPlNFvwvwHMk0rphf7M6zuYrRm5lsmOZG6
+ 1GJksWlG5VU2M2D3RNVIpnW3y.aPvC8.BQAoLI5qM4CQdi32t.5XkO0vjrOeSzMHQ4iwzZf_ufyF
+ cH.uVaGCf7VboA4O7A_u5lMM4M9dVIjqzK7YYIRq13Tx5H6dWTuIpLqBco5HCFMsl4fROmjcRjZW
+ u03lAgqtZpmwyb6apV2r1ILZ6rXBMGa6rPUnHhKYCOO3_O_sLsAQWRVDCBcuF4s9GEPM_BgPD1tq
+ 0_01mLQya2VbYRYao3WD4QkT7SC2JwYPsscjXSp89ulTl7UPPGOd8u0GfQf9TPkBdrKImP8qRiaL
+ l0SDJIDWtUOkCmO0x8XezQF9N6iUFZbOhIi0G8tIR13a1_664Bycg9v3irW6FqFmtoKzzKzPrYqD
+ _cuClTmRIDKdK41pOyTGykJOmb4lb7iXmRRIn5zd9S4RQv9qP7Z8BvBQG_mye109s11aeNgGYY5A
+ amjDiUmjg8oA.kStuUqyGCzlS0H9W8mI3kkpOyemxMFUXxYiEL9xdpTrH0hFp2hnxjR0PgDmgCGs
+ Bfptt7jzDH9rSWs.DY_jnuGFwswpLs18effcQx_FO_VVHkxIOcuVQAFpWtrb3YYp8We3DyrS9JVc
+ K0DT7x62ez10fxNv1OKoAOsK.foYlK..Lt.J2LCknIacgmF2fAi9W.AudkbQVd.__qU9_WLSHnQy
+ yl.c7A2Ql_c2vuulnJoD2yV4N27HES46PM9QSLZbuzoxNrEY3h5tCAHw8HT.uC1eg_cVh9wC.guV
+ yWuMHGiqe0YkK5lCcG06JoViRtdkeO_xTcZl1HQ3vBwRoJ.beUx7qt1DSTQqbGB73O.s.dKCsz0h
+ eDBsRnLrn1GLr_aV7VlTWNQKN8q22dVLJWhM4HzH1eeyzaBE05MIOkNOmNaEyeJX.y3YsL_RUgRz
+ 7jzUceRv7Y1qM0FsSkeNKKmDys4xI_6EdxKJUKqRx8sc4XTHU7pJnZlLrCv73V7Ug90GoitISR66
+ mTEvqXvwRSGkN3QJ5pSDrLCdJ.Dx_1RRkt0W3xDST5MyXKmIJ.6nFQ2gbbY5p0qLpy9ZMm_vc4Wr
+ 8O0o9RApsUH26pDv4qwrGBup_sW4dV_k5JpZTYmE4igSKWqko2EaYIKyXov9tasayX93S2UspxAa
+ HjSP6lq6FxJ8ARwI07YBrlXHfdDMjzDF3DtuE.yZQ_ErBfE3qmxFmgXXeVZflpcjfesJGi8oU762
+ wNH31nBpXI7WfMeo21xa5ml5faVgtrcG6ygs9VJl5NA0Mf30cBj6RvV8N7Os8kaUnZkr6YlgJxjH
+ MHscOs9Dht9R85ICKhjbpMeeFel2z4_.AgKShKLWPHbnEtZ6DR1oQvh0w3fDBv2Kff5M7rAory.i
+ jWLMk9g_DLtUZJbKpR_5hrKEID1WEA89w4sPiClUdQ4ceiIeiWH0Mvi4FKogOTp44DQZWdJTlgrE
+ lpVR91JeWih_.puLsa6Uu0nbUf7nK57sgekx2mXd1tYO4m2M8.Aa7VfQnZjOx_MWzbhh1jUDGwPl
+ vtho01fqvlwSfdq3nRw--
 X-Sonic-MF: <casey@schaufler-ca.com>
-X-Sonic-ID: a913fd76-249a-4faa-b59d-caf7740e2ff0
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic309.consmr.mail.ne1.yahoo.com with HTTP; Thu, 29 Jun 2023 19:58:59 +0000
+X-Sonic-ID: be22d627-ac22-4559-9992-2bc50d686d2d
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic313.consmr.mail.ne1.yahoo.com with HTTP; Thu, 29 Jun 2023 19:59:00 +0000
 Received: by hermes--production-bf1-5d96b4b9f-dbx7v (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 179208bf33e8d1ee67f1c353255c48d0;
-          Thu, 29 Jun 2023 19:58:54 +0000 (UTC)
+          Thu, 29 Jun 2023 19:58:57 +0000 (UTC)
 From:   Casey Schaufler <casey@schaufler-ca.com>
 To:     casey@schaufler-ca.com, paul@paul-moore.com,
         linux-security-module@vger.kernel.org
@@ -61,9 +61,9 @@ Cc:     jmorris@namei.org, serge@hallyn.com, keescook@chromium.org,
         john.johansen@canonical.com, penguin-kernel@i-love.sakura.ne.jp,
         stephen.smalley.work@gmail.com, linux-kernel@vger.kernel.org,
         linux-api@vger.kernel.org, mic@digikod.net
-Subject: [PATCH v12 07/11] LSM: Helpers for attribute names and filling lsm_ctx
-Date:   Thu, 29 Jun 2023 12:55:31 -0700
-Message-Id: <20230629195535.2590-8-casey@schaufler-ca.com>
+Subject: [PATCH v12 08/11] Smack: implement setselfattr and getselfattr hooks
+Date:   Thu, 29 Jun 2023 12:55:32 -0700
+Message-Id: <20230629195535.2590-9-casey@schaufler-ca.com>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <20230629195535.2590-1-casey@schaufler-ca.com>
 References: <20230629195535.2590-1-casey@schaufler-ca.com>
@@ -78,165 +78,166 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add lsm_name_to_attr(), which translates a text string to a
-LSM_ATTR value if one is available.
-
-Add lsm_fill_user_ctx(), which fills a struct lsm_ctx, including
-the trailing attribute value.
-
-All are used in module specific components of LSM system calls.
+Implement Smack support for security_[gs]etselfattr.
+Refactor the setprocattr hook to avoid code duplication.
 
 Signed-off-by: Casey Schaufler <casey@schaufler-ca.com>
-Reviewed-by: Serge Hallyn <serge@hallyn.com>
 ---
- include/linux/security.h | 14 +++++++++++++
- security/lsm_syscalls.c  | 24 ++++++++++++++++++++++
- security/security.c      | 44 ++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 82 insertions(+)
+ security/smack/smack_lsm.c | 106 +++++++++++++++++++++++++++++++++++--
+ 1 file changed, 101 insertions(+), 5 deletions(-)
 
-diff --git a/include/linux/security.h b/include/linux/security.h
-index 475d0abfebda..75ac91223c2d 100644
---- a/include/linux/security.h
-+++ b/include/linux/security.h
-@@ -32,6 +32,7 @@
- #include <linux/string.h>
- #include <linux/mm.h>
- #include <linux/sockptr.h>
-+#include <uapi/linux/lsm.h>
- 
- struct linux_binprm;
- struct cred;
-@@ -263,6 +264,7 @@ int unregister_blocking_lsm_notifier(struct notifier_block *nb);
- /* prototypes */
- extern int security_init(void);
- extern int early_security_init(void);
-+extern u64 lsm_name_to_attr(const char *name);
- 
- /* Security operations */
- int security_binder_set_context_mgr(const struct cred *mgr);
-@@ -488,6 +490,8 @@ int security_inode_notifysecctx(struct inode *inode, void *ctx, u32 ctxlen);
- int security_inode_setsecctx(struct dentry *dentry, void *ctx, u32 ctxlen);
- int security_inode_getsecctx(struct inode *inode, void **ctx, u32 *ctxlen);
- int security_locked_down(enum lockdown_reason what);
-+int lsm_fill_user_ctx(struct lsm_ctx __user *ctx, void *context,
-+		      size_t context_size, u64 id, u64 flags);
- #else /* CONFIG_SECURITY */
- 
- static inline int call_blocking_lsm_notifier(enum lsm_event event, void *data)
-@@ -505,6 +509,11 @@ static inline  int unregister_blocking_lsm_notifier(struct notifier_block *nb)
- 	return 0;
- }
- 
-+static inline u64 lsm_name_to_attr(const char *name)
-+{
-+	return LSM_ATTR_UNDEF;
-+}
-+
- static inline void security_free_mnt_opts(void **mnt_opts)
- {
- }
-@@ -1408,6 +1417,11 @@ static inline int security_locked_down(enum lockdown_reason what)
- {
- 	return 0;
- }
-+static inline int lsm_fill_user_ctx(struct lsm_ctx __user *ctx, void *context,
-+				    size_t context_size, u64 id, u64 flags)
-+{
-+	return -EOPNOTSUPP;
-+}
- #endif	/* CONFIG_SECURITY */
- 
- #if defined(CONFIG_SECURITY) && defined(CONFIG_WATCH_QUEUE)
-diff --git a/security/lsm_syscalls.c b/security/lsm_syscalls.c
-index f03f2d17ab49..bc22f05e2d8c 100644
---- a/security/lsm_syscalls.c
-+++ b/security/lsm_syscalls.c
-@@ -17,6 +17,30 @@
- #include <linux/lsm_hooks.h>
- #include <uapi/linux/lsm.h>
- 
-+/**
-+ * lsm_name_to_attr - map an LSM attribute name to its ID
-+ * @name: name of the attribute
-+ *
-+ * Returns the LSM attribute value associated with @name, or 0 if
-+ * there is no mapping.
-+ */
-+u64 lsm_name_to_attr(const char *name)
-+{
-+	if (!strcmp(name, "current"))
-+		return LSM_ATTR_CURRENT;
-+	if (!strcmp(name, "exec"))
-+		return LSM_ATTR_EXEC;
-+	if (!strcmp(name, "fscreate"))
-+		return LSM_ATTR_FSCREATE;
-+	if (!strcmp(name, "keycreate"))
-+		return LSM_ATTR_KEYCREATE;
-+	if (!strcmp(name, "prev"))
-+		return LSM_ATTR_PREV;
-+	if (!strcmp(name, "sockcreate"))
-+		return LSM_ATTR_SOCKCREATE;
-+	return LSM_ATTR_UNDEF;
-+}
-+
- /**
-  * sys_lsm_set_self_attr - Set current task's security module attribute
-  * @attr: which attribute to set
-diff --git a/security/security.c b/security/security.c
-index 199db23581f1..72ad7197b2c9 100644
---- a/security/security.c
-+++ b/security/security.c
-@@ -770,6 +770,50 @@ static int lsm_superblock_alloc(struct super_block *sb)
- 	return 0;
+diff --git a/security/smack/smack_lsm.c b/security/smack/smack_lsm.c
+index cf847cfe5ed8..4a84639e9db9 100644
+--- a/security/smack/smack_lsm.c
++++ b/security/smack/smack_lsm.c
+@@ -3536,6 +3536,45 @@ static void smack_d_instantiate(struct dentry *opt_dentry, struct inode *inode)
+ 	return;
  }
  
 +/**
-+ * lsm_fill_user_ctx - Fill a user space lsm_ctx structure
-+ * @ctx: an LSM context to be filled
-+ * @context: the new context value
-+ * @context_size: the size of the new context value
-+ * @id: LSM id
-+ * @flags: LSM defined flags
++ * smack_getselfattr - Smack current process attribute
++ * @attr: which attribute to fetch
++ * @ctx: buffer to receive the result
++ * @size: available size in, actual size out
++ * @flags: unused
 + *
-+ * Fill all of the fields in a user space lsm_ctx structure.
-+ * Caller is assumed to have verified that @ctx has enough space
-+ * for @context.
++ * Fill the passed user space @ctx with the details of the requested
++ * attribute.
 + *
-+ * The total length is padded to a multiple of 64 bits to
-+ * accomodate possible alignment issues.
-+ *
-+ * Returns 0 on success, -EFAULT on a copyout error, -ENOMEM
-+ * if memory can't be allocated.
++ * Returns 1, the number of attributes, on success, an error code otherwise.
 + */
-+int lsm_fill_user_ctx(struct lsm_ctx __user *ctx, void *context,
-+		      size_t context_size, u64 id, u64 flags)
++static int smack_getselfattr(unsigned int attr, struct lsm_ctx __user *ctx,
++			     size_t *size, u32 flags)
 +{
-+	struct lsm_ctx *lctx;
-+	size_t locallen = struct_size(lctx, ctx, context_size);
-+	int rc = 0;
++	struct smack_known *skp = smk_of_current();
++	int total;
++	int slen;
++	int rc;
 +
-+	lctx = kzalloc(locallen, GFP_KERNEL);
-+	if (lctx == NULL)
-+		return -ENOMEM;
++	if (attr != LSM_ATTR_CURRENT)
++		return -EOPNOTSUPP;
 +
-+	lctx->id = id;
-+	lctx->flags = flags;
-+	lctx->ctx_len = context_size;
-+	lctx->len = locallen;
++	slen = strlen(skp->smk_known) + 1;
++	total = ALIGN(slen + sizeof(*ctx), 8);
++	if (total > *size)
++		rc = -E2BIG;
++	else if (ctx)
++		rc = lsm_fill_user_ctx(ctx, skp->smk_known, slen, LSM_ID_SMACK,
++				       0);
++	else
++		rc = 1;
 +
-+	memcpy(lctx->ctx, context, context_size);
-+
-+	if (copy_to_user(ctx, lctx, locallen))
-+		rc = -EFAULT;
-+
-+	kfree(lctx);
-+
++	*size = total;
++	if (rc >= 0)
++		return 1;
 +	return rc;
 +}
 +
- /*
-  * The default value of the LSM hook is defined in linux/lsm_hook_defs.h and
-  * can be accessed with:
+ /**
+  * smack_getprocattr - Smack process attribute access
+  * @p: the object task
+@@ -3565,8 +3604,8 @@ static int smack_getprocattr(struct task_struct *p, const char *name, char **val
+ }
+ 
+ /**
+- * smack_setprocattr - Smack process attribute setting
+- * @name: the name of the attribute in /proc/.../attr
++ * do_setattr - Smack process attribute setting
++ * @attr: the ID of the attribute
+  * @value: the value to set
+  * @size: the size of the value
+  *
+@@ -3575,7 +3614,7 @@ static int smack_getprocattr(struct task_struct *p, const char *name, char **val
+  *
+  * Returns the length of the smack label or an error code
+  */
+-static int smack_setprocattr(const char *name, void *value, size_t size)
++static int do_setattr(u64 attr, void *value, size_t size)
+ {
+ 	struct task_smack *tsp = smack_cred(current_cred());
+ 	struct cred *new;
+@@ -3589,8 +3628,8 @@ static int smack_setprocattr(const char *name, void *value, size_t size)
+ 	if (value == NULL || size == 0 || size >= SMK_LONGLABEL)
+ 		return -EINVAL;
+ 
+-	if (strcmp(name, "current") != 0)
+-		return -EINVAL;
++	if (attr != LSM_ATTR_CURRENT)
++		return -EOPNOTSUPP;
+ 
+ 	skp = smk_import_entry(value, size);
+ 	if (IS_ERR(skp))
+@@ -3629,6 +3668,61 @@ static int smack_setprocattr(const char *name, void *value, size_t size)
+ 	return size;
+ }
+ 
++/**
++ * smack_setselfattr - Set a Smack process attribute
++ * @attr: which attribute to set
++ * @ctx: buffer containing the data
++ * @size: size of @ctx
++ * @flags: unused
++ *
++ * Fill the passed user space @ctx with the details of the requested
++ * attribute.
++ *
++ * Returns 0 on success, an error code otherwise.
++ */
++static int smack_setselfattr(unsigned int attr, struct lsm_ctx __user *ctx,
++			     size_t size, u32 flags)
++{
++	struct lsm_ctx *lctx;
++	int rc;
++
++	lctx = kmalloc(size, GFP_KERNEL);
++	if (lctx == NULL)
++		return -ENOMEM;
++
++	if (copy_from_user(lctx, ctx, size))
++		rc = -EFAULT;
++	else if (lctx->ctx_len > size)
++		rc = -E2BIG;
++	else
++		rc = do_setattr(attr, lctx->ctx, lctx->ctx_len);
++
++	kfree(lctx);
++	if (rc > 0)
++		return 0;
++	return rc;
++}
++
++/**
++ * smack_setprocattr - Smack process attribute setting
++ * @name: the name of the attribute in /proc/.../attr
++ * @value: the value to set
++ * @size: the size of the value
++ *
++ * Sets the Smack value of the task. Only setting self
++ * is permitted and only with privilege
++ *
++ * Returns the length of the smack label or an error code
++ */
++static int smack_setprocattr(const char *name, void *value, size_t size)
++{
++	int attr = lsm_name_to_attr(name);
++
++	if (attr == LSM_ATTR_UNDEF)
++		return do_setattr(attr, value, size);
++	return -EINVAL;
++}
++
+ /**
+  * smack_unix_stream_connect - Smack access on UDS
+  * @sock: one sock
+@@ -4939,6 +5033,8 @@ static struct security_hook_list smack_hooks[] __ro_after_init = {
+ 
+ 	LSM_HOOK_INIT(d_instantiate, smack_d_instantiate),
+ 
++	LSM_HOOK_INIT(getselfattr, smack_getselfattr),
++	LSM_HOOK_INIT(setselfattr, smack_setselfattr),
+ 	LSM_HOOK_INIT(getprocattr, smack_getprocattr),
+ 	LSM_HOOK_INIT(setprocattr, smack_setprocattr),
+ 
 -- 
 2.40.1
 
