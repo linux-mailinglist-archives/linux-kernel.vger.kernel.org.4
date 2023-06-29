@@ -2,110 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6C287427F8
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 16:09:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD3367427FA
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 16:10:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232213AbjF2OJ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 10:09:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53386 "EHLO
+        id S229910AbjF2OJ7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 10:09:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231443AbjF2OJZ (ORCPT
+        with ESMTP id S232238AbjF2OJx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 10:09:25 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA27D1B1;
-        Thu, 29 Jun 2023 07:09:23 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id A69BB1F8AF;
-        Thu, 29 Jun 2023 14:09:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1688047762; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=71RZpLoOR8WYSh7imeQpwmDDhV+BCqDsCV9ISGQsCK8=;
-        b=bOzAat0NSo7RDK5B8cqq0vhPaf0FH7qw+zwCC6CiHe85TxXZnp2GjF4deTGUHSbtiBj7KT
-        hPAxL+k6qQUXWv6R3wkYSqvVByhhoWWoitIRg+rW36nxGuS1uxQ+HRjjXXIB2BzosnINLu
-        HYQ8kG/7lgiKV2f1WGfkeK5AKLKsp98=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1688047762;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=71RZpLoOR8WYSh7imeQpwmDDhV+BCqDsCV9ISGQsCK8=;
-        b=8PYcx+XcIW466le2pRQYKLH8oKk8vPZ2U7BVCLyhZUBlulCyZsforuBWV4b2fIVyiihntb
-        j7roBo0AWsAkgpCg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 9440513905;
-        Thu, 29 Jun 2023 14:09:22 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 7lsjJJKQnWRUDgAAMHmgww
-        (envelope-from <jack@suse.cz>); Thu, 29 Jun 2023 14:09:22 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id 18201A0722; Thu, 29 Jun 2023 16:09:22 +0200 (CEST)
-Date:   Thu, 29 Jun 2023 16:09:22 +0200
-From:   Jan Kara <jack@suse.cz>
-To:     Baokun Li <libaokun1@huawei.com>
-Cc:     Jan Kara <jack@suse.cz>, linux-fsdevel@vger.kernel.org,
-        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yi.zhang@huawei.com, yangerkun@huawei.com, chengzhihao1@huawei.com,
-        yukuai3@huawei.com
-Subject: Re: [PATCH v2 6/7] quota: simplify drop_dquot_ref()
-Message-ID: <20230629140922.dp74owntkbm5avop@quack3>
-References: <20230628132155.1560425-1-libaokun1@huawei.com>
- <20230628132155.1560425-7-libaokun1@huawei.com>
- <20230629110813.kfaja4bdomilmns6@quack3>
- <d00a224e-1991-ce90-d458-45390a20f8dc@huawei.com>
+        Thu, 29 Jun 2023 10:09:53 -0400
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85A4C26B6
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 07:09:52 -0700 (PDT)
+Received: by mail-pl1-x632.google.com with SMTP id d9443c01a7336-1b816d30140so1446795ad.0
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 07:09:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20221208.gappssmtp.com; s=20221208; t=1688047792; x=1690639792;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=S0g2z9+kP4L2FrybPa6mrtDT1Fz/ig5aYsRSMpf+4bA=;
+        b=ICbsD1KGdHfxWbVn/ZLQtZLR+K+BlsiNzJp0z2VvqT4HrKa8dIbSxL3F387fJ883Q1
+         6ZoWgYZUghAP2d5NEmZpgD5wu+4FBNf3N9au0iCyt8n9Bp6uFsFUHVNM8DFJCQc6NhYf
+         KglDfN3P4t+6DZGS2VQnPWrg+FPSHcuZuu6+7Nf2NNRVndkAf289P1M49cCavBLFy3Qg
+         eBhE4ObZe2Ry2JZZCM+oCrw8xc47yJOg1vhy1JCCeL5IhYUB7jpgB5uIG+AvXpgcKDwf
+         LWFwf2vbpJhs6PfaiDe0AOYy35zA+kcGlNnG9fzXxIZQVSFbtlDEAX6fbpQTGj0NZxuc
+         6K0Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688047792; x=1690639792;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=S0g2z9+kP4L2FrybPa6mrtDT1Fz/ig5aYsRSMpf+4bA=;
+        b=jItWN79XUAACyM6X+NLRUU4vnUh++4+uL7XGxpY38TTakKKiB6ASKW6dTnKRr9IcSB
+         13XhU7m5ICxTJHrBw5eMWAYmCEGbm3qs0TyRBIhDH432hVsw9/20+0ll7bDcsJs6gt9E
+         QPQ1U1j05DyOpAxV5xMOs7dRXgLh9Xp4G3Vv4pVT3dj2HQ0Xt8ElNDV80B06oeBgjYqq
+         vSuJuIziOgrfp4ouuWaZoo0RXw1RvQCKSrE3PvwlCz+IwFGDW+NHxER/xlG7HvVZbC4b
+         fxN/1IRW/uU03mHADtuNo5kU06VfjLNeEWl2PSGxNsjEYhfJDL8jsxyTT0XQKm95WCAA
+         TSPQ==
+X-Gm-Message-State: AC+VfDxbjGG+Ri/Ar4XRWOzj1uiu5po9oj1IGp7/GVZhu5jQEWQRiZlJ
+        gHlnR4KYXfk9HFkiLgHHpwF/oA==
+X-Google-Smtp-Source: ACHHUZ5lVZcRHJV60CGMnzjUEJER0DcTPO9CTWINk8+t/vyaZvPU8Ezdmy6yzNwGpuioHG6hn7cjmQ==
+X-Received: by 2002:a17:903:338d:b0:1b8:17e8:5482 with SMTP id kb13-20020a170903338d00b001b817e85482mr9312511plb.1.1688047792027;
+        Thu, 29 Jun 2023 07:09:52 -0700 (PDT)
+Received: from [127.0.0.1] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id l13-20020a170902f68d00b001b843593e48sm2541633plg.228.2023.06.29.07.09.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 29 Jun 2023 07:09:51 -0700 (PDT)
+From:   Jens Axboe <axboe@kernel.dk>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-kernel@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Christoph Hellwig <hch@lst.de>,
+        Phillip Potter <phil@philpotter.co.uk>,
+        Hannes Reinecke <hare@suse.de>,
+        Christian Brauner <brauner@kernel.org>
+In-Reply-To: <20230629083047.3487172-1-linux@roeck-us.net>
+References: <20230629083047.3487172-1-linux@roeck-us.net>
+Subject: Re: [PATCH] cdrom/gdrom: Fix build error
+Message-Id: <168804779076.1357010.1628577959450806700.b4-ty@kernel.dk>
+Date:   Thu, 29 Jun 2023 08:09:50 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <d00a224e-1991-ce90-d458-45390a20f8dc@huawei.com>
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.13-dev-099c9
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu 29-06-23 20:13:05, Baokun Li wrote:
-> On 2023/6/29 19:08, Jan Kara wrote:
-> > On Wed 28-06-23 21:21:54, Baokun Li wrote:
-> > > Now when dqput() drops the last reference count, it will call
-> > > synchronize_srcu(&dquot_srcu) in quota_release_workfn() to ensure that
-> > > no other user will use the dquot after the last reference count is dropped,
-> > > so we don't need to call synchronize_srcu(&dquot_srcu) in drop_dquot_ref()
-> > > and remove the corresponding logic directly to simplify the code.
-> > Nice simplification!  It is also important that dqput() now cannot sleep
-> > which was another reason for the logic with tofree_head in
-> > remove_inode_dquot_ref().
+
+On Thu, 29 Jun 2023 01:30:47 -0700, Guenter Roeck wrote:
+> Commit 7ae24fcee992 ("cdrom: remove the unused mode argument to
+> cdrom_release") was supposed to remove an unused argument from
+> cdrom_release(). but instead removed a used argument from
+> cdrom_open(). This results in the following build error.
 > 
-> I don't understand this sentence very well, so I would appreciate it
+> drivers/cdrom/gdrom.c: In function 'gdrom_bdops_open':
+> drivers/cdrom/gdrom.c:484:15: error: too few arguments to function 'cdrom_open'
 > 
-> if you could explain it in detail. 🤔
+> [...]
 
-OK, let me phrase it in a "changelog" way :):
+Applied, thanks!
 
-remove_inode_dquot_ref() currently does not release the last dquot
-reference but instead adds the dquot to tofree_head list. This is because
-dqput() can sleep while dropping of the last dquot reference (writing back
-the dquot and calling ->release_dquot()) and that must not happen under
-dq_list_lock. Now that dqput() queues the final dquot cleanup into a
-workqueue, remove_inode_dquot_ref() can call dqput() unconditionally
-and we can significantly simplify it.
+[1/1] cdrom/gdrom: Fix build error
+      commit: a587b046ce921cc1805de6f0f000209b3644cadd
 
-								Honza
+Best regards,
 -- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+Jens Axboe
+
+
+
