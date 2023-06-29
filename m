@@ -2,68 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E7657420B4
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 09:00:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2D0E7420B6
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 09:03:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231947AbjF2HAY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 03:00:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47416 "EHLO
+        id S231972AbjF2HDy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 03:03:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231430AbjF2HAT (ORCPT
+        with ESMTP id S231430AbjF2HDu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 03:00:19 -0400
-Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E5EB1BE1
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 00:00:17 -0700 (PDT)
-Received: by mail-yb1-xb34.google.com with SMTP id 3f1490d57ef6-bb3a77abd7bso361697276.0
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 00:00:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1688022017; x=1690614017;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1O2td54UAVvMVuiHOPam6KGvjm+KGijM26LEk6Y/MBE=;
-        b=JmdDx3z6fCj+K4c0xRA6XjxR78jrsvayHIjM0U8C0Hy+I+RVzUWwwS/5sYC4ndPE7j
-         sdkBkgiwI8psDVD2SDOsS+GMyDHBmWbGAQB0a9GfrgRFFrf2MmqleQLrYHh2rNY0ZUET
-         SDMWP7vO9mdzelze4P7w3f41QlqLYklynBSm21Qyt7HwflLUtyFOVZPRKliijgto2u+l
-         kgph69R6elFZU991wDmc8vuNZXtlZmLWrd3JUn2ma2hmQLz2O9OcQfvePlioQOfc8/Av
-         uB6ljxB2QOZEOtqh47y23n4io3kTu02FSr/XUhDei/DsadG2B2L0vRksYbiJECpyO3bl
-         rBOA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688022017; x=1690614017;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=1O2td54UAVvMVuiHOPam6KGvjm+KGijM26LEk6Y/MBE=;
-        b=COe7lGLRLMfxyV89mG9FmZfUPK3bzINE6aHSIXZGE0hJXSDJX3h+ntCnyg4n92rgmt
-         m6cU5lPTaovQcWKM0h0NKHNTwmP+oYz6yxxDfu2GoYBGOq4wM5KxbZH/xrzLYStbhWQf
-         AkhEE3Run/Ahmg2Fvau4f9VpjTVm9JokyHRKdu1m1WG2Q2nlQBjpys4AjzdwcrqvToBb
-         vE0gxHKABGwxiFoO7E8K3YPMhc1o8Tc7IncJm+6Hhiey3mJAsJYyFQn9s/troBl/rtub
-         yHO4WdPufUMklYmH06zHMzsgJuL0kyFCp6xilCW8+jfpy6aegXL5OWS7WIdHclb0Tb6b
-         7wyA==
-X-Gm-Message-State: AC+VfDwt2Mom+6ySk+2KYhKncTXxrkid+z3bstFqAoQ/cfmlvPFuQRxX
-        cvh/SMAAdbwcOq+CEvqqepNRPr0wJhOXvdqVMlekNw==
-X-Google-Smtp-Source: ACHHUZ7xKpLRzmTr3/h+3Fd4K9nni98PVt0vXCb0o/8t1wqkT4btUTSQTnT4V/xz/0EbFSpZKZbLNyop53TGoJ9VcL4=
-X-Received: by 2002:a25:b195:0:b0:bc6:cf90:a286 with SMTP id
- h21-20020a25b195000000b00bc6cf90a286mr34342655ybj.36.1688022016763; Thu, 29
- Jun 2023 00:00:16 -0700 (PDT)
+        Thu, 29 Jun 2023 03:03:50 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1D5A1BE1;
+        Thu, 29 Jun 2023 00:03:48 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3BA3B6148F;
+        Thu, 29 Jun 2023 07:03:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 994CEC433C0;
+        Thu, 29 Jun 2023 07:03:44 +0000 (UTC)
+Message-ID: <567481c3-08bc-3bb8-5538-0d296ee539d9@xs4all.nl>
+Date:   Thu, 29 Jun 2023 09:03:42 +0200
 MIME-Version: 1.0
-References: <20230628133021.500477-1-eblanc@baylibre.com> <20230628133021.500477-3-eblanc@baylibre.com>
-In-Reply-To: <20230628133021.500477-3-eblanc@baylibre.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Thu, 29 Jun 2023 09:00:05 +0200
-Message-ID: <CACRpkdbtH-GtoZ5pJJCMu3sj2RB1=skqRV0nZ0qoZfXaVTNuqw@mail.gmail.com>
-Subject: Re: [PATCH v7 2/2] pinctrl: tps6594: Add driver for TPS6594 pinctrl
- and GPIOs
-To:     Esteban Blanc <eblanc@baylibre.com>
-Cc:     a.zummo@towertech.it, alexandre.belloni@bootlin.com,
-        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-rtc@vger.kernel.org, jpanis@baylibre.com,
-        jneanne@baylibre.com, aseketeli@baylibre.com, u-kumar1@ti.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH 1/2] media: verisilicon: fix excessive stack usage
+To:     Nathan Chancellor <nathan@kernel.org>,
+        Arnd Bergmann <arnd@kernel.org>
+Cc:     Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        Nicolas Dufresne <nicolas.dufresne@collabora.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        kernel test robot <lkp@intel.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+References: <20230616144854.3818934-1-arnd@kernel.org>
+ <20230628182617.GA911656@dev-arch.thelio-3990X>
+Content-Language: en-US
+From:   Hans Verkuil <hverkuil@xs4all.nl>
+In-Reply-To: <20230628182617.GA911656@dev-arch.thelio-3990X>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -72,20 +59,156 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 28, 2023 at 3:30=E2=80=AFPM Esteban Blanc <eblanc@baylibre.com>=
- wrote:
+Hi all,
 
-> TI TPS6594 PMIC has 11 GPIOs which can be used
-> for different functions.
->
-> This patch adds a pinctrl and GPIO drivers in
-> order to use those functions.
->
-> Signed-off-by: Esteban Blanc <eblanc@baylibre.com>
+On 6/28/23 20:26, Nathan Chancellor wrote:
+> On Fri, Jun 16, 2023 at 04:48:47PM +0200, Arnd Bergmann wrote:
+>> From: Arnd Bergmann <arnd@arndb.de>
+>>
+>> In some configurations, gcc decides not to inline the register accessor functions,
+>> which in turn leads to lots of temporary hantro_reg structures on the stack that
+>> cannot be eliminated because they escape into an uninlined function:
+>>
+>> drivers/media/platform/verisilicon/rockchip_vpu981_hw_av1_dec.c:1022:1: warning: the frame size of 1112 bytes is larger than 1024 bytes [-Wframe-larger-than=]
+>>
+>> Mark all of these as __always_inline so the compiler is able to completely
+>> eliminate the temporary structures instead, which brings the stack usage
+>> back down to just the normal local variables.
+>>
+>> Reported-by: kernel test robot <lkp@intel.com>
+>> Closes: https://lore.kernel.org/oe-kbuild-all/202306151506.goHEegOd-lkp@intel.com/
+>> Fixes: 727a400686a2c ("media: verisilicon: Add Rockchip AV1 decoder")
+>> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> 
+> For what it's worth, this patch massively helps with avoiding a warning
+> with clang 16.x and older, for presumably a similar reason, since this
+> happens with allmodconfig, which turns on a bunch of sanitizers.
+> 
+> https://github.com/ClangBuiltLinux/linux/issues/1875
+> 
+> Before this change:
+> 
+>    drivers/media/platform/verisilicon/rockchip_vpu981_hw_av1_dec.c:2097:5: error: stack frame size (2096) exceeds limit (2048) in 'rockchip_vpu981_av1_dec_run' [-Werror,-Wframe-larger-than]
+>    int rockchip_vpu981_av1_dec_run(struct hantro_ctx *ctx)
+>        ^
+>    238/2096 (11.35%) spills, 1858/2096 (88.65%) variables
+> 
+> After this change:
+> 
+>    drivers/media/platform/verisilicon/rockchip_vpu981_hw_av1_dec.c:2097:5: error: stack frame size (496) exceeds limit (200) in 'rockchip_vpu981_av1_dec_run' [-Werror,-Wframe-larger-than]
+>    int rockchip_vpu981_av1_dec_run(struct hantro_ctx *ctx)
+>        ^
+>    265/496 (53.43%) spills, 231/496 (46.57%) variables
+> 
+> If this could be picked up either before the 6.5 media pull goes out or
+> at some point during the -rc cycle, that would be great!
 
-That's a very compact and nice driver. Surely good enough for
-me to merge!
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+Once the merge window closes I'll make a PR to get it in 6.5.
 
-Yours,
-Linus Walleij
+Regards,
+
+	Hans
+
+> 
+> Tested-by: Nathan Chancellor <nathan@kernel.org>
+> 
+>> ---
+>>   drivers/media/platform/verisilicon/hantro.h | 22 ++++++++++-----------
+>>   1 file changed, 11 insertions(+), 11 deletions(-)
+>>
+>> diff --git a/drivers/media/platform/verisilicon/hantro.h b/drivers/media/platform/verisilicon/hantro.h
+>> index 6523ffb748812..6c5e56ce5b351 100644
+>> --- a/drivers/media/platform/verisilicon/hantro.h
+>> +++ b/drivers/media/platform/verisilicon/hantro.h
+>> @@ -370,26 +370,26 @@ extern int hantro_debug;
+>>   	pr_err("%s:%d: " fmt, __func__, __LINE__, ##args)
+>>   
+>>   /* Structure access helpers. */
+>> -static inline struct hantro_ctx *fh_to_ctx(struct v4l2_fh *fh)
+>> +static __always_inline struct hantro_ctx *fh_to_ctx(struct v4l2_fh *fh)
+>>   {
+>>   	return container_of(fh, struct hantro_ctx, fh);
+>>   }
+>>   
+>>   /* Register accessors. */
+>> -static inline void vepu_write_relaxed(struct hantro_dev *vpu,
+>> +static __always_inline void vepu_write_relaxed(struct hantro_dev *vpu,
+>>   				      u32 val, u32 reg)
+>>   {
+>>   	vpu_debug(6, "0x%04x = 0x%08x\n", reg / 4, val);
+>>   	writel_relaxed(val, vpu->enc_base + reg);
+>>   }
+>>   
+>> -static inline void vepu_write(struct hantro_dev *vpu, u32 val, u32 reg)
+>> +static __always_inline void vepu_write(struct hantro_dev *vpu, u32 val, u32 reg)
+>>   {
+>>   	vpu_debug(6, "0x%04x = 0x%08x\n", reg / 4, val);
+>>   	writel(val, vpu->enc_base + reg);
+>>   }
+>>   
+>> -static inline u32 vepu_read(struct hantro_dev *vpu, u32 reg)
+>> +static __always_inline u32 vepu_read(struct hantro_dev *vpu, u32 reg)
+>>   {
+>>   	u32 val = readl(vpu->enc_base + reg);
+>>   
+>> @@ -397,27 +397,27 @@ static inline u32 vepu_read(struct hantro_dev *vpu, u32 reg)
+>>   	return val;
+>>   }
+>>   
+>> -static inline void vdpu_write_relaxed(struct hantro_dev *vpu,
+>> +static __always_inline void vdpu_write_relaxed(struct hantro_dev *vpu,
+>>   				      u32 val, u32 reg)
+>>   {
+>>   	vpu_debug(6, "0x%04x = 0x%08x\n", reg / 4, val);
+>>   	writel_relaxed(val, vpu->dec_base + reg);
+>>   }
+>>   
+>> -static inline void vdpu_write(struct hantro_dev *vpu, u32 val, u32 reg)
+>> +static __always_inline void vdpu_write(struct hantro_dev *vpu, u32 val, u32 reg)
+>>   {
+>>   	vpu_debug(6, "0x%04x = 0x%08x\n", reg / 4, val);
+>>   	writel(val, vpu->dec_base + reg);
+>>   }
+>>   
+>> -static inline void hantro_write_addr(struct hantro_dev *vpu,
+>> +static __always_inline void hantro_write_addr(struct hantro_dev *vpu,
+>>   				     unsigned long offset,
+>>   				     dma_addr_t addr)
+>>   {
+>>   	vdpu_write(vpu, addr & 0xffffffff, offset);
+>>   }
+>>   
+>> -static inline u32 vdpu_read(struct hantro_dev *vpu, u32 reg)
+>> +static __always_inline u32 vdpu_read(struct hantro_dev *vpu, u32 reg)
+>>   {
+>>   	u32 val = readl(vpu->dec_base + reg);
+>>   
+>> @@ -425,7 +425,7 @@ static inline u32 vdpu_read(struct hantro_dev *vpu, u32 reg)
+>>   	return val;
+>>   }
+>>   
+>> -static inline u32 vdpu_read_mask(struct hantro_dev *vpu,
+>> +static __always_inline u32 vdpu_read_mask(struct hantro_dev *vpu,
+>>   				 const struct hantro_reg *reg,
+>>   				 u32 val)
+>>   {
+>> @@ -437,14 +437,14 @@ static inline u32 vdpu_read_mask(struct hantro_dev *vpu,
+>>   	return v;
+>>   }
+>>   
+>> -static inline void hantro_reg_write(struct hantro_dev *vpu,
+>> +static __always_inline void hantro_reg_write(struct hantro_dev *vpu,
+>>   				    const struct hantro_reg *reg,
+>>   				    u32 val)
+>>   {
+>>   	vdpu_write_relaxed(vpu, vdpu_read_mask(vpu, reg, val), reg->base);
+>>   }
+>>   
+>> -static inline void hantro_reg_write_s(struct hantro_dev *vpu,
+>> +static __always_inline void hantro_reg_write_s(struct hantro_dev *vpu,
+>>   				      const struct hantro_reg *reg,
+>>   				      u32 val)
+>>   {
+>> -- 
+>> 2.39.2
+>>
