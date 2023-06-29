@@ -2,186 +2,211 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 028D1742934
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 17:15:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27A5C74292F
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 17:13:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232224AbjF2PO6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 11:14:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47070 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232516AbjF2POu (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 11:14:50 -0400
-Received: from mail.zytor.com (unknown [IPv6:2607:7c80:54:3::138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 735A730EC;
-        Thu, 29 Jun 2023 08:14:49 -0700 (PDT)
-Received: from [127.0.0.1] ([73.231.166.163])
-        (authenticated bits=0)
-        by mail.zytor.com (8.17.1/8.17.1) with ESMTPSA id 35TFDVZL1867686
-        (version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
-        Thu, 29 Jun 2023 08:13:32 -0700
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 35TFDVZL1867686
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
-        s=2023061001; t=1688051613;
-        bh=VT6ScxQAx1InOOiCecxmoT8mrvGLQoZBicWdt25E8OM=;
-        h=Date:From:To:CC:Subject:In-Reply-To:References:From;
-        b=B1zI0KT18kgwNJmZXDibpraDclwrlXMr3X9fqCQ7H4RdtQXV0295It0lEfL4rEpDX
-         4eLN1CaOdl/Q8kSzbBatCArjd0rqGH1Ui2n6j8j4NiC/ngKbZiRhieaFltmy264b6U
-         vT25k+FENHRuiYEgwBzSMMuFnIrUDsX6eEY8YNAfIbzggg+bQZcfuhrgAGGKPwJUlY
-         qS6Tw5ikl5id4uxWzD6TM8ncbUbHspPLP11dXD8LIYYwWI6u3WbYut/4Mwvh/HyQsQ
-         0rEk2Ems9OchsWTi3LuA8ekGSBhpUYDktz+GL+7Kz97DlnwdqHr6xpBBncJYXrdQF+
-         1l9VMBh8DE1yw==
-Date:   Thu, 29 Jun 2023 08:13:27 -0700
-From:   "H. Peter Anvin" <hpa@zytor.com>
-To:     lizhe.67@bytedance.com, tony.luck@intel.com, bp@alien8.de,
-        tglx@linutronix.de, mingo@redhat.com, dave.hansen@linux.intel.com,
-        x86@kernel.org, rafael@kernel.org, viresh.kumar@linaro.org
-CC:     linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, lizefan.x@bytedance.com,
-        yuanzhu@bytedance.com
-Subject: =?US-ASCII?Q?Re=3A_=5BRFC=5D_msr=3A_judge_the_return_val_o?= =?US-ASCII?Q?f_function_rdmsrl=5Fon=5Fcpu=28=29_by_WARN=5FON?=
-User-Agent: K-9 Mail for Android
-In-Reply-To: <20230629072754.39844-1-lizhe.67@bytedance.com>
-References: <20230629072754.39844-1-lizhe.67@bytedance.com>
-Message-ID: <1D4C4027-C450-4346-A2EA-CEEC94CFDA64@zytor.com>
-MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
+        id S232475AbjF2PNx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 11:13:53 -0400
+Received: from mail-dbaeur03on2063.outbound.protection.outlook.com ([40.107.104.63]:7179
+        "EHLO EUR03-DBA-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S232251AbjF2PNr (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 29 Jun 2023 11:13:47 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=V+PxuzfSboXwRKpWBpSvqH2EkD+tdboisnK96KE02EmxqaAtHmfTaBGA6mSsIJj6ddPpj4Zn0WVEvhpI/IZX4NrCyUoXGjkQwLUGymsSfw+OjmRIiMj4f3/RU/1w/TAQC2FZyntmLcadnOeyANbWDbNKQEM0hNTHPXNZ+7PuX5nb1IDosaG00J4kYRTZuJUZOYUcxuCCk+Jp1bnfuX94pS5SR/krqNouY5/TbuzVnsoZjBXBqaLAqPKAjbEd4ypYmr9FOncr8bGpVK30aMxOHlPS6gnMr+Rhvuh2eJZGMs/XukKjn/ayI2Ys3hZnJprDLVOyU3h1wij1vj3Md3t81g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=/4nz0LiUsG2Da4OXYI1AndBd6LZ7MY2MAcJH1xBxDz0=;
+ b=aVO9ZbEbKCGXFQiihi5fBbgSTIg3BcDyIbUH8OSOfRyoBNj1fTcBH2q7vzcqsQKHD7ZjjUVkA6kPw1eneYEDH1ISqvXieK/wLd0FtrwagNVdZ+WyOVwVXlvkgVBYwmXKfpERsquPIGzOx4wxdOwZWNMscdXymaNF13NCA7MwqIck0F5Y2RBQpkzF9ecB8nry8ogSQDnzc1cKVgkDkJTOkCdsaxmHl6JM2vBOr2hy3yP+20/DUvw86b0G3l9UBhD75h5m38Qdu+GOsn2b4uQUwc0XlhQZ6OEoruwm2+qlrL7d7o+P/n6uqmkYs1UHwdHxSXz/0rasU/h2gkK5ZqKIjw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=/4nz0LiUsG2Da4OXYI1AndBd6LZ7MY2MAcJH1xBxDz0=;
+ b=JPHSRe4aK7LV73Htm4AfyJERV5eMolC6YwdRgh4znoiPVdG1XuyQoDqHopEimYoYqNSCfehY6dE29WmyliEz3M8/G1FrB9NFm4KbCpD4TxWrMBSlNUT1FqtFP8NlWkcYZJqzjNbpsLsMZLwh86qTZZyc7J6KpsqRKyD0i5BXqs8=
+Received: from AM0PR04MB6289.eurprd04.prod.outlook.com (2603:10a6:208:145::23)
+ by DBAPR04MB7288.eurprd04.prod.outlook.com (2603:10a6:10:1a3::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.26; Thu, 29 Jun
+ 2023 15:13:44 +0000
+Received: from AM0PR04MB6289.eurprd04.prod.outlook.com
+ ([fe80::7aac:2f58:b7e3:2c24]) by AM0PR04MB6289.eurprd04.prod.outlook.com
+ ([fe80::7aac:2f58:b7e3:2c24%7]) with mapi id 15.20.6521.026; Thu, 29 Jun 2023
+ 15:13:44 +0000
+From:   Leo Li <leoyang.li@nxp.com>
+To:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>
+CC:     Ma Ke <make_ruc2021@163.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH] usb: gadget: fsl_qe_udc: validate endpoint index for ch9
+ udc
+Thread-Topic: [PATCH] usb: gadget: fsl_qe_udc: validate endpoint index for ch9
+ udc
+Thread-Index: AQHZqZi9K7bLkqeFik2hEi3PRtnNM6+gcHbggAAtAQCAABgTIIAAlCoAgAAuA4CAAG1lAA==
+Date:   Thu, 29 Jun 2023 15:13:43 +0000
+Message-ID: <AM0PR04MB6289FD7D57831D113BAAC8348F25A@AM0PR04MB6289.eurprd04.prod.outlook.com>
+References: <20230628081511.186850-1-make_ruc2021@163.com>
+ <AM0PR04MB62893E77D085030A6E2C37B28F24A@AM0PR04MB6289.eurprd04.prod.outlook.com>
+ <f321287d-8156-b805-26fd-58acfa26e324@csgroup.eu>
+ <AM0PR04MB628929736762F5DF46C55D708F24A@AM0PR04MB6289.eurprd04.prod.outlook.com>
+ <7975b5bf-c8e0-237e-d6f4-98e641d39959@csgroup.eu>
+ <2023062958-graffiti-skyrocket-cfee@gregkh>
+In-Reply-To: <2023062958-graffiti-skyrocket-cfee@gregkh>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: AM0PR04MB6289:EE_|DBAPR04MB7288:EE_
+x-ms-office365-filtering-correlation-id: fdeef337-1a1c-43e1-8558-08db78b36dbe
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: ada/y+xxr8skz7N4pnKCcHNX28rUAzMUmAYyc0QrMugULPQHHCZyqhUqjReZLOeBoj7P0/GZJE6qvbdmxOLMSdg6JcPEbTQWqT6z7YL6BTHS7XgxQSUuz5heNvLIOAI0AcTLXOoELZVmpiFp6EWh2htc66tQh0pp919Hi6gRrDa81YB6ctlnrT39eSDKq6WEdYNJTRHmKL1MbR6XrfpTE/j0hqdA250QDhPKkOgWeDCshCOxxZ4osu9p/6A/A5u3WrDVl0/C34mx/gGofjmPFYQ64t1oX24uxntKdIxYeD3KiYbGn3Ksa8rtGxCH6bDdWPvUdJ7N3kiqD/dnWMXzOZ4TYJGk/EY4bnOde5dN2fLAiyuPCFIwWNAKEb2WfKCoL3IL6P7XJKjEVlHYHSaHlRx5u7EftIyXDiRg5eiYvzXevhZU2LMi3nMWxKd/ybjeyKiXD/eUQh/JDwhxm9YSYHpEoTbAKRz8XldAyRec9sUSwtp9eYtJZK6xYD15NYEQ14e5/UwRnXDYKppVijKjPaxLpKVDd1W21UEqyEsqQrF21DkZFq6tdu0ZQiTemdOE/0jcnrvb4VKaXPvHeNE91/NGQtdzBJfpH/Od5fmMUOTPk6h5OFNMXtmz6Oy7bKiQ
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0PR04MB6289.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(39860400002)(366004)(346002)(396003)(136003)(451199021)(66574015)(7696005)(53546011)(2906002)(9686003)(71200400001)(83380400001)(38100700002)(122000001)(26005)(6506007)(186003)(55236004)(55016003)(41300700001)(110136005)(86362001)(54906003)(4326008)(38070700005)(5660300002)(478600001)(33656002)(66946007)(76116006)(66556008)(66476007)(66446008)(64756008)(8676002)(8936002)(52536014)(316002)(15650500001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?ftnVbHFV5h1nBYnX4YKJmCd5AisGNlYGb1MSOql3xVVWnPOXBZDLwkw8VO?=
+ =?iso-8859-1?Q?vDGxL78e5SyNXTemVv5UPd4G/Td3PrnlQKQrQxzNedeyRn9Rtjs3q4G6a1?=
+ =?iso-8859-1?Q?xAb2g9D5bQXHEXSiMWlx7GpFQAkf9Dg1qln6t2FtFvDk/BddpUoHM3axtc?=
+ =?iso-8859-1?Q?3dlutVyYf+nNi4eRNLkO8U2haVc6/4kJgBZ39b/0C4pnzcHR8gLwRBNtfB?=
+ =?iso-8859-1?Q?8Pr82z6lYmR59nkCgxJd3b5lVKKDib2BwvDXEn7B5aevhZJzJwvEQVkWsg?=
+ =?iso-8859-1?Q?njyD0MgPOq0ovFyWX7RAIBXc7pNQ0xuoDyp3XO0iigBVWgnoVH2wqUrC8m?=
+ =?iso-8859-1?Q?12D2G48EXDCMGchrRXVtxJq4UW/j5GfOwFLn/NMW9B848c3mcqOM72yEwr?=
+ =?iso-8859-1?Q?06N9AYeRwvIqwVBXIYtpqL0ApYFf3dTgXTiWG359Gn8S4761K7lRlvXPhW?=
+ =?iso-8859-1?Q?IyDPlWA2ZvaU/Zvz6IIm2hF6hU2dByRKRk9J7viB4YHqzPMiA9HttY+nBO?=
+ =?iso-8859-1?Q?CSfgFt3L8dxnlgzQmcqw28Vk/CvOVoRC0lkZbgvOKcJFbkq0Np25PyI+bY?=
+ =?iso-8859-1?Q?3jbL+KlfgzlnY3oNvs9AgZZjXANTY8i3Rk3eBPYADpeA9T+zvcCKwDxR84?=
+ =?iso-8859-1?Q?Oc8WPGwwSsXOO5WT6tXcfjR6fByJXq/L1tsfM4l1CSYA6nySIrFkJZ2NEc?=
+ =?iso-8859-1?Q?VVumbLp4YhYVOuhAxec/yEt/UU1ihiNS1v0/RpBZsBgs8wlAQRoPclhpaO?=
+ =?iso-8859-1?Q?kfg6wbUdHH2OyZh98mIdG6L/aKBM92USO5wgcs5upHhRVlINWvU9rc6Ade?=
+ =?iso-8859-1?Q?cFWaBPKvuOkFuZVIOhvZBSkTH7AptZACpO8LpHpzhoirUmJZlW5ebeLAgF?=
+ =?iso-8859-1?Q?vwa+fsNjZcXJHswA+Fz0/qnzfGOwvBeazV3Fsy9w4NpyX6q5Y8z8gAqNSI?=
+ =?iso-8859-1?Q?ScW7nqGV3KZGceUcCxVh/Y6A4WZg4499pi/GlOIWqq3scs7ythz7QElhhV?=
+ =?iso-8859-1?Q?+Nany+pO2EF20bts3qhpl7+VFMUXJsM6RjDoLVJkgi2vBTOgnT4omAfKk6?=
+ =?iso-8859-1?Q?hQHImjEM1XD+MJXm9OUGg3c2MxqybctG93qN3qjh6qE3j2swrrDIT5KK6C?=
+ =?iso-8859-1?Q?l0Mn5Lo2Ntep1a1IyGs1zBgGxjuogbqX+TOfbiJlvm08nBwe8nsfDpJMIn?=
+ =?iso-8859-1?Q?BZQJt5XQzy7MTGeBZV4cWtJzJhDMHIO726JcoB1/zj5VkgntNiJAxFSYGt?=
+ =?iso-8859-1?Q?J1jAOraTLzV+aJGSToXSkrh0PBUhfwPmYwz8Ea4BqaFoem8gONZ/VuQjiX?=
+ =?iso-8859-1?Q?YlsTMMa4+xjymrey9I+5nWECotF+37WnJhx4/8eX8wU9ffPuWPWzRZEn3F?=
+ =?iso-8859-1?Q?TTqY3HnEdJe35OwvTjPVoP+k2izs4RKgj5T7aaaInZgp+J45HKE0LGomrQ?=
+ =?iso-8859-1?Q?JpEyysBawzVXMNiCMwuSJsOe/R1sHDmeYD1pQyekCFKjuTzTQcd3UZmQhL?=
+ =?iso-8859-1?Q?v2blujPpYD4++vVZxaGM4sAgmRlkwC5R02AngSvXEUC93X+oZIfPrjEV2h?=
+ =?iso-8859-1?Q?f3DF5XWhBh8dnyvJj4GFNAaJKN0Wf4hG5aDGa+c4VK/F9RK87r2mB74YRY?=
+ =?iso-8859-1?Q?4bpkN6yup2/ZA=3D?=
+Content-Type: text/plain; charset="iso-8859-1"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-        lindbergh.monkeyblade.net
+MIME-Version: 1.0
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: AM0PR04MB6289.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: fdeef337-1a1c-43e1-8558-08db78b36dbe
+X-MS-Exchange-CrossTenant-originalarrivaltime: 29 Jun 2023 15:13:43.8240
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: l8uSpbHMY06YLhPI2du2k9MhYoLerBdrEeN7KrQsblLxYhUuJrY0FQybR7GxS4FQolLbuP00WX1veFEBCvvjzw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DBAPR04MB7288
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On June 29, 2023 12:27:54 AM PDT, lizhe=2E67@bytedance=2Ecom wrote:
->From: Li Zhe <lizhe=2E67@bytedance=2Ecom>
->
->There are ten places call rdmsrl_on_cpu() in the current code without
->judging the return value=2E This may introduce a potential bug=2E For exa=
-mple,
->inj_bank_set() may return -EINVAL, show_base_frequency() may show an erro=
-r
->freq value, intel_pstate_hwp_set() may write an error value to the relate=
-d
->msr register and so on=2E But rdmsrl_on_cpu() do rarely returns an error,=
- so
->it seems that add a WARN_ON is enough for debugging=2E
->
->Signed-off-by: Li Zhe <lizhe=2E67@bytedance=2Ecom>
->---
-> arch/x86/kernel/cpu/mce/inject=2Ec |  2 +-
-> drivers/cpufreq/intel_pstate=2Ec   | 18 +++++++++---------
-> 2 files changed, 10 insertions(+), 10 deletions(-)
->
->diff --git a/arch/x86/kernel/cpu/mce/inject=2Ec b/arch/x86/kernel/cpu/mce=
-/inject=2Ec
->index 12cf2e7ca33c=2E=2E0a34057f4fc6 100644
->--- a/arch/x86/kernel/cpu/mce/inject=2Ec
->+++ b/arch/x86/kernel/cpu/mce/inject=2Ec
->@@ -587,7 +587,7 @@ static int inj_bank_set(void *data, u64 val)
-> 	u64 cap;
->=20
-> 	/* Get bank count on target CPU so we can handle non-uniform values=2E =
-*/
->-	rdmsrl_on_cpu(m->extcpu, MSR_IA32_MCG_CAP, &cap);
->+	WARN_ON(rdmsrl_on_cpu(m->extcpu, MSR_IA32_MCG_CAP, &cap));
-> 	n_banks =3D cap & MCG_BANKCNT_MASK;
->=20
-> 	if (val >=3D n_banks) {
->diff --git a/drivers/cpufreq/intel_pstate=2Ec b/drivers/cpufreq/intel_pst=
-ate=2Ec
->index 2548ec92faa2=2E=2Efe2bdb38d6a0 100644
->--- a/drivers/cpufreq/intel_pstate=2Ec
->+++ b/drivers/cpufreq/intel_pstate=2Ec
->@@ -859,7 +859,7 @@ static ssize_t show_base_frequency(struct cpufreq_pol=
-icy *policy, char *buf)
-> 	if (ratio <=3D 0) {
-> 		u64 cap;
->=20
->-		rdmsrl_on_cpu(policy->cpu, MSR_HWP_CAPABILITIES, &cap);
->+		WARN_ON(rdmsrl_on_cpu(policy->cpu, MSR_HWP_CAPABILITIES, &cap));
-> 		ratio =3D HWP_GUARANTEED_PERF(cap);
-> 	}
->=20
->@@ -883,7 +883,7 @@ static void __intel_pstate_get_hwp_cap(struct cpudata=
- *cpu)
-> {
-> 	u64 cap;
->=20
->-	rdmsrl_on_cpu(cpu->cpu, MSR_HWP_CAPABILITIES, &cap);
->+	WARN_ON(rdmsrl_on_cpu(cpu->cpu, MSR_HWP_CAPABILITIES, &cap));
-> 	WRITE_ONCE(cpu->hwp_cap_cached, cap);
-> 	cpu->pstate=2Emax_pstate =3D HWP_GUARANTEED_PERF(cap);
-> 	cpu->pstate=2Eturbo_pstate =3D HWP_HIGHEST_PERF(cap);
->@@ -920,7 +920,7 @@ static void intel_pstate_hwp_set(unsigned int cpu)
-> 	if (cpu_data->policy =3D=3D CPUFREQ_POLICY_PERFORMANCE)
-> 		min =3D max;
->=20
->-	rdmsrl_on_cpu(cpu, MSR_HWP_REQUEST, &value);
->+	WARN_ON(rdmsrl_on_cpu(cpu, MSR_HWP_REQUEST, &value));
->=20
-> 	value &=3D ~HWP_MIN_PERF(~0L);
-> 	value |=3D HWP_MIN_PERF(min);
->@@ -1802,7 +1802,7 @@ static int core_get_min_pstate(int cpu)
-> {
-> 	u64 value;
->=20
->-	rdmsrl_on_cpu(cpu, MSR_PLATFORM_INFO, &value);
->+	WARN_ON(rdmsrl_on_cpu(cpu, MSR_PLATFORM_INFO, &value));
-> 	return (value >> 40) & 0xFF;
-> }
->=20
->@@ -1810,7 +1810,7 @@ static int core_get_max_pstate_physical(int cpu)
-> {
-> 	u64 value;
->=20
->-	rdmsrl_on_cpu(cpu, MSR_PLATFORM_INFO, &value);
->+	WARN_ON(rdmsrl_on_cpu(cpu, MSR_PLATFORM_INFO, &value));
-> 	return (value >> 8) & 0xFF;
-> }
->=20
->@@ -1855,7 +1855,7 @@ static int core_get_max_pstate(int cpu)
-> 	int tdp_ratio;
-> 	int err;
->=20
->-	rdmsrl_on_cpu(cpu, MSR_PLATFORM_INFO, &plat_info);
->+	WARN_ON(rdmsrl_on_cpu(cpu, MSR_PLATFORM_INFO, &plat_info));
-> 	max_pstate =3D (plat_info >> 8) & 0xFF;
->=20
-> 	tdp_ratio =3D core_get_tdp_ratio(cpu, plat_info);
->@@ -1887,7 +1887,7 @@ static int core_get_turbo_pstate(int cpu)
-> 	u64 value;
-> 	int nont, ret;
->=20
->-	rdmsrl_on_cpu(cpu, MSR_TURBO_RATIO_LIMIT, &value);
->+	WARN_ON(rdmsrl_on_cpu(cpu, MSR_TURBO_RATIO_LIMIT, &value));
-> 	nont =3D core_get_max_pstate(cpu);
-> 	ret =3D (value) & 255;
-> 	if (ret <=3D nont)
->@@ -1921,7 +1921,7 @@ static int knl_get_turbo_pstate(int cpu)
-> 	u64 value;
-> 	int nont, ret;
->=20
->-	rdmsrl_on_cpu(cpu, MSR_TURBO_RATIO_LIMIT, &value);
->+	WARN_ON(rdmsrl_on_cpu(cpu, MSR_TURBO_RATIO_LIMIT, &value));
-> 	nont =3D core_get_max_pstate(cpu);
-> 	ret =3D (((value) >> 8) & 0xFF);
-> 	if (ret <=3D nont)
->@@ -2974,7 +2974,7 @@ static int intel_cpufreq_cpu_init(struct cpufreq_po=
-licy *policy)
->=20
-> 		intel_pstate_get_hwp_cap(cpu);
->=20
->-		rdmsrl_on_cpu(cpu->cpu, MSR_HWP_REQUEST, &value);
->+		WARN_ON(rdmsrl_on_cpu(cpu->cpu, MSR_HWP_REQUEST, &value));
-> 		WRITE_ONCE(cpu->hwp_req_cached, value);
->=20
-> 		cpu->epp_cached =3D intel_pstate_get_epp(cpu, value);
 
-Be careful here: if a return value of zero is acceptable as an equivalent =
-of no return, the code is correct, as we always return zero if the MSR faul=
-ts=2E
+
+> -----Original Message-----
+> From: gregkh@linuxfoundation.org <gregkh@linuxfoundation.org>
+> Sent: Thursday, June 29, 2023 3:41 AM
+> To: Christophe Leroy <christophe.leroy@csgroup.eu>
+> Cc: Leo Li <leoyang.li@nxp.com>; Ma Ke <make_ruc2021@163.com>; linux-
+> usb@vger.kernel.org; linuxppc-dev@lists.ozlabs.org; linux-
+> kernel@vger.kernel.org
+> Subject: Re: [PATCH] usb: gadget: fsl_qe_udc: validate endpoint index for
+> ch9 udc
+>=20
+> On Thu, Jun 29, 2023 at 05:56:30AM +0000, Christophe Leroy wrote:
+> >
+> >
+> > Le 28/06/2023 =E0 23:10, Leo Li a =E9crit=A0:
+> > >
+> > >
+> > >> -----Original Message-----
+> > >> From: Christophe Leroy <christophe.leroy@csgroup.eu>
+> > >> Sent: Wednesday, June 28, 2023 2:40 PM
+> > >> To: Leo Li <leoyang.li@nxp.com>; Ma Ke <make_ruc2021@163.com>
+> > >> Cc: gregkh@linuxfoundation.org; linux-usb@vger.kernel.org;
+> > >> linuxppc- dev@lists.ozlabs.org; linux-kernel@vger.kernel.org
+> > >> Subject: Re: [PATCH] usb: gadget: fsl_qe_udc: validate endpoint
+> > >> index for
+> > >> ch9 udc
+> > >>
+> > >>
+> > >>
+> > >> Le 28/06/2023 =E0 19:04, Leo Li a =E9crit=A0:
+> > >>>
+> > >>>
+> > >>>> -----Original Message-----
+> > >>>> From: Ma Ke <make_ruc2021@163.com>
+> > >>>> Sent: Wednesday, June 28, 2023 3:15 AM
+> > >>>> To: Leo Li <leoyang.li@nxp.com>
+> > >>>> Cc: gregkh@linuxfoundation.org; linux-usb@vger.kernel.org;
+> > >>>> linuxppc- dev@lists.ozlabs.org; linux-kernel@vger.kernel.org; Ma
+> > >>>> Ke <make_ruc2021@163.com>
+> > >>>> Subject: [PATCH] usb: gadget: fsl_qe_udc: validate endpoint index
+> > >>>> for
+> > >>>> ch9 udc
+> > >>>>
+> > >>>> We should verify the bound of the array to assure that host may
+> > >>>> not manipulate the index to point past endpoint array.
+> > >>>>
+> > >>>> Signed-off-by: Ma Ke <make_ruc2021@163.com>
+> > >>>> ---
+> > >>>>    drivers/usb/gadget/udc/fsl_qe_udc.c | 2 ++
+> > >>>>    1 file changed, 2 insertions(+)
+> > >>>>
+> > >>>> diff --git a/drivers/usb/gadget/udc/fsl_qe_udc.c
+> > >>>> b/drivers/usb/gadget/udc/fsl_qe_udc.c
+> > >>>> index 3b1cc8fa30c8..f4e5cbd193b7 100644
+> > >>>> --- a/drivers/usb/gadget/udc/fsl_qe_udc.c
+> > >>>> +++ b/drivers/usb/gadget/udc/fsl_qe_udc.c
+> > >>>> @@ -1959,6 +1959,8 @@ static void ch9getstatus(struct qe_udc
+> > >>>> *udc, u8 request_type, u16 value,
+> > >>>>    	} else if ((request_type & USB_RECIP_MASK) =3D=3D
+> > >>>> USB_RECIP_ENDPOINT) {
+> > >>>>    		/* Get endpoint status */
+> > >>>>    		int pipe =3D index & USB_ENDPOINT_NUMBER_MASK;
+> > >>>> +		if (pipe >=3D USB_MAX_ENDPOINTS)
+> > >>>> +			goto stall;
+> > >>>
+> > >>> Thanks.  This seems to be the right thing to do.  But normally we
+> > >>> don't mix
+> > >> declarations with code within a code block.  Could we re-arrange
+> > >> the code a little bit so declarations stay on top?
+> > >>
+> > >> But we are at the start of a code block aren't we ?
+> > >
+> > > But they were at the beginning of a { } block which is compliant with=
+ the
+> C89 standard.  I know gcc is more relaxed from this.  But it is probably =
+still
+> good to stick to the standard?
+> >
+> > Sorry I misread the patch and failed to see that the declaration block
+> > was continuing after the change.
+> >
+> > So yes don't interleave code with declarations. Leave declaration at
+> > the top of a block with a blank line between declarations and code.
+>=20
+> This is fine as-is, no need to change anything.
+
+With the approval from Greg, I have no objection to the patch.
+
+Acked-by: Li Yang <leoyang.li@nxp.com>
+
+Regards,
+Leo
