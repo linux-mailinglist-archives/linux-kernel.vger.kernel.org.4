@@ -2,146 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B91D742869
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 16:31:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 644C974286F
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 16:32:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232084AbjF2Obr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 10:31:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33372 "EHLO
+        id S231546AbjF2OcY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 10:32:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229522AbjF2Obn (ORCPT
+        with ESMTP id S229936AbjF2OcS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 10:31:43 -0400
-Received: from mail-ua1-x935.google.com (mail-ua1-x935.google.com [IPv6:2607:f8b0:4864:20::935])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A8B12122;
-        Thu, 29 Jun 2023 07:31:42 -0700 (PDT)
-Received: by mail-ua1-x935.google.com with SMTP id a1e0cc1a2514c-786e637f06dso270967241.2;
-        Thu, 29 Jun 2023 07:31:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688049101; x=1690641101;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=LKLBYSEdJ5sXV4EBLGg0oAJi8UayRb2mLq76mINGpUA=;
-        b=rdZyKmqkLl5oe3BwYEQFBNy3lDMrmZxCZq/pMHDzOhK+pPG8SznVdQyqNBDMigHPMi
-         2M1a/G5o1B8kFoYp7Y/s6/ktUnmSrs3ljP9+HBQNIbnvaRHbagCBJqd9anJoA/bmKJw3
-         qlPMQXhUkmVgc/99VrKlRptcyvVePtxw/EI0+g0NG2CGg0HxoXzVB8sF3MhaKNjg2hMN
-         AHisWtr20a8+bocV6c35s6n5uV/XTt57jAxOD9L/dFruG3n1LG3xhZ9b+b/7MMxyjdtR
-         YgY+jvqiu597EsIMpJYEbFDW4PB/qxRE30Z9hg9Iyk/fl/WOUc1bCIRPhw0yRhmoTxpX
-         NeIw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688049101; x=1690641101;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=LKLBYSEdJ5sXV4EBLGg0oAJi8UayRb2mLq76mINGpUA=;
-        b=k6ooPUrcdX5cjkmBo94omNB0kzQXIs4f8p8HqHqeSP+oBhuiI9s1DdUdzITeutB1Tm
-         8aasX/kZlOTsM5bJHbd1DXdmTiyh38y/jez1Go8bKeqwMmiK8JxkAnbl6WrLm9dO83se
-         om0jTT/lE4doYS5WGBlrI2NPcb9qK9S1TpbjYMeImjrlXAKLO0BBFTRHx1bxir/4tY1H
-         Yaydxs6yhyQvC+cDv7M9mal9DZJDUfFSlLxTpSEo+RoLrHSZkv2aEkCJFngGo/v4SGZE
-         JKy96FlvrLDEQ5MJG51M6aFusgyV0l5m/3rUXFWGAT9Q2xzCPHXRnlAAFoqW12zkSWRH
-         uy4w==
-X-Gm-Message-State: AC+VfDwA15ilw6Xg+Zead4vQnr0CfhHbNzdNYP9rz0sdSw0ErtbaMtI0
-        RXEEkFm1q+ScPk+x7MvOTjp2udg47YgFH5CUx8qI+jGfPRI=
-X-Google-Smtp-Source: ACHHUZ4xnAkcpMY72iUPcwnGryX3PkLB9JM29IAfVQPJbmq8i05u6E2etSLfxd0NQgm35eszZZhQwfBBofppo1lF3OU=
-X-Received: by 2002:a67:bc04:0:b0:443:68b1:3bf5 with SMTP id
- t4-20020a67bc04000000b0044368b13bf5mr7984029vsn.23.1688049101154; Thu, 29 Jun
- 2023 07:31:41 -0700 (PDT)
+        Thu, 29 Jun 2023 10:32:18 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 457942D69;
+        Thu, 29 Jun 2023 07:32:16 -0700 (PDT)
+Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35TEMAqF030331;
+        Thu, 29 Jun 2023 14:31:57 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : content-transfer-encoding : mime-version; s=pp1;
+ bh=PgkKmvKoXWdV8E7x/QtCAbTgetf5V95w91yWR0QNxXU=;
+ b=HC79Xd3rZ8F47qC6eNtnNILy1yBN6ApgcH1YmEimwMbh5hXNHYMr0tj8Z3Dg1ASvl/X0
+ Yo9BYyvzAb50msju06cQ4mJnA64HnbqWniCOuKvSMBTdwLIJzSbB2ulgxVjFRnfv0JCH
+ N1W2m2/T+99XB08jpSIvcNFMccSfTGh5bKgntLWRnwOgquoPULO8WYoHDmqicO5NycA+
+ OKF/4U+SsNMJ9VZHfiibmWY7I1+K1tAcrLsDzvap+EQRfjkbKrgYGWkpae6edfQLrBsP
+ H3JPl92u1PlvJWovoXEW+70LBjT8sjgIp4cs4Pgi2mpKU9MJXZL3yK8WhaX/x2pI3exz Yw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3rhbnf08be-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 29 Jun 2023 14:31:57 +0000
+Received: from m0360083.ppops.net (m0360083.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 35TENke0004150;
+        Thu, 29 Jun 2023 14:31:56 GMT
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3rhbnf089y-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 29 Jun 2023 14:31:56 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 35T4RLxX032704;
+        Thu, 29 Jun 2023 14:31:54 GMT
+Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
+        by ppma03ams.nl.ibm.com (PPS) with ESMTPS id 3rdr453d7r-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 29 Jun 2023 14:31:53 +0000
+Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
+        by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 35TEVpP422741684
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 29 Jun 2023 14:31:51 GMT
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 7F98620043;
+        Thu, 29 Jun 2023 14:31:51 +0000 (GMT)
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 1041A20040;
+        Thu, 29 Jun 2023 14:31:51 +0000 (GMT)
+Received: from pomme.tlslab.ibm.com (unknown [9.101.4.33])
+        by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Thu, 29 Jun 2023 14:31:50 +0000 (GMT)
+From:   Laurent Dufour <ldufour@linux.ibm.com>
+To:     linuxppc-dev@lists.ozlabs.org
+Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        mpe@ellerman.id.au, npiggin@gmail.com, christophe.leroy@csgroup.eu,
+        tglx@linutronix.de, dave.hansen@linux.intel.com, mingo@redhat.com,
+        bp@alien8.de
+Subject: [PATCH v3 0/9] Introduce SMT level and add PowerPC support
+Date:   Thu, 29 Jun 2023 16:31:40 +0200
+Message-ID: <20230629143149.79073-1-ldufour@linux.ibm.com>
+X-Mailer: git-send-email 2.41.0
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: KnQKqTYL1ux1N6LbZbIv59sbgWflxRND
+X-Proofpoint-ORIG-GUID: I0FfXe544_ewxmg6_4UIwmxfARBnRcst
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-References: <20230628121811.338655-1-tz.stoyanov@gmail.com> <20230628084428.7bb32d65@rorschach.local.home>
-In-Reply-To: <20230628084428.7bb32d65@rorschach.local.home>
-From:   Tzvetomir Stoyanov <tz.stoyanov@gmail.com>
-Date:   Thu, 29 Jun 2023 17:31:24 +0300
-Message-ID: <CAPpZLN6dCMzHyUhjSN3+9Um+-mS2TJiDPObUeO8NxyqpQS3k=g@mail.gmail.com>
-Subject: Re: [PATCH] kernel/trace: Fix cleanup logic of enable_trace_eprobe
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     mhiramat@kernel.org, dan.carpenter@linaro.org,
-        linux-trace-devel@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-06-29_03,2023-06-27_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 adultscore=0
+ lowpriorityscore=0 clxscore=1015 phishscore=0 spamscore=0 bulkscore=0
+ mlxlogscore=999 priorityscore=1501 malwarescore=0 suspectscore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2305260000 definitions=main-2306290131
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 28, 2023 at 3:44=E2=80=AFPM Steven Rostedt <rostedt@goodmis.org=
-> wrote:
->
-> On Wed, 28 Jun 2023 15:18:11 +0300
-> "Tzvetomir Stoyanov (VMware)" <tz.stoyanov@gmail.com> wrote:
->
-> > The enable_trace_eprobe() function enables all event probes, attached
-> > to given trace probe. If an error occurs in enabling one of the event
-> > probes, all others should be roll backed. There is a bug in that roll
-> > back logic - instead of all event probes, only the failed one is
-> > disabled.
-> >
-> > Reported-by: Dan Carpenter <dan.carpenter@linaro.org>
-> > Fixes: 7491e2c44278 ("tracing: Add a probe that attaches to trace event=
-s")
-> > Signed-off-by: Tzvetomir Stoyanov (VMware) <tz.stoyanov@gmail.com>
-> > ---
-> >  kernel/trace/trace_eprobe.c | 8 ++++++--
-> >  1 file changed, 6 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/kernel/trace/trace_eprobe.c b/kernel/trace/trace_eprobe.c
-> > index 67e854979d53..ba9a28bc773f 100644
-> > --- a/kernel/trace/trace_eprobe.c
-> > +++ b/kernel/trace/trace_eprobe.c
-> > @@ -702,8 +702,12 @@ static int enable_trace_eprobe(struct trace_event_=
-call *call,
-> >
-> >       if (ret) {
-> >               /* Failed to enable one of them. Roll back all */
-> > -             if (enabled)
-> > -                     disable_eprobe(ep, file->tr);
-> > +             if (enabled) {
->
-> If one was enabled and the second one failed, that should only happen
-> if there's a bug in the kernel (unless the failure was due to a memory
-> problem).
->
-> I wonder if we should add:
->
->                         int cnt =3D 0;
->
-> > +                     list_for_each_entry(pos, trace_probe_probe_list(t=
-p), list) {
->
->                                 /*
->                                  * It's a bug if one failed for something=
- other than memory
->                                  * not being available but another eprobe=
- succeeded.
->                                  */
->                                 WARN_ON_ONCE(cnt++ && ret !=3D -ENOMEM);
+I'm taking over the series Michael sent previously [1] which is smartly
+reviewing the initial series I sent [2].  This series is addressing the
+comments sent by Thomas and me on the Michael's one.
 
-That makes sense, I can send v2 with it. What is the idea of this cnt
-counter, why not just:
-                                 WARN_ON_ONCE(ret !=3D -ENOMEM);
-outside of the loop? If enabled is true and ret is not ENOMEM, the bug
-is already there.
+Here is a short introduction to the issue this series is addressing:
 
->
-> -- Steve
->
->
-> > +                             ep =3D container_of(pos, struct trace_epr=
-obe, tp);
-> > +                             disable_eprobe(ep, file->tr);
-> > +                     }
-> > +             }
-> >               if (file)
-> >                       trace_probe_remove_file(tp, file);
-> >               else
->
+When a new CPU is added, the kernel is activating all its threads. This
+leads to weird, but functional, result when adding CPU on a SMT 4 system
+for instance.
 
+Here the newly added CPU 1 has 8 threads while the other one has 4 threads
+active (system has been booted with the 'smt-enabled=4' kernel option):
 
---=20
-Tzvetomir (Ceco) Stoyanov
-VMware Open Source Technology Center
+ltcden3-lp12:~ # ppc64_cpu --info
+Core   0:    0*    1*    2*    3*    4     5     6     7
+Core   1:    8*    9*   10*   11*   12*   13*   14*   15*
+
+This mixed SMT level may confused end users and/or some applications.
+
+There is no SMT level recorded in the kernel (common code), neither in user
+space, as far as I know. Such a level is helpful when adding new CPU or
+when optimizing the energy efficiency (when reactivating CPUs).
+
+When SMP and HOTPLUG_SMT are defined, this series is adding a new SMT level
+(cpu_smt_num_threads) and few callbacks allowing the architecture code to
+fine control this value, setting a max and a "at boot" level, and
+controling whether a thread should be onlined or not.
+
+v3:
+  Fix a build error in the patch 6/9
+v2:
+  As Thomas suggested,
+    Reword some commit's description
+    Remove topology_smt_supported()
+    Remove topology_smt_threads_supported()
+    Introduce CONFIG_SMT_NUM_THREADS_DYNAMIC
+    Remove switch() in __store_smt_control()
+  Update kernel-parameters.txt
+
+[1] https://lore.kernel.org/linuxppc-dev/20230524155630.794584-1-mpe@ellerman.id.au/
+[2] https://lore.kernel.org/linuxppc-dev/20230331153905.31698-1-ldufour@linux.ibm.com/
+
+Laurent Dufour (1):
+  cpu/SMT: Remove topology_smt_supported()
+
+Michael Ellerman (8):
+  cpu/SMT: Move SMT prototypes into cpu_smt.h
+  cpu/SMT: Move smt/control simple exit cases earlier
+  cpu/SMT: Store the current/max number of threads
+  cpu/SMT: Create topology_smt_thread_allowed()
+  cpu/SMT: Allow enabling partial SMT states via sysfs
+  powerpc/pseries: Initialise CPU hotplug callbacks earlier
+  powerpc: Add HOTPLUG_SMT support
+  powerpc/pseries: Honour current SMT state when DLPAR onlining CPUs
+
+ .../ABI/testing/sysfs-devices-system-cpu      |   1 +
+ .../admin-guide/kernel-parameters.txt         |   4 +-
+ arch/Kconfig                                  |   3 +
+ arch/powerpc/Kconfig                          |   2 +
+ arch/powerpc/include/asm/topology.h           |  15 +++
+ arch/powerpc/kernel/smp.c                     |   8 +-
+ arch/powerpc/platforms/pseries/hotplug-cpu.c  |  30 +++--
+ arch/powerpc/platforms/pseries/pseries.h      |   2 +
+ arch/powerpc/platforms/pseries/setup.c        |   2 +
+ arch/x86/include/asm/topology.h               |   4 +-
+ arch/x86/kernel/cpu/bugs.c                    |   3 +-
+ arch/x86/kernel/smpboot.c                     |   8 --
+ include/linux/cpu.h                           |  25 +---
+ include/linux/cpu_smt.h                       |  33 +++++
+ kernel/cpu.c                                  | 118 ++++++++++++++----
+ 15 files changed, 187 insertions(+), 71 deletions(-)
+ create mode 100644 include/linux/cpu_smt.h
+
+-- 
+2.41.0
+
