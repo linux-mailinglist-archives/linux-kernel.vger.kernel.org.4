@@ -2,262 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB25E742A79
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 18:19:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C58A742A75
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 18:18:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232367AbjF2QTC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 12:19:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39972 "EHLO
+        id S231497AbjF2QSR convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 29 Jun 2023 12:18:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232159AbjF2QSl (ORCPT
+        with ESMTP id S230401AbjF2QSQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 12:18:41 -0400
-Received: from mail-il1-x130.google.com (mail-il1-x130.google.com [IPv6:2607:f8b0:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E16B82D7F
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 09:18:38 -0700 (PDT)
-Received: by mail-il1-x130.google.com with SMTP id e9e14a558f8ab-345c343ce29so3843465ab.3
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 09:18:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google; t=1688055518; x=1690647518;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=dI+vxECRyY3M/Rdu95pvj0tL1PCBmoWAf3eDvwREIRs=;
-        b=Myh6OhMdjqsdEZ9Ybgw4bqMA4ND+qx2dbKkWk1m+aNMkl9dMLDBOtSNVslYP1C+43c
-         yPoHEdO86DHkwgc2ZuolHzusqTDez9Lnva8pDDWoS3G02ncrN4vEUWIrJEOH3eMk1Y9j
-         1La5wHTvj+uPH2/XH3R0mA7/XIcR80+SdUZzY=
+        Thu, 29 Jun 2023 12:18:16 -0400
+Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64BD6CF;
+        Thu, 29 Jun 2023 09:18:14 -0700 (PDT)
+Received: by mail-ej1-f52.google.com with SMTP id a640c23a62f3a-991f9148334so25016866b.1;
+        Thu, 29 Jun 2023 09:18:14 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688055518; x=1690647518;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=dI+vxECRyY3M/Rdu95pvj0tL1PCBmoWAf3eDvwREIRs=;
-        b=icvAT8yX9e2YtIndZKgUDmQVUeO/FqPPLVg7CNkwuzxKTvNCrXDoHuufw09FsUAag2
-         fUUKvfVkjgAVgPAU0KH/ox7aocC8BjLiHQ5a6h+nJ2r226oaOzIesjfZexMr3e5BPQ+d
-         Rd1ON7Ib1uEPd/Ca9phMoOrOmuGgYwhkFMuWw0sOgdfX98TwgS9Pa7nQD/Cw0neWdeNy
-         SWhrFiqNoDRFNMEMa9774QgDtxeAtxCqRiFDVBO95khuUZ23KOYp0B4e1wJf22jTFzWG
-         nuw9CGpPA8jydyaO6MXFMyRvBJDlVJpNEG4v4obbfAmWJD5PasiJeIlmXHCw4cORLwcV
-         0cjw==
-X-Gm-Message-State: AC+VfDxEW+GF3HBZDaiq5EV2cXzndTI9go59gsuTEw8xe8HRsXQVaZ8k
-        8nZ2IxS53b3SPPl7oMcikiOnT8NDonn88oWk4+2Jjw==
-X-Google-Smtp-Source: ACHHUZ5rU/XAY1A2Xe5i1KDjxdaldeL3tVTYtVT1k/RjPLK58HiLRwY06mjq4ywKGJ+yys64uIrs7QQoVU72Z0TOvm8=
-X-Received: by 2002:a05:6e02:6ca:b0:345:a3c6:87ba with SMTP id
- p10-20020a056e0206ca00b00345a3c687bamr16063914ils.22.1688055518271; Thu, 29
- Jun 2023 09:18:38 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1688055493; x=1690647493;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=eKddrYb9Xcx4IoLqdTI5tk2rwMAekQcgu+s3gWevaEw=;
+        b=ThG38RP32xKZ+PWuCnCBfiwPRYgc1M/xWk/BMrEJaV8BYcfwGNK7Zm1kwoPueRNhgn
+         z+f0qmxed7ySjDgTfMV8UXFJkvhlaUrpkYNSek1CxICQKdk61BZvUOfmfjc5cO2YiL2u
+         a7sP10kS++uf73AesejacvimbX/1KQoVg+CqeauxXjQMsJHYmHROdF1NCpFVPQ31B6ZO
+         dggMDDj0r41P1T9W71lSM/tNkmvGRks28G62aM+rB0GrWXFeSedoSBppgDQ343dHaFg3
+         ZiH/WTrPjt2WV8d6jZ7QKPMN80GDVBLYtqc0bWCMh4JzGE9RCeiQifpY325UE3dUIDf2
+         bzqQ==
+X-Gm-Message-State: AC+VfDzs/sZ/KwpCuMucAdBh7MsYJbIS111fhulSrDbsDH1kr7opOUu5
+        va45CAyC7IDfmKtLSToTXLx8/tjNZzM0ANseTc8=
+X-Google-Smtp-Source: ACHHUZ7k8Ks89MOBgWSXswK1HxhhFvMe9nfbQWVunQafLyVDNv7RaVKtwd8bkxTgNnzA6i5b6d/Dmbk3eD5wOPYod2M=
+X-Received: by 2002:a17:906:73dd:b0:989:1ed3:d00b with SMTP id
+ n29-20020a17090673dd00b009891ed3d00bmr21389315ejl.4.1688055492790; Thu, 29
+ Jun 2023 09:18:12 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230629134306.95823-1-jonas.gorski@gmail.com>
- <CAKekbeuMjUPpzfgKrxgZzFpiQ4FbeYtBtbrzkWKeBy4u2Symhg@mail.gmail.com> <CAOiHx=kh79=zBM=P8BhrU+3BHcgF71ZZdJR-hV9Tsm59=jELHw@mail.gmail.com>
-In-Reply-To: <CAOiHx=kh79=zBM=P8BhrU+3BHcgF71ZZdJR-hV9Tsm59=jELHw@mail.gmail.com>
-From:   Kamal Dasu <kamal.dasu@broadcom.com>
-Date:   Thu, 29 Jun 2023 12:18:01 -0400
-Message-ID: <CAKekbesHXh+ba6x=3_DjGH1HRmdnkn4phYG5tMobxsF_u+DBHw@mail.gmail.com>
-Subject: Re: [PATCH] spi: bcm-qspi: return error if neither hif_mspi nor mspi
- is available
-To:     Jonas Gorski <jonas.gorski@gmail.com>
-Cc:     Kamal Dasu <kdasu.kdev@gmail.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="0000000000008ad27305ff470d65"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230616165034.3630141-1-michal.wilczynski@intel.com> <20230616165034.3630141-10-michal.wilczynski@intel.com>
+In-Reply-To: <20230616165034.3630141-10-michal.wilczynski@intel.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 29 Jun 2023 18:18:01 +0200
+Message-ID: <CAJZ5v0gcokw72q5uX-3pbBEZtJdCaWHN1vat8yPNQ3SXMgeD4g@mail.gmail.com>
+Subject: Re: [PATCH v5 09/10] acpi/nfit: Move handler installing logic to driver
+To:     Michal Wilczynski <michal.wilczynski@intel.com>
+Cc:     linux-acpi@vger.kernel.org, rafael@kernel.org,
+        dan.j.williams@intel.com, vishal.l.verma@intel.com,
+        lenb@kernel.org, dave.jiang@intel.com, ira.weiny@intel.com,
+        rui.zhang@intel.com, linux-kernel@vger.kernel.org,
+        nvdimm@lists.linux.dev,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---0000000000008ad27305ff470d65
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-On Thu, Jun 29, 2023 at 11:38=E2=80=AFAM Jonas Gorski <jonas.gorski@gmail.c=
-om> wrote:
+On Fri, Jun 16, 2023 at 6:51 PM Michal Wilczynski
+<michal.wilczynski@intel.com> wrote:
 >
-> On Thu, 29 Jun 2023 at 17:07, Kamal Dasu <kamal.dasu@broadcom.com> wrote:
-> >
-> > On Thu, Jun 29, 2023 at 9:43=E2=80=AFAM Jonas Gorski <jonas.gorski@gmai=
-l.com> wrote:
-> > >
-> > > If neither a "hif_mspi" nor "mspi" resource is present, the driver wi=
-ll
-> > > just early exit in probe but still return success. Apart from not doi=
-ng
-> > > anything meaningful, this would then also lead to a null pointer acce=
-ss
-> > > on removal, as platform_get_drvdata() would return NULL, which it wou=
-ld
-> > > then try to dereferce when trying to unregister the spi master.
-
-s/dereferce/ dereference
-
-> > >
-> > > Fix this by unconditionally calling devm_ioremap_resource(), as it ca=
-n
-> > > handle a NULL res and will then return a viable ERR_PTR() if we get o=
-ne.
-> > >
-> > > The "return 0;" was previously a "goto qspi_resource_err;" where then
-> > > ret was returned, but since ret was still initialized to 0 at this pl=
-ace
-> > > this was a valid conversion in 63c5395bb7a9 ("spi: bcm-qspi: Fix
-> > > use-after-free on unbind"). The issue was not introduced by this comm=
-it,
-> > > only made more obvious.
-> > >
-> > > Fixes: fa236a7ef240 ("spi: bcm-qspi: Add Broadcom MSPI driver")
-> > > Signed-off-by: Jonas Gorski <jonas.gorski@gmail.com>
-> > > ---
-
-Reviewed-by:  Kamal Dasu <kamal.dasu@broadcom.com>
-
-> > > Found by looking a the driver while comparing it to its bindings.
-> > >
-> > > Only build tested, not runtested.
-> > >
-> > >  drivers/spi/spi-bcm-qspi.c | 10 +++-------
-> > >  1 file changed, 3 insertions(+), 7 deletions(-)
-> > >
-> > > diff --git a/drivers/spi/spi-bcm-qspi.c b/drivers/spi/spi-bcm-qspi.c
-> > > index 6b46a3b67c41..d91dfbe47aa5 100644
-> > > --- a/drivers/spi/spi-bcm-qspi.c
-> > > +++ b/drivers/spi/spi-bcm-qspi.c
-> > > @@ -1543,13 +1543,9 @@ int bcm_qspi_probe(struct platform_device *pde=
-v,
-> > >                 res =3D platform_get_resource_byname(pdev, IORESOURCE=
-_MEM,
-> > >                                                    "mspi");
-> > >
-> > > -       if (res) {
-> > > -               qspi->base[MSPI]  =3D devm_ioremap_resource(dev, res)=
-;
-> > > -               if (IS_ERR(qspi->base[MSPI]))
-> > > -                       return PTR_ERR(qspi->base[MSPI]);
-> > > -       } else {
-> > > -               return 0;
-> > > -       }
-> >
-> > I would rather just do this in the else case
-> >
-> > } else {
-> >  -              return 0;
-> >  +             return -ENODEV;
-> > }
-> >
-> >  The change below does not check the return of
-> > platform_get_resource_byname() in my opinion rather relies on
-> > devm_ioremap_resource() doing the right thing.
+> Currently logic for installing notifications from ACPI devices is
+> implemented using notify callback in struct acpi_driver. Preparations
+> are being made to replace acpi_driver with more generic struct
+> platform_driver, which doesn't contain notify callback. Furthermore
+> as of now handlers are being called indirectly through
+> acpi_notify_device(), which decreases performance.
 >
-> This is how devm_ioremap_resource() is intended to be used, see e.g.
-> the example in its kernel documentation:
+> Call acpi_dev_install_notify_handler() at the end of .add() callback.
+> Call acpi_dev_remove_notify_handler() at the beginning of .remove()
+> callback. Change arguments passed to the notify function to match with
+> what's required by acpi_install_notify_handler(). Remove .notify
+> callback initialization in acpi_driver.
 >
-> https://elixir.bootlin.com/linux/latest/source/lib/devres.c#L167
+> Suggested-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> Signed-off-by: Michal Wilczynski <michal.wilczynski@intel.com>
+> ---
+>  drivers/acpi/nfit/core.c | 24 ++++++++++++++++++------
+>  1 file changed, 18 insertions(+), 6 deletions(-)
 >
-> So I don't see what's wrong with relying on functions doing the right thi=
-ng.
+> diff --git a/drivers/acpi/nfit/core.c b/drivers/acpi/nfit/core.c
+> index 95930e9d776c..a281bdfee8a0 100644
+> --- a/drivers/acpi/nfit/core.c
+> +++ b/drivers/acpi/nfit/core.c
+> @@ -3312,11 +3312,13 @@ void acpi_nfit_shutdown(void *data)
+>  }
+>  EXPORT_SYMBOL_GPL(acpi_nfit_shutdown);
 >
-> Also AFAIU the appropriate return code in this case would be rather
-> -EINVAL, not -ENODEV.
+> -static void acpi_nfit_notify(struct acpi_device *adev, u32 event)
+> +static void acpi_nfit_notify(acpi_handle handle, u32 event, void *data)
+>  {
+> -       device_lock(&adev->dev);
+> -       __acpi_nfit_notify(&adev->dev, adev->handle, event);
+> -       device_unlock(&adev->dev);
+
+It's totally not necessary to rename the ACPI device variable here.
+
+Just add
+
+struct acpi_device *adev = data;
+
+to this function.
+
+> +       struct acpi_device *device = data;
+> +
+> +       device_lock(&device->dev);
+> +       __acpi_nfit_notify(&device->dev, handle, event);
+> +       device_unlock(&device->dev);
+>  }
 >
-> >
-> > > +       qspi->base[MSPI]  =3D devm_ioremap_resource(dev, res);
-> > > +       if (IS_ERR(qspi->base[MSPI]))
-> > > +               return PTR_ERR(qspi->base[MSPI]);
-> > >
-> > >         res =3D platform_get_resource_byname(pdev, IORESOURCE_MEM, "b=
-spi");
-> > >         if (res) {
-> > > --
-> > > 2.34.1
-> > >
+>  static int acpi_nfit_add(struct acpi_device *adev)
+> @@ -3375,12 +3377,23 @@ static int acpi_nfit_add(struct acpi_device *adev)
 >
-
-
-
-> Regards,
-> Jonas
-
---0000000000008ad27305ff470d65
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
-
-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
-DxuNuBlySpn/GYqPcDcRZd8EENWqnZrjtjHMk0j7ZfrPGXq8sQkbG3OX+DOwSaefPRq1pLGWBZaZ
-YuUo5O7CNHo7h7Hc9GgjiW+6X9BjKAzSaDy8jwIDAQABo4IB2DCCAdQwDgYDVR0PAQH/BAQDAgWg
-MIGjBggrBgEFBQcBAQSBljCBkzBOBggrBgEFBQcwAoZCaHR0cDovL3NlY3VyZS5nbG9iYWxzaWdu
-LmNvbS9jYWNlcnQvZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3J0MEEGCCsGAQUFBzABhjVo
-dHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAyMDBNBgNV
-HSAERjBEMEIGCisGAQQBoDIBKAowNDAyBggrBgEFBQcCARYmaHR0cHM6Ly93d3cuZ2xvYmFsc2ln
-bi5jb20vcmVwb3NpdG9yeS8wCQYDVR0TBAIwADBJBgNVHR8EQjBAMD6gPKA6hjhodHRwOi8vY3Js
-Lmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNybDAiBgNVHREEGzAZ
-gRdrYW1hbC5kYXN1QGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggrBgEFBQcDBDAfBgNVHSMEGDAW
-gBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUcRYSWvAVyA3hgTrQ2c4AFquBsG0wDQYJ
-KoZIhvcNAQELBQADggEBAIKB2IOweF2sIYGBZTDm+Hwmhga+sjekM167Sk/KwxxvQFwZYP6i0SnR
-7aR59vbfVQVaAiZH/a+35EYxP/sXaIM4+E3bFykBuXwcGEnYyEn6MceiOCkjkWQq1Co2JyOdNvkP
-nAxyPoWlsJtr+N/MF1EYKGpYMdPM7S2T/gujjO9N56BCGu9yJElszWcXHmBl5IsaQqMS36vhsV0b
-NxffjNkeAdgfN/SS9S9Rj4WXD7pF1M0Xq8gPLCLyXrx1i2KkYOYJsj0PWlC6VRg6E1xXkYDte0VL
-fAAG4QsETU27E1HBNQyp5zF1PoPCPvq3EnWQnbLgYk+Jz2iwIUwiqwr/bDgxggJtMIICaQIBATBr
-MFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYDVQQDEyhHbG9i
-YWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgw89WX2Pp7ue922QVkwDQYJYIZI
-AWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIBpRtDSz0hHejDnQDBFKXZ8igRtAM08n5VgKLWCq
-DCzcMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIzMDYyOTE2MTgz
-OFowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsGCWCGSAFlAwQB
-AjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFlAwQCATANBgkq
-hkiG9w0BAQEFAASCAQAZQ1ExlvawAIXxhUr7Q6PXUlr4ntd4og1C7WuvitBtJqRTFr089EMsfiNt
-A0f4FBEal6nVjb1hDZkEXFK++pQ+rWVQTEF8n97lWNMO4FYYpQK14Nlt4OlkTlQSwo1N5ywb0eFS
-yrUfyVu2RaTy5zqDJVDakNl5MsSi4lksWIXtNxWiIucFbAK2NuGlSqM754Fp8opyt1vRI9WezMPH
-uKSQKGdbnh+oQzrdnvFLNoFPxDSVQih9MdkJnh0V2vPgK6aW9fzNU2cNXvq/TkLzX518eEVnujSq
-irrX2a2GC1bd9onIVGl0NfTCyfXmcjR5ZNxpqDhk32hxqHJLQsWIjjBy
---0000000000008ad27305ff470d65--
+>         if (rc)
+>                 return rc;
+> -       return devm_add_action_or_reset(dev, acpi_nfit_shutdown, acpi_desc);
+> +
+> +       rc = devm_add_action_or_reset(dev, acpi_nfit_shutdown, acpi_desc);
+> +       if (rc)
+> +               return rc;
+> +
+> +       return acpi_dev_install_notify_handler(adev,
+> +                                              ACPI_DEVICE_NOTIFY,
+> +                                              acpi_nfit_notify);
+>  }
+>
+>  static void acpi_nfit_remove(struct acpi_device *adev)
+>  {
+>         /* see acpi_nfit_unregister */
+> +
+> +       acpi_dev_remove_notify_handler(adev,
+> +                                      ACPI_DEVICE_NOTIFY,
+> +                                      acpi_nfit_notify);
+>  }
+>
+>  static void acpi_nfit_update_notify(struct device *dev, acpi_handle handle)
+> @@ -3465,7 +3478,6 @@ static struct acpi_driver acpi_nfit_driver = {
+>         .ops = {
+>                 .add = acpi_nfit_add,
+>                 .remove = acpi_nfit_remove,
+> -               .notify = acpi_nfit_notify,
+>         },
+>  };
+>
+> --
