@@ -2,26 +2,26 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCF12742559
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 14:06:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 345D874254A
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 14:05:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232413AbjF2MGU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 08:06:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47760 "EHLO
+        id S232217AbjF2MFH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 08:05:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230198AbjF2MFw (ORCPT
+        with ESMTP id S232048AbjF2ME6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 08:05:52 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 780853C1D;
-        Thu, 29 Jun 2023 05:05:20 -0700 (PDT)
-Received: from dggpemm500005.china.huawei.com (unknown [172.30.72.56])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4QsHB76DW2zqVmZ;
-        Thu, 29 Jun 2023 20:02:07 +0800 (CST)
+        Thu, 29 Jun 2023 08:04:58 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAD1430E5;
+        Thu, 29 Jun 2023 05:04:56 -0700 (PDT)
+Received: from dggpemm500005.china.huawei.com (unknown [172.30.72.55])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4QsHBw62q1zLnNr;
+        Thu, 29 Jun 2023 20:02:48 +0800 (CST)
 Received: from localhost.localdomain (10.69.192.56) by
  dggpemm500005.china.huawei.com (7.185.36.74) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27; Thu, 29 Jun 2023 20:04:53 +0800
+ 15.1.2507.27; Thu, 29 Jun 2023 20:04:55 +0800
 From:   Yunsheng Lin <linyunsheng@huawei.com>
 To:     <davem@davemloft.net>, <kuba@kernel.org>, <pabeni@redhat.com>
 CC:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
@@ -30,31 +30,17 @@ CC:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         Alexander Duyck <alexander.duyck@gmail.com>,
         Liang Chen <liangchen.linux@gmail.com>,
         Alexander Lobakin <aleksander.lobakin@intel.com>,
-        Yisen Zhuang <yisen.zhuang@huawei.com>,
-        Salil Mehta <salil.mehta@huawei.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Sunil Goutham <sgoutham@marvell.com>,
-        Geetha sowjanya <gakula@marvell.com>,
-        Subbaraya Sundeep <sbhatta@marvell.com>,
-        hariprasad <hkelam@marvell.com>,
-        Saeed Mahameed <saeedm@nvidia.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        Felix Fietkau <nbd@nbd.name>,
-        Ryder Lee <ryder.lee@mediatek.com>,
-        Shayne Chen <shayne.chen@mediatek.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Kalle Valo <kvalo@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
         Jesper Dangaard Brouer <hawk@kernel.org>,
         Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-        <linux-rdma@vger.kernel.org>, <linux-wireless@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>
-Subject: [PATCH v5 RFC 4/6] page_pool: remove PP_FLAG_PAGE_FRAG flag
-Date:   Thu, 29 Jun 2023 20:02:24 +0800
-Message-ID: <20230629120226.14854-5-linyunsheng@huawei.com>
+        Eric Dumazet <edumazet@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        John Fastabend <john.fastabend@gmail.com>,
+        <linux-doc@vger.kernel.org>, <bpf@vger.kernel.org>
+Subject: [PATCH v5 RFC 5/6] page_pool: update document about frag API
+Date:   Thu, 29 Jun 2023 20:02:25 +0800
+Message-ID: <20230629120226.14854-6-linyunsheng@huawei.com>
 X-Mailer: git-send-email 2.33.0
 In-Reply-To: <20230629120226.14854-1-linyunsheng@huawei.com>
 References: <20230629120226.14854-1-linyunsheng@huawei.com>
@@ -66,17 +52,20 @@ X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
  dggpemm500005.china.huawei.com (7.185.36.74)
 X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PP_FLAG_PAGE_FRAG is not really needed after pp_frag_count
-handling is unified and page_pool_alloc_frag() is supported
-in 32-bit arch with 64-bit DMA, so remove it.
+As more drivers begin to use the frag API, update the
+document about how to decide which API to use for the
+driver author.
+
+Also it seems there is a similar document in page_pool.h,
+so remove it to avoid the duplication.
 
 Signed-off-by: Yunsheng Lin <linyunsheng@huawei.com>
 CC: Lorenzo Bianconi <lorenzo@kernel.org>
@@ -84,106 +73,96 @@ CC: Alexander Duyck <alexander.duyck@gmail.com>
 CC: Liang Chen <liangchen.linux@gmail.com>
 CC: Alexander Lobakin <aleksander.lobakin@intel.com>
 ---
- drivers/net/ethernet/hisilicon/hns3/hns3_enet.c          | 3 +--
- drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.c | 2 +-
- drivers/net/ethernet/mellanox/mlx5/core/en_main.c        | 2 +-
- drivers/net/wireless/mediatek/mt76/mac80211.c            | 2 +-
- include/net/page_pool.h                                  | 7 ++-----
- net/core/skbuff.c                                        | 2 +-
- 6 files changed, 7 insertions(+), 11 deletions(-)
+ Documentation/networking/page_pool.rst | 34 ++++++++++++++++++++++----
+ include/net/page_pool.h                | 22 -----------------
+ 2 files changed, 29 insertions(+), 27 deletions(-)
 
-diff --git a/drivers/net/ethernet/hisilicon/hns3/hns3_enet.c b/drivers/net/ethernet/hisilicon/hns3/hns3_enet.c
-index b676496ec6d7..4e613d5bf1fd 100644
---- a/drivers/net/ethernet/hisilicon/hns3/hns3_enet.c
-+++ b/drivers/net/ethernet/hisilicon/hns3/hns3_enet.c
-@@ -4925,8 +4925,7 @@ static void hns3_put_ring_config(struct hns3_nic_priv *priv)
- static void hns3_alloc_page_pool(struct hns3_enet_ring *ring)
- {
- 	struct page_pool_params pp_params = {
--		.flags = PP_FLAG_DMA_MAP | PP_FLAG_PAGE_FRAG |
--				PP_FLAG_DMA_SYNC_DEV,
-+		.flags = PP_FLAG_DMA_MAP | PP_FLAG_DMA_SYNC_DEV,
- 		.order = hns3_page_order(ring),
- 		.pool_size = ring->desc_num * hns3_buf_size(ring) /
- 				(PAGE_SIZE << hns3_page_order(ring)),
-diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.c b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.c
-index a79cb680bb23..404caec467af 100644
---- a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.c
-+++ b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.c
-@@ -1426,7 +1426,7 @@ int otx2_pool_init(struct otx2_nic *pfvf, u16 pool_id,
- 		return 0;
- 	}
+diff --git a/Documentation/networking/page_pool.rst b/Documentation/networking/page_pool.rst
+index 873efd97f822..18b13d659c98 100644
+--- a/Documentation/networking/page_pool.rst
++++ b/Documentation/networking/page_pool.rst
+@@ -4,12 +4,27 @@
+ Page Pool API
+ =============
  
--	pp_params.flags = PP_FLAG_PAGE_FRAG | PP_FLAG_DMA_MAP;
-+	pp_params.flags = PP_FLAG_DMA_MAP;
- 	pp_params.pool_size = numptrs;
- 	pp_params.nid = NUMA_NO_NODE;
- 	pp_params.dev = pfvf->dev;
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en_main.c b/drivers/net/ethernet/mellanox/mlx5/core/en_main.c
-index 42ccb77a1b6c..cdd00848c0cb 100644
---- a/drivers/net/ethernet/mellanox/mlx5/core/en_main.c
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/en_main.c
-@@ -843,7 +843,7 @@ static int mlx5e_alloc_rq(struct mlx5e_params *params,
- 		}
+-The page_pool allocator is optimized for the XDP mode that uses one frame
+-per-page, but it can fallback on the regular page allocator APIs.
++The page_pool allocator is optimized for recycling page or page frag used by skb
++packet and xdp frame.
  
- 		pp_params.order     = 0;
--		pp_params.flags     = PP_FLAG_DMA_MAP | PP_FLAG_DMA_SYNC_DEV | PP_FLAG_PAGE_FRAG;
-+		pp_params.flags     = PP_FLAG_DMA_MAP | PP_FLAG_DMA_SYNC_DEV;
- 		pp_params.pool_size = pool_size;
- 		pp_params.nid       = node;
- 		pp_params.dev       = rq->pdev;
-diff --git a/drivers/net/wireless/mediatek/mt76/mac80211.c b/drivers/net/wireless/mediatek/mt76/mac80211.c
-index 467afef98ba2..ee72869e5572 100644
---- a/drivers/net/wireless/mediatek/mt76/mac80211.c
-+++ b/drivers/net/wireless/mediatek/mt76/mac80211.c
-@@ -566,7 +566,7 @@ int mt76_create_page_pool(struct mt76_dev *dev, struct mt76_queue *q)
- {
- 	struct page_pool_params pp_params = {
- 		.order = 0,
--		.flags = PP_FLAG_PAGE_FRAG,
-+		.flags = 0,
- 		.nid = NUMA_NO_NODE,
- 		.dev = dev->dma_dev,
- 	};
+-Basic use involves replacing alloc_pages() calls with the
+-page_pool_alloc_pages() call.  Drivers should use page_pool_dev_alloc_pages()
+-replacing dev_alloc_pages().
++Basic use involves replacing napi_alloc_frag() and alloc_pages() calls with
++page_pool_cache_alloc() and page_pool_alloc(), which allocate memory with or
++without page splitting depending on the requested memory size.
++
++If the driver knows that it always requires full pages or its allocates are
++always smaller than half a page, it can use one of the more specific API calls:
++
++1. page_pool_alloc_pages(): allocate memory without page splitting when driver
++   knows that the memory it need is always bigger than half of the page
++   allocated from page pool. There is no cache line dirtying for 'struct page'
++   when a page is recycled back to the page pool.
++
++2. page_pool_alloc_frag(): allocate memory with page splitting when driver knows
++   that the memory it need is always smaller than or equal to half of the page
++   allocated from page pool. Page splitting enables memory saving and thus avoid
++   TLB/cache miss for data access, but there also is some cost to implement page
++   splitting, mainly some cache line dirtying/bouncing for 'struct page' and
++   atomic operation for page->pp_frag_count.
+ 
+ API keeps track of in-flight pages, in order to let API user know
+ when it is safe to free a page_pool object.  Thus, API users
+@@ -93,6 +108,15 @@ a page will cause no race conditions is enough.
+ * page_pool_dev_alloc_pages(): Get a page from the page allocator or page_pool
+   caches.
+ 
++* page_pool_dev_alloc_frag(): Get a page frag from the page allocator or
++  page_pool caches.
++
++* page_pool_dev_alloc(): Get a page or page frag from the page allocator or
++  page_pool caches.
++
++* page_pool_dev_cache_alloc(): Get a cache from the page allocator or page_pool
++  caches.
++
+ * page_pool_get_dma_addr(): Retrieve the stored DMA address.
+ 
+ * page_pool_get_dma_dir(): Retrieve the stored DMA direction.
 diff --git a/include/net/page_pool.h b/include/net/page_pool.h
-index 53486ef9074d..e9fb95d62ed5 100644
+index e9fb95d62ed5..2b7db9992fc0 100644
 --- a/include/net/page_pool.h
 +++ b/include/net/page_pool.h
-@@ -45,10 +45,8 @@
- 					* Please note DMA-sync-for-CPU is still
- 					* device driver responsibility
- 					*/
--#define PP_FLAG_PAGE_FRAG	BIT(2) /* for page frag feature */
- #define PP_FLAG_ALL		(PP_FLAG_DMA_MAP |\
--				 PP_FLAG_DMA_SYNC_DEV |\
--				 PP_FLAG_PAGE_FRAG)
-+				 PP_FLAG_DMA_SYNC_DEV)
+@@ -5,28 +5,6 @@
+  *	Copyright (C) 2016 Red Hat, Inc.
+  */
  
- #define PAGE_POOL_DMA_USE_PP_FRAG_COUNT	\
- 		(sizeof(dma_addr_t) > sizeof(unsigned long))
-@@ -234,8 +232,7 @@ static inline struct page *page_pool_alloc_frag(struct page_pool *pool,
+-/**
+- * DOC: page_pool allocator
+- *
+- * This page_pool allocator is optimized for the XDP mode that
+- * uses one-frame-per-page, but have fallbacks that act like the
+- * regular page allocator APIs.
+- *
+- * Basic use involve replacing alloc_pages() calls with the
+- * page_pool_alloc_pages() call.  Drivers should likely use
+- * page_pool_dev_alloc_pages() replacing dev_alloc_pages().
+- *
+- * API keeps track of in-flight pages, in-order to let API user know
+- * when it is safe to dealloactor page_pool object.  Thus, API users
+- * must make sure to call page_pool_release_page() when a page is
+- * "leaving" the page_pool.  Or call page_pool_put_page() where
+- * appropiate.  For maintaining correct accounting.
+- *
+- * API user must only call page_pool_put_page() once on a page, as it
+- * will either recycle the page, or in case of elevated refcnt, it
+- * will release the DMA mapping and in-flight state accounting.  We
+- * hope to lift this requirement in the future.
+- */
+ #ifndef _NET_PAGE_POOL_H
+ #define _NET_PAGE_POOL_H
  
- 	size = ALIGN(size, dma_get_cache_alignment());
- 
--	if (WARN_ON(!(pool->p.flags & PP_FLAG_PAGE_FRAG) ||
--		    size > max_size))
-+	if (WARN_ON(size > max_size))
- 		return NULL;
- 
- 	/* Don't allow page splitting and allocate one big frag
-diff --git a/net/core/skbuff.c b/net/core/skbuff.c
-index 7c4338221b17..ca2316cc1e7e 100644
---- a/net/core/skbuff.c
-+++ b/net/core/skbuff.c
-@@ -5652,7 +5652,7 @@ bool skb_try_coalesce(struct sk_buff *to, struct sk_buff *from,
- 	/* In general, avoid mixing page_pool and non-page_pool allocated
- 	 * pages within the same SKB. Additionally avoid dealing with clones
- 	 * with page_pool pages, in case the SKB is using page_pool fragment
--	 * references (PP_FLAG_PAGE_FRAG). Since we only take full page
-+	 * references (page_pool_alloc_frag()). Since we only take full page
- 	 * references for cloned SKBs at the moment that would result in
- 	 * inconsistent reference counts.
- 	 * In theory we could take full references if @from is cloned and
 -- 
 2.33.0
 
