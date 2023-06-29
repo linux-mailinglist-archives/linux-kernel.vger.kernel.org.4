@@ -2,106 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38694742D81
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 21:32:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B7691742DAB
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 21:33:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232262AbjF2TXH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 15:23:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50544 "EHLO
+        id S230036AbjF2Tan (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 15:30:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231918AbjF2TWn (ORCPT
+        with ESMTP id S232501AbjF2T3u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 15:22:43 -0400
-Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BFF435BC;
-        Thu, 29 Jun 2023 12:22:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=7UucWkKLD79zbdKV1BdFvtfiPEZX683r6IsM3mY+FF8=; b=crkKI53riIFva2BgNi4Isqh06n
-        /sh6DI7zoG4wiw0KGagyUeZdB1/hwnHz6O+R6XJ6geKECjkLUL27syY3okqonq0AZFzeQ5PmJZYXE
-        PqJGMAL4nH+YhxZPOGUkHZMjaLyzUQmLrgWdbfnYt8xgfrkrA3BnZC5Adib9PBP75jQB3i2lGQODE
-        Bp3xLpWU24GU9JF45OcS1fgu9AuJ/OjCUiUMPaXtxfqG0PhDsbIX6zHjR+8R1JfGwXcfSQXILenKA
-        euhHGGqY2iFZUod1CLkz9kJfxXD59282vciONCLmV/BZ744wfQn53MSnvok01AxqRK3+K2VHiFfA0
-        s5gyW+7Q==;
-Received: from [179.232.147.2] (helo=[192.168.0.5])
-        by fanzine2.igalia.com with esmtpsa 
-        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
-        id 1qExDQ-005vxG-E7; Thu, 29 Jun 2023 21:22:05 +0200
-Message-ID: <80bf6cef-7824-124f-fe69-d820ae3416f3@igalia.com>
-Date:   Thu, 29 Jun 2023 16:22:40 -0300
+        Thu, 29 Jun 2023 15:29:50 -0400
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A7A14ECD;
+        Thu, 29 Jun 2023 12:26:59 -0700 (PDT)
+Received: by mail-wm1-x32d.google.com with SMTP id 5b1f17b1804b1-3fbc0981755so8258265e9.1;
+        Thu, 29 Jun 2023 12:26:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1688066818; x=1690658818;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=7N5ZmY2KWkRajsAf9XhKN7sozrITx4iUqfiGyFTIrtM=;
+        b=pn5mJC3LX13PWjP5BQG0rVHHheD/uC57/FYIvnpWXl+nOn3zJ4zU+rPiBklBj41S7/
+         7smMibiUI8VqTiUgSeyVEku4/Hx61E/I66tw079LprtcXk46ufEenh0Di2xq0kHrghDl
+         p/arOEK7WgI6nVGXxWsG/Zr7sQtDuskJvyy+R9ay2SimyEn7/jR9bbh5logKmaSwMbtI
+         fOkqKzSJ4qEf4L02G2XZMEGR8SVcu43PvCxA4uXhEJjhs5TSMaWtwfDY905QNeL8ZF6t
+         56ydjvpO+HlChCNACMIwmBSP1ITrlc0qQEzFqwMBigANZ1XS+pdaiVn8mPr4XJFHynzE
+         XNkA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688066818; x=1690658818;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=7N5ZmY2KWkRajsAf9XhKN7sozrITx4iUqfiGyFTIrtM=;
+        b=FYW4mE6Z9V06Pg/OfklsNfH5rKiu3WKEMfjms+GXNLe5snmP9UoFf0DVM5xNSejTAb
+         WW6zwpjyJKDe1YZkGHHKW9Jba6iHgqIll7ZObKb5pDMWzrxD0mYMSvXamdHmSuvSp2Jj
+         jShFgIUHpB/68KQpPh9a7WCm9+JCWp1KKiwbv5yAjC/H6ADTFaOpXo+UY0l6cLQQqf7L
+         9qQAOdNKmXjdaztPsMF2pkmBpxVicoYTi3meMcHKt5neVT41rpE0mS0SfDaXrVp9OKOq
+         nsGeEkePUKjtKCu5xyiLabrXTmnLH4Iej4Mw5fMuG+qqXmZh4Xv/SlH6WORnlrVE+bPt
+         AFcw==
+X-Gm-Message-State: AC+VfDzJDa5VMXSt1I+WHU170I+HrtgiS0OZ0lEXNLR8k1s5iLd6XYmj
+        79uN4aAho4AkyF40vNsfLlw=
+X-Google-Smtp-Source: ACHHUZ6fs7BvV10RnyZejEahZQFzg9KSCff3eoy+1EJu4azlNVoW9RvNuqjHRhLk1DDk4kb32xF6RQ==
+X-Received: by 2002:a7b:cc15:0:b0:3f9:8c3:6805 with SMTP id f21-20020a7bcc15000000b003f908c36805mr265160wmh.7.1688066817749;
+        Thu, 29 Jun 2023 12:26:57 -0700 (PDT)
+Received: from localhost.localdomain (cpc157791-rdng31-2-0-cust585.15-3.cable.virginm.net. [86.24.214.74])
+        by smtp.gmail.com with ESMTPSA id c1-20020a05600c0ac100b003fba6a0c881sm7972683wmr.43.2023.06.29.12.26.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 29 Jun 2023 12:26:57 -0700 (PDT)
+From:   Stuart Hayhurst <stuart.a.hayhurst@gmail.com>
+Cc:     Stuart Hayhurst <stuart.a.hayhurst@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Jiri Kosina <jikos@kernel.org>,
+        Bastien Nocera <hadess@hadess.net>,
+        =?UTF-8?q?Filipe=20La=C3=ADns?= <lains@riseup.net>
+Subject: [PATCH] HID: logitech-hidpp: Add wired USB id for Logitech G502 Lightspeed
+Date:   Thu, 29 Jun 2023 20:24:26 +0100
+Message-ID: <20230629192422.980071-1-stuart.a.hayhurst@gmail.com>
+X-Mailer: git-send-email 2.40.1.521.gf1e218fcd8
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH] pstore: ramoops: support pmsg size larger than kmalloc
- limitation
-Content-Language: en-US
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Yuxiao Zhang <yuxiaozhang@google.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Tony Luck <tony.luck@intel.com>,
-        linux-hardening@vger.kernel.org, linux-kernel@vger.kernel.org,
-        wak@google.com
-References: <2023062832-barrier-strenuous-9499@gregkh>
- <20230628171055.1312737-1-yuxiaozhang@google.com>
- <28718037-ccf1-c36b-4eb6-716c518ca98f@igalia.com>
- <202306281615.360B12EFC@keescook>
-From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-In-Reply-To: <202306281615.360B12EFC@keescook>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 28/06/2023 20:24, Kees Cook wrote:
-> On Wed, Jun 28, 2023 at 03:12:10PM -0300, Guilherme G. Piccoli wrote:
->> Also - Kees certainly knows that way better, but - are we 100% sure that
->> the region for pstore can be non-contiguous? For some reason, I always
->> thought this was a requirement - grepping the code, I found this
->> (wrong?) comment:
->> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/fs/pstore/zone.c#n3
-> 
-> The contiguous requirements are entirely for the RAM backend's storage,
-> so these intermediate memory regions can use non-contiguous physical
-> backing memory (i.e. vmalloc).
-> 
-> Even the special case of crash-dumping should be fine for the large
-> buffer used to hold the crash before doing compression.
-> 
-> There are effectively 4 types of allocations in pstore:
-> 
-> 1- a physical -> virtual mapping for the RAM backend
-> 2- the allocations (if any) for non-RAM backends to hold a copy of pstore
->    records when extracted from the backend storage (e.g NVRAM, EFI vars,
->    etc).
-> 3- incoming allocations that are used temporarily to hand data to the
->    backend (e.g. the write_compat used in this patch)
-> 4- the allocation used for holding the pstorefs data contents (which I
->    need to double-check, but is entirely defined by the backends)
-> 
-> Changes aren't needed for (1), it's fine on its own. This patch changes
-> allocations for (2) and (3) for pmsg and the RAM backend, if I'm reading
-> it correctly. I think (4) is included as part of (2), but I need to
-> check. As long as all paths use kvfree() for the record buffers,
-> everything should Just Work for RAM. Switching the other backends to
-> also use kvalloc() would allow for greater flexibility, though.
-> 
-> Anyway, it's on my list to review and test. I'm still working through
-> other things related to the merge window opening, so I may be a bit slow
-> for the next week. :)
-> 
-> -Kees
-> 
+Previously, support for the G502 had been attempted and reverted within this driver.
+Since then, a new version of this mouse has been released, and seems to work fine.
 
-Thanks a bunch for the clarification Kees, much appreciated!
-Now I understand it way better =)
+Signed-off-by: Stuart Hayhurst <stuart.a.hayhurst@gmail.com>
+---
+ drivers/hid/hid-logitech-hidpp.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/drivers/hid/hid-logitech-hidpp.c b/drivers/hid/hid-logitech-hidpp.c
+index 5e1a412fd28f..050bad0f9aca 100644
+--- a/drivers/hid/hid-logitech-hidpp.c
++++ b/drivers/hid/hid-logitech-hidpp.c
+@@ -4598,6 +4598,8 @@ static const struct hid_device_id hidpp_devices[] = {
+ 
+ 	{ /* Logitech G403 Wireless Gaming Mouse over USB */
+ 	  HID_USB_DEVICE(USB_VENDOR_ID_LOGITECH, 0xC082) },
++	{ /* Logitech G502 Lightspeed Wireless Gaming Mouse over USB */
++	  HID_USB_DEVICE(USB_VENDOR_ID_LOGITECH, 0xC08D) },
+ 	{ /* Logitech G703 Gaming Mouse over USB */
+ 	  HID_USB_DEVICE(USB_VENDOR_ID_LOGITECH, 0xC087) },
+ 	{ /* Logitech G703 Hero Gaming Mouse over USB */
+-- 
+2.40.1.521.gf1e218fcd8
+
