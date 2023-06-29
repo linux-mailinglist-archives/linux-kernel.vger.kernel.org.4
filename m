@@ -2,221 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FD9E741E3C
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 04:24:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07806741E3F
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 04:25:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231831AbjF2CYZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 22:24:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54744 "EHLO
+        id S231833AbjF2CZh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 22:25:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230382AbjF2CYV (ORCPT
+        with ESMTP id S231453AbjF2CZf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 22:24:21 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0366C2682;
-        Wed, 28 Jun 2023 19:24:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1688005461; x=1719541461;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=iRWYc588DnPjwCZSLKDLMK3NT5M0wxxRz2EjZJct/iI=;
-  b=GgcubjTQn9/xoqGgQVfud5M8BL4UAh4UyCHk16fpd+UcNHekR6RKCXh8
-   vyHAc+OdWdsk2seSsGcgSIvd2NgxG3X2uAnIgTT0u2YhHUhxhh/10i1xq
-   pYsRDsVACVNBVrSCr1JrOUfBCmhNTB3dlmTEWHOv4YmCK3RzH8MsrHWwy
-   mOkxLIsRE/Th+atcx9J16I4eXsnQ1jHKcjzKGhAmDdmRUJUVhacP3JXPi
-   S5WY/C5kpmk8N7RFw59akI0VCSTDYkRfB4ankRtAsClhRspCuQzMjn7HH
-   wKPAlgGcZ+OhEbGMCeFoauDdEj4nbzwYsfSsSPTJLIB6LY8GBVvxUggzS
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10755"; a="428023819"
-X-IronPort-AV: E=Sophos;i="6.01,167,1684825200"; 
-   d="scan'208";a="428023819"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2023 19:24:20 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10755"; a="782519620"
-X-IronPort-AV: E=Sophos;i="6.01,167,1684825200"; 
-   d="scan'208";a="782519620"
-Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
-  by fmsmga008.fm.intel.com with ESMTP; 28 Jun 2023 19:24:15 -0700
-Received: from fmsmsx612.amr.corp.intel.com (10.18.126.92) by
- fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
+        Wed, 28 Jun 2023 22:25:35 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDC592682
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 19:25:33 -0700 (PDT)
+Received: from dggpemm500006.china.huawei.com (unknown [172.30.72.57])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Qs2NT5Y5RzqSqY;
+        Thu, 29 Jun 2023 10:25:13 +0800 (CST)
+Received: from [10.174.178.55] (10.174.178.55) by
+ dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27; Wed, 28 Jun 2023 19:24:10 -0700
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx612.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27; Wed, 28 Jun 2023 19:24:09 -0700
-Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27 via Frontend Transport; Wed, 28 Jun 2023 19:24:09 -0700
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (104.47.59.170)
- by edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.27; Wed, 28 Jun 2023 19:24:07 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=k2jZA7ZIbziv+PWqG6S3hQJFhHOE04Zu3n5zX1qVOjJxy/FfBzdOHoApGwwZgSnycSktCmhsyvykVPM2LeTIIlo4Xcr4XcGJDs/1VMZQ0sLbfOyP6wHXYgo+PI6QGRC6kilbdDVBoB/fXflNtO/xRy2sAxjYNjC/LoFPt6GC404lfusmsT6mGKkYnPtxvuzGcRGrcMvrntBU4AE6f592ahb9PSIcjjeIRc9LNd7B8sz2RxPoHjFpZe3HA2p+Ki35TBy4H3bQ6t2c15cCB1lzBcOEXW8mfqGMlEEq6aqyvfvpyI/l4uXsF/jqori+Gjmg5A4pMaT/QweBV4TwQtemIQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=7hB2Qd1hFUs2CTFyP7aNujvvifV71goBM4QFyawLvpM=;
- b=FXh2pN4oRsBQ+W+HoUseaFr0GZjsspnYX80srJvlNR4MaZY17QQaFLNH+OywhZQ0XRQUxEARjDUT1w/G92cTk9CoKjOL7azhCiPevBnVQhk70DxudoWDC35ODvfHb99/jiigH2SzbVhXsCyFEC6jhZ01iN1NpJ8pdL9u2CoPfrqgdlrvdB676/OCyXW3TxErVMd4bi6l2pDREYU1TMKvXrE5LZhvWwAxlPFvU/86lpbogTGM38Hn88H7IhuyhBkvzpN3GUci8YQBsShyuYYikyXXiMa8MXUCsF8E7rZzSQVOdsiaFRIrcSLiTd02SY3z60ovW6MQbMmzDNv78ZR8LA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from SA1PR11MB6733.namprd11.prod.outlook.com (2603:10b6:806:25c::17)
- by PH7PR11MB8122.namprd11.prod.outlook.com (2603:10b6:510:235::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.41; Thu, 29 Jun
- 2023 02:24:00 +0000
-Received: from SA1PR11MB6733.namprd11.prod.outlook.com
- ([fe80::7237:cab8:f7f:52a5]) by SA1PR11MB6733.namprd11.prod.outlook.com
- ([fe80::7237:cab8:f7f:52a5%7]) with mapi id 15.20.6521.024; Thu, 29 Jun 2023
- 02:24:00 +0000
-Date:   Wed, 28 Jun 2023 19:23:54 -0700
-From:   Ira Weiny <ira.weiny@intel.com>
-To:     Matthew Wilcox <willy@infradead.org>,
-        Sumitra Sharma <sumitraartsy@gmail.com>
-CC:     Hans de Goede <hdegoede@redhat.com>,
-        <linux-fsdevel@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Fabio <fmdefrancesco@gmail.com>, Deepak R Varma <drv@mailo.com>
-Subject: Re: [PATCH] fs/vboxsf: Replace kmap() with kmap_local_{page, folio}()
-Message-ID: <649ceb3aeb554_92a1629445@iweiny-mobl.notmuch>
-References: <20230627135115.GA452832@sumitra.com>
- <ZJxqmEVKoxxftfXM@casper.infradead.org>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <ZJxqmEVKoxxftfXM@casper.infradead.org>
-X-ClientProxiedBy: BY5PR13CA0030.namprd13.prod.outlook.com
- (2603:10b6:a03:180::43) To SA1PR11MB6733.namprd11.prod.outlook.com
- (2603:10b6:806:25c::17)
+ 15.1.2507.27; Thu, 29 Jun 2023 10:25:31 +0800
+Subject: Re: [PATCH v2] kallsyms: strip LTO-only suffixes from promoted global
+ functions
+To:     Yonghong Song <yhs@fb.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Petr Mladek <pmladek@suse.com>, Song Liu <song@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>
+CC:     Fangrui Song <maskray@google.com>, <kernel-team@fb.com>,
+        <linux-kernel@vger.kernel.org>, <llvm@lists.linux.dev>
+References: <20230628181926.4102448-1-yhs@fb.com>
+From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
+Message-ID: <0bcb9470-4b39-1fe1-fcab-4d945f10fe7b@huawei.com>
+Date:   Thu, 29 Jun 2023 10:25:30 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SA1PR11MB6733:EE_|PH7PR11MB8122:EE_
-X-MS-Office365-Filtering-Correlation-Id: 99fadb08-2a05-4f8f-40ae-08db7847e5de
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 9HwO6wWdsng3ldJyr+TzKq85iDsSBujhZYBb6VLjiTpK1sDdjo6qD2fpzXscN9J4FLOBYgBbRaKznkxMqQY2fwF/5DtNhhf8v+4gPQwQiEgYyUCW2EiETF2Vpzlc6esrzw5OV4g18gg3Bz3iDriFsD3zytk9aiJeGgNr2wYxtjlcVzjWiiXpMu/f8Sw4hFpDBsdvcFI0/Pog6dGXEhIxc5Aao+o4TeiT/cNEJ8tcKti1qO8Eqryp2+p7pReNq8622DmzHVDnjivDr1S8U28+ohT+B+DbSeG2zmV7G+P+VUdJ3CRvg735+hCMFVwOT/AFLBqui98CoiaT9yMZJgCnEzgq8IcqAqQ5545bTSb/Ctc3lXGE8nlmk0a1F1q2ART1Mh9whP1Scs9CA9nImu18ZQFUuUtK7oMT7gToQURAKkkzCDjO0M5scjgkOZ9n7sYq1ABpVYHBV97sLaEW/AIoJN6DmIk8efPkfLq/rpmrjLcBdmCyj0YDmZsFg+iD3JoYW3mHNLgPNRgA8tsu93yEL4x/6ij3OK4uAeJQ5eKyUDKe5MrSGeAb+OJfRBgy6aCj
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR11MB6733.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(346002)(39860400002)(136003)(376002)(396003)(366004)(451199021)(316002)(2906002)(38100700002)(41300700001)(66556008)(66476007)(83380400001)(9686003)(26005)(6506007)(6512007)(4326008)(86362001)(5660300002)(66946007)(8676002)(6666004)(6486002)(82960400001)(186003)(478600001)(8936002)(54906003)(110136005)(44832011);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?wMg/5txX8tdiY07zau27T4/FoiaS8DoXhGZ97aXECA3wQIrh3E2x40/8tvB3?=
- =?us-ascii?Q?sGzvv6XdUgb+rIJf6JoojH+OL7T7j8A16rpNvPZtEcgvDEVh/+c1U0rUU9p9?=
- =?us-ascii?Q?jyDj07gn4hYwfbDsvtkKmEp+gFNl9uoQfDoTyacQpNVhV9pqjC3GFDnhZ5Zy?=
- =?us-ascii?Q?P2wQg/UormSzwrfIBBVCuYW1vC/jOL6btJfKuR13YhulzFuKAyMnwhQUa/8t?=
- =?us-ascii?Q?PwLPPapHt6ztKL/ApLfpH6/iE1wjmvgSqKsHKdssLOVZ/RJTXhh36FO3gSNn?=
- =?us-ascii?Q?gdAO/Ix2+C2v8IJByyHVwDQDCoj2O9+w5jM4GjZEGGVnYQtZHda4ce1K/Imj?=
- =?us-ascii?Q?evvxk4rIOASvwG+Ff2Fkpawv0xOqKYgnSgM+oItRVS5u7Tk+qat/BF/sCxje?=
- =?us-ascii?Q?u4Fo0YiEtJ7Lt3yAb0eQtkSItgFpCLIH3SDWX1f2h2zl+eqZjk5QHTRPlSag?=
- =?us-ascii?Q?HLMwqHfyabta0gwK5bM1qCSzek1sr6E1pCr9HYgIioPi1VRmU+2JdtvgZ8bG?=
- =?us-ascii?Q?4PBvaHfsi4sU4kQ1tbbQqOeX45PYPtaGig4wMruisJFweGNih5RyF9ma7OND?=
- =?us-ascii?Q?NPre7fCPY2SItSmbAiEXhVHC6IsAOmAFMeZT4P+agGP3XjzhcvLoXSQ/iCms?=
- =?us-ascii?Q?BE/KlElNRkI3hCf1fV+Zrd4pNqSVBGZBZyYJOYU9gVAM7PFKkuSf5VdfjIxj?=
- =?us-ascii?Q?oQjZfFoQgNsHczrP6H6fQqTdXf3KfHo72DGuC3WvXzmbZGg2xKvnzlamD9me?=
- =?us-ascii?Q?pyKxQ2TEPhVbZqL8SpRLVNJMXyAcjXLo3ZxYsHmiELBHnw+Q7HJ0Hz8r/mjh?=
- =?us-ascii?Q?O6j5kJljcZE/QK2hAcxNAdjzQcXIp95f/6smJWi1jf3RISIHyGd9ojrihzt8?=
- =?us-ascii?Q?oWdODDqWFIWE84C88aIpJTg67u7CbEW7OUMEzui47JnTjEj2GhXs/NUDUVDM?=
- =?us-ascii?Q?E9bVxb15A9mlUkLGhaKneO10Q2Y0Rd4j1pMTfLO2zWko1K2767HQKfX3gt6i?=
- =?us-ascii?Q?Y1BA228PVM9RkeTItRtOG+E7a5woGqw5TPRVVQe4xmJE6tQ+elZ1IH97qs3Y?=
- =?us-ascii?Q?ggoDPt6uwF3E90idIBZKc9moGk4bhxIsuJv7Ge8DJYp1u71/+5RY3T/48lEI?=
- =?us-ascii?Q?sMySGPvNCq1y/xBlSTiUWUDC1NZKwxniDqNCsUQ/MNCm2TDVIpZ5tFvJbaM/?=
- =?us-ascii?Q?CcwPBfUPC2dLZz6/p+Jj+CKx8G3IIJb5HN/f3+AniuF5MHBTBKTY4ckc3k3N?=
- =?us-ascii?Q?WNw5uxJ0frORr/OpB8MK9X1bEuMKmhJUGckH+/p8kE24Qt6nMt07wdDkJCar?=
- =?us-ascii?Q?NQz7T8jFcuvFEle+zPeuY2UVC5ldaUOm72j7HitLpAG7WqYAm3NOLqggntWn?=
- =?us-ascii?Q?Bw4UaDKPR1+FxtdiiPOjMSzNvbGuykS9qE3bAj/K86MjT907zvKeKUkyJJzI?=
- =?us-ascii?Q?5RN0lMY//TA2+WWZ54lP76w4I0n2ofufE8DQmkrqGx9Nu5S64ijJlGZU8CDF?=
- =?us-ascii?Q?SDhrMn6pXwtjpL1FWehae+pWb2ajCWre17vm/RNLdETSiRJpleSjT7Om9Ars?=
- =?us-ascii?Q?ibn1TkpyIMnFxSwJ4W99kUyFLOoo0+6YxH9ySNO/?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 99fadb08-2a05-4f8f-40ae-08db7847e5de
-X-MS-Exchange-CrossTenant-AuthSource: SA1PR11MB6733.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Jun 2023 02:24:00.1156
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: yG3/s8zIZFP77qH9L8r8+7QURRHU/QuQyDF41jgi3CCXClI5ZN7JW7io7fz8hy082RaIAlalgaZM44PNgjh5kQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR11MB8122
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230628181926.4102448-1-yhs@fb.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.178.55]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggpemm500006.china.huawei.com (7.185.36.236)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Matthew Wilcox wrote:
-> Here's a more comprehensive read_folio patch.  It's not at all
-> efficient, but then if we wanted an efficient vboxsf, we'd implement
-> vboxsf_readahead() and actually do an async call with deferred setting
-> of the uptodate flag.  I can consult with anyone who wants to do all
-> this work.
+
+
+On 2023/6/29 2:19, Yonghong Song wrote:
+> Commit 6eb4bd92c1ce ("kallsyms: strip LTO suffixes from static functions")
+> stripped all function/variable suffixes started with '.' regardless
+> of whether those suffixes are generated at LTO mode or not. In fact,
+> as far as I know, in LTO mode, when a static function/variable is
+> promoted to the global scope, '.llvm.<...>' suffix is added.
 > 
-> I haven't even compiled this, just trying to show the direction this
-> should take.
+> The existing mechanism breaks live patch for a LTO kernel even if
+> no <symbol>.llvm.<...> symbols are involved. For example, for the following
+> kernel symbols:
+>   $ grep bpf_verifier_vlog /proc/kallsyms
+>   ffffffff81549f60 t bpf_verifier_vlog
+>   ffffffff8268b430 d bpf_verifier_vlog._entry
+>   ffffffff8282a958 d bpf_verifier_vlog._entry_ptr
+>   ffffffff82e12a1f d bpf_verifier_vlog.__already_done
+> 'bpf_verifier_vlog' is a static function. '_entry', '_entry_ptr' and
+> '__already_done' are static variables used inside 'bpf_verifier_vlog',
+> so llvm promotes them to file-level static with prefix 'bpf_verifier_vlog.'.
+> Note that the func-level to file-level static function promotion also
+> happens without LTO.
+> 
+> Given a symbol name 'bpf_verifier_vlog', with LTO kernel, current mechanism will
+> return 4 symbols to live patch subsystem which current live patching
+> subsystem cannot handle it. With non-LTO kernel, only one symbol
+> is returned.
+> 
+> In [1], we have a lengthy discussion, the suggestion is to separate two
+> cases:
+>   (1). new symbols with suffix which are generated regardless of whether
+>        LTO is enabled or not, and
+>   (2). new symbols with suffix generated only when LTO is enabled.
+> 
+> The cleanup_symbol_name() should only remove suffixes for case (2).
+> Case (1) should not be changed so it can work uniformly with or without LTO.
+> 
+> This patch removed LTO-only suffix '.llvm.<...>' so live patching and
+> tracing should work the same way for non-LTO kernel.
+> The cleanup_symbol_name() in scripts/kallsyms.c is also changed to have the same
+> filtering pattern so both kernel and kallsyms tool have the same
+> expectation on the order of symbols.
 
-I'm a bit confused.  Is this progressing toward having the folio passed
-down to vboxsf_read() or just an expanded vboxsf_read_folio which can
-handle larger folios as well as fix the kmap?
-
-Ira
+Reviewed-by: Zhen Lei <thunder.leizhen@huawei.com>
 
 > 
-> diff --git a/fs/vboxsf/file.c b/fs/vboxsf/file.c
-> index 2307f8037efc..f1af9a7bd3d8 100644
-> --- a/fs/vboxsf/file.c
-> +++ b/fs/vboxsf/file.c
-> @@ -227,26 +227,31 @@ const struct inode_operations vboxsf_reg_iops = {
->  
->  static int vboxsf_read_folio(struct file *file, struct folio *folio)
->  {
-> -	struct page *page = &folio->page;
->  	struct vboxsf_handle *sf_handle = file->private_data;
-> -	loff_t off = page_offset(page);
-> -	u32 nread = PAGE_SIZE;
-> -	u8 *buf;
-> +	loff_t pos = folio_pos(folio);
-> +	size_t offset = 0;
->  	int err;
->  
-> -	buf = kmap(page);
-> +	do {
-> +		u8 *buf = kmap_local_folio(folio, offset);
-> +		u32 nread = PAGE_SIZE;
->  
-> -	err = vboxsf_read(sf_handle->root, sf_handle->handle, off, &nread, buf);
-> -	if (err == 0) {
-> -		memset(&buf[nread], 0, PAGE_SIZE - nread);
-> -		flush_dcache_page(page);
-> -		SetPageUptodate(page);
-> -	} else {
-> -		SetPageError(page);
-> -	}
-> +		err = vboxsf_read(sf_handle->root, sf_handle->handle, pos,
-> +				&nread, buf);
-> +		if (nread < PAGE_SIZE)
-> +			memset(&buf[nread], 0, PAGE_SIZE - nread);
-> +		kunmap_local(buf);
-> +		if (err)
-> +			break;
-> +		offset += PAGE_SIZE;
-> +		pos += PAGE_SIZE;
-> +	} while (offset < folio_size(folio);
->  
-> -	kunmap(page);
-> -	unlock_page(page);
-> +	if (!err) {
-> +		flush_dcache_folio(folio);
-> +		folio_mark_uptodate(folio);
-> +	}
-> +	folio_unlock(folio);
->  	return err;
+>  [1] https://lore.kernel.org/live-patching/20230615170048.2382735-1-song@kernel.org/T/#u
+> 
+> Fixes: 6eb4bd92c1ce ("kallsyms: strip LTO suffixes from static functions")
+> Reported-by: Song Liu <song@kernel.org>
+> Signed-off-by: Yonghong Song <yhs@fb.com>
+> ---
+>  kernel/kallsyms.c  | 5 ++---
+>  scripts/kallsyms.c | 6 +++---
+>  2 files changed, 5 insertions(+), 6 deletions(-)
+> 
+> Changelogs:
+>   v1 -> v2:
+>     . add 'Reported-by: Song Liu <song@kernel.org>'
+>     . also fix in scripts/kallsyms.c.
+> 
+> diff --git a/kernel/kallsyms.c b/kernel/kallsyms.c
+> index 77747391f49b..4874508bb950 100644
+> --- a/kernel/kallsyms.c
+> +++ b/kernel/kallsyms.c
+> @@ -174,11 +174,10 @@ static bool cleanup_symbol_name(char *s)
+>  	 * LLVM appends various suffixes for local functions and variables that
+>  	 * must be promoted to global scope as part of LTO.  This can break
+>  	 * hooking of static functions with kprobes. '.' is not a valid
+> -	 * character in an identifier in C. Suffixes observed:
+> +	 * character in an identifier in C. Suffixes only in LLVM LTO observed:
+>  	 * - foo.llvm.[0-9a-f]+
+> -	 * - foo.[0-9a-f]+
+>  	 */
+> -	res = strchr(s, '.');
+> +	res = strstr(s, ".llvm.");
+>  	if (res) {
+>  		*res = '\0';
+>  		return true;
+> diff --git a/scripts/kallsyms.c b/scripts/kallsyms.c
+> index 0d2db41177b2..13af6d0ff845 100644
+> --- a/scripts/kallsyms.c
+> +++ b/scripts/kallsyms.c
+> @@ -346,10 +346,10 @@ static void cleanup_symbol_name(char *s)
+>  	 * ASCII[_]   = 5f
+>  	 * ASCII[a-z] = 61,7a
+>  	 *
+> -	 * As above, replacing '.' with '\0' does not affect the main sorting,
+> -	 * but it helps us with subsorting.
+> +	 * As above, replacing the first '.' in ".llvm." with '\0' does not
+> +	 * affect the main sorting, but it helps us with subsorting.
+>  	 */
+> -	p = strchr(s, '.');
+> +	p = strstr(s, ".llvm.");
+>  	if (p)
+>  		*p = '\0';
 >  }
->  
+> 
+
+-- 
+Regards,
+  Zhen Lei
