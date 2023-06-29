@@ -2,151 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA62174270C
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 15:11:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75ACE742711
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 15:14:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231248AbjF2NLw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 09:11:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38788 "EHLO
+        id S231634AbjF2NO2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 09:14:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230079AbjF2NLi (ORCPT
+        with ESMTP id S231204AbjF2NO0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 09:11:38 -0400
-Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8FF33586
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 06:11:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:References:
-        Cc:To:From:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=5gBm7015A4hdAPyt1XTpmFIFSaE1k9BcyQR+lyfqJ8o=; b=WcF7a7PvHPSSH8RkVJssqlUU+s
-        ImScZlAnduZcKAwEtiUvHyTPNF9vZBW26pH3ld6VExtPVXcKZMyDvFSXjvRVLv6F46fkbIwtmGJSW
-        3J/hGWgetzDJjykSs/LPhPzQQ9d9hSg6lyJXfm6mYTJLoTQN0EEcduJ10WsEXRVuZ+a4Sgp6KX73m
-        sxLLQffRdpKecaMLzKCKuuFm0WePnUOmZMTNN2UR2dq00AskhaueObNPhKW3YM2R08xCBCm6YUs8l
-        xzTOWIrZ97X1ZdRqiHZuyxWgh9XNpjmDihWhIQPXF7VqBwr6gC9Dg03Fq31r8nL6P6B5DIAbQy1It
-        Eo/BZCEQ==;
-Received: from [187.74.70.209] (helo=[192.168.1.111])
-        by fanzine2.igalia.com with esmtpsa 
-        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
-        id 1qErQX-005nTk-1p; Thu, 29 Jun 2023 15:11:13 +0200
-Message-ID: <02789f9b-ff16-b419-097f-b97b56afad57@igalia.com>
-Date:   Thu, 29 Jun 2023 10:11:06 -0300
+        Thu, 29 Jun 2023 09:14:26 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DBFD2D51;
+        Thu, 29 Jun 2023 06:14:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=ev7f/SttSlNV0/fZbiCdeWB5/3NyrGGdpFSEpdjZfZs=; b=dw64qHpvoez7kAlXxbwTpcAjxK
+        zJbV1Dh7pNxO6aUo91ZAO7nB+5oRF3WhOA8lGPKB5d4NaE4tMhZdm3tNFcjAbg5ztGQOEyTe7AX83
+        UOCKZJjcj0r/8P11UMJFxN63ObG46BaYdqKUuDVjQ3wT5NUdx91CzMklpi50RZBtNxA4=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1qErTH-000EAl-PH; Thu, 29 Jun 2023 15:14:03 +0200
+Date:   Thu, 29 Jun 2023 15:14:03 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Luo Jie <quic_luoj@quicinc.com>
+Cc:     hkallweit1@gmail.com, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, linux@armlinux.org.uk,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        quic_sricharan@quicinc.com
+Subject: Re: [PATCH 1/3] net: phy: at803x: support qca8081 1G chip type
+Message-ID: <48e41540-6857-4f61-bcc5-4d0a6dbb9ec1@lunn.ch>
+References: <20230629034846.30600-1-quic_luoj@quicinc.com>
+ <20230629034846.30600-2-quic_luoj@quicinc.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v5 1/1] drm/doc: Document DRM device reset expectations
-Content-Language: en-US
-From:   =?UTF-8?Q?Andr=c3=a9_Almeida?= <andrealmeid@igalia.com>
-To:     =?UTF-8?Q?Christian_K=c3=b6nig?= <ckoenig.leichtzumerken@gmail.com>
-Cc:     pierre-eric.pelloux-prayer@amd.com,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        =?UTF-8?B?J01hcmVrIE9sxaHDoWsn?= <maraeo@gmail.com>,
-        =?UTF-8?Q?Michel_D=c3=a4nzer?= <michel.daenzer@mailbox.org>,
-        Simon Ser <contact@emersion.fr>, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org,
-        =?UTF-8?Q?Timur_Krist=c3=b3f?= <timur.kristof@gmail.com>,
-        amd-gfx@lists.freedesktop.org,
-        Pekka Paalanen <ppaalanen@gmail.com>,
-        Daniel Stone <daniel@fooishbar.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Samuel Pitoiset <samuel.pitoiset@gmail.com>,
-        kernel-dev@igalia.com, Bas Nieuwenhuizen <bas@basnieuwenhuizen.nl>,
-        alexander.deucher@amd.com,
-        Pekka Paalanen <pekka.paalanen@collabora.com>,
-        Dave Airlie <airlied@gmail.com>, christian.koenig@amd.com
-References: <20230627132323.115440-1-andrealmeid@igalia.com>
- <1dbeb507-3f18-1b5d-37be-fcfd60a1c0d4@gmail.com>
- <b3f72b45-c607-7cd3-2bdb-21567f901469@igalia.com>
-In-Reply-To: <b3f72b45-c607-7cd3-2bdb-21567f901469@igalia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230629034846.30600-2-quic_luoj@quicinc.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-Em 27/06/2023 18:17, André Almeida escreveu:
-> Em 27/06/2023 14:47, Christian König escreveu:
->> Am 27.06.23 um 15:23 schrieb André Almeida:
->>> Create a section that specifies how to deal with DRM device resets for
->>> kernel and userspace drivers.
->>>
->>> Acked-by: Pekka Paalanen <pekka.paalanen@collabora.com>
->>> Signed-off-by: André Almeida <andrealmeid@igalia.com>
->>> ---
->>>
->>> v4: 
->>> https://lore.kernel.org/lkml/20230626183347.55118-1-andrealmeid@igalia.com/
->>>
->>> Changes:
->>>   - Grammar fixes (Randy)
->>>
->>>   Documentation/gpu/drm-uapi.rst | 68 ++++++++++++++++++++++++++++++++++
->>>   1 file changed, 68 insertions(+)
->>>
->>> diff --git a/Documentation/gpu/drm-uapi.rst 
->>> b/Documentation/gpu/drm-uapi.rst
->>> index 65fb3036a580..3cbffa25ed93 100644
->>> --- a/Documentation/gpu/drm-uapi.rst
->>> +++ b/Documentation/gpu/drm-uapi.rst
->>> @@ -285,6 +285,74 @@ for GPU1 and GPU2 from different vendors, and a 
->>> third handler for
->>>   mmapped regular files. Threads cause additional pain with signal
->>>   handling as well.
->>> +Device reset
->>> +============
->>> +
->>> +The GPU stack is really complex and is prone to errors, from 
->>> hardware bugs,
->>> +faulty applications and everything in between the many layers. Some 
->>> errors
->>> +require resetting the device in order to make the device usable 
->>> again. This
->>> +sections describes the expectations for DRM and usermode drivers when a
->>> +device resets and how to propagate the reset status.
->>> +
->>> +Kernel Mode Driver
->>> +------------------
->>> +
->>> +The KMD is responsible for checking if the device needs a reset, and 
->>> to perform
->>> +it as needed. Usually a hang is detected when a job gets stuck 
->>> executing. KMD
->>> +should keep track of resets, because userspace can query any time 
->>> about the
->>> +reset stats for an specific context.
->>
->> Maybe drop the part "for a specific context". Essentially the reset 
->> query could use global counters instead and we won't need the context 
->> any more here.
->>
+On Thu, Jun 29, 2023 at 11:48:44AM +0800, Luo Jie wrote:
+> The qca8081 1G chip version does not support 2.5 capability, which
+> is distinguished from qca8081 2.5G chip according to the bit0 of
+> register mmd7.0x901d.
 > 
-> Right, I wrote like this to reflect how it's currently implemented.
-> 
-> If follow correctly what you meant, KMD could always notify the global 
-> count for UMD, and we would move to the UMD the responsibility to manage 
-> the reset counters, right? This would also simplify my 
-> DRM_IOCTL_GET_RESET proposal. I'll apply your suggestion to the next doc 
-> version.
-> 
+> The fast retrain and master slave seed configs are only needed when
+> the 2.5G capability is supported.
 
-Actually, if we drop the context identifier we would lose the ability to 
-track which is the guilty context. Vulkan API doesn't seem to care about 
-this, but OpenGL does.
+Does genphy_c45_pma_read_abilities() work on these devices? 
 
->> Apart from that this sounds good to me, feel free to add my rb.
->>
->> Regards,
->> Christian.
->>
->>
+     Andrew
