@@ -2,130 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 513D6742D7B
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 21:32:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7476C742DB1
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 21:37:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232373AbjF2Tbl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 15:31:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53124 "EHLO
+        id S231878AbjF2TfZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 15:35:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232106AbjF2TbF (ORCPT
+        with ESMTP id S230187AbjF2TfX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 15:31:05 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40F0B2D70;
-        Thu, 29 Jun 2023 12:30:26 -0700 (PDT)
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35THuIVK022359;
-        Thu, 29 Jun 2023 19:30:17 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=qcppdkim1;
- bh=l/VdP1zAdROk8YySMoVsFWoGNzGxLoWK3gulGU/nzf4=;
- b=hVxl8KET+wloE++cRAJ/Y7bmPM4qLYdX/S8WPRY3LKJySeqzvOhLEakDUCNWXUuMFuBX
- UDw/Q5o7m7MfTTO1G85+qrn+e5QCPVGfdWFDwAMNUZq2U0KYjaFeT3/2mF0jg2vdxOyT
- IaDyxUZ5nQyVoYhsWzfAm0yt5NEJQm+QUha7IeZ3YMvjcVh6JtPXuqTdbhcxcguYYUqC
- l/UVrl+rtOCFP3WgqfzsQFexB+vLmeQmnFwlpAI9briVNiOY/ipxLwTcu8h4oQIbK+Ma
- 0QhCSG3Hp+HX/AnBfQ6VOdIpmJ4DD6pkDoyCWih4oJYw/tl5NOucI6i1Ijdzh+hdtMBJ Pg== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rh5g8sfrg-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 29 Jun 2023 19:30:17 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35TJUG0K016224
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 29 Jun 2023 19:30:16 GMT
-Received: from abhinavk-linux.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.7; Thu, 29 Jun 2023 12:30:15 -0700
-From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
-To:     <freedreno@lists.freedesktop.org>, Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        David Airlie <airlied@gmail.com>,
-        "Daniel Vetter" <daniel@ffwll.ch>
-CC:     <dri-devel@lists.freedesktop.org>, <quic_jesszhan@quicinc.com>,
-        <andersson@kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH v3 3/3] drm/msm/dpu: drop DPU_INTF_DATA_COMPRESS from dpu catalog
-Date:   Thu, 29 Jun 2023 12:29:58 -0700
-Message-ID: <20230629193001.22618-3-quic_abhinavk@quicinc.com>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230629193001.22618-1-quic_abhinavk@quicinc.com>
-References: <20230629193001.22618-1-quic_abhinavk@quicinc.com>
+        Thu, 29 Jun 2023 15:35:23 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A73D12F;
+        Thu, 29 Jun 2023 12:35:22 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1688067320;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=cQWrepqeMi4qIeVTOHeQAMFD514b/C3xCiVp4otJIcA=;
+        b=sPLqChFMbwkv7gUwFdIZmNr84XHb6D2mjdmp+jV6yLK0gpjf/1guCqRCQXf3UuVN9a1jhT
+        KV2/t0r8g9bIum79RRipBqOw8tSsmID2evmWe5Bf/B0gEHDub6hMjp+uUll2VUR1cWO8bg
+        BkmH3PrRndazrmGkcskfGUfZlOGtfgU21Br07TmLqvpoOFozC8HI/WgmBqaCYLwNNjec/D
+        Q2uuxVUXXwia0M6QZyAxA9IqMq2VimbUC+HcdcUmSw7+y+MAegwR75iG5owSN6mHloiKCe
+        qxoIqSvBguJlLmCEJZuAcspj69ITLqBOhHL26Lz8ealCLhDPK6f7C9wBEoy1zA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1688067320;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=cQWrepqeMi4qIeVTOHeQAMFD514b/C3xCiVp4otJIcA=;
+        b=3nR0ix5L1Oxfruv0U7AwkFzNl5SLb/elXiT6FzigX3+qvl5ejSZN8rglwscHPwqtjlK2zI
+        pQaEZybL3uj4hxDA==
+To:     LKML <linux-kernel@vger.kernel.org>
+Cc:     =?utf-8?Q?Nikl=C4=81vs_Ko=C4=BCes=C5=86ikovs?= 
+        <pinkflames.linux@gmail.com>, Ard Biesheuvel <ardb@kernel.org>,
+        linux-efi@vger.kernel.org, x86@kernel.org,
+        regressions@lists.linux.dev
+Subject: x86/efi: Make efi_set_virtual_address_map IBT safe
+Date:   Thu, 29 Jun 2023 21:35:19 +0200
+Message-ID: <87jzvm12q0.ffs@tglx>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: kAKDNCqhZBw5ssQUtPBS44D4vOZVAuz7
-X-Proofpoint-GUID: kAKDNCqhZBw5ssQUtPBS44D4vOZVAuz7
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-06-29_06,2023-06-27_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0
- priorityscore=1501 malwarescore=0 spamscore=0 impostorscore=0 mlxscore=0
- phishscore=0 mlxlogscore=930 clxscore=1015 suspectscore=0
- lowpriorityscore=0 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2305260000 definitions=main-2306290175
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Now that all usages of DPU_INTF_DATA_COMPRESS have been replaced
-with the dpu core's major revision lets drop DPU_INTF_DATA_COMPRESS
-from the catalog completely.
+Nikl=C4=81vs reported a boot regression on an Alderlake machine and bisecte=
+d it
+to commit 9df9d2f0471b ("init: Invoke arch_cpu_finalize_init() earlier").
 
-Signed-off-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
+By moving the invocation of arch_cpu_finalize_init() further down he
+identified that efi_enter_virtual_mode() is the function which causes
+the boot hang.
+
+The main difference of the earlier invocation is that the boot CPU is
+already fully initialized and mitigations and alternatives are applied.
+
+But the only really interesting change turned out to be IBT, which is
+now enabled before efi_enter_virtual_mode(). "ibt=3Doff" on the kernel
+command line cured the problem.
+
+Inspection of the involved calls in efi_enter_virtual_mode() unearthed that
+efi_set_virtual_address_map() is the only place in the kernel which invokes
+an EFI call without the IBT safe wrapper. This went obviously unnoticed so
+far as IBT was enabled later.
+
+Use arch_efi_call_virt() instead of efi_call() to cure that.
+
+Fixes: fe379fa4d199 ("x86/ibt: Disable IBT around firmware")
+Fixes: 9df9d2f0471b ("init: Invoke arch_cpu_finalize_init() earlier")
+Reported-by: Nikl=C4=81vs Ko=C4=BCes=C5=86ikovs <pinkflames.linux@gmail.com>
+Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+Link: https://bugzilla.kernel.org/show_bug.cgi?id=3D217602
 ---
- drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c | 2 +-
- drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h | 2 --
- 2 files changed, 1 insertion(+), 3 deletions(-)
+I put two fixes tags in as the IBT one missed that and the earlier
+invocation unearthed it and made it observable.
+---
+ arch/x86/platform/efi/efi_64.c |    6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
-index 0de507d4d7b7..35994e676450 100644
---- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
-+++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
-@@ -105,7 +105,7 @@
- 	 BIT(DPU_INTF_STATUS_SUPPORTED) | \
- 	 BIT(DPU_DATA_HCTL_EN))
- 
--#define INTF_SC7280_MASK (INTF_SC7180_MASK | BIT(DPU_INTF_DATA_COMPRESS))
-+#define INTF_SC7280_MASK (INTF_SC7180_MASK)
- 
- #define WB_SM8250_MASK (BIT(DPU_WB_LINE_MODE) | \
- 			 BIT(DPU_WB_UBWC) | \
-diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
-index 8b900be3ea90..572e618150b8 100644
---- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
-+++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
-@@ -181,7 +181,6 @@ enum {
-  * @DPU_DATA_HCTL_EN                Allows data to be transferred at different rate
-  *                                  than video timing
-  * @DPU_INTF_STATUS_SUPPORTED       INTF block has INTF_STATUS register
-- * @DPU_INTF_DATA_COMPRESS          INTF block has DATA_COMPRESS register
-  * @DPU_INTF_MAX
-  */
- enum {
-@@ -189,7 +188,6 @@ enum {
- 	DPU_INTF_TE,
- 	DPU_DATA_HCTL_EN,
- 	DPU_INTF_STATUS_SUPPORTED,
--	DPU_INTF_DATA_COMPRESS,
- 	DPU_INTF_MAX
- };
- 
--- 
-2.40.1
-
+--- a/arch/x86/platform/efi/efi_64.c
++++ b/arch/x86/platform/efi/efi_64.c
+@@ -853,9 +853,9 @@ efi_set_virtual_address_map(unsigned lon
+=20
+ 	/* Disable interrupts around EFI calls: */
+ 	local_irq_save(flags);
+-	status =3D efi_call(efi.runtime->set_virtual_address_map,
+-			  memory_map_size, descriptor_size,
+-			  descriptor_version, virtual_map);
++	status =3D arch_efi_call_virt(efi.runtime, set_virtual_address_map,
++				    memory_map_size, descriptor_size,
++				    descriptor_version, virtual_map);
+ 	local_irq_restore(flags);
+=20
+ 	efi_fpu_end();
