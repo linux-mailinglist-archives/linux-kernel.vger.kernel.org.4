@@ -2,150 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 604F8741DD9
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 03:59:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E123741DDC
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 03:59:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231497AbjF2B7R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 21:59:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46416 "EHLO
+        id S231127AbjF2B7w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 21:59:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231494AbjF2B7K (ORCPT
+        with ESMTP id S230463AbjF2B7j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 21:59:10 -0400
-Received: from smtp-fw-9102.amazon.com (smtp-fw-9102.amazon.com [207.171.184.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C08982681;
-        Wed, 28 Jun 2023 18:59:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1688003949; x=1719539949;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=Z5ADgpgRcm7ildcG3JRpr/Zcwf95I9lu4+eIDLt2QIQ=;
-  b=hikrSbtCH2THGVDVNMfIqYzS9KMdkZyiZeAZi4CmawK2tsOoglkgKkmu
-   +rG3RFSzU2z0j0nTjY8aIyZ1bMcjClPUwfnxXOnw84XJxPV8XH/XC2NFs
-   uGHf0PSHvShuz/cQ/N6T8eNnEVdOTT3REL6JCNYxUrd1QK841dvZIlQtd
-   E=;
-X-IronPort-AV: E=Sophos;i="6.01,167,1684800000"; 
-   d="scan'208";a="348439320"
-Received: from pdx4-co-svc-p1-lb2-vlan2.amazon.com (HELO email-inbound-relay-pdx-2a-m6i4x-1cca8d67.us-west-2.amazon.com) ([10.25.36.210])
-  by smtp-border-fw-9102.sea19.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jun 2023 01:59:09 +0000
-Received: from EX19MTAUWA002.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan2.pdx.amazon.com [10.236.137.194])
-        by email-inbound-relay-pdx-2a-m6i4x-1cca8d67.us-west-2.amazon.com (Postfix) with ESMTPS id 24CC08064F;
-        Thu, 29 Jun 2023 01:59:08 +0000 (UTC)
-Received: from EX19D001UWA002.ant.amazon.com (10.13.138.236) by
- EX19MTAUWA002.ant.amazon.com (10.250.64.202) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Thu, 29 Jun 2023 01:59:07 +0000
-Received: from u46989501580c5c.ant.amazon.com (10.88.130.162) by
- EX19D001UWA002.ant.amazon.com (10.13.138.236) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.30; Thu, 29 Jun 2023 01:59:06 +0000
-From:   Samuel Mendoza-Jonas <samjonas@amazon.com>
-To:     <netdev@vger.kernel.org>
-CC:     Stewart Smith <trawets@amazon.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        David Ahern <dsahern@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        <linux-kernel@vger.kernel.org>, <benh@amazon.com>,
-        <stable@vger.kernel.org>,
-        Samuel Mendoza-Jonas <samjonas@amazon.com>
-Subject: [PATCH net] net/ipv6: Reduce chance of collisions in inet6_hashfn()
-Date:   Wed, 28 Jun 2023 18:58:44 -0700
-Message-ID: <20230629015844.800280-1-samjonas@amazon.com>
-X-Mailer: git-send-email 2.25.1
+        Wed, 28 Jun 2023 21:59:39 -0400
+Received: from stravinsky.debian.org (unknown [IPv6:2001:41b8:202:deb::311:108])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57C59270A;
+        Wed, 28 Jun 2023 18:59:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
+        s=smtpauto.stravinsky; h=X-Debian-User:In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=YChyS4nbtccbfNNu4X1A8v3ecoV4guD+QWtTyEZmb9U=; b=Zqqr+smxp55qdZwF34DftF8llx
+        j1un6BP2dCog0gdIk8uXiquY+6GJso4mPHx0RLbYxJRgDO3JAnuk0MauwEct7RQHVLzcPWOYrZU3S
+        hluJWKTArm8fnHQcrB9YM3iQXWKQbebPARM/yemRImQL4kLZR9fOTMhsWgz7ezB181DBDRtRMuD8l
+        IAGGRuDalj8Zotrhd9zKPxpp1hpr9YZM6Ux5Re5Hr8GKR2j19hK7f3FB0yepPKnq2gfL37jACo1g9
+        xlKP6wld0uGYSKUvu9kyxBqAyOh+sq4HwydUdWS0HRC5v9/92DLXTObmNGWDNr2a7tjp4+QqlTGfL
+        9hL+OOOQ==;
+Received: from authenticated user
+        by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+        (Exim 4.94.2)
+        (envelope-from <kibi@debian.org>)
+        id 1qEgwL-005i06-9G; Thu, 29 Jun 2023 01:59:22 +0000
+Date:   Thu, 29 Jun 2023 03:59:18 +0200
+From:   Cyril Brulebois <kibi@debian.org>
+To:     Jim Quinlan <james.quinlan@broadcom.com>
+Cc:     linux-pci@vger.kernel.org,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Phil Elwell <phil@raspberrypi.com>,
+        bcm-kernel-feedback-list@broadcom.com,
+        Conor Dooley <conor+dt@kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Jim Quinlan <jim2101024@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
+        <linux-rpi-kernel@lists.infradead.org>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Rob Herring <robh@kernel.org>
+Subject: Re: [PATCH v6 0/5] PCI: brcmstb: Configure appropriate HW CLKREQ#
+ mode
+Message-ID: <20230629015918.v4u7atl3ep3aetgj@mraw.org>
+Organization: Debian
+References: <20230623144100.34196-1-james.quinlan@broadcom.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.88.130.162]
-X-ClientProxiedBy: EX19D041UWA002.ant.amazon.com (10.13.139.121) To
- EX19D001UWA002.ant.amazon.com (10.13.138.236)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="7befo4br4255cxtj"
+Content-Disposition: inline
+In-Reply-To: <20230623144100.34196-1-james.quinlan@broadcom.com>
+X-Debian-User: kibi
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        RDNS_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        UNPARSEABLE_RELAY autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Stewart Smith <trawets@amazon.com>
 
-For both IPv4 and IPv6 incoming TCP connections are tracked in a hash
-table with a hash over the source & destination addresses and ports.
-However, the IPv6 hash is insufficient and can lead to a high rate of
-collisions.
+--7befo4br4255cxtj
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-The IPv6 hash used an XOR to fit everything into the 96 bits for the
-fast jenkins hash, meaning it is possible for an external entity to
-ensure the hash collides, thus falling back to a linear search in the
-bucket, which is slow.
+Hi Jim,
 
-We take the approach of hash half the data; hash the other half; and
-then hash them together. We do this with 3x jenkins hashes rather than
-2x to calculate the hashing value for the connection covering the full
-length of the addresses and ports.
+Jim Quinlan <james.quinlan@broadcom.com> (2023-06-23):
+> v6 -- No code has been changed.
+>    -- Changed commit subject and comment in "#PERST" commit (Bjorn, Cyril)
+>    -- Changed sign-off and author email address for all commits.
+>       This was due to a change in Broadcom's upstreaming policy.
 
-While this may look like it adds overhead, the reality of modern CPUs
-means that this is unmeasurable in real world scenarios.
+I've just run some more tests to be on the safe side, and I can confirm
+everything is still looking good with the updated series and the updated
+base commit.
 
-In simulating with llvm-mca, the increase in cycles for the hashing code
-was ~5 cycles on Skylake (from a base of ~50), and an extra ~9 on
-Nehalem (base of ~62).
+Test setup:
+-----------
 
-In commit dd6d2910c5e0 ("netfilter: conntrack: switch to siphash")
-netfilter switched from a jenkins hash to a siphash, but even the faster
-hsiphash is a more significant overhead (~20-30%) in some preliminary
-testing. So, in this patch, we keep to the more conservative approach to
-ensure we don't add much overhead per SYN.
+ - using a $CM with the 20230111 EEPROM
+ - on the same CM4 IO Board
+ - with a $PCIE board (PCIe to multiple USB ports)
+ - and the same Samsung USB flash drive.
 
-In testing, this results in a consistently even spread across the
-connection buckets. In both testing and real-world scenarios, we have
-not found any measurable performance impact.
+where $CM is one of:
 
-Cc: stable@vger.kernel.org
-Fixes: 08dcdbf6a7b9 ("ipv6: use a stronger hash for tcp")
-Fixes: b3da2cf37c5c ("[INET]: Use jhash + random secret for ehash.")
-Signed-off-by: Stewart Smith <trawets@amazon.com>
-Signed-off-by: Samuel Mendoza-Jonas <samjonas@amazon.com>
----
- include/net/ipv6.h          | 4 +---
- net/ipv6/inet6_hashtables.c | 5 ++++-
- 2 files changed, 5 insertions(+), 4 deletions(-)
+ - CM4 Lite Rev 1.0
+ - CM4 8/32 Rev 1.0
+ - CM4 4/32 Rev 1.1
 
-diff --git a/include/net/ipv6.h b/include/net/ipv6.h
-index 7332296eca44..f9bb54869d82 100644
---- a/include/net/ipv6.h
-+++ b/include/net/ipv6.h
-@@ -752,9 +752,7 @@ static inline u32 ipv6_addr_hash(const struct in6_addr *a)
- /* more secured version of ipv6_addr_hash() */
- static inline u32 __ipv6_addr_jhash(const struct in6_addr *a, const u32 initval)
- {
--	u32 v = (__force u32)a->s6_addr32[0] ^ (__force u32)a->s6_addr32[1];
--
--	return jhash_3words(v,
-+	return jhash_3words((__force u32)a->s6_addr32[1],
- 			    (__force u32)a->s6_addr32[2],
- 			    (__force u32)a->s6_addr32[3],
- 			    initval);
-diff --git a/net/ipv6/inet6_hashtables.c b/net/ipv6/inet6_hashtables.c
-index b64b49012655..bb7198081974 100644
---- a/net/ipv6/inet6_hashtables.c
-+++ b/net/ipv6/inet6_hashtables.c
-@@ -33,7 +33,10 @@ u32 inet6_ehashfn(const struct net *net,
- 	net_get_random_once(&inet6_ehash_secret, sizeof(inet6_ehash_secret));
- 	net_get_random_once(&ipv6_hash_secret, sizeof(ipv6_hash_secret));
- 
--	lhash = (__force u32)laddr->s6_addr32[3];
-+	lhash = jhash_3words((__force u32)laddr->s6_addr32[3],
-+			    (((u32)lport) << 16) | (__force u32)fport,
-+			    (__force u32)faddr->s6_addr32[0],
-+			    ipv6_hash_secret);
- 	fhash = __ipv6_addr_jhash(faddr, ipv6_hash_secret);
- 
- 	return __inet6_ehashfn(lhash, lport, fhash, fport,
--- 
-2.25.1
+and $PCIE is one of:
 
+ - SupaHub PCE6U1C-R02, VER 006
+ - SupaHub PCE6U1C-R02, VER 006S
+
+
+Results:
+--------
+
+ 1. With an unpatched kernel, I'm getting the dreaded Serror for all
+    $CM/$PCIE combinations. That's reproducible with:
+     - the 6.1.y kernel shipped in Debian 12;
+     - a locally-built v6.4-rc7-194-g8a28a0b6f1a1d kernel.
+
+ 2. With a patched kernel (v6.4-rc7-194-g8a28a0b6f1a1d + this series),
+    for all $CM/$PCIE combinations, I'm getting a system that boots,
+    sees the flash drive, and gives decent read performance on the USB
+    flash drive (200+ MB/s on the CM4 Lite, 220+ MB/s on the non-Lite
+    versions).
+
+
+In passing, since that looks like it could be merged finally: I suppose
+it's fair to say this series adds support for hardware that wasn't
+working before, which means it's not a candidate for inclusion via
+stable@ (even if it gets rid of a nasty failure to boot depending on
+what hardware is plugged in at that time)?
+
+In other words, downstream distributions should be expected to either
+adjust their build systems to pick some future Linux release or consider
+backporting this series on their own, to each base Linux version they
+support?
+
+
+Thanks again for all the help figuring this out.
+
+
+Cheers,
+--=20
+Cyril Brulebois (kibi@debian.org)            <https://debamax.com/>
+D-I release manager -- Release team member -- Freelance Consultant
+
+--7befo4br4255cxtj
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEtg6/KYRFPHDXTPR4/5FK8MKzVSAFAmSc5XMACgkQ/5FK8MKz
+VSA3Sg//fgoP825n1pCIyd3e2L9YZB3DWHb6OWdjrkcyyLL4YEn6BapxdPkjwMpk
+JAK7iCo1grklQEvdqMrkoc4mRHsjN/3Hkx9GzRguiU28AqaMkazc3s+GnRJtoUnO
+zWNPnwnwsaeIGmB0uIXWLxtp1A9naSO/zOPwD/INCWYbC2EAT4sEPb+A4qqtMrz/
+CGXalNZb58prYVJrlZ2fcQL3SGrgf4lcob7JqtZcL9pHE5uaS7sOhSQdxQI1JgTC
+/6bjJGvBAyLLlOA8rTR8vYgmXbaFX12aVJ9OOn0tByScMc7VNikVPSTo7/Oc630t
+ElCEnxxIc/cslSXhM1xlhUMgGY8WIrr1G0qNM7LPVoC4FPWsOjdFXj0ooChEKaHW
+ZqKrJ7UDlq7rTIwyzJTVCbZJw+QVt8Qz6ffaQgbJ5jGkVIxrjFgfMvfNeRIhEF8a
+c6PJiLNm8QRh2h497F+J2PopC/i9kEL/k5ySoa1rOzqUPReXhN57Q5xQRivOZDdw
+nMa7m5eX0gbtvjX3qaCwVIIcwpVaWAeiOEm2/B3aAKiPVPmibw0sdCRtoSflh2NZ
+dq2ReO2rJZhNHgeOD3oY6L0vU7w2dN8k56eh+JVcWzksjqPgbndq0U54oFnuBnfL
+I7qN6WjGtPPQeYf/j9ngJkuKTPY/BUxUTP0cBkFrgQMHqnTJOyA=
+=yUbx
+-----END PGP SIGNATURE-----
+
+--7befo4br4255cxtj--
