@@ -2,127 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BA34742AE9
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 18:59:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 59706742AF0
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 19:00:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232099AbjF2Q7v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 12:59:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49924 "EHLO
+        id S232170AbjF2RAY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 13:00:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231902AbjF2Q7n (ORCPT
+        with ESMTP id S229522AbjF2RAW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 12:59:43 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D26063598
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 09:58:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1688057936;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=swdMiA1r9t+az8w+QR1JvmbiMrBSFzQ6KVm/MzBCuOU=;
-        b=To0i02Dcdfq1x9gMZ9vi5PPNCp0/cA9kvECpJBZt0P+0nSmls0KNiWcyteQmSs0x2+QJZh
-        xa0OqY5vVRHVkCxMj7o9r2Q2NcWMoGx7XCSOROorPf8lWZ0Yl4axysRR65R2JhREEPi849
-        jivFk9JN962exm2PBRv8UKr+FpinfFI=
-Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com
- [209.85.219.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-495-37UTdkj3OuKsJ5KuC9sLJw-1; Thu, 29 Jun 2023 12:58:54 -0400
-X-MC-Unique: 37UTdkj3OuKsJ5KuC9sLJw-1
-Received: by mail-qv1-f71.google.com with SMTP id 6a1803df08f44-635e664d2f8so9702226d6.3
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 09:58:54 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688057933; x=1690649933;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=swdMiA1r9t+az8w+QR1JvmbiMrBSFzQ6KVm/MzBCuOU=;
-        b=PPd1ShyBjaMeZyz0KLWrlkc66Wbo0r/4lhM7b17KmQUhub/dYyZ0oMHL4rl2yXp6WT
-         LXxH0gFTuLH4AHZkv318KzYp6QBat32omUB9pw0f6r5k64Hng7oGm3PL0ykYTY3W2CnL
-         78o8SgtlKF7IXmzHRqObJkgoCxbs48YImxmRuEQaLWqWWhDplQhVLmC8pv7wlA1mM3rP
-         wHr0B3iVNlHGhl3/X9I1T3g0StUh2s4sDNj3Er/KVn02HIu33pSxqEIMgJmQs5db+Y6G
-         4CJZ1ABNaOXiWGnSioVjvVDbAD533jGtuKDAjaq6LSjVXS9SC8EXRYvgaJX/EetVJrWR
-         RsuA==
-X-Gm-Message-State: ABy/qLbbcsNymL8IjYKGjMkt2Wzi2GzwenawE79tSAuwE6x1igcOJSyS
-        bNjlEAhx6pWTsesqrP+ZdQMy7JiXxc4qQEFUaJsFsCSg112DNOKSEl4yQaGDX9KCaIN3stle4+R
-        Pf2F3MLMJefA/Xqvv5kg0PC8p
-X-Received: by 2002:a05:6214:4110:b0:635:e0dd:db42 with SMTP id kc16-20020a056214411000b00635e0dddb42mr216411qvb.27.1688057933215;
-        Thu, 29 Jun 2023 09:58:53 -0700 (PDT)
-X-Google-Smtp-Source: APBJJlEZh6c5lPlscLNAkoheXBIabQY3I2vBrGKgWcc7orFQAecMaAR78/iF4k9GfBYMHfhVZAMJ9g==
-X-Received: by 2002:a05:6214:4110:b0:635:e0dd:db42 with SMTP id kc16-20020a056214411000b00635e0dddb42mr216401qvb.27.1688057932994;
-        Thu, 29 Jun 2023 09:58:52 -0700 (PDT)
-Received: from localhost (ip98-179-76-75.ph.ph.cox.net. [98.179.76.75])
-        by smtp.gmail.com with ESMTPSA id y11-20020ad457cb000000b00631eb444e6esm7108198qvx.51.2023.06.29.09.58.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Jun 2023 09:58:52 -0700 (PDT)
-Date:   Thu, 29 Jun 2023 09:58:51 -0700
-From:   Jerry Snitselaar <jsnitsel@redhat.com>
-To:     Florian Bezdeka <florian@bezdeka.de>
-Cc:     Peter Huewe <peterhuewe@gmx.de>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Lino Sanfilippo <l.sanfilippo@kunbus.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] tpm/tpm_tis: Disable interrupts for Lenovo L590 devices
-Message-ID: <qaghyyi3wd6sfppfkbf2d6spsnfafalseeznyjf5bgdj5nikdy@mz4t52hjkuus>
-References: <20230620-flo-lenovo-l590-tpm-fix-v1-1-16032a8b5a1d@bezdeka.de>
+        Thu, 29 Jun 2023 13:00:22 -0400
+Received: from 189.cn (ptr.189.cn [183.61.185.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0E3242D4C;
+        Thu, 29 Jun 2023 10:00:18 -0700 (PDT)
+HMM_SOURCE_IP: 10.64.8.31:48394.1297546617
+HMM_ATTACHE_NUM: 0000
+HMM_SOURCE_TYPE: SMTP
+Received: from clientip-114.242.206.180 (unknown [10.64.8.31])
+        by 189.cn (HERMES) with SMTP id 05A4C10020D;
+        Fri, 30 Jun 2023 01:00:13 +0800 (CST)
+Received: from  ([114.242.206.180])
+        by gateway-151646-dep-75648544bd-xp9j7 with ESMTP id 2713aa1564624f348fd6c097b85f39d9 for helgaas@kernel.org;
+        Fri, 30 Jun 2023 01:00:17 CST
+X-Transaction-ID: 2713aa1564624f348fd6c097b85f39d9
+X-Real-From: 15330273260@189.cn
+X-Receive-IP: 114.242.206.180
+X-MEDUSA-Status: 0
+Sender: 15330273260@189.cn
+Message-ID: <bcfdc77d-a94d-bca1-56e3-5e14e91f6fd9@189.cn>
+Date:   Fri, 30 Jun 2023 01:00:10 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230620-flo-lenovo-l590-tpm-fix-v1-1-16032a8b5a1d@bezdeka.de>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v7 6/8] PCI/VGA: Introduce is_boot_device function
+ callback to vga_client_register
+To:     Bjorn Helgaas <helgaas@kernel.org>,
+        Sui Jingfeng <suijingfeng@loongson.cn>
+Cc:     Bjorn Helgaas <bhelgaas@google.com>, linux-fbdev@vger.kernel.org,
+        Cornelia Huck <cohuck@redhat.com>,
+        Karol Herbst <kherbst@redhat.com>,
+        nouveau@lists.freedesktop.org,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        dri-devel@lists.freedesktop.org, YiPeng Chai <YiPeng.Chai@amd.com>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        Likun Gao <Likun.Gao@amd.com>,
+        David Airlie <airlied@gmail.com>,
+        Ville Syrjala <ville.syrjala@linux.intel.com>,
+        Yi Liu <yi.l.liu@intel.com>, kvm@vger.kernel.org,
+        amd-gfx@lists.freedesktop.org, Jason Gunthorpe <jgg@ziepe.ca>,
+        Ben Skeggs <bskeggs@redhat.com>, linux-pci@vger.kernel.org,
+        Kevin Tian <kevin.tian@intel.com>,
+        Lijo Lazar <lijo.lazar@amd.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Bokun Zhang <Bokun.Zhang@amd.com>,
+        intel-gfx@lists.freedesktop.org,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Abhishek Sahu <abhsahu@nvidia.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        Yishai Hadas <yishaih@nvidia.com>,
+        Pan Xinhui <Xinhui.Pan@amd.com>, linux-kernel@vger.kernel.org,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Christian Konig <christian.koenig@amd.com>,
+        Hawking Zhang <Hawking.Zhang@amd.com>
+References: <20230629155436.GA397963@bhelgaas>
+Content-Language: en-US
+From:   Sui Jingfeng <15330273260@189.cn>
+In-Reply-To: <20230629155436.GA397963@bhelgaas>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FROM_LOCAL_DIGITS,
+        FROM_LOCAL_HEX,NICE_REPLY_A,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 20, 2023 at 01:11:01PM +0200, Florian Bezdeka wrote:
-> The Lenovo L590 suffers from an irq storm issue like the T490, T490s
-> and P360 Tiny, so add an entry for it to tpm_tis_dmi_table and force
-> polling.
-> 
-> Link: https://bugzilla.redhat.com/show_bug.cgi?id=2214069#c0
-> Fixes: e644b2f498d2 ("tpm, tpm_tis: Enable interrupt test")
-> Signed-off-by: Florian Bezdeka <florian@bezdeka.de>
+Hi,
 
-Reviewed-by: Jerry Snitselaar <jsnitsel@redhat.com>
+On 2023/6/29 23:54, Bjorn Helgaas wrote:
+> On Thu, Jun 22, 2023 at 01:08:15PM +0800, Sui Jingfeng wrote:
+>> Hi,
+>>
+>>
+>> A nouveau developer(Lyude) from redhat send me a R-B,
+>>
+>> Thanks for the developers of nouveau project.
+>>
+>>
+>> Please allow me add a link[1] here.
+>>
+>>
+>> [1] https://lore.kernel.org/all/0afadc69f99a36bc9d03ecf54ff25859dbc10e28.camel@redhat.com/
+> 1) Thanks for this.  If you post another version of this series,
+>     please pick up Lyude's Reviewed-by and include it in the relevant
+>     patches (as long as you haven't made significant changes to the
+>     code Lyude reviewed).
 
-> ---
->  drivers/char/tpm/tpm_tis.c | 8 ++++++++
->  1 file changed, 8 insertions(+)
-> 
-> diff --git a/drivers/char/tpm/tpm_tis.c b/drivers/char/tpm/tpm_tis.c
-> index 7db3593941ea..2771abb5628f 100644
-> --- a/drivers/char/tpm/tpm_tis.c
-> +++ b/drivers/char/tpm/tpm_tis.c
-> @@ -138,6 +138,14 @@ static const struct dmi_system_id tpm_tis_dmi_table[] = {
->  			DMI_MATCH(DMI_PRODUCT_VERSION, "ThinkPad L490"),
->  		},
->  	},
-> +	{
-> +		.callback = tpm_tis_disable_irq,
-> +		.ident = "ThinkPad L590",
-> +		.matches = {
-> +			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
-> +			DMI_MATCH(DMI_PRODUCT_VERSION, "ThinkPad L590"),
-> +		},
-> +	},
->  	{
->  		.callback = tpm_tis_disable_irq,
->  		.ident = "UPX-TGL",
-> 
-> ---
-> base-commit: 9561de3a55bed6bdd44a12820ba81ec416e705a7
-> change-id: 20230620-flo-lenovo-l590-tpm-fix-4aeb6aa25667
-> 
-> Best regards,
-> -- 
-> Florian Bezdeka <florian@bezdeka.de>
-> 
+Yes, no significant changes. Just fix typo.
 
+I also would like to add support for other DRM drivers.
+
+But I think this deserve another patch.
+
+>   Whoever applies this should automatically
+>     pick up Reviewed-by/Ack/etc that are replies to the version being
+>     applied, but they won't go through previous revisions to find them.
+>
+> 2) Please mention the commit to which the series applies.  I tried to
+>     apply this on v6.4-rc1, but it doesn't apply cleanly.
+
+Since I'm a graphic driver developer, I'm using drm-tip.
+
+I just have already pulled, it still apply cleanly on drm-tip.
+
+> 3) Thanks for including cover letters in your postings.  Please
+>     include a little changelog in the cover letter so we know what
+>     changed between v6 and v7, etc.
+
+No change between v6 and v7,
+
+it seems that it is because the mailbox don't allow me to sending too 
+many mails a day.
+
+so some of the patch is failed to delivery because out of quota.
+
+
+> 4) Right now we're in the middle of the v6.5 merge window, so new
+>     content, e.g., this series, is too late for v6.5.  Most
+>     maintainers, including me, wait to merge new content until the
+>     merge window closes and a new -rc1 is tagged.  This merge window
+>     should close on July 9, and people will start merging content for
+>     v6.6, typically based on v6.5-rc1.
+
+I'm wondering
+
+Would you will merge all of the patches in this series (e.g. including 
+the patch for drm/amdgpu(7/8) and drm/radeon(8/8)) ?
+
+Or just part of them?
+
+Emm, I don't know because my patch seems across different subsystem of 
+Linux kernel.
+
+There is also a developer for AMDGPU (Mario) give me a R-B for the 
+patch-0002 of this series.
+
+So, at least, PATCH-0001, PATCH-0002, PATCH-0003, PATCH-0004, PATCH-0006 
+are already OK(got reviewed by).
+
+Those 5 patch are already qualified to be merged, I think.
+
+I means that if you could merge those 5 patch first, then there no need 
+to send another version again.
+
+I will refine the rest patch with more details and description.
+
+I'm fear of making too much noise.
+
+> Bjorn
