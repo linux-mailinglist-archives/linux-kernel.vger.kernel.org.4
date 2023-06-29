@@ -2,134 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B35A9742F77
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 23:24:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C653742F76
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 23:24:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232345AbjF2VYR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 17:24:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54470 "EHLO
+        id S231974AbjF2VYD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 17:24:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231633AbjF2VX5 (ORCPT
+        with ESMTP id S231499AbjF2VXv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 17:23:57 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABCD91BD1
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 14:23:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1688073788;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=xEvn4mNBJjxGCfxtSjAM8jMyMTbXVbbppuQzIKpSf88=;
-        b=OvsZHuVyMg77vlKJnRqka/XCO3fzzLctDqp0nRzcy7wTz/6ePPYmAJKcKy0YOVWXR6Guj2
-        kPtkBsVzEZuTsfV+WRx0/xBLbEiR2VLxvjiKWW7J3JgZAm9nsIrZcO+Ej8/hpJ5FFjsebb
-        B7NO5E6iF606AohxpzqoPmlCzknou8E=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-113-Mn4whvRiN6qoD5RPWRCUAg-1; Thu, 29 Jun 2023 17:23:05 -0400
-X-MC-Unique: Mn4whvRiN6qoD5RPWRCUAg-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 8FDE381DB6C;
-        Thu, 29 Jun 2023 21:23:04 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.42.28.4])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 3ED20200B402;
-        Thu, 29 Jun 2023 21:23:02 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <a1b7984a-d0a0-087c-2db9-6dbb6400a2bb@grimberg.me>
-References: <a1b7984a-d0a0-087c-2db9-6dbb6400a2bb@grimberg.me> <20230620145338.1300897-1-dhowells@redhat.com> <20230620145338.1300897-11-dhowells@redhat.com> <253mt0il43o.fsf@mtr-vdi-124.i-did-not-set--mail-host-address--so-tickle-me>
-To:     Sagi Grimberg <sagi@grimberg.me>
-Cc:     dhowells@redhat.com, Aurelien Aptel <aaptel@nvidia.com>,
-        netdev@vger.kernel.org,
-        Alexander Duyck <alexander.duyck@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-        David Ahern <dsahern@kernel.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Jens Axboe <axboe@kernel.dk>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        Willem de Bruijn <willemb@google.com>,
-        Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@fb.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Chaitanya Kulkarni <kch@nvidia.com>,
-        linux-nvme@lists.infradead.org
-Subject: Re: [PATCH net-next v3 10/18] nvme/host: Use sendmsg(MSG_SPLICE_PAGES) rather then sendpage
+        Thu, 29 Jun 2023 17:23:51 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.65.254])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C0762D5B;
+        Thu, 29 Jun 2023 14:23:48 -0700 (PDT)
+X-QQ-mid: bizesmtp69t1688073816t6rn2wxp
+Received: from linux-lab-host.localdomain ( [119.123.131.49])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Fri, 30 Jun 2023 05:23:35 +0800 (CST)
+X-QQ-SSF: 01200000000000D0W000000A0000000
+X-QQ-FEAT: 3d/k9/GSbqqdYOgmaIVI6oSQFPKWPhUina+MSZdvM1lVs8hdfFSn2l+S1MGhM
+        AhRd8U/uFb0bUA1K72HFAsqeTjFP/MqKvv92L7Yw8O9S/3fq82lIouT2iFpUGGpwIH7y7US
+        o8usMbkY78sf/DpIG+AvXE3wQa7hg+5RpEZuCD7D9+J3RNJgOkUkkWNx9OdgPZpztFyI7AY
+        WgRQxxrpfNjSK1LxrBfbtvSPyhYsjfQTt1Qnzwi/Kc0HHGnd8bOSR2tPFhVrCQyp00Oz2O0
+        xBKBcjay+osjSR4cHiyEZnnmhMoGt4yBwP5b7tONfXobnZmaT/D3r6NsOimhY22dyVi0zcr
+        ZaHDl27emXN6W2UTDY=
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 17768331475880898827
+From:   Zhangjin Wu <falcon@tinylab.org>
+To:     thomas@t-8ch.de
+Cc:     arnd@arndb.de, falcon@tinylab.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, w@1wt.eu
+Subject: Re: [PATCH v1 05/17] selftests/nolibc: stat_timestamps: remove procfs dependency
+Date:   Fri, 30 Jun 2023 05:23:35 +0800
+Message-Id: <20230629212335.115754-1-falcon@tinylab.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <df1f8ba1-3040-465c-804e-495f046dba7a@t-8ch.de>
+References: <df1f8ba1-3040-465c-804e-495f046dba7a@t-8ch.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <55022.1688073781.1@warthog.procyon.org.uk>
-Content-Transfer-Encoding: quoted-printable
-Date:   Thu, 29 Jun 2023 22:23:01 +0100
-Message-ID: <55023.1688073781@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrgz:qybglogicsvrgz5a-1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sagi Grimberg <sagi@grimberg.me> wrote:
+> Hi Zhangjin,
+> 
+> On 2023-06-28 21:59:22+0800, Zhangjin Wu wrote:
+> > I'm preparing a revision for this series, in the past days, when I was
+> > working on testing our new 'minimal' kernel config support for all of
+> > the architectures, the time cost (and wait) is really appreciable and the
+> > repeated develop and test is really a big pain, I can also image when you
+> > was working on stack-protector and Willy was working on lots of old
+> > features ;-)
+> 
+> To be honest I almost never built a kernel.
+> Most of the time I tested my stuff with qemu-user.
+> This made the dev-cycle really fast, especially with a binfmt setup that
+> launches foreign binaries automatically with qemu-user.
+>
 
-> simple way to check is to run:
-> nvme_trtype=3Dtcp ./check nvme
+Yeah, qemu-user-static + binfmt_misc work perfectly, but my host kernel
+is not that new, so, I'm still a little worried about that there may be
+some hidden issues.
 
-It says a lot of:
+> > As you explained before, I knew the idea of using '/proc/self' here is
+> > important to not using a fixed-time file, besides our proposed method (make
+> > sure it at least not fail, just skip for !procfs):
+> > 
+> >     - CASE_TEST(stat_timestamps);   EXPECT_SYSZR(1, test_stat_timestamps()); break;
+> >     + CASE_TEST(stat_timestamps);   EXPECT_SYSZR(proc, test_stat_timestamps()); break;
+> > 
+> > To further avoid skip it for !procfs (I don't mean relaly disable it for the
+> > default tinyconfig support, which need more discuss, at least provide the
+> > possibility to pass without procfs), do you like this change? it doesn't depend
+> > on 'proc' now.
+> > 
+> >     -	if (stat("/proc/self/", &st))
+> >     +	if (stat("/proc/self/", &st) && stat("/init", &st) && stat("/", &st))
+> > 
+> > The "/init" is compiled for 'run' target every time, so, the time stamp should
+> > be dynamic enough, for libc-test, the /proc/self should be always there (if
+> > still not enough, we can reuse the init file list here), the "/" here is only
+> > for the worst-case scene ;-)
+> 
+> Both aproaches seem fine. Just skipping on !proc seems good enough.
+>
 
-nvme/002 (create many subsystems and test discovery)         [not run]
-    nvme is not available
-    nvme_trtype=3Dtcp is not supported in this test
-nvme/003 (test if we're sending keep-alives to a discovery controller) [no=
-t run]
-    nvme is not available
-nvme/004 (test nvme and nvmet UUID NS descriptors)           [not run]
-    nvme is not available
-nvme/005 (reset local loopback target)                       [not run]
-    nvme is not available
-...
+To get less skips, let's use the second method, just updated my local
+patches ;-)
 
-I have the following NVMe config:
+> As for enabling proc in the test configs I just tested a plain
+> tinyconfig vs one with CONFIG_PROC_FS enabled:
+> 
+> tinyconfig:                  375.06user 53.21system 2:05.80elapsed
+> tinyconfig + CONFIG_PROC_FS: 397.77user 56.84system 2:09.24elapsed
+> 
+> The overhead seems acceptable.
+>
 
-# NVME Support
-CONFIG_NVME_COMMON=3Dy
-CONFIG_NVME_CORE=3Dy
-CONFIG_BLK_DEV_NVME=3Dy
-CONFIG_NVME_MULTIPATH=3Dy
-# CONFIG_NVME_VERBOSE_ERRORS is not set
-# CONFIG_NVME_HWMON is not set
-CONFIG_NVME_FABRICS=3Dy
-# CONFIG_NVME_RDMA is not set
-# CONFIG_NVME_FC is not set
-CONFIG_NVME_TCP=3Dy
-CONFIG_NVME_AUTH=3Dy
-CONFIG_NVME_TARGET=3Dy
-CONFIG_NVME_TARGET_PASSTHRU=3Dy
-CONFIG_NVME_TARGET_LOOP=3Dy
-# CONFIG_NVME_TARGET_RDMA is not set
-# CONFIG_NVME_TARGET_FC is not set
-CONFIG_NVME_TARGET_TCP=3Dy
-CONFIG_NVME_TARGET_AUTH=3Dy
-# end of NVME Support
-CONFIG_RTC_NVMEM=3Dy
-CONFIG_NVMEM=3Dy
-# CONFIG_NVMEM_SYSFS is not set
-# CONFIG_NVMEM_LAYOUT_SL28_VPD is not set
-# CONFIG_NVMEM_LAYOUT_ONIE_TLV is not set
-# CONFIG_NVMEM_RMEM is not set
+Yeah, only one option is ok, but "multiple options x multiple
+architectures x multiple repeated runs", that is 'huge' ;-)
 
-Can you tell me what I'm missing?
+> 
+> Note as for disabling memfd:
+> 
+> It seems currently MEMFD_CREATE is hardwired to only be enabled when
+> either TMPFS or HUGETLBFS is enabled.
+> 
+> But the memfd code and syscalls seem to work perfectly fine with those
+> options disabled. I'll send a patch to fix up the Kconfigs to enable
+> that usecase.
 
-David
+Good catch!
 
+but for the vfprintf test cases, It is able to open a file from tmpfs
+directly. If no tmpfs, use the default ramfs (initramfs uses) instead,
+this will also avoid the new flags trying (to silence the warning).
+
+     static int expect_vfprintf(int llen, size_t c, const char *expected, const char *fmt, ...)
+     {
+    +       static const char *tmpfile = "/tmp/nolibc-vfprintf";
+    +       struct stat stat_buf;
+            int ret, fd, w, r;
+            char buf[100];
+            FILE *memfile;
+            va_list args;
+
+    -       fd = memfd_create("vfprintf", 0);
+    +       if (stat("/tmp/.", &stat_buf)) {
+    +               pad_spc(llen, 64, "[SKIPPED]\n");
+    +               return 0;
+    +       }
+    +
+    +       fd = open(tmpfile, O_CREAT | O_TRUNC | O_RDWR, 0755);
+    ...
+    +       unlink(tmpfile);
+    ...
+
+tmpfs is mounted (in another patch) like procfs in prepare() for pid==1.
+
+I plan to use this method in the revision, do you like this?
+
+memfd_create() was designed to do this work, but in current stage,
+opening tmpfile ourselves may be better.
+
+Thanks,
+Zhangjin
