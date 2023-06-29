@@ -2,117 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D5A8741DD4
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 03:59:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 604F8741DD9
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 03:59:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230314AbjF2B7G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 21:59:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46390 "EHLO
+        id S231497AbjF2B7R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 21:59:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229487AbjF2B7E (ORCPT
+        with ESMTP id S231494AbjF2B7K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 21:59:04 -0400
-X-Greylist: delayed 61 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 28 Jun 2023 18:59:01 PDT
-Received: from mx5.ucr.edu (unknown [138.23.62.67])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 607972681
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 18:59:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=ucr.edu; i=@ucr.edu; q=dns/txt; s=selector3;
-  t=1688003942; x=1719539942;
-  h=mime-version:references:in-reply-to:from:date:message-id:
-   subject:to:cc:content-transfer-encoding;
-  bh=pe35qtVkGgjfoC1i4JMkatChz6WIyH40TUO3MKRfwUU=;
-  b=sh76aNU//FSXh/8Siz++l+feKuI+/ggXfEuIZ7DrQOYzDCAN3lLGo9IJ
-   rUc+bWVyUkOY6rzSG428DgRXSYOpy8DRa3Ot/WdxInRHuNVWHTRQszokh
-   btR5BIVJXDmbzdWWdJZNkkyegTpCGSWoxQxXVUPA4c/BJEp/PLmqvEpPI
-   UqSksnIpB5Xhb+NFNrb6d3s22Ds6+DGgcC+ZahA+AOAhiTPcXvyyX7mMM
-   v6tuPAjhP1RQJLV7C2cLALZgR2k90GRir/W9P8ty8YmKZMU73VjcfAFeL
-   qUduV1e+h/dspX185VBf9OVJmtq7H5jcVex9zP2fDjhNPg2FcLvWcuILw
-   w==;
-Received: from mail-wr1-f69.google.com ([209.85.221.69])
-  by smtpmx5.ucr.edu with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 28 Jun 2023 18:58:00 -0700
-Received: by mail-wr1-f69.google.com with SMTP id ffacd0b85a97d-30e4943ca7fso79764f8f.3
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 18:57:59 -0700 (PDT)
+        Wed, 28 Jun 2023 21:59:10 -0400
+Received: from smtp-fw-9102.amazon.com (smtp-fw-9102.amazon.com [207.171.184.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C08982681;
+        Wed, 28 Jun 2023 18:59:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ucr.edu; s=rmail; t=1688003878; x=1690595878;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=pe35qtVkGgjfoC1i4JMkatChz6WIyH40TUO3MKRfwUU=;
-        b=VFkawkT4irTE5sIF+gsnj7bJs7eIR08hSU7dK4LdxEsh08HQmbnpeKrOycV34L3fOY
-         j6E1gcT79LHbD95tV+xo5fG1a6EqAAExDRJDkPt6t5BNks3SYoM6iL6qy6TwYEK+26zu
-         W6wfV0vMe1Yrwog+wtydo9HFVBv9YK5tiZpL4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688003878; x=1690595878;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=pe35qtVkGgjfoC1i4JMkatChz6WIyH40TUO3MKRfwUU=;
-        b=M38jfY/96tT+yzXgo9g0mCr7X+sZde4iUyW5f+U4+opFpzG0JMG8h9u8JzHs4wlXo6
-         XmeB7Il0+Y4q/gWB5aXTYLjHrC0kDmZJbr2ElHXwTBqvLEtlVImrpR/YqeSDVHGYQupa
-         UkUmVRoNPrDHH2Q1MXmkuc1Wo4Tk9Ivg3MOQW6L9f2ynoeyYfor/UPbS67jODHeiGQXm
-         tMr6COPJZXY28zNa2LC0XpKekTcThRjBouxExqmdRAYuMv08fIgWTjLwL3f7k7SSBXuU
-         1O1JviKDPwy9ebYxajC7ell/jE5wINL3QlQzRYK8hkT1T049GYw0URKqdaKXOJIBggmx
-         Dnqw==
-X-Gm-Message-State: ABy/qLZSGFcAnq/bXu7jaLD9svFWQsWXs2V/HGfAkVNMd5kQaS3eQPL/
-        KqC+LRDonLLwd1p3ofAHKF/D2Y160Jlfiul+NVgMW5G2uJiZeHIhFsffN7+pzEa7cmexEhH0eHQ
-        r/OjX77N6P0/TJwoFUJY2R+v7qka9rlJu4CeM7IHh2w==
-X-Received: by 2002:adf:f2c7:0:b0:314:13da:39a4 with SMTP id d7-20020adff2c7000000b0031413da39a4mr743209wrp.66.1688003878301;
-        Wed, 28 Jun 2023 18:57:58 -0700 (PDT)
-X-Google-Smtp-Source: APBJJlFOF/6OWGWZTemvPXak6D95jENYjn5TNXI25OqnTNh53Sx8ZHggcEwCmrswHwElG9FHDlCm3+xlThuhf23SAes=
-X-Received: by 2002:adf:f2c7:0:b0:314:13da:39a4 with SMTP id
- d7-20020adff2c7000000b0031413da39a4mr743200wrp.66.1688003878052; Wed, 28 Jun
- 2023 18:57:58 -0700 (PDT)
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1688003949; x=1719539949;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=Z5ADgpgRcm7ildcG3JRpr/Zcwf95I9lu4+eIDLt2QIQ=;
+  b=hikrSbtCH2THGVDVNMfIqYzS9KMdkZyiZeAZi4CmawK2tsOoglkgKkmu
+   +rG3RFSzU2z0j0nTjY8aIyZ1bMcjClPUwfnxXOnw84XJxPV8XH/XC2NFs
+   uGHf0PSHvShuz/cQ/N6T8eNnEVdOTT3REL6JCNYxUrd1QK841dvZIlQtd
+   E=;
+X-IronPort-AV: E=Sophos;i="6.01,167,1684800000"; 
+   d="scan'208";a="348439320"
+Received: from pdx4-co-svc-p1-lb2-vlan2.amazon.com (HELO email-inbound-relay-pdx-2a-m6i4x-1cca8d67.us-west-2.amazon.com) ([10.25.36.210])
+  by smtp-border-fw-9102.sea19.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jun 2023 01:59:09 +0000
+Received: from EX19MTAUWA002.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan2.pdx.amazon.com [10.236.137.194])
+        by email-inbound-relay-pdx-2a-m6i4x-1cca8d67.us-west-2.amazon.com (Postfix) with ESMTPS id 24CC08064F;
+        Thu, 29 Jun 2023 01:59:08 +0000 (UTC)
+Received: from EX19D001UWA002.ant.amazon.com (10.13.138.236) by
+ EX19MTAUWA002.ant.amazon.com (10.250.64.202) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.26; Thu, 29 Jun 2023 01:59:07 +0000
+Received: from u46989501580c5c.ant.amazon.com (10.88.130.162) by
+ EX19D001UWA002.ant.amazon.com (10.13.138.236) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.30; Thu, 29 Jun 2023 01:59:06 +0000
+From:   Samuel Mendoza-Jonas <samjonas@amazon.com>
+To:     <netdev@vger.kernel.org>
+CC:     Stewart Smith <trawets@amazon.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        David Ahern <dsahern@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        <linux-kernel@vger.kernel.org>, <benh@amazon.com>,
+        <stable@vger.kernel.org>,
+        Samuel Mendoza-Jonas <samjonas@amazon.com>
+Subject: [PATCH net] net/ipv6: Reduce chance of collisions in inet6_hashfn()
+Date:   Wed, 28 Jun 2023 18:58:44 -0700
+Message-ID: <20230629015844.800280-1-samjonas@amazon.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20230628150140.GU21539@linux-l9pv.suse>
-In-Reply-To: <20230628150140.GU21539@linux-l9pv.suse>
-From:   Yu Hao <yhao016@ucr.edu>
-Date:   Wed, 28 Jun 2023 18:57:47 -0700
-Message-ID: <CA+UBctDPEvHdkHMwD340=n02rh+jNRJNNQ5LBZNA+Wm4Keh2ow@mail.gmail.com>
-Subject: Re: How to reproduce the BUG general protection fault in hci_uart_tty_ioctl?
-To:     Weiteng Chen <wchen130@ucr.edu>
-Cc:     joeyli <jlee@suse.com>, linux-bluetooth@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.88.130.162]
+X-ClientProxiedBy: EX19D041UWA002.ant.amazon.com (10.13.139.121) To
+ EX19D001UWA002.ant.amazon.com (10.13.138.236)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Weiteng,
+From: Stewart Smith <trawets@amazon.com>
 
-Could you give more info about the bug, e.g., kernel configuration,
-qemu arguments.
+For both IPv4 and IPv6 incoming TCP connections are tracked in a hash
+table with a hash over the source & destination addresses and ports.
+However, the IPv6 hash is insufficient and can lead to a high rate of
+collisions.
 
-Thanks.
-Yu Hao
-Ph.D. student
-Department of Computer Science & Engineering
-University of California, Riverside
+The IPv6 hash used an XOR to fit everything into the 96 bits for the
+fast jenkins hash, meaning it is possible for an external entity to
+ensure the hash collides, thus falling back to a linear search in the
+bucket, which is slow.
 
-On Wed, Jun 28, 2023 at 8:02=E2=80=AFAM joeyli <jlee@suse.com> wrote:
->
-> Hi Yu Hao,
->
-> I am looking at your "BUG: general protection fault in hci_uart_tty_ioctl=
-":
->
-> https://lore.kernel.org/all/CA+UBctC3p49aTgzbVgkSZ2+TQcqq4fPDO7yZitFT5uBP=
-DeCO2g@mail.gmail.com/
->
-> I am trying the C reproducer in your URL, but it is not success yet:
-> https://gist.github.com/ZHYfeng/a3e3ff2bdfea5ed5de5475f0b54d55cb
->
-> I am using v6.2 mainline kernel to run the C reproducer.
->
-> Could you please provide suggestions for how to reproduce this issue?
-> And what is your qemu environment for reproducing issue?
->
-> Thanks a lot!
-> Joey Lee
+We take the approach of hash half the data; hash the other half; and
+then hash them together. We do this with 3x jenkins hashes rather than
+2x to calculate the hashing value for the connection covering the full
+length of the addresses and ports.
+
+While this may look like it adds overhead, the reality of modern CPUs
+means that this is unmeasurable in real world scenarios.
+
+In simulating with llvm-mca, the increase in cycles for the hashing code
+was ~5 cycles on Skylake (from a base of ~50), and an extra ~9 on
+Nehalem (base of ~62).
+
+In commit dd6d2910c5e0 ("netfilter: conntrack: switch to siphash")
+netfilter switched from a jenkins hash to a siphash, but even the faster
+hsiphash is a more significant overhead (~20-30%) in some preliminary
+testing. So, in this patch, we keep to the more conservative approach to
+ensure we don't add much overhead per SYN.
+
+In testing, this results in a consistently even spread across the
+connection buckets. In both testing and real-world scenarios, we have
+not found any measurable performance impact.
+
+Cc: stable@vger.kernel.org
+Fixes: 08dcdbf6a7b9 ("ipv6: use a stronger hash for tcp")
+Fixes: b3da2cf37c5c ("[INET]: Use jhash + random secret for ehash.")
+Signed-off-by: Stewart Smith <trawets@amazon.com>
+Signed-off-by: Samuel Mendoza-Jonas <samjonas@amazon.com>
+---
+ include/net/ipv6.h          | 4 +---
+ net/ipv6/inet6_hashtables.c | 5 ++++-
+ 2 files changed, 5 insertions(+), 4 deletions(-)
+
+diff --git a/include/net/ipv6.h b/include/net/ipv6.h
+index 7332296eca44..f9bb54869d82 100644
+--- a/include/net/ipv6.h
++++ b/include/net/ipv6.h
+@@ -752,9 +752,7 @@ static inline u32 ipv6_addr_hash(const struct in6_addr *a)
+ /* more secured version of ipv6_addr_hash() */
+ static inline u32 __ipv6_addr_jhash(const struct in6_addr *a, const u32 initval)
+ {
+-	u32 v = (__force u32)a->s6_addr32[0] ^ (__force u32)a->s6_addr32[1];
+-
+-	return jhash_3words(v,
++	return jhash_3words((__force u32)a->s6_addr32[1],
+ 			    (__force u32)a->s6_addr32[2],
+ 			    (__force u32)a->s6_addr32[3],
+ 			    initval);
+diff --git a/net/ipv6/inet6_hashtables.c b/net/ipv6/inet6_hashtables.c
+index b64b49012655..bb7198081974 100644
+--- a/net/ipv6/inet6_hashtables.c
++++ b/net/ipv6/inet6_hashtables.c
+@@ -33,7 +33,10 @@ u32 inet6_ehashfn(const struct net *net,
+ 	net_get_random_once(&inet6_ehash_secret, sizeof(inet6_ehash_secret));
+ 	net_get_random_once(&ipv6_hash_secret, sizeof(ipv6_hash_secret));
+ 
+-	lhash = (__force u32)laddr->s6_addr32[3];
++	lhash = jhash_3words((__force u32)laddr->s6_addr32[3],
++			    (((u32)lport) << 16) | (__force u32)fport,
++			    (__force u32)faddr->s6_addr32[0],
++			    ipv6_hash_secret);
+ 	fhash = __ipv6_addr_jhash(faddr, ipv6_hash_secret);
+ 
+ 	return __inet6_ehashfn(lhash, lport, fhash, fport,
+-- 
+2.25.1
+
