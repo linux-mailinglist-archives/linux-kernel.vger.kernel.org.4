@@ -2,206 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03D447423F4
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 12:25:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC5517423FA
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 12:27:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231663AbjF2KZU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 06:25:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52232 "EHLO
+        id S229840AbjF2K1d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 06:27:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231593AbjF2KZP (ORCPT
+        with ESMTP id S231831AbjF2K1X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 06:25:15 -0400
-Received: from mail-ua1-x92e.google.com (mail-ua1-x92e.google.com [IPv6:2607:f8b0:4864:20::92e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DF6310F;
-        Thu, 29 Jun 2023 03:25:11 -0700 (PDT)
-Received: by mail-ua1-x92e.google.com with SMTP id a1e0cc1a2514c-791b8525b59so182898241.1;
-        Thu, 29 Jun 2023 03:25:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688034310; x=1690626310;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=tTm2R4f4h1+O6uYNvyiVwVy5iGd6ob1BEHbPRTu4rPo=;
-        b=l3g5YpQ0rLrUEY8s0rBG5pT3FfHXqj9VwbA1SdTuIcrg+6GogfpONRcw/Lao3QagZN
-         SX7xeY2qvk0LIDrvCqUgD6RUI/MkC5zhze31nT3zOyRZpMeF7nUIlFE5AAp2LvaVdL0w
-         b4bbSjrvnQZtfqNDUPqYSc7Ajo8FzehuE9c74ZZ9yXdRc5QOX3N4oE28ygWgPeiLAC6K
-         lnuhJUHN+pltMK9bMSSI0O3pBm0id8vvlIv1Dz4cC29x2dFFc45cgdU4Y/4Wovt7bU97
-         NZqT5qB+7jGUtJwZ9FIs/im831ZqmsN0LBM65mI1x4H6IXnoDqLZ8AMt0PeDa/3GMgyD
-         5fyQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688034310; x=1690626310;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=tTm2R4f4h1+O6uYNvyiVwVy5iGd6ob1BEHbPRTu4rPo=;
-        b=XLSEzSwbE3QSJu7NqIeKKlBJ//S9duEjbo+YCpOAuZA14PKJ/epAd+PSh5+fI20YDw
-         B7mA7MILUUFDLskWF64aaR9592z1FMlrHn4sGSZnvO1oelGWuIEzc1WoWrPSQ7Zbsu2L
-         yuFA+eXFg2zZilKz1sjfNar/B9t0AVMG/hPE+hSG1XmCBlH98U45na33sHGQn0y04ZtE
-         7noc/Pf+uKSb5DJGD/OC1V15ST7yR2k+qHdpna/oug0U0ALTngOpq9zeUn219tvuwcmm
-         CSX/VPO7eWRLioqjiktY75EJqwG93mKQDSro08SZ8ZcCUhDoB6cmow/TU5oHtRtbXXmh
-         mJPw==
-X-Gm-Message-State: AC+VfDzXbfYWck45XJXhuyrpQUVtnLWF/FjHbN8XFzjLXTGe0HPmexAI
-        uYxXi+/9K1hx16UIVuaXbbfezFW/ddlvslAkbto=
-X-Google-Smtp-Source: ACHHUZ5HXwtUzxCv8pjT4UbZRbgTzNUPzvUalS2nVUrC0UeyvkhAUzFwydIbtNOaHZoxeVoGhaAiWDjJ4EeNCv0Yvgs=
-X-Received: by 2002:a67:f906:0:b0:443:5af5:8128 with SMTP id
- t6-20020a67f906000000b004435af58128mr7388178vsq.0.1688034310265; Thu, 29 Jun
- 2023 03:25:10 -0700 (PDT)
+        Thu, 29 Jun 2023 06:27:23 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 618931B0;
+        Thu, 29 Jun 2023 03:27:22 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EC5656151C;
+        Thu, 29 Jun 2023 10:27:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC3F0C433C8;
+        Thu, 29 Jun 2023 10:27:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688034441;
+        bh=bPvP4Y25hHgu3neqxtUdrkLGAxIwJpwf6S6yIFQalOo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Mg9DuhezoYMh/FWOnp+kn9eVapyic23i9t897m/wCgM5aQNwHZQcRgLHPPMJkjAks
+         0xuC2rRKBM19KSGUaPriv8F7GUlw2+Wf+l2n0o4mupP5i6qIA7NXzSNCjdCvK0WBYh
+         u4GhlyOVp3yYICmzW8BMOoGteNOX1JVMWgCznNhq5zrvOgEy8HZklDzDoggC+MULRM
+         f3WYN/U7H/RsVX84kOZKVkEGFQqN271oBsuLc9JpNIv/AdJlSSaZNO5C5qIPP44imm
+         ecbW3hInCwKpS7hQlo/xnol5Tn2B8BrvNcoAYttcuS2NEqlgseuMbmJf43UtSs0+Hb
+         mxznilpapIDmQ==
+Date:   Thu, 29 Jun 2023 11:27:14 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     David Laight <David.Laight@aculab.com>
+Cc:     'Sameer Pujar' <spujar@nvidia.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzk+dt@kernel.org" <krzk+dt@kernel.org>,
+        "thierry.reding@gmail.com" <thierry.reding@gmail.com>,
+        "lgirdwood@gmail.com" <lgirdwood@gmail.com>,
+        "perex@perex.cz" <perex@perex.cz>,
+        "tiwai@suse.com" <tiwai@suse.com>,
+        "jonathanh@nvidia.com" <jonathanh@nvidia.com>,
+        "mkumard@nvidia.com" <mkumard@nvidia.com>,
+        "sheetal@nvidia.com" <sheetal@nvidia.com>,
+        "alsa-devel@alsa-project.org" <alsa-devel@alsa-project.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>,
+        Oder Chiou <oder_chiou@realtek.com>
+Subject: Re: [PATCH v2 3/5] ASoC: rt5640: Fix sleep in atomic context
+Message-ID: <006fe704-4777-43f4-a85a-e181106ee31b@sirena.org.uk>
+References: <1688015537-31682-1-git-send-email-spujar@nvidia.com>
+ <1688015537-31682-4-git-send-email-spujar@nvidia.com>
+ <bae9f041867e4625ad293d284566bb4f@AcuMS.aculab.com>
+ <550e5c8f-0bfb-4ffc-9a43-1ecb153c6a02@sirena.org.uk>
+ <953c899d04e543f681e44daad4ec2ff7@AcuMS.aculab.com>
 MIME-Version: 1.0
-References: <20230621100151.6329-1-victorshihgli@gmail.com>
- <20230621100151.6329-2-victorshihgli@gmail.com> <CAPDyKFq5YzwAGGKi_4=MVrQad9kM-i0xoQ5XhijDNuWDPOVFFA@mail.gmail.com>
-In-Reply-To: <CAPDyKFq5YzwAGGKi_4=MVrQad9kM-i0xoQ5XhijDNuWDPOVFFA@mail.gmail.com>
-From:   Victor Shih <victorshihgli@gmail.com>
-Date:   Thu, 29 Jun 2023 18:24:58 +0800
-Message-ID: <CAK00qKAVyOxz9nJMphJ+atbgsR7Bd_KG6fe4+zudmsKcTm=YLQ@mail.gmail.com>
-Subject: Re: [PATCH V8 01/23] mmc: core: Cleanup printing of speed mode at
- card insertion
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     adrian.hunter@intel.com, linux-mmc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, benchuanggli@gmail.com,
-        HL.Liu@genesyslogic.com.tw, Greg.tu@genesyslogic.com.tw,
-        takahiro.akashi@linaro.org, dlunev@chromium.org,
-        Victor Shih <victor.shih@genesyslogic.com.tw>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="gA2UFWZQXCDsCSqy"
+Content-Disposition: inline
+In-Reply-To: <953c899d04e543f681e44daad4ec2ff7@AcuMS.aculab.com>
+X-Cookie: Surprise due today.  Also the rent.
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Ulf
 
-On Wed, Jun 21, 2023 at 9:44=E2=80=AFPM Ulf Hansson <ulf.hansson@linaro.org=
-> wrote:
->
-> On Wed, 21 Jun 2023 at 12:02, Victor Shih <victorshihgli@gmail.com> wrote=
-:
-> >
-> > From: Victor Shih <victor.shih@genesyslogic.com.tw>
->
-> Please do not claim authorship of patches that haven't been authored
-> by you. Of course, there is a balance, if you need to make bigger
-> modifications, then you deserve to claim the authorship, but that
-> isn't the case here I think.
->
-> This applies to a couple of more patches in the series, I will not
-> comment on them in this regard, but leave that to you to look over at
-> the next submission.
->
+--gA2UFWZQXCDsCSqy
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-I have confirmed this issue in several other patches in this series,
-and I will fix it in the next version of the patch.
+On Thu, Jun 29, 2023 at 10:21:06AM +0000, David Laight wrote:
+> From: Mark Brown
 
-> >
-> > The current print of the bus speed mode in mmc_add_card() has grown ove=
-r
-> > the years and is now difficult to parse. Let's clean up the code and al=
-so
-> > take the opportunity to properly announce "DDR" for eMMCs as
-> > "high speed DDR", which is according to the eMMC spec.
-> >
-> > Updates in V8:
-> >  - Modify commit message.
-> >
-> > Updates in V7:
-> >  - Remove unnecessary parentheses.
-> >
-> > Updates in V6:
-> >  - Adjust the position of matching brackets.
->
-> I appreciate the version history per patch. However, this doesn't
-> belong in the commit message.
->
-> Instead you have to manually edit each formatted patch to add this,
-> exactly where see below.
->
-> >
-> > Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
-> > Signed-off-by: Victor Shih <victor.shih@genesyslogic.com.tw>
-> > ---
->
-> After this line you can add comments and version history for the
-> patch. In this way, it will not be a part of the commit message when
-> applying.
->
-> Complete the section by adding three new dashes and a newline - this
-> keeps the patch format correct.
->
-> ---
->
+> > What makes you think this is anything to do with audio glitches?  The
+> > bug is literally what is described, it is not valid to sleep in atomic
+> > contexts and if we ever actually try things are likely to go badly.
 
-I will implement this in the next version of the patch.
+> What I mean is that deferring the ISR to process context
+> is likely to generate audio glitches on a busy system.
 
-> >  drivers/mmc/core/bus.c | 36 ++++++++++++++++++++----------------
-> >  1 file changed, 20 insertions(+), 16 deletions(-)
-> >
-> > diff --git a/drivers/mmc/core/bus.c b/drivers/mmc/core/bus.c
-> > index 2c3074a605fc..cf32cf135781 100644
-> > --- a/drivers/mmc/core/bus.c
-> > +++ b/drivers/mmc/core/bus.c
-> > @@ -299,6 +299,7 @@ int mmc_add_card(struct mmc_card *card)
-> >  {
-> >         int ret;
-> >         const char *type;
-> > +       const char *speed_mode =3D "";
-> >         const char *uhs_bus_speed_mode =3D "";
-> >         static const char *const uhs_speeds[] =3D {
-> >                 [UHS_SDR12_BUS_SPEED] =3D "SDR12 ",
-> > @@ -337,27 +338,30 @@ int mmc_add_card(struct mmc_card *card)
-> >                 break;
-> >         }
-> >
-> > +       if (mmc_card_hs(card))
-> > +               speed_mode =3D "high speed ";
-> > +       else if (mmc_card_uhs(card))
-> > +               speed_mode =3D "ultra high speed ";
-> > +       else if (mmc_card_ddr52(card))
-> > +               speed_mode =3D "high speed DDR ";
-> > +       else if (mmc_card_hs200(card))
-> > +               speed_mode =3D "HS200 ";
-> > +       else if (mmc_card_hs400es(card))
-> > +               speed_mode =3D "HS400 Enhanced strobe ";
-> > +       else if (mmc_card_hs400(card))
-> > +               speed_mode =3D "HS400 ";
-> > +
-> >         if (mmc_card_uhs(card) &&
-> >                 (card->sd_bus_speed < ARRAY_SIZE(uhs_speeds)))
-> >                 uhs_bus_speed_mode =3D uhs_speeds[card->sd_bus_speed];
-> >
-> > -       if (mmc_host_is_spi(card->host)) {
-> > -               pr_info("%s: new %s%s%s card on SPI\n",
-> > -                       mmc_hostname(card->host),
-> > -                       mmc_card_hs(card) ? "high speed " : "",
-> > -                       mmc_card_ddr52(card) ? "DDR " : "",
-> > -                       type);
-> > -       } else {
-> > -               pr_info("%s: new %s%s%s%s%s%s card at address %04x\n",
-> > -                       mmc_hostname(card->host),
-> > -                       mmc_card_uhs(card) ? "ultra high speed " :
-> > -                       (mmc_card_hs(card) ? "high speed " : ""),
-> > -                       mmc_card_hs400(card) ? "HS400 " :
-> > -                       (mmc_card_hs200(card) ? "HS200 " : ""),
-> > -                       mmc_card_hs400es(card) ? "Enhanced strobe " : "=
-",
-> > -                       mmc_card_ddr52(card) ? "DDR " : "",
-> > +       if (mmc_host_is_spi(card->host))
-> > +               pr_info("%s: new %s%s card on SPI\n",
-> > +                       mmc_hostname(card->host), speed_mode, type);
-> > +       else
-> > +               pr_info("%s: new %s%s%s card at address %04x\n",
-> > +                       mmc_hostname(card->host), speed_mode,
-> >                         uhs_bus_speed_mode, type, card->rca);
-> > -       }
-> >
-> >         mmc_add_card_debugfs(card);
-> >         card->dev.of_node =3D mmc_of_find_child_device(card->host, 0);
-> > --
-> > 2.25.1
-> >
+This is an I2C connected CODEC.  We're not doing anything with it in
+atomic context, and nothing it does is going to be *that* latency
+sensitive.
 
-Thanks, Victor Shih
+--gA2UFWZQXCDsCSqy
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmSdXIEACgkQJNaLcl1U
+h9Be0wf/ROgGSAEbkgQzBxOmNgrw91eBaIwJJe+GoIsaTybqliz5eXrMv9B46p1F
+sixbkb16ATRlZBFC/1QUfV5ieLTC4USlazvajvIn9zLfhiCaYjDgLL7jtq1H6BkR
+pAVz5tEnETeZlnorDIw4rA/8xG8tZyYAdcCI97SsXq4czkCRf1n4Ec7L/IeBZ6D4
+ENfM9wZ7LvCHJNw5/NqqhoKcGuJHaGDLjj0mY0BXzyIdnKfSGi/E/rFVHdlhgifV
+sh6kmwULkWuysVkdVyASn1Ogil7CH6aTmAH6g3vYp3dILODIoWJv5Zt13JOoNLR4
+TnkzOJoTvEb8crrDMBNvTJysNuELrQ==
+=dbwv
+-----END PGP SIGNATURE-----
+
+--gA2UFWZQXCDsCSqy--
