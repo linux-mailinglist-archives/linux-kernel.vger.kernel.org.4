@@ -2,67 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09C1B7428F2
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 16:55:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 318A37428F9
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 16:58:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232384AbjF2OzG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 10:55:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42456 "EHLO
+        id S232252AbjF2O6m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 10:58:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230079AbjF2OzA (ORCPT
+        with ESMTP id S231461AbjF2O6k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 10:55:00 -0400
-Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C9C81FC1
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 07:54:58 -0700 (PDT)
-Received: by mail-yb1-xb2e.google.com with SMTP id 3f1490d57ef6-be3e2d172cbso619735276.3
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 07:54:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1688050497; x=1690642497;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=rtoVNY9/a+RZXpNAvxs5m0NIRQKbmTHO92MA89OkDCE=;
-        b=y6RcZw3fDktbZz2B5yIOkhrcaG6qfzzQNLCnjzBb3mTOWBvySw+yKYis5Jpbm/C/D6
-         GuUWbG4Tek2T/3f/O7hOgRrWEEIEyYlTMJMBLOS3ZY+NdC2B6zYPQJvUuZZzegNCMgoF
-         xiqfo9Xdbl2cIz7pUisnBYFnT1UsIWhV2VifdmUiY7l1OTj4fJ23K0pWKCCQLRJUndCY
-         vU1djMxeVq3DelCrrfZdLpdwZwHCjlHGmemQ++8DdpQayX4RsN3q6f3fygWhriVq8lTR
-         o6bJEeSH26Q+rwd3XohJMLZc60XhEUJVIQ83IvDeRNZDOltLtXMUWAH42jv1LBKciRXX
-         +VcQ==
+        Thu, 29 Jun 2023 10:58:40 -0400
+Received: from mail-io1-f43.google.com (mail-io1-f43.google.com [209.85.166.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3095A2D56;
+        Thu, 29 Jun 2023 07:58:39 -0700 (PDT)
+Received: by mail-io1-f43.google.com with SMTP id ca18e2360f4ac-78363cc070aso31992239f.1;
+        Thu, 29 Jun 2023 07:58:39 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688050497; x=1690642497;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=rtoVNY9/a+RZXpNAvxs5m0NIRQKbmTHO92MA89OkDCE=;
-        b=JThDzestGIXuVIFejsnVDHFI7KrF1HFvCBPlniTLPiwSFgkevaghkuAfgZpe07wdfX
-         W7dfFhhvZRlUTI+DQ3qbHsdJkbL8s/ECJO//+kd7v5KXzy3+CpvzyUn4fxf+k8okLpw/
-         SOHEN5o4s3kk3GcAu4jMt3Q+jDqxfUo8AuZ5V3Jec3PpkYmEXf01YzsaV35oz0S60o9r
-         BSn7ME8e4lni8OC32NeUJ93OVaQ3zfMmB/+EgVL4PBjuMGHsXPADW6DWwl98Ty4QWGLy
-         t8C2r64dno6/zRG6/qFuRXi3Dbo3uTUVVmEoqbcCyIxj24XSTPWNcrd3I/KIjrCL2lDM
-         LBIA==
-X-Gm-Message-State: ABy/qLZQGWwJbIUT9OETzrlmwJ3zeja4XQsDSr1QxeUjQ8+UbVsUFu/6
-        wlrszFrHyOwfVtb4ZTuqUNhAvS/6poKy3CMHt2Kttw==
-X-Google-Smtp-Source: APBJJlGOo9va/zBh5Drn3nTfzWewQJBg27NKR8QxX2EsDI1HQd7QeFC4lXte5R2+kx9UhCTMvkAPt07pEy4WaZQnFXo=
-X-Received: by 2002:a05:6902:529:b0:c22:c2e0:93c1 with SMTP id
- y9-20020a056902052900b00c22c2e093c1mr171570ybs.7.1688050497433; Thu, 29 Jun
- 2023 07:54:57 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1688050718; x=1690642718;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ljRf0hyGo8Gpwci5RsjZ1gzHX+tCb5+i5VvfOpLuGAs=;
+        b=ZUfU8MANCNlulWXcIvFMqx263aH2ph7uYq7s0Jmmj6CKGPnQGZpfKBk9y32eSnPqK/
+         0xp+6DHuB2lLHEXonqZIsutmBIYG3GvRne+qZLcTifdr0265uuwm13h3vKEOl1IZ2Q5d
+         YUiwbEr82E6QKT1eoweFrfNcTGCk0958cEnhIKYmN2Su1Fruo/158a2KTUHvdynR1u63
+         wYaR0ewieZqym5tRt/SItlK9z1f7tQ6srwNzENOnnxuXdmNxgGEH+wPovE2xqKOuzx/o
+         2LJqx7nsXo3L669u6Vaf/3fVZ1xbCezmG2d9bE5xiVFDFL2pseYv7Kx+wdQeZ9jF+kAl
+         fDog==
+X-Gm-Message-State: AC+VfDwTOFfDjISdkuDuUE+QmqmXzgUqfzefjl+7QBSjQo5fTDcaobUH
+        XBSpZ3BebCeiIjO92gxoDg==
+X-Google-Smtp-Source: ACHHUZ4fvxRFhvMqpuckwCnsXWFPC/rwz9erlSudSvlNJ+tRVLwMuByK8y5rQaap4kBc7/3o7vVugA==
+X-Received: by 2002:a5d:8c86:0:b0:783:4bd2:3fd2 with SMTP id g6-20020a5d8c86000000b007834bd23fd2mr15394851ion.17.1688050718366;
+        Thu, 29 Jun 2023 07:58:38 -0700 (PDT)
+Received: from robh_at_kernel.org ([64.188.179.250])
+        by smtp.gmail.com with ESMTPSA id m5-20020a02cdc5000000b0042036f06b24sm2857172jap.163.2023.06.29.07.58.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 29 Jun 2023 07:58:37 -0700 (PDT)
+Received: (nullmailer pid 2961403 invoked by uid 1000);
+        Thu, 29 Jun 2023 14:58:35 -0000
+Date:   Thu, 29 Jun 2023 08:58:35 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Maso Huang <maso.huang@mediatek.com>
+Cc:     Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Trevor Wu <trevor.wu@mediatek.com>,
+        Jiaxin Yu <jiaxin.yu@mediatek.com>,
+        Ren Zhijie <renzhijie2@huawei.com>,
+        Allen-KH Cheng <allen-kh.cheng@mediatek.com>,
+        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH v2 6/7] ASoC: dt-bindings: mediatek,mt7986-wm8960: add
+ mt7986-wm8960 document
+Message-ID: <20230629145835.GA2954895-robh@kernel.org>
+References: <20230626023501.11120-1-maso.huang@mediatek.com>
+ <20230626023501.11120-7-maso.huang@mediatek.com>
 MIME-Version: 1.0
-References: <26d178dcfc2f4b7d9010145d0c051394@hyperstone.com>
- <CAPDyKFrvE6Ur3ASXOmq-2QQxRF37XK+6GzRAJZ-1mGh5hWQE3w@mail.gmail.com> <6e6386ca65964d8da994842b0404af28@hyperstone.com>
-In-Reply-To: <6e6386ca65964d8da994842b0404af28@hyperstone.com>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Thu, 29 Jun 2023 16:54:21 +0200
-Message-ID: <CAPDyKFqLB3brh1grY6w5eh32gyYM=BKMLhT5geWmXS+enrc4vQ@mail.gmail.com>
-Subject: Re: [PATCHv3 1/1] mmc: block: ioctl: Add PROG-error aggregation
-To:     Christian Loehle <CLoehle@hyperstone.com>
-Cc:     "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Avri Altman <avri.altman@wdc.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230626023501.11120-7-maso.huang@mediatek.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,118 +79,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 28 Jun 2023 at 08:47, Christian Loehle <CLoehle@hyperstone.com> wrote:
->
->
->
-> > -----Original Message-----
-> > From: Ulf Hansson <ulf.hansson@linaro.org>
-> > Sent: Donnerstag, 22. Juni 2023 11:46
-> > To: Christian Loehle <CLoehle@hyperstone.com>
-> > Cc: linux-mmc@vger.kernel.org; linux-kernel@vger.kernel.org; Adrian
-> > Hunter <adrian.hunter@intel.com>; Avri Altman <avri.altman@wdc.com>
-> > Subject: Re: [PATCHv3 1/1] mmc: block: ioctl: Add PROG-error aggregation
-> >
-> > CAUTION: this mail comes from external!/ACHTUNG: Diese Mail kommt von
-> > extern!
-> >
-> > On Tue, 20 Jun 2023 at 14:44, Christian Loehle <CLoehle@hyperstone.com>
-> > wrote:
-> > >
-> > > Userspace currently has no way of checking for error bits of detection
-> > > mode X. These are error bits that are only detected by the card when
-> > > executing the command. For e.g. a sanitize operation this may be
-> > > minutes after the RSP was seen by the host.
-> > >
-> > > Currently userspace programs cannot see these error bits reliably.
-> > > They could issue a multi ioctl cmd with a CMD13 immediately following
-> > > it, but since errors of detection mode X are automatically cleared
-> > > (they are all clear condition B).
-> > > mmc_poll_for_busy of the first ioctl may have already hidden such an
-> > > error flag.
-> > >
-> > > In case of the security operations: sanitize, secure erases and RPMB
-> > > writes, this could lead to the operation not being performed
-> > > successfully by the card with the user not knowing.
-> > > If the user trusts that this operation is completed (e.g. their data
-> > > is sanitized), this could be a security issue.
-> > > An attacker could e.g. provoke a eMMC (VCC) flash fail, where a
-> > > successful sanitize of a card is not possible. A card may move out of
-> > > PROG state but issue a bit 19 R1 error.
-> > >
-> > > This patch therefore will also have the consequence of a mmc-utils
-> > > patch, which enables the bit for the security-sensitive operations.
-> > >
-> > > Signed-off-by: Christian Loehle <cloehle@hyperstone.com>
-> > > ---
-> > >  drivers/mmc/core/block.c   | 26 +++++++++++++++-----------
-> > >  drivers/mmc/core/mmc_ops.c | 14 +++++++-------
-> > > drivers/mmc/core/mmc_ops.h |  9 +++++++++
-> > >  3 files changed, 31 insertions(+), 18 deletions(-)
-> > >
-> > > diff --git a/drivers/mmc/core/block.c b/drivers/mmc/core/block.c index
-> > > e46330815484..c7e2b8ae58a9 100644
-> > > --- a/drivers/mmc/core/block.c
-> > > +++ b/drivers/mmc/core/block.c
-> > > @@ -470,7 +470,7 @@ static int __mmc_blk_ioctl_cmd(struct mmc_card
-> > *card, struct mmc_blk_data *md,
-> > >         struct mmc_data data = {};
-> > >         struct mmc_request mrq = {};
-> > >         struct scatterlist sg;
-> > > -       bool r1b_resp, use_r1b_resp = false;
-> > > +       bool r1b_resp;
-> > >         unsigned int busy_timeout_ms;
-> > >         int err;
-> > >         unsigned int target_part;
-> > > @@ -551,8 +551,7 @@ static int __mmc_blk_ioctl_cmd(struct mmc_card
-> > *card, struct mmc_blk_data *md,
-> > >         busy_timeout_ms = idata->ic.cmd_timeout_ms ? :
-> > MMC_BLK_TIMEOUT_MS;
-> > >         r1b_resp = (cmd.flags & MMC_RSP_R1B) == MMC_RSP_R1B;
-> > >         if (r1b_resp)
-> > > -               use_r1b_resp = mmc_prepare_busy_cmd(card->host, &cmd,
-> > > -                                                   busy_timeout_ms);
-> > > +               mmc_prepare_busy_cmd(card->host, &cmd,
-> > > + busy_timeout_ms);
-> > >
-> > >         mmc_wait_for_req(card->host, &mrq);
-> > >         memcpy(&idata->ic.response, cmd.resp, sizeof(cmd.resp)); @@
-> > > -605,19 +604,24 @@ static int __mmc_blk_ioctl_cmd(struct mmc_card
-> > *card, struct mmc_blk_data *md,
-> > >         if (idata->ic.postsleep_min_us)
-> > >                 usleep_range(idata->ic.postsleep_min_us,
-> > > idata->ic.postsleep_max_us);
-> > >
-> > > -       /* No need to poll when using HW busy detection. */
-> > > -       if ((card->host->caps & MMC_CAP_WAIT_WHILE_BUSY) &&
-> > use_r1b_resp)
-> > > -               return 0;
-> > > -
-> > >         if (mmc_host_is_spi(card->host)) {
-> > >                 if (idata->ic.write_flag || r1b_resp || cmd.flags &
-> > MMC_RSP_SPI_BUSY)
-> > >                         return mmc_spi_err_check(card);
-> > >                 return err;
-> > >         }
-> > > -       /* Ensure RPMB/R1B command has completed by polling with CMD13.
-> > */
-> > > -       if (idata->rpmb || r1b_resp)
-> > > -               err = mmc_poll_for_busy(card, busy_timeout_ms, false,
-> > > -                                       MMC_BUSY_IO);
-> > > +       /* Poll for RPMB/write/R1B execution errors */
-> >
-> > Except for the other comments that I had on v2 (which isn't addressed in v3),
-> > I would like this comment to be extended a bit.
-> Sorry, could you elaborate on the comments I haven't addressed?
-> What I sent as v3 was what I understood from your comments.
+On Mon, Jun 26, 2023 at 10:35:00AM +0800, Maso Huang wrote:
+> Add document for mt7986 board with wm8960.
+> 
+> Signed-off-by: Maso Huang <maso.huang@mediatek.com>
+> ---
+>  .../sound/mediatek,mt7986-wm8960.yaml         | 53 +++++++++++++++++++
+>  1 file changed, 53 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/sound/mediatek,mt7986-wm8960.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/sound/mediatek,mt7986-wm8960.yaml b/Documentation/devicetree/bindings/sound/mediatek,mt7986-wm8960.yaml
+> new file mode 100644
+> index 000000000000..76394f7e5502
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/sound/mediatek,mt7986-wm8960.yaml
+> @@ -0,0 +1,53 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/sound/mediatek,mt7986-wm8960.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: MediaTek MT7986 sound card with WM8960 codec
+> +
+> +maintainers:
+> +  - Maso Huang <maso.huang@mediatek.com>
+> +
+> +properties:
+> +  compatible:
+> +    const: mediatek,mt7986-wm8960-machine
+> +
+> +  mediatek,platform:
+> +    $ref: /schemas/types.yaml#/definitions/phandle
+> +    description: The phandle of MT7986 platform.
+> +
+> +  audio-routing:
+> +    $ref: /schemas/types.yaml#/definitions/non-unique-string-array
+> +    description:
+> +      A list of the connections between audio components. Each entry is a
+> +      sink/source pair of strings. Valid names could be the input or output
+> +      widgets of audio components, power supplies, MicBias of codec and the
+> +      software switch.
+> +
+> +  mediatek,audio-codec:
+> +    $ref: /schemas/types.yaml#/definitions/phandle
+> +    description: The phandle of wm8960 codec.
 
-No problem, it's probably me that was not clear enough.
+Please define these properties in a common schema and reference them 
+where already used and here. A given property shouldn't have multiple 
+type definitions.
 
-Anyway, to help mode this forward, let me amend the patch and submit a
-new version of it. Then you can have a look and confirm that it looks
-good to you.
-
-[...]
-
-Kind regards
-Uffe
+Rob
