@@ -2,163 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 342A2742350
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 11:32:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 60BCB742344
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 11:29:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231594AbjF2JcS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 05:32:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40110 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231783AbjF2Jbo (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 05:31:44 -0400
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87E7635AB
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 02:31:36 -0700 (PDT)
-Received: by mail-lf1-x133.google.com with SMTP id 2adb3069b0e04-4fb960b7c9dso724051e87.0
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 02:31:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google; t=1688031095; x=1690623095;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ajD4Xlmgnwv8O+jtu7HYaXxwVa4EBrrrsttRRo2IsCo=;
-        b=S6CoM+QL+IrLFXgIDSFYfgP3xref1Lw3zrAa+ruoTEOTjEaeaWuoTi/yED9tjbOX3e
-         WPy4uhNOuQ/FNXaRj8aD0G3pH+8qlO8D4BxuYAa4lGpwdcf6eftfPCG2ANJ7sdFMv4kV
-         NjVwHbhrtAJVyuyZ6UtzcDQEYkrtRwFgHZJUI8GaBcf3os1KN5dYL6QD2xr5mcK6mkY/
-         SYXwzjIiHG7dgcHXiVmE0eqmwaXbKdm9KjwnCZS+otS/r8deZFL7rxvIoPhgnLRIdzhE
-         z/1HTz7KLstyepnVUfFEUHJ39fR2O1TkMdm/bfO0XjWzVpm1xIjslxTdUBlh/u1r2iC0
-         Z2oA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688031095; x=1690623095;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ajD4Xlmgnwv8O+jtu7HYaXxwVa4EBrrrsttRRo2IsCo=;
-        b=cTBSuVrAfQ5ApEmB6XqgpudyQmsjJoHBKfIs0mjBRFac1/qUpagLu7uSaa8QkL5u3W
-         YotMMwfjIpprpxdvA60SCwBNUEiSx6I9I5yUyjSx6HjrGIoUquwOJt7o4QUEg8TM0bQv
-         VahStxsFe/aQxiKdCy3YFPMzmfw4MUAL2p6BBAuMj5tj+rrAr+Izzy4mSImhaculP+qr
-         UurZekABzreC3+v4Cf/918N3B/xwPLyPdpvy+jKtWORlID6f91drlbc7AogdacMlP70l
-         PnIzOKNXwxvrhswiR2HGdEBxeozgLB0u1bcyut98zfwtD5DNADfT0ZEcAUO/lfv9V3HP
-         Izfw==
-X-Gm-Message-State: ABy/qLaNSbYtY4rZvmgqp9jQz6fiCUANHcHQKBoTxVu4nAmiXN/EuJh2
-        IQimCwtMM+IvifrL0DtVxcRhRgn+ad2w5Z5+7E4=
-X-Google-Smtp-Source: APBJJlEt3kWDaGO7D0zrrowbl1KaWdBGX6mWiQYWM1fItOdFeb3Rv6MrTumN9H7oxc+mij9WFVhxNA==
-X-Received: by 2002:a05:6512:2355:b0:4fb:97d9:382b with SMTP id p21-20020a056512235500b004fb97d9382bmr1730502lfu.60.1688031094662;
-        Thu, 29 Jun 2023 02:31:34 -0700 (PDT)
-Received: from localhost (cst2-173-16.cust.vodafone.cz. [31.30.173.16])
-        by smtp.gmail.com with ESMTPSA id m6-20020a7bce06000000b003f733c1129fsm7205674wmc.33.2023.06.29.02.31.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Jun 2023 02:31:34 -0700 (PDT)
-Date:   Thu, 29 Jun 2023 11:31:33 +0200
-From:   Andrew Jones <ajones@ventanamicro.com>
-To:     Conor Dooley <conor.dooley@microchip.com>
-Cc:     palmer@dabbelt.com, conor@kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Heiko Stuebner <heiko.stuebner@vrull.eu>,
-        Evan Green <evan@rivosinc.com>,
-        Sunil V L <sunilvl@ventanamicro.com>,
-        linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Palmer Dabbelt <palmer@rivosinc.com>
-Subject: Re: [PATCH v2 10/10] RISC-V: provide a Kconfig option to disable
- parsing "riscv,isa"
-Message-ID: <20230629-a80f112e6ed4158080867694@orel>
-References: <20230629-rebuttal-vagueness-a699deb7c7b3@wendy>
- <20230629-resilient-grievance-d782163b09d6@wendy>
+        id S232000AbjF2J3P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 05:29:15 -0400
+Received: from mail-vi1eur02on2076.outbound.protection.outlook.com ([40.107.241.76]:16896
+        "EHLO EUR02-VI1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S232620AbjF2J2o (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 29 Jun 2023 05:28:44 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=NfpINTAskcWNYfxqLJquRL0Cw5oyyf9Y8J0AUgxAC/BpSDIUwtIj0G4FK8DhidPTHwsTYBBck8VjsfeGjBvhd4arVk/c3HawY9Q7jCmrRXaRs+45X88EOrihbJct4jrHzCHYiXF0dhC1tzjh7zq5gBj8FJIaizy4iENWkSWDP8FCLBJnZi5DtzrQ06VX3wWGyjTgodUuZFpneynHQqtWlYoYG5sssoGd9L7lEPu/jhSLNtIeW+DBLQ/cfZ/eoMwoyQA1n7Gia0fWcGNVhrBVQvcvX5B2L+pWw5o2i5/rasU2VR9+hfYc4P3PsiJfG3SdvKPx6TrnyLb7vr11HBx0Bw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ufXtIx0oKtdXw6R5tdCkNrK3lRf8lKbSPLnFmjCzzQg=;
+ b=ZtF0XW04ocvhpcRf8FYpfPwkxNDMv9XMGkByDV0Gc67rrB6nAWOCTNyTOQkSHCnprbQmFTKz+sN2DD51XF18khIsmtm96CNpRivJeGuys1ZNDOFQkaBioXx9oQqYckKrHifJx0hyhmi2wMxp6YIFPpLPKxNHflUzhsYMw6+Uta+auwYnyXh/e/3fDVU2lQMGrLMOL/YVbUYRkn24yWOj5HQS+MlWrw8lQBdkZar5nwWCx4q8tWEpUHtpuqwB7eAQrhGm0h8hNbWvEwBasmebh5y2Lkm5TCzd4ayDoN/6q5/xhboemPIiXTp1H8Y8BSBezb9I3eDCr+UQ8e6+BuzJOA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
+ dkim=pass header.d=oss.nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
+ s=selector2-NXP1-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ufXtIx0oKtdXw6R5tdCkNrK3lRf8lKbSPLnFmjCzzQg=;
+ b=S5qLd3M1KCbW79WGJ45MXhdNQhaNWqnho5n+L3LpWyP2YYorSaMuKBj3C+lpMJ7bcFbTpmJ2pNJpqgMs6Z+mYBKnci0Tpf3GGNKL0tUolHroI7z47ou4EtY3eFp7R1xASFaW+HGbxMtxsKKZeFDJg/VTLc462nIHcNEHY1u9AU8=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=oss.nxp.com;
+Received: from DU0PR04MB9417.eurprd04.prod.outlook.com (2603:10a6:10:358::11)
+ by AS8PR04MB7608.eurprd04.prod.outlook.com (2603:10a6:20b:293::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.26; Thu, 29 Jun
+ 2023 09:28:40 +0000
+Received: from DU0PR04MB9417.eurprd04.prod.outlook.com
+ ([fe80::efff:43d6:6f46:eea]) by DU0PR04MB9417.eurprd04.prod.outlook.com
+ ([fe80::efff:43d6:6f46:eea%7]) with mapi id 15.20.6521.026; Thu, 29 Jun 2023
+ 09:28:40 +0000
+From:   "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
+To:     andersson@kernel.org, mathieu.poirier@linaro.org,
+        shawnguo@kernel.org, s.hauer@pengutronix.de, daniel.baluta@nxp.com,
+        iuliana.prodan@nxp.com
+Cc:     kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
+        linux-remoteproc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Peng Fan <peng.fan@nxp.com>
+Subject: [PATCH V3] remoteproc: imx_rproc: iterate all notifiyids in rx callback
+Date:   Thu, 29 Jun 2023 17:33:27 +0800
+Message-Id: <20230629093327.3376308-1-peng.fan@oss.nxp.com>
+X-Mailer: git-send-email 2.37.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SI2PR02CA0009.apcprd02.prod.outlook.com
+ (2603:1096:4:194::11) To DU0PR04MB9417.eurprd04.prod.outlook.com
+ (2603:10a6:10:358::11)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230629-resilient-grievance-d782163b09d6@wendy>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-        lindbergh.monkeyblade.net
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DU0PR04MB9417:EE_|AS8PR04MB7608:EE_
+X-MS-Office365-Filtering-Correlation-Id: 2746d1fa-7abf-490d-710e-08db78833967
+X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: f2+JRqeNkWjsL9PVYW8oT5uDSFcJyQzrleWcwtebIGyV1xlMKoZI119IHxS+CJ44aF5T+7HtpGsAuQjr/dU36f18wqLVkl+R95sv1b2kZJkyT/mb9Axtr+9gZQOA9LReGraz3cnA82unxORiOEwXzCBDgSAUwgfpL18QHcYCcbibWY7TOshPgeFsd4hYumZclB09Nklcm4hjklkcNUtkJ61r4Q61K0qBi7M8dP7gzVI9dbvZr+3P8ecvU0s5HKv35+ecf+BOwk6xlTjV5D9wKAFJxp40vSX//MtgAGANumKECe5lsxoN7+jt5sPiFJiNbJDRn66epUeQXysO4VaTCByP+Ev9Cari2fSlo5gMi0gZAwzZz1RhXwAgnEHakP8EKpZfdHfbrDv0u1nlTAYz2Ej2TNuRirkav4RvN5Cix9nHJtfJVO5ciQSgi55xqoWDPGwUjmVKXWkYFGAC12U63kKxniWtYy3xafVUr3FyqfJfapElQnKHm7bKUcTmpLeRTVq0LHyMbaXjyClVOuhHofscEKuQ2DBUBGQp7B6a/eOEh6fD1Xuh5QRvBRl3hkB5Qq1dB8xI5TQtc5Xe5CpM4L9/CST2rjtMrtSjWHDEclPRCBbn2vk4QjnPYBUk2jgX
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR04MB9417.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(136003)(39860400002)(376002)(366004)(346002)(451199021)(5660300002)(66946007)(66556008)(4326008)(66476007)(478600001)(316002)(8936002)(8676002)(2906002)(6512007)(6666004)(41300700001)(6486002)(52116002)(186003)(38350700002)(86362001)(6506007)(26005)(1076003)(2616005)(38100700002)(83380400001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?qJkQHKCxCKn9Mizxx1BFzzCcneE3Km1TPBEJ2ur8XOnaZPz4kfO9NVrH2U8R?=
+ =?us-ascii?Q?H+eMkbzKd+db7B6EG+fqBK5ggbrxAkHkzWO5FCt1VRMhVNlVIyMHFpRL50xL?=
+ =?us-ascii?Q?PxVow61ls41dXZ4YJZKwNbxfyr3KfSS259Dg8yi9qqh49A6iuCs2YVuQKAmo?=
+ =?us-ascii?Q?+K1x3MVevAYLMFpNKIAxrNc7PDJCHek5uK8IEPPsr+DJforZOGWScNCorWIe?=
+ =?us-ascii?Q?7c+o4c2dC3Pz/f2AXSs928LH48W0EPZ0wfivMo6DyS7HTgmAfQzeOyNo4fbA?=
+ =?us-ascii?Q?1vNN/d3FHjtCbP+EAlpKR6VJBEg+x9bDxghPJQD2CyP7rgrGCleJUS3L+/XM?=
+ =?us-ascii?Q?A+rVQOGz1zp2g6Gjayv5/UhJLaConFELrjtvdnx/BwmbX+ANEbryE+lL2Dh2?=
+ =?us-ascii?Q?o2jqytijOozCbnDs9Fwa7/r2Rafw+C9Sz0py3bWaZoRN8gecYQ0cRQD7huTx?=
+ =?us-ascii?Q?LrLS+9kTqHlHtolsgV2LahHPBHQUMxdPtnYErWi+bc3DfK6Hm0RewKvOIbjJ?=
+ =?us-ascii?Q?erT0hJmTYb6a5ewJ63O0DzwG40tS4acqYxzlpBYmyrAo1FZk1gGZPa6rOO2p?=
+ =?us-ascii?Q?DcUarklO2tXZvO9Y1NTF8BByJb5+iq/QtzWgki5wXl+jh64lMyQRrq9ZRHaO?=
+ =?us-ascii?Q?vd2LWRZpnsaiSJIcCYD387nOwEHKFRObUbfJlEFdghAUA47jUsQgr5Lahg36?=
+ =?us-ascii?Q?kcFQOsaliZH52426S9DNBj2rQnmX80MiQNSx3/YR93Qg0eAgQ4ufOFIsm3/9?=
+ =?us-ascii?Q?w5+fStSAQRLPKmvalPyC/ZIgFznJCEJoyUwAZ/IgJlOBMLnslFIYJ1YB76p3?=
+ =?us-ascii?Q?fBT+LjS6lzs3T+x0pPIsbDxZk3LgW1bYKGhKhqKRRjKkW8/GH89UqwdJQrIZ?=
+ =?us-ascii?Q?Xa/YOdueFpP8qDfB/wgDZ+XNsYwo+YTpOeDFRMoARIdoSEvJgZbive/kbakl?=
+ =?us-ascii?Q?97I+HGGKX6FEOWsE7A2fL3rncd/NxqwDd4alRuS+y76r+WNTmR6HNGTc6ExD?=
+ =?us-ascii?Q?4N2NuQUeQwsiSF48FQEp9VKugYTJY7YoYxhsOdEyzJsQjvkJuTPedeg5rvC1?=
+ =?us-ascii?Q?ecNR5IXW2luJ1HwVmyTbxpM4r6UQphtJR0Q/Q67UPc0xgS8kd5SAy+mcu3mH?=
+ =?us-ascii?Q?7Y6DKeeoYeTnOQmi8Z2/begdbJ7Jho/112WrNMziMdHVE7oHyNWS6rOp6vJD?=
+ =?us-ascii?Q?d9av3KAXS6AO38+j1+lW4COnESuKDhqdQVeGCkfJh9jaCyMLxuztAFO53rdj?=
+ =?us-ascii?Q?6jMjk9i6hEiAhYnWRw3Dgi3iaoOEq8UK9EELDSV+nfpmP2/4FofhiIjwiQyZ?=
+ =?us-ascii?Q?FKJnBWFqBfyENDYgiNRwOzrvJ0MSOZAV7z1ZGQJng8dUGaO4h/xptUx2fCji?=
+ =?us-ascii?Q?AWUOAgA17aSw+BoqGajZx7Icb4lg5+G1YbxmpE0R0fyoLnLpFDBiWYZVm2A0?=
+ =?us-ascii?Q?O2W/LCJ/gefQvByeL8n/hzwcCJ6gxT+NsPzMSwfRuAyRhSD6XvXxNYGZUZVX?=
+ =?us-ascii?Q?XJD3DLYb5CBiMute/69Lylnuv/xxOrJgG932qXVnD9BjK1B+oxOw1Tzx6ri6?=
+ =?us-ascii?Q?eC4NZ9NKxQIufiJRpYcH3iJEu7tTsdgvXC+4dS5v?=
+X-OriginatorOrg: oss.nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2746d1fa-7abf-490d-710e-08db78833967
+X-MS-Exchange-CrossTenant-AuthSource: DU0PR04MB9417.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Jun 2023 09:28:40.5445
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: qB83yAdqQYbu9bMFTj0FNl1HceuREkdP4suu9CCYX5H2WUESyDHv1/p9ZUHKMXgrM6YeLA/g8GxN+CaD2OBPkA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR04MB7608
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 29, 2023 at 09:28:56AM +0100, Conor Dooley wrote:
-> As it says on the tin, provide a Kconfig option to disabling parsing the
-> "riscv,isa" devicetree property. Hide the option behind NONPORTABLE so
-> that only those willing to keep the pieces enable it, and make sure the
-> default kernel contains the fallback code.
-> 
-> Suggested-by: Palmer Dabbelt <palmer@rivosinc.com>
-> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
-> ---
->  arch/riscv/Kconfig             | 16 ++++++++++++++++
->  arch/riscv/kernel/cpu.c        |  3 +++
->  arch/riscv/kernel/cpufeature.c |  2 +-
->  3 files changed, 20 insertions(+), 1 deletion(-)
-> 
-> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-> index 1d39efe2b940..0e1909ac5947 100644
-> --- a/arch/riscv/Kconfig
-> +++ b/arch/riscv/Kconfig
-> @@ -291,6 +291,22 @@ config NONPORTABLE
->  
->  	  If unsure, say N.
->  
-> +config NO_RISCV_ISA_FALLBACK
-> +	bool "Permit falling back to parsing riscv,isa for extension support"
-> +	depends on NONPORTABLE
-> +	help
-> +	  Parsing the "riscv,isa" devicetree property has been deprecated and
-> +	  replaced by a list of explicitly defined strings. For compatibility
-> +	  with existing platforms, the kernel will fall back to parsing the
-> +	  "riscv,isa" property if the replacements are not found.
-> +
-> +	  Selecting Y here will result in a kernel without this fallback, and
-> +	  will not work on platforms where the devicetree does not contain the
-> +	  replacement 	  properties of "riscv,isa-base" and
-                     ^ spacing issue
+From: Peng Fan <peng.fan@nxp.com>
 
-> +	  "riscv,isa-extensions". Please see the dt-binding, located at
-> +	  Documentation/devicetree/bindings/riscv/extensions.yaml for details
-> +	  on the replacement properties.
-> +
->  choice
->  	prompt "Base ISA"
->  	default ARCH_RV64I
-> diff --git a/arch/riscv/kernel/cpu.c b/arch/riscv/kernel/cpu.c
-> index 9a4f4a23afcd..86a1d98b8b3b 100644
-> --- a/arch/riscv/kernel/cpu.c
-> +++ b/arch/riscv/kernel/cpu.c
-> @@ -81,6 +81,9 @@ int riscv_early_of_processor_hartid(struct device_node *node, unsigned long *har
->  	return 0;
->  
->  old_interface:
-> +	if (IS_ENABLED(CONFIG_NO_RISCV_ISA_FALLBACK))
-> +		return -ENODEV;
-> +
->  	if (of_property_read_string(node, "riscv,isa", &isa)) {
->  		pr_warn("CPU with hartid=%lu has no \"riscv,isa-base\" or \"riscv,isa\" property\n",
->  			*hart);
-> diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpufeature.c
-> index 2c4503fa984f..f6fb18d2af84 100644
-> --- a/arch/riscv/kernel/cpufeature.c
-> +++ b/arch/riscv/kernel/cpufeature.c
-> @@ -490,7 +490,7 @@ void __init riscv_fill_hwcap(void)
->  	} else {
->  		int ret = riscv_fill_hwcap_from_ext_list(isa2hwcap);
->  
-> -		if (ret) {
-> +		if (ret && !IS_ENABLED(CONFIG_NO_RISCV_ISA_FALLBACK)) {
->  			pr_info("Falling back to deprecated \"riscv,isa\"\n");
->  			riscv_fill_hwcap_from_isa_string(isa2hwcap);
->  		}
-> -- 
-> 2.40.1
->
+The current code only supports one vdev and a single callback,
+but there are cases need more vdevs. So iterate all notifyids to
+support more vdevs with the single callback.
 
-Should we also have a kernel command line option, 'isa_fallback', where
-without this config the command line option is not necessary to fallback,
-but, with this config, no fallback will be done unless 'isa_fallback' is
-provided?
+Signed-off-by: Peng Fan <peng.fan@nxp.com>
+---
 
-Thanks,
-drew
+V3:
+ Drop debug message in callback
+
+V2:
+ Update commit log
+
+ drivers/remoteproc/imx_rproc.c | 13 +++++++++++--
+ 1 file changed, 11 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/remoteproc/imx_rproc.c b/drivers/remoteproc/imx_rproc.c
+index f9874fc5a80f..986d3db81596 100644
+--- a/drivers/remoteproc/imx_rproc.c
++++ b/drivers/remoteproc/imx_rproc.c
+@@ -725,13 +725,22 @@ static int imx_rproc_addr_init(struct imx_rproc *priv,
+ 	return 0;
+ }
+ 
++static int imx_rproc_notified_idr_cb(int id, void *ptr, void *data)
++{
++	struct rproc *rproc = data;
++
++	rproc_vq_interrupt(rproc, id);
++
++	return 0;
++}
++
+ static void imx_rproc_vq_work(struct work_struct *work)
+ {
+ 	struct imx_rproc *priv = container_of(work, struct imx_rproc,
+ 					      rproc_work);
++	struct rproc *rproc = priv->rproc;
+ 
+-	rproc_vq_interrupt(priv->rproc, 0);
+-	rproc_vq_interrupt(priv->rproc, 1);
++	idr_for_each(&rproc->notifyids, imx_rproc_notified_idr_cb, rproc);
+ }
+ 
+ static void imx_rproc_rx_callback(struct mbox_client *cl, void *msg)
+-- 
+2.37.1
+
