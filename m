@@ -2,53 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F4CD742BF4
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 20:36:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 778CC742BFA
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 20:38:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233929AbjF2SfE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 14:35:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52478 "EHLO
+        id S231633AbjF2ShB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 14:37:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232902AbjF2SeU (ORCPT
+        with ESMTP id S232351AbjF2Sgl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 14:34:20 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CF1F1719;
-        Thu, 29 Jun 2023 11:34:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Transfer-Encoding:
-        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
-        Sender:Reply-To:Content-ID:Content-Description;
-        bh=8G2XND6WYYBgieuCNXQSJ0h8yM1THsepfLIyxBzOQdM=; b=aEGaXNVYMMI9ZJt0oeCDZ/svCc
-        exHWLiuPiysn9Ks+cpi3DZ0bmBihjeD6UviXcMmED95/uIQexzmrUsT6URaqJxmwGPhEfSfN10JU2
-        vtqXW3boponYUK8F66mpxozNHAPMLFh5fSS5ctUaWPG71ptmqXYI1MjMWeaXPenxEapadwkQ3423W
-        lMTDwe+8SgXWyR2aJNBeOulLYVSjjF/ywhBxoHzRHxDio0UWamQch2p7hwhXOtUYBR2FHuC9J4zjd
-        oNw24Mpswj9X1UqbXTc30lJCwFib7tZPcak83APHLqU+siC8/MSa0rFZIadFLzUxy8lDtOLqmgg3l
-        Xn51G4Lw==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1qEwT2-0054UW-Tl; Thu, 29 Jun 2023 18:34:08 +0000
-Date:   Thu, 29 Jun 2023 19:34:08 +0100
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Matt Whitlock <kernel@mattwhitlock.name>,
-        David Howells <dhowells@redhat.com>, netdev@vger.kernel.org,
-        Dave Chinner <david@fromorbit.com>,
-        Jens Axboe <axboe@kernel.dk>, linux-fsdevel@kvack.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH 0/4] splice: Fix corruption in data spliced to pipe
-Message-ID: <ZJ3OoCcSxZzzgUur@casper.infradead.org>
-References: <20230629155433.4170837-1-dhowells@redhat.com>
- <CAHk-=wiDwfyj0CCupT-oEToqsNLcbsTQdcgDupF=ZETUjJQJtQ@mail.gmail.com>
- <4bd92932-c9d2-4cc8-b730-24c749087e39@mattwhitlock.name>
- <CAHk-=whYWEUU69nY6k4j1_EQnQDNPy4TqAMvpf1UA111UDdmYg@mail.gmail.com>
+        Thu, 29 Jun 2023 14:36:41 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89511E4;
+        Thu, 29 Jun 2023 11:36:40 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id F3D5A1F74C;
+        Thu, 29 Jun 2023 18:36:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1688063799; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=NpDYPW1OunBedfGdGzw//TqToXDXavsydJ4o33sx74A=;
+        b=ipKHiUiQ6qzcSpd/TokouNutQLqy2LdK4UkX03Ga2GJb/az+OtniBt0jN0L0d9qgcL7mXI
+        g0HUYfMcgVVnpNLJrPe25D90ZcbY93evm3xf4KHGazyF8rwOjbfGzXgdykHAVcWU3E/gNt
+        VoPsxhY64T7hraqzjQaW+e995awKs1E=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1688063799;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=NpDYPW1OunBedfGdGzw//TqToXDXavsydJ4o33sx74A=;
+        b=NHxMeELHtPZieSmsEYTo39T7CUlgWs3BqZPrJ380WjaUbIMxygZ8fW4JRT6VecAf2dDya+
+        KG+JNzXg6IRvb8Dw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id B3AAB139FF;
+        Thu, 29 Jun 2023 18:36:38 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id m/VpJjbPnWRXDgAAMHmgww
+        (envelope-from <krisman@suse.de>); Thu, 29 Jun 2023 18:36:38 +0000
+From:   Gabriel Krisman Bertazi <krisman@suse.de>
+To:     Matteo Rizzo <matteorizzo@google.com>
+Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        io-uring@vger.kernel.org, jordyzomer@google.com, evn@google.com,
+        poprdi@google.com, corbet@lwn.net, axboe@kernel.dk,
+        asml.silence@gmail.com, akpm@linux-foundation.org,
+        keescook@chromium.org, rostedt@goodmis.org,
+        dave.hansen@linux.intel.com, ribalda@chromium.org,
+        chenhuacai@kernel.org, steve@sk2.org, gpiccoli@igalia.com,
+        ldufour@linux.ibm.com, bhe@redhat.com, oleksandr@natalenko.name
+Subject: Re: [PATCH v2 1/1] Add a new sysctl to disable io_uring system-wide
+References: <20230629132711.1712536-1-matteorizzo@google.com>
+        <20230629132711.1712536-2-matteorizzo@google.com>
+Date:   Thu, 29 Jun 2023 14:36:37 -0400
+In-Reply-To: <20230629132711.1712536-2-matteorizzo@google.com> (Matteo Rizzo's
+        message of "Thu, 29 Jun 2023 13:27:11 +0000")
+Message-ID: <87bkgyt8sq.fsf@suse.de>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAHk-=whYWEUU69nY6k4j1_EQnQDNPy4TqAMvpf1UA111UDdmYg@mail.gmail.com>
+Content-Type: text/plain
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,65 +77,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 29, 2023 at 11:19:36AM -0700, Linus Torvalds wrote:
-> On Thu, 29 Jun 2023 at 11:05, Matt Whitlock <kernel@mattwhitlock.name> wrote:
-> >
-> > I don't know why SPLICE_F_MOVE is being ignored in this thread. Sure, maybe
-> > the way it has historically been implemented was only relevant when the
-> > input FD is a pipe, but that's not what the man page implies. You have the
-> > opportunity to make it actually do what it says on the tin.
-> 
-> First off, when documentation and reality disagree, it's the
-> documentation that is garbage.
-> 
-> Secondly, your point is literally moot, from what I can tell:
-> 
->        SPLICE_F_MOVE
->               Unused for vmsplice(); see splice(2).
-> 
-> that's the doc I see right now for "man vmsplice".
-> 
-> There's no "implies" there. There's an actual big honking clear
-> statement at the top of the man-page saying that what you claim is
-> simply not even remotely true.
-> 
-> Also, the reason SPLICE_F_MOVE is unused for vmsplice() is that
-> actually trying to move pages would involve having to *remove* them
-> from the VM source. And the TLB invalidation involved with that is
-> literally more expensive than the memory copy would be.
+Matteo Rizzo <matteorizzo@google.com> writes:
 
-I think David muddied the waters by talking about vmsplice().  The
-problem encountered is with splice() from the page cache.  Reading
-the documentation,
+> Introduce a new sysctl (io_uring_disabled) which can be either 0, 1,
+> or 2. When 0 (the default), all processes are allowed to create io_uring
+> instances, which is the current behavior. When 1, all calls to
+> io_uring_setup fail with -EPERM unless the calling process has
+> CAP_SYS_ADMIN. When 2, calls to io_uring_setup fail with -EPERM
+> regardless of privilege.
+>
+> Signed-off-by: Matteo Rizzo <matteorizzo@google.com>
+> ---
 
-       splice()  moves  data  between two file descriptors without copying be‐
-       tween kernel address space and user address space.  It transfers up  to
-       len bytes of data from the file descriptor fd_in to the file descriptor
-       fd_out, where one of the file descriptors must refer to a pipe.
+Thanks for adding the extra level for root-only rings.
 
-The bug reported is actually with using FALLOC_FL_PUNCH_HOLE, but a
-simpler problem is:
+The patch looks good to me.
 
-#define _GNU_SOURCE
-#include <unistd.h>
-#include <fcntl.h>
-#include <stdio.h>
+Reviewed-by: Gabriel Krisman Bertazi <krisman@suse.de>
 
-#define PAGE_SIZE 4096
-
-int main(int argc, char **argv)
-{
-        int fd = open(argv[1], O_RDWR | O_CREAT, 0644);
-
-        err = ftruncate(fd, PAGE_SIZE);
-        pwrite(fd, "old", 3, 0);
-        splice(fd, NULL, 1, NULL, PAGE_SIZE, 0);
-        pwrite(fd, "new", 3, 0);
-
-        return 0;
-}
-
-That outputs "new".  Should it?  If so, the manpage is really wrong.
-It says the point of splice() is to remove the kernel-user-kernel copy,
-and notes that zerocopy might be happening, but that's an optimisation
-the user shouldn't notice.
+-- 
+Gabriel Krisman Bertazi
