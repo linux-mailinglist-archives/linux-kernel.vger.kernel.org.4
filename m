@@ -2,59 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EA8B742F09
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 22:52:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 74A7A742F11
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 22:53:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232036AbjF2Uwe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 16:52:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46556 "EHLO
+        id S232556AbjF2Ux1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 16:53:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232550AbjF2Uvv (ORCPT
+        with ESMTP id S232316AbjF2UwJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 16:51:51 -0400
+        Thu, 29 Jun 2023 16:52:09 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9AE32D4A;
-        Thu, 29 Jun 2023 13:51:39 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 289423595;
+        Thu, 29 Jun 2023 13:51:42 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0472E61627;
-        Thu, 29 Jun 2023 20:51:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 5F9E4C433C0;
-        Thu, 29 Jun 2023 20:51:37 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6FD9361634;
+        Thu, 29 Jun 2023 20:51:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id DA301C433C0;
+        Thu, 29 Jun 2023 20:51:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688071897;
-        bh=x+GKEsRMJslSqI8daiJR2oohFs0jyp6CpXtfrCFonDA=;
+        s=k20201202; t=1688071900;
+        bh=91GnsxmCq5c15wSFhvVC9Fj3JfW1GYcpAiXQHKTcpbg=;
         h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=jT/NDQGWDeZa4SYZvQowiqhPBC3g9pOmUtBvdZc8Sn8DhIoaK0pXPDUoaHgbSv1fX
-         eNqEU5Dm3rTrMjVDNMcOfyX9o90A8CJ9/ln4+quR4zCwocJ79uRqBJGpFE119NgE8c
-         6SIWlerW5HvZxnM2iFECSX3T6/03uaoQscUJjfm+iKQbagjdREjEeIcjSdZo0eP/bC
-         qOdA3sEVj6owLgseNr35dKD2E2eiM/2JfQIkzhWAerY6U9+Pgr8pYrANCbevOnYqXt
-         Ry0BEVEkz4hg8qBgnclVYn5LhCiWe0kW8x2Aam4g+1orOnF2CS/2UZ0fENl/p6tnI4
-         OPAcOsTkmsFdA==
+        b=WEbTSr42ajK/+ya1wClw6M4VTfaH4ZkOS+IswtIMAJlQAk+djJyfS7UI5cBXfIL2Q
+         5IT5p4GC+P/3a56iP1L0H03aiVjra7Xcd0j+LuTMqwRpjZN3pfNOfj0Ni+jZrZ0VuE
+         NA8Gqyn67UhNRGdVXeBARolytWVwxG5W56cAGcmi0w458WnscaVKQHxMbETEkxK8cB
+         ozcDOy8cMqWf9A0IV30hnWAGTRZkPRCRTHBE1kffxfRBvv5Q73rAw/lP7uWSqtkam+
+         J7JTlsxb8UKEZv70qMWXlJrwqUfR7YGqgFfPMPME3eNYtzDDjS1bKk8fbLlKPr8QLj
+         S4yDx4ap8h8Ww==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 4B33DC40C5E;
-        Thu, 29 Jun 2023 20:51:37 +0000 (UTC)
-Subject: Re: [GIT PULL] overlayfs update for 6.5
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id C9B89E5381B;
+        Thu, 29 Jun 2023 20:51:40 +0000 (UTC)
+Subject: Re: [GIT PULL] ext4 updates for 6.5
 From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20230626191849.3451873-1-amir73il@gmail.com>
-References: <20230626191849.3451873-1-amir73il@gmail.com>
-X-PR-Tracked-List-Id: <linux-fsdevel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20230626191849.3451873-1-amir73il@gmail.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/overlayfs/vfs.git tags/ovl-update-6.5
-X-PR-Tracked-Commit-Id: 62149a745eee03194f025021640c80b84353089b
+In-Reply-To: <20230627153618.GA329146@mit.edu>
+References: <20230627153618.GA329146@mit.edu>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20230627153618.GA329146@mit.edu>
+X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/tytso/ext4.git tags/ext4_for_linus
+X-PR-Tracked-Commit-Id: 2ef6c32a914b85217b44a0a2418e830e520b085e
 X-PR-Merge-Tree: torvalds/linux.git
 X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: be3c213150dc4370ef211a78d78457ff166eba4e
-Message-Id: <168807189729.21634.5447622001041358411.pr-tracker-bot@kernel.org>
-Date:   Thu, 29 Jun 2023 20:51:37 +0000
-To:     Amir Goldstein <amir73il@gmail.com>
+X-PR-Merge-Commit-Id: 53ea167b212f675e40420498e46fa31553b406ac
+Message-Id: <168807190082.21634.14409452832650801640.pr-tracker-bot@kernel.org>
+Date:   Thu, 29 Jun 2023 20:51:40 +0000
+To:     Theodore Ts'o <tytso@mit.edu>
 Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Miklos Szeredi <miklos@szeredi.hu>,
-        Christian Brauner <brauner@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-unionfs@vger.kernel.org
+        Linux Kernel Developers List <linux-kernel@vger.kernel.org>,
+        Ext4 Developers List <linux-ext4@vger.kernel.org>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -65,12 +63,12 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Mon, 26 Jun 2023 22:18:49 +0300:
+The pull request you sent on Tue, 27 Jun 2023 11:36:18 -0400:
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/overlayfs/vfs.git tags/ovl-update-6.5
+> https://git.kernel.org/pub/scm/linux/kernel/git/tytso/ext4.git tags/ext4_for_linus
 
 has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/be3c213150dc4370ef211a78d78457ff166eba4e
+https://git.kernel.org/torvalds/c/53ea167b212f675e40420498e46fa31553b406ac
 
 Thank you!
 
