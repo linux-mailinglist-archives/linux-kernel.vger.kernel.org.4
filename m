@@ -2,331 +2,284 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E27A7424F9
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 13:30:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04F9A742504
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 13:32:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232285AbjF2LaN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 07:30:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41634 "EHLO
+        id S231842AbjF2Lco (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 07:32:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230460AbjF2LaM (ORCPT
+        with ESMTP id S230446AbjF2Lcm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 07:30:12 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 67B4830EF;
-        Thu, 29 Jun 2023 04:30:10 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B155EC14;
-        Thu, 29 Jun 2023 04:30:53 -0700 (PDT)
-Received: from [10.1.27.40] (C02Z41KALVDN.cambridge.arm.com [10.1.27.40])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3EE113F64C;
-        Thu, 29 Jun 2023 04:30:07 -0700 (PDT)
-Message-ID: <bfd1de51-d445-5861-f69f-13d740651f8e@arm.com>
-Date:   Thu, 29 Jun 2023 12:30:05 +0100
+        Thu, 29 Jun 2023 07:32:42 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAFED30EF
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 04:31:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1688038310;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=GoRf97kbYDZBwP3J/hRLkmLH66DPLZ1hXk0cIFzlfrw=;
+        b=UHqhwF6xjt988sSEBupUu9ISBiXf7lhcEpC5VewolOS7sQ5EwrDDq53s0F2/b98ILu4Jyv
+        c0y1aaIa/N5nP542j2L9rbpreLXYfznkGJMUhAIEy7z+pAdw3dY0L7b+btjIfTKcLliIn4
+        MkRyF9HBJ4u2oXIj1CYQuju7UOKyirY=
+Received: from mail-lf1-f69.google.com (mail-lf1-f69.google.com
+ [209.85.167.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-609-nc5NhRObPNqx-pUd6wb2zw-1; Thu, 29 Jun 2023 07:31:47 -0400
+X-MC-Unique: nc5NhRObPNqx-pUd6wb2zw-1
+Received: by mail-lf1-f69.google.com with SMTP id 2adb3069b0e04-4fb76659d44so566354e87.3
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 04:31:47 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688038306; x=1690630306;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=GoRf97kbYDZBwP3J/hRLkmLH66DPLZ1hXk0cIFzlfrw=;
+        b=IMcwJJODkF72Q07gSBcnYmkmSeBjLVzQRIVRhpCXhY1Pud3HvCpdakrobvuyAEh4XV
+         7Qf1HRDarM14vPJGUmJwq7YsQ2YgkR49HBMz3zgsqXgZR/qnlq7F4RCobDBCEeiWHg7e
+         dOe0u9HSmvccwqxY4W9cwFod18XcaSb+NAX9eu8CHIFne6TJzW/Lr92QiDZW3Npy1k5p
+         lWFIA+7CQmWSG1ciD/XDC9ZRZGt61SAIo2OWYxAQs+c+0wrAB7WwAhjLzVt6nZOark2g
+         8sL6GVjhhfU+Mkg0WjLd1azBEZZVtJJBBxV0btRW4q3bJY+xYbvfC3omKrEFJQqCXwo5
+         JOkg==
+X-Gm-Message-State: ABy/qLb+mlfgJ6Ik7/H3LQ48ZYzlRZIVcdXIOQXxL0hedstRTCsnuA/f
+        N/u6gOnlPk+CS50qEz2cR4Rz3rdbLQgu061EQvYj3dl9Lmq83y6qutxl9QhL7nCODicI3P228Dc
+        pRx1hvv7BnnmOUE2RAnDnOy5g
+X-Received: by 2002:ac2:4c48:0:b0:4fb:9595:15e9 with SMTP id o8-20020ac24c48000000b004fb959515e9mr3245786lfk.22.1688038305945;
+        Thu, 29 Jun 2023 04:31:45 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ759QKQQgqTCxa6IKWpXNlinwcvLHmiY40QmBJrFlDbDPxQTAATynaKDRxhNlc/1jVC7j3A+Q==
+X-Received: by 2002:ac2:4c48:0:b0:4fb:9595:15e9 with SMTP id o8-20020ac24c48000000b004fb959515e9mr3245756lfk.22.1688038305499;
+        Thu, 29 Jun 2023 04:31:45 -0700 (PDT)
+Received: from ?IPV6:2a09:80c0:192:0:5dac:bf3d:c41:c3e7? ([2a09:80c0:192:0:5dac:bf3d:c41:c3e7])
+        by smtp.gmail.com with ESMTPSA id hn8-20020a05600ca38800b003fa722e8b48sm19303141wmb.32.2023.06.29.04.31.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 29 Jun 2023 04:31:45 -0700 (PDT)
+Message-ID: <bd9ce008-528b-2009-b157-6d69f1cf5530@redhat.com>
+Date:   Thu, 29 Jun 2023 13:31:43 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.12.0
-Subject: Re: [PATCH v1 10/10] mm: Allocate large folios for anonymous memory
-To:     Yang Shi <shy828301@gmail.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Yin Fengwei <fengwei.yin@intel.com>,
-        David Hildenbrand <david@redhat.com>,
-        Yu Zhao <yuzhao@google.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-alpha@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, linux-s390@vger.kernel.org
-References: <20230626171430.3167004-1-ryan.roberts@arm.com>
- <20230626171430.3167004-11-ryan.roberts@arm.com>
- <CAHbLzkoZf=5PLrC0HNT4Owy=xM4HfA9HDjdCHC+h5RYXUwp0gw@mail.gmail.com>
-From:   Ryan Roberts <ryan.roberts@arm.com>
-In-Reply-To: <CAHbLzkoZf=5PLrC0HNT4Owy=xM4HfA9HDjdCHC+h5RYXUwp0gw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH v12 07/22] x86/virt/tdx: Add skeleton to enable TDX on
+ demand
+Content-Language: en-US
+To:     Kai Huang <kai.huang@intel.com>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org
+Cc:     linux-mm@kvack.org, x86@kernel.org, dave.hansen@intel.com,
+        kirill.shutemov@linux.intel.com, tony.luck@intel.com,
+        peterz@infradead.org, tglx@linutronix.de, bp@alien8.de,
+        mingo@redhat.com, hpa@zytor.com, seanjc@google.com,
+        pbonzini@redhat.com, dan.j.williams@intel.com,
+        rafael.j.wysocki@intel.com, ashok.raj@intel.com,
+        reinette.chatre@intel.com, len.brown@intel.com, ak@linux.intel.com,
+        isaku.yamahata@intel.com, ying.huang@intel.com, chao.gao@intel.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com, nik.borisov@suse.com,
+        bagasdotme@gmail.com, sagis@google.com, imammedo@redhat.com
+References: <cover.1687784645.git.kai.huang@intel.com>
+ <104d324cd68b12e14722ee5d85a660cccccd8892.1687784645.git.kai.huang@intel.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <104d324cd68b12e14722ee5d85a660cccccd8892.1687784645.git.kai.huang@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 29/06/2023 03:13, Yang Shi wrote:
-> On Mon, Jun 26, 2023 at 10:15 AM Ryan Roberts <ryan.roberts@arm.com> wrote:
->>
->> With all of the enabler patches in place, modify the anonymous memory
->> write allocation path so that it opportunistically attempts to allocate
->> a large folio up to `max_anon_folio_order()` size (This value is
->> ultimately configured by the architecture). This reduces the number of
->> page faults, reduces the size of (e.g. LRU) lists, and generally
->> improves performance by batching what were per-page operations into
->> per-(large)-folio operations.
->>
->> If CONFIG_LARGE_ANON_FOLIO is not enabled (the default) then
->> `max_anon_folio_order()` always returns 0, meaning we get the existing
->> allocation behaviour.
->>
->> Signed-off-by: Ryan Roberts <ryan.roberts@arm.com>
->> ---
->>  mm/memory.c | 159 +++++++++++++++++++++++++++++++++++++++++++++++-----
->>  1 file changed, 144 insertions(+), 15 deletions(-)
->>
->> diff --git a/mm/memory.c b/mm/memory.c
->> index a8f7e2b28d7a..d23c44cc5092 100644
->> --- a/mm/memory.c
->> +++ b/mm/memory.c
->> @@ -3161,6 +3161,90 @@ static inline int max_anon_folio_order(struct vm_area_struct *vma)
->>                 return CONFIG_LARGE_ANON_FOLIO_NOTHP_ORDER_MAX;
->>  }
->>
->> +/*
->> + * Returns index of first pte that is not none, or nr if all are none.
->> + */
->> +static inline int check_ptes_none(pte_t *pte, int nr)
->> +{
->> +       int i;
->> +
->> +       for (i = 0; i < nr; i++) {
->> +               if (!pte_none(ptep_get(pte++)))
->> +                       return i;
->> +       }
->> +
->> +       return nr;
->> +}
->> +
->> +static int calc_anon_folio_order_alloc(struct vm_fault *vmf, int order)
->> +{
->> +       /*
->> +        * The aim here is to determine what size of folio we should allocate
->> +        * for this fault. Factors include:
->> +        * - Order must not be higher than `order` upon entry
->> +        * - Folio must be naturally aligned within VA space
->> +        * - Folio must not breach boundaries of vma
->> +        * - Folio must be fully contained inside one pmd entry
->> +        * - Folio must not overlap any non-none ptes
->> +        *
->> +        * Additionally, we do not allow order-1 since this breaks assumptions
->> +        * elsewhere in the mm; THP pages must be at least order-2 (since they
->> +        * store state up to the 3rd struct page subpage), and these pages must
->> +        * be THP in order to correctly use pre-existing THP infrastructure such
->> +        * as folio_split().
->> +        *
->> +        * As a consequence of relying on the THP infrastructure, if the system
->> +        * does not support THP, we always fallback to order-0.
->> +        *
->> +        * Note that the caller may or may not choose to lock the pte. If
->> +        * unlocked, the calculation should be considered an estimate that will
->> +        * need to be validated under the lock.
->> +        */
->> +
->> +       struct vm_area_struct *vma = vmf->vma;
->> +       int nr;
->> +       unsigned long addr;
->> +       pte_t *pte;
->> +       pte_t *first_set = NULL;
->> +       int ret;
->> +
->> +       if (has_transparent_hugepage()) {
->> +               order = min(order, PMD_SHIFT - PAGE_SHIFT);
->> +
->> +               for (; order > 1; order--) {
->> +                       nr = 1 << order;
->> +                       addr = ALIGN_DOWN(vmf->address, nr << PAGE_SHIFT);
->> +                       pte = vmf->pte - ((vmf->address - addr) >> PAGE_SHIFT);
->> +
->> +                       /* Check vma bounds. */
->> +                       if (addr < vma->vm_start ||
->> +                           addr + (nr << PAGE_SHIFT) > vma->vm_end)
->> +                               continue;
->> +
->> +                       /* Ptes covered by order already known to be none. */
->> +                       if (pte + nr <= first_set)
->> +                               break;
->> +
->> +                       /* Already found set pte in range covered by order. */
->> +                       if (pte <= first_set)
->> +                               continue;
->> +
->> +                       /* Need to check if all the ptes are none. */
->> +                       ret = check_ptes_none(pte, nr);
->> +                       if (ret == nr)
->> +                               break;
->> +
->> +                       first_set = pte + ret;
->> +               }
->> +
->> +               if (order == 1)
->> +                       order = 0;
->> +       } else
->> +               order = 0;
->> +
->> +       return order;
->> +}
->> +
->>  /*
->>   * Handle write page faults for pages that can be reused in the current vma
->>   *
->> @@ -4201,6 +4285,9 @@ static vm_fault_t do_anonymous_page(struct vm_fault *vmf)
->>         struct folio *folio;
->>         vm_fault_t ret = 0;
->>         pte_t entry;
->> +       unsigned long addr;
->> +       int order = uffd_wp ? 0 : max_anon_folio_order(vma);
->> +       int pgcount = BIT(order);
->>
->>         /* File mapping without ->vm_ops ? */
->>         if (vma->vm_flags & VM_SHARED)
->> @@ -4242,24 +4329,44 @@ static vm_fault_t do_anonymous_page(struct vm_fault *vmf)
->>                         pte_unmap_unlock(vmf->pte, vmf->ptl);
->>                         return handle_userfault(vmf, VM_UFFD_MISSING);
->>                 }
->> -               goto setpte;
->> +               if (uffd_wp)
->> +                       entry = pte_mkuffd_wp(entry);
->> +               set_pte_at(vma->vm_mm, vmf->address, vmf->pte, entry);
->> +
->> +               /* No need to invalidate - it was non-present before */
->> +               update_mmu_cache(vma, vmf->address, vmf->pte);
->> +               goto unlock;
->>         }
->>
->> -       /* Allocate our own private page. */
->> +retry:
->> +       /*
->> +        * Estimate the folio order to allocate. We are not under the ptl here
->> +        * so this estiamte needs to be re-checked later once we have the lock.
->> +        */
->> +       vmf->pte = pte_offset_map(vmf->pmd, vmf->address);
->> +       order = calc_anon_folio_order_alloc(vmf, order);
->> +       pte_unmap(vmf->pte);
->> +
->> +       /* Allocate our own private folio. */
->>         if (unlikely(anon_vma_prepare(vma)))
->>                 goto oom;
->> -       folio = vma_alloc_zeroed_movable_folio(vma, vmf->address, 0, 0);
->> +       folio = try_vma_alloc_movable_folio(vma, vmf->address, order, true);
->>         if (!folio)
->>                 goto oom;
->>
->> +       /* We may have been granted less than we asked for. */
->> +       order = folio_order(folio);
->> +       pgcount = BIT(order);
->> +       addr = ALIGN_DOWN(vmf->address, pgcount << PAGE_SHIFT);
->> +
->>         if (mem_cgroup_charge(folio, vma->vm_mm, GFP_KERNEL))
->>                 goto oom_free_page;
->>         folio_throttle_swaprate(folio, GFP_KERNEL);
->>
->>         /*
->>          * The memory barrier inside __folio_mark_uptodate makes sure that
->> -        * preceding stores to the page contents become visible before
->> -        * the set_pte_at() write.
->> +        * preceding stores to the folio contents become visible before
->> +        * the set_ptes() write.
->>          */
->>         __folio_mark_uptodate(folio);
->>
->> @@ -4268,11 +4375,31 @@ static vm_fault_t do_anonymous_page(struct vm_fault *vmf)
->>         if (vma->vm_flags & VM_WRITE)
->>                 entry = pte_mkwrite(pte_mkdirty(entry));
->>
->> -       vmf->pte = pte_offset_map_lock(vma->vm_mm, vmf->pmd, vmf->address,
->> -                       &vmf->ptl);
->> -       if (vmf_pte_changed(vmf)) {
->> -               update_mmu_tlb(vma, vmf->address, vmf->pte);
->> -               goto release;
->> +       vmf->pte = pte_offset_map_lock(vma->vm_mm, vmf->pmd, addr, &vmf->ptl);
->> +
->> +       /*
->> +        * Ensure our estimate above is still correct; we could have raced with
->> +        * another thread to service a fault in the region.
->> +        */
->> +       if (order == 0) {
->> +               if (vmf_pte_changed(vmf)) {
->> +                       update_mmu_tlb(vma, vmf->address, vmf->pte);
->> +                       goto release;
->> +               }
->> +       } else if (check_ptes_none(vmf->pte, pgcount) != pgcount) {
->> +               pte_t *pte = vmf->pte + ((vmf->address - addr) >> PAGE_SHIFT);
->> +
->> +               /* If faulting pte was allocated by another, exit early. */
->> +               if (!pte_none(ptep_get(pte))) {
->> +                       update_mmu_tlb(vma, vmf->address, pte);
->> +                       goto release;
->> +               }
->> +
->> +               /* Else try again, with a lower order. */
->> +               pte_unmap_unlock(vmf->pte, vmf->ptl);
->> +               folio_put(folio);
->> +               order--;
->> +               goto retry;
+On 26.06.23 16:12, Kai Huang wrote:
+> To enable TDX the kernel needs to initialize TDX from two perspectives:
+> 1) Do a set of SEAMCALLs to initialize the TDX module to make it ready
+> to create and run TDX guests; 2) Do the per-cpu initialization SEAMCALL
+> on one logical cpu before the kernel wants to make any other SEAMCALLs
+> on that cpu (including those involved during module initialization and
+> running TDX guests).
 > 
-> I'm not sure whether this extra fallback logic is worth it or not. Do
-> you have any benchmark data or is it just an arbitrary design choice?
-> If it is just an arbitrary design choice, I'd like to go with the
-> simplest way by just exiting page fault handler, just like the
-> order-0, IMHO.
-
-Yes, its an arbitrary design choice. Based on Yu Zhao's feedback, I'm already
-reworking this so that we only try the preferred order and order-0, so no longer
-iterating through intermediate orders.
-
-I think what you are suggesting is that if attempting to allocate the preferred
-order and we find there was a race meaning that the folio now is overlapping
-populated ptes (but the faulting pte is still empty), just exit and rely on the
-page fault being re-triggered, rather than immediately falling back to order-0?
-
-The reason I didn't do that was I wasn't sure if the return path might have
-assumptions that the faulting pte is now valid if no error was returned? I guess
-another option is to return VM_FAULT_RETRY but then it seemed cleaner to do the
-retry directly here. What do you suggest?
-
-Thanks,
-Ryan
-
-
-
+> The TDX module can be initialized only once in its lifetime.  Instead
+> of always initializing it at boot time, this implementation chooses an
+> "on demand" approach to initialize TDX until there is a real need (e.g
+> when requested by KVM).  This approach has below pros:
 > 
->>         }
->>
->>         ret = check_stable_address_space(vma->vm_mm);
->> @@ -4286,16 +4413,18 @@ static vm_fault_t do_anonymous_page(struct vm_fault *vmf)
->>                 return handle_userfault(vmf, VM_UFFD_MISSING);
->>         }
->>
->> -       inc_mm_counter(vma->vm_mm, MM_ANONPAGES);
->> -       folio_add_new_anon_rmap(folio, vma, vmf->address);
->> +       folio_ref_add(folio, pgcount - 1);
->> +
->> +       add_mm_counter(vma->vm_mm, MM_ANONPAGES, pgcount);
->> +       folio_add_new_anon_rmap_range(folio, &folio->page, pgcount, vma, addr);
->>         folio_add_lru_vma(folio, vma);
->> -setpte:
->> +
->>         if (uffd_wp)
->>                 entry = pte_mkuffd_wp(entry);
->> -       set_pte_at(vma->vm_mm, vmf->address, vmf->pte, entry);
->> +       set_ptes(vma->vm_mm, addr, vmf->pte, entry, pgcount);
->>
->>         /* No need to invalidate - it was non-present before */
->> -       update_mmu_cache(vma, vmf->address, vmf->pte);
->> +       update_mmu_cache_range(vma, addr, vmf->pte, pgcount);
->>  unlock:
->>         pte_unmap_unlock(vmf->pte, vmf->ptl);
->>         return ret;
->> --
->> 2.25.1
->>
->>
+> 1) It avoids consuming the memory that must be allocated by kernel and
+> given to the TDX module as metadata (~1/256th of the TDX-usable memory),
+> and also saves the CPU cycles of initializing the TDX module (and the
+> metadata) when TDX is not used at all.
+> 
+> 2) The TDX module design allows it to be updated while the system is
+> running.  The update procedure shares quite a few steps with this "on
+> demand" initialization mechanism.  The hope is that much of "on demand"
+> mechanism can be shared with a future "update" mechanism.  A boot-time
+> TDX module implementation would not be able to share much code with the
+> update mechanism.
+> 
+> 3) Making SEAMCALL requires VMX to be enabled.  Currently, only the KVM
+> code mucks with VMX enabling.  If the TDX module were to be initialized
+> separately from KVM (like at boot), the boot code would need to be
+> taught how to muck with VMX enabling and KVM would need to be taught how
+> to cope with that.  Making KVM itself responsible for TDX initialization
+> lets the rest of the kernel stay blissfully unaware of VMX.
+> 
+> Similar to module initialization, also make the per-cpu initialization
+> "on demand" as it also depends on VMX being enabled.
+> 
+> Add two functions, tdx_enable() and tdx_cpu_enable(), to enable the TDX
+> module and enable TDX on local cpu respectively.  For now tdx_enable()
+> is a placeholder.  The TODO list will be pared down as functionality is
+> added.
+> 
+> Export both tdx_cpu_enable() and tdx_enable() for KVM use.
+> 
+> In tdx_enable() use a state machine protected by mutex to make sure the
+> initialization will only be done once, as tdx_enable() can be called
+> multiple times (i.e. KVM module can be reloaded) and may be called
+> concurrently by other kernel components in the future.
+> 
+> The per-cpu initialization on each cpu can only be done once during the
+> module's life time.  Use a per-cpu variable to track its status to make
+> sure it is only done once in tdx_cpu_enable().
+> 
+> Also, a SEAMCALL to do TDX module global initialization must be done
+> once on any logical cpu before any per-cpu initialization SEAMCALL.  Do
+> it inside tdx_cpu_enable() too (if hasn't been done).
+> 
+> tdx_enable() can potentially invoke SEAMCALLs on any online cpus.  The
+> per-cpu initialization must be done before those SEAMCALLs are invoked
+> on some cpu.  To keep things simple, in tdx_cpu_enable(), always do the
+> per-cpu initialization regardless of whether the TDX module has been
+> initialized or not.  And in tdx_enable(), don't call tdx_cpu_enable()
+> but assume the caller has disabled CPU hotplug, done VMXON and
+> tdx_cpu_enable() on all online cpus before calling tdx_enable().
+> 
+> Signed-off-by: Kai Huang <kai.huang@intel.com>
+> ---
+> 
+> v11 -> v12:
+>   - Simplified TDX module global init and lp init status tracking (David).
+>   - Added comment around try_init_module_global() for using
+>     raw_spin_lock() (Dave).
+>   - Added one sentence to changelog to explain why to expose tdx_enable()
+>     and tdx_cpu_enable() (Dave).
+>   - Simplifed comments around tdx_enable() and tdx_cpu_enable() to use
+>     lockdep_assert_*() instead. (Dave)
+>   - Removed redundent "TDX" in error message (Dave).
+> 
+> v10 -> v11:
+>   - Return -NODEV instead of -EINVAL when CONFIG_INTEL_TDX_HOST is off.
+>   - Return the actual error code for tdx_enable() instead of -EINVAL.
+>   - Added Isaku's Reviewed-by.
+> 
+> v9 -> v10:
+>   - Merged the patch to handle per-cpu initialization to this patch to
+>     tell the story better.
+>   - Changed how to handle the per-cpu initialization to only provide a
+>     tdx_cpu_enable() function to let the user of TDX to do it when the
+>     user wants to run TDX code on a certain cpu.
+>   - Changed tdx_enable() to not call cpus_read_lock() explicitly, but
+>     call lockdep_assert_cpus_held() to assume the caller has done that.
+>   - Improved comments around tdx_enable() and tdx_cpu_enable().
+>   - Improved changelog to tell the story better accordingly.
+> 
+> v8 -> v9:
+>   - Removed detailed TODO list in the changelog (Dave).
+>   - Added back steps to do module global initialization and per-cpu
+>     initialization in the TODO list comment.
+>   - Moved the 'enum tdx_module_status_t' from tdx.c to local tdx.h
+> 
+> v7 -> v8:
+>   - Refined changelog (Dave).
+>   - Removed "all BIOS-enabled cpus" related code (Peter/Thomas/Dave).
+>   - Add a "TODO list" comment in init_tdx_module() to list all steps of
+>     initializing the TDX Module to tell the story (Dave).
+>   - Made tdx_enable() unverisally return -EINVAL, and removed nonsense
+>     comments (Dave).
+>   - Simplified __tdx_enable() to only handle success or failure.
+>   - TDX_MODULE_SHUTDOWN -> TDX_MODULE_ERROR
+>   - Removed TDX_MODULE_NONE (not loaded) as it is not necessary.
+>   - Improved comments (Dave).
+>   - Pointed out 'tdx_module_status' is software thing (Dave).
+> 
+> v6 -> v7:
+>   - No change.
+> 
+> v5 -> v6:
+>   - Added code to set status to TDX_MODULE_NONE if TDX module is not
+>     loaded (Chao)
+>   - Added Chao's Reviewed-by.
+>   - Improved comments around cpus_read_lock().
+> 
+> - v3->v5 (no feedback on v4):
+>   - Removed the check that SEAMRR and TDX KeyID have been detected on
+>     all present cpus.
+>   - Removed tdx_detect().
+>   - Added num_online_cpus() to MADT-enabled CPUs check within the CPU
+>     hotplug lock and return early with error message.
+>   - Improved dmesg printing for TDX module detection and initialization.
+> 
+> 
+> ---
+>   arch/x86/include/asm/tdx.h  |   4 +
+>   arch/x86/virt/vmx/tdx/tdx.c | 162 ++++++++++++++++++++++++++++++++++++
+>   arch/x86/virt/vmx/tdx/tdx.h |  13 +++
+>   3 files changed, 179 insertions(+)
+> 
+> diff --git a/arch/x86/include/asm/tdx.h b/arch/x86/include/asm/tdx.h
+> index 4dfe2e794411..d8226a50c58c 100644
+> --- a/arch/x86/include/asm/tdx.h
+> +++ b/arch/x86/include/asm/tdx.h
+> @@ -97,8 +97,12 @@ static inline long tdx_kvm_hypercall(unsigned int nr, unsigned long p1,
+>   
+>   #ifdef CONFIG_INTEL_TDX_HOST
+>   bool platform_tdx_enabled(void);
+> +int tdx_cpu_enable(void);
+> +int tdx_enable(void);
+>   #else	/* !CONFIG_INTEL_TDX_HOST */
+>   static inline bool platform_tdx_enabled(void) { return false; }
+> +static inline int tdx_cpu_enable(void) { return -ENODEV; }
+> +static inline int tdx_enable(void)  { return -ENODEV; }
+>   #endif	/* CONFIG_INTEL_TDX_HOST */
+>   
+>   #endif /* !__ASSEMBLY__ */
+> diff --git a/arch/x86/virt/vmx/tdx/tdx.c b/arch/x86/virt/vmx/tdx/tdx.c
+> index 141d12376c4d..29ca18f66d61 100644
+> --- a/arch/x86/virt/vmx/tdx/tdx.c
+> +++ b/arch/x86/virt/vmx/tdx/tdx.c
+> @@ -13,6 +13,10 @@
+>   #include <linux/errno.h>
+>   #include <linux/printk.h>
+>   #include <linux/smp.h>
+> +#include <linux/cpu.h>
+> +#include <linux/spinlock.h>
+> +#include <linux/percpu-defs.h>
+> +#include <linux/mutex.h>
+>   #include <asm/msr-index.h>
+>   #include <asm/msr.h>
+>   #include <asm/archrandom.h>
+> @@ -23,6 +27,13 @@ static u32 tdx_global_keyid __ro_after_init;
+>   static u32 tdx_guest_keyid_start __ro_after_init;
+>   static u32 tdx_nr_guest_keyids __ro_after_init;
+>   
+> +static bool tdx_global_initialized;
+> +static DEFINE_RAW_SPINLOCK(tdx_global_init_lock);
+> +static DEFINE_PER_CPU(bool, tdx_lp_initialized);
+> +
+> +static enum tdx_module_status_t tdx_module_status;
+
+Why can't you switch to a simple bool here as well?
+
+It's either initialized or uninitialized. If uninitialized and you get 
+an error, leave it uninitialized. The next caller will try again and 
+fail again.
+
+-- 
+Cheers,
+
+David / dhildenb
 
