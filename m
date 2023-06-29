@@ -2,118 +2,224 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C82A742B23
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 19:23:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DA0E742B2D
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 19:26:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231430AbjF2RXI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 13:23:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54476 "EHLO
+        id S229520AbjF2R0v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 13:26:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229865AbjF2RW7 (ORCPT
+        with ESMTP id S231865AbjF2R0q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 13:22:59 -0400
-Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AC4D10C9;
-        Thu, 29 Jun 2023 10:22:58 -0700 (PDT)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.west.internal (Postfix) with ESMTP id 42FED320099B;
-        Thu, 29 Jun 2023 13:22:56 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute4.internal (MEProxy); Thu, 29 Jun 2023 13:22:58 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm2; t=1688059375; x=1688145775; bh=Cw
-        E2wcHANU3ek6A8gHn/xl6f0ODbgDTZqECgroPgqbw=; b=KmPDis3AAUdV73TLXo
-        3OgDknDtNClg5x81qOb965Qm5cYr8IvBdXhGCvghC6eXv81fiE9fG56quzNDzZst
-        /45f3i/zaf2LLN5iCHJQZ/RK3D1QpoqRKUl+8v1fSucJTUF6UJfVar0BDZCQ20Hn
-        l+liTEg46Hsd1sng3DdI97pvvFC3kwBWeDW3nwt/uejkcN0J/mk/Y1a8yJDS8bqa
-        JMIAxG1Gnlpsr2aM/GkAJzYUPxYnlfZSJ7ZZs6WeYDdcEX6dmVN2SHx0DfUmQX73
-        G3/KbHUY0HSz5fHQkbbibFsIsYYtYvP9Y4nJ7mqAHyX83IHBR3X55NcLf7C5gli7
-        p6xg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; t=1688059375; x=1688145775; bh=CwE2wcHANU3ek
-        6A8gHn/xl6f0ODbgDTZqECgroPgqbw=; b=P60oOGRwftxmCUZrRzMi4jW32xc8n
-        x/eFQb0AcAT1TPGPGifej8BeSyum6UHdShIH8Vel+XbjhTR6dFf6fx7hhL9eYBHC
-        8AxQHRCA40a+Q3uWnXXz5wYSAgyTbjqkEjfI8xiy8QVcpXMJy9WWReqY2RA84cCp
-        iGz5Lv/Sb8T2zUE0+ISKl2EI4124iK2EICFrWM3mG4XV0hFRnJHrWmi8Ljtg2xhc
-        VNaBBAhLyGJZq/4zvRjcmREb60gX9pXeNRgxuGni8h4vTsd/Bfbbkp8fH8aNDhg6
-        ubhKsArA6i2l9ey7ciIKEqbX0PU9A/Roz60ygeg9HF4tQ2CLdynNmpM7A==
-X-ME-Sender: <xms:7r2dZPDLxq62M1kBStgKsfRuxemXsMrZzXVBnqFElAp05hW8nJmkZA>
-    <xme:7r2dZFiRFG8Vyjfyo5GhZZyIwFPE8E0ULnZ1F0bEAKRiKa5s8MlxBpnlzf35RQiKx
-    qOf15zr3vC0aA>
-X-ME-Received: <xmr:7r2dZKlK1wqTzcXBRUtDDIvakYJooS_zGMyatWd4F6tGlD1OsJtLccEUQulqVE9rJAhJ5BUgmn8kdxg-RZShi0K_UonVJHaFC8H3ww>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrtdeggdduuddvucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepifhrvghg
-    ucfmjfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecuggftrfgrthhtvghrnhepheegvd
-    evvdeljeeugfdtudduhfekledtiefhveejkeejuefhtdeufefhgfehkeetnecuvehluhhs
-    thgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepghhrvghgsehkrhhorg
-    hhrdgtohhm
-X-ME-Proxy: <xmx:7r2dZBwMbrF4faEtgoZSd7eeg0wEP9Tyhwjf0jLldB286bmYrr_RrA>
-    <xmx:7r2dZEQU0Bhnx465BF7A7M9TFiqIYiSbFYJ6-6EjLteV3BCe3mu5oA>
-    <xmx:7r2dZEZVZKrU2X_BeAWA3KAVFrEfgS6uSQJJTwTqYP8MvMsHwG9Wvw>
-    <xmx:772dZDCeQFPJcEKuRI0bDql2RgH-aTbX7IKfOHr2q36_TPqSiQbNRA>
-Feedback-ID: i787e41f1:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 29 Jun 2023 13:22:53 -0400 (EDT)
-Date:   Thu, 29 Jun 2023 19:22:51 +0200
-From:   Greg KH <greg@kroah.com>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        johan+linaro@kernel.org, perex@perex.cz, tiwai@suse.com,
-        lgirdwood@gmail.com, ckeepax@opensource.cirrus.com,
-        kuninori.morimoto.gx@renesas.com, linux-kernel@vger.kernel.org,
-        pierre-louis.bossart@linux.intel.com, alsa-devel@alsa-project.org,
-        Stable@vger.kernel.org
-Subject: Re: [PATCH] ASoC: qdsp6: q6apm: use dai link pcm id as pcm device
- number
-Message-ID: <2023062958-thumping-ambulance-7a2f@gregkh>
-References: <20230628092404.13927-1-srinivas.kandagatla@linaro.org>
- <c22fcc94-aa41-4ffd-bfe8-f0b9f15a76c0@sirena.org.uk>
- <2023062940-snore-brick-419b@gregkh>
- <9699a960-74b0-4064-b264-6cde06cd16fc@sirena.org.uk>
+        Thu, 29 Jun 2023 13:26:46 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3D103596;
+        Thu, 29 Jun 2023 10:26:44 -0700 (PDT)
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35TGR3ju032236;
+        Thu, 29 Jun 2023 17:26:33 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : from : to : cc : references : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=Qpi4CKj7LD2MZyQq5FEOioWfm1c6qFWR8XXj6QCLa/Y=;
+ b=QphGtSSRGBluwKqlV1r6EJ6u3pvFr2p2nDrp5zEV/W2HhEzDHGM5jVaigF5gba6Pf+2k
+ +UPavONsS/DVRdUsAdjCz6HxWwgBX/Gd4QRKu2vAM+NWeq95WbeeJ0z2cI77S2EPgpef
+ mTS5064xubDSP1ASzYJSFDpIqtln9CFWy1RNff32qOos9b+7dqw6CC5h5933rpPqv7Mi
+ KnPx/EeDc6a4f8IlOF5Aejmf7Vy0Go6WhtbwMr2v1WsjVS4nf+mro6dwuont7eA0xdpu
+ Ro7SVkE2lpW1DtZ25fQ1B4qo6L7fMHqWloA/hnvgiwUH8i3F/2HHwpTLbzDnAakI7E6B wQ== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rha8e0mu3-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 29 Jun 2023 17:26:33 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35THQWnF006296
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 29 Jun 2023 17:26:32 GMT
+Received: from [10.134.70.142] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.7; Thu, 29 Jun
+ 2023 10:26:31 -0700
+Message-ID: <53df7008-0a72-dfa7-27d9-96c07e410ac3@quicinc.com>
+Date:   Thu, 29 Jun 2023 10:26:31 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <9699a960-74b0-4064-b264-6cde06cd16fc@sirena.org.uk>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [Freedreno] [PATCH 2/3] drm/msm/dpu: Set DATABUS_WIDEN on command
+ mode encoders
+Content-Language: en-US
+From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        Jessica Zhang <quic_jesszhan@quicinc.com>
+CC:     Sean Paul <sean@poorly.run>, <linux-kernel@vger.kernel.org>,
+        <dri-devel@lists.freedesktop.org>, Rob Clark <robdclark@gmail.com>,
+        "Daniel Vetter" <daniel@ffwll.ch>, <linux-arm-msm@vger.kernel.org>,
+        David Airlie <airlied@gmail.com>,
+        <freedreno@lists.freedesktop.org>
+References: <20230525-add-widebus-support-v1-0-c7069f2efca1@quicinc.com>
+ <20230525-add-widebus-support-v1-2-c7069f2efca1@quicinc.com>
+ <c74c9e0e-d059-f0e3-4350-03089c37131a@linaro.org>
+ <cce68370-3fd9-4c9a-258e-af0d5d057fda@quicinc.com>
+ <n2c5qlujxhbbj2aqlgj7fetzoteood5h4hmbwt4mapi77xlvmt@bpourzaideti>
+ <81a5e241-ec82-7414-8752-4ce3cb084959@linaro.org>
+ <f14f2c31-38c2-0600-3a29-17e83afececf@quicinc.com>
+ <26tvhvqpxtxz5tqc6jbjixadpae34k7uc7fyec2u5o2ccj4tdq@tjvguzlolc3g>
+ <8dcd643f-9644-a4e7-a0d5-eefa28084a88@linaro.org>
+ <7d5256cd-c0bd-36e3-9b59-63ad8595f0ce@quicinc.com>
+ <b119470d-f656-71d1-8b87-b4b8196f5220@linaro.org>
+ <a4688db2-4230-7485-a688-bc6253d2d4b8@quicinc.com>
+ <dab90e58-c25a-9b5a-bae0-dfc50de7d363@linaro.org>
+ <0f988169-58cb-eccf-9590-f5097e085f22@quicinc.com>
+In-Reply-To: <0f988169-58cb-eccf-9590-f5097e085f22@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: vVpJRfMaAir9KAZTGv0ruT2A6U9NwV9c
+X-Proofpoint-ORIG-GUID: vVpJRfMaAir9KAZTGv0ruT2A6U9NwV9c
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-06-29_05,2023-06-27_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 phishscore=0
+ mlxlogscore=999 clxscore=1015 impostorscore=0 priorityscore=1501
+ spamscore=0 mlxscore=0 malwarescore=0 suspectscore=0 adultscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2305260000 definitions=main-2306290158
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 29, 2023 at 05:16:44PM +0100, Mark Brown wrote:
-> On Thu, Jun 29, 2023 at 06:06:05PM +0200, Greg KH wrote:
-> > On Thu, Jun 29, 2023 at 04:43:57PM +0100, Mark Brown wrote:
-> 
-> > > Won't this be an ABI change?  That seems like it'd disrupt things in
-> > > stable.
-> 
-> > ABI changes should disrupt things just the same in Linus's tree, why is
-> > stable any different?
-> 
-> This is a numbering resulting from enumeration thing so it gets to be
-> like the issues we've had with the order in which block and ethernet
-> devices appear, it's on the edge the extent to which people might be
-> relying on it.  If it's causing some problem as is and there's a reason
-> to do something (see the first half of my reply...) but the case gets
-> even harder to make with stable.
 
-It shouldn't matter for stable or not, if the change is acceptable in
-Linus's tree, with the userspace visable change, then it should be
-acceptable in any active stable branch as well.  There is no difference
-here for userspace api/abi rules.
 
-thanks,
+On 6/22/2023 4:37 PM, Abhinav Kumar wrote:
+> 
+> 
+> On 6/22/2023 4:14 PM, Dmitry Baryshkov wrote:
+>> On 23/06/2023 01:37, Abhinav Kumar wrote:
+>>>
+>>>
+>>> On 6/21/2023 4:46 PM, Dmitry Baryshkov wrote:
+>>>> On 22/06/2023 02:01, Abhinav Kumar wrote:
+>>>>>
+>>>>>
+>>>>> On 6/21/2023 9:36 AM, Dmitry Baryshkov wrote:
+>>>>>> On 21/06/2023 18:17, Marijn Suijten wrote:
+>>>>>>> On 2023-06-20 14:38:34, Jessica Zhang wrote:
+>>>>>>> <snip>
+>>>>>>>>>>>>> +    if (phys_enc->hw_intf->ops.enable_widebus)
+>>>>>>>>>>>>> + phys_enc->hw_intf->ops.enable_widebus(phys_enc->hw_intf);
+>>>>>>>>>>>>
+>>>>>>>>>>>> No. Please provide a single function which takes necessary
+>>>>>>>>>>>> configuration, including compression and wide_bus_enable.
+>>>>>>>>>>>>
+>>>>>>>>>>>
+>>>>>>>>>>> There are two ways to look at this. Your point is coming from 
+>>>>>>>>>>> the
+>>>>>>>>>>> perspective that its programming the same register but just a 
+>>>>>>>>>>> different
+>>>>>>>>>>> bit. But that will also make it a bit confusing.
+>>>>>>>>>
+>>>>>>>>> My point is to have a high-level function that configures the 
+>>>>>>>>> INTF for
+>>>>>>>>> the CMD mode. This way it can take a structure with necessary
+>>>>>>>>> configuration bits.
+>>>>>>>>
+>>>>>>>> Hi Dmitry,
+>>>>>>>>
+>>>>>>>> After discussing this approach with Abhinav, we still have a few
+>>>>>>>> questions about it:
+>>>>>>>>
+>>>>>>>> Currently, only 3 of the 32 bits for INTF_CONFIG2 are being used 
+>>>>>>>> (the
+>>>>>>>> rest are reserved with no plans of being programmed in the 
+>>>>>>>> future). Does
+>>>>>>>> this still justify the use of a struct to pass in the necessary
+>>>>>>>> configuration?
+>>>>>>>
+>>>>>>> No.  The point Dmitry is making is **not** about this concidentally
+>>>>>>> using the same register, but about adding a common codepath to 
+>>>>>>> enable
+>>>>>>> compression on this hw_intf (regardless of the registers it needs to
+>>>>>>> touch).
+>>>>>>
+>>>>>> Actually to setup INTF for CMD stream (which is equal to setting 
+>>>>>> up compression at this point).
+>>>>>>
+>>>>>
+>>>>> Yes it should be setup intf for cmd and not enable compression.
+>>>>>
+>>>>> Widebus and compression are different features and we should be 
+>>>>> able to control them independently.
+>>>>>
+>>>>> We just enable them together for DSI. So a separation is necessary.
+>>>>>
+>>>>> But I am still not totally convinced we even need to go down the 
+>>>>> path for having an op called setup_intf_cmd() which takes in a 
+>>>>> struct like
+>>>>>
+>>>>> struct dpu_cmd_intf_cfg {
+>>>>>      bool data_compress;
+>>>>>      bool widebus_en;
+>>>>> };
+>>>>>
+>>>>> As we have agreed that we will not touch the video mode timing 
+>>>>> engine path, it leaves us with only two bits.
+>>>>>
+>>>>> And like I said, its not that these two bits always go together. We 
+>>>>> want to be able to control them independently which means that its 
+>>>>> not necessary both bits program the same register one by one. We 
+>>>>> might just end up programming one of them if we just use widebus.
+>>>>>
+>>>>> Thats why I am still leaning on keeping this approach.
+>>>>
+>>>> I do not like the idea of having small functions being called 
+>>>> between modules. So, yes there will a config of two booleans, but it 
+>>>> is preferable (and more scalable) compared to separate callbacks.
+>>>>
+>>>
+>>> I definitely agree with the scalable part and I even cross checked 
+>>> that the number of usable bitfields of this register is going up from 
+>>> one chipset to the other although once again that depends on whether 
+>>> we will use those features.
+>>>
+>>> For that reason I am not opposed to the struct idea.
+>>>
+>>> But there is also another pattern i am seeing which worries me. 
+>>> Usable bitfields sometimes even reduce. For those cases, if we go 
+>>> with a pre-defined struct it ends up with redundant members as those 
+>>> bitfields go away.
+>>>
+>>> With the function op based approach, we just call the op if the 
+>>> feature bit / core revision.
+>>>
+>>> So I wanted to check once more about the fact that we should consider 
+>>> not just expansion but also reduction.
+>>
+>> As we have to support all generations, there is no actual reduction. 
+>> Newer SoCs do not have particular feature/bit, but older ones do. By 
+>> having multiple optional ops we just move this knowledge from 
+>> ops->complex_callback() to _setup_block_ops(). But more importantly 
+>> the caller gets more complicated. Instead of just calling 
+>> ops->set_me_up(), it has to check all the optional callbacks and call 
+>> the one by one.
+>>
+> 
+> Alright, I am thinking that perhaps because this register is kind of 
+> unique that its actually controlling a specific setting in the datapath, 
+> downstream also has separate ops for this.
+> 
+> But thats fine, we can go ahead with the struct based approach.
+> 
 
-greg k-h
+As data_compress has already landed, let me introduced the struct along 
+with the core_revision based approach in the core_revision series and 
+this series will expand that struct to include widebus too.
