@@ -2,134 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C558741E9D
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 05:14:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3059E741EA0
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 05:16:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231794AbjF2DOK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 23:14:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35162 "EHLO
+        id S231631AbjF2DQS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 23:16:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230173AbjF2DNx (ORCPT
+        with ESMTP id S230523AbjF2DQJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 23:13:53 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A709272D
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 20:13:45 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id a640c23a62f3a-991fe70f21bso23888866b.3
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 20:13:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1688008424; x=1690600424;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=xsP6l6F2Ynxmy6UfbGE0U5XGQemQAiefdBx9y2MwRzY=;
-        b=I6G+9+XnwLcg3XT8KdV+xRXd4FxyrBoVymRZnyU5rEYGnkYtzQWVojNJAIzuBC48XT
-         Rlfk8KDOOREEuq4y2OMP2AuVNE8bOAmLi5rYb7u8uiWFbzV2VS6g1OCFofRm8+p6JZwu
-         /6e8IoAkkVFTJAooKqAR+R1sJkx+yU6yeSoWI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688008424; x=1690600424;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=xsP6l6F2Ynxmy6UfbGE0U5XGQemQAiefdBx9y2MwRzY=;
-        b=WJo3E/evl/n36fEfd69kHsp/8ve8r1kT741gJi+YHZPVtOjuYQkP56bN2hbndl2DZ5
-         Iv/xjNQoa2XOdAGJkmstNrnpNdOOSi8YfdqV9J/hhJQrJWVbPY9ZDVbMmDYGjRFK0uW/
-         sKdeRBkVKwJwg0z5iNI/9ue0Wn+V7roMulkCxLFL/qgDJW83G4PjQRdYNbBfx27e29F1
-         GRycSCrAjef6lD/aX0MBrhbMkdFk5iaF5wautJWQAzqdW0Hf/+mH7HB92ReLqnwYcuwz
-         Od3ISTqLU14QbiUl0vauEyKTMilfynZbSpZI0cpOfUwHq6bO2cqe6E9fNaYRxTr5WZvS
-         4C5w==
-X-Gm-Message-State: AC+VfDzPlhHhOY5qL+ditxMwsD9oms7aghF4auPKAlj64QhyFUCnv1bu
-        bdWV+0/4BfDR87VmQRYpy0h68BMYxZGla63wYmI5BKr6
-X-Google-Smtp-Source: ACHHUZ6ZyVx4TCyiVaNDofEPVOF1b2NK5BRkT2PLbopFgo8e+INVte24QlhxqKWADHsXoSEa6o8SKA==
-X-Received: by 2002:a17:907:d9e:b0:98e:419b:4cc2 with SMTP id go30-20020a1709070d9e00b0098e419b4cc2mr11003094ejc.3.1688008423911;
-        Wed, 28 Jun 2023 20:13:43 -0700 (PDT)
-Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com. [209.85.208.49])
-        by smtp.gmail.com with ESMTPSA id c15-20020a170906528f00b00982a352f078sm6281264ejm.124.2023.06.28.20.13.42
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 28 Jun 2023 20:13:43 -0700 (PDT)
-Received: by mail-ed1-f49.google.com with SMTP id 4fb4d7f45d1cf-51d91e9b533so233657a12.3
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 20:13:42 -0700 (PDT)
-X-Received: by 2002:aa7:da44:0:b0:51d:9605:28fc with SMTP id
- w4-20020aa7da44000000b0051d960528fcmr7619337eds.41.1688008422437; Wed, 28 Jun
- 2023 20:13:42 -0700 (PDT)
+        Wed, 28 Jun 2023 23:16:09 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D716271B;
+        Wed, 28 Jun 2023 20:16:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=Y/a+t3d/wEGpupZ38F99LZOEtohzSmepAE5z3o2T7a8=; b=CTZhf+teSgQpgsLhWsOMru+raT
+        rGOlq5+9XWj+3Qybu/cItMXXcGn+dmBh3BYY/u+etzJuhSwhd+AwWOH+qRL4DPv8W/3xM8jy66/fP
+        CU2vEJSD/TKotnmx44dMrC/KKnaQ4IULmg/PLdoa5Bpn0lz/+5k+zb054tvw4HgIFHKBzJPcaJj8E
+        vpahTFNTvelbDXud2gdmXYPPg0CBFz6N3opF4dZ++04IyAxXRanoP+fZvOc4TL6/VIbw9sOkzlCUc
+        BdDTSfRnMtu0JlIh8odHKhw46jDxaAWUXO2p1d1V9464PAwU0zx1LgWGO2coHKwjiR4ns7GpP3Osu
+        mhzkRDCQ==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1qEi8a-004YGx-Ui; Thu, 29 Jun 2023 03:16:05 +0000
+Date:   Thu, 29 Jun 2023 04:16:04 +0100
+From:   Matthew Wilcox <willy@infradead.org>
+To:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+Cc:     Sumitra Sharma <sumitraartsy@gmail.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Ira Weiny <ira.weiny@intel.com>, Deepak R Varma <drv@mailo.com>
+Subject: Re: [PATCH] fs/vboxsf: Replace kmap() with kmap_local_{page, folio}()
+Message-ID: <ZJz3dO10o9+xV65F@casper.infradead.org>
+References: <20230627135115.GA452832@sumitra.com>
+ <ZJxqmEVKoxxftfXM@casper.infradead.org>
+ <6924669.18pcnM708K@suse>
 MIME-Version: 1.0
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Wed, 28 Jun 2023 20:13:25 -0700
-X-Gmail-Original-Message-ID: <CAHk-=whXn0YTojV=+J8B-r8KLvNtqc2JtCa4a_bdhf+=GN5OOw@mail.gmail.com>
-Message-ID: <CAHk-=whXn0YTojV=+J8B-r8KLvNtqc2JtCa4a_bdhf+=GN5OOw@mail.gmail.com>
-Subject: Build error in crypto/marvell/cesa/cipher.c
-To:     Kees Cook <keescook@chromium.org>,
-        Boris Brezillon <bbrezillon@kernel.org>,
-        Arnaud Ebalard <arno@natisbad.org>,
-        Srujana Challa <schalla@marvell.com>,
-        Mustafa Ismail <mustafa.ismail@intel.com>,
-        Shiraz Saleem <shiraz.saleem@intel.com>
-Cc:     Herbert Xu <herbert@gondor.apana.org.au>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Leon Romanovsky <leon@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <6924669.18pcnM708K@suse>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-So I don't see anything that has changed, and I suspect the only
-change is that my compiler version changed, but my arm64 build fails
-right now with FORTIFY_STRING enabled.
+On Thu, Jun 29, 2023 at 12:23:54AM +0200, Fabio M. De Francesco wrote:
+> > -	buf = kmap(page);
+> > +	do {
+> 
+> Please let me understand why you are calling vboxsf_read() in a loop, a 
+> PAGE_SIZE at a time.
 
-On arm64 I now get this warning:
+Because kmap_local_folio() can only (guarantee to) map one page at a
+time.  Also vboxsf_read() is only tested with a single page at a time.
 
-  In function 'fortify_memcpy_chk',
-    inlined from 'mv_cesa_des3_ede_setkey' and
-drivers/crypto/marvell/cesa/cipher.c:307:2:
-  ./include/linux/fortify-string.h:583:25: error: call to
-'__write_overflow_field' declared with attribute warning: detected
-write beyond size of field (1st parameter); maybe use struct_group()?
-[-Werror=attribute-warning[
+> If I understand the current code it reads a single page at offset zero of a 
+> folio and then memset() with zeros from &buf[nread] up to the end of the page. 
+> Then it seems that this function currently assume that the folio doesn't need 
+> to be read until "offset < folio_size(folio)" becomes false.
+> 
+> Does it imply that the folio is always one page sized? Doesn't it? I'm surely 
+> missing some basics...  
 
-but I haven't been compiling regularly enough to know when this
-warning suddenly started showing up.
+vboxsf does not yet claim to support large folios, so every folio that
+it sees will be only a single page in size.  Hopefully at some point
+that will change.  Again, somebody would need to test that.  In the
+meantime, if someone is going to the trouble of switching over to using
+the folio API, let's actually include support for large folios.
 
-I enabled the cesa driver on x86-64 (by also letting it build with
-COMPILE_TEST), and I do *not* see this warning on x86-64, which makes
-me think it's the compiler version that matters here.
+> > -	kunmap(page);
+> > -	unlock_page(page);
+> > +	if (!err) {
+> > +		flush_dcache_folio(folio);
+> > +		folio_mark_uptodate(folio);
+> > +	}
+> > +	folio_unlock(folio);
+> 
+> Shouldn't we call folio_lock() to lock the folio to be able to unlock with 
+> folio_unlock()?
+>  
+> If so, I can't find any neither a folio_lock() or a page_lock() in this 
+> filesystem. 
+> 
+> Again sorry for not understanding, can you please explain it?
 
-On my arm64 setup, I have gcc-13.1.1, while my x86-64 build is still 12.3.1.
+Ira gave the minimal explanation, but a slightly fuller explanation is
+that the folio is locked while it is being fetched from backing store.
+That prevents both a second thread from reading from it while another
+thread is bringing it uptodate, and two threads trying to bring it
+uptodate at the same time.
 
-But I think the warning is correct.  The problem is that the 'ctx'
-pointer is wrongly typed, and it's using "struct mv_cesa_des_ctx"
-(which has a "key[]" size of DES_KEY_SIZE).
-
-And it *should* use "struct mv_cesa_des3_ctx" which has otherwise the
-same layout, but the right key size (DES3_EDE_KEY_SIZE).
-
-Fixing that type fixes the warning.
-
-I'm actually surprised that gcc-12 doesn't seem to warn about this.
-Kees? This looks like a rather obvious overflow, which makes me think
-I'm missing something.
-
-I get a similar error in 'irdma_clr_wqes()' at
-drivers/infiniband/hw/irdma/uk.c:103 (and same thing on line 105). I
-don't see what the right solution there is, but it looks like we have
-
-        IRDMA_CQP_WQE_SIZE = 8
-        __le64 elem[IRDMA_CQP_WQE_SIZE];
-
-and it's doing a 4kB memset to that element. The mistake is not as
-obvious as in the cesa driver.
-
-Kees, any idea why I'm seeing it now? Is it the new
--fstrict-flex-arrays=3? And if so, why? None of this is about flex
-arrays...
-
-Anyway, please forward me fixes so that I can have a working arm64
-test build again....
-
-               Linus
+Most filesystems have an asynchronous read_folio, so you don't see the
+folio_unlock() in the read_folio() function; instead it's in the I/O
+completion path.  vboxsf is synchronous.
