@@ -2,127 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CFA1742AE2
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 18:56:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C324742AE3
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 18:57:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232017AbjF2Q4w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 12:56:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49272 "EHLO
+        id S231537AbjF2Q5r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 12:57:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230455AbjF2Q4t (ORCPT
+        with ESMTP id S230455AbjF2Q5o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 12:56:49 -0400
-Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42F852134;
-        Thu, 29 Jun 2023 09:56:48 -0700 (PDT)
-Date:   Thu, 29 Jun 2023 18:56:44 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=t-8ch.de; s=mail;
-        t=1688057805; bh=4elotnmXGpe3V3SJ//1GuCSRqBeSHWMIR5YI5hTtzS0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=K1MvRxqnvqIUKvTQoMgfm5QYAlTAXP1HyZqpNC4Q4Ic9UcorZnRD0KS7A+fo6cfbG
-         T0yCsDOGaILA4iyiuGDxnJsOEm9dRnUhUgDKixMRSxRvJ2HH9c2be1cFTSFPHZBeXP
-         Vulmrd3isXtcEA94fE7C2egvupwB1Ox5QsToVUkg=
-From:   Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas@t-8ch.de>
-To:     Zhangjin Wu <falcon@tinylab.org>
-Cc:     arnd@arndb.de, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, w@1wt.eu
-Subject: Re: [PATCH v1 05/17] selftests/nolibc: stat_timestamps: remove
- procfs dependency
-Message-ID: <df1f8ba1-3040-465c-804e-495f046dba7a@t-8ch.de>
-References: <5f80f3dae60f77c6b746578113e56c8fa6454143.1687344643.git.falcon@tinylab.org>
- <20230628135922.97298-1-falcon@tinylab.org>
+        Thu, 29 Jun 2023 12:57:44 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EE182D4C;
+        Thu, 29 Jun 2023 09:57:44 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9E8F0615A9;
+        Thu, 29 Jun 2023 16:57:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B82EC433C0;
+        Thu, 29 Jun 2023 16:57:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688057863;
+        bh=duJXJuih7Fd3L+sgCuJfNa9TCg06mFFsR8D0muRvx2Y=;
+        h=Subject:From:To:Date:From;
+        b=KCaKLksZdZg9s6mxr5KI3lnYwYA0JOF+TZ72sjdhCupspwO+h8LaTByFjuW+dqiRA
+         ScXv+ABQj7tfqDVaYIWXqDL3MA9kR8CunaiMvTCiBQLliAhoZ40ZwxOe6OQTPCwAJ2
+         uQHkXtrW0GsiQgQA9pRJEr45ym84Xr3F8fJrVIAcSW9QdbRlpkbUAJSY71moK8npvt
+         y+q9kE413xrqHHC7txDk8SSw0rxCr+ys6K4iF3PgV3Q14AZSlcVfGx5Rf2M5pCVaKT
+         V2UB1Os72lf6/CqecRKR5u6gazpwAXHMxo0eWX6Iko7nBFP/X8cKLE78C/FzOWC2XD
+         U1udr4XAcGYCA==
+Message-ID: <b90fda7ccdf3b2bc821d42bf54b857a041009a38.camel@kernel.org>
+Subject: [ANNOUNCE] 5.4.248-rt83
+From:   Tom Zanussi <zanussi@kernel.org>
+To:     LKML <linux-kernel@vger.kernel.org>,
+        linux-rt-users <linux-rt-users@vger.kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Carsten Emde <C.Emde@osadl.org>,
+        John Kacur <jkacur@redhat.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Daniel Wagner <wagi@monom.org>,
+        Clark Williams <williams@redhat.com>,
+        "Luis Claudio R. Goncalves" <lgoncalv@redhat.com>,
+        Tom Zanussi <zanussi@kernel.org>
+Date:   Thu, 29 Jun 2023 11:57:39 -0500
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.1-0ubuntu1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230628135922.97298-1-falcon@tinylab.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Zhangjin,
+Hello RT Folks!
 
-On 2023-06-28 21:59:22+0800, Zhangjin Wu wrote:
-> I'm preparing a revision for this series, in the past days, when I was
-> working on testing our new 'minimal' kernel config support for all of
-> the architectures, the time cost (and wait) is really appreciable and the
-> repeated develop and test is really a big pain, I can also image when you
-> was working on stack-protector and Willy was working on lots of old
-> features ;-)
+I'm pleased to announce the 5.4.248-rt83 stable release.
 
-To be honest I almost never built a kernel.
-Most of the time I tested my stuff with qemu-user.
-This made the dev-cycle really fast, especially with a binfmt setup that
-launches foreign binaries automatically with qemu-user.
+This release is just an update to the new stable 5.4.248
+version and no RT specific changes have been made.
 
-> As you explained before, I knew the idea of using '/proc/self' here is
-> important to not using a fixed-time file, besides our proposed method (make
-> sure it at least not fail, just skip for !procfs):
-> 
->     - CASE_TEST(stat_timestamps);   EXPECT_SYSZR(1, test_stat_timestamps()); break;
->     + CASE_TEST(stat_timestamps);   EXPECT_SYSZR(proc, test_stat_timestamps()); break;
-> 
-> To further avoid skip it for !procfs (I don't mean relaly disable it for the
-> default tinyconfig support, which need more discuss, at least provide the
-> possibility to pass without procfs), do you like this change? it doesn't depend
-> on 'proc' now.
-> 
->     -	if (stat("/proc/self/", &st))
->     +	if (stat("/proc/self/", &st) && stat("/init", &st) && stat("/", &st))
-> 
-> The "/init" is compiled for 'run' target every time, so, the time stamp should
-> be dynamic enough, for libc-test, the /proc/self should be always there (if
-> still not enough, we can reuse the init file list here), the "/" here is only
-> for the worst-case scene ;-)
+You can get this release via the git tree at:
 
-Both aproaches seem fine. Just skipping on !proc seems good enough.
+  git://git.kernel.org/pub/scm/linux/kernel/git/rt/linux-stable-rt.git
 
-As for enabling proc in the test configs I just tested a plain
-tinyconfig vs one with CONFIG_PROC_FS enabled:
+  branch: v5.4-rt
+  Head SHA1: b7c31a429c09685c2e24d64c119370a78cec1207
 
-tinyconfig:                  375.06user 53.21system 2:05.80elapsed
-tinyconfig + CONFIG_PROC_FS: 397.77user 56.84system 2:09.24elapsed
+Or to build 5.4.248-rt83 directly, the following patches should be applied:
 
-The overhead seems acceptable.
+  https://www.kernel.org/pub/linux/kernel/v5.x/linux-5.4.tar.xz
+
+  https://www.kernel.org/pub/linux/kernel/v5.x/patch-5.4.248.xz
+
+  https://www.kernel.org/pub/linux/kernel/projects/rt/5.4/patch-5.4.248-rt8=
+3.patch.xz
 
 
-Note as for disabling memfd:
+Enjoy!
 
-It seems currently MEMFD_CREATE is hardwired to only be enabled when
-either TMPFS or HUGETLBFS is enabled.
+   Tom
 
-But the memfd code and syscalls seem to work perfectly fine with those
-options disabled. I'll send a patch to fix up the Kconfigs to enable
-that usecase.
-
-> Thanks,
-> Zhangjin
-> 
-> > Since it is not really necessary to use /proc/self here, instead of
-> > adding a condition check, we use the always existing '/' path instead of
-> > /proc/self, this eventually let it work without procfs.
-> > 
-> > Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
-> > ---
-> >  tools/testing/selftests/nolibc/nolibc-test.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > 
-> > diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
-> > index ebec948ec808..2ef44176f7a9 100644
-> > --- a/tools/testing/selftests/nolibc/nolibc-test.c
-> > +++ b/tools/testing/selftests/nolibc/nolibc-test.c
-> > @@ -520,7 +520,7 @@ static int test_stat_timestamps(void)
-> >  	if (sizeof(st.st_atim.tv_sec) != sizeof(st.st_atime))
-> >  		return 1;
-> >  
-> > -	if (stat("/proc/self/", &st))
-> > +	if (stat("/", &st))
-> >  		return 1;
-> >  
-> >  	if (st.st_atim.tv_sec != st.st_atime || st.st_atim.tv_nsec > 1000000000)
-> > -- 
-> > 2.25.1
