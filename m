@@ -2,57 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D13E0742917
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 17:06:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37416742922
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 17:09:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232192AbjF2PGS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 11:06:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44908 "EHLO
+        id S232245AbjF2PJB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 11:09:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231497AbjF2PGN (ORCPT
+        with ESMTP id S232105AbjF2PI6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 11:06:13 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F92A30C5
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 08:06:12 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E919661573
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 15:06:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 272B9C433C8;
-        Thu, 29 Jun 2023 15:06:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688051171;
-        bh=474x6sMuA4plncvQ6IrECB4qCG3K40O5a/bmnxALyas=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=iyTCu0f5QA4FVNSB65EEfJPxXlmulwlUJtsO2jbv8BLlni96QEeX5EDltLkShm/PJ
-         Dd/2N6fgVXAy0GHo3lYMFSpbOAOrp3feuxigkYqZAndvycDVeegiz+O9bL9yKN6PBq
-         i4SIAcnevtO7DClmCfpIyv0v/gp6kXA0vDI9a+f0rJ+QiPaz+k1imVqXjMH5MVag86
-         LG3r7jEbGyS+U/Ngrdp7QcfR2uzgFIjiJbXDXMkFI7iTPxmdKdJ4j37Fzn8YiBraAP
-         Krfzykyro4RR5xPjPS0vrl5kqcAdYzXWlCnnuW4p5o+N3rnzzDe/tccoNlbk7xQae5
-         6OiE6XsELxhkQ==
-Date:   Thu, 29 Jun 2023 16:06:04 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Trevor Wu <trevor.wu@mediatek.com>
-Cc:     lgirdwood@gmail.com, tiwai@suse.com, perex@perex.cz,
-        matthias.bgg@gmail.com, angelogioacchino.delregno@collabora.com,
-        alsa-devel@alsa-project.org, linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] ASoC: mediatek: mt8188: add constraints for PCM
-Message-ID: <5995e77b-ea8e-4e88-8ca2-f716df9c9579@sirena.org.uk>
-References: <20230629075910.21982-1-trevor.wu@mediatek.com>
+        Thu, 29 Jun 2023 11:08:58 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0940F10CE;
+        Thu, 29 Jun 2023 08:08:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1688051337; x=1719587337;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=qFbYUeBDAwmHSAN5zdmlbA5OxaHvaeNOgj0I3clyMJk=;
+  b=OQHLVOrPoZbyxn5QT4ACTRJmZboKgEFPgIdmgzn1b0EPFR6xM/oOrgrh
+   N0VMTgyi0FsJSL+rLWmKYTQg1womxAmgU2M5z4MzjOLjws83nUPnAI6Hj
+   8llsU65q/Ihp6ZxSZUC8chGq1GPJD/wrqCzR6VWuvRSKzL9Ptyp48lqjZ
+   eWyaki9pVLqT+AS3LJjUrUBTy4bNXxh09oEdaUrlBXuOBa/hnnuKO+3ks
+   SwwXpKuWVU7amopfCeiwZDlTgbqvqEBWgQqZy2oTPJxoTBK22VMsOQKIa
+   KhJnp8NLQ7j6B07C+zC8rOR9f7Y47/kbeindet3R5MPn/o51b39wya6sS
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10756"; a="365618017"
+X-IronPort-AV: E=Sophos;i="6.01,168,1684825200"; 
+   d="scan'208";a="365618017"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jun 2023 08:06:34 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10756"; a="717410205"
+X-IronPort-AV: E=Sophos;i="6.01,168,1684825200"; 
+   d="scan'208";a="717410205"
+Received: from zengguan-mobl1.ccr.corp.intel.com (HELO [10.254.209.154]) ([10.254.209.154])
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jun 2023 08:06:31 -0700
+Message-ID: <d03a6324-c0e2-dfdb-7913-22f3d0e9555f@intel.com>
+Date:   Thu, 29 Jun 2023 23:06:24 +0800
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="9vDzboGe8Rh5zM2x"
-Content-Disposition: inline
-In-Reply-To: <20230629075910.21982-1-trevor.wu@mediatek.com>
-X-Cookie: Surprise due today.  Also the rent.
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH v1 4/6] KVM: x86: Add emulator helper for LASS violation
+ check
+Content-Language: en-US
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        H Peter Anvin <hpa@zytor.com>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20230601142309.6307-1-guang.zeng@intel.com>
+ <20230601142309.6307-5-guang.zeng@intel.com> <ZJsqanMgqOp6M8j/@google.com>
+From:   Zeng Guang <guang.zeng@intel.com>
+In-Reply-To: <ZJsqanMgqOp6M8j/@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -60,35 +73,77 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---9vDzboGe8Rh5zM2x
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+On 6/28/2023 2:28 AM, Sean Christopherson wrote:
+> On Thu, Jun 01, 2023, Zeng Guang wrote:
+>> When LASS is enabled, KVM need apply LASS violation check to instruction
+>> emulations. Add helper for the usage of x86 emulator to perform LASS
+>> protection.
+>>
+>> Signed-off-by: Zeng Guang <guang.zeng@intel.com>
+>> Tested-by: Xuelian Guo <xuelian.guo@intel.com>
+>> ---
+>>   arch/x86/kvm/kvm_emulate.h |  1 +
+>>   arch/x86/kvm/x86.c         | 12 ++++++++++++
+>>   2 files changed, 13 insertions(+)
+>>
+>> diff --git a/arch/x86/kvm/kvm_emulate.h b/arch/x86/kvm/kvm_emulate.h
+>> index f1439ab7c14b..fd1c2b22867e 100644
+>> --- a/arch/x86/kvm/kvm_emulate.h
+>> +++ b/arch/x86/kvm/kvm_emulate.h
+>> @@ -230,6 +230,7 @@ struct x86_emulate_ops {
+>>   	int (*leave_smm)(struct x86_emulate_ctxt *ctxt);
+>>   	void (*triple_fault)(struct x86_emulate_ctxt *ctxt);
+>>   	int (*set_xcr)(struct x86_emulate_ctxt *ctxt, u32 index, u64 xcr);
+>> +	bool (*check_lass)(struct x86_emulate_ctxt *ctxt, u64 access, u64 la, u32 flags);
+>>   };
+>>   
+>>   /* Type, address-of, and value of an instruction's operand. */
+>> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+>> index c0778ca39650..faf01fecc4ca 100644
+>> --- a/arch/x86/kvm/x86.c
+>> +++ b/arch/x86/kvm/x86.c
+>> @@ -8287,6 +8287,17 @@ static void emulator_vm_bugged(struct x86_emulate_ctxt *ctxt)
+>>   		kvm_vm_bugged(kvm);
+>>   }
+>>   
+>> +static bool emulator_check_lass(struct x86_emulate_ctxt *ctxt,
+>> +				u64 access, u64 la, u32 flags)
+>> +{
+>> +	struct kvm_vcpu *vcpu = emul_to_vcpu(ctxt);
+>> +
+>> +	if (!is_long_mode(vcpu))
+>> +		return false;
+> Likely a moot point if we wrap ->gva_to_gpa(), but most this into the vendor
+> implementation.
+It's right way to move cpu mode check into is_lass_violation(). 
+Previously I was struggling
+to expect getting benefit from separate invocation. But it doesn't help 
+much indeed.
 
-On Thu, Jun 29, 2023 at 03:59:10PM +0800, Trevor Wu wrote:
-
-> For certain projects, only a limited number of parameters are necessary.
-> Therefore, it may be beneficial to add constraints that restrict the
-> capacity of the PCM.
-
-This commit message isn't entirely clear.  The effect of the commit is
-to restrict the configurations supported when using a nau8825 but it's
-not clear what a nau8825 has to do with this or why we're doing this in
-general.  What exactly do you mean when saying that "only a limited
-number of parameters are necessary" and what makes this the case?
-
---9vDzboGe8Rh5zM2x
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmSdndsACgkQJNaLcl1U
-h9Aj1Af9EDUZJPIpv75r4jnUe38kpi7YWD4SjRP7RAdggjnFr3VblTudJeMsxBfP
-Xg9arOq/KEIqU3qGGn0ejdO0SOUF/cCS5ZUyNTcIMr3IWGUlWEn2mSZDP01MbnGg
-DrIv5lNYZ+LXxdZD4UPqIcuEp/umRN7mTp3nQxX3AqIo2BWplzSKE9yIYF4CrZvx
-XU2ZpGqV3RIR2G8avJlLdC16KL3gOQqLzPkPEctHFP2u24hnnkobgwEvBPlR9Xuy
-/TvMv8XRH3FcVqoKf82e23q0hl7W1g6DCy5N7ShqD/lRqlIjGWcUbIiaffP8f+rp
-L/kqu8AfVJw33IGr4CscKIVH29kFcA==
-=i7Ra
------END PGP SIGNATURE-----
-
---9vDzboGe8Rh5zM2x--
+>
+> And if we keep these emulator hooks, massage the patch ordering:
+>
+>    1. Add plumbing to emulator to pass new flags
+>    2. Add kvm_x86_ops definition and invocation from emulator
+>    3. Implement and wire up vmx_is_lass_violation()
+>
+> That way the changes to each area of KVM are better isolated.
+OK. Will reorganize the patch accordingly.
+Thanks.
+>> +	return static_call(kvm_x86_check_lass)(vcpu, access, la, flags);
+>> +}
+>> +
+>>   static const struct x86_emulate_ops emulate_ops = {
+>>   	.vm_bugged           = emulator_vm_bugged,
+>>   	.read_gpr            = emulator_read_gpr,
+>> @@ -8332,6 +8343,7 @@ static const struct x86_emulate_ops emulate_ops = {
+>>   	.leave_smm           = emulator_leave_smm,
+>>   	.triple_fault        = emulator_triple_fault,
+>>   	.set_xcr             = emulator_set_xcr,
+>> +	.check_lass          = emulator_check_lass,
+>>   };
+>>   
+>>   static void toggle_interruptibility(struct kvm_vcpu *vcpu, u32 mask)
+>> -- 
+>> 2.27.0
+>>
