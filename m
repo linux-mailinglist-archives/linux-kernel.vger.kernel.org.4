@@ -2,23 +2,23 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 521DB741F9F
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 07:13:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C896741FA3
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 07:13:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231783AbjF2FNV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 01:13:21 -0400
-Received: from mail-bn7nam10on2041.outbound.protection.outlook.com ([40.107.92.41]:4960
-        "EHLO NAM10-BN7-obe.outbound.protection.outlook.com"
+        id S232001AbjF2FNe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 01:13:34 -0400
+Received: from mail-bn1nam02on2048.outbound.protection.outlook.com ([40.107.212.48]:31975
+        "EHLO NAM02-BN1-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S231561AbjF2FM6 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 01:12:58 -0400
+        id S231789AbjF2FNC (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 29 Jun 2023 01:13:02 -0400
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=JR7d6lYm1vdEccg7DNUbiQY1/zg8RY8XvY7zeEWAkoDojGiwlNwJKR6McSaNnkfEzBFbY/HaPliwNXeO1/8ULRSNWyhottfBL0qWPtR0bXAPMtHpUkvWcUi9ZJS5I4F9Dztj2MR1qYdVvvMwOikrRjBWoJuWPU+fYwOD9cPwnbp7sdon/BEZQqTVDQ5x6fZhLgCqNF1pk+TcLVXyJamuMJDKK0Wby7RYm+K6RU5xnLfL81UlAWQk3TM7yXrMCBzEwF5TnVbAeS3KmVJRjvzIHOGAjpTRzHV6HTKdbczIOD4X1A7t3MIlOGMvEwoVvbp0gN8g1jfbh23hUZgnTVbdiQ==
+ b=EZBHcXpKj1ugAuPzjfjhStSHIcu0sqX+NjdFE5TycJLVitJ4aS7VkB3LhG/o9NpLCXDK0ga9D/MtTOJ1MNgkBW4GRc6HkMb+2TjwxY9mP43wx0A4qWc8BYBQ+FtSXIXAbIEMCcxCYy0/dASSQk5yZ8JaSDYvtGWn7JzjrIrPgEJxItC8IEdjlcqrH3hdRyZhgn8quuktZVn2pEPtXZnaR7RWWIJ8FiQnN8ypokINbSnCT6xMWMPv0D/Zu9oHjQnq3OXFHioHq+MBe41613u+D+lgi+Ef9CB1RN63ZPMPMK5aC+iS5wQJOOE1sIYoFQjxHgvkW2fI4kK5yhNwhIkXVA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=NCaGBkWc/W+y3OkGgYQ8Rth/qfDlr0RWBpPiGNARBL8=;
- b=Yq1V82c7X/XKMPsu869N/9EWSWmWbTqsNpzIrT0aWHsWQM2ioWBMEOdJcePpF6LofGBAFh7sKItPD2r7qz+PV7pCDrKdAN7RCOfavIUS1boaaBMIP8y3xWSxHVaW6oFZo8YFfOpViuW2vqI4ey39G+PdPZDt9Vj3lumq6rlR5uLXsiH1VNxGZOTtCzYU1TI5wVzrlc0ZoUEJEBMT5RqAQRri1TcKSVmc7N2FGDEMJglMr+CqR/pANwDomd7vwU+feNhfROSNGeyHucFWL+tfPYUzjF56Ix1Gb+rI+RgUhHo9eOu2muZDKab42HbtJT22BJvYnoGnXTRgq1+y+Nr7QQ==
+ bh=KNQQEmVq13fEPOVIpt+X4qka1BkChiXFqG8zIYLtjOU=;
+ b=CKWz9V1dFrWWtxHnUYvsADgGlaERLgxzp78iY8vt6MreAEq5g6xYvaWXFeCWfzUiFtc9S43KRhrOuZSLnPpgB8qwIH8D1BfKfsE5iOFIe2APqafOJZgYpFYCo5bzN4iBCTxpSQQtbr9pGzJ2dspD9M5r0QXhvsaNdYEtdn1Ew51QJrilwIQgZTd+a/IYYeqBURFQR2n0tF+IwFhS7K/6F1cDdzwQ1TKhLGwZWfdvQZH/haJqc8AaoA56y6uWu0UkcmBfPR2yHNL9WTf2sm91+RBHP1bsneakCSy9BufIpDwuu4IJDxhSsFw0dzaPMJ/AhRIUkLby2jV5mLIis+flEA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  216.228.118.233) smtp.rcpttodomain=kernel.org smtp.mailfrom=nvidia.com;
  dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
@@ -26,18 +26,18 @@ ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=NCaGBkWc/W+y3OkGgYQ8Rth/qfDlr0RWBpPiGNARBL8=;
- b=e7krhYOl7WckGg7N4ek8gSCtGOiNegg5nb4xP/Xp9zHXLi7qP5BbG3xBebeQ7dnP84mM9iIb6TSzZJc2YXnUTlZAac2YtWgzRCPXyMDVwGqz/dOBo6WQ58zW0V+npWjN91ZKm2jkDm4HflHuz15DMek214wXjqyyCaHb3JSTPOH5eGAwNL0t2DeYpiwMHyu8rqIICU3ad5xFcy7xJ4D2bhyuAgp3KYYnEX/oYnpUsvVe089ndcF40te+PG4hKx4Ih55PZS1pc4bPWWyn8ZzilsWLNHqwsL2EqTO8XF+M7p8mcdK5UnQeKiWm1QlIbN1uBnh4tDcbvdieBFEUVbxFeQ==
-Received: from DM6PR17CA0022.namprd17.prod.outlook.com (2603:10b6:5:1b3::35)
- by MW3PR12MB4587.namprd12.prod.outlook.com (2603:10b6:303:5d::17) with
+ bh=KNQQEmVq13fEPOVIpt+X4qka1BkChiXFqG8zIYLtjOU=;
+ b=birsNuk8aXmSpJUTT9J3WqGaPhFU9yKJHpaVDp2JwYUqvMuPQRNt98XM9dfOYRhk0eSLoeC4YyFBnNBwoLANYxmfvFpYkbCi7VqZrNcRxsYMldgjiQY03r4woZSDSzjXj2WPIc4vG/8RbMODFdE95n+WPajYJs3/PrlyGdeae9iFyr13G5LZGhBjJRpMZyfTF1BZKLqStolEIMNclwr8P0QF4nu6ZIJwfFJGzm4D/jSXxQ28JDxxAJ2mVrX2QT4cDomgAG1/2PzxPCPaRKKx15O3KtUBW/DEi9FP2qAeM20/Xhk3dpPLlTbKCA0ZRt+rhVcU7lkRsnoiZ+ck4Hf7Hw==
+Received: from DM6PR13CA0066.namprd13.prod.outlook.com (2603:10b6:5:134::43)
+ by CH3PR12MB9194.namprd12.prod.outlook.com (2603:10b6:610:19f::7) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.23; Thu, 29 Jun
- 2023 05:12:56 +0000
-Received: from DM6NAM11FT019.eop-nam11.prod.protection.outlook.com
- (2603:10b6:5:1b3:cafe::e0) by DM6PR17CA0022.outlook.office365.com
- (2603:10b6:5:1b3::35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6544.22 via Frontend
- Transport; Thu, 29 Jun 2023 05:12:55 +0000
+ 2023 05:13:00 +0000
+Received: from DM6NAM11FT021.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:5:134:cafe::4f) by DM6PR13CA0066.outlook.office365.com
+ (2603:10b6:5:134::43) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6565.8 via Frontend
+ Transport; Thu, 29 Jun 2023 05:13:00 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.118.233)
  smtp.mailfrom=nvidia.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=nvidia.com;
@@ -45,20 +45,20 @@ Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
  216.228.118.233 as permitted sender) receiver=protection.outlook.com;
  client-ip=216.228.118.233; helo=mail.nvidia.com; pr=C
 Received: from mail.nvidia.com (216.228.118.233) by
- DM6NAM11FT019.mail.protection.outlook.com (10.13.172.172) with Microsoft SMTP
+ DM6NAM11FT021.mail.protection.outlook.com (10.13.173.76) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6500.49 via Frontend Transport; Thu, 29 Jun 2023 05:12:55 +0000
-Received: from drhqmail202.nvidia.com (10.126.190.181) by mail.nvidia.com
+ 15.20.6500.49 via Frontend Transport; Thu, 29 Jun 2023 05:13:00 +0000
+Received: from drhqmail201.nvidia.com (10.126.190.180) by mail.nvidia.com
  (10.127.129.6) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Wed, 28 Jun 2023
- 22:12:44 -0700
+ 22:12:49 -0700
 Received: from drhqmail203.nvidia.com (10.126.190.182) by
- drhqmail202.nvidia.com (10.126.190.181) with Microsoft SMTP Server
+ drhqmail201.nvidia.com (10.126.190.180) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.37; Wed, 28 Jun 2023 22:12:44 -0700
+ 15.2.986.37; Wed, 28 Jun 2023 22:12:48 -0700
 Received: from audio.nvidia.com (10.127.8.10) by mail.nvidia.com
  (10.126.190.182) with Microsoft SMTP Server id 15.2.986.37 via Frontend
- Transport; Wed, 28 Jun 2023 22:12:40 -0700
+ Transport; Wed, 28 Jun 2023 22:12:44 -0700
 From:   Sameer Pujar <spujar@nvidia.com>
 To:     <broonie@kernel.org>, <robh+dt@kernel.org>, <krzk+dt@kernel.org>,
         <thierry.reding@gmail.com>, <lgirdwood@gmail.com>,
@@ -66,10 +66,11 @@ To:     <broonie@kernel.org>, <robh+dt@kernel.org>, <krzk+dt@kernel.org>,
 CC:     <jonathanh@nvidia.com>, <mkumard@nvidia.com>, <sheetal@nvidia.com>,
         <spujar@nvidia.com>, <alsa-devel@alsa-project.org>,
         <devicetree@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <stable@vger.kernel.org>
-Subject: [PATCH v2 2/5] ASoC: tegra: Fix ADX byte map
-Date:   Thu, 29 Jun 2023 10:42:14 +0530
-Message-ID: <1688015537-31682-3-git-send-email-spujar@nvidia.com>
+        <linux-kernel@vger.kernel.org>, <stable@vger.kernel.org>,
+        Oder Chiou <oder_chiou@realtek.com>
+Subject: [PATCH v2 3/5] ASoC: rt5640: Fix sleep in atomic context
+Date:   Thu, 29 Jun 2023 10:42:15 +0530
+Message-ID: <1688015537-31682-4-git-send-email-spujar@nvidia.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1688015537-31682-1-git-send-email-spujar@nvidia.com>
 References: <1688015537-31682-1-git-send-email-spujar@nvidia.com>
@@ -78,138 +79,82 @@ Content-Type: text/plain
 X-NV-OnPremToCloud: ExternallySecured
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6NAM11FT019:EE_|MW3PR12MB4587:EE_
-X-MS-Office365-Filtering-Correlation-Id: 2e3a5b56-4d55-4f99-eb33-08db785f7f80
+X-MS-TrafficTypeDiagnostic: DM6NAM11FT021:EE_|CH3PR12MB9194:EE_
+X-MS-Office365-Filtering-Correlation-Id: 76baee59-5565-4592-e672-08db785f820d
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: axkIap8FzCObjSS/oYf833Um3T4ETBPSCgLBYopNL+DauFTX09hI0PqSbFbRiEObIjDxSdNa6zcx4jeA2co9QHy0rEoBLedeb9GcUrUTmYMPy8y2nHfwU22jRCZq92ZPFS+6qW+7obb3U12jxYqez7c0en6dMOWBlAGWyuAPKjTmqFICN/Jg/sBYrlWPgLqH75klIcCQNOBdagABdf04ExpcbTAdshmRx1C+PG7g24bJtx87i0twHtRKBbxYgk5l5w0PV7kOos3wOVxA8rAAXrM/0fsvmpC2sRYOr7JVRf50WejmUQa/fkwrZ6Y4IOPTjKZe88r+4FRWVccZ0SfZEA4glf3DCail84+aSz+uCREqPHvnj0+++JKNhYlje0udwOJe/f+4j96fpSNi5lq5YMKzZZ2iYdjklx27+lIUMlShPbSoH84zhOSPOjMuBJZ2vd1B1B/4LYC1LhT44Jb/yf88DvvYQYvnk0jCYEL/r8OfEHWvhPbJIWSF0jbw7uIoSJqsnS91H3lnucIaGQ7IMcdIjLkSz6UFAf5lDSpkCKDFBZBqOo2hqQKRMfpBTL88XE0wsOc8nBQHdIZg5cd7P72ocgZ6EBBzpizdXu4RGzRQOi0ckreaC5Y7ee6ZiBCXZGD6jATNFTtpPQ4/nZ6FeDB+vjp8DWYPVs9zABnBpRTxenuxyJ6XUDmZiWCO5orEhmQsTcznRktGYx6xNC7dqizPSTZpWOxwTPvYQpF2l5rEY0cN7eHfucBA91S8wK3g
-X-Forefront-Antispam-Report: CIP:216.228.118.233;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc7edge2.nvidia.com;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(396003)(136003)(346002)(376002)(451199021)(36840700001)(46966006)(40470700004)(36756003)(82310400005)(36860700001)(82740400003)(70206006)(40460700003)(356005)(86362001)(5660300002)(316002)(7416002)(4326008)(41300700001)(8936002)(40480700001)(7636003)(8676002)(70586007)(47076005)(2906002)(7696005)(478600001)(186003)(426003)(26005)(336012)(83380400001)(110136005)(54906003)(6666004)(2616005);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: sjkADh66RIFiSxXZi2Jv4io3wRVM0/lRa5aDMqWGngw9ZuKxxDB0Mw0smZ6LvXyy7hKgWmxKwbp2rz8LT/XexsuxUbAj7uGWDQ0IhaB8UwVCpUv23tdRNl85YXMCQf7zNQwShwGmPzeirDZzVEjyHE0DujVFOFtO/Ab1F1/Z6gynjbrQtKa99I9TirCWSiSBQJTc2dQxYcOu3ILSzUstxOOu8EtirmWgBp56He8ivlZz814hZ1qdNkpg1BYlRinmDRtAlmrdSNHM+GgnuTHkabNCvfwkMvZe9nMQvMVpyrW9pElVwnbiaw2bwn20iU5TSUS/GKeTQ8UHlzD6G7bIsJ7xEA4i5BwEdzKWl40l2qtu6yioG3M6cu5z/RbmezdspjF9KnX1JP7fND+KkoCMEr1sdAzbSMcboZHDZ6H37ZUfQ1BenB2mJQFOn5kYuvlVGzMZWbcM7MFp8Ctzeo/i9WEvu2uI6tG9dXKfTR/fNlIMI/ZJ+sGKoKGJoylZK2jQ+7RuPoDEdjnocDRoPaLVymWqCsqT7ukBQr+0SLgU/PSNX4IMQf8Pq39yhJcIQWmnko3Q0wZGGMON/5xjsRWH5lylk0pDeHQzNoxweh9ArQok9QOs+LgIK/qLyCZnsQ6Py9MyA8hRkcpzgXi0FKeuWGEdFFInfHPTW9aXm/xTBdN+mra5PD0zZSJd1EI1IEcu5bRHmTiBhWBm0pSRgYz6cohAHr23R93cfpoqFd+W8IpjOfp4sT0gmDFQuZUG4FtC
+X-Forefront-Antispam-Report: CIP:216.228.118.233;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc7edge2.nvidia.com;CAT:NONE;SFS:(13230028)(4636009)(376002)(39860400002)(396003)(136003)(346002)(451199021)(46966006)(40470700004)(36840700001)(82740400003)(356005)(47076005)(83380400001)(426003)(36756003)(36860700001)(86362001)(7636003)(478600001)(110136005)(54906003)(70586007)(7696005)(40460700003)(6666004)(2616005)(4326008)(41300700001)(70206006)(316002)(8936002)(8676002)(336012)(186003)(26005)(82310400005)(40480700001)(7416002)(5660300002)(2906002);DIR:OUT;SFP:1101;
 X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Jun 2023 05:12:55.7876
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Jun 2023 05:13:00.0670
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2e3a5b56-4d55-4f99-eb33-08db785f7f80
+X-MS-Exchange-CrossTenant-Network-Message-Id: 76baee59-5565-4592-e672-08db785f820d
 X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.118.233];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT019.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT021.eop-nam11.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW3PR12MB4587
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR12MB9194
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sheetal <sheetal@nvidia.com>
+Following prints are observed while testing audio on Jetson AGX Orin which
+has onboard RT5640 audio codec:
 
-Byte mask for channel-1 of stream-1 is not getting enabled and this
-causes failures during ADX use cases. This happens because the byte
-map value 0 matches the byte map array and put() callback returns
-without enabling the corresponding bits in the byte mask.
+  BUG: sleeping function called from invalid context at kernel/workqueue.c:3027
+  in_atomic(): 1, irqs_disabled(): 128, non_block: 0, pid: 0, name: swapper/0
+  preempt_count: 10001, expected: 0
+  RCU nest depth: 0, expected: 0
+  ------------[ cut here ]------------
+  WARNING: CPU: 0 PID: 0 at kernel/irq/handle.c:159 __handle_irq_event_percpu+0x1e0/0x270
+  ---[ end trace ad1c64905aac14a6 ]-
 
-ADX supports 4 output streams and each stream can have a maximum of
-16 channels. Each byte in the input frame is uniquely mapped to a
-byte in one of these 4 outputs. This mapping is done with the help of
-byte map array via user space control setting. The byte map array
-size in the driver is 16 and each array element is of size 4 bytes.
-This corresponds to 64 byte map values.
+The IRQ handler rt5640_irq() runs in interrupt context and can sleep
+during cancel_delayed_work_sync().
 
-Each byte in the byte map array can have any value between 0 to 255
-to enable the corresponding bits in the byte mask. The value 256 is
-used as a way to disable the byte map. However the byte map array
-element cannot store this value. The put() callback disables the byte
-mask for 256 value and byte map value is reset to 0 for this case.
-This causes problems during subsequent runs since put() callback,
-for value of 0, just returns without enabling the byte mask. In short,
-the problem is coming because 0 and 256 control values are stored as
-0 in the byte map array.
+Fix this by running IRQ handler, rt5640_irq(), in thread context.
+Hence replace request_irq() calls with devm_request_threaded_irq().
 
-Right now fix the put() callback by actually looking at the byte mask
-array state to identify if any change is needed and update the fields
-accordingly. The get() callback needs an update as well to return the
-correct control value that user has set before. Note that when user
-set 256, the value is stored as 0 and byte mask is disabled. So byte
-mask state is used to either return 256 or the value from byte map
-array.
-
-Given above, this looks bit complicated and all this happens because
-the byte map array is tightly packed and cannot actually store the 256
-value. Right now the priority is to fix the existing failure and a TODO
-item is put to improve this logic.
-
-Fixes: 3c97881b8c8a ("ASoC: tegra: Fix kcontrol put callback in ADX")
+Fixes: 051dade34695 ("ASoC: rt5640: Fix the wrong state of JD1 and JD2")
 Cc: stable@vger.kernel.org
-Signed-off-by: Sheetal <sheetal@nvidia.com>
-Reviewed-by: Mohan Kumar D <mkumard@nvidia.com>
-Reviewed-by: Sameer Pujar <spujar@nvidia.com>
+Cc: Oder Chiou <oder_chiou@realtek.com>
+Signed-off-by: Sameer Pujar <spujar@nvidia.com>
 ---
- sound/soc/tegra/tegra210_adx.c | 34 ++++++++++++++++++++++------------
- 1 file changed, 22 insertions(+), 12 deletions(-)
+ sound/soc/codecs/rt5640.c | 12 +++++++-----
+ 1 file changed, 7 insertions(+), 5 deletions(-)
 
-diff --git a/sound/soc/tegra/tegra210_adx.c b/sound/soc/tegra/tegra210_adx.c
-index bd0b10c..7d003f0 100644
---- a/sound/soc/tegra/tegra210_adx.c
-+++ b/sound/soc/tegra/tegra210_adx.c
-@@ -2,7 +2,7 @@
- //
- // tegra210_adx.c - Tegra210 ADX driver
- //
--// Copyright (c) 2021 NVIDIA CORPORATION.  All rights reserved.
-+// Copyright (c) 2021-2023 NVIDIA CORPORATION.  All rights reserved.
+diff --git a/sound/soc/codecs/rt5640.c b/sound/soc/codecs/rt5640.c
+index 0ed4fa2..e24ed75 100644
+--- a/sound/soc/codecs/rt5640.c
++++ b/sound/soc/codecs/rt5640.c
+@@ -2567,9 +2567,10 @@ static void rt5640_enable_jack_detect(struct snd_soc_component *component,
+ 	if (jack_data && jack_data->use_platform_clock)
+ 		rt5640->use_platform_clock = jack_data->use_platform_clock;
  
- #include <linux/clk.h>
- #include <linux/device.h>
-@@ -175,10 +175,20 @@ static int tegra210_adx_get_byte_map(struct snd_kcontrol *kcontrol,
- 	mc = (struct soc_mixer_control *)kcontrol->private_value;
- 	enabled = adx->byte_mask[mc->reg / 32] & (1 << (mc->reg % 32));
+-	ret = request_irq(rt5640->irq, rt5640_irq,
+-			  IRQF_TRIGGER_RISING | IRQF_TRIGGER_FALLING | IRQF_ONESHOT,
+-			  "rt5640", rt5640);
++	ret = devm_request_threaded_irq(component->dev, rt5640->irq,
++					NULL, rt5640_irq,
++					IRQF_TRIGGER_RISING | IRQF_TRIGGER_FALLING | IRQF_ONESHOT,
++					"rt5640", rt5640);
+ 	if (ret) {
+ 		dev_warn(component->dev, "Failed to reguest IRQ %d: %d\n", rt5640->irq, ret);
+ 		rt5640_disable_jack_detect(component);
+@@ -2622,8 +2623,9 @@ static void rt5640_enable_hda_jack_detect(
  
-+	/*
-+	 * TODO: Simplify this logic to just return from bytes_map[]
-+	 *
-+	 * Presently below is required since bytes_map[] is
-+	 * tightly packed and cannot store the control value of 256.
-+	 * Byte mask state is used to know if 256 needs to be returned.
-+	 * Note that for control value of 256, the put() call stores 0
-+	 * in the bytes_map[] and disables the corresponding bit in
-+	 * byte_mask[].
-+	 */
- 	if (enabled)
- 		ucontrol->value.integer.value[0] = bytes_map[mc->reg];
- 	else
--		ucontrol->value.integer.value[0] = 0;
-+		ucontrol->value.integer.value[0] = 256;
+ 	rt5640->jack = jack;
  
- 	return 0;
- }
-@@ -192,19 +202,19 @@ static int tegra210_adx_put_byte_map(struct snd_kcontrol *kcontrol,
- 	int value = ucontrol->value.integer.value[0];
- 	struct soc_mixer_control *mc =
- 		(struct soc_mixer_control *)kcontrol->private_value;
-+	unsigned int mask_val = adx->byte_mask[mc->reg / 32];
- 
--	if (value == bytes_map[mc->reg])
-+	if (value >= 0 && value <= 255)
-+		mask_val |= (1 << (mc->reg % 32));
-+	else
-+		mask_val &= ~(1 << (mc->reg % 32));
-+
-+	if (mask_val == adx->byte_mask[mc->reg / 32])
- 		return 0;
- 
--	if (value >= 0 && value <= 255) {
--		/* update byte map and enable slot */
--		bytes_map[mc->reg] = value;
--		adx->byte_mask[mc->reg / 32] |= (1 << (mc->reg % 32));
--	} else {
--		/* reset byte map and disable slot */
--		bytes_map[mc->reg] = 0;
--		adx->byte_mask[mc->reg / 32] &= ~(1 << (mc->reg % 32));
--	}
-+	/* Update byte map and slot */
-+	bytes_map[mc->reg] = value % 256;
-+	adx->byte_mask[mc->reg / 32] = mask_val;
- 
- 	return 1;
- }
+-	ret = request_irq(rt5640->irq, rt5640_irq,
+-			  IRQF_TRIGGER_RISING | IRQF_ONESHOT, "rt5640", rt5640);
++	ret = devm_request_threaded_irq(component->dev, rt5640->irq,
++					NULL, rt5640_irq, IRQF_TRIGGER_RISING | IRQF_ONESHOT,
++					"rt5640", rt5640);
+ 	if (ret) {
+ 		dev_warn(component->dev, "Failed to reguest IRQ %d: %d\n", rt5640->irq, ret);
+ 		rt5640->irq = -ENXIO;
 -- 
 2.7.4
 
