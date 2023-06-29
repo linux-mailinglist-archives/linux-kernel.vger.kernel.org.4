@@ -2,425 +2,706 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB4B3742166
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 09:51:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 77963742303
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 11:14:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232083AbjF2Hux (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 03:50:53 -0400
-Received: from mail-tyzapc01on2127.outbound.protection.outlook.com ([40.107.117.127]:35187
-        "EHLO APC01-TYZ-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S232297AbjF2Hto (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 03:49:44 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=bOP5xKjmH3jd1sMuzzqsJP0+W8IX1lBv1aHEBVCdrLGW8Oy2d87kze6lZhEtMl/EjX8UTJAojiO/kvpGOO21Vn3AHHcBndfSoM6gyYT2bhhLxNuSBmlxm7vZMKknQZ7Bc51Y+EKvooJvOETkkBElH/RT+1WDeMI1GeIjCttYme+K94jfOP7vt1jOihuMDjqcZCbbYHjpMxG15H3vydsuPGv3eSRCH5xERSAWgBpNHTbjjz8Hy8JIaB0lGLUHJgOBQ18c/hRiuv1MXm/8isey7uncbgCCMRlIMcGwTc1fhlT7sfZGZH33IaY8pZ0WEK/BSo4MBs6J+bW/q3NbPlLioA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=L/W2pbIOQTMKAoxK84Mwh/sLlNSeF+DbF1pOlFJKizw=;
- b=EUiRDZ8Tx8GJpkgl107zKVV2Xoiqt2MiIRyvtqsyE7rV/g7DbDy8kE9M9X+On+arqiq7yRKUhN5y+jr8H8uR+Rrz5f+5FT6vd8+7skYw8MlGcMFS4Cch9GlgbFuUFW58kAKGEPMaiMBSbZ18rHq8JulFL1GgHM6hhlutGnGmx8oA/PYBSMgLv7vONPY5F0FKuuN2t/gIeht/17UjNZb1kP1S17dmjg/gF2QZWgG4I+PVKYWgydsgYvzwm1AgLF40k2qXokd9tAPPLGrPloT22ZpppEqB7+/i77499Nz4hCDUqLr+pNu+k5JmO/a/+dwKA+6UnB2f22ya+QH+2FfJfA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amlogic.com; dmarc=pass action=none header.from=amlogic.com;
- dkim=pass header.d=amlogic.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amlogic.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=L/W2pbIOQTMKAoxK84Mwh/sLlNSeF+DbF1pOlFJKizw=;
- b=lLa/DE73sY1ZyJB34CTsGBuZ9+7fxQddfpjP7EhFJSh+hbYsrq9IAhMXOk7meT8kWlCMDEHBAaz9AQnyQvmQrudx48+dMSjGGDL27VNczsm/vAEz33EuaP7OeSf89Q2selkocC41AahwOuYErJ+M3ekzCKv72I7h6/MNRuIh5WjsY92KV+uWRvPRwN/rHD+Tmmb3vgh4VHqEkhPqnMRSckIl67nO+aFwYIf1w9aHevT/2CYFpJ0Hj4MkVivrunc15mwFR5TlhHtbgBKpNeRLzNf8NE0V68vAACuimoV130GcA4DPiF01u4PTLXhE+LWt9pglLGBBDsrOwnhOO3oiOA==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amlogic.com;
-Received: from TYZPR03MB6896.apcprd03.prod.outlook.com (2603:1096:400:289::14)
- by TYUPR03MB7231.apcprd03.prod.outlook.com (2603:1096:400:357::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.26; Thu, 29 Jun
- 2023 07:48:50 +0000
-Received: from TYZPR03MB6896.apcprd03.prod.outlook.com
- ([fe80::e659:543b:2ac9:8fd7]) by TYZPR03MB6896.apcprd03.prod.outlook.com
- ([fe80::e659:543b:2ac9:8fd7%3]) with mapi id 15.20.6521.026; Thu, 29 Jun 2023
- 07:48:50 +0000
-Message-ID: <c99fbf55-74a1-beb6-613a-268e48cac84a@amlogic.com>
-Date:   Thu, 29 Jun 2023 15:48:45 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v6 4/4] arm64: dts: amlogic-t7-a311d2-khadas-vim4: add
- initial device-tree
-Content-Language: en-US
-To:     tanure@linux.com
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Kevin Hilman <khilman@baylibre.com>, Nick <nick@khadas.com>,
-        Artem <art@khadas.com>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-amlogic@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org
-References: <20230627091007.190958-1-tanure@linux.com>
- <20230627091007.190958-5-tanure@linux.com>
- <fd7e60d1-b99a-a425-42c9-db85236ba71e@amlogic.com>
- <CAJX_Q+1q1nbE3HxA_xG5f6vwRBfvzcfBnXiFnEfsU7KuBkTHWA@mail.gmail.com>
-From:   Xianwei Zhao <xianwei.zhao@amlogic.com>
-In-Reply-To: <CAJX_Q+1q1nbE3HxA_xG5f6vwRBfvzcfBnXiFnEfsU7KuBkTHWA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: TYCP286CA0258.JPNP286.PROD.OUTLOOK.COM
- (2603:1096:400:455::6) To TYZPR03MB6896.apcprd03.prod.outlook.com
- (2603:1096:400:289::14)
+        id S230401AbjF2JOk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 05:14:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35038 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231974AbjF2JO1 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 29 Jun 2023 05:14:27 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 396701FD8
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 02:14:24 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id 4fb4d7f45d1cf-51d80d81d6eso536876a12.1
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 02:14:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=metaspace-dk.20221208.gappssmtp.com; s=20221208; t=1688030062; x=1690622062;
+        h=content-transfer-encoding:mime-version:message-id:in-reply-to:date
+         :subject:cc:to:from:user-agent:references:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=DlzZ1d2/ORYP6oELjqeVaw3L6f3qL4E3exq1P6nXQ4Y=;
+        b=f51H0e4WnUL+0G/JvKX4bYk7GF9oHr4kElYMQfASC+6mzkQv4STqpKXQVheRY4pWKn
+         3Nwvo4aWt3VFWB0QRz3YOyN3882Mb5+ZNadDkL8a7eLjx+5ncCkocr2cHGVl2rUArQkM
+         S7AZ5XTAhyTXeQbScIC89txcoe8dmUtc8VbBqBmwQmNHPz7x6GdahsW5GI3JBndjPsub
+         dqsQDiC6hyvMRzrYoDD/2DyZouUZYWQyUo8Ys2hjif1EKd152T2PvG6we54hpHsSOh0P
+         AGPNRjawCopT+dNyIodbeCx9I2XSLlIN5Lvvdktvs1DtH3k7QeyoS2akRqfm9/gPQKHy
+         aHKA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688030062; x=1690622062;
+        h=content-transfer-encoding:mime-version:message-id:in-reply-to:date
+         :subject:cc:to:from:user-agent:references:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=DlzZ1d2/ORYP6oELjqeVaw3L6f3qL4E3exq1P6nXQ4Y=;
+        b=PPyb8+s72DT1+eikYX4+ZpVVD+mHY89yRm1t3SdS4etde1SuQ3E0BcIHZeC7au5v8u
+         gGArauRYi7l6kGtVJeXWeUQ4+AVsLyaI3mcRB3oaVUCEbjlI52FZXyRMN+nqh/1S+UFr
+         70ymFL12oYSFgvn32ZIPewYHZ1LppcwZqlkJu6tkAj/5D5+O7HUZtT50op+idOs6OfUc
+         0hq6qiou6i2fObIBIrxnK+BXhwaJTEP/uBUUGO/OGGucElZfRhWkrubpB/4fn0KyZ1QD
+         McR1b0XuNPjwOI8Hl8N35hyiGcquxFKUjiufO+dzDZaepMJdnkXBbtMMLSUHoLXGLXE9
+         +jZA==
+X-Gm-Message-State: AC+VfDwollVWsS1fjbVXrJknHUPL7jGniv1g2PGdI6iBe3xSMtbkBXrO
+        5yZgCnkBqdVRiSmbwsXbnwMnyg==
+X-Google-Smtp-Source: ACHHUZ7kftnMYz+Nq46s2BIp8BFyHSySvFCiv6/NuXbM8BEVAPomaGvHnoqQhGZ75MitAA7pW7eBFA==
+X-Received: by 2002:a05:6402:1389:b0:51a:441f:75d7 with SMTP id b9-20020a056402138900b0051a441f75d7mr23853109edv.6.1688030062122;
+        Thu, 29 Jun 2023 02:14:22 -0700 (PDT)
+Received: from localhost ([79.142.230.34])
+        by smtp.gmail.com with ESMTPSA id b16-20020aa7c6d0000000b0051d7f4f32d6sm5465499eds.96.2023.06.29.02.14.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 29 Jun 2023 02:14:21 -0700 (PDT)
+References: <20230628190649.11233-1-nmi@metaspace.dk>
+ <20230628190649.11233-4-nmi@metaspace.dk>
+ <be52be54-3178-082c-4bfc-7702308a0012@kernel.org>
+User-agent: mu4e 1.10.4; emacs 28.2.50
+From:   "Andreas Hindborg (Samsung)" <nmi@metaspace.dk>
+To:     Damien Le Moal <dlemoal@kernel.org>
+Cc:     Ming Lei <ming.lei@redhat.com>,
+        Hans Holmberg <Hans.Holmberg@wdc.com>,
+        Aravind Ramesh <Aravind.Ramesh@wdc.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        "open list:BLOCK LAYER" <linux-block@vger.kernel.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Matias Bjorling <Matias.Bjorling@wdc.com>,
+        open list <linux-kernel@vger.kernel.org>, gost.dev@samsung.com,
+        Minwoo Im <minwoo.im.dev@gmail.com>
+Subject: Re: [PATCH v4 3/4] ublk: enable zoned storage support
+Date:   Thu, 29 Jun 2023 09:50:17 +0200
+In-reply-to: <be52be54-3178-082c-4bfc-7702308a0012@kernel.org>
+Message-ID: <87ilb6y6j9.fsf@metaspace.dk>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: TYZPR03MB6896:EE_|TYUPR03MB7231:EE_
-X-MS-Office365-Filtering-Correlation-Id: bb65e2d6-e636-48d9-7181-08db78754713
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: NuR2mrVyERHB1anOxttbEH4enMqM0dEbFdeBFxMKaqWJQJx31beqRyZt1cCJrNnJpnXsaHhEJ1C6obvKx94TX/RgMkSPb9ViV5RJsqPb4780J9UczlJM+jOPM+BTlR8pztry49TZiEXi++278k/rBJwpObhxe6GXHujs4rHZA6g29pCTkn9z3Rb93kVm5BTAW4OCJuT80Pq35noIdntwXGxUnXqb8EashPzL/qcFvydBJDwZiWV8N0allefL8/tgVc0AikBnQ7TQzrQTW8kkQC6ydojfnH3RD2CpjB3jpCqSw6m4z66v16FR3tfG0u5JkIA0EroDVrqGUeelkrp+aOUI9T7xyyiYB8DaRWggiS2BwH0Af8jfqiX14eF4Lkd6SpaXQW0yoIpke0TUz02W4o/adKcIgI6DWUGv1+cMZCRN48ZvNdOyA/+3aBuBu3W3rpC1RHw4TUeFq0rCcyGa01aw9i+XCTuWq6+aETRI6UKampR7Zaf3ii5ZdKz96JQ17XkBD14pkcru8zFARwEQKZGAqupevTGBgkxWcnkFmXqjamcMw32FQM/VHP0lWirn2rVOuwKrBmxNc18e6vmlw0bTQq0fj7hzT0c8uQNVo1TmrH+a2BNBMrQB+lW1CgItAE7GrxLCn7d7qrfMRnO11Ej7rjJ6HWsucce8g6+mjG+VjHJqVHck+vFbrzUJD8MNIrUv5dsvVOCYcGOxl5yRtA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYZPR03MB6896.apcprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(346002)(39850400004)(136003)(376002)(366004)(451199021)(31686004)(7416002)(66946007)(316002)(44832011)(66476007)(6916009)(66556008)(478600001)(4326008)(36756003)(8936002)(8676002)(5660300002)(86362001)(31696002)(2906002)(54906003)(41300700001)(6486002)(53546011)(6506007)(6512007)(6666004)(186003)(83380400001)(38100700002)(26005)(2616005)(45980500001)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?M0s0R3gxOXRrTlJmaXJpOG5uNE9aRUZqQXRyazVybFl4RDA1d1k5czFqeEpX?=
- =?utf-8?B?MjYxRUp1WU95dUxUekxyVWNSVlQ4UC9vaHlGQW5ObGJUZUc0ZDRJUnhnOHd0?=
- =?utf-8?B?R0RHRGwwZ1FCV1liSXRXYS95cllsYkI4bXE5QmZ3Q1JPVCtEdVlrZmY3TnZy?=
- =?utf-8?B?bHhZTjZVanhkRHVmc200cFdoQjZodUJYQlI2Um5nS0RuV2l1bWtQbnNLUDlU?=
- =?utf-8?B?VU5oZjFrRTgwd3BKM2hVRm1SZE1aaGtSZEpUWkVWcHhhSzVQMGJFS3FOcVBN?=
- =?utf-8?B?YWRiZEwwc1p3V2pyNzllN25kY1ZvNXBoQTFxRkEyQ3dNZlMwYi80ZmFoQUpv?=
- =?utf-8?B?UWJqY05RUU82RS9KMUVOTTREV2NOYVJBRnJ1UXVycU4zOVB1MjFBQUt0eHBY?=
- =?utf-8?B?NUp0dmRFcU5hQVphSks3QWd4M0pkdlJSVU5xM3g3aTZKQjZzVndxTmJDNXVn?=
- =?utf-8?B?bHROUWowZnlkV2xabVE5U0RYMjVpZ2ZWVDMxRDJ5Y1pBM1pLRFB2NGdTU0Y1?=
- =?utf-8?B?YUdnbXJwb2t4QVJvdlhhcHpRWkw0aEdaend1M3Z5L2NoV2FuYWxLem1HRkEw?=
- =?utf-8?B?NTh1WlVPdXB1WFd6MFBpVCtjTkkyTURPbjZsRk1aY3ZQa2NRUnNvVjJNZFln?=
- =?utf-8?B?aHJKdG9UUnZERUlIL1N0K0tvZWZKa1o4TUtWQWFFNnlTK3IzbTlFNWZVR255?=
- =?utf-8?B?bkE1anFJcFdkWWp0UnZNWnJRN1QreUNIVkZIcGpUd05VMmFtN284dFJBSFJG?=
- =?utf-8?B?YlRuNUEvU2FUVjF2aDI2dUFKZ1JJQ3hZbFVKZHV1ZFpEYVNDTHQrZlpmOHJm?=
- =?utf-8?B?MXVqMFBnSnhURTBub3BDYzBJL1VDNENheURhTXVkdFdIN1dydW12QUlmQWI1?=
- =?utf-8?B?OFhnditXYkI3cG9FWisrUGlQM2tsdUNjSlM1b09GYktsMEt1TlUzM0ZEYUtY?=
- =?utf-8?B?YzJydUp5SGlZUW1LZTBsNkFoTk5UY29lZzM4T3hqSTlHWG91aDUwcVBISkhz?=
- =?utf-8?B?a3JLSHpDaDlRWmVJZDJiWnZHcSt2Y0JHOGZ2MHRmQlJFWWtvdVBENWZZdi9a?=
- =?utf-8?B?SDB1SHRIOGF5WGRJVHFudVB4Y2NyMVAxZ0c3bE50MkRpUFlJOGRlL0svQlk4?=
- =?utf-8?B?NS80SjVtK0lwZWFyQjhJYmZGd1pKRkQzVzhOMG9TdHpFQ0VIRkRBU3ZYQlU1?=
- =?utf-8?B?MDVDM2Erb2hiNkR6dTkwSkFZRzFOemI5aTFQMXZKcXRKaFFMTU1tc1F0eWRn?=
- =?utf-8?B?Nzc5MkptZ3dwbFFobWVtdmpMUzducFEranpnOHIvS1N2bFRRNFlPM0JiQUkw?=
- =?utf-8?B?TXZXMFBNS0FmT1g1QlVKZnNtZ1hpQkY5dXhpNlZNZHYwV1hWTkZnU0dESFBv?=
- =?utf-8?B?QkhjcWY0OUk3WUVCWU5kenNpdUYvRzdITmYrWHJuaVh2L3Z2bzZqWEZ4SEFv?=
- =?utf-8?B?NjJaNWFsTklmN3ovQmR6TnUrZjBNWTcrakFaeWQ5RjYwOWc2V0NIbEJ4ZWNY?=
- =?utf-8?B?d0tZckp6MTlEallBSjZvcURBd1l6ZnlqV0RRZWxZUEVEbExxVFVsNXVYbE8v?=
- =?utf-8?B?NTRqV2pPQ0xBK0VYSmV5TEJMWS9tSThDVjcxZnRPblNZbksvTWdib3VmL0dj?=
- =?utf-8?B?enh6Z0kycytuWGVaNVRPb1d4dGQza1RmVUdZcGViWTNrMG12OWQ1VkFGZTFH?=
- =?utf-8?B?VkxHK3c5RXR4dmsraEtZTkRKd0lKeHVsQ0ZzSUN6cTYremlIZ3c5OXFCaWo2?=
- =?utf-8?B?cjQrcElqK0xBNlV6SEl1RkEvZk8vWTNpMW5LZ3NKMmdFSjNpVENENlNHc1l5?=
- =?utf-8?B?aGVIRVJNcXJ0NWdkUHBHWHA1VWliencyN3QwWjdIeU1TamptNU91cWFaWWZj?=
- =?utf-8?B?YSs5MkVpa28vVzJKQ0tWb3kxSXhrb1pOWFFCRmYzNGY1dU8ydmx5RVRkVFhQ?=
- =?utf-8?B?YnMvN2dVZk5ocDhydnR1VWowZVRmbENaaGJCVFV1eGpFYi90eCtsRCtLSVZQ?=
- =?utf-8?B?dTY4S3FzQy9kN3V3YWJycDhIRHJ4NmlEclpTVEcwQUNRRWZWVHlSalZTS0lw?=
- =?utf-8?B?UlBTd0JEV1M2Q0JiT21hdGJ1T2tuSkpNVXJqSnE3dWJSNmlpaHI1b1RxNmFR?=
- =?utf-8?B?VUFRMk1KK3M3Tyt4M1Z5amprOFlpZVRZRkgwcWNYRU9FL09SWm5EanNFRmRL?=
- =?utf-8?B?NlE9PQ==?=
-X-OriginatorOrg: amlogic.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: bb65e2d6-e636-48d9-7181-08db78754713
-X-MS-Exchange-CrossTenant-AuthSource: TYZPR03MB6896.apcprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Jun 2023 07:48:50.3757
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 0df2add9-25ca-4b3a-acb4-c99ddf0b1114
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 7k9LmOVlA3JObmd8HWduT5YRBQxqslkUVr/7WY6t7CVBTxjH0T9XiAIE2KGK4uzRDcTCRHy4ebYRfRLQltIBsId5euVWeNRvzR/QzF1bPXE=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYUPR03MB7231
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+        lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
+Damien Le Moal <dlemoal@kernel.org> writes:
 
-On 2023/6/29 15:10, Lucas Tanure wrote:
-> [ EXTERNAL EMAIL ]
-> 
-> On Tue, Jun 27, 2023 at 10:21 AM Xianwei Zhao <xianwei.zhao@amlogic.com> wrote:
->>
->>
->>
->> On 2023/6/27 17:10, Lucas Tanure wrote:
->>> [ EXTERNAL EMAIL ]
->>>
->>> The Khadas VIM4 uses the Amlogic A311D2 SoC, based on the Amlogic T7 SoC
->>> family, on a board with the same form factor as the VIM3 models.
->>>
->>> - 8GB LPDDR4X 2016MHz
->>> - 32GB eMMC 5.1 storage
->>> - 32MB SPI flash
->>> - 10/100/1000 Base-T Ethernet
->>> - AP6275S Wireless (802.11 a/b/g/n/ac/ax, BT5.1)
->>> - HDMI 2.1 video
->>> - HDMI Input
->>> - 1x USB 2.0 + 1x USB 3.0 ports
->>> - 1x USB-C (power) with USB 2.0 OTG
->>> - 3x LED's (1x red, 1x blue, 1x white)
->>> - 3x buttons (power, function, reset)
->>> - M2 socket with PCIe, USB, ADC & I2C
->>> - 40pin GPIO Header
->>> - 1x micro SD card slot
->>>
->>> Signed-off-by: Lucas Tanure <tanure@linux.com>
->>> ---
->>>    arch/arm64/boot/dts/amlogic/Makefile          |   1 +
->>>    .../amlogic/amlogic-t7-a311d2-khadas-vim4.dts |  52 ++++++
->>>    arch/arm64/boot/dts/amlogic/amlogic-t7.dtsi   | 158 ++++++++++++++++++
->>>    3 files changed, 211 insertions(+)
->>>    create mode 100644 arch/arm64/boot/dts/amlogic/amlogic-t7-a311d2-khadas-vim4.dts
->>>    create mode 100644 arch/arm64/boot/dts/amlogic/amlogic-t7.dtsi
->>>
->>> diff --git a/arch/arm64/boot/dts/amlogic/Makefile b/arch/arm64/boot/dts/amlogic/Makefile
->>> index cd1c5b04890a..166fec1e4229 100644
->>> --- a/arch/arm64/boot/dts/amlogic/Makefile
->>> +++ b/arch/arm64/boot/dts/amlogic/Makefile
->>> @@ -1,4 +1,5 @@
->>>    # SPDX-License-Identifier: GPL-2.0
->>> +dtb-$(CONFIG_ARCH_MESON) += amlogic-t7-a311d2-khadas-vim4.dtb
->>>    dtb-$(CONFIG_ARCH_MESON) += meson-a1-ad401.dtb
->>>    dtb-$(CONFIG_ARCH_MESON) += meson-axg-jethome-jethub-j100.dtb
->>>    dtb-$(CONFIG_ARCH_MESON) += meson-axg-jethome-jethub-j110-rev-2.dtb
->>> diff --git a/arch/arm64/boot/dts/amlogic/amlogic-t7-a311d2-khadas-vim4.dts b/arch/arm64/boot/dts/amlogic/amlogic-t7-a311d2-khadas-vim4.dts
->>> new file mode 100644
->>> index 000000000000..5d7fb86a9738
->>> --- /dev/null
->>> +++ b/arch/arm64/boot/dts/amlogic/amlogic-t7-a311d2-khadas-vim4.dts
->>> @@ -0,0 +1,52 @@
->>> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
->>> +/*
->>> + * Copyright (c) 2022 Wesion, Inc. All rights reserved.
->>> + */
->>> +
->>> +/dts-v1/;
->>> +
->>> +#include "amlogic-t7.dtsi"
->>> +
->>> +/ {
->>> +       model = "Khadas vim4";
->>> +       compatible = "khadas,vim4", "amlogic,a311d2", "amlogic,t7";
->>> +
->>> +       aliases {
->>> +               serial0 = &uart_A;
->>> +       };
->>> +
->>> +       memory@0 {
->>> +               device_type = "memory";
->>> +               reg = <0x0 0x0 0x2 0x0>; /* 8 GB */
->>> +       };
->>> +
->>> +       reserved-memory {
->>> +               #address-cells = <2>;
->>> +               #size-cells = <2>;
->>> +               ranges;
->>> +
->>> +               /* 3 MiB reserved for ARM Trusted Firmware (BL31) */
->>> +               secmon_reserved: secmon@5000000 {
->>> +                       reg = <0x0 0x05000000 0x0 0x300000>;
->>> +                       no-map;
->>> +               };
->>> +
->>> +               /* 32 MiB reserved for ARM Trusted Firmware (BL32) */
->>> +               secmon_reserved_bl32: secmon@5300000 {
->>> +                       reg = <0x0 0x05300000 0x0 0x2000000>;
->>> +                       no-map;
->>> +               };
->>> +       };
->>> +
->>> +       xtal: xtal-clk {
->>> +               compatible = "fixed-clock";
->>> +               clock-frequency = <24000000>;
->>> +               clock-output-names = "xtal";
->>> +               #clock-cells = <0>;
->>> +       };
->>> +
->>> +};
->>> +
->>> +&uart_A {
->>> +       status = "okay";
->>> +};
->>> diff --git a/arch/arm64/boot/dts/amlogic/amlogic-t7.dtsi b/arch/arm64/boot/dts/amlogic/amlogic-t7.dtsi
->>> new file mode 100644
->>> index 000000000000..6f3971b4df99
->>> --- /dev/null
->>> +++ b/arch/arm64/boot/dts/amlogic/amlogic-t7.dtsi
->>> @@ -0,0 +1,158 @@
->>> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
->>> +/*
->>> + * Copyright (c) 2019 Amlogic, Inc. All rights reserved.
->>> + */
->>> +
->>> +#include <dt-bindings/interrupt-controller/arm-gic.h>
->>> +
->>> +/ {
->>> +       interrupt-parent = <&gic>;
->>> +       #address-cells = <2>;
->>> +       #size-cells = <2>;
->>> +
->>> +       cpus {
->>> +               #address-cells = <0x2>;
->>> +               #size-cells = <0x0>;
->>> +
->>> +               cpu-map {
->>> +                       cluster0 {
->>> +                               core0 {
->>> +                                       cpu = <&cpu100>;
->>> +                               };
->>> +                               core1 {
->>> +                                       cpu = <&cpu101>;
->>> +                               };
->>> +                               core2 {
->>> +                                       cpu = <&cpu102>;
->>> +                               };
->>> +                               core3 {
->>> +                                       cpu = <&cpu103>;
->>> +                               };
->>> +                       };
->>> +
->>> +                       cluster1 {
->>> +                               core0 {
->>> +                                       cpu = <&cpu0>;
->>> +                               };
->>> +                               core1 {
->>> +                                       cpu = <&cpu1>;
->>> +                               };
->>> +                               core2 {
->>> +                                       cpu = <&cpu2>;
->>> +                               };
->>> +                               core3 {
->>> +                                       cpu = <&cpu3>;
->>> +                               };
->>> +                       };
->>> +               };
->>> +
->>> +               cpu100: cpu@100 {
->>> +                       device_type = "cpu";
->>> +                       compatible = "arm,cortex-a53";
->>> +                       reg = <0x0 0x100>;
->>> +                       enable-method = "psci";
->>> +               };
->>> +
->>> +               cpu101: cpu@101{
->>> +                       device_type = "cpu";
->>> +                       compatible = "arm,cortex-a53";
->>> +                       reg = <0x0 0x101>;
->>> +                       enable-method = "psci";
->>> +               };
->>> +
->>> +               cpu102: cpu@102 {
->>> +                       device_type = "cpu";
->>> +                       compatible = "arm,cortex-a53";
->>> +                       reg = <0x0 0x102>;
->>> +                       enable-method = "psci";
->>> +               };
->>> +
->>> +               cpu103: cpu@103 {
->>> +                       device_type = "cpu";
->>> +                       compatible = "arm,cortex-a53";
->>> +                       reg = <0x0 0x103>;
->>> +                       enable-method = "psci";
->>> +               };
->>> +
->>> +               cpu0: cpu@0 {
->>> +                       device_type = "cpu";
->>> +                       compatible = "arm,cortex-a73";
->>> +                       reg = <0x0 0x0>;
->>> +                       enable-method = "psci";
->>> +               };
->>> +
->>> +               cpu1: cpu@1 {
->>> +                       device_type = "cpu";
->>> +                       compatible = "arm,cortex-a73";
->>> +                       reg = <0x0 0x1>;
->>> +                       enable-method = "psci";
->>> +               };
->>> +
->>> +               cpu2: cpu@2 {
->>> +                       device_type = "cpu";
->>> +                       compatible = "arm,cortex-a73";
->>> +                       reg = <0x0 0x2>;
->>> +                       enable-method = "psci";
->>> +               };
->>> +
->>> +               cpu3: cpu@3 {
->>> +                       device_type = "cpu";
->>> +                       compatible = "arm,cortex-a73";
->>> +                       reg = <0x0 0x3>;
->>> +                       enable-method = "psci";
->>> +               };
->>> +       };
->>> +
->>> +       timer {
->>> +               compatible = "arm,armv8-timer";
->>> +               interrupts = <GIC_PPI 13 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_LOW)>,
->>> +                            <GIC_PPI 14 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_LOW)>,
->>> +                            <GIC_PPI 11 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_LOW)>,
->>> +                            <GIC_PPI 10 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_LOW)>;
->>> +       };
->> cpu number is 8, not 4, need use GIC_CPU_MASK_SIMPLE(8)
->>> +
->>> +       psci {
->>> +               compatible = "arm,psci-1.0";
->>> +               method = "smc";
->>> +       };
->>> +
->>> +       sm: secure-monitor {
->>> +               compatible = "amlogic,meson-gxbb-sm";
->>> +       };
->>> +
->>> +       soc {
->>> +               compatible = "simple-bus";
->>> +               #address-cells = <2>;
->>> +               #size-cells = <2>;
->>> +               ranges;
->>> +
->>> +               gic: interrupt-controller@fff01000 {
->>> +                       compatible = "arm,gic-400";
->>> +                       #interrupt-cells = <3>;
->>> +                       #address-cells = <0>;
->>> +                       interrupt-controller;
->>> +                       reg = <0x0 0xfff01000 0 0x1000>,
->>> +                             <0x0 0xfff02000 0 0x0100>;
->>> +                       interrupts = <GIC_PPI 9 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_HIGH)>;
->> cpu number is 8, not 4, need use GIC_CPU_MASK_SIMPLE(8)
-> OK
-> 
->>> +               };
->>> +
->>> +               apb4: bus@fe000000 {
->>> +                       compatible = "simple-bus";
->>> +                       reg = <0x0 0xfe000000 0x0 0x480000>;
->>> +                       #address-cells = <2>;
->>> +                       #size-cells = <2>;
->>> +                       ranges = <0x0 0x0 0x0 0xfe000000 0x0 0x480000>;
->>> +
->>> +                       uart_A: serial@78000 {
->> use lowercase, "uart_a"
-> 
-> OK
->>> +                               compatible = "amlogic,t7-uart",
->>> +                                            "amlogic,meson-s4-uart";
->>> +                               reg = <0x0 0x78000 0x0 0x18>;
->>> +                               interrupts = <GIC_SPI 168 IRQ_TYPE_EDGE_RISING>;
->>> +                               status = "disabled";
->>> +                               clocks = <&xtal>, <&xtal>, <&xtal>
->> "xtal" why defined in  amlogic-t7-a311d2-khadas-vim4.dts files
-> 
-> The 24MHz clock is a crystal in VIm4 schematic, so its something the
-> board did to provide that clock.
-> Other boards using a311d2 could provide that clock in a different way.
-> Or are you saying that this clock is mandatory at boot time, and all
-> boards using this chip will have the same crystal?
-> 
+> On 6/29/23 04:06, Andreas Hindborg wrote:
+>> From: Andreas Hindborg <a.hindborg@samsung.com>
+>>=20
+>> Add zoned storage support to ublk: report_zones and operations:
+>>  - REQ_OP_ZONE_OPEN
+>>  - REQ_OP_ZONE_CLOSE
+>>  - REQ_OP_ZONE_FINISH
+>>  - REQ_OP_ZONE_RESET
+>>=20
+>> Note: This commit changes the ublk kernel module name from `ublk_drv.ko`=
+ to
+>> `ublk.ko` in order to link multiple translation units into the module.
+>
+> You probably could rename ublk_drv.c to ublk.c to avoid that and keep the=
+ module
+> name as it was, ublk_drv.ko.
 
-The board must use crystal, different boards maybe use different
-frequency. DTSI file be included by other DTS or DTSI files.
-It is strange that DTSI file reference DTS file's  property .
-The property "xtal" can  be defined in DTSI file, DTS file can Change 
-the "frequency" if necessary, like other property.
+OK, will change.
 
->>> +                               clock-names = "xtal", "pclk", "baud";
->>> +                       };
->>> +               };
->>> +
->>> +       };
->>> +};
->>> --
->>> 2.41.0
->>>
+>
+>>=20
+>> Signed-off-by: Andreas Hindborg <a.hindborg@samsung.com>
+>> ---
+>>  MAINTAINERS                    |   1 +
+>>  drivers/block/Kconfig          |   4 +
+>>  drivers/block/Makefile         |   4 +-
+>>  drivers/block/ublk_drv-zoned.c | 144 +++++++++++++++++++++++++++++++++
+>>  drivers/block/ublk_drv.c       |  64 +++++++++++++--
+>>  drivers/block/ublk_drv.h       |  15 ++++
+>>  include/uapi/linux/ublk_cmd.h  |  14 ++++
+>>  7 files changed, 239 insertions(+), 7 deletions(-)
+>>  create mode 100644 drivers/block/ublk_drv-zoned.c
+>>=20
+>> diff --git a/MAINTAINERS b/MAINTAINERS
+>> index ace71c90751c..db8a8deb5926 100644
+>> --- a/MAINTAINERS
+>> +++ b/MAINTAINERS
+>> @@ -21555,6 +21555,7 @@ S:	Maintained
+>>  F:	Documentation/block/ublk.rst
+>>  F:	drivers/block/ublk_drv.c
+>>  F:	drivers/block/ublk_drv.h
+>> +F:	drivers/block/ublk_drv-zoned.c
+>>  F:	include/uapi/linux/ublk_cmd.h
+>>=20=20
+>>  UCLINUX (M68KNOMMU AND COLDFIRE)
+>> diff --git a/drivers/block/Kconfig b/drivers/block/Kconfig
+>> index 5b9d4aaebb81..c58dfd035557 100644
+>> --- a/drivers/block/Kconfig
+>> +++ b/drivers/block/Kconfig
+>> @@ -402,6 +402,10 @@ config BLKDEV_UBLK_LEGACY_OPCODES
+>>  	  suggested to enable N if your application(ublk server) switches to
+>>  	  ioctl command encoding.
+>>=20=20
+>> +config BLK_DEV_UBLK_ZONED
+>> +	def_bool y
+>
+> This can be "bool" only.
+
+I did it like this because I wanted BLK_DEV_UBLK_ZONED to be set
+automatically to "y" when BLK_DEV_UBLK and BLK_DEV_ZONED are enabled.
+BLK_DEV_UBLK_ZONED has no menu entry. If we change it to "bool" it will
+be default "n" and we would have to make it appear in menuconfig to be
+manually enabled.
+
+Isn't it more sane if it is just unconditionally enabled when
+BLK_DEV_ZONED and BLK_DEV_UBLK is enabled?
+
+>
+>> +	depends on BLK_DEV_UBLK && BLK_DEV_ZONED
+>> +
+>>  source "drivers/block/rnbd/Kconfig"
+>>=20=20
+>>  endif # BLK_DEV
+>> diff --git a/drivers/block/Makefile b/drivers/block/Makefile
+>> index 101612cba303..bc1649e20ec2 100644
+>> --- a/drivers/block/Makefile
+>> +++ b/drivers/block/Makefile
+>> @@ -37,6 +37,8 @@ obj-$(CONFIG_BLK_DEV_RNBD)	+=3D rnbd/
+>>=20=20
+>>  obj-$(CONFIG_BLK_DEV_NULL_BLK)	+=3D null_blk/
+>>=20=20
+>> -obj-$(CONFIG_BLK_DEV_UBLK)			+=3D ublk_drv.o
+>> +obj-$(CONFIG_BLK_DEV_UBLK)		+=3D ublk.o
+>> +ublk-$(CONFIG_BLK_DEV_UBLK)		+=3D ublk_drv.o
+>> +ublk-$(CONFIG_BLK_DEV_UBLK_ZONED)	+=3D ublk_drv-zoned.o
+>>=20=20
+>>  swim_mod-y	:=3D swim.o swim_asm.o
+>> diff --git a/drivers/block/ublk_drv-zoned.c b/drivers/block/ublk_drv-zon=
+ed.c
+>> new file mode 100644
+>> index 000000000000..ea86bf4b3681
+>> --- /dev/null
+>> +++ b/drivers/block/ublk_drv-zoned.c
+>> @@ -0,0 +1,144 @@
+>> +// SPDX-License-Identifier: GPL-2.0
+>> +/*
+>> + * Copyright 2023 Andreas Hindborg <a.hindborg@samsung.com>
+>> + */
+>> +#include <linux/blkzoned.h>
+>> +#include <linux/ublk_cmd.h>
+>> +#include <linux/vmalloc.h>
+>> +
+>> +#include "ublk_drv.h"
+>> +
+>> +void ublk_set_nr_zones(struct ublk_device *ub)
+>> +{
+>> +	const struct ublk_param_basic *p =3D &ub->params.basic;
+>> +
+>> +	if (ub->dev_info.flags & UBLK_F_ZONED && p->chunk_sectors)
+>
+> If UBLK_F_ZONED is set but chunk_sectors is not, that is a bug on the user
+> driver side, no ? So an error message about that would be nice instead of
+> silently ignoring the zoned flag.
+
+Yes, I'll add a check to `ublk_validate_params()`.
+
+>
+>> +		ub->ub_disk->nr_zones =3D p->dev_sectors / p->chunk_sectors;
+>> +}
+>> +
+>> +void ublk_dev_param_zoned_apply(struct ublk_device *ub)
+>> +{
+>> +	const struct ublk_param_zoned *p =3D &ub->params.zoned;
+>> +
+>> +	if (ub->dev_info.flags & UBLK_F_ZONED) {
+>> +		disk_set_max_active_zones(ub->ub_disk, p->max_active_zones);
+>> +		disk_set_max_open_zones(ub->ub_disk, p->max_open_zones);
+>
+> You do not need to check if the max_active_zones and max_open_zones value=
+s are
+> sensible ? E.g. what if they are larger than the number of zones ?
+
+I don't think it will be a problem. I assume you can set them to 0 to
+indicate infinite. If user space sets them to more than the actual
+number of available zones (that user space set up also), user space will
+have to handle that when it gets a zone request for a zone outside the
+logical drive LBA space. I don't think the kernel has to care. Will this
+break anything kernel side?
+
+>
+>> +	}
+>> +}
+>> +
+>> +int ublk_revalidate_disk_zones(struct gendisk *disk)
+>> +{
+>> +	return blk_revalidate_disk_zones(disk, NULL);
+>> +}
+>
+> I do not think this helper is needed at all (see below comment on the cal=
+l site).
+
+This is required because the prototype for `blk_revalidate_disk_zones()`
+is not defined when BLK_DEV_ZONED is not defined. Without this helper
+for which the prototype is always defined, we will have a compile error
+at the call site.
+
+>
+>> +
+>> +/* Based on virtblk_alloc_report_buffer */
+>> +static void *ublk_alloc_report_buffer(struct ublk_device *ublk,
+>> +				      unsigned int nr_zones,
+>> +				      unsigned int zone_sectors, size_t *buflen)
+>> +{
+>> +	struct request_queue *q =3D ublk->ub_disk->queue;
+>> +	size_t bufsize;
+>> +	void *buf;
+>> +
+>> +	nr_zones =3D min_t(unsigned int, nr_zones,
+>> +			 get_capacity(ublk->ub_disk) >> ilog2(zone_sectors));
+>> +
+>> +	bufsize =3D nr_zones * sizeof(struct blk_zone);
+>> +	bufsize =3D
+>> +		min_t(size_t, bufsize, queue_max_hw_sectors(q) << SECTOR_SHIFT);
+>> +	bufsize =3D min_t(size_t, bufsize, queue_max_segments(q) << PAGE_SHIFT=
+);
+>> +
+>> +	while (bufsize >=3D sizeof(struct blk_zone)) {
+>> +		buf =3D __vmalloc(bufsize, GFP_KERNEL | __GFP_NORETRY);
+>> +		if (buf) {
+>> +			*buflen =3D bufsize;
+>> +			return buf;
+>> +		}
+>> +		bufsize >>=3D 1;
+>> +	}
+>> +
+>> +	bufsize =3D 0;
+>
+> This is not needed. This should rather be "*buflen =3D 0;".
+
+Yes, this an ugly oops.
+
+>
+>> +	return NULL;
+>> +}
+>> +
+>> +int ublk_report_zones(struct gendisk *disk, sector_t sector,
+>> +		      unsigned int nr_zones, report_zones_cb cb, void *data)
+>> +{
+>> +	struct ublk_device *ub =3D disk->private_data;
+>> +	unsigned int zone_size_sectors =3D disk->queue->limits.chunk_sectors;
+>> +	unsigned int first_zone =3D sector >> ilog2(zone_size_sectors);
+>> +	unsigned int done_zones =3D 0;
+>> +	unsigned int max_zones_per_request;
+>> +	struct blk_zone *buffer;
+>> +	size_t buffer_length;
+>> +
+>> +	if (!(ub->dev_info.flags & UBLK_F_ZONED))
+>
+> This is repeated a lot. So a small inline helper ublk_dev_is_zoned() woul=
+d be nice.
+
+Yes, thanks.
+
+>
+>> +		return -EOPNOTSUPP;
+>> +
+>> +	nr_zones =3D min_t(unsigned int, ub->ub_disk->nr_zones - first_zone,
+>> +			 nr_zones);
+>> +
+>> +	buffer =3D ublk_alloc_report_buffer(ub, nr_zones, zone_size_sectors,
+>> +					  &buffer_length);
+>> +	if (!buffer)
+>> +		return -ENOMEM;
+>> +
+>> +	max_zones_per_request =3D buffer_length / sizeof(struct blk_zone);
+>> +
+>> +	while (done_zones < nr_zones) {
+>> +		unsigned int remaining_zones =3D nr_zones - done_zones;
+>> +		unsigned int zones_in_request =3D min_t(
+>> +			unsigned int, remaining_zones, max_zones_per_request);
+>> +		int err =3D 0;
+>> +		struct request *req;
+>> +		struct ublk_rq_data *pdu;
+>> +		blk_status_t status;
+>> +
+>> +		memset(buffer, 0, buffer_length);
+>> +
+>> +		req =3D blk_mq_alloc_request(disk->queue, REQ_OP_DRV_IN, 0);
+>> +		if (IS_ERR(req))
+>> +			return PTR_ERR(req);
+>
+> You are leaking buffer.
+
+=F0=9F=91=8D
+
+>
+>> +
+>> +		pdu =3D blk_mq_rq_to_pdu(req);
+>> +		pdu->operation =3D UBLK_IO_OP_REPORT_ZONES;
+>> +		pdu->sector =3D sector;
+>> +		pdu->nr_sectors =3D remaining_zones * zone_size_sectors;
+>> +
+>> +		err =3D blk_rq_map_kern(disk->queue, req, buffer, buffer_length,
+>> +					GFP_KERNEL);
+>> +		if (err) {
+>> +			blk_mq_free_request(req);
+>> +			kvfree(buffer);
+>> +			return err;
+>> +		}
+>> +
+>> +		status =3D blk_execute_rq(req, 0);
+>> +		err =3D blk_status_to_errno(status);
+>> +		blk_mq_free_request(req);
+>> +		if (err) {
+>> +			kvfree(buffer);
+>> +			return err;
+>
+> You are repeating this a lot. Use a goto to cleanup on error.
+
+Ok
+
+>
+>> +		}
+>> +
+>> +		for (unsigned int i =3D 0; i < zones_in_request; i++) {
+>> +			struct blk_zone *zone =3D buffer + i;
+>> +
+>> +			err =3D cb(zone, i, data);
+>> +			if (err)
+>> +				return err;
+>> +
+>> +			done_zones++;
+>> +			sector +=3D zone_size_sectors;
+>> +
+>> +			/* A zero length zone means don't ask for more zones */
+>> +			if (!zone->len) {
+>> +				kvfree(buffer);
+>> +				return done_zones;
+>> +			}
+>> +		}
+>> +	}
+>> +
+>> +	kvfree(buffer);
+>> +	return done_zones;
+>> +}
+>> diff --git a/drivers/block/ublk_drv.c b/drivers/block/ublk_drv.c
+>> index e519dc0d9fe7..88fa39853c61 100644
+>> --- a/drivers/block/ublk_drv.c
+>> +++ b/drivers/block/ublk_drv.c
+>> @@ -57,12 +57,13 @@
+>>  		| UBLK_F_USER_RECOVERY_REISSUE \
+>>  		| UBLK_F_UNPRIVILEGED_DEV \
+>>  		| UBLK_F_CMD_IOCTL_ENCODE \
+>> -		| UBLK_F_USER_COPY)
+>> +		| UBLK_F_USER_COPY \
+>> +		| UBLK_F_ZONED)
+>>=20=20
+>>  /* All UBLK_PARAM_TYPE_* should be included here */
+>> -#define UBLK_PARAM_TYPE_ALL (UBLK_PARAM_TYPE_BASIC | \
+>> -		UBLK_PARAM_TYPE_DISCARD | UBLK_PARAM_TYPE_DEVT)
+>> -
+>> +#define UBLK_PARAM_TYPE_ALL                                \
+>> +	(UBLK_PARAM_TYPE_BASIC | UBLK_PARAM_TYPE_DISCARD | \
+>> +	 UBLK_PARAM_TYPE_DEVT | UBLK_PARAM_TYPE_ZONED)
+>>=20=20
+>>  struct ublk_uring_cmd_pdu {
+>>  	struct ublk_queue *ubq;
+>> @@ -209,6 +210,9 @@ static void ublk_dev_param_basic_apply(struct ublk_d=
+evice *ub)
+>>  		set_disk_ro(ub->ub_disk, true);
+>>=20=20
+>>  	set_capacity(ub->ub_disk, p->dev_sectors);
+>> +
+>> +	if (IS_ENABLED(CONFIG_BLK_DEV_ZONED))
+>> +		ublk_set_nr_zones(ub);
+>
+> So if the user is attempting to setup a zoned drive but the kernel does n=
+ot have
+> CONFIG_BLK_DEV_ZONED=3Dy, the user setup will be silently ignored. Not ex=
+actly
+> nice I think, unless I am missing something.
+
+We have this in `ublk_ctrl_add_dev()`:
+
+	if (!IS_ENABLED(CONFIG_BLK_DEV_ZONED))
+		ub->dev_info.flags &=3D ~UBLK_F_ZONED;
+
+User space is supposed to check the flags after the call to know the
+kernel capabilities.
+
+>
+> Also, repeating that "if (IS_ENABLED(CONFIG_BLK_DEV_ZONED))" for all zone
+> related functions is very verbose. Stub the functions in ublk_drv.h. That=
+ will
+> make the main C code lighter.
+
+Not sure what you mean "stub the functions". Like so:
+
+@@ -216,8 +216,7 @@ static void ublk_dev_param_basic_apply(struct ublk_devi=
+ce *ub)
+=20
+ 	set_capacity(ub->ub_disk, p->dev_sectors);
+=20
+-	if (IS_ENABLED(CONFIG_BLK_DEV_ZONED))
+-		ublk_set_nr_zones(ub);
++	ublk_config_nr_zones(ub);
+ }
+
+And then in the header:
+
+void ublk_config_nr_zones(struct ublk_device *ub)
+{
+	if (IS_ENABLED(CONFIG_BLK_DEV_ZONED))
+		ublk_set_nr_zones(ub);
+}
+
+Or something else?
+
+>
+>>  }
+>>=20=20
+>>  static void ublk_dev_param_discard_apply(struct ublk_device *ub)
+>> @@ -269,6 +273,9 @@ static int ublk_apply_params(struct ublk_device *ub)
+>>  	if (ub->params.types & UBLK_PARAM_TYPE_DISCARD)
+>>  		ublk_dev_param_discard_apply(ub);
+>>=20=20
+>> +	if (IS_ENABLED(CONFIG_BLK_DEV_ZONED) && (ub->params.types & UBLK_PARAM=
+_TYPE_ZONED))
+>> +		ublk_dev_param_zoned_apply(ub);
+>
+> Similar comment as above. If the user tries to apply zoned parameters to =
+a non
+> zoned drive, no error reported...
+>
+>> +
+>>  	return 0;
+>>  }
+>>=20=20
+>> @@ -439,6 +446,7 @@ static const struct block_device_operations ub_fops =
+=3D {
+>>  	.owner =3D	THIS_MODULE,
+>>  	.open =3D		ublk_open,
+>>  	.free_disk =3D	ublk_free_disk,
+>> +	.report_zones =3D	ublk_report_zones,
+>>  };
+>>=20=20
+>>  #define UBLK_MAX_PIN_PAGES	32
+>> @@ -553,7 +561,8 @@ static inline bool ublk_need_map_req(const struct re=
+quest *req)
+>>=20=20
+>>  static inline bool ublk_need_unmap_req(const struct request *req)
+>>  {
+>> -	return ublk_rq_has_data(req) && req_op(req) =3D=3D REQ_OP_READ;
+>> +	return ublk_rq_has_data(req) &&
+>> +	       (req_op(req) =3D=3D REQ_OP_READ || req_op(req) =3D=3D REQ_OP_DR=
+V_IN);
+>>  }
+>>=20=20
+>>  static int ublk_map_io(const struct ublk_queue *ubq, const struct reque=
+st *req,
+>> @@ -637,6 +646,7 @@ static blk_status_t ublk_setup_iod(struct ublk_queue=
+ *ubq, struct request *req)
+>>  {
+>>  	struct ublksrv_io_desc *iod =3D ublk_get_iod(ubq, req->tag);
+>>  	struct ublk_io *io =3D &ubq->ios[req->tag];
+>> +	struct ublk_rq_data *pdu =3D blk_mq_rq_to_pdu(req);
+>>  	u32 ublk_op;
+>>=20=20
+>>  	switch (req_op(req)) {
+>> @@ -655,6 +665,35 @@ static blk_status_t ublk_setup_iod(struct ublk_queu=
+e *ubq, struct request *req)
+>>  	case REQ_OP_WRITE_ZEROES:
+>>  		ublk_op =3D UBLK_IO_OP_WRITE_ZEROES;
+>>  		break;
+>> +	case REQ_OP_ZONE_OPEN:
+>> +		ublk_op =3D UBLK_IO_OP_ZONE_OPEN;
+>> +		break;
+>> +	case REQ_OP_ZONE_CLOSE:
+>> +		ublk_op =3D UBLK_IO_OP_ZONE_CLOSE;
+>> +		break;
+>> +	case REQ_OP_ZONE_FINISH:
+>> +		ublk_op =3D UBLK_IO_OP_ZONE_FINISH;
+>> +		break;
+>> +	case REQ_OP_ZONE_RESET:
+>> +		ublk_op =3D UBLK_IO_OP_ZONE_RESET;
+>> +		break;
+>> +	case REQ_OP_DRV_IN:
+>> +		ublk_op =3D pdu->operation;
+>> +		switch (ublk_op) {
+>> +		case UBLK_IO_OP_REPORT_ZONES:
+>> +			iod->op_flags =3D ublk_op | ublk_req_build_flags(req);
+>> +			iod->nr_sectors =3D pdu->nr_sectors;
+>> +			iod->start_sector =3D pdu->sector;
+>> +			iod->addr =3D io->addr;
+>> +			return BLK_STS_OK;
+>> +		default:
+>> +			return BLK_STS_IOERR;
+>> +		}
+>> +	case REQ_OP_ZONE_APPEND:
+>> +	case REQ_OP_ZONE_RESET_ALL:
+>> +	case REQ_OP_DRV_OUT:
+>> +		/* We do not support zone append or reset_all yet */
+>> +		fallthrough;
+>
+> Not OK ! zone append is mandatory for zoned block devices. So zone append
+> support needs to come with this patch. reset all can be a different patch=
+ as
+> that is optional.
+
+I will merge the patches. I thought it would be easier to review when split.
+
+>
+>>  	default:
+>>  		return BLK_STS_IOERR;
+>>  	}
+>> @@ -708,7 +747,8 @@ static inline void __ublk_complete_rq(struct request=
+ *req)
+>>  	 *
+>>  	 * Both the two needn't unmap.
+>>  	 */
+>> -	if (req_op(req) !=3D REQ_OP_READ && req_op(req) !=3D REQ_OP_WRITE)
+>> +	if (req_op(req) !=3D REQ_OP_READ && req_op(req) !=3D REQ_OP_WRITE &&
+>> +	    req_op(req) !=3D REQ_OP_DRV_IN)
+>>  		goto exit;
+>>=20=20
+>>  	/* for READ request, writing data in iod->addr to rq buffers */
+>> @@ -1835,6 +1875,15 @@ static int ublk_ctrl_start_dev(struct ublk_device=
+ *ub, struct io_uring_cmd *cmd)
+>>  	if (ub->nr_privileged_daemon !=3D ub->nr_queues_ready)
+>>  		set_bit(GD_SUPPRESS_PART_SCAN, &disk->state);
+>>=20=20
+>> +	if (IS_ENABLED(CONFIG_BLK_DEV_ZONED) &&
+>> +	    ub->dev_info.flags & UBLK_F_ZONED) {
+>
+> Same comment as above about error return instead of silently ignoring the=
+ zoned
+> flag for the CONFIG_BLK_DEV_ZONED=3Dn case.
+>
+>> +		disk_set_zoned(disk, BLK_ZONED_HM);
+>> +		blk_queue_required_elevator_features(disk->queue, ELEVATOR_F_ZBD_SEQ_=
+WRITE);
+>> +		ret =3D ublk_revalidate_disk_zones(disk);
+>> +		if (ret)
+>> +			goto out_put_disk;
+>
+> This should be all a helper ublk_set_zoned() or something.
+
+Ok =F0=9F=91=8D Unfortunately this block of code is split up in the zone ap=
+pend
+patch. I will see what I can do, maybe 2 functions.
+
+>
+>> +	}
+>> +
+>>  	get_device(&ub->cdev_dev);
+>>  	ub->dev_info.state =3D UBLK_S_DEV_LIVE;
+>>  	ret =3D add_disk(disk);
+>> @@ -1997,6 +2046,9 @@ static int ublk_ctrl_add_dev(struct io_uring_cmd *=
+cmd)
+>>  	if (ub->dev_info.flags & UBLK_F_USER_COPY)
+>>  		ub->dev_info.flags &=3D ~UBLK_F_NEED_GET_DATA;
+>>=20=20
+>> +	if (!IS_ENABLED(CONFIG_BLK_DEV_ZONED))
+>> +		ub->dev_info.flags &=3D ~UBLK_F_ZONED;
+>
+> Arg, no. The user should be notified with an error that he/she is attempt=
+ing to
+> create a zoned device that cannot be supported.
+
+As I wrote above, this is part of the ublk uapi. This is the way user
+space does kernel capability check. User space will check the flags when
+this call returns. @Ming did I understand this correctly or did I miss some=
+thing?
+
+>
+>> +
+>>  	/* We are not ready to support zero copy */
+>>  	ub->dev_info.flags &=3D ~UBLK_F_SUPPORT_ZERO_COPY;
+>>=20=20
+>> diff --git a/drivers/block/ublk_drv.h b/drivers/block/ublk_drv.h
+>> index f81e62256456..7242430fd6b9 100644
+>> --- a/drivers/block/ublk_drv.h
+>> +++ b/drivers/block/ublk_drv.h
+>> @@ -50,6 +50,21 @@ struct ublk_rq_data {
+>>  	struct llist_node node;
+>>=20=20
+>>  	struct kref ref;
+>> +	enum ublk_op operation;
+>> +	__u64 sector;
+>> +	__u32 nr_sectors;
+>>  };
+>>=20=20
+>> +void ublk_set_nr_zones(struct ublk_device *ub);
+>> +void ublk_dev_param_zoned_apply(struct ublk_device *ub);
+>> +int ublk_revalidate_disk_zones(struct gendisk *disk);
+>> +
+>> +#ifdef CONFIG_BLK_DEV_UBLK_ZONED
+>> +int ublk_report_zones(struct gendisk *disk, sector_t sector,
+>> +		      unsigned int nr_zones, report_zones_cb cb,
+>> +		      void *data);
+>> +#else
+>> +#define ublk_report_zones NULL
+>> +#endif
+>> +
+>>  #endif
+>> diff --git a/include/uapi/linux/ublk_cmd.h b/include/uapi/linux/ublk_cmd=
+.h
+>> index 471b3b983045..436525afffe8 100644
+>> --- a/include/uapi/linux/ublk_cmd.h
+>> +++ b/include/uapi/linux/ublk_cmd.h
+>> @@ -176,6 +176,11 @@
+>>  /* Copy between request and user buffer by pread()/pwrite() */
+>>  #define UBLK_F_USER_COPY	(1UL << 7)
+>>=20=20
+>> +/*
+>> + * Enable zoned device support
+>
+> Isn't this for "Indicate that the device is zoned" ?
+
+User space sets this flag when setting up the device to enable zoned
+storage support. Kernel may reject it. I think the wording is
+sufficient. Could be updated to:
+
+"User space sets this flag when setting up the device to request zoned
+ storage support. Kernel may deny the request by clearing the flag
+ during setup."
+
+>
+>> + */
+>> +#define UBLK_F_ZONED (1ULL << 8)
+>> +
+>>  /* device state */
+>>  #define UBLK_S_DEV_DEAD	0
+>>  #define UBLK_S_DEV_LIVE	1
+>> @@ -242,6 +247,7 @@ enum ublk_op {
+>>  	UBLK_IO_OP_ZONE_APPEND =3D 13,
+>>  	UBLK_IO_OP_ZONE_RESET =3D 15,
+>>  	__UBLK_IO_OP_DRV_IN_START =3D 32,
+>> +	UBLK_IO_OP_REPORT_ZONES =3D __UBLK_IO_OP_DRV_IN_START,
+>>  	__UBLK_IO_OP_DRV_IN_END =3D 96,
+>>  	__UBLK_IO_OP_DRV_OUT_START =3D __UBLK_IO_OP_DRV_IN_END,
+>>  	__UBLK_IO_OP_DRV_OUT_END =3D 160,
+>> @@ -342,6 +348,12 @@ struct ublk_param_devt {
+>>  	__u32   disk_minor;
+>>  };
+>>=20=20
+>> +struct ublk_param_zoned {
+>> +	__u32	max_open_zones;
+>> +	__u32	max_active_zones;
+>> +	__u8	reserved[24];
+>> +};
+>> +
+>>  struct ublk_params {
+>>  	/*
+>>  	 * Total length of parameters, userspace has to set 'len' for both
+>> @@ -353,11 +365,13 @@ struct ublk_params {
+>>  #define UBLK_PARAM_TYPE_BASIC           (1 << 0)
+>>  #define UBLK_PARAM_TYPE_DISCARD         (1 << 1)
+>>  #define UBLK_PARAM_TYPE_DEVT            (1 << 2)
+>> +#define UBLK_PARAM_TYPE_ZONED           (1 << 3)
+>>  	__u32	types;			/* types of parameter included */
+>>=20=20
+>>  	struct ublk_param_basic		basic;
+>>  	struct ublk_param_discard	discard;
+>>  	struct ublk_param_devt		devt;
+>> +	struct ublk_param_zoned	zoned;
+>>  };
+>>=20=20
+>>  #endif
+
