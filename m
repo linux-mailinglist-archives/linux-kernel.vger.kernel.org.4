@@ -2,151 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D49F742759
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 15:26:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DD4574275E
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 15:27:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231894AbjF2N0r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 09:26:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42616 "EHLO
+        id S232012AbjF2N1m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 09:27:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231929AbjF2N0k (ORCPT
+        with ESMTP id S231855AbjF2N1k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 09:26:40 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B098C2D4A;
-        Thu, 29 Jun 2023 06:26:39 -0700 (PDT)
-Received: from pps.filterd (m0353725.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35TDGKLk015851;
-        Thu, 29 Jun 2023 13:26:18 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=QsIE4YvZg+MuKCPLsytxLGBxlXmOrHMoeFDnva0uOEY=;
- b=ELtgLYVfVrWbrHzSUpHP46dmIfUtiIsPOaTfZ/v7RTnGLVViRBe7AZdaRf7qpZiKh19m
- jSbKFimF+R3TTmfzEzM/47DqzdwRKqHtQYEJP3m1fKltkkfPq0SzDFRTM0gAmBvVPjo7
- G21LYQPfzbhqtCmb6VpNBPV+Y3/fcVykD99woxFt74d0fTbnYKfdVVpvZJHshPLA6wMq
- PCDo7akSZcg9x8PYqPv3Aze2NC4jdGf5ZMvBz4D1MgCrhrIowYqmA9F94lAIEbiHUz+q
- a3/j1AHSLhflgYNardOulyKefteNmn1Asu0xJBAKd4A2Ll240unw1VC8domCzeK9tsp1 aw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3rhapqr7mj-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 29 Jun 2023 13:26:18 +0000
-Received: from m0353725.ppops.net (m0353725.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 35TDGZfU017050;
-        Thu, 29 Jun 2023 13:26:17 GMT
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3rhapqr7kn-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 29 Jun 2023 13:26:17 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 35T3p0UE004735;
-        Thu, 29 Jun 2023 13:26:15 GMT
-Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
-        by ppma03ams.nl.ibm.com (PPS) with ESMTPS id 3rdr453c1u-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 29 Jun 2023 13:26:15 +0000
-Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
-        by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 35TDQDxd41484622
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 29 Jun 2023 13:26:13 GMT
-Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 087F32004B;
-        Thu, 29 Jun 2023 13:26:13 +0000 (GMT)
-Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 09C7720040;
-        Thu, 29 Jun 2023 13:26:12 +0000 (GMT)
-Received: from [9.171.48.121] (unknown [9.171.48.121])
-        by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Thu, 29 Jun 2023 13:26:11 +0000 (GMT)
-Message-ID: <cf4f1ec3873b6c4b92ddb347d5bd3c2e2f03bf00.camel@linux.ibm.com>
-Subject: Re: [PATCH v5 00/44] treewide: Remove I/O port accessors for
- HAS_IOPORT=n
-From:   Niklas Schnelle <schnelle@linux.ibm.com>
-To:     Arnd Bergmann <arnd@arndb.de>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Heiko Carstens <hca@linux.ibm.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Uwe =?ISO-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-kernel@vger.kernel.org,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        linux-pci@vger.kernel.org, Netdev <netdev@vger.kernel.org>
-Date:   Thu, 29 Jun 2023 15:26:11 +0200
-In-Reply-To: <de4fe7d1-a0ae-40eb-a9d4-434802083e70@app.fastmail.com>
-References: <20230522105049.1467313-1-schnelle@linux.ibm.com>
-         <7b5c40f3-d25b-4082-807d-4d75dc38886d@app.fastmail.com>
-         <43a1f34a6b1c5a14519f3967dff5eb42e82ee88d.camel@linux.ibm.com>
-         <de4fe7d1-a0ae-40eb-a9d4-434802083e70@app.fastmail.com>
+        Thu, 29 Jun 2023 09:27:40 -0400
+Received: from mail-ed1-x54a.google.com (mail-ed1-x54a.google.com [IPv6:2a00:1450:4864:20::54a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 998422689
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 06:27:39 -0700 (PDT)
+Received: by mail-ed1-x54a.google.com with SMTP id 4fb4d7f45d1cf-51dd18ca0a2so450196a12.1
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 06:27:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1688045258; x=1690637258;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=RBX/ZfKOmZybnCy+TJCC1Khkdf0JaxSO6nOHYL3602s=;
+        b=74Ac2Po/8YOM/O803qScwIOjP8gYg8G4wgHxyw5rZCTNWIAlHSyGb9SzNo9Xnf5sQE
+         qzan4SM0hGh4dAHfg8JrtmpEF/sZ2DHeotQDS3yXSGNuwTKxqCLJUy2FBE/GS6RJ0JBj
+         lMH/r5u8eQ5j8+xaJAqcCaNWpwxYsUaf0VJkMFMj0Xztjh9h3z0me4Pm2E75CiDzgW1O
+         gopD6LcMIvae2qAnyV0jf4iFCXfxK2l2GJApT0fhEWXmyerE3Ghhmezd6x5eVhW/VGEJ
+         /xStz4RtSKlO3l1WpCXgOc910qGmb1vb7ex4f23C/e4mVgmMeZfJ67s5z/MxghQ6zRUA
+         gsgA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688045258; x=1690637258;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=RBX/ZfKOmZybnCy+TJCC1Khkdf0JaxSO6nOHYL3602s=;
+        b=O+mTCEB4Lx+2cnKq19xGBX6Os3gQo1xbGymX6Uv3OBM4OfpwOAaczOZuM4s4+h7RiT
+         eUHZoDMDnxs1dQVJBBhSsDTWeUBIPf0FyT/wMRR+mJ4mU+tpNC6wlOcP9LvsY98goKri
+         TMSCnFCgwsXASijYB5TXwccraYB+bcUb+06latFUDb2yGk5lY5FEP1FDFK3rOQ6Lkmd2
+         FDMqrk44geIT/1ovbl+e2qvfO2XvQny+ZlvklqdMpLNyFHpGOXXkDlflIxvu3wLRdO3a
+         VXsGv2QmR7XAdfKm7s5bLsatGZF6WVgYiSQDcuUzwYfgP5n1Z7WAnxQUlfK7fN5ZX7+2
+         4mwQ==
+X-Gm-Message-State: AC+VfDxqYQokUL1a92TAosbJQs5DAXekQsn07mbUqKoluYFZfUX/szx6
+        d94lhqrYotxXap9JRqilkKAJvPqaLPv9M2MRIA==
+X-Google-Smtp-Source: ACHHUZ68x22hc/u7loDafI2EMqho0Kd4jMofvcMTzF5nV3k/Nt4gqftj8nkSDifh1eoZn4ve45CvYUjPmmUUfNKVFw==
+X-Received: from mr-cloudtop2.c.googlers.com ([fda3:e722:ac3:cc00:31:98fb:c0a8:fb5])
+ (user=matteorizzo job=sendgmr) by 2002:a50:cdc8:0:b0:51d:7d61:a833 with SMTP
+ id h8-20020a50cdc8000000b0051d7d61a833mr1674482edj.0.1688045258087; Thu, 29
+ Jun 2023 06:27:38 -0700 (PDT)
+Date:   Thu, 29 Jun 2023 13:27:10 +0000
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.41.0.162.gfafddb0af9-goog
+Message-ID: <20230629132711.1712536-1-matteorizzo@google.com>
+Subject: [PATCH v2 0/1] Add a sysctl to disable io_uring system-wide
+From:   Matteo Rizzo <matteorizzo@google.com>
+To:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        io-uring@vger.kernel.org
+Cc:     matteorizzo@google.com, jordyzomer@google.com, evn@google.com,
+        poprdi@google.com, corbet@lwn.net, axboe@kernel.dk,
+        asml.silence@gmail.com, akpm@linux-foundation.org,
+        keescook@chromium.org, rostedt@goodmis.org,
+        dave.hansen@linux.intel.com, ribalda@chromium.org,
+        chenhuacai@kernel.org, steve@sk2.org, gpiccoli@igalia.com,
+        ldufour@linux.ibm.com, bhe@redhat.com, oleksandr@natalenko.name
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.48.3 (3.48.3-1.fc38) 
-MIME-Version: 1.0
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: BxIZCkNvLWM-htSxEtD_VuqrJkpEhI2T
-X-Proofpoint-GUID: ukF1eiTpCrqXSEgzF4YcIcJY7PrWlXJe
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-06-29_03,2023-06-27_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 mlxlogscore=999
- impostorscore=0 phishscore=0 malwarescore=0 bulkscore=0 lowpriorityscore=0
- mlxscore=0 suspectscore=0 priorityscore=1501 spamscore=0 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2305260000
- definitions=main-2306290117
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2023-06-27 at 14:53 +0200, Arnd Bergmann wrote:
-> On Tue, Jun 27, 2023, at 11:12, Niklas Schnelle wrote:
-> > On Mon, 2023-05-22 at 13:29 +0200, Arnd Bergmann wrote:
-> > >=20
-> > > Maybe let's give it another week to have more maintainers pick
-> > > up stuff from v5, and then send out a v6 as separate submissions.
-> > >=20
-> > >     Arnd
-> >=20
-> > Hi Arnd and All,
-> >=20
-> > I'm sorry there hasn't been an updated in a long time and we're missing
-> > v6.5. I've been quite busy with other work and life. Speaking of, I
-> > will be mostly out for around a month starting some time mid to end
-> > July as, if all goes well, I'm expecting to become a dad. That said, I
-> > haven't forgotten about this and your overall plan of sending per-
-> > subsystem patches sounds good, just haven't had the time to also
-> > incorporate the feedback.
->=20
-> Ok, thanks for letting us know. I just checked to see that about half
-> of your series has already made it into linux-next and is likely to
-> be part of v6.5 or already in v6.4.
->=20
-> Maybe you can start out by taking a pass at just resending the ones
-> that don't need any changes and can just get picked up after -rc1,
-> and then I'll try to have a look at whatever remains after that.
->=20
->     Arnd
+Over the last few years we've seen many critical vulnerabilities in
+io_uring[1] which could be exploited by an unprivileged process to gain
+control over the kernel. This patch introduces a new sysctl which disables
+the creation of new io_uring instances system-wide.
+
+The goal of this patch is to give distros, system admins, and cloud
+providers a way to reduce the risk of privilege escalation through io_uring
+where disabling it with seccomp or at compile time is not practical. For
+example a distro or cloud provider might want to disable io_uring by
+default and have users enable it again if they need to run a program that
+requires it. The new sysctl is designed to let a user with root on the
+machine enable and disable io_uring systemwide at runtime without requiring
+a kernel recompilation or a reboot.
+
+[1] Link: https://goo.gle/limit-iouring
+
+---
+v2:
+	* Documentation style fixes
+	* Add a third level that only disables io_uring for unprivileged
+	  processes
 
 
-Oh yeah looks better than I anticipated. I seem to have picked an odd
-base commit for "tty: serial: .." because of which Greg couldn't apply
-it so res-ending + rebase might be enough for that. By my count it
-looks like only "usb: pci-quirksL ..." needs real work and possibly the
-"drm: .." part though the discussion around cirrus doesn't look like it
-would require much work. So I'll do rebase/re-send of the easy ones
-tomorrow/next week.
+Matteo Rizzo (1):
+  Add a new sysctl to disable io_uring system-wide
 
-Thanks,
-Niklas
+ Documentation/admin-guide/sysctl/kernel.rst | 19 +++++++++++++
+ io_uring/io_uring.c                         | 30 +++++++++++++++++++++
+ 2 files changed, 49 insertions(+)
+
+-- 
+2.41.0.162.gfafddb0af9-goog
+
