@@ -2,151 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7796742274
+	by mail.lfdr.de (Postfix) with ESMTP id 7E3C0742273
 	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 10:43:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232634AbjF2Ims convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 29 Jun 2023 04:42:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52446 "EHLO
+        id S232646AbjF2Imy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 04:42:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230255AbjF2IlQ (ORCPT
+        with ESMTP id S232452AbjF2IlV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 04:41:16 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E5DD4202
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 01:38:12 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-86-mCyGUWdvOzqOD0rili5ykg-1; Thu, 29 Jun 2023 09:38:10 +0100
-X-MC-Unique: mCyGUWdvOzqOD0rili5ykg-1
-Received: from AcuMS.Aculab.com (10.202.163.4) by AcuMS.aculab.com
- (10.202.163.4) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Thu, 29 Jun
- 2023 09:38:09 +0100
-Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
- id 15.00.1497.048; Thu, 29 Jun 2023 09:38:09 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Sameer Pujar' <spujar@nvidia.com>,
-        "broonie@kernel.org" <broonie@kernel.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzk+dt@kernel.org" <krzk+dt@kernel.org>,
-        "thierry.reding@gmail.com" <thierry.reding@gmail.com>,
-        "lgirdwood@gmail.com" <lgirdwood@gmail.com>,
-        "perex@perex.cz" <perex@perex.cz>,
-        "tiwai@suse.com" <tiwai@suse.com>
-CC:     "jonathanh@nvidia.com" <jonathanh@nvidia.com>,
-        "mkumard@nvidia.com" <mkumard@nvidia.com>,
-        "sheetal@nvidia.com" <sheetal@nvidia.com>,
-        "alsa-devel@alsa-project.org" <alsa-devel@alsa-project.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>,
-        Oder Chiou <oder_chiou@realtek.com>
-Subject: RE: [PATCH v2 3/5] ASoC: rt5640: Fix sleep in atomic context
-Thread-Topic: [PATCH v2 3/5] ASoC: rt5640: Fix sleep in atomic context
-Thread-Index: AQHZqkh8hA8hSCOxA0KruUap8XcLma+hdFow
-Date:   Thu, 29 Jun 2023 08:38:09 +0000
-Message-ID: <bae9f041867e4625ad293d284566bb4f@AcuMS.aculab.com>
-References: <1688015537-31682-1-git-send-email-spujar@nvidia.com>
- <1688015537-31682-4-git-send-email-spujar@nvidia.com>
-In-Reply-To: <1688015537-31682-4-git-send-email-spujar@nvidia.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Thu, 29 Jun 2023 04:41:21 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 181B4297B;
+        Thu, 29 Jun 2023 01:40:13 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A0210614C9;
+        Thu, 29 Jun 2023 08:40:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AABC2C433C0;
+        Thu, 29 Jun 2023 08:40:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1688028012;
+        bh=AIUH8mRUplcQ3HfuP4DceQUR2BEXzAOyNoGosEpG0PU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=x4n3wIhUv1ByMeGcPTOb6H9n7hguZqKF7JqlsTu8Kg7cxVmSt3uqLHrMOL3f6JNq2
+         igHDe3mCw9jYTQayUmatdyXMcN96+kzmaN0GdCMnDYxtrF4SKkuK7z1W3zqKeDYsm7
+         bUTR2ZXy5uSbhbJ1B5xthmN01KXdYU3Vs+2ykXdY=
+Date:   Thu, 29 Jun 2023 10:40:09 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Ricardo Ribalda <ribalda@chromium.org>
+Cc:     Zubin Mithra <zsm@chromium.org>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] usb: xhci-mtk: set the dma max_seg_size
+Message-ID: <2023062942-thumb-giddily-f0e0@gregkh>
+References: <20230628-mtk-usb-v1-1-3c5b2ea3d6b9@chromium.org>
+ <CANiDSCsAgD33gMk9-CTGHuUv_b4KfRnO02ETEt6jFtQvw+6cag@mail.gmail.com>
+ <ZJystxdl0jVoe5b6@google.com>
+ <CANiDSCu3WOqK9wdLDXmW+zbckq15gmxKjtFA4Aghv6uoidO_3Q@mail.gmail.com>
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,PDS_BAD_THREAD_QP_64,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CANiDSCu3WOqK9wdLDXmW+zbckq15gmxKjtFA4Aghv6uoidO_3Q@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sameer Pujar
-> Sent: 29 June 2023 06:12
+On Thu, Jun 29, 2023 at 09:13:23AM +0200, Ricardo Ribalda wrote:
+> Hi Zubin
 > 
-> Following prints are observed while testing audio on Jetson AGX Orin which
-> has onboard RT5640 audio codec:
+> On Wed, 28 Jun 2023 at 23:57, Zubin Mithra <zsm@chromium.org> wrote:
+> >
+> > On Wed, Jun 28, 2023 at 11:04:20PM +0200, Ricardo Ribalda wrote:
+> > > On Wed, 28 Jun 2023 at 23:00, Ricardo Ribalda <ribalda@chromium.org> wrote:
+> > > >
+> > > > Allow devices to have dma operations beyond 64K, and avoid warnings such
+> > > > as:
+> > > >
+> > > > DMA-API: xhci-mtk 11200000.usb: mapping sg segment longer than device claims to support [len=98304] [max=65536]
+> > > >
+> > > > Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+> > > Reported-by: Zubin Mithra <zsm@chromium.org>
+> >
+> > Should this be cc'd to stable@ as well?
 > 
->   BUG: sleeping function called from invalid context at kernel/workqueue.c:3027
->   in_atomic(): 1, irqs_disabled(): 128, non_block: 0, pid: 0, name: swapper/0
->   preempt_count: 10001, expected: 0
->   RCU nest depth: 0, expected: 0
->   ------------[ cut here ]------------
->   WARNING: CPU: 0 PID: 0 at kernel/irq/handle.c:159 __handle_irq_event_percpu+0x1e0/0x270
->   ---[ end trace ad1c64905aac14a6 ]-
-> 
-> The IRQ handler rt5640_irq() runs in interrupt context and can sleep
-> during cancel_delayed_work_sync().
-> 
-> Fix this by running IRQ handler, rt5640_irq(), in thread context.
-> Hence replace request_irq() calls with devm_request_threaded_irq().
+> Not sure, in most of the cases this is "just" a warning fix. Let the
+> maintainer decide:
 
-My 'gut feel' is that this will just move the problem elsewhere.
+Warnings can cause reboots as the majority of the linux systems in the
+world run panic-on-warn, so yes, it should be backported.
 
-If the ISR is responsible for adding audio buffers (etc) then it is
-also not unlikely that the scheduling delays in running a threaded ISR
-will cause audio glitches if the system is busy.
+thanks,
 
-> 
-> Fixes: 051dade34695 ("ASoC: rt5640: Fix the wrong state of JD1 and JD2")
-> Cc: stable@vger.kernel.org
-> Cc: Oder Chiou <oder_chiou@realtek.com>
-> Signed-off-by: Sameer Pujar <spujar@nvidia.com>
-> ---
->  sound/soc/codecs/rt5640.c | 12 +++++++-----
->  1 file changed, 7 insertions(+), 5 deletions(-)
-> 
-> diff --git a/sound/soc/codecs/rt5640.c b/sound/soc/codecs/rt5640.c
-> index 0ed4fa2..e24ed75 100644
-> --- a/sound/soc/codecs/rt5640.c
-> +++ b/sound/soc/codecs/rt5640.c
-> @@ -2567,9 +2567,10 @@ static void rt5640_enable_jack_detect(struct snd_soc_component *component,
->  	if (jack_data && jack_data->use_platform_clock)
->  		rt5640->use_platform_clock = jack_data->use_platform_clock;
-> 
-> -	ret = request_irq(rt5640->irq, rt5640_irq,
-> -			  IRQF_TRIGGER_RISING | IRQF_TRIGGER_FALLING | IRQF_ONESHOT,
-> -			  "rt5640", rt5640);
-> +	ret = devm_request_threaded_irq(component->dev, rt5640->irq,
-> +					NULL, rt5640_irq,
-> +					IRQF_TRIGGER_RISING | IRQF_TRIGGER_FALLING | IRQF_ONESHOT,
-> +					"rt5640", rt5640);
-
-You need a comment saying this must be a threaded IRQ because the ISR
-calls cancel_delayed_work_sync().
-
-	David
-
->  	if (ret) {
->  		dev_warn(component->dev, "Failed to reguest IRQ %d: %d\n", rt5640->irq, ret);
->  		rt5640_disable_jack_detect(component);
-> @@ -2622,8 +2623,9 @@ static void rt5640_enable_hda_jack_detect(
-> 
->  	rt5640->jack = jack;
-> 
-> -	ret = request_irq(rt5640->irq, rt5640_irq,
-> -			  IRQF_TRIGGER_RISING | IRQF_ONESHOT, "rt5640", rt5640);
-> +	ret = devm_request_threaded_irq(component->dev, rt5640->irq,
-> +					NULL, rt5640_irq, IRQF_TRIGGER_RISING | IRQF_ONESHOT,
-> +					"rt5640", rt5640);
->  	if (ret) {
->  		dev_warn(component->dev, "Failed to reguest IRQ %d: %d\n", rt5640->irq, ret);
->  		rt5640->irq = -ENXIO;
-> --
-> 2.7.4
-
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
-
+greg k-h
