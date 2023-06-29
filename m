@@ -2,84 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AD7F742794
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 15:40:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 949D6742795
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 15:41:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231653AbjF2Nkw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 09:40:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46556 "EHLO
+        id S232113AbjF2NlA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 09:41:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232194AbjF2NkX (ORCPT
+        with ESMTP id S232138AbjF2Nkq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 09:40:23 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30ACE35AA;
-        Thu, 29 Jun 2023 06:40:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=M3OpBfdI1HQqAXGgDJu5F2fM4UCfWxFlAYDKoVm+Fl4=; b=Wnpn6sLkbY6VdfDukd8MvApRbV
-        zYEGeeioKp8QrP9ZJVE8r19/IaStRAdagVHdsYNmiCm4+mwdiZTe2iUA3Oy2tOfC5ne5R2EzNZNO4
-        MnOkED6r1DQuFOY4wCQeh3of63qi7ZhqlI9qCKclVBDkN0LfNmq8gNctcE3AvinuxG2M=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1qErsX-000EI5-1E; Thu, 29 Jun 2023 15:40:09 +0200
-Date:   Thu, 29 Jun 2023 15:40:09 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Sathesh Edara <sedara@marvell.com>
-Cc:     linux-kernel@vger.kernel.org, sburla@marvell.com,
-        vburru@marvell.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, netdev@vger.kernel.org,
-        hgani@marvell.com
-Subject: Re: [net-next PATCH] octeon_ep: Add control plane host and firmware
- versions.
-Message-ID: <9c470add-1a35-4f09-bba6-12b99f890a82@lunn.ch>
-References: <20230629084227.98848-1-sedara@marvell.com>
+        Thu, 29 Jun 2023 09:40:46 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66DC630FA
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 06:40:22 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 716C561554
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 13:40:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id C997AC433CA;
+        Thu, 29 Jun 2023 13:40:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688046020;
+        bh=TxOavPXw+8POPkiDSt/eNo8WZ/YgJm9JsoHOlxWJYCY=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=fOyr7gHwteA20BDlO0GXWre7OPGnaGlWDIgkQvZiZUyCmFLicskorC/pRCqnSLrNV
+         Da2pqGmWcLrGrp/j5MZsEUqcgZVu2CgVQDBdh846NLIn4wQl7cTr+ju6iHjQ86llcE
+         nXbIhv2aoY8Oe0snNIh4DFBhQ3+Md0uAo9/mSNmeki2kd6oN4xvpD2yboqiNZPZd8A
+         YOMzKyJ7CXa72WFmeZUwDvQTMFEyIGamFbcjPq+rvEvEgjU40Z87IHYaGjs2vA4mcN
+         dDVf5+jJNKCRRQP1+u24UsFLU/QeU6/FLQ3cuGswqtQ9ZpmKztC32EQ8elZPEJozFl
+         YGobldzaj9itQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id AD9D5C395D8;
+        Thu, 29 Jun 2023 13:40:20 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230629084227.98848-1-sedara@marvell.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v4] lib/test_bpf: Call page_address() on page acquired with
+ GFP_KERNEL flag
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <168804602070.32686.5893039361315012662.git-patchwork-notify@kernel.org>
+Date:   Thu, 29 Jun 2023 13:40:20 +0000
+References: <20230623151644.GA434468@sumitra.com>
+In-Reply-To: <20230623151644.GA434468@sumitra.com>
+To:     Sumitra Sharma <sumitraartsy@gmail.com>
+Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
+        haoluo@google.com, jolsa@kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, ira.weiny@intel.com,
+        fmdefrancesco@gmail.com, drv@mailo.com
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
->  int octep_ctrl_net_init(struct octep_device *oct)
->  {
->  	struct octep_ctrl_mbox *ctrl_mbox;
-> @@ -84,12 +101,22 @@ int octep_ctrl_net_init(struct octep_device *oct)
->  
->  	/* Initialize control mbox */
->  	ctrl_mbox = &oct->ctrl_mbox;
-> +	ctrl_mbox->version = OCTEP_CP_VERSION_CURRENT;
->  	ctrl_mbox->barmem = CFG_GET_CTRL_MBOX_MEM_ADDR(oct->conf);
->  	ret = octep_ctrl_mbox_init(ctrl_mbox);
->  	if (ret) {
->  		dev_err(&pdev->dev, "Failed to initialize control mbox\n");
->  		return ret;
->  	}
-> +	dev_info(&pdev->dev, "Control plane versions host: %llx, firmware: %x:%x\n",
-> +		 ctrl_mbox->version, ctrl_mbox->min_fw_version,
-> +		 ctrl_mbox->max_fw_version);
+Hello:
 
-Please consider exporting this information via devlink.
+This patch was applied to bpf/bpf-next.git (master)
+by Daniel Borkmann <daniel@iogearbox.net>:
 
-> +	ret = validate_fw_version(ctrl_mbox);
-> +	if (ret < 0) {
-> +		dev_err(&pdev->dev, "Control plane version mismatch\n");
-> +		octep_ctrl_mbox_uninit(ctrl_mbox);
-> +		return -EINVAL;
-> +	}
+On Fri, 23 Jun 2023 08:16:44 -0700 you wrote:
+> generate_test_data() acquires a page with alloc_page(GFP_KERNEL).
+> The GFP_KERNEL is typical for kernel-internal allocations.
+> The caller requires ZONE_NORMAL or a lower zone for direct access.
+> 
+> Therefore the page cannot come from ZONE_HIGHMEM. Thus there's
+> no need to map it with kmap().
+> 
+> [...]
 
-If i'm reading this correct, a mismatch is fatal, the driver probe
-will error out. That sort of thing is generally not liked. The driver
-worked so far with mismatched firmware. It should keep working, but
-not offer the features which require matching firmware.
+Here is the summary with links:
+  - [v4] lib/test_bpf: Call page_address() on page acquired with GFP_KERNEL flag
+    https://git.kernel.org/bpf/bpf-next/c/da1a055d01ed
 
-    Andrew
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
