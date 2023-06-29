@@ -2,85 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 239C6741E87
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 04:55:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F9D5741E8A
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 05:01:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231509AbjF2Cza (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 22:55:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32838 "EHLO
+        id S231450AbjF2DBF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 23:01:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231359AbjF2CzZ (ORCPT
+        with ESMTP id S231208AbjF2DAy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 22:55:25 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C362271B
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 19:55:23 -0700 (PDT)
-Received: from kwepemm600007.china.huawei.com (unknown [172.30.72.55])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Qs3036WD9zqTHZ;
-        Thu, 29 Jun 2023 10:52:35 +0800 (CST)
-Received: from [10.174.185.179] (10.174.185.179) by
- kwepemm600007.china.huawei.com (7.193.23.208) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27; Thu, 29 Jun 2023 10:55:20 +0800
-Subject: Re: [RESEND PATCH v8 04/11] bus: platform, amba, fsl-mc, PCI: Add
- device DMA ownership management
-To:     Jason Gunthorpe <jgg@nvidia.com>
-CC:     Lu Baolu <baolu.lu@linux.intel.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Kevin Tian <kevin.tian@intel.com>,
-        <linux-kernel@vger.kernel.org>, <iommu@lists.linux.dev>
-References: <20220418005000.897664-1-baolu.lu@linux.intel.com>
- <20220418005000.897664-5-baolu.lu@linux.intel.com>
- <6472f254-c3c4-8610-4a37-8d9dfdd54ce8@huawei.com>
- <ZJxFZkxvPNj74uQe@nvidia.com>
-From:   Zenghui Yu <yuzenghui@huawei.com>
-Message-ID: <c453353f-6fe7-df66-91ee-5b6a36e7d84b@huawei.com>
-Date:   Thu, 29 Jun 2023 10:55:19 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.9.0
+        Wed, 28 Jun 2023 23:00:54 -0400
+Received: from mail.nfschina.com (unknown [42.101.60.195])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 27A29E5
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 20:00:44 -0700 (PDT)
+Received: from localhost.localdomain (unknown [180.167.10.98])
+        by mail.nfschina.com (Maildata Gateway V2.8.8) with ESMTPA id 179AE604F04A2;
+        Thu, 29 Jun 2023 11:00:27 +0800 (CST)
+X-MD-Sfrom: dengxiang@nfschina.com
+X-MD-SrcIP: 180.167.10.98
+From:   dengxiang <dengxiang@nfschina.com>
+To:     tiwai@suse.com, yangyingliang@huawei.com, perex@perex.cz
+Cc:     linux-kernel@vger.kernel.org, dengxiang@nfschina.com
+Subject: [PATCH] ALSA: hda/realtek: Add quirks for Unis  H3C Desktop B760 & Q760
+Date:   Thu, 29 Jun 2023 11:00:16 +0800
+Message-Id: <20230629030016.10185-1-dengxiang@nfschina.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-In-Reply-To: <ZJxFZkxvPNj74uQe@nvidia.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.185.179]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- kwepemm600007.china.huawei.com (7.193.23.208)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/6/28 22:36, Jason Gunthorpe wrote:
-> On Mon, Jun 26, 2023 at 09:02:40PM +0800, Zenghui Yu wrote:
-> 
->> It looks like on device probe, with DEBUG_TEST_DRIVER_REMOVE,
->> .dma_configure() will be executed *twice* via the
->> really_probe()/re_probe path, and *no* .dma_cleanup() will be executed.
->> The resulting dev::iommu_group::owner_cnt is 2, which will confuse the
->> later iommu_group_dma_owner_claimed() call from VFIO on guest startup.
-> 
-> Does this work for you?
+These models use NSIWAY amplifiers for internal speaker, but cannot put
+sound outside from these amplifiers. So eapd verbs are needed to initialize
+the amplifiers. They can be added during boot to get working sound out
+of internal speaker.
 
-It works. Please feel free to add my Tested-by if you send it as a
-formal patch. Thanks.
+Signed-off-by: dengxiang <dengxiang@nfschina.com>
+---
+ sound/pci/hda/patch_realtek.c | 23 +++++++++++++++++++++++
+ 1 file changed, 23 insertions(+)
 
-> diff --git a/drivers/base/dd.c b/drivers/base/dd.c
-> index 9c09ca5c4ab68e..7145d9b940b14b 100644
-> --- a/drivers/base/dd.c
-> +++ b/drivers/base/dd.c
-> @@ -693,6 +693,8 @@ static int really_probe(struct device *dev, struct device_driver *drv)
->  
->  		device_remove(dev);
->  		driver_sysfs_remove(dev);
-> +		if (dev->bus && dev->bus->dma_cleanup)
-> +			dev->bus->dma_cleanup(dev);
->  		device_unbind_cleanup(dev);
->  
->  		goto re_probe;
+diff --git a/sound/pci/hda/patch_realtek.c b/sound/pci/hda/patch_realtek.c
+index afe8253f9a4f..0b944fe8b6ee 100644
+--- a/sound/pci/hda/patch_realtek.c
++++ b/sound/pci/hda/patch_realtek.c
+@@ -11201,6 +11201,22 @@ static void alc897_fixup_lenovo_headset_mode(struct hda_codec *codec,
+ 	}
+ }
+ 
++static const struct hda_verb alc897_unis_h3c_x500s_eapd_verbs[] = {
++		{0x14, AC_VERB_SET_EAPD_BTLENABLE, 0},
++		{ }
++};
++
++static void alc897_fixup_unis_h3c_x500s(struct hda_codec *codec,
++					  const struct hda_fixup *fix, int action)
++{
++	struct alc_spec *spec = codec->spec;
++
++	if (action != HDA_FIXUP_ACT_PRE_PROBE)
++		return;
++
++	snd_hda_add_verbs(codec, alc897_unis_h3c_x500s_eapd_verbs);
++}
++
+ static const struct coef_fw alc668_coefs[] = {
+ 	WRITE_COEF(0x01, 0xbebe), WRITE_COEF(0x02, 0xaaaa), WRITE_COEF(0x03,    0x0),
+ 	WRITE_COEF(0x04, 0x0180), WRITE_COEF(0x06,    0x0), WRITE_COEF(0x07, 0x0f80),
+@@ -11286,6 +11302,7 @@ enum {
+ 	ALC897_FIXUP_HP_HSMIC_VERB,
+ 	ALC897_FIXUP_LENOVO_HEADSET_MODE,
+ 	ALC897_FIXUP_HEADSET_MIC_PIN2,
++	ALC897_FIXUP_UNIS_H3C_X500s,
+ };
+ 
+ static const struct hda_fixup alc662_fixups[] = {
+@@ -11725,6 +11742,10 @@ static const struct hda_fixup alc662_fixups[] = {
+ 		.chained = true,
+ 		.chain_id = ALC897_FIXUP_LENOVO_HEADSET_MODE
+ 	},
++	[ALC897_FIXUP_UNIS_H3C_X500s] = {
++		.type = HDA_FIXUP_FUNC,
++		.v.func = alc897_fixup_unis_h3c_x500s,
++	},
+ };
+ 
+ static const struct snd_pci_quirk alc662_fixup_tbl[] = {
+@@ -11792,6 +11813,7 @@ static const struct snd_pci_quirk alc662_fixup_tbl[] = {
+ 	SND_PCI_QUIRK(0x1b35, 0x1234, "CZC ET26", ALC662_FIXUP_CZC_ET26),
+ 	SND_PCI_QUIRK(0x1b35, 0x2206, "CZC P10T", ALC662_FIXUP_CZC_P10T),
+ 	SND_PCI_QUIRK(0x1c6c, 0x1239, "Compaq N14JP6-V2", ALC897_FIXUP_HP_HSMIC_VERB),
++	SND_PCI_QUIRK(0x10ec, 0x0897, "UNIS H3C X500s", ALC897_FIXUP_UNIS_H3C_X500s),
+ 
+ #if 0
+ 	/* Below is a quirk table taken from the old code.
+@@ -11886,6 +11908,7 @@ static const struct hda_model_fixup alc662_fixup_models[] = {
+ 	{.id = ALC662_FIXUP_USI_HEADSET_MODE, .name = "usi-headset"},
+ 	{.id = ALC662_FIXUP_LENOVO_MULTI_CODECS, .name = "dual-codecs"},
+ 	{.id = ALC669_FIXUP_ACER_ASPIRE_ETHOS, .name = "aspire-ethos"},
++	{.id = ALC897_FIXUP_UNIS_H3C_X500s, .name = "unis-h3c-x500s"},
+ 	{}
+ };
+ 
+-- 
+2.30.2
+
