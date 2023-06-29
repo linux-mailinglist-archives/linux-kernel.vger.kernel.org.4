@@ -2,194 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55946742ACD
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 18:48:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FE7B742AD0
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 18:49:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231465AbjF2QsR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 12:48:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47542 "EHLO
+        id S231843AbjF2Qsy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 12:48:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230119AbjF2QsO (ORCPT
+        with ESMTP id S230119AbjF2Qsq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 12:48:14 -0400
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43E2A30DD
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 09:48:13 -0700 (PDT)
-Received: by mail-wm1-x332.google.com with SMTP id 5b1f17b1804b1-3fbc41398c8so902385e9.2
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 09:48:13 -0700 (PDT)
+        Thu, 29 Jun 2023 12:48:46 -0400
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A125E30DD;
+        Thu, 29 Jun 2023 09:48:44 -0700 (PDT)
+Received: by mail-pf1-x42e.google.com with SMTP id d2e1a72fcca58-666eba6f3d6so594505b3a.3;
+        Thu, 29 Jun 2023 09:48:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1688057292; x=1690649292;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Ck75qwMLAYsu4fdOQ2ZPfvL9NJwp3DUFn+wFIqZjMSI=;
-        b=QrhkhV9IESwo6EVlqZZQhK0oTx73qCOiXPBadfWgs/n0icWc2PuXxL2GkF/RAYu5sX
-         kTUfQv0/eGrp2cg2iGzNKqh24UD2CpW7HyCzsxmTEp4pYeW+rWEUXd9hJJ9jcR42fovN
-         sqp27mLeaipdXMWQ2NiRtHuDbrRC1XV+cqNhHNC2+ot5D86uLyAXESaoBeOIt3bNKQk/
-         jZrYYesikpVrajV3BU3RNN6v+SraRexHIzifmFHkTOix97RZxYNs/ANmHRHl97iToGyf
-         oHv8X0UQhefjAz5g/9cGljkH6sXnVs2+W6xa+jhPFzq4aTjnK2l8wEHHaemHdGQAdLQE
-         LwPQ==
+        d=gmail.com; s=20221208; t=1688057324; x=1690649324;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=bSki35S0PvYwPqAK7/2pZgtomNRuxO2llKu0zknsBnk=;
+        b=IK+Pu7ifwtQliKRnlj7Nn0eRKL7I9Mv61uWrAaYBBeZPmZxyj2Ylq0fHe/hNc8Qta7
+         +g2uEiGK268PijWCOTVsvTKUvA+M0aMyMQtFji356Rjm5+dteYzfddK/RcCqnMSv3qYi
+         9haTTQEfVNYrmH60/crg+3qwUN8NNDdTVEaaHTWO0m7ImgyJrRknPymq2UaxzCDvNUEG
+         x+FBxXw+/1F6EREqw8ZdTahpzV7WnthvKOk7jCx/VuudswbAWudta+SN2dFunv0W8BdE
+         57Lxf1Ho/3Is0Cprcb+XoAIZ0DUjrKlPe3vPv7oqfJ4jZX8/lywCQ4W+zjg7NMuL2CNz
+         IsQw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688057292; x=1690649292;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Ck75qwMLAYsu4fdOQ2ZPfvL9NJwp3DUFn+wFIqZjMSI=;
-        b=V6xQsiU0xXJ+0MCWOJhAPm/6PpEMEyIipBUUasxqTujrEWEL+4FLrC6kmrxPvqtfnF
-         zOGhZ32jj4mQ1mT0aMAQsUxYheEuLzAjV47tsMWYDXseM7bG2c1sbi4XX43JSKhogDpj
-         0DmLIdM3tkRzapstI1YN+2C5JCVaFxXjAz8/GTy4AlQfrchYHvnkdFe/X8hXqOtQCB68
-         M/IA6XxDEGiLNb4o/0yykg+3Ukcl1JvJpql6TQ9VMYJMZhQ2amb5CaG0ZLAe3HdXoo82
-         IJr0A3j0F+/oQPGlOtJZAzCC9gOApc9JTf8rDbgsTjPXz1PPWrQ9HWj5EZKiHXQBzt4B
-         xJhw==
-X-Gm-Message-State: AC+VfDz0Fz4MpUp9XBIhEl0jOnoAQoGeRCIRta9Xp3zc/Ri35PSoXDbQ
-        90xfSyDYs5J8o8UWNOl/WM+uEg==
-X-Google-Smtp-Source: ACHHUZ4+zHDq74XxcvyN8aG1Iu+IgudsPOO9+qu5vVtoc3b+/Y8ToE33xHz9Rjg/R5DSYGENZ6LAPg==
-X-Received: by 2002:a1c:7c08:0:b0:3fa:9939:47c with SMTP id x8-20020a1c7c08000000b003fa9939047cmr9522406wmc.37.1688057291632;
-        Thu, 29 Jun 2023 09:48:11 -0700 (PDT)
-Received: from aspen.lan (aztw-34-b2-v4wan-166919-cust780.vm26.cable.virginm.net. [82.37.195.13])
-        by smtp.gmail.com with ESMTPSA id y9-20020a7bcd89000000b003fbb5506e54sm3403487wmj.29.2023.06.29.09.48.10
+        d=1e100.net; s=20221208; t=1688057324; x=1690649324;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=bSki35S0PvYwPqAK7/2pZgtomNRuxO2llKu0zknsBnk=;
+        b=WtDGBLt44+Ltpl9eXEn5u8iN0qiMXNkRGD0wfp+W2pY43NGxib87nIqZya6I8y9N7s
+         Mrrxh5l8HKEdWlhaHw8HHDz3AEE75ZhFYZCoYabWqmNgK2NGsJlo9JfQ0ZnKDTwSSxGP
+         fCNo4DGtIc8QrPKslCxn5cPVksu4hP+m4sLDoTwJA1yToex5htHgQxOPXHS1GHQCNbHa
+         2znaEdC6OE4oGhuX7+EljS5KAbMEPRC4gyBkpkCeO6wJCtOvuA2D0wFbq79J5C3pLA8q
+         oJAphfGyS4E1dyvAKqrp34zoYZZGIo935IQEPE6FGXYeVELkYVlkTQYzJFNxULJEH2Lu
+         2B0A==
+X-Gm-Message-State: ABy/qLZeQD+/N5QYy3/EIWpZrg2OvI3X6HMtzsFaRB0bxIocMMzKjQs5
+        sdCY+ITHvGrAOXf1u740kYA=
+X-Google-Smtp-Source: APBJJlFLalmrW00cv9nDfJaWZuxENtV9pNZdmFCIw6hOxO1KZHGUQnax8YXliaHN1g7SEU5Mf0q1ng==
+X-Received: by 2002:a05:6a00:b92:b0:680:fa5f:4ed6 with SMTP id g18-20020a056a000b9200b00680fa5f4ed6mr545799pfj.27.1688057323982;
+        Thu, 29 Jun 2023 09:48:43 -0700 (PDT)
+Received: from localhost.localdomain ([114.84.30.247])
+        by smtp.gmail.com with ESMTPSA id k6-20020aa78206000000b0064aea45b040sm8557339pfi.168.2023.06.29.09.48.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Jun 2023 09:48:11 -0700 (PDT)
-Date:   Thu, 29 Jun 2023 17:48:09 +0100
-From:   Daniel Thompson <daniel.thompson@linaro.org>
-To:     Douglas Anderson <dianders@chromium.org>
-Cc:     Aaron Tomlin <atomlin@atomlin.com>,
-        Jason Wessel <jason.wessel@windriver.com>,
-        John Ogness <john.ogness@linutronix.de>,
-        Petr Mladek <pmladek@suse.com>,
-        kgdb-bugreport@lists.sourceforge.net, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] kdb: Handle LF in the command parser
-Message-ID: <20230629164809.GA2872423@aspen.lan>
-References: <20230628125612.1.I5cc6c3d916195f5bcfdf5b75d823f2037707f5dc@changeid>
+        Thu, 29 Jun 2023 09:48:42 -0700 (PDT)
+From:   Like Xu <like.xu.linux@gmail.com>
+X-Google-Original-From: Like Xu <likexu@tencent.com>
+To:     Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] KVM: x86/tsc: Update guest tsc_offset again before vcpu first runs
+Date:   Fri, 30 Jun 2023 00:48:38 +0800
+Message-Id: <20230629164838.66847-1-likexu@tencent.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230628125612.1.I5cc6c3d916195f5bcfdf5b75d823f2037707f5dc@changeid>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 28, 2023 at 12:56:17PM -0700, Douglas Anderson wrote:
-> The main kdb command parser only handles CR (ASCII 13 AKA '\r') today,
-> but not LF (ASCII 10 AKA '\n'). That means that the kdb command parser
-> can handle terminals that send just CR or that send CR+LF but can't
-> handle terminals that send just LF.
->
-> The fact that kdb didn't handle LF in the command parser tripped up a
-> tool I tried to use with it. Specifically, I was trying to send a
-> command to my device to resume it from kdb using a ChromeOS tool like:
->   dut-control cpu_uart_cmd:"g"
-> That tool only terminates lines with LF, not CR+LF.
->
-> Arguably the ChromeOS tool should be fixed. After all, officially kdb
-> seems to be designed such that CR+LF is the official line ending
-> transmitted over the wire and that internally a line ending is just
-> '\n' (LF). Some evidence:
-> * uart_poll_put_char(), which is used by kdb, notices a '\n' and
->   converts it to '\r\n'.
-> * kdb functions specifically use '\r' to get a carriage return without
->   a newline. You can see this in the pager where kdb will write a '\r'
->   and then write over the pager prompt.
+From: Like Xu <likexu@tencent.com>
 
-I'd view this as simply "what you have to do drive a terminal correctly"
-rather than indicating what the official newline protocol for kdb is.
-With a human and a terminal emulator I would expect the typical input to
-be CR-only (and that's what I setup the test suite to send ;-)).
+When a new vcpu is created and subsequently restored by vcpu snapshot,
+apply kvm_vcpu_write_tsc_offset() before vcpu runs for the first time.
 
+Before a vcpu runs for the first time, the user space (VMM) sets the guest
+tsc as it wants, which may triggers the time synchronization mechanism with
+other vcpus (if any). In a scenario where a vcpu snapshot is used to
+restore, like the bugzilla report [*], the newly target guest tsc (e.g.
+at the time of vcpu restoration) is synchronized with its the most
+primitive guest timestamp initialized at the time of vcpu creation.
 
-> However, all that being said there's no real harm in accepting LF as a
-> command terminator in the kdb parser and doing so seems like it would
-> improve compatibility. After this, I'd expect that things would work
-> OK-ish with a remote terminal that used any of CR, CR+LF, or LF as a
-> line ending. Someone using CR as a line ending might get some ugliness
-> where kdb wasn't able to overwrite the last line, but basic commands
-> would work. Someone using just LF as a line ending would probably also
-> work OK.
->
-> A few other notes:
-> - It can be noted that "bash" running on an "agetty" handles LF as a
->   line termination with no complaints.
-> - Historically, kdb's "pager" actually handled either CR or LF fine. A
->   very quick inspection would make one think that kdb's pager actually
->   could have paged down two lines instead of one for anyone using
->   CR+LF, but this is generally avoided because of kdb_input_flush().
+Furthermore, the VMM can actually update the target guest tsc multiple
+times before the vcpu actually gets running, which requires the tsc_offset
+to be updated every time it is set. In this scenario, it can be considered
+as unstable tsc (even this vcpu has not yet even started ticking to follow
+the intended logic of KVM timer emulation).
 
-These are very convincing though!
+It is only necessary to delay this step until kvm_arch_vcpu_load() to
+catch up with guest expectation with the help of kvm_vcpu_has_run(),
+and the change is expected to not break any of the cumbersome existing
+virt timer features.
 
-> - Conceivably one could argue that some of this special case logic
->   belongs in uart_poll_get_char() since uart_poll_put_char() handles
->   the '\n' => '\r\n' conversion. I would argue that perhaps we should
->   eventually do the opposite and move the '\n' => '\r\n' out of
->   uart_poll_put_char(). Having that conversion at such a low level
->   could interfere if we ever want to transfer binary data. In
->   addition, if we truly made uart_poll_get_char() the inverse of
->   uart_poll_put_char() it would convert back to '\n' and (ironically)
->   kdb's parser currently only looks for '\r' to find the end of a
->   command.
->
-> Signed-off-by: Douglas Anderson <dianders@chromium.org>
+Reported-by: Yong He <alexyonghe@tencent.com>
+Closes: https://bugzilla.kernel.org/show_bug.cgi?id=217423 [*] 
+Tested-by: Jinrong Liang <cloudliang@tencent.com>
+Signed-off-by: Like Xu <likexu@tencent.com>
+---
+ arch/x86/kvm/x86.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-This arrived just as I was gathering up the patches (I know... running
-late). I've added a couple of cases to the test suite to cover the
-new feature.
+diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+index 439312e04384..616940fc3791 100644
+--- a/arch/x86/kvm/x86.c
++++ b/arch/x86/kvm/x86.c
+@@ -4818,7 +4818,7 @@ void kvm_arch_vcpu_load(struct kvm_vcpu *vcpu, int cpu)
+ 		if (tsc_delta < 0)
+ 			mark_tsc_unstable("KVM discovered backwards TSC");
+ 
+-		if (kvm_check_tsc_unstable()) {
++		if (kvm_check_tsc_unstable() || !kvm_vcpu_has_run(vcpu)) {
+ 			u64 offset = kvm_compute_l1_tsc_offset(vcpu,
+ 						vcpu->arch.last_guest_tsc);
+ 			kvm_vcpu_write_tsc_offset(vcpu, offset);
 
-The code looks good to me. Are you happy for me to take it this
-merge cycle?
+base-commit: 88bb466c9dec4f70d682cf38c685324e7b1b3d60
+-- 
+2.32.0
 
-
-Daniel.
-
-> ---
->
->  kernel/debug/kdb/kdb_io.c | 16 +++++++++++++++-
->  1 file changed, 15 insertions(+), 1 deletion(-)
->
-> diff --git a/kernel/debug/kdb/kdb_io.c b/kernel/debug/kdb/kdb_io.c
-> index 5c7e9ba7cd6b..813cb6cf72d6 100644
-> --- a/kernel/debug/kdb/kdb_io.c
-> +++ b/kernel/debug/kdb/kdb_io.c
-> @@ -131,6 +131,7 @@ char kdb_getchar(void)
->  	int escape_delay = 0;
->  	get_char_func *f, *f_prev = NULL;
->  	int key;
-> +	static bool last_char_was_cr;
->
->  	for (f = &kdb_poll_funcs[0]; ; ++f) {
->  		if (*f == NULL) {
-> @@ -149,6 +150,18 @@ char kdb_getchar(void)
->  			continue;
->  		}
->
-> +		/*
-> +		 * The caller expects that newlines are either CR or LF. However
-> +		 * some terminals send _both_ CR and LF. Avoid having to handle
-> +		 * this in the caller by stripping the LF if we saw a CR right
-> +		 * before.
-> +		 */
-> +		if (last_char_was_cr && key == '\n') {
-> +			last_char_was_cr = false;
-> +			continue;
-> +		}
-> +		last_char_was_cr = (key == '\r');
-> +
->  		/*
->  		 * When the first character is received (or we get a change
->  		 * input source) we set ourselves up to handle an escape
-> @@ -244,7 +257,8 @@ static char *kdb_read(char *buffer, size_t bufsize)
->  			*cp = tmp;
->  		}
->  		break;
-> -	case 13: /* enter */
-> +	case 10: /* linefeed */
-> +	case 13: /* carriage return */
->  		*lastchar++ = '\n';
->  		*lastchar++ = '\0';
->  		if (!KDB_STATE(KGDB_TRANS)) {
-> --
-> 2.41.0.162.gfafddb0af9-goog
->
