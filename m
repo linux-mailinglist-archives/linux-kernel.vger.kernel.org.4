@@ -2,58 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F25FD7424A2
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 13:05:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A35B7424A6
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 13:05:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231655AbjF2LEu convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 29 Jun 2023 07:04:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35036 "EHLO
+        id S232103AbjF2LFw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 07:05:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229632AbjF2LEs (ORCPT
+        with ESMTP id S230181AbjF2LFt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 07:04:48 -0400
-Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C16F8E4C;
-        Thu, 29 Jun 2023 04:04:46 -0700 (PDT)
-Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-98de322d11fso15486966b.1;
-        Thu, 29 Jun 2023 04:04:46 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688036685; x=1690628685;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=5CTKBsMeu1jkNSiTMYG6eAZzgA8cN95HfNu1PurLGGQ=;
-        b=M5vJ+4XEUrcL/gnIOxikxe5DHRGlmsLOmmPN5iWvsmcy3u793Zb/jH0zZkZ2uFkDSq
-         ga+sslLhxIR7/6ojxz5JlaB9p+DV90lfIZBwBezsja4dIkXeNhD1BzsUXeOBbHSFeAt9
-         diVisgdWZROkI00DrqY51BWGbeslycn/H7tJIIancbhpQ1vZq8qqBy9VVQaeMMnhNzRS
-         H+Bu4EWdq23AUKuc7ab08kd8s0OoOZqPbk7xE+s5TumfLlQTjigSn1o0RXseEEymgop+
-         vtZcLMUwEfEBl90VJerGnkQgINa1yJ3hdZEQj1Mq981wdeMJEmV5wt/hihDALvcC/Aj5
-         Vc3g==
-X-Gm-Message-State: AC+VfDx1m7eodnzb69a2KvWmdYo8OEJm8Dmukrsb6qwVGhAQLxkRCOow
-        FmYbCTUZdbNw+IvKVdPOtrPrfcZcovm9i6yaGas=
-X-Google-Smtp-Source: ACHHUZ7BXwpr+vIOSX7zYX62MJnR9qV6n1sKGll74P58JdPEp8QMzEzXbFPEQUaxfOyiQw+TeIQvTF9QziwYaBRVswc=
-X-Received: by 2002:a17:906:c1:b0:98e:46f:3eab with SMTP id
- 1-20020a17090600c100b0098e046f3eabmr13145910eji.6.1688036685019; Thu, 29 Jun
- 2023 04:04:45 -0700 (PDT)
+        Thu, 29 Jun 2023 07:05:49 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CF21E4C;
+        Thu, 29 Jun 2023 04:05:49 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id B950A1F8AA;
+        Thu, 29 Jun 2023 11:05:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1688036747; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=DxZG+eGbesMc+qW7i7D8iQT3Knlr73r/mfe4sTHLErc=;
+        b=g7u6RHC1eRr6vSIwplw/P90srh4AWrJx3RtZWc461xSV49K/qI7vEQY5nZHcnYRmKL5qCk
+        uS1eyb9Uqjr+y0/3yeZAMWIFospnDclbEGC4/nWUGkbN79DQlKObMCyCJt9D0iDR03hFtG
+        OOj6dH9xnx9XQJTB1wjvRhIg+8b34wI=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1688036747;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=DxZG+eGbesMc+qW7i7D8iQT3Knlr73r/mfe4sTHLErc=;
+        b=GrKPRyKdBdL7Gg1aiB3i/PdvQROhF7OHTAj2e/ohm7wnxK7kG+dLgRchP1bg0FiYeTYoob
+        PwWp5O7f59uXHyCA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id AB07B139FF;
+        Thu, 29 Jun 2023 11:05:47 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id fGK2KYtlnWSpLwAAMHmgww
+        (envelope-from <jack@suse.cz>); Thu, 29 Jun 2023 11:05:47 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id 3E4C9A0722; Thu, 29 Jun 2023 13:05:47 +0200 (CEST)
+Date:   Thu, 29 Jun 2023 13:05:47 +0200
+From:   Jan Kara <jack@suse.cz>
+To:     Baokun Li <libaokun1@huawei.com>
+Cc:     jack@suse.cz, linux-fsdevel@vger.kernel.org,
+        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yi.zhang@huawei.com, yangerkun@huawei.com, chengzhihao1@huawei.com,
+        yukuai3@huawei.com
+Subject: Re: [PATCH v2 7/7] quota: remove unused function put_dquot_list()
+Message-ID: <20230629110547.oppa5crrgzt6xrkf@quack3>
+References: <20230628132155.1560425-1-libaokun1@huawei.com>
+ <20230628132155.1560425-8-libaokun1@huawei.com>
 MIME-Version: 1.0
-References: <20230613161034.3496047-1-michal.wilczynski@intel.com> <20230613161034.3496047-4-michal.wilczynski@intel.com>
-In-Reply-To: <20230613161034.3496047-4-michal.wilczynski@intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 29 Jun 2023 13:04:34 +0200
-Message-ID: <CAJZ5v0j+Wz7366kLT3ez5TNoGWXvsa53hBYYeS=aHgbTJUqvKg@mail.gmail.com>
-Subject: Re: [PATCH v3 3/5] acpi: Introduce new function callback for _OSC
-To:     Michal Wilczynski <michal.wilczynski@intel.com>
-Cc:     linux-acpi@vger.kernel.org, rafael@kernel.org,
-        andriy.shevchenko@intel.com, artem.bityutskiy@linux.intel.com,
-        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        hpa@zytor.com, lenb@kernel.org, jgross@suse.com,
-        linux-kernel@vger.kernel.org, x86@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230628132155.1560425-8-libaokun1@huawei.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,129 +74,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I would just say "Introduce acpi_processor_osc()" in the subject and
-then explain its role in the changelog.
+On Wed 28-06-23 21:21:55, Baokun Li wrote:
+> Now that no one is calling put_dquot_list(), remove it.
+> 
+> Signed-off-by: Baokun Li <libaokun1@huawei.com>
 
-On Tue, Jun 13, 2023 at 6:12 PM Michal Wilczynski
-<michal.wilczynski@intel.com> wrote:
->
-> Currently in ACPI code _OSC method is already used for workaround
-> introduced in commit a21211672c9a ("ACPI / processor: Request native
-> thermal interrupt handling via _OSC"). Create new function, similar to
-> already existing acpi_hwp_native_thermal_lvt_osc(). Call new function
-> acpi_processor_osc(). Make this function fulfill the purpose previously
-> fulfilled by the workaround plus convey OSPM processor capabilities
-> with it by setting correct processor capability bits.
->
-> Suggested-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> Signed-off-by: Michal Wilczynski <michal.wilczynski@intel.com>
-> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+I guess you can merge this with patch 6. When there was only a single user,
+there's no good reason to separate the removal of the unused function...
+
+								Honza
+
 > ---
->  arch/x86/include/asm/acpi.h   |  3 +++
->  drivers/acpi/acpi_processor.c | 43 ++++++++++++++++++++++++++++++++++-
->  include/acpi/pdc_intel.h      |  1 +
->  3 files changed, 46 insertions(+), 1 deletion(-)
->
-> diff --git a/arch/x86/include/asm/acpi.h b/arch/x86/include/asm/acpi.h
-> index 6a498d1781e7..6c25ce2dad18 100644
-> --- a/arch/x86/include/asm/acpi.h
-> +++ b/arch/x86/include/asm/acpi.h
-> @@ -112,6 +112,9 @@ static inline void arch_acpi_set_proc_cap_bits(u32 *cap)
->         if (cpu_has(c, X86_FEATURE_ACPI))
->                 *cap |= ACPI_PDC_T_FFH;
->
-> +       if (cpu_has(c, X86_FEATURE_HWP))
-> +               *cap |= ACPI_PDC_COLLAB_PROC_PERF;
-> +
->         /*
->          * If mwait/monitor is unsupported, C2/C3_FFH will be disabled
->          */
-> diff --git a/drivers/acpi/acpi_processor.c b/drivers/acpi/acpi_processor.c
-> index 8c5d0295a042..0de0b05b6f53 100644
-> --- a/drivers/acpi/acpi_processor.c
-> +++ b/drivers/acpi/acpi_processor.c
-> @@ -591,13 +591,54 @@ void __init processor_dmi_check(void)
->         dmi_check_system(processor_idle_dmi_table);
+>  fs/quota/dquot.c | 20 --------------------
+>  1 file changed, 20 deletions(-)
+> 
+> diff --git a/fs/quota/dquot.c b/fs/quota/dquot.c
+> index df028fb2ce72..ba0125473be3 100644
+> --- a/fs/quota/dquot.c
+> +++ b/fs/quota/dquot.c
+> @@ -1102,26 +1102,6 @@ static void remove_inode_dquot_ref(struct inode *inode, int type)
+>  	dqput(dquot);
 >  }
->
-> +/* vendor specific UUID indicating an Intel platform */
-> +static u8 sb_uuid_str[] = "4077A616-290C-47BE-9EBD-D87058713953";
->  static bool acpi_hwp_native_thermal_lvt_set;
-> +static acpi_status __init acpi_processor_osc(acpi_handle handle, u32 lvl,
-> +                                            void *context, void **rv)
-> +{
-> +       u32 capbuf[2] = {};
-> +       acpi_status status;
-> +       struct acpi_osc_context osc_context = {
-> +               .uuid_str = sb_uuid_str,
-> +               .rev = 1,
-> +               .cap.length = 8,
-> +               .cap.pointer = capbuf,
-> +       };
-> +
-> +       if (processor_physically_present(handle) == false)
-
-if (!processor_physically_present(handle))
-
-> +               return AE_OK;
-> +
-> +       arch_acpi_set_proc_cap_bits(&capbuf[OSC_SUPPORT_DWORD]);
-> +
-> +       if (boot_option_idle_override == IDLE_NOMWAIT)
-> +               capbuf[OSC_SUPPORT_DWORD] &=
-> +                       ~(ACPI_PDC_C_C2C3_FFH | ACPI_PDC_C_C1_FFH);
-> +
-> +       status = acpi_run_osc(handle, &osc_context);
-> +       if (ACPI_FAILURE(status))
-> +               return status;
-> +
-> +       if (osc_context.ret.pointer && osc_context.ret.length > 1) {
-> +               u32 *capbuf_ret = osc_context.ret.pointer;
-> +
-> +               if (!acpi_hwp_native_thermal_lvt_set &&
-> +                   capbuf_ret[1] & ACPI_PDC_COLLAB_PROC_PERF) {
-
-Checking it in capbuf_ret[] if it was not set in capbuf[] is sort of
-questionable.
-
-Note that acpi_hwp_native_thermal_lvt_osc() sets it in capbuf[] before
-calling acpi_run_osc().
-
-> +                       acpi_handle_info(handle,
-> +                                        "_OSC native thermal LVT Acked\n");
-> +                       acpi_hwp_native_thermal_lvt_set = true;
-> +               }
-> +       }
-> +       kfree(osc_context.ret.pointer);
-> +
-> +       return AE_OK;
-> +}
-> +
->  static acpi_status __init acpi_hwp_native_thermal_lvt_osc(acpi_handle handle,
->                                                           u32 lvl,
->                                                           void *context,
->                                                           void **rv)
+>  
+> -/*
+> - * Free list of dquots
+> - * Dquots are removed from inodes and no new references can be got so we are
+> - * the only ones holding reference
+> - */
+> -static void put_dquot_list(struct list_head *tofree_head)
+> -{
+> -	struct list_head *act_head;
+> -	struct dquot *dquot;
+> -
+> -	act_head = tofree_head->next;
+> -	while (act_head != tofree_head) {
+> -		dquot = list_entry(act_head, struct dquot, dq_free);
+> -		act_head = act_head->next;
+> -		/* Remove dquot from the list so we won't have problems... */
+> -		list_del_init(&dquot->dq_free);
+> -		dqput(dquot);
+> -	}
+> -}
+> -
+>  static void remove_dquot_ref(struct super_block *sb, int type)
 >  {
-> -       u8 sb_uuid_str[] = "4077A616-290C-47BE-9EBD-D87058713953";
->         u32 capbuf[2];
->         struct acpi_osc_context osc_context = {
->                 .uuid_str = sb_uuid_str,
-> diff --git a/include/acpi/pdc_intel.h b/include/acpi/pdc_intel.h
-> index 967c552d1cd3..9427f639287f 100644
-> --- a/include/acpi/pdc_intel.h
-> +++ b/include/acpi/pdc_intel.h
-> @@ -16,6 +16,7 @@
->  #define ACPI_PDC_C_C1_FFH              (0x0100)
->  #define ACPI_PDC_C_C2C3_FFH            (0x0200)
->  #define ACPI_PDC_SMP_P_HWCOORD         (0x0800)
-> +#define ACPI_PDC_COLLAB_PROC_PERF      (0x1000)
-
-I would call this ACPI_OSC_COLLAB_PROC_PERF to avoid confusion.
-
-It may also be a good idea to introduce ACPI_OSC_ symbols to replace
-the existing ACPI_PDC_ ones (with the same values, respectively) and
-get rid of the latter later.
-
->  #define ACPI_PDC_EST_CAPABILITY_SMP    (ACPI_PDC_SMP_C1PT | \
->                                          ACPI_PDC_C_C1_HALT | \
-> --
+>  	struct inode *inode;
+> -- 
+> 2.31.1
+> 
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
