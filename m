@@ -2,115 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EDAE742E20
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 22:09:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F1CD742E18
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 22:09:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232583AbjF2UCL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 16:02:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33530 "EHLO
+        id S232180AbjF2UEh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 16:04:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232471AbjF2UBA (ORCPT
+        with ESMTP id S232316AbjF2UEV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 16:01:00 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA2AE3A9E
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 13:00:55 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id a640c23a62f3a-992af8b3b1bso117236066b.1
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 13:00:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1688068854; x=1690660854;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=fECowZNpcpA0gZRwlMHH3UbCOy7cdW91Ppc09VLxieo=;
-        b=APCoejVbi7NPMCZ2ZxiifT4LT8K/VyJGzCeCBDfFOHnI5/Jy6Xwp+h76TJGuOJ5aD6
-         8RimehdJ3vIONWDNXYJeJ9wXiV9KmY+uzqNgh18Qvyl8N4fA2N674gN1VnosnhCOdDmK
-         4Ewfg7R8FfHvizv0sza1ZAutc5FGL140rBvOI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688068854; x=1690660854;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=fECowZNpcpA0gZRwlMHH3UbCOy7cdW91Ppc09VLxieo=;
-        b=G7W8DbwLZ2B5GGK2EksuCfBCWVpzD/hvMHZLzXZt9LEkyq+umdYPBAr2vO0kssPtQT
-         Wo7vb2WZsz4nJ0a8IhZHMSA7EEHkNo2F2+p48dChyh8WvWLKYEiMPbC3pg41Lh46RQvD
-         zp/MwAgaY3SBWs8jd6mEO1jHQ7VFK92fZTAb9fE4q0vBY1LGtwn4bqJ2f1O+aiWmlrYm
-         RHqQAFvYeYgU4JzlSgQit6TQeFpYiaOgAW64IzvLZn/U7P1UjfyiNwKkIcywdPiRxlK+
-         EEZwRLbR9NENGDGPF4r5USG5CDDB9L3GlmNbXuLk0D/tSbIp65Ey3ntYLQrq8zkcl2Ub
-         gUqw==
-X-Gm-Message-State: ABy/qLbHLMANpPZyj1njaVVyt8CPuCVk0NicbR9uFvUSp5x5urGRfp2g
-        5Id5ZEq0yQyiINPTgpd2EUbz6BuBoY6Z1NP4EyQhwnNG
-X-Google-Smtp-Source: ACHHUZ567mCMdWEdOPC7iAiWXwDcl0n3jKp6q8uB6vvmf439EBy6hSzPFQfdBhE4HejaHXyup0IDHw==
-X-Received: by 2002:a17:906:b811:b0:992:ba2c:2e0f with SMTP id dv17-20020a170906b81100b00992ba2c2e0fmr387004ejb.30.1688068854306;
-        Thu, 29 Jun 2023 13:00:54 -0700 (PDT)
-Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com. [209.85.218.53])
-        by smtp.gmail.com with ESMTPSA id dk18-20020a170906f0d200b00992b3ea1ee4sm927063ejb.149.2023.06.29.13.00.52
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 29 Jun 2023 13:00:53 -0700 (PDT)
-Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-98e0c1d5289so128554566b.2
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 13:00:52 -0700 (PDT)
-X-Received: by 2002:aa7:d7d8:0:b0:51a:5e8f:ac1 with SMTP id
- e24-20020aa7d7d8000000b0051a5e8f0ac1mr220186eds.23.1688068852598; Thu, 29 Jun
- 2023 13:00:52 -0700 (PDT)
+        Thu, 29 Jun 2023 16:04:21 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A16D3AB1
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 13:02:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1688068949;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
+        bh=4dDgyzZLkY2/8iXhAmRttHNZmuwZzxKf8DyRqRDsvIs=;
+        b=ivTVNjWOT/tvrh/3moBGlBGUdlhz52YgOcxSvQubT9SKtiEfG81OEgW6i3iXydlfBqamuG
+        lbVw2eOk072EGiJR5oX3XAcb7Y5OoeG155VybXuoKx9KyH4bldEcQdYcM2/lUsuzymVaJF
+        ZSC9Vs6Myz6dTp/EFlzzsPnr6j4eHgo=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-253-kTu_riKmMzW_abOJcKEdiA-1; Thu, 29 Jun 2023 16:02:25 -0400
+X-MC-Unique: kTu_riKmMzW_abOJcKEdiA-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 93CA31C06ED8;
+        Thu, 29 Jun 2023 20:02:24 +0000 (UTC)
+Received: from redhat.com (null.msp.redhat.com [10.15.80.136])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 590D7F5CE5;
+        Thu, 29 Jun 2023 20:02:24 +0000 (UTC)
+Date:   Thu, 29 Jun 2023 15:02:23 -0500
+From:   David Teigland <teigland@redhat.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org, cluster-devel@redhat.com
+Subject: [GIT PULL] dlm updates for 6.5
+Message-ID: <20230629200223.GC14388@redhat.com>
 MIME-Version: 1.0
-References: <20230629191414.1215929-1-willy@infradead.org>
-In-Reply-To: <20230629191414.1215929-1-willy@infradead.org>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Thu, 29 Jun 2023 13:00:35 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wiuXi4KmjgTocOZMpHTZuZP+y8r5wYynvvT_ZPXyG+TYA@mail.gmail.com>
-Message-ID: <CAHk-=wiuXi4KmjgTocOZMpHTZuZP+y8r5wYynvvT_ZPXyG+TYA@mail.gmail.com>
-Subject: Re: [PATCH] mm: Always downgrade mmap_lock if requested
-To:     "Matthew Wilcox (Oracle)" <willy@infradead.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        "Liam R . Howlett" <Liam.Howlett@oracle.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.8.3 (2017-05-23)
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 29 Jun 2023 at 12:14, Matthew Wilcox (Oracle)
-<willy@infradead.org> wrote:
->
-> Now that stack growth must always hold the mmap_lock for write, we can
-> always downgrade the mmap_lock to read and safely unmap pages from the
-> page table, even if we're next to a stack.
+Hi Linus,
 
-Can we please also fix the really odd return value semantics?
+Please pull dlm updates from tag:
 
-Right now that function returns either an error - meaning that it
-didn't downgrade, or it returns 0/1 as a success to show "did I
-downgrade as you asked me to"?
+git://git.kernel.org/pub/scm/linux/kernel/git/teigland/linux-dlm.git dlm-6.5
 
-That is *really* confusing, but it was needed in that bad old world order.
+The dlm posix lock handling (for gfs2) has three notable changes:
 
-But now that the downgrade is not a "try to downgrade if you can", but
-something reliable, can we please just make the success case be 0, and
-make the callers all know that on success, it was downgraded?
+- Local pids returned from GETLK are no longer negated.  A previous
+  patch negating remote pids mistakenly changed local pids also.
 
-And yes, I realize that that means do_vmi_munmap() also has to be
-changed. The documentation for that function is horrid, btw, in that
-it says
+- SETLKW operations can now be interrupted only when the process is
+  killed, and not from other signals.  General interruption was
+  resulting in previously acquired locks being cleared, not just
+  the in-progress lock.  Handling this correctly will require
+  extending a cancel capability to user space (a future feature.)
 
- * Returns: -EINVAL on failure, 1 on success and unlock, 0 otherwise.
+- If multiple threads are requesting posix locks (with SETLKW),
+  fix incorrect matching of results to the requests.
 
-which is just not true. It can return other errors than -EINVAL
-(through exactly that do_vmi_align_munmap() function), and the "1 on
-success and unlock" is not true, it's a "success and downgrade if you
-asked me to".
+The dlm networking has several minor cleanups, and one notable change:
 
-So I think all of those callers should also be changed to "if you
-asked for a downgrade, and do_vmi_munmap() returned success, then you
-got a downgrade".
+- Avoid delaying ack messages for too long (used for message reliability),
+  resulting in a backlog of un-acked messages.  These could previously
+  be delayed as a result of either too many or too few other messages
+  being sent.  Now an upper and lower threshold is used to determine
+  when an ack should be sent.
 
-Then some of the callers of *that* can be simplified too.
+Thanks,
+Dave
 
-Please?
 
-                 Linus
+Alexander Aring (18):
+      fs: dlm: return positive pid value for F_GETLK
+      fs: dlm: fix cleanup pending ops when interrupted
+      fs: dlm: interrupt posix locks only when process is killed
+      fs: dlm: make F_SETLK use unkillable wait_event
+      fs: dlm: fix mismatch of plock results from userspace
+      fs: dlm: revert check required context while close
+      fs: dlm: clear pending bit when queue was empty
+      fs: dlm: fix missing pending to false
+      fs: dlm: unregister memory at the very last
+      fs: dlm: don't check othercon twice
+      fs: dlm: cleanup STOP_IO bitflag set when stop io
+      fs: dlm: move dlm_purge_lkb_callbacks to user module
+      fs: dlm: warn about messages from left nodes
+      fs: dlm: filter ourself midcomms calls
+      fs: dlm: handle lkb wait count as atomic_t
+      fs: dlm: handle sequence numbers as atomic
+      fs: dlm: add send ack threshold and append acks to msgs
+      fs: dlm: remove filter local comms on close
+
+Azeem Shaikh (1):
+      dlm: Replace all non-returning strlcpy with strscpy
+
+
+ fs/dlm/ast.c          |  25 ++--------
+ fs/dlm/ast.h          |   1 -
+ fs/dlm/config.c       |   4 +-
+ fs/dlm/dlm_internal.h |   2 +-
+ fs/dlm/lock.c         |  36 +++++++--------
+ fs/dlm/lockspace.c    |  12 -----
+ fs/dlm/lockspace.h    |   1 -
+ fs/dlm/lowcomms.c     |  49 +++-----------------
+ fs/dlm/main.c         |   2 +-
+ fs/dlm/member.c       |  37 ++++++++++++---
+ fs/dlm/midcomms.c     | 126 ++++++++++++++++++++++----------------------------
+ fs/dlm/plock.c        | 115 +++++++++++++++++++++++++++------------------
+ fs/dlm/user.c         |  18 ++++++++
+ fs/dlm/user.h         |   1 +
+ 14 files changed, 205 insertions(+), 224 deletions(-)
+
