@@ -2,53 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB3557424DD
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 13:15:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 284A47424DF
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 13:16:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231445AbjF2LPS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 07:15:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38620 "EHLO
+        id S232097AbjF2LQR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 07:16:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232165AbjF2LPA (ORCPT
+        with ESMTP id S230181AbjF2LQM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 07:15:00 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 123E4125;
-        Thu, 29 Jun 2023 04:14:55 -0700 (PDT)
-Received: from dggpeml500021.china.huawei.com (unknown [172.30.72.56])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4QsG3y0q7YzMpbG;
-        Thu, 29 Jun 2023 19:11:42 +0800 (CST)
-Received: from [10.174.177.174] (10.174.177.174) by
- dggpeml500021.china.huawei.com (7.185.36.21) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27; Thu, 29 Jun 2023 19:14:53 +0800
-Message-ID: <20dddac7-8f01-2d37-02d2-f63c8bcfbf25@huawei.com>
-Date:   Thu, 29 Jun 2023 19:14:52 +0800
+        Thu, 29 Jun 2023 07:16:12 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C4AC10CF;
+        Thu, 29 Jun 2023 04:16:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1688037371; x=1719573371;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=AmSC6QSDI6fA0PB2pX5j89MVglE58ZfjBAk4Tqqgf7c=;
+  b=Dza0h1K5yE22gsHfNKgTlNexL4x/DRucFw4/rqfZnyHPwRoCHf63YM9+
+   cNe3eMgZOXHODqYRLzCfJk7sKmBfdhsOzNrTjmbN7DV2FB2e4wBCftGsB
+   r7rVMbq8HGIgOXiLJD45CixaVWAx/E9BKXDNRyb1aaetUToCSLmHydWUs
+   4RHZLR5N1kSNUaddtSSGDPCd7+ts965NaqN0fRG8FxW/4eouQo2MA6xfN
+   YVNYvaOlPV+297+x+WTS2HzjJFtS6Nykvse/cELrqYiIebo1UtYMpjzby
+   f/sJKB6k3tm0zgumESPNYlerWMRi9qCmh5OhTYiYtWoBNvkkusD8hzvg1
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10755"; a="365545203"
+X-IronPort-AV: E=Sophos;i="6.01,168,1684825200"; 
+   d="scan'208";a="365545203"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jun 2023 04:16:10 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10755"; a="787334581"
+X-IronPort-AV: E=Sophos;i="6.01,168,1684825200"; 
+   d="scan'208";a="787334581"
+Received: from aperepel-mobl.ger.corp.intel.com (HELO box.shutemov.name) ([10.249.47.231])
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jun 2023 04:16:03 -0700
+Received: by box.shutemov.name (Postfix, from userid 1000)
+        id 9AC471095DD; Thu, 29 Jun 2023 14:16:00 +0300 (+03)
+Date:   Thu, 29 Jun 2023 14:16:00 +0300
+From:   kirill.shutemov@linux.intel.com
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Kai Huang <kai.huang@intel.com>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, linux-mm@kvack.org, x86@kernel.org,
+        dave.hansen@intel.com, tony.luck@intel.com, tglx@linutronix.de,
+        bp@alien8.de, mingo@redhat.com, hpa@zytor.com, seanjc@google.com,
+        pbonzini@redhat.com, david@redhat.com, dan.j.williams@intel.com,
+        rafael.j.wysocki@intel.com, ashok.raj@intel.com,
+        reinette.chatre@intel.com, len.brown@intel.com, ak@linux.intel.com,
+        isaku.yamahata@intel.com, ying.huang@intel.com, chao.gao@intel.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com, nik.borisov@suse.com,
+        bagasdotme@gmail.com, sagis@google.com, imammedo@redhat.com
+Subject: Re: [PATCH v12 20/22] x86/virt/tdx: Allow SEAMCALL to handle #UD and
+ #GP
+Message-ID: <20230629111600.hq4carptan6pfu37@box.shutemov.name>
+References: <cover.1687784645.git.kai.huang@intel.com>
+ <c124550719716f1f7759c2bdea70f4722d8e0167.1687784645.git.kai.huang@intel.com>
+ <20230628152900.GI2438817@hirez.programming.kicks-ass.net>
+ <20230628203823.GR38236@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.1.2
-Subject: Re: [PATCH v2 3/7] quota: rename dquot_active() to
- inode_dquot_active()
-Content-Language: en-US
-To:     Jan Kara <jack@suse.cz>
-CC:     <linux-fsdevel@vger.kernel.org>, <linux-ext4@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <yi.zhang@huawei.com>,
-        <yangerkun@huawei.com>, <chengzhihao1@huawei.com>,
-        <yukuai3@huawei.com>, Baokun Li <libaokun1@huawei.com>
-References: <20230628132155.1560425-1-libaokun1@huawei.com>
- <20230628132155.1560425-4-libaokun1@huawei.com>
- <20230629102445.injcpqkfm6wnrw3y@quack3>
-From:   Baokun Li <libaokun1@huawei.com>
-In-Reply-To: <20230629102445.injcpqkfm6wnrw3y@quack3>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.177.174]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- dggpeml500021.china.huawei.com (7.185.36.21)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230628203823.GR38236@hirez.programming.kicks-ass.net>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,125 +75,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/6/29 18:24, Jan Kara wrote:
-> On Wed 28-06-23 21:21:51, Baokun Li wrote:
->> Now we have a helper function dquot_dirty() to determine if dquot has
->> DQ_MOD_B bit. dquot_active() can easily be misunderstood as a helper
->> function to determine if dquot has DQ_ACTIVE_B bit. So we avoid this by
->> adding the "inode_" prefix and later on we will add the helper function
->> dquot_active() to determine if dquot has DQ_ACTIVE_B bit.
->>
->> Signed-off-by: Baokun Li <libaokun1@huawei.com>
-> Maybe inode_quota_active() will be a better name what you are already
-> renaming it?
->
-> 								Honza
-Indeed! I will rename it to inode_quota_active() in the next version.
->
->> ---
->>   fs/quota/dquot.c | 20 ++++++++++----------
->>   1 file changed, 10 insertions(+), 10 deletions(-)
->>
->> diff --git a/fs/quota/dquot.c b/fs/quota/dquot.c
->> index a8b43b5b5623..b21f5e888482 100644
->> --- a/fs/quota/dquot.c
->> +++ b/fs/quota/dquot.c
->> @@ -1435,7 +1435,7 @@ static int info_bdq_free(struct dquot *dquot, qsize_t space)
->>   	return QUOTA_NL_NOWARN;
->>   }
->>   
->> -static int dquot_active(const struct inode *inode)
->> +static int inode_dquot_active(const struct inode *inode)
->>   {
->>   	struct super_block *sb = inode->i_sb;
->>   
->> @@ -1458,7 +1458,7 @@ static int __dquot_initialize(struct inode *inode, int type)
->>   	qsize_t rsv;
->>   	int ret = 0;
->>   
->> -	if (!dquot_active(inode))
->> +	if (!inode_dquot_active(inode))
->>   		return 0;
->>   
->>   	dquots = i_dquot(inode);
->> @@ -1566,7 +1566,7 @@ bool dquot_initialize_needed(struct inode *inode)
->>   	struct dquot **dquots;
->>   	int i;
->>   
->> -	if (!dquot_active(inode))
->> +	if (!inode_dquot_active(inode))
->>   		return false;
->>   
->>   	dquots = i_dquot(inode);
->> @@ -1677,7 +1677,7 @@ int __dquot_alloc_space(struct inode *inode, qsize_t number, int flags)
->>   	int reserve = flags & DQUOT_SPACE_RESERVE;
->>   	struct dquot **dquots;
->>   
->> -	if (!dquot_active(inode)) {
->> +	if (!inode_dquot_active(inode)) {
->>   		if (reserve) {
->>   			spin_lock(&inode->i_lock);
->>   			*inode_reserved_space(inode) += number;
->> @@ -1747,7 +1747,7 @@ int dquot_alloc_inode(struct inode *inode)
->>   	struct dquot_warn warn[MAXQUOTAS];
->>   	struct dquot * const *dquots;
->>   
->> -	if (!dquot_active(inode))
->> +	if (!inode_dquot_active(inode))
->>   		return 0;
->>   	for (cnt = 0; cnt < MAXQUOTAS; cnt++)
->>   		warn[cnt].w_type = QUOTA_NL_NOWARN;
->> @@ -1790,7 +1790,7 @@ int dquot_claim_space_nodirty(struct inode *inode, qsize_t number)
->>   	struct dquot **dquots;
->>   	int cnt, index;
->>   
->> -	if (!dquot_active(inode)) {
->> +	if (!inode_dquot_active(inode)) {
->>   		spin_lock(&inode->i_lock);
->>   		*inode_reserved_space(inode) -= number;
->>   		__inode_add_bytes(inode, number);
->> @@ -1832,7 +1832,7 @@ void dquot_reclaim_space_nodirty(struct inode *inode, qsize_t number)
->>   	struct dquot **dquots;
->>   	int cnt, index;
->>   
->> -	if (!dquot_active(inode)) {
->> +	if (!inode_dquot_active(inode)) {
->>   		spin_lock(&inode->i_lock);
->>   		*inode_reserved_space(inode) += number;
->>   		__inode_sub_bytes(inode, number);
->> @@ -1876,7 +1876,7 @@ void __dquot_free_space(struct inode *inode, qsize_t number, int flags)
->>   	struct dquot **dquots;
->>   	int reserve = flags & DQUOT_SPACE_RESERVE, index;
->>   
->> -	if (!dquot_active(inode)) {
->> +	if (!inode_dquot_active(inode)) {
->>   		if (reserve) {
->>   			spin_lock(&inode->i_lock);
->>   			*inode_reserved_space(inode) -= number;
->> @@ -1931,7 +1931,7 @@ void dquot_free_inode(struct inode *inode)
->>   	struct dquot * const *dquots;
->>   	int index;
->>   
->> -	if (!dquot_active(inode))
->> +	if (!inode_dquot_active(inode))
->>   		return;
->>   
->>   	dquots = i_dquot(inode);
->> @@ -2103,7 +2103,7 @@ int dquot_transfer(struct mnt_idmap *idmap, struct inode *inode,
->>   	struct super_block *sb = inode->i_sb;
->>   	int ret;
->>   
->> -	if (!dquot_active(inode))
->> +	if (!inode_dquot_active(inode))
->>   		return 0;
->>   
->>   	if (i_uid_needs_update(idmap, iattr, inode)) {
->> -- 
->> 2.31.1
->>
+On Wed, Jun 28, 2023 at 10:38:23PM +0200, Peter Zijlstra wrote:
+> On Wed, Jun 28, 2023 at 05:29:01PM +0200, Peter Zijlstra wrote:
+> > On Tue, Jun 27, 2023 at 02:12:50AM +1200, Kai Huang wrote:
+> > > diff --git a/arch/x86/virt/vmx/tdx/tdxcall.S b/arch/x86/virt/vmx/tdx/tdxcall.S
+> > > index 49a54356ae99..757b0c34be10 100644
+> > > --- a/arch/x86/virt/vmx/tdx/tdxcall.S
+> > > +++ b/arch/x86/virt/vmx/tdx/tdxcall.S
+> > > @@ -1,6 +1,7 @@
+> > >  /* SPDX-License-Identifier: GPL-2.0 */
+> > >  #include <asm/asm-offsets.h>
+> > >  #include <asm/tdx.h>
+> > > +#include <asm/asm.h>
+> > >  
+> > >  /*
+> > >   * TDCALL and SEAMCALL are supported in Binutils >= 2.36.
+> > > @@ -45,6 +46,7 @@
+> > >  	/* Leave input param 2 in RDX */
+> > >  
+> > >  	.if \host
+> > > +1:
+> > >  	seamcall
+> > 
+> > So what registers are actually clobbered by SEAMCALL ? There's a
+> > distinct lack of it in SDM Vol.2 instruction list :-(
+> 
+> With the exception of the abomination that is TDH.VP.ENTER all SEAMCALLs
+> seem to be limited to the set presented here (c,d,8,9,10,11) and all
+> other registers should be available.
+> 
+> Can we please make that a hard requirement, SEAMCALL must not use
+> registers outside this? We can hardly program to random future
+> extentions; we need hard ABI guarantees here.
+> 
+> That also means we should be able to use si,di for the cmovc below.
+> 
+> Kirill, back when we did __tdx_hypercall() we got bp removed as a valid
+> register, the 1.0 spec still lists that, and it is also listed in
+> TDH.VP.ENTER, I'm assuming it will be removed there too?
+> 
+> bp must not be used -- it violates the pre-existing calling convention.
 
-Thanks!
+I've just brought it up again internally. Let's see what will happen.
+ 
+
 -- 
-With Best Regards,
-Baokun Li
-.
+  Kiryl Shutsemau / Kirill A. Shutemov
