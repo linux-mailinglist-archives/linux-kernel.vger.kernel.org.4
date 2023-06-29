@@ -2,177 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 302F3742B95
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 19:55:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 340B1742B98
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 19:56:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231305AbjF2Rzw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 13:55:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36668 "EHLO
+        id S231550AbjF2R42 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 13:56:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230333AbjF2Rzu (ORCPT
+        with ESMTP id S229639AbjF2R40 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 13:55:50 -0400
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB6221FCD
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 10:55:47 -0700 (PDT)
-Received: by mail-pl1-x634.google.com with SMTP id d9443c01a7336-1b52875b8d9so11785ad.0
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 10:55:47 -0700 (PDT)
+        Thu, 29 Jun 2023 13:56:26 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB0D31FCD
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 10:56:24 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id a640c23a62f3a-991e69499d1so101389966b.2
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 10:56:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1688061347; x=1690653347;
-        h=mime-version:user-agent:message-id:in-reply-to:date:references
-         :subject:cc:to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=sAxukAuOQ1tZakZNLu7tDSVD3deXjfjzmKWVjSrew8s=;
-        b=lFp7yeuXjj0YVKWD6JpaktKMieuZyKS//ozRFTow51EqV5o7GgLo7i7PTmD4Gi6z09
-         WivxMQTPDU8Cn5cAyVad6Yg0EwLBLqSEw6HpKlIxkcNDlEGrlF2j1US56F1zi/XGoy0s
-         ODZ+hhTaASxv1rOoCAO7adp79u1g5NiGsEOaEWcM64lEvRbviksfS6aPGO6rkmFTBu8W
-         1/Yaf2P/X8ypfGCnTAvEoYpsnewyC7XyzxRlfKposG8/5kb05/zlqkxpFmRGs1fSN147
-         IC7UdfaL3FQ3hP4XqrhZTbl8gx8M11NatxkBqTRv/Yu7HeZyfqJwA7pGf6V+gL/pD4hu
-         FglQ==
+        d=linux-foundation.org; s=google; t=1688061383; x=1690653383;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=jNOtAlZsxNFXBjiO7ePrUZV0+YgygUmrdD3PxgMZGw4=;
+        b=XARa3SVN4NfQv2nZBsfksIva4mbWuedkl+RR8mKV6+zl4hg4QwKPyGPmh8iLekQIYx
+         shKSY7SONko44IbPhyA1gMNTRLNPfcaLvpWsSCFwWVquAcn06qUC/Hf6wxdZOiXtLlC5
+         R2PKqHLT3uvBSfJjiIXa3LV2xsTuyIYNVjIL0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688061347; x=1690653347;
-        h=mime-version:user-agent:message-id:in-reply-to:date:references
-         :subject:cc:to:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=sAxukAuOQ1tZakZNLu7tDSVD3deXjfjzmKWVjSrew8s=;
-        b=Fkgv83m2iepJEM1RMtWBVq1Rib8Lc6SH4f7AJRRZLmGIFWRhXSP90K+/AsO4zgMrpF
-         QVqc1WNQHpDeWD/6g+vvTNZbCdrfLTdJi/LujBeJlQdxLTMaZENvJsOeEJhkRwcg1YHK
-         fUQCHwPvYPPb/mM1bW0fntoy/xwg+gjdY4qY/RGUYjv2i8/LPfmkuX1PoWiDzl8O6PGy
-         gQ7PEDG0Gj0Dsn/GIdukRo5R1V++NK5JTJa3bL82ljwE8H9ujnedIUjwITJqJ39PA5UD
-         nsOIP/N5gEHI1Wb4M2Mz5gmsIVgsCT00NV8WpYiHcGIH4SOMK7QEDuUcoq32AQTn7C7t
-         TpUg==
-X-Gm-Message-State: ABy/qLZMudfe9kouoMb6eCsZD0LluaMkzDFtZy8BOjVewDoFuzPV4ikw
-        qBQgEtU+60vc25ayvOTgnaA2aQ==
-X-Google-Smtp-Source: APBJJlGwCqf41r8MaEoMitlpULsfrPGS0zSSY8hZwKJUiypIEQsvFRlNVvTqskl3yDn4nSWraMBspg==
-X-Received: by 2002:a17:902:b70b:b0:1b8:5857:ea9a with SMTP id d11-20020a170902b70b00b001b85857ea9amr176444pls.23.1688061347129;
-        Thu, 29 Jun 2023 10:55:47 -0700 (PDT)
-Received: from bsegall-glaptop.localhost ([2620:15c:2c0:5:c831:5665:2d2b:3ca7])
-        by smtp.gmail.com with ESMTPSA id z7-20020a170903018700b001b02162c86bsm9389701plg.80.2023.06.29.10.55.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Jun 2023 10:55:46 -0700 (PDT)
-From:   Benjamin Segall <bsegall@google.com>
-To:     Phil Auld <pauld@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, Juri Lelli <juri.lelli@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Mel Gorman <mgorman@suse.de>
-Subject: Re: [PATCH v2] Sched/fair: Block nohz tick_stop when cfs bandwidth
- in use
-References: <20230627191201.344110-1-pauld@redhat.com>
-        <xm26jzvn8ds7.fsf@google.com>
-        <20230629005342.GB8069@lorien.usersys.redhat.com>
-Date:   Thu, 29 Jun 2023 10:55:44 -0700
-In-Reply-To: <20230629005342.GB8069@lorien.usersys.redhat.com> (Phil Auld's
-        message of "Wed, 28 Jun 2023 20:53:42 -0400")
-Message-ID: <xm26fs6a8867.fsf@google.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
+        d=1e100.net; s=20221208; t=1688061383; x=1690653383;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=jNOtAlZsxNFXBjiO7ePrUZV0+YgygUmrdD3PxgMZGw4=;
+        b=XeuxOWGy2eOXPh2JAUUP3BFsMD3hfnRGtXi1W748wcn5qvZP0GLP4nb4SO+LHNGdte
+         oYYpGUYLHaDHJkBnZQZF+8IsHF9Ln9A0anvjrmqKOV9QMK/ONBa3eDq9L712r0FDLDpY
+         BoFkME2dMBcU3ozmilx8bBVRwsUM7GPz81Axrpb32Ag+IcXWDaALBZDLFguXD9ykNAF8
+         VP0jZpzSWManqEYdn2HECDVYqgBOp5R2Kjz3RncrgDRg6OQ2G9LUEpp8Eq9vZIarnkoi
+         KFhNuzDyd6fhFMp/zH63yweGGeW9nbCYNMbAkxGR5GC1Pt0qry5Ay4wAI6Qv7L4aB/Pl
+         mrtw==
+X-Gm-Message-State: ABy/qLZqqczaTahCHhsgeBbh8Kvrtc4pTz9nIzE2qky1UKYrBKX491H3
+        N+y7iIdNcGDjaWlYDr2ddZGNf939+QSsQ2i4WTzhH+wx
+X-Google-Smtp-Source: APBJJlEcmg8OIpQ+A9SbZ3gxenkz9XZTLYJ/gUsM+3JWxE+WtKt4vTWsxV1E/bQEOpGcW7RuBdLD7w==
+X-Received: by 2002:a17:906:3650:b0:989:4952:bf9f with SMTP id r16-20020a170906365000b009894952bf9fmr153898ejb.26.1688061383223;
+        Thu, 29 Jun 2023 10:56:23 -0700 (PDT)
+Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com. [209.85.208.46])
+        by smtp.gmail.com with ESMTPSA id z15-20020a17090655cf00b00992099223a0sm3503391ejp.103.2023.06.29.10.56.22
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 29 Jun 2023 10:56:22 -0700 (PDT)
+Received: by mail-ed1-f46.google.com with SMTP id 4fb4d7f45d1cf-51d9c71fb4bso1005576a12.2
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 10:56:22 -0700 (PDT)
+X-Received: by 2002:a05:6402:f1a:b0:51d:8961:bf07 with SMTP id
+ i26-20020a0564020f1a00b0051d8961bf07mr36999eda.3.1688061382069; Thu, 29 Jun
+ 2023 10:56:22 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230629155433.4170837-1-dhowells@redhat.com>
+In-Reply-To: <20230629155433.4170837-1-dhowells@redhat.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Thu, 29 Jun 2023 10:56:04 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wiDwfyj0CCupT-oEToqsNLcbsTQdcgDupF=ZETUjJQJtQ@mail.gmail.com>
+Message-ID: <CAHk-=wiDwfyj0CCupT-oEToqsNLcbsTQdcgDupF=ZETUjJQJtQ@mail.gmail.com>
+Subject: Re: [RFC PATCH 0/4] splice: Fix corruption in data spliced to pipe
+To:     David Howells <dhowells@redhat.com>
+Cc:     netdev@vger.kernel.org, Matthew Wilcox <willy@infradead.org>,
+        Dave Chinner <david@fromorbit.com>,
+        Matt Whitlock <kernel@mattwhitlock.name>,
+        Jens Axboe <axboe@kernel.dk>, linux-fsdevel@kvack.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Phil Auld <pauld@redhat.com> writes:
-
-> On Wed, Jun 28, 2023 at 02:42:16PM -0700 Benjamin Segall wrote:
->> Phil Auld <pauld@redhat.com> writes:
->> 
->> > CFS bandwidth limits and NOHZ full don't play well together.  Tasks
->> > can easily run well past their quotas before a remote tick does
->> > accounting.  This leads to long, multi-period stalls before such
->> > tasks can run again. Currentlyi, when presented with these conflicting
->> > requirements the scheduler is favoring nohz_full and letting the tick
->> > be stopped. However, nohz tick stopping is already best-effort, there
->> > are a number of conditions that can prevent it, whereas cfs runtime
->> > bandwidth is expected to be enforced.
->> >
->> > Make the scheduler favor bandwidth over stopping the tick by setting
->> > TICK_DEP_BIT_SCHED when the only running task is a cfs task with
->> > runtime limit enabled.
->> >
->> > Add sched_feat HZ_BW (off by default) to control this behavior.
->> >
->> > Signed-off-by: Phil Auld <pauld@redhat.com>
->> > Cc: Ingo Molnar <mingo@redhat.com>
->> > Cc: Peter Zijlstra <peterz@infradead.org>
->> > Cc: Vincent Guittot <vincent.guittot@linaro.org>
->> > Cc: Juri Lelli <juri.lelli@redhat.com>
->> > Cc: Dietmar Eggemann <dietmar.eggemann@arm.com>
->> > Cc: Valentin Schneider <vschneid@redhat.com>
->> > Cc: Ben Segall <bsegall@google.com>
->> > ---
->> >
->> > v2:  Ben pointed out that the bit could get cleared in the dequeue path
->> > if we migrate a newly enqueued task without preempting curr. Added a 
->> > check for that edge case to sched_can_stop_tick. Removed the call to 
->> > sched_can_stop_tick from sched_fair_update_stop_tick since it was 
->> > redundant.
->> >
->> >  kernel/sched/core.c     | 12 +++++++++++
->> >  kernel/sched/fair.c     | 45 +++++++++++++++++++++++++++++++++++++++++
->> >  kernel/sched/features.h |  2 ++
->> >  3 files changed, 59 insertions(+)
->> >
->> > diff --git a/kernel/sched/core.c b/kernel/sched/core.c
->> > index a68d1276bab0..646f60bfc7e7 100644
->> > --- a/kernel/sched/core.c
->> > +++ b/kernel/sched/core.c
->> > @@ -1194,6 +1194,8 @@ static void nohz_csd_func(void *info)
->> >  #endif /* CONFIG_NO_HZ_COMMON */
->> >  
->> >  #ifdef CONFIG_NO_HZ_FULL
->> > +extern bool sched_cfs_bandwidth_active(struct cfs_rq *cfs_rq);
->> > +
->> >  bool sched_can_stop_tick(struct rq *rq)
->> >  {
->> >  	int fifo_nr_running;
->> > @@ -1229,6 +1231,16 @@ bool sched_can_stop_tick(struct rq *rq)
->> >  	if (rq->nr_running > 1)
->> >  		return false;
->> >  
->> > +	/*
->> > +	 * If there is one task and it has CFS runtime bandwidth constraints
->> > +	 * and it's on the cpu now we don't want to stop the tick.
->> > +	 */
->> > +	if (sched_feat(HZ_BW) && rq->nr_running == 1 && rq->curr
->> > +	    && rq->curr->sched_class == &fair_sched_class && task_on_rq_queued(rq->curr)) {
->> > +		if (sched_cfs_bandwidth_active(task_cfs_rq(rq->curr)))
->> 
->> Actually, something I should have noticed earlier is that this should
->> probably be hierarchical, right? You need to check every ancestor
->> cfs_rq, not just the immediate parent. And at that point it probably
->> makes sense to have sched_cfs_bandwidth_active take a task_struct.
->> 
+On Thu, 29 Jun 2023 at 08:55, David Howells <dhowells@redhat.com> wrote:
 >
-> Are you saying a child cfs_rq with a parent that has runtime_enabled could
-> itself not have runtime_enabled?   I may be missing something but I don't
-> see how that works.
+> Matt Whitlock, Matthew Wilcox and Dave Chinner are of the opinion that data
+> in the pipe must not be seen to change and that if it does, this is a bug.
 
-Correct.
+I'm not convinced.
 
->
-> account_cfs_rq_runtime() for example just looks at the immediate cfs_rq of
-> curr and bails if it does not have runtime_enabled. How could that task get
-> throttled if it exceeds some parent's limit?
+The whole *point* of vmsplice (and splicing from a file) is the zero-copy.
 
-account_cfs_rq_runtime() is called (primarily) from update_curr(), which
-is called by enqueue_entity/dequeue_entity/entity_tick/etc, which are
-called at each level of the hierarchy.
+If you don't want the zero-copy, then you should use just "write()".
 
-The worse cache behavior of doing a separate walk in sched_can_stop_tick
-aka add/sub_nr_running could I guess be avoided by having some
-runtime_enabled flag on the task struct or rq that is up to date for
-rq->curr only. That would only be a little annoying to keep accurate,
-and there's the dual arguments of "task_struct/rq is already too
-cluttered"/"well they're already so cluttered a little more won't hurt".
+So I disagree violently. This is not a bug unless you can point to
+some other correctness issues.
+
+The "stableness" of the data is literally the *only* difference
+between vmsplice() and write().
+
+> Whilst this does allow the code to be somewhat simplified, it also results
+> in a loss of performance: stolen pages have to be reloaded in accessed
+> again; more data has to be copied.
+
+No. It literally results in a loss of THE WHOLE POINT of vmsplice().
+
+                    Linus
