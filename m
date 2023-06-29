@@ -2,93 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A857574204A
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 08:24:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7526742060
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 08:27:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231726AbjF2GYC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 02:24:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39374 "EHLO
+        id S232001AbjF2G04 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 29 Jun 2023 02:26:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231609AbjF2GXz (ORCPT
+        with ESMTP id S231932AbjF2G01 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 02:23:55 -0400
-Received: from mail-oi1-f197.google.com (mail-oi1-f197.google.com [209.85.167.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 405A62D55
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 23:23:53 -0700 (PDT)
-Received: by mail-oi1-f197.google.com with SMTP id 5614622812f47-3a034580aafso472689b6e.0
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 23:23:53 -0700 (PDT)
+        Thu, 29 Jun 2023 02:26:27 -0400
+Received: from mail-yb1-f176.google.com (mail-yb1-f176.google.com [209.85.219.176])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE5FA30C5;
+        Wed, 28 Jun 2023 23:26:20 -0700 (PDT)
+Received: by mail-yb1-f176.google.com with SMTP id 3f1490d57ef6-c14476f8401so323926276.3;
+        Wed, 28 Jun 2023 23:26:20 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688019832; x=1690611832;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=IpcX8yoGQwtDbbS2InhwrDWLqMJ+UOKxIROuGAmi4E4=;
-        b=g6HGdUr3kLLn/PObD/B/oIPAzLHfZ679AcZ/hzAgpFuVqiYVgP/Vz5HBnbFU8+hIhE
-         cm8cGcOGFFZY5Futq6N+RNmY53ALNVaUjTzY7ygk+rY2Ohx5S8TWgNcLhfy5xwyyH49t
-         wfbUBCMiNv+STSBl2cVayct2EedPzAMGKrDh2zdAXd4yIn+iDSDgY2PW90Z5/FzRDuxK
-         H6WifLiTFaPVd5kN7/60nqe+TM+0u6sp3DCSz75EQiYQImYN14jblRcREHqcQIHUZnqD
-         L5QipVMu2/QP1WY8mYkGYEU28ipNnMtuaBfmhooyRWB2gsVqvOIQ0iMpgY720Cnqbyu0
-         5Cdg==
-X-Gm-Message-State: AC+VfDxai51wYhl/JcIlNwaUARZBfCnJ6XqPngDm47B378qayH+qLgEU
-        69EHtPQsXwlO6OrN3UTdEJx+La/tNv4KJToNuCrTnLW7Hfxb
-X-Google-Smtp-Source: ACHHUZ4OWqm0vehdzke3e3J+zETMbhDo9DI9nEBAGnL7yoqoyvW+/2sgnywN3ZZ+y+SSlxsWCFji9OEyNL2l7l4rcUPxsNr0edsv
+        d=1e100.net; s=20221208; t=1688019979; x=1690611979;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=YfLTbjgoIsSKWwNycBDFQAmVln5oxCfW2uQIjevEO0Q=;
+        b=XsKrwfcPgYsJ3ILFRX7CJ8rq9Dx+sDCYsgRhJ7y7PtbacvLzQL6D4mBPp5mx4Ib0e/
+         FtiI8paUgY/iAzm00i1XJDQBJNg0dvmPZ3GzjyNWyJavSFkqBu+yRGpxutijgc2++hvB
+         sUrww9rzu51b8BGsdBdrDI5BS4MvTy+fcD/HU8xlIgOnexgURuUay9aQ28j+i3CiSMRr
+         0upkak4DqwbdZgvkyGPJ+84kBM5RTW+XA8RiXov2oRLN9P/qPSnl0e18/i+q2r9rNE6V
+         iqh4+lIpuVnpsUCFj5eg+mytkQI8t1j3FcfCmUFWoildSQO2xj8Uwwzptn/dfYpV9yLA
+         yXsQ==
+X-Gm-Message-State: AC+VfDxZmWZFCppYJLUZPyl5Suog6dxoOGsji8W0BMq6sEYd8Pd+NMww
+        dH4ejwQUpSoMl6Fx0TgsttlZOopDswIxxnU4Qyc=
+X-Google-Smtp-Source: ACHHUZ686BJK5GLXUVLpMrxPzUvmVNafwU2xx1cinYaV1jwVxxqvItD9C/+eScUzT8eZ2aDpXxFGKxy5rBZQOyUt7aQ=
+X-Received: by 2002:a25:37d7:0:b0:c0b:7483:5cf0 with SMTP id
+ e206-20020a2537d7000000b00c0b74835cf0mr16305934yba.65.1688019979572; Wed, 28
+ Jun 2023 23:26:19 -0700 (PDT)
 MIME-Version: 1.0
-X-Received: by 2002:aca:de43:0:b0:39c:bfd3:7e with SMTP id v64-20020acade43000000b0039cbfd3007emr12130030oig.10.1688019832673;
- Wed, 28 Jun 2023 23:23:52 -0700 (PDT)
-Date:   Wed, 28 Jun 2023 23:23:52 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000801b1a05ff3ebee0@google.com>
-Subject: [syzbot] linux-next build error (15)
-From:   syzbot <syzbot+4c222134dc629d256ee8@syzkaller.appspotmail.com>
-To:     linux-cifs@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-next@vger.kernel.org, lsahlber@redhat.com, pc@manguebit.com,
-        samba-technical@lists.samba.org, sfr@canb.auug.org.au,
-        sfrench@samba.org, sprasad@microsoft.com,
-        syzkaller-bugs@googlegroups.com, tom@talpey.com
+References: <ZG5kjDN63HqqMuJJ@yoga> <CAM9d7ciUsJM1kZhGbhQUfdxq1rsvLig2C-mAki13a92EjW37kw@mail.gmail.com>
+ <CAP-5=fVekEnC1s=xUG-jFeL20qM=EPNkPO8aw8bcg4cVM=m5wg@mail.gmail.com>
+ <ZHENW4HOIo0F6FnN@yoga> <ZHkEWse0NVZhwKR7@yoga> <ZH5YBBWW5ANckoMp@yoga>
+ <CAP-5=fU7ukrQSh_8OwH9C+a-EwCamCrMaZxjqDhE9f+bFJwQBQ@mail.gmail.com>
+ <ZIHPXV5/ZopqcSSc@yoga> <ZIofrGKElc3nkNk0@yoga> <CAP-5=fV9tXNpYHH9DW0cVbRoFLGvG9SNn-MUhuyKuVBRuDqjoA@mail.gmail.com>
+ <ZJyT8bt0LFLw6hKV@yoga>
+In-Reply-To: <ZJyT8bt0LFLw6hKV@yoga>
+From:   Namhyung Kim <namhyung@kernel.org>
+Date:   Wed, 28 Jun 2023 23:26:08 -0700
+Message-ID: <CAM9d7ch7TdagV+dzj6MCp4fY15Vc4oGJjKAoQDyc=BXqy7qi+A@mail.gmail.com>
+Subject: Re: [RFC] Adding Support for Firefox's Gecko Profile Format
+To:     Anup Sharma <anupnewsmail@gmail.com>
+Cc:     Ian Rogers <irogers@google.com>, linux-perf-users@vger.kernel.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Hi Anup,
 
-syzbot found the following issue on:
+On Wed, Jun 28, 2023 at 1:11 PM Anup Sharma <anupnewsmail@gmail.com> wrote:
+>
+> On Wed, Jun 14, 2023 at 01:17:52PM -0700, Ian Rogers wrote:
+> > On Wed, Jun 14, 2023 at 1:14 PM Anup Sharma <anupnewsmail@gmail.com> wrote:
+> > >
+> > > On Thu, Jun 08, 2023 at 06:23:49PM +0530, Anup Sharma wrote:
+> > > I wanted to take a moment to provide you with an update on the progress
+> > > of our Firefox Gecko converter work. While I must emphasize that the code
+> > > I'm sharing is not the final version, I wanted to share the advancements
+> > > I have made thus far.
+> > >
+> > > This script can generate a JSON format from the output of the "perf script" command.
+> > > I attempted to load this JSON file into profile.firefox.com, and although it
+> > > successfully loaded, the call tree are not visible. I'm certain this issue
+> > > is related to the format of the JSON file or if there is another underlying
+> > > cause. I will continue investigating to determine the cause of this problem.
+> >
+> > Great Anup, progress can be frustrating slow at first but it is a good
+> > milestone to be generating output and having firefox profiler consume
+> > it. You can open up the JavaScript console for the firefox profiler
+> > and it will give some debug output. This should hopefully help you
+> > make progress.
+>
+> This week I tried playing with perf-script-python, the first challenge was
+> figuring out how to parse the data coming from the process_events.
+> Understanding the structure and extracting the necessary information
+> proved to be more complex than anticipated. This required me to spend
+> a significant amount of time researching and experimenting with different
+> parsing techniques.
 
-HEAD commit:    8b14b70331aa Add linux-next specific files for 20230629
-git tree:       linux-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=11079dbf280000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=83c17849d18e7a86
-dashboard link: https://syzkaller.appspot.com/bug?extid=4c222134dc629d256ee8
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+I'm not sure what kind of parsing you meant.  IIRC the sample data is
+in a dict and all the information should be available there.  Maybe we
+missed some new sample data types though.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+4c222134dc629d256ee8@syzkaller.appspotmail.com
+>
+> The second challenge revolved around the usage of event hooks provided with the perf script
+> python event handlers. I found myself deliberating between two approaches. The first
+> approach involved creating custom functions that would be called using the event
+> handlers. These functions would then save the data in an organized format within
+> globally created data structures. The alternative approach was to write the entire
+> logic inside the event handlers themselves.
+>
+> Additionally, I contemplated whether it would be more suitable to handle the creation of
+> a Gecko format for JSON and the profile format within the same script or to separate
+> them into different scripts.
+>
+> I will discuss this points during tomorrow's office hour.
+>
+> However, I have gained a deeper understanding of the problem at hand and will use this
+> knowledge to make more informed decisions and progress more effectively in the coming weeks.
 
-fs/smb/client/cifs_debug.c:169:1: error: label at end of compound statement
+Sounds like you did a good amount of research on how perf script
+works.  We can talk about the details in the meeting.
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-
-If the bug is already fixed, let syzbot know by replying with:
-#syz fix: exact-commit-title
-
-If you want to change bug's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
-
-If the bug is a duplicate of another bug, reply with:
-#syz dup: exact-subject-of-another-report
-
-If you want to undo deduplication, reply with:
-#syz undup
+Thanks,
+Namhyung
