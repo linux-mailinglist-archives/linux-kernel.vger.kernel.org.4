@@ -2,296 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDFAC741D0C
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 02:35:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A55A741D45
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 02:37:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230082AbjF2AfA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 28 Jun 2023 20:35:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58430 "EHLO
+        id S231767AbjF2AhT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 28 Jun 2023 20:37:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230492AbjF2Ae5 (ORCPT
+        with ESMTP id S231933AbjF2AhG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 28 Jun 2023 20:34:57 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C75152102
-        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 17:34:55 -0700 (PDT)
+        Wed, 28 Jun 2023 20:37:06 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DBFA2D63
+        for <linux-kernel@vger.kernel.org>; Wed, 28 Jun 2023 17:37:04 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2F754614B0
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 00:34:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35EAAC433CA;
-        Thu, 29 Jun 2023 00:34:52 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3230761489
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 00:37:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5AA5C433C0;
+        Thu, 29 Jun 2023 00:37:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687998894;
-        bh=H5CexLdNVkHoiH7McrTGx6XWtj4Sm7MNlNrvQTM04Nc=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=Q2z1YaCRJUqJUKiwHVcwNrKfzi/x330n6aqNeBwfW5WSzGNUCklsM/JMN0purdjja
-         PEnbAqroqQgScEtFDBy3XDoIN0aLUFS4hCGQfe/W4BByo63ESQprTCXYSFHzjRGOsM
-         EU6X8yTL/BCYgbxqbRvsH4n7I4sz961za9cCv4guNUmSGDwgVHMEq5HwlFzydshA+9
-         NnABe9yorsd3019bSA667hPI8cYCWiNqntdtv79HOGwiA34QYuNca1GHy9sVzs9Psn
-         l0Qd3eOXHu8JpO3ci63nJybVq26h6eWZf9DgFFZYZS/HY8Yr87H/7Z2uerkBq195Pe
-         eB1BtgypUvvpQ==
-Date:   Thu, 29 Jun 2023 09:34:50 +0900
-From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To:     Masami Hiramatsu (Google) <mhiramat@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Akanksha J N <akanksha@linux.ibm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [GIT PULL] Probes update for v6.5
-Message-Id: <20230629093450.376e43232c28c82624da622f@kernel.org>
-In-Reply-To: <20230628005818.c8df3a79955c7585d979419b@kernel.org>
-References: <20230628005818.c8df3a79955c7585d979419b@kernel.org>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
+        s=k20201202; t=1687999023;
+        bh=RbA+79AH9JCoDWq9dm/zU/V/7D09CMZCr404fAuCY28=;
+        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
+        b=fGXZuB2pfrlyrXMYyVBq+UhBVu7gck/SCxrPPK1triuE7c/KtGKvlEe0sEG6hgjUW
+         PjVaVA61ZUqZfxibCNPlGYMPDtnzQYNj4oMCEgaNGuBvJ/LYyasenqIJHjJOu4MO4o
+         8FbKHT/uI7f1Y9KZq0uhitwuFbc53ywp0KFSLumsuwRm7ciIyiQ8QYAZ4uI96igrHN
+         OClS2PgtxSpOvKAH8VawcpaLIB7+RETmgWFFdlfYTTSWkzzdJ4GC57YkKY4R6b8Y6x
+         1lAi4y/WWVNlBqVJdbG5vNrvm79n07LJN1iB1N8LJAw6HbEfxrr/BrmkTIzJrtk5M7
+         +5fWnsSd5jk9w==
+Date:   Wed, 28 Jun 2023 17:37:01 -0700 (PDT)
+From:   Stefano Stabellini <sstabellini@kernel.org>
+X-X-Sender: sstabellini@ubuntu-linux-20-04-desktop
+To:     Oleksandr Tyshchenko <Oleksandr_Tyshchenko@epam.com>
+cc:     Petr Pavlu <petr.pavlu@suse.com>,
+        "xen-devel@lists.xenproject.org" <xen-devel@lists.xenproject.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "sstabellini@kernel.org" <sstabellini@kernel.org>,
+        "jgross@suse.com" <jgross@suse.com>
+Subject: Re: [PATCH 1/2] xen/virtio: Fix NULL deref when a bridge of PCI root
+ bus has no parent
+In-Reply-To: <249a24a2-497f-7695-452d-f509ebe89a14@epam.com>
+Message-ID: <alpine.DEB.2.22.394.2306281736502.3936094@ubuntu-linux-20-04-desktop>
+References: <20230621131214.9398-1-petr.pavlu@suse.com> <20230621131214.9398-2-petr.pavlu@suse.com> <249a24a2-497f-7695-452d-f509ebe89a14@epam.com>
+User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
+MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+On Wed, 21 Jun 2023, Oleksandr Tyshchenko wrote:
+> On 21.06.23 16:12, Petr Pavlu wrote:
+> Hello Petr
+> 
+> 
+> > When attempting to run Xen on a QEMU/KVM virtual machine with virtio
+> > devices (all x86_64), function xen_dt_get_node() crashes on accessing
+> > bus->bridge->parent->of_node because a bridge of the PCI root bus has no
+> > parent set:
+> > 
+> > [    1.694192][    T1] BUG: kernel NULL pointer dereference, address: 0000000000000288
+> > [    1.695688][    T1] #PF: supervisor read access in kernel mode
+> > [    1.696297][    T1] #PF: error_code(0x0000) - not-present page
+> > [    1.696297][    T1] PGD 0 P4D 0
+> > [    1.696297][    T1] Oops: 0000 [#1] PREEMPT SMP NOPTI
+> > [    1.696297][    T1] CPU: 0 PID: 1 Comm: swapper/0 Not tainted 6.3.7-1-default #1 openSUSE Tumbleweed a577eae57964bb7e83477b5a5645a1781df990f0
+> > [    1.696297][    T1] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS rel-1.15.0-0-g2dd4b9b-rebuilt.opensuse.org 04/01/2014
+> > [    1.696297][    T1] RIP: e030:xen_virtio_restricted_mem_acc+0xd9/0x1c0
+> > [    1.696297][    T1] Code: 45 0c 83 e8 c9 a3 ea ff 31 c0 eb d7 48 8b 87 40 ff ff ff 48 89 c2 48 8b 40 10 48 85 c0 75 f4 48 8b 82 10 01 00 00 48 8b 40 40 <48> 83 b8 88 02 00 00 00 0f 84 45 ff ff ff 66 90 31 c0 eb a5 48 89
+> > [    1.696297][    T1] RSP: e02b:ffffc90040013cc8 EFLAGS: 00010246
+> > [    1.696297][    T1] RAX: 0000000000000000 RBX: ffff888006c75000 RCX: 0000000000000029
+> > [    1.696297][    T1] RDX: ffff888005ed1000 RSI: ffffc900400f100c RDI: ffff888005ee30d0
+> > [    1.696297][    T1] RBP: ffff888006c75010 R08: 0000000000000001 R09: 0000000330000006
+> > [    1.696297][    T1] R10: ffff888005850028 R11: 0000000000000002 R12: ffffffff830439a0
+> > [    1.696297][    T1] R13: 0000000000000000 R14: ffff888005657900 R15: ffff888006e3e1e8
+> > [    1.696297][    T1] FS:  0000000000000000(0000) GS:ffff88804a000000(0000) knlGS:0000000000000000
+> > [    1.696297][    T1] CS:  e030 DS: 0000 ES: 0000 CR0: 0000000080050033
+> > [    1.696297][    T1] CR2: 0000000000000288 CR3: 0000000002e36000 CR4: 0000000000050660
+> > [    1.696297][    T1] Call Trace:
+> > [    1.696297][    T1]  <TASK>
+> > [    1.696297][    T1]  virtio_features_ok+0x1b/0xd0
+> > [    1.696297][    T1]  virtio_dev_probe+0x19c/0x270
+> > [    1.696297][    T1]  really_probe+0x19b/0x3e0
+> > [    1.696297][    T1]  __driver_probe_device+0x78/0x160
+> > [    1.696297][    T1]  driver_probe_device+0x1f/0x90
+> > [    1.696297][    T1]  __driver_attach+0xd2/0x1c0
+> > [    1.696297][    T1]  bus_for_each_dev+0x74/0xc0
+> > [    1.696297][    T1]  bus_add_driver+0x116/0x220
+> > [    1.696297][    T1]  driver_register+0x59/0x100
+> > [    1.696297][    T1]  virtio_console_init+0x7f/0x110
+> > [    1.696297][    T1]  do_one_initcall+0x47/0x220
+> > [    1.696297][    T1]  kernel_init_freeable+0x328/0x480
+> > [    1.696297][    T1]  kernel_init+0x1a/0x1c0
+> > [    1.696297][    T1]  ret_from_fork+0x29/0x50
+> > [    1.696297][    T1]  </TASK>
+> > [    1.696297][    T1] Modules linked in:
+> > [    1.696297][    T1] CR2: 0000000000000288
+> > [    1.696297][    T1] ---[ end trace 0000000000000000 ]---
+> > 
+> > The PCI root bus is in this case created from ACPI description via
+> > acpi_pci_root_add() -> pci_acpi_scan_root() -> acpi_pci_root_create() ->
+> > pci_create_root_bus() where the last function is called with
+> > parent=NULL. It indicates that no parent is present and then
+> > bus->bridge->parent is NULL too.
+> > 
+> > Fix the problem by checking bus->bridge->parent in xen_dt_get_node() for
+> > NULL first >
+> > Fixes: ef8ae384b4c9 ("xen/virtio: Handle PCI devices which Host controller is described in DT")
+> 
+> Oops, sorry. I have to admit I checked with DT only.
+> 
+> 
+> > Signed-off-by: Petr Pavlu <petr.pavlu@suse.com>
+> 
+> 
+> Reviewed-by: Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
 
-Oops, I found the subject format was wrong. Let me resend it.
-
-On Wed, 28 Jun 2023 00:58:18 +0900
-Masami Hiramatsu (Google) <mhiramat@kernel.org> wrote:
-
-> Hi Linus,
-> 
-> Probes updates for v6.5:
-> 
-> - fprobe: Pass return address to the fprobe entry/exit callbacks so that
->   the callbacks don't need to analyze pt_regs/stack to find the function
->   return address.
-> 
-> - kprobe events: cleanup usage of TPARG_FL_FENTRY and TPARG_FL_RETURN
->   flags so that those are not set at once.
-> 
-> - fprobe events:
->  . Add a new fprobe events for tracing arbitrary function entry and
->    exit as a trace event.
->  . Add a new tracepoint events for tracing raw tracepoint as a trace
->    event. This allows user to trace non user-exposed tracepoints.
->  . Move eprobe's event parser code into probe event common file.
->  . Introduce BTF (BPF type format) support to kernel probe (kprobe,
->    fprobe and tracepoint probe) events so that user can specify traced
->    function arguments by name. This also applies the type of argument
->    when fetching the argument.
->  . Introduce '$arg*' wildcard support if BTF is available. This expands
->    the '$arg*' meta argument to all function argument automatically.
->  . Check the return value types by BTF. If the function returns 'void',
->    '$retval' is rejected.
->  . Add some selftest script for fprobe events, tracepoint events and
->    BTF support.
->  . Update documentation about the fprobe events.
->  . Some fixes for above features, document and selftests.
-> 
-> - selftests for ftrace (except for new fprobe events):
->  . Add a test case for multiple consecutive probes in a function which
->    checks if ftrace based kprobe, optimized kprobe and normal kprobe
->    can be defined in the same target function.
->  . Add a test case for optimized probe, which checks whether kprobe
->    can be optimized or not.
-> 
-> 
-> Please pull the latest probes-v6.5 tree, which can be found at:
-> 
-> 
->   git://git.kernel.org/pub/scm/linux/kernel/git/trace/linux-trace.git
-> probes-v6.5
-> 
-> Tag SHA1: 08bb7e2de7f32619cd100419e719ef96d6cf0aab
-> Head SHA1: 53431798f4bb60d214ae1ec4a79eefdd414f577b
-> 
-> 
-> Akanksha J N (2):
->       selftests/ftrace: Add new test case which adds multiple consecutive probes in a function
->       selftests/ftrace: Add new test case which checks for optimized probes
-> 
-> Masami Hiramatsu (Google) (15):
->       fprobe: Pass return address to the handlers
->       tracing/probes: Avoid setting TPARG_FL_FENTRY and TPARG_FL_RETURN
->       tracing/probes: Add fprobe events for tracing function entry and exit.
->       selftests/ftrace: Add fprobe related testcases
->       tracing/probes: Add tracepoint support on fprobe_events
->       tracing/probes: Move event parameter fetching code to common parser
->       tracing/probes: Support function parameters if BTF is available
->       tracing/probes: Add $arg* meta argument for all function args
->       tracing/probes: Add BTF retval type support
->       selftests/ftrace: Add tracepoint probe test case
->       selftests/ftrace: Add BTF arguments test cases
->       Documentation: tracing/probes: Add fprobe event tracing document
->       tracing/probes: Fix to return NULL and keep using current argc
->       Documentation: Fix typo of reference file name
->       tracing/probes: Fix tracepoint event with $arg* to fetch correct argument
-> 
-> ----
->  Documentation/trace/fprobetrace.rst                |  188 +++
->  Documentation/trace/index.rst                      |    1 +
->  Documentation/trace/kprobetrace.rst                |    2 +
->  include/linux/fprobe.h                             |   11 +-
->  include/linux/rethook.h                            |    2 +-
->  include/linux/trace_events.h                       |    3 +
->  include/linux/tracepoint-defs.h                    |    1 +
->  include/linux/tracepoint.h                         |    5 +
->  kernel/kprobes.c                                   |    1 +
->  kernel/trace/Kconfig                               |   26 +
->  kernel/trace/Makefile                              |    1 +
->  kernel/trace/bpf_trace.c                           |    6 +-
->  kernel/trace/fprobe.c                              |   17 +-
->  kernel/trace/rethook.c                             |    3 +-
->  kernel/trace/trace.c                               |   13 +-
->  kernel/trace/trace.h     Linus,
-> 
-> Probes updates for v6.5:
-> 
-> - fprobe: Pass return address to the fprobe entry/exit callbacks so that
->   the callbacks don't need to analyze pt_regs/stack to find the function
->   return address.
-> 
-> - kprobe events: cleanup usage of TPARG_FL_FENTRY and TPARG_FL_RETURN
->   flags so that those are not set at once.
-> 
-> - fprobe events:
->  . Add a new fprobe events for tracing arbitrary function entry and
->    exit as a trace event.
->  . Add a new tracepoint events for tracing raw tracepoint as a trace
->    event. This allows user to trace non user-exposed tracepoints.
->  . Move eprobe's event parser code into probe event common file.
->  . Introduce BTF (BPF type format) support to kernel probe (kprobe,
->    fprobe and tracepoint probe) events so that user can specify traced
->    function arguments by name. This also applies the type of argument
->    when fetching the argument.
->  . Introduce '$arg*' wildcard support if BTF is available. This expands
->    the '$arg*' meta argument to all function argument automatically.
->  . Check the return value types by BTF. If the function returns 'void',
->    '$retval' is rejected.
->  . Add some selftest script for fprobe events, tracepoint events and
->    BTF support.
->  . Update documentation about the fprobe events.
->  . Some fixes for above features, document and selftests.
-> 
-> - selftests for ftrace (except for new fprobe events):
->  . Add a test case for multiple consecutive probes in a function which
->    checks if ftrace based kprobe, optimized kprobe and normal kprobe
->    can be defined in the same target function.
->  . Add a test case for optimized probe, which checks whether kprobe
->    can be optimized or not.
-> 
-> 
-> Please pull the latest probes-v6.5 tree, which can be found at:
-> 
-> 
->   git://git.kernel.org/pub/scm/linux/kernel/git/trace/linux-trace.git
-> probes-v6.5
-> 
-> Tag SHA1: 08bb7e2de7f32619cd100419e719ef96d6cf0aab
-> Head SHA1: 53431798f4bb60d214ae1ec4a79eefdd414f577b
-> 
-> 
-> Akanksha J N (2):
->       selftests/ftrace: Add new test case which adds multiple consecutive probes in a function
->       selftests/ftrace: Add new test case which checks for optimized probes
-> 
-> Masami Hiramatsu (Google) (15):
->       fprobe: Pass return address to the handlers
->       tracing/probes: Avoid setting TPARG_FL_FENTRY and TPARG_FL_RETURN
->       tracing/probes: Add fprobe events for tracing function entry and exit.
->       selftests/ftrace: Add fprobe related testcases
->       tracing/probes: Add tracepoint support on fprobe_events
->       tracing/probes: Move event parameter fetching code to common parser
->       tracing/probes: Support function parameters if BTF is available
->       tracing/probes: Add $arg* meta argument for all function args
->       tracing/probes: Add BTF retval type support
->       selftests/ftrace: Add tracepoint probe test case
->       selftests/ftrace: Add BTF arguments test cases
->       Documentation: tracing/probes: Add fprobe event tracing document
->       tracing/probes: Fix to return NULL and keep using current argc
->       Documentation: Fix typo of reference file name
->       tracing/probes: Fix tracepoint event with $arg* to fetch correct argument
-> 
-> ----
->  Documentation/trace/fprobetrace.rst                |  188 +++
->  Documentation/trace/index.rst                      |    1 +
->  Documentation/trace/kprobetrace.rst                |    2 +
->  include/linux/fprobe.h                             |   11 +-
->  include/linux/rethook.h                            |    2 +-
->  include/linux/trace_events.h                       |    3 +
->  include/linux/tracepoint-defs.h                    |    1 +
->  include/linux/tracepoint.h                         |    5 +
->  kernel/kprobes.c                                   |    1 +
->  kernel/trace/Kconfig                               |   26 +
->  kernel/trace/Makefile                              |    1 +
->  kernel/trace/bpf_trace.c                           |    6 +-
->  kernel/trace/fprobe.c                              |   17 +-
->  kernel/trace/rethook.c                             |    3 +-
->  kernel/trace/trace.c                               |   13 +-
->  kernel/trace/trace.h                               |   11 +
->  kernel/trace/trace_eprobe.c                        |   44 +-
->  kernel/trace/trace_fprobe.c                        | 1199 ++++++++++++++++++++
->  kernel/trace/trace_kprobe.c                        |   35 +-
->  kernel/trace/trace_probe.c                         |  659 +++++++++--
->  kernel/trace/trace_probe.h                         |   49 +-
->  kernel/trace/trace_uprobe.c                        |    8 +-
->  lib/test_fprobe.c                                  |   10 +-
->  samples/fprobe/fprobe_example.c                    |    6 +-
->  .../ftrace/test.d/dynevent/add_remove_btfarg.tc    |   58 +
->  .../ftrace/test.d/dynevent/add_remove_fprobe.tc    |   26 +
->  .../ftrace/test.d/dynevent/add_remove_tprobe.tc    |   27 +
->  .../ftrace/test.d/dynevent/fprobe_syntax_errors.tc |  111 ++
->  .../ftrace/test.d/dynevent/tprobe_syntax_errors.tc |   82 ++
->  .../ftrace/test.d/kprobe/kprobe_insn_boundary.tc   |   19 +
->  .../ftrace/test.d/kprobe/kprobe_opt_types.tc       |   34 +
->  .../ftrace/test.d/kprobe/kprobe_syntax_errors.tc   |   16 +-
->  32 files changed, 2510 insertions(+), 164 deletions(-)
->  create mode 100644 Documentation/trace/fprobetrace.rst
->  create mode 100644 kernel/trace/trace_fprobe.c
->  create mode 100644 tools/testing/selftests/ftrace/test.d/dynevent/add_remove_btfarg.tc
->  create mode 100644 tools/testing/selftests/ftrace/test.d/dynevent/add_remove_fprobe.tc
->  create mode 100644 tools/testing/selftests/ftrace/test.d/dynevent/add_remove_tprobe.tc
->  create mode 100644 tools/testing/selftests/ftrace/test.d/dynevent/fprobe_syntax_errors.tc
->  create mode 100644 tools/testing/selftests/ftrace/test.d/dynevent/tprobe_syntax_errors.tc
->  create mode 100644 tools/testing/selftests/ftrace/test.d/kprobe/kprobe_insn_boundary.tc
->  create mode 100644 tools/testing/selftests/ftrace/test.d/kprobe/kprobe_opt_types.tc                          |   11 +
->  kernel/trace/trace_eprobe.c                        |   44 +-
->  kernel/trace/trace_fprobe.c                        | 1199 ++++++++++++++++++++
->  kernel/trace/trace_kprobe.c                        |   35 +-
->  kernel/trace/trace_probe.c                         |  659 +++++++++--
->  kernel/trace/trace_probe.h                         |   49 +-
->  kernel/trace/trace_uprobe.c                        |    8 +-
->  lib/test_fprobe.c                                  |   10 +-
->  samples/fprobe/fprobe_example.c                    |    6 +-
->  .../ftrace/test.d/dynevent/add_remove_btfarg.tc    |   58 +
->  .../ftrace/test.d/dynevent/add_remove_fprobe.tc    |   26 +
->  .../ftrace/test.d/dynevent/add_remove_tprobe.tc    |   27 +
->  .../ftrace/test.d/dynevent/fprobe_syntax_errors.tc |  111 ++
->  .../ftrace/test.d/dynevent/tprobe_syntax_errors.tc |   82 ++
->  .../ftrace/test.d/kprobe/kprobe_insn_boundary.tc   |   19 +
->  .../ftrace/test.d/kprobe/kprobe_opt_types.tc       |   34 +
->  .../ftrace/test.d/kprobe/kprobe_syntax_errors.tc   |   16 +-
->  32 files changed, 2510 insertions(+), 164 deletions(-)
->  create mode 100644 Documentation/trace/fprobetrace.rst
->  create mode 100644 kernel/trace/trace_fprobe.c
->  create mode 100644 tools/testing/selftests/ftrace/test.d/dynevent/add_remove_btfarg.tc
->  create mode 100644 tools/testing/selftests/ftrace/test.d/dynevent/add_remove_fprobe.tc
->  create mode 100644 tools/testing/selftests/ftrace/test.d/dynevent/add_remove_tprobe.tc
->  create mode 100644 tools/testing/selftests/ftrace/test.d/dynevent/fprobe_syntax_errors.tc
->  create mode 100644 tools/testing/selftests/ftrace/test.d/dynevent/tprobe_syntax_errors.tc
->  create mode 100644 tools/testing/selftests/ftrace/test.d/kprobe/kprobe_insn_boundary.tc
->  create mode 100644 tools/testing/selftests/ftrace/test.d/kprobe/kprobe_opt_types.tc
-> 
-> -- 
-> Masami Hiramatsu (Google) <mhiramat@kernel.org>
-
-
--- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+Reviewed-by: Stefano Stabellini <sstabellini@kernel.org>
