@@ -2,82 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B5ED743139
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 01:50:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93F51743137
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 01:50:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232105AbjF2Xo1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 19:44:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37184 "EHLO
+        id S231305AbjF2Xrm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 19:47:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231282AbjF2XoL (ORCPT
+        with ESMTP id S229646AbjF2Xri (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 19:44:11 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED7843AAB
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 16:43:43 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BB1E86167A
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 23:43:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76DA5C433C9;
-        Thu, 29 Jun 2023 23:43:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688082200;
-        bh=KIYW1lUTJeQEkbIElm6us4axZkg9EmgFSwq92AAsf6A=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=FAwxhF/sxTGaYZAjCNqCnXzM7+1IK6BDzDB725t8iS0GHPDcS1bhTM8BwwZl6JeVx
-         61w93PxTHNhifhYhOawcWoYmxCqnzubKSubp9DLbQgU5P8G5Z/IdzpHEVRCTKsikYr
-         I7EkcgcYNjVcKq2Id/oC2GgeGbmBqOPfYQqZC7PtYzGfRG+4O34EytEQW0oF0aqKAQ
-         803uYRUYut+Nfy4yz0+l6nAZLT68yUufkg5pNe0mCuD15bJ0+Q2Vj1FQ3H5TtaMdTm
-         SmurcO0ub7iNkhFWFvhRR4LvPCC0uoam7AqUJfZjdPBphlYAfCZynAHlsqyoRcpell
-         xnaG0uRIZVnag==
-Date:   Thu, 29 Jun 2023 16:43:18 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     David Howells <dhowells@redhat.com>
-Cc:     Aurelien Aptel <aaptel@nvidia.com>, netdev@vger.kernel.org,
-        Alexander Duyck <alexander.duyck@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-        David Ahern <dsahern@kernel.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Jens Axboe <axboe@kernel.dk>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, Sagi Grimberg <sagi@grimberg.me>,
-        Willem de Bruijn <willemb@google.com>,
-        Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@fb.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Chaitanya Kulkarni <kch@nvidia.com>,
-        linux-nvme@lists.infradead.org, llvm@lists.linux.dev
-Subject: Re: [PATCH net-next v3 10/18] nvme/host: Use
- sendmsg(MSG_SPLICE_PAGES) rather then sendpage
-Message-ID: <20230629164318.44f45caf@kernel.org>
-In-Reply-To: <58466.1688074499@warthog.procyon.org.uk>
-References: <253mt0il43o.fsf@mtr-vdi-124.i-did-not-set--mail-host-address--so-tickle-me>
-        <20230620145338.1300897-1-dhowells@redhat.com>
-        <20230620145338.1300897-11-dhowells@redhat.com>
-        <58466.1688074499@warthog.procyon.org.uk>
+        Thu, 29 Jun 2023 19:47:38 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 947382D50;
+        Thu, 29 Jun 2023 16:47:36 -0700 (PDT)
+X-QQ-mid: bizesmtp69t1688082446tioisu3e
+Received: from linux-lab-host.localdomain ( [119.123.131.49])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Fri, 30 Jun 2023 07:47:25 +0800 (CST)
+X-QQ-SSF: 01200000000000D0W000000A0000000
+X-QQ-FEAT: GUznYiACrGRXU/PHOEhZV4uIpp/gsrUe2qnOFpSTSF4MU1t9SCpp/PEXkGLnU
+        X5sOQhdKVk9smFzAGQFaDLeDEwaVOpwCjMZ/QvMIpG5KF3300XxhHvoQpm6rFYpTpMhdbWa
+        gielDawdT0Lm8wppHPUNs30pHHLYDJozuaT+A5bC2vX6H5DIQHD2GRfibL9k1GlUy1sL7iw
+        U2L0h/dLPqID9hcbsmNDXA/PNc+YmKx8l6rpH7i7qkRkeUeLDZtU5S8PXbXWE5Vuf2jW2WT
+        IQtTG3PqUOW8AttwjOR41SezOEo15azPYbN7wfChYvXhPFoUf362D8B7WwnbHY3pS1qAFbX
+        T2mZ380MafeGj9Wbhzx8/WUCYI8pfecB1ICzTqF3SXKkLsgfhQ=
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 1361039155256738211
+From:   Zhangjin Wu <falcon@tinylab.org>
+To:     thomas@t-8ch.de, w@1wt.eu
+Cc:     falcon@tinylab.org, arnd@arndb.de, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: [PATCH v2 08/15] tools/nolibc: add rmdir() support
+Date:   Fri, 30 Jun 2023 07:45:00 +0800
+Message-Id: <7a2cde610506ca288742b4e52833572c4341ac20.1688078605.git.falcon@tinylab.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <cover.1688078604.git.falcon@tinylab.org>
+References: <cover.1688078604.git.falcon@tinylab.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrgz:qybglogicsvrgz5a-1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H5,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 29 Jun 2023 22:34:59 +0100 David Howells wrote:
->                 if (!sendpage_ok(page))
-> -                       msg.msg_flags &=3D ~MSG_SPLICE_PAGES,
-> +                       msg.msg_flags &=3D ~MSG_SPLICE_PAGES;
+a reverse operation of mkdir() is meaningful, add rmdir() here.
 
-=F0=9F=98=B5=EF=B8=8F
+required by nolibc-test to remove /proc while CONFIG_PROC_FS is not
+enabled.
 
-Let me CC llvm@ in case someone's there is willing to make=20
-the compiler warn about this.
+Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
+---
+ tools/include/nolibc/sys.h | 22 ++++++++++++++++++++++
+ 1 file changed, 22 insertions(+)
+
+diff --git a/tools/include/nolibc/sys.h b/tools/include/nolibc/sys.h
+index b6c33c40c037..7b052958e2ae 100644
+--- a/tools/include/nolibc/sys.h
++++ b/tools/include/nolibc/sys.h
+@@ -610,6 +610,28 @@ int mkdir(const char *path, mode_t mode)
+ 	return __sysret(sys_mkdir(path, mode));
+ }
+ 
++/*
++ * int rmdir(const char *path);
++ */
++
++static __attribute__((unused))
++int sys_rmdir(const char *path)
++{
++#ifdef __NR_rmdir
++	return my_syscall1(__NR_rmdir, path);
++#elif defined(__NR_unlinkat)
++	return my_syscall3(__NR_unlinkat, AT_FDCWD, path, AT_REMOVEDIR);
++#else
++	return -ENOSYS;
++#endif
++}
++
++static __attribute__((unused))
++int rmdir(const char *path)
++{
++	return __sysret(sys_rmdir(path));
++}
++
+ 
+ /*
+  * int mknod(const char *path, mode_t mode, dev_t dev);
+-- 
+2.25.1
+
