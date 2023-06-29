@@ -2,121 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00BA0742821
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 16:18:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CED7742822
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 16:18:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231784AbjF2OSZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 10:18:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56560 "EHLO
+        id S231245AbjF2OS2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 10:18:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232060AbjF2OSJ (ORCPT
+        with ESMTP id S229494AbjF2OSX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 10:18:09 -0400
-Received: from smtp2.axis.com (smtp2.axis.com [195.60.68.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34DDA1737
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 07:18:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=axis.com; q=dns/txt; s=axis-central1; t=1688048287;
-  x=1719584287;
-  h=from:date:subject:mime-version:content-transfer-encoding:
-   message-id:to:cc;
-  bh=/EACAvCkqaq5SWsngoSCmDYPrtH4Wz7SJv4BW6QmdMI=;
-  b=bBbcSEsxarDnMjaFAdXLmJ7oTwjegItzZ/M7U3u74beXPcGsDYIHb4Zc
-   sdWSQxjmRwlgSOioXtJuD0vvzdEQSLP9raqfyIg81NV76oXmf2BLc7F+O
-   rQBuITpEmfASG+DRmMBZc14gHcXJ94THixkb2NudyWrxSbE3AkFTmfWki
-   Ug2s9eaNojh83qZINUM8yxXj13MGbWLSIWMJwSf88nKs89PgjwN06JQtB
-   0sgWscodyCeeEATB1gI4B7fScMvfAMqAFtjf38nsF7GptBT6OxwiCT8qP
-   v4ywD5cV9DTr0a3qXHAlvYYBtGXNGyynBvmZTNi8myn/h620TKyZRU911
-   g==;
-From:   Vincent Whitchurch <vincent.whitchurch@axis.com>
-Date:   Thu, 29 Jun 2023 16:17:57 +0200
-Subject: [PATCH] squashfs: fix cache race with migration
+        Thu, 29 Jun 2023 10:18:23 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0B0E358A
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 07:18:22 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6D81E61558
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 14:18:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9AF03C433C0;
+        Thu, 29 Jun 2023 14:18:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688048301;
+        bh=cBPe9u9KZDbd5csui0WGqBq35mFNRweRCSHEgHuupio=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=IeH88kCjF7clYHMc/gXG35iOIKXaXt9dNRMKWDcvWq67WplRlgpl5+mpSPrXG0Y3h
+         MidfVBrgZF0qgjW7lZawaoy84q2UhhkOJdUBHIOy6wmF0B2V5r5gjM0PinG7Izkobw
+         iI0eIMmSaSnV6fjQlCsyaP5e53WGy3xLwGr48SChdeyGZ4In/Km+WSogRkDshxiXKR
+         qcPBnyPt8bZcYVPDQ4twWcltZSzY9+v9dw7l8fmpiPva05xAPu0upe4hUYneO3sq6z
+         lSiFwuSXqsiX0u0cENpr09ZE2rKzauHxBU+M3JF7p2hUBzgA85Ll97Vmug0tSq14J7
+         KCi6khFiRocpw==
+Date:   Thu, 29 Jun 2023 07:18:19 -0700
+From:   Josh Poimboeuf <jpoimboe@kernel.org>
+To:     Michal Kubecek <mkubecek@suse.cz>
+Cc:     Peter Zijlstra <peterz@infradead.org>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] objtool: initialize all of struct elf
+Message-ID: <20230629141819.aopy23zi5wc6iqof@treble>
+References: <20230629102051.42E8360467@lion.mk-sys.cz>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-ID: <20230629-squashfs-cache-migration-v1-1-d50ebe55099d@axis.com>
-X-B4-Tracking: v=1; b=H4sIAJSSnWQC/x2NQQ7CMAwEv1L5jKU0TUHlK4iDG5zGBxKwASFV/
- Tspx1lpZlcwVmGDc7eC8kdMamnQHzqImcrCKLfG4J0f3NFPaM83WU6GkWJmvMui9GoS+lM/Bhp
- dCmGCps9kjLNSiXkPpFqHfX4oJ/n+Hy/XbfsByl3ZJYEAAAA=
-To:     Phillip Lougher <phillip@squashfs.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>
-CC:     Christoph Hellwig <hch@lst.de>, <linux-kernel@vger.kernel.org>,
-        <kernel@axis.com>, Vincent Whitchurch <vincent.whitchurch@axis.com>
-X-Mailer: b4 0.12.2
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230629102051.42E8360467@lion.mk-sys.cz>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Migration replaces the page in the mapping before copying the contents
-and the flags over from the old page, so check that the page in the page
-cache is really up to date before using it.  Without this, stressing
-squashfs reads with parallel compaction sometimes results in squashfs
-reporting data corruption.
+On Thu, Jun 29, 2023 at 12:05:05PM +0200, Michal Kubecek wrote:
+> Function elf_open_read() only zero initializes the initial part of
+> allocated struct elf; num_relocs member was recently added outside the
+> zeroed part so that it was left uninitialized, resulting in build failures
+> on some systems.
+> 
+> The partial initialization is a relic of times when struct elf had large
+> hash tables embedded. This is no longer the case so remove the trap and
+> initialize the whole structure instead.
+> 
+> Fixes: eb0481bbc4ce ("objtool: Fix reloc_hash size")
+> Signed-off-by: Michal Kubecek <mkubecek@suse.cz>
+> ---
+>  tools/objtool/elf.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/tools/objtool/elf.c b/tools/objtool/elf.c
+> index d420b5d2e2b6..081befa4674b 100644
+> --- a/tools/objtool/elf.c
+> +++ b/tools/objtool/elf.c
+> @@ -1005,7 +1005,7 @@ struct elf *elf_open_read(const char *name, int flags)
+>  		perror("malloc");
+>  		return NULL;
+>  	}
+> -	memset(elf, 0, offsetof(struct elf, sections));
+> +	memset(elf, 0, sizeof(*elf));
+>  
+>  	INIT_LIST_HEAD(&elf->sections);
 
-Fixes: e994f5b677ee ("squashfs: cache partial compressed blocks")
-Signed-off-by: Vincent Whitchurch <vincent.whitchurch@axis.com>
----
- fs/squashfs/block.c | 27 +++++++++++++++++++++++----
- 1 file changed, 23 insertions(+), 4 deletions(-)
+Thanks!
 
-diff --git a/fs/squashfs/block.c b/fs/squashfs/block.c
-index 6aa9c2e1e8ebe..581ce95193390 100644
---- a/fs/squashfs/block.c
-+++ b/fs/squashfs/block.c
-@@ -166,6 +166,26 @@ static int squashfs_bio_read_cached(struct bio *fullbio,
- 	return 0;
- }
- 
-+static struct page *squashfs_get_cache_page(struct address_space *mapping,
-+					    pgoff_t index)
-+{
-+	struct page *page;
-+
-+	if (!mapping)
-+		return NULL;
-+
-+	page = find_get_page(mapping, index);
-+	if (!page)
-+		return NULL;
-+
-+	if (!PageUptodate(page)) {
-+		put_page(page);
-+		return NULL;
-+	}
-+
-+	return page;
-+}
-+
- static int squashfs_bio_read(struct super_block *sb, u64 index, int length,
- 			     struct bio **biop, int *block_offset)
- {
-@@ -190,11 +210,10 @@ static int squashfs_bio_read(struct super_block *sb, u64 index, int length,
- 	for (i = 0; i < page_count; ++i) {
- 		unsigned int len =
- 			min_t(unsigned int, PAGE_SIZE - offset, total_len);
--		struct page *page = NULL;
-+		pgoff_t index = (read_start >> PAGE_SHIFT) + i;
-+		struct page *page;
- 
--		if (cache_mapping)
--			page = find_get_page(cache_mapping,
--					     (read_start >> PAGE_SHIFT) + i);
-+		page = squashfs_get_cache_page(cache_mapping, index);
- 		if (!page)
- 			page = alloc_page(GFP_NOIO);
- 
+Acked-by: Josh Poimboeuf <jpoimboe@kernel.org>
 
----
-base-commit: 3a8a670eeeaa40d87bd38a587438952741980c18
-change-id: 20230629-squashfs-cache-migration-27154a50f449
-
-Best regards,
 -- 
-Vincent Whitchurch <vincent.whitchurch@axis.com>
-
+Josh
