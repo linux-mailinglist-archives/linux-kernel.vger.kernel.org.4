@@ -2,69 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6788F7420F8
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 09:28:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 606607420F4
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 09:28:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232060AbjF2H2r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 03:28:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52918 "EHLO
+        id S232134AbjF2H2S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 03:28:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231450AbjF2H2k (ORCPT
+        with ESMTP id S232113AbjF2H2M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 03:28:40 -0400
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88C911FE7
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 00:28:14 -0700 (PDT)
-Received: by mail-pl1-x62a.google.com with SMTP id d9443c01a7336-1b82616c4ecso1357425ad.2
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 00:28:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1688023694; x=1690615694;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=bdqfLgDUuJb07iu/eyFucllYJFRkleKz3YPajRNTUfQ=;
-        b=MALEqPsBbcdOGOv3lUZJ9vMaPuk03aN+0l0/R2cId89A9k8aOU39fjgLiaOGjIqd7c
-         OWOw4ZNugdZyOychlN6O3vnHjXwKP1dZnB2VB1O38DBs76BXk3z0Stvt9By/a8AzzNj8
-         x0iUQ21LKxW0tRmTXWZfVMQ54MYZyHCuH9KIry95c2tas2rVS3gCTckMt1LkibG7TJCc
-         7/rOHfLH1G/QX7ljW2Ur/Ti8Jwpc7eO2lPGKrnNC71KtPNmqCK2Jbi11xPOJatNV4q3s
-         aydh42c/jSBdWj1kq3twayU1ka9pJioollyPYFFmHoDB3Bn6zP3u1IXbGDX/p211EmuN
-         YRhg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688023694; x=1690615694;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=bdqfLgDUuJb07iu/eyFucllYJFRkleKz3YPajRNTUfQ=;
-        b=KlqALW0Tll+LyH9ZuLpxD4ZqQ4xJSonZWCNFZmONupMow4Ce8YWIkqqjqElOMTJ52K
-         zmg1Lnp5rztIca4Hjwo11EamMSfGd/PB0EizVt1+dnOAGW4cJ9cGbhmPuLeSfc59Lq+H
-         BzZqk2fkiXzN0XNvlirnhcrBx+vNlCfCl3TUwPg/sxV3FbgPX3AJXJyT9/qgcomWABV3
-         LpGHLzpKsBLkUX2hk53sn1jzi3newmKLOulIiqFWZqlSxtrQ/VUImJU7WnhnOCfX+sDA
-         ZWXYgPxjzThc60xRtyLH75pVhhuzXW0qNH+YLwvPOkKXt/zOBUpgH1VVoZAu0OlkTeNy
-         DB2A==
-X-Gm-Message-State: AC+VfDzXYnlcNktTCyzJw9JISoOp/vm8hb+1kuCJS3F5qQOv4h3jljeD
-        r5C2+x3J+oZo5UM0VjaHjHRH5g==
-X-Google-Smtp-Source: ACHHUZ4DRxYqRjjAIvQ5tkZF0JIo2v/rtV+thDhBRXHeE4toAqp6lOKKy5HrUDq4Bp5PsXKGRFwnKw==
-X-Received: by 2002:a17:902:bc4c:b0:1b7:facb:2e79 with SMTP id t12-20020a170902bc4c00b001b7facb2e79mr8624136plz.18.1688023693996;
-        Thu, 29 Jun 2023 00:28:13 -0700 (PDT)
-Received: from localhost.localdomain ([203.208.189.13])
-        by smtp.gmail.com with ESMTPSA id d7-20020a170902aa8700b001b0358848b0sm8626844plr.161.2023.06.29.00.28.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Jun 2023 00:28:13 -0700 (PDT)
-From:   lizhe.67@bytedance.com
-To:     tony.luck@intel.com, bp@alien8.de, tglx@linutronix.de,
-        mingo@redhat.com, dave.hansen@linux.intel.com, x86@kernel.org,
-        hpa@zytor.com, rafael@kernel.org, viresh.kumar@linaro.org
-Cc:     linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, lizefan.x@bytedance.com,
-        yuanzhu@bytedance.com, lizhe.67@bytedance.com
-Subject: [RFC] msr: judge the return val of function rdmsrl_on_cpu() by WARN_ON
-Date:   Thu, 29 Jun 2023 15:27:54 +0800
-Message-Id: <20230629072754.39844-1-lizhe.67@bytedance.com>
-X-Mailer: git-send-email 2.39.0
+        Thu, 29 Jun 2023 03:28:12 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E404268A;
+        Thu, 29 Jun 2023 00:28:11 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BCFEE61475;
+        Thu, 29 Jun 2023 07:28:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64316C433C8;
+        Thu, 29 Jun 2023 07:28:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688023690;
+        bh=YybS3GOlOBIDzkNzWpon+uuGWahmqnaYLL/cihgEKjQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=NajRoua/kcVZrw8GbqivoW0UN9nIcAyEavl5YzguvD5nUV6nw04Ksw2ViZ6vQ197E
+         fPil9QKn6COdSFWJYxB2bsuBYJRu96GLv3LnEDd0TpI2/EuAISuhr50aixEj6w4oqa
+         Op2suIG6PO0Rw9g7E/m8cprNmNdttF+ntAG5DgE15Z0NO3569Tjs6+cTsGuSNLDp6l
+         eOuSBNNEL7jMvw0gzduPSdNyuNjqtpGDMS5xgH9mKPbC7h5Yv6dXPtSzUI6gT+InLf
+         PJLxr9gqSc9rSEet/N6+11QTgNCWIp9BFkieMpaPmNtVhPgqppTnIaUlQJnhwJE/8C
+         MuP1M789rX0Kw==
+Date:   Thu, 29 Jun 2023 10:28:05 +0300
+From:   Leon Romanovsky <leon@kernel.org>
+To:     Kees Cook <keescook@chromium.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Boris Brezillon <bbrezillon@kernel.org>,
+        Arnaud Ebalard <arno@natisbad.org>,
+        Srujana Challa <schalla@marvell.com>,
+        Mustafa Ismail <mustafa.ismail@intel.com>,
+        Shiraz Saleem <shiraz.saleem@intel.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>
+Subject: Re: Build error in crypto/marvell/cesa/cipher.c
+Message-ID: <20230629072805.GE23952@unreal>
+References: <CAHk-=whXn0YTojV=+J8B-r8KLvNtqc2JtCa4a_bdhf+=GN5OOw@mail.gmail.com>
+ <202306282051.51D98294F@keescook>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202306282051.51D98294F@keescook>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,119 +64,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Li Zhe <lizhe.67@bytedance.com>
+On Wed, Jun 28, 2023 at 08:53:26PM -0700, Kees Cook wrote:
+> On Wed, Jun 28, 2023 at 08:13:25PM -0700, Linus Torvalds wrote:
+> > I get a similar error in 'irdma_clr_wqes()' at
+> > drivers/infiniband/hw/irdma/uk.c:103 (and same thing on line 105). I
+> > don't see what the right solution there is, but it looks like we have
+> > 
+> >         IRDMA_CQP_WQE_SIZE = 8
+> >         __le64 elem[IRDMA_CQP_WQE_SIZE];
+> > 
+> > and it's doing a 4kB memset to that element. The mistake is not as
+> > obvious as in the cesa driver.
+> 
+> I pressed "send" too fast. :)
+> 
+> This should also already be fixed:
+> https://lore.kernel.org/all/20230523111859.2197825-1-arnd@kernel.org/
 
-There are ten places call rdmsrl_on_cpu() in the current code without
-judging the return value. This may introduce a potential bug. For example,
-inj_bank_set() may return -EINVAL, show_base_frequency() may show an error
-freq value, intel_pstate_hwp_set() may write an error value to the related
-msr register and so on. But rdmsrl_on_cpu() do rarely returns an error, so
-it seems that add a WARN_ON is enough for debugging.
+The fix is in latest RDMA PR:
+https://lore.kernel.org/linux-rdma/ZJzUeFT7lLqEjMJn@nvidia.com/T/#u
 
-Signed-off-by: Li Zhe <lizhe.67@bytedance.com>
----
- arch/x86/kernel/cpu/mce/inject.c |  2 +-
- drivers/cpufreq/intel_pstate.c   | 18 +++++++++---------
- 2 files changed, 10 insertions(+), 10 deletions(-)
+Arnd Bergmann (1):
+      RDMA/irdma: avoid fortify-string warning in irdma_clr_wqes
 
-diff --git a/arch/x86/kernel/cpu/mce/inject.c b/arch/x86/kernel/cpu/mce/inject.c
-index 12cf2e7ca33c..0a34057f4fc6 100644
---- a/arch/x86/kernel/cpu/mce/inject.c
-+++ b/arch/x86/kernel/cpu/mce/inject.c
-@@ -587,7 +587,7 @@ static int inj_bank_set(void *data, u64 val)
- 	u64 cap;
- 
- 	/* Get bank count on target CPU so we can handle non-uniform values. */
--	rdmsrl_on_cpu(m->extcpu, MSR_IA32_MCG_CAP, &cap);
-+	WARN_ON(rdmsrl_on_cpu(m->extcpu, MSR_IA32_MCG_CAP, &cap));
- 	n_banks = cap & MCG_BANKCNT_MASK;
- 
- 	if (val >= n_banks) {
-diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pstate.c
-index 2548ec92faa2..fe2bdb38d6a0 100644
---- a/drivers/cpufreq/intel_pstate.c
-+++ b/drivers/cpufreq/intel_pstate.c
-@@ -859,7 +859,7 @@ static ssize_t show_base_frequency(struct cpufreq_policy *policy, char *buf)
- 	if (ratio <= 0) {
- 		u64 cap;
- 
--		rdmsrl_on_cpu(policy->cpu, MSR_HWP_CAPABILITIES, &cap);
-+		WARN_ON(rdmsrl_on_cpu(policy->cpu, MSR_HWP_CAPABILITIES, &cap));
- 		ratio = HWP_GUARANTEED_PERF(cap);
- 	}
- 
-@@ -883,7 +883,7 @@ static void __intel_pstate_get_hwp_cap(struct cpudata *cpu)
- {
- 	u64 cap;
- 
--	rdmsrl_on_cpu(cpu->cpu, MSR_HWP_CAPABILITIES, &cap);
-+	WARN_ON(rdmsrl_on_cpu(cpu->cpu, MSR_HWP_CAPABILITIES, &cap));
- 	WRITE_ONCE(cpu->hwp_cap_cached, cap);
- 	cpu->pstate.max_pstate = HWP_GUARANTEED_PERF(cap);
- 	cpu->pstate.turbo_pstate = HWP_HIGHEST_PERF(cap);
-@@ -920,7 +920,7 @@ static void intel_pstate_hwp_set(unsigned int cpu)
- 	if (cpu_data->policy == CPUFREQ_POLICY_PERFORMANCE)
- 		min = max;
- 
--	rdmsrl_on_cpu(cpu, MSR_HWP_REQUEST, &value);
-+	WARN_ON(rdmsrl_on_cpu(cpu, MSR_HWP_REQUEST, &value));
- 
- 	value &= ~HWP_MIN_PERF(~0L);
- 	value |= HWP_MIN_PERF(min);
-@@ -1802,7 +1802,7 @@ static int core_get_min_pstate(int cpu)
- {
- 	u64 value;
- 
--	rdmsrl_on_cpu(cpu, MSR_PLATFORM_INFO, &value);
-+	WARN_ON(rdmsrl_on_cpu(cpu, MSR_PLATFORM_INFO, &value));
- 	return (value >> 40) & 0xFF;
- }
- 
-@@ -1810,7 +1810,7 @@ static int core_get_max_pstate_physical(int cpu)
- {
- 	u64 value;
- 
--	rdmsrl_on_cpu(cpu, MSR_PLATFORM_INFO, &value);
-+	WARN_ON(rdmsrl_on_cpu(cpu, MSR_PLATFORM_INFO, &value));
- 	return (value >> 8) & 0xFF;
- }
- 
-@@ -1855,7 +1855,7 @@ static int core_get_max_pstate(int cpu)
- 	int tdp_ratio;
- 	int err;
- 
--	rdmsrl_on_cpu(cpu, MSR_PLATFORM_INFO, &plat_info);
-+	WARN_ON(rdmsrl_on_cpu(cpu, MSR_PLATFORM_INFO, &plat_info));
- 	max_pstate = (plat_info >> 8) & 0xFF;
- 
- 	tdp_ratio = core_get_tdp_ratio(cpu, plat_info);
-@@ -1887,7 +1887,7 @@ static int core_get_turbo_pstate(int cpu)
- 	u64 value;
- 	int nont, ret;
- 
--	rdmsrl_on_cpu(cpu, MSR_TURBO_RATIO_LIMIT, &value);
-+	WARN_ON(rdmsrl_on_cpu(cpu, MSR_TURBO_RATIO_LIMIT, &value));
- 	nont = core_get_max_pstate(cpu);
- 	ret = (value) & 255;
- 	if (ret <= nont)
-@@ -1921,7 +1921,7 @@ static int knl_get_turbo_pstate(int cpu)
- 	u64 value;
- 	int nont, ret;
- 
--	rdmsrl_on_cpu(cpu, MSR_TURBO_RATIO_LIMIT, &value);
-+	WARN_ON(rdmsrl_on_cpu(cpu, MSR_TURBO_RATIO_LIMIT, &value));
- 	nont = core_get_max_pstate(cpu);
- 	ret = (((value) >> 8) & 0xFF);
- 	if (ret <= nont)
-@@ -2974,7 +2974,7 @@ static int intel_cpufreq_cpu_init(struct cpufreq_policy *policy)
- 
- 		intel_pstate_get_hwp_cap(cpu);
- 
--		rdmsrl_on_cpu(cpu->cpu, MSR_HWP_REQUEST, &value);
-+		WARN_ON(rdmsrl_on_cpu(cpu->cpu, MSR_HWP_REQUEST, &value));
- 		WRITE_ONCE(cpu->hwp_req_cached, value);
- 
- 		cpu->epp_cached = intel_pstate_get_epp(cpu, value);
--- 
-2.20.1
 
+Thanks
+
+> 
+> -- 
+> Kees Cook
