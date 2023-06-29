@@ -2,101 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29377742323
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 11:22:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2226E742328
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 11:22:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232263AbjF2JV4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 05:21:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37058 "EHLO
+        id S232102AbjF2JWy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 05:22:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229539AbjF2JVv (ORCPT
+        with ESMTP id S232453AbjF2JWp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 05:21:51 -0400
-Received: from mail-ot1-f70.google.com (mail-ot1-f70.google.com [209.85.210.70])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 575361FE3
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 02:21:50 -0700 (PDT)
-Received: by mail-ot1-f70.google.com with SMTP id 46e09a7af769-6b8810af3adso469427a34.1
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 02:21:50 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688030509; x=1690622509;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=T7l5KtrkfZe3TdZVxNxWTIOc6dkwdkg2w+KCysZHte8=;
-        b=ORioL45nfwO7Fbk9owztQHswV2qSdPxB4vOEaGCsaM3VJ0a5N7NPWqwN7LSwZ+dsAL
-         WX2YDypLOTzW6fuAPoYJxdSYL7wetk8AEt6H54kKTeIbGhXkr071igb176TCwu2JF6SQ
-         U6Bxs+QWn20sOI0e14JvO2jkvJPlitvxX87I5YgbXLbkChxp5g0hM+Of54NsuTOrxCOM
-         5M5bILMbuKHBu/SxvX0CEVtH9ChQxbSR8KvP2AJCBQnimsPl8nU+8mmEuvYmI/PMZjSb
-         o8IAtnGE54bvqOYmjShAIru9Qn9ko0i9mxiIahIzJuWR/i7Ja5bQ7icEZzdoyKDzUbRC
-         QN7A==
-X-Gm-Message-State: AC+VfDwFsOoH6qqFpSGSfeBLLyn9q6ZcgYGbkVr1IDQWEo4BgtY5ZtJn
-        T9Vh5EpJdm+T0JJAGZKrnazGiHI4uFmuwaDeANKyJw4YPOVb
-X-Google-Smtp-Source: ACHHUZ7Z/d9RSnZbRgBP/S7yAUd65CwbJGk6eHAkuECvddAjQwlYG/cD2VTc9y2DIw28AuSRpEzbRM4EhnFjT04tZM8VvAihB/fv
+        Thu, 29 Jun 2023 05:22:45 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 061482728
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 02:22:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1688030564; x=1719566564;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=3NRSTjyOfKpve9/AW/hw08ffGhe9mZ/e6rJCV787WIs=;
+  b=GnVg3zTyoA+occdTYE85WyYkY+JU2knch2Rgsj9JfoU/pcKIv/lmkIKM
+   6EVNOy50cst5haCFul6xJ/8u8+xlLdXXCy0D6hpWF0qMl2Zijx75dRgmX
+   sxVWTjLEyTRUkWFlJgbxDyCc3P2rJenjdvgaL65J5Q+r1ycAKk5ln0KMf
+   QxVDq70Rv+LdZDfvVvVTen7fXlarhe38I8e8GHPd2FixWc2nvhknSeEk5
+   +cc1pXD0pgnTNB2Uuq9MjHB47E0ZPFOtF75X9LlJIgKOFXq3SENwGT6Ec
+   2x9fIhQCaUHrX0kaD/J2Nw54HycAJZ6w1qj9nLtsApd+ZhCEJz5erRDlz
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10755"; a="360913466"
+X-IronPort-AV: E=Sophos;i="6.01,168,1684825200"; 
+   d="scan'208";a="360913466"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jun 2023 02:22:44 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10755"; a="782622678"
+X-IronPort-AV: E=Sophos;i="6.01,168,1684825200"; 
+   d="scan'208";a="782622678"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga008.fm.intel.com with ESMTP; 29 Jun 2023 02:22:42 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1qEnrM-000oP0-1N;
+        Thu, 29 Jun 2023 12:22:40 +0300
+Date:   Thu, 29 Jun 2023 12:22:40 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Alexander Potapenko <glider@google.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        kasan-dev@googlegroups.com, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>
+Subject: Re: [PATCH v1 1/1] kasan: Replace strreplace() with strchrnul()
+Message-ID: <ZJ1NYFtTJ/9CZ0qU@smile.fi.intel.com>
+References: <20230628153342.53406-1-andriy.shevchenko@linux.intel.com>
+ <CAG_fn=WjLDsnUPKFwF8XJiyqYP6M+Q9ZqUweRPzPT3dW0i_E+A@mail.gmail.com>
 MIME-Version: 1.0
-X-Received: by 2002:a9d:7389:0:b0:6b7:1590:6d6a with SMTP id
- j9-20020a9d7389000000b006b715906d6amr6765027otk.0.1688030509783; Thu, 29 Jun
- 2023 02:21:49 -0700 (PDT)
-Date:   Thu, 29 Jun 2023 02:21:49 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000e7e1df05ff413a66@google.com>
-Subject: [syzbot] Monthly ntfs3 report (Jun 2023)
-From:   syzbot <syzbot+list1b14ef0414bc5da68ce7@syzkaller.appspotmail.com>
-To:     almaz.alexandrovich@paragon-software.com,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ntfs3@lists.linux.dev, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAG_fn=WjLDsnUPKFwF8XJiyqYP6M+Q9ZqUweRPzPT3dW0i_E+A@mail.gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello ntfs3 maintainers/developers,
+On Wed, Jun 28, 2023 at 05:39:26PM +0200, Alexander Potapenko wrote:
+> On Wed, Jun 28, 2023 at 5:34 PM Andy Shevchenko
+> <andriy.shevchenko@linux.intel.com> wrote:
 
-This is a 31-day syzbot report for the ntfs3 subsystem.
-All related reports/information can be found at:
-https://syzkaller.appspot.com/upstream/s/ntfs3
+...
 
-During the period, 3 new issues were detected and 0 were fixed.
-In total, 59 issues are still open and 24 have been fixed so far.
+> >                 /* Strip line number; without filename it's not very helpful. */
+> > -               strreplace(token, ':', '\0');
+> > +               p[strchrnul(token, ':') - token] = '\0';
+> 
+> Why not just
+>    *(strchrnul(token, ':')) = '\0';
+> ?
 
-Some of the still happening issues:
+I don't like Pythonish style in the C. But if you insist, I can update it.
 
-Ref  Crashes Repro Title
-<1>  3589    Yes   UBSAN: shift-out-of-bounds in ntfs_fill_super (2)
-                   https://syzkaller.appspot.com/bug?extid=478c1bf0e6bf4a8f3a04
-<2>  3573    Yes   KASAN: slab-out-of-bounds Read in ntfs_iget5
-                   https://syzkaller.appspot.com/bug?extid=b4084c18420f9fad0b4f
-<3>  1591    Yes   possible deadlock in ni_fiemap
-                   https://syzkaller.appspot.com/bug?extid=c300ab283ba3bc072439
-<4>  1241    Yes   KASAN: out-of-bounds Write in end_buffer_read_sync
-                   https://syzkaller.appspot.com/bug?extid=3f7f291a3d327486073c
-<5>  1108    Yes   possible deadlock in attr_data_get_block
-                   https://syzkaller.appspot.com/bug?extid=36bb70085ef6edc2ebb9
-<6>  913     Yes   possible deadlock in ntfs_set_state
-                   https://syzkaller.appspot.com/bug?extid=f91c29a5d5a01ada051a
-<7>  479     Yes   possible deadlock in mi_read
-                   https://syzkaller.appspot.com/bug?extid=bc7ca0ae4591cb2550f9
-<8>  440     No    possible deadlock in ntfs_mark_rec_free
-                   https://syzkaller.appspot.com/bug?extid=f83f0dbef763c426e3cf
-<9>  389     Yes   possible deadlock in ntfs_fiemap
-                   https://syzkaller.appspot.com/bug?extid=96cee7d33ca3f87eee86
-<10> 62      Yes   WARNING in do_mkdirat
-                   https://syzkaller.appspot.com/bug?extid=919c5a9be8433b8bf201
+-- 
+With Best Regards,
+Andy Shevchenko
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-To disable reminders for individual bugs, reply with the following command:
-#syz set <Ref> no-reminders
-
-To change bug's subsystems, reply with:
-#syz set <Ref> subsystems: new-subsystem
-
-You may send multiple commands in a single email message.
