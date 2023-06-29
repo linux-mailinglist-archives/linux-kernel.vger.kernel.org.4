@@ -2,147 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32D93742E24
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 22:09:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD6CF742E1C
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 22:09:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232420AbjF2UFu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 16:05:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36218 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232316AbjF2UFp (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 16:05:45 -0400
-Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com [IPv6:2607:f8b0:4864:20::d2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30713212C
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 13:05:44 -0700 (PDT)
-Received: by mail-io1-xd2d.google.com with SMTP id ca18e2360f4ac-77dcff76e35so17498739f.1
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 13:05:44 -0700 (PDT)
+        id S232456AbjF2UGD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 16:06:03 -0400
+Received: from mail-mw2nam10on2127.outbound.protection.outlook.com ([40.107.94.127]:64769
+        "EHLO NAM10-MW2-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S232432AbjF2UFz (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 29 Jun 2023 16:05:55 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=QMwdGchk+R08pDZ6qdfmH/8Gnh+EvHJ2ZSrGrpDMIvGXN/j48CWABhCCLbHwpksBCDK+BEfPPvRw2i4metVyy+0psjoVJyAbmsZRqmQ75qC+LWNfuSjmhC2rM64yhe/AKfII74tLE9acr5VnrEILfRXmK2c3eK1mVSPBKOG+pXFSO5vCdzpI6blxN/3aLcm1pqQsEAPtmvgvhSUzHBjSqpa2asl4UkKEkJVlz64HqBgzLd4g2JGnn8TWMfRldqOYTfQa+HeXXrrjFynn20RASGw/DYTwExIIR/CAyBXPP+1yh/BbTruTmFu56Hh7DHgAnX1SADCuK5NNX6VzsZCu0w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=WKT5oapl6jiuKbRC+9aBRTxArFEsW6KOdcrgA4sXHSo=;
+ b=Ph3h7OwDd7ZE+hSqo+T3ZGb1Yr/ASX8++fp2dp+UDjMDf7qowf/Kylo9EUG/P6+IOcRF6n8YxCgJChdQB1qEXycaJLTervI+EOj0DawIhLFcjmPPQ6NgjC6icVu9mUNUf/qMu+GSJ363XJBbTFRw6pQgJjrKawCLpfbdwRP6Ws4m+NLuIfUPcalg3M/LKA/BOurqNXTLSEYZ/E0auk38DxqqVm0slXKeIf9PeS+EaV4jLouvCS/Afnhb0ZnMHyBBIyLIC7NsAV45+g87ueBVQPNqlsT9Pfsc8xTcNvciTq6xOR2QJw8vRfTR/1M4/45wwUbvWCLJLAfApmOt77rGbw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
+ dkim=pass header.d=corigine.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20221208.gappssmtp.com; s=20221208; t=1688069143; x=1690661143;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=y4tq5eP75MWhv6841WPIqTGQTd0wmAvIyZR6YMM91cU=;
-        b=kt4y6BEf8FjwOMV3pk/CMHocQI2zxrK/0DPy8nfGhKmxrGsb65ZnyBk+RzELx7IxdD
-         04Ssa46bdvqfxULj03WxMa9fcLlxSY63jScz96ALYVx09vgtscokAI9SfKbVWv4H7PYj
-         gyiiqBnpaQCX4E9KDfK1xQyoOQdI0XQF7unrkr6IlDkz4WUDKDAbUL8X/oBFXev85tpn
-         aMDqQMNCAMTRTqS01YP3lvh4K737d+lAlgczZoU1zxUTUZmk8R5INS1HnSgkB6mHnQ/j
-         AvGcSR7A01zpQXCkY/TiqTwvZ4zJmhORcCgYf0//mnUBMXqCkfX9vfyV2HBbLpc/oTYL
-         scKw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688069143; x=1690661143;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=y4tq5eP75MWhv6841WPIqTGQTd0wmAvIyZR6YMM91cU=;
-        b=fbWc+FjegX5pjrT+vZyzAB9dh1zOQSjw2rU7wf3+W0MGZuFx192v8rk6qvtWQLNsMz
-         leV13OsG3WVhDVxeEPeUk54o7uzCgWkLMEN20hSCI+6u5e3qbmLv6edRRtP702R1nHKN
-         HVc7Cv4v2PdwS3/4lxPqOW2oXO6p2DCBVgeiTzl9nkQhnE3s24HoZoPEYJ/RJ9/pwoGR
-         +SKBGrB2jl5naSq05XJHtm1oSO4U0bUoh6s6cdXDTpVrGk6hKc/arD9JEItogyRo9I3k
-         BpMtTya1fFyNMRJXKwzQGbnwVRDU0FNa7Bs3v0l7tOByGcdHmWP9rOJMfvighJkRE7Ai
-         oWww==
-X-Gm-Message-State: AC+VfDyKilTF3hanneBAtaM5wu5MzFlwRS9MswbLjwyj1RAqoIIhxgoj
-        gO3O4HXX8SihjMh1B2WoCo6r+Q==
-X-Google-Smtp-Source: ACHHUZ7pGQ6LKbesXl3hlbRX1AckZ5mzpygexKjVW7CU51oKAJKLyAWwhk1jdwG4cE4v0XY9sALCiw==
-X-Received: by 2002:a05:6602:3e94:b0:783:5df5:950d with SMTP id el20-20020a0566023e9400b007835df5950dmr579213iob.1.1688069143431;
-        Thu, 29 Jun 2023 13:05:43 -0700 (PDT)
-Received: from [192.168.1.94] ([96.43.243.2])
-        by smtp.gmail.com with ESMTPSA id t5-20020a02cca5000000b0042aca9978c6sm2865041jap.0.2023.06.29.13.05.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 29 Jun 2023 13:05:42 -0700 (PDT)
-Message-ID: <d6130a0c-5d91-b0a3-f6a9-d1fa6edbba92@kernel.dk>
-Date:   Thu, 29 Jun 2023 14:05:41 -0600
+ d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=WKT5oapl6jiuKbRC+9aBRTxArFEsW6KOdcrgA4sXHSo=;
+ b=eUaldwwWFD+zuhU2C69ClXnwIAvQMFwvjHaLUOTAClqrejUcwt3UqE6olA5QcyEAP6ArvOCDFTz47bVxZWe3/cVtNAtfjcZhrydvf3VUdHP+WkniGW/HO9uwDMHjoawu4VKTFl5MC9ZLDxNSxPjA/K0VLeqI2vJpQir6ZucY7/A=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=corigine.com;
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
+ by SN4PR13MB5709.namprd13.prod.outlook.com (2603:10b6:806:1ed::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.32; Thu, 29 Jun
+ 2023 20:05:53 +0000
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::eb8f:e482:76e0:fe6e]) by PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::eb8f:e482:76e0:fe6e%5]) with mapi id 15.20.6521.023; Thu, 29 Jun 2023
+ 20:05:52 +0000
+Date:   Thu, 29 Jun 2023 22:05:47 +0200
+From:   Simon Horman <simon.horman@corigine.com>
+To:     You Kangren <youkangren@vivo.com>
+Cc:     Kalle Valo <kvalo@kernel.org>, Dongliang Mu <dzm91@hust.edu.cn>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        "open list:RAYLINK/WEBGEAR 802.11 WIRELESS LAN DRIVER" 
+        <linux-wireless@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        opensource.kernel@vivo.com
+Subject: Re: [PATCH v3] wifi: ray_cs: Replace the ternary conditional
+ operator with min()
+Message-ID: <ZJ3kG7CSWSGw1Ql2@corigine.com>
+References: <20230627043151.19576-1-youkangren@vivo.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230627043151.19576-1-youkangren@vivo.com>
+X-ClientProxiedBy: AM0PR02CA0200.eurprd02.prod.outlook.com
+ (2603:10a6:20b:28f::7) To PH0PR13MB4842.namprd13.prod.outlook.com
+ (2603:10b6:510:78::6)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: mainline build failure due to 8295efbe68c0 ("md/raid1-10: factor
- out a helper to submit normal write")
-Content-Language: en-US
-To:     Song Liu <song@kernel.org>,
-        Linux regressions mailing list <regressions@lists.linux.dev>
-Cc:     Yu Kuai <yukuai1@huaweicloud.com>,
-        "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>,
-        linux-raid@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>
-References: <ZJ2H5FWuo9oDMgPm@debian>
- <be9320b5-7613-be0f-ffcd-4b3041ea5836@huaweicloud.com>
- <13abe42f-2f5f-cbaf-21b8-baa4516963aa@leemhuis.info>
- <CAPhsuW4Wf+PLDCZ7JpHzVT81ubj1Y6MCyLm-BWcVmB1jRqYEGg@mail.gmail.com>
- <CAPhsuW7VK6O6RKQTAcAVk4XxUzNALUW5nKMnMFkm3pW+4F23yw@mail.gmail.com>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <CAPhsuW7VK6O6RKQTAcAVk4XxUzNALUW5nKMnMFkm3pW+4F23yw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-        lindbergh.monkeyblade.net
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|SN4PR13MB5709:EE_
+X-MS-Office365-Filtering-Correlation-Id: ef1fb1d6-260a-48cb-a302-08db78dc3dcd
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: UELD2PsLZAA5BtmvUwOEqd0E4ehYGr7LY2eXU1K1FzP3q5LGaj3/hTnBSoiTCr6RiA0EXKUOSIyL5Hs64irFbMvXlnz9UsZzj7nW9n1E3Hucl5vnulv1XYWQLhzqAmqaIsFZtOQA3+sifIk5fNAAj4xCfeGG0M1wqZzKji3NFPuxZr+SrlSNYwQeOC+tEkrD7ux07TFVjOZ5eSr645PMT0WPTTRUdjjt7TroqEiyzrLwTO2E3KHjMg2Eh141gChY9KfFnkGim6FjZC0rPt/vJn1d7irJZy9BdwrAKZ3yqnmRPBJny5jfJFgEVcXCIFi/RuH9S2PzIN9T/HEPu1p/usMA44w3yzShRxRZZXAi6xszvIUaJkR/qerSjLv6ZLcPBPuPjZROvkyJeb50kLpQeipbaJ6JzYVjlcSE+pz6Mdo9Ueg1iSj2AuNowtZQKdgFIjOz25cQ/o40RzJirc8wiG6tXWqXrAn3BSKgEI5yzhEvWyBWmELJn7VV2HwlV4jOyx5q4TA6NN3AQukmM1/iBzGEfjAh8k7X/DnnvjHlb0UZ3Dbf28CAHwQIiQ+8ce2PYMJ6b+BPh6PIrQHXnZwCUsgUZ9Wq8viCPXg+pM6Mju8=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(39840400004)(366004)(376002)(396003)(136003)(451199021)(6512007)(44832011)(6506007)(66476007)(8676002)(8936002)(5660300002)(186003)(86362001)(4326008)(2906002)(4744005)(36756003)(83380400001)(41300700001)(6666004)(316002)(66946007)(478600001)(54906003)(2616005)(38100700002)(6916009)(66556008)(6486002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?90MoqDgUhpj3w2dChPR4BXNQxd/iusA/cSU7KHWD7P3Lj8v1QxNc01BJ7I1B?=
+ =?us-ascii?Q?PGtgPd2NpVroiSUM8EBh5UUUxkBoJyehaw68IptryAA8WjFhhvaGXxS3Pv60?=
+ =?us-ascii?Q?ja/eQqQFZrKNlIEUwp5/D+cYRtX7Kkqe52QoBNPpBQ3QGohZaUvJIOVjdftn?=
+ =?us-ascii?Q?PXkxnqzrpGKgs/fK6IxksFtlwGk4EAA0TgPM77WBRDYoC9iFj4FUm/DuKsju?=
+ =?us-ascii?Q?FzSKfU+nMN0qT3fdlfkHCf2S8/eJf4Ys9OHXODQDyMfELew3WUjLoDA18kb5?=
+ =?us-ascii?Q?YRAkovRFaXrdT4NlGqTdu+TYiHRwJODf/NNvy5NUq5yLkcj+9GUvbGzwuh0e?=
+ =?us-ascii?Q?oAUW4d7RLBcZj8tT6AVI9svfAo0MeJKlDdkabPh8AsACspefxGRfjO3xD0S9?=
+ =?us-ascii?Q?+G52F3+xxAUDeTUkQ/Tot7keAi9yMlYppx+2p7r3JODWI++Jz4OXf6zndH9z?=
+ =?us-ascii?Q?FxQghLSM6VzL+x5oz3Y+kHs5p6jDyAUY7okx1hlH5ELPFjlxUxvQ6CdZaBWw?=
+ =?us-ascii?Q?S3H6IWTA2EeUnuHzSe++K0d1gB5l3qnfLXJbndQqrsxaWE6Dz66QvW/MSSxU?=
+ =?us-ascii?Q?gm2jJZ1eXyC4KGa/OrHbdfukxs7UkGNdfgeCnclV6cMw0jPQiHh3jLoZzdmR?=
+ =?us-ascii?Q?zvHVzHbZKYaaxq6ui+OLgq6WpUY7s5a8WmH6FJC+ZIjMoNQwKdXOAvS0tZdB?=
+ =?us-ascii?Q?ZP1wm+68axMIve1qQaOc6Lgqx2CgkthurPD2n7EFVKDyl0vhUmEZhPPRRTUB?=
+ =?us-ascii?Q?jfX+15Nu1gihZMYoS3Aws41aDDgcx3JjcYV0H4tuIQe7+bGv/74yYfwx9Mee?=
+ =?us-ascii?Q?hPmI6wkz231B2Ugn0vAMlVGueeghi0Nab9dtOxXlE8hX1hAoD3IJvAms2run?=
+ =?us-ascii?Q?GAv1Fv+MDOYDlZcRDrD0lQQurTZSJgTJSnZB7mEpbzZv77fUnYPnStssBUDA?=
+ =?us-ascii?Q?2KDHwwQEzT4XWZ9sBWvwkYL7OhlVKttle7zZwKN3P183+qY1BK+1fW1gYHAu?=
+ =?us-ascii?Q?AArDXzcRidclX5O/NaV1vsTeCesGygWU7KW9CsToT7OsVOq9vIEUgUUjkCgU?=
+ =?us-ascii?Q?6g/0Q0hjjlOrL/2Zb8GJkzBqeLEhgCCggoeLL0Q5UVBuzOU+EEqQ6DXmUYAk?=
+ =?us-ascii?Q?YcmOsfqPbd7T6lK9OqqCdip+j1WqyHllME8eoPawWF/S4wBbjPXO8DXE5GGq?=
+ =?us-ascii?Q?KVGaKJvPPUI6Z9jfe1MulJ3KY+0KwrCAMzJr0ZmlUfgKZQQRkRoDZP2rkr8q?=
+ =?us-ascii?Q?0/b7+dABD0Xxm9jkf+wUhpYaA71DJn7vwBzWppqglcQjH10E0FDF4MvDus7U?=
+ =?us-ascii?Q?KWyX4DL5mzY/ZNe+oQzw6H/OwYhu+YdQa+1YD5CGFSqGqYb8Gxkew2yupIf5?=
+ =?us-ascii?Q?YhCfISfiFGDjiYA4QHECqnQuZjkJNVJDbGR3WMTUxN9L0K732PW87ojT5snw?=
+ =?us-ascii?Q?qGP8WlWxJiAhy2lXdqRQrLL7pu0E4TZVk8Dqcfc/SXbSUIYiHw0VmnkNp5u+?=
+ =?us-ascii?Q?zUmR4NOHYSQNHnadxDOnzsLxcOdujuKigQTRzIBXPJwqQ7yWZ9W5q6uXvlrK?=
+ =?us-ascii?Q?ArWxImSSdrfd4WdzyaZLikHIyV9VTwfEX5a+UEZoKZuXSyK4hLvpT47cLwEf?=
+ =?us-ascii?Q?wuKcdsAXeNAO1GyB/rwvCx42fhzpJ/F5RJgfEtAx8ykaJhTeCMygqli7U7BY?=
+ =?us-ascii?Q?V58ZSA=3D=3D?=
+X-OriginatorOrg: corigine.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ef1fb1d6-260a-48cb-a302-08db78dc3dcd
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Jun 2023 20:05:52.9060
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: ki2xG9gxuGSMA1A4q6k9M6ppUztA0EKO4YUENCHAxknHMdF2z+xKYUEpcDVOFeIWyvLgsno8ruqxN51/rESFh7DB1btNquo9RpWIkqZ9Yu8=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN4PR13MB5709
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The late branch will go out some time next week.
-
-
-On 6/29/23 9:56?AM, Song Liu wrote:
-> Oops, didn't really add Jens in the previous email.
+On Tue, Jun 27, 2023 at 12:31:48PM +0800, You Kangren wrote:
+> Replace the ternary conditional operator with min_t() to simplify the code
 > 
-> Add Jens now.
+> Signed-off-by: You Kangren <youkangren@vivo.com>
+> ---
+>  drivers/net/wireless/legacy/ray_cs.c | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
 > 
-> On Thu, Jun 29, 2023 at 8:55?AM Song Liu <song@kernel.org> wrote:
->>
->> + Jens,
->>
->> On Thu, Jun 29, 2023 at 7:10?AM Linux regression tracking (Thorsten
->> Leemhuis) <regressions@leemhuis.info> wrote:
->>>
->>> On 29.06.23 15:56, Yu Kuai wrote:
->>>>
->>>> ? 2023/06/29 21:32, Sudip Mukherjee (Codethink) ??:
->>>>> The latest mainline kernel branch fails to build x86_64, arm64 and arm
->>>>> allmodconfig
->>>
->>> Thx for the report.
->>>
->>>> Thanks for the testing, which branch are you testing?
->>>>
->>>> This problem is already fixed in latest mainline kernel:
->>>> https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=b5a99602b74bbfa655be509c615181dd95b0719e
->>
->> Hi Jens,
->>
->> The fix is in the for-6.5/block-late branch.
->>
->> https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git/commit/?h=for-6.5/block-late&id=b5a99602b74bbfa655be509c615181dd95b0719e
->>
->> Would you send a pull request with it? Or would you prefer
->> some other solution for the issue?
->>
->> AFAICT, it will fix clang build with RANDSTRUCT.
->>
->> Thanks,
->> Song
->>
->>>
->>> And thx for the reply. :-D
->>>
->>> FWIW, that fix afaics is still in -next and hasn't reached mainline yet.
->>> But I guess that will change within a few days.
->>>
->>>>> #regzbot introduced: 8295efbe68c080047e98d9c0eb5cb933b238a8cb
->>>
->>> #regzbot fix: b5a99602b74bbfa6
->>> #regzbot dup-of: https://lore.kernel.org/all/ZJ2M4yqnOCqqGWH0@debian/
->>> #regzbot ignore-activity
->>>
->>> Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
->>> --
->>> Everything you wanna know about Linux kernel regression tracking:
->>> https://linux-regtracking.leemhuis.info/about/#tldr
->>> If I did something stupid, please tell me, as explained on that page.
+> diff --git a/drivers/net/wireless/legacy/ray_cs.c b/drivers/net/wireless/legacy/ray_cs.c
+> index 8ace797ce951..25edbc655738 100644
+> --- a/drivers/net/wireless/legacy/ray_cs.c
+> +++ b/drivers/net/wireless/legacy/ray_cs.c
+> @@ -2086,8 +2086,7 @@ static void ray_rx(struct net_device *dev, ray_dev_t *local,
+>  			rx_data(dev, prcs, pkt_addr, rx_len);
+>  
+>  		copy_from_rx_buff(local, (UCHAR *) &local->last_bcn, pkt_addr,
+> -				  rx_len < sizeof(struct beacon_rx) ?
+> -				  rx_len : sizeof(struct beacon_rx));
+> +				  min_t(size_t, rx_len, sizeof(struct beacon_rx));
 
--- 
-Jens Axboe
+Hi You Kangen,
 
+unfortunately this patch doesn't seem to compile.
