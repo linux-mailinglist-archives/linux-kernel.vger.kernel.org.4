@@ -2,104 +2,232 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AA4B7429A2
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 17:28:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CBBF97429A7
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 17:28:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231952AbjF2P2B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 11:28:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52362 "EHLO
+        id S231395AbjF2P2f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 11:28:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230487AbjF2P1u (ORCPT
+        with ESMTP id S231644AbjF2P2c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 11:27:50 -0400
-Received: from mail-io1-f49.google.com (mail-io1-f49.google.com [209.85.166.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD6DAE57;
-        Thu, 29 Jun 2023 08:27:48 -0700 (PDT)
-Received: by mail-io1-f49.google.com with SMTP id ca18e2360f4ac-783544a1c90so33585039f.1;
-        Thu, 29 Jun 2023 08:27:48 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688052468; x=1690644468;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=VZR9sZh+9bjHT/NeBWN3KSD8INZ5F1XGNWsIgo61+bw=;
-        b=WGuX7TOe7g3Vn5OECSraMNCk52ob8wEu4AguwZ4TTgo9V8y64dSGkQ+ksPwRUe5PuZ
-         N1tlvjDIWMriF54ytl+ZCJ8RYhsVle8f3h78apO36+GAQe2kTAVqQWsuoJHETngPl1ck
-         fxTIYXGYJfgA1K90pgPWkR9FC3qk+q3Y5sEe7b/hdcXtKvGeYewV2ZR6rw5HbPWjsvZt
-         mKBFn5tDfgOvFLn4kkwMlDhMPl8yCFnlRCqAuALGlEC9numaaO4EtNHLSavQGAaaYAAy
-         EcLthhkJd+Rb5PeO8ITLnSBzJxywgA9+6HRpbf9Ax3FhcgxNVfAUr+ND9v/WCRYlbC35
-         klUw==
-X-Gm-Message-State: AC+VfDwOwTktjkpBf5BgnlDXunbkhl1Inp5ZdX+cuYfO2nYbPLO2lcZe
-        jgnH1/iKcGlDrUcyl5HMUDUqh8S/lA==
-X-Google-Smtp-Source: ACHHUZ4KLxkCInEQQQCS9qmNAEIF532E5Hd6Y2pqUoJrYe3Vdsqc/jeuYEguX546tpcpPckCkDYkiA==
-X-Received: by 2002:a05:6602:424e:b0:775:5f74:f4c7 with SMTP id cc14-20020a056602424e00b007755f74f4c7mr42469927iob.17.1688052468076;
-        Thu, 29 Jun 2023 08:27:48 -0700 (PDT)
-Received: from robh_at_kernel.org ([64.188.179.250])
-        by smtp.gmail.com with ESMTPSA id t10-20020a02878a000000b00428722c1c51sm3875373jai.32.2023.06.29.08.27.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Jun 2023 08:27:47 -0700 (PDT)
-Received: (nullmailer pid 3066583 invoked by uid 1000);
-        Thu, 29 Jun 2023 15:27:44 -0000
-Date:   Thu, 29 Jun 2023 09:27:44 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Marijn Suijten <marijn.suijten@somainline.org>
-Cc:     Daniel Vetter <daniel@ffwll.ch>, Sean Paul <sean@poorly.run>,
-        Krishna Manikandan <quic_mkrishn@quicinc.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        linux-kernel@vger.kernel.org,
-        Martin Botka <martin.botka@somainline.org>,
-        dri-devel@lists.freedesktop.org, linux-clk@vger.kernel.org,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        freedreno@lists.freedesktop.org, Rob Clark <robdclark@gmail.com>,
-        Jami Kettunen <jami.kettunen@somainline.org>,
-        ~postmarketos/upstreaming@lists.sr.ht,
-        linux-arm-msm@vger.kernel.org,
-        Michael Turquette <mturquette@baylibre.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        David Airlie <airlied@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Andy Gross <agross@kernel.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Loic Poulain <loic.poulain@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Lux Aliaga <they@mint.lgbt>, devicetree@vger.kernel.org
-Subject: Re: [PATCH v2 03/15] dt-bindings: clock: qcom,dispcc-sm6125: Require
- GCC PLL0 DIV clock
-Message-ID: <168805246390.3066499.7212254924681716912.robh@kernel.org>
-References: <20230627-sm6125-dpu-v2-0-03e430a2078c@somainline.org>
- <20230627-sm6125-dpu-v2-3-03e430a2078c@somainline.org>
+        Thu, 29 Jun 2023 11:28:32 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1F3452703;
+        Thu, 29 Jun 2023 08:28:21 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 35E38C14;
+        Thu, 29 Jun 2023 08:29:04 -0700 (PDT)
+Received: from [10.1.27.40] (C02Z41KALVDN.cambridge.arm.com [10.1.27.40])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id BF5103F64C;
+        Thu, 29 Jun 2023 08:28:17 -0700 (PDT)
+Message-ID: <7ed253e7-7245-32bc-e5ac-6d037b711b49@arm.com>
+Date:   Thu, 29 Jun 2023 16:28:16 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230627-sm6125-dpu-v2-3-03e430a2078c@somainline.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.12.0
+Subject: Re: [PATCH v1 00/10] variable-order, large folios for anonymous
+ memory
+To:     Yu Zhao <yuzhao@google.com>, Yin Fengwei <fengwei.yin@intel.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        David Hildenbrand <david@redhat.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-alpha@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, linux-s390@vger.kernel.org
+References: <20230626171430.3167004-1-ryan.roberts@arm.com>
+ <CAOUHufaUTbUw9MTzw8D=sVrEB+RP6LSBQVGn93TWk=ozV8XobA@mail.gmail.com>
+ <CAOUHufa0S_ayrys0XzDbH8KJi5HxvbGCh_bSAhDpAgcmSJjFUQ@mail.gmail.com>
+ <1fb0c4cb-a709-de20-d643-32ed43550059@arm.com>
+ <CAOUHufbtNPkdktjt_5qM45GegVO-rCFOMkSh0HQminQ12zsV8Q@mail.gmail.com>
+From:   Ryan Roberts <ryan.roberts@arm.com>
+In-Reply-To: <CAOUHufbtNPkdktjt_5qM45GegVO-rCFOMkSh0HQminQ12zsV8Q@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On Tue, 27 Jun 2023 22:14:18 +0200, Marijn Suijten wrote:
-> The "gcc_disp_gpll0_div_clk_src" clock is consumed by the driver, will
-> be passed from DT, and should be required by the bindings.
+On 28/06/2023 19:22, Yu Zhao wrote:
+> On Tue, Jun 27, 2023 at 3:59 AM Ryan Roberts <ryan.roberts@arm.com> wrote:
+>>
+>> On 27/06/2023 08:49, Yu Zhao wrote:
+>>> On Mon, Jun 26, 2023 at 9:30 PM Yu Zhao <yuzhao@google.com> wrote:
+>>>>
+>>>> On Mon, Jun 26, 2023 at 11:14 AM Ryan Roberts <ryan.roberts@arm.com> wrote:
+>>>>>
+>>>>> Hi All,
+>>>>>
+>>>>> Following on from the previous RFCv2 [1], this series implements variable order,
+>>>>> large folios for anonymous memory. The objective of this is to improve
+>>>>> performance by allocating larger chunks of memory during anonymous page faults:
+>>>>>
+>>>>>  - Since SW (the kernel) is dealing with larger chunks of memory than base
+>>>>>    pages, there are efficiency savings to be had; fewer page faults, batched PTE
+>>>>>    and RMAP manipulation, fewer items on lists, etc. In short, we reduce kernel
+>>>>>    overhead. This should benefit all architectures.
+>>>>>  - Since we are now mapping physically contiguous chunks of memory, we can take
+>>>>>    advantage of HW TLB compression techniques. A reduction in TLB pressure
+>>>>>    speeds up kernel and user space. arm64 systems have 2 mechanisms to coalesce
+>>>>>    TLB entries; "the contiguous bit" (architectural) and HPA (uarch).
+>>>>>
+>>>>> This patch set deals with the SW side of things only and based on feedback from
+>>>>> the RFC, aims to be the most minimal initial change, upon which future
+>>>>> incremental changes can be added. For this reason, the new behaviour is hidden
+>>>>> behind a new Kconfig switch, CONFIG_LARGE_ANON_FOLIO, which is disabled by
+>>>>> default. Although the code has been refactored to parameterize the desired order
+>>>>> of the allocation, when the feature is disabled (by forcing the order to be
+>>>>> always 0) my performance tests measure no regression. So I'm hoping this will be
+>>>>> a suitable mechanism to allow incremental submissions to the kernel without
+>>>>> affecting the rest of the world.
+>>>>>
+>>>>> The patches are based on top of v6.4 plus Matthew Wilcox's set_ptes() series
+>>>>> [2], which is a hard dependency. I'm not sure of Matthew's exact plans for
+>>>>> getting that series into the kernel, but I'm hoping we can start the review
+>>>>> process on this patch set independently. I have a branch at [3].
+>>>>>
+>>>>> I've posted a separate series concerning the HW part (contpte mapping) for arm64
+>>>>> at [4].
+>>>>>
+>>>>>
+>>>>> Performance
+>>>>> -----------
+>>>>>
+>>>>> Below results show 2 benchmarks; kernel compilation and speedometer 2.0 (a
+>>>>> javascript benchmark running in Chromium). Both cases are running on Ampere
+>>>>> Altra with 1 NUMA node enabled, Ubuntu 22.04 and XFS filesystem. Each benchmark
+>>>>> is repeated 15 times over 5 reboots and averaged.
+>>>>>
+>>>>> All improvements are relative to baseline-4k. 'anonfolio-basic' is this series.
+>>>>> 'anonfolio' is the full patch set similar to the RFC with the additional changes
+>>>>> to the extra 3 fault paths. The rest of the configs are described at [4].
+>>>>>
+>>>>> Kernel Compilation (smaller is better):
+>>>>>
+>>>>> | kernel          |   real-time |   kern-time |   user-time |
+>>>>> |:----------------|------------:|------------:|------------:|
+>>>>> | baseline-4k     |        0.0% |        0.0% |        0.0% |
+>>>>> | anonfolio-basic |       -5.3% |      -42.9% |       -0.6% |
+>>>>> | anonfolio       |       -5.4% |      -46.0% |       -0.3% |
+>>>>> | contpte         |       -6.8% |      -45.7% |       -2.1% |
+>>>>> | exefolio        |       -8.4% |      -46.4% |       -3.7% |
+>>>>> | baseline-16k    |       -8.7% |      -49.2% |       -3.7% |
+>>>>> | baseline-64k    |      -10.5% |      -66.0% |       -3.5% |
+>>>>>
+>>>>> Speedometer 2.0 (bigger is better):
+>>>>>
+>>>>> | kernel          |   runs_per_min |
+>>>>> |:----------------|---------------:|
+>>>>> | baseline-4k     |           0.0% |
+>>>>> | anonfolio-basic |           0.7% |
+>>>>> | anonfolio       |           1.2% |
+>>>>> | contpte         |           3.1% |
+>>>>> | exefolio        |           4.2% |
+>>>>> | baseline-16k    |           5.3% |
+>>>>
+>>>> Thanks for pushing this forward!
+>>>>
+>>>>> Changes since RFCv2
+>>>>> -------------------
+>>>>>
+>>>>>   - Simplified series to bare minimum (on David Hildenbrand's advice)
+>>>>
+>>>> My impression is that this series still includes many pieces that can
+>>>> be split out and discussed separately with followup series.
+>>>>
+>>>> (I skipped 04/10 and will look at it tomorrow.)
+>>>
+>>> I went through the series twice. Here what I think a bare minimum
+>>> series (easier to review/debug/land) would look like:
 > 
-> Fixes: 8397c9c0c26b ("dt-bindings: clock: add QCOM SM6125 display clock bindings")
-> Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
-> ---
->  Documentation/devicetree/bindings/clock/qcom,dispcc-sm6125.yaml | 8 ++++++--
->  1 file changed, 6 insertions(+), 2 deletions(-)
+> ===
 > 
+>>> 1. a new arch specific function providing a prefered order within (0,
+>>> PMD_ORDER).
+>>> 2. an extended anon folio alloc API taking that order (02/10, partially).
+>>> 3. an updated folio_add_new_anon_rmap() covering the large() &&
+>>> !pmd_mappable() case (similar to 04/10).
+>>> 4. s/folio_test_pmd_mappable/folio_test_large/ in page_remove_rmap()
+>>> (06/10, reviewed-by provided).
+>>> 5. finally, use the extended anon folio alloc API with the arch
+>>> preferred order in do_anonymous_page() (10/10, partially).
+> 
+> ===
+> 
+>>> The rest can be split out into separate series and move forward in
+>>> parallel with probably a long list of things we need/want to do.
+>>
+>> Thanks for the fadt review - I really appreciate it!
+>>
+>> I've responded to many of your comments. I'd appreciate if we can close those
+>> points then I will work up a v2.
+> 
+> Thanks!
+> 
+> Based on the latest discussion here [1], my original list above can be
+> optionally reduced to 4 patches: item 2 can be quashed into item 5.
+> 
+> Also please make sure we have only one global (apply to all archs)
+> Kconfig option, and it should be added in item 5:
+> 
+>   if TRANSPARENT_HUGEPAGE
+>     config FLEXIBLE/VARIABLE_THP # or whatever name you see fit
+>   end if
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+Naming is always the hardest part. I've been calling it LARGE_ANON_FOLIO up
+until now. But I think you are right that we should show that it is related to
+THP, so I'll go with FLEXIBLE_THP for v2, and let people shout if they hate it.
+
+If we are not letting the arch declare that it supports FLEXIBLE_THP, then I
+think we need the default version of arch_wants_pte_order() to return a value
+higher than 0 (which is what I have it returning at the moment). Because
+otherwise, for an arch that hasn't defined its own version of
+arch_wants_pte_order(), FLEXIBLE_THP on vs off will give the same result. So I
+propose to set the default to ilog2(SZ_64K >> PAGE_SHIFT). Shout if you have any
+concerns.
+
+> 
+> (How many new Kconfig options added within arch/arm64/ is not a concern of MM.)
+> 
+> And please make sure it's disabled by default,
+
+Done
+
+ because we are still
+> missing many important functions, e.g., I don't think we can mlock()
+> when large() && !pmd_mappable(), see mlock_pte_range() and
+> mlock_vma_folio(). We can fix it along with many things later, but we
+> need to present a plan and a schedule now. Otherwise, there would be
+> pushback if we try to land the series without supporting mlock().
+
+There are other areas that I'm aware off. I'll put together a table and send it
+out once I have v2 out the door (hopefully tomorrow or Monday). Hopefully we can
+work together to fill it in and figure out who can do what? I'm certainly
+planning to continue to push this work forwards beyond this initial patch set.
+
+Thanks,
+Ryan
+
+> 
+> Do you or Fengwei plan to take on it? (I personally don't.) If not,
+> I'll try to find someone from our team to look at it. (It'd be more
+> scalable if we have a coordinated group of people individually solving
+> different problems.)
+> 
+> [1] https://lore.kernel.org/r/b2c81404-67df-f841-ef02-919e841f49f2@arm.com/
 
