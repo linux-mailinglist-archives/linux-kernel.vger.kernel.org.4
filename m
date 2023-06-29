@@ -2,105 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8F287427EB
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 16:04:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C70C7427EF
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 16:07:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232006AbjF2OEi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 10:04:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52392 "EHLO
+        id S232033AbjF2OHL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 10:07:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231443AbjF2OEg (ORCPT
+        with ESMTP id S231443AbjF2OHI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 10:04:36 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F00DA26B6
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 07:04:34 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-230-5oQ8jz6OMYi6w2bJDof4Jw-1; Thu, 29 Jun 2023 15:04:32 +0100
-X-MC-Unique: 5oQ8jz6OMYi6w2bJDof4Jw-1
-Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
- (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Thu, 29 Jun
- 2023 15:04:31 +0100
-Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
- id 15.00.1497.048; Thu, 29 Jun 2023 15:04:31 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Borislav Petkov' <bp@alien8.de>,
-        Noah Goldstein <goldstein.w.n@gmail.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-CC:     "x86@kernel.org" <x86@kernel.org>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        lkml <linux-kernel@vger.kernel.org>
-Subject: RE: x86/csum: Remove unnecessary odd handling
-Thread-Topic: x86/csum: Remove unnecessary odd handling
-Thread-Index: AQHZqaKlrhaTNuKhJ0qJMNdg92SDBq+hy3VQ
-Date:   Thu, 29 Jun 2023 14:04:30 +0000
-Message-ID: <a6fce3b915e04125b15aa33317ce07ff@AcuMS.aculab.com>
-References: <20230628020657.957880-1-goldstein.w.n@gmail.com>
- <20230628091241.GAZJv5ie0xVGvnMKIM@fat_crate.local>
-In-Reply-To: <20230628091241.GAZJv5ie0xVGvnMKIM@fat_crate.local>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Thu, 29 Jun 2023 10:07:08 -0400
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AB3CAA;
+        Thu, 29 Jun 2023 07:07:07 -0700 (PDT)
+Received: by mail-lf1-x12e.google.com with SMTP id 2adb3069b0e04-4fb7b2e3dacso1161840e87.0;
+        Thu, 29 Jun 2023 07:07:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1688047626; x=1690639626;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=OEYh2DRfk53je4DxOfap66hrkUZhOB02h/6gUlMbFXQ=;
+        b=SxW8aPh3FgVNSKH2CoC6ad9zu7IDSAbyBabHXVoiqLmcesAK9OTxBIRASK/tyhXgIS
+         h2nh5pkTSKxPDSIirIeWnovZRIoQDHAPtMRVg1mtV3QEjLP3ERfL3C0nTbqWF9LyuUx2
+         RSbBzS6F8EaldvUiXGxkVhkFFxjRseDArwWsbuMEscGWzlGMV+vvuEAdTdQf0N2CeVRF
+         HyIrjQPHyb25CSYZgD5bmfH7EaKpvn0o9tRvS2q7ZzNqPha/KcPm3TZv2bxJ3bm7QHNF
+         rf2ryzln5Oo4yzQc9E4wXaia5+wdTp0xGEQ89OBODPXOnHtXJQ/bM8egb0O1KYKXNXDn
+         S+Iw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688047626; x=1690639626;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=OEYh2DRfk53je4DxOfap66hrkUZhOB02h/6gUlMbFXQ=;
+        b=HXz0V1dQ36CXFOHoselvipaI3Gf7p86Pc3EG8Vb/yQt5B/FMsS4G18hV5QxRVUZNoQ
+         SQE0AQCyC/XyI/wdkbyyor7CkYd6MXwME2udF4oLBCPgsbAmBfbqzZIQnHqHjABzTUKD
+         +3vvYt7L5PBoXcMqpzgva1/Px3s/hA5QO7anNUUu/SIEV6+hAS3KaQ3YN5I/93nwW83i
+         L/RHuE4RQNic5WsHyywT+ZzOJgPzzT9xwDBT2SeYRhEPDxRjFOXtOa3Uyv3E6bTU6NOL
+         VoGIfqZANrgH5XbKCJR8Chltl64/otHo8B5kqgYtMu+n8QYysCadkjIkjEqHK2cvgyiH
+         FICw==
+X-Gm-Message-State: ABy/qLY8nClk2YkfT0y2B3WO7J2y9KcpXsjOlVkniQcZ8I/G3ldya9gr
+        zeqS6tTNjhYqIDVxtPDa+4eAgMLpKPiYQSZgHxs=
+X-Google-Smtp-Source: APBJJlGuXe9oTBIiTfmuhpdTfJ+BVZGUuj1yzHYCSkpMv5tJzrqDUg7bLo/dUXj75LHpnXbhfTNRHsjuJsRYiCnv1A0=
+X-Received: by 2002:a05:6512:2214:b0:4f9:556b:93c5 with SMTP id
+ h20-20020a056512221400b004f9556b93c5mr48961lfu.40.1688047625527; Thu, 29 Jun
+ 2023 07:07:05 -0700 (PDT)
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <ZJ2H5FWuo9oDMgPm@debian> <be9320b5-7613-be0f-ffcd-4b3041ea5836@huaweicloud.com>
+In-Reply-To: <be9320b5-7613-be0f-ffcd-4b3041ea5836@huaweicloud.com>
+From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+Date:   Thu, 29 Jun 2023 15:06:29 +0100
+Message-ID: <CADVatmNG=_v0yLwZrK0FcOGdOkz_W_36kurKKeDHWoxyGWx7Qw@mail.gmail.com>
+Subject: Re: mainline build failure due to 8295efbe68c0 ("md/raid1-10: factor
+ out a helper to submit normal write")
+To:     Yu Kuai <yukuai1@huaweicloud.com>
+Cc:     Song Liu <song@kernel.org>, linux-raid@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        regressions@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-RnJvbTogQm9yaXNsYXYgUGV0a292DQo+IFNlbnQ6IDI4IEp1bmUgMjAyMyAxMDoxMw0KPiANCj4g
-KyBMaW51cyB3aG8ncyBiZWVuIHBva2luZyBhdCB0aGlzIHllc3RlcmRheS4NCj4gDQo+ICsgbGtt
-bC4gUGxlYXNlIGFsd2F5cyBDQyBsa21sIHdoZW4gc2VuZGluZyBwYXRjaGVzLg0KPiANCj4gT24g
-VHVlLCBKdW4gMjcsIDIwMjMgYXQgMDk6MDY6NTdQTSAtMDUwMCwgTm9haCBHb2xkc3RlaW4gd3Jv
-dGU6DQo+ID4gVGhlIHNwZWNpYWwgY2FzZSBmb3Igb2RkIGFsaWduZWQgYnVmZmVycyBpcyB1bm5l
-Y2Vzc2FyeSBhbmQgbW9zdGx5DQo+ID4ganVzdCBhZGRzIG92ZXJoZWFkLiBBbGlnbmVkIGJ1ZmZl
-cnMgaXMgdGhlIGV4cGVjdGF0aW9ucywgYW5kIGV2ZW4gZm9yDQo+ID4gdW5hbGlnbmVkIGJ1ZmZl
-ciwgdGhlIG9ubHkgY2FzZSB0aGF0IHdhcyBoZWxwZWQgaXMgaWYgdGhlIGJ1ZmZlciB3YXMNCj4g
-PiAxLWJ5dGUgZnJvbSB3b3JkIGFsaWduZWQgd2hpY2ggaXMgfjEvNyBvZiB0aGUgY2FzZXMuIE92
-ZXJhbGwgaXQgc2VlbXMNCj4gPiBoaWdobHkgdW5saWtlbHkgdG8gYmUgd29ydGggdG8gZXh0cmEg
-YnJhbmNoLg0KPiA+DQo+ID4gSXQgd2FzIGxlZnQgaW4gdGhlIHByZXZpb3VzIHBlcmYgaW1wcm92
-ZW1lbnQgcGF0Y2ggYmVjYXVzZSBJIHdhcw0KPiA+IGVycm9uZW91c2x5IGNvbXBhcmluZyB0aGUg
-ZXhhY3Qgb3V0cHV0IG9mIGBjc3VtX3BhcnRpYWwoLi4uKWAsIGJ1dA0KPiA+IHJlYWxseSB3ZSBv
-bmx5IG5lZWQgYGNzdW1fZm9sZChjc3VtX3BhcnRpYWwoLi4uKSlgIHRvIG1hdGNoIHNvIGl0cw0K
-PiA+IHNhZmUgdG8gcmVtb3ZlLg0KDQpJJ20gc3VyZSBJJ3ZlIHN1Z2dlc3RlZCB0aGlzIGJlZm9y
-ZS4NClRoZSAnb2RkJyBjaGVjayB3YXMgbmVlZGVkIGJ5IGFuIGVhcmxpZXIgaW1wbGVtZW50YXRp
-b24uDQoNCk1pc2FsaWduZWQgYnVmZmVycyBhcmUgKGp1c3QgYWJvdXQpIG1lYXN1cmFibHkgc2xv
-d2VyLg0KQnV0IGl0IGlzIHByZXR0eSBtdWNoIG5vaXNlIGFuZCB0aGUgZXh0cmEgY29kZSBpbiB0
-aGUNCmFsaWduZWQgY2FzZSB3aWxsIGNvZGUgbW9yZS4NCg0KSXQgaXMgcHJldHR5IG11Y2ggaW1w
-b3NzaWJsZSB0byBmaW5kIG91dCB3aGF0IHRoZSBjcHUgaXMgZG9pbmcsDQpidXQgaWYgeW91IGRv
-IG1pc2FsaWduZWQgYWNjZXNzZXMgdG8gYSBQQ0llIHRhcmdldCB5b3UgY2FuDQood2l0aCBzdWl0
-YWJsZSBoYXJkd2FyZSkgbG9vayBhdCB0aGUgZ2VuZXJhdGVkIFRMUC4NCg0KV2hhdCB0aGF0IHNo
-b3dzIGlzIG1pc2FsaWduZWQgdHJhbnNmZXJzIGJlaW5nIGRvbmUgaW4gOC1ieXRlDQpjaHVua3Mg
-YW5kIGJlaW5nIHNwbGl0IGludG8gdHdvIFRMUCBpZiB0aGV5IGNyb3NzIGEgNjQgYnl0ZQ0KKHBy
-b2JhYmx5IGNhY2hlIGxpbmUpIGJvdW5kYXJ5Lg0KDQpJdCBpcyBsaWtlbHkgdGhhdCB0aGUgc2Ft
-ZSBoYXBwZW5zIGZvciBjYWNoZWQgYWNjZXNzZXMuDQoNCkdpdmVuIHRoYXQgdGhlIGNwdSBjYW4g
-ZG8gdHdvIG1lbW9yeSByZWFkcyBlYWNoIGNsb2NrDQppdCBpc24ndCBzdXJwcmlzaW5nIHRoYXQg
-dGhlIGNoZWNrc3VtIGxvb3AgKHdoaWNoIGRvZXNuJ3QNCmV2ZW4gbWFuYWdlIGEgcmVhZCBldmVy
-eSBjbG9jaykgaXMgc2xvd2VyIGJ5IGxlc3MgdGhhbg0Kb25lIGNsb2NrIGV2ZXJ5IGNhY2hlIGxp
-bmUuDQoNClNvbWVvbmUgbWlnaHQgYWxzbyB3YW50IHRvIHVzZSB0aGUgJ2FyYycgQyB2ZXJzaW9u
-IG9mIGNzdW1fZm9sZCgpDQpvbiBwcmV0dHkgbXVjaCBldmVyeSBhcmNoaXRlY3R1cmUgWzFdLg0K
-SXQgaXM6DQoJcmV0dXJuICh+c3VtIC0gcm9yMzIoc3VtLCAxNikpID4+IDE2Ow0Kc2lnbmlmaWNh
-bnRseSBiZXR0ZXIgdGhhbiB0aGUgeDg2IGFzbSAoZXZlbiBvbiBtb3JlIHJlY2VudA0KY3B1IHRo
-YXQgZG9uJ3QgdGFrZSAyIGNsb2NrcyBmb3IgYW4gJ2FkYycpLg0KDQpbMV0gYXJtIGNhbiBkbyBh
-IGJpdCBiZXR0ZXIgYmVjYXVzZSBvZiB0aGUgYmFycmVsIHNoaWZ0ZXIuDQogICAgc3BhcmMgaXMg
-c2xvd2VyIGJlY2F1c2UgaXQgaGFzIGEgY2FycnkgZmxhZyBidXQgbm8gcm90YXRlLg0KDQoJRGF2
-aWQNCg0KLQ0KUmVnaXN0ZXJlZCBBZGRyZXNzIExha2VzaWRlLCBCcmFtbGV5IFJvYWQsIE1vdW50
-IEZhcm0sIE1pbHRvbiBLZXluZXMsIE1LMSAxUFQsIFVLDQpSZWdpc3RyYXRpb24gTm86IDEzOTcz
-ODYgKFdhbGVzKQ0K
+Hi Kuai,
 
+On Thu, 29 Jun 2023 at 14:56, Yu Kuai <yukuai1@huaweicloud.com> wrote:
+>
+> Hi,
+>
+> =E5=9C=A8 2023/06/29 21:32, Sudip Mukherjee (Codethink) =E5=86=99=E9=81=
+=93:
+> > Hi All,
+> >
+> > The latest mainline kernel branch fails to build x86_64, arm64 and arm =
+allmodconfig
+>
+> Thanks for the testing, which branch are you testing?
+>
+> This problem is already fixed in latest mainline kernel:
+>
+> https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commi=
+t/?id=3Db5a99602b74bbfa655be509c615181dd95b0719e
+
+The link you gave is not "mainline kernel". Its linux-next.
+
+Linus still does not have the fix, so the mainline kernel branch fails.
+
+
+--=20
+Regards
+Sudip
