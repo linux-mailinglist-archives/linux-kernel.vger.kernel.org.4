@@ -2,501 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C0A0742AE5
-	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 18:58:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BA34742AE9
+	for <lists+linux-kernel@lfdr.de>; Thu, 29 Jun 2023 18:59:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232083AbjF2Q6p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 12:58:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49818 "EHLO
+        id S232099AbjF2Q7v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 12:59:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230455AbjF2Q6n (ORCPT
+        with ESMTP id S231902AbjF2Q7n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 12:58:43 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D29B32D4C;
-        Thu, 29 Jun 2023 09:58:41 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2007B615AF;
-        Thu, 29 Jun 2023 16:58:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0CE46C433C8;
-        Thu, 29 Jun 2023 16:58:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688057920;
-        bh=FQntZ6/LqIfW8Aeoys0cCNfrFRK7KsODpzAfiQHGArw=;
-        h=Date:From:To:Cc:Subject:From;
-        b=KYMGAygL8Pgw8FEm1HNU2K1M980PCp/iQxpFr8rL63KnuhfuMCinIowq2os1CVdp1
-         GdYL1wjbiZ/DskRVksAVnVFBXA74xbyOHx53RSAgPQTTg2afYihXTZmJikDL3EDfoj
-         DD7i0SDByIe0HYSP4eQeDONSGApRcu/U7DkCvvQfHGUHRYuBOjfwIHtaz/0Pqq757o
-         OrMCqtFwlsrnRJAd1PYAJyjNgo3Hg6A3TOOxbqUD1CgPUrSMnIAkN7U0BK1Fe42kHw
-         9p13j+XYZ6AStLDytCWT+8knPQFywnWU+HuhaUMfRcOdgGULPiJ+f//+ykCGmZ19n5
-         GnUnF+jKiL3cw==
-Date:   Thu, 29 Jun 2023 11:58:38 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>
-Subject: [GIT PULL] PCI changes for v6.5
-Message-ID: <20230629165838.GA438762@bhelgaas>
+        Thu, 29 Jun 2023 12:59:43 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D26063598
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 09:58:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1688057936;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=swdMiA1r9t+az8w+QR1JvmbiMrBSFzQ6KVm/MzBCuOU=;
+        b=To0i02Dcdfq1x9gMZ9vi5PPNCp0/cA9kvECpJBZt0P+0nSmls0KNiWcyteQmSs0x2+QJZh
+        xa0OqY5vVRHVkCxMj7o9r2Q2NcWMoGx7XCSOROorPf8lWZ0Yl4axysRR65R2JhREEPi849
+        jivFk9JN962exm2PBRv8UKr+FpinfFI=
+Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com
+ [209.85.219.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-495-37UTdkj3OuKsJ5KuC9sLJw-1; Thu, 29 Jun 2023 12:58:54 -0400
+X-MC-Unique: 37UTdkj3OuKsJ5KuC9sLJw-1
+Received: by mail-qv1-f71.google.com with SMTP id 6a1803df08f44-635e664d2f8so9702226d6.3
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 09:58:54 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688057933; x=1690649933;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=swdMiA1r9t+az8w+QR1JvmbiMrBSFzQ6KVm/MzBCuOU=;
+        b=PPd1ShyBjaMeZyz0KLWrlkc66Wbo0r/4lhM7b17KmQUhub/dYyZ0oMHL4rl2yXp6WT
+         LXxH0gFTuLH4AHZkv318KzYp6QBat32omUB9pw0f6r5k64Hng7oGm3PL0ykYTY3W2CnL
+         78o8SgtlKF7IXmzHRqObJkgoCxbs48YImxmRuEQaLWqWWhDplQhVLmC8pv7wlA1mM3rP
+         wHr0B3iVNlHGhl3/X9I1T3g0StUh2s4sDNj3Er/KVn02HIu33pSxqEIMgJmQs5db+Y6G
+         4CJZ1ABNaOXiWGnSioVjvVDbAD533jGtuKDAjaq6LSjVXS9SC8EXRYvgaJX/EetVJrWR
+         RsuA==
+X-Gm-Message-State: ABy/qLbbcsNymL8IjYKGjMkt2Wzi2GzwenawE79tSAuwE6x1igcOJSyS
+        bNjlEAhx6pWTsesqrP+ZdQMy7JiXxc4qQEFUaJsFsCSg112DNOKSEl4yQaGDX9KCaIN3stle4+R
+        Pf2F3MLMJefA/Xqvv5kg0PC8p
+X-Received: by 2002:a05:6214:4110:b0:635:e0dd:db42 with SMTP id kc16-20020a056214411000b00635e0dddb42mr216411qvb.27.1688057933215;
+        Thu, 29 Jun 2023 09:58:53 -0700 (PDT)
+X-Google-Smtp-Source: APBJJlEZh6c5lPlscLNAkoheXBIabQY3I2vBrGKgWcc7orFQAecMaAR78/iF4k9GfBYMHfhVZAMJ9g==
+X-Received: by 2002:a05:6214:4110:b0:635:e0dd:db42 with SMTP id kc16-20020a056214411000b00635e0dddb42mr216401qvb.27.1688057932994;
+        Thu, 29 Jun 2023 09:58:52 -0700 (PDT)
+Received: from localhost (ip98-179-76-75.ph.ph.cox.net. [98.179.76.75])
+        by smtp.gmail.com with ESMTPSA id y11-20020ad457cb000000b00631eb444e6esm7108198qvx.51.2023.06.29.09.58.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 29 Jun 2023 09:58:52 -0700 (PDT)
+Date:   Thu, 29 Jun 2023 09:58:51 -0700
+From:   Jerry Snitselaar <jsnitsel@redhat.com>
+To:     Florian Bezdeka <florian@bezdeka.de>
+Cc:     Peter Huewe <peterhuewe@gmx.de>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Lino Sanfilippo <l.sanfilippo@kunbus.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] tpm/tpm_tis: Disable interrupts for Lenovo L590 devices
+Message-ID: <qaghyyi3wd6sfppfkbf2d6spsnfafalseeznyjf5bgdj5nikdy@mz4t52hjkuus>
+References: <20230620-flo-lenovo-l590-tpm-fix-v1-1-16032a8b5a1d@bezdeka.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230620-flo-lenovo-l590-tpm-fix-v1-1-16032a8b5a1d@bezdeka.de>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following changes since commit ac9a78681b921877518763ba0e89202254349d1b:
+On Tue, Jun 20, 2023 at 01:11:01PM +0200, Florian Bezdeka wrote:
+> The Lenovo L590 suffers from an irq storm issue like the T490, T490s
+> and P360 Tiny, so add an entry for it to tpm_tis_dmi_table and force
+> polling.
+> 
+> Link: https://bugzilla.redhat.com/show_bug.cgi?id=2214069#c0
+> Fixes: e644b2f498d2 ("tpm, tpm_tis: Enable interrupt test")
+> Signed-off-by: Florian Bezdeka <florian@bezdeka.de>
+
+Reviewed-by: Jerry Snitselaar <jsnitsel@redhat.com>
+
+> ---
+>  drivers/char/tpm/tpm_tis.c | 8 ++++++++
+>  1 file changed, 8 insertions(+)
+> 
+> diff --git a/drivers/char/tpm/tpm_tis.c b/drivers/char/tpm/tpm_tis.c
+> index 7db3593941ea..2771abb5628f 100644
+> --- a/drivers/char/tpm/tpm_tis.c
+> +++ b/drivers/char/tpm/tpm_tis.c
+> @@ -138,6 +138,14 @@ static const struct dmi_system_id tpm_tis_dmi_table[] = {
+>  			DMI_MATCH(DMI_PRODUCT_VERSION, "ThinkPad L490"),
+>  		},
+>  	},
+> +	{
+> +		.callback = tpm_tis_disable_irq,
+> +		.ident = "ThinkPad L590",
+> +		.matches = {
+> +			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
+> +			DMI_MATCH(DMI_PRODUCT_VERSION, "ThinkPad L590"),
+> +		},
+> +	},
+>  	{
+>  		.callback = tpm_tis_disable_irq,
+>  		.ident = "UPX-TGL",
+> 
+> ---
+> base-commit: 9561de3a55bed6bdd44a12820ba81ec416e705a7
+> change-id: 20230620-flo-lenovo-l590-tpm-fix-4aeb6aa25667
+> 
+> Best regards,
+> -- 
+> Florian Bezdeka <florian@bezdeka.de>
+> 
 
-  Linux 6.4-rc1 (2023-05-07 13:34:35 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/pci/pci.git tags/pci-v6.5-changes
-
-for you to fetch changes up to 6ecac465eee887de7ceda7ffe3bccf538eb786bc:
-
-  Merge branch 'pci/controller/remove-void-callbacks' (2023-06-26 13:00:00 -0500)
-
-----------------------------------------------------------------
-
-Enumeration:
-
-  - Export pcie_retrain_link() for use outside ASPM
-
-  - Add Data Link Layer Link Active Reporting as another way for
-    pcie_retrain_link() to determine the link is up
-
-  - Work around link training failures (especially on the ASMedia ASM2824
-    switch) by training first at 2.5GT/s and then attempting higher rates
-
-Resource management:
-
-  - When we coalesce host bridge windows, remove invalidated resources from
-    the resource tree so future allocations work correctly
-
-Hotplug:
-
-  - Cancel bringup sequence if card is not present, to keep from blinking
-    Power Indicator indefinitely
-
-  - Reassign bridge resources if necessary for ACPI hotplug
-
-Driver binding:
-
-  - Convert platform_device .remove() callbacks to return void instead of a
-    mostly useless int
-
-Power management:
-
-  - Reduce wait time for secondary bus to be ready to speed up resume
-
-  - Avoid putting EloPOS E2/S2/H2 (as well as Elo i2) PCIe Ports in D3cold
-
-  - Call _REG when transitioning D-states so AML that uses the PCI config
-    space OpRegion works, which fixes some ASMedia GPIO controllers after
-    resume
-
-Virtualization:
-
-  - Delay extra 250ms after FLR of Solidigm P44 Pro NVMe to avoid KVM hang
-    when guest is rebooted
-
-  - Add function 1 DMA alias quirk for Marvell 88SE9235
-
-Error handling:
-
-  - Unexport pci_save_aer_state() since it's only used in drivers/pci/
-
-  - Drop recommendation for drivers to configure AER Capability, since the
-    PCI core does this for all devices
-
-ASPM:
-
-  - Disable ASPM on MFD function removal to avoid use-after-free
-
-  - Tighten up pci_enable_link_state() and pci_disable_link_state()
-    interfaces so they don't enable/disable states the driver didn't
-    specify
-
-  - Avoid link retraining race that can happen if ASPM sets link control
-    parameters while the link is in the midst of training for some other
-    reason
-
-Endpoint framework:
-
-  - Change "PCI Endpoint Virtual NTB driver" Kconfig prompt to be different
-    from "PCI Endpoint NTB driver"
-
-  - Automatically create a function specific attributes group for endpoint
-    drivers to avoid reference counting issues
-
-  - Fix many EPC test issues
-
-  - Return pci_epf_type_add_cfs() error if EPF has no driver
-
-  - Add kernel-doc for pci_epc_raise_irq() and pci_epc_map_msi_irq() MSI
-    vector parameters
-
-  - Pass EPF device ID to driver probe functions
-
-  - Return -EALREADY if EPC has already been started/stopped
-
-  - Add linkdown notifier support and use it in qcom-ep
-
-  - Add Bus Master Enable event support and use it in qcom-ep
-
-  - Add Qualcomm Modem Host Interface (MHI) endpoint driver
-
-  - Add Layerscape PME interrupt handling to manage link-up notification
-
-Cadence PCIe controller driver:
-
-  - Wait for link retrain to complete when working around the J721E i2085
-    erratum with Gen2 mode
-
-Faraday FTPC100 PCI controller driver:
-
-  - Release clock resources on error paths
-
-Freescale i.MX6 PCIe controller driver:
-
-  - Save and restore Root Port MSI control to work around hardware defect
-
-Intel VMD host bridge driver:
-
-  - Reset VMD config register between soft reboots
-
-  - Capture pci_reset_bus() return value instead of printing junk when it
-    fails
-
-Qualcomm PCIe controller driver:
-
-  - Add SDX65 endpoint compatible string to DT binding
-
-  - Disable register write access after init for IP v2.3.3, v2.9.0
-
-  - Use DWC helpers for enabling/disabling writes to DBI registers
-
-  - Hide slot hotplug capability for IP v1.0.0, v1.9.0, v2.1.0, v2.3.2,
-    v2.3.3, v2.7.0, v2.9.0
-
-  - Reuse v2.3.2 post-init sequence for v2.4.0
-
-Renesas R-Car PCIe controller driver:
-
-  - Remove unused static pcie_base and pcie_dev
-
-Rockchip PCIe controller driver:
-
-  - Remove writes to unused registers
-
-  - Write endpoint Device ID using correct register
-
-  - Assert PCI Configuration Enable bit after probe so endpoint responds
-    instead of generating Request Retry Status messages
-
-  - Poll waiting for PHY PLLs to lock
-
-  - Update RK3399 example DT binding to be valid
-
-  - Use RK3399 PCIE_CLIENT_LEGACY_INT_CTRL to generate INTx instead of
-    manually generating PCIe message
-
-  - Use multiple windows to avoid address translation conflicts
-
-  - Use u32 (not u16) when accessing 32-bit registers
-
-  - Hide MSI-X Capability, since RK3399 can't generate MSI-X
-
-  - Set endpoint controller required alignment to 256
-
-Synopsys DesignWare PCIe controller driver:
-
-  - Wait for link to come up only if we've initiated link training
-
-Miscellaneous:
-
-  - Add pci_clear_master() stub for non-CONFIG_PCI
-
-----------------------------------------------------------------
-Ajay Agarwal (6):
-      PCI/ASPM: Disable only ASPM_STATE_L1 when driver disables L1
-      PCI/ASPM: Set only ASPM_STATE_L1 when driver enables L1
-      PCI/ASPM: Set ASPM_STATE_L1 when driver enables L1.1 or L1.2
-      PCI/ASPM: Rename L1.2-specific functions from 'l1ss' to 'l12'
-      PCI/ASPM: Remove unnecessary ASPM_STATE_L1SS check
-      PCI: dwc: Wait for link up only if link is started
-
-Andy Shevchenko (1):
-      PCI: of: Propagate firmware node by calling device_set_node()
-
-Ben Dooks (1):
-      PCI: Add PCI_EXT_CAP_ID_PL_32GT define
-
-Bjorn Helgaas (26):
-      PCI: pciehp: Simplify Attention Button logging
-      PCI: Expand comment about sorting pci_ids.h entries
-      PCI: Unexport pci_save_aer_state()
-      Documentation: PCI: Drop recommendation to configure AER Capability
-      Documentation: PCI: Update cross references to .rst files
-      Documentation: PCI: Tidy AER documentation
-      PCI/ASPM: Return 0 or -ETIMEDOUT from  pcie_retrain_link()
-      PCI/ACPI: Validate acpi_pci_set_power_state() parameter
-      Merge branch 'pci/aer'
-      Merge branch 'pci/aspm'
-      Merge branch 'pci/enumeration'
-      Merge branch 'pci/hotplug'
-      Merge branch 'pci/pm'
-      Merge branch 'pci/resource'
-      Merge branch 'pci/virtualization'
-      Merge branch 'pci/misc'
-      Merge branch 'pci/controller/dt'
-      Merge branch 'pci/controller/cadence'
-      Merge branch 'pci/controller/dwc'
-      Merge branch 'pci/pci/ftpci100'
-      Merge branch 'pci/controller/qcom'
-      Merge branch 'pci/controller/rcar'
-      Merge branch 'pci/controller/rockchip'
-      Merge branch 'pci/controller/vmd'
-      Merge branch 'pci/controller/endpoint'
-      Merge branch 'pci/controller/remove-void-callbacks'
-
-Damien Le Moal (19):
-      PCI: rockchip: Set address alignment for endpoint mode
-      PCI: endpoint: Automatically create a function specific attributes group
-      PCI: endpoint: Move pci_epf_type_add_cfs() code
-      PCI: epf-test: Fix DMA transfer completion initialization
-      PCI: epf-test: Fix DMA transfer completion detection
-      PCI: epf-test: Use dmaengine_submit() to initiate DMA transfer
-      PCI: epf-test: Simplify read/write/copy test functions
-      PCI: epf-test: Simplify pci_epf_test_raise_irq()
-      PCI: epf-test: Simplify IRQ test commands execution
-      PCI: epf-test: Improve handling of command and status registers
-      PCI: epf-test: Cleanup pci_epf_test_cmd_handler()
-      PCI: epf-test: Cleanup request result handling
-      PCI: epf-test: Simplify DMA support checks
-      PCI: epf-test: Simplify transfers result print
-      misc: pci_endpoint_test: Free IRQs before removing the device
-      misc: pci_endpoint_test: Re-init completion for every test
-      misc: pci_endpoint_test: Do not write status in IRQ handler
-      misc: pci_endpoint_test: Simplify pci_endpoint_test_msi_irq()
-      PCI: endpoint: Improve pci_epf_type_add_cfs()
-
-Ding Hui (1):
-      PCI/ASPM: Disable ASPM on MFD function removal to avoid use-after-free
-
-Frank Li (2):
-      PCI: endpoint: pci-epf-vntb: Fix typo in comments
-      PCI: layerscape: Add the endpoint linkup notifier support
-
-Geert Uytterhoeven (1):
-      PCI: rcar-host: Remove unused static pcie_base and pcie_dev
-
-Igor Mammedov (1):
-      PCI: acpiphp: Reassign resources on bridge if necessary
-
-Ilpo Järvinen (2):
-      PCI/ASPM: Factor out pcie_wait_for_retrain()
-      PCI/ASPM: Avoid link retraining race
-
-Junyan Ye (1):
-      PCI: ftpci100: Release the clock resources
-
-Maciej W. Rozycki (14):
-      PCI: Initialize dev->link_active_reporting earlier
-      PCI: pciehp: Rely on dev->link_active_reporting
-      powerpc/eeh: Rely on dev->link_active_reporting
-      net/mlx5: Rely on dev->link_active_reporting
-      PCI/ASPM: Use distinct local vars in pcie_retrain_link()
-      PCI/ASPM: Avoid unnecessary pcie_link_state use
-      PCI/ASPM: Factor out waiting for link training to complete
-      PCI: Execute quirk_enable_clear_retrain_link() earlier
-      PCI: Export PCIe link retrain timeout
-      PCI: Export pcie_retrain_link() for use outside ASPM
-      PCI: Add support for polling DLLLA to pcie_retrain_link()
-      PCI: Use pcie_wait_for_link_status() in pcie_wait_for_link_delay()
-      PCI: Work around PCIe link training failures
-      PCI: Add failed link recovery for device reset events
-
-Manivannan Sadhasivam (18):
-      PCI: qcom: Disable write access to read only registers for IP v2.3.3
-      PCI: qcom: Use DWC helpers for modifying the read-only DBI registers
-      PCI: qcom: Disable write access to read only registers for IP v2.9.0
-      PCI: qcom: Do not advertise hotplug capability for IPs v2.7.0 and v1.9.0
-      PCI: qcom: Do not advertise hotplug capability for IPs v2.3.3 and v2.9.0
-      PCI: qcom: Do not advertise hotplug capability for IP v2.3.2
-      PCI: qcom: Use post init sequence of IP v2.3.2 for v2.4.0
-      PCI: qcom: Do not advertise hotplug capability for IP v1.0.0
-      PCI: qcom: Do not advertise hotplug capability for IP v2.1.0
-      PCI: endpoint: Add missing documentation about the MSI/MSI-X range
-      PCI: endpoint: Pass EPF device ID to the probe function
-      PCI: endpoint: Return error if EPC is started/stopped multiple times
-      PCI: endpoint: Add linkdown notifier support
-      PCI: endpoint: Add BME notifier support
-      PCI: qcom-ep: Add support for Link down notification
-      PCI: qcom-ep: Add support for BME notification
-      PCI: endpoint: Add PCI Endpoint function driver for MHI bus
-      MAINTAINERS: Add PCI MHI endpoint function driver under MHI bus
-
-Mario Limonciello (1):
-      PCI/ACPI: Call _REG when transitioning D-states
-
-Mika Westerberg (1):
-      PCI/PM: Shorten pci_bridge_wait_for_secondary_bus() wait time for slow links
-
-Mike Pastore (1):
-      PCI: Delay after FLR of Solidigm P44 Pro NVMe
-
-Nirmal Patel (1):
-      PCI: vmd: Reset VMD config register between soft reboots
-
-Ondrej Zary (1):
-      PCI/PM: Avoid putting EloPOS E2/S2/H2 PCIe Ports in D3cold
-
-Randy Dunlap (1):
-      Documentation: PCI: correct spelling
-
-Richard Zhu (1):
-      PCI: imx6: Save and restore root port MSI control in suspend and resume
-
-Rick Wertenbroek (9):
-      PCI: rockchip: Remove writes to unused registers
-      PCI: rockchip: Write PCI Device ID to correct register
-      PCI: rockchip: Assert PCI Configuration Enable bit after probe
-      PCI: rockchip: Add poll and timeout to wait for PHY PLLs to be locked
-      dt-bindings: PCI: Update the RK3399 example to a valid one
-      PCI: rockchip: Fix legacy IRQ generation for RK3399 PCIe endpoint core
-      PCI: rockchip: Fix window mapping and address translation for endpoint
-      PCI: rockchip: Use u32 variable to access 32-bit registers
-      PCI: rockchip: Don't advertise MSI-X in PCIe capabilities
-
-Robin Murphy (1):
-      PCI: Add function 1 DMA alias quirk for Marvell 88SE9235
-
-Rohit Agarwal (1):
-      dt-bindings: PCI: qcom: Add SDX65 SoC
-
-Rongguang Wei (1):
-      PCI: pciehp: Cancel bringup sequence if card is not present
-
-Ross Lagerwall (1):
-      PCI: Release resource invalidated by coalescing
-
-Shunsuke Mie (1):
-      PCI: endpoint: Fix a Kconfig prompt of vNTB driver
-
-Siddharth Vadapalli (1):
-      PCI: cadence: Fix Gen2 Link Retraining process
-
-Sui Jingfeng (1):
-      PCI: Add pci_clear_master() stub for non-CONFIG_PCI
-
-Uwe Kleine-König (15):
-      PCI: aardvark: Convert to platform remove callback returning void
-      PCI: altera: Convert to platform remove callback returning void
-      PCI: altera-msi: Convert to platform remove callback returning void
-      PCI: brcmstb: Convert to platform remove callback returning void
-      PCI: j721e: Convert to platform remove callback returning void
-      PCI: dwc: Convert to platform remove callback returning void
-      PCI: hisi-error: Convert to platform remove callback returning void
-      PCI: iproc: Convert to platform remove callback returning void
-      PCI: mediatek: Convert to platform remove callback returning void
-      PCI: mediatek-gen3: Convert to platform remove callback returning void
-      PCI: mt7621: Convert to platform remove callback returning void
-      PCI: mvebu: Convert to platform remove callback returning void
-      PCI: rockchip-host: Convert to platform remove callback returning void
-      PCI: tegra: Convert to platform remove callback returning void
-      PCI: xgene-msi: Convert to platform remove callback returning void
-
-Wolfram Sang (1):
-      PCI: rcar: Use correct product family name for Renesas R-Car
-
-Xinghui Li (1):
-      PCI: vmd: Fix uninitialized variable usage in vmd_enable_domain()
-
-Yoshihiro Shimoda (1):
-      PCI: endpoint: functions/pci-epf-test: Fix dma_chan direction
-
- Documentation/PCI/endpoint/pci-ntb-howto.rst       |  11 +-
- Documentation/PCI/endpoint/pci-vntb-howto.rst      |  13 +-
- Documentation/PCI/msi-howto.rst                    |   2 +-
- Documentation/PCI/pci-error-recovery.rst           |   2 +-
- Documentation/PCI/pcieaer-howto.rst                | 183 +++-----
- .../devicetree/bindings/pci/qcom,pcie-ep.yaml      |   2 +
- .../bindings/pci/rockchip,rk3399-pcie-ep.yaml      |   4 +-
- MAINTAINERS                                        |   1 +
- arch/powerpc/kernel/eeh_pe.c                       |   5 +-
- drivers/misc/pci_endpoint_test.c                   |  25 +-
- drivers/net/ethernet/mellanox/mlx5/core/fw_reset.c |   8 +-
- drivers/pci/controller/cadence/pci-j721e.c         |   6 +-
- drivers/pci/controller/cadence/pcie-cadence-host.c |  27 ++
- drivers/pci/controller/dwc/pci-imx6.c              |  23 ++
- drivers/pci/controller/dwc/pci-layerscape-ep.c     | 100 ++++-
- drivers/pci/controller/dwc/pcie-bt1.c              |   6 +-
- drivers/pci/controller/dwc/pcie-designware-host.c  |  13 +-
- drivers/pci/controller/dwc/pcie-designware.c       |  20 +-
- drivers/pci/controller/dwc/pcie-designware.h       |   1 +
- drivers/pci/controller/dwc/pcie-histb.c            |   6 +-
- drivers/pci/controller/dwc/pcie-intel-gw.c         |   6 +-
- drivers/pci/controller/dwc/pcie-qcom-ep.c          |  10 +-
- drivers/pci/controller/dwc/pcie-qcom.c             |  73 ++--
- drivers/pci/controller/dwc/pcie-tegra194.c         |   8 +-
- drivers/pci/controller/pci-aardvark.c              |   6 +-
- drivers/pci/controller/pci-ftpci100.c              |  14 +-
- drivers/pci/controller/pci-mvebu.c                 |   6 +-
- drivers/pci/controller/pci-tegra.c                 |   6 +-
- drivers/pci/controller/pci-xgene-msi.c             |   6 +-
- drivers/pci/controller/pcie-altera-msi.c           |   5 +-
- drivers/pci/controller/pcie-altera.c               |   6 +-
- drivers/pci/controller/pcie-brcmstb.c              |   6 +-
- drivers/pci/controller/pcie-hisi-error.c           |   6 +-
- drivers/pci/controller/pcie-iproc-platform.c       |   6 +-
- drivers/pci/controller/pcie-iproc.c                |   4 +-
- drivers/pci/controller/pcie-iproc.h                |   2 +-
- drivers/pci/controller/pcie-mediatek-gen3.c        |   6 +-
- drivers/pci/controller/pcie-mediatek.c             |   6 +-
- drivers/pci/controller/pcie-mt7621.c               |   6 +-
- drivers/pci/controller/pcie-rcar-host.c            |  25 +-
- drivers/pci/controller/pcie-rockchip-ep.c          | 221 +++++-----
- drivers/pci/controller/pcie-rockchip-host.c        |   6 +-
- drivers/pci/controller/pcie-rockchip.c             |  17 +
- drivers/pci/controller/pcie-rockchip.h             |  49 ++-
- drivers/pci/controller/vmd.c                       |  11 +-
- drivers/pci/endpoint/functions/Kconfig             |  12 +-
- drivers/pci/endpoint/functions/Makefile            |   1 +
- drivers/pci/endpoint/functions/pci-epf-mhi.c       | 458 +++++++++++++++++++++
- drivers/pci/endpoint/functions/pci-epf-ntb.c       |   4 +-
- drivers/pci/endpoint/functions/pci-epf-test.c      | 271 ++++++------
- drivers/pci/endpoint/functions/pci-epf-vntb.c      |  14 +-
- drivers/pci/endpoint/pci-ep-cfs.c                  |  81 +++-
- drivers/pci/endpoint/pci-epc-core.c                |  56 ++-
- drivers/pci/endpoint/pci-epf-core.c                |  42 +-
- drivers/pci/hotplug/acpiphp_glue.c                 |   5 +-
- drivers/pci/hotplug/pciehp_ctrl.c                  |  21 +-
- drivers/pci/hotplug/pciehp_hpc.c                   |  12 +-
- drivers/pci/of.c                                   |  14 +-
- drivers/pci/pci-acpi.c                             |  53 ++-
- drivers/pci/pci.c                                  | 194 +++++++--
- drivers/pci/pci.h                                  |  19 +-
- drivers/pci/pcie/aspm.c                            | 101 ++---
- drivers/pci/probe.c                                |  12 +-
- drivers/pci/quirks.c                               | 111 ++++-
- include/linux/aer.h                                |   4 -
- include/linux/pci-epc.h                            |   2 +
- include/linux/pci-epf.h                            |  11 +-
- include/linux/pci.h                                |   1 +
- include/linux/pci_ids.h                            |   4 +-
- include/uapi/linux/pci_regs.h                      |   1 +
- 70 files changed, 1631 insertions(+), 848 deletions(-)
- create mode 100644 drivers/pci/endpoint/functions/pci-epf-mhi.c
