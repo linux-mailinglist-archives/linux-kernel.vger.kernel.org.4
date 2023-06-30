@@ -2,150 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D15674411E
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 19:23:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D63D74412B
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 19:25:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232552AbjF3RXK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 13:23:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40502 "EHLO
+        id S233004AbjF3RZ0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Jun 2023 13:25:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233043AbjF3RWq (ORCPT
+        with ESMTP id S233208AbjF3RYn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 13:22:46 -0400
-Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A8C84230
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 10:22:28 -0700 (PDT)
-Received: by mail-qt1-x82e.google.com with SMTP id d75a77b69052e-401f4408955so16201cf.1
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 10:22:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1688145747; x=1690737747;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=55VlF4SrUJuf+l1F6X+Urs6uXQ0VvjhO9X8SqfAz6ms=;
-        b=oNrGkBxUE06bMnNDlNNYbGJZiI7xgYY2dlvvFI2Sut03A92LDF3IM1HnGL/hLT2uLV
-         n/m76CkLFt0YAUrFglfyuau1Zm66fXvIWDA3zqZ3H7CzPXvCHWm1T4dzYfyENCJs3s0L
-         jKgEFixBUFAQxqqst9CdR2rZqZzyMMUkcER3LS6x1x0fYkMKICQH7N2WHe1eAylR4D1f
-         7WkfezGzAyY0Ldybs9eBMS3nhRc3sOtbzQrzKz/qzCxX5Yob3At5SdJSA7XfYNoViBZ9
-         KWcQ/vNRfs2Lb7oe4BtBmf+8VTWYsfWHO2FjDDgmNxqKljYjZ7i763L7asd2ne8sryIQ
-         DoIw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688145747; x=1690737747;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=55VlF4SrUJuf+l1F6X+Urs6uXQ0VvjhO9X8SqfAz6ms=;
-        b=a89cpKx+zwHVAnIENtCEHMVP3cf0JSJ/BEgVeG6pZDsKUiwWXdpsNgjEzIN2nOcf1U
-         vm4ofdi13UL726iHiQPxXcsKCxWf2ocpPFOCFoWozSgXnm4V8Wc334QbkCLb6cg3YLKh
-         6T9KmlvpkNBr7xJmpIU97TYY9g+mbdZapm2hLmGseQzHSXAZb5sL+XHpY1hAUxtsjDE9
-         DbGhKk+XgLYtq/6hU0n0KJ38j0dyaOG6F/7NapzvxkbAOnLcEshR2ampYaIaM62zPhLG
-         RL1PKByOzklwuxxDMj3RwUf208g8wLZITXoVfbRWFN96BMORxcwMGhb413PKWkHwzpqi
-         VymQ==
-X-Gm-Message-State: ABy/qLZmlxX5sP74NMldGxgSNeMimRKhfogMsQ3cNdKSwzqxe3W3W/6E
-        uNN/73k/Zj8wWuRZg2HMrcTzW4okTfNxO9Jub5VJAg==
-X-Google-Smtp-Source: APBJJlErNqG9AH5qYKmEMFmq5x6/7lwU4bKXyMx9rshdKQFrFY5VoGbg4W/2v0957vwZftnJjy9/0CKbYTMOml8aw30=
-X-Received: by 2002:a05:622a:1194:b0:3f2:1441:3c11 with SMTP id
- m20-20020a05622a119400b003f214413c11mr13001qtk.2.1688145747475; Fri, 30 Jun
- 2023 10:22:27 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230628102949.2598096-1-john.g.garry@oracle.com> <20230628102949.2598096-2-john.g.garry@oracle.com>
-In-Reply-To: <20230628102949.2598096-2-john.g.garry@oracle.com>
-From:   Ian Rogers <irogers@google.com>
-Date:   Fri, 30 Jun 2023 10:22:16 -0700
-Message-ID: <CAP-5=fXNFpDGJtESvYy=JF8snPyYrUVZ0m_G3XajXqqS_XLbHg@mail.gmail.com>
-Subject: Re: [PATCH RFC 1/9] perf metrics: Delete metricgroup_add_iter_data.table
-To:     John Garry <john.g.garry@oracle.com>
-Cc:     acme@kernel.org, namhyung@kernel.org, jolsa@kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        renyu.zj@linux.alibaba.com, shangxiaojing@huawei.com,
-        zhangshaokun@hisilicon.com, qiangqing.zhang@nxp.com,
-        kjain@linux.ibm.com, kan.liang@linux.intel.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 30 Jun 2023 13:24:43 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A333919AF
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 10:24:39 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BB598618F2
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 17:23:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 1D39DC433C0;
+        Fri, 30 Jun 2023 17:23:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688145835;
+        bh=4KZpDBMjgtsDbjCKv/Gbyt2RHGrPJMISMi8TtypstTw=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=A/6BTFen1JqA/6VbKwB8ojVdwRRmwPB40u+7GblrxXhQwxZXwXswT6stNKOAipcMX
+         vSrDbY9Vu+1SfuLRNXh9nyK3RSoXOnKBZmmCZbKRxEfGysu43/tB8pwQMAsNnLWBW0
+         EEAq5uyc8KaN19ygmH4CnwMkCRTM0urxjnJgPFhIerLcPUPg7tKS1Gv1jEOTjiWFva
+         rS51hN3PCHl019MRQHDNlJ5Rf2m9IJo5JxS2f/pYJUNg+ZNsjJSblWuLVDTcBDdYWS
+         HnO10dN2MeaUcI/FzyvnOHFyRXkqi20dJBtFuvzrQhOHz6aoR5r/TozLV8621GY8ni
+         xryCE7FRPw1aw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 07E18C43158;
+        Fri, 30 Jun 2023 17:23:55 +0000 (UTC)
+Subject: Re: [GIT PULL] Please pull powerpc/linux.git powerpc-6.5-1 tag
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <877crlgrdl.fsf@mail.lhotse>
+References: <877crlgrdl.fsf@mail.lhotse>
+X-PR-Tracked-List-Id: Linux on PowerPC Developers Mail List <linuxppc-dev.lists.ozlabs.org>
+X-PR-Tracked-Message-Id: <877crlgrdl.fsf@mail.lhotse>
+X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git tags/powerpc-6.5-1
+X-PR-Tracked-Commit-Id: 54a11654de163994e32b24e3aa90ef81f4a3184d
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: d8b0bd57c2d68eb500f356f0f9228e6183da94ae
+Message-Id: <168814583502.9404.7781714394572409298.pr-tracker-bot@kernel.org>
+Date:   Fri, 30 Jun 2023 17:23:55 +0000
+To:     Michael Ellerman <mpe@ellerman.id.au>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>, trix@redhat.com,
+        paul.gortmaker@windriver.com, bgray@linux.ibm.com,
+        adityag@linux.ibm.com, robh@kernel.org, arnd@arndb.de,
+        aneesh.kumar@linux.ibm.com, masahiroy@kernel.org,
+        nayna@linux.ibm.com, tpearson@raptorengineering.com,
+        geert@linux-m68k.org, joel@jms.id.au,
+        u.kleine-koenig@pengutronix.de, naveen.n.rao@linux.vnet.ibm.com,
+        colin.i.king@gmail.com, elver@google.com,
+        gbatra@linux.vnet.ibm.com, naveen@kernel.org, npiggin@gmail.com,
+        rmclure@linux.ibm.com, jcmvbkbc@gmail.com, rdunlap@infradead.org,
+        ndesaulniers@google.com, linux-kernel@vger.kernel.org,
+        jarkko@kernel.org, linuxppc-dev@lists.ozlabs.org
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 28, 2023 at 3:30=E2=80=AFAM John Garry <john.g.garry@oracle.com=
-> wrote:
->
-> Member metricgroup_add_iter_data.table is only used in
-> metricgroup__add_metric_sys_event_iter() as the @table arg to the
-> add_metric() call there.
->
-> However we only use the @table arg in add_metric() for resolving metrics,
-> which is currently not relevant to sys event metrics. As such, don't
-> bother passing this @table arg and use iter table instead, which is more
-> sane.
->
-> Signed-off-by: John Garry <john.g.garry@oracle.com>
+The pull request you sent on Fri, 30 Jun 2023 20:45:58 +1000:
 
-Acked-by: Ian Rogers <irogers@google.com>
+> https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git tags/powerpc-6.5-1
 
-Thanks,
-Ian
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/d8b0bd57c2d68eb500f356f0f9228e6183da94ae
 
-> ---
->  tools/perf/util/metricgroup.c | 6 ++----
->  1 file changed, 2 insertions(+), 4 deletions(-)
->
-> diff --git a/tools/perf/util/metricgroup.c b/tools/perf/util/metricgroup.=
-c
-> index a6a5ed44a679..4389ccd29fe7 100644
-> --- a/tools/perf/util/metricgroup.c
-> +++ b/tools/perf/util/metricgroup.c
-> @@ -798,7 +798,6 @@ struct metricgroup_add_iter_data {
->         bool system_wide;
->         struct metric *root_metric;
->         const struct visited_metric *visited;
-> -       const struct pmu_metrics_table *table;
->  };
->
->  static bool metricgroup__find_metric(const char *pmu,
-> @@ -1112,7 +1111,7 @@ static int add_metric(struct list_head *metric_list=
-,
->  }
->
->  static int metricgroup__add_metric_sys_event_iter(const struct pmu_metri=
-c *pm,
-> -                                       const struct pmu_metrics_table *t=
-able __maybe_unused,
-> +                                       const struct pmu_metrics_table *t=
-able,
->                                         void *data)
->  {
->         struct metricgroup_add_iter_data *d =3D data;
-> @@ -1123,7 +1122,7 @@ static int metricgroup__add_metric_sys_event_iter(c=
-onst struct pmu_metric *pm,
->
->         ret =3D add_metric(d->metric_list, pm, d->modifier, d->metric_no_=
-group,
->                          d->metric_no_threshold, d->user_requested_cpu_li=
-st,
-> -                        d->system_wide, d->root_metric, d->visited, d->t=
-able);
-> +                        d->system_wide, d->root_metric, d->visited, tabl=
-e);
->         if (ret)
->                 goto out;
->
-> @@ -1275,7 +1274,6 @@ static int metricgroup__add_metric(const char *pmu,=
- const char *metric_name, con
->                                 .system_wide =3D system_wide,
->                                 .has_match =3D &has_match,
->                                 .ret =3D &ret,
-> -                               .table =3D table,
->                         },
->                 };
->
-> --
-> 2.35.3
->
+Thank you!
+
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
