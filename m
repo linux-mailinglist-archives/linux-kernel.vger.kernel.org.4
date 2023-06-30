@@ -2,115 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 243A5743E2D
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 17:02:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BBDB4743E30
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 17:03:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232880AbjF3PCj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 11:02:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57216 "EHLO
+        id S232895AbjF3PDn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Jun 2023 11:03:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229560AbjF3PCh (ORCPT
+        with ESMTP id S232883AbjF3PDk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 11:02:37 -0400
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E300D171E
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 08:02:35 -0700 (PDT)
-Received: by mail-wm1-x32a.google.com with SMTP id 5b1f17b1804b1-3fbc0981755so18661875e9.1
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 08:02:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1688137354; x=1690729354;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=+XkW0ju1DfGLdkGmFEpNKOeGgt/oTLnPR/vBNsWYtTw=;
-        b=T+6sWpEWNaNvJCk70tUnQ7ziTP17oZtBYhn3Ywf4K4FPwXvc2KrTIHPNt8VLVIKgKQ
-         JAwKb6mpFuTWw1Qy8wNENmKMue7fvogPzhBbL3CRtSyikw5CgcSzW03pNACvI3tl/qwp
-         CM+FQKK3skDeb8Ms/oTxZ+Wm2I85CwpVP9ysZIjX5fr4q6vkgKy2OR1fTtFpERYbemk1
-         6Cgv2uyfryFhbl688BTDMAwTtgB9o6RGG/TtcPAl/z0FVR1k1Rs3GSwpNLDQkDKah111
-         9IjdHNE3TDjsZlhjNLcgmnwtNwDIggMOWtxXMSZkgYBsoW5VWhK2mXkT7i+unaDb2feV
-         PI6Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688137354; x=1690729354;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=+XkW0ju1DfGLdkGmFEpNKOeGgt/oTLnPR/vBNsWYtTw=;
-        b=hZZmZV06kvfwhEpxEtqLg2orrW9BS8inZLZDLLmQNE5F3zIYj1ugmvqyDWOnFp+3K6
-         cYsyV7yESheoxT92B0VTDDvep2WYkaxpCIQwYqw7fRAOzKynupdxi+dc4Kzx7PHtDRJq
-         ET4X9ICE9eXMbmaA8QJU0KN32/DVOgLr97ZyxQaIKlOjFLCs4kz3vWnBuCX2woX7ae8t
-         AmXf+0yju0pBmkDWRA2/UcFwRo3BBF7tXTFZoMPKkw2CTzA4/TJCqH9D5wm5WA9y1d9V
-         p2Nv0H6idyxSQCxktSkruDu5523zwuNmgZxiUk+90PoKz9kfBiOKBU/F+sHpdP9LUhgX
-         Jyhg==
-X-Gm-Message-State: AC+VfDzLbzJY4DxMMLqwMnmSstf1Lx+3S5egjoxvhy3gD4ERBh29tayb
-        n7EewszFRBWPTP1bGWwQ5C5Zgg==
-X-Google-Smtp-Source: ACHHUZ6fO6EpxJ+iOICbEV1K5cvBhUyJ6l4rYRLUp1Lmucz+u3sm9qi9CAw4KbgZjDOgQ5K3ugspEw==
-X-Received: by 2002:a05:600c:ac6:b0:3fb:b3aa:1c88 with SMTP id c6-20020a05600c0ac600b003fbb3aa1c88mr2169011wmr.26.1688137354397;
-        Fri, 30 Jun 2023 08:02:34 -0700 (PDT)
-Received: from [192.168.1.195] ([5.133.47.210])
-        by smtp.googlemail.com with ESMTPSA id u12-20020a05600c00cc00b003fbc681c8d1sm1900627wmm.36.2023.06.30.08.02.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 30 Jun 2023 08:02:33 -0700 (PDT)
-Message-ID: <07881d30-cec6-5885-ecb6-fbfaea88f3c1@linaro.org>
-Date:   Fri, 30 Jun 2023 16:02:32 +0100
+        Fri, 30 Jun 2023 11:03:40 -0400
+Received: from mail-40133.protonmail.ch (mail-40133.protonmail.ch [185.70.40.133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4618F171E
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 08:03:36 -0700 (PDT)
+Date:   Fri, 30 Jun 2023 15:03:23 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=proton.me;
+        s=protonmail; t=1688137413; x=1688396613;
+        bh=GOuPFgT87znF0ebWMyLwXo4ofXzgfLkd6vzl1Y3CfqA=;
+        h=Date:To:From:Cc:Subject:Message-ID:Feedback-ID:From:To:Cc:Date:
+         Subject:Reply-To:Feedback-ID:Message-ID:BIMI-Selector;
+        b=NrF664B6Yj0S5v0K2a8SBUlj4tguRpmjCqdIi0VDecC5Af+oGs8Jow/Z7UlUxgpU6
+         sr/lRkn5WLpKUuwrJ28b9xhWvtVm92iXjHoqHgWwALy5WJK8wMWigXQKzq1J9YbtoY
+         uVH5+0WMMG8zV1uDUJTmaUnY8YJ+2i+atSwnmEPX3gyffdh+XdnG+oPAq8RegM1QH+
+         oayFkKeYdKuzUUuBX30Zi8Cq1uFdEhbv/o0k0GnPqXGRIPHirt2o3vNMtQIAcGGof+
+         trOWTeMVgrocDBf+d+8C2bakHzV+avyR/N5Pe+Zj8MW4uCaACwlW5L00vXRO8abiIz
+         EQVCjKMpULetA==
+To:     Miguel Ojeda <ojeda@kernel.org>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Alex Gaynor <alex.gaynor@gmail.com>
+From:   Benno Lossin <benno.lossin@proton.me>
+Cc:     Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?utf-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+        Benno Lossin <benno.lossin@proton.me>,
+        Alice Ryhl <aliceryhl@google.com>,
+        Andreas Hindborg <nmi@metaspace.dk>,
+        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        patches@lists.linux.dev
+Subject: [PATCH] rust: types: make `Opaque` be `!Unpin`
+Message-ID: <20230630150216.109789-1-benno.lossin@proton.me>
+Feedback-ID: 71780778:user:proton
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH 0/5] ASoC: codecs: wcd938x/wcd934x: loglevel fix and
- cleanups
-Content-Language: en-US
-To:     Johan Hovold <johan+linaro@kernel.org>,
-        Mark Brown <broonie@kernel.org>
-Cc:     Liam Girdwood <lgirdwood@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org
-References: <20230630142717.5314-1-johan+linaro@kernel.org>
-From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-In-Reply-To: <20230630142717.5314-1-johan+linaro@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Adds a `PhantomPinned` field to `Opaque<T>`. This removes the last Rust
+guarantee: the assumption that the type `T` can be freely moved. This is
+not the case for many types from the C side (e.g. if they contain a
+`struct list_head`). This change removes the need to add a
+`PhantomPinned` field manually to Rust structs that contain C structs
+which must not be moved.
+
+Signed-off-by: Benno Lossin <benno.lossin@proton.me>
+---
+This patch depends on the patch that swaps `UnsafeCell` with
+`MaybeUninit` inside `Opaque` [1].
+
+[1]: https://lore.kernel.org/rust-for-linux/20230614115328.2825961-1-alicer=
+yhl@google.com/
+---
+ rust/kernel/types.rs | 19 ++++++++++++++-----
+ 1 file changed, 14 insertions(+), 5 deletions(-)
+
+diff --git a/rust/kernel/types.rs b/rust/kernel/types.rs
+index fb41635f1e1f..e664a2beef30 100644
+--- a/rust/kernel/types.rs
++++ b/rust/kernel/types.rs
+@@ -6,7 +6,7 @@
+ use alloc::boxed::Box;
+ use core::{
+     cell::UnsafeCell,
+-    marker::PhantomData,
++    marker::{PhantomData, PhantomPinned},
+     mem::MaybeUninit,
+     ops::{Deref, DerefMut},
+     ptr::NonNull,
+@@ -224,17 +224,26 @@ fn drop(&mut self) {
+ ///
+ /// This is meant to be used with FFI objects that are never interpreted b=
+y Rust code.
+ #[repr(transparent)]
+-pub struct Opaque<T>(UnsafeCell<MaybeUninit<T>>);
++pub struct Opaque<T> {
++    value: UnsafeCell<MaybeUninit<T>>,
++    _pin: PhantomPinned,
++}
+=20
+ impl<T> Opaque<T> {
+     /// Creates a new opaque value.
+     pub const fn new(value: T) -> Self {
+-        Self(UnsafeCell::new(MaybeUninit::new(value)))
++        Self {
++            value: UnsafeCell::new(MaybeUninit::new(value)),
++            _pin: PhantomPinned,
++        }
+     }
+=20
+     /// Creates an uninitialised value.
+     pub const fn uninit() -> Self {
+-        Self(UnsafeCell::new(MaybeUninit::uninit()))
++        Self {
++            value: UnsafeCell::new(MaybeUninit::uninit()),
++            _pin: PhantomPinned,
++        }
+     }
+=20
+     /// Creates a pin-initializer from the given initializer closure.
+@@ -258,7 +267,7 @@ pub fn ffi_init(init_func: impl FnOnce(*mut T)) -> impl=
+ PinInit<Self> {
+=20
+     /// Returns a raw pointer to the opaque data.
+     pub fn get(&self) -> *mut T {
+-        UnsafeCell::get(&self.0).cast::<T>()
++        UnsafeCell::get(&self.value).cast::<T>()
+     }
+=20
+     /// Gets the value behind `this`.
+--=20
+2.41.0
 
 
-On 30/06/2023 15:27, Johan Hovold wrote:
-> When investigating a race in the wcd938x driver I noticed that the MBHC
-> impedance measurements where printed at error loglevel which is clearly
-> wrong.
-> 
-> Fix that, and clean up the logging somewhat by using dev_printk() and
-> addressing some style issues.
-> 
-> Included are also two patches that drop the bogus inline keywords from
-> the functions involved.
-> 
-> Johan
-> 
-> 
-> Johan Hovold (5):
->    ASoC: codecs: wcd938x: fix mbhc impedance loglevel
->    ASoC: codecs: wcd938x: drop inline keywords
->    ASoC: codecs: wcd938x: use dev_printk() for impedance logging
->    ASoC: codecs: wcd934x: demote impedance printk loglevel
->    ASoC: codecs: wcd934x: drop inline keywords
-> 
-
-lgtm,
-
-Reviewed-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-
---srini
-
-
->   sound/soc/codecs/wcd934x.c |  8 ++++----
->   sound/soc/codecs/wcd938x.c | 17 +++++++++--------
->   2 files changed, 13 insertions(+), 12 deletions(-)
-> 
