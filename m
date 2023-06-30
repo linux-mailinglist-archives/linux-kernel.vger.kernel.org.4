@@ -2,167 +2,225 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A1AC743666
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 10:03:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F2D4474366B
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 10:04:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231794AbjF3IDC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 04:03:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60058 "EHLO
+        id S232317AbjF3IEf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Jun 2023 04:04:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230308AbjF3IC7 (ORCPT
+        with ESMTP id S232174AbjF3IEV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 04:02:59 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 967E42D70;
-        Fri, 30 Jun 2023 01:02:57 -0700 (PDT)
-Received: from localhost (unknown [IPv6:2a01:e0a:2c:6930:5cf4:84a1:2763:fe0d])
+        Fri, 30 Jun 2023 04:04:21 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82B682D50
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 01:04:19 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        (Authenticated sender: bbrezillon)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id EA0A66606FDE;
-        Fri, 30 Jun 2023 09:02:54 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1688112175;
-        bh=AZ8TNuVM1gieOIi8tQeOA/DmOnzpPZU4mn9mx4MyD4Q=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=oDlrCeuTgLPl2QzJpS1vsno/RMHtI/H/HL1oScNeYUexrIbQm8ibBk8hwib4S7p7O
-         //xJ1qfGJ6x8hRs9SawXTDJ+8QmISHpyUGxYpLXJOPIteRcM5AYBcnuiZDuY+sCkzb
-         V9M15Lurltg9sEVYGaodChSzoFoKxO7Fr5eC6nK15snuNppKxwAxgprehJVA6pTZ/c
-         IilIoHqUZU5/rvSAQt3NWZwNobOTxLik9Ht7cqOfd13bFIjzY0GW6kQgxXZAN8tNmd
-         zFaX8bwAUoWJ/LZcBBWeHbWG+8IjHuriFjqN8pugoot4ntvBgodJuw2DvJzXhDIZ/k
-         rXBQr+yfL9h7A==
-Date:   Fri, 30 Jun 2023 10:02:52 +0200
-From:   Boris Brezillon <boris.brezillon@collabora.com>
-To:     Danilo Krummrich <dakr@redhat.com>
-Cc:     airlied@gmail.com, daniel@ffwll.ch, tzimmermann@suse.de,
-        mripard@kernel.org, corbet@lwn.net, christian.koenig@amd.com,
-        bskeggs@redhat.com, Liam.Howlett@oracle.com,
-        matthew.brost@intel.com, alexdeucher@gmail.com, ogabbay@kernel.org,
-        bagasdotme@gmail.com, willy@infradead.org, jason@jlekstrand.net,
-        dri-devel@lists.freedesktop.org, nouveau@lists.freedesktop.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Donald Robson <donald.robson@imgtec.com>,
-        Dave Airlie <airlied@redhat.com>
-Subject: Re: [PATCH drm-next v6 02/13] drm: manager to keep track of GPUs VA
- mappings
-Message-ID: <20230630100252.7ff6421d@collabora.com>
-In-Reply-To: <20230629222651.3196-3-dakr@redhat.com>
-References: <20230629222651.3196-1-dakr@redhat.com>
-        <20230629222651.3196-3-dakr@redhat.com>
-Organization: Collabora
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 17CCB616D8
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 08:04:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99E92C433C0;
+        Fri, 30 Jun 2023 08:04:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688112258;
+        bh=BSxR6KsOVnaZSz9CJvy9FpmHQ1QZSEPtTTUPoyrhzUM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=HyZnletwUQC0CjLbUmX/6ryQjVObm9pYNhEbjBdB12oynBgrbqFDxscIpZRBBCI+y
+         NzeswjREf+se0rIQOL362KruG3UoL1P6tcSK87PEoLC7VWtj6uPBlh+FNdxhJ4xHx+
+         wFh0mJfdyrSCulE5S/dHsT4NgrB9dW32l3RKyH2s5klf7AK7WI5cbhZZjP7beFnXfN
+         SvRlNFMfeeS8/btTOprqQdvjydIgnwQ8WWsuM4EkGsVrGQ+S6jhTUAhLEvIFHEj75r
+         +B3kbxpnpPLbdW4q/GXJlfWC389/QO12mcdc2uKNxVrIt4Y0PY3hPc0zjF8//LMoPO
+         IJHAvftXBpWuQ==
+Date:   Fri, 30 Jun 2023 10:04:14 +0200
+From:   Christian Brauner <brauner@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Kees Cook <keescook@chromium.org>, linux-kernel@vger.kernel.org
+Subject: Re: [GIT PULL] pid: use flex array
+Message-ID: <20230630-stiefel-rotor-7f2d13fc084f@brauner>
+References: <20230628-pokal-puzzeln-5199c679b051@brauner>
+ <CAHk-=wiBXJOzkez2Rd=cQ5ckttJq6OdYtArFmCtVQHyeuQBGrw@mail.gmail.com>
+ <20230630-testphasen-orangen-0e54486a267d@brauner>
+ <CAHk-=whJJbmfBk_8v_vFn1NdJ9O-AKCrjY+EArkzgFp9h-sKHA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CAHk-=whJJbmfBk_8v_vFn1NdJ9O-AKCrjY+EArkzgFp9h-sKHA@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Danilo,
+On Fri, Jun 30, 2023 at 12:12:22AM -0700, Linus Torvalds wrote:
+> On Thu, 29 Jun 2023 at 23:51, Christian Brauner <brauner@kernel.org> wrote:
+> >
+> > I have no preference for either syntax. Both work. But this is probably
+> > more an objection to this being mixed in with the flex array change in
+> > the first place.
+> 
+> Yes. I looked at it, and tried to figure out if it was related
+> somehow, and decided that no, it can't possibly be, and must be just
+> an unrelated change.
 
-On Fri, 30 Jun 2023 00:25:18 +0200
-Danilo Krummrich <dakr@redhat.com> wrote:
+Yeah, I admit that I would've paid more attention to this detail if it
+would've been in a fs/ codepath. So that's fully on me.
 
-> + *	int driver_gpuva_remap(struct drm_gpuva_op *op, void *__ctx)
-> + *	{
-> + *		struct driver_context *ctx = __ctx;
-> + *
-> + *		drm_gpuva_remap(ctx->prev_va, ctx->next_va, &op->remap);
-> + *
-> + *		drm_gpuva_unlink(op->remap.unmap->va);
-> + *		kfree(op->remap.unmap->va);
-> + *
-> + *		if (op->remap.prev) {
-> + *			drm_gpuva_link(ctx->prev_va);
+> 
+> > I did react to that in the original review here:
+> > https://lore.kernel.org/all/20230518-zuneigen-brombeeren-0a57cd32b1a7@brauner
+> > but then I grepped for it and saw it done in a few other places already
+> 
+> Yeah, we do end up growing new uses of 'use 0 as a pointer' almost as
+> quickly as we get rid of them.
+> 
+> We got rid of a couple just recently in commit dadeeffbe525 ("fbdev:
+> hitfb: Use NULL for pointers"), but yes, a quick
+> 
+>     git grep '\*)0\>'
+> 
+> shows many more.
+> 
+> And some of them are even ok. I don't think it's always wrong,
+> particularly if you then abstract it out.
+> 
+> So doing something like that
+> 
+>    #define PCI_IOBASE ((void __iomem *)0)
+> 
+> makes perfect sense. It's literally abstracting out something real (in
+> this case yes, it looks like a NULL pointer, but it's actually a
+> pointer with a strict type that just happens to have the value zero.
+> 
+> So that "NULL pointer with a type" concept makes sense, but it really
+> should be abstracted out, not be in the middle of some random code.
+> 
+> And that's *particularly* true when we already have the exact
+> abstraction for the situation that the code then uses (ie in this case
+> that "struct_size_t()" thing). Writing it out - in an ugly form -
+> using the disgusting traditional "constant integer zero can be cast to
+> any pointer" thing - just makes me go "Eugghhh!".
+> 
+> I mean, if this ugly part was just a small detail in a l;arger patch,
+> I probably would just have let it slide. It works. It is what it is.
+> 
+> But when three quarters of the patch was stuff I found questionable, I
+> just couldn't stomach it.
+> 
+> I'm looking at some of the grep hits, and I'm going "ok, that's a C++
+> programmer". I think there's a very real reason why so many of them
+> are in bpf code and in the bpf tests.
+> 
+> C++ made a *huge* fundamental design mistake early on wrt NULL, and a
+> generation of C++ programmers were poisoned by it and you had people
+> who swore until they were blue that 0 and NULL had to be the same
+> thing.
+> 
+> They were horribly and utterly wrong. But sometimes when it takes you
+> three decades to admit that you were wrong all that time, it's just
+> too painful to admit.
+> 
+> There are literally people who still can't admit to their mistake, and
+> refuse to use NULL, and use either 0 or 'nullptr'.
 
-I ended up switching to dma_resv-based locking for the GEMs and I
-wonder what the locking is supposed to look like in the async-mapping
-case, where we insert/remove the VA nodes in the drm_sched::run_job()
-path.
+I have to admit that I've never touched C++ in my life in any meaningful
+way. It was C, Go, and then Rust...
 
-What I have right now is something like:
+I've grepped around a bit and I saw that the
+struct_size((struct bla *)NULL, ...)
+pattern seems to be used in most places that have similar needs. Not
+sure if there's something nicer.
 
-	dma_resv_lock(vm->resv);
+I gave this thing a stab myself since I have a few minutes and so Kees
+doesn't have to do it. Authorship retained and dropped the ack. Is the
+following more acceptable? 
 
-	// split done in drm_gpuva_sm_map(), each iteration
-	// of the loop is a call to the driver ->[re,un]map()
-	// hook
-	for_each_sub_op() {
-		
-		// Private BOs have their resv field pointing to the
-		// VM resv and we take the VM resv lock before calling
-		// drm_gpuva_sm_map()
-		if (vm->resv != gem->resv)
-			dma_resv_lock(gem->resv);
+From ee7cb2546ff47d02e284fd8461ae1c57fab8ca49 Mon Sep 17 00:00:00 2001
+From: Kees Cook <keescook@chromium.org>
+Date: Fri, 30 Jun 2023 09:46:17 +0200
+Subject: [PATCH] pid: Replace struct pid 1-element array with flex-array
 
-		drm_gpuva_[un]link(va);
-		gem_[un]pin(gem);
+For pid namespaces, struct pid uses a dynamically sized array member,
+"numbers". This was implemented using the ancient 1-element fake flexible
+array, which has been deprecated for decades. Replace it with a C99
+flexible array, refactor the array size calculations to use struct_size(),
+and address elements via indexes. Note that the static initializer (which
+defines a single element) works as-is, and requires no special handling.
 
-		if (vm->resv != gem->resv)
-			dma_resv_unlock(gem->resv);
-	}
+Without this, CONFIG_UBSAN_BOUNDS (and potentially CONFIG_FORTIFY_SOURCE)
+will trigger bounds checks:
+https://lore.kernel.org/lkml/20230517-bushaltestelle-super-e223978c1ba6@brauner
 
-	dma_resv_unlock(vm->resv);
+Cc: Christian Brauner <brauner@kernel.org>
+Cc: Jan Kara <jack@suse.cz>
+Cc: Jeff Xu <jeffxu@google.com>
+Cc: Andreas Gruenbacher <agruenba@redhat.com>
+Cc: Daniel Verkamp <dverkamp@chromium.org>
+Cc: "Paul E. McKenney" <paulmck@kernel.org>
+Cc: Jeff Xu <jeffxu@google.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: Boqun Feng <boqun.feng@gmail.com>
+Cc: Luis Chamberlain <mcgrof@kernel.org>
+Cc: Frederic Weisbecker <frederic@kernel.org>
+Reported-by: syzbot+ac3b41786a2d0565b6d5@syzkaller.appspotmail.com
+[brauner: dropped unrelated changes and remove 0 with NULL cast]
+Signed-off-by: Kees Cook <keescook@chromium.org>
+Signed-off-by: Christian Brauner <brauner@kernel.org>
+---
+ include/linux/pid.h    | 2 +-
+ kernel/pid.c           | 7 +++++--
+ kernel/pid_namespace.c | 2 +-
+ 3 files changed, 7 insertions(+), 4 deletions(-)
 
-In practice, I don't expect things to deadlock, because the VM resv is
-not supposed to be taken outside the VM context and the locking order
-is always the same (VM lock first, and then each shared BO
-taken/released independently), but I'm not super thrilled by this
-nested lock, and I'm wondering if we shouldn't have a pass collecting
-locks in a drm_exec context first, and then have
-the operations executed. IOW, something like that:
+diff --git a/include/linux/pid.h b/include/linux/pid.h
+index b75de288a8c2..653a527574c4 100644
+--- a/include/linux/pid.h
++++ b/include/linux/pid.h
+@@ -67,7 +67,7 @@ struct pid
+ 	/* wait queue for pidfd notifications */
+ 	wait_queue_head_t wait_pidfd;
+ 	struct rcu_head rcu;
+-	struct upid numbers[1];
++	struct upid numbers[];
+ };
+ 
+ extern struct pid init_struct_pid;
+diff --git a/kernel/pid.c b/kernel/pid.c
+index f93954a0384d..8bce3aebc949 100644
+--- a/kernel/pid.c
++++ b/kernel/pid.c
+@@ -656,8 +656,11 @@ void __init pid_idr_init(void)
+ 
+ 	idr_init(&init_pid_ns.idr);
+ 
+-	init_pid_ns.pid_cachep = KMEM_CACHE(pid,
+-			SLAB_HWCACHE_ALIGN | SLAB_PANIC | SLAB_ACCOUNT);
++	init_pid_ns.pid_cachep = kmem_cache_create("pid",
++			struct_size((struct pid *)NULL, numbers, 1),
++			__alignof__(struct pid),
++			SLAB_HWCACHE_ALIGN | SLAB_PANIC | SLAB_ACCOUNT,
++			NULL);
+ }
+ 
+ static struct file *__pidfd_fget(struct task_struct *task, int fd)
+diff --git a/kernel/pid_namespace.c b/kernel/pid_namespace.c
+index b43eee07b00c..70a929784a5d 100644
+--- a/kernel/pid_namespace.c
++++ b/kernel/pid_namespace.c
+@@ -48,7 +48,7 @@ static struct kmem_cache *create_pid_cachep(unsigned int level)
+ 		return kc;
+ 
+ 	snprintf(name, sizeof(name), "pid_%u", level + 1);
+-	len = sizeof(struct pid) + level * sizeof(struct upid);
++	len = struct_size((struct pid *)NULL, numbers, level + 1);
+ 	mutex_lock(&pid_caches_mutex);
+ 	/* Name collision forces to do allocation under mutex. */
+ 	if (!*pkc)
+-- 
+2.34.1
 
-	drm_exec_init(exec, DRM_EXEC_IGNORE_DUPLICATES)
-	drm_exec_until_all_locked(exec) {
-		// Dummy GEM is the dummy GEM object I use to make the VM
-		// participate in the locking without having to teach
-		// drm_exec how to deal with raw dma_resv objects.
-		ret = drm_exec_lock_obj(exec, vm->dummy_gem);
-		drm_exec_retry_on_contention(exec);
-		if (ret)
-			return ret;
-
-		// Could take the form of drm_gpuva_sm_[un]map_acquire_locks()
-		// helpers
-		for_each_sub_op() {
-			ret = drm_exec_lock_obj(exec, gem);
-			if (ret)
-				return ret;
-		}
-	}
-
-	// each iteration of the loop is a call to the driver
-	// ->[re,un]map() hook
-	for_each_sub_op() {
-		...
-		gem_[un]pin_locked(gem);
-		drm_gpuva_[un]link(va);
-		...
-	}
-
-	drm_exec_fini(exec);
-
-Don't know if I got this right, or if I'm just confused again by how
-the drm_gpuva API is supposed to be used.
-
-Regards,
-
-Boris
-
-> + *			ctx->prev_va = NULL;
-> + *		}
-> + *
-> + *		if (op->remap.next) {
-> + *			drm_gpuva_link(ctx->next_va);
-> + *			ctx->next_va = NULL;
-> + *		}
-> + *
-> + *		return 0;
-> + *	}
