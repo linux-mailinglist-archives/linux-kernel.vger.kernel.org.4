@@ -2,51 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F448743403
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 07:21:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5153743405
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 07:21:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230415AbjF3FVf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 01:21:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37260 "EHLO
+        id S231393AbjF3FV4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Jun 2023 01:21:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231824AbjF3FVW (ORCPT
+        with ESMTP id S229945AbjF3FVx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 01:21:22 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23C192D78;
-        Thu, 29 Jun 2023 22:21:19 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B43D161644;
-        Fri, 30 Jun 2023 05:21:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94DB1C433C0;
-        Fri, 30 Jun 2023 05:21:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1688102478;
-        bh=8Ef5WYOUOB2AfTmhfbQVbF6OgLVgkrEM1qir2bZFwy0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=F/ThVpgqdR4bTPAGDcwcoqRvSuB7IH0y33T5SYkqhwf8BR/46VvONOeKW34M7qCCR
-         xaWzCJd2z7/zX5Wxiq8GukOlK4yBCU5iLX03FvIoFMoUVf8MIFxR9l9Embky0anB8a
-         x3WdHqrnpnzBpqo4t/4gWy0mW79VhdWObGSfNB3w=
-Date:   Fri, 30 Jun 2023 07:21:15 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Li Huafei <lihuafei1@huawei.com>
-Cc:     stable@vger.kernel.org, mhiramat@kernel.org, tglx@linutronix.de,
-        mingo@redhat.com, bp@alien8.de, x86@kernel.org, hpa@zytor.com,
-        sashal@kernel.org, peterz@infradead.org,
-        linux-kernel@vger.kernel.org, xukuohai@huawei.com
-Subject: Re: [PATCH 5.10] kprobes/x86: Fix kprobe debug exception handling
- logic
-Message-ID: <2023063039-dotted-improper-7b3c@gregkh>
-References: <20230630020845.227939-1-lihuafei1@huawei.com>
+        Fri, 30 Jun 2023 01:21:53 -0400
+Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com [IPv6:2607:f8b0:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AC5B2D78
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 22:21:52 -0700 (PDT)
+Received: by mail-oi1-x230.google.com with SMTP id 5614622812f47-3a37909a64eso872633b6e.1
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 22:21:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1688102511; x=1690694511;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=3vh6aUxcW9Sd7Nxw2SV2uQlOuQlDwxv1Adt7CXHdwfk=;
+        b=nAeGpiUndUVQPZMONYwc5zzAZpk7CWbiehmHv9I1PbnOL9LX5oMIuZWNTjkq6tKdui
+         EGnqJS779zDyO/LiRjSBzAjO+gGxxcQC+bxIbZF56aHwtMEOxObe9iVF6839gBPwwtjF
+         1mJodOzwca8fotOK97lnhgj4m/DwMgk58D4YuZ29OCw3zVfftkJiJdQONmPTB1YZ6U6V
+         AcdwIWxn391JeUYRd/ZJukEncgow4UMeLLEX5d8iX2T6e0BbrtvuB3br66P77W01YQBp
+         wrs4oV7U4Zbc1s7W3yKspvIRTSIXvt+XB+j/kNrL/Wymc+BzhAsYXQAJ0BgedIy1dBUC
+         U86A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688102511; x=1690694511;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=3vh6aUxcW9Sd7Nxw2SV2uQlOuQlDwxv1Adt7CXHdwfk=;
+        b=M4lLx+lySOKQwDTZaGlvw9oveXogMYKDYt16DQcoaML9CvEr2JhXUu/EmLJLWz5GDk
+         ID9rjllBubpmGqsyHtSwGkmI7lEl0rcYiEbEwywDa9ogzlOE9Mb5SJ1wMt50LgAIOPH7
+         SwS7JbojGqD5j49Cdm0v/Vq6/607K31jRxX7vPiTzzfS7J/QzsmMcka4/gli4rdyaO9d
+         zos9Fodi6NCHBHpoZrePLW03LGLkXM1FKgGlHSJJQos3bXqOVVYTVyBw49XvRLwqrkBl
+         f6RT6VD+bJHIMqL2ndeb4WdV4GbHBiDKyBujRvARdtWdDP4/lXmShNhFCq7JuFRAVwbT
+         eTDg==
+X-Gm-Message-State: AC+VfDyc9QmR6Qv1INpeVPcwhizhDZ5e1dEVLEr63J9ME/4c/goTI/ee
+        gkVra67aFrQJvpvZGAjpWewMUnft6BxF8EcLWG+b+Q==
+X-Google-Smtp-Source: ACHHUZ6UjmrHQtZtyrtFYxI2C+hfVD90LjdrZ/WYiPgj7rLAkiWiamFoA1AZi+yuYC5Nfm+35QUwTj/FybV0jioAUNM=
+X-Received: by 2002:a05:6808:11cf:b0:3a1:c108:41b1 with SMTP id
+ p15-20020a05680811cf00b003a1c10841b1mr1656069oiv.25.1688102511194; Thu, 29
+ Jun 2023 22:21:51 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230630020845.227939-1-lihuafei1@huawei.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+References: <20230629184151.651069086@linuxfoundation.org> <CAEUSe7-xC90CGpJjQD4w10ea=nXMiGhsFouhaa8fVK5W-WJJJQ@mail.gmail.com>
+ <2023063056-waviness-unearth-08aa@gregkh>
+In-Reply-To: <2023063056-waviness-unearth-08aa@gregkh>
+From:   =?UTF-8?B?RGFuaWVsIETDrWF6?= <daniel.diaz@linaro.org>
+Date:   Thu, 29 Jun 2023 23:21:39 -0600
+Message-ID: <CAEUSe7_3+JHgdEAkJ=7ha5pm=24dV5zN_LakKMM6RUBo+nABXQ@mail.gmail.com>
+Subject: Re: [PATCH 6.1 00/30] 6.1.37-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de,
+        conor@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -55,57 +75,83 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 30, 2023 at 10:08:45AM +0800, Li Huafei wrote:
-> We get the following crash caused by a null pointer access:
-> 
->  BUG: kernel NULL pointer dereference, address: 0000000000000000
->  ...
->  RIP: 0010:resume_execution+0x35/0x190
->  ...
->  Call Trace:
->   <#DB>
->   kprobe_debug_handler+0x41/0xd0
->   exc_debug+0xe5/0x1b0
->   asm_exc_debug+0x19/0x30
->  RIP: 0010:copy_from_kernel_nofault.part.0+0x55/0xc0
->  ...
->   </#DB>
->   process_fetch_insn+0xfb/0x720
->   kprobe_trace_func+0x199/0x2c0
->   ? kernel_clone+0x5/0x2f0
->   kprobe_dispatcher+0x3d/0x60
->   aggr_pre_handler+0x40/0x80
->   ? kernel_clone+0x1/0x2f0
->   kprobe_ftrace_handler+0x82/0xf0
->   ? __se_sys_clone+0x65/0x90
->   ftrace_ops_assist_func+0x86/0x110
->   ? rcu_nocb_try_bypass+0x1f3/0x370
->   0xffffffffc07e60c8
->   ? kernel_clone+0x1/0x2f0
->   kernel_clone+0x5/0x2f0
-> 
-> The analysis reveals that kprobe and hardware breakpoints conflict in
-> the use of debug exceptions.
-> 
-> If we set a hardware breakpoint on a memory address and also have a
-> kprobe event to fetch the memory at this address. Then when kprobe
-> triggers, it goes to read the memory and triggers hardware breakpoint
-> monitoring. This time, since kprobe handles debug exceptions earlier
-> than hardware breakpoints, it will cause kprobe to incorrectly assume
-> that the exception is a kprobe trigger.
-> 
-> Notice that after the mainline commit 6256e668b7af ("x86/kprobes: Use
-> int3 instead of debug trap for single-step"), kprobe no longer uses
-> debug trap, avoiding the conflict with hardware breakpoints here. This
-> commit is to remove the IRET that returns to kernel, not to fix the
-> problem we have here. Also there are a bunch of merge conflicts when
-> trying to apply this commit to older kernels, so fixing it directly in
-> older kernels is probably a better option.
+Hello!
 
-What is the list of commits that it would take to resolve this in these
-kernels?  We would almost always prefer to do that instead of taking
-changes that are not upstream.
+On Thu, 29 Jun 2023 at 23:18, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+> On Thu, Jun 29, 2023 at 04:25:40PM -0600, Daniel D=C3=ADaz wrote:
+> > Hello!
+> >
+> > On Thu, 29 Jun 2023 at 12:46, Greg Kroah-Hartman
+> > <gregkh@linuxfoundation.org> wrote:
+> > > This is the start of the stable review cycle for the 6.1.37 release.
+> > > There are 30 patches in this series, all will be posted as a response
+> > > to this one.  If anyone has any issues with these being applied, plea=
+se
+> > > let me know.
+> > >
+> > > Responses should be made by Sat, 01 Jul 2023 18:41:39 +0000.
+> > > Anything received after that time might be too late.
+> > >
+> > > The whole patch series can be found in one patch at:
+> > >         https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/pa=
+tch-6.1.37-rc1.gz
+> > > or in the git tree and branch at:
+> > >         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-st=
+able-rc.git linux-6.1.y
+> > > and the diffstat can be found below.
+> > >
+> > > thanks,
+> > >
+> > > greg k-h
+> >
+> > Early report of failures.
+> >
+> > SPARC and PA-RISC both fail to build (GCC-8 and GCC-11).
+> >
+> > For SPARC:
+> > * allnoconfig
+> > * defconfig
+> > * tinyconfig
+> >
+> > -----8<-----
+> > /builds/linux/arch/sparc/mm/fault_32.c: In function 'force_user_fault':
+> > /builds/linux/arch/sparc/mm/fault_32.c:312:49: error: 'regs'
+> > undeclared (first use in this function)
+> >   312 |         vma =3D lock_mm_and_find_vma(mm, address, regs);
+> >       |                                                 ^~~~
+> > /builds/linux/arch/sparc/mm/fault_32.c:312:49: note: each undeclared
+> > identifier is reported only once for each function it appears in
+> > make[4]: *** [/builds/linux/scripts/Makefile.build:250:
+> > arch/sparc/mm/fault_32.o] Error 1
+> > make[4]: Target 'arch/sparc/mm/' not remade because of errors.
+> > ----->8-----
+> >
+> > For PA-RISC:
+> > * allnoconfig
+> > * tinyconfig
+> >
+> > -----8<-----
+> > /builds/linux/arch/parisc/mm/fault.c: In function 'do_page_fault':
+> > /builds/linux/arch/parisc/mm/fault.c:292:22: error: 'prev' undeclared
+> > (first use in this function)
+> >   292 |                 if (!prev || !(prev->vm_flags & VM_GROWSUP))
+> >       |                      ^~~~
+> > /builds/linux/arch/parisc/mm/fault.c:292:22: note: each undeclared
+> > identifier is reported only once for each function it appears in
+> > make[4]: *** [/builds/linux/scripts/Makefile.build:250:
+> > arch/parisc/mm/fault.o] Error 1
+> > make[4]: Target 'arch/parisc/mm/' not remade because of errors.
+> > ----->8-----
+>
+> These issues are also in Linus's tree right now, right?  Or are they
+> unique to the -rc releases right now?
 
-thanks,
+Correct. I went to look at mainline and it fails the same way there
+for SPARC and PA-RISC, so 6.1 and 6.4 are on par there; 6.3's failures
+on Arm64 are only seen there.
 
-greg k-h
+Greetings!
+
+Daniel D=C3=ADaz
+daniel.diaz@linaro.org
