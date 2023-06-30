@@ -2,153 +2,209 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1C23743CFB
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 15:47:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 653BB743D03
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 15:51:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232119AbjF3Nrf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 09:47:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56732 "EHLO
+        id S232234AbjF3NvZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Jun 2023 09:51:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229522AbjF3Nrc (ORCPT
+        with ESMTP id S229522AbjF3NvX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 09:47:32 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4BCA3A8E;
-        Fri, 30 Jun 2023 06:47:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1688132851; x=1719668851;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=9sM2Z0ZbOcroZOD9P9vuoDOY6kcrOfhx3gRZ/Nk6+Og=;
-  b=cHxMImJ8xy1efwj2ppzbgKfJFUTkW+DhEcUiue+s9MuqkWCOtVZ+AR1y
-   y0EGjND7KnWLOgZuxK6j4cJ+Q1txbOIr/ToUedV/eX9D9GW/0BP8GaJql
-   qkHtKWtsEKUhIsDmhl2Ci6gG5G2lRipId0PHcK60Pu0iIZRu+AlVGfuT4
-   e1udSvHXbvwO2bAoBofz2MqfdALm9Pf2/yv6usfKIA9hr4u9Twx0anb2l
-   c1bFKUfMhnMPH1bR5INkQi8CyXVr2A42eOlyU9yjbaGBz6lwPfgUurLuO
-   GTQCzZFy2CTiq0jzKZa3ihkChl4d++GbjsMIqiDxYLnn5F7nQuWU5UDDx
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10756"; a="352217793"
-X-IronPort-AV: E=Sophos;i="6.01,170,1684825200"; 
-   d="scan'208";a="352217793"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jun 2023 06:47:30 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10756"; a="783083985"
-X-IronPort-AV: E=Sophos;i="6.01,170,1684825200"; 
-   d="scan'208";a="783083985"
-Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 30 Jun 2023 06:47:27 -0700
-Received: from kbuild by 783282924a45 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1qFET9-000F05-0O;
-        Fri, 30 Jun 2023 13:47:27 +0000
-Date:   Fri, 30 Jun 2023 21:46:56 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Vivek Pernamitta <quic_vpernami@quicinc.com>, mhi@lists.linux.dev
-Cc:     oe-kbuild-all@lists.linux.dev, mrana@quicinc.com,
-        quic_qianyu@quicinc.com, manivannan.sadhasivam@linaro.org,
-        Vivek Pernamitta <quic_vpernami@quicinc.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH V1] net: mhi : Add support to enable ethernet interface
-Message-ID: <202306302115.IYBBlrFn-lkp@intel.com>
-References: <1688118281-13032-1-git-send-email-quic_vpernami@quicinc.com>
+        Fri, 30 Jun 2023 09:51:23 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3368230C5;
+        Fri, 30 Jun 2023 06:51:21 -0700 (PDT)
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35UDIOxg001644;
+        Fri, 30 Jun 2023 13:51:17 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=7WIZ51abadDkdHK19ZK8eWOhE0e++6LJo77oOIa5j9s=;
+ b=oW4iES/q+eQGW0rIGhT9oOCFKvAXztUZt59/b6QDpEVR2rU5PiGe8ylke2ZqyG69DUtq
+ ZAsFPafgjOti6y0MYmBfUCIKywa5yBg/W4c16yl7eV2n3dOXMFUtR18EoQGKRZjyWa+l
+ De0DwUBJ7q/P+jg36+RNlwuW7MNLbzyos6fxhqFhunBLxbM01VdGNbeneeOxJ8/W74E8
+ zgrnGERU/EuB4IGsiX9TDtEi1SbM5Pp8GaQtADwuRdbgaqQu+ypwUjpmj+aXXDQ0F1mj
+ pVjSfP+7tmk85v3gYeRRssIaHeJPuWA8AN2IyQ1log3XvJQt3stNIAZhEsRG5EcLZTrM xQ== 
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rhw70rdex-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 30 Jun 2023 13:51:17 +0000
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35UDpFu9015689
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 30 Jun 2023 13:51:15 GMT
+Received: from [10.216.15.2] (10.80.80.8) by nalasex01b.na.qualcomm.com
+ (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.7; Fri, 30 Jun
+ 2023 06:51:11 -0700
+Message-ID: <8b5bcae2-f849-ec35-4ea2-e2dd15f42af3@quicinc.com>
+Date:   Fri, 30 Jun 2023 19:21:06 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1688118281-13032-1-git-send-email-quic_vpernami@quicinc.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [PATCH v4 5/6] soc: qcom: Add LLCC support for multi channel DDR
+Content-Language: en-US
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>
+CC:     <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <devicetree@vger.kernel.org>
+References: <20230623141806.13388-1-quic_kbajaj@quicinc.com>
+ <20230623141806.13388-6-quic_kbajaj@quicinc.com>
+ <b84b2bfc-6f8f-f50f-27b5-52a982ae30f2@linaro.org>
+ <e80f0bd3-cf1e-dfed-bcc6-d22d4d934230@quicinc.com>
+ <2dfa5bb8-3189-29f2-a85f-3dd392b27141@linaro.org>
+From:   Komal Bajaj <quic_kbajaj@quicinc.com>
+In-Reply-To: <2dfa5bb8-3189-29f2-a85f-3dd392b27141@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: 6e7LjCh6K7RqGUmlAWDTZwlztv6aOuhM
+X-Proofpoint-GUID: 6e7LjCh6K7RqGUmlAWDTZwlztv6aOuhM
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-06-30_05,2023-06-30_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 phishscore=0
+ mlxlogscore=809 spamscore=0 impostorscore=0 malwarescore=0
+ priorityscore=1501 clxscore=1015 lowpriorityscore=0 bulkscore=0
+ suspectscore=0 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2305260000 definitions=main-2306300118
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Vivek,
-
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on net-next/main]
-[also build test WARNING on net/main linus/master v6.4 next-20230630]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Vivek-Pernamitta/net-mhi-Add-support-to-enable-ethernet-interface/20230630-174659
-base:   net-next/main
-patch link:    https://lore.kernel.org/r/1688118281-13032-1-git-send-email-quic_vpernami%40quicinc.com
-patch subject: [PATCH V1] net: mhi : Add support to enable ethernet interface
-config: alpha-allyesconfig (https://download.01.org/0day-ci/archive/20230630/202306302115.IYBBlrFn-lkp@intel.com/config)
-compiler: alpha-linux-gcc (GCC) 12.3.0
-reproduce: (https://download.01.org/0day-ci/archive/20230630/202306302115.IYBBlrFn-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306302115.IYBBlrFn-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   drivers/net/mhi_net.c: In function 'mhi_net_newlink':
->> drivers/net/mhi_net.c:327:37: warning: passing argument 1 of 'eth_random_addr' discards 'const' qualifier from pointer target type [-Wdiscarded-qualifiers]
-     327 |                 eth_random_addr(ndev->dev_addr);
-         |                                 ~~~~^~~~~~~~~~
-   In file included from drivers/net/mhi_net.c:14:
-   include/linux/etherdevice.h:230:40: note: expected 'u8 *' {aka 'unsigned char *'} but argument is of type 'const unsigned char *'
-     230 | static inline void eth_random_addr(u8 *addr)
-         |                                    ~~~~^~~~
 
 
-vim +327 drivers/net/mhi_net.c
+On 6/28/2023 4:43 PM, Konrad Dybcio wrote:
+> On 28.06.2023 10:52, Komal Bajaj wrote:
+>>
+>> On 6/23/2023 8:28 PM, Konrad Dybcio wrote:
+>>> On 23.06.2023 16:18, Komal Bajaj wrote:
+>>>> Add LLCC support for multi channel DDR configuration
+>>>> based on a feature register. Reading DDR channel
+>>>> confiuration uses nvmem framework, so select the
+>>>> dependency in Kconfig. Without this, there will be
+>>>> errors while building the driver with COMPILE_TEST only.
+>>>>
+>>>> Signed-off-by: Komal Bajaj <quic_kbajaj@quicinc.com>
+>>>> ---
+>>>>    drivers/soc/qcom/Kconfig     |  2 ++
+>>>>    drivers/soc/qcom/llcc-qcom.c | 33 ++++++++++++++++++++++++++++++---
+>>>>    2 files changed, 32 insertions(+), 3 deletions(-)
+>>>>
+>>>> diff --git a/drivers/soc/qcom/Kconfig b/drivers/soc/qcom/Kconfig
+>>>> index a491718f8064..cc9ad41c63aa 100644
+>>>> --- a/drivers/soc/qcom/Kconfig
+>>>> +++ b/drivers/soc/qcom/Kconfig
+>>>> @@ -64,6 +64,8 @@ config QCOM_LLCC
+>>>>        tristate "Qualcomm Technologies, Inc. LLCC driver"
+>>>>        depends on ARCH_QCOM || COMPILE_TEST
+>>>>        select REGMAP_MMIO
+>>>> +    select NVMEM
+>>>> +    select QCOM_SCM
+>>>>        help
+>>>>          Qualcomm Technologies, Inc. platform specific
+>>>>          Last Level Cache Controller(LLCC) driver for platforms such as,
+>>>> diff --git a/drivers/soc/qcom/llcc-qcom.c b/drivers/soc/qcom/llcc-qcom.c
+>>>> index 6cf373da5df9..3c29612da1c5 100644
+>>>> --- a/drivers/soc/qcom/llcc-qcom.c
+>>>> +++ b/drivers/soc/qcom/llcc-qcom.c
+>>>> @@ -12,6 +12,7 @@
+>>>>    #include <linux/kernel.h>
+>>>>    #include <linux/module.h>
+>>>>    #include <linux/mutex.h>
+>>>> +#include <linux/nvmem-consumer.h>
+>>>>    #include <linux/of.h>
+>>>>    #include <linux/of_device.h>
+>>>>    #include <linux/regmap.h>
+>>>> @@ -943,6 +944,19 @@ static int qcom_llcc_cfg_program(struct platform_device *pdev,
+>>>>        return ret;
+>>>>    }
+>>>>    +static int qcom_llcc_get_cfg_index(struct platform_device *pdev, u8 *cfg_index)
+>>>> +{
+>>>> +    int ret;
+>>>> +
+>>>> +    ret = nvmem_cell_read_u8(&pdev->dev, "multi-chan-ddr", cfg_index);
+>>>> +    if (ret == -ENOENT) {
+>>>> +        *cfg_index = 0;
+>>>> +        return 0;
+>>>> +    }
+>>>> +
+>>>> +    return ret;
+>>>> +}
+>>>> +
+>>>>    static int qcom_llcc_remove(struct platform_device *pdev)
+>>>>    {
+>>>>        /* Set the global pointer to a error code to avoid referencing it */
+>>>> @@ -975,11 +989,13 @@ static int qcom_llcc_probe(struct platform_device *pdev)
+>>>>        struct device *dev = &pdev->dev;
+>>>>        int ret, i;
+>>>>        struct platform_device *llcc_edac;
+>>>> -    const struct qcom_llcc_config *cfg;
+>>>> +    const struct qcom_llcc_config *cfg, *entry;
+>>>>        const struct llcc_slice_config *llcc_cfg;
+>>>>        u32 sz;
+>>>> +    u8 cfg_index;
+>>>>        u32 version;
+>>>>        struct regmap *regmap;
+>>>> +    u32 num_entries = 0;
+>>>>          drv_data = devm_kzalloc(dev, sizeof(*drv_data), GFP_KERNEL);
+>>>>        if (!drv_data) {
+>>>> @@ -1040,8 +1056,19 @@ static int qcom_llcc_probe(struct platform_device *pdev)
+>>>>          drv_data->version = version;
+>>>>    -    llcc_cfg = cfg[0]->sct_data;
+>>>> -    sz = cfg[0]->size;
+>>>> +    ret = qcom_llcc_get_cfg_index(pdev, &cfg_index);
+>>>> +    if (ret)
+>>>> +        goto err;
+>>>> +
+>>>> +    for (entry = cfg; entry->sct_data; entry++, num_entries++)
+>>>> +        ;
+>>>> +    if (cfg_index >= num_entries || cfg_index < 0) {
+>>> cfg_index is an unsigned variable, it can never be < 0
+>> Okay, will remove this condition.
+>>
+>>>> +        ret = -EINVAL;
+>>>> +        goto err;
+>>>> +    }
+>>>> +
+>>> if (cfg_index >= entry->size)? With that, you can also keep the config
+>>> entries non-0-terminated in the previous patch, saving a whole lot of RAM.
+>> entry->size represents the size of sct table whereas num_entries represents the number
+>> of sct tables that we can have. And by this check we are validating the value read from the
+>> fuse register. Am I understanding your comment correctly?
+> Oh you're right.
+>
+> I still see room for improvement, though.
+>
+> For example, you duplicate assigning need_llcc_cfg, reg_offset
+> and edac_reg_offset. You can add a new struct, like "sct_config" and add
+> a pointer to sct_config[] & the length of this array to qcom_llcc_config.
+>
+> Konrad
 
-   320	
-   321	static int mhi_net_newlink(struct mhi_device *mhi_dev, struct net_device *ndev, bool eth_dev)
-   322	{
-   323		struct mhi_net_dev *mhi_netdev;
-   324		int err;
-   325	
-   326		if (eth_dev) {
- > 327			eth_random_addr(ndev->dev_addr);
-   328			if (!is_valid_ether_addr(ndev->dev_addr))
-   329				return -EADDRNOTAVAIL;
-   330		}
-   331	
-   332		mhi_netdev = netdev_priv(ndev);
-   333	
-   334		dev_set_drvdata(&mhi_dev->dev, mhi_netdev);
-   335		mhi_netdev->ndev = ndev;
-   336		mhi_netdev->mdev = mhi_dev;
-   337		mhi_netdev->skbagg_head = NULL;
-   338		mhi_netdev->mru = mhi_dev->mhi_cntrl->mru;
-   339		mhi_netdev->ethernet_if = eth_dev;
-   340	
-   341		INIT_DELAYED_WORK(&mhi_netdev->rx_refill, mhi_net_rx_refill_work);
-   342		u64_stats_init(&mhi_netdev->stats.rx_syncp);
-   343		u64_stats_init(&mhi_netdev->stats.tx_syncp);
-   344	
-   345		/* Start MHI channels */
-   346		err = mhi_prepare_for_transfer(mhi_dev);
-   347		if (err)
-   348			return err;
-   349	
-   350		/* Number of transfer descriptors determines size of the queue */
-   351		mhi_netdev->rx_queue_sz = mhi_get_free_desc_count(mhi_dev, DMA_FROM_DEVICE);
-   352	
-   353		err = register_netdev(ndev);
-   354		if (err)
-   355			return err;
-   356	
-   357		return 0;
-   358	}
-   359	
+Okay, will follow this approach.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+>
+>>> Konrad
+>>>> +    llcc_cfg = cfg[cfg_index].sct_data;
+>>>> +    sz = cfg[cfg_index].size;
+>>>>          for (i = 0; i < sz; i++)
+>>>>            if (llcc_cfg[i].slice_id > drv_data->max_slices)
+
