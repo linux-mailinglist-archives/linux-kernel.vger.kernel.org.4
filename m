@@ -2,165 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72A9A74372E
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 10:30:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA68474373D
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 10:32:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232539AbjF3Ia1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 04:30:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40936 "EHLO
+        id S232570AbjF3IcF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Jun 2023 04:32:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232512AbjF3IaZ (ORCPT
+        with ESMTP id S232571AbjF3Ibs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 04:30:25 -0400
-Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 394A035A0
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 01:30:21 -0700 (PDT)
-Received: by mail-pg1-x536.google.com with SMTP id 41be03b00d2f7-55779047021so1156647a12.3
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 01:30:21 -0700 (PDT)
+        Fri, 30 Jun 2023 04:31:48 -0400
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 665583588
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 01:31:40 -0700 (PDT)
+Received: by mail-wr1-x435.google.com with SMTP id ffacd0b85a97d-31114b46d62so1809963f8f.3
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 01:31:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1688113820; x=1690705820;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=IylOOlS5ad80V9wYkTvlltIZ1alSaalCsW6vNzoqxCE=;
-        b=w1n2X6SwuQTGf40ACuJOa3mBnZ6ZkpTXgN9WgWekcgA9wX8DhnWHIvrr/ntVep8Wfx
-         xxgnSrGUku9qrt5TAFiqidVe8dfAzB7z8BGj0BthdVH6Fk7veTxovV3SqntFhLwev/Xa
-         eUnJHfSZnVCkgbMzzE26Gxlda3H0ztt2I/95FfE803JDRp7pjeSO9jnZ3BLSXJludS5H
-         yQtKkttWWKnagkVjdx8eHyDXlneyKqjT6bWj5R/9iUy1xW+l0s6qCRI+zleuBgi9kTQn
-         U6yVyv6y2eeuryVrYLzfAODmlTygbytKVYCG0m/woa92+yDWDiaLEU2bdxcTFVaqGJz+
-         AhUQ==
+        d=rivosinc-com.20221208.gappssmtp.com; s=20221208; t=1688113899; x=1690705899;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=I7xu9e/8zpZngb/8IehgWdJUCcpoeDVm3vpzs3Qy7mo=;
+        b=H865ZtJHjbuc6MuFVYa6SgB+ccoXiHGJQIfADr+zwMK/j+TvVpF9r811O5KdXbAu5+
+         8rnETbuyrAMsXoADgBZsmqyWAJr2v0SEQYshs1SJYhCXKgyoO6o3PJr4ldpS8G81FyDD
+         5pJH5cSvZ1+TDWcK6vDQAbBn+F15tFvNuOhYAQrzT4I29Y6oNdLKn4cLGQ+ogAC/S4FO
+         VTT6g+Rr36ezXTugl0LhtdCY68hxlgD8P8RQc//MOZj5goxL8G/fFJl97Hi8BBomykLL
+         ifR/3V7HCfdYcA93pumIwoaa/E8SI7eQ7OroZqiDb/jdJyXWhiTW+FiT0P9QtP8R7EOe
+         vpZg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688113820; x=1690705820;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=IylOOlS5ad80V9wYkTvlltIZ1alSaalCsW6vNzoqxCE=;
-        b=RykOwIxqgI3rseVcLiOVVd8arc7PkGsVx1Xe3Tdah5ZrIE2TxGBsq2l28WJqQHPZDK
-         xCOBuwRUSzVvK9/TSeQsdUxmT/R7lySis181DtibmBH0Abo6yWZxwm8D8bhILxF4a7Lc
-         yZhvF22g+UV+CMR/APCTAb+N5C+lAvuOqEG14R8gLujsGI/SmwIk7YsXy93eDSWBoUGq
-         QwCprp/57OtORIIvQYB0YrJ+fW3WPpYW5Up0WJ+Hyx6ItDu7Lw2co44LRQK9ZiTh+NAP
-         uiP+k1LG7zJQPJVcsrrbiCqhYNSWa9p176SJZgY2kHl1I3a8T0SFC2GK8gP2ErWo6VLJ
-         KS/g==
-X-Gm-Message-State: ABy/qLa/GxEQ0YzaLDajdBBfQJpGFUSH5jU6BL3OLs4oX4Z9fR8JsrDL
-        zrajb7Mz8yJAuQlF0yhPeEN/4J+u5imY1zdwygk=
-X-Google-Smtp-Source: APBJJlFwGdFpxh5lh0GMjOfiQCZJY9c+/4qoU0guVGErEKUDZanZB/3Rl1aCMaiF991mJDNpY11l/w==
-X-Received: by 2002:a17:90b:954:b0:262:fc42:c7bc with SMTP id dw20-20020a17090b095400b00262fc42c7bcmr1366282pjb.32.1688113820036;
-        Fri, 30 Jun 2023 01:30:20 -0700 (PDT)
-Received: from [192.168.1.4] ([223.233.68.54])
-        by smtp.gmail.com with ESMTPSA id x8-20020a17090a6b4800b002635db431a0sm2023231pjl.45.2023.06.30.01.30.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 30 Jun 2023 01:30:19 -0700 (PDT)
-Message-ID: <f14c00e4-d0d2-17cd-da8c-5632558f53b9@linaro.org>
-Date:   Fri, 30 Jun 2023 14:00:00 +0530
+        d=1e100.net; s=20221208; t=1688113899; x=1690705899;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=I7xu9e/8zpZngb/8IehgWdJUCcpoeDVm3vpzs3Qy7mo=;
+        b=fQndb3zgHTwMIT91NBlqeqrORrRdkq9zCgRE1j3Vdja+ElI2doZJl3JvVP7Yaglb+L
+         eWD6kHKKlKpQtk3Vchh1j6POzcOe5bjEezQqg7g5jpAA4K707/WwYRpWegZfDuK+PNGt
+         x68FbjKricUX2Ovdk2/8fGtbQGA4YYkKxZhVQdBWq/AzgXpMucrsNOPdeApMHx/pic+B
+         N0UgEq5oBG4hWRkS1S0Q1mbNFgBRRTMUdK6T9Mes0KW5Hp/03pZQ96R67qd8gdGHHZJy
+         Pj0bzNTxh4dnBoWkfpOz5jwb6zNjiiIkMVGMQNy1ekKN24uJEMwZlPdVPmG36iy7JBNi
+         nXWQ==
+X-Gm-Message-State: ABy/qLYCXmHdibgiKfomQPKuHEUNvKQxti2pp07a9sTtwye+uXD3W4bD
+        CvU6KaZBlz99qUe50URmkWU6ig==
+X-Google-Smtp-Source: APBJJlF2cVmZSXyEpZo5Wr+x3JPdjgQAG++Uz1dQG5lH+T/9n8SPtY5CQ+JHQXWfIJwLUbsOsOGQcg==
+X-Received: by 2002:adf:f60c:0:b0:313:e741:1caa with SMTP id t12-20020adff60c000000b00313e7411caamr1823926wrp.25.1688113898731;
+        Fri, 30 Jun 2023 01:31:38 -0700 (PDT)
+Received: from alex-rivos.ba.rivosinc.com (amontpellier-656-1-456-62.w92-145.abo.wanadoo.fr. [92.145.124.62])
+        by smtp.gmail.com with ESMTPSA id h15-20020a05600004cf00b0030e52d4c1bcsm17976111wri.71.2023.06.30.01.31.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 30 Jun 2023 01:31:38 -0700 (PDT)
+From:   Alexandre Ghiti <alexghiti@rivosinc.com>
+To:     Jonathan Corbet <corbet@lwn.net>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Atish Patra <atishp@atishpatra.org>,
+        Anup Patel <anup@brainfault.org>,
+        Will Deacon <will@kernel.org>, Rob Herring <robh@kernel.org>,
+        Andrew Jones <ajones@ventanamicro.com>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org
+Cc:     Alexandre Ghiti <alexghiti@rivosinc.com>
+Subject: [PATCH v3 00/10] riscv: Allow userspace to directly access perf counters
+Date:   Fri, 30 Jun 2023 10:30:03 +0200
+Message-Id: <20230630083013.102334-1-alexghiti@rivosinc.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Subject: Re: [PATCH v8 01/11] dt-bindings: dma: Add support for SM6115 and
- QCM2290 SoCs
-To:     Vinod Koul <vkoul@kernel.org>
-Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        dmaengine@vger.kernel.org, agross@kernel.org,
-        linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
-        andersson@kernel.org, bhupesh.linux@gmail.com,
-        krzysztof.kozlowski@linaro.org, robh+dt@kernel.org,
-        konrad.dybcio@linaro.org, vladimir.zapolskiy@linaro.org,
-        rfoss@kernel.org, neil.armstrong@linaro.org, djakov@kernel.org,
-        stephan@gerhold.net, Rob Herring <robh@kernel.org>,
-        Anders Roxell <anders.roxell@linaro.org>,
-        Linux Kernel Functional Testing <lkft@linaro.org>
-References: <20230526192210.3146896-1-bhupesh.sharma@linaro.org>
- <20230526192210.3146896-2-bhupesh.sharma@linaro.org>
- <CAH=2Ntx+4F+ZP_Y+=e4p9rdTRQV8FHaepJCyqVFtWUPjDehoNg@mail.gmail.com>
- <ZIHKWYMs1e/rOez0@matsya>
-Content-Language: en-US
-From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
-In-Reply-To: <ZIHKWYMs1e/rOez0@matsya>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/8/23 6:02 PM, Vinod Koul wrote:
-> On 29-05-23, 11:43, Bhupesh Sharma wrote:
->> Hi Vinod,
->>
->>> On Sat, 27 May 2023 at 00:52, Bhupesh Sharma <bhupesh.sharma@linaro.org> wrote:
->>>
->>> Add new compatible for BAM DMA engine version v1.7.4 which is
->>> found on Qualcomm SM6115 and QCM2290 SoCs. Since its very similar
->>> to v1.7.0 used on SM8150 like SoCs, mark the comptible scheme
->>> accordingly.
->>>
->>> While at it, also update qcom,bam-dma bindings to add comments
->>> which describe the BAM DMA versions used in SM8150 and SM8250 SoCs.
->>> This provides an easy reference for identifying the actual BAM DMA
->>> version available on Qualcomm SoCs.
->>>
->>> Acked-by: Rob Herring <robh@kernel.org>
->>> Tested-by: Anders Roxell <anders.roxell@linaro.org>
->>> Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
->>> Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
->>> ---
->>>   .../devicetree/bindings/dma/qcom,bam-dma.yaml | 20 ++++++++++++-------
->>>   1 file changed, 13 insertions(+), 7 deletions(-)
->>>
->>> diff --git a/Documentation/devicetree/bindings/dma/qcom,bam-dma.yaml b/Documentation/devicetree/bindings/dma/qcom,bam-dma.yaml
->>> index f1ddcf672261..c663b6102f50 100644
->>> --- a/Documentation/devicetree/bindings/dma/qcom,bam-dma.yaml
->>> +++ b/Documentation/devicetree/bindings/dma/qcom,bam-dma.yaml
->>> @@ -15,13 +15,19 @@ allOf:
->>>
->>>   properties:
->>>     compatible:
->>> -    enum:
->>> -        # APQ8064, IPQ8064 and MSM8960
->>> -      - qcom,bam-v1.3.0
->>> -        # MSM8974, APQ8074 and APQ8084
->>> -      - qcom,bam-v1.4.0
->>> -        # MSM8916 and SDM845
->>> -      - qcom,bam-v1.7.0
->>> +    oneOf:
->>> +      - enum:
->>> +          # APQ8064, IPQ8064 and MSM8960
->>> +          - qcom,bam-v1.3.0
->>> +          # MSM8974, APQ8074 and APQ8084
->>> +          - qcom,bam-v1.4.0
->>> +          # MSM8916, SDM630
->>> +          - qcom,bam-v1.7.0
->>> +      - items:
->>> +          - enum:
->>> +              # SDM845, SM6115, SM8150, SM8250 and QCM2290
->>> +              - qcom,bam-v1.7.4
->>> +          - const: qcom,bam-v1.7.0
->>>
->>>     clocks:
->>>       maxItems: 1
->>> --
->>> 2.38.1
->>
->> Bjorn has applied the dts patches from this series to his tree.
->> As suggested by him, can you please pick patches [PATCH 1/11] and
->> [PATCH 2/11] from this series via the 'dmaengine' tree.
-> 
-> I dont have this series in my inbox or dmaengine pw
-> 
->> Seems some Cc fields got messed up while sending the patchset, so
->> Cc'ing the dmaengine list again.
-> 
-> not just list but mine too..
-> 
-> Please rebase and resend
+riscv used to allow direct access to cycle/time/instret counters,
+bypassing the perf framework, this patchset intends to allow the user to
+mmap any counter when accessed through perf. But we can't break the
+existing behaviour so we introduce a sysctl perf_user_access like arm64
+does, which defaults to the legacy mode described above.
 
-Sure, I have sent a v9, which can be seen here: 
-<https://lore.kernel.org/linux-arm-msm/20230630082230.2264698-1-bhupesh.sharma@linaro.org/>
-Please help review.
+This version needs openSBI v1.3 *and* a fix that went upstream lately
+(https://lore.kernel.org/lkml/20230616114831.3186980-1-maz@kernel.org/T/).
 
-Thanks,
-Bhupesh
+**Important**: In this version, the default mode is now user access, not
+the legacy so some applications will break.
+
+base-commit-tag: v6.4-rc6
+
+Changes in v3:
+v3:
+- patch 1 now contains the ref to the faulty commit (no Fixes tag as it is only a comment), as Andrew suggested
+- Removed RISCV_PMU_LEGACY_TIME from patch 3, as Andrew suggested
+- Rename RISCV_PMU_PDEV_NAME to "riscv-pmu-sbi", patch4 is just cosmetic now, as Andrew suggested
+- Removed a few useless (and wrong) comments, as Andrew suggested
+- Simplify arch_perf_update_userpage code, as Andrew suggested
+- Documentation now mentions that time CSR is *always* accessible, whatever the mode, as suggested by Andrew
+- Removed CYCLEH reference and add TODO for rv32 support, as suggested by Atish
+- Do not rename the pmu instance as Atish suggested
+- Set pmc_width only if rdpmc is enabled and CONFIG_RISCV_PMU is set and the event is a hw event
+- Move arch_perf_update_userpage https://lore.kernel.org/lkml/20230616114831.3186980-1-maz@kernel.org/T/
+- **Switch to user mode access by default**
+
+Changes in v2:
+- Split into smaller patches, way better!
+- Add RB from Conor
+- Simplify the way we checked riscv architecture
+- Fix race mmap and other thread running on other cpus
+- Use hwc when available
+- Set all userspace access flags in event_init, too cumbersome to handle sysctl changes
+- Fix arch_perf_update_userpage for pmu other than riscv-pmu by renaming pmu driver
+- Fixed kernel test robot build error
+- Fixed documentation (Andrew and Bagas)
+- perf testsuite passes mmap tests in all 3 modes
+
+Alexandre Ghiti (10):
+  perf: Fix wrong comment about default event_idx
+  include: riscv: Fix wrong include guard in riscv_pmu.h
+  riscv: Make legacy counter enum match the HW numbering
+  drivers: perf: Rename riscv pmu sbi driver
+  riscv: Prepare for user-space perf event mmap support
+  drivers: perf: Implement perf event mmap support in the legacy backend
+  drivers: perf: Implement perf event mmap support in the SBI backend
+  Documentation: admin-guide: Add riscv sysctl_perf_user_access
+  tools: lib: perf: Implement riscv mmap support
+  perf: tests: Adapt mmap-basic.c for riscv
+
+ Documentation/admin-guide/sysctl/kernel.rst |  26 ++-
+ drivers/perf/riscv_pmu.c                    | 113 +++++++++++
+ drivers/perf/riscv_pmu_legacy.c             |  28 ++-
+ drivers/perf/riscv_pmu_sbi.c                | 196 +++++++++++++++++++-
+ include/linux/perf/riscv_pmu.h              |  12 +-
+ include/linux/perf_event.h                  |   3 +-
+ tools/lib/perf/mmap.c                       |  65 +++++++
+ tools/perf/tests/mmap-basic.c               |   4 +-
+ 8 files changed, 427 insertions(+), 20 deletions(-)
+
+-- 
+2.39.2
+
