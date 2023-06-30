@@ -2,97 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBAD7743FF0
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 18:40:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 15C7E743FF3
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 18:40:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231946AbjF3QkK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 12:40:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46300 "EHLO
+        id S229546AbjF3Qkx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Jun 2023 12:40:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229546AbjF3QkG (ORCPT
+        with ESMTP id S229957AbjF3Qku (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 12:40:06 -0400
-Received: from mail-il1-f175.google.com (mail-il1-f175.google.com [209.85.166.175])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDA2E3A9B;
-        Fri, 30 Jun 2023 09:40:05 -0700 (PDT)
-Received: by mail-il1-f175.google.com with SMTP id e9e14a558f8ab-3426e9a9c3eso5129945ab.0;
-        Fri, 30 Jun 2023 09:40:05 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688143205; x=1690735205;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        Fri, 30 Jun 2023 12:40:50 -0400
+Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEFBA3A9B
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 09:40:49 -0700 (PDT)
+Received: by mail-qt1-x834.google.com with SMTP id d75a77b69052e-401d1d967beso2981cf.0
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 09:40:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1688143249; x=1690735249;
+        h=content-transfer-encoding:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=EeB/bfHSBcU9maXUNIluojjzFlamBE8CEArcolnrob8=;
-        b=cuL6ATqx3ESLDwHctSCt9MvRDhzhjjjWHXHpJcbjGskDu2aSjuSSUWfi/DJOYMz1Hw
-         2YW5BmgBlQM05tTDoEo9K2ZlX0LrsdkIB0pW+8YWOmHp3MN07HYLCPtB0SMnol4sBjKP
-         c4DuTCQKSQLQzBnmNxQ05Xi1CoYpun2qrXwN81QBVl43S5s/FNeANuxujqJMJrNlZ9Ny
-         q8vwuIhmiskV4/LkDC9edomdX7ouitOWx4QKzvFVv8VgnAgK0HP1cYa9q6Q+IKFG6RXG
-         1QESvNitN9k/B0aHM99CWSQx8Bad0ap6uzDMCgK75eqBaiDN2wDGsI211YHlT0E+QgeR
-         Co9g==
-X-Gm-Message-State: AC+VfDxpUuXhq2V2cdjs7maiaahwraiV8q5mvcQYxFDNlKKk9d9R+noO
-        9HQLyYuCB9IpptXrCBzI8A==
-X-Google-Smtp-Source: ACHHUZ4DLZ3IurzatjPxbZeoavj6m0W8wqNX8o02xrmVCC4dlOC415Oo8kXvv2bRAOJgcoQ2rt3L/g==
-X-Received: by 2002:a05:6e02:f91:b0:345:ad29:1f84 with SMTP id v17-20020a056e020f9100b00345ad291f84mr5878456ilo.3.1688143204998;
-        Fri, 30 Jun 2023 09:40:04 -0700 (PDT)
-Received: from robh_at_kernel.org ([64.188.179.250])
-        by smtp.gmail.com with ESMTPSA id z13-20020a056638000d00b0042b1354452csm811726jao.83.2023.06.30.09.40.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 30 Jun 2023 09:40:04 -0700 (PDT)
-Received: (nullmailer pid 1877025 invoked by uid 1000);
-        Fri, 30 Jun 2023 16:40:01 -0000
-Date:   Fri, 30 Jun 2023 10:40:01 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     Liam Girdwood <lgirdwood@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Krishna Manikandan <quic_mkrishn@quicinc.com>,
-        Sean Paul <sean@poorly.run>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        devicetree@vger.kernel.org, Rob Clark <robdclark@gmail.com>,
-        freedreno@lists.freedesktop.org, Andy Gross <agross@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        linux-kernel@vger.kernel.org, David Airlie <airlied@gmail.com>,
-        Konrad Dybcio <konradybcio@kernel.org>,
-        linux-arm-msm@vger.kernel.org, Mark Brown <broonie@kernel.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        dri-devel@lists.freedesktop.org
-Subject: Re: [PATCH v2 1/4] dt-bindings: regulator: Describe Qualcomm REFGEN
- regulator
-Message-ID: <168814320140.1876966.17866889850041692910.robh@kernel.org>
-References: <20230628-topic-refgen-v2-0-6136487c78c5@linaro.org>
- <20230628-topic-refgen-v2-1-6136487c78c5@linaro.org>
+        bh=1O2jb2ZRq3iKub8wzToWxUbybun5ApHXKfxPti5SoXo=;
+        b=hB54yH6rPphXZa2pVpo7ah3BwI53myyvXN1Q2T3Owg6EnRSNtzjGMkgSegbzP9GoQS
+         W0wBiYgT+q9g0MP9+MDg+zizhwFj786nKzoAHKlsbFtf5HYx6cWhcwCwbmcWfILEiUO7
+         62f/waacoZXisGna2kWdP5CwK6tNadmozDerJ97LXVUv4gTEAHuI0dM5txxNNdD9RwMB
+         P4vEMTpsmLnhuQS3jZr3VoyZMzK4ozq+VX5V8Muqy7Yu66Q7nThPDJ4jEZLck3g2FxbE
+         diSmMbMKsL7xb7gLopsSerkwCBe7p5pSpaZIQZ3dJec1pWXkkM6aW0gflCGChTshz9Eh
+         /VCA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688143249; x=1690735249;
+        h=content-transfer-encoding:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=1O2jb2ZRq3iKub8wzToWxUbybun5ApHXKfxPti5SoXo=;
+        b=dnO6c9jOmdWghDrqzeO0SVxMCUvSgPHTVur6Vp1PQUs8mzbon/SKIjwBrtKp3LmJZV
+         pVlGH6rl5SVraK6u7NFV5AroKmETsJQMWJGeKRlkeerwHhjgIG+bBFWWJ6zTgJP6R4fa
+         I+hJBXMEF4silu1VtzVHCPztVkznEmTOS8oUwGJOBKLShhBbUGIuLEVmHoFp7Poql9NY
+         gxmzwmVo1bL+VL8JOQZiCPOjWlcuqUCHdZWNuvsULdFJUVeJp/BbNArMuva9oWmeAw+e
+         LTZjh++r+aNOtgjcIl44nZDz+VoGnk3CLVMV89cRVVbklyr8KE2cesckEyt3zu/Yoa8m
+         V4yg==
+X-Gm-Message-State: AC+VfDy2HPn+2CNXuGBSH+iTv02UUGnHxhGTjctzoSTaaDUh+/b+VLf2
+        LHgAYrgY3W/4cf/VS56A4f8PLSei0mZe1/xTG+47qUbWRpfuyvfQD/p4UQ==
+X-Google-Smtp-Source: ACHHUZ7cgdzz/M+RL5lA57//vzlA/0JjcxrrS5JNEsira0Qrza1rWHs6rgnRQTXHVdOLklBsP5WZwoLfnNfi5S9K3Z8=
+X-Received: by 2002:ac8:5905:0:b0:3f8:5b2:aef0 with SMTP id
+ 5-20020ac85905000000b003f805b2aef0mr815604qty.24.1688143248846; Fri, 30 Jun
+ 2023 09:40:48 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230628-topic-refgen-v2-1-6136487c78c5@linaro.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+References: <20230504120042.785651-1-rkagan@amazon.de> <ZH6DJ8aFq/LM6Bk9@google.com>
+ <CALMp9eS3F08cwUJbKjTRAEL0KyZ=MC==YSH+DW-qsFkNfMpqEQ@mail.gmail.com>
+ <ZJ4dmrQSduY8aWap@google.com> <ZJ65CiW0eEL2mGg8@u40bc5e070a0153.ant.amazon.com>
+ <ZJ7mjdZ8h/RSilFX@google.com> <ZJ7y9DuedQyBb9eU@u40bc5e070a0153.ant.amazon.com>
+In-Reply-To: <ZJ7y9DuedQyBb9eU@u40bc5e070a0153.ant.amazon.com>
+From:   Jim Mattson <jmattson@google.com>
+Date:   Fri, 30 Jun 2023 09:40:37 -0700
+Message-ID: <CALMp9eSNoHoAB4ZnMTZqvc8h2O8VL7RkLkSDeS-PSGi7usZ+TA@mail.gmail.com>
+Subject: Re: [PATCH] KVM: x86: vPMU: truncate counter value to allowed width
+To:     Roman Kagan <rkagan@amazon.de>,
+        Sean Christopherson <seanjc@google.com>,
+        Jim Mattson <jmattson@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Eric Hankland <ehankland@google.com>, kvm@vger.kernel.org,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Like Xu <likexu@tencent.com>, x86@kernel.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-kernel@vger.kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        Borislav Petkov <bp@alien8.de>, Ingo Molnar <mingo@redhat.com>,
+        Mingwei Zhang <mizhang@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Jun 30, 2023 at 8:21=E2=80=AFAM Roman Kagan <rkagan@amazon.de> wrot=
+e:
+>
+> On Fri, Jun 30, 2023 at 07:28:29AM -0700, Sean Christopherson wrote:
+> > On Fri, Jun 30, 2023, Roman Kagan wrote:
+> > > On Thu, Jun 29, 2023 at 05:11:06PM -0700, Sean Christopherson wrote:
+> > > > @@ -74,6 +74,14 @@ static inline u64 pmc_read_counter(struct kvm_pm=
+c *pmc)
+> > > >         return counter & pmc_bitmask(pmc);
+> > > >  }
+> > > >
+> > > > +static inline void pmc_write_counter(struct kvm_pmc *pmc, u64 val)
+> > > > +{
+> > > > +       if (pmc->perf_event && !pmc->is_paused)
+> > > > +               perf_event_set_count(pmc->perf_event, val);
+> > > > +
+> > > > +       pmc->counter =3D val;
+> > >
+> > > Doesn't this still have the original problem of storing wider value t=
+han
+> > > allowed?
+> >
+> > Yes, this was just to fix the counter offset weirdness.  My plan is to =
+apply your
+> > patch on top.  Sorry for not making that clear.
+>
+> Ah, got it, thanks!
+>
+> Also I'm now chasing a problem that we occasionally see
+>
+> [3939579.462832] Uhhuh. NMI received for unknown reason 30 on CPU 43.
+> [3939579.462836] Do you have a strange power saving mode enabled?
+> [3939579.462836] Dazed and confused, but trying to continue
+>
+> in the guests when perf is used.  These messages disappear when
+> 9cd803d496e7 ("KVM: x86: Update vPMCs when retiring instructions") is
+> reverted.  I haven't yet figured out where exactly the culprit is.
 
-On Thu, 29 Jun 2023 22:35:41 +0200, Konrad Dybcio wrote:
-> Modern Qualcomm SoCs have a REFGEN (reference voltage generator)
-> regulator, providing reference voltage to on-chip IP, like PHYs.
-> It's controlled through MMIO and we can toggle it or read its state back.
-> 
-> Describe it.
-> 
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> ---
->  .../regulator/qcom,sdm845-refgen-regulator.yaml    | 57 ++++++++++++++++++++++
->  1 file changed, 57 insertions(+)
-> 
+Maybe this is because KVM doesn't virtualize
+IA32_DEBUGCTL.Freeze_PerfMon_On_PMI?
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+Consider:
 
+1. PMC0 overflows, GLOBAL_STATUS[0] is set, and an NMI is delivered.
+2. Before the guest's PMI handler clears GLOBAL_CTRL, PMC1 overflows,
+GLOBAL_STATUS[1] is set, and an NMI is queued for delivery after the
+next IRET.
+3. The guest's PMI handler clears GLOBAL_CTRL, reads 3 from
+GLOBAL_STATUS, writes 3 to GLOBAL_OVF_CTRL, re-enables GLOBAL_CTRL,
+and IRETs.
+4. The queued NMI is delivered, but GLOBAL_STATUS is now 0. No one
+claims the NMI, so we get the spurious NMI message.
+
+I don't know why this would require counting the retirement of
+emulated instructions. It seems that hardware PMC overflow in the
+early part of the guest's PMI handler would also be a problem.
+
+> Thanks,
+> Roman.
+>
+>
+>
+> Amazon Development Center Germany GmbH
+> Krausenstr. 38
+> 10117 Berlin
+> Geschaeftsfuehrung: Christian Schlaeger, Jonathan Weiss
+> Eingetragen am Amtsgericht Charlottenburg unter HRB 149173 B
+> Sitz: Berlin
+> Ust-ID: DE 289 237 879
+>
+>
+>
