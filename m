@@ -2,332 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C169A743B96
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 14:09:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CCE30743B9F
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 14:10:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232583AbjF3MIy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 08:08:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50414 "EHLO
+        id S232399AbjF3MKJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Jun 2023 08:10:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232904AbjF3MIe (ORCPT
+        with ESMTP id S232777AbjF3MJj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 08:08:34 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD4D14C31;
-        Fri, 30 Jun 2023 05:07:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=aQIbBeHHxL8b1EjNDcJ4bA1/I8pw3VBqIBojsRFOLbw=; b=KC/TbbzT8bzIA0JpUlRQYGkWSu
-        X36S4/OI2xzOEihSBR6z3wSl1KCcHUBx4VX7XNxsLT9r0RDfusT+qDwypgxa2N2qTmYDJZbwKmPHo
-        afaRLdxGeSE1dFf81lP+9jSfsYVKnLeTp9Xlz58gos5YrnsB+H3ln/H4v+d2+LynRreSEDtIViXqF
-        EVweNvkVBisoB9UnnDIQu1Gl/yksQNfy3ois/kPe3S6Zu323pM5taGFZ4WpIJh+LiT5Xt5TNsGaIZ
-        wjUCmtD54dZSTarHds4fj4AMRwlh28BlrQovnx+z1An9E1XKvSSpvsAXfl9OZahC0gHLlGhH6sXlE
-        wGpkDy/w==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1qFCto-007yu1-06;
-        Fri, 30 Jun 2023 12:06:53 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 41827300338;
-        Fri, 30 Jun 2023 14:06:50 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 28EC024806A2C; Fri, 30 Jun 2023 14:06:50 +0200 (CEST)
-Date:   Fri, 30 Jun 2023 14:06:50 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     "Huang, Kai" <kai.huang@intel.com>
-Cc:     "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "Raj, Ashok" <ashok.raj@intel.com>,
-        "Hansen, Dave" <dave.hansen@intel.com>,
-        "david@redhat.com" <david@redhat.com>,
-        "bagasdotme@gmail.com" <bagasdotme@gmail.com>,
-        "Luck, Tony" <tony.luck@intel.com>,
-        "ak@linux.intel.com" <ak@linux.intel.com>,
-        "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Christopherson,, Sean" <seanjc@google.com>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "Chatre, Reinette" <reinette.chatre@intel.com>,
-        "Yamahata, Isaku" <isaku.yamahata@intel.com>,
-        "nik.borisov@suse.com" <nik.borisov@suse.com>,
-        "hpa@zytor.com" <hpa@zytor.com>, "Shahar, Sagi" <sagis@google.com>,
-        "imammedo@redhat.com" <imammedo@redhat.com>,
-        "bp@alien8.de" <bp@alien8.de>, "Gao, Chao" <chao.gao@intel.com>,
-        "Brown, Len" <len.brown@intel.com>,
-        "sathyanarayanan.kuppuswamy@linux.intel.com" 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        "Huang, Ying" <ying.huang@intel.com>,
-        "Williams, Dan J" <dan.j.williams@intel.com>,
-        "x86@kernel.org" <x86@kernel.org>
-Subject: Re: [PATCH v12 20/22] x86/virt/tdx: Allow SEAMCALL to handle #UD and
- #GP
-Message-ID: <20230630120650.GB2534364@hirez.programming.kicks-ass.net>
-References: <cover.1687784645.git.kai.huang@intel.com>
- <c124550719716f1f7759c2bdea70f4722d8e0167.1687784645.git.kai.huang@intel.com>
- <20230628152900.GI2438817@hirez.programming.kicks-ass.net>
- <20230628203823.GR38236@hirez.programming.kicks-ass.net>
- <42e13ccf7f27a68c0dd64640eed378c38ef40967.camel@intel.com>
- <20230630100659.GF2533791@hirez.programming.kicks-ass.net>
- <20230630102141.GA2534364@hirez.programming.kicks-ass.net>
+        Fri, 30 Jun 2023 08:09:39 -0400
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2041.outbound.protection.outlook.com [40.107.236.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2178249E9;
+        Fri, 30 Jun 2023 05:08:34 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=UviX6xJS6L34PUPrW9yhmEV6gvNf0yEyewjUhmHDy8eTAXI/hFC4vAuQg8K1+MGAmzxZ/vcHGoTF+LCB/IJLxbfKaMW6bJ7k/CGOGBWOcH5y1Zza3+gMD6trwsqddC9cnES0p1r0Kpu922jOQeJrZ0M23iMKY/QM1r2rOuCWdLlvqUf0gZTkYPn7meHHFZ51AizKhQB29gCv0gO2dIYuhcP/9yaTmpt9SNw9ci5pLcI8wN5IkO0mmYO/uc8gwjnLm5UwKaHv5ApKzAgNO63E51j1klsU6gMXLwdaxQZOlt54U+kGiVvWpLwAvMwceIMP6XTuaM4VoJuWZ99b6f7D5w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=LFjBh44Fatv71WfoJc2LsAnfGfJKygyb77kgmlgPEPY=;
+ b=NFH9NBBSfT1kYFY8Ev24NUxw/NDBx16SNrlft0rPaQk/CP3MXP2dxzpoUHYBSlS3tx9+aeb560Rhu5yrTqK4iufyvwJxfk620DUlPNHGNHkE3073SQeyjTRR+pUMKO8C1Uk9HCTQfaGKqLYtdrUWD7o0K9A0taKBAtrV5w2C15K7q6Cj137gMucJ1KDLR2WsYaNUtPHIpx30l32AoO1bnPsP9WJRVoMApKxIQnYlJRyLvlYWX8KLGz+Q5dXF86tdSDCfWIxZNNyNGOtutyBa3yFFtWrCmn56pIMqevs9rlxF9ejpAarOEaXtQmPnFVjIgqu9jrpTKEMBp4UTUVOfXA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.118.233) smtp.rcpttodomain=linuxfoundation.org
+ smtp.mailfrom=nvidia.com; dmarc=pass (p=reject sp=reject pct=100) action=none
+ header.from=nvidia.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=LFjBh44Fatv71WfoJc2LsAnfGfJKygyb77kgmlgPEPY=;
+ b=gWed+vYtfPDpNWEeBLRvqGU6PF00UnkSzKT9435UmSYJRkFD4qOk/mQzj5clDM0WibieqAUsabLJuhxcDwsWn5g1TFn0Q4Gwi7AGuZ+DU+3Eb7Z9KHRpYnr7f2dGH/zYK1bzgjN3nVCNwj2ATV6aigilNxYA8I4mPc5//JG9eEXhXjwx6siukWkMiN8PHO1Yh/EH8oaxKtPyw8B2takulCZR14F2tJYVJ2Az5USCQreJgoqgp1GVNquqRqsuSHggX8Nrv6zsrCKtPD49EGllqnKKZSBgd75lNJuHVKBkCiFKTMNXD3d/T6l/tCmHP3vwWH/Pbyezo0f1QH49l+Cnwg==
+Received: from BN8PR03CA0028.namprd03.prod.outlook.com (2603:10b6:408:94::41)
+ by BY5PR12MB4051.namprd12.prod.outlook.com (2603:10b6:a03:20c::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6544.19; Fri, 30 Jun
+ 2023 12:08:24 +0000
+Received: from BN8NAM11FT104.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:94:cafe::37) by BN8PR03CA0028.outlook.office365.com
+ (2603:10b6:408:94::41) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6544.22 via Frontend
+ Transport; Fri, 30 Jun 2023 12:08:23 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.118.233)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.118.233 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.118.233; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.118.233) by
+ BN8NAM11FT104.mail.protection.outlook.com (10.13.177.160) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6500.49 via Frontend Transport; Fri, 30 Jun 2023 12:08:23 +0000
+Received: from drhqmail203.nvidia.com (10.126.190.182) by mail.nvidia.com
+ (10.127.129.6) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Fri, 30 Jun 2023
+ 05:08:20 -0700
+Received: from drhqmail202.nvidia.com (10.126.190.181) by
+ drhqmail203.nvidia.com (10.126.190.182) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.37; Fri, 30 Jun 2023 05:08:19 -0700
+Received: from jonathanh-vm-01.nvidia.com (10.127.8.9) by mail.nvidia.com
+ (10.126.190.181) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37 via Frontend
+ Transport; Fri, 30 Jun 2023 05:08:19 -0700
+From:   Jon Hunter <jonathanh@nvidia.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        <patches@lists.linux.dev>, <linux-kernel@vger.kernel.org>,
+        <torvalds@linux-foundation.org>, <akpm@linux-foundation.org>,
+        <linux@roeck-us.net>, <shuah@kernel.org>, <patches@kernelci.org>,
+        <lkft-triage@lists.linaro.org>, <pavel@denx.de>,
+        <jonathanh@nvidia.com>, <f.fainelli@gmail.com>,
+        <sudipm.mukherjee@gmail.com>, <srw@sladewatkins.net>,
+        <rwarsow@gmx.de>, <conor@kernel.org>,
+        <linux-tegra@vger.kernel.org>, <stable@vger.kernel.org>
+Subject: Re: [PATCH 6.1 00/33] 6.1.37-rc3 review
+In-Reply-To: <20230630072124.944461414@linuxfoundation.org>
+References: <20230630072124.944461414@linuxfoundation.org>
+X-NVConfidentiality: public
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230630102141.GA2534364@hirez.programming.kicks-ass.net>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Message-ID: <f445ed10-2113-4eb4-ad7d-1a59b87485bb@drhqmail202.nvidia.com>
+Date:   Fri, 30 Jun 2023 05:08:19 -0700
+X-NV-OnPremToCloud: ExternallySecured
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN8NAM11FT104:EE_|BY5PR12MB4051:EE_
+X-MS-Office365-Filtering-Correlation-Id: f22ea541-96dd-4c59-113b-08db7962b3f5
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: HZOIYftclc2QjQ8+pBV4O/prCEbvK7l8ObV9yO3KaSEHO4Aup9GtyEVM4I4bAfVeoWYosCDEZ5uLgyQOEuaSnyIyHuUBb/MNPks5pjQ69TUyx7lCigG5UbvQvwK42621OrbgFNpwHR+rZtBD4BouVL1RFfkGsJenlj8RoDj11BMviiiYVaYa70iktZkRX5X1FcLZWr18T1PruNhKJQk8b6Kn502wR8jmFD2v483jP5/gZkjekxUrallvoTEi+9Wjos/B01sPkkyriuLO9mBj98gO8bPVHhVR3KUBXsM7wY19iie9q5koO7AgchWKqtfJH4Iav3rMZhlQZWUY5FOiDLgwPCzMrdC22G3oXuOyOuwOivCUXYRVkMd108tE4/Q0ItvFE0y8Y01sFN+L+OKsE7xUN6Ad3WJl46UsQJo+OBfRVbkdR/ISXh0YBy6AP39P+/nAVx/WXZcPb6oed0k0jPRKdRWzowt4gE10Dyjm77x9pdCmapcvvT6EL/z0PcIfgMmqMb/f6ohtDa/LN8MEQMRV57JTsc8XRIAhS7hnipJrwHotSPvGK520Xr3GF/YbnLibRO2/IHMKcMdiqR8LdHea5BMDhtBO0lnIxR4TrK+WTUTPI/HmwE9HUibs83K7DOzsCTDXa4G4JeUWlyg7X3SQ6XBwGswUg8ocuUIiGt+V6NJiCO4ScIp2KvtO7fpSIZj42v4By4GgiFDzt64I7NnCX5dNiu4Y4bVtOBcLoPbkITRsCN0SBgIL/zOdB17A
+X-Forefront-Antispam-Report: CIP:216.228.118.233;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc7edge2.nvidia.com;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(136003)(346002)(376002)(396003)(451199021)(46966006)(36840700001)(336012)(426003)(47076005)(2906002)(7636003)(356005)(82740400003)(36860700001)(40480700001)(8936002)(8676002)(82310400005)(5660300002)(86362001)(31686004)(54906003)(966005)(41300700001)(6916009)(4326008)(70206006)(70586007)(316002)(478600001)(186003)(31696002)(7416002)(26005);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Jun 2023 12:08:23.4120
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: f22ea541-96dd-4c59-113b-08db7962b3f5
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.118.233];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT104.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB4051
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 30, 2023 at 12:21:41PM +0200, Peter Zijlstra wrote:
-> On Fri, Jun 30, 2023 at 12:07:00PM +0200, Peter Zijlstra wrote:
-> > On Thu, Jun 29, 2023 at 10:33:38AM +0000, Huang, Kai wrote:
+On Fri, 30 Jun 2023 09:32:49 +0200, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 6.1.37 release.
+> There are 33 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> > > Looking at the later versions of TDX spec (with TD live migration, etc), it
-> > > seems they are already using R12-R13 as SEAMCALL output:
-> > > 
-> > > https://cdrdv2.intel.com/v1/dl/getContent/733579
-> > 
-> > Urgh.. I think I read an older versio because I got bleeding eyes from
-> > all this colour coded crap.
-> > 
-> > All this red is unreadable :-( Have they been told about the glories of
-> > TeX and diff ?
-> > 
-> > > E.g., 6.3.15. NEW: TDH.IMPORT.MEM Leaf
-> > > 
-> > > It uses R12 and R13 as input.
-> > 
-> > 12 and 14. They skipped 13 for some mysterious raisin.
+> Responses should be made by Sun, 02 Jul 2023 07:21:12 +0000.
+> Anything received after that time might be too late.
 > 
-> Things like TDH.SERVTD.BIND do use R13.
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.1.37-rc3.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.1.y
+> and the diffstat can be found below.
 > 
-> > But also, 10,11 are frequently used as input with this new stuff, which
-> > already suggests the setup from your patches is not tenable.
+> thanks,
 > 
-> 
-> TDG.SERVTD.RD *why* can't they pass that TD_UUID as a pointer? Using *4*
-> registers like that is quite insane.
-> 
-> TDG.VP.ENTER :-(((( that has b,15,si,di as additional output.
-> 
-> That means there's not a single register left unused. Can we still get
-> this changed, please?!?
+> greg k-h
 
-Can't :/, VP.ENTER mirrors VP.VMCALL, so we need to deal with both.
+All tests passing for Tegra ...
 
-So I think the below deals with everything and unifies __tdx_hypercall()
-and __tdx_module_call(), since both sides needs to deal with exactly the
-same trainwreck.
+Test results for stable-v6.1:
+    11 builds:	11 pass, 0 fail
+    28 boots:	28 pass, 0 fail
+    130 tests:	130 pass, 0 fail
 
+Linux version:	6.1.37-rc3-gbb9014bd0a31
+Boards tested:	tegra124-jetson-tk1, tegra186-p2771-0000,
+                tegra194-p2972-0000, tegra194-p3509-0000+p3668-0000,
+                tegra20-ventana, tegra210-p2371-2180,
+                tegra210-p3450-0000, tegra30-cardhu-a04
 
-/*
- * Used for input/output registers values of the TDCALL and SEAMCALL
- * instructions when requesting services from the TDX module.
- *
- * This is a software only structure and not part of the TDX module/VMM ABI.
- */
-struct tdx_module_args {
-	/* callee-clobbered */
-	u64 rdx;
-	u64 rcx;
-	u64 r8;
-	u64 r9;
-	/* extra callee-clobbered */
-	u64 r10;
-	u64 r11;
-	/* callee-saved + rdi/rsi */
-	u64 rdi;
-	u64 rsi;
-	u64 rbx;
-	u64 r12;
-	u64 r13;
-	u64 r14;
-	u64 r15;
-};
+Tested-by: Jon Hunter <jonathanh@nvidia.com>
 
-
-
-/*
- * TDX_MODULE_CALL - common helper macro for both
- *                   TDCALL and SEAMCALL instructions.
- *
- * TDCALL   - used by TDX guests to make requests to the
- *            TDX module and hypercalls to the VMM.
- *
- * SEAMCALL - used by TDX hosts to make requests to the
- *            TDX module.
- *
- *-------------------------------------------------------------------------
- * TDCALL/SEAMCALL ABI:
- *-------------------------------------------------------------------------
- * Input Registers:
- *
- * RAX                 - Leaf number.
- * RCX,RDX,R8-R11      - Leaf specific input registers.
- * RDI,RSI,RBX,R11-R15 - VP.VMCALL VP.ENTER
- *
- * Output Registers:
- *
- * RAX                 - instruction error code.
- * RCX,RDX,R8-R11      - Leaf specific output registers.
- * RDI,RSI,RBX,R12-R15 - VP.VMCALL VP.ENTER
- *
- *-------------------------------------------------------------------------
- *
- * So while the common core (RAX,RCX,RDX,R8-R11) fits nicely in the
- * callee-clobbered registers and even leaves RDI,RSI free to act as a base
- * pointer some rare leafs (VP.VMCALL, VP.ENTER) make a giant mess of things.
- *
- * For simplicity, assume that anything that needs the callee-saved regs also
- * tramples on RDI,RSI. This isn't strictly true, see for example EXPORT.MEM.
- */
-.macro TDX_MODULE_CALL host:req ret:req saved:0
-	FRAME_BEGIN
-
-	movq	%rdi, %rax
-
-	movq	TDX_MODULE_rcx(%rsi), %rcx
-	movq	TDX_MODULE_rdx(%rsi), %rdx
-	movq	TDX_MODULE_r8(%rsi),  %r8
-	movq	TDX_MODULE_r9(%rsi),  %r9
-	movq	TDX_MODULE_r10(%rsi), %r10
-	movq	TDX_MODULE_r11(%rsi), %r11
-
-.if \saved
-	pushq	rbx
-	pushq	r12
-	pushq	r13
-	pushq	r14
-	pushq	r15
-
-	movq	TDX_MODULE_rbx(%rsi), %rbx
-	movq	TDX_MODULE_r12(%rsi), %r12
-	movq	TDX_MODULE_r13(%rsi), %r13
-	movq	TDX_MODULE_r14(%rsi), %r14
-	movq	TDX_MODULE_r15(%rsi), %r15
-
-	/* VP.VMCALL and VP.ENTER */
-.if \ret
-	pushq	%rsi
-.endif
-	movq	TDX_MODULE_rdi(%rsi), %rdi
-	movq	TDX_MODULE_rsi(%rsi), %rsi
-.endif
-
-.Lcall:
-.if \host
-	seamcall
-	/*
-	 * SEAMCALL instruction is essentially a VMExit from VMX root
-	 * mode to SEAM VMX root mode.  VMfailInvalid (CF=1) indicates
-	 * that the targeted SEAM firmware is not loaded or disabled,
-	 * or P-SEAMLDR is busy with another SEAMCALL. RAX is not
-	 * changed in this case.
-	 */
-	jc	.Lseamfail
-
-.if \saved && \ret
-	/*
-	 * VP.ENTER clears RSI on output, use it to restore state.
-	 */
-	popq	%rsi
-	xor	%edi,%edi
-	movq	%rdi, TDX_MODULE_rdi(%rsi)
-	movq	%rdi, TDX_MODULE_rsi(%rsi)
-.endif
-.else
-	tdcall
-
-	/*
-	 * RAX!=0 indicates a failure, assume no return values.
-	 */
-	testq	%rax, %rax
-	jne	.Lerror
-
-.if \saved && \ret
-	/*
-	 * Since RAX==0, it can be used as a scratch register to restore state.
-	 *
-	 * [ assumes \saved implies \ret ]
-	 */
-	popq	%rax
-	movq	%rdi, TDX_MODULE_rdi(%rax)
-	movq	%rsi, TDX_MODULE_rsi(%rax)
-	movq	%rax, %rsi
-	xor	%eax, %eax;
-.endif
-.endif // \host
-
-.if \ret
-	/* RSI is restored */
-	movq	%rcx, TDX_MODULE_rcx(%rsi)
-	movq	%rdx, TDX_MODULE_rdx(%rsi)
-	movq	%r8,  TDX_MODULE_r8(%rsi)
-	movq	%r9,  TDX_MODULE_r9(%rsi)
-	movq	%r10, TDX_MODULE_r10(%rsi)
-	movq	%r11, TDX_MODULE_r11(%rsi)
-.if \saved
-	movq	%rbx, TDX_MODULE_rbx(%rsi)
-	movq	%r12, TDX_MODULE_r12(%rsi)
-	movq	%r13, TDX_MODULE_r13(%rsi)
-	movq	%r14, TDX_MODULE_r14(%rsi)
-	movq	%r15, TDX_MODULE_r15(%rsi)
-.endif
-.endif // \ret
-
-.Lout:
-.if \saved
-	popq	%r15
-	popq	%r14
-	popq	%r13
-	popq	%r12
-	popq	%rbx
-.endif
-	FRAME_END
-	RET
-
-	/*
-	 * Error and exception handling at .Lcall. Ignore \ret on failure.
-	 */
-.Lerror:
-.if \saved && \ret
-	popq	%rsi
-.endif
-	jmp	.Lout
-
-.if \host
-.Lseamfail:
-	/*
-	 * Set RAX to TDX_SEAMCALL_VMFAILINVALID for VMfailInvalid.
-	 * This value will never be used as actual SEAMCALL error code as
-	 * it is from the Reserved status code class.
-	 */
-	movq	$TDX_SEAMCALL_VMFAILINVALID, %rax
-	jmp	.Lerror
-
-.Lfault:
-	/*
-	 * SEAMCALL caused #GP or #UD. Per _ASM_EXTABLE_FAULT() RAX
-	 * contains the trap number, convert to a TDX error code by
-	 * setting the high word to TDX_SW_ERROR.
-	 */
-	mov	$TDX_SW_ERROR, %rdi
-	or	%rdi, %rax
-	jmp	.Lerror
-
-	_ASM_EXTABLE_FAULT(.Lcall, .Lfault)
-.endif
-.endm
+Jon
