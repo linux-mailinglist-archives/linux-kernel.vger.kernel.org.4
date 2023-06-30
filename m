@@ -2,124 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4396743F0A
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 17:39:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DEEBB743F0B
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 17:39:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232080AbjF3PjR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 11:39:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52124 "EHLO
+        id S232770AbjF3PjV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Jun 2023 11:39:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232503AbjF3PjN (ORCPT
+        with ESMTP id S232348AbjF3PjP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 11:39:13 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0C84B10F8;
+        Fri, 30 Jun 2023 11:39:15 -0400
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E716D1705
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 08:39:13 -0700 (PDT)
+Received: by mail-wm1-x331.google.com with SMTP id 5b1f17b1804b1-3fbac8b01b3so17698495e9.1
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 08:39:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1688139552; x=1690731552;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=7yi29T2vIRc/Jr/dhBuRnalltZFUrcB3TL1AHhUs3Ac=;
+        b=porJS4cNiq0PjO2bJCZpC9PtrP/jBSNRNCHCMms0COrdpb24HZ9mQOG0UvxYsi7giN
+         CHo1u9lWrjX1U1G1TTptJiIwBETa2urzNXGVDdgm4sNJkqwIedPzNcAaxVPGx7B9G2ii
+         IKmHmDLuOGIdlaube7+7onpPwRNFsLiAKFO6TbjzNcnwZmt8QWVpkJnhl1I2PsVLqNXU
+         lHbfBtL43wR3SYGXcqOpNURLa+bh73QiaNkC8ELOQGhK0pDAUBOgrLLROMVdcWR5h1Lc
+         T4jnf5ILyLXKUgAYpwEhN4aOww6pIEuYRmC9eV/KKsf9HrRBQdJtd3Ilw4/8Ea9Zs0Xt
+         QEBA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688139552; x=1690731552;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=7yi29T2vIRc/Jr/dhBuRnalltZFUrcB3TL1AHhUs3Ac=;
+        b=YXSHXqCyf8weMeOE2X02CDI7Qxool2nnd26UVnqMeLNLs7+tAdIrlzvjRXE+v3GbTA
+         kf51hX5LORd3B+qZLjgFwORPIOEzkR9kAAUSkyph+R9ARazETmZoJ5A2AcRaiySI20US
+         X3/R9Z045li+bzsGw5j+oK7DXrPr5EgmykfvR4Wr+9U5HM9OymXDgcFRtbG3JYOzZJm/
+         6aoY39Ka6+9gG9wjMI9xkR/mzVd66qS9+WFkr/2ZZxBWICdl/zsHd7n8k+fd/By42Z3c
+         0fT+NobXWIJvoe4e+Xi6HmuQmI5YaQrBTWkT4P+hjYZev7a7fCsTUxEZCxPZk6opuhJl
+         LD6g==
+X-Gm-Message-State: AC+VfDz//vtXnqUeJWbE1UkNXsBLwbXydi6+7bKLJhiJFKCZQX6DQtfq
+        E/djcYGZIk/x+E3tfMyMOId6eg==
+X-Google-Smtp-Source: ACHHUZ6Q1gem7hiGijIceHRXD1Cr6EYxU0juZvCFx3zCNdKI/eDhA53E3sR0qwGk9NjDMx3c8TEhjw==
+X-Received: by 2002:a7b:c40d:0:b0:3f7:c92:57a0 with SMTP id k13-20020a7bc40d000000b003f70c9257a0mr3152415wmi.14.1688139552383;
         Fri, 30 Jun 2023 08:39:12 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4201CD75;
-        Fri, 30 Jun 2023 08:39:55 -0700 (PDT)
-Received: from e127643.broadband (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 11A2C3F73F;
-        Fri, 30 Jun 2023 08:39:09 -0700 (PDT)
-From:   James Clark <james.clark@arm.com>
-To:     linux-perf-users@vger.kernel.org, irogers@google.com
-Cc:     James Clark <james.clark@arm.com>,
+Received: from aspen.lan (aztw-34-b2-v4wan-166919-cust780.vm26.cable.virginm.net. [82.37.195.13])
+        by smtp.gmail.com with ESMTPSA id x2-20020a5d54c2000000b003142439c7bcsm1546354wrv.80.2023.06.30.08.39.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 30 Jun 2023 08:39:12 -0700 (PDT)
+Date:   Fri, 30 Jun 2023 16:39:10 +0100
+From:   Daniel Thompson <daniel.thompson@linaro.org>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Arnd Bergmann <arnd@kernel.org>,
+        Jason Wessel <jason.wessel@windriver.com>,
+        kgdb-bugreport@lists.sourceforge.net,
+        Doug Anderson <dianders@chromium.org>,
         Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Kees Cook <keescook@chromium.org>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
         linux-kernel@vger.kernel.org
-Subject: [PATCH] perf symbol: Fix uninitialized return value in symbols__find_by_name()
-Date:   Fri, 30 Jun 2023 16:38:39 +0100
-Message-Id: <20230630153840.858668-1-james.clark@arm.com>
-X-Mailer: git-send-email 2.34.1
+Subject: Re: [PATCH] kdb: include header in signal handling code
+Message-ID: <20230630153910.GA2901579@aspen.lan>
+References: <20230517125423.930967-1-arnd@kernel.org>
+ <20230630152439.GA2900969@aspen.lan>
+ <51b8b3c2-f4ac-454c-acde-e1d136139109@app.fastmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <51b8b3c2-f4ac-454c-acde-e1d136139109@app.fastmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-found_idx and s aren't initialized, so if no symbol is found then the
-assert at the end will index off the end of the array causing a
-segfault. The function also doesn't return NULL when the symbol isn't
-found even if the assert passes. Fix it by initializing the values and
-only setting them when something is found.
+On Fri, Jun 30, 2023 at 05:31:01PM +0200, Arnd Bergmann wrote:
+> On Fri, Jun 30, 2023, at 17:24, Daniel Thompson wrote:
+> > On Wed, May 17, 2023 at 02:54:09PM +0200, Arnd Bergmann wrote:
+> >> diff --git a/kernel/signal.c b/kernel/signal.c
+> >> index 8f6330f0e9ca..d38df14f71ac 100644
+> >> --- a/kernel/signal.c
+> >> +++ b/kernel/signal.c
+> >> @@ -4780,6 +4780,8 @@ void __init signals_init(void)
+> >>
+> >>  #ifdef CONFIG_KGDB_KDB
+> >>  #include <linux/kdb.h>
+> >> +#include "debug/kdb/kdb_private.h"
+> >> +
+> >
+> > Isn't is better to move the prototype for kdb_send_sig() into
+> > linux/kdb.h instead?
+> >
+> > That's what other kdb helpers spread across the kernel do
+> > (kdb_walk_kallsyms() for example).
+>
+> Right, that is probably better here. Not sure if it's worth
+> reworking the branch if you already merged it, the difference
+> seems rather minor.
 
-Fixes the following test failure:
+I figure it will take me as long to rework the branch as it will to
+write the covering letter on the pull-request to explain why kgdb/kdb
+is messing around in kernel/signal.c ;-) .
 
-  $ perf test 1
-  1: vmlinux symtab matches kallsyms     : FAILED!
 
-Fixes: 259dce914e93 ("perf symbol: Remove symbol_name_rb_node")
-Signed-off-by: James Clark <james.clark@arm.com>
----
- tools/perf/util/symbol.c | 16 +++++++++-------
- 1 file changed, 9 insertions(+), 7 deletions(-)
-
-diff --git a/tools/perf/util/symbol.c b/tools/perf/util/symbol.c
-index bc79291b9f3b..f849f9ef68e6 100644
---- a/tools/perf/util/symbol.c
-+++ b/tools/perf/util/symbol.c
-@@ -495,7 +495,10 @@ static struct symbol *symbols__find_by_name(struct symbol *symbols[],
- 					    size_t *found_idx)
- {
- 	size_t i, lower = 0, upper = symbols_len;
--	struct symbol *s;
-+	struct symbol *s = NULL;
-+
-+	if (found_idx)
-+		*found_idx = SIZE_MAX;
- 
- 	if (!symbols_len)
- 		return NULL;
-@@ -504,8 +507,7 @@ static struct symbol *symbols__find_by_name(struct symbol *symbols[],
- 		int cmp;
- 
- 		i = (lower + upper) / 2;
--		s = symbols[i];
--		cmp = symbol__match_symbol_name(s->name, name, includes);
-+		cmp = symbol__match_symbol_name(symbols[i]->name, name, includes);
- 
- 		if (cmp > 0)
- 			upper = i;
-@@ -514,10 +516,11 @@ static struct symbol *symbols__find_by_name(struct symbol *symbols[],
- 		else {
- 			if (found_idx)
- 				*found_idx = i;
-+			s = symbols[i];
- 			break;
- 		}
- 	}
--	if (includes != SYMBOL_TAG_INCLUDE__DEFAULT_ONLY) {
-+	if (s && includes != SYMBOL_TAG_INCLUDE__DEFAULT_ONLY) {
- 		/* return first symbol that has same name (if any) */
- 		for (; i > 0; i--) {
- 			struct symbol *tmp = symbols[i - 1];
-@@ -525,13 +528,12 @@ static struct symbol *symbols__find_by_name(struct symbol *symbols[],
- 			if (!arch__compare_symbol_names(tmp->name, s->name)) {
- 				if (found_idx)
- 					*found_idx = i - 1;
-+				s = tmp;
- 			} else
- 				break;
--
--			s = tmp;
- 		}
- 	}
--	assert(!found_idx || s == symbols[*found_idx]);
-+	assert(!found_idx || !s || s == symbols[*found_idx]);
- 	return s;
- }
- 
--- 
-2.34.1
-
+Daniel.
