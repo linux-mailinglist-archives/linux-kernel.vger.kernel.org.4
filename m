@@ -2,44 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3E0074347A
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 07:41:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C18E74347B
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 07:41:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232234AbjF3FlY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 01:41:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45218 "EHLO
+        id S231593AbjF3Fl2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Jun 2023 01:41:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231784AbjF3FlP (ORCPT
+        with ESMTP id S232155AbjF3FlQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 01:41:15 -0400
-Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam02on2058.outbound.protection.outlook.com [40.107.95.58])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E66A53AA1;
-        Thu, 29 Jun 2023 22:40:40 -0700 (PDT)
+        Fri, 30 Jun 2023 01:41:16 -0400
+Received: from NAM02-BN1-obe.outbound.protection.outlook.com (mail-bn1nam02on2061b.outbound.protection.outlook.com [IPv6:2a01:111:f400:7eb2::61b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF1753AAC;
+        Thu, 29 Jun 2023 22:40:41 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=CG5KtOmbQNZoaW/kBtEIukXLofDxiXXb4atF2qPykN95BpuFLVyYqF5R+HxMDU0bFJDuvRMOkNqI92djxWTUgLbXHp3cSz0Silc8BhEL077AFKMhej2ki5aIQWSeZBpIoKEh66t/bn9Jau1YpAMGcSWaq7l8cfQfBEmbvCI3a57vqujE9/7YB/G4V4weuWqjbRmVA1QClUzBzE45rbngVvSO3b14cUWSu4/7mQDhSvBVnXDeWdDJrv6MAdluiA49SsBDwnWIWlY/pGZBp9GAQ5TxOLz786cyMk9hUOcmOLNOqBEAba/DtcuXmB0Q0jMo5Rg2TP1xvcnpe7w0jhel5Q==
+ b=aX0nypdn0UXyLuFfpc1Q2u0acBIpdJVlr4CTq3OjiPXYOo+l02QRJM4pOK/obYGTsvR9oV40fT6/xyBml9/lO4W9IawXCcqCcEpNpF3fYy6C3LFLFtsk7+G+XEGL153o/bt95wkTaPa5VQ1Pj+Uq1yt9bd9+KCPUAr4a8194Lzd0b9EYeEOdpW5gCqnNMbtwVaI9+dzYEaYo6BlJFj0WxRvFKBgIjWIvucewimfzTiVKnSBRQjKBdbARSj8+oyPdgB0vNOf0VfMK/r2FK/Lu1AQE2hBMf0LP+dFZw2p4Z9xUo4n4MjdXvtqD/R+PECz9+otUgaBvoakOI5GADAxplg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=p+pizYYg1ey/zm4pL87pVpZ2HKiq91cy4HDCwtuIHYU=;
- b=nz69juZXNnB793WZDmGR/nWSfaox3OAyOhxSwskajFEoKq/oftzdUKppdiMuQu5tMn1qRvAOMdrRLLlbG6YQ/iHjfD0RqSMWiXpbhTpcFXrvO3HcDlal1J2VRk/Y37mZfU47WWHc52ru7FdREfl99lkvu+m/vJ35LDXajJyl6RUxhxMZO/UKnUzzkzqaFTaFSUX3t4SWcfYS60eotQaEuCishbkhspZ3ffVFTAfBKxuRWOBR8SspHRoE20jZcF0CFW3AteYJQHt4FfktOSslfeV6ZdbhmCdrfIdZUlutjnRtRK7tkd2PSR02rhke2vfS3wR/5t36abCfJEqe/W1fGQ==
+ bh=b/nzAasz3m5gqnTR10emgKTOqVc4xNwxix9ew2EjSoQ=;
+ b=hs8jNJZeugbixWduEcEyBBI7Pm36Xh69xjRdKkGdDp96gMR7TuXE9SumKs3fnNT+bRyTXd/bNR65l2uVc4G0O5Nv/nA7UYeVJiAGalUskinPupMQn/2+IT4/r1xroB4qSJNfvSQwzycD6ffH36DJcsFFrk8hjwF9wTNTGKpr1yUOw6cJ6pWb7EGsgJRollXsYrgCC6OzLWwgZddpdmBMHrUneZcrJTNQpRGrtOn/HxrSUsLjv2Gq1tcT1cjnMe9u+4KErqXH7R2DZYqsGbyJnEUIotyWZUCpf46rdDb1WDgSkQ2S8JwM89/nIiX1xQip8OUYsZ11KgXV6+ih/POX7Q==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  165.204.84.17) smtp.rcpttodomain=davemloft.net smtp.mailfrom=amd.com;
  dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
  header.from=amd.com; dkim=none (message not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=p+pizYYg1ey/zm4pL87pVpZ2HKiq91cy4HDCwtuIHYU=;
- b=bza3dTzqVFUVXgSbBqKTSsGz7/RBLk7TolZQzgHyPgnoDFCo32cr2/Ru+gL0W4gEDrgxGZrQk6LxBC70GP3GR2iY59Hfhno6+PFvozwgUErqQvoaiLrF9x/dO2fxo4XTwDUiuNWmv6FxG/8wZZARw7wS5+jgX3zwLOeZl+FvXR0=
-Received: from DS7PR03CA0202.namprd03.prod.outlook.com (2603:10b6:5:3b6::27)
- by SA0PR12MB4447.namprd12.prod.outlook.com (2603:10b6:806:9b::23) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6544.19; Fri, 30 Jun
- 2023 05:39:10 +0000
-Received: from DM6NAM11FT084.eop-nam11.prod.protection.outlook.com
- (2603:10b6:5:3b6:cafe::41) by DS7PR03CA0202.outlook.office365.com
- (2603:10b6:5:3b6::27) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6544.22 via Frontend
- Transport; Fri, 30 Jun 2023 05:39:10 +0000
+ bh=b/nzAasz3m5gqnTR10emgKTOqVc4xNwxix9ew2EjSoQ=;
+ b=OpqU153MtY7QJV9Q3KsjMpedYZyQ8xEjRK+GJkf6GnxrXfgnBe+D24++A3fbC5M1tuymnYe3lUVM4xeCT6jshC2cwqiGlQ3i20SlJlj0r+hvOvGudqtxLWsCg/YwXBnoD2DCQ0PAUjjoAqAKN8l6Dh5lvUigUC27wbQalpnbyc8=
+Received: from DM6PR05CA0037.namprd05.prod.outlook.com (2603:10b6:5:335::6) by
+ BN9PR12MB5227.namprd12.prod.outlook.com (2603:10b6:408:100::6) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6521.26; Fri, 30 Jun 2023 05:39:13 +0000
+Received: from DM6NAM11FT025.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:5:335:cafe::b4) by DM6PR05CA0037.outlook.office365.com
+ (2603:10b6:5:335::6) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6565.8 via Frontend
+ Transport; Fri, 30 Jun 2023 05:39:13 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
  smtp.mailfrom=amd.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=amd.com;
@@ -47,16 +46,16 @@ Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
  165.204.84.17 as permitted sender) receiver=protection.outlook.com;
  client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
 Received: from SATLEXMB04.amd.com (165.204.84.17) by
- DM6NAM11FT084.mail.protection.outlook.com (10.13.172.132) with Microsoft SMTP
+ DM6NAM11FT025.mail.protection.outlook.com (10.13.172.197) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6500.50 via Frontend Transport; Fri, 30 Jun 2023 05:39:10 +0000
+ 15.20.6500.49 via Frontend Transport; Fri, 30 Jun 2023 05:39:13 +0000
 Received: from SATLEXMB04.amd.com (10.181.40.145) by SATLEXMB04.amd.com
  (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Fri, 30 Jun
- 2023 00:38:49 -0500
+ 2023 00:38:54 -0500
 Received: from xhdsneeli40.xilinx.com (10.180.168.240) by SATLEXMB04.amd.com
  (10.181.40.145) with Microsoft SMTP Server id 15.1.2507.23 via Frontend
- Transport; Fri, 30 Jun 2023 00:38:44 -0500
+ Transport; Fri, 30 Jun 2023 00:38:50 -0500
 From:   Sarath Babu Naidu Gaddam <sarath.babu.naidu.gaddam@amd.com>
 To:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
         <pabeni@redhat.com>, <robh+dt@kernel.org>,
@@ -68,110 +67,124 @@ CC:     <sbhatta@marvell.com>, <linux@armlinux.org.uk>,
         <linux-kernel@vger.kernel.org>, <anirudha.sarangi@amd.com>,
         <harini.katakam@amd.com>, <sarath.babu.naidu.gaddam@amd.com>,
         <git@amd.com>
-Subject: [PATCH net-next V4 0/3] net: axienet: Introduce dmaengine  
-Date:   Fri, 30 Jun 2023 11:08:41 +0530
-Message-ID: <20230630053844.1366171-1-sarath.babu.naidu.gaddam@amd.com>
+Subject: [PATCH net-next V4 1/3] dt-bindings: net: xlnx,axi-ethernet: Introduce DMA support
+Date:   Fri, 30 Jun 2023 11:08:42 +0530
+Message-ID: <20230630053844.1366171-2-sarath.babu.naidu.gaddam@amd.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230630053844.1366171-1-sarath.babu.naidu.gaddam@amd.com>
+References: <20230630053844.1366171-1-sarath.babu.naidu.gaddam@amd.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6NAM11FT084:EE_|SA0PR12MB4447:EE_
-X-MS-Office365-Filtering-Correlation-Id: 4d64c9d5-8170-43eb-b5f6-08db792c5442
+X-MS-TrafficTypeDiagnostic: DM6NAM11FT025:EE_|BN9PR12MB5227:EE_
+X-MS-Office365-Filtering-Correlation-Id: 67bed9fa-1f78-44fa-f8f6-08db792c55ff
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Nbhf5sKvQdXLSjnyna1wtnWfpRfQ5vjstPfFayrJyDV08PQdtWwsQyLzX3cPUbkGacFs+y31UNLCN9XFsPeAmTAQe1E11AnqVGAhSJ6zW9B9RNRQvXTOW2my6urGnpMGcTz4ZzrOr2NoZ4xEp8TQb6edvTxpifyuc9FyEg+IPNzdF3rWIQJ4Y7IvZ0sVZEAU+BphgEk0BFPSbBUhAJUS50ORfwtnRX1EqkLDudYYxf6DVpqBD38n2W+FrFg4J/ETvG96G1QTTHy24DFyYLYkuiyms7GWl+xfj3ysEh2l0m/Nfj+VoeA/ZIlJSfMaeWvoTjTcw9iizUF9EH41g1YKQWRJWzxPZgDYS4UKuDANKsPrJOGma4G5565naycWXJu4MSzyKNf+MAENCQbJhc0E26Q36f/9ER5MCxsApzVVhKDiiPJ4gx/GXWUifcruNXOT0r7srhnY5hO/hxi4TOgoKSYHK6/WWKcE5mWssVjFmRHC7bE7y/Rc1sW1aW3hYDWBZkK4zS2OJYLQZo0JJnIfoa/xwIq3SyrOi0BYcnXZb+j54czC18jytRXbD5nMfuTDAy5aSljQpkK/9GxQJeaDYX+DWn6196OTKokDHq4YbEZwttHTsCCpJIFJAiLtXvsjru1gOlG4a7ssByhCOUsi1hmDAhdNp5ec4sNJpWHmZLRt6RXh4zq12oi3WB0vSOFILQ8vK4nB3dmebp7OBNU/Z7EcX5TYCRUeJV0tM6wIi2QQtaUyRPcamE6ksEXSS5GBBESSlxiaQVlLU1IrhBSfAguSXnvCyMolrB3ouMp1P7c=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(136003)(346002)(396003)(376002)(39860400002)(451199021)(40470700004)(46966006)(36840700001)(966005)(478600001)(40460700003)(6666004)(47076005)(36860700001)(103116003)(186003)(26005)(40480700001)(1076003)(426003)(336012)(2616005)(83380400001)(36756003)(82740400003)(82310400005)(86362001)(81166007)(356005)(4326008)(70586007)(70206006)(2906002)(316002)(7416002)(5660300002)(8936002)(8676002)(41300700001)(110136005)(54906003)(66899021)(36900700001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: hA3WI+vHy7sKsMz8kt/fCmw4Yysll1iJaKwMWxaQIclboqYrir3ZSktNp40qZmXlW0r43DxwNzdE5Lg3A6AaY/iclJRivkIxFnzC/H4du7uz0KK1Dy2Ntkx89rEHUxKLnYQVgadWgaASCtweilHyb1ZRK3nWfEF9l0okFw6J9jyi92knO61eZHW95fKt7dogz43UsQYyom23zXmYVnqmNVSm70zcAXf4JLgBfwPpQVl0xE78U8Kr8BvQlQ/wWpRn38+H2+eTlC+0d48hQt3Z7pbq1SfYYFTHN9m+f5/tj9ZmbQVTevqHe6aSOJDA1VawYuxaLgPf7WZmmiqAQDXTtwO3PxiHuZTGtNH0NCpQ7gPOpmKjshNaU2D2Rd2O14e+3J4qzdGwpCQurnp1koc2eURMQhdPsmPMMW6OLL9sn5S8HRU7lmXo0fxvHzsP3gvqiHqrb9ePaM1mgbvJX62qHgv1ep65nRzSyMP5GRqFBMgH5sebm+VPgTyOi6oPvwXKw8hjQ9FUqhbDDTCqKbIdmoaq14GYkDgCvFXX/cArRGQNLnCh6MhFy0WrEblrgwv7Kn1IOJzz73wyuJVoZRvWe4sBtYJroupBFEzdJddAsXiKz8BJ5CIrjUp7eKXeuw5YbaUeT0cBTkAoz2nqBqEpdEISvj/lJsfQ8K4z5Mdh+NGi8qL/ad5QlNkWYnXhEBfXuIigqBBk9CI5iJNjJmLoCXoJWSvLipw881G07VPRF/dYq7fNnuStAXlnqGT84zzvx+rvznDmLK6Rd5Khj2Czow==
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(396003)(376002)(346002)(136003)(39860400002)(451199021)(36840700001)(46966006)(40470700004)(8676002)(316002)(70206006)(186003)(4326008)(26005)(1076003)(336012)(8936002)(110136005)(54906003)(40460700003)(6666004)(41300700001)(70586007)(82310400005)(5660300002)(7416002)(2906002)(40480700001)(478600001)(2616005)(81166007)(356005)(82740400003)(103116003)(86362001)(83380400001)(36860700001)(36756003)(47076005)(426003)(36900700001);DIR:OUT;SFP:1101;
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Jun 2023 05:39:10.1456
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Jun 2023 05:39:13.0636
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4d64c9d5-8170-43eb-b5f6-08db792c5442
+X-MS-Exchange-CrossTenant-Network-Message-Id: 67bed9fa-1f78-44fa-f8f6-08db792c55ff
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT084.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT025.eop-nam11.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA0PR12MB4447
-X-Spam-Status: No, score=1.5 required=5.0 tests=AC_FROM_MANY_DOTS,BAYES_00,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: *
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN9PR12MB5227
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The axiethernet driver can use the dmaengine framework to communicate
-with the xilinx DMAengine driver(AXIDMA, MCDMA). The inspiration behind
-this dmaengine adoption is to reuse the in-kernel xilinx dma engine
-driver[1] and remove redundant dma programming sequence[2] from the
-ethernet driver. This simplifies the ethernet driver and also makes
-it generic to be hooked to any complaint dma IP i.e AXIDMA, MCDMA
-without any modification.
+From: Radhey Shyam Pandey <radhey.shyam.pandey@xilinx.com>
 
-The dmaengine framework was extended for metadata API support during
-the axidma RFC[3] discussion. However, it still needs further
-enhancements to make it well suited for ethernet usecases.
+The axiethernet will use dmaengine framework to communicate
+with dma controller IP instead of built-in dma programming sequence.
 
-Backward compatibility support:
-To support backward compatibility, we are planning to use below approach,
-1) Use "dmas" property as an optional for now to differentiate
-   dmaengine based ethernet Driver or built-in dma ethernet driver.
-   Will move this property to required property some time later.
-2) after some time, will introduce a new compatible string to support
-   the dmaengine method, This new compatible name will use different
-   APIs for init and data transfer.
+To request dma transmit and receive channels the axiethernet uses
+generic dmas, dma-names properties.
 
-Comments, suggestions, thoughts to implement remaining functional
-features are very welcome!
+Axiethernet may use AXI DMA or MCDMA. DMA has only two channels
+where as MCDMA has 16 Tx, 16 Rx channels. To uniquely identify each
+channel, we are using 'chan' suffix. Depending on the usecase AXI
+ethernet driver can request any combination of multichannel DMA
+channels.
 
-[1]: https://github.com/torvalds/linux/blob/master/drivers/dma/xilinx/xilinx_dma.c
-[2]: https://github.com/torvalds/linux/blob/master/drivers/net/ethernet/xilinx/xilinx_axienet_main.c#L238
-[3]: http://lkml.iu.edu/hypermail/linux/kernel/1804.0/00367.html
+Example:
+dma-names = tx_chan0, rx_chan0, tx_chan1, rx_chan1;
 
+Also to support the backward compatibility, use "dmas" property to
+identify as it should use dmaengine framework or legacy
+driver(built-in dma programming).
+
+At this point it is recommended to use dmaengine framework but it's
+optional. Once the solution is stable will make dmas as
+required properties.
+
+Signed-off-by: Radhey Shyam Pandey <radhey.shyam.pandey@xilinx.com>
+Signed-off-by: Sarath Babu Naidu Gaddam <sarath.babu.naidu.gaddam@amd.com>
+
+---
 Changes in V4:
-1) Updated commit description about tx/rx channels name(1/3).
-2) Removed "dt-bindings" and "dmaengine" strings in subject(1/3).
-3) Extended dmas and dma-names to support MCDMA channel names(1/3).
-4) Rename has_dmas to use_dmaegine(2/3).
-5) Remove the AXIENET_USE_DMA(2/3).
-6) Remove the AXIENET_USE_DMA(3/3).
-7) Add dev_err_probe for dma_request_chan error handling(3/3).
-8) Add kmem_cache_destroy for create in axienet_setup_dma_chan(3/3).
+1) Updated commit description about tx/rx channels name.
+2) Removed "dt-bindings" and "dmaengine" strings in subject.
+3) Extended dmas and dma-names to support MCDMA channel names.
+1) Remove "driver" from commit message.
+2) Use pattern/regex for dma-names property.
 
 Changes in V3:
-1) Moved RFC to PATCH.
-2) Removed ethtool get/set coalesce, will be added later.
-3) Added backward comapatible support.
-4) Split the dmaengine support patch of V2 into two patches(2/3 and 3/3).
-https://lore.kernel.org/all/20220920055703.13246-4-sarath.babu.naidu.gaddam@amd.com/
+1) Reverted reg and interrupts property to  support backward compatibility.
+2) Moved dmas and dma-names properties from Required properties.
 
 Changes in V2:
-1) Add ethtool get/set coalesce and DMA reset using DMAengine framework.
-2) Add performance numbers.
-3) Remove .txt and change the name of file to xlnx,axiethernet.yaml.
-4) Fix DT check warning(Fix DT check warning('device_type' does not match
-   any of the regexes:'pinctrl-[0-9]+' From schema: Documentation/
-   devicetree/bindings/net/xilinx_axienet.yaml).
+- None.
+---
+ .../bindings/net/xlnx,axi-ethernet.yaml          | 16 ++++++++++++++++
+ 1 file changed, 16 insertions(+)
 
-Radhey Shyam Pandey (1):
-  dt-bindings: net: xlnx,axi-ethernet: Introduce DMA support
-
-Sarath Babu Naidu Gaddam (2):
-  net: axienet: Preparatory changes for dmaengine support
-  net: axienet: Introduce dmaengine support
-
- .../bindings/net/xlnx,axi-ethernet.yaml       |  16 +
- drivers/net/ethernet/xilinx/Kconfig           |   1 +
- drivers/net/ethernet/xilinx/xilinx_axienet.h  |   8 +
- .../net/ethernet/xilinx/xilinx_axienet_main.c | 616 ++++++++++++++----
- 4 files changed, 516 insertions(+), 125 deletions(-)
-
+diff --git a/Documentation/devicetree/bindings/net/xlnx,axi-ethernet.yaml b/Documentation/devicetree/bindings/net/xlnx,axi-ethernet.yaml
+index 1d33d80af11c..ea203504b8d4 100644
+--- a/Documentation/devicetree/bindings/net/xlnx,axi-ethernet.yaml
++++ b/Documentation/devicetree/bindings/net/xlnx,axi-ethernet.yaml
+@@ -122,6 +122,20 @@ properties:
+       and "phy-handle" should point to an external PHY if exists.
+     maxItems: 1
+ 
++  dmas:
++    minItems: 2
++    maxItems: 32
++    description: DMA Channel phandle and DMA request line number
++
++  dma-names:
++    items:
++      pattern: "^[tr]x_chan[0-9]|1[0-5]$"
++    description:
++      Should be "tx_chan0", "tx_chan1" ... "tx_chan15" for DMA Tx channel
++      Should be "rx_chan0", "rx_chan1" ... "rx_chan15" for DMA Rx channel
++    minItems: 2
++    maxItems: 32
++
+ required:
+   - compatible
+   - interrupts
+@@ -143,6 +157,8 @@ examples:
+         clocks = <&axi_clk>, <&axi_clk>, <&pl_enet_ref_clk>, <&mgt_clk>;
+         phy-mode = "mii";
+         reg = <0x40c00000 0x40000>,<0x50c00000 0x40000>;
++        dmas = <&xilinx_dma 0>, <&xilinx_dma 1>;
++        dma-names = "tx_chan0", "rx_chan0";
+         xlnx,rxcsum = <0x2>;
+         xlnx,rxmem = <0x800>;
+         xlnx,txcsum = <0x2>;
 -- 
 2.25.1
 
