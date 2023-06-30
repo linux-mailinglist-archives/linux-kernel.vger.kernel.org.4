@@ -2,103 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E98D174344B
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 07:34:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1322E743455
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 07:34:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232141AbjF3FeD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 01:34:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41836 "EHLO
+        id S229742AbjF3FeL convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 30 Jun 2023 01:34:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229508AbjF3Fd7 (ORCPT
+        with ESMTP id S231235AbjF3FeF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 01:33:59 -0400
-Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 918D23582
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 22:33:58 -0700 (PDT)
-Received: by mail-qt1-x82f.google.com with SMTP id d75a77b69052e-401f4408955so118471cf.1
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 22:33:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1688103237; x=1690695237;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=aVktAUTo8uqqiwGeF3etOt9dgoCyOsZaU9oSN6UEZBE=;
-        b=37sn0xlL0STS3tToajGcCaIcWU2UbLFGoVgjNL7zfRHQZ3wAJXov4luYHzHYf6phIB
-         6s43JYgF9MtPsFk9w5T9IZy+NsYsBb/mPAwFaLjPp3XT68Nci0E0GHfcY07GxlxqfXSm
-         GGiWeklNLLxBgu6y6LuoitKvoejsIywVwRrpqjsntNW/Gxv4uK6CXtDh/0NvXuCkNqun
-         iam8LBz++AkvKxNgLEJeC4CFgErOfJ7RS4Fpnjj9BdYCNX/sMZVwJVM+b1saWaMDo5SD
-         3YkigFIE4EHi72mBLW99H8OFjtUP0scmoE9d90L2E9GN7+1xS8BNXhUDbcAwOmWXZiup
-         euDw==
+        Fri, 30 Jun 2023 01:34:05 -0400
+Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com [209.85.219.177])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AE8010F8;
+        Thu, 29 Jun 2023 22:34:04 -0700 (PDT)
+Received: by mail-yb1-f177.google.com with SMTP id 3f1490d57ef6-bfe6ea01ff5so1371845276.3;
+        Thu, 29 Jun 2023 22:34:04 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688103237; x=1690695237;
+        d=1e100.net; s=20221208; t=1688103243; x=1690695243;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=aVktAUTo8uqqiwGeF3etOt9dgoCyOsZaU9oSN6UEZBE=;
-        b=NugIp9ZbH7Q44/vcFayeSbSxMoKx2aCBz8n0Y53XCS8L5UCgKZcq0W5exPNVZv8hY4
-         IjxQFuADTprNm6qrbDzPiGOLLJFc4v9/1UmG+Ft9+kYgjuEsufRkrdmYHlIaP8Dg3wu0
-         tNyDlxWQ4nmsenCtIpC8vw2/u/OjgcqcpN/JCfCVwIDgkcuTkVudJZ9T+ZCNWHf7gXNS
-         F5vvl6gHwB8EHmG7ZIYnycIZ7iqEC6ubkLUBzaIcqRghSm/P43YUtLWOTr1lwfP6VHoa
-         X6G/xiKJS/bEd8bbw5EFHamV4H7l29HpiftvoZWApbSPMyyMkEdprQU8UeUHDTtKutH7
-         6YjQ==
-X-Gm-Message-State: AC+VfDyKOWHdG7KC5G0mDFRvPHMtBfBXsGULcnifcRltAGLWVfdRq9yY
-        /0WC3WdTrA6i7GM6VxyKzIR26zaHcxXA2o9hNfPUiZ+5UN0HTQZHNWw=
-X-Google-Smtp-Source: ACHHUZ42pHAQjS8oNAQHuXraTYAthPXAQg0vmckJ+g/JK/W3yZ0uwon02og73a/o/nMdcIHS66b0v9fIhBVdP16B0J8=
-X-Received: by 2002:ac8:7f4e:0:b0:3f8:1f30:a1f2 with SMTP id
- g14-20020ac87f4e000000b003f81f30a1f2mr801884qtk.26.1688103237494; Thu, 29 Jun
- 2023 22:33:57 -0700 (PDT)
+        bh=rqe4oW6egP6ZYOUhmx0yHzT4spsp8DeajtOy9Dxl0N0=;
+        b=LIl0qLBMoW2LcJe2pPURQ0ju/TOcC/ZDWK6A3oVTnmFWJS7gYfIC1bIOf1gArGxrxM
+         I1boPzYZz19N5jurvtUEsZMRl9AlekP1u5fqDuB95nUo4uhTt3NgshUtNu3KfRvwzo5k
+         rCkn2GPz/k93Of9GfOClAJMS3N5vv2B6eqJ0c3fYbGN42PK38YFAkqAJP8/kkthAga+s
+         U1s3ENOmaKhtVza2UVdZzhHmtC883/wN8Z3t4TZ6kPVzGDnduFiMHU/jII8VFmZ8ixFn
+         P8WkVY85ZdA7eJb99tEhNAjPervEYs0QXGjiLfb3/OEV3+Dv5RZYEzR4W/h2Ythp+374
+         LUTg==
+X-Gm-Message-State: ABy/qLZ+1tELI0GRK3KtASWIqhDTVq1zv15xBVimE0wYU6IodiN/UVGf
+        XMpKUz2j7WLP6GjxWts5bkvmrtp3Sh5+2+FN1ApXPUOEo1c=
+X-Google-Smtp-Source: APBJJlGsOWkMaxD3Bj5EXOi0ZRM8KsFOEr8Lg1uNKczc+6HZPSKDsYy2QxFxSi6Et+JGvnEpCG0zVQlZ9J+DNPB54vc=
+X-Received: by 2002:a25:3107:0:b0:c12:29ac:1d36 with SMTP id
+ x7-20020a253107000000b00c1229ac1d36mr1697430ybx.7.1688103242894; Thu, 29 Jun
+ 2023 22:34:02 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230630032653.26426-1-qiang.zhang1211@gmail.com>
-In-Reply-To: <20230630032653.26426-1-qiang.zhang1211@gmail.com>
-From:   Eric Dumazet <edumazet@google.com>
-Date:   Fri, 30 Jun 2023 07:33:46 +0200
-Message-ID: <CANn89i+Yw_3FEjo_dYSknhmyfoOCD-1S0OSRR_GoyMjQPjcu6w@mail.gmail.com>
-Subject: Re: [PATCH] net: Destroy previously created kthreads after failing to
- set napi threaded mode
-To:     Zqiang <qiang.zhang1211@gmail.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Wei Wang <weiwan@google.com>
+References: <20230628230935.1196180-1-sohil.mehta@intel.com> <08e273fc-49c5-dd09-1c9e-d85a080767f9@infradead.org>
+In-Reply-To: <08e273fc-49c5-dd09-1c9e-d85a080767f9@infradead.org>
+From:   Namhyung Kim <namhyung@kernel.org>
+Date:   Thu, 29 Jun 2023 22:33:51 -0700
+Message-ID: <CAM9d7ch0GtTUjhtbph5rmCDvRBAKjLCN+25mukn_QPv4bDsjGQ@mail.gmail.com>
+Subject: Re: [PATCH] syscalls: Cleanup references to sys_lookup_dcookie()
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     Sohil Mehta <sohil.mehta@intel.com>, Arnd Bergmann <arnd@arndb.de>,
+        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
+        Richard Henderson <richard.henderson@linaro.org>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Michal Simek <monstr@monstr.eu>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        "James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+        "David S . Miller" <davem@davemloft.net>,
+        Andy Lutomirski <luto@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>, Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        Sergei Trofimovich <slyich@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Rohan McLure <rmclure@linux.ibm.com>,
+        Andreas Schwab <schwab@linux-m68k.org>,
+        "Eric W . Biederman" <ebiederm@xmission.com>,
+        Brian Gerst <brgerst@gmail.com>, linux-alpha@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-perf-users@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 30, 2023 at 5:27=E2=80=AFAM Zqiang <qiang.zhang1211@gmail.com> =
-wrote:
+Hello,
+
+On Wed, Jun 28, 2023 at 4:44 PM Randy Dunlap <rdunlap@infradead.org> wrote:
 >
-> When setting 1 to enable napi threaded mode, will traverse dev->napi_list
-> and create kthread for napi->thread, if creation fails, the dev->threaded
-> will be set to false and we will clear NAPI_STATE_THREADED bit for all
-> napi->state in dev->napi_list, even if some napi that has successfully
-> created the kthread before. as a result, for successfully created napi
-> kthread, they will never be used.
 >
-> This commit therefore destroy previously created napi->thread if setting
-> napi threaded mode fails.
 >
+> On 6/28/23 16:09, Sohil Mehta wrote:
+> > commit 'be65de6b03aa ("fs: Remove dcookies support")' removed the
+> > syscall definition for lookup_dcookie.  However, syscall tables still
+> > point to the old sys_lookup_dcookie() definition. Update syscall tables
+> > of all architectures to directly point to sys_ni_syscall() instead.
+> >
+> > Signed-off-by: Sohil Mehta <sohil.mehta@intel.com>
+>
+> Reviewed-by: Randy Dunlap <rdunlap@infradead.org>
 
-I am not sure we need this, because these kthreads are not leaked at
-present time.
+I was about to say that it'd be nice if you split the tools/perf part
+since it can support old kernels.  But if the syscall is only used for
+oprofile then probably perf doesn't need to care about it. :)
 
-pktgen also creates unused kthreads (one per cpu), even if in most
-cases only one of them is used.
+For the perf part,
+Acked-by: Namhyung Kim <namhyung@kernel.org>
 
-Leaving kthreads makes it possible to eventually succeed to enable
-napi threaded mode
-after several tries, for devices with 64 or more queues...
-
-This would target net-next.
-
-If you claim to fix a bug (thus targeting net tree), we would need a Fixes:=
- tag.
-
-Thanks.
+Thanks,
+Namhyung
