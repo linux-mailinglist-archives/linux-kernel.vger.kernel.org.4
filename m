@@ -2,63 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46133743B67
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 14:03:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 715A2743B6A
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 14:04:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232992AbjF3MDd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 08:03:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48732 "EHLO
+        id S232967AbjF3MEX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Jun 2023 08:04:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232957AbjF3MDS (ORCPT
+        with ESMTP id S229742AbjF3MEV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 08:03:18 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C8C73AB1;
-        Fri, 30 Jun 2023 05:03:13 -0700 (PDT)
-From:   Florian Kauer <florian.kauer@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1688126591;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=XZbPTleH8tvt6ILWOyc607090QYMkQzPFfKhUGy2cko=;
-        b=uRmnxtDn3mLSSk1VRWVUabR3L6Cb6skeKPeVT8tsuZlMtQ0m9othNXwcY+wxZk2osYh2zu
-        dtZTwk+Y8lLzDTe3O1qRy72VcVaZVWLwQoMocvOjyGsmQstf22NxkcJu15BIOkEZYulvNp
-        vlbZv6/FdZvx1fi/EXz4XtwwbuBclM6BKA7okoxJTej9DWqlLsm+0j3eS3vIk40Grjx4xD
-        VoHycBNcC9hfbdgImTYcTfxF3HWVQd62uWpZfy4yZc/WJgwDtbFasFjJVGu08bnRzHkfob
-        bcxEpXz4Y8V63upjEwaaJ86rdOWm4oxqlHvmU27bD/vXqS8GU25IPhU92n/inQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1688126591;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=XZbPTleH8tvt6ILWOyc607090QYMkQzPFfKhUGy2cko=;
-        b=7upiJJkMkWVEEcvMAtbhIM5502wHHDPKdKUndgk2PG6bRQmzDUchv9yucRd8kCUPjWBTiC
-        otEXzvc7s7aDk4Cw==
-To:     Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Vedang Patel <vedang.patel@intel.com>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Jithu Joseph <jithu.joseph@intel.com>,
-        Andre Guedes <andre.guedes@intel.com>,
-        Simon Horman <simon.horman@corigine.com>
-Cc:     intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kurt@linutronix.de,
-        florian.kauer@linutronix.de,
-        Vinicius Costa Gomes <vinicius.gomes@intel.com>
-Subject: [PATCH net v3] igc: Prevent garbled TX queue with XDP ZEROCOPY
-Date:   Fri, 30 Jun 2023 14:03:06 +0200
-Message-Id: <20230630120306.8534-1-florian.kauer@linutronix.de>
+        Fri, 30 Jun 2023 08:04:21 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5BC2171E;
+        Fri, 30 Jun 2023 05:04:17 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 08A686173A;
+        Fri, 30 Jun 2023 12:04:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 69047C433C9;
+        Fri, 30 Jun 2023 12:04:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688126656;
+        bh=g9hLiJat+dtXzcd2zhhtjEUxB1SI6RvzzK4VEH1nhEk=;
+        h=From:To:Cc:Subject:Date:From;
+        b=DdCvdQpjcPzzD6bDojCti8fnagXcQHzzXrDxTUGCqSFt0f/t1aN6GClYYPMBch45A
+         0noIXvsZXuuHLmISup9G88yZhpXWLHVXSSqFrLIK2PMboCGZ8QeoDuLHdpZqoLvQOe
+         w7ecouI1oH7frM1NgbzO/712nY13RxowM3MUtlPivxxTTRrfvOdy5OlQkqeDU2DSzU
+         bMTEAFVaQKAviE93HsMG2nmosKPGwEIZE9ZOFXjC5U1QXIyMBtWEm8lgo6Nw7uxvFq
+         5Lvb7gxZJAP+sKZfcElMNlZjxT4Gl39kaLeGXaiMkiVq7RPSGrVeNqLt/+gLOzDLcE
+         wjloORClBpiVA==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan+linaro@kernel.org>)
+        id 1qFCrO-0001if-C8; Fri, 30 Jun 2023 14:04:22 +0200
+From:   Johan Hovold <johan+linaro@kernel.org>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Liam Girdwood <lgirdwood@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org,
+        Johan Hovold <johan+linaro@kernel.org>, stable@vger.kernel.org,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Steev Klimaszewski <steev@kali.org>
+Subject: [PATCH] ASoC: codecs: wcd938x: fix codec initialisation race
+Date:   Fri, 30 Jun 2023 14:03:18 +0200
+Message-Id: <20230630120318.6571-1-johan+linaro@kernel.org>
+X-Mailer: git-send-email 2.39.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,77 +61,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In normal operation, each populated queue item has
-next_to_watch pointing to the last TX desc of the packet,
-while each cleaned item has it set to 0. In particular,
-next_to_use that points to the next (necessarily clean)
-item to use has next_to_watch set to 0.
+Make sure to resume the codec and soundwire device before trying to read
+the codec variant and configure the device during component probe.
 
-When the TX queue is used both by an application using
-AF_XDP with ZEROCOPY as well as a second non-XDP application
-generating high traffic, the queue pointers can get in
-an invalid state where next_to_use points to an item
-where next_to_watch is NOT set to 0.
+This specifically avoids interpreting (a masked and shifted) -EBUSY
+errno as the variant:
 
-However, the implementation assumes at several places
-that this is never the case, so if it does hold,
-bad things happen. In particular, within the loop inside
-of igc_clean_tx_irq(), next_to_clean can overtake next_to_use.
-Finally, this prevents any further transmission via
-this queue and it never gets unblocked or signaled.
-Secondly, if the queue is in this garbled state,
-the inner loop of igc_clean_tx_ring() will never terminate,
-completely hogging a CPU core.
+	wcd938x_codec audio-codec: ASoC: error at soc_component_read_no_lock on audio-codec for register: [0x000034b0] -16
 
-The reason is that igc_xdp_xmit_zc() reads next_to_use
-before acquiring the lock, and writing it back
-(potentially unmodified) later. If it got modified
-before locking, the outdated next_to_use is written
-pointing to an item that was already used elsewhere
-(and thus next_to_watch got written).
+when the soundwire device happens to be suspended, which in turn
+prevents some headphone controls from being registered.
 
-Fixes: 9acf59a752d4 ("igc: Enable TX via AF_XDP zero-copy")
-Signed-off-by: Florian Kauer <florian.kauer@linutronix.de>
-Reviewed-by: Kurt Kanzenbach <kurt@linutronix.de>
-Tested-by: Kurt Kanzenbach <kurt@linutronix.de>
-Acked-by: Vinicius Costa Gomes <vinicius.gomes@intel.com>
+Fixes: 8d78602aa87a ("ASoC: codecs: wcd938x: add basic driver")
+Cc: stable@vger.kernel.org      # 5.14
+Cc: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Reported-by: Steev Klimaszewski <steev@kali.org>
+Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
 ---
+ sound/soc/codecs/wcd938x.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-v2 -> v3:
-Resolve merge conflict
-
-v1 -> v2:
-I added some more context for further clarification,
-but it is also just how I interpret the code.
-Also the typo is fixed and it is reverse christmas again 😉
-
----
- drivers/net/ethernet/intel/igc/igc_main.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/net/ethernet/intel/igc/igc_main.c b/drivers/net/ethernet/intel/igc/igc_main.c
-index 019ce91c45aa..722ffcc319f0 100644
---- a/drivers/net/ethernet/intel/igc/igc_main.c
-+++ b/drivers/net/ethernet/intel/igc/igc_main.c
-@@ -2833,9 +2833,8 @@ static void igc_xdp_xmit_zc(struct igc_ring *ring)
- 	struct netdev_queue *nq = txring_txq(ring);
- 	union igc_adv_tx_desc *tx_desc = NULL;
- 	int cpu = smp_processor_id();
--	u16 ntu = ring->next_to_use;
- 	struct xdp_desc xdp_desc;
--	u16 budget;
-+	u16 budget, ntu;
+diff --git a/sound/soc/codecs/wcd938x.c b/sound/soc/codecs/wcd938x.c
+index e7d6a02cdec0..e3ae4fb2c4db 100644
+--- a/sound/soc/codecs/wcd938x.c
++++ b/sound/soc/codecs/wcd938x.c
+@@ -3085,6 +3085,10 @@ static int wcd938x_soc_codec_probe(struct snd_soc_component *component)
  
- 	if (!netif_carrier_ok(ring->netdev))
- 		return;
-@@ -2845,6 +2844,7 @@ static void igc_xdp_xmit_zc(struct igc_ring *ring)
- 	/* Avoid transmit queue timeout since we share it with the slow path */
- 	txq_trans_cond_update(nq);
+ 	snd_soc_component_init_regmap(component, wcd938x->regmap);
  
-+	ntu = ring->next_to_use;
- 	budget = igc_desc_unused(ring);
++	ret = pm_runtime_resume_and_get(dev);
++	if (ret < 0)
++		return ret;
++
+ 	wcd938x->variant = snd_soc_component_read_field(component,
+ 						 WCD938X_DIGITAL_EFUSE_REG_0,
+ 						 WCD938X_ID_MASK);
+@@ -3098,6 +3102,8 @@ static int wcd938x_soc_codec_probe(struct snd_soc_component *component)
+ 			     (WCD938X_DIGITAL_INTR_LEVEL_0 + i), 0);
+ 	}
  
- 	while (xsk_tx_peek_desc(pool, &xdp_desc) && budget--) {
++	pm_runtime_put(dev);
++
+ 	wcd938x->hphr_pdm_wd_int = regmap_irq_get_virq(wcd938x->irq_chip,
+ 						       WCD938X_IRQ_HPHR_PDM_WD_INT);
+ 	wcd938x->hphl_pdm_wd_int = regmap_irq_get_virq(wcd938x->irq_chip,
 -- 
-2.39.2
+2.39.3
 
