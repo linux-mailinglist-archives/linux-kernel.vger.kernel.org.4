@@ -2,121 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9EF77443C0
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 23:04:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 06AA77443C5
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 23:07:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232701AbjF3VEC convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 30 Jun 2023 17:04:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58910 "EHLO
+        id S232552AbjF3VHL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Jun 2023 17:07:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232726AbjF3VDw (ORCPT
+        with ESMTP id S229673AbjF3VHJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 17:03:52 -0400
-Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com [209.85.219.177])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E98424221;
-        Fri, 30 Jun 2023 14:03:48 -0700 (PDT)
-Received: by mail-yb1-f177.google.com with SMTP id 3f1490d57ef6-c40c367949eso1342543276.1;
-        Fri, 30 Jun 2023 14:03:48 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688159028; x=1690751028;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=wVGM406xAqn4Hn9Deh7kQt4tORL6Fxhh/UBnDJhIX3I=;
-        b=CzIjt5xVEqqcAlgyHrLMT85/B5TIYHlVJM8enjx/uChiCCpipGV8yluOy354TqMDcp
-         5u+GjZFANjVQVPclj78VJdP3ZffgzhZfUGP+u2Xixn02GMUuB62EieElyznM4aZGTE7r
-         4D5Sqz4C0JYrAIjCBovs1mVW+S8SfIKqDfPXhoDh/GnqmY35Z7bJPlfSCChxAS3QZpPW
-         zaeIfmJzMRJ7FoWGp5uCwxtP4/y76rtjYSd5svzEFykevFytm4siO+gaRq3snU72PKr/
-         f3VA8jyBwYTv85YlVNGikYLGyqqQQqhJgbDZDLop9jRyElGtyWTOGTpOK3jo5eDP5A0Z
-         kkHA==
-X-Gm-Message-State: ABy/qLZIyh+XxqZw6ktsMQQPNO47fvX83g7c92J72utM0O7iKaibzY3C
-        wS6isL/qNyd0TcWxAL3z1YkrB9DqG03fnDVHrcM=
-X-Google-Smtp-Source: APBJJlEG8/0u0yaEBl0JZOnHYNF5VOMtgNAxXm0x2vZqAu/ZydtgsSX1mofjdxkhJyBYZn1lwTjMrZzqhSOVvIJsEj8=
-X-Received: by 2002:a25:6cd4:0:b0:bac:1522:f870 with SMTP id
- h203-20020a256cd4000000b00bac1522f870mr3675226ybc.52.1688159028012; Fri, 30
- Jun 2023 14:03:48 -0700 (PDT)
+        Fri, 30 Jun 2023 17:07:09 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 487BB3AAF;
+        Fri, 30 Jun 2023 14:07:08 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C9DA061808;
+        Fri, 30 Jun 2023 21:07:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9576C433C8;
+        Fri, 30 Jun 2023 21:07:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688159227;
+        bh=hYpTEHMq6y6J6BenMyXuV1x1KGnn5tFTZrm73RQZ4aU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=AzzeprbLoRBnHWrjJgRKbrUVVtaz33A2ZhsLuQyXKqDmyQOvljcBt3DAhrDflzwp0
+         bJ6XivbLjc+Oa+fochTe2RWbZMh8PKRIo7wkZFbYVC92qiFcoydLXV0oRqY0qsf0ew
+         krnGRlpTeLDYFh8Km+lfBZGqKGVXNTBrldkarnpOuZTFXuCa2TMACzq5cMsCzGiuJ+
+         cx9UhgS3LZHH5XGzDBm3DkrcwpM0106BaZdjTK4dSm1kDvRBqMv03DMHRbb2zzbVcI
+         JAvG3NWomezqtyWEWd3P9qU/XECzKAVDm9grLS9Z3HvKE2759v596WuvTaktksVK+z
+         c3vJSzj2MV8Hw==
+Date:   Fri, 30 Jun 2023 23:06:50 +0200
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     linus.walleij@linaro.org, Andi Shyti <andi.shyti@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
+Subject: Re: [PATCH] i2c: busses: i2c-nomadik: Remove a useless call in the
+ remove function
+Message-ID: <ZJ9D6mP+gqQahEVq@sai>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        linus.walleij@linaro.org, Andi Shyti <andi.shyti@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
+References: <4f4c2c5c20b61c4bb28cb3e9ab4640534dd2adec.1629530169.git.christophe.jaillet@wanadoo.fr>
+ <8ac04af8-eff8-bfe1-647a-2d04f5739702@wanadoo.fr>
 MIME-Version: 1.0
-References: <20230623151016.4193660-1-irogers@google.com> <CAM9d7cgX-vnwkrQMMHn2C1sCjm3YO=xaigmMTsrbkg+fHk2H2g@mail.gmail.com>
-In-Reply-To: <CAM9d7cgX-vnwkrQMMHn2C1sCjm3YO=xaigmMTsrbkg+fHk2H2g@mail.gmail.com>
-From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Fri, 30 Jun 2023 14:03:35 -0700
-Message-ID: <CAM9d7cjVChbQThcMx7ptp-FRCrrwgV97fVJ0FpasC20M1+yLbQ@mail.gmail.com>
-Subject: Re: [PATCH v2 00/12] Add metric has_event, update intel vendor events
-To:     Ian Rogers <irogers@google.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
-        Kajol Jain <kjain@linux.ibm.com>,
-        John Garry <john.g.garry@oracle.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Eduard Zingerman <eddyz87@gmail.com>,
-        Jing Zhang <renyu.zj@linux.alibaba.com>,
-        Sohom Datta <sohomdatta1@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        Perry Taylor <perry.taylor@intel.com>,
-        Samantha Alt <samantha.alt@intel.com>,
-        Caleb Biggers <caleb.biggers@intel.com>,
-        Weilin Wang <weilin.wang@intel.com>,
-        Edward Baker <edward.baker@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="2SKYA9MrhLMabYkk"
+Content-Disposition: inline
+In-Reply-To: <8ac04af8-eff8-bfe1-647a-2d04f5739702@wanadoo.fr>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 29, 2023 at 2:31 PM Namhyung Kim <namhyung@kernel.org> wrote:
->
-> Hi Ian,
->
-> On Fri, Jun 23, 2023 at 8:10 AM Ian Rogers <irogers@google.com> wrote:
-> >
-> > Add a new has_event function for metrics so that events that can be
-> > disabled by the kernel/firmware don't cause metrics to fail. Use this
-> > function for Intel transaction metrics fixing "perf all metrics test"
-> > on systems with TSX disabled. The update conversion script is posted in:
-> > https://github.com/intel/perfmon/pull/90
-> >
-> > Re-generate Intel vendor events using:
-> > https://github.com/intel/perfmon/blob/main/scripts/create_perf_json.py
-> > Adding rocketlake support, uncore and many core events for meteorlake,
-> > and smaller updates for cascakelakex, icelake, icelakex,
-> > sapphirerapids, skylake, skylakex and tigerlake.
-> >
-> > v2. Handle failed memory allocated for evlist, John Garry.
-> >
-> > Ian Rogers (12):
-> >   perf expr: Add has_event function
-> >   perf jevents: Support for has_event function
-> >   perf vendor metrics intel: Make transaction metrics conditional
-> >   perf vendor events intel: Add rocketlake events/metrics
-> >   perf vendor events intel: Update meteorlake to 1.03
-> >   perf vendor events intel: Update cascadelakex to 1.19
-> >   perf vendor events intel: Update icelake to 1.19
-> >   perf vendor events intel: Update icelakex to 1.21
-> >   perf vendor events intel: Update sapphirerapids to 1.14
-> >   perf vendor events intel: Update skylake to 57
-> >   perf vendor events intel: Update skylakex to 1.31
-> >   perf vendor events intel: Update tigerlake to 1.13
->
-> My tigerlake laptop now passes the all metrics test with this.
-> It used to fail like below:
->
->   event syntax error:
-> '{cpu/cycles-t,metric-id=cpu!3cycles!1t!3/,cpu/tx-start,m..'
->                             \___ unknown term 'cycles-t' for pmu 'cpu'
->
-> Tested-by: Namhyung Kim <namhyung@kernel.org>
 
-Applied to perf-tools-next, thanks!
+--2SKYA9MrhLMabYkk
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Fri, Jun 30, 2023 at 10:10:40PM +0200, Christophe JAILLET wrote:
+> Hi,
+>=20
+> "drivers/i2c/busses/i2c-nomadik.c" just got some loved, so I was wondering
+> if the below patch could be reviewed.
+>=20
+> It does not apply anymore because of the recent change, but the explanati=
+on
+> in the commit message and the proposed change still make sense to me.
+>=20
+> If it looks valid, I could send a V2.
+>=20
+> So any feedback would be appreciated.
+
+Sure, go ahead!
+
+
+--2SKYA9MrhLMabYkk
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmSfQ+cACgkQFA3kzBSg
+KbZFWQ//fBMB4Z1V98HOgBgCUVd0VuuXt9kxzZvljp7zwhLujA/JQ/2q41iQZ5og
+VBI7V7gjuMjAYLRPwgQAtW3JObcIQ9BEenHv2DGGQX/xEDsmGvhyWVwnW4Oyl8mb
+RBz8OMdleU/p641cbrZJa0RNbbONIjsx+G1KI8nvm0cyah2Fc+ITJAyc4MDY++/7
+EtOjYWnbZJRsWX9FC2fEWqvNFTmI1EV8d5Z5ODf3dMK+fTlgs0yohf0JHa00IUpb
+Jc5REW6JcVvPLppS7jXyurDD3ZxdkM7RxWyZcM9hPrGvs4gtI+VC0sFfugPI3z6F
+09t6+1kBZuLGszIMQo89WeWqWUldFmYprY8bmdTdisf2AwZmdu1cogsaZrjOpA3H
+2FDNT7iRs/AGSidJnTgUkeAhpDHODyXVBgnv5cbA4zubWYnMKVRVVWhiO/88PUpM
+vXhnmkF4l6lOmtT9Q+XAJahmeW8S//AkMtW5DCdjgu+ruHv5vdD0BzYYWdDLiDrW
+NsM6Cv2BSW+V9a3rWViM3vg9dHsUt9Vx9pI6TmeLC73DZFdM1LgpGAX/VTLWZYke
+ToE1ngerg8X8OgoXeS3kSOkGH/byHxlWTI0qIv4j+3JcctQQUorW8TI2+kQu0eZc
+0ncdZ4MFI0X9Lsky6S0b7/Gr/up+noH3P58q716HOlEIYjKrnDk=
+=P9oA
+-----END PGP SIGNATURE-----
+
+--2SKYA9MrhLMabYkk--
