@@ -2,384 +2,324 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE662743862
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 11:31:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3361F74386F
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 11:35:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230462AbjF3JbY convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 30 Jun 2023 05:31:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36778 "EHLO
+        id S232134AbjF3Jf1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Jun 2023 05:35:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232242AbjF3JbM (ORCPT
+        with ESMTP id S232858AbjF3Jew (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 05:31:12 -0400
-Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 986D33591;
-        Fri, 30 Jun 2023 02:31:01 -0700 (PDT)
-Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
-        by fd01.gateway.ufhost.com (Postfix) with ESMTP id B12618068;
-        Fri, 30 Jun 2023 17:30:59 +0800 (CST)
-Received: from EXMBX062.cuchost.com (172.16.6.62) by EXMBX165.cuchost.com
- (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 30 Jun
- 2023 17:30:59 +0800
-Received: from ubuntu.localdomain (183.27.97.206) by EXMBX062.cuchost.com
- (172.16.6.62) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 30 Jun
- 2023 17:30:59 +0800
-From:   Changhuang Liang <changhuang.liang@starfivetech.com>
-To:     Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>
-CC:     Jack Zhu <jack.zhu@starfivetech.com>,
-        Changhuang Liang <changhuang.liang@starfivetech.com>,
-        <linux-phy@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH v6 2/2] phy: starfive: Add mipi dphy rx support
-Date:   Fri, 30 Jun 2023 02:30:56 -0700
-Message-ID: <20230630093056.46904-3-changhuang.liang@starfivetech.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230630093056.46904-1-changhuang.liang@starfivetech.com>
-References: <20230630093056.46904-1-changhuang.liang@starfivetech.com>
+        Fri, 30 Jun 2023 05:34:52 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA23035A0;
+        Fri, 30 Jun 2023 02:34:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1688117689; x=1719653689;
+  h=message-id:date:subject:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=J39gEdD9+655ZLzYGKNubscq4mmfboTRVlkM+2X+PrU=;
+  b=Oy79NFQD0etho8H2DtcSubAbp6EkLQYVcAlx7KjB8AdFyqKyNwI4deKW
+   D2SPLsm+f26RawNnOt8Rgt+wkSY8kMBX3XeN+tgVSGvYQ1Jy/DE7vX/mW
+   L+8bcIHrptmPutkh2HRZ1FrdgY4Q7DLn1Mh/9Z60JH/VTCkPj4n1r8uVD
+   WdOr1GymzwlToXEtctReowRJzn4izT8qLBVFMxHfHa/XlbcVPRSrQL8Gu
+   o2JFkTTbsPxv44K2Jja+5AHRZPoCTYqx5h8LdOMaolidtQmc9v7WhmxuB
+   MYkBmr0eBvhuKWjjwGzokmnq/4eoFIqichLjmcPREE7RAZi0ktyJEn+zz
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10756"; a="359836341"
+X-IronPort-AV: E=Sophos;i="6.01,170,1684825200"; 
+   d="scan'208";a="359836341"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jun 2023 02:34:49 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10756"; a="830867220"
+X-IronPort-AV: E=Sophos;i="6.01,170,1684825200"; 
+   d="scan'208";a="830867220"
+Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
+  by fmsmga002.fm.intel.com with ESMTP; 30 Jun 2023 02:34:49 -0700
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.27; Fri, 30 Jun 2023 02:34:48 -0700
+Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.27 via Frontend Transport; Fri, 30 Jun 2023 02:34:48 -0700
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (104.47.58.101)
+ by edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.27; Fri, 30 Jun 2023 02:34:48 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=B9qTj4cwZSaMH+Zt1vYx0zWQEiW8k6I+5jiJJzChJhcdnVQXOu7Iay79ReOh9+h+Wy1MPktF/AMmN8ZcN+vH2T0ufWkiEYutpgU7ag4YL8H4bnUDQUmPoLk1ll4OymRpvecwpUAwYsulq1LUPZ0T3xUv8G/wLmFWe9JozxiSwuLelkZ/TCXNyiybkhqpGxEr95IWCyerVSA4Pjx/J6Uj4Jg4Wlk5Ahy49CnUktdPIMRxY7TzBGodUB3Cunfzunc1ek2GrEfWWHP6iJKwOmsFkSibD9YvazAliVTMhovu4I/L2J9vPKpXAWKZTXpVnAhGXGuZa6X0uVigLx414jMqQQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=PU4+FpFqDBu6f9oRV/k6mfbhl89W2ZlpcvlZm0SH3jo=;
+ b=XTq13zFhGqKz2zkxnGpJDiMIseKRidLjvZ8AHBtUwVosIMZUarB5s/+LXxRy5hgN81UBH5K5AZWcX/Tx3KGg0AIdSZtlb+PDzuW75Poa60R3xJ0dBp2sc18Iar35LERKiRqEUaP7iN4QLJqHgLGOCvbMfL31vA9i9uDylRNmY7lQLD0RT/b4s5pyBx9XID6o1AgJ5eOBLP5COOLLlASDNBz9P6GfZ7sODQr2rZahmotYdmx57UO8KDKSL+TugWRq6Exa5muzwjwS8EBddQoHsz01ds7EMykE52tm65YQiegh9NeCCAIvQDqdzIynGawFMwxWvrf9wY5K3E5iGxgbIQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from PH0PR11MB4965.namprd11.prod.outlook.com (2603:10b6:510:34::7)
+ by SJ0PR11MB4878.namprd11.prod.outlook.com (2603:10b6:a03:2d8::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.26; Fri, 30 Jun
+ 2023 09:34:40 +0000
+Received: from PH0PR11MB4965.namprd11.prod.outlook.com
+ ([fe80::4707:8818:a403:f7a9]) by PH0PR11MB4965.namprd11.prod.outlook.com
+ ([fe80::4707:8818:a403:f7a9%6]) with mapi id 15.20.6544.012; Fri, 30 Jun 2023
+ 09:34:40 +0000
+Message-ID: <0a98683f-3e60-1f1b-55df-f2a781929fdf@intel.com>
+Date:   Fri, 30 Jun 2023 17:34:28 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH v3 10/21] KVM:x86: Add #CP support in guest exception
+ classification
+To:     Sean Christopherson <seanjc@google.com>
+CC:     Chao Gao <chao.gao@intel.com>, <pbonzini@redhat.com>,
+        <kvm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <peterz@infradead.org>, <rppt@kernel.org>,
+        <binbin.wu@linux.intel.com>, <rick.p.edgecombe@intel.com>,
+        <john.allen@amd.com>, <gil.neiger@intel.com>
+References: <20230511040857.6094-1-weijiang.yang@intel.com>
+ <20230511040857.6094-11-weijiang.yang@intel.com>
+ <ZH73kDx6VCaBFiyh@chao-email>
+ <21568052-eb0f-a8d6-5225-3b422e9470e9@intel.com>
+ <ZIulniryqlj0hLnt@google.com>
+ <dfdf6d93-a68c-bb07-e59e-8d888dd6ebb6@intel.com>
+ <ZIywqx6xTAMFyDPT@google.com>
+Content-Language: en-US
+From:   "Yang, Weijiang" <weijiang.yang@intel.com>
+In-Reply-To: <ZIywqx6xTAMFyDPT@google.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: SI2PR02CA0025.apcprd02.prod.outlook.com
+ (2603:1096:4:195::21) To PH0PR11MB4965.namprd11.prod.outlook.com
+ (2603:10b6:510:34::7)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [183.27.97.206]
-X-ClientProxiedBy: EXCAS061.cuchost.com (172.16.6.21) To EXMBX062.cuchost.com
- (172.16.6.62)
-X-YovoleRuleAgent: yovoleflag
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR11MB4965:EE_|SJ0PR11MB4878:EE_
+X-MS-Office365-Filtering-Correlation-Id: 73f1c035-df95-41ab-ca08-08db794d3a15
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Cq4whBAnZAXAalbd5xckFysrk9AXx9sRNdhhxP0EWEJftgoUhexQuxNtERN3nCxzY3Ygqo05d1whbVpD1CXbfJf7FKeb5I59luWPUPiC/MhtB8WR/meqiy2TXwGAGl2KtXNl2TJUCIi42I+JEWknuCMjWYincHOvuTSO0dJ2ze0TH4xVsrZjRTc6rpNro5Ho200+WJcVGrT8xxt49wtC5DLr5YOYOvYfHlacAWdgcX84a4dvtIFzL41oUPf1HF9C8jyPn/5i4rVraMZ1H6cK1pUKa1qrhEcID5P8Mv2z0eULG6L2GLtgH3po2XC1+F5pxx8Zl+dafke2t2N0iqQTdXl2FNg47UfOTasGh5N28o1pNn6MP5ucbQvstwW9Mym1TRWHR0xLJ9Cl3xiqqsFNI0YT2ZnA74cquRefdxbqWwqSlWMQVEtXhDVQeysiaRcUOprz9D/85G8/+Gv4qQlA/p1wFgyR4jbaOrUwmW9z2jcUP2nc9Wjg6uAzSwhqKkkFXJjKNdtrOQFY6cXm7gslSkI7vDPveDog0XoLgzMJiPdiztDrGlQTQKhYNhr9dRFkCoqdV9SD58H0J4uF41BrADbWwuHxQP3xixo/fznoNirFTHYlP5Ypqkn7ZnjpIZPjmsz3hxGj9OhvCPnxo56rrA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR11MB4965.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(376002)(136003)(346002)(396003)(366004)(39860400002)(451199021)(53546011)(6506007)(36756003)(66556008)(6486002)(83380400001)(478600001)(26005)(2616005)(6666004)(6512007)(186003)(2906002)(86362001)(316002)(5660300002)(66476007)(82960400001)(31696002)(66946007)(8676002)(6916009)(41300700001)(4326008)(38100700002)(8936002)(31686004)(43740500002)(45980500001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Z293d2dvMHkwMVI0MmhSSUtHT1g4WDRSSW4zR2RaMHlCaUk5dzBIcm9PeUI0?=
+ =?utf-8?B?T1h3WGdESndzMTJ5aDBqYktqSTNpS1RyTk1rUzBTdHNGM0ZXYTVCUmdnL3ZN?=
+ =?utf-8?B?MGdEZXFlQmNwbUxXZ2MrcWxVVXNTRDM2a0xOaUs4SDRWOW9mV2lONjVwUkdF?=
+ =?utf-8?B?SWcvV2svd1doTmF1QmhGLzl3K3Y5Rmt6VHhtZ0RYV29nVGQ2c1M3V0hQTDRZ?=
+ =?utf-8?B?UEQrd1hPbkdUYWlKaW5ZSTlGKzhVTXkySDQ0bHJuOHZPS0xUZHZVVHQ5NU43?=
+ =?utf-8?B?SkhBY3NMRDF2MUxHeUVYaTBxS09IRjJtTElMTWJpREpJcDhzUk41YnV6aHVB?=
+ =?utf-8?B?TmdNRUVmQ0N3WUN1a3NDdFVMR3QxZDZCU2hpSGJFQXVWU1FqM2I4RWNuRlNZ?=
+ =?utf-8?B?UjVaN1habzF1VWJoY0doZEdzYUJNb2tId2FudXNyRTdBL3BPWnMwTUNiVVd1?=
+ =?utf-8?B?aE80Y01yb1gwWFk0UWpicWlmK2pwYWxVc0lRK1FjbUw1aVk2TWlpSnZuekI5?=
+ =?utf-8?B?NEhtYkQzMUsxczZSaFBSUyt3d3BjK3Mvb3FCYit4M2hJbDhhU3ZXOEwrU005?=
+ =?utf-8?B?M3I5MXRTZ21OOGM4VVdJelpTYTcvOGdaME5mZytzSGx1aUFmbzM1UUZGUkR5?=
+ =?utf-8?B?czlsbjg1RnBYMDVzQWE1UlZDcHNFaGlNTW1uRDNtUFZ0MnVQd2RPa3NxVmNX?=
+ =?utf-8?B?RlRhN0ltSjZ6NVBGZk51Sm95d3FHZE9RVUsvNzE2cGFkYTloemcyMkVnNDlq?=
+ =?utf-8?B?WlRvaXdMYmtEcVMrMzBpNHdvQWR0RUEvYThWKzFYazJxOXhZVUxONGJvbkk4?=
+ =?utf-8?B?bzNCcndZei9VYzArS3RiT1p5SkRYZGlRL3k3eEJxZmtGUEFrMkk1TEZXai9B?=
+ =?utf-8?B?aVNka005a0VTdVlmOFFBOFZZZTVZMHdjbWhxS1lNZGt5NnlXY2VoM0h6K0RF?=
+ =?utf-8?B?RjFJelhNZzBBMUVObTZldHFRN2cyUXZUNVdQc2JYQ0twNjN0WnNIdGgrOFZO?=
+ =?utf-8?B?UjFtL2RJR05JenoxTG1BY05ZVE9KbElyMjFOSDFwcnRTWkkvSURwR2hKRlVo?=
+ =?utf-8?B?UDlCSmpWckx0LzFIcjZGS0hqQTlQS2szbVI1RDRzNmNyOG9jdmlWMzdLRi9L?=
+ =?utf-8?B?SHNaQ0JVODJZMSsvYkZvVEp6MEtBZFFaMGNMSUs0TThrWFRITHVJWFAwS2hv?=
+ =?utf-8?B?YzJJZmQrK1NIZ3owZzhONVlFaHduMnJ0NjNwRVBJY0kvYmFNRDhWQzN3T3hN?=
+ =?utf-8?B?bmZzSW0rK09WMlp3QUwyMEIxc0c4ODF2dEhNbTFCclRRUlZ6WTZIbWRXSEs2?=
+ =?utf-8?B?UTdqam9SWWUySmdSQ1NjcmFINHFmSXF5QUhBclo4MHBvUlhjV0dka29lcUpq?=
+ =?utf-8?B?VnZQMGlSVkpVR0F5U0xkaTlXQmd2Um03ZXpVN2ZmbTZnMmdoendIcEdJUEhv?=
+ =?utf-8?B?dmc1YWJsbXNXYzVraVM5NTduNC9ZYUpNdU0veElmdmNFNjI0L0N2Y2x0Y2hC?=
+ =?utf-8?B?VVdSblIwS0pxMncvMHJPOGZHVXlIOC9BMFJ3cENwVVE3bzhCR20ya1IwNG1T?=
+ =?utf-8?B?N2NkZEJLeXhKbnlKcEFEUHRuaTZHYjhZR0Qvb2JyVmxFWjgxV1d0OGlNUW9H?=
+ =?utf-8?B?MW9TcGJCWFVSc0lML3JxSjRZb0FKNk85YW1aSkNlWnRvM2JvSVErd0tMcmI1?=
+ =?utf-8?B?c2k5c1F1OU9OUDFZbjA4c2R0VWpCcTBaWm9qSmI1OVRsRWhGMUQ5YlQ5cU9m?=
+ =?utf-8?B?VWk2ZVpmUmpHbmR0RGI3UzhXOVNIcWdPakQ3MkQyOXdXb0ZESlZqKzdmbFdU?=
+ =?utf-8?B?bHlQZzJqMnFVMW00c3J2dHN6N05pWko0THRGMm56eXRHd3ZUb2N2VENOa3k1?=
+ =?utf-8?B?U1VISnphWExLV2JvVENwdHJLUC9wZjY0T3RrSEIzeDRLMittekU1cm9LSWsx?=
+ =?utf-8?B?a21QdXRvNHhyb1Q3Wkl1dTNvQ29mTDMzZS9qYlZtVnhGUnBCZG4wcS9vVHQr?=
+ =?utf-8?B?Vk1GTDErcmhuNWZ1RkVrOC8yNkh5TEZnSzBBRGNGL2ZENy9vMm5Tblo2bnd5?=
+ =?utf-8?B?RWtwaFk0MzdTOWZDd0lKVDJQY2t4S0QvWk9QNFBSNkpuckRRZ0VoVnEyaWNy?=
+ =?utf-8?B?RXJpbGNac1JGUW5sY3VBYXFwYTRwbjR6SHc5Nlo2U3pNMWEwMzc1UjE5OVdq?=
+ =?utf-8?B?M2c9PQ==?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 73f1c035-df95-41ab-ca08-08db794d3a15
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR11MB4965.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Jun 2023 09:34:40.0567
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 9LNpYPm8iR64MGF4UnNZcW/eEo6dzPgzjVrLDYVpL7UyBN76SDLRFdYt35EwV42SjsUM9mFBkZRoZ+qBClnp/A==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR11MB4878
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add mipi dphy rx support for the StarFive JH7110 SoC. It is used to
-transfer CSI camera data.
 
-Signed-off-by: Changhuang Liang <changhuang.liang@starfivetech.com>
----
- MAINTAINERS                                 |   7 +
- drivers/phy/Kconfig                         |   1 +
- drivers/phy/Makefile                        |   1 +
- drivers/phy/starfive/Kconfig                |  13 ++
- drivers/phy/starfive/Makefile               |   2 +
- drivers/phy/starfive/phy-starfive-dphy-rx.c | 230 ++++++++++++++++++++
- 6 files changed, 254 insertions(+)
- create mode 100644 drivers/phy/starfive/Kconfig
- create mode 100644 drivers/phy/starfive/Makefile
- create mode 100644 drivers/phy/starfive/phy-starfive-dphy-rx.c
+On 6/17/2023 2:57 AM, Sean Christopherson wrote:
+> On Fri, Jun 16, 2023, Weijiang Yang wrote:
+>> On 6/16/2023 7:58 AM, Sean Christopherson wrote:
+>>> On Thu, Jun 08, 2023, Weijiang Yang wrote:
+>>>> On 6/6/2023 5:08 PM, Chao Gao wrote:
+>>>>> On Thu, May 11, 2023 at 12:08:46AM -0400, Yang Weijiang wrote:
+>>>>>> Add handling for Control Protection (#CP) exceptions(vector 21).
+>>>>>> The new vector is introduced for Intel's Control-Flow Enforcement
+>>>>>> Technology (CET) relevant violation cases.
+>>>>>>
+>>>>>> Although #CP belongs contributory exception class, but the actual
+>>>>>> effect is conditional on CET being exposed to guest. If CET is not
+>>>>>> available to guest, #CP falls back to non-contributory and doesn't
+>>>>>> have an error code.
+>>>>> This sounds weird. is this the hardware behavior? If yes, could you
+>>>>> point us to where this behavior is documented?
+>>>> It's not SDM documented behavior.
+>>> The #CP behavior needs to be documented.  Please pester whoever you need to in
+>>> order to make that happen.
+>> Do you mean documentation for #CP as an generic exception or the behavior in
+>> KVM as this patch shows?
+> As I pointed out two *years* ago, this entry in the SDM
+>
+>    — The field's deliver-error-code bit (bit 11) is 1 if each of the following
+>      holds: (1) the interruption type is hardware exception; (2) bit 0
+>      (corresponding to CR0.PE) is set in the CR0 field in the guest-state area;
+>      (3) IA32_VMX_BASIC[56] is read as 0 (see Appendix A.1); and (4) the vector
+>      indicates one of the following exceptions: #DF (vector 8), #TS (10),
+>      #NP (11), #SS (12), #GP (13), #PF (14), or #AC (17).
+>
+> needs to read something like
+>
+>    — The field's deliver-error-code bit (bit 11) is 1 if each of the following
+>      holds: (1) the interruption type is hardware exception; (2) bit 0
+>      (corresponding to CR0.PE) is set in the CR0 field in the guest-state area;
+>      (3) IA32_VMX_BASIC[56] is read as 0 (see Appendix A.1); and (4) the vector
+>      indicates one of the following exceptions: #DF (vector 8), #TS (10),
+>      #NP (11), #SS (12), #GP (13), #PF (14), #AC (17), or #CP (21)[1]
+>
+>      [1] #CP has an error code if and only if IA32_VMX_CR4_FIXED1 enumerates
+>          support for the 1-setting of CR4.CET.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 35e19594640d..2c58564ce5a0 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -20121,6 +20121,13 @@ S:	Maintained
- F:	Documentation/devicetree/bindings/net/starfive,jh7110-dwmac.yaml
- F:	drivers/net/ethernet/stmicro/stmmac/dwmac-starfive.c
- 
-+STARFIVE JH7110 DPHY RX DRIVER
-+M:	Jack Zhu <jack.zhu@starfivetech.com>
-+M:	Changhuang Liang <changhuang.liang@starfivetech.com>
-+S:	Supported
-+F:	Documentation/devicetree/bindings/phy/starfive,jh7110-dphy-rx.yaml
-+F:	drivers/phy/starfive/phy-starfive-dphy-rx.c
-+
- STARFIVE JH7110 MMC/SD/SDIO DRIVER
- M:	William Qiu <william.qiu@starfivetech.com>
- S:	Supported
-diff --git a/drivers/phy/Kconfig b/drivers/phy/Kconfig
-index f46e3148d286..0000149edbc4 100644
---- a/drivers/phy/Kconfig
-+++ b/drivers/phy/Kconfig
-@@ -91,6 +91,7 @@ source "drivers/phy/rockchip/Kconfig"
- source "drivers/phy/samsung/Kconfig"
- source "drivers/phy/socionext/Kconfig"
- source "drivers/phy/st/Kconfig"
-+source "drivers/phy/starfive/Kconfig"
- source "drivers/phy/sunplus/Kconfig"
- source "drivers/phy/tegra/Kconfig"
- source "drivers/phy/ti/Kconfig"
-diff --git a/drivers/phy/Makefile b/drivers/phy/Makefile
-index 54f312c10a40..fb3dc9de6111 100644
---- a/drivers/phy/Makefile
-+++ b/drivers/phy/Makefile
-@@ -31,6 +31,7 @@ obj-y					+= allwinner/	\
- 					   samsung/	\
- 					   socionext/	\
- 					   st/		\
-+					   starfive/	\
- 					   sunplus/	\
- 					   tegra/	\
- 					   ti/		\
-diff --git a/drivers/phy/starfive/Kconfig b/drivers/phy/starfive/Kconfig
-new file mode 100644
-index 000000000000..f989b8ff8bcb
---- /dev/null
-+++ b/drivers/phy/starfive/Kconfig
-@@ -0,0 +1,13 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+#
-+# Phy drivers for StarFive platforms
-+#
-+
-+config PHY_STARFIVE_DPHY_RX
-+	tristate "StarFive D-PHY RX Support"
-+	select GENERIC_PHY
-+	select GENERIC_PHY_MIPI_DPHY
-+	help
-+	  Choose this option if you have a StarFive D-PHY in your
-+	  system. If M is selected, the module will be called
-+	  phy-starfive-dphy-rx.
-diff --git a/drivers/phy/starfive/Makefile b/drivers/phy/starfive/Makefile
-new file mode 100644
-index 000000000000..7ec576cb30ae
---- /dev/null
-+++ b/drivers/phy/starfive/Makefile
-@@ -0,0 +1,2 @@
-+# SPDX-License-Identifier: GPL-2.0
-+obj-$(CONFIG_PHY_STARFIVE_DPHY_RX)      += phy-starfive-dphy-rx.o
-diff --git a/drivers/phy/starfive/phy-starfive-dphy-rx.c b/drivers/phy/starfive/phy-starfive-dphy-rx.c
-new file mode 100644
-index 000000000000..7015fae6503c
---- /dev/null
-+++ b/drivers/phy/starfive/phy-starfive-dphy-rx.c
-@@ -0,0 +1,230 @@
-+// SPDX-License-Identifier: GPL-2.0+
-+/*
-+ * DPHY driver for the StarFive JH7110 SoC
-+ *
-+ * Copyright (C) 2023 StarFive Technology Co., Ltd.
-+ */
-+
-+#include <linux/bitfield.h>
-+#include <linux/bitops.h>
-+#include <linux/clk.h>
-+#include <linux/io.h>
-+#include <linux/module.h>
-+#include <linux/of.h>
-+#include <linux/phy/phy.h>
-+#include <linux/platform_device.h>
-+#include <linux/pm_runtime.h>
-+#include <linux/reset.h>
-+
-+#define STF_DPHY_APBCFGSAIF_SYSCFG(x)		(x)
-+
-+#define STF_DPHY_ENABLE_CLK			BIT(6)
-+#define STF_DPHY_ENABLE_CLK1			BIT(7)
-+#define STF_DPHY_ENABLE_LAN0			BIT(8)
-+#define STF_DPHY_ENABLE_LAN1			BIT(9)
-+#define STF_DPHY_ENABLE_LAN2			BIT(10)
-+#define STF_DPHY_ENABLE_LAN3			BIT(11)
-+#define STF_DPHY_LANE_SWAP_CLK			GENMASK(22, 20)
-+#define STF_DPHY_LANE_SWAP_CLK1			GENMASK(25, 23)
-+#define STF_DPHY_LANE_SWAP_LAN0			GENMASK(28, 26)
-+#define STF_DPHY_LANE_SWAP_LAN1			GENMASK(31, 29)
-+
-+#define STF_DPHY_LANE_SWAP_LAN2			GENMASK(2, 0)
-+#define STF_DPHY_LANE_SWAP_LAN3			GENMASK(5, 3)
-+#define STF_DPHY_PLL_CLK_SEL			GENMASK(21, 12)
-+#define STF_DPHY_PRECOUNTER_IN_CLK		GENMASK(29, 22)
-+
-+#define STF_DPHY_PRECOUNTER_IN_CLK1		GENMASK(7, 0)
-+#define STF_DPHY_PRECOUNTER_IN_LAN0		GENMASK(15, 8)
-+#define STF_DPHY_PRECOUNTER_IN_LAN1		GENMASK(23, 16)
-+#define STF_DPHY_PRECOUNTER_IN_LAN2		GENMASK(31, 24)
-+
-+#define STF_DPHY_PRECOUNTER_IN_LAN3		GENMASK(7, 0)
-+#define STF_DPHY_RX_1C2C_SEL			BIT(8)
-+
-+#define STF_MAP_LANES_NUM			6
-+
-+struct regval {
-+	u32 addr;
-+	u32 val;
-+};
-+
-+struct stf_dphy_info {
-+	/**
-+	 * @maps:
-+	 *
-+	 * Physical lanes and logic lanes mapping table.
-+	 *
-+	 * The default order is:
-+	 * [clk lane0, data lane 0, data lane 1, data lane 2, date lane 3, clk lane 1]
-+	 */
-+	u8 maps[STF_MAP_LANES_NUM];
-+};
-+
-+struct stf_dphy {
-+	struct device *dev;
-+	void __iomem *regs;
-+	struct clk *cfg_clk;
-+	struct clk *ref_clk;
-+	struct clk *tx_clk;
-+	struct reset_control *rstc;
-+	struct regulator *mipi_0p9;
-+	struct phy *phy;
-+	const struct stf_dphy_info *info;
-+};
-+
-+static int stf_dphy_configure(struct phy *phy, union phy_configure_opts *opts)
+Hi, Sean,
+
+I sent above change request to Gil(added in cc), but he shared different 
+opinion on this issue:
+
+
+"It is the case that all CET-capable parts enumerate IA32_VMX_BASIC[56] 
+as 1.
+
+  However, there were earlier parts without CET that enumerated 
+IA32_VMX_BASIC[56] as 0.
+
+  On those parts, an attempt to inject an exception with vector 21 (#CP) 
+with an error code would fail.
+
+(Injection of exception 21 with no error code would be allowed.)
+
+  It may make things clearer if we document the statement above (all 
+CET-capable parts enumerate IA32_VMX_BASIC[56] as 1).
+
+I will see if we can update future revisions of the SDM to clarify this."
+
+
+Then if this is the case,  kvm needs to check IA32_VMX_BASIC[56] before 
+inject exception to nested VM.
+
+And this patch could be removed, instead need another patch like below:
+
+diff --git a/arch/x86/include/asm/msr-index.h 
+b/arch/x86/include/asm/msr-index.h
+index ad35355ee43e..6b33aacc8587 100644
+--- a/arch/x86/include/asm/msr-index.h
++++ b/arch/x86/include/asm/msr-index.h
+@@ -1076,6 +1076,7 @@
+  #define VMX_BASIC_MEM_TYPE_MASK    0x003c000000000000LLU
+  #define VMX_BASIC_MEM_TYPE_WB    6LLU
+  #define VMX_BASIC_INOUT        0x0040000000000000LLU
++#define VMX_BASIC_CHECK_ERRCODE    0x0140000000000000LLU
+
+  /* Resctrl MSRs: */
+  /* - Intel: */
+diff --git a/arch/x86/kvm/vmx/capabilities.h 
+b/arch/x86/kvm/vmx/capabilities.h
+index 85cffeae7f10..4b1ed4dc03bc 100644
+--- a/arch/x86/kvm/vmx/capabilities.h
++++ b/arch/x86/kvm/vmx/capabilities.h
+@@ -79,6 +79,11 @@ static inline bool cpu_has_vmx_basic_inout(void)
+      return    (((u64)vmcs_config.basic_cap << 32) & VMX_BASIC_INOUT);
+  }
+
++static inline bool cpu_has_vmx_basic_check_errcode(void)
 +{
-+	struct stf_dphy *dphy = phy_get_drvdata(phy);
-+	const struct stf_dphy_info *info = dphy->info;
-+
-+	writel(FIELD_PREP(STF_DPHY_ENABLE_CLK, 1) |
-+	       FIELD_PREP(STF_DPHY_ENABLE_CLK1, 1) |
-+	       FIELD_PREP(STF_DPHY_ENABLE_LAN0, 1) |
-+	       FIELD_PREP(STF_DPHY_ENABLE_LAN1, 1) |
-+	       FIELD_PREP(STF_DPHY_ENABLE_LAN2, 1) |
-+	       FIELD_PREP(STF_DPHY_ENABLE_LAN3, 1) |
-+	       FIELD_PREP(STF_DPHY_LANE_SWAP_CLK, info->maps[0]) |
-+	       FIELD_PREP(STF_DPHY_LANE_SWAP_CLK1, info->maps[5]) |
-+	       FIELD_PREP(STF_DPHY_LANE_SWAP_LAN0, info->maps[1]) |
-+	       FIELD_PREP(STF_DPHY_LANE_SWAP_LAN1, info->maps[2]),
-+	       dphy->regs + STF_DPHY_APBCFGSAIF_SYSCFG(188));
-+
-+	writel(FIELD_PREP(STF_DPHY_LANE_SWAP_LAN2, info->maps[3]) |
-+	       FIELD_PREP(STF_DPHY_LANE_SWAP_LAN3, info->maps[4]) |
-+	       FIELD_PREP(STF_DPHY_PRECOUNTER_IN_CLK, 8),
-+	       dphy->regs + STF_DPHY_APBCFGSAIF_SYSCFG(192));
-+
-+	writel(FIELD_PREP(STF_DPHY_PRECOUNTER_IN_CLK1, 8) |
-+	       FIELD_PREP(STF_DPHY_PRECOUNTER_IN_LAN0, 7) |
-+	       FIELD_PREP(STF_DPHY_PRECOUNTER_IN_LAN1, 7) |
-+	       FIELD_PREP(STF_DPHY_PRECOUNTER_IN_LAN2, 7),
-+	       dphy->regs + STF_DPHY_APBCFGSAIF_SYSCFG(196));
-+
-+	writel(FIELD_PREP(STF_DPHY_PRECOUNTER_IN_LAN3, 7),
-+	       dphy->regs + STF_DPHY_APBCFGSAIF_SYSCFG(200));
-+
-+	return 0;
++    return    (((u64)vmcs_config.basic_cap << 32) & 
+VMX_BASIC_CHECK_ERRCODE);
 +}
 +
-+static int stf_dphy_power_on(struct phy *phy)
-+{
-+	struct stf_dphy *dphy = phy_get_drvdata(phy);
-+	int ret;
-+
-+	ret = pm_runtime_resume_and_get(dphy->dev);
-+	if (ret < 0)
-+		return ret;
-+
-+	ret = regulator_enable(dphy->mipi_0p9);
-+	if (ret) {
-+		pm_runtime_put(dphy->dev);
-+		return ret;
-+	}
-+
-+	clk_set_rate(dphy->cfg_clk, 99000000);
-+	clk_set_rate(dphy->ref_clk, 49500000);
-+	clk_set_rate(dphy->tx_clk, 19800000);
-+	reset_control_deassert(dphy->rstc);
-+
-+	return 0;
-+}
-+
-+static int stf_dphy_power_off(struct phy *phy)
-+{
-+	struct stf_dphy *dphy = phy_get_drvdata(phy);
-+
-+	reset_control_assert(dphy->rstc);
-+
-+	regulator_disable(dphy->mipi_0p9);
-+
-+	pm_runtime_put_sync(dphy->dev);
-+
-+	return 0;
-+}
-+
-+static const struct phy_ops stf_dphy_ops = {
-+	.configure = stf_dphy_configure,
-+	.power_on  = stf_dphy_power_on,
-+	.power_off = stf_dphy_power_off,
-+};
-+
-+static int stf_dphy_probe(struct platform_device *pdev)
-+{
-+	struct phy_provider *phy_provider;
-+	struct stf_dphy *dphy;
-+
-+	dphy = devm_kzalloc(&pdev->dev, sizeof(*dphy), GFP_KERNEL);
-+	if (!dphy)
-+		return -ENOMEM;
-+
-+	dphy->info = of_device_get_match_data(&pdev->dev);
-+
-+	dev_set_drvdata(&pdev->dev, dphy);
-+	dphy->dev = &pdev->dev;
-+
-+	dphy->regs = devm_platform_ioremap_resource(pdev, 0);
-+	if (IS_ERR(dphy->regs))
-+		return PTR_ERR(dphy->regs);
-+
-+	dphy->cfg_clk = devm_clk_get(&pdev->dev, "cfg");
-+	if (IS_ERR(dphy->cfg_clk))
-+		return PTR_ERR(dphy->cfg_clk);
-+
-+	dphy->ref_clk = devm_clk_get(&pdev->dev, "ref");
-+	if (IS_ERR(dphy->ref_clk))
-+		return PTR_ERR(dphy->ref_clk);
-+
-+	dphy->tx_clk = devm_clk_get(&pdev->dev, "tx");
-+	if (IS_ERR(dphy->tx_clk))
-+		return PTR_ERR(dphy->tx_clk);
-+
-+	dphy->rstc = devm_reset_control_array_get_exclusive(&pdev->dev);
-+	if (IS_ERR(dphy->rstc))
-+		return PTR_ERR(dphy->rstc);
-+
-+	dphy->mipi_0p9 = devm_regulator_get(&pdev->dev, "mipi_0p9");
-+	if (IS_ERR(dphy->mipi_0p9))
-+		return PTR_ERR(dphy->mipi_0p9);
-+
-+	dphy->phy = devm_phy_create(&pdev->dev, NULL, &stf_dphy_ops);
-+	if (IS_ERR(dphy->phy)) {
-+		dev_err(&pdev->dev, "Failed to create PHY\n");
-+		return PTR_ERR(dphy->phy);
-+	}
-+
-+	pm_runtime_enable(&pdev->dev);
-+
-+	phy_set_drvdata(dphy->phy, dphy);
-+	phy_provider = devm_of_phy_provider_register(&pdev->dev,
-+						     of_phy_simple_xlate);
-+
-+	return PTR_ERR_OR_ZERO(phy_provider);
-+}
-+
-+static const struct stf_dphy_info starfive_dphy_info = {
-+	.maps = {4, 0, 1, 2, 3, 5},
-+};
-+
-+static const struct of_device_id stf_dphy_dt_ids[] = {
-+	{
-+		.compatible = "starfive,jh7110-dphy-rx",
-+		.data = &starfive_dphy_info,
-+	},
-+	{ /* sentinel */ },
-+};
-+MODULE_DEVICE_TABLE(of, stf_dphy_dt_ids);
-+
-+static struct platform_driver stf_dphy_driver = {
-+	.probe = stf_dphy_probe,
-+	.driver = {
-+		.name	= "starfive-dphy-rx",
-+		.of_match_table = stf_dphy_dt_ids,
-+	},
-+};
-+module_platform_driver(stf_dphy_driver);
-+
-+MODULE_AUTHOR("Jack Zhu <jack.zhu@starfivetech.com>");
-+MODULE_AUTHOR("Changhuang Liang <changhuang.liang@starfivetech.com>");
-+MODULE_DESCRIPTION("StarFive DPHY RX driver");
-+MODULE_LICENSE("GPL");
--- 
-2.25.1
+  static inline bool cpu_has_virtual_nmis(void)
+  {
+      return vmcs_config.pin_based_exec_ctrl & PIN_BASED_VIRTUAL_NMIS &&
+diff --git a/arch/x86/kvm/vmx/nested.c b/arch/x86/kvm/vmx/nested.c
+index 78524daa2cb2..92aa4fc3d233 100644
+--- a/arch/x86/kvm/vmx/nested.c
++++ b/arch/x86/kvm/vmx/nested.c
+@@ -1227,9 +1227,9 @@ static int vmx_restore_vmx_basic(struct vcpu_vmx 
+*vmx, u64 data)
+  {
+      const u64 feature_and_reserved =
+          /* feature (except bit 48; see below) */
+-        BIT_ULL(49) | BIT_ULL(54) | BIT_ULL(55) |
++        BIT_ULL(49) | BIT_ULL(54) | BIT_ULL(55) | BIT_ULL(56) |
+          /* reserved */
+-        BIT_ULL(31) | GENMASK_ULL(47, 45) | GENMASK_ULL(63, 56);
++        BIT_ULL(31) | GENMASK_ULL(47, 45) | GENMASK_ULL(63, 57);
+      u64 vmx_basic = vmcs_config.nested.basic;
+
+      if (!is_bitwise_subset(vmx_basic, data, feature_and_reserved))
+@@ -2873,7 +2873,8 @@ static int nested_check_vm_entry_controls(struct 
+kvm_vcpu *vcpu,
+          should_have_error_code =
+              intr_type == INTR_TYPE_HARD_EXCEPTION && prot_mode &&
+              x86_exception_has_error_code(vector);
+-        if (CC(has_error_code != should_have_error_code))
++        if (!cpu_has_vmx_basic_check_errcode() &&
++            CC(has_error_code != should_have_error_code))
+              return -EINVAL;
+
+          /* VM-entry exception error code */
+@@ -6986,6 +6987,8 @@ static void nested_vmx_setup_basic(struct 
+nested_vmx_msrs *msrs)
+
+      if (cpu_has_vmx_basic_inout())
+          msrs->basic |= VMX_BASIC_INOUT;
++    if (cpu_has_vmx_basic_check_errcode())
++        msrs->basic |= VMX_BASIC_CHECK_ERRCODE;
+  }
+
+  static void nested_vmx_setup_cr_fixed(struct nested_vmx_msrs *msrs)
+diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
+index d70f2e94b187..95c0eab7805c 100644
+--- a/arch/x86/kvm/vmx/vmx.c
++++ b/arch/x86/kvm/vmx/vmx.c
+@@ -2748,7 +2748,7 @@ static int setup_vmcs_config(struct vmcs_config 
+*vmcs_conf,
+      rdmsrl(MSR_IA32_VMX_MISC, misc_msr);
+
+      vmcs_conf->size = vmx_msr_high & 0x1fff;
+-    vmcs_conf->basic_cap = vmx_msr_high & ~0x1fff;
++    vmcs_conf->basic_cap = vmx_msr_high & ~0x7fff;
+
+      vmcs_conf->revision_id = vmx_msr_low;
+
 
