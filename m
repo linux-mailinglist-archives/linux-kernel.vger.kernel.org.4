@@ -2,98 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED83574428F
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 20:55:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BA18744291
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 20:56:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230180AbjF3SzA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 14:55:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52982 "EHLO
+        id S231617AbjF3S4K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Jun 2023 14:56:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229738AbjF3Sy5 (ORCPT
+        with ESMTP id S229738AbjF3S4J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 14:54:57 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46E073C18
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 11:54:56 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id a640c23a62f3a-991f956fb5aso243618966b.0
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 11:54:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1688151294; x=1690743294;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=TNDdxm2uRBanyTPDPNPrPhakFGMtbZ0lo57cu0b88BM=;
-        b=TNggm6bHMP4atZhQ+ioXsL1qmmri8OLjdoLgvmJJan5q9l7H02/6zQHP5r7nYWVkuV
-         KAIbQTUZPRF9NtiJn1eW3+h0DLyvJFKevKHx76R6dp8pzfxz4QKMF+sbI04NXRZHDhGc
-         7bONuGmijwn7chkj6o2ufyCw2HrCk+gA+PzG4=
+        Fri, 30 Jun 2023 14:56:09 -0400
+Received: from mail-io1-f41.google.com (mail-io1-f41.google.com [209.85.166.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AF443C17;
+        Fri, 30 Jun 2023 11:56:08 -0700 (PDT)
+Received: by mail-io1-f41.google.com with SMTP id ca18e2360f4ac-78372b896d0so92103939f.2;
+        Fri, 30 Jun 2023 11:56:08 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688151294; x=1690743294;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20221208; t=1688151367; x=1690743367;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=TNDdxm2uRBanyTPDPNPrPhakFGMtbZ0lo57cu0b88BM=;
-        b=ePocjnK6Hayz8YQYN33EsmXZSnOnXDD9UymWmhjxbNfKg9dTrktZPbZ8zGCrB1xPOL
-         D/8dgR3ZdzltPesFL9JoLoU/iLp+GR7jVCK/SOKcoxTDh13zZZdjhzyKxwVxSEa8hxBN
-         b1HltgoO1mt4sqlAsqs2sn3ihS0qKd2H9+xPgveTwx80U4ULbFOWY6vfzm8IkKCZJ9is
-         Vr/dlfDyfxZ5tVPKSVlSDZegaPo6BV/ujxft///Wbuxff/dAq2p/Wx7Dr1S5Z94vhsxu
-         RilxOAiYOrVBzvfBqEeTgEXrSwnKpOXolTK6TRhLcENGbN5RfZxGBlxjPaBM9DQzsfns
-         LQZw==
-X-Gm-Message-State: ABy/qLamEXYuo2MJuJjsNHjMhlGpNxIYJI291LmBOEiueUPac69VvArz
-        9YEZveoO4qMnMqRR2ZVG4lmU0k6dxlIXs3PEP9GrcLvQ
-X-Google-Smtp-Source: APBJJlEICROppBDPYSVm0KZ3QWl+K9fJ6r8nTemk6KB5efh6cCbrKlAtRFXxZUbtUD9GyWPVKbqmlw==
-X-Received: by 2002:a17:906:f9d7:b0:988:9621:d855 with SMTP id lj23-20020a170906f9d700b009889621d855mr2257005ejb.61.1688151294538;
-        Fri, 30 Jun 2023 11:54:54 -0700 (PDT)
-Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com. [209.85.208.45])
-        by smtp.gmail.com with ESMTPSA id u4-20020a17090617c400b0099297c99314sm2794276eje.113.2023.06.30.11.54.53
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 30 Jun 2023 11:54:54 -0700 (PDT)
-Received: by mail-ed1-f45.google.com with SMTP id 4fb4d7f45d1cf-51d810010deso2223437a12.0
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 11:54:53 -0700 (PDT)
-X-Received: by 2002:a50:ee05:0:b0:51d:d4dd:a0e1 with SMTP id
- g5-20020a50ee05000000b0051dd4dda0e1mr1971858eds.15.1688151293677; Fri, 30 Jun
- 2023 11:54:53 -0700 (PDT)
+        bh=SBsvzXB7J1T8smPYnRti2Y7WQp0yg4tNQa4bMVJSe5s=;
+        b=GhDL6YLOXj6zcpmZQKDlxQAmtZSao/M5/o59yMiA9Zu/9NQ8LW3LJFhvL1xno1l1G2
+         wlf4Ug48xdGf3GBPZxMNr6E474vApY+BTPQfeBZAYnXtemA2lBTKQlVjnaDQX++jVf3p
+         Lga+axq3UpyKpPwki7k3XVGUT8J5CA8hinVv9KnBoraa9B3yEMJWrQyPazadNcZ12rf6
+         AP1akpZqtiHORY/bFVgEx+Hd9MckwMBqTLl5tra3gM+gg5nn8m2E1RVxY4PC2oCRURPr
+         83FdnK8HwLsI7dAU/WXkxrwGf1oiuO0hoVnW5l3R9vQwE9DzV504uUHw5unolnaJ8Al2
+         89QA==
+X-Gm-Message-State: ABy/qLapXf13iQP7H17TNUeMCpjOaZjkK/XsCHHn1ApvcKC/tyLZKgd4
+        C2ffPMo6DOczkaSNc89tvg==
+X-Google-Smtp-Source: APBJJlFbal0TSSFUEyZJj6gaS/OIeklfv37G7dQ9yMSEemrqVGCYWLyUg5LqgSoJI8r6LFLWHesWCg==
+X-Received: by 2002:a92:d48e:0:b0:345:6ffa:63c5 with SMTP id p14-20020a92d48e000000b003456ffa63c5mr2738484ilg.32.1688151367484;
+        Fri, 30 Jun 2023 11:56:07 -0700 (PDT)
+Received: from robh_at_kernel.org ([64.188.179.250])
+        by smtp.gmail.com with ESMTPSA id b4-20020a92c844000000b0033e62b47a49sm2154252ilq.41.2023.06.30.11.56.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 30 Jun 2023 11:56:06 -0700 (PDT)
+Received: (nullmailer pid 2175660 invoked by uid 1000);
+        Fri, 30 Jun 2023 18:56:04 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     Will Deacon <will@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>
+Cc:     linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 1/2] dt-bindings: arm: pmu: Add Cortex-A520, Cortex-A715, and Cortex-A720
+Date:   Fri, 30 Jun 2023 12:56:01 -0600
+Message-Id: <20230630185602.2175559-1-robh@kernel.org>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-References: <CAHk-=wgqQCAtA4cVev0g3A6RCD16s1p-_TAUeVkGE0_yS2ehyA@mail.gmail.com>
- <mhng-784b868b-bc5c-44b4-ae82-3929f67ac5dc@palmer-ri-x1c9a>
-In-Reply-To: <mhng-784b868b-bc5c-44b4-ae82-3929f67ac5dc@palmer-ri-x1c9a>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Fri, 30 Jun 2023 11:54:35 -0700
-X-Gmail-Original-Message-ID: <CAHk-=whzdoWP5TRA=p=monXZmzo1Wd-gH8GRpcEUKh74nmDgZQ@mail.gmail.com>
-Message-ID: <CAHk-=whzdoWP5TRA=p=monXZmzo1Wd-gH8GRpcEUKh74nmDgZQ@mail.gmail.com>
-Subject: Re: [GIT PULL] RISC-V Patches for the 6.5 Merge Window, Part 1
-To:     Palmer Dabbelt <palmer@rivosinc.com>
-Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 30 Jun 2023 at 11:47, Palmer Dabbelt <palmer@rivosinc.com> wrote:
->
-> Awesome, thanks.  I poke around the git merge resolution stuff, but I'm
-> never 100% sure so I usually just look at the resulting output files and
-> then just paste in whatever git says as a heads up ;)
+Add compatible strings for the Arm Cortex-A520, Cortex-A715, and
+Cortex-A720 CPU PMUs.
 
-Yup. It's one reason I really prefer to do merges myself - I just have
-done *so* many of them over the years (and did them long before git
-made them much easier) that I can usually do them in my sleep.
+Signed-off-by: Rob Herring <robh@kernel.org>
+---
+ Documentation/devicetree/bindings/arm/pmu.yaml | 3 +++
+ 1 file changed, 3 insertions(+)
 
-Which obviously doesn't mean I then necessarily always get them right,
-but I tend to have a higher success rate just because I'm so used to
-them.
+diff --git a/Documentation/devicetree/bindings/arm/pmu.yaml b/Documentation/devicetree/bindings/arm/pmu.yaml
+index e14358bf0b9c..0cc468d6c372 100644
+--- a/Documentation/devicetree/bindings/arm/pmu.yaml
++++ b/Documentation/devicetree/bindings/arm/pmu.yaml
+@@ -49,7 +49,10 @@ properties:
+           - arm,cortex-a77-pmu
+           - arm,cortex-a78-pmu
+           - arm,cortex-a510-pmu
++          - arm,cortex-a520-pmu
+           - arm,cortex-a710-pmu
++          - arm,cortex-a715-pmu
++          - arm,cortex-a720-pmu
+           - arm,cortex-x1-pmu
+           - arm,cortex-x2-pmu
+           - arm,neoverse-e1-pmu
+-- 
+2.40.1
 
-Regardless, I like seeing the heads-up for merge conflicts in the pull
-requests, if for no other reason than the fact that it sets my
-expectations for what I'm going to see.
-
-For example, sometimes it means that I decide I'll just go make a cup
-of coffee before tackling the merge at all... Not for something this
-trivial, but you get the idea.
-
-                Linus
