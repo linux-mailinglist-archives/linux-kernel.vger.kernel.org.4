@@ -2,84 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29024743B19
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 13:48:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DCC32743B17
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 13:48:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232691AbjF3Ls3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 07:48:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42512 "EHLO
+        id S232665AbjF3LsU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Jun 2023 07:48:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232525AbjF3LsZ (ORCPT
+        with ESMTP id S232525AbjF3LsS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 07:48:25 -0400
-Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B2C63A90
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 04:48:24 -0700 (PDT)
-Received: by mail-yb1-xb2a.google.com with SMTP id 3f1490d57ef6-bfe6ea01ff5so1686683276.3
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 04:48:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1688125703; x=1690717703;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=n5ZqAZiSn5H7ncYmND2Mk0HDGl8wCPZgwIU7C8IqLJ4=;
-        b=eJu3hD8LV6A9O1ghoud7QTR+967Q4UY5TO/Mut++jAffD8Q9ckoNu0Q0JnDaWRbVhD
-         w74d5xSb4m8YZZsImJmvU8GpkonaTEnYXvJ9xWy2o59Slw7umVI7g5EFHpvcoCmrdJZI
-         bIsUgIDtFTUYaG4QNZkQpSrooeZ80wHOudjrIEMrFFIHo3qBVOf8CCAhmgHayq9aprAy
-         Vy4jQ1oaByHqqwLB8suCXJCe2L43qGAQ5uIFfSbbXCTr/ERAp5iRAxAWfVCWvaDJQwR8
-         WaOhu5mQci+vrhWh2/KJw3iI6qg7HlzquSK3f9vWxnFG9TgCrj3dtiApQZEjkMwPwnzo
-         RFYA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688125703; x=1690717703;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=n5ZqAZiSn5H7ncYmND2Mk0HDGl8wCPZgwIU7C8IqLJ4=;
-        b=J//0CnZo1lZfGC/jC2GPZlWiGEh3UhxaMVCIsPnThkWfrZ6tFsjvxkVy+JtY5UmJGA
-         jNDOFg4zIzwHo+Y+fpqt4xLNd+KrAhD3BgXTzxIY/cDDl1HymcWBIj3TaNu8FuZVNKni
-         Gi/1wA18WwzeAxt/MdwouRTVieCvyJlTeF3tD+SlauLKW2JRAQjQCiDXXxk14eeBe1RZ
-         DLFubnua4XmqZ+j013f/zJnFAT/HCpJddAuRMxy7QX37jT0iUh0MZbwix124Ytcd8/PX
-         xJ9/G6YuQx3LveQpkHJc/4rmc5BH0Jq6u42qEN1+H7IdU0N+b5ZnzEu7kkoiuUQtu6C+
-         EJ2Q==
-X-Gm-Message-State: ABy/qLb4SVrl5xQd+ljPkgHDpT515GyvqlISpLpJOhXnftWKlvrR8/bi
-        SVvuFMfDLgx21vouq6dagdeC65cTJNibtQdYaEBjCA==
-X-Google-Smtp-Source: APBJJlEn23zpm9K2m3GcGXdyOI90JuXNMbceme7t72QCtVJK1VLTsf7axf/ddaUV4XHnxExw+9SjP+jDaXTxQSRWvDE=
-X-Received: by 2002:a25:1f54:0:b0:bca:7cd:7f32 with SMTP id
- f81-20020a251f54000000b00bca07cd7f32mr2488364ybf.48.1688125703651; Fri, 30
- Jun 2023 04:48:23 -0700 (PDT)
+        Fri, 30 Jun 2023 07:48:18 -0400
+Received: from gproxy4-pub.mail.unifiedlayer.com (gproxy4-pub.mail.unifiedlayer.com [69.89.23.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 766EC3A87
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 04:48:17 -0700 (PDT)
+Received: from cmgw15.mail.unifiedlayer.com (unknown [10.0.90.130])
+        by progateway6.mail.pro1.eigbox.com (Postfix) with ESMTP id 1FD6710049531
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 11:48:17 +0000 (UTC)
+Received: from box5620.bluehost.com ([162.241.219.59])
+        by cmsmtp with ESMTP
+        id FCbpqpxN5xKeeFCbpqVFLR; Fri, 30 Jun 2023 11:48:17 +0000
+X-Authority-Reason: nr=8
+X-Authority-Analysis: v=2.4 cv=NvUUz+RJ c=1 sm=1 tr=0 ts=649ec101
+ a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
+ a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
+ a=of4jigFt-DYA:10:nop_rcvd_month_year
+ a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
+ a=HaFmDPmJAAAA:8 a=Jrc7CLIahwlOR-p7YVwA:9 a=QEXdDO2ut3YA:10:nop_charset_2
+ a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
+        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
+        Message-ID:From:In-Reply-To:References:Cc:To:Subject:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=1DOgCVW2Sy9RjweoOq8OKyvquk4jU3/8rXFrYWqMJlQ=; b=hkhUtJwcnuC5oTV06OfVrZhdB/
+        2IZYB5M85obFu0VAQRrb6X2tDQ6e6eQfIIF361zmGWWaXqdVUaFbOx0LJiq8q0KFGJrhS14s2BUoJ
+        yWpo5KdH8Fjio55q2rt1n9FtiUXRQvCethi+FGLGF/Tt3MpNOVFnrmaYxDiMo9JVtmTSfczTMDVl5
+        Sz5zzW34Fzh14SwU4yZwiD4S5AmUyZXpSWzENyBhdAUY0ZmBKDRSz2zxHetzn99TFnJ5smJrZo/wo
+        u+y+khxW3NynwHasTX2tijozNpPpJnjvPGgd2KYAHSRUtKMNtKL1mCFVgoTOl1tjCYmKHS/JTSu0j
+        o5PjH7eg==;
+Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:46134 helo=[10.0.1.47])
+        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.95)
+        (envelope-from <re@w6rz.net>)
+        id 1qFCbn-001w2W-Sx;
+        Fri, 30 Jun 2023 05:48:15 -0600
+Subject: Re: [PATCH 6.1 00/33] 6.1.37-rc3 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org
+Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de, conor@kernel.org
+References: <20230630072124.944461414@linuxfoundation.org>
+In-Reply-To: <20230630072124.944461414@linuxfoundation.org>
+From:   Ron Economos <re@w6rz.net>
+Message-ID: <87618009-e6f3-4267-401a-85e29a5b9bbd@w6rz.net>
+Date:   Fri, 30 Jun 2023 04:48:13 -0700
+User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-References: <20230621174943.30302-1-andriy.shevchenko@linux.intel.com> <20230621174943.30302-2-andriy.shevchenko@linux.intel.com>
-In-Reply-To: <20230621174943.30302-2-andriy.shevchenko@linux.intel.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Fri, 30 Jun 2023 13:48:12 +0200
-Message-ID: <CACRpkdbraGC0H+axUizMXEpo=kC2L-iwfFeiWCL8x8xc9e=6sQ@mail.gmail.com>
-Subject: Re: [PATCH v1 2/5] gpiolib: Factor out gpiochip_simple_create_domain()
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Andy Shevchenko <andy@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - box5620.bluehost.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - w6rz.net
+X-BWhitelist: no
+X-Source-IP: 73.162.232.9
+X-Source-L: No
+X-Exim-ID: 1qFCbn-001w2W-Sx
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.47]) [73.162.232.9]:46134
+X-Source-Auth: re@w6rz.net
+X-Email-Count: 38
+X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
+X-Local-Domain: yes
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 21, 2023 at 7:49=E2=80=AFPM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
-
-> As a preparatory patch and for the sake of consistency,
-> factor out gpiochip_simple_create_domain().
+On 6/30/23 12:32 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 6.1.37 release.
+> There are 33 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 >
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Responses should be made by Sun, 02 Jul 2023 07:21:12 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.1.37-rc3.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.1.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
 
-Yours,
-Linus Walleij
+Tested-by: Ron Economos <re@w6rz.net>
+
