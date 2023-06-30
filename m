@@ -2,60 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77571743648
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 09:58:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9163B74364F
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 10:00:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230054AbjF3H57 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 03:57:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58728 "EHLO
+        id S232144AbjF3IAk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Jun 2023 04:00:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230427AbjF3H5u (ORCPT
+        with ESMTP id S229742AbjF3IAe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 03:57:50 -0400
+        Fri, 30 Jun 2023 04:00:34 -0400
 Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B66D5170B;
-        Fri, 30 Jun 2023 00:57:47 -0700 (PDT)
-Received: by mail-wr1-x431.google.com with SMTP id ffacd0b85a97d-3128fcd58f3so1793221f8f.1;
-        Fri, 30 Jun 2023 00:57:47 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F39751713;
+        Fri, 30 Jun 2023 01:00:32 -0700 (PDT)
+Received: by mail-wr1-x431.google.com with SMTP id ffacd0b85a97d-311099fac92so1884303f8f.0;
+        Fri, 30 Jun 2023 01:00:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688111866; x=1690703866;
+        d=gmail.com; s=20221208; t=1688112031; x=1690704031;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=f1oSNH4YpSoAOwVpPwfuADPnn2NfW9arFUVTEKiYWyk=;
-        b=N2XMCwCaALKOeVzeJrSaYu76zsmgVhOIJtjJ0zALu4joYaFV7WzJwCu/HxsORpmEl7
-         d1Q0+l8RSQ1cU9R27ej7HtotppJnZtRtHUZXOr5hPPqgVdayy6pM1L/lKjtJWWRj6QV1
-         wbtOEkixbqNEDRvcLAcNHr9dzpuPreTMVSdJXemFejz8e0Nr3YiImjzGn5qv0B2VdSk/
-         eytpoHVN462AzVpOGYw6jN+8JCaatgC4d1ypMm+zEzysAQNBiR5+LVrumI6oN8BGOyaf
-         M5uarZG37vhzcAQJARRlvqP6ehgGt7HW56XAKJgmBMn7p2hTQywiSeK8MOM//4NyXaJ8
-         Dbew==
+        bh=A8FnmCCz7avUcOjil/VxXP8BWdBesWE35fMFLOG+zfM=;
+        b=Te325GePj1V1DJnW6/YqZe1cLLVmY/Hl2Ra5DOMFH+AjsljkDe4GLJAt4HetxmZHMG
+         6hs/f1VsVvrIYwzh8woH4s4CLvmCXQonD9nEtonuErVhrIAynjnJrDH6zV2Qa+aP3Tsx
+         6bDH4fQxifehCTpjAGFMiuL0DExhIB/L/j2F2Kn429qHTD4SE/DYv/7qcUW+p/pl7skM
+         7X010/U3/9T9pHV93kdyQj+4UuIaBDnrALr8p+CxkYL5xhYxyY1Uyj/ST2WjikErWJnM
+         7raHWYrjWxcvodxUyZD2b+L543eQsnLFK6duFl5QjbblakfIt6+voogdwemA6DxlPs6W
+         gv1A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688111866; x=1690703866;
+        d=1e100.net; s=20221208; t=1688112031; x=1690704031;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=f1oSNH4YpSoAOwVpPwfuADPnn2NfW9arFUVTEKiYWyk=;
-        b=QFtGJhv7YN5R/mcx5TzvKADfOWU1R741Kn62JTF8AxhTucWNVcZhz6BmiNlAWI5p45
-         ssHAQ7S8am06/GL8GMt4fyu/44zFf98KtHTFSKY1D9WIM31FcRIDTqmPBXZpn5pBWc95
-         8fAUIuKnXcq3kk+o9zol0fZb9ExOXA1wkJJVyW/rwhJLiQ7GSDRAuuthOmsockGz0hFz
-         vA5QPlHPROVpSNl+R2Palao9xPWCglk8tvrc6nwIsNO2H1BNx4/HcRFXSmxAIbq6TMSg
-         J0FIuyUKVR2Tg9BdU5HSjk9QRvOmceQs1ZvEQ8lFHZCWVughcQqn/9d+y0E2y+iYVPd7
-         cJNg==
-X-Gm-Message-State: ABy/qLZUVnjyhexKAVJMxyA7qvw5Wbcie4y9mxlTp5Tl0gDq3Mb9/gRX
-        52s7fR0WP5prwFN0dEZ21uI=
-X-Google-Smtp-Source: APBJJlFFxTx9HwQcewwPwSSgJgYcbVqcwRReJ86o0te0HJC6qB3e+yiRKb0fAh3zjLuzaUf0HG4dWw==
-X-Received: by 2002:adf:fa88:0:b0:313:ec90:ac23 with SMTP id h8-20020adffa88000000b00313ec90ac23mr1436840wrr.13.1688111865928;
-        Fri, 30 Jun 2023 00:57:45 -0700 (PDT)
+        bh=A8FnmCCz7avUcOjil/VxXP8BWdBesWE35fMFLOG+zfM=;
+        b=QBQAvgT1e1dr3DGF+3V5ID9RFceSOtsGiyCzOoHfAsjkw6Jzk37jlL6RI5mh0qSjNq
+         eaP6p9kYr1b704KEAHa8pmXO4oeG8l/25kUBzq9nANx3nq6Fk8Bm/by9pDVD0IlKO1Ww
+         JGj6Ivf2WHjMUUH7Bjixb5t3WeXXjgbye5jjpca4FXn8NZsfta7pYstQ7hi/pGYaf6IG
+         jecrY8Pfbwj9O6tGd/NhyIl1kz2/WFlkdCwlpPuJBdjjWE1GKFjIAPZmTdoCNsES/ofr
+         aApClYAp/ekIAvFti/bE+8fsMzQVPdS8HgpkAQhgu+2qyCwXtkWTMZPmFIYFthuJS3w1
+         LaYA==
+X-Gm-Message-State: ABy/qLapLlKM9cTZAahy1bg5WaO+B333jWeYk07OW3Z8ui6MX1I9H0s2
+        NpoUlvREgYwJJEqGlfwWhrE=
+X-Google-Smtp-Source: APBJJlHceyknYZd/od2MM2r7dprrhRcaPC788isslwGOi7QoNWp5Krq7bfc6DIEfs4QylAsf1IV+0w==
+X-Received: by 2002:adf:fd43:0:b0:313:f18d:1f2c with SMTP id h3-20020adffd43000000b00313f18d1f2cmr1640240wrs.38.1688112031114;
+        Fri, 30 Jun 2023 01:00:31 -0700 (PDT)
 Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id a11-20020a056000050b00b003110dc7f408sm17808031wrf.41.2023.06.30.00.57.44
+        by smtp.gmail.com with ESMTPSA id t15-20020a0560001a4f00b00313f676832bsm11422388wry.93.2023.06.30.01.00.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 30 Jun 2023 00:57:45 -0700 (PDT)
+        Fri, 30 Jun 2023 01:00:30 -0700 (PDT)
 From:   Colin Ian King <colin.i.king@gmail.com>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        linux-perf-users@vger.kernel.org
 Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH][next] media: wl128x: Fix spelling mistake "Transfered" -> "Transferred"
-Date:   Fri, 30 Jun 2023 08:57:44 +0100
-Message-Id: <20230630075744.15444-1-colin.i.king@gmail.com>
+Subject: [PATCH][next] perf/benchmark: Fix spelling mistake "synchronious" -> "synchronous"
+Date:   Fri, 30 Jun 2023 09:00:29 +0100
+Message-Id: <20230630080029.15614-1-colin.i.king@gmail.com>
 X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
@@ -70,26 +78,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is a spelling mistake in a fmdbg message. Fix it.
+There is a spelling mistake in an option description. Fix it.
 
 Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
 ---
- drivers/media/radio/wl128x/fmdrv_common.c | 2 +-
+ tools/perf/bench/sched-seccomp-notify.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/media/radio/wl128x/fmdrv_common.c b/drivers/media/radio/wl128x/fmdrv_common.c
-index b31b7ed60bbe..ca6f09e58e62 100644
---- a/drivers/media/radio/wl128x/fmdrv_common.c
-+++ b/drivers/media/radio/wl128x/fmdrv_common.c
-@@ -1282,7 +1282,7 @@ static int fm_download_firmware(struct fmdev *fmdev, const u8 *fw_name)
- 		fw_data += (sizeof(struct bts_action) + (action->size));
- 		fw_len -= (sizeof(struct bts_action) + (action->size));
- 	}
--	fmdbg("Transfered only %d of %d bytes of the firmware to chip\n", fw_entry->size - fw_len, fw_entry->size);
-+	fmdbg("Transferred only %d of %d bytes of the firmware to chip\n", fw_entry->size - fw_len, fw_entry->size);
- rel_fw:
- 	release_firmware(fw_entry);
- 	clear_bit(FM_FW_DW_INPROGRESS, &fmdev->flag);
+diff --git a/tools/perf/bench/sched-seccomp-notify.c b/tools/perf/bench/sched-seccomp-notify.c
+index eac4ef60090f..2e8205c61141 100644
+--- a/tools/perf/bench/sched-seccomp-notify.c
++++ b/tools/perf/bench/sched-seccomp-notify.c
+@@ -33,7 +33,7 @@ static bool sync_mode;
+ static const struct option options[] = {
+ 	OPT_U64('l', "loop",	&loops,		"Specify number of loops"),
+ 	OPT_BOOLEAN('s', "sync-mode", &sync_mode,
+-		    "Enable the synchronious mode for seccomp notifications"),
++		    "Enable the synchronous mode for seccomp notifications"),
+ 	OPT_END()
+ };
+ 
 -- 
 2.39.2
 
