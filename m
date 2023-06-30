@@ -2,58 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 221AB7442CC
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 21:40:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA9697442D4
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 21:43:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229957AbjF3Tk1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 15:40:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33962 "EHLO
+        id S230235AbjF3TnY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Jun 2023 15:43:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229485AbjF3TkZ (ORCPT
+        with ESMTP id S229485AbjF3TnV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 15:40:25 -0400
+        Fri, 30 Jun 2023 15:43:21 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D967F3C3C;
-        Fri, 30 Jun 2023 12:40:24 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DE6BA7;
+        Fri, 30 Jun 2023 12:43:20 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6F24B61773;
-        Fri, 30 Jun 2023 19:40:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F26EC433C8;
-        Fri, 30 Jun 2023 19:40:21 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C6D43617F1;
+        Fri, 30 Jun 2023 19:43:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3CE50C433C0;
+        Fri, 30 Jun 2023 19:43:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688154023;
-        bh=f4ZT04acv8jhClxAzPRU6wHrP1dP/42XxHkIt0O7tIw=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=XNIGm+o2TWYIo4roryHW75aES8fogItxPyjNROzZBPFlDkd762yw/9m0Hm4EBMVR7
-         fSe/zysLj/l4mzjXqlRVRJHwrUoxH695NpUpQoyq/GHN8hjfEBRRrcaHqYAbcSIEHz
-         vv0IwSncXkOAZ9bxNIXHBg6h1sIlXm/iyPsWv0znYXnelNs0urdASJlh45z/02DO2v
-         vISAK1NrXTZ4gxhovLQFfFVh7u2lgFQVf2EnT4U5a1z6nZZkcWDcKKoErwXuv/NkPy
-         Dq4EIAlSpvLyZkziv650Inaq6yMlZZoQzlseMRUTy/h1J3WUUZaia5NMWeetT3AkD1
-         7nPawZ1nDPdLg==
-Message-ID: <7f44798b-e2bf-1620-da37-ca13bfd07a21@kernel.org>
-Date:   Fri, 30 Jun 2023 22:40:19 +0300
+        s=k20201202; t=1688154199;
+        bh=b0y+8nFzSPDkanVO/OW8i7+MJRn/8oHgRiArrnt1vpM=;
+        h=Date:Subject:To:References:From:In-Reply-To:From;
+        b=IOCxhD1wkEAF0rXK5hmAEIOkoxz7RysWGgwjQMXXdUaLQcWXHr2LhUXFkZr4peWvf
+         OgzrMi9Bq95swkvDc02K+CDXOl0wXx5MXAfSivD9C4/jIti7v8gGfKUucbQiNAr1AI
+         qGL4EUP9YBm4hM7/4wzzITtmfa4qXKcUfeuQrfuzr3lZ9dgpan2k56CvUvJsE5pyZh
+         rZEpH/Hgfdzagg7aJOXsfs30HyEoCtlMc4cwTlgtanEDLPJKcS3cj1CF/KOlQEmj1H
+         DZpWyCx3sMpyH7d3jSnEj+iyJBXIj4E/hpdS/Odtqhi5AX9eVyJK0akfUNJQk6c23G
+         V+e71QCdJqWtg==
+Message-ID: <158f9975-afff-25b8-130c-2a8381ce21ee@kernel.org>
+Date:   Fri, 30 Jun 2023 22:43:14 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.11.0
-Subject: Re: [PATCH 0/3] Configure usb0 as peripheral on am335x boards
+Subject: Re: [EXT] Re: [PATCH 1/1] usb: gadget: call usb_gadget_check_config()
+ to verify UDC capability
 Content-Language: en-US
-To:     Julien Panis <jpanis@baylibre.com>,
-        Tony Lindgren <tony@atomide.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>, linux-omap@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        vigneshr@ti.com, nm@ti.com
-References: <20230629-usb0-as-peripheral-v1-0-167f78a11746@baylibre.com>
- <20230630072047.GK14287@atomide.com>
- <f4fa80fd-1a6a-4718-0287-f5288cd9d912@baylibre.com>
+To:     Frank Li <frank.li@nxp.com>,
+        "r-gunasekaran@ti.com" <r-gunasekaran@ti.com>,
+        "imx@lists.linux.dev" <imx@lists.linux.dev>,
+        Jun Li <jun.li@nxp.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Elson Roy Serrao <quic_eserrao@quicinc.com>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        =?UTF-8?B?SsOzIMOBZ2lsYSBCaXRzY2g=?= <jgilab@gmail.com>,
+        Prashanth K <quic_prashk@quicinc.com>,
+        Peter Chen <peter.chen@kernel.org>,
+        "open list:USB SUBSYSTEM" <linux-usb@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20230628222437.3188441-1-Frank.Li@nxp.com>
+ <42940cae-ce4f-577a-474b-f06b3b481e4e@kernel.org>
+ <AM6PR04MB4838E7A9B41AB382DAAA35038825A@AM6PR04MB4838.eurprd04.prod.outlook.com>
 From:   Roger Quadros <rogerq@kernel.org>
-In-Reply-To: <f4fa80fd-1a6a-4718-0287-f5288cd9d912@baylibre.com>
+In-Reply-To: <AM6PR04MB4838E7A9B41AB382DAAA35038825A@AM6PR04MB4838.eurprd04.prod.outlook.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
         RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -64,57 +71,98 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
 
-On 30/06/2023 11:30, Julien Panis wrote:
-> Hello Tony,
+
+On 29/06/2023 06:40, Frank Li wrote:
 > 
-> On 6/30/23 09:20, Tony Lindgren wrote:
->> Hi,
+> 
+>> -----Original Message-----
+>> From: Roger Quadros <rogerq@kernel.org>
+>> Sent: Wednesday, June 28, 2023 10:23 PM
+>> To: Frank Li <frank.li@nxp.com>; r-gunasekaran@ti.com; imx@lists.linux.dev;
+>> Jun Li <jun.li@nxp.com>; Greg Kroah-Hartman
+>> <gregkh@linuxfoundation.org>; Elson Roy Serrao
+>> <quic_eserrao@quicinc.com>; Thinh Nguyen
+>> <Thinh.Nguyen@synopsys.com>; Andy Shevchenko
+>> <andriy.shevchenko@linux.intel.com>; Jó Ágila Bitsch <jgilab@gmail.com>;
+>> Prashanth K <quic_prashk@quicinc.com>; Peter Chen
+>> <peter.chen@kernel.org>; open list:USB SUBSYSTEM <linux-
+>> usb@vger.kernel.org>; open list <linux-kernel@vger.kernel.org>
+>> Subject: [EXT] Re: [PATCH 1/1] usb: gadget: call usb_gadget_check_config()
+>> to verify UDC capability
 >>
->> * Julien Panis <jpanis@baylibre.com> [230629 13:10]:
->>> This series configures usb0 dr_mode as 'peripheral' for am335x-evm,
->>> am335x-evmsk, and am335x-icev2. This USB port is mainly used for
->>> RNDIS and DFU.
->> Is this a mini-B connector? Just wondering if it was originally attempted
->> to be configured as OTG or how it ended up with a host configuration..
-> 
-> It's a micro USB-AB connector.
-> I don't know how it ended up with a host configuration, it looks like an oversight.
-> Maybe Vignesh or Nishanth can confirm (?)
-
-usb0 role should be "otg".
-It is rightly so in Linux DT. am33xx.dtsi contains "otg" and all AM335x board files inherit from it.
-
-So I don't think setting it to "peripheral" in u-boot is the right thing to do.
-
-> 
+>> Caution: This is an external email. Please take care when clicking links or
+>> opening attachments. When in doubt, report the message using the 'Report
+>> this email' button
 >>
->>> Initially, a series was submitted to overlay dr_mode in u-boot specific
->>> device trees ('<board>-u-boot.dtsi'):
->>> https://lore.kernel.org/all/20230621-fix_usb_ether_init-v2-0-ff121f0e8d7a@baylibre.com/
+>>
+>> On 29/06/2023 03:54, Frank Li wrote:
+>>> The legacy gadget driver omitted calling usb_gadget_check_config()
+>>> to ensure that the USB device controller (UDC) has adequate resources,
+>>> including sufficient endpoint numbers and types, to support the given
+>>> configuration.
 >>>
->>> It was finally decided to modify linux device trees.
->> Do we need these as fixes? If so is there a fixes tag for these?
+>>> Previously, usb_add_config() was solely invoked by the legacy gadget
+>>> driver. Adds the necessary usb_gadget_check_config() after the bind()
+>>> operation to fix the issue.
+>>
+>> You have only fixed composite.c. Not all gadget drivers use composite.c
+>> so it will be still broken for them.
+>>
+>> Please also add default sane configuration in CDNS3 so it works even
+>> if usb_gadget_check_config() is not invoked.
 > 
-> I don't think so.
-> The u-boot series mentioned above was submitted to fix an error returned
-> by usb_ether_init() function. This error appeared after changes in u-boot
-> (arch/arm/mach-omap2/am33xx/board.c). The u-boot commit is:
-> 6815a66ad7430 ("am33xx: musb: Remove unused configuration logic").
-> But this commit is right actually, and the error appeared because dr_mode
-> was not properly configured for am335x-evmsk and am335x-icev2 dts.
-> In other words, this u-boot commit is correct but revealed an oversight
-> in dr_mode configuration for these boards.
-> So, there is not a fixes tag here. That was just an omission in device trees.
+> Which one was not call usb_add_config()?
+> DWC3 also use
+>  .check_config		= dwc3_gadget_check_config, 
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/usb/dwc3/gadget.c 
+
+I meant gadget drivers not UDC drivers.
+
+e.g.
+
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/usb/gadget/legacy/dbgp.c
+
+> 
+> I think it is not correct by assume UDC can support specific config
+> at gadget function driver. 
+> Add default value of CDNS3 actually hidden potential problem. 
+> 
+> I don't suggest it before fixed hidden potential problem. 
+> 
+> Frank  
 > 
 >>
->> Regards,
+>>>
+>>> Fixes: dce49449e04f ("usb: cdns3: allocate TX FIFO size according to
+>> composite EP number")
+>>> Reported-by: Ravi Gunasekaran <r-gunasekaran@ti.com>
+>>> Signed-off-by: Frank Li <Frank.Li@nxp.com>
+>>> ---
+>>>  drivers/usb/gadget/composite.c | 4 ++++
+>>>  1 file changed, 4 insertions(+)
+>>>
+>>> diff --git a/drivers/usb/gadget/composite.c
+>> b/drivers/usb/gadget/composite.c
+>>> index 1b3489149e5e..dd9b90481b4c 100644
+>>> --- a/drivers/usb/gadget/composite.c
+>>> +++ b/drivers/usb/gadget/composite.c
+>>> @@ -1125,6 +1125,10 @@ int usb_add_config(struct usb_composite_dev
+>> *cdev,
+>>>               goto done;
+>>>
+>>>       status = bind(config);
+>>> +
+>>> +     if (status == 0)
+>>> +             status = usb_gadget_check_config(cdev->gadget);
+>>> +
+>>>       if (status < 0) {
+>>>               while (!list_empty(&config->functions)) {
+>>>                       struct usb_function             *f;
 >>
->> Tony
-> 
-> Julien
-> 
+>> --
+>> cheers,
+>> -roger
 
 -- 
 cheers,
