@@ -2,152 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E890A743DA5
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 16:38:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 810EB743DAC
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 16:40:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232656AbjF3Oii (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 10:38:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42884 "EHLO
+        id S232697AbjF3Oke (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Jun 2023 10:40:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230462AbjF3Oih (ORCPT
+        with ESMTP id S232543AbjF3Ok3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 10:38:37 -0400
-Received: from mail.3ffe.de (0001.3ffe.de [159.69.201.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D79DC35AF;
-        Fri, 30 Jun 2023 07:38:34 -0700 (PDT)
-Received: from 3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.3ffe.de (Postfix) with ESMTPSA id 6CBA161A;
-        Fri, 30 Jun 2023 16:38:32 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2022082101;
-        t=1688135912;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=z3dNqsYdomU8JDWZFc7ypuImUApBhTKuCgR+jHSwU44=;
-        b=yVOQmT7E68fq2NuJt5AXkzK1y6OIwQbSIWa5NtHXnjsc1ITm571s0nfTDQqoBeXgkESZhC
-        LWzAhHKUTh2C1weBLzmM86uK0uv9WXB4nvd8gDjEOPIAWT0NrtzzXa7quCZKWH3m2t9UFh
-        FZmlDuQ/JQu5sdymIH0KBTEpjjHL/iQcgYuwqSWOduM6cOOwgLhFn4eWpTEd/+jVLT7w6p
-        4YlWe7Za7iKwtVPaF5ptAMHr0qhEaF45iYwIM1qc4LZ0fG25ub1YqlQwJ7UweY5SW05p9W
-        vbA4TgHvWUnfauT05g+g+Jg8PncW46Pi3uQi9BUN9ijNyazEobrri/LkvrI1bA==
+        Fri, 30 Jun 2023 10:40:29 -0400
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F48335BC
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 07:40:26 -0700 (PDT)
+Received: by mail-lf1-x129.google.com with SMTP id 2adb3069b0e04-4f86e6e4038so2424537e87.0
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 07:40:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=semihalf.com; s=google; t=1688136025; x=1690728025;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=YvEx3RaTLGXPx4GzzRnbkgUJYYMtxml/54Bl1CcEZSU=;
+        b=AGtbxnHKbXaWDDdI8S9Gfw2SSp6vXWkCQ2I3RuRmVEe4mDJpKStORqSIb/0DH9M7M7
+         rbs2QjGqZYrzqC7KSBkomRkh2OfiqGFAMcsE/qUgf2HO1OtoAdJjLJxNwmMFJ6rr0oM4
+         4FM+e1YIyT+MtwEewTmbS60Y0C528V8/fFeN9lMuRCo4/ycd6GoZayeG5GzzndHmrgG4
+         si/NL6s1UxvF9Mnoy95Nsc7rpPyIZ6EKu1GL+JwdsXD9QE6IBG6gul0rb2gP2OVHJ22m
+         /kS7kao9gf3Wc18SDr9c7sC75+xLDhuuCcJy73G0pcH9Y7cSB8xPgLKtab08OwvIbgcP
+         qGvg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688136025; x=1690728025;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=YvEx3RaTLGXPx4GzzRnbkgUJYYMtxml/54Bl1CcEZSU=;
+        b=ONMXnNXv7LwaGeb56VkdjETunodE8VO8U5mhimatVcqCgWLDe1dXfyUcQ45Iqpf+Ri
+         HmUBVv5wBukKWyiZ0pWrHBK9AzM6NKeXOv/71UC4EForcChdqYiGJSEiX2ixdpdHludA
+         pLOUqGQr/F4sh0XRYaTgE2Pk0glvkkmCDnzBChzCc0AKUQm7zjmiELSM/f5+aNt/5wlf
+         yj7nyajkUsTL7qSb7eNlSbGSaOKzEQfjtlYbuMQkpzZOL1lBK7CvijBbjCTPY4WNBkat
+         2VBWUQvvRzRRov1yL5S5IJNOjoY7iP/YrLDtIkWw+87ewzZaAe39WYJLpyN6trs7XMi2
+         PMyA==
+X-Gm-Message-State: AC+VfDz2oA8JioLfniWu3yVMB4UExCtzz1POzcyG58R/qpSRTak81nq1
+        404IY9LyHplza6ZjErKXYpoTtg==
+X-Google-Smtp-Source: ACHHUZ6ICKaLNAzs2Em4En8f9SO77xD+3Sm7yrZR8UCALUDwn9rHYUDGwTeKvmwSMroxzeXy90sagA==
+X-Received: by 2002:a05:6512:1049:b0:4f6:1307:80b0 with SMTP id c9-20020a056512104900b004f6130780b0mr2606438lfb.12.1688136024576;
+        Fri, 30 Jun 2023 07:40:24 -0700 (PDT)
+Received: from panikiel.roam.corp.google.com (staticline-31-182-201-26.toya.net.pl. [31.182.201.26])
+        by smtp.gmail.com with ESMTPSA id b7-20020a056512024700b004f85d80ca64sm2750402lfo.221.2023.06.30.07.40.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 30 Jun 2023 07:40:24 -0700 (PDT)
+From:   =?UTF-8?q?Pawe=C5=82=20Anikiel?= <pan@semihalf.com>
+To:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org
+Cc:     dinguyen@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        mchehab@kernel.org, upstream@semihalf.com, amstan@chromium.org,
+        ribalda@chromium.org,
+        =?UTF-8?q?Pawe=C5=82=20Anikiel?= <pan@semihalf.com>
+Subject: [RFC PATCH 0/3] Google Chameleon v3 video driver
+Date:   Fri, 30 Jun 2023 16:40:03 +0200
+Message-ID: <20230630144006.1513270-1-pan@semihalf.com>
+X-Mailer: git-send-email 2.41.0.255.g8b1d071c50-goog
 MIME-Version: 1.0
-Date:   Fri, 30 Jun 2023 16:38:32 +0200
-From:   Michael Walle <michael@walle.cc>
-To:     Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>
-Cc:     tudor.ambarus@linaro.org, pratyush@kernel.org,
-        miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        conor+dt@kernel.org, git@amd.com, linux-mtd@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        amitrkcian2002@gmail.com,
-        Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>
-Subject: Re: [PATCH v4 2/2] mtd: spi-nor: Avoid setting SRWD bit in SR if WP#
- signal not connected
-In-Reply-To: <20230630142233.63585-3-amit.kumar-mahapatra@amd.com>
-References: <20230630142233.63585-1-amit.kumar-mahapatra@amd.com>
- <20230630142233.63585-3-amit.kumar-mahapatra@amd.com>
-Message-ID: <10ae0cdbaf4b080d337ab4945d335f25@walle.cc>
-X-Sender: michael@walle.cc
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 2023-06-30 16:22, schrieb Amit Kumar Mahapatra:
-> Setting the status register write disable (SRWD) bit in the status
-> register (SR) with WP# signal of the flash left floating or wrongly 
-> tied to
-> GND (that includes internal pull-downs), will configure the SR 
-> permanently
-> as read-only. If WP# signal is left floating or wrongly tied to GND, 
-> avoid
-> setting SRWD bit while writing the SR during flash protection.
-> 
-> Signed-off-by: Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>
-> ---
->  drivers/mtd/spi-nor/core.c    | 3 +++
->  drivers/mtd/spi-nor/core.h    | 1 +
->  drivers/mtd/spi-nor/debugfs.c | 1 +
->  drivers/mtd/spi-nor/swp.c     | 9 +++++++--
->  4 files changed, 12 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/mtd/spi-nor/core.c b/drivers/mtd/spi-nor/core.c
-> index 0bb0ad14a2fc..520f5ab86d2b 100644
-> --- a/drivers/mtd/spi-nor/core.c
-> +++ b/drivers/mtd/spi-nor/core.c
-> @@ -2864,6 +2864,9 @@ static void spi_nor_init_flags(struct spi_nor 
-> *nor)
->  	if (flags & NO_CHIP_ERASE)
->  		nor->flags |= SNOR_F_NO_OP_CHIP_ERASE;
-> 
-> +	if (of_property_read_bool(np, "no-wp"))
-> +		nor->flags |= SNOR_F_NO_WP;
-> +
+The Google Chameleon v3 is a testing device for external displays. It
+is based on an Arria 10 SoCFPGA. This patch adds a V4L2 driver for the
+video system. The video system consists of:
+  * Six video interfaces (DMA ping pong buffers) in the FPGA, called
+  "framebuffers".
+  * Two Intel DisplayPort DPRX IP cores in the FPGA, one MST x4, one SST
+  * IT68051 chip, handled by EC firmware
 
-Not moved below the first of_property_read_bool() in that function
-(as pointed out before). It's just a minor nit.
+The driver is implemented as a single device driver, because the video
+interface devices need to talk to the DisplayPort IP core devices
+(e.g. to configure the EDID). This has the effect of the DPRX driver
+being in the chameleonv3 directory even though it's an Intel IP.
 
-But with or without that fixed:
+The DPRX code handles all the AUX communication (DPCD, sideband messages,
+message transfers). There is similarity to what's already present in
+the DRM subsystem, but I found it hard to reuse that code effectively.
 
-Reviewed-by: Michael Walle <michael@walle.cc>
+My main concern is with the overall structure of the driver - how it's
+divided into parts, the interfaces and APIs used, etc. Any feedback is
+greately appreciated.
 
->  	if (flags & SPI_NOR_RWW && nor->info->n_banks > 1 &&
->  	    !nor->controller_ops)
->  		nor->flags |= SNOR_F_RWW;
-> diff --git a/drivers/mtd/spi-nor/core.h b/drivers/mtd/spi-nor/core.h
-> index 4fb5ff09c63a..55b5e7abce6e 100644
-> --- a/drivers/mtd/spi-nor/core.h
-> +++ b/drivers/mtd/spi-nor/core.h
-> @@ -132,6 +132,7 @@ enum spi_nor_option_flags {
->  	SNOR_F_SWP_IS_VOLATILE	= BIT(13),
->  	SNOR_F_RWW		= BIT(14),
->  	SNOR_F_ECC		= BIT(15),
-> +	SNOR_F_NO_WP		= BIT(16),
->  };
-> 
->  struct spi_nor_read_command {
-> diff --git a/drivers/mtd/spi-nor/debugfs.c 
-> b/drivers/mtd/spi-nor/debugfs.c
-> index e11536fffe0f..6e163cb5b478 100644
-> --- a/drivers/mtd/spi-nor/debugfs.c
-> +++ b/drivers/mtd/spi-nor/debugfs.c
-> @@ -27,6 +27,7 @@ static const char *const snor_f_names[] = {
->  	SNOR_F_NAME(SWP_IS_VOLATILE),
->  	SNOR_F_NAME(RWW),
->  	SNOR_F_NAME(ECC),
-> +	SNOR_F_NAME(NO_WP),
->  };
->  #undef SNOR_F_NAME
-> 
-> diff --git a/drivers/mtd/spi-nor/swp.c b/drivers/mtd/spi-nor/swp.c
-> index 0ba716e84377..5ab9d5324860 100644
-> --- a/drivers/mtd/spi-nor/swp.c
-> +++ b/drivers/mtd/spi-nor/swp.c
-> @@ -214,8 +214,13 @@ static int spi_nor_sr_lock(struct spi_nor *nor, 
-> loff_t ofs, uint64_t len)
-> 
->  	status_new = (status_old & ~mask & ~tb_mask) | val;
-> 
-> -	/* Disallow further writes if WP pin is asserted */
-> -	status_new |= SR_SRWD;
-> +	/*
-> +	 * Disallow further writes if WP# pin is neither left floating nor
-> +	 * wrongly tied to GND (that includes internal pull-downs).
-> +	 * WP# pin hard strapped to GND can be a valid use case.
-> +	 */
-> +	if (!(nor->flags & SNOR_F_NO_WP))
-> +		status_new |= SR_SRWD;
-> 
->  	if (!use_top)
->  		status_new |= tb_mask;
+Paweł Anikiel (3):
+  media: Add 10, 12, and 16 bit RGB formats
+  media: Add Google Chameleon v3 video driver
+  ARM: dts: Add Chameleon v3 video node
+
+ .../socfpga/socfpga_arria10_chameleonv3.dts   |  54 ++
+ drivers/media/platform/Kconfig                |   1 +
+ drivers/media/platform/Makefile               |   1 +
+ drivers/media/platform/google/Kconfig         |   4 +
+ drivers/media/platform/google/Makefile        |   2 +
+ .../media/platform/google/chameleonv3/Kconfig |   9 +
+ .../platform/google/chameleonv3/Makefile      |  15 +
+ .../platform/google/chameleonv3/chv3-core.c   | 292 ++++++++++
+ .../platform/google/chameleonv3/chv3-core.h   |  17 +
+ .../platform/google/chameleonv3/chv3-fb.c     | 539 ++++++++++++++++++
+ .../platform/google/chameleonv3/chv3-fb.h     |  34 ++
+ .../platform/google/chameleonv3/dprx-aux.c    |  77 +++
+ .../platform/google/chameleonv3/dprx-dp.c     |  82 +++
+ .../platform/google/chameleonv3/dprx-dpcd.c   | 424 ++++++++++++++
+ .../platform/google/chameleonv3/dprx-dprx.c   | 262 +++++++++
+ .../platform/google/chameleonv3/dprx-edid.c   |  39 ++
+ .../platform/google/chameleonv3/dprx-i2c.c    |  41 ++
+ .../platform/google/chameleonv3/dprx-mt.c     | 184 ++++++
+ .../platform/google/chameleonv3/dprx-sbmsg.c  | 162 ++++++
+ .../media/platform/google/chameleonv3/dprx.h  | 128 +++++
+ drivers/media/v4l2-core/v4l2-ioctl.c          |   5 +
+ include/uapi/linux/videodev2.h                |   5 +
+ 22 files changed, 2377 insertions(+)
+ create mode 100644 drivers/media/platform/google/Kconfig
+ create mode 100644 drivers/media/platform/google/Makefile
+ create mode 100644 drivers/media/platform/google/chameleonv3/Kconfig
+ create mode 100644 drivers/media/platform/google/chameleonv3/Makefile
+ create mode 100644 drivers/media/platform/google/chameleonv3/chv3-core.c
+ create mode 100644 drivers/media/platform/google/chameleonv3/chv3-core.h
+ create mode 100644 drivers/media/platform/google/chameleonv3/chv3-fb.c
+ create mode 100644 drivers/media/platform/google/chameleonv3/chv3-fb.h
+ create mode 100644 drivers/media/platform/google/chameleonv3/dprx-aux.c
+ create mode 100644 drivers/media/platform/google/chameleonv3/dprx-dp.c
+ create mode 100644 drivers/media/platform/google/chameleonv3/dprx-dpcd.c
+ create mode 100644 drivers/media/platform/google/chameleonv3/dprx-dprx.c
+ create mode 100644 drivers/media/platform/google/chameleonv3/dprx-edid.c
+ create mode 100644 drivers/media/platform/google/chameleonv3/dprx-i2c.c
+ create mode 100644 drivers/media/platform/google/chameleonv3/dprx-mt.c
+ create mode 100644 drivers/media/platform/google/chameleonv3/dprx-sbmsg.c
+ create mode 100644 drivers/media/platform/google/chameleonv3/dprx.h
+
+-- 
+2.41.0.255.g8b1d071c50-goog
+
