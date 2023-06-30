@@ -2,127 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B34B57435DC
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 09:36:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2282A7435DE
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 09:36:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232079AbjF3HgE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 03:36:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51574 "EHLO
+        id S232372AbjF3HgH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Jun 2023 03:36:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232415AbjF3HfP (ORCPT
+        with ESMTP id S231655AbjF3Hfe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 03:35:15 -0400
-Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 686312694;
-        Fri, 30 Jun 2023 00:35:05 -0700 (PDT)
-Authenticated-By: 
-X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 35U7XiBD2019875, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (rtexh36505.realtek.com.tw[172.21.6.25])
-        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 35U7XiBD2019875
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=FAIL);
-        Fri, 30 Jun 2023 15:33:44 +0800
-Received: from RTEXDAG02.realtek.com.tw (172.21.6.101) by
- RTEXH36505.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.32; Fri, 30 Jun 2023 15:33:45 +0800
-Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
- RTEXDAG02.realtek.com.tw (172.21.6.101) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.7; Fri, 30 Jun 2023 15:33:45 +0800
-Received: from RTEXMBS04.realtek.com.tw ([fe80::e138:e7f1:4709:ff4d]) by
- RTEXMBS04.realtek.com.tw ([fe80::e138:e7f1:4709:ff4d%5]) with mapi id
- 15.01.2375.007; Fri, 30 Jun 2023 15:33:45 +0800
-From:   =?big5?B?U3RhbmxleSBDaGFuZ1up96h8vHdd?= <stanley_chang@realtek.com>
-To:     Rob Herring <robh@kernel.org>
-CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        "Douglas Anderson" <dianders@chromium.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        Flavio Suligoi <f.suligoi@asem.it>,
-        Ray Chi <raychi@google.com>,
-        "linux-phy@lists.infradead.org" <linux-phy@lists.infradead.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: RE: [PATCH v6 4/5] dt-bindings: phy: realtek: Add the doc about the Realtek SoC USB 2.0 PHY
-Thread-Topic: [PATCH v6 4/5] dt-bindings: phy: realtek: Add the doc about the
- Realtek SoC USB 2.0 PHY
-Thread-Index: AQHZqkz4ea6k1ChKgUmQ1oGFAHMAzq+hdqEAgAFUL4A=
-Date:   Fri, 30 Jun 2023 07:33:45 +0000
-Message-ID: <f17378f003144f4ba50ec08e0ad38c0b@realtek.com>
-References: <20230629054523.7519-1-stanley_chang@realtek.com>
- <20230629054523.7519-4-stanley_chang@realtek.com>
- <20230629164220.GA3146341-robh@kernel.org>
-In-Reply-To: <20230629164220.GA3146341-robh@kernel.org>
-Accept-Language: zh-TW, en-US
-Content-Language: zh-TW
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.21.190.159]
-x-kse-serverinfo: RTEXDAG02.realtek.com.tw, 9
-x-kse-antispam-interceptor-info: fallback
-x-kse-antivirus-interceptor-info: fallback
-Content-Type: text/plain; charset="big5"
-Content-Transfer-Encoding: base64
+        Fri, 30 Jun 2023 03:35:34 -0400
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2047.outbound.protection.outlook.com [40.107.237.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FB722703
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 00:35:33 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=cneF23IVAdXfKmAmAv9PwWatV/3B9/f7DAwd01REfVoVPQK4DViuq6WiPfwl3lzy0w0upukoNW1zBGNgMDmDBElLNruAvTU6DdfQxAHTLqB2Z0Fgd4venTYOd/QkFXjCL+Yvb/Xk3uPhWHtXEku0pq8TdP7QIOtGsC8YHiu5p8iHnkZIZ9TtEeo80oNWECe/3lh58vZiIhNPZRutEiT8jdwycu2gKYLyi7vPQ3AfPwANv5TnRgc2eSJcECHZH0SvAF48emojfVJCd2+ubvwRS6sBJlMOQqvMWneEfwSrxs72WCI84CGqObegvK9B2oNOJGhYrVuXPK7OsqNgWOe+dg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=XTc0Y1rrXNKRDWpAUmQ3mpunEfzfO3YtM3nY3zDW1Cc=;
+ b=n1X2JH7Q/wvFss2csN0Axj4T2KYWBrUNJVYqS2dFvv5EwpD5OGUz9VHJxpdJei8x8lNSLE91PinHKM+efpN9nEOnjlVb35sbb8pn3WW0jBtQaroyBa64hSG/+Hhr4+rOO3LIBUrAjUAz3sRRiYe4IX+Wn9oC/DZXCacYmzn6Slr+LsUBD1pIDI5bg6lgtlsm10NELx3EupuzTfXBFnxOhy6bYp0tCCd1TkApARw3PDHbUSdncwIF/cQhErycRiLEU00+U4pf70AwxCzZAtXmiltBtCBRgWA3q7Z9+2KeLYNOXF8rVwO4BXEbeMB6FkGEZBy6trIiTsIOhTh0mBClWg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=redhat.com smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=XTc0Y1rrXNKRDWpAUmQ3mpunEfzfO3YtM3nY3zDW1Cc=;
+ b=xuxJbHr9sHweyAEKcBsTC2ZC3jwsfz5SWhn5I836Mgub23P2AOfeI/+GX46ExLmbyFOzFGJHjQ3uBl3qBC7KwxbscASqrVeek+wtzvEVP1GE+dPoAGHJifR5QbWtZM/GHD+kG0/VjRAKFLARsMTiXY6ywOghzS8xuk8WmdkoAyE=
+Received: from SJ0PR13CA0091.namprd13.prod.outlook.com (2603:10b6:a03:2c5::6)
+ by PH0PR12MB5608.namprd12.prod.outlook.com (2603:10b6:510:143::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.26; Fri, 30 Jun
+ 2023 07:35:29 +0000
+Received: from CO1NAM11FT046.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:a03:2c5:cafe::f2) by SJ0PR13CA0091.outlook.office365.com
+ (2603:10b6:a03:2c5::6) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6544.19 via Frontend
+ Transport; Fri, 30 Jun 2023 07:35:29 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ CO1NAM11FT046.mail.protection.outlook.com (10.13.174.203) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6500.49 via Frontend Transport; Fri, 30 Jun 2023 07:35:28 +0000
+Received: from cjq-desktop.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Fri, 30 Jun
+ 2023 02:35:06 -0500
+From:   Jiqian Chen <Jiqian.Chen@amd.com>
+To:     David Airlie <airlied@redhat.com>,
+        Gerd Hoffmann <kraxel@redhat.com>,
+        =?UTF-8?q?Marc-Andr=C3=A9=20Lureau?= <marcandre.lureau@gmail.com>,
+        "Gurchetan Singh" <gurchetansingh@chromium.org>,
+        Chia-I Wu <olvaffe@gmail.com>,
+        "Juergen Gross" <jgross@suse.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        =?UTF-8?q?Roger=20Pau=20Monn=C3=A9?= <roger.pau@citrix.com>,
+        Robert Beckett <bob.beckett@collabora.com>,
+        <virtualization@lists.linux-foundation.org>,
+        <linux-kernel@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
+        <xen-devel@lists.xenproject.org>
+CC:     Alex Deucher <Alexander.Deucher@amd.com>,
+        Christian Koenig <Christian.Koenig@amd.com>,
+        Stewart Hildebrand <Stewart.Hildebrand@amd.com>,
+        Xenia Ragiadakou <burzalodowa@gmail.com>,
+        Honglei Huang <Honglei1.Huang@amd.com>,
+        Julia Zhang <Julia.Zhang@amd.com>,
+        Huang Rui <Ray.Huang@amd.com>,
+        Jiqian Chen <Jiqian.Chen@amd.com>
+Subject: [LINUX KERNEL PATCH v2 0/1] add S3 support for virtgpu
+Date:   Fri, 30 Jun 2023 15:34:47 +0800
+Message-ID: <20230630073448.842767-1-Jiqian.Chen@amd.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-KSE-ServerInfo: RTEXH36505.realtek.com.tw, 9
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-KSE-Antivirus-Interceptor-Info: fallback
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO1NAM11FT046:EE_|PH0PR12MB5608:EE_
+X-MS-Office365-Filtering-Correlation-Id: 76283c84-3296-4f38-acc4-08db793c93f6
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: mwvPJCcQY3+WAvQ7nycHHaVlzPPpRbzUeaeMw2Deo9W3vPdRN5Ieau3j5g96HsdoYhQR14U1gZvfj0GJSUpPtmJPkD0RKxHJICTc2EErHvi2/RZmW4gBtzkiGJeBpwHyvKjL3BpCJHwOrLFigFCwflBOzuJTGgoFN8znnKSW0aH/FaqkvUukMIsQmIKcCzP3PsVqlKYXY6b59mYhnzJYZwT9QINB6E6YYcYfSVcRnX6KkTL/JTFHNsEWXnfGgP7WG5bHXhFpzue0/xsWv2MKJkb5O2VBmQJqKwtQdKuc6bw1SCwMZ9jbo9p1cn0TUVhcjmlKVI7hm2E9VHt5NEj0lTs5NJ9WCNDtM+9hN4bhJEfLVF7RqYhHFpNsjatMvJvXdP33Hy7tMyVgScdaD4Htwlz5KbisOa283SU4/Q9PW/jVZtbL01zhx5rqpMjtHhEREs6yHfpaOkzSYyrkCYxLSlyBBWnbwgtjLlGUjEQO/y91HpTupERI+dIdnPyeheJWz03rwLqJ5vsTu2QnSFerlHCer70stwsBCPdHlcxSr0eELR8ySsxkG/vlgz9WD5bSzX5/qSyWah9LV6KefAcBy9jFG+/e33kRuBX8IcVzrnkWc3x6SJKyRH4C7pvwFsxGl53BkDynOsTGbPO1OQ0dSwC2SjBqv4VBDP37hOV9PaHd14XONXODnSSCI1gJQpwhYku7sjL/v3+J+x0ioPO4hFGVVsh4UkX2ZIkK+JyuzPVxo6W05VS2XL1llYj6QI2h84ZqJlw6WSo8tHY1fCFXtta7xi577ewm0vQzjlPOHBsqKl6SiVv99ht+aQPWXC96
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(136003)(39860400002)(346002)(396003)(376002)(451199021)(46966006)(40470700004)(36840700001)(26005)(2906002)(86362001)(356005)(82310400005)(7696005)(6666004)(83380400001)(81166007)(2616005)(921005)(186003)(336012)(16526019)(426003)(47076005)(82740400003)(40460700003)(54906003)(966005)(110136005)(41300700001)(36860700001)(40480700001)(4326008)(478600001)(36756003)(70586007)(316002)(70206006)(7416002)(1076003)(5660300002)(8936002)(8676002)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Jun 2023 07:35:28.9066
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 76283c84-3296-4f38-acc4-08db793c93f6
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT046.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR12MB5608
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SGkgUm9iLA0KDQo+IE9uIFRodSwgSnVuIDI5LCAyMDIzIGF0IDAxOjQ1OjEyUE0gKzA4MDAsIFN0
-YW5sZXkgQ2hhbmcgd3JvdGU6DQo+ID4gQWRkIHRoZSBkb2N1bWVudGF0aW9uIGV4cGxhaW4gdGhl
-IHByb3BlcnR5IGFib3V0IFJlYWx0ZWsgVVNCIFBIWSBkcml2ZXIuDQo+IA0KPiBJbiB0aGUgc3Vi
-amVjdCwgZHJvcCAidGhlIGRvYyBhYm91dCB0aGUiLiBJdCdzIHJlZHVuZGFudC4gQW5kIHBlcmhh
-cHMgYWRkICdESEMNCj4gUlREIFNvQycgaWYgdGhpcyBpc24ndCBmb3IgKmFsbCogUmVhbHRlayBT
-b0NzLg0KPiANCj4gPiBSZWFsdGVrIERIQyAoZGlnaXRhbCBob21lIGNlbnRlcikgUlREIFNvQ3Mg
-c3VwcG9ydCBEV0MzIFhIQ0kgVVNCDQo+ID4gY29udHJvbGxlci4gQWRkZWQgdGhlIGRyaXZlciB0
-byBkcml2ZSB0aGUgVVNCIDIuMCBQSFkgdHJhbnNjZWl2ZXJzLg0KPiANCj4gZHJpdmVyPyBUaGlz
-IGlzIGEgYmluZGluZyBmb3IgdGhlIGgvdy4NCg0KSSBtZWFuLCB0aGUgZHJpdmVyIGlzIGRyaXZl
-cnMvcGh5L3JlYWx0ZWsvcGh5LXJ0ay11c2IyLmMNCkkgd2lsbCByZXZpc2UgYXMNCiAgICBkdC1i
-aW5kaW5nczogcGh5OiByZWFsdGVrOiBBZGQgdGhlIFJlYWx0ZWsgREhDIFJURCBTb0MgVVNCIDIu
-MCBQSFkNCg0KICAgIEFkZCB0aGUgZG9jdW1lbnRhdGlvbiBleHBsYWluIHRoZSBwcm9wZXJ0eSBh
-Ym91dCBSZWFsdGVrIFVTQiBQSFkgZHJpdmVyLg0KDQogICAgUmVhbHRlayBESEMgKGRpZ2l0YWwg
-aG9tZSBjZW50ZXIpIFJURCBTb0NzIHN1cHBvcnQgRFdDMyBYSENJIFVTQg0KICAgIGNvbnRyb2xs
-ZXIgYW5kIHVzZXMgcGh5LXJ0ay11c2IyIGFzIGRyaXZlciBmb3IgVVNCIDIuMCBQSFkgdHJhbnNj
-ZWl2ZXIuLg0KDQo+ID4gKyRpZDogaHR0cDovL2RldmljZXRyZWUub3JnL3NjaGVtYXMvcGh5L3Jl
-YWx0ZWssdXNiMnBoeS55YW1sIw0KPiA+ICskc2NoZW1hOiBodHRwOi8vZGV2aWNldHJlZS5vcmcv
-bWV0YS1zY2hlbWFzL2NvcmUueWFtbCMNCj4gPiArDQo+ID4gK3RpdGxlOiBSZWFsdGVrIERIQyBT
-b0NzIFVTQiAyLjAgUEhZDQo+ID4gKw0KPiA+ICttYWludGFpbmVyczoNCj4gPiArICAtIFN0YW5s
-ZXkgQ2hhbmcgPHN0YW5sZXlfY2hhbmdAcmVhbHRlay5jb20+DQo+ID4gKw0KPiA+ICtkZXNjcmlw
-dGlvbjoNCj4gDQo+IFlvdSBuZWVkICd8JyBpZiBmb3JtYXR0aW5nIChsaW5lIGJyZWFrcykgYXJl
-IGltcG9ydGFudC4NCg0KSSB0aGluayBJIG5lZWQgaXQuIEkgd2lsbCBhZGQgaXQuDQoNCj4gPiAr
-ICByZWFsdGVrLGludmVyc2UtaHN0eC1zeW5jLWNsb2NrOg0KPiA+ICsgICAgZGVzY3JpcHRpb246
-DQo+ID4gKyAgICAgIEZvciBvbmUgb2YgdGhlIHBoeXMgb2YgUlREMTYxOWIgU29DLCB0aGUgc3lu
-Y2hyb25vdXMgY2xvY2sgb2YgdGhlDQo+ID4gKyAgICAgIGhpZ2gtc3BlZWQgdHggbXVzdCBiZSBp
-bnZlcnRlZC4NCj4gDQo+ICJpbnZlcnQiIGFzc3VtZXMgSSBrbm93IHdoYXQgbm9uLWludmVydGVk
-IG1lYW5zLiBJIGRvIG5vdC4gQmV0dGVyIHRvIHN0YXRlIGluDQo+IHRlcm1zIG9mIGFjdGl2ZSBo
-aWdoLCBsb3csIGZhbGxpbmcgZWRnZSwgcmlzaW5nIGVkZ2UsIGV0Yy4NCg0KTWVhbmluZywgdGhl
-IGNsb2NrIG11c3QgYmUgcmV2ZXJzZWQuDQo+IA0KPiA+ICsgICAgdHlwZTogYm9vbGVhbg0KPiA+
-ICsNCj4gPiArICByZWFsdGVrLGRyaXZpbmctbGV2ZWw6DQo+ID4gKyAgICBkZXNjcmlwdGlvbjoN
-Cj4gPiArICAgICAgQ29udHJvbCB0aGUgbWFnbml0dWRlIG9mIEhpZ2ggc3BlZWQgRHAvRG0gb3V0
-cHV0IHN3aW5nLg0KPiA+ICsgICAgICBGb3IgYSBkaWZmZXJlbnQgYm9hcmQgb3IgcG9ydCwgdGhl
-IG9yaWdpbmFsIG1hZ25pdHVkZSBtYXliZSBub3QNCj4gbWVldA0KPiA+ICsgICAgICB0aGUgc3Bl
-Y2lmaWNhdGlvbi4gSW4gdGhpcyBzaXR1YXRpb24gd2UgY2FuIGFkanVzdCB0aGUgdmFsdWUgdG8g
-bWVldA0KPiA+ICsgICAgICB0aGUgc3BlY2lmaWNhdGlvbi4NCj4gDQo+IFdoYXQgYXJlIHRoZSB1
-bml0cz8NCg0KVGhlcmUgaXMgbm8gdW5pdC4gSXQgaXMgb25seSBhIGdhaW4gZm9yIGFkanVzdGlu
-ZyB0aGUgbWFnbml0dWRlLiANCg0KPiA+ICsgICAgJHJlZjogL3NjaGVtYXMvdHlwZXMueWFtbCMv
-ZGVmaW5pdGlvbnMvdWludDMyDQo+ID4gKyAgICBkZWZhdWx0OiA4DQo+ID4gKyAgICBtaW5pbXVt
-OiAwDQo+ID4gKyAgICBtYXhpbXVtOiAzMQ0KPiA+ICsNCj4gPiArICByZWFsdGVrLGRyaXZpbmct
-Y29tcGVuc2F0ZToNCj4gDQo+IGNvbXBlbnNhdGUgd2hhdD8NCg0KSXQgaXMgdG8gY29tcGVuc2F0
-ZSB0aGUgZHJpdmluZyBsZXZlbC4gSW4gb3RoZXIgd29yZCwgdG8gYWRqdXN0IHRoZSBkcml2aW5n
-IGxldmVsLg0KDQpUaGFua3MsDQpTdGFubGV5DQo=
+v2:
+
+Hi all,
+
+Thanks to Marc-André Lureau, Robert Beckett and Gerd Hoffmann for
+their advice and guidance. V2 makes below changes:
+
+* Change VIRTIO_CPU_CMD_STATUS_FREEZING to 0x0400 (<0x1000)
+* Add a new feature flag VIRTIO_GPU_F_FREEZING, so that guest and
+  host can negotiate whenever freezing is supported or not.
+
+V2 of Qemu patch https://lore.kernel.org/qemu-devel/20230630070016.841459-1-Jiqian.Chen@amd.com/T/#t
+
+Best regards,
+Jiqian Chen.
+
+v1:
+
+link: https://lore.kernel.org/lkml/20230608063857.1677973-1-Jiqian.Chen@amd.com/
+
+Hi all,
+
+I am working to implement virtgpu S3 function on Xen.
+
+Currently on Xen, if we start a guest who enables virtgpu, and then
+run "echo mem > /sys/power/state" to suspend guest. And run
+"sudo xl trigger <guest id> s3resume" to resume guest. We can find that
+the guest kernel comes back, but the display doesn't. It just shows a
+black screen.
+
+In response to the above phenomenon, I have found two problems.
+
+First, if we move mouse on the black screen, guest kernel still sends a
+cursor request to Qemu, but Qemu doesn't response. Because when guest
+is suspending, it calls device_suspend, and then call into Qemu to call
+virtio_reset->__virtio_queue_reset. In __virtio_queue_reset, it clears
+all virtqueue information on Qemu end. So, after guest resumes, Qemu
+can't get message from virtqueue.
+
+Second, the reason why display can't come back is that when guest is
+suspending, it calls into Qemu to call virtio_reset->virtio_gpu_gl_reset.
+In virtio_gpu_gl_reset, it destroys all resources and resets renderer,
+which are used for display. So after guest resumes, the display can't
+come back to the status when guest is suspended.
+
+This patch initializes virtqueue when guest is resuming to solve first
+problem. And it notifies Qemu that guest is suspending to prevent Qemu
+destroying resources, this is to solve second problem. And then, I can
+bring the display back, and everything continues their actions after
+guest resumes.
+
+Modifications on Qemu end is:
+https://lore.kernel.org/qemu-devel/20230608025655.1674357-2-Jiqian.Chen@amd.com/
+
+Jiqian Chen (1):
+  virtgpu: init vq during resume and notify qemu guest status
+
+ drivers/gpu/drm/virtio/virtgpu_debugfs.c |  1 +
+ drivers/gpu/drm/virtio/virtgpu_drv.c     | 37 ++++++++++++++++++++++++
+ drivers/gpu/drm/virtio/virtgpu_drv.h     |  4 +++
+ drivers/gpu/drm/virtio/virtgpu_kms.c     | 36 +++++++++++++++++------
+ drivers/gpu/drm/virtio/virtgpu_vq.c      | 15 ++++++++++
+ include/uapi/linux/virtio_gpu.h          | 15 ++++++++++
+ 6 files changed, 99 insertions(+), 9 deletions(-)
+
+-- 
+2.34.1
+
