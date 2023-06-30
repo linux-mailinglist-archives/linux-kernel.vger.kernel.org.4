@@ -2,145 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20BAC744303
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 21:58:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 87829744308
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 22:00:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232180AbjF3T6Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 15:58:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40196 "EHLO
+        id S232372AbjF3UAI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Jun 2023 16:00:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230235AbjF3T6O (ORCPT
+        with ESMTP id S232262AbjF3UAF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 15:58:14 -0400
-Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2042.outbound.protection.outlook.com [40.107.20.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9C8F1BF3;
-        Fri, 30 Jun 2023 12:58:12 -0700 (PDT)
+        Fri, 30 Jun 2023 16:00:05 -0400
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on20626.outbound.protection.outlook.com [IPv6:2a01:111:f400:fe5b::626])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D00301FC1;
+        Fri, 30 Jun 2023 13:00:03 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Rq8qiPHsF8+K6WxYckrS6xZDDnZt9Q2F4FotZ5LcNyuw8CRAqeb5CnvZjx6mEgqwpmJAlkn+ZvH0O3Fo3n7QQQ1tS1BfekdVqw2UyuNC+k7hBe6HJTBah3In2wDqiHOPx2/g8OHlMzjmYRlSHXspaLww9VIGNy8V/iwmiTD8xhBxNrZk1jybWhkvDTDvfc1fI7FsB5Bkmfv275m/DPP1u55YGl0Q7eWwvzq4hHcf1qymo/fMPwOu+JczWPwWJjD6Ao7Xpi1l49fT909wjebSQes4Vyi7zEXUfwCGLYcsIOIEhTa0KHtGJkPP+NCQUqpJVAkn44D6nzdSqeMiZAZ2Cg==
+ b=ZJHtTGw5aoFoOQ9+hTtSYnffJlgz70G3gYl6SyijPQnDuWGcp2fecEhD6FxOZ1JHMrj3hETlIm6sVIZQCflAV0X08T4hNnsoDq/C/BJFYqkABO3DH3JJH0CORN44TPDY7wRpD2n/foFbS3PdmkQKAdTVWjSsS5PXgi3R4QOQBgsCG9TvnlHLx4vraBqnlbA0WdTP+f2IvysmOjbtNyg7o/TqfpNOeiMu1oHsCQHTX8UQw8NMPtuvhRmHzxbYF4zOg0VfL3KOA7u8xU6tUpBNDpU/sfipfQB6344Rhg4agBut0lmL5at5r8ZUvYIxPnUhzhxhbwR/DtGsuVeyOwPLrg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=LWs1B3BJTtkd+RaOM5ujZ/ixKrcDnRJDxFcgZ9Ws+NQ=;
- b=F3P/KumcwZvkcGuX7zpinOb6t5aXZdAZBoe9xAYIt7A33+P2RHcSikemPlgWoGsnnADJPjyGmu76E0i0HeSmEVqUb8nt3nlpKWtwfU/E9WTksjW5scnLaOxj92G1gb2xYmdmbGB0oZxWYXnfmI6vAHrrDXfXaSZa8MM6FRYh/PiBAcQC6cIfCM40eANtByR4cCCSTQi5/XcGeDFe6nfs15U8F0KT/H4lEjhKL5Iq/VeinKwbKzHgOm+X6E3PN4AyL6ng60lSBK4yno5IEYGHAkSSRPY+MTMjyaLcCN+xaH/0KO3VYhcSJF7AXps6cbchjhD6jbuZt8fU/bmSrGTVvA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ bh=HcasFk97ljDjKsO3gI3Gv1wsnlRYpJuPfekRKC+UplI=;
+ b=FnWZMrd3xmICj9P9VNDIQF/qex11+1eRZ9obuAYuV2uJwYUQocUFMpGRatUeyXm+cle75uuDlaIbz40eQND4GSlvYPM0nYAKOUABdS16IhJ+EtYctpfjSUXrYKgmm/vtx9DuN8+TgcEWlDAZdPCIaAoO2Tdh7S2uO6OtSBqRI1SImEYnURtYx0LSPk9gDVt1SY0oVKqDbsa2jWxEj4o0KjTPS7yW2f69UYcMenvBDOooWpcH1gx0VVm5A7epvP951bDoAp6rEWp9ShraYcSlLiI/F3G3kVAAAGeQfUHYq6dP8RRGXSARJp08uQDKfh9RLIZWrd52Cdh0PSpjCd7joA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=LWs1B3BJTtkd+RaOM5ujZ/ixKrcDnRJDxFcgZ9Ws+NQ=;
- b=ccsqmX7UOEMVs+7L5DqsAsmQDVywvfd3YZEn52Ve4R/qQ2I8ws/WF85VpkpC591Cggrwo8/ldD4Qsi57Gr2skCf8F6LiNp+0dQSjC2uqP9pmW2/YnkLf/DnwdQsRwGZSlZw0vyxYHLcEjcvJVivio8UEFuimOsiTGiyNo1VzJR4=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from AM6PR04MB4838.eurprd04.prod.outlook.com (2603:10a6:20b:4::16)
- by DBBPR04MB7947.eurprd04.prod.outlook.com (2603:10a6:10:1f1::22) with
+ bh=HcasFk97ljDjKsO3gI3Gv1wsnlRYpJuPfekRKC+UplI=;
+ b=Ciyn3r4yfxMx8vU9/Z4jrin/9v3Y5AK4htx2Qg8TV3D6lMviqmSwyu2BBw+t3K+F21K+XykwF7IlIyxoUrM5fXwlavNABfsdLYOLx1AhDUzzT/Z9Zfi0c35ZldHjF4KwAzoNVCuuOx5wpvVpUhx5+1X764jANDMBIK+lQAmVVW4=
+Received: from MW4P222CA0007.NAMP222.PROD.OUTLOOK.COM (2603:10b6:303:114::12)
+ by DM4PR12MB5229.namprd12.prod.outlook.com (2603:10b6:5:398::12) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.26; Fri, 30 Jun
- 2023 19:58:10 +0000
-Received: from AM6PR04MB4838.eurprd04.prod.outlook.com
- ([fe80::4a2a:262e:415f:e41c]) by AM6PR04MB4838.eurprd04.prod.outlook.com
- ([fe80::4a2a:262e:415f:e41c%7]) with mapi id 15.20.6544.019; Fri, 30 Jun 2023
- 19:58:09 +0000
-Date:   Fri, 30 Jun 2023 15:57:54 -0400
-From:   Frank Li <Frank.li@nxp.com>
-To:     Roger Quadros <rogerq@kernel.org>
-Cc:     "r-gunasekaran@ti.com" <r-gunasekaran@ti.com>,
-        "imx@lists.linux.dev" <imx@lists.linux.dev>,
-        Jun Li <jun.li@nxp.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Elson Roy Serrao <quic_eserrao@quicinc.com>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        =?iso-8859-1?Q?J=F3_=C1gila?= Bitsch <jgilab@gmail.com>,
-        Prashanth K <quic_prashk@quicinc.com>,
-        Peter Chen <peter.chen@kernel.org>,
-        "open list:USB SUBSYSTEM" <linux-usb@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [EXT] Re: [PATCH 1/1] usb: gadget: call
- usb_gadget_check_config() to verify UDC capability
-Message-ID: <ZJ8zwiTHKIaH5pFB@lizhi-Precision-Tower-5810>
-References: <20230628222437.3188441-1-Frank.Li@nxp.com>
- <42940cae-ce4f-577a-474b-f06b3b481e4e@kernel.org>
- <AM6PR04MB4838E7A9B41AB382DAAA35038825A@AM6PR04MB4838.eurprd04.prod.outlook.com>
- <158f9975-afff-25b8-130c-2a8381ce21ee@kernel.org>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <158f9975-afff-25b8-130c-2a8381ce21ee@kernel.org>
-X-ClientProxiedBy: SJ0PR13CA0236.namprd13.prod.outlook.com
- (2603:10b6:a03:2c1::31) To AM6PR04MB4838.eurprd04.prod.outlook.com
- (2603:10a6:20b:4::16)
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6544.19; Fri, 30 Jun
+ 2023 19:59:57 +0000
+Received: from CO1NAM11FT096.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:303:114:cafe::78) by MW4P222CA0007.outlook.office365.com
+ (2603:10b6:303:114::12) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6544.22 via Frontend
+ Transport; Fri, 30 Jun 2023 19:59:57 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB03.amd.com; pr=C
+Received: from SATLEXMB03.amd.com (165.204.84.17) by
+ CO1NAM11FT096.mail.protection.outlook.com (10.13.175.84) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6521.43 via Frontend Transport; Fri, 30 Jun 2023 19:59:57 +0000
+Received: from SATLEXMB03.amd.com (10.181.40.144) by SATLEXMB03.amd.com
+ (10.181.40.144) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Fri, 30 Jun
+ 2023 14:59:53 -0500
+Received: from [172.19.74.144] (10.180.168.240) by SATLEXMB03.amd.com
+ (10.181.40.144) with Microsoft SMTP Server id 15.1.2507.23 via Frontend
+ Transport; Fri, 30 Jun 2023 14:59:52 -0500
+Message-ID: <1c41b8e1-5b13-463b-c522-6775954c0ee7@amd.com>
+Date:   Fri, 30 Jun 2023 12:59:47 -0700
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH V10 2/5] PCI: Create device tree node for bridge
+Content-Language: en-US
+To:     Bjorn Helgaas <helgaas@kernel.org>, Rob Herring <robh@kernel.org>
+CC:     <linux-pci@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <max.zhen@amd.com>,
+        <sonal.santan@amd.com>, <stefano.stabellini@xilinx.com>
+References: <20230630164821.GA483874@bhelgaas>
+From:   Lizhi Hou <lizhi.hou@amd.com>
+In-Reply-To: <20230630164821.GA483874@bhelgaas>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AM6PR04MB4838:EE_|DBBPR04MB7947:EE_
-X-MS-Office365-Filtering-Correlation-Id: 19b1eef0-4712-455c-5cfc-08db79a45403
+X-MS-TrafficTypeDiagnostic: CO1NAM11FT096:EE_|DM4PR12MB5229:EE_
+X-MS-Office365-Filtering-Correlation-Id: 31d53abf-3882-4d14-18ad-08db79a49457
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: C07FrfygejP6pfeMKuC+M6iXnEMtFPkZjUMW8434O9rXkNw4L5cASD1MR4MZhZ3sDOnGICvj61khVbK8RbxOcAGVwc9ThT6MHEY46MSzeI2xoDsTg640q88MjQVnKd8CXTj016+HZary3EYIyY9u97h4K7wOED/2NmuhBx2Y0UIUeyuUkFNACYfx9U9F+Aypzrg7GAwZLEd4Stje1xLzBLI1EgQgvW42bdvoadoyWRC9DT3byT6CYNPAuO9Sj39Z/V0Od9ZBqLT6BYDRMrPjtlHw4vxkMDaiPmvoRrhomxVybbNhY3fdGydr68TaGb4goxj60ZZ8cKc7wxo+t/aGDfREQUCbNSnSGoTCWx20DM82hvR/JHOieV4G9paU85dRaIHd1SSWdNLWy1dDKnKWZbRtPhlOlbwekfMudCvNZhOzLxrzZhRcCTeYeih2OdNFNh4ZdB4VqLX616e1Y6ipxy8csjF6YDMLPpKkELUe+/mPhtnzyYT7sbM2R7Wsgq3xB0frgIxXWEJoJZAHi1kdSCs4D+fpLBC64MsjNEwzt8i/uAJhv2sMOqDaDr00qbF0wGys+fCl7s31uDzqNHRXB9z7pX5NYyQ63u+WfgV00zNZC3OAaKoBeqGGT3OUjhn80pK8JGpoO/OzCUpYFxP0uw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR04MB4838.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(7916004)(4636009)(136003)(346002)(39860400002)(396003)(376002)(366004)(451199021)(54906003)(52116002)(6666004)(478600001)(6486002)(966005)(4744005)(66946007)(2906002)(186003)(26005)(9686003)(66476007)(6512007)(6506007)(66556008)(33716001)(41300700001)(38350700002)(38100700002)(7416002)(5660300002)(8676002)(316002)(8936002)(6916009)(4326008)(86362001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?IZz21I3x80VwzLHt0ZcDqy0+7A5Yf8UrTmcjleJ17lIzGqAlobms0jYInptv?=
- =?us-ascii?Q?P1e4cI5Ql1Gg9TMO8+I6IKQ+CHEOuIhApGNP2g7Q26phwuH8cnGlH8aOwQDj?=
- =?us-ascii?Q?iYD24V3c3GKEjAn803n8+MUKecekDvYut9BR9Uuov7Dkn2b9sKYUEwUPALR7?=
- =?us-ascii?Q?7F2HF61UlzOWuGoZE8pIgYC+YSRExE7FK9UoYs30/foLuj3VPxs6ACQQRUsh?=
- =?us-ascii?Q?AR2flMJBnkTKs18kyG4ASxvH1mJpCeArVyToTSKnaZt3jKOGKIyDhTnEga9k?=
- =?us-ascii?Q?ypL1JaAqK3hsdho5Ie0jRzwK9puwka266Ecmb4ZqHcjEpq+YIeEl9VN/Frek?=
- =?us-ascii?Q?xSTk9SxT4xvvyESkxnTW3aZEuB3KrhNVQpk/h+tiBL18uz+ucOGnTDVKYvFL?=
- =?us-ascii?Q?rh6yXawDZPXgrFlhizh7a86m5xAgRDPru+LM/0PGdTMUPekAIk9Ij/DfPXke?=
- =?us-ascii?Q?gAjCsZ1iPJv/QU539WcBMzMxfCtSDXVfwF/+aCdj2iyZGi1TW//cmruE78dD?=
- =?us-ascii?Q?8hieRpsdjfJZEUzGiavI3efWBDhN+4QUwqa1Y2mnoCS4J7fSCbQskfM83cUQ?=
- =?us-ascii?Q?GqE7zvAYFgEH7XyzZEEipA6H3CmPH1Zo8A9crKou954C615DotGjK1KymC33?=
- =?us-ascii?Q?BSfmYOFv2054oQKzNgbG/uj2ZvdrMEQNcD16unCgFBZ9cvVw7FlIzzzqjOX+?=
- =?us-ascii?Q?vxiVB8Qu49e02Vn3f1v+wL/HVQIgFat6WImiJUfjAExv0jUpLA3h0U0wAkUB?=
- =?us-ascii?Q?aeTNwwZKEsxCQZJZS+cqz17mH9giP3hHNPhFYPoVExUE/ZpVnqIAwWquhvd4?=
- =?us-ascii?Q?GX5tYwuQe6IffVb5KDGeO7boMYHqe+JbLsiSOlz0RmBtlckKMTe3ONcTFkuT?=
- =?us-ascii?Q?e2dpxSK4/bY5HcZMCzIA57WnVgTLh/JkDZV5CrotqrvZi1ztXB70UdSfisuv?=
- =?us-ascii?Q?z/yoKq4/ojGcGS69/9sKGLdgROD2vhwJavfdbt51Mh4DDU3Ano9KTE47j9u/?=
- =?us-ascii?Q?2FBizg3zUW6mB9rfHZjbZ7v6OyR/cs/CyrAPUunEBwQ4ly8qKmdgLIACw0q1?=
- =?us-ascii?Q?haTbzSsnoFNQxsUzdR8lFPpJyE9O42yAAGHDW1H4eWC1oAoHTf2zD1qbHNnC?=
- =?us-ascii?Q?s2S98tVW/UqkzQoxKSONMVurull15vYMpQcVimM5e0uGaTdEbWL3zdjESwEN?=
- =?us-ascii?Q?VXWqQRmRapukLEFxcLuHZVLlyQrC7MBPIi54b55R6z9NkWrEwiZpinRJXVKL?=
- =?us-ascii?Q?W53TgwuXeQW4h9Iqu+8zgezsjG7e+EsAxXTQ7hAJDunvsAYk8E4depPivo8C?=
- =?us-ascii?Q?zlVaa9yKgGLdxDPxUR8OWDtglRlsiQpaw4vNnPvGoMr1ljDGvHC+mpdOk6EU?=
- =?us-ascii?Q?i1zfnfQZOOlyNP5ThoubyRdCn6MSyQ4xbl/6A/jM5whuk3G6Pr/X9y5nXkm/?=
- =?us-ascii?Q?K+iibwEkT7lIn5fqUC6WsfY9k66R7NdqBWJBaLmd6RGEtJlU/H1zPp1y3QbU?=
- =?us-ascii?Q?cJ/xCLGUnBvZigcOTBedar0p+twTm0D1FoCmwMap1x7u3P+IhH/BSO/RymsC?=
- =?us-ascii?Q?JQI0V9ivIivMoyNIfHE=3D?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 19b1eef0-4712-455c-5cfc-08db79a45403
-X-MS-Exchange-CrossTenant-AuthSource: AM6PR04MB4838.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Jun 2023 19:58:09.6057
+X-Microsoft-Antispam-Message-Info: 1K+OchoippdYHbjSUjK+us8XeZOgi9N0CypOfGoPK2Rkol0REtfZqCmw77S4cxzcO+TyAZc8aG0ibKeB9IFuXsViUF7JsJuDMh66ACkQRERiaw4N01YbFrbvQcw/hTjuHn8ZV5hMN1AG0YbcE5ioMj1jXfdHU6cexw8RDIPB2htUUGVjt2ySsaOWJf0pUmkL36pglQAaWn+siOX8rhnykd/hung/87jDgP57kjhCVlXhciqTW8vG9RGY+sodeZ9a1o/N4n9+d06eFLpva5u/xq0ZVUD6Aes3e8WYXPBVwdbxfdI7D8QCguJiQr0fFEGfwQxfVcRNKrDf/9/Zrub/w36HgKh3dgL2Vibo5C+5xsfVWqjMCMRGLXwDf60zbH3CBFbo5sWC/8PwFzSLLQlEFpZZ9Mscx/Jt6wrJC/U3y305O7Z0jPM14votok0K9iNOS/mhdPD0ui4ammoxvRwPuNcLlE6mX+Qokr03hAgRNyCH0tO37/4kQdmIpkc79Ikz5J3Dl73MoEfKcldVI6w/5Pdyw29pnE/kGAt0MnX3FuPpK3sJC5xymoOu6beE/9Iv2asORG5vnFSx1VDNHWcXdj+8HxKrG4qTUwjyjD9m8xRkjm7fe7+b1lBomjYRpku32wwFyR5veFOKJjpZem8Qf04CrbqLXe0cEs1Dins2ae9ds1N0MjfXCo7eicKtH91Q2x0v7GXikm0QV+hKuOZ440WI/7Gdxgxh24uwMhXuXEfdxyv1bEk9NSI/HQupsh2B9HEIkbcKnS7YmGfzzapC4ioV/N9wEDGP/xytIYOuxms=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB03.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(396003)(346002)(39860400002)(376002)(136003)(451199021)(46966006)(36840700001)(40470700004)(336012)(426003)(47076005)(40460700003)(83380400001)(2616005)(2906002)(81166007)(82740400003)(356005)(36860700001)(40480700001)(36756003)(8936002)(8676002)(82310400005)(110136005)(5660300002)(86362001)(31686004)(54906003)(16576012)(41300700001)(966005)(4326008)(70206006)(70586007)(6666004)(316002)(478600001)(186003)(31696002)(44832011)(53546011)(26005)(43740500002)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Jun 2023 19:59:57.1671
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: AlYgqnK0cO3N/2BD2ngTXzLNFi0D7F3zjYIZY2zKWM81ZhVxQXM8advohryyR14KZUbLodZFKJnUlY8nCJ5jaw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DBBPR04MB7947
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-Network-Message-Id: 31d53abf-3882-4d14-18ad-08db79a49457
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB03.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT096.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB5229
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 30, 2023 at 10:43:14PM +0300, Roger Quadros wrote:
-> 
-> 
-> >  .check_config		= dwc3_gadget_check_config, 
-> > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/usb/dwc3/gadget.c 
-> 
-> I meant gadget drivers not UDC drivers.
-> 
-> e.g.
-> 
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/usb/gadget/legacy/dbgp.c
-> 
 
-This is for EHCI host controller debug port, specially implement simple
-tty gadget devices. Generally used for PC. This driver suppose will not
-use UDC at all.
+On 6/30/23 09:48, Bjorn Helgaas wrote:
+> On Thu, Jun 29, 2023 at 05:52:26PM -0600, Rob Herring wrote:
+>> On Thu, Jun 29, 2023 at 05:56:31PM -0500, Bjorn Helgaas wrote:
+>>> On Thu, Jun 29, 2023 at 10:19:47AM -0700, Lizhi Hou wrote:
+>>>> The PCI endpoint device such as Xilinx Alveo PCI card maps the register
+>>>> spaces from multiple hardware peripherals to its PCI BAR. Normally,
+>>>> the PCI core discovers devices and BARs using the PCI enumeration process.
+>>>> There is no infrastructure to discover the hardware peripherals that are
+>>>> present in a PCI device, and which can be accessed through the PCI BARs.
+>>> IIUC this is basically a multi-function device except that instead of
+>>> each device being a separate PCI Function, they all appear in a single
+>>> Function.  That would mean all the devices share the same config space
+>>> so a single PCI Command register controls all of them, they all share
+>>> the same IRQs (either INTx or MSI/MSI-X), any MMIO registers are likely
+>>> in a shared BAR, etc., right?
+>> Could be multiple BARs, but yes.
+> Where does the PCI glue live?  E.g., who ioremaps the BARs?  Who sets
+> up PCI interrupts?  Who enables bus mastering?  The platform driver
+> that claims the DT node wouldn't know that this is part of a PCI
+> device, so I guess the PCI driver must do all that stuff?  I don't see
+> it in the xmgmt-drv.c from
+> https://lore.kernel.org/all/20220305052304.726050-4-lizhi.hou@xilinx.com/
+>
+Yes, the PCI driver will do all that stuff. This xmgmt-drv.c is created
 
+to just populating the devices based on fdt input.  It is removed after
+
+the unittest is created which can populate devices and verify the
+
+address translation.
+
+
+Thanks,
+
+Lizhi
 
