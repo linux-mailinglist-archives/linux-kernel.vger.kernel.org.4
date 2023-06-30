@@ -2,354 +2,296 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E34C74317F
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 02:16:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 399E8743184
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 02:16:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232036AbjF3AKX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 20:10:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47934 "EHLO
+        id S231839AbjF3ALL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 20:11:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231638AbjF3AKU (ORCPT
+        with ESMTP id S231638AbjF3ALJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 20:10:20 -0400
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10E102D50
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 17:10:18 -0700 (PDT)
-Received: by mail-lf1-x135.google.com with SMTP id 2adb3069b0e04-4f4b2bc1565so2139299e87.2
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 17:10:17 -0700 (PDT)
+        Thu, 29 Jun 2023 20:11:09 -0400
+Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6338FE4B
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 17:11:08 -0700 (PDT)
+Received: by mail-pj1-x104a.google.com with SMTP id 98e67ed59e1d1-262e2cb725eso885959a91.0
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 17:11:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1688083816; x=1690675816;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=camuhZqO2M3VVj97y6Q9iWq24yoNUrxmmezTN9LU4Tk=;
-        b=gznDCh3ZUemu2Ro+72HmqDQutwwL+rgndlMiOHQ4YyBEQWDB8Ajw4aTx+KjO0PM0Wb
-         aBcc0N6bDeDYbiHsHM0YKo3CYH4n6NfiQDv5XuQn5uy6v8jf27jCuDkL4TrCgpPucayO
-         69CEVRkYpKVteoX588QPEjc9y2bXMQMK5A9JXHiQ3GrNDdfPtrdjjZRSPgScG7MCYQKT
-         lqGSmty3Jfs8miTr63OpE7jZhPpasmH72uZ8UWk1VgukLTVx6KBh6UeGi7+YsIsDxE/l
-         q0jGzPz/ROq+F64l6WfQgDe+MMJDBQPqUG317J47/qwQOjJn+P0PbERX+Vt8BMlb557M
-         NIBA==
+        d=google.com; s=20221208; t=1688083868; x=1690675868;
+        h=content-transfer-encoding:cc:to:from:subject:message-id:references
+         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=CLAK2aaJMqt8JMt9rFyLuXa7SLZsuXSqltLsJC9Ut/I=;
+        b=pafJgNqSlBfLIW/qP07meHoC4gZ7MF1KwU9BqieXtUH4Vh0Wj5OFtwZXoEUjt7NtI6
+         oQ0Cy7ROucQoeyCtenftvliy0LnSZMFN18ofzMCCKELi9585Vwr8ffJoZgA6qx4jf2g2
+         7RNcuQusOSh/RXk2d0VvBk5eKleqddXMRMF/FK8ZgPxJKPzl9Nxwp28xuuk2J9MvNDQr
+         9RPO5JquPNQ3XNQx/n3Fv2l+LK9Q5wv6Stxv2+davIiFfFzcE4vuYb6226s76NERC8lv
+         sltZCMLVNWZFEjFNz+r+sqwzIFWy7tC7MsRRYJsORDr/7ZYKP5+tnqldgLzK5l0ElgN3
+         PVCw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688083816; x=1690675816;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=camuhZqO2M3VVj97y6Q9iWq24yoNUrxmmezTN9LU4Tk=;
-        b=LS/T//FdA9gx1aIYceKjNTOmdrdXFQl9LJb9TdlwpMBmM8JQgv+mQbWm53puO3MgwD
-         SrteM8iZkUKopFbfd4kvsGL4cIT1tL5J7GZrjuUiaGrva/oBSmyqnc5gajWBulbwwR43
-         Bra1EI3HjAfjp+6CoEgqt+qdpTlSgnk6RqdfO+uhEInmrFWob47/+XZbmpAbJ+dGjOSg
-         JI7Tb307NrW4awTmKp7jzFsxhUkfJIs6nlz4zFcdEQgAyUHPsnUW9eWJ5HI9597Alzu2
-         f19212RwkqEGIb6YM40qTY3vrAuAT8WWD6YEBHR3EFuxFNwHh53/VC5dolRvBtJ49vBW
-         n/6g==
-X-Gm-Message-State: ABy/qLYL3ZOP1Gk3yPy9jty7ANrCL06+QETgax6yaBwE6VMd6kVsL4yg
-        ADOpa4nGScum/nFnY5/Khi0ceQ==
-X-Google-Smtp-Source: APBJJlHKLZghO/vcVEHWdC0HqNAIu2k8t2zfJcing7kUlLELyaZRdnIpsx7FH74IIr8RfjqMdX769A==
-X-Received: by 2002:a05:6512:3481:b0:4fb:97e8:bc1c with SMTP id v1-20020a056512348100b004fb97e8bc1cmr936941lfr.54.1688083816222;
-        Thu, 29 Jun 2023 17:10:16 -0700 (PDT)
-Received: from ?IPV6:2001:14ba:a0db:1f00::8a5? (dzdqv0yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a0db:1f00::8a5])
-        by smtp.gmail.com with ESMTPSA id w2-20020a05651204c200b004f8586ab633sm2508285lfq.279.2023.06.29.17.10.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 29 Jun 2023 17:10:15 -0700 (PDT)
-Message-ID: <6499015f-3c7d-6f26-cb6e-466c6773e36b@linaro.org>
-Date:   Fri, 30 Jun 2023 03:10:15 +0300
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH 6/6] drm/msm/dpu: Update dev core dump to dump registers
- of sub blocks
-Content-Language: en-GB
-To:     Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Ryan McCann <quic_rmccann@quicinc.com>,
-        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     Rob Clark <robdclark@chromium.org>, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        quic_jesszhan@quicinc.com, freedreno@lists.freedesktop.org
-References: <20230622-devcoredump_patch-v1-0-3b2cdcc6a576@quicinc.com>
- <20230622-devcoredump_patch-v1-6-3b2cdcc6a576@quicinc.com>
- <114f34dd-e5ce-f878-5b23-4c14dc800547@linaro.org>
- <1e41b909-4886-8392-edbc-78684e52bbf9@quicinc.com>
- <412f68a3-e3cc-f26e-2e3d-59727e5c48d8@linaro.org>
- <37c4bde0-0798-7506-ffd3-c8689ab78ba0@quicinc.com>
- <dffa5b4c-3273-3b8a-a170-acb146063f43@linaro.org>
- <9fcf6fb4-20eb-500d-a5fd-a0a328e530ed@quicinc.com>
- <413e6880-787c-06a1-8448-2b470e372c7e@quicinc.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <413e6880-787c-06a1-8448-2b470e372c7e@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        d=1e100.net; s=20221208; t=1688083868; x=1690675868;
+        h=content-transfer-encoding:cc:to:from:subject:message-id:references
+         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=CLAK2aaJMqt8JMt9rFyLuXa7SLZsuXSqltLsJC9Ut/I=;
+        b=NVIB8ARwWQjo1LImOgOr1pD7KaPLzS2Qwk90G3sr1vkRYP2APjxuUuOGHVRnw4XQgn
+         860s05W1Gqk0U8QK/Rlaj8EgNDxzTn3XDi3xwM7Ie02IHIzOuuJQeDtXlm1CcXQvcdW2
+         T52x2uVR/89h/rZPW5Q4QXxhOXWILRs8bz1UG/NfG84UmDXPyK27einySc2nuHBDE7Km
+         l9RcvHYVDjtKpiTpOOaADKZ4vvrZbbJrXvdYzYsIZTV2gs8bQ2r5Rv/RfqDrNoA5EkND
+         N+h1XU581FcAieXh5q2cTvpPWfjb/59eWGwpmhSZkKhceEhSFRzZGUU55sDu/cajtSPu
+         Pc7g==
+X-Gm-Message-State: ABy/qLaPYrZsHcMIOSriuxXdbOcv/MEInnbB6M7vV00pQ6VGH6Fqis+r
+        Va9CwyWt8onfg4vBMY9M0JZFpwoRJIg=
+X-Google-Smtp-Source: APBJJlHHfs2HzeDQUGiyPhu0LQ4LqgREP7UJhyRp5LdVIvQGqUvmDQHybH8Q7DwIiJhY9yPbuVy0VMHVIvU=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a17:90b:d82:b0:25b:809a:c7a with SMTP id
+ bg2-20020a17090b0d8200b0025b809a0c7amr416383pjb.3.1688083867787; Thu, 29 Jun
+ 2023 17:11:07 -0700 (PDT)
+Date:   Thu, 29 Jun 2023 17:11:06 -0700
+In-Reply-To: <CALMp9eS3F08cwUJbKjTRAEL0KyZ=MC==YSH+DW-qsFkNfMpqEQ@mail.gmail.com>
+Mime-Version: 1.0
+References: <20230504120042.785651-1-rkagan@amazon.de> <ZH6DJ8aFq/LM6Bk9@google.com>
+ <CALMp9eS3F08cwUJbKjTRAEL0KyZ=MC==YSH+DW-qsFkNfMpqEQ@mail.gmail.com>
+Message-ID: <ZJ4dmrQSduY8aWap@google.com>
+Subject: Re: [PATCH] KVM: x86: vPMU: truncate counter value to allowed width
+From:   Sean Christopherson <seanjc@google.com>
+To:     Jim Mattson <jmattson@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Eric Hankland <ehankland@google.com>,
+        Roman Kagan <rkagan@amazon.de>, kvm@vger.kernel.org,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Like Xu <likexu@tencent.com>, x86@kernel.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-kernel@vger.kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        Borislav Petkov <bp@alien8.de>, Ingo Molnar <mingo@redhat.com>,
+        Mingwei Zhang <mizhang@google.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30/06/2023 02:29, Abhinav Kumar wrote:
-> 
-> 
-> On 6/24/2023 7:44 PM, Abhinav Kumar wrote:
->>
->>
->> On 6/24/2023 8:03 AM, Dmitry Baryshkov wrote:
->>> On 24/06/2023 17:17, Abhinav Kumar wrote:
->>>>
->>>>
->>>> On 6/24/2023 5:07 AM, Dmitry Baryshkov wrote:
->>>>> On 24/06/2023 03:09, Abhinav Kumar wrote:
->>>>>>
->>>>>>
->>>>>> On 6/22/2023 5:13 PM, Dmitry Baryshkov wrote:
->>>>>>> On 23/06/2023 02:48, Ryan McCann wrote:
->>>>>>>> Currently, the device core dump mechanism does not dump 
->>>>>>>> registers of sub
->>>>>>>> blocks within the DSPP, SSPP, DSC, and PINGPONG blocks. Add wrapper
->>>>>>>> function to dump hardware blocks that contain sub blocks.
->>>>>>>>
->>>>>>>> Signed-off-by: Ryan McCann <quic_rmccann@quicinc.com>
->>>>>>>> ---
->>>>>>>>   drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c | 194 
->>>>>>>> +++++++++++++++++++++++++++-----
->>>>>>>>   1 file changed, 168 insertions(+), 26 deletions(-)
->>>>>>>>
->>>>>>>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c 
->>>>>>>> b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
->>>>>>>> index aa8499de1b9f..9b1b1c382269 100644
->>>>>>>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
->>>>>>>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
->>>>>>>> @@ -885,6 +885,154 @@ static int dpu_irq_postinstall(struct 
->>>>>>>> msm_kms *kms)
->>>>>>>>       return 0;
->>>>>>>>   }
->>>>>>>> +static void dpu_kms_mdp_snapshot_add_block(struct 
->>>>>>>> msm_disp_state *disp_state,
->>>>>>>> +                       void __iomem *mmio, void *blk,
->>>>>>>> +                       enum dpu_hw_blk_type blk_type)
->>>>>>>
->>>>>>> No. Such multiplexers add no value to the code. Please inline it.
->>>>>>>
->>>>>>> Not to mention that this patch is hard to review. You both move 
->>>>>>> existing code and add new features. If it were to go, it should 
->>>>>>> have been split into two patches: one introducing the multiplexer 
->>>>>>> and another one adding subblocks.
->>>>>>>
->>>>>>
->>>>>> Ok. we can split this into:
->>>>>>
->>>>>> 1) adding the multiplexer
->>>>>> 2) adding sub-blk parsing support inside the multiplexer
->>>>>
->>>>> I'd say, drop the multiplexer completely. It adds no value here. It 
->>>>> is only used from dpu_kms_mdp_snapshot(). If the code there was 
->>>>> complex enough, it would have made sense to _split_ the function. 
->>>>> But even in such case there would be no point in having 
->>>>> multiplexer. We do not enumerate block by type.
->>>>>
->>>>
->>>> Can you pls elaborate what you mean by enumerate blk by type?
->>>>
->>>> We do have DPU_HW_BLK_***
->>>>
->>>> Did you mean sub-blk?
->>>>
->>>>>>
->>>>>>>> +{
->>>>>>>> +    u32 base;
->>>>>>>> +
->>>>>>>> +    switch (blk_type) {
->>>>>>>> +    case DPU_HW_BLK_TOP:
->>>>>>>> +    {
->>>>>>>> +        struct dpu_mdp_cfg *top = (struct dpu_mdp_cfg *)blk;
->>>>>>>> +
->>>>>>>> +        if (top->features & BIT(DPU_MDP_PERIPH_0_REMOVED)) {
->>>>>>>> +            msm_disp_snapshot_add_block(disp_state, 
->>>>>>>> MDP_PERIPH_TOP0,
->>>>>>>> +                            mmio + top->base, "top");
->>>>>>>> +            msm_disp_snapshot_add_block(disp_state, top->len - 
->>>>>>>> MDP_PERIPH_TOP0_END,
->>>>>>>> +                            mmio + top->base + 
->>>>>>>> MDP_PERIPH_TOP0_END,
->>>>>>>> +                            "top_2");
->>>>>>>> +        } else {
->>>>>>>> +            msm_disp_snapshot_add_block(disp_state, top->len, 
->>>>>>>> mmio + top->base, "top");
->>>>>>>> +        }
->>>>>>>> +        break;
->>>>>>>> +    }
->>>>>>>> +    case DPU_HW_BLK_LM:
->>>>>>>> +    {
->>>>>>>> +        struct dpu_lm_cfg *mixer = (struct dpu_lm_cfg *)blk;
->>>>>>>> +
->>>>>>>> +        msm_disp_snapshot_add_block(disp_state, mixer->len, 
->>>>>>>> mmio + mixer->base, "%s",
->>>>>>>> +                        mixer->name);
->>>>>>>> +        break;
->>>>>>>> +    }
->>>>>>>> +    case DPU_HW_BLK_CTL:
->>>>>>>> +    {
->>>>>>>> +        struct dpu_ctl_cfg *ctl = (struct dpu_ctl_cfg *)blk;
->>>>>>>> +
->>>>>>>> +        msm_disp_snapshot_add_block(disp_state, ctl->len, mmio 
->>>>>>>> + ctl->base, "%s",
->>>>>>>> +                        ctl->name);
->>>>>>>> +        break;
->>>>>>>> +    }
->>>>>>>> +    case DPU_HW_BLK_INTF:
->>>>>>>> +    {
->>>>>>>> +        struct dpu_intf_cfg *intf = (struct dpu_intf_cfg *)blk;
->>>>>>>> +
->>>>>>>> +        msm_disp_snapshot_add_block(disp_state, intf->len, mmio 
->>>>>>>> + intf->base, "%s",
->>>>>>>> +                        intf->name);
->>>>>>>> +        break;
->>>>>>>> +    }
->>>>>>>> +    case DPU_HW_BLK_WB:
->>>>>>>> +    {
->>>>>>>> +        struct dpu_wb_cfg *wb = (struct dpu_wb_cfg *)blk;
->>>>>>>> +
->>>>>>>> +        msm_disp_snapshot_add_block(disp_state, wb->len, mmio + 
->>>>>>>> wb->base, "%s",
->>>>>>>> +                        wb->name);
->>>>>>>> +        break;
->>>>>>>> +    }
->>>>>>>> +    case DPU_HW_BLK_SSPP:
->>>>>>>> +    {
->>>>>>>> +        struct dpu_sspp_cfg *sspp_block = (struct dpu_sspp_cfg 
->>>>>>>> *)blk;
->>>>>>>> +        const struct dpu_sspp_sub_blks *sblk = sspp_block->sblk;
->>>>>>>> +
->>>>>>>> +        base = sspp_block->base;
->>>>>>>> +
->>>>>>>> +        msm_disp_snapshot_add_block(disp_state, 
->>>>>>>> sspp_block->len, mmio + base, "%s",
->>>>>>>> +                        sspp_block->name);
->>>>>>>> +
->>>>>>>> +        if (sspp_block->features & BIT(DPU_SSPP_SCALER_QSEED3) ||
->>>>>>>> +            sspp_block->features & 
->>>>>>>> BIT(DPU_SSPP_SCALER_QSEED3LITE) ||
->>>>>>>> +            sspp_block->features & BIT(DPU_SSPP_SCALER_QSEED4))
->>>>>>>> +            msm_disp_snapshot_add_block(disp_state, 
->>>>>>>> sblk->scaler_blk.len,
->>>>>>>> +                            mmio + base + 
->>>>>>>> sblk->scaler_blk.base, "%s_%s",
->>>>>>>> +                            sspp_block->name, 
->>>>>>>> sblk->scaler_blk.name);
->>>>>>>
->>>>>>> Actually, it would be better to:
->>>>>>> - drop name from all sblk instances (and use known string instead 
->>>>>>> of the sblk name here)
->>>>>>> - Use sblk->foo_blk.len to check if it should be printed or not.
->>>>>>>
->>>>>>
->>>>>> No, I dont agree. If we drop the names from the sub_blk in the 
->>>>>> catalog, we will end up using "sub_blk_name" string here in the 
->>>>>> code to indicate which blk that is in the dump.
->>>>>>
->>>>>> If we add more sub_blks in the catalog in the future we need to 
->>>>>> keep changing the code over here. Thats not how it should be.
->>>>>>
->>>>>> Leaving the names in the catalog ensures that this code wont 
->>>>>> change and only catalog changes when we add a new sub_blk either 
->>>>>> for an existing or new chipset.
->>>>>>
->>>>>> catalog is indicating the new blk, and dumping code just prints it.
->>>>>>
->>>>>> with your approach, dumping code will or can keep changing with 
->>>>>> chipsets or sub_blks. Thats not how it should be.
->>>>>
->>>>> Well, we do not enumerate sub-blocks in any way, they are not 
->>>>> indexed. So even with sblk->blk.name in place, adding new sub-block 
->>>>> would require adding new code here. That's why I wrote that the 
->>>>> calling code knows which sub-block it refers to.
->>>>>
->>>>
->>>> Today, unfortunately each sub_blk type is different so we have to do 
->>>> this case by case.
->>>>
->>>> Ideally, this should have just been
->>>>
->>>> -> print main blk
->>>> -> print all sub-blks of the main blk
->>>>
->>>> Without having to handle each main blk's sub-blks separately.
->>>>
->>>> That way the dumping code would have remained generic without having 
->>>> to do even the multiplexer in the first place.
->>>>
->>>> Need to explore if somehow we can come up with a generic sub-blk 
->>>> struct and make this possible. Then this code will become much 
->>>> easier and what I am saying will make total sense.
->>>
->>> In such case, yes. However I'd warn about having a generic array of 
->>> subblocks. Having named subblock entries might complicate 
->>> snapshotting, but it makes the rest of the DPU driver smaller.
->>>
->>
->> Need to explore this. But not immediately.
->>
->>>>
->>>> Even without that, conceptually these sub-blk names are reflecting 
->>>> whats in our software document. So its not a random name but 
->>>> reflects the actual sub-blk name from the hardware.
->>>
->>> Yes
->>>
->>>> So this belongs in the catalog.
->>>
->>> But the sub-block field already has a correct name: scaler_blk, 
->>> csc_blk, etc. Having both sub-block field name and the .name inside 
->>> results in kind of duplication, which seems unnecessary to me.
->>>
->>
->> No, there is a difference and not duplicated. One is the name of the 
->> struct so it can really be anything and doesnt need to match the hw 
->> doc name. But the other is the string name which we can give exactly 
->> to match software interface doc and makes parsing such a dump much 
->> much easier.
->>
->> One point I dont see you have considered is the block index of the 
->> sub_blk.
->>
->> Today, yes I see only a "pcc" or a "dither" etc
->>
->> What if there are two PCCs or two dithers.
->>
->> Then their names can just be "pcc_0" and "pcc_1" or "dither_0" and 
->> "dither_1".
->>
->> Having name gives us the ability to easily incorporate even 
->> unsequential indices.
->>
->> For example, every sspp's name today is not sequential. it can be 
->> "sspp_3" then "sspp_8" etc
->>
->> By having names reflect the correct indices, dumping code becomes less 
->> complex as the catalog will still have the right names as dumping code 
->> will just use that.
->>
-> 
-> The QC team is in agreement that we would like to go ahead with the 
-> names from the catalog and not drop them.
-> 
-> Hence we will post the next revision with the name still from the 
-> catalog and drop the multiplexer completely.
++Mingwei
 
-Ack, let's see how it goes.
+On Thu, Jun 29, 2023, Jim Mattson wrote:
+> On Mon, Jun 5, 2023 at 5:51=E2=80=AFPM Sean Christopherson <seanjc@google=
+.com> wrote:
+> >
+> > On Thu, May 04, 2023, Roman Kagan wrote:
+> > > diff --git a/arch/x86/kvm/pmu.h b/arch/x86/kvm/pmu.h
+> > > index 5c7bbf03b599..6a91e1afef5a 100644
+> > > --- a/arch/x86/kvm/pmu.h
+> > > +++ b/arch/x86/kvm/pmu.h
+> > > @@ -60,6 +60,12 @@ static inline u64 pmc_read_counter(struct kvm_pmc =
+*pmc)
+> > >       return counter & pmc_bitmask(pmc);
+> > >  }
+> > >
+> > > +static inline void pmc_set_counter(struct kvm_pmc *pmc, u64 val)
+> > > +{
+> > > +     pmc->counter +=3D val - pmc_read_counter(pmc);
+> >
+> > Ugh, not your code, but I don't see how the current code can possibly b=
+e correct.
+> >
+> > The above unpacks to
+> >
+> >         counter =3D pmc->counter;
+> >         if (pmc->perf_event && !pmc->is_paused)
+> >                 counter +=3D perf_event_read_value(pmc->perf_event,
+> >                                                  &enabled, &running);
+> >         pmc->counter +=3D val - (counter & pmc_bitmask(pmc));
+> >
+> > which distills down to
+> >
+> >         counter =3D 0;
+> >         if (pmc->perf_event && !pmc->is_paused)
+> >                 counter +=3D perf_event_read_value(pmc->perf_event,
+> >                                                  &enabled, &running);
+> >         pmc->counter =3D val - (counter & pmc_bitmask(pmc));
+> >
+> > or more succinctly
+> >
+> >         if (pmc->perf_event && !pmc->is_paused)
+> >                 val -=3D perf_event_read_value(pmc->perf_event, &enable=
+d, &running);
+> >
+> >         pmc->counter =3D val;
+> >
+> > which is obviously wrong.  E.g. if the guest writes '0' to an active co=
+unter, the
+> > adjustment will cause pmc->counter to be loaded with a large (in unsign=
+ed terms)
+> > value, and thus quickly overflow after a write of '0'.
+>=20
+> This weird construct goes all the way back to commit f5132b01386b
+> ("KVM: Expose a version 2 architectural PMU to a guests"). Paolo
+> killed it in commit 2924b52117b2 ("KVM: x86/pmu: do not mask the value
+> that is written to fixed PMUs"), perhaps by accident. Eric then
+> resurrected it in commit 4400cf546b4b ("KVM: x86: Fix perfctr WRMSR
+> for running counters").
+>=20
+> It makes no sense to me. WRMSR should just set the new value of the
+> counter, regardless of the old value or whether or not it is running.
 
-> 
-> Since the intern has a short period of time to finish development on 
-> this task, we would like to go ahead with this approach and post the 
-> next rev.
+Heh, didn't stop you from giving Eric's patch a thumbs-up[*] :-)
 
-This is a bad argument.
+Thanks to Eric's testcase [Wow, tests do help!  We should try writing more =
+of them!],
+I finally figured out what's going on.  I wrongly assumed perf_event_read_v=
+alue()
+is destructive, but it's not, it just reads the current value.  So on a WRM=
+SR,
+KVM offsets the value with the current perf event, and then *mostly* adjust=
+s for
+it when reading the counter.
 
+But that is obviously super fragile because it means pmc->counter must neve=
+r be
+read directly unless the perf event is paused and the accumulated counter h=
+as been
+propagated to pmc->counter.  Blech.
 
--- 
-With best wishes
-Dmitry
+I fiddled with a variety of things, but AFAICT the easiest solution is also=
+ the
+most obviously correct: set perf's count to the guest's count.  Lightly tes=
+ted
+patch below.
 
+On a related topic, Mingwei also appears to have found another bug: prev_co=
+unter
+needs to be set when the counter is written, i.e. my proposed pmc_write_cou=
+nter()
+also needs to update prev_counter.
+
+Though that also raises the question of whether or not zeroing prev_counter=
+ in
+reprogram_counter() is correct.  Unless I'm missing something, reprogram_co=
+unter()
+should also set pmc->prev_counter to pmc->counter when the counter is succe=
+ssfully
+(re)enabled.
+
+And Jim also pointed out that prev_counter needs to be set even when KVM fa=
+ils
+to enable a perf event (software counting should still work).
+
+[*] https://lore.kernel.org/all/CALMp9eRfeFFb6n22Uf4R2Pf8WW7BVLX_Vuf04WFwiM=
+trk14Y-Q@mail.gmail.com
+
+---
+ arch/x86/kvm/pmu.h           |  8 ++++++++
+ arch/x86/kvm/svm/pmu.c       |  2 +-
+ arch/x86/kvm/vmx/pmu_intel.c |  4 ++--
+ include/linux/perf_event.h   |  2 ++
+ kernel/events/core.c         | 11 +++++++++++
+ 5 files changed, 24 insertions(+), 3 deletions(-)
+
+diff --git a/arch/x86/kvm/pmu.h b/arch/x86/kvm/pmu.h
+index 7d9ba301c090..ba91a78e4dc1 100644
+--- a/arch/x86/kvm/pmu.h
++++ b/arch/x86/kvm/pmu.h
+@@ -74,6 +74,14 @@ static inline u64 pmc_read_counter(struct kvm_pmc *pmc)
+ 	return counter & pmc_bitmask(pmc);
+ }
+=20
++static inline void pmc_write_counter(struct kvm_pmc *pmc, u64 val)
++{
++	if (pmc->perf_event && !pmc->is_paused)
++		perf_event_set_count(pmc->perf_event, val);
++
++	pmc->counter =3D val;
++}
++
+ static inline void pmc_release_perf_event(struct kvm_pmc *pmc)
+ {
+ 	if (pmc->perf_event) {
+diff --git a/arch/x86/kvm/svm/pmu.c b/arch/x86/kvm/svm/pmu.c
+index cef5a3d0abd0..373ff6a6687b 100644
+--- a/arch/x86/kvm/svm/pmu.c
++++ b/arch/x86/kvm/svm/pmu.c
+@@ -160,7 +160,7 @@ static int amd_pmu_set_msr(struct kvm_vcpu *vcpu, struc=
+t msr_data *msr_info)
+ 	/* MSR_PERFCTRn */
+ 	pmc =3D get_gp_pmc_amd(pmu, msr, PMU_TYPE_COUNTER);
+ 	if (pmc) {
+-		pmc->counter +=3D data - pmc_read_counter(pmc);
++		pmc_write_counter(pmc, data);
+ 		pmc_update_sample_period(pmc);
+ 		return 0;
+ 	}
+diff --git a/arch/x86/kvm/vmx/pmu_intel.c b/arch/x86/kvm/vmx/pmu_intel.c
+index 80c769c58a87..18a658aa2a8d 100644
+--- a/arch/x86/kvm/vmx/pmu_intel.c
++++ b/arch/x86/kvm/vmx/pmu_intel.c
+@@ -406,11 +406,11 @@ static int intel_pmu_set_msr(struct kvm_vcpu *vcpu, s=
+truct msr_data *msr_info)
+ 			if (!msr_info->host_initiated &&
+ 			    !(msr & MSR_PMC_FULL_WIDTH_BIT))
+ 				data =3D (s64)(s32)data;
+-			pmc->counter +=3D data - pmc_read_counter(pmc);
++			pmc_write_counter(pmc, data);
+ 			pmc_update_sample_period(pmc);
+ 			break;
+ 		} else if ((pmc =3D get_fixed_pmc(pmu, msr))) {
+-			pmc->counter +=3D data - pmc_read_counter(pmc);
++			pmc_write_counter(pmc, data);
+ 			pmc_update_sample_period(pmc);
+ 			break;
+ 		} else if ((pmc =3D get_gp_pmc(pmu, msr, MSR_P6_EVNTSEL0))) {
+diff --git a/include/linux/perf_event.h b/include/linux/perf_event.h
+index d5628a7b5eaa..8fcd52a87ba2 100644
+--- a/include/linux/perf_event.h
++++ b/include/linux/perf_event.h
+@@ -1677,6 +1677,7 @@ extern void perf_event_disable_inatomic(struct perf_e=
+vent *event);
+ extern void perf_event_task_tick(void);
+ extern int perf_event_account_interrupt(struct perf_event *event);
+ extern int perf_event_period(struct perf_event *event, u64 value);
++extern void perf_event_set_count(struct perf_event *event, u64 count);
+ extern u64 perf_event_pause(struct perf_event *event, bool reset);
+ #else /* !CONFIG_PERF_EVENTS: */
+ static inline void *
+@@ -1760,6 +1761,7 @@ static inline int perf_event_period(struct perf_event=
+ *event, u64 value)
+ {
+ 	return -EINVAL;
+ }
++static inline perf_event_set_count(struct perf_event *event, u64 count) { =
+}
+ static inline u64 perf_event_pause(struct perf_event *event, bool reset)
+ {
+ 	return 0;
+diff --git a/kernel/events/core.c b/kernel/events/core.c
+index db016e418931..d368c283eba5 100644
+--- a/kernel/events/core.c
++++ b/kernel/events/core.c
+@@ -5646,6 +5646,17 @@ static void _perf_event_reset(struct perf_event *eve=
+nt)
+ 	perf_event_update_userpage(event);
+ }
+=20
++void perf_event_set_count(struct perf_event *event, u64 count)
++{
++	struct perf_event_context *ctx;
++
++	ctx =3D perf_event_ctx_lock(event);
++	(void)perf_event_read(event, false);
++	local64_set(&event->count, count);
++	perf_event_ctx_unlock(event, ctx);
++}
++EXPORT_SYMBOL_GPL(perf_event_set_count);
++
+ /* Assume it's not an event with inherit set. */
+ u64 perf_event_pause(struct perf_event *event, bool reset)
+ {
+
+base-commit: 5ae85a1bd17b959796f6cc4c1153ceada2cf8f24
+--=20
