@@ -2,137 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CAB31744277
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 20:42:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76CEB74427B
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 20:43:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232930AbjF3Smk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 14:42:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46952 "EHLO
+        id S233165AbjF3SnE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Jun 2023 14:43:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232498AbjF3Smi (ORCPT
+        with ESMTP id S233121AbjF3Sm6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 14:42:38 -0400
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E8EC3C26;
-        Fri, 30 Jun 2023 11:42:37 -0700 (PDT)
-Received: by mail-pf1-x42c.google.com with SMTP id d2e1a72fcca58-6687466137bso1746742b3a.0;
-        Fri, 30 Jun 2023 11:42:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688150557; x=1690742557;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=s90sSJDGZ4o69CYENWCxmFlyZZs5Y1mAusgwMiJFmQc=;
-        b=qTdD+kQ/dZz9jFS4u5KBrSV1OOJAOhIlDM0dffuAP0q3sUhu/kxp8taqzzUmdZpudY
-         c22eskJXTrN4HL16oes8igxcavJCz/amPw78uiR4IBRXlUFSHO6sCHH13SbUrTlmIPsg
-         MbFxEY4ya8HuDWT4NfdtdKdqi+77XSdGXWebLa9+pMmjF9olCc/kuS2bY0Ejj4jrK+s9
-         WC99WMEyGCsdIdaIoBGMD0/aVJ10bej66ILx9pklM69fAPeHlENKvBGOgThvqX2p7UOB
-         bkCHri3FXlSAhTrsava4uloq6l8Y63TpLaQLLlB4QpNi4DhDALNbEUcGTDqNpRPb2x3x
-         +knA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688150557; x=1690742557;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=s90sSJDGZ4o69CYENWCxmFlyZZs5Y1mAusgwMiJFmQc=;
-        b=WuzSuEd/JfngwL5rGpzr8te0PsV5YNmvR3+vX5RFhO4s6FJIRjXgJWsnML2tjHwPOV
-         gzC/dJaIAgWhNJtwTeatOpXYoXT/xiPsic8RxCMmG+FQVANPBeUx1hMpAPyyX3CU0dkC
-         bf1HHw2Bp1uIri2O/O3rZ7yxW/UGUZFRRpocfSTGn+br6JBOBcezWiiZjuH2fZv1KWZO
-         LeiS6u7xBBj3/oh2zVpOe/SDuxncEGkBKzzKKPxGJsEgF1EaXt5br30wds8CgqhjPqXm
-         G0S7eYR/hth8M+O/ll7bWkqQX2k3FgRDydMeXequ3J31oCrfq6ZaTrhB8BNqnAU5i5fx
-         juWg==
-X-Gm-Message-State: ABy/qLbNNTHNgOAjqyA7k5euOMb4vMw2q7WZPEIdpuOlVDGkJ5Of5Q6M
-        l1L4IjySfQLNRDSVuKEQTVg=
-X-Google-Smtp-Source: APBJJlEGsVVJrMfSJnWrKK8x9XhlvZ/lVjRS2VwnK4Qau3PCGMmGslkxKbq9jz3H2x84e9lAp+eoow==
-X-Received: by 2002:a62:7b07:0:b0:682:57f0:7c00 with SMTP id w7-20020a627b07000000b0068257f07c00mr3143508pfc.3.1688150556680;
-        Fri, 30 Jun 2023 11:42:36 -0700 (PDT)
-Received: from localhost ([192.55.54.50])
-        by smtp.gmail.com with ESMTPSA id j18-20020a62e912000000b00666add7f047sm10215681pfh.207.2023.06.30.11.42.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 30 Jun 2023 11:42:35 -0700 (PDT)
-Date:   Fri, 30 Jun 2023 11:42:29 -0700
-From:   Isaku Yamahata <isaku.yamahata@gmail.com>
-To:     "Huang, Kai" <kai.huang@intel.com>
-Cc:     "peterz@infradead.org" <peterz@infradead.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "Gao, Chao" <chao.gao@intel.com>,
-        "Raj, Ashok" <ashok.raj@intel.com>,
-        "Shahar, Sagi" <sagis@google.com>,
-        "Hansen, Dave" <dave.hansen@intel.com>,
-        "david@redhat.com" <david@redhat.com>,
-        "bagasdotme@gmail.com" <bagasdotme@gmail.com>,
-        "ak@linux.intel.com" <ak@linux.intel.com>,
-        "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Chatre, Reinette" <reinette.chatre@intel.com>,
-        "Christopherson,, Sean" <seanjc@google.com>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "Yamahata, Isaku" <isaku.yamahata@intel.com>,
-        "nik.borisov@suse.com" <nik.borisov@suse.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "Luck, Tony" <tony.luck@intel.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "imammedo@redhat.com" <imammedo@redhat.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "bp@alien8.de" <bp@alien8.de>, "Brown, Len" <len.brown@intel.com>,
-        "sathyanarayanan.kuppuswamy@linux.intel.com" 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        "Huang, Ying" <ying.huang@intel.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "Williams, Dan J" <dan.j.williams@intel.com>,
-        isaku.yamahata@gmail.com
-Subject: Re: [PATCH v12 07/22] x86/virt/tdx: Add skeleton to enable TDX on
- demand
-Message-ID: <20230630184229.GG3436214@ls.amr.corp.intel.com>
-References: <104d324cd68b12e14722ee5d85a660cccccd8892.1687784645.git.kai.huang@intel.com>
- <20230627095012.ln47s62pqzdrnb7x@box.shutemov.name>
- <d6a0fb32ebcdeb6c38ebe8e2b03f034f42360c0f.camel@intel.com>
- <20230627121853.ek5zr7sfiezfkfyj@box.shutemov.name>
- <9361abfa9bf22c2a1a4b25e5495bcccc5b8dcd43.camel@intel.com>
- <7b61715ad35d7b9916f55df72378e02e62c5cc4e.camel@intel.com>
- <20230628133541.GF2438817@hirez.programming.kicks-ass.net>
- <03def8b40a7db14f31d2ad67fb1a201e8ae8bce0.camel@intel.com>
- <20230630092232.GB2533791@hirez.programming.kicks-ass.net>
- <716cdf73799a5322cbe34c7f23d582f8a3ecf301.camel@intel.com>
+        Fri, 30 Jun 2023 14:42:58 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C0FD3C00;
+        Fri, 30 Jun 2023 11:42:54 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id C601D2185A;
+        Fri, 30 Jun 2023 18:42:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1688150572; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=hzP6++sspeiMJGly5/GKvnU83DNQrkePv6Ujpx4JBFo=;
+        b=WzwMOUZ7URL2pshBLAbrR5Eb1snRRrtSTCfPeViixI6CoyWR3brJj+Opy8GY3af3RexoqS
+        QBRbdHfDEjAv47pVfxR/ZLVfOcteQydj6yXqtbF8EHg4iVioohn/g7MPxHxp/GqDb9Bwz/
+        4ZK6Zr+Q+n15blaSHPLRsoHSPyG0mY4=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 98B59138F8;
+        Fri, 30 Jun 2023 18:42:52 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id Vw50JCwin2SUbgAAMHmgww
+        (envelope-from <mkoutny@suse.com>); Fri, 30 Jun 2023 18:42:52 +0000
+Date:   Fri, 30 Jun 2023 20:42:51 +0200
+From:   Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>
+To:     Waiman Long <longman@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Zefan Li <lizefan.x@bytedance.com>, Tejun Heo <tj@kernel.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Shuah Khan <shuah@kernel.org>
+Subject: Re: [PATCH 1/3] cpuset: Allow setscheduler regardless of manipulated
+ task
+Message-ID: <qmxqf4cnt4ajt7y43vmy7xjf7mgljnq4gxqkiqdmaadrcq4lfx@f4kxwy5wygvm>
+References: <20230629091146.28801-1-mkoutny@suse.com>
+ <20230629091146.28801-2-mkoutny@suse.com>
+ <15c607d9-c1fa-ca11-d675-8f2b3a6fd15b@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="v3oci5sln533st5v"
 Content-Disposition: inline
-In-Reply-To: <716cdf73799a5322cbe34c7f23d582f8a3ecf301.camel@intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <15c607d9-c1fa-ca11-d675-8f2b3a6fd15b@redhat.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 30, 2023 at 10:09:08AM +0000,
-"Huang, Kai" <kai.huang@intel.com> wrote:
 
-> On Fri, 2023-06-30 at 11:22 +0200, Peter Zijlstra wrote:
-> > On Thu, Jun 29, 2023 at 12:15:13AM +0000, Huang, Kai wrote:
-> > 
-> > > > 	Can be called locally or through an IPI function call.
-> > > > 
-> > > 
-> > > Thanks.  As in another reply, if using spinlock is OK, then I think we can say
-> > > it will be called either locally or through an IPI function call.  Otherwise, we
-> > > do via a new separate function tdx_global_init() and no lock is needed in that
-> > > function.  The caller should call it properly.
-> > 
-> > IPI must use raw_spinlock_t. I'm ok with using raw_spinlock_t if there's
-> > actual need for that, but the code as presented didn't -- in comments or
-> > otherwise -- make it clear why it was as it was.
-> 
-> There's no hard requirement as I replied in another email.
-> 
-> Presumably you prefer the option to have a dedicated tdx_global_init() so we can
-> avoid the raw_spinlock_t?
+--v3oci5sln533st5v
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-TDX KVM calls tdx_cpu_enable() in IPI context as KVM hardware_setup() callback.
-tdx_cpu_enable() calls tdx_global_init().
--- 
-Isaku Yamahata <isaku.yamahata@gmail.com>
+On Thu, Jun 29, 2023 at 08:11:33AM -0400, Waiman Long <longman@redhat.com> wrote:
+> Another fact about cpuset controller enabling is that both cpus_allowed and
+> mems_allowed are empty at that point. You may also add these checks as a
+> preconditions for disabling the security_task_setscheduler check.
+
+I considered relying on that, however, there is more generic case when
+migrating between two sibling that should be allowed in v2 too.
+See the added test_cpuset_perms_object(). (Admittedly, it doesn't stress
+the case when the two siblings had different CPUs but it could.)
+
+Anyway, let's move on to v2 (where I addressed remaining comments).
+
+Thanks,
+Michal
+
+--v3oci5sln533st5v
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQQpEWyjXuwGT2dDBqAGvrMr/1gcjgUCZJ8iKAAKCRAGvrMr/1gc
+jsKlAP9Aq4WN+NlTiUnIUf8PeXwyJiCKLc3wgk3m+bILYfDpZgD7B4/zkWylYWB9
+ySZ09DxxEk78SmXA9ZCPzwHdr/SkQAU=
+=b3pu
+-----END PGP SIGNATURE-----
+
+--v3oci5sln533st5v--
