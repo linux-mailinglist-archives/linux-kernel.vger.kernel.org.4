@@ -2,76 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 971057441B8
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 20:02:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C58157441BB
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 20:04:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232709AbjF3SCJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 14:02:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58466 "EHLO
+        id S229991AbjF3SER (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Jun 2023 14:04:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232564AbjF3SCG (ORCPT
+        with ESMTP id S231843AbjF3SEO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 14:02:06 -0400
-Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71E2810FB
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 11:02:05 -0700 (PDT)
-Received: by mail-qt1-x834.google.com with SMTP id d75a77b69052e-40345bf4875so33601cf.0
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 11:02:05 -0700 (PDT)
+        Fri, 30 Jun 2023 14:04:14 -0400
+Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A274E5C
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 11:04:13 -0700 (PDT)
+Received: by mail-lj1-x230.google.com with SMTP id 38308e7fff4ca-2b6a16254a4so33898861fa.0
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 11:04:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1688148124; x=1690740124;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Qg3LqEdLU3wZEunyax8ElGaV027EQp1GLKpP0FoAtZ4=;
-        b=nUtk3UHqQQUVq/3fAMJN8zld0gA+IYs5zYdT7Uo+1PoprdBu4MRtnsgBqmZY7TI6MQ
-         tF+X0kYmjcEQh+NLQuxHYi5w+WkoU8bV9BBveB9LXFmW2MbKYNQEmS/DlNZilCC9dkO2
-         eXjXEXYWe+97MJD14YN0gih7SwS53IBd0qr21WILpoLONQ5E2vS7B2NwXYBH0Vic9nqo
-         PqArhZicfpl3NhBLgwWCIeIs8WYB7Fw5YmLqsS/+BpjNQNsJiHwEEVRvel5M3CTg/Iyt
-         NvlOtAq6UcKM4UnQTXsP+5B4Fx71MrZzTzRRuIpn1QQGAbgyBTjMdxta1nuj0NWDMjhK
-         Tdmg==
+        d=google.com; s=20221208; t=1688148251; x=1690740251;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=uYdGoo2IprrfPMUF4ijD753EkS4/HIm2RYWkY/Jxr5s=;
+        b=sQJDPDPhU2yH6TxF/IrqYPa+x/nB9NHhP5ZlgmLDc0NrTPtN6RfViTuwDGygdN4Vlg
+         TMfS90ClO96XXxSWl0mIbkPIKDzEtoegAUh8cODszQPcpeYbW+WaX37dwoRIWuPcJR+t
+         d80fxgxuomyGG9jujER1E9SG+C9m2C8GsCCOXJwgniprVhvs+JK0QPdw3myFBU7cE8U0
+         AgPvlmBHNinIuKuBLbPKUyaU7k0KAOAdEGmxk6NAygQBjlC1mO0Gmgf1QuxZnmBp11qE
+         NGkF8UORud38UcyO+Gp1nPTt5imwNgT/6eaEKYgiNdNqUo4Y8r9ahk1uowm+W8OS9rUH
+         vmYQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688148124; x=1690740124;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Qg3LqEdLU3wZEunyax8ElGaV027EQp1GLKpP0FoAtZ4=;
-        b=Usp6jwdMtfDEs/BPjULnr1YY60+Bf3J5auyWUte/Z5wwxHFRYI4Lq/ssftaGTaVy8O
-         2bhQpXAoLK79HKGYi84Lai8BVoSi2akfuAVKaCS2ggOYvlS6/AhOBZyHnRRHGGtQCP9W
-         CTrquVSljZ+nO3HyvMcfhpYQK34ZWqlLiWSD/TkmJbszctoV9uFDd61NFelCeqaHCC0V
-         1vbBlvnNopSXDZ2eta+doJsY5RX8JJvqiZhUeyWkbgV2vEHaohodak71SpsHaAkjMk0+
-         0l7qR9Z7UlKGDat9C7hwYPGWxR3KIA6WkxziqocBZZqCwr8xw3/uEqK7b9y5huXADaNJ
-         IqWQ==
-X-Gm-Message-State: ABy/qLbbXzksfjTLBWXOq27835iUJTO9ZNbVbZxXaOo9aCY077ve8Ist
-        AmrN2ahChw+dDsL/qXWw0meNtbrFZkPARSjz0+uOBg==
-X-Google-Smtp-Source: APBJJlHT2B/Kk6L2SpQUQcP6e9OV8JTKhSdmmFsb/AO5updG8vO6F+jx9bKgQAdCEXIYQy2VJpQxAAi77H3Vm/HQL5Y=
-X-Received: by 2002:a05:622a:10d:b0:3f2:2c89:f1ef with SMTP id
- u13-20020a05622a010d00b003f22c89f1efmr25916qtw.5.1688148124390; Fri, 30 Jun
- 2023 11:02:04 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1688148251; x=1690740251;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=uYdGoo2IprrfPMUF4ijD753EkS4/HIm2RYWkY/Jxr5s=;
+        b=Ubds8rsQX0Qs5uzTqOfOI59I+FbATz50HP3gkSrFoB6VVS/hB5UaSiIlrf3JFVRZUx
+         U4uKMPygHqLNgg8fhqEdxSxteo8zMvYPbYwK88ZOemmI9ghnr5AujQnaljGw/vkG84xM
+         dLVCfpKMyJrvvePxNpZcBgZQSflDhyuWdRjMAGvfoP7nNmCXt5I/wrHzBUBXl40RMWJJ
+         kit9L8DEuVDKvj+Hy4ISgOIT7K9K2L1WhR/p4foxy2iMdt0VCfPCu0b4GmD7wrKWnIdT
+         Gnw7gqflAjbeEdeTCKu6ZL5vVjdIISIjqiI3ttvwVeGWdoe+k3TgwMG3VTkNvUIuJppG
+         wzDg==
+X-Gm-Message-State: ABy/qLacEG+RESy/O3qCyeAIRvQgWk1C19o3gGBqolBZ6+e56ZSvznXj
+        gXxBPR59RvzP6EHcILQPKxqKblph+8rGgrAp5mVe6A==
+X-Google-Smtp-Source: APBJJlEtwaUdbybFWqQjeuK+sGhxwAg1iNgt4IfVkag0T/duKX4X+vo+xgVFLbleKQ4zuteEzNZdIE7/+bycQNdjoZw=
+X-Received: by 2002:a2e:980c:0:b0:2b4:8168:2050 with SMTP id
+ a12-20020a2e980c000000b002b481682050mr2486687ljj.29.1688148251192; Fri, 30
+ Jun 2023 11:04:11 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230627181030.95608-2-irogers@google.com> <8dab7522-31de-2137-7474-991885932308@web.de>
- <CAP-5=fVxTYpiXgxDKX1q7ELoAPnAisajWcNOhAp19TZDwnA0oA@mail.gmail.com>
- <59e92b31-cd78-5c0c-ef87-f0d824cd20f7@web.de> <CAP-5=fX8-2USHn8M4KPfwLz3=AG9kc8=9KdjayMsRexZ87R_EA@mail.gmail.com>
- <44d77ec3-9a19-cfd5-4bba-4a23d0cd526b@web.de> <CAP-5=fXjXBSFVDYXw6fXUf35hLDMqS-C4DRC4LWXUcsMNP6gdw@mail.gmail.com>
- <dbf08741-0b3d-f61f-bb06-05ca3f445202@web.de>
-In-Reply-To: <dbf08741-0b3d-f61f-bb06-05ca3f445202@web.de>
-From:   Ian Rogers <irogers@google.com>
-Date:   Fri, 30 Jun 2023 11:01:53 -0700
-Message-ID: <CAP-5=fXK9dcyycfOfD+a8_qHw+g3vmkd52ZLgwBNfhBFXELLhA@mail.gmail.com>
-Subject: Re: [v2 01/13] perf parse-events: Remove unused PE_PMU_EVENT_FAKE token
-To:     Markus Elfring <Markus.Elfring@web.de>
-Cc:     linux-perf-users@vger.kernel.org, bpf@vger.kernel.org,
-        kernel-janitors@vger.kernel.org,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
-        Ingo Molnar <mingo@redhat.com>, Jiri Olsa <jolsa@kernel.org>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
+References: <20230504120042.785651-1-rkagan@amazon.de> <ZH6DJ8aFq/LM6Bk9@google.com>
+ <CALMp9eS3F08cwUJbKjTRAEL0KyZ=MC==YSH+DW-qsFkNfMpqEQ@mail.gmail.com>
+ <ZJ4dmrQSduY8aWap@google.com> <ZJ65CiW0eEL2mGg8@u40bc5e070a0153.ant.amazon.com>
+ <ZJ7mjdZ8h/RSilFX@google.com> <ZJ7y9DuedQyBb9eU@u40bc5e070a0153.ant.amazon.com>
+ <ZJ74gELkj4DgAk4S@google.com> <CAL715WL9T8Ucnj_1AygwMgDjOJrttNZHRP9o-KUNfpx1aYZnog@mail.gmail.com>
+ <CALMp9eSQ9uRBVdLDkfCdPbprZ45LpdZY5-5O9i41oJYs-dK7+Q@mail.gmail.com> <CAL715WJDjox6AOU=gzN_E-VPL8aXMuD+SkN3k18T=imoS_dKaw@mail.gmail.com>
+In-Reply-To: <CAL715WJDjox6AOU=gzN_E-VPL8aXMuD+SkN3k18T=imoS_dKaw@mail.gmail.com>
+From:   Mingwei Zhang <mizhang@google.com>
+Date:   Fri, 30 Jun 2023 11:03:34 -0700
+Message-ID: <CAL715WJfOXOovUJSBtC0SfXVTuXEXwRF3sQBUzGaPDXe99dRoQ@mail.gmail.com>
+Subject: Re: [PATCH] KVM: x86: vPMU: truncate counter value to allowed width
+To:     Jim Mattson <jmattson@google.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Roman Kagan <rkagan@amazon.de>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Eric Hankland <ehankland@google.com>, kvm@vger.kernel.org,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Like Xu <likexu@tencent.com>, x86@kernel.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-kernel@vger.kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        Borislav Petkov <bp@alien8.de>, Ingo Molnar <mingo@redhat.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
@@ -83,43 +80,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 30, 2023 at 10:52=E2=80=AFAM Markus Elfring <Markus.Elfring@web=
-.de> wrote:
+> diff --git a/arch/x86/kvm/pmu.c b/arch/x86/kvm/pmu.c
+> index 48a0528080ab..8d28158e58f2 100644
+> --- a/arch/x86/kvm/pmu.c
+> +++ b/arch/x86/kvm/pmu.c
+> @@ -322,7 +322,7 @@ static void reprogram_counter(struct kvm_pmc *pmc)
+>         if (!pmc_event_is_allowed(pmc))
+>                 goto reprogram_complete;
 >
-> >> Can the mentioned patch review concern be adjusted with wording altern=
-atives
-> >> for improved commit messages?
-> >
-> > Sorry, checked with a colleague and kernel contributor,
+> -       if (pmc->counter < pmc->prev_counter)
+> +       if (pmc->counter == 0)
+>                 __kvm_perf_overflow(pmc, false);
 >
-> Interesting =E2=80=A6
+>         if (eventsel & ARCH_PERFMON_EVENTSEL_PIN_CONTROL)
 >
->
-> > we don't know what is being requested here,
->
-> Another bit of attention for a known information source:
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/D=
-ocumentation/process/submitting-patches.rst?h=3Dv6.4#n94
->
->
-> > "imperative mood" makes no sense,
->
-> How does such an opinion fit to the Linux development documentation?
->
->
-> > as such I don't have a fix for what you're requesting.
->
-> I got the impression that further possibilities can be taken better into =
-account
-> also for improved change descriptions.
+> Since this is software emulation, we (KVM) should only handle overflow
+> by plusing one?
 
-Thanks Markus, I appreciate you feel you have a real point here, I'm
-just not getting it. Perhaps you can write a commit message that
-fulfils requirements like being in the correct "imperative mood" and I
-will learn and improve.
-
-Thanks,
-Ian
-
-> Regards,
-> Markus
+Sign. Please ignore this as it is not only hacky but also not working.
