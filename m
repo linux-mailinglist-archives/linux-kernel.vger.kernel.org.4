@@ -2,116 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCCB0743964
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 12:33:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C6E2743969
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 12:33:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231361AbjF3KdZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 06:33:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34928 "EHLO
+        id S232235AbjF3Kdv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Jun 2023 06:33:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230178AbjF3KdX (ORCPT
+        with ESMTP id S232111AbjF3Kdp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 06:33:23 -0400
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 695B330DF
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 03:33:21 -0700 (PDT)
-Received: by mail-lj1-x22c.google.com with SMTP id 38308e7fff4ca-2b69ea3b29fso27154031fa.3
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 03:33:21 -0700 (PDT)
+        Fri, 30 Jun 2023 06:33:45 -0400
+Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F92730C5
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 03:33:44 -0700 (PDT)
+Received: by mail-lj1-x22d.google.com with SMTP id 38308e7fff4ca-2b6985de215so27828491fa.2
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 03:33:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1688121199; x=1690713199;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=BV6pMCNFBELZthFQNdbEPY0LFf8oujVmtU/HlHM5O6w=;
-        b=La97SAtUMDaQJPXoGRraZ0zdFoKriXSnJyG5uqhKNWQLBvzsNLIa3sVbPGjI/Hyn6r
-         CwAUr8zFLmuU1Hw6/1WHilfZMHUbRmEi3qC+ryRszPZL6yTQZGTK/Fzq93hyTrPBE3ld
-         lvLHmDjSPBltv0e0WuW3AvCI1sVhEa6O7rxJXMNLcxJnQHKJ9hdlugyO7Ta3UAvdfsjR
-         vXB49PmJZrbWS40WXb320dBMOKwsnfMToxiq20oHb9+hWxDzy1gJT0GxGHFPpm6iJkbV
-         RdnaTWKi8hXixIY83GUyhOPj4PwhlGU5Rk3YCCUOP8WZj09ShQyDQ6kSgG8jPXJ5z+t+
-         JreA==
+        d=futuring-girl-com.20221208.gappssmtp.com; s=20221208; t=1688121223; x=1690713223;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=WMvg4+xf/FpT2l2ger0oTsMzr40HAUi9gV+dNJ+SQAU=;
+        b=ptIyYvAGr7z2ddcaHcOP+a5GUrlPfF7+kvw9taw+/uSBqODpirNaXfrjvvaah2YJO4
+         1I+MABWWd1CMrpSEEL8XCWF+dfhQzuerODUen0VCYKl61KpU4edsHLHSNb/e/8KWVpku
+         iNLrIGxlbqQy2MJ2uLDoqkplGXbaoeRbvFubhmM+C1vjdZzT36cvY2cLUfGGOAlthxMy
+         Kh158t2XgN9f6kdlcWlCDAev77ibQ4onJGwHEAzLSGieQ3K/ZWUP8R3qYUdsxz2QhyET
+         f4xJYykbgbt91ep0t8+htl6DigRVG61IO8UFbqxQubKQCzQxU/VD0s+nXv4n4DdCNVjA
+         ythA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688121199; x=1690713199;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=BV6pMCNFBELZthFQNdbEPY0LFf8oujVmtU/HlHM5O6w=;
-        b=W+Ku4H6CYdJ7JVzJzlTX1CoAXTeQQQdlTHNqsYDRB2OsaA7F+NXcWEkcV+uud79OZe
-         XKANRY4I7bT6ICl9h1irK1yBNesz9SRqRzor5jSMtuOJUSEBqwDml9bC7o8f5TjKJGc+
-         CaFjtcJSCo57Ubw1VM77i48P6bDBgguo6vMKntJrXLlsFe6tONLJY1FOSn+RJUkCQq/y
-         EKYhZhG8GDqbqnK5QQJKPPxq9uNruRp/qB9cAdPipnOyJKgxiUSpICGDR3aBSDLZzeHv
-         0f6aj37JLK7IyGr2wr1zlhQHKZbpGDvLIfCNFDhsX9g909uoqGp7+aJ+8R6MGi2SaZPB
-         qHlQ==
-X-Gm-Message-State: ABy/qLaK0BoDwOOItQ5H6Nv/aR9SSqTaswJw3YJFNCIfjrxscZiO49bZ
-        JgjKDZY8Hg+QczN/I0PrifTBkQ==
-X-Google-Smtp-Source: APBJJlEQ56WLGrt67F0epM2MytRHTKau3I6Ew1h+D6xetubMMeQ1wj68PFO/tnppTDhXOMB2EaKmOA==
-X-Received: by 2002:a05:6512:280d:b0:4fb:18f4:4cd4 with SMTP id cf13-20020a056512280d00b004fb18f44cd4mr2161674lfb.55.1688121199585;
-        Fri, 30 Jun 2023 03:33:19 -0700 (PDT)
-Received: from [10.10.15.130] ([192.130.178.91])
-        by smtp.gmail.com with ESMTPSA id a20-20020a05600c225400b003fbb06af219sm6875419wmm.32.2023.06.30.03.33.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 30 Jun 2023 03:33:18 -0700 (PDT)
-Message-ID: <972b7cc7-77de-e332-ba41-b96c01dc7939@linaro.org>
-Date:   Fri, 30 Jun 2023 13:33:16 +0300
+        d=1e100.net; s=20221208; t=1688121223; x=1690713223;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=WMvg4+xf/FpT2l2ger0oTsMzr40HAUi9gV+dNJ+SQAU=;
+        b=Ca7IRmC3jQ2WSkMito20WwYEPkCiYPxD0/YHUdOEazA4cdefjfK3E5/py/FOJcQ8jT
+         E2IfdlnmX87lxW0ktQ7GJzXDPq6Gn9uxZZ4RC2q933MlKu/sdgWjADypFUhB1hFKYDxD
+         FpHecIvxJ9LrzmJNrTtJtJr9EeI+dZdHtSvnzLr3EbVpRX5UOHVdQvA+VALIueVmeIks
+         sDWMOhFfRncflB9NzmcuIKCKHkVRF/r3JFV9w1iNw5DrOUvq0gBJWnAUGoC7ZJPTfpS1
+         vpuZ8raaWJag5g8htGLSBzx0Nt5LXkQf8WB+JeT53SISeBQH0dptrDAWhSP/43PKTm1P
+         qeug==
+X-Gm-Message-State: ABy/qLbbDrDd4R3TBUOSEKtW8eLBSQoTVDtno1M+aymgtVdZudRM1H1O
+        CFyWZJVkjMIWhw1RpJ7RKVfxJW2RMhlTA3fKz/CmWQ==
+X-Google-Smtp-Source: APBJJlG2u/xyzuJ84ph37p/iQTjUyhcv/0ujEisW8iOXdWjzS2aHJnQdoa55ieUt9lpi45BGDEBdxvotYQGcYJ/euZE=
+X-Received: by 2002:a2e:9b0b:0:b0:2b6:a5bd:da2d with SMTP id
+ u11-20020a2e9b0b000000b002b6a5bdda2dmr1739785lji.27.1688121222628; Fri, 30
+ Jun 2023 03:33:42 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH RFC v4 1/7] drm: Introduce solid fill DRM plane property
-Content-Language: en-GB
-To:     Jessica Zhang <quic_jesszhan@quicinc.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
-        Marijn Suijten <marijn.suijten@somainline.org>
-Cc:     quic_abhinavk@quicinc.com, ppaalanen@gmail.com,
-        contact@emersion.fr, laurent.pinchart@ideasonboard.com,
-        sebastian.wick@redhat.com, ville.syrjala@linux.intel.com,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, freedreno@lists.freedesktop.org,
-        wayland-devel@lists.freedesktop.org
-References: <20230404-solid-fill-v4-0-f4ec0caa742d@quicinc.com>
- <20230404-solid-fill-v4-1-f4ec0caa742d@quicinc.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20230404-solid-fill-v4-1-f4ec0caa742d@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230630072124.944461414@linuxfoundation.org>
+In-Reply-To: <20230630072124.944461414@linuxfoundation.org>
+From:   ogasawara takeshi <takeshi.ogasawara@futuring-girl.com>
+Date:   Fri, 30 Jun 2023 19:33:31 +0900
+Message-ID: <CAKL4bV5Dhh3n0cLnd7wvgheMOrodFkCLa-RpzK9f3NW+n0jsKQ@mail.gmail.com>
+Subject: Re: [PATCH 6.1 00/33] 6.1.37-rc3 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de,
+        conor@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30/06/2023 03:25, Jessica Zhang wrote:
-> Document and add support for solid_fill property to drm_plane. In
-> addition, add support for setting and getting the values for solid_fill.
-> 
-> To enable solid fill planes, userspace must assign a property blob to
-> the "solid_fill" plane property containing the following information:
-> 
-> struct drm_solid_fill_info {
-> 	u8 version;
-> 	u32 r, g, b;
-> };
-> 
-> Signed-off-by: Jessica Zhang <quic_jesszhan@quicinc.com>
-> ---
->   drivers/gpu/drm/drm_atomic_state_helper.c |  9 +++++
->   drivers/gpu/drm/drm_atomic_uapi.c         | 55 +++++++++++++++++++++++++++++++
->   drivers/gpu/drm/drm_blend.c               | 33 +++++++++++++++++++
->   include/drm/drm_blend.h                   |  1 +
->   include/drm/drm_plane.h                   | 43 ++++++++++++++++++++++++
->   5 files changed, 141 insertions(+)
+Hi Greg
 
-Also, I think the point which we missed up to now. Could you please add 
-both new properties to dri/N/state debugfs?
+On Fri, Jun 30, 2023 at 4:32=E2=80=AFPM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 6.1.37 release.
+> There are 33 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Sun, 02 Jul 2023 07:21:12 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-=
+6.1.37-rc3.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-6.1.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
--- 
-With best wishes
-Dmitry
+6.1.37-rc3 tested.
 
+Build successfully completed.
+Boot successfully completed.
+No dmesg regressions.
+Video output normal.
+Sound output normal.
+
+Lenovo ThinkPad X1 Carbon Gen10(Intel i7-1260P(x86_64), arch linux)
+
+Thanks
+
+Tested-by: Takeshi Ogasawara <takeshi.ogasawara@futuring-girl.com>
