@@ -2,137 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B6B27432D8
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 04:46:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 89DB37432DD
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 04:48:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231854AbjF3Cq3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 22:46:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33086 "EHLO
+        id S230106AbjF3Cr6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 22:47:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230034AbjF3Cq0 (ORCPT
+        with ESMTP id S230013AbjF3Crz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 22:46:26 -0400
-Received: from mail-pj1-x1041.google.com (mail-pj1-x1041.google.com [IPv6:2607:f8b0:4864:20::1041])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1652E3583
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 19:45:59 -0700 (PDT)
-Received: by mail-pj1-x1041.google.com with SMTP id 98e67ed59e1d1-262e3c597b9so986823a91.0
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 19:45:59 -0700 (PDT)
+        Thu, 29 Jun 2023 22:47:55 -0400
+Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 316F230D1;
+        Thu, 29 Jun 2023 19:47:54 -0700 (PDT)
+Received: by mail-wr1-x441.google.com with SMTP id ffacd0b85a97d-311099fac92so1649499f8f.0;
+        Thu, 29 Jun 2023 19:47:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1688093158; x=1690685158;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+        d=gmail.com; s=20221208; t=1688093272; x=1690685272;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=6hzvSD9GFhy/jKWa6fSxQTV3jRMi0i1mWv1yFuJ1OnQ=;
-        b=YSpovZITc5f/rxtk6imAJ3XXDu0nxGqwQrM9vx9Pd7yO9XsCXifUh5a4AqpcOY0Um2
-         WgFjsoGqV+U3JIaFz/bYoWyZXb5Qa9iwb43baFMNu5bkSeUAJcg94uSn14aCncybFATs
-         OyVJR3SiB2JXrP8E1v7mg6yCV0rb3yJ6v2/Vvc1+zR2KqbDj/CyKF/FbdHHklKzRIdPy
-         +3b7aAu169odsbTcGNjf128+voyIc3cJB1HaNu6irgey9lpxxSJAcgKLDTqq7cDmqWn/
-         GQ+ev5H8/56w9z16YcUNiFue2+w2CSAZ/VWaOl4qtinnfr6WXeLlfV6tS9QG26/HkcI9
-         FTvw==
+        bh=PN5yxbuJ2nnYnl/4YBa8slTNyYfmpUDhYSEL5xstQsU=;
+        b=IUaTt8TcLWNzXn8Ey8PCwkSOyValaLJHNsJBzfJ8c8VFkXDXWZ07DZAYAyY8ZpyG+D
+         ViyKdbolLZuN3acuoZPui7va0jpo92CmUUIR/E7PR4LuPuZ/dAWAmpRWYosYBlh7+UXN
+         SbsW85y6oTB4jNWi3r6NOH6/5NH8WmCp+PHbpfVjulKWtWdG30+EdGEfcyAzSfV0zRVP
+         BTcIyC28klTeW45HEmkwSpo9CSqIcb1O9J4m64qHMGD47BrK1KM43qXMEAlbWKWW/g/d
+         dLFlS0reoxJD2v1Q0NAKPAhoCVlf93BZoE/wJRWSISQssl9GtJnZi4AwMUJS8dA7GITJ
+         i1dw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688093158; x=1690685158;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20221208; t=1688093272; x=1690685272;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=6hzvSD9GFhy/jKWa6fSxQTV3jRMi0i1mWv1yFuJ1OnQ=;
-        b=Jup+fvwWIAZuYm09OOLdXi49bSPTIt+FZ0eAUOAiO39bcMTI5+PYdUvxeLF7hZ03NZ
-         TbSbA3PqW+bhs5LMJo06P3Rib6sJswnDBN9mo0Tzrxm+6f5oiDYU3jZ+tuVQWWrebeRh
-         /XrjCRyXZqyY3eBQfLZPNVg9pYW2OjShr28XWlGGrgWx1kULu83sJRy/llPoL0kouaW5
-         I8ipXjBJ+Uj/KTb0CPxLGOqa1n629TSai3/g0mFL8oyNomoscyK0WB3F9fo/OJDIV38W
-         ZxDIOLgSTbP/mq/VJ5BycZ2huOdUzJYQHGiAjbWm64K1iLuhcFpIxlf35og0dK/2aF0b
-         OYwg==
-X-Gm-Message-State: ABy/qLZr6buhk7SJ7TK00YLN8rM7xuamduqBbUi3eGOmA4n6C8znuzin
-        pMOymokKAc4F6Qx1THEX92n3Uw==
-X-Google-Smtp-Source: APBJJlEWt5SI1+Qi4PG5ZpyUp5NrkQNoe2RGNNki+4+TiyciwzaA770deJ1sLnP/XWUjWDOPC7mWpQ==
-X-Received: by 2002:a17:90a:b81:b0:262:c291:4b6c with SMTP id 1-20020a17090a0b8100b00262c2914b6cmr1129635pjr.45.1688093158565;
-        Thu, 29 Jun 2023 19:45:58 -0700 (PDT)
-Received: from localhost.localdomain ([203.208.189.9])
-        by smtp.gmail.com with ESMTPSA id k2-20020a17090a4c8200b002609cadc56esm10549454pjh.11.2023.06.29.19.45.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Jun 2023 19:45:58 -0700 (PDT)
-From:   lizhe.67@bytedance.com
-To:     tglx@linutronix.de
-Cc:     bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
-        linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, lizefan.x@bytedance.com,
-        lizhe.67@bytedance.com, mingo@redhat.com, rafael@kernel.org,
-        tony.luck@intel.com, viresh.kumar@linaro.org, x86@kernel.org,
-        yuanzhu@bytedance.com
-Subject: Re: [RFC] msr: judge the return val of function rdmsrl_on_cpu() by WARN_ON
-Date:   Fri, 30 Jun 2023 10:45:49 +0800
-Message-Id: <20230630024549.76487-1-lizhe.67@bytedance.com>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <87r0ptzxad.ffs@tglx>
-References: <87r0ptzxad.ffs@tglx>
+        bh=PN5yxbuJ2nnYnl/4YBa8slTNyYfmpUDhYSEL5xstQsU=;
+        b=VQw18THOx28CsTP5o/yyu2WuJzMh6j1EWXH60pOUu6SQ2BAwkRFMMVjbrL7BA2V/Kx
+         PmfOGDt309dI1tE0ivl6Rieivvp/qgJ1PA1pBAeFLVL+JwWhs2ME6gxDMuIqc+HdmKY4
+         gMyY26bX19oZEZVUKrMCyi9ORREnRtmSFKSKtwa3OnxI57TGKGF5pYDpXT6UuwgJVVtL
+         3vzZWzYlyU03gfGLUm3EnUohNmOZrWj0RK0eLLE2PR3oZwT1AEpAAMgDT7IFTe3N+gwM
+         U2R/aqXz3rZtERQ/gpGG8EESABtLFlNaKKu2Ytto+asq+MZ7fTTMGsSMpsCaoP8GOwk+
+         OZHw==
+X-Gm-Message-State: ABy/qLa3kZ5xV4GJTz1Ou8Cu6J4FXhGWODDZ+M6zq4AsILw6oSCTi2zn
+        hT9/nufL/tbu2htBuF23Ua4I+ODGqRR0U0OyPp8=
+X-Google-Smtp-Source: APBJJlG2XSLJk7WgprfL+OPvH4/Ws0gRTftzgVG3a1nA2jukp+WyKKCCC6yZ9QwKgrCuixwdMY5UR+sy3rDqqsFm9rU=
+X-Received: by 2002:a5d:514d:0:b0:313:e20c:b8e0 with SMTP id
+ u13-20020a5d514d000000b00313e20cb8e0mr921811wrt.23.1688093272424; Thu, 29 Jun
+ 2023 19:47:52 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20230607123700.40229-1-cloudliang@tencent.com>
+ <20230607123700.40229-2-cloudliang@tencent.com> <ZJyj3QDu9eAtJ+eq@google.com>
+In-Reply-To: <ZJyj3QDu9eAtJ+eq@google.com>
+From:   Jinrong Liang <ljr.kernel@gmail.com>
+Date:   Fri, 30 Jun 2023 10:47:40 +0800
+Message-ID: <CAFg_LQVtcBaO-=dvrqe7OjMqift__x-F6FeJ8EEUh+Ei-tgyhg@mail.gmail.com>
+Subject: Re: [PATCH v3 1/4] KVM: selftests: Introduce __kvm_pmu_event_filter
+ to improved event filter settings
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Aaron Lewis <aaronlewis@google.com>,
+        David Matlack <dmatlack@google.com>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Like Xu <like.xu.linux@gmail.com>,
+        Jinrong Liang <cloudliang@tencent.com>,
+        linux-kselftest@vger.kernel.org, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 30 Jun 2023 at 01:03:22 +0200, tglx@linutronix.de wrote:
->Li!
+Sean Christopherson <seanjc@google.com> =E4=BA=8E2023=E5=B9=B46=E6=9C=8829=
+=E6=97=A5=E5=91=A8=E5=9B=9B 05:19=E5=86=99=E9=81=93=EF=BC=9A
 >
->On Thu, Jun 29 2023 at 15:27, lizhe.67@bytedance.com wrote:
+> On Wed, Jun 07, 2023, Jinrong Liang wrote:
+> > -static struct kvm_pmu_event_filter *remove_event(struct kvm_pmu_event_=
+filter *f,
+> > +static struct kvm_pmu_event_filter *remove_event(struct __kvm_pmu_even=
+t_filter *__f,
+> >                                                uint64_t event)
 >
->> There are ten places call rdmsrl_on_cpu() in the current code without
->> judging the return value. This may introduce a potential bug. For example,
->> inj_bank_set() may return -EINVAL, show_base_frequency() may show an error
->> freq value, intel_pstate_hwp_set() may write an error value to the related
->> msr register and so on. But rdmsrl_on_cpu() do rarely returns an error, so
->> it seems that add a WARN_ON is enough for debugging.
->
->Can you please structure your changelogs as documented in:
->
->  https://www.kernel.org/doc/html/latest/process/maintainer-tip.html#changelog
->
->instead of providing a big lump of words?
->
->> There are ten places call rdmsrl_on_cpu() in the current code without
->> judging the return value.
->
->Return values are not judged. They are either ignored or checked/evaluated.
->
->> This may introduce a potential bug.
->
->Sure. Anything which does not check a return value from a function might
->be a bug, but you have to look at each instance whether its a bug or
->not.
->
->> For example, inj_bank_set() may return -EINVAL, show_base_frequency()
->> may show an error freq value, intel_pstate_hwp_set() may write an
->> error value to the related msr register and so on.  But
->> rdmsrl_on_cpu() do rarely returns an error, so it seems that add a
->> WARN_ON is enough for debugging.
->
->This is hillarious at best.
->
->  1) It does not matter at all whether that function returns an error rarely
->     or not.
->
->  2) Adding WARN_ON() without justification at each call site is not
->     enough. Neither for debugging nor for real world usage.
->
->You have to come up with individual patches for each callsite to add the
->WARN_ON() and in each patch you have to explain why it is justified and
->why there is no other solution, e.g. taking an error exit path.
->
->Just slapping WARN_ON()'s into the code without any deeper analysis is
->worse than the current state of the code.
->
->If you have identified a real world problem at any of these call sites
->then adding a WARN_ON() does not solve it at all.
->
->I'm looking forward to your profound anlysis of each of these "problems".
->
->Thanks,
->
->        tglx
+> Can you tack on a patch to drop the return?  None of the callers consume =
+it, and
+> it incorrectly implies that the incoming filter isn't modified.
 
-Thanks for all your advice. I will analysis each of these "problems".
+Thank you very much for your suggestion! I'm more than happy to follow
+your advice and modify the code accordingly.
+
+>
+> >  {
+> >       bool found =3D false;
+> >       int i;
+> > +     struct kvm_pmu_event_filter *f =3D (void *)__f;
+>
+> Nit, reverse xmas tree is preferred:
+>
+>         struct kvm_pmu_event_filter *f =3D (void *)__f;
+>         bool found =3D false;
+>         int i;
+>
+> Hoever, I don't think this one needs to cast, the cast is only necessary =
+when
+> invoking a KVM ioctl(), e.g. I believe this should work:
+>
+> static void remove_event(struct __kvm_pmu_event_filter *f, uint64_t event=
+)
+> {
+>         bool found =3D false;
+>         int i;
+>
+>         for (i =3D 0; i < f->nevents; i++) {
+>                 if (found)
+>                         f->events[i - 1] =3D f->events[i];
+>                 else
+>                         found =3D f->events[i] =3D=3D event;
+>         }
+>         if (found)
+>                 f->nevents--;
+> }
+> > @@ -569,19 +554,16 @@ static void run_masked_events_test(struct kvm_vcp=
+u *vcpu,
+> >                                  const uint64_t masked_events[],
+> >                                  const int nmasked_events)
+> >  {
+> > -     struct kvm_pmu_event_filter *f;
+> > +     struct __kvm_pmu_event_filter f =3D {
+> > +         .nevents =3D nmasked_events,
+> > +         .action =3D KVM_PMU_EVENT_ALLOW,
+> > +         .flags =3D KVM_PMU_EVENT_FLAG_MASKED_EVENTS,
+>
+> Tabs, not spaces please.
+>
+> > +static int set_pmu_single_event_filter(struct kvm_vcpu *vcpu, uint64_t=
+ event,
+> > +                                    uint32_t flags, uint32_t action)
+> > +{
+> > +     struct __kvm_pmu_event_filter f =3D {
+> > +         .nevents =3D 1,
+> > +         .flags =3D flags,
+> > +         .action =3D action,
+> > +         .events =3D {
+> > +             event,
+>
+> Tabs.
+
+I will include these change in the new patch version and ensure that
+any related code is adjusted accordingly.
+
+Once again, I truly appreciate your guidance!
