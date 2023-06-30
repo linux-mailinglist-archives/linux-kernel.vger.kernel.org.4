@@ -2,258 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E5A6743E8E
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 17:19:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1118743E84
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 17:18:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232527AbjF3PT1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 11:19:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34884 "EHLO
+        id S232525AbjF3PSy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Jun 2023 11:18:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232186AbjF3PS7 (ORCPT
+        with ESMTP id S232402AbjF3PSc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 11:18:59 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 976C444A8
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 08:17:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1688138231;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=HIKi0zHLnu1hjZ3YJMMoOoPZaQGGpdOq8FelXRkEWEM=;
-        b=B2JesUlv5vruLXckPeCtxYAJFBfagQ8uR7br+VGPY7qL6iQOQMEfGoSEwrcIGJyAwOSNIx
-        wqRVxJSb1nROGdTygDs7Hiw7Fa8ad7Kk9hZlAgYBc1NpDWf/KhhnTY/zUy7/SL4vF7JGOD
-        tSBjq5z74jcufuYtoMLWxT8l1VZhNCk=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-593-_LC-zIbSMR-X7w2nKGx5pA-1; Fri, 30 Jun 2023 11:17:08 -0400
-X-MC-Unique: _LC-zIbSMR-X7w2nKGx5pA-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 3C049800B35;
-        Fri, 30 Jun 2023 15:17:07 +0000 (UTC)
-Received: from warthog.procyon.org.uk.com (unknown [10.39.192.26])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 9A6E71121314;
-        Fri, 30 Jun 2023 15:16:57 +0000 (UTC)
-From:   David Howells <dhowells@redhat.com>
-To:     Jens Axboe <axboe@kernel.dk>, Al Viro <viro@zeniv.linux.org.uk>,
-        Christoph Hellwig <hch@infradead.org>
-Cc:     David Howells <dhowells@redhat.com>,
-        Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
-        Jeff Layton <jlayton@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Hillf Danton <hdanton@sina.com>,
-        Christian Brauner <brauner@kernel.org>,
-        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Christoph Hellwig <hch@lst.de>,
-        Christian Brauner <christian@brauner.io>
-Subject: [RFC PATCH 02/11] vfs: Set IOCB_WRITE in iocbs that we're going to write from
-Date:   Fri, 30 Jun 2023 16:16:19 +0100
-Message-ID: <20230630151628.660343-3-dhowells@redhat.com>
-In-Reply-To: <20230630151628.660343-1-dhowells@redhat.com>
-References: <20230630151628.660343-1-dhowells@redhat.com>
+        Fri, 30 Jun 2023 11:18:32 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2541A469B;
+        Fri, 30 Jun 2023 08:17:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1688138267; x=1719674267;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=vNkj93/5Q0qPJqdsxO49mwhsALqQK4kXJEFlJaSNhnE=;
+  b=S18uEx3lk1G0nR2kIoaSVGv25QB6PwuweY4F3PAx1bb55zJxQcD85+Kz
+   VSNQkwDWkccXwVBeKG4qIFeFpNh6xe10oINPOzluuMZVDzabwCL9bGDcu
+   oW+LhTYKpVwuXXyad4klg1NeonOZbEQHjY2dnNtgB69G0UkDGFSkS8wEy
+   qDWYH19KN4fT2+4dh99cbl/b11C9oVXYGwOLa8/xCXMJ8eJzZ10QwSa7n
+   gG5vSh8zrlQSZyyeg9+/2XHTJPaVkUkcEypIUFrTaKdW0pPI0mFSlE2Vv
+   REUExvMMqNov/O3WSqSfZ/VGXBrd4gO6aCo07c2w0xBX/RLRN46XdaOhX
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10757"; a="448793795"
+X-IronPort-AV: E=Sophos;i="6.01,171,1684825200"; 
+   d="scan'208";a="448793795"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jun 2023 08:16:53 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10757"; a="747455463"
+X-IronPort-AV: E=Sophos;i="6.01,171,1684825200"; 
+   d="scan'208";a="747455463"
+Received: from amuruge1-mobl.amr.corp.intel.com (HELO [10.252.133.96]) ([10.252.133.96])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jun 2023 08:16:51 -0700
+Message-ID: <1121357f-93ad-9016-36be-8bc34c256b16@intel.com>
+Date:   Fri, 30 Jun 2023 08:16:50 -0700
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v12 20/22] x86/virt/tdx: Allow SEAMCALL to handle #UD and
+ #GP
+Content-Language: en-US
+To:     "Huang, Kai" <kai.huang@intel.com>,
+        "peterz@infradead.org" <peterz@infradead.org>
+Cc:     "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "Raj, Ashok" <ashok.raj@intel.com>,
+        "Luck, Tony" <tony.luck@intel.com>,
+        "david@redhat.com" <david@redhat.com>,
+        "bagasdotme@gmail.com" <bagasdotme@gmail.com>,
+        "ak@linux.intel.com" <ak@linux.intel.com>,
+        "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "Chatre, Reinette" <reinette.chatre@intel.com>,
+        "Christopherson,, Sean" <seanjc@google.com>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "Yamahata, Isaku" <isaku.yamahata@intel.com>,
+        "nik.borisov@suse.com" <nik.borisov@suse.com>,
+        "hpa@zytor.com" <hpa@zytor.com>, "Shahar, Sagi" <sagis@google.com>,
+        "imammedo@redhat.com" <imammedo@redhat.com>,
+        "bp@alien8.de" <bp@alien8.de>, "Gao, Chao" <chao.gao@intel.com>,
+        "Brown, Len" <len.brown@intel.com>,
+        "sathyanarayanan.kuppuswamy@linux.intel.com" 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        "Huang, Ying" <ying.huang@intel.com>,
+        "Williams, Dan J" <dan.j.williams@intel.com>,
+        "x86@kernel.org" <x86@kernel.org>
+References: <cover.1687784645.git.kai.huang@intel.com>
+ <c124550719716f1f7759c2bdea70f4722d8e0167.1687784645.git.kai.huang@intel.com>
+ <20230628152900.GI2438817@hirez.programming.kicks-ass.net>
+ <20230628203823.GR38236@hirez.programming.kicks-ass.net>
+ <42e13ccf7f27a68c0dd64640eed378c38ef40967.camel@intel.com>
+ <20230630100659.GF2533791@hirez.programming.kicks-ass.net>
+ <88de636ed40786f40c153b392070357f8b3d6948.camel@intel.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <88de636ed40786f40c153b392070357f8b3d6948.camel@intel.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-IOCB_WRITE is set by aio, io_uring and cachefiles before submitting a write
-operation to the VFS, but it isn't set by, say, the write() system call.
+On 6/30/23 03:18, Huang, Kai wrote:
+>> Please, because 12,14 are callee-saved, which means we need to go add
+>> push/pop to preserve them 🙁
+> Yes.
+> 
+> However those new SEAMCALLs are for TDX guest live migration support,  which is
+> at a year(s)-later thing from upstreaming's point of view.  My thinking is we
+> can defer supporting those new SEAMCALls until that phase.  Yes we need to do
+> some assembly change at that time, but also looks fine to me.
+> 
+> How does this sound?
 
-Fix this by adding an extra argument to init_sync_kiocb() to indicate the
-direction and setting that to READ or WRITE, which will cause IOCB_WRITE to
-be set as appropriate.
-
-Whilst we're at it, rename init_sync_kiocb() to init_kiocb().
-
-This will allow drivers to use IOCB_WRITE instead of the iterator data
-source to determine the I/O direction.
-
-Signed-off-by: David Howells <dhowells@redhat.com>
-cc: Christoph Hellwig <hch@lst.de>
-cc: Jens Axboe <axboe@kernel.dk>
-cc: Christian Brauner <christian@brauner.io>
-cc: Alexander Viro <viro@zeniv.linux.org.uk>
-cc: linux-block@vger.kernel.org
-cc: linux-fsdevel@vger.kernel.org
----
- fs/btrfs/ioctl.c   |  4 ++--
- fs/read_write.c    | 10 +++++-----
- fs/seq_file.c      |  2 +-
- fs/splice.c        |  2 +-
- include/linux/fs.h |  6 +++++-
- mm/filemap.c       |  2 +-
- mm/page_io.c       |  4 ++--
- 7 files changed, 17 insertions(+), 13 deletions(-)
-
-diff --git a/fs/btrfs/ioctl.c b/fs/btrfs/ioctl.c
-index a895d105464b..15870337dd26 100644
---- a/fs/btrfs/ioctl.c
-+++ b/fs/btrfs/ioctl.c
-@@ -4422,7 +4422,7 @@ static int btrfs_ioctl_encoded_read(struct file *file, void __user *argp,
- 	if (ret < 0)
- 		goto out_iov;
- 
--	init_sync_kiocb(&kiocb, file);
-+	init_kiocb(&kiocb, file, READ);
- 	kiocb.ki_pos = pos;
- 
- 	ret = btrfs_encoded_read(&kiocb, &iter, &args);
-@@ -4523,7 +4523,7 @@ static int btrfs_ioctl_encoded_write(struct file *file, void __user *argp, bool
- 	if (ret < 0)
- 		goto out_end_write;
- 
--	init_sync_kiocb(&kiocb, file);
-+	init_kiocb(&kiocb, file, WRITE);
- 	ret = kiocb_set_rw_flags(&kiocb, 0);
- 	if (ret)
- 		goto out_end_write;
-diff --git a/fs/read_write.c b/fs/read_write.c
-index b07de77ef126..6fe517047095 100644
---- a/fs/read_write.c
-+++ b/fs/read_write.c
-@@ -382,7 +382,7 @@ static ssize_t new_sync_read(struct file *filp, char __user *buf, size_t len, lo
- 	struct iov_iter iter;
- 	ssize_t ret;
- 
--	init_sync_kiocb(&kiocb, filp);
-+	init_kiocb(&kiocb, filp, READ);
- 	kiocb.ki_pos = (ppos ? *ppos : 0);
- 	iov_iter_ubuf(&iter, ITER_DEST, buf, len);
- 
-@@ -422,7 +422,7 @@ ssize_t __kernel_read(struct file *file, void *buf, size_t count, loff_t *pos)
- 	if (unlikely(!file->f_op->read_iter || file->f_op->read))
- 		return warn_unsupported(file, "read");
- 
--	init_sync_kiocb(&kiocb, file);
-+	init_kiocb(&kiocb, file, READ);
- 	kiocb.ki_pos = pos ? *pos : 0;
- 	iov_iter_kvec(&iter, ITER_DEST, &iov, 1, iov.iov_len);
- 	ret = file->f_op->read_iter(&kiocb, &iter);
-@@ -484,7 +484,7 @@ static ssize_t new_sync_write(struct file *filp, const char __user *buf, size_t
- 	struct iov_iter iter;
- 	ssize_t ret;
- 
--	init_sync_kiocb(&kiocb, filp);
-+	init_kiocb(&kiocb, filp, WRITE);
- 	kiocb.ki_pos = (ppos ? *ppos : 0);
- 	iov_iter_ubuf(&iter, ITER_SOURCE, (void __user *)buf, len);
- 
-@@ -512,7 +512,7 @@ ssize_t __kernel_write_iter(struct file *file, struct iov_iter *from, loff_t *po
- 	if (unlikely(!file->f_op->write_iter || file->f_op->write))
- 		return warn_unsupported(file, "write");
- 
--	init_sync_kiocb(&kiocb, file);
-+	init_kiocb(&kiocb, file, WRITE);
- 	kiocb.ki_pos = pos ? *pos : 0;
- 	ret = file->f_op->write_iter(&kiocb, from);
- 	if (ret > 0) {
-@@ -723,7 +723,7 @@ static ssize_t do_iter_readv_writev(struct file *filp, struct iov_iter *iter,
- 	struct kiocb kiocb;
- 	ssize_t ret;
- 
--	init_sync_kiocb(&kiocb, filp);
-+	init_kiocb(&kiocb, filp, type);
- 	ret = kiocb_set_rw_flags(&kiocb, flags);
- 	if (ret)
- 		return ret;
-diff --git a/fs/seq_file.c b/fs/seq_file.c
-index f5fdaf3b1572..1ee6ffc630da 100644
---- a/fs/seq_file.c
-+++ b/fs/seq_file.c
-@@ -155,7 +155,7 @@ ssize_t seq_read(struct file *file, char __user *buf, size_t size, loff_t *ppos)
- 	struct iov_iter iter;
- 	ssize_t ret;
- 
--	init_sync_kiocb(&kiocb, file);
-+	init_kiocb(&kiocb, file, READ);
- 	iov_iter_init(&iter, ITER_DEST, &iov, 1, size);
- 
- 	kiocb.ki_pos = *ppos;
-diff --git a/fs/splice.c b/fs/splice.c
-index 004eb1c4ce31..867357ebb2c3 100644
---- a/fs/splice.c
-+++ b/fs/splice.c
-@@ -362,7 +362,7 @@ ssize_t copy_splice_read(struct file *in, loff_t *ppos,
- 
- 	/* Do the I/O */
- 	iov_iter_bvec(&to, ITER_DEST, bv, npages, len);
--	init_sync_kiocb(&kiocb, in);
-+	init_kiocb(&kiocb, in, READ);
- 	kiocb.ki_pos = *ppos;
- 	ret = call_read_iter(in, &kiocb, &to);
- 
-diff --git a/include/linux/fs.h b/include/linux/fs.h
-index d4b67bdeb53e..466eba253502 100644
---- a/include/linux/fs.h
-+++ b/include/linux/fs.h
-@@ -2017,13 +2017,17 @@ static inline bool HAS_UNMAPPED_ID(struct mnt_idmap *idmap,
- 	       !vfsgid_valid(i_gid_into_vfsgid(idmap, inode));
- }
- 
--static inline void init_sync_kiocb(struct kiocb *kiocb, struct file *filp)
-+static inline void init_kiocb(struct kiocb *kiocb, struct file *filp,
-+			      unsigned int rw)
- {
- 	*kiocb = (struct kiocb) {
- 		.ki_filp = filp,
- 		.ki_flags = filp->f_iocb_flags,
- 		.ki_ioprio = get_current_ioprio(),
- 	};
-+
-+	if (rw == WRITE)
-+		kiocb->ki_flags |= IOCB_WRITE;
- }
- 
- static inline void kiocb_clone(struct kiocb *kiocb, struct kiocb *kiocb_src,
-diff --git a/mm/filemap.c b/mm/filemap.c
-index 9e44a49bbd74..cd763122d2a2 100644
---- a/mm/filemap.c
-+++ b/mm/filemap.c
-@@ -2905,7 +2905,7 @@ ssize_t filemap_splice_read(struct file *in, loff_t *ppos,
- 	if (unlikely(*ppos >= in->f_mapping->host->i_sb->s_maxbytes))
- 		return 0;
- 
--	init_sync_kiocb(&iocb, in);
-+	init_kiocb(&iocb, in, READ);
- 	iocb.ki_pos = *ppos;
- 
- 	/* Work out how much data we can actually add into the pipe */
-diff --git a/mm/page_io.c b/mm/page_io.c
-index 684cd3c7b59b..85cbadaf7395 100644
---- a/mm/page_io.c
-+++ b/mm/page_io.c
-@@ -312,7 +312,7 @@ static void swap_writepage_fs(struct page *page, struct writeback_control *wbc)
- 	}
- 	if (!sio) {
- 		sio = mempool_alloc(sio_pool, GFP_NOIO);
--		init_sync_kiocb(&sio->iocb, swap_file);
-+		init_kiocb(&sio->iocb, swap_file, WRITE);
- 		sio->iocb.ki_complete = sio_write_complete;
- 		sio->iocb.ki_pos = pos;
- 		sio->pages = 0;
-@@ -443,7 +443,7 @@ static void swap_readpage_fs(struct page *page,
- 	}
- 	if (!sio) {
- 		sio = mempool_alloc(sio_pool, GFP_KERNEL);
--		init_sync_kiocb(&sio->iocb, sis->swap_file);
-+		init_kiocb(&sio->iocb, sis->swap_file, READ);
- 		sio->iocb.ki_pos = pos;
- 		sio->iocb.ki_complete = sio_read_complete;
- 		sio->pages = 0;
-
+It would sound better if the TDX module folks would take that year to
+fix the module and make it nicer for Linux. :)
