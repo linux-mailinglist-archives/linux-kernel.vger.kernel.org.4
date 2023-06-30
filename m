@@ -2,259 +2,237 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3CE5743D0C
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 15:55:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CBEF5743D17
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 15:58:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230455AbjF3NzE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 09:55:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58102 "EHLO
+        id S231979AbjF3N6P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Jun 2023 09:58:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230046AbjF3Ny7 (ORCPT
+        with ESMTP id S229546AbjF3N6O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 09:54:59 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EED7CE5E;
-        Fri, 30 Jun 2023 06:54:57 -0700 (PDT)
-Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35UBoD09017765;
-        Fri, 30 Jun 2023 13:54:54 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=JPqW/yb8tupNXF0cJMpitNiYM42Q+8XjZnb82FxXeHA=;
- b=ZOe98rViwuR1ltgEy773tSVtfQcLPe2vrzzjHaBeIHXkWZ/cZ1YCo8lhHIzmNG+TgaRI
- /8ZJWAx0W54svKeaswgD331Tm4NRA9w1rRmO8iB/kIohna5+gX4HvHaubPHS+kMtwn0B
- ljgkJ3pfpMtwKLJpWRQqHJqfQ1D3UAKUs058mDv26XRvY/2AERBJV7PuvlLmCINudvDj
- S353P3j76/kWIj9ZWEREwwh2x7E28oI7ikfw01YVQrjy5gxGFFhdXDPKqhP3ZXocD1Xj
- jdGN3t0Z2ySv3COk44ftpxKM8YdZ0X+DfXn7SnNyYhPtN+kBgmIM2nme2gVUKrE3UDMQ FQ== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rhw70rdp5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 30 Jun 2023 13:54:54 +0000
-Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35UDsr8X021079
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 30 Jun 2023 13:54:53 GMT
-Received: from [10.216.15.2] (10.80.80.8) by nalasex01b.na.qualcomm.com
- (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.7; Fri, 30 Jun
- 2023 06:54:48 -0700
-Message-ID: <88407863-7f7f-aea0-e9b8-4275e667bb4b@quicinc.com>
-Date:   Fri, 30 Jun 2023 19:24:42 +0530
+        Fri, 30 Jun 2023 09:58:14 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3086E1FDF
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 06:57:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1688133441;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=/Mb3/vAXvYSOXJ0WoEaEg/3Fwgn4e3x4h9lc+0POYcw=;
+        b=GF6uQ5L9BcjuORbGT+klwig7h0HR70IygsenP4EdSPBn8kapnQwXP3aZsNMPizdG7StfPm
+        dGepwlXWrgFhf1J2aWT3iv0PkbU8NDPKIy/eQtE9Jl0/sa6jnX9LmmYN1ASmAMSsnTvTZ6
+        glF61et35ZJ9EmK8dIvY0FZ548xC+Ws=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-562-jn7JcaiPM2Cea50w1EuwZg-1; Fri, 30 Jun 2023 09:57:17 -0400
+X-MC-Unique: jn7JcaiPM2Cea50w1EuwZg-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 9A4671C03D82;
+        Fri, 30 Jun 2023 13:57:16 +0000 (UTC)
+Received: from pauld.bos.com (dhcp-17-165.bos.redhat.com [10.18.17.165])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 22471F5CEF;
+        Fri, 30 Jun 2023 13:57:16 +0000 (UTC)
+From:   Phil Auld <pauld@redhat.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Juri Lelli <juri.lelli@redhat.com>, Ingo Molnar <mingo@redhat.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Ben Segall <bsegall@google.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Mel Gorman <mgorman@suse.de>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Phil Auld <pauld@redhat.com>
+Subject: [PATCH v4] Sched/fair: Block nohz tick_stop when cfs bandwidth in use
+Date:   Fri, 30 Jun 2023 09:57:14 -0400
+Message-Id: <20230630135714.1018434-1-pauld@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [PATCH v4 5/6] soc: qcom: Add LLCC support for multi channel DDR
-Content-Language: en-US
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-CC:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <devicetree@vger.kernel.org>
-References: <20230623141806.13388-1-quic_kbajaj@quicinc.com>
- <20230623141806.13388-6-quic_kbajaj@quicinc.com>
- <CAA8EJpoZiXWDHGEgBF6KuKruQigqdy37pLH1Q_AnXsN6iRPhyA@mail.gmail.com>
- <db8ea67e-529c-856b-026e-2435a2405f6b@quicinc.com>
- <a16b57be-34cd-d093-ac63-d02aef049e51@linaro.org>
-From:   Komal Bajaj <quic_kbajaj@quicinc.com>
-In-Reply-To: <a16b57be-34cd-d093-ac63-d02aef049e51@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-type: text/plain
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: NofqB320yLJTH1vpnVFuj0hsts4OTfJ3
-X-Proofpoint-GUID: NofqB320yLJTH1vpnVFuj0hsts4OTfJ3
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-06-30_05,2023-06-30_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 phishscore=0
- mlxlogscore=629 spamscore=0 impostorscore=0 malwarescore=0
- priorityscore=1501 clxscore=1015 lowpriorityscore=0 bulkscore=0
- suspectscore=0 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2305260000 definitions=main-2306300118
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+CFS bandwidth limits and NOHZ full don't play well together.  Tasks
+can easily run well past their quotas before a remote tick does
+accounting.  This leads to long, multi-period stalls before such
+tasks can run again. Currently, when presented with these conflicting
+requirements the scheduler is favoring nohz_full and letting the tick
+be stopped. However, nohz tick stopping is already best-effort, there
+are a number of conditions that can prevent it, whereas cfs runtime
+bandwidth is expected to be enforced.
 
+Make the scheduler favor bandwidth over stopping the tick by setting
+TICK_DEP_BIT_SCHED when the only running task is a cfs task with
+runtime limit enabled.
 
-On 6/28/2023 6:44 PM, Dmitry Baryshkov wrote:
-> On 28/06/2023 11:45, Komal Bajaj wrote:
->
-> No HTML emails on public mailing lists, please.
->
->>
->>
->> On 6/23/2023 7:56 PM, Dmitry Baryshkov wrote:
->>> On Fri, 23 Jun 2023 at 17:19, Komal Bajaj<quic_kbajaj@quicinc.com>  
->>> wrote:
->>>> Add LLCC support for multi channel DDR configuration
->>>> based on a feature register. Reading DDR channel
->>>> confiuration uses nvmem framework, so select the
->>>> dependency in Kconfig. Without this, there will be
->>>> errors while building the driver with COMPILE_TEST only.
->>>>
->>>> Signed-off-by: Komal Bajaj<quic_kbajaj@quicinc.com>
->>>> ---
->>>>   drivers/soc/qcom/Kconfig     |  2 ++
->>>>   drivers/soc/qcom/llcc-qcom.c | 33 ++++++++++++++++++++++++++++++---
->>>>   2 files changed, 32 insertions(+), 3 deletions(-)
->>>>
->>>> diff --git a/drivers/soc/qcom/Kconfig b/drivers/soc/qcom/Kconfig
->>>> index a491718f8064..cc9ad41c63aa 100644
->>>> --- a/drivers/soc/qcom/Kconfig
->>>> +++ b/drivers/soc/qcom/Kconfig
->>>> @@ -64,6 +64,8 @@ config QCOM_LLCC
->>>>          tristate "Qualcomm Technologies, Inc. LLCC driver"
->>>>          depends on ARCH_QCOM || COMPILE_TEST
->>>>          select REGMAP_MMIO
->>>> +       select NVMEM
->>> No need to select NVMEM. The used functions are stubbed if NVMEM is 
->>> disabled
->>
->> With the previous patch, where this config was not selected, below 
->> error was flagged by kernel test robot -
->>
->>     drivers/soc/qcom/llcc-qcom.c: In function 'qcom_llcc_get_cfg_index':
->>      >> drivers/soc/qcom/llcc-qcom.c:951:15: error: implicit declaration
->>     of function 'nvmem_cell_read_u8'; did you mean
->>     'nvmem_cell_read_u64'? [-Werror=implicit-function-declaration]
->>           951 |         ret = nvmem_cell_read_u8(&pdev->dev,
->>     "multi_chan_ddr", cfg_index);
->>               |               ^~~~~~~~~~~~~~~~~~
->>               |               nvmem_cell_read_u64
->>         cc1: some warnings being treated as errors
->
-> Judging from the rest of nvmem-consumer.h, it appears that not having 
-> stubs for this function is an omission. Please fix the header instead.
+Add sched_feat HZ_BW (off by default) to control this behavior.
 
-Okay, I will add the stub for this function in the header.
+Signed-off-by: Phil Auld <pauld@redhat.com>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Vincent Guittot <vincent.guittot@linaro.org>
+Cc: Juri Lelli <juri.lelli@redhat.com>
+Cc: Dietmar Eggemann <dietmar.eggemann@arm.com>
+Cc: Valentin Schneider <vschneid@redhat.com>
+Cc: Ben Segall <bsegall@google.com>
+Cc: Frederic Weisbecker <frederic@kernel.org>
+---
+v4: Made checks for runtime_enabled hierarchical. 
 
->
->>
->>>> +       select QCOM_SCM
->>>>          help
->>>>            Qualcomm Technologies, Inc. platform specific
->>>>            Last Level Cache Controller(LLCC) driver for platforms 
->>>> such as,
->>>> diff --git a/drivers/soc/qcom/llcc-qcom.c 
->>>> b/drivers/soc/qcom/llcc-qcom.c
->>>> index 6cf373da5df9..3c29612da1c5 100644
->>>> --- a/drivers/soc/qcom/llcc-qcom.c
->>>> +++ b/drivers/soc/qcom/llcc-qcom.c
->>>> @@ -12,6 +12,7 @@
->>>>   #include <linux/kernel.h>
->>>>   #include <linux/module.h>
->>>>   #include <linux/mutex.h>
->>>> +#include <linux/nvmem-consumer.h>
->>>>   #include <linux/of.h>
->>>>   #include <linux/of_device.h>
->>>>   #include <linux/regmap.h>
->>>> @@ -943,6 +944,19 @@ static int qcom_llcc_cfg_program(struct 
->>>> platform_device *pdev,
->>>>          return ret;
->>>>   }
->>>>
->>>> +static int qcom_llcc_get_cfg_index(struct platform_device *pdev, 
->>>> u8 *cfg_index)
->>>> +{
->>>> +       int ret;
->>>> +
->>>> +       ret = nvmem_cell_read_u8(&pdev->dev, "multi-chan-ddr", 
->>>> cfg_index);
->>>> +       if (ret == -ENOENT) {
->>> || ret == -EOPNOTSUPP ?
->>
->> Okay
->>
->>>> +               *cfg_index = 0;
->>>> +               return 0;
->>>> +       }
->>>> +
->>>> +       return ret;
->>>> +}
->>>> +
->>>>   static int qcom_llcc_remove(struct platform_device *pdev)
->>>>   {
->>>>          /* Set the global pointer to a error code to avoid 
->>>> referencing it */
->>>> @@ -975,11 +989,13 @@ static int qcom_llcc_probe(struct 
->>>> platform_device *pdev)
->>>>          struct device *dev = &pdev->dev;
->>>>          int ret, i;
->>>>          struct platform_device *llcc_edac;
->>>> -       const struct qcom_llcc_config *cfg;
->>>> +       const struct qcom_llcc_config *cfg, *entry;
->>>>          const struct llcc_slice_config *llcc_cfg;
->>>>          u32 sz;
->>>> +       u8 cfg_index;
->>>>          u32 version;
->>>>          struct regmap *regmap;
->>>> +       u32 num_entries = 0;
->>>>
->>>>          drv_data = devm_kzalloc(dev, sizeof(*drv_data), GFP_KERNEL);
->>>>          if (!drv_data) {
->>>> @@ -1040,8 +1056,19 @@ static int qcom_llcc_probe(struct 
->>>> platform_device *pdev)
->>>>
->>>>          drv_data->version = version;
->>>>
->>>> -       llcc_cfg = cfg[0]->sct_data;
->>>> -       sz = cfg[0]->size;
->>>> +       ret = qcom_llcc_get_cfg_index(pdev, &cfg_index);
->>>> +       if (ret)
->>>> +               goto err;
->>>> +
->>>> +       for (entry = cfg; entry->sct_data; entry++, num_entries++)
->>>> +               ;
->>> Please add num_cfgs to the configuration data instead.
->>
->> Shall I create a new wrapper struct having a field num_cfg and a 
->> pointer to those cfgs
->> because configuration data is itself an instance of "struct 
->> qcom_llcc_config" and
->> we can have multiple instances of it.
->
-> A wrapper struct is a better approach in my opinion.
+v3: Moved sched_cfs_bandwidth_active() prototype to sched.h outside of
+guards to silence -Wmissing-prototypes.
 
-Okay, will follow this approach then.
+v2:  Ben pointed out that the bit could get cleared in the dequeue path
+if we migrate a newly enqueued task without preempting curr. Added a
+check for that edge case to sched_can_stop_tick. Removed the call to
+sched_can_stop_tick from sched_fair_update_stop_tick since it was
+redundant.
 
-Thanks
-Komal
->
->>
->>
->>>> +       if (cfg_index >= num_entries || cfg_index < 0) {
->>> cfg_index is unsigned, so it can not be less than 0.
->>
->> Okay.
->>
->>>> +               ret = -EINVAL;
->>>> +               goto err;
->>>> +       }
->>>> +
->>>> +       llcc_cfg = cfg[cfg_index].sct_data;
->>>> +       sz = cfg[cfg_index].size;
->>>>
->>>>          for (i = 0; i < sz; i++)
->>>>                  if (llcc_cfg[i].slice_id > drv_data->max_slices)
->>>> -- 
->>>> 2.40.1
->>>>
->>
->
+ kernel/sched/core.c     | 10 ++++++++
+ kernel/sched/fair.c     | 53 +++++++++++++++++++++++++++++++++++++++++
+ kernel/sched/features.h |  2 ++
+ kernel/sched/sched.h    |  1 +
+ 4 files changed, 66 insertions(+)
+
+diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+index a68d1276bab0..2685373e12f1 100644
+--- a/kernel/sched/core.c
++++ b/kernel/sched/core.c
+@@ -1229,6 +1229,16 @@ bool sched_can_stop_tick(struct rq *rq)
+ 	if (rq->nr_running > 1)
+ 		return false;
+ 
++	/*
++	 * If there is one task and it has CFS runtime bandwidth constraints
++	 * and it's on the cpu now we don't want to stop the tick.
++	 */
++	if (sched_feat(HZ_BW) && rq->nr_running == 1 && rq->curr
++	    && rq->curr->sched_class == &fair_sched_class && task_on_rq_queued(rq->curr)) {
++		if (sched_cfs_bandwidth_active(rq->curr))
++			return false;
++	}
++
+ 	return true;
+ }
+ #endif /* CONFIG_NO_HZ_FULL */
+diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+index 373ff5f55884..125b1ec4476f 100644
+--- a/kernel/sched/fair.c
++++ b/kernel/sched/fair.c
+@@ -6139,6 +6139,50 @@ static void __maybe_unused unthrottle_offline_cfs_rqs(struct rq *rq)
+ 	rcu_read_unlock();
+ }
+ 
++#ifdef CONFIG_NO_HZ_FULL
++static inline bool cfs_se_bandwidth_enabled(struct sched_entity *se)
++{
++	int ret = 0;
++
++	for_each_sched_entity(se)
++		ret += cfs_rq_of(se)->runtime_enabled;
++
++	return ret != 0;
++}
++
++bool sched_cfs_bandwidth_active(struct task_struct *p)
++{
++	if (cfs_bandwidth_used() && cfs_se_bandwidth_enabled(&p->se))
++		return true;
++
++	return false;
++}
++
++/* called from pick_next_task_fair() */
++static void sched_fair_update_stop_tick(struct rq *rq, struct task_struct *p)
++{
++	int cpu = cpu_of(rq);
++
++	if (!sched_feat(HZ_BW) || !cfs_bandwidth_used())
++		return;
++
++	if (!tick_nohz_full_cpu(cpu))
++		return;
++
++	if (rq->nr_running != 1)
++		return;
++
++	/*
++	 *  We know there is only one task runnable and we've just picked it. The
++	 *  normal enqueue path will have cleared TICK_DEP_BIT_SCHED if we will
++	 *  be otherwise able to stop the tick. Just need to check if we are using
++	 *  bandwidth control.
++	 */
++	if (cfs_se_bandwidth_enabled(&p->se))
++		tick_nohz_dep_set_cpu(cpu, TICK_DEP_BIT_SCHED);
++}
++#endif
++
+ #else /* CONFIG_CFS_BANDWIDTH */
+ 
+ static inline bool cfs_bandwidth_used(void)
+@@ -6181,9 +6225,17 @@ static inline struct cfs_bandwidth *tg_cfs_bandwidth(struct task_group *tg)
+ static inline void destroy_cfs_bandwidth(struct cfs_bandwidth *cfs_b) {}
+ static inline void update_runtime_enabled(struct rq *rq) {}
+ static inline void unthrottle_offline_cfs_rqs(struct rq *rq) {}
++bool sched_cfs_bandwidth_active(struct task_struct *p)
++{
++	return false;
++}
+ 
+ #endif /* CONFIG_CFS_BANDWIDTH */
+ 
++#if !defined(CONFIG_CFS_BANDWIDTH) || !defined(CONFIG_NO_HZ_FULL)
++static inline void sched_fair_update_stop_tick(struct rq *rq, struct task_struct *p) {}
++#endif
++
+ /**************************************************
+  * CFS operations on tasks:
+  */
+@@ -8097,6 +8149,7 @@ done: __maybe_unused;
+ 		hrtick_start_fair(rq, p);
+ 
+ 	update_misfit_status(p, rq);
++	sched_fair_update_stop_tick(rq, p);
+ 
+ 	return p;
+ 
+diff --git a/kernel/sched/features.h b/kernel/sched/features.h
+index ee7f23c76bd3..6fdf1fdf6b17 100644
+--- a/kernel/sched/features.h
++++ b/kernel/sched/features.h
+@@ -101,3 +101,5 @@ SCHED_FEAT(LATENCY_WARN, false)
+ 
+ SCHED_FEAT(ALT_PERIOD, true)
+ SCHED_FEAT(BASE_SLICE, true)
++
++SCHED_FEAT(HZ_BW, false)
+diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
+index ec7b3e0a2b20..41f80dd5538d 100644
+--- a/kernel/sched/sched.h
++++ b/kernel/sched/sched.h
+@@ -2789,6 +2789,7 @@ extern void init_dl_rq(struct dl_rq *dl_rq);
+ 
+ extern void cfs_bandwidth_usage_inc(void);
+ extern void cfs_bandwidth_usage_dec(void);
++extern bool sched_cfs_bandwidth_active(struct task_struct *p);
+ 
+ #ifdef CONFIG_NO_HZ_COMMON
+ #define NOHZ_BALANCE_KICK_BIT	0
+-- 
+2.31.1
 
