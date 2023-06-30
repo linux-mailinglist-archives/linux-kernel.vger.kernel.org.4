@@ -2,210 +2,203 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD1017438DB
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 12:01:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB2337438E0
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 12:02:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232897AbjF3KBr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 06:01:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50378 "EHLO
+        id S232974AbjF3KCq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Jun 2023 06:02:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233024AbjF3KBI (ORCPT
+        with ESMTP id S232975AbjF3KCn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 06:01:08 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C5A53A93;
-        Fri, 30 Jun 2023 03:01:05 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F2ED561714;
-        Fri, 30 Jun 2023 10:01:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3EB9C433C0;
-        Fri, 30 Jun 2023 10:01:01 +0000 (UTC)
-From:   Huacai Chen <chenhuacai@loongson.cn>
-To:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Huacai Chen <chenhuacai@kernel.org>
-Cc:     loongarch@lists.linux.dev, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Guo Ren <guoren@kernel.org>,
-        Xuerui Wang <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Huacai Chen <chenhuacai@loongson.cn>
-Subject: [GIT PULL] LoongArch changes for v6.5
-Date:   Fri, 30 Jun 2023 18:00:37 +0800
-Message-Id: <20230630100037.1071320-1-chenhuacai@loongson.cn>
-X-Mailer: git-send-email 2.39.3
+        Fri, 30 Jun 2023 06:02:43 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABA9E2681;
+        Fri, 30 Jun 2023 03:02:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1688119360; x=1719655360;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-id:content-transfer-encoding:
+   mime-version;
+  bh=fAvrHRDy3RAnOnGf+akVXuck4HzmjjL4r09eSSdx4Qg=;
+  b=PIuinnzzA1Wz5WAnvJh2iIZNMpqW493CUZUXKWE1rkXsRfl9lsPJkrFp
+   615C0Cfx1xuawpIOF8syT52jnJ5KHw2796kRxc4mp+aWOa7IqQa/cQ5rZ
+   ktecU8yYCiSl2A/4U1qWAwBvYIsErN6Kp9vAgDXqAZM5iXdTaskBtZyIf
+   5JHlacSaQYk0PaTU81POjqRMQoYJlGzIeDcZb9rJzO27MSbal6GF6wGFk
+   9xlXz1CpYuDiyqtqmDpdLz1S7JeCigy/CjsN1Cygd9/Bq9dWx/JZWS1WA
+   be61o3rG8efXjaRu5Ivb34GGn99TSUWQKSmg82orotexNtNjRpSca4Mlb
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10756"; a="342699773"
+X-IronPort-AV: E=Sophos;i="6.01,170,1684825200"; 
+   d="scan'208";a="342699773"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jun 2023 03:02:40 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10756"; a="891706515"
+X-IronPort-AV: E=Sophos;i="6.01,170,1684825200"; 
+   d="scan'208";a="891706515"
+Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
+  by orsmga005.jf.intel.com with ESMTP; 30 Jun 2023 03:02:38 -0700
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.27; Fri, 30 Jun 2023 03:02:37 -0700
+Received: from fmsmsx602.amr.corp.intel.com (10.18.126.82) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.27; Fri, 30 Jun 2023 03:02:37 -0700
+Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
+ fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.27 via Frontend Transport; Fri, 30 Jun 2023 03:02:37 -0700
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (104.47.66.47) by
+ edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.27; Fri, 30 Jun 2023 03:02:36 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=S2N2jBALzoUuEaMbAVWOTjYN1cAj6VyuDGwMg80JuJsGMBVCL9CYgYiBTSTyKupAuX3LbVuCCpUOp8Bp86udrvF8CZJcOlj/Q/Xbc8zFlvE5VD8WkM7ZvDQX7on1C1y7Bc61pb0+SrSXSOPu+9AFbjv3mpiN/yQuxkcS8wKqzyIzrCiCZpNy8OO4WQAq4J/R9ePMAmW/JDP41FvHkVzPU1atrX0eTPOawuKgwwuiR0Xy04vAiQFd4CjdROS0opSCcXYsQTrr73SR7xTOdKkJglnqAWFn4FlonabDpBDXpg6OwveZRTMpG6fK2lQQDqStU9q6DXmtA75ESqN6OctJmQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=fAvrHRDy3RAnOnGf+akVXuck4HzmjjL4r09eSSdx4Qg=;
+ b=maZ0Hv+J9LGVUagVZHPguvXLeNAC6rRYSlVAWXWXofNzJryrbv+7C6i7bhQGqxuxRbHc8SNOfvnphR8G4lAbI/XGdrWuytcGXEMy+hzr62idBkbF4JuC0z1mIsRvMvW9wkXrWTFANgPYi60QBLxSrtZ9gzXsnHiUlYub2puSsndC8QYiEJonmklYGALnzQ6uyrDPIBueaCoWSRKSDZ/3flOidX65J6tVGqXwvo0lzPKroBw4d/uocbSn7CGZPhQuud3NksErYRL7FvxuzFZPHqz/Ns5fIZ9U3eVwhtSbsQUEze+Jh1JlYQlwGq2j1PxA3bdI9E5QDKy79dn9qxTArw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from BL1PR11MB5978.namprd11.prod.outlook.com (2603:10b6:208:385::18)
+ by SJ0PR11MB7702.namprd11.prod.outlook.com (2603:10b6:a03:4e2::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.24; Fri, 30 Jun
+ 2023 10:02:33 +0000
+Received: from BL1PR11MB5978.namprd11.prod.outlook.com
+ ([fe80::19b7:466f:32ac:b764]) by BL1PR11MB5978.namprd11.prod.outlook.com
+ ([fe80::19b7:466f:32ac:b764%3]) with mapi id 15.20.6521.026; Fri, 30 Jun 2023
+ 10:02:33 +0000
+From:   "Huang, Kai" <kai.huang@intel.com>
+To:     "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "peterz@infradead.org" <peterz@infradead.org>
+CC:     "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "Raj, Ashok" <ashok.raj@intel.com>,
+        "Hansen, Dave" <dave.hansen@intel.com>,
+        "david@redhat.com" <david@redhat.com>,
+        "bagasdotme@gmail.com" <bagasdotme@gmail.com>,
+        "Luck, Tony" <tony.luck@intel.com>,
+        "ak@linux.intel.com" <ak@linux.intel.com>,
+        "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Christopherson,, Sean" <seanjc@google.com>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "Yamahata, Isaku" <isaku.yamahata@intel.com>,
+        "Chatre, Reinette" <reinette.chatre@intel.com>,
+        "nik.borisov@suse.com" <nik.borisov@suse.com>,
+        "hpa@zytor.com" <hpa@zytor.com>, "Shahar, Sagi" <sagis@google.com>,
+        "imammedo@redhat.com" <imammedo@redhat.com>,
+        "bp@alien8.de" <bp@alien8.de>, "Gao, Chao" <chao.gao@intel.com>,
+        "Brown, Len" <len.brown@intel.com>,
+        "sathyanarayanan.kuppuswamy@linux.intel.com" 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        "Huang, Ying" <ying.huang@intel.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "Williams, Dan J" <dan.j.williams@intel.com>
+Subject: Re: [PATCH v12 20/22] x86/virt/tdx: Allow SEAMCALL to handle #UD and
+ #GP
+Thread-Topic: [PATCH v12 20/22] x86/virt/tdx: Allow SEAMCALL to handle #UD and
+ #GP
+Thread-Index: AQHZqDW2iSvVOZI03kGK/IB0Vnjb6a+gWhoAgABWcYCAAAlDAIAAAXCAgAJXt4CAABCVAA==
+Date:   Fri, 30 Jun 2023 10:02:32 +0000
+Message-ID: <84e13c5e32f001b8c79f0f18fe18f3225cf47dfb.camel@intel.com>
+References: <cover.1687784645.git.kai.huang@intel.com>
+         <c124550719716f1f7759c2bdea70f4722d8e0167.1687784645.git.kai.huang@intel.com>
+         <20230628152900.GI2438817@hirez.programming.kicks-ass.net>
+         <20230628203823.GR38236@hirez.programming.kicks-ass.net>
+         <20230628211132.GS38236@hirez.programming.kicks-ass.net>
+         <20230628211641.GT38236@hirez.programming.kicks-ass.net>
+         <20230630090309.6mnsvfhcptekmzfu@box.shutemov.name>
+In-Reply-To: <20230630090309.6mnsvfhcptekmzfu@box.shutemov.name>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Evolution 3.48.3 (3.48.3-1.fc38) 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BL1PR11MB5978:EE_|SJ0PR11MB7702:EE_
+x-ms-office365-filtering-correlation-id: 0fa34df7-7ff2-415e-ad71-08db79511f78
+x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: IBanyBSoJPugJlt+nUI/j81j+rp0CIJRxeNgnL7l7WdgoZ2MY+KOHiZ3PZXVo+tou3vSLlBIjXDIdcvBErq114EJL6Ryw5IkiAATmchlrPe3awCI5wJcpTZmugmYxxng5YVoUAbdiTk4ORQRLKlMk8hLLRaSa0pfhOnt78f9dmFFr9XvHlFEHLXb0yrRYUH8vJAlCy8b8jH5LW6qiHuBCacUxt7lrAGORhcFskCZYI78Lp7NG4rP7Rxd6XXQrmAqJ421ZrEwBuQl7DQGv0359ztGsSZ4WKH7eYU4CZ0ao8WrXKvpIZsBKxB9ES+OHkmr+XEHYu5ry7rwJucI/HsevdmfJTqZ9ts+48MlLbXpyfl0irJcoUvfXaPnMKMpWR8TaPdEKHc0Bt3sXoHtb9crLawOERSS3pfaDeAInFuuNf2OhUrnUDjPy4GM9icCQANWylYALGqaEaOxTFZJAJ2a4m/M+vtr6RRgYqEzv3i9Ea5+J/jVc2nytOL7Edmg5mbDxBtcIOn6M+6EAOqpCljx9pZSLv4A4fZLBvlFgiJG3VimpeoWYKDloGcFlOIBiD0QAqkeG+XCm+5JmUSJZnd+3viWy/umo8GoxwTKTTCbVkH/aRZhep3vDJTeFVMgyw0q
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL1PR11MB5978.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(366004)(396003)(376002)(136003)(346002)(39860400002)(451199021)(66446008)(558084003)(36756003)(38070700005)(5660300002)(64756008)(7416002)(86362001)(91956017)(66476007)(66556008)(41300700001)(122000001)(8676002)(316002)(76116006)(4326008)(8936002)(38100700002)(82960400001)(66946007)(2906002)(478600001)(6506007)(186003)(6512007)(26005)(2616005)(6486002)(110136005)(71200400001)(54906003);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?ejI4M2RQd05EdExJeUM0bkFnVEJXRHo2WVkvZmtFdzhFTFVybDhQbmxzQmdC?=
+ =?utf-8?B?V0U0NDlKZEJFVWwzWHVlYzNRWThRTEZsWUJJMEV4dUpnYU93WXlsUEpFb3ZG?=
+ =?utf-8?B?K2xJNGVaWGJWdEp5NStqZ0JtdVJzcWVDY0ZOZFc5LzFoTzRhQ084L2l2eXd6?=
+ =?utf-8?B?MnlyZHo4cys0QXZaZk5MMHpOYzZ1NXlVQ1VKT2s4YWw5ZTBna1RnOFFBRW1B?=
+ =?utf-8?B?dXUrWTN1WG52MlBNU0RWL21Ma3V2RDc0bHJPOVIzNmE4MW1oSjQ4QWtpYzJU?=
+ =?utf-8?B?dUNhQjV1UmJQS3lvNXBTUXZQdTlFT3AxczJyRURMZmVGSU5NTERqa0VBK09X?=
+ =?utf-8?B?WjJhOC9SWmtpU3hFc1c4NFYxRHRZNHZMSjlxN0tVQ3dZSWVsUXZUb2kzVmlD?=
+ =?utf-8?B?THpTc3A2SFB1R29RK1lNZ3BZcjdsTE52QWhkMUhlNklPblQ0bUc1Q2hLZFdn?=
+ =?utf-8?B?VlhmT2U2VjlaTHRlOG5vZXRZNWl1MXFjSlVsUEVvdlpvT3hicnJNNHpCNCtQ?=
+ =?utf-8?B?NnJ5UFVMRHFTelJpWWpqU2cwMGMxd01RZUY0ZlVwbVpnWmFzVTVJNnAxSkda?=
+ =?utf-8?B?WDhYS1JjNjBGYlRkRE1JV0RDQmQrMHN0WURrWU9keGUxL25mT00vY1lXN2xn?=
+ =?utf-8?B?RVNKOGxkcDQ1VXE0RUtuOW5TMnVoTjRqa3lLQWxlOTlHcm9tYTJnaUpQcGFM?=
+ =?utf-8?B?SU1RZ1V2ZkZHeTBvbEQ0c2FtNGFLV1hsVnlGcGUxWW8vN1dSZU55Qnh6eElH?=
+ =?utf-8?B?Tk51QWhkT1NlUXdOUVdBTzlOMGdMV29VUkxTdE5iNlJNSUw4NjVJa2h2NEhu?=
+ =?utf-8?B?YldyQ1hvZHF4TDZzSDFnTkpsZm1UL1RSVVJmR0ltMXNjVlJjdE96eGx3dnJh?=
+ =?utf-8?B?MTZZcUUrOWptdXYrVFJVOGNwNXdSU0d6RVpFNTlUQ2tpKzBRU2g5ZVhWa2Zp?=
+ =?utf-8?B?QnM5Z3Frbi9HVzgxeGkyZ0JaSXFiYTFzQ1hDVXQrU1owaTl2WjFSOVBBYTdK?=
+ =?utf-8?B?NUVmc2VEUU8rVFAwaENQenhpYnZWK3FYL1VCTTZMZzRualg0QnJ3L2hvb04y?=
+ =?utf-8?B?WDA3aHR3OHhaczhwVzlTRnhQZlgySHkxeEg3WWZlb2NLWGtpVkVzbndYSnBL?=
+ =?utf-8?B?ZVR6ak45ejdwKzVpRzFSMmt4NlExdzZobE9lSjZ3dWp3ZW5DTGdaY2Ryem5j?=
+ =?utf-8?B?UjdkZlV6ZTZHUXdCb2V6NjZwRjVxbW4wcFFTQkRPdFBsWTJQSDhpdEFNeXAy?=
+ =?utf-8?B?UVhySW5ySFgzWmM0WjJRbU5kZ2REd1lxZnJ3UkJleExuT0ZWY3djQ2Q5Z2Zo?=
+ =?utf-8?B?b0hZMWdlMnR5b05ZRTQzNGoyYUlvUUtVeWNZRXNqcTlpMWlFSkhzeWlhODNZ?=
+ =?utf-8?B?Q1QzSjdtWDhaNHcycWZ1dkFRT2h0R1NqNlhqRE8wVmFFVU5oQis0R2JmTHY4?=
+ =?utf-8?B?NFdBRmdsNTdWc21aeitEMFpPRTl2UE02WnVvVVF5UnNuRHgrMXRUMHEvdEdD?=
+ =?utf-8?B?bURrMFIyTGR5MDJLT21XR2NiYTAxUndZRHJDNjVCanhsSHA5Y1Uva2drUHZZ?=
+ =?utf-8?B?ZTV1ZnV0aDF6SnM4WUg2ZFhRNkcwUFB2cW1reGIyaXMxQU81ZnRKVi95T0R6?=
+ =?utf-8?B?U0Z4R21QK1FIOU1Jb3V5L3hKaXlwQXdRZVA0OEZUSjZBY29CQzZUdHhWSXFF?=
+ =?utf-8?B?a3duR293NzRTaWtsZXAxQklZSjlOaHdtQW1xUXFzT2tuencwRmM3MG1LcTR5?=
+ =?utf-8?B?YTZmRTJlSDNSTU1FRmJtbmwxMUl1ZzB6WHBxamthY0gzWmpyZnhGQ1ZmbWpa?=
+ =?utf-8?B?b0U2WVdLVms3MGxtbDk1cy9CZ0tkZnN5UytKd3o0QVExM3AvVFNOcDZjRDRo?=
+ =?utf-8?B?OXpiaVJkSE03Qm5GTWNXVFBKaEJFUElSRWJ2WnhKa2x2QmNod0NVdEVIMHhY?=
+ =?utf-8?B?cVRPS3FCamxYd0U1angyOURXbmtuZXc0ZjEyT2E4TzRDYU1aamVSRlVPL1VI?=
+ =?utf-8?B?Rm1PNHJ1ajlzcjE2Tm5KSEJlcm1vbUwvT25rRVlzYWRCZVUxVGJrcmViZ2Iv?=
+ =?utf-8?B?UlNqcE1ZRElHZ3FnbWh5SVliYXdIU0srTkQ0bTUxUnNUVkFqWDBjVTVVNXBv?=
+ =?utf-8?Q?DLOJoqqaoVK3vapCeMNkcRKGU?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <8A24A8B04141C447837E6306C16CE68C@namprd11.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BL1PR11MB5978.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0fa34df7-7ff2-415e-ad71-08db79511f78
+X-MS-Exchange-CrossTenant-originalarrivaltime: 30 Jun 2023 10:02:32.9895
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: zB9E5XRa/bfKZgYossgHogyuhzmptAKaCZgx5eIitOvyAvLrW5pS6caOWBv1omcF/Ew6UoQsibuSBcqADhelLw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR11MB7702
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following changes since commit 6995e2de6891c724bfeb2db33d7b87775f913ad1:
-
-  Linux 6.4 (2023-06-25 16:29:58 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/chenhuacai/linux-loongson.git tags/loongarch-6.5
-
-for you to fetch changes up to 5ee35c769663cb1c5f26e12cad84904dc3002de8:
-
-  LoongArch: Remove five DIE_* definitions in kdebug.h (2023-06-29 20:58:44 +0800)
-
-----------------------------------------------------------------
-LoongArch changes for v6.5
-
-1, Preliminary ClangBuiltLinux enablement;
-2, Add support to clone a time namespace;
-3, Add vector extensions support;
-4, Add SMT (Simultaneous Multi-Threading) support;
-5, Support dbar with different hints;
-6, Introduce hardware page table walker;
-7, Add jump-label implementation;
-8, Add rethook and uprobes support;
-9, Some bug fixes and other small changes.
-
-----------------------------------------------------------------
-Binbin Zhou (2):
-      dt-bindings: interrupt-controller: Add Loongson EIOINTC
-      irqchip/loongson-eiointc: Add DT init support
-
-Dan Carpenter (1):
-      LoongArch: Delete unnecessary debugfs checking
-
-Haoran Jiang (1):
-      LoongArch: Replace kretprobe with rethook
-
-Huacai Chen (6):
-      Merge 'irq/loongarch-fixes-6.5' into loongarch-next
-      LoongArch: Set CPU#0 as the io master for FDT
-      LoongArch: Add vector extensions support
-      LoongArch: Add SMT (Simultaneous Multi-Threading) support
-      LoongArch: Support dbar with different hints
-      LoongArch: Introduce hardware page table walker
-
-Jianmin Lv (3):
-      irqchip/loongson-pch-pic: Fix initialization of HT vector register
-      irqchip/loongson-liointc: Fix IRQ trigger polarity
-      irqchip/loongson-eiointc: Fix irq affinity setting during resume
-
-Liu Peibao (1):
-      irqchip/loongson-pch-pic: Fix potential incorrect hwirq assignment
-
-Tiezhu Yang (8):
-      LoongArch: Add support to clone a time namespace
-      LoongArch: Select HAVE_DEBUG_KMEMLEAK to support kmemleak
-      LoongArch: Move three functions from kprobes.c to inst.c
-      LoongArch: Check for AMO instructions in insns_not_supported()
-      LoongArch: Add larch_insn_gen_break() to generate break insns
-      LoongArch: Use larch_insn_gen_break() for kprobes
-      LoongArch: Add uprobes support
-      LoongArch: Remove five DIE_* definitions in kdebug.h
-
-WANG Rui (3):
-      LoongArch: Add guard for the larch_insn_gen_xxx functions
-      LoongArch: Calculate various sizes in the linker script
-      LoongArch: extable: Also recognize ABI names of registers
-
-WANG Xuerui (8):
-      LoongArch: Prepare for assemblers with proper FCSR class support
-      LoongArch: Make the CPUCFG&CSR ops simple aliases of compiler built-ins
-      LoongArch: Simplify the invtlb wrappers
-      LoongArch: Tweak CFLAGS for Clang compatibility
-      LoongArch: vDSO: Use CLANG_FLAGS instead of filtering out '--target='
-      LoongArch: Include KBUILD_CPPFLAGS in CHECKFLAGS invocation
-      LoongArch: Mark Clang LTO as working
-      Makefile: Add loongarch target flag for Clang compilation
-
-Yinbo Zhu (2):
-      irqchip/loongson-liointc: Add IRQCHIP_SKIP_SET_WAKE flag
-      LoongArch: Export some arch-specific pm interfaces
-
-Youling Tang (1):
-      LoongArch: Add jump-label implementation
-
- .../interrupt-controller/loongson,eiointc.yaml     |  59 ++++
- .../features/core/jump-labels/arch-support.txt     |   2 +-
- .../features/debug/kmemleak/arch-support.txt       |   2 +-
- arch/loongarch/Kconfig                             |  72 +++-
- arch/loongarch/Makefile                            |  23 +-
- arch/loongarch/include/asm/Kbuild                  |   1 -
- arch/loongarch/include/asm/acpi.h                  |  13 +-
- arch/loongarch/include/asm/asmmacro.h              | 393 +++++++++++++++++++++
- arch/loongarch/include/asm/barrier.h               | 130 +++----
- arch/loongarch/include/asm/cpu-features.h          |   2 +-
- arch/loongarch/include/asm/cpu-info.h              |   1 +
- arch/loongarch/include/asm/cpu.h                   |   2 +
- arch/loongarch/include/asm/fpregdef.h              |   7 +
- arch/loongarch/include/asm/fpu.h                   | 185 +++++++++-
- arch/loongarch/include/asm/gpr-num.h               |  30 ++
- arch/loongarch/include/asm/inst.h                  |  55 ++-
- arch/loongarch/include/asm/io.h                    |   2 +-
- arch/loongarch/include/asm/jump_label.h            |  50 +++
- arch/loongarch/include/asm/kdebug.h                |   5 -
- arch/loongarch/include/asm/kprobes.h               |   5 +-
- arch/loongarch/include/asm/loongarch.h             |  76 ++--
- arch/loongarch/include/asm/module.h                |   2 +-
- arch/loongarch/include/asm/page.h                  |   1 +
- arch/loongarch/include/asm/percpu.h                |   6 +-
- arch/loongarch/include/asm/pgtable.h               |   4 +-
- arch/loongarch/include/asm/qspinlock.h             |  18 +
- arch/loongarch/include/asm/suspend.h               |  10 +
- arch/loongarch/include/asm/tlb.h                   |  46 ++-
- arch/loongarch/include/asm/uprobes.h               |  36 ++
- arch/loongarch/include/asm/vdso/gettimeofday.h     |   9 +-
- arch/loongarch/include/asm/vdso/vdso.h             |  32 +-
- arch/loongarch/include/uapi/asm/hwcap.h            |   1 +
- arch/loongarch/include/uapi/asm/ptrace.h           |  16 +-
- arch/loongarch/include/uapi/asm/sigcontext.h       |  18 +
- arch/loongarch/kernel/Makefile                     |   8 +-
- arch/loongarch/kernel/acpi.c                       |  32 ++
- arch/loongarch/kernel/cpu-probe.c                  |  16 +
- arch/loongarch/kernel/efi-header.S                 |   6 +-
- arch/loongarch/kernel/fpu.S                        | 270 ++++++++++++++
- arch/loongarch/kernel/head.S                       |   8 +-
- arch/loongarch/kernel/inst.c                       |  83 ++++-
- arch/loongarch/kernel/jump_label.c                 |  22 ++
- arch/loongarch/kernel/kprobes.c                    |  96 +----
- arch/loongarch/kernel/proc.c                       |   2 +
- arch/loongarch/kernel/process.c                    |  12 +-
- arch/loongarch/kernel/ptrace.c                     | 110 ++++++
- arch/loongarch/kernel/rethook.c                    |  28 ++
- arch/loongarch/kernel/rethook.h                    |   8 +
- .../{kprobes_trampoline.S => rethook_trampoline.S} |   6 +-
- arch/loongarch/kernel/signal.c                     | 326 ++++++++++++++++-
- arch/loongarch/kernel/smp.c                        |  27 +-
- arch/loongarch/kernel/traps.c                      |  95 ++++-
- arch/loongarch/kernel/unaligned.c                  |   2 -
- arch/loongarch/kernel/uprobes.c                    | 153 ++++++++
- arch/loongarch/kernel/vdso.c                       |  98 ++++-
- arch/loongarch/kernel/vmlinux.lds.S                |   9 +
- arch/loongarch/lib/dump_tlb.c                      |   6 +-
- arch/loongarch/mm/tlb.c                            |  21 +-
- arch/loongarch/mm/tlbex.S                          |  27 +-
- arch/loongarch/power/suspend.c                     |   8 +-
- arch/loongarch/vdso/Makefile                       |   7 +-
- arch/loongarch/vdso/vgetcpu.c                      |   2 +-
- drivers/acpi/Kconfig                               |   2 +-
- drivers/irqchip/irq-loongson-eiointc.c             | 135 +++++--
- drivers/irqchip/irq-loongson-liointc.c             |  13 +-
- drivers/irqchip/irq-loongson-pch-pic.c             |  10 +-
- scripts/Makefile.clang                             |   1 +
- 67 files changed, 2549 insertions(+), 414 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/interrupt-controller/loongson,eiointc.yaml
- create mode 100644 arch/loongarch/include/asm/jump_label.h
- create mode 100644 arch/loongarch/include/asm/qspinlock.h
- create mode 100644 arch/loongarch/include/asm/suspend.h
- create mode 100644 arch/loongarch/include/asm/uprobes.h
- create mode 100644 arch/loongarch/kernel/jump_label.c
- create mode 100644 arch/loongarch/kernel/rethook.c
- create mode 100644 arch/loongarch/kernel/rethook.h
- rename arch/loongarch/kernel/{kprobes_trampoline.S => rethook_trampoline.S} (93%)
- create mode 100644 arch/loongarch/kernel/uprobes.c
+DQo+IA0KPiBJJ20gb2theSBlaXRoZXIgd2F5Lg0KPiANCj4gT2J2aW91c2x5LCBhcmNoL3g4Ni9j
+b2NvL3RkeC90ZGNhbGwuUyBoYXMgdG8gYmUgcGF0Y2hlZCB0byB1c2UgdGhlIG5ldw0KPiBURFhf
+TU9EVUxFX0NBTEwgbWFjcm8uDQo+IA0KDQpDb29sIHRoZW4gd2UgaGF2ZSBjb25zZW5zdXMuDQoN
+CktpcmlsbCB3aWxsIHlvdSBkbyB0aGUgcGF0Y2goZXMpLCBvciB5b3Ugd2FudCBtZSB0byBkbz8N
+Cg0KVW5sZXNzIFBldGVyIGlzIGFscmVhZHkgaGF2aW5nIHRoaXMgb24gaGlzIGhhbmQgOikNCg==
