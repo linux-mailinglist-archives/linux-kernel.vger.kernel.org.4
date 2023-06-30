@@ -2,203 +2,809 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 543D9743F4E
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 17:59:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D68D9743F51
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 18:00:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232301AbjF3P70 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 11:59:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58452 "EHLO
+        id S230118AbjF3QAB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Jun 2023 12:00:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230118AbjF3P7X (ORCPT
+        with ESMTP id S231718AbjF3P77 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 11:59:23 -0400
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCBA83ABF
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 08:59:22 -0700 (PDT)
-Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35UEnFvK015084;
-        Fri, 30 Jun 2023 15:59:02 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=corp-2023-03-30;
- bh=V6njzENVbH1Ko6m5e7UwJlUWwzc4egZWfJg/UMWQZGY=;
- b=Al3Vuec5mQAM7uXSXdOFP6pJjMHQB+qhCW2j+lbb5ZoZRLkgdaJvl9+FUXA4hSd6lrqK
- iY7etNVLCBK0LzI0C359v4J5yHAUoNXoMLr24etwDEThrzN3vIrDEihGIsf7tWCOVgmZ
- 0RiNtGO9UkYPy/gN8xoysfsRlgrAiHy31idABUR8xM70kNj2w8bK4ScwIdG2PqUGZhzx
- gCsxMChEgM2EhqgtcXXOyiTHqgwLDKkaZKIZhrHMDYpILnfd16ouENsRZ0k8MJA+aiLW
- bP0OQZIx0Z8r2je7dIFZ4dHcRGrL8iXu8W/2vDyB7qG4A87tjCg7BsnFl2gSCXex+LC6 rQ== 
-Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3rdq319hhr-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 30 Jun 2023 15:59:02 +0000
-Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 35UF1E19038208;
-        Fri, 30 Jun 2023 15:59:00 GMT
-Received: from nam10-bn7-obe.outbound.protection.outlook.com (mail-bn7nam10lp2109.outbound.protection.outlook.com [104.47.70.109])
-        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3rdpxfjfyv-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 30 Jun 2023 15:59:00 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=W/UEIFKddj4D5MW1hzfVOcl9f2N8qcrKToaY9LNKlEdMmwUXSyOouGXVNabu/Gn0rx3WNMkVwfEAUXwhhZl/H8tqaFem02dWJ0M06hvRXV5nxM2qFxB3H4j7kBZBIFwNlFaggk6TpoV/LTodzANNmj8XrxY2k3V6tZqmujnmjBqjyxUSOXRUk0HVBq23hwq3LzadFQmvVeD7iVSEJMm4RKRXx/usotq7lMVfbDfoe+UKvdP8G8ycE2buiWp2pCxVak4minsPmsiUt7/67xtDX4OFGwvvZDP/s2hDnHdRraOYMfVHNSuxUJGU9LoZxbJh62AEfLRDR6sYw0yizCBnEg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=V6njzENVbH1Ko6m5e7UwJlUWwzc4egZWfJg/UMWQZGY=;
- b=GFPIh6uxSkpi9wfUMMU6kULX+sENMUxvLHyxJxe52a3puTlyPcThIGU4tcWcZqNvnsTAodNb2+vR7s+q3RVbfZrlo/ZJ9JGMLyLnOVPMAZuv5g/9/BJLA7wo8tc750muWcCsbQXG30rM/OL4U2rJiGsspBQ5U3ySmzpboP9+2FA6JINKcDBRrGSbXp16EqGJtSZkRzBHiKNFrZbV72gzEdEdJHmrfzXAxq7l4qZzSrMUAh33STlQMKep4ILRQGKgibdraWRb53nF6jMUKXAkPbZiw1EDmlaZun5Z3dQP7dDFc3qPsCP3GJIt8dpn1oX+7V09pj3Geqi4oEO2hUhUEw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
+        Fri, 30 Jun 2023 11:59:59 -0400
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 826243C06
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 08:59:56 -0700 (PDT)
+Received: by mail-lj1-x233.google.com with SMTP id 38308e7fff4ca-2b699a2fe86so33445351fa.3
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 08:59:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=V6njzENVbH1Ko6m5e7UwJlUWwzc4egZWfJg/UMWQZGY=;
- b=ecc0iNpABgurW6W+RN3dQIWFptMWyCbC5At908Vmov0E5SMMr4TAFebfVN1giDDOkYNTs981dMskl08HBaZ3lKfHxMz5ufPHQjNyCmLNutKzLuGTxnJBw7jkoW6vm2/biEctp5BKciiRQaWI8ml/ZaEzgEIp44b05OJzqJnwqCc=
-Received: from CH0PR10MB5113.namprd10.prod.outlook.com (2603:10b6:610:c9::8)
- by CY8PR10MB7267.namprd10.prod.outlook.com (2603:10b6:930:6c::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.26; Fri, 30 Jun
- 2023 15:58:59 +0000
-Received: from CH0PR10MB5113.namprd10.prod.outlook.com
- ([fe80::d9c0:689a:147b:ced5]) by CH0PR10MB5113.namprd10.prod.outlook.com
- ([fe80::d9c0:689a:147b:ced5%5]) with mapi id 15.20.6544.019; Fri, 30 Jun 2023
- 15:58:58 +0000
-Message-ID: <6800d1d2-4378-f851-f2bd-5b8479358234@oracle.com>
-Date:   Fri, 30 Jun 2023 11:58:55 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH 2/2] mm: use a folio in fault_dirty_shared_page()
-Content-Language: en-US
-To:     Peng Zhang <zhangpeng362@huawei.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Cc:     willy@infradead.org, akpm@linux-foundation.org,
-        wangkefeng.wang@huawei.com, sunnanyong@huawei.com
-References: <20230630121310.165700-1-zhangpeng362@huawei.com>
- <20230630121310.165700-3-zhangpeng362@huawei.com>
-From:   Sidhartha Kumar <sidhartha.kumar@oracle.com>
-In-Reply-To: <20230630121310.165700-3-zhangpeng362@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: BN1PR14CA0017.namprd14.prod.outlook.com
- (2603:10b6:408:e3::22) To CH0PR10MB5113.namprd10.prod.outlook.com
- (2603:10b6:610:c9::8)
+        d=semihalf.com; s=google; t=1688140794; x=1690732794;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZqpxRnbTSgdJp0548oyJOAdyFQWGYzRcS3g2eKn5CU8=;
+        b=s5doS4c/RV3/3dHtFvaCYL5g9POBPmHTet1dkmA9CVtgX8p0rOnTBhppJY3xLoMtmV
+         pMqGBoV/7J02XYLqLr5I2H0dWKGPcEu/YMMmGjiwYaihLwfhLPi6sOZ+Rv0fITAKrz3N
+         FT+pfqLGcdg0zie2vOPVXAaO9m2aMnAEQgnez2MHxvopNPPgNMei6l9p75NzOzcnwtnd
+         W/OWah7AsS32PCKj4rnNuakGqoZA2FHVnyB1XNbSL+ovWQ/mUGd6IDAQkZi0SgJm8+TC
+         CUTYJPl0aF2bM4t+0PuqHrptMnH5R6Rnv8HihX3quspZt+7Dw93Gtehg5MaQ/nTy4h1h
+         abug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688140794; x=1690732794;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ZqpxRnbTSgdJp0548oyJOAdyFQWGYzRcS3g2eKn5CU8=;
+        b=LZdYX0f1UA3AYsCfaVlRxVdRVoEUD+JG3GaO6NuCWKPo+wcDmHqvwtjowi1fNksTQM
+         KqtqS5Joj2IImJEJ1yX4i/pmkb6Vn+1Jztpdw8GIaeEPlzcZUYl0UhAp7dEk6OwC3kdM
+         tswiHXniSloyfz2uwL9AjKKV6pJ3xawF4EGtfLKjssw53B0GpXgc+jP+oxGnbmlXTzsm
+         EXba+nmJAU/uFNnD/KJ3EpHhvxxPT9C+jcXQwPMKaB2xpUG2i9FLnn2RDxDyAductZBS
+         Vymx3561Xxdb0NS/eR4git7DNbPf9hQP32QwqChDM5KCJ0FUpGdh+E65Zthb7z1/N1ht
+         g++w==
+X-Gm-Message-State: ABy/qLbPQGTMTopoRzp950HEyRpMcBEo6D8IA3J5yuNuWwC27EuXmmuP
+        Vqz6e7N+NEmOOPataq7cyJPiP8DPb1mAK3XNVuKHww==
+X-Google-Smtp-Source: APBJJlFSGIhAKSCQeM0z6HX2BQA3O+xILZKFM1Ta4msbFM4lO7kIMQOAum5SDVIZZM/bcrw61oHZYg==
+X-Received: by 2002:a2e:b0c3:0:b0:2b6:a630:1e5 with SMTP id g3-20020a2eb0c3000000b002b6a63001e5mr2592681ljl.33.1688140794163;
+        Fri, 30 Jun 2023 08:59:54 -0700 (PDT)
+Received: from jazctssd.c.googlers.com.com (138.58.228.35.bc.googleusercontent.com. [35.228.58.138])
+        by smtp.gmail.com with ESMTPSA id z15-20020a2e8e8f000000b002b6cdbd9e35sm555273ljk.55.2023.06.30.08.59.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 30 Jun 2023 08:59:53 -0700 (PDT)
+From:   Grzegorz Jaszczyk <jaz@semihalf.com>
+To:     linux-kernel@vger.kernel.org, alex.williamson@redhat.com
+Cc:     dmy@semihalf.com, tn@semihalf.com, dbehr@google.com,
+        dbehr@chromium.org, upstream@semihalf.com, dtor@google.com,
+        jgg@ziepe.ca, kevin.tian@intel.com, cohuck@redhat.com,
+        abhsahu@nvidia.com, yishaih@nvidia.com, yi.l.liu@intel.com,
+        kvm@vger.kernel.org, libvir-list@redhat.com, pmorel@linux.ibm.com,
+        borntraeger@linux.ibm.com, mjrosato@linux.ibm.com,
+        Grzegorz Jaszczyk <jaz@semihalf.com>
+Subject: [PATCH v6] vfio/pci: Propagate ACPI notifications to user-space via eventfd
+Date:   Fri, 30 Jun 2023 15:59:36 +0000
+Message-ID: <20230630155936.3015595-1-jaz@semihalf.com>
+X-Mailer: git-send-email 2.41.0.255.g8b1d071c50-goog
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CH0PR10MB5113:EE_|CY8PR10MB7267:EE_
-X-MS-Office365-Filtering-Correlation-Id: d869af00-0c92-4e27-f5b9-08db7982ea31
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: U8fl/JyEuyh3nv0wvIiVgqju+tTY6SPB4fzZaHr6dCyrjJhtBc27/fjrxh+r81q3Vn+f/q29VDNYO/mmTWd5tIg88ruKqA3QeVBSgXH2HVuGhCkenavr59Tg+p5lr3BEVZDI4ZYPrLReIKIRisTEGPeAPh5rsK5BrMV1wEzrUxPwj9dIr89roOLIbZBX77uU9loeNSpG51SoRi4On8E595rqfROjla8A2E0d6YQxVzR4e3aDSdHt5reBJiZHTxFQ08FqLqhpWhVIpsxGSjD/5ww3cAHpSDXPx6PeccKaBZx+VXsI8ePQRRvnNGTaERLMxHT7uRgrArn2RgEPGNdcbhGS1XlWk3Tgg6xfQXW/uwtdJcMUFB6YstgJeTbxG5OUDqygjRB6qntiDozajzr9gY+hF4RdPUFc8SL+8La+STbdOk77gtPnqV+uV1pNFUCJWki/4s9rnAkIUKxB0q+Wgt9xEOMY14zozn9xkPC5ved7hsnVOzsy3DMV2+aUcpiUZrbF2r+DqLP6Ngw1hrnHMmQYsLI0r5NlZLm6A1VCaGDQCIU6Qsy0crxP0ELdwXKfOgm7qL42TBhNUf4/QYnjv8g/3ud7cw98qYFrQcHCvjwe/VnaBQcAs50iUGpJd6cZvuRemto+uKh3y43p2liIXowezkUPTil4bjrZ/13nqXg=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH0PR10MB5113.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(39860400002)(396003)(136003)(376002)(366004)(346002)(451199021)(44832011)(5660300002)(31686004)(66946007)(66556008)(4326008)(66476007)(478600001)(316002)(36756003)(8936002)(8676002)(2906002)(6512007)(6666004)(26005)(41300700001)(31696002)(6486002)(186003)(53546011)(6506007)(86362001)(38100700002)(83380400001)(2616005)(14143004)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?UklpK00zNld5Z3V0R3pLVWxJMkNFWHdlazQzNXJiaEV0MllmOHMrY2gwd21o?=
- =?utf-8?B?d0RYU0N2aVJuSDBIdzVXbHhJS3lGWEJSTFJ1Q2ppZ2Q2Z2hQV1ZJWWpiWTdU?=
- =?utf-8?B?WmpBUlFINDZ4S29VR3dLTUswcFh0MTBLb2hpdDY1STh2b2JnVlBPMkhJeGZH?=
- =?utf-8?B?UWhQWmNiK3ZqWDR0VHRMWDY3ZnRqa2hsU0c1T0tHVFdQdjlyR3BRNjVYQXFH?=
- =?utf-8?B?cFA5L3k3WXdRKzR6NUxzSXA0L1NHSG9qT3JaYXR6ay85a085UHYwSU9hR1Zi?=
- =?utf-8?B?S2ZhTFg4VUZmNmdyNnhPRi9aQkt1MEdBVkFyOGxVVGVjeWgvNG9zUkx1dHZ3?=
- =?utf-8?B?cFNPRjFwTVZ5TjZTY3doOVZRR1l3Nk5YTmFRR1YyYzFheTlmN2VyWUI5bG4y?=
- =?utf-8?B?UzJCQ1ZDNjV0c2ladXhZWUxLR2lwSW9CSjJlY2VYZFFBcmVsM1RrMXkvcmMy?=
- =?utf-8?B?eU9YTGVOWTZaTTl6TldKV2ZnY3oxc3BsaTRSNVpSNnpLU3hBckFSSWdjMjVO?=
- =?utf-8?B?NWlLUFBMM3h6Q2tPL2xYSk1TclFaUVpQOUNVcjVRaWxWVnkxTUR2ZHhMMm55?=
- =?utf-8?B?QjVrUGVwekk2UDM0cEhWNWkrSG54TTJrSTRzaDZSdGRXZGM0SkRHdFNGdTk4?=
- =?utf-8?B?RjVKdWpvcHY2RUdHY1BIdFJhZ1paSFlqTmk0NitxcnlIM2dDM2xnMytVSnlT?=
- =?utf-8?B?OERlMzFPY213UFI4Rk1kR09CQkszNTg1Y2k5c0huMm5Wbk9od3NqUThxNnpl?=
- =?utf-8?B?TWFVeFBVK1hITGRyaFdKU2p6ZTRjN01xVUs5TDhnbWlSa3dJWU5MQWlSTWJh?=
- =?utf-8?B?WU1yK2NqUmU1VDByUE44NUZ2OHdjT2tqZGZZUm5PK2FZZW5nWUVRbDFsS0Uz?=
- =?utf-8?B?eXlDbXlCVHhEYkVtOFd2K2lCeXFpTkdPeWFlUzB0b2U0NjFYK2x0eDZtYmFF?=
- =?utf-8?B?WDc5cXFJcUZXU3JjWFRYQXlhaHVoNGVrTkgrSmNROTZhOUVNVXhmUzlnaHJ3?=
- =?utf-8?B?R0JCUEIreVZSajJzUkM4SUZ5NWFKM242MGtNWkJEL00vUDF1TkpFdFMyWnYv?=
- =?utf-8?B?clQ4YU13N2NaSU4wQmlVZk02MTdKZitCSUxxdFUyejNuRmM0SmNtbUE2b3Zj?=
- =?utf-8?B?ZW1KalpnT2JWWDN6YjhoMFE2eWZHMmNaWG5YRnExZ05wQm16NkhwVkhQNW8w?=
- =?utf-8?B?MHJmYTIwalF2ZjUrY1N3M0swYjB1aFNGdTJhTUpwQWNpNktWb1huUHF5RFpE?=
- =?utf-8?B?cWFIN1MwaEdPcFNRMzdvcHQ5dWFQeGRjKzQyQSsvMDFHdWIxdlJqMmlzWE5Q?=
- =?utf-8?B?eW5IWHI1TENQY1pkUGdRdzZDVmZRWUNLK1RhR3NnOE1TdW0vOW1CeXVtR0Ft?=
- =?utf-8?B?Y3dna213aG9HdzVJRUFyL2gwWGVDOFB2M1lDeXExcVJBSktpNFlYRTVCKzRR?=
- =?utf-8?B?U2pIcFBXUThnM0l6Z3FObDFqK2ZiZGF1NGxwRHZCSGtnVUZrb2h3OVprN3o3?=
- =?utf-8?B?SDBrZW43V3ZyQUZrZFJvUGx5ZHJDd29ZYmRsejB4WlMrNWhXblY0QjZxbzZQ?=
- =?utf-8?B?ZDJSdTZJVGl4bUVwSll0VUNvb05RaTd2N2NTVHpkWmpqMkt3NlYxaFJWSG5O?=
- =?utf-8?B?WDRpQjUzSTZFWVg5czVhL3lieEhwR2lPQld4aVErUk1qNmZpWVc4U2x6WUl1?=
- =?utf-8?B?REpvOUhBZFZMSFloRXArcjRkSGFOYTBjNmE3TW5tNjZ1TXQ2NmlOeTdOWTBR?=
- =?utf-8?B?WFFFRzVTaitBUmExY0FyTUt0ZWVhMDlyaXRhblFKSlJvbjE4Q2dyMm5jbUQy?=
- =?utf-8?B?aUVFbmJyQUxLYWlhRUJvalNmUVZxQU0waTdXeTVVcE9hRjNlUU5xMW1XTTRL?=
- =?utf-8?B?c1FUS3JTR3JwWlNteGRDcjJXUFFkS3FoOVllVHpqM3pHN1RDd25WRG9abmFG?=
- =?utf-8?B?eFovRm13dGdkMUZ6aVZ5THgzZVRFT3p0UDlkRy9oV0h5NUp1eXhqNDZ5UWNj?=
- =?utf-8?B?U25qQ295eldROURIZVhQSUNpdWFxMWNHeUMrRXo2eUxGc0d5WEZBU3dKVGE1?=
- =?utf-8?B?QkhPWnN6aU9GbzljbmxyS2t6L0hpMVdScjc2MUlnd3JqYzVRSU9sMmZHajQ3?=
- =?utf-8?B?S1pJcjZJbWtkRGVYVDhTdEFqZktaU0ozTFJoaDBzVmMxcy90VWlqdTR6R082?=
- =?utf-8?B?bmc9PQ==?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: en2gH2ss4pvYOE6OaD+UUCsYfjHAtNvHImtHe7W1hju5pp9WR1aVeIPNORIZ3KVFoE0jkfreCVduBzq/SNDaNXeh2ScvjEZrDhWkMWceB0JbAQfqShWq/8pkcCTOoFC93lm/rO4Xelne8Vqz5oY6juysFJUfV6pD+KqnRiu3Aq3ViY4OkAgv/A8SkQzNswFIXamu7vYkcA8slQchjMnXHTvCoe3G8afLsg5LUo5ffTGbYaBZN31NpuFOBeoX7lcgxjQNi76OIND8BZLiLZ3rg/g/ms+xqf+Ui7JhPwSizfspeQ39oHgjEd8URurBebvSANXzG8shJs/2xEJJ934dJWufoofvu6i/qyGnl+rW4TeXOFupfrELcDD26ZkuDdSehzezjIMNivqNX3sgZn/f5WiF0jmp6xD4X1vP0VZXQSL17tZT65lG/9aSlcrtZ9EKgi0ruTx318YrDxaTDLGe0s62PYSJSP/rXd98ZMZVSxb5pnQQ+YDJgFtNnuFTJjrCyV0MR0GnbzLpyqKKxDC+19Q78JHXEYUcB4NDow1aJCY/Z+GMQp5xQbN70hokfDCutNpgoBQ3mf+IsK4OIwqxQ0XS29Xpvfeiekbxxixuk2hUxoL9IZyxMHX8obZXjMUBtrtgHedWnf6wwx9KWxoAin1/pi16yeOfncCTezg6Qv8amegvkRQNYmAygZ+oP9KFrvZ8tzEzzESQTu/r7W17LBWzhSNNytiiHdW/BFGBAruzLIDRwBuTZkB/hjrfkrGwXu5DOMknv25NL1fSNee0UAt1f1O9WctBBsPDU04QOJuElS9jCOHQoJNMVQWCuWaVNiDASTBX7VhDT15sEBk23GUvTZkHEON2eWaKepocIDLE2L8EPP+Z1h1uVy9+8GqiBE8LS7okrEPtr9rDcQmA942eawt/soh6nXKopVFbXSU=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d869af00-0c92-4e27-f5b9-08db7982ea31
-X-MS-Exchange-CrossTenant-AuthSource: CH0PR10MB5113.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Jun 2023 15:58:58.6511
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: bgbhK3EyfrPjAWo/xpbR11RylGReYrYtJ0wA1kUqPb5JxHWg/OuUwgTh4rN5FqKDkRBJDDK73ANf6l/ONw/cr2HhYul1v0MpVD0iXfr9RmU=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR10MB7267
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-06-30_08,2023-06-30_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 spamscore=0
- mlxlogscore=999 malwarescore=0 phishscore=0 bulkscore=0 suspectscore=0
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2305260000 definitions=main-2306300136
-X-Proofpoint-ORIG-GUID: TBIbirUED-XRGbNt7RHCgp8m9-S-Br0f
-X-Proofpoint-GUID: TBIbirUED-XRGbNt7RHCgp8m9-S-Br0f
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/30/23 5:13 AM, Peng Zhang wrote:
-> From: ZhangPeng <zhangpeng362@huawei.com>
-> 
-> We can replace four implicit calls to compound_head() with one by using
-> folio.
-> 
-> Signed-off-by: ZhangPeng <zhangpeng362@huawei.com>
-> ---
->   mm/memory.c | 10 +++++-----
->   1 file changed, 5 insertions(+), 5 deletions(-)
-> 
-> diff --git a/mm/memory.c b/mm/memory.c
-> index 6921df44a99f..73b03706451c 100644
-> --- a/mm/memory.c
-> +++ b/mm/memory.c
-> @@ -2967,20 +2967,20 @@ static vm_fault_t fault_dirty_shared_page(struct vm_fault *vmf)
->   {
->   	struct vm_area_struct *vma = vmf->vma;
->   	struct address_space *mapping;
-> -	struct page *page = vmf->page;
-> +	struct folio *folio = page_folio(vmf->page);
->   	bool dirtied;
->   	bool page_mkwrite = vma->vm_ops && vma->vm_ops->page_mkwrite;
->   
-> -	dirtied = set_page_dirty(page);
-> -	VM_BUG_ON_PAGE(PageAnon(page), page);
-> +	dirtied = folio_mark_dirty(folio);
-> +	VM_BUG_ON_FOLIO(folio_test_anon(folio), folio);
->   	/*
->   	 * Take a local copy of the address_space - page.mapping may be zeroed
->   	 * by truncate after unlock_page().   The address_space itself remains
->   	 * pinned by vma->vm_file's reference.  We rely on unlock_page()'s
->   	 * release semantics to prevent the compiler from undoing this copying.
->   	 */
-> -	mapping = folio_raw_mapping(page_folio(page));
-> -	unlock_page(page);
-> +	mapping = folio_raw_mapping(folio);
-> +	folio_unlock(folio);
->   
->   	if (!page_mkwrite)
->   		file_update_time(vma->vm_file);
-Reviewed-by: Sidhartha Kumar <sidhartha.kumar@oracle.com>
+To allow pass-through devices receiving ACPI notifications, permit to
+register ACPI notify handler (via VFIO_DEVICE_SET_IRQS) for a given
+device. The handler role is to receive and propagate such ACPI
+notifications to the user-space through the user provided eventfd. This
+allows VMM to receive and propagate them further to the VM, where the
+actual driver for pass-through device resides and can react to device
+specific notifications accordingly.
+
+The eventfd usage ensures VMM and device isolation: it allows to use a
+dedicated channel associated with the device for such events, such that
+the VMM has direct access.
+
+Since the eventfd counter is used as ACPI notification value
+placeholder, the eventfd signaling needs to be serialized in order to
+not end up with notification values being coalesced. Therefore ACPI
+notification values are buffered and signalized one by one, when the
+previous notification value has been consumed.
+
+Signed-off-by: Grzegorz Jaszczyk <jaz@semihalf.com>
+---
+Changelog v5..v6
+- Get rid of #if IS_ENABLED(CONFIG_ACPI) from vfio_pci_intrs.c
+- There is no need to keep vfio_acpi_notification struct definition in
+  header, make it private and move to cpi_notify.c
+- Add lockdep_asserts in acpi_notification_dequeue
+- notification_list_lock was not initialized which triggers some
+  warning with CONFIG_DEBUG_MUTEXES enabled (it was not logical error
+  since mentioned mutex was zeroed thanks to kzalloc it is just
+  DEBUG_MUTEXES performs extra checks and sets lock->magic).
+- Change notification_lock from mutex to semaphore (notification_sem).
+  The logic was working fine with the mutex but enabling lockdep support
+  made me realize that the mutex has to be released by the same task
+  which acquires it and it is checked with lockdep enabled. Semaphore
+  does not have such a restriction.
+- In order to correctly handle some sequences such as:
+  * user configures a notification eventfd
+  * a notification fires
+  * the user closes the eventfd without reading it, and then tries
+    to swap in a different eventfd ctx
+  separate the entire eventfd context together with notification_sem
+  from the main vfio_acpi_notification struct. Thanks to that entire,
+  separate eventfd ctx could be swapped leaving the previous eventfd ctx
+  untouched. The new eventfd has its separate notification_sem
+  initialized and will not depend on previous eventfd ctx. Additionally
+  when the last handle to old eventfd will be released and EPOLLHUP
+  triggered, old eventfd ctx will be cleaned-up.
+- Together with the above add support for required EPOLLHUP handling.
+- Add missing fput invocations.
+- Move some common code into vfio_acpi_eventfd_init and use it during
+  registration and eventfd swapping.
+- v5: https://patchwork.kernel.org/project/kvm/patch/20230609133950.2197552-1-jaz@semihalf.com/
+
+Changelog v4..v5
+Address Alex Williamson's feedback:
+- s/vfio_acpi_notify.{c,o}/acpi_notify.{c,o}
+- Do not put acpi_notify to its own module but fold it into main
+  vfio.ko. Additionally select it from VFIO_PCI_CORE instead of VFIO_PCI.
+- Cleanup acpi notify under igate mutex (in vfio_pci_core_close_device).
+- Add extra check for ACPI companion in vfio_pci_get_irq_count and
+  extend vfio_pci_ioctl_get_irq_info.
+- Drop acpi.h include - linux/vfio_acpi_notify.h includes it already.
+- Send device check notification value for DATA_NONE and non-zero count
+  and for DATA_BOOL and non-zero count  (as for loopback testing).
+- Drop some redundant !acpi_notify->acpi_notify_trigger checks.
+- Move some common code to new helper functions:
+  1) acpi_notification_dequeue
+  2) vfio_acpi_notify_cleanup and rename previous
+     vfio_acpi_notify_cleanup into vfio_remove_acpi_notify which uses it
+- Add rate limited logging for dropped notifications.
+- Move vdev->acpi_notification pointer cleanup to the
+  vfio_acpi_notify_cleanup function this also fixes two bigger issues
+  caught by Alex.
+- Allow the eventfd to be swapped.
+- s/GFP_KERNEL/GFP_KERNEL_ACCOUNT.
+- s/VFIO_PCI_ACPI_NTFY_IRQ_INDEX/VFIO_PCI_ACPI_IRQ_INDEX.
+- Add header protection for multiple includes.
+- v4: https://patchwork.kernel.org/project/kvm/patch/20230522165811.123417-1-jaz@semihalf.com/
+
+Changelog v3..v4
+Address Alex Williamson feedback:
+- Instead of introducing new ioctl used for eventfd registration, take
+  advantage of VFIO_DEVICE_SET_IRQS which already supports virtual IRQs
+  for things like error notification and device release requests.
+- Introduced mechanism preventing creation of large queues.
+Other:
+- Move the implementation into the newly introduced VFIO_ACPI_NOTIFY
+  helper module. It is actually not bound to VFIO_PCI but VFIO_PCI
+  enables it whenever ACPI support is enabled. This change is introduced
+  since ACPI notifications are not limited to PCI devices, making it PCI
+  independent will allow to re-use it also for other VFIO_* like
+  supports: e.g. VFIO_PLATFORM in the future if needed. Moving it out of
+  drivers/vfio/pci/ was also suggested offline.
+- s/notify_val_next/node
+- v3: https://patchwork.kernel.org/project/kvm/patch/20230502132700.654528-1-jaszczyk@google.com/
+
+Changelog v2..v3:
+- Fix compilation warnings when building with "W=1"
+
+Changelog v1..v2:
+- The v2 implementation is actually completely different then v1:
+  instead of using acpi netlink events for propagating ACPI
+  notifications to the user space take advantage of eventfd, which can
+  provide better VMM and device isolation: it allows to use a dedicated
+  channel associated with the device for such events, such that the VMM
+  has direct access.
+- Using eventfd counter as notification value placeholder was suggested
+  in v1 and requires additional serialization logic introduced in v2.
+- Since the vfio-pci supports non-ACPI platforms address !CONFIG_ACPI
+  case.
+- v1 discussion: https://patchwork.kernel.org/project/kvm/patch/20230307220553.631069-1-jaz@semihalf.com/
+---
+ drivers/vfio/Kconfig              |   5 +
+ drivers/vfio/Makefile             |   1 +
+ drivers/vfio/acpi_notify.c        | 324 ++++++++++++++++++++++++++++++
+ drivers/vfio/pci/Kconfig          |   1 +
+ drivers/vfio/pci/vfio_pci_core.c  |  13 ++
+ drivers/vfio/pci/vfio_pci_intrs.c |  80 ++++++++
+ include/linux/vfio_acpi_notify.h  |  36 ++++
+ include/linux/vfio_pci_core.h     |   1 +
+ include/uapi/linux/vfio.h         |   1 +
+ 9 files changed, 462 insertions(+)
+ create mode 100644 drivers/vfio/acpi_notify.c
+ create mode 100644 include/linux/vfio_acpi_notify.h
+
+diff --git a/drivers/vfio/Kconfig b/drivers/vfio/Kconfig
+index 89e06c981e43..cd9df43a4eb4 100644
+--- a/drivers/vfio/Kconfig
++++ b/drivers/vfio/Kconfig
+@@ -12,6 +12,11 @@ menuconfig VFIO
+ 	  If you don't know what to do here, say N.
+ 
+ if VFIO
++config VFIO_ACPI_NOTIFY
++	bool
++	depends on ACPI
++	default n
++
+ config VFIO_CONTAINER
+ 	bool "Support for the VFIO container /dev/vfio/vfio"
+ 	select VFIO_IOMMU_TYPE1 if MMU && (X86 || S390 || ARM || ARM64)
+diff --git a/drivers/vfio/Makefile b/drivers/vfio/Makefile
+index 70e7dcb302ef..003c2b041785 100644
+--- a/drivers/vfio/Makefile
++++ b/drivers/vfio/Makefile
+@@ -7,6 +7,7 @@ vfio-y += vfio_main.o \
+ vfio-$(CONFIG_IOMMUFD) += iommufd.o
+ vfio-$(CONFIG_VFIO_CONTAINER) += container.o
+ vfio-$(CONFIG_VFIO_VIRQFD) += virqfd.o
++vfio-$(CONFIG_VFIO_ACPI_NOTIFY) += acpi_notify.o
+ 
+ obj-$(CONFIG_VFIO_IOMMU_TYPE1) += vfio_iommu_type1.o
+ obj-$(CONFIG_VFIO_IOMMU_SPAPR_TCE) += vfio_iommu_spapr_tce.o
+diff --git a/drivers/vfio/acpi_notify.c b/drivers/vfio/acpi_notify.c
+new file mode 100644
+index 000000000000..b78c33077dfa
+--- /dev/null
++++ b/drivers/vfio/acpi_notify.c
+@@ -0,0 +1,324 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * VFIO ACPI notification propagation
++ *
++ * Author: Grzegorz Jaszczyk <jaz@semihalf.com>
++ */
++#include <linux/file.h>
++#include <linux/semaphore.h>
++#include <linux/vfio_acpi_notify.h>
++
++#define NOTIFICATION_QUEUE_SIZE 20
++
++struct acpi_eventfd_ctx {
++	struct eventfd_ctx	*acpi_notify_trigger;
++	struct file		*acpi_notify_trigger_file;
++	struct semaphore	notification_sem;
++	struct work_struct	acpi_notification_work;
++	wait_queue_entry_t	wait;
++	poll_table		pt;
++	struct vfio_acpi_notification *acpi_notify;
++};
++
++struct vfio_acpi_notification {
++	struct acpi_eventfd_ctx		*acpi_eventfd;
++	struct list_head		notification_list;
++	struct mutex			notification_list_lock;
++	int				notification_queue_count;
++};
++
++struct notification_queue {
++	int notification_val;
++	struct list_head node;
++};
++
++static int vfio_eventfd_wakeup(wait_queue_entry_t *wait, unsigned int mode,
++			       int sync, void *key)
++{
++	struct acpi_eventfd_ctx *acpi_eventfdctx =
++		container_of(wait, struct acpi_eventfd_ctx, wait);
++	__poll_t flags = key_to_poll(key);
++
++	/*
++	 * eventfd_read signalize EPOLLOUT at the end of its function - this
++	 * means previous eventfd with its notification value was consumed so
++	 * the next notification can be signalized now if pending - schedule
++	 * proper work.
++	 */
++	if (flags & EPOLLOUT) {
++		up(&acpi_eventfdctx->notification_sem);
++
++		schedule_work(&acpi_eventfdctx->acpi_notification_work);
++	}
++
++	/*
++	 * Even if the eventfd is closed lets still queue notifications so they
++	 * can be replicated when new eventfd is registered (see "Allow eventfd
++	 * to be swapped").
++	 *
++	 * Below will be reached only in case user closes eventfd and then
++	 * trigger eventfd swap (or vice-versa).
++	 */
++	if (flags & EPOLLHUP) {
++		/*
++		 * eventfd_release after signalling EPOLLHUP calls eventfd_ctx_put
++		 * so no need to do it here.
++		 */
++
++		kfree(acpi_eventfdctx);
++	}
++
++	return 0;
++}
++
++static void vfio_ptable_queue_proc(struct file *file,
++				   wait_queue_head_t *wqh, poll_table *pt)
++{
++	struct acpi_eventfd_ctx *acpi_eventfdctx =
++		container_of(pt, struct acpi_eventfd_ctx, pt);
++
++	add_wait_queue(wqh, &acpi_eventfdctx->wait);
++}
++
++static struct notification_queue *
++acpi_notification_dequeue(struct vfio_acpi_notification *acpi_notify)
++{
++	struct notification_queue *oldest_entry;
++
++	lockdep_assert_held(&acpi_notify->notification_list_lock);
++
++	oldest_entry = list_first_entry(&acpi_notify->notification_list,
++					struct notification_queue,
++					node);
++	list_del(&oldest_entry->node);
++	acpi_notify->notification_queue_count--;
++
++	return oldest_entry;
++}
++
++static void acpi_notification_work_fn(struct work_struct *work)
++{
++	struct acpi_eventfd_ctx *acpi_eventfdctx;
++	struct vfio_acpi_notification *acpi_notify;
++	struct notification_queue *entry;
++
++	acpi_eventfdctx = container_of(work, struct acpi_eventfd_ctx,
++				       acpi_notification_work);
++
++	acpi_notify = acpi_eventfdctx->acpi_notify;
++
++	mutex_lock(&acpi_notify->notification_list_lock);
++	if (list_empty(&acpi_notify->notification_list))
++		goto out;
++
++	/*
++	 * If the previous eventfd was not yet consumed by user-space lets hold
++	 * on and exit. The notification function will be rescheduled when
++	 * signaling eventfd will be possible (when the EPOLLOUT will be
++	 * signalized and unlocks notify_events or when eventfd will be swapped).
++	 */
++	if (down_trylock(&acpi_eventfdctx->notification_sem))
++		goto out;
++
++	entry = acpi_notification_dequeue(acpi_notify);
++
++	mutex_unlock(&acpi_notify->notification_list_lock);
++
++	eventfd_signal(acpi_eventfdctx->acpi_notify_trigger, entry->notification_val);
++
++	kfree(entry);
++
++	return;
++out:
++	mutex_unlock(&acpi_notify->notification_list_lock);
++}
++
++static void
++vfio_acpi_notify_cleanup(struct vfio_acpi_notification **acpi_notify_ptr,
++			 struct acpi_device *adev)
++{
++	struct vfio_acpi_notification *acpi_notify = *acpi_notify_ptr;
++	struct acpi_eventfd_ctx *acpi_eventfd = acpi_notify->acpi_eventfd;
++	struct notification_queue *entry, *entry_tmp;
++	u64 cnt;
++
++	eventfd_ctx_remove_wait_queue(acpi_eventfd->acpi_notify_trigger,
++				      &acpi_eventfd->wait, &cnt);
++
++	flush_work(&acpi_eventfd->acpi_notification_work);
++
++	mutex_lock(&acpi_notify->notification_list_lock);
++	list_for_each_entry_safe(entry, entry_tmp,
++				 &acpi_notify->notification_list,
++				 node) {
++		list_del(&entry->node);
++		kfree(entry);
++	}
++	mutex_unlock(&acpi_notify->notification_list_lock);
++
++	eventfd_ctx_put(acpi_eventfd->acpi_notify_trigger);
++
++	/*
++	 * fput releases references to eventfd file but it will not trigger the
++	 * vfio_eventfd_wakeup with EPOLLHUP since eventfd_ctx_remove_wait_queue
++	 * was already called and removed wq entry (wait) from the eventfd
++	 * wq head.
++	 */
++	fput(acpi_eventfd->acpi_notify_trigger_file);
++
++	kfree(acpi_notify->acpi_eventfd);
++	kfree(acpi_notify);
++
++	*acpi_notify_ptr = NULL;
++}
++
++static void vfio_acpi_notify_handler(acpi_handle handle, u32 event, void *data)
++{
++	struct vfio_acpi_notification *acpi_notify = (struct vfio_acpi_notification *)data;
++	struct notification_queue *entry;
++
++	entry = kmalloc(sizeof(*entry), GFP_KERNEL);
++	if (!entry)
++		return;
++
++	entry->notification_val = event;
++	INIT_LIST_HEAD(&entry->node);
++
++	mutex_lock(&acpi_notify->notification_list_lock);
++	if (acpi_notify->notification_queue_count > NOTIFICATION_QUEUE_SIZE) {
++		struct notification_queue *oldest_entry =
++			acpi_notification_dequeue(acpi_notify);
++
++		if (printk_ratelimit())
++			acpi_handle_warn(handle,
++					 "dropping notification value %d\n",
++					 oldest_entry->notification_val);
++
++		kfree(oldest_entry);
++	}
++	list_add_tail(&entry->node, &acpi_notify->notification_list);
++	acpi_notify->notification_queue_count++;
++	mutex_unlock(&acpi_notify->notification_list_lock);
++
++	schedule_work(&acpi_notify->acpi_eventfd->acpi_notification_work);
++}
++
++void vfio_acpi_notify(struct acpi_device *adev, u32 event, void *data)
++{
++	acpi_handle handle = adev->handle;
++
++	vfio_acpi_notify_handler(handle, event, data);
++}
++EXPORT_SYMBOL_GPL(vfio_acpi_notify);
++
++void vfio_remove_acpi_notify(struct vfio_acpi_notification **acpi_notify_ptr,
++			     struct acpi_device *adev)
++{
++	struct vfio_acpi_notification *acpi_notify = *acpi_notify_ptr;
++
++	if (!acpi_notify)
++		return;
++
++	acpi_remove_notify_handler(adev->handle, ACPI_DEVICE_NOTIFY,
++				   vfio_acpi_notify_handler);
++
++	vfio_acpi_notify_cleanup(acpi_notify_ptr, adev);
++}
++EXPORT_SYMBOL_GPL(vfio_remove_acpi_notify);
++
++static void vfio_acpi_eventfd_init(struct vfio_acpi_notification *acpi_notify,
++				   struct eventfd_ctx *efdctx, int32_t fd)
++{
++	struct acpi_eventfd_ctx *acpi_eventfd;
++
++	acpi_eventfd = kzalloc(sizeof(struct acpi_eventfd_ctx), GFP_KERNEL_ACCOUNT);
++
++	INIT_WORK(&acpi_eventfd->acpi_notification_work, acpi_notification_work_fn);
++	acpi_eventfd->acpi_notify_trigger = efdctx;
++
++	sema_init(&acpi_eventfd->notification_sem, 1);
++
++	/*
++	 * Install custom wake-up handler to be notified whenever underlying
++	 * eventfd is consumed by the user-space.
++	 */
++	init_waitqueue_func_entry(&acpi_eventfd->wait, vfio_eventfd_wakeup);
++	init_poll_funcptr(&acpi_eventfd->pt, vfio_ptable_queue_proc);
++
++	acpi_eventfd->acpi_notify_trigger_file = eventfd_fget(fd);
++	vfs_poll(acpi_eventfd->acpi_notify_trigger_file, &acpi_eventfd->pt);
++
++	acpi_eventfd->acpi_notify = acpi_notify;
++	acpi_notify->acpi_eventfd = acpi_eventfd;
++}
++
++int vfio_register_acpi_notify_handler(struct vfio_acpi_notification **acpi_notify_ptr,
++				      struct acpi_device *adev, int32_t fd)
++{
++	struct vfio_acpi_notification *acpi_notify = *acpi_notify_ptr;
++	struct eventfd_ctx *efdctx;
++	acpi_status status;
++
++	if (fd < -1)
++		return -EINVAL;
++	else if (fd == -1) {
++		vfio_remove_acpi_notify(acpi_notify_ptr, adev);
++		return 0;
++	}
++
++	efdctx = eventfd_ctx_fdget(fd);
++	if (IS_ERR(efdctx))
++		return PTR_ERR(efdctx);
++
++	/* Allow eventfd to be swapped */
++	if (acpi_notify) {
++		struct file *trigger_file_before_swap =
++			acpi_notify->acpi_eventfd->acpi_notify_trigger_file;
++
++		/*
++		 * Lets allocate new acpi_eventfd_ctx, the previous is
++		 * alive until eventfd is closed.
++		 */
++		vfio_acpi_eventfd_init(acpi_notify, efdctx, fd);
++
++		/*
++		 * The ACPI notifications could arrive and be queued during
++		 * eventfd swap, retrigger the worker after notification
++		 * replication unlocking.
++		 */
++		schedule_work(&acpi_notify->acpi_eventfd->acpi_notification_work);
++
++		/*
++		 * If the last reference to acpi_notify_trigger_file was
++		 * released, the EPOLLHUP will be handled (but not immediately
++		 * since fput is async).
++		 */
++		fput(trigger_file_before_swap);
++
++		return 0;
++	}
++
++	acpi_notify = kzalloc(sizeof(*acpi_notify), GFP_KERNEL_ACCOUNT);
++	if (!acpi_notify)
++		return -ENOMEM;
++
++	*acpi_notify_ptr = acpi_notify;
++	mutex_init(&acpi_notify->notification_list_lock);
++	INIT_LIST_HEAD(&acpi_notify->notification_list);
++
++	vfio_acpi_eventfd_init(acpi_notify, efdctx, fd);
++
++	status = acpi_install_notify_handler(adev->handle, ACPI_DEVICE_NOTIFY,
++				vfio_acpi_notify_handler, (void *)acpi_notify);
++	if (ACPI_FAILURE(status)) {
++		dev_err(&adev->dev, "Failed to install notify handler: %s",
++			acpi_format_exception(status));
++
++		vfio_acpi_notify_cleanup(acpi_notify_ptr, adev);
++
++		return -ENODEV;
++	}
++
++	return 0;
++}
++EXPORT_SYMBOL_GPL(vfio_register_acpi_notify_handler);
+diff --git a/drivers/vfio/pci/Kconfig b/drivers/vfio/pci/Kconfig
+index f9d0c908e738..f03ca773dfd9 100644
+--- a/drivers/vfio/pci/Kconfig
++++ b/drivers/vfio/pci/Kconfig
+@@ -4,6 +4,7 @@ config VFIO_PCI_CORE
+ 	tristate
+ 	select VFIO_VIRQFD
+ 	select IRQ_BYPASS_MANAGER
++	select VFIO_ACPI_NOTIFY if ACPI
+ 
+ config VFIO_PCI_MMAP
+ 	def_bool y if !S390
+diff --git a/drivers/vfio/pci/vfio_pci_core.c b/drivers/vfio/pci/vfio_pci_core.c
+index a5ab416cf476..1cc4a9c05403 100644
+--- a/drivers/vfio/pci/vfio_pci_core.c
++++ b/drivers/vfio/pci/vfio_pci_core.c
+@@ -27,6 +27,7 @@
+ #include <linux/vgaarb.h>
+ #include <linux/nospec.h>
+ #include <linux/sched/mm.h>
++#include <linux/vfio_acpi_notify.h>
+ #if IS_ENABLED(CONFIG_EEH)
+ #include <asm/eeh.h>
+ #endif
+@@ -683,6 +684,7 @@ void vfio_pci_core_close_device(struct vfio_device *core_vdev)
+ {
+ 	struct vfio_pci_core_device *vdev =
+ 		container_of(core_vdev, struct vfio_pci_core_device, vdev);
++	struct acpi_device *adev = ACPI_COMPANION(&vdev->pdev->dev);
+ 
+ 	if (vdev->sriov_pf_core_dev) {
+ 		mutex_lock(&vdev->sriov_pf_core_dev->vf_token->lock);
+@@ -704,6 +706,8 @@ void vfio_pci_core_close_device(struct vfio_device *core_vdev)
+ 		eventfd_ctx_put(vdev->req_trigger);
+ 		vdev->req_trigger = NULL;
+ 	}
++	if (adev)
++		vfio_remove_acpi_notify(&vdev->acpi_notification, adev);
+ 	mutex_unlock(&vdev->igate);
+ }
+ EXPORT_SYMBOL_GPL(vfio_pci_core_close_device);
+@@ -725,6 +729,8 @@ EXPORT_SYMBOL_GPL(vfio_pci_core_finish_enable);
+ 
+ static int vfio_pci_get_irq_count(struct vfio_pci_core_device *vdev, int irq_type)
+ {
++	struct acpi_device *adev = ACPI_COMPANION(&vdev->pdev->dev);
++
+ 	if (irq_type == VFIO_PCI_INTX_IRQ_INDEX) {
+ 		u8 pin;
+ 
+@@ -761,6 +767,8 @@ static int vfio_pci_get_irq_count(struct vfio_pci_core_device *vdev, int irq_typ
+ 			return 1;
+ 	} else if (irq_type == VFIO_PCI_REQ_IRQ_INDEX) {
+ 		return 1;
++	} else if (adev && irq_type == VFIO_PCI_ACPI_IRQ_INDEX) {
++		return 1;
+ 	}
+ 
+ 	return 0;
+@@ -1084,6 +1092,7 @@ static int vfio_pci_ioctl_get_irq_info(struct vfio_pci_core_device *vdev,
+ 				       struct vfio_irq_info __user *arg)
+ {
+ 	unsigned long minsz = offsetofend(struct vfio_irq_info, count);
++	struct acpi_device *adev = ACPI_COMPANION(&vdev->pdev->dev);
+ 	struct vfio_irq_info info;
+ 
+ 	if (copy_from_user(&info, arg, minsz))
+@@ -1096,6 +1105,10 @@ static int vfio_pci_ioctl_get_irq_info(struct vfio_pci_core_device *vdev,
+ 	case VFIO_PCI_INTX_IRQ_INDEX ... VFIO_PCI_MSIX_IRQ_INDEX:
+ 	case VFIO_PCI_REQ_IRQ_INDEX:
+ 		break;
++	case VFIO_PCI_ACPI_IRQ_INDEX:
++		if (adev)
++			break;
++		return -EINVAL;
+ 	case VFIO_PCI_ERR_IRQ_INDEX:
+ 		if (pci_is_pcie(vdev->pdev))
+ 			break;
+diff --git a/drivers/vfio/pci/vfio_pci_intrs.c b/drivers/vfio/pci/vfio_pci_intrs.c
+index bffb0741518b..27d0c4cdc3c9 100644
+--- a/drivers/vfio/pci/vfio_pci_intrs.c
++++ b/drivers/vfio/pci/vfio_pci_intrs.c
+@@ -19,6 +19,7 @@
+ #include <linux/vfio.h>
+ #include <linux/wait.h>
+ #include <linux/slab.h>
++#include <linux/vfio_acpi_notify.h>
+ 
+ #include "vfio_pci_priv.h"
+ 
+@@ -667,6 +668,71 @@ static int vfio_pci_set_req_trigger(struct vfio_pci_core_device *vdev,
+ 					       count, flags, data);
+ }
+ 
++static int
++vfio_pci_set_acpi_ntfy_trigger(struct vfio_pci_core_device *vdev,
++			       unsigned int index, unsigned int start,
++			       unsigned int count, uint32_t flags, void *data)
++{
++	struct acpi_device *adev = ACPI_COMPANION(&vdev->pdev->dev);
++
++	if (index != VFIO_PCI_ACPI_IRQ_INDEX || start != 0 || count > 1)
++		return -EINVAL;
++
++	if (!adev)
++		return -ENODEV;
++
++	if (!vdev->acpi_notification)
++		return -EINVAL;
++
++	/*
++	 * Disable notifications: flags = (DATA_NONE|ACTION_TRIGGER), count = 0
++	 * Enable loopback testing: (DATA_BOOL|ACTION_TRIGGER) or
++	 *			    (DATA_NONE|ACTION_TRIGGER), count != 0
++	 */
++	if (flags & VFIO_IRQ_SET_DATA_NONE) {
++		if (count)
++			vfio_acpi_notify(adev, ACPI_NOTIFY_DEVICE_CHECK,
++					 vdev->acpi_notification);
++		else
++			vfio_remove_acpi_notify(&vdev->acpi_notification, adev);
++
++		return 0;
++	} else if (flags & VFIO_IRQ_SET_DATA_BOOL) {
++		uint8_t trigger;
++
++		if (!count)
++			return -EINVAL;
++
++		trigger = *(uint8_t *)data;
++		if (trigger)
++			vfio_acpi_notify(adev, ACPI_NOTIFY_DEVICE_CHECK,
++					 vdev->acpi_notification);
++
++		return 0;
++	}
++
++	return -EINVAL;
++}
++
++static int
++vfio_pci_set_acpi_ntfy_eventfd_trigger(struct vfio_pci_core_device *vdev,
++				       unsigned int index, unsigned int start,
++				       unsigned int count, uint32_t flags, void *data)
++{
++	struct acpi_device *adev = ACPI_COMPANION(&vdev->pdev->dev);
++	int32_t fd;
++
++	if (index != VFIO_PCI_ACPI_IRQ_INDEX || start != 0 || count != 1)
++		return -EINVAL;
++
++	if (!adev)
++		return -ENODEV;
++
++	fd = *(int32_t *)data;
++
++	return vfio_register_acpi_notify_handler(&vdev->acpi_notification, adev, fd);
++}
++
+ int vfio_pci_set_irqs_ioctl(struct vfio_pci_core_device *vdev, uint32_t flags,
+ 			    unsigned index, unsigned start, unsigned count,
+ 			    void *data)
+@@ -716,6 +782,20 @@ int vfio_pci_set_irqs_ioctl(struct vfio_pci_core_device *vdev, uint32_t flags,
+ 			break;
+ 		}
+ 		break;
++	case VFIO_PCI_ACPI_IRQ_INDEX:
++		switch (flags & VFIO_IRQ_SET_ACTION_TYPE_MASK) {
++		case VFIO_IRQ_SET_ACTION_TRIGGER:
++			switch (flags & VFIO_IRQ_SET_DATA_TYPE_MASK) {
++			case VFIO_IRQ_SET_DATA_BOOL:
++			case VFIO_IRQ_SET_DATA_NONE:
++				func = vfio_pci_set_acpi_ntfy_trigger;
++				break;
++			case VFIO_IRQ_SET_DATA_EVENTFD:
++				func = vfio_pci_set_acpi_ntfy_eventfd_trigger;
++				break;
++			}
++		}
++		break;
+ 	}
+ 
+ 	if (!func)
+diff --git a/include/linux/vfio_acpi_notify.h b/include/linux/vfio_acpi_notify.h
+new file mode 100644
+index 000000000000..e29e4274d192
+--- /dev/null
++++ b/include/linux/vfio_acpi_notify.h
+@@ -0,0 +1,36 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++/*
++ * VFIO ACPI notification replication
++ *
++ * Author: Grzegorz Jaszczyk <jaz@semihalf.com>
++ */
++#include <linux/acpi.h>
++#include <linux/eventfd.h>
++#include <linux/poll.h>
++
++#ifndef VFIO_ACPI_NOTIFY_H
++#define VFIO_ACPI_NOTIFY_H
++
++struct vfio_acpi_notification;
++
++#if IS_ENABLED(CONFIG_ACPI)
++void vfio_acpi_notify(struct acpi_device *adev, u32 event, void *data);
++int vfio_register_acpi_notify_handler(struct vfio_acpi_notification **acpi_notify,
++				      struct acpi_device *adev, int32_t fd);
++void vfio_remove_acpi_notify(struct vfio_acpi_notification **acpi_notify,
++			     struct acpi_device *adev);
++#else
++static inline void vfio_acpi_notify(struct acpi_device *adev, u32 event, void *data) {}
++static inline int
++vfio_register_acpi_notify_handler(struct vfio_acpi_notification **acpi_notify,
++				  struct acpi_device *adev, int32_t fd)
++{
++	return -ENODEV;
++}
++
++static inline void
++vfio_remove_acpi_notify(struct vfio_acpi_notification **acpi_notify,
++			struct acpi_device *adev) {}
++#endif /* CONFIG_ACPI */
++
++#endif /* VFIO_ACPI_NOTIFY_H */
+diff --git a/include/linux/vfio_pci_core.h b/include/linux/vfio_pci_core.h
+index 367fd79226a3..a4491b3d8064 100644
+--- a/include/linux/vfio_pci_core.h
++++ b/include/linux/vfio_pci_core.h
+@@ -96,6 +96,7 @@ struct vfio_pci_core_device {
+ 	struct mutex		vma_lock;
+ 	struct list_head	vma_list;
+ 	struct rw_semaphore	memory_lock;
++	struct vfio_acpi_notification	*acpi_notification;
+ };
+ 
+ /* Will be exported for vfio pci drivers usage */
+diff --git a/include/uapi/linux/vfio.h b/include/uapi/linux/vfio.h
+index b71276bd7f91..ee8ba6354662 100644
+--- a/include/uapi/linux/vfio.h
++++ b/include/uapi/linux/vfio.h
+@@ -625,6 +625,7 @@ enum {
+ 	VFIO_PCI_MSIX_IRQ_INDEX,
+ 	VFIO_PCI_ERR_IRQ_INDEX,
+ 	VFIO_PCI_REQ_IRQ_INDEX,
++	VFIO_PCI_ACPI_IRQ_INDEX,
+ 	VFIO_PCI_NUM_IRQS
+ };
+ 
+-- 
+2.41.0.255.g8b1d071c50-goog
+
