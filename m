@@ -2,78 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95B76743AC1
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 13:24:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DE42743AC9
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 13:25:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232741AbjF3LYM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 07:24:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34486 "EHLO
+        id S232347AbjF3LZZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Jun 2023 07:25:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232317AbjF3LYD (ORCPT
+        with ESMTP id S231743AbjF3LZX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 07:24:03 -0400
-Received: from mail-io1-f54.google.com (mail-io1-f54.google.com [209.85.166.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10189C0;
-        Fri, 30 Jun 2023 04:24:01 -0700 (PDT)
-Received: by mail-io1-f54.google.com with SMTP id ca18e2360f4ac-7835ffc53bfso43805839f.1;
-        Fri, 30 Jun 2023 04:24:01 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688124240; x=1690716240;
-        h=date:subject:message-id:references:in-reply-to:cc:to:from
-         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=0xQcHCEfZmuNEbtp3cdeH3UJbr+AqROplj2X1YQLpNg=;
-        b=eqSpGMpIKL6j4hfSmm1ol3tm5fVYXDpk4hjMbeePr6rbe/U6dtXiWLh4yZ0dEyggNV
-         XToo9CL3EH9XlGFCfJCX8lu6uSLvDt0yFNKLWV5W+x9+W1TCQJFrWL3LiB14E/qwaKlk
-         As8o8ZTfF8g8tBBvIu3IgkXSnxBHyXHs+bkjGDorEI7g7/d5Ngcplam/2F3zox/FjUZW
-         cEmqjB6WzN+jD6XCGsBXwEMy63RWO3oDWgx9EQKpeMDgfTex4WHSoLhPJbR7vinsXGPJ
-         orLmlmK5JVyZIc46R/Aig+PRRMPCHPG3f7cJ6E0MVaINpOdaGnF1RXnnY5sTP4OPirFr
-         iOsw==
-X-Gm-Message-State: AC+VfDz7bfy7xBFjDSFHpBniS27ndV/jobJ4qyqhBYw99R6WUyYzb7lf
-        KpVN1SkhlcJ2ND9vQyAp+VZcTR8AkA==
-X-Google-Smtp-Source: ACHHUZ5xH1J9xSD1ATB7C+2MVvmjFL+cw3O4K/E8UXcBMl92pRkMHx8HlcLX/wo2pE27VaghmDzUrQ==
-X-Received: by 2002:a6b:a1a:0:b0:783:3899:e1d7 with SMTP id z26-20020a6b0a1a000000b007833899e1d7mr1960946ioi.2.1688124240296;
-        Fri, 30 Jun 2023 04:24:00 -0700 (PDT)
-Received: from robh_at_kernel.org ([64.188.179.250])
-        by smtp.gmail.com with ESMTPSA id y13-20020a5e920d000000b00786582eb9fbsm29977iop.15.2023.06.30.04.23.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 30 Jun 2023 04:23:59 -0700 (PDT)
-Received: (nullmailer pid 1082768 invoked by uid 1000);
-        Fri, 30 Jun 2023 11:23:54 -0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+        Fri, 30 Jun 2023 07:25:23 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6DDD19BA
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 04:25:21 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4525961722
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 11:25:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25BA3C433C8;
+        Fri, 30 Jun 2023 11:25:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688124320;
+        bh=X31RKRIHXlJbmFQz+NTD/ZkZDT5OmzkD7mBCLIY1Www=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=MOWRoCccKwwIA7EnL67Jli7SOaLQnESZ35Ce3qY46kJyS74eyJYqXBL03LYzlEdmi
+         SFvnMyPJm2CeUZMM3SCh85nQlyHJnm0sP6uwtiI2bB+wG3alqnWeNHp7TDlhgCiucx
+         88tIPnlUXKVP3JsP076UGn1UAhViduqENAa8u3unLSnbR8tXAbzn7ncws67YNEEZE6
+         kJzbwe0zs9nHeJWvOx17qtCkkhRe6FHzyRbtetl9S+U/2ww863XMKAnuViGC0XCSKc
+         crHytPY6oNSVaMEyQOvbKNglrzyobWjwaneXnesGW3REXzzNtBQ8EQeYPZl5n9F9za
+         K6XWuipXJI2qg==
+Date:   Fri, 30 Jun 2023 13:25:17 +0200
+From:   Frederic Weisbecker <frederic@kernel.org>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Anna-Maria Behnsen <anna-maria@linutronix.de>,
+        John Stultz <jstultz@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Oleg Nesterov <oleg@redhat.com>
+Subject: Re: [patch 14/45] posix-timers: Consolidate interval retrieval
+Message-ID: <ZJ67nQ6Q8F3mu6Jb@lothringen>
+References: <20230606132949.068951363@linutronix.de>
+ <20230606142031.816970056@linutronix.de>
+ <ZJww66Svi84Bvw9Z@localhost.localdomain>
+ <87ttuq14xp.ffs@tglx>
 MIME-Version: 1.0
-From:   Rob Herring <robh@kernel.org>
-To:     Julien Stephan <jstephan@baylibre.com>
-Cc:     linux-mediatek@lists.infradead.org,
-        daoyuan huang <daoyuan.huang@mediatek.com>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Phi-bang Nguyen <pnguyen@baylibre.com>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Louis Kuo <louis.kuo@mediatek.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Andy Hsieh <andy.hsieh@mediatek.com>,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Ping-Hsun Wu <ping-hsun.wu@mediatek.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Moudy Ho <moudy.ho@mediatek.com>,
-        Florian Sylvestre <fsylvestre@baylibre.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-In-Reply-To: <20230630100321.1951138-4-jstephan@baylibre.com>
-References: <20230630100321.1951138-1-jstephan@baylibre.com>
- <20230630100321.1951138-4-jstephan@baylibre.com>
-Message-Id: <168812423413.1082731.16618986920467028772.robh@kernel.org>
-Subject: Re: [PATCH v2 3/4] dt-bindings: media: add mediatek ISP3.0 camsv
-Date:   Fri, 30 Jun 2023 05:23:54 -0600
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <87ttuq14xp.ffs@tglx>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,50 +65,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On Fri, 30 Jun 2023 12:01:52 +0200, Julien Stephan wrote:
-> From: Phi-bang Nguyen <pnguyen@baylibre.com>
+On Thu, Jun 29, 2023 at 08:47:30PM +0200, Thomas Gleixner wrote:
+> On Wed, Jun 28 2023 at 15:08, Frederic Weisbecker wrote:
 > 
-> This adds the bindings, for the ISP3.0 camsv module embedded in
-> some Mediatek SoC, such as the mt8365
+> > Le Tue, Jun 06, 2023 at 04:37:40PM +0200, Thomas Gleixner a écrit :
+> >> There is no point to collect the current interval in the posix clock
+> >> specific settime() and gettime() callbacks. Just do it right in the common
+> >> code.
+> >> 
+> >> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+> >
+> > The only difference I see is that we now return the old interval
+> > even if the target is reaped, which probably doesn't matter anyway.
 > 
-> Signed-off-by: Phi-bang Nguyen <pnguyen@baylibre.com>
-> Signed-off-by: Julien Stephan <jstephan@baylibre.com>
-> ---
->  .../bindings/media/mediatek,mt8365-camsv.yaml | 113 ++++++++++++++++++
->  MAINTAINERS                                   |   1 +
->  2 files changed, 114 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/media/mediatek,mt8365-camsv.yaml
-> 
+> But we don't return it to user space because ret != 0 in that case.
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+In the case of ->set yes but in the case of ->get there is no error
+handling.
 
-yamllint warnings/errors:
+But still this shouldn't matter as the task is fetched under rcu protection.
+And also it can be reaped by the time we return to userspace, so this is
+inherently racy. Well, the effect could be visible if current is the reaper
+and it has reaped the target already, then it could expect a 0 value in the
+interval. I don't think we care though.
 
-dtschema/dtc warnings/errors:
-Documentation/devicetree/bindings/media/mediatek,mt8365-camsv.example.dts:28:18: fatal error: dt-bindings/power/mediatek,mt8365-power.h: No such file or directory
-   28 |         #include <dt-bindings/power/mediatek,mt8365-power.h>
-      |                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-compilation terminated.
-make[1]: *** [scripts/Makefile.lib:419: Documentation/devicetree/bindings/media/mediatek,mt8365-camsv.example.dtb] Error 1
-make[1]: *** Waiting for unfinished jobs....
-make: *** [Makefile:1512: dt_binding_check] Error 2
-
-doc reference errors (make refcheckdocs):
-
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230630100321.1951138-4-jstephan@baylibre.com
-
-The base for the series is generally the latest rc1. A different dependency
-should be noted in *this* patch.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit after running the above command yourself. Note
-that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-your schema. However, it must be unset to test all examples with your schema.
-
+Thanks.
