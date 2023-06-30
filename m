@@ -2,71 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 338C3743ABA
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 13:23:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C16EA743ABF
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 13:24:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232880AbjF3LXC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 07:23:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33880 "EHLO
+        id S231979AbjF3LYB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Jun 2023 07:24:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232515AbjF3LW5 (ORCPT
+        with ESMTP id S229968AbjF3LX7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 07:22:57 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE80AC0;
-        Fri, 30 Jun 2023 04:22:54 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8AD8961727;
-        Fri, 30 Jun 2023 11:22:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 014F5C433B6;
-        Fri, 30 Jun 2023 11:22:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688124174;
-        bh=HIgffZnOosSIcjOP1dB+R/SNrBLEPOgvVYTtQ+OoMbc=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=iC9Y0Eb2Z2MrXa6Y0C3L0itdnUhM4boFSN3EVF2hfwwESwXo2f0xnysTU4DH55i8q
-         LPRCqB1weLDnb1l/6wVnR26XX6yvfBBjDiwiCnWAD+1Q8tj7lgbNPv9QNYG3oXhCYi
-         jhoRAa0IscmrtkjZetLnY0SUfy6bT1P9ix6uoengTcF8SfJxq6sRNwBBw6YKmaHmat
-         Hk+finD67UsNPxNmVWFr5EqEGCImxrkyJfW4S0fSJo6AEaxNGlsb1/ODu+nXFEyQHL
-         DDaDryi0GmannFjCqZzQhFhLnJK/4U5QqwMzl9zCmtDH7+5Z/gF0qyEkmHLaUvG2DI
-         YLz91LavDYzNw==
-Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-3fb4146e8deso21799755e9.0;
-        Fri, 30 Jun 2023 04:22:53 -0700 (PDT)
-X-Gm-Message-State: ABy/qLa7F0EXPppSbihLT1r4Fb/1QDkAsvTj4CwfD6AKtaGaYkAu9c7+
-        kIs72V3WZCiDdGX4O+KdJrnpsWFdul48ZW66ehk=
-X-Google-Smtp-Source: APBJJlEl3R3agomzm6d8TGvRI5Iv/j9uIUWV2C5RvtxdK+YCyx2E8/q4piZNcSGztOcV2x6OLVr/LPL52UVCqEccBUc=
-X-Received: by 2002:a7b:c3c1:0:b0:3fb:c77e:80f6 with SMTP id
- t1-20020a7bc3c1000000b003fbc77e80f6mr1426408wmj.36.1688124172132; Fri, 30 Jun
- 2023 04:22:52 -0700 (PDT)
+        Fri, 30 Jun 2023 07:23:59 -0400
+Received: from mail-il1-f177.google.com (mail-il1-f177.google.com [209.85.166.177])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E8C9C0;
+        Fri, 30 Jun 2023 04:23:58 -0700 (PDT)
+Received: by mail-il1-f177.google.com with SMTP id e9e14a558f8ab-345a41cebc5so7570895ab.2;
+        Fri, 30 Jun 2023 04:23:58 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688124237; x=1690716237;
+        h=date:subject:message-id:references:in-reply-to:cc:to:from
+         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=qTDuY1fub/AlYVcXZL8jYlsmiEw4GE6gVtFVz9G9Nys=;
+        b=O9zu7IgwB7UzYsxeosCq1x/73YqRVSx0cKp6HxfFhi0FN/q7Duwipn0XJpHXCUIqbe
+         8jzXR4T5DOGPsS1iKUi4hkIjbwCCErgI4BaaNNCroNHF7J/d3CHF3lTpb/tGMUhmmsJG
+         F+4ZKOoAjUWkoRPSMFIlmTS98m53j3iI5hSuUiYVwlZbkK1jTsqP4tbDUtHB+aWuCnT4
+         32/G+AaA8vDikjmnynfxbz/7HfJvtYwIlEkN0OyC/eIBycyscXnbPbPIQg9z2OYQr5rT
+         mg6+4BW18MkSQB6wM/E0qMMTpKqLy8lsqImyo53CDETPbfp0Vk+klOKZeMS37nuBMUJ1
+         hH6A==
+X-Gm-Message-State: AC+VfDznIyWFnU8YvAV6mySvnanBoUL2yT8JhYNIY+le+BgHRLuT1BF8
+        qS9+p5oufGQSZCuE2FsaBzhWKbNdUw==
+X-Google-Smtp-Source: ACHHUZ7DcLDIREaS/YBHqwtSxRlaLvmAB1fHHkDnsf1HSnobtWWdY9D3unVpsCudqGOJcAmi/2q4tw==
+X-Received: by 2002:a05:6602:3056:b0:783:67a3:a69f with SMTP id p22-20020a056602305600b0078367a3a69fmr2672870ioy.18.1688124237219;
+        Fri, 30 Jun 2023 04:23:57 -0700 (PDT)
+Received: from robh_at_kernel.org ([64.188.179.250])
+        by smtp.gmail.com with ESMTPSA id e15-20020a056638020f00b0042ae858d84dsm2191300jaq.88.2023.06.30.04.23.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 30 Jun 2023 04:23:56 -0700 (PDT)
+Received: (nullmailer pid 1082765 invoked by uid 1000);
+        Fri, 30 Jun 2023 11:23:54 -0000
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 MIME-Version: 1.0
-References: <20230222033021.983168-1-guoren@kernel.org> <20230222033021.983168-5-guoren@kernel.org>
- <ZJ2PBosSQtSX28Mf@wychelm> <CAJF2gTRPYDxDpia=o6oqbt_8_5hqAQk-pwY1uPwUjcxCFg1EPw@mail.gmail.com>
-In-Reply-To: <CAJF2gTRPYDxDpia=o6oqbt_8_5hqAQk-pwY1uPwUjcxCFg1EPw@mail.gmail.com>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Fri, 30 Jun 2023 07:22:40 -0400
-X-Gmail-Original-Message-ID: <CAJF2gTTRViivgy3njDc1k7A-jaSFUsyo2VPg2JwEAwx=H3mR4w@mail.gmail.com>
-Message-ID: <CAJF2gTTRViivgy3njDc1k7A-jaSFUsyo2VPg2JwEAwx=H3mR4w@mail.gmail.com>
-Subject: Re: [PATCH -next V17 4/7] riscv: entry: Convert to generic entry
-To:     Daniel Thompson <daniel.thompson@linaro.org>
-Cc:     arnd@arndb.de, palmer@rivosinc.com, tglx@linutronix.de,
-        peterz@infradead.org, luto@kernel.org, conor.dooley@microchip.com,
-        heiko@sntech.de, jszhang@kernel.org, lazyparser@gmail.com,
-        falcon@tinylab.org, chenhuacai@kernel.org, apatel@ventanamicro.com,
-        atishp@atishpatra.org, mark.rutland@arm.com, ben@decadent.org.uk,
-        bjorn@kernel.org, palmer@dabbelt.com, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        Guo Ren <guoren@linux.alibaba.com>,
-        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@rivosinc.com>,
-        Yipeng Zou <zouyipeng@huawei.com>,
-        Vincent Chen <vincent.chen@sifive.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+From:   Rob Herring <robh@kernel.org>
+To:     Julien Stephan <jstephan@baylibre.com>
+Cc:     Sumanth Korikkar <sumanthk@linux.ibm.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        devicetree@vger.kernel.org,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Moudy Ho <moudy.ho@mediatek.com>, linux-media@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Phi-Bang Nguyen <pnguyen@baylibre.com>,
+        linux-mediatek@lists.infradead.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Ping-Hsun Wu <ping-hsun.wu@mediatek.com>,
+        Louis Kuo <louis.kuo@mediatek.com>,
+        Andy Hsieh <andy.hsieh@mediatek.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Florian Sylvestre <fsylvestre@baylibre.com>,
+        daoyuan huang <daoyuan.huang@mediatek.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        linux-kernel@vger.kernel.org,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>
+In-Reply-To: <20230630100321.1951138-2-jstephan@baylibre.com>
+References: <20230630100321.1951138-1-jstephan@baylibre.com>
+ <20230630100321.1951138-2-jstephan@baylibre.com>
+Message-Id: <168812423326.1082703.10045152844736741396.robh@kernel.org>
+Subject: Re: [PATCH v2 1/4] dt-bindings: media: add mediatek ISP3.0 sensor
+ interface
+Date:   Fri, 30 Jun 2023 05:23:54 -0600
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,118 +85,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 30, 2023 at 7:16=E2=80=AFAM Guo Ren <guoren@kernel.org> wrote:
->
-> On Thu, Jun 29, 2023 at 10:02=E2=80=AFAM Daniel Thompson
-> <daniel.thompson@linaro.org> wrote:
-> >
-> > On Tue, Feb 21, 2023 at 10:30:18PM -0500, guoren@kernel.org wrote:
-> > > From: Guo Ren <guoren@linux.alibaba.com>
-> > >
-> > > This patch converts riscv to use the generic entry infrastructure fro=
-m
-> > > kernel/entry/*. The generic entry makes maintainers' work easier and
-> > > codes more elegant. Here are the changes:
-> > >
-> > >  - More clear entry.S with handle_exception and ret_from_exception
-> > >  - Get rid of complex custom signal implementation
-> > >  - Move syscall procedure from assembly to C, which is much more
-> > >    readable.
-> > >  - Connect ret_from_fork & ret_from_kernel_thread to generic entry.
-> > >  - Wrap with irqentry_enter/exit and syscall_enter/exit_from_user_mod=
-e
-> > >  - Use the standard preemption code instead of custom
-> > >
-> > > Suggested-by: Huacai Chen <chenhuacai@kernel.org>
-> > > Reviewed-by: Bj=C3=B6rn T=C3=B6pel <bjorn@rivosinc.com>
-> > > Tested-by: Yipeng Zou <zouyipeng@huawei.com>
-> > > Tested-by: Jisheng Zhang <jszhang@kernel.org>
-> > > Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-> > > Signed-off-by: Guo Ren <guoren@kernel.org>
-> > > Cc: Ben Hutchings <ben@decadent.org.uk>
-> >
-> > Apologies for the late feedback but I've been swamped lately and only
-> > recently got round to running the full kgdb test suite on the v6.4
-> > series.
-> >
-> > The kgdb test suite includes a couple of tests that verify that the
-> > system resumes after breakpointing due to a BUG():
-> > https://github.com/daniel-thompson/kgdbtest/blob/master/tests/test_kdb_=
-fault_injection.py#L24-L45
-> >
-> > These tests have regressed on riscv between v6.3 and v6.4 and a bisect
-> > is pointing at this patch. With these changes in place then, after kdb
-> > resumes the system, the BUG() message is printed as normal but then
-> > immediately fails. From the backtrace it looks like the new entry/exit
-> > code cannot advance past a compiled breakpoint instruction:
-> > ~~~
-> > PANIC: Fatal exception in interrupt
-> It comes from:
-> void die(struct pt_regs *regs, ...
-> {
-> ...
-> if (in_interrupt())
->         panic("Fatal exception in interrupt");
-> ...
->
-> We could add a dump_backtrace to see what happened:
-> if (in_interrupt()) {
-> +      dump_backtrace(regs, NULL, KERN_DEFAULT);
-Sorry, it should be:
-+        dump_backtrace(NULL, NULL, KERN_DEFAULT);
-We need current stack info, not exception context.
 
+On Fri, 30 Jun 2023 12:01:50 +0200, Julien Stephan wrote:
+> From: Louis Kuo <louis.kuo@mediatek.com>
+> 
+> This adds the bindings, for the mediatek ISP3.0 SENINF module embedded in
+> some Mediatek SoC, such as the mt8365
+> 
+> Signed-off-by: Louis Kuo <louis.kuo@mediatek.com>
+> Signed-off-by: Phi-Bang Nguyen <pnguyen@baylibre.com>
+> Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> Signed-off-by: Julien Stephan <jstephan@baylibre.com>
+> ---
+>  .../media/mediatek,mt8365-seninf.yaml         | 295 ++++++++++++++++++
+>  MAINTAINERS                                   |   7 +
+>  2 files changed, 302 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/media/mediatek,mt8365-seninf.yaml
+> 
 
->         panic("Fatal exception in interrupt");
-> }
->
->
->
-> >
-> > Entering kdb (current=3D0xff60000001a2a280, pid 104) on processor 1 due=
- to
-> > NonMask
-> > able Interrupt @ 0xffffffff800bb3c4
-> > [1]kdb> bt
-> > Stack traceback for pid 104
-> > 0xff60000001a2a280      104       92  1    1   R  0xff60000001a2ac50
-> > *echo
-> > CPU: 1 PID: 104 Comm: echo Tainted: G      D
-> > 6.3.0-rc1-00003-gf0bddf50586d #119
-> > Hardware name: riscv-virtio,qemu (DT)
-> > Call Trace:
-> > [<ffffffff800050dc>] dump_backtrace+0x1c/0x24
-> > [<ffffffff808458f8>] show_stack+0x2c/0x38
-> > [<ffffffff80851b00>] dump_stack_lvl+0x3c/0x54
-> > [<ffffffff80851b2c>] dump_stack+0x14/0x1c
-> > [<ffffffff800bc4b8>] kdb_dump_stack_on_cpu+0x64/0x66
-> > [<ffffffff800c3d2a>] kdb_show_stack+0x82/0x88
-> > [<ffffffff800c3dc0>] kdb_bt1+0x90/0xf2
-> > [<ffffffff800c4206>] kdb_bt+0x34c/0x384
-> > [<ffffffff800c1d28>] kdb_parse+0x27a/0x618
-> > [<ffffffff800c2566>] kdb_main_loop+0x3b2/0x8fa
-> > [<ffffffff800c4c5a>] kdb_stub+0x1ba/0x3a8
-> > [<ffffffff800bbba8>] kgdb_cpu_enter+0x342/0x5ba
-> > [<ffffffff800bc3da>] kgdb_handle_exception+0xe0/0x11a
-> > [<ffffffff8000810c>] kgdb_riscv_notify+0x86/0xb4
-> > [<ffffffff8002f210>] notify_die+0x6a/0xa6
-> > [<ffffffff80004db0>] handle_break+0x70/0xe0
-> > [<ffffffff80852462>] do_trap_break+0x48/0x5c
-> > [<ffffffff80003598>] ret_from_exception+0x0/0x64
-> > [<ffffffff800bb3c4>] kgdb_compiled_break+0x0/0x14
-> > ~~~
-> >
-> >
-> > Daniel.
->
->
->
-> --
-> Best Regards
->  Guo Ren
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
+yamllint warnings/errors:
 
+dtschema/dtc warnings/errors:
+Documentation/devicetree/bindings/media/mediatek,mt8365-seninf.example.dts:28:18: fatal error: dt-bindings/power/mediatek,mt8365-power.h: No such file or directory
+   28 |         #include <dt-bindings/power/mediatek,mt8365-power.h>
+      |                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+compilation terminated.
+make[1]: *** [scripts/Makefile.lib:419: Documentation/devicetree/bindings/media/mediatek,mt8365-seninf.example.dtb] Error 1
+make[1]: *** Waiting for unfinished jobs....
+make: *** [Makefile:1512: dt_binding_check] Error 2
 
---
-Best Regards
- Guo Ren
+doc reference errors (make refcheckdocs):
+
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230630100321.1951138-2-jstephan@baylibre.com
+
+The base for the series is generally the latest rc1. A different dependency
+should be noted in *this* patch.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit after running the above command yourself. Note
+that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+your schema. However, it must be unset to test all examples with your schema.
+
