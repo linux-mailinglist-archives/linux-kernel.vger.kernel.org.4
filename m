@@ -2,114 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34057743190
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 02:21:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 546E6743191
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 02:23:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232088AbjF3AVz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 20:21:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50800 "EHLO
+        id S232173AbjF3AXQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 20:23:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229700AbjF3AVu (ORCPT
+        with ESMTP id S230036AbjF3AXO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 20:21:50 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD5DB2D62;
-        Thu, 29 Jun 2023 17:21:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1688084501;
-        bh=vt6/RnuSiSReNKf6aSQIzd35ALzFzJ90RoWD7TGrads=;
-        h=Date:From:To:Cc:Subject:From;
-        b=BsrY9fG7XzuEgXk+vI+SJ1uwmL3NbN1AzafgjXxh5CdAjYbCQpdv/QS3GHGcNpUAa
-         OpfdzpZUskyRu5x13mgbZYpxS8D4dmiYdkz/qW6tWxTaTrQhlFBvOlbAZbEDAGP6BB
-         FOnwe1LyP537s0DPqZYccoYwa+RgVS5awllhfWZwXf7a+A7Drd82cUVRYa1cmqWPG2
-         VJwxhxcXjGGPNbpTvwDXdQS4Eo2qkN6xSbBOPazv9S4OO7AgFVSHNqPDkM8rPPZS+t
-         WRQnS6/dIxGW5XTe68ziEb4SUp8wBLMg85EgsZZnD7nn0xygKCKFbeyeI0WRk0RXic
-         LZHn0FOAnRLlw==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        Thu, 29 Jun 2023 20:23:14 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAD822D78
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 17:23:13 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QsbbT3phjz4wb2;
-        Fri, 30 Jun 2023 10:21:41 +1000 (AEST)
-Date:   Fri, 30 Jun 2023 10:21:39 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Marcel Holtmann <marcel@holtmann.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: duplicate patches in the bluetooth tree
-Message-ID: <20230630102139.12a3ce8d@canb.auug.org.au>
-MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/OnCSlzEEdcFJwruZ+pV7ON0";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 89A126167E
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 00:23:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id E9553C433C0;
+        Fri, 30 Jun 2023 00:23:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688084593;
+        bh=4D80tJAtN1aaG+JPSSDIV/UPKKZefMl3hzH2wq2ZLEQ=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=gsNj7MbFL+buphbRQTuTjLuh2PKUf3yhWOYkQV8TQD0btV6FOwa8tu5SzaIsEK2/R
+         UrJCxb9p4+cJn4z1zv2GJL/vIHug0vSSGMlQWfon+HTqeYQy8V8nMJjbkKkUACv8q9
+         hIZVFro69TT5R9mQVR0cW0/wYPtSqv3Z6DVjLPOiTzlLm7L2QWg6FBR32rU3nB8Vmc
+         zwk3aS4gsFqLxGpWpA5lwzOXVjxlMfeGVqHX9su0VHpiYATjQRdtxrVKWLKOEa01Zn
+         gXeubc2zRC3MbaD9L9hnwCyUBO9HOhGUqfr9CBwMWcm2QtreFdjV3eYM5Oc5KkFAS7
+         bWO7aAzGmDy4A==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id D5E9CE5381B;
+        Fri, 30 Jun 2023 00:23:12 +0000 (UTC)
+Subject: Re: [GIT PULL] slab updates for 6.5
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <1c39c9b0-ec37-f910-2b09-cedf7acf6e91@suse.cz>
+References: <1c39c9b0-ec37-f910-2b09-cedf7acf6e91@suse.cz>
+X-PR-Tracked-List-Id: <patches.lists.linux.dev>
+X-PR-Tracked-Message-Id: <1c39c9b0-ec37-f910-2b09-cedf7acf6e91@suse.cz>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/vbabka/slab.git tags/slab-for-6.5
+X-PR-Tracked-Commit-Id: 7bc162d5cc4de5c33c5570dba2719a01506a9fd0
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 632f54b4d60bfe0701f43d0bc387928de6e3dcfb
+Message-Id: <168808459286.18676.11809401059160966086.pr-tracker-bot@kernel.org>
+Date:   Fri, 30 Jun 2023 00:23:12 +0000
+To:     Vlastimil Babka <vbabka@suse.cz>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Christoph Lameter <cl@linux.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>, patches@lists.linux.dev,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
+        Jesper Dangaard Brouer <brouer@redhat.com>,
+        David Sterba <dsterba@suse.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/OnCSlzEEdcFJwruZ+pV7ON0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+The pull request you sent on Tue, 27 Jun 2023 09:37:55 +0200:
 
-Hi all,
+> git://git.kernel.org/pub/scm/linux/kernel/git/vbabka/slab.git tags/slab-for-6.5
 
-The following commits are also in net tree as different commits (but
-the same patches):
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/632f54b4d60bfe0701f43d0bc387928de6e3dcfb
 
-  0d4cc72dd9db ("Bluetooth: hci_bcm: do not mark valid bd_addr as invalid")
-  1155a833ed0d ("Bluetooth: MGMT: Fix marking SCAN_RSP as not connectable")
-  14dc3f27c944 ("Bluetooth: btrtl: Add missing MODULE_FIRMWARE declarations=
-")
-  15d74ca10a2e ("Bluetooth: L2CAP: Fix use-after-free in l2cap_sock_ready_c=
-b")
-  289bfc8d7dfd ("Bluetooth: L2CAP: Fix use-after-free")
-  3945d329465e ("Bluetooth: ISO: Rework sync_interval to be sync_factor")
-  41696c5c9627 ("Bluetooth: hci_event: fix Set CIG Parameters error status =
-handling")
-  49c5fe08def9 ("Bluetooth: btusb: Add MT7922 bluetooth ID for the Asus All=
-y")
-  5a06716bc727 ("Bluetooth: fix use-bdaddr-property quirk")
-  7a26cd876524 ("Bluetooth: hci_sysfs: make bt_class a static const structu=
-re")
-  8900ccc56ad3 ("Bluetooth: btusb: Add device 6655:8771 to device tables")
-  b3d9018d9254 ("Bluetooth: fix invalid-bdaddr quirk for non-persistent set=
-up")
-  dbc333d3abdf ("Bluetooth: btqca: use le32_to_cpu for ver.soc_id")
-  eee96e90b646 ("Bluetooth: hci_conn: Use kmemdup() to replace kzalloc + me=
-mcpy")
+Thank you!
 
-Some of these are causing unnecessary conflicts when I merge the
-bluetooth tree.  Is there anything in the bluetooth tree (that is not in
-the net-next or net trees) that is destined for the current merge window?
-If not, then please just rename the master branch to something else and
-recreate a new master branch to be somewhere in Linus' tree or the net-dev
-tree until after the merge window closes.
-
-I am also still reverting "Bluetooth: hci_sock: Forward credentials
-to monitor".
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/OnCSlzEEdcFJwruZ+pV7ON0
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmSeIBMACgkQAVBC80lX
-0GzCKQf/d9FIdSbBEeajh5E7cXDzvexU/NBwFh5JHmNv9jTYZTYOuZoryib3gWbj
-ZY3PNAPm+MH1ihGaCtgT5MLMNl5s6WBhfajbiMY1mXIhHVYKS1Kk54ox0I47t+9e
-QMwrI1ZQBUqFK6CBId5RnaTWcjvoAT+Rru7CVE6Aawp6xrqrhHYsNPSj1mndmrFq
-2VI7G04IxTJ9bYVvBxMOok/eqT6hdPq0bdx3OHqH+V+xtY4M+Lz64pmRFSPLKKk4
-oOI8dPLve92uonfnblFFlhKwXzIIjhFT3YEfgsLTSfOHNnEbu89GcChOO7eyPWS+
-tJoPDIKB7Wpsm3YKLRKjK8VPyQvYTg==
-=vHp8
------END PGP SIGNATURE-----
-
---Sig_/OnCSlzEEdcFJwruZ+pV7ON0--
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
