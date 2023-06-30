@@ -2,134 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BA58743E45
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 17:06:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2748B743DF1
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 16:53:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232478AbjF3PGd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 11:06:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59030 "EHLO
+        id S232790AbjF3Oxt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Jun 2023 10:53:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232931AbjF3PG3 (ORCPT
+        with ESMTP id S231657AbjF3Oxr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 11:06:29 -0400
-Received: from mo4-p01-ob.smtp.rzone.de (unknown [81.169.146.166])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C04E3C14;
-        Fri, 30 Jun 2023 08:06:19 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1688136804; cv=none;
-    d=strato.com; s=strato-dkim-0002;
-    b=ktQWRloAJVcbtfzrwy7QVJMfZYy4BWWVjmUnPf5NL47XUIoo2h2XF5m496FyVmK59f
-    Jure2X4x2FXITqAPDvytbcGH/plEu0Ir1NS59iS6xm4CYzAFLvY0YXxXdAXgEMD5juCK
-    PLrfx5/wpjEajxzFuEbmd4FnaVdyI4OXDrDqgSQtV1VHeJrqpvhPEvjHvwegTlcG+674
-    cZCcEQJwWuqowQPaiatkm1mIpkqkt67MQGuKt8XDSNOebpyK2CokqgzJ+47LAGskQlZl
-    Ap3eT1iZ/63HV+Kd/I0ZgMMiDRSuU5eLUlLzn5XlUp44nvseCfYudELwf60T6YMFJFR3
-    hlag==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1688136804;
-    s=strato-dkim-0002; d=strato.com;
-    h=Message-Id:Date:Subject:Cc:To:From:Cc:Date:From:Subject:Sender;
-    bh=3v9FwKwabXm3VhIGPqHolyELPsxinvnAmxZlzv2LbiI=;
-    b=sMGy9vkeo4NgzYHgfB0DQFmQqVMbUEs7H2EoBi9KokQIPmhvbogESQxzHlzvV7Yyat
-    z4LNi/ZuvybenLmXsXId/aow0xq4QPXIm8ctX9/ClEOjy0568svuJVZ6uAtHMpZuft+J
-    oHWTfEMG5TyvNd5Qg5X8UG8agVi7PJpphXhdR0N/2g2jeQHn3HhItS6UruFB3zGQeV5a
-    FqNgBj9bVl5GMxWovb3iBcteo9LHcJv890aeg/ZCie0IjJxgO6W9oUH2iW2yDNIW0dbM
-    lh7s6ECZCvhJVSf2p4qRJXk2vKH0+jII4LXuKDffzq1fGmf3Dy70waa93ljo9z3VfNzJ
-    K0/A==
-ARC-Authentication-Results: i=1; strato.com;
-    arc=none;
-    dkim=none
-X-RZG-CLASS-ID: mo01
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1688136804;
-    s=strato-dkim-0002; d=aepfle.de;
-    h=Message-Id:Date:Subject:Cc:To:From:Cc:Date:From:Subject:Sender;
-    bh=3v9FwKwabXm3VhIGPqHolyELPsxinvnAmxZlzv2LbiI=;
-    b=XSuY7hhtLS79JwyA0oJpta5/cIWvSuU1nviL381DYHGxEyGJ4WIsKEm6wF14LU0aIW
-    o33SoVm5T19ssaE+7fXvXsY2ZgSW+HyNN/yEl01exvzsD4myOYzaY7mwJQzMctROmuUz
-    VJrD7vZCJdgR8gN+9Jutem9t1zM/LqqNX6sFQykL+qmVDbxW898b8dx1j82xBxScZr+7
-    IqV0sbEJt2q3ponqcHiknFIk8Fk99xvfkDldewrTB1ahTWDhJNy0yLK0qNEWiymny60M
-    BzeR0FJNCWhtmqcWeaXb8WgLZ63zxXWZztfG9vqCKTxKKRzpUAbmucPeOQdgPdxjzd98
-    EJ4w==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1688136804;
-    s=strato-dkim-0003; d=aepfle.de;
-    h=Message-Id:Date:Subject:Cc:To:From:Cc:Date:From:Subject:Sender;
-    bh=3v9FwKwabXm3VhIGPqHolyELPsxinvnAmxZlzv2LbiI=;
-    b=F7Gp3a1EBO67LR5zgQEvd/wQ/xgdvjrUUG7VhAM/OOv6ZMCH6AdEZs9KlNJ3YQvGVi
-    6eCAwGpbjiBJbIExRaCA==
-X-RZG-AUTH: ":P2EQZWCpfu+qG7CngxMFH1J+3q8wa/QXkBR9MXjAuzpIG0mv9coXAg4x+1/7Qcst+v+6egNSCv2nSejLpXdlt4RWwKmQOQ=="
-Received: from sender
-    by smtp.strato.de (RZmta 49.6.0 AUTH)
-    with ESMTPSA id y5401az5UErNzMj
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-    Fri, 30 Jun 2023 16:53:23 +0200 (CEST)
-From:   Olaf Hering <olaf@aepfle.de>
-To:     Jonathan Corbet <corbet@lwn.net>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        "Steven Rostedt (Google)" <rostedt@goodmis.org>,
-        Kim Phillips <kim.phillips@amd.com>,
-        Wyes Karny <wyes.karny@amd.com>,
-        Tiezhu Yang <yangtiezhu@loongson.cn>,
-        Prarit Bhargava <prarit@redhat.com>,
-        Yasuaki Ishimatsu <isimatu.yasuaki@jp.fujitsu.com>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        rcu@vger.kernel.org, linux-kselftest@vger.kernel.org
-Cc:     Josh Triplett <josh@joshtriplett.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Shuah Khan <shuah@kernel.org>
-Subject: [PATCH v1] Fix documentation of panic_on_warn
-Date:   Fri, 30 Jun 2023 16:53:02 +0200
-Message-Id: <20230630145307.25865-1-olaf@aepfle.de>
-X-Mailer: git-send-email 2.35.3
+        Fri, 30 Jun 2023 10:53:47 -0400
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3482419B5;
+        Fri, 30 Jun 2023 07:53:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
+        bh=HmgFAntZ82v5P8cl9xrxIHdMfpvylXkji0oyaxknWgs=; b=J+hN8n/ke5/i5Eao95HcFnzTz8
+        jmSuzPddWTl37d2SbKMVb169ozrhThONleW733C3sUmhelOSvcIYyP2UWgdogPwUKFIWDjn5800BJ
+        GoYAQsOejaTpOiXfD+rFBpGzRMZUXvmdjGSK67b+u9hiMc6EhsO0oaRW2hM6DXYAt6YHxY7Rhyiic
+        TcpLB9Sa+anx6B7rVURDXEcDZUIfghUUqIgKSIsZx5OCoZg8IPoELRxXtT9VYWIwv7hL6ceMdojXF
+        w5XK45aijv7al53vh3Knq7TSUFTnmnD/t7v7lynPFK8iSWX+75tEYqIGjyG0uPnj2woVMfDBKuuJj
+        W/KnEVqg==;
+Received: from sslproxy05.your-server.de ([78.46.172.2])
+        by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1qFFVD-000BfR-EV; Fri, 30 Jun 2023 16:53:39 +0200
+Received: from [85.1.206.226] (helo=linux.home)
+        by sslproxy05.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1qFFVD-0009lg-0O; Fri, 30 Jun 2023 16:53:39 +0200
+Subject: Re: [PATCH v2] btf: warn but return no error for NULL btf from
+ __register_btf_kfunc_id_set()
+To:     SeongJae Park <sj@kernel.org>, martin.lau@linux.dev
+Cc:     Alexander.Egorenkov@ibm.com, ast@kernel.org, memxor@gmail.com,
+        olsajiri@gmail.com, bpf@vger.kernel.org, stable@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jiri Olsa <jolsa@kernel.org>
+References: <20230628164611.83038-1-sj@kernel.org>
+From:   Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <bae7e6d7-d7f4-a507-ee80-44e45aa4f2b4@iogearbox.net>
+Date:   Fri, 30 Jun 2023 16:53:38 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20230628164611.83038-1-sj@kernel.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.103.8/26955/Fri Jun 30 09:29:09 2023)
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The kernel cmdline option panic_on_warn expects an integer, it is not a
-plain option as documented. A number of uses in the tree figured this
-already, and use panic_on_warn=1 for their purpose.
+On 6/28/23 6:46 PM, SeongJae Park wrote:
+> __register_btf_kfunc_id_set() assumes .BTF to be part of the module's
+> .ko file if CONFIG_DEBUG_INFO_BTF is enabled.  If that's not the case,
+> the function prints an error message and return an error.  As a result,
+> such modules cannot be loaded.
+> 
+> However, the section could be stripped out during a build process.  It
+> would be better to let the modules loaded, because their basic
+> functionalities have no problem[1], though the BTF functionalities will
+> not be supported.  Make the function to lower the level of the message
+> from error to warn, and return no error.
+> 
+> [1] https://lore.kernel.org/bpf/20220219082037.ow2kbq5brktf4f2u@apollo.legion/
+> 
+> Reported-by: Alexander Egorenkov <Alexander.Egorenkov@ibm.com>
+> Link: https://lore.kernel.org/bpf/87y228q66f.fsf@oc8242746057.ibm.com/
+> Suggested-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+> Link: https://lore.kernel.org/bpf/20220219082037.ow2kbq5brktf4f2u@apollo.legion/
+> Fixes: c446fdacb10d ("bpf: fix register_btf_kfunc_id_set for !CONFIG_DEBUG_INFO_BTF")
+> Cc: <stable@vger.kernel.org> # 5.18.x
+> Signed-off-by: SeongJae Park <sj@kernel.org>
+> Acked-by: Jiri Olsa <jolsa@kernel.org>
 
-Adjust a comment which otherwise may mislead people in the future.
+I presume this one is targeted at bpf (rather than bpf-next) tree, right?
 
-Fixes: 9e3961a097 ("kernel: add panic_on_warn")
+> diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+> index 6b682b8e4b50..d683f034996f 100644
+> --- a/kernel/bpf/btf.c
+> +++ b/kernel/bpf/btf.c
+> @@ -7848,14 +7848,10 @@ static int __register_btf_kfunc_id_set(enum btf_kfunc_hook hook,
+>   
+>   	btf = btf_get_module_btf(kset->owner);
+>   	if (!btf) {
+> -		if (!kset->owner && IS_ENABLED(CONFIG_DEBUG_INFO_BTF)) {
+> -			pr_err("missing vmlinux BTF, cannot register kfuncs\n");
+> -			return -ENOENT;
+> -		}
 
-Signed-off-by: Olaf Hering <olaf@aepfle.de>
----
- Documentation/admin-guide/kernel-parameters.txt | 2 +-
- tools/testing/selftests/rcutorture/bin/kvm.sh   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Why the above one needs to be changed? Do you also run into this case? vmlinux BTF
+should be built-in in this case. I understand it's rather the one below for BTF +
+modules instead, no?
 
-diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-index 9e5bab29685f..15196f84df49 100644
---- a/Documentation/admin-guide/kernel-parameters.txt
-+++ b/Documentation/admin-guide/kernel-parameters.txt
-@@ -4049,7 +4049,7 @@
- 			extra details on the taint flags that users can pick
- 			to compose the bitmask to assign to panic_on_taint.
- 
--	panic_on_warn	panic() instead of WARN().  Useful to cause kdump
-+	panic_on_warn=1	panic() instead of WARN().  Useful to cause kdump
- 			on a WARN().
- 
- 	parkbd.port=	[HW] Parallel port number the keyboard adapter is
-diff --git a/tools/testing/selftests/rcutorture/bin/kvm.sh b/tools/testing/selftests/rcutorture/bin/kvm.sh
-index 62f3b0f56e4d..d3cdc2d33d4b 100755
---- a/tools/testing/selftests/rcutorture/bin/kvm.sh
-+++ b/tools/testing/selftests/rcutorture/bin/kvm.sh
-@@ -655,4 +655,4 @@ fi
- # Control buffer size: --bootargs trace_buf_size=3k
- # Get trace-buffer dumps on all oopses: --bootargs ftrace_dump_on_oops
- # Ditto, but dump only the oopsing CPU: --bootargs ftrace_dump_on_oops=orig_cpu
--# Heavy-handed way to also dump on warnings: --bootargs panic_on_warn
-+# Heavy-handed way to also dump on warnings: --bootargs panic_on_warn=1
+> -		if (kset->owner && IS_ENABLED(CONFIG_DEBUG_INFO_BTF_MODULES)) {
+> -			pr_err("missing module BTF, cannot register kfuncs\n");
+> -			return -ENOENT;
+> -		}
+> +		if (!kset->owner && IS_ENABLED(CONFIG_DEBUG_INFO_BTF))
+> +			pr_warn("missing vmlinux BTF, cannot register kfuncs\n");
+> +		if (kset->owner && IS_ENABLED(CONFIG_DEBUG_INFO_BTF_MODULES))
+> +			pr_warn("missing module BTF, cannot register kfuncs\n");
+>   		return 0;
+>   	}
+>   	if (IS_ERR(btf))
+> 
+
