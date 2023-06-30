@@ -2,70 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC161743540
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 08:46:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B9B33743542
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 08:47:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231593AbjF3Gqs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 02:46:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38084 "EHLO
+        id S231794AbjF3GrP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Jun 2023 02:47:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229578AbjF3Gqp (ORCPT
+        with ESMTP id S231961AbjF3GrF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 02:46:45 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12274E5B;
-        Thu, 29 Jun 2023 23:46:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1688107604; x=1719643604;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=48q1NTvqt0qgKBQfVueuQcWYPjiExBBEJFG3i8T9p1k=;
-  b=DuSEvhx/RLrQ2F0ptDXl1+IDZOBlaXVOcXyld+f+xbbHcf56553UJegP
-   XkartyRsWGSYVx0Vb4rsq+K0PBNPu3C9axQ+3xPc8xkdlRHVMNCxfQaOl
-   OEVpcFxqAZVea3FLfhtvpYgeDbD/D1tygknJ1gZhEySsjZVPDLgHQHuZk
-   Mr+5IfXkkmXCDj4H2uCBUBiSVFf+nYb3E2BanOMu8eckRrg0aaWTzoLpz
-   2Xhv0QUeXowWSrcks8G75Ub2JbQj4N6putknhiV78cxJml0wo87C5jvGf
-   BkYom5/Bq79A9VikqyqXH0TTzc/NEC+LpNxD58GkeDnfciz+pUMHSNZAy
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10756"; a="365814573"
-X-IronPort-AV: E=Sophos;i="6.01,170,1684825200"; 
-   d="scan'208";a="365814573"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jun 2023 23:45:22 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10756"; a="717686999"
-X-IronPort-AV: E=Sophos;i="6.01,169,1684825200"; 
-   d="scan'208";a="717686999"
-Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 29 Jun 2023 23:45:16 -0700
-Received: from kbuild by 783282924a45 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1qF7sa-000EmB-0I;
-        Fri, 30 Jun 2023 06:45:16 +0000
-Date:   Fri, 30 Jun 2023 14:44:26 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     jeffxu@chromium.org, skhan@linuxfoundation.org,
-        keescook@chromium.org
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        akpm@linux-foundation.org, dmitry.torokhov@gmail.com,
-        dverkamp@chromium.org, asmadeus@codewreck.org, hughd@google.com,
-        jeffxu@google.com, jorgelo@chromium.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-mm@kvack.org, jannh@google.com,
-        linux-hardening@vger.kernel.org,
-        linux-security-module@vger.kernel.org
-Subject: Re: [PATCH v1 1/2] mm/memfd: sysctl: fix
- MEMFD_NOEXEC_SCOPE_NOEXEC_ENFORCED
-Message-ID: <202306301413.VtwSCI1F-lkp@intel.com>
-References: <20230630031721.623955-2-jeffxu@google.com>
+        Fri, 30 Jun 2023 02:47:05 -0400
+Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80FA4171E;
+        Thu, 29 Jun 2023 23:47:02 -0700 (PDT)
+Received: by mail-lj1-x230.google.com with SMTP id 38308e7fff4ca-2b69923a715so22507931fa.0;
+        Thu, 29 Jun 2023 23:47:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1688107621; x=1690699621;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=TcNkK7QhtQRZoNjiKnln1uOwjiN81JdIADWFEln4Gqs=;
+        b=aSmIw/mI1MAA63imaZEWs1aayzhdfF/qzHVXPMXxDj2sfQL3hJb/GsXaOq6HzncTO0
+         YLISEBjling3H8gOJhbIJrAqiach3LgoGVTVK8WGoR2Po4cdRHTKLet614EZhJsJ3XCy
+         sjzdMj+Oa+YDPxfXmyNghnc+5OvNYpB7Gq50QFnM/bavLpkb59dIEibUHLLzheEW3EAk
+         zGzt77/vsjlFbmGZDs7SU/DnyClwDMElrmbq2WJ50/p/sIVj31524qz3IViiNw0/zLTA
+         57S6d7TYsDYmBKsBppOKaI7OCAbGzOrS3NFleI38h59CvQyi271RW+TzYzgbKjUXNgWq
+         No5Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688107621; x=1690699621;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=TcNkK7QhtQRZoNjiKnln1uOwjiN81JdIADWFEln4Gqs=;
+        b=SvJ4hlyfHLDOobYnSygGdWpbVQrqqTWVFyh6+Iag4oOMRJ53jxC95uZFp6jm3rd/pi
+         mmmAG1/EXgpn/5lbdFi6R1o8tnLLHtSiGlS40lz8TZDjqzad+U6Ipx9UdpBJk2J7USP1
+         Ra4fjb1IExnAnRKqqAj6zDmB+oUlyvtJ9hsT5knVQIm7d1lJswD4RURRXbc/jwZ9P5f0
+         PZKvagnjhFemRQIgLS7BDPUf7/nLB82++kwsm6uBaNGAmHFObqKVhlJHbJ5DhIqZbgBa
+         l1J6GSUtICGF4nxvVo5PUZNNySnZI/7DTgxU3NyIFSa6iplnPxKAZl/RMbZxEFMy2HQA
+         SZoQ==
+X-Gm-Message-State: ABy/qLain6d3OszCyDL6AkQGpPWfhe2sV9wiH7ididyh5RwTpIb3bMoy
+        98EXtcgyVPvEEBqp8DeYQ5+BA9bjw1BCDgh2aWM=
+X-Google-Smtp-Source: APBJJlEjsjhPjVs6yMnJWIlPta/rIeJe08ueSRiHjjIaWip/gjvY6o7yVIEmCRW4mUDfDV6SakPEv/CuiHCT6o2DgkA=
+X-Received: by 2002:a2e:870f:0:b0:2b6:a682:9aaf with SMTP id
+ m15-20020a2e870f000000b002b6a6829aafmr1741685lji.43.1688107620423; Thu, 29
+ Jun 2023 23:47:00 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230630031721.623955-2-jeffxu@google.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+References: <20230609115806.2625564-1-saikrishnag@marvell.com>
+ <880d628e-18bf-44a1-a55f-ffbe1777dd2b@kadam.mountain> <BY3PR18MB470788B4096D586DEB9A3B22A023A@BY3PR18MB4707.namprd18.prod.outlook.com>
+ <3894dd38-377b-4691-907b-ec3d47fddffd@kadam.mountain> <SA1PR18MB4709E390AC13A1EF5F652165A02AA@SA1PR18MB4709.namprd18.prod.outlook.com>
+ <5e222335-5baa-4ce8-a90b-69a865f29b1a@kadam.mountain>
+In-Reply-To: <5e222335-5baa-4ce8-a90b-69a865f29b1a@kadam.mountain>
+From:   Sunil Kovvuri <sunil.kovvuri@gmail.com>
+Date:   Fri, 30 Jun 2023 12:16:49 +0530
+Message-ID: <CA+sq2Cd0qXL+Cgi2EXJHXPYrCouPJQMJ+rCs22_2PJUfJXMK2A@mail.gmail.com>
+Subject: Re: [net PATCH v2] octeontx2-af: Move validation of ptp pointer
+ before its usage
+To:     Dan Carpenter <dan.carpenter@linaro.org>
+Cc:     Sai Krishna Gajula <saikrishnag@marvell.com>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Sunil Kovvuri Goutham <sgoutham@marvell.com>,
+        "maciej.fijalkowski@intel.com" <maciej.fijalkowski@intel.com>,
+        Naveen Mamindlapalli <naveenm@marvell.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,94 +81,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Fri, Jun 30, 2023 at 11:16=E2=80=AFAM Dan Carpenter <dan.carpenter@linar=
+o.org> wrote:
+>
+> On Fri, Jun 30, 2023 at 05:19:27AM +0000, Sai Krishna Gajula wrote:
+> >
+> > > -----Original Message-----
 
-kernel test robot noticed the following build errors:
+> >
+> > As suggested, we will return error in ptp_probe in case of any
+> > failure conditions. In this case AF driver continues without PTP suppor=
+t.
+>
+> I'm concerned about the "AF driver continues without PTP support".
+>
 
-[auto build test ERROR on akpm-mm/mm-everything]
+Yes, it doesn't make sense to proceed with AF driver if PTP driver
+probe has failed.
+PTP driver probe will fail upon memory alloc or ioremap failures, such fail=
+ures
+will most likely be encountered by AF driver as well. So better not
+continue with AF driver probe.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/jeffxu-chromium-org/mm-memfd-sysctl-fix-MEMFD_NOEXEC_SCOPE_NOEXEC_ENFORCED/20230630-111827
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-patch link:    https://lore.kernel.org/r/20230630031721.623955-2-jeffxu%40google.com
-patch subject: [PATCH v1 1/2] mm/memfd: sysctl: fix MEMFD_NOEXEC_SCOPE_NOEXEC_ENFORCED
-config: riscv-randconfig-r042-20230630 (https://download.01.org/0day-ci/archive/20230630/202306301413.VtwSCI1F-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce: (https://download.01.org/0day-ci/archive/20230630/202306301413.VtwSCI1F-lkp@intel.com/reproduce)
+> > When the AF driver is probed before PTP driver , we will defer the AF
+> > probe. Hope these changes are inline with your view.
+> > I will send a v3 patch with these changes.
+> >
+>
+> I don't really understand the situation.  You have two drivers.
+> Normally, the relationship is very simple where you have to load one
+> before you can load the other.  But here it sounds like the relationships
+> are very complicated and you are loading one in a degraded state for
+> some reason...
+>
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306301413.VtwSCI1F-lkp@intel.com/
+No, the relationship is simple. Idea is to defer AF driver probe until
+PTP driver is loaded.
+Once the above is fixed there won't be any degraded state.
 
-All errors (new ones prefixed by >>):
-
->> mm/memfd.c:273:15: error: use of undeclared identifier 'MEMFD_NOEXEC_SCOPE_EXEC'
-     273 |         int sysctl = MEMFD_NOEXEC_SCOPE_EXEC;
-         |                      ^
->> mm/memfd.c:311:17: error: use of undeclared identifier 'MEMFD_NOEXEC_SCOPE_NOEXEC_SEAL'
-     311 |                 if (sysctl == MEMFD_NOEXEC_SCOPE_NOEXEC_SEAL)
-         |                               ^
->> mm/memfd.c:321:36: error: use of undeclared identifier 'MEMFD_NOEXEC_SCOPE_NOEXEC_ENFORCED'
-     321 |         if (flags & MFD_EXEC && sysctl >= MEMFD_NOEXEC_SCOPE_NOEXEC_ENFORCED) {
-         |                                           ^
-   3 errors generated.
-
-
-vim +/MEMFD_NOEXEC_SCOPE_EXEC +273 mm/memfd.c
-
-   270	
-   271	static int sysctl_memfd_noexec(void)
-   272	{
- > 273		int sysctl = MEMFD_NOEXEC_SCOPE_EXEC;
-   274	#ifdef CONFIG_SYSCTL
-   275		struct pid_namespace *ns;
-   276	
-   277		ns = task_active_pid_ns(current);
-   278		if (ns)
-   279			sysctl = ns->memfd_noexec_scope;
-   280	#endif
-   281		return sysctl;
-   282	}
-   283	
-   284	SYSCALL_DEFINE2(memfd_create,
-   285			const char __user *, uname,
-   286			unsigned int, flags)
-   287	{
-   288		char comm[TASK_COMM_LEN];
-   289		unsigned int *file_seals;
-   290		struct file *file;
-   291		int fd, error;
-   292		char *name;
-   293		long len;
-   294		int sysctl = sysctl_memfd_noexec();
-   295	
-   296		if (!(flags & MFD_HUGETLB)) {
-   297			if (flags & ~(unsigned int)MFD_ALL_FLAGS)
-   298				return -EINVAL;
-   299		} else {
-   300			/* Allow huge page size encoding in flags. */
-   301			if (flags & ~(unsigned int)(MFD_ALL_FLAGS |
-   302					(MFD_HUGE_MASK << MFD_HUGE_SHIFT)))
-   303				return -EINVAL;
-   304		}
-   305	
-   306		/* Invalid if both EXEC and NOEXEC_SEAL are set.*/
-   307		if ((flags & MFD_EXEC) && (flags & MFD_NOEXEC_SEAL))
-   308			return -EINVAL;
-   309	
-   310		if (!(flags & (MFD_EXEC | MFD_NOEXEC_SEAL))) {
- > 311			if (sysctl == MEMFD_NOEXEC_SCOPE_NOEXEC_SEAL)
-   312				flags |= MFD_NOEXEC_SEAL;
-   313			else
-   314				flags |= MFD_EXEC;
-   315	
-   316			pr_warn_once(
-   317				"memfd_create() without MFD_EXEC nor MFD_NOEXEC_SEAL, pid=%d '%s'\n",
-   318				task_pid_nr(current), get_task_comm(comm, current));
-   319		}
-   320	
- > 321		if (flags & MFD_EXEC && sysctl >= MEMFD_NOEXEC_SCOPE_NOEXEC_ENFORCED) {
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Thanks,
+Sunil.
