@@ -2,198 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71A597432BF
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 04:28:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B50147432C1
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 04:31:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230158AbjF3C2G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 22:28:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58400 "EHLO
+        id S229730AbjF3CbM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 22:31:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229576AbjF3C2D (ORCPT
+        with ESMTP id S229576AbjF3CbK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 22:28:03 -0400
-Received: from mail-vs1-xe2e.google.com (mail-vs1-xe2e.google.com [IPv6:2607:f8b0:4864:20::e2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36DD935AB
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 19:27:59 -0700 (PDT)
-Received: by mail-vs1-xe2e.google.com with SMTP id ada2fe7eead31-4436dc265d6so540950137.0
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 19:27:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1688092078; x=1690684078;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=eTo9hY6za6sp4iN6jnPaCNqbOXw5FRoNumhZ0qdWDT0=;
-        b=VTJbmNvHjTej6lTE/CJNYZ8fA/ivIlXHmJZFdOes0lUdz1zqTfw57H4fzp1rceKSSC
-         KUDAuNDxQqD7xl3FXiJ0X3uKm6wsNeq4fJ9QjDIaJW+LIm1p98ZXtYj3XNfo0a/LtlvT
-         nk1uIeHhrVsTqVow7LQY2IqrA5qs/sPY3TQU0YNoLFoUi9mktogOXr1pj6Dt5+XeoYoj
-         UgaiDx/5a3R/GpHU82ujOzlyOjq/rAky0x+0JHf7o0SV4I436BP9BX4pOv/Iue4YBBNe
-         4UaC/kOCWJvUWvc/C56iyq3pkxJNkpoitRmW5H4NmXQh5P0FtNNEGebEsgAFTAtv3V51
-         GZ0A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688092078; x=1690684078;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=eTo9hY6za6sp4iN6jnPaCNqbOXw5FRoNumhZ0qdWDT0=;
-        b=XJ+UWhSa+f60E0PcjJwXGGhJAZG7CWwdTKGl1GKjVDYa33NLZ7xqcpPbOLMXsMml5r
-         +rfMaVFAe707KkDstzzKeHRoHcCB2qykVKZu03tE9iA3Sz/swQb7ISRnhhhYO4qQ9Ba6
-         5rcQq2XSg5Sug1OrXkIsTnHugy9UQ/A/cAcdCfXXgKir3Vph8iz26vi3r0U63yhXix6z
-         NdZowpAkEnkom+MmjP/VMehDdYQ94NKVrIIUZKvy4R/cYlgmafqUDaAbJZ72pdrXLEIz
-         sZuRzV07BsQ+IyqojdIkp55ptOzbBnZXPoQUdkhFxghmOd9aO+MTlUodAIewEic/1v4z
-         +YcA==
-X-Gm-Message-State: ABy/qLaPFjnkHbhJ32Awb66FXSWMcgEQxzoHZkahTK0+uQapHJ8B1zeQ
-        BMiOedGJGhNSwmjcC63VOakdeGCgKDCupLJUVdWsZw==
-X-Google-Smtp-Source: APBJJlGS5fPCjeCoPCceVsMEDJwZdtv3ffVTv0LqhfudUaRPcxeWgOGwlh4B4Gc06mRDoibfLyP/0aoGiRpvBDUVDfE=
-X-Received: by 2002:a05:6102:407:b0:440:bee1:e811 with SMTP id
- d7-20020a056102040700b00440bee1e811mr1357973vsq.22.1688092077918; Thu, 29 Jun
- 2023 19:27:57 -0700 (PDT)
+        Thu, 29 Jun 2023 22:31:10 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 325D21BE9;
+        Thu, 29 Jun 2023 19:31:10 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C2F6A6167E;
+        Fri, 30 Jun 2023 02:31:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4888C433C8;
+        Fri, 30 Jun 2023 02:31:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688092269;
+        bh=J6nxjWywyEiSc/t5QFa8u5nsfvS0YlDiw8/BL0IXBxo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=lNBjSCGWJDyJ8VTTSG6JJ9p05nFKXRvImX8g45EoM2SCrEoaYICiF3Wl3kwEpT50q
+         tq2x+SLtMY4y3jK24n0lSWYuLMXt8b8zUbUm30ihQkoaa3WWLUa3Dsu0M453iWt2ic
+         xLb/E20+JWD783RLwh4ZCsYEHE7l2z1F80jv7GJ3PmYiAFS7+ej5XskPijm4wU+V7h
+         pDM1ZHUG+jjThxaoUJ9tAvFAzkqryjk/KxT3YI28x4lj6I/8nDG8cZVv7p580MXPLi
+         Xb/817/cvBf6wpKU5YX5I2xjLRNiaT9sicyTCjEg4MlvbSuUE87hkXgST3XQMa8+Lu
+         CcZtNLW7UDLWQ==
+Date:   Thu, 29 Jun 2023 19:31:07 -0700
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+Cc:     Tyler Hicks <code@tyhicks.com>,
+        Christian Brauner <brauner@kernel.org>,
+        Dave Chinner <dchinner@redhat.com>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Al Viro <viro@zeniv.linux.org.uk>, ecryptfs@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 0/3] fs/ecryptfs: Replace kmap{,_atomic}() with
+ kmap_local_page()
+Message-ID: <20230630023107.GA1088@sol.localdomain>
+References: <20230426172223.8896-1-fmdefrancesco@gmail.com>
+ <23780760.ouqheUzb2q@suse>
 MIME-Version: 1.0
-References: <20230612130256.4572-1-linyunsheng@huawei.com> <20230612130256.4572-5-linyunsheng@huawei.com>
- <20230614101954.30112d6e@kernel.org> <8c544cd9-00a3-2f17-bd04-13ca99136750@huawei.com>
- <20230615095100.35c5eb10@kernel.org> <CAKgT0Uc6Xoyh3Edgt+83b+HTM5j4JDr3fuxcyL9qDk+Wwt9APg@mail.gmail.com>
- <908b8b17-f942-f909-61e6-276df52a5ad5@huawei.com> <CAKgT0UeZfbxDYaeUntrQpxHmwCh6zy0dEpjxghiCNxPxv=kdoQ@mail.gmail.com>
- <72ccf224-7b45-76c5-5ca9-83e25112c9c6@redhat.com> <20230616122140.6e889357@kernel.org>
- <eadebd58-d79a-30b6-87aa-1c77acb2ec17@redhat.com> <20230619110705.106ec599@kernel.org>
-In-Reply-To: <20230619110705.106ec599@kernel.org>
-From:   Mina Almasry <almasrymina@google.com>
-Date:   Thu, 29 Jun 2023 19:27:46 -0700
-Message-ID: <CAHS8izOySGEcXmMg3Gbb5DS-D9-B165gNpwf5a+ObJ7WigLmHg@mail.gmail.com>
-Subject: Re: Memory providers multiplexing (Was: [PATCH net-next v4 4/5]
- page_pool: remove PP_FLAG_PAGE_FRAG flag)
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     Jesper Dangaard Brouer <jbrouer@redhat.com>, brouer@redhat.com,
-        Alexander Duyck <alexander.duyck@gmail.com>,
-        Yunsheng Lin <linyunsheng@huawei.com>, davem@davemloft.net,
-        pabeni@redhat.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Yisen Zhuang <yisen.zhuang@huawei.com>,
-        Salil Mehta <salil.mehta@huawei.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Sunil Goutham <sgoutham@marvell.com>,
-        Geetha sowjanya <gakula@marvell.com>,
-        Subbaraya Sundeep <sbhatta@marvell.com>,
-        hariprasad <hkelam@marvell.com>,
-        Saeed Mahameed <saeedm@nvidia.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        Felix Fietkau <nbd@nbd.name>,
-        Ryder Lee <ryder.lee@mediatek.com>,
-        Shayne Chen <shayne.chen@mediatek.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Kalle Valo <kvalo@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-        linux-rdma@vger.kernel.org, linux-wireless@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Jonathan Lemon <jonathan.lemon@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <23780760.ouqheUzb2q@suse>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 19, 2023 at 11:07=E2=80=AFAM Jakub Kicinski <kuba@kernel.org> w=
-rote:
->
-> On Fri, 16 Jun 2023 22:42:35 +0200 Jesper Dangaard Brouer wrote:
-> > > Former is better for huge pages, latter is better for IO mem
-> > > (peer-to-peer DMA). I wonder if you have different use case which
-> > > requires a different model :(
-> >
-> > I want for the network stack SKBs (and XDP) to support different memory
-> > types for the "head" frame and "data-frags". Eric have described this
-> > idea before, that hardware will do header-split, and we/he can get TCP
-> > data part is another page/frag, making it faster for TCP-streams, but
-> > this can be used for much more.
-> >
-> > My proposed use-cases involves more that TCP.  We can easily imagine
-> > NVMe protocol header-split, and the data-frag could be a mem_type that
-> > actually belongs to the harddisk (maybe CPU cannot even read this).  Th=
-e
-> > same scenario goes for GPU memory, which is for the AI use-case.  IIRC
-> > then Jonathan have previously send patches for the GPU use-case.
-> >
-> > I really hope we can work in this direction together,
->
-> Perfect, that's also the use case I had in mind. The huge page thing
-> was just a quick thing to implement as a PoC (although useful in its
-> own right, one day I'll find the time to finish it, sigh).
->
-> That said I couldn't convince myself that for a peer-to-peer setup we
-> have enough space in struct page to store all the information we need.
-> Or that we'd get a struct page at all, and not just a region of memory
-> with no struct page * allocated :S
->
-> That'd require serious surgery on the page pool's fast paths to work
-> around.
->
-> I haven't dug into the details, tho. If you think we can use page pool
-> as a frontend for iouring and/or p2p memory that'd be awesome!
->
+On Wed, Jun 28, 2023 at 03:50:30PM +0200, Fabio M. De Francesco wrote:
+> On mercoledì 26 aprile 2023 19:22:20 CEST Fabio M. De Francesco wrote:
+> > kmap() and kmap_atomic() have been deprecated in favor of
+> > kmap_local_page().
+> > 
+> > Therefore, replace kmap() and kmap_atomic() with kmap_local_page().
+> 
+> After two months from submission, I haven't received any comments on this 
+> short series yet, except for a "Reviewed by" tag from Ira on patch 1/3 only.
+> 
+> I would appreciate any comments/reviews/acks and would especially like to know 
+> if anything is preventing these patches from being applied.
+> 
 
-Hello Jakub, I'm looking into device memory (peer-to-peer) networking
-actually, and I plan to pursue using the page pool as a front end.
+eCryptfs is in "Odd Fixes" status.  See the thread
+https://lore.kernel.org/ecryptfs/ZB4nYykRg6UwZ0cj@sequoia/T/#u
 
-Quick description of what I have so far:
-current implementation uses device memory with struct pages; I am
-putting all those pages in a gen_pool, and we have written an
-allocator that allocates pages from the gen_pool. In the driver, we
-use this allocator instead of alloc_page() (the driver in question is
-gve which currently doesn't use the page pool). When the driver is
-done with the p2p page, it simply decrements the refcount on it and
-the page is freed back to the gen_pool.
+I would suggest that if Tyler is not responding, that Christian or Al take these
+patches through the VFS tree instead.
 
-Test results are good; our best results we're able to achieve ~96%
-line rate with incoming packets going straight to device memory and
-without bouncing the memory to a host buffer (albeit these results are
-on our slighly older, production LTS, I need to work on getting
-results from linus/master).
+FWIW, I took a quick look at these three patches, and all look correct.  I'm not
+sure I want to give a formal R-b, as I don't want people to start bothering me
+about eCryptfs stuff because they saw my name on it :-)
 
-I've discussed your page pool frontend idea with our gve owners and
-the idea is attractive. In particular it would be good not to insert
-much custom code into the driver to support device memory pages or
-other page types. I plan on trying to change my approach to match the
-page pool provider you have in progress here:
-https://github.com/kuba-moo/linux/tree/pp-providers
-
-In particular the main challenge right now seems to be that my device
-memory pages are ZONE_DEVICE pages, which can't be inserted to the
-page pool as-is due to the union in struct page between the page pool
-entries and the ZONE_DEVICE entries. I have some ideas on how to work
-around that I'm looking into.
-
-It sounds like you don't have the time at the moment to work on the
-page pool provider idea; I plan to try and get my code working with
-that model and propose it if it's successful. Let me know if you have
-concerns here.
-
-> The workaround solution I had in mind would be to create a narrower API
-> for just data pages. Since we'd need to sprinkle ifs anyway, pull them
-> up close to the call site. Allowing to switch page pool for a
-> completely different implementation, like the one Jonathan coded up for
-> iouring. Basically
->
-> $name_alloc_page(queue)
-> {
->         if (queue->pp)
->                 return page_pool_dev_alloc_pages(queue->pp);
->         else if (queue->iouring..)
->                 ...
-> }
->
-
-
---=20
-Thanks,
-Mina
+- Eric
