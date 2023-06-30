@@ -2,186 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 662CD743F88
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 18:16:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EDF23743FA7
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 18:24:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232866AbjF3QPi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 12:15:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37312 "EHLO
+        id S232459AbjF3QYD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Jun 2023 12:24:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232983AbjF3QPG (ORCPT
+        with ESMTP id S230427AbjF3QYB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 12:15:06 -0400
-Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 013BA3C21
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 09:15:04 -0700 (PDT)
-Received: by mail-qt1-x835.google.com with SMTP id d75a77b69052e-401d1d967beso319961cf.0
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 09:15:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1688141704; x=1690733704;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=yiUGGvDdS8R3PBD2YgZ3X8YTYgPrxBI5qP1K5GVjXY0=;
-        b=Xt8EqydTvWQR4hXsuzv+L3+naFxfOmMeXzeodf+m1VjRPytSV2y6xl4wx2mYRVD0du
-         5A8K6oCZgXZ8mgVSK2AoyjmCfaUlgq5xNJQuIWRHOn7wbFP2lSy/e95M6cBOGYeKqIGi
-         IirfYPpe67RjPz+UfUjWn2AQ9nGm5FpMrxIG4xvyRbo0lQK+YO8zembpl5r5drKDRT76
-         jmLHylxBF4kC3c2ldIanf8hZ2b5oDkYuH2uCGvWpeMLVgQg1so2u1Hz4XplZc4D54w+L
-         hT/0dr/+xCxQH+egfMiFncJWDu3CdJ0z0ozwZOOQX24Q9WfnueWjkUmnkLWooYfLBMqS
-         Qp2w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688141704; x=1690733704;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=yiUGGvDdS8R3PBD2YgZ3X8YTYgPrxBI5qP1K5GVjXY0=;
-        b=CANr2PbZmw9PkvS5pVEI75ZkKJF4jB9TDniKc1OWCzid3edi8RV4ZlWGXRFXFnU+7Z
-         xfT5d28+sMy7+ZDqp2gN8eKwThw0JVrVf+nybduliZCTsJzs60JISv1DvY8GcKgE+vY5
-         fmg1n7dwIfm0OXGAOx0ipbD2AtgdzU/4ADlOB4zE1sEVVYMaokzewP3O1yJM6GpukPWU
-         LRirNwkSa1kNsDEVeSK1k6WAYa8T9iPRU15d+TsrtY1aGMd4LMgPBoQi15xjddNe3Luh
-         xG2ZhYFK8/KHWjRyGwu5/jEN4KBB0vB7O6b9Y9C9EkbWgwpKsmv5HWoi4sMulEESWLde
-         7phA==
-X-Gm-Message-State: AC+VfDxVyc0n03qWCfYi5zSiUZjHqQc0LXlZZPffqf6tvjIBj5v0gnx/
-        sR8I2Sg4xtmHruKJYzmK2Z57PJeB8i1Dd93j6l8dzQ==
-X-Google-Smtp-Source: ACHHUZ6qvWQi3kNZGdcC+YAc4jK08c5yKsTf+VhsbWIHah/vsUZQqiIcOLrx14G4bqQg0c3SRJIAJkHdrlJahF74cRQ=
-X-Received: by 2002:ac8:4e46:0:b0:3f8:5b2:aeec with SMTP id
- e6-20020ac84e46000000b003f805b2aeecmr847953qtw.20.1688141703923; Fri, 30 Jun
- 2023 09:15:03 -0700 (PDT)
+        Fri, 30 Jun 2023 12:24:01 -0400
+X-Greylist: delayed 443 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 30 Jun 2023 09:23:59 PDT
+Received: from mx1.sberdevices.ru (mx1.sberdevices.ru [37.18.73.165])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 341C9E49;
+        Fri, 30 Jun 2023 09:23:59 -0700 (PDT)
+Received: from p-infra-ksmg-sc-msk01 (localhost [127.0.0.1])
+        by mx1.sberdevices.ru (Postfix) with ESMTP id 5DF9D100002;
+        Fri, 30 Jun 2023 19:16:34 +0300 (MSK)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mx1.sberdevices.ru 5DF9D100002
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
+        s=mail; t=1688141794;
+        bh=DYDUqZ5q1Q+sph6vsN5QJLQHBW12OVdZvTZa4RwFxxw=;
+        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type:From;
+        b=pkn05C5Ytqa2b3cXCsR7wj5mahZr8wJnb942hV1b9vPD+uSJK3h7s+kSSgmKgZft/
+         4CHHvwGsW4sacX2udyfF+Ob9tu0gUGs4GXh6d6+3nekQ7C9OrS71U8Y1cDpXbRSGG9
+         eLc1oz6rn9ympSoRSHka1EmYqo2ezvcZG7NnjazTj4EwVJPpdHow7NsmZ1uBdzHI0Y
+         bNL2rdviD3DCcXoet/xkxdVk8itMxz7v9Egd6HuBhHx8mN/Fme9aQb+6A0HEmbkhSI
+         0cWZNFZcbbWIFYCjFidzG5gku3QkLoQFl0GZaRv/P6ypEQ6oN9FOiJBo+kV38EMzhA
+         2oshPxRDFjV3Q==
+Received: from p-i-exch-sc-m01.sberdevices.ru (p-i-exch-sc-m01.sberdevices.ru [172.16.192.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mx1.sberdevices.ru (Postfix) with ESMTPS;
+        Fri, 30 Jun 2023 19:16:34 +0300 (MSK)
+Received: from localhost (100.64.160.123) by p-i-exch-sc-m01.sberdevices.ru
+ (172.16.192.107) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.30; Fri, 30 Jun
+ 2023 19:16:20 +0300
+Date:   Fri, 30 Jun 2023 19:16:33 +0300
+From:   Dmitry Rokosov <ddrokosov@sberdevices.ru>
+To:     zelong dong <zelong.dong@amlogic.com>
+CC:     <narmstrong@baylibre.com>, <p.zabel@pengutronix.de>,
+        <khilman@baylibre.com>, Rob Herring <robh+dt@kernel.org>,
+        <martin.blumenstingl@googlemail.com>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-amlogic@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>, <jbrunet@baylibre.com>,
+        <devicetree@vger.kernel.org>, <kelvin.zhang@amlogic.com>
+Subject: Re: [PATCH 3/3] arm64: dts: meson: add reset controller for Meson-C3
+ SoC
+Message-ID: <20230630161633.eym2dhxaffn2uxfv@CAB-WSD-L081021>
+References: <20230630121059.28748-1-zelong.dong@amlogic.com>
+ <20230630121059.28748-4-zelong.dong@amlogic.com>
 MIME-Version: 1.0
-References: <20230628200141.2739587-1-namhyung@kernel.org> <20230628200141.2739587-5-namhyung@kernel.org>
-In-Reply-To: <20230628200141.2739587-5-namhyung@kernel.org>
-From:   Ian Rogers <irogers@google.com>
-Date:   Fri, 30 Jun 2023 09:14:51 -0700
-Message-ID: <CAP-5=fVMVuj2Y-ShYZwH-hetoN5ySxJfaZDJ0g29MiZ2kBpnfQ@mail.gmail.com>
-Subject: Re: [PATCH 4/4] perf test: Test perf lock contention CSV output
-To:     Namhyung Kim <namhyung@kernel.org>
-Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-perf-users@vger.kernel.org, Song Liu <song@kernel.org>,
-        Hao Luo <haoluo@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20230630121059.28748-4-zelong.dong@amlogic.com>
+User-Agent: NeoMutt/20220415
+X-Originating-IP: [100.64.160.123]
+X-ClientProxiedBy: p-i-exch-sc-m01.sberdevices.ru (172.16.192.107) To
+ p-i-exch-sc-m01.sberdevices.ru (172.16.192.107)
+X-KSMG-Rule-ID: 10
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Lua-Profiles: 178380 [Jun 30 2023]
+X-KSMG-AntiSpam-Version: 5.9.59.0
+X-KSMG-AntiSpam-Envelope-From: DDRokosov@sberdevices.ru
+X-KSMG-AntiSpam-Rate: 0
+X-KSMG-AntiSpam-Status: not_detected
+X-KSMG-AntiSpam-Method: none
+X-KSMG-AntiSpam-Auth: dkim=none
+X-KSMG-AntiSpam-Info: LuaCore: 517 517 b0056c19d8e10afbb16cb7aad7258dedb0179a79, {Tracking_uf_ne_domains}, {Track_E25351}, {Tracking_from_domain_doesnt_match_to}, lists.infradead.org:7.1.1;lore.kernel.org:7.1.1;p-i-exch-sc-m01.sberdevices.ru:7.1.1,5.0.1;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;sberdevices.ru:7.1.1,5.0.1;127.0.0.199:7.1.2;100.64.160.123:7.1.2, FromAlignment: s, {Tracking_white_helo}, ApMailHostAddress: 100.64.160.123
+X-MS-Exchange-Organization-SCL: -1
+X-KSMG-AntiSpam-Interceptor-Info: scan successful
+X-KSMG-AntiPhishing: Clean, bases: 2023/06/30 15:49:00
+X-KSMG-LinksScanning: Clean, bases: 2023/06/30 15:49:00
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 2.0.1.6960, bases: 2023/06/30 12:24:00 #21606311
+X-KSMG-AntiVirus-Status: Clean, skipped
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 28, 2023 at 1:01=E2=80=AFPM Namhyung Kim <namhyung@kernel.org> =
-wrote:
->
-> To verify CSV output, just check the number of separators (",") using
-> the tr and wc commands like this.
->
->   grep -v "^#" ${result} | tr -d -c | wc -c
->
-> Now it expects 6 columns (and 5 separators) in the output, but it may
-> be changed later so count the field in the header first and compare it
-> to the actual output lines.
->
->   $ cat ${result}
->   # output: contended, total wait, max wait, avg wait, type, caller
->   1, 28787, 28787, 28787, spinlock, raw_spin_rq_lock_nested+0x1b
->
-> The test looks like below now:
->
->   $ sudo ./perf test -v contention
->    86: kernel lock contention analysis test                            :
->   --- start ---
->   test child forked, pid 2705822
->   Testing perf lock record and perf lock contention
->   Testing perf lock contention --use-bpf
->   Testing perf lock record and perf lock contention at the same time
->   Testing perf lock contention --threads
->   Testing perf lock contention --lock-addr
->   Testing perf lock contention --type-filter (w/ spinlock)
->   Testing perf lock contention --lock-filter (w/ tasklist_lock)
->   Testing perf lock contention --callstack-filter (w/ unix_stream)
->   Testing perf lock contention --callstack-filter with task aggregation
->   Testing perf lock contention CSV output
->   test child finished with 0
->   ---- end ----
->   kernel lock contention analysis test: Ok
->
-> Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+Hello Zelong,
 
-Acked-by: Ian Rogers <irogers@google.com>
+Thanks a lot for the patch, please find my comments below.
 
-Thanks,
-Ian
-
+On Fri, Jun 30, 2023 at 08:10:59PM +0800, zelong dong wrote:
+> From: Zelong Dong <zelong.dong@amlogic.com>
+> 
+> Add the reset controller device of Meson-C3 SoC family
+> 
+> Signed-off-by: Zelong Dong <zelong.dong@amlogic.com>
 > ---
->  tools/perf/tests/shell/lock_contention.sh | 36 +++++++++++++++++++++++
->  1 file changed, 36 insertions(+)
->
-> diff --git a/tools/perf/tests/shell/lock_contention.sh b/tools/perf/tests=
-/shell/lock_contention.sh
-> index f2cc187b6186..4a194420416e 100755
-> --- a/tools/perf/tests/shell/lock_contention.sh
-> +++ b/tools/perf/tests/shell/lock_contention.sh
-> @@ -233,6 +233,41 @@ test_aggr_task_stack_filter()
->         fi
->  }
->
-> +test_csv_output()
-> +{
-> +       echo "Testing perf lock contention CSV output"
-> +       perf lock contention -i ${perfdata} -E 1 -x , --output ${result}
-> +       # count the number of commas in the header
-> +       # it should have 5: contended, total-wait, max-wait, avg-wait, ty=
-pe, caller
-> +       header=3D$(grep "# output:" ${result} | tr -d -c , | wc -c)
-> +       if [ "${header}" !=3D "5" ]; then
-> +               echo "[Fail] Recorded result does not have enough output =
-columns: ${header} !=3D 5"
-> +               err=3D1
-> +               exit
-> +       fi
-> +       # count the number of commas in the output
-> +       output=3D$(grep -v "^#" ${result} | tr -d -c , | wc -c)
-> +       if [ "${header}" !=3D "${output}" ]; then
-> +               echo "[Fail] Recorded result does not match the number of=
- commas: ${header} !=3D ${output}"
-> +               err=3D1
-> +               exit
-> +       fi
+>  arch/arm64/boot/dts/amlogic/amlogic-c3.dtsi | 7 +++++++
+>  1 file changed, 7 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/amlogic/amlogic-c3.dtsi b/arch/arm64/boot/dts/amlogic/amlogic-c3.dtsi
+> index 60ad4f3eef9d..62684b7a684c 100644
+> --- a/arch/arm64/boot/dts/amlogic/amlogic-c3.dtsi
+> +++ b/arch/arm64/boot/dts/amlogic/amlogic-c3.dtsi
+> @@ -6,6 +6,7 @@
+>  #include <dt-bindings/interrupt-controller/irq.h>
+>  #include <dt-bindings/interrupt-controller/arm-gic.h>
+>  #include <dt-bindings/gpio/gpio.h>
+> +#include <dt-bindings/reset/amlogic,meson-c3-reset.h>
+>  
+>  / {
+>  	cpus {
+> @@ -82,6 +83,12 @@ uart_b: serial@7a000 {
+>  				clock-names = "xtal", "pclk", "baud";
+>  			};
+>  
+> +			reset: reset-controller@0x2000 {
+> +				compatible = "amlogic,meson-c3-reset";
+> +				reg = <0x0 0x2000 0x0 0x98>;
+> +				#reset-cells = <1>;
+> +			};
 > +
-> +       if ! perf lock con -b true > /dev/null 2>&1 ; then
-> +               echo "[Skip] No BPF support"
-> +               return
-> +       fi
-> +
-> +       # the perf lock contention output goes to the stderr
-> +       perf lock con -a -b -E 1 -x , --output ${result} -- perf bench sc=
-hed messaging > /dev/null 2>&1
-> +       output=3D$(grep -v "^#" ${result} | tr -d -c , | wc -c)
-> +       if [ "${header}" !=3D "${output}" ]; then
-> +               echo "[Fail] BPF result does not match the number of comm=
-as: ${header} !=3D ${output}"
-> +               err=3D1
-> +               exit
-> +       fi
-> +}
-> +
->  check
->
->  test_record
-> @@ -244,5 +279,6 @@ test_type_filter
->  test_lock_filter
->  test_stack_filter
->  test_aggr_task_stack_filter
-> +test_csv_output
->
->  exit ${err}
-> --
-> 2.41.0.255.g8b1d071c50-goog
->
+
+As Martin mentioned in the my review, internal apb entries should be
+sorted by base reg offset. So reset-controller must be located before
+uart_b.
+
+Please refer to:
+
+https://lore.kernel.org/linux-amlogic/CAFBinCAO14zcgY66UyJO9UxuCWf1N-Lsx=iYNTJL=cwXoJv__Q@mail.gmail.com/
+
+>  		};
+>  	};
+>  };
+> -- 
+> 2.35.1
+> 
+> 
+> _______________________________________________
+> linux-amlogic mailing list
+> linux-amlogic@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-amlogic
+
+-- 
+Thank you,
+Dmitry
