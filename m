@@ -2,67 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E80C37432A5
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 04:15:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1172B7432B1
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 04:20:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231644AbjF3CPY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 22:15:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54838 "EHLO
+        id S230229AbjF3CUc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 22:20:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232152AbjF3CPI (ORCPT
+        with ESMTP id S231388AbjF3CU2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 22:15:08 -0400
-Received: from mail-qk1-x733.google.com (mail-qk1-x733.google.com [IPv6:2607:f8b0:4864:20::733])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CACED3588
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 19:14:46 -0700 (PDT)
-Received: by mail-qk1-x733.google.com with SMTP id af79cd13be357-76731802203so122406185a.3
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 19:14:46 -0700 (PDT)
+        Thu, 29 Jun 2023 22:20:28 -0400
+Received: from mail-oi1-x233.google.com (mail-oi1-x233.google.com [IPv6:2607:f8b0:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68CBA358A;
+        Thu, 29 Jun 2023 19:20:24 -0700 (PDT)
+Received: by mail-oi1-x233.google.com with SMTP id 5614622812f47-39ca48cd4c6so1007870b6e.0;
+        Thu, 29 Jun 2023 19:20:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1688091285; x=1690683285;
-        h=in-reply-to:references:subject:cc:to:from:message-id:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=CYjOJQzczNCrKegpSzD/qpaJvwPv5v+9dxljoRuBmPU=;
-        b=XPnusK+xZumPpWK+TnAUlS47hwJecS+UZpSGGpkyFUq32PVtnnKC82N2AS0o564c5O
-         nCG0afUQzhNi/f32vRMZykfQK5ZDJFAAgPGwuAw/LgvF9RGhChAfFFpd2UGIO3J0Brcm
-         OzoQAihWKqpHn3BCuMB6LS1cYSDeTDNjDnRtKAB0SW3gg/svki+1zf0K1jedKFOwPyUx
-         UkQbZ5mL1eVUD7rTZbJPtNgot4q7aND0dI7qK1OGixnQam0BN5M0VB0SyKlJeWmb2pST
-         ZZamZP6AH+4dtMu2rIvCu8GUtFWVYcae2aJnB7UpPfC+yIUoy1PS2yFv0XQblexyNq7S
-         4KLw==
+        d=gmail.com; s=20221208; t=1688091623; x=1690683623;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ta4EJbZZ0uV3MxaQXraN6HqKk8GzjbnpNw8IbX9ky+g=;
+        b=TPV5PImZsHzOznLksdHPnIn+FCKyQmrTmJtjsgRrJQQr/WiyaQMA0Lq58dokiR0rKN
+         uJH3mNfiuKKAK6fF1kCpYdoQ7G1Ma+oP2O+3YD+lUXwSdzitKiKrc+3vYPwOtH5tiAfm
+         25/hXKSfUD7kDWtFc3Nt6Ocx6S2q9nq2IHEZuWezVBUTmJWj65DbdOOIVnujI9Zdbnqm
+         opLSeLa3iSMK3r1AgkjFDY565wz3iYJ6KN8MplPXB+cU122BpSvl0DWPbFstcszqnfKx
+         jGIOQVUvC41C/n9Hbcdibn30pEDRuVjk3Dnolg3ZruHYoTtMF+fU1wl+q6Jz1HlelJjo
+         x6jw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688091285; x=1690683285;
-        h=in-reply-to:references:subject:cc:to:from:message-id:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=CYjOJQzczNCrKegpSzD/qpaJvwPv5v+9dxljoRuBmPU=;
-        b=Qk/VHnR3Y75peF5NdsTASPgrCYg59w3r+9J4dNegM8+Fr2WGF3cqdRorP1PG5Tft3q
-         FJqRKEvD1gelqqgs4t5wBPTf9zlZrlAYFNOTdYjvuinrNT32g863vO2uLqQlCWfd5Rwc
-         5IhCp4OiAGDZVV/9bPselbvNDTih9SDnVF+DL3idMQqtEKMzaEI9lhc/tSspwtmKz/y3
-         Ak9dKeRZG0hUatf2Fkw87MN2pBo/GeWYPQepmF0FyYkJx7gPzVj0EUQcc/BVc+Oo1gfG
-         oonJtpSuNdR9cORTStG9ACtsfe2jVH2fcCrFMDmWaieIMKkpPCg8JM22w4aYl/XVaMgZ
-         Am2Q==
-X-Gm-Message-State: ABy/qLau4tLautZl9O3mANdn1GYmOjnijBqQgZyW5QFsBjyWIkNzDUTu
-        snkx95PIaxTIgwSkTPFY+S/g
-X-Google-Smtp-Source: APBJJlEYmTkp0TWIhcE/1Q/1btQ6Nkp1941nU8UvOANXQNCODPFIXEE7Vp24aTqcnPqDySPvgwLkKw==
-X-Received: by 2002:a05:6214:cc7:b0:636:277f:4155 with SMTP id 7-20020a0562140cc700b00636277f4155mr2111822qvx.15.1688091285696;
-        Thu, 29 Jun 2023 19:14:45 -0700 (PDT)
-Received: from localhost ([70.22.175.108])
-        by smtp.gmail.com with ESMTPSA id ep8-20020a05621418e800b00630182f0191sm7551322qvb.1.2023.06.29.19.14.45
+        d=1e100.net; s=20221208; t=1688091623; x=1690683623;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ta4EJbZZ0uV3MxaQXraN6HqKk8GzjbnpNw8IbX9ky+g=;
+        b=ZyE1CHS9yLGqsTqPBRS1OI3D02ztBS+xQPBXlNDVRcAINaj0Su4rxz0zCPZ7xhTzVB
+         WOE92Q+zUMorhtJo8sqBdJoTa9EWgdwDxfoBR4hsuENmS63mfdMaKObeKC0SOqzoGnnf
+         vgn/CF/QddukRHWM8UrpXkR/Go2umLHyTHAY7cTVEkPgCCisdtMI/Ho40dpCgnj60t+N
+         Rervh8s16ZQCCerUZX0q9PNFjd5dxm5oPzpGhMi/0li4M2k3PmewJmVQVc898IN1zXaa
+         6gkfepqMF/mlGW3yuBHXm43EYbSau6nR9p/UtueL3GDTmqizbEGXOm5z2VQdKt81EEby
+         MhQw==
+X-Gm-Message-State: AC+VfDz+qLUJTcMagqtlD/BnVaz/1cQ0xTjbwzALHuYqT4vVp+RYTnEV
+        Q1BzHtbRF+qYgc1ZYsuZLz4RPEsr4sMSDw==
+X-Google-Smtp-Source: ACHHUZ44vTUV957qp9+DnLN4eNNEpL6MTmRnTy+8ptocJfF63+XpjMn4jsXa4h2C+NbR++rf1zLuxw==
+X-Received: by 2002:a05:6808:6295:b0:3a3:76d4:b506 with SMTP id du21-20020a056808629500b003a376d4b506mr1091901oib.20.1688091623504;
+        Thu, 29 Jun 2023 19:20:23 -0700 (PDT)
+Received: from oslab-pc.tsinghua.edu.cn ([166.111.139.122])
+        by smtp.gmail.com with ESMTPSA id t18-20020aa79392000000b0063d24fcc2b7sm3055384pfe.1.2023.06.29.19.20.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Jun 2023 19:14:45 -0700 (PDT)
-Date:   Thu, 29 Jun 2023 22:14:44 -0400
-Message-ID: <d1283a1078fd30a2e45915416ae968d2.paul@paul-moore.com>
-From:   Paul Moore <paul@paul-moore.com>
-To:     Casey Schaufler <casey@schaufler-ca.com>, casey@schaufler-ca.com,
-        linux-security-module@vger.kernel.org
-Cc:     jmorris@namei.org, serge@hallyn.com, keescook@chromium.org,
-        john.johansen@canonical.com, penguin-kernel@i-love.sakura.ne.jp,
-        stephen.smalley.work@gmail.com, linux-kernel@vger.kernel.org,
-        linux-api@vger.kernel.org, mic@digikod.net
-Subject: Re: [PATCH v12 8/11] Smack: implement setselfattr and getselfattr  hooks
-References: <20230629195535.2590-9-casey@schaufler-ca.com>
-In-Reply-To: <20230629195535.2590-9-casey@schaufler-ca.com>
+        Thu, 29 Jun 2023 19:20:23 -0700 (PDT)
+From:   Tuo Li <islituo@gmail.com>
+To:     inki.dae@samsung.com, sw0312.kim@samsung.com,
+        kyungmin.park@samsung.com, airlied@gmail.com, daniel@ffwll.ch,
+        krzysztof.kozlowski@linaro.org, alim.akhtar@samsung.com
+Cc:     dri-devel@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        baijiaju1990@outlook.com, Tuo Li <islituo@gmail.com>,
+        BassCheck <bass@buaa.edu.cn>
+Subject: [PATCH] drm/exynos: fix a possible null-pointer dereference due to data race in exynos_drm_crtc_atomic_disable()
+Date:   Fri, 30 Jun 2023 10:19:06 +0800
+Message-Id: <20230630021906.1035115-1-islituo@gmail.com>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,99 +74,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Jun 29, 2023 Casey Schaufler <casey@schaufler-ca.com> wrote:
-> 
-> Implement Smack support for security_[gs]etselfattr.
-> Refactor the setprocattr hook to avoid code duplication.
-> 
-> Signed-off-by: Casey Schaufler <casey@schaufler-ca.com>
-> ---
->  security/smack/smack_lsm.c | 106 +++++++++++++++++++++++++++++++++++--
->  1 file changed, 101 insertions(+), 5 deletions(-)
-> 
-> diff --git a/security/smack/smack_lsm.c b/security/smack/smack_lsm.c
-> index cf847cfe5ed8..4a84639e9db9 100644
-> --- a/security/smack/smack_lsm.c
-> +++ b/security/smack/smack_lsm.c
+The variable crtc->state->event is often protected by the lock 
+crtc->dev->event_lock when is accessed. However, it is accessed as a 
+condition of an if statement in exynos_drm_crtc_atomic_disable() without
+holding the lock:
 
-...
+  if (crtc->state->event && !crtc->state->active)
 
-> @@ -3629,6 +3668,61 @@ static int smack_setprocattr(const char *name, void *value, size_t size)
->  	return size;
->  }
->  
-> +/**
-> + * smack_setselfattr - Set a Smack process attribute
-> + * @attr: which attribute to set
-> + * @ctx: buffer containing the data
-> + * @size: size of @ctx
-> + * @flags: unused
-> + *
-> + * Fill the passed user space @ctx with the details of the requested
-> + * attribute.
-> + *
-> + * Returns 0 on success, an error code otherwise.
-> + */
-> +static int smack_setselfattr(unsigned int attr, struct lsm_ctx __user *ctx,
-> +			     size_t size, u32 flags)
-> +{
-> +	struct lsm_ctx *lctx;
-> +	int rc;
-> +
-> +	lctx = kmalloc(size, GFP_KERNEL);
-> +	if (lctx == NULL)
-> +		return -ENOMEM;
-> +
-> +	if (copy_from_user(lctx, ctx, size))
-> +		rc = -EFAULT;
-> +	else if (lctx->ctx_len > size)
-> +		rc = -E2BIG;
-> +	else
-> +		rc = do_setattr(attr, lctx->ctx, lctx->ctx_len);
-> +
-> +	kfree(lctx);
-> +	if (rc > 0)
-> +		return 0;
-> +	return rc;
-> +}
-> +
-> +/**
-> + * smack_setprocattr - Smack process attribute setting
-> + * @name: the name of the attribute in /proc/.../attr
-> + * @value: the value to set
-> + * @size: the size of the value
-> + *
-> + * Sets the Smack value of the task. Only setting self
-> + * is permitted and only with privilege
-> + *
-> + * Returns the length of the smack label or an error code
-> + */
-> +static int smack_setprocattr(const char *name, void *value, size_t size)
-> +{
-> +	int attr = lsm_name_to_attr(name);
-> +
-> +	if (attr == LSM_ATTR_UNDEF)
+However, if crtc->state->event is changed to NULL by another thread right
+after the conditions of the if statement is checked to be true, a
+null-pointer dereference can occur in drm_crtc_send_vblank_event():
 
-That should be '(attr != LSM_ATTR_UNDEF)', right?
+  e->pipe = pipe;
 
-> +		return do_setattr(attr, value, size);
-> +	return -EINVAL;
-> +}
-> +
->  /**
->   * smack_unix_stream_connect - Smack access on UDS
->   * @sock: one sock
-> @@ -4939,6 +5033,8 @@ static struct security_hook_list smack_hooks[] __ro_after_init = {
->  
->  	LSM_HOOK_INIT(d_instantiate, smack_d_instantiate),
->  
-> +	LSM_HOOK_INIT(getselfattr, smack_getselfattr),
-> +	LSM_HOOK_INIT(setselfattr, smack_setselfattr),
->  	LSM_HOOK_INIT(getprocattr, smack_getprocattr),
->  	LSM_HOOK_INIT(setprocattr, smack_setprocattr),
->  
-> -- 
-> 2.40.1
+To fix this possible null-pointer dereference caused by data race, the 
+spin lock coverage is extended to protect the if statement as well as the 
+function call to drm_crtc_send_vblank_event().
 
---
-paul-moore.com
+Reported-by: BassCheck <bass@buaa.edu.cn>
+Signed-off-by: Tuo Li <islituo@gmail.com>
+---
+ drivers/gpu/drm/exynos/exynos_drm_crtc.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/gpu/drm/exynos/exynos_drm_crtc.c b/drivers/gpu/drm/exynos/exynos_drm_crtc.c
+index 4153f302de7c..d19e796c2061 100644
+--- a/drivers/gpu/drm/exynos/exynos_drm_crtc.c
++++ b/drivers/gpu/drm/exynos/exynos_drm_crtc.c
+@@ -39,13 +39,12 @@ static void exynos_drm_crtc_atomic_disable(struct drm_crtc *crtc,
+ 	if (exynos_crtc->ops->atomic_disable)
+ 		exynos_crtc->ops->atomic_disable(exynos_crtc);
+ 
++	spin_lock_irq(&crtc->dev->event_lock);
+ 	if (crtc->state->event && !crtc->state->active) {
+-		spin_lock_irq(&crtc->dev->event_lock);
+ 		drm_crtc_send_vblank_event(crtc, crtc->state->event);
+-		spin_unlock_irq(&crtc->dev->event_lock);
+-
+ 		crtc->state->event = NULL;
+ 	}
++	spin_unlock_irq(&crtc->dev->event_lock);
+ }
+ 
+ static int exynos_crtc_atomic_check(struct drm_crtc *crtc,
+-- 
+2.34.1
+
