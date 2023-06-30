@@ -2,169 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDFD7743F32
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 17:49:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C4A57743F3A
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 17:54:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232965AbjF3Ptz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 11:49:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55966 "EHLO
+        id S232636AbjF3Py0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Jun 2023 11:54:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232816AbjF3Ptn (ORCPT
+        with ESMTP id S232929AbjF3PyM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 11:49:43 -0400
-Received: from mail-qt1-x829.google.com (mail-qt1-x829.google.com [IPv6:2607:f8b0:4864:20::829])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3547A3C06
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 08:49:41 -0700 (PDT)
-Received: by mail-qt1-x829.google.com with SMTP id d75a77b69052e-401f4408955so261121cf.1
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 08:49:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1688140180; x=1690732180;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ypApT2hRzaMD7zWDLfvFjlKKtvQJ4OYbQ8ZXF60dCvY=;
-        b=EDUEu7W2r/7Fb6WRCuA7Q+7DxOQvO0t/y3dQETd58nysuk5gqNeelrxH/ugdRXV04b
-         tugJhKUkg/6BUOt3oTh05bjX9ThbnlARx8X2mDNn6kgDBGWuuW3574AH/C4syw2FCc8e
-         vmcsntztGUM16oFvJrnWAmz3DAMzosvdi3JWeoTvaMYgvMUCLv2KrNIuimYQnwMxvd14
-         psu6q9z/Dq9viB+g1fiYAeFw06xQsLGA4zFmFDgvu2QcvBq++Qdv+nIikMrZs1oy4hde
-         qAr2lHXOqG64ZTDU1o5/0yIiArbU/ZGuJsDYFtj5CuQHCoUsbGl7QPw2freudY41wCX2
-         X0+g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688140180; x=1690732180;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ypApT2hRzaMD7zWDLfvFjlKKtvQJ4OYbQ8ZXF60dCvY=;
-        b=MaI/hNRoBUqLx86oJnzTAXllp0in+sths80+i7LCA9oSiO94xj4WzrN4d6A+nqOlW9
-         5c6LQRiKwSm0qVhSC8jTIsg8jK69xC9O0t3fpffuLtgFmJh6xkrudv8BQSbq25tiZ7j3
-         QafQ+3Im8M3CNrAiSAYEF+yZi+A71G3x3ETUymy+f6lZC2/eMkKCOD6EoasDyx6iXwLr
-         7/W68XQ6LTOemhhfFs6EPrH7ccah3v5KMRPKqjshPaDxFzrsdKf9231xiREQKCKlliZ0
-         eKgkToB0x4rtgMtwiAYyl2TZj2U1xPXzsD4C0gQJpVExhR3kMS91RqjFlwWAWr0B6YOo
-         Q9Pw==
-X-Gm-Message-State: AC+VfDwAjNeZ12TGPuVC9CyvJ++cjumBB01HNzHMPuwHZU+mL4XAjzb1
-        JcS5Xze3XnrI8EUj1D4kYwTvk+ipuNWp6P/QsKTioA==
-X-Google-Smtp-Source: ACHHUZ41SYhbUvQSgTzG7vzBDKRiAe4qvoligE7YxGQl/rgoZByrQQPolfBYjnEPkW89+LxYTonPVVxd+YnNym5UXFk=
-X-Received: by 2002:ac8:7f0a:0:b0:3f7:ff4a:eae5 with SMTP id
- f10-20020ac87f0a000000b003f7ff4aeae5mr891493qtk.12.1688140180231; Fri, 30 Jun
- 2023 08:49:40 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230630153840.858668-1-james.clark@arm.com>
-In-Reply-To: <20230630153840.858668-1-james.clark@arm.com>
-From:   Ian Rogers <irogers@google.com>
-Date:   Fri, 30 Jun 2023 08:49:28 -0700
-Message-ID: <CAP-5=fWMu7g9DWbBatbACV0VmThKNLLg0=Uff-oH48XEsrpJ3g@mail.gmail.com>
-Subject: Re: [PATCH] perf symbol: Fix uninitialized return value in symbols__find_by_name()
-To:     James Clark <james.clark@arm.com>
-Cc:     linux-perf-users@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
+        Fri, 30 Jun 2023 11:54:12 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 514883ABE
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 08:54:11 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D8A5761792
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 15:54:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70C4CC433C8;
+        Fri, 30 Jun 2023 15:54:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688140450;
+        bh=7OJfj3mRRwh7boKqkb9v7u3M1MnmPwlc5BEi+eCoD/c=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=TkBi1TAgIpC7ZQSW3Zk8aXoNhmgecjUToehHCp6xLMSLcf5FGOMITfg2wjUX9+JwW
+         qfgfb7bauqO3q3RwO9M5eK5jSkcIe4v5d0ie1cZSAJRSH2r1YYL7Wb4tYRcKuiW9vr
+         6jHGMXcF6ejiovEyzeF+mUC7P0sN50pUHR64dI0rMaZJW5dUO+jGsTubNHD/iaROmG
+         modtPW5nZix4xJYtW2K1rVngSC1mBZzIsjvbFO7lrzKQDGQJGqWTKf28Kbl5JpzOV3
+         ijBrWxhBCUuljye65qKslQIgHuv2BgyZ/dgoQ1DqZAmIgY11kKmoQ1dMia+EdUH0Bf
+         ikQCQe9nBxsew==
+Date:   Fri, 30 Jun 2023 16:54:03 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Johan Hovold <johan+linaro@kernel.org>
+Cc:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
         linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH 1/5] ASoC: codecs: wcd938x: fix mbhc impedance loglevel
+Message-ID: <4dbc08d4-9e45-40d7-95f5-4c12d3034bf5@sirena.org.uk>
+References: <20230630142717.5314-1-johan+linaro@kernel.org>
+ <20230630142717.5314-2-johan+linaro@kernel.org>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="DCVMfBkLXgljzRQ6"
+Content-Disposition: inline
+In-Reply-To: <20230630142717.5314-2-johan+linaro@kernel.org>
+X-Cookie: Old mail has arrived.
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 30, 2023 at 8:39=E2=80=AFAM James Clark <james.clark@arm.com> w=
-rote:
->
-> found_idx and s aren't initialized, so if no symbol is found then the
-> assert at the end will index off the end of the array causing a
-> segfault. The function also doesn't return NULL when the symbol isn't
-> found even if the assert passes. Fix it by initializing the values and
-> only setting them when something is found.
->
-> Fixes the following test failure:
->
->   $ perf test 1
->   1: vmlinux symtab matches kallsyms     : FAILED!
->
-> Fixes: 259dce914e93 ("perf symbol: Remove symbol_name_rb_node")
-> Signed-off-by: James Clark <james.clark@arm.com>
 
-Thanks, and thanks for the Fixes.
+--DCVMfBkLXgljzRQ6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Acked-by: Ian Rogers <irogers@google.com>
+On Fri, Jun 30, 2023 at 04:27:13PM +0200, Johan Hovold wrote:
 
-> ---
->  tools/perf/util/symbol.c | 16 +++++++++-------
->  1 file changed, 9 insertions(+), 7 deletions(-)
->
-> diff --git a/tools/perf/util/symbol.c b/tools/perf/util/symbol.c
-> index bc79291b9f3b..f849f9ef68e6 100644
-> --- a/tools/perf/util/symbol.c
-> +++ b/tools/perf/util/symbol.c
-> @@ -495,7 +495,10 @@ static struct symbol *symbols__find_by_name(struct s=
-ymbol *symbols[],
->                                             size_t *found_idx)
->  {
->         size_t i, lower =3D 0, upper =3D symbols_len;
-> -       struct symbol *s;
-> +       struct symbol *s =3D NULL;
-> +
-> +       if (found_idx)
-> +               *found_idx =3D SIZE_MAX;
->
->         if (!symbols_len)
->                 return NULL;
-> @@ -504,8 +507,7 @@ static struct symbol *symbols__find_by_name(struct sy=
-mbol *symbols[],
->                 int cmp;
->
->                 i =3D (lower + upper) / 2;
-> -               s =3D symbols[i];
-> -               cmp =3D symbol__match_symbol_name(s->name, name, includes=
-);
-> +               cmp =3D symbol__match_symbol_name(symbols[i]->name, name,=
- includes);
->
->                 if (cmp > 0)
->                         upper =3D i;
-> @@ -514,10 +516,11 @@ static struct symbol *symbols__find_by_name(struct =
-symbol *symbols[],
->                 else {
->                         if (found_idx)
->                                 *found_idx =3D i;
-> +                       s =3D symbols[i];
->                         break;
->                 }
->         }
-> -       if (includes !=3D SYMBOL_TAG_INCLUDE__DEFAULT_ONLY) {
-> +       if (s && includes !=3D SYMBOL_TAG_INCLUDE__DEFAULT_ONLY) {
->                 /* return first symbol that has same name (if any) */
->                 for (; i > 0; i--) {
->                         struct symbol *tmp =3D symbols[i - 1];
-> @@ -525,13 +528,12 @@ static struct symbol *symbols__find_by_name(struct =
-symbol *symbols[],
->                         if (!arch__compare_symbol_names(tmp->name, s->nam=
-e)) {
->                                 if (found_idx)
->                                         *found_idx =3D i - 1;
-> +                               s =3D tmp;
->                         } else
->                                 break;
-> -
-> -                       s =3D tmp;
->                 }
->         }
-> -       assert(!found_idx || s =3D=3D symbols[*found_idx]);
-> +       assert(!found_idx || !s || s =3D=3D symbols[*found_idx]);
->         return s;
->  }
->
-> --
-> 2.34.1
->
+> -	pr_err("%s: d1=%d, c1=%d, x1=0x%x, z_val=%d(milliOhm)\n",
+> -		__func__, d1, c1, x1, *zdet);
+> +	pr_debug("%s: d1=%d, c1=%d, x1=0x%x, z_val=%d (milliohm)\n",
+> +		 __func__, d1, c1, x1, *zdet);
+
+Indeed we should really be able to arrange to make this a dev_dbg().
+
+--DCVMfBkLXgljzRQ6
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmSe+psACgkQJNaLcl1U
+h9CDJgf+P+jaWniR0//IBmvy7CV+0jDyq6kdWfoTrfeLkWm5xzGHOnkC7rYuf2pz
+cqpg7YPaH2ebAOd/MOyA4kuY8JM5bn+rPCjVeQCb2nEsC8srnMTP+Sel8lUQ0otD
+3+w/0fAX6xVGQFAjTMVtgkGEkbJBv+NcWVDS3uVUv1KnIH0G0sh2PunuvhN37Fe/
+/dXGEKMtqV0PlGpLN+VwbqEH5iK12SaW+5SoK8iFQkdxdWTXUDdu61mJRL5Xrg8O
+wYe1hJIM4/Ne/Y6pOZ76TMGSEppI8kH/oKRwa4rSwl8rlIJfdzULzG+XFJH+DPZQ
+BTig6ASZoMy9x1TP1/JHM91orIR/Mw==
+=h3V6
+-----END PGP SIGNATURE-----
+
+--DCVMfBkLXgljzRQ6--
