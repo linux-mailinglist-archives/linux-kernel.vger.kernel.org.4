@@ -2,112 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C6E2743969
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 12:33:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 426D874396F
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 12:34:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232235AbjF3Kdv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 06:33:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35012 "EHLO
+        id S232342AbjF3KeD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Jun 2023 06:34:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232111AbjF3Kdp (ORCPT
+        with ESMTP id S232111AbjF3Kdz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 06:33:45 -0400
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F92730C5
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 03:33:44 -0700 (PDT)
-Received: by mail-lj1-x22d.google.com with SMTP id 38308e7fff4ca-2b6985de215so27828491fa.2
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 03:33:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=futuring-girl-com.20221208.gappssmtp.com; s=20221208; t=1688121223; x=1690713223;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=WMvg4+xf/FpT2l2ger0oTsMzr40HAUi9gV+dNJ+SQAU=;
-        b=ptIyYvAGr7z2ddcaHcOP+a5GUrlPfF7+kvw9taw+/uSBqODpirNaXfrjvvaah2YJO4
-         1I+MABWWd1CMrpSEEL8XCWF+dfhQzuerODUen0VCYKl61KpU4edsHLHSNb/e/8KWVpku
-         iNLrIGxlbqQy2MJ2uLDoqkplGXbaoeRbvFubhmM+C1vjdZzT36cvY2cLUfGGOAlthxMy
-         Kh158t2XgN9f6kdlcWlCDAev77ibQ4onJGwHEAzLSGieQ3K/ZWUP8R3qYUdsxz2QhyET
-         f4xJYykbgbt91ep0t8+htl6DigRVG61IO8UFbqxQubKQCzQxU/VD0s+nXv4n4DdCNVjA
-         ythA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688121223; x=1690713223;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=WMvg4+xf/FpT2l2ger0oTsMzr40HAUi9gV+dNJ+SQAU=;
-        b=Ca7IRmC3jQ2WSkMito20WwYEPkCiYPxD0/YHUdOEazA4cdefjfK3E5/py/FOJcQ8jT
-         E2IfdlnmX87lxW0ktQ7GJzXDPq6Gn9uxZZ4RC2q933MlKu/sdgWjADypFUhB1hFKYDxD
-         FpHecIvxJ9LrzmJNrTtJtJr9EeI+dZdHtSvnzLr3EbVpRX5UOHVdQvA+VALIueVmeIks
-         sDWMOhFfRncflB9NzmcuIKCKHkVRF/r3JFV9w1iNw5DrOUvq0gBJWnAUGoC7ZJPTfpS1
-         vpuZ8raaWJag5g8htGLSBzx0Nt5LXkQf8WB+JeT53SISeBQH0dptrDAWhSP/43PKTm1P
-         qeug==
-X-Gm-Message-State: ABy/qLbbDrDd4R3TBUOSEKtW8eLBSQoTVDtno1M+aymgtVdZudRM1H1O
-        CFyWZJVkjMIWhw1RpJ7RKVfxJW2RMhlTA3fKz/CmWQ==
-X-Google-Smtp-Source: APBJJlG2u/xyzuJ84ph37p/iQTjUyhcv/0ujEisW8iOXdWjzS2aHJnQdoa55ieUt9lpi45BGDEBdxvotYQGcYJ/euZE=
-X-Received: by 2002:a2e:9b0b:0:b0:2b6:a5bd:da2d with SMTP id
- u11-20020a2e9b0b000000b002b6a5bdda2dmr1739785lji.27.1688121222628; Fri, 30
- Jun 2023 03:33:42 -0700 (PDT)
+        Fri, 30 Jun 2023 06:33:55 -0400
+Received: from esa5.hgst.iphmx.com (esa5.hgst.iphmx.com [216.71.153.144])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49C7530C5
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 03:33:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1688121235; x=1719657235;
+  h=mime-version:date:from:to:subject:in-reply-to:references:
+   message-id:content-transfer-encoding;
+  bh=bh+mzwZsv0sqyvr7ZUOmbGwgq8sCUfE12/5m1clQC8A=;
+  b=Wrnu99Nyyf4Djnk9un3Q3likYp/ECVADByziehWC6Q4oxOravS6Qp0gi
+   skYhPFhd85KNt/k6NR+fKDETk+nUTCUvqTo5vAdoUijI+GVHmXm9KgYoE
+   7ewG6IUalKDagptg4lLCmDr/WHEQUN3+GQizEoaiE/JwT/WH5YXW17R+6
+   7wprjXoDX8tCD/bDUfSa48PoLDGy3uWNZjmqnVaANcbzYXsCo19n3TJSO
+   r1rjVTLAQ74GN02we7T97czB2FY8inm456F7f0rb9TWdLGKreDzKfe7nq
+   wGX4BtPd31ekPJ1I4tuOl/ywbRo6/O79aUUu7Kd/TROkzHnK0WKzDPWDT
+   A==;
+X-IronPort-AV: E=Sophos;i="6.01,170,1684771200"; 
+   d="scan'208";a="236618453"
+Received: from h199-255-45-14.hgst.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
+  by ob1.hgst.iphmx.com with ESMTP; 30 Jun 2023 18:33:54 +0800
+IronPort-SDR: cP25xD1Ch0xn26LBwx2t7BopIAuXy+/uvB6HjHkxmTREr799/3c9LRK837HS0BRrn+P8yPyVwa
+ T/nnY1Q/V5Q4HenIfuv7eBZizYwWDn9gL+l/Uvw7qz+leMRBQm+ey/YK5BCM2+5t+Vk3IIO673
+ jWbfM35SHf3+RJgoCwLetODRlEpfhT0jPj6qk8seAh3wWoxuIUqSQmkJZIHorTrZkj4zdS9Prt
+ qMtpfhTJM4Rv1rQTJDkV8mBHCBLVV8xXaRRV+3JuCvvAuATXsuwLzEpD5dgz2Pttyz+BzEd4Qv
+ tqY=
+Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
+  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 30 Jun 2023 02:48:09 -0700
+IronPort-SDR: FqEHsljVVnwqBxlGasowtuzlCwI9sgS4bP5KTDXKeSQOS9zZF7IyWBoOv8FXrM3zahbOCXfMYW
+ ZQWOuKX9Wc/tgIzWzvPm3LkWXWcfpA7mWYJO0T9KtvbAnvHX/44wIrJ08M77/1sJdsCCv8HXQU
+ X76LtOpnEBR7MnNRgcdVGaQ5JP8b8TegngT+Dgw4J4xMQ1Gcx9WpPr6tYsUMM8wyxs9wFs0k/h
+ G38gPef507kZOW5hh7rVr+WWoLVIbXJ+7hLHTu9tzDyTJume32sDcnMAQgZmCfh7uVEgsM9pWv
+ Tyo=
+WDCIronportException: Internal
+Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
+  by uls-op-cesaip01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 30 Jun 2023 03:33:54 -0700
+Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4Qss9s3HwKz1RtVp
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 03:33:53 -0700 (PDT)
+Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)"
+        header.d=opensource.wdc.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
+        opensource.wdc.com; h=content-transfer-encoding:content-type
+        :message-id:user-agent:references:in-reply-to:subject:to:from
+        :date:mime-version; s=dkim; t=1688121218; x=1690713219; bh=bh+mz
+        wZsv0sqyvr7ZUOmbGwgq8sCUfE12/5m1clQC8A=; b=mg/2dVzZ9mHH66e8lYah0
+        kAQ/xE5I9J0LfBZZFEtHDYp7B1ujTVs1yDkT4RxqBY/bou5E9GxVHTx3RvHmGrSb
+        4PMBj5sJn6o5anpuDmfXeWluUuYPF8cYfFFIDFb/ZaxJ5lpCw4dWDiGYc/lvcf0U
+        gSaDLZ8oD3rwVPmxHVu3f6lYKgivQ6UKiMSHdkcBTh/Y/K/XBhYK8NZAu7toB+4N
+        er28XVhB82OIENJKzIxKL37PJmdY1/xOaAKkh0Toqlh5AqIQ/I0J5jFjJt6UneS7
+        ZSmJCUVUBJ7GB/31B3xGGGOxdovmnHedOdf1hBpSwge9pzEGVGUOySn+xRo6Cc/r
+        Q==
+X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
+Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
+        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id x1qqHVgZNf56 for <linux-kernel@vger.kernel.org>;
+        Fri, 30 Jun 2023 03:33:38 -0700 (PDT)
+Received: from localhost (usg-ed-osssrv.wdc.com [127.0.0.1])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4Qss9Y6Dxwz1RtVn;
+        Fri, 30 Jun 2023 03:33:37 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230630072124.944461414@linuxfoundation.org>
-In-Reply-To: <20230630072124.944461414@linuxfoundation.org>
-From:   ogasawara takeshi <takeshi.ogasawara@futuring-girl.com>
-Date:   Fri, 30 Jun 2023 19:33:31 +0900
-Message-ID: <CAKL4bV5Dhh3n0cLnd7wvgheMOrodFkCLa-RpzK9f3NW+n0jsKQ@mail.gmail.com>
-Subject: Re: [PATCH 6.1 00/33] 6.1.37-rc3 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de,
-        conor@kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Date:   Fri, 30 Jun 2023 16:03:37 +0530
+From:   aravind.ramesh@opensource.wdc.com
+To:     Hans Holmberg <Hans.Holmberg@wdc.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        "open list:BLOCK LAYER" <linux-block@vger.kernel.org>,
+        hch@infradead.org,
+        =?UTF-8?Q?Matias_Bj=C3=B8rling?= <Matias.Bjorling@wdc.com>,
+        Andreas Hindborg <a.hindborg@samsung.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        Damien Le Moal <dlemoal@kernel.org>, gost.dev@samsung.com,
+        Minwoo Im <minwoo.im.dev@gmail.com>,
+        Ming Lei <ming.lei@redhat.com>
+Subject: Re: [PATCH v4 0/4] ublk: add zoned storage support
+In-Reply-To: <5F597343-EC91-4698-ACBE-9111B52FC3FC@wdc.com>
+References: <20230628190649.11233-1-nmi@metaspace.dk>
+ <5F597343-EC91-4698-ACBE-9111B52FC3FC@wdc.com>
+User-Agent: Roundcube Webmail
+Message-ID: <b29f01c287c7469f47fb4b689a3cba68@opensource.wdc.com>
+X-Sender: aravind.ramesh@opensource.wdc.com
+Content-Type: text/plain; charset=UTF-8;
+ format=flowed
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg
+> =EF=BB=BFOn 29/06/23, 12:37 AM, "Andreas Hindborg" <nmi@metaspace.dk
+> <mailto:nmi@metaspace.dk>> wrote:
+>=20
+>=20
+> From: Andreas Hindborg <a.hindborg@samsung.com=20
+> <mailto:a.hindborg@samsung.com>>
+>=20
+>=20
+> Hi All,
+>=20
+>=20
+> This patch set adds zoned storage support to `ublk`. The first two=20
+> patches does
+> some house cleaning in preparation for the last two patches. The third=20
+> patch
+> adds support for report_zones and the following operations:
+>=20
 
-On Fri, Jun 30, 2023 at 4:32=E2=80=AFPM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 6.1.37 release.
-> There are 33 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Sun, 02 Jul 2023 07:21:12 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-=
-6.1.37-rc3.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-6.1.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+Just to clarify, we do need you ublk user space patches
+to create a ublk device node (with these patches in kernel), right ?
 
-6.1.37-rc3 tested.
+>=20
+> - REQ_OP_ZONE_OPEN
+> - REQ_OP_ZONE_CLOSE
+> - REQ_OP_ZONE_FINISH
+> - REQ_OP_ZONE_RES
 
-Build successfully completed.
-Boot successfully completed.
-No dmesg regressions.
-Video output normal.
-Sound output normal.
+REQ_OP_ZONE_RESET
 
-Lenovo ThinkPad X1 Carbon Gen10(Intel i7-1260P(x86_64), arch linux)
+>=20
+>=20
+> The last patch adds support for REQ_OP_ZONE_APPEND.
+>=20
+>=20
+> v3 [2] -> v4 changes:
+> - Split up v3 patches
+> - Add zone append support
+> - Change order of variables in `ublk_report_zones`
+>=20
+>=20
+> Read/write and zone operations are tested with zenfs [3].
+>=20
+>=20
+> The zone append path is tested with fio -> zonefs -> ublk -> null_blk.
+>=20
+>=20
+> The implementation of zone append requires ublk user copy feature, and=20
+> therefore
+> the series is based on branch for-next (6afa337a3789) of [4].
+>=20
+>=20
+> [1]
+> https://github.com/metaspace/ubdsrv/commit/7de0d901c329fde7dc5a2e998952=
+dd88bf5e668b
+> <https://github.com/metaspace/ubdsrv/commit/7de0d901c329fde7dc5a2e99895=
+2dd88bf5e668b>
+> [2]
+> https://lore.kernel.org/linux-block/20230316145539.300523-1-nmi@metaspa=
+ce.dk
+> <mailto:20230316145539.300523-1-nmi@metaspace.dk>/
+> [3] https://github.com/westerndigitalcorporation/zenfs
+> <https://github.com/westerndigitalcorporation/zenfs>
+> [4] https://git.kernel.dk/linux.git <https://git.kernel.dk/linux.git>
+>=20
+>=20
+> Andreas Hindborg (4):
+> ublk: change ublk IO command defines to enum
+> ublk: move types to shared header file
+> ublk: enable zoned storage support
+> ublk: add zone append
+>=20
+>=20
+> MAINTAINERS | 2 +
+> drivers/block/Kconfig | 4 +
+> drivers/block/Makefile | 4 +-
+> drivers/block/ublk_drv-zoned.c | 155 +++++++++++++++++++++++++++++++++
+> drivers/block/ublk_drv.c | 150 +++++++++++++++++++------------
+> drivers/block/ublk_drv.h | 71 +++++++++++++++
+> include/uapi/linux/ublk_cmd.h | 38 ++++++--
+> 7 files changed, 363 insertions(+), 61 deletions(-)
+> create mode 100644 drivers/block/ublk_drv-zoned.c
+> create mode 100644 drivers/block/ublk_drv.h
+>=20
+>=20
+>=20
+>=20
+> base-commit: 3261ea42710e9665c9151006049411bd23b5411f
 
-Thanks
-
-Tested-by: Takeshi Ogasawara <takeshi.ogasawara@futuring-girl.com>
+Regards,
+Aravind
