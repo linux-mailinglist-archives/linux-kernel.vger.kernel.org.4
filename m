@@ -2,113 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E578743BC2
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 14:16:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EE1B743BF5
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 14:36:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232484AbjF3MQe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 08:16:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57992 "EHLO
+        id S232298AbjF3Mg2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Jun 2023 08:36:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230015AbjF3MQb (ORCPT
+        with ESMTP id S232168AbjF3MgZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 08:16:31 -0400
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3A66E4F;
-        Fri, 30 Jun 2023 05:16:30 -0700 (PDT)
-Received: by mail-wm1-x32d.google.com with SMTP id 5b1f17b1804b1-3fa9850bfebso18878975e9.1;
-        Fri, 30 Jun 2023 05:16:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688127389; x=1690719389;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=POwzEyHOdtL57sIqvI2QVvs+UewHf9VWu9YMTjUelI0=;
-        b=UZH1mfohLZvRw9Q14mYJsx82z7XymmyTd5ioYGrF+M0DgC5R+kVJhw13vzcPb2ndkq
-         YeQ3n40ebC5JCYnuON8zOsLX2wGH05871+Y+R/aGLqf1tomVnkkNHxwsmhWPeqER9qxE
-         6+iox4l0rYZdwy8vEKAURpOqcQueeiws1e6odS0RJV9iTseOwq2j5BKP6NLrfiN53+oM
-         G/8S1Pv6JNPXR5lRxNvyRxOX0W8PaqpV2uehYNFdZIUHkMlYGfHSo52nsXVe8enUEmWx
-         cLSwPzXUBywetlK0DpLbYkWuEWk4PPouxGDPzNyjDKVJDp4Oxg/Ie9j+kqsZKOYyducm
-         IKvw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688127389; x=1690719389;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=POwzEyHOdtL57sIqvI2QVvs+UewHf9VWu9YMTjUelI0=;
-        b=FaCQr40jneljE826tYd6ZsWdgUoJPT9JALTKn4JS0Wmj0VkqIjnxZgQRm131Sm4Mhv
-         eU5BomxytCa89kP7BN23DeVceYIeEvRl2y0hnWhYgwpV0vAc/mqyNtOgrekWcl52UpsW
-         SSgP4GYAkNMTVnJ3EafbyHCmAwZv1+ufP0KYFI9DvXrsVHQYgwFdtQJSSP0i/3/f27T1
-         KpyAgabFtCi8TLT5LmDKd0SuXGrhcvfAbLyKKki+dca7qRak1su0A/t6jYHYdo6DSr7e
-         KKBsE/b/VIHHCFaJt28KEbjXHXOHR/1pe0QaB8yT1lgsQHVkjN5XdzGsMvSPrv6zFKCN
-         xqSA==
-X-Gm-Message-State: AC+VfDy/9M1Qfx9Kkj9FTVcgQQOHX4Kxf1PkNBImH1dQ7+OPwQmcwtEN
-        uqwoEhKD6Bj8rwLrGDhMcw02sQZi+dA=
-X-Google-Smtp-Source: ACHHUZ52zhXZx/IRbg0hxtxnZXFRkOAYddh5ciotPrMLJWbueVJ/7V66ZOQ5YQlTizVrPV0bj7Lq+w==
-X-Received: by 2002:a1c:f70a:0:b0:3fb:c060:8b3d with SMTP id v10-20020a1cf70a000000b003fbc0608b3dmr1884948wmh.40.1688127388962;
-        Fri, 30 Jun 2023 05:16:28 -0700 (PDT)
-Received: from oberon.zico.biz (77-85-190-39.ip.btc-net.bg. [77.85.190.39])
-        by smtp.gmail.com with ESMTPSA id o11-20020a05600c378b00b003fa95f328afsm14209200wmr.29.2023.06.30.05.16.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 30 Jun 2023 05:16:28 -0700 (PDT)
-From:   "Tzvetomir Stoyanov (VMware)" <tz.stoyanov@gmail.com>
-To:     rostedt@goodmis.org
-Cc:     mhiramat@kernel.org, dan.carpenter@linaro.org,
-        linux-trace-devel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2] kernel/trace: Fix cleanup logic of enable_trace_eprobe
-Date:   Fri, 30 Jun 2023 15:16:27 +0300
-Message-ID: <20230630121627.833560-1-tz.stoyanov@gmail.com>
-X-Mailer: git-send-email 2.41.0
+        Fri, 30 Jun 2023 08:36:25 -0400
+X-Greylist: delayed 904 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 30 Jun 2023 05:36:23 PDT
+Received: from sender4-op-o15.zoho.com (sender4-op-o15.zoho.com [136.143.188.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91E6935AC;
+        Fri, 30 Jun 2023 05:36:23 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1688127645; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=Dk//0Njx8FF/AYZDBW5cKe7m2rtHr10S73FYJqgvmWntZzP5z6aOK11OIguSvl34Tn0oA5o9RYe7Nul1ynIAU4+vdSXlvpC0lqGh/+TeRWsvJAjI3sQ5FoKUPSA0Xy/xLvxvW7VY7DieQXS2tp01Qrj/ndruwWSuli4q9pc71QQ=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1688127645; h=Content-Type:Content-Transfer-Encoding:Date:From:MIME-Version:Message-ID:Subject:To; 
+        bh=6LhIr6V17BrdC653wm2u6g1ZGMjqgmuF6Gf290y9Mik=; 
+        b=htfyOO+Tg6ZDjzP4O23dkxu4Y2pLn/9npK0Y5pvRUVlKGgIeugjje7yMHjoeL3dyvKmB5NnD79YXpHrtqHjefP7pEmefnkEZWgJyUQ2FAftPondNUhf9aTrmoELXgY+ycZTs6Yi/Ole0m5gYbbZOaaPTof7AeAoGMNRko3i0cY4=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=linux.beauty;
+        spf=pass  smtp.mailfrom=me@linux.beauty;
+        dmarc=pass header.from=<me@linux.beauty>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1688127645;
+        s=zmail; d=linux.beauty; i=me@linux.beauty;
+        h=Date:Date:From:From:To:To:Message-ID:In-Reply-To:Subject:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To:Cc;
+        bh=6LhIr6V17BrdC653wm2u6g1ZGMjqgmuF6Gf290y9Mik=;
+        b=LOmNU0Fs53LMzNr2s0M3AfsVLMlnYVstdIi8idH4DbWSjuampAXE4MZq2PiFJMrC
+        ATu31HqUwn/PQhhi02rhd0zNgxDhLKnEsGlOa1YwoW/a191EzAkF3ju0DuAlCc96UKl
+        KdIN1Mii9hvpmiTgh1hoxP9s3oFHjg7AuNVZPnYI=
+Received: from mail.zoho.com by mx.zohomail.com
+        with SMTP id 1688127644347812.1873140766394; Fri, 30 Jun 2023 05:20:44 -0700 (PDT)
+Date:   Fri, 30 Jun 2023 20:20:44 +0800
+From:   Li Chen <me@linux.beauty>
+To:     "linux-kernel" <linux-kernel@vger.kernel.org>,
+        "linux-acpi" <linux-acpi@vger.kernel.org>,
+        "Len Brown" <lenb@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Message-ID: <1890c3fa24c.d101fdf01298845.3731868257024939195@linux.beauty>
+In-Reply-To: 
+Subject: [PATCH] ACPI: resource: Add IRQ override for MECHREV Jiaolong17KS
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+Importance: Medium
+User-Agent: Zoho Mail
+X-Mailer: Zoho Mail
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The enable_trace_eprobe() function enables all event probes, attached
-to given trace probe. If an error occurs in enabling one of the event
-probes, all others should be roll backed. There is a bug in that roll
-back logic - instead of all event probes, only the failed one is
-disabled.
+Fix a regression introduced by commit 9946e39fe8d0 ("ACPI: resource: skip
+IRQ override on AMD Zen platforms") on MECHREV Jiaolong17KS, which
+causes the built-in keyboard to not work. This restores the functionality
+by adding an IRQ override.
 
-Reported-by: Dan Carpenter <dan.carpenter@linaro.org>
-Fixes: 7491e2c44278 ("tracing: Add a probe that attaches to trace events")
-Signed-off-by: Tzvetomir Stoyanov (VMware) <tz.stoyanov@gmail.com>
+I have personally tested this on the 17" model but I'm not sure if this
+issue is present on the 16 model.
+
+Fixes: 9946e39fe8d0 ("ACPI: resource: skip IRQ override on AMD Zen platforms")
+Signed-off-by: Li Chen <me@linux.beauty>
 ---
-v2: Added one-time warning, as suggested by Steven Rostedt.
+ drivers/acpi/resource.c | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
- kernel/trace/trace_eprobe.c | 14 ++++++++++++--
- 1 file changed, 12 insertions(+), 2 deletions(-)
-
-diff --git a/kernel/trace/trace_eprobe.c b/kernel/trace/trace_eprobe.c
-index 67e854979d53..6629fa217c99 100644
---- a/kernel/trace/trace_eprobe.c
-+++ b/kernel/trace/trace_eprobe.c
-@@ -702,8 +702,18 @@ static int enable_trace_eprobe(struct trace_event_call *call,
+diff --git a/drivers/acpi/resource.c b/drivers/acpi/resource.c
+index 0800a9d77558..5b00ee90388a 100644
+--- a/drivers/acpi/resource.c
++++ b/drivers/acpi/resource.c
+@@ -527,6 +527,17 @@ static const struct dmi_system_id lg_laptop[] = {
+ 	{ }
+ };
  
- 	if (ret) {
- 		/* Failed to enable one of them. Roll back all */
--		if (enabled)
--			disable_eprobe(ep, file->tr);
-+		if (enabled) {
-+			/*
-+			 * It's a bug if one failed for something other than memory
-+			 * not being available but another eprobe succeeded.
-+			 */
-+			WARN_ON_ONCE(ret != -ENOMEM);
++static const struct dmi_system_id mechrev_laptop[] = {
++	{
++		.ident = "Jiaolong17KS Series GM7XG0M",
++		.matches = {
++			DMI_MATCH(DMI_SYS_VENDOR, "MECHREVO"),
++			DMI_MATCH(DMI_PRODUCT_NAME, "Jiaolong17KS Series GM7XG0M"),
++		},
++	},
++	{ }
++};
 +
-+			list_for_each_entry(pos, trace_probe_probe_list(tp), list) {
-+				ep = container_of(pos, struct trace_eprobe, tp);
-+				disable_eprobe(ep, file->tr);
-+			}
-+		}
- 		if (file)
- 			trace_probe_remove_file(tp, file);
- 		else
+ struct irq_override_cmp {
+ 	const struct dmi_system_id *system;
+ 	unsigned char irq;
+@@ -544,6 +555,7 @@ static const struct irq_override_cmp override_table[] = {
+ 	{ tongfang_gm_rg, 1, ACPI_EDGE_SENSITIVE, ACPI_ACTIVE_LOW, 1, true },
+ 	{ maingear_laptop, 1, ACPI_EDGE_SENSITIVE, ACPI_ACTIVE_LOW, 1, true },
+ 	{ lg_laptop, 1, ACPI_LEVEL_SENSITIVE, ACPI_ACTIVE_LOW, 0, false },
++	{ mechrev_laptop, 1, ACPI_EDGE_SENSITIVE, ACPI_ACTIVE_LOW, 1, true },
+ };
+ 
+ static bool acpi_dev_irq_override(u32 gsi, u8 triggering, u8 polarity,
 -- 
 2.41.0
+
 
