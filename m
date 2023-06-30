@@ -2,128 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18EA47440B9
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 19:01:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DBBA37440C8
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 19:05:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232820AbjF3RBw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 13:01:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54404 "EHLO
+        id S232959AbjF3REw convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 30 Jun 2023 13:04:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232598AbjF3RBX (ORCPT
+        with ESMTP id S232800AbjF3REc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 13:01:23 -0400
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FEF34C3A
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 10:00:02 -0700 (PDT)
-Received: by mail-pf1-x430.google.com with SMTP id d2e1a72fcca58-66767d628e2so1655383b3a.2
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 10:00:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1688144389; x=1690736389;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=JHRes1O1VxMkr+CfLg+uJGUs+Iy2MgLhTyprz6Plm7M=;
-        b=dAVepBRSWI8Z+sSG2bcHZWFJV1N3FsDVH7G83a8DbJvXjlmkgWZkv3vKatTg8DPYVw
-         r9uIFE7N6l6l0NV9cvJRwqED6POrjJVdD+iMOSj1UfegI2c8wkIpHtIKEuJ8o4EPqA2d
-         Lzoy/Jl4bh9V5hnS1hxRKOXDRQ1qURLy64daI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688144389; x=1690736389;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=JHRes1O1VxMkr+CfLg+uJGUs+Iy2MgLhTyprz6Plm7M=;
-        b=ex+sEArgQRWIEVZxdV4QIBtsMjYgi05LCAwsVDnVFuKuDD6c8fLFkGtT17PxSFmY/n
-         LyBaYgLQTv6OiO2kpddQQG4q8hP+xmIEtj9HbHC/Sz/ThAs/K2LF6Wf+Z8/6y3c0f7Cj
-         4kD5AstkwnZ5TAoIZ2pgFg+dU0kfSlMT9rp282iDfQdTe3crXquNSSiYHnpAO7jS2JVJ
-         stEVF2gIy3kzmHhO9KjZSIdWQJqwmInPQ43k5Vd7lkD5aS0FhdcuLnR3F3nYoggCqcEw
-         QSIy4L+K/HqP61vhILf+cEFQWRLwa0VguzJ6Hts+TGocGf572k0070H+Ixhh8KKF+8ca
-         41KA==
-X-Gm-Message-State: AC+VfDxzu7yPnGzOWoSFlfNiJ9WIXdL/CuVnAnCn2Qm1I1TBSt1Cx/IK
-        2epqleenRcnhb4cNMV8RGPlS0zLa4Ro0RTUI/VM=
-X-Google-Smtp-Source: ACHHUZ5o4/tBiwRadgu5tGxdbBGl4knDtTJFKkAyDtoDU59yvKQgxw2W2hUtynVX5t50awuXclX9Eg==
-X-Received: by 2002:a05:6a20:12cf:b0:101:1951:d491 with SMTP id v15-20020a056a2012cf00b001011951d491mr3313305pzg.6.1688144389058;
-        Fri, 30 Jun 2023 09:59:49 -0700 (PDT)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id p15-20020aa7860f000000b0064cca73d911sm10254599pfn.103.2023.06.30.09.59.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 30 Jun 2023 09:59:48 -0700 (PDT)
-Date:   Fri, 30 Jun 2023 09:59:47 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Christian Brauner <brauner@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [GIT PULL] pid: use flex array
-Message-ID: <202306300950.2BE7567101@keescook>
-References: <20230628-pokal-puzzeln-5199c679b051@brauner>
- <CAHk-=wiBXJOzkez2Rd=cQ5ckttJq6OdYtArFmCtVQHyeuQBGrw@mail.gmail.com>
- <20230630-testphasen-orangen-0e54486a267d@brauner>
- <CAHk-=whJJbmfBk_8v_vFn1NdJ9O-AKCrjY+EArkzgFp9h-sKHA@mail.gmail.com>
- <20230630-stiefel-rotor-7f2d13fc084f@brauner>
+        Fri, 30 Jun 2023 13:04:32 -0400
+Received: from unicorn.mansr.com (unicorn.mansr.com [81.2.72.234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4930244AC;
+        Fri, 30 Jun 2023 10:03:50 -0700 (PDT)
+Received: from raven.mansr.com (raven.mansr.com [81.2.72.235])
+        by unicorn.mansr.com (Postfix) with ESMTPS id E44D915360;
+        Fri, 30 Jun 2023 18:03:48 +0100 (BST)
+Received: by raven.mansr.com (Postfix, from userid 51770)
+        id BFA04219FD1; Fri, 30 Jun 2023 18:03:48 +0100 (BST)
+From:   =?iso-8859-1?Q?M=E5ns_Rullg=E5rd?= <mans@mansr.com>
+To:     Maxime Ripard <mripard@kernel.org>
+Cc:     Samuel Holland <samuel@sholland.org>, Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        linux-sunxi@lists.linux.dev,
+        Michael Turquette <mturquette@baylibre.com>,
+        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Stephen Boyd <sboyd@kernel.org>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 3/4] clk: sunxi-ng: Convert early providers to
+ platform drivers
+References: <20211119033338.25486-1-samuel@sholland.org>
+        <20211119033338.25486-4-samuel@sholland.org>
+        <yw1xedly2z3m.fsf@mansr.com>
+        <maqh4yir66agto4lyulvrqrim7qnixwd246jusvvhsjlhhrmmw@gjbubqc2cv4o>
+        <yw1xa5wj3kvn.fsf@mansr.com>
+        <un3xm7ybsm54qf56ojhrtr6kehlmhdoavzcaqr2jfbcyg2kr6u@rdlq7nelycs2>
+        <yw1x352b308w.fsf@mansr.com>
+        <z2656f5zlmntm3zf5ds72vtbd6cyw3mffj7vmeygpscjcnodw6@cwb65fhurfaa>
+Date:   Fri, 30 Jun 2023 18:03:48 +0100
+In-Reply-To: <z2656f5zlmntm3zf5ds72vtbd6cyw3mffj7vmeygpscjcnodw6@cwb65fhurfaa>
+        (Maxime Ripard's message of "Fri, 30 Jun 2023 16:17:32 +0200")
+Message-ID: <yw1xwmzkzxu3.fsf@mansr.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230630-stiefel-rotor-7f2d13fc084f@brauner>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 30, 2023 at 10:04:14AM +0200, Christian Brauner wrote:
-> On Fri, Jun 30, 2023 at 12:12:22AM -0700, Linus Torvalds wrote:
-> > On Thu, 29 Jun 2023 at 23:51, Christian Brauner <brauner@kernel.org> wrote:
-> > >
-> > > I have no preference for either syntax. Both work. But this is probably
-> > > more an objection to this being mixed in with the flex array change in
-> > > the first place.
-> > 
-> > Yes. I looked at it, and tried to figure out if it was related
-> > somehow, and decided that no, it can't possibly be, and must be just
-> > an unrelated change.
+Maxime Ripard <mripard@kernel.org> writes:
 
-Yes, those changes were style changes because I was annoyed that a grep
-for 'numbers[' didn't turn anything up. :P Since it's an array I think
-it's just good form to use [] when accessing an element. But yes, it's
-conceptually the same.
+> On Wed, Jun 28, 2023 at 07:33:35PM +0100, Måns Rullgård wrote:
+>> Maxime Ripard <mripard@kernel.org> writes:
+>> 
+>> > On Wed, Jun 28, 2023 at 12:07:56PM +0100, Måns Rullgård wrote:
+>> >> Maxime Ripard <mripard@kernel.org> writes:
+>> >> 
+>> >> > On Mon, Jun 26, 2023 at 01:21:33PM +0100, Måns Rullgård wrote:
+>> >> >> Samuel Holland <samuel@sholland.org> writes:
+>> >> >> 
+>> >> >> > The PRCM CCU drivers depend on clocks provided by other CCU drivers. For
+>> >> >> > example, the sun8i-r-ccu driver uses the "pll-periph" clock provided by
+>> >> >> > the SoC's main CCU.
+>> >> >> >
+>> >> >> > However, sun8i-r-ccu is an early OF clock provider, and many of the
+>> >> >> > main CCUs (e.g. sun50i-a64-ccu) use platform drivers. This means that
+>> >> >> > the consumer clocks will be orphaned until the supplier driver is bound.
+>> >> >> > This can be avoided by converting the remaining CCUs to use platform
+>> >> >> > drivers. Then fw_devlink will ensure the drivers are bound in the
+>> >> >> > optimal order.
+>> >> >> >
+>> >> >> > The sun5i CCU is the only one which actually needs to be an early clock
+>> >> >> > provider, because it provides the clock for the system timer. That one
+>> >> >> > is left alone.
+>> >> >> >
+>> >> >> > Signed-off-by: Samuel Holland <samuel@sholland.org>
+>> >> >> > ---
+>> >> >> >
+>> >> >> > (no changes since v1)
+>> >> >> >
+>> >> >> >  drivers/clk/sunxi-ng/Kconfig             | 20 ++++----
+>> >> >> >  drivers/clk/sunxi-ng/ccu-sun4i-a10.c     | 58 +++++++++++++--------
+>> >> >> >  drivers/clk/sunxi-ng/ccu-sun50i-h6-r.c   | 56 ++++++++++++--------
+>> >> >> >  drivers/clk/sunxi-ng/ccu-sun50i-h616.c   | 33 ++++++++----
+>> >> >> >  drivers/clk/sunxi-ng/ccu-sun6i-a31.c     | 40 +++++++++++----
+>> >> >> >  drivers/clk/sunxi-ng/ccu-sun8i-a23.c     | 35 +++++++++----
+>> >> >> >  drivers/clk/sunxi-ng/ccu-sun8i-a33.c     | 40 +++++++++++----
+>> >> >> >  drivers/clk/sunxi-ng/ccu-sun8i-h3.c      | 62 ++++++++++++++--------
+>> >> >> >  drivers/clk/sunxi-ng/ccu-sun8i-r.c       | 65 ++++++++++++++----------
+>> >> >> >  drivers/clk/sunxi-ng/ccu-sun8i-v3s.c     | 57 +++++++++++++--------
+>> >> >> >  drivers/clk/sunxi-ng/ccu-suniv-f1c100s.c | 38 ++++++++++----
+>> >> >> >  11 files changed, 332 insertions(+), 172 deletions(-)
+>> >> >> 
+>> >> >> This broke the hstimer clocksource on A20 since it requires a clock
+>> >> >> provided by the sun4i ccu driver.
+>> >> >
+>> >> > The A10 is probably broken by this, but the A20 should be able to use
+>> >> > the arch timers just like all the other Cortex-A7-based SoCs.
+>> >> >
+>> >> > Do you have a dmesg log that could help debug why it's not working?
+>> >> 
+>> >> The A20 works as such since, as you say, it has other clocksources.
+>> >> However, the hstimer has become unusable.  If anyone was using, for
+>> >> whatever reason, it won't be working for them now.
+>> >> 
+>> >> Before this change, the kernel log used include this line:
+>> >> 
+>> >> clocksource: hstimer: mask: 0xffffffff max_cycles: 0xffffffff, max_idle_ns: 6370868154 ns
+>> >> 
+>> >> Now there is only a cryptic "Can't get timer clock" in its place.
+>> >> 
+>> >> As it is now, the hstimer driver is nothing but a waste of space.
+>> >> I figure it ought to be fixed one way or another.
+>> >
+>> > Yeah, definitely.
+>> >
+>> > IIRC, the situation is:
+>> >
+>> >  - A10 has just the "regular", old, timer
+>> >  - A10s/A13/GR8 has the A10 timer + hstimer
+>> >  - A20 has the A13 timers + arch timers
+>> >
+>> > We also default to the hstimer only for the A10s/A13 which aren't
+>> > affected by this patch series afaics.
+>> >
+>> > We also enable the HS timer for the A31, but just like the A20 it
+>> > doesn't use it by default, so it's probably been broken there too.
+>> >
+>> > I guess one way to fix it would be to switch the HS timer driver to a
+>> > lower priority than the A10 timer, so we pick that up by default instead
+>> > for the A10s/A13, and then convert the HS timer driver to a proper
+>> > platform_device driver that will be able to get its clock.
+>> >
+>> > The downside is that the A13 will lose some precision over its default
+>> > timer, but I don't think it's a big deal.
+>> 
+>> The options I see are converting the hstimer to a platform device or
+>> reverting the change to the sun4i ccu driver.
+>> 
+>> I don't personally have much of an opinion on this since my systems
+>> aren't affected.  The only reason I looked at it was that I noticed
+>> a new error message in the kernel logs.
+>
+> Thanks for the report then. I'm not really working on that anymore, so I
+> won't submit a fix for this either.
 
-> > > I did react to that in the original review here:
-> > > https://lore.kernel.org/all/20230518-zuneigen-brombeeren-0a57cd32b1a7@brauner
-> > > but then I grepped for it and saw it done in a few other places already
-> > 
-> > Yeah, we do end up growing new uses of 'use 0 as a pointer' almost as
-> > quickly as we get rid of them.
-
-Apologies on this -- this patch was just before the addition of
-struct_size_t(), so I missed it in the cleanup I did for that:
-https://git.kernel.org/linus/d67790ddf0219aa0ad3e13b53ae0a7619b3425a2
-
-> I've grepped around a bit and I saw that the
-> struct_size((struct bla *)NULL, ...)
-> pattern seems to be used in most places that have similar needs. Not
-> sure if there's something nicer.
-
-The above patch fixes them all (excepting struct pid). In retrospect, I
-should have asked to carry the struct pid fix in the hardening tree due
-to that.
-
-> I gave this thing a stab myself since I have a few minutes and so Kees
-> doesn't have to do it. Authorship retained and dropped the ack. Is the
-> following more acceptable? 
-
-Thanks for reworking it!
-
-> [...]
-> [brauner: dropped unrelated changes and remove 0 with NULL cast]
-
-However, this should use struct_size_t(); I'll send a new patch and
-double check that UBSAN stays happy, etc.
-
-Sorry for the mess!
-
--Kees
+I can have a go at converting it to a platform device if you think
+that's the right approach.  I don't have anything other than A20 to
+test it on, though.
 
 -- 
-Kees Cook
+Måns Rullgård
