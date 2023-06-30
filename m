@@ -2,106 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E75F674316F
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 02:09:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84823743174
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 02:09:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231857AbjF3AGT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 20:06:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46224 "EHLO
+        id S231176AbjF3AGv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 20:06:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230385AbjF3AGR (ORCPT
+        with ESMTP id S230079AbjF3AGs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 20:06:17 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.65.254])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 724C3199B;
-        Thu, 29 Jun 2023 17:06:15 -0700 (PDT)
-X-QQ-mid: bizesmtp71t1688083565twklsj26
-Received: from linux-lab-host.localdomain ( [119.123.131.49])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Fri, 30 Jun 2023 08:06:04 +0800 (CST)
-X-QQ-SSF: 01200000000000D0W000000A0000000
-X-QQ-FEAT: RFp2QSjOiS7beTcSYXt1iawYE5VBFE+qfrFikOGIrZGU78FGQ//+XBNHlkTeb
-        TF9bjq4tqANTGj/eXrmZuqrAjBtKHg7Qp+Y5VIjCUePqDup95utpa2bac+We01QQ5iHPhta
-        /zN6i6ZKv9IPOPTajq6hPE+XEVU+Lc/QRz7szyfrDSQ+kksByTKk20N1o8F2uxrCJJgmE8O
-        5hVrAJvv3KqNUx9SLoQ8ngwmbNGFK5DTN0cZ+Pps0q5ox1rTJREprqRx/RBPItazmUbDH6I
-        DiikY/83T+T6cmW/kAnmW8Lt1Q+wE8q+79BlUAdoStWwD1jLD+RDCQ49SpArKwT3WIn1hz4
-        1yCFJtTzqJcQzfMvymdKAYqjfJxUixP6hjv/1KgL7SqVmysltewh2BBbP4TtbvBUY+HKAA3
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 527216731131771503
-From:   Zhangjin Wu <falcon@tinylab.org>
-To:     thomas@t-8ch.de, w@1wt.eu
-Cc:     falcon@tinylab.org, arnd@arndb.de, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        =?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Subject: [PATCH v2 15/15] selftests/nolibc: vfprintf: remove MEMFD_CREATE dependency
-Date:   Fri, 30 Jun 2023 08:03:14 +0800
-Message-Id: <2438cf7e4ecb2444a79f838437c149dd7d5bdde6.1688078605.git.falcon@tinylab.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <cover.1688078604.git.falcon@tinylab.org>
-References: <cover.1688078604.git.falcon@tinylab.org>
+        Thu, 29 Jun 2023 20:06:48 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D067102
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 17:06:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1688083607; x=1719619607;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=v89akaza7HsjyKIZYAwuft+VjZZ85WZYxFaVCTk+znk=;
+  b=j4y/UtVO3CvIQfjRa72CXxiV832qiEEv8xL57mq0UA/M8/EbtqDBidTJ
+   Y1RkwfHBi0QOSYMC4v3RCcsKadUvCf6WbV5nM695r+S9r8hmDtIa72IGC
+   thNnVBtpuf2kMpSzVPuI+L7nqrXGi0igEchrmEY1NOUCpOq/gTPkZ2YY5
+   ZDZr8/h1bLdQoLaGM8n1bEpq3mk5VFdb9OV0G0e2cmIkw9XqbuPv8XJQR
+   2pprsWHBAfQDj8bzyJojs/cFbLBJnp9m+Yv9uxQnrfbUH8/b1ZcKzpKuG
+   K/DfqCSNOmCPoh95drExfN1uwK+QpSWvGALCntRrJdFN2WJkq8pSYscx2
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10756"; a="341850771"
+X-IronPort-AV: E=Sophos;i="6.01,169,1684825200"; 
+   d="scan'208";a="341850771"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jun 2023 17:06:46 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10756"; a="1048016939"
+X-IronPort-AV: E=Sophos;i="6.01,169,1684825200"; 
+   d="scan'208";a="1048016939"
+Received: from agluck-desk3.sc.intel.com (HELO agluck-desk3) ([172.25.222.74])
+  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jun 2023 17:06:46 -0700
+Date:   Thu, 29 Jun 2023 17:06:45 -0700
+From:   Tony Luck <tony.luck@intel.com>
+To:     Drew Fustini <dfustini@baylibre.com>
+Cc:     James Morse <james.morse@arm.com>,
+        "Yu, Fenghua" <fenghua.yu@intel.com>,
+        "Chatre, Reinette" <reinette.chatre@intel.com>,
+        Babu Moger <Babu.Moger@amd.com>,
+        Peter Newman <peternewman@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        H Peter Anvin <hpa@zytor.com>,
+        "shameerali.kolothum.thodi@huawei.com" 
+        <shameerali.kolothum.thodi@huawei.com>,
+        D Scott Phillips OS <scott@os.amperecomputing.com>,
+        "carl@os.amperecomputing.com" <carl@os.amperecomputing.com>,
+        "lcherian@marvell.com" <lcherian@marvell.com>,
+        "bobo.shaobowang@huawei.com" <bobo.shaobowang@huawei.com>,
+        "tan.shaopeng@fujitsu.com" <tan.shaopeng@fujitsu.com>,
+        "xingxin.hx@openanolis.org" <xingxin.hx@openanolis.org>,
+        "baolin.wang@linux.alibaba.com" <baolin.wang@linux.alibaba.com>,
+        Jamie Iles <quic_jiles@quicinc.com>,
+        Xin Hao <xhao@linux.alibaba.com>,
+        "Pitre, Nicolas" <npitre@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        "aricciardi@baylibre.com" <aricciardi@baylibre.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "patches@lists.linux.dev" <patches@lists.linux.dev>
+Subject: Re: [RFC PATCH 0/2] Resctrl - rewrite (WIP)
+Message-ID: <ZJ4clUlN2OujgHlC@agluck-desk3>
+References: <20230620033702.33344-1-tony.luck@intel.com>
+ <ZJqhDYLG+/Kr44sp@x1>
+ <SJ1PR11MB60832BA425B43CA19C778100FC27A@SJ1PR11MB6083.namprd11.prod.outlook.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrgz:qybglogicsvrgz5a-1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <SJ1PR11MB60832BA425B43CA19C778100FC27A@SJ1PR11MB6083.namprd11.prod.outlook.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The vfprintf test case require to open a temporary file to write, the
-old memfd_create() method is perfect but has strong dependency on
-MEMFD_CREATE and also TMPFS or HUGETLBFS (see fs/Kconfig):
+On Tue, Jun 27, 2023 at 04:33:52PM +0000, Luck, Tony wrote:
+> I've made some significant changes since I posted those patches. I pushed
+> the latest version to:
+> 
+> git://git.kernel.org/pub/scm/linux/kernel/git/aegl/linux.git    resctrl2_v64
 
-    config MEMFD_CREATE
-	def_bool TMPFS || HUGETLBFS
+I just pushed one big commit with all the bits I've updated so far
+this week. Fixes some serious issues as well as general cleanup.
 
-And from v6.2, MFD_NOEXEC_SEAL must be passed for the non-executable
-memfd, otherwise, The kernel warning will be output to the test result
-like this:
+HEAD is now:
 
-        Running test 'vfprintf'
-        0 emptymemfd_create() without MFD_EXEC nor MFD_NOEXEC_SEAL, pid=1 'init'
-         "" = ""                                                  [OK]
+afb7cdd4d640 resctrl2: Many cleanups, fixes, and new functionality
 
-To avoid such warning and also to remove the MEMFD_CREATE dependency,
-let's open a file from tmpfs directly.
+If you've started writing your own architecture specific modules there
+are some small interface changes. Most should be found by the compiler
+barfing, but the new ".reset()" resource function called during unmount
+of /sys/fs/resctrl might be less obvious.
 
-The /tmp directory is used to detect the existing of tmpfs, if not
-there, skip instead of fail.
-
-And further, for pid == 1, the initramfs is loaded as ramfs, which can
-be used as tmpfs, so, it is able to further remove TMPFS dependency too.
-
-Suggested-by: Thomas Weißschuh <linux@weissschuh.net>
-Link: https://lore.kernel.org/lkml/9ad51430-b7c0-47dc-80af-20c86539498d@t-8ch.de
-Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
----
- tools/testing/selftests/nolibc/nolibc-test.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
-index 0ca7d011765a..0847813d756c 100644
---- a/tools/testing/selftests/nolibc/nolibc-test.c
-+++ b/tools/testing/selftests/nolibc/nolibc-test.c
-@@ -888,10 +888,10 @@ static int expect_vfprintf(int llen, size_t c, const char *expected, const char
- 	FILE *memfile;
- 	va_list args;
- 
--	fd = memfd_create("vfprintf", 0);
-+	fd = open("/tmp", O_TMPFILE | O_EXCL | O_RDWR, 0600);
- 	if (fd == -1) {
--		pad_spc(llen, 64, "[FAIL]\n");
--		return 1;
-+		pad_spc(llen, 64, "[SKIPPED]\n");
-+		return 0;
- 	}
- 
- 	memfile = fdopen(fd, "w+");
--- 
-2.25.1
-
+-Tony
