@@ -2,118 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F08A5743361
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 06:07:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 756EF743366
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 06:10:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231431AbjF3EHF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 00:07:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47162 "EHLO
+        id S230054AbjF3EKl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Jun 2023 00:10:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229742AbjF3EHD (ORCPT
+        with ESMTP id S229522AbjF3EKi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 00:07:03 -0400
-Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [IPv6:2001:df5:b000:5::4])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32128199C
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 21:07:01 -0700 (PDT)
-Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 84C402C0543;
-        Fri, 30 Jun 2023 16:06:58 +1200 (NZST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
-        s=mail181024; t=1688098018;
-        bh=jB27fmXkfzp7He06PxN/Gc4RfV1heM0YKMl2NWUGi/A=;
-        h=From:To:CC:Subject:Date:References:In-Reply-To:From;
-        b=d2zsqXm+xOY9ObtniFSp1XB3ylZj8/9z186Q/lBwA1e6yz1HFJsrvoRLNb5WSexuv
-         TnRn+Mij8sADWO6qEQL9wgM3S19CnRodag/v+l7eRsnqnsnzy9V4OSVjTFVYLgEUSs
-         2TnFTKM3MloDZFC9p1tmqAGzlovrnokHuGOId3JTeVpaBKPvFWb+nKabqC+o0jbR9Q
-         IDQr4BJoE+e9+L5vUegfdDnHVgqNvqWxVyJnJ7H4+6jlRocYoZBuMUB3ZtQtFq2GLe
-         zvorIGltlrlqg98TO1DokdACVnC2K/4V3tSl0HhAPbzvoqwUqAwb2U/MmraVcEQash
-         SDyuf+qlzFuvg==
-Received: from svr-chch-ex2.atlnz.lc (Not Verified[2001:df5:b000:bc8::76]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
-        id <B649e54e20001>; Fri, 30 Jun 2023 16:06:58 +1200
-Received: from svr-chch-ex2.atlnz.lc (2001:df5:b000:bc8::76) by
- svr-chch-ex2.atlnz.lc (2001:df5:b000:bc8::76) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.30; Fri, 30 Jun 2023 16:06:58 +1200
-Received: from svr-chch-ex2.atlnz.lc ([fe80::a9eb:c9b7:8b52:9567]) by
- svr-chch-ex2.atlnz.lc ([fe80::a9eb:c9b7:8b52:9567%15]) with mapi id
- 15.02.1118.030; Fri, 30 Jun 2023 16:06:58 +1200
-From:   Chris Packham <Chris.Packham@alliedtelesis.co.nz>
-To:     "miquel.raynal@bootlin.com" <miquel.raynal@bootlin.com>,
-        "richard@nod.at" <richard@nod.at>,
-        "vigneshr@ti.com" <vigneshr@ti.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "conor+dt@kernel.org" <conor+dt@kernel.org>,
-        "gregory.clement@bootlin.com" <gregory.clement@bootlin.com>,
-        "pierre.gondois@arm.com" <pierre.gondois@arm.com>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "f.fainelli@gmail.com" <f.fainelli@gmail.com>
-CC:     "linux-mtd@lists.infradead.org" <linux-mtd@lists.infradead.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH v2 2/3] arm64: dts: marvell: Add NAND flash controller to
- AC5
-Thread-Topic: [PATCH v2 2/3] arm64: dts: marvell: Add NAND flash controller to
- AC5
-Thread-Index: AQHZp9wFzLABkbH5wEGgo5cmf3kQUa+h972A
-Date:   Fri, 30 Jun 2023 04:06:58 +0000
-Message-ID: <aa45c265-5b90-b8a5-722e-4bcbc662660b@alliedtelesis.co.nz>
-References: <20230626031217.870938-1-chris.packham@alliedtelesis.co.nz>
- <20230626031217.870938-3-chris.packham@alliedtelesis.co.nz>
-In-Reply-To: <20230626031217.870938-3-chris.packham@alliedtelesis.co.nz>
-Accept-Language: en-NZ, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.33.22.30]
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <0324BC037DBF9749B057D985433F6C8F@atlnz.lc>
-Content-Transfer-Encoding: base64
+        Fri, 30 Jun 2023 00:10:38 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41041199C
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 21:10:37 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id a640c23a62f3a-98dfb3f9af6so173517966b.2
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 21:10:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google; t=1688098235; x=1690690235;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=YlumTE1/VZOp3prH/yZnB1tVVLT1aI0qSCA6eRI/6cc=;
+        b=hg1yZ14twzSQrztVFPq1eX2eJT3Alhc1s7tgEVXCURfK4hCTUEPifp0fbSPLdlSzFd
+         Sk6e5IpSdExKVq05Qy/r7g1cvWrEgWka6CxzwfdHM+HEa8FEKb+RwLto/Eo8uHmmhORw
+         qvzXf2CjF7U2aFZK/LWwNTjNvBOCQaBFprZjw=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688098235; x=1690690235;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=YlumTE1/VZOp3prH/yZnB1tVVLT1aI0qSCA6eRI/6cc=;
+        b=lD7HWjnSLd5pQ+S1xnhh4VTC4N63PpqY/vHOiyK9K2RgxZ18KAIDccwnKuGGY6/GOe
+         0OUv0x7AZ0HZibqEm+YymstoiGSzRfqjpb6EqdsBKx7KSfMUWGuH6LD7Y7EukQE4HXYT
+         pBYcK+DiQeqMFfAmRPdCO+vXxSzP4ME4mdFcOHH2M4kBEFaE6+UazzUqkwDld7ZE+Me5
+         tC5w8G3j61IuXhc423Y03Dthk252Ip19neZLKG6mTeQG2lO8/ME8FktOM7NzroCjoERn
+         JN9X9ISALG5LzbYUhcSaFVRXHCaM+ZtVOU6bOTyo8WfeEcy/S62j/8MemF8NzRLcY7ik
+         luGw==
+X-Gm-Message-State: ABy/qLbHNFCdJMziZv+VYuE6MkregGXhChRDi9WoUH2zA64PXgqGVCsc
+        UBde20bDha2tt0H2TfFTeIyHAK0Ya1DKQ7JmMKsKf+Lp
+X-Google-Smtp-Source: APBJJlFfOQ6hHfBy8ezFcx4Gns0RQsqp9s1YlzyNOYh05A+OLmm50n1Cji5kBE3TQuUN3lO92oNq7w==
+X-Received: by 2002:a17:906:4e41:b0:992:5cda:69ee with SMTP id g1-20020a1709064e4100b009925cda69eemr904628ejw.55.1688098235478;
+        Thu, 29 Jun 2023 21:10:35 -0700 (PDT)
+Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com. [209.85.208.41])
+        by smtp.gmail.com with ESMTPSA id t14-20020a170906948e00b0098d2f703408sm7515618ejx.118.2023.06.29.21.10.34
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 29 Jun 2023 21:10:34 -0700 (PDT)
+Received: by mail-ed1-f41.google.com with SMTP id 4fb4d7f45d1cf-51d7f4c1cfeso1508345a12.0
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 21:10:34 -0700 (PDT)
+X-Received: by 2002:aa7:c703:0:b0:51b:e4b4:8bb0 with SMTP id
+ i3-20020aa7c703000000b0051be4b48bb0mr755246edq.2.1688098234320; Thu, 29 Jun
+ 2023 21:10:34 -0700 (PDT)
 MIME-Version: 1.0
-X-SEG-SpamProfiler-Analysis: v=2.3 cv=NPqrBHyg c=1 sm=1 tr=0 a=Xf/6aR1Nyvzi7BryhOrcLQ==:117 a=xqWC_Br6kY4A:10 a=75chYTbOgJ0A:10 a=IkcTkHD0fZMA:10 a=of4jigFt-DYA:10 a=w2twMtuE976TmCkByo0A:9 a=QEXdDO2ut3YA:10
-X-SEG-SpamProfiler-Score: 0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <ZJzUeFT7lLqEjMJn@nvidia.com>
+In-Reply-To: <ZJzUeFT7lLqEjMJn@nvidia.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Thu, 29 Jun 2023 21:10:17 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wjiSW52tf=xaBe0LrFJrRbSnA=E1ziKBEioMT9cMJPM1A@mail.gmail.com>
+Message-ID: <CAHk-=wjiSW52tf=xaBe0LrFJrRbSnA=E1ziKBEioMT9cMJPM1A@mail.gmail.com>
+Subject: Re: [GIT PULL] Please pull RDMA subsystem changes
+To:     Jason Gunthorpe <jgg@nvidia.com>
+Cc:     linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Leon Romanovsky <leonro@nvidia.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DQpPbiAyNi8wNi8yMyAxNToxMiwgQ2hyaXMgUGFja2hhbSB3cm90ZToNCj4gVGhlIEFDNS9BQzVY
-IFNvQyBoYXMgYSBOQU5EIGZsYXNoIGNvbnRyb2xsZXIgKE5GQykuIEFkZCB0aGlzIHRvDQo+IHRo
-ZSBiYXNlIFNvQyBkdHNpIGZpbGUgYXMgYSBkaXNhYmxlZCBub2RlLiBUaGUgTkZDIGludGVncmF0
-aW9uDQo+IG9uIHRoZSBBQzUvQUM1WCBvbmx5IHN1cHBvcnRzIFNEUiB0aW1pbmcgbW9kZXMgdXAg
-dG8gMyBzbyByZXF1aXJlcyBhDQo+IGRlZGljYXRlZCBjb21wYXRpYmxlIHByb3BlcnR5IHNvIHRo
-aXMgbGltaXRhdGlvbiBjYW4gYmUgZW5mb3JjZWQuDQo+DQo+IFNpZ25lZC1vZmYtYnk6IENocmlz
-IFBhY2toYW0gPGNocmlzLnBhY2toYW1AYWxsaWVkdGVsZXNpcy5jby5uej4NCj4gLS0tDQo+DQo+
-IE5vdGVzOg0KPiAgICAgIENoYW5nZXMgaW4gdjI6DQo+ICAgICAgLSBOZXcuDQo+DQo+ICAgYXJj
-aC9hcm02NC9ib290L2R0cy9tYXJ2ZWxsL2FjNS05OGR4MjV4eC5kdHNpIHwgMTAgKysrKysrKysr
-Kw0KPiAgIDEgZmlsZSBjaGFuZ2VkLCAxMCBpbnNlcnRpb25zKCspDQo+DQo+IGRpZmYgLS1naXQg
-YS9hcmNoL2FybTY0L2Jvb3QvZHRzL21hcnZlbGwvYWM1LTk4ZHgyNXh4LmR0c2kgYi9hcmNoL2Fy
-bTY0L2Jvb3QvZHRzL21hcnZlbGwvYWM1LTk4ZHgyNXh4LmR0c2kNCj4gaW5kZXggOGJjZTY0MDY5
-MTM4Li43NGQ2NDRlMGMyOWUgMTAwNjQ0DQo+IC0tLSBhL2FyY2gvYXJtNjQvYm9vdC9kdHMvbWFy
-dmVsbC9hYzUtOThkeDI1eHguZHRzaQ0KPiArKysgYi9hcmNoL2FybTY0L2Jvb3QvZHRzL21hcnZl
-bGwvYWM1LTk4ZHgyNXh4LmR0c2kNCj4gQEAgLTI5Niw2ICsyOTYsMTYgQEAgc3BpMTogc3BpQDgw
-NWE4MDAwIHsNCj4gICAJCQlzdGF0dXMgPSAiZGlzYWJsZWQiOw0KPiAgIAkJfTsNCj4gICANCj4g
-KwkJbmFuZDogbmFuZC1jb250cm9sbGVyQDgwNWIwMDAwIHsNCj4gKwkJCWNvbXBhdGlibGUgPSAi
-bWFydmVsbCxhYzUtbmFuZC1jb250cm9sbGVyIjsNCj4gKwkJCXJlZyA9ICA8MHgwIDB4ODA1YjAw
-MDAgMHgwIDB4MDAwMDAwNTQ+Ow0KPiArCQkJI2FkZHJlc3MtY2VsbHMgPSA8MHgxPjsNCj4gKwkJ
-CSNzaXplLWNlbGxzID0gPDB4MD47DQo+ICsJCQlpbnRlcnJ1cHRzID0gPEdJQ19TUEkgODkgSVJR
-X1RZUEVfTEVWRUxfSElHSD47DQo+ICsJCQljbG9ja3MgPSA8JmNubV9jbG9jaz47DQoNCkFjdHVh
-bGx5IEkgdGhpbmsgSSd2ZSBqdXN0IG5vdGljZWQgYSBwcm9ibGVtIHdpdGggdGhpcy4gVGhlIE5G
-QyB1c2VzIGEgDQpkaWZmZXJlbnQgY2xvY2sgbm90IHRoZSBjbm0gb25lLiBJdCdzIG5vdCBhIGdh
-dGluZyBjbG9jayBsaWtlIG90aGVyIFNvQ3MgDQphbmQgdGhleSdyZSBjbG9zZSBlbm91Z2ggZnJl
-cXVlbmN5IHdpc2Ugc28gaXQgbW9zdGx5IHdvcmtzLiBJJ2xsIHVwZGF0ZSANCnRoaXMgdG8gYWRk
-IGEgZGVkaWNhdGVkIG5hbmQtY2xvY2sgZm9yIHYzLg0KDQo+ICsJCQlzdGF0dXMgPSAiZGlzYWJs
-ZWQiOw0KPiArCQl9Ow0KPiArDQo+ICAgCQlnaWM6IGludGVycnVwdC1jb250cm9sbGVyQDgwNjAw
-MDAwIHsNCj4gICAJCQljb21wYXRpYmxlID0gImFybSxnaWMtdjMiOw0KPiAgIAkJCSNpbnRlcnJ1
-cHQtY2VsbHMgPSA8Mz47
+On Wed, 28 Jun 2023 at 17:46, Jason Gunthorpe <jgg@nvidia.com> wrote:
+>
+> Here are the changes for RDMA for this cycle, there was a small rxe
+> conflict with v6.4 that I resolved in the usual way.
+
+Please just don't. I'd rather know about the conflicts. See
+
+   Documentation/maintainer/rebasing-and-merging.rst
+
+and about gazillion emails on the issue.
+
+> - Lots of small cleanups and rework in bnxt_re
+>    * Use the common mmap functions
+>    * Support disassociation
+>    * Improve FW command flow
+>
+> - bnxt_re support for "low latency push", this allows a packet
+
+This allows a packet WHAT?
+
+On a positive note, I see that you have a blue checkmark by google
+now, and Google says
+
+  "The sender of this email has verified that
+    they own nvidia.com and the logo in the
+    profile image. Learn more"
+
+which is lovely. I expect great things from nvidia now that you
+apparently own it. Congratulations! Champagne all around!
+
+             Linus
