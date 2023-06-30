@@ -2,144 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AE9E7441F1
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 20:15:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C0F327441EF
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 20:14:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229496AbjF3SPm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 14:15:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34882 "EHLO
+        id S232788AbjF3SOL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Jun 2023 14:14:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232361AbjF3SPk (ORCPT
+        with ESMTP id S232361AbjF3SOK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 14:15:40 -0400
-Received: from mx1.sberdevices.ru (mx2.sberdevices.ru [45.89.224.132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2713D3AA4
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 11:15:34 -0700 (PDT)
-Received: from p-infra-ksmg-sc-msk02 (localhost [127.0.0.1])
-        by mx1.sberdevices.ru (Postfix) with ESMTP id BEEDA120005;
-        Fri, 30 Jun 2023 21:15:16 +0300 (MSK)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mx1.sberdevices.ru BEEDA120005
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1688148916;
-        bh=+iLch2qAvGn4pfUehxJdtn4vtmFO4jTPo40JbMcUAX8=;
-        h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type:From;
-        b=WxEg/2kvwPreQTg+r2N3XEH3y3Kk07do/xoH4StKlU9Oa5VXbIIkYQ73UKVdxkN3c
-         VwhvBg30btoWcumWDTIu4GceBRikwuxcgG//JVMcSlrXC4kJxDHdYI68czOHSn3tx6
-         TeYHzUa759gNbHKlwHSb+pVhlbharcYmuXlq2ud0f1qsyYd8CSDq2tqNNdPc2VUcVv
-         7uOuQX9kwB+w1Y9LnnPC7hUsSbFWEzQBaa8FKMMRTxAH8xbjl0YluALyhm1MrrUUhk
-         rjdY9P/sk7C58OWnxg1l5OnY+CYl3cHVhBkpKmtz1aIom/Egz8rO3Tu637l3CPmOPj
-         Hzvfnvyy5AdUw==
-Received: from p-i-exch-sc-m01.sberdevices.ru (p-i-exch-sc-m01.sberdevices.ru [172.16.192.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mx1.sberdevices.ru (Postfix) with ESMTPS;
-        Fri, 30 Jun 2023 21:15:15 +0300 (MSK)
-Received: from [192.168.1.127] (100.64.160.123) by
- p-i-exch-sc-m01.sberdevices.ru (172.16.192.107) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.30; Fri, 30 Jun 2023 21:15:01 +0300
-Message-ID: <c487ed03-0ab2-74fb-91bc-4a773bfdfc5b@sberdevices.ru>
-Date:   Fri, 30 Jun 2023 21:10:55 +0300
+        Fri, 30 Jun 2023 14:14:10 -0400
+Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com [IPv6:2607:f8b0:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 803F63AB4
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 11:14:07 -0700 (PDT)
+Received: by mail-oi1-x232.google.com with SMTP id 5614622812f47-39e9d1bf835so1507496b6e.2
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 11:14:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1688148847; x=1690740847;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=LqwqIDNUlZeN2SG9uV7xSJv9crwhQD0n5IxeEUkTYuI=;
+        b=DjVunBjtXA+IlIrHX2uS4TSPyJzImNA53G/sm5ANqU45Ugwr9wu0WvO3aVlTFTyi0h
+         Cr7iLMvBY2u/WobiM7YerMhPQirHcMKa1gsajCUE/9agQ1lmpmDts2IjmCb7DOjhnW9m
+         7T7Rb1oiMNvtqh9p7BsFQ++qXWTn1OHa7bfps=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688148847; x=1690740847;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=LqwqIDNUlZeN2SG9uV7xSJv9crwhQD0n5IxeEUkTYuI=;
+        b=hZomFVQbBV/bg2oAXJUo5hHTBVXNTDf20lljlCYpXEHc+yRKf8AcfDuVbWTiZl7uUn
+         FjFQv2pSgYISJy9wOSIHscL8B3Cc+jIPaPn2ckXvVqnFjvm2pO0gvpftRchVcWH8mKUA
+         8t970+0mSYB6Vwc3WFy4/IHDpMomit4PIFfUhtHFPon8oWSdP7TnPsCw6QxmFcH5+J4X
+         MAiEOTsyIk70Hp7/FkEotZXNg2Y41Ahm4mRYZEX8WmohCenupjqneJrHwt/6fEYHCi+H
+         LIrsq+ZXrNH0P1hYld+LkroTZ5ZiUWXOHL1a7rb4uJw+AbRHyJCOWWzU6vVFXLxthiyX
+         Gjlw==
+X-Gm-Message-State: AC+VfDy7XnTVMG+cSbMJcZfiOFYoWpxVQCn0PjZLk4U7tRJ/+gjcSVoB
+        aHHFjG+LZZorWIeFthU+xBzrLI1pBhAvyjPlV7o=
+X-Google-Smtp-Source: ACHHUZ4aY95gxLXv4IKjVUVD3VfvFAYTpE5ZOFpn2RyICbZ110rHSSituQlAMJubXooG4QyorbIDnw==
+X-Received: by 2002:aca:6708:0:b0:3a3:6423:bf7d with SMTP id z8-20020aca6708000000b003a36423bf7dmr3158875oix.10.1688148846907;
+        Fri, 30 Jun 2023 11:14:06 -0700 (PDT)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id 14-20020a17090a098e00b0025c2c398d33sm6250986pjo.39.2023.06.30.11.14.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 30 Jun 2023 11:14:06 -0700 (PDT)
+Date:   Fri, 30 Jun 2023 11:14:05 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        security@kernel.org, corbet@lwn.net, workflows@vger.kernel.org
+Subject: Re: [PATCH 1/2] Documentation: security-bugs.rst: update preferences
+ when dealing with the linux-distros group
+Message-ID: <202306301113.FA8FD533@keescook>
+References: <2023063020-throat-pantyhose-f110@gregkh>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v6 5/9] drm/meson: gate px_clk when setting rate
-Content-Language: en-US
-To:     Neil Armstrong <neil.armstrong@linaro.org>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Jagan Teki <jagan@amarulasolutions.com>,
-        Nicolas Belin <nbelin@baylibre.com>
-CC:     <linux-clk@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-amlogic@lists.infradead.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <dri-devel@lists.freedesktop.org>
-References: <20230512-amlogic-v6-4-upstream-dsi-ccf-vim3-v6-0-fd2ac9845472@linaro.org>
- <20230512-amlogic-v6-4-upstream-dsi-ccf-vim3-v6-5-fd2ac9845472@linaro.org>
-From:   George Stark <gnstark@sberdevices.ru>
-In-Reply-To: <20230512-amlogic-v6-4-upstream-dsi-ccf-vim3-v6-5-fd2ac9845472@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [100.64.160.123]
-X-ClientProxiedBy: p-i-exch-sc-m01.sberdevices.ru (172.16.192.107) To
- p-i-exch-sc-m01.sberdevices.ru (172.16.192.107)
-X-KSMG-Rule-ID: 10
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Lua-Profiles: 178380 [Jun 30 2023]
-X-KSMG-AntiSpam-Version: 5.9.59.0
-X-KSMG-AntiSpam-Envelope-From: GNStark@sberdevices.ru
-X-KSMG-AntiSpam-Rate: 0
-X-KSMG-AntiSpam-Status: not_detected
-X-KSMG-AntiSpam-Method: none
-X-KSMG-AntiSpam-Auth: dkim=none
-X-KSMG-AntiSpam-Info: LuaCore: 517 517 b0056c19d8e10afbb16cb7aad7258dedb0179a79, {Tracking_from_domain_doesnt_match_to}, 100.64.160.123:7.1.2;p-i-exch-sc-m01.sberdevices.ru:5.0.1,7.1.1;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;127.0.0.199:7.1.2;sberdevices.ru:5.0.1,7.1.1, FromAlignment: s, {Tracking_white_helo}, ApMailHostAddress: 100.64.160.123
-X-MS-Exchange-Organization-SCL: -1
-X-KSMG-AntiSpam-Interceptor-Info: scan successful
-X-KSMG-AntiPhishing: Clean
-X-KSMG-LinksScanning: Clean
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 2.0.1.6960, bases: 2023/06/30 14:57:00 #21607376
-X-KSMG-AntiVirus-Status: Clean, skipped
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2023063020-throat-pantyhose-f110@gregkh>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Neil
+On Fri, Jun 30, 2023 at 09:14:20AM +0200, Greg Kroah-Hartman wrote:
+> Because the linux-distros group forces reporters to release information
+> about reported bugs, and they impose arbitrary deadlines in having those
+> bugs fixed despite not actually being kernel developers, the kernel
+> security team recommends not interacting with them at all as this just
+> causes confusion and the early-release of reported security problems.
+> 
+> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
-On 6/30/23 19:29, Neil Armstrong wrote:
-> Disable the px_clk when setting the rate to recover a fully
-> configured and correctly reset VCLK clock tree after the rate
-> is set.
->
-> Fixes: 77d9e1e6b846 ("drm/meson: add support for MIPI-DSI transceiver")
-> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
-> ---
->   drivers/gpu/drm/meson/meson_dw_mipi_dsi.c | 7 +++++++
->   1 file changed, 7 insertions(+)
->
-> diff --git a/drivers/gpu/drm/meson/meson_dw_mipi_dsi.c b/drivers/gpu/drm/meson/meson_dw_mipi_dsi.c
-> index 57447abf1a29..dc63d2d813a9 100644
-> --- a/drivers/gpu/drm/meson/meson_dw_mipi_dsi.c
-> +++ b/drivers/gpu/drm/meson/meson_dw_mipi_dsi.c
-> @@ -94,6 +94,7 @@ static int dw_mipi_dsi_phy_init(void *priv_data)
->   		return ret;
->   	}
->   
-> +	clk_disable_unprepare(mipi_dsi->px_clk);
->   	ret = clk_set_rate(mipi_dsi->px_clk, mipi_dsi->mode->clock * 1000);
->   
->   	if (ret) {
-> @@ -102,6 +103,12 @@ static int dw_mipi_dsi_phy_init(void *priv_data)
->   		return ret;
->   	}
->   
-> +	clk_prepare_enable(mipi_dsi->px_clk);
-probably should be:
-ret = clk_prepare_enable(mipi_dsi->px_clk);
-> +	if (ret) {
-> +		dev_err(mipi_dsi->dev, "Failed to enable DSI Pixel clock (ret %d)\n", ret);
-> +		return ret;
-> +	}
-> +
->   	switch (mipi_dsi->dsi_device->format) {
->   	case MIPI_DSI_FMT_RGB888:
->   		dpi_data_format = DPI_COLOR_24BIT;
->
+Yeah, this is good. It might make sense to explicitly detail the
+rationale in security-bugs.rst (as you have in the commit log), but
+perhaps that's too much detail.
+
+Reviewed-by: Kees Cook <keescook@chromium.org>
+
 -- 
-Best regards
-George
-
+Kees Cook
