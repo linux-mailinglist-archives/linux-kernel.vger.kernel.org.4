@@ -2,79 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D773743DEF
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 16:53:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EA3A743DED
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 16:52:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232741AbjF3Oxh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 10:53:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51628 "EHLO
+        id S232278AbjF3Owc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Jun 2023 10:52:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232701AbjF3Oxd (ORCPT
+        with ESMTP id S231657AbjF3Ow3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 10:53:33 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D77A61996;
-        Fri, 30 Jun 2023 07:53:30 -0700 (PDT)
-X-QQ-mid: bizesmtp69t1688136801tyxc0y2f
-Received: from linux-lab-host.localdomain ( [119.123.131.49])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Fri, 30 Jun 2023 22:53:18 +0800 (CST)
-X-QQ-SSF: 01200000000000D0W000000A0000000
-X-QQ-FEAT: 5q30pvLz2ie3Y/Doqwtf5t34E8pidXRwnNfxRvp8bFvhcIXw71A6eq1w9Q9UM
-        JXc2vs6oj9EfcQ4DmBQDD+8F3o7g/1ieNlGp43BUMCLL/6+ixRn8Q1BSzZ2NTn+3OBREJQa
-        7tY96c5Ks3ylL/BoEb3WKkkB2tT4uqYLgq5XHyS//7sKuUdIPO/8FUI7MJyv2/ypFVbPeKH
-        9oyDtoNSJW7oHNG96YQgiI+r0/4HM9VVKP1tQPKj1EdXrKHhLSP8Bwg0QGEGJLb/1pxnjbG
-        QjOZJmGjeoe3wQuFVs6Za0deePAz9pUJl+1ogiiowfNf6MOMlMYT3SSlbr0+jAXjNRBsEeN
-        9/VaPz3SBZPas4uiZLh1yFH2q2uqfoohPTr7nFhNGWE3e6bJ4l3o921Nb8MFYuOyu/OdIoF
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 15121841345925353120
-From:   Zhangjin Wu <falcon@tinylab.org>
-To:     thomas@t-8ch.de, w@1wt.eu
-Cc:     arnd@arndb.de, falcon@tinylab.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        =?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Subject: [PATCH v3 08/14] selftests/nolibc: link_cross: use /proc/self/cmdline
-Date:   Fri, 30 Jun 2023 22:52:14 +0800
-Message-Id: <3131dc57acb38f0c6db068aff43bde28441a414c.1688134400.git.falcon@tinylab.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <cover.1688134399.git.falcon@tinylab.org>
-References: <cover.1688134399.git.falcon@tinylab.org>
+        Fri, 30 Jun 2023 10:52:29 -0400
+Received: from out-52.mta1.migadu.com (out-52.mta1.migadu.com [95.215.58.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DD0A1996
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 07:52:28 -0700 (PDT)
+Date:   Fri, 30 Jun 2023 23:52:17 +0900
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1688136746;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=CvLbC96VyN5eisvKhg3EHjlXU7OR/vXWQBGxVJFAJRM=;
+        b=P901hNCVtCyn5iINIZhbUguRjZh1mux/fD+vcNpq706IRkR62tdZB3/aNzAwbMINXmJHsL
+        Xmr/fmID9O5jcigfHHZHpsDqjuSsAmnlfllKoNpbgHbMAaMd3sYxcfAb8+2mQ67L9MTumi
+        jDNsQEc3p+JVpT3dhImzP2TGqnXYoqA=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Naoya Horiguchi <naoya.horiguchi@linux.dev>
+To:     Jiaqi Yan <jiaqiyan@google.com>
+Cc:     mike.kravetz@oracle.com, naoya.horiguchi@nec.com,
+        songmuchun@bytedance.com, shy828301@gmail.com,
+        linmiaohe@huawei.com, akpm@linux-foundation.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        duenwen@google.com, axelrasmussen@google.com, jthoughton@google.com
+Subject: Re: [PATCH v2 1/4] mm/hwpoison: delete all entries before traversal
+ in __folio_free_raw_hwp
+Message-ID: <20230630145217.GA2213127@ik1-406-35019.vs.sakura.ne.jp>
+References: <20230623164015.3431990-1-jiaqiyan@google.com>
+ <20230623164015.3431990-2-jiaqiyan@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrgz:qybglogicsvrgz5a-1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H4,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230623164015.3431990-2-jiaqiyan@google.com>
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-For CONFIG_NET=n, there would be no /proc/self/net, so, use
-/proc/self/cmdline instead.
+On Fri, Jun 23, 2023 at 04:40:12PM +0000, Jiaqi Yan wrote:
+> Traversal on llist (e.g. llist_for_each_safe) is only safe AFTER entries
+> are deleted from the llist.
+> 
+> llist_del_all are lock free with itself. folio_clear_hugetlb_hwpoison()s
+> from __update_and_free_hugetlb_folio and memory_failure won't need
+> explicit locking when freeing the raw_hwp_list.
+> 
+> Signed-off-by: Jiaqi Yan <jiaqiyan@google.com>
 
-Reviewed-by: Thomas Weißschuh <linux@weissschuh.net>
-Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
----
- tools/testing/selftests/nolibc/nolibc-test.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+(Sorry if stupid question...) folio_set_hugetlb_hwpoison() also calls
+llist_for_each_safe() but it still traverses the list without calling
+llist_del_all().  This convention applies only when removing item(s)?
 
-diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
-index a7a4310dec3e..8269f900db76 100644
---- a/tools/testing/selftests/nolibc/nolibc-test.c
-+++ b/tools/testing/selftests/nolibc/nolibc-test.c
-@@ -723,7 +723,7 @@ int run_syscall(int min, int max)
- 		CASE_TEST(link_root1);        EXPECT_SYSER(1, link("/", "/"), -1, EEXIST); break;
- 		CASE_TEST(link_blah);         EXPECT_SYSER(1, link("/proc/self/blah", "/blah"), -1, ENOENT); break;
- 		CASE_TEST(link_dir);          EXPECT_SYSER(euid0, link("/", "/blah"), -1, EPERM); break;
--		CASE_TEST(link_cross);        EXPECT_SYSER(proc, link("/proc/self/net", "/blah"), -1, EXDEV); break;
-+		CASE_TEST(link_cross);        EXPECT_SYSER(proc, link("/proc/self/cmdline", "/blah"), -1, EXDEV); break;
- 		CASE_TEST(lseek_m1);          EXPECT_SYSER(1, lseek(-1, 0, SEEK_SET), -1, EBADF); break;
- 		CASE_TEST(lseek_0);           EXPECT_SYSER(1, lseek(0, 0, SEEK_SET), -1, ESPIPE); break;
- 		CASE_TEST(mkdir_root);        EXPECT_SYSER(1, mkdir("/", 0755), -1, EEXIST); break;
--- 
-2.25.1
+Thanks,
+Naoya Horiguchi
 
+> ---
+>  mm/memory-failure.c | 8 +++-----
+>  1 file changed, 3 insertions(+), 5 deletions(-)
+> 
+> diff --git a/mm/memory-failure.c b/mm/memory-failure.c
+> index 004a02f44271..c415c3c462a3 100644
+> --- a/mm/memory-failure.c
+> +++ b/mm/memory-failure.c
+> @@ -1825,12 +1825,11 @@ static inline struct llist_head *raw_hwp_list_head(struct folio *folio)
+>  
+>  static unsigned long __folio_free_raw_hwp(struct folio *folio, bool move_flag)
+>  {
+> -	struct llist_head *head;
+> -	struct llist_node *t, *tnode;
+> +	struct llist_node *t, *tnode, *head;
+>  	unsigned long count = 0;
+>  
+> -	head = raw_hwp_list_head(folio);
+> -	llist_for_each_safe(tnode, t, head->first) {
+> +	head = llist_del_all(raw_hwp_list_head(folio));
+> +	llist_for_each_safe(tnode, t, head) {
+>  		struct raw_hwp_page *p = container_of(tnode, struct raw_hwp_page, node);
+>  
+>  		if (move_flag)
+> @@ -1840,7 +1839,6 @@ static unsigned long __folio_free_raw_hwp(struct folio *folio, bool move_flag)
+>  		kfree(p);
+>  		count++;
+>  	}
+> -	llist_del_all(head);
+>  	return count;
+>  }
+>  
+> -- 
+> 2.41.0.162.gfafddb0af9-goog
+> 
+> 
+> 
