@@ -2,114 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40269743B09
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 13:40:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF7FD743AFA
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 13:39:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232608AbjF3Lky (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 07:40:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40240 "EHLO
+        id S231766AbjF3Lju (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Jun 2023 07:39:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232095AbjF3Lku (ORCPT
+        with ESMTP id S232598AbjF3Ljr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 07:40:50 -0400
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CFE41FE4;
-        Fri, 30 Jun 2023 04:40:49 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id 2adb3069b0e04-4fb9fd28025so2114692e87.2;
-        Fri, 30 Jun 2023 04:40:48 -0700 (PDT)
+        Fri, 30 Jun 2023 07:39:47 -0400
+Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCF642690
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 04:39:46 -0700 (PDT)
+Received: by mail-yb1-xb29.google.com with SMTP id 3f1490d57ef6-c413d8224e3so628141276.0
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 04:39:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688125247; x=1690717247;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=VmfjX6Wn9m5YuvJvCWHimbJjifc79f2/rbARPNwTo4o=;
-        b=TcMbVyWoTQvrN0J43t4brKxg/EgKZXWW7DfWGDZs8ZlLhxcwokidL6mCIrny6YeOpB
-         4vb3e7/w2iOs47K0QbuZUYn1F77zUwfge0A+DVIwO9urXI75UrfSkg6z/lBbsPLCcJdK
-         JDiW71/B0p9cE1I5dMFwDYuQY1jEASKd/KF3E9TAZlv+BFKhxSK2vUkOcVtSn8+1/T39
-         hjDTJ/ZI0dImxQGF99PGbcKloQS5NNZjvzJ5okIeIvhaCacnj8PbpoY5x9VVibpMbbmT
-         CE2hw7g0XHgAC98z+oOp8sBskLpBhhlR2qvBowisFxhAxl0hZifd/JsA41hoLpsdTZqT
-         u0sQ==
+        d=linaro.org; s=google; t=1688125186; x=1690717186;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=1FKTf+DGyDOz3jz745diWglkj41tR1A7OYRUqmfwWVU=;
+        b=IHgMwUpDO+z5gKayJevAsmx1wAuhBNQ0APfLWDl9aERZDo+tPinvtptdcBaTvhoC/o
+         psH8r4AXrig1oAxZBsrcaQcaT0UB6UfhkLtjJr2okK1+Oeh/JoYzLzEMAwqHUNVmocUV
+         tL6RXjZPuC1kaQMKicZizjGU2kUTjC96sPWKSOD/gKibiuFMWDIffSdEUAaUkEHFJWll
+         c8dWxzfcBtfL64ns4gn/rgen0Uw2xb0lyWYl4Hvg8ItW4QmhqFNyaHu/j+aJmievkHPD
+         wSgSjNz/knO+O1ewUzfLG9AlBTIaIg+DXftiSEBcR9EJxWmLc/tFdpX/Zak90ICKupjy
+         IYaA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688125247; x=1690717247;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20221208; t=1688125186; x=1690717186;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=VmfjX6Wn9m5YuvJvCWHimbJjifc79f2/rbARPNwTo4o=;
-        b=AQ8fXvcy+yCkfT0ZM9+YXgiUrAPcJ2dsL08oMRv4Uz1eDyPpv5D80h+0AO33gxsE1Y
-         UMo2ZVAhnt0B21flRRXrQM5q7Tybg9p/bWOZXUifEJrS7D3oGQ8CQL1OwAyX9ZrIt92g
-         xuqxuSssyjr0h/Up+Yh6Cp6TEpIYAVnA+c3oMITxi37gajUFhsSA4dGB3il08xaMFP6p
-         9vtqyu8iPrXIZ+9KvAJfimpgZu58T9tzF+tNT2PLGTJZlEYTHpalVmZ4raqalXcJ/fTm
-         g15R93hzxK5HquaFIkeOSfwWMOc1NF6FI760BXCulGbgWZl7kJRHX07WWuIgcmvH1820
-         q4RA==
-X-Gm-Message-State: ABy/qLayte/lbvyzF0O2+/pV7u8Y2lndiLbbGlzBmsDw7VBkgdtZzCTy
-        h7lL9PimZXpyE8b4JmPdWYs=
-X-Google-Smtp-Source: APBJJlEbamyWd9pJHWL99c5UMwWwaB7NdYtA840f17JULOnXq/r5bBnPfCoWnhAs0zRFsZCxszzQug==
-X-Received: by 2002:ac2:4bc6:0:b0:4f8:6627:7983 with SMTP id o6-20020ac24bc6000000b004f866277983mr1946478lfq.5.1688125246974;
-        Fri, 30 Jun 2023 04:40:46 -0700 (PDT)
-Received: from localhost.localdomain (cpc157791-rdng31-2-0-cust585.15-3.cable.virginm.net. [86.24.214.74])
-        by smtp.gmail.com with ESMTPSA id i7-20020adfdec7000000b00313dfe954ecsm17996863wrn.11.2023.06.30.04.40.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 30 Jun 2023 04:40:46 -0700 (PDT)
-From:   Stuart Hayhurst <stuart.a.hayhurst@gmail.com>
-Cc:     Stuart Hayhurst <stuart.a.hayhurst@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Jiri Kosina <jikos@kernel.org>,
-        Bastien Nocera <hadess@hadess.net>,
-        =?UTF-8?q?Filipe=20La=C3=ADns?= <lains@riseup.net>
-Subject: [PATCH v3] HID: logitech-hidpp: Add wired USB id for Logitech G502 Lightspeed
-Date:   Fri, 30 Jun 2023 12:38:20 +0100
-Message-ID: <20230630113818.13005-1-stuart.a.hayhurst@gmail.com>
-X-Mailer: git-send-email 2.40.1.521.gf1e218fcd8
+        bh=1FKTf+DGyDOz3jz745diWglkj41tR1A7OYRUqmfwWVU=;
+        b=ELfB1Kb8USMEZr+u54oYaxUNC+9C6CAN61frrXVDvA5bxHqXrDKoiiYwlgjCtBnowc
+         uNGvlVsNxJi53wmFI95XtK0igWjdbxfJw2X23ClqqrjmRV9LDkKQNso76yOtWb4S2tQI
+         w/Ufe+B5NhLxzIznS05S1LSQ2Kl/nw8g9Kh3YwKM3weMiiaT1zKnjqAnCiZFE4JPwdgm
+         3wJyagP7/mF+hq3ui1/Y4yeINTY2lhOPLdzAhc12w5TtBnnFfaJZ48XI6DSwISicv+Bk
+         vuWAHAs54DaVCVcs2/13a0kCrxatebVnomPs0UG/NthCfTSUU1yrUDYxbkLkRuShtrG1
+         9lOQ==
+X-Gm-Message-State: ABy/qLZqN6iZlPu5RRjG4XXkh23T327KObBqqn3GwEUuMteWkRZcpxN5
+        FnOs5LyNAm5yzw+XnKITv/T730Ezumwahgb4Ys3+gw==
+X-Google-Smtp-Source: APBJJlFv6OWAbfmvCwTMpKnZcsHojIDzRR3gY5SY0YdYRaR4I3+/xAM9DQ4uWtCvWgJB6E9Lsyo8LxLkKQPCgvALJjY=
+X-Received: by 2002:a5b:c05:0:b0:b8e:cb88:1b69 with SMTP id
+ f5-20020a5b0c05000000b00b8ecb881b69mr931293ybq.34.1688125185916; Fri, 30 Jun
+ 2023 04:39:45 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20230630055723.7673-1-jyanchou@realtek.com>
+In-Reply-To: <20230630055723.7673-1-jyanchou@realtek.com>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Fri, 30 Jun 2023 13:39:09 +0200
+Message-ID: <CAPDyKFp96N=nUS_8aLQcJyd0DZ+yce42xpHtzyPMn0y7hStjbg@mail.gmail.com>
+Subject: Re: [PATCH] mmc: Add Synopsys DesignWare mmc cmdq host driver
+To:     Jyan Chou <jyanchou@realtek.com>
+Cc:     adrian.hunter@intel.com, jh80.chung@samsung.com,
+        linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        james.tai@realtek.com
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Previously, support for the G502 had been attempted in commit
-'27fc32fd9417 ("HID: logitech-hidpp: add USB PID for a few more supported mice")'
+On Fri, 30 Jun 2023 at 07:57, Jyan Chou <jyanchou@realtek.com> wrote:
+>
+> The difference between dw_mmc.c and dw_mmc_cqe.c is that
+> we implemrnted cmdq feature, and we found out the difference
+> between distint version of synopsys' data book and user guide.
+>
+> We add the mmc driver for the Synopsys DesignWare mmc cmdq host
+> controller that can improve performance. Also, we add our
+> Realtek mmc driver that make good use of it.
+>
+> Signed-off-by: Jyan Chou <jyanchou@realtek.com>
+> ---
+>  drivers/mmc/host/cqhci-core.c     |    5 +
+>  drivers/mmc/host/cqhci.h          |    2 +
+>  drivers/mmc/host/dw_mmc_cqe-rtk.c | 1343 +++++++++++++++++++++
+>  drivers/mmc/host/dw_mmc_cqe-rtk.h |  164 +++
+>  drivers/mmc/host/dw_mmc_cqe.c     | 1821 +++++++++++++++++++++++++++++
+>  drivers/mmc/host/dw_mmc_cqe.h     |  441 +++++++
+>  6 files changed, 3776 insertions(+)
+>  create mode 100644 drivers/mmc/host/dw_mmc_cqe-rtk.c
+>  create mode 100644 drivers/mmc/host/dw_mmc_cqe-rtk.h
+>  create mode 100644 drivers/mmc/host/dw_mmc_cqe.c
+>  create mode 100644 drivers/mmc/host/dw_mmc_cqe.h
+>
+> diff --git a/drivers/mmc/host/cqhci-core.c b/drivers/mmc/host/cqhci-core.c
+> index b3d7d6d8d654..f4ddad62632a 100644
+> --- a/drivers/mmc/host/cqhci-core.c
+> +++ b/drivers/mmc/host/cqhci-core.c
+> @@ -514,6 +514,11 @@ static int cqhci_prep_tran_desc(struct mmc_request *mrq,
+>                 return sg_count;
+>         }
+>
+> +       if (cq_host->ops->setup_tran_desc) {
+> +               cq_host->ops->setup_tran_desc(data, cq_host, desc, sg_count);
+> +               return 0;
+> +       }
+> +
+>         desc = get_trans_desc(cq_host, tag);
+>
+>         for_each_sg(data->sg, sg, sg_count, i) {
+> diff --git a/drivers/mmc/host/cqhci.h b/drivers/mmc/host/cqhci.h
+> index ba9387ed90eb..a3e56da6189d 100644
+> --- a/drivers/mmc/host/cqhci.h
+> +++ b/drivers/mmc/host/cqhci.h
+> @@ -286,6 +286,8 @@ struct cqhci_host_ops {
+>                                  u64 *data);
+>         void (*pre_enable)(struct mmc_host *mmc);
+>         void (*post_disable)(struct mmc_host *mmc);
+> +       void (*setup_tran_desc)(struct mmc_data *data,
+> +               struct cqhci_host *cq_host, u8 *desc, int sg_count);
+>  #ifdef CONFIG_MMC_CRYPTO
+>         int (*program_key)(struct cqhci_host *cq_host,
+>                            const union cqhci_crypto_cfg_entry *cfg, int slot);
+> diff --git a/drivers/mmc/host/dw_mmc_cqe-rtk.c b/drivers/mmc/host/dw_mmc_cqe-rtk.c
+> new file mode 100644
+> index 000000000000..577cb1f1ed70
+> --- /dev/null
+> +++ b/drivers/mmc/host/dw_mmc_cqe-rtk.c
+> @@ -0,0 +1,1343 @@
+> +// SPDX-License-Identifier: GPL-2.0-or-later
+> +/*
+> + * Copyright (c) 2023 Realtek Semiconductor Corp.
+> + *
+> + */
+> +
+> +
+> +#include <linux/clk.h>
+> +#include <linux/delay.h>
+> +#include <linux/mfd/syscon.h>
+> +#include <linux/mmc/core.h>
+> +#include <linux/mmc/host.h>
+> +#include <linux/mmc/mmc.h>
+> +#include <linux/module.h>
+> +#include <linux/nvmem-consumer.h>
+> +#include <linux/of_address.h>
+> +#include <linux/pinctrl/consumer.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/regmap.h>
+> +#include <linux/slab.h>
+> +
+> +#include "dw_mmc_cqe.h"
+> +#include "dw_mmc_cqe-rtk.h"
+> +
+> +#define LOWER_BIT_MASK         0x00ffffff
+> +#define HIGH_BIT_MASK          0xff000000
+> +
+> +static void dw_mci_rtk_hs400_complete(struct mmc_host *mmc);
+> +static int dw_mci_rtk_execute_tuning(struct dw_mci_slot *slot, u32 opcode);
+> +
+> +int dw_mci_rtk_write_protect_cmd(struct mmc_host *mmc, u32 args, bool is_wrtie_protect)
+> +{
+> +       struct mmc_request mrq = {};
+> +       struct mmc_command cmd = {};
+> +       int err = 0;
+> +
+> +       if (is_wrtie_protect)
+> +               cmd.opcode = MMC_SET_WRITE_PROT;
+> +       else
+> +               cmd.opcode = MMC_CLR_WRITE_PROT;
+> +
+> +       cmd.arg = args;
+> +       cmd.flags = MMC_CMD_AC|MMC_RSP_SPI_R1B | MMC_RSP_R1B;
+> +       mrq.cmd = &cmd;
+> +       mrq.data = NULL;
+> +
+> +       mmc_wait_for_req(mmc, &mrq);
 
-This caused some issues and was reverted by
-'addf3382c47c ("Revert "HID: logitech-hidpp: add USB PID for a few more
-supported mice"")'.
+This is not how the mmc subsystem works. Commands and protocol
+specific things are managed by the core layer.
 
-Since then, a new version of this mouse has been released (Lightpseed Wireless), and works correctly.
+Please don't abuse the interfaces/APIs from the core. Just looking at
+a few lines below, I noticed that there are more cases like this in
+$subject patch, therefore I am stopping the review already at this
+point. I am simply afraid that I will waste my time on this, sorry.
 
-This device has support for battery reporting with the driver
+Next time, if you honestly want me to review this, please do your
+homework and take care of the above before posting a new version.
 
-Signed-off-by: Stuart Hayhurst <stuart.a.hayhurst@gmail.com>
----
+[...]
 
-Changes:
-v3:
- - Add git commit titles
-v2:
- - Add commit references
-
----
- drivers/hid/hid-logitech-hidpp.c | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/drivers/hid/hid-logitech-hidpp.c b/drivers/hid/hid-logitech-hidpp.c
-index 5e1a412fd28f..94a045ef8e50 100644
---- a/drivers/hid/hid-logitech-hidpp.c
-+++ b/drivers/hid/hid-logitech-hidpp.c
-@@ -4598,6 +4598,8 @@ static const struct hid_device_id hidpp_devices[] = {
- 
- 	{ /* Logitech G403 Wireless Gaming Mouse over USB */
- 	  HID_USB_DEVICE(USB_VENDOR_ID_LOGITECH, 0xC082) },
-+	{ /* Logitech G502 Lightspeed Wireless Gaming Mouse over USB */
-+	  HID_USB_DEVICE(USB_VENDOR_ID_LOGITECH, 0xC08D) },
- 	{ /* Logitech G703 Gaming Mouse over USB */
- 	  HID_USB_DEVICE(USB_VENDOR_ID_LOGITECH, 0xC087) },
- 	{ /* Logitech G703 Hero Gaming Mouse over USB */
--- 
-2.40.1.521.gf1e218fcd8
-
+Kind regards
+Uffe
