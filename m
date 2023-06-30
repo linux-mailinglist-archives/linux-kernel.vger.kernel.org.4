@@ -2,384 +2,457 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B7E7743D34
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 16:09:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E7BD743D3B
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 16:10:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232571AbjF3OJJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 10:09:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33292 "EHLO
+        id S232454AbjF3OKH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Jun 2023 10:10:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232088AbjF3OI4 (ORCPT
+        with ESMTP id S232682AbjF3OJ4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 10:08:56 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36FBE2680;
-        Fri, 30 Jun 2023 07:08:54 -0700 (PDT)
-X-UUID: a1f8b6da174f11eeb20a276fd37b9834-20230630
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=9oBbEWi353QXhgHYJiVE7v9EYtv5k3WTTuDdy4HbVXQ=;
-        b=KaAPHqUsbz6F5kO2wiz61Feyw68g6PhnmzSGwOZci5Lt/HQR5Kt5bN+kc+2Blzz9GxBYt75kA5tFBGi+m4XN98nz2pan4qJiQTrNgTNY2Ez2w6lI0Z55Zg9kHcwNE8xD1DdiwDfkr1IaHwliAoL70EEfPP94b/6GH4WQeDiSnEk=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.27,REQID:0abf361b-0a88-45de-a43e-d1f2cb2328de,IP:0,U
-        RL:0,TC:0,Content:-25,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
-        N:release,TS:-25
-X-CID-META: VersionHash:01c9525,CLOUDID:e4746c0d-26a8-467f-b838-f99719a9c083,B
-        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO
-X-CID-BVR: 0
-X-CID-BAS: 0,_,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR
-X-UUID: a1f8b6da174f11eeb20a276fd37b9834-20230630
-Received: from mtkmbs11n2.mediatek.inc [(172.21.101.187)] by mailgw02.mediatek.com
-        (envelope-from <powen.kao@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 429051148; Fri, 30 Jun 2023 22:08:48 +0800
-Received: from mtkmbs13n1.mediatek.inc (172.21.101.193) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Fri, 30 Jun 2023 22:08:46 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
- mtkmbs13n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.1118.26 via Frontend Transport; Fri, 30 Jun 2023 22:08:46 +0800
-From:   Po-Wen Kao <powen.kao@mediatek.com>
-To:     <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        Stanley Chu <stanley.chu@mediatek.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-CC:     <wsd_upstream@mediatek.com>, <peter.wang@mediatek.com>,
-        <powen.kao@mediatek.com>, <alice.chao@mediatek.com>,
-        <naomi.chu@mediatek.com>, <chun-hung.wu@mediatek.com>,
-        <cc.chou@mediatek.com>, <eddie.huang@mediatek.com>
-Subject: [PATCH v4 2/2] scsi: ufs: ufs-mediatek: Add MCQ support for MTK platform
-Date:   Fri, 30 Jun 2023 22:06:22 +0800
-Message-ID: <20230630140624.21739-3-powen.kao@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20230630140624.21739-1-powen.kao@mediatek.com>
-References: <20230630140624.21739-1-powen.kao@mediatek.com>
+        Fri, 30 Jun 2023 10:09:56 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DF7E3C0E;
+        Fri, 30 Jun 2023 07:09:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1688134190; x=1719670190;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=87HWBjxPKH1eCSf8y/PM6kHwdjnnl/CXZEzOqA7rh38=;
+  b=DwA/ykdbg4yP4wZ+yqPtdNg5TQ0duTF+4idFgA1Pjulqf5ouzq0OtnBI
+   I9z/c4LIzHxXfe7INSb8e3I/EkCYj2a8VEji1iKIn8DGR7sY7KvrDGPVc
+   ZZtZQCxT7/NFNgokp1WvJ/2tz8GHKExyDAWQ4vQktktHVOnsjV5qFqJbI
+   V2n5HIcsuxtuFuu5mf3brQVKvQDnuo3ABJHVv2jlD+lBJ5qle1mF9wNFB
+   3tPELNdduNz0GRrWuUodhbtcE5FADbvayNjXhjSsXQEZLKeoGK2vXDJlB
+   UCb27i789ffNpTt8KM+Lmi4KpLv++acMBSRI8PLqHU8gTo7b/NTWhLIEt
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10757"; a="362442642"
+X-IronPort-AV: E=Sophos;i="6.01,171,1684825200"; 
+   d="scan'208";a="362442642"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jun 2023 07:09:37 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10757"; a="841882631"
+X-IronPort-AV: E=Sophos;i="6.01,171,1684825200"; 
+   d="scan'208";a="841882631"
+Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 30 Jun 2023 07:09:28 -0700
+Received: from kbuild by 783282924a45 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1qFEoS-000F1Z-00;
+        Fri, 30 Jun 2023 14:09:28 +0000
+Date:   Fri, 30 Jun 2023 22:08:32 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Evan Quan <evan.quan@amd.com>, rafael@kernel.org, lenb@kernel.org,
+        Alexander.Deucher@amd.com, Christian.Koenig@amd.com,
+        Xinhui.Pan@amd.com, airlied@gmail.com, daniel@ffwll.ch,
+        johannes@sipsolutions.net, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        Mario.Limonciello@amd.com, mdaenzer@redhat.com,
+        maarten.lankhorst@linux.intel.com, tzimmermann@suse.de,
+        hdegoede@redhat.com, jingyuwang_vip@163.com, Lijo.Lazar@amd.com,
+        jim.cromie@gmail.com, bellosilicio@gmail.com,
+        andrealmeid@igalia.com, trix@redhat.com, jsg@jsg.id.au,
+        arnd@arndb.de
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        netdev@vger.kernel.org, linux-wireless@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-acpi@vger.kernel.org
+Subject: Re: [PATCH V5 4/9] wifi: mac80211: Add support for ACPI WBRF
+Message-ID: <202306302133.Px6k3Lmq-lkp@intel.com>
+References: <20230630103240.1557100-5-evan.quan@amd.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNPARSEABLE_RELAY,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230630103240.1557100-5-evan.quan@amd.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add UFS MCQ vops and irq handler for MediaTek platform.
-PM flow is fixed accordingly.
+Hi Evan,
 
-Signed-off-by: Po-Wen Kao <powen.kao@mediatek.com>
-Reviewed-by: Stanley Chu <stanley.chu@mediatek.com>
-Suggested-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
----
- drivers/ufs/host/ufs-mediatek.c | 168 +++++++++++++++++++++++++++++++-
- drivers/ufs/host/ufs-mediatek.h |  34 +++++++
- 2 files changed, 200 insertions(+), 2 deletions(-)
+kernel test robot noticed the following build errors:
 
-diff --git a/drivers/ufs/host/ufs-mediatek.c b/drivers/ufs/host/ufs-mediatek.c
-index e68b05976f9e..d2da9a6c5cd5 100644
---- a/drivers/ufs/host/ufs-mediatek.c
-+++ b/drivers/ufs/host/ufs-mediatek.c
-@@ -27,8 +27,14 @@
- #include <ufs/unipro.h>
- #include "ufs-mediatek.h"
- 
-+static int  ufs_mtk_config_mcq(struct ufs_hba *hba, bool irq);
-+
- #define CREATE_TRACE_POINTS
- #include "ufs-mediatek-trace.h"
-+#undef CREATE_TRACE_POINTS
-+
-+#define MAX_SUPP_MAC 64
-+#define MCQ_QUEUE_OFFSET(c) ((((c) >> 16) & 0xFF) * 0x200)
- 
- static const struct ufs_dev_quirk ufs_mtk_dev_fixups[] = {
- 	{ .wmanufacturerid = UFS_ANY_VENDOR,
-@@ -840,6 +846,34 @@ static void ufs_mtk_vreg_fix_vccqx(struct ufs_hba *hba)
- 	}
- }
- 
-+static void ufs_mtk_init_mcq_irq(struct ufs_hba *hba)
-+{
-+	struct ufs_mtk_host *host = ufshcd_get_variant(hba);
-+	struct platform_device *pdev;
-+	int i;
-+	int irq;
-+
-+	host->mcq_nr_intr = UFSHCD_MAX_Q_NR;
-+	pdev = container_of(hba->dev, struct platform_device, dev);
-+
-+	for (i = 0; i < host->mcq_nr_intr; i++) {
-+		/* irq index 0 is legacy irq, sq/cq irq start from index 1 */
-+		irq = platform_get_irq(pdev, i + 1);
-+		if (irq < 0) {
-+			host->mcq_intr_info[i].irq = MTK_MCQ_INVALID_IRQ;
-+			dev_err(hba->dev, "get platform mcq irq fail: %d\n", i);
-+			goto failed;
-+		}
-+		host->mcq_intr_info[i].hba = hba;
-+		host->mcq_intr_info[i].irq = irq;
-+		dev_info(hba->dev, "get platform mcq irq: %d, %d\n", i, irq);
-+	}
-+
-+	return;
-+failed:
-+	host->mcq_nr_intr = 0;
-+}
-+
- /**
-  * ufs_mtk_init - find other essential mmio bases
-  * @hba: host controller instance
-@@ -876,6 +910,8 @@ static int ufs_mtk_init(struct ufs_hba *hba)
- 	/* Initialize host capability */
- 	ufs_mtk_init_host_caps(hba);
- 
-+	ufs_mtk_init_mcq_irq(hba);
-+
- 	err = ufs_mtk_bind_mphy(hba);
- 	if (err)
- 		goto out_variant_clear;
-@@ -1173,7 +1209,17 @@ static int ufs_mtk_link_set_hpm(struct ufs_hba *hba)
- 	else
- 		return err;
- 
--	err = ufshcd_make_hba_operational(hba);
-+	if (!hba->mcq_enabled) {
-+		err = ufshcd_make_hba_operational(hba);
-+	} else {
-+		ufs_mtk_config_mcq(hba, false);
-+		ufshcd_mcq_make_queues_operational(hba);
-+		ufshcd_mcq_config_mac(hba, hba->nutrs);
-+		/* Enable MCQ mode */
-+		ufshcd_writel(hba, ufshcd_readl(hba, REG_UFS_MEM_CFG) | 0x1,
-+			      REG_UFS_MEM_CFG);
-+	}
-+
- 	if (err)
- 		return err;
- 
-@@ -1497,6 +1543,119 @@ static int ufs_mtk_clk_scale_notify(struct ufs_hba *hba, bool scale_up,
- 	return 0;
- }
- 
-+static int ufs_mtk_get_hba_mac(struct ufs_hba *hba)
-+{
-+	return MAX_SUPP_MAC;
-+}
-+
-+static int ufs_mtk_op_runtime_config(struct ufs_hba *hba)
-+{
-+	struct ufshcd_mcq_opr_info_t *opr;
-+	int i;
-+
-+	hba->mcq_opr[OPR_SQD].offset = REG_UFS_MTK_SQD;
-+	hba->mcq_opr[OPR_SQIS].offset = REG_UFS_MTK_SQIS;
-+	hba->mcq_opr[OPR_CQD].offset = REG_UFS_MTK_CQD;
-+	hba->mcq_opr[OPR_CQIS].offset = REG_UFS_MTK_CQIS;
-+
-+	for (i = 0; i < OPR_MAX; i++) {
-+		opr = &hba->mcq_opr[i];
-+		opr->stride = REG_UFS_MCQ_STRIDE;
-+		opr->base = hba->mmio_base + opr->offset;
-+	}
-+
-+	return 0;
-+}
-+
-+static int ufs_mtk_mcq_config_resource(struct ufs_hba *hba)
-+{
-+	struct ufs_mtk_host *host = ufshcd_get_variant(hba);
-+
-+	/* fail mcq initialization if interrupt is not filled properly */
-+	if (!host->mcq_nr_intr) {
-+		dev_info(hba->dev, "IRQs not ready. MCQ disabled.");
-+		return -EINVAL;
-+	}
-+
-+	hba->mcq_base = hba->mmio_base + MCQ_QUEUE_OFFSET(hba->mcq_capabilities);
-+	return 0;
-+}
-+
-+static irqreturn_t ufs_mtk_mcq_intr(int irq, void *__intr_info)
-+{
-+	struct ufs_mtk_mcq_intr_info *mcq_intr_info = __intr_info;
-+	struct ufs_hba *hba = mcq_intr_info->hba;
-+	struct ufs_hw_queue *hwq;
-+	u32 events;
-+	int qid = mcq_intr_info->qid;
-+
-+	hwq = &hba->uhq[qid];
-+
-+	events = ufshcd_mcq_read_cqis(hba, qid);
-+	if (events)
-+		ufshcd_mcq_write_cqis(hba, events, qid);
-+
-+	if (events & UFSHCD_MCQ_CQIS_TAIL_ENT_PUSH_STS)
-+		ufshcd_mcq_poll_cqe_lock(hba, hwq);
-+
-+	return IRQ_HANDLED;
-+}
-+
-+static int ufs_mtk_config_mcq_irq(struct ufs_hba *hba)
-+{
-+	struct ufs_mtk_host *host = ufshcd_get_variant(hba);
-+	u32 irq, i;
-+	int ret;
-+
-+	for (i = 0; i < host->mcq_nr_intr; i++) {
-+		irq = host->mcq_intr_info[i].irq;
-+		if (irq == MTK_MCQ_INVALID_IRQ) {
-+			dev_err(hba->dev, "invalid irq. %d\n", i);
-+			return -ENOPARAM;
-+		}
-+
-+		host->mcq_intr_info[i].qid = i;
-+		ret = devm_request_irq(hba->dev, irq, ufs_mtk_mcq_intr, 0, UFSHCD,
-+				       &host->mcq_intr_info[i]);
-+
-+		dev_info(hba->dev, "request irq %d intr %s\n", irq, ret ? "failed" : "");
-+
-+		if (ret)
-+			return ret;
-+	}
-+
-+	return 0;
-+}
-+
-+static int ufs_mtk_config_mcq(struct ufs_hba *hba, bool irq)
-+{
-+	struct ufs_mtk_host *host = ufshcd_get_variant(hba);
-+	int ret = 0;
-+
-+	if (!host->mcq_set_intr) {
-+		/* Disable irq option register */
-+		ufshcd_rmwl(hba, MCQ_INTR_EN_MSK, 0, REG_UFS_MMIO_OPT_CTRL_0);
-+
-+		if (irq) {
-+			ret = ufs_mtk_config_mcq_irq(hba);
-+			if (ret)
-+				return ret;
-+		}
-+
-+		host->mcq_set_intr = true;
-+	}
-+
-+	ufshcd_rmwl(hba, MCQ_AH8, MCQ_AH8, REG_UFS_MMIO_OPT_CTRL_0);
-+	ufshcd_rmwl(hba, MCQ_INTR_EN_MSK, MCQ_MULTI_INTR_EN, REG_UFS_MMIO_OPT_CTRL_0);
-+
-+	return 0;
-+}
-+
-+static int ufs_mtk_config_esi(struct ufs_hba *hba)
-+{
-+	return ufs_mtk_config_mcq(hba, true);
-+}
-+
- /*
-  * struct ufs_hba_mtk_vops - UFS MTK specific variant operations
-  *
-@@ -1520,6 +1679,11 @@ static const struct ufs_hba_variant_ops ufs_hba_mtk_vops = {
- 	.event_notify        = ufs_mtk_event_notify,
- 	.config_scaling_param = ufs_mtk_config_scaling_param,
- 	.clk_scale_notify    = ufs_mtk_clk_scale_notify,
-+	/* mcq vops */
-+	.get_hba_mac         = ufs_mtk_get_hba_mac,
-+	.op_runtime_config   = ufs_mtk_op_runtime_config,
-+	.mcq_config_resource = ufs_mtk_mcq_config_resource,
-+	.config_esi          = ufs_mtk_config_esi,
- };
- 
- /**
-@@ -1566,7 +1730,7 @@ static int ufs_mtk_probe(struct platform_device *pdev)
- 
- out:
- 	if (err)
--		dev_info(dev, "probe failed %d\n", err);
-+		dev_err(dev, "probe failed %d\n", err);
- 
- 	of_node_put(reset_node);
- 	return err;
-diff --git a/drivers/ufs/host/ufs-mediatek.h b/drivers/ufs/host/ufs-mediatek.h
-index 2fc6d7b87694..3ba1229b58a2 100644
---- a/drivers/ufs/host/ufs-mediatek.h
-+++ b/drivers/ufs/host/ufs-mediatek.h
-@@ -10,11 +10,28 @@
- #include <linux/pm_qos.h>
- #include <linux/soc/mediatek/mtk_sip_svc.h>
- 
-+/*
-+ * MCQ define and struct
-+ */
-+#define UFSHCD_MAX_Q_NR 8
-+#define MTK_MCQ_INVALID_IRQ	0xFFFF
-+
-+/* REG_UFS_MMIO_OPT_CTRL_0 160h */
-+#define EHS_EN                  BIT(0)
-+#define PFM_IMPV                BIT(1)
-+#define MCQ_MULTI_INTR_EN       BIT(2)
-+#define MCQ_CMB_INTR_EN         BIT(3)
-+#define MCQ_AH8                 BIT(4)
-+#define MON_EN                  BIT(5)
-+
-+#define MCQ_INTR_EN_MSK         (MCQ_MULTI_INTR_EN | MCQ_CMB_INTR_EN)
-+
- /*
-  * Vendor specific UFSHCI Registers
-  */
- #define REG_UFS_XOUFS_CTRL          0x140
- #define REG_UFS_REFCLK_CTRL         0x144
-+#define REG_UFS_MMIO_OPT_CTRL_0     0x160
- #define REG_UFS_EXTREG              0x2100
- #define REG_UFS_MPHYCTRL            0x2200
- #define REG_UFS_MTK_IP_VER          0x2240
-@@ -26,6 +43,13 @@
- #define REG_UFS_DEBUG_SEL_B2        0x22D8
- #define REG_UFS_DEBUG_SEL_B3        0x22DC
- 
-+#define REG_UFS_MTK_SQD             0x2800
-+#define REG_UFS_MTK_SQIS            0x2814
-+#define REG_UFS_MTK_CQD             0x281C
-+#define REG_UFS_MTK_CQIS            0x2824
-+
-+#define REG_UFS_MCQ_STRIDE          0x30
-+
- /*
-  * Ref-clk control
-  *
-@@ -136,6 +160,12 @@ struct ufs_mtk_hw_ver {
- 	u8 major;
- };
- 
-+struct ufs_mtk_mcq_intr_info {
-+	struct ufs_hba *hba;
-+	u32 irq;
-+	u8 qid;
-+};
-+
- struct ufs_mtk_host {
- 	struct phy *mphy;
- 	struct pm_qos_request pm_qos_req;
-@@ -155,6 +185,10 @@ struct ufs_mtk_host {
- 	u16 ref_clk_ungating_wait_us;
- 	u16 ref_clk_gating_wait_us;
- 	u32 ip_ver;
-+
-+	bool mcq_set_intr;
-+	int mcq_nr_intr;
-+	struct ufs_mtk_mcq_intr_info mcq_intr_info[UFSHCD_MAX_Q_NR];
- };
- 
- /*
+[auto build test ERROR on wireless-next/main]
+[also build test ERROR on wireless/main linus/master v6.4]
+[cannot apply to drm-misc/drm-misc-next next-20230630]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Evan-Quan/drivers-core-Add-support-for-Wifi-band-RF-mitigations/20230630-183633
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/wireless/wireless-next.git main
+patch link:    https://lore.kernel.org/r/20230630103240.1557100-5-evan.quan%40amd.com
+patch subject: [PATCH V5 4/9] wifi: mac80211: Add support for ACPI WBRF
+config: powerpc-randconfig-r025-20230630 (https://download.01.org/0day-ci/archive/20230630/202306302133.Px6k3Lmq-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce: (https://download.01.org/0day-ci/archive/20230630/202306302133.Px6k3Lmq-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306302133.Px6k3Lmq-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+         |                 ^~~~~~~~~~~~~~
+   <scratch space>:87:1: note: expanded from here
+      87 | __do_insw
+         | ^
+   arch/powerpc/include/asm/io.h:615:56: note: expanded from macro '__do_insw'
+     615 | #define __do_insw(p, b, n)      readsw((PCI_IO_ADDR)_IO_BASE+(p), (b), (n))
+         |                                        ~~~~~~~~~~~~~~~~~~~~~^
+   In file included from net/mac80211/rx.c:15:
+   In file included from include/linux/skbuff.h:17:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/powerpc/include/asm/hardirq.h:6:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/powerpc/include/asm/io.h:677:
+   arch/powerpc/include/asm/io-defs.h:47:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+      47 | DEF_PCI_AC_NORET(insl, (unsigned long p, void *b, unsigned long c),
+         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      48 |                  (p, b, c), pio, p)
+         |                  ~~~~~~~~~~~~~~~~~~
+   arch/powerpc/include/asm/io.h:674:3: note: expanded from macro 'DEF_PCI_AC_NORET'
+     674 |                 __do_##name al;                                 \
+         |                 ^~~~~~~~~~~~~~
+   <scratch space>:89:1: note: expanded from here
+      89 | __do_insl
+         | ^
+   arch/powerpc/include/asm/io.h:616:56: note: expanded from macro '__do_insl'
+     616 | #define __do_insl(p, b, n)      readsl((PCI_IO_ADDR)_IO_BASE+(p), (b), (n))
+         |                                        ~~~~~~~~~~~~~~~~~~~~~^
+   In file included from net/mac80211/rx.c:15:
+   In file included from include/linux/skbuff.h:17:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/powerpc/include/asm/hardirq.h:6:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/powerpc/include/asm/io.h:677:
+   arch/powerpc/include/asm/io-defs.h:49:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+      49 | DEF_PCI_AC_NORET(outsb, (unsigned long p, const void *b, unsigned long c),
+         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      50 |                  (p, b, c), pio, p)
+         |                  ~~~~~~~~~~~~~~~~~~
+   arch/powerpc/include/asm/io.h:674:3: note: expanded from macro 'DEF_PCI_AC_NORET'
+     674 |                 __do_##name al;                                 \
+         |                 ^~~~~~~~~~~~~~
+   <scratch space>:91:1: note: expanded from here
+      91 | __do_outsb
+         | ^
+   arch/powerpc/include/asm/io.h:617:58: note: expanded from macro '__do_outsb'
+     617 | #define __do_outsb(p, b, n)     writesb((PCI_IO_ADDR)_IO_BASE+(p),(b),(n))
+         |                                         ~~~~~~~~~~~~~~~~~~~~~^
+   In file included from net/mac80211/rx.c:15:
+   In file included from include/linux/skbuff.h:17:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/powerpc/include/asm/hardirq.h:6:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/powerpc/include/asm/io.h:677:
+   arch/powerpc/include/asm/io-defs.h:51:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+      51 | DEF_PCI_AC_NORET(outsw, (unsigned long p, const void *b, unsigned long c),
+         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      52 |                  (p, b, c), pio, p)
+         |                  ~~~~~~~~~~~~~~~~~~
+   arch/powerpc/include/asm/io.h:674:3: note: expanded from macro 'DEF_PCI_AC_NORET'
+     674 |                 __do_##name al;                                 \
+         |                 ^~~~~~~~~~~~~~
+   <scratch space>:93:1: note: expanded from here
+      93 | __do_outsw
+         | ^
+   arch/powerpc/include/asm/io.h:618:58: note: expanded from macro '__do_outsw'
+     618 | #define __do_outsw(p, b, n)     writesw((PCI_IO_ADDR)_IO_BASE+(p),(b),(n))
+         |                                         ~~~~~~~~~~~~~~~~~~~~~^
+   In file included from net/mac80211/rx.c:15:
+   In file included from include/linux/skbuff.h:17:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/powerpc/include/asm/hardirq.h:6:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/powerpc/include/asm/io.h:677:
+   arch/powerpc/include/asm/io-defs.h:53:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+      53 | DEF_PCI_AC_NORET(outsl, (unsigned long p, const void *b, unsigned long c),
+         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      54 |                  (p, b, c), pio, p)
+         |                  ~~~~~~~~~~~~~~~~~~
+   arch/powerpc/include/asm/io.h:674:3: note: expanded from macro 'DEF_PCI_AC_NORET'
+     674 |                 __do_##name al;                                 \
+         |                 ^~~~~~~~~~~~~~
+   <scratch space>:95:1: note: expanded from here
+      95 | __do_outsl
+         | ^
+   arch/powerpc/include/asm/io.h:619:58: note: expanded from macro '__do_outsl'
+     619 | #define __do_outsl(p, b, n)     writesl((PCI_IO_ADDR)_IO_BASE+(p),(b),(n))
+         |                                         ~~~~~~~~~~~~~~~~~~~~~^
+   In file included from net/mac80211/rx.c:26:
+>> net/mac80211/ieee80211_i.h:2655:48: error: void function 'ieee80211_add_wbrf' should not return a value [-Wreturn-type]
+    2655 |                                       struct cfg80211_chan_def *chandef) { return 0; }
+         |                                                                            ^      ~
+   6 warnings and 1 error generated.
+--
+   In file included from include/net/net_namespace.h:43:
+   In file included from include/linux/skbuff.h:17:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/powerpc/include/asm/hardirq.h:6:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/powerpc/include/asm/io.h:677:
+   arch/powerpc/include/asm/io-defs.h:47:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+      47 | DEF_PCI_AC_NORET(insl, (unsigned long p, void *b, unsigned long c),
+         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      48 |                  (p, b, c), pio, p)
+         |                  ~~~~~~~~~~~~~~~~~~
+   arch/powerpc/include/asm/io.h:674:3: note: expanded from macro 'DEF_PCI_AC_NORET'
+     674 |                 __do_##name al;                                 \
+         |                 ^~~~~~~~~~~~~~
+   <scratch space>:87:1: note: expanded from here
+      87 | __do_insl
+         | ^
+   arch/powerpc/include/asm/io.h:616:56: note: expanded from macro '__do_insl'
+     616 | #define __do_insl(p, b, n)      readsl((PCI_IO_ADDR)_IO_BASE+(p), (b), (n))
+         |                                        ~~~~~~~~~~~~~~~~~~~~~^
+   In file included from net/mac80211/rc80211_minstrel_ht.c:6:
+   In file included from include/linux/netdevice.h:38:
+   In file included from include/net/net_namespace.h:43:
+   In file included from include/linux/skbuff.h:17:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/powerpc/include/asm/hardirq.h:6:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/powerpc/include/asm/io.h:677:
+   arch/powerpc/include/asm/io-defs.h:49:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+      49 | DEF_PCI_AC_NORET(outsb, (unsigned long p, const void *b, unsigned long c),
+         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      50 |                  (p, b, c), pio, p)
+         |                  ~~~~~~~~~~~~~~~~~~
+   arch/powerpc/include/asm/io.h:674:3: note: expanded from macro 'DEF_PCI_AC_NORET'
+     674 |                 __do_##name al;                                 \
+         |                 ^~~~~~~~~~~~~~
+   <scratch space>:89:1: note: expanded from here
+      89 | __do_outsb
+         | ^
+   arch/powerpc/include/asm/io.h:617:58: note: expanded from macro '__do_outsb'
+     617 | #define __do_outsb(p, b, n)     writesb((PCI_IO_ADDR)_IO_BASE+(p),(b),(n))
+         |                                         ~~~~~~~~~~~~~~~~~~~~~^
+   In file included from net/mac80211/rc80211_minstrel_ht.c:6:
+   In file included from include/linux/netdevice.h:38:
+   In file included from include/net/net_namespace.h:43:
+   In file included from include/linux/skbuff.h:17:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/powerpc/include/asm/hardirq.h:6:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/powerpc/include/asm/io.h:677:
+   arch/powerpc/include/asm/io-defs.h:51:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+      51 | DEF_PCI_AC_NORET(outsw, (unsigned long p, const void *b, unsigned long c),
+         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      52 |                  (p, b, c), pio, p)
+         |                  ~~~~~~~~~~~~~~~~~~
+   arch/powerpc/include/asm/io.h:674:3: note: expanded from macro 'DEF_PCI_AC_NORET'
+     674 |                 __do_##name al;                                 \
+         |                 ^~~~~~~~~~~~~~
+   <scratch space>:91:1: note: expanded from here
+      91 | __do_outsw
+         | ^
+   arch/powerpc/include/asm/io.h:618:58: note: expanded from macro '__do_outsw'
+     618 | #define __do_outsw(p, b, n)     writesw((PCI_IO_ADDR)_IO_BASE+(p),(b),(n))
+         |                                         ~~~~~~~~~~~~~~~~~~~~~^
+   In file included from net/mac80211/rc80211_minstrel_ht.c:6:
+   In file included from include/linux/netdevice.h:38:
+   In file included from include/net/net_namespace.h:43:
+   In file included from include/linux/skbuff.h:17:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/powerpc/include/asm/hardirq.h:6:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/powerpc/include/asm/io.h:677:
+   arch/powerpc/include/asm/io-defs.h:53:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+      53 | DEF_PCI_AC_NORET(outsl, (unsigned long p, const void *b, unsigned long c),
+         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      54 |                  (p, b, c), pio, p)
+         |                  ~~~~~~~~~~~~~~~~~~
+   arch/powerpc/include/asm/io.h:674:3: note: expanded from macro 'DEF_PCI_AC_NORET'
+     674 |                 __do_##name al;                                 \
+         |                 ^~~~~~~~~~~~~~
+   <scratch space>:93:1: note: expanded from here
+      93 | __do_outsl
+         | ^
+   arch/powerpc/include/asm/io.h:619:58: note: expanded from macro '__do_outsl'
+     619 | #define __do_outsl(p, b, n)     writesl((PCI_IO_ADDR)_IO_BASE+(p),(b),(n))
+         |                                         ~~~~~~~~~~~~~~~~~~~~~^
+   In file included from net/mac80211/rc80211_minstrel_ht.c:15:
+   In file included from net/mac80211/rate.h:16:
+>> net/mac80211/ieee80211_i.h:2655:48: error: void function 'ieee80211_add_wbrf' should not return a value [-Wreturn-type]
+    2655 |                                       struct cfg80211_chan_def *chandef) { return 0; }
+         |                                                                            ^      ~
+   6 warnings and 1 error generated.
+--
+   In file included from include/linux/ieee80211.h:19:
+   In file included from include/linux/if_ether.h:19:
+   In file included from include/linux/skbuff.h:17:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/powerpc/include/asm/hardirq.h:6:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/powerpc/include/asm/io.h:677:
+   arch/powerpc/include/asm/io-defs.h:47:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+      47 | DEF_PCI_AC_NORET(insl, (unsigned long p, void *b, unsigned long c),
+         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      48 |                  (p, b, c), pio, p)
+         |                  ~~~~~~~~~~~~~~~~~~
+   arch/powerpc/include/asm/io.h:674:3: note: expanded from macro 'DEF_PCI_AC_NORET'
+     674 |                 __do_##name al;                                 \
+         |                 ^~~~~~~~~~~~~~
+   <scratch space>:126:1: note: expanded from here
+     126 | __do_insl
+         | ^
+   arch/powerpc/include/asm/io.h:616:56: note: expanded from macro '__do_insl'
+     616 | #define __do_insl(p, b, n)      readsl((PCI_IO_ADDR)_IO_BASE+(p), (b), (n))
+         |                                        ~~~~~~~~~~~~~~~~~~~~~^
+   In file included from net/mac80211/ht.c:15:
+   In file included from include/linux/ieee80211.h:19:
+   In file included from include/linux/if_ether.h:19:
+   In file included from include/linux/skbuff.h:17:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/powerpc/include/asm/hardirq.h:6:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/powerpc/include/asm/io.h:677:
+   arch/powerpc/include/asm/io-defs.h:49:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+      49 | DEF_PCI_AC_NORET(outsb, (unsigned long p, const void *b, unsigned long c),
+         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      50 |                  (p, b, c), pio, p)
+         |                  ~~~~~~~~~~~~~~~~~~
+   arch/powerpc/include/asm/io.h:674:3: note: expanded from macro 'DEF_PCI_AC_NORET'
+     674 |                 __do_##name al;                                 \
+         |                 ^~~~~~~~~~~~~~
+   <scratch space>:128:1: note: expanded from here
+     128 | __do_outsb
+         | ^
+   arch/powerpc/include/asm/io.h:617:58: note: expanded from macro '__do_outsb'
+     617 | #define __do_outsb(p, b, n)     writesb((PCI_IO_ADDR)_IO_BASE+(p),(b),(n))
+         |                                         ~~~~~~~~~~~~~~~~~~~~~^
+   In file included from net/mac80211/ht.c:15:
+   In file included from include/linux/ieee80211.h:19:
+   In file included from include/linux/if_ether.h:19:
+   In file included from include/linux/skbuff.h:17:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/powerpc/include/asm/hardirq.h:6:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/powerpc/include/asm/io.h:677:
+   arch/powerpc/include/asm/io-defs.h:51:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+      51 | DEF_PCI_AC_NORET(outsw, (unsigned long p, const void *b, unsigned long c),
+         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      52 |                  (p, b, c), pio, p)
+         |                  ~~~~~~~~~~~~~~~~~~
+   arch/powerpc/include/asm/io.h:674:3: note: expanded from macro 'DEF_PCI_AC_NORET'
+     674 |                 __do_##name al;                                 \
+         |                 ^~~~~~~~~~~~~~
+   <scratch space>:130:1: note: expanded from here
+     130 | __do_outsw
+         | ^
+   arch/powerpc/include/asm/io.h:618:58: note: expanded from macro '__do_outsw'
+     618 | #define __do_outsw(p, b, n)     writesw((PCI_IO_ADDR)_IO_BASE+(p),(b),(n))
+         |                                         ~~~~~~~~~~~~~~~~~~~~~^
+   In file included from net/mac80211/ht.c:15:
+   In file included from include/linux/ieee80211.h:19:
+   In file included from include/linux/if_ether.h:19:
+   In file included from include/linux/skbuff.h:17:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/powerpc/include/asm/hardirq.h:6:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/powerpc/include/asm/io.h:677:
+   arch/powerpc/include/asm/io-defs.h:53:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+      53 | DEF_PCI_AC_NORET(outsl, (unsigned long p, const void *b, unsigned long c),
+         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      54 |                  (p, b, c), pio, p)
+         |                  ~~~~~~~~~~~~~~~~~~
+   arch/powerpc/include/asm/io.h:674:3: note: expanded from macro 'DEF_PCI_AC_NORET'
+     674 |                 __do_##name al;                                 \
+         |                 ^~~~~~~~~~~~~~
+   <scratch space>:132:1: note: expanded from here
+     132 | __do_outsl
+         | ^
+   arch/powerpc/include/asm/io.h:619:58: note: expanded from macro '__do_outsl'
+     619 | #define __do_outsl(p, b, n)     writesl((PCI_IO_ADDR)_IO_BASE+(p),(b),(n))
+         |                                         ~~~~~~~~~~~~~~~~~~~~~^
+   In file included from net/mac80211/ht.c:18:
+>> net/mac80211/ieee80211_i.h:2655:48: error: void function 'ieee80211_add_wbrf' should not return a value [-Wreturn-type]
+    2655 |                                       struct cfg80211_chan_def *chandef) { return 0; }
+         |                                                                            ^      ~
+   6 warnings and 1 error generated.
+..
+
+
+vim +/ieee80211_add_wbrf +2655 net/mac80211/ieee80211_i.h
+
+  2630	
+  2631	u8 ieee80211_ie_len_eht_cap(struct ieee80211_sub_if_data *sdata, u8 iftype);
+  2632	u8 *ieee80211_ie_build_eht_cap(u8 *pos,
+  2633				       const struct ieee80211_sta_he_cap *he_cap,
+  2634				       const struct ieee80211_sta_eht_cap *eht_cap,
+  2635				       u8 *end,
+  2636				       bool for_ap);
+  2637	
+  2638	void
+  2639	ieee80211_eht_cap_ie_to_sta_eht_cap(struct ieee80211_sub_if_data *sdata,
+  2640					    struct ieee80211_supported_band *sband,
+  2641					    const u8 *he_cap_ie, u8 he_cap_len,
+  2642					    const struct ieee80211_eht_cap_elem *eht_cap_ie_elem,
+  2643					    u8 eht_cap_len,
+  2644					    struct link_sta_info *link_sta);
+  2645	
+  2646	#ifdef CONFIG_WBRF
+  2647	void ieee80211_check_wbrf_support(struct ieee80211_local *local);
+  2648	void ieee80211_add_wbrf(struct ieee80211_local *local,
+  2649				struct cfg80211_chan_def *chandef);
+  2650	void ieee80211_remove_wbrf(struct ieee80211_local *local,
+  2651				   struct cfg80211_chan_def *chandef);
+  2652	#else
+  2653	static inline void ieee80211_check_wbrf_support(struct ieee80211_local *local) { }
+  2654	static inline void ieee80211_add_wbrf(struct ieee80211_local *local,
+> 2655					      struct cfg80211_chan_def *chandef) { return 0; }
+  2656	static inline void ieee80211_remove_wbrf(struct ieee80211_local *local,
+  2657						 struct cfg80211_chan_def *chandef) { }
+  2658	#endif /* CONFIG_WBRF */
+  2659	
+
 -- 
-2.18.0
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
