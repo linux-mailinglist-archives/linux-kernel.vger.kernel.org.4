@@ -2,166 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2841C74451C
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Jul 2023 01:19:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D123744528
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Jul 2023 01:22:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232644AbjF3XTf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 19:19:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36844 "EHLO
+        id S232762AbjF3XWA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Jun 2023 19:22:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232732AbjF3XTR (ORCPT
+        with ESMTP id S232242AbjF3XVi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 19:19:17 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 452914683;
-        Fri, 30 Jun 2023 16:18:36 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C1EEE61805;
-        Fri, 30 Jun 2023 23:18:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9A84C433C8;
-        Fri, 30 Jun 2023 23:18:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688167115;
-        bh=JKd3pcacA54AZ0fE+QcV56KctfOkUbfebcxzki2Xzw4=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=ZMi4zhYmfvWJMdkvedanUYstuVE7V++h8+4bGqe8iRsO64USW/4d3yNZcbJWF4dFb
-         iqTvVQKxd/hcW4amlQdMvCalBxakXpwsJTYx//KfXK+Ocq3HhdqzLAEEYyA/WYIIO9
-         m3cUTjAbAJXwWJTR0npi8sxQCqDafIpDyT5YR4y6LnkTsWJGTejQg1k828QAQJx+xF
-         YLnwfYb5OtgQJjbOcQXgbr+hQQtFhmaqz89WhtJPqc0oVV2rfVNBe+d6Ybj7rH73xa
-         7quq7fo9yvPZswXaoXZA2zNn/lkZUWFjoQZtXWIaOEyaGkBTpKhMpv4g35BMDBquFB
-         c2GoPvpi27qaQ==
-Date:   Fri, 30 Jun 2023 18:18:32 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Thippeswamy Havalige <thippeswamy.havalige@amd.com>
-Cc:     krzysztof.kozlowski@linaro.org, devicetree@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        robh+dt@kernel.org, bhelgaas@google.com, lorenzo.pieralisi@arm.com,
-        linux-arm-kernel@lists.infradead.org, bharat.kumar.gogada@amd.com,
-        michals@amd.com
-Subject: Re: [PATCH V5 3/3] PCI: xilinx-xdma: Add Xilinx XDMA Root Port driver
-Message-ID: <20230630231832.GA496495@bhelgaas>
+        Fri, 30 Jun 2023 19:21:38 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 193E75242;
+        Fri, 30 Jun 2023 16:20:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=jvdz0LbFUd5KiEFSNFVLvK0uJCLqVYTsPuq+h53F+6E=; b=u/vsEj2FgZ9QmeEuNpjS7q+tuh
+        hONGbehXcGJxZhd9FubfoY6WSSYbJ9UPF61udiyY3YDrjQYxphEMAEmqW13hZrjYlrxP9Aj0+80Mv
+        lSHjcDIUUYBt37PBBzN0m+QkmonWpmQLq/GzYl2uGsUYUh8itiU4LW5ukJtsPfTYW3ijiAUHQvXGD
+        /rpdUy97sLEY2g6GOCv+CDWGzno0N9uACVNRdj00rgV0xz+EZ4SF3kwchTHqSgRqom7nK2WZbhQIG
+        ZmRcejFw7P/KjuG88ANRAXoXaBUnf4BHaHCr5ZC/TzjAtteUMi03cESvUlAvVzauCMdK7+4M7+MBI
+        SpvKEtHA==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
+        id 1qFNPi-004kne-2X;
+        Fri, 30 Jun 2023 23:20:30 +0000
+Date:   Fri, 30 Jun 2023 16:20:30 -0700
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Tom Rix <trix@redhat.com>, yzaikin@google.com,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org
+Subject: Re: [PATCH] sysctl: set variable sysctl_mount_point
+ storage-class-specifier to static
+Message-ID: <ZJ9jPpdRq3My4bKM@bombadil.infradead.org>
+References: <20230611120725.183182-1-trix@redhat.com>
+ <202306131330.AAC4C43AC@keescook>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230628092812.1592644-4-thippeswamy.havalige@amd.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <202306131330.AAC4C43AC@keescook>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 28, 2023 at 02:58:12PM +0530, Thippeswamy Havalige wrote:
-> Add support for Xilinx XDMA Soft IP core as Root Port.
-> ...
+On Tue, Jun 13, 2023 at 01:30:47PM -0700, Kees Cook wrote:
+> On Sun, Jun 11, 2023 at 08:07:25AM -0400, Tom Rix wrote:
+> > smatch reports
+> > fs/proc/proc_sysctl.c:32:18: warning: symbol
+> >   'sysctl_mount_point' was not declared. Should it be static?
+> > 
+> > This variable is only used in its defining file, so it should be static.
+> > 
+> > Signed-off-by: Tom Rix <trix@redhat.com>
+> 
+> Reviewed-by: Kees Cook <keescook@chromium.org>
 
-> |Reported-by: kernel test robot <lkp@intel.com>
-> |Reported-by: Dan Carpenter <error27@gmail.com>
-> |Closes: https://lore.kernel.org/r/202305261250.2cs1phTS-lkp@intel.com/
+Queued up, thanks!
 
-Remove these.  I mentioned this before:
-https://lore.kernel.org/r/ZHd/7AaLaGyr1jNA@bhelgaas
-
-> + * struct pl_dma_pcie - PCIe port information
-> + * @dev: Device pointer
-> + * @reg_base: IO Mapped Register Base
-> + * @irq: Interrupt number
-> + * @cfg: Holds mappings of config space window
-> + * @phys_reg_base: Physical address of reg base
-> + * @intx_domain: Legacy IRQ domain pointer
-> + * @pldma_domain: PL DMA IRQ domain pointer
-> + * @resources: Bus Resources
-> + * @msi: MSI information
-> + * @irq_misc: Legacy and error interrupt number
-> + * @intx_irq: legacy interrupt number
-> + * @lock: lock protecting shared register access
-
-Capitalize the intx_irq and lock descriptions so they match the others.
-
-"Legacy and error interrupt number" and "legacy interrupt number"
-sound like they overlap -- "legacy interrupt number" is part of both.
-Is that an error?
-
-> +static bool xilinx_pl_dma_pcie_valid_device(struct pci_bus *bus, unsigned int devfn)
-> +{
-> +	struct pl_dma_pcie *port = bus->sysdata;
-> +
-> +	/* Check if link is up when trying to access downstream ports */
-> +	if (!pci_is_root_bus(bus)) {
-> +		/*
-> +		 * If the link goes down after we check for link-up, we have a problem:
-> +		 * if a PIO request is initiated while link-down, the whole controller
-> +		 * hangs, and even after link comes up again, previous PIO requests
-> +		 * won't work, and a reset of the whole PCIe controller is needed.
-> +		 * Henceforth we need link-up check here to avoid sending PIO request
-> +		 * when link is down.
-
-Wrap this comment so it fits in 80 columns like the rest of the file.
-
-I think the comment was added because I pointed out that this is racy.
-Obviously the comment doesn't *fix* the race, and it actually doesn't
-even describe the race.
-
-Even with the xilinx_pl_dma_pcie_link_up() check, this is racy because
-xilinx_pl_dma_pcie_link_up() may tell you the link is up, but the link
-may go down before the driver attempts the config transaction.  THAT
-is the race.
-
-If the controller hangs in that situation, that's a hardware defect,
-and from your comment, it sounds like it's unrecoverable.
-
-> +		 */
-> +		if (!xilinx_pl_dma_pcie_link_up(port))
-> +			return false;
-
-> +static int xilinx_pl_dma_pcie_intx_map(struct irq_domain *domain, unsigned int irq,
-> +				       irq_hw_number_t hwirq)
-
-Wrap to fit in 80 columns like the rest of the file.
-
-> +static struct irq_chip xilinx_msi_irq_chip = {
-> +	.name = "pl_dma_pciepcie:msi",
-
-Why does this name have two copies of "pcie" in it?  This driver has
-four irq_chip structs; maybe the names could be more similar?
-
-  xilinx_leg_irq_chip			INTx
-  xilinx_msi_irq_chip			pl_dma_pciepcie:msi
-  xilinx_irq_chip			Xilinx MSI
-  xilinx_pl_dma_pcie_event_irq_chip	RC-Event
-
-> +	/* Plug the INTx chained handler */
-> +	irq_set_chained_handler_and_data(port->intx_irq,
-> +					 xilinx_pl_dma_pcie_intx_flow, port);
-> +
-> +	/* Plug the main event chained handler */
-> +	irq_set_chained_handler_and_data(port->irq,
-> +					 xilinx_pl_dma_pcie_event_flow, port);
-
-What's the reason for using chained IRQs?  Can this be done without
-them?  I don't claim to understand all the issues here, but it seems
-better to avoid chained IRQ handlers when possible:
-https://lore.kernel.org/all/877csohcll.ffs@tglx/
-
-> +	/*set the Bridge enable bit */
-
-Space before "Set".  I mentioned this before at
-https://lore.kernel.org/r/ZHd/7AaLaGyr1jNA@bhelgaas
-
-> +	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-> +	if (!res) {
-> +		dev_err(dev, "missing \"reg\" property\n");
-
-All your other error messages are capitalized.  Make this one match.
-
-> +	bridge->ops = (struct pci_ops *)&xilinx_pl_dma_pcie_ops.pci_ops;
-
-I don't think this cast is needed.
-
-Bjorn
+  Luis
