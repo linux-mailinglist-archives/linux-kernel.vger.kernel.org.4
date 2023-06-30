@@ -2,51 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A669743FAF
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 18:28:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D0C48743FDC
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 18:31:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232588AbjF3Q2e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 12:28:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40836 "EHLO
+        id S233010AbjF3Qbm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Jun 2023 12:31:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230015AbjF3Q22 (ORCPT
+        with ESMTP id S232601AbjF3QbY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 12:28:28 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AA282D63;
-        Fri, 30 Jun 2023 09:28:27 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A2AC16179E;
-        Fri, 30 Jun 2023 16:28:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75A1EC433C8;
-        Fri, 30 Jun 2023 16:28:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688142506;
-        bh=leLKl0DAy07tgyn34hWxkdY6pUyriDCgyyG0mnmq5Bw=;
-        h=Date:From:To:Cc:Subject:From;
-        b=g3kk6HwKWNVj8V8WtQeqoGpNWcT6lPWX/Mb4lXm7FjH9GhYdNEJkqmdrEDRu3ojAC
-         RAE3tvQTMHAj9To3ssZ35wph74E/3H6CVinLig6IGfZXOtG+zEp+VFSbU12pw/ssg2
-         24NfE0lISIIwNtci2rD8wZNyPa8h0TnJFp3nr9D3IlP5D2oPAfyhlFRrt+0bM6DiaC
-         Cn+0uDAphhs/PUthcn9NWDr9pbBvH/zREzKyqlAvSadY/P0EOGzRRtgj9iWkeAvWF2
-         XBBGYXp7Ua4onnO6QQesSWqXbOdO+GUeL5+2CwyQHB602/pBnJQ99+FvRMPEbhPZSc
-         SEb+bsaZh++cA==
-Date:   Fri, 30 Jun 2023 10:29:20 -0600
-From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Kees Cook <keescook@chromium.org>, linux-hardening@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>
-Subject: [GIT PULL v2] flexible-array transformations for 6.5-rc1
-Message-ID: <ZJ8C4PtPrxr6LTA7@work>
+        Fri, 30 Jun 2023 12:31:24 -0400
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17B723C2D;
+        Fri, 30 Jun 2023 09:30:42 -0700 (PDT)
+Received: by mail-wm1-x32e.google.com with SMTP id 5b1f17b1804b1-3fbc587febfso11904305e9.2;
+        Fri, 30 Jun 2023 09:30:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1688142635; x=1690734635;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=8AwnYMQCKgvWHKEeqF4b8y7/KfT7y0eWsPAWzULZUOM=;
+        b=JI6HEIh4WomaJysav1ufm2uXTOKqRa1rMcOac5mwpwgiGGpjqspwQpQAoPq7FErWqe
+         2rg8L/pOjKVjtuX1yyjVaKAcGo6kqUGUPEWFSVESt8nyL3StX+Qc3XTvXvsv0D29guR6
+         iDmB2I4DhIeX3w0BH6A+5lY+FO9Mhst0QyRshr/aY4UNFa/mSdN8740yuQ94Yq2+HQ6f
+         xfUR5x9YbNe7COYXfbWey7pOaKsS5PabwpbVxPGgjmHWoKanO5YoaqqUKlqm3ibeArA0
+         s56t1EWhecboMOQgrUnn77JE8pF7k8m97LFCdhXPQmtlqD8q16jlFphECxSvhWhqUt10
+         /PcA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688142635; x=1690734635;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=8AwnYMQCKgvWHKEeqF4b8y7/KfT7y0eWsPAWzULZUOM=;
+        b=O4az+hWQuXaJrFTTbRFgYXD2FtNPgwgG5ObTY37bA3vXKZAgM5SR2g3P6SwI7OZfyw
+         b37FISP5SVArDS0+PubTsGRAtchJn5JOWMeqoKW7rPK97DGqt08U3lmHE4XsN0nzs0Ur
+         AnPNdkakP2dWRXiQXwEWkbum4Ch5WN2jFF2cpbs4OPaAIL9Kn6FHdNauW/1m+cQBXTVA
+         Jt69hED7eMAvKm3BKsUetXCRqLusbDGTj5D26ca+kXixkhj+BH4jmX/Dnqc/HU3EiWk3
+         zBUR7DsogI68Id7i/RLs112xmZzZniWdS++6P3pZXvCk3UFn5HlnPF7vQIPmHxGz1rCA
+         nR4g==
+X-Gm-Message-State: AC+VfDxXV5UCeUuD5IUiHFFwzAo9QDIN07lkqNeYvxePvoQ1WdljhhJX
+        tw/uXtZM+clGgboLYbfB/3k=
+X-Google-Smtp-Source: ACHHUZ5wDb9cpTmnUOmcrdS5VPP1C/Sighk60M0/m2tWn4veGVTigS5eZjp26qJ5O5DD3cBU+lx0kQ==
+X-Received: by 2002:a7b:cb95:0:b0:3fb:b53c:1a32 with SMTP id m21-20020a7bcb95000000b003fbb53c1a32mr2177453wmi.34.1688142634925;
+        Fri, 30 Jun 2023 09:30:34 -0700 (PDT)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id x19-20020a1c7c13000000b003fbb0c01d4bsm7451834wmc.16.2023.06.30.09.30.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 30 Jun 2023 09:30:34 -0700 (PDT)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     Jan Kara <jack@suse.com>, linux-ext4@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH][next] ext2: remove redundant assignment to variable desc
+Date:   Fri, 30 Jun 2023 17:30:33 +0100
+Message-Id: <20230630163033.165326-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,46 +69,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following changes since commit f1fcbaa18b28dec10281551dfe6ed3a3ed80e3d6:
+Variable desc is being assigned a value that is never read, the exit
+via label found immeditely returns with no access to desc. The
+assignment is redundant and can be removed. Cleans up clang scan
+muild warning:
 
-  Linux 6.4-rc2 (2023-05-14 12:51:40 -0700)
+fs/ext2/ialloc.c:297:4: warning: Value stored to 'desc' is never
+read [deadcode.DeadStores]
 
-are available in the Git repository at:
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+---
+ fs/ext2/ialloc.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/gustavoars/linux.git tags/flex-array-transformations-6.5-rc1
+diff --git a/fs/ext2/ialloc.c b/fs/ext2/ialloc.c
+index a4e1d7a9c544..f50beb77d6ba 100644
+--- a/fs/ext2/ialloc.c
++++ b/fs/ext2/ialloc.c
+@@ -294,7 +294,6 @@ static int find_group_orlov(struct super_block *sb, struct inode *parent)
+ 			best_desc = desc;
+ 		}
+ 		if (best_group >= 0) {
+-			desc = best_desc;
+ 			group = best_group;
+ 			goto found;
+ 		}
+-- 
+2.39.2
 
-for you to fetch changes up to 40ca06d71d60677a8424798610c97a46e4140a21:
-
-  uapi: wireless: Replace zero-length array with flexible-array member (2023-05-28 19:07:48 -0600)
-
-----------------------------------------------------------------
-flexible-array transformations for 6.5-rc1
-
-Hi Linus,
-
-Please, pull the following patch that transforms a zero-length array
-into a C99 flexible-array member. This patch has been baking in
-linux-next for a while.
-
-Also, this addresses a build failure with Clang[1] by fixing multiple
--Warray-bounds warnings in drivers/staging/ks7010/ks_wlan_net.c[2].
-
-Link: https://linux.kernelci.org/build/next/branch/master/kernel/next-20230524/ [1]
-Link: https://github.com/ClangBuiltLinux/linux/issues/1851 [2]
-
-Thanks
---
-Gustavo
-
-Changes in v2:
- - Remove media-venus patch from the pull-request.
-
-v1:
- - Link: https://lore.kernel.org/linux-hardening/ZJxZJDUDs1ry84Rc@work/
-
-----------------------------------------------------------------
-Gustavo A. R. Silva (1):
-      uapi: wireless: Replace zero-length array with flexible-array member
-
- include/uapi/linux/wireless.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
