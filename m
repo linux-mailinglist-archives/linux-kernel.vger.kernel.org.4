@@ -2,81 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F0D9743EF3
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 17:33:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B94AF743EFE
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 17:35:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231967AbjF3PdU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 11:33:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47158 "EHLO
+        id S232759AbjF3Pfg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Jun 2023 11:35:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232606AbjF3Pcy (ORCPT
+        with ESMTP id S233140AbjF3PfD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 11:32:54 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94AA95247
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 08:30:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1688138980;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=2RRepOp7BBkzoiWTZGgUNtL5p6yT9JMH864pOX91L68=;
-        b=G7DfbVpie+N9VnSJJdoJck4GqWOeGJqjP/fpSzioz6jiBq784cBxGVsSRz7XeC1mgwDfrS
-        UR2r1j4AjetXBAQKvObuWEACBcOqLPjapfCgUkr+QqHFlk06f3xVWNwdJjzsNOynHRj5U6
-        ojp0jHTwsLT7LBHnXL+Ro3UpRHCG5p0=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-587-qXsOTZnVPBOawnT-lDiFOA-1; Fri, 30 Jun 2023 11:29:37 -0400
-X-MC-Unique: qXsOTZnVPBOawnT-lDiFOA-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 533A785A58A;
-        Fri, 30 Jun 2023 15:29:36 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.42.28.195])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id E332B40C6CCD;
-        Fri, 30 Jun 2023 15:29:34 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <ZJ7cQ8Wdiyb0Ax/r@corigine.com>
-References: <ZJ7cQ8Wdiyb0Ax/r@corigine.com> <20230629155433.4170837-1-dhowells@redhat.com> <20230629155433.4170837-3-dhowells@redhat.com>
-To:     Simon Horman <simon.horman@corigine.com>
-Cc:     dhowells@redhat.com, netdev@vger.kernel.org,
-        Matthew Wilcox <willy@infradead.org>,
-        Dave Chinner <david@fromorbit.com>,
-        Matt Whitlock <kernel@mattwhitlock.name>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Jens Axboe <axboe@kernel.dk>, linux-fsdevel@kvack.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Christoph Hellwig <hch@lst.de>, linux-fsdevel@vger.kernel.org
-Subject: Re: [RFC PATCH 2/4] splice: Make vmsplice() steal or copy
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <661359.1688138974.1@warthog.procyon.org.uk>
-Date:   Fri, 30 Jun 2023 16:29:34 +0100
-Message-ID: <661360.1688138974@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 30 Jun 2023 11:35:03 -0400
+Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EF2BE5C
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 08:35:02 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id BE81F5C163D;
+        Fri, 30 Jun 2023 11:31:22 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Fri, 30 Jun 2023 11:31:22 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm1; t=1688139082; x=1688225482; bh=up
+        LBwBc2dBmHKX9v2pXFENlWMqDWFCIobcQ0HEfLYik=; b=IoTcM+BNU5go7enV0u
+        JT9XMkqfYa+qdnubg8XHBYF5i2NXlo1fPOir8T9gSOmYLYMpuFSxn3GNQB3AGn+s
+        7BfpTods5F9J1kJLl4nO3S61LUPhcF8jfTyqwB04PFuykuZHbHQzPLLzIpKJwqsY
+        hBBJpbeQ0+GTse6FIeoTtMMOYvX2Wdbp8itXv7Q4u85pghNbUCeLexA79b/yEXBa
+        gChy7+PUrSV/UlYFI1hWbWMoYl0AebKqaEQfVHAu9u8HP12coHAnFnlB81WMvVJ/
+        BnRLGVToZB8scM6QJXWLEuZAx2IuhvYExOJUo1NopgYSaDJ3rUFlOQNqx8jaCGD/
+        Zhow==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1688139082; x=1688225482; bh=upLBwBc2dBmHK
+        X9v2pXFENlWMqDWFCIobcQ0HEfLYik=; b=dSAPUWjPp1SYx2dhvpDc6kP0C4o9a
+        W0kiwUjeRa6rut+EfGy3P42zbh922ribXMJL+v+gMBV6g7YIHyV0LR5X+kGe2kpQ
+        eLw8A+ar9zyIpRgI/nin3JlfuNFLpnIwdaHIzSDeEV6uYXns8HDuKaBI2YMzjb+c
+        xAYJcOcRvb6oDTMb5iCQCLsr0gcJz+reoQmMio5yGRO6pwKZlRnGdmOvOsHJr2l9
+        ZLwm8DcOKLsDabMw5s35yyXcPo9puH1MadTBf4iTeXUK4PxWMt5X2P5Es/gle9gE
+        JO3gxF2j0JogtIhvBO+/zMmbU/uZwuEUDbVEs4KGAHBfmmBpTKuM+TEyw==
+X-ME-Sender: <xms:SvWeZPVlXpa0WqrDZq4956SnxDgJS3IHYuk4KACxRyH5xAX5-2r1Yw>
+    <xme:SvWeZHmjnZGfiKsXuXrI2INfaRI33I7gLBBWnmgLdafkhpL9ECNZAsfGFg56f0qR1
+    upnW0lWMmMgBty0170>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrtdeigdekkecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhn
+    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
+    gvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedtkeet
+    ffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrh
+    hnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:SvWeZLao6TmHJFrx3m7a1abR0ScevQl2ysVKrgAb1r68RwqxrZmFTg>
+    <xmx:SvWeZKXFuzaAkLRaTR5DnB52NF0n1dVGTQ6Hs3XNolHIJNO19SVE_A>
+    <xmx:SvWeZJkp5Ye0ibJuLPmUOVfA4COMkNxHhKpMIlnUQQgRsP6oRB5A-w>
+    <xmx:SvWeZPX9ipntvWfaN-beytqmFz_yGGpiAJksGvMbhcdHAp-hOL0gCw>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 2B7DAB60092; Fri, 30 Jun 2023 11:31:22 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-499-gf27bbf33e2-fm-20230619.001-gf27bbf33
+Mime-Version: 1.0
+Message-Id: <51b8b3c2-f4ac-454c-acde-e1d136139109@app.fastmail.com>
+In-Reply-To: <20230630152439.GA2900969@aspen.lan>
+References: <20230517125423.930967-1-arnd@kernel.org>
+ <20230630152439.GA2900969@aspen.lan>
+Date:   Fri, 30 Jun 2023 17:31:01 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Daniel Thompson" <daniel.thompson@linaro.org>,
+        "Arnd Bergmann" <arnd@kernel.org>
+Cc:     "Jason Wessel" <jason.wessel@windriver.com>,
+        kgdb-bugreport@lists.sourceforge.net,
+        "Doug Anderson" <dianders@chromium.org>,
+        "Peter Zijlstra" <peterz@infradead.org>,
+        "Dmitry Vyukov" <dvyukov@google.com>,
+        "Kees Cook" <keescook@chromium.org>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] kdb: include header in signal handling code
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Simon Horman <simon.horman@corigine.com> wrote:
+On Fri, Jun 30, 2023, at 17:24, Daniel Thompson wrote:
+> On Wed, May 17, 2023 at 02:54:09PM +0200, Arnd Bergmann wrote:
+>> diff --git a/kernel/signal.c b/kernel/signal.c
+>> index 8f6330f0e9ca..d38df14f71ac 100644
+>> --- a/kernel/signal.c
+>> +++ b/kernel/signal.c
+>> @@ -4780,6 +4780,8 @@ void __init signals_init(void)
+>>
+>>  #ifdef CONFIG_KGDB_KDB
+>>  #include <linux/kdb.h>
+>> +#include "debug/kdb/kdb_private.h"
+>> +
+>
+> Isn't is better to move the prototype for kdb_send_sig() into
+> linux/kdb.h instead?
+>
+> That's what other kdb helpers spread across the kernel do
+> (kdb_walk_kallsyms() for example).
 
-> But, on a more mundane level, GCC reports that user_page_pipe_buf_ops is
-> (now) unused.  I guess this was the last user, and user_page_pipe_buf_ops
-> can be removed as part of this patch.
+Right, that is probably better here. Not sure if it's worth
+reworking the branch if you already merged it, the difference
+seems rather minor.
 
-See patch 3.
-
-David
-
+       Arnd
