@@ -2,61 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14BC07444D6
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Jul 2023 00:29:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F26F97444DA
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Jul 2023 00:30:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233051AbjF3W3i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 18:29:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54990 "EHLO
+        id S232632AbjF3WaO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Jun 2023 18:30:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230180AbjF3W3e (ORCPT
+        with ESMTP id S232365AbjF3WaD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 18:29:34 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EEA53C22;
-        Fri, 30 Jun 2023 15:29:34 -0700 (PDT)
+        Fri, 30 Jun 2023 18:30:03 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F6724489;
+        Fri, 30 Jun 2023 15:29:50 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D42FD6166E;
-        Fri, 30 Jun 2023 22:29:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 3CCD6C433C7;
-        Fri, 30 Jun 2023 22:29:33 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CE21A61831;
+        Fri, 30 Jun 2023 22:29:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 3FED0C433CA;
+        Fri, 30 Jun 2023 22:29:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688164173;
-        bh=VzR0B8mmHtedFXvTB26r0Eh7F5F4F9J5vQopchEoSHg=;
+        s=k20201202; t=1688164189;
+        bh=eNGz5uV6SVOSrtLtVF2bhDRU6Kns2q1uJO4r8gzTOC4=;
         h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=pB5qT9ZoWnxDHwKpuoLUPeFqHiEgXVb2MWo2qn9CUyINN8KMVkxlkpc6jw9D5Ai21
-         hMhBWSa89/o+MOKDW5LaaAnk1OMKc2A7k43KU8CsneFGZg9hmLWyFJhsWEsixZ+XRQ
-         MmNxWLuY85WRy1/FewmnhRQ/ZHg0oxSCUSldLPeAhwQwVh/3b09xPgIa+Ak1ZcsMHo
-         Xa0Aeen/9vUCZhKhd2uFb9bPxMSTZ+In6k5KbvdoaHBlw/ppqTxtgyU15V3LT41Jlk
-         ILOUIOv+KzNhGmJR4B8hYXAnxAqQIjjwYKKLjOmLqkQ1nTh0VkkdTlxXndMkiwjGj2
-         2i/7Jq88xQhoA==
+        b=VeFISMVY/Mp9M2TrnKKkcAe8E+zBnT7rJ2I6PbQcjoB1eJenS0tu8j5fE/KL8UIl3
+         gNGEPRvke2RXbmdQ9CI3ueck/kL+iWLcFjpPrHQhFpqAzUG8nkf5zHcQW9Es2F0bI6
+         CN3HzYHsMesNwu6/uApNPUnpmVOG+Ed+nBvdCdW5H1lTaz5E1Kz5m4f5/QqF7vUhYA
+         KyreP6XmbGpRcIe/rHb3KjSeZeme41KFaHLEgE1UxZL/VFpt2Sr6WL8Op+bDRHsGwA
+         /cFssrA4cvE4iZegHyqXY7ueY9hVGwiZoPdIZ+0wATQ5kYgINNgsxsCYd7rNGN+V0w
+         qLjhrT6fKK+UQ==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 2BD24C39563;
-        Fri, 30 Jun 2023 22:29:33 +0000 (UTC)
-Subject: Re: [GIT PULL] PCI changes for v6.5
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 3003AC39563;
+        Fri, 30 Jun 2023 22:29:49 +0000 (UTC)
+Subject: Re: [GIT PULL] VFIO updates for v6.5-rc1
 From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20230629165838.GA438762@bhelgaas>
-References: <20230629165838.GA438762@bhelgaas>
-X-PR-Tracked-List-Id: <linux-pci.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20230629165838.GA438762@bhelgaas>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/pci/pci.git tags/pci-v6.5-changes
-X-PR-Tracked-Commit-Id: 6ecac465eee887de7ceda7ffe3bccf538eb786bc
+In-Reply-To: <20230629144949.07e6cd78.alex.williamson@redhat.com>
+References: <20230629144949.07e6cd78.alex.williamson@redhat.com>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20230629144949.07e6cd78.alex.williamson@redhat.com>
+X-PR-Tracked-Remote: https://github.com/awilliam/linux-vfio.git tags/vfio-v6.5-rc1
+X-PR-Tracked-Commit-Id: ff598081e5b9d0bdd6874bfe340811bbb75b35e4
 X-PR-Merge-Tree: torvalds/linux.git
 X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 9070577ae9d6065e447d422bdf85a09f89eaa9e8
-Message-Id: <168816417317.26572.8230148836516977547.pr-tracker-bot@kernel.org>
-Date:   Fri, 30 Jun 2023 22:29:33 +0000
-To:     Bjorn Helgaas <helgaas@kernel.org>
+X-PR-Merge-Commit-Id: b25f62ccb490680a8cee755ac4528909395e0711
+Message-Id: <168816418919.26572.14874927329691358838.pr-tracker-bot@kernel.org>
+Date:   Fri, 30 Jun 2023 22:29:49 +0000
+To:     Alex Williamson <alex.williamson@redhat.com>
 Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -65,12 +63,12 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Thu, 29 Jun 2023 11:58:38 -0500:
+The pull request you sent on Thu, 29 Jun 2023 14:49:49 -0600:
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/pci/pci.git tags/pci-v6.5-changes
+> https://github.com/awilliam/linux-vfio.git tags/vfio-v6.5-rc1
 
 has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/9070577ae9d6065e447d422bdf85a09f89eaa9e8
+https://git.kernel.org/torvalds/c/b25f62ccb490680a8cee755ac4528909395e0711
 
 Thank you!
 
