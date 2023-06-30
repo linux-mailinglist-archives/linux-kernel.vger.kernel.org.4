@@ -2,53 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 240E4744018
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 18:48:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03BFF74401B
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 18:49:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232403AbjF3Qs2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 12:48:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50512 "EHLO
+        id S230309AbjF3Qtf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Jun 2023 12:49:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230009AbjF3QsZ (ORCPT
+        with ESMTP id S230009AbjF3Qtc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 12:48:25 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F07D10FB;
-        Fri, 30 Jun 2023 09:48:24 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1F74E6179E;
-        Fri, 30 Jun 2023 16:48:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5583BC433C0;
-        Fri, 30 Jun 2023 16:48:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688143703;
-        bh=Nd8IcQkatSNE5s/b57nxVYn+hCy0DE0OvfYaIi0hv1U=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=cpsaJu+ftljiTRRn524d0jBzQwdqQ/0GNIPJAXXUogfJg0YSjIjVVgSS3xlexPjQO
-         oNBk3gCDchHEgPFBaD6gAjel/vjpMUFBjBI5cQtiVtdC+pIkZ9x1zSu971cs8mQ3xj
-         8ehTFkwHyULNCE70KWSMDZj01v6ZrrwT9QSECZ/V4YGeiSl9LQ4w/2Nwa7q1/7ng+O
-         Req4CMLRXV6doLCwWVkD0z3lITUGvAeaLgihdhvsNgFmO6EtDfBqWVsOD/6pq6GzuD
-         pdQ6MHFFGWZl6k22eGRhi2VlkhdLh5u5SfBkAWN95bfi3J5gASF7AbHGzDSRAGrTRX
-         vjujTX/dSF0wg==
-Date:   Fri, 30 Jun 2023 11:48:21 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Lizhi Hou <lizhi.hou@amd.com>, linux-pci@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        max.zhen@amd.com, sonal.santan@amd.com,
-        stefano.stabellini@xilinx.com
-Subject: Re: [PATCH V10 2/5] PCI: Create device tree node for bridge
-Message-ID: <20230630164821.GA483874@bhelgaas>
+        Fri, 30 Jun 2023 12:49:32 -0400
+Received: from mail-il1-f170.google.com (mail-il1-f170.google.com [209.85.166.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5607D1BD0;
+        Fri, 30 Jun 2023 09:49:31 -0700 (PDT)
+Received: by mail-il1-f170.google.com with SMTP id e9e14a558f8ab-3459baa237bso9107515ab.3;
+        Fri, 30 Jun 2023 09:49:31 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688143770; x=1690735770;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=cFm+MwUTJ0Nrf5st/c0X4e2ak6wIZTxERF+a0wkzT1c=;
+        b=EZ9vGeSgJuPE2tUkc1JAOJ1BvqGWz/a5IunxQIQHAXJ4xNxKS6VCy/De6dNyuJCkhF
+         jCrSoOLIq3mVsO6VLHWa3osGoY4/XitxTQuIdQ7Ac/JI2QJsgiuZPdsB2PSEARqnDV10
+         r25jHETDM7JMiPvfEc57UYIy+ZYE/5IXmCD27irJxfrDkcM8CugfH4Jcfl/zvlL9Pd0h
+         DYGj8Yjh4DuSJ84NOUzUTxw2qlnkULXOsJ1qpXFlUsE7kDBReWEwLwxzayOR2qgb24XD
+         owNlk2kJT+Nq24UeonjfzJYyNCosHQCleGwDpNKTkH9gnWHs76xq9wTZKOWONqW1ajz/
+         /ByQ==
+X-Gm-Message-State: AC+VfDw81jQsyB/cVK7cXPBf5q4yoCAyhDd+dnpXYC/gD+6B61RG5IFa
+        bjqQ47EUPZy51hx2hdIFcaGGh7eDOQ==
+X-Google-Smtp-Source: ACHHUZ7/4giS855SP320cWiO7+NFI00/wA7SRunbZLjvrL2Pjq26ubpM9I6uTDjHH7UIr0OG39MI8w==
+X-Received: by 2002:a5d:94c3:0:b0:76c:71dc:55f3 with SMTP id y3-20020a5d94c3000000b0076c71dc55f3mr3486773ior.6.1688143770566;
+        Fri, 30 Jun 2023 09:49:30 -0700 (PDT)
+Received: from robh_at_kernel.org ([64.188.179.250])
+        by smtp.gmail.com with ESMTPSA id k8-20020a02a708000000b0042aebaf294dsm2142602jam.146.2023.06.30.09.49.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 30 Jun 2023 09:49:29 -0700 (PDT)
+Received: (nullmailer pid 1887131 invoked by uid 1000);
+        Fri, 30 Jun 2023 16:49:28 -0000
+Date:   Fri, 30 Jun 2023 10:49:28 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Astrid Rost <astrid.rost@axis.com>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
+        Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>, kernel@axis.com,
+        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 2/2] dt-bindings: leds: Read max-brightness from
+ devicetree
+Message-ID: <20230630164928.GA1884613-robh@kernel.org>
+References: <20230630092248.4146169-1-astrid.rost@axis.com>
+ <20230630092248.4146169-3-astrid.rost@axis.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230629235226.GA92592-robh@kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <20230630092248.4146169-3-astrid.rost@axis.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,94 +70,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 29, 2023 at 05:52:26PM -0600, Rob Herring wrote:
-> On Thu, Jun 29, 2023 at 05:56:31PM -0500, Bjorn Helgaas wrote:
-> > On Thu, Jun 29, 2023 at 10:19:47AM -0700, Lizhi Hou wrote:
-> > > The PCI endpoint device such as Xilinx Alveo PCI card maps the register
-> > > spaces from multiple hardware peripherals to its PCI BAR. Normally,
-> > > the PCI core discovers devices and BARs using the PCI enumeration process.
-> > > There is no infrastructure to discover the hardware peripherals that are
-> > > present in a PCI device, and which can be accessed through the PCI BARs.
-> > 
-> > IIUC this is basically a multi-function device except that instead of
-> > each device being a separate PCI Function, they all appear in a single
-> > Function.  That would mean all the devices share the same config space
-> > so a single PCI Command register controls all of them, they all share
-> > the same IRQs (either INTx or MSI/MSI-X), any MMIO registers are likely
-> > in a shared BAR, etc., right?
+On Fri, Jun 30, 2023 at 11:22:47AM +0200, Astrid Rost wrote:
+> Add max-brightness in order to reduce the current on the connected LEDs.
+> Normally, the maximum brightness is determined by the hardware, and this
+> property is not required. This property is used to set a software limit.
+> It could happen that an LED is made so bright that it gets damaged or
+> causes damage due to restrictions in a specific system, such as mounting
+> conditions. Note that led-max-microamp should be preferably used, if it
+> is supported by the controller.
 > 
-> Could be multiple BARs, but yes.
+> Signed-off-by: Astrid Rost <astrid.rost@axis.com>
+> ---
+>  Documentation/devicetree/bindings/leds/common.yaml | 10 ++++++++++
+>  1 file changed, 10 insertions(+)
 
-Where does the PCI glue live?  E.g., who ioremaps the BARs?  Who sets
-up PCI interrupts?  Who enables bus mastering?  The platform driver
-that claims the DT node wouldn't know that this is part of a PCI
-device, so I guess the PCI driver must do all that stuff?  I don't see
-it in the xmgmt-drv.c from
-https://lore.kernel.org/all/20220305052304.726050-4-lizhi.hou@xilinx.com/
+The patch order is wrong. You have to define a property before you can 
+use it. Otherwise,
 
-> > Obviously PCI enumeration only sees the single Function and binds a
-> > single driver to it.  But IIUC, you want to use existing drivers for
-> > each of these sub-devices, so this series adds a DT node for the
-> > single Function (using the quirks that call of_pci_make_dev_node()).
-> > And I assume that when the PCI driver claims the single Function, it
-> > will use that DT node to add platform devices, and those existing
-> > drivers can claim those?
-> 
-> Yes. It will call some variant of of_platform_populate().
-> 
-> > I don't see the PCI driver for the single Function in this series.  Is
-> > that coming?  Is this series useful without it?
-> 
-> https://lore.kernel.org/all/20220305052304.726050-4-lizhi.hou@xilinx.com/
-> 
-> I asked for things to be split up as the original series did a lot 
-> of new things at once. This series only works with the QEMU PCI test 
-> device which the DT unittest will use.
-> 
-> > > Apparently, the device tree framework requires a device tree node for the
-> > > PCI device. Thus, it can generate the device tree nodes for hardware
-> > > peripherals underneath. Because PCI is self discoverable bus, there might
-> > > not be a device tree node created for PCI devices. Furthermore, if the PCI
-> > > device is hot pluggable, when it is plugged in, the device tree nodes for
-> > > its parent bridges are required. Add support to generate device tree node
-> > > for PCI bridges.
-> > 
-> > Can you remind me why hot-adding a PCI device requires DT nodes for
-> > parent bridges?
-> 
-> Because the PCI device needs a DT node and we can't just put PCI devices 
-> in the DT root. We have to create the bus hierarchy.
-> 
-> > I don't think we have those today, so maybe the DT
-> > node for the PCI device requires a DT parent?  How far up does that
-> > go?
-> 
-> All the way.
-> 
-> >  From this patch, I guess a Root Port would be the top DT node on
-> > a PCIe system, since that's the top PCI-to-PCI bridge?
-> 
-> Yes. Plus above the host bridge could have a hierarchy of nodes.
-
-I'm missing something if it goes "all the way up," i.e., to a single
-system root, but a Root Port is the top DT node.  If a Root Port is
-the top, there would be several roots.
-
-> > This patch adds a DT node for *every* PCI bridge in the system.  We
-> > only actually need that node for these unusual devices.  Is there some
-> > way the driver for the single PCI Function could add that node when it
-> > is needed?  Sorry if you've answered this in the past; maybe the
-> > answer could be in the commit log or a code comment in case somebody
-> > else wonders.
-> 
-> This was discussed early on. I don't think it would work to create the 
-> nodes at the time we discover we have a device that wants a DT node. The 
-> issue is decisions are made in the code based on whether there's a DT 
-> node for a PCI device or not. It might work, but I think it's fragile to 
-> have nodes attached to devices at different points in time.
-
-Ah.  So I guess the problem is we enumerate a PCI bridge, we might do
-something based on the fact that it doesn't have a DT node, then add a
-DT node for it later.
-
-Bjorn
+Reviewed-by: Rob Herring <robh@kernel.org>
