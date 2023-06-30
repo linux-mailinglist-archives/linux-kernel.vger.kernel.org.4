@@ -2,74 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C0B2743C8F
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 15:20:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6AFF743C91
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 15:20:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232550AbjF3NUB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 09:20:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45782 "EHLO
+        id S232549AbjF3NUV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Jun 2023 09:20:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232480AbjF3NTt (ORCPT
+        with ESMTP id S232480AbjF3NUT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 09:19:49 -0400
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42BB43C07;
-        Fri, 30 Jun 2023 06:19:46 -0700 (PDT)
-Received: by mail-lf1-x135.google.com with SMTP id 2adb3069b0e04-4fb73ba3b5dso3082676e87.1;
-        Fri, 30 Jun 2023 06:19:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688131184; x=1690723184;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=5XR5ShywBTsDhxqrqnPNPImYwgLwdolYpfqjtsu6y5c=;
-        b=gbCKNNtsQLcsUQlFs7+FLhqKUlnLm6Slc2QEcI/BGBoYVuKCOskfPLDyj+GqU4SJ2P
-         mYqPGSi1xo4kNoxm8HjFV13PS/gaMZd3xWUDAaPJk8OaOUc3XzNi6eFA/cPuSPO//FCq
-         HUsUgy5PMTVNddYkKfRFCS+jG5yIYsbJaxjlvosLzQtlFF8omDptyqNAMRnQJ6+1VIVj
-         T0A1zXu6ygfYwNJr7uCSaVhyy49JPcddqe8fOlnxqhCU97wDPNg1O6lcQgmurdU1zJoZ
-         KVEzB8ny0xFnhn22u5Aa5UZZacpog6ysnqmWuSDSfGovQGjiL2k2CUJX3S5hikZOSjCp
-         QTmQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688131184; x=1690723184;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=5XR5ShywBTsDhxqrqnPNPImYwgLwdolYpfqjtsu6y5c=;
-        b=EywyvrP3xBo3GaIcG8lJqfqahvE8sSimHNjtssuN+Qoncsh6j9qo5nr8x2wcvLg/fQ
-         O8KYhtcGz6IYcPkDFtm6BGOTwcicW6METv5MvlYHWaviq2I3ExJI7UFCTNqI2HOSSdYP
-         Eqf8E/nepBfMZu4On3egf4VWW3/sPKw9UZ1dZ1wa4SsuFgv+oUGVW4CMF1Ozeme3AMk9
-         QeFEfry/fP6PnIvAsE2VgzQhzDpqwjCHN1QUNjB560hs2hUarkpG/OjkDo/NYzRQ7HaT
-         2pPGH/igYuhV+cI4Rt8EMEAA8bPhJJqxh8F0ROC5uzrAKnsShS/O5rprkPfNKruQSMvN
-         3sQA==
-X-Gm-Message-State: ABy/qLZ8VKAVCI0QSMe0EJmA33YMOz8HrwL/vywFrkgw4CTzdnR7FKn2
-        XyK2OKFIZ1NdhdlhX9Xx++leukrcAj6TaQ==
-X-Google-Smtp-Source: APBJJlHbqV544RedYUwZYHpNe0Ten97YJSL9QE5S+bJRvvt/iFa6ErJQZ384JcSCGnOLJSySwE28mw==
-X-Received: by 2002:a05:6512:3b8b:b0:4fb:774f:9a84 with SMTP id g11-20020a0565123b8b00b004fb774f9a84mr2822368lfv.13.1688131183984;
-        Fri, 30 Jun 2023 06:19:43 -0700 (PDT)
-Received: from A13PC04R.einet.ad.eivd.ch ([193.134.219.72])
-        by smtp.googlemail.com with ESMTPSA id bc23-20020a056402205700b0051d9dbf5edfsm4749059edb.55.2023.06.30.06.19.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 30 Jun 2023 06:19:43 -0700 (PDT)
-From:   Rick Wertenbroek <rick.wertenbroek@gmail.com>
-To:     alberto.dassatti@heig.vd.ch
-Cc:     dlemoal@kernel.org, Rick Wertenbroek <rick.wertenbroek@gmail.com>,
-        Dan Carpenter <dan.carpenter@linaro.org>,
-        stable@vger.kernel.org, Shawn Lin <shawn.lin@rock-chips.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
-        Rob Herring <robh@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Heiko Stuebner <heiko@sntech.de>, linux-pci@vger.kernel.org,
-        linux-rockchip@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] PCI: rockchip: Use 64-bit mask on MSI 64-bit PCI address
-Date:   Fri, 30 Jun 2023 15:17:52 +0200
-Message-Id: <20230630131753.1549685-1-rick.wertenbroek@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Fri, 30 Jun 2023 09:20:19 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20BEA3A81;
+        Fri, 30 Jun 2023 06:20:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1688131218; x=1719667218;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=EaJ77L8/k3Hf0KmA9VK9enDoW0KMpkjzS7BilECDl2A=;
+  b=zNSTiHPPjPJnIj1KJ98izycMouV3yTak2XgvVfFNuQVlPdS3pyVLRVD3
+   VQw5eUu+Al+WkJdlc2ICzdhXPP8ADplTCogp33X9TGZwb9WEjKC3XBMbf
+   OJlQgBHmoWX1H0eDEgkPJSAbUutgSTmOoTK4YEZnom2qDmMQxUHlBy1xL
+   YEI4TWGwz7hpHg3XWtwgvjUDB050Q/5R4smaipRfk4jCgz2PHGRkIYZhd
+   wAsDQrMut1PiCXw5d48s6ghJOuCv9uv1md2EKYwrlL50tFoy9O7y7T90t
+   yN1HiVmViVMBj5BTj7BdO2IxPQdjOumvDDtiQM5OmhDMo5WZzBAHV+pS4
+   w==;
+X-IronPort-AV: E=Sophos;i="6.01,170,1684825200"; 
+   d="asc'?scan'208";a="221422464"
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 30 Jun 2023 06:20:18 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Fri, 30 Jun 2023 06:20:17 -0700
+Received: from wendy (10.10.115.15) by chn-vm-ex01.mchp-main.com
+ (10.10.85.143) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
+ Transport; Fri, 30 Jun 2023 06:20:15 -0700
+Date:   Fri, 30 Jun 2023 14:19:46 +0100
+From:   Conor Dooley <conor.dooley@microchip.com>
+To:     Andrew Jones <ajones@ventanamicro.com>
+CC:     Conor Dooley <conor@kernel.org>,
+        Palmer Dabbelt <palmer@rivosinc.com>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        <aou@eecs.berkeley.edu>, <heiko.stuebner@vrull.eu>,
+        Evan Green <evan@rivosinc.com>, <sunilvl@ventanamicro.com>,
+        <linux-riscv@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 10/10] RISC-V: provide a Kconfig option to disable
+ parsing "riscv,isa"
+Message-ID: <20230630-urgency-emission-882cd52a7a27@wendy>
+References: <20230629-landed-popsicle-ab46ab3b46d9@spud>
+ <mhng-f060b5c8-aa99-4952-b1e1-ee85a92e6b07@palmer-ri-x1c9a>
+ <20230629-angled-gallantly-8fe7451a25fa@spud>
+ <20230630-7d0f6fe66c9415315d491f15@orel>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="o4a1LRPZt0ieGy5D"
+Content-Disposition: inline
+In-Reply-To: <20230630-7d0f6fe66c9415315d491f15@orel>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,88 +75,94 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-A 32-bit mask was used on the 64-bit PCI address used for mapping MSIs.
-This would result in the upper 32 bits being unintentionally zeroed and
-MSIs getting mapped to incorrect PCI addresses if the address had any
-of the upper bits set.
+--o4a1LRPZt0ieGy5D
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Replace 32-bit mask by appropriate 64-bit mask and rename 32-bit mask
-for clarity.
+On Fri, Jun 30, 2023 at 09:46:48AM +0200, Andrew Jones wrote:
+> On Thu, Jun 29, 2023 at 10:44:18PM +0100, Conor Dooley wrote:
+> > On Thu, Jun 29, 2023 at 02:16:49PM -0700, Palmer Dabbelt wrote:
+> > > On Thu, 29 Jun 2023 13:20:55 PDT (-0700), Conor Dooley wrote:
+> ...
+> > > > +bool __initdata riscv_isa_fallback_cmdline =3D false;
+> > > > +static int __init riscv_isa_fallback_setup(char *__unused)
+> > >=20
+> > > Maybe it's better to support =3Dtrue and =3Dfalse here?  Not sure it =
+matters,
+> > > we're already down a rabbit hole ;)
+> >=20
+> > Dunno, not implemented a cmdline param before. Seemed "cleaner" to check
+> > for presence, don't really care so I'll adapt to w/e.
+> >
+>=20
+> I don't have a strong preference here, but to throw in more food for
+> thought, I see this DT-v1 vs. DT-v2 choice to be a bit analogous to the
+> DT vs. ACPI choice. The 'acpi' command line parameter, for RISC-V, can
+> be 'off', 'on', and 'force', where
+>=20
+>   off -- disable ACPI if default was on
+>   on -- enable ACPI but allow fallback to DT
+>   force -- enable ACPI if default was off
+>=20
+> So, if the default of the isa fallback command line option will depend on
+> Kconfig, then we may also want a 'force'.
 
-Fixes: dc73ed0f1b8b ("PCI: rockchip: Fix window mapping and address translation for endpoint")
-Reported-by: Dan Carpenter <dan.carpenter@linaro.org>
-Closes: https://lore.kernel.org/linux-pci/8d19e5b7-8fa0-44a4-90e2-9bb06f5eb694@moroto.mountain/
-Signed-off-by: Rick Wertenbroek <rick.wertenbroek@gmail.com>
-Cc: stable@vger.kernel.org
----
- drivers/pci/controller/pcie-rockchip-ep.c | 12 ++++++------
- drivers/pci/controller/pcie-rockchip.h    |  6 +++---
- 2 files changed, 9 insertions(+), 9 deletions(-)
+I'm not sure that I understand what "force" would give us.
+There's 4 cases:
+- CONFIG_RISCV_ISA_FALLBACK is enabled, cmdline option is present:
+  cmdline option is ignored, fallback is taken if needed.
+  crash if neither are present.
 
-diff --git a/drivers/pci/controller/pcie-rockchip-ep.c b/drivers/pci/controller/pcie-rockchip-ep.c
-index 0af0e965fb57..313face6a87f 100644
---- a/drivers/pci/controller/pcie-rockchip-ep.c
-+++ b/drivers/pci/controller/pcie-rockchip-ep.c
-@@ -354,7 +354,7 @@ static int rockchip_pcie_ep_send_msi_irq(struct rockchip_pcie_ep *ep, u8 fn,
- 	struct rockchip_pcie *rockchip = &ep->rockchip;
- 	u32 flags, mme, data, data_mask;
- 	u8 msi_count;
--	u64 pci_addr;
-+	u64 pci_addr, pci_addr_mask = GENMASK(63, 8);
- 	u32 r;
- 
- 	/* Check MSI enable bit */
-@@ -391,18 +391,18 @@ static int rockchip_pcie_ep_send_msi_irq(struct rockchip_pcie_ep *ep, u8 fn,
- 				       PCI_MSI_ADDRESS_LO);
- 
- 	/* Set the outbound region if needed. */
--	if (unlikely(ep->irq_pci_addr != (pci_addr & PCIE_ADDR_MASK) ||
-+	if (unlikely(ep->irq_pci_addr != (pci_addr & pci_addr_mask) ||
- 		     ep->irq_pci_fn != fn)) {
- 		r = rockchip_ob_region(ep->irq_phys_addr);
- 		rockchip_pcie_prog_ep_ob_atu(rockchip, fn, r,
- 					     ep->irq_phys_addr,
--					     pci_addr & PCIE_ADDR_MASK,
--					     ~PCIE_ADDR_MASK + 1);
--		ep->irq_pci_addr = (pci_addr & PCIE_ADDR_MASK);
-+					     pci_addr & pci_addr_mask,
-+					     ~pci_addr_mask + 1);
-+		ep->irq_pci_addr = (pci_addr & pci_addr_mask);
- 		ep->irq_pci_fn = fn;
- 	}
- 
--	writew(data, ep->irq_cpu_addr + (pci_addr & ~PCIE_ADDR_MASK));
-+	writew(data, ep->irq_cpu_addr + (pci_addr & ~pci_addr_mask));
- 	return 0;
- }
- 
-diff --git a/drivers/pci/controller/pcie-rockchip.h b/drivers/pci/controller/pcie-rockchip.h
-index fe0333778fd9..2d7b05f07b7e 100644
---- a/drivers/pci/controller/pcie-rockchip.h
-+++ b/drivers/pci/controller/pcie-rockchip.h
-@@ -158,11 +158,11 @@
- #define PCIE_RC_CONFIG_THP_CAP		(PCIE_RC_CONFIG_BASE + 0x274)
- #define   PCIE_RC_CONFIG_THP_CAP_NEXT_MASK	GENMASK(31, 20)
- 
--#define PCIE_ADDR_MASK			0xffffff00
-+#define PCIE_LO_ADDR_MASK		GENMASK(31, 8)
- #define PCIE_CORE_AXI_CONF_BASE		0xc00000
- #define PCIE_CORE_OB_REGION_ADDR0	(PCIE_CORE_AXI_CONF_BASE + 0x0)
- #define   PCIE_CORE_OB_REGION_ADDR0_NUM_BITS	0x3f
--#define   PCIE_CORE_OB_REGION_ADDR0_LO_ADDR	PCIE_ADDR_MASK
-+#define   PCIE_CORE_OB_REGION_ADDR0_LO_ADDR	PCIE_LO_ADDR_MASK
- #define PCIE_CORE_OB_REGION_ADDR1	(PCIE_CORE_AXI_CONF_BASE + 0x4)
- #define PCIE_CORE_OB_REGION_DESC0	(PCIE_CORE_AXI_CONF_BASE + 0x8)
- #define PCIE_CORE_OB_REGION_DESC1	(PCIE_CORE_AXI_CONF_BASE + 0xc)
-@@ -170,7 +170,7 @@
- #define PCIE_CORE_AXI_INBOUND_BASE	0xc00800
- #define PCIE_RP_IB_ADDR0		(PCIE_CORE_AXI_INBOUND_BASE + 0x0)
- #define   PCIE_CORE_IB_REGION_ADDR0_NUM_BITS	0x3f
--#define   PCIE_CORE_IB_REGION_ADDR0_LO_ADDR	PCIE_ADDR_MASK
-+#define   PCIE_CORE_IB_REGION_ADDR0_LO_ADDR	PCIE_LO_ADDR_MASK
- #define PCIE_RP_IB_ADDR1		(PCIE_CORE_AXI_INBOUND_BASE + 0x4)
- 
- /* Size of one AXI Region (not Region 0) */
--- 
-2.25.1
+- CONFIG_RISCV_ISA_FALLBACK is enabled, cmdline option is not present:
+  cmdline option is ignored, fallback is taken if needed.
+  crash if neither are present.
 
+- CONFIG_RISCV_ISA_FALLBACK is disabled, cmdline option is present:
+  cmdline option takes priority, fallback is taken if needed.
+  crash if neither are present.
+
+- CONFIG_RISCV_ISA_FALLBACK is disabled, cmdline option is not present:
+  fallback is never taken
+  crash if new properties aren't present.
+
+I don't really see the value in having an equivalent to acpi=3Doff,
+because the order of precedence is, to use your naming, "DT-v2" falling
+back to "DT-v1" & the default value concerns the use of the fallback.
+For ACPI, it is the other way around & the option controls the use of
+"DT-v2"'s analogue. Trying to slot in that logic:
+
+- CONFIG_RISCV_ISA_FALLBACK is enabled, cmdline option "=3Don":
+  cmdline option is ignored, fallback is taken if needed.
+  crash if neither are present.
+
+- CONFIG_RISCV_ISA_FALLBACK is enabled, cmdline option "=3Doff":
+  cmdline option is prioritised, fallback is taken if needed.
+  crash if new properties aren't present.
+
+- CONFIG_RISCV_ISA_FALLBACK is disabled, cmdline option "=3Don":
+  cmdline option is prioritised, fallback is taken if needed.
+  crash if neither are present.
+
+- CONFIG_RISCV_ISA_FALLBACK is disabled, cmdline option "=3Doff":
+  fallback is never taken
+  crash if new properties aren't present.
+
+I think I prefer the behaviour of what I currently have & I don't really
+get where the "force" option is supposed to fit in either?
+
+Cheers,
+Conor.
+
+--o4a1LRPZt0ieGy5D
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZJ7WZwAKCRB4tDGHoIJi
+0gMcAQChwEuzvhSORcS7/4Mm0GXlyvRmOlOfWOHtGmwWRFmLMgD+JzMMaxJwKmej
+f/W/6SoUrX44MMben0skWQdfEYtTNQo=
+=N0ZM
+-----END PGP SIGNATURE-----
+
+--o4a1LRPZt0ieGy5D--
