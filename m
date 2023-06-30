@@ -2,62 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4892743CD1
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 15:32:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 55584743CD4
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 15:33:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232644AbjF3Ncj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 09:32:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51294 "EHLO
+        id S231315AbjF3NdH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Jun 2023 09:33:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232619AbjF3Ncf (ORCPT
+        with ESMTP id S231508AbjF3NdE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 09:32:35 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7341B359E;
-        Fri, 30 Jun 2023 06:32:21 -0700 (PDT)
-Date:   Fri, 30 Jun 2023 13:32:19 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1688131940;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=5Ct27fAT+6XX7UPKXfhBWOCjOGHDjnQ44IBDaz+qjbw=;
-        b=hfRme7N5dKXKo5O1TO8gz0XfuS+yInortheRRP39ifAjWip5iS8uieiiZ/+Tro9hYD4DRn
-        Cj6BL2SaWZ09364aGxDA9D2a/pGZwDhLL+JLdnw9s6gowhiQE/BR+JLaqAHw6ohBNFE4Zp
-        h+147ndUyUHUJMDa3lFxjjrckmEMSNY29oCuwFsq/Bn3zQwF7LfqHhQQJm0xgi6/JJzqgr
-        Z8/38yj9CX9XYzP/HVBwdaSsfEbgfNUVFLpSz0+32b/tpQ+V38m2BJzpuPCfWkghd1IlKg
-        rtUf2ADO233Zimskvr6niaXfrblijGnjJwJ27LAye7kb/Eq7qJGJXK4/eePT0w==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1688131940;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=5Ct27fAT+6XX7UPKXfhBWOCjOGHDjnQ44IBDaz+qjbw=;
-        b=aqIZJQLhieGpMxed3LDBpQb2BhQrZARAV4obijh/ckkjZiqQf5VdwzRK6yXAYiefxbBr24
-        HlLZnoBeC4DVY5Cg==
-From:   "tip-bot2 for Thomas Gleixner" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/urgent] x86/efi: Make efi_set_virtual_address_map IBT safe
-Cc:     pinkflames.linux@gmail.com, Thomas Gleixner <tglx@linutronix.de>,
-        Ard Biesheuvel <ardb@kernel.org>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <87jzvm12q0.ffs@tglx>
-References: <87jzvm12q0.ffs@tglx>
+        Fri, 30 Jun 2023 09:33:04 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDC9E3583;
+        Fri, 30 Jun 2023 06:32:58 -0700 (PDT)
+X-UUID: 97cfdcce174a11eeb20a276fd37b9834-20230630
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=iK4IiZuupKCVysdp9+ObQBOJXW6f9UGKbW4oKCJYlT8=;
+        b=hH1cKklyxbF0CBiskTE6VYW5KJXf8ZbSrvu/p0zTfTBLVF8sZ7IiGVpbf3Yj5lyC4f3wu6Y/J80FQc4I2JHyJ4Ut1cOsh4C3uwAgmBJZ9BxTVMxZq4uvWd/gM2q5MynuLFVczqOw1Aj9GKegxpPrsZ/SF0weTwFhuilgnxwDAOs=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.27,REQID:7e87b20a-eca5-4c35-8fb6-60d49e7640aa,IP:0,U
+        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+        release,TS:0
+X-CID-META: VersionHash:01c9525,CLOUDID:5ec18e82-5a99-42ae-a2dd-e4afb731b474,B
+        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:11|1,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:
+        NO
+X-CID-BVR: 0
+X-CID-BAS: 0,_,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_ULN
+X-UUID: 97cfdcce174a11eeb20a276fd37b9834-20230630
+Received: from mtkmbs11n2.mediatek.inc [(172.21.101.187)] by mailgw02.mediatek.com
+        (envelope-from <chris.lu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 926939932; Fri, 30 Jun 2023 21:32:43 +0800
+Received: from mtkmbs11n1.mediatek.inc (172.21.101.186) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.26; Fri, 30 Jun 2023 21:32:42 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
+ mtkmbs11n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.1118.26 via Frontend Transport; Fri, 30 Jun 2023 21:32:42 +0800
+From:   Chris Lu <chris.lu@mediatek.com>
+To:     Marcel Holtmann <marcel@holtmann.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Luiz Von Dentz <luiz.dentz@gmail.com>
+CC:     Sean Wang <sean.wang@mediatek.com>,
+        Deren Wu <deren.Wu@mediatek.com>,
+        Aaron Hou <aaron.hou@mediatek.com>,
+        Steve Lee <steve.lee@mediatek.com>,
+        linux-bluetooth <linux-bluetooth@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-mediatek <linux-mediatek@lists.infradead.org>,
+        Chris Lu <chris.lu@mediatek.com>
+Subject: [PATCH RESEND v2 1/1] Bluetooth: btusb: Add a new VID/PID 0489/e0f6 for MT7922
+Date:   Fri, 30 Jun 2023 21:32:30 +0800
+Message-ID: <242298f784e2bba8eb6d8c9a993ca7c0b9ca802b.1688008770.git.chris.lu@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-Message-ID: <168813193932.404.2885732890333911092.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+Content-Type: text/plain
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,
+        RCVD_IN_MSPIKE_WL,RDNS_NONE,SPF_HELO_PASS,T_SCC_BODY_TEXT_LINE,
+        T_SPF_TEMPERROR,UNPARSEABLE_RELAY,URIBL_BLOCKED autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,66 +71,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the x86/urgent branch of tip:
+From: "Chris Lu" <chris.lu@mediatek.com>
 
-Commit-ID:     0303c9729afc4094ef53e552b7b8cff7436028d6
-Gitweb:        https://git.kernel.org/tip/0303c9729afc4094ef53e552b7b8cff7436=
-028d6
-Author:        Thomas Gleixner <tglx@linutronix.de>
-AuthorDate:    Thu, 29 Jun 2023 21:35:19 +02:00
-Committer:     Thomas Gleixner <tglx@linutronix.de>
-CommitterDate: Fri, 30 Jun 2023 15:26:24 +02:00
+Add VID/PID 0489/e0f6 for MediaTek MT7922 USB Bluetooth chip.
 
-x86/efi: Make efi_set_virtual_address_map IBT safe
+The information in /sys/kernel/debug/usb/devices about the Bluetooth
+device is listed as the below.
 
-Nikl=C4=81vs reported a boot regression on an Alderlake machine and bisected =
-it
-to commit 9df9d2f0471b ("init: Invoke arch_cpu_finalize_init() earlier").
+T:  Bus=01 Lev=01 Prnt=01 Port=04 Cnt=03 Dev#=  4 Spd=480  MxCh= 0
+D:  Ver= 2.10 Cls=ef(misc ) Sub=02 Prot=01 MxPS=64 #Cfgs=  1
+P:  Vendor=0489 ProdID=e0f6 Rev= 1.00
+S:  Manufacturer=MediaTek Inc.
+S:  Product=Wireless_Device
+S:  SerialNumber=000000000
+C:* #Ifs= 3 Cfg#= 1 Atr=e0 MxPwr=100mA
+A:  FirstIf#= 0 IfCount= 3 Cls=e0(wlcon) Sub=01 Prot=01
+I:* If#= 0 Alt= 0 #EPs= 3 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
+E:  Ad=81(I) Atr=03(Int.) MxPS=  16 Ivl=125us
+E:  Ad=82(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 1 Alt= 0 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
+E:  Ad=83(I) Atr=01(Isoc) MxPS=   0 Ivl=1ms
+E:  Ad=03(O) Atr=01(Isoc) MxPS=   0 Ivl=1ms
+I:  If#= 1 Alt= 1 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
+E:  Ad=83(I) Atr=01(Isoc) MxPS=   9 Ivl=1ms
+E:  Ad=03(O) Atr=01(Isoc) MxPS=   9 Ivl=1ms
+I:  If#= 1 Alt= 2 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
+E:  Ad=83(I) Atr=01(Isoc) MxPS=  17 Ivl=1ms
+E:  Ad=03(O) Atr=01(Isoc) MxPS=  17 Ivl=1ms
+I:  If#= 1 Alt= 3 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
+E:  Ad=83(I) Atr=01(Isoc) MxPS=  25 Ivl=1ms
+E:  Ad=03(O) Atr=01(Isoc) MxPS=  25 Ivl=1ms
+I:  If#= 1 Alt= 4 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
+E:  Ad=83(I) Atr=01(Isoc) MxPS=  33 Ivl=1ms
+E:  Ad=03(O) Atr=01(Isoc) MxPS=  33 Ivl=1ms
+I:  If#= 1 Alt= 5 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
+E:  Ad=83(I) Atr=01(Isoc) MxPS=  49 Ivl=1ms
+E:  Ad=03(O) Atr=01(Isoc) MxPS=  49 Ivl=1ms
+I:  If#= 1 Alt= 6 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
+E:  Ad=83(I) Atr=01(Isoc) MxPS=  63 Ivl=1ms
+E:  Ad=03(O) Atr=01(Isoc) MxPS=  63 Ivl=1ms
+I:* If#= 2 Alt= 0 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=(none)
+E:  Ad=8a(I) Atr=03(Int.) MxPS=  64 Ivl=125us
+E:  Ad=0a(O) Atr=03(Int.) MxPS=  64 Ivl=125us
+I:  If#= 2 Alt= 1 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=(none)
+E:  Ad=8a(I) Atr=03(Int.) MxPS= 512 Ivl=125us
+E:  Ad=0a(O) Atr=03(Int.) MxPS= 512 Ivl=125us
 
-By moving the invocation of arch_cpu_finalize_init() further down he
-identified that efi_enter_virtual_mode() is the function which causes the
-boot hang.
-
-The main difference of the earlier invocation is that the boot CPU is
-already fully initialized and mitigations and alternatives are applied.
-
-But the only really interesting change turned out to be IBT, which is now
-enabled before efi_enter_virtual_mode(). "ibt=3Doff" on the kernel command
-line cured the problem.
-
-Inspection of the involved calls in efi_enter_virtual_mode() unearthed that
-efi_set_virtual_address_map() is the only place in the kernel which invokes
-an EFI call without the IBT safe wrapper. This went obviously unnoticed so
-far as IBT was enabled later.
-
-Use arch_efi_call_virt() instead of efi_call() to cure that.
-
-Fixes: fe379fa4d199 ("x86/ibt: Disable IBT around firmware")
-Fixes: 9df9d2f0471b ("init: Invoke arch_cpu_finalize_init() earlier")
-Reported-by: Nikl=C4=81vs Ko=C4=BCes=C5=86ikovs <pinkflames.linux@gmail.com>
-Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Reviewed-by: Ard Biesheuvel <ardb@kernel.org>
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=3D217602
-Link: https://lore.kernel.org/r/87jzvm12q0.ffs@tglx
-
+Signed-off-by: Chris Lu <chris.lu@mediatek.com>
 ---
- arch/x86/platform/efi/efi_64.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+v2: resend with the latest tree
+---
+ drivers/bluetooth/btusb.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/arch/x86/platform/efi/efi_64.c b/arch/x86/platform/efi/efi_64.c
-index 232acf4..77f7ac3 100644
---- a/arch/x86/platform/efi/efi_64.c
-+++ b/arch/x86/platform/efi/efi_64.c
-@@ -853,9 +853,9 @@ efi_set_virtual_address_map(unsigned long memory_map_size,
-=20
- 	/* Disable interrupts around EFI calls: */
- 	local_irq_save(flags);
--	status =3D efi_call(efi.runtime->set_virtual_address_map,
--			  memory_map_size, descriptor_size,
--			  descriptor_version, virtual_map);
-+	status =3D arch_efi_call_virt(efi.runtime, set_virtual_address_map,
-+				    memory_map_size, descriptor_size,
-+				    descriptor_version, virtual_map);
- 	local_irq_restore(flags);
-=20
- 	efi_fpu_end();
+diff --git a/drivers/bluetooth/btusb.c b/drivers/bluetooth/btusb.c
+index cb58691b63ca..1a8a4efb3ed4 100644
+--- a/drivers/bluetooth/btusb.c
++++ b/drivers/bluetooth/btusb.c
+@@ -628,6 +628,9 @@ static const struct usb_device_id blacklist_table[] = {
+ 	{ USB_DEVICE(0x0489, 0xe0f2), .driver_info = BTUSB_MEDIATEK |
+ 						     BTUSB_WIDEBAND_SPEECH |
+ 						     BTUSB_VALID_LE_STATES },
++	{ USB_DEVICE(0x0489, 0xe0f6), .driver_info = BTUSB_MEDIATEK |
++						     BTUSB_WIDEBAND_SPEECH |
++						     BTUSB_VALID_LE_STATES },
+ 
+ 	/* Additional Realtek 8723AE Bluetooth devices */
+ 	{ USB_DEVICE(0x0930, 0x021d), .driver_info = BTUSB_REALTEK },
+-- 
+2.18.0
+
