@@ -2,108 +2,257 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F7C77439D4
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 12:46:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 847D47439E0
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 12:52:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232410AbjF3Kqm convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 30 Jun 2023 06:46:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42374 "EHLO
+        id S231882AbjF3KwF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Jun 2023 06:52:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229742AbjF3Kqi (ORCPT
+        with ESMTP id S231455AbjF3KwD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 06:46:38 -0400
-Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D96DEF0;
-        Fri, 30 Jun 2023 03:46:37 -0700 (PDT)
-Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-98502b12fd4so45256766b.1;
-        Fri, 30 Jun 2023 03:46:37 -0700 (PDT)
+        Fri, 30 Jun 2023 06:52:03 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EB48358A
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 03:51:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1688122271;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=uyqtfh/uO+c59eeqAPwfK8ApK34k3U13F7I83iFK+cU=;
+        b=CRBf8E0Qxr9ZIqedptmeoMzbFl6R08GUGH6R39whIwuWfhHEjmd963xa+0d1cTPCrpFZrg
+        4yONJLN8Ps31Gpfi5hpZI6FHWAAqv6VrFFxwphbN0wV3NPfgIXF8wauGT+ZqMKQ9hvPyNh
+        IMou0UJ9uXMpQSBImvJVTM2Hzq94uUQ=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-595-S6ZfXkBpOMmforeNwfdK4Q-1; Fri, 30 Jun 2023 06:51:10 -0400
+X-MC-Unique: S6ZfXkBpOMmforeNwfdK4Q-1
+Received: by mail-wm1-f71.google.com with SMTP id 5b1f17b1804b1-3fb40d0623bso8366985e9.1
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 03:51:10 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688121996; x=1690713996;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=c/UBV7P1ulz8YvA35BhCt72l7KfIOxYTNUGMNlMCewg=;
-        b=CfdwF6kGwnTz+N01bo4RiU6731eJOd4t7eumO2s9F9czzzs0hGTrdLddF0nSE9EHEm
-         b/Eo5ZuLVI5hWttQgwALUii+30EHC97JHqnJJB3oIUX5EtjFtHk95MISnXHi9jc2XNa4
-         syE61espwdTE0OA3WOW0OCZdPsF4ZxruTYLxePVmUOcWwqsBuJpofit97cVpxuuFRpxm
-         JB/CXTssmXrDxbOnOTDpbx8YwmRoMq01QObcp9bzdH+NN7/s/BWpcatUIV8tgEKq0jPe
-         gNWV7AR/db5vAiD8J65q8y/mHgn7gmsKY13hlfiv/698grDge/6Vvi3/kTDytw2Jo18g
-         DMsQ==
-X-Gm-Message-State: ABy/qLYFa0CvbtbNFMaB1EJ7NQ7vxb63i+nJW2isTp5h8ESOQr3OpIm2
-        3HBoAfz7yK9u/UZmnvVTFJWQ9XUpHIAvoxXdx08=
-X-Google-Smtp-Source: APBJJlHAbw3cv+huvJUtlKwW2ExWGqSGStRGZZzCW/2PIO1UUthMw3rlS5DOVBCNSj+a75AK0FsQfC5rqzpn02VyAvk=
-X-Received: by 2002:a17:906:1109:b0:988:f9ba:e18d with SMTP id
- h9-20020a170906110900b00988f9bae18dmr1539376eja.6.1688121996174; Fri, 30 Jun
- 2023 03:46:36 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1688122269; x=1690714269;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=uyqtfh/uO+c59eeqAPwfK8ApK34k3U13F7I83iFK+cU=;
+        b=jGbLygOMS+wEIbdilr1zV2jDlwEkYOFVfZo2JwSAdNH4OURCJCHBEovDSea6NQP1N5
+         Zi1vn9LrB+eIU2FolGeaGnrpU03H3LfgIZRQpauSvNM2hZcNe0T0cF6vz8Rt4qwGNLpT
+         R+6Vb86fk46GlesigE72mV5qhpBju/V93dXjKUCgAo7ZgHz0Zpb4ztY4xvabI8AHOYRI
+         cfRRFHZ5/gQ7gtlp29yhmDH0QPxf6YmkNjAmlB8JkzCxsfQQt1fptpqhwIJ2IullV/GP
+         /Rtte7h0OI6flQb9hayKFiM7xDyf1JtfAOkjA20HYAAhhhw7Uf9X+JOP2HEN2lJsnENi
+         e/ag==
+X-Gm-Message-State: AC+VfDylTsLLs4jEM7bNzF37mCmhZA4PUeZEWJHueu3zvLZ2OmJNYoML
+        +qwqZ+4xuMNAmFqczRL9E4GxyZUgJGdzxeqH9P02BpG8fknm6O6LcP6G2ucpJczJwN32B6c+BfY
+        6swwdGDsOdhtfjlP9DZVanYKD
+X-Received: by 2002:a05:600c:2259:b0:3f7:aee8:c23a with SMTP id a25-20020a05600c225900b003f7aee8c23amr6742589wmm.19.1688122269270;
+        Fri, 30 Jun 2023 03:51:09 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ4ar/tTtvUE+lxD/WKHTgCoVCq4pBAcO5fMERH2qhCP0DM6uF+75yi5jYVG8xRfdHUuTfLWAQ==
+X-Received: by 2002:a05:600c:2259:b0:3f7:aee8:c23a with SMTP id a25-20020a05600c225900b003f7aee8c23amr6742572wmm.19.1688122268942;
+        Fri, 30 Jun 2023 03:51:08 -0700 (PDT)
+Received: from localhost (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
+        by smtp.gmail.com with ESMTPSA id a10-20020a05600c224a00b003faef96ee78sm12491386wmm.33.2023.06.30.03.51.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 30 Jun 2023 03:51:08 -0700 (PDT)
+From:   Javier Martinez Canillas <javierm@redhat.com>
+To:     Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org
+Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "H. Peter Anvin" <hpa@zytor.com>, Helge Deller <deller@gmx.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org,
+        x86@kernel.org
+Subject: Re: [PATCH 1/2] fbdev: Split frame buffer support in FB and FB_CORE
+ symbols
+In-Reply-To: <723a3c51-7997-46d0-9262-68f33384a9e7@app.fastmail.com>
+References: <20230629225113.297512-1-javierm@redhat.com>
+ <20230629225113.297512-2-javierm@redhat.com>
+ <723a3c51-7997-46d0-9262-68f33384a9e7@app.fastmail.com>
+Date:   Fri, 30 Jun 2023 12:51:07 +0200
+Message-ID: <87h6qpdy04.fsf@minerva.mail-host-address-is-not-set>
 MIME-Version: 1.0
-References: <20230607003721.834038-1-evalenti@kernel.org> <f26ac9a9-60af-a0fe-fccc-25bcd306f5a1@linaro.org>
- <ZICybSuZELhR1Ni5@uf8f119305bce5e.ant.amazon.com> <b2e93db5-e6f8-a9d8-53de-af5ea750f0f0@linaro.org>
- <ZIITZINvtPfjuhS6@uf8f119305bce5e.ant.amazon.com> <7616fd9d-aa0d-2ecd-8751-894b1c9073c0@linaro.org>
- <ZJKFar/U75+PGCRt@uf8f119305bce5e.ant.amazon.com> <75eba2da-593f-f3bd-4eac-5155fcf5aee8@linaro.org>
- <ZJPUchRH+3LLvuKy@uf8f119305bce5e.ant.amazon.com> <CAJZ5v0jAJj-Eh9tJZRMamSFSWWJqVpzaWeHmqThyPvAGpzk17w@mail.gmail.com>
- <ZJyh1Dp5WrXyv9wW@uf8f119305bce5e.ant.amazon.com> <CAJZ5v0jn-zCgObgNYswGQK0vLbWaK1VhPZP1L+pB5k1BhNs5bA@mail.gmail.com>
- <2d59de0d-5011-780a-cb6c-94e6e2b74156@linaro.org>
-In-Reply-To: <2d59de0d-5011-780a-cb6c-94e6e2b74156@linaro.org>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 30 Jun 2023 12:46:24 +0200
-Message-ID: <CAJZ5v0jQssaVMim3b3yWEqw2NGt4SYSZP6Zb4i5O++=9Tp7C3w@mail.gmail.com>
-Subject: Re: [PATCH 1/1] thermal: sysfs: avoid actual readings from sysfs
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Eduardo Valentin <evalenti@kernel.org>, eduval@amazon.com,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Daniel,
+"Arnd Bergmann" <arnd@arndb.de> writes:
 
-On Fri, Jun 30, 2023 at 12:11 PM Daniel Lezcano
-<daniel.lezcano@linaro.org> wrote:
->
->
-> Hi Rafael,
->
-> On 30/06/2023 10:16, Rafael J. Wysocki wrote:
-> > On Wed, Jun 28, 2023 at 11:10 PM Eduardo Valentin <evalenti@kernel.org> wrote:
->
-> [ ... ]
->
-> > So what about adding a new zone attribute that can be used to specify
-> > the preferred caching time for the temperature?
-> >
-> > That is, if the time interval between two consecutive updates of the
-> > cached temperature value is less than the value of the new attribute,
-> > the cached temperature value will be returned by "temp".  Otherwise,
-> > it will cause the sensor to be read and the value obtained from it
-> > will be returned to user space and cached.
-> >
-> > If the value of the new attribute is 0, everything will work as it
-> > does now (which will also need to be the default behavior).
->
-> I'm still not convinced about the feature.
->
-> Eduardo provided some numbers but they seem based on the characteristics
-> of the I2C, not to a real use case. Eduardo?
->
-> Before adding more complexity in the thermal framework and yet another
-> sysfs entry, it would be interesting to have an experiment and show the
-> impact of both configurations, not from a timing point of view but with
-> a temperature mitigation accuracy.
->
-> Without a real use case, this feature does make really sense IMO.
+Hello Arnd,
 
-I'm kind of unsure why you think that it is not a good idea in general
-to have a way to limit the rate of accessing a temperature sensor, for
-energy-efficiency reasons if nothing more.
+Thanks for your review!
+
+> On Fri, Jun 30, 2023, at 00:51, Javier Martinez Canillas wrote:
+>> Currently the CONFIG_FB option has to be enabled even if no legacy fbdev
+>> drivers are needed (e.g: only to have support for framebuffer consoles).
+>>
+>> The DRM subsystem has a fbdev emulation layer, but depends on CONFIG_FB
+>> and so it can only be enabled if that dependency is enabled as well.
+>>
+>> That means fbdev drivers have to be explicitly disabled if users want to
+>> enable CONFIG_FB, only to use fbcon and/or the DRM fbdev emulation layer.
+>>
+>> This patch introduces a CONFIG_FB_CORE option that could be enabled just
+>> to have the core support needed for CONFIG_DRM_FBDEV_EMULATION, allowing
+>> CONFIG_FB to be disabled (and automatically disabling all fbdev drivers).
+>>
+>> Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
+>> ---
+>
+> This looks really nice!
+>
+> I tried to do something like this a few years ago, but failed as
+
+Yes, I also tried to do this before some time ago [0]:
+
+[0]: https://lore.kernel.org/lkml/20210827100027.1577561-1-javierm@redhat.com/t/#mc8bb6cda8c2d795673618049b6c834b34bf86162
+
+and at the time required some code refactoring but now thanks to all the
+cleanups that Thomas has been doing over, I could just do it with Kconfig.
+
+> I did too much at once by attempting to cut out msot of the fb core
+> support that is not actually used by DRM at the same time.
+>
+> Doing just the Kconfig bits as you do here is probably better
+> anyway, cutting out unneeded bits into separate modules or #ifdef
+> sections can come later.
+>
+
+Exactly, that was my thought too. Glad that you agree with the approach.
+
+>> @@ -59,7 +71,7 @@ config FIRMWARE_EDID
+>> 
+>>  config FB_DEVICE
+>>  	bool "Provide legacy /dev/fb* device"
+>> -	depends on FB
+>> +	depends on FB_CORE
+>>  	default y
+>>  	help
+>>  	  Say Y here if you want the legacy /dev/fb* device file and
+>
+> I don't see this symbol in linux-next yet, what tree are you using
+> as a base?
+>
+
+It's now in the drm-misc/drm-misc-next branch [1]. It's not in -next yet
+because it just landed a few days ago [2].
+
+[1]: https://cgit.freedesktop.org/drm/drm-misc/log/?h=drm-misc-next
+[2]: https://cgit.freedesktop.org/drm/drm-misc/commit/?id=701d2054fa3
+
+In fact, that's the reason why I rebased my previous attempt [0].
+
+>> @@ -69,13 +81,13 @@ config FB_DEVICE
+>> 
+>>  config FB_DDC
+>>  	tristate
+>> -	depends on FB
+>> +	depends on FB_CORE
+>>  	select I2C_ALGOBIT
+>>  	select I2C
+>
+> This seems to only be used by actual fbdev drivers, so maybe
+> don't change the dependency here.
+>
+
+Indeed.
+
+>> @@ -162,22 +174,22 @@ endchoice
+>> 
+>>  config FB_SYS_FOPS
+>>  	tristate
+>> -	depends on FB
+>> +	depends on FB_CORE
+>
+> Same for this one
+>
+
+Ok.
+
+>>  config FB_HECUBA
+>>  	tristate
+>> -	depends on FB
+>> +	depends on FB_CORE
+>>  	depends on FB_DEFERRED_IO
+>> 
+>>  config FB_SVGALIB
+>>  	tristate
+>> -	depends on FB
+>> +	depends on FB_CORE
+>>  	help
+>>  	  Common utility functions useful to fbdev drivers of VGA-based
+>>  	  cards.
+>>  config FB_MACMODES
+>>  	tristate
+>> -	depends on FB
+>> +	depends on FB_CORE
+>> 
+>
+> These three seem to actually be part of fbdev drivers rather
+> than the core, and it may be best to move them into
+> drviers/video/fbdev/ as standalone modules. That would be a
+> separate patch of course.
+>
+
+Agreed. I'll then also don't change the dependency on these ones.
+
+>>  config FB_BACKLIGHT
+>>  	tristate
+>> -	depends on FB
+>> +	depends on FB_CORE
+>>  	select BACKLIGHT_CLASS_DEVICE
+>
+> Separating this one from FB_CORE would help avoid circular dependencies,
+> this one keeps causing issues.
+>
+
+You mean separating from FB or should I keep the existing depends on FB?
+
+It seems this is only used by fbdev drivers so probably the latter?
+
+>> @@ -1,22 +1,22 @@
+>>  # SPDX-License-Identifier: GPL-2.0
+>>  obj-$(CONFIG_FB_NOTIFY)           += fb_notify.o
+>> -obj-$(CONFIG_FB)                  += fb.o
+>> -fb-y                              := fb_backlight.o \
+>> +obj-$(CONFIG_FB_CORE)             += fb_core.o
+>> +fb_core-y                         := fb_backlight.o \
+>>                                       fb_info.o \
+>>                                       fbmem.o fbmon.o fbcmap.o \
+>>                                       modedb.o fbcvt.o fb_cmdline.o 
+>
+> I would not bother renaming the module itself here, that
+> might cause problems if anything relies on loading the
+> module by name or a named module parameter.
+>
+
+I was actually not sure about this, but then thought that someone could
+had complained that the Kconfig symbol and module name wouldn't match :)
+
+I'll just keep the existing module name then and drop the rename.
+
+>       Arnd
+>
+
+-- 
+Best regards,
+
+Javier Martinez Canillas
+Core Platforms
+Red Hat
+
