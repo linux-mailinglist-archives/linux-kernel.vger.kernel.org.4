@@ -2,71 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5153743405
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 07:21:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 330AD74340C
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 07:22:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231393AbjF3FV4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 01:21:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37446 "EHLO
+        id S231854AbjF3FWh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Jun 2023 01:22:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229945AbjF3FVx (ORCPT
+        with ESMTP id S229720AbjF3FWf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 01:21:53 -0400
-Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com [IPv6:2607:f8b0:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AC5B2D78
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 22:21:52 -0700 (PDT)
-Received: by mail-oi1-x230.google.com with SMTP id 5614622812f47-3a37909a64eso872633b6e.1
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 22:21:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1688102511; x=1690694511;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3vh6aUxcW9Sd7Nxw2SV2uQlOuQlDwxv1Adt7CXHdwfk=;
-        b=nAeGpiUndUVQPZMONYwc5zzAZpk7CWbiehmHv9I1PbnOL9LX5oMIuZWNTjkq6tKdui
-         EGnqJS779zDyO/LiRjSBzAjO+gGxxcQC+bxIbZF56aHwtMEOxObe9iVF6839gBPwwtjF
-         1mJodOzwca8fotOK97lnhgj4m/DwMgk58D4YuZ29OCw3zVfftkJiJdQONmPTB1YZ6U6V
-         AcdwIWxn391JeUYRd/ZJukEncgow4UMeLLEX5d8iX2T6e0BbrtvuB3br66P77W01YQBp
-         wrs4oV7U4Zbc1s7W3yKspvIRTSIXvt+XB+j/kNrL/Wymc+BzhAsYXQAJ0BgedIy1dBUC
-         U86A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688102511; x=1690694511;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=3vh6aUxcW9Sd7Nxw2SV2uQlOuQlDwxv1Adt7CXHdwfk=;
-        b=M4lLx+lySOKQwDTZaGlvw9oveXogMYKDYt16DQcoaML9CvEr2JhXUu/EmLJLWz5GDk
-         ID9rjllBubpmGqsyHtSwGkmI7lEl0rcYiEbEwywDa9ogzlOE9Mb5SJ1wMt50LgAIOPH7
-         SwS7JbojGqD5j49Cdm0v/Vq6/607K31jRxX7vPiTzzfS7J/QzsmMcka4/gli4rdyaO9d
-         zos9Fodi6NCHBHpoZrePLW03LGLkXM1FKgGlHSJJQos3bXqOVVYTVyBw49XvRLwqrkBl
-         f6RT6VD+bJHIMqL2ndeb4WdV4GbHBiDKyBujRvARdtWdDP4/lXmShNhFCq7JuFRAVwbT
-         eTDg==
-X-Gm-Message-State: AC+VfDyc9QmR6Qv1INpeVPcwhizhDZ5e1dEVLEr63J9ME/4c/goTI/ee
-        gkVra67aFrQJvpvZGAjpWewMUnft6BxF8EcLWG+b+Q==
-X-Google-Smtp-Source: ACHHUZ6UjmrHQtZtyrtFYxI2C+hfVD90LjdrZ/WYiPgj7rLAkiWiamFoA1AZi+yuYC5Nfm+35QUwTj/FybV0jioAUNM=
-X-Received: by 2002:a05:6808:11cf:b0:3a1:c108:41b1 with SMTP id
- p15-20020a05680811cf00b003a1c10841b1mr1656069oiv.25.1688102511194; Thu, 29
- Jun 2023 22:21:51 -0700 (PDT)
+        Fri, 30 Jun 2023 01:22:35 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A06D2D69;
+        Thu, 29 Jun 2023 22:22:34 -0700 (PDT)
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35U4XWVx017861;
+        Fri, 30 Jun 2023 05:22:25 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=gKsS/01MXpL4I+QnaLU3C0pJ34xWCicExHRxGvK3uU8=;
+ b=cAqLqMl9Y7PN9Hi0in9e1CTqweO1B3PtUtl9VGECSS/HumOPpop/JT6XaZtFwGyFM+1d
+ MNbadG9JkZc6itr7lph24qhw4N8g9K4tQ822nN2yA+8dUt67AW5pLNg0QeYlcRFGLwpQ
+ 6/7YV616iF7pivqsdd3e+IhL0J3LgABC8ojoreN+0fAbchOks3QUKPryeeAIbMlbhJWX
+ UnBJ4O/xbFNGvkNzQHa+c6kPmq7WiGsyPDLgHDbwQwmudY17Wrtbpky1oIt1DjHUYJQ2
+ DbJX8G3Wn2vVu1tlZoQC6MHyV95F7etJWGRCXXUYWUOz1A4S/vUqd2knvm08rHeyzM4k bQ== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rgy1tjxn4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 30 Jun 2023 05:22:25 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35U5MOmf004591
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 30 Jun 2023 05:22:24 GMT
+Received: from [10.216.50.172] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.7; Thu, 29 Jun
+ 2023 22:22:19 -0700
+Message-ID: <c226d063-a8e9-d9b8-e070-bc15f7c7ec47@quicinc.com>
+Date:   Fri, 30 Jun 2023 10:52:13 +0530
 MIME-Version: 1.0
-References: <20230629184151.651069086@linuxfoundation.org> <CAEUSe7-xC90CGpJjQD4w10ea=nXMiGhsFouhaa8fVK5W-WJJJQ@mail.gmail.com>
- <2023063056-waviness-unearth-08aa@gregkh>
-In-Reply-To: <2023063056-waviness-unearth-08aa@gregkh>
-From:   =?UTF-8?B?RGFuaWVsIETDrWF6?= <daniel.diaz@linaro.org>
-Date:   Thu, 29 Jun 2023 23:21:39 -0600
-Message-ID: <CAEUSe7_3+JHgdEAkJ=7ha5pm=24dV5zN_LakKMM6RUBo+nABXQ@mail.gmail.com>
-Subject: Re: [PATCH 6.1 00/30] 6.1.37-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de,
-        conor@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH 1/4] pcie: qcom: Fix the macro
+ PARF_SLV_ADDR_SPACE_SIZE_2_3_3
+Content-Language: en-US
+To:     Bjorn Helgaas <helgaas@kernel.org>
+CC:     <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
+        <sboyd@kernel.org>, <mturquette@baylibre.com>, <mani@kernel.org>,
+        <lpieralisi@kernel.org>, <bhelgaas@google.com>,
+        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-clk@vger.kernel.org>,
+        <linux-pci@vger.kernel.org>
+References: <20230623180026.GA181743@bhelgaas>
+From:   Sricharan Ramabadhran <quic_srichara@quicinc.com>
+In-Reply-To: <20230623180026.GA181743@bhelgaas>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: RZxAVXWhfyM6WiiZ-h3zv8OhuurrW3Ej
+X-Proofpoint-GUID: RZxAVXWhfyM6WiiZ-h3zv8OhuurrW3Ej
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-06-30_02,2023-06-27_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 phishscore=0
+ impostorscore=0 mlxlogscore=877 mlxscore=0 malwarescore=0
+ lowpriorityscore=0 clxscore=1011 adultscore=0 priorityscore=1501
+ bulkscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2305260000 definitions=main-2306300046
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -75,83 +86,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello!
+Hi Bjorn,
 
-On Thu, 29 Jun 2023 at 23:18, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
-> On Thu, Jun 29, 2023 at 04:25:40PM -0600, Daniel D=C3=ADaz wrote:
-> > Hello!
-> >
-> > On Thu, 29 Jun 2023 at 12:46, Greg Kroah-Hartman
-> > <gregkh@linuxfoundation.org> wrote:
-> > > This is the start of the stable review cycle for the 6.1.37 release.
-> > > There are 30 patches in this series, all will be posted as a response
-> > > to this one.  If anyone has any issues with these being applied, plea=
-se
-> > > let me know.
-> > >
-> > > Responses should be made by Sat, 01 Jul 2023 18:41:39 +0000.
-> > > Anything received after that time might be too late.
-> > >
-> > > The whole patch series can be found in one patch at:
-> > >         https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/pa=
-tch-6.1.37-rc1.gz
-> > > or in the git tree and branch at:
-> > >         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-st=
-able-rc.git linux-6.1.y
-> > > and the diffstat can be found below.
-> > >
-> > > thanks,
-> > >
-> > > greg k-h
-> >
-> > Early report of failures.
-> >
-> > SPARC and PA-RISC both fail to build (GCC-8 and GCC-11).
-> >
-> > For SPARC:
-> > * allnoconfig
-> > * defconfig
-> > * tinyconfig
-> >
-> > -----8<-----
-> > /builds/linux/arch/sparc/mm/fault_32.c: In function 'force_user_fault':
-> > /builds/linux/arch/sparc/mm/fault_32.c:312:49: error: 'regs'
-> > undeclared (first use in this function)
-> >   312 |         vma =3D lock_mm_and_find_vma(mm, address, regs);
-> >       |                                                 ^~~~
-> > /builds/linux/arch/sparc/mm/fault_32.c:312:49: note: each undeclared
-> > identifier is reported only once for each function it appears in
-> > make[4]: *** [/builds/linux/scripts/Makefile.build:250:
-> > arch/sparc/mm/fault_32.o] Error 1
-> > make[4]: Target 'arch/sparc/mm/' not remade because of errors.
-> > ----->8-----
-> >
-> > For PA-RISC:
-> > * allnoconfig
-> > * tinyconfig
-> >
-> > -----8<-----
-> > /builds/linux/arch/parisc/mm/fault.c: In function 'do_page_fault':
-> > /builds/linux/arch/parisc/mm/fault.c:292:22: error: 'prev' undeclared
-> > (first use in this function)
-> >   292 |                 if (!prev || !(prev->vm_flags & VM_GROWSUP))
-> >       |                      ^~~~
-> > /builds/linux/arch/parisc/mm/fault.c:292:22: note: each undeclared
-> > identifier is reported only once for each function it appears in
-> > make[4]: *** [/builds/linux/scripts/Makefile.build:250:
-> > arch/parisc/mm/fault.o] Error 1
-> > make[4]: Target 'arch/parisc/mm/' not remade because of errors.
-> > ----->8-----
->
-> These issues are also in Linus's tree right now, right?  Or are they
-> unique to the -rc releases right now?
+On 6/23/2023 11:30 PM, Bjorn Helgaas wrote:
+> On Fri, Jun 23, 2023 at 03:04:42PM +0530, Sricharan Ramabadhran wrote:
+>> PARF_SLV_ADDR_SPACE_SIZE_2_3_3 macro used for IPQ8074
+>> pcie slave addr size was initially set to 0x358, but
+>> was wrongly changed to 0x168 as a part of
+>> 'PCI: qcom: Sort and group registers and bitfield definitions'
+>> Fixing it back to right value here.
+> 
+> 1) Make your subject line match the history.  For example, you're
+> fixing 769e49d87b15 ("PCI: qcom: Sort and group registers ..."), so
+> your subject line should start with "PCI: qcom: ...".
+> 
 
-Correct. I went to look at mainline and it fails the same way there
-for SPARC and PA-RISC, so 6.1 and 6.4 are on par there; 6.3's failures
-on Arm64 are only seen there.
+  ok, will fix.
 
-Greetings!
+> 2) It doesn't look like 769e49d87b15 changed
+> PARF_SLV_ADDR_SPACE_SIZE_2_3_3:
+> 
+>    $ git show 769e49d87b15 | grep PARF_SLV_ADDR_SPACE_SIZE_2_3_3
+>    +#define PARF_SLV_ADDR_SPACE_SIZE_2_3_3		0x16C /* Register offset specific to IP ver 2.3.3 */
+>    -#define PARF_SLV_ADDR_SPACE_SIZE_2_3_3		0x16C /* Register offset specific to IP rev 2.3.3 */
+> 
+> What am I missing here?  Do you have another out-of-tree patch that
+> broke this?
 
-Daniel D=C3=ADaz
-daniel.diaz@linaro.org
+  39171b33f652 ("PCI: qcom: Remove PCIE20_ prefix from
+                register definitions") broke it. Will change and post .
+
+Regards,
+  Sricharan
