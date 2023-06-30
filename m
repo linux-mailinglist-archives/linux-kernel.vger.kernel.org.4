@@ -2,89 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0217743DBB
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 16:43:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B9FB2743DBE
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 16:43:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232185AbjF3OnL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 10:43:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45104 "EHLO
+        id S230180AbjF3Ona (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Jun 2023 10:43:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232604AbjF3Om7 (ORCPT
+        with ESMTP id S232403AbjF3OnM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 10:42:59 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 636823C06;
-        Fri, 30 Jun 2023 07:42:38 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EDCAF6176C;
-        Fri, 30 Jun 2023 14:42:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16954C433C8;
-        Fri, 30 Jun 2023 14:42:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688136157;
-        bh=FobgviI7+8dwx2oijrp2XqAsD6wlFH06OENkuR5Y50g=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=ZEO2dSFD4R0cumSQ4KDz5a/xHsp+PHKKOqrleiwbGQWliL7M6QRQL3SI2fjxSu1/c
-         DPrZlpsMi9p+MbDq8YRTskpM8iHGZZ2Da21v2F6dsYGd5W0RWL1nJKjni7/JCt5wHf
-         r1DyKC01cKJyK93I5AT+W9u+RMYg5NMxBAmSwqWM0c7L7OtQOBriffyjkbtxiOET1k
-         0CDlBcMIe8WZtdT5Ahl/iF+kTtFjRnSXJfkcGdm0SLMLb0dn1K6sH0Q1ORH3EpiEpM
-         aTKIrBolB1mZRob90MIuRPw4QcORcVjnPiAYAgKYBr8FYllUafmLgNkisCFneynHJz
-         8YQVaA1qHSWPQ==
-Date:   Fri, 30 Jun 2023 09:42:35 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Lizhi Hou <lizhi.hou@amd.com>, linux-pci@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        max.zhen@amd.com, sonal.santan@amd.com,
-        stefano.stabellini@xilinx.com
-Subject: Re: [PATCH V10 2/5] PCI: Create device tree node for bridge
-Message-ID: <20230630144235.GA483557@bhelgaas>
+        Fri, 30 Jun 2023 10:43:12 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAC4A44A6;
+        Fri, 30 Jun 2023 07:42:55 -0700 (PDT)
+X-QQ-mid: bizesmtp84t1688136166tze1g8ev
+Received: from linux-lab-host.localdomain ( [119.123.131.49])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Fri, 30 Jun 2023 22:42:44 +0800 (CST)
+X-QQ-SSF: 00200000000000D0W000000A0000000
+X-QQ-FEAT: LE7C6P2vL8SQwZOGdkG/lTjPsV7PgvW2oesEBVFY6dM9tcdRhIkifWsyjQUo/
+        Ol8lESzlCLkSb8/LwvbBjwFNtLbbQoGMX9ZQmju3B292dp0/jDMaguAs+Y61UyM+s9x9G5s
+        N0iwPV5qFiX02Rkr+vXvSIPY71FnWXWa5lOsqqG4hpHlOs8qMyOQOL90FU8X3t5jYrvAYlz
+        bn3uLQEBQMBlikvRAFvd7x9DHJ+JlXAPJCaR//7Me3iGbYtGupmfYIvm1fzdBvNPPi3hrYy
+        pi1lMkdGVARJL1NfrB5JRU8XxG1kZaYWDn0FsMpGEPM4uHxINr9UjdSnGUn3/ZhVzRhWE5Q
+        PFnfuhwkZTOLdYZeoC/zd3EneQFzWG/muXo5wyuSLavubcPeHwVA3ng4/XlhArBOMlAk93F
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 2264253388160424813
+From:   Zhangjin Wu <falcon@tinylab.org>
+To:     thomas@t-8ch.de, w@1wt.eu
+Cc:     arnd@arndb.de, falcon@tinylab.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        =?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <linux@weissschuh.net>
+Subject: [PATCH v3 01/14] selftests/nolibc: stat_fault: silence NULL argument warning with glibc
+Date:   Fri, 30 Jun 2023 22:42:38 +0800
+Message-Id: <8a0a69f8e88219ca83f7d1eecfaeceafe7551a34.1688134399.git.falcon@tinylab.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <cover.1688134399.git.falcon@tinylab.org>
+References: <cover.1688134399.git.falcon@tinylab.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230629235551.GB92592-robh@kernel.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrgz:qybglogicsvrgz5a-1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H4,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 29, 2023 at 05:55:51PM -0600, Rob Herring wrote:
-> On Thu, Jun 29, 2023 at 05:56:31PM -0500, Bjorn Helgaas wrote:
-> > On Thu, Jun 29, 2023 at 10:19:47AM -0700, Lizhi Hou wrote:
-> > > The PCI endpoint device such as Xilinx Alveo PCI card maps the register
-> > > spaces from multiple hardware peripherals to its PCI BAR. Normally,
-> > > the PCI core discovers devices and BARs using the PCI enumeration process.
-> > > There is no infrastructure to discover the hardware peripherals that are
-> > > present in a PCI device, and which can be accessed through the PCI BARs.
+Use another invalid address (void *)1 instead of NULL to silence this
+compile warning with glibc:
 
-> > > --- a/drivers/pci/of.c
-> > > +++ b/drivers/pci/of.c
-> > > @@ -487,6 +487,15 @@ static int of_irq_parse_pci(const struct pci_dev *pdev, struct of_phandle_args *
-> > >  		} else {
-> > >  			/* We found a P2P bridge, check if it has a node */
-> > >  			ppnode = pci_device_to_OF_node(ppdev);
-> > > +#if IS_ENABLED(CONFIG_PCI_DYNAMIC_OF_NODES)
-> > 
-> > I would use plain #ifdef here instead of IS_ENABLED(), as you did in
-> > pci.h below.  IS_ENABLED() is true if the Kconfig symbol is set to
-> > either "y" or "m".
-> 
-> Actually, IS_ENABLED() with a C 'if' rather than a preprocessor #if 
-> would work here and is preferred.
+    $ make libc-test
+      CC      libc-test
+    nolibc-test.c: In function ‘run_syscall’:
+    nolibc-test.c:622:49: warning: null argument where non-null required (argument 1) [-Wnonnull]
+      622 |   CASE_TEST(stat_fault);        EXPECT_SYSER(1, stat(NULL, &stat_buf), -1, EFAULT); break;
+          |                                                 ^~~~
+    nolibc-test.c:304:79: note: in definition of macro ‘EXPECT_SYSER2’
+      304 |  do { if (!cond) pad_spc(llen, 64, "[SKIPPED]\n"); else ret += expect_syserr2(expr, expret, experr1, experr2, llen); } while (0)
+          |                                                                               ^~~~
+    nolibc-test.c:622:33: note: in expansion of macro ‘EXPECT_SYSER’
+      622 |   CASE_TEST(stat_fault);        EXPECT_SYSER(1, stat(NULL, &stat_buf), -1, EFAULT); break;
 
-Makes sense; I see the justification at [1].  I do wish it didn't have
-to be different between this usage and the "#ifdef
-CONFIG_PCI_DYNAMIC_OF_NODES" in pci.h for the stubs.  But this is OK
-by me.
+Reviewed-by: Thomas Weißschuh <linux@weissschuh.net>
+Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
+---
+ tools/testing/selftests/nolibc/nolibc-test.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Bjorn
+diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
+index f85f55921410..ffef0ff921bf 100644
+--- a/tools/testing/selftests/nolibc/nolibc-test.c
++++ b/tools/testing/selftests/nolibc/nolibc-test.c
+@@ -733,7 +733,7 @@ int run_syscall(int min, int max)
+ 		CASE_TEST(select_stdout);     EXPECT_SYSNE(1, ({ fd_set fds; FD_ZERO(&fds); FD_SET(1, &fds); select(2, NULL, &fds, NULL, NULL); }), -1); break;
+ 		CASE_TEST(select_fault);      EXPECT_SYSER(1, select(1, (void *)1, NULL, NULL, 0), -1, EFAULT); break;
+ 		CASE_TEST(stat_blah);         EXPECT_SYSER(1, stat("/proc/self/blah", &stat_buf), -1, ENOENT); break;
+-		CASE_TEST(stat_fault);        EXPECT_SYSER(1, stat(NULL, &stat_buf), -1, EFAULT); break;
++		CASE_TEST(stat_fault);        EXPECT_SYSER(1, stat((void *)1, &stat_buf), -1, EFAULT); break;
+ 		CASE_TEST(stat_timestamps);   EXPECT_SYSZR(1, test_stat_timestamps()); break;
+ 		CASE_TEST(symlink_root);      EXPECT_SYSER(1, symlink("/", "/"), -1, EEXIST); break;
+ 		CASE_TEST(unlink_root);       EXPECT_SYSER(1, unlink("/"), -1, EISDIR); break;
+-- 
+2.25.1
 
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/process/coding-style.rst?id=v6.4#n1162
