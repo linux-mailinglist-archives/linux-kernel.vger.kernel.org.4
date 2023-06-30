@@ -2,269 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04BF57436F1
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 10:22:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 914997436F6
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 10:22:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232467AbjF3IWM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 04:22:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36978 "EHLO
+        id S232480AbjF3IWt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Jun 2023 04:22:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230158AbjF3IWK (ORCPT
+        with ESMTP id S232470AbjF3IWr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 04:22:10 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 430943594;
-        Fri, 30 Jun 2023 01:22:08 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id 2adb3069b0e04-4fba74870abso73379e87.0;
-        Fri, 30 Jun 2023 01:22:08 -0700 (PDT)
+        Fri, 30 Jun 2023 04:22:47 -0400
+Received: from mail-qk1-x72f.google.com (mail-qk1-x72f.google.com [IPv6:2607:f8b0:4864:20::72f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 999121997
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 01:22:44 -0700 (PDT)
+Received: by mail-qk1-x72f.google.com with SMTP id af79cd13be357-7659dc74da1so147204985a.3
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 01:22:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688113326; x=1690705326;
-        h=mime-version:references:in-reply-to:message-id:subject:cc:to:from
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ntQTwtwPH6k2j9EgkW281inSLM7kOUQ10aVVuHlZEc4=;
-        b=ihlKDBEheoZcYHcqOuKu31r8sFkA0nrjiIPwMW3BZcUrW4C9rwA2fzSFXQMBWhEzGr
-         rZD4DOMcqQmnYgHumako0KFVkF6uQRfbyPtCGuC5C7PL+R/TqnoVzqw2uwKkdYR7kNwj
-         p17xabIsSVFLUFyr+pmq0V5+FZsutrILjtF7OvIyVo+xdFHw7NUQXZfgrEZKId+RTGKc
-         kwD18vrla2uVl+qyGEmjdAtbKByW0bT3JXJbZV9c8nn/ApqreNIxS9bV6lPM12TXOxSK
-         iujHBgB+VH24B7tXaX7t8OVBH69OLxD+GKdupORYHv+OAKvHjifd7LBDW+GZ6hJCrZ3J
-         CnSA==
+        d=linaro.org; s=google; t=1688113363; x=1690705363;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=24mW1z/BqCb5EBJHp3ULvIr3bZwApFxhHmnOyHEIWyI=;
+        b=MvVFGuyKfZ4RfhcbEV9YmVNzMeIxc4lcl9UuH7lRzVqqYIW7z1hmetpngcE66TjiSp
+         Dbd+W/JAvsyRkU1Lt4gibkJYQJwmnR5UExEuKeN2u+Gw6wtBMWnlZe9Ee9S76+3y3N5Q
+         ZVdLeqtzOBMJ8pdPDIJcHy8+aJuNCq0IAzM4BOMXUh6a4CPmPkx4ZBrwdRyuIKx2q8UQ
+         fqJGRrJ+T37eJ9YY0VDUYywTZ9HJXBos5x8HfTism8dGfUew0N8OD2V7Y78Udosc3T0D
+         aFcn7HEjfNIsLkZok4Z2PUEW2RV1GSy2njui6Qw1whU6F436hR8HP0D7tIOU2xUQ4z33
+         SNDQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688113326; x=1690705326;
-        h=mime-version:references:in-reply-to:message-id:subject:cc:to:from
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ntQTwtwPH6k2j9EgkW281inSLM7kOUQ10aVVuHlZEc4=;
-        b=bXfBJsPvCwO4OKj24we3Xf0O9m80TbT5D5+BmbApm+WkMTnaB8E2VZtlx2Axs1uvCU
-         iAQRvI9hax7Nhv9/Z/zx1IlJi+PbAp2IMEAcbznv+LuXCLHBhX0xmu2+9caDKBYbSQbJ
-         ZMApfZBWmDn6w02CTAWYMnfZV8S936mg0+nfl/F913PWtv+XF96mITmtw41I6XsNW9pg
-         KEnl12/A4BHXhdUK/iC7Biv1Mt8q/+4PYrUiOTZKNrKk+iiNeF2MdjBlKVmMsnhxJsIO
-         R6/+9YvaLaw7oWvZtnRMgHkk1LIdCEMRQoEyflUXBOigE8IE0mSGnesCcSEWWd1O6T26
-         FBTg==
-X-Gm-Message-State: ABy/qLY50dSu5IZCOqWd1PCnu+kYscNZKfURjl3Nvb/yvSbvMow0z756
-        xPe6KkRDsa8+oJ6XhVNn6gI=
-X-Google-Smtp-Source: APBJJlExbp8m3ZcjRwFy7mEU1e0ARNuryhyHwt3HSuGcmZLnnFH1KUQwPgPMNpf8oRCelYCSmCVGBQ==
-X-Received: by 2002:a05:6512:3491:b0:4fb:7be5:4870 with SMTP id v17-20020a056512349100b004fb7be54870mr1555220lfr.46.1688113325800;
-        Fri, 30 Jun 2023 01:22:05 -0700 (PDT)
-Received: from eldfell ([194.136.85.206])
-        by smtp.gmail.com with ESMTPSA id f10-20020a19ae0a000000b004fb75142020sm1997184lfc.276.2023.06.30.01.22.04
+        d=1e100.net; s=20221208; t=1688113363; x=1690705363;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=24mW1z/BqCb5EBJHp3ULvIr3bZwApFxhHmnOyHEIWyI=;
+        b=Pu/FCwTQPWgYqvNSAvHh05m/Up7bUGrK9ItUBAZZ+KFAOfXHTvA3oYgIK+lhp4EUWG
+         uhyAScNH5OVz5Zc+x7qnQop4NeP0cn7RXHNVJO62nYlNPdbuKSFR5smfOPrOvHC/a27K
+         WedoFm2rO+YhL5zSLgy3UO5Rp0zgx+xQKZYih+PT7Q3igPQcXp1hGnKusEExQv15aJPh
+         YUg/QP0Mkirr+dyes9gjJNtCW26CEb0HRST/QdwHatBcYd6OvEup/3S4eh04z81trty3
+         gApxea7upTGjY9TQwOyLiGGWe7dxfKPGF1VSGcG11Hj6WV8KYhN4EGT7ujP4Gw3WjVre
+         P2Gg==
+X-Gm-Message-State: AC+VfDwNy2CqZffe0gft2Iz1xyEFgsvUaYa11fzMZ7Coqfqtr6EZY+aV
+        cHI4W2NGMsELLk1VGxdTWqWkd+YL2aWjRRhbFds=
+X-Google-Smtp-Source: ACHHUZ7M/I5tDg2Tx8uMTc+kdz6EifYof2eCpYo3fW6wNGsw+33eb+QabNrLyJHUsmo7kjyIkxcwkA==
+X-Received: by 2002:a05:620a:8e0c:b0:767:2736:ecd4 with SMTP id re12-20020a05620a8e0c00b007672736ecd4mr1513344qkn.47.1688113363676;
+        Fri, 30 Jun 2023 01:22:43 -0700 (PDT)
+Received: from localhost.localdomain ([223.233.68.54])
+        by smtp.gmail.com with ESMTPSA id a16-20020aa780d0000000b00666e2dac482sm9462967pfn.124.2023.06.30.01.22.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 30 Jun 2023 01:22:05 -0700 (PDT)
-Date:   Fri, 30 Jun 2023 11:21:53 +0300
-From:   Pekka Paalanen <ppaalanen@gmail.com>
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     Jessica Zhang <quic_jesszhan@quicinc.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        quic_abhinavk@quicinc.com, contact@emersion.fr,
-        laurent.pinchart@ideasonboard.com, sebastian.wick@redhat.com,
-        ville.syrjala@linux.intel.com, dri-devel@lists.freedesktop.org,
+        Fri, 30 Jun 2023 01:22:43 -0700 (PDT)
+From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
+To:     devicetree@vger.kernel.org, dmaengine@vger.kernel.org
+Cc:     vkoul@kernel.org, krzysztof.kozlowski+dt@linaro.org,
         linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        freedreno@lists.freedesktop.org,
-        wayland-devel@lists.freedesktop.org
-Subject: Re: [PATCH RFC v4 6/7] drm/msm/dpu: Allow NULL FBs in atomic commit
-Message-ID: <20230630112153.5da36b6a@eldfell>
-In-Reply-To: <cca48c01-b84a-dff6-57ae-356971edacf3@linaro.org>
-References: <20230404-solid-fill-v4-0-f4ec0caa742d@quicinc.com>
-        <20230404-solid-fill-v4-6-f4ec0caa742d@quicinc.com>
-        <cca48c01-b84a-dff6-57ae-356971edacf3@linaro.org>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-pc-linux-gnu)
+        andersson@kernel.org, bhupesh.sharma@linaro.org,
+        bhupesh.linux@gmail.com, agross@kernel.org,
+        konrad.dybcio@linaro.org, conor+dt@kernel.org, robh+dt@kernel.org
+Subject: [PATCH v9 0/2] dt-bindings: dma: Add support for SM6115 and QCM2290 SoCs
+Date:   Fri, 30 Jun 2023 13:52:28 +0530
+Message-Id: <20230630082230.2264698-1-bhupesh.sharma@linaro.org>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/07tMRP1ecaqD8UF0TI6/QGP";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/07tMRP1ecaqD8UF0TI6/QGP
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Add support for SM6115 and QCM2290 SoCs in qcom,bam-dma bindings.
+Also increase iommu maxItems for BAM DMA to 6 which is the number
+required on sm8250 SoC.
 
-On Fri, 30 Jun 2023 03:52:37 +0300
-Dmitry Baryshkov <dmitry.baryshkov@linaro.org> wrote:
+This patchset is rebased on linux-next/master.
 
-> On 30/06/2023 03:25, Jessica Zhang wrote:
-> > Since solid fill planes allow for a NULL framebuffer in a valid commit,
-> > add NULL framebuffer checks to atomic commit calls within DPU.
-> >=20
-> > Signed-off-by: Jessica Zhang <quic_jesszhan@quicinc.com>
-> > ---
-> >   drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c  |  9 ++++++-
-> >   drivers/gpu/drm/msm/disp/dpu1/dpu_plane.c | 45 +++++++++++++++++++---=
----------
-> >   2 files changed, 36 insertions(+), 18 deletions(-)
-> >=20
-> > diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c b/drivers/gpu/drm=
-/msm/disp/dpu1/dpu_crtc.c
-> > index 1edf2b6b0a26..d1b37d2cc202 100644
-> > --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c
-> > +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c
-> > @@ -451,6 +451,7 @@ static void _dpu_crtc_blend_setup_mixer(struct drm_=
-crtc *crtc,
-> >   	struct drm_plane_state *state;
-> >   	struct dpu_crtc_state *cstate =3D to_dpu_crtc_state(crtc->state);
-> >   	struct dpu_plane_state *pstate =3D NULL;
-> > +	const struct msm_format *fmt;
-> >   	struct dpu_format *format;
-> >   	struct dpu_hw_ctl *ctl =3D mixer->lm_ctl;
-> >  =20
-> > @@ -470,7 +471,13 @@ static void _dpu_crtc_blend_setup_mixer(struct drm=
-_crtc *crtc,
-> >   		pstate =3D to_dpu_plane_state(state);
-> >   		fb =3D state->fb;
-> >  =20
-> > -		format =3D to_dpu_format(msm_framebuffer_format(pstate->base.fb));
-> > +		if (state->pixel_source =3D=3D DRM_PLANE_PIXEL_SOURCE_FB && fb)
-> > +			fmt =3D msm_framebuffer_format(pstate->base.fb);
-> > +		else
-> > +			fmt =3D dpu_get_msm_format(&_dpu_crtc_get_kms(crtc)->base,
-> > +					DRM_FORMAT_RGBA8888, 0); =20
->=20
-> The DRM_FORMAT_RGBA8888 should be defined somewhere in patch 1 as format=
-=20
-> for the solid_fill, then that define can be used in this patch.
+Changes since v8:
+-----------------
+- v8 can be viewed here: https://www.spinics.net/lists/linux-crypto/msg72349.html
+- As rest of the patches from v8 have been applied to linux-next, dropped them from v9.
+- Added dma list and maintainer in Cc again as the Cc list got messed up while
+  sending out v8.
 
-Isn't this just a driver-specific decision to convert a RGB323232
-solid_fill to be presented as a RGBA8888?
+Changes since v7:
+-----------------
+- v7 can be viewed here: https://lore.kernel.org/linux-arm-msm/20230519214813.2593271-1-bhupesh.sharma@linaro.org/
+- Addressed Stephan's comment about RPM clocks for sm6115 crypto block in dtsi.
+- Also fixed the iommu context ids for sm6115 crypto block in dtsi.
 
-Though, below there is ABGR8888 used for something... inconsistent?
+Changes since v6:
+-----------------
+- v6 can be viewed here: https://lore.kernel.org/linux-arm-msm/20230405072836.1690248-1-bhupesh.sharma@linaro.org/
+- Collected Acks, R-Bs and Tested-by for various patches.
+- Addressed Konrad's comment about iommu sids for sm8150 and sm8250
+  crypto node entries.
+- Addressed Konrad's and Stephan's comments about adding RPM clock for
+  crypto blocks on qcm2290 and sm6115.
 
+Changes since v5:
+-----------------
+- v5 can be viewed here: https://lore.kernel.org/linux-arm-msm/20230402100509.1154220-1-bhupesh.sharma@linaro.org/
+- Collected Ack from Rob for [PATCH 01/11].
+- Addressed Georgi's comment about interconnect cells in [PATCH 10/11].
 
-Thanks,
-pq
+Changes since v4:
+-----------------
+- v4 can be viewed here: https://lore.kernel.org/linux-arm-msm/20230331164323.729093-1-bhupesh.sharma@linaro.org/
+- Collected R-Bs from Konrad for a couple of patches sent in v4.
+- Fixed incorrect email IDs for a couple of patches sent in v3, which I used for
+  some patches created on a different work machine.
+- No functional changes since v3.
 
->=20
-> > +
-> > +		format =3D to_dpu_format(fmt);
-> >  =20
-> >   		if (pstate->stage =3D=3D DPU_STAGE_BASE && format->alpha_enable)
-> >   			bg_alpha_enable =3D true;
-> > diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_plane.c b/drivers/gpu/dr=
-m/msm/disp/dpu1/dpu_plane.c
-> > index 5f0984ce62b1..4476722f03bb 100644
-> > --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_plane.c
-> > +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_plane.c
-> > @@ -837,8 +837,10 @@ static int dpu_plane_atomic_check(struct drm_plane=
- *plane,
-> >  =20
-> >   	pipe_cfg->dst_rect =3D new_plane_state->dst;
-> >  =20
-> > -	fb_rect.x2 =3D new_plane_state->fb->width;
-> > -	fb_rect.y2 =3D new_plane_state->fb->height;
-> > +	if (new_plane_state->pixel_source =3D=3D DRM_PLANE_PIXEL_SOURCE_FB &&=
- new_plane_state->fb) {
-> > +		fb_rect.x2 =3D new_plane_state->fb->width;
-> > +		fb_rect.y2 =3D new_plane_state->fb->height;
-> > +	}
-> >  =20
-> >   	/* Ensure fb size is supported */
-> >   	if (drm_rect_width(&fb_rect) > MAX_IMG_WIDTH ||
-> > @@ -848,10 +850,13 @@ static int dpu_plane_atomic_check(struct drm_plan=
-e *plane,
-> >   		return -E2BIG;
-> >   	}
-> >  =20
-> > -	fmt =3D to_dpu_format(msm_framebuffer_format(new_plane_state->fb));
-> > -
-> >   	max_linewidth =3D pdpu->catalog->caps->max_linewidth;
-> >  =20
-> > +	if (drm_plane_solid_fill_enabled(new_plane_state))
-> > +		fmt =3D dpu_get_dpu_format(DRM_FORMAT_ABGR8888);
-> > +	else
-> > +		fmt =3D to_dpu_format(msm_framebuffer_format(new_plane_state->fb));
-> > +
-> >   	if (drm_rect_width(&pipe_cfg->src_rect) > max_linewidth) {
-> >   		/*
-> >   		 * In parallel multirect case only the half of the usual width
-> > @@ -1082,21 +1087,32 @@ static void dpu_plane_sspp_atomic_update(struct=
- drm_plane *plane)
-> >   	struct drm_crtc *crtc =3D state->crtc;
-> >   	struct drm_framebuffer *fb =3D state->fb;
-> >   	bool is_rt_pipe;
-> > -	const struct dpu_format *fmt =3D
-> > -		to_dpu_format(msm_framebuffer_format(fb));
-> > +	const struct dpu_format *fmt;
-> >   	struct dpu_sw_pipe_cfg *pipe_cfg =3D &pstate->pipe_cfg;
-> >   	struct dpu_sw_pipe_cfg *r_pipe_cfg =3D &pstate->r_pipe_cfg;
-> >   	struct dpu_kms *kms =3D _dpu_plane_get_kms(&pdpu->base);
-> >   	struct msm_gem_address_space *aspace =3D kms->base.aspace;
-> >   	struct dpu_hw_fmt_layout layout;
-> >   	bool layout_valid =3D false;
-> > -	int ret;
-> >  =20
-> > -	ret =3D dpu_format_populate_layout(aspace, fb, &layout);
-> > -	if (ret)
-> > -		DPU_ERROR_PLANE(pdpu, "failed to get format layout, %d\n", ret);
-> > -	else
-> > -		layout_valid =3D true;
-> > +	if (state->pixel_source =3D=3D DRM_PLANE_PIXEL_SOURCE_FB && fb) {
-> > +		int ret;
-> > +
-> > +		fmt =3D to_dpu_format(msm_framebuffer_format(fb));
-> > +
-> > +		ret =3D dpu_format_populate_layout(aspace, fb, &layout);
-> > +		if (ret)
-> > +			DPU_ERROR_PLANE(pdpu, "failed to get format layout, %d\n", ret);
-> > +		else
-> > +			layout_valid =3D true;
-> > +
-> > +		DPU_DEBUG_PLANE(pdpu, "FB[%u] " DRM_RECT_FP_FMT "->crtc%u " DRM_RECT=
-_FMT
-> > +				", %4.4s ubwc %d\n", fb->base.id, DRM_RECT_FP_ARG(&state->src),
-> > +				crtc->base.id, DRM_RECT_ARG(&state->dst),
-> > +				(char *)&fmt->base.pixel_format, DPU_FORMAT_IS_UBWC(fmt));
-> > +	} else {
-> > +		fmt =3D dpu_get_dpu_format(DRM_FORMAT_ABGR8888);
-> > +	}
-> >  =20
-> >   	pstate->pending =3D true;
-> >  =20
-> > @@ -1104,11 +1120,6 @@ static void dpu_plane_sspp_atomic_update(struct =
-drm_plane *plane)
-> >   	pstate->needs_qos_remap |=3D (is_rt_pipe !=3D pdpu->is_rt_pipe);
-> >   	pdpu->is_rt_pipe =3D is_rt_pipe;
-> >  =20
-> > -	DPU_DEBUG_PLANE(pdpu, "FB[%u] " DRM_RECT_FP_FMT "->crtc%u " DRM_RECT_=
-FMT
-> > -			", %4.4s ubwc %d\n", fb->base.id, DRM_RECT_FP_ARG(&state->src),
-> > -			crtc->base.id, DRM_RECT_ARG(&state->dst),
-> > -			(char *)&fmt->base.pixel_format, DPU_FORMAT_IS_UBWC(fmt));
-> > -
-> >   	dpu_plane_sspp_update_pipe(plane, pipe, pipe_cfg, fmt,
-> >   				   drm_mode_vrefresh(&crtc->mode),
-> >   				   layout_valid ? &layout : NULL);
-> >  =20
->=20
+Changes since v3:
+-----------------
+- v3 can be viewed here: https://lore.kernel.org/linux-arm-msm/20230328092815.292665-1-bhupesh.sharma@linaro.org/
+- Collected Acks from Krzysztof for a couple of patches sent in v3.
+- Fixed review comments from Krzysztof regarding DMA binding document
+  and also added a couple of new patches which are required to fix the
+  'dtbs_check' errors highlighted after this fix.
 
+Changes since v2:
+-----------------
+- v2 can be viewed here: https://lore.kernel.org/linux-arm-msm/20230322114519.3412469-1-bhupesh.sharma@linaro.org/
+- No functional change since v2. As the sdm845 patch from v1 was accepted in linux-next,
+  dropped it from this version.
 
---Sig_/07tMRP1ecaqD8UF0TI6/QGP
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+Changes since v1:
+-----------------
+- v1 can be viewed here: https://lore.kernel.org/linux-arm-msm/20230321190118.3327360-1-bhupesh.sharma@linaro.org/
+- Folded the BAM DMA dt-binding change.
+  (sent earlier as: https://lore.kernel.org/linux-arm-msm/20230321184811.3325725-1-bhupesh.sharma@linaro.org/)
+- Folded the QCE dt-binding change.
+  (sent earlier as: https://lore.kernel.org/linux-arm-msm/20230320073816.3012198-1-bhupesh.sharma@linaro.org/)
+- Folded Neil's SM8450 dts patch in this series.
+- Addressed review comments from Rob, Stephan and Konrad.
+- Collected Konrad's R-B for [PATCH 5/9].
 
------BEGIN PGP SIGNATURE-----
+Bhupesh Sharma (2):
+  dt-bindings: dma: Add support for SM6115 and QCM2290 SoCs
+  dt-bindings: dma: Increase iommu maxItems for BAM DMA
 
-iQIzBAEBCAAdFiEEJQjwWQChkWOYOIONI1/ltBGqqqcFAmSekKEACgkQI1/ltBGq
-qqf6Tg//TpfJjrOyp7UIcbIe96gAJnBOQNqjDffE+dXnO9mNHkUfumCAeoL8v0JM
-5JFEABQABEG5k1DVHzZSRcnIVdPMu2WJl0n7RNUM1GH7ANXTxjPW0aReaWFQxyf8
-Pts5v2weaXjUBUGSsiHg+EMRRO951V6W0sOwwAB0Wz+ux6v5i0qWBbDXXE7jquOn
-eNUv1LlNBtqDgpMCxrZFxbR3qJZ0z4HpSrZgzEqJO/XpEN+n/2UlIW2GkocfIzfB
-nxS6jZuhJ40tQJtY4Mo7kZ2U3KD/KpZKbEO10FFYlVMOEhLMuH52k3pLq8dUJ8J2
-Lcc9KaKWIXj00YQUWjHl2ADcsZGR1PU+ZEJrezmx2iu5m0CqiU3wIBJoeIBWmETf
-A2los5HQQH4B3BQnK4s3UcpGbX943Ef9v3QvK5jbymk+cjcWjc44fPFXDgLakqQd
-arX8Prf9u9LWoMaXTLxfwaSt0u2yaJAs6L+cH9BJLDoC0Gq1bWLrPfPxMVn8J8VB
-WuVe2u8JRekuQoPOlgXOGHocz2Wna7j3y7LASbms3UB74rhqfuWz9OdlXmx3I8pU
-ZICFtqqi8OufMkS4qqaQxd0logF2KF/tLlCeuTx52yAdt6o2HTeoVcgx4EPA71OL
-jAuXVgQ7HGsb3ruQZKOs2e0mYfc/VrfDao9ov5ebdMnqeOBdpQU=
-=PGcE
------END PGP SIGNATURE-----
+ .../devicetree/bindings/dma/qcom,bam-dma.yaml | 22 ++++++++++++-------
+ 1 file changed, 14 insertions(+), 8 deletions(-)
 
---Sig_/07tMRP1ecaqD8UF0TI6/QGP--
+-- 
+2.38.1
+
