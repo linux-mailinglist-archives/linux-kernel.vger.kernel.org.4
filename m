@@ -2,168 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5FC67437D9
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 11:03:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DBFB7437E8
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 11:08:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232474AbjF3JD2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 05:03:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55172 "EHLO
+        id S232116AbjF3JHN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Jun 2023 05:07:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231874AbjF3JDV (ORCPT
+        with ESMTP id S229742AbjF3JHL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 05:03:21 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB11C2118;
-        Fri, 30 Jun 2023 02:03:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1688115800; x=1719651800;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=G4tgA5Quxms81FQitPgPzP60ScKph30Y7igWUr2N9eg=;
-  b=QLMjkTlOT92fEDbPTZ5LVOlPKtEhLNQ1evgZM/D5mJE3HR6TRoUFiu4N
-   QzepQ16Dur//5lovbi79xx6bs4tDCiqWj34g4v6ppB1E8M9h+sgyMG454
-   PLl8x+9hei+pw45+rWJaQOYOu4ss0MCBgrGFnvaOBe/Ej/pjFV1CvzzVi
-   wn3du7m8RPYp9m7IRJDh1r7bM7IDMyvhd/h5sVGgfYz+0yGd5FB02w8Kr
-   QSP9uobdkKqn+XNeECWAfIB/Z0+ts5nWTi/n6/ro52CV7W+2YSfBewo5c
-   JaVb9zHgJ7EqjOiNlWsqz6J9c88gykKup6/ffwU4y08PjrgzctEcfLC5G
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10756"; a="342690207"
-X-IronPort-AV: E=Sophos;i="6.01,170,1684825200"; 
-   d="scan'208";a="342690207"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jun 2023 02:03:20 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10756"; a="694958090"
-X-IronPort-AV: E=Sophos;i="6.01,170,1684825200"; 
-   d="scan'208";a="694958090"
-Received: from valeriik-mobl.ger.corp.intel.com (HELO box.shutemov.name) ([10.252.49.47])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jun 2023 02:03:12 -0700
-Received: by box.shutemov.name (Postfix, from userid 1000)
-        id DC7D3109754; Fri, 30 Jun 2023 12:03:09 +0300 (+03)
-Date:   Fri, 30 Jun 2023 12:03:09 +0300
-From:   kirill.shutemov@linux.intel.com
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Kai Huang <kai.huang@intel.com>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, linux-mm@kvack.org, x86@kernel.org,
-        dave.hansen@intel.com, tony.luck@intel.com, tglx@linutronix.de,
-        bp@alien8.de, mingo@redhat.com, hpa@zytor.com, seanjc@google.com,
-        pbonzini@redhat.com, david@redhat.com, dan.j.williams@intel.com,
-        rafael.j.wysocki@intel.com, ashok.raj@intel.com,
-        reinette.chatre@intel.com, len.brown@intel.com, ak@linux.intel.com,
-        isaku.yamahata@intel.com, ying.huang@intel.com, chao.gao@intel.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com, nik.borisov@suse.com,
-        bagasdotme@gmail.com, sagis@google.com, imammedo@redhat.com
-Subject: Re: [PATCH v12 20/22] x86/virt/tdx: Allow SEAMCALL to handle #UD and
- #GP
-Message-ID: <20230630090309.6mnsvfhcptekmzfu@box.shutemov.name>
-References: <cover.1687784645.git.kai.huang@intel.com>
- <c124550719716f1f7759c2bdea70f4722d8e0167.1687784645.git.kai.huang@intel.com>
- <20230628152900.GI2438817@hirez.programming.kicks-ass.net>
- <20230628203823.GR38236@hirez.programming.kicks-ass.net>
- <20230628211132.GS38236@hirez.programming.kicks-ass.net>
- <20230628211641.GT38236@hirez.programming.kicks-ass.net>
+        Fri, 30 Jun 2023 05:07:11 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA0B510C;
+        Fri, 30 Jun 2023 02:07:10 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4358461703;
+        Fri, 30 Jun 2023 09:07:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48733C433C8;
+        Fri, 30 Jun 2023 09:07:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688116029;
+        bh=C+tUX9gfoFQb7OopzcGYBk3yW5e3tfFfCz9w7wqq7SU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=QCK5SkuSB37sZIRSyEYPpK5nZNM954DnbX6W7/bfjbYpDPFi/XUkr/Kt5CEoYTX3F
+         8D5a8hRdFGNtHHvkpkfJ3IAKegqJ8ikveCqdOE35cT3/vf/s1uwCfO49EGAANusLAS
+         Psg3hyrz7ePW1R+WyjtS10WK1hO0d7OuJMF6QHsOdJ59Fbya7LBIXb9WzH9VrWEfS7
+         C3iqTRBDaciO4EfIw4YKvyRn9LhZPwJQBgWOBBDYoBEPEIi0AcPFn9yk+W4gmmksJD
+         wVjwoy6Xq2bhguKEGF8J1ksGfAlWWU1qA7LTP09EBnNdnaZ0IXvMBBYxvWEvhReAjr
+         VZLAve/esK79Q==
+Date:   Fri, 30 Jun 2023 11:06:59 +0200
+From:   Christian Brauner <brauner@kernel.org>
+To:     Laurent Vivier <laurent@vivier.eu>
+Cc:     Norbert Lange <nolange79@gmail.com>, linux-kernel@vger.kernel.org,
+        linux-api@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        containers@lists.linux-foundation.org, jan.kiszka@siemens.com,
+        jannh@google.com, avagin@gmail.com, dima@arista.com,
+        James.Bottomley@HansenPartnership.com
+Subject: Re: [PATCH v8 1/1] ns: add binfmt_misc to the user namespace
+Message-ID: <20230630-hufen-herzallerliebst-fde8e7aecba0@brauner>
+References: <8eb5498d-89f6-e39e-d757-404cc3cfaa5c@vivier.eu>
+ <20230630083852.3988-1-norbert.lange@andritz.com>
+ <e8161622-beb0-d8d5-6501-f0bee76a372d@vivier.eu>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230628211641.GT38236@hirez.programming.kicks-ass.net>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <e8161622-beb0-d8d5-6501-f0bee76a372d@vivier.eu>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 28, 2023 at 11:16:41PM +0200, Peter Zijlstra wrote:
-> On Wed, Jun 28, 2023 at 11:11:32PM +0200, Peter Zijlstra wrote:
-> > --- a/arch/x86/virt/vmx/tdx/tdxcall.S
-> > +++ b/arch/x86/virt/vmx/tdx/tdxcall.S
-> > @@ -17,37 +17,44 @@
-> >   *            TDX module and hypercalls to the VMM.
-> >   * SEAMCALL - used by TDX hosts to make requests to the
-> >   *            TDX module.
-> > + *
-> > + *-------------------------------------------------------------------------
-> > + * TDCALL/SEAMCALL ABI:
-> > + *-------------------------------------------------------------------------
-> > + * Input Registers:
-> > + *
-> > + * RAX                 - TDCALL Leaf number.
-> > + * RCX,RDX,R8-R9       - TDCALL Leaf specific input registers.
-> > + *
-> > + * Output Registers:
-> > + *
-> > + * RAX                 - TDCALL instruction error code.
-> > + * RCX,RDX,R8-R11      - TDCALL Leaf specific output registers.
-> > + *
-> > + *-------------------------------------------------------------------------
-> > + *
-> > + * __tdx_module_call() function ABI:
-> > + *
-> > + * @fn   (RDI)         - TDCALL Leaf ID,    moved to RAX
-> > + * @regs (RSI)         - struct tdx_regs pointer
-> > + *
-> > + * Return status of TDCALL via RAX.
-> >   */
-> > +.macro TDX_MODULE_CALL host:req ret:req
-> > +	FRAME_BEGIN
-> >  
-> > +	mov	%rdi, %rax
-> > +	mov	$TDX_SEAMCALL_VMFAILINVALID, %rdi
-> >  
-> > +	mov	TDX_MODULE_rcx(%rsi), %rcx
-> > +	mov	TDX_MODULE_rdx(%rsi), %rdx
-> > +	mov	TDX_MODULE_r8(%rsi),  %r8
-> > +	mov	TDX_MODULE_r9(%rsi),  %r9
-> > +//	mov	TDX_MODULE_r10(%rsi), %r10
-> > +//	mov	TDX_MODULE_r11(%rsi), %r11
-> >  
-> > +.if \host
-> > +1:	seamcall
-> >  	/*
-> >  	 * SEAMCALL instruction is essentially a VMExit from VMX root
-> >  	 * mode to SEAM VMX root mode.  VMfailInvalid (CF=1) indicates
-> 	...
-> >  	 * This value will never be used as actual SEAMCALL error code as
-> >  	 * it is from the Reserved status code class.
-> >  	 */
-> > +	cmovc	%rdi, %rax
-> >  2:
-> > +.else
-> >  	tdcall
-> > +.endif
-> >  
-> > +.if \ret
-> > +	movq %rcx, TDX_MODULE_rcx(%rsi)
-> > +	movq %rdx, TDX_MODULE_rdx(%rsi)
-> > +	movq %r8,  TDX_MODULE_r8(%rsi)
-> > +	movq %r9,  TDX_MODULE_r9(%rsi)
-> > +	movq %r10, TDX_MODULE_r10(%rsi)
-> > +	movq %r11, TDX_MODULE_r11(%rsi)
-> > +.endif
-> > +
-> > +	FRAME_END
-> > +	RET
-> > +
-> > +.if \host
-> > +3:
-> > +	mov	$TDX_SW_ERROR, %rdi
-> > +	or	%rdi, %rax
-> > +	jmp 2b
-> >  
-> > +	_ASM_EXTABLE_FAULT(1b, 3b)
-> > +.endif
-> >  .endm
+On Fri, Jun 30, 2023 at 10:52:22AM +0200, Laurent Vivier wrote:
+> Hi Norbert,
 > 
-> Isn't that much simpler?
+> Le 30/06/2023 à 10:38, Norbert Lange a écrit :
+> > Any news on this? What remains to be done, who needs to be harrassed?
+> > 
+> > Regards, Norbert
+> 
+> Christian was working on a new version but there is no update for 1 year.
+> 
+> [PATCH v2 1/2] binfmt_misc: cleanup on filesystem umount
+> https://lkml.org/lkml/2021/12/16/406
+> [PATCH v2 2/2] binfmt_misc: enable sandboxed mounts
+> https://lkml.org/lkml/2021/12/16/407
+> 
+> And personally I don't have the time to work on this.
 
-I'm okay either way.
-
-Obviously, arch/x86/coco/tdx/tdcall.S has to be patched to use the new
-TDX_MODULE_CALL macro.
-
--- 
-  Kiryl Shutsemau / Kirill A. Shutemov
+I've actually rebased this a few weeks ago:
+https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git/log/?h=vfs.binfmt_misc
+It has Acks, it's done. The only thing back then was Kees had wanted to
+take this but never did. I'll ping him.
