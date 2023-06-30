@@ -2,199 +2,249 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6440743296
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 04:14:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC55D74329C
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 04:14:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231393AbjF3COV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 22:14:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54090 "EHLO
+        id S232134AbjF3CO3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 22:14:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229576AbjF3COT (ORCPT
+        with ESMTP id S230013AbjF3COU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 22:14:19 -0400
-Received: from out-47.mta0.migadu.com (out-47.mta0.migadu.com [91.218.175.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0A9B30EC
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 19:14:17 -0700 (PDT)
-Content-Type: text/plain;
-        charset=us-ascii
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1688091255;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=c+Q6kGCsNOKoZaGl4/+CoNXY45hAC8Rmehd0ODubecA=;
-        b=nBw5cd0UmlLTPBcRMaXJgc7YE0SMPKtdhLmuO73l3i6lmYUhxiOT/De7PvW9OIa2qAxDHg
-        mA10/Pb7AmwhwRqeiQSmdiToCh59DsruaJ1F+7UnJqGswYO1K5cH8Ibxcf06gt+QMAuVpo
-        iVNAWO95ztLaVLBd0bSJGpTZzQGqt8M=
+        Thu, 29 Jun 2023 22:14:20 -0400
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C104730EF;
+        Thu, 29 Jun 2023 19:14:17 -0700 (PDT)
+Received: from loongson.cn (unknown [10.20.42.43])
+        by gateway (Coremail) with SMTP id _____8BxlfB4Op5kzh0EAA--.6712S3;
+        Fri, 30 Jun 2023 10:14:16 +0800 (CST)
+Received: from [10.20.42.43] (unknown [10.20.42.43])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8BxxsxzOp5kA3oSAA--.41851S3;
+        Fri, 30 Jun 2023 10:14:11 +0800 (CST)
+Message-ID: <2c81fbe3-308a-4c5e-0150-32006253b3ea@loongson.cn>
+Date:   Fri, 30 Jun 2023 10:14:11 +0800
 MIME-Version: 1.0
-Subject: Re: [PATCH] mm/hugetlb.c: fix a bug within a BUG(): inconsistent pte
- comparison
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Muchun Song <muchun.song@linux.dev>
-In-Reply-To: <20230630013203.1955064-1-jhubbard@nvidia.com>
-Date:   Fri, 30 Jun 2023 10:13:31 +0800
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v7 6/8] PCI/VGA: Introduce is_boot_device function
+ callback to vga_client_register
+To:     "Limonciello, Mario" <Mario.Limonciello@amd.com>,
+        "15330273260@189.cn" <15330273260@189.cn>,
+        Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Bjorn Helgaas <bhelgaas@google.com>,
+        "linux-fbdev@vger.kernel.org" <linux-fbdev@vger.kernel.org>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Karol Herbst <kherbst@redhat.com>,
+        "nouveau@lists.freedesktop.org" <nouveau@lists.freedesktop.org>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        "Chai, Thomas" <YiPeng.Chai@amd.com>,
+        "Gao, Likun" <Likun.Gao@amd.com>, David Airlie <airlied@gmail.com>,
+        Ville Syrjala <ville.syrjala@linux.intel.com>,
+        Yi Liu <yi.l.liu@intel.com>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "amd-gfx@lists.freedesktop.org" <amd-gfx@lists.freedesktop.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Ben Skeggs <bskeggs@redhat.com>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        Kevin Tian <kevin.tian@intel.com>,
+        "Lazar, Lijo" <Lijo.Lazar@amd.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        "Zhang, Bokun" <Bokun.Zhang@amd.com>,
+        "intel-gfx@lists.freedesktop.org" <intel-gfx@lists.freedesktop.org>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
         Alex Williamson <alex.williamson@redhat.com>,
-        Alexander Potapenko <glider@google.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Christoph Hellwig <hch@infradead.org>,
+        Abhishek Sahu <abhsahu@nvidia.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        Yishai Hadas <yishaih@nvidia.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         Daniel Vetter <daniel@ffwll.ch>,
-        Dave Airlie <airlied@gmail.com>,
-        Dimitri Sivanich <dimitri.sivanich@hpe.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Ian Rogers <irogers@google.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>, Jiri Olsa <jolsa@kernel.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Lorenzo Stoakes <lstoakes@gmail.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-        Pavel Tatashin <pasha.tatashin@soleen.com>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Ryan Roberts <ryan.roberts@arm.com>,
-        SeongJae Park <sj@kernel.org>,
-        Shakeel Butt <shakeelb@google.com>,
-        Uladzislau Rezki <urezki@gmail.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Yu Zhao <yuzhao@google.com>
+        "Deucher, Alexander" <Alexander.Deucher@amd.com>,
+        "Koenig, Christian" <Christian.Koenig@amd.com>,
+        "Zhang, Hawking" <Hawking.Zhang@amd.com>
+References: <20230629155436.GA397963@bhelgaas>
+ <bcfdc77d-a94d-bca1-56e3-5e14e91f6fd9@189.cn>
+ <MN0PR12MB6101CDB6FF9DC8F8EDEF5F45E225A@MN0PR12MB6101.namprd12.prod.outlook.com>
+Content-Language: en-US
+From:   suijingfeng <suijingfeng@loongson.cn>
+In-Reply-To: <MN0PR12MB6101CDB6FF9DC8F8EDEF5F45E225A@MN0PR12MB6101.namprd12.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-Message-Id: <070B191B-1D20-4E19-A9AB-961852FEC333@linux.dev>
-References: <20230630013203.1955064-1-jhubbard@nvidia.com>
-To:     John Hubbard <jhubbard@nvidia.com>
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-CM-TRANSID: AQAAf8BxxsxzOp5kA3oSAA--.41851S3
+X-CM-SenderInfo: xvxlyxpqjiv03j6o00pqjv00gofq/
+X-Coremail-Antispam: 1Uk129KBj93XoW3JryDGFWfuryxZw1xGryrZrc_yoW7ZF4xpr
+        WY9FsIkrs7Xr1rAF1kKa4UAF1jq3y8J343Wrn8t3W8ur909F1SqrZaqr4a9Fy5Ar1akF4Y
+        vw4agrn2k395Z3gCm3ZEXasCq-sJn29KB7ZKAUJUUUUd529EdanIXcx71UUUUU7KY7ZEXa
+        sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+        0xBIdaVrnRJUUUPqb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+        IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+        e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+        0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAF
+        wI0_Gr1j6F4UJwAaw2AFwI0_Jw0_GFyle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2
+        xF0cIa020Ex4CE44I27wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_
+        Jw0_WrylYx0Ex4A2jsIE14v26r4j6F4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwI
+        xGrwCYjI0SjxkI62AI1cAE67vIY487MxkF7I0En4kS14v26rWY6Fy7MxAIw28IcxkI7VAK
+        I48JMxC20s026xCaFVCjc4AY6r1j6r4UMxCIbckI1I0E14v26r1q6r43MI8I3I0E5I8CrV
+        AFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWrXVW8Jr1l
+        IxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVW8JVW5JwCI42IY6xIIjxv20xvEc7CjxV
+        AFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j
+        6F4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07bUzu
+        AUUUUU=
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi,
+
+On 2023/6/30 01:44, Limonciello, Mario wrote:
+> [Public]
+>
+>> -----Original Message-----
+>> From: 15330273260@189.cn <15330273260@189.cn>
+>> Sent: Thursday, June 29, 2023 12:00 PM
+>> To: Bjorn Helgaas <helgaas@kernel.org>; Sui Jingfeng
+>> <suijingfeng@loongson.cn>
+>> Cc: Bjorn Helgaas <bhelgaas@google.com>; linux-fbdev@vger.kernel.org;
+>> Cornelia Huck <cohuck@redhat.com>; Karol Herbst <kherbst@redhat.com>;
+>> nouveau@lists.freedesktop.org; Joonas Lahtinen
+>> <joonas.lahtinen@linux.intel.com>; dri-devel@lists.freedesktop.org; Chai,
+>> Thomas <YiPeng.Chai@amd.com>; Limonciello, Mario
+>> <Mario.Limonciello@amd.com>; Gao, Likun <Likun.Gao@amd.com>; David
+>> Airlie <airlied@gmail.com>; Ville Syrjala <ville.syrjala@linux.intel.com>; Yi Liu
+>> <yi.l.liu@intel.com>; kvm@vger.kernel.org; amd-gfx@lists.freedesktop.org;
+>> Jason Gunthorpe <jgg@ziepe.ca>; Ben Skeggs <bskeggs@redhat.com>; linux-
+>> pci@vger.kernel.org; Kevin Tian <kevin.tian@intel.com>; Lazar, Lijo
+>> <Lijo.Lazar@amd.com>; Thomas Zimmermann <tzimmermann@suse.de>;
+>> Zhang, Bokun <Bokun.Zhang@amd.com>; intel-gfx@lists.freedesktop.org;
+>> Maarten Lankhorst <maarten.lankhorst@linux.intel.com>; Jani Nikula
+>> <jani.nikula@linux.intel.com>; Alex Williamson
+>> <alex.williamson@redhat.com>; Abhishek Sahu <abhsahu@nvidia.com>;
+>> Maxime Ripard <mripard@kernel.org>; Rodrigo Vivi <rodrigo.vivi@intel.com>;
+>> Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>; Yishai Hadas
+>> <yishaih@nvidia.com>; Pan, Xinhui <Xinhui.Pan@amd.com>; linux-
+>> kernel@vger.kernel.org; Daniel Vetter <daniel@ffwll.ch>; Deucher, Alexander
+>> <Alexander.Deucher@amd.com>; Koenig, Christian
+>> <Christian.Koenig@amd.com>; Zhang, Hawking <Hawking.Zhang@amd.com>
+>> Subject: Re: [PATCH v7 6/8] PCI/VGA: Introduce is_boot_device function
+>> callback to vga_client_register
+>>
+>> Hi,
+>>
+>> On 2023/6/29 23:54, Bjorn Helgaas wrote:
+>>> On Thu, Jun 22, 2023 at 01:08:15PM +0800, Sui Jingfeng wrote:
+>>>> Hi,
+>>>>
+>>>>
+>>>> A nouveau developer(Lyude) from redhat send me a R-B,
+>>>>
+>>>> Thanks for the developers of nouveau project.
+>>>>
+>>>>
+>>>> Please allow me add a link[1] here.
+>>>>
+>>>>
+>>>> [1]
+>> https://lore.kernel.org/all/0afadc69f99a36bc9d03ecf54ff25859dbc10e28.ca
+>> mel@redhat.com/
+>>> 1) Thanks for this.  If you post another version of this series,
+>>>      please pick up Lyude's Reviewed-by and include it in the relevant
+>>>      patches (as long as you haven't made significant changes to the
+>>>      code Lyude reviewed).
+>> Yes, no significant changes. Just fix typo.
+>>
+>> I also would like to add support for other DRM drivers.
+>>
+>> But I think this deserve another patch.
+>>
+>>>    Whoever applies this should automatically
+>>>      pick up Reviewed-by/Ack/etc that are replies to the version being
+>>>      applied, but they won't go through previous revisions to find them.
+>>>
+>>> 2) Please mention the commit to which the series applies.  I tried to
+>>>      apply this on v6.4-rc1, but it doesn't apply cleanly.
+>> Since I'm a graphic driver developer, I'm using drm-tip.
+>>
+>> I just have already pulled, it still apply cleanly on drm-tip.
+>>
+>>> 3) Thanks for including cover letters in your postings.  Please
+>>>      include a little changelog in the cover letter so we know what
+>>>      changed between v6 and v7, etc.
+>> No change between v6 and v7,
+>>
+>> it seems that it is because the mailbox don't allow me to sending too
+>> many mails a day.
+>>
+>> so some of the patch is failed to delivery because out of quota.
+>>
+>>
+>>> 4) Right now we're in the middle of the v6.5 merge window, so new
+>>>      content, e.g., this series, is too late for v6.5.  Most
+>>>      maintainers, including me, wait to merge new content until the
+>>>      merge window closes and a new -rc1 is tagged.  This merge window
+>>>      should close on July 9, and people will start merging content for
+>>>      v6.6, typically based on v6.5-rc1.
+>> I'm wondering
+>>
+>> Would you will merge all of the patches in this series (e.g. including
+>> the patch for drm/amdgpu(7/8) and drm/radeon(8/8)) ?
+>>
+>> Or just part of them?
+>>
+>> Emm, I don't know because my patch seems across different subsystem of
+>> Linux kernel.
+>>
+>> There is also a developer for AMDGPU (Mario) give me a R-B for the
+>> patch-0002 of this series.
+>>
+>> So, at least, PATCH-0001, PATCH-0002, PATCH-0003, PATCH-0004, PATCH-
+>> 0006
+>> are already OK(got reviewed by).
+>>
+>> Those 5 patch are already qualified to be merged, I think.
+> I think what you can do is pick up all the tags in your next version.  Once the
+> whole series has tags we can discuss how it merges.
+
+Thanks a lot, Mario.
 
 
-> On Jun 30, 2023, at 09:32, John Hubbard <jhubbard@nvidia.com> wrote:
-> 
-> The following crash happens for me when running the -mm selftests
-> (below). Specifically, it happens while running the uffd-stress
-> subtests:
-> 
-> kernel BUG at mm/hugetlb.c:7249!
-> invalid opcode: 0000 [#1] PREEMPT SMP NOPTI
-> CPU: 0 PID: 3238 Comm: uffd-stress Not tainted 6.4.0-hubbard-github+ #109
-> Hardware name: ASUS X299-A/PRIME X299-A, BIOS 1503 08/03/2018
-> RIP: 0010:huge_pte_alloc+0x12c/0x1a0
-> ...
-> Call Trace:
-> <TASK>
-> ? __die_body+0x63/0xb0
-> ? die+0x9f/0xc0
-> ? do_trap+0xab/0x180
-> ? huge_pte_alloc+0x12c/0x1a0
-> ? do_error_trap+0xc6/0x110
-> ? huge_pte_alloc+0x12c/0x1a0
-> ? handle_invalid_op+0x2c/0x40
-> ? huge_pte_alloc+0x12c/0x1a0
-> ? exc_invalid_op+0x33/0x50
-> ? asm_exc_invalid_op+0x16/0x20
-> ? __pfx_put_prev_task_idle+0x10/0x10
-> ? huge_pte_alloc+0x12c/0x1a0
-> hugetlb_fault+0x1a3/0x1120
-> ? finish_task_switch+0xb3/0x2a0
-> ? lock_is_held_type+0xdb/0x150
-> handle_mm_fault+0xb8a/0xd40
-> ? find_vma+0x5d/0xa0
-> do_user_addr_fault+0x257/0x5d0
-> exc_page_fault+0x7b/0x1f0
-> asm_exc_page_fault+0x22/0x30
-> 
-> That happens because a BUG() statement in huge_pte_alloc() attempts to
-> check that a pte, if present, is a hugetlb pte, but it does so in a
-> non-lockless-safe manner that leads to a false BUG() report.
-> 
-> We got here due to a couple of bugs, each of which by itself was not
-> quite enough to cause a problem:
-> 
-> First of all, before commit c33c794828f2("mm: ptep_get() conversion"),
-> the BUG() statement in huge_pte_alloc() was itself fragile: it relied
-> upon compiler behavior to only read the pte once, despite using it twice
-> in the same conditional.
-> 
-> Next, commit c33c794828f2 ("mm: ptep_get() conversion") broke that
-> delicate situation, by causing all direct pte reads to be done via
-> READ_ONCE(). And so READ_ONCE() got called twice within the same BUG()
-> conditional, leading to comparing (potentially, occasionally) different
-> versions of the pte, and thus to false BUG() reports.
-> 
-> Fix this by taking a single snapshot of the pte before using it in the
-> BUG conditional.
-> 
-> Now, that commit is only partially to blame here but, people doing
-> bisections will invariably land there, so this will help them find a fix
-> for a real crash. And also, the previous behavior was unlikely to ever
-> expose this bug--it was fragile, yet not actually broken.
-> 
-> So that's why I chose this commit for the Fixes tag, rather than the
-> commit that created the original BUG() statement.
-> 
-> Fixes: c33c794828f2 ("mm: ptep_get() conversion")
-> Cc: Adrian Hunter <adrian.hunter@intel.com>
-> Cc: Al Viro <viro@zeniv.linux.org.uk>
-> Cc: Alex Williamson <alex.williamson@redhat.com>
-> Cc: Alexander Potapenko <glider@google.com>
-> Cc: Alexander Shishkin <alexander.shishkin@linux.intel.com>
-> Cc: Andrew Morton <akpm@linux-foundation.org>
-> Cc: Andrey Konovalov <andreyknvl@gmail.com>
-> Cc: Andrey Ryabinin <ryabinin.a.a@gmail.com>
-> Cc: Christian Brauner <brauner@kernel.org>
-> Cc: Christoph Hellwig <hch@infradead.org>
-> Cc: Daniel Vetter <daniel@ffwll.ch>
-> Cc: Dave Airlie <airlied@gmail.com>
-> Cc: Dimitri Sivanich <dimitri.sivanich@hpe.com>
-> Cc: Dmitry Vyukov <dvyukov@google.com>
-> Cc: Ian Rogers <irogers@google.com>
-> Cc: Jason Gunthorpe <jgg@ziepe.ca>
-> Cc: Jiri Olsa <jolsa@kernel.org>
-> Cc: Johannes Weiner <hannes@cmpxchg.org>
-> Cc: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-> Cc: Lorenzo Stoakes <lstoakes@gmail.com>
-> Cc: Mark Rutland <mark.rutland@arm.com>
-> Cc: Matthew Wilcox <willy@infradead.org>
-> Cc: Miaohe Lin <linmiaohe@huawei.com>
-> Cc: Michal Hocko <mhocko@kernel.org>
-> Cc: Mike Kravetz <mike.kravetz@oracle.com>
-> Cc: Mike Rapoport (IBM) <rppt@kernel.org>
-> Cc: Muchun Song <muchun.song@linux.dev>
-> Cc: Namhyung Kim <namhyung@kernel.org>
-> Cc: Naoya Horiguchi <naoya.horiguchi@nec.com>
-> Cc: Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
-> Cc: Pavel Tatashin <pasha.tatashin@soleen.com>
-> Cc: Roman Gushchin <roman.gushchin@linux.dev>
-> Cc: Ryan Roberts <ryan.roberts@arm.com>
-> Cc: SeongJae Park <sj@kernel.org>
-> Cc: Shakeel Butt <shakeelb@google.com>
-> Cc: Uladzislau Rezki (Sony) <urezki@gmail.com>
-> Cc: Vincenzo Frascino <vincenzo.frascino@arm.com>
-> Cc: Yu Zhao <yuzhao@google.com>
-> Signed-off-by: John Hubbard <jhubbard@nvidia.com>
+Is it possible to merge the PCI/VGA part as fast as possible, especially the
 
-Acked-by: Muchun Song <songmuchun@bytedance.com>
+PATCH-0006 PCI/VGA: Introduce is_boot_device function callback to vga_client_register
 
-Thanks.
+As this patch is fundamental, it introduce no functional change, as long as the drm
+
+driver side don't introduce a callback.
+
+I'm not hurry, but drm driver-side's patch have a dependency on this patch,
+
+I think it is better the PCI/VGA-side's patch got merge first.
+
+At least for get the first four cleanup(0001 ~ 0004) patch merged first,
+
+so that I don't have to send so much on the next version on one series.
+
+Being exposed so far, there no obvious objection.
+
+It saying that other people also want it got merged.
+
+Bjorn, is this OK ?
+
+>
+>> I means that if you could merge those 5 patch first, then there no need
+>> to send another version again.
+>>
+>> I will refine the rest patch with more details and description.
+>>
+>> I'm fear of making too much noise.
+>>
+>>> Bjorn
 
