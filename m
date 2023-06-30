@@ -2,111 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87AC67440D8
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 19:07:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D5397440E0
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 19:08:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232399AbjF3RHr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 13:07:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33258 "EHLO
+        id S233020AbjF3RIo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Jun 2023 13:08:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229511AbjF3RHp (ORCPT
+        with ESMTP id S232883AbjF3RIa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 13:07:45 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADAB3B0
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 10:07:44 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 36178617AC
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 17:07:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20506C433C8;
-        Fri, 30 Jun 2023 17:07:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688144863;
-        bh=U1TJ5FLNUaKTvdst4pVsT+ci60Uh+zUzDQUuUW43oHs=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=de8bYXYiV5/q10RfBenKwLSVpc2wDUzUCQRKL5F0fh+iAZMdnRBCPOMvlpZ4t6nZw
-         T3VOg5Owc1VSpYSW7fI/EIFCmUoJWGmKLybsgn4QxhLP9ORPHIAbXiuTKFEQA/h/O0
-         mCNaYFPdI1vEzji1c634qyCtxckD/o9zIalBYfGeHO1wVLf3WQlVlaF1VKGdPLFyTn
-         vhlJWDnTsDU++yzThy3B42JMKofvULXaH3mGJ0whwtazKZsyEHvErCiNxey8Gt+WQK
-         JK19q0rafqYOdTBa939MgK9OZOS7Yt0nTpFCR4eTZH+wAue+t91xQycjb3G/5UQk/M
-         saZ5kIbbeQ7Tg==
-From:   Mark Brown <broonie@kernel.org>
-To:     Mastan Katragadda <Mastan.Katragadda@amd.com>
-Cc:     alsa-devel@alsa-project.org, Basavaraj.Hiregoudar@amd.com,
-        Sunil-kumar.Dommati@amd.com, vijendar.mukunda@amd.com,
-        Arungopal.kondaveeti@amd.com, vsujithkumar.reddy@amd.com,
-        venkataprasad.potturu@amd.com,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
-        Bard Liao <yung-chuan.liao@linux.intel.com>,
-        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
-        Daniel Baluta <daniel.baluta@nxp.com>,
-        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        V sujith kumar Reddy <Vsujithkumar.Reddy@amd.com>,
-        Vijendar Mukunda <Vijendar.Mukunda@amd.com>,
-        Ajit Kumar Pandey <AjitKumar.Pandey@amd.com>,
-        Ajye Huang <ajye_huang@compal.corp-partner.google.com>,
-        "moderated list:SOUND - SOUND OPEN FIRMWARE (SOF) DRIVERS" 
-        <sound-open-firmware@alsa-project.org>,
-        open list <linux-kernel@vger.kernel.org>
-In-Reply-To: <20230630070544.2167421-1-Mastan.Katragadda@amd.com>
-References: <20230630070544.2167421-1-Mastan.Katragadda@amd.com>
-Subject: Re: (subset) [PATCH 1/2] ASoC: SOF: amd: add revision check for
- sending sha dma completion command
-Message-Id: <168814485881.50974.4096249135530047142.b4-ty@kernel.org>
-Date:   Fri, 30 Jun 2023 18:07:38 +0100
+        Fri, 30 Jun 2023 13:08:30 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64F263C3E
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 10:08:17 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id a640c23a62f3a-98d34f1e54fso231997566b.2
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 10:08:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1688144896; x=1690736896;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=djbszLtoHHDMZ0fSdJiXx0t0hVE4VrfDsRtDQpq854Y=;
+        b=3PtJ+g5tJVeNWTN9Ljx1dw7SLn5XosBx138xqjpGi4HRgfV8/lV5msek82vI7WzAcB
+         f+nqVrAXRlxGnxi06J3cwEbTEXX3wwlj5znjrhrGTnIne5y6ZvD6Nq0BN7mylz+TnGue
+         evW7if1wrjiiFzebMjDtoq5aK56wwaTDeRMNBaRsFv0JKbbQUEVX+GFwnja//KIcMV6h
+         pKsLJ+m0Y6HqFVK1283i90jwnAKjuKmLnMFUrzpz2eLId4YHfd0C7s6lOCMP5s8SWi/+
+         71aJRE2u3wILt3Nc5SCc/AxjKed6H8/z/zqo/FnNeNibFt2XY4Xz45HwXTytSAotDe7k
+         kBVw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688144896; x=1690736896;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=djbszLtoHHDMZ0fSdJiXx0t0hVE4VrfDsRtDQpq854Y=;
+        b=h4y2W6iV6Jg1XtZ+Kr21ET4Kmctd7Ljcw1fqbEddr7K1DwSedW2e/59xycEy9SwlWl
+         Jj7oIrlUDYZdNxYn2takPD6EAvQFqlJliHIutwqolK3C8RFdwPNQ5yYx5Hh5C1k7WDOp
+         FJs60zrf4lLNODIuS7MWlPvXeG2zEVWnJRkvfEAzdlz38b0DRr7akkDogf3LxyEtyh9Q
+         jyX2i8XDf61BZol/tR6RC9d+lRAoqpvAO6rV3+xVXCPNIyTG6s2WP7ePP4/gTjdXrIU7
+         dwatgrgjaOnSamuxycu4nWdsfVbKimOU94z7cjPG/ESLrvjiq33NefgA4q9VQEFjklCv
+         xjig==
+X-Gm-Message-State: ABy/qLZtj5fa+lfO6hbuIFH52y5DGoM/9Vx5HmdfjU5zcmUMFk2wwgZ4
+        9IqWBS3t7dFlJEcVKn73gr7N3unNmFhcJGn2C32ydQ==
+X-Google-Smtp-Source: APBJJlH2EcKJmNRj9FXktydgMJpbVRopfo4XCcmt9cSNSkHsUzW30x5OOmbN17Zos9Bp0lx4mOrobJKBZxi8jM4a7Xw=
+X-Received: by 2002:a17:906:9142:b0:958:4c75:705e with SMTP id
+ y2-20020a170906914200b009584c75705emr2156152ejw.17.1688144895628; Fri, 30 Jun
+ 2023 10:08:15 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.13-dev-c6835
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230504120042.785651-1-rkagan@amazon.de> <ZH6DJ8aFq/LM6Bk9@google.com>
+ <CALMp9eS3F08cwUJbKjTRAEL0KyZ=MC==YSH+DW-qsFkNfMpqEQ@mail.gmail.com>
+ <ZJ4dmrQSduY8aWap@google.com> <ZJ65CiW0eEL2mGg8@u40bc5e070a0153.ant.amazon.com>
+ <ZJ7mjdZ8h/RSilFX@google.com> <ZJ7y9DuedQyBb9eU@u40bc5e070a0153.ant.amazon.com>
+ <ZJ74gELkj4DgAk4S@google.com>
+In-Reply-To: <ZJ74gELkj4DgAk4S@google.com>
+From:   Mingwei Zhang <mizhang@google.com>
+Date:   Fri, 30 Jun 2023 10:07:38 -0700
+Message-ID: <CAL715WL9T8Ucnj_1AygwMgDjOJrttNZHRP9o-KUNfpx1aYZnog@mail.gmail.com>
+Subject: Re: [PATCH] KVM: x86: vPMU: truncate counter value to allowed width
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Roman Kagan <rkagan@amazon.de>, Jim Mattson <jmattson@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Eric Hankland <ehankland@google.com>, kvm@vger.kernel.org,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Like Xu <likexu@tencent.com>, x86@kernel.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-kernel@vger.kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        Borislav Petkov <bp@alien8.de>, Ingo Molnar <mingo@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 30 Jun 2023 12:35:42 +0530, Mastan Katragadda wrote:
-> ACP driver should send SHA DMA completion command to PSP module for RN
-> platform only.
-> Add a revision check for RN platform.
-> 
-> 
+On Fri, Jun 30, 2023 at 8:45=E2=80=AFAM Sean Christopherson <seanjc@google.=
+com> wrote:
+>
+> On Fri, Jun 30, 2023, Roman Kagan wrote:
+> > On Fri, Jun 30, 2023 at 07:28:29AM -0700, Sean Christopherson wrote:
+> > > On Fri, Jun 30, 2023, Roman Kagan wrote:
+> > > > On Thu, Jun 29, 2023 at 05:11:06PM -0700, Sean Christopherson wrote=
+:
+> > > > > @@ -74,6 +74,14 @@ static inline u64 pmc_read_counter(struct kvm_=
+pmc *pmc)
+> > > > >         return counter & pmc_bitmask(pmc);
+> > > > >  }
+> > > > >
+> > > > > +static inline void pmc_write_counter(struct kvm_pmc *pmc, u64 va=
+l)
+> > > > > +{
+> > > > > +       if (pmc->perf_event && !pmc->is_paused)
+> > > > > +               perf_event_set_count(pmc->perf_event, val);
+> > > > > +
+> > > > > +       pmc->counter =3D val;
+> > > >
+> > > > Doesn't this still have the original problem of storing wider value=
+ than
+> > > > allowed?
+> > >
+> > > Yes, this was just to fix the counter offset weirdness.  My plan is t=
+o apply your
+> > > patch on top.  Sorry for not making that clear.
+> >
+> > Ah, got it, thanks!
+> >
+> > Also I'm now chasing a problem that we occasionally see
+> >
+> > [3939579.462832] Uhhuh. NMI received for unknown reason 30 on CPU 43.
+> > [3939579.462836] Do you have a strange power saving mode enabled?
+> > [3939579.462836] Dazed and confused, but trying to continue
+> >
+> > in the guests when perf is used.  These messages disappear when
+> > 9cd803d496e7 ("KVM: x86: Update vPMCs when retiring instructions") is
+> > reverted.  I haven't yet figured out where exactly the culprit is.
+>
+> Can you reverting de0f619564f4 ("KVM: x86/pmu: Defer counter emulated ove=
+rflow
+> via pmc->prev_counter")?  I suspect the problem is the prev_counter mess.
 
-Applied to
+For sure it is prev_counter issue, I have done some instrumentation as foll=
+ows:
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+diff --git a/arch/x86/kvm/pmu.c b/arch/x86/kvm/pmu.c
+index 48a0528080ab..946663a42326 100644
+--- a/arch/x86/kvm/pmu.c
++++ b/arch/x86/kvm/pmu.c
+@@ -322,8 +322,11 @@ static void reprogram_counter(struct kvm_pmc *pmc)
+        if (!pmc_event_is_allowed(pmc))
+                goto reprogram_complete;
 
-Thanks!
+-       if (pmc->counter < pmc->prev_counter)
++       if (pmc->counter < pmc->prev_counter) {
++               pr_info("pmc->counter: %llx\tpmc->prev_counter: %llx\n",
++                       pmc->counter, pmc->prev_counter);
+                __kvm_perf_overflow(pmc, false);
++       }
 
-[1/2] ASoC: SOF: amd: add revision check for sending sha dma completion command
-      commit: b1db244c716fe300e36428aeb0874913d2e0a91d
+        if (eventsel & ARCH_PERFMON_EVENTSEL_PIN_CONTROL)
+                printk_once("kvm pmu: pin control bit is ignored\n");
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+I find some interesting changes on prev_counter:
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+[  +7.295348] pmc->counter: 12 pmc->prev_counter: fffffffffb3d
+[  +0.622991] pmc->counter: 3 pmc->prev_counter: fffffffffb1a
+[  +6.943282] pmc->counter: 1 pmc->prev_counter: fffffffff746
+[  +4.483523] pmc->counter: 0 pmc->prev_counter: ffffffffffff
+[ +12.817772] pmc->counter: 0 pmc->prev_counter: ffffffffffff
+[ +21.721233] pmc->counter: 0 pmc->prev_counter: ffffffffffff
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
+The first 3 logs will generate this:
 
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
+[ +11.811925] Uhhuh. NMI received for unknown reason 20 on CPU 2.
+[  +0.000003] Dazed and confused, but trying to continue
 
-Thanks,
-Mark
+While the last 3 logs won't. This is quite reasonable as looking into
+de0f619564f4 ("KVM: x86/pmu: Defer counter emulated overflow via
+pmc->prev_counter"), counter and prev_counter should only have 1 diff
+in value.
 
+So, the reasonable suspect should be the stale prev_counter. There
+might be several potential reasons behind this. Jim's theory is the
+highly reasonable one as I did another experiment and found that KVM
+may leave pmu->global_status as '0' when injecting an NMI.
