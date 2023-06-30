@@ -2,225 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08D9A743E4B
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 17:08:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D7C6743E4E
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 17:10:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232939AbjF3PIA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 11:08:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59968 "EHLO
+        id S232951AbjF3PKk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Jun 2023 11:10:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232445AbjF3PH5 (ORCPT
+        with ESMTP id S232940AbjF3PKh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 11:07:57 -0400
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD1B2172C
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 08:07:55 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-5707177ff8aso18831627b3.2
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 08:07:55 -0700 (PDT)
+        Fri, 30 Jun 2023 11:10:37 -0400
+Received: from mail-ed1-x549.google.com (mail-ed1-x549.google.com [IPv6:2a00:1450:4864:20::549])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48E4830C5
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 08:10:35 -0700 (PDT)
+Received: by mail-ed1-x549.google.com with SMTP id 4fb4d7f45d1cf-51da39aa6dcso1287551a12.2
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 08:10:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1688137675; x=1690729675;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=mrWYh3PRBbdzI533s9Ew0EAXehsA/qHZG3mTg4wZnHM=;
-        b=M1ViaITYNRj8vOECiWQf6QNdpr/b0hFVhpgzkgimB1iEHmCDCMLI34196l3hwb2wFd
-         diTLBgH11Y3Yz/AQl321djbXYGMoKJidYzGGvTA5T3WyfjEVeOfu/C46ymNffPfJsHYq
-         AX6XnwSJ7EYOUbJFoT7rcWmRNxbPLl0ucFXnYQsaJeFRdgHbrjh7Zm0BNNpqXt2WieR/
-         Lc4y9cDWNbIIKX0TnWVBDT7BxkZAeNVBaT0g3Nc3pwvixMIRUOI96QE8a8DzB93hhASM
-         5bzHf/kBbI+E4138JxhDhGCStj77y7PNA7E2S9hUDEQuYFoONX7EnyRouIr6LBKOdA+0
-         iGMg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688137675; x=1690729675;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
+        d=google.com; s=20221208; t=1688137833; x=1690729833;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=mrWYh3PRBbdzI533s9Ew0EAXehsA/qHZG3mTg4wZnHM=;
-        b=JXnMXckS1WdUiLr27oKM9qxFypg/5L3xuGrV8IFGm5hzjKrNby//D4CfDhuBcRFeYD
-         kltF0Cyt/JOKLWbUPxBJ00YHgVQ26yINOE/gxjnJfJiq+w16CF5zFMoY5glsBtBA8mrw
-         myFdyHaZ/WFm6AB9hgOksnZTCL4h3BB+FDzS6qGhQ2fntCEX9Pezg7SDSc3FMVSkauUA
-         reHIidtLB+kXLwq2BV97CEVZJfbFQkjIaUbBtWL0xJ2UvAMdf/qjTrb3SJeR4SD6P6mK
-         Xdri7oW5DxJ1x4w0xWdyiDbq5cRelAv07tA2K80KHz007Y8812KiJZun8gMz0UrYsnFF
-         L8pQ==
-X-Gm-Message-State: ABy/qLYE8AkBIq+jbWGQMpRWtyjC4I17LFtGfo0x7gdGGcZ59myBAk8u
-        YJm3hWMvADdDnK8yKWw7+TGfAl74RZk=
-X-Google-Smtp-Source: APBJJlHzoZOss0LPcsdk/XcICJPt4SQdaa9IAQxT9IT978Tg6wtIVsT7DmNGf+bLYov52r6dXSriFO4hUJQ=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a0d:d586:0:b0:573:9e16:2cca with SMTP id
- x128-20020a0dd586000000b005739e162ccamr22477ywd.0.1688137674950; Fri, 30 Jun
- 2023 08:07:54 -0700 (PDT)
-Date:   Fri, 30 Jun 2023 08:07:52 -0700
-In-Reply-To: <0a98683f-3e60-1f1b-55df-f2a781929fdf@intel.com>
+        bh=loQnDSW9i5LQhmfPoJ46XCIWUTUs998PhfaFmb8iPCg=;
+        b=wV/AbYBDpdmbnu1YXDKN+oBr9te5bbwTFjXCX+p+JSvzD9dErSY/O74w8yfzZ16p51
+         3Od1QYzsQZ1AEsh/lKwZLkk6RMDChs6mPHCDAfEeHwdgo32BUfdw7HeOjkjURjOyUOzz
+         ZgqnDNwD6BICpQkyAkzynhWrpXaEObB7I/EuwzIzU53xHc3lm7lXWhUPYBmLYQo8PY9g
+         Rzy+UmgVqCt9AOwDqjuOzicwNW8jX4Idp00fTc2oymxSWVZCArWNwTTIH73Cr6egGvrk
+         hk7g81HfHNGEK0uiRVgMoV91gLwmAsXnVPI0R/K/LL3ZOZpH8P4jw4wkn9fHrY76oIwk
+         cXdA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688137833; x=1690729833;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=loQnDSW9i5LQhmfPoJ46XCIWUTUs998PhfaFmb8iPCg=;
+        b=Ua+kqGnjVW267Q5j77WGQsGmZ5fOWeiWJKDrXbQ886XXUNXo0+UpjmLVVpeRM8ASFS
+         voNvbUfh14NeiP7jNVbwMvdBRmagtYREtGUQQd6VEpzxKfyEvYiP9jEbd5VLep3Wdebn
+         DZ68kYTopN8JENcb9fQ3hla9t3ps73VyIgxLX6E6eLQIKlcYoF06uiyr7L3DC74tY3sb
+         CFNun3c6/LVkiNhZ26Q4r/CTyUgXkRteeAyPkCQ+iXZWE/maUFNWApLJqqzDF+idvpQ0
+         UGNYIo2SYMPu8T4gpkAfJB3bYKm4CnajlnW4ORzxaqRJztOLFdEGfGyHrX1BN6vn5Npo
+         86Qw==
+X-Gm-Message-State: ABy/qLZdOY8jnAj6/zQq2zyTAI2EtWpGmTfPYWpZ08r+5fxyhx0GsnU4
+        FnUSjhHMYuWzW3VFcwsSlFvUD6c4srtVbHu+cA==
+X-Google-Smtp-Source: APBJJlEv85eOlT2Ou52uqPZuUTuFK0QDmKuWT4jlAo1G5h8cw8X8JntUMAG5b8OBfMI5o+Wy5gdplV1s7bH9+wFHMA==
+X-Received: from mr-cloudtop2.c.googlers.com ([fda3:e722:ac3:cc00:31:98fb:c0a8:fb5])
+ (user=matteorizzo job=sendgmr) by 2002:a50:a6dd:0:b0:51d:9659:4dae with SMTP
+ id f29-20020a50a6dd000000b0051d96594daemr11259edc.5.1688137833489; Fri, 30
+ Jun 2023 08:10:33 -0700 (PDT)
+Date:   Fri, 30 Jun 2023 15:10:02 +0000
 Mime-Version: 1.0
-References: <20230511040857.6094-1-weijiang.yang@intel.com>
- <20230511040857.6094-11-weijiang.yang@intel.com> <ZH73kDx6VCaBFiyh@chao-email>
- <21568052-eb0f-a8d6-5225-3b422e9470e9@intel.com> <ZIulniryqlj0hLnt@google.com>
- <dfdf6d93-a68c-bb07-e59e-8d888dd6ebb6@intel.com> <ZIywqx6xTAMFyDPT@google.com>
- <0a98683f-3e60-1f1b-55df-f2a781929fdf@intel.com>
-Message-ID: <ZJ7vyBw1nbTBOfuf@google.com>
-Subject: Re: [PATCH v3 10/21] KVM:x86: Add #CP support in guest exception classification
-From:   Sean Christopherson <seanjc@google.com>
-To:     Weijiang Yang <weijiang.yang@intel.com>
-Cc:     Chao Gao <chao.gao@intel.com>, pbonzini@redhat.com,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        peterz@infradead.org, rppt@kernel.org, binbin.wu@linux.intel.com,
-        rick.p.edgecombe@intel.com, john.allen@amd.com,
-        gil.neiger@intel.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+X-Mailer: git-send-email 2.41.0.255.g8b1d071c50-goog
+Message-ID: <20230630151003.3622786-1-matteorizzo@google.com>
+Subject: [PATCH v3 0/1] Add a sysctl to disable io_uring system-wide
+From:   Matteo Rizzo <matteorizzo@google.com>
+To:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        io-uring@vger.kernel.org, axboe@kernel.dk, asml.silence@gmail.com
+Cc:     matteorizzo@google.com, corbet@lwn.net, akpm@linux-foundation.org,
+        keescook@chromium.org, ribalda@chromium.org, rostedt@goodmis.org,
+        jannh@google.com, chenhuacai@kernel.org, gpiccoli@igalia.com,
+        ldufour@linux.ibm.com, evn@google.com, poprdi@google.com,
+        jordyzomer@google.com, jmoyer@redhat.com, krisman@suse.de
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,
+        USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 30, 2023, Weijiang Yang wrote:
->=20
-> On 6/17/2023 2:57 AM, Sean Christopherson wrote:
-> > > Do you mean documentation for #CP as an generic exception or the beha=
-vior in
-> > > KVM as this patch shows?
-> > As I pointed out two *years* ago, this entry in the SDM
-> >=20
-> >    =E2=80=94 The field's deliver-error-code bit (bit 11) is 1 if each o=
-f the following
-> >      holds: (1) the interruption type is hardware exception; (2) bit 0
-> >      (corresponding to CR0.PE) is set in the CR0 field in the guest-sta=
-te area;
-> >      (3) IA32_VMX_BASIC[56] is read as 0 (see Appendix A.1); and (4) th=
-e vector
-> >      indicates one of the following exceptions: #DF (vector 8), #TS (10=
-),
-> >      #NP (11), #SS (12), #GP (13), #PF (14), or #AC (17).
-> >=20
-> > needs to read something like
-> >=20
-> >    =E2=80=94 The field's deliver-error-code bit (bit 11) is 1 if each o=
-f the following
-> >      holds: (1) the interruption type is hardware exception; (2) bit 0
-> >      (corresponding to CR0.PE) is set in the CR0 field in the guest-sta=
-te area;
-> >      (3) IA32_VMX_BASIC[56] is read as 0 (see Appendix A.1); and (4) th=
-e vector
-> >      indicates one of the following exceptions: #DF (vector 8), #TS (10=
-),
-> >      #NP (11), #SS (12), #GP (13), #PF (14), #AC (17), or #CP (21)[1]
-> >=20
-> >      [1] #CP has an error code if and only if IA32_VMX_CR4_FIXED1 enume=
-rates
-> >          support for the 1-setting of CR4.CET.
->=20
-> Hi, Sean,
->=20
-> I sent above change request to Gil(added in cc), but he shared different
-> opinion on this issue:
+Over the last few years we've seen many critical vulnerabilities in
+io_uring[1] which could be exploited by an unprivileged process to gain
+control over the kernel. This patch introduces a new sysctl which disables
+the creation of new io_uring instances system-wide.
 
-Heh, "opinion".
+The goal of this patch is to give distros, system admins, and cloud
+providers a way to reduce the risk of privilege escalation through io_uring
+where disabling it with seccomp or at compile time is not practical. For
+example a distro or cloud provider might want to disable io_uring by
+default and have users enable it again if they need to run a program that
+requires it. The new sysctl is designed to let a user with root on the
+machine enable and disable io_uring systemwide at runtime without requiring
+a kernel recompilation or a reboot.
 
-> =C2=A0It may make things clearer if we document the statement above (all
-> CET-capable parts enumerate IA32_VMX_BASIC[56] as 1).
->=20
-> I will see if we can update future revisions of the SDM to clarify this."
+[1] Link: https://goo.gle/limit-iouring
 
-That would be helpful.  Though to be perfectly honest, I simply overlooked =
-the
-existence of IA32_VMX_BASIC[56].
+---
+v3:
+	* Fix the commit message
+	* Use READ_ONCE in io_uring_allowed to avoid races
+	* Add reviews
+v2:
+	* Documentation style fixes
+	* Add a third level that only disables io_uring for unprivileged
+	  processes
 
-Thanks!
 
-> Then if this is the case,=C2=A0 kvm needs to check IA32_VMX_BASIC[56] bef=
-ore
-> inject exception to nested VM.
->=20
-> And this patch could be removed, instead need another patch like below:
->=20
-> diff --git a/arch/x86/include/asm/msr-index.h
-> b/arch/x86/include/asm/msr-index.h
-> index ad35355ee43e..6b33aacc8587 100644
-> --- a/arch/x86/include/asm/msr-index.h
-> +++ b/arch/x86/include/asm/msr-index.h
-> @@ -1076,6 +1076,7 @@
-> =C2=A0#define VMX_BASIC_MEM_TYPE_MASK=C2=A0=C2=A0=C2=A0 0x003c00000000000=
-0LLU
-> =C2=A0#define VMX_BASIC_MEM_TYPE_WB=C2=A0=C2=A0=C2=A0 6LLU
-> =C2=A0#define VMX_BASIC_INOUT=C2=A0=C2=A0=C2=A0 =C2=A0=C2=A0=C2=A0 0x0040=
-000000000000LLU
-> +#define VMX_BASIC_CHECK_ERRCODE=C2=A0=C2=A0=C2=A0 0x0140000000000000LLU
+Matteo Rizzo (1):
+  io_uring: add a sysctl to disable io_uring system-wide
 
-"Check Error Code" isn't a great description.  The flag enumerates that the=
-re the
-CPU does *not* perform consistency checks on the error code when injecting =
-hardware
-exceptions.
+ Documentation/admin-guide/sysctl/kernel.rst | 19 +++++++++++++
+ io_uring/io_uring.c                         | 31 +++++++++++++++++++++
+ 2 files changed, 50 insertions(+)
 
-So something like this?
 
-  VMX_BASIC_NO_HW_ERROR_CODE_CC
+base-commit: 1601fb26b26758668533bdb211fdfbb5234367ee
+-- 
+2.41.0.255.g8b1d071c50-goog
 
-or maybe
-
-  VMX_BASIC_PM_NO_HW_ERROR_CODE_CC
-
-if we want to capture that only protected mode is exempt (I personally pref=
-er
-just VMX_BASIC_NO_HW_ERROR_CODE_CC as "PM" is a bit ambiguous).
-
-> @@ -2873,7 +2873,8 @@ static int nested_check_vm_entry_controls(struct
-> kvm_vcpu *vcpu,
-> =C2=A0=C2=A0=C2=A0=C2=A0 =C2=A0=C2=A0=C2=A0 should_have_error_code =3D
-> =C2=A0=C2=A0=C2=A0=C2=A0 =C2=A0=C2=A0=C2=A0 =C2=A0=C2=A0=C2=A0 intr_type =
-=3D=3D INTR_TYPE_HARD_EXCEPTION && prot_mode &&
-> =C2=A0=C2=A0=C2=A0=C2=A0 =C2=A0=C2=A0=C2=A0 =C2=A0=C2=A0=C2=A0 x86_except=
-ion_has_error_code(vector);
-> -=C2=A0=C2=A0=C2=A0 =C2=A0=C2=A0=C2=A0 if (CC(has_error_code !=3D should_=
-have_error_code))
-> +=C2=A0=C2=A0=C2=A0 =C2=A0=C2=A0=C2=A0 if (!cpu_has_vmx_basic_check_errco=
-de() &&
-> +=C2=A0=C2=A0=C2=A0 =C2=A0=C2=A0=C2=A0 =C2=A0=C2=A0=C2=A0 CC(has_error_co=
-de !=3D should_have_error_code))
-
-This is wrong on mutiple fronts:
-
-  1. The new feature flag only excempts hardware exceptions delivered to gu=
-ests
-     with CR0.PE=3D1.  The above will skip the consistency check for all ev=
-ent injection.
-
-  2. KVM needs to check the CPU model that is exposed to L1, not the capabi=
-lities
-     of the host CPU.
-
-Highlighting the key phrases in the SDM:
-
-  The field's deliver-error-code bit (bit 11) is 1 if each of the following=
- holds: (1) the interruption type is
-                                                      ^^^^^^^
-  hardware exception; (2) bit 0 (corresponding to CR0.PE) is set in the CR0=
- field in the guest-state area;
-  (3) IA32_VMX_BASIC[56] is read as 0 (see Appendix A.1); and (4) the vecto=
-r indicates one of the following
-  exceptions: #DF (vector 8), #TS (10), #NP (11), #SS (12), #GP (13), #PF (=
-14), or #AC (17).
- =20
-  The field's deliver-error-code bit is 0 if any of the following holds: (1=
-) the interruption type is not hardware
-                                             ^^^^^^
-  exception; (2) bit 0 is clear in the CR0 field in the guest-state area; o=
-r (3) IA32_VMX_BASIC[56] is read as
-  0 and the vector is in one of the following ranges: 0=E2=80=937, 9, 15, 1=
-6, or 18=E2=80=9331.
-
-I think what we want is:
-
-		/* VM-entry interruption-info field: deliver error code */
-		if (!prot_mode || intr_type !=3D INTR_TYPE_HARD_EXCEPTION ||
-		    !nested_cpu_has_no_hw_error_code_cc(vcpu)) {
-			should_have_error_code =3D
-				intr_type =3D=3D INTR_TYPE_HARD_EXCEPTION && prot_mode &&
-				x86_exception_has_error_code(vector);
-			if (CC(has_error_code !=3D should_have_error_code))
-				return -EINVAL;
-		}
