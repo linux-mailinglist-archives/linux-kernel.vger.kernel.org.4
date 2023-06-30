@@ -2,135 +2,252 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EDA9743EA2
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 17:22:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F355743EA7
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 17:22:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232094AbjF3PV7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 11:21:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38274 "EHLO
+        id S232406AbjF3PWy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Jun 2023 11:22:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229578AbjF3PVr (ORCPT
+        with ESMTP id S232210AbjF3PWv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 11:21:47 -0400
-Received: from smtp-fw-9103.amazon.com (smtp-fw-9103.amazon.com [207.171.188.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C14CDF;
-        Fri, 30 Jun 2023 08:21:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.de; i=@amazon.de; q=dns/txt; s=amazon201209;
-  t=1688138506; x=1719674506;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=BQVmRLO9m74UMK8I9pR2qF8AU/mjLbuAVCyZ5Z+eWss=;
-  b=oib5cg80jhPQK1c2ceJdiPNRHqAndMu/EInfDCpbPgYcm+MYP2aQKtUR
-   r5QGPpM0Zn0nBVjuGxxk03GiqXNss88O19qBtkY9BwBF4L1i8XcMlBf0K
-   WH5Ob2ZGxZOIJ8Apx7d7se0W4akutSu1tXDiJE3Qbiv2xxGrFrZefF4p6
-   4=;
-X-IronPort-AV: E=Sophos;i="6.01,171,1684800000"; 
-   d="scan'208";a="1140502254"
-Received: from pdx4-co-svc-p1-lb2-vlan3.amazon.com (HELO email-inbound-relay-pdx-1box-2bm6-32cf6363.us-west-2.amazon.com) ([10.25.36.214])
-  by smtp-border-fw-9103.sea19.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jun 2023 15:21:37 +0000
-Received: from EX19D007EUA002.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan3.pdx.amazon.com [10.236.137.198])
-        by email-inbound-relay-pdx-1box-2bm6-32cf6363.us-west-2.amazon.com (Postfix) with ESMTPS id 0B45C804E1;
-        Fri, 30 Jun 2023 15:21:36 +0000 (UTC)
-Received: from EX19D033EUC004.ant.amazon.com (10.252.61.133) by
- EX19D007EUA002.ant.amazon.com (10.252.50.68) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.30; Fri, 30 Jun 2023 15:21:34 +0000
-Received: from u40bc5e070a0153.ant.amazon.com (10.1.212.14) by
- EX19D033EUC004.ant.amazon.com (10.252.61.133) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.30; Fri, 30 Jun 2023 15:21:29 +0000
-Date:   Fri, 30 Jun 2023 17:21:24 +0200
-From:   Roman Kagan <rkagan@amazon.de>
-To:     Sean Christopherson <seanjc@google.com>
-CC:     Jim Mattson <jmattson@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Eric Hankland <ehankland@google.com>, <kvm@vger.kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Like Xu <likexu@tencent.com>, <x86@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        <linux-kernel@vger.kernel.org>, "H. Peter Anvin" <hpa@zytor.com>,
-        "Borislav Petkov" <bp@alien8.de>, Ingo Molnar <mingo@redhat.com>,
-        Mingwei Zhang <mizhang@google.com>
-Subject: Re: [PATCH] KVM: x86: vPMU: truncate counter value to allowed width
-Message-ID: <ZJ7y9DuedQyBb9eU@u40bc5e070a0153.ant.amazon.com>
-Mail-Followup-To: Roman Kagan <rkagan@amazon.de>,
-        Sean Christopherson <seanjc@google.com>,
-        Jim Mattson <jmattson@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Eric Hankland <ehankland@google.com>, kvm@vger.kernel.org,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Like Xu <likexu@tencent.com>, x86@kernel.org,
-        Thomas Gleixner <tglx@linutronix.de>, linux-kernel@vger.kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, Borislav Petkov <bp@alien8.de>,
-        Ingo Molnar <mingo@redhat.com>, Mingwei Zhang <mizhang@google.com>
-References: <20230504120042.785651-1-rkagan@amazon.de>
- <ZH6DJ8aFq/LM6Bk9@google.com>
- <CALMp9eS3F08cwUJbKjTRAEL0KyZ=MC==YSH+DW-qsFkNfMpqEQ@mail.gmail.com>
- <ZJ4dmrQSduY8aWap@google.com>
- <ZJ65CiW0eEL2mGg8@u40bc5e070a0153.ant.amazon.com>
- <ZJ7mjdZ8h/RSilFX@google.com>
+        Fri, 30 Jun 2023 11:22:51 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 023C41BD0
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 08:22:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1688138521;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=A0/KJd9Ao12HpM7EhiEG+rTUpa+ZcmTLO37mgBG070Y=;
+        b=bSrI/muWMfBC/nuy6tezm7EbKQSSvF1gxNuuZlNkGQqOGRhnnrRyo6O9GdrKf8x3yaTbDI
+        fMBdxTSohVSZUSXXJ28vztIpWwC5IQpdQ4Fs2Y9gqmwxoa+OMiXIuTzLvrHcZ+BIdHpd3+
+        hS3XAeXAgxECbm4OiUN0PJ/DvQtl/KM=
+Received: from mail-lf1-f70.google.com (mail-lf1-f70.google.com
+ [209.85.167.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-449-gvmIXQFFNDGjJqCttC12gg-1; Fri, 30 Jun 2023 11:21:59 -0400
+X-MC-Unique: gvmIXQFFNDGjJqCttC12gg-1
+Received: by mail-lf1-f70.google.com with SMTP id 2adb3069b0e04-4fb76659cacso2249611e87.1
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 08:21:59 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688138518; x=1690730518;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=A0/KJd9Ao12HpM7EhiEG+rTUpa+ZcmTLO37mgBG070Y=;
+        b=IxYEKW8y1+3Rka+++CKgBM6C9oR2XCZsGs2KY2+FhaYS+vVgarqHW5yE379Goil+AC
+         hEv2e1j5YelzDLqrszWkMtbX6xJgAH8mchppDYmEoB1bDjoaVThODldASspwvYnEZyBh
+         DM4J0/fgHykuGPUKfUtHud0jo4x3DqSK16ay9dADkN97+x8nRoc8UuQiXaL2XxAl/S4H
+         sj8Q/MKm2RmeoNhDPnPGIhJdEq0G3PWlzmTJhA0gB8Os+dXduB4nyjByVLUAbqlJ4PPS
+         lLfQjC95agOwhnoPiiMjUdcuOHrwfBeKPQFR3DCoeitkkdSTsAGy3mEYNQaR9w5RLha2
+         CWhg==
+X-Gm-Message-State: ABy/qLaZHljcOnym3UsnqMVvYMEoSktlkPYYdu3T2i8juR6my8jsj/BS
+        0YtmoKfyjZpMvzecEJ7hLIJPvcpdypj+mA38xxM88qlFiXX3mHi2SCYDyxRbAvH7ehoR7d9EbPG
+        TGFN3qGFCkgiq5hb/T1pAiPN8vii8Q7r+f0QdRZKT
+X-Received: by 2002:a05:6512:3192:b0:4f9:56aa:26c2 with SMTP id i18-20020a056512319200b004f956aa26c2mr2667474lfe.57.1688138518318;
+        Fri, 30 Jun 2023 08:21:58 -0700 (PDT)
+X-Google-Smtp-Source: APBJJlFlISImJgeb+KOFXyH5xVPuwtFZ9105/CxI2wUwJVq6cP/HF7H6eStKguYKWYp1+faMrvgmLps7tpKo4XiRdwk=
+X-Received: by 2002:a05:6512:3192:b0:4f9:56aa:26c2 with SMTP id
+ i18-20020a056512319200b004f956aa26c2mr2667452lfe.57.1688138517933; Fri, 30
+ Jun 2023 08:21:57 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <ZJ7mjdZ8h/RSilFX@google.com>
-X-Originating-IP: [10.1.212.14]
-X-ClientProxiedBy: EX19D041UWA004.ant.amazon.com (10.13.139.9) To
- EX19D033EUC004.ant.amazon.com (10.252.61.133)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,
-        T_SPF_PERMERROR autolearn=ham autolearn_force=no version=3.4.6
+References: <20230627132323.115440-1-andrealmeid@igalia.com>
+ <CA+hFU4z1pc=KUVVqyqfXEceUqMXQgh-qUnuB=1nkPELghvQO7w@mail.gmail.com> <CADnq5_MNVdtdcWKSz6dgmsjg+kEu8p5FVE+fkw_5BaXeG3QGow@mail.gmail.com>
+In-Reply-To: <CADnq5_MNVdtdcWKSz6dgmsjg+kEu8p5FVE+fkw_5BaXeG3QGow@mail.gmail.com>
+From:   Sebastian Wick <sebastian.wick@redhat.com>
+Date:   Fri, 30 Jun 2023 17:21:47 +0200
+Message-ID: <CA+hFU4yg3DDEE=6J4yiS4z-KDDH6apkMQwa2q6rXd_vQZGjn3A@mail.gmail.com>
+Subject: Re: [PATCH v5 1/1] drm/doc: Document DRM device reset expectations
+To:     Alex Deucher <alexdeucher@gmail.com>
+Cc:     =?UTF-8?Q?Andr=C3=A9_Almeida?= <andrealmeid@igalia.com>,
+        pierre-eric.pelloux-prayer@amd.com,
+        Samuel Pitoiset <samuel.pitoiset@gmail.com>,
+        Pekka Paalanen <pekka.paalanen@collabora.com>,
+        =?UTF-8?B?TWFyZWsgT2zFocOhaw==?= <maraeo@gmail.com>,
+        =?UTF-8?Q?Michel_D=C3=A4nzer?= <michel.daenzer@mailbox.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        linux-kernel@vger.kernel.org, amd-gfx@lists.freedesktop.org,
+        Pekka Paalanen <ppaalanen@gmail.com>,
+        =?UTF-8?Q?Timur_Krist=C3=B3f?= <timur.kristof@gmail.com>,
+        dri-devel@lists.freedesktop.org, kernel-dev@igalia.com,
+        alexander.deucher@amd.com, christian.koenig@amd.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 30, 2023 at 07:28:29AM -0700, Sean Christopherson wrote:
-> On Fri, Jun 30, 2023, Roman Kagan wrote:
-> > On Thu, Jun 29, 2023 at 05:11:06PM -0700, Sean Christopherson wrote:
-> > > @@ -74,6 +74,14 @@ static inline u64 pmc_read_counter(struct kvm_pmc *pmc)
-> > >         return counter & pmc_bitmask(pmc);
-> > >  }
-> > >
-> > > +static inline void pmc_write_counter(struct kvm_pmc *pmc, u64 val)
-> > > +{
-> > > +       if (pmc->perf_event && !pmc->is_paused)
-> > > +               perf_event_set_count(pmc->perf_event, val);
-> > > +
-> > > +       pmc->counter = val;
+On Fri, Jun 30, 2023 at 4:59=E2=80=AFPM Alex Deucher <alexdeucher@gmail.com=
+> wrote:
+>
+> On Fri, Jun 30, 2023 at 10:49=E2=80=AFAM Sebastian Wick
+> <sebastian.wick@redhat.com> wrote:
 > >
-> > Doesn't this still have the original problem of storing wider value than
-> > allowed?
-> 
-> Yes, this was just to fix the counter offset weirdness.  My plan is to apply your
-> patch on top.  Sorry for not making that clear.
+> > On Tue, Jun 27, 2023 at 3:23=E2=80=AFPM Andr=C3=A9 Almeida <andrealmeid=
+@igalia.com> wrote:
+> > >
+> > > Create a section that specifies how to deal with DRM device resets fo=
+r
+> > > kernel and userspace drivers.
+> > >
+> > > Acked-by: Pekka Paalanen <pekka.paalanen@collabora.com>
+> > > Signed-off-by: Andr=C3=A9 Almeida <andrealmeid@igalia.com>
+> > > ---
+> > >
+> > > v4: https://lore.kernel.org/lkml/20230626183347.55118-1-andrealmeid@i=
+galia.com/
+> > >
+> > > Changes:
+> > >  - Grammar fixes (Randy)
+> > >
+> > >  Documentation/gpu/drm-uapi.rst | 68 ++++++++++++++++++++++++++++++++=
+++
+> > >  1 file changed, 68 insertions(+)
+> > >
+> > > diff --git a/Documentation/gpu/drm-uapi.rst b/Documentation/gpu/drm-u=
+api.rst
+> > > index 65fb3036a580..3cbffa25ed93 100644
+> > > --- a/Documentation/gpu/drm-uapi.rst
+> > > +++ b/Documentation/gpu/drm-uapi.rst
+> > > @@ -285,6 +285,74 @@ for GPU1 and GPU2 from different vendors, and a =
+third handler for
+> > >  mmapped regular files. Threads cause additional pain with signal
+> > >  handling as well.
+> > >
+> > > +Device reset
+> > > +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> > > +
+> > > +The GPU stack is really complex and is prone to errors, from hardwar=
+e bugs,
+> > > +faulty applications and everything in between the many layers. Some =
+errors
+> > > +require resetting the device in order to make the device usable agai=
+n. This
+> > > +sections describes the expectations for DRM and usermode drivers whe=
+n a
+> > > +device resets and how to propagate the reset status.
+> > > +
+> > > +Kernel Mode Driver
+> > > +------------------
+> > > +
+> > > +The KMD is responsible for checking if the device needs a reset, and=
+ to perform
+> > > +it as needed. Usually a hang is detected when a job gets stuck execu=
+ting. KMD
+> > > +should keep track of resets, because userspace can query any time ab=
+out the
+> > > +reset stats for an specific context. This is needed to propagate to =
+the rest of
+> > > +the stack that a reset has happened. Currently, this is implemented =
+by each
+> > > +driver separately, with no common DRM interface.
+> > > +
+> > > +User Mode Driver
+> > > +----------------
+> > > +
+> > > +The UMD should check before submitting new commands to the KMD if th=
+e device has
+> > > +been reset, and this can be checked more often if the UMD requires i=
+t. After
+> > > +detecting a reset, UMD will then proceed to report it to the applica=
+tion using
+> > > +the appropriate API error code, as explained in the section below ab=
+out
+> > > +robustness.
+> > > +
+> > > +Robustness
+> > > +----------
+> > > +
+> > > +The only way to try to keep an application working after a reset is =
+if it
+> > > +complies with the robustness aspects of the graphical API that it is=
+ using.
+> > > +
+> > > +Graphical APIs provide ways to applications to deal with device rese=
+ts. However,
+> > > +there is no guarantee that the app will use such features correctly,=
+ and the
+> > > +UMD can implement policies to close the app if it is a repeating off=
+ender,
+> > > +likely in a broken loop. This is done to ensure that it does not kee=
+p blocking
+> > > +the user interface from being correctly displayed. This should be do=
+ne even if
+> > > +the app is correct but happens to trigger some bug in the hardware/d=
+river.
+> >
+> > I still don't think it's good to let the kernel arbitrarily kill
+> > processes that it thinks are not well-behaved based on some heuristics
+> > and policy.
+> >
+> > Can't this be outsourced to user space? Expose the information about
+> > processes causing a device and let e.g. systemd deal with coming up
+> > with a policy and with killing stuff.
+>
+> I don't think it's the kernel doing the killing, it would be the UMD.
+> E.g., if the app is guilty and doesn't support robustness the UMD can
+> just call exit().
 
-Ah, got it, thanks!
-
-Also I'm now chasing a problem that we occasionally see
-
-[3939579.462832] Uhhuh. NMI received for unknown reason 30 on CPU 43.
-[3939579.462836] Do you have a strange power saving mode enabled?
-[3939579.462836] Dazed and confused, but trying to continue
-
-in the guests when perf is used.  These messages disappear when
-9cd803d496e7 ("KVM: x86: Update vPMCs when retiring instructions") is
-reverted.  I haven't yet figured out where exactly the culprit is.
-
-Thanks,
-Roman.
-
-
-
-Amazon Development Center Germany GmbH
-Krausenstr. 38
-10117 Berlin
-Geschaeftsfuehrung: Christian Schlaeger, Jonathan Weiss
-Eingetragen am Amtsgericht Charlottenburg unter HRB 149173 B
-Sitz: Berlin
-Ust-ID: DE 289 237 879
-
-
+Ah, right, completely skipped over the UMD part. That makes more sense.
+>
+> Alex
+>
+> >
+> > > +
+> > > +OpenGL
+> > > +~~~~~~
+> > > +
+> > > +Apps using OpenGL should use the available robust interfaces, like t=
+he
+> > > +extension ``GL_ARB_robustness`` (or ``GL_EXT_robustness`` for OpenGL=
+ ES). This
+> > > +interface tells if a reset has happened, and if so, all the context =
+state is
+> > > +considered lost and the app proceeds by creating new ones. If it is =
+possible to
+> > > +determine that robustness is not in use, the UMD will terminate the =
+app when a
+> > > +reset is detected, giving that the contexts are lost and the app won=
+'t be able
+> > > +to figure this out and recreate the contexts.
+> > > +
+> > > +Vulkan
+> > > +~~~~~~
+> > > +
+> > > +Apps using Vulkan should check for ``VK_ERROR_DEVICE_LOST`` for subm=
+issions.
+> > > +This error code means, among other things, that a device reset has h=
+appened and
+> > > +it needs to recreate the contexts to keep going.
+> > > +
+> > > +Reporting causes of resets
+> > > +--------------------------
+> > > +
+> > > +Apart from propagating the reset through the stack so apps can recov=
+er, it's
+> > > +really useful for driver developers to learn more about what caused =
+the reset in
+> > > +first place. DRM devices should make use of devcoredump to store rel=
+evant
+> > > +information about the reset, so this information can be added to use=
+r bug
+> > > +reports.
+> > > +
+> > >  .. _drm_driver_ioctl:
+> > >
+> > >  IOCTL Support on Device Nodes
+> > > --
+> > > 2.41.0
+> > >
+> >
+>
 
