@@ -2,53 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AB8E7443BC
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 23:03:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA5C37443BE
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 23:03:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232631AbjF3VDA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 17:03:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58500 "EHLO
+        id S232693AbjF3VDY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Jun 2023 17:03:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230388AbjF3VC4 (ORCPT
+        with ESMTP id S232710AbjF3VDO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 17:02:56 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B90FD3AB6;
-        Fri, 30 Jun 2023 14:02:55 -0700 (PDT)
+        Fri, 30 Jun 2023 17:03:14 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2661A4224
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 14:03:08 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5832861812;
-        Fri, 30 Jun 2023 21:02:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DEF1CC433C0;
-        Fri, 30 Jun 2023 21:02:53 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AF50C617FF
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 21:03:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 263F6C433C9
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 21:03:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688158974;
-        bh=JcRoUVFNM9/6PR4mDTjNnE2muKhhGvnoeEasmT4br1g=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=byinquFCr/Gggvsv/R7A6N614gv3EUx+4dmFXAZ0rdYEOYUAaZ5fnniEEAPyS6JHA
-         n6kp6jaizk1QTx7gyAbl30ZH9jidBOv1qFDjQy7mm4+zaJirNeeC7HkKGOC17av1lr
-         jYfbWFNbe6en6ziR8GSr5LTX6ziEpA2v2XQhxzDI1kMCCCKHSE7XUQkdb+K9aaC/He
-         GMk4oItAKiyRjJcHhOIzFD4NTmokq96vZS/TWbCJsZm/1XJg2A7zi5cBE8DfyDNn3M
-         F17bf4dQko3kkURaNgauZR9oJrDbqOuxge9fhH4S7LBn27lrsPDA1E1SESju5saP8Z
-         xrup+9a4lckFw==
-From:   SeongJae Park <sj@kernel.org>
-To:     Daniel Borkmann <daniel@iogearbox.net>
-Cc:     SeongJae Park <sj@kernel.org>, martin.lau@linux.dev,
-        Alexander.Egorenkov@ibm.com, ast@kernel.org, memxor@gmail.com,
-        olsajiri@gmail.com, bpf@vger.kernel.org, stable@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jiri Olsa <jolsa@kernel.org>
-Subject: Re: [PATCH v2] btf: warn but return no error for NULL btf from __register_btf_kfunc_id_set()
-Date:   Fri, 30 Jun 2023 21:02:51 +0000
-Message-Id: <20230630210251.126928-1-sj@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <75483b53-bd8e-692e-ed18-a4c87cf20a1b@iogearbox.net>
-References: 
+        s=k20201202; t=1688158987;
+        bh=GbigMdFJ1gzcE+bU8P8CZ5URxsvoZ5dfHvZ0M6ibtMM=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=I9oR/QSMCaWc+Y4yeKUiG7CSAi+7AkoOEJu8C2gwZGwlfZc1yMCw/cvmu69X2erwY
+         LENNmZj8kOvXfp9sCbDSnVLB+c0TvHs0Q8ySk7GtY0lk/xMB4NzpqFtJHgBYP5eTOJ
+         koAg7uNd2XOxIPGNhn+hbUy1wWUfyko7BDOHPkkXN0lCn1NYMgRgQI7CBwCNL5IY7W
+         W7pibjq6E6cTlPFNHD6+7TqEwbmGTSOxpg/QYywW3F3ToHVvJRqD0C0dfD1YKM/mwW
+         6t2ik4NDvTSy5SejzK+dkZc7Qesr1tSYEwzs7WpUffn2WfV7sSPf/OICaO2oXK0UKC
+         pALYd5MDQJktw==
+Received: by mail-lj1-f174.google.com with SMTP id 38308e7fff4ca-2b6a152a933so36841581fa.1
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 14:03:07 -0700 (PDT)
+X-Gm-Message-State: ABy/qLabx2/lYwFCXiSiwwWRmjO167lRdYo4nfuqPzENDKIrKQWOd2vx
+        arpPjvRvcrRDE0E0fZd4qF6rUBEVf3fRjwi2Qw==
+X-Google-Smtp-Source: APBJJlHKU/y3Hydryo1gEqB+hgkapodjXTtcVwuLvGL97mmWcIK8NK2WZ/A2myqHn1MzIpVHXvorjRmwug36+hhkpzg=
+X-Received: by 2002:a2e:3508:0:b0:2b6:98c3:7a70 with SMTP id
+ z8-20020a2e3508000000b002b698c37a70mr2838320ljz.41.1688158985189; Fri, 30 Jun
+ 2023 14:03:05 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+References: <20230609183056.1765183-1-robh@kernel.org>
+In-Reply-To: <20230609183056.1765183-1-robh@kernel.org>
+From:   Rob Herring <robh@kernel.org>
+Date:   Fri, 30 Jun 2023 15:02:52 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqLTc_9Yujp=wJjjn7P5YwAFZ9fn2SU6ey1q_gY3MFp9TA@mail.gmail.com>
+Message-ID: <CAL_JsqLTc_9Yujp=wJjjn7P5YwAFZ9fn2SU6ey1q_gY3MFp9TA@mail.gmail.com>
+Subject: Re: [PATCH] fsi: Use of_property_read_reg() to parse "reg"
+To:     Jeremy Kerr <jk@ozlabs.org>, Joel Stanley <joel@jms.id.au>,
+        Alistar Popple <alistair@popple.id.au>,
+        Eddie James <eajames@linux.ibm.com>
+Cc:     linux-fsi@lists.ozlabs.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -57,74 +65,98 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 30 Jun 2023 22:52:24 +0200 Daniel Borkmann <daniel@iogearbox.net> wrote:
+On Fri, Jun 9, 2023 at 12:31=E2=80=AFPM Rob Herring <robh@kernel.org> wrote=
+:
+>
+> Use the recently added of_property_read_reg() helper to get the
+> untranslated "reg" address value.
+>
+> Signed-off-by: Rob Herring <robh@kernel.org>
+> ---
+>  drivers/fsi/fsi-core.c | 39 +++++++++------------------------------
+>  1 file changed, 9 insertions(+), 30 deletions(-)
 
-> On 6/30/23 9:48 PM, SeongJae Park wrote:
-> > On Fri, 30 Jun 2023 16:53:38 +0200 Daniel Borkmann <daniel@iogearbox.net> wrote:
-> >> On 6/28/23 6:46 PM, SeongJae Park wrote:
-> >>> __register_btf_kfunc_id_set() assumes .BTF to be part of the module's
-> >>> .ko file if CONFIG_DEBUG_INFO_BTF is enabled.  If that's not the case,
-> >>> the function prints an error message and return an error.  As a result,
-> >>> such modules cannot be loaded.
-> >>>
-> >>> However, the section could be stripped out during a build process.  It
-> >>> would be better to let the modules loaded, because their basic
-> >>> functionalities have no problem[1], though the BTF functionalities will
-> >>> not be supported.  Make the function to lower the level of the message
-> >>> from error to warn, and return no error.
-> >>>
-> >>> [1] https://lore.kernel.org/bpf/20220219082037.ow2kbq5brktf4f2u@apollo.legion/
-> >>>
-> >>> Reported-by: Alexander Egorenkov <Alexander.Egorenkov@ibm.com>
-> >>> Link: https://lore.kernel.org/bpf/87y228q66f.fsf@oc8242746057.ibm.com/
-> >>> Suggested-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-> >>> Link: https://lore.kernel.org/bpf/20220219082037.ow2kbq5brktf4f2u@apollo.legion/
-> >>> Fixes: c446fdacb10d ("bpf: fix register_btf_kfunc_id_set for !CONFIG_DEBUG_INFO_BTF")
-> >>> Cc: <stable@vger.kernel.org> # 5.18.x
-> >>> Signed-off-by: SeongJae Park <sj@kernel.org>
-> >>> Acked-by: Jiri Olsa <jolsa@kernel.org>
-> >>
-> >> I presume this one is targeted at bpf (rather than bpf-next) tree, right?
-> > 
-> > You're correct.  It's not urgent for us, but I would prefer it to be merged
-> > into all affected kernels as early as possible.
-> 
-> Ok, sounds good, bpf tree it is then.
-> 
-> >>> diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-> >>> index 6b682b8e4b50..d683f034996f 100644
-> >>> --- a/kernel/bpf/btf.c
-> >>> +++ b/kernel/bpf/btf.c
-> >>> @@ -7848,14 +7848,10 @@ static int __register_btf_kfunc_id_set(enum btf_kfunc_hook hook,
-> >>>    
-> >>>    	btf = btf_get_module_btf(kset->owner);
-> >>>    	if (!btf) {
-> >>> -		if (!kset->owner && IS_ENABLED(CONFIG_DEBUG_INFO_BTF)) {
-> >>> -			pr_err("missing vmlinux BTF, cannot register kfuncs\n");
-> >>> -			return -ENOENT;
-> >>> -		}
-> >>
-> >> Why the above one needs to be changed? Do you also run into this case? vmlinux BTF
-> >> should be built-in in this case. I understand it's rather the one below for BTF +
-> >> modules instead, no?
-> > 
-> > Again, you're correct.  This change is not really needed.  I was interpreting
-> > Kumar's suggestion merely into code without thinking about his real meaning,
-> > sorry.  I will restore this in the next spin.
-> 
-> Perfect, I think after your v3 respin it should be good to land.
+Ping!
 
-Thank you!  I will send it by tomorrow, to give people enough time to comment.
-If you don't want to wait, please let me know :)
-
-Also, please note that this will not cleanly applicable on 6.1.y.  I will
-provide the backport to stable@ as soon as this is merged into the mainline.
-
-
-Thanks,
-SJ
-
-> 
-> Thanks,
-> Daniel
-> 
+>
+> diff --git a/drivers/fsi/fsi-core.c b/drivers/fsi/fsi-core.c
+> index 0b927c9f4267..19c4d5b3bde9 100644
+> --- a/drivers/fsi/fsi-core.c
+> +++ b/drivers/fsi/fsi-core.c
+> @@ -16,6 +16,7 @@
+>  #include <linux/idr.h>
+>  #include <linux/module.h>
+>  #include <linux/of.h>
+> +#include <linux/of_address.h>
+>  #include <linux/slab.h>
+>  #include <linux/bitops.h>
+>  #include <linux/cdev.h>
+> @@ -415,28 +416,18 @@ EXPORT_SYMBOL_GPL(fsi_slave_release_range);
+>  static bool fsi_device_node_matches(struct device *dev, struct device_no=
+de *np,
+>                 uint32_t addr, uint32_t size)
+>  {
+> -       unsigned int len, na, ns;
+> -       const __be32 *prop;
+> -       uint32_t psize;
+> +       u64 paddr, psize;
+>
+> -       na =3D of_n_addr_cells(np);
+> -       ns =3D of_n_size_cells(np);
+> -
+> -       if (na !=3D 1 || ns !=3D 1)
+> -               return false;
+> -
+> -       prop =3D of_get_property(np, "reg", &len);
+> -       if (!prop || len !=3D 8)
+> +       if (of_property_read_reg(np, 0, &paddr, &psize))
+>                 return false;
+>
+> -       if (of_read_number(prop, 1) !=3D addr)
+> +       if (paddr !=3D addr)
+>                 return false;
+>
+> -       psize =3D of_read_number(prop + 1, 1);
+>         if (psize !=3D size) {
+>                 dev_warn(dev,
+> -                       "node %s matches probed address, but not size (go=
+t 0x%x, expected 0x%x)",
+> -                       of_node_full_name(np), psize, size);
+> +                       "node %pOF matches probed address, but not size (=
+got 0x%llx, expected 0x%x)",
+> +                       np, psize, size);
+>         }
+>
+>         return true;
+> @@ -653,24 +644,12 @@ static void fsi_slave_release(struct device *dev)
+>  static bool fsi_slave_node_matches(struct device_node *np,
+>                 int link, uint8_t id)
+>  {
+> -       unsigned int len, na, ns;
+> -       const __be32 *prop;
+> -
+> -       na =3D of_n_addr_cells(np);
+> -       ns =3D of_n_size_cells(np);
+> -
+> -       /* Ensure we have the correct format for addresses and sizes in
+> -        * reg properties
+> -        */
+> -       if (na !=3D 2 || ns !=3D 0)
+> -               return false;
+> +       u64 addr;
+>
+> -       prop =3D of_get_property(np, "reg", &len);
+> -       if (!prop || len !=3D 8)
+> +       if (of_property_read_reg(np, 0, &addr, NULL))
+>                 return false;
+>
+> -       return (of_read_number(prop, 1) =3D=3D link) &&
+> -               (of_read_number(prop + 1, 1) =3D=3D id);
+> +       return addr =3D=3D (((u64)link << 32) | id);
+>  }
+>
+>  /* Find a matching node for the slave at (link, id). Returns NULL if non=
+e
+> --
+> 2.39.2
+>
