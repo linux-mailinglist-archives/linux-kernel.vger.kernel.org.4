@@ -2,251 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE1D27442B3
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 21:23:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A6917442BC
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 21:28:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232355AbjF3TXB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 15:23:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58872 "EHLO
+        id S232589AbjF3T2o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Jun 2023 15:28:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229546AbjF3TW6 (ORCPT
+        with ESMTP id S232564AbjF3T2d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 15:22:58 -0400
-Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 171783C3A
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 12:22:56 -0700 (PDT)
-Received: by mail-yb1-xb32.google.com with SMTP id 3f1490d57ef6-bd744ffc263so2189753276.3
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 12:22:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1688152975; x=1690744975;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=UpA/3MkDA4Bbb6eJ6xeemnz64HxyzKE7wrEAQ570pfY=;
-        b=qrvgu39+Pjzc0ty+cMKIrH7Eni71vn8ej746goZG1tt82sCTsmWg6sBEtMY5CYHkvc
-         xclnmytvO77Jk7WZZk/il6ovWRv1QJV2T5YBR38m1fpA60DTf2h7Xd6BRbHgj9AvET1p
-         tRCXjgGhJ6lxaDD/J1iU2O9lhqpC8W/NCc+eL3bbCVdX54HfuY4wUAcwYj6APMOTcz4G
-         f66Hj1VDT8JxouLBXxbgSCkSfpv2cMeVkvsNVflvvYlmarJ0nMeAwtFB3YcpKUnimWJd
-         M0kxVMaVqi4PmA2kSbzsqFbGlI4UBRtOwklt4JjwKtiq8VRHxGS9MYdDm87KrkMzPwwX
-         AxHQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688152975; x=1690744975;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=UpA/3MkDA4Bbb6eJ6xeemnz64HxyzKE7wrEAQ570pfY=;
-        b=ihuPq/QUdG4yB+Jo7Jjw1kcWf1JHnbGcgWgMWqQs3HQpU+uW1M9WZXAe4qxvEr52dj
-         A5DR9ha0XZqJl5UYtHtmsz3/j7zHOvht5gIh2YqAVxsikb24nbnL24x4eOhBtuIzVC5A
-         VB2dSJCbsr1lbdPGmCtTNDtnuJKSs4zysXW8XIz7sYWgAUXHtSQruzLuTO/5WTAUX8VZ
-         l2z63JWnq81c2j36hjJeyadjTfruLGdwCX2omqav1GTZ654LjqZOR/4WUELW2tRgwOHL
-         ow9NzgmEXiTAWhpiXlA38ScHrwCY2SZO+l8OxpbTFEbc3BkWhdcIKf1timqUkT5Gzibw
-         PDNw==
-X-Gm-Message-State: ABy/qLZp/+DVSo3Rfja8THKG7C4P3MGOs3aDexjB7dA6b1oavAOnlpJi
-        /vIX39HGtC7GlMRB580ykQ8uGQ==
-X-Google-Smtp-Source: APBJJlEeRudcWa5iit7A1oAKHz4BndX5rtVzOZ4hnmAKD3Z6cXWQLvZ24j/5LxRaPlyEpIMC7jurbQ==
-X-Received: by 2002:a25:ce04:0:b0:c22:82b1:17ee with SMTP id x4-20020a25ce04000000b00c2282b117eemr3233485ybe.63.1688152975093;
-        Fri, 30 Jun 2023 12:22:55 -0700 (PDT)
-Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
-        by smtp.gmail.com with ESMTPSA id t4-20020a259ac4000000b00bb144da7d68sm2968477ybo.13.2023.06.30.12.22.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 30 Jun 2023 12:22:54 -0700 (PDT)
-Date:   Fri, 30 Jun 2023 12:22:43 -0700 (PDT)
-From:   Hugh Dickins <hughd@google.com>
-X-X-Sender: hugh@ripple.attlocal.net
-To:     Claudio Imbrenda <imbrenda@linux.ibm.com>
-cc:     Hugh Dickins <hughd@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        David Hildenbrand <david@redhat.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Qi Zheng <zhengqi.arch@bytedance.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Peter Xu <peterx@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Will Deacon <will@kernel.org>, Yu Zhao <yuzhao@google.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Ralph Campbell <rcampbell@nvidia.com>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Steven Price <steven.price@arm.com>,
-        SeongJae Park <sj@kernel.org>,
-        Lorenzo Stoakes <lstoakes@gmail.com>,
-        Huang Ying <ying.huang@intel.com>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Zack Rusin <zackr@vmware.com>, Jason Gunthorpe <jgg@ziepe.ca>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Minchan Kim <minchan@kernel.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Song Liu <song@kernel.org>,
-        Thomas Hellstrom <thomas.hellstrom@linux.intel.com>,
-        Russell King <linux@armlinux.org.uk>,
+        Fri, 30 Jun 2023 15:28:33 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FBC53C38
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 12:28:31 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9D829617F5
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 19:28:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE726C433C0;
+        Fri, 30 Jun 2023 19:28:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688153308;
+        bh=zX7DtgKaXqa8tSnrkMuQTXY6UheSPHRSG4DhhcbKq+g=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ryup1iNS7cnCw2wiYI3YEs2N7PeCMaMxWV1gkQER97KVMF9lUTjIK9fzk3DQSkk6q
+         M+MqgMxaw01mt5CQJkyVoO9FEbADys+v/GY8cYOOAo8cGz0mR5z1t2Z2jbWiWBHe3a
+         2SUPqi1E9SO46ZJpEI6KSX8OMAPW2qgfncFFfHniX5QNV9jHuH2YBR0CH4Oe9KVhoC
+         Mi4/QItY+2LBUukkmIeMd8s+nPBYMevX7Wwbj1GsdziHcoAtWeZDF/tFvAn8Ar88eI
+         RjrS0eVk052IzxtszvnH8y3/MNlfF+v+hiJeG9qiwYwudNCWMxPTjEBAgyj6rmJdq9
+         JLEUuTBhVG9vA==
+Date:   Fri, 30 Jun 2023 12:28:25 -0700
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     David Howells <dhowells@redhat.com>,
+        Aurelien Aptel <aaptel@nvidia.com>, netdev@vger.kernel.org,
+        Alexander Duyck <alexander.duyck@gmail.com>,
         "David S. Miller" <davem@davemloft.net>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Jann Horn <jannh@google.com>,
-        Vishal Moola <vishal.moola@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        linux-arm-kernel@lists.infradead.org, sparclinux@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [PATCH v2 07/12] s390: add pte_free_defer() for pgtables sharing
- page
-In-Reply-To: <20230630182556.7727ef50@p-imbrenda>
-Message-ID: <7f6d399b-c47-1faa-f7f6-9932b9811f8c@google.com>
-References: <54cb04f-3762-987f-8294-91dafd8ebfb0@google.com> <a722dbec-bd9e-1213-1edd-53cd547aa4f@google.com> <20230630153852.31163592@p-imbrenda> <062b19-4cf1-261-a9bf-9cefd32382fc@google.com> <20230630182556.7727ef50@p-imbrenda>
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+        David Ahern <dsahern@kernel.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Jens Axboe <axboe@kernel.dk>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, Sagi Grimberg <sagi@grimberg.me>,
+        Willem de Bruijn <willemb@google.com>,
+        Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@fb.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Chaitanya Kulkarni <kch@nvidia.com>,
+        linux-nvme@lists.infradead.org, llvm@lists.linux.dev
+Subject: Re: [PATCH net-next v3 10/18] nvme/host: Use
+ sendmsg(MSG_SPLICE_PAGES) rather then sendpage
+Message-ID: <20230630192825.GA2745548@dev-arch.thelio-3990X>
+References: <253mt0il43o.fsf@mtr-vdi-124.i-did-not-set--mail-host-address--so-tickle-me>
+ <20230620145338.1300897-1-dhowells@redhat.com>
+ <20230620145338.1300897-11-dhowells@redhat.com>
+ <58466.1688074499@warthog.procyon.org.uk>
+ <20230629164318.44f45caf@kernel.org>
+ <20230630161043.GA2902645@dev-arch.thelio-3990X>
+ <20230630091442.172ec67f@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230630091442.172ec67f@kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 30 Jun 2023, Claudio Imbrenda wrote:
-> On Fri, 30 Jun 2023 08:28:54 -0700 (PDT)
-> Hugh Dickins <hughd@google.com> wrote:
-> > On Fri, 30 Jun 2023, Claudio Imbrenda wrote:
-> > > On Tue, 20 Jun 2023 00:51:19 -0700 (PDT)
-> > > Hugh Dickins <hughd@google.com> wrote:
-> > > 
-> > > [...]
-> > >   
-> > > > +void pte_free_defer(struct mm_struct *mm, pgtable_t pgtable)
-> > > > +{
-> > > > +	unsigned int bit, mask;
-> > > > +	struct page *page;
-> > > > +
-> > > > +	page = virt_to_page(pgtable);
-> > > > +	if (mm_alloc_pgste(mm)) {
-> > > > +		call_rcu(&page->rcu_head, pte_free_pgste);  
-> > > 
-> > > so is this now going to be used to free page tables
-> > > instead of page_table_free_rcu?  
+On Fri, Jun 30, 2023 at 09:14:42AM -0700, Jakub Kicinski wrote:
+> On Fri, 30 Jun 2023 09:10:43 -0700 Nathan Chancellor wrote:
+> > > Let me CC llvm@ in case someone's there is willing to make 
+> > > the compiler warn about this.
 > > 
-> > No.
+> > Turns out clang already has a warning for this, -Wcomma:
 > > 
-> > All pte_free_defer() is being used for (in this series; and any future
-> > use beyond this series will have to undertake its own evaluations) is
-> > for the case of removing an empty page table, which used to map a group
-> > of PTE mappings of a file, in order to make way for one PMD mapping of
-> > the huge page which those scattered pages have now been gathered into.
+> >   drivers/nvme/host/tcp.c:1017:38: error: possible misuse of comma operator here [-Werror,-Wcomma]
+> >    1017 |                         msg.msg_flags &= ~MSG_SPLICE_PAGES,
+> >         |                                                           ^
+> >   drivers/nvme/host/tcp.c:1017:4: note: cast expression to void to silence warning
+> >    1017 |                         msg.msg_flags &= ~MSG_SPLICE_PAGES,
+> >         |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> >         |                         (void)(                           )
+> >   1 error generated.
 > > 
-> > You're worried by that mm_alloc_pgste() block: it's something I didn't
-> 
-> actually no, but thanks for bringing it up :D
-> 
-> > have at all in my first draft, then I thought that perhaps the pgste
-> > case might be able to come this way, so it seemed stupid to leave out
-> > the handling for it.
-> > 
-> > I hope that you're implying that should be dead code here?  Perhaps,
-> > that the pgste case corresponds to the case in s390 where THPs are
-> > absolutely forbidden?  That would be good news for us.
-> > 
-> > Gerald, in his version of this block, added a comment asking:
-> > 	/*
-> > 	 * TODO: Do we need gmap_unlink(mm, pgtable, addr), like in
-> > 	 * page_table_free_rcu()?
-> > 	 * If yes -> need addr parameter here, like in pte_free_tlb().
-> > 	 */
-> > Do you have the answer to that?  Neither of us could work it out.
-> 
-> this is the thing I'm worried about; removing a page table that was
-> used to map a guest will leave dangling pointers in the gmap that will
-> cause memory corruption (I actually ran into that problem myself for
-> another patchseries).
-> 
-> gmap_unlink() is needed to clean up the pointers before they become
-> dangling (and also potentially do some TLB purging as needed)
+> > Let me do some wider build testing to see if it is viable to turn this
+> > on for the whole kernel because it seems worth it, at least in this
+> > case. There are a lot of cases where a warning won't be emitted (see the
+> > original upstream review for a list: https://reviews.llvm.org/D3976) but
+> > something is better than nothing, right? :)
 
-That's something I would have expected to be handled already via
-mmu_notifiers, rather than buried inside the page table freeing.
+Well, that was a pipe dream :/ In ARCH=arm multi_v7_defconfig alone,
+there are 289 unique instances of the warning (although a good number
+have multiple instances per line, so it is not quite as bad as it seems,
+but still bad):
 
-If s390 is the only architecture to go that way, and could instead do
-it via mmu_notifiers, then I think that will be more easily supported
-in the long term.
+$ rg -- -Wcomma arm-multi_v7_defconfig.log | sort | uniq -c | wc -l
+289
 
-But I'm writing from a position of very great ignorance: advising
-KVM on s390 is many dimensions away from what I'm capable of.
+https://gist.github.com/nathanchance/907867e0a7adffc877fd39fd08853801
 
-> 
-> the point here is: we need that only for page_table_free_rcu(); all
-> other users of page_table_free() cannot act on guest page tables
+Probably not a good sign of the signal to noise ratio, I looked through
+a good handful and all the cases I saw were not interesting... Perhaps
+the warning could be tuned further to become useful for the kernel but
+in its current form, it is definitely a no-go :/
 
-I might be wrong, but I think that most users of page_table_free()
-are merely freeing a page table which had to be allocated up front,
-but was then found unnecessary (maybe a racing task already inserted
-one): page tables which were never exposed to actual use.
+> Ah, neat. Misleading indentation is another possible angle, I reckon,
+> but not sure if that's enabled/possible to enable for the entire kernel
 
-> (because we don't allow THP for KVM guests). and that is why
-> page_table_free() does not do gmap_unlink() currently.
+Yeah, I was surprised there was no warning for misleading indentation...
+it is a part of -Wall for both clang and GCC, so it is on for the
+kernel, it just appears not to trigger in this case.
 
-But THP collapse does (or did before this series) use it to free a
-page table which had been exposed to use.  The fact that s390 does
-not allow THP for KVM guests makes page_table_free(), and this new
-pte_free_defer(), safe for that; but it feels dangerously coincidental.
+> either :( We test-build with W=1 in networking, FWIW, so W=1 would be
+> enough for us.
 
-It's easy to imagine a future change being made, which would stumble
-over this issue.  I have imagined that pte_free_defer() will be useful
-in future, in the freeing of empty page tables: but s390 may pose a
-problem there - though perhaps no more of a problem than additionally
-needing to pass a virtual address down the stack.
+Unfortunately, even in its current form, it is way too noisy for W=1, as
+the qualifier for W=1 is "do not occur too often". Probably could be
+placed under W=2 but it still has the problem of wading through every
+instance and it is basically a no-op because nobody tests with W=2.
 
-> 
-> > 
-> > > 
-> > > or will it be used instead of page_table_free?  
-> > 
-> > Not always; but yes, this case of removing a page table used
-> > page_table_free() before; but now, with the lighter locking, needs
-> > to keep the page table valid until the RCU grace period expires.
-> 
-> so if I understand correctly your code will, sometimes, under some
-> circumstances, replace what page_table_free() does, but it will never
-> replace page_table_free_rcu()?
-> 
-> because in that case there would be no issues 
-
-Yes, thanks for confirming: we have no issue here at present, but may
-do if use of pte_free_defer() is extended to other contexts in future.
-
-Would it be appropriate to add a WARN_ON_ONCE around that
-> > > > +	if (mm_alloc_pgste(mm)) {
-in pte_free_defer()?
-
-I ask that somewhat rhetorically: that block disappears in the later
-version I was working on last night (and will return to shortly), in
-which pte_free_defer() just sets a bit and calls page_table_free().
-
-But I'd like to understand the possibilities better: does mm_alloc_pgste()
-correspond 1:1 to KVM guest on s390, or does it cover several different
-possibilities of which KVM guest is one, or am I just confused to be
-thinking there's any relationship?
-
-Thanks,
-Hugh
-
-> 
-> > 
-> > > 
-> > > this is actually quite important for KVM on s390  
-> > 
-> > None of us are wanting to break KVM on s390: your guidance appreciated!
-> > 
-> > Thanks,
-> > Hugh
+Cheers,
+Nathan
