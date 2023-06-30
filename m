@@ -2,155 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F927743E47
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 17:07:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 332EF743E49
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 17:07:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232931AbjF3PHG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 11:07:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59500 "EHLO
+        id S232235AbjF3PHp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Jun 2023 11:07:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232516AbjF3PHD (ORCPT
+        with ESMTP id S232445AbjF3PHj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 11:07:03 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61998E68
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 08:07:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=ScEt9DiAzd+hsgUAGDc7rzKKhqHbIw5WsqFtP88mfTg=; b=ION21A1Qdt5lVgXthxTwG4DG5c
-        U+tk1C/OfAls/3ZtGmKjBmI/07z9AJ7pjB+mqnLe2N8XIpHKUsP5qpaSnwwTO6Qf4U4vILjfWrnxa
-        Zd7n6JIyIRWpNki/hRbL76wDVA/rssZcPOoBQwd4JGLI0BCzgWnnn0DijYbQ/JrI8TsfuZvW85HTD
-        UgV3ohlYvUunqXID15ynAX3fR2hSsLJA2vwLktsyH+lZIleSgTwypbxWeMYHwOczyvc6WpSpwjSdH
-        3HAwW9J8jiVCMRIqb2Fu0xIgdaniqpucnN9Hzx5yVQ+1tPRAB2ryS5xwxoc6d9Zs6o+bUQq5DSPvp
-        W6qyfPJw==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1qFFhr-005nWB-Dg; Fri, 30 Jun 2023 15:06:45 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 091E63002E1;
-        Fri, 30 Jun 2023 17:06:42 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id E22E524810097; Fri, 30 Jun 2023 17:06:41 +0200 (CEST)
-Date:   Fri, 30 Jun 2023 17:06:41 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Phil Auld <pauld@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, Juri Lelli <juri.lelli@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Ben Segall <bsegall@google.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Mel Gorman <mgorman@suse.de>,
-        Frederic Weisbecker <frederic@kernel.org>
-Subject: Re: [PATCH v4] Sched/fair: Block nohz tick_stop when cfs bandwidth
- in use
-Message-ID: <20230630150641.GH2533791@hirez.programming.kicks-ass.net>
-References: <20230630135714.1018434-1-pauld@redhat.com>
+        Fri, 30 Jun 2023 11:07:39 -0400
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A620E68
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 08:07:37 -0700 (PDT)
+Received: by mail-pl1-x62c.google.com with SMTP id d9443c01a7336-1b852785a65so12934865ad.0
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 08:07:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=heitbaum.com; s=google; t=1688137656; x=1690729656;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=8EnuOO6oK/ZVqVGz3O9HMiKg2lC4Al7i/4UAuVg8htY=;
+        b=PDNb3JOlAYukvjfbvtQ8ZLFvnbUoRaeNLFtvnAXu5kbH/6T7dn4pTHw5k8zpwiETGL
+         v9PQYHRTz9ctIdIWj9bV9ajKu870gPZlcBRKrZcjLhCY+tLRhybDb33Z+Fd1QgoVy920
+         KIdd1JfBuwockiY6424G/jo7krbCswaHzVaKg=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688137656; x=1690729656;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8EnuOO6oK/ZVqVGz3O9HMiKg2lC4Al7i/4UAuVg8htY=;
+        b=B2snSpF0I9WQkLPTabdUt6IVLJ/Wn2alllI2fRHLAf+fOmsc7LN32nx6cjagXJ5EbT
+         Y1JtgSuUUM/BIdmwsizCi8WXMvxxd45V69wl8H3pxLtTcOEtnDQK4LU4RanHV2N+bDOk
+         ykZXTr0B0DGPqkNOdUzsXhpdgz3UrHPsjNi/rjYg6ZxvAHsnRdcWybsKiJeyu2kRbuOB
+         l6Oi7RH3pmxpkxU9mxsRNf2cG0ZxWkNzNkhXmn8gLCl0daAjRjPkvoCjJwlMmF0TUB4e
+         x0UFziwybZaybnMyMtWWwMEEKDPxTh79ab4MZQWsxnNz3gza6NYRtf8wwK6GecFCjA03
+         6LoQ==
+X-Gm-Message-State: AC+VfDzvX+sHs8cdQQJalnuDKgqWVgQhQouuzWzSaFwrMgebYAzZrbcM
+        mhpn2XKvGTogaQWP4/0u6fVq/A==
+X-Google-Smtp-Source: ACHHUZ5iqx/PxCy9A0NgfSEXCrVRwBebxEv2MkEa873Y9HdaqjtDpTpqnWXbi6zOPsH61dYoDU2WJA==
+X-Received: by 2002:a17:902:c411:b0:1b6:92f0:b6f5 with SMTP id k17-20020a170902c41100b001b692f0b6f5mr10240571plk.14.1688137656539;
+        Fri, 30 Jun 2023 08:07:36 -0700 (PDT)
+Received: from 88b90ce288d3 ([122.199.31.3])
+        by smtp.gmail.com with ESMTPSA id x12-20020a170902820c00b001b3d7205401sm10867637pln.303.2023.06.30.08.07.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 30 Jun 2023 08:07:35 -0700 (PDT)
+Date:   Fri, 30 Jun 2023 15:07:27 +0000
+From:   Rudi Heitbaum <rudi@heitbaum.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de,
+        conor@kernel.org
+Subject: Re: [PATCH 6.4 00/31] 6.4.1-rc3 review
+Message-ID: <ZJ7vr/OtdYiwqLy2@88b90ce288d3>
+References: <20230630072101.040486316@linuxfoundation.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230630135714.1018434-1-pauld@redhat.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230630072101.040486316@linuxfoundation.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 30, 2023 at 09:57:14AM -0400, Phil Auld wrote:
+On Fri, Jun 30, 2023 at 09:33:31AM +0200, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 6.4.1 release.
+> There are 31 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Sun, 02 Jul 2023 07:20:45 +0000.
+> Anything received after that time might be too late.
 
-> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-> index a68d1276bab0..2685373e12f1 100644
-> --- a/kernel/sched/core.c
-> +++ b/kernel/sched/core.c
-> @@ -1229,6 +1229,16 @@ bool sched_can_stop_tick(struct rq *rq)
->  	if (rq->nr_running > 1)
->  		return false;
->  
-> +	/*
-> +	 * If there is one task and it has CFS runtime bandwidth constraints
-> +	 * and it's on the cpu now we don't want to stop the tick.
-> +	 */
-> +	if (sched_feat(HZ_BW) && rq->nr_running == 1 && rq->curr
-> +	    && rq->curr->sched_class == &fair_sched_class && task_on_rq_queued(rq->curr)) {
+Hi Greg,
 
-&& goes at the end of the previous line
+6.4.1-rc3 tested.
 
-rq->curr is never NULL
+Run tested on:
+- Allwinner H6 (Tanix TX6)
+- Intel Alder Lake x86_64 (nuc12 i7-1260P)
 
-But surely you can find a saner way to write this?
+In addition - build tested for:
+- Allwinner A64
+- Allwinner H3
+- Allwinner H5
+- NXP iMX6
+- NXP iMX8
+- Qualcomm Dragonboard
+- Rockchip RK3288
+- Rockchip RK3328
+- Rockchip RK3399pro
+- Samsung Exynos
 
-> +		if (sched_cfs_bandwidth_active(rq->curr))
-> +			return false;
-> +	}
-> +
->  	return true;
->  }
->  #endif /* CONFIG_NO_HZ_FULL */
-> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-> index 373ff5f55884..125b1ec4476f 100644
-> --- a/kernel/sched/fair.c
-> +++ b/kernel/sched/fair.c
-> @@ -6139,6 +6139,50 @@ static void __maybe_unused unthrottle_offline_cfs_rqs(struct rq *rq)
->  	rcu_read_unlock();
->  }
->  
-> +#ifdef CONFIG_NO_HZ_FULL
-> +static inline bool cfs_se_bandwidth_enabled(struct sched_entity *se)
-> +{
-> +	int ret = 0;
-> +
-> +	for_each_sched_entity(se)
-> +		ret += cfs_rq_of(se)->runtime_enabled;
-> +
-> +	return ret != 0;
-> +}
-> +
-> +bool sched_cfs_bandwidth_active(struct task_struct *p)
-> +{
-> +	if (cfs_bandwidth_used() && cfs_se_bandwidth_enabled(&p->se))
-> +		return true;
-> +
-> +	return false;
-> +}
-> +
-> +/* called from pick_next_task_fair() */
-> +static void sched_fair_update_stop_tick(struct rq *rq, struct task_struct *p)
-> +{
-> +	int cpu = cpu_of(rq);
-> +
-> +	if (!sched_feat(HZ_BW) || !cfs_bandwidth_used())
-> +		return;
-> +
-> +	if (!tick_nohz_full_cpu(cpu))
-> +		return;
-> +
-> +	if (rq->nr_running != 1)
-> +		return;
-> +
-> +	/*
-> +	 *  We know there is only one task runnable and we've just picked it. The
-> +	 *  normal enqueue path will have cleared TICK_DEP_BIT_SCHED if we will
-> +	 *  be otherwise able to stop the tick. Just need to check if we are using
-> +	 *  bandwidth control.
-> +	 */
-> +	if (cfs_se_bandwidth_enabled(&p->se))
-> +		tick_nohz_dep_set_cpu(cpu, TICK_DEP_BIT_SCHED);
-> +}
-
-Yeah, I think not; pick_next_task_fair() just walked the cgroup
-hierarchy and now you do it again.
-
-Also, why does this code exist at all? Both enqueue/dequeue already end
-up in sched_update_tick_depenency() and should be able to handle the
-nr_running==1 with bandwidth crap, no?
+Tested-by: Rudi Heitbaum <rudi@heitbaum.com>
+--
+Rudi
