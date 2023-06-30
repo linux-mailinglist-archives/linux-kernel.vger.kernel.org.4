@@ -2,95 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 553E07443E0
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 23:25:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 009807443E2
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 23:26:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229919AbjF3VZD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 17:25:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36250 "EHLO
+        id S232172AbjF3VZx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Jun 2023 17:25:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229560AbjF3VY7 (ORCPT
+        with ESMTP id S231315AbjF3VZt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 17:24:59 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B556F2686
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 14:24:58 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id 3f1490d57ef6-bfebb1beeccso2197813276.2
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 14:24:58 -0700 (PDT)
+        Fri, 30 Jun 2023 17:25:49 -0400
+Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7915C102
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 14:25:48 -0700 (PDT)
+Received: by mail-yb1-xb2b.google.com with SMTP id 3f1490d57ef6-bfee66a5db6so2198942276.0
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 14:25:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1688160298; x=1690752298;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=9OuqO+GprsYwzlZrAMxO302oe0WdyZWBaVRgt/0KOVc=;
-        b=C98VfhGLNA5xfbBYxeu79VpxIy9gRA6nupPJlAfe0FuPEfw/4GPR1LutGEmbPkU+D6
-         LCsyyk7D1OMMbPdZuqJ9pRQyj5bW6ckdCA5JJQ6l1LqK6+B3WHfFhFGW1zF4WhSDt95B
-         76niGAHa2KUaUlGFoU46LfHpWIdnS1uFr74lXzrCCEehASUT/Zkr0bpM7jQ7BSmVFXYz
-         a2YxzWzm0vujdecLtLgB25IIGiMTe9YiFVK4SJ/eBhMlwZW3PKId1fdZAWpVYfILXO43
-         OkuMAJ9vMYtxDqrigZ3s9PiQR/RD0SJ2XoRA2Xh0FFvQ/TxS2T5r8RXuCsiv02v77dUv
-         kuPQ==
+        d=google.com; s=20221208; t=1688160347; x=1690752347;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=LDq+42TG3Ict2mGIXSxzLvITw6tDdgLWNgtDD2KSbtQ=;
+        b=p+FcoycAK0LPHezltqUeI1NrBX02NNvg5DenKN0eWW1dccMI32UPW8kFZXi9E1liI7
+         DXYS4n5JEx0K8GZNxGg+qprF+yhlh0aoqEyKqaRW/GmIuTumS/1PkBlZI+loDbENmNBX
+         Ho7ju7BN9BO7gPdG/IYe8CqRA3A5LJUsyNWk7PlMC++UPN9eBCyXVNb14REAHWCSl6q2
+         Je65sJp6xp3ZUvwhMu5GeWyM8Qo+RY+ReIkKr8cTipAt+0MzoT57tkgZye0aad+zr0Q0
+         bE/RhNvlJ1QugzovorCN6ITdQVr2mEdnCVPvr9vPU4ew5xC0HaqZ7A2pwu6xaV+0yUr9
+         UeXg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688160298; x=1690752298;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=9OuqO+GprsYwzlZrAMxO302oe0WdyZWBaVRgt/0KOVc=;
-        b=RQ09LRK46IEaZApWzcx6epoOoU0mD32LO50aDTi7HiwyiHOQoyK4RGbNTfeKF+KP/D
-         kf5HqzFvYqxsqglC3R8Y9SVuhofE04/zA8P6kSorXbEvDhQf3eUAiyyUZ/isZMEBg7UC
-         dX1B7ACOMx/nkruhh92qyTNy05XZRKKxrN3jv7cF0NpjuGNYILpDjVi7BzrM/3M5t6Qd
-         Mgk4POmQGDXGjcRxwtSx7mVui3x24olhieN6dfTU+lERpmMs/tm2vTQzo34KfwNCkOzD
-         tsJyy1B6XS9O9MCr0OKeB21JjBQcdt33w1eGEYPgw9Tn1q+4U8aeOy+ClXOz5rYoOYvm
-         /rGQ==
-X-Gm-Message-State: ABy/qLbAQkAjWD/u2TdZ4jYVKuKcf9Tbf5fsFlkpM79r2EMp3l//nVUt
-        rtNubb8noz/nDVcZ+ZeTN1hhHB00uP8=
-X-Google-Smtp-Source: APBJJlGImEzp5+7kOBgHaxvCjkxiHX5w7NN8ScEyxNJQ7wgzjAyS5wsh+UoGUOwuj07AgYjSnXiJcdrLhIY=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a25:4183:0:b0:c1e:f91c:2691 with SMTP id
- o125-20020a254183000000b00c1ef91c2691mr37547yba.10.1688160297945; Fri, 30 Jun
- 2023 14:24:57 -0700 (PDT)
-Date:   Fri, 30 Jun 2023 14:24:56 -0700
-In-Reply-To: <20230630190514.GH3436214@ls.amr.corp.intel.com>
-Mime-Version: 1.0
-References: <cover.1687784645.git.kai.huang@intel.com> <104d324cd68b12e14722ee5d85a660cccccd8892.1687784645.git.kai.huang@intel.com>
- <20230628131717.GE2438817@hirez.programming.kicks-ass.net>
- <0c9639db604a0670eeae5343d456e43d06b35d39.camel@intel.com>
- <20230630092615.GD2533791@hirez.programming.kicks-ass.net>
- <2659d6eef84f008635ba300f4712501ac88cef2c.camel@intel.com>
- <20230630183020.GA4253@hirez.programming.kicks-ass.net> <20230630190514.GH3436214@ls.amr.corp.intel.com>
-Message-ID: <ZJ9IKALhz1Q6ogu1@google.com>
-Subject: Re: [PATCH v12 07/22] x86/virt/tdx: Add skeleton to enable TDX on demand
-From:   Sean Christopherson <seanjc@google.com>
-To:     Isaku Yamahata <isaku.yamahata@gmail.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Kai Huang <kai.huang@intel.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        Ashok Raj <ashok.raj@intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        "david@redhat.com" <david@redhat.com>,
-        "bagasdotme@gmail.com" <bagasdotme@gmail.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        "ak@linux.intel.com" <ak@linux.intel.com>,
-        Rafael J Wysocki <rafael.j.wysocki@intel.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        Reinette Chatre <reinette.chatre@intel.com>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        Isaku Yamahata <isaku.yamahata@intel.com>,
-        "nik.borisov@suse.com" <nik.borisov@suse.com>,
-        "hpa@zytor.com" <hpa@zytor.com>, Sagi Shahar <sagis@google.com>,
-        "imammedo@redhat.com" <imammedo@redhat.com>,
-        "bp@alien8.de" <bp@alien8.de>, Chao Gao <chao.gao@intel.com>,
-        Len Brown <len.brown@intel.com>,
-        "sathyanarayanan.kuppuswamy@linux.intel.com" 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        Ying Huang <ying.huang@intel.com>,
-        Dan J Williams <dan.j.williams@intel.com>,
-        "x86@kernel.org" <x86@kernel.org>
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        d=1e100.net; s=20221208; t=1688160347; x=1690752347;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=LDq+42TG3Ict2mGIXSxzLvITw6tDdgLWNgtDD2KSbtQ=;
+        b=e3lU635zcmShCZTQ6C0wMaWkZFW7CanaGS9XUowVTO8torUYxIGfISUaNFphvgCqeJ
+         TEUCoKiZIy6JTCLTSg1I3yED2lZQONLGrdROH5qi3+R7aDNhRdZoqDhlrapJrO5AdyQh
+         sFiWJqGBG74DsWD1H3F3M7VFIQ4Qog91buKIgUgkVGQ4LBsTw3PwqdwqqdsM3Sc2doBN
+         T/BcHQB+rP4kI/TcG2gyVQ/iUc3LvUTTniBSBMu9pJy1Ux7v2IduA8fy2h0WPmbd3Y5G
+         NnbaDPCB83ekVjCE/VMLOooczmoLqQvWskddNwhXQkPKMeQhRFAXF7ecNZ84ite9mmrz
+         gpjg==
+X-Gm-Message-State: ABy/qLYu7xQlayXNpj0B3gcWo9gWrPa8N7vi6Du2on938NW6Gs4aEQcz
+        mAxtd2QAY3eRizGogoFZlUeXXxOdO8Wjilwwjcb5pA==
+X-Google-Smtp-Source: APBJJlG07kZfUqsjjffPRGzbU8Rg8FwBTqDjQrYIYP39R2vse26RFRoYEGSmwzduzus/Oe7YVXAxuSv0y1+UclYTcxU=
+X-Received: by 2002:a25:15c1:0:b0:bfe:77f1:f454 with SMTP id
+ 184-20020a2515c1000000b00bfe77f1f454mr3324853ybv.51.1688160347525; Fri, 30
+ Jun 2023 14:25:47 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230630020436.1066016-1-surenb@google.com> <20230630020436.1066016-5-surenb@google.com>
+ <ZJ5NzJDY0XPt8ui1@casper.infradead.org> <CAJuCfpH7uBPS4v24MEh_4XTfJ1bz3oUhHGvtNY=XwoicXc8_XA@mail.gmail.com>
+ <ZJ5QR5q2WtD2z1rd@casper.infradead.org>
+In-Reply-To: <ZJ5QR5q2WtD2z1rd@casper.infradead.org>
+From:   Suren Baghdasaryan <surenb@google.com>
+Date:   Fri, 30 Jun 2023 14:25:36 -0700
+Message-ID: <CAJuCfpE9XCBy3vCv-zKDbB2J7ctgGz1k4Y5265V6vXNX=GTX8A@mail.gmail.com>
+Subject: Re: [PATCH v6 4/6] mm: change folio_lock_or_retry to use vm_fault directly
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     akpm@linux-foundation.org, hannes@cmpxchg.org, mhocko@suse.com,
+        josef@toxicpanda.com, jack@suse.cz, ldufour@linux.ibm.com,
+        laurent.dufour@fr.ibm.com, michel@lespinasse.org,
+        liam.howlett@oracle.com, jglisse@google.com, vbabka@suse.cz,
+        minchan@google.com, dave@stgolabs.net, punit.agrawal@bytedance.com,
+        lstoakes@gmail.com, hdanton@sina.com, apopple@nvidia.com,
+        peterx@redhat.com, ying.huang@intel.com, david@redhat.com,
+        yuzhao@google.com, dhowells@redhat.com, hughd@google.com,
+        viro@zeniv.linux.org.uk, brauner@kernel.org,
+        pasha.tatashin@soleen.com, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-team@android.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -98,102 +82,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 30, 2023, Isaku Yamahata wrote:
-> On Fri, Jun 30, 2023 at 08:30:20PM +0200,
-> Peter Zijlstra <peterz@infradead.org> wrote:
-> 
-> > On Fri, Jun 30, 2023 at 09:55:32AM +0000, Huang, Kai wrote:
-> > > On Fri, 2023-06-30 at 11:26 +0200, Peter Zijlstra wrote:
-> > > > On Thu, Jun 29, 2023 at 12:10:00AM +0000, Huang, Kai wrote:
-> > > > > On Wed, 2023-06-28 at 15:17 +0200, Peter Zijlstra wrote:
-> > > > > > On Tue, Jun 27, 2023 at 02:12:37AM +1200, Kai Huang wrote:
-> > > > > > > +EXPORT_SYMBOL_GPL(tdx_cpu_enable);
-> > > > > > 
-> > > > > > I can't find a single caller of this.. why is this exported?
-> > > > > 
-> > > > > It's for KVM TDX patch to use, which isn't in this series.
-> > > > > 
-> > > > > I'll remove the export.  KVM TDX series can export it.
-> > > > 
-> > > > Fair enough; where will the KVM TDX series call this? Earlier there was
-> > > > talk about doing it at kvm module load time -- but I objected (and still
-> > > > do object) to that.
-> > > > 
-> > > > What's the current plan?
-> > > > 
-> > > 
-> > > The direction is still doing it during module load (not my series anyway).  But
-> > > this can be a separate discussion with KVM maintainers involved.
-> > 
-> > They all on Cc afaict.
-> > 
-> > > I understand you have concern that you don't want to have the memory & cpu time
-> > > wasted on enabling TDX by default.  For that we can have a kernel command line
-> > > to disable TDX once for all (we can even make it default).
-> > 
-> > That's insane, I don't want to totally disable it. I want it done at
-> > guard creation. Do the whole TDX setup the moment you actually create a
-> > TDX guast.
-> > 
-> > Totally killing TDX is stupid, 
+On Thu, Jun 29, 2023 at 8:47=E2=80=AFPM Matthew Wilcox <willy@infradead.org=
+> wrote:
+>
+> On Thu, Jun 29, 2023 at 08:45:39PM -0700, Suren Baghdasaryan wrote:
+> > On Thu, Jun 29, 2023 at 8:36=E2=80=AFPM Matthew Wilcox <willy@infradead=
+.org> wrote:
+> > >
+> > > On Thu, Jun 29, 2023 at 07:04:33PM -0700, Suren Baghdasaryan wrote:
+> > > > Change folio_lock_or_retry to accept vm_fault struct and return the
+> > > > vm_fault_t directly.
+> > >
+> > > I thought we decided to call this folio_lock_fault()?
+> > >
+> > > > +static inline vm_fault_t folio_lock_or_retry(struct folio *folio,
+> > > > +                                          struct vm_fault *vmf)
+> > > >  {
+> > > >       might_sleep();
+> > > > -     return folio_trylock(folio) || __folio_lock_or_retry(folio, m=
+m, flags);
+> > > > +     return folio_trylock(folio) ? 0 : __folio_lock_or_retry(folio=
+, vmf);
+> > >
+> > > No, don't use the awful ternary operator.  The || form is used
+> > > everywhere else.
+> >
+> > Ok, but folio_trylock() returns a boolean while folio_lock_or_retry
+> > should return vm_fault_t. How exactly do you suggest changing this?
+> > Something like this perhaps:
+> >
+> > static inline vm_fault_t folio_lock_or_retry(struct folio *folio,
+> >                                           struct vm_fault *vmf)
+> > {
+> >      might_sleep();
+> >      if (folio_trylock(folio))
+> >          return 0;
+> >      return __folio_lock_or_retry(folio, mm, flags);
+> > }
+> >
+> > ?
+>
+> I think the automatic casting would work, but I prefer what you've
+> written here.
+>
+> > > >  /*
+> > > >   * Return values:
+> > > > - * true - folio is locked; mmap_lock is still held.
+> > > > - * false - folio is not locked.
+> > > > + * 0 - folio is locked.
+> > > > + * VM_FAULT_RETRY - folio is not locked.
+> > >
+> > > I don't think we want to be so prescriptive here.  It returns non-zer=
+o
+> > > if the folio is not locked.  The precise value is not something that
+> > > callers should depend on.
+> >
+> > Ok, I'll change it to "non-zero" here.
+>
+> Thanks!
 
-I dunno about that, *totally* killing TDX would make my life a lot simpler ;-)
-
-> > just about as stupid as doing it on module load (which equates to always
-> > doing it).
-> > 
-> > > Also, KVM will have a module parameter 'enable_tdx'.  I am hoping this could
-> > > reduce your concern too.
-> > 
-> > I don't get this obsession with doing at module load time :/
-
-Waiting until userspace attempts to create the first TDX guest adds complexity
-and limits what KVM can do to harden itself.  Currently, all feature support in
-KVM is effectively frozen at module load.  E.g. most of the setup code is
-contained in __init functions, many module-scoped variables are effectively 
-RO after init (though they can't be marked as such until we smush kvm-intel.ko
-and kvm-amd.ko into kvm.ko, which is tentatively the long-term plan).  All of
-those patterns would get tossed aside if KVM waits until userspace attempts to
-create the first guest.
-
-The userspace experience would also be poor, as KVM can't know whether or TDX is
-actually supported until the TDX module is fully loaded and configured.  KVM waits
-until VM creation to enable VMX, but that's pure enabling and more or less
-guaranteed to succeed, e.g. will succeed barring hardware failures, software bugs,
-or *severe* memory pressure.
-
-There are also latency and noisy neighbor concerns, e.g. we *really* don't want
-to end up in a situation where creating a TDX guest for a customer can observe
-arbitrary latency *and* potentially be disruptive to VMs already running on the
-host.
-
-Userspace can workaround the second and third issues by spawning a dummy TDX guest
-as early as possible, but that adds complexity to userspace, especially if there's
-any desire for it to be race free, e.g. with respect to reporting system capabilities
-to the control plan.
-
-On the flip side, limited hardware availability (unless Intel has changed its
-tune) and the amount of enabling that's required in BIOS and whatnot makes it
-highly unlikely that random Linux users are going to unknowingly boot with TDX
-enabled.
-
-That said, if this is a sticking point, let's just make enable_tdx off by default,
-i.e. force userspace to opt-in.  Deployments that *know* they may want to schedule
-TDX VMs on the host can simply force the module param.  And for everyone else,
-since KVM is typically configured as a module by distros, KVM can be unloaded and
-reload if the user realizes they want TDX well after the system is up and running.
-
-> The KVM maintainers prefer the initialization on kvm_intel.ko loading time. [1]
-
-You can say "Sean", I'm not the bogeyman :-)
-
-> I can change enable_tdx parameter for kvm_intel.ko instead of boolean.
-> Something like
-> 
-> enable_tdx
->         ondemand: on-demand initialization when creating the first TDX guest
->         onload:   initialize TDX module when loading kvm_intel.ko
-
-No, that's the most complex path and makes no one happy.
-
->         disable:  disable TDX support
+Posted v7 at https://lore.kernel.org/all/20230630211957.1341547-1-surenb@go=
+ogle.com/
