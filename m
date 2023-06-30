@@ -2,109 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEC4F743E94
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 17:20:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EDA9743EA2
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 17:22:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232858AbjF3PUC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 11:20:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35740 "EHLO
+        id S232094AbjF3PV7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Jun 2023 11:21:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232862AbjF3PT0 (ORCPT
+        with ESMTP id S229578AbjF3PVr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 11:19:26 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7ABFC2703;
-        Fri, 30 Jun 2023 08:19:20 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 18F7361782;
-        Fri, 30 Jun 2023 15:19:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 79C11C433C0;
-        Fri, 30 Jun 2023 15:19:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688138359;
-        bh=0OcMf9HI6oDlP5s96FA6hXvlby0mTwGL255F60fmJNY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Oq6SRXemZv3QPiYrxSGaCswEqBNCx4KmAFohDEmaVSWQhjF6v7shFbQLXFl7y9UUt
-         KhheirUrp06qdtMvnhiWU+Lejx3RY86tVjq03epKOAkw+hkExs3HaLwwk0iAfcRmtD
-         YK4ehi7CKWHgtMOXqOTjhnuQVCD4aUqezAdq1zeSFoq5GFcAlXDD7iG0Jtg+EtRrws
-         E7YYO1HUD1n2hwY4igPS/nBFtuuyzSj7sS70XDJLpJEotBepbevEc2/aABE3sEcqnw
-         W7rFpy30JPR4C7PLt76qUUA4sIcS81Muwb1Srh8zvHWwzdvSzcf82JEW+OrIEttNB7
-         lT/gMrs4D9vdg==
-Date:   Fri, 30 Jun 2023 08:19:19 -0700
-From:   "Darrick J. Wong" <djwong@kernel.org>
-To:     zenghongling <zenghongling@kylinos.cn>
-Cc:     hch@infradead.org, darrick.wong@oracle.com,
-        linux-xfs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, zhongling0719@126.com
-Subject: Re: [PATCH] fs: Optimize unixbench's file copy test
-Message-ID: <20230630151919.GK11441@frogsfrogsfrogs>
-References: <1688117303-8294-1-git-send-email-zenghongling@kylinos.cn>
+        Fri, 30 Jun 2023 11:21:47 -0400
+Received: from smtp-fw-9103.amazon.com (smtp-fw-9103.amazon.com [207.171.188.200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C14CDF;
+        Fri, 30 Jun 2023 08:21:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.de; i=@amazon.de; q=dns/txt; s=amazon201209;
+  t=1688138506; x=1719674506;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=BQVmRLO9m74UMK8I9pR2qF8AU/mjLbuAVCyZ5Z+eWss=;
+  b=oib5cg80jhPQK1c2ceJdiPNRHqAndMu/EInfDCpbPgYcm+MYP2aQKtUR
+   r5QGPpM0Zn0nBVjuGxxk03GiqXNss88O19qBtkY9BwBF4L1i8XcMlBf0K
+   WH5Ob2ZGxZOIJ8Apx7d7se0W4akutSu1tXDiJE3Qbiv2xxGrFrZefF4p6
+   4=;
+X-IronPort-AV: E=Sophos;i="6.01,171,1684800000"; 
+   d="scan'208";a="1140502254"
+Received: from pdx4-co-svc-p1-lb2-vlan3.amazon.com (HELO email-inbound-relay-pdx-1box-2bm6-32cf6363.us-west-2.amazon.com) ([10.25.36.214])
+  by smtp-border-fw-9103.sea19.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jun 2023 15:21:37 +0000
+Received: from EX19D007EUA002.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan3.pdx.amazon.com [10.236.137.198])
+        by email-inbound-relay-pdx-1box-2bm6-32cf6363.us-west-2.amazon.com (Postfix) with ESMTPS id 0B45C804E1;
+        Fri, 30 Jun 2023 15:21:36 +0000 (UTC)
+Received: from EX19D033EUC004.ant.amazon.com (10.252.61.133) by
+ EX19D007EUA002.ant.amazon.com (10.252.50.68) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.30; Fri, 30 Jun 2023 15:21:34 +0000
+Received: from u40bc5e070a0153.ant.amazon.com (10.1.212.14) by
+ EX19D033EUC004.ant.amazon.com (10.252.61.133) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.30; Fri, 30 Jun 2023 15:21:29 +0000
+Date:   Fri, 30 Jun 2023 17:21:24 +0200
+From:   Roman Kagan <rkagan@amazon.de>
+To:     Sean Christopherson <seanjc@google.com>
+CC:     Jim Mattson <jmattson@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Eric Hankland <ehankland@google.com>, <kvm@vger.kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Like Xu <likexu@tencent.com>, <x86@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        <linux-kernel@vger.kernel.org>, "H. Peter Anvin" <hpa@zytor.com>,
+        "Borislav Petkov" <bp@alien8.de>, Ingo Molnar <mingo@redhat.com>,
+        Mingwei Zhang <mizhang@google.com>
+Subject: Re: [PATCH] KVM: x86: vPMU: truncate counter value to allowed width
+Message-ID: <ZJ7y9DuedQyBb9eU@u40bc5e070a0153.ant.amazon.com>
+Mail-Followup-To: Roman Kagan <rkagan@amazon.de>,
+        Sean Christopherson <seanjc@google.com>,
+        Jim Mattson <jmattson@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Eric Hankland <ehankland@google.com>, kvm@vger.kernel.org,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Like Xu <likexu@tencent.com>, x86@kernel.org,
+        Thomas Gleixner <tglx@linutronix.de>, linux-kernel@vger.kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, Borislav Petkov <bp@alien8.de>,
+        Ingo Molnar <mingo@redhat.com>, Mingwei Zhang <mizhang@google.com>
+References: <20230504120042.785651-1-rkagan@amazon.de>
+ <ZH6DJ8aFq/LM6Bk9@google.com>
+ <CALMp9eS3F08cwUJbKjTRAEL0KyZ=MC==YSH+DW-qsFkNfMpqEQ@mail.gmail.com>
+ <ZJ4dmrQSduY8aWap@google.com>
+ <ZJ65CiW0eEL2mGg8@u40bc5e070a0153.ant.amazon.com>
+ <ZJ7mjdZ8h/RSilFX@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <1688117303-8294-1-git-send-email-zenghongling@kylinos.cn>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <ZJ7mjdZ8h/RSilFX@google.com>
+X-Originating-IP: [10.1.212.14]
+X-ClientProxiedBy: EX19D041UWA004.ant.amazon.com (10.13.139.9) To
+ EX19D033EUC004.ant.amazon.com (10.252.61.133)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,
+        T_SPF_PERMERROR autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 30, 2023 at 05:28:23PM +0800, zenghongling wrote:
-> The iomap_set_range_uptodate function checks if the file is a private
-> mapping,and if it is, it needs to do something about it.UnixBench's
-> file copy tests are mostly share mapping, such a check would reduce
-> file copy scores, so we added the unlikely macro for optimization.
-> and the score of file copy can be improved after branch optimization.
-> As follows:
+On Fri, Jun 30, 2023 at 07:28:29AM -0700, Sean Christopherson wrote:
+> On Fri, Jun 30, 2023, Roman Kagan wrote:
+> > On Thu, Jun 29, 2023 at 05:11:06PM -0700, Sean Christopherson wrote:
+> > > @@ -74,6 +74,14 @@ static inline u64 pmc_read_counter(struct kvm_pmc *pmc)
+> > >         return counter & pmc_bitmask(pmc);
+> > >  }
+> > >
+> > > +static inline void pmc_write_counter(struct kvm_pmc *pmc, u64 val)
+> > > +{
+> > > +       if (pmc->perf_event && !pmc->is_paused)
+> > > +               perf_event_set_count(pmc->perf_event, val);
+> > > +
+> > > +       pmc->counter = val;
+> >
+> > Doesn't this still have the original problem of storing wider value than
+> > allowed?
 > 
-> ./Run -c 8 -i 3 fstime fsbuffer fsdisk
-> 
-> Before the optimization
-> System Benchmarks Partial Index              BASELINE       RESULT    INDEX
-> File Copy 1024 bufsize 2000 maxblocks          3960.0     689276.0   1740.6
-> File Copy 256 bufsize 500 maxblocks            1655.0     204133.0   1233.4
-> File Copy 4096 bufsize 8000 maxblocks          5800.0    1526945.0   2632.7
->                                                                    ========
-> System Benchmarks Index Score (Partial Only)                         1781.3
-> 
-> After the optimization
-> System Benchmarks Partial Index              BASELINE       RESULT    INDEX
-> File Copy 1024 bufsize 2000 maxblocks          3960.0     741524.0   1872.5
-> File Copy 256 bufsize 500 maxblocks            1655.0     208334.0   1258.8
-> File Copy 4096 bufsize 8000 maxblocks          5800.0    1641660.0   2830.4
->                                                                    ========
-> System Benchmarks Index Score (Partial Only)                         1882.6
+> Yes, this was just to fix the counter offset weirdness.  My plan is to apply your
+> patch on top.  Sorry for not making that clear.
 
-Kernel version?  And how does this intersect with the ongoing work to
-use large folios throughout iomap?
+Ah, got it, thanks!
 
---D
+Also I'm now chasing a problem that we occasionally see
 
-> Signed-off-by: zenghongling <zenghongling@kylinos.cn>
-> ---
->  fs/iomap/buffered-io.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/fs/iomap/buffered-io.c b/fs/iomap/buffered-io.c
-> index 53cd7b2..35a50c2 100644
-> --- a/fs/iomap/buffered-io.c
-> +++ b/fs/iomap/buffered-io.c
-> @@ -148,7 +148,7 @@ iomap_set_range_uptodate(struct page *page, unsigned off, unsigned len)
->  	if (PageError(page))
->  		return;
->  
-> -	if (page_has_private(page))
-> +	if (unlikely(page_has_private(page)))
->  		iomap_iop_set_range_uptodate(page, off, len);
->  	else
->  		SetPageUptodate(page);
-> -- 
-> 2.1.0
-> 
+[3939579.462832] Uhhuh. NMI received for unknown reason 30 on CPU 43.
+[3939579.462836] Do you have a strange power saving mode enabled?
+[3939579.462836] Dazed and confused, but trying to continue
+
+in the guests when perf is used.  These messages disappear when
+9cd803d496e7 ("KVM: x86: Update vPMCs when retiring instructions") is
+reverted.  I haven't yet figured out where exactly the culprit is.
+
+Thanks,
+Roman.
+
+
+
+Amazon Development Center Germany GmbH
+Krausenstr. 38
+10117 Berlin
+Geschaeftsfuehrung: Christian Schlaeger, Jonathan Weiss
+Eingetragen am Amtsgericht Charlottenburg unter HRB 149173 B
+Sitz: Berlin
+Ust-ID: DE 289 237 879
+
+
+
