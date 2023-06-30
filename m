@@ -2,115 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73D89743728
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 10:30:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72A9A74372E
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 10:30:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232488AbjF3IaH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 04:30:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40224 "EHLO
+        id S232539AbjF3Ia1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Jun 2023 04:30:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232593AbjF3I3u (ORCPT
+        with ESMTP id S232512AbjF3IaZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 04:29:50 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8072C35A1
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 01:29:46 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-272-sTh1UJeJMDO3OsTYjnjZSA-1; Fri, 30 Jun 2023 09:29:43 +0100
-X-MC-Unique: sTh1UJeJMDO3OsTYjnjZSA-1
-Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
- (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Fri, 30 Jun
- 2023 09:29:42 +0100
-Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
- id 15.00.1497.048; Fri, 30 Jun 2023 09:29:42 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Evan Green' <evan@rivosinc.com>
-CC:     Jessica Clarke <jrtc27@jrtc27.com>,
-        Palmer Dabbelt <palmer@rivosinc.com>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        Yangyu Chen <cyy@cyyself.name>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Guo Ren <guoren@kernel.org>,
-        Jisheng Zhang <jszhang@kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        "Xianting Tian" <xianting.tian@linux.alibaba.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Greentime Hu <greentime.hu@sifive.com>,
-        Simon Hosie <shosie@rivosinc.com>,
-        Li Zhengyu <lizhengyu3@huawei.com>,
-        Andrew Jones <ajones@ventanamicro.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Alexandre Ghiti <alexghiti@rivosinc.com>,
-        Ley Foon Tan <leyfoon.tan@starfivetech.com>,
-        "Paul Walmsley" <paul.walmsley@sifive.com>,
-        Heiko Stuebner <heiko.stuebner@vrull.eu>,
-        Anup Patel <apatel@ventanamicro.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Sia Jee Heng <jeeheng.sia@starfivetech.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        "Andy Chiu" <andy.chiu@sifive.com>
-Subject: RE: [PATCH 1/2] RISC-V: Probe for unaligned access speed
-Thread-Topic: [PATCH 1/2] RISC-V: Probe for unaligned access speed
-Thread-Index: AQHZqSszK74IXZi1x0Sk5pxi8WFXO6+hr6jwgACq1QCAAKe+MA==
-Date:   Fri, 30 Jun 2023 08:29:42 +0000
-Message-ID: <b9a23f8947014fdbb625d67134ed796d@AcuMS.aculab.com>
-References: <20230623222016.3742145-1-evan@rivosinc.com>
- <20230623222016.3742145-2-evan@rivosinc.com>
- <64F2D853-61E5-49CF-BAB5-AAFB8697683E@jrtc27.com>
- <CALs-HssZG8daTJaRK8JPT0VRk=23CtO6B_5kq4Xa_DdLELjaZw@mail.gmail.com>
- <53dc6959cc8849d6b66676ad48c1376a@AcuMS.aculab.com>
- <CALs-HstgcnK=prSHm9D7bqWc05q52ObA5kozmxzr-euR=CFfKw@mail.gmail.com>
-In-Reply-To: <CALs-HstgcnK=prSHm9D7bqWc05q52ObA5kozmxzr-euR=CFfKw@mail.gmail.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Fri, 30 Jun 2023 04:30:25 -0400
+Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 394A035A0
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 01:30:21 -0700 (PDT)
+Received: by mail-pg1-x536.google.com with SMTP id 41be03b00d2f7-55779047021so1156647a12.3
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 01:30:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1688113820; x=1690705820;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=IylOOlS5ad80V9wYkTvlltIZ1alSaalCsW6vNzoqxCE=;
+        b=w1n2X6SwuQTGf40ACuJOa3mBnZ6ZkpTXgN9WgWekcgA9wX8DhnWHIvrr/ntVep8Wfx
+         xxgnSrGUku9qrt5TAFiqidVe8dfAzB7z8BGj0BthdVH6Fk7veTxovV3SqntFhLwev/Xa
+         eUnJHfSZnVCkgbMzzE26Gxlda3H0ztt2I/95FfE803JDRp7pjeSO9jnZ3BLSXJludS5H
+         yQtKkttWWKnagkVjdx8eHyDXlneyKqjT6bWj5R/9iUy1xW+l0s6qCRI+zleuBgi9kTQn
+         U6yVyv6y2eeuryVrYLzfAODmlTygbytKVYCG0m/woa92+yDWDiaLEU2bdxcTFVaqGJz+
+         AhUQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688113820; x=1690705820;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=IylOOlS5ad80V9wYkTvlltIZ1alSaalCsW6vNzoqxCE=;
+        b=RykOwIxqgI3rseVcLiOVVd8arc7PkGsVx1Xe3Tdah5ZrIE2TxGBsq2l28WJqQHPZDK
+         xCOBuwRUSzVvK9/TSeQsdUxmT/R7lySis181DtibmBH0Abo6yWZxwm8D8bhILxF4a7Lc
+         yZhvF22g+UV+CMR/APCTAb+N5C+lAvuOqEG14R8gLujsGI/SmwIk7YsXy93eDSWBoUGq
+         QwCprp/57OtORIIvQYB0YrJ+fW3WPpYW5Up0WJ+Hyx6ItDu7Lw2co44LRQK9ZiTh+NAP
+         uiP+k1LG7zJQPJVcsrrbiCqhYNSWa9p176SJZgY2kHl1I3a8T0SFC2GK8gP2ErWo6VLJ
+         KS/g==
+X-Gm-Message-State: ABy/qLa/GxEQ0YzaLDajdBBfQJpGFUSH5jU6BL3OLs4oX4Z9fR8JsrDL
+        zrajb7Mz8yJAuQlF0yhPeEN/4J+u5imY1zdwygk=
+X-Google-Smtp-Source: APBJJlFwGdFpxh5lh0GMjOfiQCZJY9c+/4qoU0guVGErEKUDZanZB/3Rl1aCMaiF991mJDNpY11l/w==
+X-Received: by 2002:a17:90b:954:b0:262:fc42:c7bc with SMTP id dw20-20020a17090b095400b00262fc42c7bcmr1366282pjb.32.1688113820036;
+        Fri, 30 Jun 2023 01:30:20 -0700 (PDT)
+Received: from [192.168.1.4] ([223.233.68.54])
+        by smtp.gmail.com with ESMTPSA id x8-20020a17090a6b4800b002635db431a0sm2023231pjl.45.2023.06.30.01.30.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 30 Jun 2023 01:30:19 -0700 (PDT)
+Message-ID: <f14c00e4-d0d2-17cd-da8c-5632558f53b9@linaro.org>
+Date:   Fri, 30 Jun 2023 14:00:00 +0530
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.1
+Subject: Re: [PATCH v8 01/11] dt-bindings: dma: Add support for SM6115 and
+ QCM2290 SoCs
+To:     Vinod Koul <vkoul@kernel.org>
+Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        dmaengine@vger.kernel.org, agross@kernel.org,
+        linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
+        andersson@kernel.org, bhupesh.linux@gmail.com,
+        krzysztof.kozlowski@linaro.org, robh+dt@kernel.org,
+        konrad.dybcio@linaro.org, vladimir.zapolskiy@linaro.org,
+        rfoss@kernel.org, neil.armstrong@linaro.org, djakov@kernel.org,
+        stephan@gerhold.net, Rob Herring <robh@kernel.org>,
+        Anders Roxell <anders.roxell@linaro.org>,
+        Linux Kernel Functional Testing <lkft@linaro.org>
+References: <20230526192210.3146896-1-bhupesh.sharma@linaro.org>
+ <20230526192210.3146896-2-bhupesh.sharma@linaro.org>
+ <CAH=2Ntx+4F+ZP_Y+=e4p9rdTRQV8FHaepJCyqVFtWUPjDehoNg@mail.gmail.com>
+ <ZIHKWYMs1e/rOez0@matsya>
 Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
+In-Reply-To: <ZIHKWYMs1e/rOez0@matsya>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Li4uDQo+IFllYWgsIG9uZSB0aGluZyBJIGNvdWxkIGRvIGlzIGRpc2FibGUgaW50ZXJydXB0cywg
-bWVhc3VyZSB0aGUgY3ljbGUNCj4gY291bnQgb2YgZG9pbmcgYW4gaW5kaXZpZHVhbCBpdGVyYXRp
-b24sIGRvIHRoaXMgTiB0aW1lcywgYW5kIHRha2UgdGhlDQo+IG1pbmltdW0gdmFsdWUgYXMgdGhl
-IHRpbWUgdG8gY29tcGFyZS4gSW4gdGhlIGVuZCBJJ2xsIHRoZW4gaGF2ZSB0d28NCj4gbnVtYmVy
-cyB0byBjb21wYXJlLCBsaWtlIEkgZG8gaW4gdGhpcyBwYXRjaC4gSW4gdGhlb3J5IHRoZSB2YXJp
-YW5jZSBvbg0KPiB0aGF0IHNob3VsZCBiZSByZWFsbHkgdGlnaHQuIE4gd2lsbCBoYXZlIHRvIGRl
-cGVuZCBvbiB0aGUgb3ZlcmFsbA0KPiBhbW91bnQgb2YgdGltZSBJJ20gdGFraW5nIHNvIGFzIG5v
-dCB0byBzaHV0IGludGVycnVwdHMgb2ZmIGZvciB2ZXJ5DQo+IGxvbmcuIExldCBtZSBleHBlcmlt
-ZW50IHdpdGggdGhpcyBhbmQgc2VlIGhvdyB0aGUgcmVzdWx0cyBsb29rLg0KPiAtRXZhbg0KDQpJ
-IGRvdWJ0IHlvdSdsbCBuZWVkIG1hbnkgaXRlcmF0aW9ucyBvciBhIGxvbmcgdGVzdC4NCg0KWW91
-IGNhbiBkbyB0ZXN0cyBpbiB1c2Vyc3BhY2Ugd2l0aG91dCBkaXNhYmxpbmcgcHJlLWVtcHRpb24N
-Cm9yIGludGVycnVwdHMgLSB0aGUgbGFyZ2Uvc2lsbHkgdmFsdWVzIHRoZXkgZ2VuZXJhdGUgYXJl
-DQplYXNpbHkgaWdub3JlZC4NCg0KSSBzdXNwZWN0IHlvdSdsbCBnZXQgZW5vdWdoIGluZm8gZnJv
-bSBzb21ldGhpbmcgbGlrZToNCgl1bnNpZ25lZCBsb25nIHhbMl07DQoJdm9sYXRpbGUgdW5zaWdu
-ZWQgbG9uZyAqcCA9ICh2b2lkICopKCh1bnNpZ25lZCBjaGFyICopeCArIDEpOw0KCWZ1bGxfY3B1
-X2JhcnJpZXIoKQ0KCXN0YXJ0ID0gcmR0c2MoKTsNCglmdWxsX2NwdV9iYXJyaWVyKCk7DQoJKnA7
-ICpwOyAqcDsgKnA7ICpwOyAqcDsgKnA7ICpwOw0KCSpwOyAqcDsgKnA7ICpwOyAqcDsgKnA7ICpw
-OyAqcDsNCglmdWxsX2NwdV9iYXJyaWVyKCkNCgllbGFwc2VkID0gcmR0c2MoKSAtIHN0YXJ0Ow0K
-T25jZSB0aGUgaS1jYWNoZSBpcyBsb2FkZWQgaXQgc2hvdWxkIGJlIHByZXR0eSBjb25zdGFudC4N
-CkZvciBhbGlnbmVkIGFkZHJlc3NlcyBJJ2QgZXhwZWN0IGVhY2ggZXh0cmEgJypwJyB0byBiZQ0K
-b25lIG1vcmUgY2xvY2suDQpXaXRoIGhhcmR3YXJlIHN1cHBvcnQgZm9yIG1pc2FsaWduZWQgdHJh
-bnNmZXJzIGF0IG1vc3QNCjIgY2xvY2tzICh0ZXN0IG9uIHg4NiBhbmQgaXQgd2lsbCBiZSAxIGNs
-b2NrKS4NClRoZSBlbXVsYXRlZCB2ZXJzaW9uIHdpbGwgYmUgMTAwcyBvciAxMDAwcy4NCgkNCkkn
-bSBub3Qgc3VyZSBob3cgbXVjaCBvZiBhIGNwdSBiYXJyaWVyIHlvdSBuZWVkLg0KRGVmaW5pdGVs
-eSBuZWVkcyB0byB3YWl0IGZvciBhbGwgbWVtb3J5IGFjY2Vzc2VzDQphbmQgdGhlIHJkdHNjKCku
-DQoNCglEYXZpZA0KDQotDQpSZWdpc3RlcmVkIEFkZHJlc3MgTGFrZXNpZGUsIEJyYW1sZXkgUm9h
-ZCwgTW91bnQgRmFybSwgTWlsdG9uIEtleW5lcywgTUsxIDFQVCwgVUsNClJlZ2lzdHJhdGlvbiBO
-bzogMTM5NzM4NiAoV2FsZXMpDQo=
+On 6/8/23 6:02 PM, Vinod Koul wrote:
+> On 29-05-23, 11:43, Bhupesh Sharma wrote:
+>> Hi Vinod,
+>>
+>>> On Sat, 27 May 2023 at 00:52, Bhupesh Sharma <bhupesh.sharma@linaro.org> wrote:
+>>>
+>>> Add new compatible for BAM DMA engine version v1.7.4 which is
+>>> found on Qualcomm SM6115 and QCM2290 SoCs. Since its very similar
+>>> to v1.7.0 used on SM8150 like SoCs, mark the comptible scheme
+>>> accordingly.
+>>>
+>>> While at it, also update qcom,bam-dma bindings to add comments
+>>> which describe the BAM DMA versions used in SM8150 and SM8250 SoCs.
+>>> This provides an easy reference for identifying the actual BAM DMA
+>>> version available on Qualcomm SoCs.
+>>>
+>>> Acked-by: Rob Herring <robh@kernel.org>
+>>> Tested-by: Anders Roxell <anders.roxell@linaro.org>
+>>> Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+>>> Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
+>>> ---
+>>>   .../devicetree/bindings/dma/qcom,bam-dma.yaml | 20 ++++++++++++-------
+>>>   1 file changed, 13 insertions(+), 7 deletions(-)
+>>>
+>>> diff --git a/Documentation/devicetree/bindings/dma/qcom,bam-dma.yaml b/Documentation/devicetree/bindings/dma/qcom,bam-dma.yaml
+>>> index f1ddcf672261..c663b6102f50 100644
+>>> --- a/Documentation/devicetree/bindings/dma/qcom,bam-dma.yaml
+>>> +++ b/Documentation/devicetree/bindings/dma/qcom,bam-dma.yaml
+>>> @@ -15,13 +15,19 @@ allOf:
+>>>
+>>>   properties:
+>>>     compatible:
+>>> -    enum:
+>>> -        # APQ8064, IPQ8064 and MSM8960
+>>> -      - qcom,bam-v1.3.0
+>>> -        # MSM8974, APQ8074 and APQ8084
+>>> -      - qcom,bam-v1.4.0
+>>> -        # MSM8916 and SDM845
+>>> -      - qcom,bam-v1.7.0
+>>> +    oneOf:
+>>> +      - enum:
+>>> +          # APQ8064, IPQ8064 and MSM8960
+>>> +          - qcom,bam-v1.3.0
+>>> +          # MSM8974, APQ8074 and APQ8084
+>>> +          - qcom,bam-v1.4.0
+>>> +          # MSM8916, SDM630
+>>> +          - qcom,bam-v1.7.0
+>>> +      - items:
+>>> +          - enum:
+>>> +              # SDM845, SM6115, SM8150, SM8250 and QCM2290
+>>> +              - qcom,bam-v1.7.4
+>>> +          - const: qcom,bam-v1.7.0
+>>>
+>>>     clocks:
+>>>       maxItems: 1
+>>> --
+>>> 2.38.1
+>>
+>> Bjorn has applied the dts patches from this series to his tree.
+>> As suggested by him, can you please pick patches [PATCH 1/11] and
+>> [PATCH 2/11] from this series via the 'dmaengine' tree.
+> 
+> I dont have this series in my inbox or dmaengine pw
+> 
+>> Seems some Cc fields got messed up while sending the patchset, so
+>> Cc'ing the dmaengine list again.
+> 
+> not just list but mine too..
+> 
+> Please rebase and resend
 
+Sure, I have sent a v9, which can be seen here: 
+<https://lore.kernel.org/linux-arm-msm/20230630082230.2264698-1-bhupesh.sharma@linaro.org/>
+Please help review.
+
+Thanks,
+Bhupesh
