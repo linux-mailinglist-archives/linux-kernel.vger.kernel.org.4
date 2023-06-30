@@ -2,54 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE0EF7437F1
+	by mail.lfdr.de (Postfix) with ESMTP id 5C6C47437F0
 	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 11:11:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232477AbjF3JJJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 05:09:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56544 "EHLO
+        id S232523AbjF3JLE convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 30 Jun 2023 05:11:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231315AbjF3JJC (ORCPT
+        with ESMTP id S231315AbjF3JLC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 05:09:02 -0400
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02D9BE5E;
-        Fri, 30 Jun 2023 02:09:01 -0700 (PDT)
-From:   =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-        s=mail; t=1688116139;
-        bh=OOAKwOFfZgl3msnuVjn16jsWxbjqhfuBBnZpLziJnjI=;
-        h=From:Date:Subject:To:Cc:From;
-        b=nAHp3GNWH3bIQbbJ7B2nTlLTXY9Xq9hWNzqd0TfTgHy3IlpLDeWD+dqQm7O/eXYKH
-         0K/WErRYqTmvh7xyi3fti32K8jO6hhbiSopGvMb1wcI5VLDlClgpI9DBF50J9KHfdA
-         jEofzwLiPn0IJVU1BBMtLuj1xR1dkREs+FIaJFUk=
-Date:   Fri, 30 Jun 2023 11:08:53 +0200
-Subject: [PATCH] mm: make MEMFD_CREATE into a selectable config option
+        Fri, 30 Jun 2023 05:11:02 -0400
+Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D456E5E;
+        Fri, 30 Jun 2023 02:11:00 -0700 (PDT)
+Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-98dfd15aae1so46563466b.0;
+        Fri, 30 Jun 2023 02:11:00 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688116259; x=1690708259;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=RA/+650qKoq/WvgXW4KrtiCH77rUUc/hjHSHIGyfEeI=;
+        b=dfROBLpBTg+RllV2t36keShlPqIKTI2MxRRgEHbo7WWJcxlvjf3Yv+VA6pYmRgdY7J
+         UoxggmcduUYZi0TIK65uPYGVng0mXkVv0Tqcdp+WOEzzdht0aErQDYGe/iWd96GrVljY
+         j3XPqAetmy3Z6+z7MYjGMMEm+lZ98G5/v3/vy7Y+ti1/Jpg2zdfXV50l360nCBUkl91g
+         RctdFjSbrIoKitapBZNyFdDBr/xc+n4AP73dC09a/yuvUbZKfS3gOQI510YAZnNjboDp
+         ORrqgHceSKTRj78rzdnig/SgyDCMrzG2JR6n2kIzgC84Wa+ybeEx5KBbiPmWwoNLwgNg
+         1JTQ==
+X-Gm-Message-State: ABy/qLbNVggN3OKOCvBLW6dThbtwVb6YyuS13AB9jYRstQ6H7w5V93ze
+        r7DWBXc7YWPNdJKSaFeP4TH3ykqXjmdXuV/OSqc=
+X-Google-Smtp-Source: APBJJlECWPV3oXE0dzFgSPDGYpfzaZyFgL26C7YGaERoNS6/Q2V8yHk3tBy6sz5oBftZqLnkEFTy4qUQIL6pMqU+j3w=
+X-Received: by 2002:a17:907:119a:b0:987:6960:36c5 with SMTP id
+ uz26-20020a170907119a00b00987696036c5mr1205763ejb.6.1688116258769; Fri, 30
+ Jun 2023 02:10:58 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20230630-config-memfd-v1-1-9acc3ae38b5a@weissschuh.net>
-X-B4-Tracking: v=1; b=H4sIAKSbnmQC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
- vPSU3UzU4B8JSMDI2MDMyNL3eT8vLTMdN3c1Ny0FN2kVLPENAPjJPOU5EQloJaCotS0zAqwcdG
- xtbUA9l1O0V4AAAA=
-To:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <brauner@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, Willy Tarreau <w@lwt.eu>,
-        Zhangjin Wu <falcon@tinylab.org>,
-        =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-X-Mailer: b4 0.12.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1688116137; l=2138;
- i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=OOAKwOFfZgl3msnuVjn16jsWxbjqhfuBBnZpLziJnjI=;
- b=kQBkkRFrqk5TKAAbU2s4iVjeJ2yAWu+HDlzAGyCqAqXUgKoaMED26dyk7Wz3UwkSiKAieqaCN
- wukedK6JuBXC9N+wJRWyCzBe5NaSB5lv8wz20O/k+hugFZlrp9EiaeA
-X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
- pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+References: <20230613161034.3496047-1-michal.wilczynski@intel.com>
+ <20230613161034.3496047-4-michal.wilczynski@intel.com> <CAJZ5v0j+Wz7366kLT3ez5TNoGWXvsa53hBYYeS=aHgbTJUqvKg@mail.gmail.com>
+ <CAJZ5v0gWuU1JPbzYpDZ6YQ4YNydyELQ9tXKcJgmLwe_=fZ521A@mail.gmail.com> <e94c0d23-4873-5c34-be24-c2208d03043f@intel.com>
+In-Reply-To: <e94c0d23-4873-5c34-be24-c2208d03043f@intel.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Fri, 30 Jun 2023 11:10:47 +0200
+Message-ID: <CAJZ5v0h3mNFa4P+5o=LtUvTW4VnJs=4SJxvjoYMKCeir4tXfpQ@mail.gmail.com>
+Subject: Re: [PATCH v3 3/5] acpi: Introduce new function callback for _OSC
+To:     "Wilczynski, Michal" <michal.wilczynski@intel.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        linux-acpi@vger.kernel.org, andriy.shevchenko@intel.com,
+        artem.bityutskiy@linux.intel.com, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, hpa@zytor.com, lenb@kernel.org,
+        jgross@suse.com, linux-kernel@vger.kernel.org, x86@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,71 +63,122 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The memfd_create() syscall, enabled by CONFIG_MEMFD_CREATE, is useful on
-its own even when not required by CONFIG_TMPFS or CONFIG_HUGETLBFS.
+On Fri, Jun 30, 2023 at 11:02 AM Wilczynski, Michal
+<michal.wilczynski@intel.com> wrote:
+>
+>
+>
+> On 6/29/2023 3:15 PM, Rafael J. Wysocki wrote:
+> > On Thu, Jun 29, 2023 at 1:04 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
+> >> I would just say "Introduce acpi_processor_osc()" in the subject and
+> >> then explain its role in the changelog.
+> >>
+> >> On Tue, Jun 13, 2023 at 6:12 PM Michal Wilczynski
+> >> <michal.wilczynski@intel.com> wrote:
+> >>> Currently in ACPI code _OSC method is already used for workaround
+> >>> introduced in commit a21211672c9a ("ACPI / processor: Request native
+> >>> thermal interrupt handling via _OSC"). Create new function, similar to
+> >>> already existing acpi_hwp_native_thermal_lvt_osc(). Call new function
+> >>> acpi_processor_osc(). Make this function fulfill the purpose previously
+> >>> fulfilled by the workaround plus convey OSPM processor capabilities
+> >>> with it by setting correct processor capability bits.
+> >>>
+> >>> Suggested-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> >>> Signed-off-by: Michal Wilczynski <michal.wilczynski@intel.com>
+> >>> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> >>> ---
+> >>>  arch/x86/include/asm/acpi.h   |  3 +++
+> >>>  drivers/acpi/acpi_processor.c | 43 ++++++++++++++++++++++++++++++++++-
+> >>>  include/acpi/pdc_intel.h      |  1 +
+> >>>  3 files changed, 46 insertions(+), 1 deletion(-)
+> >>>
+> >>> diff --git a/arch/x86/include/asm/acpi.h b/arch/x86/include/asm/acpi.h
+> >>> index 6a498d1781e7..6c25ce2dad18 100644
+> >>> --- a/arch/x86/include/asm/acpi.h
+> >>> +++ b/arch/x86/include/asm/acpi.h
+> >>> @@ -112,6 +112,9 @@ static inline void arch_acpi_set_proc_cap_bits(u32 *cap)
+> >>>         if (cpu_has(c, X86_FEATURE_ACPI))
+> >>>                 *cap |= ACPI_PDC_T_FFH;
+> >>>
+> >>> +       if (cpu_has(c, X86_FEATURE_HWP))
+> >>> +               *cap |= ACPI_PDC_COLLAB_PROC_PERF;
+> >>> +
+> >>>         /*
+> >>>          * If mwait/monitor is unsupported, C2/C3_FFH will be disabled
+> >>>          */
+> >>> diff --git a/drivers/acpi/acpi_processor.c b/drivers/acpi/acpi_processor.c
+> >>> index 8c5d0295a042..0de0b05b6f53 100644
+> >>> --- a/drivers/acpi/acpi_processor.c
+> >>> +++ b/drivers/acpi/acpi_processor.c
+> >>> @@ -591,13 +591,54 @@ void __init processor_dmi_check(void)
+> >>>         dmi_check_system(processor_idle_dmi_table);
+> >>>  }
+> >>>
+> >>> +/* vendor specific UUID indicating an Intel platform */
+> >>> +static u8 sb_uuid_str[] = "4077A616-290C-47BE-9EBD-D87058713953";
+> >>>  static bool acpi_hwp_native_thermal_lvt_set;
+> >>> +static acpi_status __init acpi_processor_osc(acpi_handle handle, u32 lvl,
+> >>> +                                            void *context, void **rv)
+> >>> +{
+> >>> +       u32 capbuf[2] = {};
+> >>> +       acpi_status status;
+> >>> +       struct acpi_osc_context osc_context = {
+> >>> +               .uuid_str = sb_uuid_str,
+> >>> +               .rev = 1,
+> >>> +               .cap.length = 8,
+> >>> +               .cap.pointer = capbuf,
+> >>> +       };
+> >>> +
+> >>> +       if (processor_physically_present(handle) == false)
+> >> if (!processor_physically_present(handle))
+> >>
+> >>> +               return AE_OK;
+> >>> +
+> >>> +       arch_acpi_set_proc_cap_bits(&capbuf[OSC_SUPPORT_DWORD]);
+> >>> +
+> >>> +       if (boot_option_idle_override == IDLE_NOMWAIT)
+> >>> +               capbuf[OSC_SUPPORT_DWORD] &=
+> >>> +                       ~(ACPI_PDC_C_C2C3_FFH | ACPI_PDC_C_C1_FFH);
+> >>> +
+> >>> +       status = acpi_run_osc(handle, &osc_context);
+> >>> +       if (ACPI_FAILURE(status))
+> >>> +               return status;
+> >>> +
+> >>> +       if (osc_context.ret.pointer && osc_context.ret.length > 1) {
+> >>> +               u32 *capbuf_ret = osc_context.ret.pointer;
+> >>> +
+> >>> +               if (!acpi_hwp_native_thermal_lvt_set &&
+> >>> +                   capbuf_ret[1] & ACPI_PDC_COLLAB_PROC_PERF) {
+> >> Checking it in capbuf_ret[] if it was not set in capbuf[] is sort of
+> >> questionable.
+> >>
+> >> Note that acpi_hwp_native_thermal_lvt_osc() sets it in capbuf[] before
+> >> calling acpi_run_osc().
+> > So you moved setting it to arch_acpi_set_proc_cap_bits(), but then it
+> > should also be checked by the arch code.  That is, add an arch
+> > function to check if a given bit is set in the returned capabilities
+> > buffer (passed as an argument).
+>
+> Hmm, maybe that's true, but the only reason we check that is so we can print
+> a debug message
 
-Split it into its own proper bool option that can be enabled by users.
+No, it is not the only reason.  The more important part is to set
+acpi_hwp_native_thermal_lvt_set if it is still unset at that point.
 
-Move that option into mm/ where the code itself also lies.
-Also add "select" statements to CONFIG_TMPFS and CONFIG_HUGETLBFS so
-they automatically enable CONFIG_MEMFD_CREATE as before.
+>  - that's pretty much a leftover after a workaround. Introducing
+> more arch code to accommodate this seemed wasteful, since in my understanding
+> all workarounds are meant to be removed at some point, even if it takes a long time
+> to do so.
 
-Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
----
- fs/Kconfig | 5 ++---
- mm/Kconfig | 3 +++
- 2 files changed, 5 insertions(+), 3 deletions(-)
+Not really, until the systems needing them are in use.
 
-diff --git a/fs/Kconfig b/fs/Kconfig
-index 18d034ec7953..19975b104bc3 100644
---- a/fs/Kconfig
-+++ b/fs/Kconfig
-@@ -169,6 +169,7 @@ source "fs/sysfs/Kconfig"
- config TMPFS
- 	bool "Tmpfs virtual memory file system support (former shm fs)"
- 	depends on SHMEM
-+	select MEMFD_CREATE
- 	help
- 	  Tmpfs is a file system which keeps all files in virtual memory.
- 
-@@ -240,6 +241,7 @@ config HUGETLBFS
- 	bool "HugeTLB file system support"
- 	depends on X86 || IA64 || SPARC64 || ARCH_SUPPORTS_HUGETLBFS || BROKEN
- 	depends on (SYSFS || SYSCTL)
-+	select MEMFD_CREATE
- 	help
- 	  hugetlbfs is a filesystem backing for HugeTLB pages, based on
- 	  ramfs. For architectures that support it, say Y here and read
-@@ -264,9 +266,6 @@ config HUGETLB_PAGE_OPTIMIZE_VMEMMAP_DEFAULT_ON
- 	  enable HVO by default. It can be disabled via hugetlb_free_vmemmap=off
- 	  (boot command line) or hugetlb_optimize_vmemmap (sysctl).
- 
--config MEMFD_CREATE
--	def_bool TMPFS || HUGETLBFS
--
- config ARCH_HAS_GIGANTIC_PAGE
- 	bool
- 
-diff --git a/mm/Kconfig b/mm/Kconfig
-index 09130434e30d..22acffd9009d 100644
---- a/mm/Kconfig
-+++ b/mm/Kconfig
-@@ -1144,6 +1144,9 @@ config KMAP_LOCAL_NON_LINEAR_PTE_ARRAY
- config IO_MAPPING
- 	bool
- 
-+config MEMFD_CREATE
-+	bool "Enable memfd_create() system call" if EXPERT
-+
- config SECRETMEM
- 	default y
- 	bool "Enable memfd_secret() system call" if EXPERT
+> >
+> > Also it can be argued that ACPI_PDC_C_C2C3_FFH and ACPI_PDC_C_C1_FFH
+> > should be set by the arch code too.
+>
+> That makes sense, but technically is also a workaround, since we're basically
+> checking for some specific DMI's and then we disable mwait for them.
 
----
-base-commit: e55e5df193d247a38a5e1ac65a5316a0adcc22fa
-change-id: 20230629-config-memfd-be6af03b7dca
+But boot_option_idle_override is set by the arch code, isn't it?
 
-Best regards,
--- 
-Thomas Weißschuh <linux@weissschuh.net>
-
+So the arch code may as well do the quirk in accordance with it.
