@@ -2,223 +2,260 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B0F4743AD6
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 13:29:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2967A743ADA
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 13:31:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232487AbjF3L3n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 07:29:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36780 "EHLO
+        id S232525AbjF3LbH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Jun 2023 07:31:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231778AbjF3L3j (ORCPT
+        with ESMTP id S231778AbjF3LbF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 07:29:39 -0400
-Received: from out30-101.freemail.mail.aliyun.com (out30-101.freemail.mail.aliyun.com [115.124.30.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38EFFC0;
-        Fri, 30 Jun 2023 04:29:37 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R271e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046056;MF=rongwei.wang@linux.alibaba.com;NM=1;PH=DS;RN=4;SR=0;TI=SMTPD_---0VmIQKDt_1688124573;
-Received: from 30.240.105.188(mailfrom:rongwei.wang@linux.alibaba.com fp:SMTPD_---0VmIQKDt_1688124573)
-          by smtp.aliyun-inc.com;
-          Fri, 30 Jun 2023 19:29:34 +0800
-Message-ID: <e43c47c9-2bf7-b34d-0d30-83902543ae32@linux.alibaba.com>
-Date:   Fri, 30 Jun 2023 19:29:31 +0800
+        Fri, 30 Jun 2023 07:31:05 -0400
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CCF7C0
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 04:30:56 -0700 (PDT)
+Received: by mail-wm1-x331.google.com with SMTP id 5b1f17b1804b1-3fbc54caad5so8983075e9.2
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 04:30:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=layalina-io.20221208.gappssmtp.com; s=20221208; t=1688124654; x=1690716654;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZV6dzBiQl0IH1EEhpQsQA8tKPBloNuEHt8BD8L2NkEI=;
+        b=wml0BG1fzqHqy5AFo8YeNkTuA+sDYFhG8thc/i8gW71eeBfUj3Az4BTt1UT27FoIMy
+         V92rSpl9hsQtMth70RMSgEOFCCMrcR/tODf5Jy7XzZrb/pLEYbulZjlN/VYToU1Lc1Xd
+         aOIZAaEcuPcSoLPkeG2PLhXh4mSCftHCJa8sWZdkgFUX5GuKSNb1vY6Y/mPJLXDfE2Oe
+         V8uD7ZU96af7P57fa4ugtogo9oYuu45dXzWzl/0rDAqz/gM2rZIBFwAKwTK/gTj7vLa5
+         Q0zytl2g1TVUuAcq0ZoVCX7PqedHe5p2oDRk75yUHYMxWy16Bf2JGNGbpNsgVeHo5MsR
+         LL5g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688124654; x=1690716654;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ZV6dzBiQl0IH1EEhpQsQA8tKPBloNuEHt8BD8L2NkEI=;
+        b=e3W9eauoifB7plj4SitDKmsEMzpgINfByGS//ZhJb/JElz+JncNRKEaygYR3hKdFLm
+         G9/Ju+14JbM/FTN+JRKEtEqUiw8qRdX/If2pUje/0dCt23vOmDkW1d45C7xyqftPcRG0
+         DzTYOo2J+3sjC1b3y+rByQncVyEPmwn+y7jjQQT7LtB+W4i9F4Kkrtam86ICj/4yO6jI
+         UIUgXZDcj8g3f/xKMkYYKbSZ3FNScK8nScWzRiDqdlrSWHxYy7RtVffWoVP6C+oP1em3
+         uOOlCxkEu3qZ2Tfn1M2roNBL3FPkwwgDEJSBD0IhbRvgHWOOsw4g5XArdrRC3EHn6MrO
+         QTQQ==
+X-Gm-Message-State: AC+VfDwfdr6mJIDMwwpX7FJPyhJmmu3FLI99ONwwk+igXwI5Tie2lgii
+        /K1S1EG+cJJLgrKZcpMjcOmdzQ==
+X-Google-Smtp-Source: ACHHUZ7TSxhgptiqaWhxXiY/Vl9yeIQJRkaPUVC5f6QKQjnYikMG17OcC10n55EEK5ZLKWEd9arN+Q==
+X-Received: by 2002:a7b:ce87:0:b0:3f7:5d:4a06 with SMTP id q7-20020a7bce87000000b003f7005d4a06mr1841455wmj.1.1688124654424;
+        Fri, 30 Jun 2023 04:30:54 -0700 (PDT)
+Received: from airbuntu (host86-163-217-97.range86-163.btcentralplus.com. [86.163.217.97])
+        by smtp.gmail.com with ESMTPSA id c14-20020a7bc84e000000b003f8126bcf34sm21658390wml.48.2023.06.30.04.30.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 30 Jun 2023 04:30:53 -0700 (PDT)
+Date:   Fri, 30 Jun 2023 12:30:49 +0100
+From:   Qais Yousef <qyousef@layalina.io>
+To:     Dietmar Eggemann <dietmar.eggemann@arm.com>
+Cc:     Lukasz Luba <lukasz.luba@arm.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        linux-kernel@vger.kernel.org, Wei Wang <wvw@google.com>,
+        Xuewen Yan <xuewen.yan94@gmail.com>,
+        Hank <han.lin@mediatek.com>,
+        Jonathan JMChen <Jonathan.JMChen@mediatek.com>
+Subject: Re: [PATCH v2 1/3] sched/uclamp: Set max_spare_cap_cpu even if
+ max_spare_cap is 0
+Message-ID: <20230630113049.exhfcf3cc2shs4pm@airbuntu>
+References: <20230205224318.2035646-1-qyousef@layalina.io>
+ <20230205224318.2035646-2-qyousef@layalina.io>
+ <CAKfTPtA9yOncmGuLfo-XaXDZ5F7+9iL-hdyGeaOQi1qrDa_RqQ@mail.gmail.com>
+ <9e935645-9baf-af9f-73bd-3eaeaec044a8@arm.com>
+ <20230211175052.b7a4hddhkjk4j6qf@airbuntu>
+ <48db3f08-a066-c078-bfc9-bf20f66e067a@arm.com>
+ <20230531182243.r4d5teuijiadwp2c@airbuntu>
+ <2d4ead34-3023-aac9-3e1d-97703c7200a0@arm.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.12.0
-Subject: Re: [PATCH RFC v2 0/4] Add support for sharing page tables across
- processes (Previously mshare)
-Content-Language: en-US
-To:     Khalid Aziz <khalid.aziz@oracle.com>
-Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org
-References: <cover.1682453344.git.khalid.aziz@oracle.com>
-From:   Rongwei Wang <rongwei.wang@linux.alibaba.com>
-In-Reply-To: <cover.1682453344.git.khalid.aziz@oracle.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-10.0 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <2d4ead34-3023-aac9-3e1d-97703c7200a0@arm.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NO_DNS_FOR_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Khalid
+On 06/05/23 13:29, Dietmar Eggemann wrote:
+> On 31/05/2023 20:22, Qais Yousef wrote:
+> > Hi Lukasz!
+> > 
+> > Sorry for late response..
+> > 
+> > On 05/22/23 09:30, Lukasz Luba wrote:
+> >> Hi Qais,
+> >>
+> >> I have a question regarding the 'soft cpu affinity'.
+> > 
+> > [...]
+> > 
+> >>> IIUC I'm not seeing this being a problem. The goal of capping with uclamp_max
+> >>> is two folds:
+> >>>
+> >>> 	1. Prevent tasks from consuming energy.
+> >>> 	2. Keep them away from expensive CPUs.
+> >>>
+> >>> 2 is actually very important for 2 reasons:
+> >>>
+> >>> 	a. Because of max aggregation - any uncapped tasks that wakes up will
+> >>> 	   cause a frequency spike on this 'expensive' cpu. We don't have
+> >>> 	   a mechanism to downmigrate it - which is another thing I'm working
+> >>> 	   on.
+> >>> 	b. It is desired to keep these bigger cpu idle ready for more important
+> >>> 	   work.
+> >>>
+> >>> For 2, generally we don't want these tasks to steal bandwidth from these CPUs
+> >>> that we'd like to preserve for other type of work.
+> >>
+> >> I'm a bit afraid about such 'strong force'. That means the task would
+> >> not go via EAS if we set uclamp_max e.g. 90, while the little capacity
+> >> is 125. Or am I missing something?
+> > 
+> > We should go via EAS, actually that's the whole point.
+> > 
+> > Why do you think we won't go via EAS? The logic should be is we give a hint to
+> > prefer the little core, but we still can pick something else if it's more
+> > energy efficient.
+> > 
+> > What uclamp_max enables us is to still consider that little core even if it's
+> > utilization says it doesn't fit there. We need to merge these patches first
+> > though as it's broken at the moment. if little capacity is 125 and utilization
+> > of the task is 125, then even if uclamp_max is 0, EAS will skip the whole
+> > little cluster as apotential candidate because there's no spare_capacity there.
+> > Even if the whole little cluster is idle.
+> 
+> I'm not against letting uclamp_max force fit the placement of p. I'm
+> just worried that using the EM (especially in it's current state) for
+> that is wrong and will only work in certain scenarios like the one you
+> picked.
+> 
+> I did show a counter-example (Juno-r0 [446 1024 1024 446 446 446] with 6
+> 8ms/16ms uclamp_max=440). The issue is that once we have no idle time
+> left, the decisions of the EM are simply wrong and we shouldn't enforce
+> those decisions.
 
-I see this patch has send out in April, and wanna to ask about the 
-status of this RFC now (IMHO, it seems that the code has some places to 
-fix/do). This feature is useful to save much memory on pgtables, so we 
-also want to use this optimization in our databases if upstream accept that.
+But this is a different problem, no? If you consider the current level of
+brokeness, the impact is worse IMO.
 
-BTW, in the past few weeks, I made some adjustments to simplify and meet 
-with our databases base on your code, e.g. multi-vmas share same shadow 
-mm, madvise, and memory compaction. if you are interested, I can provide 
-a detailed codes.
+Given that Android force packs things on little cores using cpuset; I see this
+wrong calculation bug less impactful. But I do agree we should do better. But
+I don't see this as a blocker to merging this fix.
+
+The thing we need to keep in mind is that if the big cores are busy or running
+at high frequencies, then yes we want to cram these tasks on the little cores.
+The impact of them running accidentally there (especially we lack support for
+correction action in the load balancer yet) is worse.
+
+> 
+> There is a related issue. E.g. on Pixel6 with its 4 little CPUs with
+> cpu_cap_orig = 124. If you admit a task with p->util_avg > cpu_cap_orig
+> it doesn't even fit onto a CPU. But we then do an energy calculation
+> taking the values of the whole little PD into consideration. This makes
+> no sense. The EM is not uclamp_max aware right now.
+
+Sorry could explain the difference between this problem and the one we already
+were discussing?
+
+> 
+> What about using `sis() -> sic()` for uclamp_max constrained tasks? We
+> would just have to iterate over the CPUs in cpu_cap_orig order. (1)
+
+What's the advantage here? This is not useful because we only search idle
+capacities. So on scenarios where the system is busy, they'll end up randomly
+but we do want to pack them on little cores IMHO.
+
+> Or the EM has to be made uclamp_max aware. (2)
+
+Do you have any suggestions here?
+
+Note we lack the evidence how problematic this is in real world scenarios. All
+the systems I've seen already pack everything on little cores via cpuset. So
+nothing gets worse here. But we get a chance to do better in other cases while
+we look for ways to improve this.
+
+> 
+> Your example is the idle system with 1 task p waking up. This task has a
+> util_avg which excludes the little CPUs from being the new task_cpu(p).
+> But p's uclamp_max value would allow this. But we can't just consider
+> the placement of 1 task here.
+
+No one is saying we need to consider the placement of 1 task only. I think you
+exaggerate the impact of cramming things and not noticing that whether it's
+1 or 100 tasks, EAS will not even consider the little cores for those busy
+tasks. uclamp_max was introduce to allow this, and it just doesn't work since
+by definition these tasks will cause the little cores to have 0 spare
+capacity. But we skip all cpus with 0 spare capacities.
+
+> 
+> >> This might effectively use more energy for those tasks which can run on
+> >> any CPU and EAS would figure a good energy placement. I'm worried
+> >> about this, since we have L3+littles in one DVFS domain and the L3
+> >> would be only bigger in future.
+> > 
+> > It's a bias that will enable the search algorithm in EAS to still consider the
+> > little core for big tasks. This bias will depend on the uclamp_max value chosen
+> > by userspace (so they have some control on how hard to cap the task), and what
+> > else is happening in the system at the time it wakes up.
+> 
+> To teach the EM about such tricky dependencies is IMHO outside the scope
+> of `how to select a CPU for a uclamp_max constrained task`. (3)
+> 
+> >> IMO to keep the big cpus more in idle, we should give them big energy
+> >> wake up cost. That's my 3rd feature to the EM presented in OSPM2023.
+> > 
+> > Considering the wake up cost in EAS would be a great addition to have :)
+> 
+> I see this one as unrelated to (3) as well.
+> 
+> >>> Of course userspace has control by selecting the right uclamp_max value. They
+> >>> can increase it to allow a spill to next pd - or keep it low to steer them more
+> >>> strongly on a specific pd.
+> >>
+> >> This would we be interesting to see in practice. I think we need such
+> >> experiment, for such changes.
+> > 
+> > I'm not sure what you mean by 'such changes'. I hope you don't mean these
+> > patches as they are not the key. They fix an obvious bug where task placement
+> > hint won't work at all. They don't modify any behavior that shouldn't have
+> > already been there. Nor introduce new limitation. I have to say I am
+> > disappointed that these patches aren't considered an important fix for an
+> > obvious breakage.
+> 
+> To me it's a dead-end to go this way. We need to see the full picture
+> including something like (1) or (2) or patches you have mentioned, like
+> the `down-migration in load-balance` thing.
+
+The down migration is to address another problem. It is a necessary fix to do
+corrections when we end up in bad situation. Wake up path still has to do the
+right thing first.
+
+> 
+> Maybe we can at least list all the use cases for uclamp_max capping here:
+> 
+> It was mentioned:
+> 
+> (A) `soft affinity for tasks w/ util_avg > uclamp_max`.
+> 
+> Are there more?
+
+We are trying to fix bugs here. Do you want to restart the discussion of why
+uclamp_max was introduced?
+
+Uclamp max is a hint to bias task placement and power consumption by help
+keeping these task away from big cpus and higher frequencies based on the max
+allowed performance level the task is allowed to reach.
 
 
-Thanks,
+Cheers
 
--wrw
-
-On 2023/4/27 00:49, Khalid Aziz wrote:
-> Memory pages shared between processes require a page table entry
-> (PTE) for each process. Each of these PTE consumes some of the
-> memory and as long as number of mappings being maintained is small
-> enough, this space consumed by page tables is not objectionable.
-> When very few memory pages are shared between processes, the number
-> of page table entries (PTEs) to maintain is mostly constrained by
-> the number of pages of memory on the system.  As the number of
-> shared pages and the number of times pages are shared goes up,
-> amount of memory consumed by page tables starts to become
-> significant. This issue does not apply to threads. Any number of
-> threads can share the same pages inside a process while sharing the
-> same PTEs. Extending this same model to sharing pages across
-> processes can eliminate this issue for sharing across processes as
-> well.
->
-> Some of the field deployments commonly see memory pages shared
-> across 1000s of processes. On x86_64, each page requires a PTE that
-> is only 8 bytes long which is very small compared to the 4K page
-> size. When 2000 processes map the same page in their address space,
-> each one of them requires 8 bytes for its PTE and together that adds
-> up to 8K of memory just to hold the PTEs for one 4K page. On a
-> database server with 300GB SGA, a system crash was seen with
-> out-of-memory condition when 1500+ clients tried to share this SGA
-> even though the system had 512GB of memory. On this server, in the
-> worst case scenario of all 1500 processes mapping every page from
-> SGA would have required 878GB+ for just the PTEs. If these PTEs
-> could be shared, amount of memory saved is very significant.
->
-> This patch series adds a new flag to mmap() call - MAP_SHARED_PT.
-> This flag can be specified along with MAP_SHARED by a process to
-> hint to kernel that it wishes to share page table entries for this
-> file mapping mmap region with other processes. Any other process
-> that mmaps the same file with MAP_SHARED_PT flag can then share the
-> same page table entries. Besides specifying MAP_SHARED_PT flag, the
-> processes must map the files at a PMD aligned address with a size
-> that is a multiple of PMD size and at the same virtual addresses.
-> This last requirement of same virtual addresses can possibly be
-> relaxed if that is the consensus.
->
-> When mmap() is called with MAP_SHARED_PT flag, a new host mm struct
-> is created to hold the shared page tables. Host mm struct is not
-> attached to a process. Start and size of host mm are set to the
-> start and size of the mmap region and a VMA covering this range is
-> also added to host mm struct. Existing page table entries from the
-> process that creates the mapping are copied over to the host mm
-> struct. All processes mapping this shared region are considered
-> guest processes. When a guest process mmap's the shared region, a vm
-> flag VM_SHARED_PT is added to the VMAs in guest process. Upon a page
-> fault, VMA is checked for the presence of VM_SHARED_PT flag. If the
-> flag is found, its corresponding PMD is updated with the PMD from
-> host mm struct so the PMD will point to the page tables in host mm
-> struct. vm_mm pointer of the VMA is also updated to point to host mm
-> struct for the duration of fault handling to ensure fault handling
-> happens in the context of host mm struct. When a new PTE is
-> created, it is created in the host mm struct page tables and the PMD
-> in guest mm points to the same PTEs.
->
-> This is a basic working implementation. It will need to go through
-> more testing and refinements. Some notes and questions:
->
-> - PMD size alignment and size requirement is currently hard coded
->    in. Is there a need or desire to make this more flexible and work
->    with other alignments/sizes? PMD size allows for adapting this
->    infrastructure to form the basis for hugetlbfs page table sharing
->    as well. More work will be needed to make that happen.
->
-> - Is there a reason to allow a userspace app to query this size and
->    alignment requirement for MAP_SHARED_PT in some way?
->
-> - Shared PTEs means mprotect() call made by one process affects all
->    processes sharing the same mapping and that behavior will need to
->    be documented clearly. Effect of mprotect call being different for
->    processes using shared page tables is the primary reason to
->    require an explicit opt-in from userspace processes to share page
->    tables. With a transparent sharing derived from MAP_SHARED alone,
->    changed effect of mprotect can break significant number of
->    userspace apps. One could work around that by unsharing whenever
->    mprotect changes modes on shared mapping but that introduces
->    complexity and the capability to execute a single mprotect to
->    change modes across 1000's of processes sharing a mapped database
->    is a feature explicitly asked for by database folks. This
->    capability has significant performance advantage when compared to
->    mechanism of sending messages to every process using shared
->    mapping to call mprotect and change modes in each process, or
->    using traps on permissions mismatch in each process.
->
-> - This implementation does not allow unmapping page table shared
->    mappings partially. Should that be supported in future?
->
-> Some concerns in this RFC:
->
-> - When page tables for a process are freed upon process exit,
->    pmd_free_tlb() gets called at one point to free all PMDs allocated
->    by the process. For a shared page table, shared PMDs can not be
->    released when a guest process exits. These shared PMDs are
->    released when host mm struct is released upon end of last
->    reference to page table shared region hosted by this mm. For now
->    to stop PMDs being released, this RFC introduces following change
->    in mm/memory.c which works but does not feel like the right
->    approach. Any suggestions for a better long term approach will be
->    very appreciated:
->
-> @@ -210,13 +221,19 @@ static inline void free_pmd_range(struct mmu_gather *tlb,
-> pud_t *pud,
->
->          pmd = pmd_offset(pud, start);
->          pud_clear(pud);
-> -       pmd_free_tlb(tlb, pmd, start);
-> -       mm_dec_nr_pmds(tlb->mm);
-> +       if (shared_pte) {
-> +               tlb_flush_pud_range(tlb, start, PAGE_SIZE);
-> +               tlb->freed_tables = 1;
-> +       } else {
-> +               pmd_free_tlb(tlb, pmd, start);
-> +               mm_dec_nr_pmds(tlb->mm);
-> +       }
->   }
->
->   static inline void free_pud_range(struct mmu_gather *tlb, p4d_t *p4d,
->
-> - This implementation requires an additional VM flag. Since all lower
->    32 bits are currently in use, the new VM flag must come from upper
->    32 bits which restricts this feature to 64-bit processors.
->
-> - This feature is implemented for file mappings only. Is there a
->    need to support it for anonymous memory as well?
->
-> - Accounting for MAP_SHARED_PT mapped filepages in a process and
->    pagetable bytes is not quite accurate yet in this RFC and will be
->    fixed in the non-RFC version of patches.
->
-> I appreciate any feedback on these patches and ideas for
-> improvements before moving these patches out of RFC stage.
->
->
-> Changes from RFC v1:
-> - Broken the patches up into smaller patches
-> - Fixed a few bugs related to freeing PTEs and PMDs incorrectly
-> - Cleaned up the code a bit
->
->
-> Khalid Aziz (4):
->    mm/ptshare: Add vm flag for shared PTE
->    mm/ptshare: Add flag MAP_SHARED_PT to mmap()
->    mm/ptshare: Create new mm struct for page table sharing
->    mm/ptshare: Add page fault handling for page table shared regions
->
->   include/linux/fs.h                     |   2 +
->   include/linux/mm.h                     |   8 +
->   include/trace/events/mmflags.h         |   3 +-
->   include/uapi/asm-generic/mman-common.h |   1 +
->   mm/Makefile                            |   2 +-
->   mm/internal.h                          |  21 ++
->   mm/memory.c                            | 105 ++++++++--
->   mm/mmap.c                              |  88 +++++++++
->   mm/ptshare.c                           | 263 +++++++++++++++++++++++++
->   9 files changed, 476 insertions(+), 17 deletions(-)
->   create mode 100644 mm/ptshare.c
->
+--
+Qais Yousef
