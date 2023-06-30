@@ -2,131 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBDB4743E30
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 17:03:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A026C743E3F
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 17:04:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232895AbjF3PDn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 11:03:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57662 "EHLO
+        id S232902AbjF3PEn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Jun 2023 11:04:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232883AbjF3PDk (ORCPT
+        with ESMTP id S232371AbjF3PEi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 11:03:40 -0400
-Received: from mail-40133.protonmail.ch (mail-40133.protonmail.ch [185.70.40.133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4618F171E
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 08:03:36 -0700 (PDT)
-Date:   Fri, 30 Jun 2023 15:03:23 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=proton.me;
-        s=protonmail; t=1688137413; x=1688396613;
-        bh=GOuPFgT87znF0ebWMyLwXo4ofXzgfLkd6vzl1Y3CfqA=;
-        h=Date:To:From:Cc:Subject:Message-ID:Feedback-ID:From:To:Cc:Date:
-         Subject:Reply-To:Feedback-ID:Message-ID:BIMI-Selector;
-        b=NrF664B6Yj0S5v0K2a8SBUlj4tguRpmjCqdIi0VDecC5Af+oGs8Jow/Z7UlUxgpU6
-         sr/lRkn5WLpKUuwrJ28b9xhWvtVm92iXjHoqHgWwALy5WJK8wMWigXQKzq1J9YbtoY
-         uVH5+0WMMG8zV1uDUJTmaUnY8YJ+2i+atSwnmEPX3gyffdh+XdnG+oPAq8RegM1QH+
-         oayFkKeYdKuzUUuBX30Zi8Cq1uFdEhbv/o0k0GnPqXGRIPHirt2o3vNMtQIAcGGof+
-         trOWTeMVgrocDBf+d+8C2bakHzV+avyR/N5Pe+Zj8MW4uCaACwlW5L00vXRO8abiIz
-         EQVCjKMpULetA==
-To:     Miguel Ojeda <ojeda@kernel.org>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Alex Gaynor <alex.gaynor@gmail.com>
-From:   Benno Lossin <benno.lossin@proton.me>
-Cc:     Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?utf-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
-        Benno Lossin <benno.lossin@proton.me>,
-        Alice Ryhl <aliceryhl@google.com>,
-        Andreas Hindborg <nmi@metaspace.dk>,
-        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
-        patches@lists.linux.dev
-Subject: [PATCH] rust: types: make `Opaque` be `!Unpin`
-Message-ID: <20230630150216.109789-1-benno.lossin@proton.me>
-Feedback-ID: 71780778:user:proton
+        Fri, 30 Jun 2023 11:04:38 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 734561FFA
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 08:04:36 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id a640c23a62f3a-98df6bc0048so232419466b.1
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 08:04:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1688137475; x=1690729475;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=/dVLLykZP6WKd+6flq1FWTnG0laFtJyV7E0+T2ohxVg=;
+        b=kIrWa0+hYI0FcC7ix0CNBMKmB9xK1fMznCXnzKSiJhDYobHbnTleEgtCTDTgs2VF4W
+         mntb35Y8yrLec+xWh8vra3xEesOGbTJtgFXqK1I6blcOohIwFGe96uvZhFnK2vRjfP4p
+         PfVt+XRvTDrS08UocxGk8VEg3daMPR+nwkLLD7f4uGV1pf4IARO0O3bZdAvmM3U/wufV
+         o+I8dQFv6tiycn97AWClfzTwc1rWUa19dBiVIV2JheREI1kuVHNPmzCaFuCW64N1ltKq
+         11AgB6GfhRO/EOCVacZF+B9BOLeoO0RHrv1jOrUcxTJ+E0c8xk4FpTG9wc6eb8pnUhlH
+         8hRQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688137475; x=1690729475;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=/dVLLykZP6WKd+6flq1FWTnG0laFtJyV7E0+T2ohxVg=;
+        b=AOnoLgiIIjfEsxv5sqmjFWd4olWARLLMKRysuIZUo6ahZ5W1Ilh+PJ2SmjyUVmOQlp
+         RrtURqYVQt3b8M3TYJpDIoVAevrplfSf4g7kLXKgLalIUsyVvnqGBztrDlfFIhNBsB+G
+         mbvFlE7xkHTGIlo/qisJT8abA5pvhrOBBL8+GOUj8Roe+VaDqEH1s0dzB9H5A5V0UjyZ
+         CZtgkLghzHhbOsnS7Yw9B+OOOqXEp/d6kG6sbHeg1y8n1221K1afZH8ANh1PSXOdj4r1
+         NC5g3caOnXS+91CowrYHR9bzdMJqGj9Uxlc+98qSreJ0UrYKFEdGXNjGNF/b1P9FXVDq
+         xDBA==
+X-Gm-Message-State: ABy/qLYHPw4KrVmP+ici5LwSah9iikozRDMUFkI/JTO9SXtcEi05ITwa
+        zS0NShRTUoraMQRgTjpWt0QGwLKEY8jgYYnfoECDRw==
+X-Google-Smtp-Source: APBJJlG9kOTBWqQJF3GG7lr98IJMS+YWNbQoJhPlnRsvrOFTNxORvcHSK3F7P7JfUN97vIcVVrfwUKYL4FjGrasKsDU=
+X-Received: by 2002:a17:906:3453:b0:98d:cd3e:c193 with SMTP id
+ d19-20020a170906345300b0098dcd3ec193mr1979573ejb.46.1688137474742; Fri, 30
+ Jun 2023 08:04:34 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+References: <20230629132711.1712536-1-matteorizzo@google.com>
+ <20230629132711.1712536-2-matteorizzo@google.com> <87bkgyt8sq.fsf@suse.de>
+In-Reply-To: <87bkgyt8sq.fsf@suse.de>
+From:   Matteo Rizzo <matteorizzo@google.com>
+Date:   Fri, 30 Jun 2023 17:04:23 +0200
+Message-ID: <CAHKB1w+DgbZYNL83XFUCPuPvvP6YdgjAZqPc_uG_eHAj71a=6Q@mail.gmail.com>
+Subject: Re: [PATCH v2 1/1] Add a new sysctl to disable io_uring system-wide
+To:     Gabriel Krisman Bertazi <krisman@suse.de>
+Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        io-uring@vger.kernel.org, jordyzomer@google.com, evn@google.com,
+        poprdi@google.com, corbet@lwn.net, axboe@kernel.dk,
+        asml.silence@gmail.com, akpm@linux-foundation.org,
+        keescook@chromium.org, rostedt@goodmis.org,
+        dave.hansen@linux.intel.com, ribalda@chromium.org,
+        chenhuacai@kernel.org, steve@sk2.org, gpiccoli@igalia.com,
+        ldufour@linux.ibm.com, bhe@redhat.com, oleksandr@natalenko.name,
+        Bart Van Assche <bvanassche@acm.org>, jmoyer@redhat.com,
+        Jann Horn <jannh@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Adds a `PhantomPinned` field to `Opaque<T>`. This removes the last Rust
-guarantee: the assumption that the type `T` can be freely moved. This is
-not the case for many types from the C side (e.g. if they contain a
-`struct list_head`). This change removes the need to add a
-`PhantomPinned` field manually to Rust structs that contain C structs
-which must not be moved.
+On Thu, 29 Jun 2023 at 20:36, Gabriel Krisman Bertazi <krisman@suse.de> wrote:
+>
+> Thanks for adding the extra level for root-only rings.
+>
+> The patch looks good to me.
+>
+> Reviewed-by: Gabriel Krisman Bertazi <krisman@suse.de>
 
-Signed-off-by: Benno Lossin <benno.lossin@proton.me>
----
-This patch depends on the patch that swaps `UnsafeCell` with
-`MaybeUninit` inside `Opaque` [1].
+Thanks everyone for the reviews! Unfortunately I forgot the subsystem name
+in the commit message. Jann also pointed out to me internally that the
+check in io_uring_allowed could race with another process that is trying to
+change the sysctl. I will send a v3 that fixes both issues.
 
-[1]: https://lore.kernel.org/rust-for-linux/20230614115328.2825961-1-alicer=
-yhl@google.com/
----
- rust/kernel/types.rs | 19 ++++++++++++++-----
- 1 file changed, 14 insertions(+), 5 deletions(-)
-
-diff --git a/rust/kernel/types.rs b/rust/kernel/types.rs
-index fb41635f1e1f..e664a2beef30 100644
---- a/rust/kernel/types.rs
-+++ b/rust/kernel/types.rs
-@@ -6,7 +6,7 @@
- use alloc::boxed::Box;
- use core::{
-     cell::UnsafeCell,
--    marker::PhantomData,
-+    marker::{PhantomData, PhantomPinned},
-     mem::MaybeUninit,
-     ops::{Deref, DerefMut},
-     ptr::NonNull,
-@@ -224,17 +224,26 @@ fn drop(&mut self) {
- ///
- /// This is meant to be used with FFI objects that are never interpreted b=
-y Rust code.
- #[repr(transparent)]
--pub struct Opaque<T>(UnsafeCell<MaybeUninit<T>>);
-+pub struct Opaque<T> {
-+    value: UnsafeCell<MaybeUninit<T>>,
-+    _pin: PhantomPinned,
-+}
-=20
- impl<T> Opaque<T> {
-     /// Creates a new opaque value.
-     pub const fn new(value: T) -> Self {
--        Self(UnsafeCell::new(MaybeUninit::new(value)))
-+        Self {
-+            value: UnsafeCell::new(MaybeUninit::new(value)),
-+            _pin: PhantomPinned,
-+        }
-     }
-=20
-     /// Creates an uninitialised value.
-     pub const fn uninit() -> Self {
--        Self(UnsafeCell::new(MaybeUninit::uninit()))
-+        Self {
-+            value: UnsafeCell::new(MaybeUninit::uninit()),
-+            _pin: PhantomPinned,
-+        }
-     }
-=20
-     /// Creates a pin-initializer from the given initializer closure.
-@@ -258,7 +267,7 @@ pub fn ffi_init(init_func: impl FnOnce(*mut T)) -> impl=
- PinInit<Self> {
-=20
-     /// Returns a raw pointer to the opaque data.
-     pub fn get(&self) -> *mut T {
--        UnsafeCell::get(&self.0).cast::<T>()
-+        UnsafeCell::get(&self.value).cast::<T>()
-     }
-=20
-     /// Gets the value behind `this`.
---=20
-2.41.0
-
-
+Thanks,
+--
+Matteo
