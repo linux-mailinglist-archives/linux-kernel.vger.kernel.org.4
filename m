@@ -2,217 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56927743520
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 08:34:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A535743523
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 08:36:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232456AbjF3Gef (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 02:34:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33598 "EHLO
+        id S230448AbjF3Gfk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Jun 2023 02:35:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232460AbjF3Ge1 (ORCPT
+        with ESMTP id S232585AbjF3Gfc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 02:34:27 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A394199E;
-        Thu, 29 Jun 2023 23:34:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1688106862; x=1719642862;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Lp8GVKCOH/lzScTS9lpD0yx5G69PduR8vAhXSWXJjbc=;
-  b=Y9GmXPkuXLafQjvDSDVgnhnoG/zP+EnwcoNAcnRcqa/4HRBbI6g4/z51
-   q+QUVDl28810iGVEcrOVifeOPlBeIV0cCZb3yVZ0C3FD1PxIsE++lgJGy
-   yUMB7nqNr+on7x+2yLoFpEHtw4pugZQZFs6YEEgHO/AbgRf08923J3pyb
-   0n5vt7WEhEg1d38itvmL6o3Ny9mfA+dYcabk+ItxpPii3x6DrzePPRy3S
-   GL85LQrtECxcWux238ykXT8mS0re++GYkmiSfUXHg7VBz087sR4fKXpb4
-   OsZ0mXXB+eiKChDvnPVXtrTTxQHfpg/J9EhJeGeuGzL5c5EBRCFr5ZzMI
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10756"; a="364905090"
-X-IronPort-AV: E=Sophos;i="6.01,169,1684825200"; 
-   d="scan'208";a="364905090"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jun 2023 23:34:21 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10756"; a="694926264"
-X-IronPort-AV: E=Sophos;i="6.01,169,1684825200"; 
-   d="scan'208";a="694926264"
-Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 29 Jun 2023 23:34:16 -0700
-Received: from kbuild by 783282924a45 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1qF7hv-000Elx-2x;
-        Fri, 30 Jun 2023 06:34:15 +0000
-Date:   Fri, 30 Jun 2023 14:33:57 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     jeffxu@chromium.org, skhan@linuxfoundation.org,
-        keescook@chromium.org
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        akpm@linux-foundation.org, dmitry.torokhov@gmail.com,
-        dverkamp@chromium.org, asmadeus@codewreck.org, hughd@google.com,
-        jeffxu@google.com, jorgelo@chromium.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-mm@kvack.org, jannh@google.com,
-        linux-hardening@vger.kernel.org,
-        linux-security-module@vger.kernel.org
-Subject: Re: [PATCH v1 1/2] mm/memfd: sysctl: fix
- MEMFD_NOEXEC_SCOPE_NOEXEC_ENFORCED
-Message-ID: <202306301435.dpXv0GwQ-lkp@intel.com>
-References: <20230630031721.623955-2-jeffxu@google.com>
+        Fri, 30 Jun 2023 02:35:32 -0400
+Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7895199E
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 23:35:30 -0700 (PDT)
+Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-98df3dea907so177952666b.3
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 23:35:30 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688106929; x=1690698929;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=20rBaj2Y5A8WawnZ5IpIpG7vFTWBtQPIoAz1oe/gFqA=;
+        b=XLYIqbaxrkjvzv3x5tYG6bmSSxJwzelLWkhGu6hk0y4qvh5yUQWu6yehIOmCY3IiDx
+         QnRKkD9EG8nlnpQWGio26vSs29BBg8aZATSQSptc3ApxGg5JSpvLSO3J03VoRtIWCeoe
+         FcNIikmm73KLHwRZKLTL/XcCUoF5UcKiC+8COVcozKJcj6OSe9kIIfHljkBUbpmYHxJG
+         Afpj0deGvx4v2xLkciyehi9vVKdfAvkEOZVypXqRpcpgAduwsH2r5Sx/OR3cO53pu5P7
+         SvJUyMCSXWGNY7izx7Uq2xF5gg64gAr2N+4DMe3su/36Eg/uNGGnVFbomM3rbN8dh46L
+         GENA==
+X-Gm-Message-State: ABy/qLb5gKsWAPjT0dqBbV1qgtLpBcnWbDICRTgJZD94FgvlQc+ho+IF
+        XVBbkOznfp00wxNn1XMjIYA=
+X-Google-Smtp-Source: APBJJlFfYhTxC8ahwzU+JKDiJhjiAHDdaDYcw6muBSFSxnAn39XJR+dtpGgU7WNpRhVqsWEErFSBog==
+X-Received: by 2002:a17:906:5593:b0:982:6bba:79c9 with SMTP id y19-20020a170906559300b009826bba79c9mr1180362ejp.20.1688106928988;
+        Thu, 29 Jun 2023 23:35:28 -0700 (PDT)
+Received: from ?IPV6:2a0b:e7c0:0:107::aaaa:59? ([2a0b:e7c0:0:107::aaaa:59])
+        by smtp.gmail.com with ESMTPSA id l8-20020a170906414800b0098e2969ed44sm6614566ejk.45.2023.06.29.23.35.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 29 Jun 2023 23:35:28 -0700 (PDT)
+Message-ID: <9a8d788c-b8ba-1b8a-fd79-0e25b1b60bed@kernel.org>
+Date:   Fri, 30 Jun 2023 08:35:26 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230630031721.623955-2-jeffxu@google.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH v4 29/33] x86/mm: try VMA lock-based page fault handling
+ first
+Content-Language: en-US
+To:     Suren Baghdasaryan <surenb@google.com>
+Cc:     akpm@linux-foundation.org, michel@lespinasse.org,
+        jglisse@google.com, mhocko@suse.com, vbabka@suse.cz,
+        hannes@cmpxchg.org, mgorman@techsingularity.net, dave@stgolabs.net,
+        willy@infradead.org, liam.howlett@oracle.com, peterz@infradead.org,
+        ldufour@linux.ibm.com, paulmck@kernel.org, mingo@redhat.com,
+        will@kernel.org, luto@kernel.org, songliubraving@fb.com,
+        peterx@redhat.com, david@redhat.com, dhowells@redhat.com,
+        hughd@google.com, bigeasy@linutronix.de, kent.overstreet@linux.dev,
+        punit.agrawal@bytedance.com, lstoakes@gmail.com,
+        peterjung1337@gmail.com, rientjes@google.com, chriscli@google.com,
+        axelrasmussen@google.com, joelaf@google.com, minchan@google.com,
+        rppt@kernel.org, jannh@google.com, shakeelb@google.com,
+        tatashin@google.com, edumazet@google.com, gthelen@google.com,
+        gurua@google.com, arjunroy@google.com, soheil@google.com,
+        leewalsh@google.com, posk@google.com,
+        michalechner92@googlemail.com, linux-mm@kvack.org,
+        linux-arm-kernel@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org, kernel-team@android.com
+References: <20230227173632.3292573-1-surenb@google.com>
+ <20230227173632.3292573-30-surenb@google.com>
+ <dbdef34c-3a07-5951-e1ae-e9c6e3cdf51b@kernel.org>
+ <CAJuCfpF7LweMwpvXavjJZhAciK7wK-bdLz2aFhOZGSHeK5tA9A@mail.gmail.com>
+From:   Jiri Slaby <jirislaby@kernel.org>
+In-Reply-To: <CAJuCfpF7LweMwpvXavjJZhAciK7wK-bdLz2aFhOZGSHeK5tA9A@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On 29. 06. 23, 17:30, Suren Baghdasaryan wrote:
+> On Thu, Jun 29, 2023 at 7:40 AM Jiri Slaby <jirislaby@kernel.org> wrote:
+>>
+>> Hi,
+>>
+>> On 27. 02. 23, 18:36, Suren Baghdasaryan wrote:
+>>> Attempt VMA lock-based page fault handling first, and fall back to the
+>>> existing mmap_lock-based handling if that fails.
+>>>
+>>> Signed-off-by: Suren Baghdasaryan <surenb@google.com>
+>>> ---
+>>>    arch/x86/Kconfig    |  1 +
+>>>    arch/x86/mm/fault.c | 36 ++++++++++++++++++++++++++++++++++++
+>>>    2 files changed, 37 insertions(+)
+>>>
+>>> diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+>>> index a825bf031f49..df21fba77db1 100644
+>>> --- a/arch/x86/Kconfig
+>>> +++ b/arch/x86/Kconfig
+>>> @@ -27,6 +27,7 @@ config X86_64
+>>>        # Options that are inherently 64-bit kernel only:
+>>>        select ARCH_HAS_GIGANTIC_PAGE
+>>>        select ARCH_SUPPORTS_INT128 if CC_HAS_INT128
+>>> +     select ARCH_SUPPORTS_PER_VMA_LOCK
+>>>        select ARCH_USE_CMPXCHG_LOCKREF
+>>>        select HAVE_ARCH_SOFT_DIRTY
+>>>        select MODULES_USE_ELF_RELA
+>>> diff --git a/arch/x86/mm/fault.c b/arch/x86/mm/fault.c
+>>> index a498ae1fbe66..e4399983c50c 100644
+>>> --- a/arch/x86/mm/fault.c
+>>> +++ b/arch/x86/mm/fault.c
+>>> @@ -19,6 +19,7 @@
+>>>    #include <linux/uaccess.h>          /* faulthandler_disabled()      */
+>>>    #include <linux/efi.h>                      /* efi_crash_gracefully_on_page_fault()*/
+>>>    #include <linux/mm_types.h>
+>>> +#include <linux/mm.h>                        /* find_and_lock_vma() */
+>>>
+>>>    #include <asm/cpufeature.h>         /* boot_cpu_has, ...            */
+>>>    #include <asm/traps.h>                      /* dotraplinkage, ...           */
+>>> @@ -1333,6 +1334,38 @@ void do_user_addr_fault(struct pt_regs *regs,
+>>>        }
+>>>    #endif
+>>>
+>>> +#ifdef CONFIG_PER_VMA_LOCK
+>>> +     if (!(flags & FAULT_FLAG_USER))
+>>> +             goto lock_mmap;
+>>> +
+>>> +     vma = lock_vma_under_rcu(mm, address);
+>>> +     if (!vma)
+>>> +             goto lock_mmap;
+>>> +
+>>> +     if (unlikely(access_error(error_code, vma))) {
+>>> +             vma_end_read(vma);
+>>> +             goto lock_mmap;
+>>> +     }
+>>> +     fault = handle_mm_fault(vma, address, flags | FAULT_FLAG_VMA_LOCK, regs);
+>>> +     vma_end_read(vma);
+>>> +
+>>> +     if (!(fault & VM_FAULT_RETRY)) {
+>>> +             count_vm_vma_lock_event(VMA_LOCK_SUCCESS);
+>>> +             goto done;
+>>> +     }
+>>> +     count_vm_vma_lock_event(VMA_LOCK_RETRY);
+>>
+>> This is apparently not strong enough as it causes go build failures like:
+>>
+>> [  409s] strconv
+>> [  409s] releasep: m=0x579e2000 m->p=0x5781c600 p->m=0x0 p->status=2
+>> [  409s] fatal error: releasep: invalid p state
+>> [  409s]
+>>
+>> [  325s] hash/adler32
+>> [  325s] hash/crc32
+>> [  325s] cmd/internal/codesign
+>> [  336s] fatal error: runtime: out of memory
+> 
+> Hi Jiri,
+> Thanks for reporting! I'm not familiar with go builds. Could you
+> please explain the error to me or point me to some documentation to
+> decipher that error?
 
-kernel test robot noticed the following build errors:
+Sorry, we are on the same boat -- me neither. It only popped up in our 
+(openSUSE) build system and I only tracked it down by bisection. Let me 
+know if I can try something (like a patch or gathering some debug info).
 
-[auto build test ERROR on akpm-mm/mm-everything]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/jeffxu-chromium-org/mm-memfd-sysctl-fix-MEMFD_NOEXEC_SCOPE_NOEXEC_ENFORCED/20230630-111827
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-patch link:    https://lore.kernel.org/r/20230630031721.623955-2-jeffxu%40google.com
-patch subject: [PATCH v1 1/2] mm/memfd: sysctl: fix MEMFD_NOEXEC_SCOPE_NOEXEC_ENFORCED
-config: hexagon-randconfig-r005-20230630 (https://download.01.org/0day-ci/archive/20230630/202306301435.dpXv0GwQ-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce: (https://download.01.org/0day-ci/archive/20230630/202306301435.dpXv0GwQ-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306301435.dpXv0GwQ-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   In file included from mm/memfd.c:12:
-   In file included from include/linux/pagemap.h:11:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     547 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-         |                                                   ^
-   In file included from mm/memfd.c:12:
-   In file included from include/linux/pagemap.h:11:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-         |                                                   ^
-   In file included from mm/memfd.c:12:
-   In file included from include/linux/pagemap.h:11:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     584 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
->> mm/memfd.c:273:15: error: use of undeclared identifier 'MEMFD_NOEXEC_SCOPE_EXEC'
-     273 |         int sysctl = MEMFD_NOEXEC_SCOPE_EXEC;
-         |                      ^
->> mm/memfd.c:311:17: error: use of undeclared identifier 'MEMFD_NOEXEC_SCOPE_NOEXEC_SEAL'
-     311 |                 if (sysctl == MEMFD_NOEXEC_SCOPE_NOEXEC_SEAL)
-         |                               ^
->> mm/memfd.c:321:36: error: use of undeclared identifier 'MEMFD_NOEXEC_SCOPE_NOEXEC_ENFORCED'
-     321 |         if (flags & MFD_EXEC && sysctl >= MEMFD_NOEXEC_SCOPE_NOEXEC_ENFORCED) {
-         |                                           ^
-   6 warnings and 3 errors generated.
-
-
-vim +/MEMFD_NOEXEC_SCOPE_EXEC +273 mm/memfd.c
-
-   270	
-   271	static int sysctl_memfd_noexec(void)
-   272	{
- > 273		int sysctl = MEMFD_NOEXEC_SCOPE_EXEC;
-   274	#ifdef CONFIG_SYSCTL
-   275		struct pid_namespace *ns;
-   276	
-   277		ns = task_active_pid_ns(current);
-   278		if (ns)
-   279			sysctl = ns->memfd_noexec_scope;
-   280	#endif
-   281		return sysctl;
-   282	}
-   283	
-   284	SYSCALL_DEFINE2(memfd_create,
-   285			const char __user *, uname,
-   286			unsigned int, flags)
-   287	{
-   288		char comm[TASK_COMM_LEN];
-   289		unsigned int *file_seals;
-   290		struct file *file;
-   291		int fd, error;
-   292		char *name;
-   293		long len;
-   294		int sysctl = sysctl_memfd_noexec();
-   295	
-   296		if (!(flags & MFD_HUGETLB)) {
-   297			if (flags & ~(unsigned int)MFD_ALL_FLAGS)
-   298				return -EINVAL;
-   299		} else {
-   300			/* Allow huge page size encoding in flags. */
-   301			if (flags & ~(unsigned int)(MFD_ALL_FLAGS |
-   302					(MFD_HUGE_MASK << MFD_HUGE_SHIFT)))
-   303				return -EINVAL;
-   304		}
-   305	
-   306		/* Invalid if both EXEC and NOEXEC_SEAL are set.*/
-   307		if ((flags & MFD_EXEC) && (flags & MFD_NOEXEC_SEAL))
-   308			return -EINVAL;
-   309	
-   310		if (!(flags & (MFD_EXEC | MFD_NOEXEC_SEAL))) {
- > 311			if (sysctl == MEMFD_NOEXEC_SCOPE_NOEXEC_SEAL)
-   312				flags |= MFD_NOEXEC_SEAL;
-   313			else
-   314				flags |= MFD_EXEC;
-   315	
-   316			pr_warn_once(
-   317				"memfd_create() without MFD_EXEC nor MFD_NOEXEC_SEAL, pid=%d '%s'\n",
-   318				task_pid_nr(current), get_task_comm(comm, current));
-   319		}
-   320	
- > 321		if (flags & MFD_EXEC && sysctl >= MEMFD_NOEXEC_SCOPE_NOEXEC_ENFORCED) {
-
+thanks,
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+js
+suse labs
+
