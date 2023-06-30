@@ -2,132 +2,269 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF616743C48
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 14:53:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EEAE743C51
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 15:02:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231950AbjF3MxV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 08:53:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38388 "EHLO
+        id S231950AbjF3NCS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Jun 2023 09:02:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229508AbjF3MxT (ORCPT
+        with ESMTP id S230015AbjF3NCQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 08:53:19 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D49AA2D50
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 05:53:17 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5A74A61755
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 12:53:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6138CC433C0;
-        Fri, 30 Jun 2023 12:53:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1688129596;
-        bh=55u5k1dErSnZCei8mhss24XJu4njQWqMm1vg6jlV0No=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=laEWgJY3k614Kl7YH0YATMV93wCrI08RBTC0wZEx29uED3DjkTlILrpv/nETuuqpK
-         UJU+YHDATJsMTPgPAEzrniqSz6aHmFOnER+MTXGjl+YIl3bPfYfIfyci8y0MaF7E44
-         YA+ncvlsUQWgjOJlVScpBZ+HXXUQO6c3qbjb462Y=
-Date:   Fri, 30 Jun 2023 14:53:14 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Rodolfo Giometti <giometti@enneenne.com>
-Cc:     linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] include/uapi pps.h: drop not needed PPS_MAX_SOURCES
- define
-Message-ID: <2023063015-immerse-broadside-3dab@gregkh>
-References: <20230630071826.105501-1-giometti@enneenne.com>
- <20230630071826.105501-2-giometti@enneenne.com>
- <2023063017-traverse-accustom-97f4@gregkh>
- <56e461b4-2cd8-ec89-86b2-68544826cf73@enneenne.com>
+        Fri, 30 Jun 2023 09:02:16 -0400
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E32535AC;
+        Fri, 30 Jun 2023 06:02:11 -0700 (PDT)
+Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1qFDlC-00038r-Ac; Fri, 30 Jun 2023 15:02:02 +0200
+Message-ID: <35e9ae66-76d0-5a17-31e6-7aa8de5bfadd@leemhuis.info>
+Date:   Fri, 30 Jun 2023 15:02:01 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <56e461b4-2cd8-ec89-86b2-68544826cf73@enneenne.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: Regression from "ACPI: OSI: Remove Linux-Dell-Video _OSI string"?
+ (was: Re: Bug#1036530: linux-signed-amd64: Hard lock up of system)
+Content-Language: en-US, de-DE
+To:     Nick Hastings <nicholaschastings@gmail.com>,
+        Linux regressions mailing list <regressions@lists.linux.dev>
+Cc:     Karol Herbst <kherbst@redhat.com>, Lyude Paul <lyude@redhat.com>,
+        Lukas Wunner <lukas@wunner.de>,
+        Salvatore Bonaccorso <carnil@debian.org>,
+        "1036530@bugs.debian.org" <1036530@bugs.debian.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Limonciello, Mario" <Mario.Limonciello@amd.com>
+References: <ZHfa/wQlaVCeUC22@xps>
+ <fe0ab1fa-6ed6-dc64-8165-8fc70669317b@amd.com>
+ <CACO55tsuO1kQUFfPdPFUHm4WEQseCR2tQSDhFRzR+8wOECZCyA@mail.gmail.com>
+ <MN0PR12MB61017541F5AC55485A490BCDE2499@MN0PR12MB6101.namprd12.prod.outlook.com>
+ <CACO55tudULtvt_Hcdg+uqXeYkSAR_NZ1oD=R_KhuE_THSRe88g@mail.gmail.com>
+ <MN0PR12MB6101DE067CF85E59AF187763E2499@MN0PR12MB6101.namprd12.prod.outlook.com>
+ <CACO55tuqAH5Zt+X9pjLFZ-RcFgxpgjpqmrAHPvm4=fb_DMBHyw@mail.gmail.com>
+ <ZHkxYo/a+/uInkLG@xps>
+ <MN0PR12MB610181D29933EE4787DE9BC8E24EA@MN0PR12MB6101.namprd12.prod.outlook.com>
+ <ed5f982e-c12c-b3a2-1108-62fba50bf9db@leemhuis.info> <ZJoSWftrHO65wmxz@xps>
+From:   Thorsten Leemhuis <regressions@leemhuis.info>
+In-Reply-To: <ZJoSWftrHO65wmxz@xps>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1688130131;ce93d85d;
+X-HE-SMSGID: 1qFDlC-00038r-Ac
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 30, 2023 at 09:50:33AM +0200, Rodolfo Giometti wrote:
-> On 30/06/23 09:31, Greg Kroah-Hartman wrote:
-> > On Fri, Jun 30, 2023 at 09:18:26AM +0200, Rodolfo Giometti wrote:
-> > > Userspace PPS clients should not known about how many PPS sources can
-> > > be defined within the system (nor the rfc2783 say so), so we can
-> > > safely drop this define since is not used anymore in the kernel too.
-> > > 
-> > > Signed-off-by: Rodolfo Giometti <giometti@enneenne.com>
-> > > ---
-> > >   drivers/pps/pps.c        | 6 +++---
-> > >   include/uapi/linux/pps.h | 1 -
-> > >   2 files changed, 3 insertions(+), 4 deletions(-)
-> > > 
-> > > diff --git a/drivers/pps/pps.c b/drivers/pps/pps.c
-> > > index 5d19baae6a38..1a6131608036 100644
-> > > --- a/drivers/pps/pps.c
-> > > +++ b/drivers/pps/pps.c
-> > > @@ -354,7 +354,7 @@ int pps_register_cdev(struct pps_device *pps)
-> > >   	 * Get new ID for the new PPS source.  After idr_alloc() calling
-> > >   	 * the new source will be freely available into the kernel.
-> > >   	 */
-> > > -	err = idr_alloc(&pps_idr, pps, 0, PPS_MAX_SOURCES, GFP_KERNEL);
-> > > +	err = idr_alloc(&pps_idr, pps, 0, MINORMASK, GFP_KERNEL);
-> > >   	if (err < 0) {
-> > >   		if (err == -ENOSPC) {
-> > >   			pr_err("%s: too many PPS sources in the system\n",
-> > > @@ -449,7 +449,7 @@ EXPORT_SYMBOL(pps_lookup_dev);
-> > >   static void __exit pps_exit(void)
-> > >   {
-> > >   	class_destroy(pps_class);
-> > > -	unregister_chrdev_region(pps_devt, PPS_MAX_SOURCES);
-> > > +	unregister_chrdev_region(pps_devt, MINORMASK);
-> > >   }
-> > >   static int __init pps_init(void)
-> > > @@ -463,7 +463,7 @@ static int __init pps_init(void)
-> > >   	}
-> > >   	pps_class->dev_groups = pps_groups;
-> > > -	err = alloc_chrdev_region(&pps_devt, 0, PPS_MAX_SOURCES, "pps");
-> > > +	err = alloc_chrdev_region(&pps_devt, 0, MINORMASK, "pps");
-> > >   	if (err < 0) {
-> > >   		pr_err("failed to allocate char device region\n");
-> > >   		goto remove_class;
-> > > diff --git a/include/uapi/linux/pps.h b/include/uapi/linux/pps.h
-> > > index 90f2e86020ba..8a4096f18af1 100644
-> > > --- a/include/uapi/linux/pps.h
-> > > +++ b/include/uapi/linux/pps.h
-> > > @@ -26,7 +26,6 @@
-> > >   #include <linux/types.h>
-> > >   #define PPS_VERSION		"5.3.6"
-> > > -#define PPS_MAX_SOURCES		MINORMASK
-> > 
-> > Why change this in patch 1, and then delete this here?
-> > 
-> > That makes no sense.
+On 27.06.23 00:34, Nick Hastings wrote:
+> * Linux regression tracking (Thorsten Leemhuis) <regressions@leemhuis.info> [230626 21:09]:
+>> Hi, Thorsten here, the Linux kernel's regression tracker. Top-posting
+>> for once, to make this easily accessible to everyone.
+>>
+>> Nick, what's the status/was there any progress? Did you do what Mario
+>> suggested and file a nouveau bug?
 > 
-> I did it in two steps to be clear that the first step is about a better
-> redefinition of the PPS_MAX_SOURCES define, while the second step is about
-> the fact it's now that define is useless.
+> It was not apparent that the suggestion to open "a Nouveau drm bug" was
+> addressed to me.
 
-Better to just convert everything in patch one, and then in patch 2
-delete the .h #define.  That way, when userspace breaks, you can revert
-just the last patch :)
+I wish things were earlier for reporters, but from what I can see this
+is the only way forward if you or some silent bystander cares.
 
-> > And if this is exported to userspace, removing it should break things,
-> > right?  If not, why was it there in the first place?
+>> I ask, as I still have this on my list of regressions and it seems there
+>> was no progress in three+ weeks now.
 > 
-> In reality such define is not stated within the PPS RFC2783, so userspace
-> programs whose relies on such define are broken.
+> I have not pursued this further since as far as I could tell I already
+> provided all requested information and I don't actually use nouveau, so
+> I blacklisted it.
 
-RFC's do not document Linux kernel apis.
+I doubt any developer cares enough to take a closer look[1] without a
+proper nouveau bug and some help & prodding from someone affected. And
+looks to me like reverting the culprit now might create even bigger
+problems for users.
 
-So if any userspace code breaks, you have to put this back, sorry.
+Hence I guess then this won't be fixed in the end. In a ideal world this
+would not happen, but we don't live in one and all have just 24 hours in
+a day. :-/
 
-thanks,
+Nevertheless: thx for your report your help through this thread.
 
-greg k-h
+[1] some points on the following page kinda explain this
+https://linux-regtracking.leemhuis.info/post/frequent-reasons-why-linux-kernel-bug-reports-are-ignored/
+
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+--
+Everything you wanna know about Linux kernel regression tracking:
+https://linux-regtracking.leemhuis.info/about/#tldr
+If I did something stupid, please tell me, as explained on that page.
+
+#regzbot inconclusive: reporting deadlock (see thread for details)
+
+
+
+>> Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+>> --
+>> Everything you wanna know about Linux kernel regression tracking:
+>> https://linux-regtracking.leemhuis.info/about/#tldr
+>> If I did something stupid, please tell me, as explained on that page.
+>>
+>> #regzbot backburner: slow progress, likely just affects one machine
+>> #regzbot poke
+>>
+>>
+>> On 02.06.23 02:57, Limonciello, Mario wrote:
+>>> [AMD Official Use Only - General]
+>>>
+>>>> -----Original Message-----
+>>>> From: Nick Hastings <nicholaschastings@gmail.com>
+>>>> Sent: Thursday, June 1, 2023 7:02 PM
+>>>> To: Karol Herbst <kherbst@redhat.com>
+>>>> Cc: Limonciello, Mario <Mario.Limonciello@amd.com>; Lyude Paul
+>>>> <lyude@redhat.com>; Lukas Wunner <lukas@wunner.de>; Salvatore
+>>>> Bonaccorso <carnil@debian.org>; 1036530@bugs.debian.org; Rafael J.
+>>>> Wysocki <rafael@kernel.org>; Len Brown <lenb@kernel.org>; linux-
+>>>> acpi@vger.kernel.org; linux-kernel@vger.kernel.org;
+>>>> regressions@lists.linux.dev
+>>>> Subject: Re: Regression from "ACPI: OSI: Remove Linux-Dell-Video _OSI
+>>>> string"? (was: Re: Bug#1036530: linux-signed-amd64: Hard lock up of system)
+>>>>
+>>>> Hi,
+>>>>
+>>>> * Karol Herbst <kherbst@redhat.com> [230602 03:10]:
+>>>>> On Thu, Jun 1, 2023 at 7:21 PM Limonciello, Mario
+>>>>> <Mario.Limonciello@amd.com> wrote:
+>>>>>>> -----Original Message-----
+>>>>>>> From: Karol Herbst <kherbst@redhat.com>
+>>>>>>> Sent: Thursday, June 1, 2023 12:19 PM
+>>>>>>> To: Limonciello, Mario <Mario.Limonciello@amd.com>
+>>>>>>> Cc: Nick Hastings <nicholaschastings@gmail.com>; Lyude Paul
+>>>>>>> <lyude@redhat.com>; Lukas Wunner <lukas@wunner.de>; Salvatore
+>>>>>>> Bonaccorso <carnil@debian.org>; 1036530@bugs.debian.org; Rafael J.
+>>>>>>> Wysocki <rafael@kernel.org>; Len Brown <lenb@kernel.org>; linux-
+>>>>>>> acpi@vger.kernel.org; linux-kernel@vger.kernel.org;
+>>>>>>> regressions@lists.linux.dev
+>>>>>>> Subject: Re: Regression from "ACPI: OSI: Remove Linux-Dell-Video _OSI
+>>>>>>> string"? (was: Re: Bug#1036530: linux-signed-amd64: Hard lock up of
+>>>> system)
+>>>>>>>
+>>>>>>> On Thu, Jun 1, 2023 at 6:54 PM Limonciello, Mario
+>>>>>>> <Mario.Limonciello@amd.com> wrote:
+>>>>>>>>
+>>>>>>>> [AMD Official Use Only - General]
+>>>>>>>>
+>>>>>>>>> -----Original Message-----
+>>>>>>>>> From: Karol Herbst <kherbst@redhat.com>
+>>>>>>>>> Sent: Thursday, June 1, 2023 11:33 AM
+>>>>>>>>> To: Limonciello, Mario <Mario.Limonciello@amd.com>
+>>>>>>>>> Cc: Nick Hastings <nicholaschastings@gmail.com>; Lyude Paul
+>>>>>>>>> <lyude@redhat.com>; Lukas Wunner <lukas@wunner.de>; Salvatore
+>>>>>>>>> Bonaccorso <carnil@debian.org>; 1036530@bugs.debian.org; Rafael
+>>>> J.
+>>>>>>>>> Wysocki <rafael@kernel.org>; Len Brown <lenb@kernel.org>; linux-
+>>>>>>>>> acpi@vger.kernel.org; linux-kernel@vger.kernel.org;
+>>>>>>>>> regressions@lists.linux.dev
+>>>>>>>>> Subject: Re: Regression from "ACPI: OSI: Remove Linux-Dell-Video
+>>>> _OSI
+>>>>>>>>> string"? (was: Re: Bug#1036530: linux-signed-amd64: Hard lock up of
+>>>>>>> system)
+>>>>>>>>>
+>>>>>>>>> On Thu, Jun 1, 2023 at 6:18 PM Limonciello, Mario
+>>>>>>>>>>
+>>>>>>>>>> Lyude, Lukas, Karol
+>>>>>>>>>>
+>>>>>>>>>> This thread is in relation to this commit:
+>>>>>>>>>>
+>>>>>>>>>> 24867516f06d ("ACPI: OSI: Remove Linux-Dell-Video _OSI string")
+>>>>>>>>>>
+>>>>>>>>>> Nick has found that runtime PM is *not* working for nouveau.
+>>>>>>>>>>
+>>>>>>>>>
+>>>>>>>>> keep in mind we have a list of PCIe controllers where we apply a
+>>>>>>>>> workaround:
+>>>>>>>>>
+>>>>>>>
+>>>> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers
+>>>>>>>>> /gpu/drm/nouveau/nouveau_drm.c?h=v6.4-rc4#n682
+>>>>>>>>>
+>>>>>>>>> And I suspect there might be one or two more IDs we'll have to add
+>>>>>>>>> there. Do we have any logs?
+>>>>>>>>
+>>>>>>>> There's some archived onto the distro bug.  Search this page for
+>>>>>>> "journalctl.log.gz"
+>>>>>>>> https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1036530
+>>>>>>>>
+>>>>>>>
+>>>>>>> interesting.. It seems to be the same controller used here. I wonder
+>>>>>>> if the pci topology is different or if the workaround is applied at
+>>>>>>> all.
+>>>>>>
+>>>>>> I didn't see the message in the log about the workaround being applied
+>>>>>> in that log, so I guess PCI topology difference is a likely suspect.
+>>>>>>
+>>>>>
+>>>>> yeah, but I also couldn't see a log with the usual nouveau messages,
+>>>>> so it's kinda weird.
+>>>>>
+>>>>> Anyway, the output of `lspci -tvnn` would help
+>>>>
+>>>> % lspci -tvnn
+>>>> -[0000:00]-+-00.0  Intel Corporation Device [8086:3e20]
+>>>>            +-01.0-[01]----00.0  NVIDIA Corporation TU117M [GeForce GTX 1650
+>>>> Mobile / Max-Q] [10de:1f91]
+>>>
+>>> So the bridge it's connected to is the same that the quirk *should have been* triggering.
+>>>
+>>> May 29 15:02:42 xps kernel: pci 0000:00:01.0: [8086:1901] type 01 class 0x060400
+>>>
+>>> Since the quirk isn't working and this is still a problem in 6.4-rc4 I suggest opening a
+>>> Nouveau drm bug to figure out why.
+>>>
+>>>>            +-02.0  Intel Corporation CoffeeLake-H GT2 [UHD Graphics 630]
+>>>> [8086:3e9b]
+>>>>            +-04.0  Intel Corporation Xeon E3-1200 v5/E3-1500 v5/6th Gen Core
+>>>> Processor Thermal Subsystem [8086:1903]
+>>>>            +-08.0  Intel Corporation Xeon E3-1200 v5/v6 / E3-1500 v5 /
+>>>> 6th/7th/8th Gen Core Processor Gaussian Mixture Model [8086:1911]
+>>>>            +-12.0  Intel Corporation Cannon Lake PCH Thermal Controller
+>>>> [8086:a379]
+>>>>            +-14.0  Intel Corporation Cannon Lake PCH USB 3.1 xHCI Host Controller
+>>>> [8086:a36d]
+>>>>            +-14.2  Intel Corporation Cannon Lake PCH Shared SRAM [8086:a36f]
+>>>>            +-15.0  Intel Corporation Cannon Lake PCH Serial IO I2C Controller #0
+>>>> [8086:a368]
+>>>>            +-15.1  Intel Corporation Cannon Lake PCH Serial IO I2C Controller #1
+>>>> [8086:a369]
+>>>>            +-16.0  Intel Corporation Cannon Lake PCH HECI Controller [8086:a360]
+>>>>            +-17.0  Intel Corporation Cannon Lake Mobile PCH SATA AHCI Controller
+>>>> [8086:a353]
+>>>>            +-1b.0-[02-3a]----00.0-[03-3a]--+-00.0-[04]----00.0  Intel Corporation
+>>>> JHL6340 Thunderbolt 3 NHI (C step) [Alpine Ridge 2C 2016] [8086:15d9]
+>>>>            |                               +-01.0-[05-39]--
+>>>>            |                               \-02.0-[3a]----00.0  Intel Corporation JHL6340
+>>>> Thunderbolt 3 USB 3.1 Controller (C step) [Alpine Ridge 2C 2016]
+>>>> [8086:15db]
+>>>>            +-1c.0-[3b]----00.0  Intel Corporation Wi-Fi 6 AX200 [8086:2723]
+>>>>            +-1c.4-[3c]----00.0  Realtek Semiconductor Co., Ltd. RTS525A PCI
+>>>> Express Card Reader [10ec:525a]
+>>>>            +-1d.0-[3d]----00.0  Samsung Electronics Co Ltd NVMe SSD Controller
+>>>> SM981/PM981/PM983 [144d:a808]
+>>>>            +-1f.0  Intel Corporation Cannon Lake LPC Controller [8086:a30e]
+>>>>            +-1f.3  Intel Corporation Cannon Lake PCH cAVS [8086:a348]
+>>>>            +-1f.4  Intel Corporation Cannon Lake PCH SMBus Controller
+>>>> [8086:a323]
+>>>>            \-1f.5  Intel Corporation Cannon Lake PCH SPI Controller
+>>>>            [8086:a324]
+>>>>
+>>>>
+>>>> Regards,
+>>>>
+>>>> Nick.
+>>>
+> 
+> 
+> 
