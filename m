@@ -2,115 +2,37 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44FA6743C67
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 15:09:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3504E743C61
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 15:09:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232370AbjF3NJc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 09:09:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41260 "EHLO
+        id S232267AbjF3NJD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Jun 2023 09:09:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232119AbjF3NJ2 (ORCPT
+        with ESMTP id S231393AbjF3NI6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 09:09:28 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B22835B0;
-        Fri, 30 Jun 2023 06:09:26 -0700 (PDT)
-Received: from pps.filterd (m0353722.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35UCvYeb016458;
-        Fri, 30 Jun 2023 13:08:14 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : content-type : in-reply-to :
- mime-version; s=pp1; bh=FN5rqn/S21W/5bITOEzjFOkTwNe8qQWXAAfpvfDkQwg=;
- b=UJNJ5HvOCH3ioidpoyHaAYNX6R7hWNSBpLoG0wUffy5RnAhXHl86PbBvjDO6nKQ8USPi
- 7sEXar1TkaNkmcJFphUybz6q6Tb4yxl6SQ/ZqNRH66WVQInysN81SF7fQAQUxOBDszhV
- 3b8fRe2gCQIaza7qcDM7mCKwuC6Ilk9aNPGUJxMUw2n8gCQMYiSIO+tnObSPGBU121h5
- ObdAJVNEwAu8GE+11sjrvnwTnAQvi/lRj6vqNWPq1mVeKVoGfrKDv0hlj8okmsgyo6sj
- CZCipRtOJftBTKfcr2t7oYyiWPzb0tjUBJtcpOmD7Kcx/2Zrl+GVqvSu1uoCgmOa264S bw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3rhygwgdcx-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 30 Jun 2023 13:08:13 +0000
-Received: from m0353722.ppops.net (m0353722.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 35UCwN5D019695;
-        Fri, 30 Jun 2023 13:08:03 GMT
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3rhygwgcwe-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 30 Jun 2023 13:08:02 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 35U3RosU004120;
-        Fri, 30 Jun 2023 13:07:52 GMT
-Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
-        by ppma03ams.nl.ibm.com (PPS) with ESMTPS id 3rdr4545n4-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 30 Jun 2023 13:07:51 +0000
-Received: from smtpav06.fra02v.mail.ibm.com (smtpav06.fra02v.mail.ibm.com [10.20.54.105])
-        by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 35UD7mYr35848862
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 30 Jun 2023 13:07:48 GMT
-Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 2D1C420040;
-        Fri, 30 Jun 2023 13:07:48 +0000 (GMT)
-Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 20F4620049;
-        Fri, 30 Jun 2023 13:07:46 +0000 (GMT)
-Received: from li-008a6a4c-3549-11b2-a85c-c5cc2836eea2.ibm.com (unknown [9.155.204.135])
-        by smtpav06.fra02v.mail.ibm.com (Postfix) with ESMTPS;
-        Fri, 30 Jun 2023 13:07:46 +0000 (GMT)
-Date:   Fri, 30 Jun 2023 15:07:44 +0200
-From:   Alexander Gordeev <agordeev@linux.ibm.com>
-To:     Eric DeVolder <eric.devolder@oracle.com>
-Cc:     linux@armlinux.org.uk, catalin.marinas@arm.com, will@kernel.org,
-        chenhuacai@kernel.org, geert@linux-m68k.org,
-        tsbogend@alpha.franken.de, James.Bottomley@hansenpartnership.com,
-        deller@gmx.de, ysato@users.sourceforge.jp, dalias@libc.org,
-        glaubitz@physik.fu-berlin.de, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-ia64@vger.kernel.org, loongarch@lists.linux.dev,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, kernel@xen0n.name, mpe@ellerman.id.au,
-        npiggin@gmail.com, christophe.leroy@csgroup.eu,
-        paul.walmsley@sifive.com, palmer@dabbelt.com,
-        aou@eecs.berkeley.edu, hca@linux.ibm.com, gor@linux.ibm.com,
-        borntraeger@linux.ibm.com, svens@linux.ibm.com, hpa@zytor.com,
-        keescook@chromium.org, paulmck@kernel.org, peterz@infradead.org,
-        frederic@kernel.org, akpm@linux-foundation.org, ardb@kernel.org,
-        samitolvanen@google.com, juerg.haefliger@canonical.com,
-        arnd@arndb.de, rmk+kernel@armlinux.org.uk,
-        linus.walleij@linaro.org, sebastian.reichel@collabora.com,
-        rppt@kernel.org, kirill.shutemov@linux.intel.com,
-        anshuman.khandual@arm.com, ziy@nvidia.com, masahiroy@kernel.org,
-        ndesaulniers@google.com, mhiramat@kernel.org, ojeda@kernel.org,
-        thunder.leizhen@huawei.com, xin3.li@intel.com, tj@kernel.org,
-        gregkh@linuxfoundation.org, tsi@tuyoix.net, bhe@redhat.com,
-        hbathini@linux.ibm.com, sourabhjain@linux.ibm.com,
-        boris.ostrovsky@oracle.com, konrad.wilk@oracle.com
-Subject: Re: [PATCH v3 12/13] s390/kexec: refactor for kernel/Kconfig.kexec
-Message-ID: <ZJ7ToGgYAq33bwYI@li-008a6a4c-3549-11b2-a85c-c5cc2836eea2.ibm.com>
-References: <20230626161332.183214-1-eric.devolder@oracle.com>
- <20230626161332.183214-13-eric.devolder@oracle.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230626161332.183214-13-eric.devolder@oracle.com>
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: SRv3tQadK_BLStPKVFehsvtKgdD5bfpY
-X-Proofpoint-ORIG-GUID: SMYiBxc5troNBtSiC2kzVXEEuROkenwR
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Fri, 30 Jun 2023 09:08:58 -0400
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::221])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF35E3A81;
+        Fri, 30 Jun 2023 06:08:56 -0700 (PDT)
+X-GND-Sasl: hadess@hadess.net
+X-GND-Sasl: hadess@hadess.net
+X-GND-Sasl: hadess@hadess.net
+X-GND-Sasl: hadess@hadess.net
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 5831424000D;
+        Fri, 30 Jun 2023 13:08:53 +0000 (UTC)
+From:   Bastien Nocera <hadess@hadess.net>
+To:     linux-input@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, Jiri Kosina <jikos@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Subject: [PATCH v2] HID: steelseries: Add support for Arctis 1 XBox
+Date:   Fri, 30 Jun 2023 15:08:17 +0200
+Message-ID: <20230630130852.51245-1-hadess@hadess.net>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-06-30_05,2023-06-30_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 malwarescore=0
- mlxlogscore=999 priorityscore=1501 phishscore=0 impostorscore=0
- spamscore=0 bulkscore=0 lowpriorityscore=0 mlxscore=0 clxscore=1015
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2305260000 definitions=main-2306300111
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -118,124 +40,387 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 26, 2023 at 12:13:31PM -0400, Eric DeVolder wrote:
-> The kexec and crash kernel options are provided in the common
-> kernel/Kconfig.kexec. Utilize the common options and provide
-> the ARCH_SUPPORTS_ and ARCH_SELECTS_ entries to recreate the
-> equivalent set of KEXEC and CRASH options.
-> 
-> NOTE: The original Kconfig has a KEXEC_SIG which depends on
-> MODULE_SIG_FORMAT. However, attempts to keep the MODULE_SIG_FORMAT
-> dependency (using the strategy outlined in this series, and other
-> techniques) results in 'error: recursive dependency detected'
-> on CRYPTO.
-> 
-> Per Alexander Gordeev <agordeev@linux.ibm.com>: "the MODULE_SIG_FORMAT
-> dependency was introduced with [git commit below] and in fact was not
-> necessary, since s390 did/does not use mod_check_sig() anyway.
-> 
->  commit c8424e776b09 ("MODSIGN: Export module signature definitions")
-> 
-> MODULE_SIG_FORMAT is needed to select SYSTEM_DATA_VERIFICATION. But
-> SYSTEM_DATA_VERIFICATION is also selected by FS_VERITY*, so dropping
-> MODULE_SIG_FORMAT does not hurt."
-> 
-> Therefore, the solution is to drop the MODULE_SIG_FORMAT dependency
-> from KEXEC_SIG. Still results in equivalent .config files for s390.
-> 
-> Signed-off-by: Eric DeVolder <eric.devolder@oracle.com>
-> ---
->  arch/s390/Kconfig | 65 ++++++++++++++---------------------------------
->  1 file changed, 19 insertions(+), 46 deletions(-)
-> 
-> diff --git a/arch/s390/Kconfig b/arch/s390/Kconfig
-> index 6dab9c1be508..58dc124433ca 100644
-> --- a/arch/s390/Kconfig
-> +++ b/arch/s390/Kconfig
-> @@ -243,6 +243,25 @@ config PGTABLE_LEVELS
->  
->  source "kernel/livepatch/Kconfig"
->  
-> +config ARCH_DEFAULT_KEXEC
-> +	def_bool y
-> +
-> +config ARCH_SUPPORTS_KEXEC
-> +	def_bool y
-> +
-> +config ARCH_SUPPORTS_KEXEC_FILE
-> +	def_bool CRYPTO && CRYPTO_SHA256 && CRYPTO_SHA256_S390
-> +
-> +config ARCH_HAS_KEXEC_PURGATORY
-> +	def_bool KEXEC_FILE
-> +
-> +config ARCH_SUPPORTS_CRASH_DUMP
-> +	def_bool y
-> +	help
-> +	  Refer to <file:Documentation/s390/zfcpdump.rst> for more details on this.
-> +	  This option also enables s390 zfcpdump.
-> +	  See also <file:Documentation/s390/zfcpdump.rst>
-> +
->  menu "Processor type and features"
->  
->  config HAVE_MARCH_Z10_FEATURES
-> @@ -481,36 +500,6 @@ config SCHED_TOPOLOGY
->  
->  source "kernel/Kconfig.hz"
->  
-> -config KEXEC
-> -	def_bool y
-> -	select KEXEC_CORE
-> -
-> -config KEXEC_FILE
-> -	bool "kexec file based system call"
-> -	select KEXEC_CORE
-> -	depends on CRYPTO
-> -	depends on CRYPTO_SHA256
-> -	depends on CRYPTO_SHA256_S390
-> -	help
-> -	  Enable the kexec file based system call. In contrast to the normal
-> -	  kexec system call this system call takes file descriptors for the
-> -	  kernel and initramfs as arguments.
-> -
-> -config ARCH_HAS_KEXEC_PURGATORY
-> -	def_bool y
-> -	depends on KEXEC_FILE
-> -
-> -config KEXEC_SIG
-> -	bool "Verify kernel signature during kexec_file_load() syscall"
-> -	depends on KEXEC_FILE && MODULE_SIG_FORMAT
-> -	help
-> -	  This option makes kernel signature verification mandatory for
-> -	  the kexec_file_load() syscall.
-> -
-> -	  In addition to that option, you need to enable signature
-> -	  verification for the corresponding kernel image type being
-> -	  loaded in order for this to work.
-> -
->  config KERNEL_NOBP
->  	def_bool n
->  	prompt "Enable modified branch prediction for the kernel by default"
-> @@ -732,22 +721,6 @@ config VFIO_AP
->  
->  endmenu
->  
-> -menu "Dump support"
-> -
-> -config CRASH_DUMP
-> -	bool "kernel crash dumps"
-> -	select KEXEC
-> -	help
-> -	  Generate crash dump after being started by kexec.
-> -	  Crash dump kernels are loaded in the main kernel with kexec-tools
-> -	  into a specially reserved region and then later executed after
-> -	  a crash by kdump/kexec.
-> -	  Refer to <file:Documentation/s390/zfcpdump.rst> for more details on this.
-> -	  This option also enables s390 zfcpdump.
-> -	  See also <file:Documentation/s390/zfcpdump.rst>
-> -
-> -endmenu
-> -
->  config CCW
->  	def_bool y
+Add support for the Steelseries Arctis 1 XBox headset. This driver
+will export the battery information from the headset, as well as the
+"wireless_status" property.
 
-Acked-by: Alexander Gordeev <agordeev@linux.ibm.com>
+Signed-off-by: Bastien Nocera <hadess@hadess.net>
+---
+v2:
+- Fix missing USB dependency
+- Fix config option description
+
+ drivers/hid/Kconfig           |   6 +-
+ drivers/hid/hid-steelseries.c | 307 ++++++++++++++++++++++++++++++++--
+ 2 files changed, 296 insertions(+), 17 deletions(-)
+
+diff --git a/drivers/hid/Kconfig b/drivers/hid/Kconfig
+index 4ce012f83253..1bc99b33329f 100644
+--- a/drivers/hid/Kconfig
++++ b/drivers/hid/Kconfig
+@@ -1048,9 +1048,11 @@ config STEAM_FF
+ 	Deck.
+ 
+ config HID_STEELSERIES
+-	tristate "Steelseries SRW-S1 steering wheel support"
++	tristate "Steelseries devices support"
++	depends on USB_HID
+ 	help
+-	Support for Steelseries SRW-S1 steering wheel
++	Support for Steelseries SRW-S1 steering wheel, and the Steelseries
++	Arctis 1 Wireless for XBox headset.
+ 
+ config HID_SUNPLUS
+ 	tristate "Sunplus wireless desktop"
+diff --git a/drivers/hid/hid-steelseries.c b/drivers/hid/hid-steelseries.c
+index aae3afc4107a..a9300a4244aa 100644
+--- a/drivers/hid/hid-steelseries.c
++++ b/drivers/hid/hid-steelseries.c
+@@ -1,8 +1,9 @@
+ // SPDX-License-Identifier: GPL-2.0-or-later
+ /*
+- *  HID driver for Steelseries SRW-S1
++ *  HID driver for Steelseries devices
+  *
+  *  Copyright (c) 2013 Simon Wood
++ *  Copyright (c) 2023 Bastien Nocera
+  */
+ 
+ /*
+@@ -11,10 +12,28 @@
+ #include <linux/device.h>
+ #include <linux/hid.h>
+ #include <linux/module.h>
++#include <linux/usb.h>
+ #include <linux/leds.h>
+ 
+ #include "hid-ids.h"
+ 
++#define STEELSERIES_SRWS1		BIT(0)
++#define STEELSERIES_ARCTIS_1		BIT(1)
++
++struct steelseries_device {
++	struct hid_device *hdev;
++	unsigned long quirks;
++
++	struct delayed_work battery_work;
++	spinlock_t lock;
++	bool removed;
++
++	struct power_supply_desc battery_desc;
++	struct power_supply *battery;
++	uint8_t battery_capacity;
++	bool headset_connected;
++};
++
+ #if IS_BUILTIN(CONFIG_LEDS_CLASS) || \
+     (IS_MODULE(CONFIG_LEDS_CLASS) && IS_MODULE(CONFIG_HID_STEELSERIES))
+ #define SRWS1_NUMBER_LEDS 15
+@@ -353,9 +372,208 @@ static void steelseries_srws1_remove(struct hid_device *hdev)
+ }
+ #endif
+ 
++#define STEELSERIES_HEADSET_BATTERY_TIMEOUT_MS	3000
++
++#define ARCTIS_1_BATTERY_RESPONSE_LEN		8
++
++static int steelseries_headset_arctis_1_fetch_battery(struct hid_device *hdev)
++{
++	u8 *write_buf;
++	int ret;
++	char battery_request[2] = { 0x06, 0x12 };
++
++	/* Request battery information */
++	write_buf = kmemdup(battery_request, sizeof(battery_request), GFP_KERNEL);
++	if (!write_buf)
++		return -ENOMEM;
++
++	ret = hid_hw_raw_request(hdev, battery_request[0],
++				 write_buf, sizeof(battery_request),
++				 HID_OUTPUT_REPORT, HID_REQ_SET_REPORT);
++	if (ret < sizeof(battery_request)) {
++		hid_err(hdev, "hid_hw_raw_request() failed with %d\n", ret);
++		ret = -ENODATA;
++	}
++	kfree(write_buf);
++	return ret;
++}
++
++static void steelseries_headset_fetch_battery(struct hid_device *hdev)
++{
++	struct steelseries_device *sd = hid_get_drvdata(hdev);
++	int ret = 0;
++
++	if (sd->quirks & STEELSERIES_ARCTIS_1)
++		ret = steelseries_headset_arctis_1_fetch_battery(hdev);
++
++	if (ret < 0)
++		hid_dbg(hdev,
++			"Battery query failed (err: %d)\n", ret);
++}
++
++static void steelseries_headset_battery_timer_tick(struct work_struct *work)
++{
++	struct steelseries_device *sd = container_of(work,
++		struct steelseries_device, battery_work.work);
++	struct hid_device *hdev = sd->hdev;
++
++	steelseries_headset_fetch_battery(hdev);
++}
++
++static int steelseries_headset_battery_get_property(struct power_supply *psy,
++				enum power_supply_property psp,
++				union power_supply_propval *val)
++{
++	struct steelseries_device *sd = power_supply_get_drvdata(psy);
++	int ret = 0;
++
++	switch (psp) {
++	case POWER_SUPPLY_PROP_PRESENT:
++		val->intval = 1;
++		break;
++	case POWER_SUPPLY_PROP_STATUS:
++		val->intval = sd->headset_connected ?
++			POWER_SUPPLY_STATUS_DISCHARGING :
++			POWER_SUPPLY_STATUS_UNKNOWN;
++		break;
++	case POWER_SUPPLY_PROP_SCOPE:
++		val->intval = POWER_SUPPLY_SCOPE_DEVICE;
++		break;
++	case POWER_SUPPLY_PROP_CAPACITY:
++		val->intval = sd->battery_capacity;
++		break;
++	default:
++		ret = -EINVAL;
++		break;
++	}
++	return ret;
++}
++
++static void
++steelseries_headset_set_wireless_status(struct hid_device *hdev,
++					bool connected)
++{
++	struct usb_interface *intf;
++
++	intf = to_usb_interface(hdev->dev.parent);
++	usb_set_wireless_status(intf, connected ?
++				USB_WIRELESS_STATUS_CONNECTED :
++				USB_WIRELESS_STATUS_DISCONNECTED);
++}
++
++static enum power_supply_property steelseries_headset_battery_props[] = {
++	POWER_SUPPLY_PROP_PRESENT,
++	POWER_SUPPLY_PROP_STATUS,
++	POWER_SUPPLY_PROP_SCOPE,
++	POWER_SUPPLY_PROP_CAPACITY,
++};
++
++static int steelseries_headset_battery_register(struct steelseries_device *sd)
++{
++	static atomic_t battery_no = ATOMIC_INIT(0);
++	struct power_supply_config battery_cfg = { .drv_data = sd, };
++	unsigned long n;
++	int ret;
++
++	sd->battery_desc.type = POWER_SUPPLY_TYPE_BATTERY;
++	sd->battery_desc.properties = steelseries_headset_battery_props;
++	sd->battery_desc.num_properties = ARRAY_SIZE(steelseries_headset_battery_props);
++	sd->battery_desc.get_property = steelseries_headset_battery_get_property;
++	sd->battery_desc.use_for_apm = 0;
++	n = atomic_inc_return(&battery_no) - 1;
++	sd->battery_desc.name = devm_kasprintf(&sd->hdev->dev, GFP_KERNEL,
++						    "steelseries_headset_battery_%ld", n);
++	if (!sd->battery_desc.name)
++		return -ENOMEM;
++
++	/* avoid the warning of 0% battery while waiting for the first info */
++	steelseries_headset_set_wireless_status(sd->hdev, false);
++	sd->battery_capacity = 100;
++
++	sd->battery = devm_power_supply_register(&sd->hdev->dev,
++			&sd->battery_desc, &battery_cfg);
++	if (IS_ERR(sd->battery)) {
++		ret = PTR_ERR(sd->battery);
++		hid_err(sd->hdev,
++				"%s:power_supply_register failed with error %d\n",
++				__func__, ret);
++		return ret;
++	}
++	power_supply_powers(sd->battery, &sd->hdev->dev);
++
++	INIT_DELAYED_WORK(&sd->battery_work, steelseries_headset_battery_timer_tick);
++	steelseries_headset_fetch_battery(sd->hdev);
++
++	return 0;
++}
++
++static int steelseries_probe(struct hid_device *hdev, const struct hid_device_id *id)
++{
++	struct steelseries_device *sd;
++	int ret;
++
++	sd = devm_kzalloc(&hdev->dev, sizeof(*sd), GFP_KERNEL);
++	if (!sd)
++		return -ENOMEM;
++	hid_set_drvdata(hdev, sd);
++	sd->hdev = hdev;
++	sd->quirks = id->driver_data;
++
++	if (sd->quirks & STEELSERIES_SRWS1) {
++#if IS_BUILTIN(CONFIG_LEDS_CLASS) || \
++    (IS_MODULE(CONFIG_LEDS_CLASS) && IS_MODULE(CONFIG_HID_STEELSERIES))
++		return steelseries_srws1_probe(hdev, id);
++#else
++		return -ENODEV;
++#endif
++	}
++
++	ret = hid_parse(hdev);
++	if (ret)
++		return ret;
++
++	ret = hid_hw_start(hdev, HID_CONNECT_DEFAULT);
++	if (ret)
++		return ret;
++
++	if (steelseries_headset_battery_register(sd) < 0)
++		hid_err(sd->hdev,
++			"Failed to register battery for headset\n");
++
++	spin_lock_init(&sd->lock);
++
++	return ret;
++}
++
++static void steelseries_remove(struct hid_device *hdev)
++{
++	struct steelseries_device *sd = hid_get_drvdata(hdev);
++	unsigned long flags;
++
++	if (sd->quirks & STEELSERIES_SRWS1) {
++#if IS_BUILTIN(CONFIG_LEDS_CLASS) || \
++    (IS_MODULE(CONFIG_LEDS_CLASS) && IS_MODULE(CONFIG_HID_STEELSERIES))
++		steelseries_srws1_remove(hdev);
++#endif
++		return;
++	}
++
++	spin_lock_irqsave(&sd->lock, flags);
++	sd->removed = true;
++	spin_unlock_irqrestore(&sd->lock, flags);
++
++	cancel_delayed_work_sync(&sd->battery_work);
++
++	hid_hw_stop(hdev);
++}
++
+ static __u8 *steelseries_srws1_report_fixup(struct hid_device *hdev, __u8 *rdesc,
+ 		unsigned int *rsize)
+ {
++	if (hdev->vendor != USB_VENDOR_ID_STEELSERIES ||
++	    hdev->product != USB_DEVICE_ID_STEELSERIES_SRWS1)
++		return rdesc;
++
+ 	if (*rsize >= 115 && rdesc[11] == 0x02 && rdesc[13] == 0xc8
+ 			&& rdesc[29] == 0xbb && rdesc[40] == 0xc5) {
+ 		hid_info(hdev, "Fixing up Steelseries SRW-S1 report descriptor\n");
+@@ -365,22 +583,81 @@ static __u8 *steelseries_srws1_report_fixup(struct hid_device *hdev, __u8 *rdesc
+ 	return rdesc;
+ }
+ 
+-static const struct hid_device_id steelseries_srws1_devices[] = {
+-	{ HID_USB_DEVICE(USB_VENDOR_ID_STEELSERIES, USB_DEVICE_ID_STEELSERIES_SRWS1) },
++static int steelseries_headset_raw_event(struct hid_device *hdev,
++					struct hid_report *report, u8 *read_buf,
++					int size)
++{
++	struct steelseries_device *sd = hid_get_drvdata(hdev);
++	int capacity = sd->battery_capacity;
++	bool connected = sd->headset_connected;
++	unsigned long flags;
++
++	/* Not a headset */
++	if (sd->quirks & STEELSERIES_SRWS1)
++		return 0;
++
++	if (sd->quirks & STEELSERIES_ARCTIS_1) {
++		hid_dbg(sd->hdev,
++			"Parsing raw event for Arctis 1 headset (len: %d)\n", size);
++		if (size < 8)
++			return 0;
++		if (read_buf[2] == 0x01) {
++			connected = false;
++			capacity = 100;
++		} else {
++			connected = true;
++			capacity = read_buf[3];
++		}
++	}
++
++	if (connected != sd->headset_connected) {
++		hid_dbg(sd->hdev,
++			"Connected status changed from %sconnected to %sconnected\n",
++			sd->headset_connected ? "" : "not ",
++			connected ? "" : "not ");
++		sd->headset_connected = connected;
++		steelseries_headset_set_wireless_status(hdev, connected);
++	}
++
++	if (capacity != sd->battery_capacity) {
++		hid_dbg(sd->hdev,
++			"Battery capacity changed from %d%% to %d%%\n",
++			sd->battery_capacity, capacity);
++		sd->battery_capacity = capacity;
++		power_supply_changed(sd->battery);
++	}
++
++	spin_lock_irqsave(&sd->lock, flags);
++	if (!sd->removed)
++		schedule_delayed_work(&sd->battery_work,
++				msecs_to_jiffies(STEELSERIES_HEADSET_BATTERY_TIMEOUT_MS));
++	spin_unlock_irqrestore(&sd->lock, flags);
++
++	return 0;
++}
++
++static const struct hid_device_id steelseries_devices[] = {
++	{ HID_USB_DEVICE(USB_VENDOR_ID_STEELSERIES, USB_DEVICE_ID_STEELSERIES_SRWS1),
++	  .driver_data = STEELSERIES_SRWS1 },
++
++	{ /* SteelSeries Arctis 1 Wireless for XBox */
++	  HID_USB_DEVICE(USB_VENDOR_ID_STEELSERIES, 0x12b6),
++	.driver_data = STEELSERIES_ARCTIS_1 },
++
+ 	{ }
+ };
+-MODULE_DEVICE_TABLE(hid, steelseries_srws1_devices);
+-
+-static struct hid_driver steelseries_srws1_driver = {
+-	.name = "steelseries_srws1",
+-	.id_table = steelseries_srws1_devices,
+-#if IS_BUILTIN(CONFIG_LEDS_CLASS) || \
+-    (IS_MODULE(CONFIG_LEDS_CLASS) && IS_MODULE(CONFIG_HID_STEELSERIES))
+-	.probe = steelseries_srws1_probe,
+-	.remove = steelseries_srws1_remove,
+-#endif
+-	.report_fixup = steelseries_srws1_report_fixup
++MODULE_DEVICE_TABLE(hid, steelseries_devices);
++
++static struct hid_driver steelseries_driver = {
++	.name = "steelseries",
++	.id_table = steelseries_devices,
++	.probe = steelseries_probe,
++	.remove = steelseries_remove,
++	.report_fixup = steelseries_srws1_report_fixup,
++	.raw_event = steelseries_headset_raw_event,
+ };
+ 
+-module_hid_driver(steelseries_srws1_driver);
++module_hid_driver(steelseries_driver);
+ MODULE_LICENSE("GPL");
++MODULE_AUTHOR("Bastien Nocera <hadess@hadess.net>");
++MODULE_AUTHOR("Simon Wood <simon@mungewell.org>");
+-- 
+2.41.0
+
