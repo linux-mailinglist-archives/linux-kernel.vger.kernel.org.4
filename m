@@ -2,121 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5396E743AE5
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 13:34:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E111743AE8
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 13:34:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232583AbjF3Ld4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 07:33:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37780 "EHLO
+        id S232691AbjF3LeI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Jun 2023 07:34:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232513AbjF3Ldy (ORCPT
+        with ESMTP id S232513AbjF3LeF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 07:33:54 -0400
-Received: from qproxy6-pub.mail.unifiedlayer.com (qproxy6-pub.mail.unifiedlayer.com [69.89.23.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A903D1FC1
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 04:33:53 -0700 (PDT)
-Received: from gproxy2-pub.mail.unifiedlayer.com (unknown [69.89.18.3])
-        by qproxy6.mail.unifiedlayer.com (Postfix) with ESMTP id 286EC80284CD
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 11:33:53 +0000 (UTC)
-Received: from cmgw15.mail.unifiedlayer.com (unknown [10.0.90.130])
-        by progateway4.mail.pro1.eigbox.com (Postfix) with ESMTP id 382751004807D
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 11:33:52 +0000 (UTC)
-Received: from box5620.bluehost.com ([162.241.219.59])
-        by cmsmtp with ESMTP
-        id FCNsqptW3xKeeFCNsqVBZh; Fri, 30 Jun 2023 11:33:52 +0000
-X-Authority-Reason: nr=8
-X-Authority-Analysis: v=2.4 cv=NvUUz+RJ c=1 sm=1 tr=0 ts=649ebda0
- a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
- a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
- a=of4jigFt-DYA:10:nop_rcvd_month_year
- a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
- a=HaFmDPmJAAAA:8 a=-9oEWi-u3mcIJ7S_yvsA:9 a=QEXdDO2ut3YA:10:nop_charset_2
- a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
-        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
-        Message-ID:From:In-Reply-To:References:Cc:To:Subject:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=BGDfyEhGvWQ1M2sCGoseCz7mjNya4SHRKvcGlhzF9YI=; b=tDvrfze1t1v9qxxQ1HzNL0w2wV
-        2NCmCpWhCuk2d3i1wwcmd1VoHi+QflLJOaIAN7Mhq3vC7BLZbhmDgQg5Eyd2Aukze+3bAwAguEMjU
-        JBKfNOqQ2d8j4/YEm0WPcvsYoYasMfksKSPXp2c5YF5aXcSIWxS1Y+YXVeMqsgEbdDktWB12hqU3w
-        h8usd6ns3Jrd4POaYLFR01zuRwIKj4OzjHA/YV7Jnbwcyy5PF/0cDDLSu3OJSylnGVDiTvd+Yq2lM
-        G5oKXFPExR0DlNbnO8CPQK2SnlLoHQluByLS/e9X4Zk3V/9dQatQyeylWRxMZ2nsmNWL4ygJcCKaN
-        57rTe3gg==;
-Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:46126 helo=[10.0.1.47])
-        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.95)
-        (envelope-from <re@w6rz.net>)
-        id 1qFCNq-001qhA-PN;
-        Fri, 30 Jun 2023 05:33:50 -0600
-Subject: Re: [PATCH 6.4 00/31] 6.4.1-rc3 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de, conor@kernel.org
-References: <20230630072101.040486316@linuxfoundation.org>
-In-Reply-To: <20230630072101.040486316@linuxfoundation.org>
-From:   Ron Economos <re@w6rz.net>
-Message-ID: <4a77ab37-a2f6-f916-0805-e46ad755b7f2@w6rz.net>
-Date:   Fri, 30 Jun 2023 04:33:48 -0700
-User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Fri, 30 Jun 2023 07:34:05 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BBF381FE4;
+        Fri, 30 Jun 2023 04:34:03 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0D8F2D75;
+        Fri, 30 Jun 2023 04:34:47 -0700 (PDT)
+Received: from e120937-lin (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E91BC3F64C;
+        Fri, 30 Jun 2023 04:34:01 -0700 (PDT)
+Date:   Fri, 30 Jun 2023 12:33:59 +0100
+From:   Cristian Marussi <cristian.marussi@arm.com>
+To:     Oleksii Moisieiev <Oleksii_Moisieiev@epam.com>
+Cc:     "sudeep.holla@arm.com" <sudeep.holla@arm.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>
+Subject: Re: [PATCH v3 1/4] firmware: arm_scmi: Add optional flags to
+ extended names helper
+Message-ID: <ZJ69pyXOSzMv8Jad@e120937-lin>
+References: <cover.1686063941.git.oleksii_moisieiev@epam.com>
+ <2ad06a5582bb31e16fe2f497e15cb41e8455e863.1686063941.git.oleksii_moisieiev@epam.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - box5620.bluehost.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - w6rz.net
-X-BWhitelist: no
-X-Source-IP: 73.162.232.9
-X-Source-L: No
-X-Exim-ID: 1qFCNq-001qhA-PN
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.47]) [73.162.232.9]:46126
-X-Source-Auth: re@w6rz.net
-X-Email-Count: 4
-X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
-X-Local-Domain: yes
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2ad06a5582bb31e16fe2f497e15cb41e8455e863.1686063941.git.oleksii_moisieiev@epam.com>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/30/23 12:33 AM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 6.4.1 release.
-> There are 31 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Sun, 02 Jul 2023 07:20:45 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.4.1-rc3.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.4.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+On Tue, Jun 06, 2023 at 04:22:27PM +0000, Oleksii Moisieiev wrote:
+> Some recently added SCMI protocols needs an additional flags parameter to
+> be able to properly configure the command used to query the extended name
+> of a resource.
+> 
+> Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
 
-Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
+Hi,
 
-Tested-by: Ron Economos <re@w6rz.net>
+This patch was originally at:
 
+https://lore.kernel.org/linux-arm-kernel/20230505201440.3196734-1-cristian.marussi@arm.com/
+
+but after applying your series with B4 I can see this patch with you as
+Author and me as Signer :P ... not sure what has gone wrong but, in general
+you should not change Authorship of a someone else patch that you picked in
+your series unless you compeletely reworked it; if you changed it slighlty
+you should note your changes near your Signed-Off, which is, indeed the other
+thing missing here: if you post someone else patch you should add your
+Signed-Off too as last.
+
+An example of this in this commit: 7885281260f9b952dc66b67182a2218b01e7859f
+
+Now, I really dont care about Authorship here (but note this also meant Andy
+shouted at you instead of me .. :P), but the Signed-Off and Author
+mismatch has to be fixed at least, like it is now wont be accepted for sure.
+
+Maybe the missing part is in your mail-client not prepending the From:
+line when the sending other people pacthes....git send-email does it
+automatically I think but others MUAs dont know.
+
+More detail here, in case you have not seen it already:
+https://www.kernel.org/doc/html/v4.10/process/email-clients.html
+
+Thanks,
+Cristian
