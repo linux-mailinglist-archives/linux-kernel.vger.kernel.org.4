@@ -2,88 +2,251 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71B997442AC
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 21:20:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE1D27442B3
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 21:23:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232152AbjF3TUO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 15:20:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58124 "EHLO
+        id S232355AbjF3TXB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Jun 2023 15:23:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbjF3TUL (ORCPT
+        with ESMTP id S229546AbjF3TW6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 15:20:11 -0400
-Received: from fallback1.i.mail.ru (fallback1.i.mail.ru [79.137.243.67])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AC1D3C3A;
-        Fri, 30 Jun 2023 12:20:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=jiaxyga.com; s=mailru;
-        h=Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:Cc:To:From:From:Subject:Content-Type:Content-Transfer-Encoding:To:Cc; bh=6+Sdx4y5P/7mR6Rt0XOAft4knLAqXtaeIaSTpGTdCC0=;
-        t=1688152809;x=1688242809; 
-        b=mJlO5pcIVyO7Lx+r1zzfs7tM3+XiIK3/V5ph/Yv0JOEdhDXwExjbeckZnCr0WCRwi2PIOffAX9h0OjUlTTuwoSfFNQ4vcYYDQF+TNCb4RyEHPbTXTV7Urn2EKdIFQZXAJ/YOVff1WlEqxUlvT90QLA4hr5BS1kEbjb51RrVnknU=;
-Received: from [10.12.4.8] (port=49240 helo=smtp35.i.mail.ru)
-        by fallback1.i.mail.ru with esmtp (envelope-from <danila@jiaxyga.com>)
-        id 1qFJf4-00GpPt-0g; Fri, 30 Jun 2023 22:20:06 +0300
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=jiaxyga.com; s=mailru;
-        h=Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:Cc:To:From:From:Subject:Content-Type:Content-Transfer-Encoding:To:Cc; bh=6+Sdx4y5P/7mR6Rt0XOAft4knLAqXtaeIaSTpGTdCC0=;
-        t=1688152806;x=1688242806; 
-        b=pifMZQ0xaB7FbPClZ3QDUfhBFdYgSCSLbVDz3SEaBL9eHqtO3AkDYAVVXbbHBls+JI2oY5TkHg/Ed69baaBq/pW9E1cD6O4HhQ2UsO9/9Pi8OaHtAEvCXDyhojS9l8owc2Js5P2zza6uQmm80Mu9ehrLinOm4S8hjHmlldgmSUM=;
-Received: by smtp35.i.mail.ru with esmtpa (envelope-from <danila@jiaxyga.com>)
-        id 1qFJem-002CGE-0e; Fri, 30 Jun 2023 22:19:48 +0300
-From:   Danila Tikhonov <danila@jiaxyga.com>
-To:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        mturquette@baylibre.com, sboyd@kernel.org, davidwronek@gmail.com
-Cc:     linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Danila Tikhonov <danila@jiaxyga.com>
-Subject: [PATCH] clk: qcom: gcc-sm7150: Add CLK_OPS_PARENT_ENABLE to sdcc2 rcg
-Date:   Fri, 30 Jun 2023 22:19:44 +0300
-Message-ID: <20230630191944.20282-1-danila@jiaxyga.com>
-X-Mailer: git-send-email 2.41.0
+        Fri, 30 Jun 2023 15:22:58 -0400
+Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 171783C3A
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 12:22:56 -0700 (PDT)
+Received: by mail-yb1-xb32.google.com with SMTP id 3f1490d57ef6-bd744ffc263so2189753276.3
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 12:22:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1688152975; x=1690744975;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=UpA/3MkDA4Bbb6eJ6xeemnz64HxyzKE7wrEAQ570pfY=;
+        b=qrvgu39+Pjzc0ty+cMKIrH7Eni71vn8ej746goZG1tt82sCTsmWg6sBEtMY5CYHkvc
+         xclnmytvO77Jk7WZZk/il6ovWRv1QJV2T5YBR38m1fpA60DTf2h7Xd6BRbHgj9AvET1p
+         tRCXjgGhJ6lxaDD/J1iU2O9lhqpC8W/NCc+eL3bbCVdX54HfuY4wUAcwYj6APMOTcz4G
+         f66Hj1VDT8JxouLBXxbgSCkSfpv2cMeVkvsNVflvvYlmarJ0nMeAwtFB3YcpKUnimWJd
+         M0kxVMaVqi4PmA2kSbzsqFbGlI4UBRtOwklt4JjwKtiq8VRHxGS9MYdDm87KrkMzPwwX
+         AxHQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688152975; x=1690744975;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=UpA/3MkDA4Bbb6eJ6xeemnz64HxyzKE7wrEAQ570pfY=;
+        b=ihuPq/QUdG4yB+Jo7Jjw1kcWf1JHnbGcgWgMWqQs3HQpU+uW1M9WZXAe4qxvEr52dj
+         A5DR9ha0XZqJl5UYtHtmsz3/j7zHOvht5gIh2YqAVxsikb24nbnL24x4eOhBtuIzVC5A
+         VB2dSJCbsr1lbdPGmCtTNDtnuJKSs4zysXW8XIz7sYWgAUXHtSQruzLuTO/5WTAUX8VZ
+         l2z63JWnq81c2j36hjJeyadjTfruLGdwCX2omqav1GTZ654LjqZOR/4WUELW2tRgwOHL
+         ow9NzgmEXiTAWhpiXlA38ScHrwCY2SZO+l8OxpbTFEbc3BkWhdcIKf1timqUkT5Gzibw
+         PDNw==
+X-Gm-Message-State: ABy/qLZp/+DVSo3Rfja8THKG7C4P3MGOs3aDexjB7dA6b1oavAOnlpJi
+        /vIX39HGtC7GlMRB580ykQ8uGQ==
+X-Google-Smtp-Source: APBJJlEeRudcWa5iit7A1oAKHz4BndX5rtVzOZ4hnmAKD3Z6cXWQLvZ24j/5LxRaPlyEpIMC7jurbQ==
+X-Received: by 2002:a25:ce04:0:b0:c22:82b1:17ee with SMTP id x4-20020a25ce04000000b00c2282b117eemr3233485ybe.63.1688152975093;
+        Fri, 30 Jun 2023 12:22:55 -0700 (PDT)
+Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
+        by smtp.gmail.com with ESMTPSA id t4-20020a259ac4000000b00bb144da7d68sm2968477ybo.13.2023.06.30.12.22.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 30 Jun 2023 12:22:54 -0700 (PDT)
+Date:   Fri, 30 Jun 2023 12:22:43 -0700 (PDT)
+From:   Hugh Dickins <hughd@google.com>
+X-X-Sender: hugh@ripple.attlocal.net
+To:     Claudio Imbrenda <imbrenda@linux.ibm.com>
+cc:     Hugh Dickins <hughd@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        David Hildenbrand <david@redhat.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Qi Zheng <zhengqi.arch@bytedance.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Peter Xu <peterx@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Will Deacon <will@kernel.org>, Yu Zhao <yuzhao@google.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Ralph Campbell <rcampbell@nvidia.com>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Steven Price <steven.price@arm.com>,
+        SeongJae Park <sj@kernel.org>,
+        Lorenzo Stoakes <lstoakes@gmail.com>,
+        Huang Ying <ying.huang@intel.com>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Zack Rusin <zackr@vmware.com>, Jason Gunthorpe <jgg@ziepe.ca>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Minchan Kim <minchan@kernel.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Song Liu <song@kernel.org>,
+        Thomas Hellstrom <thomas.hellstrom@linux.intel.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Jann Horn <jannh@google.com>,
+        Vishal Moola <vishal.moola@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        linux-arm-kernel@lists.infradead.org, sparclinux@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: Re: [PATCH v2 07/12] s390: add pte_free_defer() for pgtables sharing
+ page
+In-Reply-To: <20230630182556.7727ef50@p-imbrenda>
+Message-ID: <7f6d399b-c47-1faa-f7f6-9932b9811f8c@google.com>
+References: <54cb04f-3762-987f-8294-91dafd8ebfb0@google.com> <a722dbec-bd9e-1213-1edd-53cd547aa4f@google.com> <20230630153852.31163592@p-imbrenda> <062b19-4cf1-261-a9bf-9cefd32382fc@google.com> <20230630182556.7727ef50@p-imbrenda>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Mailru-Src: smtp
-X-7564579A: EEAE043A70213CC8
-X-77F55803: 4F1203BC0FB41BD9D327C87852EB66D3080F4C810759D0F811E72B7AA1AF68FA182A05F5380850404C228DA9ACA6FE278C9E5096E1C850F88C1AB0D8FB980675429B51107E0C5B6EB56CF6928DE05F7D
-X-7FA49CB5: FF5795518A3D127A4AD6D5ED66289B5278DA827A17800CE7492D3E4238663367EA1F7E6F0F101C67BD4B6F7A4D31EC0BCC500DACC3FED6E28638F802B75D45FF8AA50765F79006377E85B0EC44E8FD73EA1F7E6F0F101C6723150C8DA25C47586E58E00D9D99D84E1BDDB23E98D2D38BE5CCB53A13BC8DBA91F16B73EAF39CC839DDC95B95B59EE1CC7F00164DA146DAFE8445B8C89999728AA50765F790063706C07FE7DDBB4AB7389733CBF5DBD5E9C8A9BA7A39EFB766F5D81C698A659EA7CC7F00164DA146DA9985D098DBDEAEC8A0BCD6C998BE2772F6B57BC7E6449061A352F6E88A58FB86F5D81C698A659EA73AA81AA40904B5D9A18204E546F3947C8ADF99E4698B9BE86136E347CC761E074AD6D5ED66289B52698AB9A7B718F8C46E0066C2D8992A16725E5C173C3A84C3CF39425AD3EEC986BA3038C0950A5D36B5C8C57E37DE458B330BD67F2E7D9AF16D1867E19FE14079C09775C1D3CA48CF4964A708C60C975A1DD303D21008E298D5E8D9A59859A8B6B372FE9A2E580EFC725E5C173C3A84C3E28E55B77232B29E35872C767BF85DA2F004C90652538430E4A6367B16DE6309
-X-C1DE0DAB: 0D63561A33F958A5ADA757FF14E31B650581116A7A214DD5AB7CA050525296F8F87CCE6106E1FC07E67D4AC08A07B9B0CE135D2742255B359C5DF10A05D560A950611B66E3DA6D700B0A020F03D25A0997E3FB2386030E77
-X-C8649E89: 1C3962B70DF3F0ADE00A9FD3E00BEEDF77DD89D51EBB7742D3581295AF09D3DF87807E0823442EA2ED31085941D9CD0AF7F820E7B07EA4CFEF3E36C53A517CBCE925D51283E26D5FEB41A7ADA2AB3C51994E43073129A1BC8B42E79199D3D3ED5622055276C82EC6B13580FAD7F047B3474E29EDDDC108306E346BF9FA413E554C41F94D744909CE4BCAC77546666B612CC0CD5AA9A1B9887EE09F5AAA95A50543082AE146A756F3
-X-D57D3AED: 3ZO7eAau8CL7WIMRKs4sN3D3tLDjz0dLbV79QFUyzQ2Ujvy7cMT6pYYqY16iZVKkSc3dCLJ7zSJH7+u4VD18S7Vl4ZUrpaVfd2+vE6kuoey4m4VkSEu530nj6fImhcD4MUrOEAnl0W826KZ9Q+tr5ycPtXkTV4k65bRjmOUUP8cvGozZ33TWg5HZplvhhXbhDGzqmQDTd6OAevLeAnq3Ra9uf7zvY2zzsIhlcp/Y7m53TZgf2aB4JOg4gkr2biojbL9S8ysBdXjORchWSMBWv9DZri5am/Ys
-X-Mailru-Sender: 9EB879F2C80682A09F26F806C7394981C708A6485BDCACB4392B9430AFD86279976AF1CB91E68C81643683D8C0F3ED1CA3C71A376745D86BBE86167304C7680C3980CE5AAA35C7CD60F22E8815EDE5EAEAB4BC95F72C04283CDA0F3B3F5B9367
-X-Mras: Ok
-X-7564579A: 646B95376F6C166E
-X-77F55803: 6242723A09DB00B4F9CE69B8C4B8347460019CF3CEAE9FBB0C8A93AF53B88541049FFFDB7839CE9ED1D19D87AC90FBA299F8AE903C22B555DB942BF447F72B12F7ABE122C3467BEF
-X-D57D3AED: 3ZO7eAau8CL7WIMRKs4sN3D3tLDjz0dLbV79QFUyzQ2Ujvy7cMT6pYYqY16iZVKkSc3dCLJ7zSJH7+u4VD18S7Vl4ZUrpaVfd2+vE6kuoey4m4VkSEu530nj6fImhcD4MUrOEAnl0W826KZ9Q+tr5xhPKz0ZEsZ5k6NOOPWz5QAiZSCXKGQRq3/7KxbCLSB2ESzQkaOXqCBFZPLWFrEGlV1shfWe2EVcxl5toh0c/aCGOghz/frdRhzMe95NxDFdr2FD4uy5x8JmBMN6wj4lgw==
-X-Mailru-MI: C000000000000800
-X-Mras: Ok
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Set .flags = CLK_OPS_PARENT_ENABLE to fix "gcc_sdcc2_apps_clk_src: rcg
-didn't update its configuration" error.
+On Fri, 30 Jun 2023, Claudio Imbrenda wrote:
+> On Fri, 30 Jun 2023 08:28:54 -0700 (PDT)
+> Hugh Dickins <hughd@google.com> wrote:
+> > On Fri, 30 Jun 2023, Claudio Imbrenda wrote:
+> > > On Tue, 20 Jun 2023 00:51:19 -0700 (PDT)
+> > > Hugh Dickins <hughd@google.com> wrote:
+> > > 
+> > > [...]
+> > >   
+> > > > +void pte_free_defer(struct mm_struct *mm, pgtable_t pgtable)
+> > > > +{
+> > > > +	unsigned int bit, mask;
+> > > > +	struct page *page;
+> > > > +
+> > > > +	page = virt_to_page(pgtable);
+> > > > +	if (mm_alloc_pgste(mm)) {
+> > > > +		call_rcu(&page->rcu_head, pte_free_pgste);  
+> > > 
+> > > so is this now going to be used to free page tables
+> > > instead of page_table_free_rcu?  
+> > 
+> > No.
+> > 
+> > All pte_free_defer() is being used for (in this series; and any future
+> > use beyond this series will have to undertake its own evaluations) is
+> > for the case of removing an empty page table, which used to map a group
+> > of PTE mappings of a file, in order to make way for one PMD mapping of
+> > the huge page which those scattered pages have now been gathered into.
+> > 
+> > You're worried by that mm_alloc_pgste() block: it's something I didn't
+> 
+> actually no, but thanks for bringing it up :D
+> 
+> > have at all in my first draft, then I thought that perhaps the pgste
+> > case might be able to come this way, so it seemed stupid to leave out
+> > the handling for it.
+> > 
+> > I hope that you're implying that should be dead code here?  Perhaps,
+> > that the pgste case corresponds to the case in s390 where THPs are
+> > absolutely forbidden?  That would be good news for us.
+> > 
+> > Gerald, in his version of this block, added a comment asking:
+> > 	/*
+> > 	 * TODO: Do we need gmap_unlink(mm, pgtable, addr), like in
+> > 	 * page_table_free_rcu()?
+> > 	 * If yes -> need addr parameter here, like in pte_free_tlb().
+> > 	 */
+> > Do you have the answer to that?  Neither of us could work it out.
+> 
+> this is the thing I'm worried about; removing a page table that was
+> used to map a guest will leave dangling pointers in the gmap that will
+> cause memory corruption (I actually ran into that problem myself for
+> another patchseries).
+> 
+> gmap_unlink() is needed to clean up the pointers before they become
+> dangling (and also potentially do some TLB purging as needed)
 
-Fixes: a808d58ddf29 ("clk: qcom: Add Global Clock Controller (GCC) driver for SM7150")
-Signed-off-by: Danila Tikhonov <danila@jiaxyga.com>
----
- drivers/clk/qcom/gcc-sm7150.c | 1 +
- 1 file changed, 1 insertion(+)
+That's something I would have expected to be handled already via
+mmu_notifiers, rather than buried inside the page table freeing.
 
-diff --git a/drivers/clk/qcom/gcc-sm7150.c b/drivers/clk/qcom/gcc-sm7150.c
-index 6b628178f62c..6da87f0436d0 100644
---- a/drivers/clk/qcom/gcc-sm7150.c
-+++ b/drivers/clk/qcom/gcc-sm7150.c
-@@ -739,6 +739,7 @@ static struct clk_rcg2 gcc_sdcc2_apps_clk_src = {
- 		.parent_data = gcc_parent_data_6,
- 		.num_parents = ARRAY_SIZE(gcc_parent_data_6),
- 		.ops = &clk_rcg2_floor_ops,
-+		.flags = CLK_OPS_PARENT_ENABLE,
- 	},
- };
- 
--- 
-2.41.0
+If s390 is the only architecture to go that way, and could instead do
+it via mmu_notifiers, then I think that will be more easily supported
+in the long term.
 
+But I'm writing from a position of very great ignorance: advising
+KVM on s390 is many dimensions away from what I'm capable of.
+
+> 
+> the point here is: we need that only for page_table_free_rcu(); all
+> other users of page_table_free() cannot act on guest page tables
+
+I might be wrong, but I think that most users of page_table_free()
+are merely freeing a page table which had to be allocated up front,
+but was then found unnecessary (maybe a racing task already inserted
+one): page tables which were never exposed to actual use.
+
+> (because we don't allow THP for KVM guests). and that is why
+> page_table_free() does not do gmap_unlink() currently.
+
+But THP collapse does (or did before this series) use it to free a
+page table which had been exposed to use.  The fact that s390 does
+not allow THP for KVM guests makes page_table_free(), and this new
+pte_free_defer(), safe for that; but it feels dangerously coincidental.
+
+It's easy to imagine a future change being made, which would stumble
+over this issue.  I have imagined that pte_free_defer() will be useful
+in future, in the freeing of empty page tables: but s390 may pose a
+problem there - though perhaps no more of a problem than additionally
+needing to pass a virtual address down the stack.
+
+> 
+> > 
+> > > 
+> > > or will it be used instead of page_table_free?  
+> > 
+> > Not always; but yes, this case of removing a page table used
+> > page_table_free() before; but now, with the lighter locking, needs
+> > to keep the page table valid until the RCU grace period expires.
+> 
+> so if I understand correctly your code will, sometimes, under some
+> circumstances, replace what page_table_free() does, but it will never
+> replace page_table_free_rcu()?
+> 
+> because in that case there would be no issues 
+
+Yes, thanks for confirming: we have no issue here at present, but may
+do if use of pte_free_defer() is extended to other contexts in future.
+
+Would it be appropriate to add a WARN_ON_ONCE around that
+> > > > +	if (mm_alloc_pgste(mm)) {
+in pte_free_defer()?
+
+I ask that somewhat rhetorically: that block disappears in the later
+version I was working on last night (and will return to shortly), in
+which pte_free_defer() just sets a bit and calls page_table_free().
+
+But I'd like to understand the possibilities better: does mm_alloc_pgste()
+correspond 1:1 to KVM guest on s390, or does it cover several different
+possibilities of which KVM guest is one, or am I just confused to be
+thinking there's any relationship?
+
+Thanks,
+Hugh
+
+> 
+> > 
+> > > 
+> > > this is actually quite important for KVM on s390  
+> > 
+> > None of us are wanting to break KVM on s390: your guidance appreciated!
+> > 
+> > Thanks,
+> > Hugh
