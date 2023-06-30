@@ -2,74 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89DB37432DD
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 04:48:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 28F257432DF
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 04:48:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230106AbjF3Cr6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 22:47:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33572 "EHLO
+        id S231979AbjF3CsJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 22:48:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230013AbjF3Crz (ORCPT
+        with ESMTP id S230407AbjF3CsH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 22:47:55 -0400
-Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 316F230D1;
-        Thu, 29 Jun 2023 19:47:54 -0700 (PDT)
-Received: by mail-wr1-x441.google.com with SMTP id ffacd0b85a97d-311099fac92so1649499f8f.0;
-        Thu, 29 Jun 2023 19:47:54 -0700 (PDT)
+        Thu, 29 Jun 2023 22:48:07 -0400
+Received: from mail-qk1-x72c.google.com (mail-qk1-x72c.google.com [IPv6:2607:f8b0:4864:20::72c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA4C535A7;
+        Thu, 29 Jun 2023 19:48:05 -0700 (PDT)
+Received: by mail-qk1-x72c.google.com with SMTP id af79cd13be357-76714caf466so126204685a.1;
+        Thu, 29 Jun 2023 19:48:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688093272; x=1690685272;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=PN5yxbuJ2nnYnl/4YBa8slTNyYfmpUDhYSEL5xstQsU=;
-        b=IUaTt8TcLWNzXn8Ey8PCwkSOyValaLJHNsJBzfJ8c8VFkXDXWZ07DZAYAyY8ZpyG+D
-         ViyKdbolLZuN3acuoZPui7va0jpo92CmUUIR/E7PR4LuPuZ/dAWAmpRWYosYBlh7+UXN
-         SbsW85y6oTB4jNWi3r6NOH6/5NH8WmCp+PHbpfVjulKWtWdG30+EdGEfcyAzSfV0zRVP
-         BTcIyC28klTeW45HEmkwSpo9CSqIcb1O9J4m64qHMGD47BrK1KM43qXMEAlbWKWW/g/d
-         dLFlS0reoxJD2v1Q0NAKPAhoCVlf93BZoE/wJRWSISQssl9GtJnZi4AwMUJS8dA7GITJ
-         i1dw==
+        d=gmail.com; s=20221208; t=1688093285; x=1690685285;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=a4ALnKxby19PRdzxTmTKNTGCytmjoLEZ1P5o67YM3y8=;
+        b=XESjJS/WYUlwketPbHggw2mNZxEWqPMfUwldLsyUQzFIV4/AwstgqxiKth5pyXNlUw
+         qAi33o9dYXWUI4MXFd3itlIi8TUrwd9S0AQzdyZrOpNXZPKP9l5eNcj4i3hi/o78KrBX
+         KkK0G2ERgpK9MJaSg1FOlc/CTDGfteUVvFbR8oSjT0vJ3A7zdXttnNIHkM1vFmmR+oPW
+         vEyzkWWVYpca86QuOLGHv6txTw4q38dsRAm/obAqnGMtELIjCSRn4BJ6j2p5v89CO9+1
+         lBtCpi49x/ULmTtyNxdTs+Ogi6mAu4OzMwkz4F0/g4tMM6j8FFK0xGVhsaonDcbl+OJW
+         TA7w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688093272; x=1690685272;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=PN5yxbuJ2nnYnl/4YBa8slTNyYfmpUDhYSEL5xstQsU=;
-        b=VQw18THOx28CsTP5o/yyu2WuJzMh6j1EWXH60pOUu6SQ2BAwkRFMMVjbrL7BA2V/Kx
-         PmfOGDt309dI1tE0ivl6Rieivvp/qgJ1PA1pBAeFLVL+JwWhs2ME6gxDMuIqc+HdmKY4
-         gMyY26bX19oZEZVUKrMCyi9ORREnRtmSFKSKtwa3OnxI57TGKGF5pYDpXT6UuwgJVVtL
-         3vzZWzYlyU03gfGLUm3EnUohNmOZrWj0RK0eLLE2PR3oZwT1AEpAAMgDT7IFTe3N+gwM
-         U2R/aqXz3rZtERQ/gpGG8EESABtLFlNaKKu2Ytto+asq+MZ7fTTMGsSMpsCaoP8GOwk+
-         OZHw==
-X-Gm-Message-State: ABy/qLa3kZ5xV4GJTz1Ou8Cu6J4FXhGWODDZ+M6zq4AsILw6oSCTi2zn
-        hT9/nufL/tbu2htBuF23Ua4I+ODGqRR0U0OyPp8=
-X-Google-Smtp-Source: APBJJlG2XSLJk7WgprfL+OPvH4/Ws0gRTftzgVG3a1nA2jukp+WyKKCCC6yZ9QwKgrCuixwdMY5UR+sy3rDqqsFm9rU=
-X-Received: by 2002:a5d:514d:0:b0:313:e20c:b8e0 with SMTP id
- u13-20020a5d514d000000b00313e20cb8e0mr921811wrt.23.1688093272424; Thu, 29 Jun
- 2023 19:47:52 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1688093285; x=1690685285;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=a4ALnKxby19PRdzxTmTKNTGCytmjoLEZ1P5o67YM3y8=;
+        b=YTexsgWxkkBm7HzuuZq0J65kzHYLnNLF+mtnQ604amxn8s+twhg5N04MEV4LuwFBJY
+         yWChPIS8dJbKUTPEMp8xDtAJs5RRPn3hsKzfM5WwGWDVLW/Cms+vtCy4y5eNRDHhJ7gu
+         KVqc04bUny3UEn6eRhLpOdxWio4HAFVVMPcEyZPLlx4NNOj5ghM8EWW28NXzsUYDq/DU
+         Wd3feLbxyvAMIY3k7S9N+DSIwyOv0yEgRPvPwHVkxuh5VUxg2ob0w3TgFgxmYYfGyYWj
+         vbuhDByUm6SvTJLSS3IrElBSli0aqNcBOOdVCHBOmb5/AN/DpWHlMx8g7YqFLzcCzDR0
+         Yv9A==
+X-Gm-Message-State: AC+VfDylsbKClfpjJYI5IGJvh1V1zwDuu6sP7PgW/zpHdbpI8pPk+YGz
+        REECMWGTGYmMCkPBidRyf4k=
+X-Google-Smtp-Source: ACHHUZ7s7kalGiaALcvNXMQ8bFkk+F3F/a0hjtQhSfESqAy5yobugXLHDaNSPLiYa/X6zpKF/Sdw1Q==
+X-Received: by 2002:a05:620a:424d:b0:765:8204:dd64 with SMTP id w13-20020a05620a424d00b007658204dd64mr1522149qko.7.1688093284787;
+        Thu, 29 Jun 2023 19:48:04 -0700 (PDT)
+Received: from oslab-pc.tsinghua.edu.cn ([166.111.139.122])
+        by smtp.gmail.com with ESMTPSA id p5-20020a63c145000000b00519c3475f21sm9600224pgi.46.2023.06.29.19.48.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 29 Jun 2023 19:48:04 -0700 (PDT)
+From:   Tuo Li <islituo@gmail.com>
+To:     james.smart@broadcom.com, dick.kennedy@broadcom.com,
+        jejb@linux.ibm.com, martin.petersen@oracle.com
+Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        baijiaju1990@outlook.com, Tuo Li <islituo@gmail.com>,
+        BassCheck <bass@buaa.edu.cn>
+Subject: [PATCH] scsi: lpfc: Fix a possible data race in lpfc_unregister_fcf_rescan()
+Date:   Fri, 30 Jun 2023 10:47:48 +0800
+Message-Id: <20230630024748.1035993-1-islituo@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20230607123700.40229-1-cloudliang@tencent.com>
- <20230607123700.40229-2-cloudliang@tencent.com> <ZJyj3QDu9eAtJ+eq@google.com>
-In-Reply-To: <ZJyj3QDu9eAtJ+eq@google.com>
-From:   Jinrong Liang <ljr.kernel@gmail.com>
-Date:   Fri, 30 Jun 2023 10:47:40 +0800
-Message-ID: <CAFg_LQVtcBaO-=dvrqe7OjMqift__x-F6FeJ8EEUh+Ei-tgyhg@mail.gmail.com>
-Subject: Re: [PATCH v3 1/4] KVM: selftests: Introduce __kvm_pmu_event_filter
- to improved event filter settings
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Jim Mattson <jmattson@google.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Aaron Lewis <aaronlewis@google.com>,
-        David Matlack <dmatlack@google.com>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Like Xu <like.xu.linux@gmail.com>,
-        Jinrong Liang <cloudliang@tencent.com>,
-        linux-kselftest@vger.kernel.org, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -80,81 +71,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sean Christopherson <seanjc@google.com> =E4=BA=8E2023=E5=B9=B46=E6=9C=8829=
-=E6=97=A5=E5=91=A8=E5=9B=9B 05:19=E5=86=99=E9=81=93=EF=BC=9A
->
-> On Wed, Jun 07, 2023, Jinrong Liang wrote:
-> > -static struct kvm_pmu_event_filter *remove_event(struct kvm_pmu_event_=
-filter *f,
-> > +static struct kvm_pmu_event_filter *remove_event(struct __kvm_pmu_even=
-t_filter *__f,
-> >                                                uint64_t event)
->
-> Can you tack on a patch to drop the return?  None of the callers consume =
-it, and
-> it incorrectly implies that the incoming filter isn't modified.
+The variable phba->fcf.fcf_flag is often protected by the lock 
+phba->hbalock() when is accessed. Here is an example in 
+lpfc_unregister_fcf_rescan():
 
-Thank you very much for your suggestion! I'm more than happy to follow
-your advice and modify the code accordingly.
+  spin_lock_irq(&phba->hbalock);
+  phba->fcf.fcf_flag |= FCF_INIT_DISC;
+  spin_unlock_irq(&phba->hbalock);
 
->
-> >  {
-> >       bool found =3D false;
-> >       int i;
-> > +     struct kvm_pmu_event_filter *f =3D (void *)__f;
->
-> Nit, reverse xmas tree is preferred:
->
->         struct kvm_pmu_event_filter *f =3D (void *)__f;
->         bool found =3D false;
->         int i;
->
-> Hoever, I don't think this one needs to cast, the cast is only necessary =
-when
-> invoking a KVM ioctl(), e.g. I believe this should work:
->
-> static void remove_event(struct __kvm_pmu_event_filter *f, uint64_t event=
-)
-> {
->         bool found =3D false;
->         int i;
->
->         for (i =3D 0; i < f->nevents; i++) {
->                 if (found)
->                         f->events[i - 1] =3D f->events[i];
->                 else
->                         found =3D f->events[i] =3D=3D event;
->         }
->         if (found)
->                 f->nevents--;
-> }
-> > @@ -569,19 +554,16 @@ static void run_masked_events_test(struct kvm_vcp=
-u *vcpu,
-> >                                  const uint64_t masked_events[],
-> >                                  const int nmasked_events)
-> >  {
-> > -     struct kvm_pmu_event_filter *f;
-> > +     struct __kvm_pmu_event_filter f =3D {
-> > +         .nevents =3D nmasked_events,
-> > +         .action =3D KVM_PMU_EVENT_ALLOW,
-> > +         .flags =3D KVM_PMU_EVENT_FLAG_MASKED_EVENTS,
->
-> Tabs, not spaces please.
->
-> > +static int set_pmu_single_event_filter(struct kvm_vcpu *vcpu, uint64_t=
- event,
-> > +                                    uint32_t flags, uint32_t action)
-> > +{
-> > +     struct __kvm_pmu_event_filter f =3D {
-> > +         .nevents =3D 1,
-> > +         .flags =3D flags,
-> > +         .action =3D action,
-> > +         .events =3D {
-> > +             event,
->
-> Tabs.
+However, in the same function, phba->fcf.fcf_flag is assigned with 0 
+without holding the lock, and thus can cause a data race:
 
-I will include these change in the new patch version and ensure that
-any related code is adjusted accordingly.
+  phba->fcf.fcf_flag = 0;
 
-Once again, I truly appreciate your guidance!
+To fix this possible data race, a lock and unlock pair is added when 
+accessing the variable phba->fcf.fcf_flag.
+
+Reported-by: BassCheck <bass@buaa.edu.cn>
+Signed-off-by: Tuo Li <islituo@gmail.com>
+---
+ drivers/scsi/lpfc/lpfc_hbadisc.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/drivers/scsi/lpfc/lpfc_hbadisc.c b/drivers/scsi/lpfc/lpfc_hbadisc.c
+index 5ba3a9ad9501..9d2feb69cae7 100644
+--- a/drivers/scsi/lpfc/lpfc_hbadisc.c
++++ b/drivers/scsi/lpfc/lpfc_hbadisc.c
+@@ -6961,7 +6961,9 @@ lpfc_unregister_fcf_rescan(struct lpfc_hba *phba)
+ 	if (rc)
+ 		return;
+ 	/* Reset HBA FCF states after successful unregister FCF */
++	spin_lock_irq(&phba->hbalock);
+ 	phba->fcf.fcf_flag = 0;
++	spin_unlock_irq(&phba->hbalock);
+ 	phba->fcf.current_rec.flag = 0;
+ 
+ 	/*
+-- 
+2.34.1
+
