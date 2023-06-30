@@ -2,205 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A213743968
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 12:33:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CCF9A74397C
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 12:34:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232176AbjF3Kds (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 06:33:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34990 "EHLO
+        id S232558AbjF3Ke1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Jun 2023 06:34:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231634AbjF3Kdo (ORCPT
+        with ESMTP id S232498AbjF3KeK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 06:33:44 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BB3C30C5
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 03:33:42 -0700 (PDT)
-Received: from kwepemm600007.china.huawei.com (unknown [172.30.72.57])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Qss9C4y4NzqV2n;
-        Fri, 30 Jun 2023 18:33:19 +0800 (CST)
-Received: from [10.174.185.210] (10.174.185.210) by
- kwepemm600007.china.huawei.com (7.193.23.208) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27; Fri, 30 Jun 2023 18:33:38 +0800
-Subject: Re: [PATCH] irqchip/gic-v4.1: Properly lock VPEs when doing a
- directLPI invalidation
-To:     Marc Zyngier <maz@kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     Thomas Gleixner <tglx@linutronix.de>,
-        Zenghui Yu <yuzenghui@huawei.com>, <wanghaibin.wang@huawei.com>
-References: <20230617073242.3199746-1-maz@kernel.org>
-From:   Kunkun Jiang <jiangkunkun@huawei.com>
-Message-ID: <b33ea949-a53e-2c81-27fe-31067c94dc76@huawei.com>
-Date:   Fri, 30 Jun 2023 18:33:38 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        Fri, 30 Jun 2023 06:34:10 -0400
+Received: from esa3.hgst.iphmx.com (esa3.hgst.iphmx.com [216.71.153.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BDC1358A
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 03:34:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1688121249; x=1719657249;
+  h=mime-version:date:from:to:subject:in-reply-to:references:
+   message-id:content-transfer-encoding;
+  bh=ceBKz4A31miCsZPF9j9ZqKKds3qsGqNNGbiRMwK3xMk=;
+  b=K10plyYc8Q5vTzgHKWD7IUrNnLU+cY4wstTtc2bS9UQCLEEu5pypSkxR
+   9CjS0OoaWF51GfmKAbe4mKX3BDGY1jlDA+wZBSj7nDYGVIyjOn3Pqru6d
+   qaIOelRRzhla1Oi52vAoN/TB3JK20wYGzAyE7lpPAxKVxBIUe243YIbxd
+   fsSZGoG/iIHJNWRNeK3Pqu+cBGpExkMq04dnI84mnb28Hf/ssvF1cQSRs
+   J9UN8sB0IIHcY3ZNSdQceiO3XprZX308Cymclf3dejBb8UYYmlHAi6Jsh
+   vUFlV+1/54sYB58Jb7cUFyMUaaSrCDTchDbbloGIm8bL6DJYKhRF0Bz+i
+   A==;
+X-IronPort-AV: E=Sophos;i="6.01,170,1684771200"; 
+   d="scan'208";a="241584341"
+Received: from h199-255-45-15.hgst.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
+  by ob1.hgst.iphmx.com with ESMTP; 30 Jun 2023 18:34:07 +0800
+IronPort-SDR: hsdF/YGBpmK5Qwq5ZuSufM8300OqOAVBzHY/4kqS90qmbAQ197uXHEBC0QvuePcxTmP0KsrQH7
+ 1aom+fJ1Sr6sIlmidw+8BMF/zoQrsKYv+xqkNKmYpyVOuT2yHi5gTkxBAsgBHueLYK2ahsk9wT
+ fn+RC58eEW5peD/Za9HZmxM/yeUQYBwbe9DwkyfsS4txkyXM236M0FcL2BsZH/WvpgjB9nVTJ1
+ d/lsZWVfNeXpuPrN7a2yQQUHPd7MwRKdEWtjOLe3H7NISDm7Cs6kUkZ+9LaJdmzv+miMu984qT
+ NM8=
+Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
+  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 30 Jun 2023 02:42:42 -0700
+IronPort-SDR: BB/MP/DP9PYG2W8ozfSUvfosXIO1Tb3sHvHTNsZAycCfu2mf5plwhkng046DNLz7bdpgY7nBi/
+ pCogec2t0JHZpi4sWufPyz7m9dnoThepfNXZx2w8rzukEAyM3PMmZHuOdNdkHzQQPaic8pCsih
+ GBFElw8JW4IH6iryx3MkYbji8FwWnsDbbyk0Xw3pQBdbWdZX3RbBHX+wDrKZoowPAz5gRyeFMw
+ PHxPZfubYmBHey30ywTL1QZKtZObkaCCO6gsf4h13lcsM5w7HwMlVtX9QPxjY18OjrvMsYyRXW
+ 9ug=
+WDCIronportException: Internal
+Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
+  by uls-op-cesaip01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 30 Jun 2023 03:34:08 -0700
+Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4QssB70jcMz1RtVq
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 03:34:07 -0700 (PDT)
+Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)"
+        header.d=opensource.wdc.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
+        opensource.wdc.com; h=content-transfer-encoding:content-type
+        :message-id:user-agent:references:in-reply-to:subject:to:from
+        :date:mime-version; s=dkim; t=1688121232; x=1690713233; bh=ceBKz
+        4A31miCsZPF9j9ZqKKds3qsGqNNGbiRMwK3xMk=; b=maa8O8GQIguT3uhBLbP6u
+        F36t6iHtVDrmF2+JaIqv/+7i3ka+G8H2fWjYZArBnpA0FOd58vKzhCpbapY90QZo
+        9de7y2wugJBPX8iDBxJ//psz/InvWIHmDF4aoM6e0qzwdFXJuMc5cle0J6geSbwH
+        r0+RaaGSg5AQ6i+Sn9uO826UAXyV2eEBwoqr7gAj84cThoDu+gjBFi7mOa558o+7
+        ViTZp4gXih4/PNVzCiLkb8voiCJ7TvpKZUscX0UnA4EhpKCm+g0pDzAIGx2P/xYR
+        q/TR/I3jsUX9qir1UUHkOPcBN0kF/yxAOOKYZec/15MsdZl9U5WpPjniEuSq3kx+
+        Q==
+X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
+Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
+        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id FVkOV8h4GkPf for <linux-kernel@vger.kernel.org>;
+        Fri, 30 Jun 2023 03:33:52 -0700 (PDT)
+Received: from localhost (usg-ed-osssrv.wdc.com [127.0.0.1])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4Qss9k4K3Sz1RtVm;
+        Fri, 30 Jun 2023 03:33:46 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20230617073242.3199746-1-maz@kernel.org>
-Content-Type: text/plain; charset="utf-8"; format=flowed
+Date:   Fri, 30 Jun 2023 16:03:46 +0530
+From:   aravind.ramesh@opensource.wdc.com
+To:     Hans Holmberg <Hans.Holmberg@wdc.com>,
+        Aravind Ramesh <Aravind.Ramesh@wdc.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        "open list:BLOCK LAYER" <linux-block@vger.kernel.org>,
+        hch@infradead.org,
+        =?UTF-8?Q?Mat?= =?UTF-8?Q?ias_Bj=C3=B8rling?= 
+        <Matias.Bjorling@wdc.com>,
+        Andreas Hindborg <a.hindborg@samsung.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        Damien Le Moal <dlemoal@kernel.org>, gost.dev@samsung.com,
+        Minwoo Im <minwoo.im.dev@gmail.com>, ming.lei@redhat.com
+Subject: Re: [PATCH v4 1/4] ublk: change ublk IO command defines to enum
+In-Reply-To: <83E5C27A-9AEF-4900-9652-78ACFF47E6B0@wdc.com>
+References: <20230628190649.11233-1-nmi@metaspace.dk>
+ <20230628190649.11233-2-nmi@metaspace.dk>
+ <83E5C27A-9AEF-4900-9652-78ACFF47E6B0@wdc.com>
+User-Agent: Roundcube Webmail
+Message-ID: <a7bb663d522cde468b868e8e77110217@opensource.wdc.com>
+X-Sender: aravind.ramesh@opensource.wdc.com
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
 Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-Originating-IP: [10.174.185.210]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- kwepemm600007.china.huawei.com (7.193.23.208)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Marc,
-
-On 2023/6/17 15:32, Marc Zyngier wrote:
-> We normally rely on the irq_to_cpuid_[un]lock() primitives to make
-> sure nothing will change col->idx while performing a LPI invalidation.
->
-> However, these primitives do not cover VPE doorbells, and we have
-> some open-coded locking for that. Unfortunately, this locking is
-> pretty bogus.
->
-> Instead, extend the above primitives to cover VPE doorbells and
-> convert the whole thing to it.
-I've tested this patch 20+ times with a multi-core VM, which has
-pass-through devices (netwrok card and SSD) and GICv4 or GICv4.1
-enabled. Both Guest and Host found no exception.
-
-Tested-by: Kunkun Jiang <jiangkunkun@huawei.com>
->
-> Fixes: f3a059219bc7 ("irqchip/gic-v4.1: Ensure mutual exclusion between vPE affinity change and RD access")
-> Reported-by: Kunkun Jiang <jiangkunkun@huawei.com>
-> Signed-off-by: Marc Zyngier <maz@kernel.org>
-> Cc: Zenghui Yu <yuzenghui@huawei.com>
-> Cc: wanghaibin.wang@huawei.com
+> From: Andreas Hindborg <a.hindborg@samsung.com 
+> <mailto:a.hindborg@samsung.com>>
+> 
+> 
+> This change is in preparation for zoned storage support.
+> 
+> 
+> Signed-off-by: Andreas Hindborg <a.hindborg@samsung.com
+> <mailto:a.hindborg@samsung.com>>
 > ---
->   drivers/irqchip/irq-gic-v3-its.c | 75 ++++++++++++++++++++------------
->   1 file changed, 46 insertions(+), 29 deletions(-)
->
-> diff --git a/drivers/irqchip/irq-gic-v3-its.c b/drivers/irqchip/irq-gic-v3-its.c
-> index 0ec2b1e1df75..c5cb2830e853 100644
-> --- a/drivers/irqchip/irq-gic-v3-its.c
-> +++ b/drivers/irqchip/irq-gic-v3-its.c
-> @@ -273,13 +273,23 @@ static void vpe_to_cpuid_unlock(struct its_vpe *vpe, unsigned long flags)
->   	raw_spin_unlock_irqrestore(&vpe->vpe_lock, flags);
->   }
->   
-> +static struct irq_chip its_vpe_irq_chip;
-> +
->   static int irq_to_cpuid_lock(struct irq_data *d, unsigned long *flags)
->   {
-> -	struct its_vlpi_map *map = get_vlpi_map(d);
-> +	struct its_vpe *vpe = NULL;
->   	int cpu;
->   
-> -	if (map) {
-> -		cpu = vpe_to_cpuid_lock(map->vpe, flags);
-> +	if (d->chip == &its_vpe_irq_chip) {
-> +		vpe = irq_data_get_irq_chip_data(d);
-> +	} else {
-> +		struct its_vlpi_map *map = get_vlpi_map(d);
-> +		if (map)
-> +			vpe = map->vpe;
-> +	}
-> +
-> +	if (vpe) {
-> +		cpu = vpe_to_cpuid_lock(vpe, flags);
->   	} else {
->   		/* Physical LPIs are already locked via the irq_desc lock */
->   		struct its_device *its_dev = irq_data_get_irq_chip_data(d);
-> @@ -293,10 +303,18 @@ static int irq_to_cpuid_lock(struct irq_data *d, unsigned long *flags)
->   
->   static void irq_to_cpuid_unlock(struct irq_data *d, unsigned long flags)
->   {
-> -	struct its_vlpi_map *map = get_vlpi_map(d);
-> +	struct its_vpe *vpe = NULL;
-> +
-> +	if (d->chip == &its_vpe_irq_chip) {
-> +		vpe = irq_data_get_irq_chip_data(d);
-> +	} else {
-> +		struct its_vlpi_map *map = get_vlpi_map(d);
-> +		if (map)
-> +			vpe = map->vpe;
-> +	}
->   
-> -	if (map)
-> -		vpe_to_cpuid_unlock(map->vpe, flags);
-> +	if (vpe)
-> +		vpe_to_cpuid_unlock(vpe, flags);
->   }
->   
->   static struct its_collection *valid_col(struct its_collection *col)
-> @@ -1433,14 +1451,29 @@ static void wait_for_syncr(void __iomem *rdbase)
->   		cpu_relax();
->   }
->   
-> -static void direct_lpi_inv(struct irq_data *d)
-> +static void __direct_lpi_inv(struct irq_data *d, u64 val)
->   {
-> -	struct its_vlpi_map *map = get_vlpi_map(d);
->   	void __iomem *rdbase;
->   	unsigned long flags;
-> -	u64 val;
->   	int cpu;
->   
-> +	/* Target the redistributor this LPI is currently routed to */
-> +	cpu = irq_to_cpuid_lock(d, &flags);
-> +	raw_spin_lock(&gic_data_rdist_cpu(cpu)->rd_lock);
-> +
-> +	rdbase = per_cpu_ptr(gic_rdists->rdist, cpu)->rd_base;
-> +	gic_write_lpir(val, rdbase + GICR_INVLPIR);
-> +	wait_for_syncr(rdbase);
-> +
-> +	raw_spin_unlock(&gic_data_rdist_cpu(cpu)->rd_lock);
-> +	irq_to_cpuid_unlock(d, flags);
-> +}
-> +
-> +static void direct_lpi_inv(struct irq_data *d)
-> +{
-> +	struct its_vlpi_map *map = get_vlpi_map(d);
-> +	u64 val;
-> +
->   	if (map) {
->   		struct its_device *its_dev = irq_data_get_irq_chip_data(d);
->   
-> @@ -1453,15 +1486,7 @@ static void direct_lpi_inv(struct irq_data *d)
->   		val = d->hwirq;
->   	}
->   
-> -	/* Target the redistributor this LPI is currently routed to */
-> -	cpu = irq_to_cpuid_lock(d, &flags);
-> -	raw_spin_lock(&gic_data_rdist_cpu(cpu)->rd_lock);
-> -	rdbase = per_cpu_ptr(gic_rdists->rdist, cpu)->rd_base;
-> -	gic_write_lpir(val, rdbase + GICR_INVLPIR);
-> -
-> -	wait_for_syncr(rdbase);
-> -	raw_spin_unlock(&gic_data_rdist_cpu(cpu)->rd_lock);
-> -	irq_to_cpuid_unlock(d, flags);
-> +	__direct_lpi_inv(d, val);
->   }
->   
->   static void lpi_update_config(struct irq_data *d, u8 clr, u8 set)
-> @@ -3952,18 +3977,10 @@ static void its_vpe_send_inv(struct irq_data *d)
->   {
->   	struct its_vpe *vpe = irq_data_get_irq_chip_data(d);
->   
-> -	if (gic_rdists->has_direct_lpi) {
-> -		void __iomem *rdbase;
-> -
-> -		/* Target the redistributor this VPE is currently known on */
-> -		raw_spin_lock(&gic_data_rdist_cpu(vpe->col_idx)->rd_lock);
-> -		rdbase = per_cpu_ptr(gic_rdists->rdist, vpe->col_idx)->rd_base;
-> -		gic_write_lpir(d->parent_data->hwirq, rdbase + GICR_INVLPIR);
-> -		wait_for_syncr(rdbase);
-> -		raw_spin_unlock(&gic_data_rdist_cpu(vpe->col_idx)->rd_lock);
-> -	} else {
-> +	if (gic_rdists->has_direct_lpi)
-> +		__direct_lpi_inv(d, d->parent_data->hwirq);
-> +	else
->   		its_vpe_send_cmd(vpe, its_send_inv);
-> -	}
->   }
->   
->   static void its_vpe_mask_irq(struct irq_data *d)
+> include/uapi/linux/ublk_cmd.h | 23 +++++++++++++++++------
+> 1 file changed, 17 insertions(+), 6 deletions(-)
+> 
+> 
+> diff --git a/include/uapi/linux/ublk_cmd.h 
+> b/include/uapi/linux/ublk_cmd.h
+> index 4b8558db90e1..471b3b983045 100644
+> --- a/include/uapi/linux/ublk_cmd.h
+> +++ b/include/uapi/linux/ublk_cmd.h
+> @@ -229,12 +229,23 @@ struct ublksrv_ctrl_dev_info {
+> __u64 reserved2;
+> };
+> 
+> 
+> -#define UBLK_IO_OP_READ 0
+> -#define UBLK_IO_OP_WRITE 1
+> -#define UBLK_IO_OP_FLUSH 2
+> -#define UBLK_IO_OP_DISCARD 3
+> -#define UBLK_IO_OP_WRITE_SAME 4
+> -#define UBLK_IO_OP_WRITE_ZEROES 5
+> +enum ublk_op {
+> + UBLK_IO_OP_READ = 0,
+> + UBLK_IO_OP_WRITE = 1,
+> + UBLK_IO_OP_FLUSH = 2,
+> + UBLK_IO_OP_DISCARD = 3,
+> + UBLK_IO_OP_WRITE_SAME = 4,
+> + UBLK_IO_OP_WRITE_ZEROES = 5,
+> + UBLK_IO_OP_ZONE_OPEN = 10,
+> + UBLK_IO_OP_ZONE_CLOSE = 11,
+> + UBLK_IO_OP_ZONE_FINISH = 12,
+> + UBLK_IO_OP_ZONE_APPEND = 13,
+
+Curious to know if there is a reason to miss enum 14 here ?
+And if UBLK_IO_OP_ZONE_APPEND is defined along with other operations
+better to define that in patch 3 itself.
+
+> + UBLK_IO_OP_ZONE_RESET = 15,
+> + __UBLK_IO_OP_DRV_IN_START = 32,
+> + __UBLK_IO_OP_DRV_IN_END = 96,
+> + __UBLK_IO_OP_DRV_OUT_START = __UBLK_IO_OP_DRV_IN_END,
+> + __UBLK_IO_OP_DRV_OUT_END = 160,
+> +};
+> 
+> 
+> #define UBLK_IO_F_FAILFAST_DEV (1U << 8)
+> #define UBLK_IO_F_FAILFAST_TRANSPORT (1U << 9)
+
+Regards,
+Aravind
