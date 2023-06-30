@@ -2,425 +2,356 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3504E743C61
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 15:09:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D6D9743C6C
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 15:10:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232267AbjF3NJD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 09:09:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41132 "EHLO
+        id S232467AbjF3NKm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Jun 2023 09:10:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231393AbjF3NI6 (ORCPT
+        with ESMTP id S232498AbjF3NK2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 09:08:58 -0400
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::221])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF35E3A81;
-        Fri, 30 Jun 2023 06:08:56 -0700 (PDT)
-X-GND-Sasl: hadess@hadess.net
-X-GND-Sasl: hadess@hadess.net
-X-GND-Sasl: hadess@hadess.net
-X-GND-Sasl: hadess@hadess.net
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 5831424000D;
-        Fri, 30 Jun 2023 13:08:53 +0000 (UTC)
-From:   Bastien Nocera <hadess@hadess.net>
-To:     linux-input@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, Jiri Kosina <jikos@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Subject: [PATCH v2] HID: steelseries: Add support for Arctis 1 XBox
-Date:   Fri, 30 Jun 2023 15:08:17 +0200
-Message-ID: <20230630130852.51245-1-hadess@hadess.net>
-X-Mailer: git-send-email 2.41.0
+        Fri, 30 Jun 2023 09:10:28 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BE213A87
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 06:09:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1688130573;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Xc5/Cp59uA+b5Eo0Vu+fzIijEsuICv4yiOmEUWQV4Qc=;
+        b=C+aprVofcNt3xvIh6qD/iKKYoWoOOVP3O3F1S7cyVuljR1FiwwpwDguZZ5iV3XG5vBcXxk
+        3UWA3xvTua5QsCLXwifzEG3EkeicioRw3gsxv4b06UAp5pp0yOUMp/kua3fzwJ9clxYwjc
+        t94qaOCo/kMKrxyVNqIWj8sX8Sn6pcA=
+Received: from mail-lj1-f200.google.com (mail-lj1-f200.google.com
+ [209.85.208.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-586-MXxbWW9XMASNKjIQFdNI9Q-1; Fri, 30 Jun 2023 09:09:32 -0400
+X-MC-Unique: MXxbWW9XMASNKjIQFdNI9Q-1
+Received: by mail-lj1-f200.google.com with SMTP id 38308e7fff4ca-2b6a011a980so1849921fa.0
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 06:09:32 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688130571; x=1690722571;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Xc5/Cp59uA+b5Eo0Vu+fzIijEsuICv4yiOmEUWQV4Qc=;
+        b=A+UrQTin45RjA2yPfeg7kjvm1JFPaHAHmg7QYYiS3ttaPOgr1yORhqNj7FQEKQCha2
+         GM/cvv6oHYZXS1PhWL2p32DrxretsSnLG/dNLMYNW8l0f/FDRvdu32xJNaxt6pXI/2nj
+         1t7TeZCaO2GcFhEjzWsbUsduOySV8b1N79S9+Ytf4qOyZLCQv5YYk2Cz/Te2HEc54ygn
+         jIRLFKQCe5VHjAeUNHROOZrYl5XIQmX5dMGpqTpDVAbmzaG+c/d/kqVzyqoO48XRYUT3
+         zhZEMx4U3/EPkM4EarSatYY/t88P8oyLnfMH3JElLuxCu+gljQn0lA7SudCRrmrFSxu1
+         UluQ==
+X-Gm-Message-State: ABy/qLYTkwgMpoKk5cEjcRy9lYuMdRAG/GUf0c8uJahhpgXjvemZN5Dr
+        O+JlqDVduTa8H/8oh0lkDIXGikaalmGYgTM7lhQvxNAP0871XgZq7zs1QpTXR2Ksyvslom+2mer
+        LQgZcfSZ/qBDQ8DWc8YYYyZ+keSgVzef6ncu8yn9b
+X-Received: by 2002:a2e:6f16:0:b0:2b6:7c3a:6adc with SMTP id k22-20020a2e6f16000000b002b67c3a6adcmr1591792ljc.5.1688130570957;
+        Fri, 30 Jun 2023 06:09:30 -0700 (PDT)
+X-Google-Smtp-Source: APBJJlEvM04R7k1TF7SARhjetpFa6GX9qx3D4A9ib7WFaaSP0Ffc7ekaneq28s4k2kuk0Evc9Fi5M2fZ/59eoh30Sic=
+X-Received: by 2002:a2e:6f16:0:b0:2b6:7c3a:6adc with SMTP id
+ k22-20020a2e6f16000000b002b67c3a6adcmr1591772ljc.5.1688130570624; Fri, 30 Jun
+ 2023 06:09:30 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <ZHfa/wQlaVCeUC22@xps> <fe0ab1fa-6ed6-dc64-8165-8fc70669317b@amd.com>
+ <CACO55tsuO1kQUFfPdPFUHm4WEQseCR2tQSDhFRzR+8wOECZCyA@mail.gmail.com>
+ <MN0PR12MB61017541F5AC55485A490BCDE2499@MN0PR12MB6101.namprd12.prod.outlook.com>
+ <CACO55tudULtvt_Hcdg+uqXeYkSAR_NZ1oD=R_KhuE_THSRe88g@mail.gmail.com>
+ <MN0PR12MB6101DE067CF85E59AF187763E2499@MN0PR12MB6101.namprd12.prod.outlook.com>
+ <CACO55tuqAH5Zt+X9pjLFZ-RcFgxpgjpqmrAHPvm4=fb_DMBHyw@mail.gmail.com>
+ <ZHkxYo/a+/uInkLG@xps> <MN0PR12MB610181D29933EE4787DE9BC8E24EA@MN0PR12MB6101.namprd12.prod.outlook.com>
+ <ed5f982e-c12c-b3a2-1108-62fba50bf9db@leemhuis.info> <ZJoSWftrHO65wmxz@xps> <35e9ae66-76d0-5a17-31e6-7aa8de5bfadd@leemhuis.info>
+In-Reply-To: <35e9ae66-76d0-5a17-31e6-7aa8de5bfadd@leemhuis.info>
+From:   Karol Herbst <kherbst@redhat.com>
+Date:   Fri, 30 Jun 2023 15:09:19 +0200
+Message-ID: <CACO55ts9sJaxmVAdCVBRYwghQDtHVqWLUsPTngni2DpgzpucxQ@mail.gmail.com>
+Subject: Re: Regression from "ACPI: OSI: Remove Linux-Dell-Video _OSI string"?
+ (was: Re: Bug#1036530: linux-signed-amd64: Hard lock up of system)
+To:     Thorsten Leemhuis <regressions@leemhuis.info>
+Cc:     Nick Hastings <nicholaschastings@gmail.com>,
+        Linux regressions mailing list <regressions@lists.linux.dev>,
+        Lyude Paul <lyude@redhat.com>, Lukas Wunner <lukas@wunner.de>,
+        Salvatore Bonaccorso <carnil@debian.org>,
+        "1036530@bugs.debian.org" <1036530@bugs.debian.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Limonciello, Mario" <Mario.Limonciello@amd.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for the Steelseries Arctis 1 XBox headset. This driver
-will export the battery information from the headset, as well as the
-"wireless_status" property.
+On Fri, Jun 30, 2023 at 3:02=E2=80=AFPM Thorsten Leemhuis
+<regressions@leemhuis.info> wrote:
+>
+> On 27.06.23 00:34, Nick Hastings wrote:
+> > * Linux regression tracking (Thorsten Leemhuis) <regressions@leemhuis.i=
+nfo> [230626 21:09]:
+> >> Hi, Thorsten here, the Linux kernel's regression tracker. Top-posting
+> >> for once, to make this easily accessible to everyone.
+> >>
+> >> Nick, what's the status/was there any progress? Did you do what Mario
+> >> suggested and file a nouveau bug?
+> >
+> > It was not apparent that the suggestion to open "a Nouveau drm bug" was
+> > addressed to me.
+>
+> I wish things were earlier for reporters, but from what I can see this
+> is the only way forward if you or some silent bystander cares.
+>
+> >> I ask, as I still have this on my list of regressions and it seems the=
+re
+> >> was no progress in three+ weeks now.
+> >
+> > I have not pursued this further since as far as I could tell I already
+> > provided all requested information and I don't actually use nouveau, so
+> > I blacklisted it.
+>
+> I doubt any developer cares enough to take a closer look[1] without a
+> proper nouveau bug and some help & prodding from someone affected. And
+> looks to me like reverting the culprit now might create even bigger
+> problems for users.
+>
+> Hence I guess then this won't be fixed in the end. In a ideal world this
+> would not happen, but we don't live in one and all have just 24 hours in
+> a day. :-/
+>
 
-Signed-off-by: Bastien Nocera <hadess@hadess.net>
----
-v2:
-- Fix missing USB dependency
-- Fix config option description
+We recently merged this commit:
+https://gitlab.freedesktop.org/drm/nouveau/-/commit/11d24327c2d7ad7f24fcc44=
+fb00e1fa91ebf6525
 
- drivers/hid/Kconfig           |   6 +-
- drivers/hid/hid-steelseries.c | 307 ++++++++++++++++++++++++++++++++--
- 2 files changed, 296 insertions(+), 17 deletions(-)
+It might resolve the problem. Worth testing at least, but I can't
+remember if this was a hybrid AMD/Nvidia system, but I think it was?
 
-diff --git a/drivers/hid/Kconfig b/drivers/hid/Kconfig
-index 4ce012f83253..1bc99b33329f 100644
---- a/drivers/hid/Kconfig
-+++ b/drivers/hid/Kconfig
-@@ -1048,9 +1048,11 @@ config STEAM_FF
- 	Deck.
- 
- config HID_STEELSERIES
--	tristate "Steelseries SRW-S1 steering wheel support"
-+	tristate "Steelseries devices support"
-+	depends on USB_HID
- 	help
--	Support for Steelseries SRW-S1 steering wheel
-+	Support for Steelseries SRW-S1 steering wheel, and the Steelseries
-+	Arctis 1 Wireless for XBox headset.
- 
- config HID_SUNPLUS
- 	tristate "Sunplus wireless desktop"
-diff --git a/drivers/hid/hid-steelseries.c b/drivers/hid/hid-steelseries.c
-index aae3afc4107a..a9300a4244aa 100644
---- a/drivers/hid/hid-steelseries.c
-+++ b/drivers/hid/hid-steelseries.c
-@@ -1,8 +1,9 @@
- // SPDX-License-Identifier: GPL-2.0-or-later
- /*
-- *  HID driver for Steelseries SRW-S1
-+ *  HID driver for Steelseries devices
-  *
-  *  Copyright (c) 2013 Simon Wood
-+ *  Copyright (c) 2023 Bastien Nocera
-  */
- 
- /*
-@@ -11,10 +12,28 @@
- #include <linux/device.h>
- #include <linux/hid.h>
- #include <linux/module.h>
-+#include <linux/usb.h>
- #include <linux/leds.h>
- 
- #include "hid-ids.h"
- 
-+#define STEELSERIES_SRWS1		BIT(0)
-+#define STEELSERIES_ARCTIS_1		BIT(1)
-+
-+struct steelseries_device {
-+	struct hid_device *hdev;
-+	unsigned long quirks;
-+
-+	struct delayed_work battery_work;
-+	spinlock_t lock;
-+	bool removed;
-+
-+	struct power_supply_desc battery_desc;
-+	struct power_supply *battery;
-+	uint8_t battery_capacity;
-+	bool headset_connected;
-+};
-+
- #if IS_BUILTIN(CONFIG_LEDS_CLASS) || \
-     (IS_MODULE(CONFIG_LEDS_CLASS) && IS_MODULE(CONFIG_HID_STEELSERIES))
- #define SRWS1_NUMBER_LEDS 15
-@@ -353,9 +372,208 @@ static void steelseries_srws1_remove(struct hid_device *hdev)
- }
- #endif
- 
-+#define STEELSERIES_HEADSET_BATTERY_TIMEOUT_MS	3000
-+
-+#define ARCTIS_1_BATTERY_RESPONSE_LEN		8
-+
-+static int steelseries_headset_arctis_1_fetch_battery(struct hid_device *hdev)
-+{
-+	u8 *write_buf;
-+	int ret;
-+	char battery_request[2] = { 0x06, 0x12 };
-+
-+	/* Request battery information */
-+	write_buf = kmemdup(battery_request, sizeof(battery_request), GFP_KERNEL);
-+	if (!write_buf)
-+		return -ENOMEM;
-+
-+	ret = hid_hw_raw_request(hdev, battery_request[0],
-+				 write_buf, sizeof(battery_request),
-+				 HID_OUTPUT_REPORT, HID_REQ_SET_REPORT);
-+	if (ret < sizeof(battery_request)) {
-+		hid_err(hdev, "hid_hw_raw_request() failed with %d\n", ret);
-+		ret = -ENODATA;
-+	}
-+	kfree(write_buf);
-+	return ret;
-+}
-+
-+static void steelseries_headset_fetch_battery(struct hid_device *hdev)
-+{
-+	struct steelseries_device *sd = hid_get_drvdata(hdev);
-+	int ret = 0;
-+
-+	if (sd->quirks & STEELSERIES_ARCTIS_1)
-+		ret = steelseries_headset_arctis_1_fetch_battery(hdev);
-+
-+	if (ret < 0)
-+		hid_dbg(hdev,
-+			"Battery query failed (err: %d)\n", ret);
-+}
-+
-+static void steelseries_headset_battery_timer_tick(struct work_struct *work)
-+{
-+	struct steelseries_device *sd = container_of(work,
-+		struct steelseries_device, battery_work.work);
-+	struct hid_device *hdev = sd->hdev;
-+
-+	steelseries_headset_fetch_battery(hdev);
-+}
-+
-+static int steelseries_headset_battery_get_property(struct power_supply *psy,
-+				enum power_supply_property psp,
-+				union power_supply_propval *val)
-+{
-+	struct steelseries_device *sd = power_supply_get_drvdata(psy);
-+	int ret = 0;
-+
-+	switch (psp) {
-+	case POWER_SUPPLY_PROP_PRESENT:
-+		val->intval = 1;
-+		break;
-+	case POWER_SUPPLY_PROP_STATUS:
-+		val->intval = sd->headset_connected ?
-+			POWER_SUPPLY_STATUS_DISCHARGING :
-+			POWER_SUPPLY_STATUS_UNKNOWN;
-+		break;
-+	case POWER_SUPPLY_PROP_SCOPE:
-+		val->intval = POWER_SUPPLY_SCOPE_DEVICE;
-+		break;
-+	case POWER_SUPPLY_PROP_CAPACITY:
-+		val->intval = sd->battery_capacity;
-+		break;
-+	default:
-+		ret = -EINVAL;
-+		break;
-+	}
-+	return ret;
-+}
-+
-+static void
-+steelseries_headset_set_wireless_status(struct hid_device *hdev,
-+					bool connected)
-+{
-+	struct usb_interface *intf;
-+
-+	intf = to_usb_interface(hdev->dev.parent);
-+	usb_set_wireless_status(intf, connected ?
-+				USB_WIRELESS_STATUS_CONNECTED :
-+				USB_WIRELESS_STATUS_DISCONNECTED);
-+}
-+
-+static enum power_supply_property steelseries_headset_battery_props[] = {
-+	POWER_SUPPLY_PROP_PRESENT,
-+	POWER_SUPPLY_PROP_STATUS,
-+	POWER_SUPPLY_PROP_SCOPE,
-+	POWER_SUPPLY_PROP_CAPACITY,
-+};
-+
-+static int steelseries_headset_battery_register(struct steelseries_device *sd)
-+{
-+	static atomic_t battery_no = ATOMIC_INIT(0);
-+	struct power_supply_config battery_cfg = { .drv_data = sd, };
-+	unsigned long n;
-+	int ret;
-+
-+	sd->battery_desc.type = POWER_SUPPLY_TYPE_BATTERY;
-+	sd->battery_desc.properties = steelseries_headset_battery_props;
-+	sd->battery_desc.num_properties = ARRAY_SIZE(steelseries_headset_battery_props);
-+	sd->battery_desc.get_property = steelseries_headset_battery_get_property;
-+	sd->battery_desc.use_for_apm = 0;
-+	n = atomic_inc_return(&battery_no) - 1;
-+	sd->battery_desc.name = devm_kasprintf(&sd->hdev->dev, GFP_KERNEL,
-+						    "steelseries_headset_battery_%ld", n);
-+	if (!sd->battery_desc.name)
-+		return -ENOMEM;
-+
-+	/* avoid the warning of 0% battery while waiting for the first info */
-+	steelseries_headset_set_wireless_status(sd->hdev, false);
-+	sd->battery_capacity = 100;
-+
-+	sd->battery = devm_power_supply_register(&sd->hdev->dev,
-+			&sd->battery_desc, &battery_cfg);
-+	if (IS_ERR(sd->battery)) {
-+		ret = PTR_ERR(sd->battery);
-+		hid_err(sd->hdev,
-+				"%s:power_supply_register failed with error %d\n",
-+				__func__, ret);
-+		return ret;
-+	}
-+	power_supply_powers(sd->battery, &sd->hdev->dev);
-+
-+	INIT_DELAYED_WORK(&sd->battery_work, steelseries_headset_battery_timer_tick);
-+	steelseries_headset_fetch_battery(sd->hdev);
-+
-+	return 0;
-+}
-+
-+static int steelseries_probe(struct hid_device *hdev, const struct hid_device_id *id)
-+{
-+	struct steelseries_device *sd;
-+	int ret;
-+
-+	sd = devm_kzalloc(&hdev->dev, sizeof(*sd), GFP_KERNEL);
-+	if (!sd)
-+		return -ENOMEM;
-+	hid_set_drvdata(hdev, sd);
-+	sd->hdev = hdev;
-+	sd->quirks = id->driver_data;
-+
-+	if (sd->quirks & STEELSERIES_SRWS1) {
-+#if IS_BUILTIN(CONFIG_LEDS_CLASS) || \
-+    (IS_MODULE(CONFIG_LEDS_CLASS) && IS_MODULE(CONFIG_HID_STEELSERIES))
-+		return steelseries_srws1_probe(hdev, id);
-+#else
-+		return -ENODEV;
-+#endif
-+	}
-+
-+	ret = hid_parse(hdev);
-+	if (ret)
-+		return ret;
-+
-+	ret = hid_hw_start(hdev, HID_CONNECT_DEFAULT);
-+	if (ret)
-+		return ret;
-+
-+	if (steelseries_headset_battery_register(sd) < 0)
-+		hid_err(sd->hdev,
-+			"Failed to register battery for headset\n");
-+
-+	spin_lock_init(&sd->lock);
-+
-+	return ret;
-+}
-+
-+static void steelseries_remove(struct hid_device *hdev)
-+{
-+	struct steelseries_device *sd = hid_get_drvdata(hdev);
-+	unsigned long flags;
-+
-+	if (sd->quirks & STEELSERIES_SRWS1) {
-+#if IS_BUILTIN(CONFIG_LEDS_CLASS) || \
-+    (IS_MODULE(CONFIG_LEDS_CLASS) && IS_MODULE(CONFIG_HID_STEELSERIES))
-+		steelseries_srws1_remove(hdev);
-+#endif
-+		return;
-+	}
-+
-+	spin_lock_irqsave(&sd->lock, flags);
-+	sd->removed = true;
-+	spin_unlock_irqrestore(&sd->lock, flags);
-+
-+	cancel_delayed_work_sync(&sd->battery_work);
-+
-+	hid_hw_stop(hdev);
-+}
-+
- static __u8 *steelseries_srws1_report_fixup(struct hid_device *hdev, __u8 *rdesc,
- 		unsigned int *rsize)
- {
-+	if (hdev->vendor != USB_VENDOR_ID_STEELSERIES ||
-+	    hdev->product != USB_DEVICE_ID_STEELSERIES_SRWS1)
-+		return rdesc;
-+
- 	if (*rsize >= 115 && rdesc[11] == 0x02 && rdesc[13] == 0xc8
- 			&& rdesc[29] == 0xbb && rdesc[40] == 0xc5) {
- 		hid_info(hdev, "Fixing up Steelseries SRW-S1 report descriptor\n");
-@@ -365,22 +583,81 @@ static __u8 *steelseries_srws1_report_fixup(struct hid_device *hdev, __u8 *rdesc
- 	return rdesc;
- }
- 
--static const struct hid_device_id steelseries_srws1_devices[] = {
--	{ HID_USB_DEVICE(USB_VENDOR_ID_STEELSERIES, USB_DEVICE_ID_STEELSERIES_SRWS1) },
-+static int steelseries_headset_raw_event(struct hid_device *hdev,
-+					struct hid_report *report, u8 *read_buf,
-+					int size)
-+{
-+	struct steelseries_device *sd = hid_get_drvdata(hdev);
-+	int capacity = sd->battery_capacity;
-+	bool connected = sd->headset_connected;
-+	unsigned long flags;
-+
-+	/* Not a headset */
-+	if (sd->quirks & STEELSERIES_SRWS1)
-+		return 0;
-+
-+	if (sd->quirks & STEELSERIES_ARCTIS_1) {
-+		hid_dbg(sd->hdev,
-+			"Parsing raw event for Arctis 1 headset (len: %d)\n", size);
-+		if (size < 8)
-+			return 0;
-+		if (read_buf[2] == 0x01) {
-+			connected = false;
-+			capacity = 100;
-+		} else {
-+			connected = true;
-+			capacity = read_buf[3];
-+		}
-+	}
-+
-+	if (connected != sd->headset_connected) {
-+		hid_dbg(sd->hdev,
-+			"Connected status changed from %sconnected to %sconnected\n",
-+			sd->headset_connected ? "" : "not ",
-+			connected ? "" : "not ");
-+		sd->headset_connected = connected;
-+		steelseries_headset_set_wireless_status(hdev, connected);
-+	}
-+
-+	if (capacity != sd->battery_capacity) {
-+		hid_dbg(sd->hdev,
-+			"Battery capacity changed from %d%% to %d%%\n",
-+			sd->battery_capacity, capacity);
-+		sd->battery_capacity = capacity;
-+		power_supply_changed(sd->battery);
-+	}
-+
-+	spin_lock_irqsave(&sd->lock, flags);
-+	if (!sd->removed)
-+		schedule_delayed_work(&sd->battery_work,
-+				msecs_to_jiffies(STEELSERIES_HEADSET_BATTERY_TIMEOUT_MS));
-+	spin_unlock_irqrestore(&sd->lock, flags);
-+
-+	return 0;
-+}
-+
-+static const struct hid_device_id steelseries_devices[] = {
-+	{ HID_USB_DEVICE(USB_VENDOR_ID_STEELSERIES, USB_DEVICE_ID_STEELSERIES_SRWS1),
-+	  .driver_data = STEELSERIES_SRWS1 },
-+
-+	{ /* SteelSeries Arctis 1 Wireless for XBox */
-+	  HID_USB_DEVICE(USB_VENDOR_ID_STEELSERIES, 0x12b6),
-+	.driver_data = STEELSERIES_ARCTIS_1 },
-+
- 	{ }
- };
--MODULE_DEVICE_TABLE(hid, steelseries_srws1_devices);
+> Nevertheless: thx for your report your help through this thread.
+>
+> [1] some points on the following page kinda explain this
+> https://linux-regtracking.leemhuis.info/post/frequent-reasons-why-linux-k=
+ernel-bug-reports-are-ignored/
+>
+> Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+> --
+> Everything you wanna know about Linux kernel regression tracking:
+> https://linux-regtracking.leemhuis.info/about/#tldr
+> If I did something stupid, please tell me, as explained on that page.
+>
+> #regzbot inconclusive: reporting deadlock (see thread for details)
+>
+>
+>
+> >> Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' ha=
+t)
+> >> --
+> >> Everything you wanna know about Linux kernel regression tracking:
+> >> https://linux-regtracking.leemhuis.info/about/#tldr
+> >> If I did something stupid, please tell me, as explained on that page.
+> >>
+> >> #regzbot backburner: slow progress, likely just affects one machine
+> >> #regzbot poke
+> >>
+> >>
+> >> On 02.06.23 02:57, Limonciello, Mario wrote:
+> >>> [AMD Official Use Only - General]
+> >>>
+> >>>> -----Original Message-----
+> >>>> From: Nick Hastings <nicholaschastings@gmail.com>
+> >>>> Sent: Thursday, June 1, 2023 7:02 PM
+> >>>> To: Karol Herbst <kherbst@redhat.com>
+> >>>> Cc: Limonciello, Mario <Mario.Limonciello@amd.com>; Lyude Paul
+> >>>> <lyude@redhat.com>; Lukas Wunner <lukas@wunner.de>; Salvatore
+> >>>> Bonaccorso <carnil@debian.org>; 1036530@bugs.debian.org; Rafael J.
+> >>>> Wysocki <rafael@kernel.org>; Len Brown <lenb@kernel.org>; linux-
+> >>>> acpi@vger.kernel.org; linux-kernel@vger.kernel.org;
+> >>>> regressions@lists.linux.dev
+> >>>> Subject: Re: Regression from "ACPI: OSI: Remove Linux-Dell-Video _OS=
+I
+> >>>> string"? (was: Re: Bug#1036530: linux-signed-amd64: Hard lock up of =
+system)
+> >>>>
+> >>>> Hi,
+> >>>>
+> >>>> * Karol Herbst <kherbst@redhat.com> [230602 03:10]:
+> >>>>> On Thu, Jun 1, 2023 at 7:21=E2=80=AFPM Limonciello, Mario
+> >>>>> <Mario.Limonciello@amd.com> wrote:
+> >>>>>>> -----Original Message-----
+> >>>>>>> From: Karol Herbst <kherbst@redhat.com>
+> >>>>>>> Sent: Thursday, June 1, 2023 12:19 PM
+> >>>>>>> To: Limonciello, Mario <Mario.Limonciello@amd.com>
+> >>>>>>> Cc: Nick Hastings <nicholaschastings@gmail.com>; Lyude Paul
+> >>>>>>> <lyude@redhat.com>; Lukas Wunner <lukas@wunner.de>; Salvatore
+> >>>>>>> Bonaccorso <carnil@debian.org>; 1036530@bugs.debian.org; Rafael J=
+.
+> >>>>>>> Wysocki <rafael@kernel.org>; Len Brown <lenb@kernel.org>; linux-
+> >>>>>>> acpi@vger.kernel.org; linux-kernel@vger.kernel.org;
+> >>>>>>> regressions@lists.linux.dev
+> >>>>>>> Subject: Re: Regression from "ACPI: OSI: Remove Linux-Dell-Video =
+_OSI
+> >>>>>>> string"? (was: Re: Bug#1036530: linux-signed-amd64: Hard lock up =
+of
+> >>>> system)
+> >>>>>>>
+> >>>>>>> On Thu, Jun 1, 2023 at 6:54=E2=80=AFPM Limonciello, Mario
+> >>>>>>> <Mario.Limonciello@amd.com> wrote:
+> >>>>>>>>
+> >>>>>>>> [AMD Official Use Only - General]
+> >>>>>>>>
+> >>>>>>>>> -----Original Message-----
+> >>>>>>>>> From: Karol Herbst <kherbst@redhat.com>
+> >>>>>>>>> Sent: Thursday, June 1, 2023 11:33 AM
+> >>>>>>>>> To: Limonciello, Mario <Mario.Limonciello@amd.com>
+> >>>>>>>>> Cc: Nick Hastings <nicholaschastings@gmail.com>; Lyude Paul
+> >>>>>>>>> <lyude@redhat.com>; Lukas Wunner <lukas@wunner.de>; Salvatore
+> >>>>>>>>> Bonaccorso <carnil@debian.org>; 1036530@bugs.debian.org; Rafael
+> >>>> J.
+> >>>>>>>>> Wysocki <rafael@kernel.org>; Len Brown <lenb@kernel.org>; linux=
 -
--static struct hid_driver steelseries_srws1_driver = {
--	.name = "steelseries_srws1",
--	.id_table = steelseries_srws1_devices,
--#if IS_BUILTIN(CONFIG_LEDS_CLASS) || \
--    (IS_MODULE(CONFIG_LEDS_CLASS) && IS_MODULE(CONFIG_HID_STEELSERIES))
--	.probe = steelseries_srws1_probe,
--	.remove = steelseries_srws1_remove,
--#endif
--	.report_fixup = steelseries_srws1_report_fixup
-+MODULE_DEVICE_TABLE(hid, steelseries_devices);
-+
-+static struct hid_driver steelseries_driver = {
-+	.name = "steelseries",
-+	.id_table = steelseries_devices,
-+	.probe = steelseries_probe,
-+	.remove = steelseries_remove,
-+	.report_fixup = steelseries_srws1_report_fixup,
-+	.raw_event = steelseries_headset_raw_event,
- };
- 
--module_hid_driver(steelseries_srws1_driver);
-+module_hid_driver(steelseries_driver);
- MODULE_LICENSE("GPL");
-+MODULE_AUTHOR("Bastien Nocera <hadess@hadess.net>");
-+MODULE_AUTHOR("Simon Wood <simon@mungewell.org>");
--- 
-2.41.0
+> >>>>>>>>> acpi@vger.kernel.org; linux-kernel@vger.kernel.org;
+> >>>>>>>>> regressions@lists.linux.dev
+> >>>>>>>>> Subject: Re: Regression from "ACPI: OSI: Remove Linux-Dell-Vide=
+o
+> >>>> _OSI
+> >>>>>>>>> string"? (was: Re: Bug#1036530: linux-signed-amd64: Hard lock u=
+p of
+> >>>>>>> system)
+> >>>>>>>>>
+> >>>>>>>>> On Thu, Jun 1, 2023 at 6:18=E2=80=AFPM Limonciello, Mario
+> >>>>>>>>>>
+> >>>>>>>>>> Lyude, Lukas, Karol
+> >>>>>>>>>>
+> >>>>>>>>>> This thread is in relation to this commit:
+> >>>>>>>>>>
+> >>>>>>>>>> 24867516f06d ("ACPI: OSI: Remove Linux-Dell-Video _OSI string"=
+)
+> >>>>>>>>>>
+> >>>>>>>>>> Nick has found that runtime PM is *not* working for nouveau.
+> >>>>>>>>>>
+> >>>>>>>>>
+> >>>>>>>>> keep in mind we have a list of PCIe controllers where we apply =
+a
+> >>>>>>>>> workaround:
+> >>>>>>>>>
+> >>>>>>>
+> >>>> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/t=
+ree/drivers
+> >>>>>>>>> /gpu/drm/nouveau/nouveau_drm.c?h=3Dv6.4-rc4#n682
+> >>>>>>>>>
+> >>>>>>>>> And I suspect there might be one or two more IDs we'll have to =
+add
+> >>>>>>>>> there. Do we have any logs?
+> >>>>>>>>
+> >>>>>>>> There's some archived onto the distro bug.  Search this page for
+> >>>>>>> "journalctl.log.gz"
+> >>>>>>>> https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=3D1036530
+> >>>>>>>>
+> >>>>>>>
+> >>>>>>> interesting.. It seems to be the same controller used here. I won=
+der
+> >>>>>>> if the pci topology is different or if the workaround is applied =
+at
+> >>>>>>> all.
+> >>>>>>
+> >>>>>> I didn't see the message in the log about the workaround being app=
+lied
+> >>>>>> in that log, so I guess PCI topology difference is a likely suspec=
+t.
+> >>>>>>
+> >>>>>
+> >>>>> yeah, but I also couldn't see a log with the usual nouveau messages=
+,
+> >>>>> so it's kinda weird.
+> >>>>>
+> >>>>> Anyway, the output of `lspci -tvnn` would help
+> >>>>
+> >>>> % lspci -tvnn
+> >>>> -[0000:00]-+-00.0  Intel Corporation Device [8086:3e20]
+> >>>>            +-01.0-[01]----00.0  NVIDIA Corporation TU117M [GeForce G=
+TX 1650
+> >>>> Mobile / Max-Q] [10de:1f91]
+> >>>
+> >>> So the bridge it's connected to is the same that the quirk *should ha=
+ve been* triggering.
+> >>>
+> >>> May 29 15:02:42 xps kernel: pci 0000:00:01.0: [8086:1901] type 01 cla=
+ss 0x060400
+> >>>
+> >>> Since the quirk isn't working and this is still a problem in 6.4-rc4 =
+I suggest opening a
+> >>> Nouveau drm bug to figure out why.
+> >>>
+> >>>>            +-02.0  Intel Corporation CoffeeLake-H GT2 [UHD Graphics =
+630]
+> >>>> [8086:3e9b]
+> >>>>            +-04.0  Intel Corporation Xeon E3-1200 v5/E3-1500 v5/6th =
+Gen Core
+> >>>> Processor Thermal Subsystem [8086:1903]
+> >>>>            +-08.0  Intel Corporation Xeon E3-1200 v5/v6 / E3-1500 v5=
+ /
+> >>>> 6th/7th/8th Gen Core Processor Gaussian Mixture Model [8086:1911]
+> >>>>            +-12.0  Intel Corporation Cannon Lake PCH Thermal Control=
+ler
+> >>>> [8086:a379]
+> >>>>            +-14.0  Intel Corporation Cannon Lake PCH USB 3.1 xHCI Ho=
+st Controller
+> >>>> [8086:a36d]
+> >>>>            +-14.2  Intel Corporation Cannon Lake PCH Shared SRAM [80=
+86:a36f]
+> >>>>            +-15.0  Intel Corporation Cannon Lake PCH Serial IO I2C C=
+ontroller #0
+> >>>> [8086:a368]
+> >>>>            +-15.1  Intel Corporation Cannon Lake PCH Serial IO I2C C=
+ontroller #1
+> >>>> [8086:a369]
+> >>>>            +-16.0  Intel Corporation Cannon Lake PCH HECI Controller=
+ [8086:a360]
+> >>>>            +-17.0  Intel Corporation Cannon Lake Mobile PCH SATA AHC=
+I Controller
+> >>>> [8086:a353]
+> >>>>            +-1b.0-[02-3a]----00.0-[03-3a]--+-00.0-[04]----00.0  Inte=
+l Corporation
+> >>>> JHL6340 Thunderbolt 3 NHI (C step) [Alpine Ridge 2C 2016] [8086:15d9=
+]
+> >>>>            |                               +-01.0-[05-39]--
+> >>>>            |                               \-02.0-[3a]----00.0  Inte=
+l Corporation JHL6340
+> >>>> Thunderbolt 3 USB 3.1 Controller (C step) [Alpine Ridge 2C 2016]
+> >>>> [8086:15db]
+> >>>>            +-1c.0-[3b]----00.0  Intel Corporation Wi-Fi 6 AX200 [808=
+6:2723]
+> >>>>            +-1c.4-[3c]----00.0  Realtek Semiconductor Co., Ltd. RTS5=
+25A PCI
+> >>>> Express Card Reader [10ec:525a]
+> >>>>            +-1d.0-[3d]----00.0  Samsung Electronics Co Ltd NVMe SSD =
+Controller
+> >>>> SM981/PM981/PM983 [144d:a808]
+> >>>>            +-1f.0  Intel Corporation Cannon Lake LPC Controller [808=
+6:a30e]
+> >>>>            +-1f.3  Intel Corporation Cannon Lake PCH cAVS [8086:a348=
+]
+> >>>>            +-1f.4  Intel Corporation Cannon Lake PCH SMBus Controlle=
+r
+> >>>> [8086:a323]
+> >>>>            \-1f.5  Intel Corporation Cannon Lake PCH SPI Controller
+> >>>>            [8086:a324]
+> >>>>
+> >>>>
+> >>>> Regards,
+> >>>>
+> >>>> Nick.
+> >>>
+> >
+> >
+> >
+>
 
