@@ -2,197 +2,223 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB5B0743ACF
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 13:27:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B0F4743AD6
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 13:29:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232234AbjF3L05 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 07:26:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36212 "EHLO
+        id S232487AbjF3L3n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Jun 2023 07:29:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231967AbjF3L0x (ORCPT
+        with ESMTP id S231778AbjF3L3j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 07:26:53 -0400
-Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EC361B1
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 04:26:51 -0700 (PDT)
-Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-5704fce0f23so18356007b3.3
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 04:26:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1688124410; x=1690716410;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ZicOvf9bDN4v7xxXHEcxX/D7CBL3Gv0y/6DJ76/RtpU=;
-        b=nr+0qeBnsO0LpFZUv3yLUD2H793smM2ShCQmOJ8jSQ5ovo+SrbqQCuOFvWQc6eC/Tg
-         mfdwp6h8mPk+Suf838p2/LVSoxOQ+i+dglfsAgJ/vTHH1x9fVHIyDkLX1xTgGCoueo5A
-         JJK7t9MhytFIuMmIPJTrxWl/fcevbd2NhGlbIpSveCm9ZaZnu6cXFCmfC0iemSFsG0SS
-         4D7LpmmjslV6bPq82EAx5tCRCm1EDPGgA9OQr6opIRCq6YW3EMfRwz8AMmf8IyS5gbK9
-         IRPpFpfySROLopvKjsda5hzU9kHDl/ZJ4hXBDJR7gr948YnNxqYjA96VlBlHXwM5Unac
-         KE8Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688124410; x=1690716410;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ZicOvf9bDN4v7xxXHEcxX/D7CBL3Gv0y/6DJ76/RtpU=;
-        b=H9sfEwCVt6LRKtw3s4LaekRQOGNTRbVE5n2E8srBx6+4P7OY+wblkc8Ovb4W+2PauB
-         aUp8BdGyGNTDA5m79JRB90UUH3xLEvtYlRagQoohpCIo09vfRs9Wcl7z2ky9134jWWy5
-         UhOGfkQDJxcysBzy7vqRORQLQbN3q/5DbveG0oCM1NxLxElWehGERVhuGm2mm3epZ6dh
-         ZdLa1MenPb9jpLbNrEiOvk/qLq3RsmqemeUq5BwOdMKUe+yQ7yC8NS71uFXOxtJNGnI9
-         bywKeWLx2orohAWrp39rU45voGNYvjf3x47x+mO3mrDANSefInwhkWJdFxu4vllqNG+D
-         Bd/g==
-X-Gm-Message-State: ABy/qLaNq6wmrKhgtPNTQ4HLUG4dudiy0BhfKYLXjwoRX9SOrCCAWif3
-        UluZkC8oQnW6W+o90O+9jDClH0wiJLXjFi6HP+G/uBvqJvlEX08NkP8=
-X-Google-Smtp-Source: APBJJlGWl+Zz2b36QIag6H3aK/0BNoriFADaghtw2KYGG+i6kE/6uWTfVRFY1+G9TpLfkHrhaUNTQRHOVWpf337++e4=
-X-Received: by 2002:a81:6783:0:b0:577:617c:8cd with SMTP id
- b125-20020a816783000000b00577617c08cdmr507282ywc.35.1688124410564; Fri, 30
- Jun 2023 04:26:50 -0700 (PDT)
+        Fri, 30 Jun 2023 07:29:39 -0400
+Received: from out30-101.freemail.mail.aliyun.com (out30-101.freemail.mail.aliyun.com [115.124.30.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38EFFC0;
+        Fri, 30 Jun 2023 04:29:37 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R271e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046056;MF=rongwei.wang@linux.alibaba.com;NM=1;PH=DS;RN=4;SR=0;TI=SMTPD_---0VmIQKDt_1688124573;
+Received: from 30.240.105.188(mailfrom:rongwei.wang@linux.alibaba.com fp:SMTPD_---0VmIQKDt_1688124573)
+          by smtp.aliyun-inc.com;
+          Fri, 30 Jun 2023 19:29:34 +0800
+Message-ID: <e43c47c9-2bf7-b34d-0d30-83902543ae32@linux.alibaba.com>
+Date:   Fri, 30 Jun 2023 19:29:31 +0800
 MIME-Version: 1.0
-References: <20230329202148.71107-1-dennis@kernel.org> <ZCTOMVjW+pnZVGsQ@snowbird>
- <CAMuHMdVK2zPnyB9s0uYwoKj0xspa0CRzqPjhrj-YFqVNdXxEkg@mail.gmail.com>
-In-Reply-To: <CAMuHMdVK2zPnyB9s0uYwoKj0xspa0CRzqPjhrj-YFqVNdXxEkg@mail.gmail.com>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Fri, 30 Jun 2023 13:26:14 +0200
-Message-ID: <CAPDyKFqtgCK5Wb_fZ9+VVK1F-LWYL+htMvQ9JPpp0zPjzBZ9gw@mail.gmail.com>
-Subject: Re: [PATCH v2] mmc: inline the first mmc_scan() on mmc_start_host()
-To:     Dennis Zhou <dennis@kernel.org>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Linux MMC List <linux-mmc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.12.0
+Subject: Re: [PATCH RFC v2 0/4] Add support for sharing page tables across
+ processes (Previously mshare)
+Content-Language: en-US
+To:     Khalid Aziz <khalid.aziz@oracle.com>
+Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org
+References: <cover.1682453344.git.khalid.aziz@oracle.com>
+From:   Rongwei Wang <rongwei.wang@linux.alibaba.com>
+In-Reply-To: <cover.1682453344.git.khalid.aziz@oracle.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-10.0 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 27 Jun 2023 at 19:20, Geert Uytterhoeven <geert@linux-m68k.org> wro=
-te:
->
-> Hi Dennis,
->
-> On Thu, Mar 30, 2023 at 1:48=E2=80=AFAM Dennis Zhou <dennis@kernel.org> w=
-rote:
-> > When using dm-verity with a data partition on an emmc device, dm-verity
-> > races with the discovery of attached emmc devices. This is because mmc'=
-s
-> > probing code sets up the host data structure then a work item is
-> > scheduled to do discovery afterwards. To prevent this race on init,
-> > let's inline the first call to detection, __mm_scan(), and let
-> > subsequent detect calls be handled via the workqueue.
-> >
-> > Signed-off-by: Dennis Zhou <dennis@kernel.org>
->
-> Thanks for your patch, which is now commit 2cc83bf7d41113d9 ("mmc:
-> core: Allow mmc_start_host() synchronously detect a card") in
-> linux-next/master mmc/next next-20230614 next-20230615 next-20230616
->
-> I have bisected the following failure on Renesas Salvator-XS with R-Car H=
-3
-> ES2.0 to the above commit:
->
->     renesas_sdhi_internal_dmac ee140000.mmc: timeout waiting for
-> hardware interrupt (CMD0)
->     renesas_sdhi_internal_dmac ee140000.mmc: timeout waiting for
-> hardware interrupt (CMD1)
->     renesas_sdhi_internal_dmac ee140000.mmc: timeout waiting for
-> hardware interrupt (CMD0)
->     renesas_sdhi_internal_dmac ee140000.mmc: timeout waiting for
-> hardware interrupt (CMD1)
->     mmc0: Failed to initialize a non-removable card
+Hi Khalid
 
-Thanks for reporting!
+I see this patch has send out in April, and wanna to ask about the 
+status of this RFC now (IMHO, it seems that the code has some places to 
+fix/do). This feature is useful to save much memory on pgtables, so we 
+also want to use this optimization in our databases if upstream accept that.
 
-After I had a closer look, I realize that all the renesas/tmio drivers
-are suffering from the similar problem. A host driver must not call
-mmc_add_host() before it's ready to serve requests.
+BTW, in the past few weeks, I made some adjustments to simplify and meet 
+with our databases base on your code, e.g. multi-vmas share same shadow 
+mm, madvise, and memory compaction. if you are interested, I can provide 
+a detailed codes.
 
-Things like initializing an irq-handler must be done before
-mmc_add_host() is called, which is not the case for renesas/tmio. In
-fact, there seems to be a few other host drivers that have the similar
-pattern in their probe routines.
 
-Note that, even if the offending commit below triggers this problem
-100% of the cases (as the probe path has now becomes synchronous),
-there was a potential risk even before. Previously, mmc_add_host()
-ended up punting a work - and if that work ended up sending a request
-to the host driver, *before* the irq-handler would be ready, we would
-hit the similar problem. I bet adding an msleep(1000) immediately
-after mmc_add_host() in tmio_mmc_host_probe(), would then trigger this
-problem too. :-)
+Thanks,
 
-That said, I am going to revert the offending commit to fix these
-problems, for now. Then I will try to help out and fixup the relevant
-host drivers  - and when that is done, we can give this whole thing a
-new try.
+-wrw
 
-Any objections or other suggestions to this?
-
-Kind regards
-Uffe
-
+On 2023/4/27 00:49, Khalid Aziz wrote:
+> Memory pages shared between processes require a page table entry
+> (PTE) for each process. Each of these PTE consumes some of the
+> memory and as long as number of mappings being maintained is small
+> enough, this space consumed by page tables is not objectionable.
+> When very few memory pages are shared between processes, the number
+> of page table entries (PTEs) to maintain is mostly constrained by
+> the number of pages of memory on the system.  As the number of
+> shared pages and the number of times pages are shared goes up,
+> amount of memory consumed by page tables starts to become
+> significant. This issue does not apply to threads. Any number of
+> threads can share the same pages inside a process while sharing the
+> same PTEs. Extending this same model to sharing pages across
+> processes can eliminate this issue for sharing across processes as
+> well.
 >
-> Reverting the commit fixes the issue for me.
+> Some of the field deployments commonly see memory pages shared
+> across 1000s of processes. On x86_64, each page requires a PTE that
+> is only 8 bytes long which is very small compared to the 4K page
+> size. When 2000 processes map the same page in their address space,
+> each one of them requires 8 bytes for its PTE and together that adds
+> up to 8K of memory just to hold the PTEs for one 4K page. On a
+> database server with 300GB SGA, a system crash was seen with
+> out-of-memory condition when 1500+ clients tried to share this SGA
+> even though the system had 512GB of memory. On this server, in the
+> worst case scenario of all 1500 processes mapping every page from
+> SGA would have required 878GB+ for just the PTEs. If these PTEs
+> could be shared, amount of memory saved is very significant.
 >
-> > --- a/drivers/mmc/core/core.c
-> > +++ b/drivers/mmc/core/core.c
-> > @@ -2185,10 +2185,8 @@ int mmc_card_alternative_gpt_sector(struct mmc_c=
-ard *card, sector_t *gpt_sector)
-> >  }
-> >  EXPORT_SYMBOL(mmc_card_alternative_gpt_sector);
-> >
-> > -void mmc_rescan(struct work_struct *work)
-> > +static void __mmc_rescan(struct mmc_host *host)
-> >  {
-> > -       struct mmc_host *host =3D
-> > -               container_of(work, struct mmc_host, detect.work);
-> >         int i;
-> >
-> >         if (host->rescan_disable)
-> > @@ -2249,6 +2247,14 @@ void mmc_rescan(struct work_struct *work)
-> >                 mmc_schedule_delayed_work(&host->detect, HZ);
-> >  }
-> >
-> > +void mmc_rescan(struct work_struct *work)
-> > +{
-> > +       struct mmc_host *host =3D
-> > +               container_of(work, struct mmc_host, detect.work);
-> > +
-> > +       __mmc_rescan(host);
-> > +}
-> > +
-> >  void mmc_start_host(struct mmc_host *host)
-> >  {
-> >         host->f_init =3D max(min(freqs[0], host->f_max), host->f_min);
-> > @@ -2261,7 +2267,8 @@ void mmc_start_host(struct mmc_host *host)
-> >         }
-> >
-> >         mmc_gpiod_request_cd_irq(host);
-> > -       _mmc_detect_change(host, 0, false);
-> > +       host->detect_change =3D 1;
-> > +       __mmc_rescan(host);
-> >  }
-> >
-> >  void __mmc_stop_host(struct mmc_host *host)
+> This patch series adds a new flag to mmap() call - MAP_SHARED_PT.
+> This flag can be specified along with MAP_SHARED by a process to
+> hint to kernel that it wishes to share page table entries for this
+> file mapping mmap region with other processes. Any other process
+> that mmaps the same file with MAP_SHARED_PT flag can then share the
+> same page table entries. Besides specifying MAP_SHARED_PT flag, the
+> processes must map the files at a PMD aligned address with a size
+> that is a multiple of PMD size and at the same virtual addresses.
+> This last requirement of same virtual addresses can possibly be
+> relaxed if that is the consensus.
 >
-> Gr{oetje,eeting}s,
+> When mmap() is called with MAP_SHARED_PT flag, a new host mm struct
+> is created to hold the shared page tables. Host mm struct is not
+> attached to a process. Start and size of host mm are set to the
+> start and size of the mmap region and a VMA covering this range is
+> also added to host mm struct. Existing page table entries from the
+> process that creates the mapping are copied over to the host mm
+> struct. All processes mapping this shared region are considered
+> guest processes. When a guest process mmap's the shared region, a vm
+> flag VM_SHARED_PT is added to the VMAs in guest process. Upon a page
+> fault, VMA is checked for the presence of VM_SHARED_PT flag. If the
+> flag is found, its corresponding PMD is updated with the PMD from
+> host mm struct so the PMD will point to the page tables in host mm
+> struct. vm_mm pointer of the VMA is also updated to point to host mm
+> struct for the duration of fault handling to ensure fault handling
+> happens in the context of host mm struct. When a new PTE is
+> created, it is created in the host mm struct page tables and the PMD
+> in guest mm points to the same PTEs.
 >
->                         Geert
+> This is a basic working implementation. It will need to go through
+> more testing and refinements. Some notes and questions:
 >
-> --
-> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m6=
-8k.org
+> - PMD size alignment and size requirement is currently hard coded
+>    in. Is there a need or desire to make this more flexible and work
+>    with other alignments/sizes? PMD size allows for adapting this
+>    infrastructure to form the basis for hugetlbfs page table sharing
+>    as well. More work will be needed to make that happen.
 >
-> In personal conversations with technical people, I call myself a hacker. =
-But
-> when I'm talking to journalists I just say "programmer" or something like=
- that.
->                                 -- Linus Torvalds
+> - Is there a reason to allow a userspace app to query this size and
+>    alignment requirement for MAP_SHARED_PT in some way?
+>
+> - Shared PTEs means mprotect() call made by one process affects all
+>    processes sharing the same mapping and that behavior will need to
+>    be documented clearly. Effect of mprotect call being different for
+>    processes using shared page tables is the primary reason to
+>    require an explicit opt-in from userspace processes to share page
+>    tables. With a transparent sharing derived from MAP_SHARED alone,
+>    changed effect of mprotect can break significant number of
+>    userspace apps. One could work around that by unsharing whenever
+>    mprotect changes modes on shared mapping but that introduces
+>    complexity and the capability to execute a single mprotect to
+>    change modes across 1000's of processes sharing a mapped database
+>    is a feature explicitly asked for by database folks. This
+>    capability has significant performance advantage when compared to
+>    mechanism of sending messages to every process using shared
+>    mapping to call mprotect and change modes in each process, or
+>    using traps on permissions mismatch in each process.
+>
+> - This implementation does not allow unmapping page table shared
+>    mappings partially. Should that be supported in future?
+>
+> Some concerns in this RFC:
+>
+> - When page tables for a process are freed upon process exit,
+>    pmd_free_tlb() gets called at one point to free all PMDs allocated
+>    by the process. For a shared page table, shared PMDs can not be
+>    released when a guest process exits. These shared PMDs are
+>    released when host mm struct is released upon end of last
+>    reference to page table shared region hosted by this mm. For now
+>    to stop PMDs being released, this RFC introduces following change
+>    in mm/memory.c which works but does not feel like the right
+>    approach. Any suggestions for a better long term approach will be
+>    very appreciated:
+>
+> @@ -210,13 +221,19 @@ static inline void free_pmd_range(struct mmu_gather *tlb,
+> pud_t *pud,
+>
+>          pmd = pmd_offset(pud, start);
+>          pud_clear(pud);
+> -       pmd_free_tlb(tlb, pmd, start);
+> -       mm_dec_nr_pmds(tlb->mm);
+> +       if (shared_pte) {
+> +               tlb_flush_pud_range(tlb, start, PAGE_SIZE);
+> +               tlb->freed_tables = 1;
+> +       } else {
+> +               pmd_free_tlb(tlb, pmd, start);
+> +               mm_dec_nr_pmds(tlb->mm);
+> +       }
+>   }
+>
+>   static inline void free_pud_range(struct mmu_gather *tlb, p4d_t *p4d,
+>
+> - This implementation requires an additional VM flag. Since all lower
+>    32 bits are currently in use, the new VM flag must come from upper
+>    32 bits which restricts this feature to 64-bit processors.
+>
+> - This feature is implemented for file mappings only. Is there a
+>    need to support it for anonymous memory as well?
+>
+> - Accounting for MAP_SHARED_PT mapped filepages in a process and
+>    pagetable bytes is not quite accurate yet in this RFC and will be
+>    fixed in the non-RFC version of patches.
+>
+> I appreciate any feedback on these patches and ideas for
+> improvements before moving these patches out of RFC stage.
+>
+>
+> Changes from RFC v1:
+> - Broken the patches up into smaller patches
+> - Fixed a few bugs related to freeing PTEs and PMDs incorrectly
+> - Cleaned up the code a bit
+>
+>
+> Khalid Aziz (4):
+>    mm/ptshare: Add vm flag for shared PTE
+>    mm/ptshare: Add flag MAP_SHARED_PT to mmap()
+>    mm/ptshare: Create new mm struct for page table sharing
+>    mm/ptshare: Add page fault handling for page table shared regions
+>
+>   include/linux/fs.h                     |   2 +
+>   include/linux/mm.h                     |   8 +
+>   include/trace/events/mmflags.h         |   3 +-
+>   include/uapi/asm-generic/mman-common.h |   1 +
+>   mm/Makefile                            |   2 +-
+>   mm/internal.h                          |  21 ++
+>   mm/memory.c                            | 105 ++++++++--
+>   mm/mmap.c                              |  88 +++++++++
+>   mm/ptshare.c                           | 263 +++++++++++++++++++++++++
+>   9 files changed, 476 insertions(+), 17 deletions(-)
+>   create mode 100644 mm/ptshare.c
+>
