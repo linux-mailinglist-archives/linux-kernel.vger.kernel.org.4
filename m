@@ -2,132 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6283F743DB3
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 16:41:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A4612743DB7
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 16:42:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229503AbjF3OlA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 10:41:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43698 "EHLO
+        id S232355AbjF3Omh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Jun 2023 10:42:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232701AbjF3Okt (ORCPT
+        with ESMTP id S231499AbjF3Omd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 10:40:49 -0400
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F1CB3C06
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 07:40:42 -0700 (PDT)
-Received: by mail-lf1-x12b.google.com with SMTP id 2adb3069b0e04-4f973035d60so3229284e87.3
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 07:40:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=layalina-io.20221208.gappssmtp.com; s=20221208; t=1688136040; x=1690728040;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=F4P+Rj0oUJhKXVUru8smVHTl7Xg4pceMd76M85J93j4=;
-        b=beH7I+3T7UvFuU1PqzWQYYEVZijNNbAuGfoJjqoIk2P+/04qfVXCMQdURQS3ztF2zJ
-         gUd5N0JN4XxXCr6J0hzaYBoz1krJL8RDz4oAgGfUt1OH4/CuT5BUFt9AO11gIe6vPj5r
-         V4GCZ4PZxm1G2uWHIRV93h4Z8SeBFifK1myV9FMLnsR+14Zoi0kAaZFri+aqGIwbdvBq
-         gyzjFQpSQbFHupKYx1C5+rfIb5Hf8IQnu/grB4ef976HYbbEW/kaJ+5r0W9N/xoB+Gjw
-         A6tBdDlkDkftlLcY0ut+qxrt+B30KEFk9eat8LM4IAw6sP8/q6IFCLeVP7Gx9OmPUGDh
-         kCtg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688136040; x=1690728040;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=F4P+Rj0oUJhKXVUru8smVHTl7Xg4pceMd76M85J93j4=;
-        b=j42eA/8HmofLZrA/AJ5+9f0Kft81VzGxbo1J1b7VUGswcWEdyBfceplnR5QzJoEh8N
-         Av8QzdY+TNIGhE2gP+BYDUfyx0AwQH565ALOSEUhT/UPjUiB9so189QWK6GiQd4qB716
-         Hm7CC/HlXa10+zso3AMwRo6oXav0PD+qitvSzryCL79qiN8gTdDaC6U3H1KNdNcKBUVd
-         j0ckjODC7Os1XBibKOW/VnO7m0x4vsdAYJYfKW6G770m4Ww1/O4CAQg2QhHPFmhIhieS
-         Yci9hMotEYTF+l4Es+Wm+FQ2ICidzNkXGu/XW9BFwnD1RW3WNiuwbkT3yXlriynKiFIo
-         b5AA==
-X-Gm-Message-State: ABy/qLY5TlEyR4fl0Q1Pk5LcbyZIoLq12howeKHlUEPhrUwN0DODWFYT
-        +LC5JwSq34gRxiAd0jw5khJGxw==
-X-Google-Smtp-Source: APBJJlGfiJ7vQiQkIlcZOiCOr9PTECo0JS3xzwWMnWt65YxoDvwFIHxTLjMzkzwgLxHnJJB4skMdgQ==
-X-Received: by 2002:a05:6512:3b8b:b0:4fb:774f:9a84 with SMTP id g11-20020a0565123b8b00b004fb774f9a84mr3062410lfv.13.1688136040182;
-        Fri, 30 Jun 2023 07:40:40 -0700 (PDT)
-Received: from airbuntu (host86-163-217-97.range86-163.btcentralplus.com. [86.163.217.97])
-        by smtp.gmail.com with ESMTPSA id s24-20020a7bc398000000b003fb9ebb6b88sm10815685wmj.39.2023.06.30.07.40.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 30 Jun 2023 07:40:39 -0700 (PDT)
-Date:   Fri, 30 Jun 2023 15:40:38 +0100
-From:   Qais Yousef <qyousef@layalina.io>
-To:     Xuewen Yan <xuewen.yan94@gmail.com>
-Cc:     Vincent Guittot <vincent.guittot@linaro.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Xuewen Yan <xuewen.yan@unisoc.com>, mingo@redhat.com,
-        juri.lelli@redhat.com, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, vschneid@redhat.com,
-        linux-kernel@vger.kernel.org, ke.wang@unisoc.com,
-        zhaoyang.huang@unisoc.com
-Subject: Re: [RFC PATCH] sched/fair: update the vruntime to be max vruntime
- when yield
-Message-ID: <20230630144038.v2rv7qtrxi4ujhdg@airbuntu>
-References: <20230227220735.3kaytmtt53uoegq7@airbuntu>
- <CAB8ipk--trBk-Acsjz7YDb5szPLc93ejPXVXQBJdomZO4OrpGQ@mail.gmail.com>
- <CAKfTPtBdMO6_APib1OBxW+fdAORX8vXdT-W3fWTRffa5-8bGxQ@mail.gmail.com>
- <CAB8ipk96OXJcmp_H5EcagrMUigSFdW_gd4wwGjfjBpyP6hqaTg@mail.gmail.com>
- <CAKfTPtAvuz0SEDX3izcOhZkC+pFddqrSwY+iYO2p7U6N3Z2hRA@mail.gmail.com>
- <20230228133111.6i5tlhvthnfljvmf@airbuntu>
- <CAKfTPtAsxz7s6W2peoVj+EcNVQp6bpO6qhPPTXgfJxVtXHbaKQ@mail.gmail.com>
- <CAB8ipk83Ofywn0T19dHxjJNXfKcd9DD_EopQupeepjSk-XceRQ@mail.gmail.com>
- <CAKfTPtDfSHnd7=ZG2S-x46kxw0Cc0RSXq+_B8Oe46fa3Fa75BA@mail.gmail.com>
- <CAB8ipk9uPMxwEUHkLWbKXQEO1UkwBPWbZb=NF7AE5JHnG8V6Dw@mail.gmail.com>
+        Fri, 30 Jun 2023 10:42:33 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F372EE4C;
+        Fri, 30 Jun 2023 07:41:46 -0700 (PDT)
+X-QQ-mid: bizesmtp85t1688136094t0q9sslu
+Received: from linux-lab-host.localdomain ( [119.123.131.49])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Fri, 30 Jun 2023 22:41:32 +0800 (CST)
+X-QQ-SSF: 01200000000000D0W000000A0000000
+X-QQ-FEAT: aBJFcW+uBGZl0+FHzxpPL1G5qDwO+yGHyjib98Q307+eWlL5WU1+x9mU75Kr1
+        sMdIiM9Huqr2lyYM8IA8WHq+VYOO7uD3jK1jfeKxZnDg5da6XnV7wuo8nAxrWrM+CLWgtuI
+        qaXeAdHzfVbFETS4Q330aC/iMOnLie23SQXME6TG/65gMXsRKlfEk32QxqPSvUkOOmuLXvO
+        pv9i50JcFPkOh3FsZiaUNQvlJhLFlx7kV0sne7lCYHnikgnDZMlw8FmHDCtEJ0TVXrPE0T4
+        xz3zTi0/w1pf0GqPXbtRPsA8Yhp4AVzJgjwPn6RsDj/9GQLVFQVIHfJGb3HFSeB2P26upAS
+        MrEFIf9hGjacb3Sxscj8T2y2ig9zCqLPY38z6KAM9mp4CMCaDDKqCk1Ss2nTmynHzMXTgBQ
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 17093662963563239174
+From:   Zhangjin Wu <falcon@tinylab.org>
+To:     thomas@t-8ch.de, w@1wt.eu
+Cc:     arnd@arndb.de, falcon@tinylab.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: [PATCH v3 00/14] selftests/nolibc: allow run with minimal kernel config
+Date:   Fri, 30 Jun 2023 22:41:31 +0800
+Message-Id: <cover.1688134399.git.falcon@tinylab.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAB8ipk9uPMxwEUHkLWbKXQEO1UkwBPWbZb=NF7AE5JHnG8V6Dw@mail.gmail.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NO_DNS_FOR_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrgz:qybglogicsvrgz5a-1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H4,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Xuewen
+Willy, Thomas
 
-On 03/01/23 16:20, Xuewen Yan wrote:
-> On Wed, Mar 1, 2023 at 4:09 PM Vincent Guittot
-> <vincent.guittot@linaro.org> wrote:
-> >
-> > On Wed, 1 Mar 2023 at 08:30, Xuewen Yan <xuewen.yan94@gmail.com> wrote:
-> > >
-> > > Hi Vincent
-> > >
-> > > I noticed the following patch:
-> > > https://lore.kernel.org/lkml/20230209193107.1432770-1-rkagan@amazon.de/
-> > > And I notice the V2 had merged to mainline:
-> > > https://lore.kernel.org/all/20230130122216.3555094-1-rkagan@amazon.de/T/#u
-> > >
-> > > The patch fixed the inversing of the vruntime comparison, and I see
-> > > that in my case, there also are some vruntime is inverted.
-> > > Do you think which patch will work for our scenario? I would be very
-> > > grateful if you could give us some advice.
-> > > I would try this patch in our tree.
-> >
-> > By default use the one that is merged; The difference is mainly a
-> > matter of time range. Also be aware that the case of newly migrated
-> > task is not fully covered by both patches.
-> 
-> Okay, Thank you very much!
-> 
-> >
-> > This patch fixes a problem with long sleeping entity in the presence
-> > of low weight and always running entities. This doesn't seem to be
-> > aligned with the description of your use case
-> 
-> Thanks for the clarification! We would try it first to see whether it
-> could resolve our problem.
+This is v3 to allow run with minimal kernel config, see v2 [1].
 
-Did you get a chance to see if that patch help? It'd be good to backport it to
-LTS if it does.
+Applied further suggestions from Thomas, It is based on our previous v5
+sysret helper series [2] and Thomas' chmod_net removal patchset [3].
 
+Now, a test report on arm/vexpress-a9 without procfs, shmem, tmpfs, net
+and memfd_create looks like:
 
-Thanks
+    LOG: testing report for arm/vexpress-a9:
 
---
-Qais Yousef
+    14 chmod_self                                                   [SKIPPED]
+    16 chown_self                                                   [SKIPPED]
+    40 link_cross                                                   [SKIPPED]
+    0 -fstackprotector not supported                                [SKIPPED]
+
+    139 test(s) passed, 4 skipped, 0 failed.
+    See all results in /labs/linux-lab/logging/nolibc/arm-vexpress-a9-nolibc-test.log
+
+    LOG: testing summary:
+
+         arch/board | result
+        ------------|------------
+    arm/vexpress-a9 | 139 test(s) passed, 4 skipped, 0 failed. See all results in /labs/linux-lab/logging/nolibc/arm-vexpress-a9-nolibc-test.log
+
+Changes from v2 --> v3:
+
+* Added Reviewed-by from Thomas for the whole series, Many Thanks
+
+* selftests/nolibc: stat_fault: silence NULL argument warning with glibc
+  selftests/nolibc: gettid: restore for glibc and musl
+  selftests/nolibc: add _LARGEFILE64_SOURCE for musl
+  selftests/nolibc: fix up int_fast16/32_t test cases for musl
+  selftests/nolibc: fix up kernel parameters support
+  selftests/nolibc: stat_timestamps: remove procfs dependency
+  selftests/nolibc: link_cross: use /proc/self/cmdline
+  tools/nolibc: add rmdir() support
+  selftests/nolibc: add a new rmdir() test case
+  selftests/nolibc: fix up failures when CONFIG_PROC_FS=n
+  selftests/nolibc: vfprintf: remove MEMFD_CREATE dependency
+
+    No code changes except some commit message cleanups.
+
+* selftests/nolibc: prepare /tmp for tmpfs or ramfs
+
+    As suggested by Thomas, simply calling mkdir() and mount() to
+    prepare /tmp can save a stat() call.
+
+* selftests/nolibc: chroot_exe: remove procfs dependency
+
+    As suggested by Thomas, remove the 'weird' get_tmpfile() and use
+    the '/init' for !procfs as we did for stat_timestamps.
+
+    For the worst-case scene, when '/init' is not there, add ENOENT to
+    the error check list.
+
+    Now, it is a oneline code change.
+
+* selftests/nolibc: add chmod_tmpdir test
+
+    Without get_tmpfile(), let's direct mkdir() a temp directory for
+    chmod_tmpdir test, it function as a substitute for the removed
+    chmod_net.
+
+    Now, it is a oneline code change.
+
+Best regards,
+Zhangjin
+---
+[1]: https://lore.kernel.org/lkml/cover.1688078604.git.falcon@tinylab.org/
+
+Zhangjin Wu (14):
+  selftests/nolibc: stat_fault: silence NULL argument warning with glibc
+  selftests/nolibc: gettid: restore for glibc and musl
+  selftests/nolibc: add _LARGEFILE64_SOURCE for musl
+  selftests/nolibc: fix up int_fast16/32_t test cases for musl
+  selftests/nolibc: fix up kernel parameters support
+  selftests/nolibc: stat_timestamps: remove procfs dependency
+  selftests/nolibc: chroot_exe: remove procfs dependency
+  selftests/nolibc: link_cross: use /proc/self/cmdline
+  tools/nolibc: add rmdir() support
+  selftests/nolibc: add a new rmdir() test case
+  selftests/nolibc: fix up failures when CONFIG_PROC_FS=n
+  selftests/nolibc: prepare /tmp for tmpfs or ramfs
+  selftests/nolibc: add chmod_tmpdir test
+  selftests/nolibc: vfprintf: remove MEMFD_CREATE dependency
+
+ tools/include/nolibc/sys.h                   | 22 ++++++
+ tools/testing/selftests/nolibc/nolibc-test.c | 83 +++++++++++++++-----
+ 2 files changed, 87 insertions(+), 18 deletions(-)
+
+-- 
+2.25.1
+
