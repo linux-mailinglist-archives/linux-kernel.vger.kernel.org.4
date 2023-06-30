@@ -2,293 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BFC0C7441B2
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 20:00:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0ABB57441B0
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 20:00:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232933AbjF3SAH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 14:00:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57606 "EHLO
+        id S232868AbjF3SAA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Jun 2023 14:00:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229496AbjF3SAD (ORCPT
+        with ESMTP id S229496AbjF3R76 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 14:00:03 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E46535AA;
-        Fri, 30 Jun 2023 11:00:02 -0700 (PDT)
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35UEP36x010953;
-        Fri, 30 Jun 2023 17:59:35 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=f7EqXuo9+U0LlvJWLejMJultiA8XpJiCKMpiyEuU1GU=;
- b=Fe4q+MtC7Xuw3CEy7UA1uLCMlTX1fVPPansQ8pD/uJ3j4Q0X7ZEyexp4KinwgWYCelSJ
- Uapp4eW07h9vgLNxLh/uDv7h7zsWB2rSWXgkaSMEonyR1JDqafkBRuAjc2jFW/2Q5iT7
- Mb+babbs1r58pDiTe8F7Jd9veDxTCAaW9PhWmqlkmUe1wGLsTo3v4KuL+a4wmoBbAmbd
- PTxUqlwxq+UdNGLWdgLG0yghHsx4mJxsm8GBYoSSZe6JfxrAfDrwTdr/A6JavBDlBzNB
- pNa/aLM/T3YixG37WTbtkKNcuDJiygMJok60J1q2IHoZDjyGJ3eaFo24uX9pnILqRPhZ aQ== 
-Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rhxdm8v1w-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 30 Jun 2023 17:59:34 +0000
-Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-        by NASANPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35UHxDKS021574
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 30 Jun 2023 17:59:13 GMT
-Received: from [10.71.110.193] (10.80.80.8) by nasanex01b.na.qualcomm.com
- (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Fri, 30 Jun
- 2023 10:59:12 -0700
-Message-ID: <559b81a3-c4a5-9e18-57bd-e5af74db99c8@quicinc.com>
-Date:   Fri, 30 Jun 2023 10:59:12 -0700
+        Fri, 30 Jun 2023 13:59:58 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F8F835AB;
+        Fri, 30 Jun 2023 10:59:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1688147997; x=1719683997;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=SsGHuD60K6V+2Csu940O7qwcjIx9HfXaFouXONb7hXY=;
+  b=MsJIGi3x5Fh7DSsaFiAWg8fZuB7zFPBZ20RuKGxQbzVJNLKuBNpoclbY
+   VsILDQntt7zhU4uDKk1Zdn1dlAFyxuILxGvBoDty3WQPt+es8bHZL+aTa
+   Wx4XriaA8YnV3qFCYjLi+A8QmyPt0n9aMaivUcCyZWsv3Hm/pAyO1AGNV
+   e6g1NPk7wZLtWxPpGmIBTEBFE03M2OJkEHvFp1Vk8fMg9sCUSt9Zdu8Gs
+   eC61gfyCCuJRxNOmpBiNsdMy2S1E7qSjt7TCUspv2L25fPD3YunQzdACf
+   OJV3jcvfgKTf/MZ8mzy31c0mKMD31GXW65rD1PLSpPBWhv3R5vVOWyT5n
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10757"; a="361307514"
+X-IronPort-AV: E=Sophos;i="6.01,171,1684825200"; 
+   d="scan'208";a="361307514"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jun 2023 10:59:56 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10757"; a="831030189"
+X-IronPort-AV: E=Sophos;i="6.01,171,1684825200"; 
+   d="scan'208";a="831030189"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga002.fm.intel.com with ESMTP; 30 Jun 2023 10:59:54 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1qFIPQ-001AjG-2G;
+        Fri, 30 Jun 2023 20:59:52 +0300
+Date:   Fri, 30 Jun 2023 20:59:52 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Astrid Rost <astrid.rost@axis.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh@kernel.org>,
+        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
+        Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>,
+        kernel@axis.com, linux-leds@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] led: led-class: Read max-brightness from
+ devicetree
+Message-ID: <ZJ8YGFxQCHKCCAqw@smile.fi.intel.com>
+References: <20230630092248.4146169-1-astrid.rost@axis.com>
+ <20230630092248.4146169-2-astrid.rost@axis.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH RFC v4 3/7] drm/atomic: Move framebuffer checks to helper
-Content-Language: en-US
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
-        Marijn Suijten <marijn.suijten@somainline.org>
-CC:     <quic_abhinavk@quicinc.com>, <ppaalanen@gmail.com>,
-        <contact@emersion.fr>, <laurent.pinchart@ideasonboard.com>,
-        <sebastian.wick@redhat.com>, <ville.syrjala@linux.intel.com>,
-        <dri-devel@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <freedreno@lists.freedesktop.org>,
-        <wayland-devel@lists.freedesktop.org>
-References: <20230404-solid-fill-v4-0-f4ec0caa742d@quicinc.com>
- <20230404-solid-fill-v4-3-f4ec0caa742d@quicinc.com>
- <49be4c4c-8143-a3bf-ddbd-364a2be81e4f@linaro.org>
-From:   Jessica Zhang <quic_jesszhan@quicinc.com>
-In-Reply-To: <49be4c4c-8143-a3bf-ddbd-364a2be81e4f@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: 6oKPsg-2lqq5DL34Q3IVZkKBgkG2nVMf
-X-Proofpoint-ORIG-GUID: 6oKPsg-2lqq5DL34Q3IVZkKBgkG2nVMf
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-06-30_10,2023-06-30_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- mlxlogscore=954 clxscore=1015 adultscore=0 lowpriorityscore=0 bulkscore=0
- suspectscore=0 phishscore=0 malwarescore=0 mlxscore=0 impostorscore=0
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2305260000 definitions=main-2306300156
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230630092248.4146169-2-astrid.rost@axis.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Jun 30, 2023 at 11:22:46AM +0200, Astrid Rost wrote:
+> Add max-brightness in order to reduce the current on the connected LEDs.
+> Normally, the maximum brightness is determined by the hardware, and this
+> property is not required. This property is used to set a software limit.
+> It could happen that an LED is made so bright that it gets damaged or
+> causes damage due to restrictions in a specific system, such as mounting
+> conditions. Note that led-max-microamp should be preferably used, if it
+> is supported by the controller.
 
+LGTM,
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-On 6/29/2023 5:43 PM, Dmitry Baryshkov wrote:
-> On 30/06/2023 03:25, Jessica Zhang wrote:
->> Currently framebuffer checks happen directly in
->> drm_atomic_plane_check(). Move these checks into their own helper
->> method.
->>
->> Signed-off-by: Jessica Zhang <quic_jesszhan@quicinc.com>
->> ---
->>   drivers/gpu/drm/drm_atomic.c | 130 
->> ++++++++++++++++++++++++-------------------
->>   1 file changed, 74 insertions(+), 56 deletions(-)
->>
->> diff --git a/drivers/gpu/drm/drm_atomic.c b/drivers/gpu/drm/drm_atomic.c
->> index b4c6ffc438da..404b984d2d9f 100644
->> --- a/drivers/gpu/drm/drm_atomic.c
->> +++ b/drivers/gpu/drm/drm_atomic.c
->> @@ -580,6 +580,76 @@ plane_switching_crtc(const struct drm_plane_state 
->> *old_plane_state,
->>       return true;
->>   }
->> +static int drm_atomic_check_fb(const struct drm_plane_state *state)
->> +{
->> +    struct drm_plane *plane = state->plane;
->> +    const struct drm_framebuffer *fb = state->fb;
->> +    struct drm_mode_rect *clips;
->> +
->> +    uint32_t num_clips;
->> +    unsigned int fb_width, fb_height;
->> +    int ret;
->> +
->> +    /* Check whether this plane supports the fb pixel format. */
->> +    ret = drm_plane_check_pixel_format(plane, fb->format->format,
->> +                       fb->modifier);
->> +
->> +    if (ret) {
->> +        drm_dbg_atomic(plane->dev,
->> +                   "[PLANE:%d:%s] invalid pixel format %p4cc, 
->> modifier 0x%llx\n",
->> +                   plane->base.id, plane->name,
->> +                   &fb->format->format, fb->modifier);
->> +        return ret;
->> +    }
->> +
->> +    fb_width = fb->width << 16;
->> +    fb_height = fb->height << 16;
->> +
->> +    /* Make sure source coordinates are inside the fb. */
->> +    if (state->src_w > fb_width ||
->> +        state->src_x > fb_width - state->src_w ||
->> +        state->src_h > fb_height ||
->> +        state->src_y > fb_height - state->src_h) {
->> +        drm_dbg_atomic(plane->dev,
->> +                   "[PLANE:%d:%s] invalid source coordinates "
->> +                   "%u.%06ux%u.%06u+%u.%06u+%u.%06u (fb %ux%u)\n",
->> +                   plane->base.id, plane->name,
->> +                   state->src_w >> 16,
->> +                   ((state->src_w & 0xffff) * 15625) >> 10,
->> +                   state->src_h >> 16,
->> +                   ((state->src_h & 0xffff) * 15625) >> 10,
->> +                   state->src_x >> 16,
->> +                   ((state->src_x & 0xffff) * 15625) >> 10,
->> +                   state->src_y >> 16,
->> +                   ((state->src_y & 0xffff) * 15625) >> 10,
->> +                   fb->width, fb->height);
->> +        return -ENOSPC;
->> +    }
->> +
->> +    clips = __drm_plane_get_damage_clips(state);
->> +    num_clips = drm_plane_get_damage_clips_count(state);
->> +
->> +    /* Make sure damage clips are valid and inside the fb. */
->> +    while (num_clips > 0) {
->> +        if (clips->x1 >= clips->x2 ||
->> +            clips->y1 >= clips->y2 ||
->> +            clips->x1 < 0 ||
->> +            clips->y1 < 0 ||
->> +            clips->x2 > fb_width ||
->> +            clips->y2 > fb_height) {
->> +            drm_dbg_atomic(plane->dev,
->> +                       "[PLANE:%d:%s] invalid damage clip %d %d %d 
->> %d\n",
->> +                       plane->base.id, plane->name, clips->x1,
->> +                       clips->y1, clips->x2, clips->y2);
->> +            return -EINVAL;
->> +        }
->> +        clips++;
->> +        num_clips--;
->> +    }
->> +
->> +    return 0;
->> +}
->> +
->>   /**
->>    * drm_atomic_plane_check - check plane state
->>    * @old_plane_state: old plane state to check
->> @@ -596,9 +666,6 @@ static int drm_atomic_plane_check(const struct 
->> drm_plane_state *old_plane_state,
->>       struct drm_plane *plane = new_plane_state->plane;
->>       struct drm_crtc *crtc = new_plane_state->crtc;
->>       const struct drm_framebuffer *fb = new_plane_state->fb;
->> -    unsigned int fb_width, fb_height;
->> -    struct drm_mode_rect *clips;
->> -    uint32_t num_clips;
->>       int ret;
->>       /* either *both* CRTC and FB must be set, or neither */
->> @@ -625,17 +692,6 @@ static int drm_atomic_plane_check(const struct 
->> drm_plane_state *old_plane_state,
->>           return -EINVAL;
->>       }
->> -    /* Check whether this plane supports the fb pixel format. */
->> -    ret = drm_plane_check_pixel_format(plane, fb->format->format,
->> -                       fb->modifier);
->> -    if (ret) {
->> -        drm_dbg_atomic(plane->dev,
->> -                   "[PLANE:%d:%s] invalid pixel format %p4cc, 
->> modifier 0x%llx\n",
->> -                   plane->base.id, plane->name,
->> -                   &fb->format->format, fb->modifier);
->> -        return ret;
->> -    }
->> -
->>       /* Give drivers some help against integer overflows */
->>       if (new_plane_state->crtc_w > INT_MAX ||
->>           new_plane_state->crtc_x > INT_MAX - (int32_t) 
->> new_plane_state->crtc_w ||
->> @@ -649,49 +705,11 @@ static int drm_atomic_plane_check(const struct 
->> drm_plane_state *old_plane_state,
->>           return -ERANGE;
->>       }
->> -    fb_width = fb->width << 16;
->> -    fb_height = fb->height << 16;
->> -    /* Make sure source coordinates are inside the fb. */
->> -    if (new_plane_state->src_w > fb_width ||
->> -        new_plane_state->src_x > fb_width - new_plane_state->src_w ||
->> -        new_plane_state->src_h > fb_height ||
->> -        new_plane_state->src_y > fb_height - new_plane_state->src_h) {
->> -        drm_dbg_atomic(plane->dev,
->> -                   "[PLANE:%d:%s] invalid source coordinates "
->> -                   "%u.%06ux%u.%06u+%u.%06u+%u.%06u (fb %ux%u)\n",
->> -                   plane->base.id, plane->name,
->> -                   new_plane_state->src_w >> 16,
->> -                   ((new_plane_state->src_w & 0xffff) * 15625) >> 10,
->> -                   new_plane_state->src_h >> 16,
->> -                   ((new_plane_state->src_h & 0xffff) * 15625) >> 10,
->> -                   new_plane_state->src_x >> 16,
->> -                   ((new_plane_state->src_x & 0xffff) * 15625) >> 10,
->> -                   new_plane_state->src_y >> 16,
->> -                   ((new_plane_state->src_y & 0xffff) * 15625) >> 10,
->> -                   fb->width, fb->height);
->> -        return -ENOSPC;
->> -    }
->> -
->> -    clips = __drm_plane_get_damage_clips(new_plane_state);
->> -    num_clips = drm_plane_get_damage_clips_count(new_plane_state);
->> -
->> -    /* Make sure damage clips are valid and inside the fb. */
->> -    while (num_clips > 0) {
->> -        if (clips->x1 >= clips->x2 ||
->> -            clips->y1 >= clips->y2 ||
->> -            clips->x1 < 0 ||
->> -            clips->y1 < 0 ||
->> -            clips->x2 > fb_width ||
->> -            clips->y2 > fb_height) {
->> -            drm_dbg_atomic(plane->dev,
->> -                       "[PLANE:%d:%s] invalid damage clip %d %d %d 
->> %d\n",
->> -                       plane->base.id, plane->name, clips->x1,
->> -                       clips->y1, clips->x2, clips->y2);
->> -            return -EINVAL;
->> -        }
->> -        clips++;
->> -        num_clips--;
->> +    if (fb) {
+Maybe you can also add to the cover letter that there are already users in
+the kernel that may be simplified after this change lands the upstream.
+
+> Signed-off-by: Astrid Rost <astrid.rost@axis.com>
+> ---
+>  drivers/leds/led-class.c | 4 ++++
+>  1 file changed, 4 insertions(+)
 > 
-> This doesn't only move code, but also changes semantics, making the 
-> checks optional if no FB is provided. Consider moving the condition to 
-> the next patch. Otherwise LGTM.
-
-Hi Dmitry,
-
-Sounds good.
-
-Thanks,
-
-Jessica Zhang
-
-> 
->> +        ret = drm_atomic_check_fb(new_plane_state);
->> +        if (ret)
->> +            return ret;
->>       }
->>       if (plane_switching_crtc(old_plane_state, new_plane_state)) {
->>
-> 
+> diff --git a/drivers/leds/led-class.c b/drivers/leds/led-class.c
+> index 9255bc11f99d..ce652abf9336 100644
+> --- a/drivers/leds/led-class.c
+> +++ b/drivers/leds/led-class.c
+> @@ -457,6 +457,10 @@ int led_classdev_register_ext(struct device *parent,
+>  			if (fwnode_property_present(init_data->fwnode,
+>  						    "retain-state-shutdown"))
+>  				led_cdev->flags |= LED_RETAIN_AT_SHUTDOWN;
+> +
+> +			fwnode_property_read_u32(init_data->fwnode,
+> +				"max-brightness",
+> +				&led_cdev->max_brightness);
+>  		}
+>  	} else {
+>  		proposed_name = led_cdev->name;
 > -- 
-> With best wishes
-> Dmitry
+> 2.30.2
 > 
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
