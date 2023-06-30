@@ -2,159 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DBBA37440C8
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 19:05:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DF427440D1
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 19:05:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232959AbjF3REw convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 30 Jun 2023 13:04:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55570 "EHLO
+        id S232576AbjF3RFq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Jun 2023 13:05:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232800AbjF3REc (ORCPT
+        with ESMTP id S233000AbjF3REy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 13:04:32 -0400
-Received: from unicorn.mansr.com (unicorn.mansr.com [81.2.72.234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4930244AC;
-        Fri, 30 Jun 2023 10:03:50 -0700 (PDT)
-Received: from raven.mansr.com (raven.mansr.com [81.2.72.235])
-        by unicorn.mansr.com (Postfix) with ESMTPS id E44D915360;
-        Fri, 30 Jun 2023 18:03:48 +0100 (BST)
-Received: by raven.mansr.com (Postfix, from userid 51770)
-        id BFA04219FD1; Fri, 30 Jun 2023 18:03:48 +0100 (BST)
-From:   =?iso-8859-1?Q?M=E5ns_Rullg=E5rd?= <mans@mansr.com>
-To:     Maxime Ripard <mripard@kernel.org>
-Cc:     Samuel Holland <samuel@sholland.org>, Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        linux-sunxi@lists.linux.dev,
-        Michael Turquette <mturquette@baylibre.com>,
-        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Stephen Boyd <sboyd@kernel.org>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 3/4] clk: sunxi-ng: Convert early providers to
- platform drivers
-References: <20211119033338.25486-1-samuel@sholland.org>
-        <20211119033338.25486-4-samuel@sholland.org>
-        <yw1xedly2z3m.fsf@mansr.com>
-        <maqh4yir66agto4lyulvrqrim7qnixwd246jusvvhsjlhhrmmw@gjbubqc2cv4o>
-        <yw1xa5wj3kvn.fsf@mansr.com>
-        <un3xm7ybsm54qf56ojhrtr6kehlmhdoavzcaqr2jfbcyg2kr6u@rdlq7nelycs2>
-        <yw1x352b308w.fsf@mansr.com>
-        <z2656f5zlmntm3zf5ds72vtbd6cyw3mffj7vmeygpscjcnodw6@cwb65fhurfaa>
-Date:   Fri, 30 Jun 2023 18:03:48 +0100
-In-Reply-To: <z2656f5zlmntm3zf5ds72vtbd6cyw3mffj7vmeygpscjcnodw6@cwb65fhurfaa>
-        (Maxime Ripard's message of "Fri, 30 Jun 2023 16:17:32 +0200")
-Message-ID: <yw1xwmzkzxu3.fsf@mansr.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
+        Fri, 30 Jun 2023 13:04:54 -0400
+Received: from mail-io1-f48.google.com (mail-io1-f48.google.com [209.85.166.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F051D3C30;
+        Fri, 30 Jun 2023 10:04:48 -0700 (PDT)
+Received: by mail-io1-f48.google.com with SMTP id ca18e2360f4ac-7835bad99fbso88923439f.1;
+        Fri, 30 Jun 2023 10:04:48 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688144688; x=1690736688;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=bDSvITIumvxU+9FeXxHNbJLwhZGzlxTTZldXnMbbHIk=;
+        b=RruGZEIVVjV37EmwLYWeUNTEgoEZLxVyAoTrlVySuNTybnB76gI/OQ9FCuN2/9xKIa
+         /zq6qEUSJBt+GMQa0gy3DnWcORqJSSV3F2ykshWOQO/zrwFxIg2/Bhhin1BGiCI9avPL
+         DGfa0NCeozfC3fESajjY7jzZgmHVOtoxupq66ZsAAbOnM5d0KcRQ4II+riFfhpttfvU9
+         wN/KA89OOtubXAhfGlBISy3/JZ/2gZU4RpCSLKGcT5Udz5G+T+N7SkzL8vvsm4nmB1dL
+         qd6nxd/KqCICTBShtvadvURwMqvZ1j03Uv3fwtDkyjLXzleSfzXZY86blQMlua+ACBFw
+         GugQ==
+X-Gm-Message-State: AC+VfDzBhSbH3SnZzUTAKg4ECB4QbCRAxibYLyG7EZpIESJMUr5BtARU
+        Do3zv4Ks4W3JpifkCe8RUQ==
+X-Google-Smtp-Source: ACHHUZ7YVGW6lKVvg7C24o8CcDQqjgMElHyuoGKVnJCWvqYKZlQzdchG5JVGPC50uiHB8TDngxV6bA==
+X-Received: by 2002:a05:6602:19d1:b0:783:5209:c01 with SMTP id ba17-20020a05660219d100b0078352090c01mr3305594iob.17.1688144687999;
+        Fri, 30 Jun 2023 10:04:47 -0700 (PDT)
+Received: from robh_at_kernel.org ([64.188.179.250])
+        by smtp.gmail.com with ESMTPSA id k5-20020a02cb45000000b0040bbcee6b57sm2373025jap.133.2023.06.30.10.04.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 30 Jun 2023 10:04:47 -0700 (PDT)
+Received: (nullmailer pid 1908824 invoked by uid 1000);
+        Fri, 30 Jun 2023 17:04:44 -0000
+Date:   Fri, 30 Jun 2023 11:04:44 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Dipen Patel <dipenp@nvidia.com>,
+        Tony Lindgren <tony@atomide.com>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Dilip Kota <eswara.kota@linux.intel.com>,
+        Mark Brown <broonie@kernel.org>, timestamp@lists.linux.dev,
+        alsa-devel@alsa-project.org, linux-watchdog@vger.kernel.org,
+        linux-pwm@vger.kernel.org, devicetree@vger.kernel.org,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Oleksij Rempel <o.rempel@pengutronix.de>,
+        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>, linux-phy@lists.infradead.org,
+        linux-spi@vger.kernel.org, linux-rtc@vger.kernel.org,
+        Conor Dooley <conor+dt@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 7/7] dt-bindings: watchdog: restrict node name suffixes
+Message-ID: <168814464489.1908194.10092224539849073775.robh@kernel.org>
+References: <20230530144851.92059-1-krzysztof.kozlowski@linaro.org>
+ <20230530144851.92059-8-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230530144851.92059-8-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Maxime Ripard <mripard@kernel.org> writes:
 
-> On Wed, Jun 28, 2023 at 07:33:35PM +0100, Måns Rullgård wrote:
->> Maxime Ripard <mripard@kernel.org> writes:
->> 
->> > On Wed, Jun 28, 2023 at 12:07:56PM +0100, Måns Rullgård wrote:
->> >> Maxime Ripard <mripard@kernel.org> writes:
->> >> 
->> >> > On Mon, Jun 26, 2023 at 01:21:33PM +0100, Måns Rullgård wrote:
->> >> >> Samuel Holland <samuel@sholland.org> writes:
->> >> >> 
->> >> >> > The PRCM CCU drivers depend on clocks provided by other CCU drivers. For
->> >> >> > example, the sun8i-r-ccu driver uses the "pll-periph" clock provided by
->> >> >> > the SoC's main CCU.
->> >> >> >
->> >> >> > However, sun8i-r-ccu is an early OF clock provider, and many of the
->> >> >> > main CCUs (e.g. sun50i-a64-ccu) use platform drivers. This means that
->> >> >> > the consumer clocks will be orphaned until the supplier driver is bound.
->> >> >> > This can be avoided by converting the remaining CCUs to use platform
->> >> >> > drivers. Then fw_devlink will ensure the drivers are bound in the
->> >> >> > optimal order.
->> >> >> >
->> >> >> > The sun5i CCU is the only one which actually needs to be an early clock
->> >> >> > provider, because it provides the clock for the system timer. That one
->> >> >> > is left alone.
->> >> >> >
->> >> >> > Signed-off-by: Samuel Holland <samuel@sholland.org>
->> >> >> > ---
->> >> >> >
->> >> >> > (no changes since v1)
->> >> >> >
->> >> >> >  drivers/clk/sunxi-ng/Kconfig             | 20 ++++----
->> >> >> >  drivers/clk/sunxi-ng/ccu-sun4i-a10.c     | 58 +++++++++++++--------
->> >> >> >  drivers/clk/sunxi-ng/ccu-sun50i-h6-r.c   | 56 ++++++++++++--------
->> >> >> >  drivers/clk/sunxi-ng/ccu-sun50i-h616.c   | 33 ++++++++----
->> >> >> >  drivers/clk/sunxi-ng/ccu-sun6i-a31.c     | 40 +++++++++++----
->> >> >> >  drivers/clk/sunxi-ng/ccu-sun8i-a23.c     | 35 +++++++++----
->> >> >> >  drivers/clk/sunxi-ng/ccu-sun8i-a33.c     | 40 +++++++++++----
->> >> >> >  drivers/clk/sunxi-ng/ccu-sun8i-h3.c      | 62 ++++++++++++++--------
->> >> >> >  drivers/clk/sunxi-ng/ccu-sun8i-r.c       | 65 ++++++++++++++----------
->> >> >> >  drivers/clk/sunxi-ng/ccu-sun8i-v3s.c     | 57 +++++++++++++--------
->> >> >> >  drivers/clk/sunxi-ng/ccu-suniv-f1c100s.c | 38 ++++++++++----
->> >> >> >  11 files changed, 332 insertions(+), 172 deletions(-)
->> >> >> 
->> >> >> This broke the hstimer clocksource on A20 since it requires a clock
->> >> >> provided by the sun4i ccu driver.
->> >> >
->> >> > The A10 is probably broken by this, but the A20 should be able to use
->> >> > the arch timers just like all the other Cortex-A7-based SoCs.
->> >> >
->> >> > Do you have a dmesg log that could help debug why it's not working?
->> >> 
->> >> The A20 works as such since, as you say, it has other clocksources.
->> >> However, the hstimer has become unusable.  If anyone was using, for
->> >> whatever reason, it won't be working for them now.
->> >> 
->> >> Before this change, the kernel log used include this line:
->> >> 
->> >> clocksource: hstimer: mask: 0xffffffff max_cycles: 0xffffffff, max_idle_ns: 6370868154 ns
->> >> 
->> >> Now there is only a cryptic "Can't get timer clock" in its place.
->> >> 
->> >> As it is now, the hstimer driver is nothing but a waste of space.
->> >> I figure it ought to be fixed one way or another.
->> >
->> > Yeah, definitely.
->> >
->> > IIRC, the situation is:
->> >
->> >  - A10 has just the "regular", old, timer
->> >  - A10s/A13/GR8 has the A10 timer + hstimer
->> >  - A20 has the A13 timers + arch timers
->> >
->> > We also default to the hstimer only for the A10s/A13 which aren't
->> > affected by this patch series afaics.
->> >
->> > We also enable the HS timer for the A31, but just like the A20 it
->> > doesn't use it by default, so it's probably been broken there too.
->> >
->> > I guess one way to fix it would be to switch the HS timer driver to a
->> > lower priority than the A10 timer, so we pick that up by default instead
->> > for the A10s/A13, and then convert the HS timer driver to a proper
->> > platform_device driver that will be able to get its clock.
->> >
->> > The downside is that the A13 will lose some precision over its default
->> > timer, but I don't think it's a big deal.
->> 
->> The options I see are converting the hstimer to a platform device or
->> reverting the change to the sun4i ccu driver.
->> 
->> I don't personally have much of an opinion on this since my systems
->> aren't affected.  The only reason I looked at it was that I noticed
->> a new error message in the kernel logs.
->
-> Thanks for the report then. I'm not really working on that anymore, so I
-> won't submit a fix for this either.
+On Tue, 30 May 2023 16:48:51 +0200, Krzysztof Kozlowski wrote:
+> Make the pattern matching node names a bit stricter to improve DTS
+> consistency.  The pattern is restricted to -N suffixes to decimal
+> numbers.
+> 
+> Suggested-by: Rob Herring <robh@kernel.org>
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> 
+> ---
+> 
+> Cc: Tony Lindgren <tony@atomide.com>
+> Cc: Oleksij Rempel <o.rempel@pengutronix.de>
+> ---
+>  Documentation/devicetree/bindings/watchdog/watchdog.yaml | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
 
-I can have a go at converting it to a platform device if you think
-that's the right approach.  I don't have anything other than A20 to
-test it on, though.
+Seems watchdog patches aren't getting applied... Applied, thanks!
 
--- 
-Måns Rullgård
