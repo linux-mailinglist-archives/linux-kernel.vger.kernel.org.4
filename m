@@ -2,37 +2,37 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D20074326C
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 03:57:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 289E7743272
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 04:04:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231655AbjF3B5J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 21:57:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47472 "EHLO
+        id S231784AbjF3CEQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 22:04:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229730AbjF3B5H (ORCPT
+        with ESMTP id S229493AbjF3CEN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 21:57:07 -0400
-Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67985C0;
-        Thu, 29 Jun 2023 18:57:05 -0700 (PDT)
+        Thu, 29 Jun 2023 22:04:13 -0400
+Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2DAF1991;
+        Thu, 29 Jun 2023 19:04:11 -0700 (PDT)
 Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
         (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
         (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
-        by fd01.gateway.ufhost.com (Postfix) with ESMTP id 0DD8124DE30;
-        Fri, 30 Jun 2023 09:57:04 +0800 (CST)
+        by ex01.ufhost.com (Postfix) with ESMTP id A848224DBCE;
+        Fri, 30 Jun 2023 10:04:10 +0800 (CST)
 Received: from EXMBX172.cuchost.com (172.16.6.92) by EXMBX165.cuchost.com
  (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 30 Jun
- 2023 09:57:04 +0800
+ 2023 10:04:10 +0800
 Received: from [192.168.125.93] (183.27.97.206) by EXMBX172.cuchost.com
  (172.16.6.92) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 30 Jun
- 2023 09:57:03 +0800
-Message-ID: <0312262c-28c0-9445-c6f7-2079a57db8c7@starfivetech.com>
-Date:   Fri, 30 Jun 2023 09:57:02 +0800
+ 2023 10:04:09 +0800
+Message-ID: <fdba4068-a947-4d42-8fcc-8edf48e710f1@starfivetech.com>
+Date:   Fri, 30 Jun 2023 10:04:08 +0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
  Thunderbird/102.3.2
-Subject: Re: [PATCH v1 1/5] ASoC: dt-bindings: Add StarFive JH7110 dummy
- PWM-DAC transmitter
+Subject: Re: [PATCH v1 3/5] ASoC: dt-bindings: Add StarFive JH7110 PWM-DAC
+ controller
 Content-Language: en-US
 To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         Mark Brown <broonie@kernel.org>,
@@ -48,18 +48,18 @@ To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
 CC:     <alsa-devel@alsa-project.org>, <devicetree@vger.kernel.org>,
         <linux-riscv@lists.infradead.org>, <linux-kernel@vger.kernel.org>
 References: <20230626110909.38718-1-hal.feng@starfivetech.com>
- <20230626110909.38718-2-hal.feng@starfivetech.com>
- <006ddacd-0496-70d1-3310-99b16706de84@linaro.org>
+ <20230626110909.38718-4-hal.feng@starfivetech.com>
+ <fc726c72-0503-b407-cad1-f24422f02ab2@linaro.org>
 From:   Hal Feng <hal.feng@starfivetech.com>
-In-Reply-To: <006ddacd-0496-70d1-3310-99b16706de84@linaro.org>
+In-Reply-To: <fc726c72-0503-b407-cad1-f24422f02ab2@linaro.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 7bit
 X-Originating-IP: [183.27.97.206]
-X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX172.cuchost.com
+X-ClientProxiedBy: EXCAS062.cuchost.com (172.16.6.22) To EXMBX172.cuchost.com
  (172.16.6.92)
 X-YovoleRuleAgent: yovoleflag
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,33 +67,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 26 Jun 2023 17:34:56 +0200, Krzysztof Kozlowski wrote:
+On Mon, 26 Jun 2023 17:36:20 +0200, Krzysztof Kozlowski wrote:
 > On 26/06/2023 13:09, Hal Feng wrote:
->> Add bindings for StarFive JH7110 dummy PWM-DAC transmitter.
-> 
-> ...
-> 
->> +required:
->> +  - compatible
->> +  - "#sound-dai-cells"
+>> Add bindings for the PWM-DAC controller on the JH7110
+>> RISC-V SoC by StarFive Ltd.
+>> 
+>> Signed-off-by: Hal Feng <hal.feng@starfivetech.com>
+>> ---
+>>  .../sound/starfive,jh7110-pwmdac.yaml         | 76 +++++++++++++++++++
+>>  1 file changed, 76 insertions(+)
+>>  create mode 100644 Documentation/devicetree/bindings/sound/starfive,jh7110-pwmdac.yaml
+>> 
+>> diff --git a/Documentation/devicetree/bindings/sound/starfive,jh7110-pwmdac.yaml b/Documentation/devicetree/bindings/sound/starfive,jh7110-pwmdac.yaml
+>> new file mode 100644
+>> index 000000000000..91a4213f2bd8
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/sound/starfive,jh7110-pwmdac.yaml
+>> @@ -0,0 +1,76 @@
+>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>> +%YAML 1.2
+>> +---
+>> +$id: http://devicetree.org/schemas/sound/starfive,jh7110-pwmdac.yaml#
+>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
 >> +
->> +additionalProperties: false
+>> +title: StarFive JH7110 PWM-DAC Controller
 >> +
->> +examples:
->> +  - |
->> +    pwmdac-dit {
->> +        compatible = "starfive,jh7110-pwmdac-dit";
->> +        #sound-dai-cells = <0>;
+>> +description: |
 > 
-> BTW, I don't see any resources here. Neither in the driver. I think you
-> just added this for driver, not for a real hardware.
+> Do not need '|' unless you need to preserve formatting.
 
-Yes, this is a dummy PWM-DAC transmitter as described in the title. The
-StarFive JH7110 PWM-DAC module doesn't need a hardware codec, but a
-dummy codec is needed for the driver.
+Got it. Will drop it later.
 
-For a similar implementation, you can refer to
-sound/soc/codecs/spdif_transmitter.c
+> 
+>> +  The PWM-DAC Controller uses PWM square wave generators plus RC filters to
+>> +  form a DAC for audio play in StarFive JH7110 SoC. This audio play controller
+>> +  supports 16 bit audio format, up to 48K sampling frequency , up to left
+> 
+> No space before ,
+
+Will fix.
+
+> 
+>> +  and right dual channels.
+>> +
+>> +maintainers:
+>> +  - Hal Feng <hal.feng@starfivetec
+> 
+> 
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+Thanks for your review.
 
 Best regards,
 Hal
