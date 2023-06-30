@@ -2,104 +2,241 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADAD5743E28
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 17:01:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6981743E2B
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 17:01:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232873AbjF3PBO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 11:01:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56264 "EHLO
+        id S232885AbjF3PBZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Jun 2023 11:01:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232576AbjF3PBL (ORCPT
+        with ESMTP id S232892AbjF3PBU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 11:01:11 -0400
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4795171E
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 08:01:09 -0700 (PDT)
-Received: by mail-wm1-x335.google.com with SMTP id 5b1f17b1804b1-3fbc244d384so14146575e9.0
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 08:01:09 -0700 (PDT)
+        Fri, 30 Jun 2023 11:01:20 -0400
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B0A93C0E;
+        Fri, 30 Jun 2023 08:01:18 -0700 (PDT)
+Received: by mail-pg1-x52d.google.com with SMTP id 41be03b00d2f7-5577004e21bso854198a12.2;
+        Fri, 30 Jun 2023 08:01:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=layalina-io.20221208.gappssmtp.com; s=20221208; t=1688137268; x=1690729268;
+        d=gmail.com; s=20221208; t=1688137278; x=1690729278;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ahf4iN0qt3X6fXGQpyVE3X/VovChKIPfO2Ax1JckjEQ=;
-        b=3yh6L5c0Exj1o0zeTk4a6REXEYKM4fADuVl9BclOQhNxISU2t4fip9AXdWU/TxCkE2
-         OqehUtaUgyceR46RN4c8vaFFCD/IVadlqcqp95eocOsazOWkdUAOwn55jgcBDaBUuqe+
-         xbv7KeliCoitInjDNB+1JGj+VyukxrmP4K7wIGrgCQYfwGQRpfyqmpvkuWXft6QSVjVA
-         +uPIMXW3U1J5hbLSPsGSsifGDMe2tls/RHw+zemHQBbSrRVPl1LI+/DSa3jGqqcrntRz
-         SPiHnlysd2rdfqxUHmFa99MK/abqxrQtlvHM29PqtdM/GJp3KdNjSaKPlTy577HyXrXd
-         vGiw==
+        bh=NSsTB0hmYO66HgY14Drqa9YRHmTG+NozNNyOOeYG7lo=;
+        b=iKbCzPGkPYpkgH4fM65WJ2wRcQHtPOecpUEm1N0SAWWSKSCSB+V+QKZUDv6kXG7QaI
+         zP6wi7hDms3+5uSzyJaflRvwQscjuCc83Vg4aasSgRdVeKjayuu8qJhqUvXGnDjYJFgV
+         28EKkAJHk2fog3qt9+fAzSbj+iJH9ljxkC24Z06a2Rutir42QXVUcnN3HfeAbO4AoPBX
+         yMKFHtfUEqWjTkD0z3+eiTmX7Xfr/cFyQcOfTBkExCZVh5bKuNg/byS1a+nzTqYgN1XX
+         RhMsUWGeqjC62urg+MxGSObqdynQAQ+uPxX+OSO9zsyf5q/6VGqutidZFX1rbSTHrn/s
+         Bj3g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688137268; x=1690729268;
+        d=1e100.net; s=20221208; t=1688137278; x=1690729278;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ahf4iN0qt3X6fXGQpyVE3X/VovChKIPfO2Ax1JckjEQ=;
-        b=JLS8YTjjRt5XhVE71/nhZyR8hEipmS9viGWx340vk19MYZ2rl+AFljGuYvy5nnTk+G
-         4ci/fWRwjvIzEbLjAXPDi6XU0eFSkolKES3P9r/ujHUzR9MDtzoR6XbUCCEiEJBFownc
-         f8HuXwxw0Ifm+0bFsH2GL4bM3kDGYZEnwEF2e1hUwdvJOd8D8vYacXrgVH+DAj2ZuHZO
-         zn3RX4Ud8OKUptGZydXt5xixKiq5PFY6KLD/Mnzwdr8bXweRsDs9oBn0trc7Fu7vPzXA
-         B6LrQJ2x4YoElDwEHRDIkinP8Vv5hY1U/fkV2i2uqWg0JvHxDcjMDwVIGHirJtbn18Ac
-         qv9Q==
-X-Gm-Message-State: AC+VfDzdrDgo3nkjt5xckMaID1qasEaVbwyczjHN0ixdBC+6Ut14iRJ9
-        tfJZ0rlAZinAyvpQ/gU5GOHwJQ==
-X-Google-Smtp-Source: ACHHUZ74pk8fAscwl4/V1VyKKVEfajAZpMtTT9HM7NTbJGdATFOVKQDPw1YOnaAs9I7gIMtI+MrUYQ==
-X-Received: by 2002:a05:600c:364f:b0:3f9:b1e7:8a4b with SMTP id y15-20020a05600c364f00b003f9b1e78a4bmr2324106wmq.21.1688137268223;
-        Fri, 30 Jun 2023 08:01:08 -0700 (PDT)
-Received: from airbuntu (host86-163-217-97.range86-163.btcentralplus.com. [86.163.217.97])
-        by smtp.gmail.com with ESMTPSA id a10-20020a1cf00a000000b003f8fb02c413sm19293360wmb.8.2023.06.30.08.01.07
+        bh=NSsTB0hmYO66HgY14Drqa9YRHmTG+NozNNyOOeYG7lo=;
+        b=MJfragh2VMHvck7M8D0Yo8lcBnjgP3LiE654HTFOpF6g9bJu+ZxM45P9sd0iUwyB9W
+         NP+Np4KjXDbDJJ8hzG+myzfa+umC1hh7/SfQNrI9NteAQ0e3rqiBxQFBZbBGD4KGba1c
+         fRKnvINQdpjijzjTpoYy0Luit0N4Y9An5PGQ+IVxDxpkHUNHOId0lPr5Qu40jZ3d8GOr
+         edkRqLla76tAu7w9GkUlzvoLPNS5nDfZiHacoSvDQ83ymRXwf+xAy3tKv8KAJV2DkXxg
+         DDHSqYmfiIgbnpX/lv96YchlgR0Cc6MP9e3gXdi0kV5uyZl+iBb5RO+zq8qjLn1mpQPm
+         uq/Q==
+X-Gm-Message-State: ABy/qLZzRe8mym4kXpao8qAV2Ke3P7Pn0/6IbPpMkCYenUFzygiECPcY
+        pgSpXbP6vF9+ozKCBHXWnJcrKhgfP4djDQ==
+X-Google-Smtp-Source: APBJJlE394MygCedoL+MS6kM8cWScMjYRUiThvmF9m2dsizYXYvsssqyJtnCfYrcSQjCd6bCWjxp2A==
+X-Received: by 2002:a17:90b:1895:b0:259:466:940f with SMTP id mn21-20020a17090b189500b002590466940fmr1875936pjb.22.1688137277712;
+        Fri, 30 Jun 2023 08:01:17 -0700 (PDT)
+Received: from gmail.com ([2601:600:8500:5f14:d627:c51e:516e:a105])
+        by smtp.gmail.com with ESMTPSA id 18-20020a17090a199200b0024df6bbf5d8sm4948680pji.30.2023.06.30.08.01.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 30 Jun 2023 08:01:07 -0700 (PDT)
-Date:   Fri, 30 Jun 2023 16:01:03 +0100
-From:   Qais Yousef <qyousef@layalina.io>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Bart Van Assche <bvanassche@acm.org>, linux-kernel@vger.kernel.org,
-        Ingo Molnar <mingo@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>
-Subject: Re: [PATCH] sched/cputime: Make IRQ time accounting configurable at
- boot time
-Message-ID: <20230630150103.pp7lhxko7gya65rx@airbuntu>
-References: <20230615203745.1259-1-bvanassche@acm.org>
- <20230616074518.GW4253@hirez.programming.kicks-ass.net>
+        Fri, 30 Jun 2023 08:01:16 -0700 (PDT)
+Date:   Fri, 30 Jun 2023 08:01:14 -0700
+From:   Andrei Vagin <avagin@gmail.com>
+To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
+Cc:     Peter Xu <peterx@redhat.com>, David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>,
+        Danylo Mocherniuk <mdanylo@google.com>,
+        Paul Gofman <pgofman@codeweavers.com>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Shuah Khan <shuah@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Yang Shi <shy828301@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+        Yun Zhou <yun.zhou@windriver.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Alex Sierra <alex.sierra@amd.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
+Subject: Re: [PATCH v22 2/5] fs/proc/task_mmu: Implement IOCTL to get and
+ optionally clear info about PTEs
+Message-ID: <ZJ7uOqPIJwMiCuOI@gmail.com>
+References: <20230628095426.1886064-1-usama.anjum@collabora.com>
+ <20230628095426.1886064-3-usama.anjum@collabora.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=koi8-r
 Content-Disposition: inline
-In-Reply-To: <20230616074518.GW4253@hirez.programming.kicks-ass.net>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NO_DNS_FOR_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20230628095426.1886064-3-usama.anjum@collabora.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FSL_HELO_FAKE,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/16/23 09:45, Peter Zijlstra wrote:
-> On Thu, Jun 15, 2023 at 01:37:26PM -0700, Bart Van Assche wrote:
-> > Some producers of Android devices want IRQ time accounting enabled while
-> > others want IRQ time accounting disabled. Hence, make IRQ time accounting
-> > configurable at boot time.
+On Wed, Jun 28, 2023 at 02:54:23PM +0500, Muhammad Usama Anjum wrote:
+> This IOCTL, PAGEMAP_SCAN on pagemap file can be used to get and/or clear
+> the info about page table entries. The following operations are supported
+> in this ioctl:
+> - Get the information if the pages have been written-to (PAGE_IS_WRITTEN),
+>   file mapped (PAGE_IS_FILE), present (PAGE_IS_PRESENT), swapped
+>   (PAGE_IS_SWAPPED) or page has pfn zero (PAGE_IS_PFNZERO).
+> - Find pages which have been written-to and/or write protect the pages
+>   (atomic PM_SCAN_OP_GET + PM_SCAN_OP_WP)
 > 
-> Why would they want this disabled? IRQ time accounting avoids a number
-> of issues under high irq/softirq pressure.
+> This IOCTL can be extended to get information about more PTE bits. The
+> entire address range passed by user [start, end) is scanned until either
+> the user provided buffer is full or max_pages have been found.
 > 
-> Disabling this makes no sense.
+> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
 
-I think it is assumed that IRQ time accounting is only used for stat
-collection (which is what I thought too), but based on this response I can see
-it is used to ensure we account for stolen time in update_rq_clock_task() so it
-helps to make it account more accurately for the time a task actually spent
-running and doing useful work.
+<snip>
 
-Bart, could you profile the cause of the high overhead? The config message says
-a small perf impact, but 40% mentioned in your v2 is high. Could you try to
-break down the problem further as we might be overlooking the true source of
-overhead or miss an opportunity to improve the accounting logic instead?
+> +
+> +static long do_pagemap_scan(struct mm_struct *mm, unsigned long __arg)
+> +{
+> +	struct pm_scan_arg __user *uarg = (struct pm_scan_arg __user *)__arg;
+> +	unsigned long long start, end, walk_start, walk_end;
+> +	unsigned long empty_slots, vec_index = 0;
+> +	struct mmu_notifier_range range;
+> +	struct page_region __user *vec;
+> +	struct pagemap_scan_private p;
+> +	struct pm_scan_arg arg;
+> +	int ret = 0;
+> +
+> +	if (copy_from_user(&arg, uarg, sizeof(arg)))
+> +		return -EFAULT;
+> +
+> +	start = untagged_addr((unsigned long)arg.start);
+> +	end = untagged_addr((unsigned long)arg.end);
+> +	vec = (struct page_region __user *)untagged_addr((unsigned long)arg.vec);
+> +
+> +	ret = pagemap_scan_args_valid(&arg, start, end, vec);
+> +	if (ret)
+> +		return ret;
+> +
+> +	p.max_pages = (arg.max_pages) ? arg.max_pages : ULONG_MAX;
+> +	p.found_pages = 0;
+> +	p.required_mask = arg.required_mask;
+> +	p.anyof_mask = arg.anyof_mask;
+> +	p.excluded_mask = arg.excluded_mask;
+> +	p.return_mask = arg.return_mask;
+> +	p.flags = arg.flags;
+> +	p.flags |= ((p.required_mask | p.anyof_mask | p.excluded_mask) &
+> +		    PAGE_IS_WRITTEN) ? PM_SCAN_REQUIRE_UFFD : 0;
+> +	p.cur_buf.start = p.cur_buf.len = p.cur_buf.flags = 0;
+> +	p.vec_buf = NULL;
+> +	p.vec_buf_len = PAGEMAP_WALK_SIZE >> PAGE_SHIFT;
+> +
+> +	/*
+> +	 * Allocate smaller buffer to get output from inside the page walk
+> +	 * functions and walk page range in PAGEMAP_WALK_SIZE size chunks. As
+> +	 * we want to return output to user in compact form where no two
+> +	 * consecutive regions should be continuous and have the same flags.
+> +	 * So store the latest element in p.cur_buf between different walks and
+> +	 * store the p.cur_buf at the end of the walk to the user buffer.
+> +	 */
+> +	if (IS_PM_SCAN_GET(p.flags)) {
+> +		p.vec_buf = kmalloc_array(p.vec_buf_len, sizeof(*p.vec_buf),
+> +					  GFP_KERNEL);
+> +		if (!p.vec_buf)
+> +			return -ENOMEM;
+> +	}
+> +
+> +	if (IS_PM_SCAN_WP(p.flags)) {
+> +		mmu_notifier_range_init(&range, MMU_NOTIFY_PROTECTION_VMA, 0,
+> +					mm, start, end);
+> +		mmu_notifier_invalidate_range_start(&range);
+> +	}
+> +
+> +	walk_start = walk_end = start;
+> +	while (walk_end < end && !ret) {
+> +		if (IS_PM_SCAN_GET(p.flags)) {
+> +			p.vec_buf_index = 0;
+> +
+> +			/*
+> +			 * All data is copied to cur_buf first. When more data
+> +			 * is found, we push cur_buf to vec_buf and copy new
+> +			 * data to cur_buf. Subtract 1 from length as the
+> +			 * index of cur_buf isn't counted in length.
+> +			 */
+> +			empty_slots = arg.vec_len - vec_index;
+> +			p.vec_buf_len = min(p.vec_buf_len, empty_slots - 1);
+> +		}
+> +
+> +		ret = mmap_read_lock_killable(mm);
+> +		if (ret)
+> +			goto return_status;
+> +
+> +		walk_end = min((walk_start + PAGEMAP_WALK_SIZE) & PAGEMAP_WALK_MASK, end);
+> +
+> +		ret = walk_page_range(mm, walk_start, walk_end,
+> +				      &pagemap_scan_ops, &p);
+> +		mmap_read_unlock(mm);
+> +
+> +		if (ret && ret != PM_SCAN_FOUND_MAX_PAGES &&
+> +		    ret != PM_SCAN_END_WALK)
+> +			goto return_status;
+> +
+> +		walk_start = walk_end;
+> +		if (IS_PM_SCAN_GET(p.flags) && p.vec_buf_index) {
+> +			if (copy_to_user(&vec[vec_index], p.vec_buf,
+> +					 p.vec_buf_index * sizeof(*p.vec_buf))) {
+> +				/*
+> +				 * Return error even though the OP succeeded
+> +				 */
+> +				ret = -EFAULT;
+> +				goto return_status;
+> +			}
+> +			vec_index += p.vec_buf_index;
+> +		}
+> +	}
+> +
+> +	if (p.cur_buf.len) {
+> +		if (copy_to_user(&vec[vec_index], &p.cur_buf, sizeof(p.cur_buf))) {
+> +			ret = -EFAULT;
+> +			goto return_status;
+> +		}
+> +		vec_index++;
+> +	}
+> +
+> +	ret = vec_index;
+> +
+> +return_status:
+> +	arg.start = (unsigned long)walk_end;
 
+This doesn't look right. pagemap_scan_pmd_entry can stop early. For
+example, it can happen when it hits the max_pages limit. Do I miss
+something?
 
-Thanks
-
---
-Qais Yousef
+> +	if (copy_to_user(&uarg->start, &arg.start, sizeof(arg.start)))
+> +		ret = -EFAULT;
+> +
+> +	if (IS_PM_SCAN_WP(p.flags))
+> +		mmu_notifier_invalidate_range_end(&range);
+> +
+> +	kfree(p.vec_buf);
+> +	return ret;
+> +}
+> +
