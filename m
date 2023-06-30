@@ -2,165 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D957A7433A4
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 06:39:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72B327433AF
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 06:43:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230498AbjF3Ej0 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 30 Jun 2023 00:39:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56732 "EHLO
+        id S231499AbjF3EnN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Jun 2023 00:43:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbjF3EjZ (ORCPT
+        with ESMTP id S230141AbjF3EnL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 00:39:25 -0400
-Received: from mail-yb1-f181.google.com (mail-yb1-f181.google.com [209.85.219.181])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65B4A1FC0;
-        Thu, 29 Jun 2023 21:39:20 -0700 (PDT)
-Received: by mail-yb1-f181.google.com with SMTP id 3f1490d57ef6-c13280dfb09so1372044276.2;
-        Thu, 29 Jun 2023 21:39:20 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688099959; x=1690691959;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :reply-to:in-reply-to:references:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=WCTjff0Lm/tkc2wvW+DXTAD5VUVHNKURb19DniWHXAc=;
-        b=HMRxRdGlfVDURrt1iQr2yiUxysd4BSefhCVfYklrRBHEoApgVmcDs8ZbE45QWFgOgj
-         cCYTvAbqAkrSBbELlgBW/SDvUspy0iHgDZecC0LJe+FXaSrjBVOELz0f/uWe/9votjlw
-         xK78+ynzPj/POmJc6AIpEPD84TNJzVsuEQMbi0xWG+HIOAehLyNauhvvJGbO0+uC5ARZ
-         FZZYILm2pNMEH2GculWSAxYC4FaLUaxDOEpDGwjKSAlwk8lHu9KtBaErudlrSNuwmTgJ
-         Lzum96BhcdvHcyUnYU2sAYyvxnE22NnmBbRPAnKzm3Elx9BNFD/DG/XxZe2wDyPnV6A7
-         fEog==
-X-Gm-Message-State: ABy/qLYnLQLNOiWfO71sCHyNf+pzwZpKXTCM+GrutxCxI436zZspkf7o
-        sjmE/DW3AVJORK1PNJhVILZzgWUxzIcb1xbR
-X-Google-Smtp-Source: APBJJlHcnlhQVr/XiJSoKdbWwRGozSxDZLax3KI9epzczZ23m1Ah0w3PM0mIwiWaTTnHK3hnf39i/w==
-X-Received: by 2002:a25:6884:0:b0:c39:8036:e3f9 with SMTP id d126-20020a256884000000b00c398036e3f9mr1837158ybc.26.1688099959254;
-        Thu, 29 Jun 2023 21:39:19 -0700 (PDT)
-Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com. [209.85.128.179])
-        by smtp.gmail.com with ESMTPSA id w143-20020a25df95000000b00bcae3682a51sm2861298ybg.47.2023.06.29.21.39.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 29 Jun 2023 21:39:18 -0700 (PDT)
-Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-5700401acbeso14956587b3.0;
-        Thu, 29 Jun 2023 21:39:18 -0700 (PDT)
-X-Received: by 2002:a81:5bd6:0:b0:56d:2e22:8b31 with SMTP id
- p205-20020a815bd6000000b0056d2e228b31mr1434020ywb.41.1688099958565; Thu, 29
- Jun 2023 21:39:18 -0700 (PDT)
+        Fri, 30 Jun 2023 00:43:11 -0400
+Received: from 189.cn (ptr.189.cn [183.61.185.104])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 33987210E;
+        Thu, 29 Jun 2023 21:43:08 -0700 (PDT)
+HMM_SOURCE_IP: 10.64.8.41:36042.36167694
+HMM_ATTACHE_NUM: 0000
+HMM_SOURCE_TYPE: SMTP
+Received: from clientip-114.242.206.180 (unknown [10.64.8.41])
+        by 189.cn (HERMES) with SMTP id C76A010013F;
+        Fri, 30 Jun 2023 12:43:02 +0800 (CST)
+Received: from  ([114.242.206.180])
+        by gateway-151646-dep-6d8594f54d-zsdp9 with ESMTP id 5b3173dd4b264e9cbf3fad1bf2583dd6 for mario.limonciello@amd.com;
+        Fri, 30 Jun 2023 12:43:06 CST
+X-Transaction-ID: 5b3173dd4b264e9cbf3fad1bf2583dd6
+X-Real-From: 15330273260@189.cn
+X-Receive-IP: 114.242.206.180
+X-MEDUSA-Status: 0
+Sender: 15330273260@189.cn
+Message-ID: <b7528e1d-7f71-016c-f0ef-a044586b7765@189.cn>
+Date:   Fri, 30 Jun 2023 12:42:59 +0800
 MIME-Version: 1.0
-References: <20230626095223.721011-1-xianwei.zhao@amlogic.com>
- <20230626-viewless-marrow-17838c2172f6@wendy> <676db602-54d8-d6b0-274f-365e65a2102c@amlogic.com>
- <20230627-unsure-uniformly-079cad2c26e6@wendy> <061bb829-fb75-d154-0c15-9f0f982fec41@amlogic.com>
- <CAJX_Q+0Kf3zFyUtkCEkm7K8zXwaovxQmo1DWFwy8y25GQ2wqXg@mail.gmail.com> <0b4b67aa-e8f5-2bd9-223b-0f26add687fe@amlogic.com>
-In-Reply-To: <0b4b67aa-e8f5-2bd9-223b-0f26add687fe@amlogic.com>
-Reply-To: tanure@linux.com
-From:   Lucas Tanure <tanure@linux.com>
-Date:   Fri, 30 Jun 2023 05:39:07 +0100
-X-Gmail-Original-Message-ID: <CAJX_Q+3jDsFwmx-voMxCiKadJSobV00BuwLjpzc72UK5681ibQ@mail.gmail.com>
-Message-ID: <CAJX_Q+3jDsFwmx-voMxCiKadJSobV00BuwLjpzc72UK5681ibQ@mail.gmail.com>
-Subject: Re: [PATCH 0/2] Baisc devicetree support for Amlogic T7
-To:     Xianwei Zhao <xianwei.zhao@amlogic.com>
-Cc:     Conor Dooley <conor.dooley@microchip.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-amlogic@lists.infradead.org, devicetree@vger.kernel.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v7 6/8] PCI/VGA: Introduce is_boot_device function
+ callback to vga_client_register
+To:     "Limonciello, Mario" <Mario.Limonciello@amd.com>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        Sui Jingfeng <suijingfeng@loongson.cn>
+Cc:     Bjorn Helgaas <bhelgaas@google.com>,
+        "linux-fbdev@vger.kernel.org" <linux-fbdev@vger.kernel.org>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Karol Herbst <kherbst@redhat.com>,
+        "nouveau@lists.freedesktop.org" <nouveau@lists.freedesktop.org>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        "Chai, Thomas" <YiPeng.Chai@amd.com>,
+        "Gao, Likun" <Likun.Gao@amd.com>, David Airlie <airlied@gmail.com>,
+        Ville Syrjala <ville.syrjala@linux.intel.com>,
+        Yi Liu <yi.l.liu@intel.com>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "amd-gfx@lists.freedesktop.org" <amd-gfx@lists.freedesktop.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Ben Skeggs <bskeggs@redhat.com>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        Kevin Tian <kevin.tian@intel.com>,
+        "Lazar, Lijo" <Lijo.Lazar@amd.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        "Zhang, Bokun" <Bokun.Zhang@amd.com>,
+        "intel-gfx@lists.freedesktop.org" <intel-gfx@lists.freedesktop.org>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Abhishek Sahu <abhsahu@nvidia.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        Yishai Hadas <yishaih@nvidia.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        "Deucher, Alexander" <Alexander.Deucher@amd.com>,
+        "Koenig, Christian" <Christian.Koenig@amd.com>,
+        "Zhang, Hawking" <Hawking.Zhang@amd.com>
+References: <20230629155436.GA397963@bhelgaas>
+ <bcfdc77d-a94d-bca1-56e3-5e14e91f6fd9@189.cn>
+ <MN0PR12MB6101CDB6FF9DC8F8EDEF5F45E225A@MN0PR12MB6101.namprd12.prod.outlook.com>
+Content-Language: en-US
+From:   Sui Jingfeng <15330273260@189.cn>
+In-Reply-To: <MN0PR12MB6101CDB6FF9DC8F8EDEF5F45E225A@MN0PR12MB6101.namprd12.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FROM_LOCAL_DIGITS,
+        FROM_LOCAL_HEX,NICE_REPLY_A,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 30, 2023 at 3:22 AM Xianwei Zhao <xianwei.zhao@amlogic.com> wrote:
->
->
->
-> On 2023/6/30 00:33, Lucas Tanure wrote:
-> > [ EXTERNAL EMAIL ]
-> >
-> > On Tue, Jun 27, 2023 at 8:52 AM Xianwei Zhao <xianwei.zhao@amlogic.com> wrote:
-> >>
-> >>
-> >> On 2023/6/27 15:23, Conor Dooley wrote:
-> >>
-> >>
-> >>   > [ EXTERNAL EMAIL ]
-> >>   >
-> >>   > On Tue, Jun 27, 2023 at 02:13:34PM +0800, Xianwei Zhao wrote:
-> >>   >> Hi Conor,
-> >>   >>      Thanks for you reply.
-> >>   >> On 2023/6/26 18:02, Conor Dooley wrote:
-> >>   >>
-> >>   >>
-> >>   >>> [ EXTERNAL EMAIL ]
-> >>   >>>
-> >>   >>> Hey,
-> >>   >>>
-> >>   >>> On Mon, Jun 26, 2023 at 05:52:21PM +0800, Xianwei Zhao wrote:
-> >>   >>>> T7 is an advanced application processor designed for smart display.
-> >>   >>>>
-> >>   >>>> Add the new T7 SoC/board device tree bindings.
-> >>   >>>>
-> >>   >>>> Add basic support for the T7 based Amlogic AN400 board, which
-> >>   >>>> describesthe following components: CPU, GIC, IRQ, Timer, UART. It's
-> >>   >>>> capable of booting up into the serial console.
-> >>   >>>
-> >>   >>> Lucas has already sent patches for the T7 SoC & is at v5:
-> >>   >>> https://lore.kernel.org/linux-devicetree/20230623081242.109131-1-
-> >>   >>> tanure@linux.com/
-> >>   >>> There's been a bit of discussion there, and there serial stuff in
-> >>   >>> particular is different in his series (it doesn't use always-on for
-> >>   >>> examples).
-> >>   >>> Could you please go and take a look at his series?
-> >>   >>>
-> >>   >>> Cheers,
-> >>   >>> Conor.
-> >>   >>>
-> >>   >> AN400 is the reference board designed by Amlogic, which is different
-> >>   >> from Khadas VIM4.
-> >>   >
-> >>   > Yet you share the same dtsi, which he has got through several
-> >>   > iterations of before you arrived.
-> >>   >
-> >> Hi Lucas,
-> >> Are you going to continue with the dtsi part?
-> >>
-> >>   >> And T7 serial is the same as S4, so I follow S4 serial.
-> >>   >
-> >>   > Yeah, no. SoC specific compatible please.
-> >>   >
-> >>   >
-> >>   > _______________________________________________
-> >>   > linux-amlogic mailing list
-> >>   > linux-amlogic@lists.infradead.org
-> >>   > http://lists.infradead.org/mailman/listinfo/linux-amlogic
-> >
-> > Hi Xianwei,
-> >
-> > I am doing the basics for Amlogic T7 A311D2, but the next step ( sd
-> > card or emmc, something to boot on) would be more difficult for me
-> > than you.
-> > After the first series for Vim4 gets merged, I will start to work on
-> > how to get sd cards working.
-> > But if you already have that working for the AN400 board, please send
-> > it. And I will look at that work and use it for Vim4.
-> >
-> > Or, if you don't have it ready and want to share it with me, we can
-> > work together on these A311D2 patches.
-> > You test on AN400, and I test on Vim4.
-> >
-> > Thanks
-> > Lucas
->
-> We are preparing this part. However it depends on clock. So the clock
-> must ready first.
+Hi,
 
-Will you send clock for T7?
+On 2023/6/30 01:44, Limonciello, Mario wrote:
+> I think what you can do is pick up all the tags in your next version.  Once the
+> whole series has tags we can discuss how it merges.
+
+Yes, you are right.
+
+I will prepare the next version.
+
+But I think, I should only gather the reverent part together.
+
+I means that I probably should divide the 8 patches in V7 into 4 + 4.
+
+The first four patch form a group, and the last four patch form another 
+group.
+
+
+Certainly, I will pick up the precious tags I got in the next version.
+
+Thanks you!
+
