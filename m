@@ -2,84 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DC7F7433BC
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 06:45:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 440FC7433C1
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 06:53:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230436AbjF3Epk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 00:45:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58190 "EHLO
+        id S230436AbjF3ExB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Jun 2023 00:53:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229522AbjF3Epi (ORCPT
+        with ESMTP id S229850AbjF3Ew6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 00:45:38 -0400
-Received: from mail.nsr.re.kr (unknown [210.104.33.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E88CF2118;
-        Thu, 29 Jun 2023 21:45:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; s=LIY0OQ3MUMW6182UNI14; d=nsr.re.kr; t=1688100197; c=relaxed/relaxed; h=content-type:date:from:message-id:mime-version:subject:to; bh=PZP6GR6XyvR4JOR6xXLruJf7U2QaWCAiYJVe4SwxDx4=; b=ke7Sb1DSwpOtg8xjStsNmBdNSxID+K4HQmOdeQLNsB7dbXQm5VX7l59tVWx6bfdvJPuujXlxmjvKoVX6EL0QcTMkRSIVgGRv8PSXn7E3NcCcuprAGBlUV0NFPY23g+vbEvxO6EX/4eu4DCWmlGJGS60JnEIZssiEHCMp09wH2DY5W5XiJsbfFA9UkUh/2hcQ9wLWN35RQui4ZsQcNoIiFVSYSV7hq31mUmawTziXrGo6TGFTPOL+VUZtqcTWPfORlj4hE3PayNQ/58ouwh+jbaiXb4DHesz03RcAxl3k3DjBnRuTOmWqZPu04akUVnzGPxu4lt3X535aw0sEVORfjA==
-Received: from 210.104.33.70 (nsr.re.kr)
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128 bits))
-        by mail.nsr.re.kr with SMTP; Fri, 30 Jun 2023 13:43:02 +0900
-Received: from 192.168.155.188 ([192.168.155.188])
-          by mail.nsr.re.kr (Crinity Message Backbone-7.0.1) with SMTP ID 506;
-          Fri, 30 Jun 2023 13:45:09 +0900 (KST)
-From:   Dongsoo Lee <letrhee@nsr.re.kr>
-To:     'Eric Biggers' <ebiggers@kernel.org>
-Cc:     'Herbert Xu' <herbert@gondor.apana.org.au>,
-        "'David S. Miller'" <davem@davemloft.net>,
-        'Jens Axboe' <axboe@kernel.dk>,
-        "'Theodore Y. Ts'o'" <tytso@mit.edu>,
-        'Jaegeuk Kim' <jaegeuk@kernel.org>,
-        linux-crypto@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-fscrypt@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230626084703.907331-1-letrhee@nsr.re.kr> <20230626084703.907331-5-letrhee@nsr.re.kr> <20230628063830.GA7920@sol.localdomain> <000901d9aa70$a228c420$e67a4c60$@nsr.re.kr> <20230630025914.GB1088@sol.localdomain>
-In-Reply-To: <20230630025914.GB1088@sol.localdomain>
-Subject: RE: [PATCH v3 4/4] fscrypt: Add LEA-256-XTS, LEA-256-CTS support
-Date:   Fri, 30 Jun 2023 13:45:10 +0900
-Message-ID: <001201d9ab0d$a6ab50b0$f401f210$@nsr.re.kr>
-MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-X-Mailer: Microsoft Outlook 16.0
-Thread-Index: AQHHxDRlmstc7qqNSJFY4M8BkkyX4gFqzZG4AcdR3rkCVVeuvQFbPgFSr497xkA=
-Content-Language: ko
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNPARSEABLE_RELAY,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+        Fri, 30 Jun 2023 00:52:58 -0400
+Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AD042690
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 21:52:58 -0700 (PDT)
+Received: by mail-pl1-x649.google.com with SMTP id d9443c01a7336-1b81fc6c729so9863145ad.3
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 21:52:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1688100777; x=1690692777;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=QMopF0yt6SNtXURrQJLWhNgsWSeXqZOwln5eBV7VSyg=;
+        b=X0Nlx2LfwFLDoIreU6J/7nCFcprP8zXSy4BxreWWpmLt4DmeFREe1gl/cooDVrO5uc
+         QvfY2Cbb1PQsTS1vCHzruuFKJFgZT4o/rEBTiTTuI19w3kh2dNLNlnCtLlAOMOukieA1
+         ZJ38X6tokAgCiMV300QArFfYtblOiB+cgTo6Cv1/mSKKV1g5KsbxMKb0LDp8/UKgYjmX
+         O4mNSebBakv5tTr3K5HipZ4wOpIN2KIqlVbwTV147KpuJJhFWrw6eZanI7EWuXcbJEJ2
+         YFSYjRYsRWlbBpq6SsWcGytlzaik5q2Z19hTce/BKQ8N4XwlNB7lOnCpcebUkw3N5buX
+         wvvg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688100777; x=1690692777;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=QMopF0yt6SNtXURrQJLWhNgsWSeXqZOwln5eBV7VSyg=;
+        b=d9FUsevFswYQLBO+F/lPZ10RWn/XAESQjpLZTq6A5YijausjfYa9Q6z3kdrJpC0Y5y
+         1h/W9CGR9YdSc432ArbRJ1jgCpFZQE85jm0SMOuc1tFFl/3BQbTF4HBmvpoip0AuMGR+
+         iTEEm/L1HwH/MrYlE1P4h1xGhwbTp4/PqY1duVvq2egS9rXAhgkB6Yjy3JDkRO9b4umI
+         TCGKxhvarZ1wFQdAtRfKhw1sDuRJyUo9ktBjlf/Vz1OB/RP30sb5lrmCvs34+KYsc60O
+         MOBPY8WZsLneko3geeWga+jwbDV/aWNiec7m5MJRURCOiUgvH5UNynyEp84H8TMAURkl
+         sVjg==
+X-Gm-Message-State: ABy/qLa/MFVivbSaps9IysK+i3PAytgQTh4UFflc72OdIIVwTd7xkl9r
+        1YCQWBR59EqAe0+Do8gKmc4aligME2/Nosx3FRW8JS7wIjvp2onSVi8ihuXPSObYfliAArzA8Hg
+        DhxHdi0hGuOWDWGoA2gqb+J5E/xFLOWBDPt4Nn0KScpnONaj6C0/wVUTsCTZAvcHmExzW+xo=
+X-Google-Smtp-Source: APBJJlEV+O7siKol/DY7iCP6fmNhLuKbzWPu98PuLcJd0QPskucrT7s+QKRfycseJlSmVxoSK0wgrz7omUNv
+X-Received: from jstultz-noogler2.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:600])
+ (user=jstultz job=sendgmr) by 2002:a17:903:2041:b0:1b8:fd7:cb0c with SMTP id
+ q1-20020a170903204100b001b80fd7cb0cmr873422pla.5.1688100777397; Thu, 29 Jun
+ 2023 21:52:57 -0700 (PDT)
+Date:   Fri, 30 Jun 2023 04:52:23 +0000
+In-Reply-To: <CABdmKX0A8mqz5cS4+CqjRgpQQKuSp=3SvE1KJ_di09VjJQVoGg@mail.gmail.com>
+Mime-Version: 1.0
+References: <CABdmKX0A8mqz5cS4+CqjRgpQQKuSp=3SvE1KJ_di09VjJQVoGg@mail.gmail.com>
+X-Mailer: git-send-email 2.41.0.255.g8b1d071c50-goog
+Message-ID: <20230630045246.1674919-1-jstultz@google.com>
+Subject: [PATCH] MAINTAINERS: Add T.J. Mercier as reviewer for DMA-BUF HEAPS FRAMEWORK
+From:   John Stultz <jstultz@google.com>
+To:     LKML <linux-kernel@vger.kernel.org>
+Cc:     John Stultz <jstultz@google.com>,
+        "T . J . Mercier" <tjmercier@google.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        Brian Starkey <Brian.Starkey@arm.com>,
+        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linaro-mm-sig@lists.linaro.org, kernel-team@android.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 29, 2023 at 19:59:14 -0700, Eric Biggers wrote:
-> I don't think that really addresses my comment, due to the second
-sentence.  I
-> understand that you would like to advertise the performance of LEA.  But
-as I
-> mentioned, it's not yet realized in the kernel crypto API, and in the
-context of
-> fscrypt it won't really bring anything new to the table anyway.  For now I
-think
-> LEA is best described as a "national pride cipher" alongside SM4...  Keep
-in
-> mind, it can always be changed later if new use cases come up.
-> 
-> Could you just omit the documentation update from your patch?  I actually
-need
-> to rework the whole "Encryption modes and usage" section anyway since it's
-> growing a bit unwieldy, with 6 different combinations of encryption modes
-now
-> supported.  The information needs to be organized better.  It currently
-reads
-> like a list, and it might be hard for users to understand which setting to
-use.
-> 
-> I'll add on a patch that does that and adds the mention of LEA support.
-> 
-> - Eric
+T.J. has been responsible for dmab-buf items on the Android team
+for awhile now, so it would be great to have him on as a reviewer.
 
-Thanks for the feedback.
+Cc: T.J. Mercier <tjmercier@google.com>
+Cc: Sumit Semwal <sumit.semwal@linaro.org>
+Cc: Benjamin Gaignard <benjamin.gaignard@collabora.com>
+Cc: Brian Starkey <Brian.Starkey@arm.com>
+Cc: John Stultz <jstultz@google.com>
+Cc: linux-media@vger.kernel.org
+Cc: dri-devel@lists.freedesktop.org
+Cc: linaro-mm-sig@lists.linaro.org
+Cc: kernel-team@android.com
+Signed-off-by: John Stultz <jstultz@google.com>
+---
+ MAINTAINERS | 1 +
+ 1 file changed, 1 insertion(+)
 
-We'll remove the documentation and submit the next version.
+diff --git a/MAINTAINERS b/MAINTAINERS
+index cb075f52d97b..f4e92b968ed7 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -6184,6 +6184,7 @@ R:	Benjamin Gaignard <benjamin.gaignard@collabora.com>
+ R:	Laura Abbott <labbott@redhat.com>
+ R:	Brian Starkey <Brian.Starkey@arm.com>
+ R:	John Stultz <jstultz@google.com>
++R:	T.J. Mercier <tjmercier@google.com>
+ L:	linux-media@vger.kernel.org
+ L:	dri-devel@lists.freedesktop.org
+ L:	linaro-mm-sig@lists.linaro.org (moderated for non-subscribers)
+-- 
+2.41.0.255.g8b1d071c50-goog
+
