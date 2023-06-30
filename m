@@ -2,111 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06AA77443C5
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 23:07:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 088097443C6
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 23:08:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232552AbjF3VHL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 17:07:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60338 "EHLO
+        id S232539AbjF3VIE convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 30 Jun 2023 17:08:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229673AbjF3VHJ (ORCPT
+        with ESMTP id S229503AbjF3VIA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 17:07:09 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 487BB3AAF;
-        Fri, 30 Jun 2023 14:07:08 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C9DA061808;
-        Fri, 30 Jun 2023 21:07:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9576C433C8;
-        Fri, 30 Jun 2023 21:07:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688159227;
-        bh=hYpTEHMq6y6J6BenMyXuV1x1KGnn5tFTZrm73RQZ4aU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=AzzeprbLoRBnHWrjJgRKbrUVVtaz33A2ZhsLuQyXKqDmyQOvljcBt3DAhrDflzwp0
-         bJ6XivbLjc+Oa+fochTe2RWbZMh8PKRIo7wkZFbYVC92qiFcoydLXV0oRqY0qsf0ew
-         krnGRlpTeLDYFh8Km+lfBZGqKGVXNTBrldkarnpOuZTFXuCa2TMACzq5cMsCzGiuJ+
-         cx9UhgS3LZHH5XGzDBm3DkrcwpM0106BaZdjTK4dSm1kDvRBqMv03DMHRbb2zzbVcI
-         JAvG3NWomezqtyWEWd3P9qU/XECzKAVDm9grLS9Z3HvKE2759v596WuvTaktksVK+z
-         c3vJSzj2MV8Hw==
-Date:   Fri, 30 Jun 2023 23:06:50 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     linus.walleij@linaro.org, Andi Shyti <andi.shyti@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kernel-janitors@vger.kernel.org,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
-Subject: Re: [PATCH] i2c: busses: i2c-nomadik: Remove a useless call in the
- remove function
-Message-ID: <ZJ9D6mP+gqQahEVq@sai>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        linus.walleij@linaro.org, Andi Shyti <andi.shyti@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kernel-janitors@vger.kernel.org,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
-References: <4f4c2c5c20b61c4bb28cb3e9ab4640534dd2adec.1629530169.git.christophe.jaillet@wanadoo.fr>
- <8ac04af8-eff8-bfe1-647a-2d04f5739702@wanadoo.fr>
+        Fri, 30 Jun 2023 17:08:00 -0400
+Received: from mail-yb1-f176.google.com (mail-yb1-f176.google.com [209.85.219.176])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5BC23AB2;
+        Fri, 30 Jun 2023 14:07:57 -0700 (PDT)
+Received: by mail-yb1-f176.google.com with SMTP id 3f1490d57ef6-bfee66a5db6so2184796276.0;
+        Fri, 30 Jun 2023 14:07:57 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688159277; x=1690751277;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=z/CO/oCABqzFmq54OHALLtN32UzLowehqvMtAzumrCU=;
+        b=QG4NM5hxG3NfQ+HmEoH+xDSBBF/UORMx1XyYNjCftI9IC+IQ5n4J1Gbp2su3t1Km8z
+         F/A09axtQ9CMGGkePivD91i1XA2U/tmwerd47LzpJI8zgvT3wMZGXBJD67K0ZcG2CBhP
+         aiYhMo8LvK7k/MYPl3bvrVkxxmazbaBq8mGOvmm60KHGmxYFK4EWZDVTrSLKBEvSsWHV
+         kYBQqnkeHL4RW1YtT7WAvzZ9DTzqIwfYTOwhtELvy8/DT79HhErwa0W8mzdcqOBBGr6H
+         o51h14ky8RUUF7oUc6j7pCibF2nlonZ+1EHXvzKqvck3M+Jgrau+BfB6vdhTJFfXBPsq
+         7gfA==
+X-Gm-Message-State: ABy/qLYWxYQzK4OCHTFhgn/APSnxDiAs6chDgg6Vq9Y2UHprWkS+5HPi
+        rgwtb1vneWsxQt13KYfGoc/spQtNBk/r3b318PU=
+X-Google-Smtp-Source: APBJJlHfQHqDUVj0jpVaP1NJ+yZ3Kh1WAyDJSbwftGcT9k7GZYd6dMeWyamYz9UcWOcyRiIIa17yKlFok6efS9MY7Jw=
+X-Received: by 2002:a25:734f:0:b0:bcd:73a2:d2cc with SMTP id
+ o76-20020a25734f000000b00bcd73a2d2ccmr3754774ybc.59.1688159276776; Fri, 30
+ Jun 2023 14:07:56 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="2SKYA9MrhLMabYkk"
-Content-Disposition: inline
-In-Reply-To: <8ac04af8-eff8-bfe1-647a-2d04f5739702@wanadoo.fr>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230628102949.2598096-1-john.g.garry@oracle.com>
+ <CAM9d7ciBWjNHOfouNKSFy2q88Cs4-6F8EjGqGpFdwb6QTShaew@mail.gmail.com> <9aef5f82-fa76-dbb5-59a0-47f2e85f8bda@oracle.com>
+In-Reply-To: <9aef5f82-fa76-dbb5-59a0-47f2e85f8bda@oracle.com>
+From:   Namhyung Kim <namhyung@kernel.org>
+Date:   Fri, 30 Jun 2023 14:07:44 -0700
+Message-ID: <CAM9d7chwaDPRnrAFreD=1eKia2f1iL1ZgF87dJCWcL_6dGAexQ@mail.gmail.com>
+Subject: Re: [PATCH RFC 0/9] perf tool: sys event metric support re-write
+To:     John Garry <john.g.garry@oracle.com>
+Cc:     acme@kernel.org, irogers@google.com, jolsa@kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        renyu.zj@linux.alibaba.com, shangxiaojing@huawei.com,
+        kjain@linux.ibm.com, kan.liang@linux.intel.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Jun 30, 2023 at 2:35 AM John Garry <john.g.garry@oracle.com> wrote:
+>
+>
+> >>
+> >> Based on 82fe2e45cdb0 (acme/tmp.perf/core, acme/tmp.perf-tools-next, acme/perf/core, acme/perf-tools-next) perf pmus: Check if we can encode the PMU number in perf_event_attr.type
+> >
+> > We moved to new repos from acme to perf/perf-tools and perf/perf-tools-next.
+> > You'd better rebase the series onto perf-tools-next (branch name is the same).
+>
+> Is that in the MAINTAINERS file? I could not see it.
 
---2SKYA9MrhLMabYkk
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+No it's not.  But it seems acme/perf is not there either.
+Probably we need to add one and split the tooling part.
 
-On Fri, Jun 30, 2023 at 10:10:40PM +0200, Christophe JAILLET wrote:
-> Hi,
->=20
-> "drivers/i2c/busses/i2c-nomadik.c" just got some loved, so I was wondering
-> if the below patch could be reviewed.
->=20
-> It does not apply anymore because of the recent change, but the explanati=
-on
-> in the commit message and the proposed change still make sense to me.
->=20
-> If it looks valid, I could send a V2.
->=20
-> So any feedback would be appreciated.
+>
+> And I was hoping that Ian could first have a look, since this is just an
+> RFC.
 
-Sure, go ahead!
+Ok, makes sense.
 
-
---2SKYA9MrhLMabYkk
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmSfQ+cACgkQFA3kzBSg
-KbZFWQ//fBMB4Z1V98HOgBgCUVd0VuuXt9kxzZvljp7zwhLujA/JQ/2q41iQZ5og
-VBI7V7gjuMjAYLRPwgQAtW3JObcIQ9BEenHv2DGGQX/xEDsmGvhyWVwnW4Oyl8mb
-RBz8OMdleU/p641cbrZJa0RNbbONIjsx+G1KI8nvm0cyah2Fc+ITJAyc4MDY++/7
-EtOjYWnbZJRsWX9FC2fEWqvNFTmI1EV8d5Z5ODf3dMK+fTlgs0yohf0JHa00IUpb
-Jc5REW6JcVvPLppS7jXyurDD3ZxdkM7RxWyZcM9hPrGvs4gtI+VC0sFfugPI3z6F
-09t6+1kBZuLGszIMQo89WeWqWUldFmYprY8bmdTdisf2AwZmdu1cogsaZrjOpA3H
-2FDNT7iRs/AGSidJnTgUkeAhpDHODyXVBgnv5cbA4zubWYnMKVRVVWhiO/88PUpM
-vXhnmkF4l6lOmtT9Q+XAJahmeW8S//AkMtW5DCdjgu+ruHv5vdD0BzYYWdDLiDrW
-NsM6Cv2BSW+V9a3rWViM3vg9dHsUt9Vx9pI6TmeLC73DZFdM1LgpGAX/VTLWZYke
-ToE1ngerg8X8OgoXeS3kSOkGH/byHxlWTI0qIv4j+3JcctQQUorW8TI2+kQu0eZc
-0ncdZ4MFI0X9Lsky6S0b7/Gr/up+noH3P58q716HOlEIYjKrnDk=
-=P9oA
------END PGP SIGNATURE-----
-
---2SKYA9MrhLMabYkk--
+Thanks,
+Namhyung
