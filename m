@@ -2,117 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6730744424
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 23:57:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 766B9744361
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 22:42:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232302AbjF3V5k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 17:57:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44146 "EHLO
+        id S232561AbjF3Umk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Jun 2023 16:42:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229485AbjF3V5f (ORCPT
+        with ESMTP id S230013AbjF3Umg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 17:57:35 -0400
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2072.outbound.protection.outlook.com [40.107.243.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40BCEA2;
-        Fri, 30 Jun 2023 14:57:34 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=GfYjU94Cnp06BXBw5UiRvIRCry8BPZEoYJOfUqeLOmPcov+IzIIzh6FfdcywTlQojkBFfPrNTPKhz6MhmdMHOAE5IdOQussuo5qf1xPyo1zr2R63Sr0QDq+65564dYVyu6rMWwTQmIKgFwo2mHq6dvU1x8SkbhIao/BsZFYHamzpC0M2jBwTYc9YZdalYsrfSs/MnnWxbp3gX1+Fxsso4GdkMImp7rhYwDp0YLa0q+D069m9HbRltQkQAmca7OpbKE7FVdQeuwcBtPiPR9piOQ+mzk0KvYb+9/lVw9Bg2Q1absC2sgz26R9Ojs8qINdQbwjEmSChDzIz9lGoxkCldg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=+iP/yKKjl5mdIjpVbAtOLYWO3fTzTwcqvi2QUrxpywA=;
- b=NL5WNRrNrPN/ZgOw2kvgxt2ScqjJE9T70CIt44UpTkUISi+AJNM3Pw2rY8Xb3/Pyu6DuVeu6nRX0hzjv7/Z0I3NasLMPL8afi+hdQgwsygv05CHdkD0GDgKJJOU8Uwjw332jP7QmJKkBAeKzlm1ZNwRO2YJ6ifzk+10K7/i3HHrHQ+N6b44J0Y8ukLc7UtLawazzm0MpU6HLSuVTXC0S6dfXpgRdnhjQm3cm0SwVNq7aMzR3v7gWfscumoW5x89utGdtVoGfIHuSKSuqXCDWdWclNg2O/GG1XGHoT3y2XQDGman01wkm1/u3bVh/MIOTtzZCI5DuFQ3xxByPVh/suQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=alien8.de smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=+iP/yKKjl5mdIjpVbAtOLYWO3fTzTwcqvi2QUrxpywA=;
- b=aorNiie7NFRWzpxynbEUyhNvR8XyDo9C/1bNYcN8A02dXHJcoSJ29Dnnditld1YyKDTRCVQxB8p8xfO/iX8+oDv8uqTWZQXWn4v4YQldY1/uZtkzNVUyPBRX8WFB11Qsesli7xIzw/Ja0Rs06mpEivYK/y/bz0w+DjdixyT5jQU=
-Received: from SJ0PR13CA0084.namprd13.prod.outlook.com (2603:10b6:a03:2c4::29)
- by BL1PR12MB5062.namprd12.prod.outlook.com (2603:10b6:208:313::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6544.19; Fri, 30 Jun
- 2023 21:57:31 +0000
-Received: from DM6NAM11FT078.eop-nam11.prod.protection.outlook.com
- (2603:10b6:a03:2c4:cafe::7b) by SJ0PR13CA0084.outlook.office365.com
- (2603:10b6:a03:2c4::29) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6565.10 via Frontend
- Transport; Fri, 30 Jun 2023 21:57:30 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- DM6NAM11FT078.mail.protection.outlook.com (10.13.173.183) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6521.43 via Frontend Transport; Fri, 30 Jun 2023 21:57:29 +0000
-Received: from localhost (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Fri, 30 Jun
- 2023 16:57:29 -0500
-Date:   Thu, 29 Jun 2023 16:02:04 -0500
-From:   Michael Roth <michael.roth@amd.com>
-To:     Borislav Petkov <bp@alien8.de>
-CC:     <kvm@vger.kernel.org>, <linux-coco@lists.linux.dev>,
-        <linux-mm@kvack.org>, <linux-crypto@vger.kernel.org>,
-        <x86@kernel.org>, <linux-kernel@vger.kernel.org>,
-        <tglx@linutronix.de>, <mingo@redhat.com>, <jroedel@suse.de>,
-        <thomas.lendacky@amd.com>, <hpa@zytor.com>, <ardb@kernel.org>,
-        <pbonzini@redhat.com>, <seanjc@google.com>, <vkuznets@redhat.com>,
-        <jmattson@google.com>, <luto@kernel.org>,
-        <dave.hansen@linux.intel.com>, <slp@redhat.com>,
-        <pgonda@google.com>, <peterz@infradead.org>,
-        <srinivas.pandruvada@linux.intel.com>, <rientjes@google.com>,
-        <dovmurik@linux.ibm.com>, <tobin@ibm.com>, <vbabka@suse.cz>,
-        <kirill@shutemov.name>, <ak@linux.intel.com>,
-        <tony.luck@intel.com>, <marcorr@google.com>,
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        <alpergun@google.com>, <dgilbert@redhat.com>, <jarkko@kernel.org>,
-        <ashish.kalra@amd.com>, <nikunj.dadhania@amd.com>,
-        <liam.merwick@oracle.com>, <zhi.a.wang@intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
-Subject: Re: [PATCH RFC v9 05/51] x86/coco: move CONFIG_HAS_CC_PLATFORM check
- down into coco/Makefile
-Message-ID: <20230629210204.tknoh7p3hw45jcp4@amd.com>
-References: <20230612042559.375660-1-michael.roth@amd.com>
- <20230612042559.375660-6-michael.roth@amd.com>
- <20230620120920.GAZJGW8B6XHrsoLGCJ@fat_crate.local>
- <20230620204315.xr7wtcrowc7oprka@amd.com>
- <20230621085400.GDZJK6qMeOU2monJDv@fat_crate.local>
+        Fri, 30 Jun 2023 16:42:36 -0400
+Received: from omta34.uswest2.a.cloudfilter.net (omta34.uswest2.a.cloudfilter.net [35.89.44.33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12B66BD;
+        Fri, 30 Jun 2023 13:42:35 -0700 (PDT)
+Received: from eig-obgw-5004a.ext.cloudfilter.net ([10.0.29.221])
+        by cmsmtp with ESMTP
+        id FKRcqfuqWfaVXFKwsqzAH0; Fri, 30 Jun 2023 20:42:34 +0000
+Received: from gator4166.hostgator.com ([108.167.133.22])
+        by cmsmtp with ESMTPS
+        id FKwrqtbpVyWX6FKwrqUAfS; Fri, 30 Jun 2023 20:42:33 +0000
+X-Authority-Analysis: v=2.4 cv=L5IO/sf8 c=1 sm=1 tr=0 ts=649f3e39
+ a=1YbLdUo/zbTtOZ3uB5T3HA==:117 a=WzbPXH4gqzPVN0x6HrNMNA==:17
+ a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10 a=of4jigFt-DYA:10
+ a=wYkD_t78qR0A:10 a=VwQbUJbxAAAA:8 a=20KFwNOVAAAA:8 a=cm27Pg_UAAAA:8
+ a=1XWaLZrsAAAA:8 a=Z4Rwk6OoAAAA:8 a=pGLkceISAAAA:8 a=hSkVLCK3AAAA:8
+ a=xjWn6lA6g3CWHTlZJwwA:9 a=QEXdDO2ut3YA:10 a=AjGcO6oz07-iQ99wixmX:22
+ a=xmb-EsYY8bH0VWELuYED:22 a=HkZW87K1Qel5hWWM3VKY:22 a=cQPPKAXgyycSBL8etih5:22
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=embeddedor.com; s=default; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=/P25XoWocTqeuunlFiDXa1Xh7ntxGZHuVbgXimvxP/4=; b=J9pW7WBzoZOlUBf+XKCdg/O/2X
+        lC4vz/JAL+vdIgIyGqv37WIIDIpzGuRbCUe7iARzNp2iJhMfIOt97N1ayoIMsqZoc+sOX3LfSqDe9
+        hGWScXsBjb140P9OguMZRZKhtvgbd1r4wpBo+M9kpNEhDHZKWpRkZej22DyQMj1VXd8q89+mBu6lA
+        Hehp8DGRrCC7r0HKYIdm/h4U4px/l9iXg972Ov4RBRD7YQtePXL0U5SXJKbCtkVWIYf5vrp/gv0kb
+        8ZuqJNMJVkPd4J26qWMxbFZuUZNOYqAIhqZwzZtjFmDRWTLV+dwFOisN2PZSICkbkasdtGbYWZMtM
+        AOxRS90A==;
+Received: from 187-162-21-192.static.axtel.net ([187.162.21.192]:39270 helo=[192.168.15.8])
+        by gator4166.hostgator.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.96)
+        (envelope-from <gustavo@embeddedor.com>)
+        id 1qFJLR-002Yq2-37;
+        Fri, 30 Jun 2023 13:59:50 -0500
+Message-ID: <a55bdeae-149b-5d08-9544-57ac8140147c@embeddedor.com>
+Date:   Fri, 30 Jun 2023 13:00:36 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20230621085400.GDZJK6qMeOU2monJDv@fat_crate.local>
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6NAM11FT078:EE_|BL1PR12MB5062:EE_
-X-MS-Office365-Filtering-Correlation-Id: f0427086-2cf8-440e-9a14-08db79b4fff1
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 2sMGfiNIQZezfcZ+PMzMdNlgxoADlvJl2Lni3o1m/an0dVjtH/TvzKf9pgnnM8aK6EchpUcimIfT2GE4BKWCWXtWXwFyo2sffHuQE3pb+0HkGQZTo3mzfAvqbymOFNjolh/RVms2Dpqy2IDA48n4Ex6zXSE/7SaC9s/Nkm2k4eWrl7Ix5Wg9MDX2oAZzTu0TrUqA4KtdOqXIMF3qC4akTccxbif13LtRYO5hFgBCv00wqukWGUa236DlYiMFPF11/uncY1906z+1xSsbyj1PzjlIm1PRqeBzUIQ1FPUwsx6TP1UTBPV3TGlbfmr0WCTImzbAC67/Pe1FUqNyP//zlHOev+Y8RPuGJn7fDwJ5vuQZJXXX8EfiyeMlZmPIK86zodgAcVm0lWAIGAN76Q3CB9F4yhRvDPKgdCaT5FyyW93XPuRKevfGgNw4iP3eT6NyVa38aczMQd1gHKKCMDudRz6ZEU69vjQqoJY/sf+bHWfI7sXUxyq2BUBvOQuslkSMbaJRApASVvuDgF1QHx2UukzzYoRj4ZKKZfnS1VkiZl7YPO+o++dx74NCx6zqFPWOWLG2OETx7fWRgSKOI/+MiVJTb8fDf0xviQVU1IGOafN2/TiVStiB31XL3kNTCC6C/ikEqbwkpubXChwN/VPK3g8gPoxISeKUtYlOos6DDITkZaE4c3z+sMtjTX/TzA4PEb/o1ZmUR5Yjo2G54u4eHcsVSWRm7HNRWkdCZK3P//9LuCr9/ir5EK3WJvgS1wy7Sb0jUPW+VCQtmd2gzqQqdTI4/oi/oFoOADdLiMDDpqs=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(346002)(39860400002)(396003)(136003)(376002)(451199021)(40470700004)(46966006)(36840700001)(336012)(426003)(47076005)(40460700003)(2616005)(2906002)(81166007)(356005)(82740400003)(36860700001)(40480700001)(36756003)(8936002)(8676002)(82310400005)(5660300002)(86362001)(54906003)(966005)(41300700001)(6916009)(4326008)(70206006)(70586007)(6666004)(316002)(478600001)(16526019)(186003)(44832011)(1076003)(7406005)(7416002)(26005)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Jun 2023 21:57:29.7373
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: f0427086-2cf8-440e-9a14-08db79b4fff1
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT078.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR12MB5062
-X-Spam-Status: No, score=0.2 required=5.0 tests=BAYES_00,DATE_IN_PAST_24_48,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v2] pid: Replace struct pid 1-element array with
+ flex-array
+Content-Language: en-US
+To:     Kees Cook <keescook@chromium.org>,
+        Christian Brauner <brauner@kernel.org>
+Cc:     Jan Kara <jack@suse.cz>, Andreas Gruenbacher <agruenba@redhat.com>,
+        Daniel Verkamp <dverkamp@chromium.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Jeff Xu <jeffxu@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        syzbot+ac3b41786a2d0565b6d5@syzkaller.appspotmail.com,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+References: <20230630180418.gonna.286-kees@kernel.org>
+From:   "Gustavo A. R. Silva" <gustavo@embeddedor.com>
+In-Reply-To: <20230630180418.gonna.286-kees@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - gator4166.hostgator.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - embeddedor.com
+X-BWhitelist: no
+X-Source-IP: 187.162.21.192
+X-Source-L: No
+X-Exim-ID: 1qFJLR-002Yq2-37
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: 187-162-21-192.static.axtel.net ([192.168.15.8]) [187.162.21.192]:39270
+X-Source-Auth: gustavo@embeddedor.com
+X-Email-Count: 0
+X-Org:  HG=hgshared;ORG=hostgator;
+X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
+X-Local-Domain: yes
+X-CMAE-Envelope: MS4xfP0LiplCTGFH3P4K5KOoIsaFnaQT2Zh5TUxSfm849qkC1LGnfLU6AjuFvu7KTaXqWkFTw+utLoit+ZRcjpUUHMVjPhYbOrDPQya3kxPGHxrIlo6rDzqX
+ ZLEQbn2xdGbGFLBPzfDIkdgI7CA7G5SFY902njp1Uh6swghyoQEbb4cyDB2MC79jXP/yyQomXUZBNc/uLTZyJHExJvMuVwdYlgixRGGsHzIgPOtPK58/bNYn
+ HeGAJP/tcfZ3tIJ7M2d43ULovYNKyleWm+2trz6CsuM=
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -120,40 +103,99 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 21, 2023 at 10:54:00AM +0200, Borislav Petkov wrote:
-> On Tue, Jun 20, 2023 at 03:43:15PM -0500, Michael Roth wrote:
-> > Basically, arch/x86/coco/Makefile is never processed if arch/x86/Kbuild
-> > indicates that CONFIG_HAS_CC_PLATFORM is not set. So if we want to have
-> > stuff in arch/x86/coco/Makefile that build for !CONFIG_HAS_CC_PLATFORM,
-> > like SNP host support, which does not rely on CONFIG_HAS_CC_PLATFORM
-> > being set, that check needs to be moved down into arch/x86/coco/Makefile.
+
+
+On 6/30/23 12:04, Kees Cook wrote:
+> For pid namespaces, struct pid uses a dynamically sized array member,
+> "numbers". This was implemented using the ancient 1-element fake flexible
+> array, which has been deprecated for decades. Replace it with a C99
+> flexible array, refactor the array size calculations to use struct_size(),
+> and address elements via indexes. Note that the static initializer (which
+> defines a single element) works as-is, and requires no special handling.
 > 
-> Ok, so if you put SNP host support into arch/x86/virt/svm/sev.c, that
-> should work too and won't have any relation to CONFIG_HAS_CC_PLATFORM,
-> right?
-
-Right, that works out just as well, and ends up being a bit more
-straightforward. I have it implemented here:
-
-  https://github.com/mdroth/linux/commits/snp-host-latest-v9b
-
-  https://github.com/mdroth/linux/commit/a889a2dd64b62d9c3bf74cf02e7d8d71c7061667
-
-and dropped the patch that reworks arch/x86/coco/Makefile.
-
-Thanks,
-
-Mike
-
+> Without this, CONFIG_UBSAN_BOUNDS (and potentially CONFIG_FORTIFY_SOURCE)
+> will trigger bounds checks when entering a pid namespace:
+> https://lore.kernel.org/lkml/20230517-bushaltestelle-super-e223978c1ba6@brauner
 > 
-> The CC_PLATFORM thing is a way to check for confidential computing guest
-> features by abstracting the capabilities so that you don't have to check
-> *each* and *every* conf guest type in the conditionals and thus go nuts.
+> For example: unshare --fork --pid --mount-proc readlink /proc/self
 > 
-> Thx.
+> Cc: Christian Brauner <brauner@kernel.org>
+> Cc: Jan Kara <jack@suse.cz>
+> Cc: Andreas Gruenbacher <agruenba@redhat.com>
+> Cc: Daniel Verkamp <dverkamp@chromium.org>
+> Cc: "Paul E. McKenney" <paulmck@kernel.org>
+> Cc: Jeff Xu <jeffxu@google.com>
+> Cc: Andrew Morton <akpm@linux-foundation.org>
+> Cc: Boqun Feng <boqun.feng@gmail.com>
+> Cc: Luis Chamberlain <mcgrof@kernel.org>
+> Cc: Frederic Weisbecker <frederic@kernel.org>
+> Reported-by: syzbot+ac3b41786a2d0565b6d5@syzkaller.appspotmail.com
+> Closes: https://lore.kernel.org/lkml/000000000000c6de2a05fbdecbbb@google.com/
+> Acked-by: Jeff Xu <jeffxu@google.com>
+> Signed-off-by: Kees Cook <keescook@chromium.org>
+
+I would vote in favor of the array over the pointer notation, but anyway... we need
+to land this change, and that's what matters.
+
+Reviewed-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+
+Thanks!
+--
+Gustavo
+
+> ---
+> v2:
+>   - drop pointer math to array index conversions (torvalds)
+>   - use struct_size_t now that it exists (torvalds)
+>   - updated commit log with reproducer example
+> v1: https://lore.kernel.org/lkml/20230517225838.never.965-kees@kernel.org/
+> ---
+>   include/linux/pid.h    | 2 +-
+>   kernel/pid.c           | 7 +++++--
+>   kernel/pid_namespace.c | 2 +-
+>   3 files changed, 7 insertions(+), 4 deletions(-)
 > 
-> -- 
-> Regards/Gruss,
->     Boris.
-> 
-> https://people.kernel.org/tglx/notes-about-netiquette
+> diff --git a/include/linux/pid.h b/include/linux/pid.h
+> index b75de288a8c2..653a527574c4 100644
+> --- a/include/linux/pid.h
+> +++ b/include/linux/pid.h
+> @@ -67,7 +67,7 @@ struct pid
+>   	/* wait queue for pidfd notifications */
+>   	wait_queue_head_t wait_pidfd;
+>   	struct rcu_head rcu;
+> -	struct upid numbers[1];
+> +	struct upid numbers[];
+>   };
+>   
+>   extern struct pid init_struct_pid;
+> diff --git a/kernel/pid.c b/kernel/pid.c
+> index f93954a0384d..6a1d23a11026 100644
+> --- a/kernel/pid.c
+> +++ b/kernel/pid.c
+> @@ -656,8 +656,11 @@ void __init pid_idr_init(void)
+>   
+>   	idr_init(&init_pid_ns.idr);
+>   
+> -	init_pid_ns.pid_cachep = KMEM_CACHE(pid,
+> -			SLAB_HWCACHE_ALIGN | SLAB_PANIC | SLAB_ACCOUNT);
+> +	init_pid_ns.pid_cachep = kmem_cache_create("pid",
+> +			struct_size_t(struct pid, numbers, 1),
+> +			__alignof__(struct pid),
+> +			SLAB_HWCACHE_ALIGN | SLAB_PANIC | SLAB_ACCOUNT,
+> +			NULL);
+>   }
+>   
+>   static struct file *__pidfd_fget(struct task_struct *task, int fd)
+> diff --git a/kernel/pid_namespace.c b/kernel/pid_namespace.c
+> index b43eee07b00c..0bf44afe04dd 100644
+> --- a/kernel/pid_namespace.c
+> +++ b/kernel/pid_namespace.c
+> @@ -48,7 +48,7 @@ static struct kmem_cache *create_pid_cachep(unsigned int level)
+>   		return kc;
+>   
+>   	snprintf(name, sizeof(name), "pid_%u", level + 1);
+> -	len = sizeof(struct pid) + level * sizeof(struct upid);
+> +	len = struct_size_t(struct pid, numbers, level + 1);
+>   	mutex_lock(&pid_caches_mutex);
+>   	/* Name collision forces to do allocation under mutex. */
+>   	if (!*pkc)
