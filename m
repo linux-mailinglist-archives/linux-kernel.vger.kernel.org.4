@@ -2,84 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04ECF7437AB
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 10:43:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CBF7E7437B0
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 10:45:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232489AbjF3Inq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 04:43:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47444 "EHLO
+        id S231956AbjF3Ip3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Jun 2023 04:45:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232351AbjF3InN (ORCPT
+        with ESMTP id S230009AbjF3Ip0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 04:43:13 -0400
-Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 776483C02
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 01:43:06 -0700 (PDT)
-Received: by mail-ej1-f52.google.com with SMTP id a640c23a62f3a-992ca792065so109660566b.2
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 01:43:06 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688114585; x=1690706585;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=5B4IVr8Ja8HmXEBGoLMWf9UwelCEFdj8Ikbkk9A1VuU=;
-        b=N4u63ZGmpj5k2FEasVogQJ5eTmmFbG02eurGZ0aBtBKkN5UuiyaVx4hAa5IKPb7oyZ
-         Jgi9K7KSNSsHHy7VwJpeBtxOr7BWbovOkixnx6eznckqvXjbt8ozQQYsc9RNCJRUtmD5
-         mEdgEoS5OxNBiS/MlIVygJb279KtEzXrpuArTqOS5XvZIGuEvFnXK4iLe2UhaHkZDIfy
-         hB7b/XLl+O9aSkP9swZ60bZXNy96kCp0RlV7muNdVa54fqi1GuIRbn63kicqr0kQLRPL
-         1ZVBgVNp4wXqoMa6wVCwtPQUOolh0h6rsaJZ7c+YjtHHqSIRRj7aIpdcmWeOTwwdbrBk
-         oSmQ==
-X-Gm-Message-State: ABy/qLbd7eR5ZqdMn0Jsytus4ixyFaL4pKEln5mOpdtjTXslwzz4nv39
-        HqYb0fAApl3OA6spA5y4JNE=
-X-Google-Smtp-Source: APBJJlFeNIVHPqaAGPftDvBSqiTQ4Tr/AXjHL5jLgbaPc4SKjWIPk0fOpqH5cRG+2Lv/IuCHmqm3Mg==
-X-Received: by 2002:a17:906:e48:b0:988:882b:9a3 with SMTP id q8-20020a1709060e4800b00988882b09a3mr1415031eji.36.1688114585311;
-        Fri, 30 Jun 2023 01:43:05 -0700 (PDT)
-Received: from [192.168.1.58] (185-219-167-24-static.vivo.cz. [185.219.167.24])
-        by smtp.gmail.com with ESMTPSA id t14-20020a170906948e00b0098d2f703408sm7724415ejx.118.2023.06.30.01.43.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 30 Jun 2023 01:43:04 -0700 (PDT)
-Message-ID: <f8864bb0-3d76-20d5-8a25-aab9726354f2@kernel.org>
-Date:   Fri, 30 Jun 2023 10:43:02 +0200
+        Fri, 30 Jun 2023 04:45:26 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC987194;
+        Fri, 30 Jun 2023 01:45:25 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 40CA2616FE;
+        Fri, 30 Jun 2023 08:45:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72995C433C8;
+        Fri, 30 Jun 2023 08:45:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688114724;
+        bh=XCGEJy3R7r9qVEdodIrivlpUMg2Wf0w09Wh06MmqfKo=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=qYGriyuY2tStPWMV981uCR6OqpUX/wtnRmIwGMQ3laEM3IMXL8dDhFVcnZK9ojCNI
+         aEHF4JJeazTc0Z1NsmkdzpmKoZlUH6ao5cdFcUSxErg/lAFP4K2KIYyNdFNCdZGnNI
+         QnFR8IWiVZNRKWnHgUZVPtcdMJKRMZJpt7nYiEAXIdewNqW9mDbbLFGdWCtU6HvYCm
+         PNISEJy7QyzRudTeJ+bS5onYKnvJKmjHb4dOeO0P7mRjv6/ficWNt8FgvsI+3PSS2W
+         4fL73WDcCEwmVaz8Hm8e6lCLXKFuVgcpAw6glYqmoPLxo00V0rC1FirDJzYbV/srTV
+         SDXqMKN7TX2zQ==
+From:   Christian Brauner <brauner@kernel.org>
+To:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+Cc:     Christian Brauner <brauner@kernel.org>,
+        Tyler Hicks <code@tyhicks.com>,
+        Dave Chinner <dchinner@redhat.com>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Al Viro <viro@zeniv.linux.org.uk>, ecryptfs@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Eric Biggers <ebiggers@kernel.org>
+Subject: Re: [PATCH v2 0/3] fs/ecryptfs: Replace kmap{,_atomic}() with kmap_local_page()
+Date:   Fri, 30 Jun 2023 10:45:17 +0200
+Message-Id: <20230630-umfang-pumpt-a0cd2d6cdd91@brauner>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230426172223.8896-1-fmdefrancesco@gmail.com>
+References: <20230426172223.8896-1-fmdefrancesco@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v4 29/33] x86/mm: try VMA lock-based page fault handling
- first
-Content-Language: en-US
-From:   Jiri Slaby <jirislaby@kernel.org>
-To:     Suren Baghdasaryan <surenb@google.com>
-Cc:     akpm@linux-foundation.org, michel@lespinasse.org,
-        jglisse@google.com, mhocko@suse.com, vbabka@suse.cz,
-        hannes@cmpxchg.org, mgorman@techsingularity.net, dave@stgolabs.net,
-        willy@infradead.org, liam.howlett@oracle.com, peterz@infradead.org,
-        ldufour@linux.ibm.com, paulmck@kernel.org, mingo@redhat.com,
-        will@kernel.org, luto@kernel.org, songliubraving@fb.com,
-        peterx@redhat.com, david@redhat.com, dhowells@redhat.com,
-        hughd@google.com, bigeasy@linutronix.de, kent.overstreet@linux.dev,
-        punit.agrawal@bytedance.com, lstoakes@gmail.com,
-        peterjung1337@gmail.com, rientjes@google.com, chriscli@google.com,
-        axelrasmussen@google.com, joelaf@google.com, minchan@google.com,
-        rppt@kernel.org, jannh@google.com, shakeelb@google.com,
-        tatashin@google.com, edumazet@google.com, gthelen@google.com,
-        gurua@google.com, arjunroy@google.com, soheil@google.com,
-        leewalsh@google.com, posk@google.com,
-        michalechner92@googlemail.com, linux-mm@kvack.org,
-        linux-arm-kernel@lists.infradead.org,
-        linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org, kernel-team@android.com
-References: <20230227173632.3292573-1-surenb@google.com>
- <20230227173632.3292573-30-surenb@google.com>
- <dbdef34c-3a07-5951-e1ae-e9c6e3cdf51b@kernel.org>
- <CAJuCfpF7LweMwpvXavjJZhAciK7wK-bdLz2aFhOZGSHeK5tA9A@mail.gmail.com>
- <9a8d788c-b8ba-1b8a-fd79-0e25b1b60bed@kernel.org>
- <f7ad7a42-13c8-a486-d0b7-01d5acf01e13@kernel.org>
-In-Reply-To: <f7ad7a42-13c8-a486-d0b7-01d5acf01e13@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1421; i=brauner@kernel.org; h=from:subject:message-id; bh=HdGmSeFl/tSI7e/B0hTSZaffBkpDR39gQdEGFv0fcNQ=; b=owGbwMvMwCU28Zj0gdSKO4sYT6slMaTMm/q5w0P88u6dt4yW36v8rt9/Q/rcsnOdsmYpbg7N/TyC G1ynd5SyMIhxMciKKbI4tJuEyy3nqdhslKkBM4eVCWQIAxenAEykvZeR4aOQ1qeDzv99p/35FxF17o jlK+GUZD3OtZ3dRw4rSonNVWD4H7Xs4+V5Ja3fPnxcVWPek30q3vX4ZqmX8pMP2Lh1sK2LZAEA
+X-Developer-Key: i=brauner@kernel.org; a=openpgp; fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,40 +63,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30. 06. 23, 10:28, Jiri Slaby wrote:
->  > 2348 
-> clone3({flags=CLONE_VM|CLONE_FS|CLONE_FILES|CLONE_SIGHAND|CLONE_THREAD|CLONE_SYSVSEM|CLONE_SETTLS|CLONE_PARENT_SETTID|CLONE_CHILD_CLEARTID, child_tid=0x7fcaa5882990, parent_tid=0x7fcaa5882990, exit_signal=0, stack=0x7fcaa5082000, stack_size=0x7ffe00, tls=0x7fcaa58826c0} => {parent_tid=[2351]}, 88) = 2351
->  > 2350  <... clone3 resumed> => {parent_tid=[2372]}, 88) = 2372
->  > 2351  <... clone3 resumed> => {parent_tid=[2354]}, 88) = 2354
->  > 2351  <... clone3 resumed> => {parent_tid=[2357]}, 88) = 2357
->  > 2354  <... clone3 resumed> => {parent_tid=[2355]}, 88) = 2355
->  > 2355  <... clone3 resumed> => {parent_tid=[2370]}, 88) = 2370
->  > 2370  mmap(NULL, 262144, PROT_READ|PROT_WRITE, 
-> MAP_PRIVATE|MAP_ANONYMOUS, -1, 0 <unfinished ...>
->  > 2370  <... mmap resumed>)               = 0x7fca68249000
->  > 2372  <... clone3 resumed> => {parent_tid=[2384]}, 88) = 2384
->  > 2384  <... clone3 resumed> => {parent_tid=[2388]}, 88) = 2388
->  > 2388  <... clone3 resumed> => {parent_tid=[2392]}, 88) = 2392
->  > 2392  <... clone3 resumed> => {parent_tid=[2395]}, 88) = 2395
->  > 2395  write(2, "runtime: marked free object in s"..., 36 <unfinished 
-> ...>
+On Wed, 26 Apr 2023 19:22:20 +0200, Fabio M. De Francesco wrote:
+> kmap() and kmap_atomic() have been deprecated in favor of
+> kmap_local_page().
 > 
-> I.e. IIUC, all are threads (CLONE_VM) and thread 2370 mapped ANON 
-> 0x7fca68249000 - 0x7fca6827ffff and go in thread 2395 thinks for some 
-> reason 0x7fca6824bec8 in that region is "bad".
+> Therefore, replace kmap() and kmap_atomic() with kmap_local_page().
+> 
+> Tested in a QEMU/KVM x86_32 VM, 6GB RAM, booting a kernel with
+> HIGHMEM64GB enabled.
+> 
+> [...]
 
-As I was noticed, this might be as well be a fail of the go's 
-inter-thread communication (or alike) too. It might now be only more 
-exposed with vma-based locks as we can do more parallelism now.
+Picking this up. Please tell me if this should be routed somewhere else.
+vfs.misc will be rebased once v6.5-rc1 is released.
 
-There are older hard to reproduce bugs in go with similar symptoms (we 
-see this error sometimes now too):
-https://github.com/golang/go/issues/15246
+---
 
-Or this 2016 bug is a red herring. Hard to tell...
+Applied to the vfs.misc branch of the vfs/vfs.git tree.
+Patches in the vfs.misc branch should appear in linux-next soon.
 
->> thanks,
--- 
-js
-suse labs
+Please report any outstanding bugs that were missed during review in a
+new review to the original patch series allowing us to drop it.
 
+It's encouraged to provide Acked-bys and Reviewed-bys even though the
+patch has now been applied. If possible patch trailers will be updated.
+
+Note that commit hashes shown below are subject to change due to rebase,
+trailer updates or similar. If in doubt, please check the listed branch.
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git
+branch: vfs.misc
+
+[1/3] fs/ecryptfs: Replace kmap() with kmap_local_page()
+      https://git.kernel.org/vfs/vfs/c/7a367455b6a5
+[2/3] fs/ecryptfs: Use kmap_local_page() in ecryptfs_write()
+      https://git.kernel.org/vfs/vfs/c/55f13011af9d
+[3/3] fs/ecryptfs: Use kmap_local_page() in copy_up_encrypted_with_header()
+      https://git.kernel.org/vfs/vfs/c/de9f5a15080f
