@@ -2,60 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEE99743A01
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 12:53:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 39DE0743A20
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 12:58:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232186AbjF3Kx3 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 30 Jun 2023 06:53:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43884 "EHLO
+        id S232406AbjF3K6T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Jun 2023 06:58:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232288AbjF3KxG (ORCPT
+        with ESMTP id S232361AbjF3K6C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 06:53:06 -0400
-Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DBBD35B6;
-        Fri, 30 Jun 2023 03:53:04 -0700 (PDT)
-Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-94ea38c90ccso47836466b.1;
-        Fri, 30 Jun 2023 03:53:04 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688122383; x=1690714383;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=/A56lQbaSYx6f8A8Kd9myuvvjZF2IChmVUGzObphlZg=;
-        b=I9+ZCk4HUfdY42bTSscxs1a/+YAhPUEpSY4wqOXX1XiS6V7OL0tLJW3xSyB/delA6m
-         Jz5DY5N1u/S5fjvWDnlt9G63i/HT22gx0HNyB73vJy56df3P3TVGDFg7zVMI4y4M8opO
-         410bchTm1yiGP+7pYdpxUugCJS1pfBQO71lI8Tndiy9fIalzrfWGnmB6NNlh0HuTWQ3v
-         bQ77ZL+h+N/h36REnQxhpxRdFpjpzonNPmQgGktpOn/rNin/RLR4/3d5K4XfFrjebdAE
-         ej2t7o9cVRSr8NOHfiVM3drM191uTl/6fGUGGEblyYlEZT7673LSjaR0Y3iIiwhYbzli
-         SUeg==
-X-Gm-Message-State: ABy/qLZfnxpeA66DCyyqZ6QxAnhrF4QLVjbaNsGLiYX+0yZ17r9UQG6C
-        FmArxT1DhsZeujXMxOCMgueQ7IF9wK/hXdPKVDo=
-X-Google-Smtp-Source: ACHHUZ4WgWkFA9uBFLQ4chY9yS0DrCbDHKg+qJki1rTD/526fTFWs9/rOjn0MfGzEAyJcN8v4XUfb+eUTcSmoaBkahQ=
-X-Received: by 2002:a17:906:35c5:b0:988:8220:2af0 with SMTP id
- p5-20020a17090635c500b0098882202af0mr1588637ejb.5.1688122383089; Fri, 30 Jun
- 2023 03:53:03 -0700 (PDT)
+        Fri, 30 Jun 2023 06:58:02 -0400
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 11C581BCA;
+        Fri, 30 Jun 2023 03:57:58 -0700 (PDT)
+Received: from loongson.cn (unknown [10.20.42.43])
+        by gateway (Coremail) with SMTP id _____8BxlfA1tZ5kjkQEAA--.6980S3;
+        Fri, 30 Jun 2023 18:57:57 +0800 (CST)
+Received: from openarena.loongson.cn (unknown [10.20.42.43])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8DxJ801tZ5k5GETAA--.63992S2;
+        Fri, 30 Jun 2023 18:57:57 +0800 (CST)
+From:   Sui Jingfeng <suijingfeng@loongson.cn>
+To:     Alex Deucher <alexander.deucher@amd.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Maxime Ripard <mripard@kernel.org>,
+        Jani Nikula <jani.nikula@linux.intel.com>
+Cc:     dri-devel@lists.freedesktop.org, amd-gfx@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, intel-gfx@lists.freedesktop.org,
+        nouveau@lists.freedesktop.org, linux-pci@vger.kernel.org,
+        kvm@vger.kernel.org, linux-fbdev@vger.kernel.org
+Subject: [PATCH v1 0/4] PCI/VGA: Improve the default VGA device selection
+Date:   Fri, 30 Jun 2023 18:57:53 +0800
+Message-Id: <20230630105757.141582-1-suijingfeng@loongson.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20230616165034.3630141-1-michal.wilczynski@intel.com>
- <20230616165034.3630141-8-michal.wilczynski@intel.com> <CAJZ5v0jjwk+jVsULD8nyguc7p00Sn3Hyxq7=PLNzpj-Fz6H6sg@mail.gmail.com>
- <aad9608b-34fa-1405-1fc4-5eb8d7d1647f@intel.com>
-In-Reply-To: <aad9608b-34fa-1405-1fc4-5eb8d7d1647f@intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 30 Jun 2023 12:52:52 +0200
-Message-ID: <CAJZ5v0jVsWatCmnN9=H18CzhoekgZOgnEisDJYfb-F=M3cOX1A@mail.gmail.com>
-Subject: Re: [PATCH v5 07/10] acpi/nfit: Move acpi_nfit_notify() before acpi_nfit_add()
-To:     "Wilczynski, Michal" <michal.wilczynski@intel.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        linux-acpi@vger.kernel.org, dan.j.williams@intel.com,
-        vishal.l.verma@intel.com, lenb@kernel.org, dave.jiang@intel.com,
-        ira.weiny@intel.com, rui.zhang@intel.com,
-        linux-kernel@vger.kernel.org, nvdimm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8DxJ801tZ5k5GETAA--.63992S2
+X-CM-SenderInfo: xvxlyxpqjiv03j6o00pqjv00gofq/
+X-Coremail-Antispam: 1Uk129KBj93XoW7ZFWfuw4DAFWxAw1rtr1UJwc_yoW8tF15pF
+        429F9Ivrn5JF43Kw13Zay8AFy5Zan7JayrKr9rA34Yga13Ary8trZFyFW5K34DXr48ZF12
+        qr9xKryUWFyqv3gCm3ZEXasCq-sJn29KB7ZKAUJUUUUf529EdanIXcx71UUUUU7KY7ZEXa
+        sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+        0xBIdaVrnRJUUUB2b4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+        IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+        e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+        0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AK
+        xVWxJr0_GcWln4kS14v26r126r1DM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12
+        xvs2x26I8E6xACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r12
+        6r1DMcIj6I8E87Iv67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64
+        vIr41lc7CjxVAaw2AFwI0_Jw0_GFyl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_
+        Jr0_Gr1l4IxYO2xFxVAFwI0_JF0_Jw1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8Gjc
+        xK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0
+        cI8IcVAFwI0_JFI_Gr1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8V
+        AvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVW8JVWxJwCI42IY6I8E87Iv6xkF7I0E
+        14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUcApnDUUUU
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,64 +66,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 30, 2023 at 11:48 AM Wilczynski, Michal
-<michal.wilczynski@intel.com> wrote:
->
->
->
-> On 6/29/2023 6:06 PM, Rafael J. Wysocki wrote:
-> > On Fri, Jun 16, 2023 at 6:51 PM Michal Wilczynski
-> > <michal.wilczynski@intel.com> wrote:
-> >> To use new style of installing event handlers acpi_nfit_notify() needs
-> >> to be known inside acpi_nfit_add(). Move acpi_nfit_notify() upwards in
-> >> the file, so it can be used inside acpi_nfit_add().
-> >>
-> >> Signed-off-by: Michal Wilczynski <michal.wilczynski@intel.com>
-> >> ---
-> >>  drivers/acpi/nfit/core.c | 14 +++++++-------
-> >>  1 file changed, 7 insertions(+), 7 deletions(-)
-> >>
-> >> diff --git a/drivers/acpi/nfit/core.c b/drivers/acpi/nfit/core.c
-> >> index 07204d482968..aff79cbc2190 100644
-> >> --- a/drivers/acpi/nfit/core.c
-> >> +++ b/drivers/acpi/nfit/core.c
-> >> @@ -3312,6 +3312,13 @@ void acpi_nfit_shutdown(void *data)
-> >>  }
-> >>  EXPORT_SYMBOL_GPL(acpi_nfit_shutdown);
-> >>
-> >> +static void acpi_nfit_notify(struct acpi_device *adev, u32 event)
-> >> +{
-> >> +       device_lock(&adev->dev);
-> >> +       __acpi_nfit_notify(&adev->dev, adev->handle, event);
-> >> +       device_unlock(&adev->dev);
-> >> +}
-> >> +
-> >>  static int acpi_nfit_add(struct acpi_device *adev)
-> >>  {
-> >>         struct acpi_buffer buf = { ACPI_ALLOCATE_BUFFER, NULL };
-> >> @@ -3446,13 +3453,6 @@ void __acpi_nfit_notify(struct device *dev, acpi_handle handle, u32 event)
-> >>  }
-> >>  EXPORT_SYMBOL_GPL(__acpi_nfit_notify);
-> >>
-> >> -static void acpi_nfit_notify(struct acpi_device *adev, u32 event)
-> >> -{
-> >> -       device_lock(&adev->dev);
-> >> -       __acpi_nfit_notify(&adev->dev, adev->handle, event);
-> >> -       device_unlock(&adev->dev);
-> >> -}
-> >> -
-> >>  static const struct acpi_device_id acpi_nfit_ids[] = {
-> >>         { "ACPI0012", 0 },
-> >>         { "", 0 },
-> >> --
-> > Please fold this patch into the next one.  By itself, it is an
-> > artificial change IMV.
->
-> I agree with you, but I got told specifically to do that.
-> https://lore.kernel.org/linux-acpi/e0f67199-9feb-432c-f0cb-7bdbdaf9ff63@linux.intel.com/
+Currently, the default VGA device selection is not perfect. Potential
+problems are:
 
-Whether or not this is easier to review is kind of subjective.
+1) This function is a no-op on non-x86 architectures.
+2) It does not take the PCI Bar may get relocated into consideration.
+3) It is not effective for the PCI device without a dedicated VRAM Bar.
+4) It is device-agnostic, thus it has to waste the effort to iterate all
+   of the PCI Bar to find the VRAM aperture.
+5) It has invented lots of methods to determine which one is the default
+   boot device on a multiple video card coexistence system. But this is
+   still a policy because it doesn't give the user a choice to override.
 
-If there were more code to move, I would agree, but in this particular
-case having to review two patches instead of just one is a bit of a
-hassle IMV.
+With the observation that device drivers or video aperture helpers may
+have better knowledge about which PCI bar contains the firmware FB,
+
+This patch tries to solve the above problems by introducing a function
+callback to the vga_client_register() function interface. DRM device
+drivers for the PCI device need to register the is_boot_device() function
+callback during the driver loading time. Once the driver binds the device
+successfully, VRAARB will call back to the driver. This gives the device
+drivers a chance to provide accurate boot device identification. Which in
+turn unlock the abitration service to non-x86 architectures. A device
+driver can also pass a NULL pointer to the keep the original behavior.
+
+Sui Jingfeng (4):
+  video/aperture: Add a helper to detect if an aperture contains
+    firmware FB
+  PCI/VGA: Improve the default VGA device selection
+  drm/amdgpu: Implement the is_boot_device callback function
+  drm/radeon: Implement the is_boot_device callback function
+
+ drivers/gpu/drm/amd/amdgpu/amdgpu_device.c | 12 ++++++++-
+ drivers/gpu/drm/drm_aperture.c             | 16 ++++++++++++
+ drivers/gpu/drm/i915/display/intel_vga.c   |  3 +--
+ drivers/gpu/drm/nouveau/nouveau_vga.c      |  2 +-
+ drivers/gpu/drm/radeon/radeon_device.c     | 12 ++++++++-
+ drivers/pci/vgaarb.c                       | 21 +++++++++++++++-
+ drivers/vfio/pci/vfio_pci_core.c           |  2 +-
+ drivers/video/aperture.c                   | 29 ++++++++++++++++++++++
+ include/drm/drm_aperture.h                 |  2 ++
+ include/linux/aperture.h                   |  7 ++++++
+ include/linux/vgaarb.h                     |  8 +++---
+ 11 files changed, 104 insertions(+), 10 deletions(-)
+
+-- 
+2.25.1
+
