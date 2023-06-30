@@ -2,110 +2,198 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC9807443DE
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 23:23:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 553E07443E0
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 23:25:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229611AbjF3VX5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 17:23:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35792 "EHLO
+        id S229919AbjF3VZD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Jun 2023 17:25:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229560AbjF3VXy (ORCPT
+        with ESMTP id S229560AbjF3VY7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 17:23:54 -0400
-Received: from smtp.smtpout.orange.fr (unknown [80.12.242.13])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A20B4102
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 14:23:50 -0700 (PDT)
-Received: from pop-os.home ([86.243.2.178])
-        by smtp.orange.fr with ESMTPA
-        id FLaWqFE741lRhFLaWqu2BO; Fri, 30 Jun 2023 23:23:35 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-        s=t20230301; t=1688160215;
-        bh=kMcJl7rvulaYPvsNlfWsI9/je8sVJ9jmEHBC5pxujxE=;
-        h=From:To:Cc:Subject:Date;
-        b=O8ML1LNRtqOBAXG4IUAARTGOG4bbWqctKdJCWvjnoFtNnYF4JIikMW/veVPXHlGtN
-         qENoZRqlrMJekwDGxR9X+hXSz/LOJesjZxS44YRA7UBb3ongN/YFK/GY1OX4BhW5pT
-         fgEq+VWs1lCN0cQhuLgxHyEx20Pid8ftLkEsYy2kLPrjyG8QP1b7+BV4AFkQAX0eph
-         EJuPNUgLuePv0w3ezdcIJsxqF5hHlzDK7P+vgeVRIvcqleA9NrcNk6ozzKdhLlSwqt
-         vrcgtjVBDBTY1K1kEOWMYouMC4xdNSq6sAAaKxHHJ6M8vhZgWHT0E9Y63evhoOAtJo
-         kWP44ZYBRSDFg==
-X-ME-Helo: pop-os.home
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Fri, 30 Jun 2023 23:23:35 +0200
-X-ME-IP: 86.243.2.178
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     wsa@kernel.org, Linus Walleij <linus.walleij@linaro.org>,
-        Andi Shyti <andi.shyti@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org
-Subject: [PATCH v2] i2c: busses: i2c-nomadik: Remove a useless call in the remove function
-Date:   Fri, 30 Jun 2023 23:23:28 +0200
-Message-Id: <62ae6810d41e0429ebaadfac8a95409f4bc72456.1688160163.git.christophe.jaillet@wanadoo.fr>
-X-Mailer: git-send-email 2.34.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        Fri, 30 Jun 2023 17:24:59 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B556F2686
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 14:24:58 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id 3f1490d57ef6-bfebb1beeccso2197813276.2
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 14:24:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1688160298; x=1690752298;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=9OuqO+GprsYwzlZrAMxO302oe0WdyZWBaVRgt/0KOVc=;
+        b=C98VfhGLNA5xfbBYxeu79VpxIy9gRA6nupPJlAfe0FuPEfw/4GPR1LutGEmbPkU+D6
+         LCsyyk7D1OMMbPdZuqJ9pRQyj5bW6ckdCA5JJQ6l1LqK6+B3WHfFhFGW1zF4WhSDt95B
+         76niGAHa2KUaUlGFoU46LfHpWIdnS1uFr74lXzrCCEehASUT/Zkr0bpM7jQ7BSmVFXYz
+         a2YxzWzm0vujdecLtLgB25IIGiMTe9YiFVK4SJ/eBhMlwZW3PKId1fdZAWpVYfILXO43
+         OkuMAJ9vMYtxDqrigZ3s9PiQR/RD0SJ2XoRA2Xh0FFvQ/TxS2T5r8RXuCsiv02v77dUv
+         kuPQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688160298; x=1690752298;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=9OuqO+GprsYwzlZrAMxO302oe0WdyZWBaVRgt/0KOVc=;
+        b=RQ09LRK46IEaZApWzcx6epoOoU0mD32LO50aDTi7HiwyiHOQoyK4RGbNTfeKF+KP/D
+         kf5HqzFvYqxsqglC3R8Y9SVuhofE04/zA8P6kSorXbEvDhQf3eUAiyyUZ/isZMEBg7UC
+         dX1B7ACOMx/nkruhh92qyTNy05XZRKKxrN3jv7cF0NpjuGNYILpDjVi7BzrM/3M5t6Qd
+         Mgk4POmQGDXGjcRxwtSx7mVui3x24olhieN6dfTU+lERpmMs/tm2vTQzo34KfwNCkOzD
+         tsJyy1B6XS9O9MCr0OKeB21JjBQcdt33w1eGEYPgw9Tn1q+4U8aeOy+ClXOz5rYoOYvm
+         /rGQ==
+X-Gm-Message-State: ABy/qLbAQkAjWD/u2TdZ4jYVKuKcf9Tbf5fsFlkpM79r2EMp3l//nVUt
+        rtNubb8noz/nDVcZ+ZeTN1hhHB00uP8=
+X-Google-Smtp-Source: APBJJlGImEzp5+7kOBgHaxvCjkxiHX5w7NN8ScEyxNJQ7wgzjAyS5wsh+UoGUOwuj07AgYjSnXiJcdrLhIY=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a25:4183:0:b0:c1e:f91c:2691 with SMTP id
+ o125-20020a254183000000b00c1ef91c2691mr37547yba.10.1688160297945; Fri, 30 Jun
+ 2023 14:24:57 -0700 (PDT)
+Date:   Fri, 30 Jun 2023 14:24:56 -0700
+In-Reply-To: <20230630190514.GH3436214@ls.amr.corp.intel.com>
+Mime-Version: 1.0
+References: <cover.1687784645.git.kai.huang@intel.com> <104d324cd68b12e14722ee5d85a660cccccd8892.1687784645.git.kai.huang@intel.com>
+ <20230628131717.GE2438817@hirez.programming.kicks-ass.net>
+ <0c9639db604a0670eeae5343d456e43d06b35d39.camel@intel.com>
+ <20230630092615.GD2533791@hirez.programming.kicks-ass.net>
+ <2659d6eef84f008635ba300f4712501ac88cef2c.camel@intel.com>
+ <20230630183020.GA4253@hirez.programming.kicks-ass.net> <20230630190514.GH3436214@ls.amr.corp.intel.com>
+Message-ID: <ZJ9IKALhz1Q6ogu1@google.com>
+Subject: Re: [PATCH v12 07/22] x86/virt/tdx: Add skeleton to enable TDX on demand
+From:   Sean Christopherson <seanjc@google.com>
+To:     Isaku Yamahata <isaku.yamahata@gmail.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Kai Huang <kai.huang@intel.com>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        Ashok Raj <ashok.raj@intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        "david@redhat.com" <david@redhat.com>,
+        "bagasdotme@gmail.com" <bagasdotme@gmail.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        "ak@linux.intel.com" <ak@linux.intel.com>,
+        Rafael J Wysocki <rafael.j.wysocki@intel.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        Reinette Chatre <reinette.chatre@intel.com>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        Isaku Yamahata <isaku.yamahata@intel.com>,
+        "nik.borisov@suse.com" <nik.borisov@suse.com>,
+        "hpa@zytor.com" <hpa@zytor.com>, Sagi Shahar <sagis@google.com>,
+        "imammedo@redhat.com" <imammedo@redhat.com>,
+        "bp@alien8.de" <bp@alien8.de>, Chao Gao <chao.gao@intel.com>,
+        Len Brown <len.brown@intel.com>,
+        "sathyanarayanan.kuppuswamy@linux.intel.com" 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Ying Huang <ying.huang@intel.com>,
+        Dan J Williams <dan.j.williams@intel.com>,
+        "x86@kernel.org" <x86@kernel.org>
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since commit a410963ba4c0 ("Merge branch 'i2c-embedded/for-next' of
-git://git.pengutronix.de/git/wsa/linux"), there is no more
-request_mem_region() call in this driver.
+On Fri, Jun 30, 2023, Isaku Yamahata wrote:
+> On Fri, Jun 30, 2023 at 08:30:20PM +0200,
+> Peter Zijlstra <peterz@infradead.org> wrote:
+> 
+> > On Fri, Jun 30, 2023 at 09:55:32AM +0000, Huang, Kai wrote:
+> > > On Fri, 2023-06-30 at 11:26 +0200, Peter Zijlstra wrote:
+> > > > On Thu, Jun 29, 2023 at 12:10:00AM +0000, Huang, Kai wrote:
+> > > > > On Wed, 2023-06-28 at 15:17 +0200, Peter Zijlstra wrote:
+> > > > > > On Tue, Jun 27, 2023 at 02:12:37AM +1200, Kai Huang wrote:
+> > > > > > > +EXPORT_SYMBOL_GPL(tdx_cpu_enable);
+> > > > > > 
+> > > > > > I can't find a single caller of this.. why is this exported?
+> > > > > 
+> > > > > It's for KVM TDX patch to use, which isn't in this series.
+> > > > > 
+> > > > > I'll remove the export.  KVM TDX series can export it.
+> > > > 
+> > > > Fair enough; where will the KVM TDX series call this? Earlier there was
+> > > > talk about doing it at kvm module load time -- but I objected (and still
+> > > > do object) to that.
+> > > > 
+> > > > What's the current plan?
+> > > > 
+> > > 
+> > > The direction is still doing it during module load (not my series anyway).  But
+> > > this can be a separate discussion with KVM maintainers involved.
+> > 
+> > They all on Cc afaict.
+> > 
+> > > I understand you have concern that you don't want to have the memory & cpu time
+> > > wasted on enabling TDX by default.  For that we can have a kernel command line
+> > > to disable TDX once for all (we can even make it default).
+> > 
+> > That's insane, I don't want to totally disable it. I want it done at
+> > guard creation. Do the whole TDX setup the moment you actually create a
+> > TDX guast.
+> > 
+> > Totally killing TDX is stupid, 
 
-So remove the release_mem_region() call from the remove function which is
-likely a left over.
+I dunno about that, *totally* killing TDX would make my life a lot simpler ;-)
 
-There is no details in the above commit log, but at its end we can read:
-   Conflicts:
-	   drivers/i2c/busses/i2c-nomadik.c
+> > just about as stupid as doing it on module load (which equates to always
+> > doing it).
+> > 
+> > > Also, KVM will have a module parameter 'enable_tdx'.  I am hoping this could
+> > > reduce your concern too.
+> > 
+> > I don't get this obsession with doing at module load time :/
 
-This may explain why this call has been left here.
+Waiting until userspace attempts to create the first TDX guest adds complexity
+and limits what KVM can do to harden itself.  Currently, all feature support in
+KVM is effectively frozen at module load.  E.g. most of the setup code is
+contained in __init functions, many module-scoped variables are effectively 
+RO after init (though they can't be marked as such until we smush kvm-intel.ko
+and kvm-amd.ko into kvm.ko, which is tentatively the long-term plan).  All of
+those patterns would get tossed aside if KVM waits until userspace attempts to
+create the first guest.
 
-Fixes: a410963ba4c0 ("Merge branch 'i2c-embedded/for-next' of git://git.pengutronix.de/git/wsa/linux
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
----
-v2: synch with latest -next
+The userspace experience would also be poor, as KVM can't know whether or TDX is
+actually supported until the TDX module is fully loaded and configured.  KVM waits
+until VM creation to enable VMX, but that's pure enabling and more or less
+guaranteed to succeed, e.g. will succeed barring hardware failures, software bugs,
+or *severe* memory pressure.
 
-v1: https://lore.kernel.org/all/4f4c2c5c20b61c4bb28cb3e9ab4640534dd2adec.1629530169.git.christophe.jaillet@wanadoo.fr/
+There are also latency and noisy neighbor concerns, e.g. we *really* don't want
+to end up in a situation where creating a TDX guest for a customer can observe
+arbitrary latency *and* potentially be disruptive to VMs already running on the
+host.
 
+Userspace can workaround the second and third issues by spawning a dummy TDX guest
+as early as possible, but that adds complexity to userspace, especially if there's
+any desire for it to be race free, e.g. with respect to reporting system capabilities
+to the control plan.
 
-/!\ /!\ /!\ /!\ /!\ /!\
-  This patch is completely speculative and without details about commit
-  a410963ba4c0 it's hard to be sure of the intent.
-/!\ /!\ /!\ /!\ /!\ /!\
+On the flip side, limited hardware availability (unless Intel has changed its
+tune) and the amount of enabling that's required in BIOS and whatnot makes it
+highly unlikely that random Linux users are going to unknowingly boot with TDX
+enabled.
 
-All I can say is that it looks logical to me and that it compiles!
----
- drivers/i2c/busses/i2c-nomadik.c | 2 --
- 1 file changed, 2 deletions(-)
+That said, if this is a sticking point, let's just make enable_tdx off by default,
+i.e. force userspace to opt-in.  Deployments that *know* they may want to schedule
+TDX VMs on the host can simply force the module param.  And for everyone else,
+since KVM is typically configured as a module by distros, KVM can be unloaded and
+reload if the user realizes they want TDX well after the system is up and running.
 
-diff --git a/drivers/i2c/busses/i2c-nomadik.c b/drivers/i2c/busses/i2c-nomadik.c
-index 1e5fd23ef45c..212f412f1c74 100644
---- a/drivers/i2c/busses/i2c-nomadik.c
-+++ b/drivers/i2c/busses/i2c-nomadik.c
-@@ -1038,7 +1038,6 @@ static int nmk_i2c_probe(struct amba_device *adev, const struct amba_id *id)
- 
- static void nmk_i2c_remove(struct amba_device *adev)
- {
--	struct resource *res = &adev->res;
- 	struct nmk_i2c_dev *dev = amba_get_drvdata(adev);
- 
- 	i2c_del_adapter(&dev->adap);
-@@ -1047,7 +1046,6 @@ static void nmk_i2c_remove(struct amba_device *adev)
- 	clear_all_interrupts(dev);
- 	/* disable the controller */
- 	i2c_clr_bit(dev->virtbase + I2C_CR, I2C_CR_PE);
--	release_mem_region(res->start, resource_size(res));
- }
- 
- static struct i2c_vendor_data vendor_stn8815 = {
--- 
-2.34.1
+> The KVM maintainers prefer the initialization on kvm_intel.ko loading time. [1]
 
+You can say "Sean", I'm not the bogeyman :-)
+
+> I can change enable_tdx parameter for kvm_intel.ko instead of boolean.
+> Something like
+> 
+> enable_tdx
+>         ondemand: on-demand initialization when creating the first TDX guest
+>         onload:   initialize TDX module when loading kvm_intel.ko
+
+No, that's the most complex path and makes no one happy.
+
+>         disable:  disable TDX support
