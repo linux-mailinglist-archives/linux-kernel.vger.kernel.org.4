@@ -2,114 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C41CE743488
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 07:45:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3001074348B
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 07:46:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230410AbjF3FpP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 01:45:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48612 "EHLO
+        id S232367AbjF3FqI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Jun 2023 01:46:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232434AbjF3FpD (ORCPT
+        with ESMTP id S232344AbjF3Fp4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 01:45:03 -0400
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 388CD3A8B;
-        Thu, 29 Jun 2023 22:44:40 -0700 (PDT)
-Received: by mail-pl1-x629.google.com with SMTP id d9443c01a7336-1b7f92b764dso8415525ad.2;
-        Thu, 29 Jun 2023 22:44:40 -0700 (PDT)
+        Fri, 30 Jun 2023 01:45:56 -0400
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95CFB3AA8
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 22:45:46 -0700 (PDT)
+Received: by mail-wr1-x431.google.com with SMTP id ffacd0b85a97d-307d20548adso1692267f8f.0
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 22:45:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688103879; x=1690695879;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=Md88dxy0Oq073zhiW/L7j2467fRKk8w3qHvdwFL4C9M=;
-        b=PcjD32MMYgiYE564baUOEyiGOo22UgtVHw0i59AYfPpgyunfV/fOoc6viTly+vaOhb
-         zRV2g5/ghxDxVFaXHb4j4geiWH+qCuDuINmC+dUjaRbqr6bbrMBcwX9EZKX5X4mWCnkK
-         ny1z2eOBxlwYymTMSilH2LSBpQyf2Nid4F+cVjbYi95/cR7av3ygJbYYNtnN0Fn4b5A+
-         nzUeTOlwl7kBUqvsjz5xKPpsUNzl4iHVC/M2gJKJMTIlRcgt+397t9Bg2vqPfxieECvM
-         UNoi5r2SUU6fzVSyEG9GPtwNHwmddZ2KX2XgCUogouM6va3jJkdCcKTKaDXo7sqi8y3W
-         xp3Q==
+        d=linaro.org; s=google; t=1688103945; x=1690695945;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=o9DamHqoQRTGEPHmJjYoXKs4p/juuPvPGTamt5VWg8Y=;
+        b=a8Wcpk7EDnnZwIgwD2HX0WSZBy+1oa/bj7pOqmvTOZzbvUL/OiML4GAVM3UU9WJuJB
+         WxDiHNh4mr+EQ6SVUllGP1thPRm2M/PLa/cmrHZklfYVaoD9MEK2It1U12hX0y2wZxtH
+         NKG24iqSMHcbvcB2Yb278McTlYFmBlKtJLMlWrIdoTiJFMXNwzOGXZNBYReowDLio1MF
+         77GmQ7EUb/90uMkL6Wdcu2te4qPDKn7sx8AKOkdulebFP/Q51zXUVU4s1fBnN+DlBFpW
+         +BNyTYv4B5hvX38cIcYfdVLgJTVCzfpAdBmceCOeOiND1sOdgbfCZ7LJdEWSRrwj7xYb
+         wG6Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688103879; x=1690695879;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Md88dxy0Oq073zhiW/L7j2467fRKk8w3qHvdwFL4C9M=;
-        b=T1kB7h62ZTbgBCB15Oso8MKScUg55YHMXnhruDa1tM/HajEPo9vHYeK3gBd7XNKHTm
-         0s6JP6B/3O0yer+N/gcNhcaizAsBqa7+3UQgqcBvxtvhRVGb0Q0wWKINTpO2u09uCsi/
-         PIcOAlMos6aOq3xFjFlQH/WWSJSmQrKbC1rYzCZ9i42Uiul3r3Yt9eKciSNMrvVJXPH7
-         HT539A51ky7lRcMI2+Y096EbGm70lykSxFicuq7mKZlLKIQ3IS9i70yJNwAqdu2+bMao
-         0fkYrvwep5Y8SdLFjqPRtZfdE6VEbBgMYuqay0BFCFgtHlSj2Y5E492vs5BBu4SMvNNB
-         fLDw==
-X-Gm-Message-State: ABy/qLaDMb0lLh1xN32+g2wtBS3zsdPO30+MhSKV1bIS9yWqV0Jmaa3m
-        MDmmnc1top6Xe1DXthzhiNtXMfaECyQ=
-X-Google-Smtp-Source: APBJJlFTSPdz9sZ9BVH+flhoUgKYShHebTBaqggxrP+wIhHccl62R6D2aSkvZGgq38Bi5Pl5TuIgug==
-X-Received: by 2002:a17:902:ecc5:b0:1b8:144c:7023 with SMTP id a5-20020a170902ecc500b001b8144c7023mr893750plh.60.1688103879352;
-        Thu, 29 Jun 2023 22:44:39 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id t10-20020a170902a5ca00b001b53c8659fesm9942394plq.30.2023.06.29.22.44.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 29 Jun 2023 22:44:38 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <5a6cb162-790a-d24a-8946-090f4a893cf7@roeck-us.net>
-Date:   Thu, 29 Jun 2023 22:44:37 -0700
+        d=1e100.net; s=20221208; t=1688103945; x=1690695945;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=o9DamHqoQRTGEPHmJjYoXKs4p/juuPvPGTamt5VWg8Y=;
+        b=TgaeIivdR2ZAHDWZfYqFPuHqlhDe8s/rU8Yl1V1Yp0OxKvTF7mDV9gl34oCngfh8a5
+         W/fQCknvuiSSLNwGg95PIy/v0yHj0Qt9EIfo84gxAxqX1S2ZOr7SEnNptg88zV9YFxzH
+         9m+afe123qcss4bL356z7AOospjSkGQ3zCDZl3bOxce4Dzw1l5vGJNxEI1QzY/DABDeZ
+         PgK95UbQFBRY2Gvme9F3plvltD9Qvn8RbF3whCtPhiNK8M8YNCH5+11w+RBRQekZnc8a
+         QSPSuCTQBCQOdh0XNJNsuEjy/UqPz1QuP//YOxT/QYPdM/N3+gw5bS/4ajvyVnTq6tOh
+         GOrw==
+X-Gm-Message-State: ABy/qLZmXiDbFO6YssuM3EePCQ0SmtOpF/8ccv29qZOby21Pxdw4um7x
+        itSiqyC0XvTF29ziTwFdanNemEdYTehWPh6ta3A=
+X-Google-Smtp-Source: APBJJlH41vjtNXK96kxURDA38odJVMBPwEkTkxM5vYTyKgQj30uXZ5l3+v9GL1D6Vdu8EmbRSr2Deg==
+X-Received: by 2002:a5d:6512:0:b0:314:a03:c7a0 with SMTP id x18-20020a5d6512000000b003140a03c7a0mr1442004wru.9.1688103944951;
+        Thu, 29 Jun 2023 22:45:44 -0700 (PDT)
+Received: from localhost ([102.36.222.112])
+        by smtp.gmail.com with ESMTPSA id j9-20020a5d4649000000b0030aefa3a957sm17413602wrs.28.2023.06.29.22.45.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 29 Jun 2023 22:45:42 -0700 (PDT)
+Date:   Fri, 30 Jun 2023 08:45:38 +0300
+From:   Dan Carpenter <dan.carpenter@linaro.org>
+To:     Sai Krishna Gajula <saikrishnag@marvell.com>
+Cc:     "davem@davemloft.net" <davem@davemloft.net>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Sunil Kovvuri Goutham <sgoutham@marvell.com>,
+        "maciej.fijalkowski@intel.com" <maciej.fijalkowski@intel.com>,
+        Naveen Mamindlapalli <naveenm@marvell.com>
+Subject: Re: [net PATCH v2] octeontx2-af: Move validation of ptp pointer
+ before its usage
+Message-ID: <5e222335-5baa-4ce8-a90b-69a865f29b1a@kadam.mountain>
+References: <20230609115806.2625564-1-saikrishnag@marvell.com>
+ <880d628e-18bf-44a1-a55f-ffbe1777dd2b@kadam.mountain>
+ <BY3PR18MB470788B4096D586DEB9A3B22A023A@BY3PR18MB4707.namprd18.prod.outlook.com>
+ <3894dd38-377b-4691-907b-ec3d47fddffd@kadam.mountain>
+ <SA1PR18MB4709E390AC13A1EF5F652165A02AA@SA1PR18MB4709.namprd18.prod.outlook.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH] watchdog: core: stop watchdog when executing poweroff
- command
-Content-Language: en-US
-To:     Meng Li <Meng.Li@windriver.com>, wim@linux-watchdog.org,
-        linux-watchdog@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org
-References: <20230630053912.28205-1-Meng.Li@windriver.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20230630053912.28205-1-Meng.Li@windriver.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <SA1PR18MB4709E390AC13A1EF5F652165A02AA@SA1PR18MB4709.namprd18.prod.outlook.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/29/23 22:39, Meng Li wrote:
-> From: Meng Li <meng.li@windriver.com>
+On Fri, Jun 30, 2023 at 05:19:27AM +0000, Sai Krishna Gajula wrote:
 > 
-> On some platforms, for example, Intel SoC FPGA platform, the watchdog is
-> started in from u-boot, and so kernel will create a timer and work to
-> keep watchdog alive. .But when user executes commands "poweroff" or
-> "shutdown -h", the system is reset when watchdog triggers timeout even
-> if WDOG_STOP_ON_REBOOT is set in watchdog driver. The root cause is
-> that the watchdog not stopped properly because the SYS_POWER_OFF case
-> is not supported in nofify callback function. So, add this case to stop
-> watchdog when executing poweroff command.
+> > -----Original Message-----
+> > From: Dan Carpenter <dan.carpenter@linaro.org>
+> > Sent: Friday, June 23, 2023 5:14 PM
+> > To: Sai Krishna Gajula <saikrishnag@marvell.com>
+> > Cc: davem@davemloft.net; edumazet@google.com; kuba@kernel.org;
+> > pabeni@redhat.com; netdev@vger.kernel.org; linux-
+> > kernel@vger.kernel.org; Sunil Kovvuri Goutham <sgoutham@marvell.com>;
+> > maciej.fijalkowski@intel.com; Naveen Mamindlapalli
+> > <naveenm@marvell.com>
+> > Subject: Re: [net PATCH v2] octeontx2-af: Move validation of ptp
+> > pointer before its usage
+> > 
+> > On Fri, Jun 23, 2023 at 11:28:19AM +0000, Sai Krishna Gajula wrote:
+> > > > This probe function is super weird how it returns success on the failure
+> > path.
+> > > > One concern, I had initially was that if anything returns
+> > > > -EPROBE_DEFER then we cannot recover.  That's not possible in the
+> > > > current code, but it makes me itch...  But here is a different crash.
+> > > >
+> > >
+> > > In few circumstances, the PTP device is probed before the AF device in
+> > > the driver. In such instance, -EPROBE_DEFER is used.
+> > > -- EDEFER_PROBE is useful when probe order changes. Ex: AF driver probes
+> > before PTP.
+> > >
+> > 
+> > You're describing how -EPROBE_DEFER is *supposed* to work.  But that's not
+> > what this driver does.
+> > 
+> > If the AF driver is probed before the PTP driver then ptp_probe() should
+> > return -EPROBE_DEFER and that would allow the kernel to automatically retry
+> > ptp_probe() later.  But instead of that, ptp_probe() returns success.  So I
+> > guess the user would have to manually rmmod it and insmod it again?  So,
+> > what I'm saying I don't understand why we can't do this in the normal way.
+> > 
+> > The other thing I'm saying is that the weird return success on error stuff
+> > hasn't been tested or we would have discovered the crash through testing.
+> > 
+> > regards,
+> > dan carpenter
 > 
-> Signed-off-by: Meng Li <Meng.Li@windriver.com>
+> As suggested, we will return error in ptp_probe in case of any
+> failure conditions. In this case AF driver continues without PTP support.
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+I'm concerned about the "AF driver continues without PTP support".
 
-> ---
->   drivers/watchdog/watchdog_core.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
+> When the AF driver is probed before PTP driver , we will defer the AF
+> probe. Hope these changes are inline with your view.
+> I will send a v3 patch with these changes. 
 > 
-> diff --git a/drivers/watchdog/watchdog_core.c b/drivers/watchdog/watchdog_core.c
-> index d4c5a736fdcb..5b55ccae06d4 100644
-> --- a/drivers/watchdog/watchdog_core.c
-> +++ b/drivers/watchdog/watchdog_core.c
-> @@ -161,7 +161,7 @@ static int watchdog_reboot_notifier(struct notifier_block *nb,
->   	struct watchdog_device *wdd;
->   
->   	wdd = container_of(nb, struct watchdog_device, reboot_nb);
-> -	if (code == SYS_DOWN || code == SYS_HALT) {
-> +	if (code == SYS_DOWN || code == SYS_HALT || code == SYS_POWER_OFF) {
->   		if (watchdog_hw_running(wdd)) {
->   			int ret;
->   
 
+I don't really understand the situation.  You have two drivers.
+Normally, the relationship is very simple where you have to load one
+before you can load the other.  But here it sounds like the relationships
+are very complicated and you are loading one in a degraded state for
+some reason...
+
+When drivers are loaded that happens in drivers/base/dd.c.  We start
+with a list of drivers to probe.  Then if any of them return
+-EPROBE_DEFER, we put them on deferred_probe_pending_list.  Then as soon
+as we manage to probe another driver successfully we put the drivers on
+deferred_probe_pending_list onto another list and start trying to probe
+them again.
+
+That process continues until we've gone through the list of drivers and
+nothing succeeds.
+
+regards,
+dan carpenter
