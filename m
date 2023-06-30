@@ -2,293 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5C2F743A24
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 12:59:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA4FD7438E4
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 12:04:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232562AbjF3K6g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 06:58:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46668 "EHLO
+        id S232992AbjF3KE1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Jun 2023 06:04:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230235AbjF3K6L (ORCPT
+        with ESMTP id S232952AbjF3KEY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 06:58:11 -0400
-Received: from smtp1.axis.com (smtp1.axis.com [195.60.68.17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CE5135BD;
-        Fri, 30 Jun 2023 03:58:08 -0700 (PDT)
+        Fri, 30 Jun 2023 06:04:24 -0400
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CB571FC1
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 03:04:23 -0700 (PDT)
+Received: by mail-wm1-x32d.google.com with SMTP id 5b1f17b1804b1-3fb4146e8fcso15129915e9.0
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 03:04:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=axis.com; q=dns/txt; s=axis-central1; t=1688122689;
-  x=1719658689;
-  h=references:from:to:cc:subject:date:in-reply-to:
-   message-id:mime-version;
-  bh=KAaXVbPDlTxgz8UQ8Ae4cggP8Zew9LI0cO3pnmJUSgs=;
-  b=aRCirzNCMeqb79PRwYpnpINm7czWrBMpthDxe5UgQwswFTa9jfh4Cq9x
-   uXkdqx3NxEvipsoNucuf9HAEs8B58tbW6Ob20gLHmWUH+7VqoX0CrfKki
-   iwe1Fc4MxO+M35/Qu5yLNXdhjOgmN3BX2qtm3p1FRwPtg2Vyvbm1uwAb/
-   QSEBoQC+14EZwYPw/QfiuyDhzsAY2P9+LG2rqk1yGSXv+dfc0ygGqPzjM
-   P+iyUTWXoWnqPQ/gdtOJ+lGE0kAI+C1RgFHIMUC6ZNNv8y54AZt+ht63H
-   YIV9cER/Sj6qA4MIpZglIXV9iXpAN7LJ6PL+3Z5Pu06smEWEcwvGyYWNU
-   w==;
-References: <cover.1686926857.git.waqarh@axis.com>
- <d2d8f34c09a2ba0504eaba4f451412de41db2f37.1686926857.git.waqarh@axis.com>
- <20230617143508.28309834@jic23-huawei> <pndo7lb1mes.fsf@axis.com>
- <20230625120604.3ecc54bf@jic23-huawei>
-User-agent: a.out
-From:   Waqar Hameed <waqar.hameed@axis.com>
-To:     Jonathan Cameron <jic23@kernel.org>
-CC:     Lars-Peter Clausen <lars@metafoo.de>,
-        <linux-kernel@vger.kernel.org>, <linux-iio@vger.kernel.org>,
-        <kernel@axis.com>
-Subject: Re: [PATCH 2/2] iio: Add driver for Murata IRS-D200
-Date:   Fri, 30 Jun 2023 10:54:01 +0200
-In-Reply-To: <20230625120604.3ecc54bf@jic23-huawei>
-Message-ID: <pndilb5xlmt.fsf@axis.com>
+        d=baylibre-com.20221208.gappssmtp.com; s=20221208; t=1688119461; x=1690711461;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=jBKfzhFFhqAcTYJrg0Dr4h4x6W3U5a5giVvpMdKvQlM=;
+        b=LlWsUWbq1Di/wC+f2am+zd1wq6JZQpYMso73TAuEWKuA17yojjbdgQsBSqTxxX4uNA
+         s0Knm59Dk29M6lpoBzEij1CU/EFN/bFX/mF4CCgSzJy4DqtYPv/DsTHauOIMt8RRRy6a
+         6LcNT1Nquw1n1/ChM+TgnbZbonqWgZcZ98b37vEUadBMAM2UagS7S2/eWV3RaVK4D/I+
+         5Ywwkb7W6zqcV+PsHXy2gBoPOwuCO6iF85XDTrwZpUf1zkEjY+5BHW1+Kx+Y2pv2L8Qp
+         SQ+xLhV35juqFXGD/fs+KNuKz0stf7I527vM7mH6MXWk4QL6Ic3V+NLWLDlz8L/DHFJa
+         ta/Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688119461; x=1690711461;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=jBKfzhFFhqAcTYJrg0Dr4h4x6W3U5a5giVvpMdKvQlM=;
+        b=jUVg8zB7m0FM9G0kMxvvQra6ifgiueHlCfUHYMzlKwVDL3DhgzaRMr12uq6zjzUZ2P
+         cs69BwYOWX1gcVrhXt4RdwrNwHrsIIY81BKG5VHKQ+dX2pap62+lqzUDoIw00yVbB2uR
+         0KpO5C+tulKEj/d8KpvFHydoA7Z0AZSj0vgqbCA3XISrXf1LgNtRLk7O1J06VwIAnSOY
+         hH0kO3Vo3i5f+NmOqJ7hFRkKeLYlt2hNgbEVRvkazqBKmIpeuy+7ES63A+1n2qoKdhTc
+         rgoM25iD7AmUDEpS0S2INAHW/Yx27ujVR/u1ouvLTjEzOTVG8jmxYqkiswb4dmE6LTnh
+         Jo5A==
+X-Gm-Message-State: AC+VfDxOZoWeUAABnnGLMlr82G+70VcG+TJemK8gKTP5u8yP3djfbVvr
+        nPI+T9OHC2r34Fx+omiNCDTqFg==
+X-Google-Smtp-Source: ACHHUZ4u46ovHqmM1pHPoNIUq+uSFsIrq0pSwJxOzyZztDHewsHVbkiEFAY3g8CAub6dkFiNq5KlKg==
+X-Received: by 2002:a05:600c:214d:b0:3f7:e660:cdc5 with SMTP id v13-20020a05600c214d00b003f7e660cdc5mr2329714wml.9.1688119461299;
+        Fri, 30 Jun 2023 03:04:21 -0700 (PDT)
+Received: from localhost.localdomain ([2a01:e0a:55f:21e0:9e19:4376:dea6:dbfa])
+        by smtp.gmail.com with ESMTPSA id x11-20020adff0cb000000b0031424f4ef1dsm743280wro.19.2023.06.30.03.04.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 30 Jun 2023 03:04:21 -0700 (PDT)
+From:   Julien Stephan <jstephan@baylibre.com>
+Cc:     Julien Stephan <jstephan@baylibre.com>,
+        Andy Hsieh <andy.hsieh@mediatek.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Conor Dooley <conor+dt@kernel.org>,
+        daoyuan huang <daoyuan.huang@mediatek.com>,
+        devicetree@vger.kernel.org,
+        Florian Sylvestre <fsylvestre@baylibre.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, linux-media@vger.kernel.org,
+        Louis Kuo <louis.kuo@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Moudy Ho <moudy.ho@mediatek.com>,
+        Phi-bang Nguyen <pnguyen@baylibre.com>,
+        Ping-Hsun Wu <ping-hsun.wu@mediatek.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sumanth Korikkar <sumanthk@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>
+Subject: [PATCH v2 0/4] Add Mediatek ISP3.0
+Date:   Fri, 30 Jun 2023 12:01:49 +0200
+Message-ID: <20230630100321.1951138-1-jstephan@baylibre.com>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.0.5.60]
-X-ClientProxiedBy: se-mail02w.axis.com (10.20.40.8) To se-mail01w.axis.com
- (10.20.40.7)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jun 25, 2023 at 12:06 +0100 Jonathan Cameron <jic23@kernel.org> wrote:
+This series add the support of the Mediatek ISP3.0 found on some
+Mediatek SoCs such as the mt8365. The driver is divided into 2 parts:
 
-[...]
+* SENINF: the sensor interface
+* CAMSV: this driver provides a path to bypass the SoC ISP so that image
+  data coming from the SENINF can go directly into memory without any
+  image processing. This allows the use of an external ISP or camera
+  sensor directly.
 
->> >> +static int irsd200_write_data_rate(struct irsd200_data *data, int val)
->> >> +{
->> >> +	size_t idx;
->> >> +	int ret;
->> >> +
->> >> +	for (idx = 0; idx < ARRAY_SIZE(irsd200_data_rates); ++idx) {
->> >> +		if (irsd200_data_rates[idx] == val)
->> >> +			break;
->> >> +	}
->> >> +
->> >> +	if (idx == ARRAY_SIZE(irsd200_data_rates))
->> >> +		return -ERANGE;
->> >> +
->> >> +	ret = regmap_write(data->regmap, IRS_REG_DATA_RATE, idx);
->> >> +	if (ret < 0) {
->> >> +		dev_err(data->dev, "Could not write data rate (%d)\n", ret);
->> >> +		return ret;
->> >> +	}
->> >> +
->> >> +	/* Data sheet says the device needs 3 seconds of settling time. */
->> >> +	ssleep(3);  
->> > You aren't preventing other userspace reads / writes during that time so
->> > this is a light protection at best.  
->> 
->> Yes, we aren't preventing anything. The hardware actually operates
->> without any "errors" during this period (e.g. buffer data and events
->> keep arriving). 
->> 
->> This is more of a guarantee that "within 3 s, the new data rate should
->> be in effect". When I think about it, we should maybe just remove this
->> sleep?
-> Interesting corner case.  I'd keep as you have it but add a little
-> more documentation as why.  Having this sleep will make it easy for a single
-> thread in userspace to get what it expects.
+The SENINF driver is based on previous work done by Louis Kuo available
+as an RFC here: https://lore.kernel.org/all/20200708104023.3225-1-louis.kuo@mediatek.com/
 
-Alright, let's update the comment then.
+This series depends on the following series: [1] for the phy,  [2] for
+power management support
 
-[...]
+Changes in v2:
+- renamed clock `cam_seninf` to `camsys`
+- renamed clock `top_mux_seninf` to `top_mux`
+- moved phy properties from port nodes to top level
+- remove patternProperties
+- specify power management dependency in the cover letter description to fix
+  missing include in dt-binding example
+- change '$ref' properties on some endpoint nodes from
+  '$ref: video-interfaces.yaml#' to '$ref: /schemas/graph.yaml#/$defs/endpoint-base'
+ where applicable
 
->> >> +		dev_err(data->dev, "Could not write hp filter frequency (%d)\n",
->> >> +			ret);
->> >> +		return ret;  
->> >
->> > drop this return ret out of the if block here.
->> >
->> > In general being able to ignore possibility of ret > 0 simplifies handling.  
->> 
->> I try to be consistent and it also "helps" the next person potentially
->> adding code after the `if`-statement and forgetting about adding
->> `return`. We can drop the `return here, but then we should do the same
->> in other places with a check just before the last `return` (like
->> `irsd200_write_timer()`, `irsd200_read_nr_count()`,
->> `irsd200_write_nr_count()` and many more), right?
->
-> I don't feel particulartly strongly about this, but there are scripts
-> that get used to scan for this pattern to simplify the code.
->
-> Sure on the other cases. I don't tend to try and label all cases of things
-> pointed out, just pick on one and rely on the patch author to generalise.
+Best
+Julien Stephan
 
-I don't have strong opinions on this either. Let's remove the `return`.
+[1] : https://lore.kernel.org/all/20230620121928.1231745-1-jstephan@baylibre.com/
+[2] : https://lore.kernel.org/lkml/20230627131040.3418538-1-msp@baylibre.com/
 
-[...]
 
->> >> +static irqreturn_t irsd200_irq_thread(int irq, void *dev_id)
->> >> +{
->> >> +	struct iio_dev *indio_dev = dev_id;
->> >> +	struct irsd200_data *data = iio_priv(indio_dev);
->> >> +	enum iio_event_direction dir;
->> >> +	unsigned int lower_count;
->> >> +	unsigned int upper_count;
->> >> +	unsigned int status = 0;
->> >> +	unsigned int source = 0;
->> >> +	unsigned int clear = 0;
->> >> +	unsigned int count = 0;
->> >> +	int ret;
->> >> +
->> >> +	ret = regmap_read(data->regmap, IRS_REG_INTR, &source);
->> >> +	if (ret) {
->> >> +		dev_err(data->dev, "Could not read interrupt source (%d)\n",
->> >> +			ret);
->> >> +		return IRQ_NONE;
->> >> +	}
->> >> +
->> >> +	ret = regmap_read(data->regmap, IRS_REG_STATUS, &status);
->> >> +	if (ret) {
->> >> +		dev_err(data->dev, "Could not acknowledge interrupt (%d)\n",
->> >> +			ret);
->> >> +		return IRQ_NONE;
->> >> +	}
->> >> +
->> >> +	if (status & BIT(IRS_INTR_DATA) && iio_buffer_enabled(indio_dev)) {
->> >> +		iio_trigger_poll_nested(indio_dev->trig);
->> >> +		clear |= BIT(IRS_INTR_DATA);
->> >> +	}
->> >> +
->> >> +	if (status & BIT(IRS_INTR_TIMER) && source & BIT(IRS_INTR_TIMER)) {
->> >> +		iio_push_event(indio_dev,
->> >> +			       IIO_UNMOD_EVENT_CODE(IIO_PROXIMITY, 0,
->> >> +						    IIO_EV_TYPE_CHANGE,
->> >> +						    IIO_EV_DIR_NONE),  
->> >
->> > As below, I'd like more explanation of what this is.
->> > I can't find a datasheet to look it up in.  
->> 
->> This is a timer for the detection event window time, i.e. the signal
->> should pass the threshold values within this time in order to get an
->> interrupt (`IIO_EV_TYPE_THRESH`).
->> 
->> You setup the window time (`IIO_EV_INFO_TIMEOUT`), and when this timer
->> has expired, you get this interrupt (and thus `IIO_EV_TYPE_CHANGE`). I
->> couldn't find any other more fitting value in `enum iio_event_type`.
->
-> I'm not totally following.   This is some sort of watchdog?  If threshold
-> not exceeded for N seconds an interrupt occurs?  
+Louis Kuo (2):
+  dt-bindings: media: add mediatek ISP3.0 sensor interface
+  media: platform: mediatek: isp_30: add mediatek ISP3.0 sensor
+    interface
 
-Yes, exactly.
+Phi-bang Nguyen (2):
+  dt-bindings: media: add mediatek ISP3.0 camsv
+  media: platform: mediatek: isp_30: add mediatek ISP3.0 camsv
 
-> Change is definitely not indicating that, so not appropriate ABI to use.
-> Timeout currently has a very specific defined meaning and it's not this
-> (see the ABI docs - to do with adaptive algorithm jumps - we also have
-> reset_timeout but that's different again).
->
-> This probably needs some new ABI defining.  I'm not sure what will work
-> best though as it's kind of a 'event did not happen' signal if I've understood
-> it correctly?
+ .../bindings/media/mediatek,mt8365-camsv.yaml |  113 ++
+ .../media/mediatek,mt8365-seninf.yaml         |  295 ++++
+ MAINTAINERS                                   |   10 +
+ drivers/media/platform/mediatek/Kconfig       |    1 +
+ drivers/media/platform/mediatek/Makefile      |    1 +
+ drivers/media/platform/mediatek/isp/Kconfig   |    2 +
+ drivers/media/platform/mediatek/isp/Makefile  |    3 +
+ .../platform/mediatek/isp/isp_30/Kconfig      |   35 +
+ .../platform/mediatek/isp/isp_30/Makefile     |    4 +
+ .../mediatek/isp/isp_30/camsv/Makefile        |    7 +
+ .../mediatek/isp/isp_30/camsv/mtk_camsv.c     |  334 ++++
+ .../mediatek/isp/isp_30/camsv/mtk_camsv.h     |  200 +++
+ .../isp/isp_30/camsv/mtk_camsv30_hw.c         |  474 +++++
+ .../isp/isp_30/camsv/mtk_camsv30_regs.h       |   59 +
+ .../isp/isp_30/camsv/mtk_camsv_video.c        |  781 +++++++++
+ .../mediatek/isp/isp_30/seninf/Makefile       |    5 +
+ .../mediatek/isp/isp_30/seninf/mtk_seninf.c   | 1561 +++++++++++++++++
+ .../isp/isp_30/seninf/mtk_seninf_reg.h        |   99 ++
+ 18 files changed, 3984 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/media/mediatek,mt8365-camsv.yaml
+ create mode 100644 Documentation/devicetree/bindings/media/mediatek,mt8365-seninf.yaml
+ create mode 100644 drivers/media/platform/mediatek/isp/Kconfig
+ create mode 100644 drivers/media/platform/mediatek/isp/Makefile
+ create mode 100644 drivers/media/platform/mediatek/isp/isp_30/Kconfig
+ create mode 100644 drivers/media/platform/mediatek/isp/isp_30/Makefile
+ create mode 100644 drivers/media/platform/mediatek/isp/isp_30/camsv/Makefile
+ create mode 100644 drivers/media/platform/mediatek/isp/isp_30/camsv/mtk_camsv.c
+ create mode 100644 drivers/media/platform/mediatek/isp/isp_30/camsv/mtk_camsv.h
+ create mode 100644 drivers/media/platform/mediatek/isp/isp_30/camsv/mtk_camsv30_hw.c
+ create mode 100644 drivers/media/platform/mediatek/isp/isp_30/camsv/mtk_camsv30_regs.h
+ create mode 100644 drivers/media/platform/mediatek/isp/isp_30/camsv/mtk_camsv_video.c
+ create mode 100644 drivers/media/platform/mediatek/isp/isp_30/seninf/Makefile
+ create mode 100644 drivers/media/platform/mediatek/isp/isp_30/seninf/mtk_seninf.c
+ create mode 100644 drivers/media/platform/mediatek/isp/isp_30/seninf/mtk_seninf_reg.h
 
-Yeah, I'm not sure when this interrupt actually could be useful. Maybe
-when you are testing and calibrating the device, it could help to know
-that "these particular settings didn't cause the data to pass any
-thresholds during the window time"?
-
-The alternative would be to just ignore this interrupt and not signaling
-any events for this. I don't think it would deteriorate the
-functionality of the device (except the test/calibration situation
-described above, which obviously _can_ be resolved in user space).
-
->> >> +			       iio_get_time_ns(indio_dev));
->> >> +		clear |= BIT(IRS_INTR_TIMER);
->> >> +	}
->> >> +
->> >> +	if (status & BIT(IRS_INTR_COUNT_THR_OR) &&
->> >> +	    source & BIT(IRS_INTR_COUNT_THR_OR)) {
->> >> +		/*
->> >> +		 * The register value resets to zero after reading. We therefore
->> >> +		 * need to read once and manually extract the lower and upper
->> >> +		 * count register fields.
->> >> +		 */
->> >> +		ret = regmap_read(data->regmap, IRS_REG_COUNT, &count);
->> >> +		if (ret)
->> >> +			dev_err(data->dev, "Could not read count (%d)\n", ret);
->> >> +
->> >> +		upper_count = IRS_UPPER_COUNT(count);
->> >> +		lower_count = IRS_LOWER_COUNT(count);
->> >> +
->> >> +		/*
->> >> +		 * We only check the OR mode to be able to push events for
->> >> +		 * rising and falling thresholds. AND mode is covered when both
->> >> +		 * upper and lower count is non-zero, and is signaled with
->> >> +		 * IIO_EV_DIR_EITHER.  
->> >
->> > Whey you say AND, you mean that both thresholds have been crossed but also that
->> > in that configuration either being crossed would also have gotten us to here?
->> > (as opposed to the interrupt only occurring if value is greater than rising threshold
->> >  and less than falling threshold?)
->> >
->> > If it's the first then just report two events.  Either means we don't know, rather
->> > than we know both occurred.  We don't document that well though - so something
->> > we should improved there. whilst a bit confusing: 
->> > https://elixir.bootlin.com/linux/v6.4-rc6/source/Documentation/ABI/testing/sysfs-bus-iio#L792
->> > talks about this.
->> >
->> > The bracketed case is more annoying to deal with so I hope you don't mean that.
->> > Whilst we've had sensors that support it in hardware for years, I don't think we
->> > ever came up with a usecase that really justified describing it.  
->> 
->> According to the data sheet (which will hopefully be soon publicly
->> available):
->> 
->> OR-interrupt:  (UPPER_COUNT + LOWER_COUNT >= NR_COUNT)
->> 
->> AND-interrupt: (UPPER_COUNT + LOWER_COUNT >= NR_COUNT) &&
->>                (UPPER_COUNT != 0) && (LOWER_COUNT != 0)
->>                
->> For example, consider the following situation:
->> 
->>                                ___
->>                               /   \
->> -----------------------------3------------------- Upper threshold
->>                ___          /       \
->> ______        /   \        /         \___________ Data signal
->>       \      /     \      /
->> -------1------------2---------------------------- Lower threshold
->>         \__/         \__/
->>         
->> When `NR_COUNT` is set to 3, we will get an OR-interrupt on point "3" in
->> the graph above. In this case `UPPER_COUNT = 1` and `LOWER_COUNT = 2`.
->> 
->> When `NR_COUNT` is set to 2, we will get an OR-interrupt on point "2"
->> instead. Here `UPPER_COUNT = 0` and `LOWER_COUNT = 2`.
->> 
->
-> Thanks.  That is very odd definition of AND.  At least OR is close to normal
-> though the way count is applied is unusual.  Most common thing similar to that
-> is what we use period for in IIO - it's same count here, but it resets once
-> the condition is no longer true.  Here we have a running total...
->
-> Getting this into standard ABI or anything approaching it is going to be tricky.
->
-> Firstly need a concept similar to period but with out the reset. That will at least
-> allow us to comprehend the counts part.
->
-> Either can then be used for the OR case.
-
-Are you saying that the current implementation (with manually checking
-the upper and lower counts only with the OR mode) wouldn't "fit" the
-current ABI? It does cover the rising and falling directions correctly,
-no? Could `IIO_EV_DIR_NONE` instead of `IIO_EV_DIR_EITHER` be used to
-signal "both" then?
-
->
-> The AND case is a mess so for now I'm stuck.  Will think some more on this.
-> Out of curiosity does the datasheet include why that particular function makes
-> any sense?  Feels like a rough attempt to approximate something they don't have
-> hardware resources to actually estimate.
-
-Unfortunately not. I guess there could be an application where you are
-only interested if _both_ lower and upper threshold are exceeded. Maybe
-in order to minimize small "false positives" movements in front of the
-sensor? But as stated in the comments, one can cover this with only the
-OR mode (and manually checking the upper and lower count as we do).
+--
+2.41.0
