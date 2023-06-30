@@ -2,134 +2,211 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F4AA744147
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 19:32:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03E8174414A
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 19:33:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232528AbjF3RcU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 13:32:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46402 "EHLO
+        id S230015AbjF3RdF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Jun 2023 13:33:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232623AbjF3RcO (ORCPT
+        with ESMTP id S231886AbjF3RdC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 13:32:14 -0400
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on20729.outbound.protection.outlook.com [IPv6:2a01:111:f400:7e8a::729])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6CE63AB6;
-        Fri, 30 Jun 2023 10:32:11 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=bY+0lxre64vpZzcniM6C2rg5CYkZVtg7sa+g3pat+0V3R8wv0XaV5hRnH5+C3fusIfYHGwNn4a2IqMQ4FDIjrkCynXMxqxg6bP6juqarvAkdoD08X8nzWH7+NmLI345sUtOxWqeY+Escy+bprB6uQFfIPkUPtuVarFeFATZhcoraWyjxFMeuoQjHFpA/gwly7vIYsHF3PoPYvcxANi4FBI8H3Mxkux6jOX4mPqR4lxY4/pIsBhr3/7ws43SiANTmx18WCSax8DI19k+0PY6kOQzNj8ZCR3injSVxfOnebMIKEwzygijrYK59mkf70ItG7H0etWbJ80QpRPuKuiofww==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=UR/tk9OjlXf62UjgTR+WCe7pAajztS+TQkgrNXxondw=;
- b=M1aF1hNEDVmNUiZN67pVCBCq63lL+WuBu03isPmz3VyXHUkfVtit8Ltbq8O+t5V55fgSygEqC82MpNRVQDcTk/RnElBneHllHGDnAIlRi2juBYEO5shILOdVsFfEQIUHErLdeVBTqP0seW13LIOa6kakc59Cls035Jv/uG4INu/XdBGhf4rX95jxU5KHupna5SyxOXdHjWuehtKxtKSwx26C6LdUHSzTwJwNYAZap7LSnUISd0RmC2iqOjL5oXg05+lJ7F08DsUvg5u2z5Z6s7Syq3uVqSgDlr4Aui0cUddb0M9wZItY7APN992P5UcOlr2DIyg8GBmWLWU/G5KWZw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
- dkim=pass header.d=corigine.com; arc=none
+        Fri, 30 Jun 2023 13:33:02 -0400
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C3C5E6C
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 10:33:01 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id 4fb4d7f45d1cf-51d7f4c1cfeso2244487a12.0
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 10:33:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=UR/tk9OjlXf62UjgTR+WCe7pAajztS+TQkgrNXxondw=;
- b=rybXyzm2P4qZaGfJgepqeEoaiC9J/P8F2ZwB9CtuVAVLnpUWS/3r92mEv3g5wGoP00lRZJmtuQfYoIprmnkFq20E2SWMr5RkBVlzGVMDuL5pOJWbHQUXBb3vMtqUaTP5mkftCUFxDNC0tI4rYUnNXagBEK1JrS7LjgtDoDy/1do=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=corigine.com;
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
- by PH7PR13MB6295.namprd13.prod.outlook.com (2603:10b6:510:236::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6544.19; Fri, 30 Jun
- 2023 17:32:07 +0000
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::eb8f:e482:76e0:fe6e]) by PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::eb8f:e482:76e0:fe6e%5]) with mapi id 15.20.6544.019; Fri, 30 Jun 2023
- 17:32:07 +0000
-Date:   Fri, 30 Jun 2023 19:32:00 +0200
-From:   Simon Horman <simon.horman@corigine.com>
-To:     David Howells <dhowells@redhat.com>
-Cc:     netdev@vger.kernel.org, Matthew Wilcox <willy@infradead.org>,
-        Dave Chinner <david@fromorbit.com>,
-        Matt Whitlock <kernel@mattwhitlock.name>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Jens Axboe <axboe@kernel.dk>, linux-fsdevel@kvack.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Christoph Hellwig <hch@lst.de>, linux-fsdevel@vger.kernel.org
-Subject: Re: [RFC PATCH 2/4] splice: Make vmsplice() steal or copy
-Message-ID: <ZJ8RkKCLYxvEiRq5@corigine.com>
-References: <ZJ7cQ8Wdiyb0Ax/r@corigine.com>
- <20230629155433.4170837-1-dhowells@redhat.com>
- <20230629155433.4170837-3-dhowells@redhat.com>
- <661360.1688138974@warthog.procyon.org.uk>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <661360.1688138974@warthog.procyon.org.uk>
-X-ClientProxiedBy: AM0PR06CA0080.eurprd06.prod.outlook.com
- (2603:10a6:208:fa::21) To PH0PR13MB4842.namprd13.prod.outlook.com
- (2603:10b6:510:78::6)
+        d=google.com; s=20221208; t=1688146380; x=1690738380;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=TRxnSk9kxMzaUaw9NVLI4lJ1EfwlE8b7suSgdr4IEqI=;
+        b=c6JEuiDQ+wrPvK+QjxunYykvRbfHhcBKV05AoUOFRmzHswSWjmcSXPXM1ZVHkHfDqs
+         vWkbiaNqkpDXdWqxfBFccdeVdepgIW86nt7v8pemIupjrVYIp8vncjQn8BxgTl6edG36
+         RLNcK4EJPaBtOGWBr8ruXswZTzyWd0Z+YQ9rSRlmvF6BCz5txfyPS3R2jfAtgaovAyl1
+         UfB+4hVZxyU6S8fHHeV2tvxuJjimlAeWsN9tgVTn68uMqbA8JWwRnaoYlxmE8T0FCOrF
+         1AuiJAQdewxbWyHfWEkehHr0I4u93PrY8mgl4xew0ZjyUsu+4BXkbf4laP4fcAxHyaN+
+         B2qg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688146380; x=1690738380;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=TRxnSk9kxMzaUaw9NVLI4lJ1EfwlE8b7suSgdr4IEqI=;
+        b=OXSdVQkP37eF+CA4Sgh/sYOZl8ykoeGQLADObyVmdqy0AWk6MKODzuijUFue9AUbS1
+         Kv8cVgZAuytx7pBgBxAmFsJtIo4xPvAc+Xmitsjax1JiSgmbBvzArJKZUgymku7g8oDi
+         i2/Z3x/Uhes4RK33T7FIEDlEsucBvn1Yf5Q+x9jJd/FlIh818CoanICoMIbDPchDHA/L
+         +z8FcXZbAkj0mCeAMOlEYixr/oixggMXLq4HI0wmJ3Pr8Bh9ypeEaQPFOGf1EuN5jgap
+         hLy0+RBr0EWWIfR2YLchqS6kkF9Y7p/CXwG7U3KDla+7OtfQhUkA1DNbhb0mqntflRYL
+         ZPMw==
+X-Gm-Message-State: ABy/qLb9vMfG6SR6vViEEe0MBREwP3bghYOBzWR+dQeFEOcMhUNHRpmG
+        B2qgTQYxhxX0yTLJ5mbBua27i2EfudEJfx8HpWm4nQ==
+X-Google-Smtp-Source: APBJJlH48PHLP8a6rvcVshOZaojaPPhJAvoFbw4qR/w+S3pNxQPH3Tf0cnQsOEnoHhrj5bfcnZmvQr/PYqCOMWc4YWo=
+X-Received: by 2002:a17:906:f299:b0:991:f427:2fd8 with SMTP id
+ gu25-20020a170906f29900b00991f4272fd8mr2265350ejb.74.1688146379640; Fri, 30
+ Jun 2023 10:32:59 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|PH7PR13MB6295:EE_
-X-MS-Office365-Filtering-Correlation-Id: 3187091d-8e91-4f59-5f95-08db798fed4c
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Rnmld5CXyKSSLWmftZ2KZz7oImAF5+NsyyAgiexVVNk1eG1gV5faqAhtWukbiYFfdn6UMsYZAEUy/z39GSeyaqn8ECk1eMFQc118QaAMW339/p519Tws/7Nr5slvdOAbsooP249fclB6ccGqcnmUspiHi5iOcnm0uxRmLoOqaOy92v7swr1xISALHSf7wBX1es2s1XbbuuAob9TIlrzK5XJspxyLaenuprpPKqQWFl/t4M8fUkBAlc0PSGU/BGqRtugEtoR8R73fH9EMMvymL2YB/rkft3jOBqygs6FaNn6oQJ96IXV7da43LdPWrQ5LtC4V7UIKgffzxdFg87d6GZvVqltv4DW/FPAoUWavdw7l1X+3/CYhCHkHmykONY7Fb5n8dA+d6WJEcXsZyAoTsgc3wx5N4jmb5Qehazen21+mdjNYYMLm9dDWi9UwUQzVfESeuIA5/ybuQNyva0EWIeud2ZX2w9lebcgzGS3aERhIifO8rhHLTIY62fwiQA2uWuXk/mN82XmdmeH57sEpTXFyTdLDBZhrM6lGjQWeTWdytkMwsSCSMx4fDJBh6nVXQP4feh4bxHuckOZ1kAeHLKxcTX9kO88Farstl4DUv4k=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39840400004)(396003)(366004)(346002)(376002)(136003)(451199021)(2616005)(2906002)(4744005)(38100700002)(36756003)(8936002)(8676002)(5660300002)(86362001)(54906003)(6512007)(41300700001)(66556008)(66476007)(6916009)(4326008)(66946007)(6666004)(316002)(6486002)(478600001)(186003)(44832011)(6506007)(7416002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?91EbAinSusLh0w2HVdFInHY8cQZkA+fHtSD4XfVo/oV8FrEWQqZqsC11JM0+?=
- =?us-ascii?Q?KrILmFP7Wc1xhrauDpzC6hhk/gemymOtUdUACR2orXs2mdmGCpBRd/oKfwtg?=
- =?us-ascii?Q?fcTHPno232ivTs2QH2SVM0r1/vjHwH8gnMxePuNjMD4o92OybUH8z0f3aMog?=
- =?us-ascii?Q?ERrzEvhw+jNEFxXsYuZ8hyef8Zgs7Da2U4o363yfdYHQ30GGATmsN6/Nz7KR?=
- =?us-ascii?Q?8+9L6FMH8xzdhWdFi3dYu9Q87csGmAISaYiIX1k1rdjcLfypi1FPTKWrWx+d?=
- =?us-ascii?Q?Zzk1vPdbLZ0omOPys8HTUUWkfvIrNGtouPl30xU72pd8EFyWjTzFldCfjG3W?=
- =?us-ascii?Q?so+mUZLD3xAYnQ1ZEMKoWA94NDP1QNf1/jXtICdjIXPcOhpNIiovVy8nDmxw?=
- =?us-ascii?Q?ZVPBIQnbxPf2a4poc2JLFnycCA32EuYhHNs0WJ/ZAyDVKbeJMv5nn86PlUWG?=
- =?us-ascii?Q?7RWabbkoy5KkbppLAbQ1+0ugtGCFfdVef/5Mjn5rtFaQUTZ9k3oBwjgDupSv?=
- =?us-ascii?Q?cyE2RNmLapfsCRyVbO7MM1eDtliUdo8pRRphjMjwJu/rCzr/PNihTo5biVO+?=
- =?us-ascii?Q?zWxdIcwlXAaf6XjxNBIXxTFXJ9vgZ0RjVaJyzycUdSH6VpTJGhV5Oa9wOhnH?=
- =?us-ascii?Q?eEkCesCNqoYw4uFSTKA6P7uuz1dVKiPol5r/Q2PENAUG0IgHVeq0/xWzOT5X?=
- =?us-ascii?Q?B0OPOxzclr2CK2cV5lnAYXm8qqbitHrwMdFbvzT5qHjWJYFcN2VwsV25YyX7?=
- =?us-ascii?Q?sSBhxhhhP5TJuNOi85LxlZrkO7dy1T7HfSsItPueLV2YTo3CyAwxqP5hfZBd?=
- =?us-ascii?Q?fvmnLYCzNjXPyAUH3BUxbh0Aj2pkHP/96PEp5w2bdrBWhwqgiIGAFtb/8zK3?=
- =?us-ascii?Q?BdJJLWWXozQiKjGkrVP+tTUNownpYSDTeD6Lh7DmQZCmlTGTOaHNepnDxaVT?=
- =?us-ascii?Q?LmPRLDzaGVA5rCd8YfE6zfPDX4w+21Cj01tW2/OYQvaJARojzMRz+AS9VTb+?=
- =?us-ascii?Q?V3UW9hnmyz3Lg3ENUnLsdCKh9bJ9IFxIH3V5QSVU6c6jHUVEbnhqjNbzYOI7?=
- =?us-ascii?Q?IscB3EeXMpF3UBxYfderHWByUV6okZlEyWvREBi8VAKSa0yPlusZpwK9mbar?=
- =?us-ascii?Q?IrIDCAwafCCRqZ094FbaoE1bM1EUcrrtrl6VdIm5nnQWr3GZVhZFmyBGxG9q?=
- =?us-ascii?Q?bJGd0voJ2W8pdAS/vlOebRQmMV1KbBKQj/ddYqlldW/wcPvrLwGls5Hr6Hp4?=
- =?us-ascii?Q?f7DELv9cFgBeaOVOUnixXc6ZxalC+zvlIlLXRvt1bvfjC/8UBezwEc2OT/6n?=
- =?us-ascii?Q?DE8w6ajjQ2fmtdM9lPSIAneabxcXPIyLQ2LBkS4kgFCKoT80SZxv5ie7NJ3K?=
- =?us-ascii?Q?zygOVdAV0G34YHFOI5lBUKSEmayVLPhSWd4xDTVvuAHpTactm/LWiGp8dLig?=
- =?us-ascii?Q?mlamUwQujYWZ663FvznnVEdnVUZHHPoNkELiWg7SrCBlEmmDYSr1dnJiSIoU?=
- =?us-ascii?Q?wehsGw3nGiBprvQeHVMuJAOU/qi7h0BWv1i0aZgyl1bPxnx68G/Fv9nCz650?=
- =?us-ascii?Q?8KKSMOKsC1/2hWnsKoG4EZDeTGPyFCt5Nfifj40Ld23T2Jcal9AxcWUyKy0x?=
- =?us-ascii?Q?7Pobh15VOhwen0vj4SRiN72y1vsQib5O21U4mAHhysQdWIif63EvIdmSiZDP?=
- =?us-ascii?Q?I91/aw=3D=3D?=
-X-OriginatorOrg: corigine.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3187091d-8e91-4f59-5f95-08db798fed4c
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Jun 2023 17:32:07.2478
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: sLh3DfDJCQxrG/fX6gYAabLUQobDkjLZfuRdh0Fm9aVpKtX21YSG49Xtje7VaQXbf94pbWi4Zz1T227JUhQIjWeoplNNykP2/SuIHD0AUhc=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR13MB6295
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230504120042.785651-1-rkagan@amazon.de> <ZH6DJ8aFq/LM6Bk9@google.com>
+ <CALMp9eS3F08cwUJbKjTRAEL0KyZ=MC==YSH+DW-qsFkNfMpqEQ@mail.gmail.com>
+ <ZJ4dmrQSduY8aWap@google.com> <ZJ65CiW0eEL2mGg8@u40bc5e070a0153.ant.amazon.com>
+ <ZJ7mjdZ8h/RSilFX@google.com> <ZJ7y9DuedQyBb9eU@u40bc5e070a0153.ant.amazon.com>
+ <ZJ74gELkj4DgAk4S@google.com> <CAL715WL9T8Ucnj_1AygwMgDjOJrttNZHRP9o-KUNfpx1aYZnog@mail.gmail.com>
+ <CALMp9eSQ9uRBVdLDkfCdPbprZ45LpdZY5-5O9i41oJYs-dK7+Q@mail.gmail.com>
+In-Reply-To: <CALMp9eSQ9uRBVdLDkfCdPbprZ45LpdZY5-5O9i41oJYs-dK7+Q@mail.gmail.com>
+From:   Mingwei Zhang <mizhang@google.com>
+Date:   Fri, 30 Jun 2023 10:32:23 -0700
+Message-ID: <CAL715WJDjox6AOU=gzN_E-VPL8aXMuD+SkN3k18T=imoS_dKaw@mail.gmail.com>
+Subject: Re: [PATCH] KVM: x86: vPMU: truncate counter value to allowed width
+To:     Jim Mattson <jmattson@google.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Roman Kagan <rkagan@amazon.de>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Eric Hankland <ehankland@google.com>, kvm@vger.kernel.org,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Like Xu <likexu@tencent.com>, x86@kernel.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-kernel@vger.kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        Borislav Petkov <bp@alien8.de>, Ingo Molnar <mingo@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 30, 2023 at 04:29:34PM +0100, David Howells wrote:
-> Simon Horman <simon.horman@corigine.com> wrote:
-> 
-> > But, on a more mundane level, GCC reports that user_page_pipe_buf_ops is
-> > (now) unused.  I guess this was the last user, and user_page_pipe_buf_ops
-> > can be removed as part of this patch.
-> 
-> See patch 3.
+On Fri, Jun 30, 2023 at 10:16=E2=80=AFAM Jim Mattson <jmattson@google.com> =
+wrote:
+>
+> On Fri, Jun 30, 2023 at 10:08=E2=80=AFAM Mingwei Zhang <mizhang@google.co=
+m> wrote:
+> >
+> > On Fri, Jun 30, 2023 at 8:45=E2=80=AFAM Sean Christopherson <seanjc@goo=
+gle.com> wrote:
+> > >
+> > > On Fri, Jun 30, 2023, Roman Kagan wrote:
+> > > > On Fri, Jun 30, 2023 at 07:28:29AM -0700, Sean Christopherson wrote=
+:
+> > > > > On Fri, Jun 30, 2023, Roman Kagan wrote:
+> > > > > > On Thu, Jun 29, 2023 at 05:11:06PM -0700, Sean Christopherson w=
+rote:
+> > > > > > > @@ -74,6 +74,14 @@ static inline u64 pmc_read_counter(struct =
+kvm_pmc *pmc)
+> > > > > > >         return counter & pmc_bitmask(pmc);
+> > > > > > >  }
+> > > > > > >
+> > > > > > > +static inline void pmc_write_counter(struct kvm_pmc *pmc, u6=
+4 val)
+> > > > > > > +{
+> > > > > > > +       if (pmc->perf_event && !pmc->is_paused)
+> > > > > > > +               perf_event_set_count(pmc->perf_event, val);
+> > > > > > > +
+> > > > > > > +       pmc->counter =3D val;
+> > > > > >
+> > > > > > Doesn't this still have the original problem of storing wider v=
+alue than
+> > > > > > allowed?
+> > > > >
+> > > > > Yes, this was just to fix the counter offset weirdness.  My plan =
+is to apply your
+> > > > > patch on top.  Sorry for not making that clear.
+> > > >
+> > > > Ah, got it, thanks!
+> > > >
+> > > > Also I'm now chasing a problem that we occasionally see
+> > > >
+> > > > [3939579.462832] Uhhuh. NMI received for unknown reason 30 on CPU 4=
+3.
+> > > > [3939579.462836] Do you have a strange power saving mode enabled?
+> > > > [3939579.462836] Dazed and confused, but trying to continue
+> > > >
+> > > > in the guests when perf is used.  These messages disappear when
+> > > > 9cd803d496e7 ("KVM: x86: Update vPMCs when retiring instructions") =
+is
+> > > > reverted.  I haven't yet figured out where exactly the culprit is.
+> > >
+> > > Can you reverting de0f619564f4 ("KVM: x86/pmu: Defer counter emulated=
+ overflow
+> > > via pmc->prev_counter")?  I suspect the problem is the prev_counter m=
+ess.
+> >
+> > For sure it is prev_counter issue, I have done some instrumentation as =
+follows:
+> >
+> > diff --git a/arch/x86/kvm/pmu.c b/arch/x86/kvm/pmu.c
+> > index 48a0528080ab..946663a42326 100644
+> > --- a/arch/x86/kvm/pmu.c
+> > +++ b/arch/x86/kvm/pmu.c
+> > @@ -322,8 +322,11 @@ static void reprogram_counter(struct kvm_pmc *pmc)
+> >         if (!pmc_event_is_allowed(pmc))
+> >                 goto reprogram_complete;
+> >
+> > -       if (pmc->counter < pmc->prev_counter)
+> > +       if (pmc->counter < pmc->prev_counter) {
+> > +               pr_info("pmc->counter: %llx\tpmc->prev_counter: %llx\n"=
+,
+> > +                       pmc->counter, pmc->prev_counter);
+> >                 __kvm_perf_overflow(pmc, false);
+> > +       }
+> >
+> >         if (eventsel & ARCH_PERFMON_EVENTSEL_PIN_CONTROL)
+> >                 printk_once("kvm pmu: pin control bit is ignored\n");
+> >
+> > I find some interesting changes on prev_counter:
+> >
+> > [  +7.295348] pmc->counter: 12 pmc->prev_counter: fffffffffb3d
+> > [  +0.622991] pmc->counter: 3 pmc->prev_counter: fffffffffb1a
+> > [  +6.943282] pmc->counter: 1 pmc->prev_counter: fffffffff746
+> > [  +4.483523] pmc->counter: 0 pmc->prev_counter: ffffffffffff
+> > [ +12.817772] pmc->counter: 0 pmc->prev_counter: ffffffffffff
+> > [ +21.721233] pmc->counter: 0 pmc->prev_counter: ffffffffffff
+> >
+> > The first 3 logs will generate this:
+> >
+> > [ +11.811925] Uhhuh. NMI received for unknown reason 20 on CPU 2.
+> > [  +0.000003] Dazed and confused, but trying to continue
+> >
+> > While the last 3 logs won't. This is quite reasonable as looking into
+> > de0f619564f4 ("KVM: x86/pmu: Defer counter emulated overflow via
+> > pmc->prev_counter"), counter and prev_counter should only have 1 diff
+> > in value.
+>
+> prev_counter isn't actually sync'ed at this point, is it? This comes
+> back to that "setting a running counter" nonsense. We want to add 1 to
+> the current counter, but we don't actually know what the current
+> counter is.
+>
+> My interpretation of the above is that, in the first three cases, PMU
+> hardware has already detected an overflow. In the last three cases,
+> software counting has detected an overflow.
+>
+> If the last three occur while executing the guest's PMI handler (i.e.
+> NMIs are blocked), then this could corroborate my conjecture about
+> IA32_DEBUGCTL.Freeze_PerfMon_On_PMI.
+>
 
-Thanks, I do see that now.
-But as thing stand, bisection is broken.
+I see. I wonder if we can just do this:
+
+diff --git a/arch/x86/kvm/pmu.c b/arch/x86/kvm/pmu.c
+index 48a0528080ab..8d28158e58f2 100644
+--- a/arch/x86/kvm/pmu.c
++++ b/arch/x86/kvm/pmu.c
+@@ -322,7 +322,7 @@ static void reprogram_counter(struct kvm_pmc *pmc)
+        if (!pmc_event_is_allowed(pmc))
+                goto reprogram_complete;
+
+-       if (pmc->counter < pmc->prev_counter)
++       if (pmc->counter =3D=3D 0)
+                __kvm_perf_overflow(pmc, false);
+
+        if (eventsel & ARCH_PERFMON_EVENTSEL_PIN_CONTROL)
+
+Since this is software emulation, we (KVM) should only handle overflow
+by plusing one?
