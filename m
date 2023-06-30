@@ -2,74 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C95F74403B
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 18:58:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93BFC74407F
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 18:59:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231946AbjF3Q55 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 12:57:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53760 "EHLO
+        id S232768AbjF3Q67 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Jun 2023 12:58:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232594AbjF3Q5t (ORCPT
+        with ESMTP id S231361AbjF3Q6m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 12:57:49 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18F4C420C;
-        Fri, 30 Jun 2023 09:57:42 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id 98e67ed59e1d1-25eabe8b5fcso263622a91.1;
-        Fri, 30 Jun 2023 09:57:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688144261; x=1690736261;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=0WbvTFCty7AXhGWc17dVqnpVXlZ2ZnUtOfdshsodAAU=;
-        b=HNvUV70PBbb6z2cRbQ9PoHPkeNtGLZbLkn8RlNRkV2qGIW1OGPS8uSTjsMPDgBZTZJ
-         82tRgf2GZPYwDfu4eYcqqBPQXqHnL1/TzI5bWHpX02Ojl7TC084orn/dwcY2BgbRBCQI
-         poTzfuUMLZj2mfWruU5GDX68doWjrlbR/vjl9etkIbHe9BkD8aSrJSXwLmNaoEcsNzW9
-         O2Hh0XCrgZCCj68PKLIdiQ4d3EzbRku1lQK5GIQzew54NJG020XykPX6mkF/6ZJUr8bg
-         LNG23L4Hd46PTiNrZ3QGHKImnys6NSAuLtUFOhKuatiVgA6L442SwAOdzHyp1pz4bSAC
-         f9aQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688144261; x=1690736261;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=0WbvTFCty7AXhGWc17dVqnpVXlZ2ZnUtOfdshsodAAU=;
-        b=Lw4ccedhpZSUmS6ei97c5K/8ii9H8TjcQWP4sJGMAHLKbV2qBmAEaLWbeNgdlpxFJ1
-         8vZ0I7yOmXrHq7kpB7rez5Y2DryJgLA+mwtsZFWIunJdePsN3ZXrTQPcuAbbUGxpdm1E
-         X3KFgT46lEt1m3y5N5sVg8Fd5YmxXI0wASZ8T82VOQy2DaFvZWm7jhPnFKzMdZ9YK0B3
-         GuZ9WVFbe/uGyZcjt603iNE3aw5cE0Yo77JgNSya2TAhYvnEG/CU3DqkKidW8NCECwrd
-         hrMHEvjuok/u+d7gR+Nf5avcqPgytCbZ286U1YuBTW/J3R0uH2isBVdNf5TgFC4uVsQ2
-         tmJQ==
-X-Gm-Message-State: ABy/qLbJl/hSuSO44QX+OoHr5bJ3BnZ45QgOUEjPK6noXU5XFeJkLoLw
-        /n1EGjeXleJvG2+06KvvKbk=
-X-Google-Smtp-Source: APBJJlHGMy7JxCMfwvYk/+o/WTY+8mCPj7NC3s62ZuXEV9zpMn2iZz931YBUfxyRilftypsqm8WEdw==
-X-Received: by 2002:a17:90a:be16:b0:262:c2a1:c029 with SMTP id a22-20020a17090abe1600b00262c2a1c029mr3096424pjs.2.1688144261502;
-        Fri, 30 Jun 2023 09:57:41 -0700 (PDT)
-Received: from hoboy.vegasvil.org ([2601:640:8000:54:e2d5:5eff:fea5:802f])
-        by smtp.gmail.com with ESMTPSA id 22-20020a17090a031600b00262ffa796d7sm8417569pje.42.2023.06.30.09.57.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 30 Jun 2023 09:57:40 -0700 (PDT)
-Date:   Fri, 30 Jun 2023 09:57:38 -0700
-From:   Richard Cochran <richardcochran@gmail.com>
-To:     Yoann Congal <yoann.congal@smile.fr>
-Cc:     Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH RFC] igb: Use TAI clock to reset PHC value
-Message-ID: <ZJ8Jgt60QQmCQlFi@hoboy.vegasvil.org>
-References: <20230630154138.4041809-1-yoann.congal@smile.fr>
+        Fri, 30 Jun 2023 12:58:42 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A94D3C24
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 09:58:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1688144320; x=1719680320;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=sUvFn7BQUsTfjsY4UYm8QejPHUhKXjjAIB5/x9BcE9s=;
+  b=PpUCCfCHUEqhxsvhUPQR3QwJHj/RFmb0kjyuo7G3JoTDlIA2mW01uSTe
+   9jKMSVxMUlS5JtrGkiXTh8BiUXLvJkmcs4ybsPQKXi/mJpiMG5WIOSidU
+   il5GX0sz0x4FoSmFG0Q2AYIzqzIGqn2EtsWm1wM0ou1burdhZOqE7bhEW
+   qoa2mm5NIyTmbL9TvJIkD15nbtRxJimwUhH9lie2KlN5+x5tFviY4+MUj
+   4nNpc9M9/916Oc1mthzYCvzCvTYVVvMh1aiFURokQWkjnBJ2hG8MiY6Gk
+   l2qtsk3SEfB1mMpl+UdLauYBoHe58uA0hEp5pBte6dgjTQc12FFaYcF4H
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10757"; a="361292404"
+X-IronPort-AV: E=Sophos;i="6.01,171,1684825200"; 
+   d="scan'208";a="361292404"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jun 2023 09:58:38 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10757"; a="747480980"
+X-IronPort-AV: E=Sophos;i="6.01,171,1684825200"; 
+   d="scan'208";a="747480980"
+Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 30 Jun 2023 09:58:36 -0700
+Received: from kbuild by 783282924a45 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1qFHS7-000FAt-1c;
+        Fri, 30 Jun 2023 16:58:35 +0000
+Date:   Sat, 1 Jul 2023 00:58:11 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Chuck Lever <chuck.lever@oracle.com>
+Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Simo Sorce <simo@redhat.com>
+Subject: net/sunrpc/auth_gss/gss_krb5_mech.c:325 gss_krb5_lookup_enctype()
+ warn: unsigned 'i' is never less than zero.
+Message-ID: <202307010010.uGvpzuSy-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230630154138.4041809-1-yoann.congal@smile.fr>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,30 +63,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 30, 2023 at 05:41:38PM +0200, Yoann Congal wrote:
-> The PHC is usually synchronised in TAI (from PTP). By resetting it with
-> the kernel TAI clock we avoid having to correct the PHC from REALTIME
-> (usually UTC) to TAI (37s as of today).
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   e55e5df193d247a38a5e1ac65a5316a0adcc22fa
+commit: ddd8c1f975ee7c2fc60ea836540b5b10f97ac919 SUNRPC: Export get_gss_krb5_enctype()
+date:   4 months ago
+config: x86_64-randconfig-m001-20230629 (https://download.01.org/0day-ci/archive/20230701/202307010010.uGvpzuSy-lkp@intel.com/config)
+compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
+reproduce: (https://download.01.org/0day-ci/archive/20230701/202307010010.uGvpzuSy-lkp@intel.com/reproduce)
 
-Nothing guarantees that the kernel's time is correct.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202307010010.uGvpzuSy-lkp@intel.com/
 
-When initializing a PHC, it is better to reset it to zero.  That way,
-the fact that the clock is unsynchronized is obvious.  Otherwise,
-people may believe the PHC is synchronized when in fact it is not.
- 
-> RFC: While this patch looks trivial and it does make linuxptp/ptp4l
-> complain about a driver bug:
->   timed out while polling for tx timestamp
->   increasing tx_timestamp_timeout may correct this issue, but it is likely caused by a driver bug
->   port 1: send peer delay response failed
-> 
-> Increasing tx_timestamp_timeout to 1s does nothing different so I guess
-> the driver does indeed freeze with this change but I can't figure out
-> why... 
-> 
-> Do you have any idea/pointers? Thanks!
+New smatch warnings:
+net/sunrpc/auth_gss/gss_krb5_mech.c:325 gss_krb5_lookup_enctype() warn: unsigned 'i' is never less than zero.
+net/sunrpc/auth_gss/gss_krb5_mech.c:325 gss_krb5_lookup_enctype() warn: unsigned 'i' is never less than zero.
 
-No idea, but you should figure that out before posting a "fix".
+Old smatch warnings:
+net/sunrpc/auth_gss/gss_krb5_mech.c:301 gss_krb5_prepare_enctype_priority_list() warn: unsigned 'i' is never less than zero.
+net/sunrpc/auth_gss/gss_krb5_mech.c:301 gss_krb5_prepare_enctype_priority_list() warn: unsigned 'i' is never less than zero.
+net/sunrpc/auth_gss/gss_krb5_mech.c:325 gss_krb5_lookup_enctype() warn: we never enter this loop
 
-Thanks,
-Richard
+vim +/i +325 net/sunrpc/auth_gss/gss_krb5_mech.c
+
+   312	
+   313	/**
+   314	 * gss_krb5_lookup_enctype - Retrieve profile information for a given enctype
+   315	 * @etype: ENCTYPE value
+   316	 *
+   317	 * Returns a pointer to a gss_krb5_enctype structure, or NULL if no
+   318	 * matching etype is found.
+   319	 */
+   320	VISIBLE_IF_KUNIT
+   321	const struct gss_krb5_enctype *gss_krb5_lookup_enctype(u32 etype)
+   322	{
+   323		size_t i;
+   324	
+ > 325		for (i = 0; i < ARRAY_SIZE(supported_gss_krb5_enctypes); i++)
+   326			if (supported_gss_krb5_enctypes[i].etype == etype)
+   327				return &supported_gss_krb5_enctypes[i];
+   328		return NULL;
+   329	}
+   330	EXPORT_SYMBOL_IF_KUNIT(gss_krb5_lookup_enctype);
+   331	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
