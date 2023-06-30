@@ -2,113 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1040674356C
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 08:57:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F6E1743568
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 08:57:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232138AbjF3G5c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 02:57:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41782 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229967AbjF3G5Z (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S232088AbjF3G5Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Fri, 30 Jun 2023 02:57:25 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95F182D4A;
-        Thu, 29 Jun 2023 23:57:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de;
- s=s31663417; t=1688108200; x=1688713000; i=deller@gmx.de;
- bh=0q0VUzs1KzIduNEEYU3fEHEwVR18u+xqcQFYFJu20RU=;
- h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
- b=htYO+Y87Hk65LKUyVkqEY/06G0o0PPyEFpbg3y2XgzOya4Mgs8PJeGYIhSV7uaIVmG+XqP7
- DJqm62soTcN663xdijGjoCBko18dtY+361fLBD7T10ukBZjipKbtxdlsF05owBEm//snxtdyo
- v4/2bOPQqJubG/SpzEJ/4Rdj55Vagl+OHrt9lapfj7FLNlxiDaPYBCZAESS9eKckxdHZl+iaM
- GrNzB1tmcPAGAmNi1ELZs3QL9W9lo3ETkxS1n7ksr0szCflSRgf9XAofuVQtTXrPx0Yr05fkQ
- mo082CdfJ/+GwPYo2cU/NVon0eL6fqOuEByfSYQNMbQfs1UPelsw==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [192.168.20.60] ([94.134.148.7]) by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1Mqs4Z-1pkgzB08R7-00mvVz; Fri, 30
- Jun 2023 08:56:40 +0200
-Message-ID: <0b2aefa4-7407-4936-6604-dedfb1614483@gmx.de>
-Date:   Fri, 30 Jun 2023 08:56:36 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH 6.4 00/28] 6.4.1-rc1 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>, stable@vger.kernel.org,
-        patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de,
-        conor@kernel.org, linux-parisc <linux-parisc@vger.kernel.org>,
-        sparclinux@vger.kernel.org,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Jason Wang <wangborong@cdjrlc.com>
-References: <20230629184151.888604958@linuxfoundation.org>
- <CA+G9fYsM2s3q1k=+wHszvNbkKbHGe1pskkffWvaGXjYrp6qR=g@mail.gmail.com>
- <CAHk-=whaO3RZmKj8NDjs4f6JEwuwQWWesOfFu-URzOqTkyPoxw@mail.gmail.com>
- <2023063001-overlying-browse-de1a@gregkh>
-From:   Helge Deller <deller@gmx.de>
-In-Reply-To: <2023063001-overlying-browse-de1a@gregkh>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:579RH/hxDQUZKy2JPrhdJGMkIR7PS/wWM2AUassTtV1Scraepz9
- +cSDfD2O+9+RtAFxZKlWQEzaRvmM5lNQtPz1kc6tiG3zk8wpAnbBC06p+sSr61Q2foZyPEO
- +y3V9cnLoVZQfBOXRzuhC7+LxOCJApqbfL5Z0PrCzwglxna6GinPHPjMw4QWED/QEp3jSqy
- YFYnKVsDe02eQ7uCpUZRw==
-UI-OutboundReport: notjunk:1;M01:P0:oX3xCpx1BDs=;6HP9D34Bw/26MSDKE4PCqBQFzIq
- ODo9vbV53GlPub7zuUS0PfKoxCLEhiT/+8jZ4iXTEl0+Y2njPFJFOgA0MDP8KDbZEmi1hRZaU
- xg48tkVLL2RnhbRMJTaM7Ijx6c2Pmf3cFRDynsQe+iV2tvDKcMoG/1HSBkUt+Q0koa7adc4Ij
- 8Eu+eSapnmV0Om/q6WFTWNxhyqo9yXWohHZCakbkL40HUCwNO6c+OZUiudyLGxsUJDxQx8ixa
- 7/irnUJl02evNJGvwRv83p3HzaNopu4vorEWXHTu4gSUqDAkrDmC9m/rBScyBuveONeaqUFKR
- NaCWUkCaIaM6PKZ5WparWFHT+m/zaLp0k7U+n2R6M1Rsr3bBjgBDp2dDPjE9FqtayowqsyC9W
- u8V2z6Kj3RauYFi8i2iaBk1Wa/laKUMVhLdZB3i2QBTDAfwWTpcU3g2PgQG5GQxM6FoOHyOzS
- UC0cr48hdqoooMnrmMlkh6k5fOG8pzZpdOOuysaCDfDvWzLg+22SvUtGfJszSi7V5G3dV1JYP
- PZVIh/C+aryjw8ypXaNE6l21fG+mIabU7c2bTaPQKyy1Cc8qKqKT6eO13Pt1i7E+auQkNea+/
- zzeVevC5sSvjOlh9zSraWRqyIB8JU6UCo2nscKm5JRkF0tF+Zq/Ge4KC7kEgzbuFJxC1bL8M+
- JplyGDxfhq3ZIFyUKP4rVLazIM/dJ41KQLPZmqUQAJaCK9XUKIZdL80w6ZuK2B3iSru6eYL+e
- hxBClLLgUW4GtQoTymjjLT1GppdoJP7BvGa+t68wG46TNyUXdVfpgSW7ZjfxshSZBiWYvyKWd
- AyugYY6KljR01+C4YS1gsbUJ5fgdjc4wIwRR1lLSPdmB1wfNKmeloOH6dgOdaxUteJ6tOgHFq
- 5Zt3gPK/vg+kwSEmyGkOFiHKGublbaQ2btlaaJ/NN8k47hgXZHLBZGJTGVAdKUrmvU+smYXqh
- +ecxoQj0LxRH2gZWcXSPW5U+Aqo=
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41758 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229850AbjF3G5U (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 30 Jun 2023 02:57:20 -0400
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C5211981
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 23:57:19 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-5618857518dso13762807b3.2
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 23:57:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1688108238; x=1690700238;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=hZ3wBkz2pxdTUS9/OQCSJauqcYuxtthvA5zABIfqeJs=;
+        b=IHjNBLE8spNRlxeSzalRRO2ui4YRHwmxXkc+ASamvdb9CHOxn8qwnSEiqN1+mF7C1I
+         65kVXy93Ko1Y/lEMFdRR+ZIxNX1TFNkeG34Xnis5jg9d0hoEGdOt9w0AQpFne6mShjAt
+         P9FoTr3D5bkGN6Uhsybdnl/wjbGlbKxkniTkommrQ3mcVrTVSFMiHagDwxm/jHimrFva
+         ckJ8+CSVgcLaA4zwAlsciWEVoIriv+4cFbHcrbQq93D0DOSMm103Hzoifcvl27VqzRiD
+         Be0R5gQEKHBb7geFzHl2ZWZAYHckPDF6oBtMfIumcSlc3pBItBFY2E7ChuQVw7A1CaTs
+         Puqw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688108238; x=1690700238;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=hZ3wBkz2pxdTUS9/OQCSJauqcYuxtthvA5zABIfqeJs=;
+        b=HtZWTzfexntmlE+LfIpq51hZtbMNaVQi9fEoXbDVBABM5gMuf/MoM99Izqz7ZVy508
+         YU3MQB49aQRGlCzOqv3VxsnRwrORDbwYRV1utmP0qYKGQ09IzyNqPpWoyWDcduPwlDRE
+         sCkWc0YuBlz8KNWaOLjFquCf6ngyPfJaKLwx0BrFB/mKfohqjNr4rVJHYx0VZX0kSay8
+         B4OIfIzS7qHv8Mi+Avx4/NJ/t5QB40NMJyEk6e+sk83qBdwEbrktpehm1hvfQoeQW4VH
+         ncDoL826EfXnXQKPNnTygar+VGzlmkoU7svFtIQELAqK078RJU+wLGWvZ5MeH0dsIGQd
+         odiQ==
+X-Gm-Message-State: ABy/qLZrjndUXvIlGuMiwxdsHRNGIUY/geba3Yl+hYIQzPzWzjOEAwA2
+        r1FwH0w/MD9xlWH6JtTPAK09OTKdPms=
+X-Google-Smtp-Source: APBJJlGQnXr8LdhGOtoxxO7nzmA+qzRWdfpj/MZ43yNUGq1KD/gmpUbEbaXsQjjANjBBl6atuvTUd8xkVKg=
+X-Received: from hhhuuu.c.googlers.com ([fda3:e722:ac3:cc00:3:22c1:c0a8:c80])
+ (user=hhhuuu job=sendgmr) by 2002:a25:d158:0:b0:c42:6459:c45a with SMTP id
+ i85-20020a25d158000000b00c426459c45amr2389ybg.12.1688108238655; Thu, 29 Jun
+ 2023 23:57:18 -0700 (PDT)
+Date:   Fri, 30 Jun 2023 06:57:11 +0000
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.41.0.255.g8b1d071c50-goog
+Message-ID: <20230630065711.801569-1-hhhuuu@google.com>
+Subject: [PATCH] usb: typec: tcpm: Add IS_ERR_OR_NULL check for port->partner
+From:   Jimmy Hu <hhhuuu@google.com>
+To:     linux@roeck-us.net, heikki.krogerus@linux.intel.com,
+        gregkh@linuxfoundation.org
+Cc:     kyletso@google.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jimmy Hu <hhhuuu@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/30/23 08:29, Greg Kroah-Hartman wrote:
-> On Thu, Jun 29, 2023 at 11:16:21PM -0700, Linus Torvalds wrote:
->> On Thu, 29 Jun 2023 at 22:31, Naresh Kamboju <naresh.kamboju@linaro.org=
-> wrote:
->>>
->>> arch/parisc/mm/fault.c: In function 'do_page_fault':
->>> arch/parisc/mm/fault.c:292:22: error: 'prev' undeclared (first use in =
-this function)
->>>    292 |                 if (!prev || !(prev->vm_flags & VM_GROWSUP))
->>
->> Bah. "prev" should be "prev_vma" here.
->>
->> I've pushed out the fix. Greg, apologies. It's
->>
->>     ea3f8272876f parisc: fix expand_stack() conversion
->>
->> and Naresh already pointed to the similarly silly sparc32 fix.
->
-> Ah, I saw it hit your repo before your email here, sorry about that.
-> Now picked up.
+port->partner may be an error or NULL, so we must check it with
+IS_ERR_OR_NULL() before dereferencing it.
 
-I've just cherry-picked ea3f8272876f on top of -rc2, built and run-tested =
-it,
-and everything is OK on parisc.
+Fixes: 5e1d4c49fbc8 ("usb: typec: tcpm: Determine common SVDM Version")
+Signed-off-by: Jimmy Hu <hhhuuu@google.com>
+---
+ drivers/usb/typec/tcpm/tcpm.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Thanks!
-Helge
+diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+index 829d75ebab42..cd2590eead04 100644
+--- a/drivers/usb/typec/tcpm/tcpm.c
++++ b/drivers/usb/typec/tcpm/tcpm.c
+@@ -1626,6 +1626,8 @@ static int tcpm_pd_svdm(struct tcpm_port *port, struct typec_altmode *adev,
+ 				break;
+ 
+ 			if (PD_VDO_SVDM_VER(p[0]) < svdm_version) {
++				if (IS_ERR_OR_NULL(port->partner))
++					break;
+ 				typec_partner_set_svdm_version(port->partner,
+ 							       PD_VDO_SVDM_VER(p[0]));
+ 				svdm_version = PD_VDO_SVDM_VER(p[0]);
+-- 
+2.41.0.255.g8b1d071c50-goog
+
