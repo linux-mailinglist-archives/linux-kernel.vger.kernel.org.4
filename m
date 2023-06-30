@@ -2,2063 +2,472 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4C477438F3
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 12:06:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 167997438ED
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 12:05:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233041AbjF3KGW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 06:06:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52750 "EHLO
+        id S233019AbjF3KFh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Jun 2023 06:05:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232435AbjF3KGS (ORCPT
+        with ESMTP id S233004AbjF3KFe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 06:06:18 -0400
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E8863AB6
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 03:06:07 -0700 (PDT)
-Received: by mail-wr1-x433.google.com with SMTP id ffacd0b85a97d-3110ab7110aso1904777f8f.3
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 03:06:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20221208.gappssmtp.com; s=20221208; t=1688119565; x=1690711565;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+FsqxfcxaqxNnK2GAOzwfluXLnZHtcaP2LC1pz3efc4=;
-        b=lpdTuwMKRYJn8QYo11jmhdYGM3wBk6If3kuwM20DxEnzLmSqVdPxYz2XEeMtqD3IQX
-         qKRyxpR+8ZgMNeFv4lh3sz5QEOywx2lTTAx4hLI2uv4/AM3vVN9q5j7SolMUN3ru5OyW
-         Qk0Zhk3QMzNXNkyZE7jKsuYkyJshWB9jgfQacOrLyGO1SnWwERQ3GcmRFYDD2/lKo9Sl
-         c5bl7l62ia35HSbbrUkDRCLqfTEBcpPP3PafnJ8SEwHW8bHj9dxeAWZc2VLF5oeTXOXL
-         WZNnhNgG1C0mDLQX+kOWSwV8WlSRl082msTwA+LqJ36qXrfrfPWBIrvPBvqsM/TSJyAJ
-         ts0w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688119565; x=1690711565;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=+FsqxfcxaqxNnK2GAOzwfluXLnZHtcaP2LC1pz3efc4=;
-        b=TinAW1412BffO8IJfIICDUA6TeoyYEfvUVWkIp8cfUQAmZwrmzU+8sZxmNmp1+kcwe
-         KSlSn9AF4tvfVUXTa00udVzbHLoRDZTyDAdTWrFKgiFQPbPwsV2yRKvuOduzE754uStj
-         E4CTTDazFERedErkOqwHPImK1J/Ij+wGwvJiT7mN+yQIJqamIl9xHU1CEkiwDWDNFo0N
-         5FVVTaxwFjyXB5J3KPFXUlAgrbligWD77gKnKqTOqALseGU3ZHq5AbrPI6vQtpucEs/x
-         0qV8qmcqKK1mOowapHwkytfZRR2+6+unyp8AjKTtY2+OTWLPRtbE++jgDwpfd6CmNeRi
-         Eg5g==
-X-Gm-Message-State: ABy/qLYIrU90Tl52dSdGVxF77gHB3sxhHxWAhpyednPMVOh/plkTzatu
-        LRs4aiPX1oVJfXxRDAshJsbUXg==
-X-Google-Smtp-Source: APBJJlHJtkivsu6fpmrp93N6L0dLXA8Wrbb0PTvBCCESCRhm7RiYgOGgSl0JFVsecgsIYlQOauGH6A==
-X-Received: by 2002:adf:f98a:0:b0:313:efe3:c165 with SMTP id f10-20020adff98a000000b00313efe3c165mr1638146wrr.49.1688119565200;
-        Fri, 30 Jun 2023 03:06:05 -0700 (PDT)
-Received: from localhost.localdomain ([2a01:e0a:55f:21e0:9e19:4376:dea6:dbfa])
-        by smtp.gmail.com with ESMTPSA id x11-20020adff0cb000000b0031424f4ef1dsm743280wro.19.2023.06.30.03.06.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 30 Jun 2023 03:06:04 -0700 (PDT)
-From:   Julien Stephan <jstephan@baylibre.com>
-Cc:     Phi-bang Nguyen <pnguyen@baylibre.com>,
-        Florian Sylvestre <fsylvestre@baylibre.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Julien Stephan <jstephan@baylibre.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Andy Hsieh <andy.hsieh@mediatek.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Conor Dooley <conor+dt@kernel.org>,
-        daoyuan huang <daoyuan.huang@mediatek.com>,
-        devicetree@vger.kernel.org,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, linux-media@vger.kernel.org,
-        Louis Kuo <louis.kuo@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Moudy Ho <moudy.ho@mediatek.com>,
-        Ping-Hsun Wu <ping-hsun.wu@mediatek.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Vasily Gorbik <gor@linux.ibm.com>
-Subject: [PATCH v2 4/4] media: platform: mediatek: isp_30: add mediatek ISP3.0 camsv
-Date:   Fri, 30 Jun 2023 12:01:53 +0200
-Message-ID: <20230630100321.1951138-5-jstephan@baylibre.com>
-X-Mailer: git-send-email 2.41.0
-In-Reply-To: <20230630100321.1951138-1-jstephan@baylibre.com>
-References: <20230630100321.1951138-1-jstephan@baylibre.com>
+        Fri, 30 Jun 2023 06:05:34 -0400
+Received: from lahtoruutu.iki.fi (lahtoruutu.iki.fi [185.185.170.37])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C21E2122;
+        Fri, 30 Jun 2023 03:05:31 -0700 (PDT)
+Received: from hillosipuli.retiisi.eu (dkzdf0gkyyyyyyyyyyyyt-3.rev.dnainternet.fi [IPv6:2001:14ba:4506:4f15::1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: sailus)
+        by lahtoruutu.iki.fi (Postfix) with ESMTPSA id 4QsrY16f6sz49Q3M;
+        Fri, 30 Jun 2023 13:05:25 +0300 (EEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=lahtoruutu;
+        t=1688119527;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=6qcAL44V2VQPq8nW4DQ+CM8zwpG0FjZ9MKM6NQq5bKo=;
+        b=OQNlOj2ifgFuY5Z58PueDGVtRMoGfQlMq/fhl/MMqHhgiId3zuEN5DGn+einZotd6rnAtI
+        mfDnDJ96+VBbt7I1L1OaR735WNT2qhDmmUzQrwqVupu6t8mYW/QESNpEQn6GRmfybYkbUt
+        2e5IVRDVEAjn20ywuT+qt1eoXJ2lgprEsJXQ+N5x+wc3rFbseYeilalJB9m6wfR0La84u+
+        0JhelEg5hDR5iO7jAq4Kv3z0tK14NCYIy255H2HV3hTBmCJm9WStWj7yGSzFfjYphlsVie
+        NKV7yXiYsJAgXTX6sTPE0wtpMGT6/08LQrwj5DIqbrDd/QIvWT7kSAo5Jp7Sbg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
+        s=lahtoruutu; t=1688119527;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=6qcAL44V2VQPq8nW4DQ+CM8zwpG0FjZ9MKM6NQq5bKo=;
+        b=f69EeWpqh1bUOkWZMFZvrfBmqAFqZS5lHnhS1v/eVBcWO217U6rYNMFhVxLUe3ydapV4ak
+        rMtxj7mN65e/XUkM4d3YNDK72JILhSfadpI3dfjRun7beAI9EQxMcEmgx0hUGd94TOo5Ke
+        d5ha3Rf1eHIdljIHFOp6xhqcJVhm1lE8LJLIAMrdiXjlCn8lMKv29tqDxHhPtwcXH2QJEa
+        vQYis0d0lbZWJByzbhlW9jakuJc3E9+CW/YySmL2VruAvKtuJSMDJCR4f0sY3490d6Lj0Y
+        xYwJlNJ7BITQq8iHu/6yGWZfYTONZ8/ELEpinz1O6N63Y1Ok2RdhCbhkCU9/uA==
+ARC-Authentication-Results: i=1;
+        ORIGINATING;
+        auth=pass smtp.auth=sailus smtp.mailfrom=sakari.ailus@iki.fi
+ARC-Seal: i=1; s=lahtoruutu; d=iki.fi; t=1688119527; a=rsa-sha256;
+        cv=none;
+        b=Iirl49YpCiFZUxiJjAhpe6vncipdoxx9m9KqBYKIODu9XDLSiVotLHm00FJ6MWCLVr8Z4X
+        EUbA22GdsoUWpHoVSBogmt+kCDRfPiyt3EaRKViZuzmBk1mQtgJtERF8Qi+HEH7rzBiM5T
+        /5Fc8KpS6Kr3Jdnf/p50l9ZGcwbBDC1Qzeqnta2VA+HReSBw42ge/TpkM7Z2PwOq/tmMKJ
+        wU6bBbdBmkrnHiCaWrhHUAZTy5uY+oa/7MG2wgpW8UYzptxaZM+jG+IJYhg4YR/q0qtUCU
+        VyfcMq5LXgdmw/3lVR9bGhMuakwFND5NWZ+TiVrHjSjsfqykv/3ZBEoJXwaexg==
+Received: from valkosipuli.retiisi.eu (valkosipuli.localdomain [192.168.4.2])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by hillosipuli.retiisi.eu (Postfix) with ESMTPS id 34A37634C91;
+        Fri, 30 Jun 2023 13:05:25 +0300 (EEST)
+Date:   Fri, 30 Jun 2023 10:05:25 +0000
+From:   Sakari Ailus <sakari.ailus@iki.fi>
+To:     Shengjiu Wang <shengjiu.wang@nxp.com>
+Cc:     tfiga@chromium.org, m.szyprowski@samsung.com, mchehab@kernel.org,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        shengjiu.wang@gmail.com, Xiubo.Lee@gmail.com, festevam@gmail.com,
+        nicoleotsuka@gmail.com, lgirdwood@gmail.com, broonie@kernel.org,
+        perex@perex.cz, tiwai@suse.com, alsa-devel@alsa-project.org,
+        linuxppc-dev@lists.ozlabs.org, hverkuil@xs4all.nl,
+        Jacopo Mondi <jacopo@jmondi.org>
+Subject: Re: [PATCH 1/6] media: v4l2: Add audio capture and output support
+Message-ID: <ZJ6o5fT4V4HXivFa@valkosipuli.retiisi.eu>
+References: <1688002673-28493-1-git-send-email-shengjiu.wang@nxp.com>
+ <1688002673-28493-2-git-send-email-shengjiu.wang@nxp.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1688002673-28493-2-git-send-email-shengjiu.wang@nxp.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Phi-bang Nguyen <pnguyen@baylibre.com>
+Hi Shengjiu,
 
-This driver provides a path to bypass the SoC ISP so that image data
-coming from the SENINF can go directly into memory without any image
-processing. This allows the use of an external ISP.
+On Thu, Jun 29, 2023 at 09:37:48AM +0800, Shengjiu Wang wrote:
+> Audio signal processing has the requirement for memory to
+> memory similar as Video.
+> 
+> This patch is to add this support in v4l2 framework, defined
+> new buffer type V4L2_BUF_TYPE_AUDIO_CAPTURE and
+> V4L2_BUF_TYPE_AUDIO_OUTPUT, defined new format v4l2_audio_format
+> for audio case usage.
 
-Signed-off-by: Phi-bang Nguyen <pnguyen@baylibre.com>
-Signed-off-by: Florian Sylvestre <fsylvestre@baylibre.com>
-Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Signed-off-by: Julien Stephan <jstephan@baylibre.com>
----
- MAINTAINERS                                   |   1 +
- .../platform/mediatek/isp/isp_30/Kconfig      |  19 +
- .../platform/mediatek/isp/isp_30/Makefile     |   1 +
- .../mediatek/isp/isp_30/camsv/Makefile        |   7 +
- .../mediatek/isp/isp_30/camsv/mtk_camsv.c     | 334 ++++++++
- .../mediatek/isp/isp_30/camsv/mtk_camsv.h     | 200 +++++
- .../isp/isp_30/camsv/mtk_camsv30_hw.c         | 474 +++++++++++
- .../isp/isp_30/camsv/mtk_camsv30_regs.h       |  59 ++
- .../isp/isp_30/camsv/mtk_camsv_video.c        | 781 ++++++++++++++++++
- 9 files changed, 1876 insertions(+)
- create mode 100644 drivers/media/platform/mediatek/isp/isp_30/camsv/Makefile
- create mode 100644 drivers/media/platform/mediatek/isp/isp_30/camsv/mtk_camsv.c
- create mode 100644 drivers/media/platform/mediatek/isp/isp_30/camsv/mtk_camsv.h
- create mode 100644 drivers/media/platform/mediatek/isp/isp_30/camsv/mtk_camsv30_hw.c
- create mode 100644 drivers/media/platform/mediatek/isp/isp_30/camsv/mtk_camsv30_regs.h
- create mode 100644 drivers/media/platform/mediatek/isp/isp_30/camsv/mtk_camsv_video.c
+Why are you proposing to add this to V4L2 framework instead of doing this
+within ALSA?
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 60b2bceca584..cebb8fb62b45 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -13357,6 +13357,7 @@ M:	Andy Hsieh <andy.hsieh@mediatek.com>
- S:	Supported
- F:	Documentation/devicetree/bindings/media/mediatek,mt8365-camsv.yaml
- F:	Documentation/devicetree/bindings/media/mediatek,mt8365-seninf.yaml
-+F:	drivers/media/platform/mediatek/isp/isp_30/camsv/*
- F:	drivers/media/platform/mediatek/isp/isp_30/seninf/*
- 
- MEDIATEK SMI DRIVER
-diff --git a/drivers/media/platform/mediatek/isp/isp_30/Kconfig b/drivers/media/platform/mediatek/isp/isp_30/Kconfig
-index 831f9bee5fdd..04d4a2af80bc 100644
---- a/drivers/media/platform/mediatek/isp/isp_30/Kconfig
-+++ b/drivers/media/platform/mediatek/isp/isp_30/Kconfig
-@@ -14,3 +14,22 @@ config MTK_SENINF
- 
- 	  To compile this driver as a module, choose M here: the
- 	  module will be called mtk-seninf.
-+
-+config MTK_CAMSV30
-+	tristate "MediaTek ISP3.0 CAMSV driver"
-+	depends on VIDEO_V4L2_SUBDEV_API
-+	depends on ARCH_MEDIATEK || COMPILE_TEST
-+	depends on OF
-+	depends on PM
-+	select VIDEOBUF2_VMALLOC
-+	select VIDEOBUF2_DMA_CONTIG
-+	select MTK_SENINF
-+	select PHY_MTK_MIPI_CSI_0_5
-+	default n
-+	help
-+	  This driver provides a path to bypass the SoC ISP so that
-+	  image data come from the SENINF can go directly into memory
-+	  without any image processing.
-+
-+	  To compile this driver as a module, choose M here: the
-+	  module will be called mtk-camsv30.
-diff --git a/drivers/media/platform/mediatek/isp/isp_30/Makefile b/drivers/media/platform/mediatek/isp/isp_30/Makefile
-index 2e7d731d42b7..c0034ef31702 100644
---- a/drivers/media/platform/mediatek/isp/isp_30/Makefile
-+++ b/drivers/media/platform/mediatek/isp/isp_30/Makefile
-@@ -1,3 +1,4 @@
- # SPDX-License-Identifier: GPL-2.0
- 
- obj-$(CONFIG_MTK_SENINF) += seninf/
-+obj-$(CONFIG_MTK_CAMSV30) += camsv/
-diff --git a/drivers/media/platform/mediatek/isp/isp_30/camsv/Makefile b/drivers/media/platform/mediatek/isp/isp_30/camsv/Makefile
-new file mode 100644
-index 000000000000..fffbc6e7cb78
---- /dev/null
-+++ b/drivers/media/platform/mediatek/isp/isp_30/camsv/Makefile
-@@ -0,0 +1,7 @@
-+# SPDX-License-Identifier: GPL-2.0
-+
-+mtk-camsv30-objs += mtk_camsv.o
-+mtk-camsv30-objs += mtk_camsv30_hw.o
-+mtk-camsv30-objs += mtk_camsv_video.o
-+
-+obj-$(CONFIG_MTK_CAMSV30) += mtk-camsv30.o
-diff --git a/drivers/media/platform/mediatek/isp/isp_30/camsv/mtk_camsv.c b/drivers/media/platform/mediatek/isp/isp_30/camsv/mtk_camsv.c
-new file mode 100644
-index 000000000000..03d234f54e1c
---- /dev/null
-+++ b/drivers/media/platform/mediatek/isp/isp_30/camsv/mtk_camsv.c
-@@ -0,0 +1,334 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright (c) 2020 BayLibre
-+ * Copyright (c) 2022 MediaTek Inc.
-+ */
-+
-+#include <media/v4l2-async.h>
-+#include <media/v4l2-device.h>
-+
-+#include "mtk_camsv.h"
-+
-+static inline struct mtk_cam_dev *to_mtk_cam_dev(struct v4l2_subdev *sd)
-+{
-+	return container_of(sd, struct mtk_cam_dev, subdev);
-+}
-+
-+static const u32 mtk_cam_mbus_formats[] = {
-+	MEDIA_BUS_FMT_SBGGR8_1X8,
-+	MEDIA_BUS_FMT_SGBRG8_1X8,
-+	MEDIA_BUS_FMT_SGRBG8_1X8,
-+	MEDIA_BUS_FMT_SRGGB8_1X8,
-+	MEDIA_BUS_FMT_SBGGR10_1X10,
-+	MEDIA_BUS_FMT_SGBRG10_1X10,
-+	MEDIA_BUS_FMT_SGRBG10_1X10,
-+	MEDIA_BUS_FMT_SRGGB10_1X10,
-+	MEDIA_BUS_FMT_SBGGR12_1X12,
-+	MEDIA_BUS_FMT_SGBRG12_1X12,
-+	MEDIA_BUS_FMT_SGRBG12_1X12,
-+	MEDIA_BUS_FMT_SRGGB12_1X12,
-+	MEDIA_BUS_FMT_UYVY8_1X16,
-+	MEDIA_BUS_FMT_VYUY8_1X16,
-+	MEDIA_BUS_FMT_YUYV8_1X16,
-+	MEDIA_BUS_FMT_YVYU8_1X16,
-+};
-+
-+/* -----------------------------------------------------------------------------
-+ * V4L2 Subdev Operations
-+ */
-+
-+static int mtk_cam_cio_stream_on(struct mtk_cam_dev *cam)
-+{
-+	struct device *dev = cam->dev;
-+	struct v4l2_subdev *seninf;
-+	int ret;
-+
-+	if (!cam->seninf) {
-+		cam->seninf = media_pad_remote_pad_first(&cam->subdev_pads[MTK_CAM_CIO_PAD_SENINF]);
-+		if (!cam->seninf) {
-+			dev_err(dev, "%s: No SENINF connected\n", __func__);
-+			return -ENOLINK;
-+		}
-+	}
-+
-+	seninf = media_entity_to_v4l2_subdev(cam->seninf->entity);
-+
-+	/* Seninf must stream on first */
-+	ret = v4l2_subdev_call(seninf, pad, enable_streams, NULL, cam->seninf->index, 0);
-+	if (ret) {
-+		dev_err(dev, "failed to stream on %s:%d\n",
-+			seninf->entity.name, ret);
-+		return ret;
-+	}
-+
-+	cam->streaming = true;
-+
-+	return 0;
-+}
-+
-+static int mtk_cam_cio_stream_off(struct mtk_cam_dev *cam)
-+{
-+	struct device *dev = cam->dev;
-+	struct v4l2_subdev *seninf;
-+	int ret;
-+
-+	if (cam->seninf) {
-+		seninf = media_entity_to_v4l2_subdev(cam->seninf->entity);
-+
-+		ret = v4l2_subdev_call(seninf, pad, disable_streams, NULL,
-+				       cam->seninf->index, 0);
-+		if (ret) {
-+			dev_err(dev, "failed to stream off %s:%d\n",
-+				seninf->entity.name, ret);
-+			return ret;
-+		}
-+	}
-+
-+	cam->streaming = false;
-+
-+	return 0;
-+}
-+
-+static int mtk_cam_sd_s_stream(struct v4l2_subdev *sd, int enable)
-+{
-+	struct mtk_cam_dev *cam = to_mtk_cam_dev(sd);
-+
-+	if (enable) {
-+		/* Align vb2_core_streamon design */
-+		if (cam->streaming) {
-+			dev_warn(cam->dev, "already streaming on\n");
-+			return 0;
-+		}
-+		return mtk_cam_cio_stream_on(cam);
-+	}
-+
-+	if (!cam->streaming) {
-+		dev_warn(cam->dev, "already streaming off\n");
-+		return 0;
-+	}
-+
-+	return mtk_cam_cio_stream_off(cam);
-+}
-+
-+static struct v4l2_mbus_framefmt *
-+mtk_cam_get_pad_format(struct mtk_cam_dev *cam,
-+		       struct v4l2_subdev_state *sd_state,
-+		       unsigned int pad, u32 which)
-+{
-+	switch (which) {
-+	case V4L2_SUBDEV_FORMAT_TRY:
-+		return v4l2_subdev_get_try_format(&cam->subdev, sd_state, pad);
-+	case V4L2_SUBDEV_FORMAT_ACTIVE:
-+		return &cam->formats[pad];
-+	default:
-+		return NULL;
-+	}
-+}
-+
-+static int mtk_cam_init_cfg(struct v4l2_subdev *sd,
-+			    struct v4l2_subdev_state *sd_state)
-+{
-+	static const struct v4l2_mbus_framefmt def_format = {
-+		.code = MEDIA_BUS_FMT_SGRBG10_1X10,
-+		.width = IMG_DEF_WIDTH,
-+		.height = IMG_DEF_HEIGHT,
-+		.field = V4L2_FIELD_NONE,
-+		.colorspace = V4L2_COLORSPACE_SRGB,
-+		.xfer_func = V4L2_XFER_FUNC_DEFAULT,
-+		.ycbcr_enc = V4L2_YCBCR_ENC_DEFAULT,
-+		.quantization = V4L2_QUANTIZATION_DEFAULT,
-+	};
-+
-+	struct mtk_cam_dev *cam = to_mtk_cam_dev(sd);
-+	u32 which = sd_state ? V4L2_SUBDEV_FORMAT_TRY
-+		  : V4L2_SUBDEV_FORMAT_ACTIVE;
-+	struct v4l2_mbus_framefmt *format;
-+	unsigned int i;
-+
-+	for (i = 0; i < sd->entity.num_pads; i++) {
-+		format = mtk_cam_get_pad_format(cam, sd_state, i, which);
-+		*format = def_format;
-+	}
-+
-+	return 0;
-+}
-+
-+static int mtk_cam_enum_mbus_code(struct v4l2_subdev *sd,
-+				  struct v4l2_subdev_state *sd_state,
-+				  struct v4l2_subdev_mbus_code_enum *code)
-+{
-+	if (code->index >= ARRAY_SIZE(mtk_cam_mbus_formats))
-+		return -EINVAL;
-+
-+	code->code = mtk_cam_mbus_formats[code->index];
-+
-+	return 0;
-+}
-+
-+static int mtk_cam_get_fmt(struct v4l2_subdev *sd,
-+			   struct v4l2_subdev_state *sd_state,
-+			   struct v4l2_subdev_format *fmt)
-+{
-+	struct mtk_cam_dev *cam = to_mtk_cam_dev(sd);
-+
-+	fmt->format = *mtk_cam_get_pad_format(cam, sd_state, fmt->pad,
-+					      fmt->which);
-+
-+	return 0;
-+}
-+
-+static int mtk_cam_set_fmt(struct v4l2_subdev *sd,
-+			   struct v4l2_subdev_state *sd_state,
-+			   struct v4l2_subdev_format *fmt)
-+{
-+	struct mtk_cam_dev *cam = to_mtk_cam_dev(sd);
-+	struct v4l2_mbus_framefmt *format;
-+	unsigned int i;
-+
-+	/*
-+	 * We only support pass-through mode, the format on source pads can't
-+	 * be modified.
-+	 */
-+	if (fmt->pad != MTK_CAM_CIO_PAD_SENINF)
-+		return mtk_cam_get_fmt(sd, sd_state, fmt);
-+
-+	for (i = 0; i < ARRAY_SIZE(mtk_cam_mbus_formats); ++i) {
-+		if (mtk_cam_mbus_formats[i] == fmt->format.code)
-+			break;
-+	}
-+
-+	if (i == ARRAY_SIZE(mtk_cam_mbus_formats))
-+		fmt->format.code = mtk_cam_mbus_formats[0];
-+
-+	format = mtk_cam_get_pad_format(cam, sd_state, fmt->pad, fmt->which);
-+	format->width = fmt->format.width;
-+	format->height = fmt->format.height;
-+	format->code = fmt->format.code;
-+
-+	fmt->format = *format;
-+
-+	/* Propagate the format to the source pad. */
-+	format = mtk_cam_get_pad_format(cam, sd_state, MTK_CAM_CIO_PAD_VIDEO,
-+					fmt->which);
-+	format->width = fmt->format.width;
-+	format->height = fmt->format.height;
-+	format->code = fmt->format.code;
-+
-+	return 0;
-+}
-+
-+static int mtk_cam_subdev_registered(struct v4l2_subdev *sd)
-+{
-+	struct mtk_cam_dev *cam = to_mtk_cam_dev(sd);
-+
-+	/* Create the video device and link. */
-+	return mtk_cam_video_register(cam);
-+}
-+
-+static const struct v4l2_subdev_video_ops mtk_cam_subdev_video_ops = {
-+	.s_stream = mtk_cam_sd_s_stream,
-+};
-+
-+static const struct v4l2_subdev_pad_ops mtk_cam_subdev_pad_ops = {
-+	.init_cfg = mtk_cam_init_cfg,
-+	.enum_mbus_code = mtk_cam_enum_mbus_code,
-+	.set_fmt = mtk_cam_set_fmt,
-+	.get_fmt = mtk_cam_get_fmt,
-+	.link_validate = v4l2_subdev_link_validate_default,
-+};
-+
-+static const struct v4l2_subdev_ops mtk_cam_subdev_ops = {
-+	.video = &mtk_cam_subdev_video_ops,
-+	.pad = &mtk_cam_subdev_pad_ops,
-+};
-+
-+static const struct v4l2_subdev_internal_ops mtk_cam_internal_ops = {
-+	.registered = mtk_cam_subdev_registered,
-+};
-+
-+/* -----------------------------------------------------------------------------
-+ * Media Entity Operations
-+ */
-+
-+static const struct media_entity_operations mtk_cam_media_entity_ops = {
-+	.link_validate = v4l2_subdev_link_validate,
-+	.get_fwnode_pad = v4l2_subdev_get_fwnode_pad_1_to_1,
-+};
-+
-+/* -----------------------------------------------------------------------------
-+ * Init & Cleanup
-+ */
-+
-+static int mtk_cam_v4l2_register(struct mtk_cam_dev *cam)
-+{
-+	struct device *dev = cam->dev;
-+	int ret;
-+
-+	/* Initialize subdev pads */
-+	ret = media_entity_pads_init(&cam->subdev.entity,
-+				     ARRAY_SIZE(cam->subdev_pads),
-+				     cam->subdev_pads);
-+	if (ret) {
-+		dev_err(dev, "failed to initialize media pads:%d\n", ret);
-+		return ret;
-+	}
-+
-+	cam->subdev_pads[MTK_CAM_CIO_PAD_SENINF].flags = MEDIA_PAD_FL_SINK;
-+	cam->subdev_pads[MTK_CAM_CIO_PAD_VIDEO].flags = MEDIA_PAD_FL_SOURCE;
-+
-+	/* Initialize subdev */
-+	v4l2_subdev_init(&cam->subdev, &mtk_cam_subdev_ops);
-+
-+	cam->subdev.dev = dev;
-+	cam->subdev.entity.function = MEDIA_ENT_F_PROC_VIDEO_PIXEL_FORMATTER;
-+	cam->subdev.entity.ops = &mtk_cam_media_entity_ops;
-+	cam->subdev.internal_ops = &mtk_cam_internal_ops;
-+	cam->subdev.flags = V4L2_SUBDEV_FL_HAS_DEVNODE;
-+	strscpy(cam->subdev.name, dev_name(dev), V4L2_SUBDEV_NAME_SIZE);
-+	v4l2_set_subdevdata(&cam->subdev, cam);
-+
-+	mtk_cam_init_cfg(&cam->subdev, NULL);
-+
-+	ret = v4l2_async_register_subdev(&cam->subdev);
-+	if (ret) {
-+		dev_err(dev, "failed to initialize subdev:%d\n", ret);
-+		goto fail_clean_media_entiy;
-+	}
-+
-+	return 0;
-+
-+fail_clean_media_entiy:
-+	media_entity_cleanup(&cam->subdev.entity);
-+
-+	return ret;
-+}
-+
-+static void mtk_cam_v4l2_unregister(struct mtk_cam_dev *cam)
-+{
-+	mtk_cam_video_unregister(&cam->vdev);
-+
-+	media_entity_cleanup(&cam->subdev.entity);
-+	v4l2_async_unregister_subdev(&cam->subdev);
-+}
-+
-+int mtk_cam_dev_init(struct mtk_cam_dev *cam_dev)
-+{
-+	int ret;
-+
-+	mutex_init(&cam_dev->op_lock);
-+
-+	/* v4l2 sub-device registration */
-+	ret = mtk_cam_v4l2_register(cam_dev);
-+	if (ret) {
-+		mutex_destroy(&cam_dev->op_lock);
-+		return ret;
-+	}
-+
-+	return ret;
-+}
-+
-+void mtk_cam_dev_cleanup(struct mtk_cam_dev *cam)
-+{
-+	mtk_cam_v4l2_unregister(cam);
-+	mutex_destroy(&cam->op_lock);
-+}
-diff --git a/drivers/media/platform/mediatek/isp/isp_30/camsv/mtk_camsv.h b/drivers/media/platform/mediatek/isp/isp_30/camsv/mtk_camsv.h
-new file mode 100644
-index 000000000000..91e30fe006a8
---- /dev/null
-+++ b/drivers/media/platform/mediatek/isp/isp_30/camsv/mtk_camsv.h
-@@ -0,0 +1,200 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Copyright (c) 2020 BayLibre
-+ * Copyright (c) 2022 MediaTek Inc.
-+ */
-+
-+#ifndef __MTK_CAMSV_H__
-+#define __MTK_CAMSV_H__
-+
-+#include <linux/clk.h>
-+#include <linux/err.h>
-+#include <linux/errno.h>
-+#include <linux/kernel.h>
-+#include <linux/of_graph.h>
-+#include <linux/pm_runtime.h>
-+#include <linux/videodev2.h>
-+#include <media/media-entity.h>
-+#include <media/v4l2-subdev.h>
-+#include <media/videobuf2-core.h>
-+#include <media/videobuf2-dma-contig.h>
-+#include <media/videobuf2-v4l2.h>
-+#include <soc/mediatek/smi.h>
-+
-+#define IMG_MAX_WIDTH			5376
-+#define IMG_MAX_HEIGHT			4032
-+#define IMG_DEF_WIDTH			1920
-+#define IMG_DEF_HEIGHT			1080
-+#define IMG_MIN_WIDTH			80
-+#define IMG_MIN_HEIGHT			60
-+
-+#define MTK_CAM_CIO_PAD_SENINF		0
-+#define MTK_CAM_CIO_PAD_VIDEO		1
-+#define MTK_CAM_CIO_NUM_PADS		2
-+
-+struct mtk_cam_format_info {
-+	u32 code;
-+	u32 fourcc;
-+	bool packed;
-+	unsigned int bpp;
-+};
-+
-+struct mtk_cam_dev_buffer {
-+	struct vb2_v4l2_buffer v4l2_buf;
-+	struct list_head list;
-+	dma_addr_t daddr;
-+	dma_addr_t fhaddr;
-+};
-+
-+struct mtk_cam_sparams {
-+	unsigned int w_factor;
-+	unsigned int module_en_pak;
-+	unsigned int fmt_sel;
-+	unsigned int pak;
-+	unsigned int imgo_stride;
-+};
-+
-+/*
-+ * struct mtk_cam_vdev_desc - MTK camera device descriptor
-+ *
-+ * @name: name of the node
-+ * @cap: supported V4L2 capabilities
-+ * @buf_type: supported V4L2 buffer type
-+ * @link_flags: default media link flags
-+ * @def_width: the default format width
-+ * @def_height: the default format height
-+ * @num_fmts: the number of supported node formats
-+ * @max_buf_count: maximum VB2 buffer count
-+ * @ioctl_ops:  mapped to v4l2_ioctl_ops
-+ * @fmts: supported format
-+ * @frmsizes: supported V4L2 frame size number
-+ *
-+ */
-+struct mtk_cam_vdev_desc {
-+	const char *name;
-+	u32 cap;
-+	u32 buf_type;
-+	u32 link_flags;
-+	u32 def_width;
-+	u32 def_height;
-+	u8 num_fmts;
-+	u8 max_buf_count;
-+	const struct v4l2_ioctl_ops *ioctl_ops;
-+	const u32 *fmts;
-+	const struct v4l2_frmsizeenum *frmsizes;
-+};
-+
-+/*
-+ * struct mtk_cam_video_device - MediaTek video device structure
-+ *
-+ * @desc: The node description of video device
-+ * @vdev_pad: The media pad graph object of video device
-+ * @vdev: The video device instance
-+ * @vbq: A videobuf queue of video device
-+ * @vdev_lock: Serializes vb2 queue and video device operations
-+ * @format: The V4L2 format of video device
-+ * @fmtinfo: Information about the current format
-+ */
-+struct mtk_cam_video_device {
-+	const struct mtk_cam_vdev_desc *desc;
-+
-+	struct media_pad vdev_pad;
-+	struct video_device vdev;
-+	struct vb2_queue vbq;
-+
-+	/* Serializes vb2 queue and video device operations */
-+	struct mutex vdev_lock;
-+
-+	struct v4l2_pix_format_mplane format;
-+	const struct mtk_cam_format_info *fmtinfo;
-+};
-+
-+/*
-+ * struct mtk_cam_dev - MediaTek camera device structure.
-+ *
-+ * @dev: Pointer to device.
-+ * @regs: Base address of CAMSV.
-+ * @regs_img0: Base address of CAMSV IMG0.
-+ * @regs_tg: Base address of CAMSV TG.
-+ * @num_clks: Number of clocks.
-+ * @clks: The clocks.
-+ * @irq: Irq fired when buffer is ready.
-+ * @conf: soc specific driver data.
-+ * @pipeline: Media pipeline information.
-+ * @subdev: The V4L2 sub-device instance.
-+ * @subdev_pads: Media pads of this sub-device.
-+ * @formats: Media bus format for all pads.
-+ * @vdev: The video device node.
-+ * @seninf: Pointer to the seninf pad.
-+ * @streaming: Indicate the overall streaming status is on or off.
-+ * @stream_count: Number of streaming video nodes.
-+ * @sequence: Buffer sequence number.
-+ * @op_lock: Serializes driver's VB2 callback operations.
-+ * @irqlock: Protects the buffer list.
-+ * @buf_list: List head for the buffer list.
-+ * @hw_functions: Hardware specific functions.
-+ * @dummy: Dummy buffer used when user buffer is not available.
-+ * @dummy_size : Size of the dummy buffer.
-+ * @is_dummy_used: True if dummy buffer is currently used.
-+ */
-+struct mtk_cam_dev {
-+	struct device *dev;
-+	void __iomem *regs;
-+	void __iomem *regs_img0;
-+	void __iomem *regs_tg;
-+
-+	unsigned int num_clks;
-+	struct clk_bulk_data *clks;
-+	unsigned int irq;
-+	const struct mtk_cam_conf *conf;
-+
-+	struct media_pipeline pipeline;
-+	struct v4l2_subdev subdev;
-+	struct media_pad subdev_pads[MTK_CAM_CIO_NUM_PADS];
-+	struct v4l2_mbus_framefmt formats[MTK_CAM_CIO_NUM_PADS];
-+	struct mtk_cam_video_device vdev;
-+	struct media_pad *seninf;
-+	unsigned int streaming;
-+	unsigned int stream_count;
-+	unsigned int sequence;
-+
-+	struct mutex op_lock;
-+	spinlock_t irqlock;
-+
-+	struct list_head buf_list;
-+
-+	struct mtk_cam_hw_functions *hw_functions;
-+
-+	struct mtk_cam_dev_buffer dummy;
-+	unsigned int dummy_size;
-+	bool is_dummy_used;
-+};
-+
-+struct mtk_cam_conf {
-+	unsigned int tg_sen_mode;
-+	unsigned int module_en;
-+	unsigned int pak;
-+	unsigned int dma_special_fun;
-+	unsigned int imgo_con;
-+	unsigned int imgo_con2;
-+	unsigned int imgo_con3;
-+	bool enableFH;
-+};
-+
-+struct mtk_cam_hw_functions {
-+	void (*mtk_cam_setup)(struct mtk_cam_dev *cam_dev, u32 width,
-+			      u32 height, u32 bpl, u32 mbus_fmt);
-+	void (*mtk_cam_update_buffers_add)(struct mtk_cam_dev *cam_dev,
-+					   struct mtk_cam_dev_buffer *buf);
-+	void (*mtk_cam_cmos_vf_hw_enable)(struct mtk_cam_dev *cam_dev,
-+					  bool pak_en);
-+	void (*mtk_cam_cmos_vf_hw_disable)(struct mtk_cam_dev *cam_dev,
-+					   bool pak_en);
-+};
-+
-+int mtk_cam_dev_init(struct mtk_cam_dev *cam_dev);
-+void mtk_cam_dev_cleanup(struct mtk_cam_dev *cam_dev);
-+int mtk_cam_video_register(struct mtk_cam_dev *cam_dev);
-+void mtk_cam_video_unregister(struct mtk_cam_video_device *vdev);
-+
-+#endif /* __MTK_CAMSV_H__ */
-diff --git a/drivers/media/platform/mediatek/isp/isp_30/camsv/mtk_camsv30_hw.c b/drivers/media/platform/mediatek/isp/isp_30/camsv/mtk_camsv30_hw.c
-new file mode 100644
-index 000000000000..39fc3ef7b4e7
---- /dev/null
-+++ b/drivers/media/platform/mediatek/isp/isp_30/camsv/mtk_camsv30_hw.c
-@@ -0,0 +1,474 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright (c) 2020 BayLibre
-+ * Copyright (c) 2022 MediaTek Inc.
-+ */
-+
-+#include <linux/device.h>
-+#include <linux/interrupt.h>
-+#include <linux/iommu.h>
-+#include <linux/ktime.h>
-+#include <linux/module.h>
-+#include <linux/of.h>
-+#include <linux/of_platform.h>
-+#include <linux/platform_device.h>
-+
-+#include "mtk_camsv.h"
-+#include "mtk_camsv30_regs.h"
-+
-+#define MTK_CAMSV30_AUTOSUSPEND_DELAY_MS 100
-+
-+static const struct mtk_cam_conf camsv30_conf = {
-+	.tg_sen_mode = 0x00010002U, /* TIME_STP_EN = 1. DBL_DATA_BUS = 1 */
-+	.module_en = 0x40000001U, /* enable double buffer and TG */
-+	.dma_special_fun = 0x61000000U, /* enable RDMA insterlace */
-+	.imgo_con = 0x80000080U, /* DMA FIFO depth and burst */
-+	.imgo_con2 = 0x00020002U, /* DMA priority */
-+	.imgo_con3 = 0x00020002U, /* DMA pre-priority */
-+	.enableFH = false, /* Frame Header disabled */
-+};
-+
-+static void fmt_to_sparams(u32 mbus_fmt, struct mtk_cam_sparams *sparams)
-+{
-+	switch (mbus_fmt) {
-+	/* SBGGR values coming from isp5.0 configuration.
-+	 * not tested on isp2.0
-+	 */
-+	case MEDIA_BUS_FMT_SBGGR12_1X12:
-+	case MEDIA_BUS_FMT_SGBRG12_1X12:
-+	case MEDIA_BUS_FMT_SGRBG12_1X12:
-+	case MEDIA_BUS_FMT_SRGGB12_1X12:
-+		sparams->w_factor = 1;
-+		sparams->module_en_pak = 0x4;
-+		sparams->fmt_sel = 0x2;
-+		sparams->pak = 0x5;
-+		sparams->imgo_stride = 0x000B0000;
-+		break;
-+	case MEDIA_BUS_FMT_SBGGR10_1X10:
-+	case MEDIA_BUS_FMT_SGBRG10_1X10:
-+	case MEDIA_BUS_FMT_SGRBG10_1X10:
-+	case MEDIA_BUS_FMT_SRGGB10_1X10:
-+		sparams->w_factor = 1;
-+		sparams->module_en_pak = 0x4;
-+		sparams->fmt_sel = 0x1;
-+		sparams->pak = 0x6;
-+		sparams->imgo_stride = 0x000B0000;
-+		break;
-+	case MEDIA_BUS_FMT_SBGGR8_1X8:
-+	case MEDIA_BUS_FMT_SGBRG8_1X8:
-+	case MEDIA_BUS_FMT_SGRBG8_1X8:
-+	case MEDIA_BUS_FMT_SRGGB8_1X8:
-+		sparams->w_factor = 1;
-+		sparams->module_en_pak = 0x4;
-+		sparams->fmt_sel = 0x0;
-+		sparams->pak = 0x7;
-+		sparams->imgo_stride = 0x000B0000;
-+		break;
-+	case MEDIA_BUS_FMT_UYVY8_1X16:
-+	case MEDIA_BUS_FMT_VYUY8_1X16:
-+	case MEDIA_BUS_FMT_YUYV8_1X16:
-+	case MEDIA_BUS_FMT_YVYU8_1X16:
-+		sparams->w_factor = 2;
-+		sparams->module_en_pak = 0x8;
-+		sparams->fmt_sel = 0x1000003;
-+		sparams->pak = 0x0;
-+		sparams->imgo_stride = 0x00090000;
-+		break;
-+	default:
-+		break;
-+	}
-+}
-+
-+static u32 mtk_camsv30_read(struct mtk_cam_dev *priv, u32 reg)
-+{
-+	return readl(priv->regs + reg);
-+}
-+
-+static void mtk_camsv30_write(struct mtk_cam_dev *priv, u32 reg, u32 value)
-+{
-+	writel(value, priv->regs + reg);
-+}
-+
-+static void mtk_camsv30_img0_write(struct mtk_cam_dev *priv, u32 reg, u32 value)
-+{
-+	writel(value, priv->regs_img0 + reg);
-+}
-+
-+static u32 mtk_camsv30_tg_read(struct mtk_cam_dev *priv, u32 reg)
-+{
-+	return readl(priv->regs_tg + reg);
-+}
-+
-+static void mtk_camsv30_tg_write(struct mtk_cam_dev *priv, u32 reg, u32 value)
-+{
-+	writel(value, priv->regs_tg + reg);
-+}
-+
-+static void mtk_camsv30_update_buffers_add(struct mtk_cam_dev *cam_dev,
-+					   struct mtk_cam_dev_buffer *buf)
-+{
-+	mtk_camsv30_img0_write(cam_dev, CAMSV_IMGO_SV_BASE_ADDR, buf->daddr);
-+
-+	mtk_camsv30_write(cam_dev, CAMSV_IMGO_FBC, 0x1U);
-+}
-+
-+static void mtk_camsv30_cmos_vf_hw_enable(struct mtk_cam_dev *cam_dev,
-+					  bool pak_en)
-+{
-+	u32 clk_en;
-+
-+	clk_en = CAMSV_TG_DP_CLK_EN | CAMSV_DMA_DP_CLK_EN;
-+	if (pak_en)
-+		clk_en |= CAMSV_PAK_DP_CLK_EN;
-+	mtk_camsv30_write(cam_dev, CAMSV_CLK_EN, clk_en);
-+	mtk_camsv30_tg_write(cam_dev, CAMSV_TG_VF_CON,
-+			     mtk_camsv30_tg_read(cam_dev, CAMSV_TG_VF_CON) |
-+			     CAMSV_TG_VF_CON_VFDATA_EN);
-+}
-+
-+static void mtk_camsv30_cmos_vf_hw_disable(struct mtk_cam_dev *cam_dev,
-+					   bool pak_en)
-+{
-+	mtk_camsv30_tg_write(cam_dev, CAMSV_TG_SEN_MODE,
-+			     mtk_camsv30_tg_read(cam_dev, CAMSV_TG_SEN_MODE) &
-+			     ~CAMSV_TG_SEN_MODE_CMOS_EN);
-+	mtk_camsv30_tg_write(cam_dev, CAMSV_TG_VF_CON,
-+			     mtk_camsv30_tg_read(cam_dev, CAMSV_TG_VF_CON) &
-+			     ~CAMSV_TG_VF_CON_VFDATA_EN);
-+}
-+
-+static void mtk_camsv30_setup(struct mtk_cam_dev *cam_dev, u32 w, u32 h,
-+			      u32 bpl, u32 mbus_fmt)
-+{
-+	const struct mtk_cam_conf *conf = cam_dev->conf;
-+	int poll_num = 1000;
-+	u32 int_en = INT_ST_MASK_CAMSV;
-+	struct mtk_cam_sparams sparams;
-+
-+	fmt_to_sparams(mbus_fmt, &sparams);
-+
-+	spin_lock(&cam_dev->irqlock);
-+
-+	if (pm_runtime_get_sync(cam_dev->dev) < 0) {
-+		dev_err(cam_dev->dev, "failed to get pm_runtime\n");
-+		spin_unlock(&cam_dev->irqlock);
-+		return;
-+	}
-+
-+	mtk_camsv30_tg_write(cam_dev, CAMSV_TG_SEN_MODE, conf->tg_sen_mode);
-+
-+	mtk_camsv30_tg_write(cam_dev,
-+			     CAMSV_TG_SEN_GRAB_PXL, (w * sparams.w_factor) << 16U);
-+
-+	mtk_camsv30_tg_write(cam_dev, CAMSV_TG_SEN_GRAB_LIN, h << 16U);
-+
-+	/* YUV_U2S_DIS: disable YUV sensor unsigned to signed */
-+	mtk_camsv30_tg_write(cam_dev, CAMSV_TG_PATH_CFG, 0x1000U);
-+
-+	/* Reset cam */
-+	mtk_camsv30_write(cam_dev, CAMSV_SW_CTL, CAMSV_SW_RST);
-+	mtk_camsv30_write(cam_dev, CAMSV_SW_CTL, 0x0U);
-+	mtk_camsv30_write(cam_dev, CAMSV_SW_CTL, CAMSV_IMGO_RST_TRIG);
-+
-+	while (mtk_camsv30_read(cam_dev, CAMSV_SW_CTL) !=
-+		       (CAMSV_IMGO_RST_TRIG | CAMSV_IMGO_RST_ST) &&
-+	       poll_num++ < 1000)
-+		;
-+
-+	mtk_camsv30_write(cam_dev, CAMSV_SW_CTL, 0x0U);
-+
-+	mtk_camsv30_write(cam_dev, CAMSV_INT_EN, int_en);
-+
-+	mtk_camsv30_write(cam_dev, CAMSV_MODULE_EN,
-+			  conf->module_en | sparams.module_en_pak);
-+	mtk_camsv30_write(cam_dev, CAMSV_FMT_SEL, sparams.fmt_sel);
-+	mtk_camsv30_write(cam_dev, CAMSV_PAK, sparams.pak);
-+
-+	mtk_camsv30_img0_write(cam_dev, CAMSV_IMGO_SV_XSIZE, bpl - 1U);
-+	mtk_camsv30_img0_write(cam_dev, CAMSV_IMGO_SV_YSIZE, h - 1U);
-+
-+	mtk_camsv30_img0_write(cam_dev, CAMSV_IMGO_SV_STRIDE, sparams.imgo_stride | bpl);
-+
-+	mtk_camsv30_img0_write(cam_dev, CAMSV_IMGO_SV_CON, conf->imgo_con);
-+	mtk_camsv30_img0_write(cam_dev, CAMSV_IMGO_SV_CON2, conf->imgo_con2);
-+
-+	/* CMOS_EN first */
-+	mtk_camsv30_tg_write(cam_dev, CAMSV_TG_SEN_MODE,
-+			     mtk_camsv30_tg_read(cam_dev, CAMSV_TG_SEN_MODE) | 0x1U);
-+
-+	/* finally, CAMSV_MODULE_EN : IMGO_EN */
-+	mtk_camsv30_write(cam_dev, CAMSV_MODULE_EN,
-+			  mtk_camsv30_read(cam_dev, CAMSV_MODULE_EN) | 0x00000010U);
-+
-+	pm_runtime_put_autosuspend(cam_dev->dev);
-+	spin_unlock(&cam_dev->irqlock);
-+}
-+
-+static irqreturn_t isp_irq_camsv30(int irq, void *data)
-+{
-+	struct mtk_cam_dev *cam_dev = (struct mtk_cam_dev *)data;
-+	struct mtk_cam_dev_buffer *buf;
-+	unsigned long flags = 0;
-+	unsigned int irq_status;
-+
-+	spin_lock_irqsave(&cam_dev->irqlock, flags);
-+
-+	irq_status = mtk_camsv30_read(cam_dev, CAMSV_INT_STATUS);
-+
-+	if (irq_status & INT_ST_MASK_CAMSV_ERR) {
-+		dev_err(cam_dev->dev, "irq error 0x%x\n",
-+			(unsigned int)(irq_status & INT_ST_MASK_CAMSV_ERR));
-+	}
-+
-+	/* De-queue frame */
-+	if (irq_status & CAMSV_IRQ_PASS1_DON) {
-+		cam_dev->sequence++;
-+
-+		if (!cam_dev->is_dummy_used) {
-+			buf = list_first_entry_or_null(&cam_dev->buf_list,
-+						       struct mtk_cam_dev_buffer,
-+						       list);
-+			if (buf) {
-+				buf->v4l2_buf.sequence = cam_dev->sequence;
-+				buf->v4l2_buf.vb2_buf.timestamp = ktime_get_ns();
-+				vb2_buffer_done(&buf->v4l2_buf.vb2_buf,
-+						VB2_BUF_STATE_DONE);
-+				list_del(&buf->list);
-+			}
-+		}
-+
-+		if (list_empty(&cam_dev->buf_list)) {
-+			(*cam_dev->hw_functions->mtk_cam_update_buffers_add)
-+						(cam_dev, &cam_dev->dummy);
-+			cam_dev->is_dummy_used = true;
-+		} else {
-+			buf = list_first_entry_or_null(&cam_dev->buf_list,
-+						       struct mtk_cam_dev_buffer,
-+						       list);
-+			(*cam_dev->hw_functions->mtk_cam_update_buffers_add)
-+						(cam_dev, buf);
-+			cam_dev->is_dummy_used = false;
-+		}
-+	}
-+
-+	spin_unlock_irqrestore(&cam_dev->irqlock, flags);
-+
-+	return IRQ_HANDLED;
-+}
-+
-+static int mtk_camsv30_runtime_suspend(struct device *dev)
-+{
-+	struct mtk_cam_dev *cam_dev = dev_get_drvdata(dev);
-+	struct vb2_queue *vbq = &cam_dev->vdev.vbq;
-+
-+	if (vb2_is_streaming(vbq)) {
-+		mutex_lock(&cam_dev->op_lock);
-+		v4l2_subdev_call(&cam_dev->subdev, video, s_stream, 0);
-+		mutex_unlock(&cam_dev->op_lock);
-+	}
-+
-+	clk_bulk_disable_unprepare(cam_dev->num_clks, cam_dev->clks);
-+
-+	return 0;
-+}
-+
-+static int mtk_camsv30_runtime_resume(struct device *dev)
-+{
-+	struct mtk_cam_dev *cam_dev = dev_get_drvdata(dev);
-+	struct mtk_cam_video_device *vdev = &cam_dev->vdev;
-+	const struct v4l2_pix_format_mplane *fmt = &vdev->format;
-+	struct vb2_queue *vbq = &vdev->vbq;
-+	struct mtk_cam_dev_buffer *buf, *buf_prev;
-+	int ret;
-+	unsigned long flags = 0;
-+
-+	ret = clk_bulk_prepare_enable(cam_dev->num_clks, cam_dev->clks);
-+	if (ret) {
-+		dev_err(dev, "failed to enable clock:%d\n", ret);
-+		return ret;
-+	}
-+
-+	if (vb2_is_streaming(vbq)) {
-+		spin_lock_irqsave(&cam_dev->irqlock, flags);
-+
-+		mtk_camsv30_setup(cam_dev, fmt->width, fmt->height,
-+				  fmt->plane_fmt[0].bytesperline, vdev->fmtinfo->code);
-+
-+		buf = list_first_entry_or_null(&cam_dev->buf_list,
-+					       struct mtk_cam_dev_buffer,
-+					       list);
-+		if (buf) {
-+			mtk_camsv30_update_buffers_add(cam_dev, buf);
-+			cam_dev->is_dummy_used = false;
-+		} else {
-+			mtk_camsv30_update_buffers_add(cam_dev, &cam_dev->dummy);
-+			cam_dev->is_dummy_used = true;
-+		}
-+
-+		mtk_camsv30_cmos_vf_hw_enable(cam_dev, vdev->fmtinfo->packed);
-+
-+		spin_unlock_irqrestore(&cam_dev->irqlock, flags);
-+
-+		/* Stream on the sub-device */
-+		mutex_lock(&cam_dev->op_lock);
-+		ret = v4l2_subdev_call(&cam_dev->subdev, video, s_stream, 1);
-+
-+		if (ret) {
-+			cam_dev->stream_count--;
-+			if (cam_dev->stream_count == 0)
-+				media_pipeline_stop(vdev->vdev.entity.pads);
-+		}
-+		mutex_unlock(&cam_dev->op_lock);
-+
-+		if (ret)
-+			goto fail_no_stream;
-+	}
-+
-+	return 0;
-+
-+fail_no_stream:
-+	spin_lock_irqsave(&cam_dev->irqlock, flags);
-+	list_for_each_entry_safe(buf, buf_prev, &cam_dev->buf_list, list) {
-+		buf->daddr = 0ULL;
-+		list_del(&buf->list);
-+		vb2_buffer_done(&buf->v4l2_buf.vb2_buf, VB2_BUF_STATE_ERROR);
-+	}
-+	spin_unlock_irqrestore(&cam_dev->irqlock, flags);
-+	return ret;
-+}
-+
-+static struct mtk_cam_hw_functions mtk_camsv30_hw_functions = {
-+	.mtk_cam_setup = mtk_camsv30_setup,
-+	.mtk_cam_update_buffers_add = mtk_camsv30_update_buffers_add,
-+	.mtk_cam_cmos_vf_hw_enable = mtk_camsv30_cmos_vf_hw_enable,
-+	.mtk_cam_cmos_vf_hw_disable = mtk_camsv30_cmos_vf_hw_disable,
-+};
-+
-+static int mtk_camsv30_probe(struct platform_device *pdev)
-+{
-+	static const char * const clk_names[] = {
-+		"camsys_cam_cgpdn",
-+		"camsys_camtg_cgpdn",
-+		"camsys_camsv"
-+	};
-+
-+	struct mtk_cam_dev *cam_dev;
-+	struct device *dev = &pdev->dev;
-+	int ret;
-+	int i;
-+
-+	if (!iommu_present(&platform_bus_type))
-+		return -EPROBE_DEFER;
-+
-+	cam_dev = devm_kzalloc(dev, sizeof(*cam_dev), GFP_KERNEL);
-+	if (!cam_dev)
-+		return -ENOMEM;
-+
-+	cam_dev->conf = of_device_get_match_data(dev);
-+	if (!cam_dev->conf)
-+		return -ENODEV;
-+
-+	cam_dev->dev = dev;
-+	dev_set_drvdata(dev, cam_dev);
-+
-+	cam_dev->regs = devm_platform_ioremap_resource(pdev, 0);
-+	if (IS_ERR(cam_dev->regs)) {
-+		dev_err(dev, "failed to map register base\n");
-+		return PTR_ERR(cam_dev->regs);
-+	}
-+
-+	cam_dev->regs_img0 = devm_platform_ioremap_resource(pdev, 1);
-+
-+	if (IS_ERR(cam_dev->regs_img0)) {
-+		dev_err(dev, "failed to map img0 register base\n");
-+		return PTR_ERR(cam_dev->regs_img0);
-+	}
-+
-+	cam_dev->regs_tg = devm_platform_ioremap_resource(pdev, 2);
-+	if (IS_ERR(cam_dev->regs_tg)) {
-+		dev_err(dev, "failed to map TG register base\n");
-+		return PTR_ERR(cam_dev->regs_tg);
-+	}
-+
-+	cam_dev->num_clks = ARRAY_SIZE(clk_names);
-+	cam_dev->clks = devm_kcalloc(dev, cam_dev->num_clks,
-+				     sizeof(*cam_dev->clks), GFP_KERNEL);
-+	if (!cam_dev->clks)
-+		return -ENOMEM;
-+
-+	for (i = 0; i < cam_dev->num_clks; ++i)
-+		cam_dev->clks[i].id = clk_names[i];
-+
-+	ret = devm_clk_bulk_get(dev, cam_dev->num_clks, cam_dev->clks);
-+	if (ret) {
-+		dev_err(dev, "failed to get clocks: %i\n", ret);
-+		return ret;
-+	}
-+
-+	cam_dev->irq = platform_get_irq(pdev, 0);
-+	ret = devm_request_irq(dev, cam_dev->irq,
-+			       isp_irq_camsv30, 0,
-+			       dev_name(dev), cam_dev);
-+	if (ret != 0) {
-+		dev_err(dev, "failed to request irq=%d\n", cam_dev->irq);
-+		return -ENODEV;
-+	}
-+
-+	cam_dev->hw_functions = &mtk_camsv30_hw_functions;
-+
-+	spin_lock_init(&cam_dev->irqlock);
-+
-+	/* initialise runtime power management */
-+	pm_runtime_set_autosuspend_delay(dev, MTK_CAMSV30_AUTOSUSPEND_DELAY_MS);
-+	pm_runtime_use_autosuspend(dev);
-+	pm_runtime_set_suspended(dev);
-+	pm_runtime_enable(dev);
-+	//pm_runtime_get_sync(dev);
-+
-+	/* Initialize the v4l2 common part */
-+	return mtk_cam_dev_init(cam_dev);
-+}
-+
-+static int mtk_camsv30_remove(struct platform_device *pdev)
-+{
-+	struct device *dev = &pdev->dev;
-+	struct mtk_cam_dev *cam_dev = dev_get_drvdata(dev);
-+
-+	mtk_cam_dev_cleanup(cam_dev);
-+	pm_runtime_put_autosuspend(dev);
-+	pm_runtime_disable(dev);
-+
-+	return 0;
-+}
-+
-+static const struct dev_pm_ops mtk_camsv30_pm_ops = {
-+	SET_SYSTEM_SLEEP_PM_OPS(pm_runtime_force_suspend,
-+				pm_runtime_force_resume)
-+	SET_RUNTIME_PM_OPS(mtk_camsv30_runtime_suspend,
-+			   mtk_camsv30_runtime_resume, NULL)
-+};
-+
-+static const struct of_device_id mtk_camsv30_of_ids[] = {
-+	{
-+		.compatible = "mediatek,mt8365-camsv",
-+		.data = &camsv30_conf,
-+	},
-+	{}
-+};
-+MODULE_DEVICE_TABLE(of, mtk_camsv30_of_ids);
-+
-+static struct platform_driver mtk_camsv30_driver = {
-+	.probe = mtk_camsv30_probe,
-+	.remove = mtk_camsv30_remove,
-+	.driver = {
-+		.name = "mtk-camsv-isp30",
-+		.of_match_table = mtk_camsv30_of_ids,
-+		.pm = &mtk_camsv30_pm_ops,
-+	}
-+};
-+
-+module_platform_driver(mtk_camsv30_driver);
-+
-+MODULE_DESCRIPTION("MediaTek CAMSV ISP3.0 driver");
-+MODULE_AUTHOR("Florian Sylvestre <fsylvestre@baylibre.com>");
-+MODULE_LICENSE("GPL");
-diff --git a/drivers/media/platform/mediatek/isp/isp_30/camsv/mtk_camsv30_regs.h b/drivers/media/platform/mediatek/isp/isp_30/camsv/mtk_camsv30_regs.h
-new file mode 100644
-index 000000000000..707678ab8a73
---- /dev/null
-+++ b/drivers/media/platform/mediatek/isp/isp_30/camsv/mtk_camsv30_regs.h
-@@ -0,0 +1,59 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Copyright (c) 2022 MediaTek Inc.
-+ */
-+
-+#ifndef __MTK_CAMSV30_REGS_H__
-+#define __MTK_CAMSV30_REGS_H__
-+
-+/* CAMSV */
-+#define CAMSV_MODULE_EN				0x0000
-+#define CAMSV_FMT_SEL				0x0004
-+#define CAMSV_INT_EN				0x0008
-+#define CAMSV_INT_STATUS			0x000c
-+#define CAMSV_SW_CTL				0x0010
-+#define CAMSV_IMGO_FBC				0x001C
-+#define CAMSV_CLK_EN				0x0020
-+#define CAMSV_PAK				0x003c
-+
-+/* CAMSV_TG */
-+#define CAMSV_TG_SEN_MODE			0x0010
-+#define CAMSV_TG_VF_CON				0x0014
-+#define CAMSV_TG_SEN_GRAB_PXL			0x0018
-+#define CAMSV_TG_SEN_GRAB_LIN			0x001c
-+#define CAMSV_TG_PATH_CFG			0x0020
-+
-+/* CAMSV_IMG0 */
-+#define CAMSV_IMGO_SV_BASE_ADDR			0x0000
-+#define CAMSV_IMGO_SV_XSIZE			0x0008
-+#define CAMSV_IMGO_SV_YSIZE			0x000c
-+#define CAMSV_IMGO_SV_STRIDE			0x0010
-+#define CAMSV_IMGO_SV_CON			0x0014
-+#define CAMSV_IMGO_SV_CON2			0x0018
-+
-+#define CAMSV_TG_SEN_MODE_CMOS_EN		BIT(0)
-+#define CAMSV_TG_VF_CON_VFDATA_EN		BIT(0)
-+
-+/* CAMSV_CLK_EN bits */
-+#define CAMSV_TG_DP_CLK_EN			BIT(0)
-+#define CAMSV_PAK_DP_CLK_EN			BIT(2)
-+#define CAMSV_DMA_DP_CLK_EN			BIT(15)
-+
-+/* CAMSV_SW_CTL bits */
-+#define CAMSV_IMGO_RST_TRIG			BIT(0)
-+#define CAMSV_IMGO_RST_ST			BIT(1)
-+#define CAMSV_SW_RST				BIT(2)
-+
-+/* IRQ BITS */
-+#define CAMSV_IRQ_TG_ERR			BIT(4)
-+#define CAMSV_IRQ_TG_GBERR			BIT(5)
-+#define CAMSV_IRQ_PASS1_DON			BIT(10)
-+#define CAMSV_IRQ_IMGO_ERR			BIT(16)
-+
-+#define INT_ST_MASK_CAMSV                                                      \
-+	(CAMSV_IRQ_PASS1_DON)
-+
-+#define INT_ST_MASK_CAMSV_ERR                                                  \
-+	(CAMSV_IRQ_TG_ERR | CAMSV_IRQ_TG_GBERR | CAMSV_IRQ_IMGO_ERR)
-+
-+#endif /* __MTK_CAMSV30_REGS_H__ */
-diff --git a/drivers/media/platform/mediatek/isp/isp_30/camsv/mtk_camsv_video.c b/drivers/media/platform/mediatek/isp/isp_30/camsv/mtk_camsv_video.c
-new file mode 100644
-index 000000000000..e5d7141bd0b1
---- /dev/null
-+++ b/drivers/media/platform/mediatek/isp/isp_30/camsv/mtk_camsv_video.c
-@@ -0,0 +1,781 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * mtk_camsv_video.c - V4L2 video node support
-+ *
-+ * Copyright (c) 2020 BayLibre
-+ * Copyright (c) 2022 MediaTek Inc.
-+ */
-+
-+#include <linux/version.h>
-+#include <media/v4l2-ctrls.h>
-+#include <media/v4l2-event.h>
-+#include <media/v4l2-ioctl.h>
-+#include <media/v4l2-mediabus.h>
-+
-+#include "mtk_camsv.h"
-+
-+static inline struct mtk_cam_video_device *
-+file_to_mtk_cam_video_device(struct file *__file)
-+{
-+	return container_of(video_devdata(__file),
-+			    struct mtk_cam_video_device, vdev);
-+}
-+
-+static inline struct mtk_cam_video_device *
-+vb2_queue_to_mtk_cam_video_device(struct vb2_queue *vq)
-+{
-+	return container_of(vq, struct mtk_cam_video_device, vbq);
-+}
-+
-+static inline struct mtk_cam_dev_buffer *
-+to_mtk_cam_dev_buffer(struct vb2_buffer *buf)
-+{
-+	return container_of(buf, struct mtk_cam_dev_buffer, v4l2_buf.vb2_buf);
-+}
-+
-+/* -----------------------------------------------------------------------------
-+ * Format Information
-+ */
-+
-+static const struct mtk_cam_format_info mtk_cam_format_info[] = {
-+	{
-+		.fourcc = V4L2_PIX_FMT_SBGGR8,
-+		.code = MEDIA_BUS_FMT_SBGGR8_1X8,
-+		.packed = true,
-+		.bpp = 8,
-+	}, {
-+		.fourcc = V4L2_PIX_FMT_SGBRG8,
-+		.code = MEDIA_BUS_FMT_SGBRG8_1X8,
-+		.packed = true,
-+		.bpp = 8,
-+	}, {
-+		.fourcc = V4L2_PIX_FMT_SGRBG8,
-+		.code = MEDIA_BUS_FMT_SGRBG8_1X8,
-+		.packed = true,
-+		.bpp = 8,
-+	}, {
-+		.fourcc = V4L2_PIX_FMT_SRGGB8,
-+		.code = MEDIA_BUS_FMT_SRGGB8_1X8,
-+		.packed = true,
-+		.bpp = 8,
-+	}, {
-+		.fourcc = V4L2_PIX_FMT_YUYV,
-+		.code = MEDIA_BUS_FMT_YUYV8_1X16,
-+		.packed = true,
-+		.bpp = 16,
-+	}, {
-+		.fourcc = V4L2_PIX_FMT_YVYU,
-+		.code = MEDIA_BUS_FMT_YVYU8_1X16,
-+		.packed = true,
-+		.bpp = 16,
-+	}, {
-+		.fourcc = V4L2_PIX_FMT_UYVY,
-+		.code = MEDIA_BUS_FMT_UYVY8_1X16,
-+		.packed = true,
-+		.bpp = 16,
-+	}, {
-+		.fourcc = V4L2_PIX_FMT_VYUY,
-+		.code = MEDIA_BUS_FMT_VYUY8_1X16,
-+		.packed = true,
-+		.bpp = 16,
-+	},
-+};
-+
-+static const struct mtk_cam_format_info *
-+mtk_cam_format_info_by_fourcc(u32 fourcc)
-+{
-+	unsigned int i;
-+
-+	for (i = 0; i < ARRAY_SIZE(mtk_cam_format_info); ++i) {
-+		const struct mtk_cam_format_info *info =
-+			&mtk_cam_format_info[i];
-+
-+		if (info->fourcc == fourcc)
-+			return info;
-+	}
-+
-+	return NULL;
-+}
-+
-+static const struct mtk_cam_format_info *
-+mtk_cam_format_info_by_code(u32 code)
-+{
-+	unsigned int i;
-+
-+	for (i = 0; i < ARRAY_SIZE(mtk_cam_format_info); ++i) {
-+		const struct mtk_cam_format_info *info =
-+			&mtk_cam_format_info[i];
-+
-+		if (info->code == code)
-+			return info;
-+	}
-+
-+	return NULL;
-+}
-+
-+static bool mtk_cam_dev_find_fmt(const struct mtk_cam_vdev_desc *desc,
-+				 u32 format)
-+{
-+	unsigned int i;
-+
-+	for (i = 0; i < desc->num_fmts; i++) {
-+		if (desc->fmts[i] == format)
-+			return true;
-+	}
-+
-+	return false;
-+}
-+
-+static void calc_bpl_size_pix_mp(const struct mtk_cam_format_info *fmtinfo,
-+				 struct v4l2_pix_format_mplane *pix_mp)
-+{
-+	unsigned int bpl;
-+	unsigned int i;
-+
-+	bpl = ALIGN(DIV_ROUND_UP(pix_mp->width * fmtinfo->bpp, 8), 2);
-+
-+	for (i = 0; i < pix_mp->num_planes; ++i) {
-+		pix_mp->plane_fmt[i].bytesperline = bpl;
-+		pix_mp->plane_fmt[i].sizeimage = bpl * pix_mp->height;
-+	}
-+}
-+
-+static void mtk_cam_dev_load_default_fmt(struct mtk_cam_dev *cam)
-+{
-+	struct mtk_cam_video_device *vdev = &cam->vdev;
-+	struct v4l2_pix_format_mplane *fmt = &vdev->format;
-+
-+	fmt->num_planes = cam->conf->enableFH ? 2 : 1;
-+	fmt->pixelformat = vdev->desc->fmts[0];
-+	fmt->width = vdev->desc->def_width;
-+	fmt->height = vdev->desc->def_height;
-+
-+	fmt->colorspace = V4L2_COLORSPACE_SRGB;
-+	fmt->field = V4L2_FIELD_NONE;
-+	fmt->ycbcr_enc = V4L2_YCBCR_ENC_DEFAULT;
-+	fmt->quantization = V4L2_QUANTIZATION_DEFAULT;
-+	fmt->xfer_func = V4L2_XFER_FUNC_DEFAULT;
-+
-+	vdev->fmtinfo = mtk_cam_format_info_by_fourcc(fmt->pixelformat);
-+
-+	calc_bpl_size_pix_mp(vdev->fmtinfo, fmt);
-+}
-+
-+/* -----------------------------------------------------------------------------
-+ * VB2 Queue Operations
-+ */
-+
-+static int mtk_cam_vb2_queue_setup(struct vb2_queue *vq,
-+				   unsigned int *num_buffers,
-+				   unsigned int *num_planes,
-+				   unsigned int sizes[],
-+				   struct device *alloc_devs[])
-+{
-+	struct mtk_cam_video_device *vdev =
-+		vb2_queue_to_mtk_cam_video_device(vq);
-+	unsigned int max_buffer_count = vdev->desc->max_buf_count;
-+	const struct v4l2_pix_format_mplane *fmt = &vdev->format;
-+	struct mtk_cam_dev *cam = vb2_get_drv_priv(vq);
-+	unsigned int size;
-+	unsigned int np_conf;
-+	unsigned int i;
-+
-+	/* Check the limitation of buffer size */
-+	if (max_buffer_count)
-+		*num_buffers = clamp_val(*num_buffers, 1, max_buffer_count);
-+
-+	size = fmt->plane_fmt[0].sizeimage;
-+	/* Add for q.create_bufs with fmt.g_sizeimage(p) / 2 test */
-+
-+	np_conf = cam->conf->enableFH ? 2 : 1;
-+
-+	if (*num_planes == 0) {
-+		*num_planes = np_conf;
-+		for (i = 0; i < *num_planes; ++i)
-+			sizes[i] = size;
-+	} else if (*num_planes != np_conf || sizes[0] < size) {
-+		return -EINVAL;
-+	}
-+
-+	(*cam->hw_functions->mtk_cam_setup)(cam, fmt->width, fmt->height,
-+			fmt->plane_fmt[0].bytesperline, vdev->fmtinfo->code);
-+
-+	return 0;
-+}
-+
-+static int mtk_cam_vb2_buf_init(struct vb2_buffer *vb)
-+{
-+	struct mtk_cam_dev_buffer *buf = to_mtk_cam_dev_buffer(vb);
-+
-+	buf->daddr = 0ULL;
-+
-+	return 0;
-+}
-+
-+static int mtk_cam_vb2_buf_prepare(struct vb2_buffer *vb)
-+{
-+	struct mtk_cam_video_device *vdev =
-+		vb2_queue_to_mtk_cam_video_device(vb->vb2_queue);
-+	struct mtk_cam_dev *cam = vb2_get_drv_priv(vb->vb2_queue);
-+	struct mtk_cam_dev_buffer *buf = to_mtk_cam_dev_buffer(vb);
-+	const struct v4l2_pix_format_mplane *fmt = &vdev->format;
-+	u32 size;
-+	int i;
-+
-+	for (i = 0; i < vb->num_planes; i++) {
-+		size = fmt->plane_fmt[i].sizeimage;
-+		if (vb2_plane_size(vb, i) < size) {
-+			dev_err(cam->dev, "plane size is too small:%lu<%u\n",
-+				vb2_plane_size(vb, i), size);
-+			return -EINVAL;
-+		}
-+	}
-+
-+	buf->v4l2_buf.field = V4L2_FIELD_NONE;
-+
-+	for (i = 0; i < vb->num_planes; i++) {
-+		size = fmt->plane_fmt[i].sizeimage;
-+		vb2_set_plane_payload(vb, i, size);
-+	}
-+
-+	if (buf->daddr == 0ULL) {
-+		buf->daddr = vb2_dma_contig_plane_dma_addr(vb, 0);
-+		if (cam->conf->enableFH)
-+			buf->fhaddr = vb2_dma_contig_plane_dma_addr(vb, 1);
-+	}
-+
-+	return 0;
-+}
-+
-+static void mtk_cam_vb2_buf_queue(struct vb2_buffer *vb)
-+{
-+	struct mtk_cam_dev *cam = vb2_get_drv_priv(vb->vb2_queue);
-+	struct mtk_cam_dev_buffer *buf = to_mtk_cam_dev_buffer(vb);
-+	unsigned long flags = 0;
-+
-+	/* added the buffer into the tracking list */
-+	spin_lock_irqsave(&cam->irqlock, flags);
-+	list_add_tail(&buf->list, &cam->buf_list);
-+	spin_unlock_irqrestore(&cam->irqlock, flags);
-+}
-+
-+static void mtk_cam_vb2_return_all_buffers(struct mtk_cam_dev *cam,
-+					   enum vb2_buffer_state state)
-+{
-+	struct mtk_cam_dev_buffer *buf, *buf_prev;
-+	unsigned long flags = 0;
-+
-+	spin_lock_irqsave(&cam->irqlock, flags);
-+	list_for_each_entry_safe(buf, buf_prev, &cam->buf_list, list) {
-+		buf->daddr = 0ULL;
-+		list_del(&buf->list);
-+		vb2_buffer_done(&buf->v4l2_buf.vb2_buf, state);
-+	}
-+	spin_unlock_irqrestore(&cam->irqlock, flags);
-+}
-+
-+static void mtk_cam_cmos_vf_enable(struct mtk_cam_dev *cam_dev,
-+				   bool enable, bool pak_en)
-+{
-+	struct device *dev = cam_dev->dev;
-+	unsigned long flags = 0;
-+
-+	if (pm_runtime_get_sync(dev) < 0) {
-+		dev_err(dev, "failed to get pm_runtime\n");
-+		goto out;
-+	}
-+
-+	spin_lock_irqsave(&cam_dev->irqlock, flags);
-+	if (enable)
-+		(*cam_dev->hw_functions->mtk_cam_cmos_vf_hw_enable)(cam_dev, pak_en);
-+	else
-+		(*cam_dev->hw_functions->mtk_cam_cmos_vf_hw_disable)(cam_dev, pak_en);
-+	spin_unlock_irqrestore(&cam_dev->irqlock, flags);
-+
-+out:
-+	pm_runtime_put_autosuspend(dev);
-+}
-+
-+static int mtk_cam_verify_format(struct mtk_cam_dev *cam)
-+{
-+	struct mtk_cam_video_device *vdev = &cam->vdev;
-+	struct v4l2_subdev_format fmt = {
-+		.which = V4L2_SUBDEV_FORMAT_ACTIVE,
-+		.pad = MTK_CAM_CIO_PAD_VIDEO,
-+	};
-+	int ret;
-+
-+	ret = v4l2_subdev_call(&cam->subdev, pad, get_fmt, NULL, &fmt);
-+	if (ret < 0)
-+		return ret == -ENOIOCTLCMD ? -EINVAL : ret;
-+
-+	if (vdev->fmtinfo->code != fmt.format.code ||
-+	    vdev->format.height != fmt.format.height ||
-+	    vdev->format.width != fmt.format.width)
-+		return -EINVAL;
-+
-+	return 0;
-+}
-+
-+static int mtk_cam_vb2_start_streaming(struct vb2_queue *vq,
-+				       unsigned int count)
-+{
-+	struct mtk_cam_dev *cam = vb2_get_drv_priv(vq);
-+	struct mtk_cam_dev_buffer *buf;
-+	struct mtk_cam_video_device *vdev =
-+		vb2_queue_to_mtk_cam_video_device(vq);
-+	struct device *dev = cam->dev;
-+	const struct v4l2_pix_format_mplane *fmt = &vdev->format;
-+	int ret;
-+	unsigned long flags = 0;
-+
-+	if (pm_runtime_get_sync(dev) < 0) {
-+		dev_err(dev, "failed to get pm_runtime\n");
-+		pm_runtime_put_autosuspend(dev);
-+		return -1;
-+	}
-+
-+	/* Enable CMOS and VF */
-+	mtk_cam_cmos_vf_enable(cam, true, vdev->fmtinfo->packed);
-+
-+	mutex_lock(&cam->op_lock);
-+
-+	ret = mtk_cam_verify_format(cam);
-+	if (ret < 0)
-+		goto fail_unlock;
-+
-+	/* Start streaming of the whole pipeline now*/
-+	if (!cam->pipeline.start_count) {
-+		ret = media_pipeline_start(vdev->vdev.entity.pads,
-+					   &cam->pipeline);
-+		if (ret) {
-+			dev_err(dev, "failed to start pipeline:%d\n", ret);
-+			goto fail_unlock;
-+		}
-+	}
-+
-+	/* Media links are fixed after media_pipeline_start */
-+	cam->stream_count++;
-+
-+	cam->sequence = (unsigned int)-1;
-+
-+	/* Stream on the sub-device */
-+	ret = v4l2_subdev_call(&cam->subdev, video, s_stream, 1);
-+	if (ret)
-+		goto fail_no_stream;
-+
-+	mutex_unlock(&cam->op_lock);
-+
-+	/* Create dummy buffer */
-+	cam->dummy_size = fmt->plane_fmt[0].sizeimage;
-+
-+	cam->dummy.fhaddr = (dma_addr_t)dma_alloc_coherent(cam->dev,
-+					       cam->dummy_size,
-+					       &cam->dummy.daddr, GFP_KERNEL);
-+	if (!cam->dummy.fhaddr) {
-+		dev_err(cam->dev, "can't allocate dummy buffer\n");
-+		ret = -ENOMEM;
-+		goto fail_no_buffer;
-+	}
-+
-+	/* update first buffer address */
-+
-+	/* added the buffer into the tracking list */
-+	spin_lock_irqsave(&cam->irqlock, flags);
-+	if (list_empty(&cam->buf_list)) {
-+		(*cam->hw_functions->mtk_cam_update_buffers_add)(cam, &cam->dummy);
-+		cam->is_dummy_used = true;
-+	} else {
-+		buf = list_first_entry_or_null(&cam->buf_list,
-+					       struct mtk_cam_dev_buffer,
-+					       list);
-+		(*cam->hw_functions->mtk_cam_update_buffers_add)(cam, buf);
-+		cam->is_dummy_used = false;
-+	}
-+	spin_unlock_irqrestore(&cam->irqlock, flags);
-+
-+	return 0;
-+
-+fail_no_buffer:
-+	mutex_lock(&cam->op_lock);
-+	v4l2_subdev_call(&cam->subdev, video, s_stream, 0);
-+fail_no_stream:
-+	cam->stream_count--;
-+	if (cam->stream_count == 0)
-+		media_pipeline_stop(vdev->vdev.entity.pads);
-+fail_unlock:
-+	mutex_unlock(&cam->op_lock);
-+	mtk_cam_vb2_return_all_buffers(cam, VB2_BUF_STATE_QUEUED);
-+
-+	return ret;
-+}
-+
-+static void mtk_cam_vb2_stop_streaming(struct vb2_queue *vq)
-+{
-+	struct mtk_cam_dev *cam = vb2_get_drv_priv(vq);
-+	struct mtk_cam_video_device *vdev =
-+		vb2_queue_to_mtk_cam_video_device(vq);
-+
-+	/* Disable CMOS and VF */
-+	mtk_cam_cmos_vf_enable(cam, false, false);
-+
-+	mutex_lock(&cam->op_lock);
-+
-+	v4l2_subdev_call(&cam->subdev, video, s_stream, 0);
-+
-+	mtk_cam_vb2_return_all_buffers(cam, VB2_BUF_STATE_ERROR);
-+	cam->stream_count--;
-+	if (cam->stream_count) {
-+		mutex_unlock(&cam->op_lock);
-+		return;
-+	}
-+
-+	/* Destroy dummy buffer */
-+	if (cam->dummy.fhaddr) {
-+		dma_free_coherent(cam->dev, cam->dummy_size,
-+				  (void *)cam->dummy.fhaddr,
-+				  cam->dummy.daddr);
-+		memset(&cam->dummy, 0, sizeof(cam->dummy));
-+		cam->dummy_size = 0;
-+		cam->is_dummy_used = false;
-+	}
-+
-+	mutex_unlock(&cam->op_lock);
-+
-+	media_pipeline_stop(vdev->vdev.entity.pads);
-+}
-+
-+static const struct vb2_ops mtk_cam_vb2_ops = {
-+	.queue_setup = mtk_cam_vb2_queue_setup,
-+	.buf_init = mtk_cam_vb2_buf_init,
-+	.buf_prepare = mtk_cam_vb2_buf_prepare,
-+	.buf_queue = mtk_cam_vb2_buf_queue,
-+	.start_streaming = mtk_cam_vb2_start_streaming,
-+	.stop_streaming = mtk_cam_vb2_stop_streaming,
-+	.wait_prepare = vb2_ops_wait_prepare,
-+	.wait_finish = vb2_ops_wait_finish,
-+};
-+
-+/* -----------------------------------------------------------------------------
-+ * V4L2 Video IOCTLs
-+ */
-+
-+static int mtk_cam_vidioc_querycap(struct file *file, void *fh,
-+				   struct v4l2_capability *cap)
-+{
-+	struct mtk_cam_dev *cam = video_drvdata(file);
-+
-+	strscpy(cap->driver, dev_driver_string(cam->dev), sizeof(cap->driver));
-+	strscpy(cap->card, dev_driver_string(cam->dev), sizeof(cap->card));
-+	snprintf(cap->bus_info, sizeof(cap->bus_info), "platform:%s",
-+		 dev_name(cam->dev));
-+
-+	/* Minimum v4l2 api kernel version required by libcamera is 5.0.0 */
-+	cap->version = KERNEL_VERSION(5, 0, 0);
-+
-+	return 0;
-+}
-+
-+static int mtk_cam_vidioc_enum_fmt(struct file *file, void *fh,
-+				   struct v4l2_fmtdesc *f)
-+{
-+	struct mtk_cam_video_device *vdev = file_to_mtk_cam_video_device(file);
-+	const struct mtk_cam_format_info *fmtinfo;
-+	unsigned int i;
-+
-+	/* If mbus_code is not set enumerate all supported formats. */
-+	if (!f->mbus_code) {
-+		if (f->index >= vdev->desc->num_fmts)
-+			return -EINVAL;
-+
-+		/* f->description is filled in v4l_fill_fmtdesc function */
-+		f->pixelformat = vdev->desc->fmts[f->index];
-+		f->flags = 0;
-+
-+		return 0;
-+	}
-+
-+	/*
-+	 * Otherwise only enumerate supported pixel formats corresponding to
-+	 * that bus code.
-+	 */
-+	if (f->index)
-+		return -EINVAL;
-+
-+	fmtinfo = mtk_cam_format_info_by_code(f->mbus_code);
-+	if (!fmtinfo)
-+		return -EINVAL;
-+
-+	for (i = 0; i < vdev->desc->num_fmts; ++i) {
-+		if (vdev->desc->fmts[i] == fmtinfo->fourcc) {
-+			f->pixelformat = fmtinfo->fourcc;
-+			f->flags = 0;
-+			return 0;
-+		}
-+	}
-+
-+	return -EINVAL;
-+}
-+
-+static int mtk_cam_vidioc_g_fmt(struct file *file, void *fh,
-+				struct v4l2_format *f)
-+{
-+	struct mtk_cam_video_device *vdev = file_to_mtk_cam_video_device(file);
-+
-+	f->fmt.pix_mp = vdev->format;
-+
-+	return 0;
-+}
-+
-+static int mtk_cam_vidioc_try_fmt(struct file *file, void *fh,
-+				  struct v4l2_format *f)
-+{
-+	struct mtk_cam_dev *cam = video_drvdata(file);
-+	struct mtk_cam_video_device *vdev = file_to_mtk_cam_video_device(file);
-+	struct v4l2_pix_format_mplane *pix_mp = &f->fmt.pix_mp;
-+	const struct mtk_cam_format_info *fmtinfo;
-+
-+	/* Validate pixelformat */
-+	if (!mtk_cam_dev_find_fmt(vdev->desc, pix_mp->pixelformat))
-+		pix_mp->pixelformat = vdev->desc->fmts[0];
-+
-+	pix_mp->width = clamp_val(pix_mp->width, IMG_MIN_WIDTH, IMG_MAX_WIDTH);
-+	pix_mp->height = clamp_val(pix_mp->height, IMG_MIN_HEIGHT,
-+				   IMG_MAX_HEIGHT);
-+
-+	pix_mp->num_planes = cam->conf->enableFH ? 2 : 1;
-+
-+	fmtinfo = mtk_cam_format_info_by_fourcc(pix_mp->pixelformat);
-+	calc_bpl_size_pix_mp(fmtinfo, pix_mp);
-+
-+	/* Constant format fields */
-+	pix_mp->colorspace = V4L2_COLORSPACE_SRGB;
-+	pix_mp->field = V4L2_FIELD_NONE;
-+	pix_mp->ycbcr_enc = V4L2_YCBCR_ENC_DEFAULT;
-+	pix_mp->quantization = V4L2_QUANTIZATION_DEFAULT;
-+	pix_mp->xfer_func = V4L2_XFER_FUNC_DEFAULT;
-+
-+	return 0;
-+}
-+
-+static int mtk_cam_vidioc_s_fmt(struct file *file, void *fh,
-+				struct v4l2_format *f)
-+{
-+	struct mtk_cam_dev *cam = video_drvdata(file);
-+	struct mtk_cam_video_device *vdev = file_to_mtk_cam_video_device(file);
-+	int ret;
-+
-+	if (vb2_is_busy(vdev->vdev.queue)) {
-+		dev_dbg(cam->dev, "%s: queue is busy\n", __func__);
-+		return -EBUSY;
-+	}
-+
-+	ret = mtk_cam_vidioc_try_fmt(file, fh, f);
-+	if (ret)
-+		return ret;
-+
-+	/* Configure to video device */
-+	vdev->format = f->fmt.pix_mp;
-+	vdev->fmtinfo =
-+		mtk_cam_format_info_by_fourcc(f->fmt.pix_mp.pixelformat);
-+
-+	return 0;
-+}
-+
-+static int mtk_cam_vidioc_enum_framesizes(struct file *file, void *priv,
-+					  struct v4l2_frmsizeenum *sizes)
-+{
-+	struct mtk_cam_video_device *vdev = file_to_mtk_cam_video_device(file);
-+
-+	if (sizes->index)
-+		return -EINVAL;
-+
-+	if (!mtk_cam_dev_find_fmt(vdev->desc, sizes->pixel_format))
-+		return -EINVAL;
-+
-+	sizes->type = vdev->desc->frmsizes->type;
-+	memcpy(&sizes->stepwise, &vdev->desc->frmsizes->stepwise,
-+	       sizeof(sizes->stepwise));
-+
-+	return 0;
-+}
-+
-+static const struct v4l2_ioctl_ops mtk_cam_v4l2_vcap_ioctl_ops = {
-+	.vidioc_querycap = mtk_cam_vidioc_querycap,
-+	.vidioc_enum_framesizes = mtk_cam_vidioc_enum_framesizes,
-+	.vidioc_enum_fmt_vid_cap = mtk_cam_vidioc_enum_fmt,
-+	.vidioc_g_fmt_vid_cap_mplane = mtk_cam_vidioc_g_fmt,
-+	.vidioc_s_fmt_vid_cap_mplane = mtk_cam_vidioc_s_fmt,
-+	.vidioc_try_fmt_vid_cap_mplane = mtk_cam_vidioc_try_fmt,
-+	.vidioc_reqbufs = vb2_ioctl_reqbufs,
-+	.vidioc_create_bufs = vb2_ioctl_create_bufs,
-+	.vidioc_prepare_buf = vb2_ioctl_prepare_buf,
-+	.vidioc_querybuf = vb2_ioctl_querybuf,
-+	.vidioc_qbuf = vb2_ioctl_qbuf,
-+	.vidioc_dqbuf = vb2_ioctl_dqbuf,
-+	.vidioc_streamon = vb2_ioctl_streamon,
-+	.vidioc_streamoff = vb2_ioctl_streamoff,
-+	.vidioc_expbuf = vb2_ioctl_expbuf,
-+	.vidioc_subscribe_event = v4l2_ctrl_subscribe_event,
-+	.vidioc_unsubscribe_event = v4l2_event_unsubscribe,
-+};
-+
-+static const struct v4l2_file_operations mtk_cam_v4l2_fops = {
-+	.unlocked_ioctl = video_ioctl2,
-+	.open = v4l2_fh_open,
-+	.release = vb2_fop_release,
-+	.poll = vb2_fop_poll,
-+	.mmap = vb2_fop_mmap,
-+#ifdef CONFIG_COMPAT
-+	.compat_ioctl32 = v4l2_compat_ioctl32,
-+#endif
-+};
-+
-+/* -----------------------------------------------------------------------------
-+ * Init & Cleanup
-+ */
-+
-+static const u32 stream_out_fmts[] = {
-+	/* The 1st entry is the default image format */
-+	V4L2_PIX_FMT_SBGGR8,
-+	V4L2_PIX_FMT_SGBRG8,
-+	V4L2_PIX_FMT_SGRBG8,
-+	V4L2_PIX_FMT_SRGGB8,
-+	V4L2_PIX_FMT_UYVY,
-+	V4L2_PIX_FMT_VYUY,
-+	V4L2_PIX_FMT_YUYV,
-+	V4L2_PIX_FMT_YVYU,
-+};
-+
-+static const struct mtk_cam_vdev_desc video_stream = {
-+	.name = "video stream",
-+	.cap = V4L2_CAP_VIDEO_CAPTURE_MPLANE,
-+	.buf_type = V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE,
-+	.link_flags = MEDIA_LNK_FL_IMMUTABLE | MEDIA_LNK_FL_ENABLED,
-+	.fmts = stream_out_fmts,
-+	.num_fmts = ARRAY_SIZE(stream_out_fmts),
-+	.def_width = 1920,
-+	.def_height = 1080,
-+	.ioctl_ops = &mtk_cam_v4l2_vcap_ioctl_ops,
-+	.frmsizes =
-+		&(struct v4l2_frmsizeenum){
-+			.index = 0,
-+			.type = V4L2_FRMSIZE_TYPE_CONTINUOUS,
-+			.stepwise = {
-+				.max_width = IMG_MAX_WIDTH,
-+				.min_width = IMG_MIN_WIDTH,
-+				.max_height = IMG_MAX_HEIGHT,
-+				.min_height = IMG_MIN_HEIGHT,
-+				.step_height = 1,
-+				.step_width = 1,
-+			},
-+		},
-+};
-+
-+int mtk_cam_video_register(struct mtk_cam_dev *cam)
-+{
-+	struct device *dev = cam->dev;
-+	struct mtk_cam_video_device *cam_vdev = &cam->vdev;
-+	struct video_device *vdev = &cam_vdev->vdev;
-+	struct vb2_queue *vbq = &cam_vdev->vbq;
-+	int ret;
-+
-+	vb2_dma_contig_set_max_seg_size(cam->dev, DMA_BIT_MASK(32));
-+
-+	cam_vdev->desc = &video_stream;
-+
-+	/* Initialize mtk_cam_video_device */
-+	mtk_cam_dev_load_default_fmt(cam);
-+
-+	cam->subdev_pads[MTK_CAM_CIO_PAD_VIDEO].flags = MEDIA_PAD_FL_SOURCE;
-+
-+	/* Initialize media entities */
-+	ret = media_entity_pads_init(&vdev->entity, 1, &cam_vdev->vdev_pad);
-+	if (ret) {
-+		dev_err(dev, "failed to initialize media pad:%d\n", ret);
-+		return ret;
-+	}
-+	cam_vdev->vdev_pad.flags = MEDIA_PAD_FL_SINK;
-+
-+	vbq->type = cam_vdev->desc->buf_type;
-+	vbq->io_modes = VB2_MMAP | VB2_DMABUF;
-+	vbq->dev = dev;
-+	vbq->ops = &mtk_cam_vb2_ops;
-+	vbq->mem_ops = &vb2_dma_contig_memops;
-+	vbq->buf_struct_size = sizeof(struct mtk_cam_dev_buffer);
-+	/*
-+	 * TODO: The hardware supports SOF interrupts, switch to a SOF
-+	 * timestamp source would give better accuracy, but first requires
-+	 * extending the V4L2 API to support it.
-+	 */
-+	vbq->timestamp_flags = V4L2_BUF_FLAG_TIMESTAMP_MONOTONIC
-+			     | V4L2_BUF_FLAG_TSTAMP_SRC_EOF;
-+
-+	/* No minimum buffers limitation */
-+	vbq->min_buffers_needed = 0;
-+	vbq->drv_priv = cam;
-+
-+	vbq->lock = &cam_vdev->vdev_lock;
-+	ret = vb2_queue_init(vbq);
-+	if (ret) {
-+		dev_err(dev, "failed to init. vb2 queue:%d\n", ret);
-+		goto fail_media_clean;
-+	}
-+
-+	/* Initialize vdev */
-+	snprintf(vdev->name, sizeof(vdev->name), "%s %s",
-+		 dev_name(dev), cam_vdev->desc->name);
-+
-+	/* Set cap/type/ioctl_ops of the video device */
-+	vdev->device_caps = cam_vdev->desc->cap | V4L2_CAP_STREAMING
-+			  | V4L2_CAP_IO_MC;
-+	vdev->ioctl_ops = cam_vdev->desc->ioctl_ops;
-+	vdev->fops = &mtk_cam_v4l2_fops;
-+	vdev->release = video_device_release_empty;
-+	vdev->lock = &cam_vdev->vdev_lock;
-+	vdev->v4l2_dev = cam->subdev.v4l2_dev;
-+	vdev->queue = &cam_vdev->vbq;
-+	vdev->vfl_dir = VFL_DIR_RX;
-+	vdev->entity.function = MEDIA_ENT_F_IO_V4L;
-+	vdev->entity.ops = NULL;
-+	video_set_drvdata(vdev, cam);
-+
-+	/* Initialize miscellaneous variables */
-+	mutex_init(&cam_vdev->vdev_lock);
-+	INIT_LIST_HEAD(&cam->buf_list);
-+
-+	ret = video_register_device(vdev, VFL_TYPE_VIDEO, -1);
-+	if (ret) {
-+		dev_err(dev, "failed to register vde:%d\n", ret);
-+		goto fail_vb2_rel;
-+	}
-+
-+	/* Create link between the video pad and the subdev pad. */
-+	ret = media_create_pad_link(&cam->subdev.entity,
-+				    MTK_CAM_CIO_PAD_VIDEO,
-+				    &vdev->entity, 0, cam_vdev->desc->link_flags);
-+
-+	if (ret)
-+		goto fail_vdev_ureg;
-+
-+	return 0;
-+
-+fail_vdev_ureg:
-+	video_unregister_device(vdev);
-+fail_vb2_rel:
-+	mutex_destroy(&cam_vdev->vdev_lock);
-+	vb2_queue_release(vbq);
-+fail_media_clean:
-+	media_entity_cleanup(&vdev->entity);
-+
-+	return ret;
-+}
-+
-+void mtk_cam_video_unregister(struct mtk_cam_video_device *vdev)
-+{
-+	video_unregister_device(&vdev->vdev);
-+	vb2_queue_release(&vdev->vbq);
-+	media_entity_cleanup(&vdev->vdev.entity);
-+	mutex_destroy(&vdev->vdev_lock);
-+	vb2_dma_contig_clear_max_seg_size(&vdev->vdev.dev);
-+}
+Also cc Hans and Jacopo.
+
+> 
+> The created audio device is named "/dev/audioX".
+> 
+> Signed-off-by: Shengjiu Wang <shengjiu.wang@nxp.com>
+> ---
+>  .../media/common/videobuf2/videobuf2-v4l2.c   |  4 ++
+>  drivers/media/v4l2-core/v4l2-dev.c            | 17 ++++++
+>  drivers/media/v4l2-core/v4l2-ioctl.c          | 52 +++++++++++++++++++
+>  include/media/v4l2-dev.h                      |  2 +
+>  include/media/v4l2-ioctl.h                    | 34 ++++++++++++
+>  include/uapi/linux/videodev2.h                | 19 +++++++
+>  6 files changed, 128 insertions(+)
+> 
+> diff --git a/drivers/media/common/videobuf2/videobuf2-v4l2.c b/drivers/media/common/videobuf2/videobuf2-v4l2.c
+> index c7a54d82a55e..12f2be2773a2 100644
+> --- a/drivers/media/common/videobuf2/videobuf2-v4l2.c
+> +++ b/drivers/media/common/videobuf2/videobuf2-v4l2.c
+> @@ -785,6 +785,10 @@ int vb2_create_bufs(struct vb2_queue *q, struct v4l2_create_buffers *create)
+>  	case V4L2_BUF_TYPE_META_OUTPUT:
+>  		requested_sizes[0] = f->fmt.meta.buffersize;
+>  		break;
+> +	case V4L2_BUF_TYPE_AUDIO_CAPTURE:
+> +	case V4L2_BUF_TYPE_AUDIO_OUTPUT:
+> +		requested_sizes[0] = f->fmt.audio.buffersize;
+> +		break;
+>  	default:
+>  		return -EINVAL;
+>  	}
+> diff --git a/drivers/media/v4l2-core/v4l2-dev.c b/drivers/media/v4l2-core/v4l2-dev.c
+> index f81279492682..67484f4c6eaf 100644
+> --- a/drivers/media/v4l2-core/v4l2-dev.c
+> +++ b/drivers/media/v4l2-core/v4l2-dev.c
+> @@ -553,6 +553,7 @@ static void determine_valid_ioctls(struct video_device *vdev)
+>  	bool is_tch = vdev->vfl_type == VFL_TYPE_TOUCH;
+>  	bool is_meta = vdev->vfl_type == VFL_TYPE_VIDEO &&
+>  		       (vdev->device_caps & meta_caps);
+> +	bool is_audio = vdev->vfl_type == VFL_TYPE_AUDIO;
+>  	bool is_rx = vdev->vfl_dir != VFL_DIR_TX;
+>  	bool is_tx = vdev->vfl_dir != VFL_DIR_RX;
+>  	bool is_io_mc = vdev->device_caps & V4L2_CAP_IO_MC;
+> @@ -664,6 +665,19 @@ static void determine_valid_ioctls(struct video_device *vdev)
+>  		SET_VALID_IOCTL(ops, VIDIOC_S_FMT, vidioc_s_fmt_meta_out);
+>  		SET_VALID_IOCTL(ops, VIDIOC_TRY_FMT, vidioc_try_fmt_meta_out);
+>  	}
+> +	if (is_audio && is_rx) {
+> +		/* audio capture specific ioctls */
+> +		SET_VALID_IOCTL(ops, VIDIOC_ENUM_FMT, vidioc_enum_fmt_audio_cap);
+> +		SET_VALID_IOCTL(ops, VIDIOC_G_FMT, vidioc_g_fmt_audio_cap);
+> +		SET_VALID_IOCTL(ops, VIDIOC_S_FMT, vidioc_s_fmt_audio_cap);
+> +		SET_VALID_IOCTL(ops, VIDIOC_TRY_FMT, vidioc_try_fmt_audio_cap);
+> +	} else if (is_audio && is_tx) {
+> +		/* audio output specific ioctls */
+> +		SET_VALID_IOCTL(ops, VIDIOC_ENUM_FMT, vidioc_enum_fmt_audio_out);
+> +		SET_VALID_IOCTL(ops, VIDIOC_G_FMT, vidioc_g_fmt_audio_out);
+> +		SET_VALID_IOCTL(ops, VIDIOC_S_FMT, vidioc_s_fmt_audio_out);
+> +		SET_VALID_IOCTL(ops, VIDIOC_TRY_FMT, vidioc_try_fmt_audio_out);
+> +	}
+>  	if (is_vbi) {
+>  		/* vbi specific ioctls */
+>  		if ((is_rx && (ops->vidioc_g_fmt_vbi_cap ||
+> @@ -927,6 +941,9 @@ int __video_register_device(struct video_device *vdev,
+>  	case VFL_TYPE_TOUCH:
+>  		name_base = "v4l-touch";
+>  		break;
+> +	case VFL_TYPE_AUDIO:
+> +		name_base = "audio";
+> +		break;
+>  	default:
+>  		pr_err("%s called with unknown type: %d\n",
+>  		       __func__, type);
+> diff --git a/drivers/media/v4l2-core/v4l2-ioctl.c b/drivers/media/v4l2-core/v4l2-ioctl.c
+> index a858acea6547..26bc4b0d8ef0 100644
+> --- a/drivers/media/v4l2-core/v4l2-ioctl.c
+> +++ b/drivers/media/v4l2-core/v4l2-ioctl.c
+> @@ -188,6 +188,8 @@ const char *v4l2_type_names[] = {
+>  	[V4L2_BUF_TYPE_SDR_OUTPUT]         = "sdr-out",
+>  	[V4L2_BUF_TYPE_META_CAPTURE]       = "meta-cap",
+>  	[V4L2_BUF_TYPE_META_OUTPUT]	   = "meta-out",
+> +	[V4L2_BUF_TYPE_AUDIO_CAPTURE]      = "audio-cap",
+> +	[V4L2_BUF_TYPE_AUDIO_OUTPUT]	   = "audio-out",
+>  };
+>  EXPORT_SYMBOL(v4l2_type_names);
+>  
+> @@ -276,6 +278,7 @@ static void v4l_print_format(const void *arg, bool write_only)
+>  	const struct v4l2_sliced_vbi_format *sliced;
+>  	const struct v4l2_window *win;
+>  	const struct v4l2_meta_format *meta;
+> +	const struct v4l2_audio_format *audio;
+>  	u32 pixelformat;
+>  	u32 planes;
+>  	unsigned i;
+> @@ -346,6 +349,12 @@ static void v4l_print_format(const void *arg, bool write_only)
+>  		pr_cont(", dataformat=%p4cc, buffersize=%u\n",
+>  			&pixelformat, meta->buffersize);
+>  		break;
+> +	case V4L2_BUF_TYPE_AUDIO_CAPTURE:
+> +	case V4L2_BUF_TYPE_AUDIO_OUTPUT:
+> +		audio = &p->fmt.audio;
+> +		pr_cont(", rate=%u, format=%u, channels=%u, buffersize=%u\n",
+> +			audio->rate, audio->format, audio->channels, audio->buffersize);
+> +		break;
+>  	}
+>  }
+>  
+> @@ -927,6 +936,7 @@ static int check_fmt(struct file *file, enum v4l2_buf_type type)
+>  	bool is_tch = vfd->vfl_type == VFL_TYPE_TOUCH;
+>  	bool is_meta = vfd->vfl_type == VFL_TYPE_VIDEO &&
+>  		       (vfd->device_caps & meta_caps);
+> +	bool is_audio = vfd->vfl_type == VFL_TYPE_AUDIO;
+>  	bool is_rx = vfd->vfl_dir != VFL_DIR_TX;
+>  	bool is_tx = vfd->vfl_dir != VFL_DIR_RX;
+>  
+> @@ -992,6 +1002,14 @@ static int check_fmt(struct file *file, enum v4l2_buf_type type)
+>  		if (is_meta && is_tx && ops->vidioc_g_fmt_meta_out)
+>  			return 0;
+>  		break;
+> +	case V4L2_BUF_TYPE_AUDIO_CAPTURE:
+> +		if (is_audio && is_rx && ops->vidioc_g_fmt_audio_cap)
+> +			return 0;
+> +		break;
+> +	case V4L2_BUF_TYPE_AUDIO_OUTPUT:
+> +		if (is_audio && is_tx && ops->vidioc_g_fmt_audio_out)
+> +			return 0;
+> +		break;
+>  	default:
+>  		break;
+>  	}
+> @@ -1592,6 +1610,16 @@ static int v4l_enum_fmt(const struct v4l2_ioctl_ops *ops,
+>  			break;
+>  		ret = ops->vidioc_enum_fmt_meta_out(file, fh, arg);
+>  		break;
+> +	case V4L2_BUF_TYPE_AUDIO_CAPTURE:
+> +		if (unlikely(!ops->vidioc_enum_fmt_audio_cap))
+> +			break;
+> +		ret = ops->vidioc_enum_fmt_audio_cap(file, fh, arg);
+> +		break;
+> +	case V4L2_BUF_TYPE_AUDIO_OUTPUT:
+> +		if (unlikely(!ops->vidioc_enum_fmt_audio_out))
+> +			break;
+> +		ret = ops->vidioc_enum_fmt_audio_out(file, fh, arg);
+> +		break;
+>  	}
+>  	if (ret == 0)
+>  		v4l_fill_fmtdesc(p);
+> @@ -1668,6 +1696,10 @@ static int v4l_g_fmt(const struct v4l2_ioctl_ops *ops,
+>  		return ops->vidioc_g_fmt_meta_cap(file, fh, arg);
+>  	case V4L2_BUF_TYPE_META_OUTPUT:
+>  		return ops->vidioc_g_fmt_meta_out(file, fh, arg);
+> +	case V4L2_BUF_TYPE_AUDIO_CAPTURE:
+> +		return ops->vidioc_g_fmt_audio_cap(file, fh, arg);
+> +	case V4L2_BUF_TYPE_AUDIO_OUTPUT:
+> +		return ops->vidioc_g_fmt_audio_out(file, fh, arg);
+>  	}
+>  	return -EINVAL;
+>  }
+> @@ -1779,6 +1811,16 @@ static int v4l_s_fmt(const struct v4l2_ioctl_ops *ops,
+>  			break;
+>  		memset_after(p, 0, fmt.meta);
+>  		return ops->vidioc_s_fmt_meta_out(file, fh, arg);
+> +	case V4L2_BUF_TYPE_AUDIO_CAPTURE:
+> +		if (unlikely(!ops->vidioc_s_fmt_audio_cap))
+> +			break;
+> +		memset_after(p, 0, fmt.audio);
+> +		return ops->vidioc_s_fmt_audio_cap(file, fh, arg);
+> +	case V4L2_BUF_TYPE_AUDIO_OUTPUT:
+> +		if (unlikely(!ops->vidioc_s_fmt_audio_out))
+> +			break;
+> +		memset_after(p, 0, fmt.audio);
+> +		return ops->vidioc_s_fmt_audio_out(file, fh, arg);
+>  	}
+>  	return -EINVAL;
+>  }
+> @@ -1887,6 +1929,16 @@ static int v4l_try_fmt(const struct v4l2_ioctl_ops *ops,
+>  			break;
+>  		memset_after(p, 0, fmt.meta);
+>  		return ops->vidioc_try_fmt_meta_out(file, fh, arg);
+> +	case V4L2_BUF_TYPE_AUDIO_CAPTURE:
+> +		if (unlikely(!ops->vidioc_try_fmt_audio_cap))
+> +			break;
+> +		memset_after(p, 0, fmt.audio);
+> +		return ops->vidioc_try_fmt_audio_cap(file, fh, arg);
+> +	case V4L2_BUF_TYPE_AUDIO_OUTPUT:
+> +		if (unlikely(!ops->vidioc_try_fmt_audio_out))
+> +			break;
+> +		memset_after(p, 0, fmt.audio);
+> +		return ops->vidioc_try_fmt_audio_out(file, fh, arg);
+>  	}
+>  	return -EINVAL;
+>  }
+> diff --git a/include/media/v4l2-dev.h b/include/media/v4l2-dev.h
+> index e0a13505f88d..0924e6d1dab1 100644
+> --- a/include/media/v4l2-dev.h
+> +++ b/include/media/v4l2-dev.h
+> @@ -30,6 +30,7 @@
+>   * @VFL_TYPE_SUBDEV:	for V4L2 subdevices
+>   * @VFL_TYPE_SDR:	for Software Defined Radio tuners
+>   * @VFL_TYPE_TOUCH:	for touch sensors
+> + * @VFL_TYPE_AUDIO:	for audio input/output devices
+>   * @VFL_TYPE_MAX:	number of VFL types, must always be last in the enum
+>   */
+>  enum vfl_devnode_type {
+> @@ -39,6 +40,7 @@ enum vfl_devnode_type {
+>  	VFL_TYPE_SUBDEV,
+>  	VFL_TYPE_SDR,
+>  	VFL_TYPE_TOUCH,
+> +	VFL_TYPE_AUDIO,
+>  	VFL_TYPE_MAX /* Shall be the last one */
+>  };
+>  
+> diff --git a/include/media/v4l2-ioctl.h b/include/media/v4l2-ioctl.h
+> index edb733f21604..f840cf740ce1 100644
+> --- a/include/media/v4l2-ioctl.h
+> +++ b/include/media/v4l2-ioctl.h
+> @@ -45,6 +45,12 @@ struct v4l2_fh;
+>   * @vidioc_enum_fmt_meta_out: pointer to the function that implements
+>   *	:ref:`VIDIOC_ENUM_FMT <vidioc_enum_fmt>` ioctl logic
+>   *	for metadata output
+> + * @vidioc_enum_fmt_audio_cap: pointer to the function that implements
+> + *	:ref:`VIDIOC_ENUM_FMT <vidioc_enum_fmt>` ioctl logic
+> + *	for audio capture
+> + * @vidioc_enum_fmt_audio_out: pointer to the function that implements
+> + *	:ref:`VIDIOC_ENUM_FMT <vidioc_enum_fmt>` ioctl logic
+> + *	for audio output
+>   * @vidioc_g_fmt_vid_cap: pointer to the function that implements
+>   *	:ref:`VIDIOC_G_FMT <vidioc_g_fmt>` ioctl logic for video capture
+>   *	in single plane mode
+> @@ -79,6 +85,10 @@ struct v4l2_fh;
+>   *	:ref:`VIDIOC_G_FMT <vidioc_g_fmt>` ioctl logic for metadata capture
+>   * @vidioc_g_fmt_meta_out: pointer to the function that implements
+>   *	:ref:`VIDIOC_G_FMT <vidioc_g_fmt>` ioctl logic for metadata output
+> + * @vidioc_g_fmt_audio_cap: pointer to the function that implements
+> + *	:ref:`VIDIOC_G_FMT <vidioc_g_fmt>` ioctl logic for audio capture
+> + * @vidioc_g_fmt_audio_out: pointer to the function that implements
+> + *	:ref:`VIDIOC_G_FMT <vidioc_g_fmt>` ioctl logic for audio output
+>   * @vidioc_s_fmt_vid_cap: pointer to the function that implements
+>   *	:ref:`VIDIOC_S_FMT <vidioc_g_fmt>` ioctl logic for video capture
+>   *	in single plane mode
+> @@ -113,6 +123,10 @@ struct v4l2_fh;
+>   *	:ref:`VIDIOC_S_FMT <vidioc_g_fmt>` ioctl logic for metadata capture
+>   * @vidioc_s_fmt_meta_out: pointer to the function that implements
+>   *	:ref:`VIDIOC_S_FMT <vidioc_g_fmt>` ioctl logic for metadata output
+> + * @vidioc_s_fmt_audio_cap: pointer to the function that implements
+> + *	:ref:`VIDIOC_S_FMT <vidioc_g_fmt>` ioctl logic for audio capture
+> + * @vidioc_s_fmt_audio_out: pointer to the function that implements
+> + *	:ref:`VIDIOC_S_FMT <vidioc_g_fmt>` ioctl logic for audio output
+>   * @vidioc_try_fmt_vid_cap: pointer to the function that implements
+>   *	:ref:`VIDIOC_TRY_FMT <vidioc_g_fmt>` ioctl logic for video capture
+>   *	in single plane mode
+> @@ -149,6 +163,10 @@ struct v4l2_fh;
+>   *	:ref:`VIDIOC_TRY_FMT <vidioc_g_fmt>` ioctl logic for metadata capture
+>   * @vidioc_try_fmt_meta_out: pointer to the function that implements
+>   *	:ref:`VIDIOC_TRY_FMT <vidioc_g_fmt>` ioctl logic for metadata output
+> + * @vidioc_try_fmt_audio_cap: pointer to the function that implements
+> + *	:ref:`VIDIOC_TRY_FMT <vidioc_g_fmt>` ioctl logic for audio capture
+> + * @vidioc_try_fmt_audio_out: pointer to the function that implements
+> + *	:ref:`VIDIOC_TRY_FMT <vidioc_g_fmt>` ioctl logic for audio output
+>   * @vidioc_reqbufs: pointer to the function that implements
+>   *	:ref:`VIDIOC_REQBUFS <vidioc_reqbufs>` ioctl
+>   * @vidioc_querybuf: pointer to the function that implements
+> @@ -315,6 +333,10 @@ struct v4l2_ioctl_ops {
+>  					struct v4l2_fmtdesc *f);
+>  	int (*vidioc_enum_fmt_meta_out)(struct file *file, void *fh,
+>  					struct v4l2_fmtdesc *f);
+> +	int (*vidioc_enum_fmt_audio_cap)(struct file *file, void *fh,
+> +					 struct v4l2_fmtdesc *f);
+> +	int (*vidioc_enum_fmt_audio_out)(struct file *file, void *fh,
+> +					 struct v4l2_fmtdesc *f);
+>  
+>  	/* VIDIOC_G_FMT handlers */
+>  	int (*vidioc_g_fmt_vid_cap)(struct file *file, void *fh,
+> @@ -345,6 +367,10 @@ struct v4l2_ioctl_ops {
+>  				     struct v4l2_format *f);
+>  	int (*vidioc_g_fmt_meta_out)(struct file *file, void *fh,
+>  				     struct v4l2_format *f);
+> +	int (*vidioc_g_fmt_audio_cap)(struct file *file, void *fh,
+> +				      struct v4l2_format *f);
+> +	int (*vidioc_g_fmt_audio_out)(struct file *file, void *fh,
+> +				      struct v4l2_format *f);
+>  
+>  	/* VIDIOC_S_FMT handlers */
+>  	int (*vidioc_s_fmt_vid_cap)(struct file *file, void *fh,
+> @@ -375,6 +401,10 @@ struct v4l2_ioctl_ops {
+>  				     struct v4l2_format *f);
+>  	int (*vidioc_s_fmt_meta_out)(struct file *file, void *fh,
+>  				     struct v4l2_format *f);
+> +	int (*vidioc_s_fmt_audio_cap)(struct file *file, void *fh,
+> +				      struct v4l2_format *f);
+> +	int (*vidioc_s_fmt_audio_out)(struct file *file, void *fh,
+> +				      struct v4l2_format *f);
+>  
+>  	/* VIDIOC_TRY_FMT handlers */
+>  	int (*vidioc_try_fmt_vid_cap)(struct file *file, void *fh,
+> @@ -405,6 +435,10 @@ struct v4l2_ioctl_ops {
+>  				       struct v4l2_format *f);
+>  	int (*vidioc_try_fmt_meta_out)(struct file *file, void *fh,
+>  				       struct v4l2_format *f);
+> +	int (*vidioc_try_fmt_audio_cap)(struct file *file, void *fh,
+> +					struct v4l2_format *f);
+> +	int (*vidioc_try_fmt_audio_out)(struct file *file, void *fh,
+> +					struct v4l2_format *f);
+>  
+>  	/* Buffer handlers */
+>  	int (*vidioc_reqbufs)(struct file *file, void *fh,
+> diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
+> index aee75eb9e686..a7af28f4c8c3 100644
+> --- a/include/uapi/linux/videodev2.h
+> +++ b/include/uapi/linux/videodev2.h
+> @@ -153,6 +153,8 @@ enum v4l2_buf_type {
+>  	V4L2_BUF_TYPE_SDR_OUTPUT           = 12,
+>  	V4L2_BUF_TYPE_META_CAPTURE         = 13,
+>  	V4L2_BUF_TYPE_META_OUTPUT	   = 14,
+> +	V4L2_BUF_TYPE_AUDIO_CAPTURE        = 15,
+> +	V4L2_BUF_TYPE_AUDIO_OUTPUT         = 16,
+>  	/* Deprecated, do not use */
+>  	V4L2_BUF_TYPE_PRIVATE              = 0x80,
+>  };
+> @@ -169,6 +171,7 @@ enum v4l2_buf_type {
+>  	 || (type) == V4L2_BUF_TYPE_VBI_OUTPUT			\
+>  	 || (type) == V4L2_BUF_TYPE_SLICED_VBI_OUTPUT		\
+>  	 || (type) == V4L2_BUF_TYPE_SDR_OUTPUT			\
+> +	 || (type) == V4L2_BUF_TYPE_AUDIO_OUTPUT		\
+>  	 || (type) == V4L2_BUF_TYPE_META_OUTPUT)
+>  
+>  #define V4L2_TYPE_IS_CAPTURE(type) (!V4L2_TYPE_IS_OUTPUT(type))
+> @@ -2404,6 +2407,20 @@ struct v4l2_meta_format {
+>  	__u32				buffersize;
+>  } __attribute__ ((packed));
+>  
+> +/**
+> + * struct v4l2_audio_format - audio data format definition
+> + * @rate:		sample rate
+> + * @format:		sample format
+> + * @channels:		channel numbers
+> + * @buffersize:		maximum size in bytes required for data
+> + */
+> +struct v4l2_audio_format {
+> +	__u32				rate;
+> +	__u32				format;
+> +	__u32				channels;
+> +	__u32				buffersize;
+> +} __attribute__ ((packed));
+> +
+>  /**
+>   * struct v4l2_format - stream data format
+>   * @type:	enum v4l2_buf_type; type of the data stream
+> @@ -2412,6 +2429,7 @@ struct v4l2_meta_format {
+>   * @win:	definition of an overlaid image
+>   * @vbi:	raw VBI capture or output parameters
+>   * @sliced:	sliced VBI capture or output parameters
+> + * @audio:	definition of an audio format
+>   * @raw_data:	placeholder for future extensions and custom formats
+>   * @fmt:	union of @pix, @pix_mp, @win, @vbi, @sliced, @sdr, @meta
+>   *		and @raw_data
+> @@ -2426,6 +2444,7 @@ struct v4l2_format {
+>  		struct v4l2_sliced_vbi_format	sliced;  /* V4L2_BUF_TYPE_SLICED_VBI_CAPTURE */
+>  		struct v4l2_sdr_format		sdr;     /* V4L2_BUF_TYPE_SDR_CAPTURE */
+>  		struct v4l2_meta_format		meta;    /* V4L2_BUF_TYPE_META_CAPTURE */
+> +		struct v4l2_audio_format	audio;   /* V4L2_BUF_TYPE_AUDIO_CAPTURE */
+>  		__u8	raw_data[200];                   /* user-defined */
+>  	} fmt;
+>  };
+> -- 
+> 2.34.1
+> 
+
 -- 
-2.41.0
-
+Sakari Ailus
