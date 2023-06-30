@@ -2,43 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE3B8743966
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 12:33:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E78A743954
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 12:27:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231766AbjF3Kdh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 06:33:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34970 "EHLO
+        id S232152AbjF3K1w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Jun 2023 06:27:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231634AbjF3Kdd (ORCPT
+        with ESMTP id S229968AbjF3K1t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 06:33:33 -0400
-X-Greylist: delayed 549 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 30 Jun 2023 03:33:32 PDT
-Received: from out-49.mta1.migadu.com (out-49.mta1.migadu.com [IPv6:2001:41d0:203:375::31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 569F8359E
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 03:33:32 -0700 (PDT)
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1688120662;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=8Qdp9pUoNDY5Mvuaf7+DmACBXhNJIeFau8zbx4GIwY4=;
-        b=i/whvionwp7XeBI50BDtNvMp+ngKCUEzRxZds9j4ahAqhJmK6r1FRei7sRHniau8/OIylZ
-        vkYcn7T9RIFYd2FTAJqNJPdp94Cw0Lh9dxWuAgFxtU0saOFKiEWU6uaZLWtLzP7g28/nL7
-        Tzv1xubl9tHNvhORMxE04c8sI/Lclpo=
-From:   Sui Jingfeng <sui.jingfeng@linux.dev>
-To:     Bjorn Helgaas <bhelgaas@google.com>
-Cc:     linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Sui Jingfeng <suijingfeng@loongson.cn>
-Subject: [PATCH 2/2] PCI/VGA: drop the inline of vga_update_device_decodes() function
-Date:   Fri, 30 Jun 2023 18:24:12 +0800
-Message-Id: <20230630102412.134977-1-sui.jingfeng@linux.dev>
+        Fri, 30 Jun 2023 06:27:49 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C95A2EE;
+        Fri, 30 Jun 2023 03:27:48 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 67939616F7;
+        Fri, 30 Jun 2023 10:27:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 52DCEC433C0;
+        Fri, 30 Jun 2023 10:27:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688120867;
+        bh=fqgWG9xEz9LQRlu2zsrFniOCeXMiZg/S9PLfSW2fGh0=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=gK9Sul1y7wSUOD//OnFlTmuL1Z12y07fplacQhMdrwiwnwCMIxcu2bNI2szihZ9Ni
+         cXghbtAgxsYhVRwvGAhzCt4Hnf933TTtEI0Xn1vFmnrigwoP+HQzrJ3E1lZufSmY2j
+         3aZBmvhyZzCmCH7Ynw8BkMs+AYcyR5fMov0l6Smh4vhZcjnDmAk8bjtapJ4rMv2hrg
+         zj6PGIR02SNSGhAAK+8Hn84AYsJ3HPevOF761Q/OHOmnrC4xQEHVpG896laIGsneJu
+         EMXyKzsfXz4jxlcGynInxZWO2HLGSt+T6fIeUtM4IIqXf7ed8R3560m7h0s39KwTnB
+         8nQX/CfnmoBvw==
+From:   =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
+To:     Alexey Dobriyan <adobriyan@gmail.com>
+Cc:     Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
+        =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@rivosinc.com>,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org,
+        Anders Roxell <anders.roxell@linaro.org>
+Subject: Re: [PATCH 2/2] selftests/proc: Do not build x86-64 tests on
+ non-x86-64 builds
+In-Reply-To: <fd61fd96-f06f-4a2d-8707-0e1e395c9e51@p183>
+References: <20230629162301.1234157-1-bjorn@kernel.org>
+ <20230629162301.1234157-3-bjorn@kernel.org>
+ <fd61fd96-f06f-4a2d-8707-0e1e395c9e51@p183>
+Date:   Fri, 30 Jun 2023 12:27:44 +0200
+Message-ID: <871qhttfbz.fsf@all.your.base.are.belong.to.us>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -46,53 +61,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sui Jingfeng <suijingfeng@loongson.cn>
+Alexey Dobriyan <adobriyan@gmail.com> writes:
 
-The vga_update_device_decodes() is NOT a trivial function, nor performance
-critical. So drop the inline. Also keep the parameter and argument
-consistent. The second argument should declared as 'unsigned int' type.
+> On Thu, Jun 29, 2023 at 06:23:00PM +0200, Bj=C3=B6rn T=C3=B6pel wrote:
+>> From: Bj=C3=B6rn T=C3=B6pel <bjorn@rivosinc.com>
+>>=20
+>> The proc-empty-vm test is x86-64 only. Remove that test from
+>> non-x86-64 builds.
+>>=20
+>> Signed-off-by: Bj=C3=B6rn T=C3=B6pel <bjorn@rivosinc.com>
+>
+> What's the address space size on risc-v?
 
-Signed-off-by: Sui Jingfeng <suijingfeng@loongson.cn>
----
- drivers/pci/vgaarb.c | 20 ++++++++++----------
- 1 file changed, 10 insertions(+), 10 deletions(-)
+Different sizes are supported, 39b, 48b, and 57b:
+Documentation/riscv/vm-layout.rst
 
-diff --git a/drivers/pci/vgaarb.c b/drivers/pci/vgaarb.c
-index cbd06bbf9dd7..17bd1268c36a 100644
---- a/drivers/pci/vgaarb.c
-+++ b/drivers/pci/vgaarb.c
-@@ -877,21 +877,21 @@ static bool vga_arbiter_del_pci_device(struct pci_dev *pdev)
- }
- 
- /* This is called with the lock */
--static inline void vga_update_device_decodes(struct vga_device *vgadev,
--					     int new_decodes)
-+static void vga_update_device_decodes(struct vga_device *vgadev,
-+				      unsigned int new_decodes)
- {
- 	struct device *dev = &vgadev->pdev->dev;
--	int old_decodes, decodes_removed, decodes_unlocked;
-+	unsigned int old_decodes = vgadev->decodes;
-+	unsigned int decodes_removed = ~new_decodes & old_decodes;
-+	unsigned int decodes_unlocked = vgadev->locks & decodes_removed;
- 
--	old_decodes = vgadev->decodes;
--	decodes_removed = ~new_decodes & old_decodes;
--	decodes_unlocked = vgadev->locks & decodes_removed;
- 	vgadev->decodes = new_decodes;
- 
--	vgaarb_info(dev, "changed VGA decodes: olddecodes=%s,decodes=%s:owns=%s\n",
--		vga_iostate_to_str(old_decodes),
--		vga_iostate_to_str(vgadev->decodes),
--		vga_iostate_to_str(vgadev->owns));
-+	vgaarb_info(dev,
-+		    "VGA decodes changed: olddecodes=%s,decodes=%s:owns=%s\n",
-+		    vga_iostate_to_str(old_decodes),
-+		    vga_iostate_to_str(vgadev->decodes),
-+		    vga_iostate_to_str(vgadev->owns));
- 
- 	/* If we removed locked decodes, lock count goes to zero, and release */
- 	if (decodes_unlocked) {
--- 
-2.25.1
-
+Did you have anything particular in mind?
