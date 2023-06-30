@@ -2,113 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DA7B743D2A
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 16:06:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 15C17743D31
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 16:08:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232351AbjF3OGb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 10:06:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60716 "EHLO
+        id S232521AbjF3OIy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Jun 2023 10:08:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230525AbjF3OG3 (ORCPT
+        with ESMTP id S232466AbjF3OIw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 10:06:29 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.65.254])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79BD8297C;
-        Fri, 30 Jun 2023 07:06:24 -0700 (PDT)
-X-QQ-mid: bizesmtp88t1688133972tps58rre
-Received: from linux-lab-host.localdomain ( [119.123.131.49])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Fri, 30 Jun 2023 22:06:10 +0800 (CST)
-X-QQ-SSF: 01200000000000D0W000000A0000000
-X-QQ-FEAT: V4JOsym0FHqCqJmQlnD2l8SkfrQEZVY9NptJ2TcjxV7sRXyUtJ9Enl2xfdhz+
-        0hGa/4YyEZzoY3duK31fYRejq1j4LZFvWf1DqoISA69EGDQRVdblDk3TohwH3ZoohdSnJMe
-        VMX3dmbDHRx9+XqnvHioN26Y50xRgoaBwNYb329ofovzfRhsJ3Cp12RSGLAPaxOdrnZGcHr
-        6xE21FP5G/B8jKIHQ3rT4FMD1TFpQW8E8JLvyCBBtrFwVt+J9U2LCvzMGbed+ds9hEjMXqu
-        /uyIperG1ls4ZPuNc/JUG7A6zZ9GU1Agyr+gg1+1BapqyvccpN3Nn3cjdAmRT/BpnbQcmp2
-        jVPIEQK1GqxPOk/AxWzghg52cCIg0BKxbn2M8isj8sRMU2eSWbQYYyzn4RORAw6oAEx8Clh
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 15545205547833323079
-From:   Zhangjin Wu <falcon@tinylab.org>
-To:     linux@weissschuh.net
-Cc:     arnd@arndb.de, falcon@tinylab.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        shuah@kernel.org, w@1wt.eu
-Subject: [PATCH 0/2] proc: proc_setattr for /proc/$PID/net
-Date:   Fri, 30 Jun 2023 22:06:09 +0800
-Message-Id: <20230630140609.263790-1-falcon@tinylab.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230624-proc-net-setattr-v1-0-73176812adee@weissschuh.net>
-References: <20230624-proc-net-setattr-v1-0-73176812adee@weissschuh.net>
+        Fri, 30 Jun 2023 10:08:52 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EC922680;
+        Fri, 30 Jun 2023 07:08:50 -0700 (PDT)
+X-UUID: 9fff7ef4174f11eeb20a276fd37b9834-20230630
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=rqt1KJ+yqUVKyHKhni/Ik7xfINlFW2iSreRBLnxj6hk=;
+        b=h2+eUDdLfY/u020X9axOqrHp4VLagIt66tjctDhKYjRWMn1/wgjX3yKEUCioa2wuVWBukb5yToOqQpooLMnHJ9tPc+lpgpBFDV4nNR/pBOZRe7s/CeLXhOuJV4LHEtlpknqzmq+WNvaMnFodDY5V9RpZt7LcUyK64+GQZz6YSOY=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.27,REQID:dec8c3af-e94e-4ef8-8136-a65e9829c020,IP:0,U
+        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+        release,TS:0
+X-CID-META: VersionHash:01c9525,CLOUDID:d7746c0d-26a8-467f-b838-f99719a9c083,B
+        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO
+X-CID-BVR: 0
+X-CID-BAS: 0,_,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR
+X-UUID: 9fff7ef4174f11eeb20a276fd37b9834-20230630
+Received: from mtkmbs11n2.mediatek.inc [(172.21.101.187)] by mailgw02.mediatek.com
+        (envelope-from <powen.kao@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 975202326; Fri, 30 Jun 2023 22:08:44 +0800
+Received: from mtkmbs13n1.mediatek.inc (172.21.101.193) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.26; Fri, 30 Jun 2023 22:08:43 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
+ mtkmbs13n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.1118.26 via Frontend Transport; Fri, 30 Jun 2023 22:08:43 +0800
+From:   Po-Wen Kao <powen.kao@mediatek.com>
+To:     <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+CC:     <wsd_upstream@mediatek.com>, <peter.wang@mediatek.com>,
+        <stanley.chu@mediatek.com>, <powen.kao@mediatek.com>,
+        <alice.chao@mediatek.com>, <naomi.chu@mediatek.com>,
+        <chun-hung.wu@mediatek.com>, <cc.chou@mediatek.com>,
+        <eddie.huang@mediatek.com>
+Subject: [PATCH v4 0/2] Add MCQ support for MTK platform
+Date:   Fri, 30 Jun 2023 22:06:20 +0800
+Message-ID: <20230630140624.21739-1-powen.kao@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrgz:qybglogicsvrgz5a-1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNPARSEABLE_RELAY,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Thomas
+v3 -> v4
+Address AngeloGioacchino's comments.
 
-Just applied your patchset on v6.4, and then:
+v2 -> v3
+- Drop SQ to CQ mapping vops introduced in v2
+- Refactor commit message
+- Update export symbols
 
-  - revert the 1st patch: 'selftests/nolibc: drop test chmod_net' manually
+v1 -> v2
+- Introduce MCQ SQ to CQ mapping vops and provide MTK implementation.
+- Update export symbol patch
 
-  - do the 'run' test of nolibc on arm/vexpress-a9
+v1
+- Separated from topic "[PATCH v4 0/5] Several UFS MCQ Code Changes".
+  Here are some changes since last upload
+  - Store irq in per host array
+  - Symbol rename
+  - Use ufshcd_mcq_poll_cqe_lock() instead of ufshcd_mcq_poll_cqe_nolock()
+  - Handle invalid irq dts property
+  - Remove ufshcd_disable_intr(hba, MCQ_CQ_EVENT_STATUS) in MCQ mode.
+    This will become host quirk later.
 
-The 'chmod_net' test of tools/testing/selftests/nolibc/nolibc-test.c
-really failed as expected (and therefore, should be removed):
+Po-Wen Kao (2):
+  scsi: ufs: core: Export symbols for MTK driver module
+  scsi: ufs: ufs-mediatek: Add MCQ support for MTK platform
 
-    11 chdir_root = 0                                                [OK]
-    12 chdir_dot = 0                                                 [OK]
-    13 chdir_blah = -1 ENOENT                                        [OK]
-    14 chmod_net = -1 EPERM                                         [FAIL]
-    15 chmod_self = -1 EPERM                                         [OK]
-    16 chmod_tmpdir = 0                                              [OK]
-    17 chown_self = -1 EPERM                                         [OK]
+ drivers/ufs/core/ufs-mcq.c      |   3 +
+ drivers/ufs/host/ufs-mediatek.c | 168 +++++++++++++++++++++++++++++++-
+ drivers/ufs/host/ufs-mediatek.h |  34 +++++++
+ include/ufs/ufshcd.h            |   3 +
+ 4 files changed, 206 insertions(+), 2 deletions(-)
 
-So, If this test result is enough for this patch, here is my:
+--
+2.18.0
 
-Tested-by: Zhangjin Wu <falcon@tinylab.org>
-
-Best regards,
-Zhangjin
-
-> /proc/$PID/net currently allows the setting of file attributes,
-> in contrast to other /proc/$PID/ files and directories.
-> 
-> This would break the nolibc testsuite so the first patch in the series
-> removes the offending testcase.
-> The "fix" for nolibc-test is intentionally kept trivial as the series
-> will most likely go through the filesystem tree and if conflicts arise,
-> it is obvious on how to resolve them.
-> 
-> Technically this can lead to breakage of nolibc-test if an old
-> nolibc-test is used with a newer kernel containing the fix.
-> 
-> Note:
-> 
-> Except for /proc itself this is the only "struct inode_operations" in
-> fs/proc/ that is missing an implementation of setattr().
-> 
-> Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
-> ---
-> Thomas Weißschuh (2):
->       selftests/nolibc: drop test chmod_net
->       proc: use generic setattr() for /proc/$PID/net
-> 
->  fs/proc/proc_net.c                           | 1 +
->  tools/testing/selftests/nolibc/nolibc-test.c | 1 -
->  2 files changed, 1 insertion(+), 1 deletion(-)
-> ---
-> base-commit: a92b7d26c743b9dc06d520f863d624e94978a1d9
-> change-id: 20230624-proc-net-setattr-8f0a6b8eb2f5
-> 
-> Best regards,
-> -- 
-> Thomas Weißschuh <linux@weissschuh.net>
