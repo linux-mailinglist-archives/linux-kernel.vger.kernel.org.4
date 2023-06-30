@@ -2,104 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45A7E743531
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 08:39:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC161743540
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 08:46:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229578AbjF3Gjr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 02:39:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37412 "EHLO
+        id S231593AbjF3Gqs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Jun 2023 02:46:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230410AbjF3Gjo (ORCPT
+        with ESMTP id S229578AbjF3Gqp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 02:39:44 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8D0A1FD7;
-        Thu, 29 Jun 2023 23:39:43 -0700 (PDT)
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35U6AqvS027983;
-        Fri, 30 Jun 2023 06:39:22 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=TSfRHAww6esW5IXcPBRSVAEqhmtQ2ujUpdB0plvGKtg=;
- b=IziP2UdXu2EfVD88x7pQsanDDd3nvbdS+nWT+42dprso8i3EVo4Tz3COMbcRiYz2aiZ/
- 0p1x72ChGeBEvPin1YZ/nUz/W4/BAHTJf3CX0ed2VNxunoprolIfc7mngofatsG3Lng8
- xRxp+GGhrobuPm2B3AYQZOhzL0ndo5kbkvPTBjFrHmrjq7dpmTymzQJV3vC6fXpgKcQC
- 0yOTvm9Xb3yDiKIqv0MAUXbGaglUVg+3MTLFDZKjVvdEhWTQCj07Lcs88AMkEi9dXGEn
- QxJBvkDgcu2br9F2ap2sqR9hK3zaEUctqJJNa9weFBNyq4GDwTkWCLc+K0NkBn0YtFo3 yQ== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rh7aetbbn-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 30 Jun 2023 06:39:22 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35U6dLkv025992
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 30 Jun 2023 06:39:21 GMT
-Received: from [10.253.74.51] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.7; Thu, 29 Jun
- 2023 23:39:19 -0700
-Message-ID: <b735b442-8818-c66e-5498-9faa2e4984f2@quicinc.com>
-Date:   Fri, 30 Jun 2023 14:39:06 +0800
+        Fri, 30 Jun 2023 02:46:45 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12274E5B;
+        Thu, 29 Jun 2023 23:46:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1688107604; x=1719643604;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=48q1NTvqt0qgKBQfVueuQcWYPjiExBBEJFG3i8T9p1k=;
+  b=DuSEvhx/RLrQ2F0ptDXl1+IDZOBlaXVOcXyld+f+xbbHcf56553UJegP
+   XkartyRsWGSYVx0Vb4rsq+K0PBNPu3C9axQ+3xPc8xkdlRHVMNCxfQaOl
+   OEVpcFxqAZVea3FLfhtvpYgeDbD/D1tygknJ1gZhEySsjZVPDLgHQHuZk
+   Mr+5IfXkkmXCDj4H2uCBUBiSVFf+nYb3E2BanOMu8eckRrg0aaWTzoLpz
+   2Xhv0QUeXowWSrcks8G75Ub2JbQj4N6putknhiV78cxJml0wo87C5jvGf
+   BkYom5/Bq79A9VikqyqXH0TTzc/NEC+LpNxD58GkeDnfciz+pUMHSNZAy
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10756"; a="365814573"
+X-IronPort-AV: E=Sophos;i="6.01,170,1684825200"; 
+   d="scan'208";a="365814573"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jun 2023 23:45:22 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10756"; a="717686999"
+X-IronPort-AV: E=Sophos;i="6.01,169,1684825200"; 
+   d="scan'208";a="717686999"
+Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 29 Jun 2023 23:45:16 -0700
+Received: from kbuild by 783282924a45 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1qF7sa-000EmB-0I;
+        Fri, 30 Jun 2023 06:45:16 +0000
+Date:   Fri, 30 Jun 2023 14:44:26 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     jeffxu@chromium.org, skhan@linuxfoundation.org,
+        keescook@chromium.org
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        akpm@linux-foundation.org, dmitry.torokhov@gmail.com,
+        dverkamp@chromium.org, asmadeus@codewreck.org, hughd@google.com,
+        jeffxu@google.com, jorgelo@chromium.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-mm@kvack.org, jannh@google.com,
+        linux-hardening@vger.kernel.org,
+        linux-security-module@vger.kernel.org
+Subject: Re: [PATCH v1 1/2] mm/memfd: sysctl: fix
+ MEMFD_NOEXEC_SCOPE_NOEXEC_ENFORCED
+Message-ID: <202306301413.VtwSCI1F-lkp@intel.com>
+References: <20230630031721.623955-2-jeffxu@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH 1/3] net: phy: at803x: support qca8081 1G chip type
-To:     Andrew Lunn <andrew@lunn.ch>
-CC:     <hkallweit1@gmail.com>, <davem@davemloft.net>,
-        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
-        <linux@armlinux.org.uk>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20230629034846.30600-1-quic_luoj@quicinc.com>
- <20230629034846.30600-2-quic_luoj@quicinc.com>
- <48e41540-6857-4f61-bcc5-4d0a6dbb9ec1@lunn.ch>
-Content-Language: en-US
-From:   Jie Luo <quic_luoj@quicinc.com>
-In-Reply-To: <48e41540-6857-4f61-bcc5-4d0a6dbb9ec1@lunn.ch>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: FFxeLG7G2LaAcvB6U5BfG3KUuWBQ61Zm
-X-Proofpoint-ORIG-GUID: FFxeLG7G2LaAcvB6U5BfG3KUuWBQ61Zm
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-06-30_03,2023-06-27_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 mlxlogscore=417
- malwarescore=0 phishscore=0 bulkscore=0 lowpriorityscore=0 spamscore=0
- clxscore=1015 suspectscore=0 priorityscore=1501 impostorscore=0 mlxscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2305260000
- definitions=main-2306300056
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230630031721.623955-2-jeffxu@google.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on akpm-mm/mm-everything]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/jeffxu-chromium-org/mm-memfd-sysctl-fix-MEMFD_NOEXEC_SCOPE_NOEXEC_ENFORCED/20230630-111827
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+patch link:    https://lore.kernel.org/r/20230630031721.623955-2-jeffxu%40google.com
+patch subject: [PATCH v1 1/2] mm/memfd: sysctl: fix MEMFD_NOEXEC_SCOPE_NOEXEC_ENFORCED
+config: riscv-randconfig-r042-20230630 (https://download.01.org/0day-ci/archive/20230630/202306301413.VtwSCI1F-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce: (https://download.01.org/0day-ci/archive/20230630/202306301413.VtwSCI1F-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306301413.VtwSCI1F-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> mm/memfd.c:273:15: error: use of undeclared identifier 'MEMFD_NOEXEC_SCOPE_EXEC'
+     273 |         int sysctl = MEMFD_NOEXEC_SCOPE_EXEC;
+         |                      ^
+>> mm/memfd.c:311:17: error: use of undeclared identifier 'MEMFD_NOEXEC_SCOPE_NOEXEC_SEAL'
+     311 |                 if (sysctl == MEMFD_NOEXEC_SCOPE_NOEXEC_SEAL)
+         |                               ^
+>> mm/memfd.c:321:36: error: use of undeclared identifier 'MEMFD_NOEXEC_SCOPE_NOEXEC_ENFORCED'
+     321 |         if (flags & MFD_EXEC && sysctl >= MEMFD_NOEXEC_SCOPE_NOEXEC_ENFORCED) {
+         |                                           ^
+   3 errors generated.
 
 
-On 6/29/2023 9:14 PM, Andrew Lunn wrote:
-> On Thu, Jun 29, 2023 at 11:48:44AM +0800, Luo Jie wrote:
->> The qca8081 1G chip version does not support 2.5 capability, which
->> is distinguished from qca8081 2.5G chip according to the bit0 of
->> register mmd7.0x901d.
->>
->> The fast retrain and master slave seed configs are only needed when
->> the 2.5G capability is supported.
-> 
-> Does genphy_c45_pma_read_abilities() work on these devices?
-> 
->       Andrew
+vim +/MEMFD_NOEXEC_SCOPE_EXEC +273 mm/memfd.c
 
-Hi Andrew,
-yes, genphy_c45_pma_read_abilities works on both normal qca8081 2.5G 
-chip and qca8081 1G version chip, even the PHY ID is same, the only 
-difference between qca8081 1G and 2.5G chip is the 2.5G capability 
-removed on 1G version chip.
+   270	
+   271	static int sysctl_memfd_noexec(void)
+   272	{
+ > 273		int sysctl = MEMFD_NOEXEC_SCOPE_EXEC;
+   274	#ifdef CONFIG_SYSCTL
+   275		struct pid_namespace *ns;
+   276	
+   277		ns = task_active_pid_ns(current);
+   278		if (ns)
+   279			sysctl = ns->memfd_noexec_scope;
+   280	#endif
+   281		return sysctl;
+   282	}
+   283	
+   284	SYSCALL_DEFINE2(memfd_create,
+   285			const char __user *, uname,
+   286			unsigned int, flags)
+   287	{
+   288		char comm[TASK_COMM_LEN];
+   289		unsigned int *file_seals;
+   290		struct file *file;
+   291		int fd, error;
+   292		char *name;
+   293		long len;
+   294		int sysctl = sysctl_memfd_noexec();
+   295	
+   296		if (!(flags & MFD_HUGETLB)) {
+   297			if (flags & ~(unsigned int)MFD_ALL_FLAGS)
+   298				return -EINVAL;
+   299		} else {
+   300			/* Allow huge page size encoding in flags. */
+   301			if (flags & ~(unsigned int)(MFD_ALL_FLAGS |
+   302					(MFD_HUGE_MASK << MFD_HUGE_SHIFT)))
+   303				return -EINVAL;
+   304		}
+   305	
+   306		/* Invalid if both EXEC and NOEXEC_SEAL are set.*/
+   307		if ((flags & MFD_EXEC) && (flags & MFD_NOEXEC_SEAL))
+   308			return -EINVAL;
+   309	
+   310		if (!(flags & (MFD_EXEC | MFD_NOEXEC_SEAL))) {
+ > 311			if (sysctl == MEMFD_NOEXEC_SCOPE_NOEXEC_SEAL)
+   312				flags |= MFD_NOEXEC_SEAL;
+   313			else
+   314				flags |= MFD_EXEC;
+   315	
+   316			pr_warn_once(
+   317				"memfd_create() without MFD_EXEC nor MFD_NOEXEC_SEAL, pid=%d '%s'\n",
+   318				task_pid_nr(current), get_task_comm(comm, current));
+   319		}
+   320	
+ > 321		if (flags & MFD_EXEC && sysctl >= MEMFD_NOEXEC_SCOPE_NOEXEC_ENFORCED) {
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
