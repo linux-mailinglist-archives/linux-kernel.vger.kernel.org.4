@@ -2,66 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8615743463
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 07:36:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3E9F743468
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 07:36:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232233AbjF3Fg0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 01:36:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42208 "EHLO
+        id S232213AbjF3Fgb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Jun 2023 01:36:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232185AbjF3FgT (ORCPT
+        with ESMTP id S232236AbjF3Fg0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 01:36:19 -0400
+        Fri, 30 Jun 2023 01:36:26 -0400
 Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58FD72D78;
-        Thu, 29 Jun 2023 22:36:18 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.west.internal (Postfix) with ESMTP id 079D9320098C;
-        Fri, 30 Jun 2023 01:36:16 -0400 (EDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9288F3593;
+        Thu, 29 Jun 2023 22:36:23 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.west.internal (Postfix) with ESMTP id 43B5E3200983;
+        Fri, 30 Jun 2023 01:36:22 -0400 (EDT)
 Received: from mailfrontend1 ([10.202.2.162])
-  by compute6.internal (MEProxy); Fri, 30 Jun 2023 01:36:17 -0400
+  by compute3.internal (MEProxy); Fri, 30 Jun 2023 01:36:23 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ljones.dev; h=cc
         :cc:content-transfer-encoding:content-type:date:date:from:from
         :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm3; t=1688103376; x=
-        1688189776; bh=J5Y4dx1tZFnnSjeHMvtCaqCyhXJYhqnkpp50GoTLBdg=; b=c
-        IOMuKR2xIUrJ8tx6CjYa+F6PYB3k/heUhnFJw1bEJEdrVkBQXxbDk1JOJVFj+OIm
-        6u6ul7oUOqpC4fp4WWMsZ29jOXCYVM+HNg9F2qiXOfABpX6n/pQeLAYQq692jKwL
-        E+vrSI6f5N9JoSgMhJpDBluD/4iV4bw6u8GWXyq3C/ilFenh+d6wYdwuO9Jcpe1R
-        6OuYX07r62wrKXSr1mnJ3TU2EnVmEbto4leqgSsHIbVJb3xGpP65ewfykrPatjLx
-        t2T3a3tSPrItTOhzvkfAxFKONVHBEyfbDkDFgMgca7njq1M7DEIqFR/aCIlJWNn6
-        D0IVmlbUqiMF2U8WKuj/A==
+        :reply-to:sender:subject:subject:to:to; s=fm3; t=1688103381; x=
+        1688189781; bh=x0NWRw+Ml4xfFfMxC4QlVOlD9apc5xmU8rzFplB/f6g=; b=M
+        D8Zlt4lu7VLWfeGFldSfBCUv+jQ0fOzUKrcQrIRigVXLNbzQfRSSHpmvECseL09n
+        Hy/xmcIuYe7IRzxYZH6eL3A2ItaREY5vHA7vawHxA6KorS0FyAcNvYSQ1jcV81YG
+        rRbHejuZWDQZV9WDK3ZOiYpK6W6TjiWfD2NOjpCgoyr+rKzIG/r0ZXbDZLhjk5aA
+        5jYh9ReoHWNc8mDELatZpasCs6GcemGW3mVDw9TaMobvF8QZQN5xtd66QJ8P+egQ
+        JF8R3IFrae70NCBY8muInmpF+EZwYIjnTBcvREHeYjt04gvL5Y6QWv9y101JCx47
+        /0FfdvhE5XTRK6BvPE/Lw==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:cc:content-transfer-encoding
         :content-type:date:date:feedback-id:feedback-id:from:from
         :in-reply-to:in-reply-to:message-id:mime-version:references
         :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1688103376; x=
-        1688189776; bh=J5Y4dx1tZFnnSjeHMvtCaqCyhXJYhqnkpp50GoTLBdg=; b=e
-        k1P5xrJU1lx/H5MEPcHDYYR46dkcfZy0s7PJoWhRaA2wNGH4yW5jB1LEF/DUAmwN
-        kXg9zgIJrwML39a9g/gcxYrpz8XaPgi1iOwOziy0yhW97GEfBXu9O/Vj0hh1K610
-        aqpkF3bjOW6Xg9mXUHBnGswSTnjaF9pF1EsunkTvQheIefAcFVCT9Ih6DCu2pqhb
-        hxsKCEx/wOd6cvT0dVJTm8uTaqWYqwkw4eovxNQMgXG8tjG6Abou7AyldLBLmtnx
-        Aboo+0FlnjpGaK2WdTFPcT+CnSBSBT8g+Nci3g9fNe/3swrbbWRyN+ojLDeAoPMa
-        jy5qHRjFeCCPRx8kUICUw==
-X-ME-Sender: <xms:0GmeZDM_2R77RO8EONmDN1FAsydEAZk8KVv-LkFDNOHX2i15K25RLQ>
-    <xme:0GmeZN_WQRZA1o-BtIrZo_Fji7wX3_cMwHGRrF-s5ueYLi5nFffVqaQ7-fBqR0Rc5
-    2CawF8s-jIRteaqSiU>
-X-ME-Received: <xmr:0GmeZCQvCRACFlFAcZVC3-PMDYDT4-v1AtM7ntIVbMqj0_HFOjeHOt-WAv1i>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrtdehgddutddtucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucenucfjughrpefhvfevufffkffojghfggfgsedtke
-    ertdertddtnecuhfhrohhmpedfnfhukhgvucffrdculfhonhgvshdfuceolhhukhgvsehl
-    jhhonhgvshdruggvvheqnecuggftrfgrthhtvghrnhepgfetfedugfetudeuheetjefhue
-    fggfelleetvdevtefhueeujeefvdegleevhefgnecuvehluhhsthgvrhfuihiivgepuden
-    ucfrrghrrghmpehmrghilhhfrhhomheplhhukhgvsehljhhonhgvshdruggvvh
-X-ME-Proxy: <xmx:0GmeZHvWVgaV-ytAlQFY6ax0ko4EXqMZhiayCaVIfXOnYiCDwhMt5g>
-    <xmx:0GmeZLeYU1fOU-Rarbi2GIlBfmIbCReKXpX2_X9pj8WAJHGQPfjHuQ>
-    <xmx:0GmeZD0MZ0WaSRv-oZR7ZaDf2mByY-1qS63zLo1BS5BI6kLROvmr-w>
-    <xmx:0GmeZNvW2hmrders-iJ8gClthBwTzS7msKpgaGh0n9shcVth5k62nQ>
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1688103381; x=
+        1688189781; bh=x0NWRw+Ml4xfFfMxC4QlVOlD9apc5xmU8rzFplB/f6g=; b=H
+        qz4RKxowc2c/XpO+C5koXJvt8QWA34+VWODyB2rTwCj5+x2IiAtmvtkpdqxQHFPy
+        OCvP5T99C1KiD2GFUy0ESzFwxIbIXd26yWSzbkNrnqNAxSIDU68I2U9oCffyoX9s
+        j3zWytOi5kf/hGECt6QkZl6Wfh3dthV+q9/RMW791+n2FhstyMgY1RThUu5hdkYB
+        xokKb6kbX0YA23sCHSykyo/uDgQcc+Q47S1XpyYbW/XMMVaqPz6cpqKKuOUMwSGr
+        edmOWAx/WzTVh5K04M5Y0K68ymWoZb9tIEKXjgSXIZdScgdxlV/S9gT76Jgx06uT
+        4OvOrfly0nag4IXR91QBQ==
+X-ME-Sender: <xms:1WmeZJagvT-Nbkbcz0-ytPeUu-9V4ZgXkKlliWJrz0xTCCd6iGTDCg>
+    <xme:1WmeZAZAQujwEMvNOOJ0THzCphyd-VO4TEvklSnysoJbyJcxOi972jxoS5KDHRime
+    szuFRvBNBtOL5PUfR0>
+X-ME-Received: <xmr:1WmeZL_-opp4Ul9zyU2mDzZVpoJIbUklklOeAlKFqxQXSaRAQFO1erca0TAt>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrtdehgdellecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecunecujfgurhephffvvefufffkofgjfhgggfestdekre
+    dtredttdenucfhrhhomhepfdfnuhhkvgcuffdrucflohhnvghsfdcuoehluhhkvgeslhhj
+    ohhnvghsrdguvghvqeenucggtffrrghtthgvrhhnpefgteefudfgteduueehteejhfeugf
+    fgleeltedvveethfeuueejfedvgeelveehgfenucevlhhushhtvghrufhiiigvpedtnecu
+    rfgrrhgrmhepmhgrihhlfhhrohhmpehluhhkvgeslhhjohhnvghsrdguvghv
+X-ME-Proxy: <xmx:1WmeZHp9PQdIzgm1OzeYSzpofQxE_hQyWN18siGS4zxJASLvE-TzTA>
+    <xmx:1WmeZErNpQgOYxDOfGVZyfAg2-ToYakxHImqPVUzrheGyYAZQwz8Ug>
+    <xmx:1WmeZNSAJ5Lltw7fN_Wiw_YH0ZbEOeVEPchlmIqoUOSonxqcnVao6g>
+    <xmx:1WmeZMLXc7Kv1c_WgiYXeWDAA_BXxQmoce7B-et7hMr6MWTeUFRt_Q>
 Feedback-ID: i5ec1447f:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 30 Jun 2023 01:36:13 -0400 (EDT)
+ 30 Jun 2023 01:36:18 -0400 (EDT)
 From:   "Luke D. Jones" <luke@ljones.dev>
 To:     hdegoede@redhat.com
 Cc:     corentin.chary@gmail.com, acpi4asus-user@lists.sourceforge.net,
@@ -69,9 +69,9 @@ Cc:     corentin.chary@gmail.com, acpi4asus-user@lists.sourceforge.net,
         linux-hwmon@vger.kernel.org, markgross@kernel.org,
         jdelvare@suse.com, linux@roeck-us.net,
         "Luke D. Jones" <luke@ljones.dev>
-Subject: [PATCH v2 3/8] platform/x86: asus-wmi: support middle fan custom curves
-Date:   Fri, 30 Jun 2023 17:35:47 +1200
-Message-ID: <20230630053552.976579-4-luke@ljones.dev>
+Subject: [PATCH v2 4/8] platform/x86: asus-wmi: add WMI method to show if egpu connected
+Date:   Fri, 30 Jun 2023 17:35:48 +1200
+Message-ID: <20230630053552.976579-5-luke@ljones.dev>
 X-Mailer: git-send-email 2.41.0
 In-Reply-To: <20230630053552.976579-1-luke@ljones.dev>
 References: <20230630053552.976579-1-luke@ljones.dev>
@@ -87,171 +87,111 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Adds support for fan curves defined for the middle fan which
-is available on some ASUS ROG laptops.
+Exposes the WMI method which tells if the eGPU is properly connected
+on the devices that support it.
 
 Signed-off-by: Luke D. Jones <luke@ljones.dev>
 ---
- drivers/platform/x86/asus-wmi.c            | 77 +++++++++++++++++++++-
- include/linux/platform_data/x86/asus-wmi.h |  1 +
- 2 files changed, 76 insertions(+), 2 deletions(-)
+ .../ABI/testing/sysfs-platform-asus-wmi       | 11 +++++++++-
+ drivers/platform/x86/asus-wmi.c               | 21 +++++++++++++++++++
+ include/linux/platform_data/x86/asus-wmi.h    |  4 +++-
+ 3 files changed, 34 insertions(+), 2 deletions(-)
 
+diff --git a/Documentation/ABI/testing/sysfs-platform-asus-wmi b/Documentation/ABI/testing/sysfs-platform-asus-wmi
+index eb29e3023c7b..878daf7c2036 100644
+--- a/Documentation/ABI/testing/sysfs-platform-asus-wmi
++++ b/Documentation/ABI/testing/sysfs-platform-asus-wmi
+@@ -107,4 +107,13 @@ Description:
+ 		Get the current charging mode being used:
+ 			* 1 - Barrel connected charger,
+ 			* 2 - USB-C charging
+-			* 3 - Both connected, barrel used for charging
+\ No newline at end of file
++			* 3 - Both connected, barrel used for charging
++
++What:		/sys/devices/platform/<platform>/egpu_connected
++Date:		Jun 2023
++KernelVersion:	6.5
++Contact:	"Luke Jones" <luke@ljones.dev>
++Description:
++		Show if the egpu (XG Mobile) is correctly connected:
++			* 0 - False,
++			* 1 - True
 diff --git a/drivers/platform/x86/asus-wmi.c b/drivers/platform/x86/asus-wmi.c
-index 375d25ae0aca..fb27218e51cf 100644
+index fb27218e51cf..0c8a4a46b121 100644
 --- a/drivers/platform/x86/asus-wmi.c
 +++ b/drivers/platform/x86/asus-wmi.c
-@@ -113,6 +113,7 @@ module_param(fnlock_default, bool, 0444);
- #define FAN_CURVE_BUF_LEN		32
- #define FAN_CURVE_DEV_CPU		0x00
- #define FAN_CURVE_DEV_GPU		0x01
-+#define FAN_CURVE_DEV_MID		0x02
- /* Mask to determine if setting temperature or percentage */
- #define FAN_CURVE_PWM_MASK		0x04
+@@ -243,6 +243,7 @@ struct asus_wmi {
  
-@@ -253,7 +254,8 @@ struct asus_wmi {
+ 	bool charge_mode_available;
+ 	bool egpu_enable_available;
++	bool egpu_connect_available;
+ 	bool dgpu_disable_available;
+ 	bool gpu_mux_mode_available;
  
- 	bool cpu_fan_curve_available;
- 	bool gpu_fan_curve_available;
--	struct fan_curve_data custom_fan_curves[2];
-+	bool mid_fan_curve_available;
-+	struct fan_curve_data custom_fan_curves[3];
- 
- 	struct platform_profile_handler platform_profile_handler;
- 	bool platform_profile_support;
-@@ -2080,6 +2082,8 @@ static ssize_t pwm1_enable_store(struct device *dev,
- 		asus->custom_fan_curves[FAN_CURVE_DEV_CPU].enabled = false;
- 	if (asus->gpu_fan_curve_available)
- 		asus->custom_fan_curves[FAN_CURVE_DEV_GPU].enabled = false;
-+	if (asus->mid_fan_curve_available)
-+		asus->custom_fan_curves[FAN_CURVE_DEV_MID].enabled = false;
- 
- 	return count;
+@@ -709,6 +710,22 @@ static ssize_t egpu_enable_store(struct device *dev,
  }
-@@ -2531,6 +2535,9 @@ static int fan_curve_get_factory_default(struct asus_wmi *asus, u32 fan_dev)
- 	if (fan_dev == ASUS_WMI_DEVID_GPU_FAN_CURVE)
- 		fan_idx = FAN_CURVE_DEV_GPU;
+ static DEVICE_ATTR_RW(egpu_enable);
  
-+	if (fan_dev == ASUS_WMI_DEVID_MID_FAN_CURVE)
-+		fan_idx = FAN_CURVE_DEV_MID;
++/* Is eGPU connected? *********************************************************/
++static ssize_t egpu_connected_show(struct device *dev,
++				   struct device_attribute *attr, char *buf)
++{
++	struct asus_wmi *asus = dev_get_drvdata(dev);
++	int result;
 +
- 	curves = &asus->custom_fan_curves[fan_idx];
- 	err = asus_wmi_evaluate_method_buf(asus->dsts_id, fan_dev, mode, buf,
- 					   FAN_CURVE_BUF_LEN);
-@@ -2819,6 +2826,42 @@ static SENSOR_DEVICE_ATTR_2_RW(pwm2_auto_point7_pwm, fan_curve,
- static SENSOR_DEVICE_ATTR_2_RW(pwm2_auto_point8_pwm, fan_curve,
- 			       FAN_CURVE_DEV_GPU | FAN_CURVE_PWM_MASK, 7);
- 
-+/* MID */
-+static SENSOR_DEVICE_ATTR_RW(pwm3_enable, fan_curve_enable, FAN_CURVE_DEV_GPU);
-+static SENSOR_DEVICE_ATTR_2_RW(pwm3_auto_point1_temp, fan_curve,
-+			       FAN_CURVE_DEV_GPU, 0);
-+static SENSOR_DEVICE_ATTR_2_RW(pwm3_auto_point2_temp, fan_curve,
-+			       FAN_CURVE_DEV_GPU, 1);
-+static SENSOR_DEVICE_ATTR_2_RW(pwm3_auto_point3_temp, fan_curve,
-+			       FAN_CURVE_DEV_GPU, 2);
-+static SENSOR_DEVICE_ATTR_2_RW(pwm3_auto_point4_temp, fan_curve,
-+			       FAN_CURVE_DEV_GPU, 3);
-+static SENSOR_DEVICE_ATTR_2_RW(pwm3_auto_point5_temp, fan_curve,
-+			       FAN_CURVE_DEV_GPU, 4);
-+static SENSOR_DEVICE_ATTR_2_RW(pwm3_auto_point6_temp, fan_curve,
-+			       FAN_CURVE_DEV_GPU, 5);
-+static SENSOR_DEVICE_ATTR_2_RW(pwm3_auto_point7_temp, fan_curve,
-+			       FAN_CURVE_DEV_GPU, 6);
-+static SENSOR_DEVICE_ATTR_2_RW(pwm3_auto_point8_temp, fan_curve,
-+			       FAN_CURVE_DEV_GPU, 7);
++	result = asus_wmi_get_devstate_simple(asus, ASUS_WMI_DEVID_EGPU_CONNECTED);
++	if (result < 0)
++		return result;
 +
-+static SENSOR_DEVICE_ATTR_2_RW(pwm3_auto_point1_pwm, fan_curve,
-+			       FAN_CURVE_DEV_GPU | FAN_CURVE_PWM_MASK, 0);
-+static SENSOR_DEVICE_ATTR_2_RW(pwm3_auto_point2_pwm, fan_curve,
-+			       FAN_CURVE_DEV_GPU | FAN_CURVE_PWM_MASK, 1);
-+static SENSOR_DEVICE_ATTR_2_RW(pwm3_auto_point3_pwm, fan_curve,
-+			       FAN_CURVE_DEV_GPU | FAN_CURVE_PWM_MASK, 2);
-+static SENSOR_DEVICE_ATTR_2_RW(pwm3_auto_point4_pwm, fan_curve,
-+			       FAN_CURVE_DEV_GPU | FAN_CURVE_PWM_MASK, 3);
-+static SENSOR_DEVICE_ATTR_2_RW(pwm3_auto_point5_pwm, fan_curve,
-+			       FAN_CURVE_DEV_GPU | FAN_CURVE_PWM_MASK, 4);
-+static SENSOR_DEVICE_ATTR_2_RW(pwm3_auto_point6_pwm, fan_curve,
-+			       FAN_CURVE_DEV_GPU | FAN_CURVE_PWM_MASK, 5);
-+static SENSOR_DEVICE_ATTR_2_RW(pwm3_auto_point7_pwm, fan_curve,
-+			       FAN_CURVE_DEV_GPU | FAN_CURVE_PWM_MASK, 6);
-+static SENSOR_DEVICE_ATTR_2_RW(pwm3_auto_point8_pwm, fan_curve,
-+			       FAN_CURVE_DEV_GPU | FAN_CURVE_PWM_MASK, 7);
++	return sysfs_emit(buf, "%d\n", result);
++}
 +
- static struct attribute *asus_fan_curve_attr[] = {
- 	/* CPU */
- 	&sensor_dev_attr_pwm1_enable.dev_attr.attr,
-@@ -2856,6 +2899,24 @@ static struct attribute *asus_fan_curve_attr[] = {
- 	&sensor_dev_attr_pwm2_auto_point6_pwm.dev_attr.attr,
- 	&sensor_dev_attr_pwm2_auto_point7_pwm.dev_attr.attr,
- 	&sensor_dev_attr_pwm2_auto_point8_pwm.dev_attr.attr,
-+	/* MID */
-+	&sensor_dev_attr_pwm3_enable.dev_attr.attr,
-+	&sensor_dev_attr_pwm3_auto_point1_temp.dev_attr.attr,
-+	&sensor_dev_attr_pwm3_auto_point2_temp.dev_attr.attr,
-+	&sensor_dev_attr_pwm3_auto_point3_temp.dev_attr.attr,
-+	&sensor_dev_attr_pwm3_auto_point4_temp.dev_attr.attr,
-+	&sensor_dev_attr_pwm3_auto_point5_temp.dev_attr.attr,
-+	&sensor_dev_attr_pwm3_auto_point6_temp.dev_attr.attr,
-+	&sensor_dev_attr_pwm3_auto_point7_temp.dev_attr.attr,
-+	&sensor_dev_attr_pwm3_auto_point8_temp.dev_attr.attr,
-+	&sensor_dev_attr_pwm3_auto_point1_pwm.dev_attr.attr,
-+	&sensor_dev_attr_pwm3_auto_point2_pwm.dev_attr.attr,
-+	&sensor_dev_attr_pwm3_auto_point3_pwm.dev_attr.attr,
-+	&sensor_dev_attr_pwm3_auto_point4_pwm.dev_attr.attr,
-+	&sensor_dev_attr_pwm3_auto_point5_pwm.dev_attr.attr,
-+	&sensor_dev_attr_pwm3_auto_point6_pwm.dev_attr.attr,
-+	&sensor_dev_attr_pwm3_auto_point7_pwm.dev_attr.attr,
-+	&sensor_dev_attr_pwm3_auto_point8_pwm.dev_attr.attr,
- 	NULL
- };
- 
-@@ -2875,6 +2936,9 @@ static umode_t asus_fan_curve_is_visible(struct kobject *kobj,
- 	if (asus->gpu_fan_curve_available && attr->name[3] == '2')
- 		return 0644;
- 
-+	if (asus->mid_fan_curve_available && attr->name[3] == '3')
-+		return 0644;
++static DEVICE_ATTR_RO(egpu_connected);
 +
- 	return 0;
- }
+ /* gpu mux switch *************************************************************/
+ static ssize_t gpu_mux_mode_show(struct device *dev,
+ 				 struct device_attribute *attr, char *buf)
+@@ -3645,6 +3662,7 @@ static struct attribute *platform_attributes[] = {
+ 	&dev_attr_touchpad.attr,
+ 	&dev_attr_charge_mode.attr,
+ 	&dev_attr_egpu_enable.attr,
++	&dev_attr_egpu_connected.attr,
+ 	&dev_attr_dgpu_disable.attr,
+ 	&dev_attr_gpu_mux_mode.attr,
+ 	&dev_attr_lid_resume.attr,
+@@ -3677,6 +3695,8 @@ static umode_t asus_sysfs_is_visible(struct kobject *kobj,
+ 		ok = asus->charge_mode_available;
+ 	else if (attr == &dev_attr_egpu_enable.attr)
+ 		ok = asus->egpu_enable_available;
++	else if (attr == &dev_attr_egpu_connected.attr)
++		ok = asus->egpu_connect_available;
+ 	else if (attr == &dev_attr_dgpu_disable.attr)
+ 		ok = asus->dgpu_disable_available;
+ 	else if (attr == &dev_attr_gpu_mux_mode.attr)
+@@ -3943,6 +3963,7 @@ static int asus_wmi_add(struct platform_device *pdev)
  
-@@ -2904,7 +2968,14 @@ static int asus_wmi_custom_fan_curve_init(struct asus_wmi *asus)
- 	if (err)
- 		return err;
- 
--	if (!asus->cpu_fan_curve_available && !asus->gpu_fan_curve_available)
-+	err = fan_curve_check_present(asus, &asus->mid_fan_curve_available,
-+				      ASUS_WMI_DEVID_MID_FAN_CURVE);
-+	if (err)
-+		return err;
-+
-+	if (!asus->cpu_fan_curve_available
-+		&& !asus->gpu_fan_curve_available
-+		&& !asus->mid_fan_curve_available)
- 		return 0;
- 
- 	hwmon = devm_hwmon_device_register_with_groups(
-@@ -2973,6 +3044,8 @@ static int throttle_thermal_policy_write(struct asus_wmi *asus)
- 		asus->custom_fan_curves[FAN_CURVE_DEV_CPU].enabled = false;
- 	if (asus->gpu_fan_curve_available)
- 		asus->custom_fan_curves[FAN_CURVE_DEV_GPU].enabled = false;
-+	if (asus->mid_fan_curve_available)
-+		asus->custom_fan_curves[FAN_CURVE_DEV_MID].enabled = false;
- 
- 	return 0;
- }
+ 	asus->charge_mode_available = asus_wmi_dev_is_present(asus, ASUS_WMI_DEVID_CHARGE_MODE);
+ 	asus->egpu_enable_available = asus_wmi_dev_is_present(asus, ASUS_WMI_DEVID_EGPU);
++	asus->egpu_connect_available = asus_wmi_dev_is_present(asus, ASUS_WMI_DEVID_EGPU_CONNECTED);
+ 	asus->dgpu_disable_available = asus_wmi_dev_is_present(asus, ASUS_WMI_DEVID_DGPU);
+ 	asus->gpu_mux_mode_available = asus_wmi_dev_is_present(asus, ASUS_WMI_DEVID_GPU_MUX);
+ 	asus->kbd_rgb_mode_available = asus_wmi_dev_is_present(asus, ASUS_WMI_DEVID_TUF_RGB_MODE);
 diff --git a/include/linux/platform_data/x86/asus-wmi.h b/include/linux/platform_data/x86/asus-wmi.h
-index 2c03bda7703f..329efc086993 100644
+index 329efc086993..2034648f8cdf 100644
 --- a/include/linux/platform_data/x86/asus-wmi.h
 +++ b/include/linux/platform_data/x86/asus-wmi.h
-@@ -83,6 +83,7 @@
- #define ASUS_WMI_DEVID_MID_FAN_CTRL 0x00110031
- #define ASUS_WMI_DEVID_CPU_FAN_CURVE	0x00110024
- #define ASUS_WMI_DEVID_GPU_FAN_CURVE	0x00110025
-+#define ASUS_WMI_DEVID_MID_FAN_CURVE	0x00110032
+@@ -100,7 +100,9 @@
+ /* Charging mode - 1=Barrel, 2=USB */
+ #define ASUS_WMI_DEVID_CHARGE_MODE	0x0012006C
  
- /* Power */
- #define ASUS_WMI_DEVID_PROCESSOR_STATE	0x00120012
+-/* dgpu on/off */
++/* epu is connected? 1 == true */
++#define ASUS_WMI_DEVID_EGPU_CONNECTED	0x00090018
++/* egpu on/off */
+ #define ASUS_WMI_DEVID_EGPU		0x00090019
+ 
+ /* dgpu on/off */
 -- 
 2.41.0
 
