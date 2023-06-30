@@ -2,191 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A14A744294
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 21:01:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8DAA744296
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 21:03:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230015AbjF3TBF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 15:01:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54170 "EHLO
+        id S230426AbjF3TD3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Jun 2023 15:03:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229496AbjF3TBD (ORCPT
+        with ESMTP id S229496AbjF3TD1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 15:01:03 -0400
-Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9C573C32
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 12:01:01 -0700 (PDT)
-Received: by mail-qt1-x834.google.com with SMTP id d75a77b69052e-4007b5bafceso44771cf.1
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 12:01:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1688151661; x=1690743661;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1P79XzyniN175v02xWz3VthmQA9nnn+iiqxl7BlzXX0=;
-        b=JVWDy9S5lZQqOy6W0HMr9hUMfKM67zzYFUI/6y/vyiAgJWyzAcYT04GZIU55ncpXNt
-         aHNli4HurGACd8JcJhHxJWxxIxyPLGBQN3FJ3eiu1HvhSOjAy/67jwHudoA4YAVmjsyF
-         Z5rgsHbmfRWJ0CzOuDNp2EbIbYsu6QtU11iypofvqpdMGIq1T1cRlDcS34Oi6MYYDezZ
-         cO59rfqLlydj/gvtcKkD4DNeYm88NrcKt69ixuST6DgrRj94eyJjtfUFzHm0DXHz/v4f
-         ALcx+pomr87Wmy8jnmykSuNu/ij/peTfy1BoIPlhCDG6WeoBIuIyZFlYr+P+PvEPL836
-         Nl6Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688151661; x=1690743661;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=1P79XzyniN175v02xWz3VthmQA9nnn+iiqxl7BlzXX0=;
-        b=Os6t5THtOH4vTkfLYrh8HseQ5+awz08RSThIR5Gca/boNmHLEjNsTpR6oHVzO/ZSqX
-         ic8YxX+MvhhyYumUE8s3KSAsPPL5KMEA9XXvKmufjF+7Q9T0VkJx0UqTU4jgFV/9omKC
-         NHO3T5TW0kohWe52802gwITHBhpEe2/EYWSWcmRxD35XioWAvcYFkQUHsdL7zSPtykIG
-         6w1zLq+RdSgzD/Hv4LBvIuwV8v1Yo0wLSuB2rt7nrzKofB7XO40+Xub4v0gZGTwYtqp0
-         R178Uj3MRJZOYYTxLTHxm71l8T3FKudww3pmb5x/NvZtV+F+JQvRaKBo8PuUaN3VAOBf
-         lvVQ==
-X-Gm-Message-State: ABy/qLb8GoLYkyC3ZE1FJkWyGy3SPXkwlQ86AZzQFAa7prqNBOnR/i+t
-        gdNFowMe2uC+8CbbszfdbaOGN+AWfjN5DECxYfHmCw==
-X-Google-Smtp-Source: APBJJlHEWrTrFnIwItSQK/DV5LB3sw/UmULLL5UOl67gfobs7L4ST3kG0Nvnrd69SCX6IRmRG8ukr8HM7vuMcpTvjCo=
-X-Received: by 2002:ac8:5b01:0:b0:3f9:56c:1129 with SMTP id
- m1-20020ac85b01000000b003f9056c1129mr23785qtw.5.1688151660761; Fri, 30 Jun
- 2023 12:01:00 -0700 (PDT)
+        Fri, 30 Jun 2023 15:03:27 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D6833C07
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 12:03:26 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9FF48617E8
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 19:03:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06AEBC433C0;
+        Fri, 30 Jun 2023 19:03:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688151805;
+        bh=V5IBn/evDQRFoADoP9GjVWUyd4RyxJcnLBcMQx5mzo0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=oGWh90/19eaYQN9pgIkTZCQCl4pcbTwwaFzTnSoQo6bNF6+4kY10d9OdV08B2IAYX
+         QjO9BwlyNzzHvkEnddAZJO8mIrCDIBMvmjz+dXRyrr8DLorU0BmMnf9ksTQtkQEp+L
+         t8AKrR+CWrmeURGwKrDdlZRyER7vKOudccklPMvh2GGVSA9E00A7u/ChwJDZwBye68
+         BYzbBWOKqz3I432VFzWmihSrNqPxYieKRwFkV6qTN9++NUwsfIRIeYg9IiocaX3BPR
+         Q+Gcrdg8tEVY2zhI9QR6wxYVmTGU2pmwGMi914tq1+z6M7NsmTttPAi2X/OZM8jUyd
+         rBR2XqCdaMD7g==
+Date:   Fri, 30 Jun 2023 20:03:20 +0100
+From:   Conor Dooley <conor@kernel.org>
+To:     Sami Tolvanen <samitolvanen@google.com>
+Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Kees Cook <keescook@chromium.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        linux-riscv@lists.infradead.org, llvm@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 4/6] riscv: Add CFI error handling
+Message-ID: <20230630-utopia-drizzle-df8c14558696@spud>
+References: <20230629234244.1752366-8-samitolvanen@google.com>
+ <20230629234244.1752366-12-samitolvanen@google.com>
 MIME-Version: 1.0
-References: <20230628102949.2598096-1-john.g.garry@oracle.com> <20230628102949.2598096-5-john.g.garry@oracle.com>
-In-Reply-To: <20230628102949.2598096-5-john.g.garry@oracle.com>
-From:   Ian Rogers <irogers@google.com>
-Date:   Fri, 30 Jun 2023 12:00:48 -0700
-Message-ID: <CAP-5=fXa24_LEiyni0Ncyfa5hKwC1GE6y-zi2u8M98M9SwHX+g@mail.gmail.com>
-Subject: Re: [PATCH RFC 4/9] perf jevents: Add sys_events_find_events_table()
-To:     John Garry <john.g.garry@oracle.com>
-Cc:     acme@kernel.org, namhyung@kernel.org, jolsa@kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        renyu.zj@linux.alibaba.com, shangxiaojing@huawei.com,
-        zhangshaokun@hisilicon.com, qiangqing.zhang@nxp.com,
-        kjain@linux.ibm.com, kan.liang@linux.intel.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="2hnuImplXuBy7/70"
+Content-Disposition: inline
+In-Reply-To: <20230629234244.1752366-12-samitolvanen@google.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 28, 2023 at 3:30=E2=80=AFAM John Garry <john.g.garry@oracle.com=
-> wrote:
->
-> Add a function to get the events table associated with a metric table for
-> struct pmu_sys_events.
->
-> We could also use something like:
-> struct pmu_sys_events *sys =3D container_of(metrics, struct pmu_sys_event=
-s,
->                                                 metric_table);
->
-> to lookup struct pmu_sys_events, but that relies on the user always passi=
-ng
-> a sys events metric struct pointer, so this way is safer, but slower.
 
-If an event is specific to a particular PMU, shouldn't the metric name
-the PMU with the event? For example:
+--2hnuImplXuBy7/70
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-MetricName: "IPC",
-MetricExpr: "instructions / cycles",
+Hey Sami,
 
-Here instructions and cycles can wildcard match on BIG.little/hybrid
-systems and so we get an IPC metric for each PMU - although, I suspect
-this isn't currently quite working. We can also, and currently, do:
+On Thu, Jun 29, 2023 at 11:42:49PM +0000, Sami Tolvanen wrote:
 
-MetricName: "IPC",
-MetricExpr: "cpu_atom@instructions@ / cpu_atom@cycles@",
-...
-MetricName: "IPC",
-MetricExpr: "cpu_core@instructions@ / cpu_core@cycles@",
+> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+> index b54a830eb5c6..20a40927175e 100644
+> --- a/arch/riscv/Kconfig
+> +++ b/arch/riscv/Kconfig
+> @@ -44,6 +44,7 @@ config RISCV
+>  	select ARCH_SUPPORTS_DEBUG_PAGEALLOC if MMU
+>  	select ARCH_SUPPORTS_HUGETLBFS if MMU
+>  	select ARCH_SUPPORTS_PAGE_TABLE_CHECK if MMU
+> +	select ARCH_USES_CFI_TRAPS if CFI_CLANG
 
-The @ is used to avoid parsing confusion with / meaning divide. The
-PMUs for the events are explicitly listed here. We could say the PMU
-is implied but then it gets complex for uncore events, for metrics
-that mix core and uncore events.
+Could you please add new entries in alphanumerical order?
 
-Thanks,
-Ian
+>  	select ARCH_USE_MEMTEST
+>  	select ARCH_USE_QUEUED_RWLOCKS
+>  	select ARCH_WANT_DEFAULT_TOPDOWN_MMAP_LAYOUT if MMU
 
-
-> Signed-off-by: John Garry <john.g.garry@oracle.com>
-> ---
->  tools/perf/pmu-events/empty-pmu-events.c |  6 ++++++
->  tools/perf/pmu-events/jevents.py         | 11 +++++++++++
->  tools/perf/pmu-events/pmu-events.h       |  3 +++
->  3 files changed, 20 insertions(+)
->
-> diff --git a/tools/perf/pmu-events/empty-pmu-events.c b/tools/perf/pmu-ev=
-ents/empty-pmu-events.c
-> index a630c617e879..ae431b6bdf91 100644
-> --- a/tools/perf/pmu-events/empty-pmu-events.c
-> +++ b/tools/perf/pmu-events/empty-pmu-events.c
-> @@ -290,6 +290,12 @@ int pmu_metrics_table_for_each_metric(const struct p=
-mu_metrics_table *table, pmu
->         return 0;
->  }
->
-> +const struct pmu_events_table *
-> +sys_events_find_events_table(__maybe_unused const struct pmu_metrics_tab=
-le *metrics)
-> +{
-> +       return NULL;
-> +}
+> diff --git a/arch/riscv/include/asm/insn.h b/arch/riscv/include/asm/insn.h
+> index 8d5c84f2d5ef..45bc485fcf3f 100644
+> --- a/arch/riscv/include/asm/insn.h
+> +++ b/arch/riscv/include/asm/insn.h
+> @@ -63,6 +63,7 @@
+>  #define RVG_RS1_OPOFF		15
+>  #define RVG_RS2_OPOFF		20
+>  #define RVG_RD_OPOFF		7
+> +#define RVG_RS1_MASK		GENMASK(4, 0)
+>  #define RVG_RD_MASK		GENMASK(4, 0)
+> =20
+>  /* The bit field of immediate value in RVC J instruction */
+> @@ -129,6 +130,7 @@
+>  #define RVC_C2_RS1_OPOFF	7
+>  #define RVC_C2_RS2_OPOFF	2
+>  #define RVC_C2_RD_OPOFF		7
+> +#define RVC_C2_RS1_MASK		GENMASK(4, 0)
+> =20
+>  /* parts of opcode for RVG*/
+>  #define RVG_OPCODE_FENCE	0x0f
+> @@ -258,6 +260,10 @@ static __always_inline bool riscv_insn_is_branch(u32=
+ code)
+>  #define RV_X(X, s, mask)  (((X) >> (s)) & (mask))
+>  #define RVC_X(X, s, mask) RV_X(X, s, mask)
+> =20
+> +#define RV_EXTRACT_RS1_REG(x) \
+> +	({typeof(x) x_ =3D (x); \
+> +	(RV_X(x_, RVG_RS1_OPOFF, RVG_RS1_MASK)); })
 > +
->  const struct pmu_events_table *perf_pmu__find_events_table(struct perf_p=
-mu *pmu)
->  {
->         const struct pmu_events_table *table =3D NULL;
-> diff --git a/tools/perf/pmu-events/jevents.py b/tools/perf/pmu-events/jev=
-ents.py
-> index 80b569b8634b..947e8b1efa26 100755
-> --- a/tools/perf/pmu-events/jevents.py
-> +++ b/tools/perf/pmu-events/jevents.py
-> @@ -786,6 +786,17 @@ int pmu_metrics_table_for_each_metric(const struct p=
-mu_metrics_table *table,
->          return 0;
->  }
->
-> +const struct pmu_events_table *
-> +sys_events_find_events_table(const struct pmu_metrics_table *metrics)
-> +{
-> +       for (const struct pmu_sys_events *tables =3D &pmu_sys_event_table=
-s[0];
-> +             tables->name; tables++) {
-> +               if (&tables->metric_table =3D=3D metrics)
-> +                       return &tables->event_table;
-> +       }
-> +       return NULL;
-> +}
+>  #define RV_EXTRACT_RD_REG(x) \
+>  	({typeof(x) x_ =3D (x); \
+>  	(RV_X(x_, RVG_RD_OPOFF, RVG_RD_MASK)); })
+> @@ -285,6 +291,10 @@ static __always_inline bool riscv_insn_is_branch(u32=
+ code)
+>  	(RV_X(x_, RV_B_IMM_11_OPOFF, RV_B_IMM_11_MASK) << RV_B_IMM_11_OFF) | \
+>  	(RV_IMM_SIGN(x_) << RV_B_IMM_SIGN_OFF); })
+> =20
+> +#define RVC_EXTRACT_C2_RS1_REG(x) \
+> +	({typeof(x) x_ =3D (x); \
+> +	(RV_X(x_, RVC_C2_RS1_OPOFF, RVC_C2_RS1_MASK)); })
 > +
->  const struct pmu_events_table *perf_pmu__find_events_table(struct perf_p=
-mu *pmu)
->  {
->          const struct pmu_events_table *table =3D NULL;
-> diff --git a/tools/perf/pmu-events/pmu-events.h b/tools/perf/pmu-events/p=
-mu-events.h
-> index caf59f23cd64..a3642c08e39d 100644
-> --- a/tools/perf/pmu-events/pmu-events.h
-> +++ b/tools/perf/pmu-events/pmu-events.h
-> @@ -77,6 +77,9 @@ typedef int (*pmu_metric_iter_fn)(const struct pmu_metr=
-ic *pm,
->                                   const struct pmu_metrics_table *table,
->                                   void *data);
->
-> +const struct pmu_events_table *
-> +sys_events_find_events_table(const struct pmu_metrics_table *metrics);
-> +
->  int pmu_events_table_for_each_event(const struct pmu_events_table *table=
-, pmu_event_iter_fn fn,
->                                     void *data);
->  int pmu_metrics_table_for_each_metric(const struct pmu_metrics_table *ta=
-ble, pmu_metric_iter_fn fn,
-> --
-> 2.35.3
->
+>  #define RVC_EXTRACT_JTYPE_IMM(x) \
+>  	({typeof(x) x_ =3D (x); \
+>  	(RVC_X(x_, RVC_J_IMM_3_1_OPOFF, RVC_J_IMM_3_1_MASK) << RVC_J_IMM_3_1_OF=
+F) | \
+
+I was surprised that we didn't have these bits before, had to go
+looking. Think the optprobes series had handrolled copies of these,
+which is probably the source of my surprise.
+
+Reviewed-by: Conor Dooley <conor.dooley@microchip.com> # ISA bits
+
+--2hnuImplXuBy7/70
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZJ8m+AAKCRB4tDGHoIJi
+0jBUAP0UMMzoYNXY5nsJHuteXP1BsQTrz11CKX9PQUFp3nlqBgEA6PNVMrlF90jy
+yn449Glx4Y4AQdasyKf/P30AlWM9hgo=
+=Vt5W
+-----END PGP SIGNATURE-----
+
+--2hnuImplXuBy7/70--
