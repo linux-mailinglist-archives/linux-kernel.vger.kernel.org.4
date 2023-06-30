@@ -2,84 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1402743BAE
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 14:12:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B7E32743BB2
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 14:13:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232924AbjF3MMh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 08:12:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54604 "EHLO
+        id S231361AbjF3MN2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Jun 2023 08:13:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233060AbjF3MMK (ORCPT
+        with ESMTP id S231956AbjF3MNZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 08:12:10 -0400
-Received: from mail-sh.amlogic.com (mail-sh.amlogic.com [58.32.228.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DBFF3C07;
-        Fri, 30 Jun 2023 05:11:14 -0700 (PDT)
-Received: from droid10-sz.amlogic.com (10.28.11.69) by mail-sh.amlogic.com
- (10.18.11.5) with Microsoft SMTP Server id 15.1.2507.13; Fri, 30 Jun 2023
- 20:11:11 +0800
-From:   zelong dong <zelong.dong@amlogic.com>
-To:     <narmstrong@baylibre.com>, <p.zabel@pengutronix.de>,
-        <khilman@baylibre.com>, Rob Herring <robh+dt@kernel.org>,
-        <martin.blumenstingl@googlemail.com>
-CC:     <linux-kernel@vger.kernel.org>,
-        <linux-amlogic@lists.infradead.org>,
-        <linux-arm-kernel@lists.infradead.org>, <jbrunet@baylibre.com>,
-        <devicetree@vger.kernel.org>, <kelvin.zhang@amlogic.com>,
-        Zelong Dong <zelong.dong@amlogic.com>
-Subject: [PATCH 3/3] arm64: dts: meson: add reset controller for Meson-C3 SoC
-Date:   Fri, 30 Jun 2023 20:10:59 +0800
-Message-ID: <20230630121059.28748-4-zelong.dong@amlogic.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20230630121059.28748-1-zelong.dong@amlogic.com>
-References: <20230630121059.28748-1-zelong.dong@amlogic.com>
+        Fri, 30 Jun 2023 08:13:25 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DFEE130
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 05:13:24 -0700 (PDT)
+Received: from kwepemm600020.china.huawei.com (unknown [172.30.72.55])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4QsvJx2YdjzMq79;
+        Fri, 30 Jun 2023 20:10:09 +0800 (CST)
+Received: from localhost.localdomain (10.175.112.125) by
+ kwepemm600020.china.huawei.com (7.193.23.147) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.27; Fri, 30 Jun 2023 20:13:20 +0800
+From:   Peng Zhang <zhangpeng362@huawei.com>
+To:     <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>
+CC:     <willy@infradead.org>, <sidhartha.kumar@oracle.com>,
+        <akpm@linux-foundation.org>, <wangkefeng.wang@huawei.com>,
+        <sunnanyong@huawei.com>, ZhangPeng <zhangpeng362@huawei.com>
+Subject: [PATCH 0/2] mm: remove page_rmapping()
+Date:   Fri, 30 Jun 2023 20:13:08 +0800
+Message-ID: <20230630121310.165700-1-zhangpeng362@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7BIT
 Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.28.11.69]
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Originating-IP: [10.175.112.125]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ kwepemm600020.china.huawei.com (7.193.23.147)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zelong Dong <zelong.dong@amlogic.com>
+From: ZhangPeng <zhangpeng362@huawei.com>
 
-Add the reset controller device of Meson-C3 SoC family
+This minor patch series remove page_rmapping() and convert the last user
+fault_dirty_shared_page() to use a folio.
 
-Signed-off-by: Zelong Dong <zelong.dong@amlogic.com>
----
- arch/arm64/boot/dts/amlogic/amlogic-c3.dtsi | 7 +++++++
- 1 file changed, 7 insertions(+)
+ZhangPeng (2):
+  mm: remove page_rmapping()
+  mm: use a folio in fault_dirty_shared_page()
 
-diff --git a/arch/arm64/boot/dts/amlogic/amlogic-c3.dtsi b/arch/arm64/boot/dts/amlogic/amlogic-c3.dtsi
-index 60ad4f3eef9d..62684b7a684c 100644
---- a/arch/arm64/boot/dts/amlogic/amlogic-c3.dtsi
-+++ b/arch/arm64/boot/dts/amlogic/amlogic-c3.dtsi
-@@ -6,6 +6,7 @@
- #include <dt-bindings/interrupt-controller/irq.h>
- #include <dt-bindings/interrupt-controller/arm-gic.h>
- #include <dt-bindings/gpio/gpio.h>
-+#include <dt-bindings/reset/amlogic,meson-c3-reset.h>
- 
- / {
- 	cpus {
-@@ -82,6 +83,12 @@ uart_b: serial@7a000 {
- 				clock-names = "xtal", "pclk", "baud";
- 			};
- 
-+			reset: reset-controller@0x2000 {
-+				compatible = "amlogic,meson-c3-reset";
-+				reg = <0x0 0x2000 0x0 0x98>;
-+				#reset-cells = <1>;
-+			};
-+
- 		};
- 	};
- };
+ include/linux/mm.h |  1 -
+ mm/memory.c        | 10 +++++-----
+ mm/util.c          |  6 ------
+ 3 files changed, 5 insertions(+), 12 deletions(-)
+
 -- 
-2.35.1
+2.25.1
 
