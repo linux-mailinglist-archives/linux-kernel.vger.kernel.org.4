@@ -2,111 +2,210 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90DF47438D1
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 12:00:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD1017438DB
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 12:01:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232967AbjF3KAD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 06:00:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50020 "EHLO
+        id S232897AbjF3KBr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Jun 2023 06:01:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232958AbjF3KAA (ORCPT
+        with ESMTP id S233024AbjF3KBI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 06:00:00 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B73BE2728;
-        Fri, 30 Jun 2023 02:59:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1688119196; x=1719655196;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=QGADKNyESx2s/DzdJordA2PV6zGAyu24ihv4MNiI0Vs=;
-  b=Pd0PzPUEU7EGMIKp8IalOcPSqz1xYyBnrpJncjoNUTdaeY5IrxNhHsXo
-   P1nHOt3gampB2ezXifRQQXf1G6fiO74TlnHMUpbKxA05rgBS6+AN2fK03
-   WTcXflu5B+yqSTG58H6OLMnnSyDRQZlbMkKeM1I6sCZI+WMXZlMJnHnUZ
-   af/nv2W0LifLPhmO/WHM6/qg82aXZvI6N3+QRb7ewepZFBJPW1PINEmR3
-   bD+Jc+T9ZpF2uKi90D2JONF4fRRc61JL10vuz8G/U0l2z2HIGdRzp2PPo
-   rhlMwMniVcHDZB8ffK9mP/cPZI+I+jul1+T51C0l+xOCMTH8ClD1uP4qT
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10756"; a="393086724"
-X-IronPort-AV: E=Sophos;i="6.01,170,1684825200"; 
-   d="scan'208";a="393086724"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jun 2023 02:59:56 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10756"; a="787670161"
-X-IronPort-AV: E=Sophos;i="6.01,170,1684825200"; 
-   d="scan'208";a="787670161"
-Received: from yijiang-mobl1.ccr.corp.intel.com (HELO localhost) ([10.254.212.46])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jun 2023 02:59:53 -0700
-Date:   Fri, 30 Jun 2023 18:00:01 +0800
-From:   Yu Zhang <yu.c.zhang@linux.intel.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Maxim Levitsky <mlevitsk@redhat.com>
-Subject: Re: [PATCH 08/12] KVM: nSVM: Use KVM-governed feature framework to
- track "vVM{SAVE,LOAD} enabled"
-Message-ID: <20230630100001.vmzlrtaw5fq5pisn@linux.intel.com>
-References: <20230217231022.816138-1-seanjc@google.com>
- <20230217231022.816138-9-seanjc@google.com>
- <20230221152349.ulcjtbnvziair7ff@linux.intel.com>
- <20230221153306.qubx7tfmasnvodeu@linux.intel.com>
- <Y/VYN3n/lHePiDxM@google.com>
- <20230222064931.ppz6berhfr4edewf@linux.intel.com>
- <Y/ZFJfspU6L2RmQS@google.com>
- <ZJ22Wts4WKKD19bN@google.com>
+        Fri, 30 Jun 2023 06:01:08 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C5A53A93;
+        Fri, 30 Jun 2023 03:01:05 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F2ED561714;
+        Fri, 30 Jun 2023 10:01:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3EB9C433C0;
+        Fri, 30 Jun 2023 10:01:01 +0000 (UTC)
+From:   Huacai Chen <chenhuacai@loongson.cn>
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Huacai Chen <chenhuacai@kernel.org>
+Cc:     loongarch@lists.linux.dev, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Guo Ren <guoren@kernel.org>,
+        Xuerui Wang <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Huacai Chen <chenhuacai@loongson.cn>
+Subject: [GIT PULL] LoongArch changes for v6.5
+Date:   Fri, 30 Jun 2023 18:00:37 +0800
+Message-Id: <20230630100037.1071320-1-chenhuacai@loongson.cn>
+X-Mailer: git-send-email 2.39.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZJ22Wts4WKKD19bN@google.com>
-User-Agent: NeoMutt/20171215
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 29, 2023 at 09:50:34AM -0700, Sean Christopherson wrote:
-> On Wed, Feb 22, 2023, Sean Christopherson wrote:
-> > +Maxim
-> > 
-> > On Wed, Feb 22, 2023, Yu Zhang wrote:
-> > I'll opportunistically massage the comment to make it more explicit about why
-> > VMLOAD needs to be intercepted.
-> >  
-> > That said, clearing the bits for this seems wrong.  That would corrupt the MSRs
-> > for 64-bit Intel guests.  The "target" of the fix was 32-bit L2s, i.e. I doubt
-> > anything would notice.
-> > 
-> >     This patch fixes nested migration of 32 bit nested guests, that was
-> >     broken because incorrect cached values of SYSENTER msrs were stored in
-> >     the migration stream if L1 changed these msrs with
-> >     vmload prior to L2 entry.
-> 
-> Aha!  Finally figured out what this code is doing.  KVM intercepts VMLOAD so that
-> KVM can correctly model the VMLOAD behavior of dropping bits 63:32, i.e. to clear
-> svm->sysenter_eip_hi and svm->sysenter_esp_hi.
-> 
-> So the code is correct.  I'll add this comment:
-> 
-> 	/*
-> 	 * Intercept VMLOAD if the vCPU mode is Intel in order to emulate that
-> 	 * VMLOAD drops bits 63:32 of SYSENTER (ignoring the fact that exposing
-> 	 * SVM on Intel is bonkers and extremely unlikely to work).
-> 	 */
-> 
-Oh.. Because L2 will never be a 64-bit Intel guest, and the emulation of vmload
-shall follow APM's requirement(to clear the upper 32 bits)?
+The following changes since commit 6995e2de6891c724bfeb2db33d7b87775f913ad1:
 
-Thanks a lot for bring me back to this discussion... I totally forgot it. :)
+  Linux 6.4 (2023-06-25 16:29:58 -0700)
 
-B.R.
-Yu
- 
-Thanks a lot for this explanation, Sean! 
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/chenhuacai/linux-loongson.git tags/loongarch-6.5
+
+for you to fetch changes up to 5ee35c769663cb1c5f26e12cad84904dc3002de8:
+
+  LoongArch: Remove five DIE_* definitions in kdebug.h (2023-06-29 20:58:44 +0800)
+
+----------------------------------------------------------------
+LoongArch changes for v6.5
+
+1, Preliminary ClangBuiltLinux enablement;
+2, Add support to clone a time namespace;
+3, Add vector extensions support;
+4, Add SMT (Simultaneous Multi-Threading) support;
+5, Support dbar with different hints;
+6, Introduce hardware page table walker;
+7, Add jump-label implementation;
+8, Add rethook and uprobes support;
+9, Some bug fixes and other small changes.
+
+----------------------------------------------------------------
+Binbin Zhou (2):
+      dt-bindings: interrupt-controller: Add Loongson EIOINTC
+      irqchip/loongson-eiointc: Add DT init support
+
+Dan Carpenter (1):
+      LoongArch: Delete unnecessary debugfs checking
+
+Haoran Jiang (1):
+      LoongArch: Replace kretprobe with rethook
+
+Huacai Chen (6):
+      Merge 'irq/loongarch-fixes-6.5' into loongarch-next
+      LoongArch: Set CPU#0 as the io master for FDT
+      LoongArch: Add vector extensions support
+      LoongArch: Add SMT (Simultaneous Multi-Threading) support
+      LoongArch: Support dbar with different hints
+      LoongArch: Introduce hardware page table walker
+
+Jianmin Lv (3):
+      irqchip/loongson-pch-pic: Fix initialization of HT vector register
+      irqchip/loongson-liointc: Fix IRQ trigger polarity
+      irqchip/loongson-eiointc: Fix irq affinity setting during resume
+
+Liu Peibao (1):
+      irqchip/loongson-pch-pic: Fix potential incorrect hwirq assignment
+
+Tiezhu Yang (8):
+      LoongArch: Add support to clone a time namespace
+      LoongArch: Select HAVE_DEBUG_KMEMLEAK to support kmemleak
+      LoongArch: Move three functions from kprobes.c to inst.c
+      LoongArch: Check for AMO instructions in insns_not_supported()
+      LoongArch: Add larch_insn_gen_break() to generate break insns
+      LoongArch: Use larch_insn_gen_break() for kprobes
+      LoongArch: Add uprobes support
+      LoongArch: Remove five DIE_* definitions in kdebug.h
+
+WANG Rui (3):
+      LoongArch: Add guard for the larch_insn_gen_xxx functions
+      LoongArch: Calculate various sizes in the linker script
+      LoongArch: extable: Also recognize ABI names of registers
+
+WANG Xuerui (8):
+      LoongArch: Prepare for assemblers with proper FCSR class support
+      LoongArch: Make the CPUCFG&CSR ops simple aliases of compiler built-ins
+      LoongArch: Simplify the invtlb wrappers
+      LoongArch: Tweak CFLAGS for Clang compatibility
+      LoongArch: vDSO: Use CLANG_FLAGS instead of filtering out '--target='
+      LoongArch: Include KBUILD_CPPFLAGS in CHECKFLAGS invocation
+      LoongArch: Mark Clang LTO as working
+      Makefile: Add loongarch target flag for Clang compilation
+
+Yinbo Zhu (2):
+      irqchip/loongson-liointc: Add IRQCHIP_SKIP_SET_WAKE flag
+      LoongArch: Export some arch-specific pm interfaces
+
+Youling Tang (1):
+      LoongArch: Add jump-label implementation
+
+ .../interrupt-controller/loongson,eiointc.yaml     |  59 ++++
+ .../features/core/jump-labels/arch-support.txt     |   2 +-
+ .../features/debug/kmemleak/arch-support.txt       |   2 +-
+ arch/loongarch/Kconfig                             |  72 +++-
+ arch/loongarch/Makefile                            |  23 +-
+ arch/loongarch/include/asm/Kbuild                  |   1 -
+ arch/loongarch/include/asm/acpi.h                  |  13 +-
+ arch/loongarch/include/asm/asmmacro.h              | 393 +++++++++++++++++++++
+ arch/loongarch/include/asm/barrier.h               | 130 +++----
+ arch/loongarch/include/asm/cpu-features.h          |   2 +-
+ arch/loongarch/include/asm/cpu-info.h              |   1 +
+ arch/loongarch/include/asm/cpu.h                   |   2 +
+ arch/loongarch/include/asm/fpregdef.h              |   7 +
+ arch/loongarch/include/asm/fpu.h                   | 185 +++++++++-
+ arch/loongarch/include/asm/gpr-num.h               |  30 ++
+ arch/loongarch/include/asm/inst.h                  |  55 ++-
+ arch/loongarch/include/asm/io.h                    |   2 +-
+ arch/loongarch/include/asm/jump_label.h            |  50 +++
+ arch/loongarch/include/asm/kdebug.h                |   5 -
+ arch/loongarch/include/asm/kprobes.h               |   5 +-
+ arch/loongarch/include/asm/loongarch.h             |  76 ++--
+ arch/loongarch/include/asm/module.h                |   2 +-
+ arch/loongarch/include/asm/page.h                  |   1 +
+ arch/loongarch/include/asm/percpu.h                |   6 +-
+ arch/loongarch/include/asm/pgtable.h               |   4 +-
+ arch/loongarch/include/asm/qspinlock.h             |  18 +
+ arch/loongarch/include/asm/suspend.h               |  10 +
+ arch/loongarch/include/asm/tlb.h                   |  46 ++-
+ arch/loongarch/include/asm/uprobes.h               |  36 ++
+ arch/loongarch/include/asm/vdso/gettimeofday.h     |   9 +-
+ arch/loongarch/include/asm/vdso/vdso.h             |  32 +-
+ arch/loongarch/include/uapi/asm/hwcap.h            |   1 +
+ arch/loongarch/include/uapi/asm/ptrace.h           |  16 +-
+ arch/loongarch/include/uapi/asm/sigcontext.h       |  18 +
+ arch/loongarch/kernel/Makefile                     |   8 +-
+ arch/loongarch/kernel/acpi.c                       |  32 ++
+ arch/loongarch/kernel/cpu-probe.c                  |  16 +
+ arch/loongarch/kernel/efi-header.S                 |   6 +-
+ arch/loongarch/kernel/fpu.S                        | 270 ++++++++++++++
+ arch/loongarch/kernel/head.S                       |   8 +-
+ arch/loongarch/kernel/inst.c                       |  83 ++++-
+ arch/loongarch/kernel/jump_label.c                 |  22 ++
+ arch/loongarch/kernel/kprobes.c                    |  96 +----
+ arch/loongarch/kernel/proc.c                       |   2 +
+ arch/loongarch/kernel/process.c                    |  12 +-
+ arch/loongarch/kernel/ptrace.c                     | 110 ++++++
+ arch/loongarch/kernel/rethook.c                    |  28 ++
+ arch/loongarch/kernel/rethook.h                    |   8 +
+ .../{kprobes_trampoline.S => rethook_trampoline.S} |   6 +-
+ arch/loongarch/kernel/signal.c                     | 326 ++++++++++++++++-
+ arch/loongarch/kernel/smp.c                        |  27 +-
+ arch/loongarch/kernel/traps.c                      |  95 ++++-
+ arch/loongarch/kernel/unaligned.c                  |   2 -
+ arch/loongarch/kernel/uprobes.c                    | 153 ++++++++
+ arch/loongarch/kernel/vdso.c                       |  98 ++++-
+ arch/loongarch/kernel/vmlinux.lds.S                |   9 +
+ arch/loongarch/lib/dump_tlb.c                      |   6 +-
+ arch/loongarch/mm/tlb.c                            |  21 +-
+ arch/loongarch/mm/tlbex.S                          |  27 +-
+ arch/loongarch/power/suspend.c                     |   8 +-
+ arch/loongarch/vdso/Makefile                       |   7 +-
+ arch/loongarch/vdso/vgetcpu.c                      |   2 +-
+ drivers/acpi/Kconfig                               |   2 +-
+ drivers/irqchip/irq-loongson-eiointc.c             | 135 +++++--
+ drivers/irqchip/irq-loongson-liointc.c             |  13 +-
+ drivers/irqchip/irq-loongson-pch-pic.c             |  10 +-
+ scripts/Makefile.clang                             |   1 +
+ 67 files changed, 2549 insertions(+), 414 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/interrupt-controller/loongson,eiointc.yaml
+ create mode 100644 arch/loongarch/include/asm/jump_label.h
+ create mode 100644 arch/loongarch/include/asm/qspinlock.h
+ create mode 100644 arch/loongarch/include/asm/suspend.h
+ create mode 100644 arch/loongarch/include/asm/uprobes.h
+ create mode 100644 arch/loongarch/kernel/jump_label.c
+ create mode 100644 arch/loongarch/kernel/rethook.c
+ create mode 100644 arch/loongarch/kernel/rethook.h
+ rename arch/loongarch/kernel/{kprobes_trampoline.S => rethook_trampoline.S} (93%)
+ create mode 100644 arch/loongarch/kernel/uprobes.c
