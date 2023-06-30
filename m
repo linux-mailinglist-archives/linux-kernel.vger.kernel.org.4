@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DEA3744513
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Jul 2023 01:17:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED98B744514
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Jul 2023 01:17:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231912AbjF3XRa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 19:17:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35950 "EHLO
+        id S232314AbjF3XRn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Jun 2023 19:17:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232281AbjF3XRX (ORCPT
+        with ESMTP id S231686AbjF3XRa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 19:17:23 -0400
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2041.outbound.protection.outlook.com [40.107.236.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77ED5449B;
-        Fri, 30 Jun 2023 16:17:16 -0700 (PDT)
+        Fri, 30 Jun 2023 19:17:30 -0400
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2057.outbound.protection.outlook.com [40.107.243.57])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27C763C17;
+        Fri, 30 Jun 2023 16:17:28 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=jA2xO/1VvQLM1aoMI0ytOfSQB04aQOjcz1cEWnFexC+j03dnCVolkFIhnFqeuubAavjM/zCP1XwEtL+TXKRwjaJji1cTPDEM8HsiqjZ29hdeXe2/bHsTxUi39aWt+sfatPBw4kIh+ouu7E092JNpzmYlkAhF4AuF99EylfBli+D+RQEN0AZWuWcRI/bHVQp5FWPTJy0HttcGwlHKDreUEti65Hh285K0r6aQfT5CvT4J92hsEeOVrbiZWFpncc/F3t80MfzQ5QMG2nSNZ0WhjYQWf2udjfwBcB8Del3kXQP/PK7RzK5wQnvHYggR/N92zuT612IumTnpCmuGOhvsfQ==
+ b=cuS0iBtWnmg4wuEpIFHr59qdgCS6U36YHdHMEGpWSZCErJQpo8T0BQfUc8k4jv+hSVYYKOFXsBX5urDbDpTY3DXgX5qpbpZ/UvChwZrVpHtwdIhmg+JjoJeirvMxBuKEz/jDcbsU/y96OxbtQiTHmj5dcqb8M68hIees5untffi93QtKIylsU7mim4IL/3zInUSAimv8Xt7+VnqEZF7ZdRpo29tR7bEM5xGCQLdVnD5d35Av0sKqcHHf7yRNPEg0eOY7D1DtagmpFEW4C0fQfoGgYj2WzpueZq1BAjYMoStekiCCI4jFBr4RaFtcj9hR71OgB5kR4bEg5FHM2Py7fw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=sxhtXHrW9Xt2hF+8oum5oO76GsMV8YN8p84NXdCb7zg=;
- b=lvMy66T4rC9ZK2P6U6e4hekML3UlgU4cpAxNG/AHM6hV9qHfwBJAIP2hBqVzLmejKEXkghKbIAA0e+wCSbxK+08ksPgMcqrGG/FzbGbju1Xs7TxHbVHAyACo9yoZF+uN35o0vbkKUd1iHeOfsL2n5CwDLj4jiitK6gGaeZfsmxQj9ekbQV/dpukdBhVqseDnbOskIeQrENc/njgyPp9UqnqykpYzxBbt+8ftD0RAwses2hYs5cV6ik2gBYN1z/Bw/rmH3GMi6Wow0Q1xvg3IzvJGOrH0iIyQRVgMPihmEqmwvdfmdCjvgcAYX21EV1JvZFQo0OVIf8n9jb4L3wrnaw==
+ bh=ABeINDbqMY6Qk18Kqg7NbRozgFxBeCn2SmP490du/Vw=;
+ b=BfMwhXYlWvRMzrzumb37vptU6gz59uzQIuFGLO/xfPkbLmRmIJ/vkwVJrUyeMcX7tS2QonkUnqICbcVqF59VL1jQbJ33DIZKxxwOO+UMLXymqDapakiJ4ymajYWpotftarF5dcox0bygWXKd/ODcJVdIAFKKirPd9uAL1O3yv7UFlZhICHCwu+edB8jbzdNWP/FppStzwpLpQEpk066y+3BglSwfLuoQFx4zCn1oWBLQ05QYYKCh3UMJBCnTEwwmwGeze5F3P+spGPWx6prjeqoZHPaI4JmwTc/dDHzpYbgmaDUZdMTU6om5vqQsQOfTQ52BOJ0nJjZfUEAzdozhfQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  165.204.84.17) smtp.rcpttodomain=intel.com smtp.mailfrom=amd.com; dmarc=pass
  (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
  dkim=none (message not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=sxhtXHrW9Xt2hF+8oum5oO76GsMV8YN8p84NXdCb7zg=;
- b=YKbnDwjjjC+ofD5HmHfvBXn5bTEp1nxcXT2HJHxUUEKwiWaSi34FdHuR5gNuTF5vqiWchGZ9pYcG9/7wiimW7kJqBcHDjZIcLf1r0+9HOKmiasuHDKNVx90oURo+OlgLwOVVWnpk3q6wFyOsn/vTT9DcnCyRwfytHZ6BFTKBcDE=
-Received: from DM6PR02CA0143.namprd02.prod.outlook.com (2603:10b6:5:332::10)
- by MW4PR12MB7013.namprd12.prod.outlook.com (2603:10b6:303:218::19) with
+ bh=ABeINDbqMY6Qk18Kqg7NbRozgFxBeCn2SmP490du/Vw=;
+ b=zHMXmX7CsEXp1nWTswThWE+COyVX8HJVelvcURivBkrMkfYS2o11LmVtOd1HYx1l+sdAJifLov/4i/5TP2TkV0VNA/6rMFHETmJIoSdZMeaWXoD4SNSSr4Mi2lamkT5+Mj2FZk+PBAy7loBkfJu+6pmI47I3RT3dM8KSgkIIaq8=
+Received: from BYAPR21CA0028.namprd21.prod.outlook.com (2603:10b6:a03:114::38)
+ by DM4PR12MB5843.namprd12.prod.outlook.com (2603:10b6:8:66::11) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6544.19; Fri, 30 Jun
- 2023 23:17:12 +0000
-Received: from DM6NAM11FT042.eop-nam11.prod.protection.outlook.com
- (2603:10b6:5:332:cafe::98) by DM6PR02CA0143.outlook.office365.com
- (2603:10b6:5:332::10) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6544.22 via Frontend
- Transport; Fri, 30 Jun 2023 23:17:12 +0000
+ 2023 23:17:24 +0000
+Received: from DM6NAM11FT098.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:a03:114:cafe::7a) by BYAPR21CA0028.outlook.office365.com
+ (2603:10b6:a03:114::38) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6565.10 via Frontend
+ Transport; Fri, 30 Jun 2023 23:17:24 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
  smtp.mailfrom=amd.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=amd.com;
@@ -47,13 +47,13 @@ Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
  165.204.84.17 as permitted sender) receiver=protection.outlook.com;
  client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
 Received: from SATLEXMB04.amd.com (165.204.84.17) by
- DM6NAM11FT042.mail.protection.outlook.com (10.13.173.165) with Microsoft SMTP
+ DM6NAM11FT098.mail.protection.outlook.com (10.13.173.61) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6500.49 via Frontend Transport; Fri, 30 Jun 2023 23:17:12 +0000
+ 15.20.6500.49 via Frontend Transport; Fri, 30 Jun 2023 23:17:23 +0000
 Received: from ethanolx7ea3host.amd.com (10.180.168.240) by SATLEXMB04.amd.com
  (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Fri, 30 Jun
- 2023 18:17:11 -0500
+ 2023 18:17:22 -0500
 From:   Terry Bowman <terry.bowman@amd.com>
 To:     <alison.schofield@intel.com>, <vishal.l.verma@intel.com>,
         <ira.weiny@intel.com>, <bwidawsk@kernel.org>,
@@ -61,9 +61,9 @@ To:     <alison.schofield@intel.com>, <vishal.l.verma@intel.com>,
         <Jonathan.Cameron@huawei.com>, <linux-cxl@vger.kernel.org>
 CC:     <terry.bowman@amd.com>, <rrichter@amd.com>,
         <linux-kernel@vger.kernel.org>, <bhelgaas@google.com>
-Subject: [PATCH v8 02/14] cxl/pci: Store the endpoint's Component Register mappings in struct cxl_dev_state
-Date:   Fri, 30 Jun 2023 18:16:23 -0500
-Message-ID: <20230630231635.3132638-3-terry.bowman@amd.com>
+Subject: [PATCH v8 03/14] cxl/hdm: Use stored Component Register mappings to map HDM decoder capability
+Date:   Fri, 30 Jun 2023 18:16:24 -0500
+Message-ID: <20230630231635.3132638-4-terry.bowman@amd.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230630231635.3132638-1-terry.bowman@amd.com>
 References: <20230630231635.3132638-1-terry.bowman@amd.com>
@@ -75,23 +75,23 @@ X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
  (10.181.40.145)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6NAM11FT042:EE_|MW4PR12MB7013:EE_
-X-MS-Office365-Filtering-Correlation-Id: 4c367885-104f-4aec-91a8-08db79c02292
+X-MS-TrafficTypeDiagnostic: DM6NAM11FT098:EE_|DM4PR12MB5843:EE_
+X-MS-Office365-Filtering-Correlation-Id: 622edc73-232a-4b30-fdbd-08db79c02961
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 7nX8cx3gV/4N6Bqtf+VMe2Xg26jTDgfHv4tm8D+5rxvCwkBXidiwbP5QA7UnU13Xt1cx/Rg7mA70qDZQfJaNDO7mSjp0TWIm/SYXv2jVAsQVh7PUjhTHJmVsbeE8S9mhnCS2oNoqwheGzXcafbbDCVh/fMjjoDdYZX0zBJBUGK0Bne1sN/cWpu+UJiWAIGGKsGkcuSGAxtVj5IecX7yM0gclDepsnj+2A3vvcXgA4ItURQJE3eOGW9Vvlfe741ue6/qtNOJpC3divzG0Iyq8p4HkLnGay9YHGn4s59gu3wIMMrXNOeNP6KUC+LXzYICuXXMxH/cgrYQmtvylHDDTZP81Qut1bvi8kA/YZyPMk2Xa1+j9ICoMtifisSvmVFJkklRjaauS45h6o3JUWaQcrnZnL3osu6sZT6cxVyJvC3R5qZeFK7IZyYxymN0XtCjwPI6jmRUWEuLwTzTx9jrSV0oaJtE+6aOzEGw84h4ZWLb/OTxAMnIYdi6jh8qJU2npZmH2pZ3hXblSJQnIdDPH3gQk2OKDHk/EiNEiqDQeLNVUc3zLtjHDot6hJVUJ2mdosbgobegK54gutBi6yTESel53HdZlAIT6QGWMJrp7ugqP5nNbgNdA5XJhhVrwyyaX2LgwMoVegw3/l/lmpSu+wOAweDDi6cmLZWu23lQIiP0kIv1QiU5AgsidQBVflcor/lkXM2HXQuDiJNyNZWTV26ZVUTnlB78ak6kYGxYq4AaY2X0dCAfPr+u55GBm+2YO84T11DyTtcqpcagOWQ8NWA==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(346002)(396003)(136003)(39860400002)(376002)(451199021)(36840700001)(46966006)(40470700004)(7696005)(478600001)(40460700003)(6666004)(47076005)(36860700001)(26005)(16526019)(186003)(40480700001)(1076003)(336012)(426003)(83380400001)(36756003)(2616005)(82740400003)(82310400005)(86362001)(81166007)(356005)(4326008)(70586007)(70206006)(2906002)(316002)(7416002)(5660300002)(44832011)(8936002)(8676002)(41300700001)(54906003)(110136005)(36900700001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: T5hyf825lecJ849cqJj/gms26mEgy9g5J/kcNp0NvJofGSNZj38C96PeF2cv2AlecnBhKUq7H6m/ooYGc2SxxqtFl4TK0M7oP0/X/F/JYm/cPKcCIxOv/h1ZT5n6VoT7vOzTiDC06X5os74vb/RdW+rTvQSZ426dWRxAvMvtEp9fRT7cVkC48R/S7P4kFoD9aze5hcnSrBDav70WgiinI+6jtRCCkXS4OxdUaNkRRo1eotrl+I1bvrP7lFt92aHcwzXh/F6QTv1BMMDapVgXlDFFnLWguq6QWB2G3OsgtiLSIkP4W0R+0a+H3YtHHiwEU8IVGMuGq7pt10bDD8cPGNmEdHCbYNjiRXSpdBkK8yfPpr0Rvuf76YrmpkvuVXMGJEs0JGrZWhgpjzw4gHZJ6+x66K0JuakkNNiTc1o/ljx6nx//MSr3+zQ6fzKmvFSmuEcjUScum7Ja7Upjp7dd+tW23yBl6tRmFh8gjPdJahyEPfBJH+/IvyeFCLMWlJMdji8eghauB8+5GI5V/AI1dYtbsrIZqhSxycb9yLKvyEz7gsmnxG4pB/owFX4Xpywt0VbwwAtYjyzA9c5p/VC85GjgwDm91hD/n8juvq+h+oKXCJnjA6TwQ2ivWkzkqD8mhaKdtfVYDPBfwLPHKLi9OecvzNcJjwKiAhIjxIiHdBHU6MzUW546myT64LQzn4uE1hLxjEvyS0/1DS9UpqxUYhoRlTUryc3qvAzK89ClJuviDjJG/mH1reBmTyC7ucoDOt7pXA1ugJgxJ3AREiMJWQ==
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(376002)(396003)(136003)(39860400002)(346002)(451199021)(46966006)(36840700001)(40470700004)(86362001)(54906003)(8936002)(8676002)(5660300002)(82310400005)(110136005)(7416002)(26005)(1076003)(44832011)(7696005)(478600001)(4326008)(70206006)(70586007)(41300700001)(316002)(16526019)(186003)(2616005)(2906002)(47076005)(40460700003)(83380400001)(336012)(426003)(36860700001)(40480700001)(36756003)(82740400003)(356005)(81166007)(36900700001);DIR:OUT;SFP:1101;
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Jun 2023 23:17:12.2988
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Jun 2023 23:17:23.7089
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4c367885-104f-4aec-91a8-08db79c02292
+X-MS-Exchange-CrossTenant-Network-Message-Id: 622edc73-232a-4b30-fdbd-08db79c02961
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT042.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT098.eop-nam11.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR12MB7013
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB5843
 X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
         RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
@@ -105,67 +105,125 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Robert Richter <rrichter@amd.com>
 
-Same as for ports and dports, also store the endpoint's Component
-Register mappings, use struct cxl_dev_state for that.
+Now, that the Component Register mappings are stored, use them to
+enable and map the HDM decoder capabilities. The Component Registers
+do not need to be probed again for this, remove probing code.
 
-Keep the Component Register base address @component_reg_phys a bit to
-not break functionality. It will be removed after the transition in a
-later patch.
+The HDM capability applies to Endpoints, USPs and VH Host Bridges. The
+Endpoint's component register mappings are located in the cxlds and
+else in the port's structure. Provide a helper function
+cxl_port_get_comp_map() to locate the mappings depending on the
+component's type.
 
 Signed-off-by: Robert Richter <rrichter@amd.com>
 Signed-off-by: Terry Bowman <terry.bowman@amd.com>
 Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 Reviewed-by: Dave Jiang <dave.jiang@intel.com>
 ---
- drivers/cxl/cxlmem.h | 2 ++
- drivers/cxl/pci.c    | 9 +++++----
- 2 files changed, 7 insertions(+), 4 deletions(-)
+ drivers/cxl/core/hdm.c | 64 +++++++++++++++++++++++-------------------
+ 1 file changed, 35 insertions(+), 29 deletions(-)
 
-diff --git a/drivers/cxl/cxlmem.h b/drivers/cxl/cxlmem.h
-index 79e99c873ca2..607ee34b0ce7 100644
---- a/drivers/cxl/cxlmem.h
-+++ b/drivers/cxl/cxlmem.h
-@@ -382,6 +382,7 @@ enum cxl_devtype {
-  *
-  * @dev: The device associated with this CXL state
-  * @cxlmd: The device representing the CXL.mem capabilities of @dev
-+ * @comp_map: component register capability mappings
-  * @regs: Parsed register blocks
-  * @cxl_dvsec: Offset to the PCIe device DVSEC
-  * @rcd: operating in RCD mode (CXL 3.0 9.11.8 CXL Devices Attached to an RCH)
-@@ -396,6 +397,7 @@ enum cxl_devtype {
- struct cxl_dev_state {
- 	struct device *dev;
- 	struct cxl_memdev *cxlmd;
-+	struct cxl_register_map comp_map;
- 	struct cxl_regs regs;
- 	int cxl_dvsec;
- 	bool rcd;
-diff --git a/drivers/cxl/pci.c b/drivers/cxl/pci.c
-index 48f88d96029d..054cfa2f6a2d 100644
---- a/drivers/cxl/pci.c
-+++ b/drivers/cxl/pci.c
-@@ -836,15 +836,16 @@ static int cxl_pci_probe(struct pci_dev *pdev, const struct pci_device_id *id)
- 	 * still be useful for management functions so don't return an error.
- 	 */
- 	cxlds->component_reg_phys = CXL_RESOURCE_NONE;
--	rc = cxl_pci_setup_regs(pdev, CXL_REGLOC_RBI_COMPONENT, &map);
-+	rc = cxl_pci_setup_regs(pdev, CXL_REGLOC_RBI_COMPONENT,
-+				&cxlds->comp_map);
- 	if (rc)
- 		dev_warn(&pdev->dev, "No component registers (%d)\n", rc);
--	else if (!map.component_map.ras.valid)
-+	else if (!cxlds->comp_map.component_map.ras.valid)
- 		dev_dbg(&pdev->dev, "RAS registers not found\n");
+diff --git a/drivers/cxl/core/hdm.c b/drivers/cxl/core/hdm.c
+index 4449b34a80cc..b0f59e63e0d2 100644
+--- a/drivers/cxl/core/hdm.c
++++ b/drivers/cxl/core/hdm.c
+@@ -81,26 +81,6 @@ static void parse_hdm_decoder_caps(struct cxl_hdm *cxlhdm)
+ 		cxlhdm->interleave_mask |= GENMASK(14, 12);
+ }
  
--	cxlds->component_reg_phys = map.resource;
-+	cxlds->component_reg_phys = cxlds->comp_map.resource;
+-static int map_hdm_decoder_regs(struct cxl_port *port, void __iomem *crb,
+-				struct cxl_component_regs *regs)
+-{
+-	struct cxl_register_map map = {
+-		.dev = &port->dev,
+-		.resource = port->component_reg_phys,
+-		.base = crb,
+-		.max_size = CXL_COMPONENT_REG_BLOCK_SIZE,
+-	};
+-
+-	cxl_probe_component_regs(&port->dev, crb, &map.component_map);
+-	if (!map.component_map.hdm_decoder.valid) {
+-		dev_dbg(&port->dev, "HDM decoder registers not implemented\n");
+-		/* unique error code to indicate no HDM decoder capability */
+-		return -ENODEV;
+-	}
+-
+-	return cxl_map_component_regs(&map, regs, BIT(CXL_CM_CAP_CAP_ID_HDM));
+-}
+-
+ static bool should_emulate_decoders(struct cxl_endpoint_dvsec_info *info)
+ {
+ 	struct cxl_hdm *cxlhdm;
+@@ -145,6 +125,22 @@ static bool should_emulate_decoders(struct cxl_endpoint_dvsec_info *info)
+ 	return true;
+ }
  
--	rc = cxl_map_component_regs(&map, &cxlds->regs.component,
-+	rc = cxl_map_component_regs(&cxlds->comp_map, &cxlds->regs.component,
- 				    BIT(CXL_CM_CAP_CAP_ID_RAS));
- 	if (rc)
- 		dev_dbg(&pdev->dev, "Failed to map RAS capability.\n");
++static struct cxl_register_map *cxl_port_get_comp_map(struct cxl_port *port)
++{
++	/*
++	 * HDM capability applies to Endpoints, USPs and VH Host
++	 * Bridges. The Endpoint's component register mappings are
++	 * located in the cxlds.
++	 */
++	if (is_cxl_endpoint(port)) {
++		struct cxl_memdev *memdev = to_cxl_memdev(port->uport_dev);
++
++		return &memdev->cxlds->comp_map;
++	}
++
++	return &port->comp_map;
++}
++
+ /**
+  * devm_cxl_setup_hdm - map HDM decoder component registers
+  * @port: cxl_port to map
+@@ -155,7 +151,7 @@ struct cxl_hdm *devm_cxl_setup_hdm(struct cxl_port *port,
+ {
+ 	struct device *dev = &port->dev;
+ 	struct cxl_hdm *cxlhdm;
+-	void __iomem *crb;
++	struct cxl_register_map *comp_map;
+ 	int rc;
+ 
+ 	cxlhdm = devm_kzalloc(dev, sizeof(*cxlhdm), GFP_KERNEL);
+@@ -164,19 +160,29 @@ struct cxl_hdm *devm_cxl_setup_hdm(struct cxl_port *port,
+ 	cxlhdm->port = port;
+ 	dev_set_drvdata(dev, cxlhdm);
+ 
+-	crb = ioremap(port->component_reg_phys, CXL_COMPONENT_REG_BLOCK_SIZE);
+-	if (!crb && info && info->mem_enabled) {
+-		cxlhdm->decoder_count = info->ranges;
+-		return cxlhdm;
+-	} else if (!crb) {
++	comp_map = cxl_port_get_comp_map(port);
++
++	if (comp_map->resource == CXL_RESOURCE_NONE) {
++		if (info && info->mem_enabled) {
++			cxlhdm->decoder_count = info->ranges;
++			return cxlhdm;
++		}
+ 		dev_err(dev, "No component registers mapped\n");
+ 		return ERR_PTR(-ENXIO);
+ 	}
+ 
+-	rc = map_hdm_decoder_regs(port, crb, &cxlhdm->regs);
+-	iounmap(crb);
+-	if (rc)
++	if (!comp_map->component_map.hdm_decoder.valid) {
++		dev_dbg(&port->dev, "HDM decoder registers not implemented\n");
++		/* unique error code to indicate no HDM decoder capability */
++		return ERR_PTR(-ENODEV);
++	}
++
++	rc = cxl_map_component_regs(comp_map, &cxlhdm->regs,
++				    BIT(CXL_CM_CAP_CAP_ID_HDM));
++	if (rc) {
++		dev_dbg(dev, "Failed to map HDM capability.\n");
+ 		return ERR_PTR(rc);
++	}
+ 
+ 	parse_hdm_decoder_caps(cxlhdm);
+ 	if (cxlhdm->decoder_count == 0) {
 -- 
 2.34.1
 
