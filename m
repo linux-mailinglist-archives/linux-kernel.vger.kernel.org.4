@@ -2,116 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01A85743935
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 12:18:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B38B743937
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 12:18:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233074AbjF3KSC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 06:18:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57496 "EHLO
+        id S232507AbjF3KSc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Jun 2023 06:18:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232614AbjF3KRy (ORCPT
+        with ESMTP id S230436AbjF3KSV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 06:17:54 -0400
-Received: from out-47.mta0.migadu.com (out-47.mta0.migadu.com [91.218.175.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B82F2694
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 03:17:53 -0700 (PDT)
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1688120271;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Czs8IghMvQFj4DtiBvG7zR2KpgKm5gD1K6m9U2//NcY=;
-        b=ilBvPjteqljimLzGqnF1hZ9Pt+LcXJ6Owxu1zHPnzTqjghSo1sa5EA5MEwCUOzpCu2Wrjg
-        RuvWehhzVwaCMxyEQ4+XfehVgFb6prjkqNJSUZCFgfEdlcrQbI+bnaaas+v0246Ts/3687
-        OyAYiDwIY2MmnSlGdwfuxZlXpqpUjdg=
-From:   Sui Jingfeng <sui.jingfeng@linux.dev>
-To:     Bjorn Helgaas <bhelgaas@google.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org,
-        Sui Jingfeng <suijingfeng@loongson.cn>,
-        Andi Shyti <andi.shyti@linux.intel.com>
-Subject: [PATCH 4/4] PCI/VGA: Replace full MIT license text with SPDX identifier
-Date:   Fri, 30 Jun 2023 18:17:31 +0800
-Message-Id: <20230630101731.134375-4-sui.jingfeng@linux.dev>
-In-Reply-To: <20230630101731.134375-1-sui.jingfeng@linux.dev>
-References: <20230630101731.134375-1-sui.jingfeng@linux.dev>
+        Fri, 30 Jun 2023 06:18:21 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 128F61FE7;
+        Fri, 30 Jun 2023 03:18:17 -0700 (PDT)
+X-QQ-mid: bizesmtp68t1688120287t3nc41p8
+Received: from linux-lab-host.localdomain ( [119.123.131.49])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Fri, 30 Jun 2023 18:18:06 +0800 (CST)
+X-QQ-SSF: 01200000000000D0W000000A0000000
+X-QQ-FEAT: CR3LFp2JE4kVeLKB/IGQ9/HRtzlNKysqzzw7EbOOaZ8+pWgGPgTrhbXB+Omb0
+        rtWnq8zftwEPlSqt6c/gxeuuQuVIoG9+wbdtU+z8IIyaZHVTr0Yh7aDX+qs9sFbRIeorAkt
+        yPtt+gU2anILKtVnuIWaOTwsTX52PX1/HqBzqKiEZg1ckDWXQba3c03WgwGJophNIzGaHoe
+        /Xk1Pa+94BwABp0FVAIN0wwxWhPESgBSYfo53FvyuuvOVN/gqta8heEL2B3B5cDeLGyJ0Km
+        L6kYSzFKjxJCAs2N1LbKE02HcCINrz/Tt3jMOPoFgyBY3zNKByx8cxBdOzwExt2s1Bs3vde
+        gAZvLfQwAI4E7yYbzRRNMTTx3q8KUdWm7A5ZhxKOVBxRYOdgfPLHHs2qmOqiw==
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 15246571303830046503
+From:   Zhangjin Wu <falcon@tinylab.org>
+To:     thomas@t-8ch.de
+Cc:     arnd@arndb.de, falcon@tinylab.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, w@1wt.eu
+Subject: Re: [PATCH v2 11/15] selftests/nolibc: prepare /tmp for tmpfs or ramfs
+Date:   Fri, 30 Jun 2023 18:18:05 +0800
+Message-Id: <20230630101805.192734-1-falcon@tinylab.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <457759dc-cd95-4474-a184-242bdb028445@t-8ch.de>
+References: <457759dc-cd95-4474-a184-242bdb028445@t-8ch.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrgz:qybglogicsvrgz5a-1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H4,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sui Jingfeng <suijingfeng@loongson.cn>
+Hi, Thomas
 
-Per Documentation/process/license-rules.rst, the SPDX MIT identifier is
-equivalent to including the entire MIT license text from
-LICENSES/preferred/MIT.
+> On 2023-06-30 07:52:03+0800, Zhangjin Wu wrote:
+> > Let's create a /tmp directory and mount tmpfs there, if tmpfs is not
+> > mountable, use ramfs as tmpfs.
+> > 
+> > tmpfs will be used instead of procfs for some tests.
+> > 
+> > Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
+> > ---
+> >  tools/testing/selftests/nolibc/nolibc-test.c | 4 ++++
+> >  1 file changed, 4 insertions(+)
+> > 
+> > diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
+> > index c0f5302ada5d..8e3e2792f5e3 100644
+> > --- a/tools/testing/selftests/nolibc/nolibc-test.c
+> > +++ b/tools/testing/selftests/nolibc/nolibc-test.c
+> > @@ -1054,6 +1054,10 @@ int prepare(void)
+> >  		}
+> >  	}
+> >  
+> > +	/* try to mount /tmp if not mounted, if not mountable, use ramfs as tmpfs */
+> > +	if (stat("/tmp/.", &stat_buf) == 0 || mkdir("/tmp", 0755) == 0)
+> > +		mount("none", "/tmp", "tmpfs", 0, 0);
+> > +
+> 
+> mkdir()
+> mount()
+> 
+> without any error checking should do the same and be easier to read.
+>
 
-Replace the MIT license text with the equivalent SPDX identifier.
+Yeah, will apply it, it saves a call for us.
 
-Cc: David Airlie <airlied@gmail.com>
-Cc: Daniel Vetter <daniel@ffwll.ch>
-Cc: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
-Cc: Maxime Ripard <mripard@kernel.org>
-Cc: Thomas Zimmermann <tzimmermann@suse.de>
-Signed-off-by: Sui Jingfeng <suijingfeng@loongson.cn>
-Reviewed-by: Andi Shyti <andi.shyti@linux.intel.com>
----
- include/linux/vgaarb.h | 23 ++---------------------
- 1 file changed, 2 insertions(+), 21 deletions(-)
+Perhaps the other codes in prepare() can be cleaned up with the same method in the future too.
 
-diff --git a/include/linux/vgaarb.h b/include/linux/vgaarb.h
-index 6d5465f8c3f2..97129a1bbb7d 100644
---- a/include/linux/vgaarb.h
-+++ b/include/linux/vgaarb.h
-@@ -1,3 +1,5 @@
-+/* SPDX-License-Identifier: MIT */
-+
- /*
-  * The VGA aribiter manages VGA space routing and VGA resource decode to
-  * allow multiple VGA devices to be used in a system in a safe way.
-@@ -5,27 +7,6 @@
-  * (C) Copyright 2005 Benjamin Herrenschmidt <benh@kernel.crashing.org>
-  * (C) Copyright 2007 Paulo R. Zanoni <przanoni@gmail.com>
-  * (C) Copyright 2007, 2009 Tiago Vignatti <vignatti@freedesktop.org>
-- *
-- * Permission is hereby granted, free of charge, to any person obtaining a
-- * copy of this software and associated documentation files (the "Software"),
-- * to deal in the Software without restriction, including without limitation
-- * the rights to use, copy, modify, merge, publish, distribute, sublicense,
-- * and/or sell copies of the Software, and to permit persons to whom the
-- * Software is furnished to do so, subject to the following conditions:
-- *
-- * The above copyright notice and this permission notice (including the next
-- * paragraph) shall be included in all copies or substantial portions of the
-- * Software.
-- *
-- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL
-- * THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
-- * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
-- * DEALINGS
-- * IN THE SOFTWARE.
-- *
-  */
- 
- #ifndef LINUX_VGA_H
--- 
-2.25.1
+Thanks,
+Zhangjin
 
+> >  	return 0;
+> >  }
+> >  
+> > -- 
+> > 2.25.1
+> > 
