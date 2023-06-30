@@ -2,692 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6964074395E
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 12:29:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E94D743973
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 12:34:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232308AbjF3K34 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 06:29:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34242 "EHLO
+        id S232449AbjF3KeI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Jun 2023 06:34:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229787AbjF3K3x (ORCPT
+        with ESMTP id S232277AbjF3Kd7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 06:29:53 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32D68EE;
-        Fri, 30 Jun 2023 03:29:43 -0700 (PDT)
-Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35U8iUll014085;
-        Fri, 30 Jun 2023 10:29:37 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : from : to : cc : references : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=GOMTvJmdffmDWCrvI3yojasKJx81ctdw/UTK3c7X3mU=;
- b=nH2boVJI3ijBC+UJ04cVwtzf4bvWoNMJ2dHz9CkQYH1qynrs4uoOvqDfoxRXZ68JUYqu
- X8nJ6FAnZlsF8Y/M7T8ef1gwNWX8dNu3lz1iJZZ6Pcuj+UAvE2uGu3U6quvZXj9fjSKi
- LWWj5OhWGi/F2PnRwZR4I+2WQ+JaR0oN36dQQmW7VvPTnThJmnsbxm7LK1JxPkUbMpcj
- Uw8P5n0vesUXI1GkggNrdKGIxprJIE8EPyoDGDQ2nR7Dga8TiVbq/wLutOs4e3myLubr
- pvbNUGc2JkShkV5Y34B1HtfI6Xthfl7eKIj1b9Q4A8Bb7pVF/1U2DTXPAA9/1Uej1QWP gA== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rh7s2tqad-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 30 Jun 2023 10:29:36 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35UATTqJ009321
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 30 Jun 2023 10:29:29 GMT
-Received: from [10.216.51.197] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.7; Fri, 30 Jun
- 2023 03:29:20 -0700
-Message-ID: <8cf34ab3-fa8b-90f4-215e-bbfb0c41fade@quicinc.com>
-Date:   Fri, 30 Jun 2023 15:59:17 +0530
+        Fri, 30 Jun 2023 06:33:59 -0400
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2083.outbound.protection.outlook.com [40.107.237.83])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3F9435A0;
+        Fri, 30 Jun 2023 03:33:57 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=V5Npd76DPhbP60VXzKTU/NXTmms4e2uO6ywXtyR+b46TdJTq1VCV64vdjhHePrT1t3vLklKTamolN9Jf7/g0gse09oAVA8CRo5jkc8sRxar3B5EKkBbdoDWZxYW4m6iiZbzH6jst7LQozFOGeEOj/d09IILuVVb/XA6vcPmAa9D+7GP+JXQPEPF7ZjqkVVDDV3pC28gNJvsTXc/E6kV/ouOGwtpMruVgpXNTRkregunytf91BulWiQZIryXDg83YQzYkhj/6UqTxbpw73msQNwVtb7LXNTYaCZRrCt698jGLTWE//pkBmwwFztTCRLGcDLZstTaIe76QJVxhfNg8tA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=TL4c+OPviGSQDv5O67ryfWB2soQ+mY/5e75OBRUsY/k=;
+ b=NlU4j3vDPvt2IqRCdQpiaT8Mp9phhS76NqKKKKo4NGYFtkfRnWZvpWR94xkyHj9cFzhpV2XjV220Fy2SyO2R4MAe7xDpEUNZcpdhggZ7EQjMEjbhrxgScwhoKIQDC1za02DiOP0aLQVY/H/6gi+sipfPSO8hqV/QJrN+AT9jYpIvdYGj3McMpPJTqN4WoMatEWFQQcIe1EK/lJ0OMc3Mn53EUOEYgpfpoIVfgvspPL6PxKCloiTBXneyIXdQ2gRU5xw10LvfuM1W2mlsMNgiV7tOvt1jBZZWBCUbE1/A7s41+mKeWRA4QOq1lm/g+C7ir+TOKTnsG29U52sFByn+mw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=TL4c+OPviGSQDv5O67ryfWB2soQ+mY/5e75OBRUsY/k=;
+ b=XXwOxY8AGnXx6GCE697xIYNe0tXTAvR0fGXYdfZ7a5BB/sFHZthfxQTihZdRjh3IyrmYGRqlFVbHmXDwmC7aj1NDe1kKHCCa1wnGKemQCZZc0rcQxCaklUEZjR8rLbMLXANr716B3qaPXbeQ4GzSW1oXzkmL1Ib62x2IQ7aGKdw=
+Received: from DM6PR21CA0001.namprd21.prod.outlook.com (2603:10b6:5:174::11)
+ by SA1PR12MB7409.namprd12.prod.outlook.com (2603:10b6:806:29c::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.21; Fri, 30 Jun
+ 2023 10:33:54 +0000
+Received: from DM6NAM11FT089.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:5:174:cafe::8b) by DM6PR21CA0001.outlook.office365.com
+ (2603:10b6:5:174::11) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6565.13 via Frontend
+ Transport; Fri, 30 Jun 2023 10:33:54 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ DM6NAM11FT089.mail.protection.outlook.com (10.13.173.82) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6521.43 via Frontend Transport; Fri, 30 Jun 2023 10:33:54 +0000
+Received: from equan-buildpc.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Fri, 30 Jun
+ 2023 05:33:46 -0500
+From:   Evan Quan <evan.quan@amd.com>
+To:     <rafael@kernel.org>, <lenb@kernel.org>,
+        <Alexander.Deucher@amd.com>, <Christian.Koenig@amd.com>,
+        <Xinhui.Pan@amd.com>, <airlied@gmail.com>, <daniel@ffwll.ch>,
+        <johannes@sipsolutions.net>, <davem@davemloft.net>,
+        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
+        <Mario.Limonciello@amd.com>, <mdaenzer@redhat.com>,
+        <maarten.lankhorst@linux.intel.com>, <tzimmermann@suse.de>,
+        <hdegoede@redhat.com>, <jingyuwang_vip@163.com>,
+        <Lijo.Lazar@amd.com>, <jim.cromie@gmail.com>,
+        <bellosilicio@gmail.com>, <andrealmeid@igalia.com>,
+        <trix@redhat.com>, <jsg@jsg.id.au>, <arnd@arndb.de>
+CC:     <linux-kernel@vger.kernel.org>, <linux-acpi@vger.kernel.org>,
+        <amd-gfx@lists.freedesktop.org>, <dri-devel@lists.freedesktop.org>,
+        <linux-wireless@vger.kernel.org>, <netdev@vger.kernel.org>,
+        Evan Quan <evan.quan@amd.com>
+Subject: [PATCH V5 0/9] Enable Wifi RFI interference mitigation feature support
+Date:   Fri, 30 Jun 2023 18:32:31 +0800
+Message-ID: <20230630103240.1557100-1-evan.quan@amd.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.2
-Subject: Re: [PATCH V2 10/13] remoteproc: qcom: Add Hexagon based multipd
- rproc driver
-Content-Language: en-US
-From:   Manikanta Mylavarapu <quic_mmanikan@quicinc.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        <agross@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
-        <jassisinghbrar@gmail.com>, <mathieu.poirier@linaro.org>,
-        <mturquette@baylibre.com>, <sboyd@kernel.org>,
-        <quic_eberman@quicinc.com>, <quic_mojha@quicinc.com>,
-        <kvalo@kernel.org>, <loic.poulain@linaro.org>,
-        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-remoteproc@vger.kernel.org>,
-        <linux-clk@vger.kernel.org>
-CC:     <quic_srichara@quicinc.com>, <quic_sjaganat@quicinc.com>,
-        <quic_kathirav@quicinc.com>, <quic_anusha@quicinc.com>,
-        <quic_poovendh@quicinc.com>, <quic_varada@quicinc.com>,
-        <quic_devipriy@quicinc.com>
-References: <20230521222852.5740-1-quic_mmanikan@quicinc.com>
- <20230521222852.5740-11-quic_mmanikan@quicinc.com>
- <2061a641-4b97-1aa6-27cd-99f01a785033@linaro.org>
- <54f06704-a849-7049-5956-31cb4765a1eb@quicinc.com>
-In-Reply-To: <54f06704-a849-7049-5956-31cb4765a1eb@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: RHSaYhF1DKGxWm3pQ6oyiaPd62UwHcFO
-X-Proofpoint-ORIG-GUID: RHSaYhF1DKGxWm3pQ6oyiaPd62UwHcFO
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-06-30_05,2023-06-30_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 adultscore=0
- spamscore=0 priorityscore=1501 suspectscore=0 phishscore=0
- lowpriorityscore=0 malwarescore=0 mlxlogscore=999 impostorscore=0
- mlxscore=0 clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2305260000 definitions=main-2306300089
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6NAM11FT089:EE_|SA1PR12MB7409:EE_
+X-MS-Office365-Filtering-Correlation-Id: 2700e21f-017c-4738-c7a5-08db795580ee
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: RnqiAibPXjfzzv4xCdE+nfvuAPJSXqID5S+2FhTdOGBOJO7gR1JeEqy++NXQdCukP3hxvjlhtwTOE8oecAnTqnHbUO6R7554/My0vbJh6OQ5zlQdZ/fHdGhA4H7HkLzoK9geRgi2xs1NwxL6i0nzZutRvFiUDL9YNb131I+BFEzzJVPO9bG0Ybtl4Lmosn7EGMUAG4ifEFb3/HUfvpMDB4tzNPTjo/xn88DLvGf7+ClPv5P1ew+ApCDuzD9FLAgVnuj7pjXPqYHPF1Wiu575yptnCo+5q2SXHU36ANbg3Nzt+j+yTBXl7sBGTsobiH+D2JBJW+thfB+CKOOwrqiQWS9XQ5bm2DuQFMxeIx/DfGvyQ5YvJy/5xxtXFwZz2f498hIU0u/8OZPNIU+GjVR9m8Qm7WSH4gFtUcoVDfbSxnaT+OkRpPCVuXUFVLWAVRWl4JhW6XEBuaPOBNb2DixPPu8yK1XFCMETkXPleGsPAWw0B61M6llpdjA46Mq/bpOqHmRyHU57jl/ie3d16I3HRgQJBEgpjnGIBU2JnHYZIPoFLaULUfcnYpshjPQN7PwRTEWevVAnoJ3NWb7CR3k9GiD8hI1D119jYTR5WLZJc0pyg4/l0gxBe8McECWCoAU9AhkrbjtyxtuidJjJdiCpvauS/+lmH/cSN+8RSwXNHQEVv3kUfCunASIWLEqNGKaj6rpRXCe4TlD+AhXuQ1ze4plpSj57HPvWsQtdLQYr7kFtaY0+jULN1OxXR1WMgyJ4KerLUKqCBOAKxuWpDgL9kf1Rfy+xvFyqBZmhONXU7Uw4oxe6H1ZZQDKeK1n8NpTVZMNLjjGgOJBydrcGYq4+zQ==
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(376002)(136003)(396003)(346002)(39860400002)(451199021)(40470700004)(46966006)(36840700001)(82310400005)(36860700001)(478600001)(54906003)(16526019)(6666004)(7696005)(2616005)(110136005)(426003)(336012)(83380400001)(1076003)(186003)(26005)(2906002)(47076005)(40480700001)(7416002)(86362001)(921005)(44832011)(4326008)(70206006)(41300700001)(356005)(40460700003)(5660300002)(36756003)(70586007)(82740400003)(81166007)(316002)(8676002)(8936002)(2101003)(36900700001)(83996005);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Jun 2023 10:33:54.4589
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2700e21f-017c-4738-c7a5-08db795580ee
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT089.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR12MB7409
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Due to electrical and mechanical constraints in certain platform designs there may
+be likely interference of relatively high-powered harmonics of the (G-)DDR memory
+clocks with local radio module frequency bands used by Wifi 6/6e/7. To mitigate
+possible RFI interference producers can advertise the frequencies in use and
+consumers can use this information to avoid using these frequencies for
+sensitive features.
 
+The whole patch set is based on Linux 6.4. With some brief introductions as below:
+Patch1 - 2:  Core functionality setup for WBRF feature support
+Patch3 - 4:  Bring WBRF support to wifi subsystem.
+Patch5 - 9:  Bring WBRF support to AMD graphics driver.
 
-On 6/27/2023 6:09 PM, Manikanta Mylavarapu wrote:
-> 
-> 
-> On 6/24/2023 12:58 PM, Krzysztof Kozlowski wrote:
->> On 22/05/2023 00:28, Manikanta Mylavarapu wrote:
->>> It adds support to bring up remoteproc's on multipd model.
->>> Pd means protection domain. It's similar to process in Linux.
->>> Here QDSP6 processor runs each wifi radio functionality on a
->>> separate process. One process can't access other process
->>> resources, so this is termed as PD i.e protection domain.
->>>
->>> Here we have two pd's called root and user pd. We can correlate
->>> Root pd as root and user pd as user in linux. Root pd has more
->>> privileges than user pd. Root will provide services to user pd.
->>>
->>>  From remoteproc driver perspective, root pd corresponds to QDSP6
->>> processor bring up and user pd corresponds to Wifi radio (WCSS)
->>> bring up.
->>>
->>> Here WCSS(user) PD is dependent on Q6(root) PD, so first
->>> q6 pd should be up before wcss pd. After wcss pd goes down,
->>> q6 pd should be turned off.
->>>
->>> IPQ5018, IPQ9574 supports multipd remoteproc driver.
->>>
->>> Signed-off-by: Manikanta Mylavarapu <quic_mmanikan@quicinc.com>
->>> ---
->>> Changes in V2:
->>>     - Common functionalities moved to seperate patches
->>>     - qcom_get_pd_asid() moved to mpd driver
->>>     - Last DMA block alone memset to zero
->>>     - Added diagram to show how userpd data is organized and sent to
->>>       trustzone
->>>     - Rewritten commit message since most of the content available
->>>       in cover page
->>>     - Removed 'remote_id' becuase it's not required for bring up.
->>>
->>>   drivers/remoteproc/Kconfig          |  20 +
->>>   drivers/remoteproc/Makefile         |   1 +
->>>   drivers/remoteproc/qcom_common.h    |   9 +
->>>   drivers/remoteproc/qcom_q6v5_mpd.c  | 677 ++++++++++++++++++++++++++++
->>>   drivers/soc/qcom/mdt_loader.c       | 332 ++++++++++++++
->>>   include/linux/soc/qcom/mdt_loader.h |  19 +
->>>   6 files changed, 1058 insertions(+)
->>>   create mode 100644 drivers/remoteproc/qcom_q6v5_mpd.c
->>>
->>> diff --git a/drivers/remoteproc/Kconfig b/drivers/remoteproc/Kconfig
->>> index a850e9f486dd..44af5c36f67e 100644
->>> --- a/drivers/remoteproc/Kconfig
->>> +++ b/drivers/remoteproc/Kconfig
->>> @@ -234,6 +234,26 @@ config QCOM_Q6V5_PAS
->>>         CDSP (Compute DSP), MPSS (Modem Peripheral SubSystem), and
->>>         SLPI (Sensor Low Power Island).
->>>
->>> +config QCOM_Q6V5_MPD
->>> +    tristate "Qualcomm Hexagon based MPD model Peripheral Image Loader"
->>> +    depends on OF && ARCH_QCOM
->>> +    depends on QCOM_SMEM
->>> +    depends on RPMSG_QCOM_SMD || RPMSG_QCOM_SMD=n
->>> +    depends on RPMSG_QCOM_GLINK_SMEM || RPMSG_QCOM_GLINK_SMEM=n
->>> +    depends on QCOM_SYSMON || QCOM_SYSMON=n
->>> +    depends on RPMSG_QCOM_GLINK || RPMSG_QCOM_GLINK=n
->>> +    depends on QCOM_AOSS_QMP || QCOM_AOSS_QMP=n
->>> +    select MFD_SYSCON
->>
->> Do you really need this?
->>
-	It's not required. I will remove. Thanks for catching.
+Evan Quan (9):
+  drivers core: Add support for Wifi band RF mitigations
+  driver core: add ACPI based WBRF mechanism introduced by AMD
+  cfg80211: expose nl80211_chan_width_to_mhz for wide sharing
+  wifi: mac80211: Add support for ACPI WBRF
+  drm/amd/pm: update driver_if and ppsmc headers for coming wbrf feature
+  drm/amd/pm: setup the framework to support Wifi RFI mitigation feature
+  drm/amd/pm: add flood detection for wbrf events
+  drm/amd/pm: enable Wifi RFI mitigation feature support for SMU13.0.0
+  drm/amd/pm: enable Wifi RFI mitigation feature support for SMU13.0.7
 
->>> +    select QCOM_MDT_LOADER
->>> +    select QCOM_PIL_INFO
->>> +    select QCOM_Q6V5_COMMON
->>> +    select QCOM_RPROC_COMMON
->>> +    select QCOM_SCM
->>> +    help
->>> +      Say y here to support the Qualcomm Secure Peripheral Image Loader
->>> +      for the Hexagon based MultiPD model remote processors on e.g. 
->>> IPQ5018.
->>> +      This is trustZone wireless subsystem.
->>> +
->>
->> ...
->>
-	I didn't understand. Can you please elaborate your comment?
+ drivers/acpi/Makefile                         |   2 +
+ drivers/acpi/amd_wbrf.c                       | 236 +++++++++++++++++
+ drivers/base/Kconfig                          |  37 +++
+ drivers/base/Makefile                         |   1 +
+ drivers/base/wbrf.c                           | 250 ++++++++++++++++++
+ drivers/gpu/drm/amd/amdgpu/amdgpu.h           |   1 +
+ drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c       |  19 ++
+ drivers/gpu/drm/amd/pm/swsmu/amdgpu_smu.c     | 214 +++++++++++++++
+ drivers/gpu/drm/amd/pm/swsmu/inc/amdgpu_smu.h |  33 +++
+ .../inc/pmfw_if/smu13_driver_if_v13_0_0.h     |  14 +-
+ .../inc/pmfw_if/smu13_driver_if_v13_0_7.h     |  14 +-
+ .../pm/swsmu/inc/pmfw_if/smu_v13_0_0_ppsmc.h  |   3 +-
+ .../pm/swsmu/inc/pmfw_if/smu_v13_0_7_ppsmc.h  |   3 +-
+ drivers/gpu/drm/amd/pm/swsmu/inc/smu_types.h  |   3 +-
+ drivers/gpu/drm/amd/pm/swsmu/inc/smu_v13_0.h  |   3 +
+ .../gpu/drm/amd/pm/swsmu/smu13/smu_v13_0.c    |   9 +
+ .../drm/amd/pm/swsmu/smu13/smu_v13_0_0_ppt.c  |  60 +++++
+ .../drm/amd/pm/swsmu/smu13/smu_v13_0_7_ppt.c  |  59 +++++
+ drivers/gpu/drm/amd/pm/swsmu/smu_internal.h   |   3 +
+ include/linux/acpi_amd_wbrf.h                 |  38 +++
+ include/linux/ieee80211.h                     |   1 +
+ include/linux/wbrf.h                          |  67 +++++
+ include/net/cfg80211.h                        |   8 +
+ net/mac80211/Makefile                         |   2 +
+ net/mac80211/chan.c                           |   9 +
+ net/mac80211/ieee80211_i.h                    |  19 ++
+ net/mac80211/main.c                           |   2 +
+ net/mac80211/wbrf.c                           | 103 ++++++++
+ net/wireless/chan.c                           |   3 +-
+ 29 files changed, 1210 insertions(+), 6 deletions(-)
+ create mode 100644 drivers/acpi/amd_wbrf.c
+ create mode 100644 drivers/base/wbrf.c
+ create mode 100644 include/linux/acpi_amd_wbrf.h
+ create mode 100644 include/linux/wbrf.h
+ create mode 100644 net/mac80211/wbrf.c
 
->>> +    int (*powerup_scm)(u32 peripheral);
->>> +    int (*powerdown_scm)(u32 peripheral);
->>> +};
->>> +
->>> +/**
->>> + * qcom_get_pd_asid() - get the pd asid number from DT node
->>
->>  From node name? NAK. It does not work like that. Node names can change
->> and you did not define this number as part of ABI.
->>
->> Probably you wanted unit address.
->>
+-- 
+2.34.1
 
-	Yeah i got your point. Each of the WCSS PD's are internally
-	represented in Q6 with their corresponding "spawn" bit numbers.
-	I will use same and remove the "PD-" hardcodings.
-
-	Is this fine ?
-
->>> + * @node:    device tree node
->>> + *
->>> + * Returns asid if node name has 'pd' string
->>> + */
->>> +s8 qcom_get_pd_asid(struct device_node *node)
->>> +{
->>> +    char *str;
->>> +    s8 pd_asid;
->>> +
->>> +    if (!node)
->>> +        return -EINVAL;
->>> +
->>> +    str = strstr(node->name, "pd");
->>> +    if (!str)
->>> +        return 0;
->>> +
->>> +    str += strlen("pd") + 1;
->>> +    return kstrtos8(str, 10, &pd_asid) ? -EINVAL : pd_asid;
->>> +}
->>> +EXPORT_SYMBOL(qcom_get_pd_asid);
->>> +
->>
->> ...
->>
-	
-	I didn't understand. Can you please elaborate your comment?
-
->>> +
->>> +static int q6_wcss_spawn_pd(struct rproc *rproc)
->>> +{
->>> +    int ret;
->>> +    struct q6_wcss *wcss = rproc->priv;
->>> +
->>> +    ret = qcom_q6v5_request_spawn(&wcss->q6);
->>> +    if (ret == -ETIMEDOUT) {
->>> +        pr_err("%s spawn timedout\n", rproc->name);
->>
->> dev_err
->>
-
-	Sure, I will change to dev_err.
-
->>> +        return ret;
->>> +    }
->>> +
->>> +    ret = qcom_q6v5_wait_for_start(&wcss->q6, msecs_to_jiffies(10000));
->>> +    if (ret == -ETIMEDOUT) {
->>> +        pr_err("%s start timedout\n", rproc->name);
->>
->> dev_err
->>
-
-	Sure, I will change to dev_err.
-
->>> +        wcss->q6.running = false;
->>> +        return ret;
->>> +    }
->>> +    wcss->q6.running = true;
->>> +    return ret;
->>> +}
->>> +
->>> +static int wcss_ahb_pcie_pd_start(struct rproc *rproc)
->>> +{
->>> +    struct q6_wcss *wcss = rproc->priv;
->>> +    const struct wcss_data *desc = wcss->desc;
->>> +    int ret;
->>> +
->>> +    if (!desc->reset_seq)
->>> +        return 0;
->>> +
->>> +    if (desc->powerup_scm) {
->>> +        ret = desc->powerup_scm(desc->pasid);
->>> +        if (ret) {
->>> +            dev_err(wcss->dev, "failed to power up pd\n");
->>> +            return ret;
->>> +        }
->>> +    }
->>> +
->>> +    ret = q6_wcss_spawn_pd(rproc);
->>> +    if (ret)
->>> +        return ret;
->>> +
->>> +    wcss->state = WCSS_NORMAL;
->>> +    return ret;
->>> +}
->>> +
->>> +static int q6_wcss_stop(struct rproc *rproc)
->>> +{
->>> +    struct q6_wcss *wcss = rproc->priv;
->>> +    const struct wcss_data *desc = wcss->desc;
->>> +    int ret;
->>> +
->>> +    ret = qcom_scm_pas_shutdown(desc->pasid);
->>> +    if (ret) {
->>> +        dev_err(wcss->dev, "not able to shutdown\n");
->>> +        return ret;
->>> +    }
->>> +    qcom_q6v5_unprepare(&wcss->q6);
->>> +
->>> +    return 0;
->>> +}
->>> +
->>> +static int wcss_ahb_pcie_pd_stop(struct rproc *rproc)
->>> +{
->>> +    struct q6_wcss *wcss = rproc->priv;
->>> +    struct rproc *rpd_rproc = dev_get_drvdata(wcss->dev->parent);
->>> +    const struct wcss_data *desc = wcss->desc;
->>> +    int ret;
->>> +
->>> +    if (!desc->reset_seq)
->>> +        goto shut_down_rpd;
->>> +
->>> +    if (rproc->state != RPROC_CRASHED && wcss->q6.stop_bit) {
->>> +        ret = qcom_q6v5_request_stop(&wcss->q6, NULL);
->>> +        if (ret) {
->>> +            dev_err(&rproc->dev, "pd not stopped\n");
->>> +            return ret;
->>> +        }
->>> +    }
->>> +
->>> +    if (desc->powerdown_scm) {
->>> +        ret = desc->powerdown_scm(desc->pasid);
->>> +        if (ret) {
->>> +            dev_err(wcss->dev, "failed to power down pd\n");
->>> +            return ret;
->>> +        }
->>> +    }
->>> +
->>> +shut_down_rpd:
->>> +    rproc_shutdown(rpd_rproc);
->>> +
->>> +    wcss->state = WCSS_SHUTDOWN;
->>> +    return 0;
->>> +}
->>> +
->>> +static void *q6_wcss_da_to_va(struct rproc *rproc, u64 da, size_t len,
->>> +                  bool *is_iomem)
->>> +{
->>> +    struct q6_wcss *wcss = rproc->priv;
->>> +    int offset;
->>> +
->>> +    offset = da - wcss->mem_reloc;
->>> +    if (offset < 0 || offset + len > wcss->mem_size)
->>> +        return NULL;
->>> +
->>> +    return wcss->mem_region + offset;
->>> +}
->>> +
->>> +static int q6_wcss_load(struct rproc *rproc, const struct firmware *fw)
->>> +{
->>> +    struct q6_wcss *wcss = rproc->priv;
->>> +    const struct firmware *fw_hdl;
->>> +    int ret;
->>> +    const struct wcss_data *desc = wcss->desc;
->>> +    int loop;
->>> +
->>> +    ret = qcom_mdt_load(wcss->dev, fw, rproc->firmware,
->>> +                desc->pasid, wcss->mem_region,
->>> +                wcss->mem_phys, wcss->mem_size,
->>> +                &wcss->mem_reloc);
->>> +    if (ret)
->>> +        return ret;
->>> +
->>> +    for (loop = 1; loop < MAX_FIRMWARE; loop++) {
->>> +        if (!wcss->firmware[loop])
->>> +            continue;
->>> +
->>> +        ret = request_firmware(&fw_hdl, wcss->firmware[loop],
->>> +                       wcss->dev);
->>> +        if (ret)
->>> +            continue;
->>> +
->>> +        ret = qcom_mdt_load_no_init(wcss->dev, fw_hdl,
->>> +                        wcss->firmware[loop], 0,
->>> +                        wcss->mem_region,
->>> +                        wcss->mem_phys,
->>> +                        wcss->mem_size,
->>> +                        &wcss->mem_reloc);
->>> +
->>> +        release_firmware(fw_hdl);
->>> +
->>> +        if (ret) {
->>> +            dev_err(wcss->dev,
->>> +                "can't load %s ret:%d\n", wcss->firmware[loop], ret);
->>> +            return ret;
->>> +        }
->>> +    }
->>> +    return 0;
->>> +}
->>> +
->>> +/* This function load's userpd firmware. Since Userpd depends on rootpd
->>
->> Use Linux coding style comments.
->>
-
-	Sure, I will update.
-
->>> + * first bring up root pd and then load. User pd firmware load is 
->>> required
->>> + * only during user pd restart because root pd loads user pd FW pil 
->>> segments
->>> + * during it's bringup.
->>> + */
->>> +static int wcss_ahb_pcie_pd_load(struct rproc *rproc, const struct 
->>> firmware *fw)
->>> +{
->>> +    struct q6_wcss *wcss = rproc->priv, *wcss_rpd;
->>> +    struct rproc *rpd_rproc = dev_get_drvdata(wcss->dev->parent);
->>> +    const struct wcss_data *desc = wcss->desc;
->>> +    int ret;
->>> +
->>> +    wcss_rpd = rpd_rproc->priv;
->>> +
->>> +    /* Boot rootpd rproc */
->>
->> That's not helpful - i tcopies the function name.
->>
-
-	sure, i will remove comment.
-
->>> +    ret = rproc_boot(rpd_rproc);
->>> +    if (ret || wcss->state == WCSS_NORMAL)
->>> +        return ret;
->>> +
->>> +    return desc->mdt_load_sec(wcss->dev, fw, rproc->firmware,
->>> +                  desc->pasid, wcss->mem_region,
->>> +                  wcss->mem_phys, wcss->mem_size,
->>> +                  &wcss->mem_reloc);
->>> +}
->>> +
-
-...
-
-	I didn't understand. Can you please elaborate your comment?
-
->>> +static int q6_get_inbound_irq(struct qcom_q6v5 *q6,
->>> +                  struct platform_device *pdev,
->>> +                  const char *int_name,
->>> +                  irqreturn_t (*handler)(int irq, void *data))
->>> +{
->>> +    int ret, irq;
->>> +    char *interrupt, *tmp = (char *)int_name;
->>> +    struct q6_wcss *wcss = q6->rproc->priv;
->>> +
->>> +    irq = platform_get_irq_byname(pdev, int_name);
->>> +    if (irq < 0) {
->>> +        if (irq != -EPROBE_DEFER)
->>> +            dev_err(&pdev->dev,
->>> +                "failed to retrieve %s IRQ: %d\n",
->>> +                    int_name, irq);
->>
->> return dev_err_probe
->>
-
-	I will use dev_err_probe.
-
->>> +        return irq;
->>> +    }
->>> +
->>> +    if (!strcmp(int_name, "fatal")) {
->>> +        q6->fatal_irq = irq;
->>> +    } else if (!strcmp(int_name, "stop-ack")) {
->>> +        q6->stop_irq = irq;
->>> +        tmp = "stop_ack";
->>> +    } else if (!strcmp(int_name, "ready")) {
->>> +        q6->ready_irq = irq;
->>> +    } else if (!strcmp(int_name, "handover")) {
->>> +        q6->handover_irq  = irq;
->>> +    } else if (!strcmp(int_name, "spawn-ack")) {
->>> +        q6->spawn_irq = irq;
->>> +        tmp = "spawn_ack";
->>> +    } else {
->>> +        dev_err(&pdev->dev, "unknown interrupt\n");
->>> +        return -EINVAL;
->>> +    }
->>
->> This is over complicated method of getting interrupts. First, you can
->> pass here address of variable with interrupt to assign (*irq_field =
->> irq). Second, drop the names and get by index. Entries are fixed, not
->> flexible.
->>
-	Sure, I will do it.
-
->>> +
->>> +    interrupt = devm_kzalloc(&pdev->dev, BUF_SIZE, GFP_KERNEL);
->>> +    if (!interrupt)
->>> +        return -ENOMEM;
->>> +
->>> +    snprintf(interrupt, BUF_SIZE, "q6v5_wcss_userpd%d_%s", 
->>> wcss->pd_asid, tmp);
->>> +
->>> +    ret = devm_request_threaded_irq(&pdev->dev, irq,
->>> +                    NULL, handler,
->>> +                    IRQF_TRIGGER_RISING | IRQF_ONESHOT,
->>> +                    interrupt, q6);
->>> +    if (ret) {
->>> +        dev_err(&pdev->dev, "failed to acquire %s irq\n", interrupt);
->>> +        return ret;
->>> +    }
->>> +    return 0;
->>> +}
->>> +
->>> +static int q6_get_outbound_irq(struct qcom_q6v5 *q6,
->>> +                   struct platform_device *pdev,
->>> +                   const char *int_name)
->>> +{
->>> +    struct qcom_smem_state *tmp_state;
->>> +    unsigned  bit;
->>> +
->>> +    tmp_state = qcom_smem_state_get(&pdev->dev, int_name, &bit);
->>> +    if (IS_ERR(tmp_state)) {
->>> +        dev_err(&pdev->dev, "failed to acquire %s state\n", int_name);
->>> +        return PTR_ERR(tmp_state);
->>> +    }
->>> +
->>> +    if (!strcmp(int_name, "stop")) {
->>> +        q6->state = tmp_state;
->>> +        q6->stop_bit = bit;
->>> +    } else if (!strcmp(int_name, "spawn")) {
->>> +        q6->spawn_state = tmp_state;
->>> +        q6->spawn_bit = bit;
->>> +    }
->>> +
->>> +    return 0;
->>> +}
->>> +
->>> +static int init_irq(struct qcom_q6v5 *q6,
->>> +            struct platform_device *pdev, struct rproc *rproc,
->>> +            int crash_reason, const char *load_state,
->>> +            void (*handover)(struct qcom_q6v5 *q6))
->>> +{
->>> +    int ret;
->>> +
->>> +    q6->rproc = rproc;
->>> +    q6->dev = &pdev->dev;
->>> +    q6->crash_reason = crash_reason;
->>> +    q6->handover = handover;
->>> +
->>> +    init_completion(&q6->start_done);
->>> +    init_completion(&q6->stop_done);
->>> +    init_completion(&q6->spawn_done);
->>> +
->>> +    ret = q6_get_inbound_irq(q6, pdev, "fatal",
->>> +                 q6v5_fatal_interrupt);
->>> +    if (ret)
->>> +        return ret;
->>> +
->>> +    ret = q6_get_inbound_irq(q6, pdev, "ready",
->>> +                 q6v5_ready_interrupt);
->>> +    if (ret)
->>> +        return ret;
->>> +
->>> +    ret = q6_get_inbound_irq(q6, pdev, "stop-ack",
->>> +                 q6v5_stop_interrupt);
->>> +    if (ret)
->>> +        return ret;
->>> +
->>> +    ret = q6_get_inbound_irq(q6, pdev, "spawn-ack",
->>> +                 q6v5_spawn_interrupt);
->>> +    if (ret)
->>> +        return ret;
->>> +
->>> +    ret = q6_get_outbound_irq(q6, pdev, "stop");
->>> +    if (ret)
->>> +        return ret;
->>> +
->>> +    ret = q6_get_outbound_irq(q6, pdev, "spawn");
->>> +    if (ret)
->>> +        return ret;
->>> +
->>> +    return 0;
->>> +}
->>> +
->>> +static int q6_wcss_probe(struct platform_device *pdev)
->>> +{
->>> +    const struct wcss_data *desc;
->>> +    struct q6_wcss *wcss;
->>> +    struct rproc *rproc;
->>> +    int ret;
->>> +    char *subdev_name;
->>> +    const char **firmware;
->>> +
->>> +    desc = of_device_get_match_data(&pdev->dev);
->>> +    if (!desc)
->>> +        return -EINVAL;
->>> +
->>> +    firmware = devm_kcalloc(&pdev->dev, MAX_FIRMWARE,
->>> +                sizeof(*firmware), GFP_KERNEL);
->>> +    if (!firmware)
->>> +        return -ENOMEM;
->>> +
->>> +    ret = of_property_read_string_array(pdev->dev.of_node, 
->>> "firmware-name",
->>> +                        firmware, MAX_FIRMWARE);
->>> +    if (ret < 0)
->>> +        return ret;
->>> +
->>> +    rproc = rproc_alloc(&pdev->dev, pdev->name, desc->ops,
->>> +                firmware[0], sizeof(*wcss));
->>> +    if (!rproc) {
->>> +        dev_err(&pdev->dev, "failed to allocate rproc\n");
->>
->> ENOMEM do not print errors. Why do you have to print something here?
->>
-
-	Yeah, I will remove print.
-
->>> +        return -ENOMEM;
->>> +    }
->>> +    wcss = rproc->priv;
->>> +    wcss->dev = &pdev->dev;
->>> +    wcss->desc = desc;
->>> +    wcss->firmware = firmware;
->>> +
->>> +    ret = q6_alloc_memory_region(wcss);
->>> +    if (ret)
->>> +        goto free_rproc;
->>> +
->>> +    wcss->pd_asid = qcom_get_pd_asid(wcss->dev->of_node);
->>> +    if (wcss->pd_asid < 0)
->>> +        goto free_rproc;
->>> +
->>> +    if (desc->init_irq) {
->>> +        ret = desc->init_irq(&wcss->q6, pdev, rproc,
->>> +                     desc->crash_reason_smem, NULL, NULL);
->>> +        if (ret)
->>> +            goto free_rproc;
->>> +    }
->>> +
->>> +    if (desc->glink_subdev_required)
->>> +        qcom_add_glink_subdev(rproc, &wcss->glink_subdev, 
->>> desc->ssr_name);
->>> +
->>> +    subdev_name = (char *)(desc->ssr_name ? desc->ssr_name : 
->>> pdev->name);
->>> +    qcom_add_ssr_subdev(rproc, &wcss->ssr_subdev, subdev_name);
->>> +
->>> +    rproc->auto_boot = false;
->>> +    ret = rproc_add(rproc);
->>> +    if (ret)
->>> +        goto free_rproc;
->>> +
->>> +    platform_set_drvdata(pdev, rproc);
->>> +
->>> +    ret = of_platform_populate(wcss->dev->of_node, NULL,
->>> +                   NULL, wcss->dev);
->>
->> It is the same probe used for the children, right? So whom do they 
->> populate?
->>
-
-	I will add match table in 2nd param, so that childs, whose
-	compatible matches with match table will be populated.
-
-	Is this fine ?
->>> +    if (ret) {
->>> +        dev_err(&pdev->dev, "failed to populate wcss pd nodes\n");
->>
->> dev_err_probe
->>
-	 Sure, i will use dev_err_probe
-
->>> +        goto free_rproc;
->>> +    }
->>> +    return 0;
->>> +
->>> +free_rproc:
->>> +    rproc_free(rproc);
->>> +
->>> +    return ret;
->>> +}
->>> +
->>> +static int q6_wcss_remove(struct platform_device *pdev)
->>> +{
->>> +    struct rproc *rproc = platform_get_drvdata(pdev);
->>> +    struct q6_wcss *wcss = rproc->priv;
->>> +
->>> +    qcom_q6v5_deinit(&wcss->q6);
->>> +
->>> +    rproc_del(rproc);
->>> +    rproc_free(rproc);
->>> +
->>> +    return 0;
->>> +}
->>
->>
->>
-
-Thanks & Regards,
-Manikanta.
