@@ -2,101 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36DF57440F4
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 19:14:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4915F744100
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 19:16:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232837AbjF3RON (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 13:14:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36294 "EHLO
+        id S232952AbjF3RQq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Jun 2023 13:16:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232714AbjF3ROG (ORCPT
+        with ESMTP id S232721AbjF3RQg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 13:14:06 -0400
-Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A3E2183
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 10:14:05 -0700 (PDT)
-Received: from cwcc.thunk.org (pool-173-48-82-24.bstnma.fios.verizon.net [173.48.82.24])
-        (authenticated bits=0)
-        (User authenticated as tytso@ATHENA.MIT.EDU)
-        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 35UHDgXR012238
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 30 Jun 2023 13:13:44 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
-        t=1688145225; bh=eRkiqUCEclG9KgZecVs1P0Wzt0tTZDVD/MSUDf9IzBY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To;
-        b=dFFHXNePbIQJpb2yYz32mHlzqBti0NQXFuVoitWpMlKrj4nhtfFzhBy+z18UrGMh+
-         BStLvAxp8o+GwVDvCHXuVglZ47YUrqk3SZzk/Lrxt0tYZWYfrQ35XkufbYrRUDV+oF
-         Ra4R/quxfVZ13jfAa30FiJTgSUcWVcll2SeaWiY8KOZn1ojO67BGq74sPTxrTHDmfp
-         UqkvcoyjO/ckIP7HgvV+4M0X9Eipk36ne6EZnRSAaRKArqrLwDDTPoDZsn5GPxVBFd
-         N9DYdrTU0R7XmPjr8CyiZ5ia0CKsverjzw/CPat5gsmuf/YDcAgWTctNV/h1ZHI/AX
-         I85PBlKTpPrlA==
-Received: by cwcc.thunk.org (Postfix, from userid 15806)
-        id 36D6715C027F; Fri, 30 Jun 2023 13:13:42 -0400 (EDT)
-Date:   Fri, 30 Jun 2023 13:13:42 -0400
-From:   "Theodore Ts'o" <tytso@mit.edu>
-To:     Eric Biggers <ebiggers@kernel.org>
-Cc:     syzbot <syzbot+94a8c779c6b238870393@syzkaller.appspotmail.com>,
-        adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-crypto@vger.kernel.org, syzkaller-bugs@googlegroups.com,
-        David Howells <dhowells@redhat.com>
-Subject: Re: [syzbot] [ext4?] general protection fault in
- ext4_put_io_end_defer
-Message-ID: <20230630171342.GC591635@mit.edu>
-References: <0000000000002a0b1305feeae5db@google.com>
- <20230629035714.GJ8954@mit.edu>
- <20230630074111.GB36542@sol.localdomain>
- <20230630074614.GC36542@sol.localdomain>
+        Fri, 30 Jun 2023 13:16:36 -0400
+Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A2773AB2
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 10:16:34 -0700 (PDT)
+Received: by mail-qt1-x835.google.com with SMTP id d75a77b69052e-401f4408955so13811cf.1
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 10:16:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1688145394; x=1690737394;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=cHJRhOeYdjZGJtK0kiELfpJOpqjlUoQdA4uo5jTiZng=;
+        b=tOTGvjcjXsPjf2kpF4cHDyeCHK9ePpk88UqY/w/MiSd9yS9PKXDjrtNmUABRNyN/v2
+         BngxrK9UzFWDamrZwzqQOKChngOCgN5qGex4zu2IQOdBCker/AkoB/L1q/VAi6/dc4gW
+         bkjxm7s8I1GTgbnkJwdmlOcPrYCz8hOVOLLT+MZLuRaHpsc5tp5jp85iIf7UeKRaitye
+         5iYXhKgX23/Fa0dTZA8u6aTdN+Gdk7rbCp+ZOtEqpecBf83K5xuynaRU16nCNdx0+CbZ
+         jszTQV/Q1KDVEsSxpHST0kVodPMAzCsNMpjwuQQHLrZAKkRPbIv/7gGuwgysElhjfkfS
+         vRxA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688145394; x=1690737394;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=cHJRhOeYdjZGJtK0kiELfpJOpqjlUoQdA4uo5jTiZng=;
+        b=cym7BoEuqw9p6neSB9JX9xrwOUjYbkTwTkvdcFsTHsDD0Mvcz7i2w/s4oyI2M3bNL4
+         XuxNxF9p67PpI5pyYOFpml9Ctg+CLJl6mhFTvJ5zYfE447e+lsb6WI5UEN2wAQGtQrRs
+         1caM1pQg6LtButQao0s68qZbVoNS71oAz1bgkrCQUCjCURmD+/ExiAMJ0QxgUrJHPrsz
+         OSaTECXdmScB8XsZmQgXaMeOLFiyZlImXXHtdCvJeJoMEyB6UfaeU36jPCpZ9Q/6yUHR
+         NYDjj6FQVHcygqk8eDyunOOCyJ/Q/9C2InkFXd/7q6tH86EKJG3IWLBZjZr+7qyo8YIb
+         JxzQ==
+X-Gm-Message-State: AC+VfDxGwhBKmQnNyENRzFr7dlNaMSBVSn+zDqTH22ZUJvBu8qdviE0p
+        zBm4P3MgQWv4OZ1xMtWKodRQSZcNRBKvkidOUvR+Fw==
+X-Google-Smtp-Source: ACHHUZ5EIkHjSZ+sBqsk0o0f0HnhEV8nIj03CJE4DHEpGgn+INV+q28RDEvFbo7jIBrPpTNKPbpR3as1EqH0XNQ4gDI=
+X-Received: by 2002:ac8:5bc5:0:b0:3f9:f877:1129 with SMTP id
+ b5-20020ac85bc5000000b003f9f8771129mr806787qtb.29.1688145393558; Fri, 30 Jun
+ 2023 10:16:33 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230630074614.GC36542@sol.localdomain>
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20230627181030.95608-2-irogers@google.com> <8dab7522-31de-2137-7474-991885932308@web.de>
+ <CAP-5=fVxTYpiXgxDKX1q7ELoAPnAisajWcNOhAp19TZDwnA0oA@mail.gmail.com> <59e92b31-cd78-5c0c-ef87-f0d824cd20f7@web.de>
+In-Reply-To: <59e92b31-cd78-5c0c-ef87-f0d824cd20f7@web.de>
+From:   Ian Rogers <irogers@google.com>
+Date:   Fri, 30 Jun 2023 10:16:22 -0700
+Message-ID: <CAP-5=fX8-2USHn8M4KPfwLz3=AG9kc8=9KdjayMsRexZ87R_EA@mail.gmail.com>
+Subject: Re: [v2 01/13] perf parse-events: Remove unused PE_PMU_EVENT_FAKE token
+To:     Markus Elfring <Markus.Elfring@web.de>
+Cc:     linux-perf-users@vger.kernel.org, bpf@vger.kernel.org,
+        kernel-janitors@vger.kernel.org,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
+        Ingo Molnar <mingo@redhat.com>, Jiri Olsa <jolsa@kernel.org>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 30, 2023 at 12:46:14AM -0700, Eric Biggers wrote:
-> > AF_ALG has existed since 2010.  My understanding that its original purpose was
-> > to expose hardware crypto accelerators to userspace.  Unfortunately, support for
-> > exposing *any* crypto algorithm was included as well, which IMO was a mistake.
+On Fri, Jun 30, 2023 at 10:15=E2=80=AFAM Markus Elfring <Markus.Elfring@web=
+.de> wrote:
+>
+> >>> Removed by commit 70c90e4a6b2f ("perf parse-events: Avoid scanning
+> >>> PMUs before parsing").
+> >>
+> >> Will the chances ever grow to add another imperative change suggestion=
+?
+> >>
+> >> See also:
+> >> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tre=
+e/Documentation/process/submitting-patches.rst?h=3Dv6.4#n94
+> >
+> >
+> > Sorry, I can't parse this.
+>
+> Can you take the requirement =E2=80=9CDescribe your changes in imperative=
+ mood=E2=80=9D
+> into account for any more descriptions?
 
-+1000....
+Yep, still doesn't parse.
 
-> > There are quite a few different userspace programs that use AF_ALG purely to get
-> > at the CPU-based algorithm implementations, without any sort of intention to use
-> > hardware crypto accelerator.  Probably because it seemed "easy".  Or "better"
-> > because everything in the kernel is better, right?
+Thanks,
+Ian
 
-Do we know if any to standard crypto libraries are using AF_ALG?  All
-aside from whether it's a good idea for userspace programs to be using
-kernel code because "everything is better in the kernel", I'm
-wondering how solicitous we should be for programs who are very likely
-rolling their own crypto, as opposed to using crypto library that has
-been written and vetted and tested for vulnerability by experts...
-
-> > It's controlled by the CONFIG_CRYPTO_USER_API_* options, with the hash support
-> > in particular controlled by CONFIG_CRYPTO_USER_API_HASH.  Though good luck
-> > disabling it on most systems, as systemd depends on it...
-> > 
-> 
-> Actually it turns out systemd has finally seen the light:
-> https://github.com/systemd/systemd/commit/2c3794f4228162c9bfd9e10886590d9f5b1920d7
-
-Aside from those PCI-attached crypto accelerators where you have to go
-through the kernel (although my experience has been that most of the
-time, the overhead for key scheduling, etc., is such that unless
-you're doing bulk crypto on large chunks of data, using external
-crypto hardware acclerators no longer makes sense 99.99% of the time
-in the 21st century), I wonder if we should consider having the kernel
-print a warning, "WARNING: [comm] is using AF_ALG; please consider
-using a real crypto library instead of rolling your own crypto".
-
-(Only half kidding.)
-
-					- Ted
+> Regards,
+> Markus
