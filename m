@@ -2,34 +2,34 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F17A47435CF
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 09:33:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 311EB7435D2
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 09:33:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232348AbjF3Hdm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 03:33:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51080 "EHLO
+        id S232388AbjF3Hdv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Jun 2023 03:33:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232292AbjF3Hdh (ORCPT
+        with ESMTP id S232344AbjF3Hdl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 03:33:37 -0400
+        Fri, 30 Jun 2023 03:33:41 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 992C010F7;
-        Fri, 30 Jun 2023 00:33:35 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8943A2686;
+        Fri, 30 Jun 2023 00:33:40 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1830A616E9;
-        Fri, 30 Jun 2023 07:33:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EEF47C433C8;
-        Fri, 30 Jun 2023 07:33:33 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 11307616D3;
+        Fri, 30 Jun 2023 07:33:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EDB41C433C8;
+        Fri, 30 Jun 2023 07:33:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1688110414;
-        bh=n+U6Ux1FqrzO1nncgxDkqYiL97iAVESW8xuGNDjQr2U=;
+        s=korg; t=1688110419;
+        bh=HJceP9xbqzvvS221qkbqog1HjnHUAJ7NJyvIMUQjWks=;
         h=From:To:Cc:Subject:Date:From;
-        b=DhXCu6UdDKuwH69JBIuzef8FllxQQIpkMcnd4Isyll+lwV20f5U6xJ1KledMEOC2s
-         E73bWLD47BCNs+vl/1N59FwmXTfDCsSPO8UrHECTD0CwgXDiRkMesBQ6FroL/YJgGQ
-         9TCRkHrp10W+ni2Rzaj8/qtNL5YwW7e3T7/Kn2tk=
+        b=tf+ySGb6EmgP8UVJywgFvPDTbp+36Fb1AVB8z+eqA6U/Ld/Xc+NXr0ZlZHp6BhZdx
+         8nE7N1yGDyksKvulrPf7wz1/K/6cOH1JiatMSBLLz3B3de+wQx3BVG6CScLsKlWgYO
+         gI3oyBlwbW9poT080UAcgM4BCT0Rx5rYku1LPLeA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     stable@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -39,19 +39,19 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
         f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
         srw@sladewatkins.net, rwarsow@gmx.de, conor@kernel.org
-Subject: [PATCH 6.4 00/31] 6.4.1-rc3 review
-Date:   Fri, 30 Jun 2023 09:33:31 +0200
-Message-ID: <20230630072101.040486316@linuxfoundation.org>
+Subject: [PATCH 6.3 00/32] 6.3.11-rc4 review
+Date:   Fri, 30 Jun 2023 09:33:36 +0200
+Message-ID: <20230630072120.689306958@linuxfoundation.org>
 X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
 User-Agent: quilt/0.67
 X-stable: review
 X-Patchwork-Hint: ignore
-X-KernelTest-Patch: http://kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.4.1-rc3.gz
+X-KernelTest-Patch: http://kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.3.11-rc4.gz
 X-KernelTest-Tree: git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
-X-KernelTest-Branch: linux-6.4.y
+X-KernelTest-Branch: linux-6.3.y
 X-KernelTest-Patches: git://git.kernel.org/pub/scm/linux/kernel/git/stable/stable-queue.git
-X-KernelTest-Version: 6.4.1-rc3
+X-KernelTest-Version: 6.3.11-rc4
 X-KernelTest-Deadline: 2023-07-02T07:21+00:00
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -65,18 +65,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is the start of the stable review cycle for the 6.4.1 release.
-There are 31 patches in this series, all will be posted as a response
+This is the start of the stable review cycle for the 6.3.11 release.
+There are 32 patches in this series, all will be posted as a response
 to this one.  If anyone has any issues with these being applied, please
 let me know.
 
-Responses should be made by Sun, 02 Jul 2023 07:20:45 +0000.
+Responses should be made by Sun, 02 Jul 2023 07:21:08 +0000.
 Anything received after that time might be too late.
 
 The whole patch series can be found in one patch at:
-	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.4.1-rc3.gz
+	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.3.11-rc4.gz
 or in the git tree and branch at:
-	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.4.y
+	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.3.y
 and the diffstat can be found below.
 
 thanks,
@@ -87,7 +87,7 @@ greg k-h
 Pseudo-Shortlog of commits:
 
 Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-    Linux 6.4.1-rc3
+    Linux 6.3.11-rc4
 
 Linus Torvalds <torvalds@linux-foundation.org>
     csky: fix up lock_mm_and_find_vma() conversion
@@ -104,20 +104,17 @@ Ricardo Cañuelo <ricardo.canuelo@collabora.com>
 Mike Hommey <mh@glandium.org>
     HID: logitech-hidpp: add HIDPP_QUIRK_DELAYED_INIT for the T651.
 
+Jason Gerecke <jason.gerecke@wacom.com>
+    HID: wacom: Use ktime_t rather than int when dealing with timestamps
+
 Ludvig Michaelsson <ludvig.michaelsson@yubico.com>
     HID: hidraw: fix data race on device refcount
 
 Zhang Shurong <zhang_shurong@foxmail.com>
     fbdev: fix potential OOB read in fast_imageblit()
 
-Hugh Dickins <hughd@google.com>
-    mm/khugepaged: fix regression in collapse_file()
-
 Linus Torvalds <torvalds@linux-foundation.org>
     gup: add warning if some caller would seem to want stack expansion
-
-Jason Gerecke <jason.gerecke@wacom.com>
-    HID: wacom: Use ktime_t rather than int when dealing with timestamps
 
 Linus Torvalds <torvalds@linux-foundation.org>
     mm: always expand the stack with the mmap write lock held
@@ -182,6 +179,12 @@ Thomas Gleixner <tglx@linutronix.de>
 Borislav Petkov (AMD) <bp@alien8.de>
     x86/microcode/AMD: Load late on both threads too
 
+David Woodhouse <dwmw@amazon.co.uk>
+    mm/mmap: Fix error return in do_vmi_align_munmap()
+
+Liam R. Howlett <Liam.Howlett@oracle.com>
+    mm/mmap: Fix error path in do_vmi_align_munmap()
+
 
 -------------
 
@@ -193,66 +196,65 @@ Diffstat:
  arch/arc/Kconfig                          |   1 +
  arch/arc/mm/fault.c                       |  11 +--
  arch/arm/Kconfig                          |   1 +
- arch/arm/mm/fault.c                       |  63 ++++-----------
+ arch/arm/mm/fault.c                       |  63 +++---------
  arch/arm64/Kconfig                        |   1 +
- arch/arm64/mm/fault.c                     |  47 ++---------
+ arch/arm64/mm/fault.c                     |  46 ++-------
  arch/csky/Kconfig                         |   1 +
- arch/csky/mm/fault.c                      |  22 ++----
+ arch/csky/mm/fault.c                      |  22 +----
  arch/hexagon/Kconfig                      |   1 +
- arch/hexagon/mm/vm_fault.c                |  18 +----
- arch/ia64/mm/fault.c                      |  36 ++-------
+ arch/hexagon/mm/vm_fault.c                |  18 +---
+ arch/ia64/mm/fault.c                      |  36 ++-----
  arch/loongarch/Kconfig                    |   1 +
  arch/loongarch/mm/fault.c                 |  16 ++--
- arch/m68k/mm/fault.c                      |   9 ++-
+ arch/m68k/mm/fault.c                      |   9 +-
  arch/microblaze/mm/fault.c                |   5 +-
  arch/mips/Kconfig                         |   1 +
  arch/mips/mm/fault.c                      |  12 +--
  arch/nios2/Kconfig                        |   1 +
  arch/nios2/mm/fault.c                     |  17 +---
  arch/openrisc/mm/fault.c                  |   5 +-
- arch/parisc/mm/fault.c                    |  23 +++---
+ arch/parisc/mm/fault.c                    |  23 +++--
  arch/powerpc/Kconfig                      |   1 +
- arch/powerpc/mm/copro_fault.c             |  14 +---
- arch/powerpc/mm/fault.c                   |  39 +--------
+ arch/powerpc/mm/copro_fault.c             |  14 +--
+ arch/powerpc/mm/fault.c                   |  39 +-------
  arch/riscv/Kconfig                        |   1 +
- arch/riscv/mm/fault.c                     |  31 +++-----
+ arch/riscv/mm/fault.c                     |  31 +++---
  arch/s390/mm/fault.c                      |   5 +-
  arch/sh/Kconfig                           |   1 +
  arch/sh/mm/fault.c                        |  17 +---
  arch/sparc/Kconfig                        |   1 +
- arch/sparc/mm/fault_32.c                  |  32 ++------
+ arch/sparc/mm/fault_32.c                  |  32 ++-----
  arch/sparc/mm/fault_64.c                  |   8 +-
- arch/um/kernel/trap.c                     |  11 +--
+ arch/um/kernel/trap.c                     |  11 ++-
  arch/x86/Kconfig                          |   1 +
  arch/x86/include/asm/cpu.h                |   2 +
  arch/x86/include/asm/smp.h                |   2 +
  arch/x86/kernel/cpu/microcode/amd.c       |   2 +-
- arch/x86/kernel/process.c                 |  28 ++++++-
- arch/x86/kernel/smp.c                     |  73 ++++++++++-------
- arch/x86/kernel/smpboot.c                 |  81 ++++++++++++++++---
- arch/x86/mm/fault.c                       |  52 +-----------
+ arch/x86/kernel/process.c                 |  28 +++++-
+ arch/x86/kernel/smp.c                     |  73 ++++++++------
+ arch/x86/kernel/smpboot.c                 |  81 ++++++++++++++--
+ arch/x86/mm/fault.c                       |  52 +---------
  arch/xtensa/Kconfig                       |   1 +
- arch/xtensa/mm/fault.c                    |  14 +---
+ arch/xtensa/mm/fault.c                    |  14 +--
  drivers/cpufreq/amd-pstate.c              |   2 +-
  drivers/hid/hid-logitech-hidpp.c          |   2 +-
- drivers/hid/hidraw.c                      |   9 ++-
+ drivers/hid/hidraw.c                      |   9 +-
  drivers/hid/wacom_wac.c                   |   6 +-
  drivers/hid/wacom_wac.h                   |   2 +-
  drivers/iommu/amd/iommu_v2.c              |   4 +-
  drivers/iommu/iommu-sva.c                 |   2 +-
- drivers/thermal/mediatek/auxadc_thermal.c |  14 +---
+ drivers/thermal/mediatek/auxadc_thermal.c |  14 +--
  drivers/video/fbdev/core/sysimgblt.c      |   2 +-
  fs/binfmt_elf.c                           |   6 +-
- fs/exec.c                                 |  38 +++++----
+ fs/exec.c                                 |  38 ++++----
  include/linux/mm.h                        |  16 ++--
- lib/maple_tree.c                          |  11 +--
+ lib/maple_tree.c                          |  11 ++-
  mm/Kconfig                                |   4 +
- mm/gup.c                                  |  14 +++-
- mm/khugepaged.c                           |   7 +-
- mm/memory.c                               | 127 ++++++++++++++++++++++++++++++
- mm/mmap.c                                 | 121 ++++++++++++++++++++++++----
+ mm/gup.c                                  |  14 ++-
+ mm/memory.c                               | 127 +++++++++++++++++++++++++
+ mm/mmap.c                                 | 153 +++++++++++++++++++++++-------
  mm/nommu.c                                |  17 ++--
  net/can/isotp.c                           |   5 +-
- 66 files changed, 605 insertions(+), 531 deletions(-)
+ 65 files changed, 616 insertions(+), 544 deletions(-)
 
 
