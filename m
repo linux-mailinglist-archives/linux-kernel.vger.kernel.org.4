@@ -2,89 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC67E744166
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 19:37:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6475774416C
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 19:39:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232134AbjF3Rhi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 13:37:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50440 "EHLO
+        id S232661AbjF3RjF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Jun 2023 13:39:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231857AbjF3Rhe (ORCPT
+        with ESMTP id S232633AbjF3RjD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 13:37:34 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D3DB1FE4;
-        Fri, 30 Jun 2023 10:37:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1688146653; x=1719682653;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=dm6Sl1OEMpFX+zHsfmQ4rudo1iU9mbzP0Adu+TolMaY=;
-  b=AzzEdiWKzJJNkTEf6Dd6CzhhXMAsVItlLhScmWNvrT3QjyjKhN0Tu/7E
-   u/6w7gKM9Rx8XHPrO0nlvIhI/51Qsuc82vr7CGEJt69eUlPY+eIfBUIw8
-   lr3iZRu8GHigaOnDOk8MFVXTevbNkqGM/rdhWjw/I2LGre+4/yTRnXxZo
-   0frZH3bHEkEVH6dpGY14qR6guFan5PtWLWnmFRLPvbwz3Lrin4qkw0BGS
-   w0MtrUfbpAHgznV8cwFPrvYauFMPfNDZIFhoNBzFhjR/MHpQegXEzbUfy
-   DlJuHipI1U/WZLoBxk94+g+Bx85OoaOhSYls0OxvcrxFMiBC16knBiCyG
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10757"; a="352272354"
-X-IronPort-AV: E=Sophos;i="6.01,171,1684825200"; 
-   d="scan'208";a="352272354"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jun 2023 10:37:29 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10757"; a="787789404"
-X-IronPort-AV: E=Sophos;i="6.01,171,1684825200"; 
-   d="scan'208";a="787789404"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga004.fm.intel.com with ESMTP; 30 Jun 2023 10:37:23 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1qFI3d-001AR3-2g;
-        Fri, 30 Jun 2023 20:37:21 +0300
-Date:   Fri, 30 Jun 2023 20:37:21 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     "Wu, Wentong" <wentong.wu@intel.com>
-Cc:     "Ye, Xiang" <xiang.ye@intel.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Fri, 30 Jun 2023 13:39:03 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3E2130F7
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 10:38:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1688146685;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=kVYUQaLIlYzTkSSGVDZ9hVc8AmWln/G3KSgwkF5UBS4=;
+        b=VHtxW9Jiz4MzjsWZNXiKDRqKIwGWTH3hed6tMQgxhU4gJrlF8HgwHhJO6iDXKLiXqn7LA2
+        j6QLkBfTHnOksewQ7RiZkqDuy4tIdFej0DcBnND1QTPqJ8iiZVzuONaQv5Mijlu2Zlj8Mj
+        5+ILuh6mtiNZx0CCvxRiys7Al6lZZVA=
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
+ [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-643--sR6qs3wNmK8CM6cFcs4nA-1; Fri, 30 Jun 2023 13:38:04 -0400
+X-MC-Unique: -sR6qs3wNmK8CM6cFcs4nA-1
+Received: by mail-wr1-f70.google.com with SMTP id ffacd0b85a97d-30793c16c78so2726820f8f.3
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 10:38:04 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688146683; x=1690738683;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=kVYUQaLIlYzTkSSGVDZ9hVc8AmWln/G3KSgwkF5UBS4=;
+        b=TaA4yhjFEP99/iYP6lzHCPrqgr4Sgg0odXjUwU53oS9By4WuVaF7UvHTrGwiYTFhRF
+         wVXAcMWTKsvp7o+3UPN3EnfbbgoK6q3Evt96ZPgoTFrEF5KdOrUylD3+n4PzBwctT7Qv
+         4wiCQVlgpXRQPad0ZrXg0uXS8RFiH7lcn2xGt8dLqoJGWAP8K0BgJ4NwAYR3/oGCFLUx
+         lFro9kXrM8yDeQmBbgyAmbeAzhBxlnc46mgC1tkAjx98yGMeCSUHa0L2nbPIwT/yzPUo
+         QzvX2vojnpC70Sub1dkC8uKZjiYSpvL2ewJAin19Ic4ACDGlPqlPuYDd4Jo2lqju1u3h
+         UPCA==
+X-Gm-Message-State: ABy/qLbIv5Qp2/KI93LqaQjpKbcaLyyG9htHVP5fe/g1C09qh/OOwm9H
+        WP/QwSkHirR3+xxw122c4/8aus9PGRgL/2lXuj1bxhCbRgHd/IJ+APFaqXob0DA+5lAp3QaPSi2
+        Hwar4XebhdRe0QyI7Xedv/B4M
+X-Received: by 2002:a05:6000:118b:b0:2fb:1d3a:93ff with SMTP id g11-20020a056000118b00b002fb1d3a93ffmr3144622wrx.61.1688146683306;
+        Fri, 30 Jun 2023 10:38:03 -0700 (PDT)
+X-Google-Smtp-Source: APBJJlGNvUqGRtSpV8GYS4YvqUz/RSiCqQm8TkeXUu3ip49084GlOjfQ0N7UqSkJYBy9eyJgB2uFhw==
+X-Received: by 2002:a05:6000:118b:b0:2fb:1d3a:93ff with SMTP id g11-20020a056000118b00b002fb1d3a93ffmr3144605wrx.61.1688146683015;
+        Fri, 30 Jun 2023 10:38:03 -0700 (PDT)
+Received: from localhost (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
+        by smtp.gmail.com with ESMTPSA id c13-20020adfe74d000000b0030ae499da59sm3745589wrn.111.2023.06.30.10.38.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 30 Jun 2023 10:38:02 -0700 (PDT)
+From:   Javier Martinez Canillas <javierm@redhat.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        David Airlie <airlied@gmail.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Lee Jones <lee@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        Tyrone Ting <kfting@nuvoton.com>,
-        Mark Brown <broonie@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
-        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
-        "Pandruvada, Srinivas" <srinivas.pandruvada@intel.com>,
-        "sakari.ailus@linux.intel.com" <sakari.ailus@linux.intel.com>,
-        "Wang, Zhifeng" <zhifeng.wang@intel.com>,
-        "Zhang, Lixu" <lixu.zhang@intel.com>
-Subject: Re: [PATCH v5 1/5] usb: Add support for Intel LJCA device
-Message-ID: <ZJ8S0ds4IX4wLF9V@smile.fi.intel.com>
-References: <20230312190435.3568212-1-xiang.ye@intel.com>
- <20230312190435.3568212-2-xiang.ye@intel.com>
- <20230313170341.GV9667@google.com>
- <ZBAqTqZEDz/vAwVC@ye-NUC7i7DNHE>
- <ZBAyKQwnQ8fxHRuU@kuha.fi.intel.com>
- <ZBCU5h/A2woJLtvT@ye-NUC7i7DNHE>
- <ZBCYVNmoo2EdDY90@smile.fi.intel.com>
- <ZBGLYXxpkwokgV4R@kuha.fi.intel.com>
- <DM6PR11MB43163C9D76023777B36380B98D2AA@DM6PR11MB4316.namprd11.prod.outlook.com>
+        "H. Peter Anvin" <hpa@zytor.com>, Helge Deller <deller@gmx.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org,
+        x86@kernel.org
+Subject: Re: [PATCH 0/2] Allow disabling all native fbdev drivers and only
+ keeping DRM emulation
+In-Reply-To: <ZJ8RY7ZUlryrPB50@smile.fi.intel.com>
+References: <20230629225113.297512-1-javierm@redhat.com>
+ <ZJ8RY7ZUlryrPB50@smile.fi.intel.com>
+Date:   Fri, 30 Jun 2023 19:38:01 +0200
+Message-ID: <878rc0etqe.fsf@minerva.mail-host-address-is-not-set>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <DM6PR11MB43163C9D76023777B36380B98D2AA@DM6PR11MB4316.namprd11.prod.outlook.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -92,51 +93,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 30, 2023 at 07:40:48AM +0000, Wu, Wentong wrote:
-> > From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> > Sent: Wednesday, March 15, 2023 5:10 PM
-> > On Tue, Mar 14, 2023 at 05:52:52PM +0200, Andy Shevchenko wrote:
-> > > On Tue, Mar 14, 2023 at 11:38:14PM +0800, Ye, Xiang wrote:
-> > > > On Tue, Mar 14, 2023 at 10:36:57AM +0200, Heikki Krogerus wrote:
-> > > > > On Tue, Mar 14, 2023 at 04:03:26PM +0800, Ye, Xiang wrote:
+Andy Shevchenko <andriy.shevchenko@linux.intel.com> writes:
 
-...
+Hello Andy,
 
-> > > > > You don't really seem to get any benefit from MFD. Perhaps it
-> > > > > would be more appropriate and clear if you just registered
-> > > > > auxiliary devices in this driver. Check drivers/base/auxiliary.c.
-> > > > Yes, it should be a work. I have a question.
-> > > > MFD provides the ACPI binding for sub-devices through struct
-> > > > mfd_cell_acpi_match. But I didn't see this in drivers/base/auxiliary.c.
-> > > > If using auxiliary bus to implement the LJCA sub-devices, we need to
-> > > > do the sub-devices acpi binding manually in ljca.c.
-> > > >
-> > > > Something Like:
-> > > > adr = LJCA_ACPI_MATCH_GPIO
-> > > > adev = acpi_find_child_device(parent, adr, false);
-> > > > ACPI_COMPANION_SET(&pdev->dev, adev ?: parent);
-> > > >
-> > > > Is that acceptable?
-> 
-> This actually doesn't work, look at the acpi_find_child_device(), it compares
-> the bus address specified by _ADR object, but there is no _ADR object in DSDT
-> for these three devices because the relationship between the parent and
-> children isn't bus type listed in ACPI spec, so it always return NULL.
+> On Fri, Jun 30, 2023 at 12:51:02AM +0200, Javier Martinez Canillas wrote:
+>> This patch series splits the fbdev core support in two different Kconfig
+>> symbols: FB and FB_CORE. The motivation for this is to allow CONFIG_FB to
+>> be disabled, while still having the the core fbdev support needed for the
+>> CONFIG_DRM_FBDEV_EMULATION to be enabled. The motivation is automatically
+>> disabling all fbdev drivers instead of having to be disabled individually.
+>> 
+>> The reason for doing this is that now with simpledrm, there's no need for
+>> the legacy fbdev (e.g: efifb or vesafb) drivers anymore and many distros
+>
+> How does simpledrm works with earlycon=efi?
+>
 
-If you want to have this on ACPI enabled platform, ACPI table has to have
-the necessary bits. What you are describing is a BIOS bug _or_ somebody has
-to provide the SSDT overlay depending on the real connection of the device..
-
-> > Looks ok to me.
-> > 
-> > > Maybe you can implement this on the level of auxiliary bus.
-> > 
-> > I would actually prefer that the auxiliary bus itself does not make any
-> > assumptions regarding the whereabouts of the fwnodes at this stage. Maybe
-> > later, when(if) there are more users.
+simpledrm isn't for earlycon. For that you use a different driver (i.e:
+drivers/firmware/efi/earlycon.c). I'm just talking about fbdev drivers
+here that could be replaced by simpledrm.
 
 -- 
-With Best Regards,
-Andy Shevchenko
+Best regards,
 
+Javier Martinez Canillas
+Core Platforms
+Red Hat
 
