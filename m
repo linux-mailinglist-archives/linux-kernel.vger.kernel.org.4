@@ -2,143 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4A7E7439F1
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 12:53:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EEE99743A01
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 12:53:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232536AbjF3Kwt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 06:52:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43664 "EHLO
+        id S232186AbjF3Kx3 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 30 Jun 2023 06:53:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232410AbjF3Kwf (ORCPT
+        with ESMTP id S232288AbjF3KxG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 06:52:35 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4282358A;
-        Fri, 30 Jun 2023 03:52:34 -0700 (PDT)
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35U9XU80014782;
-        Fri, 30 Jun 2023 10:52:26 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references; s=qcppdkim1;
- bh=xzLUzIL/qxaf0TvQEPU7BTfA4oHCOh5h/B0H/DxoR8w=;
- b=gOh0d/bPBhSuc0oPXlgp7ncZHB5bbWz3O+2jdYXCnSb3zTd4jR0Ns1SRo0TXpsUvVdL5
- uADwYzapWUgGutMvTFse0S9VR97Zox1f7EODwFz1Xy0m3OC3ndRx0YN6WDguzPTknQ4x
- o8hO7efmhtXh6GlYwvgj+hGZPBE4pjRT2pps64xGRqk0j6+jnwb55GZdzOkyTWfLPiW5
- TWQ0kTgk3OWIMAyQhPHicMB+ad0Gcw7Ii0CutWVuMeoHcHz3oiKz6+Q/5lOvncCpu0jw
- acrFyS3RK2GSDF8BV3bazho2t/wgSih28KVZPMu4rJH2RnoKt7LImz0BjTmPJG+6UDkZ Ug== 
-Received: from apblrppmta02.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rha8e2f2e-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 30 Jun 2023 10:52:25 +0000
-Received: from pps.filterd (APBLRPPMTA02.qualcomm.com [127.0.0.1])
-        by APBLRPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 35UAqH2O004744;
-        Fri, 30 Jun 2023 10:52:22 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTPS id 3rdsjkpf31-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
-        Fri, 30 Jun 2023 10:52:22 +0000
-Received: from APBLRPPMTA02.qualcomm.com (APBLRPPMTA02.qualcomm.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 35UAqMUK004786;
-        Fri, 30 Jun 2023 10:52:22 GMT
-Received: from hu-sgudaval-hyd.qualcomm.com (hu-krichai-hyd.qualcomm.com [10.213.110.112])
-        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTP id 35UAqLYv004781;
-        Fri, 30 Jun 2023 10:52:22 +0000
-Received: by hu-sgudaval-hyd.qualcomm.com (Postfix, from userid 4058933)
-        id 39CD14ABD; Fri, 30 Jun 2023 16:22:21 +0530 (+0530)
-From:   Krishna chaitanya chundru <quic_krichai@quicinc.com>
-To:     manivannan.sadhasivam@linaro.org
-Cc:     helgaas@kernel.org, linux-pci@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        quic_vbadigan@quicinc.com, quic_nitegupt@quicinc.com,
-        quic_skananth@quicinc.com, quic_ramkri@quicinc.com,
-        krzysztof.kozlowski@linaro.org,
-        Krishna chaitanya chundru <quic_krichai@quicinc.com>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Jeffrey Hugo <quic_jhugo@quicinc.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Dan Carpenter <error27@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Bo Liu <liubo03@inspur.com>,
-        mhi@lists.linux.dev (open list:MHI BUS)
-Subject: [PATCH v2 8/8] bus: mhi: ep: wake up host is the MHI state is in M3
-Date:   Fri, 30 Jun 2023 16:22:11 +0530
-Message-Id: <1688122331-25478-9-git-send-email-quic_krichai@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1688122331-25478-1-git-send-email-quic_krichai@quicinc.com>
-References: <1688122331-25478-1-git-send-email-quic_krichai@quicinc.com>
-X-QCInternal: smtphost
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: Skcwe1DPfFGYgtTmPP72vdU1oy6Admjq
-X-Proofpoint-ORIG-GUID: Skcwe1DPfFGYgtTmPP72vdU1oy6Admjq
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-06-30_05,2023-06-30_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 phishscore=0
- mlxlogscore=868 clxscore=1011 impostorscore=0 priorityscore=1501
- spamscore=0 mlxscore=0 malwarescore=0 suspectscore=0 adultscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2305260000 definitions=main-2306300092
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 30 Jun 2023 06:53:06 -0400
+Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DBBD35B6;
+        Fri, 30 Jun 2023 03:53:04 -0700 (PDT)
+Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-94ea38c90ccso47836466b.1;
+        Fri, 30 Jun 2023 03:53:04 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688122383; x=1690714383;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=/A56lQbaSYx6f8A8Kd9myuvvjZF2IChmVUGzObphlZg=;
+        b=I9+ZCk4HUfdY42bTSscxs1a/+YAhPUEpSY4wqOXX1XiS6V7OL0tLJW3xSyB/delA6m
+         Jz5DY5N1u/S5fjvWDnlt9G63i/HT22gx0HNyB73vJy56df3P3TVGDFg7zVMI4y4M8opO
+         410bchTm1yiGP+7pYdpxUugCJS1pfBQO71lI8Tndiy9fIalzrfWGnmB6NNlh0HuTWQ3v
+         bQ77ZL+h+N/h36REnQxhpxRdFpjpzonNPmQgGktpOn/rNin/RLR4/3d5K4XfFrjebdAE
+         ej2t7o9cVRSr8NOHfiVM3drM191uTl/6fGUGGEblyYlEZT7673LSjaR0Y3iIiwhYbzli
+         SUeg==
+X-Gm-Message-State: ABy/qLZfnxpeA66DCyyqZ6QxAnhrF4QLVjbaNsGLiYX+0yZ17r9UQG6C
+        FmArxT1DhsZeujXMxOCMgueQ7IF9wK/hXdPKVDo=
+X-Google-Smtp-Source: ACHHUZ4WgWkFA9uBFLQ4chY9yS0DrCbDHKg+qJki1rTD/526fTFWs9/rOjn0MfGzEAyJcN8v4XUfb+eUTcSmoaBkahQ=
+X-Received: by 2002:a17:906:35c5:b0:988:8220:2af0 with SMTP id
+ p5-20020a17090635c500b0098882202af0mr1588637ejb.5.1688122383089; Fri, 30 Jun
+ 2023 03:53:03 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230616165034.3630141-1-michal.wilczynski@intel.com>
+ <20230616165034.3630141-8-michal.wilczynski@intel.com> <CAJZ5v0jjwk+jVsULD8nyguc7p00Sn3Hyxq7=PLNzpj-Fz6H6sg@mail.gmail.com>
+ <aad9608b-34fa-1405-1fc4-5eb8d7d1647f@intel.com>
+In-Reply-To: <aad9608b-34fa-1405-1fc4-5eb8d7d1647f@intel.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Fri, 30 Jun 2023 12:52:52 +0200
+Message-ID: <CAJZ5v0jVsWatCmnN9=H18CzhoekgZOgnEisDJYfb-F=M3cOX1A@mail.gmail.com>
+Subject: Re: [PATCH v5 07/10] acpi/nfit: Move acpi_nfit_notify() before acpi_nfit_add()
+To:     "Wilczynski, Michal" <michal.wilczynski@intel.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        linux-acpi@vger.kernel.org, dan.j.williams@intel.com,
+        vishal.l.verma@intel.com, lenb@kernel.org, dave.jiang@intel.com,
+        ira.weiny@intel.com, rui.zhang@intel.com,
+        linux-kernel@vger.kernel.org, nvdimm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If the MHI state is in M3 then the most probably the host kept the
-device in D3 hot or D3 cold, due to that endpoint transctions will not
-be read by the host, so endpoint needs to bring the host to D0 which
-eventually bring back the MHI state to M0.
+On Fri, Jun 30, 2023 at 11:48 AM Wilczynski, Michal
+<michal.wilczynski@intel.com> wrote:
+>
+>
+>
+> On 6/29/2023 6:06 PM, Rafael J. Wysocki wrote:
+> > On Fri, Jun 16, 2023 at 6:51 PM Michal Wilczynski
+> > <michal.wilczynski@intel.com> wrote:
+> >> To use new style of installing event handlers acpi_nfit_notify() needs
+> >> to be known inside acpi_nfit_add(). Move acpi_nfit_notify() upwards in
+> >> the file, so it can be used inside acpi_nfit_add().
+> >>
+> >> Signed-off-by: Michal Wilczynski <michal.wilczynski@intel.com>
+> >> ---
+> >>  drivers/acpi/nfit/core.c | 14 +++++++-------
+> >>  1 file changed, 7 insertions(+), 7 deletions(-)
+> >>
+> >> diff --git a/drivers/acpi/nfit/core.c b/drivers/acpi/nfit/core.c
+> >> index 07204d482968..aff79cbc2190 100644
+> >> --- a/drivers/acpi/nfit/core.c
+> >> +++ b/drivers/acpi/nfit/core.c
+> >> @@ -3312,6 +3312,13 @@ void acpi_nfit_shutdown(void *data)
+> >>  }
+> >>  EXPORT_SYMBOL_GPL(acpi_nfit_shutdown);
+> >>
+> >> +static void acpi_nfit_notify(struct acpi_device *adev, u32 event)
+> >> +{
+> >> +       device_lock(&adev->dev);
+> >> +       __acpi_nfit_notify(&adev->dev, adev->handle, event);
+> >> +       device_unlock(&adev->dev);
+> >> +}
+> >> +
+> >>  static int acpi_nfit_add(struct acpi_device *adev)
+> >>  {
+> >>         struct acpi_buffer buf = { ACPI_ALLOCATE_BUFFER, NULL };
+> >> @@ -3446,13 +3453,6 @@ void __acpi_nfit_notify(struct device *dev, acpi_handle handle, u32 event)
+> >>  }
+> >>  EXPORT_SYMBOL_GPL(__acpi_nfit_notify);
+> >>
+> >> -static void acpi_nfit_notify(struct acpi_device *adev, u32 event)
+> >> -{
+> >> -       device_lock(&adev->dev);
+> >> -       __acpi_nfit_notify(&adev->dev, adev->handle, event);
+> >> -       device_unlock(&adev->dev);
+> >> -}
+> >> -
+> >>  static const struct acpi_device_id acpi_nfit_ids[] = {
+> >>         { "ACPI0012", 0 },
+> >>         { "", 0 },
+> >> --
+> > Please fold this patch into the next one.  By itself, it is an
+> > artificial change IMV.
+>
+> I agree with you, but I got told specifically to do that.
+> https://lore.kernel.org/linux-acpi/e0f67199-9feb-432c-f0cb-7bdbdaf9ff63@linux.intel.com/
 
-Signed-off-by: Krishna chaitanya chundru <quic_krichai@quicinc.com>
----
- drivers/bus/mhi/ep/main.c | 16 +++++++++++++++-
- 1 file changed, 15 insertions(+), 1 deletion(-)
+Whether or not this is easier to review is kind of subjective.
 
-diff --git a/drivers/bus/mhi/ep/main.c b/drivers/bus/mhi/ep/main.c
-index 6008818..42d3791 100644
---- a/drivers/bus/mhi/ep/main.c
-+++ b/drivers/bus/mhi/ep/main.c
-@@ -451,12 +451,14 @@ int mhi_ep_queue_skb(struct mhi_ep_device *mhi_dev, struct sk_buff *skb)
- 	struct mhi_ep_cntrl *mhi_cntrl = mhi_dev->mhi_cntrl;
- 	struct mhi_ep_chan *mhi_chan = mhi_dev->dl_chan;
- 	struct device *dev = &mhi_chan->mhi_dev->dev;
-+	u32 buf_left, read_offset, count = 0;
- 	struct mhi_ring_element *el;
--	u32 buf_left, read_offset;
- 	struct mhi_ep_ring *ring;
- 	enum mhi_ev_ccs code;
-+	enum mhi_state state;
- 	void *read_addr;
- 	u64 write_addr;
-+	bool mhi_reset;
- 	size_t tr_len;
- 	u32 tre_len;
- 	int ret;
-@@ -464,6 +466,18 @@ int mhi_ep_queue_skb(struct mhi_ep_device *mhi_dev, struct sk_buff *skb)
- 	buf_left = skb->len;
- 	ring = &mhi_cntrl->mhi_chan[mhi_chan->chan].ring;
- 
-+	if (mhi_cntrl->mhi_state == MHI_STATE_M3) {
-+		dev_dbg(dev, "wake up by ch id %x\n", mhi_chan->chan);
-+		mhi_cntrl->wakeup_host(mhi_cntrl);
-+	}
-+
-+	/* Wait for Host to set the M0 state */
-+	do {
-+		msleep(M0_WAIT_DELAY_MS);
-+		mhi_ep_mmio_get_mhi_state(mhi_cntrl, &state, &mhi_reset);
-+		count++;
-+	} while (state != MHI_STATE_M0 && count < M0_WAIT_COUNT);
-+
- 	mutex_lock(&mhi_chan->lock);
- 
- 	do {
--- 
-2.7.4
-
+If there were more code to move, I would agree, but in this particular
+case having to review two patches instead of just one is a bit of a
+hassle IMV.
