@@ -2,1187 +2,378 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D21F7744161
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 19:36:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80A4174413A
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 19:30:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230309AbjF3Rgb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 13:36:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49156 "EHLO
+        id S232080AbjF3Rau (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Jun 2023 13:30:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232888AbjF3RgM (ORCPT
+        with ESMTP id S229537AbjF3Raq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 13:36:12 -0400
-X-Greylist: delayed 302 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 30 Jun 2023 10:35:52 PDT
-Received: from mail-108-mta41.mxroute.com (mail-108-mta41.mxroute.com [136.175.108.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8EFA1FD7
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 10:35:52 -0700 (PDT)
-Received: from mail-111-mta2.mxroute.com ([136.175.111.2] filter006.mxroute.com)
- (Authenticated sender: mN4UYu2MZsgR)
- by mail-108-mta41.mxroute.com (ZoneMTA) with ESMTPSA id 1890d5b7fc5000ca8f.008
- for <linux-kernel@vger.kernel.org>
- (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
- Fri, 30 Jun 2023 17:30:47 +0000
-X-Zone-Loop: 95185a3a1165bc83ba035e25b7aa484d6550abf04817
-X-Originating-IP: [136.175.111.2]
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=ocfox.me;
-        s=x; h=Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:Cc:To:
-        From:Sender:Reply-To:Content-Type:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:
-        References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:List-Post:
-        List-Owner:List-Archive; bh=ugBil1DLRKJJ4mLEjQnGBnY2y+FhF43Dgs6JhQMjFXU=; b=E
-        TcHwIJbQZFmdzNw/Au2iE7a+e1MENDMig+y5DsJjM12deQaBUJDDZinR4jxrF4pXyHDNimlxQz1UJ
-        VELfca2GQXRUJTtGNeGGhGSllc9jiz8LLcrCe9LSt9Yf4cTABeZtbTyEzX1Zysg+5desDe43TJ05p
-        Dvt2nEH6/qUOYARX59988/mQgapjv2aKRKGydgGBjSLzhoMgW1bFdebmIt+GApL4cLCKPMcw4tfOH
-        kiXUity+L77W6b+LGjqN8eT4c9lrnGUkM19Fm2kAAUt/nJk5IGUYWdITfZyg0aDPpkuYF/WaiDUZS
-        k1CwKv9WozMvRnd4Rd5LQM1F5R9lzNcnw==;
-From:   ocfox <i@ocfox.me>
-To:     Rob Herring <robh+dt@kernel.org>,
+        Fri, 30 Jun 2023 13:30:46 -0400
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2082.outbound.protection.outlook.com [40.107.220.82])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8B1C199B;
+        Fri, 30 Jun 2023 10:30:44 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Jc13QP/cO84Xf3K36kers407GNcJskOFLCK1a/A4Fz8qObzHOpn3s5z/NDPNtivJSf5biFcxtvGq24p6Gx+RB9eIUGGP1cwiDv1WRMOQ5BsXKeCyxDygLHPnT8sx2wMNVIgqSmZHhaj60iQwjOPjfnL5plMvv/jVsNgqUUYg4pve4YmYgFlai8tuSmE7w/70nwmJcNeV/ejWsV7zsxURTsxjteE1+QadU7Zy8PCWESx8pW+m9KKZHdc81R/ZdAIhF4PMGWusOT01wnZAnRvjQBz55AOUIkznhbf0kScSmrgGwd2rQ5hyBOnbn9oJBrS2Z9TZZreuzzpDkZHO2GrqrA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=AAlshh40sjhiP/lkiGXRdr1eUSJK5dnQQxh4JAbALhk=;
+ b=JSSunPN3XWZRaZi0VnwyefnP4YKFnezgUDIuwVEtlsrrX3/OJqHjyq6rSnF0DZSN3ES80UBfpF9G2jx1S0Z0qLsfo+leltOrHfIfWaqjRV3S7TeKUzClSzJtdE1+9IBYHl/VLARFxYwQBuCneB7+3kgKCBMDezbgLLikKTJq2dtxAON91C0QDLncNLJcuq9WOkTip9VMhFBZh1xVe/R5Yt9Okbqmwh+R9jiRi3yjGdFYzvCKO986tjDKRqiN9+wJgATuAPp7cXmuYqNDctzfAtdmjhV7lIxktfF3yTG1uVCjX1d1z2roi7WgtkJ4bGxK6rcFtL8gQwl1Wtc7HX3dgg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=labundy.com; dmarc=pass action=none header.from=labundy.com;
+ dkim=pass header.d=labundy.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=NETORG5796793.onmicrosoft.com; s=selector1-NETORG5796793-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=AAlshh40sjhiP/lkiGXRdr1eUSJK5dnQQxh4JAbALhk=;
+ b=EpZ9ibV92ylKwupuwJpCt5ddwB1NToQpDDUiMXUIEEVojG6p71msHKMROunfz8ECg/P/n0gincsNikkvr1JMvDFAoZZ+AJMyowpczrYuO7lYOqwGQc8gMNtHoxn/sAm5V4VYKsINXWlY4K6ty6nrCw+v5RKkmHYB2Vqm7NbGTvE=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=labundy.com;
+Received: from SN4PR0801MB3774.namprd08.prod.outlook.com
+ (2603:10b6:803:43::21) by PH0PR08MB6504.namprd08.prod.outlook.com
+ (2603:10b6:510:42::6) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6544.19; Fri, 30 Jun
+ 2023 17:30:41 +0000
+Received: from SN4PR0801MB3774.namprd08.prod.outlook.com
+ ([fe80::b94e:6032:56d4:35b2]) by SN4PR0801MB3774.namprd08.prod.outlook.com
+ ([fe80::b94e:6032:56d4:35b2%6]) with mapi id 15.20.6544.019; Fri, 30 Jun 2023
+ 17:30:41 +0000
+Date:   Fri, 30 Jun 2023 12:30:35 -0500
+From:   Jeff LaBundy <jeff@labundy.com>
+To:     Javier Carrasco <javier.carrasco@wolfvision.net>
+Cc:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Conor Dooley <conor+dt@kernel.org>,
-        Heiko Stuebner <heiko@sntech.de>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     ocfox <i@ocfox.me>
-Subject: [PATCH] arm64: dts: rockchip: add support for Rongpin king3399 board
-Date:   Sat,  1 Jul 2023 01:27:52 +0800
-Message-ID: <20230630173010.272469-1-i@ocfox.me>
+        Henrik Rydberg <rydberg@bitmath.org>,
+        Bastian Hecht <hechtb@gmail.com>,
+        Michael Riesch <michael.riesch@wolfvision.net>,
+        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH v3 1/4] Input: ts-overlay - Add touchscreen overlay
+ object handling
+Message-ID: <ZJ8RO5lYgMUSWFha@nixie71>
+References: <20230510-feature-ts_virtobj_patch-v3-0-b4fb7fc4bab7@wolfvision.net>
+ <20230510-feature-ts_virtobj_patch-v3-1-b4fb7fc4bab7@wolfvision.net>
+ <ZJj5VcHvfMMWMRx8@nixie71>
+ <89cbb534-9371-c2be-0bad-776b51476ce8@wolfvision.net>
+ <ZJmW/KOCJF25Z79t@nixie71>
+ <543b2d74-eac4-3856-17c6-0654459a91b4@wolfvision.net>
+ <ZJz6jnt9hDjuU3du@nixie71>
+ <feb8931d-45e0-e701-d8a7-0f5e3c108a84@wolfvision.net>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <feb8931d-45e0-e701-d8a7-0f5e3c108a84@wolfvision.net>
+X-ClientProxiedBy: DM6PR17CA0033.namprd17.prod.outlook.com
+ (2603:10b6:5:1b3::46) To SN4PR0801MB3774.namprd08.prod.outlook.com
+ (2603:10b6:803:43::21)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Authenticated-Id: i@ocfox.me
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SN4PR0801MB3774:EE_|PH0PR08MB6504:EE_
+X-MS-Office365-Filtering-Correlation-Id: 046bb2ec-292c-49e2-0e93-08db798fba05
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Wp1QnYgfBpmiZ/38r7BbDxNmiWAG1yZwVeKjtptQvx1x0bYlcQ38/vhZwKDKMRlL1CmtMRZ6niyzKIspBdMl+xBdygRBiEaWJqLjQPEys0dQIMumKF5nSxf0GSHIu+1mrJIjOgfoo+6UOcBFFIbRrXxHQlMqpVD41hiJ6maEW3FV5Co1PysVPR5NjAQONvTuZCJWw/VHHFRRzI1s0/f5y7tBLSGsVRV1mU8O+oJfGyKpP4NJ3yCBSO+YoU29Sc8wALAPRClti14UgPdmfUlEUIWDn0tyESdVONsBKssE0ZhmGsrJMac52bc95jAgSoPJuxktEg7V1AhFBtwSd0NI563N8uQW4RwC49cPYYfnUGj9qOGtmob0cT3RiaEcpzyO+sjiMKpCS7jiLMj05xK3UwEgWXJ1TT161uhmQCL+y6xiO0jbpDlwMKqpnyZM6mCn9duXL7dHy2yxi/6wFk4JbPnGplD8q1tctrtHjzOLGpbaAzB9yj56+HlNSQsWllr1+/ODV0MLFBsr9O6r+JCabEoLp18D8xQnz70VSBmpbsLomw6XWwvCb3odrfHlClCU
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN4PR0801MB3774.namprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(7916004)(376002)(136003)(366004)(39830400003)(396003)(346002)(84040400005)(451199021)(5660300002)(8936002)(8676002)(7416002)(66946007)(66556008)(66476007)(6916009)(4326008)(2906002)(316002)(66899021)(30864003)(41300700001)(54906003)(478600001)(6666004)(6486002)(33716001)(6506007)(53546011)(83380400001)(6512007)(26005)(9686003)(186003)(38100700002)(86362001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?0l6kY4SGZRASMo/A0nALMJwre+b5VEx1xBn+7y+tb69IrdXWiYH6JPHYx553?=
+ =?us-ascii?Q?7+QxCYLYHPSiNtXOLYBSYaK6/OjU6G5G8vlJckYKK6MSzB1zw6QhGTDaYC8I?=
+ =?us-ascii?Q?EBnsWqb4GtQThBEf/YXSQsH6WNZWveyCoV1So75c01Hw2buF2AgpgkptliRI?=
+ =?us-ascii?Q?eNwyv9ytrXtPmIOXngyuLyGKvblipkl+1kCYQwph8hPVK5xPrwHeDJOBZpEZ?=
+ =?us-ascii?Q?HRGKtcHPcpa3tzKKLNp9xXNU5hO0knQGE/iEzNLe17Inb6iZtP+Kud3+HGmo?=
+ =?us-ascii?Q?LGfn5XMIDOcoWF+bMs85OWsBDjdc+z5c7U2FjkIo3NWxXFceND/2OzWcnLBm?=
+ =?us-ascii?Q?Vesg+qqs05c5Ddfq5CQELlfNeGruzT27geil7Y68zFxfgmxPkhzHJ1+D4P2N?=
+ =?us-ascii?Q?7fuDc7teDPLzHIFQGD95HWQMgyY3dH8ZncbvHOqoF2TYA4zmX4Y82/BKQaqF?=
+ =?us-ascii?Q?NdVTPW1vWaLsnwo68ZurjAuFx4Oyfb343fyaM5v+BO7A4pGEZ83YjgKzmR4R?=
+ =?us-ascii?Q?2CHneXzpPPBHw3bDFZBFARUOx/jKdCbFeoh9OWNVei6DCClxwOB3SSAjC3Dv?=
+ =?us-ascii?Q?bmNlJMiTpSuvSoimAlJa710zgBst7goVn7R+ri+7ajHvnvmQ6CY5Hd4xrDgy?=
+ =?us-ascii?Q?cnZ2C5O6jdEnJq2k/RJHoItvJbt35TYZh07//9OQP7p5J96l8At61FuFT4uq?=
+ =?us-ascii?Q?9kJ745VsLaeSFo/N9CWr681FBdpdS6NSV2KbU4SqLYxhhnw1FvQDJrkC0pF0?=
+ =?us-ascii?Q?tSvzNSWXKOdqGEtwBmtaBTxFN8WtbMgoxhsYq1WeDxv4e8Kkz0ik3Z6y79MQ?=
+ =?us-ascii?Q?oKLc/bCC2zVbdtUe+ZaeCU5r7cR6vvNswMD9lUGv6UhG8ITZ89WI9rAaNTh5?=
+ =?us-ascii?Q?+tMvjwpH3/LVBa1p2hJozxF2iQ76oP3bTuWmXkMAaxD6SEaNVc24P3e6U3Tj?=
+ =?us-ascii?Q?sB2YiBVT3exGX7TJNg4ytFow8op05Xl7a1uk49exmfmvyd2xuxaKXteALGYs?=
+ =?us-ascii?Q?8yvdCR3WETJWWp3zciGGA7smZZqquUOXu5t2QvVnOWx0d3VvdHC+TwD+7JRP?=
+ =?us-ascii?Q?0Za0pUp86xHpREkQn9LhOBKaZPiG/KXrSH9b0S1e4UGRsuuB3NMJT9RTF2v3?=
+ =?us-ascii?Q?rD/pS2QU9LJKcTtdWuAtgzW3tTb5Gp+CjaHhSVWN4HwLM56khEvvIodIWxaC?=
+ =?us-ascii?Q?JhrV0pWPum9nR+yYnaUOQhQeJBYzvzHlj861b35TOEQ3Ur5FOSyaukovY3mg?=
+ =?us-ascii?Q?8GX9izgtuFHsPYtj1M5+ggSyABDSqpMkjvGUiTEW33rYN1EDSOZ/E920DWO+?=
+ =?us-ascii?Q?Vjj00chZNR+V4Q4Ty3zeXw1AMxGePtLR0Zn9+vRY5Lw+ComZeySM5IHW16zo?=
+ =?us-ascii?Q?UNF0ndOzmg5WvBKfJLyrZ5xOuGfyJcs79xzbjZHOPvKtish/W+f1lotoj0HK?=
+ =?us-ascii?Q?4l4oBHJ4TJlhBUkUzZJV6jZ3o3NECRZKrxSUNrkse5tLsEMndYa58OiogESV?=
+ =?us-ascii?Q?2tW+YcuhFs0THMHopTt8FVywajBEEnxONnky82Jiifb9Y7OhhdrpsX/gpBLT?=
+ =?us-ascii?Q?megMABWIvE8tP7oaHyppHxwy0EPlnDwgdTm92OCo?=
+X-OriginatorOrg: labundy.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 046bb2ec-292c-49e2-0e93-08db798fba05
+X-MS-Exchange-CrossTenant-AuthSource: SN4PR0801MB3774.namprd08.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Jun 2023 17:30:41.2929
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 00b69d09-acab-4585-aca7-8fb7c6323e6f
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: kf2kGDJGLeTJg7r53ZI41heUFW8Cs0Hpjl02QJIPYkt3gkX0UnSLjubpvZz3ngUvBt7q9Ns5dZGDb4g/ybgjKA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR08MB6504
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-king3399 is a bord from Rongpin, you can find detail about
-it here:
-(http://www.rpdzkj.com/copy_2_1703937_175104_2536441.html)
+Hi Javier,
 
-This patch add basic node for the board and make it able to bring
-up.
+On Thu, Jun 29, 2023 at 09:53:11AM +0200, Javier Carrasco wrote:
+> Hi Jeff,
+> 
+> On 29.06.23 05:29, Jeff LaBundy wrote:
+> > Hi Javier,
+> > 
+> > On Wed, Jun 28, 2023 at 08:44:51AM +0200, Javier Carrasco wrote:
+> > 
+> > [...]
+> > 
+> >>>>>> +static const char *const ts_overlay_names[] = {
+> >>>>>> +	[TOUCHSCREEN] = "overlay-touchscreen",
+> >>>>>
+> >>>>> I'm a little confused why we need new code for this particular function; it's
+> >>>>> what touchscreen-min-x/y and touchscreen-size-x/y were meant to define. Why
+> >>>>> can't we keep using those?
+> >>>>>
+> >>>> According to the bindings, touchscreen-min-x/y define the minimum
+> >>>> reported values, but the overlay-touchscreen is actually setting a new
+> >>>> origin. Therefore I might be misusing those properties. On the other
+> >>>> hand touchscreen-size-x/y would make more sense, but I also considered
+> >>>> the case where someone would like to describe the real size of the
+> >>>> touchscreen outside of the overlay node as well as the clipped size
+> >>>> inside the node. In that case using the same property twice would be
+> >>>> confusing.
+> >>>> So in the end I thought that the origin/size properties are more precise
+> >>>> and applicable for all objects and not only the overlay touchscreen.
+> >>>> These properties are needed for the buttons anyways and in the future
+> >>>> more overlay would use the same properties.
+> >>>
+> >>> Ah, I understand now. touchscreen-min-x/y define the lower limits of the axes
+> >>> reported to input but they don't move the origin. I'm aligned with the reason
+> >>> to introduce this function.
+> >>>
+> >>> This does beg the question as to whether we need two separate types of children
+> >>> and related parsing code. Can we not simply have one overlay definition, and
+> >>> make the decision as to whether we are dealing with a border or virtual button
+> >>> based on whether 'linux,code' is present?
+> >>>
+> >> A single overlay definition would be possible, but in case more objects
+> >> are added in the future, looking for single properties and then deciding
+> >> what object it is might get messy pretty fast. You could end up needing
+> >> a decision tree and the definition in the DT would get more complex.
+> >>
+> >> Now the decision tree is straightforward (linux,code -> button), but
+> >> that might not always be the case. In the current implementation there
+> >> are well-defined objects and adding a new one will never affect the
+> >> parsing of the rest.
+> >> Therefore I would like to keep it more readable and easily extendable.
+> > 
+> > As a potential customer of this feature, I'm ultimately looking to describe
+> > the hardware as succinctly as possible. Currently we have two overlay types,
+> > a border and button(s). The former will never have linux,code defined, while
+> > the latter will. From my naive perspective, it seems redundant to define the
+> > overlay types differently when their properties imply the difference already.
+> > 
+> > Ultimately it seems we are simply dealing with generic "segments" scattered
+> > throughout a larger touch surface. These segments start to look something
+> > like the following:
+> > 
+> > struct touch_segment {
+> > 	unsigned int x_origin;
+> > 	unsigned int y_origin;
+> > 	unsigned int x_size;
+> > 	unsigned int y_size;
+> > 	unsigned int code;
+> > };
+> > 
+> > You then have one exported function akin to touchscreen_parse_properties() that
+> > simply walks the parent device looking for children named "touch-segment-0",
+> > "touch-segment-1", etc. and parses the five properties, with the fifth (keycode)
+> > being optional.
+> > 
+> > And then, you have one last exported function akin to touchscreen_report_pos()
+> > that processes the touch coordinates. If the coordinates are in a given segment
+> > and segment->code == KEY_RESERVED (i.e. linux,code was never given), then this
+> > function simply passes the shifted coordinates to touchscreen_report_pos().
+> > 
+> > If however segment->code != KEY_RESERVED, it calls input_report_key() based on
+> > whether the coordinates are within the segment. If this simplified solution
+> > shrinks the code enough, it may even make sense to keep it in touchscreen.c
+> > which this new feature is so tightly coupled to anyway.
+> > 
+> > I'm sure the devil is in the details however, and I understand the value in
+> > future-proofing. Can you help me understand a potential future case where this
+> > simplified view would break, and the existing definitions would be better?
+> > 
+> > Kind regards,
+> > Jeff LaBundy
+> 
+> I agree that your approach would reduce the code and then moving this
+> feature to touchscreen.c would be reasonable. So if in the end that is
+> the desired solution, I will go for it. But there are some points where
+> I think the bit of extra code would be worth it.
+> 
+> From a DT perspective, I can imagine some scenarios where a bunch of
+> segments scattered around would be messy. An example would be a keypad
+> with let's say N=9 buttons. It could be described easily with a buttons
+> node and the keys inside. Understanding what the node describes would be
+> straightforward as well, let alone N being much bigger.
+> You could argue that the buttons node could have segments inside instead
+> of buttons, but in the case where a cropped touchscreen is also
+> described, you would end up with a segment outside the buttons node and
+> the rest inside. That would reduce the parsing savings. Some labeling
+> would help in that case, but that would be not as clear as the current
+> implementation.
 
-Works:
-- USB, type-C port
-- Ethernet
-- WiFi/BT
-- HDMI
-- eMMC
-- PCIe
-- sd-card
+If we consider your nicely drawn hybrid example with two buttons and a border,
+the parent would look something like the following:
 
-Not test for other peripheral:
-- AUDIO
-- MIC
-- SIM
-- MIPI
+touchscreen {
+	compatible = "vendor,model";
 
-Signed-off-by: ocfox <i@ocfox.me>
----
- arch/arm64/boot/dts/rockchip/Makefile         |    1 +
- .../boot/dts/rockchip/rk3399-king3399.dts     | 1077 +++++++++++++++++
- 2 files changed, 1078 insertions(+)
- create mode 100644 arch/arm64/boot/dts/rockchip/rk3399-king3399.dts
+	overlay-touchscreen {
+		x-origin = ...;
+		y-origin = ...;
+		x-size = ...;
+		y-size = ...;
+	};
 
-diff --git a/arch/arm64/boot/dts/rockchip/Makefile b/arch/arm64/boot/dts/rockchip/Makefile
-index b7fb908eb92d..73ebee6ef430 100644
---- a/arch/arm64/boot/dts/rockchip/Makefile
-+++ b/arch/arm64/boot/dts/rockchip/Makefile
-@@ -42,6 +42,7 @@ dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3399-hugsun-x99.dtb
- dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3399-khadas-edge.dtb
- dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3399-khadas-edge-captain.dtb
- dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3399-khadas-edge-v.dtb
-+dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3399-king3399.dtb
- dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3399-kobol-helios64.dtb
- dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3399-leez-p710.dtb
- dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3399-nanopc-t4.dtb
-diff --git a/arch/arm64/boot/dts/rockchip/rk3399-king3399.dts b/arch/arm64/boot/dts/rockchip/rk3399-king3399.dts
-new file mode 100644
-index 000000000000..5d68add63d59
---- /dev/null
-+++ b/arch/arm64/boot/dts/rockchip/rk3399-king3399.dts
-@@ -0,0 +1,1077 @@
-+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-+/*
-+ * Copyright (c) 2017 Fuzhou Rockchip Electronics Co., Ltd.
-+ *
-+ * Copyright (c) 2023 ocfox <i@ocfox.me>
-+ */
-+
-+/dts-v1/;
-+#include <dt-bindings/pwm/pwm.h>
-+#include <dt-bindings/input/input.h>
-+#include <dt-bindings/usb/pd.h>
-+#include "rk3399.dtsi"
-+#include "rk3399-opp.dtsi"
-+
-+/ {
-+	model = "KING3399 RK3399 Board";
-+	compatible = "rockchip,king3399", "rockchip,rk3399";
-+
-+	aliases {
-+		mmc0 = &sdio0;
-+		mmc1 = &sdmmc;
-+		mmc2 = &sdhci;
-+	};
-+
-+	chosen {
-+		stdout-path = "serial2:1500000n8";
-+	};
-+
-+	clkin_gmac: external-gmac-clock {
-+		compatible = "fixed-clock";
-+		clock-frequency = <125000000>;
-+		clock-output-names = "clkin_gmac";
-+		#clock-cells = <0>;
-+	};
-+
-+	adc-keys {
-+		compatible = "adc-keys";
-+		io-channels = <&saradc 1>;
-+		io-channel-names = "buttons";
-+		keyup-threshold-microvolt = <1800000>;
-+		poll-interval = <100>;
-+
-+		button-up {
-+			label = "Volume Up";
-+			linux,code = <KEY_VOLUMEUP>;
-+			press-threshold-microvolt = <100000>;
-+		};
-+
-+		button-down {
-+			label = "Volume Down";
-+			linux,code = <KEY_VOLUMEDOWN>;
-+			press-threshold-microvolt = <300000>;
-+		};
-+
-+		back {
-+			label = "Back";
-+			linux,code = <KEY_BACK>;
-+			press-threshold-microvolt = <985000>;
-+		};
-+	};
-+
-+	keys: gpio-keys {
-+		compatible = "gpio-keys"; // poweroff not sure
-+		autorepeat;
-+
-+		power {
-+			debounce-interval = <100>;
-+			gpios = <&gpio0 RK_PA5 GPIO_ACTIVE_LOW>;
-+			label = "GPIO Power";
-+			linux,code = <KEY_POWER>;
-+			linux,input-type = <1>;
-+			pinctrl-names = "default";
-+			pinctrl-0 = <&pwr_btn>;
-+			wakeup-source;
-+		};
-+	};
-+
-+	ir-receiver {
-+		compatible = "gpio-ir-receiver";
-+		gpios = <&gpio0 RK_PA6 GPIO_ACTIVE_LOW>; // bsp
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&ir_int>;
-+	};
-+
-+	backlight: backlight {
-+		status = "disabled";
-+		compatible = "pwm-backlight";
-+		brightness-levels = <
-+			  0   1   2   3   4   5   6   7
-+			  8   9  10  11  12  13  14  15
-+			 16  17  18  19  20  21  22  23
-+			 24  25  26  27  28  29  30  31
-+			 32  33  34  35  36  37  38  39
-+			 40  41  42  43  44  45  46  47
-+			 48  49  50  51  52  53  54  55
-+			 56  57  58  59  60  61  62  63
-+			 64  65  66  67  68  69  70  71
-+			 72  73  74  75  76  77  78  79
-+			 80  81  82  83  84  85  86  87
-+			 88  89  90  91  92  93  94  95
-+			 96  97  98  99 100 101 102 103
-+			104 105 106 107 108 109 110 111
-+			112 113 114 115 116 117 118 119
-+			120 121 122 123 124 125 126 127
-+			128 129 130 131 132 133 134 135
-+			136 137 138 139 140 141 142 143
-+			144 145 146 147 148 149 150 151
-+			152 153 154 155 156 157 158 159
-+			160 161 162 163 164 165 166 167
-+			168 169 170 171 172 173 174 175
-+			176 177 178 179 180 181 182 183
-+			184 185 186 187 188 189 190 191
-+			192 193 194 195 196 197 198 199
-+			200 201 202 203 204 205 206 207
-+			208 209 210 211 212 213 214 215
-+			216 217 218 219 220 221 222 223
-+			224 225 226 227 228 229 230 231
-+			232 233 234 235 236 237 238 239
-+			240 241 242 243 244 245 246 247
-+			248 249 250 251 252 253 254 255>;
-+		default-brightness-level = <200>;
-+		enable-gpios = <&gpio1 RK_PB5 GPIO_ACTIVE_HIGH>;
-+		pwms = <&pwm0 0 25000 0>;
-+	};
-+
-+	sdio_pwrseq: sdio-pwrseq {
-+		compatible = "mmc-pwrseq-simple";
-+		clocks = <&rk808 1>;
-+		clock-names = "ext_clock";
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&wifi_reg_on_h>;
-+
-+		reset-gpios = <&gpio0 RK_PB2 GPIO_ACTIVE_LOW>;
-+	};
-+
-+	/* switched by pmic_sleep */
-+	vcc1v8_s3: vcca1v8_s3: vcc1v8-s3 {
-+		compatible = "regulator-fixed";
-+		regulator-name = "vcc1v8_s3";
-+		regulator-always-on;
-+		regulator-boot-on;
-+		regulator-min-microvolt = <1800000>;
-+		regulator-max-microvolt = <1800000>;
-+		vin-supply = <&vcc_1v8>;
-+	};
-+
-+	vcc3v0_sd: vcc3v0-sd {
-+		compatible = "regulator-fixed";
-+		enable-active-high;
-+		gpio = <&gpio0 RK_PA1 GPIO_ACTIVE_HIGH>; // bsp
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&sdmmc0_pwr_h>;
-+		regulator-boot-on;
-+		regulator-max-microvolt = <3000000>;
-+		regulator-min-microvolt = <3000000>;
-+		regulator-name = "vcc3v0_sd";
-+		vin-supply = <&vcc5v0_sys>;
-+	};
-+
-+	vcc3v3_sys: vcc3v3-sys {
-+		compatible = "regulator-fixed";
-+		regulator-name = "vcc3v3_sys";
-+		regulator-always-on;
-+		regulator-boot-on;
-+		regulator-min-microvolt = <3300000>;
-+		regulator-max-microvolt = <3300000>;
-+		vin-supply = <&vcc5v0_sys>;
-+	};
-+
-+	// 4G Module
-+	vcc3v3_gsm: vcc3v3-gsm {
-+		compatible = "regulator-fixed";
-+		enable-active-high;
-+		gpio = <&gpio4 RK_PC6 GPIO_ACTIVE_HIGH>; // bsp
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&vcc3v3_gsm_en>;
-+		regulator-name = "vcc3v3_gsm";
-+		// regulator-always-on;
-+		vin-supply = <&dc_12v>;
-+	};
-+
-+	// vdd 5v: USB 2&3, USB Hub, Type-C, HDMI, MIPI, IR
-+	vcc5v0_host: vcc5v0-host-regulator {
-+		compatible = "regulator-fixed";
-+		enable-active-high;
-+		regulator-boot-on;
-+		gpio = <&gpio4 RK_PD6 GPIO_ACTIVE_HIGH>; // bsp
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&vcc5v0_host_en>;
-+		regulator-name = "vcc5v0_host";
-+		// regulator-always-on;
-+		vin-supply = <&vcc5v0_sys>;
-+	};
-+
-+	vcc5v0_typec0: vbus-typec-regulator {
-+		compatible = "regulator-fixed";
-+		enable-active-high;
-+		gpio = <&gpio4 RK_PD2 GPIO_ACTIVE_HIGH>; // bsp
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&vcc5v0_typec_en>;
-+		regulator-name = "vcc5v0_typec0";
-+		vin-supply = <&vcc5v0_sys>;
-+	};
-+
-+	vcc_sys: vcc5v0_sys: vcc5v0-sys { // bsp
-+		compatible = "regulator-fixed";
-+		regulator-name = "vcc5v0_sys";
-+		regulator-always-on;
-+		regulator-boot-on;
-+		regulator-min-microvolt = <5000000>;
-+		regulator-max-microvolt = <5000000>;
-+		vin-supply = <&dc_12v>;
-+	};
-+
-+
-+	dc_12v: vdd_12v: dc-12v { // dc_12v vdd_12V
-+		compatible = "regulator-fixed";
-+		regulator-name = "dc_12v";
-+		regulator-always-on;
-+		regulator-boot-on;
-+		regulator-min-microvolt = <12000000>;
-+		regulator-max-microvolt = <12000000>;
-+	};
-+
-+	rt5651-sound { // verify
-+		status = "okay";
-+		compatible = "simple-audio-card";
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&hp_det>;
-+
-+		simple-audio-card,name = "realtek,rt5651-codec";
-+		simple-audio-card,format = "i2s";
-+		simple-audio-card,mclk-fs = <256>;
-+		simple-audio-card,hp-det-gpio = <&gpio4 RK_PD4 GPIO_ACTIVE_HIGH>;
-+		simple-audio-card,aux-devs = <&speaker_amp>;
-+		simple-audio-card,pin-switches = "Speaker";
-+		simple-audio-card,widgets =
-+			"Microphone", "Mic Jack",
-+			"Headphone", "Headphones",
-+			"Speaker", "Speaker";
-+		simple-audio-card,routing =
-+			"Mic Jack", "micbias1",
-+			"Headphones", "HPOL",
-+			"Headphones", "HPOR",
-+			"Speaker Amplifier INL", "HPOL",
-+			"Speaker Amplifier INR", "HPOR",
-+			"Speaker", "Speaker Amplifier OUTL",
-+			"Speaker", "Speaker Amplifier OUTR";
-+		simple-audio-card,cpu {
-+			sound-dai = <&i2s0>;
-+		};
-+		simple-audio-card,codec {
-+			sound-dai = <&rt5651>;
-+		};
-+	};
-+
-+	speaker_amp: speaker-amplifier { // verify
-+		compatible = "simple-audio-amplifier";
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&spk_ctl>;
-+		enable-gpios = <&gpio0 RK_PB3 GPIO_ACTIVE_HIGH>;
-+		sound-name-prefix = "Speaker Amplifier";
-+		vcc-supply = <&vcc5v0_sys>;
-+	};
-+
-+	leds {
-+		compatible = "gpio-leds";
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&breathe_led_pin>;
-+
-+		breathe_led: led-breathe-led { // bsp // vdd_12V
-+			label = "breathe_led";
-+			linux,default-trigger = "heartbeat";
-+			default-state = "off";
-+			gpios = <&gpio4 RK_PD0 GPIO_ACTIVE_LOW>;
-+		};
-+	};
-+
-+	fan0: gpio-fan { // verify // vcc5v0_sys
-+		#cooling-cells = <2>;
-+		compatible = "gpio-fan";
-+		gpio-fan,speed-map = <0 0 3000 1>;
-+		gpios = <&gpio1 RK_PC2 GPIO_ACTIVE_HIGH>;
-+		status = "okay";
-+	};
-+
-+	gpio-restart {
-+		compatible = "gpio-restart";
-+		gpios = <&gpio1 RK_PD0 GPIO_ACTIVE_LOW>;
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&hub_rst>;
-+		priority = <200>;
-+		active-delay = <100>;
-+		inactive-delay = <10>;
-+		wait-delay = <100>;
-+	};
-+
-+};
-+
-+&cpu_l0 {
-+	cpu-supply = <&vdd_cpu_l>;
-+};
-+
-+&cpu_l1 {
-+	cpu-supply = <&vdd_cpu_l>;
-+};
-+
-+&cpu_l2 {
-+	cpu-supply = <&vdd_cpu_l>;
-+};
-+
-+&cpu_l3 {
-+	cpu-supply = <&vdd_cpu_l>;
-+};
-+
-+&cpu_b0 {
-+	cpu-supply = <&vdd_cpu_b>;
-+};
-+
-+&cpu_b1 {
-+	cpu-supply = <&vdd_cpu_b>;
-+};
-+
-+&cpu_thermal { // verify
-+	trips {
-+		cpu_hot: cpu_hot {
-+			hysteresis = <10000>;
-+			temperature = <55000>;
-+			type = "active";
-+		};
-+	};
-+
-+	cooling-maps {
-+		map2 {
-+			cooling-device =
-+				<&fan0 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
-+			trip = <&cpu_hot>;
-+		};
-+	};
-+};
-+
-+&emmc_phy {
-+	status = "okay";
-+};
-+
-+&gmac {
-+	assigned-clocks = <&cru SCLK_RMII_SRC>;
-+	assigned-clock-parents = <&clkin_gmac>;
-+	clock_in_out = "input";
-+	phy-supply = <&vcc3v3_s3>;
-+	phy-mode = "rgmii";
-+	phy-handle = <&rtl8211e>;
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&rgmii_pins>, <&phy_intb>, <&phy_rstb>;
-+	tx_delay = <0x28>;
-+	rx_delay = <0x11>;
-+	status = "okay";
-+
-+	mdio {
-+		compatible = "snps,dwmac-mdio";
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+
-+		rtl8211e: ethernet-phy@1 {
-+			reg = <1>;
-+			interrupt-parent = <&gpio3>;
-+			interrupts = <RK_PB2 IRQ_TYPE_LEVEL_LOW>;
-+			reset-assert-us = <10000>;
-+			reset-deassert-us = <30000>;
-+			reset-gpios = <&gpio3 RK_PB7 GPIO_ACTIVE_LOW>;
-+		};
-+	};
-+};
-+
-+&gpu {
-+	mali-supply = <&vdd_gpu>;
-+	status = "okay";
-+};
-+
-+&hdmi {
-+	ddc-i2c-bus = <&i2c3>;
-+	status = "okay";
-+};
-+
-+&hdmi_sound {
-+	status = "okay";
-+};
-+
-+&i2s0 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&i2s_8ch_mclk_pin>, <&i2s0_2ch_bus>;
-+	#sound-dai-cells = <0>;
-+	rockchip,capture-channels = <8>;
-+	rockchip,playback-channels = <8>;
-+	status = "okay";
-+};
-+
-+&i2s2 {
-+	#sound-dai-cells = <0>;
-+	status = "okay";
-+};
-+
-+&i2c0 {
-+	clock-frequency = <400000>;
-+	i2c-scl-rising-time-ns = <168>;
-+	i2c-scl-falling-time-ns = <4>;
-+	status = "okay";
-+
-+	rk808: pmic@1b { // bsp checked
-+		compatible = "rockchip,rk808";
-+		reg = <0x1b>;
-+		interrupt-parent = <&gpio1>;
-+		interrupts = <RK_PC5 IRQ_TYPE_LEVEL_LOW>;
-+		#clock-cells = <1>;
-+		clock-output-names = "rk808-clkout1", "rk808-clkout2"; // bsp
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&pmic_int_l &pmic_dvs2>;
-+		rockchip,system-power-controller;
-+		wakeup-source;
-+
-+		vcc1-supply = <&vcc5v0_sys>;
-+		vcc2-supply = <&vcc5v0_sys>;
-+		vcc3-supply = <&vcc5v0_sys>;
-+		vcc4-supply = <&vcc5v0_sys>;
-+		vcc6-supply = <&vcc5v0_sys>;
-+		vcc7-supply = <&vcc5v0_sys>;
-+		vcc8-supply = <&vcc3v3_sys>;
-+		vcc9-supply = <&vcc5v0_sys>;
-+		vcc10-supply = <&vcc5v0_sys>;
-+		vcc11-supply = <&vcc5v0_sys>;
-+		vcc12-supply = <&vcc3v3_sys>;
-+		vddio-supply = <&vcc1v8_pmu>;
-+
-+		regulators {
-+			vdd_center: DCDC_REG1 {
-+				regulator-name = "vdd_center";
-+				regulator-always-on;
-+				regulator-boot-on;
-+				regulator-min-microvolt = <750000>;
-+				regulator-max-microvolt = <1350000>;
-+				regulator-ramp-delay = <6001>;
-+				regulator-state-mem {
-+					regulator-off-in-suspend;
-+				};
-+			};
-+
-+			vdd_cpu_l: DCDC_REG2 {
-+				regulator-name = "vdd_cpu_l";
-+				regulator-always-on;
-+				regulator-boot-on;
-+				regulator-min-microvolt = <750000>;
-+				regulator-max-microvolt = <1350000>;
-+				regulator-ramp-delay = <6001>;
-+				regulator-state-mem {
-+					regulator-off-in-suspend;
-+				};
-+			};
-+
-+			vcc_ddr: DCDC_REG3 {
-+				regulator-name = "vcc_ddr";
-+				regulator-always-on;
-+				regulator-boot-on;
-+				regulator-state-mem {
-+					regulator-on-in-suspend;
-+				};
-+			};
-+
-+			vcc_1v8: DCDC_REG4 {
-+				regulator-name = "vcc_1v8";
-+				regulator-always-on;
-+				regulator-boot-on;
-+				regulator-min-microvolt = <1800000>;
-+				regulator-max-microvolt = <1800000>;
-+				regulator-state-mem {
-+					regulator-on-in-suspend;
-+					regulator-suspend-microvolt = <1800000>;
-+				};
-+			};
-+
-+			vcc1v8_dvp: LDO_REG1 {
-+				regulator-name = "vcc1v8_dvp";
-+				regulator-always-on;
-+				regulator-boot-on;
-+				regulator-min-microvolt = <1800000>;
-+				regulator-max-microvolt = <1800000>;
-+				regulator-state-mem {
-+					regulator-off-in-suspend;
-+				};
-+			};
-+
-+			vcc3v0_tp: LDO_REG2 {
-+				regulator-name = "vcc3v0_tp";
-+				regulator-always-on;
-+				regulator-boot-on;
-+				regulator-min-microvolt = <3000000>;
-+				regulator-max-microvolt = <3000000>;
-+				regulator-state-mem {
-+					regulator-off-in-suspend;
-+				};
-+			};
-+
-+			vcc1v8_pmu: LDO_REG3 {
-+				regulator-name = "vcc1v8_pmu";
-+				regulator-always-on;
-+				regulator-boot-on;
-+				regulator-min-microvolt = <1800000>;
-+				regulator-max-microvolt = <1800000>;
-+				regulator-state-mem {
-+					regulator-on-in-suspend;
-+					regulator-suspend-microvolt = <1800000>;
-+				};
-+			};
-+
-+			vcc_sdio: LDO_REG4 {
-+				regulator-name = "vcc_sdio";
-+				regulator-always-on;
-+				regulator-boot-on;
-+				regulator-min-microvolt = <1800000>;
-+				regulator-max-microvolt = <3300000>;
-+				regulator-state-mem {
-+					regulator-on-in-suspend;
-+					regulator-suspend-microvolt = <3000000>;
-+				};
-+			};
-+
-+			vcca3v0_codec: LDO_REG5 {
-+				regulator-name = "vcca3v0_codec";
-+				regulator-always-on;
-+				regulator-boot-on;
-+				regulator-min-microvolt = <3000000>;
-+				regulator-max-microvolt = <3000000>;
-+				regulator-state-mem {
-+					regulator-off-in-suspend;
-+				};
-+			};
-+
-+			vcc_1v5: LDO_REG6 {
-+				regulator-name = "vcc_1v5";
-+				regulator-always-on;
-+				regulator-boot-on;
-+				regulator-min-microvolt = <1500000>;
-+				regulator-max-microvolt = <1500000>;
-+				regulator-state-mem {
-+					regulator-on-in-suspend;
-+					regulator-suspend-microvolt = <1500000>;
-+				};
-+			};
-+
-+			vcca1v8_codec: LDO_REG7 {
-+				regulator-name = "vcca1v8_codec";
-+				regulator-always-on;
-+				regulator-boot-on;
-+				regulator-min-microvolt = <1800000>;
-+				regulator-max-microvolt = <1800000>;
-+				regulator-state-mem {
-+					regulator-off-in-suspend;
-+				};
-+			};
-+
-+			vcc_3v0: LDO_REG8 {
-+				regulator-name = "vcc_3v0";
-+				regulator-always-on;
-+				regulator-boot-on;
-+				regulator-min-microvolt = <3000000>;
-+				regulator-max-microvolt = <3000000>;
-+				regulator-state-mem {
-+					regulator-on-in-suspend;
-+					regulator-suspend-microvolt = <3000000>;
-+				};
-+			};
-+
-+			vcc3v3_s3: vcc_lan: SWITCH_REG1 {
-+				regulator-name = "vcc3v3_s3";
-+				regulator-always-on;
-+				regulator-boot-on;
-+				regulator-state-mem {
-+					regulator-off-in-suspend;
-+				};
-+			};
-+
-+			vcc3v3_s0: SWITCH_REG2 {
-+				regulator-name = "vcc3v3_s0";
-+				regulator-always-on;
-+				regulator-boot-on;
-+				regulator-state-mem {
-+					regulator-off-in-suspend;
-+				};
-+			};
-+		};
-+	};
-+
-+	vdd_cpu_b: regulator@40 { // bsp checked
-+		compatible = "silergy,syr827";
-+		reg = <0x40>;
-+		fcs,suspend-voltage-selector = <1>;
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&cpu_b_sleep>;
-+		regulator-name = "vdd_cpu_b";
-+		regulator-min-microvolt = <712500>;
-+		regulator-max-microvolt = <1500000>;
-+		regulator-ramp-delay = <1000>;
-+		regulator-always-on;
-+		regulator-boot-on;
-+		vin-supply = <&vcc5v0_sys>;
-+
-+		regulator-state-mem {
-+			regulator-off-in-suspend;
-+		};
-+	};
-+
-+	vdd_gpu: regulator@41 { // bsp checked
-+		compatible = "silergy,syr828";
-+		reg = <0x41>;
-+		fcs,suspend-voltage-selector = <1>;
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&gpu_sleep>;
-+		regulator-name = "vdd_gpu";
-+		regulator-min-microvolt = <712500>;
-+		regulator-max-microvolt = <1500000>;
-+		regulator-ramp-delay = <1000>;
-+		regulator-always-on;
-+		regulator-boot-on;
-+		vin-supply = <&vcc5v0_sys>;
-+
-+		regulator-state-mem {
-+			regulator-off-in-suspend;
-+		};
-+	};
-+};
-+
-+&i2c1 {
-+	i2c-scl-rising-time-ns = <300>;
-+	i2c-scl-falling-time-ns = <15>;
-+	status = "okay";
-+
-+	rt5651: rt5651@1a {
-+		#sound-dai-cells = <0>;
-+		compatible = "realtek,rt5651";
-+		reg = <0x1a>;
-+		clocks = <&cru SCLK_I2S_8CH_OUT>;
-+		clock-names = "mclk";
-+		status = "okay";
-+	};
-+};
-+
-+&i2c2 {
-+	status = "okay";
-+};
-+
-+// Used for HDMI
-+&i2c3 {
-+	i2c-scl-rising-time-ns = <450>;
-+	i2c-scl-falling-time-ns = <15>;
-+	status = "okay";
-+};
-+
-+// Type-C
-+// Accelerometer
-+// Touch Screen
-+&i2c4 {
-+	clock-frequency = <400000>;
-+	i2c-scl-rising-time-ns = <450>;
-+	i2c-scl-falling-time-ns = <15>;
-+	status = "okay";
-+
-+	fusb302@22 { // bsp checked
-+		compatible = "fcs,fusb302";
-+		reg = <0x22>;
-+		interrupt-parent = <&gpio1>;
-+		interrupts = <RK_PA2 IRQ_TYPE_LEVEL_LOW>; // bsp
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&chg_cc_int_l>;
-+		vbus-supply = <&vcc5v0_typec0>;
-+
-+		typec_con: connector {
-+			compatible = "usb-c-connector";
-+			data-role = "host";
-+			label = "USB-C";
-+			op-sink-microwatt = <1000000>;
-+			power-role = "dual";
-+			sink-pdos =
-+				<PDO_FIXED(5000, 2500, PDO_FIXED_USB_COMM)>;
-+			source-pdos =
-+				<PDO_FIXED(5000, 1400, PDO_FIXED_USB_COMM)>;
-+			try-power-role = "sink";
-+
-+			ports {
-+				#address-cells = <1>;
-+				#size-cells = <0>;
-+
-+				port@0 {
-+					reg = <0>;
-+					typec_hs: endpoint {
-+						remote-endpoint = <&u2phy0_typec_hs>;
-+					};
-+				};
-+				port@1 {
-+					reg = <1>;
-+					typec_ss: endpoint {
-+						remote-endpoint = <&tcphy0_typec_ss>;
-+					};
-+				};
-+				port@2 {
-+					reg = <2>;
-+					typec_dp: endpoint {
-+						remote-endpoint = <&tcphy0_typec_dp>;
-+					};
-+				};
-+			};
-+		};
-+	};
-+
-+	mma8452: mma8452@1d {
-+		compatible = "fsl,mma8452";
-+		reg = <0x1d>;
-+		interrupt-parent = <&gpio1>;
-+		interrupts = <RK_PC7 IRQ_TYPE_EDGE_RISING>;
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&gsensor_int>;
-+	};
-+};
-+
-+&io_domains { // bsp checked
-+	status = "okay";
-+	bt656-supply = <&vcc_1v8>;
-+	audio-supply = <&vcca1v8_codec>;
-+	sdmmc-supply = <&vcc_sdio>;
-+	gpio1830-supply = <&vcc_3v0>;
-+};
-+
-+&pmu_io_domains { // bsp checked
-+	status = "okay";
-+	pmu1830-supply = <&vcc_1v8>;
-+};
-+
-+&hdmi { // bsp
-+	ddc-i2c-bus = <&i2c3>;
-+	status = "okay";
-+};
-+
-+&pinctrl {
-+	buttons {
-+		pwr_btn: pwr-btn {
-+			rockchip,pins = <0 RK_PA5 RK_FUNC_GPIO &pcfg_pull_up>;
-+		};
-+	};
-+
-+	ir {
-+		ir_int: ir-int {
-+			rockchip,pins = <0 RK_PA6 RK_FUNC_GPIO &pcfg_pull_none>; // bsp
-+		};
-+	};
-+
-+	gmac {
-+		phy_intb: phy-intb {
-+			rockchip,pins = <3 RK_PB2 RK_FUNC_GPIO &pcfg_pull_up>; // verify
-+		};
-+
-+		phy_rstb: phy-rstb {
-+			rockchip,pins = <3 RK_PB7 RK_FUNC_GPIO &pcfg_pull_none>; // verify
-+		};
-+	};
-+
-+	pmic {
-+		cpu_b_sleep: cpu-b-sleep {
-+			rockchip,pins = <1 RK_PC1 RK_FUNC_GPIO &pcfg_pull_down>; // verify
-+		};
-+
-+		gpu_sleep: gpu-sleep {
-+			rockchip,pins = <1 RK_PB6 RK_FUNC_GPIO &pcfg_pull_down>; // verify
-+		};
-+
-+		pmic_int_l: pmic-int-l {
-+			rockchip,pins = <1 RK_PC5 RK_FUNC_GPIO &pcfg_pull_up>; // verify
-+		};
-+
-+		pmic_dvs2: pmic-dvs2 {
-+			rockchip,pins = <1 RK_PA5 RK_FUNC_GPIO &pcfg_pull_down>;
-+		};
-+	};
-+
-+	sd {
-+		sdmmc0_pwr_h: sdmmc0-pwr-h {
-+			rockchip,pins = <0 RK_PA1 RK_FUNC_GPIO &pcfg_pull_none>; // bsp
-+		};
-+	};
-+
-+	usb2 {
-+		vcc5v0_host_en: vcc5v0-host-en {
-+			rockchip,pins = <4 RK_PD6 RK_FUNC_GPIO &pcfg_pull_none>; // bsp
-+		};
-+
-+		vcc5v0_typec_en: vcc5v0-typec-en {
-+			rockchip,pins = <4 RK_PD2 RK_FUNC_GPIO &pcfg_pull_none>; // bsp
-+		};
-+
-+		hub_rst: hub-rst {
-+			rockchip,pins = <1 RK_PD0 RK_FUNC_GPIO &pcfg_pull_none>;
-+		};
-+	};
-+
-+	sdio-pwrseq {
-+		wifi_reg_on_h: wifi-reg-on-h {
-+			rockchip,pins = <0 RK_PB2 RK_FUNC_GPIO &pcfg_pull_none>; // checked
-+		};
-+	};
-+
-+	wifi {
-+		wifi_host_wake_l: wifi-host-wake-l {
-+			rockchip,pins = <0 RK_PA3 RK_FUNC_GPIO &pcfg_pull_none>; // checked
-+		};
-+	};
-+
-+	bluetooth {
-+		bt_reg_on_h: bt-enable-h {
-+			rockchip,pins = <0 RK_PB1 RK_FUNC_GPIO &pcfg_pull_none>; // checked
-+		};
-+
-+		bt_host_wake_l: bt-host-wake-l {
-+			rockchip,pins = <0 RK_PA4 RK_FUNC_GPIO &pcfg_pull_none>; // checked
-+		};
-+
-+		bt_wake_l: bt-wake-l {
-+			rockchip,pins = <2 RK_PD2 RK_FUNC_GPIO &pcfg_pull_none>; // checked
-+		};
-+	};
-+
-+	fusb302 {
-+		chg_cc_int_l: chg-cc-int-l {
-+			rockchip,pins = <1 RK_PA2 RK_FUNC_GPIO &pcfg_pull_up>; // bsp
-+		};
-+	};
-+
-+	leds {
-+		breathe_led_pin: breathe-led-pin {
-+			rockchip,pins = <4 RK_PD0 RK_FUNC_GPIO &pcfg_pull_none>; // bsp
-+		};
-+	};
-+
-+	gsm {
-+		vcc3v3_gsm_en: vcc3v3-gsm-en {
-+			rockchip,pins = <4 RK_PC6 RK_FUNC_GPIO &pcfg_pull_none>; // bsp
-+		};
-+	};
-+
-+	headphone {
-+		hp_det: hp-det {
-+			rockchip,pins = <4 RK_PD4 RK_FUNC_GPIO &pcfg_pull_up>; // verify
-+		};
-+		spk_ctl: spk-ctl {
-+			rockchip,pins = <0 RK_PB3 RK_FUNC_GPIO &pcfg_pull_up>; // verify
-+		};
-+	};
-+
-+	mma8452 {
-+		gsensor_int: gsensor-int {
-+			rockchip,pins = <1 RK_PC7 RK_FUNC_GPIO &pcfg_pull_up>; // bsp
-+		};
-+	};
-+
-+	i2s0 {
-+		i2s_8ch_mclk_pin: i2s-8ch-mclk-pin {
-+			rockchip,pins = <4 RK_PA0 1 &pcfg_pull_none>; // verify
-+		};
-+	};
-+};
-+
-+&pwm0 {
-+	status = "okay";
-+};
-+
-+&pwm2 {
-+	status = "okay";
-+};
-+
-+&saradc {
-+	vref-supply = <&vcca1v8_s3>;
-+	status = "okay";
-+};
-+
-+&sdhci {
-+	bus-width = <8>;
-+	mmc-hs400-1_8v;
-+	mmc-hs400-enhanced-strobe;
-+	// keep-power-in-suspend;
-+	non-removable;
-+	status = "okay";
-+};
-+
-+&sdio0 {
-+	bus-width = <4>;
-+	cap-sd-highspeed;
-+	cap-sdio-irq;
-+	clock-frequency = <50000000>;
-+	disable-wp;
-+	keep-power-in-suspend;
-+	max-frequency = <50000000>;
-+	mmc-pwrseq = <&sdio_pwrseq>;
-+	non-removable;
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&sdio0_bus4 &sdio0_cmd &sdio0_clk>;
-+	sd-uhs-sdr104;
-+	#address-cells = <1>;
-+	#size-cells = <0>;
-+	status = "okay";
-+
-+	brcmf: wifi@1 {
-+		reg = <1>;
-+		compatible = "brcm,bcm43455-fmac";
-+		interrupt-parent = <&gpio0>;
-+		interrupts = <RK_PA3 GPIO_ACTIVE_HIGH>; // bsp verify
-+		interrupt-names = "host-wake";
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&wifi_host_wake_l>;
-+	};
-+};
-+
-+&sdmmc {
-+	bus-width = <4>;
-+	cap-mmc-highspeed;
-+	cap-sd-highspeed;
-+	cd-gpios = <&gpio0 RK_PA7 GPIO_ACTIVE_LOW>; // checked
-+	clock-frequency = <150000000>;
-+	disable-wp;
-+	max-frequency = <150000000>;
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&sdmmc_clk &sdmmc_cmd &sdmmc_cd &sdmmc_bus4>;
-+	vmmc-supply = <&vcc3v0_sd>;
-+	vqmmc-supply = <&vcc_sdio>;
-+	status = "okay";
-+};
-+
-+&tcphy0 { // verify
-+	status = "okay";
-+};
-+
-+&tcphy0_dp { // verify
-+	port {
-+		tcphy0_typec_dp: endpoint {
-+			remote-endpoint = <&typec_dp>;
-+		};
-+	};
-+};
-+
-+&tcphy0_usb3 { // verify
-+	port {
-+		tcphy0_typec_ss: endpoint {
-+			remote-endpoint = <&typec_ss>;
-+		};
-+	};
-+};
-+
-+&tcphy1 { // verify
-+	status = "okay";
-+};
-+
-+&tsadc {
-+	/* tshut mode 0:CRU 1:GPIO */
-+	rockchip,hw-tshut-mode = <1>;
-+	/* tshut polarity 0:LOW 1:HIGH */
-+	rockchip,hw-tshut-polarity = <1>;
-+	status = "okay";
-+};
-+
-+&u2phy0 {
-+	status = "okay";
-+
-+	u2phy0_otg: otg-port {
-+		phy-supply = <&vcc5v0_typec0>;
-+		status = "okay";
-+	};
-+
-+	u2phy0_host: host-port {
-+		phy-supply = <&vcc5v0_host>;
-+		status = "okay";
-+	};
-+
-+	port {
-+		u2phy0_typec_hs: endpoint {
-+			remote-endpoint = <&typec_hs>;
-+		};
-+	};
-+};
-+
-+&u2phy1 {
-+	status = "okay";
-+
-+	u2phy1_otg: otg-port {
-+		status = "okay";
-+	};
-+
-+	u2phy1_host: host-port {
-+		phy-supply = <&vcc5v0_host>;
-+		status = "okay";
-+	};
-+};
-+
-+&uart0 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&uart0_xfer &uart0_cts &uart0_rts>;
-+	status = "okay";
-+
-+	bluetooth {
-+		compatible = "brcm,bcm43438-bt";
-+		clocks = <&rk808 1>;
-+		clock-names = "lpo";
-+		device-wakeup-gpios = <&gpio2 RK_PD2 GPIO_ACTIVE_HIGH>;
-+		host-wakeup-gpios = <&gpio0 RK_PA4 GPIO_ACTIVE_HIGH>;
-+		shutdown-gpios = <&gpio0 RK_PB1 GPIO_ACTIVE_HIGH>;
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&bt_host_wake_l &bt_wake_l &bt_reg_on_h>;
-+		vbat-supply = <&vcc5v0_sys>;
-+		vddio-supply = <&vcc_1v8>;
-+	};
-+};
-+
-+&uart2 {
-+	status = "okay";
-+};
-+
-+&uart4 {
-+	status = "okay";
-+};
-+
-+&spi1 {
-+	status = "disabled";
-+};
-+
-+&usb_host0_ehci {
-+	status = "okay";
-+};
-+
-+&usb_host0_ohci {
-+	status = "okay";
-+};
-+
-+&usb_host1_ehci {
-+	status = "okay";
-+};
-+
-+&usb_host1_ohci {
-+	status = "okay";
-+};
-+
-+&usbdrd3_0 {
-+	status = "okay";
-+};
-+
-+&usbdrd_dwc3_0 {
-+	status = "okay";
-+	dr_mode = "host";
-+};
-+
-+&usbdrd3_1 {
-+	status = "okay";
-+};
-+
-+&usbdrd_dwc3_1 {
-+	status = "okay";
-+	dr_mode = "host";
-+};
-+
-+&vopb {
-+	status = "okay";
-+};
-+
-+&vopb_mmu {
-+	status = "okay";
-+};
-+
-+&vopl {
-+	status = "okay";
-+};
-+
-+&vopl_mmu {
-+	status = "okay";
-+};
--- 
-2.41.0
+	overlay-buttons {
+		button-0 {
+			x-origin = ...;
+			y-origin = ...;
+			x-size = ...;
+			y-size = ...;
+			linux,code = <KEY_POWER>;
+		};
 
+		button-1 {
+			x-origin = ...;
+			y-origin = ...;
+			x-size = ...;
+			y-size = ...;
+			linux,code = <KEY_INFO>;
+		};
+	};
+};
+
+Is that correct? My first impression was that it seems unnecessary to group
+the button-0 and button-1 children under their own 'overlay-buttons' parent,
+because there is nothing else inside 'overlay-buttons'. Stated another way,
+it seems we are drawing an unnecessary imaginary line around the buttons. It
+would be especially confusing for the case where the buttons are scattered
+throughout the touch surface and have no logical or physical relationship.
+
+My second impression is that 'overlay-touchscreen' and button-N are nearly
+identical save for the 'linux,code' property that can be optional, which makes
+it seem like these two should really just be the same node definition. If we
+follow my suggestion, the example would collapse as follows:
+
+touchscreen {
+        compatible = "vendor,model";
+
+	touch-segment-0 {
+		/*
+		 * this is the small subset of the entire surface that reports
+		 * raw coordinates
+		 */
+		x-origin = ...;
+		y-origin = ...;
+		x-size = ...;
+		y-size = ...;
+	};
+
+	touch-segment-1 {
+		x-origin = ...;
+		y-origin = ...;
+		x-size = ...;
+		y-size = ...;
+		linux,code = <KEY_POWER>;
+	};
+
+	touch-segment-2 {
+		x-origin = ...;
+		y-origin = ...;
+		x-size = ...;
+		y-size = ...;
+		linux,code = <KEY_INFO>;
+	};
+};
+
+To me, this seems like a more authentic representation of a monolithic touch
+surface. I can't imagine there is not some code savings and simplification to
+be had if touch-segment-N can always assume it is a direct descendant of the
+parent. In the present implementation, a common property such as 'x-size' may
+be one or two generations below the parent depending on the context, which
+the code has to keep track of.
+
+> There is another point that I will just touch upon because I have no
+> experience in the matter. I have seen that some keys use the
+> 'linux,input-type' property to define themselves as keys, switches, etc.
+> If that property or any other that I do not know is necessary for other
+> implementations, the button object will cover them better than a generic
+> segment where half of the properties would be meaningless in some
+> scenarios. Buttons/keys are so ubiquitous that a dedicated object for
+> them does not look that bad imho.
+
+I think we would simply adopt the same rule I have proposed for 'linux,code',
+that is, make these future properties optional and simply omit them in the
+case of what is currently defined as 'overlay-touchscreen'. For something
+like 'linux,input-type', you would simply declare it as dependening upon
+'linux,code' in the binding.
+
+That being said, 'linux,input-type' would not make sense here because we are
+simply defining how to interpret momentary touch (touch coordinate or press/
+release), so we would never have a switch here. However, nothing in either of
+our proposals would prevent it from being used.
+
+> But as I said, I do not want to make a strong statement here because I
+> have seen that you maintain several bindings where this properties are
+> present and I am not the right person to explain that to you... or
+> actually anyone else out there :)
+
+I personally feel my proposal is simpler, but I do not feel strongly about
+it. There is nothing functionally incorrect about yours; it merely struck me
+as placing some unnecessary burden on the DT author. From my perspective,
+"less code is the best code" and we can always add complexity later as unique
+use-cases arise.
+
+Since we agree on the majority of the suggestions for v4, maybe a compromise
+is to start on those for now, and keep my suggestion in mind as you work
+through the non-controversial changes. If you still feel strongly about your
+existing structure after that work is complete, then let us keep it.
+
+> 
+> Talking about the code itself, having a structure for buttons is handy
+> because you can keep track of the button status (e.g. pressed) and in
+> the end it is just a child of the base shape that is used for the
+> overlay touchscreen. The same applies to any function that handles
+> buttons: they just wrap around the shape functions and add the
+> button-specific management. So if the parsing is taken aside, the code
+> does not get much savings from that side and it is again much more
+> readable and comprehensible.
+
+Your module should not be storing button state; that is the job of the input
+core. Instead, your module should only be reporting state; the input core
+then decides if the state has changed and acts accordingly.
+
+> 
+> Thank you for your efforts to improve these patches and the constructive
+> discussion.
+> 
+> Best regards,
+> Javier Carrasco
+
+Kind regards,
+Jeff LaBundy
