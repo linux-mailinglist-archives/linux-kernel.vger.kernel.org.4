@@ -2,70 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 332EF743E49
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 17:07:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08D9A743E4B
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 17:08:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232235AbjF3PHp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 11:07:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59786 "EHLO
+        id S232939AbjF3PIA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Jun 2023 11:08:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232445AbjF3PHj (ORCPT
+        with ESMTP id S232445AbjF3PH5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 11:07:39 -0400
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A620E68
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 08:07:37 -0700 (PDT)
-Received: by mail-pl1-x62c.google.com with SMTP id d9443c01a7336-1b852785a65so12934865ad.0
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 08:07:37 -0700 (PDT)
+        Fri, 30 Jun 2023 11:07:57 -0400
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD1B2172C
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 08:07:55 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-5707177ff8aso18831627b3.2
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 08:07:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=heitbaum.com; s=google; t=1688137656; x=1690729656;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=8EnuOO6oK/ZVqVGz3O9HMiKg2lC4Al7i/4UAuVg8htY=;
-        b=PDNb3JOlAYukvjfbvtQ8ZLFvnbUoRaeNLFtvnAXu5kbH/6T7dn4pTHw5k8zpwiETGL
-         v9PQYHRTz9ctIdIWj9bV9ajKu870gPZlcBRKrZcjLhCY+tLRhybDb33Z+Fd1QgoVy920
-         KIdd1JfBuwockiY6424G/jo7krbCswaHzVaKg=
+        d=google.com; s=20221208; t=1688137675; x=1690729675;
+        h=content-transfer-encoding:cc:to:from:subject:message-id:references
+         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=mrWYh3PRBbdzI533s9Ew0EAXehsA/qHZG3mTg4wZnHM=;
+        b=M1ViaITYNRj8vOECiWQf6QNdpr/b0hFVhpgzkgimB1iEHmCDCMLI34196l3hwb2wFd
+         diTLBgH11Y3Yz/AQl321djbXYGMoKJidYzGGvTA5T3WyfjEVeOfu/C46ymNffPfJsHYq
+         AX6XnwSJ7EYOUbJFoT7rcWmRNxbPLl0ucFXnYQsaJeFRdgHbrjh7Zm0BNNpqXt2WieR/
+         Lc4y9cDWNbIIKX0TnWVBDT7BxkZAeNVBaT0g3Nc3pwvixMIRUOI96QE8a8DzB93hhASM
+         5bzHf/kBbI+E4138JxhDhGCStj77y7PNA7E2S9hUDEQuYFoONX7EnyRouIr6LBKOdA+0
+         iGMg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688137656; x=1690729656;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=8EnuOO6oK/ZVqVGz3O9HMiKg2lC4Al7i/4UAuVg8htY=;
-        b=B2snSpF0I9WQkLPTabdUt6IVLJ/Wn2alllI2fRHLAf+fOmsc7LN32nx6cjagXJ5EbT
-         Y1JtgSuUUM/BIdmwsizCi8WXMvxxd45V69wl8H3pxLtTcOEtnDQK4LU4RanHV2N+bDOk
-         ykZXTr0B0DGPqkNOdUzsXhpdgz3UrHPsjNi/rjYg6ZxvAHsnRdcWybsKiJeyu2kRbuOB
-         l6Oi7RH3pmxpkxU9mxsRNf2cG0ZxWkNzNkhXmn8gLCl0daAjRjPkvoCjJwlMmF0TUB4e
-         x0UFziwybZaybnMyMtWWwMEEKDPxTh79ab4MZQWsxnNz3gza6NYRtf8wwK6GecFCjA03
-         6LoQ==
-X-Gm-Message-State: AC+VfDzvX+sHs8cdQQJalnuDKgqWVgQhQouuzWzSaFwrMgebYAzZrbcM
-        mhpn2XKvGTogaQWP4/0u6fVq/A==
-X-Google-Smtp-Source: ACHHUZ5iqx/PxCy9A0NgfSEXCrVRwBebxEv2MkEa873Y9HdaqjtDpTpqnWXbi6zOPsH61dYoDU2WJA==
-X-Received: by 2002:a17:902:c411:b0:1b6:92f0:b6f5 with SMTP id k17-20020a170902c41100b001b692f0b6f5mr10240571plk.14.1688137656539;
-        Fri, 30 Jun 2023 08:07:36 -0700 (PDT)
-Received: from 88b90ce288d3 ([122.199.31.3])
-        by smtp.gmail.com with ESMTPSA id x12-20020a170902820c00b001b3d7205401sm10867637pln.303.2023.06.30.08.07.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 30 Jun 2023 08:07:35 -0700 (PDT)
-Date:   Fri, 30 Jun 2023 15:07:27 +0000
-From:   Rudi Heitbaum <rudi@heitbaum.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de,
-        conor@kernel.org
-Subject: Re: [PATCH 6.4 00/31] 6.4.1-rc3 review
-Message-ID: <ZJ7vr/OtdYiwqLy2@88b90ce288d3>
-References: <20230630072101.040486316@linuxfoundation.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230630072101.040486316@linuxfoundation.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        d=1e100.net; s=20221208; t=1688137675; x=1690729675;
+        h=content-transfer-encoding:cc:to:from:subject:message-id:references
+         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=mrWYh3PRBbdzI533s9Ew0EAXehsA/qHZG3mTg4wZnHM=;
+        b=JXnMXckS1WdUiLr27oKM9qxFypg/5L3xuGrV8IFGm5hzjKrNby//D4CfDhuBcRFeYD
+         kltF0Cyt/JOKLWbUPxBJ00YHgVQ26yINOE/gxjnJfJiq+w16CF5zFMoY5glsBtBA8mrw
+         myFdyHaZ/WFm6AB9hgOksnZTCL4h3BB+FDzS6qGhQ2fntCEX9Pezg7SDSc3FMVSkauUA
+         reHIidtLB+kXLwq2BV97CEVZJfbFQkjIaUbBtWL0xJ2UvAMdf/qjTrb3SJeR4SD6P6mK
+         Xdri7oW5DxJ1x4w0xWdyiDbq5cRelAv07tA2K80KHz007Y8812KiJZun8gMz0UrYsnFF
+         L8pQ==
+X-Gm-Message-State: ABy/qLYE8AkBIq+jbWGQMpRWtyjC4I17LFtGfo0x7gdGGcZ59myBAk8u
+        YJm3hWMvADdDnK8yKWw7+TGfAl74RZk=
+X-Google-Smtp-Source: APBJJlHzoZOss0LPcsdk/XcICJPt4SQdaa9IAQxT9IT978Tg6wtIVsT7DmNGf+bLYov52r6dXSriFO4hUJQ=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a0d:d586:0:b0:573:9e16:2cca with SMTP id
+ x128-20020a0dd586000000b005739e162ccamr22477ywd.0.1688137674950; Fri, 30 Jun
+ 2023 08:07:54 -0700 (PDT)
+Date:   Fri, 30 Jun 2023 08:07:52 -0700
+In-Reply-To: <0a98683f-3e60-1f1b-55df-f2a781929fdf@intel.com>
+Mime-Version: 1.0
+References: <20230511040857.6094-1-weijiang.yang@intel.com>
+ <20230511040857.6094-11-weijiang.yang@intel.com> <ZH73kDx6VCaBFiyh@chao-email>
+ <21568052-eb0f-a8d6-5225-3b422e9470e9@intel.com> <ZIulniryqlj0hLnt@google.com>
+ <dfdf6d93-a68c-bb07-e59e-8d888dd6ebb6@intel.com> <ZIywqx6xTAMFyDPT@google.com>
+ <0a98683f-3e60-1f1b-55df-f2a781929fdf@intel.com>
+Message-ID: <ZJ7vyBw1nbTBOfuf@google.com>
+Subject: Re: [PATCH v3 10/21] KVM:x86: Add #CP support in guest exception classification
+From:   Sean Christopherson <seanjc@google.com>
+To:     Weijiang Yang <weijiang.yang@intel.com>
+Cc:     Chao Gao <chao.gao@intel.com>, pbonzini@redhat.com,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        peterz@infradead.org, rppt@kernel.org, binbin.wu@linux.intel.com,
+        rick.p.edgecombe@intel.com, john.allen@amd.com,
+        gil.neiger@intel.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,35 +77,150 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 30, 2023 at 09:33:31AM +0200, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 6.4.1 release.
-> There are 31 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Sun, 02 Jul 2023 07:20:45 +0000.
-> Anything received after that time might be too late.
+On Fri, Jun 30, 2023, Weijiang Yang wrote:
+>=20
+> On 6/17/2023 2:57 AM, Sean Christopherson wrote:
+> > > Do you mean documentation for #CP as an generic exception or the beha=
+vior in
+> > > KVM as this patch shows?
+> > As I pointed out two *years* ago, this entry in the SDM
+> >=20
+> >    =E2=80=94 The field's deliver-error-code bit (bit 11) is 1 if each o=
+f the following
+> >      holds: (1) the interruption type is hardware exception; (2) bit 0
+> >      (corresponding to CR0.PE) is set in the CR0 field in the guest-sta=
+te area;
+> >      (3) IA32_VMX_BASIC[56] is read as 0 (see Appendix A.1); and (4) th=
+e vector
+> >      indicates one of the following exceptions: #DF (vector 8), #TS (10=
+),
+> >      #NP (11), #SS (12), #GP (13), #PF (14), or #AC (17).
+> >=20
+> > needs to read something like
+> >=20
+> >    =E2=80=94 The field's deliver-error-code bit (bit 11) is 1 if each o=
+f the following
+> >      holds: (1) the interruption type is hardware exception; (2) bit 0
+> >      (corresponding to CR0.PE) is set in the CR0 field in the guest-sta=
+te area;
+> >      (3) IA32_VMX_BASIC[56] is read as 0 (see Appendix A.1); and (4) th=
+e vector
+> >      indicates one of the following exceptions: #DF (vector 8), #TS (10=
+),
+> >      #NP (11), #SS (12), #GP (13), #PF (14), #AC (17), or #CP (21)[1]
+> >=20
+> >      [1] #CP has an error code if and only if IA32_VMX_CR4_FIXED1 enume=
+rates
+> >          support for the 1-setting of CR4.CET.
+>=20
+> Hi, Sean,
+>=20
+> I sent above change request to Gil(added in cc), but he shared different
+> opinion on this issue:
 
-Hi Greg,
+Heh, "opinion".
 
-6.4.1-rc3 tested.
+> =C2=A0It may make things clearer if we document the statement above (all
+> CET-capable parts enumerate IA32_VMX_BASIC[56] as 1).
+>=20
+> I will see if we can update future revisions of the SDM to clarify this."
 
-Run tested on:
-- Allwinner H6 (Tanix TX6)
-- Intel Alder Lake x86_64 (nuc12 i7-1260P)
+That would be helpful.  Though to be perfectly honest, I simply overlooked =
+the
+existence of IA32_VMX_BASIC[56].
 
-In addition - build tested for:
-- Allwinner A64
-- Allwinner H3
-- Allwinner H5
-- NXP iMX6
-- NXP iMX8
-- Qualcomm Dragonboard
-- Rockchip RK3288
-- Rockchip RK3328
-- Rockchip RK3399pro
-- Samsung Exynos
+Thanks!
 
-Tested-by: Rudi Heitbaum <rudi@heitbaum.com>
---
-Rudi
+> Then if this is the case,=C2=A0 kvm needs to check IA32_VMX_BASIC[56] bef=
+ore
+> inject exception to nested VM.
+>=20
+> And this patch could be removed, instead need another patch like below:
+>=20
+> diff --git a/arch/x86/include/asm/msr-index.h
+> b/arch/x86/include/asm/msr-index.h
+> index ad35355ee43e..6b33aacc8587 100644
+> --- a/arch/x86/include/asm/msr-index.h
+> +++ b/arch/x86/include/asm/msr-index.h
+> @@ -1076,6 +1076,7 @@
+> =C2=A0#define VMX_BASIC_MEM_TYPE_MASK=C2=A0=C2=A0=C2=A0 0x003c00000000000=
+0LLU
+> =C2=A0#define VMX_BASIC_MEM_TYPE_WB=C2=A0=C2=A0=C2=A0 6LLU
+> =C2=A0#define VMX_BASIC_INOUT=C2=A0=C2=A0=C2=A0 =C2=A0=C2=A0=C2=A0 0x0040=
+000000000000LLU
+> +#define VMX_BASIC_CHECK_ERRCODE=C2=A0=C2=A0=C2=A0 0x0140000000000000LLU
+
+"Check Error Code" isn't a great description.  The flag enumerates that the=
+re the
+CPU does *not* perform consistency checks on the error code when injecting =
+hardware
+exceptions.
+
+So something like this?
+
+  VMX_BASIC_NO_HW_ERROR_CODE_CC
+
+or maybe
+
+  VMX_BASIC_PM_NO_HW_ERROR_CODE_CC
+
+if we want to capture that only protected mode is exempt (I personally pref=
+er
+just VMX_BASIC_NO_HW_ERROR_CODE_CC as "PM" is a bit ambiguous).
+
+> @@ -2873,7 +2873,8 @@ static int nested_check_vm_entry_controls(struct
+> kvm_vcpu *vcpu,
+> =C2=A0=C2=A0=C2=A0=C2=A0 =C2=A0=C2=A0=C2=A0 should_have_error_code =3D
+> =C2=A0=C2=A0=C2=A0=C2=A0 =C2=A0=C2=A0=C2=A0 =C2=A0=C2=A0=C2=A0 intr_type =
+=3D=3D INTR_TYPE_HARD_EXCEPTION && prot_mode &&
+> =C2=A0=C2=A0=C2=A0=C2=A0 =C2=A0=C2=A0=C2=A0 =C2=A0=C2=A0=C2=A0 x86_except=
+ion_has_error_code(vector);
+> -=C2=A0=C2=A0=C2=A0 =C2=A0=C2=A0=C2=A0 if (CC(has_error_code !=3D should_=
+have_error_code))
+> +=C2=A0=C2=A0=C2=A0 =C2=A0=C2=A0=C2=A0 if (!cpu_has_vmx_basic_check_errco=
+de() &&
+> +=C2=A0=C2=A0=C2=A0 =C2=A0=C2=A0=C2=A0 =C2=A0=C2=A0=C2=A0 CC(has_error_co=
+de !=3D should_have_error_code))
+
+This is wrong on mutiple fronts:
+
+  1. The new feature flag only excempts hardware exceptions delivered to gu=
+ests
+     with CR0.PE=3D1.  The above will skip the consistency check for all ev=
+ent injection.
+
+  2. KVM needs to check the CPU model that is exposed to L1, not the capabi=
+lities
+     of the host CPU.
+
+Highlighting the key phrases in the SDM:
+
+  The field's deliver-error-code bit (bit 11) is 1 if each of the following=
+ holds: (1) the interruption type is
+                                                      ^^^^^^^
+  hardware exception; (2) bit 0 (corresponding to CR0.PE) is set in the CR0=
+ field in the guest-state area;
+  (3) IA32_VMX_BASIC[56] is read as 0 (see Appendix A.1); and (4) the vecto=
+r indicates one of the following
+  exceptions: #DF (vector 8), #TS (10), #NP (11), #SS (12), #GP (13), #PF (=
+14), or #AC (17).
+ =20
+  The field's deliver-error-code bit is 0 if any of the following holds: (1=
+) the interruption type is not hardware
+                                             ^^^^^^
+  exception; (2) bit 0 is clear in the CR0 field in the guest-state area; o=
+r (3) IA32_VMX_BASIC[56] is read as
+  0 and the vector is in one of the following ranges: 0=E2=80=937, 9, 15, 1=
+6, or 18=E2=80=9331.
+
+I think what we want is:
+
+		/* VM-entry interruption-info field: deliver error code */
+		if (!prot_mode || intr_type !=3D INTR_TYPE_HARD_EXCEPTION ||
+		    !nested_cpu_has_no_hw_error_code_cc(vcpu)) {
+			should_have_error_code =3D
+				intr_type =3D=3D INTR_TYPE_HARD_EXCEPTION && prot_mode &&
+				x86_exception_has_error_code(vector);
+			if (CC(has_error_code !=3D should_have_error_code))
+				return -EINVAL;
+		}
