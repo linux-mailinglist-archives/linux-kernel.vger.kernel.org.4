@@ -2,259 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 311EB7435D2
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 09:33:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B34B57435DC
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 09:36:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232388AbjF3Hdv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 03:33:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51132 "EHLO
+        id S232079AbjF3HgE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Jun 2023 03:36:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232344AbjF3Hdl (ORCPT
+        with ESMTP id S232415AbjF3HfP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 03:33:41 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8943A2686;
-        Fri, 30 Jun 2023 00:33:40 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 11307616D3;
-        Fri, 30 Jun 2023 07:33:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EDB41C433C8;
-        Fri, 30 Jun 2023 07:33:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1688110419;
-        bh=HJceP9xbqzvvS221qkbqog1HjnHUAJ7NJyvIMUQjWks=;
-        h=From:To:Cc:Subject:Date:From;
-        b=tf+ySGb6EmgP8UVJywgFvPDTbp+36Fb1AVB8z+eqA6U/Ld/Xc+NXr0ZlZHp6BhZdx
-         8nE7N1yGDyksKvulrPf7wz1/K/6cOH1JiatMSBLLz3B3de+wQx3BVG6CScLsKlWgYO
-         gI3oyBlwbW9poT080UAcgM4BCT0Rx5rYku1LPLeA=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     stable@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de, conor@kernel.org
-Subject: [PATCH 6.3 00/32] 6.3.11-rc4 review
-Date:   Fri, 30 Jun 2023 09:33:36 +0200
-Message-ID: <20230630072120.689306958@linuxfoundation.org>
-X-Mailer: git-send-email 2.41.0
+        Fri, 30 Jun 2023 03:35:15 -0400
+Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 686312694;
+        Fri, 30 Jun 2023 00:35:05 -0700 (PDT)
+Authenticated-By: 
+X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 35U7XiBD2019875, This message is accepted by code: ctloc85258
+Received: from mail.realtek.com (rtexh36505.realtek.com.tw[172.21.6.25])
+        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 35U7XiBD2019875
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=FAIL);
+        Fri, 30 Jun 2023 15:33:44 +0800
+Received: from RTEXDAG02.realtek.com.tw (172.21.6.101) by
+ RTEXH36505.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.32; Fri, 30 Jun 2023 15:33:45 +0800
+Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
+ RTEXDAG02.realtek.com.tw (172.21.6.101) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.7; Fri, 30 Jun 2023 15:33:45 +0800
+Received: from RTEXMBS04.realtek.com.tw ([fe80::e138:e7f1:4709:ff4d]) by
+ RTEXMBS04.realtek.com.tw ([fe80::e138:e7f1:4709:ff4d%5]) with mapi id
+ 15.01.2375.007; Fri, 30 Jun 2023 15:33:45 +0800
+From:   =?big5?B?U3RhbmxleSBDaGFuZ1up96h8vHdd?= <stanley_chang@realtek.com>
+To:     Rob Herring <robh@kernel.org>
+CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        "Douglas Anderson" <dianders@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Flavio Suligoi <f.suligoi@asem.it>,
+        Ray Chi <raychi@google.com>,
+        "linux-phy@lists.infradead.org" <linux-phy@lists.infradead.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: RE: [PATCH v6 4/5] dt-bindings: phy: realtek: Add the doc about the Realtek SoC USB 2.0 PHY
+Thread-Topic: [PATCH v6 4/5] dt-bindings: phy: realtek: Add the doc about the
+ Realtek SoC USB 2.0 PHY
+Thread-Index: AQHZqkz4ea6k1ChKgUmQ1oGFAHMAzq+hdqEAgAFUL4A=
+Date:   Fri, 30 Jun 2023 07:33:45 +0000
+Message-ID: <f17378f003144f4ba50ec08e0ad38c0b@realtek.com>
+References: <20230629054523.7519-1-stanley_chang@realtek.com>
+ <20230629054523.7519-4-stanley_chang@realtek.com>
+ <20230629164220.GA3146341-robh@kernel.org>
+In-Reply-To: <20230629164220.GA3146341-robh@kernel.org>
+Accept-Language: zh-TW, en-US
+Content-Language: zh-TW
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [172.21.190.159]
+x-kse-serverinfo: RTEXDAG02.realtek.com.tw, 9
+x-kse-antispam-interceptor-info: fallback
+x-kse-antivirus-interceptor-info: fallback
+Content-Type: text/plain; charset="big5"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-User-Agent: quilt/0.67
-X-stable: review
-X-Patchwork-Hint: ignore
-X-KernelTest-Patch: http://kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.3.11-rc4.gz
-X-KernelTest-Tree: git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
-X-KernelTest-Branch: linux-6.3.y
-X-KernelTest-Patches: git://git.kernel.org/pub/scm/linux/kernel/git/stable/stable-queue.git
-X-KernelTest-Version: 6.3.11-rc4
-X-KernelTest-Deadline: 2023-07-02T07:21+00:00
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-KSE-AntiSpam-Interceptor-Info: fallback
+X-KSE-ServerInfo: RTEXH36505.realtek.com.tw, 9
+X-KSE-AntiSpam-Interceptor-Info: fallback
+X-KSE-Antivirus-Interceptor-Info: fallback
+X-KSE-AntiSpam-Interceptor-Info: fallback
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is the start of the stable review cycle for the 6.3.11 release.
-There are 32 patches in this series, all will be posted as a response
-to this one.  If anyone has any issues with these being applied, please
-let me know.
-
-Responses should be made by Sun, 02 Jul 2023 07:21:08 +0000.
-Anything received after that time might be too late.
-
-The whole patch series can be found in one patch at:
-	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.3.11-rc4.gz
-or in the git tree and branch at:
-	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.3.y
-and the diffstat can be found below.
-
-thanks,
-
-greg k-h
-
--------------
-Pseudo-Shortlog of commits:
-
-Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-    Linux 6.3.11-rc4
-
-Linus Torvalds <torvalds@linux-foundation.org>
-    csky: fix up lock_mm_and_find_vma() conversion
-
-Linus Torvalds <torvalds@linux-foundation.org>
-    parisc: fix expand_stack() conversion
-
-Linus Torvalds <torvalds@linux-foundation.org>
-    sparc32: fix lock_mm_and_find_vma() conversion
-
-Ricardo Cañuelo <ricardo.canuelo@collabora.com>
-    Revert "thermal/drivers/mediatek: Use devm_of_iomap to avoid resource leak in mtk_thermal_probe"
-
-Mike Hommey <mh@glandium.org>
-    HID: logitech-hidpp: add HIDPP_QUIRK_DELAYED_INIT for the T651.
-
-Jason Gerecke <jason.gerecke@wacom.com>
-    HID: wacom: Use ktime_t rather than int when dealing with timestamps
-
-Ludvig Michaelsson <ludvig.michaelsson@yubico.com>
-    HID: hidraw: fix data race on device refcount
-
-Zhang Shurong <zhang_shurong@foxmail.com>
-    fbdev: fix potential OOB read in fast_imageblit()
-
-Linus Torvalds <torvalds@linux-foundation.org>
-    gup: add warning if some caller would seem to want stack expansion
-
-Linus Torvalds <torvalds@linux-foundation.org>
-    mm: always expand the stack with the mmap write lock held
-
-Linus Torvalds <torvalds@linux-foundation.org>
-    execve: expand new process stack manually ahead of time
-
-Liam R. Howlett <Liam.Howlett@oracle.com>
-    mm: make find_extend_vma() fail if write lock not held
-
-Linus Torvalds <torvalds@linux-foundation.org>
-    powerpc/mm: convert coprocessor fault to lock_mm_and_find_vma()
-
-Linus Torvalds <torvalds@linux-foundation.org>
-    mm/fault: convert remaining simple cases to lock_mm_and_find_vma()
-
-Ben Hutchings <ben@decadent.org.uk>
-    arm/mm: Convert to using lock_mm_and_find_vma()
-
-Ben Hutchings <ben@decadent.org.uk>
-    riscv/mm: Convert to using lock_mm_and_find_vma()
-
-Ben Hutchings <ben@decadent.org.uk>
-    mips/mm: Convert to using lock_mm_and_find_vma()
-
-Michael Ellerman <mpe@ellerman.id.au>
-    powerpc/mm: Convert to using lock_mm_and_find_vma()
-
-Linus Torvalds <torvalds@linux-foundation.org>
-    arm64/mm: Convert to using lock_mm_and_find_vma()
-
-Linus Torvalds <torvalds@linux-foundation.org>
-    mm: make the page fault mmap locking killable
-
-Linus Torvalds <torvalds@linux-foundation.org>
-    mm: introduce new 'lock_mm_and_find_vma()' page fault helper
-
-Peng Zhang <zhangpeng.00@bytedance.com>
-    maple_tree: fix potential out-of-bounds access in mas_wr_end_piv()
-
-Oliver Hartkopp <socketcan@hartkopp.net>
-    can: isotp: isotp_sendmsg(): fix return error fix on TX path
-
-Wyes Karny <wyes.karny@amd.com>
-    cpufreq: amd-pstate: Make amd-pstate EPP driver name hyphenated
-
-Thomas Gleixner <tglx@linutronix.de>
-    x86/smp: Cure kexec() vs. mwait_play_dead() breakage
-
-Thomas Gleixner <tglx@linutronix.de>
-    x86/smp: Use dedicated cache-line for mwait_play_dead()
-
-Thomas Gleixner <tglx@linutronix.de>
-    x86/smp: Remove pointless wmb()s from native_stop_other_cpus()
-
-Tony Battersby <tonyb@cybernetics.com>
-    x86/smp: Dont access non-existing CPUID leaf
-
-Thomas Gleixner <tglx@linutronix.de>
-    x86/smp: Make stop_other_cpus() more robust
-
-Borislav Petkov (AMD) <bp@alien8.de>
-    x86/microcode/AMD: Load late on both threads too
-
-David Woodhouse <dwmw@amazon.co.uk>
-    mm/mmap: Fix error return in do_vmi_align_munmap()
-
-Liam R. Howlett <Liam.Howlett@oracle.com>
-    mm/mmap: Fix error path in do_vmi_align_munmap()
-
-
--------------
-
-Diffstat:
-
- Makefile                                  |   4 +-
- arch/alpha/Kconfig                        |   1 +
- arch/alpha/mm/fault.c                     |  13 +--
- arch/arc/Kconfig                          |   1 +
- arch/arc/mm/fault.c                       |  11 +--
- arch/arm/Kconfig                          |   1 +
- arch/arm/mm/fault.c                       |  63 +++---------
- arch/arm64/Kconfig                        |   1 +
- arch/arm64/mm/fault.c                     |  46 ++-------
- arch/csky/Kconfig                         |   1 +
- arch/csky/mm/fault.c                      |  22 +----
- arch/hexagon/Kconfig                      |   1 +
- arch/hexagon/mm/vm_fault.c                |  18 +---
- arch/ia64/mm/fault.c                      |  36 ++-----
- arch/loongarch/Kconfig                    |   1 +
- arch/loongarch/mm/fault.c                 |  16 ++--
- arch/m68k/mm/fault.c                      |   9 +-
- arch/microblaze/mm/fault.c                |   5 +-
- arch/mips/Kconfig                         |   1 +
- arch/mips/mm/fault.c                      |  12 +--
- arch/nios2/Kconfig                        |   1 +
- arch/nios2/mm/fault.c                     |  17 +---
- arch/openrisc/mm/fault.c                  |   5 +-
- arch/parisc/mm/fault.c                    |  23 +++--
- arch/powerpc/Kconfig                      |   1 +
- arch/powerpc/mm/copro_fault.c             |  14 +--
- arch/powerpc/mm/fault.c                   |  39 +-------
- arch/riscv/Kconfig                        |   1 +
- arch/riscv/mm/fault.c                     |  31 +++---
- arch/s390/mm/fault.c                      |   5 +-
- arch/sh/Kconfig                           |   1 +
- arch/sh/mm/fault.c                        |  17 +---
- arch/sparc/Kconfig                        |   1 +
- arch/sparc/mm/fault_32.c                  |  32 ++-----
- arch/sparc/mm/fault_64.c                  |   8 +-
- arch/um/kernel/trap.c                     |  11 ++-
- arch/x86/Kconfig                          |   1 +
- arch/x86/include/asm/cpu.h                |   2 +
- arch/x86/include/asm/smp.h                |   2 +
- arch/x86/kernel/cpu/microcode/amd.c       |   2 +-
- arch/x86/kernel/process.c                 |  28 +++++-
- arch/x86/kernel/smp.c                     |  73 ++++++++------
- arch/x86/kernel/smpboot.c                 |  81 ++++++++++++++--
- arch/x86/mm/fault.c                       |  52 +---------
- arch/xtensa/Kconfig                       |   1 +
- arch/xtensa/mm/fault.c                    |  14 +--
- drivers/cpufreq/amd-pstate.c              |   2 +-
- drivers/hid/hid-logitech-hidpp.c          |   2 +-
- drivers/hid/hidraw.c                      |   9 +-
- drivers/hid/wacom_wac.c                   |   6 +-
- drivers/hid/wacom_wac.h                   |   2 +-
- drivers/iommu/amd/iommu_v2.c              |   4 +-
- drivers/iommu/iommu-sva.c                 |   2 +-
- drivers/thermal/mediatek/auxadc_thermal.c |  14 +--
- drivers/video/fbdev/core/sysimgblt.c      |   2 +-
- fs/binfmt_elf.c                           |   6 +-
- fs/exec.c                                 |  38 ++++----
- include/linux/mm.h                        |  16 ++--
- lib/maple_tree.c                          |  11 ++-
- mm/Kconfig                                |   4 +
- mm/gup.c                                  |  14 ++-
- mm/memory.c                               | 127 +++++++++++++++++++++++++
- mm/mmap.c                                 | 153 +++++++++++++++++++++++-------
- mm/nommu.c                                |  17 ++--
- net/can/isotp.c                           |   5 +-
- 65 files changed, 616 insertions(+), 544 deletions(-)
-
-
+SGkgUm9iLA0KDQo+IE9uIFRodSwgSnVuIDI5LCAyMDIzIGF0IDAxOjQ1OjEyUE0gKzA4MDAsIFN0
+YW5sZXkgQ2hhbmcgd3JvdGU6DQo+ID4gQWRkIHRoZSBkb2N1bWVudGF0aW9uIGV4cGxhaW4gdGhl
+IHByb3BlcnR5IGFib3V0IFJlYWx0ZWsgVVNCIFBIWSBkcml2ZXIuDQo+IA0KPiBJbiB0aGUgc3Vi
+amVjdCwgZHJvcCAidGhlIGRvYyBhYm91dCB0aGUiLiBJdCdzIHJlZHVuZGFudC4gQW5kIHBlcmhh
+cHMgYWRkICdESEMNCj4gUlREIFNvQycgaWYgdGhpcyBpc24ndCBmb3IgKmFsbCogUmVhbHRlayBT
+b0NzLg0KPiANCj4gPiBSZWFsdGVrIERIQyAoZGlnaXRhbCBob21lIGNlbnRlcikgUlREIFNvQ3Mg
+c3VwcG9ydCBEV0MzIFhIQ0kgVVNCDQo+ID4gY29udHJvbGxlci4gQWRkZWQgdGhlIGRyaXZlciB0
+byBkcml2ZSB0aGUgVVNCIDIuMCBQSFkgdHJhbnNjZWl2ZXJzLg0KPiANCj4gZHJpdmVyPyBUaGlz
+IGlzIGEgYmluZGluZyBmb3IgdGhlIGgvdy4NCg0KSSBtZWFuLCB0aGUgZHJpdmVyIGlzIGRyaXZl
+cnMvcGh5L3JlYWx0ZWsvcGh5LXJ0ay11c2IyLmMNCkkgd2lsbCByZXZpc2UgYXMNCiAgICBkdC1i
+aW5kaW5nczogcGh5OiByZWFsdGVrOiBBZGQgdGhlIFJlYWx0ZWsgREhDIFJURCBTb0MgVVNCIDIu
+MCBQSFkNCg0KICAgIEFkZCB0aGUgZG9jdW1lbnRhdGlvbiBleHBsYWluIHRoZSBwcm9wZXJ0eSBh
+Ym91dCBSZWFsdGVrIFVTQiBQSFkgZHJpdmVyLg0KDQogICAgUmVhbHRlayBESEMgKGRpZ2l0YWwg
+aG9tZSBjZW50ZXIpIFJURCBTb0NzIHN1cHBvcnQgRFdDMyBYSENJIFVTQg0KICAgIGNvbnRyb2xs
+ZXIgYW5kIHVzZXMgcGh5LXJ0ay11c2IyIGFzIGRyaXZlciBmb3IgVVNCIDIuMCBQSFkgdHJhbnNj
+ZWl2ZXIuLg0KDQo+ID4gKyRpZDogaHR0cDovL2RldmljZXRyZWUub3JnL3NjaGVtYXMvcGh5L3Jl
+YWx0ZWssdXNiMnBoeS55YW1sIw0KPiA+ICskc2NoZW1hOiBodHRwOi8vZGV2aWNldHJlZS5vcmcv
+bWV0YS1zY2hlbWFzL2NvcmUueWFtbCMNCj4gPiArDQo+ID4gK3RpdGxlOiBSZWFsdGVrIERIQyBT
+b0NzIFVTQiAyLjAgUEhZDQo+ID4gKw0KPiA+ICttYWludGFpbmVyczoNCj4gPiArICAtIFN0YW5s
+ZXkgQ2hhbmcgPHN0YW5sZXlfY2hhbmdAcmVhbHRlay5jb20+DQo+ID4gKw0KPiA+ICtkZXNjcmlw
+dGlvbjoNCj4gDQo+IFlvdSBuZWVkICd8JyBpZiBmb3JtYXR0aW5nIChsaW5lIGJyZWFrcykgYXJl
+IGltcG9ydGFudC4NCg0KSSB0aGluayBJIG5lZWQgaXQuIEkgd2lsbCBhZGQgaXQuDQoNCj4gPiAr
+ICByZWFsdGVrLGludmVyc2UtaHN0eC1zeW5jLWNsb2NrOg0KPiA+ICsgICAgZGVzY3JpcHRpb246
+DQo+ID4gKyAgICAgIEZvciBvbmUgb2YgdGhlIHBoeXMgb2YgUlREMTYxOWIgU29DLCB0aGUgc3lu
+Y2hyb25vdXMgY2xvY2sgb2YgdGhlDQo+ID4gKyAgICAgIGhpZ2gtc3BlZWQgdHggbXVzdCBiZSBp
+bnZlcnRlZC4NCj4gDQo+ICJpbnZlcnQiIGFzc3VtZXMgSSBrbm93IHdoYXQgbm9uLWludmVydGVk
+IG1lYW5zLiBJIGRvIG5vdC4gQmV0dGVyIHRvIHN0YXRlIGluDQo+IHRlcm1zIG9mIGFjdGl2ZSBo
+aWdoLCBsb3csIGZhbGxpbmcgZWRnZSwgcmlzaW5nIGVkZ2UsIGV0Yy4NCg0KTWVhbmluZywgdGhl
+IGNsb2NrIG11c3QgYmUgcmV2ZXJzZWQuDQo+IA0KPiA+ICsgICAgdHlwZTogYm9vbGVhbg0KPiA+
+ICsNCj4gPiArICByZWFsdGVrLGRyaXZpbmctbGV2ZWw6DQo+ID4gKyAgICBkZXNjcmlwdGlvbjoN
+Cj4gPiArICAgICAgQ29udHJvbCB0aGUgbWFnbml0dWRlIG9mIEhpZ2ggc3BlZWQgRHAvRG0gb3V0
+cHV0IHN3aW5nLg0KPiA+ICsgICAgICBGb3IgYSBkaWZmZXJlbnQgYm9hcmQgb3IgcG9ydCwgdGhl
+IG9yaWdpbmFsIG1hZ25pdHVkZSBtYXliZSBub3QNCj4gbWVldA0KPiA+ICsgICAgICB0aGUgc3Bl
+Y2lmaWNhdGlvbi4gSW4gdGhpcyBzaXR1YXRpb24gd2UgY2FuIGFkanVzdCB0aGUgdmFsdWUgdG8g
+bWVldA0KPiA+ICsgICAgICB0aGUgc3BlY2lmaWNhdGlvbi4NCj4gDQo+IFdoYXQgYXJlIHRoZSB1
+bml0cz8NCg0KVGhlcmUgaXMgbm8gdW5pdC4gSXQgaXMgb25seSBhIGdhaW4gZm9yIGFkanVzdGlu
+ZyB0aGUgbWFnbml0dWRlLiANCg0KPiA+ICsgICAgJHJlZjogL3NjaGVtYXMvdHlwZXMueWFtbCMv
+ZGVmaW5pdGlvbnMvdWludDMyDQo+ID4gKyAgICBkZWZhdWx0OiA4DQo+ID4gKyAgICBtaW5pbXVt
+OiAwDQo+ID4gKyAgICBtYXhpbXVtOiAzMQ0KPiA+ICsNCj4gPiArICByZWFsdGVrLGRyaXZpbmct
+Y29tcGVuc2F0ZToNCj4gDQo+IGNvbXBlbnNhdGUgd2hhdD8NCg0KSXQgaXMgdG8gY29tcGVuc2F0
+ZSB0aGUgZHJpdmluZyBsZXZlbC4gSW4gb3RoZXIgd29yZCwgdG8gYWRqdXN0IHRoZSBkcml2aW5n
+IGxldmVsLg0KDQpUaGFua3MsDQpTdGFubGV5DQo=
