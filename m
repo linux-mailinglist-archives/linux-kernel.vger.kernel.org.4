@@ -2,133 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5EC47435A6
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 09:18:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DBCB87435A8
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 09:19:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231508AbjF3HSG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 03:18:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46822 "EHLO
+        id S232192AbjF3HTU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Jun 2023 03:19:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229945AbjF3HSC (ORCPT
+        with ESMTP id S232180AbjF3HSy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 03:18:02 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 322D81731;
-        Fri, 30 Jun 2023 00:18:01 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AC93D616D4;
-        Fri, 30 Jun 2023 07:18:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17820C433C0;
-        Fri, 30 Jun 2023 07:17:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688109480;
-        bh=pB6a8MtXW9LfZbrAZovpz0Qoo2FMyZhdSLuByWXv/p8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Tngw9s3h5Aiar0GBBlumSxvQpfOKfKZ4pOx6A/DmQM6dkRwrU+mlKLYw8mLXyTy8H
-         5PWMcuJyc35eYxs/SGEbJP9da+cPMt1D3GpbaTP346PLUZoojXoADDoaW6VoP8Sif2
-         Lm+CDZe7fO4/tiqalXtpgNXsOA6x1KcsGu0UN8Nn82A+gwF5JbVUmL0UmB/nkZARX3
-         XRonjnO2UWTw6aeuKkN/wdIizOpjBMwudqlz938SJT+b/cssjWhzpX2a+Hsfj4JB2b
-         Ln+btnFedIvtiDt6G9oldwTFwNVjBtZfq33SrznmhcjHxxzgn1snuWH6jy3/D4rVsC
-         G+4fwHGFCuOrg==
-Date:   Fri, 30 Jun 2023 08:17:51 +0100
-From:   Lee Jones <lee@kernel.org>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Rob Herring <robh@kernel.org>,
-        William Breathitt Gray <william.gray@linaro.org>,
-        "Sahin, Okan" <Okan.Sahin@analog.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Cosmin Tanislav <demonsingur@gmail.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Caleb Connolly <caleb.connolly@linaro.org>,
-        Marcus Folkesson <marcus.folkesson@gmail.com>,
-        "Bolboaca, Ramona" <Ramona.Bolboaca@analog.com>,
-        ChiYuan Huang <cy_huang@richtek.com>,
-        "Tilki, Ibrahim" <Ibrahim.Tilki@analog.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Hugo Villeneuve <hvilleneuve@dimonoff.com>,
-        ChiaEn Wu <chiaen_wu@richtek.com>,
-        Haibo Chen <haibo.chen@nxp.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>
-Subject: Re: [PATCH v7 5/5] mfd: max77541: Add ADI MAX77541/MAX77540 PMIC
- Support
-Message-ID: <20230630071751.GC2110266@google.com>
-References: <20230628134013.GH10378@google.com>
- <472a4d86-3bfb-4c2b-a099-f1254dd01e24@sirena.org.uk>
- <20230629072500.GA2110266@google.com>
- <d070eecd-cb3b-4968-803e-1817a1a4359a@sirena.org.uk>
- <20230629155134.GB2110266@google.com>
- <7987cbbe-55bc-49a9-b63a-7f1906bf5f74@sirena.org.uk>
- <CAL_Jsq+AQrv7EGMtEkB-2cBCvA4mLHuMbyQ=f39yQkYPkvfVww@mail.gmail.com>
- <998ef8d8-594e-45e3-9aa3-ec9061cf7f11@sirena.org.uk>
- <CAL_JsqK1X-oZHerE9qhcPZ=mFsm7rJa3KxWGBqV3znHHfr6vaQ@mail.gmail.com>
- <920531c8-b5c1-409a-9cda-3ec77ba944e7@sirena.org.uk>
+        Fri, 30 Jun 2023 03:18:54 -0400
+Received: from smtpcmd12131.aruba.it (smtpcmd12131.aruba.it [62.149.156.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AD1F19BA
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 00:18:52 -0700 (PDT)
+Received: from polimar.homenet.telecomitalia.it ([79.0.204.227])
+        by Aruba Outgoing Smtp  with ESMTPSA
+        id F8P2qe5pmwtegF8P2qinBt; Fri, 30 Jun 2023 09:18:49 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
+        t=1688109529; bh=vzmN4kJ3h47heL9B7a4O2NpUoBSMDfUBOXPHa+mny4w=;
+        h=From:To:Subject:Date:MIME-Version;
+        b=O1vfhkdI1zTrqCaCJIJEQD3Rkdmi4dggT8/z7HOsyJnEp5qOq8Sc7NjlnkLLvwqIq
+         b2Odfl8u66oue6snszfSdlrc7UpizJ1vPqkcoKx6lcy+Gqjz/oF8vh+AtlGcEd1CM6
+         tNBqHkh8nVUDMIZ32CNNcYEktjqVeHAtV2gZeewxcmtsq/YTWOBnKYs7tysKW5WJ7p
+         QWTw6FqdINR5NaCs1N2tCjEMAhNNZnqTtksq/xH9Uqs5oqBSpSHUfFDHhvy6aZqKU9
+         muu6GRZ+QkXCXMqF5g6lbCNeEqHxmZo7aFW1SyagCQym1nM1ThHrab8hIx4e1DbtQz
+         MlZH9U1HKf+ig==
+From:   Rodolfo Giometti <giometti@enneenne.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Charlie Johnston <charlie.johnston@ni.com>,
+        Rodolfo Giometti <giometti@enneenne.com>
+Subject: [PATCH 1/2] include/uapi pps.h: increase PPS_MAX_SOURCES value
+Date:   Fri, 30 Jun 2023 09:18:25 +0200
+Message-Id: <20230630071826.105501-1-giometti@enneenne.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <920531c8-b5c1-409a-9cda-3ec77ba944e7@sirena.org.uk>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-CMAE-Envelope: MS4xfH/fmpQtNa7krYCUIJp18QipuTeXnS7k65LZHqKFjv+ecqqzgsEctZ+Z2uMSFFhohYiIdUGzrsbMFP6QSAUkBMxoz1p45oiy21BknMamhPiWJe3TNZBI
+ H0sdV9Mllqba/jsyK/sfvLe6fV2fX84KLyYZvzLh/61VmuAccJREUbRsN5lknsujQZ7sQUheYIYk504lG+ZXz4lEG94v0KyIyVZk+VG/bLRNjqOCiBiZrOa/
+ z8fM7f4XXmkxuLLQEDcKIfJbZHqhOk61kELSzVJyWPIK1+ION18a2f6qJSGrrIyT2wiKVm5oQhQlAvQOzXLKpUyFu7Z+TFjiInnwbWlxJwg=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 29 Jun 2023, Mark Brown wrote:
+From: Charlie Johnston <charlie.johnston@ni.com>
 
-> On Thu, Jun 29, 2023 at 12:14:00PM -0600, Rob Herring wrote:
-> > On Thu, Jun 29, 2023 at 11:59 AM Mark Brown <broonie@kernel.org> wrote:
-> 
-> > > Right, I'm suggesting applying the core part without waiting for every
-> > > single leaf driver to be lined up rather than the other way around -
-> > > that way the core part is stable and the leaf drivers only have issues
-> > > with changes in their subsystems that they'll have anyway even with
-> > > waiting.  Leaf drivers can be added on top as they're ready and if
-> > > something misses a release then it can go through the subsystem, and if
-> > > people do end up wandering off then you've still got whatever did get
-> > > merged in case someone else wants to pick things up.
-> 
-> > I misunderstood. I thought you wanted to apply things to get them out
-> > of your queue.
-> 
-> Well, I *do* but that's got issues especially when things get stuck so
-> I'm not going to.
-> 
-> >                That doesn't work when the leaf drivers depend on the
-> > core, so what do we do there? A branch or Lee takes everything? That's
-> > almost always the case with the bindings as the core binding
-> > references the child node bindings. My preference there would be that
-> > Lee picks up all the bindings with the core driver.
-> 
-> My suggestion is that once the core is ready to apply that and also
-> start applying everything else to Lee's tree as it's ready.  A branch
-> also works and might come in handy anyway in the case where there's some
-> subsystem wide updates in some other subsystem (since it avoids having
-> to pull the whole MFD tree in or anything like that) but it's not
-> essential to the idea.
+For consistency with what others use for minors, this change sets
+PPS_MAX_SOURCES to MINORMASK.
 
-The issue we currently have is that the core usually comes with a header
-file which is included by some or all of the leaf drivers.  If leaf
-drivers are pulled in without that header, the drivers will fail to
-build which will make people grumpy.
+The PPS_MAX_SOURCES value is currently set to 16. In some cases this
+was not sufficient for a system. For example, a system with multiple
+(4+) PCIe cards each with 4 PTP-capable ethernet interfaces could run
+out of the available PPS major:minors if each interface registers a
+PPS source.
 
-The suggestion of a separate branch that's added to over time as leaf
-drivers become ready is even more work that a one-hit strategy.  It will
-also mean littering the working branch which a bunch more merges and/or
-more frequent rebases than I'm happy with.
+Signed-off-by: Charlie Johnston <charlie.johnston@ni.com>
+Acked-by: Rodolfo Giometti <giometti@enneenne.com>
+---
+ include/uapi/linux/pps.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
+diff --git a/include/uapi/linux/pps.h b/include/uapi/linux/pps.h
+index 009ebcd8ced5..90f2e86020ba 100644
+--- a/include/uapi/linux/pps.h
++++ b/include/uapi/linux/pps.h
+@@ -26,7 +26,7 @@
+ #include <linux/types.h>
+ 
+ #define PPS_VERSION		"5.3.6"
+-#define PPS_MAX_SOURCES		16		/* should be enough... */
++#define PPS_MAX_SOURCES		MINORMASK
+ 
+ /* Implementation note: the logical states ``assert'' and ``clear''
+  * are implemented in terms of the chip register, i.e. ``assert''
 -- 
-Lee Jones [李琼斯]
+2.34.1
+
