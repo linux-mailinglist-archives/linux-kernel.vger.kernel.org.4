@@ -2,143 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ABC2474362D
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 09:49:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7231174363A
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 09:50:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230015AbjF3HtX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 03:49:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56738 "EHLO
+        id S231393AbjF3Hul (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Jun 2023 03:50:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229850AbjF3HtT (ORCPT
+        with ESMTP id S230364AbjF3Huh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 03:49:19 -0400
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2043.outbound.protection.outlook.com [40.107.223.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85F2A10A
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 00:49:18 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Hl9dQtdTJaqwaW2P0d3lFKTCW7yt04RELzgD8VGFV8Vpg4z72kDBtVCRALLxnV38pzS0OkT+ZYCbGdnCgRYRNsEJ8x0kDMebIi0OuOIXF+rfrhjD4/Lc9OXWBAj+b1ZhpjAxAkknvEfDXg5sXhKcdywuci1Crby6aOF1J4D/mtqlRHBjCHJQoC3z0NSXXw8iY8BcG5roQcmbSQy6r6atfoAivdb4UhIyqkOuolEjx8IWaGVc0AV6/85TlgxvzmtWiW0SFszuIgl+ZmT4Nx/u+fOPv2gKbeXh2TQQpV6rNkMQgs0+Z2QILQMgqJEHEaQhZkpUSGeytU9D2R4ht5NMxQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=QtInnFJqOyslEA8NEIBnpvOKVL1G0FRZKRX4Po5/E60=;
- b=A3lo5L+jrmFyGLvLbXaVJ0IbN3zVe3dNI6LHqGzAQnzLi5IoZB5s3ZdpDtaSevNJuXnoBm2JK0j6LKuG8p+iW76YHitdpXz32/6+NIBgXYYgR/U6YNFl1cDc/zPBA1Mz8rwAYQyHQY7igmxqn+Jn83O0o8qSm9AiyiNpUATnYJR42LoGxzsBwsgVDwrjn7WlFNyXlZj8gM8WVhxQOCc89Q79DlD0hnjct1Vmucub7ttlLv7DdiMarPAqEgoekrkV86fjFowjP9dgpi0FiWlMzalb321Q70SakiV2Z4WCxnrFtHlvl9B/xTauUeaI1PbCCmGcr086AnVjzjFDb462Yg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=QtInnFJqOyslEA8NEIBnpvOKVL1G0FRZKRX4Po5/E60=;
- b=4JynHim+2KQuC8EbYtstyYw53R2Yqms3wS8+ateObJzzpJpyw15M+kUBK14/86UDk7nLXGREeiaWPI6MBM5ZS/WRwxEn9sF7L7+URPdg7e4OmxwDgmwd/0DND336veLa5w9jCH6hAtdP9h6hJel9bq2p5ie/790YeEIvN7o9WCc=
-Received: from BL1PR12MB5849.namprd12.prod.outlook.com (2603:10b6:208:384::18)
- by DM6PR12MB4169.namprd12.prod.outlook.com (2603:10b6:5:215::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6544.19; Fri, 30 Jun
- 2023 07:49:16 +0000
-Received: from BL1PR12MB5849.namprd12.prod.outlook.com
- ([fe80::4ef5:2244:743b:9989]) by BL1PR12MB5849.namprd12.prod.outlook.com
- ([fe80::4ef5:2244:743b:9989%4]) with mapi id 15.20.6521.023; Fri, 30 Jun 2023
- 07:49:16 +0000
-From:   "Chen, Jiqian" <Jiqian.Chen@amd.com>
-To:     David Airlie <airlied@redhat.com>,
-        Gerd Hoffmann <kraxel@redhat.com>,
-        =?iso-8859-1?Q?Marc-Andr=E9_Lureau?= <marcandre.lureau@gmail.com>,
-        Gurchetan Singh <gurchetansingh@chromium.org>,
-        Chia-I Wu <olvaffe@gmail.com>, Juergen Gross <jgross@suse.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        =?iso-8859-1?Q?Roger_Pau_Monn=E9?= <roger.pau@citrix.com>,
-        Robert Beckett <bob.beckett@collabora.com>,
-        "virtualization@lists.linux-foundation.org" 
-        <virtualization@lists.linux-foundation.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "xen-devel@lists.xenproject.org" <xen-devel@lists.xenproject.org>
-CC:     "Deucher, Alexander" <Alexander.Deucher@amd.com>,
-        "Koenig, Christian" <Christian.Koenig@amd.com>,
-        "Hildebrand, Stewart" <Stewart.Hildebrand@amd.com>,
-        Xenia Ragiadakou <burzalodowa@gmail.com>,
-        "Huang, Honglei1" <Honglei1.Huang@amd.com>,
-        "Zhang, Julia" <Julia.Zhang@amd.com>,
-        "Huang, Ray" <Ray.Huang@amd.com>,
-        "Chen, Jiqian" <Jiqian.Chen@amd.com>
-Subject: Recall: [LINUX KERNEL PATCH v2 0/1] add S3 support for virtgpu
-Thread-Topic: [LINUX KERNEL PATCH v2 0/1] add S3 support for virtgpu
-Thread-Index: AQHZqydezdjrVoCNy0y4p3DT/S/pAQ==
-X-CallingTelephoneNumber: IPM.Note
-X-VoiceMessageDuration: 1
-X-FaxNumberOfPages: 0
-Date:   Fri, 30 Jun 2023 07:49:16 +0000
-Message-ID: <BL1PR12MB5849E3A0DD8DC6C6BF280487E72AA@BL1PR12MB5849.namprd12.prod.outlook.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-x-ms-exchange-messagesentrepresentingtype: 1
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BL1PR12MB5849:EE_|DM6PR12MB4169:EE_
-x-ms-office365-filtering-correlation-id: 827ea8c8-17c2-4d91-ac7c-08db793e8103
-x-ms-exchange-recallreportgenerated: true
-x-ms-exchange-recallreportcfmgenerated: true
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: v5YNKznZ3cGg7B04UPG+iPlvGJaU2W8l1MF2U9sD1NsKrK5EQ56OsUyvdu37C8gTgrPQcK/lKn8DGdB65Sm5iYTTmdKm3L7SUO4ISiOFJDLvxr4YDFNoNlYAVnBLi8Q1mo+Gnr/xoPr2qigv4BDflM/VoejkcbksTM598wJ4rjvtlaDECDADoQRtCrOIfUBpGNjf3zEhIPKzYr6ujB8Ofreg45CggP00uQnNaUtOgPVzv9SV4gR0SS3o1kZGPsjY7ZPu+4gFV4PiBg0epYTP19o/LOybCcNd2esaTTBkdDQt8BCMxFAFHHS0+4uO7RW1wUqFeS3HYEILbD41Sd0Ruo/N7ZCBH38u5KvmuX5IEmojWkePLqrvq0v3oNxJ9sbRJij9YEzhRM2td2hXXuLDLWiqq4hJJjn3icVgn5Kmj6G+AvjIOgUoYblWHdP2hpeyqIyf6rSvFi0hjwxOa49YFqKP2RZd9LlP+/TpgmEvCZY2S1tfexl6vBnJxP219AJRyxT8PXwQvSPnP8frkNaW4JYeKqmUaBtiP5YNmiuRCK2sthYC7L9KuJ58zPcwQOlv4x+2d6MvNG4D/k+geNyqSpG4yD16x/9BDC/XrhERWVzq8mnSNuSUasG2lJMjKcAgIx816p4ugUgMbZu6CtsAcQ==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL1PR12MB5849.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(366004)(346002)(396003)(376002)(39860400002)(451199021)(7696005)(478600001)(71200400001)(558084003)(33656002)(186003)(9686003)(6506007)(83380400001)(38100700002)(122000001)(38070700005)(921005)(55016003)(4326008)(64756008)(76116006)(66946007)(66556008)(66476007)(66446008)(2906002)(316002)(7416002)(5660300002)(8936002)(8676002)(41300700001)(52536014)(110136005)(54906003);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?Uttz7BPwPg4VeNJDZn/KUSvjnzp/jw6x2GvBgL6t/RXx1aIh6ho2DcqstE?=
- =?iso-8859-1?Q?f9hOx4nsgTne/erpZZdxgQmEN/lJgmnV2GJOMOiZCKbXarxtuwfYplDzsc?=
- =?iso-8859-1?Q?YGsgBA4PI6iAfXHmTWOB77HYw4IjSCMcnWKUWt2Bq4HOVhNiKHuFKZ/oOI?=
- =?iso-8859-1?Q?hsW5kjXE6VkBss6o6VJ1gl/iaJTZ5LqnPTPMCPHk2gTOk+UxBB9g7UN2Ay?=
- =?iso-8859-1?Q?vhlOH0mt0OgNfWYVPGyatFvp9LoU0bJ20OOOsC5nDJBa6nzG3BD1s0qbdA?=
- =?iso-8859-1?Q?zMmLpX8rWMWbrJmrltOeuAHGESDnmDOOMsuakgawAvo18KS4uGlWNU0mE2?=
- =?iso-8859-1?Q?sLFV2SxnD0eyJyEP+PAQ6i0cHa4fR85pvwfbtJqQ5qPFOMyP736A2IjBUH?=
- =?iso-8859-1?Q?wRqrneSi0ygCJZof4pI7QSoWY8PL7ezbOUHWIHy8SQwFw55tOas/8XQhaG?=
- =?iso-8859-1?Q?sexjIoyWwOC0rrtjznNzOWhK6OZCm4J9jxOJ8d28vRN3RGimgn8qq2AU8z?=
- =?iso-8859-1?Q?ZSI4YrdDiaayNf2ioqobngNp5uvUaVbKLDkqZ+lcPCeEka9QfGpRFStT83?=
- =?iso-8859-1?Q?H16MlqzTHPQX/SHCCdM88ypNmuC/AIwEOrevM1xYVIDubWqQYf9yRP1OkS?=
- =?iso-8859-1?Q?n8ZHhqQAi6n2tzKj8+dZOoxwkp6DQ/qoo8TJWXaNFKakCFESoVQ1kbYRDU?=
- =?iso-8859-1?Q?lLvihGkrz4BusGBMBqt/YnakCMH7/1Xgzmo/rOtbg/nFFb6fdwWdyWUHNa?=
- =?iso-8859-1?Q?4A5P1TSrQg3fjyRleJC6XlNJGyqbvyubfw9cbId0AuKRgsAb9Ndom2lvFr?=
- =?iso-8859-1?Q?GC3R6LYm/1Nbkl3FpMOwMSQGfpxOYETP3LcKAGGKIDIxkzSAGpQDWpN1nX?=
- =?iso-8859-1?Q?nRujRjhkWZ01EmItTrh8vM245QoQuBZIg4GcavO8wM/ZXlHl7np4b0ZheK?=
- =?iso-8859-1?Q?6GRYuGJHcn1WlBiPbG04HXzbaPldTE9fI7qGoU1SDUL1hDZsW7XT6wbgWE?=
- =?iso-8859-1?Q?1c3OdT5+iK5E35lW2flKInjrB/KBAKHGRuYCa8Leut0TUwQUFKlyQo5x4G?=
- =?iso-8859-1?Q?NMsOS/C5yR2ctWOMwW51nOTZn4iCjzA7FyeMGy4SlO3cNQ5RtDw9t5/rBz?=
- =?iso-8859-1?Q?T37FPZOXPJaHURLpiWuEU+DMmoI/lTpidv0DXxYYB4b9tI4WoUpu0mlb6i?=
- =?iso-8859-1?Q?GMUynxbDwHNNCQ7byH1WsRySITTxitVEeU1GLuAuzrzLihsiJv96xQ/2NZ?=
- =?iso-8859-1?Q?cyoPl86zfXezx+tADeBqxCJZdswxjsdjwhXy4BEx86H+7FjWpxAlTn60hS?=
- =?iso-8859-1?Q?I5MBu6UlCBM5O1NtE/t6cV3Y+/GYiEuFpC/qCY4t04yszIDIeaZoh5R7Jk?=
- =?iso-8859-1?Q?EL3FC5ikbMuwG0LWet+MBRzGP8tiY4YJTcVNffwFT43nkUjIbIAqMvmJsH?=
- =?iso-8859-1?Q?VAXnOiqLtBsI5zcblyLiioaT2co3anHYKDIVxmQQ870/qO75L28utD6Nsi?=
- =?iso-8859-1?Q?06eWGgK2XpG6XqpZaNoaWAOXz+FpM0iI92gyguwBJGR2qhw0EvNQ0p/8ld?=
- =?iso-8859-1?Q?mgjgqm8jDaJz3oeGWAYzlAmff2OS6ymJbVJycTDUJN8kQ8ic5g=3D=3D?=
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+        Fri, 30 Jun 2023 03:50:37 -0400
+Received: from smtpcmd13146.aruba.it (smtpcmd13146.aruba.it [62.149.156.146])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E140510A
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 00:50:35 -0700 (PDT)
+Received: from [192.168.1.56] ([79.0.204.227])
+        by Aruba Outgoing Smtp  with ESMTPSA
+        id F8tlqv6Kd5zjpF8tlqBf7Q; Fri, 30 Jun 2023 09:50:34 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
+        t=1688111434; bh=764z+bEI0TCj6mifhhdfUbZvcKT+clWJbZ8kIp0VIpk=;
+        h=Date:MIME-Version:Subject:To:From:Content-Type;
+        b=WufXTHfRymQaFbo4jcHA6TSVjF2XyVyGqvdwtGPjiPC26z98WYDlCUuOOxrmWVpo+
+         h526qgYtWaljIXMMOKyUI71vOYLq27uwAtB5TCgfcCzQNuYEMsJZLh+SE/YpRGhIF9
+         ejlABkPjNziMSuSDhjYWWVKRekopV08ApffpICcPGOuci9BVEmMBRQAvd3GYdHkLcO
+         9d6s5wGgh/aOk1R5tLL8K00Vtuff3S1/ySrwn6vhL19j6MF6ByMgdPmX8mwmdoYZ+G
+         F/eL1oDOdR3p8FyYVoUwsHqO/R6r/C3dhlOLzhIlZb7UFfPWFE2h4yTGCtdBwzD45C
+         3C3DKXzOtlR5w==
+Message-ID: <56e461b4-2cd8-ec89-86b2-68544826cf73@enneenne.com>
+Date:   Fri, 30 Jun 2023 09:50:33 +0200
 MIME-Version: 1.0
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BL1PR12MB5849.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 827ea8c8-17c2-4d91-ac7c-08db793e8103
-X-MS-Exchange-CrossTenant-originalarrivaltime: 30 Jun 2023 07:49:16.2474
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: QRwJft7cIhMvoMG635/SHEDt5cOXq5cjGb6vr/R9B7BlATR/yLpDNugZrgH5NkD8nhJK6I12uRTvBPYHJ9bxNw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4169
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH 2/2] include/uapi pps.h: drop not needed PPS_MAX_SOURCES
+ define
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org
+References: <20230630071826.105501-1-giometti@enneenne.com>
+ <20230630071826.105501-2-giometti@enneenne.com>
+ <2023063017-traverse-accustom-97f4@gregkh>
+From:   Rodolfo Giometti <giometti@enneenne.com>
+In-Reply-To: <2023063017-traverse-accustom-97f4@gregkh>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CMAE-Envelope: MS4xfFRM9CD9vSSg6Y/yaMvVQTuL9COMutu6moBCqwQfS9W2BwaVBagmrLgZeb2Z5l0GzfjebWQm05/V9Ihu6H6vhN3lR/pB/NofrBz1WtigPi2pr2J/+JEy
+ 5b9i0gkUDkDeR6I/Wc53UbkWgwtcrTm/pVsWgQr38ToIcewQIQRF9Glcvu+E3z37IA7UwTudFLss1DsNSymKr7kg/GoHqxsfGEOuqJi6t9+r/wQgora6Gqog
+ 2RGQd3Fb5HNoDYCQOtcKUA==
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Chen, Jiqian would like to recall the message, "[LINUX KERNEL PATCH v2 0/1]=
- add S3 support for virtgpu".=
+On 30/06/23 09:31, Greg Kroah-Hartman wrote:
+> On Fri, Jun 30, 2023 at 09:18:26AM +0200, Rodolfo Giometti wrote:
+>> Userspace PPS clients should not known about how many PPS sources can
+>> be defined within the system (nor the rfc2783 say so), so we can
+>> safely drop this define since is not used anymore in the kernel too.
+>>
+>> Signed-off-by: Rodolfo Giometti <giometti@enneenne.com>
+>> ---
+>>   drivers/pps/pps.c        | 6 +++---
+>>   include/uapi/linux/pps.h | 1 -
+>>   2 files changed, 3 insertions(+), 4 deletions(-)
+>>
+>> diff --git a/drivers/pps/pps.c b/drivers/pps/pps.c
+>> index 5d19baae6a38..1a6131608036 100644
+>> --- a/drivers/pps/pps.c
+>> +++ b/drivers/pps/pps.c
+>> @@ -354,7 +354,7 @@ int pps_register_cdev(struct pps_device *pps)
+>>   	 * Get new ID for the new PPS source.  After idr_alloc() calling
+>>   	 * the new source will be freely available into the kernel.
+>>   	 */
+>> -	err = idr_alloc(&pps_idr, pps, 0, PPS_MAX_SOURCES, GFP_KERNEL);
+>> +	err = idr_alloc(&pps_idr, pps, 0, MINORMASK, GFP_KERNEL);
+>>   	if (err < 0) {
+>>   		if (err == -ENOSPC) {
+>>   			pr_err("%s: too many PPS sources in the system\n",
+>> @@ -449,7 +449,7 @@ EXPORT_SYMBOL(pps_lookup_dev);
+>>   static void __exit pps_exit(void)
+>>   {
+>>   	class_destroy(pps_class);
+>> -	unregister_chrdev_region(pps_devt, PPS_MAX_SOURCES);
+>> +	unregister_chrdev_region(pps_devt, MINORMASK);
+>>   }
+>>   
+>>   static int __init pps_init(void)
+>> @@ -463,7 +463,7 @@ static int __init pps_init(void)
+>>   	}
+>>   	pps_class->dev_groups = pps_groups;
+>>   
+>> -	err = alloc_chrdev_region(&pps_devt, 0, PPS_MAX_SOURCES, "pps");
+>> +	err = alloc_chrdev_region(&pps_devt, 0, MINORMASK, "pps");
+>>   	if (err < 0) {
+>>   		pr_err("failed to allocate char device region\n");
+>>   		goto remove_class;
+>> diff --git a/include/uapi/linux/pps.h b/include/uapi/linux/pps.h
+>> index 90f2e86020ba..8a4096f18af1 100644
+>> --- a/include/uapi/linux/pps.h
+>> +++ b/include/uapi/linux/pps.h
+>> @@ -26,7 +26,6 @@
+>>   #include <linux/types.h>
+>>   
+>>   #define PPS_VERSION		"5.3.6"
+>> -#define PPS_MAX_SOURCES		MINORMASK
+> 
+> Why change this in patch 1, and then delete this here?
+> 
+> That makes no sense.
+
+I did it in two steps to be clear that the first step is about a better 
+redefinition of the PPS_MAX_SOURCES define, while the second step is about the 
+fact it's now that define is useless.
+
+> And if this is exported to userspace, removing it should break things,
+> right?  If not, why was it there in the first place?
+
+In reality such define is not stated within the PPS RFC2783, so userspace 
+programs whose relies on such define are broken.
+
+Ciao,
+
+Rodolfo
+
+-- 
+GNU/Linux Solutions                  e-mail: giometti@enneenne.com
+Linux Device Driver                          giometti@linux.it
+Embedded Systems                     phone:  +39 349 2432127
+UNIX programming                     skype:  rodolfo.giometti
+
