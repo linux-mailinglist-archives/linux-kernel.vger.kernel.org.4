@@ -2,85 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44E3B743F6F
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 18:05:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 15983743F75
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 18:08:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232804AbjF3QFt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 12:05:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33472 "EHLO
+        id S232635AbjF3QIM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Jun 2023 12:08:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230388AbjF3QFr (ORCPT
+        with ESMTP id S231718AbjF3QIJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 12:05:47 -0400
-Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C089BA9
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 09:05:45 -0700 (PDT)
-Received: by mail-io1-xd29.google.com with SMTP id ca18e2360f4ac-7748ca56133so24676239f.0
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 09:05:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20221208.gappssmtp.com; s=20221208; t=1688141145; x=1690733145;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ziU7udbSMUbbWD6WdWUse2LB6xrhtUWIqBeRynGCsik=;
-        b=RBzCO5wIRkOWtsfnLQFTCb2IVyVyMOG6Cgjz1OlGsMmo5IYrjycb6t/iILAkV1Unh1
-         OfEWG7dHahsPBFpwZTR2/L/HqSZBHP52t/SlNzC/9pB8TQSAWwFuu2n/fecl7qMK66uO
-         PBMqINiJds/8FWzdQLWHkgeapFj9eYntFRFLpZ+m9IbvCz7E1O5Pml5B7KSJjUHwBcfg
-         +dfVhkZEDa0jcxTZMYh7+e5/s2T2xD7gXi0TSVUw7jB6DEKrNWvqCUqKDn41L45pvJAk
-         vK/XP6fjpymiAog4QB5FI7tdbGM2NnmvbUivhDMrwnPVlTtl9z+yLkBGSc/vJM2zIF2H
-         x+zg==
+        Fri, 30 Jun 2023 12:08:09 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1620313D
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 09:07:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1688141238;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=zDzqJbvPB3+ncS0JVgMogsHg0szcNxLVo0nvRHNMeoA=;
+        b=DCxNDeECERtRBsGltnefAcVn1nyJ9pct59M5ZJaXLGSW/gRSgq1PgiFhUbF7inxMuRW7Dq
+        ZEO8bC7AwknncUKPruAp5AYgupHyy0iGRQUlTpDHH9J73bx0LftYiJbO8fQ2Vo3CtaJt9f
+        Kn/LfR2ehw4RXL/k/9AEIR6w+oNv/c0=
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
+ [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-204-jyQOjxFzNf-nv9Ec36B7xQ-1; Fri, 30 Jun 2023 12:07:15 -0400
+X-MC-Unique: jyQOjxFzNf-nv9Ec36B7xQ-1
+Received: by mail-wr1-f70.google.com with SMTP id ffacd0b85a97d-313e57dfb2eso234785f8f.1
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 09:07:11 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688141145; x=1690733145;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ziU7udbSMUbbWD6WdWUse2LB6xrhtUWIqBeRynGCsik=;
-        b=LDl3haPQ5RVc9AiQlyG8wO4Sh3I89ZEimpA/LrMlP+vG5LgoYQZMujyMrQitNR3pax
-         nniLnVX32BGcCo2rkmjLuDmKZh3jUKMJvMPPyRSW0W3ehtSs8ba+K7yHK/88ehWEonGo
-         496AS50Mqz55/1bHKOCfX+obSAgukfeLIqeKwW71E2bvLBh+59RZ2ilWJpjjTlwtVUHa
-         bnV7g2voNMq8w9OScFeJXtYpMo4PT2u+JME/J/PoNktQjQtaPKWgz+LCkjNb6IPvsOnx
-         iR+wpOWus+XV0TEw5Fr0nurA/unylooKO35nXmew30dHrJqf8bzwh6UnscLMlX7q+e/k
-         BiBw==
-X-Gm-Message-State: AC+VfDwKvfoNL8AujHofmyIFYL2FCKG5LAQ1bhGOmKy18HguriXxkm3V
-        /k3r33SDv+66nTiEFHyeLjRG3w==
-X-Google-Smtp-Source: ACHHUZ76Ofymlhm34XFb34rKtgMlt+vNzniJrH5TSsGc5ozk3JG98tN4+hKciqwUnIJg1Xgew5uBAA==
-X-Received: by 2002:a05:6602:4995:b0:783:617c:a8f0 with SMTP id eg21-20020a056602499500b00783617ca8f0mr4285546iob.2.1688141144768;
-        Fri, 30 Jun 2023 09:05:44 -0700 (PDT)
-Received: from [192.168.1.94] ([96.43.243.2])
-        by smtp.gmail.com with ESMTPSA id r5-20020a6bd905000000b007836a9ca101sm1874871ioc.22.2023.06.30.09.05.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 30 Jun 2023 09:05:44 -0700 (PDT)
-Message-ID: <dc2e8d58-7400-63d6-b76c-7f4f6d29fcb7@kernel.dk>
-Date:   Fri, 30 Jun 2023 10:05:42 -0600
+        d=1e100.net; s=20221208; t=1688141230; x=1690733230;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=zDzqJbvPB3+ncS0JVgMogsHg0szcNxLVo0nvRHNMeoA=;
+        b=lmhERwE6VAw3TUsWioeFogd7r5luBFXTUdvclVnb0srplRv6C74IjfxMhNmvRwvPIs
+         vmtuIBQoB+qe3wW6fZx5TcGMtREjsP2qmjNHzEnR3Nxh/wfVJPwZOz8qgjehAU86AgTT
+         +6CRRZmCTZQ9mudkqJHB3+n2UWKxmBN08IpasrEAeRds7Bsnv7DDeaIi1bhjYFq97jH3
+         87hQEP/y1a8ckPKnyBXSzyDT/wg1TIc1QwOea/Ey3D/baI9KA6TP9YPqPgpQB/BqG6jz
+         X/rk9+uR2urMJTaLJp08T5HDGZhbhtxmyi/75GnZUl4hbBrmOYnChKG2JPRp276A103b
+         HWkQ==
+X-Gm-Message-State: ABy/qLZx2hQQOkj3NMow9FVf74fG9s+9pw/ja8APRu471HHhdgiBb3l3
+        Dr9MGBqF9DbrE9wx3fkQWi6IxIDSPBVZ5d9oGqE5DQpd9I5VGfZUwCJc3dZ3J3as9VTYj1Gmv2V
+        270O+uo/Utotj8r4b/AMtKxEL7pSJSbavzxJFutqjgJTgSjV1rVvUSceYTd5fmoMPwJyqv4SxOR
+        RhkQ1A8U4=
+X-Received: by 2002:a5d:4a91:0:b0:313:ed10:7f53 with SMTP id o17-20020a5d4a91000000b00313ed107f53mr2728001wrq.6.1688141219221;
+        Fri, 30 Jun 2023 09:06:59 -0700 (PDT)
+X-Google-Smtp-Source: APBJJlHboVEA9uwXPyVU1Q8VvIf0AXphxjPZ6dsb08b1Lb3IKDCnNo6XzcKAR3OcUmRaH9Lq3IFlhA==
+X-Received: by 2002:a5d:4a91:0:b0:313:ed10:7f53 with SMTP id o17-20020a5d4a91000000b00313ed107f53mr2727668wrq.6.1688141208961;
+        Fri, 30 Jun 2023 09:06:48 -0700 (PDT)
+Received: from kherbst.pingu (ip5f5a301e.dynamic.kabel-deutschland.de. [95.90.48.30])
+        by smtp.gmail.com with ESMTPSA id cw8-20020a056000090800b00311d8c2561bsm18551755wrb.60.2023.06.30.09.06.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 30 Jun 2023 09:06:47 -0700 (PDT)
+From:   Karol Herbst <kherbst@redhat.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Ben Skeggs <bskeggs@redhat.com>, Lyude Paul <lyude@redhat.com>,
+        dri-devel@lists.freedesktop.org, nouveau@lists.freedesktop.org,
+        Karol Herbst <kherbst@redhat.com>
+Subject: [PATCH] drm/nouveau/disp/g94: enable HDMI
+Date:   Fri, 30 Jun 2023 18:06:45 +0200
+Message-ID: <20230630160645.3984596-1-kherbst@redhat.com>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [RFC PATCH 03/11] vfs: Use init_kiocb() to initialise new IOCBs
-Content-Language: en-US
-To:     David Howells <dhowells@redhat.com>
-Cc:     Al Viro <viro@zeniv.linux.org.uk>,
-        Christoph Hellwig <hch@infradead.org>,
-        Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
-        Jeff Layton <jlayton@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Hillf Danton <hdanton@sina.com>,
-        Christian Brauner <brauner@kernel.org>,
-        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Christoph Hellwig <hch@lst.de>,
-        Christian Brauner <christian@brauner.io>
-References: <36eda01e-502e-b93d-9098-77ed5a16f33c@kernel.dk>
- <20230630152524.661208-1-dhowells@redhat.com>
- <20230630152524.661208-4-dhowells@redhat.com>
- <662384.1688140818@warthog.procyon.org.uk>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <662384.1688140818@warthog.procyon.org.uk>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,35 +77,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/30/23 10:00?AM, David Howells wrote:
-> Jens Axboe <axboe@kernel.dk> wrote:
-> 
->> One concern here is that we're using IOCB_WRITE here to tell if
->> sb_start_write() has been done or not, and hence whether
->> kiocb_end_write() needs to be called. You know set it earlier, which
->> means if we get a failure if we need to setup async data, then we know
->> have IOCB_WRITE set at that point even though we did not call
->> sb_start_write().
-> 
-> Hmmm...  It's set earlier in a number of places anyway -
-> __cachefiles_write() for example.
+Cc: Ben Skeggs <bskeggs@redhat.com>
+Cc: Lyude Paul <lyude@redhat.com>
+Fixes: f530bc60a30b ("drm/nouveau/disp: move HDMI config into acquire + infoframe methods")
+Signed-off-by: Karol Herbst <kherbst@redhat.com>
+---
+ drivers/gpu/drm/nouveau/nvkm/engine/disp/g94.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-Not sure how that's relevant, that's a private kiocb and not related to
-the private one that io_uring uses?
-
-> Btw, can you please put some comments on the IOCB_* constants?  I have
-> to guess at what they mean and how they're meant to be used.  Or
-> better still, get Christoph to write Documentation/core-api/iocb.rst
-> describing the API? ;-)
-
-The ones I have added do have comments, mostly, though it's not a lot of
-commentary for sure... Which ones are confusing and need better
-comments? Would be happy to do that. I do think the comments belong in
-there rather than have a separate doc for the kiocb. Though one thing
-that's confusing is the ki_private ownership. You'd think it belongs to
-the owner of the kiocb, but nope, it has random uses in iomap and ocfs2
-at least.
-
+diff --git a/drivers/gpu/drm/nouveau/nvkm/engine/disp/g94.c b/drivers/gpu/drm/nouveau/nvkm/engine/disp/g94.c
+index a4853c4e5ee3..67ef889a0c5f 100644
+--- a/drivers/gpu/drm/nouveau/nvkm/engine/disp/g94.c
++++ b/drivers/gpu/drm/nouveau/nvkm/engine/disp/g94.c
+@@ -295,6 +295,7 @@ g94_sor = {
+ 	.clock = nv50_sor_clock,
+ 	.war_2 = g94_sor_war_2,
+ 	.war_3 = g94_sor_war_3,
++	.hdmi = &g84_sor_hdmi,
+ 	.dp = &g94_sor_dp,
+ };
+ 
 -- 
-Jens Axboe
+2.41.0
 
