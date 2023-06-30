@@ -2,82 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7694743208
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 02:59:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A668D74320C
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 03:00:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229967AbjF3A7Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 20:59:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36878 "EHLO
+        id S230013AbjF3A75 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 20:59:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231176AbjF3A7V (ORCPT
+        with ESMTP id S232042AbjF3A7q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 20:59:21 -0400
-Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F05E2D4C
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 17:59:20 -0700 (PDT)
-Received: by mail-yb1-xb29.google.com with SMTP id 3f1490d57ef6-c40c367949eso288308276.1
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 17:59:20 -0700 (PDT)
+        Thu, 29 Jun 2023 20:59:46 -0400
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9A5C30DD
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 17:59:40 -0700 (PDT)
+Received: by mail-lf1-x133.google.com with SMTP id 2adb3069b0e04-4f4b2bc1565so2183287e87.2
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 17:59:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1688086759; x=1690678759;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1fMmXmW0bN/OZjvRrmhsMCE2AbjOlvmuvYsM+l0kwu0=;
-        b=5Yi2t8UJnMuttj4mjP+RoihhUwYozeForLZddQeb2UGwZ4aZLqwDAnBkQ2O5n2B0Zv
-         61TlwP3Z99zgdWvNHZyETBcOeT3SyQ6kCVyYsQbM00SL9PlT3Q2S5o+662/8pAw6idgc
-         pWHhWwpTqsq8yIFzvMFy2UGDaFtfMn5QkoirnFaZNY6y/qm2vEHHadkn87oEW7p/MPlb
-         6YmCwGN6A3n7BFHzxQQBbfm4olW/PoxEvACOAoRsizcycVGGKB6B1iDCla//58lwQf6z
-         2+r6N6E1D8AVAuDMne+dEPeEnp26bFTvdgLcs4zKTS7hwRGkHzSEfrzwrBMzZoryhxPi
-         X3KA==
+        d=linaro.org; s=google; t=1688086779; x=1690678779;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=zoYdkdv2/OutCTcovec52gr8aSf/SvvOZ7kly3VUKmU=;
+        b=URMpqQ/B0jODA46sLTtWGi7eA3FHVg3ysmasmi0uRNPCc40oB17iSbHkB9EuwXKqt6
+         lYolEh1OHSBMobkDHS+p56nYa+2eEXpvzg58LPnBqrQobSvHfk9vHowK4ZOLwC4eJHxl
+         K+SsmrU7drH4jBdt6ykcYnIvoxXMQ07XL+rWnAos8t8UA7CzrOV7DcrJrf1O22XTObvM
+         J6ULBDd2HBuKqXhhnmV7qkzDP1+n6YZWR6YOQPTh+ITWXU5Dt1m4ZOMGhC7oqyoxoCte
+         nXtf+Bq2GyCPC2A5OgMSlZWszvUiY8d5R+HQHKQ5gwmXPa10TI0XGCsAF15eRscufYsA
+         px9w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688086759; x=1690678759;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=1fMmXmW0bN/OZjvRrmhsMCE2AbjOlvmuvYsM+l0kwu0=;
-        b=Y8Fc39+aqU1KZBAz2wTQIqusCcBgkrsRgWCxZnc3sATiF1r/UmPX+l6YTAkWMCq6QA
-         mUMPwCuXg1Uhlp6zvYuEiYYFxIZFQ/trHwz2v5AQxWTc/exnccqHmOvahaNc0OT8SDi2
-         TKThy7pOnw35k2cKVSfFCOsIqaNAhTGnEnQC8O30OCRrEXI5U43bJJAOcwV5nxZBM0dI
-         SYhFI+ur147A9Re7gyRIzBfw24zaU+wF0wq5o4v0eigqGddtKAyNbDoWOAfBTiRYLvXO
-         c42t+qDixleyGtZgsNFAPrsYtR/zsXareGRTaYSHZZDiDmeTPceCqwABqpXMmiAt5rfZ
-         Ls4Q==
-X-Gm-Message-State: ABy/qLalaWe3pVmpYn1/EZAc7vbMW3+3JSDKGGiUuvda14r9aDNHVAmz
-        sgChOtF9OPOe3nGOa2FigaYtyJDRcYnNrBCHoasBFQ==
-X-Google-Smtp-Source: APBJJlHxFBTsy1RIaDeoVbwUC3Ent+H7k2ftXq+l1oZLf/rgt8ocXK1cc9rGO7XOaIKbAEai1RmczmVdeul/5BawYDg=
-X-Received: by 2002:a25:9e87:0:b0:bcc:571d:a300 with SMTP id
- p7-20020a259e87000000b00bcc571da300mr1221336ybq.20.1688086759059; Thu, 29 Jun
- 2023 17:59:19 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1688086779; x=1690678779;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=zoYdkdv2/OutCTcovec52gr8aSf/SvvOZ7kly3VUKmU=;
+        b=h2wnJHttj/STbDZ/ScKl3kvE7U86S3X5EJiBewJxjJRnwi8Mbr5VAe2JfpJfCo2wOJ
+         06ytZPLTgAqn0sNj3ZVLIJlmAYYGA5jYNDjy6JlsVLx7tyTXJD7X1Ria8OzcXmJ4gJ00
+         UJERgAFcb8layUMlK9OwAGf2+p7bCIbM9blWNvtbqBLYHFYnLww/v9vLZBas8qEAFj49
+         eXzqEOBk0nWVckf4bnWj6262u7BZacpYvZBAjir1DxtT+1ZxwVuKvziltT7aIvEd+s/p
+         VdtrWh0cjyo4655N1Apvvb7PqSFyeuuh2IyKPGN6JOa2Qr3FClpYEFWz9R9nrwdiF2rL
+         FnyA==
+X-Gm-Message-State: ABy/qLZvXfSFXb+nBQSQHdizgtcwicwF5FE/ZM/s2obF0TGfNqY7lr8V
+        b7KfjsSRllpYtSZzxoMS0TaOow==
+X-Google-Smtp-Source: APBJJlEg6iCQC+TSL2nuh3dd1+J655NCf9q2KkuUDaitZTBiZEIYObwaxIxm3gCm0H29/6bPnPfytg==
+X-Received: by 2002:a05:6512:1094:b0:4f1:3d7d:409e with SMTP id j20-20020a056512109400b004f13d7d409emr1321712lfg.0.1688086779192;
+        Thu, 29 Jun 2023 17:59:39 -0700 (PDT)
+Received: from ?IPV6:2001:14ba:a0db:1f00::8a5? (dzdqv0yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a0db:1f00::8a5])
+        by smtp.gmail.com with ESMTPSA id q5-20020ac246e5000000b004fb94c6f5c4sm745002lfo.247.2023.06.29.17.59.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 29 Jun 2023 17:59:38 -0700 (PDT)
+Message-ID: <572ecc01-71c1-6f64-d26c-145b870584d1@linaro.org>
+Date:   Fri, 30 Jun 2023 03:59:38 +0300
 MIME-Version: 1.0
-References: <CAJuCfpGoNbLOLm08LWKPOgn05+FB1GEqeMTUSJUZpRmDYQSjpA@mail.gmail.com>
- <20230628-meisennest-redlich-c09e79fde7f7@brauner> <CAJuCfpHqZ=5a_2k==FsdBbwDCF7+s7Ji3aZ37LBqUgyXLMz7gA@mail.gmail.com>
- <20230628-faden-qualvoll-6c33b570f54c@brauner> <CAJuCfpF=DjwpWuhugJkVzet2diLkf8eagqxjR8iad39odKdeYQ@mail.gmail.com>
- <20230628-spotten-anzweifeln-e494d16de48a@brauner> <ZJx1nkqbQRVCaKgF@slm.duckdns.org>
- <CAJuCfpEFo6WowJ_4XPXH+=D4acFvFqEa4Fuc=+qF8=Jkhn=3pA@mail.gmail.com>
- <2023062845-stabilize-boogieman-1925@gregkh> <CAJuCfpFqYytC+5GY9X+jhxiRvhAyyNd27o0=Nbmt_Wc5LFL1Sw@mail.gmail.com>
- <ZJyZWtK4nihRkTME@slm.duckdns.org> <CAJuCfpFKjhmti8k6OHoDHAu6dPvqP0jn8FFdSDPqmRfH97bkiQ@mail.gmail.com>
-In-Reply-To: <CAJuCfpFKjhmti8k6OHoDHAu6dPvqP0jn8FFdSDPqmRfH97bkiQ@mail.gmail.com>
-From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Thu, 29 Jun 2023 17:59:07 -0700
-Message-ID: <CAJuCfpH3JcwADEYPBhzUcunj0dcgYNRo+0sODocdhbuXQsbsUQ@mail.gmail.com>
-Subject: Re: [PATCH 1/2] kernfs: add kernfs_ops.free operation to free
- resources tied to the file
-To:     Tejun Heo <tj@kernel.org>
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
-        Christian Brauner <brauner@kernel.org>, peterz@infradead.org,
-        lujialin4@huawei.com, lizefan.x@bytedance.com, hannes@cmpxchg.org,
-        mingo@redhat.com, ebiggers@kernel.org, oleg@redhat.com,
-        akpm@linux-foundation.org, viro@zeniv.linux.org.uk,
-        juri.lelli@redhat.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
-        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, kernel-team@android.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH RFC v4 7/7] drm/msm/dpu: Use DRM solid_fill property
+Content-Language: en-GB
+To:     Jessica Zhang <quic_jesszhan@quicinc.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
+        Marijn Suijten <marijn.suijten@somainline.org>
+Cc:     quic_abhinavk@quicinc.com, ppaalanen@gmail.com,
+        contact@emersion.fr, laurent.pinchart@ideasonboard.com,
+        sebastian.wick@redhat.com, ville.syrjala@linux.intel.com,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, freedreno@lists.freedesktop.org,
+        wayland-devel@lists.freedesktop.org
+References: <20230404-solid-fill-v4-0-f4ec0caa742d@quicinc.com>
+ <20230404-solid-fill-v4-7-f4ec0caa742d@quicinc.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <20230404-solid-fill-v4-7-f4ec0caa742d@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,74 +87,91 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 28, 2023 at 2:50=E2=80=AFPM Suren Baghdasaryan <surenb@google.c=
-om> wrote:
->
-> On Wed, Jun 28, 2023 at 1:34=E2=80=AFPM Tejun Heo <tj@kernel.org> wrote:
-> >
-> > Hello, Suren.
-> >
-> > On Wed, Jun 28, 2023 at 01:12:23PM -0700, Suren Baghdasaryan wrote:
-> > > AFAIU all other files that handle polling rely on f_op->release()
-> > > being called after all the users are gone, therefore they can safely
-> > > free their resources. However kernfs can call ->release() while there
-> > > are still active users of the file. I can't use that operation for
-> > > resource cleanup therefore I was suggesting to add a new operation
-> > > which would be called only after the last fput() and would guarantee
-> > > no users. Again, I'm not an expert in this, so there might be a bette=
-r
-> > > way to handle it. Please advise.
-> >
-> > So, w/ kernfs, the right thing to do is making sure that whatever is ex=
-posed
-> > to the kernfs user is terminated on removal - ie. after kernfs_ops->rel=
-ease
-> > is called, the ops table should be considered dead and there shouldn't =
-be
-> > anything left to clean up from the kernfs user side. You can add abstra=
-ction
-> > kernfs so that kernfs can terminate the calls coming down from the high=
-er
-> > layers on its own. That's how every other operation is handled and what
-> > should happen with the psi polling too.
->
-> I'm not sure I understand. The waitqueue head we are freeing in
-> ->release() can be accessed asynchronously and does not require any
-> kernfs_op call. Here is a recap of that race:
->
->                                                 do_select
->                                                       vfs_poll
-> cgroup_pressure_release
->     psi_trigger_destroy
->         wake_up_pollfree(&t->event_wait) -> unblocks vfs_poll
->         synchronize_rcu()
->         kfree(t) -> frees waitqueue head
->                                                      poll_freewait() -> U=
-AF
->
-> Note that poll_freewait() is not part of any kernel_op, so I'm not
-> sure how adding an abstraction kernfs would help, but again, this is
-> new territory for me and I might be missing something.
->
-> On a different note, I think there might be an easy way to fix this.
-> What if psi triggers reuse kernfs_open_node->poll waitqueue head?
-> Since we are overriding the ->poll() method, that waitqueue head is
-> unused AFAIKT. And best of all, its lifecycle is tied to the file's
-> lifecycle, so it does not have the issue that trigger waitqueue head
-> has. In the trigger I could simply store a pointer to that waitqueue
-> and use it. Then in ->release() freeing trigger would not affect the
-> waitqueue at all. Does that sound sane?
+On 30/06/2023 03:25, Jessica Zhang wrote:
+> Drop DPU_PLANE_COLOR_FILL_FLAG and check the DRM solid_fill property to
+> determine if the plane is solid fill. In addition drop the DPU plane
+> color_fill field as we can now use drm_plane_state.solid_fill instead,
+> and pass in drm_plane_state.alpha to _dpu_plane_color_fill_pipe() to
+> allow userspace to configure the alpha value for the solid fill color.
+> 
+> Signed-off-by: Jessica Zhang <quic_jesszhan@quicinc.com>
 
-I think this approach is much cleaner and I'm guessing that's in line
-with what Tejun was describing (maybe it's exactly what he was telling
-me but it took time for me to get it). Posted the patch implementing
-this approach here:
-https://lore.kernel.org/all/20230630005612.1014540-1-surenb@google.com/
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
->
->
-> >
-> > Thanks.
-> >
-> > --
-> > tejun
+Minor suggestion below.
+
+> ---
+>   drivers/gpu/drm/msm/disp/dpu1/dpu_plane.c | 21 +++++++++++++++------
+>   1 file changed, 15 insertions(+), 6 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_plane.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_plane.c
+> index 4476722f03bb..11d4fb771a1f 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_plane.c
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_plane.c
+> @@ -42,7 +42,6 @@
+>   #define SHARP_SMOOTH_THR_DEFAULT	8
+>   #define SHARP_NOISE_THR_DEFAULT	2
+>   
+> -#define DPU_PLANE_COLOR_FILL_FLAG	BIT(31)
+>   #define DPU_ZPOS_MAX 255
+>   
+>   /*
+> @@ -82,7 +81,6 @@ struct dpu_plane {
+>   
+>   	enum dpu_sspp pipe;
+>   
+> -	uint32_t color_fill;
+>   	bool is_error;
+>   	bool is_rt_pipe;
+>   	const struct dpu_mdss_cfg *catalog;
+> @@ -606,6 +604,17 @@ static void _dpu_plane_color_fill_pipe(struct dpu_plane_state *pstate,
+>   	_dpu_plane_setup_scaler(pipe, fmt, true, &pipe_cfg, pstate->rotation);
+>   }
+>   
+> +static uint32_t _dpu_plane_get_fill_color(struct drm_solid_fill solid_fill)
+
+Please consider accepting drm_plane_state instead and handling alpha 
+here. Then _dpu_color_fill can accept rgba colour instead of separate 
+RGB and alpha values.
+
+> +{
+> +	uint32_t ret = 0;
+> +
+> +	ret |= ((uint8_t) solid_fill.b) << 16;
+> +	ret |= ((uint8_t) solid_fill.g) << 8;
+> +	ret |= ((uint8_t) solid_fill.r);
+> +
+> +	return ret;
+> +}
+> +
+>   /**
+>    * _dpu_plane_color_fill - enables color fill on plane
+>    * @pdpu:   Pointer to DPU plane object
+> @@ -977,9 +986,9 @@ void dpu_plane_flush(struct drm_plane *plane)
+>   	if (pdpu->is_error)
+>   		/* force white frame with 100% alpha pipe output on error */
+>   		_dpu_plane_color_fill(pdpu, 0xFFFFFF, 0xFF);
+> -	else if (pdpu->color_fill & DPU_PLANE_COLOR_FILL_FLAG)
+> -		/* force 100% alpha */
+> -		_dpu_plane_color_fill(pdpu, pdpu->color_fill, 0xFF);
+> +	else if (drm_plane_solid_fill_enabled(plane->state))
+> +		_dpu_plane_color_fill(pdpu, _dpu_plane_get_fill_color(plane->state->solid_fill),
+> +				plane->state->alpha);
+>   	else {
+>   		dpu_plane_flush_csc(pdpu, &pstate->pipe);
+>   		dpu_plane_flush_csc(pdpu, &pstate->r_pipe);
+> @@ -1024,7 +1033,7 @@ static void dpu_plane_sspp_update_pipe(struct drm_plane *plane,
+>   	}
+>   
+>   	/* override for color fill */
+> -	if (pdpu->color_fill & DPU_PLANE_COLOR_FILL_FLAG) {
+> +	if (drm_plane_solid_fill_enabled(plane->state)) {
+>   		_dpu_plane_set_qos_ctrl(plane, pipe, false);
+>   
+>   		/* skip remaining processing on color fill */
+> 
+
+-- 
+With best wishes
+Dmitry
+
