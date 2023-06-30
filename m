@@ -2,135 +2,241 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C42737437C8
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 10:53:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 817907437D1
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 10:59:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232690AbjF3Ixr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 04:53:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52250 "EHLO
+        id S232697AbjF3I7Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Jun 2023 04:59:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232663AbjF3Ixe (ORCPT
+        with ESMTP id S230057AbjF3I7X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 04:53:34 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60C3235A0;
-        Fri, 30 Jun 2023 01:53:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de;
- s=s31663417; t=1688115199; x=1688719999; i=deller@gmx.de;
- bh=yclpbwa2nMn46Zo9sja7sWvN3MOdzaJ89fOvhuYL0vw=;
- h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
- b=np0zpTfkYv7fmxlCu9VmHKMWcOGepbahVM+YISY4DJLVUuS1QSZ6jtLExKknE40cZHjEiNn
- 8qEBAb3bdBFjNRzorG0lD91Ki3+Ae7Fb0GsI9FkFlYoA63OYVSOh+NSSygDvifCRDdJiA4h49
- shVxX5jAmK/cY2N9mRtqCs/z4TeVxuFoHK7XN0wSRhLJodcPe801BdBiqXkZa3cMe/Sc8FOGk
- q+K94jT4NGsoIMEUCZjtH0CZEZHqgX2Qop8mXi6gLuOQkoW5OE0qfoUdUSM8oiVuFTgZuFDsU
- ba4zbf4jpgxqKv1TLDBP45YlAje//h2uaNE6Zbhr5Tsp4eETiGtg==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [192.168.20.60] ([94.134.148.7]) by mail.gmx.net (mrgmx005
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MybGh-1pq3F547zR-00ywRy; Fri, 30
- Jun 2023 10:53:19 +0200
-Message-ID: <bd6d481b-22be-217f-e6f9-95a31575d7af@gmx.de>
-Date:   Fri, 30 Jun 2023 10:53:17 +0200
+        Fri, 30 Jun 2023 04:59:23 -0400
+Received: from mail-ej1-x641.google.com (mail-ej1-x641.google.com [IPv6:2a00:1450:4864:20::641])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 394122118;
+        Fri, 30 Jun 2023 01:59:22 -0700 (PDT)
+Received: by mail-ej1-x641.google.com with SMTP id a640c23a62f3a-991fe70f21bso188179966b.3;
+        Fri, 30 Jun 2023 01:59:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1688115560; x=1690707560;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=5XyG9hWncrHnC6M9gFUR394kLaY92tagFHZ9PMVjGOw=;
+        b=GYibKrN0wEDbK/0c8BH9qnz99L8rnbH7azC9dHW1F03iQ/ZAkiOULDAlgDVoiAT3o9
+         TDkk5DdokomN1jTxujVFwb4KgMP6pJq3F1B6v7TwEAzxmSBxVmYk0qvxUB5+WUP4UnBN
+         BJR5XL+MpDficKPropC5unNZwytJAPb3l+UGx37q51jJx2wgvun2nxHm/2WPrUzw9HN/
+         BolrZK7DUS3eZU3G8pHPeSuxWZZxe/iv0xg920KPsKwZtVgPsSTJtuj0gZDkSvmLp6xm
+         HbGM1nLcmd+RnYPiHKnYa1mzBnqry3e+gtrgcBWdaR6vT3GoyWLeP462eoiG0egAp5KN
+         N7hQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688115560; x=1690707560;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=5XyG9hWncrHnC6M9gFUR394kLaY92tagFHZ9PMVjGOw=;
+        b=JDwiqAqszL2fmhvWR6MaI6bRjlNzUvgPw9MfFPpNoTKb7Yi9xlCmeeM96nVgWwNnRF
+         Vaetyl7gmsYykJm08wqRCTt6zkCGk/czqUayttllvviQHmt0cH/i3uYwrRS8iIC1N3HZ
+         ESbTmdRWF5OFYE3Q8WQ7U+s03koVLH+yPX05CmNtU1LyuELS8xIjtb0c4gY40UbV/F74
+         Dl8ISScTwxABxWhswitBEWBtk5fbL3THBW7fu/hMmVBu1akuyQSDRdolaNKn0UjVFUdl
+         l0+OA24hza2HXXHuE6xck6P7niuEgggD170qJ7zTyTrNsfRLEm+JIw9yP9aDamtCL2lI
+         7y5A==
+X-Gm-Message-State: ABy/qLZY5aiONULg8uIbamW+1CmiG+d3UhIU6TVckAjK97vkd1eWTQ92
+        jBtZBB8aMFgyItFzkUYo26Nxt5TVcSWnOd3hBi0=
+X-Google-Smtp-Source: APBJJlEp4+UUDkOh9/yDHTg+SwOatqJkJzuotF+phusYUk/Vj2XurBYpoIEerHYEX5FwBBJoQCw0JJOjLoJc/zU9Npc=
+X-Received: by 2002:a17:906:340a:b0:970:1b2d:45cc with SMTP id
+ c10-20020a170906340a00b009701b2d45ccmr1217441ejb.57.1688115560344; Fri, 30
+ Jun 2023 01:59:20 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH] fbdev: imxfb: switch to DEFINE_SIMPLE_DEV_PM_OPS
-Content-Language: en-US
-To:     Martin Kaiser <martin@kaiser.cx>
-Cc:     Pengutronix Kernel Team <kernel@pengutronix.de>,
-        linux-fbdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+References: <20230608113420.14695-1-cloudliang@tencent.com>
+ <20230608113420.14695-3-cloudliang@tencent.com> <ZJysUp5Ndnecok4S@google.com>
+In-Reply-To: <ZJysUp5Ndnecok4S@google.com>
+From:   Jinrong Liang <ljr.kernel@gmail.com>
+Date:   Fri, 30 Jun 2023 16:59:08 +0800
+Message-ID: <CAFg_LQWdtWMn0HyKpBZH+fQfeBdEAq1fxDnekcw04pXFMqOJ3Q@mail.gmail.com>
+Subject: Re: [PATCH 2/2] KVM: selftests: Add PEBS test for MSR_IA32_PERF_CAPABILITIES
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Like Xu <like.xu.linux@gmail.com>,
+        Jinrong Liang <cloudliang@tencent.com>,
+        linux-kselftest@vger.kernel.org, kvm@vger.kernel.org,
         linux-kernel@vger.kernel.org
-References: <20230628132652.87202-1-martin@kaiser.cx>
-From:   Helge Deller <deller@gmx.de>
-In-Reply-To: <20230628132652.87202-1-martin@kaiser.cx>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:UJmk3kDYtKsx9v8NINHGRE4AmIzh149vn7KQFoeF222OUiWAlwQ
- yhpu6zpLfmmxwnnZIP5W2bqI2d6yJmN+xs/Mj3tsKIyq6PGKCeaN96ncUkTWpVbPa5nGBgH
- 5Rro5Vk9IR4TX1iDU+lHXTN27y3J6dids0L4eA00rfjbcrbNWWudJjI4IykIsQZJT8Bv+cn
- YOi6ZXIM2FBRVCjrzIqgA==
-UI-OutboundReport: notjunk:1;M01:P0:OzRIr3icWdo=;uFSp3F0P2MjpucVdZ7yC5En2sZ/
- DPCdCYXIE4a584xpGHo8/5foXPF9YZZk3v4x5ZTp6JTZrfgySSUH30vIBjH2iuXxK1vwH5mVn
- IPfIRsxSzs5mJWqfRczMKe1hmCAdy/5mZEeGNMmAf9Ft9QJbQn1W3FTZAf0tjmA/ZqQN7lPiq
- 9bbZC2izISPqfdKbeHavme6Jl+c9zpDaO4giyiZgmMBV4nuoBRtazkaoyo1oBmTJT+W1jrS4g
- yEuybnm8UbI0s0UOupVSXh7XqdQDAODHG/HYI1VB5B4HCedsJ+8ndhWlgFoVwevKiDWpAp+L5
- 73XoJTWrqAz9HXAtbGhfBLfH8N5WsE4ChJGCD3duwzFm23CxyIsmCr4XeJXvXllnCA4pmTRpS
- 7GKpVvJiJ8CMEwhAX3GUN6vTL6gWEdrb+pxsYxq5uURGO4LU6nI4X+WQWkSsS/H9vmE9VweR7
- NHei4rTgRXsMhdqThZOMbWmjTnVk4sKzN4hOsTqHNVhLpiIUiR1XR5Pjf4U0I/9cwF/XWa9Zf
- Wdldea/IfoTmivzox/B7g+VS6ke+pkM2T3KmSFxS9s7a7J+R9K3GQGmugg0eVvbDojMroDIPV
- vTCzkm2IHFgEwT0BJLpMBxBC2xXJAa++Hz2Sk+YPNHF+r1gdKNK+zBQ9AYFa+hjjbmjQ0Mpc2
- IZIbnq3pxRh1+lx1868fK5folGFXz58vfcvNpgacutZu83hiDKeibfJ9KvldQwnhQHx7+/ouh
- 1TPivBlmbjz3sjYCms18cWjrr6YLsL3wo67TiIYgs/+cxgx38tPGkcXWUSWfUo6yhCUEpOORN
- Yko0s1e0pUt3KQHo/BKVcrrmQylGC5/fpHR2O51rGQ+XbhhU2ufr6ZG5WZ2Ms8kYLMX0VDnVH
- 8MbzGuhi4WdCMUSYmWE1iDxzPwuBYu10XDDc4QqN6m8Wun13fbO3TizuKc4ddfOCMApxbvG22
- hP183mz5qBNPSvPEJoQDAWwG/Fg=
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/28/23 15:26, Martin Kaiser wrote:
-> SIMPLE_DEV_PM_OPS is deprecated, replace it with DEFINE_SIMPLE_DEV_PM_OP=
-S
-> and use pm_sleep_ptr for setting the driver's pm routines. We can now
-> remove the __maybe_unused qualifier in the suspend and resume functions.
+Sean Christopherson <seanjc@google.com> =E4=BA=8E2023=E5=B9=B46=E6=9C=8829=
+=E6=97=A5=E5=91=A8=E5=9B=9B 05:55=E5=86=99=E9=81=93=EF=BC=9A
 >
-> Signed-off-by: Martin Kaiser <martin@kaiser.cx>
+> On Thu, Jun 08, 2023, Jinrong Liang wrote:
+> > From: Jinrong Liang <cloudliang@tencent.com>
+> >
+> > This commit adds a PEBS test that verifies all possible combinations
+> > of PEBS-related bits in MSR_IA32_PERF_CAPABILITIES. This comprehensive
+> > test ensures the accuracy of the PEBS feature.
+> >
+> > Signed-off-by: Jinrong Liang <cloudliang@tencent.com>
+> > ---
+> >  .../selftests/kvm/x86_64/vmx_pmu_caps_test.c  | 71 +++++++++++++++++++
+> >  1 file changed, 71 insertions(+)
+> >
+> > diff --git a/tools/testing/selftests/kvm/x86_64/vmx_pmu_caps_test.c b/t=
+ools/testing/selftests/kvm/x86_64/vmx_pmu_caps_test.c
+> > index 02903084598f..c1b1ba44bc26 100644
+> > --- a/tools/testing/selftests/kvm/x86_64/vmx_pmu_caps_test.c
+> > +++ b/tools/testing/selftests/kvm/x86_64/vmx_pmu_caps_test.c
+> > @@ -21,6 +21,12 @@
+> >
+> >  #define MAX_LINEAR_ADDR_MASK         GENMASK_ULL(15, 8)
+> >  #define ADDR_OFS_BIT                 8
+> > +#define PMU_CAP_LBR_FMT              0x3f
+> > +#define PMU_CAP_SMM_FREEZE           BIT_ULL(12)
+> > +#define PMU_CAP_FW_WRITES            BIT_ULL(13)
+> > +#define PMU_CAP_PERF_METRICS_AVAILABLE       BIT_ULL(PERF_CAP_METRICS_=
+IDX)
+> > +#define PMU_CAP_PEBS_OUTPUT_PT_AVAIL BIT_ULL(PERF_CAP_PT_IDX)
+> > +#define PMU_CAP_PEBS_ALL             (PERF_CAP_PEBS_MASK | PMU_CAP_PEB=
+S_OUTPUT_PT_AVAIL)
+> >
+> >  union perf_capabilities {
+> >       struct {
+> > @@ -331,6 +337,70 @@ static void test_ds_area_noncanonical_address(unio=
+n perf_capabilities host_cap)
+> >       kvm_vm_free(vm);
+> >  }
+> >
+> > +static void test_pebs_bit_combinations(union perf_capabilities host_ca=
+p)
+> > +{
+> > +     int ret;
+>
+> Reverse xmas tree.
+>
+> > +     uint64_t pebs_val, val;
+> > +     struct kvm_vcpu *vcpu;
+> > +     struct kvm_vm *vm =3D vm_create_with_one_vcpu(&vcpu, NULL);
+>
+> It's kinda silly, but I think it makes sense to wait until after all of t=
+he
+> TEST_REQUIRE()s to create the VM+vCPU.
+>
+> > +
+> > +     TEST_REQUIRE(kvm_cpu_property(X86_PROPERTY_PMU_VERSION) > 1);
+> > +     TEST_REQUIRE(host_cap.capabilities & PERF_CAP_PEBS_FORMAT);
+> > +     TEST_REQUIRE(vcpu_get_msr(vcpu, MSR_IA32_MISC_ENABLE) &
+> > +                  MSR_IA32_MISC_ENABLE_PEBS_UNAVAIL);
+> > +
+> > +     /*
+> > +      * Test if PEBS_REC_FMT is set and the value is the same as host,
+> > +      * the other PEBS bits are allowed to be set only if they are the
+> > +      * same as host.
+> > +      */
+> > +     pebs_val =3D host_cap.capabilities & PMU_CAP_PEBS_ALL;
+> > +
+> > +     vcpu_set_msr(vcpu, MSR_IA32_PERF_CAPABILITIES, pebs_val);
+> > +     ASSERT_EQ(vcpu_get_msr(vcpu, MSR_IA32_PERF_CAPABILITIES),
+> > +               (u64)pebs_val);
+>
+> This cast shouldn't be necessary.  And if you're going to split lines...
+>
+>         ASSERT_EQ(vcpu_get_msr(vcpu, MSR_IA32_PERF_CAPABILITIES),
+>                   host_cap.capabilities & PMU_CAP_PEBS_ALL);
+>
+> Though isn't that flawed?  E.g. will fail if MSR_IA32_PERF_CAPABILITIES h=
+as
+> non-PEBS bits set.  I think what you want is something like:
+>
+>         guest_perf_caps =3D vcpu_get_msr(vcpu, MSR_IA32_PERF_CAPABILITIES=
+);
+>
+>         ASSERT_EQ(guest_perf_caps & PMU_CAP_PEBS_ALL,
+>                   host_cap.capabilities & PMU_CAP_PEBS_ALL);
+>
+> > +
+> > +     /* Test all PEBS bit combinations. */
+> > +     for (val =3D 0x0; val <=3D (~0ul & PMU_CAP_PEBS_ALL); val++) {
+> > +             /* Skips values that are not related to PEBS. */
+> > +             if (val & (PMU_CAP_LBR_FMT | PMU_CAP_SMM_FREEZE |
+> > +                 PMU_CAP_FW_WRITES | PMU_CAP_PERF_METRICS_AVAILABLE))
+>
+> Align things by their scope, i.e.
+>
+>                 if (val & (PMU_CAP_LBR_FMT | PMU_CAP_SMM_FREEZE
+>                            PMU_CAP_FW_WRITES | PMU_CAP_PERF_METRICS_AVAIL=
+ABLE))
+>
+> But even better would be to look for !PEBS, not some other values where i=
+t's not
+> clear they exhaustively cover all !PEBS value.  E.g. can't this be?
+>
+>                 if (val & ~PMU_CAP_PEBS_ALL)
+>                         continue;
+>
+> > +                     continue;
+> > +
+> > +             /*
+> > +              * Test that value of PEBS is rejected when the KVM doesn=
+'t
+>
+> Just "KVM", not "the KVM".
+>
+> > +              * supports Intel PT.
+> > +              */
+> > +             if ((val & PMU_CAP_PEBS_OUTPUT_PT_AVAIL) &&
+> > +                 (!(host_cap.capabilities & PMU_CAP_PEBS_OUTPUT_PT_AVA=
+IL))) {
+> > +                     ret =3D _vcpu_set_msr(vcpu, MSR_IA32_PERF_CAPABIL=
+ITIES, val);
+> > +                     TEST_ASSERT(!ret, "Bad PEBS auxiliary bits =3D 0x=
+%lx didn't fail", val);
+> > +
+> > +                     continue;
+> > +             }
+> > +
+> > +             /*
+> > +              * Test that value of PEBS is rejected when carrying
+>
+> I don't quite follow what you mean by "carrying".  Do you mean a non-zero=
+ value?
 
-both patches applied.
+I apologize for the confusion. Yes, by "carrying" I meant a non-zero
+value. I will revise the comment to clarify the meaning and make it
+more precise.
 
-Thanks!
-Helge
+>
+> > +              * PEBS_REC_FMT if the value of PEBS is not equal to host=
+.
+> > +              */
+> > +             if ((val & PERF_CAP_PEBS_FORMAT) && val !=3D pebs_val) {
+> > +                     ret =3D _vcpu_set_msr(vcpu, MSR_IA32_PERF_CAPABIL=
+ITIES, val);
+> > +                     TEST_ASSERT(!ret, "Bad PEBS auxiliary bits =3D 0x=
+%lx didn't fail", val);
+> > +
+> > +                     continue;
+> > +             }
+> > +
+> > +             /*
+> > +              * Test that PEBS bits can be written simultaneously or
+> > +              * independently if PEBS_REC_FMT is not carried.
+> > +              */
+> > +             vcpu_set_msr(vcpu, MSR_IA32_PERF_CAPABILITIES, val);
+> > +             ASSERT_EQ(vcpu_get_msr(vcpu, MSR_IA32_PERF_CAPABILITIES),=
+ val);
+> > +     }
+> > +
+> > +     kvm_vm_free(vm);
+> > +}
 
-> ---
->   drivers/video/fbdev/imxfb.c | 8 ++++----
->   1 file changed, 4 insertions(+), 4 deletions(-)
->
-> diff --git a/drivers/video/fbdev/imxfb.c b/drivers/video/fbdev/imxfb.c
-> index 5fbcb78a9cae..04f3bf30a529 100644
-> --- a/drivers/video/fbdev/imxfb.c
-> +++ b/drivers/video/fbdev/imxfb.c
-> @@ -1066,7 +1066,7 @@ static void imxfb_remove(struct platform_device *p=
-dev)
->   	framebuffer_release(info);
->   }
->
-> -static int __maybe_unused imxfb_suspend(struct device *dev)
-> +static int imxfb_suspend(struct device *dev)
->   {
->   	struct fb_info *info =3D dev_get_drvdata(dev);
->   	struct imxfb_info *fbi =3D info->par;
-> @@ -1076,7 +1076,7 @@ static int __maybe_unused imxfb_suspend(struct dev=
-ice *dev)
->   	return 0;
->   }
->
-> -static int __maybe_unused imxfb_resume(struct device *dev)
-> +static int imxfb_resume(struct device *dev)
->   {
->   	struct fb_info *info =3D dev_get_drvdata(dev);
->   	struct imxfb_info *fbi =3D info->par;
-> @@ -1086,13 +1086,13 @@ static int __maybe_unused imxfb_resume(struct de=
-vice *dev)
->   	return 0;
->   }
->
-> -static SIMPLE_DEV_PM_OPS(imxfb_pm_ops, imxfb_suspend, imxfb_resume);
-> +static DEFINE_SIMPLE_DEV_PM_OPS(imxfb_pm_ops, imxfb_suspend, imxfb_resu=
-me);
->
->   static struct platform_driver imxfb_driver =3D {
->   	.driver		=3D {
->   		.name	=3D DRIVER_NAME,
->   		.of_match_table =3D imxfb_of_dev_id,
-> -		.pm	=3D &imxfb_pm_ops,
-> +		.pm	=3D pm_sleep_ptr(&imxfb_pm_ops),
->   	},
->   	.probe		=3D imxfb_probe,
->   	.remove_new	=3D imxfb_remove,
-
+Thank you for all your valuable feedback and suggestions. Your
+guidance has been extremely helpful in improving the quality of the
+code.
