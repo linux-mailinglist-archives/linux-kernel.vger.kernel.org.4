@@ -2,137 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9291E743602
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 09:41:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 721D2743607
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 09:43:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232172AbjF3HlW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 03:41:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53748 "EHLO
+        id S232180AbjF3Hnp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Jun 2023 03:43:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231946AbjF3HlP (ORCPT
+        with ESMTP id S229459AbjF3Hnm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 03:41:15 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44F572705;
-        Fri, 30 Jun 2023 00:41:14 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C6867616E3;
-        Fri, 30 Jun 2023 07:41:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5206C433C8;
-        Fri, 30 Jun 2023 07:41:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688110873;
-        bh=wAi6xTm0Bk1+cZ+bw7eDSKvRA+bYPEVhsd5GBAufK0k=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Z3cCF0ZEIgaxwpJEdK8aGKyBD+UXxQWr6mRapNrobZNtEe4VDoyLNQycwvKMaLDMB
-         PJS0Zif2R02YYymzDWivkgOxSbfYJFzIT0CGwfwxvHH1qk9vbnfFxunwI1xqN+vpnb
-         LMooO3jDzShN312BZLL9VfimSbsRJndg4bggWDFYOI25XzHBpg8gvUwqTlDisM/ryX
-         P3VVhDYFvI6evy8fPfx8vdPV235VNIV9VYKtl5K+duGr8FhfrtHZ7k9JyRB1m5gYkP
-         7jbMKoBi5qLyUaVDf2Ct4H0co6Z9+vdU/tHTJkbXCMj7bCwHcx5fkIs4jT2m5XC1jz
-         3fHeARiIcOrHg==
-Date:   Fri, 30 Jun 2023 00:41:11 -0700
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     Theodore Ts'o <tytso@mit.edu>
-Cc:     syzbot <syzbot+94a8c779c6b238870393@syzkaller.appspotmail.com>,
-        adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-crypto@vger.kernel.org, syzkaller-bugs@googlegroups.com,
-        David Howells <dhowells@redhat.com>
-Subject: Re: [syzbot] [ext4?] general protection fault in
- ext4_put_io_end_defer
-Message-ID: <20230630074111.GB36542@sol.localdomain>
-References: <0000000000002a0b1305feeae5db@google.com>
- <20230629035714.GJ8954@mit.edu>
+        Fri, 30 Jun 2023 03:43:42 -0400
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2061.outbound.protection.outlook.com [40.107.92.61])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3261610A
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 00:43:41 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=FLsl1gBfRsD/5YtfE4EmlKB7GzsjTooqE7TqVD7kSDwaVJA3B16WJZsj5FkBjvHBnWDERfbpNyvjjJwjrXF5uUcUj7TeGGl7Wipt476UGGJvbQJrpHCghmw/na+4UllbdcjV6H3X/xuqeqOI2Iwrb2reAObvYlVQZ/T3+D6Nh+rI6uyOmOafrfNEA+rJfxI2taCjkdLIV7LBLSB7WexZkkGjZyHggA2bF9jGloLiIrPNoffifuHiBIHiBIyilYKfVq98wgd2tXuUsRyir0gGVOdJWZiSXXZpn9ZcJ8bbKP+/ncx5SUgcZcMLaEjNn8PjWGE3/q3eqLFNxDrVZ/1CxA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=cwekAohhQ/d149vmOGBSxkHtg/kQ2EDgO2zuwStEuQ0=;
+ b=GzGPcuWFK83eI+jo8F+m4XldsX14tW+97C4qIXRKKRkH3p28CJM7fIu3zIeY+nSRCBWDQMLQJRfGhd/3C/f9MzZRkH3+gDlZIR/tKpyzYe6BylqjEvN0Aw3NJHL0Qzb+Fz21zQiCHRjfC9W/anmxfHjta8alSgANeiyitGrEjIW3PWQ2MrHktMApEkGlPuAwxOp1kGVf4CcPP/syOdkvfOz7/zjomWqajNYFtmjrfFQByH7gMjES4kn3BaIFZiTn9tuaCzSssylxYXkJ/3UYjcbT5cZDRp75nUW7ozy1cXMg3ERiqxE/KOX9TcjCL+DtEqzkIrPXdJt1ZWaYdtM08Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=cwekAohhQ/d149vmOGBSxkHtg/kQ2EDgO2zuwStEuQ0=;
+ b=q7aVGLF6AFxulJ2Hiij7N0OcPC0edIIskGFr4BYfQELASK0D7vV36ihnStNYDSM/C9wJGW91nmdl9UQu5JV7GXC4RjHlqFYPHWBkSwRLz9dgL/SmaFt1Y3q8D/0gWFhXwYbCxLiaV+ITNQVzOvzHvz+nzcqKMlimqyp/3cOgZq0=
+Received: from BL1PR12MB5849.namprd12.prod.outlook.com (2603:10b6:208:384::18)
+ by IA1PR12MB6233.namprd12.prod.outlook.com (2603:10b6:208:3e7::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.26; Fri, 30 Jun
+ 2023 07:43:38 +0000
+Received: from BL1PR12MB5849.namprd12.prod.outlook.com
+ ([fe80::4ef5:2244:743b:9989]) by BL1PR12MB5849.namprd12.prod.outlook.com
+ ([fe80::4ef5:2244:743b:9989%4]) with mapi id 15.20.6521.023; Fri, 30 Jun 2023
+ 07:43:38 +0000
+From:   "Chen, Jiqian" <Jiqian.Chen@amd.com>
+To:     David Airlie <airlied@redhat.com>,
+        Gerd Hoffmann <kraxel@redhat.com>,
+        =?utf-8?B?TWFyYy1BbmRyw6kgTHVyZWF1?= <marcandre.lureau@gmail.com>,
+        Gurchetan Singh <gurchetansingh@chromium.org>,
+        Chia-I Wu <olvaffe@gmail.com>, Juergen Gross <jgross@suse.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        =?utf-8?B?Um9nZXIgUGF1IE1vbm7DqQ==?= <roger.pau@citrix.com>,
+        Robert Beckett <bob.beckett@collabora.com>,
+        "virtualization@lists.linux-foundation.org" 
+        <virtualization@lists.linux-foundation.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        "xen-devel@lists.xenproject.org" <xen-devel@lists.xenproject.org>
+CC:     "Deucher, Alexander" <Alexander.Deucher@amd.com>,
+        "Koenig, Christian" <Christian.Koenig@amd.com>,
+        "Hildebrand, Stewart" <Stewart.Hildebrand@amd.com>,
+        Xenia Ragiadakou <burzalodowa@gmail.com>,
+        "Huang, Honglei1" <Honglei1.Huang@amd.com>,
+        "Zhang, Julia" <Julia.Zhang@amd.com>,
+        "Huang, Ray" <Ray.Huang@amd.com>,
+        "Chen, Jiqian" <Jiqian.Chen@amd.com>
+Subject: Re: [LINUX KERNEL PATCH v2 0/1] add S3 support for virtgpu
+Thread-Topic: [LINUX KERNEL PATCH v2 0/1] add S3 support for virtgpu
+Thread-Index: AQHZqyVzGB+OORTmhkSScAPReBq7D6+jfGOA
+Date:   Fri, 30 Jun 2023 07:43:38 +0000
+Message-ID: <BL1PR12MB5849C88BE41A4AB34522FE86E72AA@BL1PR12MB5849.namprd12.prod.outlook.com>
+References: <20230630073448.842767-1-Jiqian.Chen@amd.com>
+In-Reply-To: <20230630073448.842767-1-Jiqian.Chen@amd.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-imapappendstamp: MN2PR12MB3037.namprd12.prod.outlook.com
+ (15.20.6544.003)
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+x-ms-exchange-messagesentrepresentingtype: 1
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BL1PR12MB5849:EE_|IA1PR12MB6233:EE_
+x-ms-office365-filtering-correlation-id: bf35a828-f881-4940-9b0f-08db793db777
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: FhCxXjPrny9CziiQ8wS9xscuZrD/n8HsH5ICIYdK+hrrDYay2vC1bbciSqr9b8ZhwTH7x/Mf3wtiVEJxm7XRViEvhFgRK7qs8TeSUX+ZE9AcLVdhPyBoILZFbYBDqmU5rGuhi2YYwzObtANE8eGjQfwArJJJEl3iOYsDK9/xUNcbIgB3OXHYj808ebtvgOoH7FYByYyo8W7F8hI2RDMZcQQyJtmUzok8vpDIZRcvarDLi6zyKL8eIzolUGKvbp1ZWWGrVmOtpW1zzKflpqyrNBgIID2FXrvhfBTSvQrzInhNdC4oB8yPmDnqXQykTAwdqhRZa9AsLR2T0f8mm7Wrn3MF5UujUOy3ENJWf2Rs2EBg9izzIitQzwSHSd6NTOW2vxIOzOv+B7oVIhd3n/LFEQtcg6LY8KYN2n9vf6f7R7LPAoRv77zZfD8IxTxhnQNmCk0XFSKVEN2LSEqWTOkKS3ZMIoly/5uXeN0kjKgHrNvUvDGB3srnyebqFm+VDUILx0iAwXMcybu1QETWXO0UioF7wbCz4EQ1mQ0TgpOoDv6XkwXOXebWtwipPKirX3hIbwHI/0DSdE/GbA//EedYagIXObD02TqLKKT4gmzE9rdgoasXq6duny/y1x8QpCjS8v7Q9VCnIwFM3T989t8wVrqo3H/8N0ZUALKEOkwnHaY=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL1PR12MB5849.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(346002)(366004)(376002)(39860400002)(396003)(451199021)(2906002)(186003)(54906003)(55016003)(38070700005)(966005)(4326008)(316002)(8676002)(33656002)(478600001)(110136005)(7416002)(7696005)(921005)(122000001)(38100700002)(71200400001)(8936002)(66476007)(9686003)(5660300002)(41300700001)(66946007)(66556008)(66446008)(83380400001)(76116006)(64756008)(52536014)(53546011)(6506007);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?TmEwaEllME95bml0T0JXVzZLeFM2UW1IRnBwSEVtUE1GTEl0VDNoUlpoL0Mz?=
+ =?utf-8?B?aFFLME5DMEFYNDFqZ1pyd3pseUI5RGRhc3J4MUNMR0x5anNaOGZrK2NXRnFv?=
+ =?utf-8?B?VHZaaGxRaHpDeW1NWUIzWEFSZjFHUDF5Y1VrVGFIV0MrZTFlcHV5djJ1MEVZ?=
+ =?utf-8?B?V3hqTkxhYXcvYWk0Wk43bG05ajRnNzhSRGlmd3FVUXF0dWw4N2ZXRS94L3Jx?=
+ =?utf-8?B?QXdQdjZRdkhyODN6S0ErQjlob1dnTmVVNVVNdlRqSXNScldnRFdUdHpFYW5q?=
+ =?utf-8?B?Sk1iZUJYQTVmU0NYZUNIeURsdFNUOE1GbmRQUVo5c1N1K2czZzB3QlJmS3Y5?=
+ =?utf-8?B?aEJWdUV1SzJ4cE0rMUkreVBBMlc2Q3NKRmZmdG1UZ2E1Y2NOZXM0L0hvc0Uz?=
+ =?utf-8?B?ZENZbjNPQk1NQlRCeUR0UytLRjJjUS9yN1lFZWptQ0FCdEkyRHQ1elRxYldM?=
+ =?utf-8?B?Qk5oTWtlQ3A0b3MwZWtDeWU4VnVZa1E1ek5teTZ5ckI1Z3NlS0U3alkxL2Nr?=
+ =?utf-8?B?REdVV3V3aWduUzBGa3NZN3lEYTcrSC90WWpVRjlTbXZqZkVCWkRvMEhCVjdm?=
+ =?utf-8?B?SmVJS2lHZUNxK1NISko1RE1Oekg1NFpkYzc3S01lQUdFdldnWTkydkVQQnF4?=
+ =?utf-8?B?RVd3MXhCaTQ2ZHFnTmU0OVJoTjBvRTIyblUrMjZKMWxRNytMQ045Y1NvSkl3?=
+ =?utf-8?B?aytrZGJJc2NBRUFiNnpnQWsvOW5BOTYrR3d6bHhrRTYvN2srVExsWFNPVG1G?=
+ =?utf-8?B?SEw5T3REWGEybTZwa0pRMUJaSnp0YjlkM25CYWhHUTN0Sm9NZ0EvWk5oZmdu?=
+ =?utf-8?B?WnVRUGZFQW5qenFnSC9ZU1VoZFJ2Z04xcGx1bFBrUmVHVXBtVE5JQzFVSlla?=
+ =?utf-8?B?Y2hkVlVmYWtzU2JTM2pvMGMzZFdLQkg3akZYQkFZRVMyNTlXRmtJamdnd1Ry?=
+ =?utf-8?B?OHlOUDFsQWdLa0xaeXdqVzI4WlM5Z1V0RmlIanUwT0xlY1NiQityM2tWS3pV?=
+ =?utf-8?B?RVExcDMyNzQ1dHlUSGQ4clRVZFI0cFdBbTBvNW9IQUxYNThFeW45dG9pMitE?=
+ =?utf-8?B?VFBmdEFjbWRIVDh1c3U3Tlc0UHh5YUlkTmhuWUxCdk1MYjQ0N1VtOGpVYTZr?=
+ =?utf-8?B?U2x5VFJ3eFJBaVMyNUNWV0lpbkFKYUNOMFhkbzNybVA2dHcwZ0MwSXlOS1lh?=
+ =?utf-8?B?YzZkS294U041cE53TklMS05KUjFkbVJBcGFQRnNBMjhXUlkxYTVlQnhubXRG?=
+ =?utf-8?B?QVhWRjJIZTZVQnpRVHZMODNDQmo4NW53Rzk4ejJ0UGIwd2lYak1sbFM2d0dx?=
+ =?utf-8?B?dTNSK29CUGJPL2NiMHhadUo1eXJycGpxeHoydXlFcnRXNVJhMzJNazQ1SnNx?=
+ =?utf-8?B?WjRPbVBpT3VTNEVxeG1pQlNNa2NQUTIvTFZQMnh5Y3JkZWIxQWFKQmp2YjFy?=
+ =?utf-8?B?azNWdUlQczZ4NG9mUk9sQ0JDNWRTajNYY3M5S01rTXVkV2x5dEQ3U1NML25h?=
+ =?utf-8?B?dWdicXhKYzJxdWhUK2FjRlBNRnROQ1c0aTJ2QkcrL3FrSUIxVzAxaW9UOVlI?=
+ =?utf-8?B?VHJYQThFQXNicFFqRDdIa1podVgyV1UyMFp0N1ZRRTlrTEh6VUNXTlh2VURj?=
+ =?utf-8?B?SUI0d2RSZ2hnenBUSks3Nk45MEZkOGlpaUYycllLNU1BV044d0ZpenZRTHpZ?=
+ =?utf-8?B?T0J5alRwQmU0ektEMjhrbGFLaW5BYjlydzdudnlGcGVRbDdLUWdodStFMUJU?=
+ =?utf-8?B?YVEvcmxrSG1BT2g0amxRSjBlaHZXK2x4UzZ6bkJGVnpiOWxib01ta0RLdzc2?=
+ =?utf-8?B?NFBKU2xnTGpONWtza3BNY1I1cjF0c2xRVEl2WTBWZzNZNDh3MnNRY2puS01W?=
+ =?utf-8?B?WTR3aHY2Z0RMTWtBQWplKzBmNmpSc2FibC95OEh4SCsybGtNakx3RVoybFpY?=
+ =?utf-8?B?UE4vRGU2Q1JRUjJSRjNVWkNVUk5jZjZiQ2t0VVJYU2JSUSswN0dsdVFGOU1a?=
+ =?utf-8?B?Z0ZVUXBUMURNa2ExY2VhWkhmVVBQeEZNa1FjMys1U1MzM2dZSFB6RlRJMmZ4?=
+ =?utf-8?B?ZkQ2VUhMR3Y3OEFlRzVvanloK1h4WDFjTy9rUT09?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <5CCE5699A73DCA4585881E8F4245D2F5@amdcloud.onmicrosoft.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230629035714.GJ8954@mit.edu>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BL1PR12MB5849.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: bf35a828-f881-4940-9b0f-08db793db777
+X-MS-Exchange-CrossTenant-originalarrivaltime: 30 Jun 2023 07:43:38.0216
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: APvwVzgqnYygo5u6Gs3zOqNk6IZ9nTFFMCRWp7ZsyUrA2VFmkBtgG/ZzrG3zeHGH6cdQyZm/v4CkZhq13NxkCg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB6233
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 28, 2023 at 11:57:14PM -0400, Theodore Ts'o wrote:
-> #syz set subsystems: crypto
-> 
-> On Sat, Jun 24, 2023 at 07:21:44PM -0700, syzbot wrote:
-> > Hello,
-> > 
-> > syzbot found the following issue on:
-> > 
-> > HEAD commit:    f7efed9f38f8 Add linux-next specific files for 20230616
-> > git tree:       linux-next
-> > console output: https://syzkaller.appspot.com/x/log.txt?x=152e89f3280000
-> > kernel config:  https://syzkaller.appspot.com/x/.config?x=60b1a32485a77c16
-> > dashboard link: https://syzkaller.appspot.com/bug?extid=94a8c779c6b238870393
-> > compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-> > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=116af1eb280000
-> > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=14e22d2f280000
-> 
-> If you look at the reproducer, it's creating an AF_ALG (algorithm)
-> socket and messing with it.  This is easier to see in the syz
-> reproducer, but you can see exactly what it's doing in the C
-> reproducer above:
-> 
-> # https://syzkaller.appspot.com/bug?id=4ee7656695de92cbd5820111379ae0698af0f475
-> # See https://goo.gl/kgGztJ for information about syzkaller reproducers.
-> #{"threaded":true,"repeat":true,"procs":1,"slowdown":1,"sandbox":"none","sandbox_arg":0,"netdev":true,"binfmt_misc":true,"close_fds":true,"vhci":true,"ieee802154":true,"sysctl":true,"swap":true,"tmpdir":true}
-> r0 = socket$alg(0x26, 0x5, 0x0)
-> bind$alg(r0, &(0x7f0000000280)={0x26, 'hash\x00', 0x0, 0x0, 'sha3-256-generic\x00'}, 0x58)
-> r1 = accept4(r0, 0x0, 0x0, 0x0)
-> recvmmsg$unix(r1, &(0x7f0000003700)=[{{0x0, 0x700, 0x0}}], 0x600, 0x0, 0x0)
-> sendmsg$can_bcm(r1, &(0x7f0000000180)={0x0, 0x0, &(0x7f0000000140)={0x0}}, 0x400c800)
-> 
-> (0x26 is 38, or AF_ALG)
-> 
-> From looking at the stack trace, it looks like this is triggering a
-> coredump, which presumably is the ext4 write that triggers the GPF in
-> ext4_put_io_end_defer.  But given that the syz and C reproducer isn't
-> doing anything ext4 related at all, and it's purely trying to use the
-> AF_ALG socket to calculate SHA3 in the kernel (and the greek chorus
-> cries out, "WHY?"[1]), I'm going to send this over to the crypto folks to
-> investigate.
-
-Just a couple weeks ago, commit c662b043cdca ("crypto: af_alg/hash: Support
-MSG_SPLICE_PAGES") had many syzbot reports against it.  This particular report
-is against next-20230616 which didn't include the fix commit b6d972f68983
-("crypto: af_alg/hash: Fix recvmsg() after sendmsg(MSG_MORE)").  So there's a
-high chance this report is no longer valid.  I'll go ahead and invalidate it:
-
-#syz invalid
-
-> 
-> Cheers,
-> 
-> 					- Ted
-> 
-> [1] TIL that AF_ALG exists.  Inquiring minds want to know:
->    * Why do we expose the AF_ALG userspace interface?
->    * Who uses it?
->    * Why do they use it?
->    * Is there a CONFIG option to disable it in the name of decreasing
->      the attack surface of the kernel?
->    * If not, should we add one?  :-)
-
-AF_ALG has existed since 2010.  My understanding that its original purpose was
-to expose hardware crypto accelerators to userspace.  Unfortunately, support for
-exposing *any* crypto algorithm was included as well, which IMO was a mistake.
-
-There are quite a few different userspace programs that use AF_ALG purely to get
-at the CPU-based algorithm implementations, without any sort of intention to use
-hardware crypto accelerator.  Probably because it seemed "easy".  Or "better"
-because everything in the kernel is better, right?
-
-It's controlled by the CONFIG_CRYPTO_USER_API_* options, with the hash support
-in particular controlled by CONFIG_CRYPTO_USER_API_HASH.  Though good luck
-disabling it on most systems, as systemd depends on it...
-
-- Eric
+SGkgYWxsLA0KDQpWMiBwYXRjaCBvZiBrZXJuZWwgaXMgaHR0cHM6Ly9sb3JlLmtlcm5lbC5vcmcv
+bGttbC8yMDIzMDYzMDA3MzQ0OC44NDI3NjctMS1KaXFpYW4uQ2hlbkBhbWQuY29tL1QvI3QuDQoN
+Ck9uIDIwMjMvNi8zMCAxNTozNCwgSmlxaWFuIENoZW4gd3JvdGU6DQo+IHYyOg0KPiANCj4gSGkg
+YWxsLA0KPiANCj4gVGhhbmtzIHRvIE1hcmMtQW5kcsOpIEx1cmVhdSwgUm9iZXJ0IEJlY2tldHQg
+YW5kIEdlcmQgSG9mZm1hbm4gZm9yDQo+IHRoZWlyIGFkdmljZSBhbmQgZ3VpZGFuY2UuIFYyIG1h
+a2VzIGJlbG93IGNoYW5nZXM6DQo+IA0KPiAqIENoYW5nZSBWSVJUSU9fQ1BVX0NNRF9TVEFUVVNf
+RlJFRVpJTkcgdG8gMHgwNDAwICg8MHgxMDAwKQ0KPiAqIEFkZCBhIG5ldyBmZWF0dXJlIGZsYWcg
+VklSVElPX0dQVV9GX0ZSRUVaSU5HLCBzbyB0aGF0IGd1ZXN0IGFuZA0KPiAgIGhvc3QgY2FuIG5l
+Z290aWF0ZSB3aGVuZXZlciBmcmVlemluZyBpcyBzdXBwb3J0ZWQgb3Igbm90Lg0KPiANCj4gVjIg
+b2YgUWVtdSBwYXRjaCBodHRwczovL2xvcmUua2VybmVsLm9yZy9xZW11LWRldmVsLzIwMjMwNjMw
+MDcwMDE2Ljg0MTQ1OS0xLUppcWlhbi5DaGVuQGFtZC5jb20vVC8jdA0KPiANCj4gQmVzdCByZWdh
+cmRzLA0KPiBKaXFpYW4gQ2hlbi4NCj4gDQo+IHYxOg0KPiANCj4gbGluazogaHR0cHM6Ly9sb3Jl
+Lmtlcm5lbC5vcmcvbGttbC8yMDIzMDYwODA2Mzg1Ny4xNjc3OTczLTEtSmlxaWFuLkNoZW5AYW1k
+LmNvbS8NCj4gDQo+IEhpIGFsbCwNCj4gDQo+IEkgYW0gd29ya2luZyB0byBpbXBsZW1lbnQgdmly
+dGdwdSBTMyBmdW5jdGlvbiBvbiBYZW4uDQo+IA0KPiBDdXJyZW50bHkgb24gWGVuLCBpZiB3ZSBz
+dGFydCBhIGd1ZXN0IHdobyBlbmFibGVzIHZpcnRncHUsIGFuZCB0aGVuDQo+IHJ1biAiZWNobyBt
+ZW0gPiAvc3lzL3Bvd2VyL3N0YXRlIiB0byBzdXNwZW5kIGd1ZXN0LiBBbmQgcnVuDQo+ICJzdWRv
+IHhsIHRyaWdnZXIgPGd1ZXN0IGlkPiBzM3Jlc3VtZSIgdG8gcmVzdW1lIGd1ZXN0LiBXZSBjYW4g
+ZmluZCB0aGF0DQo+IHRoZSBndWVzdCBrZXJuZWwgY29tZXMgYmFjaywgYnV0IHRoZSBkaXNwbGF5
+IGRvZXNuJ3QuIEl0IGp1c3Qgc2hvd3MgYQ0KPiBibGFjayBzY3JlZW4uDQo+IA0KPiBJbiByZXNw
+b25zZSB0byB0aGUgYWJvdmUgcGhlbm9tZW5vbiwgSSBoYXZlIGZvdW5kIHR3byBwcm9ibGVtcy4N
+Cj4gDQo+IEZpcnN0LCBpZiB3ZSBtb3ZlIG1vdXNlIG9uIHRoZSBibGFjayBzY3JlZW4sIGd1ZXN0
+IGtlcm5lbCBzdGlsbCBzZW5kcyBhDQo+IGN1cnNvciByZXF1ZXN0IHRvIFFlbXUsIGJ1dCBRZW11
+IGRvZXNuJ3QgcmVzcG9uc2UuIEJlY2F1c2Ugd2hlbiBndWVzdA0KPiBpcyBzdXNwZW5kaW5nLCBp
+dCBjYWxscyBkZXZpY2Vfc3VzcGVuZCwgYW5kIHRoZW4gY2FsbCBpbnRvIFFlbXUgdG8gY2FsbA0K
+PiB2aXJ0aW9fcmVzZXQtPl9fdmlydGlvX3F1ZXVlX3Jlc2V0LiBJbiBfX3ZpcnRpb19xdWV1ZV9y
+ZXNldCwgaXQgY2xlYXJzDQo+IGFsbCB2aXJ0cXVldWUgaW5mb3JtYXRpb24gb24gUWVtdSBlbmQu
+IFNvLCBhZnRlciBndWVzdCByZXN1bWVzLCBRZW11DQo+IGNhbid0IGdldCBtZXNzYWdlIGZyb20g
+dmlydHF1ZXVlLg0KPiANCj4gU2Vjb25kLCB0aGUgcmVhc29uIHdoeSBkaXNwbGF5IGNhbid0IGNv
+bWUgYmFjayBpcyB0aGF0IHdoZW4gZ3Vlc3QgaXMNCj4gc3VzcGVuZGluZywgaXQgY2FsbHMgaW50
+byBRZW11IHRvIGNhbGwgdmlydGlvX3Jlc2V0LT52aXJ0aW9fZ3B1X2dsX3Jlc2V0Lg0KPiBJbiB2
+aXJ0aW9fZ3B1X2dsX3Jlc2V0LCBpdCBkZXN0cm95cyBhbGwgcmVzb3VyY2VzIGFuZCByZXNldHMg
+cmVuZGVyZXIsDQo+IHdoaWNoIGFyZSB1c2VkIGZvciBkaXNwbGF5LiBTbyBhZnRlciBndWVzdCBy
+ZXN1bWVzLCB0aGUgZGlzcGxheSBjYW4ndA0KPiBjb21lIGJhY2sgdG8gdGhlIHN0YXR1cyB3aGVu
+IGd1ZXN0IGlzIHN1c3BlbmRlZC4NCj4gDQo+IFRoaXMgcGF0Y2ggaW5pdGlhbGl6ZXMgdmlydHF1
+ZXVlIHdoZW4gZ3Vlc3QgaXMgcmVzdW1pbmcgdG8gc29sdmUgZmlyc3QNCj4gcHJvYmxlbS4gQW5k
+IGl0IG5vdGlmaWVzIFFlbXUgdGhhdCBndWVzdCBpcyBzdXNwZW5kaW5nIHRvIHByZXZlbnQgUWVt
+dQ0KPiBkZXN0cm95aW5nIHJlc291cmNlcywgdGhpcyBpcyB0byBzb2x2ZSBzZWNvbmQgcHJvYmxl
+bS4gQW5kIHRoZW4sIEkgY2FuDQo+IGJyaW5nIHRoZSBkaXNwbGF5IGJhY2ssIGFuZCBldmVyeXRo
+aW5nIGNvbnRpbnVlcyB0aGVpciBhY3Rpb25zIGFmdGVyDQo+IGd1ZXN0IHJlc3VtZXMuDQo+IA0K
+PiBNb2RpZmljYXRpb25zIG9uIFFlbXUgZW5kIGlzOg0KPiBodHRwczovL2xvcmUua2VybmVsLm9y
+Zy9xZW11LWRldmVsLzIwMjMwNjA4MDI1NjU1LjE2NzQzNTctMi1KaXFpYW4uQ2hlbkBhbWQuY29t
+Lw0KPiANCj4gSmlxaWFuIENoZW4gKDEpOg0KPiAgIHZpcnRncHU6IGluaXQgdnEgZHVyaW5nIHJl
+c3VtZSBhbmQgbm90aWZ5IHFlbXUgZ3Vlc3Qgc3RhdHVzDQo+IA0KPiAgZHJpdmVycy9ncHUvZHJt
+L3ZpcnRpby92aXJ0Z3B1X2RlYnVnZnMuYyB8ICAxICsNCj4gIGRyaXZlcnMvZ3B1L2RybS92aXJ0
+aW8vdmlydGdwdV9kcnYuYyAgICAgfCAzNyArKysrKysrKysrKysrKysrKysrKysrKysNCj4gIGRy
+aXZlcnMvZ3B1L2RybS92aXJ0aW8vdmlydGdwdV9kcnYuaCAgICAgfCAgNCArKysNCj4gIGRyaXZl
+cnMvZ3B1L2RybS92aXJ0aW8vdmlydGdwdV9rbXMuYyAgICAgfCAzNiArKysrKysrKysrKysrKysr
+Ky0tLS0tLQ0KPiAgZHJpdmVycy9ncHUvZHJtL3ZpcnRpby92aXJ0Z3B1X3ZxLmMgICAgICB8IDE1
+ICsrKysrKysrKysNCj4gIGluY2x1ZGUvdWFwaS9saW51eC92aXJ0aW9fZ3B1LmggICAgICAgICAg
+fCAxNSArKysrKysrKysrDQo+ICA2IGZpbGVzIGNoYW5nZWQsIDk5IGluc2VydGlvbnMoKyksIDkg
+ZGVsZXRpb25zKC0pDQo+IA0KDQotLSANCkJlc3QgcmVnYXJkcywNCkppcWlhbiBDaGVuLg0K
