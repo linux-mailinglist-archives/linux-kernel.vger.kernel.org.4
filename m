@@ -2,184 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 518B2743D5F
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 16:23:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 752C3743D90
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 16:33:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232589AbjF3OXC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 10:23:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36090 "EHLO
+        id S232628AbjF3Odu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Jun 2023 10:33:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232532AbjF3OWz (ORCPT
+        with ESMTP id S232599AbjF3Odp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 10:22:55 -0400
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2046.outbound.protection.outlook.com [40.107.243.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E02030DD;
-        Fri, 30 Jun 2023 07:22:53 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Xw7RF+3OqIswbnckuZXrKEah6WYdQ4lBdwRsjXV9s0ji60DhIitsE7XQ8+6krwMMmCPoh5AyRFUfufbK4/v6yGjauu1x4pGRk95OJW7gBnoFOU4KemvM4qD9OLHxjC0Dl3PMUmgXmdaWsgkORkZdelUZGOK/PgvOLliNCL40Ibej8dtVE0E3hFOASOBu6uuQvUs0EdgB4DBIl8/8roBcecEPN8CdjsvRM2sRszbHmRh2tzE8mpiSCKi7RJYMssE95kIW2dVKHDDj1pIaBf47i3+mxJci1BLphIqDm6TpBb1BZ3yfuMWs7C2XABthivpifQFjL7D3ZjOPWmSdZnbTMw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=1lSxVmcXp5yVNt1hwgwl8dHwzeEFZyc4m/AacEM1+vY=;
- b=ZWXB26rqPafYavJ2FXZiOmEii2fpRAdf68Y/NsWeIgU3zDy4qdwjxwk1QvCgOAseyNpEL8H/Y/We3bwlPLaqtVpGGHKeLb+6Z2hdy3v+C9CocHPPXrhePmj6tld+O1pOXJ7K6DsrRr90r0h9N6LTL+cAVDPeB/FYpGAFEZ/iu62uuHYtlAMMCPDzhtuXDXtMiHly7KH7u6TAvRZ9aprbNgBXlBgw7TNwNGDzJ0S7TLYDRt0h1xYLuLcaTPY2hwJsrVYNF7RT7+zxNqpjb+uDN04NKswWdMJ6LMgDPMj/1kH7wEy3WmTLQTQcMkZXH0cN3eFPrGKRRtMuF0u7UTIKig==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=linaro.org smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=1lSxVmcXp5yVNt1hwgwl8dHwzeEFZyc4m/AacEM1+vY=;
- b=NtcAQ1uzyeP6CeDCg0u8XStr1Rk5vmkp2SAlbkMTAnfe5xiRbx3+9c3NWrkr4yP6hMRO9XZ70JIMzUY6Mr1dNjLqei0cKDePiAQV1hJshFlzSCeaYK1ldXNI6QoDveUivQraK9EqByVAtsi0kmCvYEmZ+hrMJ2i0aKqIWDiZRy4=
-Received: from SJ0PR05CA0019.namprd05.prod.outlook.com (2603:10b6:a03:33b::24)
- by BL0PR12MB4882.namprd12.prod.outlook.com (2603:10b6:208:1c3::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6544.19; Fri, 30 Jun
- 2023 14:22:51 +0000
-Received: from DM6NAM11FT107.eop-nam11.prod.protection.outlook.com
- (2603:10b6:a03:33b:cafe::78) by SJ0PR05CA0019.outlook.office365.com
- (2603:10b6:a03:33b::24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6565.12 via Frontend
- Transport; Fri, 30 Jun 2023 14:22:50 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB03.amd.com; pr=C
-Received: from SATLEXMB03.amd.com (165.204.84.17) by
- DM6NAM11FT107.mail.protection.outlook.com (10.13.172.142) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6521.43 via Frontend Transport; Fri, 30 Jun 2023 14:22:50 +0000
-Received: from SATLEXMB07.amd.com (10.181.41.45) by SATLEXMB03.amd.com
- (10.181.40.144) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Fri, 30 Jun
- 2023 09:22:49 -0500
-Received: from SATLEXMB03.amd.com (10.181.40.144) by SATLEXMB07.amd.com
- (10.181.41.45) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.6; Fri, 30 Jun
- 2023 07:22:48 -0700
-Received: from xhdakumarma40u.xilinx.com (10.180.168.240) by
- SATLEXMB03.amd.com (10.181.40.144) with Microsoft SMTP Server id 15.1.2507.23
- via Frontend Transport; Fri, 30 Jun 2023 09:22:44 -0500
-From:   Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>
-To:     <tudor.ambarus@linaro.org>, <pratyush@kernel.org>,
-        <miquel.raynal@bootlin.com>, <richard@nod.at>, <vigneshr@ti.com>,
-        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <conor+dt@kernel.org>
-CC:     <git@amd.com>, <michael@walle.cc>, <linux-mtd@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <amitrkcian2002@gmail.com>,
-        Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>
-Subject: [PATCH v4 2/2] mtd: spi-nor: Avoid setting SRWD bit in SR if WP# signal not connected
-Date:   Fri, 30 Jun 2023 19:52:33 +0530
-Message-ID: <20230630142233.63585-3-amit.kumar-mahapatra@amd.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20230630142233.63585-1-amit.kumar-mahapatra@amd.com>
-References: <20230630142233.63585-1-amit.kumar-mahapatra@amd.com>
+        Fri, 30 Jun 2023 10:33:45 -0400
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FD0C10D7
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 07:33:43 -0700 (PDT)
+Received: by mail-wr1-x433.google.com with SMTP id ffacd0b85a97d-313f18f5295so2289155f8f.3
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 07:33:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=metaspace-dk.20221208.gappssmtp.com; s=20221208; t=1688135621; x=1690727621;
+        h=content-transfer-encoding:mime-version:message-id:in-reply-to:date
+         :subject:cc:to:from:user-agent:references:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=jsEa83LElgV+AQL5e6o9aSSV0H6S/EdnOsnoqxBROhA=;
+        b=H+Os4B7hYlGqCKP3ZBTL1CfbmQZAnDdA1Ma95DpqUEcPbitEtWpwDZroRvTY/Yd+Qj
+         55yAJTSAzluveA0lcf4cot1uAHJTD5IxVpP3U33+/25vUo2yQRW28xqYUacd7JpKTaQh
+         0VxMG0rwaI0ypKW1awW+rOqc8asLoLz7ciVrdelUHf6oWeLftc1sAUrqENr429lDxrzf
+         FfsT0Dj5SON37+8P+ZGLYBM6o+r9QWBX7Y3/1j5+d5tP1FCetdVBNlx+x/+BbPCyx84n
+         ZquXktVmxqaGYy6LVAUF+PgYVyVwYTx+dhsV6xlnBXXBCPycrfu4P2TfQWio0GPm0uTR
+         DKZA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688135621; x=1690727621;
+        h=content-transfer-encoding:mime-version:message-id:in-reply-to:date
+         :subject:cc:to:from:user-agent:references:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=jsEa83LElgV+AQL5e6o9aSSV0H6S/EdnOsnoqxBROhA=;
+        b=PmFb8/B1DjtlQLBd/YIlIqPLVHycC/ODB1sEQajyjyr+8mVx+z0IdqCSQr7zYpPVJQ
+         qtcGd7sRKswc4ZZvE4w7fZYEcIAjtydeVpWcgvdga0hPxxhQ7b2j7tm6hZtAJpWMvbp2
+         fyAKX/nC4vB3VX5kcynNeOk5l3t4lEcovjnr/wB7rLSxVZJ65M9ttD2Oi42LO9fll00b
+         z8RQH4SGsmFuXgk7nnumb04V5AlRqsvh7FMEt9pQBSR5Ye2XNXAOOqqpBx9vYpNyJLu+
+         gu1205oDBXMsUaivcw8f2SffaL8bq8HFUw/Dj026o55HtOwrkmUciBfCLTJhdR7MGSs2
+         kSOg==
+X-Gm-Message-State: ABy/qLYn5LJVkl2v1sJS6pJcBlmv4RMbIY9U8TAm3ZavJRpqUSOgm5++
+        7T1sgzzzvO1r3ghVWU2fqwE4iA==
+X-Google-Smtp-Source: APBJJlEARPMz2iDUCKng8lbKud0V7d0IOK5so+Rb4Rp4FIFyLs2G3PYHzo7Q0PG2iYHKhBDbiuYT0A==
+X-Received: by 2002:a05:6000:1cb:b0:314:13a6:af20 with SMTP id t11-20020a05600001cb00b0031413a6af20mr2161017wrx.31.1688135621090;
+        Fri, 30 Jun 2023 07:33:41 -0700 (PDT)
+Received: from localhost ([165.225.194.214])
+        by smtp.gmail.com with ESMTPSA id g6-20020a5d6986000000b0031130b9b173sm18354949wru.34.2023.06.30.07.33.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 30 Jun 2023 07:33:40 -0700 (PDT)
+References: <20230628190649.11233-1-nmi@metaspace.dk>
+ <5F597343-EC91-4698-ACBE-9111B52FC3FC@wdc.com>
+ <b29f01c287c7469f47fb4b689a3cba68@opensource.wdc.com>
+User-agent: mu4e 1.10.4; emacs 28.2.50
+From:   "Andreas Hindborg (Samsung)" <nmi@metaspace.dk>
+To:     aravind.ramesh@opensource.wdc.com
+Cc:     Hans Holmberg <Hans.Holmberg@wdc.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        "open list:BLOCK LAYER" <linux-block@vger.kernel.org>,
+        hch@infradead.org,
+        Matias =?utf-8?Q?Bj=C3=B8rling?= <Matias.Bjorling@wdc.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        Damien Le Moal <dlemoal@kernel.org>, gost.dev@samsung.com,
+        Minwoo Im <minwoo.im.dev@gmail.com>,
+        Ming Lei <ming.lei@redhat.com>
+Subject: Re: [PATCH v4 0/4] ublk: add zoned storage support
+Date:   Fri, 30 Jun 2023 16:26:28 +0200
+In-reply-to: <b29f01c287c7469f47fb4b689a3cba68@opensource.wdc.com>
+Message-ID: <87edltdnp8.fsf@metaspace.dk>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6NAM11FT107:EE_|BL0PR12MB4882:EE_
-X-MS-Office365-Filtering-Correlation-Id: 928c7ed1-dc43-4f9c-b297-08db79757c13
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 2tzryPe7UsOplof1QoYs9gSppk6sNNN1943dk0HuXhIDJ+5VAaGTZ+UbukuhXKt1FXi5iChMpxK+dhQc+Clx4RKIJ3JAkqP+HtqkU8Fv+bVARdnZR9uHixU/LDGF+g69HB+cs84mRziRxnU3xXNz5S688mygknmyrWIzWBvX+J10dkJzTxaObsMMlcj5bDLJl9cVffZ4BmkhSB9eP4/nBjPPjhmeGgIKYdCeJsSvoMyS2p9pXH6w9bDQRkNJx9lS7OVn0+jq9sd56rI05mp4Toi+8qQAEB6vtB07MCjlIqT+yCJzJsAdUfSmm0CvDQMdT8GdZQJvnd6TtQu8nQyteDt+7wzQm0CeLzpd5MxbPmKZRAtjN/aVdlxwepUiK6iBBbX0gx+qMQ0dIuf9ZgAc8Ubdm3SgoqOQXyDpjC83pLJH3YsR85jVHKd82YgE4dnQoOqTBS6QJP6dH9k6uRvsLRmHXFn/vtRRlJahJ87IvmDYZvZ0UJGeO1ZCYNOnyRlw5lRRShT6vld0Xiy9vS99fKr2CJCHOhR2tqVdC7td5T444MQ0ytZqoAlRvadFnmzhSY1nQdNCSqJE71r4JKLYW5VOYDfyWKn01xFlEJnI8J7Lgnj8g6EZd5+k1cdIwLOKo2N35QNeeze3eBY4BAen/6wZzy+lbZv2b6BLzgGIpLrjTsZWBPXxcpYrx1SLhF8CMhSkgNbwp0oy/GgIhUo09dyahLHBrq26HUNz25U6vef3gbZrmN0hCVZGkNHy/eI9Be9S0YieZURR+QVlRdNYUQ==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB03.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(396003)(346002)(136003)(39860400002)(376002)(451199021)(36840700001)(46966006)(40470700004)(40460700003)(4326008)(316002)(70586007)(6666004)(478600001)(110136005)(70206006)(54906003)(36756003)(86362001)(47076005)(426003)(83380400001)(186003)(26005)(2616005)(336012)(36860700001)(82310400005)(1076003)(2906002)(5660300002)(7416002)(41300700001)(8676002)(8936002)(40480700001)(356005)(81166007)(82740400003)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Jun 2023 14:22:50.2076
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 928c7ed1-dc43-4f9c-b297-08db79757c13
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB03.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT107.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL0PR12MB4882
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Setting the status register write disable (SRWD) bit in the status
-register (SR) with WP# signal of the flash left floating or wrongly tied to
-GND (that includes internal pull-downs), will configure the SR permanently
-as read-only. If WP# signal is left floating or wrongly tied to GND, avoid
-setting SRWD bit while writing the SR during flash protection.
 
-Signed-off-by: Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>
----
- drivers/mtd/spi-nor/core.c    | 3 +++
- drivers/mtd/spi-nor/core.h    | 1 +
- drivers/mtd/spi-nor/debugfs.c | 1 +
- drivers/mtd/spi-nor/swp.c     | 9 +++++++--
- 4 files changed, 12 insertions(+), 2 deletions(-)
+aravind.ramesh@opensource.wdc.com writes:
 
-diff --git a/drivers/mtd/spi-nor/core.c b/drivers/mtd/spi-nor/core.c
-index 0bb0ad14a2fc..520f5ab86d2b 100644
---- a/drivers/mtd/spi-nor/core.c
-+++ b/drivers/mtd/spi-nor/core.c
-@@ -2864,6 +2864,9 @@ static void spi_nor_init_flags(struct spi_nor *nor)
- 	if (flags & NO_CHIP_ERASE)
- 		nor->flags |= SNOR_F_NO_OP_CHIP_ERASE;
- 
-+	if (of_property_read_bool(np, "no-wp"))
-+		nor->flags |= SNOR_F_NO_WP;
-+
- 	if (flags & SPI_NOR_RWW && nor->info->n_banks > 1 &&
- 	    !nor->controller_ops)
- 		nor->flags |= SNOR_F_RWW;
-diff --git a/drivers/mtd/spi-nor/core.h b/drivers/mtd/spi-nor/core.h
-index 4fb5ff09c63a..55b5e7abce6e 100644
---- a/drivers/mtd/spi-nor/core.h
-+++ b/drivers/mtd/spi-nor/core.h
-@@ -132,6 +132,7 @@ enum spi_nor_option_flags {
- 	SNOR_F_SWP_IS_VOLATILE	= BIT(13),
- 	SNOR_F_RWW		= BIT(14),
- 	SNOR_F_ECC		= BIT(15),
-+	SNOR_F_NO_WP		= BIT(16),
- };
- 
- struct spi_nor_read_command {
-diff --git a/drivers/mtd/spi-nor/debugfs.c b/drivers/mtd/spi-nor/debugfs.c
-index e11536fffe0f..6e163cb5b478 100644
---- a/drivers/mtd/spi-nor/debugfs.c
-+++ b/drivers/mtd/spi-nor/debugfs.c
-@@ -27,6 +27,7 @@ static const char *const snor_f_names[] = {
- 	SNOR_F_NAME(SWP_IS_VOLATILE),
- 	SNOR_F_NAME(RWW),
- 	SNOR_F_NAME(ECC),
-+	SNOR_F_NAME(NO_WP),
- };
- #undef SNOR_F_NAME
- 
-diff --git a/drivers/mtd/spi-nor/swp.c b/drivers/mtd/spi-nor/swp.c
-index 0ba716e84377..5ab9d5324860 100644
---- a/drivers/mtd/spi-nor/swp.c
-+++ b/drivers/mtd/spi-nor/swp.c
-@@ -214,8 +214,13 @@ static int spi_nor_sr_lock(struct spi_nor *nor, loff_t ofs, uint64_t len)
- 
- 	status_new = (status_old & ~mask & ~tb_mask) | val;
- 
--	/* Disallow further writes if WP pin is asserted */
--	status_new |= SR_SRWD;
-+	/*
-+	 * Disallow further writes if WP# pin is neither left floating nor
-+	 * wrongly tied to GND (that includes internal pull-downs).
-+	 * WP# pin hard strapped to GND can be a valid use case.
-+	 */
-+	if (!(nor->flags & SNOR_F_NO_WP))
-+		status_new |= SR_SRWD;
- 
- 	if (!use_top)
- 		status_new |= tb_mask;
--- 
-2.17.1
+>> =EF=BB=BFOn 29/06/23, 12:37 AM, "Andreas Hindborg" <nmi@metaspace.dk
+>> <mailto:nmi@metaspace.dk>> wrote:
+>> From: Andreas Hindborg <a.hindborg@samsung.com
+>> <mailto:a.hindborg@samsung.com>>
+>> Hi All,
+>> This patch set adds zoned storage support to `ublk`. The first two patch=
+es
+>> does
+>> some house cleaning in preparation for the last two patches. The third p=
+atch
+>> adds support for report_zones and the following operations:
+>>=20
+>
+> Just to clarify, we do need you ublk user space patches
+> to create a ublk device node (with these patches in kernel), right ?
+
+I provide an example implementation. I put a link in the cover letter,
+but I think the sentence referring to the link got lost, thanks for
+pointing out.
+
+https://github.com/metaspace/ubdsrv/commit/7de0d901c329fde7dc5a2e998952dd88=
+bf5e668b
+
+This implementation is based on Ming's ubdsrv code. You do not need to
+use this one, you can write your own. I am also working on an
+implementation in Rust, but that is still very early. I think Ming is
+also writing a Rust library for user space ublk devices.
+
+But currently my patched ubdsrv is the only user space implementation
+supporting zoned ublk devices (with the loop and null targets).
+
+>
+>> - REQ_OP_ZONE_OPEN
+>> - REQ_OP_ZONE_CLOSE
+>> - REQ_OP_ZONE_FINISH
+>> - REQ_OP_ZONE_RES
+>
+> REQ_OP_ZONE_RESET
+
+Thanks!
+
+>
+>> The last patch adds support for REQ_OP_ZONE_APPEND.
+>> v3 [2] -> v4 changes:
+>> - Split up v3 patches
+>> - Add zone append support
+>> - Change order of variables in `ublk_report_zones`
+>> Read/write and zone operations are tested with zenfs [3].
+>> The zone append path is tested with fio -> zonefs -> ublk -> null_blk.
+>> The implementation of zone append requires ublk user copy feature, and
+>> therefore
+>> the series is based on branch for-next (6afa337a3789) of [4].
+>> [1]
+>> https://github.com/metaspace/ubdsrv/commit/7de0d901c329fde7dc5a2e998952d=
+d88bf5e668b
+>> <https://github.com/metaspace/ubdsrv/commit/7de0d901c329fde7dc5a2e998952=
+dd88bf5e668b>
+>> [2]
+>> https://lore.kernel.org/linux-block/20230316145539.300523-1-nmi@metaspac=
+e.dk
+>> <mailto:20230316145539.300523-1-nmi@metaspace.dk>/
+>> [3] https://github.com/westerndigitalcorporation/zenfs
+>> <https://github.com/westerndigitalcorporation/zenfs>
+>> [4] https://git.kernel.dk/linux.git <https://git.kernel.dk/linux.git>
+>> Andreas Hindborg (4):
+>> ublk: change ublk IO command defines to enum
+>> ublk: move types to shared header file
+>> ublk: enable zoned storage support
+>> ublk: add zone append
+>> MAINTAINERS | 2 +
+>> drivers/block/Kconfig | 4 +
+>> drivers/block/Makefile | 4 +-
+>> drivers/block/ublk_drv-zoned.c | 155 +++++++++++++++++++++++++++++++++
+>> drivers/block/ublk_drv.c | 150 +++++++++++++++++++------------
+>> drivers/block/ublk_drv.h | 71 +++++++++++++++
+>> include/uapi/linux/ublk_cmd.h | 38 ++++++--
+>> 7 files changed, 363 insertions(+), 61 deletions(-)
+>> create mode 100644 drivers/block/ublk_drv-zoned.c
+>> create mode 100644 drivers/block/ublk_drv.h
+>> base-commit: 3261ea42710e9665c9151006049411bd23b5411f
+>
+> Regards,
+> Aravind
 
