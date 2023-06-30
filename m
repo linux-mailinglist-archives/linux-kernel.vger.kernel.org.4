@@ -2,69 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27C9A74437A
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 22:52:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B40274437C
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 22:52:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232661AbjF3Uw0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 16:52:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55258 "EHLO
+        id S232503AbjF3Uwi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Jun 2023 16:52:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231778AbjF3UwZ (ORCPT
+        with ESMTP id S232666AbjF3Uwg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 16:52:25 -0400
-Received: from mail.antaris-organics.com (mail.antaris-organics.com [91.227.220.155])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7879E3C1B;
-        Fri, 30 Jun 2023 13:52:23 -0700 (PDT)
-Date:   Fri, 30 Jun 2023 22:52:21 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mareichelt.com;
-        s=202107; t=1688158341;
-        bh=CRYQ8jJX4afV6a3ICLwULhdORCkEQt/MUm0udDV6hp0=;
-        h=Date:From:To:Subject:Message-ID:References:MIME-Version:
-         Content-Type:In-Reply-To:Cc:Cc:content-type:content-type:date:date:
-         From:from:in-reply-to:in-reply-to:message-id:mime-version:
-         references:reply-to:Sender:Subject:Subject:To:To;
-        b=P/VossInODRdPAhkcUZDpLTs6xvulmNz9gPVcnhfRBv5tJiqFFWL8uvthhDXhnmG5
-         dzqHnT0nJBfQaEsnB4WYw3zHYK5rpVRYdk1/ZZnF+Pznk/I+aaRmTnqsrNPfiqlJ1N
-         KqILCcLAGevZGApACgDcBhfgEw7Ho7/L7r6ndIuBroFhvYgUQt3x5BtVVIUVJUISTI
-         d7nL7cIyT4Z5PZ/JYzuyr/Prn3sqxP50bvH6QNbRiQHiXKq6W7mYivOjIm3RbLWdzs
-         f+IO5qCjBVR2e7G8oMMTF/6CKkamDs1aoUMsr2Tzz57JMMJIwJezSqe4MgOz47mejq
-         q0YvKFPiPbOaw==
-From:   Markus Reichelt <lkt+2023@mareichelt.com>
-To:     stable@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 6.1 00/33] 6.1.37-rc3 review
-Message-ID: <20230630205221.GA7306@pc21.mareichelt.com>
-Mail-Followup-To: stable@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230630072124.944461414@linuxfoundation.org>
+        Fri, 30 Jun 2023 16:52:36 -0400
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BC6E3C2D;
+        Fri, 30 Jun 2023 13:52:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
+        bh=BEH1BowktuuStjJyeH3e8YBBtNZC3SC1+Libjz6/Dj8=; b=lW574RdS0doFq42rK/UIqsZuRL
+        WnNSsLX/ZVMsZR0EKjfqfSCl2t5qiZhecH2/EYVCOjhYmRV5kQf/HAsAWQdl+zUyfZ9BcnaYwfc9C
+        a4qRCp6E4tXR7Lbf1Ho4+PPcjhKOABHUXIfm00XXYNYdXtF/utqBBIKsRn+3XJ1br8jDTtjodV2bn
+        jGQatFCT9w6sAUZ4UISN1Y9AJ3RZao9xc+1e0pcpc18ePEWgOtCZRYZvw+jsUxUTalrJ42Y3W2Dtz
+        EMcELk9+K75r84r+tLvOgeB7VjiPt1xc58k8PBVGHTnLa7IvPLwZAxKZajq+ljWyP7buvDZfKUSBW
+        8e6ZbcMg==;
+Received: from sslproxy06.your-server.de ([78.46.172.3])
+        by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1qFL6P-000Gji-5a; Fri, 30 Jun 2023 22:52:25 +0200
+Received: from [85.1.206.226] (helo=linux.home)
+        by sslproxy06.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1qFL6O-000FsX-QE; Fri, 30 Jun 2023 22:52:24 +0200
+Subject: Re: [PATCH v2] btf: warn but return no error for NULL btf from
+ __register_btf_kfunc_id_set()
+To:     SeongJae Park <sj@kernel.org>
+Cc:     martin.lau@linux.dev, Alexander.Egorenkov@ibm.com, ast@kernel.org,
+        memxor@gmail.com, olsajiri@gmail.com, bpf@vger.kernel.org,
+        stable@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jiri Olsa <jolsa@kernel.org>
+References: <20230630194859.100332-1-sj@kernel.org>
+From:   Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <75483b53-bd8e-692e-ed18-a4c87cf20a1b@iogearbox.net>
+Date:   Fri, 30 Jun 2023 22:52:24 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230630072124.944461414@linuxfoundation.org>
-Organization: still stuck in reorganization mode
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20230630194859.100332-1-sj@kernel.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.103.8/26955/Fri Jun 30 09:29:09 2023)
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-* Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
-
-> This is the start of the stable review cycle for the 6.1.37 release.
-> There are 33 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On 6/30/23 9:48 PM, SeongJae Park wrote:
+> On Fri, 30 Jun 2023 16:53:38 +0200 Daniel Borkmann <daniel@iogearbox.net> wrote:
+>> On 6/28/23 6:46 PM, SeongJae Park wrote:
+>>> __register_btf_kfunc_id_set() assumes .BTF to be part of the module's
+>>> .ko file if CONFIG_DEBUG_INFO_BTF is enabled.  If that's not the case,
+>>> the function prints an error message and return an error.  As a result,
+>>> such modules cannot be loaded.
+>>>
+>>> However, the section could be stripped out during a build process.  It
+>>> would be better to let the modules loaded, because their basic
+>>> functionalities have no problem[1], though the BTF functionalities will
+>>> not be supported.  Make the function to lower the level of the message
+>>> from error to warn, and return no error.
+>>>
+>>> [1] https://lore.kernel.org/bpf/20220219082037.ow2kbq5brktf4f2u@apollo.legion/
+>>>
+>>> Reported-by: Alexander Egorenkov <Alexander.Egorenkov@ibm.com>
+>>> Link: https://lore.kernel.org/bpf/87y228q66f.fsf@oc8242746057.ibm.com/
+>>> Suggested-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+>>> Link: https://lore.kernel.org/bpf/20220219082037.ow2kbq5brktf4f2u@apollo.legion/
+>>> Fixes: c446fdacb10d ("bpf: fix register_btf_kfunc_id_set for !CONFIG_DEBUG_INFO_BTF")
+>>> Cc: <stable@vger.kernel.org> # 5.18.x
+>>> Signed-off-by: SeongJae Park <sj@kernel.org>
+>>> Acked-by: Jiri Olsa <jolsa@kernel.org>
+>>
+>> I presume this one is targeted at bpf (rather than bpf-next) tree, right?
 > 
-> Responses should be made by Sun, 02 Jul 2023 07:21:12 +0000.
-> Anything received after that time might be too late.
+> You're correct.  It's not urgent for us, but I would prefer it to be merged
+> into all affected kernels as early as possible.
 
-Hi Greg
+Ok, sounds good, bpf tree it is then.
 
-6.1.37-rc3
+>>> diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+>>> index 6b682b8e4b50..d683f034996f 100644
+>>> --- a/kernel/bpf/btf.c
+>>> +++ b/kernel/bpf/btf.c
+>>> @@ -7848,14 +7848,10 @@ static int __register_btf_kfunc_id_set(enum btf_kfunc_hook hook,
+>>>    
+>>>    	btf = btf_get_module_btf(kset->owner);
+>>>    	if (!btf) {
+>>> -		if (!kset->owner && IS_ENABLED(CONFIG_DEBUG_INFO_BTF)) {
+>>> -			pr_err("missing vmlinux BTF, cannot register kfuncs\n");
+>>> -			return -ENOENT;
+>>> -		}
+>>
+>> Why the above one needs to be changed? Do you also run into this case? vmlinux BTF
+>> should be built-in in this case. I understand it's rather the one below for BTF +
+>> modules instead, no?
+> 
+> Again, you're correct.  This change is not really needed.  I was interpreting
+> Kumar's suggestion merely into code without thinking about his real meaning,
+> sorry.  I will restore this in the next spin.
 
-compiles, boots and runs here on x86_64
-(AMD Ryzen 5 PRO 4650G, Slackware64-15.0)
+Perfect, I think after your v3 respin it should be good to land.
 
-Tested-by: Markus Reichelt <lkt+2023@mareichelt.com>
+Thanks,
+Daniel
