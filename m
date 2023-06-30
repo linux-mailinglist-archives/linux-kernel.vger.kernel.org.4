@@ -2,133 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D66717444E6
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Jul 2023 00:33:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D2817444EA
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Jul 2023 00:35:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232568AbjF3Wdx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 18:33:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57658 "EHLO
+        id S231361AbjF3Wfg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Jun 2023 18:35:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232663AbjF3Wdr (ORCPT
+        with ESMTP id S229485AbjF3Wfe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 18:33:47 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E93633C24
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 15:33:46 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id 98e67ed59e1d1-262ff3a4659so1622769a91.0
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 15:33:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1688164426; x=1690756426;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=hxfCoOso1eZfolB7gUqXEtVsJqGJE4ixGbTkHqSu72o=;
-        b=C8Lei+oKaIkEOJW4Zxcm3YA1B+r3cUE9UbUJ6YJL+vcSf0La47MCNSSaQUSbG1CF8r
-         GGaSfn2RB4Lo2InoqkZf0t7WYWI0gi+X/Yw5OwQZsrXfdok9x6Ymci1S9s6xrmjdxqHN
-         K2mIvnQ2vFbpfX7lJ/oXkMv10xlgRjzeociy0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688164426; x=1690756426;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=hxfCoOso1eZfolB7gUqXEtVsJqGJE4ixGbTkHqSu72o=;
-        b=gAXMsZSXdNyB/iwcZfp+MIgoITSQ4vZFC/8eSHX9pjZvq1P4i46QFGEPwZ9jejBrEy
-         llqgHXYictqYChJDMuhMWu51NZ/crEEV0OS44lyA7RNYD3Ij27E5xCmx2DAM1or1UjVa
-         b+czV285cQfYegDWPek+K575D/rx3IIC/62v22kUg/1o5F50inf9HXf9L+FdE3KEl8pZ
-         gHDKAw8de6QcwvuBfRTOah9zmV8rP2A9r4C6Z891fySu+P+Zcq1bEo7kInXa2Kw7WvS9
-         gfp2cOY0PYXTR3v87SyP55Wg1bmHym80vPhm9icFII4S6BQE1lkO+U21mt8d6BkXdIoQ
-         xClw==
-X-Gm-Message-State: ABy/qLYb59R5otFZGEGoU7J7m5qKjqIPGZby3YokVQRqHg5d90bd73Db
-        FpmRsfEbABaUKMqzlEQeNfwQ8owFz9kSduXTuH/Eng==
-X-Google-Smtp-Source: APBJJlE/uNVnU1FE/z80KZnmJw9NpYEV3u7Ktt1iGRliZNqrRICWS8P/gtjk8dGriLHNDB8sz4GlHA==
-X-Received: by 2002:a17:90a:c684:b0:25b:d8fe:2c92 with SMTP id n4-20020a17090ac68400b0025bd8fe2c92mr3130810pjt.48.1688164426450;
-        Fri, 30 Jun 2023 15:33:46 -0700 (PDT)
-Received: from tictac2.mtv.corp.google.com ([2620:15c:9d:2:e9c4:8375:7234:e6c2])
-        by smtp.gmail.com with ESMTPSA id em23-20020a17090b015700b0026356c056cbsm3105864pjb.34.2023.06.30.15.33.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 30 Jun 2023 15:33:45 -0700 (PDT)
-From:   Douglas Anderson <dianders@chromium.org>
-To:     Marcel Holtmann <marcel@holtmann.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>
-Cc:     Stephen Boyd <swboyd@chromium.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v3 2/2] Bluetooth: hci_sync: Don't double print name in add/remove adv_monitor
-Date:   Fri, 30 Jun 2023 15:33:15 -0700
-Message-ID: <20230630153315.v3.2.I8b6365c6a13afc74d7a91324dad73601a42038c9@changeid>
-X-Mailer: git-send-email 2.41.0.255.g8b1d071c50-goog
-In-Reply-To: <20230630153315.v3.1.I3b7c8905728f3124576361ca35ed28e37f12f5d1@changeid>
-References: <20230630153315.v3.1.I3b7c8905728f3124576361ca35ed28e37f12f5d1@changeid>
+        Fri, 30 Jun 2023 18:35:34 -0400
+Received: from EUR03-AM7-obe.outbound.protection.outlook.com (mail-am7eur03on2131.outbound.protection.outlook.com [40.107.105.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1175F3C01;
+        Fri, 30 Jun 2023 15:35:33 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=BZoRw0qpqZLfkfcxNx6DJ3hW8VZKEOxH4prAQ8RjSK/Pv4vvZSkQGiVJJod44cekgvoaSujYpRqdVe6tLVwcXkScCsO7Jw5ssqQVmW/TL5kbziRRwk+Oi54St3G+2XGv2X45OyXGHAKnKujb/itheAQcZXZZrHU5/ZSZTi7dfGNJ88BRxjJDvcf6WdjQOOAi44N8rj4yLKcRdzue0mgc/ggdGYK8t449UtSgJuD79JZ5bEMS/9S2DAMSlxvyoenTHnbYNh6Y8FElPFQwnW/zwyyD7/SyZ7/ShGlr+GzAPKNQSXGdY3u8+rsVcd6l/pv4Bt5c8CthXHK8HUvdiFQBbg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=hKAVY2BJw0Z3yET/eE2eSiJDvutEBXQjAhgEVZxMlPY=;
+ b=hCbLTQd82HjQ5y0gn/5/eYUSFC9gFpiybGxsNEtydCS1jqkOBFsNJ9twH1wZD5D6RH//ZVjhBVvIO7bmEbXN7qGJ1ds256vqGuWucsA4x1Pqkht3yiewEqYoPxJeqCd97zdBrSXV2+OxTEwNQ9TAsSUUDcJBjbsVDYGvPn4fPA+0ymVQHwLseHVxdUhEjcKFPvva75zYCYqRDQ3eQWRFdP89j5mzx4JkaT3Eyia6NTftgNDwEi8xga7YkROjJkhTOJtRIZQA/Wqm25GkIZtrvAecMJv9DbLkJZD9TGsDm7ifKcauk++egDhEdJAHOhpnZ+8S/WVB+13Lb7yspTZPSA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=cvut.cz; dmarc=pass action=none header.from=cvut.cz; dkim=pass
+ header.d=cvut.cz; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cvut.cz; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=hKAVY2BJw0Z3yET/eE2eSiJDvutEBXQjAhgEVZxMlPY=;
+ b=Wk9N/RFdZrIWDB3Ga7cy7ckS/HhuHQpXF9wH5ZOpJ96TDVDjJqbBlO/xxX9Ma7I8+8kO1tRsGgoP4Xh+m9Y0d5wEdQpQOqPtBP/NK3H63zKsl8RnQve62Oq7xo+i4nlUTbNB+qgoI+x2ugBopycGyyRMwjvKp4FYhOgrMt3WJg+UlNgTnIgxIbg8m99bHEvRboqWHFqB05ewYb0i4wIDqvzChMNk4kTNjxLbg04ZZ3Nlnx0XMvzW0bs5ySnDwLiDzA51MvSsUE7k1LzSkvd+rLAUztTMNRkNwU44bSLOBjJAGpw43cj4CzE7HHEvT7Y3Rlrzi2PYWv3+bu/IRv2RNQ==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=cvut.cz;
+Received: from AM6PR0602MB3749.eurprd06.prod.outlook.com
+ (2603:10a6:209:1e::32) by AM9PR06MB8019.eurprd06.prod.outlook.com
+ (2603:10a6:20b:3a5::21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6544.19; Fri, 30 Jun
+ 2023 22:35:25 +0000
+Received: from AM6PR0602MB3749.eurprd06.prod.outlook.com
+ ([fe80::ae5:23c0:ec83:bedf]) by AM6PR0602MB3749.eurprd06.prod.outlook.com
+ ([fe80::ae5:23c0:ec83:bedf%6]) with mapi id 15.20.6544.019; Fri, 30 Jun 2023
+ 22:35:21 +0000
+From:   Michal Sojka <michal.sojka@cvut.cz>
+To:     Maxime Jayat <maxime.jayat@mobile-devices.fr>,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        "Dae R. Jeong" <threeearcat@gmail.com>,
+        Hillf Danton <hdanton@sina.com>
+Subject: Re: can: isotp: epoll breaks isotp_sendmsg
+In-Reply-To: <11328958-453f-447f-9af8-3b5824dfb041@munic.io>
+References: <11328958-453f-447f-9af8-3b5824dfb041@munic.io>
+Date:   Sat, 01 Jul 2023 00:35:18 +0200
+Message-ID: <87cz1czihl.fsf@steelpick.2x.cz>
+Content-Type: text/plain
+X-ClientProxiedBy: VI1PR0102CA0032.eurprd01.prod.exchangelabs.com
+ (2603:10a6:802::45) To AM6PR0602MB3749.eurprd06.prod.outlook.com
+ (2603:10a6:209:1e::32)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: AM6PR0602MB3749:EE_|AM9PR06MB8019:EE_
+X-MS-Office365-Filtering-Correlation-Id: 5144e4f1-8102-4848-11fb-08db79ba4985
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: ih11j8Rkw/kW4ulFkZJHwkYwetP+R1BFwzhwBmaBFudYWpYPa8bGRqp5ydJP9COFGjBd0RDFQpyb9wXhRPu2YqeqpsTvf2oNlRwZkOYUiJqLwURArY53ISZ1L1ckcN4CRYjtt9Ykj5FV24M2piTp86Nj9zEF/GKg0HzGmqGH2et65jxQHlTR4TmxFpxvYZBepwcegSXag/+iqbNzes1NVrmj7Z1gsRBRsBS2mzKweCjP2jRjHHZbDx8oXY2iGT/ruuxTyT02UH3zRCZTuyXINbviHbDkdwYPX0XzizQIGm4U6MImp8vmYEalv3fxzEQxqk0j+KLfaJmu33+xIIgecCYnieRwQDdjFv9TvvnHEgNgYrewt1bVH0FJCpnFgtRcs1GJ8e4bgZL1/SOvvQq7rsOTr2qBm14A8eikgokdO3k1VUdpfEXg0dFENXJc3e5bcqydOSXpM2BK8xmi5jwYSLa0Kz6V+lfLL+sKuDpAZz+0zvO/FTFyfVAGhUYdLNM3HlD29I+n/L9tgJi/JTca5r2VynlR1pBtQc0jItiNklnFAuzDuzCVyIl0Do6VlsC/
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR0602MB3749.eurprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(396003)(376002)(366004)(39850400004)(346002)(451199021)(54906003)(110136005)(4326008)(8676002)(8936002)(5660300002)(478600001)(6486002)(66946007)(6666004)(66476007)(66556008)(786003)(316002)(41300700001)(6512007)(38100700002)(186003)(6506007)(26005)(44832011)(9686003)(86362001)(83380400001)(2906002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?vOzU4929Dp+ioscsozFG8zmjcYIthIS5C3z0TtnHhq+4j9n3u18npEjiNl+A?=
+ =?us-ascii?Q?KATeKbWPPM2oHyh/VxyVhBCkE+QwbvQu1yRR5ZgNJNmviSIXl1T6SgMIG8Ne?=
+ =?us-ascii?Q?0cAHmOjZiZy52JpPtekylIKAtAg1vHOLB4GLd621wbTaoRGS3IwLWySsrNIJ?=
+ =?us-ascii?Q?iWwvZMo20K1LzTaPEz3SvCTGWsyHqkCsl4u7lkpNayFpHSTUb9Ogy2zaR/Jo?=
+ =?us-ascii?Q?3dY9RLFnLJsD2CS1yJuCLa5RwK5Q8TwSS0U6hJ9SeXn702ajUXvNmdbsHMrM?=
+ =?us-ascii?Q?jB6bXiIrdXqM1era6t/CbP0nbln8Zprbs9eq3aubVwAG6ISYcA5oBPTGAENG?=
+ =?us-ascii?Q?d2jcARp3qGpOBBfwEL27Wg32X9tuKTcqjEU1nBmIsvy/aQfCK4AZ/cJtjiml?=
+ =?us-ascii?Q?hR6EMEFl/bh3bxsWc9hFOcbEnJhPKnjkF7b/DNym3WvFpAKc27YBP/cm+pDX?=
+ =?us-ascii?Q?iO9FYxSEBDdSsJeLoP6BShq4RTdyjyU8pk8uVXm87leGoctHvVCBUf3xMwwc?=
+ =?us-ascii?Q?cdh6f2/36ZB4l4NZ1uv9j/DXA5vL+VLi4hrVC+En09KVmVKk84Iwt2XOy8Ff?=
+ =?us-ascii?Q?mLebUOIc1VfmFaul0cbKgGXGKThvouWJcB37pwx6W7qkgkUP/7kZK2LPaPgA?=
+ =?us-ascii?Q?vTKw7Uw+5QhF3beJYsm1kHU4KP+a1bX1HDi60/L7rssI/kFuNigWLzsvJ62U?=
+ =?us-ascii?Q?/+DL6B6JemIBx/nwGRCyoYOau+eS6gdPxK2WfTkeXKZFxuyEM7CDMZ/hTeri?=
+ =?us-ascii?Q?94C1+UV3oqVr8PL80E80bK1xX6ZozwjpJEV9J3/Drsw9L7Lf1auV7IuED6Z/?=
+ =?us-ascii?Q?HBwBwE2WBjXwu6bgZNs6DZ9Ga7gBh+W/tXFwYstI7RSwisGvwKukC6mgFxEk?=
+ =?us-ascii?Q?5iwDtbQyb9cn/JtCOoqJer3Y4kOXjpVCv34p5KHE0ppkGkTv9lEjlFEjotvC?=
+ =?us-ascii?Q?GjJIFiueqduLPuye9Z+zetxlg+QzE6SVQcEvp69O37o4V09zmepRMQyWw8g1?=
+ =?us-ascii?Q?/zqda6PSJt9z7PSe99vVSzPBKnT2wnAfuOB44v+IZ7VzYsp2G/IhtwHlgpMe?=
+ =?us-ascii?Q?0lG8WQkANENM/IEsBayaJsco4fcXKev6TiFsrvh5iryV6O1UFYovxrVnPtf7?=
+ =?us-ascii?Q?H9gQMZOa63hVeNWuLcDQRg2n5H4L7hdwUITrXWWbVCpm54fqPKr/kwweFo4e?=
+ =?us-ascii?Q?JfbX+e4VwuuUZC5CIrx7u5wI7K1YJ5Bv2hgivfeENVbwirK8b4DfIq88JRbx?=
+ =?us-ascii?Q?1Y551w4s3tHZ4E2J48z6kmGokYqAFbh5q2rPVGbvOKfMXcJdEdel5APmdTOg?=
+ =?us-ascii?Q?+n1BwuNmAjapYMIcxA7/Y2hd3we/I67T24UJb/LpEaaGIB3LmwVEf9KXlpl8?=
+ =?us-ascii?Q?6mJY5/+M0vJS0cMjgfIhKCVkONZJtUW1JdLWohW+nYk/gIujQmQ8xT5ran9I?=
+ =?us-ascii?Q?QJw34Ar4v42S7yfYLzKLBQo1j0qmw+JPpyCANk9s9h6U7L837l9XRRZ+Y0wg?=
+ =?us-ascii?Q?iBwZ7XZOl4Gesaj6WS0gpNBnld6PxGmlxTMtgItz+BmioyQdeRTjTwHOxwqA?=
+ =?us-ascii?Q?1i49rf8zF1OPRwc2sZ2VQsCwEJqJ3asJhyTIzXyK?=
+X-OriginatorOrg: cvut.cz
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5144e4f1-8102-4848-11fb-08db79ba4985
+X-MS-Exchange-CrossTenant-AuthSource: AM6PR0602MB3749.eurprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Jun 2023 22:35:20.8753
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: f345c406-5268-43b0-b19f-5862fa6833f8
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: fL6aGrQ6PVrgVkFk1K5p/+ZzD+bqTQNhpWRNxFKQR41RLxP/fItWg3BvNdQ4K4jA
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM9PR06MB8019
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The hci_add_adv_monitor() hci_remove_adv_monitor() functions call
-bt_dev_dbg() to print some debug statements. The bt_dev_dbg() macro
-automatically adds in the device's name. That means that we shouldn't
-include the name in the bt_dev_dbg() calls.
+Hi Maxime,
 
-Suggested-by: Luiz Augusto von Dentz <luiz.dentz@gmail.com>
-Signed-off-by: Douglas Anderson <dianders@chromium.org>
----
+On Fri, Jun 30 2023, Maxime Jayat wrote:
+> Hi,
+>
+> There is something not clear happening with the non-blocking behavior
+> of ISO-TP sockets in the TX path, but more importantly, using epoll now
+> completely breaks isotp_sendmsg.
+> I believe it is related to
+> 79e19fa79c ("can: isotp: isotp_ops: fix poll() to not report false 
+> EPOLLOUT events"),
+> but actually is probably deeper than that.
+>
+> I don't completely understand what is exactly going on, so I am sharing
+> the problem I face:
+>
+> With an ISO-TP socket in non-blocking mode, using epoll seems to make
+> isotp_sendmsg always return -EAGAIN.
 
-(no changes since v2)
+That's definitely not expected behavior. I tested the patch only with
+poll, hoping that epoll would behave the same.
 
-Changes in v2:
-- ("Don't double print name...") new for v2.
+[...]
 
- net/bluetooth/hci_core.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+>
+> By reverting 79e19fa79c, I get better results but still incorrect:
 
-diff --git a/net/bluetooth/hci_core.c b/net/bluetooth/hci_core.c
-index dbb2043a9112..de15a2c77e9f 100644
---- a/net/bluetooth/hci_core.c
-+++ b/net/bluetooth/hci_core.c
-@@ -1949,14 +1949,14 @@ int hci_add_adv_monitor(struct hci_dev *hdev, struct adv_monitor *monitor)
- 
- 	switch (hci_get_adv_monitor_offload_ext(hdev)) {
- 	case HCI_ADV_MONITOR_EXT_NONE:
--		bt_dev_dbg(hdev, "%s add monitor %d status %d", hdev->name,
-+		bt_dev_dbg(hdev, "add monitor %d status %d",
- 			   monitor->handle, status);
- 		/* Message was not forwarded to controller - not an error */
- 		break;
- 
- 	case HCI_ADV_MONITOR_EXT_MSFT:
- 		status = msft_add_monitor_pattern(hdev, monitor);
--		bt_dev_dbg(hdev, "%s add monitor %d msft status %d", hdev->name,
-+		bt_dev_dbg(hdev, "add monitor %d msft status %d",
- 			   monitor->handle, status);
- 		break;
- 	}
-@@ -1976,15 +1976,15 @@ static int hci_remove_adv_monitor(struct hci_dev *hdev,
- 
- 	switch (hci_get_adv_monitor_offload_ext(hdev)) {
- 	case HCI_ADV_MONITOR_EXT_NONE: /* also goes here when powered off */
--		bt_dev_dbg(hdev, "%s remove monitor %d status %d", hdev->name,
-+		bt_dev_dbg(hdev, "remove monitor %d status %d",
- 			   monitor->handle, status);
- 		goto free_monitor;
- 
- 	case HCI_ADV_MONITOR_EXT_MSFT:
- 		handle = monitor->handle;
- 		status = msft_remove_monitor(hdev, monitor);
--		bt_dev_dbg(hdev, "%s remove monitor %d msft status %d",
--			   hdev->name, handle, status);
-+		bt_dev_dbg(hdev, "remove monitor %d msft status %d",
-+			   handle, status);
- 		break;
- 	}
- 
--- 
-2.41.0.255.g8b1d071c50-goog
+[...]
 
+> It is then possible to write on the socket but the write is blocking,
+> which is not the expected behavior for a non-blocking socket.
+
+Yes, incorrect behavior was why we made the commit in question, however
+we saw write() returning -EAGAIN when it shouldn't.
+
+> I don't know how to solve the problem. To me, using wq_has_sleeper seems 
+> weird.
+
+Agreed. I've never tried to understand how synchronization works here.
+Hopefully, Oliver knows more.
+
+> The implementation of isotp_poll feels weird too (calling both 
+> datagram_poll and
+> poll_wait?). But I am not sure what would be the correct
+> implementation.
+
+I understand it as follows (which might be wrong - someone, please
+correct me), isotp_poll() should register the file with all waitqueues
+it can wait on. so->wait is one and sock->sq.wait (used by
+datagram_poll) is another. The former is definitely used for TX, the
+latter is probably used because skb_recv_datagram() is called for RX.
+But so->wait is also used for RX and there might proabbly be be some
+inconsistency between those.
+
+> My actual use-case is in Async Rust using tokio.
+
+Our initial motivation was also Rust and tokio however than I did
+testing only with simple C programs. I'm definitely interested in having
+this working.
+
+I'll try to look at this in more detail during the weekend. It's too
+late for me today.
+
+Best regards,
+-Michal
