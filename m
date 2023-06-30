@@ -2,106 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 756EF743366
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 06:10:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F8F3743367
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 06:13:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230054AbjF3EKl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 00:10:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47650 "EHLO
+        id S230104AbjF3ENC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Jun 2023 00:13:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229522AbjF3EKi (ORCPT
+        with ESMTP id S229508AbjF3ENA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 00:10:38 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41041199C
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 21:10:37 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id a640c23a62f3a-98dfb3f9af6so173517966b.2
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 21:10:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1688098235; x=1690690235;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=YlumTE1/VZOp3prH/yZnB1tVVLT1aI0qSCA6eRI/6cc=;
-        b=hg1yZ14twzSQrztVFPq1eX2eJT3Alhc1s7tgEVXCURfK4hCTUEPifp0fbSPLdlSzFd
-         Sk6e5IpSdExKVq05Qy/r7g1cvWrEgWka6CxzwfdHM+HEa8FEKb+RwLto/Eo8uHmmhORw
-         qvzXf2CjF7U2aFZK/LWwNTjNvBOCQaBFprZjw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688098235; x=1690690235;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=YlumTE1/VZOp3prH/yZnB1tVVLT1aI0qSCA6eRI/6cc=;
-        b=lD7HWjnSLd5pQ+S1xnhh4VTC4N63PpqY/vHOiyK9K2RgxZ18KAIDccwnKuGGY6/GOe
-         0OUv0x7AZ0HZibqEm+YymstoiGSzRfqjpb6EqdsBKx7KSfMUWGuH6LD7Y7EukQE4HXYT
-         pBYcK+DiQeqMFfAmRPdCO+vXxSzP4ME4mdFcOHH2M4kBEFaE6+UazzUqkwDld7ZE+Me5
-         tC5w8G3j61IuXhc423Y03Dthk252Ip19neZLKG6mTeQG2lO8/ME8FktOM7NzroCjoERn
-         JN9X9ISALG5LzbYUhcSaFVRXHCaM+ZtVOU6bOTyo8WfeEcy/S62j/8MemF8NzRLcY7ik
-         luGw==
-X-Gm-Message-State: ABy/qLbHNFCdJMziZv+VYuE6MkregGXhChRDi9WoUH2zA64PXgqGVCsc
-        UBde20bDha2tt0H2TfFTeIyHAK0Ya1DKQ7JmMKsKf+Lp
-X-Google-Smtp-Source: APBJJlFfOQ6hHfBy8ezFcx4Gns0RQsqp9s1YlzyNOYh05A+OLmm50n1Cji5kBE3TQuUN3lO92oNq7w==
-X-Received: by 2002:a17:906:4e41:b0:992:5cda:69ee with SMTP id g1-20020a1709064e4100b009925cda69eemr904628ejw.55.1688098235478;
-        Thu, 29 Jun 2023 21:10:35 -0700 (PDT)
-Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com. [209.85.208.41])
-        by smtp.gmail.com with ESMTPSA id t14-20020a170906948e00b0098d2f703408sm7515618ejx.118.2023.06.29.21.10.34
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 29 Jun 2023 21:10:34 -0700 (PDT)
-Received: by mail-ed1-f41.google.com with SMTP id 4fb4d7f45d1cf-51d7f4c1cfeso1508345a12.0
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 21:10:34 -0700 (PDT)
-X-Received: by 2002:aa7:c703:0:b0:51b:e4b4:8bb0 with SMTP id
- i3-20020aa7c703000000b0051be4b48bb0mr755246edq.2.1688098234320; Thu, 29 Jun
- 2023 21:10:34 -0700 (PDT)
+        Fri, 30 Jun 2023 00:13:00 -0400
+Received: from mail.nfschina.com (unknown [42.101.60.195])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id E6B701FD7
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 21:12:58 -0700 (PDT)
+Received: from localhost.localdomain (unknown [180.167.10.98])
+        by mail.nfschina.com (Maildata Gateway V2.8.8) with ESMTPA id 2B3F060765845;
+        Fri, 30 Jun 2023 12:12:52 +0800 (CST)
+X-MD-Sfrom: dengxiang@nfschina.com
+X-MD-SrcIP: 180.167.10.98
+From:   dengxiang <dengxiang@nfschina.com>
+To:     tiwai@suse.com, yangyingliang@huawei.com, perex@perex.cz
+Cc:     linux-kernel@vger.kernel.org, dengxiang@nfschina.com,
+        kernel test robot <lkp@intel.com>
+Subject: [PATCH v2] ALSA: hda/realtek: Add quirks for Unis  H3C Desktop B760 & Q760
+Date:   Fri, 30 Jun 2023 12:12:43 +0800
+Message-Id: <20230630041243.2309665-1-dengxiang@nfschina.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-References: <ZJzUeFT7lLqEjMJn@nvidia.com>
-In-Reply-To: <ZJzUeFT7lLqEjMJn@nvidia.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Thu, 29 Jun 2023 21:10:17 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wjiSW52tf=xaBe0LrFJrRbSnA=E1ziKBEioMT9cMJPM1A@mail.gmail.com>
-Message-ID: <CAHk-=wjiSW52tf=xaBe0LrFJrRbSnA=E1ziKBEioMT9cMJPM1A@mail.gmail.com>
-Subject: Re: [GIT PULL] Please pull RDMA subsystem changes
-To:     Jason Gunthorpe <jgg@nvidia.com>
-Cc:     linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Leon Romanovsky <leonro@nvidia.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 28 Jun 2023 at 17:46, Jason Gunthorpe <jgg@nvidia.com> wrote:
->
-> Here are the changes for RDMA for this cycle, there was a small rxe
-> conflict with v6.4 that I resolved in the usual way.
+These models use NSIWAY amplifiers for internal speaker, but cannot put
+sound outside from these amplifiers. So eapd verbs are needed to initialize
+the amplifiers. They can be added during boot to get working sound out
+of internal speaker.
 
-Please just don't. I'd rather know about the conflicts. See
+Reported-by: kernel test robot <lkp@intel.com>
+Closes: https://lore.kernel.org/oe-kbuild-all/202306291229.5w2tIZjA-lkp@xxxxxxxxx/
 
-   Documentation/maintainer/rebasing-and-merging.rst
+---
+v2:
+- remove warning about unused variable 'spec' as belows:
 
-and about gazillion emails on the issue.
+Signed-off-by: dengxiang <dengxiang@nfschina.com>
+---
+ sound/pci/hda/patch_realtek.c | 21 +++++++++++++++++++++
+ 1 file changed, 21 insertions(+)
 
-> - Lots of small cleanups and rework in bnxt_re
->    * Use the common mmap functions
->    * Support disassociation
->    * Improve FW command flow
->
-> - bnxt_re support for "low latency push", this allows a packet
+diff --git a/sound/pci/hda/patch_realtek.c b/sound/pci/hda/patch_realtek.c
+index afe8253f9a4f..82f53af2d08a 100644
+--- a/sound/pci/hda/patch_realtek.c
++++ b/sound/pci/hda/patch_realtek.c
+@@ -11201,6 +11201,20 @@ static void alc897_fixup_lenovo_headset_mode(struct hda_codec *codec,
+ 	}
+ }
+ 
++static const struct hda_verb alc897_unis_h3c_x500s_eapd_verbs[] = {
++		{0x14, AC_VERB_SET_EAPD_BTLENABLE, 0},
++		{ }
++};
++
++static void alc897_fixup_unis_h3c_x500s(struct hda_codec *codec,
++					  const struct hda_fixup *fix, int action)
++{
++	if (action != HDA_FIXUP_ACT_PRE_PROBE)
++		return;
++
++	snd_hda_add_verbs(codec, alc897_unis_h3c_x500s_eapd_verbs);
++}
++
+ static const struct coef_fw alc668_coefs[] = {
+ 	WRITE_COEF(0x01, 0xbebe), WRITE_COEF(0x02, 0xaaaa), WRITE_COEF(0x03,    0x0),
+ 	WRITE_COEF(0x04, 0x0180), WRITE_COEF(0x06,    0x0), WRITE_COEF(0x07, 0x0f80),
+@@ -11286,6 +11300,7 @@ enum {
+ 	ALC897_FIXUP_HP_HSMIC_VERB,
+ 	ALC897_FIXUP_LENOVO_HEADSET_MODE,
+ 	ALC897_FIXUP_HEADSET_MIC_PIN2,
++	ALC897_FIXUP_UNIS_H3C_X500s,
+ };
+ 
+ static const struct hda_fixup alc662_fixups[] = {
+@@ -11725,6 +11740,10 @@ static const struct hda_fixup alc662_fixups[] = {
+ 		.chained = true,
+ 		.chain_id = ALC897_FIXUP_LENOVO_HEADSET_MODE
+ 	},
++	[ALC897_FIXUP_UNIS_H3C_X500s] = {
++		.type = HDA_FIXUP_FUNC,
++		.v.func = alc897_fixup_unis_h3c_x500s,
++	},
+ };
+ 
+ static const struct snd_pci_quirk alc662_fixup_tbl[] = {
+@@ -11792,6 +11811,7 @@ static const struct snd_pci_quirk alc662_fixup_tbl[] = {
+ 	SND_PCI_QUIRK(0x1b35, 0x1234, "CZC ET26", ALC662_FIXUP_CZC_ET26),
+ 	SND_PCI_QUIRK(0x1b35, 0x2206, "CZC P10T", ALC662_FIXUP_CZC_P10T),
+ 	SND_PCI_QUIRK(0x1c6c, 0x1239, "Compaq N14JP6-V2", ALC897_FIXUP_HP_HSMIC_VERB),
++	SND_PCI_QUIRK(0x10ec, 0x0897, "UNIS H3C X500s", ALC897_FIXUP_UNIS_H3C_X500s),
+ 
+ #if 0
+ 	/* Below is a quirk table taken from the old code.
+@@ -11886,6 +11906,7 @@ static const struct hda_model_fixup alc662_fixup_models[] = {
+ 	{.id = ALC662_FIXUP_USI_HEADSET_MODE, .name = "usi-headset"},
+ 	{.id = ALC662_FIXUP_LENOVO_MULTI_CODECS, .name = "dual-codecs"},
+ 	{.id = ALC669_FIXUP_ACER_ASPIRE_ETHOS, .name = "aspire-ethos"},
++	{.id = ALC897_FIXUP_UNIS_H3C_X500s, .name = "unis-h3c-x500s"},
+ 	{}
+ };
+ 
+-- 
+2.30.2
 
-This allows a packet WHAT?
-
-On a positive note, I see that you have a blue checkmark by google
-now, and Google says
-
-  "The sender of this email has verified that
-    they own nvidia.com and the logo in the
-    profile image. Learn more"
-
-which is lovely. I expect great things from nvidia now that you
-apparently own it. Congratulations! Champagne all around!
-
-             Linus
