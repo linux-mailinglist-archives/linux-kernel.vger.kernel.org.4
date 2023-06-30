@@ -2,69 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFE46743449
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 07:33:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E98D174344B
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 07:34:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232016AbjF3FdY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 01:33:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41710 "EHLO
+        id S232141AbjF3FeD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Jun 2023 01:34:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229991AbjF3FdU (ORCPT
+        with ESMTP id S229508AbjF3Fd7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 01:33:20 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33AE510F8;
-        Thu, 29 Jun 2023 22:33:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1688103199; x=1719639199;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=dsdYNUX+gcDM37G8FPUcCZXTwbW6arF/jZi6JvzXNfw=;
-  b=Ekm4oU+VPR4sU3SlUGECJUS7qze0yyqf2qYZYNpSsFr16u/lw5WjsdUG
-   2IF9cLJ/BqTGO9KcaogxErdq7AoEaR3dpPZ74zolD/sS4T4fG72+tZ7o1
-   dJNJMvlfDRHK8TQpZPu7pGlF65XC9hZySJK819+0IP9D4uX+m7RDwr/WL
-   m0WD/QNs6+Md9gf07i5ilNQazMm4FmDEBJQJBJeefViyoufoEImgqcA0z
-   pktw6Rps6IRce7JXApoHymu/9y7XdUuD0t6J8t04CKkqqbOlK3Opf84H7
-   QOIAe1bQ7NlUQ0qoBKx8xJNoMVj87h4n1feDWH7/4LQ1mp8XbR7rkjTbQ
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10756"; a="365802562"
-X-IronPort-AV: E=Sophos;i="6.01,169,1684825200"; 
-   d="scan'208";a="365802562"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jun 2023 22:33:18 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10756"; a="807633037"
-X-IronPort-AV: E=Sophos;i="6.01,169,1684825200"; 
-   d="scan'208";a="807633037"
-Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 29 Jun 2023 22:33:14 -0700
-Received: from kbuild by 783282924a45 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1qF6kr-000EkP-2v;
-        Fri, 30 Jun 2023 05:33:13 +0000
-Date:   Fri, 30 Jun 2023 13:32:17 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     jeffxu@chromium.org, skhan@linuxfoundation.org,
-        keescook@chromium.org
-Cc:     oe-kbuild-all@lists.linux.dev, akpm@linux-foundation.org,
-        dmitry.torokhov@gmail.com, dverkamp@chromium.org,
-        asmadeus@codewreck.org, hughd@google.com, jeffxu@google.com,
-        jorgelo@chromium.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
-        jannh@google.com, linux-hardening@vger.kernel.org,
-        linux-security-module@vger.kernel.org
-Subject: Re: [PATCH v1 1/2] mm/memfd: sysctl: fix
- MEMFD_NOEXEC_SCOPE_NOEXEC_ENFORCED
-Message-ID: <202306301351.kkbSegQW-lkp@intel.com>
-References: <20230630031721.623955-2-jeffxu@google.com>
+        Fri, 30 Jun 2023 01:33:59 -0400
+Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 918D23582
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 22:33:58 -0700 (PDT)
+Received: by mail-qt1-x82f.google.com with SMTP id d75a77b69052e-401f4408955so118471cf.1
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 22:33:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1688103237; x=1690695237;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=aVktAUTo8uqqiwGeF3etOt9dgoCyOsZaU9oSN6UEZBE=;
+        b=37sn0xlL0STS3tToajGcCaIcWU2UbLFGoVgjNL7zfRHQZ3wAJXov4luYHzHYf6phIB
+         6s43JYgF9MtPsFk9w5T9IZy+NsYsBb/mPAwFaLjPp3XT68Nci0E0GHfcY07GxlxqfXSm
+         GGiWeklNLLxBgu6y6LuoitKvoejsIywVwRrpqjsntNW/Gxv4uK6CXtDh/0NvXuCkNqun
+         iam8LBz++AkvKxNgLEJeC4CFgErOfJ7RS4Fpnjj9BdYCNX/sMZVwJVM+b1saWaMDo5SD
+         3YkigFIE4EHi72mBLW99H8OFjtUP0scmoE9d90L2E9GN7+1xS8BNXhUDbcAwOmWXZiup
+         euDw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688103237; x=1690695237;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=aVktAUTo8uqqiwGeF3etOt9dgoCyOsZaU9oSN6UEZBE=;
+        b=NugIp9ZbH7Q44/vcFayeSbSxMoKx2aCBz8n0Y53XCS8L5UCgKZcq0W5exPNVZv8hY4
+         IjxQFuADTprNm6qrbDzPiGOLLJFc4v9/1UmG+Ft9+kYgjuEsufRkrdmYHlIaP8Dg3wu0
+         tNyDlxWQ4nmsenCtIpC8vw2/u/OjgcqcpN/JCfCVwIDgkcuTkVudJZ9T+ZCNWHf7gXNS
+         F5vvl6gHwB8EHmG7ZIYnycIZ7iqEC6ubkLUBzaIcqRghSm/P43YUtLWOTr1lwfP6VHoa
+         X6G/xiKJS/bEd8bbw5EFHamV4H7l29HpiftvoZWApbSPMyyMkEdprQU8UeUHDTtKutH7
+         6YjQ==
+X-Gm-Message-State: AC+VfDyKOWHdG7KC5G0mDFRvPHMtBfBXsGULcnifcRltAGLWVfdRq9yY
+        /0WC3WdTrA6i7GM6VxyKzIR26zaHcxXA2o9hNfPUiZ+5UN0HTQZHNWw=
+X-Google-Smtp-Source: ACHHUZ42pHAQjS8oNAQHuXraTYAthPXAQg0vmckJ+g/JK/W3yZ0uwon02og73a/o/nMdcIHS66b0v9fIhBVdP16B0J8=
+X-Received: by 2002:ac8:7f4e:0:b0:3f8:1f30:a1f2 with SMTP id
+ g14-20020ac87f4e000000b003f81f30a1f2mr801884qtk.26.1688103237494; Thu, 29 Jun
+ 2023 22:33:57 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230630031721.623955-2-jeffxu@google.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+References: <20230630032653.26426-1-qiang.zhang1211@gmail.com>
+In-Reply-To: <20230630032653.26426-1-qiang.zhang1211@gmail.com>
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Fri, 30 Jun 2023 07:33:46 +0200
+Message-ID: <CANn89i+Yw_3FEjo_dYSknhmyfoOCD-1S0OSRR_GoyMjQPjcu6w@mail.gmail.com>
+Subject: Re: [PATCH] net: Destroy previously created kthreads after failing to
+ set napi threaded mode
+To:     Zqiang <qiang.zhang1211@gmail.com>
+Cc:     davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Wei Wang <weiwan@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,96 +72,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Fri, Jun 30, 2023 at 5:27=E2=80=AFAM Zqiang <qiang.zhang1211@gmail.com> =
+wrote:
+>
+> When setting 1 to enable napi threaded mode, will traverse dev->napi_list
+> and create kthread for napi->thread, if creation fails, the dev->threaded
+> will be set to false and we will clear NAPI_STATE_THREADED bit for all
+> napi->state in dev->napi_list, even if some napi that has successfully
+> created the kthread before. as a result, for successfully created napi
+> kthread, they will never be used.
+>
+> This commit therefore destroy previously created napi->thread if setting
+> napi threaded mode fails.
+>
 
-kernel test robot noticed the following build errors:
+I am not sure we need this, because these kthreads are not leaked at
+present time.
 
-[auto build test ERROR on akpm-mm/mm-everything]
+pktgen also creates unused kthreads (one per cpu), even if in most
+cases only one of them is used.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/jeffxu-chromium-org/mm-memfd-sysctl-fix-MEMFD_NOEXEC_SCOPE_NOEXEC_ENFORCED/20230630-111827
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-patch link:    https://lore.kernel.org/r/20230630031721.623955-2-jeffxu%40google.com
-patch subject: [PATCH v1 1/2] mm/memfd: sysctl: fix MEMFD_NOEXEC_SCOPE_NOEXEC_ENFORCED
-config: microblaze-randconfig-r003-20230630 (https://download.01.org/0day-ci/archive/20230630/202306301351.kkbSegQW-lkp@intel.com/config)
-compiler: microblaze-linux-gcc (GCC) 12.3.0
-reproduce: (https://download.01.org/0day-ci/archive/20230630/202306301351.kkbSegQW-lkp@intel.com/reproduce)
+Leaving kthreads makes it possible to eventually succeed to enable
+napi threaded mode
+after several tries, for devices with 64 or more queues...
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306301351.kkbSegQW-lkp@intel.com/
+This would target net-next.
 
-All errors (new ones prefixed by >>):
+If you claim to fix a bug (thus targeting net tree), we would need a Fixes:=
+ tag.
 
-   mm/memfd.c: In function 'sysctl_memfd_noexec':
->> mm/memfd.c:273:22: error: 'MEMFD_NOEXEC_SCOPE_EXEC' undeclared (first use in this function)
-     273 |         int sysctl = MEMFD_NOEXEC_SCOPE_EXEC;
-         |                      ^~~~~~~~~~~~~~~~~~~~~~~
-   mm/memfd.c:273:22: note: each undeclared identifier is reported only once for each function it appears in
-   mm/memfd.c: In function '__do_sys_memfd_create':
->> mm/memfd.c:311:31: error: 'MEMFD_NOEXEC_SCOPE_NOEXEC_SEAL' undeclared (first use in this function)
-     311 |                 if (sysctl == MEMFD_NOEXEC_SCOPE_NOEXEC_SEAL)
-         |                               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->> mm/memfd.c:321:43: error: 'MEMFD_NOEXEC_SCOPE_NOEXEC_ENFORCED' undeclared (first use in this function)
-     321 |         if (flags & MFD_EXEC && sysctl >= MEMFD_NOEXEC_SCOPE_NOEXEC_ENFORCED) {
-         |                                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-
-vim +/MEMFD_NOEXEC_SCOPE_EXEC +273 mm/memfd.c
-
-   270	
-   271	static int sysctl_memfd_noexec(void)
-   272	{
- > 273		int sysctl = MEMFD_NOEXEC_SCOPE_EXEC;
-   274	#ifdef CONFIG_SYSCTL
-   275		struct pid_namespace *ns;
-   276	
-   277		ns = task_active_pid_ns(current);
-   278		if (ns)
-   279			sysctl = ns->memfd_noexec_scope;
-   280	#endif
-   281		return sysctl;
-   282	}
-   283	
-   284	SYSCALL_DEFINE2(memfd_create,
-   285			const char __user *, uname,
-   286			unsigned int, flags)
-   287	{
-   288		char comm[TASK_COMM_LEN];
-   289		unsigned int *file_seals;
-   290		struct file *file;
-   291		int fd, error;
-   292		char *name;
-   293		long len;
-   294		int sysctl = sysctl_memfd_noexec();
-   295	
-   296		if (!(flags & MFD_HUGETLB)) {
-   297			if (flags & ~(unsigned int)MFD_ALL_FLAGS)
-   298				return -EINVAL;
-   299		} else {
-   300			/* Allow huge page size encoding in flags. */
-   301			if (flags & ~(unsigned int)(MFD_ALL_FLAGS |
-   302					(MFD_HUGE_MASK << MFD_HUGE_SHIFT)))
-   303				return -EINVAL;
-   304		}
-   305	
-   306		/* Invalid if both EXEC and NOEXEC_SEAL are set.*/
-   307		if ((flags & MFD_EXEC) && (flags & MFD_NOEXEC_SEAL))
-   308			return -EINVAL;
-   309	
-   310		if (!(flags & (MFD_EXEC | MFD_NOEXEC_SEAL))) {
- > 311			if (sysctl == MEMFD_NOEXEC_SCOPE_NOEXEC_SEAL)
-   312				flags |= MFD_NOEXEC_SEAL;
-   313			else
-   314				flags |= MFD_EXEC;
-   315	
-   316			pr_warn_once(
-   317				"memfd_create() without MFD_EXEC nor MFD_NOEXEC_SEAL, pid=%d '%s'\n",
-   318				task_pid_nr(current), get_task_comm(comm, current));
-   319		}
-   320	
- > 321		if (flags & MFD_EXEC && sysctl >= MEMFD_NOEXEC_SCOPE_NOEXEC_ENFORCED) {
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Thanks.
