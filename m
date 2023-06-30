@@ -2,134 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CC4F74432D
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 22:30:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91AE774432E
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 22:30:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230235AbjF3UaQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 16:30:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48400 "EHLO
+        id S232152AbjF3UaW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Jun 2023 16:30:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229485AbjF3UaN (ORCPT
+        with ESMTP id S229882AbjF3UaT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 16:30:13 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AD582D69
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 13:29:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1688156965;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=7z4+FJGtx+jfLkCNL8iZp50XQ8kawtYgJi/zo0dFBDw=;
-        b=T0gizRdiRckitO1wADxERpIhJlMGbBqMoQQHIw663V4ZFM+uDKCjDtw7iT2SL8h4ZaMq+G
-        U/5Q1L6107QSYeGJTKLUEKEKLjESTLdcBti2UWcKqGAa5V0WsQDCSxtzv198XpkpnSwYku
-        pND7KJAXi9z6QKbGpQUX6Tthe4QPmyc=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-542-QAGutIREPyu0b9ArYSqdZA-1; Fri, 30 Jun 2023 16:29:23 -0400
-X-MC-Unique: QAGutIREPyu0b9ArYSqdZA-1
-Received: by mail-wm1-f70.google.com with SMTP id 5b1f17b1804b1-3fa9a282fffso13218645e9.1
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 13:29:23 -0700 (PDT)
+        Fri, 30 Jun 2023 16:30:19 -0400
+Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com [IPv6:2607:f8b0:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB2C42D69
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 13:30:18 -0700 (PDT)
+Received: by mail-oi1-x22f.google.com with SMTP id 5614622812f47-38c35975545so1752232b6e.1
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 13:30:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1688157018; x=1690749018;
+        h=cc:subject:message-id:date:from:in-reply-to:references:mime-version
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=LkEFnibQjHe9+QSD1TVIevJXwtQmVAtavn1QpGpWrOo=;
+        b=AJ4/iImL9x+IdZwpbBe/C20HzATo1j/2yOb8bTR8JYFOlt+I+M3zxHBxiAp0uBXaSK
+         p7R5xQzrjpCP59ezgIpfhkcLk0apwZGlp/c0lO9C9119qyzZSqa01n1bNCmHPGx36PKf
+         s91bJiEZAzHDuooRD7xRZ4fL/GvStVTxm8NeK8nqsUUvVO+sKNpn7P2FDQyg92qG51P8
+         sruhSbLhV23tD0GBhQU3xxzIMwLm6vVAcmm0r6mmPG6lxWgDT7p+kWYikfsEHfGCKlQS
+         Na/BoB1V1pnY/M19UY0/rfFAqNNeI5i8+7gZSo7W0d+kpERJAby+/nvsAXfTm6vyqL6t
+         6eAA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688156962; x=1690748962;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=7z4+FJGtx+jfLkCNL8iZp50XQ8kawtYgJi/zo0dFBDw=;
-        b=H4CE8k8j3zvVHoefSrteQwhzoRnJ5PQe2wbAz7E6hwlAGlRpHuK9i9BBpfT+l+2GZJ
-         1OAOfH6z35ZMhgUzJ4C/QR1dol+C8uaom/PnrSB4Rogn7Kp+eKvMGAE4HSN308hktah4
-         BEC7mGu5U78eZC3JJ6jq17+OR+N5SYw5G/+mcxUyuEi4p9ORyfgS7W+q5bDkRQMTTya5
-         2/yuDKqxii6jGm8U3INoVvoGA3XUDXlOZYjxWqGq9fhlY/uj+H25BhPlssaTmI5B3ns9
-         yq1z3mRSPJHthksEKkLD7mw8kVvRo19D8QDgVY8sXGEMpBf5uJOFZ1vN9YrS8m1QR6Rc
-         n0TQ==
-X-Gm-Message-State: AC+VfDw6BO11OI6+JCobanDk5K3bJ8Tq6aNXvpx2iJjqeVrlu+1wt7BF
-        Q1G1ZI3b8oCD6J3J4jP/GSUEQplUbulwlIi+TScfV/D7QRrq/s3MctbK80+5VrlEEW3geKHjVz/
-        jJqAMXBMlXoUiVdpr3Skj1I6f
-X-Received: by 2002:a7b:c8c9:0:b0:3f8:fe2a:25c2 with SMTP id f9-20020a7bc8c9000000b003f8fe2a25c2mr2902271wml.38.1688156962805;
-        Fri, 30 Jun 2023 13:29:22 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ5t8O8YZhUAlsnULK6AfHeoTDYcnWUXH+rludG0BAB8MB7qDFkZFaO5oKC6zcLL0Qt4ESi3eA==
-X-Received: by 2002:a7b:c8c9:0:b0:3f8:fe2a:25c2 with SMTP id f9-20020a7bc8c9000000b003f8fe2a25c2mr2902251wml.38.1688156962461;
-        Fri, 30 Jun 2023 13:29:22 -0700 (PDT)
-Received: from localhost (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id n10-20020a1c720a000000b003fa96620b23sm15085928wmc.12.2023.06.30.13.29.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 30 Jun 2023 13:29:21 -0700 (PDT)
-From:   Javier Martinez Canillas <javierm@redhat.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        David Airlie <airlied@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "H. Peter Anvin" <hpa@zytor.com>, Helge Deller <deller@gmx.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org,
-        x86@kernel.org
-Subject: Re: [PATCH 0/2] Allow disabling all native fbdev drivers and only
- keeping DRM emulation
-In-Reply-To: <ZJ8T/Fexkr9wEZoP@smile.fi.intel.com>
-References: <20230629225113.297512-1-javierm@redhat.com>
- <ZJ8RY7ZUlryrPB50@smile.fi.intel.com>
- <878rc0etqe.fsf@minerva.mail-host-address-is-not-set>
- <ZJ8T/Fexkr9wEZoP@smile.fi.intel.com>
-Date:   Fri, 30 Jun 2023 22:29:20 +0200
-Message-ID: <875y74elsv.fsf@minerva.mail-host-address-is-not-set>
+        d=1e100.net; s=20221208; t=1688157018; x=1690749018;
+        h=cc:subject:message-id:date:from:in-reply-to:references:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=LkEFnibQjHe9+QSD1TVIevJXwtQmVAtavn1QpGpWrOo=;
+        b=HlgwlEcwVuIIZsRUIxMeRBGorsYpBXEK2qPIT7apeu60Qxe3vhLa/byvnO7vPzSZM+
+         eyi2LKb0LdimOGoDX6iJfsi7TyxYa3tGrxZS79Z9SOPHLbQ/kbRTnrRpdAebKU0ZKU7J
+         pKJ5e0392BL6IfHZ80zIQkNnu2vKgW615r8ffClFrrUOEAYFQ5xherpfdq3wsbwD3rGN
+         m7FxxYhJFoLgXcEodP0X/OqDsUNgQ3sgt1RjTvW3iHT5sI3VNo+Mrtc0xxZ5fAs7aHl6
+         qbetT9M3ZGBuT8QgxSqGSFgiedDRUCGL+1TQlY7dpPUVRaVcIZBHQNpHwphwTeGyUgpv
+         Tx5w==
+X-Gm-Message-State: AC+VfDxoME8Ai0re8KBFNNnhuOoM9Lp4zyw/Vi/ZbSEmYYpGYxj/Apbw
+        dfpF0JLyND4CSfwDZYjU+9AEmwlIWPVCyJW3NsI7gbHusDY=
+X-Received: by 2002:a05:6808:199b:b0:3a1:eb47:a943 with SMTP id
+ bj27-20020a056808199b00b003a1eb47a943mt4715087oib.10.1688157018100; Fri, 30
+ Jun 2023 13:30:18 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230630202257.8449-1-jonas.gorski@gmail.com>
+In-Reply-To: <20230630202257.8449-1-jonas.gorski@gmail.com>
+From:   Jonas Gorski <jonas.gorski@gmail.com>
+Date:   Fri, 30 Jun 2023 22:30:06 +0200
+Message-ID: <CAOiHx=k=tpAMmT0Z18UBjgPrJxoxJ8-kTFQme_sthdudbVR5wA@mail.gmail.com>
+Subject: Re: [PATCH 1/3] MAINTAINERS: add myself for spi-bcm63xx
+Cc:     linux-kernel@vger.kernel.org,
+        Linux SPI List <linux-spi@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,MISSING_HEADERS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Andy Shevchenko <andriy.shevchenko@linux.intel.com> writes:
-
-> On Fri, Jun 30, 2023 at 07:38:01PM +0200, Javier Martinez Canillas wrote:
->> Andy Shevchenko <andriy.shevchenko@linux.intel.com> writes:
->> > On Fri, Jun 30, 2023 at 12:51:02AM +0200, Javier Martinez Canillas wrote:
->> >> This patch series splits the fbdev core support in two different Kconfig
->> >> symbols: FB and FB_CORE. The motivation for this is to allow CONFIG_FB to
->> >> be disabled, while still having the the core fbdev support needed for the
->> >> CONFIG_DRM_FBDEV_EMULATION to be enabled. The motivation is automatically
->> >> disabling all fbdev drivers instead of having to be disabled individually.
->> >> 
->> >> The reason for doing this is that now with simpledrm, there's no need for
->> >> the legacy fbdev (e.g: efifb or vesafb) drivers anymore and many distros
->> >
->> > How does simpledrm works with earlycon=efi?
->> >
->> 
->> simpledrm isn't for earlycon. For that you use a different driver (i.e:
->> drivers/firmware/efi/earlycon.c). I'm just talking about fbdev drivers
->> here that could be replaced by simpledrm.
+On Fri, 30 Jun 2023 at 22:23, Jonas Gorski <jonas.gorski@gmail.com> wrote:
 >
-> So, efifb can't be replaced. Please, fix your cover letter to reduce false
-> impression of the scope of usage of the simpledrm.
+> I noticed the driver is unclaimed. Since I was the last one doing
+> substantial work on it, add me as the maintainer.
 >
+> As it is only found in legacy products, mark it as "Odd Fixes"
+> instead of "Maintained".
+>
+> Signed-off-by: Jonas Gorski <jonas.gorski@gmail.com>
 
-Nothing to fixup.
+Well, that didn't work as expected, I missed the part where
+tocmd/cccmd is done per patch, potentially missing important
+recipients. And it felt so convenient ... .
 
-You are conflating the efifb fbdev driver (drivers/video/fbdev/efifb.c)
-with the efifb earlycon driver (drivers/firmware/efi/earlycon.c). I'm
-talking about the former (which can be replaced by simpledrm) while you
-are talking about the latter.
+I'll send it again with proper addresses added.
 
--- 
-Best regards,
-
-Javier Martinez Canillas
-Core Platforms
-Red Hat
-
+> ---
+>  MAINTAINERS | 7 +++++++
+>  1 file changed, 7 insertions(+)
+>
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index bc201627c2e0..d12da512dceb 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -4169,6 +4169,13 @@ F:       Documentation/devicetree/bindings/spi/brcm,bcm63xx-hsspi.yaml
+>  F:     drivers/spi/spi-bcm63xx-hsspi.c
+>  F:     drivers/spi/spi-bcmbca-hsspi.c
+>
+> +BROADCOM BCM6348/BCM6358 SPI controller DRIVER
+> +M:     Jonas Gorski <jonas.gorski@gmail.com>
+> +L:     linux-spi@vger.kernel.org
+> +S:     Odd Fixes
+> +F:     Documentation/devicetree/bindings/spi/spi-bcm63xx.txt
+> +F:     drivers/spi/spi-bcm63xx-spi.c
+> +
+>  BROADCOM ETHERNET PHY DRIVERS
+>  M:     Florian Fainelli <f.fainelli@gmail.com>
+>  R:     Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>
+> --
+> 2.34.1
+>
