@@ -2,80 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 277E574415C
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 19:35:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9181374415E
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 19:36:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232248AbjF3Rf0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 13:35:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47700 "EHLO
+        id S232856AbjF3RgA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Jun 2023 13:36:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232834AbjF3RfB (ORCPT
+        with ESMTP id S232717AbjF3Rfe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 13:35:01 -0400
-Received: from mail-il1-f176.google.com (mail-il1-f176.google.com [209.85.166.176])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F10E4680;
-        Fri, 30 Jun 2023 10:34:39 -0700 (PDT)
-Received: by mail-il1-f176.google.com with SMTP id e9e14a558f8ab-345d3c10bdfso8967775ab.2;
-        Fri, 30 Jun 2023 10:34:39 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688146471; x=1690738471;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=LQ94kfdEfq9RrPFyhfJUVdunZkyBAVzDUoOb8tFiC9I=;
-        b=DJc9gkx2Qj6nob9kqtEG+l+YwkxBFXyM8CaOh8ba4p4FroqnWH4MLV9xI3ZsjAbiMD
-         koSz7EW5nCy4Rijk07WqybpKcPOEYLXPzehOYJ4bi6c7BwHEFZ3aYvAgsO7ywXjE4f29
-         QMi11B8XmiBmQ39nN2LvSQ6NhgempeoNWS0kyiS5dH1RekkBHqvl+p5Yd0K2IOMu5UEn
-         N5K15JyUyhvE31i9cdFVVILterRo8vr00DDmxqL8ae9K/e/gTN8ZK7dAEj3ZsOi8PzVP
-         xzzqZKkzXa6pNGVnG3oeEQxJKo2c0c1m0WW8xs29+Q9ZnkmMuvrWjbdXewIrIH3MQbIf
-         J2wg==
-X-Gm-Message-State: AC+VfDysE37+dnvW0RJV16jsw1N5xoU4k0x3NKkITmQWpGlkHk9KEEj/
-        1D5bYXOSZ0nm3CWRMn1FcnVTTIB5sA==
-X-Google-Smtp-Source: ACHHUZ4EbUs4PS9q79isRP9O3xuyN3VlPHEnyRoBjVZ32PU31b0maNUtRwGNVSbiOr7AKyybiYfTVQ==
-X-Received: by 2002:a6b:a16:0:b0:783:694f:e791 with SMTP id z22-20020a6b0a16000000b00783694fe791mr3651652ioi.12.1688146471480;
-        Fri, 30 Jun 2023 10:34:31 -0700 (PDT)
-Received: from robh_at_kernel.org ([64.188.179.250])
-        by smtp.gmail.com with ESMTPSA id i17-20020a02ca51000000b0042af069eeefsm1830983jal.50.2023.06.30.10.34.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 30 Jun 2023 10:34:30 -0700 (PDT)
-Received: (nullmailer pid 2074728 invoked by uid 1000);
-        Fri, 30 Jun 2023 17:34:28 -0000
-Date:   Fri, 30 Jun 2023 11:34:28 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     linux-phy@lists.infradead.org, linux-rtc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Oleksij Rempel <o.rempel@pengutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        linux-watchdog@vger.kernel.org, Conor Dooley <conor+dt@kernel.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        linux-spi@vger.kernel.org, Mark Brown <broonie@kernel.org>,
-        Tony Lindgren <tony@atomide.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Dilip Kota <eswara.kota@linux.intel.com>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        timestamp@lists.linux.dev, Vinod Koul <vkoul@kernel.org>,
-        alsa-devel@alsa-project.org,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Dipen Patel <dipenp@nvidia.com>,
-        linux-pwm@vger.kernel.org
-Subject: Re: [PATCH 6/7] dt-bindings: timestamp: restrict node name suffixes
-Message-ID: <168814645706.2074491.15762386958786625732.robh@kernel.org>
-References: <20230530144851.92059-1-krzysztof.kozlowski@linaro.org>
- <20230530144851.92059-7-krzysztof.kozlowski@linaro.org>
+        Fri, 30 Jun 2023 13:35:34 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E1BC3A87;
+        Fri, 30 Jun 2023 10:35:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1688146517; x=1719682517;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=uNu3SsF/Wf4Wk2qmSnwBD4NMQQ172nyVXwTGK7AQiDI=;
+  b=Ce0AMrKuzgYX41FoeYcJVkSmrS8vlnQNtlFELVuH71ds7pPoP0tZQT74
+   aYbM5PUqfSgh38YvKaN7pMnBUwXVns+Pm5q9DVSsd6don70lyv/u95wcX
+   Hg1x0EAaqaA/7jM7yuXsKR0DfXfXc5r3hV4rg6xhOX2lR2l8ARgrgzjnG
+   iveKD0/C1oTjYJD0i14rw5RWOWwsfkS+CdnbYFV+qM3I1p7AZsp4/iAZI
+   hc4YDyt9+kgzPTCfaWDfYUVwy/1sgqblJqY7upkSxdP4spMkboeRPyq5m
+   1nsfAEj/pRC01+dohAIX39mkxL/8gI3YOzGNbhDq0mKTbuv+KxJBDWDNO
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10757"; a="393176029"
+X-IronPort-AV: E=Sophos;i="6.01,171,1684825200"; 
+   d="scan'208";a="393176029"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jun 2023 10:34:43 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10757"; a="807851576"
+X-IronPort-AV: E=Sophos;i="6.01,171,1684825200"; 
+   d="scan'208";a="807851576"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by FMSMGA003.fm.intel.com with ESMTP; 30 Jun 2023 10:34:41 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1qFI11-001APM-1q;
+        Fri, 30 Jun 2023 20:34:39 +0300
+Date:   Fri, 30 Jun 2023 20:34:39 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Ruihong Luo <colorsu1922@gmail.com>
+Cc:     gregkh@linuxfoundation.org, ilpo.jarvinen@linux.intel.com,
+        jirislaby@kernel.org, linux-kernel@vger.kernel.org,
+        linux-serial@vger.kernel.org, luoruihong@xiaomi.com,
+        weipengliang@xiaomi.com, wengjinfei@xiaomi.com
+Subject: Re: [PATCH v3] serial: 8250_dw: Preserve original value of DLF
+ register
+Message-ID: <ZJ8SL61eYKK3Xwhj@smile.fi.intel.com>
+References: <20230630003806.66112-1-colorsu1922@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230530144851.92059-7-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+In-Reply-To: <20230630003806.66112-1-colorsu1922@gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SORTED_RECIPS,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,23 +70,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Jun 30, 2023 at 08:38:08AM +0800, Ruihong Luo wrote:
+> Preserve the original value of the Divisor Latch Fraction (DLF) register.
+> When the DLF register is modified without preservation, it can disrupt
+> the baudrate settings established by firmware or bootloader, leading to
+> data corruption and the generation of unreadable or distorted characters.
 
-On Tue, 30 May 2023 16:48:50 +0200, Krzysztof Kozlowski wrote:
-> Make the pattern matching node names a bit stricter to improve DTS
-> consistency.  The pattern is restricted to -N suffixes to decimal
-> numbers.
-> 
-> Suggested-by: Rob Herring <robh@kernel.org>
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> 
+Eventually it gets to the point of clean and good fix, thank you!
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+
+Note, you are not supposed to do anything. Either Greg will pick this up after
+merge window closes, or he will comment on the issues he finds, if any.
+The process might take a few weeks (2 weeks of merge window + Greg's backlog
+size, which is huge).
+
+> Fixes: 701c5e73b296 ("serial: 8250_dw: add fractional divisor support")
+> Signed-off-by: Ruihong Luo <colorsu1922@gmail.com>
 > ---
+> v3:
+> - modify the commit message
+> - use personal email to sign
+>  drivers/tty/serial/8250/8250_dwlib.c | 6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
 > 
-> Cc: Tony Lindgren <tony@atomide.com>
-> Cc: Oleksij Rempel <o.rempel@pengutronix.de>
-> ---
->  .../bindings/timestamp/hardware-timestamps-common.yaml          | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> diff --git a/drivers/tty/serial/8250/8250_dwlib.c b/drivers/tty/serial/8250/8250_dwlib.c
+> index 75f32f054ebb..d30957722da8 100644
+> --- a/drivers/tty/serial/8250/8250_dwlib.c
+> +++ b/drivers/tty/serial/8250/8250_dwlib.c
+> @@ -244,7 +244,7 @@ void dw8250_setup_port(struct uart_port *p)
+>  	struct dw8250_port_data *pd = p->private_data;
+>  	struct dw8250_data *data = to_dw8250_data(pd);
+>  	struct uart_8250_port *up = up_to_u8250p(p);
+> -	u32 reg;
+> +	u32 reg, orig;
+>  
+>  	pd->hw_rs485_support = dw8250_detect_rs485_hw(p);
+>  	if (pd->hw_rs485_support) {
+> @@ -270,9 +270,11 @@ void dw8250_setup_port(struct uart_port *p)
+>  	dev_dbg(p->dev, "Designware UART version %c.%c%c\n",
+>  		(reg >> 24) & 0xff, (reg >> 16) & 0xff, (reg >> 8) & 0xff);
+>  
+> +	/* Preserve value written by firmware or bootloader  */
+> +	orig = dw8250_readl_ext(p, DW_UART_DLF);
+>  	dw8250_writel_ext(p, DW_UART_DLF, ~0U);
+>  	reg = dw8250_readl_ext(p, DW_UART_DLF);
+> -	dw8250_writel_ext(p, DW_UART_DLF, 0);
+> +	dw8250_writel_ext(p, DW_UART_DLF, orig);
+>  
+>  	if (reg) {
+>  		pd->dlf_size = fls(reg);
+> -- 
+> 2.39.2
 > 
 
-Applied, thanks!
+-- 
+With Best Regards,
+Andy Shevchenko
+
 
