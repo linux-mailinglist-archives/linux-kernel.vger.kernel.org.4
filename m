@@ -2,108 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2027B743EAB
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 17:23:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F9B9743EAC
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 17:25:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232620AbjF3PXy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 11:23:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41886 "EHLO
+        id S232917AbjF3PZS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Jun 2023 11:25:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232543AbjF3PXv (ORCPT
+        with ESMTP id S232565AbjF3PYo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 11:23:51 -0400
-Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 837173C26;
-        Fri, 30 Jun 2023 08:23:46 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.nyi.internal (Postfix) with ESMTP id 89AFF5C0676;
-        Fri, 30 Jun 2023 11:23:45 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Fri, 30 Jun 2023 11:23:45 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm1; t=1688138625; x=1688225025; bh=IL
-        g/wPOhXEcgQ5Av4DXDVBtyA0OobUQWTU0tPHfsP7s=; b=KpqedbCuGpeTfWO8aR
-        H9i7PlsCFvlHcBZsJOGhJOKX5VRjNurfW2SCuGQvalOFaq/i2J/yQfjPjiT5hORZ
-        AlNKYrhrkkCIICEZMrLP1VcsnMI8semBtNYfLrRv21RAxdB9LKKsneg3RZbOKMch
-        1k1p/yjAjZgp9sf5JuqoFky0iPJIq+Hf4k/Y04YYvMQrj9PGh7W9q4UhRNQb3afu
-        1sTsNNdW2uFEvYCOcVz2zpBIzmT34j6P6WOllzAUs9g5X/ebzH1cyFuOrfin3EUL
-        9ow7AfQwiyYsncCyjCVBq4vvQBqfsrewwVph7q8WZ/iMNocFxpr7NbyvDgVKelCd
-        kVyg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; t=1688138625; x=1688225025; bh=ILg/wPOhXEcgQ
-        5Av4DXDVBtyA0OobUQWTU0tPHfsP7s=; b=PR8/rBOJ661jJEQkqegRQk26V7Q8P
-        P7loAA/laIYtFFcpwxW73pyDvi4wQGzAZno/sfpt46KbJXp6+NwqYqqqmpStdfd+
-        WgEDhj7DLIn10DpIV6Wkizkt+8crbXjeKv36AN8Swu4Q5NRWVxF77DvjyFGszVGq
-        ag2bxWggdKj/bFsGge/yqGN3GiPV3ZaSE9fTN8uYfnzexvQZXSc/uZX2sqlZE+3I
-        06oY++rdWmT/4gzAKaZfdUt0TDa1I0lt+uqd1XsqtshHd5FsLGgLb8tz52OkdJ0D
-        rLHuwnyJ6V62q0kb1WRl5q26b70Elusw0Fv2S/pumL50I4UWfsFpZR+dg==
-X-ME-Sender: <xms:gfOeZA2WFjX1hT6kw_7BSjNgobGk1iQRpo5eyv1Xf2r1MJf0LUeo5w>
-    <xme:gfOeZLGtX8fNZWE5MObxvF0HzlqeCTqliqrprVeRpeJGJOdYRN94czCEILI539blt
-    G_PjJvx7ACRbm5oWXg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrtdeigdekiecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhn
-    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
-    gvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedtkeet
-    ffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrh
-    hnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:gfOeZI5SVm4qGM-HSuJiFMUPZXrmLu4UlYM2SVeGXDQFDyNtRnnICA>
-    <xmx:gfOeZJ0muAwX_k5KTlLZx7dexdIYwA1adxvIK9KqrDaQN5uSvaghaQ>
-    <xmx:gfOeZDFDGdgB_0jh1g_jm1HzvztBND-q96RJeNiGIn9c6DqNgbtqHQ>
-    <xmx:gfOeZLCajJOSrGYznpxXSuetO8srW4lAsDKvH693EKXR5HoD_r1NqA>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id E8010B60092; Fri, 30 Jun 2023 11:23:44 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-499-gf27bbf33e2-fm-20230619.001-gf27bbf33
-Mime-Version: 1.0
-Message-Id: <dc7b8b17-4338-424f-a1f1-c12fb7ea08bd@app.fastmail.com>
-In-Reply-To: <c61f64c4d1f69c19b41efae8fef5a94547089ca7.1688134399.git.falcon@tinylab.org>
-References: <cover.1688134399.git.falcon@tinylab.org>
- <c61f64c4d1f69c19b41efae8fef5a94547089ca7.1688134399.git.falcon@tinylab.org>
-Date:   Fri, 30 Jun 2023 17:23:24 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Zhangjin Wu" <falcon@tinylab.org>,
-        =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas@t-8ch.de>,
-        "Willy Tarreau" <w@1wt.eu>
-Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Subject: Re: [PATCH v3 03/14] selftests/nolibc: add _LARGEFILE64_SOURCE for musl
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        Fri, 30 Jun 2023 11:24:44 -0400
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DD0F10C3
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 08:24:43 -0700 (PDT)
+Received: by mail-lf1-x135.google.com with SMTP id 2adb3069b0e04-4f766777605so3230436e87.1
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 08:24:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1688138681; x=1690730681;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=txeggcAXbRmMDpa24OQ4hQFnGXTegi/WFNEbs/267Mk=;
+        b=zyhfMPGXkAD6EhJlJiOnavDdNQLlyKsqaPyQuT3tqsKmqxrDbWPaXnqU4ribLdFtlF
+         LVMhBIuXwzCleZdHtXIxAGe3Hvy6F2ddGLuibXvlssx9omtgDWdztKaCkbNO9o3hyUc4
+         z32ZQBMD5wBT1Jz560HCRJPN12axNLjelwqkuIJrjS/rFZ1NXN9PqN/SuSfCl1zfCOB1
+         x3ivmtNzm1/0l1OKmRjVAr7nFae9llyXKw9jnsDTXCXf8Ovfphkanl2c85GawDBMfmOQ
+         0avV+5c3Kar3gbQqvcoaXL48AC68AvPohUSBHRiN7p5pNjouRChcrE090aPkv7Q/yYLi
+         F+iw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688138681; x=1690730681;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=txeggcAXbRmMDpa24OQ4hQFnGXTegi/WFNEbs/267Mk=;
+        b=O5RhXgPyaFov7GrHjW0Zj1RDO60sYzw9hyl69hwstVxziHqC3+XmBfk+uKKOh+6DqZ
+         SWzwfV97PoJtypgUUZcfNyshEaIUBFllO1KibuuS+tJxo9fXSAbojQOo00AjfChoCvHR
+         CDMDVT95uAXsyD/VtBrHiRueP/fiy3IGvvmU+W9j81yw5roiPG4sVcTfAhifuwzQYQbt
+         UybkxBECnSScTU3hZmyFktEyJG8Txo6PxvvnRR6q4+YXywb3XL99k7VRLLWk/mIqRAHp
+         6VM66G9aiVlS31bR1xKU40w3EBGvcTxsFYwOeMLND3R1ZTRkNwDkfZoOP0NP4rdjDNqi
+         2BOA==
+X-Gm-Message-State: ABy/qLZ5U9uB0r8Jrv5xbK+cH7PzM3eMwA43xoyzY0h/Q7ytZyDmYimZ
+        fc1wbOZywXY57O79XdKegvgKig==
+X-Google-Smtp-Source: APBJJlFJPfsgrb4tFvXFPv9Ql8tUEzNhxmocRvXDbrIXKHjxgGW/kXmSw/ls3sv5mndZZvUUnNTV0A==
+X-Received: by 2002:a05:6512:2815:b0:4fb:893e:8ffc with SMTP id cf21-20020a056512281500b004fb893e8ffcmr2950126lfb.17.1688138681214;
+        Fri, 30 Jun 2023 08:24:41 -0700 (PDT)
+Received: from aspen.lan (aztw-34-b2-v4wan-166919-cust780.vm26.cable.virginm.net. [82.37.195.13])
+        by smtp.gmail.com with ESMTPSA id m13-20020a7bcb8d000000b003fba97b1252sm9313936wmi.1.2023.06.30.08.24.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 30 Jun 2023 08:24:40 -0700 (PDT)
+Date:   Fri, 30 Jun 2023 16:24:39 +0100
+From:   Daniel Thompson <daniel.thompson@linaro.org>
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Jason Wessel <jason.wessel@windriver.com>,
+        kgdb-bugreport@lists.sourceforge.net,
+        Douglas Anderson <dianders@chromium.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Kees Cook <keescook@chromium.org>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] kdb: include header in signal handling code
+Message-ID: <20230630152439.GA2900969@aspen.lan>
+References: <20230517125423.930967-1-arnd@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230517125423.930967-1-arnd@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 30, 2023, at 16:44, Zhangjin Wu wrote:
-> _GNU_SOURCE Implies _LARGEFILE64_SOURCE in glibc, but in musl, the
-> default configuration doesn't enable _LARGEFILE64_SOURCE.
+On Wed, May 17, 2023 at 02:54:09PM +0200, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
 >
-> From include/dirent.h of musl, getdents64 is provided as getdents when
-> _LARGEFILE64_SOURCE is defined.
+> kdb_send_sig() is defined in the signal code and called from kdb,
+> but the declaration is part of the kdb internal code.
+> Include this from signal.c as well to avoid the warning:
 >
->     #if defined(_LARGEFILE64_SOURCE)
->     ...
->     #define getdents64 getdents
->     #endif
+> kernel/signal.c:4789:6: error: no previous prototype for 'kdb_send_sig' [-Werror=missing-prototypes]
 >
-> Let's define _LARGEFILE64_SOURCE to fix up this compile error:
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
-I think a better solution would be to use the normal getdents() instead
-of glibc getdents64(), but then define _FILE_OFFSET_BITS=64 to tell
-glibc to use the modern version of all filesystem syscalls.
+Sorry to be so late with this feedback! I got as far as queuing this up
+for merge before the penny dropped...
 
-     Arnd
+> ---
+>  kernel/signal.c | 2 ++
+>  1 file changed, 2 insertions(+)
+>
+> diff --git a/kernel/signal.c b/kernel/signal.c
+> index 8f6330f0e9ca..d38df14f71ac 100644
+> --- a/kernel/signal.c
+> +++ b/kernel/signal.c
+> @@ -4780,6 +4780,8 @@ void __init signals_init(void)
+>
+>  #ifdef CONFIG_KGDB_KDB
+>  #include <linux/kdb.h>
+> +#include "debug/kdb/kdb_private.h"
+> +
+
+Isn't is better to move the prototype for kdb_send_sig() into
+linux/kdb.h instead?
+
+That's what other kdb helpers spread across the kernel do
+(kdb_walk_kallsyms() for example).
+
+
+Daniel.
