@@ -2,50 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7128F743327
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 05:25:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BAFFF743328
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 05:25:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231974AbjF3DZm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 23:25:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41384 "EHLO
+        id S232013AbjF3DZr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 23:25:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230498AbjF3DZk (ORCPT
+        with ESMTP id S231655AbjF3DZk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 29 Jun 2023 23:25:40 -0400
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 665113598
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 20:25:38 -0700 (PDT)
-Received: by mail-pl1-x62f.google.com with SMTP id d9443c01a7336-1b7f9d66812so11384145ad.0
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 20:25:38 -0700 (PDT)
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3197D35A0
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 20:25:39 -0700 (PDT)
+Received: by mail-pf1-x42d.google.com with SMTP id d2e1a72fcca58-666edfc50deso892122b3a.0
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 20:25:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google; t=1688095538; x=1690687538;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=qGZNY/d45qcsqv/6dK9Kz1D5j5tQyoBwHqcnw/3xWks=;
-        b=ClO4Qqdk//HiL4nAnF+jD3EXrUP0WC/6JqzrvFwxUaQAnuTb8GhL6XjHKC0M5ZnWer
-         q/QyM079DUjYyDDb55dxU0VEZkgtgl707aXs/D3aUAnFICB1gvftBkzo+qbnZ+XHv7Xg
-         dpb6aAnBl6WZhLhF8JseLS8FEa3OkLY5IW4HQ=
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=gG0p2NxJxfYPPHk57XaDb7PRgK5Ncrcc/zrK6bcWJBo=;
+        b=bWbcBjLe/HmjBUDi0chJKHI1VfwXeVHFrwoWQ6d5F3ktM+1Hx4SU0oGAk43uPUCNJS
+         fay+/AQYi1YyouUv9X87uiVa71QR3+42BgL6odKqwm0xDf4ur4NY6vRttiQcU8fa9H7C
+         BbtQfAx2ouVJRy+ccgkoOOaFpSGcWKEme9h7w=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20221208; t=1688095538; x=1690687538;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=qGZNY/d45qcsqv/6dK9Kz1D5j5tQyoBwHqcnw/3xWks=;
-        b=lyuoxQZASABYyOzkfLCGqx6P858wSWfUVoLhWQsT8raFj7V6QZsr3+1nVNQOazrrya
-         OfCvilrXUieRMzJk9QXwuIpAeaG0Osw9HlHGYXp+7jggvLCEDHA4+Z5a3RQz6UNw56yI
-         We2l41Ig3h9JJET2+XBogFcZShrCZiH0kFV27MuJZZKJnCFklQO0PPkwdovUd1ythhUj
-         tV8Lto7nXXBMzdjxgC3rAsxALfnrMrFq/j6nJ6o1kB/cpGB/AMir4W6P5802usfPjEM7
-         l3gG5RildgPbRnc0B96pYDQxhxp59/rMJKcsgw90Dh+6PrifaHha4ZkmKK3xSX+TlkJI
-         J7zA==
-X-Gm-Message-State: ABy/qLb+yvumvSc/HwaLqTRi+klJNj1L5+eEUwHBb2Gqbb1RzNWnOcLE
-        zMKy1wEt5mP+vvatDddjg+5TAg==
-X-Google-Smtp-Source: APBJJlE7RIil3rQSgYWENbH10+1mHtgxaRDkTD8nyfCULDKfglAL51FCHofXxyxl+cjgtq0ZR5dd4Q==
-X-Received: by 2002:a17:902:d2cd:b0:1b8:16c7:a786 with SMTP id n13-20020a170902d2cd00b001b816c7a786mr1379879plc.4.1688095537808;
-        Thu, 29 Jun 2023 20:25:37 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=gG0p2NxJxfYPPHk57XaDb7PRgK5Ncrcc/zrK6bcWJBo=;
+        b=RDlw+m5j7nWvwhCmL4Lh/EWtyjGL4LgAnc7+5RonwUhgDO6nIEW6UPV5e9whlbNHH7
+         5SIIFk0Ukd6U9ckuRPi6FvB/pGBvmSsFqJYGYe4wupGPiSTmp1tD8+fVpUG2RUwHjWgQ
+         8zwzioUYwNtAuonuklRZ6bLgJQFBMmY92gYg3HF0a3h8+71TzW3lJIBZRROqLE3RM3wh
+         AxYMwBFmFgMJw9pqoBBvj9aDrgha3GJ0R6ovgJC6eF321QuhMuWlPcDqA0euo5lwySEF
+         eLrjuIlrWPWLA9D4bA2hUsPlUIjp0uf8xcfrKZ/4YtnEr1320m2JwnOWjHBjFJCgI2xf
+         r06Q==
+X-Gm-Message-State: AC+VfDyYeVIY++PMYXdoOdICshGgk8myUm5nnqLiKLm/+wDeqyZvr6MI
+        tGyLD4UWu1i6sRXJhn45iTb4Bg==
+X-Google-Smtp-Source: ACHHUZ5TBCQc99UAuCTq/sSZmqcHuuEfzJMPoZsd6eNZgMDz7INWJtHCNyWIS/wMBM2hYLOZS6QS3A==
+X-Received: by 2002:a05:6a00:27aa:b0:657:1fe5:eb63 with SMTP id bd42-20020a056a0027aa00b006571fe5eb63mr7433745pfb.7.1688095538633;
+        Thu, 29 Jun 2023 20:25:38 -0700 (PDT)
 Received: from localhost (183.43.230.35.bc.googleusercontent.com. [35.230.43.183])
-        by smtp.gmail.com with UTF8SMTPSA id x3-20020a1709027c0300b001ae5d21f760sm9728322pll.146.2023.06.29.20.25.37
+        by smtp.gmail.com with UTF8SMTPSA id f4-20020aa78b04000000b0064fd4a6b306sm8973599pfd.76.2023.06.29.20.25.38
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 29 Jun 2023 20:25:37 -0700 (PDT)
+        Thu, 29 Jun 2023 20:25:38 -0700 (PDT)
 From:   jeffxu@chromium.org
 To:     skhan@linuxfoundation.org, keescook@chromium.org
 Cc:     akpm@linux-foundation.org, dmitry.torokhov@gmail.com,
@@ -55,10 +56,12 @@ Cc:     akpm@linux-foundation.org, dmitry.torokhov@gmail.com,
         linux-mm@kvack.org, jannh@google.com,
         linux-hardening@vger.kernel.org,
         linux-security-module@vger.kernel.org
-Subject: [PATCH v3 0/1]  Add documentation for sysctl vm.memfd_noexec
-Date:   Fri, 30 Jun 2023 03:25:34 +0000
-Message-ID: <20230630032535.625390-1-jeffxu@google.com>
+Subject: [PATCH v3 1/1] Documentation: mm/memfd: vm.memfd_noexec
+Date:   Fri, 30 Jun 2023 03:25:35 +0000
+Message-ID: <20230630032535.625390-2-jeffxu@google.com>
 X-Mailer: git-send-email 2.41.0.255.g8b1d071c50-goog
+In-Reply-To: <20230630032535.625390-1-jeffxu@google.com>
+References: <20230630032535.625390-1-jeffxu@google.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -75,21 +78,54 @@ From: Jeff Xu <jeffxu@google.com>
 
 Add documentation for sysctl vm.memfd_noexec
 
-Thanks to Dominique Martinet <asmadeus@codewreck.org> who reported this.
-see [1] for context.
-
-[1] https://lore.kernel.org/linux-mm/CABi2SkXUX_QqTQ10Yx9bBUGpN1wByOi_=gZU6WEy5a8MaQY3Jw@mail.gmail.com/T/
-
-V3: resend V2 with cover letter.
-V2: revise.
-V1: initial version.
-
-Jeff Xu (1):
-  Documentation: mm/memfd: vm.memfd_noexec
-
+Link:https://lore.kernel.org/linux-mm/CABi2SkXUX_QqTQ10Yx9bBUGpN1wByOi_=gZU6WEy5a8MaQY3Jw@mail.gmail.com/T/
+Reported-by: Dominique Martinet <asmadeus@codewreck.org>
+Signed-off-by: Jeff Xu <jeffxu@google.com>
+---
  Documentation/admin-guide/sysctl/vm.rst | 30 +++++++++++++++++++++++++
  1 file changed, 30 insertions(+)
 
+diff --git a/Documentation/admin-guide/sysctl/vm.rst b/Documentation/admin-guide/sysctl/vm.rst
+index 45ba1f4dc004..621588041a9e 100644
+--- a/Documentation/admin-guide/sysctl/vm.rst
++++ b/Documentation/admin-guide/sysctl/vm.rst
+@@ -424,6 +424,36 @@ e.g., up to one or two maps per allocation.
+ 
+ The default value is 65530.
+ 
++memfd_noexec:
++=============
++This pid namespaced sysctl controls memfd_create().
++
++The new MFD_NOEXEC_SEAL and MFD_EXEC flags of memfd_create() allows
++application to set executable bit at creation time.
++
++When MFD_NOEXEC_SEAL is set, memfd is created without executable bit
++(mode:0666), and sealed with F_SEAL_EXEC, so it can't be chmod to
++be executable (mode: 0777) after creation.
++
++when MFD_EXEC flag is set, memfd is created with executable bit
++(mode:0777), this is the same as the old behavior of memfd_create.
++
++The new pid namespaced sysctl vm.memfd_noexec has 3 values:
++0: memfd_create() without MFD_EXEC nor MFD_NOEXEC_SEAL acts like
++        MFD_EXEC was set.
++1: memfd_create() without MFD_EXEC nor MFD_NOEXEC_SEAL acts like
++        MFD_NOEXEC_SEAL was set.
++2: memfd_create() without MFD_NOEXEC_SEAL will be rejected.
++
++The default value is 0.
++
++Once set, it can't be downgraded at runtime, i.e. 2=>1, 1=>0
++are denied.
++
++This is pid namespaced sysctl, child processes inherit the parent
++process's memfd_noexec at the time of fork. Changes to the parent
++process after fork are not automatically propagated to the child
++process.
+ 
+ memory_failure_early_kill:
+ ==========================
 -- 
 2.41.0.255.g8b1d071c50-goog
 
