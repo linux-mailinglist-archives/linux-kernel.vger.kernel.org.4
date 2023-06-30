@@ -2,167 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00467743F05
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 17:36:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1C99743F07
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 17:37:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232569AbjF3Pgb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 11:36:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50796 "EHLO
+        id S232809AbjF3PhM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Jun 2023 11:37:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233132AbjF3PgM (ORCPT
+        with ESMTP id S230308AbjF3PhJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 11:36:12 -0400
-Received: from mail-pg1-f207.google.com (mail-pg1-f207.google.com [209.85.215.207])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B55944B2
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 08:35:59 -0700 (PDT)
-Received: by mail-pg1-f207.google.com with SMTP id 41be03b00d2f7-53450fa3a18so1862882a12.0
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 08:35:59 -0700 (PDT)
+        Fri, 30 Jun 2023 11:37:09 -0400
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00E06B4
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 08:37:08 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-5734d919156so19217927b3.3
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 08:37:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1688139428; x=1690731428;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=2bdagaR5N1qIFZFzXqIi1uWqn/bfAiw0c0oO57kq+nk=;
+        b=uXJ9O6qfWdldgDsjuntnftMM7qQJfvFQeahSqQ1ggMIEOuduwnzqedr89fbQSwyX3y
+         69liEDrUS89Mna80gPnZj9SSWOxAXWQ+AXL+3EpJDL5bi1yWAGYi0dJxql4YZx7q+rHo
+         kPwDS7Zc1fuMZ6eJ8gzVvmdfHx/U5edBjcuSC2K/3aCu1tMTMFP7CuLH9LfXT/gZd4wM
+         cVNuNiAjZoK8uEWnnjwV6qvCsxJOiY06W+8AytXoa8q1N7XdnkvDLNlzj38wkClMWZnM
+         zo5+GIMafrtJOQCoHaSghQo76lX4ae7GXByj8elgsIvYBEp7ljkzDcRkbdW0cTfXc+qr
+         EeCQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688139359; x=1690731359;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=dyyxruTMgopIXxdq7yS3dZbyVMmnSUAsRW7YyXZLY08=;
-        b=J4aMzoL0xkr3iuf8UM0VrqEvX9qBTVDeIrQggmbHQFAC9+W5yBaap83qM87UtXtnEJ
-         VgbWSMgjvLbrnI2gQIYshyyGlVR0kYNl1npjQgveWmBgdD4/0dIg9MbivmNRRNXKI2tM
-         mGdTE4iYVNKCz513Jx7cz+xNHjQAZChrmWrE/5yiSDLlrCvxPxGj20iUGyhcGjmVCgQJ
-         /fiiRPn26d7RmYMbEEL5wXLJwiElTdt5q5BC7PLNYGbqg3lur+WSFgG8UtG94pm9hEg+
-         9EuXCF30iJePRmKekvDOeQMxf7uEQztDrv/iY14mDTNyL+4RRjxU47O4O83Vis1aX253
-         7r/w==
-X-Gm-Message-State: ABy/qLaXwbGXKynZ94oiKosQCfhBr+IZIzRtJjlbqeCiDe98m8JxMcdf
-        RaESjKOs8hkiEyGj9NdNlsQbgCec+azwVY8G07MNVNKC+1pq
-X-Google-Smtp-Source: APBJJlF3ebJXLQIKZoe1XjMHV+bDnSpB2G7tCRRVY0FsjVs3HnS8Mcfz1+mB+wK3rEHqq5cM7DZ096OzP8ks0MB2fk8QdFq9R3h+
-MIME-Version: 1.0
-X-Received: by 2002:a17:903:258b:b0:1b8:550f:9e8 with SMTP id
- jb11-20020a170903258b00b001b8550f09e8mr1723833plb.3.1688139359033; Fri, 30
- Jun 2023 08:35:59 -0700 (PDT)
-Date:   Fri, 30 Jun 2023 08:35:58 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000d39fe305ff5a928f@google.com>
-Subject: [syzbot] [selinux?] [reiserfs?] KASAN: wild-memory-access Read in inode_doinit_with_dentry
-From:   syzbot <syzbot+4cdfeccf2cf6f8ab36a4@syzkaller.appspotmail.com>
-To:     bpf@vger.kernel.org, eparis@parisplace.org, gpiccoli@igalia.com,
-        keescook@chromium.org, linux-fsdevel@vger.kernel.org,
-        linux-hardening@vger.kernel.org, linux-kernel@vger.kernel.org,
-        paul@paul-moore.com, reiserfs-devel@vger.kernel.org,
-        selinux@vger.kernel.org, stephen.smalley.work@gmail.com,
-        syzkaller-bugs@googlegroups.com, tony.luck@intel.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+        d=1e100.net; s=20221208; t=1688139428; x=1690731428;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=2bdagaR5N1qIFZFzXqIi1uWqn/bfAiw0c0oO57kq+nk=;
+        b=Tch7qIQ0HvMhYR4BDUw+y43aw2EH73x5iEVaSGJ8KJxLGZgRRc/UdMtNcTYgdmpxqV
+         FDbfiYJ8tWpxvEYvvHR0bRegeaOLc5b43wbeEsgC5PsRLSczI57V5DzGE/VsHaX/+M2A
+         iddubiP7Ay0Dx8wEB/qnq8X0/5bB3/jDScrtaOq0HrABgUlgu1FOd+5HRqIPYuBNAvkY
+         vhEaZ6vgJQJTdawDlmpYu1zA02iLK532hfNeK3hd6/dYBMUIWrVdHb3T/in5HOqd8bSd
+         su9DkVbrdutKqXe29ALR/aEeEe54dOdx89DjAYF6gBWlmXKc8iyws/LUmLBkd4yXvYCT
+         ZkGg==
+X-Gm-Message-State: ABy/qLYTCS25hEXxILPCE9GTcyOHNgIUUWN8J2keLloa1y1OitUb5YAS
+        eDTZc2Cnv2Tb7zVTEl7/xbjTpLzD9Ts=
+X-Google-Smtp-Source: APBJJlH/uQWpr30lhFP7FUBhm2MxHCzEed19skQiSf4QGVih73ZchxcUBLHXypB7iNCVn2LK3aQlcjxDBd4=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a81:8d52:0:b0:56d:2abf:f0c with SMTP id
+ w18-20020a818d52000000b0056d2abf0f0cmr25114ywj.10.1688139428278; Fri, 30 Jun
+ 2023 08:37:08 -0700 (PDT)
+Date:   Fri, 30 Jun 2023 08:37:06 -0700
+In-Reply-To: <20230630050157.kurgzdcpjngs6w4k@yy-desk-7060>
+Mime-Version: 1.0
+References: <20230628071217.71126-1-ishiir@g.ecc.u-tokyo.ac.jp>
+ <ZJxTTZzZnfbyMVIH@google.com> <ZJ0w5pKk/41Zv26i@yzhao56-desk.sh.intel.com>
+ <ZJ3FyLUYrlr6+HLw@google.com> <ZJ3p5wBwyQZ+aQOV@google.com> <20230630050157.kurgzdcpjngs6w4k@yy-desk-7060>
+Message-ID: <ZJ72omPGZcdjjWbo@google.com>
+Subject: Re: [PATCH] KVM: nVMX: Prevent vmlaunch with EPTP pointing outside
+ assigned memory area
+From:   Sean Christopherson <seanjc@google.com>
+To:     Yuan Yao <yuan.yao@linux.intel.com>
+Cc:     Yan Zhao <yan.y.zhao@intel.com>,
+        Reima Ishii <ishiir@g.ecc.u-tokyo.ac.jp>,
+        shina@ecc.u-tokyo.ac.jp, Paolo Bonzini <pbonzini@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, yuan.yao@intel.com
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Fri, Jun 30, 2023, Yuan Yao wrote:
+> On Thu, Jun 29, 2023 at 01:30:31PM -0700, Sean Christopherson wrote:
+> > @@ -3834,8 +3822,8 @@ static int mmu_alloc_shadow_roots(struct kvm_vcpu *vcpu)
+> >  			if (!(pdptrs[i] & PT_PRESENT_MASK))
+> >  				continue;
+> >
+> > -			if (mmu_check_root(vcpu, pdptrs[i] >> PAGE_SHIFT))
+> > -				return 1;
+> > +			if (kvm_vcpu_is_visible_gfn(vcpu, pdptrs[i] >> PAGE_SHIFT))
+> > +				pdptrs[i] = 0;
+> 
+> Hi Sean,
+> 
+> Should this be "!kvm_vcpu_is_visible_gfn(vcpu, pdptrs[i] >> PAGE_SHIFT)" and
 
-syzbot found the following issue on:
+Yep, typo that inverted the check.  Thanks for saving me some debug time!
 
-HEAD commit:    6995e2de6891 Linux 6.4
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=17d58757280000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=9536c93ce7915e58
-dashboard link: https://syzkaller.appspot.com/bug?extid=4cdfeccf2cf6f8ab36a4
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=13b33b57280000
+> turn the pae_root[i] to dummy root yet ?
 
-Downloadable assets:
-disk image (non-bootable): https://storage.googleapis.com/syzbot-assets/7bc7510fe41f/non_bootable_disk-6995e2de.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/95b0ee5a267d/vmlinux-6995e2de.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/0e7c613d4a73/bzImage-6995e2de.xz
-mounted in repro: https://storage.googleapis.com/syzbot-assets/86bf2b608923/mount_0.gz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+4cdfeccf2cf6f8ab36a4@syzkaller.appspotmail.com
-
-==================================================================
-BUG: KASAN: wild-memory-access in instrument_atomic_read include/linux/instrumented.h:68 [inline]
-BUG: KASAN: wild-memory-access in _test_bit include/asm-generic/bitops/instrumented-non-atomic.h:141 [inline]
-BUG: KASAN: wild-memory-access in __lock_acquire+0xf3d/0x5f30 kernel/locking/lockdep.c:5058
-Read of size 8 at addr 1fffffff86b9d550 by task syz-executor.2/5155
-
-CPU: 3 PID: 5155 Comm: syz-executor.2 Not tainted 6.4.0-syzkaller #0
-Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.14.0-2 04/01/2014
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xd9/0x150 lib/dump_stack.c:106
- print_report mm/kasan/report.c:465 [inline]
- kasan_report+0xec/0x130 mm/kasan/report.c:572
- check_region_inline mm/kasan/generic.c:181 [inline]
- kasan_check_range+0x141/0x190 mm/kasan/generic.c:187
- instrument_atomic_read include/linux/instrumented.h:68 [inline]
- _test_bit include/asm-generic/bitops/instrumented-non-atomic.h:141 [inline]
- __lock_acquire+0xf3d/0x5f30 kernel/locking/lockdep.c:5058
- lock_acquire kernel/locking/lockdep.c:5705 [inline]
- lock_acquire+0x1b1/0x520 kernel/locking/lockdep.c:5670
- __raw_spin_lock include/linux/spinlock_api_smp.h:133 [inline]
- _raw_spin_lock+0x2e/0x40 kernel/locking/spinlock.c:154
- spin_lock include/linux/spinlock.h:350 [inline]
- inode_doinit_with_dentry+0x1026/0x12d0 security/selinux/hooks.c:1510
- selinux_d_instantiate+0x27/0x30 security/selinux/hooks.c:6225
- security_d_instantiate+0x54/0xe0 security/security.c:3760
- d_instantiate fs/dcache.c:2034 [inline]
- d_instantiate+0x5e/0xa0 fs/dcache.c:2030
- __debugfs_create_file+0x20f/0x5e0 fs/debugfs/inode.c:445
- debugfs_hw_add+0x28b/0x370 net/mac80211/debugfs.c:670
- ieee80211_register_hw+0x23e3/0x40e0 net/mac80211/main.c:1395
- mac80211_hwsim_new_radio+0x26c1/0x4c10 drivers/net/wireless/virtual/mac80211_hwsim.c:5294
- hwsim_new_radio_nl+0xacf/0x1210 drivers/net/wireless/virtual/mac80211_hwsim.c:5974
- genl_family_rcv_msg_doit.isra.0+0x1e6/0x2d0 net/netlink/genetlink.c:968
- genl_family_rcv_msg net/netlink/genetlink.c:1048 [inline]
- genl_rcv_msg+0x4ff/0x7e0 net/netlink/genetlink.c:1065
- netlink_rcv_skb+0x165/0x440 net/netlink/af_netlink.c:2546
- genl_rcv+0x28/0x40 net/netlink/genetlink.c:1076
- netlink_unicast_kernel net/netlink/af_netlink.c:1339 [inline]
- netlink_unicast+0x547/0x7f0 net/netlink/af_netlink.c:1365
- netlink_sendmsg+0x925/0xe30 net/netlink/af_netlink.c:1913
- sock_sendmsg_nosec net/socket.c:724 [inline]
- sock_sendmsg+0xde/0x190 net/socket.c:747
- __sys_sendto+0x23a/0x340 net/socket.c:2144
- __do_sys_sendto net/socket.c:2156 [inline]
- __se_sys_sendto net/socket.c:2152 [inline]
- __x64_sys_sendto+0xe1/0x1b0 net/socket.c:2152
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f717603e2ac
-Code: fa fa ff ff 44 8b 4c 24 2c 4c 8b 44 24 20 89 c5 44 8b 54 24 28 48 8b 54 24 18 b8 2c 00 00 00 48 8b 74 24 10 8b 7c 24 08 0f 05 <48> 3d 00 f0 ff ff 77 34 89 ef 48 89 44 24 08 e8 20 fb ff ff 48 8b
-RSP: 002b:00007ffe75814790 EFLAGS: 00000293 ORIG_RAX: 000000000000002c
-RAX: ffffffffffffffda RBX: 00007f7176cd4620 RCX: 00007f717603e2ac
-RDX: 0000000000000024 RSI: 00007f7176cd4670 RDI: 0000000000000003
-RBP: 0000000000000000 R08: 00007ffe758147e4 R09: 000000000000000c
-R10: 0000000000000000 R11: 0000000000000293 R12: 0000000000000000
-R13: 00007f7176cd4670 R14: 0000000000000003 R15: 0000000000000000
- </TASK>
-==================================================================
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-
-If the bug is already fixed, let syzbot know by replying with:
-#syz fix: exact-commit-title
-
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
-
-If you want to change bug's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
-
-If the bug is a duplicate of another bug, reply with:
-#syz dup: exact-subject-of-another-report
-
-If you want to undo deduplication, reply with:
-#syz undup
+No, zeroing the PDPTR is sufficient.  Unlike CR3, which is always "present", PDPTRs
+have a present bit and so KVM can communicate to hardware that the entry isn't
+valid simply by clearing the PDPTPR.
