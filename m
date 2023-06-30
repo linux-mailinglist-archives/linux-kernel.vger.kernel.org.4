@@ -2,66 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CB6A744213
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 20:18:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FD8D744217
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 20:22:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233022AbjF3SSy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 14:18:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35702 "EHLO
+        id S233044AbjF3SV7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Jun 2023 14:21:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229634AbjF3SSj (ORCPT
+        with ESMTP id S232361AbjF3SV5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 14:18:39 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A67243AA7
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 11:18:38 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id 98e67ed59e1d1-262cc036fa4so1115209a91.3
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 11:18:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1688149118; x=1690741118;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=JhOMq1HY0NT+4aYW+8kI5Q1oNJexqE5nfoCKy371/0I=;
-        b=Gq+GLofs0fp24id2Rgm0KWaS7yy/ePwR72VADTUhmSlnDfIxIGhdHsbAu/WT7ihYV7
-         JX9M4pvCiA8Za5u4qzsJHf/tj3Qguo0Q4zPG2hndNMm+pfxnJk2i3NIzC1I1n2e9ppP7
-         xy52sibmznojoD7vpL7Mh7VecksBdNUvAznz0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688149118; x=1690741118;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=JhOMq1HY0NT+4aYW+8kI5Q1oNJexqE5nfoCKy371/0I=;
-        b=c+v0gLTJGE2tRC2HZos4K8kpQgIKJZ47OjP2iwz9pbFlJR5C8BNSHhgE7e684isdoZ
-         VWVV3tSsUmmh9ilFSvx+nAVWRhD6uBJxpNbJo8PIwhlSrJw75h69a2UclnqhmSGEAvkD
-         4TqsP7a66++nB+BEVQw/UgYPRlF9qT1+JprhXa+Ph+lE6P+1jZM0IjXCm+/vJrf7Owgh
-         hHTE/sBVyNUttV3A7XG8qD1pzV7y72JWdcz/iFe6wK5AYrn1rEmS/QXXqZsji/CPd1Cb
-         kFsr0cBVlOqLvEemQqWq2ujHyGEBgmAHPYyGq3Ppd3idVWlij7n7oPFNTIGxrKcXRXvn
-         +H7g==
-X-Gm-Message-State: ABy/qLauQYm+7DQBzBYnoxt443b+1Hd8MMA2bZW0b1EAOcLqkdgPsWBe
-        Fe/rNUwYFIvutYpwHCHx3bLnsg==
-X-Google-Smtp-Source: APBJJlEHl8gDvbHbgn5QL6/rpYZwgiEppjuCacYsWNgW/8HmN0RO+TJlaEelpIK+MpO8GapiFgmBcw==
-X-Received: by 2002:a17:90a:ff03:b0:263:1213:df3b with SMTP id ce3-20020a17090aff0300b002631213df3bmr2628809pjb.11.1688149118116;
-        Fri, 30 Jun 2023 11:18:38 -0700 (PDT)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id y15-20020a17090a6c8f00b00260cce91d20sm11774659pjj.33.2023.06.30.11.18.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 30 Jun 2023 11:18:37 -0700 (PDT)
-Date:   Fri, 30 Jun 2023 11:18:37 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        security@kernel.org, corbet@lwn.net, workflows@vger.kernel.org
-Subject: Re: [PATCH 2/2] Documentation: security-bugs.rst: clarify CVE
- handling
-Message-ID: <202306301114.E199B136@keescook>
-References: <2023063020-throat-pantyhose-f110@gregkh>
- <2023063022-retouch-kerosene-7e4a@gregkh>
+        Fri, 30 Jun 2023 14:21:57 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C19D3BD;
+        Fri, 30 Jun 2023 11:21:56 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 48A36617DF;
+        Fri, 30 Jun 2023 18:21:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5D34C433C8;
+        Fri, 30 Jun 2023 18:21:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688149315;
+        bh=sM46dcengp7YkqfFo0VJUNN08NUrJCfycUaS2/3Woo0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=odJQMvmZ0rqdXgLbMO87OefdaC4QW3lgA/RWvCb/rfwsahLGiH1t1dFswomLcQIru
+         Z0hBWjgnZ4rt6sPNx3V8LxMtVy2Ea0AYR17S54qnwtCXCduR8Vzmj3bxKwY4gSOjLg
+         YNB3P8zD9A7gOORxtd68UVGihekQbl0Qh1aZHXURJ6emhf1E/qigeW/mxttRgdfrea
+         81V/O4GOJsty2zQALa/JSvuUCVsywnp+AlWB2/P0nJVbaXJDR4gbWY18dY+vQt7y31
+         CWmuZQJZ2wMA7ugKXOyZTsgUClPKgyj4vM9CKlxoKsGdRtmB2cZWsHbayTW4kJZOqU
+         tgUTP5fwxGz2Q==
+Date:   Fri, 30 Jun 2023 19:21:49 +0100
+From:   Conor Dooley <conor@kernel.org>
+To:     Stanley =?utf-8?B?Q2hhbmdb5piM6IKy5b63XQ==?= 
+        <stanley_chang@realtek.com>
+Cc:     Rob Herring <robh@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Douglas Anderson <dianders@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Flavio Suligoi <f.suligoi@asem.it>,
+        Ray Chi <raychi@google.com>,
+        "linux-phy@lists.infradead.org" <linux-phy@lists.infradead.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: Re: [PATCH v6 4/5] dt-bindings: phy: realtek: Add the doc about the
+ Realtek SoC USB 2.0 PHY
+Message-ID: <20230630-trowel-pleat-5312a869dda2@spud>
+References: <20230629054523.7519-1-stanley_chang@realtek.com>
+ <20230629054523.7519-4-stanley_chang@realtek.com>
+ <20230629164220.GA3146341-robh@kernel.org>
+ <f17378f003144f4ba50ec08e0ad38c0b@realtek.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="aEhlxy1fUgPMd5+/"
 Content-Disposition: inline
-In-Reply-To: <2023063022-retouch-kerosene-7e4a@gregkh>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+In-Reply-To: <f17378f003144f4ba50ec08e0ad38c0b@realtek.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -70,68 +75,125 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 30, 2023 at 09:14:21AM +0200, Greg Kroah-Hartman wrote:
-> The kernel security team does NOT assign CVEs, so document that properly
-> and provide the "if you want one, ask MITRE for it" response that we
-> give on a weekly basis in the document, so we don't have to constantly
-> say it to everyone who asks.
-> 
-> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> ---
->  Documentation/process/security-bugs.rst | 11 ++++-------
->  1 file changed, 4 insertions(+), 7 deletions(-)
-> 
-> diff --git a/Documentation/process/security-bugs.rst b/Documentation/process/security-bugs.rst
-> index f12ac2316ce7..8b80e1eb7d79 100644
-> --- a/Documentation/process/security-bugs.rst
-> +++ b/Documentation/process/security-bugs.rst
-> @@ -79,13 +79,10 @@ not contribute to actually fixing any potential security problems.
->  CVE assignment
->  --------------
->  
-> -The security team does not normally assign CVEs, nor do we require them
-> -for reports or fixes, as this can needlessly complicate the process and
-> -may delay the bug handling. If a reporter wishes to have a CVE identifier
-> -assigned ahead of public disclosure, they will need to contact the private
-> -linux-distros list, described above. When such a CVE identifier is known
-> -before a patch is provided, it is desirable to mention it in the commit
-> -message if the reporter agrees.
-> +The security team does not assign CVEs, nor do we require them for
-> +reports or fixes, as this can needlessly complicate the process and may
-> +delay the bug handling.  If a reporter wishes to have a CVE identifier
-> +assigned, they should contact MITRE directly.
 
-Hmm. The language about "assigned ahead of public disclosure" was added
-intentionally due to trouble we'd had with coordination when a CVE was
-needed, etc. Additionally, it IS preferred to have a CVE in a patch when
-it IS known ahead of time, so I think that should be kept. How about
-this:
+--aEhlxy1fUgPMd5+/
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Fri, Jun 30, 2023 at 07:33:45AM +0000, Stanley Chang[=E6=98=8C=E8=82=B2=
+=E5=BE=B7] wrote:
+> Hi Rob,
+>=20
+> > On Thu, Jun 29, 2023 at 01:45:12PM +0800, Stanley Chang wrote:
+> > > Add the documentation explain the property about Realtek USB PHY driv=
+er.
+> >=20
+> > In the subject, drop "the doc about the". It's redundant. And perhaps a=
+dd 'DHC
+> > RTD SoC' if this isn't for *all* Realtek SoCs.
+> >=20
+> > > Realtek DHC (digital home center) RTD SoCs support DWC3 XHCI USB
+> > > controller. Added the driver to drive the USB 2.0 PHY transceivers.
+> >=20
+> > driver? This is a binding for the h/w.
+>=20
+> I mean, the driver is drivers/phy/realtek/phy-rtk-usb2.c
+> I will revise as
+>     dt-bindings: phy: realtek: Add the Realtek DHC RTD SoC USB 2.0 PHY
+>=20
+>     Add the documentation explain the property about Realtek USB PHY driv=
+er.
+>=20
+>     Realtek DHC (digital home center) RTD SoCs support DWC3 XHCI USB
+>     controller and uses phy-rtk-usb2 as driver for USB 2.0 PHY transceive=
+r..
+
+No, you should mention nothing to do with how a particular operating
+system chooses to structure its code here. Bindings describe hardware,
+and the commit message should reflect that.
+
+>=20
+> > > +$id: http://devicetree.org/schemas/phy/realtek,usb2phy.yaml#
+> > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > > +
+> > > +title: Realtek DHC SoCs USB 2.0 PHY
+> > > +
+> > > +maintainers:
+> > > +  - Stanley Chang <stanley_chang@realtek.com>
+> > > +
+> > > +description:
+> >=20
+> > You need '|' if formatting (line breaks) are important.
+>=20
+> I think I need it. I will add it.
+>=20
+> > > +  realtek,inverse-hstx-sync-clock:
+> > > +    description:
+> > > +      For one of the phys of RTD1619b SoC, the synchronous clock of =
+the
+> > > +      high-speed tx must be inverted.
+> >=20
+> > "invert" assumes I know what non-inverted means. I do not. Better to st=
+ate in
+> > terms of active high, low, falling edge, rising edge, etc.
+>=20
+> Meaning, the clock must be reversed.
+
+Maybe that means something to Rob, but "reversed" doesn't seem any more
+meaningful than inverse. I agree that it should be described in terms of
+"active high" etc, as they have well understood meanings.
+
+> > > +    type: boolean
+> > > +
+> > > +  realtek,driving-level:
+> > > +    description:
+> > > +      Control the magnitude of High speed Dp/Dm output swing.
+> > > +      For a different board or port, the original magnitude maybe not
+> > meet
+> > > +      the specification. In this situation we can adjust the value t=
+o meet
+> > > +      the specification.
+> >=20
+> > What are the units?
+>=20
+> There is no unit. It is only a gain for adjusting the magnitude.
+
+Gain has units too.
+
+> > > +    $ref: /schemas/types.yaml#/definitions/uint32
+> > > +    default: 8
+> > > +    minimum: 0
+> > > +    maximum: 31
+> > > +
+> > > +  realtek,driving-compensate:
+> >=20
+> > compensate what?
+>=20
+> It is to compensate the driving level.
+
+Should it be called "driving-level-compensate" then?
+
+> In other word, to adjust the driving level.
+
+So, "realtek,driving-level" sets the gain and
+"realtek,driving-compensate" adjusts the driving level.
+By that logic, is this also a gain?
+
+Also this property is only for the RTD1315e? That should be
+described in/constrained by the binding itself, not in the text
+description alone IMO.
 
 
-diff --git a/Documentation/process/security-bugs.rst b/Documentation/process/security-bugs.rst
-index 82e29837d589..2f4060d49b31 100644
---- a/Documentation/process/security-bugs.rst
-+++ b/Documentation/process/security-bugs.rst
-@@ -81,13 +81,12 @@ the email Subject line with "[vs]" as described in the linux-distros wiki:
- CVE assignment
- --------------
- 
--The security team does not normally assign CVEs, nor do we require them
--for reports or fixes, as this can needlessly complicate the process and
--may delay the bug handling. If a reporter wishes to have a CVE identifier
--assigned ahead of public disclosure, they will need to contact the private
--linux-distros list, described above. When such a CVE identifier is known
--before a patch is provided, it is desirable to mention it in the commit
--message if the reporter agrees.
-+The security team does not assign CVEs, nor do we require them for reports
-+or fixes, as this can needlessly complicate the process and may delay
-+the bug handling. If a reporter wishes to have a CVE identifier assigned
-+ahead of public disclosure, they will need to contact MITRE directly.
-+When such a CVE identifier is known before a patch is provided, it is
-+desirable to mention it in the commit message if the reporter agrees.
- 
- Non-disclosure agreements
- -------------------------
+--aEhlxy1fUgPMd5+/
+Content-Type: application/pgp-signature; name="signature.asc"
 
--- 
-Kees Cook
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZJ8dPQAKCRB4tDGHoIJi
+0lmUAP45sQ9AK7ogaqK+eH+Y4Gn7Emg+7aM7bHUQwQztSG0w/AD/ZtzuQIET/Qsw
+9vk5lYfiSF8wdLIPvZ1gQ5IVcpEEHAM=
+=Acbb
+-----END PGP SIGNATURE-----
+
+--aEhlxy1fUgPMd5+/--
