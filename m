@@ -2,62 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DE42743AC9
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 13:25:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E16BD743AC4
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 13:24:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232347AbjF3LZZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 07:25:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35412 "EHLO
+        id S232474AbjF3LY1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Jun 2023 07:24:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231743AbjF3LZX (ORCPT
+        with ESMTP id S232410AbjF3LYU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 07:25:23 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6DDD19BA
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 04:25:21 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4525961722
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 11:25:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25BA3C433C8;
-        Fri, 30 Jun 2023 11:25:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688124320;
-        bh=X31RKRIHXlJbmFQz+NTD/ZkZDT5OmzkD7mBCLIY1Www=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=MOWRoCccKwwIA7EnL67Jli7SOaLQnESZ35Ce3qY46kJyS74eyJYqXBL03LYzlEdmi
-         SFvnMyPJm2CeUZMM3SCh85nQlyHJnm0sP6uwtiI2bB+wG3alqnWeNHp7TDlhgCiucx
-         88tIPnlUXKVP3JsP076UGn1UAhViduqENAa8u3unLSnbR8tXAbzn7ncws67YNEEZE6
-         kJzbwe0zs9nHeJWvOx17qtCkkhRe6FHzyRbtetl9S+U/2ww863XMKAnuViGC0XCSKc
-         crHytPY6oNSVaMEyQOvbKNglrzyobWjwaneXnesGW3REXzzNtBQ8EQeYPZl5n9F9za
-         K6XWuipXJI2qg==
-Date:   Fri, 30 Jun 2023 13:25:17 +0200
-From:   Frederic Weisbecker <frederic@kernel.org>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Anna-Maria Behnsen <anna-maria@linutronix.de>,
-        John Stultz <jstultz@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Oleg Nesterov <oleg@redhat.com>
-Subject: Re: [patch 14/45] posix-timers: Consolidate interval retrieval
-Message-ID: <ZJ67nQ6Q8F3mu6Jb@lothringen>
-References: <20230606132949.068951363@linutronix.de>
- <20230606142031.816970056@linutronix.de>
- <ZJww66Svi84Bvw9Z@localhost.localdomain>
- <87ttuq14xp.ffs@tglx>
+        Fri, 30 Jun 2023 07:24:20 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0207B3AA4;
+        Fri, 30 Jun 2023 04:24:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1688124257; x=1719660257;
+  h=message-id:date:mime-version:to:cc:references:from:
+   subject:in-reply-to:content-transfer-encoding;
+  bh=52Q2a5Ke+JYzT2oX03f31y1WvSO9qWB2m9pRaooy7VI=;
+  b=OvYLWa/QQSPV3UEARQGkY/3zujb9UYsyKq08H8q3NZGQG9mawSFdvPQn
+   KQ/jncRZK2kaegRFRSMx5t43TTxxZkl26kUtnCInBaPaMDPaxXI+1DK24
+   f9qZRcvwKqJT2FDi/43scLD6lC/U9DhAAMfFfuJnnTJ34jTK76FKSDnqq
+   iK4Q/eGUUq3n2OOMFeYbtDQy0STFghFa4K2duH3noi0PuHhEBrKFJupM1
+   K1CVltP527CtD/mUrIjOfgk9Spz50vq9MUfeL3+wAk7/iUsgYE4UlhhSk
+   6RZ9wyukNTGCEjl9rnMNZ9txBSuD+h3+kAmB4O7a7vxKL+dI+C8PhL3dd
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10756"; a="347154122"
+X-IronPort-AV: E=Sophos;i="6.01,170,1684825200"; 
+   d="scan'208";a="347154122"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jun 2023 04:24:16 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10756"; a="783050506"
+X-IronPort-AV: E=Sophos;i="6.01,170,1684825200"; 
+   d="scan'208";a="783050506"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
+  by fmsmga008.fm.intel.com with ESMTP; 30 Jun 2023 04:24:13 -0700
+Message-ID: <11d23da6-af10-7533-cf6c-98f6b836100f@linux.intel.com>
+Date:   Fri, 30 Jun 2023 14:25:40 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.10.0
+Content-Language: en-US
+To:     Robin Murphy <robin.murphy@arm.com>,
+        Ricardo Ribalda <ribalda@chromium.org>
+Cc:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20230628-mtk-usb-v1-1-3c5b2ea3d6b9@chromium.org>
+ <0efd9388-4cbc-d27c-f82f-d14291580150@arm.com>
+ <CANiDSCvvtdtS2E1a5qyOERG=DKzcTX2oLGWSecRz2gCi-Oo1tw@mail.gmail.com>
+ <c412681d-c845-c8a9-01ed-aafb14a0381a@arm.com>
+From:   Mathias Nyman <mathias.nyman@linux.intel.com>
+Subject: Re: [PATCH] usb: xhci-mtk: set the dma max_seg_size
+In-Reply-To: <c412681d-c845-c8a9-01ed-aafb14a0381a@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <87ttuq14xp.ffs@tglx>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,28 +74,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 29, 2023 at 08:47:30PM +0200, Thomas Gleixner wrote:
-> On Wed, Jun 28 2023 at 15:08, Frederic Weisbecker wrote:
+On 29.6.2023 22.19, Robin Murphy wrote:
+> On 2023-06-29 19:29, Ricardo Ribalda wrote:
+>> Hi Robin
+>>
+>> On Thu, 29 Jun 2023 at 20:11, Robin Murphy <robin.murphy@arm.com> wrote:
+>>>
+>>> On 2023-06-28 22:00, Ricardo Ribalda wrote:
+>>>> Allow devices to have dma operations beyond 64K, and avoid warnings such
+>>>> as:
+>>>
+>>> Hang on, is this actually correct? I just had a vague memory of XHCI
+>>> having some restrictions, and sure enough according to the spec it
+>>> *does* require buffers to be split at 64KB boundaries, since that's the
+>>> maximum length a single TRB can encode - that's exactly the kind of
+>>> constraint that the max_seg_size abstraction is intended to represent,
+>>> so it seems a bit odd to be explicitly claiming a very different value.
+>>>
+>>> Thanks,
+>>> Robin.
+>>
+>> I think we had a similar discussion forÂ  93915a4170e9 ("xhci-pci: set
+>> the dma max_seg_size")
+>> on
+>> https://lore.kernel.org/all/1fe8f8a7-c88f-0c91-e74f-4d3f2f885c89@linux.intel.com/
+>>
+>> ```
+>> Preferred max segment size of sg list would be 64k as xHC hardware has
+>> 64k TRB payload size
+>> limit, but xhci driver will take care of larger segments, splitting
+>> them into 64k chunks.
+>> ```
 > 
-> > Le Tue, Jun 06, 2023 at 04:37:40PM +0200, Thomas Gleixner a écrit :
-> >> There is no point to collect the current interval in the posix clock
-> >> specific settime() and gettime() callbacks. Just do it right in the common
-> >> code.
-> >> 
-> >> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-> >
-> > The only difference I see is that we now return the old interval
-> > even if the target is reaped, which probably doesn't matter anyway.
+> OK, but it still seems off to me to claim to support something that the hardware doesn't support, and the driver has to fake, especially when it's only to paper over a warning which isn't even the driver's fault in the first place.
+
+xHC Hardware has odd alignments and size restrictions that the driver anyway need to sort out.
+The 64K is already fake, it's the most common max supported size for TRBs, but not always true.
+Varies depending on TRB location in TRB ring.
+
+xhci driver can handle any size.
+
 > 
-> But we don't return it to user space because ret != 0 in that case.
+> The aim of the DMA_API_DEBUG_SG warnings wasn't to go round blindly adding dma_set_max_seg_size(UINT_MAX) all over the place, it was always to consider whether the dma_map_sg() call and/or the scatterlist itself are right, just as much as whether the driver may have forgotten to set an appropriate parameter. As I've already raised, in this particular case I think it's actually the debug check that's misplaced, since it's not dma_map_sg() anyway, but as it stands, the implementations of dma_alloc_noncontiguous() are definitely doing the wrong thing with respect to what it is then asking to validate.
 
-In the case of ->set yes but in the case of ->get there is no error
-handling.
+Agree that this seems to be an issue in the DMA debugging side.
+Would it need to take into account cases where device driver can support different sizes than the host controller?
 
-But still this shouldn't matter as the task is fetched under rcu protection.
-And also it can be reaped by the time we return to userspace, so this is
-inherently racy. Well, the effect could be visible if current is the reaper
-and it has reaped the target already, then it could expect a 0 value in the
-interval. I don't think we care though.
+> 
+> Unless there is some known reason to make this change to any USB host controller *other* than that someone sees UVC allocate a >64KB buffer via this path on a system which happens to have that particular HCD, it is not the right change to make.
 
-Thanks.
+This would be all USB 3.x hosts, from all vendors.
+
+keeping the 64K max seg size, and fixing the dma debug side would be optimal, but until that gets done I think
+we can take this oneliner as it resolves a real world issue where USB isn't working.
+
+Thanks
+-Mathias
+
