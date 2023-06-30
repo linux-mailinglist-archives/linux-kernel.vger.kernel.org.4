@@ -2,80 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7C127437B7
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 10:48:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 986837437BB
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 10:49:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232466AbjF3Isb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 04:48:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50206 "EHLO
+        id S232490AbjF3It1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Jun 2023 04:49:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231886AbjF3Is3 (ORCPT
+        with ESMTP id S231644AbjF3ItY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 04:48:29 -0400
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68A111FD8
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 01:48:27 -0700 (PDT)
-Received: by mail-ej1-x634.google.com with SMTP id a640c23a62f3a-992b27e1c55so175606566b.2
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 01:48:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1688114905; x=1690706905;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=7ND7dNyhnZmormo1qsszJJ6OCUF3X4qBa9aUSKAs9Fo=;
-        b=Nlop1p62Zh/45QHOahMCSK6OJcwNbUS62VDJ3r31xRt2FnsftZi2QO4R/NsyYDZa5e
-         1zvPGzveJSdE+ybzyfS33E+L5xlInvTspjfDA8z5AUCz7MPpqtqzNuSbwQvlVlAh/s0G
-         j0MsN5Z9ygKJyEuzKfccg/FlbUMjrP06pBmizZLbO2k7/lodJQmyVTVIXApbuKOhCa1c
-         m1YWjsZE2/1gTfl9AkGS9Ml31kryTbvVgk5VJCD0wtyqwiybaQNTFmFDTwZPzMADUjGV
-         WevQQI7HdEm6uiFz1X86+RpgaAC6rKZfsYkS0GEGQjMAw/fVJX2QXxYREi/NH2mhLiYm
-         5RtQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688114905; x=1690706905;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=7ND7dNyhnZmormo1qsszJJ6OCUF3X4qBa9aUSKAs9Fo=;
-        b=DqMGgqhm/dsesLqKBcoTtUZ1dDhkzvjLEAYO3/FEFN8irOI+yD0Vc5KJfcq+jpNYLR
-         M0E20mWg9irtUaAVGGiGJwblTOdmFWsitXSSNO09xD7Ad88hTrO5YUGCW2+9Q4kIp465
-         fEQk2eSDzNbYZ+uelETZauDK3WxGvTJ3AU3F6LgSjmw5WWck1dZrviLcbSQaPRTz3JX/
-         KN2g2mkRRM6Grec6PkRjcvg1vW1bEtkYhvUtp7NXKACktsV4lhj27Aa5C/s7/nf1X28C
-         gAQGEDP9mFksc65e3PpEl/+vtp9rCwRYtJSVHHOFUJkTB+wIBBjlx/GTixxTs4wE+9q8
-         ivAQ==
-X-Gm-Message-State: AC+VfDxbBjfjLYwhz2GJseDFSGwcq7oAm2JXwQhaEo7E4e5G8+ItBIjJ
-        BkfZCCHhVOfWl6UNdcAnH30FqA==
-X-Google-Smtp-Source: APBJJlH6NE+RJWp/uuJQSzzT7DyyRhteXkuogpPYaAVVGrddaQHIhsAoLXUO3RwlY41Mjc0+tAWgJw==
-X-Received: by 2002:a17:906:4dcb:b0:96f:8439:6143 with SMTP id f11-20020a1709064dcb00b0096f84396143mr1384083ejw.40.1688114905435;
-        Fri, 30 Jun 2023 01:48:25 -0700 (PDT)
-Received: from [192.168.2.107] ([79.115.63.171])
-        by smtp.gmail.com with ESMTPSA id s2-20020a170906960200b0098d2261d189sm7913892ejx.19.2023.06.30.01.48.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 30 Jun 2023 01:48:24 -0700 (PDT)
-Message-ID: <6190c9c4-6d6e-7577-f2a4-8fbede61b405@linaro.org>
-Date:   Fri, 30 Jun 2023 09:48:23 +0100
+        Fri, 30 Jun 2023 04:49:24 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 510D11FFA
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 01:49:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1688114962; x=1719650962;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=foIZ/6+yXPObI0e8ZC8E/MW66KSDHlhEW1hYPbizjpU=;
+  b=XAf3TaLO4GBA/Iz1dbOo48OWFEiPO9Q7YD/HNnOyuRXX3XHdOzQMBJg3
+   gFWmbaZXzz7+6iqgtlutVIPBosG4goXShR/58FNmAzmIf3FOFdvTlNdj4
+   NGpnBKd1BSUb64OHO+6uDNrzuNk4wAnuwQCY/Zenu7L/0RX5T7roDtw4/
+   EAGqyKqsAUfNrtNrMdIGsev4fpnlZ8Pyp64kMTgSSvXMbM6FGUKRrVxI5
+   MUF9fsfbZU98Pfo9o5LaGUbtJr2+vowAxwUqU/9WSxg6a5x53rxcSL8zY
+   0Qe5KNp4RasmKryzIAYq/LiO6uluM/7ibbid9HjuibjLbJDfG1GDXgL4r
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10756"; a="448726729"
+X-IronPort-AV: E=Sophos;i="6.01,170,1684825200"; 
+   d="scan'208";a="448726729"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jun 2023 01:49:21 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10756"; a="841785951"
+X-IronPort-AV: E=Sophos;i="6.01,170,1684825200"; 
+   d="scan'208";a="841785951"
+Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 30 Jun 2023 01:49:19 -0700
+Received: from kbuild by 783282924a45 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1qF9oc-000Ept-2S;
+        Fri, 30 Jun 2023 08:49:18 +0000
+Date:   Fri, 30 Jun 2023 16:49:16 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        linux-kernel@vger.kernel.org,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nathan Chancellor <nathan@kernel.org>
+Subject: arch/powerpc/math-emu/fcmpu.c:15:2: error: variable '_fex' set but
+ not used
+Message-ID: <202306301631.cFuy7ZmI-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v3 2/2] mtd: spi-nor: Avoid setting SRWD bit in SR if WP#
- signal not connected
-Content-Language: en-US
-To:     Michael Walle <michael@walle.cc>,
-        Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>
-Cc:     pratyush@kernel.org, miquel.raynal@bootlin.com, richard@nod.at,
-        vigneshr@ti.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        git@amd.com, linux-mtd@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        amitrkcian2002@gmail.com
-References: <20230625100251.31589-1-amit.kumar-mahapatra@amd.com>
- <20230625100251.31589-3-amit.kumar-mahapatra@amd.com>
- <5e5fe22aebe17da4f9ad2c4eaaa8985f@walle.cc>
-From:   Tudor Ambarus <tudor.ambarus@linaro.org>
-In-Reply-To: <5e5fe22aebe17da4f9ad2c4eaaa8985f@walle.cc>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,79 +65,129 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Christophe,
+
+First bad commit (maybe != root cause):
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   e55e5df193d247a38a5e1ac65a5316a0adcc22fa
+commit: 7245fc5bb7a966852d5bd7779d1f5855530b461a powerpc/math-emu: Remove -w build flag and fix warnings
+date:   10 months ago
+config: powerpc-randconfig-r022-20230630 (https://download.01.org/0day-ci/archive/20230630/202306301631.cFuy7ZmI-lkp@intel.com/config)
+compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
+reproduce: (https://download.01.org/0day-ci/archive/20230630/202306301631.cFuy7ZmI-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306301631.cFuy7ZmI-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> arch/powerpc/math-emu/fcmpu.c:15:2: error: variable '_fex' set but not used [-Werror,-Wunused-but-set-variable]
+           FP_DECL_EX;
+           ^
+   include/math-emu/soft-fp.h:94:24: note: expanded from macro 'FP_DECL_EX'
+   #define FP_DECL_EX int _fex = 0
+                          ^
+>> arch/powerpc/math-emu/fcmpu.c:13:2: error: variable 'A_c' set but not used [-Werror,-Wunused-but-set-variable]
+           FP_DECL_D(A);
+           ^
+   include/math-emu/double.h:73:23: note: expanded from macro 'FP_DECL_D'
+   #define FP_DECL_D(X)            _FP_DECL(2,X)
+                                   ^
+   include/math-emu/op-common.h:28:14: note: expanded from macro '_FP_DECL'
+     _FP_I_TYPE X##_c=0, X##_s=0, X##_e=0; \
+                ^
+   <scratch space>:161:1: note: expanded from here
+   A_c
+   ^
+>> arch/powerpc/math-emu/fcmpu.c:14:2: error: variable 'B_c' set but not used [-Werror,-Wunused-but-set-variable]
+           FP_DECL_D(B);
+           ^
+   include/math-emu/double.h:73:23: note: expanded from macro 'FP_DECL_D'
+   #define FP_DECL_D(X)            _FP_DECL(2,X)
+                                   ^
+   include/math-emu/op-common.h:28:14: note: expanded from macro '_FP_DECL'
+     _FP_I_TYPE X##_c=0, X##_s=0, X##_e=0; \
+                ^
+   <scratch space>:167:1: note: expanded from here
+   B_c
+   ^
+   arch/powerpc/math-emu/fcmpu.c:11:1: error: no previous prototype for function 'fcmpu' [-Werror,-Wmissing-prototypes]
+   fcmpu(u32 *ccr, int crfD, void *frA, void *frB)
+   ^
+   arch/powerpc/math-emu/fcmpu.c:10:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int
+   ^
+   static 
+   4 errors generated.
+--
+>> arch/powerpc/math-emu/fsel.c:14:2: error: variable '_fex' set but not used [-Werror,-Wunused-but-set-variable]
+           FP_DECL_EX;
+           ^
+   include/math-emu/soft-fp.h:94:24: note: expanded from macro 'FP_DECL_EX'
+   #define FP_DECL_EX int _fex = 0
+                          ^
+   arch/powerpc/math-emu/fsel.c:11:1: error: no previous prototype for function 'fsel' [-Werror,-Wmissing-prototypes]
+   fsel(u32 *frD, void *frA, u32 *frB, u32 *frC)
+   ^
+   arch/powerpc/math-emu/fsel.c:10:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int
+   ^
+   static 
+   2 errors generated.
+--
+>> arch/powerpc/math-emu/fctiwz.c:14:2: error: variable '_fex' set but not used [-Werror,-Wunused-but-set-variable]
+           FP_DECL_EX;
+           ^
+   include/math-emu/soft-fp.h:94:24: note: expanded from macro 'FP_DECL_EX'
+   #define FP_DECL_EX int _fex = 0
+                          ^
+   arch/powerpc/math-emu/fctiwz.c:11:1: error: no previous prototype for function 'fctiwz' [-Werror,-Wmissing-prototypes]
+   fctiwz(u32 *frD, void *frB)
+   ^
+   arch/powerpc/math-emu/fctiwz.c:10:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int
+   ^
+   static 
+   2 errors generated.
+--
+>> arch/powerpc/math-emu/fctiw.c:14:2: error: variable '_fex' set but not used [-Werror,-Wunused-but-set-variable]
+           FP_DECL_EX;
+           ^
+   include/math-emu/soft-fp.h:94:24: note: expanded from macro 'FP_DECL_EX'
+   #define FP_DECL_EX int _fex = 0
+                          ^
+   arch/powerpc/math-emu/fctiw.c:11:1: error: no previous prototype for function 'fctiw' [-Werror,-Wmissing-prototypes]
+   fctiw(u32 *frD, void *frB)
+   ^
+   arch/powerpc/math-emu/fctiw.c:10:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int
+   ^
+   static 
+   2 errors generated.
 
 
-On 6/27/23 07:14, Michael Walle wrote:
-> Am 2023-06-25 12:02, schrieb Amit Kumar Mahapatra:
->> Setting the status register write disable (SRWD) bit in the status
->> register (SR) with WP# signal of the flash left floating or wrongly tied to
->> GND (that includes internal pull-downs), will configure the SR permanently
->> as read-only. If WP# signal is left floating or wrongly tied to GND, avoid
->> setting SRWD bit while writing the SR during flash protection.
->>
->> Signed-off-by: Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>
->> ---
->>  drivers/mtd/spi-nor/core.c | 3 +++
->>  drivers/mtd/spi-nor/core.h | 1 +
->>  drivers/mtd/spi-nor/swp.c  | 9 +++++++--
->>  3 files changed, 11 insertions(+), 2 deletions(-)
->>
->> diff --git a/drivers/mtd/spi-nor/core.c b/drivers/mtd/spi-nor/core.c
->> index 0bb0ad14a2fc..520f5ab86d2b 100644
->> --- a/drivers/mtd/spi-nor/core.c
->> +++ b/drivers/mtd/spi-nor/core.c
->> @@ -2864,6 +2864,9 @@ static void spi_nor_init_flags(struct spi_nor *nor)
->>      if (flags & NO_CHIP_ERASE)
->>          nor->flags |= SNOR_F_NO_OP_CHIP_ERASE;
->>
->> +    if (of_property_read_bool(np, "no-wp"))
->> +        nor->flags |= SNOR_F_NO_WP;
->> +
-> 
-> Please put it below the of_property_read_bool() which is already
-> there, just to keep things sorted.
-> 
->>      if (flags & SPI_NOR_RWW && nor->info->n_banks > 1 &&
->>          !nor->controller_ops)
->>          nor->flags |= SNOR_F_RWW;
->> diff --git a/drivers/mtd/spi-nor/core.h b/drivers/mtd/spi-nor/core.h
->> index 4fb5ff09c63a..55b5e7abce6e 100644
->> --- a/drivers/mtd/spi-nor/core.h
->> +++ b/drivers/mtd/spi-nor/core.h
->> @@ -132,6 +132,7 @@ enum spi_nor_option_flags {
->>      SNOR_F_SWP_IS_VOLATILE    = BIT(13),
->>      SNOR_F_RWW        = BIT(14),
->>      SNOR_F_ECC        = BIT(15),
->> +    SNOR_F_NO_WP        = BIT(16),
-> 
-> See the comment right above this enum :/
-> 
->>  };
->>
->>  struct spi_nor_read_command {
->> diff --git a/drivers/mtd/spi-nor/swp.c b/drivers/mtd/spi-nor/swp.c
->> index 0ba716e84377..cfaba41d74d6 100644
->> --- a/drivers/mtd/spi-nor/swp.c
->> +++ b/drivers/mtd/spi-nor/swp.c
->> @@ -214,8 +214,13 @@ static int spi_nor_sr_lock(struct spi_nor *nor, loff_t ofs, uint64_t len)
->>
->>      status_new = (status_old & ~mask & ~tb_mask) | val;
->>
->> -    /* Disallow further writes if WP pin is asserted */
->> -    status_new |= SR_SRWD;
->> +    /*
->> +     * Disallow further writes if WP# pin is neither left floating nor
->> +     * wrongly tied to GND(that includes internal pull-downs).
-> 
-> nit: space missing
-> 
-> Otherwise looks good.
-> 
+vim +/_fex +15 arch/powerpc/math-emu/fcmpu.c
 
-Thanks, Michael.
+^1da177e4c3f41 arch/ppc/math-emu/fcmpu.c     Linus Torvalds 2005-04-16   9  
+^1da177e4c3f41 arch/ppc/math-emu/fcmpu.c     Linus Torvalds 2005-04-16  10  int
+^1da177e4c3f41 arch/ppc/math-emu/fcmpu.c     Linus Torvalds 2005-04-16  11  fcmpu(u32 *ccr, int crfD, void *frA, void *frB)
+^1da177e4c3f41 arch/ppc/math-emu/fcmpu.c     Linus Torvalds 2005-04-16  12  {
+^1da177e4c3f41 arch/ppc/math-emu/fcmpu.c     Linus Torvalds 2005-04-16 @13  	FP_DECL_D(A);
+^1da177e4c3f41 arch/ppc/math-emu/fcmpu.c     Linus Torvalds 2005-04-16 @14  	FP_DECL_D(B);
+d2b194ed820880 arch/powerpc/math-emu/fcmpu.c Kumar Gala     2008-06-04 @15  	FP_DECL_EX;
+^1da177e4c3f41 arch/ppc/math-emu/fcmpu.c     Linus Torvalds 2005-04-16  16  	int code[4] = { (1 << 3), (1 << 1), (1 << 2), (1 << 0) };
+^1da177e4c3f41 arch/ppc/math-emu/fcmpu.c     Linus Torvalds 2005-04-16  17  	long cmp;
+^1da177e4c3f41 arch/ppc/math-emu/fcmpu.c     Linus Torvalds 2005-04-16  18  
 
-Amit, would be good if you can address Michael's comments and
-resubmit. If not, I'll amend the patch by myself when applying.
+:::::: The code at line 15 was first introduced by commit
+:::::: d2b194ed820880eb19c43b9c10d9f5f30026ee54 powerpc/math-emu: Use kernel generic math-emu code
 
-Cheers,
-ta
+:::::: TO: Kumar Gala <galak@kernel.crashing.org>
+:::::: CC: Kumar Gala <galak@kernel.crashing.org>
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
