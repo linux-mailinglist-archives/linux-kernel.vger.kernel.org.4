@@ -2,59 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F26F97444DA
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Jul 2023 00:30:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D1B97444D8
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Jul 2023 00:30:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232632AbjF3WaO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 18:30:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55368 "EHLO
+        id S229995AbjF3WaK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Jun 2023 18:30:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232365AbjF3WaD (ORCPT
+        with ESMTP id S233061AbjF3WaC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 18:30:03 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F6724489;
-        Fri, 30 Jun 2023 15:29:50 -0700 (PDT)
+        Fri, 30 Jun 2023 18:30:02 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17E6D4488
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 15:29:50 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CE21A61831;
-        Fri, 30 Jun 2023 22:29:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 3FED0C433CA;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A17F86181E
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 22:29:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 155A7C433C7;
         Fri, 30 Jun 2023 22:29:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1688164189;
-        bh=eNGz5uV6SVOSrtLtVF2bhDRU6Kns2q1uJO4r8gzTOC4=;
+        bh=untxK9WQXgXLkbvHnY0KwjAvSZyud4kEDMeTeH5JsVY=;
         h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=VeFISMVY/Mp9M2TrnKKkcAe8E+zBnT7rJ2I6PbQcjoB1eJenS0tu8j5fE/KL8UIl3
-         gNGEPRvke2RXbmdQ9CI3ueck/kL+iWLcFjpPrHQhFpqAzUG8nkf5zHcQW9Es2F0bI6
-         CN3HzYHsMesNwu6/uApNPUnpmVOG+Ed+nBvdCdW5H1lTaz5E1Kz5m4f5/QqF7vUhYA
-         KyreP6XmbGpRcIe/rHb3KjSeZeme41KFaHLEgE1UxZL/VFpt2Sr6WL8Op+bDRHsGwA
-         /cFssrA4cvE4iZegHyqXY7ueY9hVGwiZoPdIZ+0wATQ5kYgINNgsxsCYd7rNGN+V0w
-         qLjhrT6fKK+UQ==
+        b=JD4iocmkCy/TrJXYB92SgzvhUdMB66ks8iPlx7+ESYzARP9SE3DM/KuWBSpfl4Tug
+         CKErIUsdDQz8Nm/YrtNdlHWl60IhHDlLC9LzWMSF8hGkhAhNjuhS17tmb3fls4hnCB
+         8FC6Cu2nlSxHhZ5GjPYZVMLpmsNMiumqVoztC7ral52WEHSkP0MoI6S/1MhOpexDPm
+         y3V92P/4uJBtaWdRs7Fisu/ytDjcrg+Z5T50o5T/OhWZBholHDR2/mCIbzsdDVLFq3
+         pu/XPl3YjTZOLhlPxSPrl6moRWsp1ZaCM9qSt5p2rlxfpxRXb2IoOwXUtv8aabUxQ/
+         WjL9ybddYCtQw==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 3003AC39563;
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 05056C39563;
         Fri, 30 Jun 2023 22:29:49 +0000 (UTC)
-Subject: Re: [GIT PULL] VFIO updates for v6.5-rc1
+Subject: Re: [GIT PULL] platform-drivers-x86 for 6.5-1
 From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20230629144949.07e6cd78.alex.williamson@redhat.com>
-References: <20230629144949.07e6cd78.alex.williamson@redhat.com>
+In-Reply-To: <a3486764-fdb3-5df2-e3be-c0262768ce0d@redhat.com>
+References: <a3486764-fdb3-5df2-e3be-c0262768ce0d@redhat.com>
 X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20230629144949.07e6cd78.alex.williamson@redhat.com>
-X-PR-Tracked-Remote: https://github.com/awilliam/linux-vfio.git tags/vfio-v6.5-rc1
-X-PR-Tracked-Commit-Id: ff598081e5b9d0bdd6874bfe340811bbb75b35e4
+X-PR-Tracked-Message-Id: <a3486764-fdb3-5df2-e3be-c0262768ce0d@redhat.com>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git tags/platform-drivers-x86-v6.5-1
+X-PR-Tracked-Commit-Id: d2a7bd3690990ab8a8239096ee432ad51985d5b6
 X-PR-Merge-Tree: torvalds/linux.git
 X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: b25f62ccb490680a8cee755ac4528909395e0711
-Message-Id: <168816418919.26572.14874927329691358838.pr-tracker-bot@kernel.org>
+X-PR-Merge-Commit-Id: 9c3255a8f3946a4c8844f1e2e093313f3b71cb30
+Message-Id: <168816418901.26572.5050119056825476849.pr-tracker-bot@kernel.org>
 Date:   Fri, 30 Jun 2023 22:29:49 +0000
-To:     Alex Williamson <alex.williamson@redhat.com>
+To:     Hans de Goede <hdegoede@redhat.com>
 Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        Andy Shevchenko <andy@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        =?UTF-8?Q?Ilpo_J=c3=a4rvinen?= <ilpo.jarvinen@linux.intel.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -63,12 +64,12 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Thu, 29 Jun 2023 14:49:49 -0600:
+The pull request you sent on Thu, 29 Jun 2023 11:28:53 +0200:
 
-> https://github.com/awilliam/linux-vfio.git tags/vfio-v6.5-rc1
+> git://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git tags/platform-drivers-x86-v6.5-1
 
 has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/b25f62ccb490680a8cee755ac4528909395e0711
+https://git.kernel.org/torvalds/c/9c3255a8f3946a4c8844f1e2e093313f3b71cb30
 
 Thank you!
 
