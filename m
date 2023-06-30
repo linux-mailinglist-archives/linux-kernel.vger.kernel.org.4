@@ -2,115 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E011D744192
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 19:48:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E6CB74419A
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 19:49:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232839AbjF3Rsx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 13:48:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55062 "EHLO
+        id S232576AbjF3Rt3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Jun 2023 13:49:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232387AbjF3Rsr (ORCPT
+        with ESMTP id S232955AbjF3RtM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 13:48:47 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5209F2D4A;
-        Fri, 30 Jun 2023 10:48:46 -0700 (PDT)
-X-IronPort-AV: E=McAfee;i="6600,9927,10757"; a="352275048"
-X-IronPort-AV: E=Sophos;i="6.01,171,1684825200"; 
-   d="scan'208";a="352275048"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jun 2023 10:48:45 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10757"; a="787792137"
-X-IronPort-AV: E=Sophos;i="6.01,171,1684825200"; 
-   d="scan'208";a="787792137"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga004.fm.intel.com with ESMTP; 30 Jun 2023 10:48:36 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andy@kernel.org>)
-        id 1qFIET-001AaS-1x;
-        Fri, 30 Jun 2023 20:48:33 +0300
-Date:   Fri, 30 Jun 2023 20:48:33 +0300
-From:   Andy Shevchenko <andy@kernel.org>
-To:     Neil Armstrong <neil.armstrong@linaro.org>
-Cc:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Sebastian Reichel <sre@kernel.org>,
-        Marc Zyngier <maz@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-mtd@lists.infradead.org, netdev@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-oxnas@groups.io,
-        Arnd Bergmann <arnd@arndb.de>,
-        Daniel Golle <daniel@makrotopia.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Sebastian Reichel <sebastian.reichel@collabora.com>
-Subject: Re: [PATCH v2 00/15] ARM: oxnas support removal
-Message-ID: <ZJ8VcZq2s5XrxJge@smile.fi.intel.com>
-References: <20230630-topic-oxnas-upstream-remove-v2-0-fb6ab3dea87c@linaro.org>
+        Fri, 30 Jun 2023 13:49:12 -0400
+Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8E383C38
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 10:49:08 -0700 (PDT)
+Received: from cwcc.thunk.org (pool-173-48-82-24.bstnma.fios.verizon.net [173.48.82.24])
+        (authenticated bits=0)
+        (User authenticated as tytso@ATHENA.MIT.EDU)
+        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 35UHmjnn030007
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 30 Jun 2023 13:48:46 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
+        t=1688147328; bh=OqlaOFsP/6utk43neMzoLHFhY4L+KrVOKmknc6WOFHU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To;
+        b=c6z9Bqo6IwH/NlNSb3oiBJXdjOUU4gcaKxdzHTzNZQoGq9t04WDQ9VOcejj17L3GR
+         GXD8xo26n3o+OqcKi1m5Fd0UfUWPRSVCRjKxQRCs4U/dP2l+2M0sP1tsU6GlviSTsa
+         zmQOsiQXllUgCTIGyDpET09bVpxslkpY2DW6JNctddKYyfvi1qyFxx0KAIewSuxXHD
+         y6uTbrL9ngETIwgbV0IrbIa4gzTIGa/DU4f9k5JYmMVI9IQbQLxsL8OTHzrEoEmV38
+         yVsY1iHovrotSWvzMSMr7VDZ3UbqBgHtm30+2SuvnR07S75qRrKQSgV4VY53gYUbbH
+         Belu3NgmFdgIQ==
+Received: by cwcc.thunk.org (Postfix, from userid 15806)
+        id A9FF415C027F; Fri, 30 Jun 2023 13:48:45 -0400 (EDT)
+Date:   Fri, 30 Jun 2023 13:48:45 -0400
+From:   "Theodore Ts'o" <tytso@mit.edu>
+To:     syzbot <syzbot+b960a0fea3fa8df1cd22@syzkaller.appspotmail.com>
+Cc:     adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, nathan@kernel.org, ndesaulniers@google.com,
+        syzkaller-bugs@googlegroups.com, trix@redhat.com
+Subject: Re: [syzbot] [ext4?] general protection fault in ext4_quota_read
+Message-ID: <20230630174845.GD591635@mit.edu>
+References: <0000000000007720b405ff59d161@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230630-topic-oxnas-upstream-remove-v2-0-fb6ab3dea87c@linaro.org>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_SOFTFAIL,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <0000000000007720b405ff59d161@google.com>
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 30, 2023 at 06:58:25PM +0200, Neil Armstrong wrote:
-> With [1] removing MPCore SMP support, this makes the OX820 barely usable,
-> associated with a clear lack of maintainance, development and migration to
-> dt-schema it's clear that Linux support for OX810 and OX820 should be removed.
+On Fri, Jun 30, 2023 at 07:41:54AM -0700, syzbot wrote:
+> Hello,
 > 
-> In addition, the OX810 hasn't been booted for years and isn't even present
-> in an ARM config file.
+> syzbot found the following issue on:
 > 
-> For the OX820, lack of USB and SATA support makes the platform not usable
-> in the current Linux support and relies on off-tree drivers hacked from the
-> vendor (defunct for years) sources.
-> 
-> The last users are in the OpenWRT distribution, and today's removal means
-> support will still be in stable 6.1 LTS kernel until end of 2026.
-> 
-> If someone wants to take over the development even with lack of SMP, I'll
-> be happy to hand off maintainance.
-> 
-> It has been a fun time adding support for this architecture, but it's time
-> to get over!
-> 
-> Now arch/arm parts are removed, now it's time to remove the remaining stuff.
+> HEAD commit:    6995e2de6891 Linux 6.4
+> git tree:       upstream
+> console output: https://syzkaller.appspot.com/x/log.txt?x=175bc8bf280000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=f4df35260418daa6
+> dashboard link: https://syzkaller.appspot.com/bug?extid=b960a0fea3fa8df1cd22
+> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=17e661af280000
 
-For all non-DT patches
-Acked-by: Andy Shevchenko <andy@kernel.org>
+There is a syz reproducer, but no C reprodducer.  Looking at the syz
+reproducer, though, it looks like this is another one of these "let's
+flip the mounted file system between r/o and r/w", with the added
+"fun" that it appears that the mounted file system has a corrupted set
+of quota inodes.  (See below.)
 
-I always like negative statistics of a magnitude order!
+Looking at the stack trace, it looks like we're passing an invalid
+inode pointer to ext4_quota_read() from do_insert_tree() which is
+ultimately called from dquot_file_open() while trying to open an ext4
+file.
 
--- 
-With Best Regards,
-Andy Shevchenko
+Jan, since I know you're working on reworking the quota code to handle
+crazy (and as Linus says, crazy userspace doesn't come more crazy than
+syzbot) r/o <-> r/w racing remounts with quota enabled, over to you.  :-)
+
+       		     	   	    	 - Ted
+
+e2fsck 1.47.0 (5-Feb-2023)
+Pass 1: Checking inodes, blocks, and sizes
+Inode 3, i_blocks is 16, should be 8.  Fix? no
+
+Inode 15, i_size is 360287970189639690, should be 4096.  Fix? no
+
+Inode 16, i_size is 9000, should be 20480.  Fix? no
+
+Pass 2: Checking directory structure
+Pass 3: Checking directory connectivity
+Pass 4: Checking reference counts
+Pass 5: Checking group summary information
+Block bitmap differences:  -10
+Fix? no
+
+Free blocks count wrong for group #0 (41, counted=18).
+Fix? no
+
+Free blocks count wrong (41, counted=18).
+Fix? no
+
+Padding at end of block bitmap is not set. Fix? no
+
+[ERROR] ../../../../lib/support/quotaio_tree.c:546:check_reference: Illegal reference (975616 >= 6) in user quota file
+Update quota info for quota type 0? no
+
+[ERROR] ../../../../lib/support/quotaio_tree.c:546:check_reference: Illegal reference (196613 >= 6) in group quota file
+Update quota info for quota type 1? no
 
 
+syzkaller: ********** WARNING: Filesystem still has errors **********
+
+syzkaller: 17/32 files (0.0% non-contiguous), 0/41 blocks
