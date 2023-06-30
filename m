@@ -2,83 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 717FF743E05
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 16:58:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6758743E03
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 16:58:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232821AbjF3O61 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 10:58:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54228 "EHLO
+        id S232814AbjF3O6R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Jun 2023 10:58:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231849AbjF3O6Z (ORCPT
+        with ESMTP id S231849AbjF3O6P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 10:58:25 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.65.254])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DD0A359E;
-        Fri, 30 Jun 2023 07:58:23 -0700 (PDT)
-X-QQ-mid: bizesmtp87t1688137093tnenfezj
-Received: from linux-lab-host.localdomain ( [119.123.131.49])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Fri, 30 Jun 2023 22:58:12 +0800 (CST)
-X-QQ-SSF: 01200000000000D0W000000A0000000
-X-QQ-FEAT: D2GZf6M6C/iXFYl/ZWwOsCC60g16lUOAO1Y9zKzd1LwnO/woTAQ+CfFAkq+Wq
-        yVeX7w8gzVRaC0SNKCQtyPkZN/zhk/F1PWjZql1ldLzLVQFuQbSiRXTcGXfcbeHLxXXnyQ+
-        lBWoXyFAGge/HaepE42/QBGraYZT7/W6Y/K26Vrhy2hEl5nmDxNYXX5FANYRVFqUj4XE5mO
-        jTe2Kfpzs4ti027IGCj9+5QK1o8po3R0YfxRGGvR14JiAva+J1DyAaPebh27Xgh/Q6Wxmdu
-        T9vYY1X2oIJAX6qK79cvfirKVYbg83JWPlQPDPwV45vrB5Khperyo2EACncI7za7Elp7jXl
-        zUPTppk7VqkRdqR6/XBT+vVjhRkQZHUuSsSGlj2k7VhjEAUtX5YedXd8D2g7ulSPoo3qCqH
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 3647784010068437256
-From:   Zhangjin Wu <falcon@tinylab.org>
-To:     thomas@t-8ch.de, w@1wt.eu
-Cc:     arnd@arndb.de, falcon@tinylab.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        =?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Subject: [PATCH v3 12/14] selftests/nolibc: prepare /tmp for tmpfs or ramfs
-Date:   Fri, 30 Jun 2023 22:58:02 +0800
-Message-Id: <020ca58ad59035488d6a50b14113ed7401e797f4.1688134400.git.falcon@tinylab.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <cover.1688134399.git.falcon@tinylab.org>
-References: <cover.1688134399.git.falcon@tinylab.org>
+        Fri, 30 Jun 2023 10:58:15 -0400
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::225])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5BEC19B5;
+        Fri, 30 Jun 2023 07:58:12 -0700 (PDT)
+X-GND-Sasl: i.maximets@ovn.org
+X-GND-Sasl: i.maximets@ovn.org
+X-GND-Sasl: i.maximets@ovn.org
+X-GND-Sasl: i.maximets@ovn.org
+X-GND-Sasl: i.maximets@ovn.org
+X-GND-Sasl: i.maximets@ovn.org
+X-GND-Sasl: i.maximets@ovn.org
+X-GND-Sasl: i.maximets@ovn.org
+X-GND-Sasl: i.maximets@ovn.org
+X-GND-Sasl: i.maximets@ovn.org
+X-GND-Sasl: i.maximets@ovn.org
+X-GND-Sasl: i.maximets@ovn.org
+X-GND-Sasl: i.maximets@ovn.org
+X-GND-Sasl: i.maximets@ovn.org
+Received: by mail.gandi.net (Postfix) with ESMTPSA id E6CF81C0002;
+        Fri, 30 Jun 2023 14:58:07 +0000 (UTC)
+From:   Ilya Maximets <i.maximets@ovn.org>
+To:     netdev@vger.kernel.org, bpf@vger.kernel.org
+Cc:     =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jason Wang <jasowang@redhat.com>,
+        Stefan Hajnoczi <stefanha@redhat.com>,
+        Ilya Maximets <i.maximets@ovn.org>
+Subject: [RFC bpf-next] xsk: honor SO_BINDTODEVICE on bind
+Date:   Fri, 30 Jun 2023 16:58:31 +0200
+Message-Id: <20230630145831.2988845-1-i.maximets@ovn.org>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrgz:qybglogicsvrgz5a-1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_PASS,SPF_NEUTRAL,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-create a /tmp directory and mount tmpfs there, if tmpfs is not
-mountable, use ramfs as tmpfs.
+Initial creation of an AF_XDP socket requires CAP_NET_RAW capability.
+A privileged process might create the socket and pass it to a
+non-privileged process for later use.  However, that process will be
+able to bind the socket to any network interface.  Even though it will
+not be able to receive any traffic without modification of the BPF map,
+the situation is not ideal.
 
-tmpfs will be used instead of procfs for some tests.
+Sockets already have a mechanism that can be used to restrict what
+interface they can be attached to.  That is SO_BINDTODEVICE.
 
-Reviewed-by: Thomas Weißschuh <linux@weissschuh.net>
-Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
+To change the binding the process will need CAP_NET_RAW.
+
+Make xsk_bind() honor the SO_BINDTODEVICE in order to allow safer
+workflow when non-privileged process is using AF_XDP.
+
+Signed-off-by: Ilya Maximets <i.maximets@ovn.org>
 ---
- tools/testing/selftests/nolibc/nolibc-test.c | 4 ++++
- 1 file changed, 4 insertions(+)
 
-diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
-index b7ea95dad0fb..906b70ddec79 100644
---- a/tools/testing/selftests/nolibc/nolibc-test.c
-+++ b/tools/testing/selftests/nolibc/nolibc-test.c
-@@ -1053,6 +1053,10 @@ int prepare(void)
- 		}
- 	}
+Posting as an RFC for now to probably get some feedback.
+Will re-post once the tree is open.
+
+ Documentation/networking/af_xdp.rst | 9 +++++++++
+ net/xdp/xsk.c                       | 6 ++++++
+ 2 files changed, 15 insertions(+)
+
+diff --git a/Documentation/networking/af_xdp.rst b/Documentation/networking/af_xdp.rst
+index 247c6c4127e9..1cc35de336a4 100644
+--- a/Documentation/networking/af_xdp.rst
++++ b/Documentation/networking/af_xdp.rst
+@@ -433,6 +433,15 @@ start N bytes into the buffer leaving the first N bytes for the
+ application to use. The final option is the flags field, but it will
+ be dealt with in separate sections for each UMEM flag.
  
-+	/* try to mount /tmp if not mounted, if not mountable, use ramfs as tmpfs */
-+	mkdir("/tmp", 0755);
-+	mount("none", "/tmp", "tmpfs", 0, 0);
++SO_BINDTODEVICE setsockopt
++--------------------------
 +
- 	return 0;
- }
++This is a generic SOL_SOCKET option that can be used to tie AF_XDP
++socket to a particular network interface.  It is useful when a socket
++is created by a privileged process and passed to a non-privileged one.
++Once the option is set, kernel will refuse attempts to bind that socket
++to a different interface.  Updating the value requires CAP_NET_RAW.
++
+ XDP_STATISTICS getsockopt
+ -------------------------
  
+diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
+index 5a8c0dd250af..386ff641db0f 100644
+--- a/net/xdp/xsk.c
++++ b/net/xdp/xsk.c
+@@ -886,6 +886,7 @@ static int xsk_bind(struct socket *sock, struct sockaddr *addr, int addr_len)
+ 	struct sock *sk = sock->sk;
+ 	struct xdp_sock *xs = xdp_sk(sk);
+ 	struct net_device *dev;
++	int bound_dev_if;
+ 	u32 flags, qid;
+ 	int err = 0;
+ 
+@@ -899,6 +900,11 @@ static int xsk_bind(struct socket *sock, struct sockaddr *addr, int addr_len)
+ 		      XDP_USE_NEED_WAKEUP))
+ 		return -EINVAL;
+ 
++	bound_dev_if = READ_ONCE(sk->sk_bound_dev_if);
++
++	if (bound_dev_if && bound_dev_if != sxdp->sxdp_ifindex)
++		return -EINVAL;
++
+ 	rtnl_lock();
+ 	mutex_lock(&xs->mutex);
+ 	if (xs->state != XSK_READY) {
 -- 
-2.25.1
+2.40.1
 
