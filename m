@@ -2,111 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28F257432DF
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 04:48:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EFF747432E5
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 04:59:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231979AbjF3CsJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 22:48:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33678 "EHLO
+        id S230054AbjF3C7V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 22:59:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230407AbjF3CsH (ORCPT
+        with ESMTP id S229545AbjF3C7T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 22:48:07 -0400
-Received: from mail-qk1-x72c.google.com (mail-qk1-x72c.google.com [IPv6:2607:f8b0:4864:20::72c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA4C535A7;
-        Thu, 29 Jun 2023 19:48:05 -0700 (PDT)
-Received: by mail-qk1-x72c.google.com with SMTP id af79cd13be357-76714caf466so126204685a.1;
-        Thu, 29 Jun 2023 19:48:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688093285; x=1690685285;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=a4ALnKxby19PRdzxTmTKNTGCytmjoLEZ1P5o67YM3y8=;
-        b=XESjJS/WYUlwketPbHggw2mNZxEWqPMfUwldLsyUQzFIV4/AwstgqxiKth5pyXNlUw
-         qAi33o9dYXWUI4MXFd3itlIi8TUrwd9S0AQzdyZrOpNXZPKP9l5eNcj4i3hi/o78KrBX
-         KkK0G2ERgpK9MJaSg1FOlc/CTDGfteUVvFbR8oSjT0vJ3A7zdXttnNIHkM1vFmmR+oPW
-         vEyzkWWVYpca86QuOLGHv6txTw4q38dsRAm/obAqnGMtELIjCSRn4BJ6j2p5v89CO9+1
-         lBtCpi49x/ULmTtyNxdTs+Ogi6mAu4OzMwkz4F0/g4tMM6j8FFK0xGVhsaonDcbl+OJW
-         TA7w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688093285; x=1690685285;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=a4ALnKxby19PRdzxTmTKNTGCytmjoLEZ1P5o67YM3y8=;
-        b=YTexsgWxkkBm7HzuuZq0J65kzHYLnNLF+mtnQ604amxn8s+twhg5N04MEV4LuwFBJY
-         yWChPIS8dJbKUTPEMp8xDtAJs5RRPn3hsKzfM5WwGWDVLW/Cms+vtCy4y5eNRDHhJ7gu
-         KVqc04bUny3UEn6eRhLpOdxWio4HAFVVMPcEyZPLlx4NNOj5ghM8EWW28NXzsUYDq/DU
-         Wd3feLbxyvAMIY3k7S9N+DSIwyOv0yEgRPvPwHVkxuh5VUxg2ob0w3TgFgxmYYfGyYWj
-         vbuhDByUm6SvTJLSS3IrElBSli0aqNcBOOdVCHBOmb5/AN/DpWHlMx8g7YqFLzcCzDR0
-         Yv9A==
-X-Gm-Message-State: AC+VfDylsbKClfpjJYI5IGJvh1V1zwDuu6sP7PgW/zpHdbpI8pPk+YGz
-        REECMWGTGYmMCkPBidRyf4k=
-X-Google-Smtp-Source: ACHHUZ7s7kalGiaALcvNXMQ8bFkk+F3F/a0hjtQhSfESqAy5yobugXLHDaNSPLiYa/X6zpKF/Sdw1Q==
-X-Received: by 2002:a05:620a:424d:b0:765:8204:dd64 with SMTP id w13-20020a05620a424d00b007658204dd64mr1522149qko.7.1688093284787;
-        Thu, 29 Jun 2023 19:48:04 -0700 (PDT)
-Received: from oslab-pc.tsinghua.edu.cn ([166.111.139.122])
-        by smtp.gmail.com with ESMTPSA id p5-20020a63c145000000b00519c3475f21sm9600224pgi.46.2023.06.29.19.48.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Jun 2023 19:48:04 -0700 (PDT)
-From:   Tuo Li <islituo@gmail.com>
-To:     james.smart@broadcom.com, dick.kennedy@broadcom.com,
-        jejb@linux.ibm.com, martin.petersen@oracle.com
-Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        baijiaju1990@outlook.com, Tuo Li <islituo@gmail.com>,
-        BassCheck <bass@buaa.edu.cn>
-Subject: [PATCH] scsi: lpfc: Fix a possible data race in lpfc_unregister_fcf_rescan()
-Date:   Fri, 30 Jun 2023 10:47:48 +0800
-Message-Id: <20230630024748.1035993-1-islituo@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        Thu, 29 Jun 2023 22:59:19 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 307F930D1;
+        Thu, 29 Jun 2023 19:59:18 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 372A261682;
+        Fri, 30 Jun 2023 02:59:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43B68C433C8;
+        Fri, 30 Jun 2023 02:59:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688093956;
+        bh=B0uJCCt4pLa8YAS3agrRPmNgvGJ8BG0YaD14PEJl/gU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=OSBICMM9QqsAR5EgD2csPc4ULMsCGxbOFC1Cldy1YYAP5XLQ0+0GGBLUHNso6isxm
+         POOvVzf/sCKOQAOjXToA2RwgtcTS0ITpdLhQay2slXHvOdyRhlDNBpsa0wM8l0Jogk
+         PuVnRp3juYw9vmZLdHs24pejpGQu3vV5xgSgfv291ts1VlQNIKh0G6KOYHIm4eJQQC
+         kCyVYTcRrmOxGVFreUiXP1XWp/PV+r4FSkPncD33t+kABYumo7lkQlr9TcaYx/CRaW
+         MhmPu/SbdZIlzvzdhOtEdvrc/DFn/QdI/ljO/fCrhNECJGiTkFq4h2evyKbpmxcCBi
+         Yf/jZUQ0/dvcw==
+Date:   Thu, 29 Jun 2023 19:59:14 -0700
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     Dongsoo Lee <letrhee@nsr.re.kr>
+Cc:     'Herbert Xu' <herbert@gondor.apana.org.au>,
+        "'David S. Miller'" <davem@davemloft.net>,
+        'Jens Axboe' <axboe@kernel.dk>,
+        "'Theodore Y. Ts'o'" <tytso@mit.edu>,
+        'Jaegeuk Kim' <jaegeuk@kernel.org>,
+        linux-crypto@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-fscrypt@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 4/4] fscrypt: Add LEA-256-XTS, LEA-256-CTS support
+Message-ID: <20230630025914.GB1088@sol.localdomain>
+References: <20230626084703.907331-1-letrhee@nsr.re.kr>
+ <20230626084703.907331-5-letrhee@nsr.re.kr>
+ <20230628063830.GA7920@sol.localdomain>
+ <000901d9aa70$a228c420$e67a4c60$@nsr.re.kr>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <000901d9aa70$a228c420$e67a4c60$@nsr.re.kr>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The variable phba->fcf.fcf_flag is often protected by the lock 
-phba->hbalock() when is accessed. Here is an example in 
-lpfc_unregister_fcf_rescan():
+On Thu, Jun 29, 2023 at 07:01:11PM +0900, Dongsoo Lee wrote:
+> On Tue, Jun 27, 2023 at 23:38:30 -0700, Eric Biggers wrote:
+> >On Mon, Jun 26, 2023 at 05:47:03PM +0900, Dongsoo Lee wrote:
+> >> when SIMD instructions are available, it performs even faster.
+> >
+> >This will only be true once there is actually an applicable implementation
+> of
+> >LEA-XTS and LEA-CTS using SIMD instructions included in the kernel.
+> >
+> >Perhaps it is your plan to go through and accelerate LEA-XTS and LEA-CTS
+> for the
+> >common CPU architectures.  However, it is not included in this patchset
+> yet, so
+> >it should not be claimed in the documentation yet.
+> >
+> >> Particularly, it outperforms AES when the dedicated crypto
+> >> +instructions for AES are unavailable, regardless of the presence of SIMD
+> >> +instructions. However, it is not recommended to use LEA unless there is
+> >> +a clear reason (such as the absence of dedicated crypto instructions for
+> >> +AES or a mandatory requirement) to do so. Also, to enable LEA support,
+> >> +it needs to be enabled in the kernel crypto API.
+> >
+> >I think I'd prefer that you omit the mention of the "absence of dedicated
+> crypto
+> >instructions" use case for now.  fscrypt already supports another algorithm
+> that
+> >fulfills exactly that use case (Adiantum), and that algorithm already has
+> >optimized implementations for arm32, arm64, and x86_64.  LEA does not have
+> that
+> >yet.  So it does not really bring anything new to the table.  I'm also
+> unsure it
+> >would be appropriate to recommend a "lightweight" cipher at this point...
+> >
+> >That would leave "mandatory requirement" as the rationale, at least for
+> now,
+> >similar to SM4.
+> >
+> >- Eric
+> 
+> As you might expect, we are working on a SIMD implementation of LEA in a
+> general-purpose CPU environment. However, since no such implementation has
+> been submitted yet, we agree that it's right to leave it out for now.
+> 
+> In the next version, we would like to change the description to the
+> following:
+> 
+> LEA is a South Korean 128-bit block cipher (with 128/192/256-bit keys)
+> included in the ISO/IEC 29192-2:2019 standard (Information security -
+> Lightweight cryptography - Part 2: Block ciphers). If dedicated cipher
+> instructions are available, or other options with performance benefits
+> are available, using LEA is likely not a suitable choice. Therefore,
+> it is not recommended to use LEA-256-XTS unless there is a clear reason
+> to do so, such as if there is a mandate. Also, to enable LEA support,
+> it needs to be enabled in the kernel crypto API.
 
-  spin_lock_irq(&phba->hbalock);
-  phba->fcf.fcf_flag |= FCF_INIT_DISC;
-  spin_unlock_irq(&phba->hbalock);
+I don't think that really addresses my comment, due to the second sentence.  I
+understand that you would like to advertise the performance of LEA.  But as I
+mentioned, it's not yet realized in the kernel crypto API, and in the context of
+fscrypt it won't really bring anything new to the table anyway.  For now I think
+LEA is best described as a "national pride cipher" alongside SM4...  Keep in
+mind, it can always be changed later if new use cases come up.
 
-However, in the same function, phba->fcf.fcf_flag is assigned with 0 
-without holding the lock, and thus can cause a data race:
+Could you just omit the documentation update from your patch?  I actually need
+to rework the whole "Encryption modes and usage" section anyway since it's
+growing a bit unwieldy, with 6 different combinations of encryption modes now
+supported.  The information needs to be organized better.  It currently reads
+like a list, and it might be hard for users to understand which setting to use.
 
-  phba->fcf.fcf_flag = 0;
+I'll add on a patch that does that and adds the mention of LEA support.
 
-To fix this possible data race, a lock and unlock pair is added when 
-accessing the variable phba->fcf.fcf_flag.
-
-Reported-by: BassCheck <bass@buaa.edu.cn>
-Signed-off-by: Tuo Li <islituo@gmail.com>
----
- drivers/scsi/lpfc/lpfc_hbadisc.c | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/drivers/scsi/lpfc/lpfc_hbadisc.c b/drivers/scsi/lpfc/lpfc_hbadisc.c
-index 5ba3a9ad9501..9d2feb69cae7 100644
---- a/drivers/scsi/lpfc/lpfc_hbadisc.c
-+++ b/drivers/scsi/lpfc/lpfc_hbadisc.c
-@@ -6961,7 +6961,9 @@ lpfc_unregister_fcf_rescan(struct lpfc_hba *phba)
- 	if (rc)
- 		return;
- 	/* Reset HBA FCF states after successful unregister FCF */
-+	spin_lock_irq(&phba->hbalock);
- 	phba->fcf.fcf_flag = 0;
-+	spin_unlock_irq(&phba->hbalock);
- 	phba->fcf.current_rec.flag = 0;
- 
- 	/*
--- 
-2.34.1
-
+- Eric
