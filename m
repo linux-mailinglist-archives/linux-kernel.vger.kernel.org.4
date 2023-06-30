@@ -2,108 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1575743E26
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 17:01:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ADAD5743E28
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 17:01:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232861AbjF3PBJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 11:01:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56248 "EHLO
+        id S232873AbjF3PBO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Jun 2023 11:01:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229508AbjF3PBH (ORCPT
+        with ESMTP id S232576AbjF3PBL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 11:01:07 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.65.254])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BDF91FF2;
-        Fri, 30 Jun 2023 08:01:05 -0700 (PDT)
-X-QQ-mid: bizesmtp84t1688137255t2mep54u
-Received: from linux-lab-host.localdomain ( [119.123.131.49])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Fri, 30 Jun 2023 23:00:54 +0800 (CST)
-X-QQ-SSF: 01200000000000D0W000000A0000000
-X-QQ-FEAT: kN2ypXZVqgzWddNeqgphAHxZz9TLgQL4byjbxUc7gzCYE0taS5aYTkz+R184h
-        INKYNRLRzmcQCBMr/Z6JGhxrpqO2iyD4O6lQ1aeMXLMDyEdMt3zFBul6o/oO9nBXyhwGSL2
-        aC9W0vRwckYxPNBTnyy38DabjTNQyXVqeaKE/XCFVmFY4lTKLfeDzGlRFVBGRp8Tx2Xve0S
-        vJGd49DqhqPa8K/0mJYTkCQpFufxxbD6ILKhqYpNmpWp3V1rkkR88y0dW4mDJ2lFpmdEDZo
-        zEtyxyBvk2uHjDpz/T6A4GDvNynBnqId0fc0WE2IsG/yp+5NCKvxhRz/fIcnUFlaZIt6l77
-        S4brYv5NuyAUKun4HWdS4LDQxxbt6FXGBo+NsHv6z7z/TPKHZEh9n+1aMsGQYLyyh977AfH
-        WUrfaZPzOQQ=
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 323981673361064231
-From:   Zhangjin Wu <falcon@tinylab.org>
-To:     thomas@t-8ch.de, w@1wt.eu
-Cc:     arnd@arndb.de, falcon@tinylab.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        =?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Subject: [PATCH v3 14/14] selftests/nolibc: vfprintf: remove MEMFD_CREATE dependency
-Date:   Fri, 30 Jun 2023 23:00:35 +0800
-Message-Id: <10d0316283b1467a9604d2b170f83e0a50483b48.1688134400.git.falcon@tinylab.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <cover.1688134399.git.falcon@tinylab.org>
-References: <cover.1688134399.git.falcon@tinylab.org>
+        Fri, 30 Jun 2023 11:01:11 -0400
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4795171E
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 08:01:09 -0700 (PDT)
+Received: by mail-wm1-x335.google.com with SMTP id 5b1f17b1804b1-3fbc244d384so14146575e9.0
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 08:01:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=layalina-io.20221208.gappssmtp.com; s=20221208; t=1688137268; x=1690729268;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=ahf4iN0qt3X6fXGQpyVE3X/VovChKIPfO2Ax1JckjEQ=;
+        b=3yh6L5c0Exj1o0zeTk4a6REXEYKM4fADuVl9BclOQhNxISU2t4fip9AXdWU/TxCkE2
+         OqehUtaUgyceR46RN4c8vaFFCD/IVadlqcqp95eocOsazOWkdUAOwn55jgcBDaBUuqe+
+         xbv7KeliCoitInjDNB+1JGj+VyukxrmP4K7wIGrgCQYfwGQRpfyqmpvkuWXft6QSVjVA
+         +uPIMXW3U1J5hbLSPsGSsifGDMe2tls/RHw+zemHQBbSrRVPl1LI+/DSa3jGqqcrntRz
+         SPiHnlysd2rdfqxUHmFa99MK/abqxrQtlvHM29PqtdM/GJp3KdNjSaKPlTy577HyXrXd
+         vGiw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688137268; x=1690729268;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ahf4iN0qt3X6fXGQpyVE3X/VovChKIPfO2Ax1JckjEQ=;
+        b=JLS8YTjjRt5XhVE71/nhZyR8hEipmS9viGWx340vk19MYZ2rl+AFljGuYvy5nnTk+G
+         4ci/fWRwjvIzEbLjAXPDi6XU0eFSkolKES3P9r/ujHUzR9MDtzoR6XbUCCEiEJBFownc
+         f8HuXwxw0Ifm+0bFsH2GL4bM3kDGYZEnwEF2e1hUwdvJOd8D8vYacXrgVH+DAj2ZuHZO
+         zn3RX4Ud8OKUptGZydXt5xixKiq5PFY6KLD/Mnzwdr8bXweRsDs9oBn0trc7Fu7vPzXA
+         B6LrQJ2x4YoElDwEHRDIkinP8Vv5hY1U/fkV2i2uqWg0JvHxDcjMDwVIGHirJtbn18Ac
+         qv9Q==
+X-Gm-Message-State: AC+VfDzdrDgo3nkjt5xckMaID1qasEaVbwyczjHN0ixdBC+6Ut14iRJ9
+        tfJZ0rlAZinAyvpQ/gU5GOHwJQ==
+X-Google-Smtp-Source: ACHHUZ74pk8fAscwl4/V1VyKKVEfajAZpMtTT9HM7NTbJGdATFOVKQDPw1YOnaAs9I7gIMtI+MrUYQ==
+X-Received: by 2002:a05:600c:364f:b0:3f9:b1e7:8a4b with SMTP id y15-20020a05600c364f00b003f9b1e78a4bmr2324106wmq.21.1688137268223;
+        Fri, 30 Jun 2023 08:01:08 -0700 (PDT)
+Received: from airbuntu (host86-163-217-97.range86-163.btcentralplus.com. [86.163.217.97])
+        by smtp.gmail.com with ESMTPSA id a10-20020a1cf00a000000b003f8fb02c413sm19293360wmb.8.2023.06.30.08.01.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 30 Jun 2023 08:01:07 -0700 (PDT)
+Date:   Fri, 30 Jun 2023 16:01:03 +0100
+From:   Qais Yousef <qyousef@layalina.io>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Bart Van Assche <bvanassche@acm.org>, linux-kernel@vger.kernel.org,
+        Ingo Molnar <mingo@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>
+Subject: Re: [PATCH] sched/cputime: Make IRQ time accounting configurable at
+ boot time
+Message-ID: <20230630150103.pp7lhxko7gya65rx@airbuntu>
+References: <20230615203745.1259-1-bvanassche@acm.org>
+ <20230616074518.GW4253@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrgz:qybglogicsvrgz5a-1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230616074518.GW4253@hirez.programming.kicks-ass.net>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NO_DNS_FOR_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The vfprintf test case require to open a temporary file to write, the
-old memfd_create() method is perfect but has strong dependency on
-MEMFD_CREATE and also TMPFS or HUGETLBFS (see fs/Kconfig):
+On 06/16/23 09:45, Peter Zijlstra wrote:
+> On Thu, Jun 15, 2023 at 01:37:26PM -0700, Bart Van Assche wrote:
+> > Some producers of Android devices want IRQ time accounting enabled while
+> > others want IRQ time accounting disabled. Hence, make IRQ time accounting
+> > configurable at boot time.
+> 
+> Why would they want this disabled? IRQ time accounting avoids a number
+> of issues under high irq/softirq pressure.
+> 
+> Disabling this makes no sense.
 
-    config MEMFD_CREATE
-	def_bool TMPFS || HUGETLBFS
+I think it is assumed that IRQ time accounting is only used for stat
+collection (which is what I thought too), but based on this response I can see
+it is used to ensure we account for stolen time in update_rq_clock_task() so it
+helps to make it account more accurately for the time a task actually spent
+running and doing useful work.
 
-And from v6.2, MFD_NOEXEC_SEAL must be passed for the non-executable
-memfd, otherwise, The kernel warning will be output to the test result
-like this:
+Bart, could you profile the cause of the high overhead? The config message says
+a small perf impact, but 40% mentioned in your v2 is high. Could you try to
+break down the problem further as we might be overlooking the true source of
+overhead or miss an opportunity to improve the accounting logic instead?
 
-        Running test 'vfprintf'
-        0 emptymemfd_create() without MFD_EXEC nor MFD_NOEXEC_SEAL, pid=1 'init'
-         "" = ""                                                  [OK]
 
-To avoid such warning and also to remove the MEMFD_CREATE dependency,
-let's open a file from tmpfs directly.
+Thanks
 
-The /tmp directory is used to detect the existing of tmpfs, if not
-there, skip instead of fail.
-
-And further, for pid == 1, the initramfs is loaded as ramfs, which can
-be used as tmpfs, so, it is able to further remove TMPFS dependency too.
-
-Suggested-by: Thomas Weißschuh <linux@weissschuh.net>
-Link: https://lore.kernel.org/lkml/9ad51430-b7c0-47dc-80af-20c86539498d@t-8ch.de
-Reviewed-by: Thomas Weißschuh <linux@weissschuh.net>
-Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
----
- tools/testing/selftests/nolibc/nolibc-test.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
-index be2a18cd5bd5..714252518595 100644
---- a/tools/testing/selftests/nolibc/nolibc-test.c
-+++ b/tools/testing/selftests/nolibc/nolibc-test.c
-@@ -868,10 +868,10 @@ static int expect_vfprintf(int llen, size_t c, const char *expected, const char
- 	FILE *memfile;
- 	va_list args;
- 
--	fd = memfd_create("vfprintf", 0);
-+	fd = open("/tmp", O_TMPFILE | O_EXCL | O_RDWR, 0600);
- 	if (fd == -1) {
--		pad_spc(llen, 64, "[FAIL]\n");
--		return 1;
-+		pad_spc(llen, 64, "[SKIPPED]\n");
-+		return 0;
- 	}
- 
- 	memfile = fdopen(fd, "w+");
--- 
-2.25.1
-
+--
+Qais Yousef
