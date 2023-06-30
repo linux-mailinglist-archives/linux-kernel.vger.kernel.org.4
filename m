@@ -2,215 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68866743CB2
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 15:25:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00215743CB9
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 15:27:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232672AbjF3NZ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 09:25:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47802 "EHLO
+        id S232002AbjF3N1B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Jun 2023 09:27:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230235AbjF3NZZ (ORCPT
+        with ESMTP id S231843AbjF3N05 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 09:25:25 -0400
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C82DA3A98
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 06:25:13 -0700 (PDT)
-Received: by mail-lf1-x12b.google.com with SMTP id 2adb3069b0e04-4fba74870abso561269e87.0
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 06:25:13 -0700 (PDT)
+        Fri, 30 Jun 2023 09:26:57 -0400
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2100.outbound.protection.outlook.com [40.107.236.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6F6B1FCC;
+        Fri, 30 Jun 2023 06:26:55 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=b24kObuygz7jiZRN84ucDIJ+2Q/EDfR9WkQkuaidQHdE6W7F9LFnjlISf/HyVMRurDl+g2EPmkS1zE/GQxNXyGWt6zzOyqujhqKyTMpPFLBQO4/QCIfPjg7KtcTKHmsBudobIRvHMqPQmcSe5hYmACo8IPxQGrLGTk1bWdv3eBfFCQR7pWvWUqfJJxQjK+X95YLof3ov1CZbvvyrCudgX6iznLf2sTh9aIbB9eKNmzLCJ71nnsZuNevUi6kI+rtTLISmPzwpfGX3NSKpYFg39WUf8sUbFZRZypu8nmbBoHpzKIrE2iyIeerbPMJsD8pKo+cYf7HC+ji2F0ChhDhDRQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=VZNJ07vd9B0hyhXzqSFZqfLALYm1Zcg4Oi6v5+SUXPY=;
+ b=cmbmc//xwY8N+foY6qav0ybjJ2DjjqR9eCc1X2DlGZkw67lWVOZFF0oWPcWbULtVePMg4F3Yb5CRagWY3/PnzwOQbRse+IqAduO4luDzzB5nf6ybrP7Zi17htitB6LHeRVBuKYHXQ6EzCFe5ZCdqdqyy4Cft+VSfsJNTwpilAb+ZUXYMtoE2e75p2kJevALfhDrc9LtAxOLHYiNlZs7Xn+Ck7tIi0UU/6uk8nAkx5y8/RQjoW3dBBp6JPNIHWN2RPnxzQfHMFbjYVXmbAh82nxTKmG2808KvBhDoCQ8rWCb4dudPKtIwfSqV/z92BWK5lRcqIvJcm9XUPxf27dg7Hw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
+ dkim=pass header.d=corigine.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=layalina-io.20221208.gappssmtp.com; s=20221208; t=1688131512; x=1690723512;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Qk/29pUWn0vGiMuP9Cfi3/EYqLftvL8xXi5fIA2JMrc=;
-        b=j+mHcNT0pkueAkNDWn7hm9eltY0NULS+J2NyiRE9ZLAh+KhRE7usnmg68+2I5JRgTy
-         0PL/HWtrOw/Pc3hhmE1FoYMWYkYKR13Wgy7vWcaqc0ujgZN5PwvXkbzgFhcZwpbUYrPa
-         JHZf4Otfur/p+BpVsSRlscKUY3dhWBuKbY0DIeoF1hb7TXh/48xIv3ygo+tbtHmo71b/
-         Sg1rEHUQvfI+3lI7DZX788Ln9+FIg2kfDisV06CoBI5zx3VKIIrLAKPA2BsK5rMz4buV
-         fzfvAztbyZjB9cpZOPwP6SYu2X7/UdDdloLWi+GoMOfFAm1GcOeyjdjf8dXtLyJiSyJn
-         a8kw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688131512; x=1690723512;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Qk/29pUWn0vGiMuP9Cfi3/EYqLftvL8xXi5fIA2JMrc=;
-        b=NmtTuYE/CiFVDHG2KvcfRG1f7///AZ38f9bh9oY7wa6w0CfDMKKnXxGCgzfdcbQJB2
-         9X314wLFZEps4yjdhz8ddX7K4Ep2PLV3n2owQrWbZBy4w2XDZZfxhtoFPV/bYpmbUQ38
-         Nqm/8sjqtXXZpM44nay2y43RSPpT9fgy+65LHJ6+hfMqcR/1ktdO5Mr8r5SaMQkQST/I
-         BLf0SdqhV0QmURcT0OvCMCDPG6kXBZ4sLVYp9rbLWXZZFYGbE2oS5Bt/LZlE/bXJSDRA
-         Fh5cORtTCQPAITM9x5R/leB8xMOqrWyoJtNjGJSIoO5i4xGO0HROBkgZ2WlAsUTHAg8F
-         D54A==
-X-Gm-Message-State: ABy/qLYhMWQoc8InRm9N9q7kl7rCm9O3tFwsbBBRv3flaIv2iLF6LxrP
-        paHIsPmNyUX6heS/lu7EYGku0P4Y0KCbnDFcVKk=
-X-Google-Smtp-Source: APBJJlFAg/rPCVEk3WXaVAiwSdndbFcfE5OcjnvsY8jXMLH02zphj9zIfobyZothbq+hgt0ET9b+4A==
-X-Received: by 2002:a05:6512:455:b0:4fa:9dc3:1d41 with SMTP id y21-20020a056512045500b004fa9dc31d41mr2182003lfk.51.1688131511950;
-        Fri, 30 Jun 2023 06:25:11 -0700 (PDT)
-Received: from airbuntu (host86-163-217-97.range86-163.btcentralplus.com. [86.163.217.97])
-        by smtp.gmail.com with ESMTPSA id q20-20020a1cf314000000b003f90b9b2c31sm22251634wmq.28.2023.06.30.06.25.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 30 Jun 2023 06:25:11 -0700 (PDT)
-Date:   Fri, 30 Jun 2023 14:25:07 +0100
-From:   Qais Yousef <qyousef@layalina.io>
-To:     Lukasz Luba <lukasz.luba@arm.com>
-Cc:     linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-        rafael@kernel.org, linux-pm@vger.kernel.org, rostedt@goodmis.org,
-        mhiramat@kernel.org, mingo@redhat.com, peterz@infradead.org,
-        juri.lelli@redhat.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, vschneid@redhat.com, delyank@fb.com,
-        qyousef@google.com, kernel test robot <lkp@intel.com>
-Subject: Re: [RESEND][PATCH v2 3/3] schedutil: trace: Add tracing to capture
- filter out requests
-Message-ID: <20230630132507.hggzz5g2odrabii6@airbuntu>
-References: <20230522145702.2419654-1-lukasz.luba@arm.com>
- <20230522145702.2419654-4-lukasz.luba@arm.com>
- <20230531183105.r5tqpdx5axoogkzp@airbuntu>
- <a0101269-1d8b-d4e1-52b4-250a99b395fa@arm.com>
- <20230630120122.oqy4q42bl5gy6bfd@airbuntu>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+ d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=VZNJ07vd9B0hyhXzqSFZqfLALYm1Zcg4Oi6v5+SUXPY=;
+ b=eNdI5+OE+LcuIg4NE/bFC8d7eiLVIEx3wI3wR0uNpCwOiXzZBaFyIK8sSJZ6vpx5wvriCwxsQgKBN2WAucgwdsGtF+Dx4r72NnmVKpC2/Bs0hp+qxBwO8rgF7Rp8LSW4VY7NX5zztgsHOe/sb4uTajSt1AQfQ47M2u7Tg+mOVR4=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=corigine.com;
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
+ by SA1PR13MB6100.namprd13.prod.outlook.com (2603:10b6:806:326::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.24; Fri, 30 Jun
+ 2023 13:26:54 +0000
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::eb8f:e482:76e0:fe6e]) by PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::eb8f:e482:76e0:fe6e%5]) with mapi id 15.20.6544.019; Fri, 30 Jun 2023
+ 13:26:54 +0000
+Date:   Fri, 30 Jun 2023 15:26:47 +0200
+From:   Simon Horman <simon.horman@corigine.com>
+To:     Hariprasad Kelam <hkelam@marvell.com>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        davem@davemloft.net, sgoutham@marvell.com, lcherian@marvell.com,
+        gakula@marvell.com, jerinj@marvell.com, sbhatta@marvell.com
+Subject: Re: [net Patch 1/4] octeontx2-af: cn10kb: fix interrupt csr addresses
+Message-ID: <ZJ7YFxFOKC1NLMwa@corigine.com>
+References: <20230630062845.26606-1-hkelam@marvell.com>
+ <20230630062845.26606-2-hkelam@marvell.com>
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230630120122.oqy4q42bl5gy6bfd@airbuntu>
+In-Reply-To: <20230630062845.26606-2-hkelam@marvell.com>
+X-ClientProxiedBy: AM0PR05CA0093.eurprd05.prod.outlook.com
+ (2603:10a6:208:136::33) To PH0PR13MB4842.namprd13.prod.outlook.com
+ (2603:10b6:510:78::6)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|SA1PR13MB6100:EE_
+X-MS-Office365-Filtering-Correlation-Id: 99ebfd83-4309-49c7-44d3-08db796dabb3
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: V0TNt0sdHF/1QxqKfj6NFnq4A8wVDdgugIdR48HaVgVrg94Y6JxHrTfab5/7Si+Ik9ex84pmkEPKhb4eoGHrFUvI1Rov/cRAC7d+QRYEh7/feGuLLREXa+hxVLj2EdpU+GKr5tEZX9mHkrBH9tNFiQbzGeItTjk/NpS8NB4TIJLKVBmyghPqzFyPzaqZTs/DcP0Erc/YK8stSnV/Ehp+SZImMoGiBkc9vGKp7lgCVsjjbuTz5f8VBOeUbciPsmGaMuC2Cs8ePG6ZRNWKrU6a7IVaUSZAU5W8NZKTf+ZXZedsMMBCiruIb1sMyclTreDwdVFqDRjTnAxwMCYei1qNa5dHUlXSySloV+71Ne/spVPugKWgiZljO9FSkB0VhJHcrfwh1raBCvkR+uEYSIygf8Rj+XgCmrglyRbpz+YPkmkIvJtSIiiHgwdvhKjHG9nGnJsVqwSQLkX6Q4+ckVws5mvE9W9mp0Req87HGttG/yCcEDJCGrM5hn152OUyQkUEIMvhm2VY36Me2Nr/l447hBcGeCIMkh9DyAkVDXuNw6pO006NLX0hpfahCuE9wtSpjUXYC++djsqaCvkf63A0hKuVwbwm3/42NZ6TNluA6oA=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(396003)(376002)(346002)(39840400004)(136003)(451199021)(41300700001)(186003)(6512007)(36756003)(6916009)(66556008)(7416002)(66476007)(4326008)(66946007)(86362001)(8676002)(5660300002)(38100700002)(316002)(44832011)(8936002)(6666004)(6506007)(4744005)(2906002)(6486002)(2616005)(478600001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?335AXMIPEsHXXw4RkRAUXSB1O8/ev/xHlwpU79Wu+ttrGjyNSORfo+ijbgeX?=
+ =?us-ascii?Q?kTqW0Ngl9lXMLDHrsdQXID57YvjD58DVqan6qL3NXQF+rcudPfSn2DAOL9uN?=
+ =?us-ascii?Q?57iwhsPWcnaesncXGZkjvO5K12Uym1cFDKXuYcrqkXxIk0TxRvnDQ8lCWGkv?=
+ =?us-ascii?Q?NkAFU0Qotjp4E/6gPitn/O2P9x8l9B5sitDFxkI1ZqRq/oOfnQ2oWSuCQTGn?=
+ =?us-ascii?Q?l2lPS6giiU4b9I5orcEa9/t7wEDEzmL3FY8vx5IzQU5r3XcgWsY0XQhIZKdK?=
+ =?us-ascii?Q?jgQbPx6MiPZtgBrSVWLqJ1VWutnVAadn2w4/apVqzyDYbtQGAaCHR/OcyR6Y?=
+ =?us-ascii?Q?jtYzYdE5Fy0ulGNZOk25edoUTNAtdsIoVy4QwLA9M56a6B3nYPo+SRcu+rzR?=
+ =?us-ascii?Q?f/Gx5u8maee8hbEbS+JoU86XqNQrqCI/L/XuTG4FNByqNhD28O/2e0i4+lwn?=
+ =?us-ascii?Q?Lj9qtjI6RzVK6r+eBd3aQRxivJaeAPgx/c0x/h0cwxTBK8KDB5mJR6a/RHEA?=
+ =?us-ascii?Q?zfgvdgHYdU+fayzqMlyL1jxCF9z8lwFXIbLAiwo6rCGzej1BmdoUNjxsb96z?=
+ =?us-ascii?Q?062peHK9u1DVclTm6qwaTCAB76ZK2uCL60FbAKZL+QzVyAKx0LUw44/EmlAb?=
+ =?us-ascii?Q?2zCAbTCsjjyIIu6ziiw6FScBiBtx9xbAbKJ132E10E3ivQcVb7c75BDrmCgA?=
+ =?us-ascii?Q?xD5uR99iurA1gM9E6YbyvUIDLYaDSYwVsC0v3Q8UskToTsS4/zYEtK6znmw9?=
+ =?us-ascii?Q?wbTgAQRvMhUwpj27+AY/Z0ehmr6oZoX7BBbSSsVvLPYmlqmxpJPWHTHBTHal?=
+ =?us-ascii?Q?tFVUR6YTAAVlt10oMeAWFuU0wFBor+ikd0+MGq7pGj8PX2mQQR6zbm5Dtq7K?=
+ =?us-ascii?Q?WK1DfRAwenZNzMfnvareX0AlUyQcVmzrFKOX3svAsJUc/yFHZ/5ocq8eovFo?=
+ =?us-ascii?Q?L3QQkw8534/KG494L1QiWwVZoY+/GPan2OX7gPvplCRJcHC9Z8bK8D75xuEp?=
+ =?us-ascii?Q?cwI8uWaxPrSDL5phIgW5T9+d+f+2xIhvPYG2LCnrCyuyWQgV3P8cYrWnJ7oW?=
+ =?us-ascii?Q?Sn/OlFBLcnd/hG0lyGCPjLvnuuS33d0G5u+CnWGhBXUSgcADMrK+ycrzDAfe?=
+ =?us-ascii?Q?Hv5YM0Z1sclKWuKof8VHatK+VdhEX+W7Y0F8gcfdIxM1NMRC7Q3Cz6BPMaLt?=
+ =?us-ascii?Q?eURDAyfURduhWhdzS+fKmlqPu+kArsJ2LPIwFz/JockorpBOlt226MT9/p72?=
+ =?us-ascii?Q?fMAlZO0aOy+cOyl/8Iwa5jCxIG+9u893FDw9dfddR20iUIDaTUO0WY/OpMUJ?=
+ =?us-ascii?Q?NqMfTiw4fhbqQzVNvXl/KMJ+fk30lXOBUXCgu1uxJVDcHlg7cRDr54CdMwA8?=
+ =?us-ascii?Q?6ZR9FLOkGg0K3VOtQKGQoSsDh6tJyu3jGq4okWYIs8e6WrRwT+Y2M1sFgdAM?=
+ =?us-ascii?Q?TeEXxY72QUug1+gKKWchEz/nx9cvCyeCpO6wb2PiGmmDtPfy3lQEzA9BFzBr?=
+ =?us-ascii?Q?uCnpGeJxaM+pbhlj1sPbto5ePUaOABtp63TEVjL5VkwoWW33OUQGr+NEW9iM?=
+ =?us-ascii?Q?m0qocbZmWi+IG0VK1StxEa0At1VTHhsjwH8B2QoZSKB9FpYHFkmdUUKtI5zQ?=
+ =?us-ascii?Q?5AW+Zyl7xqxJRzZaGjuQXLIjDn+BlKIUYUNh7d+p4mN4nJghqlHkuxTjAA/T?=
+ =?us-ascii?Q?rBmFNQ=3D=3D?=
+X-OriginatorOrg: corigine.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 99ebfd83-4309-49c7-44d3-08db796dabb3
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Jun 2023 13:26:54.3647
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: QAVI8BY8duMg4xLxY068X+msPGsHnfKx6/MqCBdMpAZNZvWYnFip9CQT0Hx3Z99IIG9NjV1eOp6Fal4iERDX/7keXvZCnfUTtq/PEg8WcAg=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR13MB6100
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,
-        T_SPF_TEMPERROR autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/30/23 13:01, Qais Yousef wrote:
-> On 06/20/23 18:52, Lukasz Luba wrote:
-> > Hi Qais,
-> > 
-> > I have somehow missed your feedback on this series.
-> > 
-> > On 5/31/23 19:31, Qais Yousef wrote:
-> > > On 05/22/23 15:57, Lukasz Luba wrote:
-> > > > Some of the frequency update requests coming form the task scheduler
-> > > > might be filter out. It can happen when the previous request was served
-> > > > not that long ago (in a period smaller than provided by the cpufreq driver
-> > > > as minimum for frequency update). In such case, we want to know if some of
-> > > > the frequency updates cannot make through.
-> > > > Export the new tracepoint as well. That would allow to handle it by a
-> > > > toolkit for trace analyzes.
-> > > > 
-> > > > Reported-by: kernel test robot <lkp@intel.com> # solved tricky build
-> > > > Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
-> > > > ---
-> > > >   include/trace/events/sched.h     |  4 ++++
-> > > >   kernel/sched/cpufreq_schedutil.c | 10 ++++++++--
-> > > >   2 files changed, 12 insertions(+), 2 deletions(-)
-> > > > 
-> > > > diff --git a/include/trace/events/sched.h b/include/trace/events/sched.h
-> > > > index dbfb30809f15..e34b7cd5de73 100644
-> > > > --- a/include/trace/events/sched.h
-> > > > +++ b/include/trace/events/sched.h
-> > > > @@ -739,6 +739,10 @@ DECLARE_TRACE(uclamp_update_tsk_tp,
-> > > >   	TP_PROTO(struct task_struct *tsk, int uclamp_id,  unsigned int value),
-> > > >   	TP_ARGS(tsk, uclamp_id, value));
-> > > > +DECLARE_TRACE(schedutil_update_filtered_tp,
-> > > > +	TP_PROTO(int cpu),
-> > > > +	TP_ARGS(cpu));
-> > > > +
-> > > >   #endif /* _TRACE_SCHED_H */
-> > > >   /* This part must be outside protection */
-> > > > diff --git a/kernel/sched/cpufreq_schedutil.c b/kernel/sched/cpufreq_schedutil.c
-> > > > index f462496e5c07..4f9daf258a65 100644
-> > > > --- a/kernel/sched/cpufreq_schedutil.c
-> > > > +++ b/kernel/sched/cpufreq_schedutil.c
-> > > > @@ -6,6 +6,8 @@
-> > > >    * Author: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > > >    */
-> > > > +EXPORT_TRACEPOINT_SYMBOL_GPL(schedutil_update_filtered_tp);
-> > > > +
-> > > >   #define IOWAIT_BOOST_MIN	(SCHED_CAPACITY_SCALE / 8)
-> > > >   struct sugov_tunables {
-> > > > @@ -318,8 +320,10 @@ static inline bool sugov_update_single_common(struct sugov_cpu *sg_cpu,
-> > > >   	ignore_dl_rate_limit(sg_cpu);
-> > > > -	if (!sugov_should_update_freq(sg_cpu->sg_policy, time))
-> > > > +	if (!sugov_should_update_freq(sg_cpu->sg_policy, time)) {
-> > > > +		trace_schedutil_update_filtered_tp(sg_cpu->cpu);
-> > > >   		return false;
-> > > > +	}
-> > > 
-> > > Can't we have something more generic here too? Are you interested to count
-> > > these events? How do you plan to use it?
-> > 
-> > The plan is to record those events, count them and maybe adjust the FW
-> > if the frequency switching capabilities are too low, e.g. 4ms...
+On Fri, Jun 30, 2023 at 11:58:42AM +0530, Hariprasad Kelam wrote:
+> The current design is that, for asynchronous events like link_up and
+> link_down firmware raises the interrupt to kernel. The previous patch
+> which added RPM_USX driver has a bug where it uses old csr addresses
+> for configuring interrupts. Which is resulting in losing interrupts
+> from source firmware.
 > 
-> You mean as part of tuning step for the system or at runtime? The latter seems
-> to indicate for a proper interface instead.
+> This patch fixes the issue by correcting csr addresses.
 > 
-> IMHO I think the current filtering mechanism needs a bit of a massage.
-> 
-> One thing I think we must do is to ignore the filter if there's a big sudden
-> change in requested frequency. Like for instance if a big task migrates. Then
-> prev_cpu should go to lower freq sooner, and new_cpu should change to higher
-> frequency sooner too. The filtering makes sense only in steady state situation
-> where we are ramping up or down gradually.
-> 
-> If no one beats me to it, I'll propose something in that regard.
-> 
-> > 
-> > We need those numbers to point out that there is a need for faster
-> > FW micro-controller to serve those incoming requests.
-> 
-> I think there's a big assumption here that the filter is always set correctly
-> ;-)
-> 
-> > 
-> > > 
-> > > I think this will be a very noisy event by the way.
-> > 
-> > Could be, but on the other hand for those statistical analysis
-> > 'the more the better'. It will also depend on number of
-> > CPUs in the cluster, e.g. 4 CPUs vs 1 CPU.
-> > 
-> > I don't know when we will switch to this per-cpu cpufreq mode
-> > when all CPUs behave like independent DVFS. Juno mainline kernel and FW
-> > supports that mode. We would have to compare those two modes and
-> > measure how much we gain/loose when using one and not the other.
-> > 
-> > Furthermore, we already suspect some of our integration testing for
-> > EAS-mainline (on Juno) failing due to filtered out requests. How much
-> > that would impact other boards - it would be nice to see in traces.
-> 
-> Another problem I think we have is that the DVFS headroom value should be
-> a function of this filter. At the moment it is hardcoded to a random value
-> which causes power issue.
-> 
-> So to summarize I think there are two improvements required (and if anyone has
-> the time to try them out go ahead otherwise I'll get to it):
-> 
->  1. The filter should only be applied if the history hasn't changed. ie: we are
->     gradually increasing or decreasing PELT. Otherwise we should honour sudden
->     changes ASAP.
->  2. DVFS headroom should be a function of the filter. 25% is too high for
->     500us. It could be too low for 10ms (I don't know).
+> Fixes: b9d0fedc6234 ("octeontx2-af: cn10kb: Add RPM_USX MAC support")
+> Signed-off-by: Hariprasad Kelam <hkelam@marvell.com>
+> Signed-off-by: Sunil Goutham <sgoutham@marvell.com>
 
-To expand a bit more since it's related. Our  migration margins should depend
-on the tick value instead of random magic numbers they are today. More
-precisely the balance_interval. If there's a misfit task, then we should
-upmigrate it at wake up only if we think it'll become misfit before the load
-balancer kicks in. Otherwise the load balancer should do the correction if it
-becomes long running/misfit. If the sys admin wants to speed up/slow down
-migration it should be throw controlling PELT IMO and not these magic margin
-values - which are hardcoded to random values at the moment anyway that are not
-suitable for every system.
+Reviewed-by: Simon Horman <simon.horman@corigine.com>
 
-And since we decoupled overutilized from misfit lb; I think our definition
-should improve to better detect when the system needs to disable packing and
-starts spreading. Current check for overutilized based on misfit is no longer
-adequate IMO. Especially when there's a single misfit task in the system.
-
-Again, just sharing thoughts in case someone interested to work on this before
-I get a chance to share any patches ;-)
-
-
-Cheers
-
---
-Qais Yousef
