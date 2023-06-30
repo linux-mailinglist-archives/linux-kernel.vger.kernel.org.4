@@ -2,237 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8528743877
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 11:40:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE55574387B
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 11:40:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231235AbjF3JkD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 05:40:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42132 "EHLO
+        id S232781AbjF3Jkn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Jun 2023 05:40:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232775AbjF3Jjw (ORCPT
+        with ESMTP id S232579AbjF3Jkj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 05:39:52 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83357102;
-        Fri, 30 Jun 2023 02:39:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1688117990; x=1719653990;
-  h=message-id:date:subject:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=ayC4wYLC/FDpDF0ffNeJA7QdmejwYATu05r0cSJ9AoQ=;
-  b=KwFIp1Wx8CTuz9TXeWbEEFcZ6zRDrdjAw3NZ+hX+51R/UCoYjHjq4tDS
-   HJtsuPpdne8zp3uHAErnLM6RlE7ldPCGF6T+UEZxPw04XHIcTRXe5+2Dc
-   705PSHv4wRWK7OwC6Xide1gd7orqVg08uf5ChfAm1GIatfOy1tnnKE6Lw
-   rFBjtWhIAF6qsBWXsngczk4XfCn4FzFRRtJyXlmfViafdPrlZLqmVzuLv
-   KKSrqYaWFpMp5uZCo+kVISD7XisU5e6uGlcUcklf2+RWmkXQpFdRa6Sq+
-   Ylf0NPcPzddScJ7znrSOi8n5ZTgYMhkKzgUh9NRmgUsqb41KN7pjgNfjV
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10756"; a="428399704"
-X-IronPort-AV: E=Sophos;i="6.01,170,1684825200"; 
-   d="scan'208";a="428399704"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jun 2023 02:39:38 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10756"; a="841802072"
-X-IronPort-AV: E=Sophos;i="6.01,170,1684825200"; 
-   d="scan'208";a="841802072"
-Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
-  by orsmga004.jf.intel.com with ESMTP; 30 Jun 2023 02:39:38 -0700
-Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
- ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27; Fri, 30 Jun 2023 02:39:38 -0700
-Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
- orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27 via Frontend Transport; Fri, 30 Jun 2023 02:39:38 -0700
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (104.47.66.47) by
- edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.27; Fri, 30 Jun 2023 02:39:36 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=OkTjU1VsGrbLpSUmAPawagxHpvRFH3MJ5h1PbSUwgrtFvS8a5Mthpay7HlczIdwEYf3eWSPGMCrtWYXkuCLiUTbIkZMdCZJUwTelVXBkYzp8Gf9/tgSrhMLooNxjbhmpg2IubT3g3b97gOHGHojRUoYuRHr91Yyu3aiKx1rvxL8J81qYFDE1nwPa0tzhg40ttajMQP8IOUxL5Txle3FvHpHid3jmNiaMJLC1gYecww7GglyAEs66bR/CWDYGUMTa+xoF4OsA6dN0reNsUi0zc9jVWL1kVoVRl9AmMh7BxASRLDII9O8/Z0iakA8Bp3Ti2I9MnyBg6WF8ByYIh+Ishg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=IOKYWhgRC3bN6KmT/HW4Qv+7iDjJMsv5gClO0KHbKEM=;
- b=fbvYL46F+jPejdQ/PAQvjys1eVzXSxZ+gdIYXBw77WyUt/Fl4kkB6laANkqCu7ePsD4huyd+IduhCDcl5Z/ZoHDfxUft5LorV6WAKCwSNRWhwwY9Fi1Vdr513r2V5BjOGGBuE/qGHkE2q1Kjj9TzZVyM4EbJGKu1NtRJvf9cxUU10B/VOvHGrTUOcmuGC+QavUDdNF235ZBNfGOuj1hLx5o7oibN+dzNOitXmwRTKMfBA5D+T5P2TO2dhCmLdGkgtR9VafLHhwhol/aPMp7dGvG/zDzNTaAft4E8Z2Gjo+uACSiub6hX3zUvDDgLSWANMPSIMX27ettG4hhE6lUWXg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from CO6PR11MB5603.namprd11.prod.outlook.com (2603:10b6:5:35c::12)
- by CY5PR11MB6414.namprd11.prod.outlook.com (2603:10b6:930:36::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.26; Fri, 30 Jun
- 2023 09:39:30 +0000
-Received: from CO6PR11MB5603.namprd11.prod.outlook.com
- ([fe80::4287:6d31:8c78:de92]) by CO6PR11MB5603.namprd11.prod.outlook.com
- ([fe80::4287:6d31:8c78:de92%6]) with mapi id 15.20.6544.019; Fri, 30 Jun 2023
- 09:39:29 +0000
-Message-ID: <ff596664-1062-92ff-a1fe-3b644925aeae@intel.com>
-Date:   Fri, 30 Jun 2023 11:39:22 +0200
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v5 03/10] acpi/ac: Move handler installing logic to driver
-Content-Language: en-US
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-CC:     <linux-acpi@vger.kernel.org>, <dan.j.williams@intel.com>,
-        <vishal.l.verma@intel.com>, <lenb@kernel.org>,
-        <dave.jiang@intel.com>, <ira.weiny@intel.com>,
-        <rui.zhang@intel.com>, <linux-kernel@vger.kernel.org>,
-        <nvdimm@lists.linux.dev>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>
-References: <20230616165034.3630141-1-michal.wilczynski@intel.com>
- <20230616165034.3630141-4-michal.wilczynski@intel.com>
- <CAJZ5v0ippMo1Haa-YFszyWZNgUE_pPUtkFngQWjUyjJe4tm94g@mail.gmail.com>
-From:   "Wilczynski, Michal" <michal.wilczynski@intel.com>
-In-Reply-To: <CAJZ5v0ippMo1Haa-YFszyWZNgUE_pPUtkFngQWjUyjJe4tm94g@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: BE1P281CA0494.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:b10:7e::13) To CO6PR11MB5603.namprd11.prod.outlook.com
- (2603:10b6:5:35c::12)
+        Fri, 30 Jun 2023 05:40:39 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33AAC102;
+        Fri, 30 Jun 2023 02:40:38 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A4EC561711;
+        Fri, 30 Jun 2023 09:40:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1CBF2C433C8;
+        Fri, 30 Jun 2023 09:40:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688118037;
+        bh=ehDPDeZJhnSrHL5jnxRgTuJeypAvNTdTtajSPzZMEHM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=aaP971a01ZkjeSwtKsJnHu7+h+J1HplZK16y5TQ0RgpXXuJ7Rvh5RMCwUrInEqmXP
+         8K9VD6T2W4ZDSiKmDjIhPWRbqfXUONbf3EGf5JliWmSFD9COMk4aBaCpg2iBZrDQGy
+         5p/YBriNacrD25o72EtRHPKz58XBAx544obG9/dqMr+97E6KoWRvJJjUgRPmh9pS1v
+         Q7HUh1uFdKVBUIVZeqY7alym1B3JZV/7Dv1LxB72X8703oP+rqYsxInEBOt3PJcYbn
+         TnIDJmp/9vzue7/Mrm/eC/cZ4zhjbpckUbqTX5Dbq6SbaZiUltYoiUHJrOE9YdTG2L
+         4gjCR3iG2Dk+g==
+Date:   Fri, 30 Jun 2023 11:40:32 +0200
+From:   Christian Brauner <brauner@kernel.org>
+To:     Kent Overstreet <kent.overstreet@linux.dev>
+Cc:     Jens Axboe <axboe@kernel.dk>, Dave Chinner <david@fromorbit.com>,
+        torvalds@linux-foundation.org, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-bcachefs@vger.kernel.org,
+        Christoph Hellwig <hch@lst.de>,
+        Al Viro <viro@zeniv.linux.org.uk>
+Subject: Re: [GIT PULL] bcachefs
+Message-ID: <20230630-aufwiegen-ausrollen-e240052c0aaa@brauner>
+References: <2e635579-37ba-ddfc-a2ab-e6c080ab4971@kernel.dk>
+ <20230628221342.4j3gr3zscnsu366p@moria.home.lan>
+ <d697ec27-8008-2eb6-0950-f612a602dcf5@kernel.dk>
+ <20230628225514.n3xtlgmjkgapgnrd@moria.home.lan>
+ <1e2134f1-f48b-1459-a38e-eac9597cd64a@kernel.dk>
+ <20230628235018.ttvtzpfe42fri4yq@moria.home.lan>
+ <ZJzXs6C8G2SL10vq@dread.disaster.area>
+ <d6546c44-04db-cbca-1523-a914670a607f@kernel.dk>
+ <20230629-fragen-dennoch-fb5265aaba23@brauner>
+ <20230629153108.wyn32bvaxmztnakl@moria.home.lan>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO6PR11MB5603:EE_|CY5PR11MB6414:EE_
-X-MS-Office365-Filtering-Correlation-Id: 2f8322e0-e1fb-468b-2051-08db794de6c5
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: p/w1uPNM8tWELfQLv9dtiEKExqXIyBmbOQRMwxgC4jtrebhg9749/7YfrUH9reQo7iLlRRuQxC5xRAsElrU3n40DMgCbpzpklu5ceZ815JvWVU4HE2/9XQZrhEWmHNVmdX+qZkaoFOurD7tpUk10VUYtMJ4BBWtf78yf+mSDZnclU8aGzYlDpD0mK5XuPixuAhLiYEeUk5fC4O47iV87HN3sAK4iIk8qSK95QSHGKmdNIim1X4K8C8UF5ngO/RQrd/Q+2XMdNs+eSSAOiPg67ody3Nfxkzarlb3dK1EwwsyekizSb839bjWOwoHnofDkbwIx2VgTC1Ci5ueCXZXRWOiNX0fQNY6Q4YirjVwiunnODRXyDhLD4Y9il+WGiqyZhCW0WjxUzTINhBdGSPRPHrLsBhU9pvt8N2aObLVbKmeQQBIi9mrl9Jc4Gy/e3U9Pk5Tv12TiJQpD4mBxpT7hs9a+/9HRkuS//V981HkODlLz1fm7LlJ0pbq23b6BldJPki6JZIp+okeZLjU9QIx0dTnQmDtgNp1CdqSzcw6HUZv+0IqH8kskulcxt8HUpRNTsdrMGzMEAAyX3tAHo2tLKfPYfK8piXtE37VsvnwZ/41OlRIrpszsjfq14rwaxv/PXTJb/LoTcrt7ZtA6wmCyzA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO6PR11MB5603.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(366004)(376002)(346002)(136003)(396003)(39860400002)(451199021)(6512007)(6666004)(2906002)(186003)(6486002)(86362001)(107886003)(38100700002)(83380400001)(2616005)(82960400001)(53546011)(6506007)(41300700001)(31696002)(26005)(478600001)(316002)(36756003)(66556008)(4326008)(66946007)(31686004)(66476007)(6916009)(5660300002)(8676002)(8936002)(43740500002)(45980500001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?bkZabWpPWGpqTkJIWWhsWk8xMmY0c0o5TUF3TnY1NnR4SjRxa3ZocUFnNnFr?=
- =?utf-8?B?UDUvR3dFeGVIWitFOFRvTThFeUxMSSs4MTBEUkRqS083bWh5Vzl4RTVQWGg4?=
- =?utf-8?B?U3dKdzdyZlN5RktKZFBURjJ3YUUzQXg1bVQwWURaeEo2Rmx4K1V0Z0pMSHR2?=
- =?utf-8?B?YW1FSzFYdXdHWEE0ejgxRWpNNTJWbXU2eFB1dlN0bWVGYzRrbWNzZTRFNlZE?=
- =?utf-8?B?b1ZTSnNncHpiQ0FjUWlhTi83WGhiaXVWcDg1QjRBZXFMclR5b1hJVXhndmYx?=
- =?utf-8?B?cFRmUGRGNVhrRDlFMmovWjB4d3RKSHprRmwzRWpDaUxHRGlMRSs3RXI5SHFG?=
- =?utf-8?B?a3owZDNDUDR6dW1Ka2VKWTVCQUNSa0ZLWldJOGthQ1pFT0wzUTF2ZWViSDJi?=
- =?utf-8?B?ZDMxczVzeVJPSitiRW5sUlRRS3ZuZnhheldMSmRoNXVReU0rcERtaTdmZjg2?=
- =?utf-8?B?b2lpVG85c21XY2syOUJlaWg5WXF5MWNmaXh3WEEwRVpVU1BwR0g4NFk5Yi9u?=
- =?utf-8?B?dGFGOFFmTGdGSGhwMktXS0lJbHlvdWRQVTRCb0JzR1dlWXFsNmJZR0syTEx6?=
- =?utf-8?B?Q2hHeHo4MEhzRGlseEVmdDVKQlFoOEt2KysrQmg0M0pjeGsrWkxndGducWJ4?=
- =?utf-8?B?VktiNWVuUU93cVR1VkxvQ1hhTWV5KzB0SElxcXpyQTNUeTE1SmZ0NXlyQVJ0?=
- =?utf-8?B?TURkeUhhWHFyd2trV092eXR0VmJ5Zmx4SExlOHQxaHFnSTc3VytET2tHNXRH?=
- =?utf-8?B?azBaVTdRZnZyaXdlQkkyd3VQc05LMW5Ldi9SRHVIZ3JMVllNd0lDNko2Szlt?=
- =?utf-8?B?TmxmZHI3bjRvYjhyRXBiNXgxWEdVdkhEUGtmT3VlQ3VGYzMrdnNHS3ZuV0tr?=
- =?utf-8?B?S3BkNkx0ekViTUZ5Zk4yWEx0Z0picXFkeS91VHR5WlBwVmlxci9oWG0rd1pn?=
- =?utf-8?B?Sys4Nm54QjNLMG9qWWhqd1lJWTVIYlFwOGVqbUZYZGdORk9YQzJDNkd5SEFo?=
- =?utf-8?B?K0g3VXZqUW00SXBJb0VNRThEZm1oZ2tDRzhIRUFTaFJIN2RYVTNSNW03aTBq?=
- =?utf-8?B?V3dQUlk4L3BDMkkrZGlBenRyQ3hmMlhwYUR4b2EvTkNuVWtlTEF4NTgzY1NP?=
- =?utf-8?B?SXBtVFo2RUxadUI5c0NwS1U0YUEzYUQ1QXdnN3ZVdStNMmRCMU5tdVA2bUE2?=
- =?utf-8?B?RkMxa2hGaHNCVlpaQ1pDMThPa3dEb3RiN0U5cU5OcHY4cHh4eXhsREZsMWxu?=
- =?utf-8?B?Y2cwSWpSektpanJiRTBRYSs0R2NyS2NmRzh6TDB2Y3ZibllmTmFELzFpU2Ro?=
- =?utf-8?B?YzAxKzI4WWdMQk9PNmZydmN1UFFnM21aWHp5V20rSnRwRnZ2L1hZU2NJK1Mz?=
- =?utf-8?B?cEs0ZEswYytQL2FUeWhOWFNwTVpwdXkvb0swd1NEV01tek1YV1BRdXNpYXo2?=
- =?utf-8?B?V0N1UXpTa0tURnEvelpHemVGckJtY2l1Y0p6RWlEOHhRWHlwdGhacmwvZGRW?=
- =?utf-8?B?ZnlaeHVCNXhCMzRRVzlGc2dMV01taVh3UE1iMDFJaUJ2VHIvaTBJVWFiZnBP?=
- =?utf-8?B?bXpKc2NYSEhoenRjc3ZjWXRmMlIwQmtYTlhBa2UrQVZ2bEgwRkZnbDdSa2hV?=
- =?utf-8?B?U1ZtZk81Q0NLNDM5b2dabi8vTlVoMTRoa05SL0xWY0UzVjhTaHEvbnFtVXlB?=
- =?utf-8?B?TUV4SGVqZGxLYjJIUVdFZW1MMlF4TS9kQWVYckFnRWdjRzZ6bjJIcXc4RCtP?=
- =?utf-8?B?b1hNY0x1bFhwUGwrcVpTRjJySnRqV3Mzd0JmYzJ5dzk3ODkrU0dicFp1VmZ1?=
- =?utf-8?B?ZjFldU54MDYwZDZ6TjBSbUk1WlcwRmRnZklkYWtOMkhmcHY1UmsyZmZld2tJ?=
- =?utf-8?B?dzM1Y1BXT1VSY3dJZ2VlM0lXZUM4OFdqaGVQaXdZTHpkSHJGWFdENzlkNWYw?=
- =?utf-8?B?bXdaSU80RExtbTFReEl2cytIUjJWMEN3b2Nzc2xacWIxbjNyeHhaS2w4TTlS?=
- =?utf-8?B?Um5xN3FqR1hhNDdhcC9sWFVmd3cwOHdKcE9JWXVnMDRuVlF3MnNJWVJ0cTBO?=
- =?utf-8?B?YzJ6T3BMd0k3MXhjYmpETFFrVU1MaFppcW0wZm5zM3c3NUtZbnowTmtPSzdM?=
- =?utf-8?B?clRzeHNoVGNNblZLTHdIRCtpTjRHWEdqK1k3bmtvaGdVUTlHcXhkUlpzME9X?=
- =?utf-8?B?OWc9PQ==?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2f8322e0-e1fb-468b-2051-08db794de6c5
-X-MS-Exchange-CrossTenant-AuthSource: CO6PR11MB5603.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Jun 2023 09:39:29.6729
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: mueMwFERzOFx8EEVAQadELm8EsPjCGtulUrVs68ZwV3S3EpvjubCf/xI6wXCFviS1MmVCw86bUUIO3BWJLhjOSYSLGcuvfxYFai+O2Wvdmg=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY5PR11MB6414
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230629153108.wyn32bvaxmztnakl@moria.home.lan>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Jun 29, 2023 at 11:31:09AM -0400, Kent Overstreet wrote:
+> On Thu, Jun 29, 2023 at 01:18:11PM +0200, Christian Brauner wrote:
+> > On Wed, Jun 28, 2023 at 07:33:18PM -0600, Jens Axboe wrote:
+> > > On 6/28/23 7:00?PM, Dave Chinner wrote:
+> > > > On Wed, Jun 28, 2023 at 07:50:18PM -0400, Kent Overstreet wrote:
+> > > >> On Wed, Jun 28, 2023 at 05:14:09PM -0600, Jens Axboe wrote:
+> > > >>> On 6/28/23 4:55?PM, Kent Overstreet wrote:
+> > > >>>>> But it's not aio (or io_uring or whatever), it's simply the fact that
+> > > >>>>> doing an fput() from an exiting task (for example) will end up being
+> > > >>>>> done async. And hence waiting for task exits is NOT enough to ensure
+> > > >>>>> that all file references have been released.
+> > > >>>>>
+> > > >>>>> Since there are a variety of other reasons why a mount may be pinned and
+> > > >>>>> fail to umount, perhaps it's worth considering that changing this
+> > > >>>>> behavior won't buy us that much. Especially since it's been around for
+> > > >>>>> more than 10 years:
+> > > >>>>
+> > > >>>> Because it seems that before io_uring the race was quite a bit harder to
+> > > >>>> hit - I only started seeing it when things started switching over to
+> > > >>>> io_uring. generic/388 used to pass reliably for me (pre backpointers),
+> > > >>>> now it doesn't.
+> > > >>>
+> > > >>> I literally just pasted a script that hits it in one second with aio. So
+> > > >>> maybe generic/388 doesn't hit it as easily, but it's surely TRIVIAL to
+> > > >>> hit with aio. As demonstrated. The io_uring is not hard to bring into
+> > > >>> parity on that front, here's one I posted earlier today for 6.5:
+> > > >>>
+> > > >>> https://lore.kernel.org/io-uring/20230628170953.952923-4-axboe@kernel.dk/
+> > > >>>
+> > > >>> Doesn't change the fact that you can easily hit this with io_uring or
+> > > >>> aio, and probably more things too (didn't look any further). Is it a
+> > > >>> realistic thing outside of funky tests? Probably not really, or at least
+> > > >>> if those guys hit it they'd probably have the work-around hack in place
+> > > >>> in their script already.
+> > > >>>
+> > > >>> But the fact is that it's been around for a decade. It's somehow a lot
+> > > >>> easier to hit with bcachefs than XFS, which may just be because the
+> > > >>> former has a bunch of workers and this may be deferring the delayed fput
+> > > >>> work more. Just hand waving.
+> > > >>
+> > > >> Not sure what you're arguing here...?
+> > > >>
+> > > >> We've had a long standing bug, it's recently become much easier to hit
+> > > >> (for multiple reasons); we seem to be in agreement on all that. All I'm
+> > > >> saying is that the existence of that bug previously is not reason to fix
+> > > >> it now.
+> > > > 
+> > > > I agree with Kent here  - the kernel bug needs to be fixed
+> > > > regardless of how long it has been around. Blaming the messenger
+> > > > (userspace, fstests, etc) and saying it should work around a
+> > > > spurious, unpredictable, undesirable and user-undebuggable kernel
+> > > > behaviour is not an acceptible solution here...
+> > > 
+> > > Not sure why you both are putting words in my mouth, I've merely been
+> > > arguing pros and cons and the impact of this. I even linked the io_uring
+> > > addition for ensuring that side will work better once the deferred fput
+> > > is sorted out. I didn't like the idea of fixing this through umount, and
+> > > even outlined how it could be fixed properly by ensuring we flush
+> > > per-task deferred puts on task exit.
+> > > 
+> > > Do I think it's a big issue? Not at all, because a) nobody has reported
+> > > it until now, and b) it's kind of a stupid case. If we can fix it with
+> > 
+> > Agreed.
+> 
+> yeah, the rest of this email that I snipped is _severely_ confused about
+> what is going on here.
+> 
+> Look, the main thing I want to say is - I'm not at all impressed by this
+> continual evasiveness from you and Jens. It's a bug, it needs to be
+> fixed.
+> 
+> We are engineers. It is our literal job to do the hard work and solve
+> the hard problems, and leave behind a system more robust and more
+> reliable for the people who come after us to use.
+> 
+> Not to kick the can down the line and leave lurking landmines in the
+> form of "oh you just have to work around this like x..."
 
+We're all not very impressed with that's going on here. I think everyone
+has made that pretty clear.
 
-On 6/29/2023 5:55 PM, Rafael J. Wysocki wrote:
-> On Fri, Jun 16, 2023 at 6:51 PM Michal Wilczynski
-> <michal.wilczynski@intel.com> wrote:
->> Currently logic for installing notifications from ACPI devices is
->> implemented using notify callback in struct acpi_driver. Preparations
->> are being made to replace acpi_driver with more generic struct
->> platform_driver, which doesn't contain notify callback. Furthermore
->> as of now handlers are being called indirectly through
->> acpi_notify_device(), which decreases performance.
->>
->> Call acpi_dev_install_notify_handler() at the end of .add() callback.
->> Call acpi_dev_remove_notify_handler() at the beginning of .remove()
->> callback. Change arguments passed to the notify function to match with
->> what's required by acpi_install_notify_handler(). Remove .notify
->> callback initialization in acpi_driver.
->>
->> Suggested-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
->> Signed-off-by: Michal Wilczynski <michal.wilczynski@intel.com>
->> ---
->>  drivers/acpi/ac.c | 33 ++++++++++++++++++++++++---------
->>  1 file changed, 24 insertions(+), 9 deletions(-)
->>
->> diff --git a/drivers/acpi/ac.c b/drivers/acpi/ac.c
->> index 1ace70b831cd..207ee3c85bad 100644
->> --- a/drivers/acpi/ac.c
->> +++ b/drivers/acpi/ac.c
->> @@ -34,7 +34,7 @@ MODULE_LICENSE("GPL");
->>
->>  static int acpi_ac_add(struct acpi_device *device);
->>  static void acpi_ac_remove(struct acpi_device *device);
->> -static void acpi_ac_notify(struct acpi_device *device, u32 event);
->> +static void acpi_ac_notify(acpi_handle handle, u32 event, void *data);
->>
->>  static const struct acpi_device_id ac_device_ids[] = {
->>         {"ACPI0003", 0},
->> @@ -54,11 +54,9 @@ static struct acpi_driver acpi_ac_driver = {
->>         .name = "ac",
->>         .class = ACPI_AC_CLASS,
->>         .ids = ac_device_ids,
->> -       .flags = ACPI_DRIVER_ALL_NOTIFY_EVENTS,
->>         .ops = {
->>                 .add = acpi_ac_add,
->>                 .remove = acpi_ac_remove,
->> -               .notify = acpi_ac_notify,
->>                 },
->>         .drv.pm = &acpi_ac_pm,
->>  };
->> @@ -128,9 +126,12 @@ static enum power_supply_property ac_props[] = {
->>  };
->>
->>  /* Driver Model */
->> -static void acpi_ac_notify(struct acpi_device *device, u32 event)
->> +static void acpi_ac_notify(acpi_handle handle, u32 event, void *data)
->>  {
->> -       struct acpi_ac *ac = acpi_driver_data(device);
-> This line doesn't need to be changed.  Just add the device variable
-> definition above it.
->
-> And the same pattern is present in the other patches in the series.
+It's worrying that this reply is so quickly and happily turning to
+"I'm a real engineer" and "you're confused" tropes and then isn't even
+making a clear point. Going forward this should stop otherwise I'll
+cease replying.
 
-I like the Reverse Christmas Tree, but sure will change that
+Nothing I said was confused. The discussion was initially trying to fix
+this in umount and we're not going to fix async aio behavior in umount.
 
->
->> +       struct acpi_device *device = data;
->> +       struct acpi_ac *ac;
->> +
->> +       ac = acpi_driver_data(device);
->>
->>         if (!ac)
->>                 return;
+My earlier mail clearly said that io_uring can be changed by Jens pretty
+quickly to not cause such test failures.
 
+But there's a trade-off to be considered where we have to introduce new
+sensitive and complicated file cleanup code for the sake of the legacy
+aio api that even the manpage marks as incomplete and buggy. And all for
+an issue that was only ever found out in a test and for behavior that's
+existed since the dawn of time.
+
+"We're real engineers" is not an argument for that trade off being
+sensible.
