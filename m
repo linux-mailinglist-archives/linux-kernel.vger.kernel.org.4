@@ -2,73 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03E8174414A
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 19:33:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6149F744153
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 19:34:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230015AbjF3RdF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 13:33:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47056 "EHLO
+        id S233098AbjF3Reo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Jun 2023 13:34:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231886AbjF3RdC (ORCPT
+        with ESMTP id S232947AbjF3ReY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 13:33:02 -0400
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C3C5E6C
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 10:33:01 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id 4fb4d7f45d1cf-51d7f4c1cfeso2244487a12.0
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 10:33:01 -0700 (PDT)
+        Fri, 30 Jun 2023 13:34:24 -0400
+Received: from mail-qt1-x82d.google.com (mail-qt1-x82d.google.com [IPv6:2607:f8b0:4864:20::82d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88AC846BE
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 10:33:48 -0700 (PDT)
+Received: by mail-qt1-x82d.google.com with SMTP id d75a77b69052e-401d1d967beso22971cf.0
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 10:33:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1688146380; x=1690738380;
+        d=google.com; s=20221208; t=1688146422; x=1690738422;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=TRxnSk9kxMzaUaw9NVLI4lJ1EfwlE8b7suSgdr4IEqI=;
-        b=c6JEuiDQ+wrPvK+QjxunYykvRbfHhcBKV05AoUOFRmzHswSWjmcSXPXM1ZVHkHfDqs
-         vWkbiaNqkpDXdWqxfBFccdeVdepgIW86nt7v8pemIupjrVYIp8vncjQn8BxgTl6edG36
-         RLNcK4EJPaBtOGWBr8ruXswZTzyWd0Z+YQ9rSRlmvF6BCz5txfyPS3R2jfAtgaovAyl1
-         UfB+4hVZxyU6S8fHHeV2tvxuJjimlAeWsN9tgVTn68uMqbA8JWwRnaoYlxmE8T0FCOrF
-         1AuiJAQdewxbWyHfWEkehHr0I4u93PrY8mgl4xew0ZjyUsu+4BXkbf4laP4fcAxHyaN+
-         B2qg==
+        bh=ncRHJ/UjJWTzqrYWhnAQ1Z9WL/dnndbkb23KvFYFj98=;
+        b=13KZgM3bZReYnp+zOtCRTMwq6znHdRzyNpuw2EhU6x6AQh/Fijhf2oEQUsl4Yp56j7
+         g7H9t/Rhkxb+wiC85UNdsnTRJ2UMs+3WirehMCQO5un7lXy4PQZsvqvdp1d696RbtO1d
+         v08UtmF2JugycqatrqL8deE/ZbUZlTL/OZmDgF3iUVqg27fv8cM9OpOKgx3eap0JId6B
+         0XV+UdR48exs/vgI1mP66mgQQ6ICA1FxzRGozGzyyo7ZEsipPffmn2koTfb+pAKfHYst
+         ysyrNrM5NpZgPAmvEa+oS74M+gXicqCXywZAcqRRCeYtx4MfoYMS20UkW9geSEHJbm6g
+         rheg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688146380; x=1690738380;
+        d=1e100.net; s=20221208; t=1688146422; x=1690738422;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=TRxnSk9kxMzaUaw9NVLI4lJ1EfwlE8b7suSgdr4IEqI=;
-        b=OXSdVQkP37eF+CA4Sgh/sYOZl8ykoeGQLADObyVmdqy0AWk6MKODzuijUFue9AUbS1
-         Kv8cVgZAuytx7pBgBxAmFsJtIo4xPvAc+Xmitsjax1JiSgmbBvzArJKZUgymku7g8oDi
-         i2/Z3x/Uhes4RK33T7FIEDlEsucBvn1Yf5Q+x9jJd/FlIh818CoanICoMIbDPchDHA/L
-         +z8FcXZbAkj0mCeAMOlEYixr/oixggMXLq4HI0wmJ3Pr8Bh9ypeEaQPFOGf1EuN5jgap
-         hLy0+RBr0EWWIfR2YLchqS6kkF9Y7p/CXwG7U3KDla+7OtfQhUkA1DNbhb0mqntflRYL
-         ZPMw==
-X-Gm-Message-State: ABy/qLb9vMfG6SR6vViEEe0MBREwP3bghYOBzWR+dQeFEOcMhUNHRpmG
-        B2qgTQYxhxX0yTLJ5mbBua27i2EfudEJfx8HpWm4nQ==
-X-Google-Smtp-Source: APBJJlH48PHLP8a6rvcVshOZaojaPPhJAvoFbw4qR/w+S3pNxQPH3Tf0cnQsOEnoHhrj5bfcnZmvQr/PYqCOMWc4YWo=
-X-Received: by 2002:a17:906:f299:b0:991:f427:2fd8 with SMTP id
- gu25-20020a170906f29900b00991f4272fd8mr2265350ejb.74.1688146379640; Fri, 30
- Jun 2023 10:32:59 -0700 (PDT)
+        bh=ncRHJ/UjJWTzqrYWhnAQ1Z9WL/dnndbkb23KvFYFj98=;
+        b=DrGMz471bKFeh+wIkLt67+5V8JpmuYpNhOqkWJKO8mjpCPb9YUoY1eb6tyN4ATccyz
+         X1u3N4knYdzWPrcCLfcpzpNIDxT/oTC8R+wJjQ4/VV9tKLqIHj6xlpVJb84rTF7psDKu
+         RHcdJauQCuZUAaZEfcH3gJBK5eqDPCjR9krhRQ442i3UaU+rfx0WDAKb5pNphvfKU9nj
+         b3FzSfOqVFzqQZjEpYdn2dDW1NHVQJuMpyTCqyhG9oo9lQ5HcsA35AdJg0YpkW7JZ9uF
+         j/gWurMpMZBVXjDVTYGF/DEss8jA30iWBJ0/w/9rmH3UQSipkW+dIhIOZJGEZFSp7Y61
+         O4TA==
+X-Gm-Message-State: ABy/qLb0ppkP61hWtOBAtN/hsx0XtssY09uw6bwwJu0aZOgtJPDCXFR8
+        Xh9Jtu+Zwvy7P5YewpsgaF67k8U9+Ko6fi7d/HmCDA==
+X-Google-Smtp-Source: APBJJlFblHu7nuYcdkIa70v0NVLCYtL+USy8nv1lip1niNa3ugQEr7gvuJTaaG87EHBpbYmr/6JI0Muoa3EKO3w9IjU=
+X-Received: by 2002:ac8:5a05:0:b0:3f9:a73b:57bb with SMTP id
+ n5-20020ac85a05000000b003f9a73b57bbmr8915qta.4.1688146422404; Fri, 30 Jun
+ 2023 10:33:42 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230504120042.785651-1-rkagan@amazon.de> <ZH6DJ8aFq/LM6Bk9@google.com>
- <CALMp9eS3F08cwUJbKjTRAEL0KyZ=MC==YSH+DW-qsFkNfMpqEQ@mail.gmail.com>
- <ZJ4dmrQSduY8aWap@google.com> <ZJ65CiW0eEL2mGg8@u40bc5e070a0153.ant.amazon.com>
- <ZJ7mjdZ8h/RSilFX@google.com> <ZJ7y9DuedQyBb9eU@u40bc5e070a0153.ant.amazon.com>
- <ZJ74gELkj4DgAk4S@google.com> <CAL715WL9T8Ucnj_1AygwMgDjOJrttNZHRP9o-KUNfpx1aYZnog@mail.gmail.com>
- <CALMp9eSQ9uRBVdLDkfCdPbprZ45LpdZY5-5O9i41oJYs-dK7+Q@mail.gmail.com>
-In-Reply-To: <CALMp9eSQ9uRBVdLDkfCdPbprZ45LpdZY5-5O9i41oJYs-dK7+Q@mail.gmail.com>
-From:   Mingwei Zhang <mizhang@google.com>
-Date:   Fri, 30 Jun 2023 10:32:23 -0700
-Message-ID: <CAL715WJDjox6AOU=gzN_E-VPL8aXMuD+SkN3k18T=imoS_dKaw@mail.gmail.com>
-Subject: Re: [PATCH] KVM: x86: vPMU: truncate counter value to allowed width
-To:     Jim Mattson <jmattson@google.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Roman Kagan <rkagan@amazon.de>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Eric Hankland <ehankland@google.com>, kvm@vger.kernel.org,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Like Xu <likexu@tencent.com>, x86@kernel.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-        Borislav Petkov <bp@alien8.de>, Ingo Molnar <mingo@redhat.com>
+References: <20230627181030.95608-2-irogers@google.com> <8dab7522-31de-2137-7474-991885932308@web.de>
+ <CAP-5=fVxTYpiXgxDKX1q7ELoAPnAisajWcNOhAp19TZDwnA0oA@mail.gmail.com>
+ <59e92b31-cd78-5c0c-ef87-f0d824cd20f7@web.de> <CAP-5=fX8-2USHn8M4KPfwLz3=AG9kc8=9KdjayMsRexZ87R_EA@mail.gmail.com>
+ <44d77ec3-9a19-cfd5-4bba-4a23d0cd526b@web.de>
+In-Reply-To: <44d77ec3-9a19-cfd5-4bba-4a23d0cd526b@web.de>
+From:   Ian Rogers <irogers@google.com>
+Date:   Fri, 30 Jun 2023 10:33:31 -0700
+Message-ID: <CAP-5=fXjXBSFVDYXw6fXUf35hLDMqS-C4DRC4LWXUcsMNP6gdw@mail.gmail.com>
+Subject: Re: [v2 01/13] perf parse-events: Remove unused PE_PMU_EVENT_FAKE token
+To:     Markus Elfring <Markus.Elfring@web.de>
+Cc:     linux-perf-users@vger.kernel.org, bpf@vger.kernel.org,
+        kernel-janitors@vger.kernel.org,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
+        Ingo Molnar <mingo@redhat.com>, Jiri Olsa <jolsa@kernel.org>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
@@ -82,131 +82,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 30, 2023 at 10:16=E2=80=AFAM Jim Mattson <jmattson@google.com> =
-wrote:
+On Fri, Jun 30, 2023 at 10:23=E2=80=AFAM Markus Elfring <Markus.Elfring@web=
+.de> wrote:
 >
-> On Fri, Jun 30, 2023 at 10:08=E2=80=AFAM Mingwei Zhang <mizhang@google.co=
-m> wrote:
+> >>>>> Removed by commit 70c90e4a6b2f ("perf parse-events: Avoid scanning
+> >>>>> PMUs before parsing").
+> >>>>
+> >>>> Will the chances ever grow to add another imperative change suggesti=
+on?
+> >>>>
+> >>>> See also:
+> >>>> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/t=
+ree/Documentation/process/submitting-patches.rst?h=3Dv6.4#n94
+> >>>
+> >>>
+> >>> Sorry, I can't parse this.
+> >>
+> >> Can you take the requirement =E2=80=9CDescribe your changes in imperat=
+ive mood=E2=80=9D
+> >> into account for any more descriptions?
 > >
-> > On Fri, Jun 30, 2023 at 8:45=E2=80=AFAM Sean Christopherson <seanjc@goo=
-gle.com> wrote:
-> > >
-> > > On Fri, Jun 30, 2023, Roman Kagan wrote:
-> > > > On Fri, Jun 30, 2023 at 07:28:29AM -0700, Sean Christopherson wrote=
-:
-> > > > > On Fri, Jun 30, 2023, Roman Kagan wrote:
-> > > > > > On Thu, Jun 29, 2023 at 05:11:06PM -0700, Sean Christopherson w=
-rote:
-> > > > > > > @@ -74,6 +74,14 @@ static inline u64 pmc_read_counter(struct =
-kvm_pmc *pmc)
-> > > > > > >         return counter & pmc_bitmask(pmc);
-> > > > > > >  }
-> > > > > > >
-> > > > > > > +static inline void pmc_write_counter(struct kvm_pmc *pmc, u6=
-4 val)
-> > > > > > > +{
-> > > > > > > +       if (pmc->perf_event && !pmc->is_paused)
-> > > > > > > +               perf_event_set_count(pmc->perf_event, val);
-> > > > > > > +
-> > > > > > > +       pmc->counter =3D val;
-> > > > > >
-> > > > > > Doesn't this still have the original problem of storing wider v=
-alue than
-> > > > > > allowed?
-> > > > >
-> > > > > Yes, this was just to fix the counter offset weirdness.  My plan =
-is to apply your
-> > > > > patch on top.  Sorry for not making that clear.
-> > > >
-> > > > Ah, got it, thanks!
-> > > >
-> > > > Also I'm now chasing a problem that we occasionally see
-> > > >
-> > > > [3939579.462832] Uhhuh. NMI received for unknown reason 30 on CPU 4=
-3.
-> > > > [3939579.462836] Do you have a strange power saving mode enabled?
-> > > > [3939579.462836] Dazed and confused, but trying to continue
-> > > >
-> > > > in the guests when perf is used.  These messages disappear when
-> > > > 9cd803d496e7 ("KVM: x86: Update vPMCs when retiring instructions") =
-is
-> > > > reverted.  I haven't yet figured out where exactly the culprit is.
-> > >
-> > > Can you reverting de0f619564f4 ("KVM: x86/pmu: Defer counter emulated=
- overflow
-> > > via pmc->prev_counter")?  I suspect the problem is the prev_counter m=
-ess.
-> >
-> > For sure it is prev_counter issue, I have done some instrumentation as =
-follows:
-> >
-> > diff --git a/arch/x86/kvm/pmu.c b/arch/x86/kvm/pmu.c
-> > index 48a0528080ab..946663a42326 100644
-> > --- a/arch/x86/kvm/pmu.c
-> > +++ b/arch/x86/kvm/pmu.c
-> > @@ -322,8 +322,11 @@ static void reprogram_counter(struct kvm_pmc *pmc)
-> >         if (!pmc_event_is_allowed(pmc))
-> >                 goto reprogram_complete;
-> >
-> > -       if (pmc->counter < pmc->prev_counter)
-> > +       if (pmc->counter < pmc->prev_counter) {
-> > +               pr_info("pmc->counter: %llx\tpmc->prev_counter: %llx\n"=
-,
-> > +                       pmc->counter, pmc->prev_counter);
-> >                 __kvm_perf_overflow(pmc, false);
-> > +       }
-> >
-> >         if (eventsel & ARCH_PERFMON_EVENTSEL_PIN_CONTROL)
-> >                 printk_once("kvm pmu: pin control bit is ignored\n");
-> >
-> > I find some interesting changes on prev_counter:
-> >
-> > [  +7.295348] pmc->counter: 12 pmc->prev_counter: fffffffffb3d
-> > [  +0.622991] pmc->counter: 3 pmc->prev_counter: fffffffffb1a
-> > [  +6.943282] pmc->counter: 1 pmc->prev_counter: fffffffff746
-> > [  +4.483523] pmc->counter: 0 pmc->prev_counter: ffffffffffff
-> > [ +12.817772] pmc->counter: 0 pmc->prev_counter: ffffffffffff
-> > [ +21.721233] pmc->counter: 0 pmc->prev_counter: ffffffffffff
-> >
-> > The first 3 logs will generate this:
-> >
-> > [ +11.811925] Uhhuh. NMI received for unknown reason 20 on CPU 2.
-> > [  +0.000003] Dazed and confused, but trying to continue
-> >
-> > While the last 3 logs won't. This is quite reasonable as looking into
-> > de0f619564f4 ("KVM: x86/pmu: Defer counter emulated overflow via
-> > pmc->prev_counter"), counter and prev_counter should only have 1 diff
-> > in value.
+> > Yep, still doesn't parse.
 >
-> prev_counter isn't actually sync'ed at this point, is it? This comes
-> back to that "setting a running counter" nonsense. We want to add 1 to
-> the current counter, but we don't actually know what the current
-> counter is.
+> Does this feedback really indicate that you stumble still on understandin=
+g difficulties
+> for the linked development documentation?
 >
-> My interpretation of the above is that, in the first three cases, PMU
-> hardware has already detected an overflow. In the last three cases,
-> software counting has detected an overflow.
->
-> If the last three occur while executing the guest's PMI handler (i.e.
-> NMIs are blocked), then this could corroborate my conjecture about
-> IA32_DEBUGCTL.Freeze_PerfMon_On_PMI.
->
+> Can the mentioned patch review concern be adjusted with wording alternati=
+ves
+> for improved commit messages?
 
-I see. I wonder if we can just do this:
+Sorry, checked with a colleague and kernel contributor, we don't know
+what is being requested here, "imperative mood" makes no sense, as
+such I don't have a fix for what you're requesting.
 
-diff --git a/arch/x86/kvm/pmu.c b/arch/x86/kvm/pmu.c
-index 48a0528080ab..8d28158e58f2 100644
---- a/arch/x86/kvm/pmu.c
-+++ b/arch/x86/kvm/pmu.c
-@@ -322,7 +322,7 @@ static void reprogram_counter(struct kvm_pmc *pmc)
-        if (!pmc_event_is_allowed(pmc))
-                goto reprogram_complete;
+Thanks,
+Ian
 
--       if (pmc->counter < pmc->prev_counter)
-+       if (pmc->counter =3D=3D 0)
-                __kvm_perf_overflow(pmc, false);
-
-        if (eventsel & ARCH_PERFMON_EVENTSEL_PIN_CONTROL)
-
-Since this is software emulation, we (KVM) should only handle overflow
-by plusing one?
+> Regards,
+> Markus
