@@ -2,272 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 069F37431DD
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 02:44:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A0107431E1
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 02:45:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229522AbjF3AoT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 20:44:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59472 "EHLO
+        id S232155AbjF3Apv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 20:45:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232116AbjF3AoG (ORCPT
+        with ESMTP id S229742AbjF3Apq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 20:44:06 -0400
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FD623593
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 17:43:55 -0700 (PDT)
-Received: by mail-lf1-x12c.google.com with SMTP id 2adb3069b0e04-4f86e6e4038so1626665e87.0
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 17:43:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1688085833; x=1690677833;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=3qjm9bsLZw72FoLoVYfydukfevECHErFvLnVeSIAhVQ=;
-        b=NZ5lpaDUaeMv44a3yVZ1nMGDCrikyLMIPSqUHvPJjMHWGMe6RqM6btppqrDCKH7qk5
-         pgnR6PBMPk5sL1/FRg6bNnjuCGThQPNV3kejm6hM8hPhbzagV6B/KGd0QPRVMUkmvFU+
-         DV97Eu7P4qtbuoadwArP3kZ0hOmF0JtAC70qSVHdCDZcbfJr+lvvhFyeGCZhZQSBxMmA
-         tI3yrRSI0AUw/+Ui9JB5MTcQPcH9DCrxduugb4gMLdaMFIVcgs/sxijWUZic2hmv8y8D
-         jFy9rogtoJcOK4BYNLBcWc0VfolywAV7n3+1VMyyvZVcSmvosbuhCvRZDu3ojPlnijn/
-         ynew==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688085833; x=1690677833;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=3qjm9bsLZw72FoLoVYfydukfevECHErFvLnVeSIAhVQ=;
-        b=hufnsQg9K2g3MRoPZkZXM2HDYprFyQH3wnGjrQJWVI/UpTRIgmSfyCWghTmF+qX8j0
-         MjiEEOkhwTLUyPEwYyTrayobVhUfcGzmFUfPL/qeMKi3IogG6pjd4HlqivUE/E7oRpkb
-         PPG8QfKp3yT38dfbyLuy/FbwFkLG82LETSbY7W09bRGZBcmq7CpG+Dfl2KAmFeSe7N6A
-         GofimMgLHhWEZiHEsbCGL1nRK+Q4Z35ENcEd97YkoPFKRlAT9CPR5ureAaPBcOh11eD7
-         a6SJmMccCTDJuB/xtMyG4GwPLdWdjAv0e5W6th3hXQQOOVqxrJ9Q5PBomL/M1EZEtbeo
-         655Q==
-X-Gm-Message-State: AC+VfDzLnn3AZOUoTWyPdWzMhmRujnqpN456B2m+o1sbdbi6GSYgen9/
-        RfbqfEAKaGiSBgS1QRVwjd097A==
-X-Google-Smtp-Source: ACHHUZ4n2nq7exXxWcoNCfFWdfw3wDzWC7Oc3ufl+zBvSHS1VA+HuuZIE1FXuNdyTzCxIeKmI1yLwQ==
-X-Received: by 2002:a05:6512:220d:b0:4fb:7371:3db6 with SMTP id h13-20020a056512220d00b004fb73713db6mr2108800lfu.29.1688085833576;
-        Thu, 29 Jun 2023 17:43:53 -0700 (PDT)
-Received: from ?IPV6:2001:14ba:a0db:1f00::8a5? (dzdqv0yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a0db:1f00::8a5])
-        by smtp.gmail.com with ESMTPSA id m15-20020a19520f000000b004fb88fffd19sm1127741lfb.146.2023.06.29.17.43.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 29 Jun 2023 17:43:53 -0700 (PDT)
-Message-ID: <49be4c4c-8143-a3bf-ddbd-364a2be81e4f@linaro.org>
-Date:   Fri, 30 Jun 2023 03:43:52 +0300
+        Thu, 29 Jun 2023 20:45:46 -0400
+Received: from mx.socionext.com (mx.socionext.com [202.248.49.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B171910C;
+        Thu, 29 Jun 2023 17:45:44 -0700 (PDT)
+Received: from unknown (HELO iyokan2-ex.css.socionext.com) ([172.31.9.54])
+  by mx.socionext.com with ESMTP; 30 Jun 2023 09:45:44 +0900
+Received: from mail.mfilter.local (mail-arc02.css.socionext.com [10.213.46.40])
+        by iyokan2-ex.css.socionext.com (Postfix) with ESMTP id 2B7982224551;
+        Fri, 30 Jun 2023 09:45:44 +0900 (JST)
+Received: from kinkan2.css.socionext.com ([172.31.9.51]) by m-FILTER with ESMTP; Fri, 30 Jun 2023 09:45:44 +0900
+Received: from plum.e01.socionext.com (unknown [10.212.243.119])
+        by kinkan2.css.socionext.com (Postfix) with ESMTP id 921571644A9;
+        Fri, 30 Jun 2023 09:45:43 +0900 (JST)
+From:   Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
+To:     Adrian Hunter <adrian.hunter@intel.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
+Subject: [PATCH v2] mmc: sdhci-f-sdh30: Replace with sdhci_pltfm
+Date:   Fri, 30 Jun 2023 09:45:33 +0900
+Message-Id: <20230630004533.26644-1-hayashi.kunihiko@socionext.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH RFC v4 3/7] drm/atomic: Move framebuffer checks to helper
-Content-Language: en-GB
-To:     Jessica Zhang <quic_jesszhan@quicinc.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
-        Marijn Suijten <marijn.suijten@somainline.org>
-Cc:     quic_abhinavk@quicinc.com, ppaalanen@gmail.com,
-        contact@emersion.fr, laurent.pinchart@ideasonboard.com,
-        sebastian.wick@redhat.com, ville.syrjala@linux.intel.com,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, freedreno@lists.freedesktop.org,
-        wayland-devel@lists.freedesktop.org
-References: <20230404-solid-fill-v4-0-f4ec0caa742d@quicinc.com>
- <20230404-solid-fill-v4-3-f4ec0caa742d@quicinc.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20230404-solid-fill-v4-3-f4ec0caa742d@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30/06/2023 03:25, Jessica Zhang wrote:
-> Currently framebuffer checks happen directly in
-> drm_atomic_plane_check(). Move these checks into their own helper
-> method.
-> 
-> Signed-off-by: Jessica Zhang <quic_jesszhan@quicinc.com>
-> ---
->   drivers/gpu/drm/drm_atomic.c | 130 ++++++++++++++++++++++++-------------------
->   1 file changed, 74 insertions(+), 56 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/drm_atomic.c b/drivers/gpu/drm/drm_atomic.c
-> index b4c6ffc438da..404b984d2d9f 100644
-> --- a/drivers/gpu/drm/drm_atomic.c
-> +++ b/drivers/gpu/drm/drm_atomic.c
-> @@ -580,6 +580,76 @@ plane_switching_crtc(const struct drm_plane_state *old_plane_state,
->   	return true;
->   }
->   
-> +static int drm_atomic_check_fb(const struct drm_plane_state *state)
-> +{
-> +	struct drm_plane *plane = state->plane;
-> +	const struct drm_framebuffer *fb = state->fb;
-> +	struct drm_mode_rect *clips;
-> +
-> +	uint32_t num_clips;
-> +	unsigned int fb_width, fb_height;
-> +	int ret;
-> +
-> +	/* Check whether this plane supports the fb pixel format. */
-> +	ret = drm_plane_check_pixel_format(plane, fb->format->format,
-> +					   fb->modifier);
-> +
-> +	if (ret) {
-> +		drm_dbg_atomic(plane->dev,
-> +			       "[PLANE:%d:%s] invalid pixel format %p4cc, modifier 0x%llx\n",
-> +			       plane->base.id, plane->name,
-> +			       &fb->format->format, fb->modifier);
-> +		return ret;
-> +	}
-> +
-> +	fb_width = fb->width << 16;
-> +	fb_height = fb->height << 16;
-> +
-> +	/* Make sure source coordinates are inside the fb. */
-> +	if (state->src_w > fb_width ||
-> +	    state->src_x > fb_width - state->src_w ||
-> +	    state->src_h > fb_height ||
-> +	    state->src_y > fb_height - state->src_h) {
-> +		drm_dbg_atomic(plane->dev,
-> +			       "[PLANE:%d:%s] invalid source coordinates "
-> +			       "%u.%06ux%u.%06u+%u.%06u+%u.%06u (fb %ux%u)\n",
-> +			       plane->base.id, plane->name,
-> +			       state->src_w >> 16,
-> +			       ((state->src_w & 0xffff) * 15625) >> 10,
-> +			       state->src_h >> 16,
-> +			       ((state->src_h & 0xffff) * 15625) >> 10,
-> +			       state->src_x >> 16,
-> +			       ((state->src_x & 0xffff) * 15625) >> 10,
-> +			       state->src_y >> 16,
-> +			       ((state->src_y & 0xffff) * 15625) >> 10,
-> +			       fb->width, fb->height);
-> +		return -ENOSPC;
-> +	}
-> +
-> +	clips = __drm_plane_get_damage_clips(state);
-> +	num_clips = drm_plane_get_damage_clips_count(state);
-> +
-> +	/* Make sure damage clips are valid and inside the fb. */
-> +	while (num_clips > 0) {
-> +		if (clips->x1 >= clips->x2 ||
-> +		    clips->y1 >= clips->y2 ||
-> +		    clips->x1 < 0 ||
-> +		    clips->y1 < 0 ||
-> +		    clips->x2 > fb_width ||
-> +		    clips->y2 > fb_height) {
-> +			drm_dbg_atomic(plane->dev,
-> +				       "[PLANE:%d:%s] invalid damage clip %d %d %d %d\n",
-> +				       plane->base.id, plane->name, clips->x1,
-> +				       clips->y1, clips->x2, clips->y2);
-> +			return -EINVAL;
-> +		}
-> +		clips++;
-> +		num_clips--;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
->   /**
->    * drm_atomic_plane_check - check plane state
->    * @old_plane_state: old plane state to check
-> @@ -596,9 +666,6 @@ static int drm_atomic_plane_check(const struct drm_plane_state *old_plane_state,
->   	struct drm_plane *plane = new_plane_state->plane;
->   	struct drm_crtc *crtc = new_plane_state->crtc;
->   	const struct drm_framebuffer *fb = new_plane_state->fb;
-> -	unsigned int fb_width, fb_height;
-> -	struct drm_mode_rect *clips;
-> -	uint32_t num_clips;
->   	int ret;
->   
->   	/* either *both* CRTC and FB must be set, or neither */
-> @@ -625,17 +692,6 @@ static int drm_atomic_plane_check(const struct drm_plane_state *old_plane_state,
->   		return -EINVAL;
->   	}
->   
-> -	/* Check whether this plane supports the fb pixel format. */
-> -	ret = drm_plane_check_pixel_format(plane, fb->format->format,
-> -					   fb->modifier);
-> -	if (ret) {
-> -		drm_dbg_atomic(plane->dev,
-> -			       "[PLANE:%d:%s] invalid pixel format %p4cc, modifier 0x%llx\n",
-> -			       plane->base.id, plane->name,
-> -			       &fb->format->format, fb->modifier);
-> -		return ret;
-> -	}
-> -
->   	/* Give drivers some help against integer overflows */
->   	if (new_plane_state->crtc_w > INT_MAX ||
->   	    new_plane_state->crtc_x > INT_MAX - (int32_t) new_plane_state->crtc_w ||
-> @@ -649,49 +705,11 @@ static int drm_atomic_plane_check(const struct drm_plane_state *old_plane_state,
->   		return -ERANGE;
->   	}
->   
-> -	fb_width = fb->width << 16;
-> -	fb_height = fb->height << 16;
->   
-> -	/* Make sure source coordinates are inside the fb. */
-> -	if (new_plane_state->src_w > fb_width ||
-> -	    new_plane_state->src_x > fb_width - new_plane_state->src_w ||
-> -	    new_plane_state->src_h > fb_height ||
-> -	    new_plane_state->src_y > fb_height - new_plane_state->src_h) {
-> -		drm_dbg_atomic(plane->dev,
-> -			       "[PLANE:%d:%s] invalid source coordinates "
-> -			       "%u.%06ux%u.%06u+%u.%06u+%u.%06u (fb %ux%u)\n",
-> -			       plane->base.id, plane->name,
-> -			       new_plane_state->src_w >> 16,
-> -			       ((new_plane_state->src_w & 0xffff) * 15625) >> 10,
-> -			       new_plane_state->src_h >> 16,
-> -			       ((new_plane_state->src_h & 0xffff) * 15625) >> 10,
-> -			       new_plane_state->src_x >> 16,
-> -			       ((new_plane_state->src_x & 0xffff) * 15625) >> 10,
-> -			       new_plane_state->src_y >> 16,
-> -			       ((new_plane_state->src_y & 0xffff) * 15625) >> 10,
-> -			       fb->width, fb->height);
-> -		return -ENOSPC;
-> -	}
-> -
-> -	clips = __drm_plane_get_damage_clips(new_plane_state);
-> -	num_clips = drm_plane_get_damage_clips_count(new_plane_state);
-> -
-> -	/* Make sure damage clips are valid and inside the fb. */
-> -	while (num_clips > 0) {
-> -		if (clips->x1 >= clips->x2 ||
-> -		    clips->y1 >= clips->y2 ||
-> -		    clips->x1 < 0 ||
-> -		    clips->y1 < 0 ||
-> -		    clips->x2 > fb_width ||
-> -		    clips->y2 > fb_height) {
-> -			drm_dbg_atomic(plane->dev,
-> -				       "[PLANE:%d:%s] invalid damage clip %d %d %d %d\n",
-> -				       plane->base.id, plane->name, clips->x1,
-> -				       clips->y1, clips->x2, clips->y2);
-> -			return -EINVAL;
-> -		}
-> -		clips++;
-> -		num_clips--;
-> +	if (fb) {
+Even if sdhci_pltfm_pmops is specified for PM, this driver doesn't apply
+sdhci_pltfm, so the structure is not correctly referenced in PM functions.
+This applies sdhci_pltfm to this driver to fix this issue.
 
-This doesn't only move code, but also changes semantics, making the 
-checks optional if no FB is provided. Consider moving the condition to 
-the next patch. Otherwise LGTM.
+- Call sdhci_pltfm_init() instead of sdhci_alloc_host() and
+  other functions that covered by sdhci_pltfm.
+- Move ops and quirks to sdhci_pltfm_data
+- Replace sdhci_priv() with own private function sdhci_f_sdh30_priv().
 
-> +		ret = drm_atomic_check_fb(new_plane_state);
-> +		if (ret)
-> +			return ret;
->   	}
->   
->   	if (plane_switching_crtc(old_plane_state, new_plane_state)) {
-> 
+Fixes: 87a507459f49 ("mmc: sdhci: host: add new f_sdh30")
+Signed-off-by: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
+Acked-by: Adrian Hunter <adrian.hunter@intel.com>
+---
+ drivers/mmc/host/sdhci_f_sdh30.c | 60 ++++++++++++++------------------
+ 1 file changed, 27 insertions(+), 33 deletions(-)
 
+Changes since v1:
+- Add Fixes and Acked-by tags
+
+diff --git a/drivers/mmc/host/sdhci_f_sdh30.c b/drivers/mmc/host/sdhci_f_sdh30.c
+index a202a69a4b08..b01ffb4d0973 100644
+--- a/drivers/mmc/host/sdhci_f_sdh30.c
++++ b/drivers/mmc/host/sdhci_f_sdh30.c
+@@ -29,9 +29,16 @@ struct f_sdhost_priv {
+ 	bool enable_cmd_dat_delay;
+ };
+ 
++static void *sdhci_f_sdhost_priv(struct sdhci_host *host)
++{
++	struct sdhci_pltfm_host *pltfm_host = sdhci_priv(host);
++
++	return sdhci_pltfm_priv(pltfm_host);
++}
++
+ static void sdhci_f_sdh30_soft_voltage_switch(struct sdhci_host *host)
+ {
+-	struct f_sdhost_priv *priv = sdhci_priv(host);
++	struct f_sdhost_priv *priv = sdhci_f_sdhost_priv(host);
+ 	u32 ctrl = 0;
+ 
+ 	usleep_range(2500, 3000);
+@@ -64,7 +71,7 @@ static unsigned int sdhci_f_sdh30_get_min_clock(struct sdhci_host *host)
+ 
+ static void sdhci_f_sdh30_reset(struct sdhci_host *host, u8 mask)
+ {
+-	struct f_sdhost_priv *priv = sdhci_priv(host);
++	struct f_sdhost_priv *priv = sdhci_f_sdhost_priv(host);
+ 	u32 ctl;
+ 
+ 	if (sdhci_readw(host, SDHCI_CLOCK_CONTROL) == 0)
+@@ -95,30 +102,32 @@ static const struct sdhci_ops sdhci_f_sdh30_ops = {
+ 	.set_uhs_signaling = sdhci_set_uhs_signaling,
+ };
+ 
++static const struct sdhci_pltfm_data sdhci_f_sdh30_pltfm_data = {
++	.ops = &sdhci_f_sdh30_ops,
++	.quirks = SDHCI_QUIRK_NO_ENDATTR_IN_NOPDESC
++		| SDHCI_QUIRK_INVERTED_WRITE_PROTECT,
++	.quirks2 = SDHCI_QUIRK2_SUPPORT_SINGLE
++		|  SDHCI_QUIRK2_TUNING_WORK_AROUND,
++};
++
+ static int sdhci_f_sdh30_probe(struct platform_device *pdev)
+ {
+ 	struct sdhci_host *host;
+ 	struct device *dev = &pdev->dev;
+-	int irq, ctrl = 0, ret = 0;
++	int ctrl = 0, ret = 0;
+ 	struct f_sdhost_priv *priv;
++	struct sdhci_pltfm_host *pltfm_host;
+ 	u32 reg = 0;
+ 
+-	irq = platform_get_irq(pdev, 0);
+-	if (irq < 0)
+-		return irq;
+-
+-	host = sdhci_alloc_host(dev, sizeof(struct f_sdhost_priv));
++	host = sdhci_pltfm_init(pdev, &sdhci_f_sdh30_pltfm_data,
++				sizeof(struct f_sdhost_priv));
+ 	if (IS_ERR(host))
+ 		return PTR_ERR(host);
+ 
+-	priv = sdhci_priv(host);
++	pltfm_host = sdhci_priv(host);
++	priv = sdhci_pltfm_priv(pltfm_host);
+ 	priv->dev = dev;
+ 
+-	host->quirks = SDHCI_QUIRK_NO_ENDATTR_IN_NOPDESC |
+-		       SDHCI_QUIRK_INVERTED_WRITE_PROTECT;
+-	host->quirks2 = SDHCI_QUIRK2_SUPPORT_SINGLE |
+-			SDHCI_QUIRK2_TUNING_WORK_AROUND;
+-
+ 	priv->enable_cmd_dat_delay = device_property_read_bool(dev,
+ 						"fujitsu,cmd-dat-delay-select");
+ 
+@@ -126,18 +135,6 @@ static int sdhci_f_sdh30_probe(struct platform_device *pdev)
+ 	if (ret)
+ 		goto err;
+ 
+-	platform_set_drvdata(pdev, host);
+-
+-	host->hw_name = "f_sdh30";
+-	host->ops = &sdhci_f_sdh30_ops;
+-	host->irq = irq;
+-
+-	host->ioaddr = devm_platform_ioremap_resource(pdev, 0);
+-	if (IS_ERR(host->ioaddr)) {
+-		ret = PTR_ERR(host->ioaddr);
+-		goto err;
+-	}
+-
+ 	if (dev_of_node(dev)) {
+ 		sdhci_get_of_property(pdev);
+ 
+@@ -204,24 +201,21 @@ static int sdhci_f_sdh30_probe(struct platform_device *pdev)
+ err_clk:
+ 	clk_disable_unprepare(priv->clk_iface);
+ err:
+-	sdhci_free_host(host);
++	sdhci_pltfm_free(pdev);
++
+ 	return ret;
+ }
+ 
+ static int sdhci_f_sdh30_remove(struct platform_device *pdev)
+ {
+ 	struct sdhci_host *host = platform_get_drvdata(pdev);
+-	struct f_sdhost_priv *priv = sdhci_priv(host);
+-
+-	sdhci_remove_host(host, readl(host->ioaddr + SDHCI_INT_STATUS) ==
+-			  0xffffffff);
++	struct f_sdhost_priv *priv = sdhci_f_sdhost_priv(host);
+ 
+ 	reset_control_assert(priv->rst);
+ 	clk_disable_unprepare(priv->clk);
+ 	clk_disable_unprepare(priv->clk_iface);
+ 
+-	sdhci_free_host(host);
+-	platform_set_drvdata(pdev, NULL);
++	sdhci_pltfm_unregister(pdev);
+ 
+ 	return 0;
+ }
 -- 
-With best wishes
-Dmitry
+2.25.1
 
