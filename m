@@ -2,145 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A037744526
-	for <lists+linux-kernel@lfdr.de>; Sat,  1 Jul 2023 01:20:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2841C74451C
+	for <lists+linux-kernel@lfdr.de>; Sat,  1 Jul 2023 01:19:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232805AbjF3XUs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 19:20:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37518 "EHLO
+        id S232644AbjF3XTf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Jun 2023 19:19:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232808AbjF3XTb (ORCPT
+        with ESMTP id S232732AbjF3XTR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 19:19:31 -0400
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2082.outbound.protection.outlook.com [40.107.223.82])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B60F3C1B;
-        Fri, 30 Jun 2023 16:19:28 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=gF5MawLWFVagbjLudU+1AKsDxNf/JPD+Fo3y0WWDgOEivuiLZ1sDW4YRoOQ6D/7gz7iQ2CjBmw6ky3tgmVA0pxa65r7sQtYi06xyewmrCqLDZ2EKiXj0IWwEKitRRI8UWMRbshvq0pTtHuH115j0VkSf2K3eM4B9eeWNy2O9uUOeHEhNDtMlGJqbQTULrVf7KycKOW3FWE0PNv+4hbRKORYPhP7/elA3ZAzUwCSs7JctfzXCYtCtEYBgTqMbAu6UoNU//5WqDOjd7kRUF61hMCKrGnN/YPMgiguIzf7dCPpDFMRerO61w1T9L4HXTZpOgskdaKIB7ho7/RCfoPyIJg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=/7sqbY0FFYnSFzTHSkwg15SUS/JBih7C1nHHGnH4Nfc=;
- b=N3+pewyTz75N5ZgyKlz0d+4grfa7rrODbv5VDb5MdE2yqrXVjOAVhwGgtIk6YQbcV4sDe4U0pJsilwSb45nPHupWIu12yjFvcE2/gBkyU2/ipbxwiLji6HOw9Gsei8zG/Yqqu4jUwLXRIWVCYWdKZJ09sbtNv830xgfSEeg+JZ7UnVUloFgZYXSxILzQojLCp1VjD7NhHeRrefZ7eZKfLD8x4YIXa68VtJ9lEa3PpCGkJyPvL6MnTEIGPAOIqIc50ink1Opak8sPstWmA/3eykKIhY5dDRE2Mp1phf+q6b5F8M1M0G4IG8oVnKSIpTzSq92lbV1+sjXeyEDg6ksM0Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=intel.com smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=/7sqbY0FFYnSFzTHSkwg15SUS/JBih7C1nHHGnH4Nfc=;
- b=o+ETQ40Wn2DOuHlTXPhZYMrp/P8D5Uvp/OYr/8hKFCEeFcTygJqQgXNfiPh5e/fZOEJChr+5dAS9eFfHSzPDahJBvhLB0eQnh85wR1W6KuySe2sp+X6sBNRZ4K5soqZBxnMjWnuiIT0rDZUMG7BSyTBmki/W8H7sA4tgZJdyZFk=
-Received: from DM6PR07CA0109.namprd07.prod.outlook.com (2603:10b6:5:330::17)
- by SJ0PR12MB6942.namprd12.prod.outlook.com (2603:10b6:a03:449::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.24; Fri, 30 Jun
- 2023 23:19:24 +0000
-Received: from DM6NAM11FT078.eop-nam11.prod.protection.outlook.com
- (2603:10b6:5:330:cafe::3c) by DM6PR07CA0109.outlook.office365.com
- (2603:10b6:5:330::17) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6544.22 via Frontend
- Transport; Fri, 30 Jun 2023 23:19:24 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- DM6NAM11FT078.mail.protection.outlook.com (10.13.173.183) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6521.43 via Frontend Transport; Fri, 30 Jun 2023 23:19:24 +0000
-Received: from ethanolx7ea3host.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Fri, 30 Jun
- 2023 18:19:23 -0500
-From:   Terry Bowman <terry.bowman@amd.com>
-To:     <alison.schofield@intel.com>, <vishal.l.verma@intel.com>,
-        <ira.weiny@intel.com>, <bwidawsk@kernel.org>,
-        <dan.j.williams@intel.com>, <dave.jiang@intel.com>,
-        <Jonathan.Cameron@huawei.com>, <linux-cxl@vger.kernel.org>
-CC:     <terry.bowman@amd.com>, <rrichter@amd.com>,
-        <linux-kernel@vger.kernel.org>, <bhelgaas@google.com>
-Subject: [PATCH v8 14/14] cxl/core/regs: Rename phys_addr in cxl_map_component_regs()
-Date:   Fri, 30 Jun 2023 18:16:35 -0500
-Message-ID: <20230630231635.3132638-15-terry.bowman@amd.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230630231635.3132638-1-terry.bowman@amd.com>
-References: <20230630231635.3132638-1-terry.bowman@amd.com>
+        Fri, 30 Jun 2023 19:19:17 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 452914683;
+        Fri, 30 Jun 2023 16:18:36 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C1EEE61805;
+        Fri, 30 Jun 2023 23:18:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9A84C433C8;
+        Fri, 30 Jun 2023 23:18:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688167115;
+        bh=JKd3pcacA54AZ0fE+QcV56KctfOkUbfebcxzki2Xzw4=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=ZMi4zhYmfvWJMdkvedanUYstuVE7V++h8+4bGqe8iRsO64USW/4d3yNZcbJWF4dFb
+         iqTvVQKxd/hcW4amlQdMvCalBxakXpwsJTYx//KfXK+Ocq3HhdqzLAEEYyA/WYIIO9
+         m3cUTjAbAJXwWJTR0npi8sxQCqDafIpDyT5YR4y6LnkTsWJGTejQg1k828QAQJx+xF
+         YLnwfYb5OtgQJjbOcQXgbr+hQQtFhmaqz89WhtJPqc0oVV2rfVNBe+d6Ybj7rH73xa
+         7quq7fo9yvPZswXaoXZA2zNn/lkZUWFjoQZtXWIaOEyaGkBTpKhMpv4g35BMDBquFB
+         c2GoPvpi27qaQ==
+Date:   Fri, 30 Jun 2023 18:18:32 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Thippeswamy Havalige <thippeswamy.havalige@amd.com>
+Cc:     krzysztof.kozlowski@linaro.org, devicetree@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        robh+dt@kernel.org, bhelgaas@google.com, lorenzo.pieralisi@arm.com,
+        linux-arm-kernel@lists.infradead.org, bharat.kumar.gogada@amd.com,
+        michals@amd.com
+Subject: Re: [PATCH V5 3/3] PCI: xilinx-xdma: Add Xilinx XDMA Root Port driver
+Message-ID: <20230630231832.GA496495@bhelgaas>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6NAM11FT078:EE_|SJ0PR12MB6942:EE_
-X-MS-Office365-Filtering-Correlation-Id: 4df72fff-f781-46ac-fd74-08db79c0711e
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: YtPJn/MjlYYMw2HyteGIUwDfkfZxnf1LsvYpJgPd2bYwFEsmWkb5e1IMybCIpFtTagXHdChYlkF+kT4mFEKg82T+EZZ5xXiJ3hLYT/0V9nGc5XV0zJ3N2nKTtNAQVigVMG2gh+SgLpIk1bba5pCBoi8M0dTw7/1xZnC8G5la47wnCTKzxG6czz72bfQImlAejvFJeD54LA8sjXRfkNNDdQh+02ERDPQquRMVUbKriI57ms6XbVT2TlNXxHXBuJq5mAqZ8dx/+IKoiGefe1WpfrCc+gljAqFBhSANDx3S3k10ycqOLBeWYtwk876VqCBfcPcUvB8rcTvGm+xxPq6FpUufDjK0Y+r78BbeUm5gPMTWgdbePPUKjSMBkXN4+UDOxOe+wnAbmY7CIYVhIV3NshvJefpQHfkIDo6gpzhOg7LoVOOiBv+yEH4Wlk1w0zelATc45LumPZRaiysyI9mgG7DghU/WTd6xqzog72YSphhfeSoOFPbH8X1x/v32tAiradei34pfBP/SycijTlFLHP8jsvFB8eLuSdbBGY8GGhZzHHQUjSfPBSiQDw6XqjaFh23Yc6quyTs9Nj5RWZ5UsBdFXvRe4LUds2D+sDha2cBFjm6F30sLviJ3dELn54Le1yHujkY/GURX9avllxWgPG43TOR7c4RhXfzET4ogIX0M7c5qlr2PuImfowO/fi+y4nPNAAJ231XmPovIg/JijGKs/kN3dCKt35tFamAWC+BUx9Ch3AbU82q5PLXaNl6SXHXlcVpnDzvx8HUdJHblkQ==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(376002)(396003)(136003)(346002)(39860400002)(451199021)(40470700004)(36840700001)(46966006)(26005)(4326008)(82310400005)(8936002)(36860700001)(110136005)(478600001)(54906003)(2616005)(1076003)(7696005)(336012)(426003)(6666004)(83380400001)(186003)(356005)(2906002)(82740400003)(44832011)(70206006)(7416002)(47076005)(36756003)(41300700001)(40480700001)(316002)(81166007)(70586007)(5660300002)(86362001)(40460700003)(8676002)(16526019)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Jun 2023 23:19:24.0814
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4df72fff-f781-46ac-fd74-08db79c0711e
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT078.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR12MB6942
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230628092812.1592644-4-thippeswamy.havalige@amd.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Robert Richter <rrichter@amd.com>
+On Wed, Jun 28, 2023 at 02:58:12PM +0530, Thippeswamy Havalige wrote:
+> Add support for Xilinx XDMA Soft IP core as Root Port.
+> ...
 
-Trivial change that renames variable phys_addr in
-cxl_map_component_regs() to shorten its length to keep the 80 char
-size limit for the line and also for consistency between the different
-paths.
+> |Reported-by: kernel test robot <lkp@intel.com>
+> |Reported-by: Dan Carpenter <error27@gmail.com>
+> |Closes: https://lore.kernel.org/r/202305261250.2cs1phTS-lkp@intel.com/
 
-Signed-off-by: Robert Richter <rrichter@amd.com>
-Signed-off-by: Terry Bowman <terry.bowman@amd.com>
-Reviewed-by: Dave Jiang <dave.jiang@intel.com>
----
- drivers/cxl/core/regs.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+Remove these.  I mentioned this before:
+https://lore.kernel.org/r/ZHd/7AaLaGyr1jNA@bhelgaas
 
-diff --git a/drivers/cxl/core/regs.c b/drivers/cxl/core/regs.c
-index 2360b480c5c5..d22ba5a76b33 100644
---- a/drivers/cxl/core/regs.c
-+++ b/drivers/cxl/core/regs.c
-@@ -217,16 +217,16 @@ int cxl_map_component_regs(const struct cxl_register_map *map,
- 
- 	for (i = 0; i < ARRAY_SIZE(mapinfo); i++) {
- 		struct mapinfo *mi = &mapinfo[i];
--		resource_size_t phys_addr;
-+		resource_size_t addr;
- 		resource_size_t length;
- 
- 		if (!mi->rmap->valid)
- 			continue;
- 		if (!test_bit(mi->rmap->id, &map_mask))
- 			continue;
--		phys_addr = map->resource + mi->rmap->offset;
-+		addr = map->resource + mi->rmap->offset;
- 		length = mi->rmap->size;
--		*(mi->addr) = devm_cxl_iomap_block(dev, phys_addr, length);
-+		*(mi->addr) = devm_cxl_iomap_block(dev, addr, length);
- 		if (!*(mi->addr))
- 			return -ENOMEM;
- 	}
--- 
-2.34.1
+> + * struct pl_dma_pcie - PCIe port information
+> + * @dev: Device pointer
+> + * @reg_base: IO Mapped Register Base
+> + * @irq: Interrupt number
+> + * @cfg: Holds mappings of config space window
+> + * @phys_reg_base: Physical address of reg base
+> + * @intx_domain: Legacy IRQ domain pointer
+> + * @pldma_domain: PL DMA IRQ domain pointer
+> + * @resources: Bus Resources
+> + * @msi: MSI information
+> + * @irq_misc: Legacy and error interrupt number
+> + * @intx_irq: legacy interrupt number
+> + * @lock: lock protecting shared register access
 
+Capitalize the intx_irq and lock descriptions so they match the others.
+
+"Legacy and error interrupt number" and "legacy interrupt number"
+sound like they overlap -- "legacy interrupt number" is part of both.
+Is that an error?
+
+> +static bool xilinx_pl_dma_pcie_valid_device(struct pci_bus *bus, unsigned int devfn)
+> +{
+> +	struct pl_dma_pcie *port = bus->sysdata;
+> +
+> +	/* Check if link is up when trying to access downstream ports */
+> +	if (!pci_is_root_bus(bus)) {
+> +		/*
+> +		 * If the link goes down after we check for link-up, we have a problem:
+> +		 * if a PIO request is initiated while link-down, the whole controller
+> +		 * hangs, and even after link comes up again, previous PIO requests
+> +		 * won't work, and a reset of the whole PCIe controller is needed.
+> +		 * Henceforth we need link-up check here to avoid sending PIO request
+> +		 * when link is down.
+
+Wrap this comment so it fits in 80 columns like the rest of the file.
+
+I think the comment was added because I pointed out that this is racy.
+Obviously the comment doesn't *fix* the race, and it actually doesn't
+even describe the race.
+
+Even with the xilinx_pl_dma_pcie_link_up() check, this is racy because
+xilinx_pl_dma_pcie_link_up() may tell you the link is up, but the link
+may go down before the driver attempts the config transaction.  THAT
+is the race.
+
+If the controller hangs in that situation, that's a hardware defect,
+and from your comment, it sounds like it's unrecoverable.
+
+> +		 */
+> +		if (!xilinx_pl_dma_pcie_link_up(port))
+> +			return false;
+
+> +static int xilinx_pl_dma_pcie_intx_map(struct irq_domain *domain, unsigned int irq,
+> +				       irq_hw_number_t hwirq)
+
+Wrap to fit in 80 columns like the rest of the file.
+
+> +static struct irq_chip xilinx_msi_irq_chip = {
+> +	.name = "pl_dma_pciepcie:msi",
+
+Why does this name have two copies of "pcie" in it?  This driver has
+four irq_chip structs; maybe the names could be more similar?
+
+  xilinx_leg_irq_chip			INTx
+  xilinx_msi_irq_chip			pl_dma_pciepcie:msi
+  xilinx_irq_chip			Xilinx MSI
+  xilinx_pl_dma_pcie_event_irq_chip	RC-Event
+
+> +	/* Plug the INTx chained handler */
+> +	irq_set_chained_handler_and_data(port->intx_irq,
+> +					 xilinx_pl_dma_pcie_intx_flow, port);
+> +
+> +	/* Plug the main event chained handler */
+> +	irq_set_chained_handler_and_data(port->irq,
+> +					 xilinx_pl_dma_pcie_event_flow, port);
+
+What's the reason for using chained IRQs?  Can this be done without
+them?  I don't claim to understand all the issues here, but it seems
+better to avoid chained IRQ handlers when possible:
+https://lore.kernel.org/all/877csohcll.ffs@tglx/
+
+> +	/*set the Bridge enable bit */
+
+Space before "Set".  I mentioned this before at
+https://lore.kernel.org/r/ZHd/7AaLaGyr1jNA@bhelgaas
+
+> +	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+> +	if (!res) {
+> +		dev_err(dev, "missing \"reg\" property\n");
+
+All your other error messages are capitalized.  Make this one match.
+
+> +	bridge->ops = (struct pci_ops *)&xilinx_pl_dma_pcie_ops.pci_ops;
+
+I don't think this cast is needed.
+
+Bjorn
