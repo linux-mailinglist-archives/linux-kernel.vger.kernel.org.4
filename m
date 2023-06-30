@@ -2,227 +2,219 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F240743FAD
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 18:27:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 249AB743FB6
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 18:29:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232477AbjF3Q10 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 12:27:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40574 "EHLO
+        id S232730AbjF3Q30 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Jun 2023 12:29:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230015AbjF3Q1Y (ORCPT
+        with ESMTP id S230015AbjF3Q3W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 12:27:24 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C10C3A9B;
-        Fri, 30 Jun 2023 09:27:22 -0700 (PDT)
-Received: from pps.filterd (m0353722.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35UGGhGg032422;
-        Fri, 30 Jun 2023 16:26:07 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : in-reply-to : references : mime-version :
- content-type : content-transfer-encoding; s=pp1;
- bh=5FleP/0R2I7M2ntcJjERxzq9JuYOAoAyKjmikS2wBhs=;
- b=rfJRDjaZJEmkfL3bAbOBfQgWWuV8fu4M4tJ60QgQix7BNqhCbdDa0fe4ogQDW2D0rhik
- WZFSh31VTe2dd7zFvMHKxG8NjyG3/mWCsRT1NXjIHQvQHnNlmreeNv4kJSHIJCm3/3cY
- 8Vo/gAsNL9CsVvHpA8vJRL3ec/c0OClfPpaT/H/wliIlFpB+pKNBdZpCsR1Qrs3tbal4
- 7d0rN+mrAqlZlfZyoi1wzQXr023CgKAdYBD22hdZ2NbPDWJ/V0kCq3Mtq78VI3Dqy9+g
- O2ZyQjIgWrj1sU0NRnKHUUlc8tPezuNGTeemTtA37ErNfK/9zqnLWTWZQoNSZFFDrx8/ 3w== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3rj2e387t8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 30 Jun 2023 16:26:07 +0000
-Received: from m0353722.ppops.net (m0353722.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 35UGH63B001290;
-        Fri, 30 Jun 2023 16:26:06 GMT
-Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3rj2e387rm-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 30 Jun 2023 16:26:05 +0000
-Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
-        by ppma01fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 35UFkuwi000452;
-        Fri, 30 Jun 2023 16:26:02 GMT
-Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
-        by ppma01fra.de.ibm.com (PPS) with ESMTPS id 3rdr453513-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 30 Jun 2023 16:26:02 +0000
-Received: from smtpav07.fra02v.mail.ibm.com (smtpav07.fra02v.mail.ibm.com [10.20.54.106])
-        by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 35UGPxmU43516216
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 30 Jun 2023 16:25:59 GMT
-Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id E9A4120043;
-        Fri, 30 Jun 2023 16:25:58 +0000 (GMT)
-Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id CAC6F20040;
-        Fri, 30 Jun 2023 16:25:57 +0000 (GMT)
-Received: from p-imbrenda (unknown [9.152.224.66])
-        by smtpav07.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Fri, 30 Jun 2023 16:25:57 +0000 (GMT)
-Date:   Fri, 30 Jun 2023 18:25:56 +0200
-From:   Claudio Imbrenda <imbrenda@linux.ibm.com>
-To:     Hugh Dickins <hughd@google.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        David Hildenbrand <david@redhat.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Qi Zheng <zhengqi.arch@bytedance.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Peter Xu <peterx@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Will Deacon <will@kernel.org>, Yu Zhao <yuzhao@google.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Ralph Campbell <rcampbell@nvidia.com>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Steven Price <steven.price@arm.com>,
-        SeongJae Park <sj@kernel.org>,
-        Lorenzo Stoakes <lstoakes@gmail.com>,
-        Huang Ying <ying.huang@intel.com>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Zack Rusin <zackr@vmware.com>, Jason Gunthorpe <jgg@ziepe.ca>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Minchan Kim <minchan@kernel.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Song Liu <song@kernel.org>,
-        Thomas Hellstrom <thomas.hellstrom@linux.intel.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Jann Horn <jannh@google.com>,
-        Vishal Moola <vishal.moola@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        linux-arm-kernel@lists.infradead.org, sparclinux@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [PATCH v2 07/12] s390: add pte_free_defer() for pgtables
- sharing page
-Message-ID: <20230630182556.7727ef50@p-imbrenda>
-In-Reply-To: <062b19-4cf1-261-a9bf-9cefd32382fc@google.com>
-References: <54cb04f-3762-987f-8294-91dafd8ebfb0@google.com>
-        <a722dbec-bd9e-1213-1edd-53cd547aa4f@google.com>
-        <20230630153852.31163592@p-imbrenda>
-        <062b19-4cf1-261-a9bf-9cefd32382fc@google.com>
-Organization: IBM
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+        Fri, 30 Jun 2023 12:29:22 -0400
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C311E2D63
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 09:29:20 -0700 (PDT)
+Received: by mail-wm1-x330.google.com with SMTP id 5b1f17b1804b1-3fba8e2aa52so22901545e9.1
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 09:29:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1688142559; x=1690734559;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=kx9jwINsXynT9xYRg2h3H3ifzA5sFvWLT1WN3/8C4lc=;
+        b=j5qb6MNlO7QpZUWIfZPtZTarvlKiW0T3tJg1j4USkqToGimjZIFgs8/Y8xd6WkbcjF
+         s8RuYSlI+4dpa0WzZMmGdy6DkoVSJIHiwX8EIKh7gZrZJOwh4ohZqXxnpKk/C+5NPXbU
+         +Z4skyWDZD6YioymPTa6jsgU/02dLHhF61LjnHtRK8koMUGZrptr40i4Iw5xlVgubCRe
+         Vj3XGvC6rDKIM4wdCinKo7uwPIVAUmNdXrwD3vGB+Sm4r5irOFYsPvCg3a04aFjY+F9z
+         aL1h79/ocUs/UuAB6n4JGAAxj4NglyesHf1cGeZp2/PoaalkSnQfPw2o7dfSe5ZsEvpp
+         FvjA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688142559; x=1690734559;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=kx9jwINsXynT9xYRg2h3H3ifzA5sFvWLT1WN3/8C4lc=;
+        b=dFyQFd2lqRG4+b/g83Kub0eysKD5Numiwl3wQ7uUuFWOvcQToVER1af0OYv4GTCF3u
+         gcZFArC0yrlk/6znrBqbnofF2w8jHbB0joP9DCpktkYEjJQ7526ZPzLWaGl3GWH8w5ui
+         6FZn4uZXnoCNZF0bpa9K+b0UlzxRemto2s65G4S1gq0FTJOvaoEoiFcsyDoKcO8xmxZT
+         pc3tOdi32szbpCk4sveflI8GWmCDtFlEekv2CswK0cTVKMWr9eqTOqa3NBfEcxjKKR4M
+         qTb5ETtTVRtLo06xdAH8XaIXgpSMTW3r3R2Aj8LuLUYkgISW3U9X3TNx182XeM96ggQ5
+         4GLA==
+X-Gm-Message-State: AC+VfDyfRsajp6XONU20bbn+3nsSjFCXpvz3hUl/8eM34pv/Urp2XxOF
+        rNNZPsa2evJIay9Y6Xuowoankw==
+X-Google-Smtp-Source: ACHHUZ5RuRc3hXLqWe4gbrbDsWZogKmRY9nZUJg0bSPHqjXea8yKM12vmyiLfNgxlF/HtV9lIxVwzg==
+X-Received: by 2002:a7b:c38f:0:b0:3fb:a46c:7eac with SMTP id s15-20020a7bc38f000000b003fba46c7eacmr2392722wmj.7.1688142559167;
+        Fri, 30 Jun 2023 09:29:19 -0700 (PDT)
+Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:52eb:f6ff:feb3:451a])
+        by smtp.gmail.com with ESMTPSA id cx16-20020a056000093000b00301a351a8d6sm18835836wrb.84.2023.06.30.09.29.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 30 Jun 2023 09:29:18 -0700 (PDT)
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+Subject: [PATCH v6 0/9] drm/meson: add support for MIPI DSI Display
+Date:   Fri, 30 Jun 2023 18:29:07 +0200
+Message-Id: <20230512-amlogic-v6-4-upstream-dsi-ccf-vim3-v6-0-fd2ac9845472@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: NGGI7X7RNOwVeaZnozOHUb2n61vBAppx
-X-Proofpoint-ORIG-GUID: ZwpwS0v6kbksCuiFRJdCAInx0_OzLG0C
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-06-30_08,2023-06-30_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- adultscore=0 mlxscore=0 impostorscore=0 phishscore=0 suspectscore=0
- clxscore=1015 mlxlogscore=999 malwarescore=0 bulkscore=0 spamscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2305260000 definitions=main-2306300137
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-B4-Tracking: v=1; b=H4sIANMCn2QC/5XPPQ6DMAwF4KtUmesKQkJ/pt6j6mCCAUuQoASiV
+ oi7N7B1ZHxv+J69iECeKYjHaRGeIgd2NoXyfBKmQ9sScJ2ykJksMp1LwKF3LRuIJSiYxzB5wgH
+ qwGBMA5GHAqobaZlfKW8UigRVGAgqj9Z0ibJz36dy9NTwZ19+vVPuOEzOf/dDotraQ5tRQQZS3
+ 6WRd0JZFs+eLXp3cb4Vmx/1cVMnU5dUXVHVOn31Z67r+gMUcLX4PgEAAA==
+To:     Jerome Brunet <jbrunet@baylibre.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Jagan Teki <jagan@amarulasolutions.com>,
+        Nicolas Belin <nbelin@baylibre.com>
+Cc:     linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-amlogic@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        dri-devel@lists.freedesktop.org,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        "Lukas F. Hartmann" <lukas@mntre.com>
+X-Mailer: b4 0.12.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=5161;
+ i=neil.armstrong@linaro.org; h=from:subject:message-id;
+ bh=KfaJiJcLkkgQCw9HdRYTgcdAd/F8lTdn4g+NwaXkFxU=;
+ b=owEBbQKS/ZANAwAKAXfc29rIyEnRAcsmYgBknwLZyBY0mgaxL7PeOcmDOMaYMgLFO68JTmPi+N8g
+ RPOmrPSJAjMEAAEKAB0WIQQ9U8YmyFYF/h30LIt33NvayMhJ0QUCZJ8C2QAKCRB33NvayMhJ0QGID/
+ 9P6um3EqQ+k72K5UqyMiHK6j21kWBVguqjDVTj/c0DeTJQJvxMMGbNgkZ5ZpTks5d9FH6N21kwp3WM
+ emuBApDfHYWCAHZgX6fL+9u2sI8TzzI+3wJZLeFWA9I+t6SYxUf9V5hka2twlKlh0rvZlWSlgGPpQM
+ bmJpt0UgKkuYLXK60DCI4co/OfPivOcAZHOeiq4rEX6AwsRCBuP2VTyFrwcoQBs0+6+VL8raX/zM8c
+ z6dt1X46a0KmeVKQn6ZApWAPGp4bOXc60bYxDrtGCSs/wD7k7YIj9o0q89aBK1P3J0KuCMGfz6+G+R
+ rxeObm4iOJd3tGdM56pinMvvZWtaC/o1QMV7uElq3aTAPz9+rJKcelrySd4UmN6O4AW8SmjiRnhUO4
+ EolVjb5bJZfSifsSCCGgA23eFav+NwjisIw/ANOd+1HeEpILg7r1lhkP181urJtqyw2eOdoB/LJ+r7
+ AS1xPAz9/MGUwJpVXqZn98Pll4+A8WTjurO0dh1+BEB44FYNcoz2SpLaSLQkhhH2MdeWza0DVSRLEE
+ qsDIZeFRH5LGokG0Plotm8TfxmkBFtDqpNbERD5Qlb/HoKWLT5wlUDlB+DwOiiWKKpneLIByL3tloP
+ x8FSe+ZjRXI3NLe3hoL1wORK9ufRVmgl3jsuCUi8p1GxOZjnJQdeH5vhrNlw==
+X-Developer-Key: i=neil.armstrong@linaro.org; a=openpgp;
+ fpr=89EC3D058446217450F22848169AB7B1A4CFF8AE
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 30 Jun 2023 08:28:54 -0700 (PDT)
-Hugh Dickins <hughd@google.com> wrote:
+The Amlogic G12A, G12B & SM1 SoCs embeds a Synopsys DW-MIPI-DSI transceiver (ver 1.21a),
+with a custom glue managing the IP resets, clock and data input similar to the DW-HDMI
+glue on the same Amlogic SoCs.
 
-> On Fri, 30 Jun 2023, Claudio Imbrenda wrote:
-> > On Tue, 20 Jun 2023 00:51:19 -0700 (PDT)
-> > Hugh Dickins <hughd@google.com> wrote:
-> > 
-> > [...]
-> >   
-> > > +void pte_free_defer(struct mm_struct *mm, pgtable_t pgtable)
-> > > +{
-> > > +	unsigned int bit, mask;
-> > > +	struct page *page;
-> > > +
-> > > +	page = virt_to_page(pgtable);
-> > > +	if (mm_alloc_pgste(mm)) {
-> > > +		call_rcu(&page->rcu_head, pte_free_pgste);  
-> > 
-> > so is this now going to be used to free page tables
-> > instead of page_table_free_rcu?  
-> 
-> No.
-> 
-> All pte_free_defer() is being used for (in this series; and any future
-> use beyond this series will have to undertake its own evaluations) is
-> for the case of removing an empty page table, which used to map a group
-> of PTE mappings of a file, in order to make way for one PMD mapping of
-> the huge page which those scattered pages have now been gathered into.
-> 
-> You're worried by that mm_alloc_pgste() block: it's something I didn't
+This is a follow-up of v5  now the DRM patches are applied, the clk & DT changes
+remains for a full DSI support on G12A & SM1 platforms.
 
-actually no, but thanks for bringing it up :D
+The DW-MIPI-DSI transceiver + D-PHY are clocked by the GP0 PLL, and the ENCL encoder + VIU
+pixel reader by the VCLK2 clock using the HDMI PLL.
 
-> have at all in my first draft, then I thought that perhaps the pgste
-> case might be able to come this way, so it seemed stupid to leave out
-> the handling for it.
-> 
-> I hope that you're implying that should be dead code here?  Perhaps,
-> that the pgste case corresponds to the case in s390 where THPs are
-> absolutely forbidden?  That would be good news for us.
-> 
-> Gerald, in his version of this block, added a comment asking:
-> 	/*
-> 	 * TODO: Do we need gmap_unlink(mm, pgtable, addr), like in
-> 	 * page_table_free_rcu()?
-> 	 * If yes -> need addr parameter here, like in pte_free_tlb().
-> 	 */
-> Do you have the answer to that?  Neither of us could work it out.
+The DW-MIPI-DSI transceiver gets this pixel stream as input clocked with the VCLK2 clock.
 
-this is the thing I'm worried about; removing a page table that was
-used to map a guest will leave dangling pointers in the gmap that will
-cause memory corruption (I actually ran into that problem myself for
-another patchseries).
+An optional "MEAS" clock can be enabled to measure the delay between each vsync feeding the
+DW-MIPI-DSI transceiver.
 
-gmap_unlink() is needed to clean up the pointers before they become
-dangling (and also potentially do some TLB purging as needed)
+The clock setup has been redesigned to use CCF, a common PLL (GP0) and the VCLK2 clock
+path for DSI in preparation of full CCF support and possibly dual display with HDMI.
 
-the point here is: we need that only for page_table_free_rcu(); all
-other users of page_table_free() cannot act on guest page tables
-(because we don't allow THP for KVM guests). and that is why
-page_table_free() does not do gmap_unlink() currently.
+The change from v5 is that now we use a "VCLK" driver instea dof notifier and rely
+on CLK_SET_RATE_GATE to ensure the VCLK gate operation are called.
 
-> 
-> > 
-> > or will it be used instead of page_table_free?  
-> 
-> Not always; but yes, this case of removing a page table used
-> page_table_free() before; but now, with the lighter locking, needs
-> to keep the page table valid until the RCU grace period expires.
+Depends on clkid public migration at [4].
 
-so if I understand correctly your code will, sometimes, under some
-circumstances, replace what page_table_free() does, but it will never
-replace page_table_free_rcu()?
+Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+---
+Changes in v6:
+- dropped applied DRM patches
+- dropped clk private prefix patches
+- rebased on top of 20230607-topic-amlogic-upstream-clkid-public-migration-v2-0-38172d17c27a@linaro.org
+- re-ordered/cleaned ENCL patches to match clkid public migration
+- Added new "vclk" driver
+- uses vclk driver instead of notifier
+- cleaned VCLK2 clk flags
+- add px_clk gating from DSI driver
+- Link to v5: https://lore.kernel.org/r/20230512-amlogic-v6-4-upstream-dsi-ccf-vim3-v5-0-56eb7a4d5b8e@linaro.org
 
-because in that case there would be no issues 
+Changes in v5:
+- Aded PRIV all the G12 internal clk IDS to simplify public exposing
+- Fixed the DSI bindings
+- Fixed the DSI HSYNC/VSYNC polarity handling
+- Fixed the DSI clock setup
+- Fixed the DSI phy timings
+- Dropped components for DSI, only keeping it for HDMI
+- Added MNT Reform 2 CM4 DT
+- Dropped already applied PHY fix
+- Link to v4: https://lore.kernel.org/r/20230512-amlogic-v6-4-upstream-dsi-ccf-vim3-v4-0-2592c29ea263@linaro.org
 
-> 
-> > 
-> > this is actually quite important for KVM on s390  
-> 
-> None of us are wanting to break KVM on s390: your guidance appreciated!
-> 
-> Thanks,
-> Hugh
+Changes from v3 at [3]:
+- switched all clk setup via CCF
+- using single PLL for DSI controller & ENCL encoder
+- added ENCL clocks to CCF
+- make the VCLK2 clocks configuration by CCF
+- fixed probe/bind of DSI controller to work with panels & bridges
+- added bit_clk to controller to it can setup the BIT clock aswell
+- added fix for components unbind
+- added fix for analog phy setup value
+- added TS050 timings fix
+- dropped previous clk control patch
+
+Changes from v2 at [2]:
+- Fixed patch 3
+- Added reviews from Jagan
+- Rebased on v5.19-rc1
+
+Changes from v1 at [1]:
+- fixed DSI host bindings
+- add reviewed-by tags for bindings
+- moved magic values to defines thanks to Martin's searches
+- added proper prefixes to defines
+- moved phy_configure to phy_init() dw-mipi-dsi callback
+- moved phy_on to a new phy_power_on() dw-mipi-dsi callback
+- correctly return phy_init/configure errors to callback returns
+
+[1] https://lore.kernel.org/r/20200907081825.1654-1-narmstrong@baylibre.com
+[2] https://lore.kernel.org/r/20220120083357.1541262-1-narmstrong@baylibre.com
+[3] https://lore.kernel.org/r/20220617072723.1742668-1-narmstrong@baylibre.com
+[4] https://lore.kernel.org/all/20230607-topic-amlogic-upstream-clkid-public-migration-v2-0-38172d17c27a@linaro.org/
+
+---
+Neil Armstrong (9):
+      dt-bindings: clk: g12a-clkc: add CTS_ENCL clock ids
+      clk: meson: g12a: add CTS_ENCL & CTS_ENCL_SEL clocks
+      clk: meson: add vclk driver
+      clk: meson: g12a: make VCLK2 and ENCL clock path configurable by CCF
+      drm/meson: gate px_clk when setting rate
+      arm64: meson: g12-common: add the MIPI DSI nodes
+      DONOTMERGE: arm64: meson: khadas-vim3l: add DSI panel
+      dt-bindings: arm: amlogic: Document the MNT Reform 2 CM4 adapter with a BPI-CM4 Module
+      arm64: dts: amlogic: meson-g12b-bananapi-cm4: add support for MNT Reform2 with CM4 adaper
+
+ Documentation/devicetree/bindings/arm/amlogic.yaml |   1 +
+ arch/arm64/boot/dts/amlogic/Makefile               |   1 +
+ arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi  |  70 ++++
+ .../meson-g12b-bananapi-cm4-mnt-reform2.dts        | 388 +++++++++++++++++++++
+ .../boot/dts/amlogic/meson-g12b-khadas-vim3.dtsi   |   2 +-
+ arch/arm64/boot/dts/amlogic/meson-khadas-vim3.dtsi |  76 ++++
+ .../boot/dts/amlogic/meson-sm1-khadas-vim3l.dts    |   2 +-
+ drivers/clk/meson/Kconfig                          |   5 +
+ drivers/clk/meson/Makefile                         |   1 +
+ drivers/clk/meson/g12a.c                           |  81 ++++-
+ drivers/clk/meson/vclk.c                           | 146 ++++++++
+ drivers/clk/meson/vclk.h                           |  68 ++++
+ drivers/gpu/drm/meson/meson_dw_mipi_dsi.c          |   7 +
+ include/dt-bindings/clock/g12a-clkc.h              |   2 +
+ 14 files changed, 832 insertions(+), 18 deletions(-)
+---
+base-commit: c6eb67de8578186066a9a3e947edf95e6fc56ed7
+change-id: 20230512-amlogic-v6-4-upstream-dsi-ccf-vim3-b8e5217e1f4a
+
+Best regards,
+-- 
+Neil Armstrong <neil.armstrong@linaro.org>
 
