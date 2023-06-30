@@ -2,77 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 847DD743E72
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 17:16:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A0C6743E7C
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 17:17:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232347AbjF3PQa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 11:16:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35626 "EHLO
+        id S232814AbjF3PR3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Jun 2023 11:17:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232539AbjF3PQG (ORCPT
+        with ESMTP id S232527AbjF3PRH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 11:16:06 -0400
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B27D54690
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 08:15:26 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-56cf9a86277so18219527b3.3
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 08:15:26 -0700 (PDT)
+        Fri, 30 Jun 2023 11:17:07 -0400
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9807644BE
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 08:16:24 -0700 (PDT)
+Received: by mail-wm1-x334.google.com with SMTP id 5b1f17b1804b1-3fbca6a9ae4so30115e9.0
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 08:16:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1688138126; x=1690730126;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Z7oJzLLPGW/Cx9f/CDqtoSXPOSWREn06ZdPTZhJC3Go=;
-        b=AfsXkZXlZJPvva1bmvipN9xiFdW0LWN5Ibj64QQvTBdzXdIrAXkFx0kUhmllcfNyjr
-         pAlOJ7sJPNzfIfdXxHCn+R1qQiqSw5cQGKtoSE6I6+1q8qU/HMbjfixp7a/mjyvMyoSN
-         b02kSEaYdL50YI1V7wz8SUtGgKFRBMVHxhqhbre0ua4nYdt2U9kAYDTJdJqzJlwBBfYb
-         Wkx8i9WsPC9wi3bibCZvTbX2brPCZKCZVckU/uqISG3uTscgkQcXTeIN9YeVJyoaCl7A
-         zKj67sA93xoBdrCn5C5jXdJufo2VXCIJY2kHP7iLx/xm7YwAjcj3Z6QR/wXS39Pna9ie
-         b2fw==
+        d=google.com; s=20221208; t=1688138180; x=1690730180;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=O2hR/KhNASLMJVxFauqxU4XhDOn7bSDTmrq/J7vDv7o=;
+        b=TRZxNMjM5RO1JNNZKgZOR5RH0Yv5C4Vn/RneOeTsb/05jK/UeLFCidNiyWhwyUaf5Z
+         aupF/jUOf2e3MicdLXmgIL0Ub+YmBEQYQcerycEdzdn2KKJhfmpJqDh7CqFLInXofjtP
+         OZXzw+wFgvv6XOU1YSmGEQm+w388OMDhu2eXlR8bp70x8p6OC91xXw3YwfrQggnC9IC9
+         WmFbW3TVfFf9vavDHIWsGS928BqHQoqNa/G6UV10Fg8X3Rvaqzy7AQ9kLz3P4VzdQO/k
+         0vQSKmKKQJj0qm7Il8kPYMhj/Z7nil2hqR6c2Dhfm315YIX3rNVztxyRHs4/o8MfQDR/
+         HHkQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688138126; x=1690730126;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Z7oJzLLPGW/Cx9f/CDqtoSXPOSWREn06ZdPTZhJC3Go=;
-        b=D5LMMfZtdZUtP9iwEAhMLndpxnP5dG0ppO75/WtWEGAXxPRj2V57XqfLd1VerLCLXR
-         3cgE1v5X69akDS+PtlQluUgKTpFBnHWZax9RLVNqqvCEMlWfrsVOqUemTnXKiuiOdbL7
-         g0ZQ2c4CDD8owZAMiVAh4FWtHmIvpPnbnJ/Xh2oTXprOSx0pIXtOI4kbOa7vh4CQzBrd
-         XzQvHKZrwP7+YY6YQtIXlyKIGxuzH0PqxXQr+CV/mwPihz3NCKBZOp9+RsSoSOzaYxjm
-         V/CD3p7YB9VXUjDVF5GHuSFH0KQRu4fqwXjGX6tKqGYH3i/Vn4JdyfV6o5GB/BhKbEbb
-         x8KQ==
-X-Gm-Message-State: ABy/qLZubI9JHqEDmgRVa1dg8tfzzflxRI3g4vIGEvoFKEDo3Vnce6VV
-        G/66hq5kHoe0ky3yZ1KmDiNOcZw1NCo=
-X-Google-Smtp-Source: APBJJlHTHksxFR2/TcaLyjYYDz1o/aFwnGkFGVCI/XRMxF6grQX75vNH1cRAuBQ+JkPyf3jb4+BDxo/E2y0=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a25:ac0b:0:b0:c3f:b53e:b2c2 with SMTP id
- w11-20020a25ac0b000000b00c3fb53eb2c2mr22548ybi.0.1688138125852; Fri, 30 Jun
- 2023 08:15:25 -0700 (PDT)
-Date:   Fri, 30 Jun 2023 08:15:24 -0700
-In-Reply-To: <CO1PR11MB5107FBC68DBA6877E390A633912AA@CO1PR11MB5107.namprd11.prod.outlook.com>
-Mime-Version: 1.0
-References: <20230511040857.6094-11-weijiang.yang@intel.com>
- <ZH73kDx6VCaBFiyh@chao-email> <21568052-eb0f-a8d6-5225-3b422e9470e9@intel.com>
- <ZIulniryqlj0hLnt@google.com> <dfdf6d93-a68c-bb07-e59e-8d888dd6ebb6@intel.com>
- <ZIywqx6xTAMFyDPT@google.com> <0a98683f-3e60-1f1b-55df-f2a781929fdf@intel.com>
- <ZJ6uKZToMPfwoXW6@chao-email> <8dec8b09-2568-a664-e51d-e6ff9f49e7de@intel.com>
- <CO1PR11MB5107FBC68DBA6877E390A633912AA@CO1PR11MB5107.namprd11.prod.outlook.com>
-Message-ID: <ZJ7xjE0qMjpYIiB/@google.com>
-Subject: Re: [PATCH v3 10/21] KVM:x86: Add #CP support in guest exception classification
-From:   Sean Christopherson <seanjc@google.com>
-To:     Gil Neiger <gil.neiger@intel.com>
-Cc:     Weijiang Yang <weijiang.yang@intel.com>,
-        Chao Gao <chao.gao@intel.com>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "rppt@kernel.org" <rppt@kernel.org>,
-        "binbin.wu@linux.intel.com" <binbin.wu@linux.intel.com>,
-        Rick P Edgecombe <rick.p.edgecombe@intel.com>,
-        "john.allen@amd.com" <john.allen@amd.com>
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        d=1e100.net; s=20221208; t=1688138180; x=1690730180;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=O2hR/KhNASLMJVxFauqxU4XhDOn7bSDTmrq/J7vDv7o=;
+        b=J+O/aD2ecrMif86f0CWkxNJhNyidySfZxOdoxkjphv2rXUeZytheOKo3VsYBTaqGTq
+         qhfS2ONlQkGqxrNaGwigBiwa8Ab+jgeG2rf11YinZ2fKxYSEsoGM2f2QLQI1khzdpvnx
+         Rr6sXRjvehFJBom/TmGvMDs3k19T4WX/nDtgCtNQyGQNBUOB09FR05ASFMA21Qcio7Ap
+         QmSA3j8QkBfXbCgwFN1yome+uUJ7v7c3ltv1/xAFex27fhu/5YMCtxC8okgyR+VtlWB1
+         JVJP4su5aitpodUUcvtbymkaifgS0gF5SWLjYFK2MCht5QmtG/lfVsal1BZJLqvN+xPf
+         DDaA==
+X-Gm-Message-State: AC+VfDyG3shOF+q3m3RKD7xG4tMIfcoO2UxxkaO0Q6eXXs5oqtyJRU3u
+        VX+YRY6EXFstiRn6lm4ie07oKIeMp6iFXBx4NnZPMu0qbhY4KoZZ8HQ=
+X-Google-Smtp-Source: ACHHUZ57TDCyI6HuFq6itIHyiuswS8qTRk/Uhbs5B8NDAkYH9kZN6vimTj2ZxN5nJTEEDgvzPrpgVVsGwA9BMFbOTJU=
+X-Received: by 2002:a05:600c:860c:b0:3f4:fb7:48d4 with SMTP id
+ ha12-20020a05600c860c00b003f40fb748d4mr378270wmb.3.1688138180627; Fri, 30 Jun
+ 2023 08:16:20 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230630151003.3622786-1-matteorizzo@google.com> <20230630151003.3622786-2-matteorizzo@google.com>
+In-Reply-To: <20230630151003.3622786-2-matteorizzo@google.com>
+From:   Jann Horn <jannh@google.com>
+Date:   Fri, 30 Jun 2023 17:15:44 +0200
+Message-ID: <CAG48ez3k2K1_gwxo=ckHQmHxXgV-VfQ897-TXQcJjUcdiyr4Hg@mail.gmail.com>
+Subject: Re: [PATCH v3 1/1] io_uring: add a sysctl to disable io_uring system-wide
+To:     Matteo Rizzo <matteorizzo@google.com>
+Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        io-uring@vger.kernel.org, axboe@kernel.dk, asml.silence@gmail.com,
+        corbet@lwn.net, akpm@linux-foundation.org, keescook@chromium.org,
+        ribalda@chromium.org, rostedt@goodmis.org, chenhuacai@kernel.org,
+        gpiccoli@igalia.com, ldufour@linux.ibm.com, evn@google.com,
+        poprdi@google.com, jordyzomer@google.com, jmoyer@redhat.com,
+        krisman@suse.de
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,16 +75,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 30, 2023, Gil Neiger wrote:
-> Intel will not produce any CPU with CET that does not enumerate IA32_VMX_BASIC[56] as 1.
-> 
-> One can check that bit before injecting a #CP with error code, but it should
-> not be necessary if CET is enumerated.
-> 
-> Of course, if the KVM may run as a guest of another VMM/hypervisor, it may be
-> that the virtual CPU in which KVM operates may enumerate CET but clear the
-> bit in IA32_VMX_BASIC.
+On Fri, Jun 30, 2023 at 5:10=E2=80=AFPM Matteo Rizzo <matteorizzo@google.co=
+m> wrote:
+> Introduce a new sysctl (io_uring_disabled) which can be either 0, 1,
+> or 2. When 0 (the default), all processes are allowed to create io_uring
+> instances, which is the current behavior. When 1, all calls to
+> io_uring_setup fail with -EPERM unless the calling process has
+> CAP_SYS_ADMIN. When 2, calls to io_uring_setup fail with -EPERM
+> regardless of privilege.
+>
+> Signed-off-by: Matteo Rizzo <matteorizzo@google.com>
+> Reviewed-by: Jeff Moyer <jmoyer@redhat.com>
+> Reviewed-by: Gabriel Krisman Bertazi <krisman@suse.de>
 
-Yeah, I think KVM should be paranoid and expose CET to the guest if and only if
-IA32_VMX_BASIC[56] is 1.  That'll also help validate nested support, e.g. will
-make it more obvious if userspace+KVM provides a  "bad" model to L1.
+Reviewed-by: Jann Horn <jannh@google.com>
