@@ -2,63 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A1AC743555
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 08:51:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD98474355A
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 08:52:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232111AbjF3Gvj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 02:51:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39778 "EHLO
+        id S231969AbjF3GwM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Jun 2023 02:52:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232088AbjF3Gvg (ORCPT
+        with ESMTP id S232233AbjF3GwD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 02:51:36 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE847359C;
-        Thu, 29 Jun 2023 23:51:34 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 56B97616D2;
-        Fri, 30 Jun 2023 06:51:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3FF62C433C8;
-        Fri, 30 Jun 2023 06:51:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1688107893;
-        bh=bXxMTjgW+hjAU8Zr3U8MPiozOA/sFSQmjIUUsOcJZy4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=r85eumcuBGOV7SWEaIzN+R9ajMjt88Jel7PpBLClkQhUBmQN9MiUlRbchryDv4Q0h
-         PxqSwxeHL2oblOGbDQGcsKRDYwoLf6qMmujNbqG1OJjYV4EtzJXECrAzMDaTbxbfnl
-         /bqKorB+Z2Bd5IABqjhQ0eRQ+v9vJb4DfWunDSWA=
-Date:   Fri, 30 Jun 2023 08:51:31 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Guenter Roeck <linux@roeck-us.net>,
-        Naresh Kamboju <naresh.kamboju@linaro.org>,
-        stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
-        shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de, conor@kernel.org,
-        linux-parisc <linux-parisc@vger.kernel.org>,
-        sparclinux@vger.kernel.org,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Helge Deller <deller@gmx.de>,
-        Jason Wang <wangborong@cdjrlc.com>
-Subject: Re: [PATCH 6.4 00/28] 6.4.1-rc1 review
-Message-ID: <2023063023-bulge-dispute-bf78@gregkh>
-References: <20230629184151.888604958@linuxfoundation.org>
- <CA+G9fYsM2s3q1k=+wHszvNbkKbHGe1pskkffWvaGXjYrp6qR=g@mail.gmail.com>
- <CAHk-=whaO3RZmKj8NDjs4f6JEwuwQWWesOfFu-URzOqTkyPoxw@mail.gmail.com>
- <fbe57907-b03f-ac8c-f3f4-4d6959bbc59c@roeck-us.net>
- <CAHk-=wgE9iTd_g20RU+FYa0NPhGSdiUDPW+moEqdHR4du1jmVA@mail.gmail.com>
+        Fri, 30 Jun 2023 02:52:03 -0400
+Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A58B30F6
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 23:51:59 -0700 (PDT)
+Received: by mail-lj1-x230.google.com with SMTP id 38308e7fff4ca-2b6a1245542so24404551fa.1
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 23:51:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1688107918; x=1690699918;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=cBW2ODM2guWVZdVNnU/ZES/eGWsE5AoCM8ERdHN+G5k=;
+        b=nc8+oxUWp5DFHwbTo0NYizKyGgQgFkvBhDxNPNUsX8fFlcDRgc0UjitbA/WmZT5gGt
+         AQpS5FWCMK0OPMWi/7kJHZs/8o2YooPQP6kUMt/8T9wLWfZoRhawJhk6Vl9H+wPbanba
+         90z5RH1PDVJZr190f6x7kcWYHbjz4Yp5G15QJe1ZYcylHcyuB0I23QmyQhYnKo+HqcNT
+         fLUX0hFlqLU5O9M9YVGb95bdksWjo5UDmUoHS0CkDhSYf7LBQJnLrJjJarrcS/JQfmLL
+         L7dMPM9wiKNu4234i+W6K2e/iSSiyLJ4qVIP4xLpW6liN0iH3A26PS/qRWaZ+yCmuKRm
+         rs+Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688107918; x=1690699918;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=cBW2ODM2guWVZdVNnU/ZES/eGWsE5AoCM8ERdHN+G5k=;
+        b=YPZ2sMR536xRgaSrYIPWTtppDeJ8T0QD/umWLVP7d1FKZxfyTb9NhSnJs+Rob24tMs
+         kh0DPu4LFdUTcXDb73k133tcVUqYxhSKvjB+yvwjqaehclLEIwRcdc6BYoFNhgYtmVzU
+         smRxqXb58oNp7grl53gRERQQimDOPuNaK8Gqss4p/XfwIaIsb7J5IUMfspMiDDxobrpw
+         ItX1kiVyusYuUanbUDRmbNbXWCxAgXKij9lAgDrWX93EtSH4QfrDGRAZcOCaCO3s2QVQ
+         UY54aqSFqhZtyZEiVLqdh5QpyNCKAs9lFe4SM4P0WlS7hkJRipusbnwauI1eQZArJODA
+         NV7g==
+X-Gm-Message-State: ABy/qLayko534oJtyThhjjW/XOnvJGAngd2HEVBRSR2Yw0JXC0anQpnX
+        hyr1te19T21woAFlS1FG6Sx52VZq5FVgMGSe+mdKag==
+X-Google-Smtp-Source: APBJJlHNp8Ainsp3NPDijOl5zudm1amCzUpI/b6OsWN0NSoMe20xSzSBReBYTUzp2a7lNP1NV1Z5kJiY4LeNW3XdO5k=
+X-Received: by 2002:a2e:8e8d:0:b0:2b1:ad15:fe38 with SMTP id
+ z13-20020a2e8e8d000000b002b1ad15fe38mr1273612ljk.3.1688107917676; Thu, 29 Jun
+ 2023 23:51:57 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHk-=wgE9iTd_g20RU+FYa0NPhGSdiUDPW+moEqdHR4du1jmVA@mail.gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+References: <CABdmKX0A8mqz5cS4+CqjRgpQQKuSp=3SvE1KJ_di09VjJQVoGg@mail.gmail.com>
+ <20230630045246.1674919-1-jstultz@google.com>
+In-Reply-To: <20230630045246.1674919-1-jstultz@google.com>
+From:   Sumit Semwal <sumit.semwal@linaro.org>
+Date:   Fri, 30 Jun 2023 12:21:46 +0530
+Message-ID: <CAO_48GEtT_rG=7aDG8g7Eosu0RWqzuNqGwsW7ODdomwu=ekafg@mail.gmail.com>
+Subject: Re: [PATCH] MAINTAINERS: Add T.J. Mercier as reviewer for DMA-BUF
+ HEAPS FRAMEWORK
+To:     John Stultz <jstultz@google.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        "T . J . Mercier" <tjmercier@google.com>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        Brian Starkey <Brian.Starkey@arm.com>,
+        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linaro-mm-sig@lists.linaro.org, kernel-team@android.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -67,25 +73,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 29, 2023 at 11:33:45PM -0700, Linus Torvalds wrote:
-> On Thu, 29 Jun 2023 at 23:29, Guenter Roeck <linux@roeck-us.net> wrote:
-> >
-> > Did you see that one (in mainline) ?
-> >
-> > Building csky:defconfig ... failed
-> 
-> Nope. Thanks. Obvious fix: 'address' is called 'addr' here.
-> 
-> I knew we had all these tiny little mazes that looked the same but
-> were just _subtly_ different, but I still ended up doing too much
-> cut-and-paste.
-> 
-> And I only ended up cross-compiling the fairly small set that I had
-> existing cross-build environments for. Which was less than half our
-> ~24 different architectures.
-> 
-> Oh well.  We'll get them all. Eventually. Let me go fix up that csky case.
+Hi John,
 
-Thanks, I've picked that up now as well.
+On Fri, 30 Jun 2023 at 10:22, John Stultz <jstultz@google.com> wrote:
+>
+> T.J. has been responsible for dmab-buf items on the Android team
+> for awhile now, so it would be great to have him on as a reviewer.
+>
+> Cc: T.J. Mercier <tjmercier@google.com>
+> Cc: Sumit Semwal <sumit.semwal@linaro.org>
+> Cc: Benjamin Gaignard <benjamin.gaignard@collabora.com>
+> Cc: Brian Starkey <Brian.Starkey@arm.com>
+> Cc: John Stultz <jstultz@google.com>
+> Cc: linux-media@vger.kernel.org
+> Cc: dri-devel@lists.freedesktop.org
+> Cc: linaro-mm-sig@lists.linaro.org
+> Cc: kernel-team@android.com
+> Signed-off-by: John Stultz <jstultz@google.com>
 
-greg k-h
+Thank you for the patch;
+Acked-by: Sumit Semwal <sumit.semwal@linaro.org>
+
+I'll push it to drm-misc along with the one removing Liam.
+
+> ---
+>  MAINTAINERS | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index cb075f52d97b..f4e92b968ed7 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -6184,6 +6184,7 @@ R:        Benjamin Gaignard <benjamin.gaignard@collabora.com>
+>  R:     Laura Abbott <labbott@redhat.com>
+>  R:     Brian Starkey <Brian.Starkey@arm.com>
+>  R:     John Stultz <jstultz@google.com>
+> +R:     T.J. Mercier <tjmercier@google.com>
+>  L:     linux-media@vger.kernel.org
+>  L:     dri-devel@lists.freedesktop.org
+>  L:     linaro-mm-sig@lists.linaro.org (moderated for non-subscribers)
+> --
+> 2.41.0.255.g8b1d071c50-goog
+>
+
+Best,
+Sumit.
