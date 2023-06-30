@@ -2,296 +2,363 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 399E8743184
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 02:16:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90CEE743182
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 02:16:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231839AbjF3ALL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 20:11:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48338 "EHLO
+        id S232125AbjF3AN4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 20:13:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231638AbjF3ALJ (ORCPT
+        with ESMTP id S231953AbjF3ANw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 20:11:09 -0400
-Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6338FE4B
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 17:11:08 -0700 (PDT)
-Received: by mail-pj1-x104a.google.com with SMTP id 98e67ed59e1d1-262e2cb725eso885959a91.0
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 17:11:08 -0700 (PDT)
+        Thu, 29 Jun 2023 20:13:52 -0400
+Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF5302D52
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 17:13:49 -0700 (PDT)
+Received: by mail-lj1-x229.google.com with SMTP id 38308e7fff4ca-2b5e7dba43cso20568151fa.1
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 17:13:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1688083868; x=1690675868;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=CLAK2aaJMqt8JMt9rFyLuXa7SLZsuXSqltLsJC9Ut/I=;
-        b=pafJgNqSlBfLIW/qP07meHoC4gZ7MF1KwU9BqieXtUH4Vh0Wj5OFtwZXoEUjt7NtI6
-         oQ0Cy7ROucQoeyCtenftvliy0LnSZMFN18ofzMCCKELi9585Vwr8ffJoZgA6qx4jf2g2
-         7RNcuQusOSh/RXk2d0VvBk5eKleqddXMRMF/FK8ZgPxJKPzl9Nxwp28xuuk2J9MvNDQr
-         9RPO5JquPNQ3XNQx/n3Fv2l+LK9Q5wv6Stxv2+davIiFfFzcE4vuYb6226s76NERC8lv
-         sltZCMLVNWZFEjFNz+r+sqwzIFWy7tC7MsRRYJsORDr/7ZYKP5+tnqldgLzK5l0ElgN3
-         PVCw==
+        d=linaro.org; s=google; t=1688084028; x=1690676028;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=6uCGtL9BeI9053Yz2/lxVypvGTw3ya9EgxV0WOl8PB0=;
+        b=Cjutq4l/KcK5a3H7qIvfV+w+v8+y3UDosrO53FUbvmuyk+nrRDmPtQw6vse3nriw5k
+         lU5KsmqhVqJts+52EZLgTvtlmtFPBU1Dd0hAfDbAfHbvLbTmCT3QGAXDCGlkKkKoCifO
+         PwGhaJV/pOyK5k7EK65tYQvU9k75D8+P4ELo7lIGqtHdar7Wr36mDc+QGtCcM7CtZlV6
+         3lVYRJJ7u+5o7l8XFGmBdYczsiUzUfD1Y3e8wlHg0uBzQISaM60qHx/bRBE0c18+7ywN
+         YIVg8Sh5LStoxIwWRRe0syNBPInbYyABPKGlQzzS1aBj65nRpMyMIUE5JZs/ZwHmgn66
+         Psig==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688083868; x=1690675868;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=CLAK2aaJMqt8JMt9rFyLuXa7SLZsuXSqltLsJC9Ut/I=;
-        b=NVIB8ARwWQjo1LImOgOr1pD7KaPLzS2Qwk90G3sr1vkRYP2APjxuUuOGHVRnw4XQgn
-         860s05W1Gqk0U8QK/Rlaj8EgNDxzTn3XDi3xwM7Ie02IHIzOuuJQeDtXlm1CcXQvcdW2
-         T52x2uVR/89h/rZPW5Q4QXxhOXWILRs8bz1UG/NfG84UmDXPyK27einySc2nuHBDE7Km
-         l9RcvHYVDjtKpiTpOOaADKZ4vvrZbbJrXvdYzYsIZTV2gs8bQ2r5Rv/RfqDrNoA5EkND
-         N+h1XU581FcAieXh5q2cTvpPWfjb/59eWGwpmhSZkKhceEhSFRzZGUU55sDu/cajtSPu
-         Pc7g==
-X-Gm-Message-State: ABy/qLaPYrZsHcMIOSriuxXdbOcv/MEInnbB6M7vV00pQ6VGH6Fqis+r
-        Va9CwyWt8onfg4vBMY9M0JZFpwoRJIg=
-X-Google-Smtp-Source: APBJJlHHfs2HzeDQUGiyPhu0LQ4LqgREP7UJhyRp5LdVIvQGqUvmDQHybH8Q7DwIiJhY9yPbuVy0VMHVIvU=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a17:90b:d82:b0:25b:809a:c7a with SMTP id
- bg2-20020a17090b0d8200b0025b809a0c7amr416383pjb.3.1688083867787; Thu, 29 Jun
- 2023 17:11:07 -0700 (PDT)
-Date:   Thu, 29 Jun 2023 17:11:06 -0700
-In-Reply-To: <CALMp9eS3F08cwUJbKjTRAEL0KyZ=MC==YSH+DW-qsFkNfMpqEQ@mail.gmail.com>
-Mime-Version: 1.0
-References: <20230504120042.785651-1-rkagan@amazon.de> <ZH6DJ8aFq/LM6Bk9@google.com>
- <CALMp9eS3F08cwUJbKjTRAEL0KyZ=MC==YSH+DW-qsFkNfMpqEQ@mail.gmail.com>
-Message-ID: <ZJ4dmrQSduY8aWap@google.com>
-Subject: Re: [PATCH] KVM: x86: vPMU: truncate counter value to allowed width
-From:   Sean Christopherson <seanjc@google.com>
-To:     Jim Mattson <jmattson@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Eric Hankland <ehankland@google.com>,
-        Roman Kagan <rkagan@amazon.de>, kvm@vger.kernel.org,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Like Xu <likexu@tencent.com>, x86@kernel.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-        Borislav Petkov <bp@alien8.de>, Ingo Molnar <mingo@redhat.com>,
-        Mingwei Zhang <mizhang@google.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        d=1e100.net; s=20221208; t=1688084028; x=1690676028;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=6uCGtL9BeI9053Yz2/lxVypvGTw3ya9EgxV0WOl8PB0=;
+        b=fhj7O6BDq4XzAUsfVB/DpfD8eoNCVouRMb5a6RmW+WyTprdS1+MrUxRrk2OzdDu39E
+         thkV1yPx5LVkG2M2sfY5Raetfxp86mLpy04oaEyvjXrI2lEIVwItFSH9bi6gQSBdCgaT
+         As/xCOjNtBuq6s8pVdbVVEuk9SER0iwS3vQG8hE7fp7a4uEDlp59hzWY9vTd1ARv7iNe
+         x5RT1kNjatgvCwCWP3QDmyKPRnR4ClD247aOv85/AR8uyRef4qb3bKlXgOeX5O8IqwCn
+         njoFYo9QUfr1VKKLI70Ux8LkuMMkk0WEptvrykoECtTljPMcyovKvK3oIOqPSNGQGUPC
+         4kkQ==
+X-Gm-Message-State: ABy/qLYzXpF+Njn9EwDVOlsEZZ0SM6uhJxkil7450imCQ9Xv8WZ9PObR
+        sRSTjnsCqvfUYVZPB0DYzVeCkw==
+X-Google-Smtp-Source: APBJJlFtKTmbCpTVnPbmDojOOOuLwAtdPtMnHSMcGAKmrGBzIdosd0apghsJK3TrTYS1MZvxUw0Zfg==
+X-Received: by 2002:a2e:9687:0:b0:2b4:5a0b:9290 with SMTP id q7-20020a2e9687000000b002b45a0b9290mr899618lji.21.1688084027907;
+        Thu, 29 Jun 2023 17:13:47 -0700 (PDT)
+Received: from ?IPV6:2001:14ba:a0db:1f00::8a5? (dzdqv0yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a0db:1f00::8a5])
+        by smtp.gmail.com with ESMTPSA id l13-20020a2e908d000000b002b6cef7e55csm160276ljg.134.2023.06.29.17.13.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 29 Jun 2023 17:13:47 -0700 (PDT)
+Message-ID: <3f8b8abf-9c99-cc9d-5985-ebadbecfe4f6@linaro.org>
+Date:   Fri, 30 Jun 2023 03:13:46 +0300
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v3 1/3] drm/msm/dpu: re-introduce dpu core revision to the
+ catalog
+Content-Language: en-GB
+To:     Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        freedreno@lists.freedesktop.org, Rob Clark <robdclark@gmail.com>,
+        Sean Paul <sean@poorly.run>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>
+Cc:     dri-devel@lists.freedesktop.org, quic_jesszhan@quicinc.com,
+        andersson@kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230629193001.22618-1-quic_abhinavk@quicinc.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <20230629193001.22618-1-quic_abhinavk@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-+Mingwei
+On 29/06/2023 22:29, Abhinav Kumar wrote:
+> With [1] dpu core revision was dropped in favor of using the
+> compatible string from the device tree to select the dpu catalog
+> being used in the device.
+> 
+> This approach works well however also necessitates adding catalog
+> entries for small register level details as dpu capabilities and/or
+> features bloating the catalog unnecessarily. Examples include but
+> are not limited to data_compress, interrupt register set, widebus etc.
+> 
+> Introduce the dpu core revision back as an entry to the catalog so that
+> we can just use dpu revision checks and enable those bits which
+> should be enabled unconditionally and not controlled by a catalog
+> and also simplify the changes to do something like:
+> 
+> if (dpu_core_revision > xxxxx && dpu_core_revision < xxxxx)
+>     enable the bit;
+> 
+> Since dpu's major and minor versions are now separate fields, lets
+> drop all the DPU_HW_VER macros.
+> 
+> [1]: https://patchwork.freedesktop.org/patch/530891/?series=113910&rev=4
+> 
+> changes in v3:
+> 	- drop DPU step version as features are not changing across steps
+> 	- add core_major_version / core_minor_version to avoid conflicts
+> 	- update the commit text to drop references to the dpu macros
+> 
+> Signed-off-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
+> ---
+>   drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_3_0_msm8998.h  | 2 ++
+>   drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_4_0_sdm845.h   | 2 ++
+>   drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_5_0_sm8150.h   | 2 ++
+>   drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_5_1_sc8180x.h  | 2 ++
+>   drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_6_0_sm8250.h   | 2 ++
+>   drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_6_2_sc7180.h   | 2 ++
+>   drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_6_3_sm6115.h   | 2 ++
+>   drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_6_4_sm6350.h   | 2 ++
+>   drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_6_5_qcm2290.h  | 2 ++
+>   drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_6_9_sm6375.h   | 2 ++
+>   drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_7_0_sm8350.h   | 2 ++
+>   drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_7_2_sc7280.h   | 2 ++
+>   drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_8_0_sc8280xp.h | 2 ++
+>   drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_8_1_sm8450.h   | 2 ++
+>   drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_9_0_sm8550.h   | 2 ++
+>   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h           | 8 ++++++--
+>   16 files changed, 36 insertions(+), 2 deletions(-)
 
-On Thu, Jun 29, 2023, Jim Mattson wrote:
-> On Mon, Jun 5, 2023 at 5:51=E2=80=AFPM Sean Christopherson <seanjc@google=
-.com> wrote:
-> >
-> > On Thu, May 04, 2023, Roman Kagan wrote:
-> > > diff --git a/arch/x86/kvm/pmu.h b/arch/x86/kvm/pmu.h
-> > > index 5c7bbf03b599..6a91e1afef5a 100644
-> > > --- a/arch/x86/kvm/pmu.h
-> > > +++ b/arch/x86/kvm/pmu.h
-> > > @@ -60,6 +60,12 @@ static inline u64 pmc_read_counter(struct kvm_pmc =
-*pmc)
-> > >       return counter & pmc_bitmask(pmc);
-> > >  }
-> > >
-> > > +static inline void pmc_set_counter(struct kvm_pmc *pmc, u64 val)
-> > > +{
-> > > +     pmc->counter +=3D val - pmc_read_counter(pmc);
-> >
-> > Ugh, not your code, but I don't see how the current code can possibly b=
-e correct.
-> >
-> > The above unpacks to
-> >
-> >         counter =3D pmc->counter;
-> >         if (pmc->perf_event && !pmc->is_paused)
-> >                 counter +=3D perf_event_read_value(pmc->perf_event,
-> >                                                  &enabled, &running);
-> >         pmc->counter +=3D val - (counter & pmc_bitmask(pmc));
-> >
-> > which distills down to
-> >
-> >         counter =3D 0;
-> >         if (pmc->perf_event && !pmc->is_paused)
-> >                 counter +=3D perf_event_read_value(pmc->perf_event,
-> >                                                  &enabled, &running);
-> >         pmc->counter =3D val - (counter & pmc_bitmask(pmc));
-> >
-> > or more succinctly
-> >
-> >         if (pmc->perf_event && !pmc->is_paused)
-> >                 val -=3D perf_event_read_value(pmc->perf_event, &enable=
-d, &running);
-> >
-> >         pmc->counter =3D val;
-> >
-> > which is obviously wrong.  E.g. if the guest writes '0' to an active co=
-unter, the
-> > adjustment will cause pmc->counter to be loaded with a large (in unsign=
-ed terms)
-> > value, and thus quickly overflow after a write of '0'.
->=20
-> This weird construct goes all the way back to commit f5132b01386b
-> ("KVM: Expose a version 2 architectural PMU to a guests"). Paolo
-> killed it in commit 2924b52117b2 ("KVM: x86/pmu: do not mask the value
-> that is written to fixed PMUs"), perhaps by accident. Eric then
-> resurrected it in commit 4400cf546b4b ("KVM: x86: Fix perfctr WRMSR
-> for running counters").
->=20
-> It makes no sense to me. WRMSR should just set the new value of the
-> counter, regardless of the old value or whether or not it is running.
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
-Heh, didn't stop you from giving Eric's patch a thumbs-up[*] :-)
+Nit: if there is a need for v-next, I'd probably suggest dropping th hex 
+prefix from these values.
 
-Thanks to Eric's testcase [Wow, tests do help!  We should try writing more =
-of them!],
-I finally figured out what's going on.  I wrongly assumed perf_event_read_v=
-alue()
-is destructive, but it's not, it just reads the current value.  So on a WRM=
-SR,
-KVM offsets the value with the current perf event, and then *mostly* adjust=
-s for
-it when reading the counter.
+> 
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_3_0_msm8998.h b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_3_0_msm8998.h
+> index 7d0d0e74c3b0..a5d486783c3f 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_3_0_msm8998.h
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_3_0_msm8998.h
+> @@ -190,6 +190,8 @@ static const struct dpu_perf_cfg msm8998_perf_data = {
+>   };
+>   
+>   const struct dpu_mdss_cfg dpu_msm8998_cfg = {
+> +	.core_major_version = 0x3,
+> +	.core_minor_version = 0x0,
+>   	.caps = &msm8998_dpu_caps,
+>   	.ubwc = &msm8998_ubwc_cfg,
+>   	.mdp_count = ARRAY_SIZE(msm8998_mdp),
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_4_0_sdm845.h b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_4_0_sdm845.h
+> index b6098141bb9b..1fdb89a4b7a6 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_4_0_sdm845.h
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_4_0_sdm845.h
+> @@ -194,6 +194,8 @@ static const struct dpu_perf_cfg sdm845_perf_data = {
+>   };
+>   
+>   const struct dpu_mdss_cfg dpu_sdm845_cfg = {
+> +	.core_major_version = 0x4,
+> +	.core_minor_version = 0x0,
+>   	.caps = &sdm845_dpu_caps,
+>   	.ubwc = &sdm845_ubwc_cfg,
+>   	.mdp_count = ARRAY_SIZE(sdm845_mdp),
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_5_0_sm8150.h b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_5_0_sm8150.h
+> index b5f751354267..129c62cf450d 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_5_0_sm8150.h
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_5_0_sm8150.h
+> @@ -208,6 +208,8 @@ static const struct dpu_perf_cfg sm8150_perf_data = {
+>   };
+>   
+>   const struct dpu_mdss_cfg dpu_sm8150_cfg = {
+> +	.core_major_version = 0x5,
+> +	.core_minor_version = 0x0,
+>   	.caps = &sm8150_dpu_caps,
+>   	.ubwc = &sm8150_ubwc_cfg,
+>   	.mdp_count = ARRAY_SIZE(sm8150_mdp),
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_5_1_sc8180x.h b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_5_1_sc8180x.h
+> index 8ed2b263c5ea..ca037b070f44 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_5_1_sc8180x.h
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_5_1_sc8180x.h
+> @@ -214,6 +214,8 @@ static const struct dpu_perf_cfg sc8180x_perf_data = {
+>   };
+>   
+>   const struct dpu_mdss_cfg dpu_sc8180x_cfg = {
+> +	.core_major_version = 0x5,
+> +	.core_minor_version = 0x1,
+>   	.caps = &sc8180x_dpu_caps,
+>   	.ubwc = &sc8180x_ubwc_cfg,
+>   	.mdp_count = ARRAY_SIZE(sc8180x_mdp),
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_6_0_sm8250.h b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_6_0_sm8250.h
+> index daebd2170041..e446af90767e 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_6_0_sm8250.h
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_6_0_sm8250.h
+> @@ -214,6 +214,8 @@ static const struct dpu_perf_cfg sm8250_perf_data = {
+>   };
+>   
+>   const struct dpu_mdss_cfg dpu_sm8250_cfg = {
+> +	.core_major_version = 0x6,
+> +	.core_minor_version = 0x0,
+>   	.caps = &sm8250_dpu_caps,
+>   	.ubwc = &sm8250_ubwc_cfg,
+>   	.mdp_count = ARRAY_SIZE(sm8250_mdp),
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_6_2_sc7180.h b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_6_2_sc7180.h
+> index 67566b07195a..88288c80b652 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_6_2_sc7180.h
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_6_2_sc7180.h
+> @@ -132,6 +132,8 @@ static const struct dpu_perf_cfg sc7180_perf_data = {
+>   };
+>   
+>   const struct dpu_mdss_cfg dpu_sc7180_cfg = {
+> +	.core_major_version = 0x6,
+> +	.core_minor_version = 0x2,
+>   	.caps = &sc7180_dpu_caps,
+>   	.ubwc = &sc7180_ubwc_cfg,
+>   	.mdp_count = ARRAY_SIZE(sc7180_mdp),
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_6_3_sm6115.h b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_6_3_sm6115.h
+> index 031fc8dae3c6..93c901502b5a 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_6_3_sm6115.h
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_6_3_sm6115.h
+> @@ -102,6 +102,8 @@ static const struct dpu_perf_cfg sm6115_perf_data = {
+>   };
+>   
+>   const struct dpu_mdss_cfg dpu_sm6115_cfg = {
+> +	.core_major_version = 0x6,
+> +	.core_minor_version = 0x3,
+>   	.caps = &sm6115_dpu_caps,
+>   	.ubwc = &sm6115_ubwc_cfg,
+>   	.mdp_count = ARRAY_SIZE(sm6115_mdp),
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_6_4_sm6350.h b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_6_4_sm6350.h
+> index 06eba23b0236..ff7e4b775fd5 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_6_4_sm6350.h
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_6_4_sm6350.h
+> @@ -141,6 +141,8 @@ static const struct dpu_perf_cfg sm6350_perf_data = {
+>   };
+>   
+>   const struct dpu_mdss_cfg dpu_sm6350_cfg = {
+> +	.core_major_version = 0x6,
+> +	.core_minor_version = 0x4,
+>   	.caps = &sm6350_dpu_caps,
+>   	.ubwc = &sm6350_ubwc_cfg,
+>   	.mdp_count = ARRAY_SIZE(sm6350_mdp),
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_6_5_qcm2290.h b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_6_5_qcm2290.h
+> index f2808098af39..7bc86aa50e6f 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_6_5_qcm2290.h
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_6_5_qcm2290.h
+> @@ -92,6 +92,8 @@ static const struct dpu_perf_cfg qcm2290_perf_data = {
+>   };
+>   
+>   const struct dpu_mdss_cfg dpu_qcm2290_cfg = {
+> +	.core_major_version = 0x6,
+> +	.core_minor_version = 0x5,
+>   	.caps = &qcm2290_dpu_caps,
+>   	.ubwc = &qcm2290_ubwc_cfg,
+>   	.mdp_count = ARRAY_SIZE(qcm2290_mdp),
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_6_9_sm6375.h b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_6_9_sm6375.h
+> index 241fa6746674..d92890f090d4 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_6_9_sm6375.h
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_6_9_sm6375.h
+> @@ -107,6 +107,8 @@ static const struct dpu_perf_cfg sm6375_perf_data = {
+>   };
+>   
+>   const struct dpu_mdss_cfg dpu_sm6375_cfg = {
+> +	.core_major_version = 0x6,
+> +	.core_minor_version = 0x9,
+>   	.caps = &sm6375_dpu_caps,
+>   	.ubwc = &sm6375_ubwc_cfg,
+>   	.mdp_count = ARRAY_SIZE(sm6375_mdp),
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_7_0_sm8350.h b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_7_0_sm8350.h
+> index 8da424eaee6a..8a2dc56c79f8 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_7_0_sm8350.h
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_7_0_sm8350.h
+> @@ -213,6 +213,8 @@ static const struct dpu_perf_cfg sm8350_perf_data = {
+>   };
+>   
+>   const struct dpu_mdss_cfg dpu_sm8350_cfg = {
+> +	.core_major_version = 0x7,
+> +	.core_minor_version = 0x0,
+>   	.caps = &sm8350_dpu_caps,
+>   	.ubwc = &sm8350_ubwc_cfg,
+>   	.mdp_count = ARRAY_SIZE(sm8350_mdp),
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_7_2_sc7280.h b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_7_2_sc7280.h
+> index 900fee410e11..bba7bdb9bd42 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_7_2_sc7280.h
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_7_2_sc7280.h
+> @@ -154,6 +154,8 @@ static const struct dpu_perf_cfg sc7280_perf_data = {
+>   };
+>   
+>   const struct dpu_mdss_cfg dpu_sc7280_cfg = {
+> +	.core_major_version = 0x7,
+> +	.core_minor_version = 0x2,
+>   	.caps = &sc7280_dpu_caps,
+>   	.ubwc = &sc7280_ubwc_cfg,
+>   	.mdp_count = ARRAY_SIZE(sc7280_mdp),
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_8_0_sc8280xp.h b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_8_0_sc8280xp.h
+> index f6ce6b090f71..3f51b802b6b7 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_8_0_sc8280xp.h
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_8_0_sc8280xp.h
+> @@ -217,6 +217,8 @@ static const struct dpu_perf_cfg sc8280xp_perf_data = {
+>   };
+>   
+>   const struct dpu_mdss_cfg dpu_sc8280xp_cfg = {
+> +	.core_major_version = 0x8,
+> +	.core_minor_version = 0x0,
+>   	.caps = &sc8280xp_dpu_caps,
+>   	.ubwc = &sc8280xp_ubwc_cfg,
+>   	.mdp_count = ARRAY_SIZE(sc8280xp_mdp),
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_8_1_sm8450.h b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_8_1_sm8450.h
+> index 8d13c369213c..20acff9db979 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_8_1_sm8450.h
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_8_1_sm8450.h
+> @@ -221,6 +221,8 @@ static const struct dpu_perf_cfg sm8450_perf_data = {
+>   };
+>   
+>   const struct dpu_mdss_cfg dpu_sm8450_cfg = {
+> +	.core_major_version = 0x8,
+> +	.core_minor_version = 0x1,
+>   	.caps = &sm8450_dpu_caps,
+>   	.ubwc = &sm8450_ubwc_cfg,
+>   	.mdp_count = ARRAY_SIZE(sm8450_mdp),
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_9_0_sm8550.h b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_9_0_sm8550.h
+> index f17b9a7fee85..89fdf334a0aa 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_9_0_sm8550.h
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_9_0_sm8550.h
+> @@ -225,6 +225,8 @@ static const struct dpu_perf_cfg sm8550_perf_data = {
+>   };
+>   
+>   const struct dpu_mdss_cfg dpu_sm8550_cfg = {
+> +	.core_major_version = 0x9,
+> +	.core_minor_version = 0x0,
+>   	.caps = &sm8550_dpu_caps,
+>   	.ubwc = &sm8550_ubwc_cfg,
+>   	.mdp_count = ARRAY_SIZE(sm8550_mdp),
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
+> index b860784ade72..8b900be3ea90 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
+> @@ -796,8 +796,9 @@ struct dpu_perf_cfg {
+>   /**
+>    * struct dpu_mdss_cfg - information of MDSS HW
+>    * This is the main catalog data structure representing
+> - * this HW version. Contains number of instances,
+> - * register offsets, capabilities of the all MDSS HW sub-blocks.
+> + * this HW version. Contains dpu's major and minor versions,
+> + * number of instances, register offsets, capabilities of the
+> + * all MDSS HW sub-blocks.
+>    *
+>    * @dma_formats        Supported formats for dma pipe
+>    * @cursor_formats     Supported formats for cursor pipe
+> @@ -805,6 +806,9 @@ struct dpu_perf_cfg {
+>    * @mdss_irqs:         Bitmap with the irqs supported by the target
+>    */
+>   struct dpu_mdss_cfg {
+> +	u8 core_major_version;
+> +	u8 core_minor_version;
+> +
+>   	const struct dpu_caps *caps;
+>   
+>   	const struct dpu_ubwc_cfg *ubwc;
 
-But that is obviously super fragile because it means pmc->counter must neve=
-r be
-read directly unless the perf event is paused and the accumulated counter h=
-as been
-propagated to pmc->counter.  Blech.
+-- 
+With best wishes
+Dmitry
 
-I fiddled with a variety of things, but AFAICT the easiest solution is also=
- the
-most obviously correct: set perf's count to the guest's count.  Lightly tes=
-ted
-patch below.
-
-On a related topic, Mingwei also appears to have found another bug: prev_co=
-unter
-needs to be set when the counter is written, i.e. my proposed pmc_write_cou=
-nter()
-also needs to update prev_counter.
-
-Though that also raises the question of whether or not zeroing prev_counter=
- in
-reprogram_counter() is correct.  Unless I'm missing something, reprogram_co=
-unter()
-should also set pmc->prev_counter to pmc->counter when the counter is succe=
-ssfully
-(re)enabled.
-
-And Jim also pointed out that prev_counter needs to be set even when KVM fa=
-ils
-to enable a perf event (software counting should still work).
-
-[*] https://lore.kernel.org/all/CALMp9eRfeFFb6n22Uf4R2Pf8WW7BVLX_Vuf04WFwiM=
-trk14Y-Q@mail.gmail.com
-
----
- arch/x86/kvm/pmu.h           |  8 ++++++++
- arch/x86/kvm/svm/pmu.c       |  2 +-
- arch/x86/kvm/vmx/pmu_intel.c |  4 ++--
- include/linux/perf_event.h   |  2 ++
- kernel/events/core.c         | 11 +++++++++++
- 5 files changed, 24 insertions(+), 3 deletions(-)
-
-diff --git a/arch/x86/kvm/pmu.h b/arch/x86/kvm/pmu.h
-index 7d9ba301c090..ba91a78e4dc1 100644
---- a/arch/x86/kvm/pmu.h
-+++ b/arch/x86/kvm/pmu.h
-@@ -74,6 +74,14 @@ static inline u64 pmc_read_counter(struct kvm_pmc *pmc)
- 	return counter & pmc_bitmask(pmc);
- }
-=20
-+static inline void pmc_write_counter(struct kvm_pmc *pmc, u64 val)
-+{
-+	if (pmc->perf_event && !pmc->is_paused)
-+		perf_event_set_count(pmc->perf_event, val);
-+
-+	pmc->counter =3D val;
-+}
-+
- static inline void pmc_release_perf_event(struct kvm_pmc *pmc)
- {
- 	if (pmc->perf_event) {
-diff --git a/arch/x86/kvm/svm/pmu.c b/arch/x86/kvm/svm/pmu.c
-index cef5a3d0abd0..373ff6a6687b 100644
---- a/arch/x86/kvm/svm/pmu.c
-+++ b/arch/x86/kvm/svm/pmu.c
-@@ -160,7 +160,7 @@ static int amd_pmu_set_msr(struct kvm_vcpu *vcpu, struc=
-t msr_data *msr_info)
- 	/* MSR_PERFCTRn */
- 	pmc =3D get_gp_pmc_amd(pmu, msr, PMU_TYPE_COUNTER);
- 	if (pmc) {
--		pmc->counter +=3D data - pmc_read_counter(pmc);
-+		pmc_write_counter(pmc, data);
- 		pmc_update_sample_period(pmc);
- 		return 0;
- 	}
-diff --git a/arch/x86/kvm/vmx/pmu_intel.c b/arch/x86/kvm/vmx/pmu_intel.c
-index 80c769c58a87..18a658aa2a8d 100644
---- a/arch/x86/kvm/vmx/pmu_intel.c
-+++ b/arch/x86/kvm/vmx/pmu_intel.c
-@@ -406,11 +406,11 @@ static int intel_pmu_set_msr(struct kvm_vcpu *vcpu, s=
-truct msr_data *msr_info)
- 			if (!msr_info->host_initiated &&
- 			    !(msr & MSR_PMC_FULL_WIDTH_BIT))
- 				data =3D (s64)(s32)data;
--			pmc->counter +=3D data - pmc_read_counter(pmc);
-+			pmc_write_counter(pmc, data);
- 			pmc_update_sample_period(pmc);
- 			break;
- 		} else if ((pmc =3D get_fixed_pmc(pmu, msr))) {
--			pmc->counter +=3D data - pmc_read_counter(pmc);
-+			pmc_write_counter(pmc, data);
- 			pmc_update_sample_period(pmc);
- 			break;
- 		} else if ((pmc =3D get_gp_pmc(pmu, msr, MSR_P6_EVNTSEL0))) {
-diff --git a/include/linux/perf_event.h b/include/linux/perf_event.h
-index d5628a7b5eaa..8fcd52a87ba2 100644
---- a/include/linux/perf_event.h
-+++ b/include/linux/perf_event.h
-@@ -1677,6 +1677,7 @@ extern void perf_event_disable_inatomic(struct perf_e=
-vent *event);
- extern void perf_event_task_tick(void);
- extern int perf_event_account_interrupt(struct perf_event *event);
- extern int perf_event_period(struct perf_event *event, u64 value);
-+extern void perf_event_set_count(struct perf_event *event, u64 count);
- extern u64 perf_event_pause(struct perf_event *event, bool reset);
- #else /* !CONFIG_PERF_EVENTS: */
- static inline void *
-@@ -1760,6 +1761,7 @@ static inline int perf_event_period(struct perf_event=
- *event, u64 value)
- {
- 	return -EINVAL;
- }
-+static inline perf_event_set_count(struct perf_event *event, u64 count) { =
-}
- static inline u64 perf_event_pause(struct perf_event *event, bool reset)
- {
- 	return 0;
-diff --git a/kernel/events/core.c b/kernel/events/core.c
-index db016e418931..d368c283eba5 100644
---- a/kernel/events/core.c
-+++ b/kernel/events/core.c
-@@ -5646,6 +5646,17 @@ static void _perf_event_reset(struct perf_event *eve=
-nt)
- 	perf_event_update_userpage(event);
- }
-=20
-+void perf_event_set_count(struct perf_event *event, u64 count)
-+{
-+	struct perf_event_context *ctx;
-+
-+	ctx =3D perf_event_ctx_lock(event);
-+	(void)perf_event_read(event, false);
-+	local64_set(&event->count, count);
-+	perf_event_ctx_unlock(event, ctx);
-+}
-+EXPORT_SYMBOL_GPL(perf_event_set_count);
-+
- /* Assume it's not an event with inherit set. */
- u64 perf_event_pause(struct perf_event *event, bool reset)
- {
-
-base-commit: 5ae85a1bd17b959796f6cc4c1153ceada2cf8f24
---=20
