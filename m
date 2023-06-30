@@ -2,135 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CA0E743224
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 03:13:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 24608743238
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 03:27:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231633AbjF3BM4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 21:12:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40080 "EHLO
+        id S230009AbjF3B1V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 21:27:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230106AbjF3BMx (ORCPT
+        with ESMTP id S229459AbjF3B1S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 21:12:53 -0400
-Received: from mail-pl1-f205.google.com (mail-pl1-f205.google.com [209.85.214.205])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF0E62694
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 18:12:49 -0700 (PDT)
-Received: by mail-pl1-f205.google.com with SMTP id d9443c01a7336-1b81fc6c729so8649515ad.3
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 18:12:49 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688087569; x=1690679569;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=bh9/ysT8WBXK2W6r2YSF4w2p4ZCI9O/CJf6g9+IlI4Y=;
-        b=aSqHP2iscZWeg17SlSmzzFpKtm719E0y84Enr9QfTf1pcrOlFSZnKZTx4qMuB+zdw+
-         h3C8nKGt/gepCiIvYMLBql4XgY1yeTpoFQA6YRXnzd0jFudsuxCMvIaGTstHiWJ2TvrZ
-         UJ21l8TiSz9Mdyb4zqJWW6sjXvZBKVJQ9LgnLY7OJHQ9uDWWMVAIBLesw2+2TwrbQt1k
-         yGU5AUvUa6mW6ljB2MLp4uauJUVna1+hY3/zGiO4KfrSdGZlklaV9zERZG0+3Km4aFuY
-         HbzFs+2+pmesjgYLTB80Wgw4UZGqe54+TjdwiPujI9JKwi4z9o/WSPxXHm1cWf4Hf6v5
-         gsiw==
-X-Gm-Message-State: ABy/qLaBzGRGHfa13ANtyrwjE6hbNHJeWMdxdme78ilCpFdadH+eeBem
-        5u1lOjxMDElRI5TZzXm3Fm745DGn2S+waSEgm+nuIUFVvKzi
-X-Google-Smtp-Source: APBJJlHyDTRvjHTT3LjuTgzwmJmwSN53wbtn43XKF5qJs89OS8p4COy2sIr0xPZNQGz2FlRxKFHfMNKfzRW132vutD4Wytv1v7kk
+        Thu, 29 Jun 2023 21:27:18 -0400
+Received: from mail.nfschina.com (unknown [42.101.60.195])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 8CAB610E7
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 18:27:15 -0700 (PDT)
+Received: from localhost.localdomain (unknown [180.167.10.98])
+        by mail.nfschina.com (Maildata Gateway V2.8.8) with ESMTPA id C459F606EE6F5;
+        Fri, 30 Jun 2023 09:27:02 +0800 (CST)
+X-MD-Sfrom: dengxiang@nfschina.com
+X-MD-SrcIP: 180.167.10.98
+From:   dengxiang <dengxiang@nfschina.com>
+To:     tiwai@suse.com, yangyingliang@huawei.com, perex@perex.cz
+Cc:     linux-kernel@vger.kernel.org, dengxiang@nfschina.com
+Subject: [PATCH] ALSA: hda/realtek: Add quirks for Unis  H3C Desktop B760 & Q760
+Date:   Fri, 30 Jun 2023 09:26:54 +0800
+Message-Id: <20230630012654.2283715-1-dengxiang@nfschina.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-X-Received: by 2002:a17:902:ecd0:b0:1b8:3fbd:9aed with SMTP id
- a16-20020a170902ecd000b001b83fbd9aedmr557439plh.3.1688087569220; Thu, 29 Jun
- 2023 18:12:49 -0700 (PDT)
-Date:   Thu, 29 Jun 2023 18:12:49 -0700
-In-Reply-To: <00000000000053541905f9eb3439@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000e9cb8305ff4e8327@google.com>
-Subject: Re: [syzbot] [btrfs?] kernel BUG in add_new_free_space
-From:   syzbot <syzbot+3ba856e07b7127889d8c@syzkaller.appspotmail.com>
-To:     clm@fb.com, dsterba@suse.com, josef@toxicpanda.com,
-        linux-btrfs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot has found a reproducer for the following issue on:
+From: 邓湘 <dengxiang@nfschina.com>
 
-HEAD commit:    e40939bbfc68 Merge branch 'for-next/core' into for-kernelci
-git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
-console output: https://syzkaller.appspot.com/x/log.txt?x=1434d99f280000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=e95897d034d60fb8
-dashboard link: https://syzkaller.appspot.com/bug?extid=3ba856e07b7127889d8c
-compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
-userspace arch: arm64
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=16f13920a80000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=177d9efb280000
+These models use NSIWAY amplifiers for internal speaker, but cannot put
+sound outside from these amplifiers. So eapd verbs are needed to initialize
+the amplifiers. They can be added during boot to get working sound out
+of internal speaker.
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/53d4a5f0770f/disk-e40939bb.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/0e95bdd1a8a6/vmlinux-e40939bb.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/8890839e5fd6/Image-e40939bb.gz.xz
-mounted in repro: https://storage.googleapis.com/syzbot-assets/512ce39b94e9/mount_0.gz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+3ba856e07b7127889d8c@syzkaller.appspotmail.com
-
- el0_svc_common+0x138/0x244 arch/arm64/kernel/syscall.c:142
- do_el0_svc+0x64/0x198 arch/arm64/kernel/syscall.c:191
- el0_svc+0x4c/0x160 arch/arm64/kernel/entry-common.c:647
- el0t_64_sync_handler+0x84/0xfc arch/arm64/kernel/entry-common.c:665
- el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:591
-------------[ cut here ]------------
-kernel BUG at fs/btrfs/block-group.c:528!
-Internal error: Oops - BUG: 00000000f2000800 [#1] PREEMPT SMP
-Modules linked in:
-CPU: 0 PID: 6029 Comm: syz-executor128 Not tainted 6.4.0-rc7-syzkaller-ge40939bbfc68 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/27/2023
-pstate: 80400005 (Nzcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-pc : add_new_free_space+0x290/0x294 fs/btrfs/block-group.c:528
-lr : add_new_free_space+0x290/0x294 fs/btrfs/block-group.c:528
-sp : ffff800096f17440
-x29: ffff800096f174e0 x28: 1ffff00012de2e94 x27: dfff800000000000
-x26: 0000000000000001 x25: ffff0000de3c0190 x24: ffff800096f174a0
-x23: 0000000000820000 x22: ffff800096f17480 x21: 0000000000000000
-x20: 00000000007e0000 x19: 00000000fffffff4 x18: 1fffe000368447c6
-x17: 0000000000000000 x16: ffff80008a443320 x15: 0000000000000001
-x14: 0000000000000000 x13: 0000000000000001 x12: 0000000000000001
-x11: 0000000000000000 x10: 0000000000000000 x9 : 0000000000000000
-x8 : ffff0000c74f3780 x7 : 0000000000000001 x6 : 0000000000000001
-x5 : ffff800096f16978 x4 : ffff80008df9ee80 x3 : ffff800082cfd768
-x2 : 0000000000000001 x1 : 00000000fffffff4 x0 : 0000000000000000
-Call trace:
- add_new_free_space+0x290/0x294 fs/btrfs/block-group.c:528
- btrfs_make_block_group+0x32c/0x858 fs/btrfs/block-group.c:2700
- create_chunk fs/btrfs/volumes.c:5440 [inline]
- btrfs_create_chunk+0x13a0/0x1e5c fs/btrfs/volumes.c:5526
- reserve_chunk_space+0x148/0x2a0 fs/btrfs/block-group.c:4083
- check_system_chunk fs/btrfs/block-group.c:4132 [inline]
- btrfs_inc_block_group_ro+0x4e8/0x570 fs/btrfs/block-group.c:2854
- scrub_enumerate_chunks+0x79c/0x1330 fs/btrfs/scrub.c:2536
- btrfs_scrub_dev+0x5f0/0xb84 fs/btrfs/scrub.c:2928
- btrfs_ioctl_scrub+0x1f4/0x3e8 fs/btrfs/ioctl.c:3177
- btrfs_ioctl+0x6a4/0xb08 fs/btrfs/ioctl.c:4626
- vfs_ioctl fs/ioctl.c:51 [inline]
- __do_sys_ioctl fs/ioctl.c:870 [inline]
- __se_sys_ioctl fs/ioctl.c:856 [inline]
- __arm64_sys_ioctl+0x14c/0x1c8 fs/ioctl.c:856
- __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
- invoke_syscall+0x98/0x2c0 arch/arm64/kernel/syscall.c:52
- el0_svc_common+0x138/0x244 arch/arm64/kernel/syscall.c:142
- do_el0_svc+0x64/0x198 arch/arm64/kernel/syscall.c:191
- el0_svc+0x4c/0x160 arch/arm64/kernel/entry-common.c:647
- el0t_64_sync_handler+0x84/0xfc arch/arm64/kernel/entry-common.c:665
- el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:591
-Code: 956f741e 97875f26 d4210000 97875f24 (d4210000) 
----[ end trace 0000000000000000 ]---
-
-
+Signed-off-by: 邓湘 <dengxiang@nfschina.com>
 ---
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
+ sound/pci/hda/patch_realtek.c | 21 +++++++++++++++++++++
+ 1 file changed, 21 insertions(+)
+
+diff --git a/sound/pci/hda/patch_realtek.c b/sound/pci/hda/patch_realtek.c
+index afe8253f9a4f..82f53af2d08a 100644
+--- a/sound/pci/hda/patch_realtek.c
++++ b/sound/pci/hda/patch_realtek.c
+@@ -11201,6 +11201,20 @@ static void alc897_fixup_lenovo_headset_mode(struct hda_codec *codec,
+ 	}
+ }
+ 
++static const struct hda_verb alc897_unis_h3c_x500s_eapd_verbs[] = {
++		{0x14, AC_VERB_SET_EAPD_BTLENABLE, 0},
++		{ }
++};
++
++static void alc897_fixup_unis_h3c_x500s(struct hda_codec *codec,
++					  const struct hda_fixup *fix, int action)
++{
++	if (action != HDA_FIXUP_ACT_PRE_PROBE)
++		return;
++
++	snd_hda_add_verbs(codec, alc897_unis_h3c_x500s_eapd_verbs);
++}
++
+ static const struct coef_fw alc668_coefs[] = {
+ 	WRITE_COEF(0x01, 0xbebe), WRITE_COEF(0x02, 0xaaaa), WRITE_COEF(0x03,    0x0),
+ 	WRITE_COEF(0x04, 0x0180), WRITE_COEF(0x06,    0x0), WRITE_COEF(0x07, 0x0f80),
+@@ -11286,6 +11300,7 @@ enum {
+ 	ALC897_FIXUP_HP_HSMIC_VERB,
+ 	ALC897_FIXUP_LENOVO_HEADSET_MODE,
+ 	ALC897_FIXUP_HEADSET_MIC_PIN2,
++	ALC897_FIXUP_UNIS_H3C_X500s,
+ };
+ 
+ static const struct hda_fixup alc662_fixups[] = {
+@@ -11725,6 +11740,10 @@ static const struct hda_fixup alc662_fixups[] = {
+ 		.chained = true,
+ 		.chain_id = ALC897_FIXUP_LENOVO_HEADSET_MODE
+ 	},
++	[ALC897_FIXUP_UNIS_H3C_X500s] = {
++		.type = HDA_FIXUP_FUNC,
++		.v.func = alc897_fixup_unis_h3c_x500s,
++	},
+ };
+ 
+ static const struct snd_pci_quirk alc662_fixup_tbl[] = {
+@@ -11792,6 +11811,7 @@ static const struct snd_pci_quirk alc662_fixup_tbl[] = {
+ 	SND_PCI_QUIRK(0x1b35, 0x1234, "CZC ET26", ALC662_FIXUP_CZC_ET26),
+ 	SND_PCI_QUIRK(0x1b35, 0x2206, "CZC P10T", ALC662_FIXUP_CZC_P10T),
+ 	SND_PCI_QUIRK(0x1c6c, 0x1239, "Compaq N14JP6-V2", ALC897_FIXUP_HP_HSMIC_VERB),
++	SND_PCI_QUIRK(0x10ec, 0x0897, "UNIS H3C X500s", ALC897_FIXUP_UNIS_H3C_X500s),
+ 
+ #if 0
+ 	/* Below is a quirk table taken from the old code.
+@@ -11886,6 +11906,7 @@ static const struct hda_model_fixup alc662_fixup_models[] = {
+ 	{.id = ALC662_FIXUP_USI_HEADSET_MODE, .name = "usi-headset"},
+ 	{.id = ALC662_FIXUP_LENOVO_MULTI_CODECS, .name = "dual-codecs"},
+ 	{.id = ALC669_FIXUP_ACER_ASPIRE_ETHOS, .name = "aspire-ethos"},
++	{.id = ALC897_FIXUP_UNIS_H3C_X500s, .name = "unis-h3c-x500s"},
+ 	{}
+ };
+ 
+-- 
+2.30.2
+
