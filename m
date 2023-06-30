@@ -2,180 +2,222 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2ADF2743614
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 09:46:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5687E743625
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 09:46:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232095AbjF3HqL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 03:46:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55270 "EHLO
+        id S232399AbjF3Hqi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Jun 2023 03:46:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230178AbjF3HqI (ORCPT
+        with ESMTP id S230046AbjF3HqQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 03:46:08 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34089E5E;
-        Fri, 30 Jun 2023 00:46:05 -0700 (PDT)
-Received: from dggpeml500021.china.huawei.com (unknown [172.30.72.55])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4QsnR30KHhzTlRC;
-        Fri, 30 Jun 2023 15:45:03 +0800 (CST)
-Received: from [10.174.177.174] (10.174.177.174) by
- dggpeml500021.china.huawei.com (7.185.36.21) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27; Fri, 30 Jun 2023 15:45:57 +0800
-Message-ID: <5b1751af-9109-68bc-7fca-62cd665663c2@huawei.com>
-Date:   Fri, 30 Jun 2023 15:45:57 +0800
+        Fri, 30 Jun 2023 03:46:16 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1436410A;
+        Fri, 30 Jun 2023 00:46:14 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 4BFC21FD5E;
+        Fri, 30 Jun 2023 07:46:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1688111173; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=s+v7TzEsD6peXuEp+SUxn6T7G+IGk1te1iZtcpAk67w=;
+        b=U5S0JZy6WbjyJY0i+chUuJjKDtyzvNR562iDu4mAoeIRYiMaQH05DYn3oC2IDHuCJ3la0d
+        6efMYRbFWwT6WipW7DuzCUm5fOh+iBRlRjda9BeHpkLO1xMw6kBvbeEfXf4OoC4HGF0uY4
+        zaQwtseSPMY8DGPVwfpIGEUiwJgpXQc=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1688111173;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=s+v7TzEsD6peXuEp+SUxn6T7G+IGk1te1iZtcpAk67w=;
+        b=X8HFoQg8L0Cu/1xVytv0JrQeNcv7odrUfIRvQXZWtOmDKktKfLxyOGVAR3qIcYAPoHvLdQ
+        4fb9jtJZixVDtrAw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 899A313915;
+        Fri, 30 Jun 2023 07:46:12 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id ZRQNIESInmT0OQAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Fri, 30 Jun 2023 07:46:12 +0000
+Message-ID: <ef7b3899-7d18-8018-47fa-aac0efaa61f4@suse.de>
+Date:   Fri, 30 Jun 2023 09:46:11 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.1.2
-Subject: Re: [PATCH v2 5/7] quota: fix dqput() to follow the guarantees
- dquot_srcu should provide
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH 07/12] arch/x86: Declare edid_info in <asm/screen_info.h>
 Content-Language: en-US
-To:     Jan Kara <jack@suse.cz>
-CC:     <linux-fsdevel@vger.kernel.org>, <linux-ext4@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <yi.zhang@huawei.com>,
-        <yangerkun@huawei.com>, <chengzhihao1@huawei.com>,
-        <yukuai3@huawei.com>, Baokun Li <libaokun1@huawei.com>
-References: <20230628132155.1560425-1-libaokun1@huawei.com>
- <20230628132155.1560425-6-libaokun1@huawei.com>
- <20230629105954.5cpqpch46ik4bg27@quack3>
- <9ac4fdcf-f236-8a05-bb96-b0b85a63b54e@huawei.com>
- <20230629143304.2t45zta3f57imowa@quack3>
-From:   Baokun Li <libaokun1@huawei.com>
-In-Reply-To: <20230629143304.2t45zta3f57imowa@quack3>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.177.174]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpeml500021.china.huawei.com (7.185.36.21)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+To:     Arnd Bergmann <arnd@arndb.de>, Helge Deller <deller@gmx.de>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Dave Airlie <airlied@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, linux-alpha@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-efi@vger.kernel.org,
+        "linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
+        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-hyperv@vger.kernel.org,
+        linux-fbdev@vger.kernel.org, linux-staging@lists.linux.dev,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Kees Cook <keescook@chromium.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Juerg Haefliger <juerg.haefliger@canonical.com>
+References: <20230629121952.10559-1-tzimmermann@suse.de>
+ <20230629121952.10559-8-tzimmermann@suse.de>
+ <80e3a583-805e-4e8f-a67b-ebe2e4b9a7e5@app.fastmail.com>
+ <d3de124c-6aa8-e930-e238-7bd6dd7929a6@suse.de>
+ <0dbbdfc4-0e91-4be4-9ca0-d8ba6f18453d@app.fastmail.com>
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+In-Reply-To: <0dbbdfc4-0e91-4be4-9ca0-d8ba6f18453d@app.fastmail.com>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------2PcBvNvj4NxOJT00dP00OAEN"
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/6/29 22:33, Jan Kara wrote:
-> On Thu 29-06-23 19:47:08, Baokun Li wrote:
->> On 2023/6/29 18:59, Jan Kara wrote:
->>> On Wed 28-06-23 21:21:53, Baokun Li wrote:
->>>> @@ -760,6 +771,8 @@ dqcache_shrink_scan(struct shrinker *shrink, struct shrink_control *sc)
->>>>    	struct dquot *dquot;
->>>>    	unsigned long freed = 0;
->>>> +	flush_delayed_work(&quota_release_work);
->>>> +
->>> I would not flush the work here. Sure, it can make more dquots available
->>> for reclaim but I think it is more important for the shrinker to not wait
->>> on srcu period as shrinker can be called very frequently under memory
->>> pressure.
->> This is because I want to use remove_free_dquot() directly, and if I don't
->> do
->> flush here anymore, then DQST_FREE_DQUOTS will not be accurate.
->> Since that's the case, I'll remove the flush here and add a determination
->> to remove_free_dquot() whether to increase DQST_FREE_DQUOTS.
-> OK.
->
->>>>    	spin_lock(&dq_list_lock);
->>>>    	while (!list_empty(&free_dquots) && sc->nr_to_scan) {
->>>>    		dquot = list_first_entry(&free_dquots, struct dquot, dq_free);
->>>> @@ -787,6 +800,60 @@ static struct shrinker dqcache_shrinker = {
->>>>    	.seeks = DEFAULT_SEEKS,
->>>>    };
->>>> +/*
->>>> + * Safely release dquot and put reference to dquot.
->>>> + */
->>>> +static void quota_release_workfn(struct work_struct *work)
->>>> +{
->>>> +	struct dquot *dquot;
->>>> +	struct list_head rls_head;
->>>> +
->>>> +	spin_lock(&dq_list_lock);
->>>> +	/* Exchange the list head to avoid livelock. */
->>>> +	list_replace_init(&releasing_dquots, &rls_head);
->>>> +	spin_unlock(&dq_list_lock);
->>>> +
->>>> +restart:
->>>> +	synchronize_srcu(&dquot_srcu);
->>>> +	spin_lock(&dq_list_lock);
->>>> +	while (!list_empty(&rls_head)) {
->>> I think the logic below needs a bit more work. Firstly, I think that
->>> dqget() should removing dquots from releasing_dquots list - basically just
->>> replace the:
->>> 	if (!atomic_read(&dquot->dq_count))
->>> 		remove_free_dquot(dquot);
->>> with
->>> 	/* Dquot on releasing_dquots list? Drop ref kept by that list. */
->>> 	if (atomic_read(&dquot->dq_count) == 1 && !list_empty(&dquot->dq_free))
->>> 		atomic_dec(&dquot->dq_count);
->>> 	remove_free_dquot(dquot);
->>> 	atomic_inc(&dquot->dq_count);
->>>
->>> That way we are sure that while we are holding dq_list_lock, all dquots on
->>> rls_head list have dq_count == 1.
->> I wrote it this way at first, but that would have been problematic, so I
->> ended up dropping the dq_count == 1 constraint for dquots on
->> releasing_dquots.  Like the following, we will get a bad dquot directly:
->>
->> quota_release_workfn
->>   spin_lock(&dq_list_lock)
->>   dquot = list_first_entry(&rls_head, struct dquot, dq_free)
->>   spin_unlock(&dq_list_lock)
->>   dquot->dq_sb->dq_op->release_dquot(dquot)
->>   release_dquot
->>         dqget
->>          atomic_dec(&dquot->dq_count)
->>          remove_free_dquot(dquot)
->>          atomic_inc(&dquot->dq_count)
->>          spin_unlock(&dq_list_lock)
->>          wait_on_dquot(dquot)
->>          if (!test_bit(DQ_ACTIVE_B, &dquot->dq_flags))
->>          // still active
->>   mutex_lock(&dquot->dq_lock)
->>   dquot_is_busy(dquot)
->>    atomic_read(&dquot->dq_count) > 1
->>   clear_bit(DQ_ACTIVE_B, &dquot->dq_flags)
->>   mutex_unlock(&dquot->dq_lock)
->>
->> Removing dquot from releasing_dquots and its reduced reference count
->> will cause dquot_is_busy() in dquot_release to fail. wait_on_dquot(dquot)
->> in dqget would have no effect. This is also the reason why I did not restart
->> at dquot_active. Adding dquot to releasing_dquots only in dqput() and
->> removing dquot from releasing_dquots only in quota_release_workfn() is
->> a simple and effective way to ensure consistency.
-> Indeed, that's a good point. Still cannot we simplify the loop like:
->
-> 	while (!list_empty(&rls_head)) {
-> 		dquot = list_first_entry(&rls_head, struct dquot, dq_free);
-> 		/* Dquot got used again? */
-> 		if (atomic_read(&dquot->dq_count) > 1) {
-> 			atomic_dec(&dquot->dq_count);
-> 			remove_free_dquot(dquot);
-> 			continue;
-> 		}
-> 		if (dquot_dirty(dquot)) {
-> 			keep what you had
-> 		}
-> 		if (dquot_active(dquot)) {
-> 			spin_unlock(&dq_list_lock);
-> 			dquot->dq_sb->dq_op->release_dquot(dquot);
-> 			goto restart;
-> 		}
-> 		/* Dquot is inactive and clean, we can move it to free list */
-> 		atomic_dec(&dquot->dq_count);
-> 		remove_free_dquot(dquot);
-> 		put_dquot_last(dquot);
-> 	}
->
-> What do you think?
-> 								Honza
-This looks great, and the code looks much cleaner, and I'll send out the
-next version later containing your suggested changes!
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------2PcBvNvj4NxOJT00dP00OAEN
+Content-Type: multipart/mixed; boundary="------------mO7mj780JaYWOEkXFpUrFA6g";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: Arnd Bergmann <arnd@arndb.de>, Helge Deller <deller@gmx.de>,
+ Daniel Vetter <daniel@ffwll.ch>, Dave Airlie <airlied@gmail.com>
+Cc: linux-kernel@vger.kernel.org, linux-alpha@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-efi@vger.kernel.org,
+ "linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
+ linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
+ loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
+ linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+ linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+ dri-devel@lists.freedesktop.org, linux-hyperv@vger.kernel.org,
+ linux-fbdev@vger.kernel.org, linux-staging@lists.linux.dev,
+ Linux-Arch <linux-arch@vger.kernel.org>, Thomas Gleixner
+ <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+ Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
+ x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+ Kees Cook <keescook@chromium.org>, "Paul E. McKenney" <paulmck@kernel.org>,
+ Peter Zijlstra <peterz@infradead.org>,
+ Andrew Morton <akpm@linux-foundation.org>,
+ Frederic Weisbecker <frederic@kernel.org>,
+ Nicholas Piggin <npiggin@gmail.com>, Ard Biesheuvel <ardb@kernel.org>,
+ Sami Tolvanen <samitolvanen@google.com>,
+ Juerg Haefliger <juerg.haefliger@canonical.com>
+Message-ID: <ef7b3899-7d18-8018-47fa-aac0efaa61f4@suse.de>
+Subject: Re: [PATCH 07/12] arch/x86: Declare edid_info in <asm/screen_info.h>
+References: <20230629121952.10559-1-tzimmermann@suse.de>
+ <20230629121952.10559-8-tzimmermann@suse.de>
+ <80e3a583-805e-4e8f-a67b-ebe2e4b9a7e5@app.fastmail.com>
+ <d3de124c-6aa8-e930-e238-7bd6dd7929a6@suse.de>
+ <0dbbdfc4-0e91-4be4-9ca0-d8ba6f18453d@app.fastmail.com>
+In-Reply-To: <0dbbdfc4-0e91-4be4-9ca0-d8ba6f18453d@app.fastmail.com>
 
-Thank you so much for your patient review!
--- 
-With Best Regards,
-Baokun Li
-.
+--------------mO7mj780JaYWOEkXFpUrFA6g
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
+
+SGkNCg0KQW0gMjkuMDYuMjMgdW0gMTU6MjEgc2NocmllYiBBcm5kIEJlcmdtYW5uOg0KPiBP
+biBUaHUsIEp1biAyOSwgMjAyMywgYXQgMTU6MDEsIFRob21hcyBaaW1tZXJtYW5uIHdyb3Rl
+Og0KPj4gQW0gMjkuMDYuMjMgdW0gMTQ6MzUgc2NocmllYiBBcm5kIEJlcmdtYW5uOg0KPj4+
+IE9uIFRodSwgSnVuIDI5LCAyMDIzLCBhdCAxMzo0NSwgVGhvbWFzIFppbW1lcm1hbm4gd3Jv
+dGU6DQo+Pj4+IFRoZSBnbG9iYWwgdmFyaWFibGUgZWRpZF9pbmZvIGNvbnRhaW5zIHRoZSBm
+aXJtd2FyZSdzIEVESUQgaW5mb3JtYXRpb24NCj4+Pj4gYXMgYW4gZXh0ZW5zaW9uIHRvIHRo
+ZSByZWd1bGFyIHNjcmVlbl9pbmZvIG9uIHg4Ni4gVGhlcmVmb3JlIG1vdmUgaXQgdG8NCj4+
+Pj4gPGFzbS9zY3JlZW5faW5mby5oPi4NCj4+Pj4NCj4+Pj4gQWRkIHRoZSBLY29uZmlnIHRv
+a2VuIEFSQ0hfSEFTX0VESURfSU5GTyB0byBndWFyZCBhZ2FpbnN0IGFjY2VzcyBvbg0KPj4+
+PiBhcmNoaXRlY3R1cmVzIHRoYXQgZG9uJ3QgcHJvdmlkZSBlZGlkX2luZm8uIFNlbGVjdCBp
+dCBvbiB4ODYuDQo+Pj4NCj4+PiBJJ20gbm90IHN1cmUgd2UgbmVlZCBhbm90aGVyIHN5bWJv
+bCBpbiBhZGRpdGlvbiB0bw0KPj4+IENPTkZJR19GSVJNV0FSRV9FRElELiBTaW5jZSBhbGwg
+dGhlIGNvZGUgYmVoaW5kIHRoYXQNCj4+PiBleGlzdGluZyBzeW1ib2wgaXMgYWxzbyB4ODYg
+c3BlY2lmaWMsIHdvdWxkIGl0IGJlIGVub3VnaA0KPj4+IHRvIGp1c3QgYWRkIGVpdGhlciAn
+ZGVwZW5kcyBvbiBYODYnIG9yICdkZXBlbmRzIG9uIFg4NiB8fA0KPj4+IENPTVBJTEVfVEVT
+VCcgdGhlcmU/DQo+Pg0KPj4gRklSTVdBUkVfRURJRCBpcyBhIHVzZXItc2VsZWN0YWJsZSBm
+ZWF0dXJlLCB3aGlsZSBBUkNIX0hBU19FRElEX0lORk8NCj4+IGFubm91bmNlcyBhbiBhcmNo
+aXRlY3R1cmUgZmVhdHVyZS4gVGhleSBkbyBkaWZmZXJlbnQgdGhpbmdzLg0KPiANCj4gSSBz
+dGlsbCBoYXZlIHRyb3VibGUgc2VlaW5nIHRoZSBkaWZmZXJlbmNlLg0KDQpUaGUgaWRlYSBo
+ZXJlIGlzIHRoYXQgQVJDSF9IQVNfIHNpZ25hbHMgdGhlIGFyY2hpdGVjdHVyZSdzIHN1cHBv
+cnQgZm9yIA0KdGhlIGZlYXR1cmUuICBEcml2ZXJzIHNldCAnZGVwZW5kcyBvbicgaW4gdGhl
+aXIgS2NvbmZpZy4NCg0KQW5vdGhlciBLY29uZmlnIHRva2VuLCBWSURFT19TQ1JFRU5fSU5G
+TyBvciBGSVJNV0FSRV9FRElELCB3b3VsZCB0aGVuIA0KYWN0dWFsbHkgZW5hYmxlIHRoZSBm
+ZWF0dXJlLiAgRHJpdmVycyBzZWxlY3QgVklERU9fU0NSRUVOX0lORk8gb3IgDQpGSVJNV0FS
+RV9FRElEIGFuZCB0aGUgYXJjaGl0ZWN0dXJlcyBjb250YWlucyBjb2RlIGxpa2UNCg0KI2lm
+ZGVmIFZJREVPX1NDUkVFTl9JTkZPDQpzdHJ1Y3Qgc2NyZWVuX2luZm8gc2NyZWVuX2luZm8g
+PSB7DQoJLyogc2V0IHZhbHVlcyBoZXJlICovDQp9DQojZW5kaWYNCg0KVGhpcyBhbGxvd3Mg
+dXMgdG8gZGlzYWJsZSBjb2RlIHRoYXQgcmVxdWlyZXMgc2NyZWVuX2luZm8vZWRpZF9pbmZv
+LCBidXQgDQphbHNvIGRpc2FibGUgc2NyZWVuX2luZm8vZWRpZF9pbmZvIHVubGVzcyBzdWNo
+IGNvZGUgaGFzIGJlZW4gZW5hYmxlZCBpbiANCnRoZSBrZXJuZWwgY29uZmlnLg0KDQpTb21l
+IGFyY2hpdGVjdHVyZXMgY3VycmVudGx5IG1pbWljIHRoaXMgYnkgZ3VhcmRpbmcgc2NyZWVu
+X2luZm8gd2l0aCANCmlmZGVmIENPTkZJR19WVCBvciBzaW1pbGFyLiBJJ2QgbGlrZSB0byBt
+YWtlIHRoaXMgbW9yZSBmbGV4aWJsZS4gVGhlIA0KY29zdCBvZiBhIGZldyBtb3JlIGludGVy
+bmFsIEtjb25maWcgdG9rZW5zIHNlZW1zIG5lZ2xpZ2libGUuDQoNCj4gDQo+PiBSaWdodCBu
+b3csIEFSQ0hfSEFTX0VESURfSU5GTyBvbmx5IHdvcmtzIG9uIHRoZSBvbGQgQklPUy1iYXNl
+ZCBWRVNBDQo+PiBzeXN0ZW1zLiBJbiB0aGUgZnV0dXJlLCBJIHdhbnQgdG8gYWRkIHN1cHBv
+cnQgZm9yIEVESUQgZGF0YSBmcm9tIEVGSSBhbmQNCj4+IE9GIGFzIHdlbGwuIEl0IHdvdWxk
+IGJlIHN0b3JlZCBpbiBlZGlkX2luZm8uIEkgYXNzdW1lIHRoYXQgdGhlIG5ldw0KPj4gc3lt
+Ym9sIHdpbGwgYmVjb21lIHVzZWZ1bCB0aGVuLg0KPiANCj4gSSBkb24ndCBzZWUgd2h5IGFu
+IE9GIGJhc2VkIHN5c3RlbSB3b3VsZCBoYXZlIHRoZSBzYW1lIGxpbWl0YXRpb24NCj4gYXMg
+bGVnYWN5IEJJT1Mgd2l0aCBzdXBwb3J0aW5nIG9ubHkgYSBzaW5nbGUgbW9uaXRvciwgaWYg
+d2UgbmVlZA0KPiB0byBoYXZlIGEgZ2VuZXJpYyByZXByZXNlbnRhdGlvbiBvZiBFRElEIGRh
+dGEgaW4gRFQsIHRoYXQgd291bGQNCj4gcHJvYmFibHkgYmUgaW4gYSBwZXIgZGV2aWNlIHBy
+b3BlcnR5IGFueXdheS4NCg0KU29ycnkgdGhhdCB3YXMgbXkgbWlzdGFrZS4gT0YgaGFzIG5v
+dGhpbmcgdG8gZG8gd2l0aCB0aGlzLg0KDQo+IA0KPiBJIHN1cHBvc2UgeW91IGNvdWxkIHVz
+ZSBGSVJNV0FSRV9FRElEIG9uIEVGSSBvciBPRiBzeXN0ZW1zIHdpdGhvdXQNCj4gdGhlIG5l
+ZWQgZm9yIGEgZ2xvYmFsIGVkaWRfaW5mbyBzdHJ1Y3R1cmUsIGJ1dCB0aGF0IHdvdWxkIG5v
+dA0KPiBzaGFyZSBhbnkgY29kZSB3aXRoIHRoZSBjdXJyZW50IGZiX2Zpcm13YXJlX2VkaWQo
+KSBmdW5jdGlvbi4NCg0KVGhlIGN1cnJlbnQgY29kZSBpcyBidWlsZCBvbiB0b3Agb2Ygc2Ny
+ZWVuX2luZm8gYW5kIGVkaWRfaW5mby4gSSdkIA0KcHJlZmVyYWJseSBub3QgcmVwbGFjZSB0
+aGF0LCBpZiBwb3NzaWJsZS4NCg0KQmVzdCByZWdhcmRzDQpUaG9tYXMNCg0KPiANCj4gICAg
+ICAgQXJuZA0KDQotLSANClRob21hcyBaaW1tZXJtYW5uDQpHcmFwaGljcyBEcml2ZXIgRGV2
+ZWxvcGVyDQpTVVNFIFNvZnR3YXJlIFNvbHV0aW9ucyBHZXJtYW55IEdtYkgNCkZyYW5rZW5z
+dHJhc3NlIDE0NiwgOTA0NjEgTnVlcm5iZXJnLCBHZXJtYW55DQpHRjogSXZvIFRvdGV2LCBB
+bmRyZXcgTXllcnMsIEFuZHJldyBNY0RvbmFsZCwgQm91ZGllbiBNb2VybWFuDQpIUkIgMzY4
+MDkgKEFHIE51ZXJuYmVyZykNCg==
+
+--------------mO7mj780JaYWOEkXFpUrFA6g--
+
+--------------2PcBvNvj4NxOJT00dP00OAEN
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
+
+-----BEGIN PGP SIGNATURE-----
+
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmSeiEMFAwAAAAAACgkQlh/E3EQov+As
+5Q/9H55ggR4DmBaaIorbgBWGfEk+cZYwIsKGIz88GTA+c5VuSIo6Mc6nMauV6sDZwQuqK4aWIzzR
+jVTZ+JGcp3h1o6Cb0aTHu4wIa0XkYCuT1Lo7p8q02mhS2T/EtbkiMAktmfNBBOCQ2Fp1RYjL5Fnx
+D8F1O/+gATcQgYGWJ4V3Y0khLBjCIhqZLpoDUZgvIznRExZlWP+eZ/NIuYR/PiM7/z0Gu/p+FZEo
+XIZrcJeJGET5ciMIAmV2d8zLT2YAwSz0bsLLYt5xyeZkVZBUKuQ93wUicuYaqXHIqpUz760GPe3M
+uITt6uKCQQHv2MOawwpy/YMei3eFhbCAixdayLHfhcyo1u3fnGsQWaLYStVYNnkfTEEb3abRZrUz
+gR90CVdui0m94ExphiWAzSjj/SbKYkUc0haYzE/CHronlSSiqHhTDghKfjEli6yS8cAAxSDZVcgw
+pggFLw7Xz3f+ITbu/zV1QzMHX5bOV+3ThWxpDGXmeQ4k60lx80NaI3unnFQqi4KN0Gyu2i2ptFNU
+KRuLox9gnQf9J50AkJOShkapFUjTVNDwxJ0Ftikb/pv/UXdsLrnWzrPgi4Qn6Y49jqHRb2wNFcIF
+erX2SS+S6zYk36Pg6L77ceHnxC0rIaZBtZ81YxFtMiZ9l8YV2rJS8orASwSIzF/yPiZXZgFY3ZQm
+S2Y=
+=pDNZ
+-----END PGP SIGNATURE-----
+
+--------------2PcBvNvj4NxOJT00dP00OAEN--
