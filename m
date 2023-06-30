@@ -2,117 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0ABB57441B0
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 20:00:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B0357441B6
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 20:01:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232868AbjF3SAA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 14:00:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57590 "EHLO
+        id S232456AbjF3SBo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Jun 2023 14:01:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229496AbjF3R76 (ORCPT
+        with ESMTP id S229496AbjF3SBl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 13:59:58 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F8F835AB;
-        Fri, 30 Jun 2023 10:59:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1688147997; x=1719683997;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=SsGHuD60K6V+2Csu940O7qwcjIx9HfXaFouXONb7hXY=;
-  b=MsJIGi3x5Fh7DSsaFiAWg8fZuB7zFPBZ20RuKGxQbzVJNLKuBNpoclbY
-   VsILDQntt7zhU4uDKk1Zdn1dlAFyxuILxGvBoDty3WQPt+es8bHZL+aTa
-   Wx4XriaA8YnV3qFCYjLi+A8QmyPt0n9aMaivUcCyZWsv3Hm/pAyO1AGNV
-   e6g1NPk7wZLtWxPpGmIBTEBFE03M2OJkEHvFp1Vk8fMg9sCUSt9Zdu8Gs
-   eC61gfyCCuJRxNOmpBiNsdMy2S1E7qSjt7TCUspv2L25fPD3YunQzdACf
-   OJV3jcvfgKTf/MZ8mzy31c0mKMD31GXW65rD1PLSpPBWhv3R5vVOWyT5n
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10757"; a="361307514"
-X-IronPort-AV: E=Sophos;i="6.01,171,1684825200"; 
-   d="scan'208";a="361307514"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jun 2023 10:59:56 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10757"; a="831030189"
-X-IronPort-AV: E=Sophos;i="6.01,171,1684825200"; 
-   d="scan'208";a="831030189"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga002.fm.intel.com with ESMTP; 30 Jun 2023 10:59:54 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1qFIPQ-001AjG-2G;
-        Fri, 30 Jun 2023 20:59:52 +0300
-Date:   Fri, 30 Jun 2023 20:59:52 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Astrid Rost <astrid.rost@axis.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh@kernel.org>,
-        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
-        Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>,
-        kernel@axis.com, linux-leds@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] led: led-class: Read max-brightness from
- devicetree
-Message-ID: <ZJ8YGFxQCHKCCAqw@smile.fi.intel.com>
-References: <20230630092248.4146169-1-astrid.rost@axis.com>
- <20230630092248.4146169-2-astrid.rost@axis.com>
+        Fri, 30 Jun 2023 14:01:41 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.65.254])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E34735AA;
+        Fri, 30 Jun 2023 11:01:38 -0700 (PDT)
+X-QQ-mid: bizesmtp63t1688148087t9jegpmu
+Received: from linux-lab-host.localdomain ( [119.123.131.49])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Sat, 01 Jul 2023 02:01:26 +0800 (CST)
+X-QQ-SSF: 01200000000000D0W000B00A0000000
+X-QQ-FEAT: QHkcO4X2U8huFrHo8l1YK+jN0cAN0mWcsFrfhBkNFui2ooTsOzApWJKLYaQfv
+        DewwEYMQS98eLS0mEe5UW1f1j3adkztnHPKP0dp6DUCg8w+0Ml9OO9zRU3K2IOKwIHZb+/T
+        qGcfS6AyofwJwhZlPv+B7syeNUTQ6jkRNHQ3ssBrQuxJ6Vm0SKntrGHJRgABuakUrYpw7Qa
+        bcemkVGjDtoPntNLRlYHBUkJD5H7GrOQUrp/9Vb1zrtvMTOJGmN6ZAYZfof0aovYvVOgwcg
+        IXGIX0Cce3cQgzN3uXwiEwFcvOuw+3bxPW44iI0Lu4GwpUMs/Rkv5XbCnUCJldhSeu17U8B
+        uTInhUZGn2AXfze0xrR/aAk6bDHCWy7rxlUxnNZ
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 17191169669005312733
+From:   Zhangjin Wu <falcon@tinylab.org>
+To:     arnd@arndb.de
+Cc:     falcon@tinylab.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux@weissschuh.net,
+        thomas@t-8ch.de, w@1wt.eu
+Subject: Re: [PATCH v3 03/14] selftests/nolibc: add _LARGEFILE64_SOURCE for musl
+Date:   Sat,  1 Jul 2023 02:01:26 +0800
+Message-Id: <20230630180126.283419-1-falcon@tinylab.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <dc7b8b17-4338-424f-a1f1-c12fb7ea08bd@app.fastmail.com>
+References: <dc7b8b17-4338-424f-a1f1-c12fb7ea08bd@app.fastmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230630092248.4146169-2-astrid.rost@axis.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrgz:qybglogicsvrgz5a-1
+X-Spam-Status: No, score=0.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 30, 2023 at 11:22:46AM +0200, Astrid Rost wrote:
-> Add max-brightness in order to reduce the current on the connected LEDs.
-> Normally, the maximum brightness is determined by the hardware, and this
-> property is not required. This property is used to set a software limit.
-> It could happen that an LED is made so bright that it gets damaged or
-> causes damage due to restrictions in a specific system, such as mounting
-> conditions. Note that led-max-microamp should be preferably used, if it
-> is supported by the controller.
+Hi, Arnd
 
-LGTM,
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-
-Maybe you can also add to the cover letter that there are already users in
-the kernel that may be simplified after this change lands the upstream.
-
-> Signed-off-by: Astrid Rost <astrid.rost@axis.com>
-> ---
->  drivers/leds/led-class.c | 4 ++++
->  1 file changed, 4 insertions(+)
+> On Fri, Jun 30, 2023, at 16:44, Zhangjin Wu wrote:
+> > _GNU_SOURCE Implies _LARGEFILE64_SOURCE in glibc, but in musl, the
+> > default configuration doesn't enable _LARGEFILE64_SOURCE.
+> >
+> > From include/dirent.h of musl, getdents64 is provided as getdents when
+> > _LARGEFILE64_SOURCE is defined.
+> >
+> >     #if defined(_LARGEFILE64_SOURCE)
+> >     ...
+> >     #define getdents64 getdents
+> >     #endif
+> >
+> > Let's define _LARGEFILE64_SOURCE to fix up this compile error:
 > 
-> diff --git a/drivers/leds/led-class.c b/drivers/leds/led-class.c
-> index 9255bc11f99d..ce652abf9336 100644
-> --- a/drivers/leds/led-class.c
-> +++ b/drivers/leds/led-class.c
-> @@ -457,6 +457,10 @@ int led_classdev_register_ext(struct device *parent,
->  			if (fwnode_property_present(init_data->fwnode,
->  						    "retain-state-shutdown"))
->  				led_cdev->flags |= LED_RETAIN_AT_SHUTDOWN;
-> +
-> +			fwnode_property_read_u32(init_data->fwnode,
-> +				"max-brightness",
-> +				&led_cdev->max_brightness);
->  		}
->  	} else {
->  		proposed_name = led_cdev->name;
-> -- 
-> 2.30.2
+> I think a better solution would be to use the normal getdents() instead
+> of glibc getdents64(), but then define _FILE_OFFSET_BITS=64 to tell
+> glibc to use the modern version of all filesystem syscalls.
 > 
 
--- 
-With Best Regards,
-Andy Shevchenko
+Just checked the getdents manpage[1] and the nolibc code, both of glibc and
+nolibc don't provide the getdents() library routine but both of them provide
+the getdents64(), only musl provide getdents() by default.
 
+And as the manpage shows, it is not easy to call getdents() with glibc, we
+need manually call syscall() and define the 'dirent' struct ourselves:
 
+    glibc does not provide a wrapper for getdents(); call getdents()
+    using syscall(2).  In that case you will need to define the
+    linux_dirent or linux_dirent64 structure yourself.
+
+And for nolibc, a getdents64() with linux_dirent64 struct (with int64_t offset)
+is provided, there is either no getdents() currently.
+
+This patch aims to let nolibc-test at least compile for musl and therefore we
+can easily check the new tests for musl, glibc and nolibc together.
+
+For the 64bit offset related stuff, we'd better delay it in another patchset
+(part of full rv32 support), which will convert the off_t to 64bit by default.
+
+Thanks,
+Zhangjin
+
+[1]: https://man7.org/linux/man-pages/man2/getdents.2.html
+
+>      Arnd
