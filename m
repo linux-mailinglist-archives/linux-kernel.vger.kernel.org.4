@@ -2,173 +2,314 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62C577431AA
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 02:26:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30E827431BA
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 02:31:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232246AbjF3A0U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 20:26:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52700 "EHLO
+        id S231455AbjF3Abe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 20:31:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229720AbjF3A0H (ORCPT
+        with ESMTP id S229720AbjF3Abc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 20:26:07 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 981E630C4;
-        Thu, 29 Jun 2023 17:26:05 -0700 (PDT)
-Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35TNdDNk029656;
-        Fri, 30 Jun 2023 00:25:39 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : date :
- subject : mime-version : content-type : content-transfer-encoding :
- message-id : references : in-reply-to : to : cc; s=qcppdkim1;
- bh=VdyE04PMuyWySXPu+KLrccTmmSzPdYZCdQoG9su95G0=;
- b=H0LvHQaCcZm9zT4YMUiVLqDNXaJz7DTvtpwf/XLkI4WzRnFjb4TO65XbOb4bq4opB5mQ
- JBr++KpgYluM5ZkIz+pyCqxe5wwXubAWjE5IdZIW/DyFOdO2N6UsFBBnzN1hT/VM/xrA
- PIlrUqDGi+HVqRAUe9x+JZsgJeFQRNCL8pPWxhY0EuwTuB1RFxLprfbcyJuBXe28wcf4
- exPzNMKMcmv5pgvaLYfSSePp9/oVD7I+/lTgwObpojVhvannM8IWb1sfaVe9sgBpq2pE
- Q7Ub95/4h0DA5ey9c6Kty8vT3yL2ZVNVJGs7o8cPLEQaz4WB6s9j/dvXlN6tr9vEgTK3 7Q== 
-Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rh7s2snsm-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 30 Jun 2023 00:25:38 +0000
-Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
-        by NASANPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35U0PcgW011879
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 30 Jun 2023 00:25:38 GMT
-Received: from jesszhan-linux.qualcomm.com (10.80.80.8) by
- nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Thu, 29 Jun 2023 17:25:37 -0700
-From:   Jessica Zhang <quic_jesszhan@quicinc.com>
-Date:   Thu, 29 Jun 2023 17:25:06 -0700
-Subject: [PATCH RFC v4 7/7] drm/msm/dpu: Use DRM solid_fill property
+        Thu, 29 Jun 2023 20:31:32 -0400
+Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC15410F
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 17:31:30 -0700 (PDT)
+Received: by mail-qt1-x830.google.com with SMTP id d75a77b69052e-401f4408955so76101cf.1
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 17:31:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1688085090; x=1690677090;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=CqBBEtn5jMdxb009LiWKpd4UBE2fGjEHD6QUuwOapDA=;
+        b=gfE8rlY0AAs9w3RfyENQ1a/gezAyx8mMQljD4cx+Zi8XXj37/8T526Fhy6xx0ngbtA
+         Y1/tcv02ElA+oFeugj6GxPPpF0yOl/Q8vv0GD/+jUulvVC46ra4DjUCRqMEJiXBXFfn0
+         Lsqwdns/AN07u/FO9Mpo0eUmUXR6x58oX8DA75dskQ1rhphV/A4nnmvj363GUVsPEbo4
+         NjriXBDxHYddp7/hdWubK5/UiyO/2PxIvvFZBqsQCisdNNFTz7iKWncOPRFnrYz8nMII
+         LGAprjOO7HCQu0dKQTau9jp9TwIXHJ/69yr6brj6KCXTJX+QEcANOGVMcpcP1aqZpSyG
+         /NzQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688085090; x=1690677090;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=CqBBEtn5jMdxb009LiWKpd4UBE2fGjEHD6QUuwOapDA=;
+        b=WmFtA88ybaJu2L4IZ0yXdcywV3QtftyX7mlx3hLBxHuiF330eXFsb5byb3gRNw39VC
+         2xEsmSIb39tcpsyiezrL+6rf2z57s7GpFY9ZlYVSuGDLUxzm0Pzbc8HFlf5NFKEWDPAB
+         5j0wmh/U7WitZTPN0mSuRDHyJmMnN9i0J7Q/JUqwtipXfV0lpZeuP4t4ZG7TTzy9Ku0X
+         CtdtJiH0MEoP+to4Sm+PT5JS+6ZyJuxl9s0QDm4dx2zKIYfbLbVqXleY7qLLqQps9Qib
+         5t8AIw3HapjmKCuGSbzBHDsHmMWcS1K/lWlW1I0iwUg9qk4+esZZ97E8KkwHpbXV+R5r
+         4RZQ==
+X-Gm-Message-State: AC+VfDygT1qnuGMMnDA9xXhpYR7bMFc6Gta8rcO0OmlvoSYh2x5eeG3D
+        wRPdkroQRnq+i7ij44n3PnmFMD6M+5+L1sqGgaDhtQ==
+X-Google-Smtp-Source: ACHHUZ4jn7K46CXEE0VMj7HQ5ntCspnNqAjqcrgs+LB0qddqnM22NocvdoMWSNfCrFVg256xKvwcK5TYlsJl6vcwjOw=
+X-Received: by 2002:a05:622a:188e:b0:3fa:45ab:22a5 with SMTP id
+ v14-20020a05622a188e00b003fa45ab22a5mr603359qtc.27.1688085089643; Thu, 29 Jun
+ 2023 17:31:29 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-ID: <20230404-solid-fill-v4-7-f4ec0caa742d@quicinc.com>
-References: <20230404-solid-fill-v4-0-f4ec0caa742d@quicinc.com>
-In-Reply-To: <20230404-solid-fill-v4-0-f4ec0caa742d@quicinc.com>
-To:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Clark <robdclark@gmail.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        "Sean Paul" <sean@poorly.run>,
-        Marijn Suijten <marijn.suijten@somainline.org>
-CC:     <quic_abhinavk@quicinc.com>, <ppaalanen@gmail.com>,
-        <contact@emersion.fr>, <laurent.pinchart@ideasonboard.com>,
-        <sebastian.wick@redhat.com>, <ville.syrjala@linux.intel.com>,
-        <dri-devel@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <freedreno@lists.freedesktop.org>,
-        <wayland-devel@lists.freedesktop.org>,
-        Jessica Zhang <quic_jesszhan@quicinc.com>
-X-Mailer: b4 0.13-dev-c6835
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1688084735; l=2628;
- i=quic_jesszhan@quicinc.com; s=20230329; h=from:subject:message-id;
- bh=Q6YT7JmnABMfvQNkdhBy2arK3XommClX1EdAKqfP+QM=;
- b=/qZT2Rvn2W773gQK+NQti5mQEg81KawDk6EQmR4vFrr0vMLQigyNupmLnCPfuD5SDESWuO1EM
- 8gquU1xJ7nACem9k06QOwZnQr7f9PhvsqqFJZJNH2vgTmyqD3Doq9ej
-X-Developer-Key: i=quic_jesszhan@quicinc.com; a=ed25519;
- pk=gAUCgHZ6wTJOzQa3U0GfeCDH7iZLlqIEPo4rrjfDpWE=
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: YjYD-qZFVh6nj_7yRLKaNzJB21Syhyul
-X-Proofpoint-ORIG-GUID: YjYD-qZFVh6nj_7yRLKaNzJB21Syhyul
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-06-29_10,2023-06-27_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 adultscore=0
- spamscore=0 priorityscore=1501 suspectscore=0 phishscore=0
- lowpriorityscore=0 malwarescore=0 mlxlogscore=999 impostorscore=0
- mlxscore=0 clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2305260000 definitions=main-2306300002
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+References: <20230504120042.785651-1-rkagan@amazon.de> <ZH6DJ8aFq/LM6Bk9@google.com>
+ <CALMp9eS3F08cwUJbKjTRAEL0KyZ=MC==YSH+DW-qsFkNfMpqEQ@mail.gmail.com> <ZJ4dmrQSduY8aWap@google.com>
+In-Reply-To: <ZJ4dmrQSduY8aWap@google.com>
+From:   Jim Mattson <jmattson@google.com>
+Date:   Thu, 29 Jun 2023 17:31:18 -0700
+Message-ID: <CALMp9eQh=KWFYvDDqchb_ztjMnqda2NQawwgJg+r7L+FY_q6kA@mail.gmail.com>
+Subject: Re: [PATCH] KVM: x86: vPMU: truncate counter value to allowed width
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Eric Hankland <ehankland@google.com>,
+        Roman Kagan <rkagan@amazon.de>, kvm@vger.kernel.org,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Like Xu <likexu@tencent.com>, x86@kernel.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-kernel@vger.kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        Borislav Petkov <bp@alien8.de>, Ingo Molnar <mingo@redhat.com>,
+        Mingwei Zhang <mizhang@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Drop DPU_PLANE_COLOR_FILL_FLAG and check the DRM solid_fill property to
-determine if the plane is solid fill. In addition drop the DPU plane
-color_fill field as we can now use drm_plane_state.solid_fill instead,
-and pass in drm_plane_state.alpha to _dpu_plane_color_fill_pipe() to
-allow userspace to configure the alpha value for the solid fill color.
+On Thu, Jun 29, 2023 at 5:11=E2=80=AFPM Sean Christopherson <seanjc@google.=
+com> wrote:
+>
+> +Mingwei
+>
+> On Thu, Jun 29, 2023, Jim Mattson wrote:
+> > On Mon, Jun 5, 2023 at 5:51=E2=80=AFPM Sean Christopherson <seanjc@goog=
+le.com> wrote:
+> > >
+> > > On Thu, May 04, 2023, Roman Kagan wrote:
+> > > > diff --git a/arch/x86/kvm/pmu.h b/arch/x86/kvm/pmu.h
+> > > > index 5c7bbf03b599..6a91e1afef5a 100644
+> > > > --- a/arch/x86/kvm/pmu.h
+> > > > +++ b/arch/x86/kvm/pmu.h
+> > > > @@ -60,6 +60,12 @@ static inline u64 pmc_read_counter(struct kvm_pm=
+c *pmc)
+> > > >       return counter & pmc_bitmask(pmc);
+> > > >  }
+> > > >
+> > > > +static inline void pmc_set_counter(struct kvm_pmc *pmc, u64 val)
+> > > > +{
+> > > > +     pmc->counter +=3D val - pmc_read_counter(pmc);
+> > >
+> > > Ugh, not your code, but I don't see how the current code can possibly=
+ be correct.
+> > >
+> > > The above unpacks to
+> > >
+> > >         counter =3D pmc->counter;
+> > >         if (pmc->perf_event && !pmc->is_paused)
+> > >                 counter +=3D perf_event_read_value(pmc->perf_event,
+> > >                                                  &enabled, &running);
+> > >         pmc->counter +=3D val - (counter & pmc_bitmask(pmc));
+> > >
+> > > which distills down to
+> > >
+> > >         counter =3D 0;
+> > >         if (pmc->perf_event && !pmc->is_paused)
+> > >                 counter +=3D perf_event_read_value(pmc->perf_event,
+> > >                                                  &enabled, &running);
+> > >         pmc->counter =3D val - (counter & pmc_bitmask(pmc));
+> > >
+> > > or more succinctly
+> > >
+> > >         if (pmc->perf_event && !pmc->is_paused)
+> > >                 val -=3D perf_event_read_value(pmc->perf_event, &enab=
+led, &running);
+> > >
+> > >         pmc->counter =3D val;
+> > >
+> > > which is obviously wrong.  E.g. if the guest writes '0' to an active =
+counter, the
+> > > adjustment will cause pmc->counter to be loaded with a large (in unsi=
+gned terms)
+> > > value, and thus quickly overflow after a write of '0'.
+> >
+> > This weird construct goes all the way back to commit f5132b01386b
+> > ("KVM: Expose a version 2 architectural PMU to a guests"). Paolo
+> > killed it in commit 2924b52117b2 ("KVM: x86/pmu: do not mask the value
+> > that is written to fixed PMUs"), perhaps by accident. Eric then
+> > resurrected it in commit 4400cf546b4b ("KVM: x86: Fix perfctr WRMSR
+> > for running counters").
+> >
+> > It makes no sense to me. WRMSR should just set the new value of the
+> > counter, regardless of the old value or whether or not it is running.
+>
+> Heh, didn't stop you from giving Eric's patch a thumbs-up[*] :-)
 
-Signed-off-by: Jessica Zhang <quic_jesszhan@quicinc.com>
----
- drivers/gpu/drm/msm/disp/dpu1/dpu_plane.c | 21 +++++++++++++++------
- 1 file changed, 15 insertions(+), 6 deletions(-)
+I was smarter then, and probably understood what was going on.
 
-diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_plane.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_plane.c
-index 4476722f03bb..11d4fb771a1f 100644
---- a/drivers/gpu/drm/msm/disp/dpu1/dpu_plane.c
-+++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_plane.c
-@@ -42,7 +42,6 @@
- #define SHARP_SMOOTH_THR_DEFAULT	8
- #define SHARP_NOISE_THR_DEFAULT	2
- 
--#define DPU_PLANE_COLOR_FILL_FLAG	BIT(31)
- #define DPU_ZPOS_MAX 255
- 
- /*
-@@ -82,7 +81,6 @@ struct dpu_plane {
- 
- 	enum dpu_sspp pipe;
- 
--	uint32_t color_fill;
- 	bool is_error;
- 	bool is_rt_pipe;
- 	const struct dpu_mdss_cfg *catalog;
-@@ -606,6 +604,17 @@ static void _dpu_plane_color_fill_pipe(struct dpu_plane_state *pstate,
- 	_dpu_plane_setup_scaler(pipe, fmt, true, &pipe_cfg, pstate->rotation);
- }
- 
-+static uint32_t _dpu_plane_get_fill_color(struct drm_solid_fill solid_fill)
-+{
-+	uint32_t ret = 0;
-+
-+	ret |= ((uint8_t) solid_fill.b) << 16;
-+	ret |= ((uint8_t) solid_fill.g) << 8;
-+	ret |= ((uint8_t) solid_fill.r);
-+
-+	return ret;
-+}
-+
- /**
-  * _dpu_plane_color_fill - enables color fill on plane
-  * @pdpu:   Pointer to DPU plane object
-@@ -977,9 +986,9 @@ void dpu_plane_flush(struct drm_plane *plane)
- 	if (pdpu->is_error)
- 		/* force white frame with 100% alpha pipe output on error */
- 		_dpu_plane_color_fill(pdpu, 0xFFFFFF, 0xFF);
--	else if (pdpu->color_fill & DPU_PLANE_COLOR_FILL_FLAG)
--		/* force 100% alpha */
--		_dpu_plane_color_fill(pdpu, pdpu->color_fill, 0xFF);
-+	else if (drm_plane_solid_fill_enabled(plane->state))
-+		_dpu_plane_color_fill(pdpu, _dpu_plane_get_fill_color(plane->state->solid_fill),
-+				plane->state->alpha);
- 	else {
- 		dpu_plane_flush_csc(pdpu, &pstate->pipe);
- 		dpu_plane_flush_csc(pdpu, &pstate->r_pipe);
-@@ -1024,7 +1033,7 @@ static void dpu_plane_sspp_update_pipe(struct drm_plane *plane,
- 	}
- 
- 	/* override for color fill */
--	if (pdpu->color_fill & DPU_PLANE_COLOR_FILL_FLAG) {
-+	if (drm_plane_solid_fill_enabled(plane->state)) {
- 		_dpu_plane_set_qos_ctrl(plane, pipe, false);
- 
- 		/* skip remaining processing on color fill */
+> Thanks to Eric's testcase [Wow, tests do help!  We should try writing mor=
+e of them!],
+> I finally figured out what's going on.  I wrongly assumed perf_event_read=
+_value()
+> is destructive, but it's not, it just reads the current value.  So on a W=
+RMSR,
+> KVM offsets the value with the current perf event, and then *mostly* adju=
+sts for
+> it when reading the counter.
+>
+> But that is obviously super fragile because it means pmc->counter must ne=
+ver be
+> read directly unless the perf event is paused and the accumulated counter=
+ has been
+> propagated to pmc->counter.  Blech.
+>
+> I fiddled with a variety of things, but AFAICT the easiest solution is al=
+so the
+> most obviously correct: set perf's count to the guest's count.  Lightly t=
+ested
+> patch below.
 
--- 
-2.41.0
+That seems correct to me. :)
 
+> On a related topic, Mingwei also appears to have found another bug: prev_=
+counter
+> needs to be set when the counter is written, i.e. my proposed pmc_write_c=
+ounter()
+> also needs to update prev_counter.
+>
+> Though that also raises the question of whether or not zeroing prev_count=
+er in
+> reprogram_counter() is correct.  Unless I'm missing something, reprogram_=
+counter()
+> should also set pmc->prev_counter to pmc->counter when the counter is suc=
+cessfully
+> (re)enabled.
+>
+> And Jim also pointed out that prev_counter needs to be set even when KVM =
+fails
+> to enable a perf event (software counting should still work).
+
+This whole prev_counter business is a mess. The software counting
+increments by at most one per VM-exit. The only time we need to
+concern ourselves about overflow is when there has been a software
+increment and the paused counter value is -1. That is the only
+situation in which software counting can trigger a PMI. Even if the
+VM-exit was for a WRMSR to the PMC, assuming that the value just
+written by the guest is the value we see when we pause the counter. Or
+am I missing something?
+
+> [*] https://lore.kernel.org/all/CALMp9eRfeFFb6n22Uf4R2Pf8WW7BVLX_Vuf04WFw=
+iMtrk14Y-Q@mail.gmail.com
+>
+> ---
+>  arch/x86/kvm/pmu.h           |  8 ++++++++
+>  arch/x86/kvm/svm/pmu.c       |  2 +-
+>  arch/x86/kvm/vmx/pmu_intel.c |  4 ++--
+>  include/linux/perf_event.h   |  2 ++
+>  kernel/events/core.c         | 11 +++++++++++
+>  5 files changed, 24 insertions(+), 3 deletions(-)
+>
+> diff --git a/arch/x86/kvm/pmu.h b/arch/x86/kvm/pmu.h
+> index 7d9ba301c090..ba91a78e4dc1 100644
+> --- a/arch/x86/kvm/pmu.h
+> +++ b/arch/x86/kvm/pmu.h
+> @@ -74,6 +74,14 @@ static inline u64 pmc_read_counter(struct kvm_pmc *pmc=
+)
+>         return counter & pmc_bitmask(pmc);
+>  }
+>
+> +static inline void pmc_write_counter(struct kvm_pmc *pmc, u64 val)
+> +{
+> +       if (pmc->perf_event && !pmc->is_paused)
+> +               perf_event_set_count(pmc->perf_event, val);
+> +
+> +       pmc->counter =3D val;
+> +}
+> +
+>  static inline void pmc_release_perf_event(struct kvm_pmc *pmc)
+>  {
+>         if (pmc->perf_event) {
+> diff --git a/arch/x86/kvm/svm/pmu.c b/arch/x86/kvm/svm/pmu.c
+> index cef5a3d0abd0..373ff6a6687b 100644
+> --- a/arch/x86/kvm/svm/pmu.c
+> +++ b/arch/x86/kvm/svm/pmu.c
+> @@ -160,7 +160,7 @@ static int amd_pmu_set_msr(struct kvm_vcpu *vcpu, str=
+uct msr_data *msr_info)
+>         /* MSR_PERFCTRn */
+>         pmc =3D get_gp_pmc_amd(pmu, msr, PMU_TYPE_COUNTER);
+>         if (pmc) {
+> -               pmc->counter +=3D data - pmc_read_counter(pmc);
+> +               pmc_write_counter(pmc, data);
+>                 pmc_update_sample_period(pmc);
+>                 return 0;
+>         }
+> diff --git a/arch/x86/kvm/vmx/pmu_intel.c b/arch/x86/kvm/vmx/pmu_intel.c
+> index 80c769c58a87..18a658aa2a8d 100644
+> --- a/arch/x86/kvm/vmx/pmu_intel.c
+> +++ b/arch/x86/kvm/vmx/pmu_intel.c
+> @@ -406,11 +406,11 @@ static int intel_pmu_set_msr(struct kvm_vcpu *vcpu,=
+ struct msr_data *msr_info)
+>                         if (!msr_info->host_initiated &&
+>                             !(msr & MSR_PMC_FULL_WIDTH_BIT))
+>                                 data =3D (s64)(s32)data;
+> -                       pmc->counter +=3D data - pmc_read_counter(pmc);
+> +                       pmc_write_counter(pmc, data);
+>                         pmc_update_sample_period(pmc);
+>                         break;
+>                 } else if ((pmc =3D get_fixed_pmc(pmu, msr))) {
+> -                       pmc->counter +=3D data - pmc_read_counter(pmc);
+> +                       pmc_write_counter(pmc, data);
+>                         pmc_update_sample_period(pmc);
+>                         break;
+>                 } else if ((pmc =3D get_gp_pmc(pmu, msr, MSR_P6_EVNTSEL0)=
+)) {
+> diff --git a/include/linux/perf_event.h b/include/linux/perf_event.h
+> index d5628a7b5eaa..8fcd52a87ba2 100644
+> --- a/include/linux/perf_event.h
+> +++ b/include/linux/perf_event.h
+> @@ -1677,6 +1677,7 @@ extern void perf_event_disable_inatomic(struct perf=
+_event *event);
+>  extern void perf_event_task_tick(void);
+>  extern int perf_event_account_interrupt(struct perf_event *event);
+>  extern int perf_event_period(struct perf_event *event, u64 value);
+> +extern void perf_event_set_count(struct perf_event *event, u64 count);
+>  extern u64 perf_event_pause(struct perf_event *event, bool reset);
+>  #else /* !CONFIG_PERF_EVENTS: */
+>  static inline void *
+> @@ -1760,6 +1761,7 @@ static inline int perf_event_period(struct perf_eve=
+nt *event, u64 value)
+>  {
+>         return -EINVAL;
+>  }
+> +static inline perf_event_set_count(struct perf_event *event, u64 count) =
+{ }
+>  static inline u64 perf_event_pause(struct perf_event *event, bool reset)
+>  {
+>         return 0;
+> diff --git a/kernel/events/core.c b/kernel/events/core.c
+> index db016e418931..d368c283eba5 100644
+> --- a/kernel/events/core.c
+> +++ b/kernel/events/core.c
+> @@ -5646,6 +5646,17 @@ static void _perf_event_reset(struct perf_event *e=
+vent)
+>         perf_event_update_userpage(event);
+>  }
+>
+> +void perf_event_set_count(struct perf_event *event, u64 count)
+> +{
+> +       struct perf_event_context *ctx;
+> +
+> +       ctx =3D perf_event_ctx_lock(event);
+> +       (void)perf_event_read(event, false);
+> +       local64_set(&event->count, count);
+> +       perf_event_ctx_unlock(event, ctx);
+> +}
+> +EXPORT_SYMBOL_GPL(perf_event_set_count);
+> +
+>  /* Assume it's not an event with inherit set. */
+>  u64 perf_event_pause(struct perf_event *event, bool reset)
+>  {
+>
+> base-commit: 5ae85a1bd17b959796f6cc4c1153ceada2cf8f24
+> --
