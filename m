@@ -2,58 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BECAB7439D2
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 12:46:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F7C77439D4
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 12:46:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231766AbjF3KqY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 06:46:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42154 "EHLO
+        id S232410AbjF3Kqm convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 30 Jun 2023 06:46:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232432AbjF3KqQ (ORCPT
+        with ESMTP id S229742AbjF3Kqi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 06:46:16 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88AC6E62
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 03:46:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-        s=201909; t=1688121968;
-        bh=6h8VMf2FSdh+dxVwg57n1/smwpuHxvVG869jQ3daLr4=;
-        h=From:To:Cc:Subject:Date:From;
-        b=QAFIT3b2NO+w6qmcfIDWN2Ae2SL0eqMlU2XB123b8PrVJbD/cy+3GERkakEX+ltSE
-         AIH6KPKd8YPLwQM5XRE6rQPwRDDrkL6UI4CTzQnIEm0JseyEPAl7z640Yxh9qm+1Gk
-         GZXLaC+QK9xEFwwYcLZnpCOPTmHdLWVKiEbiyuhqUEdAlJScfVxRdU02s9D+Hn0wUk
-         60BRO2u8pi646zYAQ4qcKuw8nK2aLcvt6j04m+Nlla6cDJLoHRD1rWqlMyRtA1ok91
-         FCe7DJxcR/9WmKMdVR/f62/pxBfH6pKqXLvziDSYb/hCfj97336EcYfvOZ6mFvwlCr
-         z08+S54YdPTSA==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QssRw0D3Yz4wZt;
-        Fri, 30 Jun 2023 20:46:04 +1000 (AEST)
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     adityag@linux.ibm.com, aneesh.kumar@linux.ibm.com, arnd@arndb.de,
-        bgray@linux.ibm.com, christophe.leroy@csgroup.eu,
-        colin.i.king@gmail.com, elver@google.com,
-        gbatra@linux.vnet.ibm.com, geert@linux-m68k.org, jarkko@kernel.org,
-        jcmvbkbc@gmail.com, joel@jms.id.au, linux-kernel@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, masahiroy@kernel.org,
-        naveen.n.rao@linux.vnet.ibm.com, naveen@kernel.org,
-        nayna@linux.ibm.com, ndesaulniers@google.com, npiggin@gmail.com,
-        paul.gortmaker@windriver.com, rdunlap@infradead.org,
-        rmclure@linux.ibm.com, robh@kernel.org,
-        tpearson@raptorengineering.com, trix@redhat.com,
-        u.kleine-koenig@pengutronix.de
-Subject: [GIT PULL] Please pull powerpc/linux.git powerpc-6.5-1 tag
-Date:   Fri, 30 Jun 2023 20:45:58 +1000
-Message-ID: <877crlgrdl.fsf@mail.lhotse>
+        Fri, 30 Jun 2023 06:46:38 -0400
+Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D96DEF0;
+        Fri, 30 Jun 2023 03:46:37 -0700 (PDT)
+Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-98502b12fd4so45256766b.1;
+        Fri, 30 Jun 2023 03:46:37 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688121996; x=1690713996;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=c/UBV7P1ulz8YvA35BhCt72l7KfIOxYTNUGMNlMCewg=;
+        b=CfdwF6kGwnTz+N01bo4RiU6731eJOd4t7eumO2s9F9czzzs0hGTrdLddF0nSE9EHEm
+         b/Eo5ZuLVI5hWttQgwALUii+30EHC97JHqnJJB3oIUX5EtjFtHk95MISnXHi9jc2XNa4
+         syE61espwdTE0OA3WOW0OCZdPsF4ZxruTYLxePVmUOcWwqsBuJpofit97cVpxuuFRpxm
+         JB/CXTssmXrDxbOnOTDpbx8YwmRoMq01QObcp9bzdH+NN7/s/BWpcatUIV8tgEKq0jPe
+         gNWV7AR/db5vAiD8J65q8y/mHgn7gmsKY13hlfiv/698grDge/6Vvi3/kTDytw2Jo18g
+         DMsQ==
+X-Gm-Message-State: ABy/qLYFa0CvbtbNFMaB1EJ7NQ7vxb63i+nJW2isTp5h8ESOQr3OpIm2
+        3HBoAfz7yK9u/UZmnvVTFJWQ9XUpHIAvoxXdx08=
+X-Google-Smtp-Source: APBJJlHAbw3cv+huvJUtlKwW2ExWGqSGStRGZZzCW/2PIO1UUthMw3rlS5DOVBCNSj+a75AK0FsQfC5rqzpn02VyAvk=
+X-Received: by 2002:a17:906:1109:b0:988:f9ba:e18d with SMTP id
+ h9-20020a170906110900b00988f9bae18dmr1539376eja.6.1688121996174; Fri, 30 Jun
+ 2023 03:46:36 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+References: <20230607003721.834038-1-evalenti@kernel.org> <f26ac9a9-60af-a0fe-fccc-25bcd306f5a1@linaro.org>
+ <ZICybSuZELhR1Ni5@uf8f119305bce5e.ant.amazon.com> <b2e93db5-e6f8-a9d8-53de-af5ea750f0f0@linaro.org>
+ <ZIITZINvtPfjuhS6@uf8f119305bce5e.ant.amazon.com> <7616fd9d-aa0d-2ecd-8751-894b1c9073c0@linaro.org>
+ <ZJKFar/U75+PGCRt@uf8f119305bce5e.ant.amazon.com> <75eba2da-593f-f3bd-4eac-5155fcf5aee8@linaro.org>
+ <ZJPUchRH+3LLvuKy@uf8f119305bce5e.ant.amazon.com> <CAJZ5v0jAJj-Eh9tJZRMamSFSWWJqVpzaWeHmqThyPvAGpzk17w@mail.gmail.com>
+ <ZJyh1Dp5WrXyv9wW@uf8f119305bce5e.ant.amazon.com> <CAJZ5v0jn-zCgObgNYswGQK0vLbWaK1VhPZP1L+pB5k1BhNs5bA@mail.gmail.com>
+ <2d59de0d-5011-780a-cb6c-94e6e2b74156@linaro.org>
+In-Reply-To: <2d59de0d-5011-780a-cb6c-94e6e2b74156@linaro.org>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Fri, 30 Jun 2023 12:46:24 +0200
+Message-ID: <CAJZ5v0jQssaVMim3b3yWEqw2NGt4SYSZP6Zb4i5O++=9Tp7C3w@mail.gmail.com>
+Subject: Re: [PATCH 1/1] thermal: sysfs: avoid actual readings from sysfs
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Eduardo Valentin <evalenti@kernel.org>, eduval@amazon.com,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,354 +67,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
------BEGIN PGP SIGNED MESSAGE-----
-Hash: SHA256
+Hi Daniel,
 
-Hi Linus,
+On Fri, Jun 30, 2023 at 12:11 PM Daniel Lezcano
+<daniel.lezcano@linaro.org> wrote:
+>
+>
+> Hi Rafael,
+>
+> On 30/06/2023 10:16, Rafael J. Wysocki wrote:
+> > On Wed, Jun 28, 2023 at 11:10 PM Eduardo Valentin <evalenti@kernel.org> wrote:
+>
+> [ ... ]
+>
+> > So what about adding a new zone attribute that can be used to specify
+> > the preferred caching time for the temperature?
+> >
+> > That is, if the time interval between two consecutive updates of the
+> > cached temperature value is less than the value of the new attribute,
+> > the cached temperature value will be returned by "temp".  Otherwise,
+> > it will cause the sensor to be read and the value obtained from it
+> > will be returned to user space and cached.
+> >
+> > If the value of the new attribute is 0, everything will work as it
+> > does now (which will also need to be the default behavior).
+>
+> I'm still not convinced about the feature.
+>
+> Eduardo provided some numbers but they seem based on the characteristics
+> of the I2C, not to a real use case. Eduardo?
+>
+> Before adding more complexity in the thermal framework and yet another
+> sysfs entry, it would be interesting to have an experiment and show the
+> impact of both configurations, not from a timing point of view but with
+> a temperature mitigation accuracy.
+>
+> Without a real use case, this feature does make really sense IMO.
 
-Please pull powerpc updates for 6.5.
-
-No conflicts that I'm aware of.
-
-Notable out of area changes:
-
-  kernel/kcsan/core.c               # 353e7300a1db kcsan: Don't expect 64 b=
-its atomic builtins from 32 bits architectures
-  arch/xtensa/lib/kcsan-stubs.c     # bcea4f7a70dc xtensa: Remove 64 bits a=
-tomic builtins stubs
-  arch/xtensa/lib/Makefile          # bcea4f7a70dc xtensa: Remove 64 bits a=
-tomic builtins stubs
-  arch/xtensa/lib/kcsan-stubs.c     # bcea4f7a70dc xtensa: Remove 64 bits a=
-tomic builtins stubs
-
-  include/uapi/linux/elf.h          # 97228ca375c7 powerpc/ptrace: Expose H=
-ASHKEYR register to ptrace
-  scripts/Makefile.compiler         # 54a11654de16 powerpc: remove checks f=
-or binutils older than 2.25
-
-cheers
-
-
-The following changes since commit f1fcbaa18b28dec10281551dfe6ed3a3ed80e3d6:
-
-  Linux 6.4-rc2 (2023-05-14 12:51:40 -0700)
-
-are available in the git repository at:
-
-  https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git tags/po=
-werpc-6.5-1
-
-for you to fetch changes up to 54a11654de163994e32b24e3aa90ef81f4a3184d:
-
-  powerpc: remove checks for binutils older than 2.25 (2023-06-27 16:59:29 =
-+1000)
-
-- ------------------------------------------------------------------
-powerpc updates for 6.5
-
- - Extend KCSAN support to 32-bit and BookE. Add some KCSAN annotations.
-
- - Make ELFv2 ABI the default for 64-bit big-endian kernel builds, and use
-   the -mprofile-kernel option (kernel specific ftrace ABI) for big endian
-   ELFv2 kernels.
-
- - Add initial Dynamic Execution Control Register (DEXCR) support, and allow
-   the ROP protection instructions to be used on Power 10.
-
- - Various other small features and fixes.
-
-Thanks to: Aditya Gupta, Aneesh Kumar K.V, Benjamin Gray, Brian King,
-Christophe Leroy, Colin Ian King, Dmitry Torokhov, Gaurav Batra, Jean Delva=
-re,
-Joel Stanley, Marco Elver, Masahiro Yamada, Nageswara R Sastry, Nathan
-Chancellor, Naveen N Rao, Nayna Jain, Nicholas Piggin, Paul Gortmaker, Randy
-Dunlap, Rob Herring, Rohan McLure, Russell Currey, Sachin Sant, Timothy
-Pearson, Tom Rix, Uwe Kleine-K=C3=B6nig.
-
-- ------------------------------------------------------------------
-Aditya Gupta (1):
-      powerpc: update ppc_save_regs to save current r1 in pt_regs
-
-Aneesh Kumar K.V (4):
-      powerpc/mm/book3s64: Use pmdp_ptep helper instead of typecasting.
-      powerpc/book3s64/mm: Fix DirectMap stats in /proc/meminfo
-      powerpc/book3s64/mm: Use PAGE_KERNEL instead of opencoding
-      powerpc/mm/dax: Fix the condition when checking if altmap vmemap can =
-cross-boundary
-
-Benjamin Gray (11):
-      powerpc/book3s: Add missing <linux/sched.h> include
-      powerpc/ptrace: Add missing <linux/regset.h> include
-      powerpc/dexcr: Add initial Dynamic Execution Control Register (DEXCR)=
- support
-      powerpc/dexcr: Handle hashchk exception
-      powerpc/dexcr: Support userspace ROP protection
-      powerpc/ptrace: Expose DEXCR and HDEXCR registers to ptrace
-      powerpc/ptrace: Expose HASHKEYR register to ptrace
-      Documentation: Document PowerPC kernel DEXCR interface
-      selftests/powerpc: Add more utility macros
-      selftests/powerpc/dexcr: Add hashst/hashchk test
-      selftests/powerpc/dexcr: Add DEXCR status utility lsdexcr
-
-Christophe Leroy (5):
-      kcsan: Don't expect 64 bits atomic builtins from 32 bits architectures
-      xtensa: Remove 64 bits atomic builtins stubs
-      powerpc/kcsan: Properly instrument arch_spin_unlock()
-      powerpc/interrupt: Don't read MSR from interrupt_exit_kernel_prepare()
-      powerpc/signal32: Force inlining of __unsafe_save_user_regs() and sav=
-e_tm_user_regs_unsafe()
-
-Colin Ian King (1):
-      powerpc/powernv/sriov: perform null check on iov before dereferencing=
- iov
-
-Gaurav Batra (1):
-      powerpc/iommu: TCEs are incorrectly manipulated with DLPAR add/remove=
- of memory
-
-Joel Stanley (3):
-      powerpc/powernv/pci: Remove ioda1 support
-      powerpc/powernv/pci: Remove MVE code
-      powerpc/powernv/pci: Remove last IODA1 defines
-
-Masahiro Yamada (1):
-      powerpc: remove checks for binutils older than 2.25
-
-Michael Ellerman (3):
-      Merge branch 'fixes' into next
-      MAINTAINERS: Exclude m68k-only drivers from powerpc entry
-      powerpc: Mark powermac as orphan in MAINTAINERS
-
-Naveen N Rao (2):
-      powerpc/ftrace: Disable ftrace on ppc32 if using clang
-      powerpc: Fail build if using recordmcount with binutils v2.37
-
-Nayna Jain (1):
-      security/integrity: fix pointer to ESL data and its size on pseries
-
-Nicholas Piggin (19):
-      KVM: PPC: Update MAINTAINERS
-      powerpc/boot: Separate target flags from BOOTCFLAGS
-      powerpc/boot: Separate CPP flags from BOOTCFLAGS
-      powerpc/boot: Separate BOOTCFLAGS from BOOTASFLAGS
-      powerpc/boot: Clean up Makefile after cflags and asflags separation
-      powerpc/build: Remove -pipe from compilation flags
-      powerpc/64: Force ELFv2 when building with LLVM linker
-      powerpc/64: Make ELFv2 the default for big-endian builds
-      powerpc/64: Use -mprofile-kernel for big endian ELFv2 kernels
-      powerpc/64s: Remove support for ELFv1 little endian userspace
-      powerpc/32s: Fix LLVM SMP build
-      powerpc/64s: move stack SLB pinning out of line from _switch
-      powerpc/64: Rearrange 64-bit _switch to prepare for 32/64 merge
-      powerpc/32: Remove sync from _switch
-      powerpc/32: Rearrange _switch to prepare for 32/64 merge
-      powerpc: merge 32-bit and 64-bit _switch implementation
-      powerpc/64: Rename entry_64.S to prom_entry_64.S
-      powerpc/64s: Fix VAS mm use after free
-      powerpc/build: vdso linker warning for orphan sections
-
-Paul Gortmaker (2):
-      powerpc: drop MPC8540_ADS and MPC8560_ADS platform support
-      powerpc: drop MPC85xx_CDS platform support
-
-Randy Dunlap (2):
-      powerpc: delete empty config entry for PPC_86xx
-      powerpc/embedded6xx: select MPC10X_BRIDGE only if PCI is set
-
-Rob Herring (8):
-      powerpc: powermac: Use of_get_cpu_hwid() to read CPU node 'reg'
-      macintosh: Use of_address_to_resource()
-      macintosh: Use of_property_read_reg() to parse "reg"
-      powerpc: fsl_rio: Use of_range_to_resource() for "ranges" parsing
-      powerpc: fsl: Use of_property_read_reg() to parse "reg"
-      powerpc: fsl_soc: Use of_range_to_resource() for "ranges" parsing
-      powerpc: mpc512x: Remove open coded "ranges" parsing
-      powerpc: 52xx: Make immr_id DT match tables static
-
-Rohan McLure (8):
-      powerpc/{32,book3e}: kcsan: Extend KCSAN Support
-      powerpc: qspinlock: Mark accesses to qnode lock checks
-      powerpc: qspinlock: Enforce qnode writes prior to publishing to queue
-      powerpc: Mark [h]ssr_valid accesses in check_return_regs_valid
-      powerpc: powernv: Fix KCSAN datarace warnings on idle_state contention
-      powerpc: Annotate accesses to ipi message flags
-      powerpc: Mark writes registering ipi to host cpu through kvm and poll=
-ing
-      powerpc: powernv: Annotate data races in opal events
-
-Timothy Pearson (1):
-      powerpc/iommu: Only build sPAPR access functions on pSeries
-
-Tom Rix (1):
-      powerpc/spufs: remove unneeded if-checks
-
-Uwe Kleine-K=C3=B6nig (3):
-      powerpc: Drop MPC5200 LocalPlus bus FIFO driver
-      macintosh: Switch i2c drivers back to use .probe()
-      powerpc: Switch i2c drivers back to use .probe()
-
-
- Documentation/powerpc/dexcr.rst                           |  58 ++
- Documentation/powerpc/index.rst                           |   1 +
- MAINTAINERS                                               |  11 +-
- arch/powerpc/Kconfig                                      |  17 +-
- arch/powerpc/Makefile                                     |  23 +-
- arch/powerpc/boot/Makefile                                |  71 ++-
- arch/powerpc/boot/dts/fsl/mpc8540ads.dts                  | 355 ----------=
---
- arch/powerpc/boot/dts/fsl/mpc8541cds.dts                  | 375 ----------=
---
- arch/powerpc/boot/dts/fsl/mpc8548cds.dtsi                 | 302 ----------
- arch/powerpc/boot/dts/fsl/mpc8548cds_32b.dts              |  82 ---
- arch/powerpc/boot/dts/fsl/mpc8548cds_36b.dts              |  82 ---
- arch/powerpc/boot/dts/fsl/mpc8555cds.dts                  | 375 ----------=
---
- arch/powerpc/boot/dts/fsl/mpc8560ads.dts                  | 388 ----------=
----
- arch/powerpc/configs/85xx/mpc8540_ads_defconfig           |  47 --
- arch/powerpc/configs/85xx/mpc8560_ads_defconfig           |  50 --
- arch/powerpc/configs/85xx/mpc85xx_cds_defconfig           |  52 --
- arch/powerpc/configs/mpc85xx_base.config                  |   3 -
- arch/powerpc/include/asm/book3s/64/kexec.h                |   5 +
- arch/powerpc/include/asm/book3s/64/kup.h                  |   1 +
- arch/powerpc/include/asm/cputable.h                       |   4 +-
- arch/powerpc/include/asm/elf.h                            |   6 +
- arch/powerpc/include/asm/kvm_ppc.h                        |   4 +-
- arch/powerpc/include/asm/mpc52xx.h                        |  41 --
- arch/powerpc/include/asm/opal.h                           |   3 -
- arch/powerpc/include/asm/paca.h                           |   1 +
- arch/powerpc/include/asm/ppc-opcode.h                     |   1 +
- arch/powerpc/include/asm/ppc_asm.h                        |  14 +
- arch/powerpc/include/asm/processor.h                      |   1 +
- arch/powerpc/include/asm/ptrace.h                         |   4 +-
- arch/powerpc/include/asm/reg.h                            |  10 +
- arch/powerpc/include/asm/simple_spinlock.h                |   2 +
- arch/powerpc/include/asm/thread_info.h                    |   6 +-
- arch/powerpc/include/uapi/asm/elf.h                       |   2 +
- arch/powerpc/kernel/Makefile                              |  14 +-
- arch/powerpc/kernel/cpu_setup_power.c                     |   8 +
- arch/powerpc/kernel/entry_32.S                            |  58 --
- arch/powerpc/kernel/interrupt.c                           |  17 +-
- arch/powerpc/kernel/iommu.c                               |   4 +
- arch/powerpc/kernel/ppc_save_regs.S                       |   6 +-
- arch/powerpc/kernel/process.c                             |  17 +
- arch/powerpc/kernel/prom.c                                |   1 +
- arch/powerpc/kernel/prom_entry_64.S                       |  87 +++
- arch/powerpc/kernel/ptrace/ptrace-decl.h                  |   6 +
- arch/powerpc/kernel/ptrace/ptrace-view.c                  |  72 ++-
- arch/powerpc/kernel/signal_32.c                           |  15 +-
- arch/powerpc/kernel/smp.c                                 |   4 +-
- arch/powerpc/kernel/{entry_64.S =3D> switch.S}              | 329 +++++---=
----
- arch/powerpc/kernel/traps.c                               |  16 +
- arch/powerpc/kernel/vdso/Makefile                         |   2 +
- arch/powerpc/kernel/vdso/vdso32.lds.S                     |   4 +-
- arch/powerpc/kernel/vdso/vdso64.lds.S                     |   4 +-
- arch/powerpc/kvm/book3s_hv_builtin.c                      |   4 +-
- arch/powerpc/lib/Makefile                                 |   2 +-
- arch/powerpc/lib/qspinlock.c                              |  11 +-
- arch/powerpc/mm/book3s32/hash_low.S                       |   8 +-
- arch/powerpc/mm/book3s64/radix_pgtable.c                  |  39 +-
- arch/powerpc/mm/init_64.c                                 |   2 +-
- arch/powerpc/platforms/44x/ppc476.c                       |   2 +-
- arch/powerpc/platforms/512x/mpc512x_lpbfifo.c             |  46 +-
- arch/powerpc/platforms/52xx/Kconfig                       |   5 -
- arch/powerpc/platforms/52xx/Makefile                      |   2 -
- arch/powerpc/platforms/52xx/lite5200_pm.c                 |   2 +-
- arch/powerpc/platforms/52xx/mpc52xx_lpbfifo.c             | 594 ----------=
-----------
- arch/powerpc/platforms/52xx/mpc52xx_pm.c                  |   2 +-
- arch/powerpc/platforms/83xx/mcu_mpc8349emitx.c            |   2 +-
- arch/powerpc/platforms/85xx/Makefile                      |   3 -
- arch/powerpc/platforms/85xx/mpc85xx_ads.c                 | 162 ------
- arch/powerpc/platforms/85xx/mpc85xx_cds.c                 | 387 ----------=
----
- arch/powerpc/platforms/86xx/Kconfig                       |   1 -
- arch/powerpc/platforms/cell/spu_base.c                    |   6 -
- arch/powerpc/platforms/embedded6xx/Kconfig                |   4 +-
- arch/powerpc/platforms/powermac/feature.c                 |  12 +-
- arch/powerpc/platforms/powernv/idle.c                     |  16 +-
- arch/powerpc/platforms/powernv/opal-call.c                |   2 -
- arch/powerpc/platforms/powernv/opal-irqchip.c             |   6 +-
- arch/powerpc/platforms/powernv/pci-ioda.c                 | 476 +---------=
-------
- arch/powerpc/platforms/powernv/pci-sriov.c                |   6 +-
- arch/powerpc/platforms/powernv/pci.c                      |   5 -
- arch/powerpc/platforms/powernv/pci.h                      |   5 -
- arch/powerpc/platforms/powernv/vas-window.c               |   2 +-
- arch/powerpc/platforms/pseries/iommu.c                    |  18 +-
- arch/powerpc/platforms/pseries/vas.c                      |   2 +-
- arch/powerpc/sysdev/fsl_rio.c                             |  46 +-
- arch/powerpc/sysdev/fsl_rmu.c                             |  10 +-
- arch/powerpc/sysdev/fsl_soc.c                             |  16 +-
- arch/powerpc/tools/gcc-check-mprofile-kernel.sh           |  11 +-
- arch/xtensa/lib/Makefile                                  |   2 -
- arch/xtensa/lib/kcsan-stubs.c                             |  54 --
- drivers/macintosh/ams/ams-i2c.c                           |   2 +-
- drivers/macintosh/smu.c                                   |  15 +-
- drivers/macintosh/therm_adt746x.c                         |   2 +-
- drivers/macintosh/therm_windtunnel.c                      |   2 +-
- drivers/macintosh/via-cuda.c                              |  16 +-
- drivers/macintosh/via-pmu.c                               |  23 +-
- drivers/macintosh/windfarm_ad7417_sensor.c                |   2 +-
- drivers/macintosh/windfarm_fcu_controls.c                 |   2 +-
- drivers/macintosh/windfarm_lm75_sensor.c                  |   2 +-
- drivers/macintosh/windfarm_lm87_sensor.c                  |   2 +-
- drivers/macintosh/windfarm_max6690_sensor.c               |   2 +-
- drivers/macintosh/windfarm_smu_sat.c                      |   2 +-
- include/uapi/linux/elf.h                                  |   2 +
- kernel/kcsan/core.c                                       |   2 +
- scripts/Makefile.compiler                                 |   4 -
- scripts/head-object-list.txt                              |   2 +-
- security/integrity/platform_certs/load_powerpc.c          |  40 +-
- tools/testing/selftests/powerpc/Makefile                  |   1 +
- tools/testing/selftests/powerpc/dexcr/.gitignore          |   2 +
- tools/testing/selftests/powerpc/dexcr/Makefile            |   9 +
- tools/testing/selftests/powerpc/dexcr/dexcr.c             | 132 +++++
- tools/testing/selftests/powerpc/dexcr/dexcr.h             |  49 ++
- tools/testing/selftests/powerpc/dexcr/hashchk_test.c      | 227 ++++++++
- tools/testing/selftests/powerpc/dexcr/lsdexcr.c           | 141 +++++
- tools/testing/selftests/powerpc/include/reg.h             |   4 +
- tools/testing/selftests/powerpc/include/utils.h           |  31 +-
- tools/testing/selftests/powerpc/pmu/sampling_tests/misc.h |   2 -
- tools/testing/selftests/powerpc/utils.c                   |  24 +
- 116 files changed, 1353 insertions(+), 4425 deletions(-)
- create mode 100644 Documentation/powerpc/dexcr.rst
- delete mode 100644 arch/powerpc/boot/dts/fsl/mpc8540ads.dts
- delete mode 100644 arch/powerpc/boot/dts/fsl/mpc8541cds.dts
- delete mode 100644 arch/powerpc/boot/dts/fsl/mpc8548cds.dtsi
- delete mode 100644 arch/powerpc/boot/dts/fsl/mpc8548cds_32b.dts
- delete mode 100644 arch/powerpc/boot/dts/fsl/mpc8548cds_36b.dts
- delete mode 100644 arch/powerpc/boot/dts/fsl/mpc8555cds.dts
- delete mode 100644 arch/powerpc/boot/dts/fsl/mpc8560ads.dts
- delete mode 100644 arch/powerpc/configs/85xx/mpc8540_ads_defconfig
- delete mode 100644 arch/powerpc/configs/85xx/mpc8560_ads_defconfig
- delete mode 100644 arch/powerpc/configs/85xx/mpc85xx_cds_defconfig
- create mode 100644 arch/powerpc/kernel/prom_entry_64.S
- rename arch/powerpc/kernel/{entry_64.S =3D> switch.S} (59%)
- delete mode 100644 arch/powerpc/platforms/52xx/mpc52xx_lpbfifo.c
- delete mode 100644 arch/powerpc/platforms/85xx/mpc85xx_ads.c
- delete mode 100644 arch/powerpc/platforms/85xx/mpc85xx_cds.c
- delete mode 100644 arch/xtensa/lib/kcsan-stubs.c
- create mode 100644 tools/testing/selftests/powerpc/dexcr/.gitignore
- create mode 100644 tools/testing/selftests/powerpc/dexcr/Makefile
- create mode 100644 tools/testing/selftests/powerpc/dexcr/dexcr.c
- create mode 100644 tools/testing/selftests/powerpc/dexcr/dexcr.h
- create mode 100644 tools/testing/selftests/powerpc/dexcr/hashchk_test.c
- create mode 100644 tools/testing/selftests/powerpc/dexcr/lsdexcr.c
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCAAdFiEEJFGtCPCthwEv2Y/bUevqPMjhpYAFAmSeshUACgkQUevqPMjh
-pYBXCA//VTdgB/3eF8zqVEUp00wK4lC0uTxiLV/2xPghYcHnXeEthD1whv89RmAD
-lxgRSy8jBfR1aUYt0PxtMgE4qOzVOQ513kK37CYFYDGtJ3gq5Xf/zCafQ/U4JM6y
-IV1N4Crz4OgFZUgl32vFbDoYwAIOQvk42d0I1JhQK9yPT7jgkhmM9N4xPd+fiZ4c
-ZtpNWvjCyj+ZY9S1E1M1Nq4c+hpcbO43yPXS0NQWmYnvB+c87UPhk/GkPeo0IG3P
-z8k4fVv6V/OHEp+PnXOpNlY0q0tg2GAhfCJHSK+6rE6b5Bi8pTR+iBOrzR/3XmBZ
-Irtb9pWXfYZC8ASQXOuw8rfQs3Jejeh6vAUg+bGpgeA/4gWtfNocRkywnupbSuO9
-oF+e2+PdeoVhpvpU8jCXzw2t0tplT8+Sfmr2ntvwc237Nnfp3sQcB7PmbmX8cheh
-ENLht7tCdFd9e7aZef4MEU+87kOU10BjruEXj/cOl8a3S5VYsjaS+rR0l02mtJ7q
-NcrfF7aCNqJwLJNJZJimXTbOEu6Mke7ZHfarL3aC5k0RGH9dHpsMjLJ+4hYA0AY3
-980EL2kZibtTRENlODcN6OrGjRAEFATADrhfQEa4mdJtUFEwT2ufNJ0mRh5b5pWw
-XanzHEc7w7NBYAzfCkJpiUwmjTf2t0yzUojs5/zmZUlmIFKjI2A=3D
-=3DcsXN
------END PGP SIGNATURE-----
+I'm kind of unsure why you think that it is not a good idea in general
+to have a way to limit the rate of accessing a temperature sensor, for
+energy-efficiency reasons if nothing more.
