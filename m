@@ -2,101 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DCD8744015
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 18:47:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 240E4744018
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 18:48:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232569AbjF3Qr0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 12:47:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49706 "EHLO
+        id S232403AbjF3Qs2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Jun 2023 12:48:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232456AbjF3QrU (ORCPT
+        with ESMTP id S230009AbjF3QsZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 12:47:20 -0400
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EFF94201
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 09:47:13 -0700 (PDT)
-Received: by mail-wm1-x32d.google.com with SMTP id 5b1f17b1804b1-3fbc59de0e2so12564315e9.3
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 09:47:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1688143632; x=1690735632;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=7Ios+3Nn79ERYy2I7//nEhHECme0jYurZDZTN9X/IgI=;
-        b=gQv4gOw7Ae68lyrnQ4PXrVdIpdeLjtYIZk++7hoagMPVPjvVWewEc5UueEfrCzWxT0
-         ntD3oQ96tYOAlzUZNPg1jA/Hw9QlKAbYQVXeQZyqEIUsq7lvzaFh01t8feRqbalXrDd8
-         e9O0HYTDyjb7mpaPwtQ/zoWpKjwEWLo86+RvHxFvc/qDSxIu0qwZukO80Xyrh9pLVOcq
-         gBoITt7fZE4gIphTs3h+slP3n9ZFAMZ3Ppl4+bo/N8sBi2kUZEwxHYMwaTTBDNXGpA+6
-         btL/IHdRDk14jOkzYjVNMYGz5nx0F2veO9PJttH85yU6ufn0o6NqHi8UT2ZOCDPE9waH
-         uggw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688143632; x=1690735632;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7Ios+3Nn79ERYy2I7//nEhHECme0jYurZDZTN9X/IgI=;
-        b=gdyy7hQSg4BH21yj2qjU/Hy59BEFYBMtzae9gSatixPYOPhtwxH3taZng1jOIzK7Oi
-         3/qqPcTiQBsuJhkblpAiwPUXnUGrfjeFnlxINcFtP3efDRs5Htl1WcVXJsYWmwfrV3s2
-         iSFuT7eeOQeUAKR0ScRoC47zHD7ZaZKhEFahQu5H7PraC4YaD+TyAdTFrBbkrSo9QSrn
-         svnG+MCwcblr6aOtcs3UhN+GtDyEZw+yoQiZylDSNHM0Mm7ekFyC4Y/ows+SndJFrnw6
-         /zlbyiQFxAg5r3XiAp6+UzHDjjXFkKn7q5RBbw5zH0bN+I/Aw6Rt7wZS2dehqRcifw/o
-         fySA==
-X-Gm-Message-State: AC+VfDyUT3EirxYL4Aft0Xd/WsdyRqwmI5atoyyP4Q+tll5YEajkJfo6
-        1/+YTlfHRF+FSThvNkmeZuImsg==
-X-Google-Smtp-Source: ACHHUZ44cxgHBTt/POPvUadcU+quLT7JDtwap+73QAhVNPgots+m3nQvBczssExJUzeeuTozZSnqgA==
-X-Received: by 2002:a7b:c5d7:0:b0:3f8:2777:15e with SMTP id n23-20020a7bc5d7000000b003f82777015emr2465477wmk.31.1688143631924;
-        Fri, 30 Jun 2023 09:47:11 -0700 (PDT)
-Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id v4-20020a05600c214400b003fa95890484sm14900345wml.20.2023.06.30.09.47.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 30 Jun 2023 09:47:10 -0700 (PDT)
-Date:   Fri, 30 Jun 2023 19:47:05 +0300
-From:   Dan Carpenter <dan.carpenter@linaro.org>
-To:     Colin Ian King <colin.i.king@gmail.com>
-Cc:     Jan Kara <jack@suse.com>, linux-ext4@vger.kernel.org,
-        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH][next] ext2: remove redundant assignment to variable desc
-Message-ID: <b12f7d11-4bfe-4e53-9a32-ce8db056d561@kadam.mountain>
-References: <20230630163033.165326-1-colin.i.king@gmail.com>
+        Fri, 30 Jun 2023 12:48:25 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F07D10FB;
+        Fri, 30 Jun 2023 09:48:24 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1F74E6179E;
+        Fri, 30 Jun 2023 16:48:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5583BC433C0;
+        Fri, 30 Jun 2023 16:48:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688143703;
+        bh=Nd8IcQkatSNE5s/b57nxVYn+hCy0DE0OvfYaIi0hv1U=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=cpsaJu+ftljiTRRn524d0jBzQwdqQ/0GNIPJAXXUogfJg0YSjIjVVgSS3xlexPjQO
+         oNBk3gCDchHEgPFBaD6gAjel/vjpMUFBjBI5cQtiVtdC+pIkZ9x1zSu971cs8mQ3xj
+         8ehTFkwHyULNCE70KWSMDZj01v6ZrrwT9QSECZ/V4YGeiSl9LQ4w/2Nwa7q1/7ng+O
+         Req4CMLRXV6doLCwWVkD0z3lITUGvAeaLgihdhvsNgFmO6EtDfBqWVsOD/6pq6GzuD
+         pdQ6MHFFGWZl6k22eGRhi2VlkhdLh5u5SfBkAWN95bfi3J5gASF7AbHGzDSRAGrTRX
+         vjujTX/dSF0wg==
+Date:   Fri, 30 Jun 2023 11:48:21 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Lizhi Hou <lizhi.hou@amd.com>, linux-pci@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        max.zhen@amd.com, sonal.santan@amd.com,
+        stefano.stabellini@xilinx.com
+Subject: Re: [PATCH V10 2/5] PCI: Create device tree node for bridge
+Message-ID: <20230630164821.GA483874@bhelgaas>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230630163033.165326-1-colin.i.king@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230629235226.GA92592-robh@kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 30, 2023 at 05:30:33PM +0100, Colin Ian King wrote:
-> Variable desc is being assigned a value that is never read, the exit
-> via label found immeditely returns with no access to desc. The
-> assignment is redundant and can be removed. Cleans up clang scan
-> muild warning:
+On Thu, Jun 29, 2023 at 05:52:26PM -0600, Rob Herring wrote:
+> On Thu, Jun 29, 2023 at 05:56:31PM -0500, Bjorn Helgaas wrote:
+> > On Thu, Jun 29, 2023 at 10:19:47AM -0700, Lizhi Hou wrote:
+> > > The PCI endpoint device such as Xilinx Alveo PCI card maps the register
+> > > spaces from multiple hardware peripherals to its PCI BAR. Normally,
+> > > the PCI core discovers devices and BARs using the PCI enumeration process.
+> > > There is no infrastructure to discover the hardware peripherals that are
+> > > present in a PCI device, and which can be accessed through the PCI BARs.
+> > 
+> > IIUC this is basically a multi-function device except that instead of
+> > each device being a separate PCI Function, they all appear in a single
+> > Function.  That would mean all the devices share the same config space
+> > so a single PCI Command register controls all of them, they all share
+> > the same IRQs (either INTx or MSI/MSI-X), any MMIO registers are likely
+> > in a shared BAR, etc., right?
 > 
-> fs/ext2/ialloc.c:297:4: warning: Value stored to 'desc' is never
-> read [deadcode.DeadStores]
+> Could be multiple BARs, but yes.
+
+Where does the PCI glue live?  E.g., who ioremaps the BARs?  Who sets
+up PCI interrupts?  Who enables bus mastering?  The platform driver
+that claims the DT node wouldn't know that this is part of a PCI
+device, so I guess the PCI driver must do all that stuff?  I don't see
+it in the xmgmt-drv.c from
+https://lore.kernel.org/all/20220305052304.726050-4-lizhi.hou@xilinx.com/
+
+> > Obviously PCI enumeration only sees the single Function and binds a
+> > single driver to it.  But IIUC, you want to use existing drivers for
+> > each of these sub-devices, so this series adds a DT node for the
+> > single Function (using the quirks that call of_pci_make_dev_node()).
+> > And I assume that when the PCI driver claims the single Function, it
+> > will use that DT node to add platform devices, and those existing
+> > drivers can claim those?
 > 
-> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
-> ---
->  fs/ext2/ialloc.c | 1 -
->  1 file changed, 1 deletion(-)
+> Yes. It will call some variant of of_platform_populate().
 > 
-> diff --git a/fs/ext2/ialloc.c b/fs/ext2/ialloc.c
-> index a4e1d7a9c544..f50beb77d6ba 100644
-> --- a/fs/ext2/ialloc.c
-> +++ b/fs/ext2/ialloc.c
-> @@ -294,7 +294,6 @@ static int find_group_orlov(struct super_block *sb, struct inode *parent)
->  			best_desc = desc;
->  		}
->  		if (best_group >= 0) {
-> -			desc = best_desc;
+> > I don't see the PCI driver for the single Function in this series.  Is
+> > that coming?  Is this series useful without it?
+> 
+> https://lore.kernel.org/all/20220305052304.726050-4-lizhi.hou@xilinx.com/
+> 
+> I asked for things to be split up as the original series did a lot 
+> of new things at once. This series only works with the QEMU PCI test 
+> device which the DT unittest will use.
+> 
+> > > Apparently, the device tree framework requires a device tree node for the
+> > > PCI device. Thus, it can generate the device tree nodes for hardware
+> > > peripherals underneath. Because PCI is self discoverable bus, there might
+> > > not be a device tree node created for PCI devices. Furthermore, if the PCI
+> > > device is hot pluggable, when it is plugged in, the device tree nodes for
+> > > its parent bridges are required. Add support to generate device tree node
+> > > for PCI bridges.
+> > 
+> > Can you remind me why hot-adding a PCI device requires DT nodes for
+> > parent bridges?
+> 
+> Because the PCI device needs a DT node and we can't just put PCI devices 
+> in the DT root. We have to create the bus hierarchy.
+> 
+> > I don't think we have those today, so maybe the DT
+> > node for the PCI device requires a DT parent?  How far up does that
+> > go?
+> 
+> All the way.
+> 
+> >  From this patch, I guess a Root Port would be the top DT node on
+> > a PCIe system, since that's the top PCI-to-PCI bridge?
+> 
+> Yes. Plus above the host bridge could have a hierarchy of nodes.
 
-You should get rid of the "best_desc" variable as well.
+I'm missing something if it goes "all the way up," i.e., to a single
+system root, but a Root Port is the top DT node.  If a Root Port is
+the top, there would be several roots.
 
-regards,
-dan carpenter
+> > This patch adds a DT node for *every* PCI bridge in the system.  We
+> > only actually need that node for these unusual devices.  Is there some
+> > way the driver for the single PCI Function could add that node when it
+> > is needed?  Sorry if you've answered this in the past; maybe the
+> > answer could be in the commit log or a code comment in case somebody
+> > else wonders.
+> 
+> This was discussed early on. I don't think it would work to create the 
+> nodes at the time we discover we have a device that wants a DT node. The 
+> issue is decisions are made in the code based on whether there's a DT 
+> node for a PCI device or not. It might work, but I think it's fragile to 
+> have nodes attached to devices at different points in time.
 
+Ah.  So I guess the problem is we enumerate a PCI bridge, we might do
+something based on the fact that it doesn't have a DT node, then add a
+DT node for it later.
+
+Bjorn
