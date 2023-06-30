@@ -2,105 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CC4374332C
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 05:27:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B93F743330
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 05:27:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230455AbjF3D1Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 23:27:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42072 "EHLO
+        id S232036AbjF3D1q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 23:27:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229578AbjF3D1G (ORCPT
+        with ESMTP id S231501AbjF3D1n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 23:27:06 -0400
-Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55D1EEE;
-        Thu, 29 Jun 2023 20:27:04 -0700 (PDT)
-Received: by mail-pg1-x52a.google.com with SMTP id 41be03b00d2f7-55b22f82ac8so841772a12.1;
-        Thu, 29 Jun 2023 20:27:04 -0700 (PDT)
+        Thu, 29 Jun 2023 23:27:43 -0400
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D321135A5
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 20:27:39 -0700 (PDT)
+Received: by mail-ed1-x534.google.com with SMTP id 4fb4d7f45d1cf-516500163b2so3244a12.1
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 20:27:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688095624; x=1690687624;
-        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
+        d=google.com; s=20221208; t=1688095658; x=1690687658;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=OwJdxtfFrP5LDWYvOjXG/8S5IIrimErpt5RB/JNheSE=;
-        b=UrTWzEhAs+uDg/yjovT/P0+gJNzpklPq6m6cKjIR9AkFka1gxu6fSuoNLtS02ceZt5
-         guvmJSGfqM+wli3R8srIWUDG/ULFMgjCXBhS6c2x2/9YdHZQXdprWL44spcBbfwwbCFH
-         qGVytoTEluJAu7j8se2b4EYnT4WVNd161B3hozIsfJC0N7T2pZ1CvDkP4sHI5LshBLwo
-         u4rHTdrhmFPDNRSIjQqMzuLG92GKAU8oz0nLBLlpJ4TFYshlkaA/D6B17JbANgJhpzbt
-         qXYdwyQ9bU+iQqMOCTOypa3WRpJL8LzpClPSZfLxO/KkP41E2eQCfnh8arYosv6cc4m4
-         lBww==
+        bh=YRN6qWsVu0mB1ku4fPTz09e+/lMrKAM1ocX41R6p7Gk=;
+        b=soWnwzrTr9hKh0W3aqnqEN2ZcGCbufVtjT17NhzB4wsFdSXzlRDGZgj6fxlukK2MKn
+         YsfdXQvKUaTg3JKW/BUM6tobUWXWciOdUv6jl2E9eGPg7EF9YV9WKQTP8f7DKOxvu/9v
+         s0rl20ZxzAyL45Vn6SpokC6QcAWuBapLJ+lbzu0NiNjwXKd2V6pthnHll0r/Y//8sStD
+         Q3AlCzR1YqBW3ivuGi7BdN4m+7yc8x0Lpugwqq1AcUmogleDxYyjpH+tgbsa3kYkEQUX
+         7vuSoyoAL717NLP88dWX6Xdmdf6/O+jP6oRM+a+ef9t+WWGF53lUE1yxazd3gLXJe2yo
+         25jA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688095624; x=1690687624;
-        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20221208; t=1688095658; x=1690687658;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=OwJdxtfFrP5LDWYvOjXG/8S5IIrimErpt5RB/JNheSE=;
-        b=UBjnKgpNTOPqsawAqOdfli9QbpesNrPg00z8qSmgUAfX8r3fEGMRhdmhyweeGi56Yy
-         KsDTuiVqgmoN7EXRClYvaG/fRTIuZmYENo7EC0fXm7gePAeixBEKqTXzuIEEYsSzxkKl
-         q6Cl9RJYrnLYb7mcWMF/08fOEdjL/cq/s8ufYN/CWywgvP6N9QInONia1hlDlvv//oeh
-         5DCVeKrSRD9WCiWZo1VTaM+1KkibH9eXV5BO7uefGllkA+5vo1nG51884pUfQvoqNsPO
-         FYTmU5OB4pGfvetSJ31b5PhkDGUCGa2RxiX4evw+cZnRDYd69YKXlw3VMJZyr5KjzOid
-         mZeg==
-X-Gm-Message-State: AC+VfDyCsV9c/4UuP0p3gs+LjvHt02YEKy0lg1zyL50CW6MWTDQ8Pa6N
-        WLpNj/TzZZpYDH3B8TkDov0=
-X-Google-Smtp-Source: ACHHUZ6kI7/WGYNJumGm8WA2cqr2+O5OQxu2/AzvugDGTDYOTHMC6HQfIRfY4baaYqRLpwQ9xWY1vQ==
-X-Received: by 2002:a17:90b:1c04:b0:262:f550:6413 with SMTP id oc4-20020a17090b1c0400b00262f5506413mr7931207pjb.6.1688095623692;
-        Thu, 29 Jun 2023 20:27:03 -0700 (PDT)
-Received: from MSCND1355B05.fareast.nevint.com ([183.242.39.186])
-        by smtp.gmail.com with ESMTPSA id x2-20020a17090a294200b00262ca945cecsm10311911pjf.54.2023.06.29.20.26.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Jun 2023 20:27:03 -0700 (PDT)
-From:   Zqiang <qiang.zhang1211@gmail.com>
-To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, qiang.zhang1211@gmail.com
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] net: Destroy previously created kthreads after failing to set napi threaded mode
-Date:   Fri, 30 Jun 2023 11:26:53 +0800
-Message-Id: <20230630032653.26426-1-qiang.zhang1211@gmail.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        bh=YRN6qWsVu0mB1ku4fPTz09e+/lMrKAM1ocX41R6p7Gk=;
+        b=R3qwdzw1yIaaoYINlNh7SiXaBQeMZkAuHp5WKWzfK0euIpKyRDxPZIfOTzKdjagbh1
+         rh+hmph3l2mJLOdzobWTUUu1zS3DJsJwt+9CF+sPD3oeSTKODXuXlcT4/yhAHOxjC3UO
+         XHQ/TEvQOsEKN73eHqh5Iw3mJKFKeCzBTTSjeUC6reuyamfvFX+Q+oNrl9/u8CHSzen+
+         I4726lxL7phFCSOZdhCtd9A90AbGGHEcmFP49XBbfVirS5ewgcsymjMYZh+iu2AS+4u+
+         mT812YXUrV2IKMPJVNNSLvgsSsFHPLWLb8ka+yQvrSeTPg4fb/vIhadAP4Q91cgJLaql
+         yIbQ==
+X-Gm-Message-State: AC+VfDwo/rDC9sWynKBuBnQQJmnyJXBiY77Zi490Ku4RlkgJvlymyRFg
+        NrQ+B0mT97hp8U0oGY701+5b6jrNZxUzqBsSKdfCJA==
+X-Google-Smtp-Source: ACHHUZ7ZUJn81AAcrfvyG7dBaqTj3v9qdubJ+SWeC50c+iFxxUBBGPEqwxbk0ZLgn2ugtR9tB/qjhK9XVxx7Es5LYjQ=
+X-Received: by 2002:a50:baaf:0:b0:510:b2b7:8a78 with SMTP id
+ x44-20020a50baaf000000b00510b2b78a78mr218316ede.5.1688095658215; Thu, 29 Jun
+ 2023 20:27:38 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230629233454.4166842-1-jeffxu@google.com>
+In-Reply-To: <20230629233454.4166842-1-jeffxu@google.com>
+From:   Jeff Xu <jeffxu@google.com>
+Date:   Thu, 29 Jun 2023 20:27:02 -0700
+Message-ID: <CALmYWFtj1rEwJQmE4nrpCswxWf8TuW9T-p7NVGsA39JoZm+nnA@mail.gmail.com>
+Subject: Re: [PATCH v2] Documentation: mm/memfd: vm.memfd_noexec
+To:     jeffxu@chromium.org
+Cc:     skhan@linuxfoundation.org, keescook@chromium.org,
+        akpm@linux-foundation.org, dmitry.torokhov@gmail.com,
+        dverkamp@chromium.org, hughd@google.com, jorgelo@chromium.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-mm@kvack.org, jannh@google.com,
+        linux-hardening@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        Dominique Martinet <asmadeus@codewreck.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When setting 1 to enable napi threaded mode, will traverse dev->napi_list
-and create kthread for napi->thread, if creation fails, the dev->threaded
-will be set to false and we will clear NAPI_STATE_THREADED bit for all
-napi->state in dev->napi_list, even if some napi that has successfully
-created the kthread before. as a result, for successfully created napi
-kthread, they will never be used.
+On Thu, Jun 29, 2023 at 4:34=E2=80=AFPM <jeffxu@chromium.org> wrote:
+>
+> From: Jeff Xu <jeffxu@google.com>
+>
+Please ignore this, I resent V3 with a cover letter.
 
-This commit therefore destroy previously created napi->thread if setting
-napi threaded mode fails.
-
-Signed-off-by: Zqiang <qiang.zhang1211@gmail.com>
----
- net/core/dev.c | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
-
-diff --git a/net/core/dev.c b/net/core/dev.c
-index 69a3e544676c..9929f0567150 100644
---- a/net/core/dev.c
-+++ b/net/core/dev.c
-@@ -6317,10 +6317,13 @@ int dev_set_threaded(struct net_device *dev, bool threaded)
- 	 * This should not cause hiccups/stalls to the live traffic.
- 	 */
- 	list_for_each_entry(napi, &dev->napi_list, dev_list) {
--		if (threaded)
-+		if (threaded) {
- 			set_bit(NAPI_STATE_THREADED, &napi->state);
--		else
-+		} else {
- 			clear_bit(NAPI_STATE_THREADED, &napi->state);
-+			if (napi->thread)
-+				kthread_stop(napi->thread);
-+		}
- 	}
- 
- 	return err;
--- 
-2.17.1
-
+> Add documentation for sysctl vm.memfd_noexec
+>
+> Link:https://lore.kernel.org/linux-mm/CABi2SkXUX_QqTQ10Yx9bBUGpN1wByOi_=
+=3DgZU6WEy5a8MaQY3Jw@mail.gmail.com/T/
+> Reported-by: Dominique Martinet <asmadeus@codewreck.org>
+> Signed-off-by: Jeff Xu <jeffxu@google.com>
+> ---
+>  Documentation/admin-guide/sysctl/vm.rst | 30 +++++++++++++++++++++++++
+>  1 file changed, 30 insertions(+)
+>
+> diff --git a/Documentation/admin-guide/sysctl/vm.rst b/Documentation/admi=
+n-guide/sysctl/vm.rst
+> index 45ba1f4dc004..621588041a9e 100644
+> --- a/Documentation/admin-guide/sysctl/vm.rst
+> +++ b/Documentation/admin-guide/sysctl/vm.rst
+> @@ -424,6 +424,36 @@ e.g., up to one or two maps per allocation.
+>
+>  The default value is 65530.
+>
+> +memfd_noexec:
+> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> +This pid namespaced sysctl controls memfd_create().
+> +
+> +The new MFD_NOEXEC_SEAL and MFD_EXEC flags of memfd_create() allows
+> +application to set executable bit at creation time.
+> +
+> +When MFD_NOEXEC_SEAL is set, memfd is created without executable bit
+> +(mode:0666), and sealed with F_SEAL_EXEC, so it can't be chmod to
+> +be executable (mode: 0777) after creation.
+> +
+> +when MFD_EXEC flag is set, memfd is created with executable bit
+> +(mode:0777), this is the same as the old behavior of memfd_create.
+> +
+> +The new pid namespaced sysctl vm.memfd_noexec has 3 values:
+> +0: memfd_create() without MFD_EXEC nor MFD_NOEXEC_SEAL acts like
+> +        MFD_EXEC was set.
+> +1: memfd_create() without MFD_EXEC nor MFD_NOEXEC_SEAL acts like
+> +        MFD_NOEXEC_SEAL was set.
+> +2: memfd_create() without MFD_NOEXEC_SEAL will be rejected.
+> +
+> +The default value is 0.
+> +
+> +Once set, it can't be downgraded at runtime, i.e. 2=3D>1, 1=3D>0
+> +are denied.
+> +
+> +This is pid namespaced sysctl, child processes inherit the parent
+> +process's memfd_noexec at the time of fork. Changes to the parent
+> +process after fork are not automatically propagated to the child
+> +process.
+>
+>  memory_failure_early_kill:
+>  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D
+> --
+> 2.41.0.255.g8b1d071c50-goog
+>
