@@ -2,215 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF761743ED4
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 17:28:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C5BED743EEC
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 17:32:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232769AbjF3P20 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 11:28:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42860 "EHLO
+        id S233049AbjF3PcK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Jun 2023 11:32:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231176AbjF3P1S (ORCPT
+        with ESMTP id S232999AbjF3Pbx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 11:27:18 -0400
+        Fri, 30 Jun 2023 11:31:53 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E1DB4222
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 08:26:09 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A942449F8
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 08:29:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1688138768;
+        s=mimecast20190719; t=1688138912;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=dTUg/mVQyhhJfywizixeKkySOuaXp8UTsLqq+KCOGUE=;
-        b=CNw32d7JAW6urqSl6UNmJoV0SXENeHbPY610lJJ7dpjueERs8jubMeUuX7H9pd32rGHkAa
-        Yy7o+hd6uW9tcyT/XNnxrj2gNADY/0wC05AJBUQka0fFK41bbyBslplGgRt3DE0U6sJsO3
-        zcE/pXuTWJwwe9SrWIi08W4eTWWm2z0=
+        bh=uF9XydFTEoRStyeXxlW9KZB1BG0toGAk1St1nW9MPdM=;
+        b=d7MKPslPpf/jt2Ukz6drLQuDkTqoRNZLHFAcSsgw3RdGc00+5iNH4HCJ8TuHmHHkmdl99G
+        ovg2dF0bNXgS+gd1tRgTZCRSw/eUwoZDISV0ca971i31wl4PtSCGvGSWBNplN+U9u44pdG
+        VvmhgYv3GfalkPq9EcaFEoBQh44k9Xc=
 Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
  [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-342-ykgDuP25MHy7G1d5_4sdcQ-1; Fri, 30 Jun 2023 11:26:03 -0400
-X-MC-Unique: ykgDuP25MHy7G1d5_4sdcQ-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+ us-mta-578-_tNpv5MwOcue8ZqbwpOg_Q-1; Fri, 30 Jun 2023 11:28:30 -0400
+X-MC-Unique: _tNpv5MwOcue8ZqbwpOg_Q-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 21B6D1C0512E;
-        Fri, 30 Jun 2023 15:26:02 +0000 (UTC)
-Received: from warthog.procyon.org.uk.com (unknown [10.42.28.195])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id DF05540C6CCD;
-        Fri, 30 Jun 2023 15:25:59 +0000 (UTC)
-From:   David Howells <dhowells@redhat.com>
-To:     Jens Axboe <axboe@kernel.dk>, Al Viro <viro@zeniv.linux.org.uk>,
-        Christoph Hellwig <hch@infradead.org>
-Cc:     David Howells <dhowells@redhat.com>,
-        Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
-        Jeff Layton <jlayton@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Hillf Danton <hdanton@sina.com>,
-        Christian Brauner <brauner@kernel.org>,
-        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        "James E . J . Bottomley" <jejb@linux.ibm.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Christoph Hellwig <hch@lst.de>, linux-scsi@vger.kernel.org
-Subject: [RFC PATCH 11/11] scsi: Use extract_iter_to_sg()
-Date:   Fri, 30 Jun 2023 16:25:24 +0100
-Message-ID: <20230630152524.661208-12-dhowells@redhat.com>
-In-Reply-To: <20230630152524.661208-1-dhowells@redhat.com>
-References: <20230630152524.661208-1-dhowells@redhat.com>
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 6D6F338117FD;
+        Fri, 30 Jun 2023 15:28:27 +0000 (UTC)
+Received: from lorien.usersys.redhat.com (unknown [10.22.32.237])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id DC9321121314;
+        Fri, 30 Jun 2023 15:28:26 +0000 (UTC)
+Date:   Fri, 30 Jun 2023 11:28:24 -0400
+From:   Phil Auld <pauld@redhat.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     linux-kernel@vger.kernel.org, Juri Lelli <juri.lelli@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Ben Segall <bsegall@google.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Mel Gorman <mgorman@suse.de>,
+        Frederic Weisbecker <frederic@kernel.org>
+Subject: Re: [PATCH v4] Sched/fair: Block nohz tick_stop when cfs bandwidth
+ in use
+Message-ID: <20230630152824.GC43299@lorien.usersys.redhat.com>
+References: <20230630135714.1018434-1-pauld@redhat.com>
+ <20230630150641.GH2533791@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230630150641.GH2533791@hirez.programming.kicks-ass.net>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use extract_iter_to_sg() to build a scatterlist from an iterator.
+Hi Peter,
 
-Signed-off-by: David Howells <dhowells@redhat.com>
-cc: James E.J. Bottomley <jejb@linux.ibm.com>
-cc: Martin K. Petersen <martin.petersen@oracle.com>
-cc: Christoph Hellwig <hch@lst.de>
-cc: linux-scsi@vger.kernel.org
----
- drivers/vhost/scsi.c | 79 +++++++++++++-------------------------------
- 1 file changed, 23 insertions(+), 56 deletions(-)
+On Fri, Jun 30, 2023 at 05:06:41PM +0200 Peter Zijlstra wrote:
+> On Fri, Jun 30, 2023 at 09:57:14AM -0400, Phil Auld wrote:
+> 
+> > diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+> > index a68d1276bab0..2685373e12f1 100644
+> > --- a/kernel/sched/core.c
+> > +++ b/kernel/sched/core.c
+> > @@ -1229,6 +1229,16 @@ bool sched_can_stop_tick(struct rq *rq)
+> >  	if (rq->nr_running > 1)
+> >  		return false;
+> >  
+> > +	/*
+> > +	 * If there is one task and it has CFS runtime bandwidth constraints
+> > +	 * and it's on the cpu now we don't want to stop the tick.
+> > +	 */
+> > +	if (sched_feat(HZ_BW) && rq->nr_running == 1 && rq->curr
+> > +	    && rq->curr->sched_class == &fair_sched_class && task_on_rq_queued(rq->curr)) {
+> 
+> && goes at the end of the previous line
+> 
+> rq->curr is never NULL
+> 
+> But surely you can find a saner way to write this?
+>
 
-diff --git a/drivers/vhost/scsi.c b/drivers/vhost/scsi.c
-index bb10fa4bb4f6..7bb41e2a0d64 100644
---- a/drivers/vhost/scsi.c
-+++ b/drivers/vhost/scsi.c
-@@ -75,6 +75,9 @@ struct vhost_scsi_cmd {
- 	u32 tvc_prot_sgl_count;
- 	/* Saved unpacked SCSI LUN for vhost_scsi_target_queue_cmd() */
- 	u32 tvc_lun;
-+	/* Cleanup modes for scatterlists */
-+	unsigned int tvc_need_unpin;
-+	unsigned int tvc_prot_need_unpin;
- 	/* Pointer to the SGL formatted memory from virtio-scsi */
- 	struct scatterlist *tvc_sgl;
- 	struct scatterlist *tvc_prot_sgl;
-@@ -327,14 +330,13 @@ static void vhost_scsi_release_cmd_res(struct se_cmd *se_cmd)
- 	struct vhost_scsi_inflight *inflight = tv_cmd->inflight;
- 	int i;
- 
--	if (tv_cmd->tvc_sgl_count) {
-+	if (tv_cmd->tvc_need_unpin && tv_cmd->tvc_sgl_count)
- 		for (i = 0; i < tv_cmd->tvc_sgl_count; i++)
--			put_page(sg_page(&tv_cmd->tvc_sgl[i]));
--	}
--	if (tv_cmd->tvc_prot_sgl_count) {
-+			unpin_user_page(sg_page(&tv_cmd->tvc_sgl[i]));
-+
-+	if (tv_cmd->tvc_prot_need_unpin && tv_cmd->tvc_prot_sgl_count)
- 		for (i = 0; i < tv_cmd->tvc_prot_sgl_count; i++)
--			put_page(sg_page(&tv_cmd->tvc_prot_sgl[i]));
--	}
-+			unpin_user_page(sg_page(&tv_cmd->tvc_prot_sgl[i]));
- 
- 	sbitmap_clear_bit(&svq->scsi_tags, se_cmd->map_tag);
- 	vhost_scsi_put_inflight(inflight);
-@@ -606,38 +608,6 @@ vhost_scsi_get_cmd(struct vhost_virtqueue *vq, struct vhost_scsi_tpg *tpg,
- 	return cmd;
- }
- 
--/*
-- * Map a user memory range into a scatterlist
-- *
-- * Returns the number of scatterlist entries used or -errno on error.
-- */
--static int
--vhost_scsi_map_to_sgl(struct vhost_scsi_cmd *cmd,
--		      struct iov_iter *iter,
--		      struct scatterlist *sgl,
--		      bool write)
--{
--	struct page **pages = cmd->tvc_upages;
--	struct scatterlist *sg = sgl;
--	ssize_t bytes;
--	size_t offset;
--	unsigned int npages = 0;
--
--	bytes = iov_iter_get_pages2(iter, pages, LONG_MAX,
--				VHOST_SCSI_PREALLOC_UPAGES, &offset);
--	/* No pages were pinned */
--	if (bytes <= 0)
--		return bytes < 0 ? bytes : -EFAULT;
--
--	while (bytes) {
--		unsigned n = min_t(unsigned, PAGE_SIZE - offset, bytes);
--		sg_set_page(sg++, pages[npages++], n, offset);
--		bytes -= n;
--		offset = 0;
--	}
--	return npages;
--}
--
- static int
- vhost_scsi_calc_sgls(struct iov_iter *iter, size_t bytes, int max_sgls)
- {
-@@ -661,24 +631,19 @@ vhost_scsi_calc_sgls(struct iov_iter *iter, size_t bytes, int max_sgls)
- static int
- vhost_scsi_iov_to_sgl(struct vhost_scsi_cmd *cmd, bool write,
- 		      struct iov_iter *iter,
--		      struct scatterlist *sg, int sg_count)
-+		      struct scatterlist *sg, int sg_count,
-+		      unsigned int *need_unpin)
- {
--	struct scatterlist *p = sg;
--	int ret;
-+	struct sg_table sgt = { .sgl = sg };
-+	ssize_t ret;
- 
--	while (iov_iter_count(iter)) {
--		ret = vhost_scsi_map_to_sgl(cmd, iter, sg, write);
--		if (ret < 0) {
--			while (p < sg) {
--				struct page *page = sg_page(p++);
--				if (page)
--					put_page(page);
--			}
--			return ret;
--		}
--		sg += ret;
--	}
--	return 0;
-+	ret = extract_iter_to_sg(iter, LONG_MAX, &sgt, sg_count,
-+				 write ? WRITE_FROM_ITER : READ_INTO_ITER);
-+	if (ret > 0)
-+		sg_mark_end(sg + sgt.nents - 1);
-+
-+	*need_unpin = iov_iter_extract_will_pin(iter);
-+	return ret;
- }
- 
- static int
-@@ -702,7 +667,8 @@ vhost_scsi_mapal(struct vhost_scsi_cmd *cmd,
- 
- 		ret = vhost_scsi_iov_to_sgl(cmd, write, prot_iter,
- 					    cmd->tvc_prot_sgl,
--					    cmd->tvc_prot_sgl_count);
-+					    cmd->tvc_prot_sgl_count,
-+					    &cmd->tvc_prot_need_unpin);
- 		if (ret < 0) {
- 			cmd->tvc_prot_sgl_count = 0;
- 			return ret;
-@@ -719,7 +685,8 @@ vhost_scsi_mapal(struct vhost_scsi_cmd *cmd,
- 		  cmd->tvc_sgl, cmd->tvc_sgl_count);
- 
- 	ret = vhost_scsi_iov_to_sgl(cmd, write, data_iter,
--				    cmd->tvc_sgl, cmd->tvc_sgl_count);
-+				    cmd->tvc_sgl, cmd->tvc_sgl_count,
-+				    &cmd->tvc_need_unpin);
- 	if (ret < 0) {
- 		cmd->tvc_sgl_count = 0;
- 		return ret;
+Okay, I'll try to clean that up.
+
+
+> > +		if (sched_cfs_bandwidth_active(rq->curr))
+> > +			return false;
+> > +	}
+> > +
+> >  	return true;
+> >  }
+> >  #endif /* CONFIG_NO_HZ_FULL */
+> > diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+> > index 373ff5f55884..125b1ec4476f 100644
+> > --- a/kernel/sched/fair.c
+> > +++ b/kernel/sched/fair.c
+> > @@ -6139,6 +6139,50 @@ static void __maybe_unused unthrottle_offline_cfs_rqs(struct rq *rq)
+> >  	rcu_read_unlock();
+> >  }
+> >  
+> > +#ifdef CONFIG_NO_HZ_FULL
+> > +static inline bool cfs_se_bandwidth_enabled(struct sched_entity *se)
+> > +{
+> > +	int ret = 0;
+> > +
+> > +	for_each_sched_entity(se)
+> > +		ret += cfs_rq_of(se)->runtime_enabled;
+> > +
+> > +	return ret != 0;
+> > +}
+> > +
+> > +bool sched_cfs_bandwidth_active(struct task_struct *p)
+> > +{
+> > +	if (cfs_bandwidth_used() && cfs_se_bandwidth_enabled(&p->se))
+> > +		return true;
+> > +
+> > +	return false;
+> > +}
+> > +
+> > +/* called from pick_next_task_fair() */
+> > +static void sched_fair_update_stop_tick(struct rq *rq, struct task_struct *p)
+> > +{
+> > +	int cpu = cpu_of(rq);
+> > +
+> > +	if (!sched_feat(HZ_BW) || !cfs_bandwidth_used())
+> > +		return;
+> > +
+> > +	if (!tick_nohz_full_cpu(cpu))
+> > +		return;
+> > +
+> > +	if (rq->nr_running != 1)
+> > +		return;
+> > +
+> > +	/*
+> > +	 *  We know there is only one task runnable and we've just picked it. The
+> > +	 *  normal enqueue path will have cleared TICK_DEP_BIT_SCHED if we will
+> > +	 *  be otherwise able to stop the tick. Just need to check if we are using
+> > +	 *  bandwidth control.
+> > +	 */
+> > +	if (cfs_se_bandwidth_enabled(&p->se))
+> > +		tick_nohz_dep_set_cpu(cpu, TICK_DEP_BIT_SCHED);
+> > +}
+> 
+> Yeah, I think not; pick_next_task_fair() just walked the cgroup
+> hierarchy and now you do it again.
+> 
+> Also, why does this code exist at all? Both enqueue/dequeue already end
+> up in sched_update_tick_depenency() and should be able to handle the
+> nr_running==1 with bandwidth crap, no?
+> 
+
+No. Or at least not without plumbing the enqueued/dequeued task all the way
+through.  I can do it that way if you prefer but that seemed a lot more
+intrusive. When we are in sched_can_stop_tick() we don't have access to the
+cfs task which will end up running. Curr is idle in that case.  We'd have to
+essential run pick_next_task_fair() to find the task to check which seemed
+wrong. Maybe there is a better way? 
+
+The code in sched_can_stop_tick() was added to catch the edge case
+of waking a second task and having it migrated before it runs so we don't
+clear the dependency of the running bandwidth enabled task by the dequeue
+of the transient waking task.
+
+
+Thanks for taking a look. This is better than "OMG" :)
+
+
+Cheers,
+Phil
+
+-- 
 
