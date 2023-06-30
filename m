@@ -2,123 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5D54743292
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 04:12:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6440743296
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 04:14:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229522AbjF3CMS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 29 Jun 2023 22:12:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53616 "EHLO
+        id S231393AbjF3COV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 29 Jun 2023 22:14:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229576AbjF3CMP (ORCPT
+        with ESMTP id S229576AbjF3COT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 29 Jun 2023 22:12:15 -0400
-Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63CEA2D56;
-        Thu, 29 Jun 2023 19:12:13 -0700 (PDT)
-Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
-        by ex01.ufhost.com (Postfix) with ESMTP id 19FE824E245;
-        Fri, 30 Jun 2023 10:12:07 +0800 (CST)
-Received: from EXMBX172.cuchost.com (172.16.6.92) by EXMBX165.cuchost.com
- (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 30 Jun
- 2023 10:12:07 +0800
-Received: from [192.168.125.93] (183.27.97.206) by EXMBX172.cuchost.com
- (172.16.6.92) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 30 Jun
- 2023 10:12:06 +0800
-Message-ID: <16813f18-2188-ad9d-9c06-6bbc845b9d99@starfivetech.com>
-Date:   Fri, 30 Jun 2023 10:12:05 +0800
+        Thu, 29 Jun 2023 22:14:19 -0400
+Received: from out-47.mta0.migadu.com (out-47.mta0.migadu.com [91.218.175.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0A9B30EC
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 19:14:17 -0700 (PDT)
+Content-Type: text/plain;
+        charset=us-ascii
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1688091255;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=c+Q6kGCsNOKoZaGl4/+CoNXY45hAC8Rmehd0ODubecA=;
+        b=nBw5cd0UmlLTPBcRMaXJgc7YE0SMPKtdhLmuO73l3i6lmYUhxiOT/De7PvW9OIa2qAxDHg
+        mA10/Pb7AmwhwRqeiQSmdiToCh59DsruaJ1F+7UnJqGswYO1K5cH8Ibxcf06gt+QMAuVpo
+        iVNAWO95ztLaVLBd0bSJGpTZzQGqt8M=
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.2
-Subject: Re: [PATCH v1 5/5] riscv: dts: starfive: Add JH7110 PWM-DAC support
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor@kernel.org>,
-        "Walker Chen" <walker.chen@starfivetech.com>,
-        Xingyu Wu <xingyu.wu@starfivetech.com>,
-        Emil Renner Berthing <emil.renner.berthing@canonical.com>
-CC:     <alsa-devel@alsa-project.org>, <devicetree@vger.kernel.org>,
-        <linux-riscv@lists.infradead.org>, <linux-kernel@vger.kernel.org>
-References: <20230626110909.38718-1-hal.feng@starfivetech.com>
- <20230626110909.38718-6-hal.feng@starfivetech.com>
- <2a0154ec-7949-f1b1-760f-3ba64d2cff3f@linaro.org>
-From:   Hal Feng <hal.feng@starfivetech.com>
-In-Reply-To: <2a0154ec-7949-f1b1-760f-3ba64d2cff3f@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: [PATCH] mm/hugetlb.c: fix a bug within a BUG(): inconsistent pte
+ comparison
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Muchun Song <muchun.song@linux.dev>
+In-Reply-To: <20230630013203.1955064-1-jhubbard@nvidia.com>
+Date:   Fri, 30 Jun 2023 10:13:31 +0800
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Alexander Potapenko <glider@google.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        Christian Brauner <brauner@kernel.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Dave Airlie <airlied@gmail.com>,
+        Dimitri Sivanich <dimitri.sivanich@hpe.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Ian Rogers <irogers@google.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>, Jiri Olsa <jolsa@kernel.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Lorenzo Stoakes <lstoakes@gmail.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
+        Pavel Tatashin <pasha.tatashin@soleen.com>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Ryan Roberts <ryan.roberts@arm.com>,
+        SeongJae Park <sj@kernel.org>,
+        Shakeel Butt <shakeelb@google.com>,
+        Uladzislau Rezki <urezki@gmail.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Yu Zhao <yuzhao@google.com>
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [183.27.97.206]
-X-ClientProxiedBy: EXCAS062.cuchost.com (172.16.6.22) To EXMBX172.cuchost.com
- (172.16.6.92)
-X-YovoleRuleAgent: yovoleflag
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Message-Id: <070B191B-1D20-4E19-A9AB-961852FEC333@linux.dev>
+References: <20230630013203.1955064-1-jhubbard@nvidia.com>
+To:     John Hubbard <jhubbard@nvidia.com>
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 26 Jun 2023 17:37:35 +0200, Krzysztof Kozlowski wrote:
-> On 26/06/2023 13:09, Hal Feng wrote:
->> Add PWM-DAC support for StarFive JH7110 SoC.
->> 
->> Signed-off-by: Hal Feng <hal.feng@starfivetech.com>
->> ---
->>  .../jh7110-starfive-visionfive-2.dtsi         | 50 +++++++++++++++++++
->>  arch/riscv/boot/dts/starfive/jh7110.dtsi      | 13 +++++
->>  2 files changed, 63 insertions(+)
->> 
->> diff --git a/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi b/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi
->> index 19b5954ee72d..5ca66a65e722 100644
->> --- a/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi
->> +++ b/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi
->> @@ -36,6 +36,34 @@ gpio-restart {
->>  		gpios = <&sysgpio 35 GPIO_ACTIVE_HIGH>;
->>  		priority = <224>;
->>  	};
->> +
->> +	pwmdac_dit: pwmdac-dit {
->> +		compatible = "starfive,jh7110-pwmdac-dit";
->> +		#sound-dai-cells = <0>;
->> +	};
->> +
->> +	sound {
->> +		compatible = "simple-audio-card";
->> +		simple-audio-card,name = "StarFive-PWMDAC-Sound-Card";
->> +		#address-cells = <1>;
->> +		#size-cells = <0>;
->> +
->> +		simple-audio-card,dai-link@0 {
->> +			reg = <0>;
->> +			format = "left_j";
->> +			bitclock-master = <&sndcpu0>;
->> +			frame-master = <&sndcpu0>;
->> +			status = "okay";
+
+
+> On Jun 30, 2023, at 09:32, John Hubbard <jhubbard@nvidia.com> wrote:
 > 
-> Drop
-
-OK.
-
+> The following crash happens for me when running the -mm selftests
+> (below). Specifically, it happens while running the uffd-stress
+> subtests:
 > 
->> +
->> +			sndcpu0: cpu {
->> +				sound-dai = <&pwmdac>;
->> +			};
->> +
->> +			codec {
->> +				sound-dai = <&pwmdac_dit>;
+> kernel BUG at mm/hugetlb.c:7249!
+> invalid opcode: 0000 [#1] PREEMPT SMP NOPTI
+> CPU: 0 PID: 3238 Comm: uffd-stress Not tainted 6.4.0-hubbard-github+ #109
+> Hardware name: ASUS X299-A/PRIME X299-A, BIOS 1503 08/03/2018
+> RIP: 0010:huge_pte_alloc+0x12c/0x1a0
+> ...
+> Call Trace:
+> <TASK>
+> ? __die_body+0x63/0xb0
+> ? die+0x9f/0xc0
+> ? do_trap+0xab/0x180
+> ? huge_pte_alloc+0x12c/0x1a0
+> ? do_error_trap+0xc6/0x110
+> ? huge_pte_alloc+0x12c/0x1a0
+> ? handle_invalid_op+0x2c/0x40
+> ? huge_pte_alloc+0x12c/0x1a0
+> ? exc_invalid_op+0x33/0x50
+> ? asm_exc_invalid_op+0x16/0x20
+> ? __pfx_put_prev_task_idle+0x10/0x10
+> ? huge_pte_alloc+0x12c/0x1a0
+> hugetlb_fault+0x1a3/0x1120
+> ? finish_task_switch+0xb3/0x2a0
+> ? lock_is_held_type+0xdb/0x150
+> handle_mm_fault+0xb8a/0xd40
+> ? find_vma+0x5d/0xa0
+> do_user_addr_fault+0x257/0x5d0
+> exc_page_fault+0x7b/0x1f0
+> asm_exc_page_fault+0x22/0x30
 > 
-> You said it is a transmitter, not a codec...
+> That happens because a BUG() statement in huge_pte_alloc() attempts to
+> check that a pte, if present, is a hugetlb pte, but it does so in a
+> non-lockless-safe manner that leads to a false BUG() report.
+> 
+> We got here due to a couple of bugs, each of which by itself was not
+> quite enough to cause a problem:
+> 
+> First of all, before commit c33c794828f2("mm: ptep_get() conversion"),
+> the BUG() statement in huge_pte_alloc() was itself fragile: it relied
+> upon compiler behavior to only read the pte once, despite using it twice
+> in the same conditional.
+> 
+> Next, commit c33c794828f2 ("mm: ptep_get() conversion") broke that
+> delicate situation, by causing all direct pte reads to be done via
+> READ_ONCE(). And so READ_ONCE() got called twice within the same BUG()
+> conditional, leading to comparing (potentially, occasionally) different
+> versions of the pte, and thus to false BUG() reports.
+> 
+> Fix this by taking a single snapshot of the pte before using it in the
+> BUG conditional.
+> 
+> Now, that commit is only partially to blame here but, people doing
+> bisections will invariably land there, so this will help them find a fix
+> for a real crash. And also, the previous behavior was unlikely to ever
+> expose this bug--it was fragile, yet not actually broken.
+> 
+> So that's why I chose this commit for the Fixes tag, rather than the
+> commit that created the original BUG() statement.
+> 
+> Fixes: c33c794828f2 ("mm: ptep_get() conversion")
+> Cc: Adrian Hunter <adrian.hunter@intel.com>
+> Cc: Al Viro <viro@zeniv.linux.org.uk>
+> Cc: Alex Williamson <alex.williamson@redhat.com>
+> Cc: Alexander Potapenko <glider@google.com>
+> Cc: Alexander Shishkin <alexander.shishkin@linux.intel.com>
+> Cc: Andrew Morton <akpm@linux-foundation.org>
+> Cc: Andrey Konovalov <andreyknvl@gmail.com>
+> Cc: Andrey Ryabinin <ryabinin.a.a@gmail.com>
+> Cc: Christian Brauner <brauner@kernel.org>
+> Cc: Christoph Hellwig <hch@infradead.org>
+> Cc: Daniel Vetter <daniel@ffwll.ch>
+> Cc: Dave Airlie <airlied@gmail.com>
+> Cc: Dimitri Sivanich <dimitri.sivanich@hpe.com>
+> Cc: Dmitry Vyukov <dvyukov@google.com>
+> Cc: Ian Rogers <irogers@google.com>
+> Cc: Jason Gunthorpe <jgg@ziepe.ca>
+> Cc: Jiri Olsa <jolsa@kernel.org>
+> Cc: Johannes Weiner <hannes@cmpxchg.org>
+> Cc: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+> Cc: Lorenzo Stoakes <lstoakes@gmail.com>
+> Cc: Mark Rutland <mark.rutland@arm.com>
+> Cc: Matthew Wilcox <willy@infradead.org>
+> Cc: Miaohe Lin <linmiaohe@huawei.com>
+> Cc: Michal Hocko <mhocko@kernel.org>
+> Cc: Mike Kravetz <mike.kravetz@oracle.com>
+> Cc: Mike Rapoport (IBM) <rppt@kernel.org>
+> Cc: Muchun Song <muchun.song@linux.dev>
+> Cc: Namhyung Kim <namhyung@kernel.org>
+> Cc: Naoya Horiguchi <naoya.horiguchi@nec.com>
+> Cc: Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
+> Cc: Pavel Tatashin <pasha.tatashin@soleen.com>
+> Cc: Roman Gushchin <roman.gushchin@linux.dev>
+> Cc: Ryan Roberts <ryan.roberts@arm.com>
+> Cc: SeongJae Park <sj@kernel.org>
+> Cc: Shakeel Butt <shakeelb@google.com>
+> Cc: Uladzislau Rezki (Sony) <urezki@gmail.com>
+> Cc: Vincenzo Frascino <vincenzo.frascino@arm.com>
+> Cc: Yu Zhao <yuzhao@google.com>
+> Signed-off-by: John Hubbard <jhubbard@nvidia.com>
 
-It is a dummy codec, also known as a dummy transmitter.
+Acked-by: Muchun Song <songmuchun@bytedance.com>
 
-Best regards,
-Hal
+Thanks.
+
