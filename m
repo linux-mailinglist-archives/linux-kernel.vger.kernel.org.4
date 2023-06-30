@@ -2,222 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC2F474414F
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 19:33:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF3447440EE
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 19:11:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232957AbjF3Rdu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 13:33:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47694 "EHLO
+        id S232435AbjF3RLw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Jun 2023 13:11:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231946AbjF3Rdf (ORCPT
+        with ESMTP id S232768AbjF3RLu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 13:33:35 -0400
-Received: from refb01.tmes.trendmicro.eu (refb01.tmes.trendmicro.eu [18.185.115.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FE183C07
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 10:33:18 -0700 (PDT)
-Received: from 104.47.7.177_.trendmicro.com (unknown [172.21.9.104])
-        by refb01.tmes.trendmicro.eu (Postfix) with ESMTPS id 5B03510A280F6
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 17:12:35 +0000 (UTC)
-Received: from 104.47.7.177_.trendmicro.com (unknown [172.21.178.217])
-        by repost01.tmes.trendmicro.eu (Postfix) with SMTP id C48B1100004FE;
-        Fri, 30 Jun 2023 17:12:33 +0000 (UTC)
-X-TM-MAIL-RECEIVED-TIME: 1688145153.430000
-X-TM-MAIL-UUID: ee4b92a0-79ce-403f-ae6a-ff1396bc5399
-Received: from DEU01-BE0-obe.outbound.protection.outlook.com (unknown [104.47.7.177])
-        by repre01.tmes.trendmicro.eu (Trend Micro Email Security) with ESMTPS id 6913B10020CF2;
-        Fri, 30 Jun 2023 17:12:33 +0000 (UTC)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=X3EMykZidH56HeJnGTjqhqtT3uSrRs720E2RWQI91+GnGVablCd6xS1Fvp+5eMkej0wzu3JyYEUKg1Bt4ZsrXR+rNpnGpP6w0ULl7QO0rHS+1FvP27y+tDJnKQgujos6RoGJctBNe9TW66g+fGOmDgEuyuvKTpNowcilTryQnn5XpL9A1OT102Vu/PpYFGao1QyqVYb1tOLXwjm9FaH9qpUO6jjfSweVA4SgFcBsuJnXEoK5qnzGpKRvN4siQ1/r6eRs8iVo/FzitMzPi4y5Y3uZai+u9U7Oun5L1krOq7NnuVR9DCic6rbX2weuYXuAeZlFh9C5D59rcDChY4AuyA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=FmFoyCaOlkqdJbrsaGL8tIEEXRJei17uNfH7jf8XZN8=;
- b=nRnyfidYKnrhjTuzbIcxjXkR6s9GkF1xLVuyWtqfaeUJe+DwP1QZ4CFJFBHuQXEqZeu29hnzeP5gbZgHRLuPA0pRmaG4r9zeTAG5cHsVn5bRvtW1IaqUmxA1sKmh54PGab9Wk9lBjAiQY2uCiHpnyMlHyIdlW3U2HNn0Xj8B0VWMqsdob348sNzFmnKGmKVmrEf+LD8hVAmutyaRRL2Vab6R+k6UTmAaammp0uTfvdr4bZxdHa1kcta+fC2j0YVuO509HmM1MDxu84ZXgntpwCm7wsrtC6IHXfTKFESI9P2RWuDK02wKelfyKpJOdqTN4ulwjAs+WIOWvbCQg1nHGQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 217.66.60.4) smtp.rcpttodomain=linux.alibaba.com
- smtp.mailfrom=opensynergy.com; dmarc=pass (p=quarantine sp=quarantine
- pct=100) action=none header.from=opensynergy.com; dkim=none (message not
- signed); arc=none
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 217.66.60.4)
- smtp.mailfrom=opensynergy.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=opensynergy.com;
-Received-SPF: Pass (protection.outlook.com: domain of opensynergy.com
- designates 217.66.60.4 as permitted sender) receiver=protection.outlook.com;
- client-ip=217.66.60.4; helo=SR-MAIL-03.open-synergy.com; pr=C
-From:   Peter Hilber <peter.hilber@opensynergy.com>
-To:     virtualization@lists.linux-foundation.org,
-        virtio-dev@lists.oasis-open.org
-Cc:     Peter Hilber <peter.hilber@opensynergy.com>,
-        linux-kernel@vger.kernel.org,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-Subject: [RFC PATCH 7/7] virtio_rtc: Add Arm Generic Timer cross-timestamping
-Date:   Fri, 30 Jun 2023 19:10:50 +0200
-Message-Id: <20230630171052.985577-8-peter.hilber@opensynergy.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230630171052.985577-1-peter.hilber@opensynergy.com>
-References: <20230630171052.985577-1-peter.hilber@opensynergy.com>
+        Fri, 30 Jun 2023 13:11:50 -0400
+Received: from sonic311-30.consmr.mail.ne1.yahoo.com (sonic311-30.consmr.mail.ne1.yahoo.com [66.163.188.211])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C567125
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 10:11:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1688145107; bh=mEHt/JqObB3Frlc2IUEbCB2n7vlId/lkmWICPwY56hs=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=oZBZ564GVvuSUmwlk6ao74tWl7pVLggMNr0TmAV2gTR0zLegBQzKYeJhlfBJPWPuoEGNRiXtlUcBURC2FTjwvavx1WXEK6gItCsa5u8btd0iZ9z4ghsYiyHZVGIHjtaKsSTITCa2qAX8paaxIZvGzmaVgqnZtnDofhGtELOcmqsg0Bqyepa7zuowb8i+efD3u29T1Pz5OenVq+OYzZHn2n8n2mXbHJhKG5a1qURiyqzDP2M/uFK55QpJt0uzUeZ75ZgU/5SSDYXGtZ6P+l0eDe61uwlRqVpOvZRBV+gOyjirKPnWL5HurkLoTJ84VuEQsyEhzyEcCO3rih8wTGSVpg==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1688145107; bh=TymhNMgO4qRUs1tebafYC31Zr0VhYFIM5/yJO3p5Ptp=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=Auqcxm5V1vDuihNba6pga71GyRk/Z3r44OTzxXbVL80bWurf6lE5xPWsmgObfN0Z5VssUNSCmOZ7T7O8pnmLo4SOvH/SjHFKG8DZS6lxB1aV7RuEY4gcIaNHXJgUwlT6vcDjnLQrNF+ixxEkU8ObEk9Dhx+wGmufYt89vtKYCPflbqrkVDiUwgn+euC8yuqQS+YG1ldggkCdPTJMtc9MHDHnuNOKdv9k7t03AOXgAmSJIon+myQKJgmR+QLCrPfnYoh9V3XlK2rSKhX4U7WUd7j2Lbi9reVkAsqW+pNpwx77AxvqBF/i1nlNdHL1rziwlbexzSIDOkaJRX10nwuajg==
+X-YMail-OSG: hPDmIoQVM1mCBJsn4UlQZw5zqgdKKYKhq9LSGVKKPSEjypUlclKITUtzUHnntgT
+ 3c8NIIm7A.fgTBnPPudNfmHWdT1uPzVxREiY1NXSRcOMGK9CyjUYv5PLsdtKd7Jg0HycuH7r9rDI
+ 7rFXIPjLgpp9o2I0VujmLxtCA8.NK7UBcsTk5xLdgNMYhWQUUIgSbLkU6.uyzktbXrik4YFYz8By
+ 1tzNHvPhmQRgngZzHOfiwPX9a_borwcOrNHcJXxqnJV03f.Tid8XFAWG0itq3xH._WxOYrVKgOeD
+ mtdMvB7JRVv.9jKMLi3fD2ajNOy44ns1KxCrRRYWHEZtbNLoY3g0O6s0oRsYZUIrsZj_iNAjnQwh
+ GA4x.42.XysqWOJazOC1dkMj7OMW_d5uWk8Fp3rBdCzcSlmIt1LA803mKQ1RnUEiLNoeXs2jytEF
+ IxUgrdW4t6Jd1AnRjQv6rZPcJ02Z0l8.RokuDoz0ZRxLaUTVw7hihyIxCSq3qtewvyxJsbihBq7_
+ TxCbh3a0dAWsJG1PHHxhYVbvOddrXJXxnBld6m5gxVNKAqHbROLnEDl53E5r_Z0f6hLOoDMC99.X
+ Q0ithwQroDLgpJcYda8eXcojv9BuadzYTCQ1bG9bEDA3vE098nBdbscercRFNVe.Hs_BBKlZSQex
+ ZuLKFkUzsJTH5NRRfdsaR9QoPUtpyq9GFD4zGIdRtC0HYzYahsfdzlwhb_xP9epJg4R_Sg42sJQ_
+ QUxgdxoWjWmcaalWWR2yxbDYRjK__SAvck5_LPE3rYc_kZ8ZrM_VWTJRccjc_VwRmlQtvm19MZYa
+ t7iwiv_TU2B8Q5xeUrKors2RPOQ9QSrTgq3sKMh_3PBH2xNRT6wiCThgT0Yu64eXqa4oBmE2AqG.
+ iS6qaqf.czUC1YSmigxaQQCvy6FAjoLgfKbvt9LX4R0dlWyrNST9vRMfwc6GNGj9qaX6G8CyMEPV
+ 7lKLe0ZF8ekMYvPxqnirqJAJjXL5Uv4N7QvsQDcl6UUiYxv469xwSdaGuuiWrCRSjFqZh382B9eQ
+ AU8avaxQaRcp_OS1nqoMtes2CqdcQN.FWBsHEQOQbjmHlkRanlubdWyXuJmSxhguIx4dS5doIH.h
+ DpQEIXH8e4AsdiO0cq4WO_nfD2ffryZsWqedRLb41U.yGjH.vX8wRi7MwThC0ch4XB2rsgK2xVP8
+ 5x5cZQCgovcdGuPWV1jbZvbP4lQMHO5bvZksA6ExpLncfPO1RJVfWlDbo.QNSTkdwingn846Uk_0
+ 6VYEn9QcZ78Rvmth3F07SSWVgxijYe7LOy9bv0f.Fot5mp76ru4Mu_5.HD6Ol4h3CKwk.LgROLIK
+ LxTAx4Z1cfQo_TKuIK6tVc8Eaf6nBxpPeZKBE8wj2xH5sSY219mS.ag5G7T9LHnmuzSI46MWKKDf
+ xJhF5fwKKIJmSjTdYJzzBHn4LZFXUH.EOyMoMSaBPuJiZu_rTybF22mkUWCWUeDq_2.u._XrqZz9
+ YvVOBx80gkV_eeepwiSPDZodL9dpW.fSMJ3HlBxT_WB0bydaQSAKNUBXBu44_QlQXxF.hsByKTlC
+ UyGf4pFmcDyV3IM.92GLADt7VS0QO6ql11gU5booUIWlnN49keP38lEBHpWjdTcRhuXTef6MEcsC
+ PJyCYVNGm0Yzk_9wWkbGvZZDUEBx9Wm4GpR1bwMKmNf1dvXnak0RVcfDyGUJeulATTsAURBpHkxS
+ EmVQcBj90UEsEqE1P4tBPl6E.f7Gn7MvQYAnL7E4ySSukUXwTsCt0zuGAFIL1UN34XzYJWs3vjLq
+ AnaP00uzUPdxmqPTC3sU9an7Nzugt96ap443DUoTdQgCqCT2ISed1zW9kKty5JXG4XnGJtSw5TnG
+ laxki.Bs9t71PIO8ZX_uM31ZJ6AA26IrIbnLecquJYFeJLgAybKVt1BOEHpd7x.0NLuLhLWZFceq
+ YngXqIp17MqgObtOISzqTSurp4fpZVZUFb2Bi7NKJk3h8ocjt4VOnMygxbtrhNlYPbM32EjZjXiR
+ iGdfhpWhRN7vwRkgRl_KS0vgWy2uOoATMy.malIzbGT.JLX6kACEOeZTXSQcj7x_LOxVuV54Q7cX
+ QvZLFwZxHUxnVIy4gRdeULQPHKwk_cFhoayLei791oLPqxpatEa4._dJVyfuAD2LHXwNHyatVDOi
+ hS0nIav9BZRPLY8OHdiN7NYRKdRiKOJq3fF3rtyKxIwvVPNw4a7tt9xyLvhR8MVIsxlt8wpH6Ris
+ aD3UTHrH7YDr6Z9SrKMPFU52m5VNbPF37fqQXVhi.QP.ttSXvUasOnAjMomTzL2Y7BWTPaQXBTOB
+ 65maGYg79mTQRcDw-
+X-Sonic-MF: <casey@schaufler-ca.com>
+X-Sonic-ID: 92000793-78ab-4a46-aceb-c6ee4f47f6b4
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic311.consmr.mail.ne1.yahoo.com with HTTP; Fri, 30 Jun 2023 17:11:47 +0000
+Received: by hermes--production-bf1-5d96b4b9f-lngg9 (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 1ac61ddcb6798a32091163362680cf0e;
+          Fri, 30 Jun 2023 17:11:45 +0000 (UTC)
+Message-ID: <d39d5784-058f-9298-1cdb-2f0e550b206a@schaufler-ca.com>
+Date:   Fri, 30 Jun 2023 10:11:42 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DB8EUR05FT036:EE_|FR0P281MB1657:EE_
-Content-Type: text/plain
-X-MS-Office365-Filtering-Correlation-Id: c8cd4262-85b8-4365-506f-08db798d30bb
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: OiQP6oSlTNBhJTbFjYANv7FzY6Rt9o1VCywT2YLqVd2SLVyi+ilb4+LC189uP54+fJM9d+FonlBALxPnlcmirsZiNa8hvKO0bVrWHpuTQSXIdvgTzsHTP1jEZW9nRj1yuyJaoaARKKGcjs7Vh3IiEtaAJu9qOWPZz6viTJw9g5AZwrukWEzYBdvEwYV4zv2aJyRKgqodamKV+eI33Gmq8z5ebwldOjY4n/U+E7qmuoWsEd902H/nEbV0J7mec5ZNq9Kr7LgkfJOak0+o4U7zIiPIE16anCOXFQgnmcDpjmZuxorODYhVSnXGsHuvId7G+/YR0JSZdkjhxphbrV7VrrlVhDAAeCMRuzcz2KJIZlIEc5uuZytazrI81K8HteFpuipSx7f1EPD3TOYJ1FrwUodHLbjbzFnq1Y9gkodgm2ZKn3WE4fLkXxaZuKl09bRykUHMu+KdnnjsTWF31rh6ek0Z0VVyMXdVC5BgzOFCGdippjMkuP/H9rfQLXevSsiC7ZNdzeB5pWVVHpcohN4LjuO0Ey4DwU/xURjpzyPoMOytqQSfbHBpjgGzhwWsbWBI2UvwAE5gFvdPs0fMW3GqCtGar+RQUka9KIvHUYYUwu0eXWrJkRAGDN9/R4W5BZ306FSeO2IBXDcZsk2nICyuRVQEjGyKqNrWkRQ4Iv2aaF90MVNC3g8CBLANXG6jGsOxo1FvOoGFhFMFL4p7Az0og4qJvdTQnov0mcAVHP0cmhGg1C0Q+/5Lk7m3b6ApbiLiskBInbLtth2FEpwXExzca43S1TFyMyZmx8V1fiZW6K0=
-X-Forefront-Antispam-Report: CIP:217.66.60.4;CTRY:DE;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SR-MAIL-03.open-synergy.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(376002)(396003)(39840400004)(136003)(346002)(451199021)(46966006)(36840700001)(86362001)(54906003)(8936002)(8676002)(5660300002)(82310400005)(26005)(44832011)(1076003)(478600001)(4326008)(70206006)(70586007)(966005)(41300700001)(316002)(42186006)(186003)(2616005)(2906002)(47076005)(83380400001)(336012)(36860700001)(40480700001)(36756003)(81166007)(41533002)(36900700001);DIR:OUT;SFP:1102;
-X-OriginatorOrg: opensynergy.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Jun 2023 17:12:31.6895
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: c8cd4262-85b8-4365-506f-08db798d30bb
-X-MS-Exchange-CrossTenant-Id: 800fae25-9b1b-4edc-993d-c939c4e84a64
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=800fae25-9b1b-4edc-993d-c939c4e84a64;Ip=[217.66.60.4];Helo=[SR-MAIL-03.open-synergy.com]
-X-MS-Exchange-CrossTenant-AuthSource: DB8EUR05FT036.eop-eur05.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: FR0P281MB1657
-X-TM-AS-ERS: 104.47.7.177-0.0.0.0
-X-TMASE-Version: StarCloud-1.3-9.1.1011-27724.001
-X-TMASE-Result: 10--11.667500-4.000000
-X-TMASE-MatchedRID: huMMtcahIlDc1YtpVABxhScOunEIf0eXRyG5SSR7mMFHwPpoS7xiTQ3u
-        hqemVNabwqNosrPrbHMTsTmVJvxcHKjHzroBTUY9L/5nX3iQblcH/MsNCRnylchGESF2QtYSsgk
-        fnaHAFPzm9Tc/GgfFJwFtWueZlMH0Hw0ziwm/5yd81fikUYgyLefShpTpYz7797gvW7V0yoZtyV
-        XNSSC+Bni2yHSIHoZstv5tlY0RB3F1dilwOXZXnZOU1MLNH5QIp9ot5GYsw7Gc2JxbD3wPF24q1
-        hfzDZy5xyWmjWIJIoJwT/DvNCCX4MddJPEKsqAMES46qCSbf/WHvP6CYoqPSgN/ojyMXH62DEom
-        GUxecKpxg7svMtapLpefsKoW209bgHkGDkIaUnULYpBk5/uhSeQZtxwUYGQZRpMDBdUmwGo=
-X-TMASE-XGENCLOUD: fbc7fa83-7c2b-44b2-acde-9dcb2ca7bd88-0-0-200-0
-X-TM-Deliver-Signature: B3A2AABD22BC6B721119BBE8E963F1C3
-X-TM-Addin-Auth: FqTsgZGS/LY7uD/3u5PjxWmSaftmsshxVUNRF/ZAPGFXer8fdMKSkX3/9jh
-        1KfeIN/AiRbIL2xkjrDrr4wIBEMCuOidwS5xZsXBiosoUZgOzjb4SUgfAEVOCBCatS4pB6LPyHp
-        y0Q1DpGIhs52iMPg2V5CVxhmdo6AHu1v7U4jVLmy6mQnJ158CrOdfhx0JpTCyIY/3WK241rIJ29
-        t2FN7qUYitRkAeX2zjtckBDhlmkHLjaN7vDVFs76aV6qm1yaJliJVkB0VHbxNyQiCkx8rNv8Rho
-        yFqmNrFf+FKzdDg=.0DHIXYL8xaY4xFvpFTmQhLEmLY1fHWqAjCLWjFCQYEkATto+GZQNH+ZiZo
-        l4Kw242CpfzgwoPk6WkjdjelSLs8Ot4gDSTt+cvMpCwFTFSRv6HsZnWLiWbYt6OC0Fge7Pyxl4Z
-        M1Z96C3/vYnrR4j4TXNxK/894g93mJL1NNbDy/KA7U+IdT2gQiHnK4mwvyVnCtpRcELAkm37nO/
-        yizyHEnfHzS75JuT88wnbX+q5iOyGfoSlrWaQJeBDcm9plA7ipJ8BGfvNTSx3k37pM/5OUVBeem
-        h05TKU84j8Eq42ZP2ICSvsSVN4fiXtmAI+h7qKXLjFrY2bSRGDlHsJNG5EA==
-X-TM-Addin-ProductCode: EMS
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=opensynergy.com;
-        s=TM-DKIM-20210503141657; t=1688145153;
-        bh=+btlWovU5V7tHS5gyvszgPfHBPOLNvhNFh8IVZ28uwY=; l=3149;
-        h=From:To:Date;
-        b=eoyDQiYgNxkGDkgrT1VFWHYo59u2BLLOEZ3EgFUkzWrCoBUofGCmJG+wZobQP7jVA
-         ZaGIn3q7sJ04faHqQQEWm5OI94uLo3zfLJVDLk4R9qDdv79cq4QexoXXV6n/LZYltL
-         BCfD+aoUTcxzF1e90lxIP5oPgKqNnGQPj83mHbV0Da14n3J3tm9vdYlukh1EkokAnS
-         isw2HN26Bq4zgDh/UrAr2AnKRoTOAmjCIuC8Pv9Da9RE+VmCenoXXcYSl419aNdPBB
-         E6fj0FFSOLFz8IjMedXDvEaVFTrVinvZlTO++qN9S4aec7TPfivlScOfkF+KQE++R1
-         ftE1DUQ+zqo8g==
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH v12 7/11] LSM: Helpers for attribute names and filling
+ lsm_ctx
+Content-Language: en-US
+To:     Paul Moore <paul@paul-moore.com>,
+        linux-security-module@vger.kernel.org
+Cc:     jmorris@namei.org, serge@hallyn.com, keescook@chromium.org,
+        john.johansen@canonical.com, penguin-kernel@i-love.sakura.ne.jp,
+        stephen.smalley.work@gmail.com, linux-kernel@vger.kernel.org,
+        linux-api@vger.kernel.org, mic@digikod.net,
+        Casey Schaufler <casey@schaufler-ca.com>
+References: <20230629195535.2590-8-casey@schaufler-ca.com>
+ <b09a9753d31dc4b842cc2e058ae01f34.paul@paul-moore.com>
+From:   Casey Schaufler <casey@schaufler-ca.com>
+In-Reply-To: <b09a9753d31dc4b842cc2e058ae01f34.paul@paul-moore.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Mailer: WebService/1.1.21612 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add PTP_SYS_OFFSET_PRECISE2 support on platforms using the Arm Generic
-Timer, by forwarding the clocksource information from arm_arch_timer.
+On 6/29/2023 7:14 PM, Paul Moore wrote:
+> On Jun 29, 2023 Casey Schaufler <casey@schaufler-ca.com> wrote:
+>> Add lsm_name_to_attr(), which translates a text string to a
+>> LSM_ATTR value if one is available.
+>>
+>> Add lsm_fill_user_ctx(), which fills a struct lsm_ctx, including
+>> the trailing attribute value.
+>>
+>> All are used in module specific components of LSM system calls.
+>>
+>> Signed-off-by: Casey Schaufler <casey@schaufler-ca.com>
+>> Reviewed-by: Serge Hallyn <serge@hallyn.com>
+>> ---
+>>  include/linux/security.h | 14 +++++++++++++
+>>  security/lsm_syscalls.c  | 24 ++++++++++++++++++++++
+>>  security/security.c      | 44 ++++++++++++++++++++++++++++++++++++++++
+>>  3 files changed, 82 insertions(+)
+> ..
+>
+>> diff --git a/security/security.c b/security/security.c
+>> index 199db23581f1..72ad7197b2c9 100644
+>> --- a/security/security.c
+>> +++ b/security/security.c
+>> @@ -770,6 +770,50 @@ static int lsm_superblock_alloc(struct super_block *sb)
+>>  	return 0;
+>>  }
+>>  
+>> +/**
+>> + * lsm_fill_user_ctx - Fill a user space lsm_ctx structure
+>> + * @ctx: an LSM context to be filled
+>> + * @context: the new context value
+>> + * @context_size: the size of the new context value
+>> + * @id: LSM id
+>> + * @flags: LSM defined flags
+>> + *
+>> + * Fill all of the fields in a user space lsm_ctx structure.
+>> + * Caller is assumed to have verified that @ctx has enough space
+>> + * for @context.
+>> + *
+>> + * The total length is padded to a multiple of 64 bits to
+>> + * accomodate possible alignment issues.
+> We should drop the sentence above now that alignment is the caller's
+> responsibility, but since that was largely my fault I can fix this up
+> during the merge assuming you're okay with that Casey.
 
-Support only the CP15 counter interfaces, since the memory-mapped
-interfaces are not supported by the Virtio RTC draft spec [1].
+I have to fix the error in patch 8/11 anyway. I can fix this, too.
 
-[1] https://lists.oasis-open.org/archives/virtio-comment/202306/msg00592.html
-
-Signed-off-by: Peter Hilber <peter.hilber@opensynergy.com>
----
- drivers/virtio/Kconfig          | 13 ++++++++++
- drivers/virtio/Makefile         |  1 +
- drivers/virtio/virtio_rtc_arm.c | 44 +++++++++++++++++++++++++++++++++
- 3 files changed, 58 insertions(+)
- create mode 100644 drivers/virtio/virtio_rtc_arm.c
-
-diff --git a/drivers/virtio/Kconfig b/drivers/virtio/Kconfig
-index 7369ecd7dd01..ed3f541032a0 100644
---- a/drivers/virtio/Kconfig
-+++ b/drivers/virtio/Kconfig
-@@ -203,4 +203,17 @@ config VIRTIO_RTC_PTP
- 
- 	 If unsure, say Y.
- 
-+config VIRTIO_RTC_ARM
-+	bool "Virtio RTC cross-timestamping using Arm Generic Timer"
-+	default y
-+	depends on VIRTIO_RTC_PTP && ARM_ARCH_TIMER
-+	help
-+	 This enables Virtio RTC cross-timestamping using the Arm Generic Timer.
-+	 It only has an effect if the Virtio RTC device also supports this. The
-+	 cross-timestamp is available through the PTP clock driver precise
-+	 cross-timestamp ioctl (PTP_SYS_OFFSET_PRECISE2 or
-+	 PTP_SYS_OFFSET_PRECISE).
-+
-+	 If unsure, say Y.
-+
- endif # VIRTIO_MENU
-diff --git a/drivers/virtio/Makefile b/drivers/virtio/Makefile
-index 4d48cbcae6bb..781dff9f8822 100644
---- a/drivers/virtio/Makefile
-+++ b/drivers/virtio/Makefile
-@@ -15,3 +15,4 @@ obj-$(CONFIG_VIRTIO_DMA_SHARED_BUFFER) += virtio_dma_buf.o
- obj-$(CONFIG_VIRTIO_RTC) += virtio_rtc.o
- virtio_rtc-y := virtio_rtc_driver.o
- virtio_rtc-$(CONFIG_VIRTIO_RTC_PTP) += virtio_rtc_ptp.o
-+virtio_rtc-$(CONFIG_VIRTIO_RTC_ARM) += virtio_rtc_arm.o
-diff --git a/drivers/virtio/virtio_rtc_arm.c b/drivers/virtio/virtio_rtc_arm.c
-new file mode 100644
-index 000000000000..2367f054081c
---- /dev/null
-+++ b/drivers/virtio/virtio_rtc_arm.c
-@@ -0,0 +1,44 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+/*
-+ * Provides cross-timestamp params for Arm.
-+ *
-+ * Copyright (C) 2022-2023 OpenSynergy GmbH
-+ */
-+
-+#include <clocksource/arm_arch_timer.h>
-+#include <linux/err.h>
-+
-+#include <uapi/linux/virtio_rtc.h>
-+
-+#include "virtio_rtc_internal.h"
-+
-+static const u16 viortc_hw_counters[] = { VIRTIO_RTC_COUNTER_ARM_VIRT,
-+					  VIRTIO_RTC_COUNTER_ARM_PHYS };
-+
-+/* see header for doc */
-+int viortc_hw_get_counters(const u16 **hw_counters, int *num_hw_counters)
-+{
-+	*hw_counters = viortc_hw_counters;
-+	*num_hw_counters = ARRAY_SIZE(viortc_hw_counters);
-+
-+	return 0;
-+}
-+
-+/* see header for doc */
-+int viortc_hw_xtstamp_params(u16 *hw_counter, struct clocksource **cs)
-+{
-+	*cs = arch_timer_get_cs();
-+
-+	switch (arch_timer_counter_get_type()) {
-+	case ARCH_COUNTER_CP15_VIRT:
-+		*hw_counter = VIRTIO_RTC_COUNTER_ARM_VIRT;
-+		break;
-+	case ARCH_COUNTER_CP15_PHYS:
-+		*hw_counter = VIRTIO_RTC_COUNTER_ARM_PHYS;
-+		break;
-+	default:
-+		return -EINVAL;
-+	}
-+
-+	return 0;
-+}
--- 
-2.39.2
-
+>
+>> + * Returns 0 on success, -EFAULT on a copyout error, -ENOMEM
+>> + * if memory can't be allocated.
+>> + */
+>> +int lsm_fill_user_ctx(struct lsm_ctx __user *ctx, void *context,
+>> +		      size_t context_size, u64 id, u64 flags)
+>> +{
+>> +	struct lsm_ctx *lctx;
+>> +	size_t locallen = struct_size(lctx, ctx, context_size);
+>> +	int rc = 0;
+>> +
+>> +	lctx = kzalloc(locallen, GFP_KERNEL);
+>> +	if (lctx == NULL)
+>> +		return -ENOMEM;
+>> +
+>> +	lctx->id = id;
+>> +	lctx->flags = flags;
+>> +	lctx->ctx_len = context_size;
+>> +	lctx->len = locallen;
+>> +
+>> +	memcpy(lctx->ctx, context, context_size);
+>> +
+>> +	if (copy_to_user(ctx, lctx, locallen))
+>> +		rc = -EFAULT;
+>> +
+>> +	kfree(lctx);
+>> +
+>> +	return rc;
+>> +}
+>> +
+>>  /*
+>>   * The default value of the LSM hook is defined in linux/lsm_hook_defs.h and
+>>   * can be accessed with:
+>> -- 
+>> 2.40.1
+> --
+> paul-moore.com
