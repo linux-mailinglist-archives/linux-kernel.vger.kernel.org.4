@@ -2,80 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B987C743546
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 08:47:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11BA074354E
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 08:49:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232079AbjF3Gr3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 02:47:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38530 "EHLO
+        id S231855AbjF3GtO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Jun 2023 02:49:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231969AbjF3GrZ (ORCPT
+        with ESMTP id S231724AbjF3GtJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 02:47:25 -0400
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D6D03595
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 23:47:23 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id 4fb4d7f45d1cf-51d9123a8abso1625899a12.2
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 23:47:23 -0700 (PDT)
+        Fri, 30 Jun 2023 02:49:09 -0400
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34EA430C4
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 23:49:08 -0700 (PDT)
+Received: by mail-lj1-x22f.google.com with SMTP id 38308e7fff4ca-2b6994a8ce3so23209221fa.1
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 23:49:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1688107642; x=1690699642;
+        d=linux-foundation.org; s=google; t=1688107746; x=1690699746;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=zlchbRYXZ2GmgikakdfRkYq9RUe43aExK7E5sqwL0Bw=;
-        b=A4gTuuMIMizRixVdblSqw5SYKt+QwmRPLuUK4f4z0K2+yGZIDExa8f4XopC4/kPs9+
-         YzKW+teF6Fq1kkS60487u5rbCRcCXk4xGumtHwFgLTCGDMvPXB2M0Q7nYK2m8trH5hCD
-         kzCPDL3NWtWTtGWdXIfTVqxyXjmpZ+rgAJiSU=
+        bh=DSXNPQ9cSE+8ldFCpxe5231qRGX3JF8PWsLfdfAuz3g=;
+        b=hICM+omDFks6kQ89EBT0xpUSj+YToF61eJndpVtCtihFxeQwaevRkEJWr0asmdsAbO
+         D+BIvvRzIVyhUN67pLHauRQ3QKPddnwsKgYxjrV8QnzH4ecTeqCdVSTBwu/TrOeuQvzy
+         Pi5a/l9hXeTbdlcC6O5Dm2gXTbcYdNl1AlLZ4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688107642; x=1690699642;
+        d=1e100.net; s=20221208; t=1688107746; x=1690699746;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=zlchbRYXZ2GmgikakdfRkYq9RUe43aExK7E5sqwL0Bw=;
-        b=dxUowiiJ4eqT6yNtK51H8oAWO0vGjPSRiKS6nPsT/UcuvV5c/FWbmhFZb3ZyGbum8I
-         DeijpUdr3AbYNoBWOr1bF/9P/yPWoBa+NZbRslyBRvrIKzEhwCXniDUrNOOS1xBEgnr+
-         O8t+1tjMnQ7JEKMIob08U77B19o7f/AQH0m5eHoBykklA6jiZYYeNiWgzibtuqhAoPnP
-         9YyftqM+dH0Kt7JbALA+qjI40TDXa0Rd/GnS69OrlfI2Afk5/fwZ11YQLg3cb/IaJZv+
-         IYBVlfGuHaXU4O+74qk9wAPq9Tv4hN/0Ae+iTNzT+V5SS7JDxJL43dR9nh/DwBT1UvKx
-         /M4Q==
-X-Gm-Message-State: ABy/qLZ6s0NBkNlMqO+QwJmhwJN6qJ3KaTk7YXoudZoGTLggKjxhbphq
-        tecP5nGkYtougXqKyUjRsb7dGy/4BusnFoA/RWekobf4
-X-Google-Smtp-Source: APBJJlHz1FHRaG77KC33KjXsRM+RJRQewLhV+2wCnj+GAj+UfGUGbp4rYFEtwTDGnbUcZJB0bRcXRA==
-X-Received: by 2002:aa7:c489:0:b0:51d:eb90:4928 with SMTP id m9-20020aa7c489000000b0051deb904928mr974766edq.30.1688107642160;
-        Thu, 29 Jun 2023 23:47:22 -0700 (PDT)
-Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com. [209.85.208.41])
-        by smtp.gmail.com with ESMTPSA id c20-20020aa7df14000000b0051d984e610esm4934785edy.66.2023.06.29.23.47.21
+        bh=DSXNPQ9cSE+8ldFCpxe5231qRGX3JF8PWsLfdfAuz3g=;
+        b=Xc2GZuBlHZi5mK2Z+T1YfFdrwOp678DDBvAdV6tO0xMrZOrAKPNMI6dllDzLQ9AdFy
+         KDrDVatCEVMJMtvBUZEvbNJlK67t7Jb/NQ4rJqNy8m8fPD9lQoB7P5c0UQb05CjuOgeK
+         riM+fTRu9QSdHslQJDPHp7KXfsjq7lByPm/Au87IZr80FNtHlS/Tj6nMLrIGsKQx1ryv
+         wt+2hJvL98C/B+dW1m2CpTBUFAF7J1HE/CiPROvhMom2dv6zhjnQttMiInK+BzXafn+w
+         rWxwA2x5PgKqNOrEfaTcfrpHklgehio8E0ipgpn/DcS2EiSZS4cEPcbH/HqALv8yYk5/
+         I18A==
+X-Gm-Message-State: ABy/qLYmp8yzgm2FpWgvn7yVtw5Xm6djFHGnZJk9xEFpW5UE/INzbob7
+        nn4cbb5Cxj+QDzfsqPIlT0CM1gH/YAJiwY6rPcDNnr+D
+X-Google-Smtp-Source: APBJJlGPgM1hGaxqfGdkRECqpV38dg97aG71jvAWh23zNH1p4TGPXapwF46YEjooZ69jcP2vm2zlUQ==
+X-Received: by 2002:a2e:730d:0:b0:2b6:caf2:c628 with SMTP id o13-20020a2e730d000000b002b6caf2c628mr1429412ljc.20.1688107746507;
+        Thu, 29 Jun 2023 23:49:06 -0700 (PDT)
+Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com. [209.85.208.50])
+        by smtp.gmail.com with ESMTPSA id ck18-20020a170906c45200b0098e38d2e584sm6510571ejb.43.2023.06.29.23.49.06
         for <linux-kernel@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 29 Jun 2023 23:47:22 -0700 (PDT)
-Received: by mail-ed1-f41.google.com with SMTP id 4fb4d7f45d1cf-51d9850ef09so1639918a12.0
-        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 23:47:21 -0700 (PDT)
-X-Received: by 2002:a05:6402:217:b0:51d:7ed9:c65 with SMTP id
- t23-20020a056402021700b0051d7ed90c65mr915784edv.21.1688107641560; Thu, 29 Jun
- 2023 23:47:21 -0700 (PDT)
+        Thu, 29 Jun 2023 23:49:06 -0700 (PDT)
+Received: by mail-ed1-f50.google.com with SMTP id 4fb4d7f45d1cf-51d9123a8abso1627015a12.2
+        for <linux-kernel@vger.kernel.org>; Thu, 29 Jun 2023 23:49:06 -0700 (PDT)
+X-Received: by 2002:a05:6402:12ca:b0:514:96f9:4f20 with SMTP id
+ k10-20020a05640212ca00b0051496f94f20mr795315edx.41.1688107745787; Thu, 29 Jun
+ 2023 23:49:05 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230629184151.888604958@linuxfoundation.org> <CA+G9fYsM2s3q1k=+wHszvNbkKbHGe1pskkffWvaGXjYrp6qR=g@mail.gmail.com>
- <CAHk-=whaO3RZmKj8NDjs4f6JEwuwQWWesOfFu-URzOqTkyPoxw@mail.gmail.com>
- <fbe57907-b03f-ac8c-f3f4-4d6959bbc59c@roeck-us.net> <CAHk-=wgE9iTd_g20RU+FYa0NPhGSdiUDPW+moEqdHR4du1jmVA@mail.gmail.com>
-In-Reply-To: <CAHk-=wgE9iTd_g20RU+FYa0NPhGSdiUDPW+moEqdHR4du1jmVA@mail.gmail.com>
+References: <20230630055626.202608973@linuxfoundation.org> <CAHk-=when9OgPprG57O+DtVFM7X9_wb6x2h4Veq4Gu6TUvxyiQ@mail.gmail.com>
+ <2023063030-overgrown-unfunded-7523@gregkh>
+In-Reply-To: <2023063030-overgrown-unfunded-7523@gregkh>
 From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Thu, 29 Jun 2023 23:47:04 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wiN5H-2dh2zCo_jXE7_ekrxSHvQcMw4xfUKjuQs2=BN4w@mail.gmail.com>
-Message-ID: <CAHk-=wiN5H-2dh2zCo_jXE7_ekrxSHvQcMw4xfUKjuQs2=BN4w@mail.gmail.com>
-Subject: Re: [PATCH 6.4 00/28] 6.4.1-rc1 review
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, patches@lists.linux.dev,
+Date:   Thu, 29 Jun 2023 23:48:49 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wjm79krU=PJ372s5PzrbZ=kUDA16WMm==J4Moery3Uu0A@mail.gmail.com>
+Message-ID: <CAHk-=wjm79krU=PJ372s5PzrbZ=kUDA16WMm==J4Moery3Uu0A@mail.gmail.com>
+Subject: Re: [PATCH 6.4 00/29] 6.4.1-rc2 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
         linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
-        shuah@kernel.org, patches@kernelci.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
         lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
         f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de, conor@kernel.org,
-        linux-parisc <linux-parisc@vger.kernel.org>,
-        sparclinux@vger.kernel.org,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Helge Deller <deller@gmx.de>,
-        Jason Wang <wangborong@cdjrlc.com>
+        srw@sladewatkins.net, rwarsow@gmx.de, conor@kernel.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
@@ -87,20 +79,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 29 Jun 2023 at 23:33, Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
+On Thu, 29 Jun 2023 at 23:32, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
 >
-> Oh well.  We'll get them all. Eventually. Let me go fix up that csky case.
+> I think the "crazy users" reports might be triggered sooner with stable
+> updates than from your tree as well, so this might be a early-warning
+> type system.
 
-It's commit e55e5df193d2 ("csky: fix up lock_mm_and_find_vma() conversion").
+Yeah, I agree, it might help find any potential odd cases more quickly.
 
-Let's hope all the problems are these kinds of silly - but obvious -
-naming differences between different architectures.
+So just as long as you are aware of the false positives by syzbot and friends..
 
-Because as long as they cause build errors, they may be embarrassing,
-but easy to find and notice.
-
-I may not have cared enough about some of these architectures, and it
-shows. sparc32. parisc. csky...
-
-             Linus
+               Linus
