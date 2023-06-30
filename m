@@ -2,118 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B94AF743EFE
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 17:35:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 64138743EF0
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 17:32:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232759AbjF3Pfg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 11:35:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49820 "EHLO
+        id S232431AbjF3Pcy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Jun 2023 11:32:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233140AbjF3PfD (ORCPT
+        with ESMTP id S231633AbjF3Pcb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 11:35:03 -0400
-Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EF2BE5C
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 08:35:02 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.nyi.internal (Postfix) with ESMTP id BE81F5C163D;
-        Fri, 30 Jun 2023 11:31:22 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Fri, 30 Jun 2023 11:31:22 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm1; t=1688139082; x=1688225482; bh=up
-        LBwBc2dBmHKX9v2pXFENlWMqDWFCIobcQ0HEfLYik=; b=IoTcM+BNU5go7enV0u
-        JT9XMkqfYa+qdnubg8XHBYF5i2NXlo1fPOir8T9gSOmYLYMpuFSxn3GNQB3AGn+s
-        7BfpTods5F9J1kJLl4nO3S61LUPhcF8jfTyqwB04PFuykuZHbHQzPLLzIpKJwqsY
-        hBBJpbeQ0+GTse6FIeoTtMMOYvX2Wdbp8itXv7Q4u85pghNbUCeLexA79b/yEXBa
-        gChy7+PUrSV/UlYFI1hWbWMoYl0AebKqaEQfVHAu9u8HP12coHAnFnlB81WMvVJ/
-        BnRLGVToZB8scM6QJXWLEuZAx2IuhvYExOJUo1NopgYSaDJ3rUFlOQNqx8jaCGD/
-        Zhow==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; t=1688139082; x=1688225482; bh=upLBwBc2dBmHK
-        X9v2pXFENlWMqDWFCIobcQ0HEfLYik=; b=dSAPUWjPp1SYx2dhvpDc6kP0C4o9a
-        W0kiwUjeRa6rut+EfGy3P42zbh922ribXMJL+v+gMBV6g7YIHyV0LR5X+kGe2kpQ
-        eLw8A+ar9zyIpRgI/nin3JlfuNFLpnIwdaHIzSDeEV6uYXns8HDuKaBI2YMzjb+c
-        xAYJcOcRvb6oDTMb5iCQCLsr0gcJz+reoQmMio5yGRO6pwKZlRnGdmOvOsHJr2l9
-        ZLwm8DcOKLsDabMw5s35yyXcPo9puH1MadTBf4iTeXUK4PxWMt5X2P5Es/gle9gE
-        JO3gxF2j0JogtIhvBO+/zMmbU/uZwuEUDbVEs4KGAHBfmmBpTKuM+TEyw==
-X-ME-Sender: <xms:SvWeZPVlXpa0WqrDZq4956SnxDgJS3IHYuk4KACxRyH5xAX5-2r1Yw>
-    <xme:SvWeZHmjnZGfiKsXuXrI2INfaRI33I7gLBBWnmgLdafkhpL9ECNZAsfGFg56f0qR1
-    upnW0lWMmMgBty0170>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrtdeigdekkecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhn
-    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
-    gvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedtkeet
-    ffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrh
-    hnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:SvWeZLao6TmHJFrx3m7a1abR0ScevQl2ysVKrgAb1r68RwqxrZmFTg>
-    <xmx:SvWeZKXFuzaAkLRaTR5DnB52NF0n1dVGTQ6Hs3XNolHIJNO19SVE_A>
-    <xmx:SvWeZJkp5Ye0ibJuLPmUOVfA4COMkNxHhKpMIlnUQQgRsP6oRB5A-w>
-    <xmx:SvWeZPX9ipntvWfaN-beytqmFz_yGGpiAJksGvMbhcdHAp-hOL0gCw>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 2B7DAB60092; Fri, 30 Jun 2023 11:31:22 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-499-gf27bbf33e2-fm-20230619.001-gf27bbf33
+        Fri, 30 Jun 2023 11:32:31 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C23BE49C9
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 08:31:13 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id 3f1490d57ef6-bf34588085bso1863684276.0
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 08:31:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1688139073; x=1690731073;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Bsmw8jfciOwOf213T4vvvPY507/uByM+euYpoT+ptPg=;
+        b=6D0cPh+YeGLV8h/5nl0BrWU1nUHMKAygp6XFTnbzbVbzPdSQq4/ECryMaHR5gvfsav
+         NXTGslGrBOjg7lgnNb5aHwxGAoINBxGmiGeDZsrxbRnoQqwY/NM2FdzBlytI2TixQg7U
+         TLQeIAv+Ntmzte95EoKJuz8ijPtLyHdpgh0L+8Bledrd6WBR8pi8zcueQHPBZxl1xtMi
+         A7l4wp+0ksdBdPxWnM8hap5e+ZNHevlDyIAjwAz+tm2010ZiKkbfRWf+EMRdsEuRwiH7
+         uiAXX9mP9Y/vMUfcuUlhEtcfG9N+V9kaPtL6CcOvugUCgx0MsqshYTEJXD79h9ROcSKb
+         r7Gg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688139073; x=1690731073;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Bsmw8jfciOwOf213T4vvvPY507/uByM+euYpoT+ptPg=;
+        b=fkkPOm6fjOvYjaI0qgiUQuTLVfdwAw0YH73CGeC5DlflSC+F8amio7ItvjuQ90FlM0
+         D7OKTSoESVEDjKL7fZQo8Qdi/8m4TOcRXY00nfX45Z6bzj+obsmaQAWs+9d1vOKl0Oud
+         z465jLvQ1YrcGt6RuJMeKNkHiGdK+7ebfLiVNYQHbi95HgG4B6JWMvRMTxs02THNZwLQ
+         jksznAzFVVhbT6fzr8iVH83h+V5J9/3njz6uBIRvRHAgdH/5LpZMfzJyQcK0bjiFW6jk
+         0RIygio1pSIJurpoxdoyl5OcLfxS0H4S2wATekKCMiPto9ksnxYwUx2Pboygrxp9lhQz
+         iruw==
+X-Gm-Message-State: ABy/qLbv2Mj3Emjkqv4ybwBnZp0Qdhh+UVD7M6TqifJmc8FsJTMluDrT
+        u1u8qM0zN/qH+Gm1KNekivXqH8ARLL0=
+X-Google-Smtp-Source: APBJJlH96WkeOuqF0lr9jikNmEIJLpGKCJfNaoB1ON4ZeustBd39YLNr9WURKYvxNyFg73yTWuDFTIt48Hc=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a25:e090:0:b0:c42:2b05:17aa with SMTP id
+ x138-20020a25e090000000b00c422b0517aamr8586ybg.6.1688139073025; Fri, 30 Jun
+ 2023 08:31:13 -0700 (PDT)
+Date:   Fri, 30 Jun 2023 08:31:11 -0700
+In-Reply-To: <ZJ6L4oWE9refbXnX@chao-email>
 Mime-Version: 1.0
-Message-Id: <51b8b3c2-f4ac-454c-acde-e1d136139109@app.fastmail.com>
-In-Reply-To: <20230630152439.GA2900969@aspen.lan>
-References: <20230517125423.930967-1-arnd@kernel.org>
- <20230630152439.GA2900969@aspen.lan>
-Date:   Fri, 30 Jun 2023 17:31:01 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Daniel Thompson" <daniel.thompson@linaro.org>,
-        "Arnd Bergmann" <arnd@kernel.org>
-Cc:     "Jason Wessel" <jason.wessel@windriver.com>,
-        kgdb-bugreport@lists.sourceforge.net,
-        "Doug Anderson" <dianders@chromium.org>,
-        "Peter Zijlstra" <peterz@infradead.org>,
-        "Dmitry Vyukov" <dvyukov@google.com>,
-        "Kees Cook" <keescook@chromium.org>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+References: <20230217231022.816138-1-seanjc@google.com> <20230217231022.816138-2-seanjc@google.com>
+ <ZJ6L4oWE9refbXnX@chao-email>
+Message-ID: <ZJ71P+i4aRg3S5TL@google.com>
+Subject: Re: [PATCH 01/12] KVM: x86: Add a framework for enabling KVM-governed
+ x86 features
+From:   Sean Christopherson <seanjc@google.com>
+To:     Chao Gao <chao.gao@intel.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>, kvm@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] kdb: include header in signal handling code
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 30, 2023, at 17:24, Daniel Thompson wrote:
-> On Wed, May 17, 2023 at 02:54:09PM +0200, Arnd Bergmann wrote:
->> diff --git a/kernel/signal.c b/kernel/signal.c
->> index 8f6330f0e9ca..d38df14f71ac 100644
->> --- a/kernel/signal.c
->> +++ b/kernel/signal.c
->> @@ -4780,6 +4780,8 @@ void __init signals_init(void)
->>
->>  #ifdef CONFIG_KGDB_KDB
->>  #include <linux/kdb.h>
->> +#include "debug/kdb/kdb_private.h"
->> +
->
-> Isn't is better to move the prototype for kdb_send_sig() into
-> linux/kdb.h instead?
->
-> That's what other kdb helpers spread across the kernel do
-> (kdb_walk_kallsyms() for example).
+On Fri, Jun 30, 2023, Chao Gao wrote:
+> On Fri, Feb 17, 2023 at 03:10:11PM -0800, Sean Christopherson wrote:
+> >+static __always_inline void kvm_governed_feature_set(struct kvm_vcpu *vcpu,
+> >+						     unsigned int x86_feature)
+> >+{
+> >+	BUILD_BUG_ON(KVM_NR_GOVERNED_FEATURES >
+> >+		     sizeof(vcpu->arch.governed_features.enabled) * BITS_PER_BYTE);
+> >+
+> >+	vcpu->arch.governed_features.enabled |= kvm_governed_feature_bit(x86_feature);
+> >+}
+> >+
+> >+static __always_inline void kvm_governed_feature_check_and_set(struct kvm_vcpu *vcpu,
+> >+							       unsigned int x86_feature)
+> >+{
+> >+	if (guest_cpuid_has(vcpu, x86_feature))
+> 
+> Most callers in this series are conditional on either boot_cpu_has() or some
+> local variables. Can we convert them to kvm_cpu_cap_has() and incorporate them
+> within this function? i.e.,
+> 
+> 	if (kvm_cpu_cap_has(x86_feature) && guest_cpuid_has(vcpu, x86_feature))
 
-Right, that is probably better here. Not sure if it's worth
-reworking the branch if you already merged it, the difference
-seems rather minor.
+Hmm, I was going to say "no", as most callers don't check kvm_cpu_cap_has() verbatim,
+but it doesn't have to be that way.   The majority of SVM features factor in module
+params, but KVM should set the kvm_cpu capability if and only if a feature is supported
+in hardware *and* enabled by its module param.
 
-       Arnd
+And arguably that's kinda sorta a bug fix, because this
+
+	if (lbrv)
+		kvm_governed_feature_check_and_set(vcpu, X86_FEATURE_LBRV);
+
+technically should be 
+
+	if (lbrv && nested)
+		kvm_governed_feature_check_and_set(vcpu, X86_FEATURE_LBRV);	
+
+Heh, and it's kinda sorta a bug fix for XSAVES on VMX, because this
+
+	if (cpu_has_vmx_xsaves() && boot_cpu_has(X86_FEATURE_XSAVE) &&
+	    guest_cpuid_has(vcpu, X86_FEATURE_XSAVE))
+		kvm_governed_feature_check_and_set(vcpu, X86_FEATURE_XSAVES);
+
+should technically be
+
+	if (kvm_cpu_cap_has(X86_FEATURE_XSAVES) &&
+	    boot_cpu_has(X86_FEATURE_XSAVE) &&
+	    guest_cpuid_has(vcpu, X86_FEATURE_XSAVE))
+		kvm_governed_feature_check_and_set(vcpu, X86_FEATURE_XSAVES);
+
+> The benefits of doing so are
+> 1. callers needn't repeat
+> 
+> 	if (kvm_cpu_cap_has(x86_feature))
+> 		kvm_governed_feature_check_and_set(x86_feature)
+> 
+> 2. this fits the idea better that guests can use a governed feature only if host
+>    supports it _and_ QEMU exposes it to the guest.
+
+Agreed, especially since we'll still have kvm_governed_feature_set() for the
+extra special cases.
+
+Thanks for the input!
