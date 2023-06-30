@@ -2,307 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 635DB743FFD
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 18:41:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CDD2A743FFE
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 18:41:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231906AbjF3Qlt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 12:41:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47128 "EHLO
+        id S232314AbjF3Qlz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Jun 2023 12:41:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230054AbjF3Qlp (ORCPT
+        with ESMTP id S232355AbjF3Qlu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 12:41:45 -0400
-Received: from EUR03-DBA-obe.outbound.protection.outlook.com (mail-dbaeur03on2079.outbound.protection.outlook.com [40.107.104.79])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F7D2421E;
-        Fri, 30 Jun 2023 09:41:31 -0700 (PDT)
+        Fri, 30 Jun 2023 12:41:50 -0400
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06D2B3AA7
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 09:41:49 -0700 (PDT)
+Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35UEnF8u015085;
+        Fri, 30 Jun 2023 16:41:41 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : references : content-type : in-reply-to :
+ mime-version; s=corp-2023-03-30;
+ bh=iQLxfCUoSxQC9hbDWXOibXivf3QUS5AYfxNKvF3emFc=;
+ b=c9utYs43jyQrV2HR059wFugyB2d/a5uwS9VcLoW0ERAPNyzg8ab0n7VJ6QzkPnvsIvjR
+ JBzXv4Sl7vHDG8ijjKfYjMv93RwB219qikpMzejzjFdakp7M9OI1gUqM2Y0ZKaMd9onT
+ Ry+A+DzsJeHAmW3YnIG5Q5z4sHy8ddMZOnwNagRMti2VSWT5BqccaVpFU+JuO3uos7JK
+ mLc9sT+npgXozSI890Ig1OZxioaT03++9tAwADg32Zxzu6U+BpDHgOQpJ8hSawM75eYJ
+ HsLkmUbJ2xziuDx5ipJVcg/x43DPciqxwHIQtUD8GvVSMAGbrfd4ZjbdZShH/hch0TS0 Ng== 
+Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3rdq319mwc-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 30 Jun 2023 16:41:41 +0000
+Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 35UFg1vJ003992;
+        Fri, 30 Jun 2023 16:41:39 GMT
+Received: from nam10-dm6-obe.outbound.protection.outlook.com (mail-dm6nam10lp2100.outbound.protection.outlook.com [104.47.58.100])
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3rdpxf43gx-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 30 Jun 2023 16:41:39 +0000
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=bcUKWia64FdNE9IQ/+IStWf24aV+16UNHhhXrULihFvLih52YxUqbTLZRVzou++Wd5L/Z6ptlEuE6GaeHU92iBEWzBwpb3LPpQ6s0ZwbdBIKoSGcN48dn7U7Jb3iHFf/33wvHpQYNYqEN834DeXHVZK298ZONi/ytUzjWsK3UVW3gDrOimNo1VLYHbFgTbo1Jk9X24nN+s9mSR260zdXZxNGEMvjB2g8kE3hWxe0lJlY2/E+dGz9Te3wnFMzmZJvmRXlNeMH+vhfLAqWV+ZTAM3X/ludSnJlkydygZdam+lZLZzDqbnQe0fnLcTgrbj6YS7bOiDEh3ksxHDbRfUUFw==
+ b=NyfejDybJBUiL4wZkqjkgLY6cXPRMdFC82C7gpLB5tpS/nhoK+rTOG7IhVowBxTunV+dZl5Zo/5IJyXnihD3CAGww67TgmTpag71G306vpGOwEfSxm1DmYu/eBXDdwOoRXmcC6r/wYlEdiqt/nGRhkKdoHtzVAcsyjTSmI73/W4vvBY9EDbDrT6S7XIq+iKN5EhJgT+5ZmT0QMehYrms5s2rC+rFN7lbEgui+O3RvOgSOALz5hL0BLnbyQKOGIhRYjXUi2MiA/hhdzAUDOn25lipldlGmyCQo2jQutQpI3UVZluwsWIhiE5v/8etjp4Of/ljvGURA9OfMOOXuWq+Qg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=PGI3Ph4oCibP0zHwVh/lsuMMAcY6BSA/FB8Xm+629wc=;
- b=MVs5BLocPIq1jtYOkpaVRFHC8bErozJiGQxkXeqm/qa8+6UQ0Le6AduOU+CmsXiRa1SwbZED6rTC8pNMh8y3svxMkXRYpz++35yajmXdaixCFyU2lcMnYLu4rw6e3fzQtlHh1A5V2GNmGJMLQO4Eg6g7KoFWE9nMvC9T2m0P+ZFHQmigZlyBE6NeRek6oKz1OzoT1lCySCrlAuafEpqHPg4p6gzcuHCqtS+OFK3Q+DAe/H8leK3Sby6+GvbNYj5zX1FhaXlXfTkbbD7T7sJvCaya9UftHjyzqDZT19QFsqwJVTgDkScKDheCKeXu6TjuncWR+SOJE+ZVnk1ECfYl4w==
+ bh=iQLxfCUoSxQC9hbDWXOibXivf3QUS5AYfxNKvF3emFc=;
+ b=V8NBQZ7AQAw7X9aPGTI0WeN3J9mrZxw7SMz9qoOoesav8Ro1DbbQUdnoTc9nphXOIhRyhwVIY2Yl16uabLvxnOkOd50mUS9G8AT37B9sgFjkBCpDetj8YPJBFACYgLaLWdHteShLLhujDAlN071b74gicPPBbLHq4Bl5R0F6siHjqnm+rzVcSnFiwXuZ+71yAlnlARDj0HpuwFL9Ewi/g1NlaPGc2nbfT8dWhdm8nGc67HLhf9iDWCAEoJ6IqlLUHJVtW+oMxzX7tnBGgo5lAc8Jq6bJOzc2O/6KOKJXBvQExKxycAw9r7H71H/hmkXV104UlFTza9HI++PBKC4Qhw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=PGI3Ph4oCibP0zHwVh/lsuMMAcY6BSA/FB8Xm+629wc=;
- b=OKFHsfapCKBI5iOVhc3evBhZxYV2DITwSrbleyOC5BiFE/D4qs1KXwyuW9sX22shx0ljv7/1saUJknwnhPw5//5cAoMSEh75kDWBubRd1xaHtegy/uySrI8N3md6Qebntexr3FYl+YIJhQuZlfKGMTRuo3nCCGnIHpwrGShUrzQ=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from AM0PR04MB6452.eurprd04.prod.outlook.com (2603:10a6:208:16d::21)
- by AS8PR04MB8343.eurprd04.prod.outlook.com (2603:10a6:20b:3f1::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6544.19; Fri, 30 Jun
- 2023 16:41:29 +0000
-Received: from AM0PR04MB6452.eurprd04.prod.outlook.com
- ([fe80::c40e:d76:fd88:f460]) by AM0PR04MB6452.eurprd04.prod.outlook.com
- ([fe80::c40e:d76:fd88:f460%5]) with mapi id 15.20.6544.019; Fri, 30 Jun 2023
- 16:41:28 +0000
-From:   Vladimir Oltean <vladimir.oltean@nxp.com>
-To:     netdev@vger.kernel.org
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Ido Schimmel <idosch@nvidia.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Vlad Yasevich <vyasevic@redhat.com>,
-        bridge@lists.linux-foundation.org, linux-kernel@vger.kernel.org
-Subject: [PATCH net] net: bridge: keep ports without IFF_UNICAST_FLT in BR_PROMISC mode
-Date:   Fri, 30 Jun 2023 19:41:18 +0300
-Message-Id: <20230630164118.1526679-1-vladimir.oltean@nxp.com>
-X-Mailer: git-send-email 2.34.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: FR3P281CA0048.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:4a::20) To AM0PR04MB6452.eurprd04.prod.outlook.com
- (2603:10a6:208:16d::21)
+ bh=iQLxfCUoSxQC9hbDWXOibXivf3QUS5AYfxNKvF3emFc=;
+ b=bjqYW9Hn36qNu8xtFCgsWysedorUVQCntGOK1HlD+QXstl7APiXu7XXsX7601PemJbf+m2lDhX2A3tTcIj1nBu75med1jBOSaH3OeFkw42IcrTSL1Nm8im5KsZvj4iAOhTatbIafMwnJg8KjklbImGLREUThJGGHPv9BwD1TTiQ=
+Received: from BL0PR10MB3011.namprd10.prod.outlook.com (2603:10b6:208:7e::29)
+ by DS7PR10MB5949.namprd10.prod.outlook.com (2603:10b6:8:86::9) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6521.23; Fri, 30 Jun 2023 16:41:38 +0000
+Received: from BL0PR10MB3011.namprd10.prod.outlook.com
+ ([fe80::de2:4e3f:62c2:865b]) by BL0PR10MB3011.namprd10.prod.outlook.com
+ ([fe80::de2:4e3f:62c2:865b%3]) with mapi id 15.20.6544.019; Fri, 30 Jun 2023
+ 16:41:37 +0000
+Date:   Fri, 30 Jun 2023 12:41:35 -0400
+From:   "Liam R. Howlett" <Liam.Howlett@Oracle.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Matthew Wilcox <willy@infradead.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: Re: [PATCH] mm: Update do_vmi_align_munmap() return semantics
+Message-ID: <20230630164135.725ewvttype5tt6x@revolver>
+Mail-Followup-To: "Liam R. Howlett" <Liam.Howlett@Oracle.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Matthew Wilcox <willy@infradead.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>
+References: <wiuXi4KmjgTocOZMpHTZuZP+y8r5wYynvvT_ZPXyG+TYA@mail.gmail.com>
+ <20230630160519.3869505-1-Liam.Howlett@oracle.com>
+ <CAHk-=wg=DGSsA+=rr3bMDKrGNgy4C+PGM_w2PtpK4+Sx9qFF8w@mail.gmail.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHk-=wg=DGSsA+=rr3bMDKrGNgy4C+PGM_w2PtpK4+Sx9qFF8w@mail.gmail.com>
+User-Agent: NeoMutt/20220429
+X-ClientProxiedBy: YT4PR01CA0113.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:b01:d7::25) To BL0PR10MB3011.namprd10.prod.outlook.com
+ (2603:10b6:208:7e::29)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AM0PR04MB6452:EE_|AS8PR04MB8343:EE_
-X-MS-Office365-Filtering-Correlation-Id: f8fd1bda-d648-4b26-3112-08db7988da02
+X-MS-TrafficTypeDiagnostic: BL0PR10MB3011:EE_|DS7PR10MB5949:EE_
+X-MS-Office365-Filtering-Correlation-Id: 1b0630b5-a795-4073-c908-08db7988df9f
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: rsudGO+RyH8B/4lpbCy4gAk2iIwAkME6fLvtSScJ/2jnN/4SQ4uNNZNyABJthIgUC3I+++sA+fwTiUvNzOnjK6u3LRpQV03u8TX1RMiNZtficE60A3yH8ueh1nfnHnmIz9Simaif0rsODzDUOxM4V3dfkYVD+Uju5gD9PYuTapFjCTo6In0oc5y2INWZS1gyRnq77VPEvEYnJN8tl8qpoB9s4kSTHc8C7TFeUcCeegAAjmV8jpILmJSE7Hj4rb1O/xc6CA24CUH0njzio8DYhtWiHefK1MFfwjif+diOAB26sM8AlzxNYc+Ks1DWKoACZYMrl2trkOr1V8SjeMjkU5wXBNtjIfy+M3WQiA+77dDZTCY36B88TXixevN9i8c8kIC1NDaGNVzVGANWQaKlU6P68ohfr3NarP3yYp/LDmW6tV+7n3U0/mOqLKmSaOOFopWl8XqAWyBWEDOaLuqcRH1rtA5zA4SWlRU1xEZD2KnAWg0RV045rnrJhJRr1lZYJ0kDqRk6bVTsADbkD1WE+nZDX67VAsYaJXFYbRLlLM63AWIX7mX8DIUCsvkswt/wLnZ9YgWxmQas517YLKe7xURpyWgv/lpGU9vTNHLaZyZ7KgEb4NPSSTEJzHccF7j3
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0PR04MB6452.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(136003)(346002)(396003)(376002)(366004)(451199021)(54906003)(4326008)(8676002)(8936002)(5660300002)(36756003)(478600001)(6916009)(6486002)(66946007)(6666004)(66476007)(66556008)(52116002)(316002)(6512007)(41300700001)(38350700002)(38100700002)(186003)(2616005)(7416002)(6506007)(26005)(1076003)(44832011)(86362001)(83380400001)(2906002);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: U/49OI8MKWHOKF/QpzNokqrJ1kFnkzmz1aU1hagJIf0sDyrAekEbzxl1XMq8Eo1FbXxSXuq7u1W+Kd6yqijOr0CHOF/869f34OqeFVkAurdHhpP2eCDYOUBmGQUUzXbkOXIZ2bou8uNy3iMJfwmbzSxVAS6N2fguvxaJpcoBEbrhUayoIxBmaCjSmCBa7FjeG4rl+u9f2ZZTeizdup36/8cnluJh/6JKoWCzCpN/1vYfg/sJ7yrgb9CRrNwbmy8ArizVlgmPB8vdZb/NyegSX+wIDzQy/p9pASGXNQOyqy2g1r6qslJ7VN+ygAoXwyaXtMtWrhAWlMtL6s4LZxKOZOfE1aRoUWnGmahWkgQS66tLIsQSCUkQjfLX0jtFkM0R5sc5ZwsnK2kD3LDZoVbh8E+q02Pz/ZKoS9j8jfFtyqykOdQ6ZfZBE1nn7k6xUZNum21bYViZAlyKCpcsmzwIAzerWJw99rltpc76A4W8SkWJ3v1A4sD6tVnF1PPMGndWOCdaIvtBrq8evQXVLoutQxE66T9AwmE+x8c0OCc1tQ6vcUPdso4o1hjcHp8BkhiB
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL0PR10MB3011.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(7916004)(39860400002)(346002)(376002)(136003)(366004)(396003)(451199021)(1076003)(6486002)(54906003)(83380400001)(2906002)(15650500001)(6512007)(9686003)(26005)(478600001)(6506007)(186003)(33716001)(5660300002)(4326008)(316002)(38100700002)(66946007)(8936002)(66556008)(41300700001)(86362001)(66476007)(8676002)(6916009);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?FdY6HpO6A8162vBUZI1zC07sUdescZkfUM9GW4NJD+wMxP6+aDg2GV/2K/i6?=
- =?us-ascii?Q?0SxPjiIGQuMr5wFoQulj9O9C3K1iiboikPz2P6EtWkmlxywwdR6rfstHlMZ0?=
- =?us-ascii?Q?wI8FrOBmccKSRCoWe9h+YjwbRHeY8fSWUUh6UjwHKQiVQg5sw9xrJsPFV5Bd?=
- =?us-ascii?Q?PfgoxQkU44uOk7hbMjDYRqN83vr023wTfAuZUFaDCpR/ezrNpo6aktKbSROK?=
- =?us-ascii?Q?dJ8LBMo08WBnHQhPAi6InO/wKMDrI4iym9XB86CoMvm0hv1KvcncNqQRAfb/?=
- =?us-ascii?Q?9tnIh++SXGoVyY9U/5UtmmvizvVqZ6CCdZwDX6uI/tXwR4NKHlCZKtZaw72W?=
- =?us-ascii?Q?8JqtmXAEgOoGkt5/+U8jkFHtVXw1EqT3B8NvqmlaTNagAHjc5nZX6YRzQPq8?=
- =?us-ascii?Q?MnopX2sd8bzfXXReHVtCjO+/LWDZ2HeYi7ZC539iAJc7qPctE0f6inFMjJJY?=
- =?us-ascii?Q?P3PU/2gnkFSW2QbZqRSN9TJHJgGDBtDiLU3+r5t3cNaeHEDNB0vjFp9PoRTf?=
- =?us-ascii?Q?WoLPYASv0oTMLBBnUNcRpbUy9UXzHCoPeGwvXGi0F7hzokZ4UlkWjoR0FtRk?=
- =?us-ascii?Q?FTp00BLO8XQmtsQPUSeo0UOPZ/GXXYsn3EDiqc1pC6ocSqH2a7GLWsG7dAU3?=
- =?us-ascii?Q?jE1btosVs0UCPpxKy5s7fCMPmKf/hIVtswthIQvhwqjNjYF0tSY1aRfUFWET?=
- =?us-ascii?Q?vq8aSqI3UCyjd+RV2wS29hXW6Nq8uaInOwDk/naO1WomO8UEIl7fJ0C05+YQ?=
- =?us-ascii?Q?K9QU4X0XiFXam5A/qd0mF/yBb3EANvuEoFiuNEDduywaLgSNmyRIg9mfviAE?=
- =?us-ascii?Q?qQ1BUFgNlau70YTsm28iB+eL9lKGQXEwNw6l0I+BVSkvgaWkbP1iq9Pq8DZt?=
- =?us-ascii?Q?Aozksn2qfTxht9U5r2qaQUB6RpuR4An+TtGsxlbsziCKlo3BqJ3MH+iLpkwy?=
- =?us-ascii?Q?11ItwyiD5amyomX+UTR2Uxs7hAzADH3ltrui7AR9coEOXGOL7PQSsMoInPeE?=
- =?us-ascii?Q?YBeEn8XtblhHnKVEB/Ma1B5+LZiayBpp7diPvyOw3YI3mBKXxMPv6AB1IVaW?=
- =?us-ascii?Q?Er3yd3Zz8VUFt4GGEb6KDJQgjfRK5MWahFaDFvJ0eNAhXB2Ypbn00PsURxDc?=
- =?us-ascii?Q?DiuLg4YBi1MlkQoQ+60U2zpdica2BCjbV0i3azaHJRAZ+pP0dnY1zoDX3E0i?=
- =?us-ascii?Q?VuVG9xdthH1p+15S8yzVcie3odc8ogUYZFdcdzgqWsvBwGLoSfy7ZbiLAbaJ?=
- =?us-ascii?Q?50/vvDr/+61qsRhAIj5Fz5p/iqt25zILkdAbTq9MWqIQE6QONZ/cx9aynW/n?=
- =?us-ascii?Q?Q5X5ND0RV4lSC5ih+GVwSOpO1OI3VzUfx9L9lzL7kKCaZlnbsurY64qD4LKK?=
- =?us-ascii?Q?STo2OLDGtvJTpWDlRUv6abFlgegz9g3wK0/ptZBd7K7YPP5ho7CZwyKnQTL+?=
- =?us-ascii?Q?SvTOKeUP0BNFJJ7NuFIRRM5p7DEb1tNlRPpKFJ1BO2EMO7wEBFJS6ph9kuPi?=
- =?us-ascii?Q?/w6E2uxz6Zr/W5rp+NWdVCE3RQqeDTwVIXfmUbZtwX1W8wGe33xZGO8Zj0vp?=
- =?us-ascii?Q?xo42TVUP20a8AG+lI5uAJGDjncmrEp3UGYrLw/lqbgNevHjoGGxr2cOMG+zE?=
- =?us-ascii?Q?aw=3D=3D?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f8fd1bda-d648-4b26-3112-08db7988da02
-X-MS-Exchange-CrossTenant-AuthSource: AM0PR04MB6452.eurprd04.prod.outlook.com
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?yBfNjKPVGtPtZ7xzSSJXskWW5TMD1/yNHLj0bL9BwleMPoosmnmdIAKdDF/H?=
+ =?us-ascii?Q?nAxBURSha25AgoyN1ll3l5k6xh6PlFBcDNCouAHHkKJg2d7Cr76OIAyxC1Mf?=
+ =?us-ascii?Q?P5IIo8amoDIIo1SqE8dUQn7QEfQMJtrc5aWXbp6D6lbE/5imp/1vVB5UJSFN?=
+ =?us-ascii?Q?KyilIE2UwS6C5kYftywrYpM0kkoq7ghaEbY55sWzQMY0mhVw1KsujioFS3cZ?=
+ =?us-ascii?Q?t2goQXm8DZ/GnxjPT7RpLwa1dchLBMVirrCVbwzl5MYtNgsRqMeJuZbqfuKH?=
+ =?us-ascii?Q?Csj3xQU92nabSwt3QwzSmysbKzvzUbwvnNGxOm6Ad314ubLzKMelrXDws6lx?=
+ =?us-ascii?Q?Bwnm1mMzl1VF5YjpQ0N05JU5tyorYtaWxFxxJE5Ddlb9imKo7z7NDgTN6L5a?=
+ =?us-ascii?Q?n7HBSbDMqCRGMEUYZwa6Q3fltGOsUvUZZjIiWyloAE6MQJiiLddSV54fX89+?=
+ =?us-ascii?Q?v/Vs1JQRYTpv2z7RzTPz3CAHhxQpwpeF7K5XPhBqKSMKUzzXBH7e4hOeScWA?=
+ =?us-ascii?Q?QyAtQwKTx+nlLlbZZKQ1k7TwiQZTufN0yQtm1uGWaB2jULJ6BB/4nHKuQu2P?=
+ =?us-ascii?Q?yofVdkc28V3wHsJKPGpjswo20wPJVx4w2t8rJhCpEzJYSEErfUePy2POqzga?=
+ =?us-ascii?Q?etI4+GVSLO3mmtobfWmjc3IU2+UmG5JIVj0m63i4uBrsKOnrvFfYo2Mo7G0y?=
+ =?us-ascii?Q?xq3+rlnm/wRxeBW2lgVrvFVrwb00KGs52B6dQWUOlxAma1uFdZlQ9Zx4W2/3?=
+ =?us-ascii?Q?p2O9ix9i+gbT+E41uPMj78Gfr3DPs5CUfmqSBdseMH1ZU1+cfYuV3IAUbit0?=
+ =?us-ascii?Q?3hKIig01T7WkmXRtuEJj9maBb7q0I1OUZOClTnBy4bCDP9ONsotYQNerskyO?=
+ =?us-ascii?Q?D14y3tUhod1tN+Itcdphdt2KFw9RQ1pfKHzJ2T8X3q5O7o8QmOfXqalzZJzd?=
+ =?us-ascii?Q?XbD4N8EPSrYbTKHk5ZOYmx60dXPFSZn7929Bo8Zg6V1vkOtqHYYl4LXv+lJD?=
+ =?us-ascii?Q?nVMDdjI/qzrSLJ0+9xD2JXUD+Ljd28drCSE65Xbpp3Ltv+VnUm09IUl7LhxP?=
+ =?us-ascii?Q?dhCBfpo9GSyiwLk282lD0ZnPI/5SPLGkXkvtSQFjDvslaVWYCuXsNOK6oi3L?=
+ =?us-ascii?Q?tD1GdNrCtdpo7pqS0qIuhtVsM//AxcYSTTRtqRpdDemWSfYMD6+e0ht8tjgc?=
+ =?us-ascii?Q?7nNEq38WaUxXXX0DZJ4Yfcjk5TDgAN76jTel4ixiTofPQg1oTLTiByo1grGM?=
+ =?us-ascii?Q?OmiubiDueK9kJbb0G78yzMfogchUCVp4FZYmxMeewcBK8jD/xUDG0bblvEO1?=
+ =?us-ascii?Q?FEx/mqniTeWc829bpepxVKFupoMf1qgKe94KUK1TBCKIppECSLNpn8tiF7jQ?=
+ =?us-ascii?Q?mxAHZac6Sttjx2YE68Ksn4wzoWvW27pmAN/ixWXZ2xNc+F21cEBnMtlHrC4a?=
+ =?us-ascii?Q?WX0YNyaZs9MOh+z0Ubl/vZiE+xBQ0k2QtGIjmKVw5yVs63ZOr4xh9HoxpRLq?=
+ =?us-ascii?Q?2h5HnSIgf8FENF3l4GjHD+2zUp9Z3G+2LfTaJ0utNPcHuTGkgV3DuB/fm0VT?=
+ =?us-ascii?Q?D+NpD9lCMHigEBUObwoNoNrBjAkmKdMr8iBPmEHpGinrCty3k/47ZDOZeDJp?=
+ =?us-ascii?Q?0w=3D=3D?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: GjH/xULAm+dpZHvxAkJH/Lmi+DdRs+EbVFqmpbY+0BgLaZQle37K+1Ut58H56IxvqACWse44+nAotFtFjqp/C2bgeuhRy4Y2NxbbOc3Vj526m4e6HeGM7P+xd5+wF0h+f7RATUrTVXEaAUGXWi5BlHo8XxVIqhRqKunKgLCbwNuvcYc+UxyoMEN3vFpiWxm9xJijHKDkCjy95ysyr28KNt4+d6bsRlxi6fGZme+TbpdwGZLxLTHBoZWtu1g2JxyCiUTxETMsEHkQMJa1EEkOnOvuSC5h1BBZIssnwIEvpc7cu7/J6H9tUhzomiIU4MXXhoKg1/Gx6jT2PAcDAvJfY2uRlhqsKzipr6Jc45KwzK9wDVnByWv7i/4w2B0hMreWqVdeeOmdUXM2yickRZqlBZt7d5RoRB8JYqSM5aXbd8pNcPY/T5aPlBsztanCX+hnOGuX8X+zXasIGVqNZ0JiFZZZX+jEgW+eIwHCO2wVUz0Llu6udXkjHNeKyxt6POLpQ6onVPd3+JFtI+7N2HOo8m3aJQuZg2ivmvbSLGJGpkck7/uLahdbOjNyjJsRL5+JcOAxOqa5pJ8JAgHE1605bFklFdWtFrmC/iXoSNVvr0mPevKhPSKR5atynIZ3UtUsF7661N/TN0JMUHQv/dx9qhAZCNKj8kbC785W8kmmW7aBVSz2roLSWPzEP6LNCq7vu5SMjD5kqGqvRM057m26rF0jcuOnTdVOLFLMAtCtuEf5VRsFsioe5THrdXkhT6l0tSdMA7vG18IRDwS6nuCzptkkOVKyUWmRRRf2d0rEDwhae7PvjNcEEhNIE8etr/uxdlCzqxcmZ7QQDZJ+TyL/IH2Fi4EHLgJ8D4sH9JalOWnWGzlh1WZu3CyP02ETkH4C
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1b0630b5-a795-4073-c908-08db7988df9f
+X-MS-Exchange-CrossTenant-AuthSource: BL0PR10MB3011.namprd10.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Jun 2023 16:41:28.4897
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Jun 2023 16:41:37.8585
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: GS1jBw7IPyxaBe2TBvUgL0B9scdeuaXAYZ1qZ/d5HDajFGav1BxnPioDPlOeM5Dm3zs8XUHiA5cYiyffkNanaQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR04MB8343
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-UserPrincipalName: oxkAw74of2cgiL3tPIpfVoO3h5ECdEe3aiHZDUVq9rnkcHWJybj2DYyLZIZTwZKOYCLYBibZ4IRdxCgwDS8+oA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR10MB5949
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-06-30_09,2023-06-30_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 malwarescore=0 mlxscore=0
+ mlxlogscore=999 bulkscore=0 spamscore=0 phishscore=0 suspectscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2305260000
+ definitions=main-2306300143
+X-Proofpoint-ORIG-GUID: IKJye3xAe0aGPzpiQIJPdZeti_fYeHCU
+X-Proofpoint-GUID: IKJye3xAe0aGPzpiQIJPdZeti_fYeHCU
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-According to the synchronization rules for .ndo_get_stats() as seen in
-Documentation/networking/netdevices.rst, acquiring a plain spin_lock()
-should not be illegal, but the bridge driver implementation makes it so.
+* Linus Torvalds <torvalds@linux-foundation.org> [230630 12:19]:
+> On Fri, 30 Jun 2023 at 09:06, Liam R. Howlett <Liam.Howlett@oracle.com> wrote:
+> >
+> > Update do_vmi_align_munmap() to return 0 for success.  Clean up the
+> > callers and comments to always expect the lock downgrade to be honored
+> > on the success path.  The error path will always leave the lock
+> > untouched.
+> 
+> Thanks for doing this, but with this cleanup, it becomes clear that
+> some of the callers that asked for a downgrade didn't actually want
+> that at all...
 
-After running these commands, I am being faced with the following
-lockdep splat:
+...
 
-$ ip link add link swp0 name macsec0 type macsec encrypt on && ip link set swp0 up
-$ ip link add dev br0 type bridge vlan_filtering 1 && ip link set br0 up
-$ ip link set macsec0 master br0 && ip link set macsec0 up
+> 
+> I didn't look at what all the indirect callers here were doing, but it
+> really looked to me like *most* callers wanted the lock dropped
+> entirely at the end.
+> 
+> In fact, looking at that patch, it looks like *all* of the callers
+> that asked for downgrading actually really wanted the lock dropped
+> entirely.
+> 
+> But I may well be missing some context.  So take this not as a NAK,
+> but as a "you looked at all this code, could it perhaps be simplified
+> a bit more still?"
+> 
 
-  ========================================================
-  WARNING: possible irq lock inversion dependency detected
-  6.4.0-04295-g31b577b4bd4a #603 Not tainted
-  --------------------------------------------------------
-  swapper/1/0 just changed the state of lock:
-  ffff6bd348724cd8 (&br->lock){+.-.}-{3:3}, at: br_forward_delay_timer_expired+0x34/0x198
-  but this lock took another, SOFTIRQ-unsafe lock in the past:
-   (&ocelot->stats_lock){+.+.}-{3:3}
+Sure, I noticed that but didn't want to change too much, at least in one
+commit.  I'll double check and will keep cleaning here.
 
-  and interrupts could create inverse lock ordering between them.
+I'm not sure how many error scenarios need the lock at all on return
+either.
 
-  other info that might help us debug this:
-  Chain exists of:
-    &br->lock --> &br->hash_lock --> &ocelot->stats_lock
+I hesitate to ask considering how much trouble I've caused with the
+32bit map flag, but I also wonder about the stack guard now that the
+write lock is taken for stack expansion?
 
-   Possible interrupt unsafe locking scenario:
-
-         CPU0                    CPU1
-         ----                    ----
-    lock(&ocelot->stats_lock);
-                                 local_irq_disable();
-                                 lock(&br->lock);
-                                 lock(&br->hash_lock);
-    <Interrupt>
-      lock(&br->lock);
-
-   *** DEADLOCK ***
-
-(details about the 3 locks skipped)
-
-swp0 is instantiated by drivers/net/dsa/ocelot/felix.c, and this
-only matters to the extent that its .ndo_get_stats64() method calls
-spin_lock(&ocelot->stats_lock).
-
-Documentation/locking/lockdep-design.rst says:
-
-| A lock is irq-safe means it was ever used in an irq context, while a lock
-| is irq-unsafe means it was ever acquired with irq enabled.
-
-(...)
-
-| Furthermore, the following usage based lock dependencies are not allowed
-| between any two lock-classes::
-|
-|    <hardirq-safe>   ->  <hardirq-unsafe>
-|    <softirq-safe>   ->  <softirq-unsafe>
-
-Lockdep marks br->hash_lock as softirq-safe, because it is sometimes
-taken in softirq context (for example br_fdb_update() which runs in
-NET_RX softirq), and when it's not in softirq context it blocks softirqs
-by using spin_lock_bh().
-
-Lockdep marks ocelot->stats_lock as softirq-unsafe, because it never
-blocks softirqs from running, and it is never taken from softirq
-context. So it can always be interrupted by softirqs.
-
-There is a call path through which a function that holds br->hash_lock:
-fdb_add_hw_addr() will call a function that acquires ocelot->stats_lock:
-ocelot_port_get_stats64(). This can be seen below:
-
-ocelot_port_get_stats64+0x3c/0x1e0
-felix_get_stats64+0x20/0x38
-dsa_slave_get_stats64+0x3c/0x60
-dev_get_stats+0x74/0x2c8
-rtnl_fill_stats+0x4c/0x150
-rtnl_fill_ifinfo+0x5cc/0x7b8
-rtmsg_ifinfo_build_skb+0xe4/0x150
-rtmsg_ifinfo+0x5c/0xb0
-__dev_notify_flags+0x58/0x200
-__dev_set_promiscuity+0xa0/0x1f8
-dev_set_promiscuity+0x30/0x70
-macsec_dev_change_rx_flags+0x68/0x88
-__dev_set_promiscuity+0x1a8/0x1f8
-__dev_set_rx_mode+0x74/0xa8
-dev_uc_add+0x74/0xa0
-fdb_add_hw_addr+0x68/0xd8
-fdb_add_local+0xc4/0x110
-br_fdb_add_local+0x54/0x88
-br_add_if+0x338/0x4a0
-br_add_slave+0x20/0x38
-do_setlink+0x3a4/0xcb8
-rtnl_newlink+0x758/0x9d0
-rtnetlink_rcv_msg+0x2f0/0x550
-netlink_rcv_skb+0x128/0x148
-rtnetlink_rcv+0x24/0x38
-
-the plain English explanation for it is:
-
-The macsec0 bridge port is created without p->flags & BR_PROMISC,
-because it is what br_manage_promisc() decides for a VLAN filtering
-bridge with a single auto port.
-
-As part of the br_add_if() procedure, br_fdb_add_local() is called for
-the MAC address of the device, and this results in a call to
-dev_uc_add() for macsec0 while the softirq-safe br->hash_lock is taken.
-
-Because macsec0 does not have IFF_UNICAST_FLT, dev_uc_add() ends up
-calling __dev_set_promiscuity() for macsec0, which is propagated by its
-implementation, macsec_dev_change_rx_flags(), to the lower device: swp0.
-This triggers the call path:
-
-dev_set_promiscuity(swp0)
--> rtmsg_ifinfo()
-   -> dev_get_stats()
-      -> ocelot_port_get_stats64()
-
-with a calling context that lockdep doesn't like (br->hash_lock held).
-
-Normally we don't see this, because even though many drivers that can be
-bridge ports don't support IFF_UNICAST_FLT, we need a driver that
-
-(a) doesn't support IFF_UNICAST_FLT, *and*
-(b) it forwards the IFF_PROMISC flag to another driver, and
-(c) *that* driver implements ndo_get_stats64() using a softirq-unsafe
-    spinlock.
-
-Condition (b) is necessary because the first __dev_set_rx_mode() calls
-__dev_set_promiscuity() with "bool notify=false", and thus, the
-rtmsg_ifinfo() code path won't be entered.
-
-The same criteria also hold true for DSA switches which don't report
-IFF_UNICAST_FLT. When the DSA master uses a spin_lock() in its
-ndo_get_stats64() method, the same lockdep splat can be seen.
-
-I think the deadlock possibility is real, even though I didn't reproduce
-it, and I'm thinking of the following situation to support that claim:
-
-fdb_add_hw_addr() runs on a CPU A, in a context with softirqs locally
-disabled and br->hash_lock held, and may end up attempting to acquire
-ocelot->stats_lock.
-
-In parallel, ocelot->stats_lock is currently held by a thread B (say,
-ocelot_check_stats_work()), which is interrupted while holding it by a
-softirq which attempts to lock br->hash_lock.
-
-Thread B cannot make progress because br->hash_lock is held by A. Whereas
-thread A cannot make progress because ocelot->stats_lock is held by B.
-
-When taking the issue at face value, the bridge can avoid that problem
-by simply making the ports promiscuous from a code path with a saner
-calling context (br->hash_lock not held). A bridge port without
-IFF_UNICAST_FLT is going to become promiscuous as soon as we call
-dev_uc_add() on it (which we do unconditionally), so why not be
-preemptive and make it promiscuous right from the beginning, so as to
-not be taken by surprise.
-
-With this, we've broken the links between code that holds br->hash_lock
-or br->lock and code that calls into the ndo_change_rx_flags() or
-ndo_get_stats64() ops of the bridge port.
-
-Fixes: 2796d0c648c9 ("bridge: Automatically manage port promiscuous mode.")
-Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
----
- net/bridge/br_if.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
-
-diff --git a/net/bridge/br_if.c b/net/bridge/br_if.c
-index 3f04b40f6056..2450690f98cf 100644
---- a/net/bridge/br_if.c
-+++ b/net/bridge/br_if.c
-@@ -166,8 +166,9 @@ void br_manage_promisc(struct net_bridge *br)
- 			 * This lets us disable promiscuous mode and write
- 			 * this config to hw.
- 			 */
--			if (br->auto_cnt == 0 ||
--			    (br->auto_cnt == 1 && br_auto_port(p)))
-+			if ((p->dev->priv_flags & IFF_UNICAST_FLT) &&
-+			    (br->auto_cnt == 0 ||
-+			     (br->auto_cnt == 1 && br_auto_port(p))))
- 				br_port_clear_promisc(p);
- 			else
- 				br_port_set_promisc(p);
--- 
-2.34.1
-
+Thanks,
+Liam
