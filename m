@@ -2,105 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E28EF7443B8
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 23:02:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DDF27443BA
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 23:03:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232399AbjF3VCc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 17:02:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58174 "EHLO
+        id S232503AbjF3VC4 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 30 Jun 2023 17:02:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231508AbjF3VCa (ORCPT
+        with ESMTP id S232375AbjF3VCx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 17:02:30 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33F1E3AB6;
-        Fri, 30 Jun 2023 14:02:29 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BC520617F3;
-        Fri, 30 Jun 2023 21:02:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E82DC433C9;
-        Fri, 30 Jun 2023 21:02:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688158948;
-        bh=VcUOHJR+47uuktJ5ytIptdWQ67g+qS6C8InKoEpNYPI=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=bKdUOjRCwCirUT9q7WtJCF4J3SZ4MFRFD8zaccxrUCFa9mbQEs4fZgvNSunaFSwHS
-         11ybRccrlNFDydC4LidgSdsGFXA7rSGVX9439m9ZFKuiJyw/WNoOyg+GKmnSr3ULyi
-         wHhqaTJsHXAOUOCB0CP88rjXunxKGHZQNCJkujwp9IlyYNecbajAR7n5nXCcv+pBd0
-         xscq2RUpHgoTZpW4VfBOQaINmjy/m8iOmKsAxgavZPUEy+5Qxp+J0WV2yqYc1p3A/T
-         B4lnfUMei8c8YgAy1s72TdRRzKQF1QxEjVJiQBSjzJ8Bn08y+Qvs1GD3YMgvhh8+Wh
-         4BILoquM3xp7A==
-Received: by mail-lj1-f180.google.com with SMTP id 38308e7fff4ca-2b69923a715so36937441fa.0;
-        Fri, 30 Jun 2023 14:02:28 -0700 (PDT)
-X-Gm-Message-State: ABy/qLZQMOUza1dBcv1cxRIKdEm3+S8Tm5EKYOc156vnFL56E9RtSqP4
-        2yr+rGyiUaHst8ih1U0dKIzu9OP34pVfO3XjTg==
-X-Google-Smtp-Source: APBJJlFXPs+PM/Yq4ExfSZtrMaxYg8sRjO2RE/Hx0FHDxKM+5ocBDwFMqtPHbTzm605Nqffb+L2iwr7y6OT1M6EjMHQ=
-X-Received: by 2002:a2e:3a10:0:b0:2b5:8102:1843 with SMTP id
- h16-20020a2e3a10000000b002b581021843mr3406860lja.18.1688158946181; Fri, 30
- Jun 2023 14:02:26 -0700 (PDT)
+        Fri, 30 Jun 2023 17:02:53 -0400
+Received: from mail-yb1-f170.google.com (mail-yb1-f170.google.com [209.85.219.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AAC93AAF;
+        Fri, 30 Jun 2023 14:02:52 -0700 (PDT)
+Received: by mail-yb1-f170.google.com with SMTP id 3f1490d57ef6-bfee66a5db6so2180424276.0;
+        Fri, 30 Jun 2023 14:02:52 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688158971; x=1690750971;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=QaJR3XXXCrhbjYtKCZ1X+dPieH6DxQBprcivRtbfQUY=;
+        b=gVTRCWp6g1EyckUqz/MVo9qU+keBJqzfj6cYAeeomlMHxJ1wm/34Crkxjxsu2g6Suz
+         BQ6dlDvBui2tz16xHg5KtCwjru95Ui5KMbn7o2fXs/h7gxZFHt8+91Erotfg1zn9T38G
+         Jm2LV0q7FI6RLn7qpfJpsKOpOC8sU/VUIi6YrWGrAMxOOtF2BiEh6P+KGtRP/ZJ0QB3z
+         tdBqAdmpDGTF68AnXIYxAnfyAMF9JQkoeSF5zlfAnzN5LCyMKRLr/gKQ6IqfLT0D+gW8
+         PC5AKYZ4qC66LklWxarFhW8LSFiGiTXp8ZHY8yyV+MjpsqF7o6ZCyGyZboXPaGj9OrcE
+         iKBg==
+X-Gm-Message-State: ABy/qLZbCGev5ka5qRJ1f/HOS2+Zl0pLIXA4T2F9TuvsHgag/dneWncu
+        ufG5l01kcVHYWY2aEPuQ0iY/3ClCLaUZQUNNmt8=
+X-Google-Smtp-Source: APBJJlFUh7jF98u3G1CNzoNLEJHzfbIQW3ootq9oZwxEGAIzPEvLBI5WrxqwcVcpo1/Qaq1hhd6xn6HyeUrqFHcrYYk=
+X-Received: by 2002:a25:26c4:0:b0:c40:f090:98bf with SMTP id
+ m187-20020a2526c4000000b00c40f09098bfmr3019764ybm.28.1688158971230; Fri, 30
+ Jun 2023 14:02:51 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230609183111.1765507-1-robh@kernel.org>
-In-Reply-To: <20230609183111.1765507-1-robh@kernel.org>
-From:   Rob Herring <robh@kernel.org>
-Date:   Fri, 30 Jun 2023 15:02:14 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqJOAK4EzED1fbKiyyv8zzS4A0ZVzHu9Us9RhmFRnPYJpQ@mail.gmail.com>
-Message-ID: <CAL_JsqJOAK4EzED1fbKiyyv8zzS4A0ZVzHu9Us9RhmFRnPYJpQ@mail.gmail.com>
-Subject: Re: [PATCH] cpufreq: pmac32: Use of_property_read_reg() to parse "reg"
-To:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     linux-pm@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-kernel@vger.kernel.org
+References: <20230626161059.324046-1-james.clark@arm.com> <20230626161059.324046-3-james.clark@arm.com>
+ <ZJonE3ZZ2cBUq0U8@google.com> <CAP-5=fX+FDAkFoMhQY27_+fiRp_UDruP8qWTdjvqU5-uE0SdWA@mail.gmail.com>
+ <CAM9d7cj4xr6oTDKvxbNTVUewyZFTBchQS36KC0nN4i4HjCsq5w@mail.gmail.com>
+ <CAP-5=fUTzn06DM7o-1qBx7Tauo2Q2ACHmYcvwTmrTOJpzS2=oQ@mail.gmail.com>
+ <d5618d0b-1441-0c04-4b09-768bfe7b7ee7@arm.com> <CAM9d7cjx2zinztBYiYaU6iqKzuV3vcJA6wtY71aicFbr5sy9zA@mail.gmail.com>
+In-Reply-To: <CAM9d7cjx2zinztBYiYaU6iqKzuV3vcJA6wtY71aicFbr5sy9zA@mail.gmail.com>
+From:   Namhyung Kim <namhyung@kernel.org>
+Date:   Fri, 30 Jun 2023 14:02:38 -0700
+Message-ID: <CAM9d7chKj4pnhtuuA6wN6TBLUYq_9bTxvr6dRT7CKW3CfQ1Avg@mail.gmail.com>
+Subject: Re: [PATCH 2/2] perf report: Don't add to histogram when there is no
+ thread found
+To:     James Clark <james.clark@arm.com>
+Cc:     Ian Rogers <irogers@google.com>, linux-perf-users@vger.kernel.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        John Garry <john.g.garry@oracle.com>,
+        Will Deacon <will@kernel.org>, linux-kernel@vger.kernel.org,
+        coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 9, 2023 at 12:31=E2=80=AFPM Rob Herring <robh@kernel.org> wrote=
-:
+On Wed, Jun 28, 2023 at 1:06 PM Namhyung Kim <namhyung@kernel.org> wrote:
 >
-> Use the recently added of_property_read_reg() helper to get the
-> untranslated "reg" address value.
+> On Wed, Jun 28, 2023 at 3:34 AM James Clark <james.clark@arm.com> wrote:
+> >
+> >
+> >
+> > On 27/06/2023 18:19, Ian Rogers wrote:
+> > > On Tue, Jun 27, 2023 at 9:58 AM Namhyung Kim <namhyung@kernel.org> wrote:
+> > >>
+> > >> On Tue, Jun 27, 2023 at 9:43 AM Ian Rogers <irogers@google.com> wrote:
+> > >>>
+> > >>> On Mon, Jun 26, 2023 at 5:02 PM Namhyung Kim <namhyung@kernel.org> wrote:
+> > >>>>
+> > >>>> On Mon, Jun 26, 2023 at 05:10:58PM +0100, James Clark wrote:
+> > >>>>> thread__find_map() chooses to exit without assigning a thread to the
+> > >>>>> addr_location in some scenarios, for example when there are samples from
+> > >>>>> a guest and perf_guest == false. This results in a segfault when adding
+> > >>>>> to the histogram because it uses unguarded accesses to the thread member
+> > >>>>> of the addr_location.
+> > >>>>
+> > >>>> Looking at the commit 0dd5041c9a0ea ("perf addr_location: Add
+> > >>>> init/exit/copy functions") that introduced the change, I'm not sure if
+> > >>>> it's the intend behavior.
+> > >>>>
+> > >>>> It might change maps and map, but not thread.  Then I think no reason
+> > >>>> to not set the al->thread at the beginning.
+> > >>>>
+> > >>>> How about this?  Ian?
+> > >>>> (I guess we can get rid of the duplicate 'al->map = NULL' part)
+> > >>>
+> > >>> It seemed strange that we were failing to find a map (the function's
+> > >>> purpose) but then populating the address_location. The change below
+> > >>> brings back that somewhat odd behavior. I'm okay with reverting to the
+> > >>> old behavior, clearly there were users relying on it. We should
+> > >>> probably also copy maps and not just thread, as that was the previous
+> > >>> behavior.
+> > >>
+> > >> Probably.  But it used to support samples without maps and I think
+> > >> that's why it ignores the return value of thread__find_map().  So
+> > >> we can expect al.map is NULL and maybe fine to leave it for now.
+> > >>
+> > >> As machine__resolve() returns -1 if it gets no thread, we should set
+> > >> al.thread when it returns 0.
+> > >>
+> > >> Can I get your Acked-by?
+> > >
+> > > Yep:
+> > > Acked-by: Ian Rogers <irogers@google.com>
+> >
+> > Looks good to me too. Should I resend the set with this change instead
+> > of my one?
 >
-> Signed-off-by: Rob Herring <robh@kernel.org>
-> ---
->  drivers/cpufreq/pmac32-cpufreq.c | 5 ++---
->  1 file changed, 2 insertions(+), 3 deletions(-)
+> No, I can take care of that.  I'll take this as your Acked-by. :)
 
-Ping!
-
->
-> diff --git a/drivers/cpufreq/pmac32-cpufreq.c b/drivers/cpufreq/pmac32-cp=
-ufreq.c
-> index ec75e79659ac..f53635ba16c1 100644
-> --- a/drivers/cpufreq/pmac32-cpufreq.c
-> +++ b/drivers/cpufreq/pmac32-cpufreq.c
-> @@ -378,10 +378,9 @@ static int pmac_cpufreq_cpu_init(struct cpufreq_poli=
-cy *policy)
->
->  static u32 read_gpio(struct device_node *np)
->  {
-> -       const u32 *reg =3D of_get_property(np, "reg", NULL);
-> -       u32 offset;
-> +       u64 offset;
->
-> -       if (reg =3D=3D NULL)
-> +       if (of_property_read_reg(np, 0, &offset, NULL) < 0)
->                 return 0;
->         /* That works for all keylargos but shall be fixed properly
->          * some day... The problem is that it seems we can't rely
-> --
-> 2.39.2
->
+This part is applied to perf-tools-next, thanks!
