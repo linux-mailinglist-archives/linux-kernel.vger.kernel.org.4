@@ -2,131 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74C63744170
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 19:41:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C9E5744177
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 19:42:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232725AbjF3RlS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 13:41:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52348 "EHLO
+        id S230426AbjF3RmC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Jun 2023 13:42:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232656AbjF3RlP (ORCPT
+        with ESMTP id S232119AbjF3RmA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 13:41:15 -0400
-Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03C941FE4
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 10:41:15 -0700 (PDT)
-Received: by mail-qt1-x82e.google.com with SMTP id d75a77b69052e-401d1d967beso25071cf.0
-        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 10:41:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1688146874; x=1690738874;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=XkFhDjCMVwNhOcO2v4G0EUDJBSzG4xJjBNq5yTT5bH8=;
-        b=R9kyVWaPQlz3WF2q9F+9D2hpAYfGj0DR3fds0AKbRKLxLMUXciVT8FvIpD5ICzbCrS
-         SOUB49q5QDV//Maefm+vq9UcMJmNvxwfwcP/32xR01Uo+1aip1j4ppkQfMLuQM2tAB/B
-         cXczeJaoOjeI13w6N6f49fEHj+4dfObrOhYxEAmwlUlqJFhOzi9DR5p1zIN/rGKHT0zM
-         Zhac8jxSF51wjSxoQGQ+l5HtL26RklLY9AWWKJlx/m6CxIoubQlooJdajCv0aBaGsKPn
-         b+fyTHedj7MnydhPlokC8PZZxK9n7y9bvWCuCTIQm54KAcZRCP3SQJc6P/bHHljHVr4E
-         Yvcg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688146874; x=1690738874;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=XkFhDjCMVwNhOcO2v4G0EUDJBSzG4xJjBNq5yTT5bH8=;
-        b=Uk/ymtVsFB2CrK/17H0Gnm5jlocZwS1GRsX8FlYxw6y3LTXrNVmxIcx1lT9RRlj0UF
-         +QULgf7VJYmuWLyS7SCrZ8Fx+tZcpJ7wIz7MrJTBM6HJnJvXbsSqPgAmfZWziq2U5EXg
-         RL45/gyBqYswaE/51CsWsveD0hKxgSOrJz5arJAUYLwjiSb4IcGLu93NC56e9DJu3Zca
-         zAcdG9AI7iRMqJSt9JzIxG1bQFW2ik+Qctt3/bbtxnYJjxd2BtRmrWyUHBSy6psyQ34m
-         LMbde3jnQsPKDSbjsjhz03yPv9SYEWDec+BYJ3JecGKFvhWkFMvRDaneDdrSZ/574LC6
-         4yDw==
-X-Gm-Message-State: ABy/qLaSTNIR+4uoyXcw80wmRahYqeV4UePwy+zOhoS8QvEglZq4ZZtF
-        gPyTR6eQhXNN4oZw9ScfCMv9GChFE1kxFVAZeh1AVg==
-X-Google-Smtp-Source: APBJJlGilaay9n2gLJLQCtHRtujFT3kTGKXgjUqBcBQP2xEJjhnP9I9FteHpbL6AtJXwtrMU6Bs+JuEHuYgx7MIpC9w=
-X-Received: by 2002:a05:622a:5d4:b0:3e3:8c75:461 with SMTP id
- d20-20020a05622a05d400b003e38c750461mr7411qtb.6.1688146874051; Fri, 30 Jun
- 2023 10:41:14 -0700 (PDT)
+        Fri, 30 Jun 2023 13:42:00 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9EFD1BDF;
+        Fri, 30 Jun 2023 10:41:59 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 40A68617CA;
+        Fri, 30 Jun 2023 17:41:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45920C433C0;
+        Fri, 30 Jun 2023 17:41:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688146918;
+        bh=oBuH5pzv1m4U165eHXlxwEABZcjqI8yl/lnDYOcl6ZI=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=A7CbpXg3brFiPOI2ytxu8IpWxHI3M+/swPov9cHayuiqO9cMATSG6c4ez6MFGNO0z
+         Ru8EowGY/rqrRQIZwEhDZTnk+iduM52sCwhkWlTTCl8+a5J9Km01kl5HI3fQzFq2Lq
+         wOjgPd6RxDUg7m4ocetVdyjL+MealrAsXh9h9PMnDDoFqivVT/qQoq3c/TGjtjiqN/
+         eHYBXPGgPFhstAo0o8ix5t3xiMpkLqrACIll6PSfK9pdsSXGZRuCxFRzU8s+FYzCAc
+         zL43+fczW0etE3m5c1GVglsbsvMe5lL55YAga1mOHJkaKrmOGii/a/rGs1ilq7P74h
+         ZnlgoVz7lUrlg==
+Date:   Fri, 30 Jun 2023 12:41:56 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     suijingfeng <suijingfeng@loongson.cn>
+Cc:     "Limonciello, Mario" <Mario.Limonciello@amd.com>,
+        "15330273260@189.cn" <15330273260@189.cn>,
+        "linux-fbdev@vger.kernel.org" <linux-fbdev@vger.kernel.org>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "nouveau@lists.freedesktop.org" <nouveau@lists.freedesktop.org>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        "Chai, Thomas" <YiPeng.Chai@amd.com>,
+        "Gao, Likun" <Likun.Gao@amd.com>, David Airlie <airlied@gmail.com>,
+        Ville Syrjala <ville.syrjala@linux.intel.com>,
+        Yi Liu <yi.l.liu@intel.com>, Karol Herbst <kherbst@redhat.com>,
+        "amd-gfx@lists.freedesktop.org" <amd-gfx@lists.freedesktop.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Ben Skeggs <bskeggs@redhat.com>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        Kevin Tian <kevin.tian@intel.com>,
+        "Lazar, Lijo" <Lijo.Lazar@amd.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        "Zhang, Bokun" <Bokun.Zhang@amd.com>,
+        "intel-gfx@lists.freedesktop.org" <intel-gfx@lists.freedesktop.org>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Abhishek Sahu <abhsahu@nvidia.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        Yishai Hadas <yishaih@nvidia.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        "Deucher, Alexander" <Alexander.Deucher@amd.com>,
+        "Koenig, Christian" <Christian.Koenig@amd.com>,
+        "Zhang, Hawking" <Hawking.Zhang@amd.com>
+Subject: Re: [PATCH v7 6/8] PCI/VGA: Introduce is_boot_device function
+ callback to vga_client_register
+Message-ID: <20230630174156.GA487980@bhelgaas>
 MIME-Version: 1.0
-References: <20230628102949.2598096-1-john.g.garry@oracle.com> <20230628102949.2598096-3-john.g.garry@oracle.com>
-In-Reply-To: <20230628102949.2598096-3-john.g.garry@oracle.com>
-From:   Ian Rogers <irogers@google.com>
-Date:   Fri, 30 Jun 2023 10:41:02 -0700
-Message-ID: <CAP-5=fWB9H0KWrXYouepUiAbnfH3u29XuRVN6KXVw3CNbD4xrA@mail.gmail.com>
-Subject: Re: [PATCH RFC 2/9] perf metrics: Don't iter sys metrics if we
- already found a CPU match
-To:     John Garry <john.g.garry@oracle.com>
-Cc:     acme@kernel.org, namhyung@kernel.org, jolsa@kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        renyu.zj@linux.alibaba.com, shangxiaojing@huawei.com,
-        zhangshaokun@hisilicon.com, qiangqing.zhang@nxp.com,
-        kjain@linux.ibm.com, kan.liang@linux.intel.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2c81fbe3-308a-4c5e-0150-32006253b3ea@loongson.cn>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 28, 2023 at 3:30=E2=80=AFAM John Garry <john.g.garry@oracle.com=
-> wrote:
->
-> In metricgroup__add_metric() we still iter the sys metrics if we already
-> found a match from the CPU table, which is pretty pointless, so don't
-> bother.
->
-> Signed-off-by: John Garry <john.g.garry@oracle.com>
-> ---
->  tools/perf/util/metricgroup.c | 7 +++++++
->  1 file changed, 7 insertions(+)
->
-> diff --git a/tools/perf/util/metricgroup.c b/tools/perf/util/metricgroup.=
-c
-> index 4389ccd29fe7..8d2ac2513530 100644
-> --- a/tools/perf/util/metricgroup.c
-> +++ b/tools/perf/util/metricgroup.c
-> @@ -1261,6 +1261,12 @@ static int metricgroup__add_metric(const char *pmu=
-, const char *metric_name, con
->
->                 has_match =3D data.has_match;
->         }
-> +
-> +       if (has_match) {
-> +               ret =3D 0;
-> +               goto out;
-> +       }
-> +
+On Fri, Jun 30, 2023 at 10:14:11AM +0800, suijingfeng wrote:
+> On 2023/6/30 01:44, Limonciello, Mario wrote:
+> > > On 2023/6/29 23:54, Bjorn Helgaas wrote:
+> > > > On Thu, Jun 22, 2023 at 01:08:15PM +0800, Sui Jingfeng wrote:
 
-I think this can just be:
+> > > > 4) Right now we're in the middle of the v6.5 merge window, so new
+> > > >      content, e.g., this series, is too late for v6.5.  Most
+> > > >      maintainers, including me, wait to merge new content until the
+> > > >      merge window closes and a new -rc1 is tagged.  This merge window
+> > > >      should close on July 9, and people will start merging content for
+> > > >      v6.6, typically based on v6.5-rc1.
+> > > 
+> > > Would you will merge all of the patches in this series (e.g. including
+> > > the patch for drm/amdgpu(7/8) and drm/radeon(8/8)) ?
+> > > 
+> > > Or just part of them?
 
-if (!has_match)
+The bulk of this series is drivers/pci changes, so typically I would
+merge all the patches after getting Acked-by tags from the other
+subsystems (DRM and VFIO).
 
-However, I'm not sure I agree with the intent of the change. We may
-have a metric like IPC and want it to apply to all types of CPU, GPU,
-etc. If we short-cut here then that won't be possible.
+> Is it possible to merge the PCI/VGA part as fast as possible,
+> especially the PATCH-0006 PCI/VGA: Introduce is_boot_device function
+> callback to vga_client_register
 
-Thanks,
-Ian
->         {
->                 struct metricgroup_iter_data data =3D {
->                         .fn =3D metricgroup__add_metric_sys_event_iter,
-> @@ -1279,6 +1285,7 @@ static int metricgroup__add_metric(const char *pmu,=
- const char *metric_name, con
->
->                 pmu_for_each_sys_metric(metricgroup__sys_event_iter, &dat=
-a);
->         }
-> +
->         /* End of pmu events. */
->         if (!has_match)
->                 ret =3D -EINVAL;
-> --
-> 2.35.3
->
+We're in the middle of the v6.5 merge window, so it's too late to add
+things to v6.5-rc1.  The most likely path for new material like this
+would be to queue it for v6.6, which means I would merge it after
+v6.5-rc1 is tagged (that tag will probably happen on July 9).
+
+It would then be in -next until the v6.6 merge window opens (likely in
+September), when it would be merged into Linus' tree.
+
+If the series fixes a regression or other major defect, it's
+*possible* to merge things earlier, so they appear in v6.5.  But this
+series doesn't seem to fall in that category, so I think v6.6 is a
+more realistic target.
+
+Merging for v6.6 would include both the PCI parts and the DRM parts at
+the same time, so hopefully that addresses your dependency concerns.
+
+I suggest that you wait until v6.5-rc1, rebase your patches so they
+apply cleanly on that tag, collect all the Reviewed-by and Acked-by
+tags, include them in your commit logs, and then repost them.
+
+Bjorn
