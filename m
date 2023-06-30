@@ -2,109 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4679743AE4
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 13:33:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5396E743AE5
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 13:34:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232414AbjF3Ldo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 07:33:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37750 "EHLO
+        id S232583AbjF3Ld4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Jun 2023 07:33:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229957AbjF3Ldl (ORCPT
+        with ESMTP id S232513AbjF3Ldy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 07:33:41 -0400
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A81A41FC1;
-        Fri, 30 Jun 2023 04:33:40 -0700 (PDT)
-Received: by mail-lf1-x133.google.com with SMTP id 2adb3069b0e04-4fb761efa7aso2811586e87.0;
-        Fri, 30 Jun 2023 04:33:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688124819; x=1690716819;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=7oDpGX7SadvHF0PBwxOvdE+kg9NeeEeLYzE8RLSZxyI=;
-        b=hNT+Q7klvxC/zjyhFtOH0PasSSR5T6dWL85jB02f0h/XRjrZqI40h82c6/TTdZbEVx
-         KNGw68S934TwE6OBBed4Xul2/X1DEeh5W64AuxiLmSV4wHxfJv9zXLlzJpzqM9VcXhT+
-         CJcx4QzGOK1isSlEuNMU8KyabdqrELfwXStJZgnSNC+M/IalpfwHySGws+FkIpjiRJfn
-         F20vvs0svavEcAqfiDVXAfJwYTF2FDX60X0zOq7zrKjN3Cd3Y4Ysw+wzQRJFTDbWsG1J
-         OSblJNQt7ZKgMvmtrRl0/vS4mb8HtNbhxQAPzMnJHUwXFYxdxfaoUQySUNlArZDHYVZu
-         upiQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688124819; x=1690716819;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=7oDpGX7SadvHF0PBwxOvdE+kg9NeeEeLYzE8RLSZxyI=;
-        b=VW+FAO0m9Q+Md+NtTjbspn1xGoP10bGb6sdiXE6EmqlKB2fwQX5BP20JWY0A/L0qfR
-         cCRwBdGF+eCZGbbh7SxteizYgEBpXyB07n8wI4HerJaG0ivP9UbgVlsdhWMPQIB/oeO8
-         aO9A0XC/e2cGgTofB0B6oANbXeb7hc4D873E5u+S3IAseQ9TCsH8VXQLKh+FPAEwj2KN
-         anjJuNzP3pTFOUzdQTEZCQvujJCe8qDla3l3uy4K+i/FL45ut5eynzTAA1spIBqjfGnr
-         HqK5NnNSfB3rkJ65bwrgMZp4uv1+fih529I0s8++z+eI3yYjwbGQxIHsDIseNjVWTpMi
-         Qfwg==
-X-Gm-Message-State: ABy/qLYC8Nu+/QLYEtbFMs6qaU5zR58Fo83Yquedfr02IJgGBq/KzBwh
-        jA/+ZHfojoB3qq2+G5dC6J8=
-X-Google-Smtp-Source: APBJJlFxTsPYthU3KN/Dq8lE2AoDRMrc2DPuPaIbkbwqbwp4wgN6PIImE0WFHCi56FDqlGDnBSgCqQ==
-X-Received: by 2002:a05:6512:3592:b0:4fb:9f93:365e with SMTP id m18-20020a056512359200b004fb9f93365emr1828727lfr.41.1688124818526;
-        Fri, 30 Jun 2023 04:33:38 -0700 (PDT)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id z24-20020a05600c221800b003fa96fe2bd9sm13772194wml.22.2023.06.30.04.33.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 30 Jun 2023 04:33:37 -0700 (PDT)
-From:   Colin Ian King <colin.i.king@gmail.com>
-To:     Steve French <sfrench@samba.org>,
-        Paulo Alcantara <pc@manguebit.com>,
-        Ronnie Sahlberg <lsahlber@redhat.com>,
-        Shyam Prasad N <sprasad@microsoft.com>,
-        Tom Talpey <tom@talpey.com>, linux-cifs@vger.kernel.org,
-        samba-technical@lists.samba.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH][next] smb: client: remove redundant pointer 'server'
-Date:   Fri, 30 Jun 2023 12:33:37 +0100
-Message-Id: <20230630113337.123257-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.39.2
+        Fri, 30 Jun 2023 07:33:54 -0400
+Received: from qproxy6-pub.mail.unifiedlayer.com (qproxy6-pub.mail.unifiedlayer.com [69.89.23.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A903D1FC1
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 04:33:53 -0700 (PDT)
+Received: from gproxy2-pub.mail.unifiedlayer.com (unknown [69.89.18.3])
+        by qproxy6.mail.unifiedlayer.com (Postfix) with ESMTP id 286EC80284CD
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 11:33:53 +0000 (UTC)
+Received: from cmgw15.mail.unifiedlayer.com (unknown [10.0.90.130])
+        by progateway4.mail.pro1.eigbox.com (Postfix) with ESMTP id 382751004807D
+        for <linux-kernel@vger.kernel.org>; Fri, 30 Jun 2023 11:33:52 +0000 (UTC)
+Received: from box5620.bluehost.com ([162.241.219.59])
+        by cmsmtp with ESMTP
+        id FCNsqptW3xKeeFCNsqVBZh; Fri, 30 Jun 2023 11:33:52 +0000
+X-Authority-Reason: nr=8
+X-Authority-Analysis: v=2.4 cv=NvUUz+RJ c=1 sm=1 tr=0 ts=649ebda0
+ a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
+ a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
+ a=of4jigFt-DYA:10:nop_rcvd_month_year
+ a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
+ a=HaFmDPmJAAAA:8 a=-9oEWi-u3mcIJ7S_yvsA:9 a=QEXdDO2ut3YA:10:nop_charset_2
+ a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
+        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
+        Message-ID:From:In-Reply-To:References:Cc:To:Subject:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=BGDfyEhGvWQ1M2sCGoseCz7mjNya4SHRKvcGlhzF9YI=; b=tDvrfze1t1v9qxxQ1HzNL0w2wV
+        2NCmCpWhCuk2d3i1wwcmd1VoHi+QflLJOaIAN7Mhq3vC7BLZbhmDgQg5Eyd2Aukze+3bAwAguEMjU
+        JBKfNOqQ2d8j4/YEm0WPcvsYoYasMfksKSPXp2c5YF5aXcSIWxS1Y+YXVeMqsgEbdDktWB12hqU3w
+        h8usd6ns3Jrd4POaYLFR01zuRwIKj4OzjHA/YV7Jnbwcyy5PF/0cDDLSu3OJSylnGVDiTvd+Yq2lM
+        G5oKXFPExR0DlNbnO8CPQK2SnlLoHQluByLS/e9X4Zk3V/9dQatQyeylWRxMZ2nsmNWL4ygJcCKaN
+        57rTe3gg==;
+Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:46126 helo=[10.0.1.47])
+        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.95)
+        (envelope-from <re@w6rz.net>)
+        id 1qFCNq-001qhA-PN;
+        Fri, 30 Jun 2023 05:33:50 -0600
+Subject: Re: [PATCH 6.4 00/31] 6.4.1-rc3 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org
+Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de, conor@kernel.org
+References: <20230630072101.040486316@linuxfoundation.org>
+In-Reply-To: <20230630072101.040486316@linuxfoundation.org>
+From:   Ron Economos <re@w6rz.net>
+Message-ID: <4a77ab37-a2f6-f916-0805-e46ad755b7f2@w6rz.net>
+Date:   Fri, 30 Jun 2023 04:33:48 -0700
+User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - box5620.bluehost.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - w6rz.net
+X-BWhitelist: no
+X-Source-IP: 73.162.232.9
+X-Source-L: No
+X-Exim-ID: 1qFCNq-001qhA-PN
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.47]) [73.162.232.9]:46126
+X-Source-Auth: re@w6rz.net
+X-Email-Count: 4
+X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
+X-Local-Domain: yes
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pointer 'server' is assigned but never read, the pointer is
-redundant and can be removed. Cleans up clang scan build warning:
+On 6/30/23 12:33 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 6.4.1 release.
+> There are 31 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Sun, 02 Jul 2023 07:20:45 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.4.1-rc3.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.4.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-fs/smb/client/dfs.c:217:3: warning: Value stored to 'server' is
-never read [deadcode.DeadStores]
+Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
- fs/smb/client/dfs.c | 2 --
- 1 file changed, 2 deletions(-)
-
-diff --git a/fs/smb/client/dfs.c b/fs/smb/client/dfs.c
-index 26d14dd0482e..1403a2d1ab17 100644
---- a/fs/smb/client/dfs.c
-+++ b/fs/smb/client/dfs.c
-@@ -143,7 +143,6 @@ static int __dfs_mount_share(struct cifs_mount_ctx *mnt_ctx)
- 	struct smb3_fs_context *ctx = mnt_ctx->fs_ctx;
- 	char *ref_path = NULL, *full_path = NULL;
- 	struct dfs_cache_tgt_iterator *tit;
--	struct TCP_Server_Info *server;
- 	struct cifs_tcon *tcon;
- 	char *origin_fullpath = NULL;
- 	char sep = CIFS_DIR_SEP(cifs_sb);
-@@ -214,7 +213,6 @@ static int __dfs_mount_share(struct cifs_mount_ctx *mnt_ctx)
- 	} while (rc == -EREMOTE);
- 
- 	if (!rc) {
--		server = mnt_ctx->server;
- 		tcon = mnt_ctx->tcon;
- 
- 		spin_lock(&tcon->tc_lock);
--- 
-2.39.2
+Tested-by: Ron Economos <re@w6rz.net>
 
