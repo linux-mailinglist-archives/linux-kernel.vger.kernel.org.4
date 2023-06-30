@@ -2,169 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34338744334
-	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 22:34:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE23F74433A
+	for <lists+linux-kernel@lfdr.de>; Fri, 30 Jun 2023 22:35:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232210AbjF3Uek (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 30 Jun 2023 16:34:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49316 "EHLO
+        id S232141AbjF3Ufj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 30 Jun 2023 16:35:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229882AbjF3Uei (ORCPT
+        with ESMTP id S229882AbjF3Ufg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 30 Jun 2023 16:34:38 -0400
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14A8A2952;
-        Fri, 30 Jun 2023 13:34:36 -0700 (PDT)
-Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35UIxIc0007380;
-        Fri, 30 Jun 2023 20:34:07 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : references : content-type : in-reply-to :
- mime-version; s=corp-2023-03-30;
- bh=WaeXEi+jszNL6GF9HzRLwwCzUhqXR31gZbRAaGNM6kM=;
- b=E8WOKlrQAPvHfGCNjvVHti9nqEKFZl+8iOrm6cTm7cs9NAb+Gm7l/cfc7SS3fw3cmOix
- QJt34cYwh1xJ92BcUvC51i25PiYdsYzYZb4xgzonEAeYMVu5wlKHeb4Hhcw320QkXE92
- gzzLD2u+zpbVxpaG59UYONJPOm2Hzf+A4OCokcyhgNno2Kb+XodqnIUZnEkzdjBgxQeE
- aAgr5AVSAUCN+YwKKLZ4rLSjB7dg7ADYFavmjm1nBzrhiH895XBVu54dIpxHteTXjdIV
- 0vEinCBYpV+Gw3jeT10ZKwc21foEKLLAiPgcaxDvR0CZ06NR698EK+vdMePHIJJIufou lQ== 
-Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3rds1uj3mn-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 30 Jun 2023 20:34:06 +0000
-Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 35UKGlsC013057;
-        Fri, 30 Jun 2023 20:34:06 GMT
-Received: from nam02-dm3-obe.outbound.protection.outlook.com (mail-dm3nam02lp2043.outbound.protection.outlook.com [104.47.56.43])
-        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3rdpx9kwtg-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 30 Jun 2023 20:34:06 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=SZuheJlLtC1MhinPUUenSW/WVNThckcb6+mEh/GloEVUy7GoxlaKk+wLKJceMVNzba+Vz7Ej1IgAKothpx2tn7mdlLV20Iq6TCR3wPQmV+zNZdOVM85ni7sFrnBBKdoOa7/XEHVMVJEJobnpRHcgJl9hyxuUhn2gdZE9cGvl8ZEYA2eNXgd0+rerTFQLKQpB/vGTABiy5/mlaSd05m6QI3sQK6yGHtrnYOSQOjuHiLDzLnjj12BM2refnufG0hWv94/UTJUKIl5mrHzR3X6ocPXhXj5SzZMg+3+n4J//qCaqzBNigX+w/Gmp6llPoFnzm5LPYZomQe9daPgwFDjqsw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=WaeXEi+jszNL6GF9HzRLwwCzUhqXR31gZbRAaGNM6kM=;
- b=a2qzv61zRVugA2Z30+iAb/T80O1Zn2vaaQ81goXXBgpe5J6c/vuAKwPX2MClFpJOpIUotvAgiqxNXZ/EyLhE3c1lB7HnfkoN6tEK/bq47MYGJtERGZDUORMvXre+dIIPSdioYXfpj0+//SCt/hJEpNZkZF9G73L9uDcCrJ0JK4NrIdMARVQKmbzcmCIdo+iEkErDiUk0MrBHrdYtUBH6vsw4cmEVDVxnyf+ktjl4AHDhx4T1i3gYEi5qad+ckiCphKgyIpd/rpAzTKeaUtND1yKTjJM96JDUL7R0U1Zg8GV4mNJ5QX/2aiahmZaa8eXd306ZzVGyZ3j/LVrKMPs3aA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
+        Fri, 30 Jun 2023 16:35:36 -0400
+Received: from mail-qk1-x72f.google.com (mail-qk1-x72f.google.com [IPv6:2607:f8b0:4864:20::72f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9632A30DF;
+        Fri, 30 Jun 2023 13:35:32 -0700 (PDT)
+Received: by mail-qk1-x72f.google.com with SMTP id af79cd13be357-7659db6fb4bso98910785a.1;
+        Fri, 30 Jun 2023 13:35:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=WaeXEi+jszNL6GF9HzRLwwCzUhqXR31gZbRAaGNM6kM=;
- b=ar0w1lXyOFTfdNRfkNv0iwQmCpi5sS1a5mYtdIwQ5E8meWIVrfvXMUmWxNqqJiOlDulgXbH8kDiI4yizlX5DzK7nS4CTEc8WJup8RIEs3d9gCm/rWx1WDgYUeyUsq0iiXHN154q7ZdRHYm8z5fhfMj6kP8WXflhDfYMnqIbjdBk=
-Received: from BL0PR10MB3011.namprd10.prod.outlook.com (2603:10b6:208:7e::29)
- by IA1PR10MB7312.namprd10.prod.outlook.com (2603:10b6:208:3fc::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6544.15; Fri, 30 Jun
- 2023 20:34:03 +0000
-Received: from BL0PR10MB3011.namprd10.prod.outlook.com
- ([fe80::de2:4e3f:62c2:865b]) by BL0PR10MB3011.namprd10.prod.outlook.com
- ([fe80::de2:4e3f:62c2:865b%3]) with mapi id 15.20.6544.019; Fri, 30 Jun 2023
- 20:34:03 +0000
-Date:   Fri, 30 Jun 2023 16:34:00 -0400
-From:   "Liam R. Howlett" <Liam.Howlett@Oracle.com>
-To:     Anjali Kulkarni <anjali.k.kulkarni@oracle.com>
-Cc:     davem@davemloft.net, david@fries.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, zbr@ioremap.net,
-        brauner@kernel.org, johannes@sipsolutions.net,
-        ecree.xilinx@gmail.com, leon@kernel.org, keescook@chromium.org,
-        socketcan@hartkopp.net, petrm@nvidia.com,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        akpm@linux-foundation.org
-Subject: Re: [PATCH v6 4/6] connector/cn_proc: Performance improvements
-Message-ID: <20230630203400.k4yuaecr2p5upn5k@revolver>
-References: <20230614234129.3264175-1-anjali.k.kulkarni@oracle.com>
- <20230614234129.3264175-5-anjali.k.kulkarni@oracle.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230614234129.3264175-5-anjali.k.kulkarni@oracle.com>
-User-Agent: NeoMutt/20220429
-X-ClientProxiedBy: YT3PR01CA0120.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:b01:85::13) To BL0PR10MB3011.namprd10.prod.outlook.com
- (2603:10b6:208:7e::29)
+        d=gmail.com; s=20221208; t=1688157331; x=1690749331;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=lqssHebmdf0dN5WP1C020zfptx4r/PNbMzwK1DWwidI=;
+        b=mQhlLc5XGizW5KwOWta5RMjm8zrhlEPQLfrOrrotyi4vEMeEDYxJGJilfURulvGpWF
+         gzx2hdUyuP0mANRuMoDDWQ409Y5gDLsYtPTBsZbX87JjpIQzezHn/wOREQc3TXZhl2Bz
+         uUcN3xAN0brj5YR0t8kxOvv+wLLDgcysB9pq8UAx0+oQx8ki6zpyiYl2LAxiFGt5+rR+
+         UBknk9ER+6dBTgNSaiQfixcf4JZkGZvT85QzrS6A7+ok9i3+SaXechGgWErEDotyYgnP
+         Aboj3lRzP8WMae+tv2cagC0ndvot9EshuG+XIMZC5KZUUuvLQDDyBk56ik/5LbOvn8wn
+         itwg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688157332; x=1690749332;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=lqssHebmdf0dN5WP1C020zfptx4r/PNbMzwK1DWwidI=;
+        b=GZAJZHvMnsp6Gt4DFeW/EVqnaGYesjHbGghbUCm9BeWJ9226CBb24wqCsGj7eZvngW
+         GMp8LloA4q64T+FtXH5q8vNUDE745dYntZIEzYGV4N6iOo7y7pUTgA/8gCfNnZ13v4G1
+         ZTOAWil0qQ/5+++GwesE9MYN4Pp23H/1Nu8IY0ma9UZpSXJcBlF5et9KTuw3DdGuQ0pf
+         UZiXow//A8cgA2S7Avf+7rgIJ2GbsMpSuODZDc/oJ8KEqSzCM2dAG1nhBoTzxfIZPGbc
+         q59Uzf8YADXeqi4WOX9hUMn6woc4z2WJbIDoemjyUqfUZf/YqeHr9IPXjl4eMCOB+mhl
+         SItw==
+X-Gm-Message-State: ABy/qLZ66a2tU5RI/uwWLR7S+v7yAYBXg0l1L2ubW5qFVu+aCvAD4isU
+        1Wy/F8Tto4k4x7zmZbSrr2I=
+X-Google-Smtp-Source: APBJJlFgK6qh/rOKQ14wVUgmFCGE97oobRxeY4Knmho8ml+RMlGpS9N62NIj7NWxOt2P1fqv4Oi0Xw==
+X-Received: by 2002:a05:620a:2ac8:b0:767:4715:87e8 with SMTP id bn8-20020a05620a2ac800b00767471587e8mr2972818qkb.33.1688157331624;
+        Fri, 30 Jun 2023 13:35:31 -0700 (PDT)
+Received: from build.adi.eng (173-14-114-226-richmond.hfc.comcastbusiness.net. [173.14.114.226])
+        by smtp.gmail.com with ESMTPSA id j3-20020a05620a146300b0076531707258sm2254684qkl.7.2023.06.30.13.35.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 30 Jun 2023 13:35:31 -0700 (PDT)
+Date:   Fri, 30 Jun 2023 16:35:29 -0400
+From:   Henry Shi <henryshi2018@gmail.com>
+To:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        hdegoede@redhat.com, markgross@kernel.org, jdelvare@suse.com,
+        linux@roeck-us.net, linux-kernel@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org, linux-hwmon@vger.kernel.org
+Cc:     wenw@silicom-usa.com, henrys@silicom-usa.com
+Subject: Add Silicom Platform Driver
+Message-ID: <20230630203529.GA20585@build.adi.eng>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BL0PR10MB3011:EE_|IA1PR10MB7312:EE_
-X-MS-Office365-Filtering-Correlation-Id: 12778aaf-1058-4c75-d0cd-08db79a957d6
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: pCGJVEErcFyh6nhm3iyBq7KjJ0+xR/ApGeATiXTI0I9CHXe1tkTKBvYmMc/IbzMeRzO6PA96hhh21JX8RLpOzZJBKxmLrX/RdO6fOXD70mN9/PCHYFFFE0+dFxFeK2FCIxSG4J5+Kv7FWudeNwLl9YT7UhwL/vH9jjbBTa7ZA4iKkydTKnug9R6BcCr8PqdywBTbEnzzz2Kf6cqwnBegC0Zgmf32OCdl2IzwrY802t8yHCqN9T9OdH+c2mZWeUQX/nimqzUoM/br9lPHyEHRVgwI0rTNtbMKtqpiQdUBzd6FrJPTGOADFnHyF8M0rrG9dZEXZCd4mWLV9TwnvYK4kg1X8N4K/Bv7r5pdS7V/iM0V/PEN6FWiLI3RgdU1XlTMQQ0hL2uhG9DovHDsQldTrLrKw2UrkeCE8Hct/BxhxJMZZg19faiItf/fFAr640HJrG3vr8UzsfPZiXkKt4xKy1pU0nUEgkK2dikA0EVnSLavORZbkfi9Wnx0co+CqxXRAVNDfuoOxkQeyqGgPZT2SkqwWhaJR5EKduOLiDw7Yy76eeXE9kCOLdf4+JfiUU1b
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL0PR10MB3011.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(7916004)(346002)(376002)(39860400002)(136003)(366004)(396003)(451199021)(6486002)(478600001)(38100700002)(6506007)(2906002)(26005)(186003)(6512007)(9686003)(66476007)(1076003)(33716001)(6636002)(316002)(8936002)(6862004)(66946007)(8676002)(41300700001)(7416002)(5660300002)(4326008)(66556008)(86362001)(83380400001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?BQvfVcQFzN2cWeRmWyX5QK9WF23t628nrUJkfLL+tvX1p94hs/6VJPcr6Plc?=
- =?us-ascii?Q?MH5lMBMRg+cUqnxy9mI3kvMM6stMeMgR4cerdORMZbrVr0DZ22G+SV4Ss/HF?=
- =?us-ascii?Q?e7S2JgSOKYfEP7otjkT7kzjnifcMqnw944NeGqsRiY80XX861XNIXmg2O82B?=
- =?us-ascii?Q?gVNgL04gx8JlkiSM17CdjkC6QP35z1O+lTlYv1qERx+1f+aO6AxylZ+RZ2bX?=
- =?us-ascii?Q?QgqIIBo72vX5vM/vMS8nsi8oi0vk04+Jl6XCUTjBerx6RIs5tEOZkv8xcwRX?=
- =?us-ascii?Q?o/l1hA5WejAAbgDQvLp+8CbZSYCr4Ap/4y2qSFI29iJU2WHRkPR1MRQAOTOv?=
- =?us-ascii?Q?G8eenNGgT49NeASukVleUmH3zh2QMvzIzCwJeKAUq2nJSNeEamhMUMUwgegB?=
- =?us-ascii?Q?CotF/uXj3hKasypt2GUKpqRiqCJeDrEHMjN5S1zrPIToDMqY09sW35xGkyWr?=
- =?us-ascii?Q?N+2VenQw5v7UtuZfbX8Uw6jG6vivAvdnVTeJkHHOno1/L9Wm6jLnbYUNOg+8?=
- =?us-ascii?Q?IL9C6WSl3eI8ea0fLyOJ/NeLNO3Yz+hf+dP6W5zVYtCgWYvE3grGUtDGY05Y?=
- =?us-ascii?Q?8gT+VIEzj9BsffQn8fnpbgepFWQdEQDQqIp5u5pmzomyuLaJSrJl9xqvkdRu?=
- =?us-ascii?Q?qSjJjmq476KY1qNxgIxhgWKeGrFmNKBHOClb5Y+UsrLyScLEEv4ov+OkVnnf?=
- =?us-ascii?Q?pJScxn1nuh2cgcqYGIJRlRjeY/SmwH6QEwbJTzwwJAD7KapYN4hjBzk7KdaI?=
- =?us-ascii?Q?9GQF0jC5yi16szDXBqpV+ij+XdeLs0k7OZa4LTlRJKt1mjTP2LRMA+gugmEL?=
- =?us-ascii?Q?gMUBBcJz6qG2zmWs7BGK1yudslogw4OzA7uq6qfJ2jbhTAYIDtT2yGpTcaX/?=
- =?us-ascii?Q?GKbd0AiJVds433X4xbE74JaI6DMPAKcZijFXHgF1fQBQnvMqrMX+yvvWBLgY?=
- =?us-ascii?Q?CyUVGet8XMx/XLNZH5zNOFz6aUiPfMap8QzvSUI43yHBTAInMm5z6vSAZ6/h?=
- =?us-ascii?Q?hiBdKTN8ZYeKAN8wTc6dXIqhF4r++VFXGKEN6ub7rbvXUZX0isdCf1KGmJUE?=
- =?us-ascii?Q?IoaOPQah0/rSab3hysPgdsKJl3hpXQHeY/gizsZeJh9OF730rWZpZEz/14uf?=
- =?us-ascii?Q?+aS4mtSR6oj6B7pTu5FKW09NN7bYSfRagW1mZkIeRg0DE+8PMFnkxST2pxQi?=
- =?us-ascii?Q?FUOVLCPI7LB0WoZ7CPp+vrkBPB+n6Bo9DUfnaZ+IYliAbRtu0SMcJIDkrFxw?=
- =?us-ascii?Q?cJwFkT6pCHHZHH++K52XtYeSXU/nt8BNFur5pKEKYG4tkBkv6/i8Qe9/+1Wo?=
- =?us-ascii?Q?XrdJdLlBXJnYBgNcgosghIQXE4gebhGnsKdV8NYYmdDjgvtj+8SAFe5PfMTB?=
- =?us-ascii?Q?DGCLQ0YWO5U7NX3xTQWoyV7HtrsMCbfkw94gwLbWaEkSX21oLb8b2yqNsbnQ?=
- =?us-ascii?Q?54STA6UCIHnH1daGfrVsqwYje/GHgj/jGMM/nf04Dsf3y9R+cVJrpqf9W+7s?=
- =?us-ascii?Q?J7z+9IIhy1lFPSSEAyuBM+AWb3UqPCyEvOlaxQS73xs0fi0SwHJykfsZ5pIV?=
- =?us-ascii?Q?wy2R33qNw6S6MpfOr/FwzP9MOGBKuKmUIHhDPyuVfXRKAHPsaJSe+hkV7AQD?=
- =?us-ascii?Q?sw=3D=3D?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: =?us-ascii?Q?OYGNnFyiS1AfVfh0ghnMdxTjo6fQWl4ptQ8qIptOnw5+z3wWBW72wTfevogS?=
- =?us-ascii?Q?5fCXthPCSgxreLuHMpkfOv2siBiQBegWff/t6qJMU5CIk25vgaffA8oDmQp0?=
- =?us-ascii?Q?rvybHhrxIUcm/KgaPvDhCo7SI7ego+3jp3NyYIia7G3Bc0P3Cep8dZgSoVD9?=
- =?us-ascii?Q?84PD5lDM6ZIkpQOAz3BaQC4UskoMSYuy0rTyrz56jC/Oo781fTga77sq77pA?=
- =?us-ascii?Q?1ID+DJEtGUWokhyQvSVlj5KoViMq80ZWe0wzQbPNYV8Otwh5nmMCmyHb1QC7?=
- =?us-ascii?Q?xL+7nDin2v1fNCRklzYlVi9mHU/13BIFYvX4G5WRASmS4ra6vUIYd43WFmxL?=
- =?us-ascii?Q?eUxKLuy5A2jy5O1UWx+LjRzuCiDtyuN+NiZgijKtR9aQ+PugRls8yP7oPE6G?=
- =?us-ascii?Q?KBIMv52dtaJiIcJFLuWNGYQMCwTReqhaV6Ds+rWn5JkRf3Oe1vpGBvus9BoR?=
- =?us-ascii?Q?hFV5vYSvzbqRHbyg509KuBaOZow7u/GxwbEz6ySQMP3vlaNpU4PLJFifbbUc?=
- =?us-ascii?Q?69MONrtZq6UbDuc8QSbB6MZ3HDUxFNqEKsN/zKMG50Dv5gSr1BUlv8GMBGLA?=
- =?us-ascii?Q?WGCszYp/WjrVePYno02LX4o+Kt3kXRss0fAPw/Dkh9eIPQU/F2/+TBig+P7f?=
- =?us-ascii?Q?nzMa7SrD+Qdr6uGT8D54RZWbnJKzExSV3101frITLfhYOMcPDxaEMQMF8zFP?=
- =?us-ascii?Q?JE+p5lJ6VmGFKEJI2bBo8uBXBqcX8w9q1cbAMIfbyFRjIlaKDuhCnwh9Vx33?=
- =?us-ascii?Q?xqXeNlVzkguE2VtJEXwulcWemb/M3BhgwC2TV6sJA8rIkTeYUo9jLV43lOam?=
- =?us-ascii?Q?jIrV8nxMQLc/CW1hU1rlas9JX1ltCKrJKkDkH33xb2gpu1yszU/vstaNn5Ph?=
- =?us-ascii?Q?JU3nf4C8B0SDvA7jI/TBl/AVl3PVMTVRn7SYgbrPtxafKgEVMZZJdtUYuUj2?=
- =?us-ascii?Q?1ViQHE8PYAMBtA09WdZFceSyiokBs5EgmUv+nHzyeH0Qe0O2qOq+NSp2ytT8?=
- =?us-ascii?Q?g17ZQ7F7kedzpJcWiOa+ajbOEyYFrZWz5owfxL53xmjiXnYLmbMtVrRxkOlJ?=
- =?us-ascii?Q?pMvVJwttzRZt64j0h79NmzDPJlKfVapA4iBWrSRwP63QZLDnm8dJc/uEkNFN?=
- =?us-ascii?Q?VTOZ/R9PQK7gG/3HZMF/4/+HOCo4ayQ/uFKxOdpctVkuJJyTspwioMQ=3D?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 12778aaf-1058-4c75-d0cd-08db79a957d6
-X-MS-Exchange-CrossTenant-AuthSource: BL0PR10MB3011.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Jun 2023 20:34:03.4949
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: fcGpXmArWaOomzJrKK0diFIe7Dx/XSHyZykaqwdIV06X8K4NBl4gtAkeE0+HcBC3hEZEdunMMXmdb7TySe7zGw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR10MB7312
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-06-30_12,2023-06-30_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 adultscore=0 bulkscore=0
- suspectscore=0 mlxscore=0 phishscore=0 malwarescore=0 mlxlogscore=999
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2305260000
- definitions=main-2306300180
-X-Proofpoint-GUID: R0A6u3mmUn7O7invq5eBrMEjw6jbrpDk
-X-Proofpoint-ORIG-GUID: R0A6u3mmUn7O7invq5eBrMEjw6jbrpDk
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+Content-Type: multipart/mixed; boundary="M9NhX3UHpAaciwkO"
+Content-Disposition: inline
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -172,225 +71,1233 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-* Anjali Kulkarni <anjali.k.kulkarni@oracle.com> [230614 19:41]:
-> This patch adds the capability to filter messages sent by the proc
-> connector on the event type supplied in the message from the client
-> to the connector. The client can register to listen for an event type
-> given in struct proc_input.
-> 
-> This event based filteting will greatly enhance performance - handling
-> 8K exits takes about 70ms, whereas 8K-forks + 8K-exits takes about 150ms
-> & handling 8K-forks + 8K-exits + 8K-execs takes 200ms. There are currently
-> 9 different types of events, and we need to listen to all of them. Also,
-> measuring the time using pidfds for monitoring 8K process exits took
-> much longer - 200ms, as compared to 70ms using only exit notifications of
-> proc connector.
-> 
-> We also add a new event type - PROC_EVENT_NONZERO_EXIT, which is
-> only sent by kernel to a listening application when any process exiting,
-> has a non-zero exit status. This will help the clients like Oracle DB,
-> where a monitoring process wants notfications for non-zero process exits
-> so it can cleanup after them.
-> 
-> This kind of a new event could also be useful to other applications like
-> Google's lmkd daemon, which needs a killed process's exit notification.
-> 
-> The patch takes care that existing clients using old mechanism of not
-> sending the event type work without any changes.
-> 
-> cn_filter function checks to see if the event type being notified via
-> proc connector matches the event type requested by client, before
-> sending(matches) or dropping(does not match) a packet.
-> 
-> Signed-off-by: Anjali Kulkarni <anjali.k.kulkarni@oracle.com>
-> ---
->  drivers/connector/cn_proc.c  | 64 ++++++++++++++++++++++++++++++++----
->  include/uapi/linux/cn_proc.h | 19 +++++++++++
->  2 files changed, 77 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/connector/cn_proc.c b/drivers/connector/cn_proc.c
-> index 84f38d2bd4b9..825d5f506919 100644
-> --- a/drivers/connector/cn_proc.c
-> +++ b/drivers/connector/cn_proc.c
-> @@ -50,21 +50,47 @@ static DEFINE_PER_CPU(struct local_event, local_event) = {
->  
->  static int cn_filter(struct sock *dsk, struct sk_buff *skb, void *data)
->  {
-> +	uintptr_t val;
-> +	__u32 what, exit_code, *ptr;
->  	enum proc_cn_mcast_op mc_op;
 
-I guess reverse xmas tree would be requested here as well?
+--M9NhX3UHpAaciwkO
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
->  
-> -	if (!dsk)
-> +	if (!dsk || !data)
->  		return 0;
->  
-> +	ptr = (__u32 *)data;
-> +	what = *ptr++;
-> +	exit_code = *ptr;
-> +	val = ((struct proc_input *)(dsk->sk_user_data))->event_type;
->  	mc_op = ((struct proc_input *)(dsk->sk_user_data))->mcast_op;
->  
->  	if (mc_op == PROC_CN_MCAST_IGNORE)
->  		return 1;
->  
-> -	return 0;
-> +	if ((__u32)val == PROC_EVENT_ALL)
-> +		return 0;
-> +
-> +	/*
-> +	 * Drop packet if we have to report only non-zero exit status
-> +	 * (PROC_EVENT_NONZERO_EXIT) and exit status is 0
-> +	 */
-> +	if (((__u32)val & PROC_EVENT_NONZERO_EXIT) &&
-> +	    (what == PROC_EVENT_EXIT)) {
-> +		if (exit_code)
-> +			return 0;
-> +		else
+Please review this patch.
 
-Nit: don't really need the else here.
+The Silicom platform (silicom-platform) Linux driver for Swisscom
+Business Box (Swisscom BB) as well as Cordoba family products is a 
+software solution designed to facilitate the efficient management
+and control of devices through the integration of various Linux
+frameworks. This platform driver provides seamless support for
+device management via the Linux LED framework, GPIO framework,
+Hardware Monitoring (HWMON), and device attributes. The Silicom
+platform driver's compatibility with these Linux frameworks allows
+applications to access and control Cordoba family devices using
+existing software that is compatible with these frameworks. This
+compatibility simplifies the development process, reduces
+dependencies on proprietary solutions, and promotes
+interoperability with other Linux-based systems and software.
 
-> +			return 1;
-> +	}
-> +
-> +	if ((__u32)val & what)
-> +		return 0;
-> +
-> +	return 1;
->  }
->  
->  static inline void send_msg(struct cn_msg *msg)
->  {
-> +	__u32 filter_data[2];
-> +
->  	local_lock(&local_event.lock);
->  
->  	msg->seq = __this_cpu_inc_return(local_event.count) - 1;
-> @@ -76,8 +102,16 @@ static inline void send_msg(struct cn_msg *msg)
->  	 *
->  	 * If cn_netlink_send() fails, the data is not sent.
->  	 */
-> +	filter_data[0] = ((struct proc_event *)msg->data)->what;
-> +	if (filter_data[0] == PROC_EVENT_EXIT) {
-> +		filter_data[1] =
-> +		((struct proc_event *)msg->data)->event_data.exit.exit_code;
-> +	} else {
-> +		filter_data[1] = 0;
-> +	}
-> +
->  	cn_netlink_send_mult(msg, msg->len, 0, CN_IDX_PROC, GFP_NOWAIT,
-> -			     cn_filter, NULL);
-> +			     cn_filter, (void *)filter_data);
->  
->  	local_unlock(&local_event.lock);
->  }
-> @@ -357,12 +391,15 @@ static void cn_proc_ack(int err, int rcvd_seq, int rcvd_ack)
->  
->  /**
->   * cn_proc_mcast_ctl
-> - * @data: message sent from userspace via the connector
-> + * @msg: message sent from userspace via the connector
-> + * @nsp: NETLINK_CB of the client's socket buffer
->   */
->  static void cn_proc_mcast_ctl(struct cn_msg *msg,
->  			      struct netlink_skb_parms *nsp)
->  {
->  	enum proc_cn_mcast_op mc_op = 0, prev_mc_op = 0;
-> +	struct proc_input *pinput = NULL;
-> +	enum proc_cn_event ev_type = 0;
->  	int err = 0, initial = 0;
->  	struct sock *sk = NULL;
->  
-> @@ -381,10 +418,21 @@ static void cn_proc_mcast_ctl(struct cn_msg *msg,
->  		goto out;
->  	}
->  
-> -	if (msg->len == sizeof(mc_op))
-> +	if (msg->len == sizeof(*pinput)) {
-> +		pinput = (struct proc_input *)msg->data;
-> +		mc_op = pinput->mcast_op;
-> +		ev_type = pinput->event_type;
-> +	} else if (msg->len == sizeof(mc_op)) {
->  		mc_op = *((enum proc_cn_mcast_op *)msg->data);
-> -	else
-> +		ev_type = PROC_EVENT_ALL;
-> +	} else {
->  		return;
-> +	}
-> +
-> +	ev_type = valid_event((enum proc_cn_event)ev_type);
-> +
-> +	if (ev_type == PROC_EVENT_NONE)
-> +		ev_type = PROC_EVENT_ALL;
->  
->  	if (nsp->sk) {
->  		sk = nsp->sk;
-> @@ -396,6 +444,8 @@ static void cn_proc_mcast_ctl(struct cn_msg *msg,
->  			prev_mc_op =
->  			((struct proc_input *)(sk->sk_user_data))->mcast_op;
->  		}
-> +		((struct proc_input *)(sk->sk_user_data))->event_type =
-> +			ev_type;
->  		((struct proc_input *)(sk->sk_user_data))->mcast_op = mc_op;
->  	}
->  
-> @@ -407,6 +457,8 @@ static void cn_proc_mcast_ctl(struct cn_msg *msg,
->  	case PROC_CN_MCAST_IGNORE:
->  		if (!initial && (prev_mc_op != PROC_CN_MCAST_IGNORE))
->  			atomic_dec(&proc_event_num_listeners);
-> +		((struct proc_input *)(sk->sk_user_data))->event_type =
-> +			PROC_EVENT_NONE;
->  		break;
->  	default:
->  		err = EINVAL;
-> diff --git a/include/uapi/linux/cn_proc.h b/include/uapi/linux/cn_proc.h
-> index 6a06fb424313..f2afb7cc4926 100644
-> --- a/include/uapi/linux/cn_proc.h
-> +++ b/include/uapi/linux/cn_proc.h
-> @@ -30,6 +30,15 @@ enum proc_cn_mcast_op {
->  	PROC_CN_MCAST_IGNORE = 2
->  };
->  
-> +#define PROC_EVENT_ALL (PROC_EVENT_FORK | PROC_EVENT_EXEC | PROC_EVENT_UID |  \
-> +			PROC_EVENT_GID | PROC_EVENT_SID | PROC_EVENT_PTRACE | \
-> +			PROC_EVENT_COMM | PROC_EVENT_NONZERO_EXIT |           \
-> +			PROC_EVENT_COREDUMP | PROC_EVENT_EXIT)
-> +
-> +/*
-> + * If you add an entry in proc_cn_event, make sure you add it in
-> + * PROC_EVENT_ALL above as well.
-> + */
->  enum proc_cn_event {
->  	/* Use successive bits so the enums can be used to record
->  	 * sets of events as well
-> @@ -45,15 +54,25 @@ enum proc_cn_event {
->  	/* "next" should be 0x00000400 */
->  	/* "last" is the last process event: exit,
->  	 * while "next to last" is coredumping event
-> +	 * before that is report only if process dies
-> +	 * with non-zero exit status
->  	 */
-> +	PROC_EVENT_NONZERO_EXIT = 0x20000000,
->  	PROC_EVENT_COREDUMP = 0x40000000,
->  	PROC_EVENT_EXIT = 0x80000000
->  };
->  
->  struct proc_input {
->  	enum proc_cn_mcast_op mcast_op;
-> +	enum proc_cn_event event_type;
->  };
->  
-> +static inline enum proc_cn_event valid_event(enum proc_cn_event ev_type)
-> +{
-> +	ev_type &= PROC_EVENT_ALL;
-> +	return ev_type;
-> +}
-> +
->  /*
->   * From the user's point of view, the process
->   * ID is the thread group ID and thread ID is the internal
-> -- 
-> 2.41.0
-> 
+Thanks!
+
+Henry Shi
+Silicom Ltd.
+Henrys@silicom-usa.com
+Henryshi2018@gmail.com
+
+
+
+
+--M9NhX3UHpAaciwkO
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: attachment; filename="Silicom-Platform-Driver.patch"
+
+From 56b4b37297ee16a289f41a3f4e7480b7a330eaea Mon Sep 17 00:00:00 2001
+From: Henry Shi <henryshi2018@gmail.com>
+Date: Fri, 30 Jun 2023 11:17:36 -0400
+Subject: [PATCH] Add Silicom Platform Driver
+
+The Silicom platform (silicom-platform) Linux driver for Swisscom
+Business Box (Swisscom BB) as well as Cordoba family products is a 
+software solution designed to facilitate the efficient management
+and control of devices through the integration of various Linux
+frameworks. This platform driver provides seamless support for
+device management via the Linux LED framework, GPIO framework,
+Hardware Monitoring (HWMON), and device attributes. The Silicom
+platform driver's compatibility with these Linux frameworks allows
+applications to access and control Cordoba family devices using
+existing software that is compatible with these frameworks. This
+compatibility simplifies the development process, reduces
+dependencies on proprietary solutions, and promotes
+interoperability with other Linux-based systems and software.
+
+Signed-off-by: Henry Shi <henryshi2018@gmail.com>
+---
+ arch/x86/Kconfig                        |   11 +
+ drivers/platform/x86/Makefile           |    1 +
+ drivers/platform/x86/silicom-platform.c | 1123 +++++++++++++++++++++++
+ 3 files changed, 1135 insertions(+)
+ create mode 100644 drivers/platform/x86/silicom-platform.c
+
+diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+index 53bab123a8ee..d94ea33b365e 100644
+--- a/arch/x86/Kconfig
++++ b/arch/x86/Kconfig
+@@ -2373,6 +2373,17 @@ config COMPAT_VDSO
+ 	  If unsure, say N: if you are compiling your own kernel, you
+ 	  are unlikely to be using a buggy version of glibc.
+ 
++config SILICOM_PLATFORM
++	tristate "Silicom Edge Networking device support"
++	depends on DMI
++	select LEDS_CLASS_MULTICOLOR
++	select GPIOLIB
++	help
++	  This option enables support for the LEDs/GPIO/etc downstream of the
++	  embedded controller on Silicom "Cordoba" hardware and derivatives.
++
++	  If you have a Silicom network appliance, say Y or M here.
++
+ choice
+ 	prompt "vsyscall table for legacy applications"
+ 	depends on X86_64
+diff --git a/drivers/platform/x86/Makefile b/drivers/platform/x86/Makefile
+index 2cafe51ec4d8..f2f5743a9e54 100644
+--- a/drivers/platform/x86/Makefile
++++ b/drivers/platform/x86/Makefile
+@@ -113,6 +113,7 @@ obj-$(CONFIG_SERIAL_MULTI_INSTANTIATE)	+= serial-multi-instantiate.o
+ obj-$(CONFIG_MLX_PLATFORM)		+= mlx-platform.o
+ obj-$(CONFIG_TOUCHSCREEN_DMI)		+= touchscreen_dmi.o
+ obj-$(CONFIG_WIRELESS_HOTKEY)		+= wireless-hotkey.o
++obj-$(CONFIG_SILICOM_PLATFORM)          += silicom-platform.o
+ obj-$(CONFIG_X86_ANDROID_TABLETS)	+= x86-android-tablets/
+ 
+ # Intel uncore drivers
+diff --git a/drivers/platform/x86/silicom-platform.c b/drivers/platform/x86/silicom-platform.c
+new file mode 100644
+index 000000000000..90431f733682
+--- /dev/null
++++ b/drivers/platform/x86/silicom-platform.c
+@@ -0,0 +1,1123 @@
++// SPDX-License-Identifier: GPL-2.0+
++//
++// silicom-platform.c - Silicom MEC170x platform driver
++//
++// Copyright (C) 2023 Henry Shi <henrys@silicom-usa.com>
++
++#include <linux/dmi.h>
++#include <linux/gpio/driver.h>
++#include <linux/init.h>
++#include <linux/ioport.h>
++#include <linux/io.h>
++#include <linux/kernel.h>
++#include <linux/led-class-multicolor.h>
++#include <linux/module.h>
++#include <linux/hwmon.h>
++#include <linux/mutex.h>
++#include <linux/platform_device.h>
++#include <linux/string.h>
++#include <linux/thermal.h>
++#include <linux/kobject.h>
++#include <linux/sysfs.h>
++
++#define MEC_ADDR ((mec_io_base) + 0x02)
++#define MEC_DATA(byte) ((mec_io_base) + 0x04 + (byte))
++#define EC_ADDR_LSB MEC_ADDR
++#define EC_ADDR_MSB ((mec_io_base) + 0x03)
++#define SILICOM_MEC_MAGIC 0x5a
++#define OFFSET_BIT_TO_CHANNEL(off, bit) ((((off) + 0x014) << 3) | (bit))
++#define CHANNEL_TO_OFFSET(chan) (((chan) >> 3) - 0x14)
++#define CHANNEL_TO_BIT(chan) ((chan) & 0x07)
++
++static DEFINE_MUTEX(mec_io_mutex);
++static int mec_io_base, mec_io_len;
++
++struct silicom_fan_control_data {
++	struct   device *hdev;
++	int      temp;
++	int      fan_speed;
++};
++
++static const struct hwmon_channel_info *silicom_fan_control_info[] = {
++	HWMON_CHANNEL_INFO(fan, HWMON_F_INPUT | HWMON_F_LABEL),
++	HWMON_CHANNEL_INFO(temp, HWMON_T_INPUT | HWMON_T_LABEL),
++	NULL
++};
++
++struct silicom_device_control_data {
++	struct   device *my_dev;
++	int      efuse_status;
++	int      uc_version;
++	int      power_cycle;
++};
++static struct silicom_device_control_data my_dev_ctl;
++
++struct silicom_platform_info {
++	int io_base;
++	int io_len;
++	struct led_classdev_mc *led_info;
++	struct gpio_chip *gpiochip;
++	u8 *gpio_channels;
++	u16 ngpio;
++};
++
++static const char * const plat_0222_gpio_names[] = {
++	"AUTOM0_SFP_TX_FAULT",
++	"SLOT2_LED_OUT",
++	"SIM_M2_SLOT2_B_DET",
++	"SIM_M2_SLOT2_A_DET",
++	"SLOT1_LED_OUT",
++	"SIM_M2_SLOT1_B_DET",
++	"SIM_M2_SLOT1_A_DET",
++	"SLOT0_LED_OUT",
++	"WAN_SFP0_RX_LOS",
++	"WAN_SFP0_PRSNT_N",
++	"WAN_SFP0_TX_FAULT",
++	"AUTOM1_SFP_RX_LOS",
++	"AUTOM1_SFP_PRSNT_N",
++	"AUTOM1_SFP_TX_FAULT",
++	"AUTOM0_SFP_RX_LOS",
++	"AUTOM0_SFP_PRSNT_N",
++	"WAN_SFP1_RX_LOS",
++	"WAN_SFP1_PRSNT_N",
++	"WAN_SFP1_TX_FAULT",
++	"SIM_M2_SLOT1_MUX_SEL",
++	"W_DISABLE_M2_SLOT1_N",
++	"W_DISABLE_MPCIE_SLOT0_N",
++	"W_DISABLE_M2_SLOT0_N",
++	"BT_COMMAND_MODE",
++	"WAN_SFP1_TX_DISABLE",
++	"WAN_SFP0_TX_DISABLE",
++	"AUTOM1_SFP_TX_DISABLE",
++	"AUTOM0_SFP_TX_DISABLE",
++	"SIM_M2_SLOT2_MUX_SEL",
++	"W_DISABLE_M2_SLOT2_N",
++	"RST_CTL_M2_SLOT_1_N",
++	"RST_CTL_M2_SLOT_2_N",
++	"PM_USB_PWR_EN_BOT",
++	"PM_USB_PWR_EN_TOP",
++};
++
++static u8 plat_0222_gpio_channels[] = {
++	OFFSET_BIT_TO_CHANNEL(0x00, 0),
++	OFFSET_BIT_TO_CHANNEL(0x00, 1),
++	OFFSET_BIT_TO_CHANNEL(0x00, 2),
++	OFFSET_BIT_TO_CHANNEL(0x00, 3),
++	OFFSET_BIT_TO_CHANNEL(0x00, 4),
++	OFFSET_BIT_TO_CHANNEL(0x00, 5),
++	OFFSET_BIT_TO_CHANNEL(0x00, 6),
++	OFFSET_BIT_TO_CHANNEL(0x00, 7),
++	OFFSET_BIT_TO_CHANNEL(0x01, 0),
++	OFFSET_BIT_TO_CHANNEL(0x01, 1),
++	OFFSET_BIT_TO_CHANNEL(0x01, 2),
++	OFFSET_BIT_TO_CHANNEL(0x01, 3),
++	OFFSET_BIT_TO_CHANNEL(0x01, 4),
++	OFFSET_BIT_TO_CHANNEL(0x01, 5),
++	OFFSET_BIT_TO_CHANNEL(0x01, 6),
++	OFFSET_BIT_TO_CHANNEL(0x01, 7),
++	OFFSET_BIT_TO_CHANNEL(0x02, 0),
++	OFFSET_BIT_TO_CHANNEL(0x02, 1),
++	OFFSET_BIT_TO_CHANNEL(0x02, 2),
++	OFFSET_BIT_TO_CHANNEL(0x09, 0),
++	OFFSET_BIT_TO_CHANNEL(0x09, 1),
++	OFFSET_BIT_TO_CHANNEL(0x09, 2),
++	OFFSET_BIT_TO_CHANNEL(0x09, 3),
++	OFFSET_BIT_TO_CHANNEL(0x0a, 0),
++	OFFSET_BIT_TO_CHANNEL(0x0a, 1),
++	OFFSET_BIT_TO_CHANNEL(0x0a, 2),
++	OFFSET_BIT_TO_CHANNEL(0x0a, 3),
++	OFFSET_BIT_TO_CHANNEL(0x0a, 4),
++	OFFSET_BIT_TO_CHANNEL(0x0a, 5),
++	OFFSET_BIT_TO_CHANNEL(0x0a, 6),
++	OFFSET_BIT_TO_CHANNEL(0x0b, 0),
++	OFFSET_BIT_TO_CHANNEL(0x0b, 1),
++	OFFSET_BIT_TO_CHANNEL(0x0b, 2),
++	OFFSET_BIT_TO_CHANNEL(0x0b, 3),
++};
++
++static int silicom_gpio_get_direction(struct gpio_chip *gc, unsigned int offset);
++static int silicom_gpio_direction_input(struct gpio_chip *gc, unsigned int offset);
++static int silicom_gpio_direction_output(struct gpio_chip *gc, unsigned int offset, int value);
++static int silicom_gpio_get(struct gpio_chip *gc, unsigned int offset);
++static void silicom_gpio_set(struct gpio_chip *gc, unsigned int offset, int value);
++static void silicom_mec_led_mc_brightness_set(struct led_classdev *led_cdev,
++					      enum led_brightness brightness);
++static enum led_brightness silicom_mec_led_mc_brightness_get(struct led_classdev *led_cdev);
++static struct platform_device *silicom_platform_dev;
++static struct led_classdev_mc *silicom_led_info __initdata;
++static struct gpio_chip *silicom_gpiochip __initdata;
++static u8 *silicom_gpio_channels __initdata;
++static struct gpio_chip silicom_gpio_chip = {
++	.label = "silicom-gpio",
++	.get_direction = silicom_gpio_get_direction,
++	.direction_input = silicom_gpio_direction_input,
++	.direction_output = silicom_gpio_direction_output,
++	.get = silicom_gpio_get,
++	.set = silicom_gpio_set,
++	.base = -1,
++	.ngpio = ARRAY_SIZE(plat_0222_gpio_channels),
++	.names = plat_0222_gpio_names,
++	/* We're using a mutex to protect the indirect access, so we can sleep if the lock blocks */
++	.can_sleep = true,
++};
++
++static struct mc_subled plat_0222_wan_mc_subled_info[] __initdata = {
++	{
++		.color_index = LED_COLOR_ID_WHITE,
++		.brightness = 1,
++		.intensity = 0,
++		.channel = OFFSET_BIT_TO_CHANNEL(0x0c, 7),
++	},
++	{
++		.color_index = LED_COLOR_ID_YELLOW,
++		.brightness = 1,
++		.intensity = 0,
++		.channel = OFFSET_BIT_TO_CHANNEL(0x0c, 6),
++	},
++	{
++		.color_index = LED_COLOR_ID_RED,
++		.brightness = 1,
++		.intensity = 0,
++		.channel = OFFSET_BIT_TO_CHANNEL(0x0c, 5),
++	},
++};
++
++static struct mc_subled plat_0222_sys_mc_subled_info[] __initdata = {
++	{
++		.color_index = LED_COLOR_ID_WHITE,
++		.brightness = 1,
++		.intensity = 0,
++		.channel = OFFSET_BIT_TO_CHANNEL(0x0c, 4),
++	},
++	{
++		.color_index = LED_COLOR_ID_AMBER,
++		.brightness = 1,
++		.intensity = 0,
++		.channel = OFFSET_BIT_TO_CHANNEL(0x0c, 3),
++	},
++	{
++		.color_index = LED_COLOR_ID_RED,
++		.brightness = 1,
++		.intensity = 0,
++		.channel = OFFSET_BIT_TO_CHANNEL(0x0c, 2),
++	},
++};
++
++static struct mc_subled plat_0222_stat1_mc_subled_info[] __initdata = {
++	{
++		.color_index = LED_COLOR_ID_RED,
++		.brightness = 1,
++		.intensity = 0,
++		.channel = OFFSET_BIT_TO_CHANNEL(0x0c, 1),
++	},
++	{
++		.color_index = LED_COLOR_ID_GREEN,
++		.brightness = 1,
++		.intensity = 0,
++		.channel = OFFSET_BIT_TO_CHANNEL(0x0c, 0),
++	},
++	{
++		.color_index = LED_COLOR_ID_BLUE,
++		.brightness = 1,
++		.intensity = 0,
++		.channel = OFFSET_BIT_TO_CHANNEL(0x0d, 7),
++	},
++	{
++		.color_index = LED_COLOR_ID_YELLOW,
++		.brightness = 1,
++		.intensity = 0,
++		.channel = OFFSET_BIT_TO_CHANNEL(0x0d, 6),
++	},
++};
++
++static struct mc_subled plat_0222_stat2_mc_subled_info[] __initdata = {
++	{
++		.color_index = LED_COLOR_ID_RED,
++		.brightness = 1,
++		.intensity = 0,
++		.channel = OFFSET_BIT_TO_CHANNEL(0x0d, 5),
++	},
++	{
++		.color_index = LED_COLOR_ID_GREEN,
++		.brightness = 1,
++		.intensity = 0,
++		.channel = OFFSET_BIT_TO_CHANNEL(0x0d, 4),
++	},
++	{
++		.color_index = LED_COLOR_ID_BLUE,
++		.brightness = 1,
++		.intensity = 0,
++		.channel = OFFSET_BIT_TO_CHANNEL(0x0d, 3),
++	},
++	{
++		.color_index = LED_COLOR_ID_YELLOW,
++		.brightness = 1,
++		.intensity = 0,
++		.channel = OFFSET_BIT_TO_CHANNEL(0x0d, 2),
++	},
++};
++
++static struct mc_subled plat_0222_stat3_mc_subled_info[] __initdata = {
++	{
++		.color_index = LED_COLOR_ID_RED,
++		.brightness = 1,
++		.intensity = 0,
++		.channel = OFFSET_BIT_TO_CHANNEL(0x0d, 1),
++	},
++	{
++		.color_index = LED_COLOR_ID_GREEN,
++		.brightness = 1,
++		.intensity = 0,
++		.channel = OFFSET_BIT_TO_CHANNEL(0x0d, 0),
++	},
++	{
++		.color_index = LED_COLOR_ID_BLUE,
++		.brightness = 1,
++		.intensity = 0,
++		.channel = OFFSET_BIT_TO_CHANNEL(0x0e, 1),
++	},
++	{
++		.color_index = LED_COLOR_ID_YELLOW,
++		.brightness = 1,
++		.intensity = 0,
++		.channel = OFFSET_BIT_TO_CHANNEL(0x0e, 0),
++	},
++};
++
++static struct led_classdev_mc plat_0222_mc_led_info[] __initdata = {
++	{
++		.led_cdev = {
++			.name = "multicolor:wan",
++			.brightness = 0,
++			.max_brightness = 1,
++			.brightness_set = silicom_mec_led_mc_brightness_set,
++			.brightness_get = silicom_mec_led_mc_brightness_get,
++		},
++		.num_colors = ARRAY_SIZE(plat_0222_wan_mc_subled_info),
++		.subled_info = plat_0222_wan_mc_subled_info,
++	},
++	{
++		.led_cdev = {
++			.name = "multicolor:sys",
++			.brightness = 0,
++			.max_brightness = 1,
++			.brightness_set = silicom_mec_led_mc_brightness_set,
++			.brightness_get = silicom_mec_led_mc_brightness_get,
++		},
++		.num_colors = ARRAY_SIZE(plat_0222_sys_mc_subled_info),
++		.subled_info = plat_0222_sys_mc_subled_info,
++	},
++	{
++		.led_cdev = {
++			.name = "multicolor:stat1",
++			.brightness = 0,
++			.max_brightness = 1,
++			.brightness_set = silicom_mec_led_mc_brightness_set,
++			.brightness_get = silicom_mec_led_mc_brightness_get,
++		},
++		.num_colors = ARRAY_SIZE(plat_0222_stat1_mc_subled_info),
++		.subled_info = plat_0222_stat1_mc_subled_info,
++	},
++	{
++		.led_cdev = {
++			.name = "multicolor:stat2",
++			.brightness = 0,
++			.max_brightness = 1,
++			.brightness_set = silicom_mec_led_mc_brightness_set,
++			.brightness_get = silicom_mec_led_mc_brightness_get,
++		},
++		.num_colors = ARRAY_SIZE(plat_0222_stat2_mc_subled_info),
++		.subled_info = plat_0222_stat2_mc_subled_info,
++	},
++	{
++		.led_cdev = {
++			.name = "multicolor:stat3",
++			.brightness = 0,
++			.max_brightness = 1,
++			.brightness_set = silicom_mec_led_mc_brightness_set,
++			.brightness_get = silicom_mec_led_mc_brightness_get,
++		},
++		.num_colors = ARRAY_SIZE(plat_0222_stat3_mc_subled_info),
++		.subled_info = plat_0222_stat3_mc_subled_info,
++	},
++	{ },
++};
++
++static struct silicom_platform_info silicom_plat_0222_cordoba_info __initdata = {
++	.io_base = 0x800,
++	.io_len = 8,
++	.led_info = plat_0222_mc_led_info,
++	.gpiochip = &silicom_gpio_chip,
++	.gpio_channels = plat_0222_gpio_channels,
++	/* The original generic cordoba does not have the last 4 outputs of the plat_0222 BB variant,
++	 * the rest are the same, so use the same longer list, but ignore the last entries here
++	 */
++	.ngpio = ARRAY_SIZE(plat_0222_gpio_channels),
++
++};
++
++static struct mc_subled cordoba_fp_left_mc_subled_info[] __initdata = {
++	{
++		.color_index = LED_COLOR_ID_RED,
++		.brightness = 1,
++		.intensity = 0,
++		.channel = OFFSET_BIT_TO_CHANNEL(0x08, 6),
++	},
++	{
++		.color_index = LED_COLOR_ID_GREEN,
++		.brightness = 1,
++		.intensity = 0,
++		.channel = OFFSET_BIT_TO_CHANNEL(0x08, 5),
++	},
++	{
++		.color_index = LED_COLOR_ID_BLUE,
++		.brightness = 1,
++		.intensity = 0,
++		.channel = OFFSET_BIT_TO_CHANNEL(0x09, 7),
++	},
++	{
++		.color_index = LED_COLOR_ID_AMBER,
++		.brightness = 1,
++		.intensity = 0,
++		.channel = OFFSET_BIT_TO_CHANNEL(0x09, 4),
++	},
++};
++
++static struct mc_subled cordoba_fp_center_mc_subled_info[] __initdata = {
++	{
++		.color_index = LED_COLOR_ID_RED,
++		.brightness = 1,
++		.intensity = 0,
++		.channel = OFFSET_BIT_TO_CHANNEL(0x08, 7),
++	},
++	{
++		.color_index = LED_COLOR_ID_GREEN,
++		.brightness = 1,
++		.intensity = 0,
++		.channel = OFFSET_BIT_TO_CHANNEL(0x08, 4),
++	},
++	{
++		.color_index = LED_COLOR_ID_BLUE,
++		.brightness = 1,
++		.intensity = 0,
++		.channel = OFFSET_BIT_TO_CHANNEL(0x08, 3),
++	},
++	{
++		.color_index = LED_COLOR_ID_AMBER,
++		.brightness = 1,
++		.intensity = 0,
++		.channel = OFFSET_BIT_TO_CHANNEL(0x09, 6),
++	},
++};
++
++static struct mc_subled cordoba_fp_right_mc_subled_info[] __initdata = {
++	{
++		.color_index = LED_COLOR_ID_RED,
++		.brightness = 1,
++		.intensity = 0,
++		.channel = OFFSET_BIT_TO_CHANNEL(0x08, 2),
++	},
++	{
++		.color_index = LED_COLOR_ID_GREEN,
++		.brightness = 1,
++		.intensity = 0,
++		.channel = OFFSET_BIT_TO_CHANNEL(0x08, 1),
++	},
++	{
++		.color_index = LED_COLOR_ID_BLUE,
++		.brightness = 1,
++		.intensity = 0,
++		.channel = OFFSET_BIT_TO_CHANNEL(0x08, 0),
++	},
++	{
++		.color_index = LED_COLOR_ID_AMBER,
++		.brightness = 1,
++		.intensity = 0,
++		.channel = OFFSET_BIT_TO_CHANNEL(0x09, 5),
++	},
++};
++
++static struct led_classdev_mc cordoba_mc_led_info[] __initdata = {
++	{
++		.led_cdev = {
++			.name = "multicolor:fp_left",
++			.brightness = 0,
++			.max_brightness = 1,
++			.brightness_set = silicom_mec_led_mc_brightness_set,
++			.brightness_get = silicom_mec_led_mc_brightness_get,
++		},
++		.num_colors = ARRAY_SIZE(cordoba_fp_left_mc_subled_info),
++		.subled_info = cordoba_fp_left_mc_subled_info,
++	},
++	{
++		.led_cdev = {
++			.name = "multicolor:fp_center",
++			.brightness = 0,
++			.max_brightness = 1,
++			.brightness_set = silicom_mec_led_mc_brightness_set,
++			.brightness_get = silicom_mec_led_mc_brightness_get,
++		},
++		.num_colors = ARRAY_SIZE(cordoba_fp_center_mc_subled_info),
++		.subled_info = cordoba_fp_center_mc_subled_info,
++	},
++	{
++		.led_cdev = {
++			.name = "multicolor:fp_right",
++			.brightness = 0,
++			.max_brightness = 1,
++			.brightness_set = silicom_mec_led_mc_brightness_set,
++			.brightness_get = silicom_mec_led_mc_brightness_get,
++		},
++		.num_colors = ARRAY_SIZE(cordoba_fp_right_mc_subled_info),
++		.subled_info = cordoba_fp_right_mc_subled_info,
++	},
++	{ },
++};
++
++static struct silicom_platform_info silicom_generic_cordoba_info __initdata = {
++	.io_base = 0x800,
++	.io_len = 8,
++	.led_info = cordoba_mc_led_info,
++	.gpiochip = &silicom_gpio_chip,
++	.gpio_channels = plat_0222_gpio_channels,
++	.ngpio = ARRAY_SIZE(plat_0222_gpio_channels),
++};
++
++static struct platform_driver silicom_platform_driver = {
++	.driver = {
++		.name = "silicom-platform",
++	},
++};
++
++void lock_io_modules(void)
++{
++	mutex_lock(&mec_io_mutex);
++}
++EXPORT_SYMBOL(lock_io_modules);
++
++void unlock_io_modules(void)
++{
++	mutex_unlock(&mec_io_mutex);
++}
++EXPORT_SYMBOL(unlock_io_modules);
++
++static ssize_t efuse_status_show(struct device *dev, struct device_attribute *attr,
++		      char *buf)
++{
++	u32 reg;
++	u32 bank = 0;
++	u32 offset = 0x28;
++	u32 byte_pos = 0;
++
++	mutex_lock(&mec_io_mutex);
++	/* Select memory region */
++	outb(bank, EC_ADDR_MSB);
++	outb(offset, EC_ADDR_LSB);
++
++	/* Get current date from the address */
++	reg = inl(MEC_DATA(byte_pos));
++	mutex_unlock(&mec_io_mutex);
++
++	my_dev_ctl.efuse_status = reg & 0x1;
++
++	return sprintf(buf, "%d\n", my_dev_ctl.efuse_status);
++}
++
++static ssize_t uc_version_show(struct device *dev,
++			       struct device_attribute *attr,
++			       char *buf)
++{
++	u32 reg;
++	u32 bank = 0;
++	u32 offset = 0x0;
++	u32 byte_pos = 0;
++	int uc_version;
++
++	mutex_lock(&mec_io_mutex);
++	outb(bank, EC_ADDR_MSB);
++	outb(offset, EC_ADDR_LSB);
++
++	reg = inl(MEC_DATA(byte_pos));
++	mutex_unlock(&mec_io_mutex);
++
++	uc_version = (reg >> 8) & 0xFF;
++	if (uc_version >= 64 && uc_version < 128) {
++		uc_version = uc_version - 64;
++		if (uc_version < 10)
++			uc_version = 100 + uc_version;
++		else
++			uc_version = 100 + 10 * (uc_version / 10) + uc_version % 10;
++	} else if (uc_version >= 128 && uc_version < 192) {
++		uc_version = uc_version - 128;
++		if (uc_version < 10)
++			uc_version = 200 + uc_version;
++		else
++			uc_version = 200 + 10 * (uc_version / 10) + uc_version % 10;
++	}
++	my_dev_ctl.uc_version = uc_version;
++	return sprintf(buf, "%d\n", my_dev_ctl.uc_version);
++}
++
++static ssize_t power_cycle_show(struct device *dev,
++				struct device_attribute *attr,
++				char *buf)
++{
++	return sprintf(buf, "%d\n", my_dev_ctl.power_cycle);
++}
++
++static void powercycle_uc(void)
++{
++	u32 bank = 0;
++	u32 offset = 0x24;
++	u32 byte_pos = 0;
++
++	mutex_lock(&mec_io_mutex);
++	/* Select memory region */
++	outb(bank, EC_ADDR_MSB);
++	outb(offset, EC_ADDR_LSB);
++
++	/* Set to 1 for current date from the address */
++	outb(1, MEC_DATA(byte_pos));
++	mutex_unlock(&mec_io_mutex);
++}
++
++static ssize_t power_cycle_store(struct device *dev, struct device_attribute *attr,
++				 const char *buf, size_t count)
++{
++	if (sscanf(buf, "%du", &my_dev_ctl.power_cycle) != 1) {
++		dev_err(dev, "Failed to read power_cycle\n");
++		return -EINVAL;
++	}
++	if (my_dev_ctl.power_cycle > 0)
++		powercycle_uc();
++
++	return count;
++}
++
++static struct device_attribute my_dev_attr[] = {
++	{
++		.attr = {.name = "efuse_status", .mode = 0644},
++		.show = efuse_status_show,
++		.store = NULL
++	},
++	{
++		.attr = {.name = "uc_version", .mode = 0644},
++		.show = uc_version_show,
++		.store = NULL
++	},
++	{
++		.attr = {.name = "power_cycle", .mode = 0644},
++		.show = power_cycle_show,
++		.store = power_cycle_store
++	},
++};
++
++static int silicom_gpio_get_direction(struct gpio_chip *gc, unsigned int offset)
++{
++	u8 *channels = gpiochip_get_data(gc);
++
++	/* Input registers have offsets between [0x00, 0x07] */
++	if (CHANNEL_TO_OFFSET(channels[offset]) < 0x08)
++		return GPIO_LINE_DIRECTION_IN;
++
++	return GPIO_LINE_DIRECTION_OUT;
++}
++
++static int silicom_gpio_direction_input(struct gpio_chip *gc, unsigned int offset)
++{
++	int direction = silicom_gpio_get_direction(gc, offset);
++
++	return direction == GPIO_LINE_DIRECTION_IN ? 0 : -EINVAL;
++}
++
++static void silicom_gpio_set(struct gpio_chip *gc, unsigned int offset, int value)
++{
++	u8 *channels = gpiochip_get_data(gc);
++	int direction = silicom_gpio_get_direction(gc, offset);
++	int channel = channels[offset];
++	u8 reg;
++
++	if (direction == GPIO_LINE_DIRECTION_IN)
++		return;
++
++	mutex_lock(&mec_io_mutex);
++	/* Get the dword offset from the channel */
++	outb((channel >> 3) & 0xfc, MEC_ADDR);
++
++	/* Get the current register */
++	reg = inb(MEC_DATA((channel >> 3) & 0x03));
++	if (value == 0)
++		reg &= ~(1 << (channel & 0x7));
++	else if (value > 0)
++		reg |= 1 << (channel & 0x7);
++	else
++		pr_err("Invalid GPIO value: %d\n", value);
++	outb(reg, MEC_DATA((channel >> 3) & 0x03));
++	mutex_unlock(&mec_io_mutex);
++}
++
++static int silicom_gpio_direction_output(struct gpio_chip *gc, unsigned int offset, int value)
++{
++	int direction = silicom_gpio_get_direction(gc, offset);
++
++	if (direction == GPIO_LINE_DIRECTION_IN)
++		return -EINVAL;
++
++	silicom_gpio_set(gc, offset, value);
++
++	return 0;
++}
++
++static int silicom_gpio_get(struct gpio_chip *gc, unsigned int offset)
++{
++	u8 *channels = gpiochip_get_data(gc);
++	int channel = channels[offset];
++	u8 reg;
++
++	mutex_lock(&mec_io_mutex);
++	/* Get the dword offset from the channel */
++	outb((channel >> 3) & 0xfc, MEC_ADDR);
++
++	/* Get the current register */
++	reg = inb(MEC_DATA((channel >> 3) & 0x03));
++	mutex_unlock(&mec_io_mutex);
++
++	return (reg >> (channel & 0x7)) & 0x01;
++}
++
++static int __init silicom_mc_leds_register(struct device *dev,
++					   const struct led_classdev_mc *mc_leds)
++{
++	struct led_classdev_mc *led;
++	int i, err;
++
++	for (i = 0; mc_leds[i].led_cdev.name; i++) {
++		/* allocate and copy data from the init constansts */
++		led = devm_kzalloc(dev, sizeof(struct led_classdev_mc), GFP_KERNEL);
++		if (IS_ERR_OR_NULL(led)) {
++			dev_err(dev, "Failed to alloc led_classdev_mc[%d]: %ld\n", i, PTR_ERR(led));
++			return -ENOMEM;
++		}
++		memcpy(led, &mc_leds[i], sizeof(*led));
++
++		led->subled_info = devm_kzalloc(dev, led->num_colors * sizeof(struct mc_subled),
++						GFP_KERNEL);
++		if (IS_ERR_OR_NULL(led->subled_info)) {
++			dev_err(dev, "Failed to alloc subled_info[%d]: %ld\n",
++				i, PTR_ERR(led->subled_info));
++			return -ENOMEM;
++		}
++		memcpy(led->subled_info, mc_leds[i].subled_info,
++			led->num_colors * sizeof(struct mc_subled));
++
++		err = devm_led_classdev_multicolor_register(dev, led);
++		if (err) {
++			dev_err(dev, "Failed to register[%d]: %d\n", i, err);
++			return err;
++		}
++	}
++
++	return 0;
++}
++
++static void silicom_mec_led_set(int channel, int on)
++{
++	u8 reg;
++
++	mutex_lock(&mec_io_mutex);
++	/* Get the dword offset from the channel */
++	outb((channel >> 3) & 0xfc, MEC_ADDR);
++
++	/* Get the current LED settings */
++	reg = inb(MEC_DATA((channel >> 3) & 0x03));
++
++	/* Outputs are active low, so clear the bit for on, or set it for off */
++	if (on)
++		reg &= ~(1 << (channel & 0x7));
++	else
++		reg |= 1 << (channel & 0x7);
++
++	/* Write back the updated register */
++	outb(reg, MEC_DATA((channel >> 3) & 0x03));
++
++	mutex_unlock(&mec_io_mutex);
++}
++
++static void silicom_mec_led_mc_brightness_set(struct led_classdev *led_cdev,
++					      enum led_brightness brightness)
++{
++	struct led_classdev_mc *mc_cdev = lcdev_to_mccdev(led_cdev);
++	int i;
++
++	led_mc_calc_color_components(mc_cdev, brightness);
++
++	for (i = 0; i < mc_cdev->num_colors; i++) {
++		silicom_mec_led_set(mc_cdev->subled_info[i].channel,
++				    mc_cdev->subled_info[i].brightness);
++	}
++}
++
++static enum led_brightness silicom_mec_led_get(int channel)
++{
++	u8 reg;
++
++	mutex_lock(&mec_io_mutex);
++	/* Get the dword offset of the register for this LED from the channel */
++	outb((channel >> 3) & 0xfc, MEC_ADDR);
++	/* Get the current LED settings */
++	reg = inb(MEC_DATA((channel >> 3) & 0x03));
++	mutex_unlock(&mec_io_mutex);
++
++	/* Outputs are active low */
++	return reg & (1 << (channel & 0x7)) ? LED_OFF : LED_ON;
++}
++
++static enum led_brightness silicom_mec_led_mc_brightness_get(struct led_classdev *led_cdev)
++{
++	struct led_classdev_mc *mc_cdev = lcdev_to_mccdev(led_cdev);
++	enum led_brightness brightness = LED_OFF;
++	int i;
++
++	for (i = 0; i < mc_cdev->num_colors; i++) {
++		mc_cdev->subled_info[i].brightness =
++			silicom_mec_led_get(mc_cdev->subled_info[i].channel);
++
++		/* Mark the overall brightness as LED_ON if any of the subleds are on */
++		if (mc_cdev->subled_info[i].brightness != LED_OFF)
++			brightness = LED_ON;
++	}
++
++	return brightness;
++}
++
++
++static u32 rpm_get(void)
++{
++	u32 reg;
++	u32 bank = 0;
++	u32 offset = 0xc;
++	u32 byte_pos = 0;
++
++	mutex_lock(&mec_io_mutex);
++	/* Select memory region */
++	outb(bank, EC_ADDR_MSB);
++	outb(offset, EC_ADDR_LSB);
++	/* Get current date from the address */
++	reg = inw(MEC_DATA(byte_pos));
++	mutex_unlock(&mec_io_mutex);
++
++	return reg;
++}
++
++static u32 temp_get(void)
++{
++	u32 reg;
++	u32 bank = 0;
++	u32 offset = 0xc;
++	u32 byte_pos = 0;
++
++	mutex_lock(&mec_io_mutex);
++	/* Select memory region */
++	outb(bank, EC_ADDR_MSB);
++	outb(offset, EC_ADDR_LSB);
++	/* Get current date from the address */
++	reg = inl(MEC_DATA(byte_pos));
++	mutex_unlock(&mec_io_mutex);
++
++	return (reg >> 16) / 10;
++}
++
++static umode_t silicom_fan_control_fan_is_visible(const u32 attr)
++{
++	switch (attr) {
++	case hwmon_fan_input:
++	case hwmon_fan_label:
++		return 0444;
++	default:
++		return 0;
++	}
++}
++
++static umode_t silicom_fan_control_temp_is_visible(const u32 attr)
++{
++	switch (attr) {
++	case hwmon_temp_input:
++	case hwmon_temp_label:
++		return 0444;
++	default:
++		return 0;
++	}
++}
++
++static int silicom_fan_control_read_fan(struct device *dev, u32 attr, long *val)
++{
++	struct silicom_fan_control_data *ctl = dev_get_drvdata(dev);
++
++	switch (attr) {
++	case hwmon_fan_input:
++		ctl->fan_speed = rpm_get();
++		*val = ctl->fan_speed;
++		return 0;
++	default:
++		return -EOPNOTSUPP;
++	}
++}
++
++static int silicom_fan_control_read_temp(struct device *dev, u32 attr, long *val)
++{
++	struct silicom_fan_control_data *ctl = dev_get_drvdata(dev);
++
++	switch (attr) {
++	case hwmon_temp_input:
++		ctl->temp = temp_get();
++		*val = ctl->temp;
++		return 0;
++	default:
++		return -EOPNOTSUPP;
++	}
++}
++
++static umode_t silicom_fan_control_is_visible(const void *data,
++					  enum hwmon_sensor_types type,
++					  u32 attr, int channel)
++{
++	switch (type) {
++	case hwmon_fan:
++		return silicom_fan_control_fan_is_visible(attr);
++	case hwmon_temp:
++		return silicom_fan_control_temp_is_visible(attr);
++	default:
++		return 0;
++	}
++}
++
++static int silicom_fan_control_read(struct device *dev, enum hwmon_sensor_types type,
++				    u32 attr, int channel, long *val)
++{
++	switch (type) {
++	case hwmon_fan:
++		return silicom_fan_control_read_fan(dev, attr, val);
++	case hwmon_temp:
++		return silicom_fan_control_read_temp(dev, attr, val);
++	default:
++		return -EOPNOTSUPP;
++	}
++}
++
++static int silicom_fan_control_read_labels(struct device *dev, enum hwmon_sensor_types type,
++					   u32 attr, int channel, const char **str)
++{
++	switch (type) {
++	case hwmon_fan:
++		*str = "Fan Speed (RPM)";
++		return 0;
++	case hwmon_temp:
++		*str = "Thermostat Sensor";
++		return 0;
++	default:
++		return -EOPNOTSUPP;
++	}
++}
++
++static int silicom_fan_control_write(struct device *dev, enum hwmon_sensor_types type,
++				     u32 attr, int channel, long val)
++{
++	return 0;
++}
++
++static const struct hwmon_ops silicom_fan_control_hwmon_ops = {
++	.is_visible = silicom_fan_control_is_visible,
++	.read = silicom_fan_control_read,
++	.write = silicom_fan_control_write,
++	.read_string = silicom_fan_control_read_labels,
++};
++
++static const struct hwmon_chip_info silicom_chip_info = {
++	.ops = &silicom_fan_control_hwmon_ops,
++	.info = silicom_fan_control_info,
++};
++
++static int __init silicom_platform_probe(struct platform_device *device)
++{
++	int i, err;
++	u8 magic, ver;
++	struct silicom_fan_control_data *ctl;
++	const char *name = "Silocom_Fan_Monitor";
++	const char *dev_name = "Silicom_platform";
++
++	mec_io_base = 0x0800;
++	mec_io_len = 8;
++	if (!devm_request_region(&device->dev, mec_io_base, mec_io_len, "mec")) {
++		dev_err(&device->dev, "couldn't reserve MEC io ports\n");
++		return -EBUSY;
++	}
++
++	/* Sanity check magic number read for EC */
++	outb(0x00, MEC_ADDR);
++	magic = inb(MEC_DATA(0));
++	ver = inb(MEC_DATA(1));
++	dev_dbg(&device->dev, "EC magic 0x%02x, version 0x%02x\n", magic, ver);
++
++	if (magic != SILICOM_MEC_MAGIC) {
++		dev_err(&device->dev, "Bad EC magic 0x%02x!\n", magic);
++		return -ENODEV;
++	}
++
++	if (silicom_led_info) {
++		err = silicom_mc_leds_register(&device->dev, silicom_led_info);
++		if (err) {
++			dev_err(&device->dev, "Failed to register LEDs\n");
++			return err;
++		}
++	}
++
++	if (silicom_gpiochip) {
++		err = devm_gpiochip_add_data(&device->dev, silicom_gpiochip, silicom_gpio_channels);
++		if (err) {
++			dev_err(&device->dev, "Failed to register gpiochip: %d\n", err);
++			return err;
++		}
++	}
++
++	ctl = devm_kzalloc(&device->dev, sizeof(*ctl), GFP_KERNEL);
++	if (!ctl)
++		return -ENOMEM;
++
++	ctl->hdev = devm_hwmon_device_register_with_info(&device->dev, name, ctl,
++				&silicom_chip_info, NULL);
++
++	my_dev_ctl.my_dev = root_device_register(dev_name);
++	for (i = 0; i < ARRAY_SIZE(my_dev_attr); i++) {
++		err = sysfs_create_file(&my_dev_ctl.my_dev->kobj, &my_dev_attr[i].attr);
++		if (err) {
++			pr_debug("failed to create the foo file in /sys/devices/Silicom_platform\n");
++			break;
++		}
++	}
++
++	return err;
++}
++
++static int __init silicom_platform_info_init(const struct dmi_system_id *id)
++{
++	struct silicom_platform_info *info = id->driver_data;
++
++	dev_info(&silicom_platform_dev->dev, "Detected %s\n", id->ident);
++
++	mec_io_base = info->io_base;
++	mec_io_len = info->io_len;
++	silicom_led_info = info->led_info;
++	silicom_gpio_channels = info->gpio_channels;
++	silicom_gpiochip = info->gpiochip;
++	if (silicom_gpiochip)
++		silicom_gpiochip->ngpio = info->ngpio;
++
++	return 1;
++}
++
++static const struct dmi_system_id silicom_dmi_ids[] __initconst = {
++	{
++		.callback = silicom_platform_info_init,
++		.ident = "Silicom Cordoba (Generic)",
++		.matches = {
++			DMI_MATCH(DMI_BOARD_VENDOR, "Silicom"),
++			DMI_MATCH(DMI_BOARD_NAME, "80300-0214-G"),
++		},
++		.driver_data = &silicom_generic_cordoba_info,
++	},
++	{
++		.callback = silicom_platform_info_init,
++		.ident = "Silicom Cordoba (Generic)",
++		.matches = {
++			DMI_MATCH(DMI_BOARD_VENDOR, "Silicom"),
++			DMI_MATCH(DMI_BOARD_NAME, "80500-0214-G"),
++		},
++		.driver_data = &silicom_generic_cordoba_info,
++	},
++	{
++		 .callback = silicom_platform_info_init,
++		 .ident = "Silicom Cordoba (plat_0222)",
++		 .matches = {
++		       DMI_MATCH(DMI_BOARD_VENDOR, "Silicom"),
++		       DMI_MATCH(DMI_BOARD_NAME, "80300-0222-G"),
++		 },
++		.driver_data = &silicom_plat_0222_cordoba_info,
++	},
++	{ },
++};
++
++static int __init silicom_platform_init(void)
++{
++	struct device *dev;
++	int err;
++
++	/* register a platform device to act as the parent for LEDS, etc. */
++	silicom_platform_dev = platform_device_register_simple("silicom-platform", -1, NULL, 0);
++	if (IS_ERR(silicom_platform_dev)) {
++		err = PTR_ERR(silicom_platform_dev);
++		pr_err("failed to register silicom-platform device: %d\n", err);
++		goto silicom_init_register_err;
++	}
++	dev = &silicom_platform_dev->dev;
++
++	err = dmi_check_system(silicom_dmi_ids);
++	if (err == 0) {
++		dev_err(dev, "No DMI match for this platform\n");
++		err = -ENODEV;
++		goto silicom_init_probe_err;
++	}
++
++	/* Directly probe the platform driver in init since this isn't a
++	 * hotpluggable device.  That means we don't need to register a driver
++	 * that needs to wait around in memory on the chance a matching device
++	 * would get added.  Instead run once in __init so that we can free all
++	 * those resources when the __init region is wiped
++	 */
++	err = platform_driver_probe(&silicom_platform_driver, silicom_platform_probe);
++	if (err) {
++		dev_err(dev, "Failed to probe platform driver %d\n", err);
++		goto silicom_init_probe_err;
++	}
++
++	return 0;
++
++silicom_init_probe_err:
++	if (silicom_platform_dev) {
++		platform_device_unregister(silicom_platform_dev);
++		silicom_platform_dev = NULL;
++	}
++	if (my_dev_ctl.my_dev) {
++		root_device_unregister(my_dev_ctl.my_dev);
++		my_dev_ctl.my_dev = NULL;
++	}
++
++silicom_init_register_err:
++	return err;
++}
++
++static void __exit silicom_platform_exit(void)
++{
++	int i;
++
++	if (silicom_platform_dev) {
++		platform_device_unregister(silicom_platform_dev);
++		platform_driver_unregister(&silicom_platform_driver);
++	}
++
++	if (my_dev_ctl.my_dev) {
++		for (i = 0; i < ARRAY_SIZE(my_dev_attr); i++)
++			sysfs_remove_file(&my_dev_ctl.my_dev->kobj, &my_dev_attr[i].attr);
++		root_device_unregister(my_dev_ctl.my_dev);
++	}
++	mutex_destroy(&mec_io_mutex);
++}
++
++module_init(silicom_platform_init);
++module_exit(silicom_platform_exit);
++
++MODULE_LICENSE("GPL");
++MODULE_AUTHOR("Henry Shi <henrys@silicom-usa.com>");
++MODULE_DESCRIPTION("Platform driver for Silicom network appliances");
++
++MODULE_DEVICE_TABLE(dmi, silicom_dmi_ids);
++
+-- 
+2.21.3
+
+
+--M9NhX3UHpAaciwkO--
